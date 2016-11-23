@@ -81,7 +81,7 @@
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
-#include <com/sun/star/sheet/GeneralFunction.hpp>
+#include <com/sun/star/sheet/GeneralFunction2.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XModel.hpp>
@@ -1876,7 +1876,7 @@ void ScFiltersTest::testPivotTableBasicODS()
     const ScDPSaveDimension* pDim = aDims.back();
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
         "Function for the data field should be COUNT.",
-        sal_uInt16(sheet::GeneralFunction_COUNT), pDim->GetFunction());
+        sal_uInt16(sheet::GeneralFunction2::COUNT), pDim->GetFunction());
 
     xDocSh->DoClose();
 }

@@ -50,6 +50,7 @@
 #include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
 #include <com/sun/star/sheet/DataPilotOutputRangeType.hpp>
 #include <com/sun/star/sheet/DataPilotTablePositionData.hpp>
+#include <com/sun/star/sheet/GeneralFunction2.hpp>
 
 #include <comphelper/extract.hxx>
 #include <comphelper/sequence.hxx>
@@ -115,6 +116,7 @@ const SfxItemPropertyMapEntry* lcl_GetDataPilotFieldMap()
     {
         {OUString(SC_UNONAME_AUTOSHOW),     0,  cppu::UnoType<DataPilotFieldAutoShowInfo>::get(),   MAYBEVOID, 0 },
         {OUString(SC_UNONAME_FUNCTION),     0,  cppu::UnoType<GeneralFunction>::get(),              0, 0 },
+        {OUString(SC_UNONAME_FUNCTION2),    0,  cppu::UnoType<sal_Int16>::get(),             0, 0 },
         {OUString(SC_UNONAME_GROUPINFO),    0,  cppu::UnoType<DataPilotFieldGroupInfo>::get(),      MAYBEVOID, 0 },
         {OUString(SC_UNONAME_HASAUTOSHOW),  0,  cppu::UnoType<bool>::get(),                          0, 0 },
         {OUString(SC_UNONAME_HASLAYOUTINFO),0,  cppu::UnoType<bool>::get(),                          0, 0 },
@@ -129,6 +131,7 @@ const SfxItemPropertyMapEntry* lcl_GetDataPilotFieldMap()
         {OUString(SC_UNONAME_REPEATITEMLABELS),    0,  cppu::UnoType<bool>::get(),                          0, 0 },
         {OUString(SC_UNONAME_SORTINFO),     0,  cppu::UnoType<DataPilotFieldSortInfo>::get(),       MAYBEVOID, 0 },
         {OUString(SC_UNONAME_SUBTOTALS),    0,  cppu::UnoType<Sequence<GeneralFunction>>::get(),    0, 0 },
+        {OUString(SC_UNONAME_SUBTOTALS2),   0,  cppu::UnoType<Sequence<sal_Int16>>::get(),   0, 0 },
         {OUString(SC_UNONAME_USESELPAGE),   0,  cppu::UnoType<bool>::get(),                          0, 0 },
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
@@ -179,48 +182,42 @@ SC_SIMPLE_SERVICE_INFO( ScDataPilotFieldGroupItemObj, "ScDataPilotFieldGroupItem
 // name that is used in the API for the data layout field
 #define SC_DATALAYOUT_NAME  "Data"
 
-GeneralFunction ScDataPilotConversion::FirstFunc( PivotFunc nBits )
+sal_Int16 ScDataPilotConversion::FirstFunc( PivotFunc nBits )
 {
-    if ( nBits & PivotFunc::Sum )       return GeneralFunction_SUM;
-    if ( nBits & PivotFunc::Count )     return GeneralFunction_COUNT;
-    if ( nBits & PivotFunc::Average )   return GeneralFunction_AVERAGE;
-#if 0
-// disabled because of css::sheet::GeneralFunction API incompatibility
-    if ( nBits & PivotFunc::Median )    return GeneralFunction_MEDIAN;
-#endif
-    if ( nBits & PivotFunc::Max )       return GeneralFunction_MAX;
-    if ( nBits & PivotFunc::Min )       return GeneralFunction_MIN;
-    if ( nBits & PivotFunc::Product )   return GeneralFunction_PRODUCT;
-    if ( nBits & PivotFunc::CountNum ) return GeneralFunction_COUNTNUMS;
-    if ( nBits & PivotFunc::StdDev )   return GeneralFunction_STDEV;
-    if ( nBits & PivotFunc::StdDevP )  return GeneralFunction_STDEVP;
-    if ( nBits & PivotFunc::StdVar )   return GeneralFunction_VAR;
-    if ( nBits & PivotFunc::StdVarP )  return GeneralFunction_VARP;
-    if ( nBits & PivotFunc::Auto )      return GeneralFunction_AUTO;
-    return GeneralFunction_NONE;
+    if ( nBits & PivotFunc::Sum )       return GeneralFunction2::SUM;
+    if ( nBits & PivotFunc::Count )     return GeneralFunction2::COUNT;
+    if ( nBits & PivotFunc::Average )   return GeneralFunction2::AVERAGE;
+    if ( nBits & PivotFunc::Median )    return GeneralFunction2::MEDIAN;
+    if ( nBits & PivotFunc::Max )       return GeneralFunction2::MAX;
+    if ( nBits & PivotFunc::Min )       return GeneralFunction2::MIN;
+    if ( nBits & PivotFunc::Product )   return GeneralFunction2::PRODUCT;
+    if ( nBits & PivotFunc::CountNum ) return GeneralFunction2::COUNTNUMS;
+    if ( nBits & PivotFunc::StdDev )   return GeneralFunction2::STDEV;
+    if ( nBits & PivotFunc::StdDevP )  return GeneralFunction2::STDEVP;
+    if ( nBits & PivotFunc::StdVar )   return GeneralFunction2::VAR;
+    if ( nBits & PivotFunc::StdVarP )  return GeneralFunction2::VARP;
+    if ( nBits & PivotFunc::Auto )      return GeneralFunction2::AUTO;
+    return GeneralFunction2::NONE;
 }
 
-PivotFunc ScDataPilotConversion::FunctionBit( GeneralFunction eFunc )
+PivotFunc ScDataPilotConversion::FunctionBit( sal_Int16 eFunc )
 {
     PivotFunc nRet = PivotFunc::NONE;  // 0
     switch (eFunc)
     {
-        case GeneralFunction_SUM:       nRet = PivotFunc::Sum;       break;
-        case GeneralFunction_COUNT:     nRet = PivotFunc::Count;     break;
-        case GeneralFunction_AVERAGE:   nRet = PivotFunc::Average;   break;
-#if 0
-// disabled because of css::sheet::GeneralFunction API incompatibility
-        case GeneralFunction_MEDIAN:    nRet = PivotFunc::Median;    break;
-#endif
-        case GeneralFunction_MAX:       nRet = PivotFunc::Max;       break;
-        case GeneralFunction_MIN:       nRet = PivotFunc::Min;       break;
-        case GeneralFunction_PRODUCT:   nRet = PivotFunc::Product;   break;
-        case GeneralFunction_COUNTNUMS: nRet = PivotFunc::CountNum; break;
-        case GeneralFunction_STDEV:     nRet = PivotFunc::StdDev;   break;
-        case GeneralFunction_STDEVP:    nRet = PivotFunc::StdDevP;  break;
-        case GeneralFunction_VAR:       nRet = PivotFunc::StdVar;   break;
-        case GeneralFunction_VARP:      nRet = PivotFunc::StdVarP;  break;
-        case GeneralFunction_AUTO:      nRet = PivotFunc::Auto;      break;
+        case GeneralFunction2::SUM:       nRet = PivotFunc::Sum;       break;
+        case GeneralFunction2::COUNT:     nRet = PivotFunc::Count;     break;
+        case GeneralFunction2::AVERAGE:   nRet = PivotFunc::Average;   break;
+        case GeneralFunction2::MEDIAN:    nRet = PivotFunc::Median;    break;
+        case GeneralFunction2::MAX:       nRet = PivotFunc::Max;       break;
+        case GeneralFunction2::MIN:       nRet = PivotFunc::Min;       break;
+        case GeneralFunction2::PRODUCT:   nRet = PivotFunc::Product;   break;
+        case GeneralFunction2::COUNTNUMS: nRet = PivotFunc::CountNum; break;
+        case GeneralFunction2::STDEV:     nRet = PivotFunc::StdDev;   break;
+        case GeneralFunction2::STDEVP:    nRet = PivotFunc::StdDevP;  break;
+        case GeneralFunction2::VAR:       nRet = PivotFunc::StdVar;   break;
+        case GeneralFunction2::VARP:      nRet = PivotFunc::StdVarP;  break;
+        case GeneralFunction2::AUTO:      nRet = PivotFunc::Auto;      break;
         default:
         {
             assert(false);
@@ -1868,11 +1865,30 @@ void SAL_CALL ScDataPilotFieldObj::setPropertyValue( const OUString& aPropertyNa
         // #i109350# use GetEnumFromAny because it also allows sal_Int32
         GeneralFunction eFunction = (GeneralFunction)
                             ScUnoHelpFunctions::GetEnumFromAny( aValue );
+        setFunction( static_cast<sal_Int16> (eFunction) );
+    }
+    else if ( aPropertyName == SC_UNONAME_FUNCTION2 )
+    {
+        sal_Int16 eFunction = (sal_Int16) ScUnoHelpFunctions::GetEnumFromAny( aValue );
         setFunction( eFunction );
     }
     else if ( aPropertyName == SC_UNONAME_SUBTOTALS )
     {
-        Sequence< GeneralFunction > aSubtotals;
+        Sequence< sal_Int16 > aSubTotals;
+        uno::Sequence<sheet::GeneralFunction> aSeq;
+        if( aValue >>= aSeq)
+        {
+            aSubTotals.realloc(aSeq.getLength());
+            for (sal_Int32 nIndex = 0; nIndex < aSeq.getLength(); nIndex++)
+            {
+                aSubTotals[nIndex] = static_cast<sal_Int16>(aSeq[nIndex]);
+            }
+            setSubtotals( aSubTotals );
+        }
+    }
+    else if ( aPropertyName == SC_UNONAME_SUBTOTALS2 )
+    {
+        Sequence< sal_Int16 > aSubtotals;
         if( aValue >>= aSubtotals )
             setSubtotals( aSubtotals );
     }
@@ -1966,9 +1982,39 @@ Any SAL_CALL ScDataPilotFieldObj::getPropertyValue( const OUString& aPropertyNam
     Any aRet;
 
     if ( aPropertyName == SC_UNONAME_FUNCTION )
+    {
+        sheet::GeneralFunction eVal;
+        sal_Int16 nFunction = getFunction();
+        if (nFunction == sheet::GeneralFunction2::MEDIAN)
+        {
+            eVal = sheet::GeneralFunction_NONE;
+        }
+        else
+        {
+            eVal = static_cast<sheet::GeneralFunction>(nFunction);
+        }
+        aRet <<= eVal;
+    }
+    else if ( aPropertyName == SC_UNONAME_FUNCTION2 )
         aRet <<= getFunction();
     else if ( aPropertyName == SC_UNONAME_SUBTOTALS )
+    {
+        uno::Sequence<sal_Int16> aSeq = getSubtotals();
+        uno::Sequence<sheet::GeneralFunction>  aNewSeq;
+        aNewSeq.realloc(aSeq.getLength());
+        for (sal_Int32 nIndex = 0; nIndex < aSeq.getLength(); nIndex++)
+        {
+            if (aSeq[nIndex] == sheet::GeneralFunction2::MEDIAN)
+                aNewSeq[nIndex] = sheet::GeneralFunction_NONE;
+            else
+                aNewSeq[nIndex] = static_cast<sheet::GeneralFunction>(aSeq[nIndex]);
+        }
+        aRet <<= aNewSeq;
+    }
+    else if ( aPropertyName == SC_UNONAME_SUBTOTALS2 )
+    {
         aRet <<= getSubtotals();
+    }
     else if ( aPropertyName == SC_UNONAME_ORIENT )
         aRet <<= getOrientation();
     else if ( aPropertyName == SC_UNONAME_SELPAGE )
@@ -2098,10 +2144,10 @@ void ScDataPilotFieldObj::setOrientation(DataPilotFieldOrientation eNew)
     }
 }
 
-GeneralFunction ScDataPilotFieldObj::getFunction() const
+sal_Int16 ScDataPilotFieldObj::getFunction() const
 {
     SolarMutexGuard aGuard;
-    GeneralFunction eRet = GeneralFunction_NONE;
+    sal_Int16 eRet = GeneralFunction2::NONE;
     if( ScDPSaveDimension* pDim = GetDPDimension() )
     {
         if( pDim->GetOrientation() != DataPilotFieldOrientation_DATA )
@@ -2109,16 +2155,16 @@ GeneralFunction ScDataPilotFieldObj::getFunction() const
             // for non-data fields, property Function is the subtotals
             long nSubCount = pDim->GetSubTotalsCount();
             if ( nSubCount > 0 )
-                eRet = (GeneralFunction)pDim->GetSubTotalFunc(0);    // always use the first one
+                eRet = static_cast<sal_Int16>(pDim->GetSubTotalFunc(0));    // always use the first one
             // else keep NONE
         }
         else
-            eRet = (GeneralFunction)pDim->GetFunction();
+            eRet = static_cast<sal_Int16>(pDim->GetFunction());
     }
     return eRet;
 }
 
-void ScDataPilotFieldObj::setFunction(GeneralFunction eNewFunc)
+void ScDataPilotFieldObj::setFunction(sal_Int16 eNewFunc)
 {
     SolarMutexGuard aGuard;
     ScDPObject* pDPObj = nullptr;
@@ -2127,7 +2173,7 @@ void ScDataPilotFieldObj::setFunction(GeneralFunction eNewFunc)
         if( pDim->GetOrientation() != DataPilotFieldOrientation_DATA )
         {
             // for non-data fields, property Function is the subtotals
-            if ( eNewFunc == GeneralFunction_NONE )
+            if ( eNewFunc == GeneralFunction2::NONE )
                 pDim->SetSubTotals( 0, nullptr );
             else
             {
@@ -2141,10 +2187,10 @@ void ScDataPilotFieldObj::setFunction(GeneralFunction eNewFunc)
     }
 }
 
-Sequence< GeneralFunction > ScDataPilotFieldObj::getSubtotals() const
+Sequence< sal_Int16 > ScDataPilotFieldObj::getSubtotals() const
 {
     SolarMutexGuard aGuard;
-    Sequence< GeneralFunction > aRet;
+    Sequence< sal_Int16 > aRet;
     if( ScDPSaveDimension* pDim = GetDPDimension() )
     {
         if( pDim->GetOrientation() != DataPilotFieldOrientation_DATA )
@@ -2155,14 +2201,14 @@ Sequence< GeneralFunction > ScDataPilotFieldObj::getSubtotals() const
             {
                 aRet.realloc( nCount );
                 for( sal_Int32 nIdx = 0; nIdx < nCount; ++nIdx )
-                    aRet[ nIdx ] = (GeneralFunction)pDim->GetSubTotalFunc( nIdx );
+                    aRet[ nIdx ] = static_cast<sal_Int16>(pDim->GetSubTotalFunc( nIdx ));
             }
         }
     }
     return aRet;
 }
 
-void ScDataPilotFieldObj::setSubtotals( const Sequence< GeneralFunction >& rSubtotals )
+void ScDataPilotFieldObj::setSubtotals( const Sequence< sal_Int16 >& rSubtotals )
 {
     SolarMutexGuard aGuard;
     ScDPObject* pDPObj = nullptr;
@@ -2174,7 +2220,7 @@ void ScDataPilotFieldObj::setSubtotals( const Sequence< GeneralFunction >& rSubt
             if( nCount == 1 )
             {
                 // count 1: all values are allowed (including NONE and AUTO)
-                if( rSubtotals[ 0 ] == GeneralFunction_NONE )
+                if( rSubtotals[ 0 ] == GeneralFunction2::NONE )
                     pDim->SetSubTotals( 0, nullptr );
                 else
                 {
@@ -2188,8 +2234,8 @@ void ScDataPilotFieldObj::setSubtotals( const Sequence< GeneralFunction >& rSubt
                 ::std::vector< sal_uInt16 > aSubt;
                 for( sal_Int32 nIdx = 0; nIdx < nCount; ++nIdx )
                 {
-                    GeneralFunction eFunc = rSubtotals[ nIdx ];
-                    if( (eFunc != GeneralFunction_NONE) && (eFunc != GeneralFunction_AUTO) )
+                    sal_Int16 eFunc = rSubtotals[ nIdx ];
+                    if( (eFunc != GeneralFunction2::NONE) && (eFunc != GeneralFunction2::AUTO) )
                     {
                         // do not insert functions twice
                         sal_uInt16 nFunc = static_cast< sal_uInt16 >( eFunc );

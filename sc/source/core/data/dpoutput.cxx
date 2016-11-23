@@ -52,6 +52,7 @@
 #include <com/sun/star/sheet/MemberResultFlags.hpp>
 #include <com/sun/star/sheet/DataResultFlags.hpp>
 #include <com/sun/star/sheet/DataPilotTablePositionType.hpp>
+#include <com/sun/star/sheet/GeneralFunction2.hpp>
 
 #include <vector>
 
@@ -1538,28 +1539,25 @@ bool ScDPOutput::GetDataResultPositionData(vector<sheet::DataPilotFieldFilter>& 
 
 namespace {
 
-OUString lcl_GetDataFieldName( const OUString& rSourceName, sheet::GeneralFunction eFunc )
+OUString lcl_GetDataFieldName( const OUString& rSourceName, sal_Int16 eFunc )
 {
     sal_uInt16 nStrId = 0;
     switch ( eFunc )
     {
-        case sheet::GeneralFunction_SUM:        nStrId = STR_FUN_TEXT_SUM;      break;
-        case sheet::GeneralFunction_COUNT:
-        case sheet::GeneralFunction_COUNTNUMS:  nStrId = STR_FUN_TEXT_COUNT;    break;
-        case sheet::GeneralFunction_AVERAGE:    nStrId = STR_FUN_TEXT_AVG;      break;
-#if 0
-// disabled because of css::sheet::GeneralFunction API incompatibility
-        case sheet::GeneralFunction_MEDIAN:     nStrId = STR_FUN_TEXT_MEDIAN;   break;
-#endif
-        case sheet::GeneralFunction_MAX:        nStrId = STR_FUN_TEXT_MAX;      break;
-        case sheet::GeneralFunction_MIN:        nStrId = STR_FUN_TEXT_MIN;      break;
-        case sheet::GeneralFunction_PRODUCT:    nStrId = STR_FUN_TEXT_PRODUCT;  break;
-        case sheet::GeneralFunction_STDEV:
-        case sheet::GeneralFunction_STDEVP:     nStrId = STR_FUN_TEXT_STDDEV;   break;
-        case sheet::GeneralFunction_VAR:
-        case sheet::GeneralFunction_VARP:       nStrId = STR_FUN_TEXT_VAR;      break;
-        case sheet::GeneralFunction_NONE:
-        case sheet::GeneralFunction_AUTO:                                       break;
+        case sheet::GeneralFunction2::SUM:        nStrId = STR_FUN_TEXT_SUM;      break;
+        case sheet::GeneralFunction2::COUNT:
+        case sheet::GeneralFunction2::COUNTNUMS:  nStrId = STR_FUN_TEXT_COUNT;    break;
+        case sheet::GeneralFunction2::AVERAGE:    nStrId = STR_FUN_TEXT_AVG;      break;
+        case sheet::GeneralFunction2::MEDIAN:     nStrId = STR_FUN_TEXT_MEDIAN;   break;
+        case sheet::GeneralFunction2::MAX:        nStrId = STR_FUN_TEXT_MAX;      break;
+        case sheet::GeneralFunction2::MIN:        nStrId = STR_FUN_TEXT_MIN;      break;
+        case sheet::GeneralFunction2::PRODUCT:    nStrId = STR_FUN_TEXT_PRODUCT;  break;
+        case sheet::GeneralFunction2::STDEV:
+        case sheet::GeneralFunction2::STDEVP:     nStrId = STR_FUN_TEXT_STDDEV;   break;
+        case sheet::GeneralFunction2::VAR:
+        case sheet::GeneralFunction2::VARP:       nStrId = STR_FUN_TEXT_VAR;      break;
+        case sheet::GeneralFunction2::NONE:
+        case sheet::GeneralFunction2::AUTO:                                       break;
         default:
         {
             assert(false);
@@ -1590,9 +1588,9 @@ void ScDPOutput::GetDataDimensionNames(
         // Generate "given name" the same way as in dptabres.
         //TODO: Should use a stored name when available
 
-        sheet::GeneralFunction eFunc = (sheet::GeneralFunction)ScUnoHelpFunctions::GetEnumProperty(
-                                xDimProp, SC_UNO_DP_FUNCTION,
-                                sheet::GeneralFunction_NONE );
+        sal_Int16 eFunc = (sal_Int16)ScUnoHelpFunctions::GetEnumProperty(
+                          xDimProp, SC_UNO_DP_FUNCTION2,
+                          sheet::GeneralFunction2::NONE );
         rGivenName = lcl_GetDataFieldName( rSourceName, eFunc );
     }
 }
