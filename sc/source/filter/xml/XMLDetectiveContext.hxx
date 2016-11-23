@@ -21,7 +21,6 @@
 #define INCLUDED_SC_SOURCE_FILTER_XML_XMLDETECTIVECONTEXT_HXX
 
 #include <xmloff/xmlimp.hxx>
-#include <com/sun/star/table/CellRangeAddress.hpp>
 #include "detfunc.hxx"
 #include "detdata.hxx"
 #include "xmlimprt.hxx"

@@ -50,14 +50,9 @@ void ScMyIteratorBase::UpdateAddress( ScAddress& rCellAddress )
     }
 }
 
-bool ScMyShape::operator<(const ScMyShape& aShape) const
+inline bool ScMyShape::operator<(const ScMyShape& aShape) const
 {
-    if( aAddress.Tab() != aShape.aAddress.Tab() )
-        return ( aAddress.Tab() < aShape.aAddress.Tab() );
-    else if( aAddress.Row() != aShape.aAddress.Row() )
-        return ( aAddress.Row() < aShape.aAddress.Row( ));
-    else
-        return ( aAddress.Col() < aShape.aAddress.Col() );
+    return ( aAddress < aShape.aAddress );
 }
 
 ScMyShapesContainer::ScMyShapesContainer()
@@ -76,7 +71,7 @@ void ScMyShapesContainer::AddNewShape( const ScMyShape& aShape )
 
 bool ScMyShapesContainer::GetFirstAddress( ScAddress& rCellAddress )
 {
-    sal_Int32 nTable( rCellAddress.Tab() );
+    SCTAB nTable( rCellAddress.Tab() );
     if( !aShapeList.empty() )
     {
         rCellAddress = aShapeList.begin()->aAddress;
@@ -111,14 +106,9 @@ void ScMyShapesContainer::Sort()
     aShapeList.sort();
 }
 
-bool ScMyNoteShape::operator<(const ScMyNoteShape& aNote) const
+inline bool ScMyNoteShape::operator<(const ScMyNoteShape& aNote) const
 {
-    if( aPos.Tab() != aNote.aPos.Tab() )
-        return ( aPos.Tab() < aNote.aPos.Tab() );
-    else if( aPos.Row() != aNote.aPos.Row() )
-        return ( aPos.Row() < aNote.aPos.Row() );
-    else
-        return ( aPos.Col() < aNote.aPos.Col() );
+    return ( aPos < aNote.aPos );
 }
 
 ScMyNoteShapesContainer::ScMyNoteShapesContainer()
@@ -137,7 +127,7 @@ void ScMyNoteShapesContainer::AddNewNote( const ScMyNoteShape& aNote )
 
 bool ScMyNoteShapesContainer::GetFirstAddress( ScAddress& rCellAddress )
 {
-    sal_Int16 nTable = rCellAddress.Tab();
+    SCTAB nTable = rCellAddress.Tab();
     if( !aNoteShapeList.empty() )
     {
         rCellAddress = aNoteShapeList.begin()->aPos;
@@ -167,14 +157,9 @@ void ScMyNoteShapesContainer::Sort()
     aNoteShapeList.sort();
 }
 
-bool ScMyMergedRange::operator<(const ScMyMergedRange& aRange) const
+inline bool ScMyMergedRange::operator<(const ScMyMergedRange& aRange) const
 {
-    if( aCellRange.aStart.Tab() != aRange.aCellRange.aStart.Tab() )
-        return ( aCellRange.aStart.Tab() < aRange.aCellRange.aStart.Tab() );
-    else if( aCellRange.aStart.Row() != aRange.aCellRange.aStart.Row() )
-        return ( aCellRange.aStart.Row() < aRange.aCellRange.aStart.Row() );
-    else
-        return ( aCellRange.aStart.Col() < aRange.aCellRange.aStart.Col() );
+    return ( aCellRange.aStart < aRange.aCellRange.aStart );
 }
 
 ScMyMergedRangesContainer::ScMyMergedRangesContainer()
@@ -188,8 +173,8 @@ ScMyMergedRangesContainer::~ScMyMergedRangesContainer()
 
 void ScMyMergedRangesContainer::AddRange(const ScRange& rMergedRange)
 {
-    sal_Int32 nStartRow( rMergedRange.aStart.Row() );
-    sal_Int32 nEndRow( rMergedRange.aEnd.Row() );
+    SCROW nStartRow( rMergedRange.aStart.Row() );
+    SCROW nEndRow( rMergedRange.aEnd.Row() );
 
     ScMyMergedRange aRange;
     aRange.bIsFirst = true;
@@ -202,7 +187,7 @@ void ScMyMergedRangesContainer::AddRange(const ScRange& rMergedRange)
 
     aRange.bIsFirst = false;
     aRange.nRows = 0;
-    for( sal_Int32 nRow = nStartRow + 1; nRow <= nEndRow; ++nRow )
+    for( SCROW nRow = nStartRow + 1; nRow <= nEndRow; ++nRow )
     {
         aRange.aCellRange.aStart.SetRow( nRow );
         aRange.aCellRange.aEnd.SetRow( nRow );
@@ -212,7 +197,7 @@ void ScMyMergedRangesContainer::AddRange(const ScRange& rMergedRange)
 
 bool ScMyMergedRangesContainer::GetFirstAddress( ScAddress& rCellAddress )
 {
-    sal_Int32 nTable( rCellAddress.Tab() );
+    SCTAB nTable( rCellAddress.Tab() );
     if( !aRangeList.empty() )
     {
         rCellAddress = aRangeList.begin()->aCellRange.aStart;
@@ -236,7 +221,7 @@ void ScMyMergedRangesContainer::SetCellData( ScMyCell& rMyCell )
             rMyCell.bIsCovered = !aItr->bIsFirst;
             if( aItr->aCellRange.aStart.Col() < aItr->aCellRange.aEnd.Col() )
             {
-                aItr->aCellRange.aStart.SetCol( aItr->aCellRange.aStart.Col() + 1 );
+                aItr->aCellRange.aStart.IncCol( 1 );
                 aItr->bIsFirst = false;
             }
             else
@@ -266,14 +251,9 @@ bool ScMyAreaLink::Compare( const ScMyAreaLink& rAreaLink ) const
             (sSourceStr == rAreaLink.sSourceStr);
 }
 
-bool ScMyAreaLink::operator<(const ScMyAreaLink& rAreaLink ) const
+inline bool ScMyAreaLink::operator<(const ScMyAreaLink& rAreaLink ) const
 {
-    if( aDestRange.aStart.Tab() != rAreaLink.aDestRange.aStart.Tab() )
-        return ( aDestRange.aStart.Tab() < rAreaLink.aDestRange.aStart.Tab() );
-    else if( aDestRange.aStart.Row() != rAreaLink.aDestRange.aStart.Row() )
-        return ( aDestRange.aStart.Row() < rAreaLink.aDestRange.aStart.Row() );
-    else
-        return ( aDestRange.aStart.Col() < rAreaLink.aDestRange.aStart.Col() );
+    return ( aDestRange.aStart < rAreaLink.aDestRange.aStart );
 }
 
 ScMyAreaLinksContainer::ScMyAreaLinksContainer() :
@@ -287,7 +267,7 @@ ScMyAreaLinksContainer::~ScMyAreaLinksContainer()
 
 bool ScMyAreaLinksContainer::GetFirstAddress( ScAddress& rCellAddress )
 {
-    sal_Int32 nTable( rCellAddress.Tab() );
+    SCTAB nTable( rCellAddress.Tab() );
     if( !aAreaLinkList.empty() )
     {
         rCellAddress = aAreaLinkList.begin()->aDestRange.aStart;
@@ -334,21 +314,6 @@ void ScMyAreaLinksContainer::Sort()
     aAreaLinkList.sort();
 }
 
-ScMyCellRangeAddress::ScMyCellRangeAddress(const ScRange& rRange)
-    : ScRange(rRange)
-{
-}
-
-bool ScMyCellRangeAddress::operator<(const ScMyCellRangeAddress& rRange ) const
-{
-    if( aStart.Tab() != rRange.aStart.Tab() )
-        return ( aStart.Tab() < rRange.aStart.Tab() );
-    else if( aStart.Row() != rRange.aStart.Row() )
-        return ( aStart.Row() < rRange.aStart.Row() );
-    else
-        return ( aStart.Col() < rRange.aStart.Col() );
-}
-
 ScMyEmptyDatabaseRangesContainer::ScMyEmptyDatabaseRangesContainer()
     : aDatabaseList()
 {
@@ -360,12 +325,11 @@ ScMyEmptyDatabaseRangesContainer::~ScMyEmptyDatabaseRangesContainer()
 
 void ScMyEmptyDatabaseRangesContainer::AddNewEmptyDatabaseRange(const table::CellRangeAddress& aCellRange)
 {
-    sal_Int32 nStartRow(aCellRange.StartRow);
-    sal_Int32 nEndRow(aCellRange.EndRow);
-    ScRange aMyRange( aCellRange.StartColumn, aCellRange.StartRow, aCellRange.Sheet,
+    SCROW nStartRow(aCellRange.StartRow);
+    SCROW nEndRow(aCellRange.EndRow);
+    ScRange aRange( aCellRange.StartColumn, aCellRange.StartRow, aCellRange.Sheet,
                       aCellRange.EndColumn, aCellRange.EndRow, aCellRange.Sheet );
-    ScMyCellRangeAddress aRange( aMyRange );
-    for( sal_Int32 nRow = nStartRow; nRow <= nEndRow; ++nRow )
+    for( SCROW nRow = nStartRow; nRow <= nEndRow; ++nRow )
     {
         aRange.aStart.SetRow( nRow );
         aRange.aEnd.SetRow( nRow );
@@ -375,7 +339,7 @@ void ScMyEmptyDatabaseRangesContainer::AddNewEmptyDatabaseRange(const table::Cel
 
 bool ScMyEmptyDatabaseRangesContainer::GetFirstAddress( ScAddress& rCellAddress )
 {
-    sal_Int32 nTable( rCellAddress.Tab() );
+    SCTAB nTable( rCellAddress.Tab() );
     if( !aDatabaseList.empty() )
     {
         rCellAddress = aDatabaseList.begin()->aStart;
@@ -413,14 +377,9 @@ void ScMyEmptyDatabaseRangesContainer::Sort()
     aDatabaseList.sort();
 }
 
-bool ScMyDetectiveObj::operator<( const ScMyDetectiveObj& rDetObj) const
+inline bool ScMyDetectiveObj::operator<( const ScMyDetectiveObj& rDetObj) const
 {
-    if( aPosition.Tab() != rDetObj.aPosition.Tab() )
-        return ( aPosition.Tab() < rDetObj.aPosition.Tab() );
-    else if( aPosition.Row() != rDetObj.aPosition.Row() )
-        return ( aPosition.Row() < rDetObj.aPosition.Row() );
-    else
-        return ( aPosition.Col() < rDetObj.aPosition.Col() );
+    return ( aPosition < rDetObj.aPosition );
 }
 
 ScMyDetectiveObjContainer::ScMyDetectiveObjContainer() :
@@ -466,7 +425,7 @@ void ScMyDetectiveObjContainer::AddObject( ScDetectiveObjType eObjType, const SC
 
 bool ScMyDetectiveObjContainer::GetFirstAddress( ScAddress& rCellAddress )
 {
-    sal_Int32 nTable( rCellAddress.Tab() );
+    SCTAB nTable( rCellAddress.Tab() );
     if( !aDetectiveObjList.empty() )
     {
         rCellAddress = aDetectiveObjList.begin()->aPosition;
@@ -500,14 +459,9 @@ void ScMyDetectiveObjContainer::Sort()
     aDetectiveObjList.sort();
 }
 
-bool ScMyDetectiveOp::operator<( const ScMyDetectiveOp& rDetOp) const
+inline bool ScMyDetectiveOp::operator<( const ScMyDetectiveOp& rDetOp) const
 {
-    if( aPosition.Tab() != rDetOp.aPosition.Tab() )
-        return ( aPosition.Tab() < rDetOp.aPosition.Tab() );
-    else if( aPosition.Row() != rDetOp.aPosition.Row() )
-        return ( aPosition.Row() < rDetOp.aPosition.Row() );
-    else
-        return ( aPosition.Col() < rDetOp.aPosition.Col() );
+    return ( aPosition < rDetOp.aPosition );
 }
 
 ScMyDetectiveOpContainer::ScMyDetectiveOpContainer() :
@@ -530,7 +484,7 @@ void ScMyDetectiveOpContainer::AddOperation( ScDetOpType eOpType, const ScAddres
 
 bool ScMyDetectiveOpContainer::GetFirstAddress( ScAddress& rCellAddress )
 {
-    sal_Int32 nTable( rCellAddress.Tab() );
+    SCTAB nTable( rCellAddress.Tab() );
     if( !aDetectiveOpList.empty() )
     {
         rCellAddress = aDetectiveOpList.begin()->aPosition;
@@ -772,7 +726,7 @@ bool ScMyNotEmptyCellsIterator::GetNext(ScMyCell& aCell, ScFormatRangeStyles* pC
         HasAnnotation( aCell );
         bool bIsAutoStyle;
         // Ranges before the previous cell are not needed by ExportFormatRanges anymore and can be removed
-        sal_Int32 nRemoveBeforeRow = aLastAddress.Row();
+        SCROW nRemoveBeforeRow = aLastAddress.Row();
         aCell.nStyleIndex = pCellStyles->GetStyleNameIndex(aCell.maCellAddress.Tab(),
             aCell.maCellAddress.Col(), aCell.maCellAddress.Row(),
             bIsAutoStyle, aCell.nValidationIndex, aCell.nNumberFormat, nRemoveBeforeRow);

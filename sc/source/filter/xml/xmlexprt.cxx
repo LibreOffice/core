@@ -620,7 +620,7 @@ void ScXMLExport::CollectShapesAutoStyles(SCTAB nTableCount)
                 if (pShapeList)
                 {
                     ScMyShapeList::const_iterator aEndItr(pShapeList->end());
-                    while (aShapeItr != aEndItr && (static_cast<sal_Int32>(aShapeItr->aAddress.Tab()) == nTable))
+                    while ( aShapeItr != aEndItr && ( aShapeItr->aAddress.Tab() == nTable ) )
                     {
                         GetShapeExport()->collectShapeAutoStyles(aShapeItr->xShape);
                         IncrementProgressBar(false);
@@ -633,7 +633,7 @@ void ScXMLExport::CollectShapesAutoStyles(SCTAB nTableCount)
                     for (ScMyNoteShapeList::const_iterator aNoteShapeItr = rNoteShapes.begin(), aNoteShapeEndItr = rNoteShapes.end();
                          aNoteShapeItr != aNoteShapeEndItr; ++aNoteShapeItr)
                     {
-                        if (static_cast<sal_Int32>(aNoteShapeItr->aPos.Tab()) == nTable)
+                        if ( aNoteShapeItr->aPos.Tab() == nTable )
                             GetShapeExport()->collectShapeAutoStyles(aNoteShapeItr->xShape);
                     }
                 }
@@ -3142,8 +3142,8 @@ void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
     bool bIsFirstMatrixCell(aCell.bIsMatrixBase);
     if (bIsFirstMatrixCell)
     {
-        sal_Int32 nColumns(aCell.aMatrixRange.aEnd.Col() - aCell.aMatrixRange.aStart.Col() + 1);
-        sal_Int32 nRows(aCell.aMatrixRange.aEnd.Row() - aCell.aMatrixRange.aStart.Row() + 1);
+        SCCOL nColumns( aCell.aMatrixRange.aEnd.Col() - aCell.aMatrixRange.aStart.Col() + 1 );
+        SCROW nRows( aCell.aMatrixRange.aEnd.Row() - aCell.aMatrixRange.aStart.Row() + 1 );
         OUStringBuffer sColumns;
         OUStringBuffer sRows;
         ::sax::Converter::convertNumber(sColumns, nColumns);
@@ -3258,8 +3258,8 @@ void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
     {
         if (aCell.bIsMergedBase)
         {
-            sal_Int32 nColumns(aCell.aMergeRange.aEnd.Col() - aCell.aMergeRange.aStart.Col() + 1);
-            sal_Int32 nRows(aCell.aMergeRange.aEnd.Row() - aCell.aMergeRange.aStart.Row() + 1);
+            SCCOL nColumns( aCell.aMergeRange.aEnd.Col() - aCell.aMergeRange.aStart.Col() + 1 );
+            SCROW nRows( aCell.aMergeRange.aEnd.Row() - aCell.aMergeRange.aStart.Row() + 1 );
             OUStringBuffer sColumns;
             OUStringBuffer sRows;
             ::sax::Converter::convertNumber(sColumns, nColumns);
