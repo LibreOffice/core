@@ -69,7 +69,6 @@ public:
           m_xComponentContext( xComponentContext ),
           m_xMacroExpander( util::theMacroExpander::get(xComponentContext) )
         {}
-    virtual ~ExpandContentProviderImpl() throw () override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
@@ -103,12 +102,6 @@ inline void ExpandContentProviderImpl::check() const
                 const_cast< ExpandContentProviderImpl * >(this) ) );
     }
 }
-
-
-ExpandContentProviderImpl::~ExpandContentProviderImpl() throw ()
-{
-}
-
 
 void ExpandContentProviderImpl::disposing()
 {

@@ -97,7 +97,6 @@ private:
 
 public:
                 SRSPropertySetInfo();
-    virtual     ~SRSPropertySetInfo() override;
 
     // XPropertySetInfo
     virtual Sequence< Property > SAL_CALL getProperties()
@@ -1927,10 +1926,6 @@ SRSPropertySetInfo::SRSPropertySetInfo()
     maProps[1].Type = cppu::UnoType<bool>::get();
     maProps[1].Attributes = -1;
 }
-
-
-SRSPropertySetInfo::~SRSPropertySetInfo()
-{}
 
 // XPropertySetInfo methods.
 

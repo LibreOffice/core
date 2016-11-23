@@ -258,7 +258,6 @@ class XPropertySetInfoImpl2
 {
 public:
     XPropertySetInfoImpl2();
-    virtual ~XPropertySetInfoImpl2() override;
 
     // XInterface
     virtual Any SAL_CALL
@@ -311,13 +310,6 @@ XPropertySetInfoImpl2::XPropertySetInfoImpl2()
                          cppu::UnoType<sal_Int32>::get(),
                          PropertyAttribute::READONLY );
 }
-
-
-XPropertySetInfoImpl2::~XPropertySetInfoImpl2()
-{
-    // nothing
-}
-
 
 void SAL_CALL
 XPropertySetInfoImpl2::acquire()
