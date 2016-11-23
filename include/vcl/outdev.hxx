@@ -141,13 +141,12 @@ enum class SalLayoutFlags
     EnableLigatures         = 0x0200,
     SubstituteDigits        = 0x0400,
     KashidaJustification    = 0x0800,
-    DisableGlyphProcessing  = 0x1000,
     ForFallback             = 0x2000,
     DrawBullet              = 0x4000,
 };
 namespace o3tl
 {
-    template<> struct typed_flags<SalLayoutFlags> : is_typed_flags<SalLayoutFlags, 0x7f77> {};
+    template<> struct typed_flags<SalLayoutFlags> : is_typed_flags<SalLayoutFlags, 0x6f77> {};
 }
 
 typedef std::vector< Rectangle > MetricVector;
