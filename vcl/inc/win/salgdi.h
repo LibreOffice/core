@@ -33,11 +33,6 @@
 #include <memory>
 #include <unordered_set>
 
-#include <config_graphite.h>
-#if ENABLE_GRAPHITE
-#  include <graphite_static.hxx>
-#  include <graphite2/Font.h>
-#endif
 #ifndef INCLUDED_PRE_POST_WIN_H
 #define INCLUDED_PRE_POST_WIN_H
 #  include "prewin.h"
@@ -60,26 +55,6 @@ class CommonSalLayout;
 #define RGB_TO_PALRGB(nRGB)         ((nRGB)|0x02000000)
 #define PALRGB_TO_RGB(nPalRGB)      ((nPalRGB)&0x00ffffff)
 
-#if ENABLE_GRAPHITE
-class RawFontData;
-class GrFontData
-{
-public:
-    GrFontData(HDC hDC);
-    ~GrFontData();
-    const void * getTable(unsigned int name, size_t *len) const;
-    const gr_face * getFace() const { return mpFace; }
-    void AddReference() { ++mnRefCount; }
-    void DeReference() { if (--mnRefCount == 0) delete this; }
-private:
-    GrFontData(GrFontData &) {};
-    HDC mhDC;
-    mutable std::vector<RawFontData*> mvData;
-    gr_face * mpFace;
-    unsigned int mnRefCount;
-};
-#endif
-
 // win32 specific physically available font face
 class WinFontFace : public PhysicalFontFace
 {
@@ -101,10 +76,6 @@ public:
     BYTE                    GetPitchAndFamily() const   { return mnPitchAndFamily; }
     bool                    SupportsCJK() const         { return mbHasCJKSupport; }
     bool                    SupportsArabic() const      { return mbHasArabicSupport; }
-#if ENABLE_GRAPHITE
-    bool                    SupportsGraphite() const    { return mbHasGraphiteSupport; }
-    const gr_face*          GraphiteFace() const;
-#endif
 
     FontCharMapRef          GetFontCharMap() const;
     bool GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const;
@@ -120,10 +91,6 @@ private:
 
     // some members that are initalized lazily when the font gets selected into a HDC
     mutable bool                    mbHasCJKSupport;
-#if ENABLE_GRAPHITE
-    mutable GrFontData*             mpGraphiteData;
-    mutable bool                    mbHasGraphiteSupport;
-#endif
     mutable bool                    mbHasArabicSupport;
     mutable bool                    mbFontCapabilitiesRead;
     mutable FontCharMapRef          mxUnicodeMap;

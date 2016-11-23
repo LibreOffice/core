@@ -20,8 +20,6 @@
 #ifndef INCLUDED_VCL_INC_GENERIC_GLYPHCACHE_HXX
 #define INCLUDED_VCL_INC_GENERIC_GLYPHCACHE_HXX
 
-#include <config_graphite.h>
-
 #include <ft2build.h>
 #include FT_FREETYPE_H
 #include FT_GLYPH_H
@@ -42,7 +40,6 @@
 class FreetypeManager;
 class FreetypeFontInfo;
 class GlyphData;
-class GraphiteFaceWrapper;
 class FontConfigFontOptions;
 class PhysicalFontCollection;
 class FreetypeFont;
@@ -170,10 +167,6 @@ public:
     bool                    GetFontCapabilities(vcl::FontCapabilities &) const;
 
     const GlyphMetric&      GetGlyphMetric(sal_GlyphId aGlyphId);
-
-#if ENABLE_GRAPHITE
-    GraphiteFaceWrapper* GetGraphiteFace() const;
-#endif
 
     sal_GlyphId             GetGlyphIndex( sal_UCS4 ) const;
     sal_GlyphId             GetRawGlyphIndex( sal_UCS4, sal_UCS4 = 0 ) const;
