@@ -1404,8 +1404,9 @@ SdrObject* SwContentTree::GetDrawingObjectsByContent(const SwContent *pCnt)
 
 bool  SwContentTree::Expand( SvTreeListEntry* pParent )
 {
-    if(!m_bIsRoot || (static_cast<SwContentType*>(pParent->GetUserData())->GetType() == ContentTypeId::OUTLINE) ||
-            (m_nRootType == ContentTypeId::OUTLINE))
+    if (!m_bIsRoot
+        || (static_cast<SwTypeNumber*>(pParent->GetUserData())->GetTypeId() == CTYPE_CTT && static_cast<SwContentType*>(pParent->GetUserData())->GetType() == ContentTypeId::OUTLINE)
+        || (m_nRootType == ContentTypeId::OUTLINE))
     {
         if(lcl_IsContentType(pParent))
         {
@@ -1459,8 +1460,9 @@ bool  SwContentTree::Expand( SvTreeListEntry* pParent )
 
 bool  SwContentTree::Collapse( SvTreeListEntry* pParent )
 {
-    if(!m_bIsRoot || (static_cast<SwContentType*>(pParent->GetUserData())->GetType() == ContentTypeId::OUTLINE) ||
-            (m_nRootType == ContentTypeId::OUTLINE))
+    if (!m_bIsRoot
+        || (static_cast<SwTypeNumber*>(pParent->GetUserData())->GetTypeId() == CTYPE_CTT && static_cast<SwContentType*>(pParent->GetUserData())->GetType() == ContentTypeId::OUTLINE)
+        || (m_nRootType == ContentTypeId::OUTLINE))
     {
         if(lcl_IsContentType(pParent))
         {
