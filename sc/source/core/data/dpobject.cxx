@@ -2195,7 +2195,7 @@ void lcl_FillOldFields( ScPivotFieldVector& rFields,
             PivotFunc nMask = PivotFunc::NONE;
             if ( nOrient == sheet::DataPilotFieldOrientation_DATA )
             {
-                sal_Int16 eFunc = (sal_Int16)ScUnoHelpFunctions::GetEnumProperty(
+                sal_Int16 eFunc = ScUnoHelpFunctions::GetShortProperty(
                                   xDimProp, SC_UNO_DP_FUNCTION2,
                                   sheet::GeneralFunction2::NONE );
                 if ( eFunc == sheet::GeneralFunction2::AUTO )
