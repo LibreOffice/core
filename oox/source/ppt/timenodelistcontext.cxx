@@ -240,10 +240,6 @@ namespace oox { namespace ppt {
                 }
             }
 
-        virtual ~CmdTimeNodeContext() throw () override
-            {
-            }
-
         virtual void onEndElement() override
             {
                 if( isCurrentElement( PPT_TOKEN( cmd ) ) )
@@ -353,10 +349,6 @@ namespace oox { namespace ppt {
                 mnPrevAc = xAttribs->getOptionalValueToken( XML_prevAc, 0 );
             }
 
-        virtual ~SequenceTimeNodeContext() throw() override
-            {
-            }
-
         virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) override
             {
                 switch ( aElementToken )
@@ -424,9 +416,6 @@ namespace oox { namespace ppt {
             , mnDir( xAttribs->getOptionalValueToken( XML_dir, 0 ) )
             , mbHasByColor( false )
             , m_byColor( AnimationColorSpace::RGB, 0, 0, 0)
-            {
-            }
-        virtual ~AnimColorContext() throw() override
             {
             }
 
@@ -627,10 +616,6 @@ namespace oox { namespace ppt {
                     = makeAny((sal_Int16)AnimationTransformType::SCALE);
             }
 
-        virtual ~AnimScaleContext( ) throw( ) override
-            {
-            }
-
         virtual void onEndElement() override
             {
                 if( isCurrentElement( mnElement ) )
@@ -726,10 +711,6 @@ namespace oox { namespace ppt {
                 }
             }
 
-        virtual ~AnimRotContext( ) throw( ) override
-            {
-            }
-
         virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) override
             {
                 switch ( aElementToken )
@@ -781,10 +762,6 @@ namespace oox { namespace ppt {
                 msPtsTypes = xAttribs->getOptionalValue( XML_ptsTypes );
                 mnAngle = attribs.getInteger( XML_rAng, 0 );
                 // TODO make sure the units are right. Likely not.
-            }
-
-        virtual ~AnimMotionContext( ) throw() override
-            {
             }
 
         virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) override
@@ -864,10 +841,6 @@ namespace oox { namespace ppt {
                     aFilter.setMode( nDir != XML_out );
                     pNode->setTransitionFilter( aFilter );
                 }
-            }
-
-        virtual ~AnimEffectContext( ) throw() override
-            {
             }
 
         virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) override

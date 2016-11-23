@@ -37,7 +37,7 @@ public:
     CustomShowContext( ::oox::core::FragmentHandler2& rParent,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttribs,
             CustomShow& rCustomShow );
-    virtual ~CustomShowContext( ) override;
+
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) override;
 };
 
@@ -49,10 +49,6 @@ CustomShowContext::CustomShowContext( FragmentHandler2& rParent,
 {
     mrCustomShow.maCustomShowName = rxAttribs->getOptionalValue( XML_name );
     mrCustomShow.mnId = rxAttribs->getOptionalValue( XML_id );
-}
-
-CustomShowContext::~CustomShowContext( )
-{
 }
 
 ::oox::core::ContextHandlerRef CustomShowContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )

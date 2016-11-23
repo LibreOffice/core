@@ -158,10 +158,6 @@ public:
         {
         }
 
-    virtual ~LayoutVariablePropertySetContext() override
-        {
-        }
-
     virtual ContextHandlerRef onCreateContext( ::sal_Int32 aElement, const AttributeList& rAttribs )
         throw (SAXException, RuntimeException) override
         {
