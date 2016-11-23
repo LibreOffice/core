@@ -7338,6 +7338,28 @@ bool PDFWriter::Sign(PDFSignContext& rContext)
     aSignerInfo.HashAlgorithm.pszObjId = const_cast<LPSTR>(szOID_NIST_sha256);
     aSignerInfo.HashAlgorithm.Parameters.cbData = 0;
 
+    // Add the signing certificate as a signed attribute.
+    CRYPT_INTEGER_BLOB aCertificateBlob;
+    // Just en empty SEQUENCE stub for now.
+    std::vector<unsigned char> aEncodedCertificate{0x30, 0x00};
+    aCertificateBlob.pbData = aEncodedCertificate.data();
+    aCertificateBlob.cbData = aEncodedCertificate.size();
+    CRYPT_ATTRIBUTE aCertificateAttribute;
+    /*
+     * id-aa-signingCertificateV2 OBJECT IDENTIFIER ::=
+     * { iso(1) member-body(2) us(840) rsadsi(113549) pkcs(1) pkcs9(9)
+     *   smime(16) id-aa(2) 47 }
+     */
+    aCertificateAttribute.pszObjId = const_cast<LPSTR>("1.2.840.113549.1.9.16.2.47");
+    aCertificateAttribute.cValue = 1;
+    aCertificateAttribute.rgValue = &aCertificateBlob;
+    // Don't write the signed attribute by default till the value is ready.
+    if (g_bDebugDisableCompression)
+    {
+        aSignerInfo.cAuthAttr = 1;
+        aSignerInfo.rgAuthAttr = &aCertificateAttribute;
+    }
+
     CMSG_SIGNED_ENCODE_INFO aSignedInfo;
     memset(&aSignedInfo, 0, sizeof(aSignedInfo));
     aSignedInfo.cbSize = sizeof(aSignedInfo);
