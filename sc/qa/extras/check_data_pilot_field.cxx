@@ -69,7 +69,9 @@ private:
 bool CheckDataPilotField::isPropertyIgnored(const OUString& rName)
 {
     return rName == "Function"
-        || rName == "Subtotals";
+        || rName == "Subtotals"
+        || rName == "Function2"
+        || rName == "Subtotals2";
 }
 
 CheckDataPilotField::CheckDataPilotField()
