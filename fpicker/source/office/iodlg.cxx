@@ -761,7 +761,7 @@ IMPL_LINK_NOARG( SvtFileDialog, NewFolderHdl_Impl, Button*, void)
     }
 }
 
-bool SvtFileDialog::createNewUserFilter( const OUString& _rNewFilter )
+void SvtFileDialog::createNewUserFilter( const OUString& _rNewFilter )
 {
     // delete the old user filter and create a new one
     DELETEZ( pImpl->_pUserFilter );
@@ -781,26 +781,17 @@ bool SvtFileDialog::createNewUserFilter( const OUString& _rNewFilter )
         SetDefaultExt( pImpl->GetCurFilter( )->GetExtension() );
     else
         EraseDefaultExt();
-
-    // outta here
-    return bIsAllFiles;
 }
 
 
-#define FLT_NONEMPTY        0x0001
-#define FLT_CHANGED         0x0002
-#define FLT_USERFILTER      0x0004
-#define FLT_ALLFILESFILTER  0x0008
-
-
-sal_uInt16 SvtFileDialog::adjustFilter( const OUString& _rFilter )
+AdjustFilterFlags SvtFileDialog::adjustFilter( const OUString& _rFilter )
 {
-    sal_uInt16 nReturn = 0;
+    AdjustFilterFlags nReturn = AdjustFilterFlags::NONE;
 
     const bool bNonEmpty = !_rFilter.isEmpty();
     if ( bNonEmpty )
     {
-        nReturn |= FLT_NONEMPTY;
+        nReturn |= AdjustFilterFlags::NonEmpty;
 
         bool bFilterChanged = true;
 
@@ -812,17 +803,13 @@ sal_uInt16 SvtFileDialog::adjustFilter( const OUString& _rFilter )
             pFilter = FindFilter_Impl( _rFilter, true, bFilterChanged );
 
         if ( bFilterChanged )
-            nReturn |= FLT_CHANGED;
+            nReturn |= AdjustFilterFlags::Changed;
 
         if ( !pFilter )
         {
-            nReturn |= FLT_USERFILTER;
+            nReturn |= AdjustFilterFlags::UserFilter;
             // no filter found : use it as user defined filter
-            if ( createNewUserFilter( _rFilter ) )
-            {   // it's the "all files" filter
-                nReturn |= FLT_ALLFILESFILTER;
-
-            }
+            createNewUserFilter( _rFilter );
         }
     }
 
@@ -946,8 +933,8 @@ void SvtFileDialog::OpenHdl_Impl(void* pVoid)
         return;
 
     // if a filter was retrieved, there were wildcards !
-    sal_uInt16 nNewFilterFlags = adjustFilter( aFilter );
-    if ( nNewFilterFlags & FLT_CHANGED )
+    AdjustFilterFlags nNewFilterFlags = adjustFilter( aFilter );
+    if ( nNewFilterFlags & AdjustFilterFlags::Changed )
     {
         // cut off all text before wildcard in edit and select wildcard
         pImpl->_pEdFileName->SetText( aFilter );
@@ -1048,14 +1035,14 @@ void SvtFileDialog::OpenHdl_Impl(void* pVoid)
             }
             else
             {
-                if ( nNewFilterFlags & FLT_CHANGED )
+                if ( nNewFilterFlags & AdjustFilterFlags::Changed )
                     ExecuteFilter();
             }
 
             return;
         }
     }
-    else if ( !( nNewFilterFlags & FLT_NONEMPTY ) )
+    else if ( !( nNewFilterFlags & AdjustFilterFlags::NonEmpty ) )
     {
         // if applicable save URL
         _aPath = aFileName;
@@ -1063,7 +1050,7 @@ void SvtFileDialog::OpenHdl_Impl(void* pVoid)
     else
     {
         // if applicable filter again
-        if ( nNewFilterFlags & FLT_CHANGED )
+        if ( nNewFilterFlags & AdjustFilterFlags::Changed )
             ExecuteFilter();
         return;
     }
@@ -1946,8 +1933,8 @@ short SvtFileDialog::PrepareExecute()
     if ( !IsolateFilterFromPath_Impl( _aPath, aFilter ) )
         return 0;
 
-    sal_uInt16 nNewFilterFlags = adjustFilter( aFilter );
-    if ( nNewFilterFlags & ( FLT_NONEMPTY | FLT_USERFILTER ) )
+    AdjustFilterFlags nNewFilterFlags = adjustFilter( aFilter );
+    if ( nNewFilterFlags & ( AdjustFilterFlags::NonEmpty | AdjustFilterFlags::UserFilter ) )
     {
         pImpl->_pEdFileName->SetText( aFilter );
     }

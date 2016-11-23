@@ -40,6 +40,7 @@
 #include <comphelper/configuration.hxx>
 #include <comphelper/processfactory.hxx>
 #include "fpdialogbase.hxx"
+#include <o3tl/typed_flags_set.hxx>
 
 #include <set>
 
@@ -50,6 +51,17 @@ class SvtFileDialogFilter_Impl;
 class SvtURLBox;
 class SvtExpFileDlg_Impl;
 class CustomContainer;
+
+enum class AdjustFilterFlags {
+    NONE            = 0x0000,
+    NonEmpty        = 0x0001,
+    Changed         = 0x0002,
+    UserFilter      = 0x0004,
+};
+namespace o3tl {
+    template<> struct typed_flags<AdjustFilterFlags> : is_typed_flags<AdjustFilterFlags, 0x0007> {};
+}
+
 
 class SvtFileDialog : public SvtFileDialog_Base
 {
@@ -238,11 +250,10 @@ private:
 
     /** updates _pUserFilter with a new filter
         <p>No checks for necessity are made.</p>
-        @return <TRUE/> if the new filter is "*.*"
     */
-    bool                        createNewUserFilter( const OUString& _rNewFilter );
+    void                        createNewUserFilter( const OUString& _rNewFilter );
 
-    sal_uInt16                  adjustFilter( const OUString& _rFilter );
+    AdjustFilterFlags           adjustFilter( const OUString& _rFilter );
 
     // IFilePickerController, needed by OControlAccess
     virtual Control*            getControl( sal_Int16 _nControlId, bool _bLabelControl = false ) const override;
