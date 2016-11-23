@@ -43,8 +43,6 @@ class GlyphData;
 class FontConfigFontOptions;
 class PhysicalFontCollection;
 class FreetypeFont;
-class ServerFontLayout;
-class ServerFontLayoutEngine;
 class SvpGcpHelper;
 
 namespace basegfx { class B2DPolyPolygon; }
@@ -178,7 +176,6 @@ public:
 
 private:
     friend class GlyphCache;
-    friend class ServerFontLayout;
     friend class FreetypeFontInstance;
     friend class X11SalGraphics;
     friend class CairoTextRender;
@@ -193,9 +190,6 @@ private:
     void                    ReleaseFromGarbageCollect();
 
     void                    ApplyGlyphTransform( int nGlyphFlags, FT_GlyphRec_* ) const;
-    void                    ApplyGSUB( const FontSelectPattern& );
-
-    ServerFontLayoutEngine* GetLayoutEngine();
 
     typedef std::unordered_map<int,GlyphData> GlyphList;
     mutable GlyphList       maGlyphList;
@@ -233,7 +227,6 @@ private:
     typedef std::unordered_map<int,int> GlyphSubstitution;
     GlyphSubstitution       maGlyphSubstitution;
 
-    ServerFontLayoutEngine* mpLayoutEngine;
     hb_font_t*              mpHbFont;
 };
 
@@ -248,42 +241,6 @@ public:
 
 private:
     FreetypeFont*           mpFreetypeFont;
-};
-
-class VCL_DLLPUBLIC ServerFontLayout : public GenericSalLayout
-{
-public:
-                            ServerFontLayout( FreetypeFont& );
-
-    virtual bool            LayoutText( ImplLayoutArgs& ) override;
-    virtual void            AdjustLayout( ImplLayoutArgs& ) override;
-    virtual void            DrawText( SalGraphics& ) const override;
-
-    void                    SetNeedFallback(
-                                ImplLayoutArgs& rArgs,
-                                sal_Int32 nIndex,
-                                bool bRightToLeft);
-
-    FreetypeFont&           GetFreetypeFont() const   { return mrFreetypeFont; }
-
-    virtual std::shared_ptr<vcl::TextLayoutCache>
-        CreateTextLayoutCache(OUString const&) const override;
-
-private:
-    FreetypeFont&           mrFreetypeFont;
-    css::uno::Reference<css::i18n::XBreakIterator> mxBreak;
-
-                            ServerFontLayout( const ServerFontLayout& ) = delete;
-                            ServerFontLayout& operator=( const ServerFontLayout& ) = delete;
-
-};
-
-class ServerFontLayoutEngine
-{
-public:
-    virtual                 ~ServerFontLayoutEngine() {}
-
-    virtual bool            Layout(ServerFontLayout&, ImplLayoutArgs&) = 0;
 };
 
 #endif // INCLUDED_VCL_INC_GENERIC_GLYPHCACHE_HXX

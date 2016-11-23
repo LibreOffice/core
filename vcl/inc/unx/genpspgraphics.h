@@ -34,7 +34,6 @@ class PhysicalFontCollection;
 namespace psp { struct JobData; class PrinterGfx; }
 
 class FreetypeFont;
-class ServerFontLayout;
 class FontAttributes;
 class SalInfoPrinter;
 class GlyphCache;
