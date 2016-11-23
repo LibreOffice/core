@@ -24,7 +24,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
-#include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/text/XFootnote.hpp>
 
 #include <cppuhelper/implbase.hxx>

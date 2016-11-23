@@ -22,7 +22,6 @@
 
 #include "acccontext.hxx"
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
-#include <com/sun/star/document/XEventListener.hpp>
 #include <com/sun/star/accessibility/XAccessibleExtendedAttributes.hpp>
 #include <com/sun/star/accessibility/XAccessibleGetAccFlowTo.hpp>
 #include <accselectionhelper.hxx>

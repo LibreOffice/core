@@ -23,7 +23,6 @@
 class SwAccessibleContext;
 class SwFEShell;
 
-#include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 
 class SwAccessibleSelectionHelper
 {

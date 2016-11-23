@@ -39,7 +39,6 @@
 #include <unotools/accessiblestatesethelper.hxx>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
-#include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/beans/UnknownPropertyException.hpp>
 #include <breakit.hxx>
 #include <accpara.hxx>
@@ -78,7 +77,6 @@
 #include <frmatr.hxx>
 #include <unosett.hxx>
 #include <paratr.hxx>
-#include <com/sun/star/container/XIndexReplace.hpp>
 #include <unomap.hxx>
 #include <unoprnms.hxx>
 #include <com/sun/star/text/WritingMode2.hpp>

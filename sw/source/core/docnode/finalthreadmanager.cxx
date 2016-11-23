@@ -26,7 +26,6 @@
 
 #include <com/sun/star/frame/Desktop.hpp>
 #include <rtl/ustring.hxx>
-#include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <cppuhelper/supportsservice.hxx>
 
 /** thread to cancel a give list of cancellable jobs

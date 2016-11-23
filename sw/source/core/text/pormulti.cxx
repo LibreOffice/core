@@ -22,7 +22,6 @@
 
 #include <hintids.hxx>
 
-#include <com/sun/star/i18n/ScriptType.hpp>
 #include <editeng/twolinesitem.hxx>
 #include <editeng/charrotateitem.hxx>
 #include <vcl/outdev.hxx>

@@ -26,7 +26,6 @@
 #include <memory>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <cstdlib>
 #include <dbfld.hxx>
 #include <dbmgr.hxx>

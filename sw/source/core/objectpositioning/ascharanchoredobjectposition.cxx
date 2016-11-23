@@ -29,7 +29,6 @@
 #include <editeng/ulspitem.hxx>
 #include <fmtornt.hxx>
 
-#include <com/sun/star/text/HoriOrientation.hpp>
 
 using namespace ::com::sun::star;
 using namespace objectpositioning;

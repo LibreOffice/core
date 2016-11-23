@@ -20,7 +20,6 @@
 #include <doc.hxx>
 #include <docsh.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/XModule.hpp>
 #include <com/sun/star/xforms/Model.hpp>
 #include <com/sun/star/xforms/XModel2.hpp>

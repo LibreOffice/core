@@ -18,7 +18,6 @@
  */
 
 #include <com/sun/star/text/HoriOrientation.hpp>
-#include <com/sun/star/chart2/XChartDocument.hpp>
 #include <hintids.hxx>
 
 #include <editeng/brushitem.hxx>

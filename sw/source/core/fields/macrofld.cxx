@@ -21,7 +21,6 @@
 #include <doc.hxx>
 #include <docufld.hxx>
 #include <unofldmid.h>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/uri/XVndSunStarScriptUrl.hpp>
 #include <comphelper/processfactory.hxx>
