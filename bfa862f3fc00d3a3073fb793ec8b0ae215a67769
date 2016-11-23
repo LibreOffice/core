@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a74a57a_be64bd49",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-11-23T06:07:25Z",
+      "side": 1,
+      "message": "s/Mulit/Multi",
+      "revId": "bfa862f3fc00d3a3073fb793ec8b0ae215a67769",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a74a57a_7e74e5fc",
+        "filename": "dtrans/source/win32/clipb/MtaOleClipb.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-11-23T06:07:25Z",
+      "side": 1,
+      "message": "s/Mulit/Multi",
+      "revId": "bfa862f3fc00d3a3073fb793ec8b0ae215a67769",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a74a57a_5e772902",
+        "filename": "dtrans/source/win32/dtobj/XTDataObject.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-11-23T06:07:25Z",
+      "side": 1,
+      "message": "would be nice to have a comment here explaining why this is necessary (for future hackers)",
+      "revId": "bfa862f3fc00d3a3073fb793ec8b0ae215a67769",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a74a57a_3e6a6d1b",
+        "filename": "include/vcl/svapp.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 778,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-11-23T06:07:25Z",
+      "side": 1,
+      "message": "This comment is a little hard to understand. In what sense is it thread-safe?\n\nI think you mean \"it is safe to call this method without the SolarMutex held\"\n\nor perhaps\n\n\"all the tasks are executed serially, so no thread-safety locks between tasks are necessary\"\n??",
+      "revId": "bfa862f3fc00d3a3073fb793ec8b0ae215a67769",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
