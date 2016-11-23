@@ -726,7 +726,6 @@ GlyphSet::PSUploadFont (osl::File& rOutFile, PrinterGfx &rGfx, bool bAllowType42
     if (meBaseType != fonttype::TrueType)
         return;
 
-#if defined( UNX )
     TrueTypeFont *pTTFont;
     OString aTTFileName (rGfx.GetFontMgr().getFontFileSysPath(mnFontID));
     int nFace = rGfx.GetFontMgr().getFontFaceNumber(mnFontID);
@@ -827,11 +826,6 @@ GlyphSet::PSUploadFont (osl::File& rOutFile, PrinterGfx &rGfx, bool bAllowType42
     // cleanup
     CloseTTFont (pTTFont);
     fclose (pTmpFile);
-
-#else
-    (void)rOutFile; (void)rGfx; (void)bAllowType42; (void)rSuppliedFonts;
-#  warning FIXME: Missing OpenTTFontFile outside of Unix ...
-#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
