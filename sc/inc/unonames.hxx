@@ -249,7 +249,9 @@
 
 //  data pilot field
 #define SC_UNONAME_FUNCTION         "Function"
+#define SC_UNONAME_FUNCTION2        "Function2"
 #define SC_UNONAME_SUBTOTALS        "Subtotals"
+#define SC_UNONAME_SUBTOTALS2       "Subtotals2"
 #define SC_UNONAME_SELPAGE          "SelectedPage"
 #define SC_UNONAME_USESELPAGE       "UseSelectedPage"
 #define SC_UNONAME_HASREFERENCE     "HasReference"
@@ -582,9 +584,11 @@
 #define SC_UNO_DP_ORIENTATION          "Orientation"
 #define SC_UNO_DP_POSITION             "Position"
 #define SC_UNO_DP_FUNCTION             "Function"
+#define SC_UNO_DP_FUNCTION2            "Function2"
 #define SC_UNO_DP_USEDHIERARCHY        "UsedHierarchy"
 #define SC_UNO_DP_FILTER               "Filter"
 #define SC_UNO_DP_SUBTOTAL             "SubTotals"
+#define SC_UNO_DP_SUBTOTAL2            "SubTotals2"
 #define SC_UNO_DP_SHOWEMPTY            "ShowEmpty"
 #define SC_UNO_DP_REPEATITEMLABELS     "RepeatItemLabels"
 #define SC_UNO_DP_ISVISIBLE            "IsVisible"

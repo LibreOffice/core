@@ -33,6 +33,7 @@
 #include <comphelper/stl_types.hxx>
 
 #include <com/sun/star/sheet/GeneralFunction.hpp>
+#include <com/sun/star/sheet/GeneralFunction2.hpp>
 #include <com/sun/star/sheet/DataPilotFieldAutoShowInfo.hpp>
 #include <com/sun/star/sheet/DataPilotFieldLayoutInfo.hpp>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
@@ -194,7 +195,7 @@ ScDPSaveDimension::ScDPSaveDimension(const OUString& rName, bool bDataLayout) :
     bIsDataLayout( bDataLayout ),
     bDupFlag( false ),
     nOrientation( sheet::DataPilotFieldOrientation_HIDDEN ),
-    nFunction( sheet::GeneralFunction_AUTO ),
+    nFunction( sheet::GeneralFunction2::AUTO ),
     nUsedHierarchy( -1 ),
     nShowEmptyMode( SC_DPSAVEMODE_DONTKNOW ),
     bRepeatItemLabels( false ),
@@ -563,8 +564,8 @@ void ScDPSaveDimension::WriteToSource( const uno::Reference<uno::XInterface>& xD
         sheet::DataPilotFieldOrientation eOrient = (sheet::DataPilotFieldOrientation)nOrientation;
         xDimProp->setPropertyValue( SC_UNO_DP_ORIENTATION, uno::Any(eOrient) );
 
-        sheet::GeneralFunction eFunc = (sheet::GeneralFunction)nFunction;
-        xDimProp->setPropertyValue( SC_UNO_DP_FUNCTION, uno::Any(eFunc) );
+        sal_Int16 eFunc = static_cast<sal_Int16>(nFunction);
+        xDimProp->setPropertyValue( SC_UNO_DP_FUNCTION2, uno::Any(eFunc) );
 
         if ( nUsedHierarchy >= 0 )
         {
@@ -629,11 +630,11 @@ void ScDPSaveDimension::WriteToSource( const uno::Reference<uno::XInterface>& xD
                     if ( !pSubTotalFuncs )
                         nSubTotalCount = 0;
 
-                    uno::Sequence<sheet::GeneralFunction> aSeq(nSubTotalCount);
-                    sheet::GeneralFunction* pArray = aSeq.getArray();
+                    uno::Sequence<sal_Int16> aSeq(nSubTotalCount);
+                    sal_Int16* pArray = aSeq.getArray();
                     for (long i=0; i<nSubTotalCount; i++)
-                        pArray[i] = (sheet::GeneralFunction)pSubTotalFuncs[i];
-                    xLevProp->setPropertyValue( SC_UNO_DP_SUBTOTAL, uno::Any(aSeq) );
+                        pArray[i] = static_cast<sal_Int16>(pSubTotalFuncs[i]);
+                    xLevProp->setPropertyValue( SC_UNO_DP_SUBTOTAL2, uno::Any(aSeq) );
                 }
                 if ( nShowEmptyMode != SC_DPSAVEMODE_DONTKNOW )
                     lcl_SetBoolProperty( xLevProp,
