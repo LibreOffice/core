@@ -56,6 +56,18 @@ public:
     }
 
     void Clear();
+
+    const ScColumn& back() const
+    {
+        assert(aCols.size() > 0);
+        return *aCols.back();
+    }
+
+    ScColumn& back()
+    {
+        assert(aCols.size() > 0);
+        return *aCols.back();
+    }
 };
 
 
