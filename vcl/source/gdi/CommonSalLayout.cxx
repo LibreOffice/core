@@ -261,6 +261,13 @@ CommonSalLayout::CommonSalLayout(FreetypeFont& rFreetypeFont)
 }
 #endif
 
+void CommonSalLayout::InitFont() const
+{
+#if defined(_WIN32)
+    SelectObject(mhDC, mhFont);
+#endif
+}
+
 struct SubRun
 {
     int32_t mnMin;
