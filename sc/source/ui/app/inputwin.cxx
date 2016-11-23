@@ -1107,7 +1107,9 @@ void ScTextWnd::StartEditEngine()
         InitEditEngine();
     }
 
-    SC_MOD()->SetInputMode( SC_INPUT_TOP );
+    ScInputHandler* pHdl = mpViewShell->GetInputHandler();
+    if (pHdl)
+        pHdl->SetMode(SC_INPUT_TOP);
 
     SfxViewFrame* pViewFrm = SfxViewFrame::Current();
     if (pViewFrm)
@@ -1557,8 +1559,10 @@ void ScTextWnd::StopEditEngine( bool bAll )
         mpEditView.reset();
         mpEditEngine.reset();
 
-        if ( pScMod->IsEditMode() && !bAll )
-            pScMod->SetInputMode(SC_INPUT_TABLE);
+        ScInputHandler* pHdl = mpViewShell->GetInputHandler();
+
+        if (pHdl && pHdl->IsEditMode() && !bAll)
+            pHdl->SetMode(SC_INPUT_TABLE);
 
         SfxViewFrame* pViewFrm = SfxViewFrame::Current();
         if (pViewFrm)
