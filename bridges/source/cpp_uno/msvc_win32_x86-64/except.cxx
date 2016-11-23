@@ -803,7 +803,7 @@ int mscx_filterCppException(
     if (rethrow && pRecord == pPointers->ExceptionRecord)
     {
         pRecord = *reinterpret_cast< EXCEPTION_RECORD ** >(
-#if _MSC_VER >= 1900 // VC 2015 (and later?)
+#if _MSC_VER >= 1900 // VC 2015/2017 (and later?)
             __current_exception()
 #else
             // Hack to get msvcrt internal _curexception field
