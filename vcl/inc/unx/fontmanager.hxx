@@ -57,7 +57,6 @@ namespace fonttype
 {
 enum type {
     Unknown = 0,
-    Type1 = 1,
     TrueType = 2,
 };
 }
@@ -65,8 +64,8 @@ enum type {
 /*
  *  the difference between FastPrintFontInfo and PrintFontInfo
  *  is that the information in FastPrintFontInfo can usually
- *  be gathered without opening either the font file or
- *  an afm metric file. they are gathered from fonts.dir alone.
+ *  be gathered without opening either the font file, they are
+ *  gathered from fonts.dir alone.
  *  if only FastPrintFontInfo is gathered and PrintFontInfo
  *  on demand and for less fonts, then performance in startup
  *  increases considerably
@@ -88,7 +87,6 @@ struct FastPrintFontInfo
     FontPitch                      m_ePitch;
     rtl_TextEncoding               m_aEncoding;
     bool                           m_bSubsettable;
-    bool                           m_bEmbeddable;
 
     FastPrintFontInfo()
         : m_nID(0)
@@ -100,7 +98,6 @@ struct FastPrintFontInfo
         , m_ePitch(PITCH_DONTKNOW)
         , m_aEncoding(RTL_TEXTENCODING_DONTKNOW)
         , m_bSubsettable(false)
-        , m_bEmbeddable(false)
     {}
 };
 
@@ -142,10 +139,8 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
 {
     struct PrintFont;
     struct TrueTypeFontFile;
-    struct Type1FontFile;
     friend struct PrintFont;
     friend struct TrueTypeFontFile;
-    friend struct Type1FontFile;
     friend class FontCache;
 
     struct PrintFontMetrics
@@ -188,7 +183,6 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
         FontWeight                                  m_eWeight;
         FontPitch                                   m_ePitch;
         rtl_TextEncoding                            m_aEncoding;
-        bool                                        m_bFontEncodingOnly; // set if font should be only accessed by builtin encoding
         CharacterMetric                             m_aGlobalMetricX;
         CharacterMetric                             m_aGlobalMetricY;
         PrintFontMetrics*                           m_pMetrics;
@@ -202,33 +196,9 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
         bool                                        m_bHaveVerticalSubstitutedGlyphs;
         bool                                        m_bUserOverride;
 
-        /// mapping from unicode (well, UCS-2) to font code
-        std::map< sal_Unicode, sal_Int32 >          m_aEncodingVector;
-        /// HACK for Type 1 fonts: if multiple UCS-2 codes map to the same
-        /// font code, this set contains the preferred one, i.e., the one that
-        /// is specified explicitly via "C" or "CH" in the AFM file
-        std::set<sal_Unicode>                  m_aEncodingVectorPriority;
-        std::map< sal_Unicode, OString >       m_aNonEncoded;
-
         explicit PrintFont( fonttype::type eType );
         virtual ~PrintFont();
         virtual bool queryMetricPage( int nPage, utl::MultiAtomProvider* pProvider ) = 0;
-
-        bool readAfmMetrics( utl::MultiAtomProvider* pProvider, bool bFillEncodingvector, bool bOnlyGlobalAttributes );
-    };
-
-    struct Type1FontFile : public PrintFont
-    {
-        int                 m_nDirectory;       // atom containing system dependent path
-        OString      m_aFontFile;        // relative to directory
-        OString      m_aMetricFile;      // dito
-
-        /* note: m_aFontFile and Metric file are not atoms
-           because they should be fairly unique */
-
-        Type1FontFile() : PrintFont( fonttype::Type1 ), m_nDirectory( 0 ) {}
-        virtual ~Type1FontFile() override;
-        virtual bool queryMetricPage( int nPage, utl::MultiAtomProvider* pProvider ) override;
     };
 
     struct TrueTypeFontFile : public PrintFont
@@ -258,14 +228,8 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
     std::unordered_map< int, OString >          m_aAtomToDir;
     int                                         m_nNextDirAtom;
 
-    std::unordered_multimap< OString, sal_Unicode, OStringHash > m_aAdobenameToUnicode;
-    std::unordered_multimap< sal_Unicode, OString > m_aUnicodeToAdobename;
-    std::unordered_multimap< sal_Unicode, sal_uInt8 > m_aUnicodeToAdobecode;
-    std::unordered_multimap< sal_uInt8, sal_Unicode > m_aAdobecodeToUnicode;
-
     mutable FontCache*                         m_pFontCache;
 
-    OString getAfmFile( PrintFont* pFont ) const;
     OString getFontFile( PrintFont* pFont ) const;
 
     bool analyzeFontFile( int nDirID, const OString& rFileName, std::list< PrintFont* >& rNewFonts, const char *pFormat=nullptr ) const;
@@ -375,13 +339,6 @@ public:
         return pFont ? pFont->m_aEncoding : RTL_TEXTENCODING_DONTKNOW;
     }
 
-    // should i only use font's builtin encoding ?
-    bool getUseOnlyFontEncoding( fontID nFontID ) const
-    {
-        PrintFont* pFont = getFont( nFontID );
-        return pFont && pFont->m_bFontEncodingOnly;
-    }
-
     // get a specific fonts system dependent filename
     OString getFontFileSysPath( fontID nFontID ) const
     {
@@ -413,27 +370,9 @@ public:
     // the user is responsible to allocate pArray large enough
     bool getMetrics( fontID nFontID, const sal_Unicode* pString, int nLen, CharacterMetric* pArray ) const;
 
-    // get encoding vector of font, currently only for Type1 fonts
-    // returns NULL if encoding vector is empty or font is not type1;
-    // if ppNonEncoded is set and non encoded type1 glyphs exist
-    // then *ppNonEncoded is set to the mapping for nonencoded glyphs.
-    // the encoding vector contains -1 for non encoded glyphs
-    const std::map< sal_Unicode, sal_Int32 >* getEncodingMap( fontID nFontID, const std::map< sal_Unicode, OString >** ppNonEncoded, std::set<sal_Unicode> const ** ppPriority ) const;
-
     // evaluates copyright flags for TrueType fonts for printing/viewing
     // type1 fonts do not have such a feature, so return for them is true
     bool isFontDownloadingAllowedForPrinting( fontID nFont ) const;
-
-    // helper for type 1 fonts
-    std::list< OString > getAdobeNameFromUnicode( sal_Unicode aChar ) const;
-
-    std::vector< sal_Unicode >  getUnicodeFromAdobeName( const OString& rName ) const;
-    std::pair< std::unordered_multimap< sal_uInt8, sal_Unicode >::const_iterator,
-                 std::unordered_multimap< sal_uInt8, sal_Unicode >::const_iterator >
-    getUnicodeFromAdobeCode( sal_uInt8 aChar ) const
-    {
-        return m_aAdobecodeToUnicode.equal_range( aChar );
-    }
 
     // creates a new font subset of an existing TrueType font
     // returns true in case of success, else false
