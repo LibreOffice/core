@@ -55,6 +55,7 @@
 #include <formula/formulahelper.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
+#include <o3tl/make_unique.hxx>
 
 #include "inputwin.hxx"
 #include "tabvwsh.hxx"
@@ -661,7 +662,7 @@ ScInputHandler::~ScInputHandler()
 
     delete pRangeFindList;     pRangeFindList = nullptr;
     delete pEditDefaults;      pEditDefaults = nullptr;
-    delete pEngine;            pEngine = nullptr;
+    pEngine.reset();
     delete pLastState;         pLastState = nullptr;
     delete pDelayTimer;        pDelayTimer = nullptr;
     delete pColumnData;        pColumnData = nullptr;
@@ -719,10 +720,11 @@ void ScInputHandler::ImplCreateEditEngine()
         if ( pActiveViewSh )
         {
             ScDocument& rDoc = pActiveViewSh->GetViewData().GetDocShell()->GetDocument();
-            pEngine = new ScFieldEditEngine(&rDoc, rDoc.GetEnginePool(), rDoc.GetEditPool());
+            pEngine = o3tl::make_unique<ScFieldEditEngine>(&rDoc, rDoc.GetEnginePool(), rDoc.GetEditPool());
         }
         else
-            pEngine = new ScFieldEditEngine(nullptr, EditEngine::CreatePool(), nullptr, true);
+            pEngine = o3tl::make_unique<ScFieldEditEngine>(nullptr, EditEngine::CreatePool(), nullptr, true);
+
         pEngine->SetWordDelimiters( ScEditUtil::ModifyDelimiters( pEngine->GetWordDelimiters() ) );
         UpdateRefDevice();      // also sets MapMode
         pEngine->SetPaperSize( Size( 1000000, 1000000 ) );
@@ -1641,7 +1643,7 @@ void ScInputHandler::UseColData() // When typing
             sal_Int32 nParLen = pEngine->GetTextLen( aSel.nEndPara );
             if ( aSel.nEndPos == nParLen )
             {
-                OUString aText = GetEditText(pEngine);
+                OUString aText = GetEditText(pEngine.get());
                 if (!aText.isEmpty())
                 {
                     OUString aNew;
@@ -1709,7 +1711,7 @@ void ScInputHandler::NextAutoEntry( bool bBack )
             sal_Int32 nParCnt = pEngine->GetParagraphCount();
             if ( aSel.nEndPara+1 == nParCnt && aSel.nStartPara == aSel.nEndPara )
             {
-                OUString aText = GetEditText(pEngine);
+                OUString aText = GetEditText(pEngine.get());
                 sal_Int32 nSelLen = aSel.nEndPos - aSel.nStartPos;
                 sal_Int32 nParLen = pEngine->GetTextLen( aSel.nEndPara );
                 if ( aSel.nEndPos == nParLen && aText.getLength() == aAutoSearch.getLength() + nSelLen )
@@ -2143,7 +2145,7 @@ bool ScInputHandler::StartTable( sal_Unicode cTyped, bool bFromCommand, bool bIn
                 aCurrentText.clear();
             }
             else
-                aStr = GetEditText(pEngine);
+                aStr = GetEditText(pEngine.get());
 
             if (aStr.startsWith("{=") && aStr.endsWith("}") )  // Matrix formula?
             {
@@ -2291,7 +2293,7 @@ void ScInputHandler::DataChanged( bool bFromTopNotify, bool bSetModified )
         if (pInputWin)
             aText = ScEditUtil::GetMultilineString(*pEngine);
         else
-            aText = GetEditText(pEngine);
+            aText = GetEditText(pEngine.get());
         lcl_RemoveTabs(aText);
 
         if ( pInputWin )
@@ -2502,7 +2504,7 @@ void ScInputHandler::SetMode( ScInputMode eNewMode, const OUString* pInitText )
             if (StartTable(0, false, eMode == SC_INPUT_TABLE))
             {
                 if (pActiveViewSh)
-                    pActiveViewSh->GetViewData().GetDocShell()->PostEditView( pEngine, aCursorPos );
+                    pActiveViewSh->GetViewData().GetDocShell()->PostEditView( pEngine.get(), aCursorPos );
             }
         }
 
@@ -2594,7 +2596,7 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode )
     ScPatternAttr*  pCellAttrs  = nullptr;
     bool            bForget     = false; // Remove due to validity?
 
-    OUString aString = GetEditText(pEngine);
+    OUString aString = GetEditText(pEngine.get());
     EditView* pActiveView = pTopView ? pTopView : pTableView;
     if (bModified && pActiveView && !aString.isEmpty() && !lcl_IsNumber(aString))
     {
@@ -2612,7 +2614,7 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode )
             pTopView->CompleteAutoCorrect(); // CompleteAutoCorrect for both Views
         if (pTableView)
             pTableView->CompleteAutoCorrect(pFrameWin);
-        aString = GetEditText(pEngine);
+        aString = GetEditText(pEngine.get());
     }
     lcl_RemoveTabs(aString);
 
@@ -2986,7 +2988,7 @@ void ScInputHandler::AddRefEntry()
     DataChanging();                         // Cannot be new
 
     RemoveSelection();
-    OUString aText = GetEditText(pEngine);
+    OUString aText = GetEditText(pEngine.get());
     sal_Unicode cLastChar = 0;
     sal_Int32 nPos = aText.getLength() - 1;
     while (nPos >= 0 && ((cLastChar = aText[nPos]) == ' ')) //checking space
@@ -3321,7 +3323,7 @@ bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, bool bStartEdit /* = false
             if (bNewView )                          // Create anew
             {
                 if (pActiveViewSh)
-                    pActiveViewSh->GetViewData().GetDocShell()->PostEditView( pEngine, aCursorPos );
+                    pActiveViewSh->GetViewData().GetDocShell()->PostEditView( pEngine.get(), aCursorPos );
                 UpdateActiveView();
                 if (eMode==SC_INPUT_NONE)
                     if (pTableView || pTopView)
@@ -3494,7 +3496,7 @@ void ScInputHandler::InputCommand( const CommandEvent& rCEvt )
             if (bNewView)                           // create new edit view
             {
                 if (pActiveViewSh)
-                    pActiveViewSh->GetViewData().GetDocShell()->PostEditView( pEngine, aCursorPos );
+                    pActiveViewSh->GetViewData().GetDocShell()->PostEditView( pEngine.get(), aCursorPos );
                 UpdateActiveView();
                 if (eMode==SC_INPUT_NONE)
                     if (pTableView || pTopView)
@@ -3624,7 +3626,7 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
                     else if ( bTextValid )
                         bTxtMod = ( !aString.equals(aCurrentText) );
                     else
-                        bTxtMod = ( !aString.equals(GetEditText(pEngine)) );
+                        bTxtMod = ( !aString.equals(GetEditText(pEngine.get())) );
 
                     if ( bTxtMod || bForce )
                     {
@@ -3634,7 +3636,7 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
                             if (pInputWin)
                                 aString = ScEditUtil::GetMultilineString(*pEngine);
                             else
-                                aString = GetEditText(pEngine);
+                                aString = GetEditText(pEngine.get());
                             lcl_RemoveTabs(aString);
                             bTextValid = false;
                             aCurrentText.clear();
@@ -3834,7 +3836,7 @@ void ScInputHandler::InputChanged( EditView* pView, bool bFromNotify )
     {
         ScViewData& rViewData = pActiveViewSh->GetViewData();
         if ( bNewView )
-            rViewData.GetDocShell()->PostEditView( pEngine, aCursorPos );
+            rViewData.GetDocShell()->PostEditView( pEngine.get(), aCursorPos );
 
         rViewData.EditGrowY();
         rViewData.EditGrowX();
