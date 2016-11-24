@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a74a57a_49ff7134",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 602,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-11-24T02:07:40Z",
+      "side": 1,
+      "message": "this is not needed any more",
+      "range": {
+        "startLine": 602,
+        "startChar": 0,
+        "endLine": 602,
+        "endChar": 32
+      },
+      "revId": "fe8af27fbed32d2ca336879f4203178d1e7b6f7d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a74a57a_69fc2d3f",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 665,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-11-24T02:07:40Z",
+      "side": 1,
+      "message": "no need to call reset in destructor, unless destruction of the objects needs to be in an order.\nlet unique_ptr dtor delete the object.",
+      "range": {
+        "startLine": 665,
+        "startChar": 0,
+        "endLine": 665,
+        "endChar": 25
+      },
+      "revId": "fe8af27fbed32d2ca336879f4203178d1e7b6f7d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
