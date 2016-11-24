@@ -158,7 +158,6 @@ class SvtLinguConfigItem : public utl::ConfigItem
 
 public:
     SvtLinguConfigItem();
-    virtual ~SvtLinguConfigItem() override;
 
     // utl::ConfigItem
     virtual void    Notify( const css::uno::Sequence< OUString > &rPropertyNames ) override;
@@ -196,11 +195,6 @@ SvtLinguConfigItem::SvtLinguConfigItem() :
 
     // request notify events when properties change
     EnableNotification( rPropertyNames );
-}
-
-SvtLinguConfigItem::~SvtLinguConfigItem()
-{
-    //! Commit (SaveOptions) will be called by the d-tor of the base called !
 }
 
 void SvtLinguConfigItem::Notify( const uno::Sequence< OUString > &rPropertyNames )

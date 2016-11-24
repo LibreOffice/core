@@ -229,8 +229,6 @@ public:
             RuntimeException
         );
 
-    virtual ~Moderator() override;
-
     enum ResultType {
         NORESULT,
 
@@ -341,8 +339,6 @@ public:
 
     explicit ModeratorsActiveDataStreamer(Moderator &theModerator);
 
-    virtual ~ModeratorsActiveDataStreamer() override;
-
     // XActiveDataStreamer
     virtual void SAL_CALL
     setStream(
@@ -377,8 +373,6 @@ public:
 
     explicit ModeratorsActiveDataSink(Moderator &theModerator);
 
-    virtual ~ModeratorsActiveDataSink() override;
-
     // XActiveDataSink.
     virtual void SAL_CALL
     setInputStream (
@@ -410,10 +404,6 @@ ModeratorsActiveDataSink::ModeratorsActiveDataSink(Moderator &theModerator)
 {
 }
 
-ModeratorsActiveDataSink::~ModeratorsActiveDataSink()
-{
-}
-
 // XActiveDataSink.
 void SAL_CALL
 ModeratorsActiveDataSink::setInputStream (
@@ -432,10 +422,6 @@ ModeratorsActiveDataStreamer::ModeratorsActiveDataStreamer(
     Moderator &theModerator
 )
     : m_aModerator(theModerator)
-{
-}
-
-ModeratorsActiveDataStreamer::~ModeratorsActiveDataStreamer()
 {
 }
 
@@ -460,8 +446,6 @@ public:
 
     explicit ModeratorsInteractionHandler(Moderator &theModerator);
 
-    virtual ~ModeratorsInteractionHandler() override;
-
     virtual void SAL_CALL
     handle( const Reference<XInteractionRequest >& Request )
         throw (RuntimeException, std::exception) override;
@@ -474,10 +458,6 @@ private:
 ModeratorsInteractionHandler::ModeratorsInteractionHandler(
     Moderator &aModerator)
     : m_aModerator(aModerator)
-{
-}
-
-ModeratorsInteractionHandler::~ModeratorsInteractionHandler()
 {
 }
 
@@ -553,10 +533,6 @@ Moderator::Moderator(
         m_aArg.Argument <<= aPostArg;
     else if(dec == 1)
         m_aArg.Argument <<= aOpenArg;
-}
-
-Moderator::~Moderator()
-{
 }
 
 Moderator::Result Moderator::getResult(const sal_uInt32 milliSec)

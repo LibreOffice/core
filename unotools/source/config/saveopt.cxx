@@ -97,7 +97,6 @@ class SvtSaveOptions_Impl : public utl::ConfigItem
 
 public:
                             SvtSaveOptions_Impl();
-                            virtual ~SvtSaveOptions_Impl() override;
 
     virtual void            Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
 
@@ -581,9 +580,6 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
     }
 }
 
-SvtSaveOptions_Impl::~SvtSaveOptions_Impl()
-{}
-
 void SvtSaveOptions_Impl::ImplCommit()
 {
     Sequence< OUString > aOrgNames = GetPropertyNames();
@@ -770,7 +766,6 @@ private:
 
 public:
                             SvtLoadOptions_Impl();
-                            virtual ~SvtLoadOptions_Impl() override;
 
     virtual void            Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
 
@@ -790,10 +785,6 @@ SvtLoadOptions_Impl::SvtLoadOptions_Impl()
     const Any* pValues = aValues.getConstArray();
     DBG_ASSERT( aValues.getLength() == aNames.getLength(), "GetProperties failed" );
     pValues[0] >>= bLoadUserDefinedSettings;
-}
-
-SvtLoadOptions_Impl::~SvtLoadOptions_Impl()
-{
 }
 
 void SvtLoadOptions_Impl::ImplCommit()
