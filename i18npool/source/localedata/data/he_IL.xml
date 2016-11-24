@@ -374,8 +374,8 @@
         </Month>
         <Month>
           <MonthID>Kislev</MonthID>
-          <DefaultAbbrvName>כסליו</DefaultAbbrvName>
-          <DefaultFullName>כסליו</DefaultFullName>
+          <DefaultAbbrvName>כסלו</DefaultAbbrvName>
+          <DefaultFullName>כסלו</DefaultFullName>
         </Month>
         <Month>
           <MonthID>Tevet</MonthID>
