@@ -54,6 +54,19 @@ class GbuildLinkTarget:
 
 class GbuildLib(GbuildLinkTarget):
 
+    @staticmethod
+    def from_json(json):
+        return GbuildLib(
+            json['LINKTARGET'],
+            json['LINKTARGET'],
+            json['MAKEFILE'],
+            json['INCLUDE'],
+            json['INCLUDE'],
+            json['DEFS'],
+            json['CXXOBJECTS'].split(' '),
+            '%s %s' % (json['CXXFLAGS'], json['CXXFLAGSAPPEND']),
+            json['LINKED_LIBS'].split(' '))
+
     def __init__(self, name, library, location, include, include_sys, defs, cxxobjects, cxxflags, linked_libs):
         GbuildLinkTarget.__init__(self, name, location, include, include_sys, defs, cxxobjects, cxxflags, linked_libs)
         self.library = library
@@ -71,6 +84,19 @@ class GbuildLib(GbuildLinkTarget):
 
 class GbuildExe(GbuildLinkTarget):
 
+    @staticmethod
+    def from_json(json):
+        return GbuildLib(
+            json['LINKTARGET'],
+            json['LINKTARGET'],
+            json['MAKEFILE'],
+            json['INCLUDE'],
+            json['INCLUDE'],
+            json['DEFS'],
+            json['CXXOBJECTS'].split(' '),
+            '%s %s' % (json['CXXFLAGS'], json['CXXFLAGSAPPEND']),
+            json['LINKED_LIBS'].split(' '))
+
     def __init__(self, name, executable, location, include, include_sys, defs, cxxobjects, cxxflags, linked_libs):
         GbuildLinkTarget.__init__(self, name, location, include, include_sys, defs, cxxobjects, cxxflags, linked_libs)
         self.executable = executable
@@ -84,10 +110,6 @@ class GbuildExe(GbuildLinkTarget):
 
 
 class GbuildParser:
-    makecmdpattern = re.compile('^MAKE_COMMAND := (.*)')
-    srcdirpattern = re.compile('^SRCDIR = (.*)')
-    builddirpattern = re.compile('^BUILDDIR = (.*)')
-    instdirpattern = re.compile('^INSTDIR = (.*)')
     binpathpattern = re.compile('^GPERF = (.*)gperf(.exe)?')
     libnamespattern = re.compile('^gb_Library_ILIBFILENAMES := (.*)')
     exenamepattern = re.compile('^gb_Executable_FILENAMES_FOR_BUILD := (.*)')
@@ -104,7 +126,7 @@ class GbuildParser:
 
     def __init__(self):
         (self.makecmd, self.srcdir, self.builddir, self.instdir, self.libs, self.exes,
-         self.libnames, self.exenames, self.target_by_path, self.target_by_location, self.modulenamelist) = ('', '', '', '', [], [], {}, {}, {}, {}, [])
+         self.libnames, self.exenames, self.target_by_path, self.target_by_location, self.modulenamelist) = ('make', os.environ['SRCDIR'], os.environ['BUILDDIR'], os.environ['INSTDIR'], [], [], {}, {}, {}, {}, [])
 
     def __mapping_to_dict(self, mapping):
         mapping_dict = {}
