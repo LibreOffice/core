@@ -58,6 +58,7 @@
 #include "sdresid.hxx"
 #include <comphelper/serviceinfohelper.hxx>
 #include <svx/svdogrp.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 #include "anminfo.hxx"
 #include "unoobj.hxx"
@@ -1148,16 +1149,22 @@ SdUnoEventsAccess::SdUnoEventsAccess( SdXShape* pShape ) throw()
 {
 }
 
-#define FOUND_CLICKACTION   0x0001
-#define FOUND_BOOKMARK      0x0002
-#define FOUND_EFFECT        0x0004
-#define FOUND_PLAYFULL      0x0008
-#define FOUND_VERB          0x0010
-#define FOUND_SOUNDURL      0x0020
-#define FOUND_SPEED         0x0040
-#define FOUND_EVENTTYPE     0x0080
-#define FOUND_MACRO         0x0100
-#define FOUND_LIBRARY       0x0200
+enum class FoundFlags {
+    NONE          = 0x0000,
+    ClickAction   = 0x0001,
+    Bookmark      = 0x0002,
+    Effect        = 0x0004,
+    PlayFull      = 0x0008,
+    Verb          = 0x0010,
+    SoundUrl      = 0x0020,
+    Speed         = 0x0040,
+    EventType     = 0x0080,
+    Macro         = 0x0100,
+    Library       = 0x0200,
+};
+namespace o3tl {
+    template<> struct typed_flags<FoundFlags> : is_typed_flags<FoundFlags, 0x03ff> {};
+}
 
 static void clearEventsInAnimationInfo( SdAnimationInfo* pInfo )
 {
@@ -1181,7 +1188,7 @@ void SAL_CALL SdUnoEventsAccess::replaceByName( const OUString& aName, const uno
     if( !aElement.hasValue() || aElement.getValueType() != getElementType() || !(aElement >>= aProperties) )
         throw lang::IllegalArgumentException();
 
-    sal_Int32 nFound = 0;
+    FoundFlags nFound = FoundFlags::NONE;
     const beans::PropertyValue* pProperties = aProperties.getConstArray();
 
     OUString aStrEventType;
@@ -1199,83 +1206,83 @@ void SAL_CALL SdUnoEventsAccess::replaceByName( const OUString& aName, const uno
     sal_Int32 nIndex;
     for( nIndex = 0; nIndex < nCount; nIndex++, pProperties++ )
     {
-        if( ( ( nFound & FOUND_EVENTTYPE ) == 0 ) && pProperties->Name == maStrEventType )
+        if( !( nFound & FoundFlags::EventType ) && pProperties->Name == maStrEventType )
         {
             if( pProperties->Value >>= aStrEventType )
             {
-                nFound |= FOUND_EVENTTYPE;
+                nFound |= FoundFlags::EventType;
                 continue;
             }
         }
-        else if( ( ( nFound & FOUND_CLICKACTION ) == 0 ) && pProperties->Name == maStrClickAction )
+        else if( !( nFound & FoundFlags::ClickAction ) && pProperties->Name == maStrClickAction )
         {
             if( pProperties->Value >>= eClickAction )
             {
-                nFound |= FOUND_CLICKACTION;
+                nFound |= FoundFlags::ClickAction;
                 continue;
             }
         }
-        else if( ( ( nFound & FOUND_MACRO ) == 0 ) && ( pProperties->Name == maStrMacroName || pProperties->Name == maStrScript ) )
+        else if( !( nFound & FoundFlags::Macro ) && ( pProperties->Name == maStrMacroName || pProperties->Name == maStrScript ) )
         {
             if( pProperties->Value >>= aStrMacro )
             {
-                nFound |= FOUND_MACRO;
+                nFound |= FoundFlags::Macro;
                 continue;
             }
         }
-        else if( ( ( nFound & FOUND_LIBRARY ) == 0 ) && pProperties->Name == maStrLibrary )
+        else if( !( nFound & FoundFlags::Library ) && pProperties->Name == maStrLibrary )
         {
             if( pProperties->Value >>= aStrLibrary )
             {
-                nFound |= FOUND_LIBRARY;
+                nFound |= FoundFlags::Library;
                 continue;
             }
         }
-        else if( ( ( nFound & FOUND_EFFECT ) == 0 ) && pProperties->Name == maStrEffect )
+        else if( !( nFound & FoundFlags::Effect ) && pProperties->Name == maStrEffect )
         {
             if( pProperties->Value >>= eEffect )
             {
-                nFound |= FOUND_EFFECT;
+                nFound |= FoundFlags::Effect;
                 continue;
             }
         }
-        else if( ( ( nFound & FOUND_BOOKMARK ) == 0 ) && pProperties->Name == maStrBookmark )
+        else if( !( nFound & FoundFlags::Bookmark ) && pProperties->Name == maStrBookmark )
         {
             if( pProperties->Value >>= aStrBookmark )
             {
-                nFound |= FOUND_BOOKMARK;
+                nFound |= FoundFlags::Bookmark;
                 continue;
             }
         }
-        else if( ( ( nFound & FOUND_SPEED ) == 0 ) && pProperties->Name == maStrSpeed )
+        else if( !( nFound & FoundFlags::Speed ) && pProperties->Name == maStrSpeed )
         {
             if( pProperties->Value >>= eSpeed )
             {
-                nFound |= FOUND_SPEED;
+                nFound |= FoundFlags::Speed;
                 continue;
             }
         }
-        else if( ( ( nFound & FOUND_SOUNDURL ) == 0 ) && pProperties->Name == maStrSoundURL )
+        else if( !( nFound & FoundFlags::SoundUrl ) && pProperties->Name == maStrSoundURL )
         {
             if( pProperties->Value >>= aStrSoundURL )
             {
-                nFound |= FOUND_SOUNDURL;
+                nFound |= FoundFlags::SoundUrl;
                 continue;
             }
         }
-        else if( ( ( nFound & FOUND_PLAYFULL ) == 0 ) && pProperties->Name == maStrPlayFull )
+        else if( !( nFound & FoundFlags::PlayFull ) && pProperties->Name == maStrPlayFull )
         {
             if( pProperties->Value >>= bPlayFull )
             {
-                nFound |= FOUND_PLAYFULL;
+                nFound |= FoundFlags::PlayFull;
                 continue;
             }
         }
-        else if( ( ( nFound & FOUND_VERB ) == 0 ) && pProperties->Name == maStrVerb )
+        else if( !( nFound & FoundFlags::Verb ) && pProperties->Name == maStrVerb )
         {
             if( pProperties->Value >>= nVerb )
             {
-                nFound |= FOUND_VERB;
+                nFound |= FoundFlags::Verb;
                 continue;
             }
         }
@@ -1286,12 +1293,12 @@ void SAL_CALL SdUnoEventsAccess::replaceByName( const OUString& aName, const uno
     bool bOk = false;
     do
     {
-        if( ( nFound & FOUND_EVENTTYPE ) == 0 )
+        if( !( nFound & FoundFlags::EventType ) )
             break;
 
         if( aStrEventType == maStrPresentation )
         {
-            if( ( nFound & FOUND_CLICKACTION ) == 0 )
+            if( !( nFound & FoundFlags::ClickAction ) )
                 break;
 
             SdAnimationInfo* pInfo = mpShape->GetAnimationInfo();
@@ -1328,7 +1335,7 @@ void SAL_CALL SdUnoEventsAccess::replaceByName( const OUString& aName, const uno
             case presentation::ClickAction_PROGRAM:
             case presentation::ClickAction_BOOKMARK:
             case presentation::ClickAction_DOCUMENT:
-                if( nFound & FOUND_BOOKMARK )
+                if( nFound & FoundFlags::Bookmark )
                 {
                     if( eClickAction == presentation::ClickAction_BOOKMARK )
                     {
@@ -1351,7 +1358,7 @@ void SAL_CALL SdUnoEventsAccess::replaceByName( const OUString& aName, const uno
                 break;
 
             case presentation::ClickAction_MACRO:
-                if( nFound & FOUND_MACRO )
+                if( nFound & FoundFlags::Macro )
                 {
                     pInfo->SetBookmark( aStrMacro );
                     bOk = true;
@@ -1359,7 +1366,7 @@ void SAL_CALL SdUnoEventsAccess::replaceByName( const OUString& aName, const uno
                 break;
 
             case presentation::ClickAction_VERB:
-                if( nFound & FOUND_VERB )
+                if( nFound & FoundFlags::Verb )
                 {
                     pInfo->mnVerb = (sal_uInt16)nVerb;
                     bOk = true;
@@ -1367,23 +1374,23 @@ void SAL_CALL SdUnoEventsAccess::replaceByName( const OUString& aName, const uno
                 break;
 
             case presentation::ClickAction_VANISH:
-                if( ( nFound & FOUND_EFFECT ) == 0 )
+                if( !( nFound & FoundFlags::Effect ) )
                     break;
 
                 pInfo->meSecondEffect = eEffect;
-                pInfo->meSecondSpeed = nFound & FOUND_SPEED ? eSpeed : presentation::AnimationSpeed_MEDIUM;
+                pInfo->meSecondSpeed = nFound & FoundFlags::Speed ? eSpeed : presentation::AnimationSpeed_MEDIUM;
 
                 bOk = true;
 
                 SAL_FALLTHROUGH;
 
             case presentation::ClickAction_SOUND:
-                if( nFound & FOUND_SOUNDURL )
+                if( nFound & FoundFlags::SoundUrl )
                 {
                     pInfo->SetBookmark( aStrSoundURL );
                     if( eClickAction != presentation::ClickAction_SOUND )
                         pInfo->mbSecondSoundOn = !aStrSoundURL.isEmpty();
-                    pInfo->mbSecondPlayFull = (nFound & FOUND_PLAYFULL) && bPlayFull;
+                    pInfo->mbSecondPlayFull = (nFound & FoundFlags::PlayFull) && bPlayFull;
 
                     bOk = true;
                 }
