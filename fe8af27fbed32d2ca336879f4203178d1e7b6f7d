@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5a74a57a_e99e7d06",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 602,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2016-11-24T02:33:32Z",
+      "side": 1,
+      "message": "I appreciate that. but we often do this to make the order of constructions explicit.  FYI I\u0027m one of the core calc developers in case I you aren\u0027t aware.",
+      "parentUuid": "5a74a57a_49ff7134",
+      "range": {
+        "startLine": 602,
+        "startChar": 0,
+        "endLine": 602,
+        "endChar": 32
+      },
+      "revId": "fe8af27fbed32d2ca336879f4203178d1e7b6f7d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a74a57a_69fc2d3f",
         "filename": "sc/source/ui/app/inputhdl.cxx",
         "patchSetId": 2
@@ -36,6 +60,30 @@
       "writtenOn": "2016-11-24T02:07:40Z",
       "side": 1,
       "message": "no need to call reset in destructor, unless destruction of the objects needs to be in an order.\nlet unique_ptr dtor delete the object.",
+      "range": {
+        "startLine": 665,
+        "startChar": 0,
+        "endLine": 665,
+        "endChar": 25
+      },
+      "revId": "fe8af27fbed32d2ca336879f4203178d1e7b6f7d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a74a57a_09a49955",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 665,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2016-11-24T02:33:32Z",
+      "side": 1,
+      "message": "This is not entirely true.  In a highly complex code base such as ours, often times a class has members who reference each other in a not-so-obvious way, and not making the order of destruction explicit often results in a hard-to-debug crasher.  I\u0027ve seen that numerous times.  So, it\u0027s a good idea to not take any chances.",
+      "parentUuid": "5a74a57a_69fc2d3f",
       "range": {
         "startLine": 665,
         "startChar": 0,
