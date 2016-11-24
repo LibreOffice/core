@@ -63,7 +63,7 @@ public:
     virtual void    dispose() override;
     virtual void    Resize() override;
 
-    virtual bool    Notify( NotifyEvent& rNEvt ) override;
+    virtual bool    EventNotify( NotifyEvent& rNEvt ) override;
 
     virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;
 

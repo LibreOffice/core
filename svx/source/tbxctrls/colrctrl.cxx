@@ -494,7 +494,7 @@ void SvxColorDockingWindow::GetFocus()
     }
 }
 
-bool SvxColorDockingWindow::Notify( NotifyEvent& rNEvt )
+bool SvxColorDockingWindow::EventNotify( NotifyEvent& rNEvt )
 {
     bool bRet = false;
     if( ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT ) )
@@ -510,7 +510,7 @@ bool SvxColorDockingWindow::Notify( NotifyEvent& rNEvt )
         }
     }
 
-    return bRet || SfxDockingWindow::Notify( rNEvt );
+    return bRet || SfxDockingWindow::EventNotify(rNEvt);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

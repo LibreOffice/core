@@ -288,7 +288,7 @@ IMPL_LINK_NOARG(DropListBox_Impl, OnAsyncExecuteDrop, void*, void)
     pDialog->ActionSelect( SID_STYLE_NEW_BY_EXAMPLE );
 }
 
-bool DropListBox_Impl::Notify( NotifyEvent& rNEvt )
+bool DropListBox_Impl::EventNotify( NotifyEvent& rNEvt )
 {
     bool bRet = false;
     if( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
@@ -309,7 +309,7 @@ bool DropListBox_Impl::Notify( NotifyEvent& rNEvt )
         }
     }
     if(!bRet)
-        bRet = SvTreeListBox::Notify( rNEvt );
+        bRet = SvTreeListBox::EventNotify( rNEvt );
     return bRet;
 }
 
@@ -417,7 +417,7 @@ bool StyleTreeListBox_Impl::DoubleClickHdl()
     return false;
 }
 
-bool StyleTreeListBox_Impl::Notify( NotifyEvent& rNEvt )
+bool StyleTreeListBox_Impl::EventNotify( NotifyEvent& rNEvt )
 {
     // handle <RETURN> as double click
 
@@ -433,7 +433,7 @@ bool StyleTreeListBox_Impl::Notify( NotifyEvent& rNEvt )
     }
 
     if ( !bRet )
-        bRet = DropListBox_Impl::Notify( rNEvt );
+        bRet = DropListBox_Impl::EventNotify( rNEvt );
 
     return bRet;
 }

@@ -652,7 +652,7 @@ NavDocInfo* SdNavigatorWin::GetDocInfo()
 /**
  * PreNotify
  */
-bool SdNavigatorWin::Notify(NotifyEvent& rNEvt)
+bool SdNavigatorWin::EventNotify(NotifyEvent& rNEvt)
 {
     const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
     bool            bOK = false;
@@ -674,7 +674,7 @@ bool SdNavigatorWin::Notify(NotifyEvent& rNEvt)
                     sd::SlideShow::Stop( *pBase );
                     // Stopping the slide show may result in a synchronous
                     // deletion of the navigator window.  Calling the
-                    // parents Notify after this is unsafe.  Therefore we
+                    // parent's EventNotify after this is unsafe.  Therefore we
                     // return now.
                     return true;
                 }
@@ -683,7 +683,7 @@ bool SdNavigatorWin::Notify(NotifyEvent& rNEvt)
     }
 
     if( !bOK )
-        bOK = Window::Notify( rNEvt );
+        bOK = Window::EventNotify(rNEvt);
 
     return bOK;
 }

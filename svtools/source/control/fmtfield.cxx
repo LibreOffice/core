@@ -745,7 +745,7 @@ void FormattedField::ReFormat()
     }
 }
 
-bool FormattedField::Notify(NotifyEvent& rNEvt)
+bool FormattedField::EventNotify(NotifyEvent& rNEvt)
 {
 
     if ((rNEvt.GetType() == MouseNotifyEvent::KEYINPUT) && !IsReadOnly())
@@ -813,7 +813,7 @@ bool FormattedField::Notify(NotifyEvent& rNEvt)
         }
     }
 
-    return SpinField::Notify( rNEvt );
+    return SpinField::EventNotify( rNEvt );
 }
 
 void FormattedField::SetMinValue(double dMin)

@@ -244,7 +244,7 @@ short SfxPrintOptionsDialog::Execute()
 }
 
 
-bool SfxPrintOptionsDialog::Notify( NotifyEvent& rNEvt )
+bool SfxPrintOptionsDialog::EventNotify( NotifyEvent& rNEvt )
 {
     if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
@@ -252,7 +252,7 @@ bool SfxPrintOptionsDialog::Notify( NotifyEvent& rNEvt )
             return true; // help disabled -> <F1> does nothing
     }
 
-    return ModalDialog::Notify( rNEvt );
+    return ModalDialog::EventNotify( rNEvt );
 }
 
 

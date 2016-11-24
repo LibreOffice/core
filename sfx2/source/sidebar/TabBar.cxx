@@ -240,7 +240,7 @@ void TabBar::DataChanged (const DataChangedEvent& rDataChangedEvent)
     Window::DataChanged(rDataChangedEvent);
 }
 
-bool TabBar::Notify (NotifyEvent& rEvent)
+bool TabBar::EventNotify(NotifyEvent& rEvent)
 {
     if(rEvent.GetType() == MouseNotifyEvent::COMMAND)
     {

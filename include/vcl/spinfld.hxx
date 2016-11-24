@@ -71,7 +71,7 @@ protected:
     using Window::ImplInit;
     SAL_DLLPRIVATE void   ImplInit( vcl::Window* pParent, WinBits nStyle );
 
-    virtual bool    Notify( NotifyEvent& rNEvt ) override;
+    virtual bool    EventNotify( NotifyEvent& rNEvt ) override;
 
     void            EndDropDown();
 

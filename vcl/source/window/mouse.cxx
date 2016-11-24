@@ -413,21 +413,21 @@ void Window::ImplGrabFocusToDocument( GetFocusFlags nFlags )
 void Window::MouseMove( const MouseEvent& rMEvt )
 {
     NotifyEvent aNEvt( MouseNotifyEvent::MOUSEMOVE, this, &rMEvt );
-    if ( !Notify( aNEvt ) )
+    if (!EventNotify(aNEvt))
         mpWindowImpl->mbMouseMove = true;
 }
 
 void Window::MouseButtonDown( const MouseEvent& rMEvt )
 {
     NotifyEvent aNEvt( MouseNotifyEvent::MOUSEBUTTONDOWN, this, &rMEvt );
-    if ( !Notify( aNEvt ) )
+    if (!EventNotify(aNEvt))
         mpWindowImpl->mbMouseButtonDown = true;
 }
 
 void Window::MouseButtonUp( const MouseEvent& rMEvt )
 {
     NotifyEvent aNEvt( MouseNotifyEvent::MOUSEBUTTONUP, this, &rMEvt );
-    if ( !Notify( aNEvt ) )
+    if (!EventNotify(aNEvt))
         mpWindowImpl->mbMouseButtonUp = true;
 }
 

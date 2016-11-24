@@ -83,7 +83,6 @@ namespace o3tl
 class SVX_DLLPUBLIC SvxRuler: public Ruler, public SfxListener
 {
     friend class SvxRulerItem;
-    using Window::Notify;
 
     std::vector<std::unique_ptr<SvxRulerItem> > pCtrlItems;
 

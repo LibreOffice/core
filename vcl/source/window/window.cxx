@@ -3873,9 +3873,9 @@ bool Window::CompatPreNotify( NotifyEvent& rNEvt )
 bool Window::CompatNotify( NotifyEvent& rNEvt )
 {
     if (!mpWindowImpl || mpWindowImpl->mbInDispose)
-        return Window::Notify( rNEvt );
+        return Window::EventNotify( rNEvt );
     else
-        return Notify( rNEvt );
+        return EventNotify( rNEvt );
 }
 
 void Window::set_id(const OUString& rID)

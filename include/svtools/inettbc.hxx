@@ -52,7 +52,7 @@ friend class SvtURLBox_Impl;
     SVT_DLLPRIVATE void             Init(bool bSetDefaultHelpID);
 
 protected:
-    virtual bool                    Notify( NotifyEvent& rNEvt ) override;
+    virtual bool                    EventNotify( NotifyEvent& rNEvt ) override;
     virtual void                    Select() override;
     virtual bool                    PreNotify( NotifyEvent& rNEvt ) override;
 

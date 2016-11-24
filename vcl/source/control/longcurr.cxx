@@ -459,7 +459,7 @@ bool LongCurrencyField::PreNotify( NotifyEvent& rNEvt )
     return SpinField::PreNotify( rNEvt );
 }
 
-bool LongCurrencyField::Notify( NotifyEvent& rNEvt )
+bool LongCurrencyField::EventNotify( NotifyEvent& rNEvt )
 {
     if( rNEvt.GetType() == MouseNotifyEvent::GETFOCUS )
     {
@@ -473,7 +473,7 @@ bool LongCurrencyField::Notify( NotifyEvent& rNEvt )
             SpinField::Modify();
         }
     }
-    return SpinField::Notify( rNEvt );
+    return SpinField::EventNotify( rNEvt );
 }
 
 void LongCurrencyField::Modify()
@@ -533,7 +533,7 @@ bool LongCurrencyBox::PreNotify( NotifyEvent& rNEvt )
     return ComboBox::PreNotify( rNEvt );
 }
 
-bool LongCurrencyBox::Notify( NotifyEvent& rNEvt )
+bool LongCurrencyBox::EventNotify( NotifyEvent& rNEvt )
 {
     if( rNEvt.GetType() == MouseNotifyEvent::GETFOCUS )
     {
@@ -547,7 +547,7 @@ bool LongCurrencyBox::Notify( NotifyEvent& rNEvt )
             ComboBox::Modify();
         }
     }
-    return ComboBox::Notify( rNEvt );
+    return ComboBox::EventNotify( rNEvt );
 }
 
 void LongCurrencyBox::Modify()

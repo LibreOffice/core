@@ -215,7 +215,7 @@ private:
     void            SetTitle_Impl(LanguageType nLang);
 
 protected:
-    virtual bool    Notify( NotifyEvent& rNEvt ) override;
+    virtual bool    EventNotify( NotifyEvent& rNEvt ) override;
 
     OUString getReplacementString() const;
 

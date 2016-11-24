@@ -228,7 +228,7 @@ OUString Control::GetDisplayText() const
     return mpControlData->mpLayoutData ? OUString(mpControlData->mpLayoutData->m_aDisplayText) : GetText();
 }
 
-bool Control::Notify( NotifyEvent& rNEvt )
+bool Control::EventNotify( NotifyEvent& rNEvt )
 {
     // tdf#91081 if control is not valid, skip the emission - chaining to the parent
     if (mpControlData)
@@ -260,7 +260,7 @@ bool Control::Notify( NotifyEvent& rNEvt )
             }
         }
     }
-    return Window::Notify( rNEvt );
+    return Window::EventNotify( rNEvt );
 }
 
 void Control::StateChanged( StateChangedType nStateChange )

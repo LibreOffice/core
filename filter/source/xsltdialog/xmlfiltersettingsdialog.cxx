@@ -992,10 +992,10 @@ void XMLFilterSettingsDialog::onOpen()
     }
 }
 
-bool XMLFilterSettingsDialog::Notify( NotifyEvent& rNEvt )
+bool XMLFilterSettingsDialog::EventNotify( NotifyEvent& rNEvt )
 {
     // Because of tab control first call the base class.
-    bool bRet = ModelessDialog::Notify( rNEvt );
+    bool bRet = ModelessDialog::EventNotify(rNEvt);
     if ( !bRet )
     {
         if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
@@ -1392,9 +1392,9 @@ void SvxPathControl::dispose()
 
 VCL_BUILDER_FACTORY(SvxPathControl)
 
-bool SvxPathControl::Notify(NotifyEvent& rNEvt)
+bool SvxPathControl::EventNotify(NotifyEvent& rNEvt)
 {
-    bool bRet = Window::Notify(rNEvt);
+    bool bRet = Window::EventNotify(rNEvt);
 
     if ( m_pFocusCtrl && rNEvt.GetWindow() != m_pFocusCtrl && rNEvt.GetType() == MouseNotifyEvent::GETFOCUS )
         m_pFocusCtrl->GrabFocus();

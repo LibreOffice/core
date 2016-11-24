@@ -81,7 +81,7 @@ namespace pcr
     }
 
 
-    bool OPropertyBrowserView::Notify( NotifyEvent& _rNEvt )
+    bool OPropertyBrowserView::EventNotify( NotifyEvent& _rNEvt )
     {
         if ( MouseNotifyEvent::KEYINPUT == _rNEvt.GetType() )
         {
@@ -93,7 +93,7 @@ namespace pcr
                 // #i63285#
                 return true;
         }
-        return Window::Notify( _rNEvt );
+        return Window::EventNotify(_rNEvt);
     }
 
 

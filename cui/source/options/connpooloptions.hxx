@@ -54,7 +54,7 @@ namespace offapp
         static VclPtr<SfxTabPage>  Create(vcl::Window* _pParent, const SfxItemSet* _rAttrSet);
 
     protected:
-        virtual bool        Notify( NotifyEvent& _rNEvt ) override;
+        virtual bool        EventNotify( NotifyEvent& _rNEvt ) override;
 
         virtual bool        FillItemSet(SfxItemSet* _rSet) override;
         virtual void        Reset(const SfxItemSet* _rSet) override;

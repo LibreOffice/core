@@ -603,10 +603,10 @@ IMPL_LINK_NOARG(Dialog, ImplAsyncCloseHdl, void*, void)
     Close();
 }
 
-bool Dialog::Notify( NotifyEvent& rNEvt )
+bool Dialog::EventNotify( NotifyEvent& rNEvt )
 {
     // first call the base class due to Tab control
-    bool bRet = SystemWindow::Notify( rNEvt );
+    bool bRet = SystemWindow::EventNotify( rNEvt );
     if ( !bRet )
     {
         if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )

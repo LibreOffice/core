@@ -134,7 +134,7 @@ public:
     bool            IsVisible() const { return bVisible; }
 
     virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
-    virtual bool    Notify( NotifyEvent& rNEvt ) override;
+    virtual bool    EventNotify( NotifyEvent& rNEvt ) override;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
     virtual void    StateChanged( StateChangedType nStateChange ) override;
 
@@ -225,7 +225,7 @@ public:
                           nFtCount = pList->GetFontNameCount(); }
     virtual void    UserDraw( const UserDrawEvent& rUDEvt ) override;
     virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
-    virtual bool    Notify( NotifyEvent& rNEvt ) override;
+    virtual bool    EventNotify( NotifyEvent& rNEvt ) override;
     virtual Reference< css::accessibility::XAccessible > CreateAccessible() override;
     void     SetOwnFontList(::std::unique_ptr<FontList> && _aOwnFontList) { m_aOwnFontList = std::move(_aOwnFontList); }
 };
@@ -532,7 +532,7 @@ bool SvxStyleBox_Impl::PreNotify( NotifyEvent& rNEvt )
     return ComboBox::PreNotify( rNEvt );
 }
 
-bool SvxStyleBox_Impl::Notify( NotifyEvent& rNEvt )
+bool SvxStyleBox_Impl::EventNotify( NotifyEvent& rNEvt )
 {
     bool bHandled = false;
 
@@ -571,7 +571,7 @@ bool SvxStyleBox_Impl::Notify( NotifyEvent& rNEvt )
                 break;
         }
     }
-    return bHandled || ComboBox::Notify( rNEvt );
+    return bHandled || ComboBox::EventNotify( rNEvt );
 }
 
 void SvxStyleBox_Impl::DataChanged( const DataChangedEvent& rDCEvt )
@@ -1052,7 +1052,7 @@ bool SvxFontNameBox_Impl::PreNotify( NotifyEvent& rNEvt )
     return FontNameBox::PreNotify( rNEvt );
 }
 
-bool SvxFontNameBox_Impl::Notify( NotifyEvent& rNEvt )
+bool SvxFontNameBox_Impl::EventNotify( NotifyEvent& rNEvt )
 {
     bool bHandled = false;
     mbEndPreview = false;
@@ -1092,7 +1092,7 @@ bool SvxFontNameBox_Impl::Notify( NotifyEvent& rNEvt )
         EndPreview();
     }
 
-    return bHandled || FontNameBox::Notify( rNEvt );
+    return bHandled || FontNameBox::EventNotify( rNEvt );
 }
 
 void SvxFontNameBox_Impl::SetOptimalSize()

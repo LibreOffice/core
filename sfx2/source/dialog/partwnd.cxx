@@ -157,7 +157,7 @@ bool SfxPartDockWnd_Impl::QueryClose()
 }
 
 
-bool SfxPartDockWnd_Impl::Notify( NotifyEvent& rEvt )
+bool SfxPartDockWnd_Impl::EventNotify( NotifyEvent& rEvt )
 {
     if( rEvt.GetType() == MouseNotifyEvent::GETFOCUS )
     {
@@ -170,7 +170,7 @@ bool SfxPartDockWnd_Impl::Notify( NotifyEvent& rEvt )
         }
     }
 
-    return SfxDockingWindow::Notify( rEvt );
+    return SfxDockingWindow::EventNotify( rEvt );
 }
 
 void SfxPartDockWnd_Impl::FillInfo( SfxChildWinInfo& rInfo ) const

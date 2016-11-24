@@ -220,7 +220,6 @@ public:
     virtual bool    Select( SvTreeListEntry* pEntry, bool bSelect=true ) override;
     virtual Size    GetOptimalSize() const override;
 
-    using Control::Notify; // FIXME why do we have 2 of these
     virtual void Notify(SfxBroadcaster& rBC, SfxHint const& rHint) override;
 
 };

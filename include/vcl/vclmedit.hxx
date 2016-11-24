@@ -49,7 +49,7 @@ protected:
     void            StateChanged( StateChangedType nType ) override;
     void            DataChanged( const DataChangedEvent& rDCEvt ) override;
     virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
-    virtual bool    Notify( NotifyEvent& rNEvt ) override;
+    virtual bool    EventNotify( NotifyEvent& rNEvt ) override;
     using Control::ImplInitSettings;
     void            ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
     static WinBits  ImplInitStyle( WinBits nStyle );

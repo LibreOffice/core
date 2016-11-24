@@ -167,7 +167,7 @@ void PlacesListBox::SetSizePixel( const Size& rNewSize )
     mpDelBtn->SetPosPixel( Point( 6 + 24, nBtnY ) );
 }
 
-bool PlacesListBox::Notify( NotifyEvent& rNEvt )
+bool PlacesListBox::EventNotify( NotifyEvent& rNEvt )
 {
     if( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
@@ -181,7 +181,7 @@ bool PlacesListBox::Notify( NotifyEvent& rNEvt )
             return true;
         }
     }
-    return Control::Notify( rNEvt );
+    return Control::EventNotify(rNEvt);
 }
 
 Image PlacesListBox::getEntryIcon( const PlacePtr& pPlace )

@@ -170,7 +170,7 @@ bool Accelerator::ToggleMnemonicsOnHierarchy(const CommandEvent& rCEvent, vcl::W
     return false;
 }
 
-bool SystemWindow::Notify( NotifyEvent& rNEvt )
+bool SystemWindow::EventNotify( NotifyEvent& rNEvt )
 {
     if (rNEvt.GetType() == MouseNotifyEvent::COMMAND)
         Accelerator::ToggleMnemonicsOnHierarchy(*rNEvt.GetCommandEvent(), this);
@@ -198,7 +198,7 @@ bool SystemWindow::Notify( NotifyEvent& rNEvt )
             return true;
     }
 
-    return Window::Notify( rNEvt );
+    return Window::EventNotify( rNEvt );
 }
 
 bool SystemWindow::PreNotify( NotifyEvent& rNEvt )

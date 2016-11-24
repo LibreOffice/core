@@ -503,7 +503,7 @@ protected:
     virtual void setAllocation(const Size &rAllocation) override;
     DECL_LINK(ScrollBarHdl, ScrollBar*, void);
     void InitScrollBars(const Size &rRequest);
-    virtual bool Notify(NotifyEvent& rNEvt) override;
+    virtual bool EventNotify(NotifyEvent& rNEvt) override;
 private:
     bool m_bUserManagedScrolling;
     VclPtr<ScrollBar> m_pVScroll;

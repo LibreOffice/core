@@ -1627,10 +1627,10 @@ const Size& SfxDockingWindow::GetMinOutputSizePixel() const
     return pImpl->aMinSize;
 }
 
-bool SfxDockingWindow::Notify( NotifyEvent& rEvt )
+bool SfxDockingWindow::EventNotify( NotifyEvent& rEvt )
 {
     if ( !pImpl )
-        return DockingWindow::Notify( rEvt );
+        return DockingWindow::EventNotify( rEvt );
 
     if ( rEvt.GetType() == MouseNotifyEvent::GETFOCUS )
     {
@@ -1642,18 +1642,20 @@ bool SfxDockingWindow::Notify( NotifyEvent& rEvt )
         else if (pMgr != nullptr)
             pMgr->Activate_Impl();
 
-        // In VCL Notify goes first to the window itself, also call the
+        // In VCL EventNotify goes first to the window itself, also call the
         // base class, otherwise the parent learns nothing
         // if ( rEvt.GetWindow() == this )  PB: #i74693# not necessary any longer
-        DockingWindow::Notify( rEvt );
+        DockingWindow::EventNotify( rEvt );
         return true;
     }
     else if( rEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
         // First, allow KeyInput for Dialog functions
-        if ( !DockingWindow::Notify( rEvt ) && SfxViewShell::Current() )
+        if (!DockingWindow::EventNotify(rEvt) && SfxViewShell::Current())
+        {
             // then also for valid global accelerators.
             return SfxViewShell::Current()->GlobalKeyInput_Impl( *rEvt.GetKeyEvent() );
+        }
         return true;
     }
     else if ( rEvt.GetType() == MouseNotifyEvent::LOSEFOCUS && !HasChildPathFocus() )
@@ -1661,7 +1663,7 @@ bool SfxDockingWindow::Notify( NotifyEvent& rEvt )
         pBindings->SetActiveFrame( nullptr );
     }
 
-    return DockingWindow::Notify( rEvt );
+    return DockingWindow::EventNotify( rEvt );
 }
 
 

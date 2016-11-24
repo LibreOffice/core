@@ -54,7 +54,7 @@ public:
 protected:
     virtual void    Select() override;
     virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
-    virtual bool    Notify( NotifyEvent& rNEvt ) override;
+    virtual bool    EventNotify( NotifyEvent& rNEvt ) override;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 
 };
@@ -76,7 +76,7 @@ protected:
     virtual void    Modify() override;
 
     virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
-    virtual bool    Notify( NotifyEvent& rNEvt ) override;
+    virtual bool    EventNotify( NotifyEvent& rNEvt ) override;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 
 public:
@@ -100,7 +100,7 @@ public:
 
 protected:
     virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
-    virtual bool    Notify( NotifyEvent& rNEvt ) override;
+    virtual bool    EventNotify( NotifyEvent& rNEvt ) override;
 
 private:
     sal_uInt16      nCurPos;
@@ -119,7 +119,7 @@ public:
 
 protected:
     virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
-    virtual bool    Notify( NotifyEvent& rNEvt ) override;
+    virtual bool    EventNotify( NotifyEvent& rNEvt ) override;
 
 private:
     sal_uInt16      nCurPos;

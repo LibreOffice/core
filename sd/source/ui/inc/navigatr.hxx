@@ -103,7 +103,7 @@ public:
     NavigatorDragType           GetNavigatorDragType();
 
 protected:
-    virtual bool                Notify(NotifyEvent& rNEvt) override;
+    virtual bool                EventNotify(NotifyEvent& rNEvt) override;
 
 private:
     friend class ::sd::NavigatorChildWindow;

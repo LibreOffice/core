@@ -1989,7 +1989,7 @@ public:
     PushButton*     EnableNoneBtn( bool bEnable );
     void            ArrangeButtons();
 
-    virtual bool    Notify( NotifyEvent& rNEvt ) override;
+    virtual bool    EventNotify( NotifyEvent& rNEvt ) override;
 };
 
 ImplCFieldFloatWin::ImplCFieldFloatWin( vcl::Window* pParent ) :
@@ -2127,7 +2127,7 @@ void ImplCFieldFloatWin::ArrangeButtons()
     }
 }
 
-bool ImplCFieldFloatWin::Notify( NotifyEvent& rNEvt )
+bool ImplCFieldFloatWin::EventNotify( NotifyEvent& rNEvt )
 {
     if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
@@ -2136,7 +2136,7 @@ bool ImplCFieldFloatWin::Notify( NotifyEvent& rNEvt )
             mpCalendar->Select();
     }
 
-    return FloatingWindow::Notify( rNEvt );
+    return FloatingWindow::EventNotify( rNEvt );
 }
 
 CalendarField::CalendarField(vcl::Window* pParent, WinBits nWinStyle)

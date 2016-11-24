@@ -2012,7 +2012,7 @@ bool VclScrolledWindow::set_property(const OString &rKey, const OString &rValue)
     return bRet;
 }
 
-bool VclScrolledWindow::Notify(NotifyEvent& rNEvt)
+bool VclScrolledWindow::EventNotify(NotifyEvent& rNEvt)
 {
     bool bDone = false;
     if ( rNEvt.GetType() == MouseNotifyEvent::COMMAND )
@@ -2028,7 +2028,7 @@ bool VclScrolledWindow::Notify(NotifyEvent& rNEvt)
         }
     }
 
-    return bDone || VclBin::Notify( rNEvt );
+    return bDone || VclBin::EventNotify( rNEvt );
 }
 
 void VclViewport::setAllocation(const Size &rAllocation)

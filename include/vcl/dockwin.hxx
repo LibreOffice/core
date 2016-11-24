@@ -287,7 +287,7 @@ public:
     virtual void    Resizing( Size& rSize );
     virtual bool    Close();
     virtual void    Tracking( const TrackingEvent& rTEvt ) override;
-    virtual bool    Notify( NotifyEvent& rNEvt ) override;
+    virtual bool    EventNotify( NotifyEvent& rNEvt ) override;
     virtual void    StateChanged( StateChangedType nType ) override;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 

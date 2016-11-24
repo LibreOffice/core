@@ -567,10 +567,10 @@ IMPL_LINK_NOARG(FloatingWindow, ImplEndPopupModeHdl, void*, void)
     PopupModeEnd();
 }
 
-bool FloatingWindow::Notify( NotifyEvent& rNEvt )
+bool FloatingWindow::EventNotify( NotifyEvent& rNEvt )
 {
     // call Base Class first for tab control
-    bool bRet = SystemWindow::Notify( rNEvt );
+    bool bRet = SystemWindow::EventNotify( rNEvt );
     if ( !bRet )
     {
         if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )

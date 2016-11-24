@@ -599,7 +599,7 @@ bool SvResizeWindow::PreNotify( NotifyEvent& rEvt )
     return Window::PreNotify(rEvt);
 }
 
-bool SvResizeWindow::Notify( NotifyEvent& rEvt )
+bool SvResizeWindow::EventNotify( NotifyEvent& rEvt )
 {
     if ( rEvt.GetType() == MouseNotifyEvent::LOSEFOCUS && m_bActive )
     {
@@ -611,7 +611,7 @@ bool SvResizeWindow::Notify( NotifyEvent& rEvt )
         }
     }
 
-    return Window::Notify(rEvt);
+    return Window::EventNotify(rEvt);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

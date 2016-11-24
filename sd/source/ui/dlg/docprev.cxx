@@ -154,7 +154,7 @@ void SdDocPreviewWin::Paint( vcl::RenderContext& /*rRenderContext*/, const Recta
     }
 }
 
-bool SdDocPreviewWin::Notify( NotifyEvent& rNEvt )
+bool SdDocPreviewWin::EventNotify( NotifyEvent& rNEvt )
 {
     if ( rNEvt.GetType() == MouseNotifyEvent::MOUSEBUTTONDOWN )
     {
@@ -168,7 +168,7 @@ bool SdDocPreviewWin::Notify( NotifyEvent& rNEvt )
         }
     }
 
-    return Control::Notify( rNEvt );
+    return Control::EventNotify(rNEvt);
 }
 
 void SdDocPreviewWin::updateViewSettings()

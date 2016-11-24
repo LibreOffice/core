@@ -35,7 +35,7 @@ class LimitBoxImpl: public LimitBox
     public:
         LimitBoxImpl( vcl::Window* pParent, LimitBoxController* pCtrl );
 
-        virtual bool Notify( NotifyEvent& rNEvt ) override;
+        virtual bool EventNotify( NotifyEvent& rNEvt ) override;
 
     private:
         LimitBoxController* m_pControl;
@@ -47,14 +47,14 @@ LimitBoxImpl::LimitBoxImpl( vcl::Window* pParent, LimitBoxController* pCtrl )
 {
 }
 
-bool LimitBoxImpl::Notify( NotifyEvent& rNEvt )
+bool LimitBoxImpl::EventNotify( NotifyEvent& rNEvt )
 {
     bool bHandled = false;
     switch ( rNEvt.GetType() )
     {
         case MouseNotifyEvent::LOSEFOCUS:
         {
-            bHandled = LimitBox::Notify( rNEvt );
+            bHandled = LimitBox::EventNotify(rNEvt);
             uno::Sequence< beans::PropertyValue > aArgs( 1 );
             aArgs[0].Name  = "DBLimit.Value";
             aArgs[0].Value = uno::makeAny( GetValue() );
@@ -82,7 +82,7 @@ bool LimitBoxImpl::Notify( NotifyEvent& rNEvt )
         default:
             break;
     }
-    return bHandled || LimitBox::Notify( rNEvt );
+    return bHandled || LimitBox::EventNotify(rNEvt);
 }
 
 

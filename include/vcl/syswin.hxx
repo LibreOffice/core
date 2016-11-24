@@ -196,7 +196,7 @@ public:
     virtual         ~SystemWindow() override;
     virtual void    dispose() override;
 
-    virtual bool    Notify( NotifyEvent& rNEvt ) override;
+    virtual bool    EventNotify( NotifyEvent& rNEvt ) override;
     virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
 
     virtual bool    Close();

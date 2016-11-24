@@ -512,7 +512,6 @@ namespace svxform
         using SvTreeListBox::Insert;
         using SvTreeListBox::ExecuteDrop;
         using SvTreeListBox::Select;
-        using SvTreeListBox::Notify;
 
     private:
         sal_Int8    implAcceptDataTransfer( const DataFlavorExVector& _rFlavors, sal_Int8 _nAction, SvTreeListEntry* _pTargetEntry, bool _bDnD );

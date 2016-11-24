@@ -104,7 +104,7 @@ protected:
 public:
     virtual void            FillInfo(SfxChildWinInfo&) const;
     void                    Initialize (SfxChildWinInfo* pInfo);
-    virtual bool            Notify( NotifyEvent& rNEvt ) override;
+    virtual bool            EventNotify( NotifyEvent& rNEvt ) override;
     SfxBindings&            GetBindings()
                             { return *pBindings; }
 
@@ -140,7 +140,7 @@ protected:
     virtual bool            Close() override;
     virtual void            Resize() override;
     virtual void            Move() override;
-    virtual bool            Notify( NotifyEvent& rNEvt ) override;
+    virtual bool            EventNotify( NotifyEvent& rNEvt ) override;
     SfxBindings&            GetBindings()
                             { return *pBindings; }
 

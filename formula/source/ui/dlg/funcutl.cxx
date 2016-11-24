@@ -353,7 +353,7 @@ bool EditBox::PreNotify( NotifyEvent& rNEvt )
         sal_uInt16 nKey=aKeyCode.GetCode();
         if( (nKey==KEY_RETURN && !aKeyCode.IsShift()) || nKey==KEY_TAB )
         {
-            bResult = GetParent()->Notify(rNEvt);
+            bResult = GetParent()->EventNotify(rNEvt);
         }
         else
         {

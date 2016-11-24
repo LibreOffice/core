@@ -59,7 +59,7 @@ public:
 class SfxPartDockWnd_Impl : public SfxDockingWindow
 {
 protected:
-    virtual bool            Notify( NotifyEvent& rNEvt ) override;
+    virtual bool            EventNotify( NotifyEvent& rNEvt ) override;
 
 public:
                             SfxPartDockWnd_Impl( SfxBindings* pBindings,

@@ -21,7 +21,7 @@
 #include <vcl/builderfactory.hxx>
 #include "actctrl.hxx"
 
-bool NumEditAction::Notify( NotifyEvent& rNEvt )
+bool NumEditAction::EventNotify( NotifyEvent& rNEvt )
 {
     bool bHandled = false;
 
@@ -39,7 +39,7 @@ bool NumEditAction::Notify( NotifyEvent& rNEvt )
 
     }
     if(!bHandled)
-        NumericField::Notify( rNEvt );
+        NumericField::EventNotify(rNEvt);
     return bHandled;
 }
 
