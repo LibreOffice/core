@@ -1169,8 +1169,7 @@ void FontConfigFontOptions::SyncPattern(const OString& rFileName, int nIndex, bo
     FcPatternAddBool(mpPattern, FC_EMBOLDEN, bEmbolden ? FcTrue : FcFalse);
 }
 
-FontConfigFontOptions* PrintFontManager::getFontOptions(
-    const FastPrintFontInfo& rInfo, int nSize, void (*subcallback)(void*))
+FontConfigFontOptions* PrintFontManager::getFontOptions(const FastPrintFontInfo& rInfo, int nSize)
 {
     FontCfgWrapper& rWrapper = FontCfgWrapper::get();
 
@@ -1193,8 +1192,7 @@ FontConfigFontOptions* PrintFontManager::getFontOptions(
     int hintstyle = FC_HINT_FULL;
 
     FcConfigSubstitute(pConfig, pPattern, FcMatchPattern);
-    if (subcallback)
-        subcallback(pPattern);
+    FontConfigFontOptions::cairo_font_options_substitute(pPattern);
     FcDefaultSubstitute(pPattern);
 
     FcResult eResult = FcResultNoMatch;
