@@ -17,10 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-/*
- * Implementation of the I/O interfaces based on stream and URI binding
- */
 #include "errorcallback.hxx"
 
 #include "xmlsec-wrapper.h"
