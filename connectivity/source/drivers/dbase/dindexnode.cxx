@@ -858,6 +858,7 @@ ONDXPagePtr& ONDXPagePtr::operator=(ONDXPagePtr const & rOther)
     }
     ONDXPage * pOldObj = mpPage;
     mpPage = rOther.mpPage;
+    nPagePos = rOther.nPagePos;
     if (pOldObj != nullptr) {
         pOldObj->ReleaseRef();
     }
