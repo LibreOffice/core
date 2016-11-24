@@ -964,7 +964,7 @@ void GtkSalFrame::InitCommon()
 
     // init members
     m_pCurrentCursor    = nullptr;
-    m_nKeyModifiers     = 0;
+    m_nKeyModifiers     = ModKeyFlags::NONE;
     m_bFullscreen       = false;
     m_bSpanMonitorsWhenFullscreen = false;
     m_nState            = GDK_WINDOW_STATE_WITHDRAWN;
@@ -2986,7 +2986,7 @@ gboolean GtkSalFrame::signalFocus( GtkWidget*, GdkEventFocus* pEvent, gpointer f
 
     if( !pEvent->in )
     {
-        pThis->m_nKeyModifiers = 0;
+        pThis->m_nKeyModifiers = ModKeyFlags::NONE;
         pThis->m_bSendModChangeOnRelease = false;
     }
 
@@ -3105,8 +3105,8 @@ gboolean GtkSalFrame::signalKey( GtkWidget*, GdkEventKey* pEvent, gpointer frame
 
         sal_uInt16 nModCode = GetKeyModCode( pEvent->state );
 
-        aModEvt.mnModKeyCode = 0; // emit no MODKEYCHANGE events
-        if( pEvent->type == GDK_KEY_PRESS && !pThis->m_nKeyModifiers )
+        aModEvt.mnModKeyCode = ModKeyFlags::NONE; // emit no MODKEYCHANGE events
+        if( pEvent->type == GDK_KEY_PRESS && pThis->m_nKeyModifiers == ModKeyFlags::NONE )
             pThis->m_bSendModChangeOnRelease = true;
 
         else if( pEvent->type == GDK_KEY_RELEASE &&
@@ -3115,7 +3115,7 @@ gboolean GtkSalFrame::signalKey( GtkWidget*, GdkEventKey* pEvent, gpointer frame
             aModEvt.mnModKeyCode = pThis->m_nKeyModifiers;
         }
 
-        sal_uInt16 nExtModMask = 0;
+        ModKeyFlags nExtModMask = ModKeyFlags::NONE;
         sal_uInt16 nModMask = 0;
         // pressing just the ctrl key leads to a keysym of XK_Control but
         // the event state does not contain ControlMask. In the release
@@ -3124,39 +3124,39 @@ gboolean GtkSalFrame::signalKey( GtkWidget*, GdkEventKey* pEvent, gpointer frame
         switch( pEvent->keyval )
         {
             case GDK_KEY_Control_L:
-                nExtModMask = MODKEY_LMOD1;
+                nExtModMask = ModKeyFlags::LeftMod1;
                 nModMask = KEY_MOD1;
                 break;
             case GDK_KEY_Control_R:
-                nExtModMask = MODKEY_RMOD1;
+                nExtModMask = ModKeyFlags::RightMod1;
                 nModMask = KEY_MOD1;
                 break;
             case GDK_KEY_Alt_L:
-                nExtModMask = MODKEY_LMOD2;
+                nExtModMask = ModKeyFlags::LeftMod2;
                 nModMask = KEY_MOD2;
                 break;
             case GDK_KEY_Alt_R:
-                nExtModMask = MODKEY_RMOD2;
+                nExtModMask = ModKeyFlags::RightMod2;
                 nModMask = KEY_MOD2;
                 break;
             case GDK_KEY_Shift_L:
-                nExtModMask = MODKEY_LSHIFT;
+                nExtModMask = ModKeyFlags::LeftShift;
                 nModMask = KEY_SHIFT;
                 break;
             case GDK_KEY_Shift_R:
-                nExtModMask = MODKEY_RSHIFT;
+                nExtModMask = ModKeyFlags::RightShift;
                 nModMask = KEY_SHIFT;
                 break;
             // Map Meta/Super to MOD3 modifier on all Unix systems
             // except Mac OS X
             case GDK_KEY_Meta_L:
             case GDK_KEY_Super_L:
-                nExtModMask = MODKEY_LMOD3;
+                nExtModMask = ModKeyFlags::LeftMod3;
                 nModMask = KEY_MOD3;
                 break;
             case GDK_KEY_Meta_R:
             case GDK_KEY_Super_R:
-                nExtModMask = MODKEY_RMOD3;
+                nExtModMask = ModKeyFlags::RightMod3;
                 nModMask = KEY_MOD3;
                 break;
         }

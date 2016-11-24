@@ -79,7 +79,7 @@ class VCLPLUG_GEN_PUBLIC X11SalFrame : public SalFrame, public NativeWindowHandl
     sal_uInt16      nKeyCode_;          // last key code
     sal_uInt16      nKeyState_;         // last key state
     bool            mbSendExtKeyModChange;
-    sal_uInt16      mnExtKeyMod;
+    ModKeyFlags     mnExtKeyMod;
 
     int             nShowState_;        // show state
     int             nWidth_;            // client width

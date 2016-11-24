@@ -3483,17 +3483,17 @@ static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
 
             sal_uInt16 tmpCode = 0;
             if( GetKeyState( VK_LSHIFT )  & 0x8000 )
-                tmpCode |= MODKEY_LSHIFT;
+                tmpCode |= ModKeyFlags::LeftShift;
             if( GetKeyState( VK_RSHIFT )  & 0x8000 )
-                tmpCode |= MODKEY_RSHIFT;
+                tmpCode |= ModKeyFlags::RightShift;
             if( GetKeyState( VK_LCONTROL ) & 0x8000 )
-                tmpCode |= MODKEY_LMOD1;
+                tmpCode |= ModKeyFlags::LeftMod1;
             if( GetKeyState( VK_RCONTROL ) & 0x8000 )
-                tmpCode |= MODKEY_RMOD1;
+                tmpCode |= ModKeyFlags::RightMod1;
             if( GetKeyState( VK_LMENU )  & 0x8000 )
-                tmpCode |= MODKEY_LMOD2;
+                tmpCode |= ModKeyFlags::LeftMod2;
             if( GetKeyState( VK_RMENU )  & 0x8000 )
-                tmpCode |= MODKEY_RMOD2;
+                tmpCode |= ModKeyFlags::RightMod2;
 
             if( tmpCode < nLastModKeyCode )
             {
