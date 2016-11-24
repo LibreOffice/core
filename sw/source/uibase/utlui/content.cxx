@@ -803,7 +803,6 @@ SwContentTree::SwContentTree(vcl::Window* pParent, const ResId& rResId)
     , m_bIsOutlineMoveable(true)
     , m_bViewHasChanged(false)
     , m_bIsImageListInitialized(false)
-    , m_bActiveDocModified(false)
     , m_bIsKeySpace(false)
 {
     SetHelpId(HID_NAVIGATOR_TREELIST);
@@ -1718,8 +1717,6 @@ void SwContentTree::Display( bool bActive )
         sal_Int32 nDelta = pVScroll->GetThumbPos() - nOldScrollPos;
         ScrollOutputArea( (short)nDelta );
     }
-
-    m_bActiveDocModified = false;
 }
 
 void SwContentTree::Clear()
@@ -2206,13 +2203,6 @@ void SwContentTree::SetConstantShell(SwWrtShell* pSh)
 
 void SwContentTree::Notify(SfxBroadcaster & rBC, SfxHint const& rHint)
 {
-    SfxSimpleHint const*const pHint(dynamic_cast<SfxSimpleHint const*>(&rHint));
-    if (pHint && SFX_HINT_DOCCHANGED == pHint->GetId())
-    {
-        m_bActiveDocModified = true;
-        return;
-    }
-
     SfxViewEventHint const*const pVEHint(
             dynamic_cast<SfxViewEventHint const*>(&rHint));
     SwXTextView* pDyingShell = nullptr;
@@ -2425,11 +2415,8 @@ IMPL_LINK_NOARG_TYPED(SwContentTree, TimerUpdate, Timer *, void)
         else if( (m_bIsActive || (m_bIsConstant && pActShell == GetWrtShell())) &&
                     HasContentChanged())
         {
-            if (!m_bIsActive || m_bActiveDocModified)
-            {   // don't burn cpu and redraw and flicker if not modified
-                FindActiveTypeAndRemoveUserData();
-                Display(true);
-            }
+            FindActiveTypeAndRemoveUserData();
+            Display(true);
         }
     }
     else if(!pView && m_bIsActive && !m_bIsIdleClear)
