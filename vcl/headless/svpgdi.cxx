@@ -389,7 +389,9 @@ SvpSalGraphics::~SvpSalGraphics()
 void SvpSalGraphics::setSurface(cairo_surface_t* pSurface)
 {
     m_pSurface = pSurface;
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 14, 0)
     cairo_surface_get_device_scale(pSurface, &m_fScale, nullptr);
+#endif
     ResetClipRegion();
 }
 
@@ -991,8 +993,9 @@ void SvpSalGraphics::copyBits( const SalTwoRect& rTR,
                                             aTR.mnSrcWidth * m_fScale,
                                             aTR.mnSrcHeight * m_fScale);
 #endif
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 14, 0)
         cairo_surface_set_device_scale(pCopy, m_fScale, m_fScale);
-
+#endif
         cairo_t* cr = cairo_create(pCopy);
         cairo_set_source_surface(cr, source, -aTR.mnSrcX, -aTR.mnSrcY);
         cairo_rectangle(cr, 0, 0, aTR.mnSrcWidth, aTR.mnSrcHeight);

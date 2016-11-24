@@ -89,7 +89,9 @@ bool SvpSalVirtualDevice::SetSizeUsingBuffer( long nNewDX, long nNewDY,
                                    nNewDX, nNewDY);
         }
 
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 14, 0)
         cairo_surface_set_device_scale(m_pSurface, m_fScale, m_fScale);
+#endif
 
         // update device in existing graphics
         for( std::list< SvpSalGraphics* >::iterator it = m_aGraphics.begin();
