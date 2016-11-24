@@ -98,20 +98,23 @@ class CheckGbuildToJsonModules(unittest.TestCase):
         self.tempwork = tempfile.mkdtemp(prefix='gbuild')
         self.tempsrc = tempfile.mkdtemp(prefix='gbuild')
         self.srcdir = os.environ['SRCDIR']
+        self.builddir = os.environ['BUILDDIR']
         if os.environ['OS'] == 'WNT':
             self.tempworkmixed = self.tempwork.replace('\\','/')
             self.tempsrcmixed = self.tempsrc.replace('\\','/')
             self.srcdirnative = self.srcdir.replace('/','\\')
+            self.builddirnative = self.builddir.replace('/','\\')
         else:
             self.tempworkmixed = self.tempwork
             self.tempsrcmixed = self.tempsrc
             self.srcdirnative = self.srcdir
-        shutil.copyfile(os.path.join(self.srcdirnative, 'config_host.mk'), os.path.join(self.tempsrc, 'config_host.mk'))
-        shutil.copyfile(os.path.join(self.srcdirnative, 'config_host_lang.mk'), os.path.join(self.tempsrc, 'config_host_lang.mk'))
+            self.builddirnative = self.builddir
+        shutil.copyfile(os.path.join(self.builddirnative, 'config_host.mk'), os.path.join(self.tempsrc, 'config_host.mk'))
+        shutil.copyfile(os.path.join(self.builddirnative, 'config_host_lang.mk'), os.path.join(self.tempsrc, 'config_host_lang.mk'))
+        shutil.copytree(os.path.join(self.builddirnative, 'config_host'),  os.path.join(self.tempsrc, 'config_host'))
         shutil.copyfile(os.path.join(self.srcdirnative, 'Repository.mk'), os.path.join(self.tempsrc, 'Repository.mk'))
         shutil.copyfile(os.path.join(self.srcdirnative, 'RepositoryExternal.mk'), os.path.join(self.tempsrc, 'RepositoryExternal.mk'))
         shutil.copyfile(os.path.join(self.srcdirnative, 'RepositoryFixes.mk'), os.path.join(self.tempsrc, 'RepositoryFixes.mk'))
-        shutil.copytree(os.path.join(self.srcdirnative, 'config_host'),  os.path.join(self.tempsrc, 'config_host'))
         #print('copytree from _%s_ to _%s_' % (os.path.join(self.srcdirnative, 'solenv').replace('\\', '#').replace('/', '!'), os.path.join(self.tempsrc, 'solenv').replace('\\', '#').replace('/', '!')))
         shutil.copytree(os.path.join(self.srcdirnative, 'solenv'),  os.path.join(self.tempsrc, 'solenv'))
 
