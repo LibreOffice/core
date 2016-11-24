@@ -3341,12 +3341,12 @@ bool WinSalFrame::MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangT
 static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
                               WPARAM wParam, LPARAM lParam, LRESULT& rResult )
 {
-    static bool     bIgnoreCharMsg  = FALSE;
-    static WPARAM   nDeadChar       = 0;
-    static WPARAM   nLastVKChar     = 0;
+    static bool         bIgnoreCharMsg  = FALSE;
+    static WPARAM       nDeadChar       = 0;
+    static WPARAM       nLastVKChar     = 0;
     static sal_uInt16   nLastChar       = 0;
-    static sal_uInt16   nLastModKeyCode = 0;
-    static bool     bWaitForModKeyRelease = false;
+    static ModKeyFlags  nLastModKeyCode = ModKeyFlags::NONE;
+    static bool         bWaitForModKeyRelease = false;
     sal_uInt16          nRepeat         = LOWORD( lParam )-1;
     sal_uInt16          nModCode        = 0;
 
@@ -3479,26 +3479,26 @@ static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
             SalKeyModEvent aModEvt;
             aModEvt.mnTime = GetMessageTime();
             aModEvt.mnCode = nModCode;
-            aModEvt.mnModKeyCode = 0;   // no command events will be sent if this member is 0
+            aModEvt.mnModKeyCode = ModKeyFlags::NONE;   // no command events will be sent if this member is 0
 
-            sal_uInt16 tmpCode = 0;
+            ModKeyFlags tmpCode = ModKeyFlags::NONE;
             if( GetKeyState( VK_LSHIFT )  & 0x8000 )
-                tmpCode |= MODKEY_LSHIFT;
+                tmpCode |= ModKeyFlags::LeftShift;
             if( GetKeyState( VK_RSHIFT )  & 0x8000 )
-                tmpCode |= MODKEY_RSHIFT;
+                tmpCode |= ModKeyFlags::RightShift;
             if( GetKeyState( VK_LCONTROL ) & 0x8000 )
-                tmpCode |= MODKEY_LMOD1;
+                tmpCode |= ModKeyFlags::LeftMod1;
             if( GetKeyState( VK_RCONTROL ) & 0x8000 )
-                tmpCode |= MODKEY_RMOD1;
+                tmpCode |= ModKeyFlags::RightMod1;
             if( GetKeyState( VK_LMENU )  & 0x8000 )
-                tmpCode |= MODKEY_LMOD2;
+                tmpCode |= ModKeyFlags::LeftMod2;
             if( GetKeyState( VK_RMENU )  & 0x8000 )
-                tmpCode |= MODKEY_RMOD2;
+                tmpCode |= ModKeyFlags::RightMod2;
 
             if( tmpCode < nLastModKeyCode )
             {
                 aModEvt.mnModKeyCode = nLastModKeyCode;
-                nLastModKeyCode = 0;
+                nLastModKeyCode = ModKeyFlags::NONE;
                 bWaitForModKeyRelease = true;
             }
             else
@@ -3507,7 +3507,7 @@ static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
                     nLastModKeyCode = tmpCode;
             }
 
-            if( !tmpCode )
+            if( tmpCode == ModKeyFlags::NONE )
                 bWaitForModKeyRelease = false;
 
             return pFrame->CallCallback( SalEvent::KeyModChange, &aModEvt );
@@ -3521,7 +3521,7 @@ static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
             UINT            nCharMsg = WM_CHAR;
             bool            bKeyUp = (nMsg == WM_KEYUP) || (nMsg == WM_SYSKEYUP);
 
-            nLastModKeyCode = 0; // make sure no modkey messages are sent if they belong to a hotkey (see above)
+            nLastModKeyCode = ModKeyFlags::NONE; // make sure no modkey messages are sent if they belong to a hotkey (see above)
             aKeyEvt.mnCharCode = 0;
             aKeyEvt.mnCode = 0;
 
