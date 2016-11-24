@@ -21,6 +21,12 @@
 
 #include "xmlsec-wrapper.h"
 
+#ifdef _WIN32
+#include <prewin.h>
+#include <postwin.h>
+#include "comphelper/windowserrorstring.hxx"
+#endif
+
 extern "C"
 void errorCallback(const char* file,
                    int line,
@@ -33,7 +39,13 @@ void errorCallback(const char* file,
     const char* pErrorObject = errorObject ? errorObject : "";
     const char* pErrorSubject = errorSubject ? errorSubject : "";
     const char* pMsg = msg ? msg : "";
-    SAL_WARN("xmlsecurity.xmlsec", file << ":" << line << ": " << func << "() '" << pErrorObject << "' '" << pErrorSubject << "' " << reason << " '" << pMsg << "'");
+    OUString systemErrorString;
+
+#ifdef _WIN32
+    systemErrorString = " " + WindowsErrorString(GetLastError());
+#endif
+
+    SAL_WARN("xmlsecurity.xmlsec", file << ":" << line << ": " << func << "() '" << pErrorObject << "' '" << pErrorSubject << "' " << reason << " '" << pMsg << "'" << systemErrorString);
 }
 
 void setErrorRecorder()
