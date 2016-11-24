@@ -91,8 +91,6 @@ void RscTypCont::Init()
     aIdUShort.SetRange( 0, 0xFFFF );
 
     aIdNoZeroUShort.SetRange( 1, 0xFFFF );
-
-    aIdLong.SetRange( SAL_MIN_INT32, SAL_MAX_INT32 );
 }
 {
     aLangType.Init( aNmTb );
