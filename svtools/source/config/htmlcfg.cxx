@@ -29,17 +29,21 @@
 #include <sal/macros.h>
 #include <rtl/instance.hxx>
 #include <list>
+#include <o3tl/typed_flags_set.hxx>
 
-
-#define HTMLCFG_UNKNOWN_TAGS            0x01
-//#define HTMLCFG_STYLE_SHEETS          0x02
-//#define HTMLCFG_NETSCAPE3             0x04
-#define HTMLCFG_STAR_BASIC              0x08
-#define HTMLCFG_LOCAL_GRF               0x10
-#define HTMLCFG_PRINT_LAYOUT_EXTENSION  0x20
-#define HTMLCFG_IGNORE_FONT_FAMILY      0x40
-#define HTMLCFG_IS_BASIC_WARNING        0x80
-#define HTMLCFG_NUMBERS_ENGLISH_US      0x100
+enum class HtmlCfgFlags {
+    NONE                  = 0x000,
+    UnknownTags           = 0x001,
+    StarBasic             = 0x008,
+    LocalGrf              = 0x010,
+    PrintLayoutExtension  = 0x020,
+    IgnoreFontFamily      = 0x040,
+    IsBasicWarning        = 0x080,
+    NumbersEnglishUS      = 0x100,
+};
+namespace o3tl {
+    template<> struct typed_flags<HtmlCfgFlags> : is_typed_flags<HtmlCfgFlags, 0x1f9> {};
+}
 
 using namespace utl;
 using namespace com::sun::star::uno;
@@ -47,14 +51,14 @@ using namespace com::sun::star::uno;
 
 struct HtmlOptions_Impl
 {
-    sal_Int32   nFlags;
-    sal_Int32   nExportMode;
-    sal_Int32   aFontSizeArr[HTML_FONT_COUNT];
-    sal_Int32   eEncoding;
-    bool        bIsEncodingDefault;
+    HtmlCfgFlags nFlags;
+    sal_Int32    nExportMode;
+    sal_Int32    aFontSizeArr[HTML_FONT_COUNT];
+    sal_Int32    eEncoding;
+    bool         bIsEncodingDefault;
 
     HtmlOptions_Impl() :
-        nFlags(HTMLCFG_LOCAL_GRF|HTMLCFG_IS_BASIC_WARNING),
+        nFlags(HtmlCfgFlags::LocalGrf|HtmlCfgFlags::IsBasicWarning),
         nExportMode(HTML_CFG_NS40),
         eEncoding( osl_getThreadTextEncoding() ),
         bIsEncodingDefault(true)
@@ -121,7 +125,7 @@ void SvxHtmlOptions::Load( const Sequence< OUString >& aNames )
     DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed");
     if(aValues.getLength() == aNames.getLength())
     {
-        pImpl->nFlags = 0;
+        pImpl->nFlags = HtmlCfgFlags::NONE;
         for(int nProp = 0; nProp < aNames.getLength(); nProp++)
         {
             if(pValues[nProp].hasValue())
@@ -130,11 +134,11 @@ void SvxHtmlOptions::Load( const Sequence< OUString >& aNames )
                 {
                     case  0:
                         if(*o3tl::doAccess<bool>(pValues[nProp]))
-                            pImpl->nFlags |= HTMLCFG_UNKNOWN_TAGS;
+                            pImpl->nFlags |= HtmlCfgFlags::UnknownTags;
                     break;//"Import/UnknownTag",
                     case  1:
                         if(*o3tl::doAccess<bool>(pValues[nProp]))
-                            pImpl->nFlags |= HTMLCFG_IGNORE_FONT_FAMILY;
+                            pImpl->nFlags |= HtmlCfgFlags::IgnoreFontFamily;
                     break;//"Import/FontSetting",
                     case  2: pValues[nProp] >>= pImpl->aFontSizeArr[0]; break;//"Import/FontSize/Size_1",
                     case  3: pValues[nProp] >>= pImpl->aFontSizeArr[1]; break;//"Import/FontSize/Size_2",
@@ -160,19 +164,19 @@ void SvxHtmlOptions::Load( const Sequence< OUString >& aNames )
                         break;
                     case 10:
                         if(*o3tl::doAccess<bool>(pValues[nProp]))
-                            pImpl->nFlags |= HTMLCFG_STAR_BASIC;
+                            pImpl->nFlags |= HtmlCfgFlags::StarBasic;
                     break;//"Export/Basic",
                     case 11:
                         if(*o3tl::doAccess<bool>(pValues[nProp]))
-                            pImpl->nFlags |= HTMLCFG_PRINT_LAYOUT_EXTENSION;
+                            pImpl->nFlags |= HtmlCfgFlags::PrintLayoutExtension;
                     break;//"Export/PrintLayout",
                     case 12:
                         if(*o3tl::doAccess<bool>(pValues[nProp]))
-                            pImpl->nFlags |= HTMLCFG_LOCAL_GRF;
+                            pImpl->nFlags |= HtmlCfgFlags::LocalGrf;
                     break;//"Export/LocalGraphic",
                     case 13:
                         if(*o3tl::doAccess<bool>(pValues[nProp]))
-                            pImpl->nFlags |= HTMLCFG_IS_BASIC_WARNING;
+                            pImpl->nFlags |= HtmlCfgFlags::IsBasicWarning;
                     break;//"Export/Warning"
 
                     case 14: pValues[nProp] >>= pImpl->eEncoding;
@@ -181,7 +185,7 @@ void SvxHtmlOptions::Load( const Sequence< OUString >& aNames )
 
                     case 15:
                         if(*o3tl::doAccess<bool>(pValues[nProp]))
-                            pImpl->nFlags |= HTMLCFG_NUMBERS_ENGLISH_US;
+                            pImpl->nFlags |= HtmlCfgFlags::NumbersEnglishUS;
                     break;//"Import/NumbersEnglishUS"
                 }
             }
@@ -202,8 +206,8 @@ void    SvxHtmlOptions::ImplCommit()
         bool bSet = false;
         switch(nProp)
         {
-            case  0: bSet = 0 != (pImpl->nFlags & HTMLCFG_UNKNOWN_TAGS);break;//"Import/UnknownTag",
-            case  1: bSet = 0 != (pImpl->nFlags & HTMLCFG_IGNORE_FONT_FAMILY);break;//"Import/FontSetting",
+            case  0: bSet = bool(pImpl->nFlags & HtmlCfgFlags::UnknownTags);break;//"Import/UnknownTag",
+            case  1: bSet = bool(pImpl->nFlags & HtmlCfgFlags::IgnoreFontFamily);break;//"Import/FontSetting",
             case  2: pValues[nProp] <<= pImpl->aFontSizeArr[0];break;//"Import/FontSize/Size_1",
             case  3: pValues[nProp] <<= pImpl->aFontSizeArr[1];break;//"Import/FontSize/Size_2",
             case  4: pValues[nProp] <<= pImpl->aFontSizeArr[2];break;//"Import/FontSize/Size_3",
@@ -226,15 +230,15 @@ void    SvxHtmlOptions::ImplCommit()
                     pValues[nProp] <<= nExpMode;
                     break;
                 }
-            case 10: bSet = 0 != (pImpl->nFlags & HTMLCFG_STAR_BASIC);break;//"Export/Basic",
-            case 11: bSet = 0 != (pImpl->nFlags & HTMLCFG_PRINT_LAYOUT_EXTENSION);break;//"Export/PrintLayout",
-            case 12: bSet = 0 != (pImpl->nFlags & HTMLCFG_LOCAL_GRF);break;//"Export/LocalGraphic",
-            case 13: bSet = 0 != (pImpl->nFlags & HTMLCFG_IS_BASIC_WARNING);break;//"Export/Warning"
+            case 10: bSet = bool(pImpl->nFlags & HtmlCfgFlags::StarBasic);break;//"Export/Basic",
+            case 11: bSet = bool(pImpl->nFlags & HtmlCfgFlags::PrintLayoutExtension);break;//"Export/PrintLayout",
+            case 12: bSet = bool(pImpl->nFlags & HtmlCfgFlags::LocalGrf);break;//"Export/LocalGraphic",
+            case 13: bSet = bool(pImpl->nFlags & HtmlCfgFlags::IsBasicWarning);break;//"Export/Warning"
             case 14:
                 if(!pImpl->bIsEncodingDefault)
                     pValues[nProp] <<= pImpl->eEncoding;
                 break;//"Export/Encoding",
-            case 15: bSet = 0 != (pImpl->nFlags & HTMLCFG_NUMBERS_ENGLISH_US);break;//"Import/NumbersEnglishUS"
+            case 15: bSet = bool(pImpl->nFlags & HtmlCfgFlags::NumbersEnglishUS);break;//"Import/NumbersEnglishUS"
         }
         if(nProp < 2 || ( nProp > 9 && nProp < 14 ) || nProp == 15)
             pValues[nProp] <<= bSet;
@@ -267,16 +271,16 @@ void SvxHtmlOptions::SetFontSize(sal_uInt16 nPos, sal_uInt16 nSize)
 
 bool SvxHtmlOptions::IsImportUnknown() const
 {
-    return 0 != (pImpl->nFlags & HTMLCFG_UNKNOWN_TAGS) ;
+    return bool(pImpl->nFlags & HtmlCfgFlags::UnknownTags) ;
 }
 
 
 void SvxHtmlOptions::SetImportUnknown(bool bSet)
 {
     if(bSet)
-        pImpl->nFlags |= HTMLCFG_UNKNOWN_TAGS;
+        pImpl->nFlags |= HtmlCfgFlags::UnknownTags;
     else
-        pImpl->nFlags &= ~HTMLCFG_UNKNOWN_TAGS;
+        pImpl->nFlags &= ~HtmlCfgFlags::UnknownTags;
     SetModified();
 }
 
@@ -289,36 +293,36 @@ sal_uInt16  SvxHtmlOptions::GetExportMode() const
 
 bool SvxHtmlOptions::IsStarBasic() const
 {
-    return 0 != (pImpl->nFlags & HTMLCFG_STAR_BASIC) ;
+    return bool(pImpl->nFlags & HtmlCfgFlags::StarBasic) ;
 }
 
 
 void SvxHtmlOptions::SetStarBasic(bool bSet)
 {
     if(bSet)
-        pImpl->nFlags |=  HTMLCFG_STAR_BASIC;
+        pImpl->nFlags |=  HtmlCfgFlags::StarBasic;
     else
-        pImpl->nFlags &= ~HTMLCFG_STAR_BASIC;
+        pImpl->nFlags &= ~HtmlCfgFlags::StarBasic;
     SetModified();
 }
 
 bool SvxHtmlOptions::IsSaveGraphicsLocal() const
 {
-    return 0 != (pImpl->nFlags & HTMLCFG_LOCAL_GRF) ;
+    return bool(pImpl->nFlags & HtmlCfgFlags::LocalGrf) ;
 }
 
 void SvxHtmlOptions::SetSaveGraphicsLocal(bool bSet)
 {
     if(bSet)
-        pImpl->nFlags |=  HTMLCFG_LOCAL_GRF;
+        pImpl->nFlags |=  HtmlCfgFlags::LocalGrf;
     else
-        pImpl->nFlags &= ~HTMLCFG_LOCAL_GRF;
+        pImpl->nFlags &= ~HtmlCfgFlags::LocalGrf;
     SetModified();
 }
 
 bool SvxHtmlOptions::IsPrintLayoutExtension() const
 {
-    bool bRet = 0 != (pImpl->nFlags & HTMLCFG_PRINT_LAYOUT_EXTENSION);
+    bool bRet(pImpl->nFlags & HtmlCfgFlags::PrintLayoutExtension);
     switch( pImpl->nExportMode )
     {
         case HTML_CFG_MSIE:
@@ -334,37 +338,37 @@ bool SvxHtmlOptions::IsPrintLayoutExtension() const
 void    SvxHtmlOptions::SetPrintLayoutExtension(bool bSet)
 {
     if(bSet)
-        pImpl->nFlags |=  HTMLCFG_PRINT_LAYOUT_EXTENSION;
+        pImpl->nFlags |=  HtmlCfgFlags::PrintLayoutExtension;
     else
-        pImpl->nFlags &= ~HTMLCFG_PRINT_LAYOUT_EXTENSION;
+        pImpl->nFlags &= ~HtmlCfgFlags::PrintLayoutExtension;
     SetModified();
 }
 
 bool SvxHtmlOptions::IsIgnoreFontFamily() const
 {
-    return 0 != (pImpl->nFlags & HTMLCFG_IGNORE_FONT_FAMILY) ;
+    return bool(pImpl->nFlags & HtmlCfgFlags::IgnoreFontFamily) ;
 }
 
 void SvxHtmlOptions::SetIgnoreFontFamily(bool bSet)
 {
     if(bSet)
-        pImpl->nFlags |=  HTMLCFG_IGNORE_FONT_FAMILY;
+        pImpl->nFlags |=  HtmlCfgFlags::IgnoreFontFamily;
     else
-        pImpl->nFlags &= ~HTMLCFG_IGNORE_FONT_FAMILY;
+        pImpl->nFlags &= ~HtmlCfgFlags::IgnoreFontFamily;
     SetModified();
 }
 
 bool SvxHtmlOptions::IsStarBasicWarning() const
 {
-    return 0 != (pImpl->nFlags & HTMLCFG_IS_BASIC_WARNING) ;
+    return bool(pImpl->nFlags & HtmlCfgFlags::IsBasicWarning) ;
 }
 
 void SvxHtmlOptions::SetStarBasicWarning(bool bSet)
 {
     if(bSet)
-        pImpl->nFlags |=  HTMLCFG_IS_BASIC_WARNING;
+        pImpl->nFlags |=  HtmlCfgFlags::IsBasicWarning;
     else
-        pImpl->nFlags &= ~HTMLCFG_IS_BASIC_WARNING;
+        pImpl->nFlags &= ~HtmlCfgFlags::IsBasicWarning;
     SetModified();
 }
 
@@ -402,15 +406,15 @@ SvxHtmlOptions& SvxHtmlOptions::Get()
 
 bool SvxHtmlOptions::IsNumbersEnglishUS() const
 {
-    return 0 != (pImpl->nFlags & HTMLCFG_NUMBERS_ENGLISH_US) ;
+    return bool(pImpl->nFlags & HtmlCfgFlags::NumbersEnglishUS) ;
 }
 
 void SvxHtmlOptions::SetNumbersEnglishUS(bool bSet)
 {
     if(bSet)
-        pImpl->nFlags |=  HTMLCFG_NUMBERS_ENGLISH_US;
+        pImpl->nFlags |=  HtmlCfgFlags::NumbersEnglishUS;
     else
-        pImpl->nFlags &= ~HTMLCFG_NUMBERS_ENGLISH_US;
+        pImpl->nFlags &= ~HtmlCfgFlags::NumbersEnglishUS;
     SetModified();
 }
 
