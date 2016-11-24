@@ -288,9 +288,7 @@ std::unique_ptr<ScDBData> ScXMLDatabaseRangeContext::ConvertToDBData(const OUStr
 
     if (bFilterConditionSourceRange)
     {
-        ScRange aAdvSource;
-        ScUnoConversion::FillScRange(aAdvSource, aFilterConditionSourceRangeAddress);
-        pData->SetAdvancedQuerySource(&aAdvSource);
+        pData->SetAdvancedQuerySource( &aFilterConditionSourceRangeAddress );
     }
 
     {
