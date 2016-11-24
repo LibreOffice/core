@@ -92,9 +92,6 @@ void RscTypCont::Init()
 
     aIdNoZeroUShort.SetRange( 1, 0xFFFF );
 
-    aNoZeroShort.SetRange( -32768, 32767 );
-    aNoZeroShort.SetOutRange( 0 );
-
     aIdLong.SetRange( SAL_MIN_INT32, SAL_MAX_INT32 );
 }
 {
