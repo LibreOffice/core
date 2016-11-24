@@ -1576,13 +1576,19 @@ void GtkSalFrame::AllocateFrame()
             cairo_surface_destroy(m_pSurface);
 
 #if GTK_CHECK_VERSION(3,10,0)
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 14, 0)
         int scale = getDisplay()->IsOwnHiDpiScale() ? 1 : gtk_widget_get_scale_factor(m_pWindow);
+#else
+        int scale = 1;
+#endif
         m_pSurface = gdk_window_create_similar_image_surface(widget_get_window(m_pWindow),
                                                              CAIRO_FORMAT_ARGB32,
                                                              aFrameSize.getX() * scale,
                                                              aFrameSize.getY() * scale,
                                                              scale);
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 14, 0)
         cairo_surface_set_device_scale(m_pSurface, scale, scale);
+#endif
 #else
         m_pSurface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32,
                                                 aFrameSize.getX(),
