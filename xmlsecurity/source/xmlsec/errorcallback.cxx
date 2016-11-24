@@ -21,9 +21,6 @@
 
 #include "xmlsec-wrapper.h"
 
-using namespace ::com::sun::star::xml::crypto;
-
-
 extern "C"
 void errorCallback(const char* file,
                    int line,
