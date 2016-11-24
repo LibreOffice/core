@@ -68,9 +68,6 @@ public:
     void SetScrolledHdl( const Link<LicenseView&,void>& rHdl ) { maScrolledHdl = rHdl; }
 
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
-
-protected:
-    using MultiLineEdit::Notify;
 };
 
 struct LicenseDialogImpl : public ModalDialog

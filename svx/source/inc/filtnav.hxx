@@ -253,7 +253,6 @@ public:
     const FmFilterModel* GetFilterModel() const {return m_pModel;}
 
 protected:
-    using Control::Notify;
 
     virtual void KeyInput( const KeyEvent& rKEvt ) override;
     virtual void Command( const CommandEvent& rEvt ) override;

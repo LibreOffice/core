@@ -1098,7 +1098,7 @@ IMPL_LINK_NOARG(SvtURLBox, AutoCompleteHdl_Impl, Edit&, void)
     TryAutoComplete();
 }
 
-bool SvtURLBox::Notify( NotifyEvent &rEvt )
+bool SvtURLBox::EventNotify( NotifyEvent &rEvt )
 {
     if ( MouseNotifyEvent::GETFOCUS == rEvt.GetType() )
     {
@@ -1119,7 +1119,7 @@ bool SvtURLBox::Notify( NotifyEvent &rEvt )
         }
     }
 
-    return ComboBox::Notify( rEvt );
+    return ComboBox::EventNotify( rEvt );
 }
 
 

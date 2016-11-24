@@ -1321,7 +1321,7 @@ void ScCheckListMenuWindow::MouseMove(const MouseEvent& rMEvt)
         queueCloseSubMenu();
 }
 
-bool ScCheckListMenuWindow::Notify(NotifyEvent& rNEvt)
+bool ScCheckListMenuWindow::EventNotify(NotifyEvent& rNEvt)
 {
     if (rNEvt.GetType() == MouseNotifyEvent::KEYUP)
     {
@@ -1334,7 +1334,7 @@ bool ScCheckListMenuWindow::Notify(NotifyEvent& rNEvt)
             return true;
         }
     }
-    return ScMenuFloatingWindow::Notify(rNEvt);
+    return ScMenuFloatingWindow::EventNotify(rNEvt);
 }
 
 void ScCheckListMenuWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)

@@ -2189,7 +2189,7 @@ void ScPosWnd::DoEnter()
     ReleaseFocus_Impl();
 }
 
-bool ScPosWnd::Notify( NotifyEvent& rNEvt )
+bool ScPosWnd::EventNotify( NotifyEvent& rNEvt )
 {
     bool bHandled = true;
 
@@ -2241,7 +2241,7 @@ bool ScPosWnd::Notify( NotifyEvent& rNEvt )
     }
 
     if (!bHandled)
-        bHandled = ComboBox::Notify(rNEvt);
+        bHandled = ComboBox::EventNotify(rNEvt);
 
     return bHandled;
 }

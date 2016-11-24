@@ -317,7 +317,7 @@ private:
 
     virtual void    Select() override;
     virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
-    virtual bool    Notify( NotifyEvent& rNEvt ) override;
+    virtual bool    EventNotify( NotifyEvent& rNEvt ) override;
     static void     ImplReleaseFocus();
 
 public:
@@ -371,9 +371,9 @@ bool ImplGrafModeControl::PreNotify( NotifyEvent& rNEvt )
     return ListBox::PreNotify( rNEvt );
 }
 
-bool ImplGrafModeControl::Notify( NotifyEvent& rNEvt )
+bool ImplGrafModeControl::EventNotify( NotifyEvent& rNEvt )
 {
-    bool bHandled = ListBox::Notify( rNEvt );
+    bool bHandled = ListBox::EventNotify( rNEvt );
 
     if( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {

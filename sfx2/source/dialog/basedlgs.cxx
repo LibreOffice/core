@@ -316,7 +316,7 @@ void SfxModelessDialog::Init(SfxBindings *pBindinx, SfxChildWindow *pCW)
     If a ModelessDialog is enabled its ViewFrame wil be activated.
     This is necessary by PluginInFrames.
 */
-bool SfxModelessDialog::Notify( NotifyEvent& rEvt )
+bool SfxModelessDialog::EventNotify( NotifyEvent& rEvt )
 {
     if ( pImpl )
     {
@@ -332,14 +332,16 @@ bool SfxModelessDialog::Notify( NotifyEvent& rEvt )
         else if( rEvt.GetType() == MouseNotifyEvent::KEYINPUT )
         {
             // First, allow KeyInput for Dialog functions ( TAB etc. )
-            if ( !ModelessDialog::Notify( rEvt ) && SfxViewShell::Current() )
+            if (!ModelessDialog::EventNotify(rEvt) && SfxViewShell::Current())
+            {
                 // then also for valid global accelerators.
                 return SfxViewShell::Current()->GlobalKeyInput_Impl( *rEvt.GetKeyEvent() );
+            }
             return true;
         }
     }
 
-    return ModelessDialog::Notify( rEvt );
+    return ModelessDialog::EventNotify( rEvt );
 }
 
 SfxModelessDialog::~SfxModelessDialog()
@@ -394,7 +396,7 @@ void SfxModelessDialog::FillInfo(SfxChildWinInfo& rInfo) const
 }
 
 
-bool SfxFloatingWindow::Notify( NotifyEvent& rEvt )
+bool SfxFloatingWindow::EventNotify( NotifyEvent& rEvt )
 
 /*  [Description]
 
@@ -420,14 +422,16 @@ bool SfxFloatingWindow::Notify( NotifyEvent& rEvt )
         else if( rEvt.GetType() == MouseNotifyEvent::KEYINPUT )
         {
             // First, allow KeyInput for Dialog functions
-            if ( !FloatingWindow::Notify( rEvt ) && SfxViewShell::Current() )
+            if (!FloatingWindow::EventNotify(rEvt) && SfxViewShell::Current())
+            {
                 // then also for valid global accelerators.
                 return SfxViewShell::Current()->GlobalKeyInput_Impl( *rEvt.GetKeyEvent() );
+            }
             return true;
         }
     }
 
-    return FloatingWindow::Notify( rEvt );
+    return FloatingWindow::EventNotify( rEvt );
 }
 
 SfxFloatingWindow::SfxFloatingWindow( SfxBindings *pBindinx,

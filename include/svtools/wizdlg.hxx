@@ -235,7 +235,7 @@ public:
 
     virtual void        Resize() override;
     virtual void        StateChanged( StateChangedType nStateChange ) override;
-    virtual bool        Notify( NotifyEvent& rNEvt ) override;
+    virtual bool        EventNotify( NotifyEvent& rNEvt ) override;
 
     virtual void        ActivatePage();
     virtual bool        DeactivatePage();

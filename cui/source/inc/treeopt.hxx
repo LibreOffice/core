@@ -168,7 +168,7 @@ protected:
     DECL_LINK(OKHdl_Impl, Button*, void);
     void SelectHdl_Impl();
 
-    virtual bool    Notify( NotifyEvent& rNEvt ) override;
+    virtual bool    EventNotify( NotifyEvent& rNEvt ) override;
     virtual short   Execute() override;
 
 public:

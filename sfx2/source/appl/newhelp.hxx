@@ -63,7 +63,7 @@ public:
     virtual void dispose() override;
 
     virtual void    RequestingChildren( SvTreeListEntry* pParent ) override;
-    virtual bool    Notify( NotifyEvent& rNEvt ) override;
+    virtual bool    EventNotify( NotifyEvent& rNEvt ) override;
 
     inline void     SetOpenHdl( const Link<SvTreeListBox*,bool>& rLink ) { SetDoubleClickHdl( rLink ); }
     OUString        GetSelectEntry() const;
@@ -115,7 +115,7 @@ public:
     IndexBox_Impl(vcl::Window* pParent, WinBits nStyle);
 
     virtual void        UserDraw( const UserDrawEvent& rUDEvt ) override;
-    virtual bool        Notify( NotifyEvent& rNEvt ) override;
+    virtual bool        EventNotify( NotifyEvent& rNEvt ) override;
 
     void                SelectExecutableEntry();
 };
@@ -194,7 +194,7 @@ public:
     {
     }
 
-    virtual bool    Notify( NotifyEvent& rNEvt ) override;
+    virtual bool    EventNotify( NotifyEvent& rNEvt ) override;
 };
 
 class SearchTabPage_Impl : public HelpTabPage_Impl
@@ -251,7 +251,7 @@ public:
     virtual ~BookmarksBox_Impl() override;
     virtual void dispose() override;
 
-    virtual bool        Notify( NotifyEvent& rNEvt ) override;
+    virtual bool        EventNotify( NotifyEvent& rNEvt ) override;
 };
 
 class BookmarksTabPage_Impl : public HelpTabPage_Impl
@@ -406,7 +406,7 @@ class TextWin_Impl : public DockingWindow
 public:
     explicit                TextWin_Impl( vcl::Window* pParent );
 
-    virtual bool            Notify( NotifyEvent& rNEvt ) override;
+    virtual bool            EventNotify( NotifyEvent& rNEvt ) override;
 };
 
 // class SfxHelpTextWindow_Impl ------------------------------------------

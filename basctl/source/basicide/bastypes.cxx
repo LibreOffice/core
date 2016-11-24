@@ -102,7 +102,7 @@ void BaseWindow::ExecuteGlobal (SfxRequest&)
 { }
 
 
-bool BaseWindow::Notify( NotifyEvent& rNEvt )
+bool BaseWindow::EventNotify( NotifyEvent& rNEvt )
 {
     bool bDone = false;
 
@@ -128,7 +128,7 @@ bool BaseWindow::Notify( NotifyEvent& rNEvt )
         }
     }
 
-    return bDone || Window::Notify( rNEvt );
+    return bDone || Window::EventNotify( rNEvt );
 }
 
 

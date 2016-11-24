@@ -60,7 +60,7 @@ public:
 protected:
     virtual void        Select() override;
     virtual void        DoubleClick() override;
-    virtual bool        Notify( NotifyEvent& rNEvt ) override;
+    virtual bool        EventNotify( NotifyEvent& rNEvt ) override;
 
 private:
     struct ScenarioEntry
@@ -120,7 +120,7 @@ public:
     void    SetCol( SCCOL nColNo );
 
 protected:
-    virtual bool    Notify( NotifyEvent& rNEvt ) override;
+    virtual bool    EventNotify( NotifyEvent& rNEvt ) override;
     virtual void    LoseFocus() override;
     virtual void    Up() override;
     virtual void    Down() override;
@@ -152,7 +152,7 @@ public:
     void    SetRow(SCROW nRow) { SetValue(nRow); }
 
 protected:
-    virtual bool    Notify( NotifyEvent& rNEvt ) override;
+    virtual bool    EventNotify( NotifyEvent& rNEvt ) override;
     virtual Size    GetOptimalSize() const override;
     virtual void    LoseFocus() override;
     virtual void    dispose() override;
@@ -260,8 +260,7 @@ public:
     virtual ~ScNavigatorDlg() override;
     virtual void dispose() override;
 
-    using Window::Notify;
-    virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
+    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 };
 
 class ScNavigatorDialogWrapper: public SfxChildWindowContext

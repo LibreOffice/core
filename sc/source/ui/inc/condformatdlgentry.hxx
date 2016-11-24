@@ -72,7 +72,7 @@ public:
     virtual void setAllocation(const Size &rAllocation) override;
     virtual void dispose() override;
 
-    virtual bool Notify( NotifyEvent& rNEvt ) override;
+    virtual bool EventNotify( NotifyEvent& rNEvt ) override;
 
     bool IsSelected() const { return mbActive;}
     void SetIndex(sal_Int32 nIndex);
@@ -131,7 +131,6 @@ public:
     virtual void SetInactive() override;
 
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
-    using ScCondFrmtEntry::Notify;
 
     virtual condformat::entry::ScCondFrmtEntryType GetType() override { return condformat::entry::CONDITION; }
 };
@@ -272,7 +271,7 @@ public:
     virtual condformat::entry::ScCondFrmtEntryType GetType() override { return condformat::entry::DATE; }
 
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
-    using ScCondFrmtEntry::Notify;
+
 protected:
     virtual OUString GetExpressionString() override;
 

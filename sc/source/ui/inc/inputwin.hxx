@@ -170,7 +170,7 @@ protected:
     virtual void    Select() override;
     virtual void    Modify() override;
 
-    virtual bool    Notify( NotifyEvent& rNEvt ) override;
+    virtual bool    EventNotify( NotifyEvent& rNEvt ) override;
 
     virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 

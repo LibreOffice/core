@@ -70,7 +70,7 @@ class PlacesListBox : public Control
         const VclPtr<PushButton>& GetDeleteButton() const { return mpDelBtn; }
         const VclPtr<PlacesListBox_Impl>& GetPlacesListBox() const { return mpImpl; }
 
-        virtual bool Notify( NotifyEvent& rNEvt ) override;
+        virtual bool EventNotify( NotifyEvent& rNEvt ) override;
 
     private:
 

@@ -173,9 +173,9 @@ bool SvxLineBox::PreNotify( NotifyEvent& rNEvt )
 }
 
 
-bool SvxLineBox::Notify( NotifyEvent& rNEvt )
+bool SvxLineBox::EventNotify( NotifyEvent& rNEvt )
 {
-    bool bHandled = LineLB::Notify( rNEvt );
+    bool bHandled = LineLB::EventNotify( rNEvt );
 
     if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
@@ -331,9 +331,9 @@ bool SvxMetricField::PreNotify( NotifyEvent& rNEvt )
 }
 
 
-bool SvxMetricField::Notify( NotifyEvent& rNEvt )
+bool SvxMetricField::EventNotify( NotifyEvent& rNEvt )
 {
-    bool bHandled = MetricField::Notify( rNEvt );
+    bool bHandled = MetricField::EventNotify( rNEvt );
 
     if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
@@ -419,9 +419,9 @@ bool SvxFillTypeBox::PreNotify( NotifyEvent& rNEvt )
 }
 
 
-bool SvxFillTypeBox::Notify( NotifyEvent& rNEvt )
+bool SvxFillTypeBox::EventNotify( NotifyEvent& rNEvt )
 {
-    bool bHandled = FillTypeLB::Notify( rNEvt );
+    bool bHandled = FillTypeLB::EventNotify( rNEvt );
 
     if (isDisposed())
         return false;
@@ -487,9 +487,9 @@ bool SvxFillAttrBox::PreNotify( NotifyEvent& rNEvt )
 }
 
 
-bool SvxFillAttrBox::Notify( NotifyEvent& rNEvt )
+bool SvxFillAttrBox::EventNotify( NotifyEvent& rNEvt )
 {
-    bool bHandled = FillAttrLB::Notify( rNEvt );
+    bool bHandled = FillAttrLB::EventNotify( rNEvt );
 
     if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {

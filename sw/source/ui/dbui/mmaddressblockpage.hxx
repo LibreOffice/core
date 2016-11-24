@@ -150,8 +150,6 @@ class AddressMultiLineEdit : public VclMultiLineEdit, public SfxListener
     Link<AddressMultiLineEdit&,void>       m_aSelectionLink;
     VclPtr<SwCustomizeAddressBlockDialog>  m_pParentDialog;
 
-    using VclMultiLineEdit::Notify;
-
     using VclMultiLineEdit::SetText;
 
 protected:

@@ -40,7 +40,7 @@ namespace svt
 
     protected:
         virtual bool        PreNotify( NotifyEvent& rNEvt ) override;
-        virtual bool        Notify( NotifyEvent& rNEvt ) override;
+        virtual bool        EventNotify( NotifyEvent& rNEvt ) override;
 
     public:
         /** transforms the given URL content into a system-dependent notation, if possible, and

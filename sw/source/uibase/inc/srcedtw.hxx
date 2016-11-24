@@ -94,7 +94,6 @@ private:
 
     DECL_LINK( SyntaxTimerHdl, Idle *, void );
 
-    using Window::Notify;
     using Window::Invalidate;
 
 protected:

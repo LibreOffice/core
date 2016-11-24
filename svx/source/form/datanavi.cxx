@@ -1027,7 +1027,7 @@ namespace svxform
     }
 
 
-    bool XFormsPage::Notify( NotifyEvent& rNEvt )
+    bool XFormsPage::EventNotify( NotifyEvent& rNEvt )
     {
         bool bHandled = false;
 
@@ -1043,7 +1043,7 @@ namespace svxform
             }
         }
 
-        return bHandled || Window::Notify( rNEvt );
+        return bHandled || Window::EventNotify( rNEvt );
     }
 
     void XFormsPage::Resize()

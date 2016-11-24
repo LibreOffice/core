@@ -389,7 +389,7 @@ void ContentListBox_Impl::RequestingChildren( SvTreeListEntry* pParent )
 }
 
 
-bool ContentListBox_Impl::Notify( NotifyEvent& rNEvt )
+bool ContentListBox_Impl::EventNotify( NotifyEvent& rNEvt )
 {
     bool bHandled = false;
     if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT &&
@@ -399,7 +399,7 @@ bool ContentListBox_Impl::Notify( NotifyEvent& rNEvt )
         bHandled = true;
     }
 
-    return bHandled || SvTreeListBox::Notify( rNEvt );
+    return bHandled || SvTreeListBox::EventNotify( rNEvt );
 }
 
 
@@ -502,7 +502,7 @@ void IndexBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
 }
 
 
-bool IndexBox_Impl::Notify( NotifyEvent& rNEvt )
+bool IndexBox_Impl::EventNotify( NotifyEvent& rNEvt )
 {
     bool bHandled = false;
     if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT &&
@@ -512,7 +512,7 @@ bool IndexBox_Impl::Notify( NotifyEvent& rNEvt )
         bHandled = true;
     }
 
-    return bHandled || ComboBox::Notify( rNEvt );
+    return bHandled || ComboBox::EventNotify( rNEvt );
 }
 
 
@@ -893,7 +893,7 @@ VCL_BUILDER_DECL_FACTORY(SearchResultsBox)
     rRet = pListBox;
 }
 
-bool SearchResultsBox_Impl::Notify( NotifyEvent& rNEvt )
+bool SearchResultsBox_Impl::EventNotify( NotifyEvent& rNEvt )
 {
     bool bHandled = false;
     if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT &&
@@ -903,7 +903,7 @@ bool SearchResultsBox_Impl::Notify( NotifyEvent& rNEvt )
         bHandled = true;
     }
 
-    return bHandled || ListBox::Notify( rNEvt );
+    return bHandled || ListBox::EventNotify( rNEvt );
 }
 
 // class SearchTabPage_Impl ----------------------------------------------
@@ -1226,7 +1226,7 @@ void BookmarksBox_Impl::DoAction( sal_uInt16 nAction )
 }
 
 
-bool BookmarksBox_Impl::Notify( NotifyEvent& rNEvt )
+bool BookmarksBox_Impl::EventNotify( NotifyEvent& rNEvt )
 {
     bool bRet = false;
     MouseNotifyEvent nType = rNEvt.GetType();
@@ -1257,7 +1257,7 @@ bool BookmarksBox_Impl::Notify( NotifyEvent& rNEvt )
         }
     }
 
-    return bRet || ListBox::Notify( rNEvt );
+    return bRet || ListBox::EventNotify( rNEvt );
 }
 
 // class BookmarksTabPage_Impl -------------------------------------------
@@ -1831,12 +1831,12 @@ TextWin_Impl::TextWin_Impl( vcl::Window* p ) : DockingWindow( p, 0 )
 {
 }
 
-bool TextWin_Impl::Notify( NotifyEvent& rNEvt )
+bool TextWin_Impl::EventNotify( NotifyEvent& rNEvt )
 {
     if( ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT ) && rNEvt.GetKeyEvent()->GetKeyCode().GetCode() == KEY_TAB )
-        return GetParent()->Notify( rNEvt );
+        return GetParent()->EventNotify( rNEvt );
     else
-        return DockingWindow::Notify( rNEvt );
+        return DockingWindow::EventNotify( rNEvt );
 }
 
 

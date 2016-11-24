@@ -72,7 +72,6 @@ class GalleryBrowser1 : public Control, public SfxListener
     friend class GalleryBrowser;
     friend class svx::sidebar::GalleryControl;
     friend class GalleryThemeListBox;
-    using Control::Notify;
     using Window::KeyInput;
 
 private:

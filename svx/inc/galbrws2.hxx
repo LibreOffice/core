@@ -91,7 +91,6 @@ class GalleryBrowser2 : public Control, public SfxListener
 {
     friend class GalleryBrowser;
     friend class svx::sidebar::GalleryControl;
-    using Control::Notify;
     using Window::KeyInput;
 
 private:

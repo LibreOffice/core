@@ -91,7 +91,7 @@ bool Window::PreNotify( NotifyEvent& rNEvt )
     return bDone;
 }
 
-bool Window::Notify( NotifyEvent& rNEvt )
+bool Window::EventNotify( NotifyEvent& rNEvt )
 {
     bool bRet = false;
 

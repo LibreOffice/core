@@ -1433,14 +1433,14 @@ void VclMultiLineEdit::Draw( OutputDevice* pDev, const Point& rPos, const Size& 
     pDev->Pop();
 }
 
-bool VclMultiLineEdit::Notify( NotifyEvent& rNEvt )
+bool VclMultiLineEdit::EventNotify( NotifyEvent& rNEvt )
 {
     bool bDone = false;
     if( rNEvt.GetType() == MouseNotifyEvent::COMMAND )
     {
         bDone = pImpVclMEdit->HandleCommand( *rNEvt.GetCommandEvent() );
     }
-    return bDone || Edit::Notify( rNEvt );
+    return bDone || Edit::EventNotify( rNEvt );
 }
 
 bool VclMultiLineEdit::PreNotify( NotifyEvent& rNEvt )

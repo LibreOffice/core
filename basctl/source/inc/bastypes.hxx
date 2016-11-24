@@ -184,7 +184,7 @@ public:
     virtual void    ExecuteCommand (SfxRequest&);
     virtual void    ExecuteGlobal (SfxRequest&);
     virtual void    GetState (SfxItemSet&) = 0;
-    virtual bool    Notify( NotifyEvent& rNEvt ) override;
+    virtual bool    EventNotify( NotifyEvent& rNEvt ) override;
 
     virtual void    StoreData();
     virtual void    UpdateData();

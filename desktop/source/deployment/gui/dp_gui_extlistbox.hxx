@@ -172,7 +172,7 @@ public:
     virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle &rPaintRect ) override;
     virtual void Resize() override;
-    virtual bool Notify( NotifyEvent& rNEvt ) override;
+    virtual bool EventNotify( NotifyEvent& rNEvt ) override;
     virtual Size GetOptimalSize() const override;
 
     void            SetExtraSize( long nSize ) { m_nExtraHeight = nSize; }

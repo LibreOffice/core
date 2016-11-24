@@ -64,7 +64,7 @@ bool SvSimpleTableContainer::PreNotify( NotifyEvent& rNEvt )
         const vcl::KeyCode& aKeyCode = rNEvt.GetKeyEvent()->GetKeyCode();
         sal_uInt16 nKey = aKeyCode.GetCode();
         if (nKey == KEY_TAB)
-            GetParent()->Notify( rNEvt );
+            GetParent()->EventNotify( rNEvt );
         else if (m_pTable && m_pTable->IsFocusOnCellEnabled() && ( nKey == KEY_LEFT || nKey == KEY_RIGHT))
             return false;
         else

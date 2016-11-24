@@ -77,7 +77,7 @@ public:
 
     virtual void Paint (vcl::RenderContext& /*rRenderContext*/, const Rectangle& rUpdateArea) override;
     virtual void DataChanged (const DataChangedEvent& rDataChangedEvent) override;
-    virtual bool Notify (NotifyEvent& rEvent) override;
+    virtual bool EventNotify (NotifyEvent& rEvent) override;
 
     static sal_Int32 GetDefaultWidth();
 

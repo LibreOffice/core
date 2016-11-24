@@ -984,7 +984,7 @@ IMPL_LINK_NOARG(ExtMgrDialog, TimeOutHdl, Idle *, void)
 
 // VCL::Window / Dialog
 
-bool ExtMgrDialog::Notify( NotifyEvent& rNEvt )
+bool ExtMgrDialog::EventNotify( NotifyEvent& rNEvt )
 {
     bool bHandled = false;
 
@@ -994,11 +994,11 @@ bool ExtMgrDialog::Notify( NotifyEvent& rNEvt )
         vcl::KeyCode aKeyCode = pKEvt->GetKeyCode();
 
         if ( aKeyCode.GetGroup() == KEYGROUP_CURSOR )
-            bHandled = m_pExtensionBox->Notify( rNEvt );
+            bHandled = m_pExtensionBox->EventNotify(rNEvt);
     }
 // VCLEVENT_WINDOW_CLOSE
     if ( !bHandled )
-        return ModelessDialog::Notify( rNEvt );
+        return ModelessDialog::EventNotify(rNEvt);
     else
         return true;
 }

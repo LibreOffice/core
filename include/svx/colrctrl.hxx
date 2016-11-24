@@ -107,7 +107,7 @@ public:
 
     virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
-    virtual bool    Notify( NotifyEvent& rNEvt ) override;
+    virtual bool    EventNotify( NotifyEvent& rNEvt ) override;
 };
 
 #endif

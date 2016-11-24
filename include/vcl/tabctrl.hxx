@@ -103,7 +103,7 @@ public:
     virtual void        LoseFocus() override;
     virtual void        RequestHelp( const HelpEvent& rHEvt ) override;
     virtual void        Command( const CommandEvent& rCEvt ) override;
-    virtual bool        Notify( NotifyEvent& rNEvt ) override;
+    virtual bool        EventNotify( NotifyEvent& rNEvt ) override;
     virtual void        StateChanged( StateChangedType nType ) override;
     virtual void        DataChanged( const DataChangedEvent& rDCEvt ) override;
     virtual bool        PreNotify( NotifyEvent& rNEvt ) override;

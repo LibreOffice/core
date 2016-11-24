@@ -166,7 +166,7 @@ public:
     {
         return false;
     }
-    virtual bool Notify( NotifyEvent& ) override
+    virtual bool EventNotify( NotifyEvent& ) override
     {
         return false;
     }

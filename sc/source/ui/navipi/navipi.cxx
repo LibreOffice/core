@@ -85,9 +85,9 @@ ColumnEdit::~ColumnEdit()
 
 VCL_BUILDER_FACTORY_ARGS(ColumnEdit, WB_BORDER | WB_SPIN | WB_REPEAT | WB_RIGHT)
 
-bool ColumnEdit::Notify( NotifyEvent& rNEvt )
+bool ColumnEdit::EventNotify( NotifyEvent& rNEvt )
 {
-    bool bHandled = SpinField::Notify( rNEvt );
+    bool bHandled = SpinField::EventNotify(rNEvt);
 
     MouseNotifyEvent nType = rNEvt.GetType();
     if ( nType == MouseNotifyEvent::KEYINPUT )
@@ -262,9 +262,9 @@ RowEdit::~RowEdit()
 
 VCL_BUILDER_FACTORY_ARGS(RowEdit, WB_BORDER | WB_SPIN | WB_REPEAT | WB_RIGHT)
 
-bool RowEdit::Notify( NotifyEvent& rNEvt )
+bool RowEdit::EventNotify( NotifyEvent& rNEvt )
 {
-    bool bHandled = NumericField::Notify( rNEvt );
+    bool bHandled = NumericField::EventNotify(rNEvt);
 
     if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {

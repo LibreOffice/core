@@ -135,7 +135,7 @@ class FileViewContainer : public vcl::Window
         }
     }
 
-    virtual bool Notify( NotifyEvent& rNEvt ) override
+    virtual bool EventNotify( NotifyEvent& rNEvt ) override
     {
         if( rNEvt.GetType() == MouseNotifyEvent::GETFOCUS )
         {
@@ -164,7 +164,7 @@ class FileViewContainer : public vcl::Window
                 return true;
             }
         }
-        return Window::Notify( rNEvt );
+        return Window::EventNotify(rNEvt);
     }
 };
 

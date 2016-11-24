@@ -520,10 +520,10 @@ void DockingWindow::Tracking( const TrackingEvent& rTEvt )
     }
 }
 
-bool DockingWindow::Notify( NotifyEvent& rNEvt )
+bool DockingWindow::EventNotify( NotifyEvent& rNEvt )
 {
     if( GetDockingManager()->IsDockable( this ) )   // new docking interface
-        return Window::Notify( rNEvt );
+        return Window::EventNotify( rNEvt );
 
     if ( mbDockable )
     {
@@ -571,7 +571,7 @@ bool DockingWindow::Notify( NotifyEvent& rNEvt )
         }
     }
 
-    return Window::Notify( rNEvt );
+    return Window::EventNotify( rNEvt );
 }
 
 void DockingWindow::StartDocking()

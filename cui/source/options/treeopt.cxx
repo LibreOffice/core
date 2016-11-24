@@ -865,7 +865,7 @@ void OfaTreeOptionsDialog::ActivateLastSelection()
     pTreeLB->GrabFocus();
 }
 
-bool OfaTreeOptionsDialog::Notify( NotifyEvent& rNEvt )
+bool OfaTreeOptionsDialog::EventNotify( NotifyEvent& rNEvt )
 {
     if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
@@ -903,7 +903,7 @@ bool OfaTreeOptionsDialog::Notify( NotifyEvent& rNEvt )
             }
         }
     }
-    return SfxModalDialog::Notify(rNEvt);
+    return SfxModalDialog::EventNotify(rNEvt);
 }
 
 void OfaTreeOptionsDialog::SelectHdl_Impl()

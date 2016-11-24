@@ -152,7 +152,7 @@ public:
     virtual        ~ExtMgrDialog() override;
     virtual void    dispose() override;
 
-    virtual bool    Notify( NotifyEvent& rNEvt ) override;
+    virtual bool    EventNotify( NotifyEvent& rNEvt ) override;
     virtual bool    Close() override;
 
     virtual void    showProgress( bool bStart ) override;

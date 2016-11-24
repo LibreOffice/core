@@ -373,7 +373,7 @@ protected:
     virtual void        GetFocus() override;
     virtual void        StateChanged( StateChangedType nType ) override;
 
-    virtual bool        Notify( NotifyEvent& rNEvt ) override;
+    virtual bool        EventNotify( NotifyEvent& rNEvt ) override;
 
     void                ImplResizeControls();
     void                ImplCheckScrollBars();

@@ -444,7 +444,7 @@ public:
         }
     }
 
-    virtual bool Notify( NotifyEvent& rNEvt ) override
+    virtual bool EventNotify( NotifyEvent& rNEvt ) override
     {
         if( rNEvt.GetType() == MouseNotifyEvent::GETFOCUS )
         {
@@ -473,7 +473,7 @@ public:
                 return true;
             }
         }
-        return Window::Notify( rNEvt );
+        return Window::EventNotify(rNEvt);
     }
 };
 
@@ -1561,7 +1561,7 @@ IMPL_LINK_NOARG(SvtFileDialog, PlayButtonHdl_Impl, Button*, void)
 }
 
 
-bool SvtFileDialog::Notify( NotifyEvent& rNEvt )
+bool SvtFileDialog::EventNotify( NotifyEvent& rNEvt )
 
 /*  [Description]
 
@@ -1589,7 +1589,7 @@ bool SvtFileDialog::Notify( NotifyEvent& rNEvt )
             }
         }
     }
-    return bRet || ModalDialog::Notify( rNEvt );
+    return bRet || ModalDialog::EventNotify(rNEvt);
 }
 
 namespace

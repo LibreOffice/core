@@ -147,7 +147,7 @@ void Deck::DataChanged (const DataChangedEvent& rEvent)
     RequestLayout();
 }
 
-bool Deck::Notify (NotifyEvent& rEvent)
+bool Deck::EventNotify(NotifyEvent& rEvent)
 {
     if (rEvent.GetType() == MouseNotifyEvent::COMMAND)
     {
@@ -163,7 +163,7 @@ bool Deck::Notify (NotifyEvent& rEvent)
             }
     }
 
-    return Window::Notify(rEvent);
+    return Window::EventNotify(rEvent);
 }
 
 bool Deck::ProcessWheelEvent(CommandEvent* pCommandEvent)

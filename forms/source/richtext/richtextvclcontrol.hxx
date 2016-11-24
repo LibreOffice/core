@@ -109,7 +109,7 @@ namespace frm
         virtual void        GetFocus() override;
         virtual void        StateChanged( StateChangedType nStateChange ) override;
         virtual bool        PreNotify( NotifyEvent& _rNEvt ) override;
-        virtual bool        Notify( NotifyEvent& _rNEvt ) override;
+        virtual bool        EventNotify( NotifyEvent& _rNEvt ) override;
 
     private:
                 void    applyAttributes( const SfxItemSet& _rAttributesToApply );

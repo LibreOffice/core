@@ -54,7 +54,7 @@ namespace svt { namespace table
         virtual void        MouseMove( const MouseEvent& rMEvt) override;
         virtual void        MouseButtonDown( const MouseEvent& rMEvt) override;
         virtual void        MouseButtonUp( const MouseEvent& rMEvt) override;
-        virtual bool        Notify(NotifyEvent& rNEvt) override;
+        virtual bool        EventNotify(NotifyEvent& rNEvt) override;
         virtual void        RequestHelp( const HelpEvent& rHEvt ) override;
 
     private:

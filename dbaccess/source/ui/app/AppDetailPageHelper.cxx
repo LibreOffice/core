@@ -134,15 +134,15 @@ namespace
         virtual void DataChanged(const DataChangedEvent& rDCEvt) override;
     public:
         OTablePreviewWindow( vcl::Window* pParent, WinBits nStyle = 0 );
-        virtual bool Notify( NotifyEvent& rNEvt ) override;
+        virtual bool EventNotify( NotifyEvent& rNEvt ) override;
     };
     OTablePreviewWindow::OTablePreviewWindow(vcl::Window* pParent, WinBits nStyle) : Window( pParent, nStyle)
     {
         ImplInitSettings();
     }
-    bool OTablePreviewWindow::Notify( NotifyEvent& rNEvt )
+    bool OTablePreviewWindow::EventNotify( NotifyEvent& rNEvt )
     {
-        bool bRet = Window::Notify( rNEvt );
+        bool bRet = Window::EventNotify(rNEvt);
         if ( rNEvt.GetType() == MouseNotifyEvent::INPUTENABLE && IsInputEnabled() )
             PostUserEvent( LINK( this, OTablePreviewWindow, OnDisableInput), nullptr, true );
         return bRet;

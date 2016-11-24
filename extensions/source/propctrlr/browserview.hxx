@@ -41,7 +41,7 @@ namespace pcr
     protected:
         virtual void Resize() override;
         virtual void GetFocus() override;
-        virtual bool Notify( NotifyEvent& _rNEvt ) override;
+        virtual bool EventNotify( NotifyEvent& _rNEvt ) override;
 
     public:
         explicit OPropertyBrowserView( vcl::Window* pParent);
