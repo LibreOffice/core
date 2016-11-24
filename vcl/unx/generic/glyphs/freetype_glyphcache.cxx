@@ -607,10 +607,9 @@ const std::shared_ptr<FontConfigFontOptions>& FreetypeFont::GetFontOptions() con
 {
     if (!mxFontOptions)
     {
-        SAL_WARN("vcl", "this doesn't happen in practice I believe");
         mxFontOptions.reset(GetFCFontOptions(mpFontInfo->GetFontAttributes(), maFontSelData.mnHeight));
+        mxFontOptions->SyncPattern(GetFontFileName(), GetFontFaceIndex(), NeedsArtificialBold());
     }
-    mxFontOptions->SyncPattern(GetFontFileName(), GetFontFaceIndex(), NeedsArtificialBold());
     return mxFontOptions;
 }
 
