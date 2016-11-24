@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLSECURITY_SOURCE_FRAMEWORK_SIGNATUREENGINE_HXX
-#define INCLUDED_XMLSECURITY_SOURCE_FRAMEWORK_SIGNATUREENGINE_HXX
+#ifndef INCLUDED_XMLSECURITY_INC_FRAMEWORK_SIGNATUREENGINE_HXX
+#define INCLUDED_XMLSECURITY_INC_FRAMEWORK_SIGNATUREENGINE_HXX
 
 #include <com/sun/star/xml/crypto/sax/XReferenceResolvedListener.hpp>
 #include <com/sun/star/xml/crypto/sax/XReferenceResolvedBroadcaster.hpp>
@@ -34,11 +34,12 @@
 
 #include <cppuhelper/implbase.hxx>
 
+#include "xsecfwdllapi.h"
 #include "securityengine.hxx"
 
 #include <vector>
 
-class SignatureEngine : public cppu::ImplInheritanceHelper
+class XSECFW_DLLPUBLIC SignatureEngine : public cppu::ImplInheritanceHelper
 <
     SecurityEngine,
     css::xml::crypto::sax::XReferenceCollector,

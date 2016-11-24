@@ -30,7 +30,7 @@
 #include <com/sun/star/xml/crypto/XXMLEncryption.hpp>
 #include <cppuhelper/implbase.hxx>
 
-#include "securityengine.hxx"
+#include "framework/securityengine.hxx"
 
 namespace com { namespace sun { namespace star { namespace uno {
     class XComponentContext;
