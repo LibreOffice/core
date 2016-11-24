@@ -407,7 +407,10 @@ void printNotifyEvent( const accessibility::AccessibleEventObject& rEvent )
                 os << "  * new state = " << getOrUnknown(aStates, nState);
 
             os << std::endl;
+            break;
         }
+        default:
+            ;
     }
 
     std::cout << os.str();
