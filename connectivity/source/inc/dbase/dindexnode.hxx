@@ -97,6 +97,7 @@ namespace connectivity
             ~ONDXPagePtr();
             void Clear();
             ONDXPagePtr& operator=(ONDXPagePtr const & rRef);
+            ONDXPagePtr& operator=(ONDXPagePtr && rRef);
             bool Is() const { return mpPage != nullptr; }
 
             ONDXPage * operator ->() const { assert(mpPage != nullptr); return mpPage; }

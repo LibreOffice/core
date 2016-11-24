@@ -865,6 +865,17 @@ ONDXPagePtr& ONDXPagePtr::operator=(ONDXPagePtr const & rOther)
     return *this;
 }
 
+ONDXPagePtr& ONDXPagePtr::operator=(ONDXPagePtr && rOther)
+{
+    if (mpPage != nullptr) {
+        mpPage->ReleaseRef();
+    }
+    mpPage = rOther.mpPage;
+    nPagePos = rOther.nPagePos;
+    rOther.mpPage = nullptr;
+    return *this;
+}
+
 static sal_uInt32 nValue;
 
 SvStream& connectivity::dbase::operator >> (SvStream &rStream, ONDXPage& rPage)
