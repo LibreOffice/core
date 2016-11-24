@@ -85,7 +85,6 @@ void RscTypCont::Init()
 
     aUShort.SetRange( 0, 0xFFFF );
 
-    aLong.SetRange( SAL_MIN_INT32, SAL_MAX_INT32 );
     aEnumLong.SetRange( SAL_MIN_INT32, SAL_MAX_INT32 );
 
     aIdUShort.SetRange( 0, 0xFFFF );

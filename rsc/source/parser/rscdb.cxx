@@ -48,7 +48,6 @@ RscTypCont::RscTypCont( RscError * pErrHdl,
     , aBool( pHS->getID( "sal_Bool" ), RSC_NOTYPE )
     , aShort( pHS->getID( "short" ), RSC_NOTYPE )
     , aUShort( pHS->getID( "sal_uInt16" ), RSC_NOTYPE )
-    , aLong( pHS->getID( "long" ), RSC_NOTYPE )
     , aEnumLong( pHS->getID( "enum_long" ), RSC_NOTYPE )
     , aIdUShort( pHS->getID( "IDUSHORT" ), RSC_NOTYPE )
     , aIdNoZeroUShort( pHS->getID( "IDUSHORT" ), RSC_NOTYPE )

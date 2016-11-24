@@ -113,7 +113,6 @@ public:
     RscBool             aBool;
     RscRange            aShort;
     RscRange            aUShort;
-    RscLongRange        aLong;
     RscLongEnumRange    aEnumLong;
     RscIdRange          aIdUShort;
     RscIdRange          aIdNoZeroUShort;
