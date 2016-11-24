@@ -243,7 +243,7 @@ void HelpParser::ProcessHelp( LangHashMap* aLangHM , const OString& sCur , ResDa
                 pEntrys = pMergeDataFile->GetMergeEntrys( pResData );
                 if( pEntrys != nullptr)
                 {
-                    pEntrys->GetText( sNewText, STRING_TYP_TEXT, sCur, true );
+                    pEntrys->GetText( sNewText, StringType::Text, sCur, true );
                     if (helper::isWellFormedXML(XMLUtil::QuotHTML(sNewText)))
                     {
                         sNewdata = sSourceText.copy(0,nPreSpaces) + sNewText;

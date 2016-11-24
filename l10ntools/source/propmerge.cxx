@@ -205,7 +205,7 @@ void PropParser::Merge( const OString &rMergeSrc, const OString &rDestinationFil
                 MergeEntrys* pEntrys = pMergeDataFile->GetMergeEntrys( &aResData );
                 if( pEntrys )
                 {
-                    pEntrys->GetText( sNewText, STRING_TYP_TEXT, m_sLang );
+                    pEntrys->GetText( sNewText, StringType::Text, m_sLang );
                 }
             }
             if( !sNewText.isEmpty() )

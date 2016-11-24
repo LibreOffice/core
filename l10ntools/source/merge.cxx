@@ -92,25 +92,25 @@ ResData::ResData( const OString &rGId, const OString &rFilename)
 
 
 bool MergeEntrys::GetText( OString &rReturn,
-    sal_uInt16 nTyp, const OString &nLangIndex, bool bDel )
+    StringType nTyp, const OString &nLangIndex, bool bDel )
 {
     bool bReturn = true;
     switch ( nTyp ) {
-        case STRING_TYP_TEXT :
+        case StringType::Text :
             rReturn = sText[ nLangIndex ];
             if ( bDel )
                 sText[ nLangIndex ] = "";
             bReturn = bTextFirst[ nLangIndex ];
             bTextFirst[ nLangIndex ] = false;
             break;
-        case STRING_TYP_QUICKHELPTEXT :
+        case StringType::QuickHelpText :
             rReturn = sQuickHelpText[ nLangIndex ];
             if ( bDel )
                 sQuickHelpText[ nLangIndex ] = "";
             bReturn = bQuickHelpTextFirst[ nLangIndex ];
             bQuickHelpTextFirst[ nLangIndex ] = false;
             break;
-        case STRING_TYP_TITLE :
+        case StringType::Title :
             rReturn = sTitle[ nLangIndex ];
             if ( bDel )
                 sTitle[ nLangIndex ] = "";

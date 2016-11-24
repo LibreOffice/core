@@ -471,7 +471,7 @@ void CfgMerge::WorkOnResourceEnd()
                 sCur = aLanguages[ i ];
 
                 OString sContent;
-                pEntrys->GetText( sContent, STRING_TYP_TEXT, sCur , true );
+                pEntrys->GetText( sContent, StringType::Text, sCur , true );
                 if (
                     ( !sCur.equalsIgnoreAsciiCase("en-US") ) && !sContent.isEmpty())
                 {

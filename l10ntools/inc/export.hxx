@@ -103,9 +103,9 @@ enum class ExportListType {
     NONE, String, Filter, Item, Paired
 };
 
-#define STRING_TYP_TEXT             0x0010
-#define STRING_TYP_QUICKHELPTEXT    0x0040
-#define STRING_TYP_TITLE            0x0080
+enum class StringType {
+    Text, QuickHelpText, Title
+};
 
 
 typedef ::std::vector< ResData* > ResStack;
@@ -152,7 +152,7 @@ private:
     static void CleanValue( OString &rValue );
     static OString GetText(const OString &rSource, int nToken);
 
-    void ResData2Output( MergeEntrys *pEntry, sal_uInt16 nType, const OString& rTextType );
+    void ResData2Output( MergeEntrys *pEntry, StringType nType, const OString& rTextType );
     void MergeRest( ResData *pResData );
     static void ConvertMergeContent( OString &rText );
     static void ConvertExportContent( OString &rText );
@@ -204,7 +204,7 @@ public:
         sTitle[ rId ] = rTitle;
         bTitleFirst[ rId ] = true;
     }
-    bool GetText( OString &rReturn, sal_uInt16 nTyp, const OString &nLangIndex, bool bDel = false );
+    bool GetText( OString &rReturn, StringType nTyp, const OString &nLangIndex, bool bDel = false );
 
     /**
       Generate QTZ string with ResData

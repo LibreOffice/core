@@ -996,7 +996,7 @@ void Export::ConvertExportContent( OString& rText )
     rText = helper::unEscapeAll(rText,"\\n""\\t""\\\\""\\\"","\n""\t""\\""\"");
 }
 
-void Export::ResData2Output( MergeEntrys *pEntry, sal_uInt16 nType, const OString& rTextType )
+void Export::ResData2Output( MergeEntrys *pEntry, StringType nType, const OString& rTextType )
 {
     bool bAddSemicolon = false;
     bool bFirst = true;
@@ -1058,13 +1058,13 @@ void Export::MergeRest( ResData *pResData )
     if ( pEntry )
     {
         if ( pResData->bText )
-            ResData2Output( pEntry, STRING_TYP_TEXT, pResData->sTextTyp );
+            ResData2Output( pEntry, StringType::Text, pResData->sTextTyp );
 
         if ( pResData->bQuickHelpText )
-            ResData2Output( pEntry, STRING_TYP_QUICKHELPTEXT, OString("QuickHelpText") );
+            ResData2Output( pEntry, StringType::QuickHelpText, OString("QuickHelpText") );
 
         if ( pResData->bTitle )
-            ResData2Output( pEntry, STRING_TYP_TITLE, OString("Title") );
+            ResData2Output( pEntry, StringType::Title, OString("Title") );
     }
 
     // Merge Lists
@@ -1143,7 +1143,7 @@ void Export::MergeRest( ResData *pResData )
                 if( pEntrys )
                 {
                     OString sText;
-                    pEntrys->GetText( sText, STRING_TYP_TEXT, sCur );
+                    pEntrys->GetText( sText, StringType::Text, sCur );
                     if( !sText.isEmpty())
                     {
                         ConvertMergeContent( sText );
