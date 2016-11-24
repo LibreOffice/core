@@ -93,7 +93,7 @@ public:
     void                UpdateFont( const css::awt::FontDescriptor& rCurrentFont );
     void                SetOptimalSize();
 
-    virtual bool        Notify( NotifyEvent& rNEvt ) override;
+    virtual bool        EventNotify( NotifyEvent& rNEvt ) override;
 
 protected:
     virtual void        Select() override;
@@ -207,7 +207,7 @@ void SvxFontSizeBox_Impl::UpdateFont( const css::awt::FontDescriptor& rCurrentFo
 }
 
 
-bool SvxFontSizeBox_Impl::Notify( NotifyEvent& rNEvt )
+bool SvxFontSizeBox_Impl::EventNotify( NotifyEvent& rNEvt )
 {
     bool bHandled = false;
 
@@ -242,7 +242,7 @@ bool SvxFontSizeBox_Impl::Notify( NotifyEvent& rNEvt )
             SetText(GetSavedValue());
     }
 
-    return bHandled || FontSizeBox::Notify( rNEvt );
+    return bHandled || FontSizeBox::EventNotify( rNEvt );
 }
 
 void SvxFontSizeBox_Impl::SetOptimalSize()

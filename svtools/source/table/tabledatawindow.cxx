@@ -175,7 +175,7 @@ namespace svt { namespace table
     }
 
 
-    bool TableDataWindow::Notify(NotifyEvent& rNEvt )
+    bool TableDataWindow::EventNotify(NotifyEvent& rNEvt )
     {
         bool bDone = false;
         if ( rNEvt.GetType() == MouseNotifyEvent::COMMAND )
@@ -190,7 +190,7 @@ namespace svt { namespace table
                 }
             }
         }
-        return bDone || Window::Notify( rNEvt );
+        return bDone || Window::EventNotify( rNEvt );
     }
 
 }} // namespace svt::table

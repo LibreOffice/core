@@ -62,7 +62,6 @@ namespace rptui
         virtual void MouseButtonUp(const MouseEvent& rMEvt) override;
         virtual void Resize() override;
         virtual void RequestHelp(const HelpEvent& rHEvt) override;
-        using Window::Notify;
 
         void setTitle(const OUString& _sTitle);
         sal_Int32 getMinHeight() const;

@@ -31,7 +31,7 @@ private:
     VclPtr<SvHeaderTabListBox>      maListBox;
 protected:
     DECL_LINK( HeaderEndDrag_Impl, HeaderBar*, void );
-    virtual bool                Notify( NotifyEvent& rNEvt ) override;
+    virtual bool EventNotify( NotifyEvent& rNEvt ) override;
 public:
     MacroEventListBox( vcl::Window* pParent, WinBits nStyle );
     virtual ~MacroEventListBox() override;

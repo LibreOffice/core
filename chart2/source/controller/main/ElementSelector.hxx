@@ -47,7 +47,7 @@ class SelectorListBox : public ListBox
         SelectorListBox( vcl::Window* pParent, WinBits nStyle );
 
         virtual void Select() override;
-        virtual bool Notify( NotifyEvent& rNEvt ) override;
+        virtual bool EventNotify( NotifyEvent& rNEvt ) override;
         virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
 
         void ReleaseFocus_Impl();

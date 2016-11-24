@@ -146,7 +146,7 @@ private:
     void    implUpdateImages( );
 
 protected:
-    virtual bool                Notify( NotifyEvent& rNEvt ) override;
+    virtual bool                EventNotify( NotifyEvent& rNEvt ) override;
 
     OUString                    _aPath;
     OUString                    _aDefExt;

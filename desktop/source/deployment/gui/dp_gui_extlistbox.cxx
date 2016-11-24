@@ -792,7 +792,7 @@ void ExtensionBox_Impl::MouseButtonDown( const MouseEvent& rMEvt )
 }
 
 
-bool ExtensionBox_Impl::Notify( NotifyEvent& rNEvt )
+bool ExtensionBox_Impl::EventNotify( NotifyEvent& rNEvt )
 {
     if ( !m_bInDelete )
         DeleteRemoved();
@@ -830,7 +830,7 @@ bool ExtensionBox_Impl::Notify( NotifyEvent& rNEvt )
     }
 
     if ( !bHandled )
-        return Control::Notify( rNEvt );
+        return Control::EventNotify(rNEvt);
     else
         return true;
 }

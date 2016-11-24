@@ -80,7 +80,7 @@ public:
         return nModifier;
     }
 
-    virtual bool Notify( NotifyEvent& rNEvt ) override;
+    virtual bool EventNotify( NotifyEvent& rNEvt ) override;
 };
 
 typedef std::vector<OUString> ExpandedEntries_t;
@@ -97,7 +97,7 @@ private:
     OUString  aStyle;
 
 protected:
-    virtual bool Notify(NotifyEvent& rNEvt) override;
+    virtual bool EventNotify(NotifyEvent& rNEvt) override;
     virtual bool DoubleClickHdl() override;
     virtual bool ExpandingHdl() override;
     virtual void ExpandedHdl() override;

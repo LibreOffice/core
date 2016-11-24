@@ -273,7 +273,7 @@ void Window::Command(const CommandEvent& rCEvt)
         vcl::Window::Command(rCEvt);
 }
 
-bool Window::Notify( NotifyEvent& rNEvt )
+bool Window::EventNotify( NotifyEvent& rNEvt )
 {
     bool bResult = false;
     if ( mpViewShell )
@@ -281,7 +281,7 @@ bool Window::Notify( NotifyEvent& rNEvt )
         bResult = mpViewShell->Notify(rNEvt, this);
     }
     if( !bResult )
-        bResult = vcl::Window::Notify( rNEvt );
+        bResult = vcl::Window::EventNotify(rNEvt);
 
     return bResult;
 }

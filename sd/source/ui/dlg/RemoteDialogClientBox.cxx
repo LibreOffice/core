@@ -583,7 +583,7 @@ void ClientBox::MouseButtonDown( const MouseEvent& rMEvt )
     }
 }
 
-bool ClientBox::Notify( NotifyEvent& rNEvt )
+bool ClientBox::EventNotify( NotifyEvent& rNEvt )
 {
     if ( !m_bInDelete )
         DeleteRemoved();
@@ -619,7 +619,7 @@ bool ClientBox::Notify( NotifyEvent& rNEvt )
     }
 
     if ( !bHandled )
-        return Control::Notify( rNEvt );
+        return Control::EventNotify(rNEvt);
     else
         return true;
 }

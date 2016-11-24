@@ -418,7 +418,7 @@ void WizardDialog::StateChanged( StateChangedType nType )
 }
 
 
-bool WizardDialog::Notify( NotifyEvent& rNEvt )
+bool WizardDialog::EventNotify( NotifyEvent& rNEvt )
 {
     if ( (rNEvt.GetType() == MouseNotifyEvent::KEYINPUT) && mpPrevBtn && mpNextBtn )
     {
@@ -459,7 +459,7 @@ bool WizardDialog::Notify( NotifyEvent& rNEvt )
         }
     }
 
-    return Dialog::Notify( rNEvt );
+    return Dialog::EventNotify( rNEvt );
 }
 
 

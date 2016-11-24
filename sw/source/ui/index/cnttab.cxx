@@ -2270,7 +2270,7 @@ void SwTOXEntryTabPage::SetFocus2theAllBtn()
     m_pAllLevelsPB->GrabFocus();
 }
 
-bool SwTOXEntryTabPage::Notify( NotifyEvent& rNEvt )
+bool SwTOXEntryTabPage::EventNotify( NotifyEvent& rNEvt )
 {
     if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
@@ -2286,7 +2286,7 @@ bool SwTOXEntryTabPage::Notify( NotifyEvent& rNEvt )
 
     }
 
-    return SfxTabPage::Notify( rNEvt );
+    return SfxTabPage::EventNotify(rNEvt);
 }
 
 // This function initializes the default value in the Token

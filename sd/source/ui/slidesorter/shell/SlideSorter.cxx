@@ -59,7 +59,7 @@ public:
     virtual void MouseButtonUp (const MouseEvent& rEvent) override;
     virtual void MouseButtonDown (const MouseEvent& rEvent) override;
     virtual void Command (const CommandEvent& rEvent) override;
-    virtual bool Notify (NotifyEvent& rEvent) override;
+    virtual bool EventNotify (NotifyEvent& rEvent) override;
 
 private:
     SlideSorter& mrSlideSorter;
@@ -483,7 +483,7 @@ void ContentWindow::Command(const CommandEvent& rEvent)
         mpCurrentFunction->Command(rEvent);
 }
 
-bool ContentWindow::Notify (NotifyEvent&)
+bool ContentWindow::EventNotify(NotifyEvent&)
 {
     return false;
 }

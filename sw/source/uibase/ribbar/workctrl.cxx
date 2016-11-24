@@ -364,7 +364,7 @@ public:
 
 protected:
     virtual void    Select() override;
-    virtual bool    Notify( NotifyEvent& rNEvt ) override;
+    virtual bool    EventNotify( NotifyEvent& rNEvt ) override;
 
     void ReleaseFocus();
 
@@ -427,7 +427,7 @@ void    SwZoomBox_Impl::Select()
     }
 }
 
-bool SwZoomBox_Impl::Notify( NotifyEvent& rNEvt )
+bool SwZoomBox_Impl::EventNotify( NotifyEvent& rNEvt )
 {
     bool bHandled = false;
 
@@ -461,7 +461,7 @@ bool SwZoomBox_Impl::Notify( NotifyEvent& rNEvt )
             SetText( GetSavedValue() );
     }
 
-    return bHandled || ComboBox::Notify( rNEvt );
+    return bHandled || ComboBox::EventNotify(rNEvt);
 }
 
 void SwZoomBox_Impl::ReleaseFocus()
@@ -527,7 +527,7 @@ public:
 
 protected:
     void            Select();
-    virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual bool    EventNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 };
 
 SwJumpToSpecificBox_Impl::SwJumpToSpecificBox_Impl(vcl::Window* pParent, sal_uInt16 nSlot)
@@ -547,11 +547,11 @@ void SwJumpToSpecificBox_Impl::Select()
             { &aPageNum });
 }
 
-bool SwJumpToSpecificBox_Impl::Notify( NotifyEvent& rNEvt )
+bool SwJumpToSpecificBox_Impl::EventNotify( NotifyEvent& rNEvt )
 {
     if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
         Select();
-    return NumericField::Notify( rNEvt );
+    return NumericField::EventNotify(rNEvt);
 }
 
 SFX_IMPL_TOOLBOX_CONTROL( SwJumpToSpecificPageControl, SfxUInt16Item);

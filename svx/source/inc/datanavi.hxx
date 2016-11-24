@@ -273,7 +273,7 @@ namespace svxform
         bool                        RemoveEntry();
 
     protected:
-        virtual bool                Notify( NotifyEvent& rNEvt ) override;
+        virtual bool                EventNotify( NotifyEvent& rNEvt ) override;
 
     public:
         XFormsPage( vcl::Window* pParent, DataNavigatorWindow* _pNaviWin, DataGroupType _eGroup );

@@ -688,7 +688,7 @@ namespace svt
     }
 
 
-    bool EditBrowseBox::Notify(NotifyEvent& rEvt)
+    bool EditBrowseBox::EventNotify(NotifyEvent& rEvt)
     {
         switch (rEvt.GetType())
         {
@@ -703,7 +703,7 @@ namespace svt
             default:
                 break;
         }
-        return BrowseBox::Notify(rEvt);
+        return BrowseBox::EventNotify(rEvt);
     }
 
 

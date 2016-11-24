@@ -94,7 +94,6 @@ private:
     class ProgressInfo;
     std::unique_ptr<ProgressInfo> pProgress;
 
-    using           Window::Notify;
     virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
     void            ImpDoHighlight( sal_uLong nLineOff );

@@ -969,7 +969,7 @@ IMPL_LINK_NOARG(SpellDialog, CancelHdl, Button*, void)
 }
 
 
-bool SpellDialog::Notify( NotifyEvent& rNEvt )
+bool SpellDialog::EventNotify( NotifyEvent& rNEvt )
 {
     /* #i38338#
     *   FIXME: LoseFocus and GetFocus are signals from vcl that
@@ -993,7 +993,7 @@ bool SpellDialog::Notify( NotifyEvent& rNEvt )
             rParent.LoseFocus();
         }
     }
-    return SfxModelessDialog::Notify(rNEvt);
+    return SfxModelessDialog::EventNotify(rNEvt);
 }
 
 

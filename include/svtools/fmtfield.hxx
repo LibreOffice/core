@@ -226,7 +226,7 @@ public:
     bool    IsUsingInputStringForFormatting() const { return m_bUseInputStringForFormatting;}
 
 protected:
-    virtual bool Notify(NotifyEvent& rNEvt) override;
+    virtual bool EventNotify(NotifyEvent& rNEvt) override;
     void impl_Modify(bool makeValueDirty = true);
     virtual void Modify() override;
 

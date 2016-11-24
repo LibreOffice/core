@@ -82,7 +82,6 @@ namespace dbaui
         void startTimer();
 
         virtual void    ConfigurationChanged( utl::ConfigurationBroadcaster*, ConfigurationHints ) override;
-        using MultiLineEditSyntaxHighlight::Notify;
     };
 }
 

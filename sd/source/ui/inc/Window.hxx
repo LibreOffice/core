@@ -177,7 +177,7 @@ protected:
     virtual void Command(const CommandEvent& rCEvt) override;
     virtual void RequestHelp( const HelpEvent& rEvt ) override;
     virtual void LoseFocus() override;
-    virtual bool Notify( NotifyEvent& rNEvt ) override;
+    virtual bool EventNotify( NotifyEvent& rNEvt ) override;
 
     /** Create an accessibility object that makes this window accessible.
 

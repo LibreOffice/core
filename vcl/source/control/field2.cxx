@@ -846,7 +846,7 @@ bool PatternField::PreNotify( NotifyEvent& rNEvt )
     return SpinField::PreNotify( rNEvt );
 }
 
-bool PatternField::Notify( NotifyEvent& rNEvt )
+bool PatternField::EventNotify( NotifyEvent& rNEvt )
 {
     if ( rNEvt.GetType() == MouseNotifyEvent::GETFOCUS )
         MarkToBeReformatted( false );
@@ -856,7 +856,7 @@ bool PatternField::Notify( NotifyEvent& rNEvt )
             Reformat();
     }
 
-    return SpinField::Notify( rNEvt );
+    return SpinField::EventNotify( rNEvt );
 }
 
 void PatternField::Modify()
@@ -898,7 +898,7 @@ bool PatternBox::PreNotify( NotifyEvent& rNEvt )
     return ComboBox::PreNotify( rNEvt );
 }
 
-bool PatternBox::Notify( NotifyEvent& rNEvt )
+bool PatternBox::EventNotify( NotifyEvent& rNEvt )
 {
     if ( rNEvt.GetType() == MouseNotifyEvent::GETFOCUS )
         MarkToBeReformatted( false );
@@ -908,7 +908,7 @@ bool PatternBox::Notify( NotifyEvent& rNEvt )
             Reformat();
     }
 
-    return ComboBox::Notify( rNEvt );
+    return ComboBox::EventNotify( rNEvt );
 }
 
 void PatternBox::Modify()
@@ -1750,7 +1750,7 @@ bool DateField::PreNotify( NotifyEvent& rNEvt )
     return SpinField::PreNotify( rNEvt );
 }
 
-bool DateField::Notify( NotifyEvent& rNEvt )
+bool DateField::EventNotify( NotifyEvent& rNEvt )
 {
     if ( rNEvt.GetType() == MouseNotifyEvent::GETFOCUS )
         MarkToBeReformatted( false );
@@ -1783,7 +1783,7 @@ bool DateField::Notify( NotifyEvent& rNEvt )
         }
     }
 
-    return SpinField::Notify( rNEvt );
+    return SpinField::EventNotify( rNEvt );
 }
 
 void DateField::DataChanged( const DataChangedEvent& rDCEvt )
@@ -1867,7 +1867,7 @@ void DateBox::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
-bool DateBox::Notify( NotifyEvent& rNEvt )
+bool DateBox::EventNotify( NotifyEvent& rNEvt )
 {
     if ( rNEvt.GetType() == MouseNotifyEvent::GETFOCUS )
         MarkToBeReformatted( false );
@@ -1886,7 +1886,7 @@ bool DateBox::Notify( NotifyEvent& rNEvt )
         }
     }
 
-    return ComboBox::Notify( rNEvt );
+    return ComboBox::EventNotify( rNEvt );
 }
 
 void DateBox::Modify()
@@ -2531,7 +2531,7 @@ bool TimeField::PreNotify( NotifyEvent& rNEvt )
     return SpinField::PreNotify( rNEvt );
 }
 
-bool TimeField::Notify( NotifyEvent& rNEvt )
+bool TimeField::EventNotify( NotifyEvent& rNEvt )
 {
     if ( rNEvt.GetType() == MouseNotifyEvent::GETFOCUS )
         MarkToBeReformatted( false );
@@ -2552,7 +2552,7 @@ bool TimeField::Notify( NotifyEvent& rNEvt )
         }
     }
 
-    return SpinField::Notify( rNEvt );
+    return SpinField::EventNotify( rNEvt );
 }
 
 void TimeField::DataChanged( const DataChangedEvent& rDCEvt )
@@ -2674,7 +2674,7 @@ bool TimeBox::PreNotify( NotifyEvent& rNEvt )
     return ComboBox::PreNotify( rNEvt );
 }
 
-bool TimeBox::Notify( NotifyEvent& rNEvt )
+bool TimeBox::EventNotify( NotifyEvent& rNEvt )
 {
     if ( rNEvt.GetType() == MouseNotifyEvent::GETFOCUS )
         MarkToBeReformatted( false );
@@ -2684,7 +2684,7 @@ bool TimeBox::Notify( NotifyEvent& rNEvt )
             Reformat();
     }
 
-    return ComboBox::Notify( rNEvt );
+    return ComboBox::EventNotify( rNEvt );
 }
 
 void TimeBox::DataChanged( const DataChangedEvent& rDCEvt )

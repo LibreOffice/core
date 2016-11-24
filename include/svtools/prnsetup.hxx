@@ -62,7 +62,7 @@ public:
     Printer*        GetPrinter() const { return mpPrinter; }
 
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
-    virtual bool    Notify( NotifyEvent& rNEvt ) override;
+    virtual bool    EventNotify( NotifyEvent& rNEvt ) override;
 
     virtual short   Execute() override;
 

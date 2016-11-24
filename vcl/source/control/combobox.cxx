@@ -694,7 +694,7 @@ void ComboBox::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
-bool ComboBox::Notify( NotifyEvent& rNEvt )
+bool ComboBox::EventNotify( NotifyEvent& rNEvt )
 {
     bool bDone = false;
     if ((rNEvt.GetType() == MouseNotifyEvent::KEYINPUT)
@@ -780,7 +780,7 @@ bool ComboBox::Notify( NotifyEvent& rNEvt )
         m_pImpl->m_pSubEdit->GrabFocus();
     }
 
-    return bDone || Edit::Notify( rNEvt );
+    return bDone || Edit::EventNotify( rNEvt );
 }
 
 void ComboBox::SetText( const OUString& rStr )

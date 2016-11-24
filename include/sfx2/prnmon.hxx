@@ -47,7 +47,7 @@ public:
     virtual void            dispose() override;
 
     virtual short           Execute() override;
-    virtual bool            Notify( NotifyEvent& rNEvt ) override;
+    virtual bool            EventNotify( NotifyEvent& rNEvt ) override;
 
     const SfxItemSet&       GetOptions() const { return *pOptions; }
     void                    DisableHelp();

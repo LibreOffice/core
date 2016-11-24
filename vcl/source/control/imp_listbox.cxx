@@ -2466,7 +2466,7 @@ void ImplListBox::StateChanged( StateChangedType nType )
     Control::StateChanged( nType );
 }
 
-bool ImplListBox::Notify( NotifyEvent& rNEvt )
+bool ImplListBox::EventNotify( NotifyEvent& rNEvt )
 {
     bool bDone = false;
     if ( rNEvt.GetType() == MouseNotifyEvent::COMMAND )
@@ -2482,7 +2482,7 @@ bool ImplListBox::Notify( NotifyEvent& rNEvt )
         }
     }
 
-    return bDone || Window::Notify( rNEvt );
+    return bDone || Window::EventNotify( rNEvt );
 }
 
 const Wallpaper& ImplListBox::GetDisplayBackground() const

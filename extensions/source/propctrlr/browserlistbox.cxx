@@ -1231,7 +1231,7 @@ namespace pcr
         return Control::PreNotify( _rNEvt );
     }
 
-    bool OBrowserListBox::Notify( NotifyEvent& _rNEvt )
+    bool OBrowserListBox::EventNotify( NotifyEvent& _rNEvt )
     {
         if ( _rNEvt.GetType() == MouseNotifyEvent::COMMAND)
         {
@@ -1248,7 +1248,7 @@ namespace pcr
                 }
             }
         }
-        return Control::Notify( _rNEvt );
+        return Control::EventNotify(_rNEvt);
     }
 
 

@@ -430,7 +430,7 @@ public:
     explicit                PatternField( vcl::Window* pParent, WinBits nWinStyle );
 
     virtual bool            PreNotify( NotifyEvent& rNEvt ) override;
-    virtual bool            Notify( NotifyEvent& rNEvt ) override;
+    virtual bool            EventNotify( NotifyEvent& rNEvt ) override;
     virtual void            Modify() override;
     virtual void            dispose() override;
 };
@@ -442,7 +442,7 @@ public:
     explicit                NumericField( vcl::Window* pParent, WinBits nWinStyle );
 
     virtual bool            PreNotify( NotifyEvent& rNEvt ) override;
-    virtual bool            Notify( NotifyEvent& rNEvt ) override;
+    virtual bool            EventNotify( NotifyEvent& rNEvt ) override;
     virtual void            DataChanged( const DataChangedEvent& rDCEvt ) override;
 
     virtual Size            CalcMinimumSize() const override;
@@ -464,7 +464,7 @@ public:
     explicit                MetricField( vcl::Window* pParent, WinBits nWinStyle );
 
     virtual bool            PreNotify( NotifyEvent& rNEvt ) override;
-    virtual bool            Notify( NotifyEvent& rNEvt ) override;
+    virtual bool            EventNotify( NotifyEvent& rNEvt ) override;
     virtual void            DataChanged( const DataChangedEvent& rDCEvt ) override;
 
     virtual Size            CalcMinimumSize() const override;
@@ -527,7 +527,7 @@ public:
     CurrencyField( vcl::Window* pParent, WinBits nWinStyle );
 
     virtual bool            PreNotify( NotifyEvent& rNEvt ) override;
-    virtual bool            Notify( NotifyEvent& rNEvt ) override;
+    virtual bool            EventNotify( NotifyEvent& rNEvt ) override;
     virtual void            DataChanged( const DataChangedEvent& rDCEvt ) override;
 
     virtual void            Modify() override;
@@ -553,7 +553,7 @@ public:
     explicit                DateField( vcl::Window* pParent, WinBits nWinStyle );
 
     virtual bool            PreNotify( NotifyEvent& rNEvt ) override;
-    virtual bool            Notify( NotifyEvent& rNEvt ) override;
+    virtual bool            EventNotify( NotifyEvent& rNEvt ) override;
     virtual void            DataChanged( const DataChangedEvent& rDCEvt ) override;
 
     virtual void            Modify() override;
@@ -584,7 +584,7 @@ public:
     explicit                TimeField( vcl::Window* pParent, WinBits nWinStyle );
 
     virtual bool            PreNotify( NotifyEvent& rNEvt ) override;
-    virtual bool            Notify( NotifyEvent& rNEvt ) override;
+    virtual bool            EventNotify( NotifyEvent& rNEvt ) override;
     virtual void            DataChanged( const DataChangedEvent& rDCEvt ) override;
 
     virtual void            Modify() override;
@@ -610,7 +610,7 @@ public:
                             PatternBox( vcl::Window* pParent, WinBits nWinStyle );
 
     virtual bool            PreNotify( NotifyEvent& rNEvt ) override;
-    virtual bool            Notify( NotifyEvent& rNEvt ) override;
+    virtual bool            EventNotify( NotifyEvent& rNEvt ) override;
 
     virtual void            Modify() override;
 
@@ -627,7 +627,7 @@ public:
     virtual Size            CalcMinimumSize() const override;
 
     virtual bool            PreNotify( NotifyEvent& rNEvt ) override;
-    virtual bool            Notify( NotifyEvent& rNEvt ) override;
+    virtual bool            EventNotify( NotifyEvent& rNEvt ) override;
     virtual void            DataChanged( const DataChangedEvent& rDCEvt ) override;
 
     virtual void            Modify() override;
@@ -645,7 +645,7 @@ public:
     explicit                MetricBox( vcl::Window* pParent, WinBits nWinStyle );
 
     virtual bool            PreNotify( NotifyEvent& rNEvt ) override;
-    virtual bool            Notify( NotifyEvent& rNEvt ) override;
+    virtual bool            EventNotify( NotifyEvent& rNEvt ) override;
     virtual void            DataChanged( const DataChangedEvent& rDCEvt ) override;
 
     virtual Size            CalcMinimumSize() const override;
@@ -675,7 +675,7 @@ public:
     explicit                CurrencyBox( vcl::Window* pParent, WinBits nWinStyle );
 
     virtual bool            PreNotify( NotifyEvent& rNEvt ) override;
-    virtual bool            Notify( NotifyEvent& rNEvt ) override;
+    virtual bool            EventNotify( NotifyEvent& rNEvt ) override;
     virtual void            DataChanged( const DataChangedEvent& rDCEvt ) override;
 
     virtual void            Modify() override;
@@ -693,7 +693,7 @@ public:
     explicit                DateBox( vcl::Window* pParent, WinBits nWinStyle );
 
     virtual bool            PreNotify( NotifyEvent& rNEvt ) override;
-    virtual bool            Notify( NotifyEvent& rNEvt ) override;
+    virtual bool            EventNotify( NotifyEvent& rNEvt ) override;
     virtual void            DataChanged( const DataChangedEvent& rDCEvt ) override;
 
     virtual void            Modify() override;
@@ -709,7 +709,7 @@ public:
     explicit                TimeBox( vcl::Window* pParent, WinBits nWinStyle );
 
     virtual bool            PreNotify( NotifyEvent& rNEvt ) override;
-    virtual bool            Notify( NotifyEvent& rNEvt ) override;
+    virtual bool            EventNotify( NotifyEvent& rNEvt ) override;
     virtual void            DataChanged( const DataChangedEvent& rDCEvt ) override;
 
     virtual void            Modify() override;

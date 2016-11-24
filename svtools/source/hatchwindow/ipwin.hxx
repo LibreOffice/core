@@ -84,7 +84,7 @@ public:
     virtual void    KeyInput( const KeyEvent & rEvt ) override;
     virtual void    Resize() override;
     virtual void    Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle & ) override;
-    virtual bool    Notify( NotifyEvent& rNEvt ) override;
+    virtual bool    EventNotify( NotifyEvent& rNEvt ) override;
     virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
 };
 

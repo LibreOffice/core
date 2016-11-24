@@ -84,7 +84,7 @@ public:
                     LongCurrencyField( vcl::Window* pParent, WinBits nWinStyle );
 
     virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
-    virtual bool    Notify( NotifyEvent& rNEvt ) override;
+    virtual bool    EventNotify( NotifyEvent& rNEvt ) override;
 
     void            Modify() override;
     void            Up() override;
@@ -107,7 +107,7 @@ public:
                     LongCurrencyBox( vcl::Window* pParent, WinBits nWinStyle );
 
     virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
-    virtual bool    Notify( NotifyEvent& rNEvt ) override;
+    virtual bool    EventNotify( NotifyEvent& rNEvt ) override;
 
     void            Modify() override;
     void            ReformatAll() override;

@@ -4312,7 +4312,7 @@ void ToolBox::RequestHelp( const HelpEvent& rHEvt )
     DockingWindow::RequestHelp( rHEvt );
 }
 
-bool ToolBox::Notify( NotifyEvent& rNEvt )
+bool ToolBox::EventNotify( NotifyEvent& rNEvt )
 {
     if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
@@ -4332,11 +4332,11 @@ bool ToolBox::Notify( NotifyEvent& rNEvt )
                 bool bNoTabCycling = bOldSchoolContainer || isContainerWindow(pParent);
 
                 if( bNoTabCycling &&  ! (GetStyle() & WB_FORCETABCYCLE) )
-                    return DockingWindow::Notify( rNEvt );
+                    return DockingWindow::EventNotify( rNEvt );
                 else if( ImplChangeHighlightUpDn( aKeyCode.IsShift() , bNoTabCycling ) )
                     return false;
                 else
-                    return DockingWindow::Notify( rNEvt );
+                    return DockingWindow::EventNotify( rNEvt );
             }
             default:
                 break;
@@ -4381,7 +4381,7 @@ bool ToolBox::Notify( NotifyEvent& rNEvt )
 
                 ++it;
             }
-            return DockingWindow::Notify( rNEvt );
+            return DockingWindow::EventNotify( rNEvt );
         }
     }
     else if( rNEvt.GetType() == MouseNotifyEvent::LOSEFOCUS )
@@ -4392,7 +4392,7 @@ bool ToolBox::Notify( NotifyEvent& rNEvt )
         mnCurPos = TOOLBOX_ITEM_NOTFOUND;
     }
 
-    return DockingWindow::Notify( rNEvt );
+    return DockingWindow::EventNotify( rNEvt );
 }
 
 void ToolBox::Command( const CommandEvent& rCEvt )

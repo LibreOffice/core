@@ -325,7 +325,7 @@ void OScrollWindowHelper::collapseSections(const uno::Sequence< css::beans::Prop
     m_aReportWindow->collapseSections(_aCollpasedSections);
 }
 
-bool OScrollWindowHelper::Notify( NotifyEvent& rNEvt )
+bool OScrollWindowHelper::EventNotify( NotifyEvent& rNEvt )
 {
     const CommandEvent* pCommandEvent = rNEvt.GetCommandEvent();
     if ( pCommandEvent &&
@@ -344,7 +344,7 @@ bool OScrollWindowHelper::Notify( NotifyEvent& rNEvt )
         if ( HandleScrollCommand( *pCommandEvent, pHScrBar, pVScrBar ) )
             return true;
     }
-    return OScrollWindowHelper_BASE::Notify(rNEvt);
+    return OScrollWindowHelper_BASE::EventNotify(rNEvt);
 }
 
 void OScrollWindowHelper::alignMarkedObjects(sal_Int32 _nControlModification,bool _bAlignAtSection)

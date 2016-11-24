@@ -52,7 +52,7 @@ public:
     virtual ~SvxPathControl() override;
     virtual void dispose() override;
 
-    virtual bool Notify( NotifyEvent& rNEvt ) override;
+    virtual bool EventNotify( NotifyEvent& rNEvt ) override;
 };
 
 class HeaderBar;
@@ -103,7 +103,7 @@ public:
 
     void    updateStates();
 
-    virtual bool Notify( NotifyEvent& rNEvt ) override;
+    virtual bool EventNotify( NotifyEvent& rNEvt ) override;
 
     bool    isClosable() { return m_bIsClosable;}
 

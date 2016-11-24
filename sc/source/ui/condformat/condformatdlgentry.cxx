@@ -94,13 +94,13 @@ void ScCondFrmtEntry::dispose()
     VclContainer::dispose();
 }
 
-bool ScCondFrmtEntry::Notify( NotifyEvent& rNEvt )
+bool ScCondFrmtEntry::EventNotify( NotifyEvent& rNEvt )
 {
     if (rNEvt.GetType() == MouseNotifyEvent::MOUSEBUTTONDOWN)
     {
         maClickHdl.Call(*this);
     }
-    return VclContainer::Notify(rNEvt);
+    return VclContainer::EventNotify(rNEvt);
 }
 
 void ScCondFrmtEntry::SetIndex(sal_Int32 nIndex)

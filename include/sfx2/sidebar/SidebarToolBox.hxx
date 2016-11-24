@@ -52,7 +52,7 @@ public:
             const Size& rRequestedSize,
             sal_uInt16 nPos = TOOLBOX_APPEND) override;
 
-    virtual bool Notify (NotifyEvent& rEvent) override;
+    virtual bool EventNotify(NotifyEvent& rEvent) override;
 
     void SetController(const sal_uInt16 nItemId,
                        const css::uno::Reference<css::frame::XToolbarController>& rxController);

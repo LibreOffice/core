@@ -363,13 +363,13 @@ namespace offapp
     }
 
 
-    bool ConnectionPoolOptionsPage::Notify( NotifyEvent& _rNEvt )
+    bool ConnectionPoolOptionsPage::EventNotify( NotifyEvent& _rNEvt )
     {
         if (MouseNotifyEvent::LOSEFOCUS == _rNEvt.GetType())
             if (m_pTimeout->IsWindowOrChild(_rNEvt.GetWindow()))
                 commitTimeoutField();
 
-        return SfxTabPage::Notify(_rNEvt);
+        return SfxTabPage::EventNotify(_rNEvt);
     }
 
 

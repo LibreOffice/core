@@ -50,7 +50,6 @@ namespace rptui
         virtual ~OColorListener() override;
         virtual void dispose() override;
 
-        using Window::Notify;
         // SfxListener
         virtual void Notify(SfxBroadcaster & rBc, SfxHint const & rHint) override;
 

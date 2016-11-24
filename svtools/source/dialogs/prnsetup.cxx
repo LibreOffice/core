@@ -305,12 +305,12 @@ IMPL_LINK_NOARG(PrinterSetupDialog, ImplChangePrinterHdl, ListBox&, void)
 }
 
 
-bool PrinterSetupDialog::Notify( NotifyEvent& rNEvt )
+bool PrinterSetupDialog::EventNotify( NotifyEvent& rNEvt )
 {
     if ( (rNEvt.GetType() == MouseNotifyEvent::GETFOCUS) && IsReallyVisible() )
         ImplStatusHdl( &maStatusTimer );
 
-    return ModalDialog::Notify( rNEvt );
+    return ModalDialog::EventNotify( rNEvt );
 }
 
 

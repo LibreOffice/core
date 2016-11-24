@@ -52,14 +52,14 @@ namespace svt
         return SvtURLBox::PreNotify(_rNEvt);
     }
 
-    bool OFileURLControl::Notify( NotifyEvent& _rNEvt )
+    bool OFileURLControl::EventNotify( NotifyEvent& _rNEvt )
     {
         if (GetSubEdit() == _rNEvt.GetWindow())
             if (MouseNotifyEvent::KEYINPUT == _rNEvt.GetType())
                 if (KEY_RETURN == _rNEvt.GetKeyEvent()->GetKeyCode().GetCode())
                     if (IsInDropDown())
                     {
-                        bool bReturn = SvtURLBox::Notify(_rNEvt);
+                        bool bReturn = SvtURLBox::EventNotify(_rNEvt);
 
                         // build a system dependent (thus more user readable) file name
                         OFileNotation aTransformer(m_sPreservedText, OFileNotation::N_URL);
@@ -72,7 +72,7 @@ namespace svt
                         return bReturn;
                     }
 
-        return SvtURLBox::Notify(_rNEvt);
+        return SvtURLBox::EventNotify(_rNEvt);
     }
 }   // namespace svt
 

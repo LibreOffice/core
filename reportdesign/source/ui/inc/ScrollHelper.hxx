@@ -67,7 +67,7 @@ namespace rptui
         virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;
         // window
         virtual void            Resize() override;
-        virtual bool            Notify( NotifyEvent& rNEvt ) override;
+        virtual bool            EventNotify( NotifyEvent& rNEvt ) override;
         // OPropertyChangeListener
         virtual void            _propertyChanged(const css::beans::PropertyChangeEvent& _rEvent) throw( css::uno::RuntimeException, std::exception) override;
     public:

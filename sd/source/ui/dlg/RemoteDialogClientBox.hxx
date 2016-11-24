@@ -137,7 +137,7 @@ public:
     void Paint( vcl::RenderContext& rRenderContext, const Rectangle &rPaintRect ) override;
     void Resize() override;
     Size GetOptimalSize() const override;
-    bool Notify( NotifyEvent& rNEvt ) override;
+    bool EventNotify( NotifyEvent& rNEvt ) override;
 
     TClientBoxEntry GetEntryData( long nPos ) { return m_vEntries[ nPos ]; }
     long GetActiveEntryIndex();

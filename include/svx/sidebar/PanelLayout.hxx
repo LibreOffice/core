@@ -39,7 +39,7 @@ public:
     virtual Size GetOptimalSize() const override;
     virtual void setPosSizePixel(long nX, long nY, long nWidth, long nHeight, PosSizeFlags nFlags = PosSizeFlags::All) override;
     virtual void queue_resize(StateChangedType eReason = StateChangedType::Layout) override;
-    virtual bool Notify(NotifyEvent& rNEvt) override;
+    virtual bool EventNotify(NotifyEvent& rNEvt) override;
 };
 
 #endif

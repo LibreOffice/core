@@ -201,7 +201,7 @@ void SelectorListBox::Select()
     }
 }
 
-bool SelectorListBox::Notify( NotifyEvent& rNEvt )
+bool SelectorListBox::EventNotify( NotifyEvent& rNEvt )
 {
     bool bHandled = false;
 
@@ -234,7 +234,7 @@ bool SelectorListBox::Notify( NotifyEvent& rNEvt )
             SelectEntryPos( GetSavedValue() );
     }
 
-    return bHandled || ListBox::Notify( rNEvt );
+    return bHandled || ListBox::EventNotify(rNEvt);
 }
 
 Reference< css::accessibility::XAccessible > SelectorListBox::CreateAccessible()

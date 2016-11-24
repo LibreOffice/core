@@ -121,7 +121,6 @@ class SwNavigationPI : public PanelLayout,
 
     void SetPopupWindow( SfxPopupWindow* );
 
-    using Window::Notify;
     using Window::StateChanged;
 
 protected:

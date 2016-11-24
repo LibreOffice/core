@@ -70,7 +70,7 @@ public:
     virtual void        DataChanged( const DataChangedEvent& rDCEvt ) override;
     virtual void        StateChanged( StateChangedType nStateChange ) override;
     virtual bool        PreNotify( NotifyEvent& rNEvt ) override;
-    virtual bool        Notify( NotifyEvent& rEvt ) override;
+    virtual bool        EventNotify( NotifyEvent& rEvt ) override;
     virtual void        Resize() override;
     virtual void        GetFocus() override;
     void                DoResize();
@@ -90,14 +90,14 @@ void SfxFrameWindow_Impl::DataChanged( const DataChangedEvent& rDCEvt )
         pWorkWin->DataChanged_Impl( rDCEvt );
 }
 
-bool SfxFrameWindow_Impl::Notify( NotifyEvent& rNEvt )
+bool SfxFrameWindow_Impl::EventNotify( NotifyEvent& rNEvt )
 {
     if ( pFrame->IsClosing_Impl() || !pFrame->GetFrameInterface().is() )
         return false;
 
     SfxViewFrame* pView = pFrame->GetCurrentViewFrame();
     if ( !pView || !pView->GetObjectShell() )
-        return Window::Notify( rNEvt );
+        return Window::EventNotify( rNEvt );
 
     if ( rNEvt.GetType() == MouseNotifyEvent::GETFOCUS )
     {
@@ -128,7 +128,7 @@ bool SfxFrameWindow_Impl::Notify( NotifyEvent& rNEvt )
         return true;
     }
 
-    return Window::Notify( rNEvt );
+    return Window::EventNotify( rNEvt );
 }
 
 bool SfxFrameWindow_Impl::PreNotify( NotifyEvent& rNEvt )

@@ -1586,14 +1586,14 @@ bool TabControl::PreNotify( NotifyEvent& rNEvt )
     return Control::PreNotify(rNEvt);
 }
 
-bool TabControl::Notify( NotifyEvent& rNEvt )
+bool TabControl::EventNotify( NotifyEvent& rNEvt )
 {
     bool bRet = false;
 
     if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
         bRet = ImplHandleKeyEvent( *rNEvt.GetKeyEvent() );
 
-    return bRet || Control::Notify( rNEvt );
+    return bRet || Control::EventNotify( rNEvt );
 }
 
 void TabControl::ActivatePage()

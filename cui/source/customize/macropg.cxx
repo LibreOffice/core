@@ -115,9 +115,9 @@ IMPL_LINK( MacroEventListBox, HeaderEndDrag_Impl, HeaderBar*, pBar, void )
     }
 }
 
-bool MacroEventListBox::Notify( NotifyEvent& rNEvt )
+bool MacroEventListBox::EventNotify( NotifyEvent& rNEvt )
 {
-    bool bRet = Control::Notify( rNEvt );
+    bool bRet = Control::EventNotify(rNEvt);
 
     if( rNEvt.GetType() == MouseNotifyEvent::GETFOCUS )
     {

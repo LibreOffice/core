@@ -489,7 +489,7 @@ void SpinField::MouseMove(const MouseEvent& rMEvt)
     Edit::MouseMove(rMEvt);
 }
 
-bool SpinField::Notify(NotifyEvent& rNEvt)
+bool SpinField::EventNotify(NotifyEvent& rNEvt)
 {
     bool bDone = false;
     if (rNEvt.GetType() == MouseNotifyEvent::KEYINPUT)
@@ -569,7 +569,7 @@ bool SpinField::Notify(NotifyEvent& rNEvt)
         }
     }
 
-    return bDone || Edit::Notify(rNEvt);
+    return bDone || Edit::EventNotify(rNEvt);
 }
 
 void SpinField::FillLayoutData() const
