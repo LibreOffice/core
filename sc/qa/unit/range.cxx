@@ -29,14 +29,14 @@ public:
     void testAddressParsing();
 
 private:
-    ScDocument *m_pDoc;
     ScDocShellRef m_xDocShRef;
 };
 
 void ScAddressTest::testAddressParsing()
 {
     ScAddress aAddr;
-    ScRefFlags nRes = aAddr.Parse("1", m_pDoc, formula::FormulaGrammar::CONV_OOO);
+    ScDocument& rDoc = m_xDocShRef->GetDocument();
+    ScRefFlags nRes = aAddr.Parse("1", &rDoc, formula::FormulaGrammar::CONV_OOO);
     CPPUNIT_ASSERT_MESSAGE("Should fail to parse.", !(nRes & ScRefFlags::VALID));
 }
 
@@ -49,8 +49,6 @@ void ScAddressTest::setUp()
         SfxModelFlags::EMBEDDED_OBJECT |
         SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS |
         SfxModelFlags::DISABLE_DOCUMENT_RECOVERY);
-
-    m_pDoc = &m_xDocShRef->GetDocument();
 }
 
 void ScAddressTest::tearDown()
@@ -72,14 +70,14 @@ public:
     void testRangeParsing();
 
 private:
-    ScDocument *m_pDoc;
     ScDocShellRef m_xDocShRef;
 };
 
 void ScRangeTest::testRangeParsing()
 {
     ScRange aRange;
-    ScRefFlags nRes = aRange.Parse(":1", m_pDoc, formula::FormulaGrammar::CONV_OOO);
+    ScDocument& rDoc = m_xDocShRef->GetDocument();
+    ScRefFlags nRes = aRange.Parse(":1", &rDoc, formula::FormulaGrammar::CONV_OOO);
     CPPUNIT_ASSERT_MESSAGE("Should fail to parse.", !(nRes & ScRefFlags::VALID));
 }
 
@@ -92,8 +90,6 @@ void ScRangeTest::setUp()
         SfxModelFlags::EMBEDDED_OBJECT |
         SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS |
         SfxModelFlags::DISABLE_DOCUMENT_RECOVERY);
-
-    m_pDoc = &m_xDocShRef->GetDocument();
 }
 
 void ScRangeTest::tearDown()
