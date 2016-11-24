@@ -2550,7 +2550,8 @@ WW8PLCFx_Fc_FKP::WW8Fkp::WW8Fkp(const WW8Fib& rFib, SvStream* pSt,
                          of the new data
                         */
                         bool bExpand = IsExpandableSprm(nSpId);
-                        if ((IsReplaceAllSprm(nSpId) || bExpand) && aEntry.mnLen >= sizeof(sal_uInt32) + 2)
+                        const void* pEndAvailableData = maRawData + sizeof(maRawData);
+                        if ((IsReplaceAllSprm(nSpId) || bExpand) && aEntry.mpData + 2 + sizeof(sal_uInt32) <= pEndAvailableData)
                         {
                             sal_uInt32 nCurr = pDataSt->Tell();
                             sal_uInt32 nPos = SVBT32ToUInt32(aEntry.mpData + 2);
