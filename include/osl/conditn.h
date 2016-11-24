@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #ifndef INCLUDED_OSL_CONDITN_H
 #define INCLUDED_OSL_CONDITN_H
 
@@ -40,6 +39,10 @@ typedef enum {
 } oslConditionResult;
 
 /** Creates a condition.
+
+    @deprecated use C++11's std::condition_variable instead
+                for a more robust and helpful condition.
+
     The condition is in the reset-state.
     @returns 0 if condition could not be created.
 */
