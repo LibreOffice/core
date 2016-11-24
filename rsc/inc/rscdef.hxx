@@ -58,16 +58,15 @@ public:
     bool IsDefinition()const { return( RSCEXP_DEF      == cType ); }
     bool IsNothing()   const { return( RSCEXP_NOTHING  == cType ); }
     void SetLong( sal_Int32 lValue )
-             {
-                 aExp.aLong.nHi = (short)(lValue >> 16);
-                 aExp.aLong.nLo = (unsigned short)lValue;
-                 cType = RSCEXP_LONG;
-             }
+    {
+        aExp.aLong.nHi = (short)(lValue >> 16);
+        aExp.aLong.nLo = (unsigned short)lValue;
+        cType = RSCEXP_LONG;
+    }
     sal_Int32 GetLong() const
-                  {
-                      return aExp.aLong.nLo |
-                          ((sal_uInt32)aExp.aLong.nHi << 16);
-                  }
+    {
+        return aExp.aLong.nLo | ((sal_uInt32)aExp.aLong.nHi << 16);
+    }
     bool Evaluate( sal_Int32 * pValue ) const;
     void AppendMacro( OStringBuffer & ) const;
 };
