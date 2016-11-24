@@ -329,6 +329,11 @@ static boost::property_tree::ptree unoAnyToPropertyTree(const uno::Any& anyItem)
 
     if (aType == "string")
         aTree.put("value", anyItem.get<OUString>().toUtf8().getStr());
+    else if (aType == "unsigned long")
+        aTree.put("value", OString::number(anyItem.get<sal_uInt32>()).getStr());
+    else if (aType == "long")
+        aTree.put("value", OString::number(anyItem.get<sal_Int32>()).getStr());
+
     // TODO: Add more as required
 
     return aTree;
@@ -1921,8 +1926,7 @@ public:
             aTree.put("success", bSuccess);
         }
 
-        // TODO UNO Any rEvent.Result -> JSON
-        // aTree.put("result": "...");
+        aTree.add_child("result", unoAnyToPropertyTree(rEvent.Result));
 
         std::stringstream aStream;
         boost::property_tree::write_json(aStream, aTree);

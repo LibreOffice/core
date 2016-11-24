@@ -10,6 +10,7 @@
 #include <string>
 #include <boost/property_tree/json_parser.hpp>
 
+#include <com/sun/star/frame/DispatchResultState.hpp>
 #include <swmodeltestbase.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/dispatchcommand.hxx>
@@ -78,6 +79,9 @@ public:
     void testCommentEndTextEdit();
     void testCursorPosition();
     void testPaintCallbacks();
+    void testUndoRepairResult();
+    void testRedoRepairResult();
+
 
     CPPUNIT_TEST_SUITE(SwTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -120,6 +124,9 @@ public:
     CPPUNIT_TEST(testCommentEndTextEdit);
     CPPUNIT_TEST(testCursorPosition);
     CPPUNIT_TEST(testPaintCallbacks);
+    CPPUNIT_TEST(testUndoRepairResult);
+    CPPUNIT_TEST(testRedoRepairResult);
+
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -751,6 +758,30 @@ public:
         }
         break;
         }
+    }
+};
+
+class TestResultListener : public cppu::WeakImplHelper<css::frame::XDispatchResultListener>
+{
+public:
+    sal_uInt32 m_nDocRepair;
+
+    TestResultListener() : m_nDocRepair(0)
+    {
+    }
+
+    virtual void SAL_CALL dispatchFinished(const css::frame::DispatchResultEvent& rEvent)
+        throw(css::uno::RuntimeException, std::exception) override
+    {
+        if (rEvent.State == frame::DispatchResultState::SUCCESS)
+        {
+            rEvent.Result >>= m_nDocRepair;
+        }
+    }
+
+    virtual void SAL_CALL disposing(const css::lang::EventObject&)
+        throw (css::uno::RuntimeException, std::exception) override
+    {
     }
 };
 
@@ -1566,6 +1597,74 @@ void SwTiledRenderingTest::testPaintCallbacks()
     aView1.m_bCalled = false;
     pXTextDocument->paintTile(*pDevice.get(), nCanvasWidth, nCanvasHeight, /*nTilePosX=*/0, /*nTilePosY=*/0, /*nTileWidth=*/3840, /*nTileHeight=*/3840);
     CPPUNIT_ASSERT(!aView1.m_bCalled);
+
+    mxComponent->dispose();
+    mxComponent.clear();
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void SwTiledRenderingTest::testUndoRepairResult()
+{
+    // Load a document and create two views.
+    comphelper::LibreOfficeKit::setActive();
+    SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
+    int nView1 = SfxLokHelper::getView();
+    SfxLokHelper::createView();
+    TestResultListener* pResult2 = new TestResultListener();
+    css::uno::Reference< css::frame::XDispatchResultListener > xListener(static_cast< css::frame::XDispatchResultListener* >(pResult2), css::uno::UNO_QUERY);
+    pXTextDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    int nView2 = SfxLokHelper::getView();
+
+    // Insert a character in the second view.
+    SfxLokHelper::setView(nView2);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'b', 0);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'b', 0);
+
+    // Insert a character in the first view.
+    SfxLokHelper::setView(nView1);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'a', 0);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'a', 0);
+
+    // Assert that by default the second view can't undo the action.
+    SfxLokHelper::setView(nView2);
+    comphelper::dispatchCommand(".uno:Undo", {}, xListener);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(UNDO_CONFLICT), pResult2->m_nDocRepair);
+
+    mxComponent->dispose();
+    mxComponent.clear();
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void SwTiledRenderingTest::testRedoRepairResult()
+{
+    // Load a document and create two views.
+    comphelper::LibreOfficeKit::setActive();
+    SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
+    int nView1 = SfxLokHelper::getView();
+    SfxLokHelper::createView();
+    TestResultListener* pResult2 = new TestResultListener();
+    css::uno::Reference< css::frame::XDispatchResultListener > xListener(static_cast< css::frame::XDispatchResultListener* >(pResult2), css::uno::UNO_QUERY);
+    pXTextDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    int nView2 = SfxLokHelper::getView();
+
+    // Insert a character in the second view.
+    SfxLokHelper::setView(nView2);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'b', 0);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'b', 0);
+
+    // Insert a character in the first view.
+    SfxLokHelper::setView(nView1);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'a', 0);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'a', 0);
+    comphelper::dispatchCommand(".uno:Undo", {}, xListener);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(0), pResult2->m_nDocRepair);
+
+    // Assert that by default the second view can't redo the action.
+    SfxLokHelper::setView(nView2);
+    comphelper::dispatchCommand(".uno:Redo", {}, xListener);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(UNDO_CONFLICT), pResult2->m_nDocRepair);
 
     mxComponent->dispose();
     mxComponent.clear();
