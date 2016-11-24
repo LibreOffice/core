@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLSECURITY_SOURCE_FRAMEWORK_SIGNATUREVERIFIERIMPL_HXX
-#define INCLUDED_XMLSECURITY_SOURCE_FRAMEWORK_SIGNATUREVERIFIERIMPL_HXX
+#ifndef INCLUDED_XMLSECURITY_INC_FRAMEWORK_SIGNATUREVERIFIERIMPL_HXX
+#define INCLUDED_XMLSECURITY_INC_FRAMEWORK_SIGNATUREVERIFIERIMPL_HXX
 
 #include <com/sun/star/xml/crypto/sax/XSignatureVerifyResultListener.hpp>
 #include <com/sun/star/xml/crypto/sax/XSignatureVerifyResultBroadcaster.hpp>
@@ -29,6 +29,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase.hxx>
 
+#include "xsecfwdllapi.h"
 #include "signatureengine.hxx"
 
 typedef cppu::ImplInheritanceHelper
@@ -39,7 +40,7 @@ typedef cppu::ImplInheritanceHelper
     css::lang::XServiceInfo
 > SignatureVerifierImpl_Base;
 
-class SignatureVerifierImpl : public SignatureVerifierImpl_Base
+class XSECFW_DLLPUBLIC SignatureVerifierImpl : public SignatureVerifierImpl_Base
 /****** SignatureVerifier.hxx/CLASS SignatureVerifierImpl *********************
  *
  *   NAME

@@ -21,6 +21,7 @@
 #include "xsecctl.hxx"
 #include "xsecparser.hxx"
 #include "ooxmlsecparser.hxx"
+#include "framework/signatureverifierimpl.hxx"
 
 #include <com/sun/star/xml/crypto/sax/XKeyCollector.hpp>
 #include <com/sun/star/xml/crypto/sax/ElementMarkPriority.hpp>
@@ -37,9 +38,6 @@ namespace cssu = com::sun::star::uno;
 namespace cssl = com::sun::star::lang;
 namespace cssxc = com::sun::star::xml::crypto;
 namespace cssxs = com::sun::star::xml::sax;
-
-/* xml security framework components */
-#define SIGNATUREVERIFIER_COMPONENT "com.sun.star.xml.crypto.sax.SignatureVerifier"
 
 /* protected: for signature verify */
 cssu::Reference< cssxc::sax::XReferenceResolvedListener > XSecController::prepareSignatureToRead(
@@ -62,9 +60,7 @@ cssu::Reference< cssxc::sax::XReferenceResolvedListener > XSecController::prepar
          * create a SignatureVerifier
          */
     cssu::Reference< cssl::XMultiComponentFactory > xMCF( mxCtx->getServiceManager() );
-    xReferenceResolvedListener.set(
-        xMCF->createInstanceWithContext(SIGNATUREVERIFIER_COMPONENT, mxCtx),
-        cssu::UNO_QUERY);
+    xReferenceResolvedListener = new SignatureVerifierImpl(mxCtx);
 
     cssu::Reference<cssl::XInitialization> xInitialization(xReferenceResolvedListener, cssu::UNO_QUERY);
 

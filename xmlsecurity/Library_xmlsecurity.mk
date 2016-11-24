@@ -41,6 +41,7 @@ $(eval $(call gb_Library_use_libraries,xmlsecurity,\
 	vcl \
 	xo \
 	i18nlangtag \
+	xsec_fw \
 	$(gb_UWINAPI) \
 ))
 
