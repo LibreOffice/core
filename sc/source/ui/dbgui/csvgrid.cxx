@@ -1012,7 +1012,7 @@ void ScCsvGrid::DataChanged( const DataChangedEvent& rDCEvt )
     ScCsvControl::DataChanged( rDCEvt );
 }
 
-void ScCsvGrid::ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 )
+void ScCsvGrid::ConfigurationChanged( utl::ConfigurationBroadcaster*, ConfigurationHints )
 {
     InitColors();
     Repaint();

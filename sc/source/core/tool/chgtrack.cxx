@@ -2244,7 +2244,7 @@ ScChangeAction* ScChangeTrack::GetLastSaved() const
         return nullptr;
 }
 
-void ScChangeTrack::ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 )
+void ScChangeTrack::ConfigurationChanged( utl::ConfigurationBroadcaster*, ConfigurationHints )
 {
     if ( !pDoc->IsInDtorClear() )
     {

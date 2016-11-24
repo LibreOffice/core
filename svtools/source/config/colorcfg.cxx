@@ -252,7 +252,7 @@ void    ColorConfig_Impl::Notify( const uno::Sequence<OUString>& )
 {
     //loading via notification always uses the default setting
     Load(OUString());
-    NotifyListeners(0);
+    NotifyListeners(ConfigurationHints::NONE);
 }
 
 void ColorConfig_Impl::ImplCommit()
@@ -330,7 +330,7 @@ void ColorConfig_Impl::SettingsChanged()
 
     ImplUpdateApplicationSettings();
 
-    NotifyListeners(0);
+    NotifyListeners(ConfigurationHints::NONE);
 }
 
 IMPL_LINK( ColorConfig_Impl, DataChangedEventListener, VclSimpleEvent&, rEvent, void )

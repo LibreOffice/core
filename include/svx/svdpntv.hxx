@@ -210,7 +210,7 @@ protected:
 
     // Interface to SdrPaintWindow
     void RemovePaintWindow(SdrPaintWindow& rOld);
-    void ConfigurationChanged( ::utl::ConfigurationBroadcaster*, sal_uInt32 ) override;
+    void ConfigurationChanged( ::utl::ConfigurationBroadcaster*, ConfigurationHints ) override;
 
 public:
     sal_uInt32 PaintWindowCount() const { return maPaintWindows.size(); }

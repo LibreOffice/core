@@ -185,7 +185,7 @@ svtools::ColorConfig & SmModule::GetColorConfig()
     return *mpColorConfig;
 }
 
-void SmModule::ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 )
+void SmModule::ConfigurationChanged( utl::ConfigurationBroadcaster*, ConfigurationHints )
 {
     ApplyColorConfigValues(*mpColorConfig);
 }

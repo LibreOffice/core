@@ -103,7 +103,7 @@ public:
     explicit SmModule(SfxObjectFactory* pObjFact);
     virtual ~SmModule() override;
 
-    virtual void ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 ) override;
+    virtual void ConfigurationChanged( utl::ConfigurationBroadcaster*, ConfigurationHints ) override;
 
     svtools::ColorConfig &  GetColorConfig();
 

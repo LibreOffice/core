@@ -678,7 +678,7 @@ void SlideSorterView::Paint (
 
 void SlideSorterView::ConfigurationChanged (
     utl::ConfigurationBroadcaster* pBroadcaster,
-    sal_uInt32 nHint)
+    ConfigurationHints nHint)
 {
     // Some changes of the configuration (some of the colors for example)
     // may affect the previews.  Throw away the old ones and create new ones.

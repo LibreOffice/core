@@ -212,7 +212,7 @@ ScModule::~ScModule()
     DeleteCfg(); // Called from Exit()
 }
 
-void ScModule::ConfigurationChanged( utl::ConfigurationBroadcaster* p, sal_uInt32 )
+void ScModule::ConfigurationChanged( utl::ConfigurationBroadcaster* p, ConfigurationHints )
 {
     if ( p == pColorConfig || p == pAccessOptions )
     {
