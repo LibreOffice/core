@@ -102,15 +102,11 @@ private:
     ScVbaControl *pControl;
 public:
     explicit ScVbaControlListener( ScVbaControl *pTmpControl );
-    virtual ~ScVbaControlListener() override;
+
     virtual void SAL_CALL disposing( const lang::EventObject& rEventObject ) throw( uno::RuntimeException, std::exception ) override;
 };
 
 ScVbaControlListener::ScVbaControlListener( ScVbaControl *pTmpControl ): pControl( pTmpControl )
-{
-}
-
-ScVbaControlListener::~ScVbaControlListener()
 {
 }
 
