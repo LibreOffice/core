@@ -787,9 +787,7 @@ SwContentTree::SwContentTree(vcl::Window* pParent, SwNavigationPI* pDialog)
     , m_nRootType(ContentTypeId::UNKNOWN)
     , m_nLastSelType(ContentTypeId::UNKNOWN)
     , m_nOutlineLevel(MAXLEVEL)
-    , m_bIsActive(true)
-    , m_bIsConstant(false)
-    , m_bIsHidden(false)
+    , m_eState(State::ACTIVE)
     , m_bDocChgdInDragging(false)
     , m_bIsInternalDrag(false)
     , m_bIsRoot(false)
@@ -1130,7 +1128,7 @@ VclPtr<PopupMenu> SwContentTree::CreateContextMenu()
             sInsert += ")";
         }
         pSubPop3->InsertItem(nId, sInsert);
-        if(m_bIsConstant && m_pActiveShell == &pView->GetWrtShell())
+        if (State::CONSTANT == m_eState && m_pActiveShell == &pView->GetWrtShell())
             pSubPop3->CheckItem(nId);
         pView = SwModule::GetNextView(pView);
         nId++;
@@ -1145,9 +1143,9 @@ VclPtr<PopupMenu> SwContentTree::CreateContextMenu()
         pSubPop3->InsertItem(nId, sHiddenEntry);
     }
 
-    if(m_bIsActive)
+    if (State::ACTIVE == m_eState)
         pSubPop3->CheckItem( --nId );
-    else if(m_bIsHidden)
+    else if (State::HIDDEN == m_eState)
         pSubPop3->CheckItem( nId );
 
     pPop->InsertItem( 1, m_aContextStrings[STR_OUTLINE_LEVEL - STR_CONTEXT_FIRST]);
@@ -1156,7 +1154,7 @@ VclPtr<PopupMenu> SwContentTree::CreateContextMenu()
     // Now edit
     SvTreeListEntry* pEntry = nullptr;
     // Edit only if the shown content is coming from the current view.
-    if((m_bIsActive || m_pActiveShell == pActiveView->GetWrtShellPtr())
+    if ((State::ACTIVE == m_eState || m_pActiveShell == pActiveView->GetWrtShellPtr())
             && nullptr != (pEntry = FirstSelected()) && lcl_IsContent(pEntry))
     {
         const SwContentType* pContType = static_cast<SwContent*>(pEntry->GetUserData())->GetParent();
@@ -1411,7 +1409,7 @@ bool  SwContentTree::Expand( SvTreeListEntry* pParent )
         {
             SwContentType* pCntType = static_cast<SwContentType*>(pParent->GetUserData());
             const sal_Int32 nOr = 1 << (int)pCntType->GetType(); //linear -> Bitposition
-            if(m_bIsActive || m_bIsConstant)
+            if (State::HIDDEN != m_eState)
             {
                 m_nActiveBlock |= nOr;
                 m_pConfig->SetActiveBlock(m_nActiveBlock);
@@ -1469,7 +1467,7 @@ bool  SwContentTree::Collapse( SvTreeListEntry* pParent )
                 return false;
             SwContentType* pCntType = static_cast<SwContentType*>(pParent->GetUserData());
             const sal_Int32 nAnd = ~(1 << (int)pCntType->GetType());
-            if(m_bIsActive || m_bIsConstant)
+            if (State::HIDDEN != m_eState)
             {
                 m_nActiveBlock &= nAnd;
                 m_pConfig->SetActiveBlock(m_nActiveBlock);
@@ -1500,9 +1498,9 @@ IMPL_LINK_NOARG(SwContentTree, ContentDoubleClickHdl, SvTreeListBox*, bool)
     {
         if(lcl_IsContentType(pEntry) && !pEntry->HasChildren())
             RequestingChildren(pEntry);
-        else if(!lcl_IsContentType(pEntry) && (m_bIsActive || m_bIsConstant))
+        else if (!lcl_IsContentType(pEntry) && (State::HIDDEN != m_eState))
         {
-            if(m_bIsConstant)
+            if (State::CONSTANT == m_eState)
             {
                 m_pActiveShell->GetView().GetViewFrame()->GetWindow().ToTop();
             }
@@ -1550,9 +1548,10 @@ void SwContentTree::Display( bool bActive )
     }
     Clear();
     SetUpdateMode( false );
-    if(bActive && !m_bIsConstant && !m_bIsActive)
-        m_bIsActive = bActive;
-    m_bIsHidden = !bActive;
+    if (!bActive)
+        m_eState = State::HIDDEN;
+    else if (State::HIDDEN == m_eState)
+        m_eState = State::ACTIVE;
     SwWrtShell* pShell = GetWrtShell();
     const bool bReadOnly = !pShell || pShell->GetView().GetDocShell()->IsReadOnly();
     if(bReadOnly != m_bIsLastReadOnly)
@@ -1587,9 +1586,9 @@ void SwContentTree::Display( bool bActive )
                                 nullptr, bChOnDemand, TREELIST_APPEND, (*ppContentT));
                 if(nCntType == m_nLastSelType)
                     pSelEntry = pEntry;
-                sal_Int32 nExpandOptions = m_bIsActive || m_bIsConstant ?
-                                            m_nActiveBlock :
-                                                m_nHiddenBlock;
+                sal_Int32 nExpandOptions = (State::HIDDEN == m_eState)
+                                            ? m_nHiddenBlock
+                                            : m_nActiveBlock;
                 if(nExpandOptions & (1 << (int)nCntType))
                 {
                     Expand(pEntry);
@@ -1655,7 +1654,7 @@ void SwContentTree::Display( bool bActive )
             else
                 RequestingChildren(pParent);
             Expand(pParent);
-            if( m_nRootType == ContentTypeId::OUTLINE && m_bIsActive )
+            if (m_nRootType == ContentTypeId::OUTLINE && State::ACTIVE == m_eState)
             {
                 // find out where the cursor is
                 const sal_uInt16 nActPos = pShell->GetOutlinePos(MAXLEVEL);
@@ -1804,7 +1803,7 @@ bool SwContentTree::FillTransferData( TransferDataContainer& rTransfer,
                 // without a filename into its own document.
                 bRet = true;
             }
-            else if(m_bIsConstant &&
+            else if (State::CONSTANT == m_eState &&
                     ( !::GetActiveView() ||
                         m_pActiveShell != ::GetActiveView()->GetWrtShellPtr()))
             {
@@ -1867,7 +1866,7 @@ void SwContentTree::ToggleToRoot()
                 pCntType = static_cast<SwContent*>(pEntry->GetUserData())->GetParent();
             m_nRootType = pCntType->GetType();
             m_bIsRoot = true;
-            Display(m_bIsActive || m_bIsConstant);
+            Display(State::HIDDEN != m_eState);
         }
     }
     else
@@ -1875,7 +1874,7 @@ void SwContentTree::ToggleToRoot()
         m_nRootType = ContentTypeId::UNKNOWN;
         m_bIsRoot = false;
         FindActiveTypeAndRemoveUserData();
-        Display(m_bIsActive || m_bIsConstant);
+        Display(State::HIDDEN != m_eState);
         if( m_bIsKeySpace )
         {
             HideFocus();
@@ -1905,7 +1904,7 @@ bool SwContentTree::HasContentChanged()
     bool bRepaint = false;
     bool bInvalidate = false;
 
-    if(!m_bIsActive && ! m_bIsConstant)
+    if (State::HIDDEN == m_eState)
     {
         for(ContentTypeId i : o3tl::enumrange<ContentTypeId>())
         {
@@ -2125,14 +2124,13 @@ void SwContentTree::FindActiveTypeAndRemoveUserData()
 void SwContentTree::SetHiddenShell(SwWrtShell* pSh)
 {
     m_pHiddenShell = pSh;
-    m_bIsHidden = true;
-    m_bIsActive = m_bIsConstant = false;
+    m_eState = State::HIDDEN;
     FindActiveTypeAndRemoveUserData();
     for(ContentTypeId i : o3tl::enumrange<ContentTypeId>())
     {
         DELETEZ(m_aHiddenContentArr[i]);
     }
-    Display(m_bIsActive);
+    Display(false);
 
     GetParentWindow()->UpdateListBox();
 }
@@ -2142,7 +2140,7 @@ void SwContentTree::SetActiveShell(SwWrtShell* pSh)
     if(m_bIsInternalDrag)
         m_bDocChgdInDragging = true;
     bool bClear = m_pActiveShell != pSh;
-    if(m_bIsActive && bClear)
+    if (State::ACTIVE == m_eState && bClear)
     {
         if (m_pActiveShell)
             EndListening(*m_pActiveShell->GetView().GetDocShell());
@@ -2150,18 +2148,17 @@ void SwContentTree::SetActiveShell(SwWrtShell* pSh)
         FindActiveTypeAndRemoveUserData();
         Clear();
     }
-    else if(m_bIsConstant)
+    else if (State::CONSTANT == m_eState)
     {
         if (m_pActiveShell)
             EndListening(*m_pActiveShell->GetView().GetDocShell());
         m_pActiveShell = pSh;
-        m_bIsActive = true;
-        m_bIsConstant = false;
+        m_eState = State::ACTIVE;
         bClear = true;
     }
     // Only if it is the active view, the array will be deleted and
     // the screen filled new.
-    if(m_bIsActive && bClear)
+    if (State::ACTIVE == m_eState && bClear)
     {
         if (m_pActiveShell)
             StartListening(*m_pActiveShell->GetView().GetDocShell());
@@ -2179,8 +2176,7 @@ void SwContentTree::SetConstantShell(SwWrtShell* pSh)
     if (m_pActiveShell)
         EndListening(*m_pActiveShell->GetView().GetDocShell());
     m_pActiveShell = pSh;
-    m_bIsActive       = false;
-    m_bIsConstant     = true;
+    m_eState = State::CONSTANT;
     StartListening(*m_pActiveShell->GetView().GetDocShell());
     FindActiveTypeAndRemoveUserData();
     for(ContentTypeId i : o3tl::enumrange<ContentTypeId>())
@@ -2216,8 +2212,8 @@ void SwContentTree::ExecCommand(const OUString& rCmd, bool bModifier)
     if (!bUpDown && !bLeftRight)
         return;
     if( !GetWrtShell()->GetView().GetDocShell()->IsReadOnly() &&
-            (m_bIsActive ||
-                (m_bIsConstant && m_pActiveShell == GetParentWindow()->GetCreateView()->GetWrtShellPtr())))
+            (State::ACTIVE == m_eState ||
+                (State::CONSTANT == m_eState && m_pActiveShell == GetParentWindow()->GetCreateView()->GetWrtShellPtr())))
     {
         SwWrtShell* pShell = GetWrtShell();
         sal_Int8 nActOutlineLevel = m_nOutlineLevel;
@@ -2387,24 +2383,24 @@ IMPL_LINK_NOARG(SwContentTree, TimerUpdate, Timer *, void)
         m_bViewHasChanged = false;
         m_bIsIdleClear = false;
         SwWrtShell* pActShell = pView->GetWrtShellPtr();
-        if( m_bIsConstant && !lcl_FindShell( m_pActiveShell ) )
+        if (State::CONSTANT == m_eState && !lcl_FindShell(m_pActiveShell))
         {
             SetActiveShell(pActShell);
             GetParentWindow()->UpdateListBox();
         }
 
-        if(m_bIsActive && pActShell != GetWrtShell())
+        if (State::ACTIVE == m_eState && pActShell != GetWrtShell())
         {
             SetActiveShell(pActShell);
         }
-        else if( (m_bIsActive || (m_bIsConstant && pActShell == GetWrtShell())) &&
+        else if ((State::ACTIVE == m_eState || (State::CONSTANT == m_eState && pActShell == GetWrtShell())) &&
                     HasContentChanged())
         {
             FindActiveTypeAndRemoveUserData();
             Display(true);
         }
     }
-    else if(!pView && m_bIsActive && !m_bIsIdleClear)
+    else if (!pView && State::ACTIVE == m_eState && !m_bIsIdleClear)
     {
         if(m_pActiveShell)
         {
@@ -2420,11 +2416,11 @@ DragDropMode SwContentTree::NotifyStartDrag(
                 SvTreeListEntry* pEntry )
 {
     DragDropMode eMode = (DragDropMode)0;
-    if( m_bIsActive && m_nRootType == ContentTypeId::OUTLINE &&
+    if (State::ACTIVE == m_eState && m_nRootType == ContentTypeId::OUTLINE &&
             GetModel()->GetAbsPos( pEntry ) > 0
             && !GetWrtShell()->GetView().GetDocShell()->IsReadOnly())
         eMode = GetDragDropMode();
-    else if(!m_bIsActive && GetWrtShell()->GetView().GetDocShell()->HasName())
+    else if (State::ACTIVE != m_eState && GetWrtShell()->GetView().GetDocShell()->HasName())
         eMode = DragDropMode::APP_COPY;
 
     sal_Int8 nDragMode;
@@ -2534,20 +2530,20 @@ void SwContentTree::GetFocus()
     if(pActView)
     {
         SwWrtShell* pActShell = pActView->GetWrtShellPtr();
-        if(m_bIsConstant && !lcl_FindShell(m_pActiveShell))
+        if (State::CONSTANT == m_eState && !lcl_FindShell(m_pActiveShell))
         {
             SetActiveShell(pActShell);
         }
 
-        if(m_bIsActive && pActShell != GetWrtShell())
+        if (State::ACTIVE == m_eState && pActShell != GetWrtShell())
             SetActiveShell(pActShell);
-        else if( (m_bIsActive || (m_bIsConstant && pActShell == GetWrtShell())) &&
+        else if ((State::ACTIVE == m_eState || (State::CONSTANT == m_eState && pActShell == GetWrtShell())) &&
                     HasContentChanged())
         {
             Display(true);
         }
     }
-    else if(m_bIsActive)
+    else if (State::ACTIVE == m_eState)
         Clear();
     SvTreeListBox::GetFocus();
 }
@@ -2609,9 +2605,9 @@ void SwContentTree::KeyInput(const KeyEvent& rEvent)
 
         if(pEntry)
         {
-            if(m_bIsActive || m_bIsConstant)
+            if (State::HIDDEN != m_eState)
             {
-                if(m_bIsConstant)
+                if (State::CONSTANT == m_eState)
                 {
                     m_pActiveShell->GetView().GetViewFrame()->GetWindow().ToTop();
                 }
@@ -2905,8 +2901,8 @@ void SwContentTree::ExecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry )
             }
             if(nSelectedPopupEntry)
             {
-                m_bViewHasChanged = m_bIsActive = nSelectedPopupEntry == 1;
-                m_bIsConstant = false;
+                m_bViewHasChanged = nSelectedPopupEntry == 1;
+                m_eState = (nSelectedPopupEntry == 1) ? State::ACTIVE : State::HIDDEN;
                 Display(nSelectedPopupEntry == 1);
             }
         }
@@ -2918,15 +2914,15 @@ void SwContentTree::SetOutlineLevel(sal_uInt8 nSet)
 {
     m_nOutlineLevel = nSet;
     m_pConfig->SetOutlineLevel( m_nOutlineLevel );
-    SwContentType** ppContentT = m_bIsActive ?
-                    &m_aActiveContentArr[ContentTypeId::OUTLINE] :
-                        &m_aHiddenContentArr[ContentTypeId::OUTLINE];
+    SwContentType** ppContentT = (State::ACTIVE == m_eState)
+            ? &m_aActiveContentArr[ContentTypeId::OUTLINE]
+            : &m_aHiddenContentArr[ContentTypeId::OUTLINE];
     if(*ppContentT)
     {
         (*ppContentT)->SetOutlineLevel(m_nOutlineLevel);
         (*ppContentT)->Init();
     }
-    Display(m_bIsActive);
+    Display(State::ACTIVE == m_eState);
 }
 
 // Mode Change: Show dropped Doc
@@ -2935,8 +2931,7 @@ void SwContentTree::ShowHiddenShell()
 {
     if(m_pHiddenShell)
     {
-        m_bIsConstant = false;
-        m_bIsActive = false;
+        m_eState = State::HIDDEN;
         Display(false);
     }
 }
@@ -2945,8 +2940,7 @@ void SwContentTree::ShowHiddenShell()
 
 void SwContentTree::ShowActualView()
 {
-    m_bIsActive = true;
-    m_bIsConstant = false;
+    m_eState = State::ACTIVE;
     Display(true);
     GetParentWindow()->UpdateListBox();
 }
