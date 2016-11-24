@@ -89,8 +89,6 @@ class RscTypCont
     RscEnum *   InitMapUnit();
     RscEnum *   InitKey();
     RscEnum *   InitTriState();
-    RscTupel *  InitGeometry();
-    RscArray *  InitLangGeometry( RscTupel * pGeo );
     RscCont  *  InitStringList();
     RscArray *  InitLangStringList( RscCont * pStrLst );
     RscTupel *  InitStringTupel();

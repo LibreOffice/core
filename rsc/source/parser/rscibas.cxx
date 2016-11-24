@@ -367,31 +367,6 @@ RscEnum * RscTypCont::InitTriState()
     return pTriState;
 }
 
-RscTupel * RscTypCont::InitGeometry()
-{
-    RscTop *    pTupel;
-    Atom        nId;
-
-    // Clientvariablen einfuegen
-    pTupel = new RscTupel( pHS->getID( "TupelDeltaSystem" ),
-                                RSC_NOTYPE );
-    nId = aNmTb.Put( "X", VARNAME );
-    pTupel->SetVariable( nId, &aShort );
-    nId = aNmTb.Put( "Y", VARNAME );
-    pTupel->SetVariable( nId, &aShort );
-    nId = aNmTb.Put( "WIDTH", VARNAME );
-    pTupel->SetVariable( nId, &aShort );
-    nId = aNmTb.Put( "HEIGHT", VARNAME );
-    pTupel->SetVariable( nId, &aShort );
-
-    return static_cast<RscTupel *>(pTupel);
-}
-
-RscArray * RscTypCont::InitLangGeometry( RscTupel * pGeo )
-{
-    return new RscArray( pHS->getID( "Lang_TupelGeometry" ), RSC_NOTYPE, pGeo, &aLangType );
-}
-
 RscCont * RscTypCont::InitStringList()
 {
     RscCont * pCont;
