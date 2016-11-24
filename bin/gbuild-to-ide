@@ -21,21 +21,7 @@ import xml.dom.minidom as minidom
 import traceback
 
 
-class GbuildParserState:
-
-    def __init__(self):
-        self.target = None
-        self.ilib = None
-        self.include = []
-        self.defs = {}
-        self.cxxobjects = []
-        self.cxxflags = []
-        self.linked_libs = []
-        self.include_sys = []
-
-
 class GbuildLinkTarget:
-
     def __init__(self, name, location, include, include_sys, defs, cxxobjects, cxxflags, linked_libs):
         (self.name, self.location, self.include, self.include_sys, self.defs, self.cxxobjects, self.cxxflags, self.linked_libs) = (
             name, location, include, include_sys, defs, cxxobjects, cxxflags, linked_libs)
@@ -53,7 +39,6 @@ class GbuildLinkTarget:
 
 
 class GbuildLib(GbuildLinkTarget):
-
     def __init__(self, name, library, location, include, include_sys, defs, cxxobjects, cxxflags, linked_libs):
         GbuildLinkTarget.__init__(self, name, location, include, include_sys, defs, cxxobjects, cxxflags, linked_libs)
         self.library = library
@@ -70,7 +55,6 @@ class GbuildLib(GbuildLinkTarget):
 
 
 class GbuildExe(GbuildLinkTarget):
-
     def __init__(self, name, executable, location, include, include_sys, defs, cxxobjects, cxxflags, linked_libs):
         GbuildLinkTarget.__init__(self, name, location, include, include_sys, defs, cxxobjects, cxxflags, linked_libs)
         self.executable = executable
@@ -84,186 +68,85 @@ class GbuildExe(GbuildLinkTarget):
 
 
 class GbuildParser:
-    makecmdpattern = re.compile('^MAKE_COMMAND := (.*)')
-    srcdirpattern = re.compile('^SRCDIR = (.*)')
-    builddirpattern = re.compile('^BUILDDIR = (.*)')
-    instdirpattern = re.compile('^INSTDIR = (.*)')
-    binpathpattern = re.compile('^GPERF = (.*)gperf(.exe)?')
-    libnamespattern = re.compile('^gb_Library_ILIBFILENAMES := (.*)')
-    exenamepattern = re.compile('^gb_Executable_FILENAMES_FOR_BUILD := (.*)')
-    rulepattern = re.compile('^(.+?):( .*)?$')
-    libpattern = re.compile('#  [a-z]+ to execute \(from [\'`](.*)/Library_(.*)\.mk\', line [0-9]*\):')
-    exepattern = re.compile('#  [a-z]+ to execute \(from [\'`](.*)/Executable_(.*)\.mk\', line [0-9]*\):')
+    def __init__(self, makecmd):
+        self.makecmd = makecmd
+        self.binpath = os.path.dirname(os.environ['GPERF']) # woha, this is quite a hack
+        (self.srcdir, self.builddir, self.instdir, self.workdir) = (os.environ['SRCDIR'], os.environ['BUILDDIR'], os.environ['INSTDIR'], os.environ['WORKDIR'])
+        (self.libs, self.exes, self.modulenamelist) = ([], [], [])
+        (self.libnames, self.exenames, self.target_by_path, self.target_by_location) = ({}, {}, {}, {})
+
     includepattern = re.compile('-I(\S+)')
     isystempattern = re.compile('-isystem\s*(\S+)')
-    defspattern = re.compile('# DEFS := (.*)')
-    cxxpattern = re.compile('# CXXOBJECTS := (.*)')
-    linkedlibspattern = re.compile('# LINKED_LIBS := (.*)')
-    ilibpattern = re.compile('# ILIBTARGET := (.*)')
     warningpattern = re.compile('-W\S+')
+    libpattern = re.compile('Library_(.*)\.mk')
+    exepattern = re.compile('Executable_(.*)\.mk')
 
-    def __init__(self):
-        (self.makecmd, self.srcdir, self.builddir, self.instdir, self.libs, self.exes,
-         self.libnames, self.exenames, self.target_by_path, self.target_by_location, self.modulenamelist) = ('', '', '', '', [], [], {}, {}, {}, {}, [])
+    @staticmethod
+    def __split_includes(includes):
+        foundisystem = GbuildParser.isystempattern.findall(includes)
+        foundincludes = [includeswitch.strip() for includeswitch in GbuildParser.includepattern.findall(includes) if
+                len(includeswitch) > 2]
+        return (foundincludes, foundisystem)
 
-    def __mapping_to_dict(self, mapping):
-        mapping_dict = {}
-        for item in mapping.split(' '):
-            library, target = item.split(':')
-            mapping_dict[target] = library
-        return mapping_dict
+    @staticmethod
+    def __split_objs(objsline):
+        return [obj for obj in objsline.strip().split(' ') if len(obj) > 0 and obj != 'CXXOBJECTS' and obj != '+=']
 
-    def _parse_hash_old(self, line, state):
-        libmatch = GbuildParser.libpattern.match(line)
-        if libmatch:
-            libname = self.libnames.get(state.ilib, None)
-            if state.cxxobjects:
-                self.libs.append(
-                    GbuildLib(libmatch.group(2), libname, libmatch.group(1),
-                              state.include, state.include_sys, state.defs, state.cxxobjects,
-                              state.cxxflags, state.linked_libs))
-            state = GbuildParserState()
-            return state
-        exematch = GbuildParser.exepattern.match(line)
-        if exematch:
-            exename = self.exenames.get(state.target, None)
-            if state.cxxobjects:
-                self.exes.append(
-                    GbuildExe(exematch.group(2), exename, exematch.group(1),
-                              state.include, state.include_sys, state.defs, state.cxxobjects,
-                              state.cxxflags, state.linked_libs))
-            state = GbuildParserState()
-            return state
-        if line.find('# INCLUDE :=') == 0:
-            isystemmatch = GbuildParser.isystempattern.findall(line)
-            if isystemmatch:
-                state.include_sys = isystemmatch
-            state.include = [includeswitch.strip() for includeswitch in GbuildParser.includepattern.findall(line) if
-                             len(includeswitch) > 2]
-            return state
-        defsmatch = GbuildParser.defspattern.match(line)
-        if defsmatch:
-            alldefs = [defswitch.strip()[2:] for defswitch in defsmatch.group(1).split(' ') if len(defswitch) > 2]
-            for d in alldefs:
-                defparts = d.split('=')
-                if len(defparts) == 1:
-                    defparts.append(None)
-                state.defs[defparts[0]] = defparts[1]
-            state.defs["LIBO_INTERNAL_ONLY"] = None
-            return state
-        cxxmatch = GbuildParser.cxxpattern.match(line)
-        if cxxmatch:
-            state.cxxobjects = [obj for obj in cxxmatch.group(1).split(' ') if len(obj) > 0]
-            return state
-        linkedlibsmatch = GbuildParser.linkedlibspattern.match(line)
-        if linkedlibsmatch:
-            state.linked_libs = linkedlibsmatch.group(1).strip().split(' ')
-            return state
-        ilibmatch = GbuildParser.ilibpattern.match(line)
-        if ilibmatch:
-            state.ilib = os.path.basename(ilibmatch.group(1))
-            return state
-        if line.find('# T_CXXFLAGS :=') == 0:
-            state.cxxflags = [cxxflag.strip() for cxxflag in GbuildParser.warningpattern.sub('', line.replace('# T_CXXFLAGS :=', '')).split(' ') if len(cxxflag) > 1]
-            return state
-        # we could match a lot of other stuff here if needed for integration rpaths etc.
-        return state
+    @staticmethod
+    def __split_defs(defsline):
+        defs = {}
+        alldefs = [defswitch.strip()[2:] for defswitch in defsline.strip().split(' ') if len(defswitch) > 2]
+        for d in alldefs:
+            defparts = d.split('=')
+            if len(defparts) == 1:
+                defparts.append(None)
+            defs[defparts[0]] = defparts[1]
+        defs["LIBO_INTERNAL_ONLY"] = None
+        return defs
 
-    def _parse_hash(self, line):
-        libmatch = GbuildParser.libpattern.match(line)
-        if libmatch:
-            return True
-        exematch = GbuildParser.exepattern.match(line)
-        if exematch:
-            return True
-        if line.find('# INCLUDE :=') == 0:
-            return True
-        defsmatch = GbuildParser.defspattern.match(line)
-        if defsmatch:
-            return True
-        cxxmatch = GbuildParser.cxxpattern.match(line)
-        if cxxmatch:
-            return True
-        linkedlibsmatch = GbuildParser.linkedlibspattern.match(line)
-        if linkedlibsmatch:
-            return True
-        ilibmatch = GbuildParser.ilibpattern.match(line)
-        if ilibmatch:
-            return True
-        if line.find('# T_CXXFLAGS :=') == 0:
-            return True
-        # we could match a lot of other stuff here if needed for integration rpaths etc.
-        return False
+    @staticmethod
+    def __split_flags(flagsline, flagslineappend):
+        return [cxxflag.strip() for cxxflag in GbuildParser.warningpattern.sub('', '%s %s' % (flagsline, flagslineappend)).split(' ') if len(cxxflag) > 1]
 
-    def _parse_without_hash(self, line):
-        makecmdmatch = GbuildParser.makecmdpattern.match(line)
-        if makecmdmatch:
-            self.makecmd = makecmdmatch.group(1)
-            # FIXME: Hack
-            if self.makecmd == 'make':
-                self.makecmd = '/usr/bin/make'
-            return False
-        srcdirmatch = GbuildParser.srcdirpattern.match(line)
-        if srcdirmatch:
-            self.srcdir = srcdirmatch.group(1)
-            return False
-        builddirmatch = GbuildParser.builddirpattern.match(line)
-        if builddirmatch:
-            self.builddir = builddirmatch.group(1)
-            return False
-        instdirmatch = GbuildParser.instdirpattern.match(line)
-        if instdirmatch:
-            self.instdir = instdirmatch.group(1)
-            return False
-        binpathmatch = GbuildParser.binpathpattern.match(line)
-        if binpathmatch:
-            self.binpath = binpathmatch.group(1)
-            return False
-        libnamesmatch = GbuildParser.libnamespattern.match(line)
-        if libnamesmatch:
-            self.libnames = self.__mapping_to_dict(libnamesmatch.group(1))
-            return False
-        exenamesmatch = GbuildParser.exenamepattern.match(line)
-        if exenamesmatch:
-            self.exenames = self.__mapping_to_dict(exenamesmatch.group(1))
-            return False
-        rulematch = self.rulepattern.match(line)
-        if rulematch:
-            return True
+    @staticmethod
+    def __lib_from_json(json):
+        (foundincludes, foundisystem) = GbuildParser.__split_includes(json['INCLUDE'])
+        return GbuildLib(
+            GbuildParser.libpattern.match(os.path.basename(json['MAKEFILE'])).group(1),
+            json['LINKTARGET'],
+            os.path.dirname(json['MAKEFILE']),
+            foundincludes,
+            foundisystem,
+            GbuildParser.__split_defs(json['DEFS']),
+            GbuildParser.__split_objs(json['CXXOBJECTS']),
+            GbuildParser.__split_flags(json['CXXFLAGS'], json['CXXFLAGSAPPEND']),
+            json['LINKED_LIBS'].strip().split(' '))
 
-    def parse(self, gbuildstate):
-        workLines = []
-        stateActive = False
-        for line in gbuildstate:
-            line = line.rstrip('\r\n')
-            if line.startswith('#'):
-                if self._parse_hash(line):
-                    stateActive = True
-                    workLines.append(line)
-            else:
-                if self._parse_without_hash(line):
-                    workLines.append(line)
-                elif stateActive:
-                    workLines.append('!END OF STATE')
+    @staticmethod
+    def __exe_from_json(json):
+        (foundincludes, foundisystem) = GbuildParser.__split_includes(json['INCLUDE'])
+        return GbuildExe(
+            GbuildParser.exepattern.match(os.path.basename(json['MAKEFILE'])).group(1),
+            json['LINKTARGET'],
+            os.path.dirname(json['MAKEFILE']),
+            foundincludes,
+            foundisystem,
+            GbuildParser.__split_defs(json['DEFS']),
+            GbuildParser.__split_objs(json['CXXOBJECTS']),
+            GbuildParser.__split_flags(json['CXXFLAGS'], json['CXXFLAGSAPPEND']),
+            json['LINKED_LIBS'].strip().split(' '))
 
-        state = GbuildParserState()
-        for line in workLines:
-            if line.startswith('!END OF STATE'):
-                state = GbuildParserState()
-                continue
-            if line.startswith('#'):
-                state = self._parse_hash_old(line, state)
-            else:
-                rulematch = self.rulepattern.match(line)
-                if rulematch:
-                    if len(rulematch.groups()) == 2 \
-                       and rulematch.group(2) is not None \
-                       and ':=' in rulematch.group(2):
-                        # Hack to make GNU make >= 4.x happy
-                        state = self._parse_hash_old('#' + rulematch.group(2), state)
-                    else:
-                       state.target = os.path.basename(rulematch.group(1))
-
+    def parse(self):
+        for jsonfilename in os.listdir(os.path.join(self.workdir, 'GbuildToJson', 'Library')):
+            with open(os.path.join(self.workdir, 'GbuildToJson', 'Library', jsonfilename), 'r') as f:
+                lib = self.__lib_from_json(json.load(f))
+                self.libnames[lib.library] = lib.name
+                self.libs.append(lib)
+        for jsonfilename in os.listdir(os.path.join(self.workdir, 'GbuildToJson', 'Executable')):
+            with open(os.path.join(self.workdir, 'GbuildToJson', 'Executable', jsonfilename), 'r') as f:
+                exe = self.__exe_from_json(json.load(f))
+                self.exenames[exe.executable] = exe.name
+                self.exes.append(exe)
         for target in set(self.libs) | set(self.exes):
             if target.location not in self.target_by_location:
                 self.target_by_location[target.location] = set()
@@ -1697,9 +1580,13 @@ if __name__ == '__main__':
         description='LibreOffice gbuild IDE project generator')
     parser.add_argument('--ide', dest='ide', required=True,
                         help='the IDE to generate project files for')
-    parser.add_argument('--input', dest='input', required=False,
-                        help='the input file, not normally used, for debugging this script')
+    parser.add_argument('--make', dest='makecmd', required=True,
+                        help='the command to execute make')
     args = parser.parse_args()
+    # FIXME: Hack
+    if args.makecmd == 'make':
+        args.makecmd = '/usr/bin/make'
+
     paths = {}
     generators = {
         'eclipsecdt': EclipseCDTIntegrationGenerator,
@@ -1716,10 +1603,7 @@ if __name__ == '__main__':
         print("Invalid ide. valid values are %s" % ','.join(generators.keys()))
         sys.exit(1)
 
-    if args.input:
-        gbuildparser = GbuildParser().parse(open(args.input, 'r'))
-    else:
-        gbuildparser = GbuildParser().parse(sys.stdin)
+    gbuildparser = GbuildParser(args.makecmd).parse()
 
     generators[args.ide](gbuildparser, args.ide).emit()
     print("Successfully created the project files.")
