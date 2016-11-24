@@ -138,7 +138,7 @@ void RscTypCont::Init()
 
     // pClassMenu is only completely defined here
     nId = aNmTb.Put( "SubMenu", VARNAME );
-    pClassMenuItem->SetVariable( nId, pClassMenu, nullptr, VAR_SVDYNAMIC,
+    pClassMenuItem->SetVariable( nId, pClassMenu, nullptr, RSCVAR::SvDynamic,
                                  (sal_uInt32)RscMenuItem::Menu );
 }
 

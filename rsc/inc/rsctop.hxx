@@ -24,15 +24,20 @@
 #include <rschash.hxx>
 #include <rscclobj.hxx>
 #include <rsc/rscsfx.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
-typedef sal_uInt32 RSCVAR;
-#define VAR_POINTER     0x0001
-#define VAR_HIDDEN      0x0002
-#define VAR_NODATAINST  0x0004
-#define VAR_NORC        0x0008
-#define VAR_SVDYNAMIC   0x0010
-#define VAR_NOENUM      0x0020
-#define VAR_EXTENDABLE  0x0040  /* class derivation can all be given */
+enum class RSCVAR {
+    NONE        = 0x0000,
+    Pointer     = 0x0001,
+    Hidden      = 0x0002,
+    NoDataInst  = 0x0004,
+    NoRc        = 0x0008,
+    SvDynamic   = 0x0010,
+    NoEnum      = 0x0020
+};
+namespace o3tl {
+    template<> struct typed_flags<RSCVAR> : is_typed_flags<RSCVAR, 0x007f> {};
+}
 
 class RscTop : public RefNode
 {
@@ -83,7 +88,7 @@ public:
                     // sets the variable
     virtual ERRTYPE SetVariable( Atom nVarName, RscTop * pClass,
                                  RSCINST * pDflt = nullptr,
-                                 RSCVAR nVarType = 0, sal_uInt32 nMask = 0,
+                                 RSCVAR nVarType = RSCVAR::NONE, sal_uInt32 nMask = 0,
                                  Atom nDataBaseName = InvalidAtom );
 
                     // enumerate all variables

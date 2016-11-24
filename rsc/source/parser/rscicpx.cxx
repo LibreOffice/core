@@ -57,7 +57,7 @@ RscTop * RscTypCont::InitClassMgr()
         pClassMgr->SetVariable( nId, pCont );
     };
     nId = aNmTb.Put( "Comment", VARNAME );
-    pClassMgr->SetVariable( nId, &aString, nullptr, VAR_NORC );
+    pClassMgr->SetVariable( nId, &aString, nullptr, RSCVAR::NoRc );
 
     pClass->SetTypeClass( pClassMgr );
 
@@ -92,7 +92,7 @@ RscTop * RscTypCont::InitClassBitmap( RscTop * pSuper )
 
     // the class RscSysDepend handles variables "FILE" in a specific way
     nId = aNmTb.Put( "File", VARNAME );
-    pClassBitmap->SetVariable( nId, &aLangString, nullptr, VAR_NORC );
+    pClassBitmap->SetVariable( nId, &aLangString, nullptr, RSCVAR::NoRc );
 
     return pClassBitmap;
 }
@@ -110,7 +110,7 @@ RscTop * RscTypCont::InitClassImage( RscTop * pSuper, RscTop * pClassBitmap )
 
     // initialize variables
     nId = aNmTb.Put( "ImageBitmap", VARNAME );
-    pClassImage->SetVariable( nId, pClassBitmap, nullptr, 0, (sal_uInt32)RscImageFlags::ImageBitmap );
+    pClassImage->SetVariable( nId, pClassBitmap, nullptr, RSCVAR::NONE, (sal_uInt32)RscImageFlags::ImageBitmap );
 
     return pClassImage;
 }
@@ -133,14 +133,14 @@ RscTop * RscTypCont::InitClassImageList( RscTop * pSuper, RscCont * pStrLst )
     pCont->SetTypeClass( &aIdUShort );
     aBaseLst.push_back( pCont );
     nId = aNmTb.Put( "IdList", VARNAME );
-    pClassImageList->SetVariable( nId, pCont, nullptr, 0,
+    pClassImageList->SetVariable( nId, pCont, nullptr, RSCVAR::NONE,
                                       (sal_uInt32)RscImageListFlags::IdList );
 
     nId = aNmTb.Put( "FileList", VARNAME );
     pClassImageList->SetVariable( nId, pStrLst );
 
     nId = aNmTb.Put( "IdCount", VARNAME );
-    pClassImageList->SetVariable( nId, &aUShort, nullptr, 0,
+    pClassImageList->SetVariable( nId, &aUShort, nullptr, RSCVAR::NONE,
                                   (sal_uInt32)RscImageListFlags::IdCount );
     return pClassImageList;
 }
@@ -177,7 +177,7 @@ RscTop * RscTypCont::InitClassKeyCode( RscTop * pSuper, RscEnum * pKey )
         // add variable
         nVarId = aNmTb.Put( "_ModifierFlags", VARNAME );
         pClassKeyCode->SetVariable( nVarId, pFlag, nullptr,
-                                                                        VAR_HIDDEN | VAR_NOENUM );
+                                                                        RSCVAR::Hidden | RSCVAR::NoEnum );
 
         // add client variables
         aBaseLst.push_back(
@@ -185,14 +185,14 @@ RscTop * RscTypCont::InitClassKeyCode( RscTop * pSuper, RscEnum * pKey )
         );
         nId = aNmTb.Put( "Shift", VARNAME );
         pClassKeyCode->SetVariable( nId, pClient, nullptr,
-                                   VAR_NODATAINST, 0, nVarId );
+                                   RSCVAR::NoDataInst, 0, nVarId );
 
         aBaseLst.push_back(
             pClient = new RscClient( pHS->getID( "sal_Bool" ), RSC_NOTYPE, pFlag, nMod1Id )
         );
         nId = aNmTb.Put( "Modifier1", VARNAME );
         pClassKeyCode->SetVariable( nId, pClient, nullptr,
-                                   VAR_NODATAINST, 0, nVarId );
+                                   RSCVAR::NoDataInst, 0, nVarId );
 
 
         aBaseLst.push_back(
@@ -200,7 +200,7 @@ RscTop * RscTypCont::InitClassKeyCode( RscTop * pSuper, RscEnum * pKey )
         );
         nId = aNmTb.Put( "Modifier2", VARNAME );
         pClassKeyCode->SetVariable( nId, pClient, nullptr,
-                                   VAR_NODATAINST, 0, nVarId );
+                                   RSCVAR::NoDataInst, 0, nVarId );
     }
     {
         Atom        nVarId;
@@ -247,10 +247,10 @@ RscTop * RscTypCont::InitClassMenuItem( RscTop * pSuper )
 
     // initialize variables
     nId = aNmTb.Put( "Separator", VARNAME );
-    pClassMenuItem->SetVariable( nId, &aBool, nullptr, 0,
+    pClassMenuItem->SetVariable( nId, &aBool, nullptr, RSCVAR::NONE,
                                  (sal_uInt32)RscMenuItem::Separator );
     nId = aNmTb.Put( "Identifier", VARNAME );
-    pClassMenuItem->SetVariable( nId, &aIdNoZeroUShort, nullptr, 0,
+    pClassMenuItem->SetVariable( nId, &aIdNoZeroUShort, nullptr, RSCVAR::NONE,
                                  (sal_uInt32)RscMenuItem::Id );
     {
         RscFlag *   pFlag;
@@ -275,7 +275,7 @@ RscTop * RscTypCont::InitClassMenuItem( RscTop * pSuper )
         // add variable
         nVarId = aNmTb.Put( "_MenuItemFlags", VARNAME );
         pClassMenuItem->SetVariable( nVarId, pFlag, nullptr,
-                                     VAR_HIDDEN | VAR_NOENUM,
+                                     RSCVAR::Hidden | RSCVAR::NoEnum,
                                      (sal_uInt32)RscMenuItem::Status );
 
         // add client variables
@@ -284,51 +284,51 @@ RscTop * RscTypCont::InitClassMenuItem( RscTop * pSuper )
         );
         nId = aNmTb.Put( "Checkable", VARNAME );
         pClassMenuItem->SetVariable( nId, pClient, nullptr,
-                                     VAR_NODATAINST, 0, nVarId );
+                                     RSCVAR::NoDataInst, 0, nVarId );
 
         aBaseLst.push_back(
             pClient = new RscClient( pHS->getID( "sal_Bool" ), RSC_NOTYPE, pFlag, nAutoCheckId )
         );
         nId = aNmTb.Put( "AutoCheck", VARNAME );
         pClassMenuItem->SetVariable( nId, pClient, nullptr,
-                                     VAR_NODATAINST, 0, nVarId );
+                                     RSCVAR::NoDataInst, 0, nVarId );
 
         aBaseLst.push_back(
             pClient = new RscClient( pHS->getID( "sal_Bool" ), RSC_NOTYPE, pFlag, nRadioCheckId )
         );
         nId = aNmTb.Put( "RadioCheck", VARNAME );
         pClassMenuItem->SetVariable( nId, pClient, nullptr,
-                                     VAR_NODATAINST, 0, nVarId );
+                                     RSCVAR::NoDataInst, 0, nVarId );
 
         aBaseLst.push_back(
             pClient = new RscClient( pHS->getID( "sal_Bool" ), RSC_NOTYPE, pFlag, nAboutId )
         );
         nId = aNmTb.Put( "About", VARNAME );
         pClassMenuItem->SetVariable( nId, pClient, nullptr,
-                                     VAR_NODATAINST, 0, nVarId );
+                                     RSCVAR::NoDataInst, 0, nVarId );
 
         aBaseLst.push_back(
             pClient = new RscClient( pHS->getID( "sal_Bool" ), RSC_NOTYPE, pFlag, nHelpId )
         );
         nId = aNmTb.Put( "Help", VARNAME );
         pClassMenuItem->SetVariable( nId, pClient, nullptr,
-                                     VAR_NODATAINST, 0, nVarId );
+                                     RSCVAR::NoDataInst, 0, nVarId );
 
     }
     nId = aNmTb.Put( "Text", VARNAME );
-    pClassMenuItem->SetVariable( nId, &aLangString, nullptr, 0,
+    pClassMenuItem->SetVariable( nId, &aLangString, nullptr, RSCVAR::NONE,
                                  (sal_uInt32)RscMenuItem::Text );
     nId = aNmTb.Put( "HelpText", VARNAME );
-    pClassMenuItem->SetVariable( nId, &aLangString, nullptr, 0,
+    pClassMenuItem->SetVariable( nId, &aLangString, nullptr, RSCVAR::NONE,
                                  (sal_uInt32)RscMenuItem::HelpText );
     nId = aNmTb.Put( "HelpID", VARNAME );
-    pClassMenuItem->SetVariable( nId, &aStringLiteral, nullptr, 0,
+    pClassMenuItem->SetVariable( nId, &aStringLiteral, nullptr, RSCVAR::NONE,
                                  (sal_uInt32)RscMenuItem::HelpId );
     nId = aNmTb.Put( "Disable", VARNAME );
-    pClassMenuItem->SetVariable( nId, &aBool, nullptr, 0,
+    pClassMenuItem->SetVariable( nId, &aBool, nullptr, RSCVAR::NONE,
                                  (sal_uInt32)RscMenuItem::Disable );
     nId = aNmTb.Put( "Command", VARNAME );
-    pClassMenuItem->SetVariable( nId, &aString, nullptr, 0,
+    pClassMenuItem->SetVariable( nId, &aString, nullptr, RSCVAR::NONE,
                                     (sal_uInt32)RscMenuItem::Command );
 
     return pClassMenuItem;
@@ -353,10 +353,10 @@ RscTop * RscTypCont::InitClassMenu( RscTop * pSuper,
         aBaseLst.push_back( pCont = new RscCont( pHS->getID( "ContMenuItem" ), RSC_NOTYPE ) );
         pCont->SetTypeClass( pClassMenuItem );
         nId = aNmTb.Put( "ItemList", VARNAME );
-        pClassMenu->SetVariable( nId, pCont, nullptr, 0, (sal_uInt32)RscMenu::Items );
+        pClassMenu->SetVariable( nId, pCont, nullptr, RSCVAR::NONE, (sal_uInt32)RscMenu::Items );
     }
     nId = aNmTb.Put( "Text", VARNAME );
-    pClassMenu->SetVariable( nId, &aLangString, nullptr, 0, (sal_uInt32)RscMenu::Text );
+    pClassMenu->SetVariable( nId, &aLangString, nullptr, RSCVAR::NONE, (sal_uInt32)RscMenu::Text );
 
     return pClassMenu;
 }

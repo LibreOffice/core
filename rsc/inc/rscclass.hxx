@@ -62,7 +62,7 @@ public:
     void            Pre_dtor() override;
     ERRTYPE         SetVariable( Atom nVarName, RscTop * pClass,
                                  RSCINST * pDflt = nullptr,
-                                 RSCVAR nVarType = 0, sal_uInt32 nMask = 0,
+                                 RSCVAR nVarType = RSCVAR::NONE, sal_uInt32 nMask = 0,
                                  Atom nDataBaseName = InvalidAtom ) override;
     virtual void    EnumVariables( void * pData, VarEnumCallbackProc ) override;
     RSCINST         GetVariable( const RSCINST & rInst, Atom nVarName,
