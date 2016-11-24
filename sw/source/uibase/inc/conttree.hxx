@@ -85,9 +85,8 @@ class SwContentTree
     ContentTypeId       m_nLastSelType;
     sal_uInt8           m_nOutlineLevel;
 
-    bool                m_bIsActive           :1;
-    bool                m_bIsConstant         :1;
-    bool                m_bIsHidden           :1;
+    enum class State { ACTIVE, CONSTANT, HIDDEN } m_eState;
+
     bool                m_bDocChgdInDragging  :1;
     bool                m_bIsInternalDrag     :1;
     bool                m_bIsRoot             :1;
@@ -184,9 +183,7 @@ public:
     void            SetConstantShell(SwWrtShell* pSh);
 
     SwWrtShell*     GetWrtShell()
-                        {return m_bIsActive||m_bIsConstant ?
-                                    m_pActiveShell :
-                                        m_pHiddenShell;}
+        { return State::HIDDEN == m_eState ? m_pHiddenShell : m_pActiveShell; }
 
     static bool     IsInDrag() {return bIsInDrag;}
 
@@ -205,9 +202,9 @@ public:
     /** folded together will not be glidled */
     void            HideTree();
 
-    bool            IsConstantView() {return m_bIsConstant;}
-    bool            IsActiveView()   {return m_bIsActive;}
-    bool            IsHiddenView()   {return m_bIsHidden;}
+    bool            IsConstantView() { return State::CONSTANT == m_eState; }
+    bool            IsActiveView()   { return State::ACTIVE == m_eState; }
+    bool            IsHiddenView()   { return State::HIDDEN == m_eState; }
 
     const SwWrtShell*   GetActiveWrtShell() {return m_pActiveShell;}
     SwWrtShell*         GetHiddenWrtShell() {return m_pHiddenShell;}
