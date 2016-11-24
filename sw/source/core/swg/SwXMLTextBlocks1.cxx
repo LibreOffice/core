@@ -377,7 +377,7 @@ sal_uLong SwXMLTextBlocks::PutBlockText( const OUString& rShort, const OUString&
     if ( xTrans.is() )
         xTrans->commit();
 
-    if (! (nFlags & SWXML_NOROOTCOMMIT) )
+    if (! (nFlags & SwXmlFlags::NoRootCommit) )
     {
         uno::Reference < embed::XTransactedObject > xTmpTrans( xBlkRoot, uno::UNO_QUERY );
         if ( xTmpTrans.is() )

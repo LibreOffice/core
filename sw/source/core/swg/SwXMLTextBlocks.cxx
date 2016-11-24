@@ -57,7 +57,7 @@ void SwXMLTextBlocks::ResetBlockMode ( )
 
 SwXMLTextBlocks::SwXMLTextBlocks( const OUString& rFile )
     : SwImpBlocks(rFile)
-    , nFlags(0)
+    , nFlags(SwXmlFlags::NONE)
 {
     SwDocShell* pDocSh = new SwDocShell ( SfxObjectCreateMode::INTERNAL );
     if( !pDocSh->DoInitNew() )
@@ -100,7 +100,7 @@ SwXMLTextBlocks::SwXMLTextBlocks( const OUString& rFile )
 
 SwXMLTextBlocks::SwXMLTextBlocks( const uno::Reference < embed::XStorage >& rStg, const OUString& rName )
     : SwImpBlocks( rName )
-    , nFlags(0)
+    , nFlags(SwXmlFlags::NONE)
 {
     SwDocShell* pDocSh = new SwDocShell ( SfxObjectCreateMode::INTERNAL );
     if( !pDocSh->DoInitNew() )
@@ -319,9 +319,7 @@ sal_uLong SwXMLTextBlocks::BeginPutDoc( const OUString& rShort, const OUString& 
 sal_uLong SwXMLTextBlocks::PutBlock( SwPaM& , const OUString& )
 {
     sal_uLong nRes = 0; // dead variable, this always returns 0
-    sal_uInt16 nCommitFlags = nFlags & (SWXML_CONVBLOCK|SWXML_NOROOTCOMMIT);
-
-    nFlags |= nCommitFlags;
+    SwXmlFlags nCommitFlags = nFlags;
 
     WriterRef xWrt;
     ::GetXMLWriter ( OUString(), GetBaseURL(), xWrt);
@@ -379,7 +377,7 @@ sal_uLong SwXMLTextBlocks::PutBlock( SwPaM& , const OUString& )
         if ( xTrans.is() )
             xTrans->commit();
         xRoot = nullptr;
-        if ( !nCommitFlags )
+        if ( nCommitFlags == SwXmlFlags::NONE )
         {
             uno::Reference < embed::XTransactedObject > xTmpTrans( xBlkRoot, uno::UNO_QUERY );
             if ( xTmpTrans.is() )
@@ -427,14 +425,14 @@ bool SwXMLTextBlocks::PutMuchEntries( bool bOn )
             bRet = 0 == OpenFile( false );
             if( bRet )
             {
-                nFlags |= SWXML_NOROOTCOMMIT;
+                nFlags |= SwXmlFlags::NoRootCommit;
                 bInPutMuchBlocks = true;
             }
         }
     }
     else if( bInPutMuchBlocks )
     {
-        nFlags &= ~SWXML_NOROOTCOMMIT;
+        nFlags &= ~SwXmlFlags::NoRootCommit;
         if( xBlkRoot.is() )
         {
             try

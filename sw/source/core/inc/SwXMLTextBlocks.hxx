@@ -23,19 +23,26 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfile.hxx>
 #include <swblocks.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 class SwPaM;
 class SwDoc;
 class SvxMacroTableDtor;
 
-#define SWXML_CONVBLOCK     0x0001
-#define SWXML_NOROOTCOMMIT  0x0002
+enum class SwXmlFlags {
+    NONE         = 0x0000,
+    ConvBlock    = 0x0001,
+    NoRootCommit = 0x0002,
+};
+namespace o3tl {
+    template<> struct typed_flags<SwXmlFlags> : is_typed_flags<SwXmlFlags, 0x0003> {};
+}
 
 class SwXMLTextBlocks : public SwImpBlocks
 {
 protected:
     SfxObjectShellRef       xDocShellRef;
-    sal_uInt16              nFlags;
+    SwXmlFlags              nFlags;
     OUString                aPackageName;
     tools::SvRef<SfxMedium> xMedium;
 
