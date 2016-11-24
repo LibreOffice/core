@@ -29,10 +29,9 @@
 enum class RscMenu {
     Items                  = 0x01,
     Text                   = 0x02,
-    DefaultItemId          = 0x04
 };
 namespace o3tl {
-    template<> struct typed_flags<RscMenu> : is_typed_flags<RscMenu, 0x07> {};
+    template<> struct typed_flags<RscMenu> : is_typed_flags<RscMenu, 0x03> {};
 }
 
 // "MenuItem" resource options:

@@ -123,7 +123,6 @@ Menu::Menu()
       nEventId(nullptr),
       mnHighlightedItemPos(ITEMPOS_INVALID),
       nMenuFlags(MenuFlags::NONE),
-      nDefaultItem(0),
       nSelectedId(0),
       nImgOrChkPos(0),
       nTextPos(0),
@@ -1204,7 +1203,6 @@ Menu& Menu::operator=( const Menu& rMenu )
     for ( sal_uInt16 i = 0; i < nCount; i++ )
         ImplCopyItem( this, rMenu, i, MENU_APPEND );
 
-    nDefaultItem = rMenu.nDefaultItem;
     aActivateHdl = rMenu.aActivateHdl;
     aDeactivateHdl = rMenu.aDeactivateHdl;
     aSelectHdl = rMenu.aSelectHdl;
@@ -2742,8 +2740,6 @@ PopupMenu::PopupMenu( const ResId& rResId )
     {
         aTitleText = ReadStringRes();
     }
-    if( nObjMask & RscMenu::DefaultItemId )
-        SetDefaultItem( sal::static_int_cast<sal_uInt16>(ReadLongRes()) );
 }
 
 PopupMenu::PopupMenu( const PopupMenu& rMenu )

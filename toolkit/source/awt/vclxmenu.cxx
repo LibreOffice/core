@@ -40,12 +40,14 @@
 
 VCLXMenu::VCLXMenu()
     : maMenuListeners( *this )
+    , mnDefaultItem(0)
 {
     mpMenu = nullptr;
 }
 
 VCLXMenu::VCLXMenu( Menu* pMenu )
     : maMenuListeners( *this )
+    , mnDefaultItem(0)
 {
     mpMenu = pMenu;
 }
@@ -476,20 +478,17 @@ void VCLXMenu::setDefaultItem(
     sal_Int16 nItemId )
 throw(css::uno::RuntimeException, std::exception)
 {
-    SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    if ( mpMenu )
-        mpMenu->SetDefaultItem( nItemId );
+    mnDefaultItem = nItemId;
 }
 
 sal_Int16 VCLXMenu::getDefaultItem(  )
 throw(css::uno::RuntimeException, std::exception)
 {
-    SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    return mpMenu ? mpMenu->GetDefaultItem() : 0;
+    return mnDefaultItem;
 }
 
 void VCLXMenu::checkItem(

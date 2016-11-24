@@ -63,6 +63,7 @@ private:
     VclPtr<Menu>            mpMenu;
     MenuListenerMultiplexer maMenuListeners;
     PopupMenuRefList        maPopupMenuRefs;
+    sal_Int16               mnDefaultItem;
 
 protected:
     ::osl::Mutex&           GetMutex() { return maMutex; }

@@ -357,9 +357,6 @@ RscTop * RscTypCont::InitClassMenu( RscTop * pSuper,
     }
     nId = aNmTb.Put( "Text", VARNAME );
     pClassMenu->SetVariable( nId, &aLangString, nullptr, 0, (sal_uInt32)RscMenu::Text );
-    nId = aNmTb.Put( "DefaultItemId", VARNAME );
-    pClassMenu->SetVariable( nId, &aIdUShort, nullptr, 0,
-                                 (sal_uInt32)RscMenu::DefaultItemId );
 
     return pClassMenu;
 }

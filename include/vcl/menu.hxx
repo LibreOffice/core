@@ -150,7 +150,6 @@ private:
     ImplSVEvent* nEventId;
     sal_uInt16 mnHighlightedItemPos; // for native menus: keeps track of the highlighted item
     MenuFlags nMenuFlags;
-    sal_uInt16 nDefaultItem;       // Id of default item
     sal_uInt16 nSelectedId;
 
     // for output:
@@ -270,9 +269,6 @@ public:
     MenuItemType GetItemType( sal_uInt16 nPos ) const;
     sal_uInt16 GetCurItemId() const { return nSelectedId;}
     OString GetCurItemIdent() const;
-
-    void SetDefaultItem( sal_uInt16 nItemId )    { nDefaultItem = nItemId; }
-    sal_uInt16 GetDefaultItem() const              { return nDefaultItem; }
 
     void SetItemBits( sal_uInt16 nItemId, MenuItemBits nBits );
     MenuItemBits GetItemBits( sal_uInt16 nItemId ) const;

@@ -329,7 +329,6 @@ String RID_STR_SHAREMACROSDIALOGS
 Menu RID_POPUP_BRKPROPS
 {
     Text [ en-US ] = "Properties" ;
-    DefaultItemId = RID_BRKPROPS ;
     ItemList =
     {
         MenuItem
@@ -367,7 +366,6 @@ Menu RID_POPUP_BRKDLG
 
 Menu RID_POPUP_TABBAR
 {
-    DefaultItemId = SID_BASICIDE_HIDECURPAGE ;
     ItemList =
     {
         MenuItem
