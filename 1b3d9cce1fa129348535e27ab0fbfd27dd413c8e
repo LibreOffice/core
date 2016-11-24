@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a74a57a_8473304d",
+        "filename": "comphelper/source/misc/threadpool.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 296,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-11-24T14:05:00Z",
+      "side": 1,
+      "message": "should \"if\" not \"while\" ?\n\nunless there is something weird going on, in which case a comment might be good :-)",
+      "revId": "1b3d9cce1fa129348535e27ab0fbfd27dd413c8e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
