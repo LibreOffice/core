@@ -91,6 +91,7 @@
 
 #include <IDocumentStylePoolAccess.hxx>
 #include <numrule.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 #include <rtl/strbuf.hxx>
 
@@ -107,12 +108,18 @@ enum class Css1Background {
     Section = 5
 };
 
-#define CSS1_FRMSIZE_WIDTH      0x01
-#define CSS1_FRMSIZE_VARHEIGHT  0x02
-#define CSS1_FRMSIZE_MINHEIGHT  0x04
-#define CSS1_FRMSIZE_FIXHEIGHT  0x08
-#define CSS1_FRMSIZE_ANYHEIGHT  0x0e
-#define CSS1_FRMSIZE_PIXEL      0x10
+enum class Css1FrameSize {
+    NONE       = 0x00,
+    Width      = 0x01,
+    VarHeight  = 0x02,
+    MinHeight  = 0x04,
+    FixHeight  = 0x08,
+    AnyHeight  = 0x0e,
+    Pixel      = 0x10,
+};
+namespace o3tl {
+    template<> struct typed_flags<Css1FrameSize> : is_typed_flags<Css1FrameSize, 0x1f> {};
+}
 
 #define DOT_LEADERS_MAX_WIDTH   18
 
@@ -149,7 +156,7 @@ static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt,
                                  const OUString *pGraphicName );
 static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt );
 static Writer& OutCSS1_SwFormatFrameSize( Writer& rWrt, const SfxPoolItem& rHt,
-                                     sal_uInt16 nMode );
+                                     Css1FrameSize nMode );
 static Writer& OutCSS1_SvxFormatBreak_SwFormatPDesc_SvxFormatKeep( Writer& rWrt,
                                         const SfxItemSet& rItemSet,
                                         bool bDeep );
@@ -2110,13 +2117,13 @@ void SwHTMLWriter::OutCSS1_FrameFormatOptions( const SwFrameFormat& rFrameFormat
                     "Export absolute size" );
             OSL_ENSURE( HTML_FRMOPT_ANYSIZE & nFrameOpts,
                     "Export every size" );
-            sal_uInt16 nMode = 0;
+            Css1FrameSize nMode = Css1FrameSize::NONE;
             if( nFrameOpts & HTML_FRMOPT_S_WIDTH )
-                nMode |= CSS1_FRMSIZE_WIDTH;
+                nMode |= Css1FrameSize::Width;
             if( nFrameOpts & HTML_FRMOPT_S_HEIGHT )
-                nMode |= (CSS1_FRMSIZE_MINHEIGHT|CSS1_FRMSIZE_FIXHEIGHT);
+                nMode |= (Css1FrameSize::MinHeight|Css1FrameSize::FixHeight);
             if( nFrameOpts & HTML_FRMOPT_S_PIXSIZE )
-                nMode |= CSS1_FRMSIZE_PIXEL;
+                nMode |= Css1FrameSize::Pixel;
 
             OutCSS1_SwFormatFrameSize( *this, rFrameFormat.GetFrameSize(), nMode );
         }
@@ -2923,13 +2930,13 @@ static Writer& OutCSS1_SwFormatDrop( Writer& rWrt, const SfxPoolItem& rHt )
 }
 
 static Writer& OutCSS1_SwFormatFrameSize( Writer& rWrt, const SfxPoolItem& rHt,
-                                     sal_uInt16 nMode )
+                                     Css1FrameSize nMode )
 {
     SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
 
     const SwFormatFrameSize& rFSItem = static_cast<const SwFormatFrameSize&>(rHt);
 
-    if( nMode & CSS1_FRMSIZE_WIDTH )
+    if( nMode & Css1FrameSize::Width )
     {
         sal_uInt8 nPrcWidth = rFSItem.GetWidthPercent();
         if( nPrcWidth )
@@ -2937,7 +2944,7 @@ static Writer& OutCSS1_SwFormatFrameSize( Writer& rWrt, const SfxPoolItem& rHt,
             OString sOut(OString::number(nPrcWidth) + "%");
             rHTMLWrt.OutCSS1_PropertyAscii(sCSS1_P_width, sOut);
         }
-        else if( nMode & CSS1_FRMSIZE_PIXEL )
+        else if( nMode & Css1FrameSize::Pixel )
         {
             rHTMLWrt.OutCSS1_PixelProperty( sCSS1_P_width,
                                             rFSItem.GetSize().Width(), false );
@@ -2949,19 +2956,19 @@ static Writer& OutCSS1_SwFormatFrameSize( Writer& rWrt, const SfxPoolItem& rHt,
         }
     }
 
-    if( nMode & CSS1_FRMSIZE_ANYHEIGHT )
+    if( nMode & Css1FrameSize::AnyHeight )
     {
         bool bOutHeight = false;
         switch( rFSItem.GetHeightSizeType() )
         {
         case ATT_FIX_SIZE:
-            bOutHeight = (nMode & CSS1_FRMSIZE_FIXHEIGHT) != 0;
+            bOutHeight = bool(nMode & Css1FrameSize::FixHeight);
             break;
         case ATT_MIN_SIZE:
-            bOutHeight = (nMode & CSS1_FRMSIZE_MINHEIGHT) != 0;
+            bOutHeight = bool(nMode & Css1FrameSize::MinHeight);
             break;
         case ATT_VAR_SIZE:
-            bOutHeight = (nMode & CSS1_FRMSIZE_VARHEIGHT) != 0;
+            bOutHeight = bool(nMode & Css1FrameSize::VarHeight);
             break;
         default:
             OSL_ENSURE( bOutHeight, "Hoehe wird nicht exportiert" );
@@ -2976,7 +2983,7 @@ static Writer& OutCSS1_SwFormatFrameSize( Writer& rWrt, const SfxPoolItem& rHt,
                 OString sOut(OString::number(nPrcHeight) + "%");
                 rHTMLWrt.OutCSS1_PropertyAscii(sCSS1_P_height, sOut);
             }
-            else if( nMode & CSS1_FRMSIZE_PIXEL )
+            else if( nMode & Css1FrameSize::Pixel )
             {
                 rHTMLWrt.OutCSS1_PixelProperty( sCSS1_P_height,
                                                 rFSItem.GetSize().Height(),
