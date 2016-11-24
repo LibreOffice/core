@@ -138,7 +138,6 @@ class GtkSalDisplay : public SalDisplay
     o3tl::enumarray<PointerStyle, GdkCursor*> m_aCursors;
     bool                            m_bStartupCompleted;
     bool                            m_bX11Display;
-    bool                            m_bOwnHiDpiScale;
 
     GdkCursor* getFromXBM( const unsigned char *pBitmap, const unsigned char *pMask,
                            int nWidth, int nHeight, int nXHot, int nYHot );
@@ -148,7 +147,6 @@ public:
 
     GdkDisplay* GetGdkDisplay() const { return m_pGdkDisplay; }
     bool        IsX11Display() const { return m_bX11Display; }
-    bool        IsOwnHiDpiScale() const { return m_bOwnHiDpiScale; }
 
     GtkSalSystem* getSystem() const { return m_pSys; }
 
