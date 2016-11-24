@@ -80,7 +80,7 @@ ScXMLFilterContext::ScXMLFilterContext( ScXMLImport& rImport,
             case XML_TOK_FILTER_ATTR_CONDITION_SOURCE_RANGE_ADDRESS :
             {
                 sal_Int32 nOffset(0);
-                if (ScRangeStringConverter::GetRangeFromString( aConditionSourceRangeAddress, sValue, pDoc, ::formula::FormulaGrammar::CONV_OOO, nOffset ))
+                if (ScRangeStringConverter::GetRangeFromString( aConditionSourceRangeAddress, sValue, pDoc, ::formula::FormulaGrammar::CONV_OOO, nOffset ) )
                     bConditionSourceRange = true;
             }
             break;

@@ -22,7 +22,6 @@
 
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlimp.hxx>
-#include <com/sun/star/table/CellRangeAddress.hpp>
 #include <com/sun/star/sheet/FilterOperator.hpp>
 
 #include "xmldrani.hxx"
@@ -48,7 +47,7 @@ class ScXMLFilterContext : public ScXMLImportContext
     ScXMLDatabaseRangeContext* pDatabaseRangeContext;
 
     ScAddress   aOutputPosition;
-    css::table::CellRangeAddress aConditionSourceRangeAddress;
+    ScRange     aConditionSourceRangeAddress;
     bool        bSkipDuplicates;
     bool        bCopyOutputData;
     bool        bConditionSourceRange;
