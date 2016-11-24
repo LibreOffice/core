@@ -1737,7 +1737,7 @@ void SmFontNode::CreateTextFromNode(OUString &rText)
         case TSIZE:
             {
                 rText += "size ";
-                switch (nSizeType)
+                switch (meSizeType)
                 {
                     case FontSizeType::PLUS:
                         rText += "+";
@@ -1756,7 +1756,7 @@ void SmFontNode::CreateTextFromNode(OUString &rText)
                         break;
                 }
                 rText += ::rtl::math::doubleToUString(
-                            static_cast<double>(aFontSize),
+                            static_cast<double>(maFontSize),
                             rtl_math_StringFormat_Automatic,
                             rtl_math_DecimalPlaces_Max, '.', true);
                 rText += " ";
@@ -1863,7 +1863,7 @@ void SmFontNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 
     switch (GetToken().eType)
     {   case TSIZE :
-            pNode->SetFontSize(aFontSize, nSizeType);
+            pNode->SetFontSize(maFontSize, meSizeType);
             break;
         case TSANS :
         case TSERIF :
@@ -1907,10 +1907,10 @@ void SmFontNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 }
 
 
-void SmFontNode::SetSizeParameter(const Fraction& rValue, FontSizeType Type)
+void SmFontNode::SetSizeParameter(const Fraction& rValue, FontSizeType eType)
 {
-    nSizeType = Type;
-    aFontSize = rValue;
+    meSizeType = eType;
+    maFontSize = rValue;
 }
 
 
