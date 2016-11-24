@@ -51,7 +51,7 @@ public:
     virtual                     ~SvtSysLocale_Impl() override;
 
     CharClass*                  GetCharClass();
-    virtual void                ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 ) override;
+    virtual void                ConfigurationChanged( utl::ConfigurationBroadcaster*, ConfigurationHints ) override;
 
 private:
     void                        setDateAcceptancePatternsConfig();
@@ -80,17 +80,17 @@ CharClass* SvtSysLocale_Impl::GetCharClass()
     return pCharClass;
 }
 
-void SvtSysLocale_Impl::ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 nHint )
+void SvtSysLocale_Impl::ConfigurationChanged( utl::ConfigurationBroadcaster*, ConfigurationHints nHint )
 {
     MutexGuard aGuard( SvtSysLocale::GetMutex() );
 
-    if ( nHint & SYSLOCALEOPTIONS_HINT_LOCALE )
+    if ( nHint & ConfigurationHints::Locale )
     {
         const LanguageTag& rLanguageTag = aSysLocaleOptions.GetRealLanguageTag();
         pLocaleData->setLanguageTag( rLanguageTag );
         GetCharClass()->setLanguageTag( rLanguageTag );
     }
-    if ( nHint & SYSLOCALEOPTIONS_HINT_DATEPATTERNS )
+    if ( nHint & ConfigurationHints::DatePatterns )
     {
         setDateAcceptancePatternsConfig();
     }

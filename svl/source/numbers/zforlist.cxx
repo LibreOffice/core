@@ -178,7 +178,7 @@ public:
     size_t                  Count()
                                 { return aFormatters.size(); }
 
-    virtual void            ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 ) override;
+    virtual void            ConfigurationChanged( utl::ConfigurationBroadcaster*, ConfigurationHints ) override;
 };
 
 SvNumberFormatterRegistry_Impl::SvNumberFormatterRegistry_Impl()
@@ -208,22 +208,22 @@ void SvNumberFormatterRegistry_Impl::Remove( SvNumberFormatter* pThis )
 }
 
 void SvNumberFormatterRegistry_Impl::ConfigurationChanged( utl::ConfigurationBroadcaster*,
-                                                           sal_uInt32 nHint)
+                                                           ConfigurationHints nHint)
 {
     ::osl::MutexGuard aGuard( SvNumberFormatter::GetMutex() );
 
-    if ( nHint & SYSLOCALEOPTIONS_HINT_LOCALE )
+    if ( nHint & ConfigurationHints::Locale )
     {
         for(SvNumberFormatter* pFormatter : aFormatters)
             pFormatter->ReplaceSystemCL( eSysLanguage );
         eSysLanguage = MsLangId::getRealLanguage( LANGUAGE_SYSTEM );
     }
-    if ( nHint & SYSLOCALEOPTIONS_HINT_CURRENCY )
+    if ( nHint & ConfigurationHints::Currency )
     {
         for(SvNumberFormatter* pFormatter : aFormatters)
             pFormatter->ResetDefaultSystemCurrency();
     }
-    if ( nHint & SYSLOCALEOPTIONS_HINT_DATEPATTERNS )
+    if ( nHint & ConfigurationHints::DatePatterns )
     {
         for(SvNumberFormatter* pFormatter : aFormatters)
             pFormatter->InvalidateDateAcceptancePatterns();

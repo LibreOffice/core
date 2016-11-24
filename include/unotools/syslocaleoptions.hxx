@@ -29,14 +29,6 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <unotools/options.hxx>
 
-// bits for broadcasting hints of changes in a SfxSimpleHint, may be combined
-const sal_uInt32 SYSLOCALEOPTIONS_HINT_LOCALE       = 0x00000001;
-const sal_uInt32 SYSLOCALEOPTIONS_HINT_CURRENCY     = 0x00000002;
-const sal_uInt32 SYSLOCALEOPTIONS_HINT_UILOCALE     = 0x00000004;
-const sal_uInt32 SYSLOCALEOPTIONS_HINT_DECSEP       = 0x00000008;
-const sal_uInt32 SYSLOCALEOPTIONS_HINT_DATEPATTERNS = 0x00000010;
-const sal_uInt32 SYSLOCALEOPTIONS_HINT_IGNORELANG   = 0x00000020;
-
 class SvtSysLocaleOptions_Impl;
 class SvtListener;
 namespace osl { class Mutex; }
@@ -46,7 +38,7 @@ class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtSysLocaleOptions : public utl::detai
     std::shared_ptr<SvtSysLocaleOptions_Impl>  pImpl;
 
     UNOTOOLS_DLLPRIVATE static  ::osl::Mutex&       GetMutex();
-    virtual void ConfigurationChanged( utl::ConfigurationBroadcaster* p, sal_uInt32 nHint ) override;
+    virtual void ConfigurationChanged( utl::ConfigurationBroadcaster* p, ConfigurationHints nHint ) override;
 
 public:
 

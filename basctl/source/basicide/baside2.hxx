@@ -457,7 +457,7 @@ private:
         Color GetColor (TokenType eType) const { return aColors[eType]; }
 
     private:
-        virtual void ConfigurationChanged (utl::ConfigurationBroadcaster*, sal_uInt32) override;
+        virtual void ConfigurationChanged (utl::ConfigurationBroadcaster*, ConfigurationHints) override;
         void NewConfig (bool bFirst);
 
     private:

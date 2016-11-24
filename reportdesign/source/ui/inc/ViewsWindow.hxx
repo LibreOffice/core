@@ -103,7 +103,7 @@ namespace rptui
         virtual void MouseButtonUp( const MouseEvent& rMEvt ) override;
 
         virtual void Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect ) override;
-        virtual void ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 ) override;
+        virtual void ConfigurationChanged( utl::ConfigurationBroadcaster*, ConfigurationHints ) override;
     public:
         OViewsWindow(
             OReportWindow* _pReportWindow);

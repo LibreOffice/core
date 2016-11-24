@@ -489,7 +489,7 @@ private:
 
     std::vector<std::unique_ptr<SdrExternalToolEdit>> m_ExternalEdits;
 
-    virtual void ConfigurationChanged( utl::ConfigurationBroadcaster* pCb, sal_uInt32 ) override;
+    virtual void ConfigurationChanged( utl::ConfigurationBroadcaster* pCb, ConfigurationHints ) override;
 
     void ConfigureAppBackgroundColor( svtools::ColorConfig* pColorConfig = nullptr );
 

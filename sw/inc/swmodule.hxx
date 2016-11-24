@@ -109,7 +109,7 @@ class SW_DLLPUBLIC SwModule: public SfxModule, public SfxListener, public utl::C
     // Catch hint for DocInfo.
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
-    virtual void        ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 ) override;
+    virtual void        ConfigurationChanged( utl::ConfigurationBroadcaster*, ConfigurationHints ) override;
 
 protected:
     // Envelopes, labels.

@@ -525,7 +525,7 @@ void OViewsWindow::unmarkAllObjects(OSectionView* _pSectionView)
     }
 }
 
-void OViewsWindow::ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32)
+void OViewsWindow::ConfigurationChanged( utl::ConfigurationBroadcaster*, ConfigurationHints)
 {
     ImplInitSettings();
     Invalidate();

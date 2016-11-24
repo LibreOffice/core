@@ -218,7 +218,7 @@ void OSqlEdit::startTimer()
         m_timerInvalidate.Start();
 }
 
-void OSqlEdit::ConfigurationChanged( utl::ConfigurationBroadcaster* pOption, sal_uInt32 )
+void OSqlEdit::ConfigurationChanged( utl::ConfigurationBroadcaster* pOption, ConfigurationHints )
 {
     assert( pOption == &m_ColorConfig );
     (void) pOption; // avoid warnings

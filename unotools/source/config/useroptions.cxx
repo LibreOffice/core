@@ -217,7 +217,7 @@ OUString SvtUserOptions::Impl::GetFullName () const
 
 void SvtUserOptions::Impl::Notify ()
 {
-    NotifyListeners(0);
+    NotifyListeners(ConfigurationHints::NONE);
 }
 
 bool SvtUserOptions::Impl::IsTokenReadonly (UserOptToken nToken) const

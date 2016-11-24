@@ -1424,10 +1424,10 @@ bool SdrView::BegMark(const Point& rPnt, bool bAddMark, bool bUnmark)
     }
 }
 
-void SdrView::ConfigurationChanged( ::utl::ConfigurationBroadcaster*p, sal_uInt32 nHint)
+void SdrView::ConfigurationChanged( ::utl::ConfigurationBroadcaster*p, ConfigurationHints nHint)
 {
     onAccessibilityOptionsChanged();
-     SdrCreateView::ConfigurationChanged(p, nHint);
+    SdrCreateView::ConfigurationChanged(p, nHint);
 }
 
 
