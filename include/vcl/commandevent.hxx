@@ -187,15 +187,15 @@ public:
 class VCL_DLLPUBLIC CommandModKeyData
 {
 private:
-    sal_uInt16          mnCode;
+    ModKeyFlags     mnCode;
 
 public:
-                    CommandModKeyData( sal_uInt16 nCode );
+                    CommandModKeyData( ModKeyFlags nCode );
 
-    bool            IsMod1()    const { return (mnCode & MODKEY_MOD1) != 0; }
-    bool            IsMod2()    const { return (mnCode & MODKEY_MOD2) != 0; }
-    bool            IsLeftShift() const { return (mnCode & MODKEY_LSHIFT) != 0; }
-    bool            IsRightShift() const { return (mnCode & MODKEY_RSHIFT) != 0; }
+    bool            IsMod1()       const { return bool(mnCode & ModKeyFlags::Mod1Msk); }
+    bool            IsMod2()       const { return bool(mnCode & ModKeyFlags::Mod2Msk); }
+    bool            IsLeftShift()  const { return bool(mnCode & ModKeyFlags::LeftShift); }
+    bool            IsRightShift() const { return bool(mnCode & ModKeyFlags::RightShift); }
 };
 
 enum class ShowDialogId

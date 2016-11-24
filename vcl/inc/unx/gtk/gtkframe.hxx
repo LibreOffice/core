@@ -186,7 +186,7 @@ class GtkSalFrame : public SalFrame
     SystemEnvData                   m_aSystemData;
     GtkSalGraphics                 *m_pGraphics;
     bool                            m_bGraphics;
-    sal_uInt16                      m_nKeyModifiers;
+    ModKeyFlags                     m_nKeyModifiers;
     GdkCursor                      *m_pCurrentCursor;
     GdkVisibilityState              m_nVisibility;
     PointerStyle                    m_ePointerStyle;

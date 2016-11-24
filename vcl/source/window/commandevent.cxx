@@ -100,7 +100,7 @@ CommandScrollData::CommandScrollData( long nDeltaX, long nDeltaY )
     mnDeltaY    = nDeltaY;
 }
 
-CommandModKeyData::CommandModKeyData( sal_uInt16 nCode )
+CommandModKeyData::CommandModKeyData( ModKeyFlags nCode )
 {
     mnCode = nCode;
 }

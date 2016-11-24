@@ -33,6 +33,7 @@ enum class InputContextFlags;
 enum class WindowStateMask;
 enum class WindowStateState;
 enum class ExtTextInputAttr;
+enum class ModKeyFlags;
 
 enum class SalEvent {
     NONE,
@@ -123,7 +124,7 @@ struct SalKeyModEvent
 {
     sal_uInt64      mnTime;         // Time in ms, when event is created
     sal_uInt16      mnCode;         // SV-Modifiercode (KEY_SHIFT|KEY_MOD1|KEY_MOD2)
-    sal_uInt16      mnModKeyCode;   // extended Modifier (MODKEY_LEFT,MODKEY_RIGHT,MODKEY_PRESS,MODKEY_RELEASE)
+    ModKeyFlags     mnModKeyCode;   // extended Modifier (MODKEY_LEFT,MODKEY_RIGHT,MODKEY_PRESS,MODKEY_RELEASE)
 };
 
 struct SalPaintEvent

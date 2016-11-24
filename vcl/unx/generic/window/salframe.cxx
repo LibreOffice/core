@@ -779,7 +779,7 @@ X11SalFrame::X11SalFrame( SalFrame *pParent, SalFrameStyleFlags nSalFrameStyle,
     nKeyCode_                   = 0;
     nKeyState_                  = 0;
     mbSendExtKeyModChange       = false;
-    mnExtKeyMod                 = 0;
+    mnExtKeyMod                 = ModKeyFlags::NONE;
 
     nShowState_                 = SHOWSTATE_UNKNOWN;
     nWidth_                     = 0;
@@ -3036,57 +3036,57 @@ long X11SalFrame::HandleKeyEvent( XKeyEvent *pEvent )
                 ||      nKeySym == XK_Super_L   || nKeySym == XK_Super_R )
     {
         SalKeyModEvent aModEvt;
-        aModEvt.mnModKeyCode = 0;
-        if( pEvent->type == KeyPress && mnExtKeyMod == 0 )
+        aModEvt.mnModKeyCode = ModKeyFlags::NONE;
+        if( pEvent->type == KeyPress && mnExtKeyMod == ModKeyFlags::NONE )
             mbSendExtKeyModChange = true;
         else if( pEvent->type == KeyRelease && mbSendExtKeyModChange )
         {
             aModEvt.mnModKeyCode = mnExtKeyMod;
-            mnExtKeyMod = 0;
+            mnExtKeyMod = ModKeyFlags::NONE;
         }
 
         // pressing just the ctrl key leads to a keysym of XK_Control but
         // the event state does not contain ControlMask. In the release
         // event it's the other way round: it does contain the Control mask.
         // The modifier mode therefore has to be adapted manually.
-        sal_uInt16 nExtModMask = 0;
+        ModKeyFlags nExtModMask = ModKeyFlags::NONE;
         sal_uInt16 nModMask = 0;
         switch( nKeySym )
         {
             case XK_Control_L:
-                nExtModMask = MODKEY_LMOD1;
+                nExtModMask = ModKeyFlags::LeftMod1;
                 nModMask = KEY_MOD1;
                 break;
             case XK_Control_R:
-                nExtModMask = MODKEY_RMOD1;
+                nExtModMask = ModKeyFlags::RightMod1;
                 nModMask = KEY_MOD1;
                 break;
             case XK_Alt_L:
-                nExtModMask = MODKEY_LMOD2;
+                nExtModMask = ModKeyFlags::LeftMod2;
                 nModMask = KEY_MOD2;
                 break;
             case XK_Alt_R:
-                nExtModMask = MODKEY_RMOD2;
+                nExtModMask = ModKeyFlags::RightMod2;
                 nModMask = KEY_MOD2;
                 break;
             case XK_Shift_L:
-                nExtModMask = MODKEY_LSHIFT;
+                nExtModMask = ModKeyFlags::LeftShift;
                 nModMask = KEY_SHIFT;
                 break;
             case XK_Shift_R:
-                nExtModMask = MODKEY_RSHIFT;
+                nExtModMask = ModKeyFlags::RightShift;
                 nModMask = KEY_SHIFT;
                 break;
             // Map Meta/Super keys to MOD3 modifier on all Unix systems
             // except Mac OS X
             case XK_Meta_L:
             case XK_Super_L:
-                nExtModMask = MODKEY_LMOD3;
+                nExtModMask = ModKeyFlags::LeftMod3;
                 nModMask = KEY_MOD3;
                 break;
             case XK_Meta_R:
             case XK_Super_R:
-                nExtModMask = MODKEY_RMOD3;
+                nExtModMask = ModKeyFlags::RightMod3;
                 nModMask = KEY_MOD3;
                 break;
         }
@@ -3319,7 +3319,7 @@ long X11SalFrame::HandleFocusEvent( XFocusChangeEvent *pEvent )
         {
             mbInputFocus = False;
             mbSendExtKeyModChange = false;
-            mnExtKeyMod = 0;
+            mnExtKeyMod = ModKeyFlags::NONE;
             return CallCallback( SalEvent::LoseFocus, nullptr );
         }
     }
