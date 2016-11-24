@@ -413,8 +413,8 @@ dump-deps-sort:
 	@$(SRCDIR)/bin/module-deps.pl -t $(MAKE) $(SRCDIR)/Makefile.gbuild
 
 define gb_Top_GbuildToIdeIntegration
-$(1)-ide-integration:
-	cd $(SRCDIR) && (LC_MESSAGES=C $(MAKE) cmd="$(MAKE) -npf Makefile.gbuild all" cmd || true) | $(SRCDIR)/bin/gbuild-to-ide --ide $(1)
+$(1)-ide-integration: gbuildtojson
+	cd $(SRCDIR) && $(SRCDIR)/bin/gbuild-to-ide --ide $(1) --make $(MAKE)
 
 endef
 
