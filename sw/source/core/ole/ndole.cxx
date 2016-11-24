@@ -690,15 +690,10 @@ public:
 
     void waitFinished()
     {
-        while(!isFinished() && !mbKilled)
-        {
-            // need to wait until the load in progress is finished.
-            // to do so, Application::Yield() is needed since the execution
-            // here means that the SolarMutex is locked, but the
-            // WorkerThreads need it to be able to continue and finish
-            // the running import
-            Application::Yield();
-        }
+        // need to wait until the load in progress is finished.
+        // WorkerThreads need the SolarMutex to be able to continue
+        // and finish the running import.
+        SolarMutexReleaser aReleaser;
         comphelper::ThreadPool::getSharedOptimalPool().waitUntilDone(mpTag);
     }
 };
