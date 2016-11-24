@@ -95,7 +95,6 @@ class SwContentTree
     bool                m_bIsOutlineMoveable  :1;
     bool                m_bViewHasChanged     :1;
     bool                m_bIsImageListInitialized : 1;
-    bool                m_bActiveDocModified :1;
 
     static bool         bIsInDrag;
 
