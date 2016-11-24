@@ -167,16 +167,6 @@ public:
                               RscTypCont * pTC, sal_uInt32 nTab, const char * ) override;
 };
 
-class RscBreakRange : public RscRange
-{
-    sal_Int32        nOutRange;
-public:
-                    RscBreakRange( Atom nId, sal_uInt32 nTypId );
-    void            SetOutRange( sal_Int32 nNumber ) { nOutRange = nNumber; }
-    RSCINST         Create( RSCINST * pInst, const RSCINST & rDfltInst, bool bOwnClass = false ) override;
-    ERRTYPE         SetNumber( const RSCINST &, sal_Int32 ) override;
-};
-
 #endif // INCLUDED_RSC_INC_RSCRANGE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

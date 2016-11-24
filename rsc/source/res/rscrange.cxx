@@ -412,32 +412,4 @@ void RscBool::WriteSrc( const RSCINST & rInst, FILE * fOutput,
         fprintf( fOutput, "FALSE" );
 }
 
-RscBreakRange::RscBreakRange( Atom nId, sal_uInt32 nTypeId )
-    : RscRange(nId, nTypeId), nOutRange(0xFFFFFFFF)
-{
-}
-
-ERRTYPE RscBreakRange::SetNumber( const RSCINST & rInst, sal_Int32 nValue )
-{
-    if( nValue == nOutRange )
-        return ERR_RSCRANGE_OUTDEFSET;
-    else
-        return RscRange::SetNumber( rInst, nValue );
-}
-
-RSCINST RscBreakRange::Create( RSCINST * pInst, const RSCINST & rDflt,
-                               bool bOwnClass )
-{
-    RSCINST aInst;
-    sal_Int32   l;
-
-    aInst = RscRange::Create( pInst, rDflt, bOwnClass );
-
-    GetNumber( aInst, &l );
-    if( l == nOutRange )
-        reinterpret_cast<RscRangeInst *>(aInst.pData)->nValue++;
-
-    return aInst;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
