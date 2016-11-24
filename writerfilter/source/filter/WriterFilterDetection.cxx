@@ -35,7 +35,6 @@ class WriterFilterDetection : public cppu::WeakImplHelper
 {
 public:
     explicit WriterFilterDetection();
-    ~WriterFilterDetection() override;
 
     //XExtendedFilterDetection
     OUString SAL_CALL detect(uno::Sequence<beans::PropertyValue>& Descriptor) throw (uno::RuntimeException, std::exception) override;
@@ -51,8 +50,6 @@ uno::Sequence<OUString> SAL_CALL WriterFilterDetection_getSupportedServiceNames(
 WriterFilterDetection::WriterFilterDetection()
 {
 }
-
-WriterFilterDetection::~WriterFilterDetection() = default;
 
 OUString WriterFilterDetection::detect(uno::Sequence<beans::PropertyValue>& rDescriptor) throw (uno::RuntimeException, std::exception)
 {

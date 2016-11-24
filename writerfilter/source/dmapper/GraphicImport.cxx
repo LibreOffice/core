@@ -80,7 +80,6 @@ class XInputStreamHelper : public cppu::WeakImplHelper<io::XInputStream>
     sal_Int32        m_nHeaderLength;
 public:
     XInputStreamHelper(const sal_uInt8* buf, size_t len);
-    virtual ~XInputStreamHelper() override;
 
     virtual ::sal_Int32 SAL_CALL readBytes( uno::Sequence< ::sal_Int8 >& aData, ::sal_Int32 nBytesToRead ) throw (io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException, std::exception) override;
     virtual ::sal_Int32 SAL_CALL readSomeBytes( uno::Sequence< ::sal_Int8 >& aData, ::sal_Int32 nMaxBytesToRead ) throw (io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException, std::exception) override;
@@ -98,11 +97,6 @@ XInputStreamHelper::XInputStreamHelper(const sal_uInt8* buf, size_t len) :
         {0x42, 0x4d, 0xe6, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00 };
     m_pBMPHeader = aHeader;
     m_nHeaderLength = 0;
-}
-
-
-XInputStreamHelper::~XInputStreamHelper()
-{
 }
 
 sal_Int32 XInputStreamHelper::readBytes( uno::Sequence<sal_Int8>& aData, sal_Int32 nBytesToRead )

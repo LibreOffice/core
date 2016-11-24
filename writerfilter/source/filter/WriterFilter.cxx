@@ -98,7 +98,6 @@ public:
     explicit WriterFilter(const uno::Reference<uno::XComponentContext>& rxContext)
         : m_xContext(rxContext)
     {}
-    ~WriterFilter() override = default;
 
     // XFilter
     sal_Bool SAL_CALL filter(const uno::Sequence<beans::PropertyValue>& rDescriptor) throw (uno::RuntimeException, std::exception) override;
