@@ -1062,20 +1062,20 @@ public:
  */
 class SmFontNode : public SmStructureNode
 {
-    FontSizeType nSizeType;
-    Fraction    aFontSize;
+    FontSizeType meSizeType;
+    Fraction     maFontSize;
 
 public:
     explicit SmFontNode(const SmToken &rNodeToken)
-    :   SmStructureNode(NFONT, rNodeToken)
+        : SmStructureNode(NFONT, rNodeToken)
+        , meSizeType(FontSizeType::MULTIPLY)
+        , maFontSize(1)
     {
-        nSizeType = FontSizeType::MULTIPLY;
-        aFontSize = Fraction(1L);
     }
 
     void SetSizeParameter(const Fraction &rValue, FontSizeType nType);
-    const Fraction & GetSizeParameter() const {return aFontSize;}
-    const FontSizeType& GetSizeType() const {return nSizeType;}
+    const Fraction & GetSizeParameter() const {return maFontSize;}
+    FontSizeType GetSizeType() const {return meSizeType;}
 
     virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell) override;
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
