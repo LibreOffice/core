@@ -51,21 +51,10 @@ private:
     typedef std::unordered_map< sal_GlyphId, sal_uInt8 > glyph_map_t;
     typedef std::list< glyph_map_t > glyph_list_t;
 
-    char_list_t         maCharList;
     glyph_list_t        maGlyphList;
 
     OString     GetGlyphSetName (sal_Int32 nGlyphSetID);
-    OString     GetCharSetName (sal_Int32 nGlyphSetID);
-    sal_Int32   GetGlyphSetEncoding (sal_Int32 nGlyphSetID);
-    OString     GetGlyphSetEncodingName (sal_Int32 nGlyphSetID);
 
-    bool        GetCharID (sal_Unicode nChar,
-                                unsigned char* nOutGlyphID, sal_Int32* nOutGlyphSetID);
-    bool        LookupCharID (sal_Unicode nChar,
-                                   unsigned char* nOutGlyphID, sal_Int32* nOutGlyphSetID);
-    bool        AddCharID (sal_Unicode nChar,
-                                unsigned char* nOutGlyphID,
-                                sal_Int32* nOutGlyphSetID);
     bool        GetGlyphID (sal_GlyphId nGlyphId, sal_Unicode nUnicode,
                                 unsigned char* nOutGlyphID, sal_Int32* nOutGlyphSetID);
     bool        LookupGlyphID (sal_GlyphId nGlyphId,
@@ -73,16 +62,8 @@ private:
     bool        AddGlyphID (sal_GlyphId nGlyphId, sal_Unicode nUnicode,
                                 unsigned char* nOutGlyphID,
                                 sal_Int32* nOutGlyphSetID);
-    static void     AddNotdef (char_map_t &rCharMap);
     static void     AddNotdef (glyph_map_t &rGlyphMap);
-    static unsigned char  GetAnsiMapping (sal_Unicode nUnicodeChar);
     static unsigned char  GetSymbolMapping (sal_Unicode nUnicodeChar);
-
-    void            ImplDrawText (PrinterGfx &rGfx, const Point& rPoint,
-                                  const sal_Unicode* pStr, sal_Int16 nLen);
-    void            ImplDrawText (PrinterGfx &rGfx, const Point& rPoint,
-                                  const sal_Unicode* pStr, sal_Int16 nLen,
-                                  const sal_Int32* pDeltaArray);
 
 public:
 
@@ -99,16 +80,12 @@ public:
                              const OString &rFontName);
     bool            IsVertical () { return mbVertical;}
 
-    void            DrawText (PrinterGfx &rGfx, const Point& rPoint,
-                              const sal_Unicode* pStr, sal_Int16 nLen,
-                              const sal_Int32* pDeltaArray);
     void            DrawGlyphs (PrinterGfx& rGfx,
                                 const Point& rPoint,
                                 const sal_GlyphId* pGlyphIds,
                                 const sal_Unicode* pUnicodes,
                                 sal_Int16 nLen,
-                                const sal_Int32* pDeltaArray,
-                                bool bUseGlyphs=true);
+                                const sal_Int32* pDeltaArray);
     void        PSUploadFont (osl::File& rOutFile, PrinterGfx &rGfx, bool bAsType42, std::list< OString >& rSuppliedFonts );
 };
 

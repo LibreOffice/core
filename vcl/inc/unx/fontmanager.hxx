@@ -357,22 +357,11 @@ public:
     // get a fonts glyph bounding box
     void getFontBoundingBox( fontID nFont, int& xMin, int& yMin, int& xMax, int& yMax );
 
-    // info whether an array of glyphs has vertical substitutions
-    void hasVerticalSubstitutions( fontID nFontID, const sal_Unicode* pCharacters,
-        int nCharacters, bool* pHasSubst ) const;
-
     // get a specific fonts metrics
 
-    // get metrics for a sal_Unicode range
-    // the user is responsible to allocate pArray large enough
-    bool getMetrics( fontID nFontID, sal_Unicode minCharacter, sal_Unicode maxCharacter, CharacterMetric* pArray, bool bVertical = false ) const;
     // get metrics for an array of sal_Unicode characters
     // the user is responsible to allocate pArray large enough
     bool getMetrics( fontID nFontID, const sal_Unicode* pString, int nLen, CharacterMetric* pArray ) const;
-
-    // evaluates copyright flags for TrueType fonts for printing/viewing
-    // type1 fonts do not have such a feature, so return for them is true
-    bool isFontDownloadingAllowedForPrinting( fontID nFont ) const;
 
     // creates a new font subset of an existing TrueType font
     // returns true in case of success, else false

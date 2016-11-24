@@ -102,7 +102,6 @@ public:
     }
 };
 
-class Font2;
 class GlyphSet;
 class PrinterJob;
 class PrintFontManager;
@@ -153,8 +152,6 @@ struct GraphicsStatus
 
     GraphicsStatus();
 };
-
-class Font2;
 
 class VCL_DLLPUBLIC PrinterGfx
 {
@@ -215,13 +212,6 @@ private:
     std::list< GraphicsStatus >     maGraphicsStack;
     GraphicsStatus& currentState() { return maGraphicsStack.front(); }
 
-    /* font */
-    friend class Font2;
-    int             getCharWidth (bool b_vert, sal_Unicode n_char,
-                                  CharacterMetric *p_bbox);
-    fontID          getCharMetric (const Font2 &rFont, sal_Unicode n_char,
-                                   CharacterMetric *p_bbox);
-
 public:
     /* graphics status update */
     void            PSSetColor ();
@@ -264,20 +254,10 @@ public:
                                 sal_Int16 nGlyphs, sal_Int16 nBytes,
                                 const sal_Int32* pDeltaArray = nullptr);
     void            PSComment (const sal_Char* pComment );
-    void            LicenseWarning (const Point& rPoint, const sal_Unicode* pStr,
-                                    sal_Int16 nLen, const sal_Int32* pDeltaArray);
 
     void            OnEndJob ();
     void            writeResources( osl::File* pFile, std::list< OString >& rSuppliedFonts );
     PrintFontManager& GetFontMgr () { return mrFontMgr; }
-
-    void            drawVerticalizedText (const Point& rPoint,
-                                          const sal_Unicode* pStr,
-                                          sal_Int16 nLen,
-                                          const sal_Int32* pDeltaArray );
-    void            drawText (const Point& rPoint,
-                              const sal_Unicode* pStr, sal_Int16 nLen,
-                              const sal_Int32* pDeltaArray = nullptr);
 
     void            drawGlyphs( const Point& rPoint,
                                 sal_GlyphId* pGlyphIds,
@@ -360,9 +340,6 @@ public:
     { return maVirtualStatus.mbArtItalic; }
     bool            GetArtificialBold() const
     { return maVirtualStatus.mbArtBold; }
-    void            DrawText (const Point& rPoint,
-                              const sal_Unicode* pStr, sal_Int16 nLen,
-                              const sal_Int32* pDeltaArray);
     void            SetTextColor (PrinterColor& rTextColor)
     { maTextColor = rTextColor; }
 
