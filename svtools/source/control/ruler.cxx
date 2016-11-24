@@ -1615,14 +1615,6 @@ bool Ruler::ImplHitTest( const Point& rPos, RulerSelection* pHitTest,
         }
     }
 
-    // everything left and right is outside and don't take this into account
-    if ( (nXTemp < mpData->nRulVirOff) || (nXTemp > mpData->nRulVirOff+mpData->nRulWidth) )
-    {
-        pHitTest->nPos = 0;
-        pHitTest->eType = RulerType::Outside;
-        return false;
-    }
-
     // test the borders
     int nBorderTolerance = 1;
     if(pHitTest->bExpandTest)
