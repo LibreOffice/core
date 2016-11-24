@@ -1576,7 +1576,7 @@ void GtkSalFrame::AllocateFrame()
 
 #if GTK_CHECK_VERSION(3,10,0)
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 14, 0)
-        int scale = getDisplay()->IsOwnHiDpiScale() ? 1 : gtk_widget_get_scale_factor(m_pWindow);
+        int scale = gtk_widget_get_scale_factor(m_pWindow);
 #else
         int scale = 1;
 #endif
