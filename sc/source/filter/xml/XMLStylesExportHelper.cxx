@@ -68,9 +68,9 @@ bool ScMyValidation::IsEqual(const ScMyValidation& aVal) const
     if (aVal.bIgnoreBlanks == bIgnoreBlanks &&
         aVal.bShowImputMessage == bShowImputMessage &&
         aVal.bShowErrorMessage == bShowErrorMessage &&
-        aVal.aBaseCell.Sheet == aBaseCell.Sheet &&
-        aVal.aBaseCell.Column == aBaseCell.Column &&
-        aVal.aBaseCell.Row == aBaseCell.Row &&
+        aVal.aBaseCell.Tab() == aBaseCell.Tab() &&
+        aVal.aBaseCell.Col() == aBaseCell.Col() &&
+        aVal.aBaseCell.Row() == aBaseCell.Row() &&
         aVal.aAlertStyle == aAlertStyle &&
         aVal.aValidationType == aValidationType &&
         aVal.aOperator == aOperator &&
@@ -143,7 +143,8 @@ void ScMyValidationsContainer::AddValidation(const uno::Any& aTempAny,
                 aValidation.sFormula1 = xCondition->getFormula1();
                 aValidation.sFormula2 = xCondition->getFormula2();
                 aValidation.aOperator = xCondition->getOperator();
-                aValidation.aBaseCell = xCondition->getSourcePosition();
+                table::CellAddress aCellAddress= xCondition->getSourcePosition();
+                aValidation.aBaseCell = ScAddress( static_cast<SCCOL>(aCellAddress.Column), static_cast<SCROW>(aCellAddress.Row), aCellAddress.Sheet );
             }
             //ScMyValidationRange aValidationRange;
             bool bEqualFound(false);
@@ -286,7 +287,7 @@ OUString ScMyValidationsContainer::GetCondition(ScXMLExport& rExport, const ScMy
     return sCondition;
 }
 
-OUString ScMyValidationsContainer::GetBaseCellAddress(ScDocument* pDoc, const table::CellAddress& aCell)
+OUString ScMyValidationsContainer::GetBaseCellAddress(ScDocument* pDoc, const ScAddress& aCell)
 {
     OUString sAddress;
     ScRangeStringConverter::GetStringFromAddress( sAddress, aCell, pDoc, ::formula::FormulaGrammar::CONV_OOO );
