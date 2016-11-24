@@ -693,7 +693,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
             // #i25686# printing should not be done asynchronously to prevent dangling offices
             // when mail merge is called as command line macro
             aMergeDesc.aPrintOptions = m_aPrintSettings;
-            aMergeDesc.bCreateSingleFile = false;
+            aMergeDesc.bCreateSingleFile = true;
         }
         break;
     case MailMergeType::SHELL:
