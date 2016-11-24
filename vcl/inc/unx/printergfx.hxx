@@ -365,8 +365,7 @@ public:
                               const sal_Int32* pDeltaArray);
     void            SetTextColor (PrinterColor& rTextColor)
     { maTextColor = rTextColor; }
-    sal_Int32       GetCharWidth (sal_uInt16 nFrom, sal_uInt16 nTo,
-                                  long *pWidthArray);
+
     // for CTL
     void            DrawGlyphs( const Point& rPoint,
                                 sal_GlyphId* pGlyphIds,
