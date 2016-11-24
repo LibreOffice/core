@@ -41,7 +41,6 @@ class CLiteral:
 {
 public:
     explicit CLiteral();
-    virtual ~CLiteral() override {}
 
     // css::lang::XServiceInfo:
     virtual OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException, std::exception) override;

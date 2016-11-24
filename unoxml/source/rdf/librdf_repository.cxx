@@ -695,8 +695,6 @@ public:
         , m_xName(i_xName)
     { };
 
-    virtual ~librdf_NamedGraph() override {}
-
     // css::rdf::XNode:
     virtual OUString SAL_CALL getStringValue()
         throw (uno::RuntimeException, std::exception) override;

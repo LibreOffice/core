@@ -44,10 +44,6 @@ namespace
         {
         }
 
-        virtual ~WeakEventListener() override
-        {
-        }
-
         virtual void SAL_CALL handleEvent(const css::uno::Reference<css::xml::dom::events::XEvent>& rEvent)
             throw(css::uno::RuntimeException, std::exception) override
         {

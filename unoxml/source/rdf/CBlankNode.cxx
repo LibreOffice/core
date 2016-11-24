@@ -39,7 +39,6 @@ class CBlankNode:
 {
 public:
     CBlankNode();
-    virtual ~CBlankNode() override {}
 
     // css::lang::XServiceInfo:
     virtual OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException, std::exception) override;
