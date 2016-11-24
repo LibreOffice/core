@@ -82,7 +82,7 @@ sal_Bool SAL_CALL SwAccessibleNoTextHyperlink::doAccessibleAction( sal_Int32 nIn
             SwViewShell *pVSh = xFrame->GetShell();
             if( pVSh )
             {
-                LoadURL( *pVSh, pMapObj->GetURL(), URLLOAD_NOFILTER,
+                LoadURL( *pVSh, pMapObj->GetURL(), LoadUrlFlags::NONE,
                          pMapObj->GetTarget() );
                 bRet = true;
             }
@@ -93,7 +93,7 @@ sal_Bool SAL_CALL SwAccessibleNoTextHyperlink::doAccessibleAction( sal_Int32 nIn
         SwViewShell *pVSh = xFrame->GetShell();
         if( pVSh )
         {
-            LoadURL( *pVSh, aURL.GetURL(), URLLOAD_NOFILTER,
+            LoadURL( *pVSh, aURL.GetURL(), LoadUrlFlags::NONE,
                      aURL.GetTargetFrameName() );
             bRet = true;
         }

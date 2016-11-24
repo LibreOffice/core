@@ -408,7 +408,7 @@ void SwWrtShell::ClickToField( const SwField& rField )
     m_bIsInClickToEdit = false;
 }
 
-void SwWrtShell::ClickToINetAttr( const SwFormatINetFormat& rItem, sal_uInt16 nFilter )
+void SwWrtShell::ClickToINetAttr( const SwFormatINetFormat& rItem, LoadUrlFlags nFilter )
 {
     if( rItem.GetValue().isEmpty() )
         return ;
@@ -436,7 +436,7 @@ void SwWrtShell::ClickToINetAttr( const SwFormatINetFormat& rItem, sal_uInt16 nF
     m_bIsInClickToEdit = false;
 }
 
-bool SwWrtShell::ClickToINetGrf( const Point& rDocPt, sal_uInt16 nFilter )
+bool SwWrtShell::ClickToINetGrf( const Point& rDocPt, LoadUrlFlags nFilter )
 {
     bool bRet = false;
     OUString sURL;
@@ -459,7 +459,7 @@ bool SwWrtShell::ClickToINetGrf( const Point& rDocPt, sal_uInt16 nFilter )
     return bRet;
 }
 
-void LoadURL( SwViewShell& rVSh, const OUString& rURL, sal_uInt16 nFilter,
+void LoadURL( SwViewShell& rVSh, const OUString& rURL, LoadUrlFlags nFilter,
               const OUString& rTargetFrameName )
 {
     OSL_ENSURE( !rURL.isEmpty(), "what should be loaded here?" );
@@ -506,7 +506,7 @@ void LoadURL( SwViewShell& rVSh, const OUString& rURL, sal_uInt16 nFilter,
     //#39076# Silent can be removed accordingly to SFX.
     SfxBoolItem aBrowse( SID_BROWSE, true );
 
-    if( nFilter & URLLOAD_NEWVIEW )
+    if( nFilter & LoadUrlFlags::NewView )
         aTargetFrameName.SetValue( "_blank" );
 
     const SfxPoolItem* aArr[] = {

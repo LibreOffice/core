@@ -20,14 +20,20 @@
 #define INCLUDED_SW_INC_SWURL_HXX
 
 #include <rtl/ustring.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 class SwViewShell;
 
-#define URLLOAD_NOFILTER            0x0000
-#define URLLOAD_NEWVIEW             0x8000
+enum class LoadUrlFlags {
+    NONE    = 0x00,
+    NewView = 0x01
+};
+namespace o3tl {
+    template<> struct typed_flags<LoadUrlFlags> : is_typed_flags<LoadUrlFlags, 0x01> {};
+}
 
 void LoadURL( SwViewShell& rSh, const OUString& rName,
-              sal_uInt16 nFilter, const OUString& rTargetFrameName );
+              LoadUrlFlags nFilter, const OUString& rTargetFrameName );
 
 #endif
 

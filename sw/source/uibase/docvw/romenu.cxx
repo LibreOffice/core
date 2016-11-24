@@ -265,12 +265,13 @@ void SwReadOnlyPopup::Execute( vcl::Window* pWin, sal_uInt16 nId )
     TransferDataContainer* pClipCntnr = nullptr;
 
     sal_uInt16 nExecId = USHRT_MAX;
-    sal_uInt16 nFilter = USHRT_MAX;
+    bool bFilterSet = false;
+    LoadUrlFlags nFilter;
     switch( nId )
     {
         case SID_WIN_FULLSCREEN :           nExecId = SID_WIN_FULLSCREEN; break;
-        case MN_READONLY_OPENURL:           nFilter = URLLOAD_NOFILTER;   break;
-        case MN_READONLY_OPENURLNEW:        nFilter = URLLOAD_NEWVIEW;    break;
+        case MN_READONLY_OPENURL:           nFilter = LoadUrlFlags::NONE; bFilterSet = true; break;
+        case MN_READONLY_OPENURLNEW:        nFilter = LoadUrlFlags::NewView; bFilterSet = true; break;
         case MN_READONLY_COPY:              nExecId = SID_COPY;           break;
 
         case MN_READONLY_EDITDOC:           nExecId = SID_EDITDOC;        break;
@@ -327,7 +328,7 @@ void SwReadOnlyPopup::Execute( vcl::Window* pWin, sal_uInt16 nId )
     }
     if( USHRT_MAX != nExecId )
         rDis.GetBindings()->Execute( nExecId );
-    if( USHRT_MAX != nFilter )
+    if( bFilterSet )
         ::LoadURL(rSh, sURL, nFilter, sTargetFrameName);
 
     if( pClipCntnr )

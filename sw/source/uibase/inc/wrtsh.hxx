@@ -420,8 +420,8 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
     // a click at the given field. the cursor is on it.
     // execute the predefined actions.
     void ClickToField( const SwField& rField );
-    void ClickToINetAttr( const SwFormatINetFormat& rItem, sal_uInt16 nFilter = URLLOAD_NOFILTER );
-    bool ClickToINetGrf( const Point& rDocPt, sal_uInt16 nFilter );
+    void ClickToINetAttr( const SwFormatINetFormat& rItem, LoadUrlFlags nFilter = LoadUrlFlags::NONE );
+    bool ClickToINetGrf( const Point& rDocPt, LoadUrlFlags nFilter );
     inline bool IsInClickToEdit() const ;
 
     // if a URL-Button is selected, return its URL; otherwise an empty string

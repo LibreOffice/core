@@ -4613,9 +4613,9 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                     // Internetfield? --> call link (load doc!!)
                     if( !bInSel )
                     {
-                        sal_uInt16 nFilter = URLLOAD_NOFILTER;
+                        LoadUrlFlags nFilter = LoadUrlFlags::NONE;
                         if( KEY_MOD1 == rMEvt.GetModifier() )
-                            nFilter |= URLLOAD_NEWVIEW;
+                            nFilter |= LoadUrlFlags::NewView;
 
                         bool bExecHyperlinks = m_rView.GetDocShell()->IsReadOnly();
                         if ( !bExecHyperlinks )
