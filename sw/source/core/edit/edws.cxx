@@ -229,9 +229,10 @@ bool     SwEditShell::GetLastUndoInfo(OUString *const o_pStr,
 }
 
 bool SwEditShell::GetFirstRedoInfo(OUString *const o_pStr,
+                                   SwUndoId *const o_pId,
                                    const SwView* pView) const
 {
-    return GetDoc()->GetIDocumentUndoRedo().GetFirstRedoInfo(o_pStr, nullptr, pView);
+    return GetDoc()->GetIDocumentUndoRedo().GetFirstRedoInfo(o_pStr, o_pId, pView);
 }
 
 SwUndoId SwEditShell::GetRepeatInfo(OUString *const o_pStr) const
