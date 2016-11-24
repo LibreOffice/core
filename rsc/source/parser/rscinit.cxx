@@ -40,16 +40,8 @@
 
 void RscTypCont::Init()
 {
-    RscEnum *   pFieldUnits;
-    RscEnum *   pColor;
-    RscEnum *   pMapUnit;
     RscEnum *   pKey;
-    RscEnum *   pTriState;
-    RscCont  *  pStringList;
-    RscArray *  pLangStringList;
-    RscTupel *  pStringTupel;
     RscTupel *  pStringLongTupel;
-    RscCont  *  pStringTupelList;
     RscCont  *  pStringLongTupelList;
     RscArray *  pLangStringLongTupelList;
 
@@ -91,16 +83,9 @@ void RscTypCont::Init()
 }
 {
     aLangType.Init( aNmTb );
-    aBaseLst.push_back( pFieldUnits      = InitFieldUnitsType() );
-    aBaseLst.push_back( pColor           = InitColor() );
-    aBaseLst.push_back( pMapUnit         = InitMapUnit() );
+    aBaseLst.push_back( InitFieldUnitsType() );
     aBaseLst.push_back( pKey             = InitKey() );
-    aBaseLst.push_back( pTriState        = InitTriState() );
 
-    aBaseLst.push_back( pStringList      = InitStringList() );
-    aBaseLst.push_back( pLangStringList  = InitLangStringList( pStringList ) );
-    aBaseLst.push_back( pStringTupel     = InitStringTupel() );
-    aBaseLst.push_back( pStringTupelList = InitStringTupelList( pStringTupel ) );
     aBaseLst.push_back( pStringLongTupel = InitStringLongTupel() );
     aBaseLst.push_back( pStringLongTupelList = InitStringLongTupelList( pStringLongTupel ) );
     aBaseLst.push_back( pLangStringLongTupelList = InitLangStringLongTupelList( pStringLongTupelList ) );

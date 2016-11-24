@@ -193,52 +193,6 @@ RscEnum * RscTypCont::InitFieldUnitsType()
     return pFieldUnits;
 }
 
-RscEnum * RscTypCont::InitColor()
-{
-    RscEnum * pColor;
-    pColor = new RscEnum( pHS->getID( "EnumColor" ), RSC_NOTYPE );
-
-    SETCONST( pColor, "COL_BLACK",                  COL_BLACK );
-    SETCONST( pColor, "COL_BLUE",                   COL_BLUE );
-    SETCONST( pColor, "COL_GREEN",                  COL_GREEN );
-    SETCONST( pColor, "COL_CYAN",                   COL_CYAN );
-    SETCONST( pColor, "COL_RED",                    COL_RED );
-    SETCONST( pColor, "COL_MAGENTA",                COL_MAGENTA );
-    SETCONST( pColor, "COL_BROWN",                  COL_BROWN );
-    SETCONST( pColor, "COL_GRAY",                   COL_GRAY );
-    SETCONST( pColor, "COL_LIGHTGRAY",              COL_LIGHTGRAY );
-    SETCONST( pColor, "COL_LIGHTBLUE",              COL_LIGHTBLUE );
-    SETCONST( pColor, "COL_LIGHTGREEN",             COL_LIGHTGREEN );
-    SETCONST( pColor, "COL_LIGHTCYAN",              COL_LIGHTCYAN );
-    SETCONST( pColor, "COL_LIGHTRED",               COL_LIGHTRED );
-    SETCONST( pColor, "COL_LIGHTMAGENTA",           COL_LIGHTMAGENTA );
-    SETCONST( pColor, "COL_YELLOW",                 COL_YELLOW );
-    SETCONST( pColor, "COL_WHITE",                  COL_WHITE );
-
-    return pColor;
-}
-
-RscEnum * RscTypCont::InitMapUnit()
-{
-    RscEnum * pMapUnit;
-    pMapUnit = new RscEnum( pHS->getID( "EnumMapUnit" ), RSC_NOTYPE );
-
-    SETCONST( pMapUnit, "MAP_PIXEL",                  MapUnit::MapPixel );
-    SETCONST( pMapUnit, "MAP_SYSFONT",                MapUnit::MapSysFont );
-    SETCONST( pMapUnit, "MAP_100TH_MM",               MapUnit::Map100thMM );
-    SETCONST( pMapUnit, "MAP_10TH_MM",                MapUnit::Map10thMM );
-    SETCONST( pMapUnit, "MAP_MM",                     MapUnit::MapMM );
-    SETCONST( pMapUnit, "MAP_CM",                     MapUnit::MapCM );
-    SETCONST( pMapUnit, "MAP_1000TH_INCH",            MapUnit::Map1000thInch );
-    SETCONST( pMapUnit, "MAP_100TH_INCH",             MapUnit::Map100thInch );
-    SETCONST( pMapUnit, "MAP_10TH_INCH",              MapUnit::Map10thInch );
-    SETCONST( pMapUnit, "MAP_INCH",                   MapUnit::MapInch );
-    SETCONST( pMapUnit, "MAP_POINT",                  MapUnit::MapPoint );
-    SETCONST( pMapUnit, "MAP_TWIP",                   MapUnit::MapTwip );
-    SETCONST( pMapUnit, "MAP_APPFONT",                MapUnit::MapAppFont );
-    return pMapUnit;
-}
-
 RscEnum * RscTypCont::InitKey()
 {
     RscEnum * pKey;
@@ -355,49 +309,6 @@ RscEnum * RscTypCont::InitKey()
     return pKey;
 }
 
-RscEnum * RscTypCont::InitTriState()
-{
-    RscEnum * pTriState;
-    pTriState = new RscEnum( pHS->getID( "EnumTriState" ), RSC_NOTYPE );
-
-    SETCONST( pTriState, "STATE_NOCHECK",      TRISTATE_FALSE  );
-    SETCONST( pTriState, "STATE_CHECK",        TRISTATE_TRUE    );
-    SETCONST( pTriState, "STATE_DONTKNOW",     TRISTATE_INDET );
-
-    return pTriState;
-}
-
-RscCont * RscTypCont::InitStringList()
-{
-    RscCont * pCont;
-
-    pCont = new RscCont( pHS->getID( "Chars[]" ), RSC_NOTYPE );
-    pCont->SetTypeClass( &aString );
-
-    return pCont;
-}
-
-RscArray * RscTypCont::InitLangStringList( RscCont * pStrLst )
-{
-    return new RscArray( pHS->getID( "Lang_CharsList" ),
-                         RSC_NOTYPE, pStrLst, &aLangType );
-}
-
-RscTupel * RscTypCont::InitStringTupel()
-{
-    RscTop *    pTupel;
-    Atom        nId;
-
-    // Clientvariablen einfuegen
-    pTupel = new RscTupel( pHS->getID( "CharsTupel" ), RSC_NOTYPE );
-    nId = aNmTb.Put( "FILTER", VARNAME );
-    pTupel->SetVariable( nId, &aString );
-    nId = aNmTb.Put( "MASK", VARNAME );
-    pTupel->SetVariable( nId, &aString );
-
-    return static_cast<RscTupel *>(pTupel);
-}
-
 RscTupel * RscTypCont::InitStringLongTupel()
 {
     RscTop *    pTupel;
@@ -411,16 +322,6 @@ RscTupel * RscTypCont::InitStringLongTupel()
     pTupel->SetVariable( nId, &aEnumLong );
 
     return static_cast<RscTupel *>(pTupel);
-}
-
-RscCont * RscTypCont::InitStringTupelList( RscTupel * pTupelString )
-{
-    RscCont * pCont;
-
-    pCont = new RscCont( pHS->getID( "CharsCharsTupel[]" ), RSC_NOTYPE );
-    pCont->SetTypeClass( pTupelString );
-
-    return pCont;
 }
 
 RscCont * RscTypCont::InitStringLongTupelList( RscTupel * pStringLong )
