@@ -3123,14 +3123,8 @@ void GtkSalGraphics::GetResolution(sal_Int32& rDPIX, sal_Int32& rDPIY)
     double fResolution = -1.0;
     g_object_get(pScreen, "resolution", &fResolution, nullptr);
 
-    int nScaleFactor = 1;
-
-#if GTK_CHECK_VERSION(3, 10, 0)
-    nScaleFactor = GtkSalFrame::getDisplay()->IsOwnHiDpiScale() ? gtk_widget_get_scale_factor(mpWindow) : 1;
-#endif
-
     if (fResolution > 0.0)
-        rDPIX = rDPIY = sal_Int32(fResolution * nScaleFactor);
+        rDPIX = rDPIY = sal_Int32(fResolution);
     else
         rDPIX = rDPIY = 96;
 }
