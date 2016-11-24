@@ -24,7 +24,6 @@
 #include <com/sun/star/sheet/DataImportMode.hpp>
 #include <com/sun/star/sheet/SubTotalColumn.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/table/CellRangeAddress.hpp>
 #include <com/sun/star/table/TableOrientation.hpp>
 
 #include "dbdata.hxx"
@@ -69,7 +68,7 @@ class ScXMLDatabaseRangeContext : public ScXMLImportContext
     OUString        sSourceObject;
     css::uno::Sequence <css::beans::PropertyValue> aSortSequence;
     std::vector < ScSubTotalRule > aSubTotalRules;
-    css::table::CellRangeAddress aFilterConditionSourceRangeAddress;
+    ScRange         aFilterConditionSourceRangeAddress;
     css::sheet::DataImportMode nSourceType;
     sal_Int32       nRefresh;
     sal_Int16       nSubTotalsUserListIndex;
@@ -123,8 +122,8 @@ public:
     void SetSubTotalsSortGroups(const bool bTemp) { bSubTotalsSortGroups = bTemp; }
     void AddSubTotalRule(const ScSubTotalRule& rRule) { aSubTotalRules.push_back(rRule); }
     void SetSortSequence(const css::uno::Sequence <css::beans::PropertyValue>& aTempSortSequence) { aSortSequence = aTempSortSequence; }
-    void SetFilterConditionSourceRangeAddress(const css::table::CellRangeAddress& aTemp) { aFilterConditionSourceRangeAddress = aTemp;
-                                                                                                    bFilterConditionSourceRange = true; }
+    void SetFilterConditionSourceRangeAddress(const ScRange& aRange) { aFilterConditionSourceRangeAddress = aRange;
+                                                                       bFilterConditionSourceRange = true; }
 };
 
 class ScXMLSourceSQLContext : public ScXMLImportContext

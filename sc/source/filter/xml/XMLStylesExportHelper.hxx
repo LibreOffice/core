@@ -23,9 +23,10 @@
 #include <vector>
 #include <memory>
 #include <list>
+
+#include "address.hxx"
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/table/CellRangeAddress.hpp>
-#include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/sheet/ConditionOperator.hpp>
 #include <com/sun/star/sheet/ValidationAlertStyle.hpp>
 #include <com/sun/star/sheet/ValidationType.hpp>
@@ -44,7 +45,7 @@ struct ScMyValidation
     OUString               sImputTitle;
     OUString               sFormula1;
     OUString               sFormula2;
-    css::table::CellAddress          aBaseCell;
+    ScAddress              aBaseCell;
     css::sheet::ValidationAlertStyle aAlertStyle;
     css::sheet::ValidationType       aValidationType;
     css::sheet::ConditionOperator    aOperator;
@@ -83,7 +84,7 @@ public:
     void                   AddValidation(const css::uno::Any& aAny,
                                     sal_Int32& nValidationIndex);
     static OUString        GetCondition(ScXMLExport& rExport, const ScMyValidation& aValidation);
-    static OUString        GetBaseCellAddress(ScDocument* pDoc, const css::table::CellAddress& aCell);
+    static OUString        GetBaseCellAddress(ScDocument* pDoc, const ScAddress& aCell);
     static void            WriteMessage(ScXMLExport& rExport,
                                     const OUString& sTitle, const OUString& sMessage,
                                     const bool bShowMessage, const bool bIsHelpMessage);
