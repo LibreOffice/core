@@ -433,12 +433,6 @@ RscCont * RscTypCont::InitStringLongTupelList( RscTupel * pStringLong )
     return pCont;
 }
 
-RscArray * RscTypCont::InitLangStringTupelList( RscCont * pStrTupelLst )
-{
-    return new RscArray( pHS->getID( "Lang_CharsCharsTupel" ),
-                         RSC_NOTYPE, pStrTupelLst, &aLangType );
-}
-
 RscArray * RscTypCont::InitLangStringLongTupelList( RscCont * pStrLongTupelLst )
 {
     return new RscArray( pHS->getID( "Lang_CharsLongTupelList" ),

@@ -95,7 +95,6 @@ class RscTypCont
     RscTupel *  InitStringLongTupel();
     static RscCont  *  InitStringTupelList( RscTupel * pStringTupel );
     static RscCont  *  InitStringLongTupelList( RscTupel * pStringLongTupel );
-    RscArray *  InitLangStringTupelList( RscCont * pStrTupelLst );
     RscArray *  InitLangStringLongTupelList( RscCont * pStrLongTupelLst );
 
     RscTop *    InitClassMgr();
