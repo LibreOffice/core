@@ -134,7 +134,7 @@ SvtCTLOptions_Impl::~SvtCTLOptions_Impl()
 void SvtCTLOptions_Impl::Notify( const Sequence< OUString >& )
 {
     Load();
-    NotifyListeners(SFX_HINT_CTL_SETTINGS_CHANGED);
+    NotifyListeners(ConfigurationHints::CtlSettingsChanged);
 }
 
 void SvtCTLOptions_Impl::ImplCommit()
@@ -224,7 +224,7 @@ void SvtCTLOptions_Impl::ImplCommit()
     aValues.realloc(nRealCount);
     PutProperties( aNames, aValues );
     //broadcast changes
-    NotifyListeners(SFX_HINT_CTL_SETTINGS_CHANGED);
+    NotifyListeners(ConfigurationHints::CtlSettingsChanged);
 }
 
 void SvtCTLOptions_Impl::Load()
@@ -324,7 +324,7 @@ void SvtCTLOptions_Impl::SetCTLFontEnabled( bool _bEnabled )
     {
         m_bCTLFontEnabled = _bEnabled;
         SetModified();
-        NotifyListeners(0);
+        NotifyListeners(ConfigurationHints::NONE);
     }
 }
 void SvtCTLOptions_Impl::SetCTLSequenceChecking( bool _bEnabled )
@@ -333,7 +333,7 @@ void SvtCTLOptions_Impl::SetCTLSequenceChecking( bool _bEnabled )
     {
         SetModified();
         m_bCTLSequenceChecking = _bEnabled;
-        NotifyListeners(0);
+        NotifyListeners(ConfigurationHints::NONE);
     }
 }
 void SvtCTLOptions_Impl::SetCTLSequenceCheckingRestricted( bool _bEnabled )
@@ -342,7 +342,7 @@ void SvtCTLOptions_Impl::SetCTLSequenceCheckingRestricted( bool _bEnabled )
     {
         SetModified();
         m_bCTLRestricted = _bEnabled;
-        NotifyListeners(0);
+        NotifyListeners(ConfigurationHints::NONE);
     }
 }
 void  SvtCTLOptions_Impl::SetCTLSequenceCheckingTypeAndReplace( bool _bEnabled )
@@ -351,7 +351,7 @@ void  SvtCTLOptions_Impl::SetCTLSequenceCheckingTypeAndReplace( bool _bEnabled )
     {
         SetModified();
         m_bCTLTypeAndReplace = _bEnabled;
-        NotifyListeners(0);
+        NotifyListeners(ConfigurationHints::NONE);
     }
 }
 void SvtCTLOptions_Impl::SetCTLCursorMovement( SvtCTLOptions::CursorMovement _eMovement )
@@ -360,7 +360,7 @@ void SvtCTLOptions_Impl::SetCTLCursorMovement( SvtCTLOptions::CursorMovement _eM
     {
         SetModified();
         m_eCTLCursorMovement = _eMovement;
-        NotifyListeners(0);
+        NotifyListeners(ConfigurationHints::NONE);
     }
 }
 void SvtCTLOptions_Impl::SetCTLTextNumerals( SvtCTLOptions::TextNumerals _eNumerals )
@@ -369,7 +369,7 @@ void SvtCTLOptions_Impl::SetCTLTextNumerals( SvtCTLOptions::TextNumerals _eNumer
     {
         SetModified();
         m_eCTLTextNumerals = _eNumerals;
-        NotifyListeners(0);
+        NotifyListeners(ConfigurationHints::NONE);
     }
 }
 

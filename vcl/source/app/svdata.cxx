@@ -288,7 +288,7 @@ bool ImplInitAccessBridge()
 }
 #endif
 
-void LocaleConfigurationListener::ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 nHint )
+void LocaleConfigurationListener::ConfigurationChanged( utl::ConfigurationBroadcaster*, ConfigurationHints nHint )
 {
     AllSettings::LocaleSettingsChanged( nHint );
 }

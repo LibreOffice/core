@@ -120,7 +120,7 @@ void WindowUpdater::UpdateWindow (OutputDevice* pDevice) const
     }
 }
 
-void WindowUpdater::ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 )
+void WindowUpdater::ConfigurationChanged( utl::ConfigurationBroadcaster*, ConfigurationHints )
 {
     // Set the current state at all registered output devices.
     tWindowList::iterator aWindowIterator (maWindowList.begin());

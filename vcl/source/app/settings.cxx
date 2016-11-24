@@ -2951,10 +2951,10 @@ const vcl::I18nHelper& AllSettings::GetUILocaleI18nHelper() const
     return *mxData->mpUII18nHelper;
 }
 
-void AllSettings::LocaleSettingsChanged( sal_uInt32 nHint )
+void AllSettings::LocaleSettingsChanged( ConfigurationHints nHint )
 {
     AllSettings aAllSettings( Application::GetSettings() );
-    if ( nHint & SYSLOCALEOPTIONS_HINT_DECSEP )
+    if ( nHint & ConfigurationHints::DecSep )
     {
         MiscSettings aMiscSettings = aAllSettings.GetMiscSettings();
         bool bIsDecSepAsLocale = aAllSettings.mxData->maSysLocale.GetOptions().IsDecimalSeparatorAsLocale();
@@ -2965,7 +2965,7 @@ void AllSettings::LocaleSettingsChanged( sal_uInt32 nHint )
         }
     }
 
-    if ( (nHint & SYSLOCALEOPTIONS_HINT_LOCALE) )
+    if ( nHint & ConfigurationHints::Locale )
         aAllSettings.SetLanguageTag( aAllSettings.mxData->maSysLocale.GetOptions().GetLanguageTag() );
 
     Application::SetSettings( aAllSettings );

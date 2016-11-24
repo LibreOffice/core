@@ -254,7 +254,7 @@ protected:
 
     virtual void                DataChanged( const DataChangedEvent& rDCEvt ) override;
 
-    virtual void                ConfigurationChanged( ::utl::ConfigurationBroadcaster*, sal_uInt32 ) override;
+    virtual void                ConfigurationChanged( ::utl::ConfigurationBroadcaster*, ConfigurationHints ) override;
 
     // painting ---------------------------------------------------------------
 protected:

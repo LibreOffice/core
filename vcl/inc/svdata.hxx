@@ -94,7 +94,7 @@ namespace vcl { class DisplayConnectionDispatch; class SettingsConfigItem; class
 class LocaleConfigurationListener : public utl::ConfigurationListener
 {
 public:
-    virtual void ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 ) override;
+    virtual void ConfigurationChanged( utl::ConfigurationBroadcaster*, ConfigurationHints ) override;
 };
 
 typedef std::vector<Link<VclWindowEvent&,bool> > SVAppKeyListeners;

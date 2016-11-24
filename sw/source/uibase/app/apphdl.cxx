@@ -935,7 +935,7 @@ void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
     }
 }
 
-void SwModule::ConfigurationChanged( utl::ConfigurationBroadcaster* pBrdCst, sal_uInt32 )
+void SwModule::ConfigurationChanged( utl::ConfigurationBroadcaster* pBrdCst, ConfigurationHints )
 {
     if( pBrdCst == m_pUserOptions )
     {

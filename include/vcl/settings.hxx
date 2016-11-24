@@ -45,6 +45,7 @@ struct ImplMiscData;
 struct ImplHelpData;
 struct ImplStyleData;
 struct ImplAllSettingsData;
+enum class ConfigurationHints;
 
 namespace vcl {
     class I18nHelper;
@@ -707,7 +708,7 @@ public:
 
     bool                                    operator ==( const AllSettings& rSet ) const;
     bool                                    operator !=( const AllSettings& rSet ) const;
-    static void                             LocaleSettingsChanged( sal_uInt32 nHint );
+    static void                             LocaleSettingsChanged( ConfigurationHints nHint );
     SvtSysLocale&                           GetSysLocale();
 };
 

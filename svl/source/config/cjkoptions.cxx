@@ -144,7 +144,7 @@ void    SvtCJKOptions_Impl::SetAll(bool bSet)
 
         SetModified();
         Commit();
-        NotifyListeners(0);
+        NotifyListeners(ConfigurationHints::NONE);
     }
 }
 
@@ -231,7 +231,7 @@ void SvtCJKOptions_Impl::Load()
 void    SvtCJKOptions_Impl::Notify( const Sequence< OUString >& )
 {
     Load();
-    NotifyListeners(0);
+    NotifyListeners(ConfigurationHints::NONE);
 }
 
 void    SvtCJKOptions_Impl::ImplCommit()

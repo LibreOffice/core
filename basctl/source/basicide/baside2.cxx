@@ -1507,7 +1507,7 @@ ModulWindowLayout::SyntaxColors::~SyntaxColors ()
 }
 
 // virtual
-void ModulWindowLayout::SyntaxColors::ConfigurationChanged (utl::ConfigurationBroadcaster*, sal_uInt32)
+void ModulWindowLayout::SyntaxColors::ConfigurationChanged (utl::ConfigurationBroadcaster*, ConfigurationHints)
 {
     NewConfig(false);
 }

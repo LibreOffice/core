@@ -98,7 +98,7 @@ public:
     /** Callback that waits for notifications of a
         <type>SvtCTLOptions</type> object.
     */
-    virtual void ConfigurationChanged ( utl::ConfigurationBroadcaster*, sal_uInt32 nHint) override;
+    virtual void ConfigurationChanged ( utl::ConfigurationBroadcaster*, ConfigurationHints nHint) override;
 
 private:
     /// Options to monitor for changes.

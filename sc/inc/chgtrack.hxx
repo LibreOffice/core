@@ -977,7 +977,7 @@ class ScChangeTrack : public utl::ConfigurationListener
     bool IsLastAction( sal_uLong nNum ) const;
 
             void                ClearMsgQueue();
-    virtual void                ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 ) override;
+    virtual void                ConfigurationChanged( utl::ConfigurationBroadcaster*, ConfigurationHints ) override;
 
 public:
 

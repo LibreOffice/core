@@ -118,7 +118,7 @@ public:
     virtual            ~ScModule() override;
 
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
-    virtual void        ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 ) override;
+    virtual void        ConfigurationChanged( utl::ConfigurationBroadcaster*, ConfigurationHints ) override;
     void                DeleteCfg();
 
                         // moved by the application

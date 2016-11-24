@@ -394,9 +394,9 @@ void SvtSysLocaleOptions_Impl::SetLocaleString( const OUString& rStr )
         MakeRealLocale();
         LanguageTag::setConfiguredSystemLanguage( m_aRealLocale.getLanguageType() );
         SetModified();
-        sal_uInt32 nHint = SYSLOCALEOPTIONS_HINT_LOCALE;
+        ConfigurationHints nHint = ConfigurationHints::Locale;
         if ( m_aCurrencyString.isEmpty() )
-            nHint |= SYSLOCALEOPTIONS_HINT_CURRENCY;
+            nHint |= ConfigurationHints::Currency;
         NotifyListeners( nHint );
     }
 }
@@ -410,7 +410,7 @@ void SvtSysLocaleOptions_Impl::SetUILocaleString( const OUString& rStr )
         // as we can't switch UILocale at runtime, we only store changes in the configuration
         MakeRealUILocale();
         SetModified();
-        NotifyListeners( SYSLOCALEOPTIONS_HINT_UILOCALE );
+        NotifyListeners( ConfigurationHints::UiLocale );
     }
 }
 
@@ -420,7 +420,7 @@ void SvtSysLocaleOptions_Impl::SetCurrencyString( const OUString& rStr )
     {
         m_aCurrencyString = rStr;
         SetModified();
-        NotifyListeners( SYSLOCALEOPTIONS_HINT_CURRENCY );
+        NotifyListeners( ConfigurationHints::Currency );
     }
 }
 
@@ -430,7 +430,7 @@ void SvtSysLocaleOptions_Impl::SetDatePatternsString( const OUString& rStr )
     {
         m_aDatePatternsString = rStr;
         SetModified();
-        NotifyListeners( SYSLOCALEOPTIONS_HINT_DATEPATTERNS );
+        NotifyListeners( ConfigurationHints::DatePatterns );
     }
 }
 
@@ -440,7 +440,7 @@ void SvtSysLocaleOptions_Impl::SetDecimalSeparatorAsLocale( bool bSet)
     {
         m_bDecimalSeparator = bSet;
         SetModified();
-        NotifyListeners( SYSLOCALEOPTIONS_HINT_DECSEP );
+        NotifyListeners( ConfigurationHints::DecSep );
     }
 }
 
@@ -450,13 +450,13 @@ void SvtSysLocaleOptions_Impl::SetIgnoreLanguageChange( bool bSet)
     {
         m_bIgnoreLanguageChange = bSet;
         SetModified();
-        NotifyListeners( SYSLOCALEOPTIONS_HINT_IGNORELANG );
+        NotifyListeners( ConfigurationHints::IgnoreLang );
     }
 }
 
 void SvtSysLocaleOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNames )
 {
-    sal_uInt32 nHint = 0;
+    ConfigurationHints nHint = ConfigurationHints::NONE;
     Sequence< Any > seqValues = GetProperties( seqPropertyNames );
     Sequence< sal_Bool > seqROStates = GetReadOnlyStates( seqPropertyNames );
     sal_Int32 nCount = seqPropertyNames.getLength();
@@ -467,9 +467,9 @@ void SvtSysLocaleOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNa
             DBG_ASSERT( seqValues[nProp].getValueTypeClass() == TypeClass_STRING, "Locale property type" );
             seqValues[nProp] >>= m_aLocaleString;
             m_bROLocale = seqROStates[nProp];
-            nHint |= SYSLOCALEOPTIONS_HINT_LOCALE;
+            nHint |= ConfigurationHints::Locale;
             if ( m_aCurrencyString.isEmpty() )
-                nHint |= SYSLOCALEOPTIONS_HINT_CURRENCY;
+                nHint |= ConfigurationHints::Currency;
             MakeRealLocale();
         }
         if( seqPropertyNames[nProp] == PROPERTYNAME_UILOCALE )
@@ -477,7 +477,7 @@ void SvtSysLocaleOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNa
             DBG_ASSERT( seqValues[nProp].getValueTypeClass() == TypeClass_STRING, "Locale property type" );
             seqValues[nProp] >>= m_aUILocaleString;
             m_bROUILocale = seqROStates[nProp];
-            nHint |= SYSLOCALEOPTIONS_HINT_UILOCALE;
+            nHint |= ConfigurationHints::UiLocale;
             MakeRealUILocale();
         }
         else if( seqPropertyNames[nProp] == PROPERTYNAME_CURRENCY )
@@ -485,7 +485,7 @@ void SvtSysLocaleOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNa
             DBG_ASSERT( seqValues[nProp].getValueTypeClass() == TypeClass_STRING, "Currency property type" );
             seqValues[nProp] >>= m_aCurrencyString;
             m_bROCurrency = seqROStates[nProp];
-            nHint |= SYSLOCALEOPTIONS_HINT_CURRENCY;
+            nHint |= ConfigurationHints::Currency;
         }
         else if( seqPropertyNames[nProp] == PROPERTYNAME_DECIMALSEPARATOR )
         {
@@ -502,10 +502,10 @@ void SvtSysLocaleOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNa
             DBG_ASSERT( seqValues[nProp].getValueTypeClass() == TypeClass_STRING, "DatePatterns property type" );
             seqValues[nProp] >>= m_aDatePatternsString;
             m_bRODatePatterns = seqROStates[nProp];
-            nHint |= SYSLOCALEOPTIONS_HINT_DATEPATTERNS;
+            nHint |= ConfigurationHints::DatePatterns;
         }
     }
-    if ( nHint )
+    if ( nHint != ConfigurationHints::NONE )
         NotifyListeners( nHint );
 }
 
@@ -689,9 +689,9 @@ const Link<LinkParamNone*,void>& SvtSysLocaleOptions::GetCurrencyChangeLink()
     return CurrencyChangeLink::get();
 }
 
-void SvtSysLocaleOptions::ConfigurationChanged( utl::ConfigurationBroadcaster* p, sal_uInt32 nHint  )
+void SvtSysLocaleOptions::ConfigurationChanged( utl::ConfigurationBroadcaster* p, ConfigurationHints nHint  )
 {
-    if ( nHint & SYSLOCALEOPTIONS_HINT_CURRENCY )
+    if ( nHint & ConfigurationHints::Currency )
     {
         const Link<LinkParamNone*,void>& rLink = GetCurrencyChangeLink();
         rLink.Call( nullptr );

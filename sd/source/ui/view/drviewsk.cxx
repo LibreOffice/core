@@ -14,7 +14,7 @@
 
 namespace sd {
 
-void DrawViewShell::ConfigurationChanged( utl::ConfigurationBroadcaster* pCb, sal_uInt32 )
+void DrawViewShell::ConfigurationChanged( utl::ConfigurationBroadcaster* pCb, ConfigurationHints )
 {
     ConfigureAppBackgroundColor( dynamic_cast<svtools::ColorConfig*>(pCb) );
 }

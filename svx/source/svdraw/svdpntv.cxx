@@ -267,7 +267,7 @@ void SdrPaintView::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
     }
 }
 
-void SdrPaintView::ConfigurationChanged( ::utl::ConfigurationBroadcaster* , sal_uInt32 )
+void SdrPaintView::ConfigurationChanged( ::utl::ConfigurationBroadcaster* , ConfigurationHints )
 {
     onChangeColorConfig();
     InvalidateAllWin();

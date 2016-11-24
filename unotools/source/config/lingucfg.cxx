@@ -206,7 +206,7 @@ SvtLinguConfigItem::~SvtLinguConfigItem()
 void SvtLinguConfigItem::Notify( const uno::Sequence< OUString > &rPropertyNames )
 {
     LoadOptions( rPropertyNames );
-    NotifyListeners(0);
+    NotifyListeners(ConfigurationHints::NONE);
 }
 
 void SvtLinguConfigItem::ImplCommit()
@@ -536,7 +536,7 @@ bool SvtLinguConfigItem::SetProperty( sal_Int32 nPropertyHandle, const uno::Any 
     if (bMod)
         SetModified();
 
-    NotifyListeners(0);
+    NotifyListeners(ConfigurationHints::NONE);
     return bSucc;
 }
 

@@ -133,7 +133,7 @@ public:
 
     virtual void ConfigurationChanged (
         utl::ConfigurationBroadcaster* pBroadcaster,
-        sal_uInt32 nHint) override;
+        ConfigurationHints nHint) override;
 
     void HandleDataChangeEvent();
 

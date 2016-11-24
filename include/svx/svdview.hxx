@@ -200,7 +200,7 @@ public:
     virtual bool MouseMove(const MouseEvent& rMEvt, vcl::Window* pWin) override;
     virtual bool Command(const CommandEvent& rCEvt, vcl::Window* pWin) override;
 
-    virtual void ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 ) override;
+    virtual void ConfigurationChanged( utl::ConfigurationBroadcaster*, ConfigurationHints ) override;
 
     bool SetAttributes(const SfxItemSet& rSet, bool bReplaceAll=false) { return SdrCreateView::SetAttributes(rSet,bReplaceAll); }
     bool SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr) { return SdrCreateView::SetStyleSheet(pStyleSheet,bDontRemoveHardAttr); }
