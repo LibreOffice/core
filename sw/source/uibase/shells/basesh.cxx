@@ -30,6 +30,7 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/request.hxx>
+#include <svl/flagitem.hxx>
 #include <svl/whiter.hxx>
 #include <svl/visitem.hxx>
 #include <sfx2/objitem.hxx>
@@ -478,6 +479,7 @@ void SwBaseShell::ExecUndo(SfxRequest &rReq)
 {
     SwWrtShell &rWrtShell = GetShell();
 
+    SwUndoId nUndoId(UNDO_EMPTY);
     sal_uInt16 nId = rReq.GetSlot(), nCnt = 1;
     const SfxItemSet* pArgs = rReq.GetArgs();
     const SfxPoolItem* pItem;
@@ -504,19 +506,25 @@ void SwBaseShell::ExecUndo(SfxRequest &rReq)
     switch( nId )
     {
         case SID_UNDO:
-            for (SwViewShell& rShell : rWrtShell.GetRingContainer())
-                rShell.LockPaint();
-            rWrtShell.Do( SwWrtShell::UNDO, nCnt );
-            for (SwViewShell& rShell : rWrtShell.GetRingContainer())
-                rShell.UnlockPaint();
+            if (rUndoRedo.GetLastUndoInfo(nullptr, &nUndoId, &rWrtShell.GetView()))
+            {
+                for (SwViewShell& rShell : rWrtShell.GetRingContainer())
+                    rShell.LockPaint();
+                rWrtShell.Do( SwWrtShell::UNDO, nCnt );
+                for (SwViewShell& rShell : rWrtShell.GetRingContainer())
+                    rShell.UnlockPaint();
+            }
             break;
 
         case SID_REDO:
-            for (SwViewShell& rShell : rWrtShell.GetRingContainer())
-                rShell.LockPaint();
-            rWrtShell.Do( SwWrtShell::REDO, nCnt );
-            for (SwViewShell& rShell : rWrtShell.GetRingContainer())
-                rShell.UnlockPaint();
+            if (rUndoRedo.GetFirstRedoInfo(nullptr, &nUndoId, &rWrtShell.GetView()))
+            {
+                for (SwViewShell& rShell : rWrtShell.GetRingContainer())
+                    rShell.LockPaint();
+                rWrtShell.Do( SwWrtShell::REDO, nCnt );
+                for (SwViewShell& rShell : rWrtShell.GetRingContainer())
+                    rShell.UnlockPaint();
+            }
             break;
 
         case SID_REPEAT:
@@ -526,6 +534,11 @@ void SwBaseShell::ExecUndo(SfxRequest &rReq)
             OSL_FAIL("wrong Dispatcher");
     }
 
+    if (nUndoId == UNDO_CONFLICT)
+    {
+        rReq.SetReturnValue( SfxInt16Item(nId, static_cast<int>(nUndoId)) );
+    }
+
     if (pViewFrame) { pViewFrame->GetBindings().InvalidateAll(false); }
 }
 
@@ -533,6 +546,7 @@ void SwBaseShell::ExecUndo(SfxRequest &rReq)
 
 void SwBaseShell::StateUndo(SfxItemSet &rSet)
 {
+    SwUndoId nUndoId(UNDO_EMPTY);
     SwWrtShell &rSh = GetShell();
     SfxWhichIter aIter(rSet);
     sal_uInt16 nWhich = aIter.FirstWhich();
@@ -542,21 +556,30 @@ void SwBaseShell::StateUndo(SfxItemSet &rSet)
         {
             case SID_UNDO:
             {
-                if (rSh.GetLastUndoInfo(nullptr, nullptr, &rSh.GetView()))
+                if (rSh.GetLastUndoInfo(nullptr, &nUndoId, &rSh.GetView()))
                 {
                     rSet.Put( SfxStringItem(nWhich,
                         rSh.GetDoString(SwWrtShell::UNDO)));
                 }
+                else if (nUndoId == UNDO_CONFLICT)
+                {
+                    rSet.Put( SfxInt16Item(nWhich, static_cast<int>(nUndoId)) );
+                }
                 else
                     rSet.DisableItem(nWhich);
+
                 break;
             }
             case SID_REDO:
             {
-                if (rSh.GetFirstRedoInfo(nullptr, &rSh.GetView()))
+                if (rSh.GetFirstRedoInfo(nullptr, &nUndoId, &rSh.GetView()))
                 {
                     rSet.Put(SfxStringItem(nWhich,
                         rSh.GetDoString(SwWrtShell::REDO)));
+                }
+                else if (nUndoId == UNDO_CONFLICT)
+                {
+                     rSet.Put( SfxInt16Item(nWhich, static_cast<int>(nUndoId)) );
                 }
                 else
                     rSet.DisableItem(nWhich);
@@ -564,7 +587,7 @@ void SwBaseShell::StateUndo(SfxItemSet &rSet)
             }
             case SID_REPEAT:
             {   // Repeat is only possible if no REDO is possible - UI-Restriction
-                if ((!rSh.GetFirstRedoInfo(nullptr)) &&
+                if ((!rSh.GetFirstRedoInfo(nullptr, nullptr)) &&
                     !rSh.IsSelFrameMode() &&
                     (UNDO_EMPTY != rSh.GetRepeatInfo(nullptr)))
                 {
@@ -587,7 +610,7 @@ void SwBaseShell::StateUndo(SfxItemSet &rSet)
                 break;
 
             case SID_GETREDOSTRINGS:
-                if (rSh.GetFirstRedoInfo(nullptr))
+                if (rSh.GetFirstRedoInfo(nullptr, nullptr))
                 {
                     SfxStringListItem aStrLst( nWhich );
                     rSh.GetDoStrings( SwWrtShell::REDO, aStrLst );
