@@ -35,10 +35,10 @@ class RscCmdLine
 
 public:
 
-    RscStrList          aInputList;     // source file list
+    RscStrList     aInputList;     // source file list
     OString        aPath;          // path list
     RSCBYTEORDER_TYPE   nByteOrder;
-    unsigned short      nCommands;      // command bits
+    CommandFlags   nCommands;      // command bits
     OString        aOutputSrs;     // Srs output file name
     OString        aILDir;
 

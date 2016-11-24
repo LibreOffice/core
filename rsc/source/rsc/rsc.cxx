@@ -65,7 +65,7 @@ AtomContainer*  pHS          = nullptr;
 
 void RscCmdLine::Init()
 {
-    nCommands       = 0;
+    nCommands       = CommandFlags::NONE;
     nByteOrder      = RSC_BIGENDIAN;
 
     aPath = OString(".");
@@ -114,24 +114,24 @@ RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
             if( !rsc_stricmp( (*ppStr) + 1, "h" )
               || !strcmp( (*ppStr) + 1, "?" ) )
             { // Write help to standard output
-                nCommands |= HELP_FLAG;
+                nCommands |= CommandFlags::Help;
             }
             else if( !rsc_stricmp( (*ppStr) + 1, "p" ) )
             { // No preprocessor
-                nCommands |= NOPREPRO_FLAG;
+                nCommands |= CommandFlags::NoPrePro;
             }
             else if( !rsc_stricmp( (*ppStr) + 1, "s" ) )
             { // Syntax analysis, creates .srs file
-                nCommands |= NOLINK_FLAG;
+                nCommands |= CommandFlags::NoLink;
             }
             else if( !rsc_stricmp( (*ppStr) + 1, "l" ) )
             { // links, no syntax and no preprocessing
-                nCommands |= NOPREPRO_FLAG;
-                nCommands |= NOSYNTAX_FLAG;
+                nCommands |= CommandFlags::NoPrePro;
+                nCommands |= CommandFlags::NoSyntax;
             }
             else if( !rsc_stricmp( (*ppStr) + 1, "r" ) )
             { // generate no .res file
-                nCommands |= NORESFILE_FLAG;
+                nCommands |= CommandFlags::NoResFile;
             }
             else if( !rsc_strnicmp( (*ppStr) + 1, "sub", 3 ) )
             {
@@ -146,7 +146,7 @@ RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
             }
             else if( !rsc_stricmp( (*ppStr) + 1, "PreLoad" ) )
             { // all resources with Preload
-                nCommands |= PRELOAD_FLAG;
+                nCommands |= CommandFlags::Preload;
             }
             else if( !rsc_stricmp( (*ppStr) + 1, "LITTLEENDIAN" ) )
             { // endianness when writing
@@ -158,11 +158,11 @@ RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
             }
             else if( !rsc_strnicmp( (*ppStr) + 1, "d", 1 ) )
             { // define symbols
-                nCommands |= DEFINE_FLAG;
+                nCommands |= CommandFlags::Define;
             }
             else if( !rsc_strnicmp( (*ppStr) + 1, "i", 1 ) )
             { // define include path
-                nCommands |= INCLUDE_FLAG;
+                nCommands |= CommandFlags::Include;
                 OStringBuffer aBuffer(aPath);
                 if (!aBuffer.isEmpty())
                     aBuffer.append(SAL_PATHSEPARATOR);
@@ -204,11 +204,11 @@ RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
             }
             else if( !rsc_stricmp( (*ppStr) + 1, "NoSysResTest" ) )
             { // don't check Bitmap, Pointers, Icons
-                nCommands |= NOSYSRESTEST_FLAG;
+                nCommands |= CommandFlags::NoSysResTest;
             }
             else if( !rsc_stricmp( (*ppStr) + 1, "SrsDefault" ) )
             { // Only write one language to srs file
-                nCommands |= SRSDEFAULT_FLAG;
+                nCommands |= CommandFlags::SrsDefault;
             }
             else if( !rsc_stricmp( (*ppStr) + 1, "lg" ) )
             {
@@ -232,7 +232,7 @@ RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
         i++;
     }
 
-    if( nCommands & HELP_FLAG )
+    if( nCommands & CommandFlags::Help )
         pEH->FatalError( ERR_USAGE, RscId() );
     // was an inputted file specified
     else if( !aInputList.empty() )
@@ -319,9 +319,9 @@ ERRTYPE RscCompiler::Start()
     for( size_t i = 0, n = pCL->aInputList.size(); i < n; ++i )
         pTC->aFileTab.NewCodeFile( *pCL->aInputList[ i ] );
 
-    if( !(pCL->nCommands & NOSYNTAX_FLAG) )
+    if( !(pCL->nCommands & CommandFlags::NoSyntax) )
     {
-        if( pCL->nCommands & NOPREPRO_FLAG )
+        if( pCL->nCommands & CommandFlags::NoPrePro )
         {
 
             pTC->pEH->SetListFile( nullptr );
@@ -371,7 +371,7 @@ ERRTYPE RscCompiler::Start()
 
 void RscCompiler::EndCompile()
 {
-    if( !pCL->aOutputSrs.isEmpty() && (pCL->nCommands & NOLINK_FLAG) )
+    if( !pCL->aOutputSrs.isEmpty() && (pCL->nCommands & CommandFlags::NoLink) )
     {
         pTC->pEH->StdOut( "Writing file ", RscVerbosityVerbose );
         pTC->pEH->StdOut( pCL->aOutputSrs.getStr(), RscVerbosityVerbose );
@@ -379,7 +379,7 @@ void RscCompiler::EndCompile()
 
         // copy from TMP to real names
         unlink( pCL->aOutputSrs.getStr() );   // delete target file
-        if( !(pCL->nCommands & NOSYNTAX_FLAG) )
+        if( !(pCL->nCommands & CommandFlags::NoSyntax) )
         {
             FILE        * foutput;
 
@@ -558,7 +558,7 @@ ERRTYPE RscCompiler::Link()
     ERRTYPE     aError;
     RscFile*    pFName;
 
-    if( !(pCL->nCommands & NOLINK_FLAG) )
+    if( !(pCL->nCommands & CommandFlags::NoLink) )
     {
         ::std::list<RscCmdLine::OutputFile>::const_iterator it;
 

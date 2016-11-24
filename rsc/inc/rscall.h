@@ -24,6 +24,7 @@
 #include <rscdef.hxx>
 #include <rschash.hxx>
 #include <rtl/alloc.h>
+#include <o3tl/typed_flags_set.hxx>
 
 /******************* T y p e s *******************************************/
 typedef char * CLASS_DATA;  // Zeiger auf die Daten einer Klasse
@@ -45,16 +46,22 @@ extern AtomContainer*   pHS;
 
 /******************* D e f i n e s ***************************************/
 
-#define HELP_FLAG         0x0001  // Hilfe anzeigen
-#define NOPREPRO_FLAG     0x0002  // kein Preprozesor
-#define NOSYNTAX_FLAG     0x0004  // keine Syntaxanalyse
-#define NOLINK_FLAG       0x0008  // nicht linken
-#define NORESFILE_FLAG    0x0010  // keine .res-Datei erzeugen
-#define DEFINE_FLAG       0x0020  // es wurde Definitionen angegeben
-#define INCLUDE_FLAG      0x0040  // der Include-Pfad wurde erweitert
-#define PRELOAD_FLAG      0x0200  // Alle Resourcen Preloaden
-#define SRSDEFAULT_FLAG   0x1000  // immer der Default geschrieben
-#define NOSYSRESTEST_FLAG 0x2000  // ueberprueft nicht die Richtigkeit von (bmp, ico, cur)
+enum class CommandFlags {
+    NONE         = 0x0000,
+    Help         = 0x0001,  // Hilfe anzeigen
+    NoPrePro     = 0x0002,  // kein Preprozesor
+    NoSyntax     = 0x0004,  // keine Syntaxanalyse
+    NoLink       = 0x0008,  // nicht linken
+    NoResFile    = 0x0010,  // keine .res-Datei erzeugen
+    Define       = 0x0020,  // es wurde Definitionen angegeben
+    Include      = 0x0040,  // der Include-Pfad wurde erweitert
+    Preload      = 0x0200,  // Alle Resourcen Preloaden
+    SrsDefault   = 0x1000,  // immer der Default geschrieben
+    NoSysResTest = 0x2000   // ueberprueft nicht die Richtigkeit von (bmp, ico, cur)
+};
+namespace o3tl {
+    template<> struct typed_flags<CommandFlags> : is_typed_flags<CommandFlags, 0x327f> {};
+}
 
 
 /******************* T y p e s *******************************************/

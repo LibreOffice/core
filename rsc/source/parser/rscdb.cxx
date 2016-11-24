@@ -38,7 +38,7 @@
 RscTypCont::RscTypCont( RscError * pErrHdl,
                           RSCBYTEORDER_TYPE nOrder,
                           const OString& rSearchPath,
-                          sal_uInt32 nFlagsP )
+                          CommandFlags nFlagsP )
     : nSourceCharSet( RTL_TEXTENCODING_UTF8 )
     , nByteOrder( nOrder )
     , aSearchPath( rSearchPath )

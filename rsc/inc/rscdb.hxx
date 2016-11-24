@@ -113,16 +113,16 @@ public:
 
     RscError*           pEH;        // error handler
     RscNameTable        aNmTb;      // name table
-    RscFileTab          aFileTab;   // fila name table
-    sal_uInt32          nFlags;
+    RscFileTab          aFileTab;   // file name table
+    CommandFlags        nFlags;
     std::map<sal_uInt64, sal_uLong> aIdTranslator; // map resources types and ids to an id (under PM9 or to a file position (MTF)
 
-    RscTypCont( RscError *, RSCBYTEORDER_TYPE, const OString& rSearchPath, sal_uInt32 nFlags );
+    RscTypCont( RscError *, RSCBYTEORDER_TYPE, const OString& rSearchPath, CommandFlags nFlags );
     ~RscTypCont();
 
     Atom AddLanguage( const char* );
     bool              IsSrsDefault() const
-                          { return (nFlags & SRSDEFAULT_FLAG) != 0; }
+                          { return bool(nFlags & CommandFlags::SrsDefault); }
     OString           ChangeLanguage(const OString & rNewLang);
     const std::vector< sal_uInt32 >& GetFallbacks() const
                           { return aLangFallbacks; }
