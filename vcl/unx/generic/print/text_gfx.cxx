@@ -594,28 +594,6 @@ PrinterGfx::getCharMetric (const Font2 &rFont, sal_Unicode n_char, CharacterMetr
     return rFont.GetFont(0) != -1 ? rFont.GetFont(0) : rFont.GetFont(1);
 }
 
-sal_Int32
-PrinterGfx::GetCharWidth (sal_uInt16 nFrom, sal_uInt16 nTo, long *pWidthArray)
-{
-    Font2 aFont(*this);
-    if (aFont.IsSymbolFont() && (nFrom < 256) && (nTo < 256))
-    {
-        nFrom += 0xF000;
-        nTo   += 0xF000;
-    }
-
-    for( int n = 0; n < (nTo - nFrom + 1); n++ )
-    {
-        CharacterMetric aBBox;
-        // coverity[callee_ptr_arith]
-        getCharMetric(aFont, n + nFrom, &aBBox);
-        pWidthArray[n] = getCharWidth (mbTextVertical, n + nFrom, &aBBox);
-    }
-
-    // returned metrics have postscript precision
-    return 1000;
-}
-
 /*
  * spool the converted truetype fonts to the page header after the page body is
  * complete
