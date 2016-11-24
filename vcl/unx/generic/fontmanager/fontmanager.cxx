@@ -1206,69 +1206,6 @@ int PrintFontManager::getFontDescend( fontID nFontID ) const
     return pFont ? pFont->m_nDescend : 0;
 }
 
-void PrintFontManager::hasVerticalSubstitutions( fontID nFontID,
-    const sal_Unicode* pCharacters, int nCharacters, bool* pHasSubst ) const
-{
-    PrintFont* pFont = getFont( nFontID );
-    if (pFont && pFont->m_nAscend == 0 && pFont->m_nDescend == 0)
-    {
-        // might be a truetype font not yet analyzed
-        if( pFont->m_eType == fonttype::TrueType )
-            analyzeTrueTypeFile( pFont );
-    }
-
-    if (!pFont || !pFont->m_bHaveVerticalSubstitutedGlyphs)
-        memset( pHasSubst, 0, sizeof(bool)*nCharacters );
-    else
-    {
-        for( int i = 0; i < nCharacters; i++ )
-        {
-            sal_Unicode code = pCharacters[i];
-            if( ! pFont->m_pMetrics ||
-                ! ( pFont->m_pMetrics->m_aPages[ code >> 11 ] & ( 1 << ( ( code >> 8 ) & 7 ) ) ) )
-                pFont->queryMetricPage( code >> 8, m_pAtoms );
-            std::unordered_map< sal_Unicode, bool >::const_iterator it = pFont->m_pMetrics->m_bVerticalSubstitutions.find( code );
-            pHasSubst[i] = it != pFont->m_pMetrics->m_bVerticalSubstitutions.end();
-        }
-    }
-}
-
-bool PrintFontManager::isFontDownloadingAllowedForPrinting( fontID nFont ) const
-{
-    static const char* pEnable = getenv( "PSPRINT_ENABLE_TTF_COPYRIGHTAWARENESS" );
-    bool bRet = true;
-
-    if( pEnable && *pEnable )
-    {
-        PrintFont* pFont = getFont( nFont );
-        if( pFont && pFont->m_eType == fonttype::TrueType )
-        {
-            TrueTypeFontFile* pTTFontFile = static_cast<TrueTypeFontFile*>(pFont);
-            if( pTTFontFile->m_nTypeFlags & TYPEFLAG_INVALID )
-            {
-                TrueTypeFont* pTTFont = nullptr;
-                OString aFile = getFontFile( pFont );
-                if( OpenTTFontFile( aFile.getStr(), pTTFontFile->m_nCollectionEntry, &pTTFont ) == SF_OK )
-                {
-                    // get type flags
-                    TTGlobalFontInfo aInfo;
-                    GetTTGlobalFontInfo( pTTFont, & aInfo );
-                    pTTFontFile->m_nTypeFlags = (unsigned int)aInfo.typeFlags;
-                    CloseTTFont( pTTFont );
-                }
-            }
-
-            unsigned int nCopyrightFlags = pTTFontFile->m_nTypeFlags & TYPEFLAG_COPYRIGHT_MASK;
-
-            // http://www.microsoft.com/typography/tt/ttf_spec/ttch02.doc
-            // Font embedding is allowed if not restricted completely (only bit 1 set).
-            // Preview&Print (bit 2), Editable (bit 3) or Installable (==0) fonts are ok.
-            bRet = ( nCopyrightFlags & 0x02 ) != 0x02;
-        }
-    }
-    return bRet;
-}
-
 bool PrintFontManager::getMetrics( fontID nFontID, const sal_Unicode* pString, int nLen, CharacterMetric* pArray ) const
 {
     PrintFont* pFont = getFont( nFontID );
@@ -1300,51 +1237,6 @@ bool PrintFontManager::getMetrics( fontID nFontID, const sal_Unicode* pString, i
                 pArray[ i ] = it->second;
         }
     }
-
-    return true;
-}
-
-bool PrintFontManager::getMetrics( fontID nFontID, sal_Unicode minCharacter, sal_Unicode maxCharacter, CharacterMetric* pArray, bool bVertical ) const
-{
-    OSL_PRECOND(minCharacter <= maxCharacter, "invalid char. range");
-    if (minCharacter > maxCharacter)
-        return false;
-
-    PrintFont* pFont = getFont( nFontID );
-    if( ! pFont )
-        return false;
-
-    if( ( pFont->m_nAscend == 0 && pFont->m_nDescend == 0 )
-        || ! pFont->m_pMetrics || pFont->m_pMetrics->isEmpty()
-        )
-    {
-        // might be a font not yet analyzed
-        if( pFont->m_eType == fonttype::TrueType )
-            analyzeTrueTypeFile( pFont );
-    }
-
-    sal_Unicode code = minCharacter;
-    do
-    {
-        if( ! pFont->m_pMetrics ||
-            ! ( pFont->m_pMetrics->m_aPages[ code >> 11 ] & ( 1 << ( ( code >> 8 ) & 7 ) ) ) )
-            pFont->queryMetricPage( code >> 8, m_pAtoms );
-        pArray[ code - minCharacter ].width     = -1;
-        pArray[ code - minCharacter ].height    = -1;
-        if( pFont->m_pMetrics )
-        {
-            int effectiveCode = code;
-            effectiveCode |= bVertical ? 1 << 16 : 0;
-            std::unordered_map< int, CharacterMetric >::const_iterator it =
-                  pFont->m_pMetrics->m_aMetrics.find( effectiveCode );
-            // if no vertical metrics are available assume rotated horizontal metrics
-            if( bVertical && (it == pFont->m_pMetrics->m_aMetrics.end()) )
-                it = pFont->m_pMetrics->m_aMetrics.find( code );
-            // the character metrics are in it->second
-            if( it != pFont->m_pMetrics->m_aMetrics.end() )
-                pArray[ code - minCharacter ] = it->second;
-        }
-    } while( code++ != maxCharacter );
 
     return true;
 }
