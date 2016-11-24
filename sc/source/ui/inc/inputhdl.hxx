@@ -32,6 +32,7 @@
 #include <editeng/svxenum.hxx>
 
 #include <set>
+#include <memory>
 
 class ScDocument;
 class ScTabViewShell;
@@ -55,7 +56,7 @@ class ScInputHandler final
 private:
     VclPtr<ScInputWindow>          pInputWin;
 
-    ScEditEngineDefaulter*  pEngine;                    ///< Edited data in the sheet (when the user clicks into the sheet, and starts writing there).
+    std::unique_ptr<ScEditEngineDefaulter> mpEditEngine;     ///< Edited data in the sheet (when the user clicks into the sheet, and starts writing there).
     EditView*               pTableView;                 // associated active EditView
     EditView*               pTopView;                   // EditView in the input row
 
