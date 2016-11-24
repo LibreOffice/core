@@ -106,7 +106,7 @@ OUString SwWrtShell::GetDoString( DoType eDoType ) const
         break;
     case REDO:
         nResStr = STR_REDO;
-        (void)GetFirstRedoInfo(&aUndoStr, &m_rView);
+        (void)GetFirstRedoInfo(&aUndoStr, nullptr, &m_rView);
         break;
     default:;//prevent warning
     }
