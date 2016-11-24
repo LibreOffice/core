@@ -8,6 +8,8 @@
  */
 
 
+// '#if CLANG_VERSION >= 30800' covers large parts of compilerplugins/clang/datamembershadow.cxx
+#if (__clang_major__ == 3 && __clang_minor__ >= 8) || __clang_major__ > 3
 struct Bar {
     int x; // expected-note {{superclass member here [loplugin:datamembershadow]}}
 };
@@ -15,5 +17,8 @@ struct Bar {
 struct Foo : public Bar {
     int x; // expected-error {{data member x is shadowing member in superclass, through inheritance path Foo->Bar [loplugin:datamembershadow]}}
 };
+#else
+// expected-no-diagnostics
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
