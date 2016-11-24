@@ -372,7 +372,13 @@ UndoManager::GetLastUndoInfo(
         // If an other view created the undo action, prevent undoing it from this view.
         sal_Int32 nViewShellId = pView ? pView->GetViewShellId() : m_pDocShell->GetView()->GetViewShellId();
         if (pAction->GetViewShellId() != nViewShellId)
+        {
+            if (o_pId)
+            {
+                 *o_pId = UNDO_CONFLICT;
+            }
             return false;
+        }
     }
 
     if (o_pStr)
@@ -425,7 +431,13 @@ bool UndoManager::GetFirstRedoInfo(OUString *const o_pStr,
         // If an other view created the undo action, prevent redoing it from this view.
         sal_Int32 nViewShellId = pView ? pView->GetViewShellId() : m_pDocShell->GetView()->GetViewShellId();
         if (pAction->GetViewShellId() != nViewShellId)
+        {
+            if (o_pId)
+            {
+                 *o_pId = UNDO_CONFLICT;
+            }
             return false;
+        }
     }
 
     if (o_pStr)
