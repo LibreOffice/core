@@ -50,7 +50,14 @@ $(eval $(call gb_Library_use_libraries,cppcanvas,\
 $(eval $(call gb_Library_add_exception_objects,cppcanvas,\
 	cppcanvas/source/mtfrenderer/bitmapaction \
 	cppcanvas/source/mtfrenderer/cachedprimitivebase \
+	cppcanvas/source/mtfrenderer/emfpbrush \
+	cppcanvas/source/mtfrenderer/emfpcustomlinecap \
+	cppcanvas/source/mtfrenderer/emfpfont \
+	cppcanvas/source/mtfrenderer/emfpimage \
 	cppcanvas/source/mtfrenderer/emfplus \
+	cppcanvas/source/mtfrenderer/emfppen \
+	cppcanvas/source/mtfrenderer/emfppath \
+	cppcanvas/source/mtfrenderer/emfpregion \
 	cppcanvas/source/mtfrenderer/implrenderer \
 	cppcanvas/source/mtfrenderer/lineaction \
 	cppcanvas/source/mtfrenderer/mtftools \
