@@ -1788,8 +1788,15 @@ public:
             aTree.put("success", bSuccess);
         }
 
-        // TODO UNO Any rEvent.Result -> JSON
-        // aTree.put("result": "...");
+        if (maCommand == ".uno:Undo" ||
+            maCommand == ".uno:Redo")
+        {
+            sal_Int16 aInt16;
+            if (rEvent.Result >>= aInt16)
+            {
+                aTree.put("result", aInt16);
+            }
+        }
 
         std::stringstream aStream;
         boost::property_tree::write_json(aStream, aTree);

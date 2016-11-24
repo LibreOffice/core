@@ -564,6 +564,7 @@ public:
                              SwUndoId *const o_pId,
                              const SwView* pView = nullptr) const;
     bool     GetFirstRedoInfo(OUString *const o_pStr,
+                              SwUndoId *const o_pId,
                               const SwView* pView = nullptr) const;
     SwUndoId GetRepeatInfo(OUString *const o_pStr) const;
 
