@@ -38,8 +38,8 @@ class SvxSearchItem;
 class SfxStyleSheetBasePool;
 class SvxJSearchOptionsPage;
 class SvxSearchController;
-
 struct SearchDlg_Impl;
+enum class ModifyFlags;
 
 struct SearchAttrItem
 {
@@ -210,7 +210,7 @@ private:
     SearchOptionFlags  nOptions;
     bool            bSet;
     bool            bConstruct;
-    sal_uIntPtr         nModifyFlag;
+    ModifyFlags     nModifyFlag;
     OUString        aStylesStr;
     OUString        aLayoutStr;
     OUString        aLayoutWriterStr;

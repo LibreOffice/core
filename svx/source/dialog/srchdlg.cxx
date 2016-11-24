@@ -68,6 +68,7 @@
 #include <tools/resary.hxx>
 #include <svx/svxdlg.hxx>
 #include <vcl/toolbox.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 #include <cstdlib>
 #include <memory>
@@ -81,23 +82,29 @@ using namespace comphelper;
 
 #define REMEMBER_SIZE       10
 
-#define MODIFY_SEARCH       0x00000001
-#define MODIFY_REPLACE      0x00000002
-#define MODIFY_WORD         0x00000004
-#define MODIFY_EXACT        0x00000008
-#define MODIFY_BACKWARDS    0x00000010
-#define MODIFY_SELECTION    0x00000020
-#define MODIFY_REGEXP       0x00000040
-#define MODIFY_LAYOUT       0x00000080
-#define MODIFY_SIMILARITY   0x00000100
-#define MODIFY_FORMULAS     0x00000200
-#define MODIFY_VALUES       0x00000400
-#define MODIFY_CALC_NOTES   0x00000800
-#define MODIFY_ROWS         0x00001000
-#define MODIFY_COLUMNS      0x00002000
-#define MODIFY_ALLTABLES    0x00004000
-#define MODIFY_NOTES        0x00008000
-#define MODIFY_WILDCARD     0x00010000
+enum class ModifyFlags {
+    NONE         = 0x000000,
+    Search       = 0x000001,
+    Replace      = 0x000002,
+    Word         = 0x000004,
+    Exact        = 0x000008,
+    Backwards    = 0x000010,
+    Selection    = 0x000020,
+    Regexp       = 0x000040,
+    Layout       = 0x000080,
+    Similarity   = 0x000100,
+    Formulas     = 0x000200,
+    Values       = 0x000400,
+    CalcNotes    = 0x000800,
+    Rows         = 0x001000,
+    Columns      = 0x002000,
+    AllTables    = 0x004000,
+    Notes        = 0x008000,
+    Wildcard     = 0x010000
+};
+namespace o3tl {
+    template<> struct typed_flags<ModifyFlags> : is_typed_flags<ModifyFlags, 0x01ffff> {};
+}
 
 namespace
 {
@@ -256,7 +263,7 @@ SvxSearchDialog::SvxSearchDialog( vcl::Window* pParent, SfxChildWindow* pChildWi
     , nOptions(SearchOptionFlags::ALL)
     , bSet(false)
     , bConstruct(true)
-    , nModifyFlag(0)
+    , nModifyFlag(ModifyFlags::NONE)
     , pSearchList(nullptr)
     , pReplaceList(new SearchAttrItemList)
     , pSearchItem(nullptr)
@@ -778,21 +785,21 @@ void SvxSearchDialog::Init_Impl( bool bSearchPattern )
 
     bWriter = ( pSearchItem->GetAppFlag() == SvxSearchApp::WRITER );
 
-    if ( ( nModifyFlag & MODIFY_WORD ) == 0 )
+    if ( !( nModifyFlag & ModifyFlags::Word ) )
          m_pWordBtn->Check( pSearchItem->GetWordOnly() );
-    if ( ( nModifyFlag & MODIFY_EXACT ) == 0 )
+    if ( !( nModifyFlag & ModifyFlags::Exact ) )
         m_pMatchCaseCB->Check( pSearchItem->GetExact() );
-    if ( ( nModifyFlag & MODIFY_BACKWARDS ) == 0 )
+    if ( !( nModifyFlag & ModifyFlags::Backwards ) )
         m_pReplaceBackwardsCB->Check( bReplaceBackwards ); //adjustment to replace backwards
-    if ( ( nModifyFlag & MODIFY_NOTES ) == 0 )
+    if ( !( nModifyFlag & ModifyFlags::Notes ) )
         m_pNotesBtn->Check( pSearchItem->GetNotes() );
-    if ( ( nModifyFlag & MODIFY_SELECTION ) == 0 )
+    if ( !( nModifyFlag & ModifyFlags::Selection ) )
         m_pSelectionBtn->Check( pSearchItem->GetSelection() );
-    if ( ( nModifyFlag & MODIFY_REGEXP ) == 0 )
+    if ( !( nModifyFlag & ModifyFlags::Regexp ) )
         m_pRegExpBtn->Check( pSearchItem->GetRegExp() );
-    if ( ( nModifyFlag & MODIFY_WILDCARD ) == 0 )
+    if ( !( nModifyFlag & ModifyFlags::Wildcard ) )
         m_pWildcardBtn->Check( pSearchItem->GetWildcard() );
-    if ( ( nModifyFlag & MODIFY_LAYOUT ) == 0 )
+    if ( !( nModifyFlag & ModifyFlags::Layout ) )
         m_pLayoutBtn->Check( pSearchItem->GetPattern() );
     if (m_pNotesBtn->IsChecked())
         m_pLayoutBtn->Disable();
@@ -818,37 +825,37 @@ void SvxSearchDialog::Init_Impl( bool bSearchPattern )
         m_pAllSheetsCB->SetClickHdl( aLink );
         m_pSearchFormattedCB->SetClickHdl( aLink );
 
-        sal_uIntPtr nModifyFlagCheck;
+        ModifyFlags nModifyFlagCheck;
         switch ( pSearchItem->GetCellType() )
         {
             case SvxSearchCellType::FORMULA:
-                nModifyFlagCheck = MODIFY_FORMULAS;
+                nModifyFlagCheck = ModifyFlags::Formulas;
                 break;
 
             case SvxSearchCellType::VALUE:
-                nModifyFlagCheck = MODIFY_VALUES;
+                nModifyFlagCheck = ModifyFlags::Values;
                 break;
 
             case SvxSearchCellType::NOTE:
-                nModifyFlagCheck = MODIFY_CALC_NOTES;
+                nModifyFlagCheck = ModifyFlags::CalcNotes;
                 break;
 
             default:
                 std::abort(); // cannot happen
         }
-        if ( (nModifyFlag & nModifyFlagCheck) == 0 )
+        if ( !(nModifyFlag & nModifyFlagCheck) )
             m_pCalcSearchInLB->SelectEntryPos( static_cast<sal_Int32>(pSearchItem->GetCellType()) );
 
         m_pWordBtn->SetText( aCalcStr.getToken( 0, '#' ) );
 
         if ( pSearchItem->GetRowDirection() &&
-             ( nModifyFlag & MODIFY_ROWS ) == 0 )
+             !( nModifyFlag & ModifyFlags::Rows ) )
             m_pRowsBtn->Check();
         else if ( !pSearchItem->GetRowDirection() &&
-                  ( nModifyFlag & MODIFY_COLUMNS ) == 0 )
+                  !( nModifyFlag & ModifyFlags::Columns ) )
             m_pColumnsBtn->Check();
 
-        if ( ( nModifyFlag & MODIFY_ALLTABLES ) == 0 )
+        if ( !( nModifyFlag & ModifyFlags::AllTables ) )
             m_pAllSheetsCB->Check( pSearchItem->IsAllTables() );
 
         // only look for formatting in Writer
@@ -898,7 +905,7 @@ void SvxSearchDialog::Init_Impl( bool bSearchPattern )
     }
 
     // similarity search?
-    if ( ( nModifyFlag & MODIFY_SIMILARITY ) == 0 )
+    if ( !( nModifyFlag & ModifyFlags::Similarity ) )
         m_pSimilarityBox->Check( pSearchItem->IsLevenshtein() );
     bSet = true;
 
@@ -964,8 +971,8 @@ void SvxSearchDialog::Init_Impl( bool bSearchPattern )
     }
     else
     {
-        bool bSetSearch = ( ( nModifyFlag & MODIFY_SEARCH ) == 0 );
-        bool bSetReplace = ( ( nModifyFlag & MODIFY_REPLACE ) == 0 );
+        bool bSetSearch = !( nModifyFlag & ModifyFlags::Search );
+        bool bSetReplace = !( nModifyFlag & ModifyFlags::Replace );
 
         if ( !(pSearchItem->GetSearchString().isEmpty()) && bSetSearch )
             m_pSearchLB->SetText( pSearchItem->GetSearchString() );
@@ -1365,7 +1372,7 @@ IMPL_LINK( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn, void )
             if ( pReplaceList )
                 pReplaceList->Clear();
         }
-        nModifyFlag = 0;
+        nModifyFlag = ModifyFlags::NONE;
         const SfxPoolItem* ppArgs[] = { pSearchItem, nullptr };
         rBindings.ExecuteSynchron( FID_SEARCH_NOW, ppArgs );
     }
@@ -2228,39 +2235,39 @@ void SvxSearchDialog::PaintAttrText_Impl()
 void SvxSearchDialog::SetModifyFlag_Impl( const Control* pCtrl )
 {
     if ( m_pSearchLB == pCtrl )
-        nModifyFlag |= MODIFY_SEARCH;
+        nModifyFlag |= ModifyFlags::Search;
     else if ( m_pReplaceLB == pCtrl )
-        nModifyFlag |= MODIFY_REPLACE;
+        nModifyFlag |= ModifyFlags::Replace;
     else if ( m_pWordBtn == pCtrl )
-        nModifyFlag |= MODIFY_WORD;
+        nModifyFlag |= ModifyFlags::Word;
     else if ( m_pMatchCaseCB == pCtrl )
-        nModifyFlag |= MODIFY_EXACT;
+        nModifyFlag |= ModifyFlags::Exact;
     else if ( m_pReplaceBackwardsCB == pCtrl )
-        nModifyFlag |= MODIFY_BACKWARDS;
+        nModifyFlag |= ModifyFlags::Backwards;
     else if ( m_pNotesBtn == pCtrl )
-        nModifyFlag |= MODIFY_NOTES;
+        nModifyFlag |= ModifyFlags::Notes;
     else if ( m_pSelectionBtn == pCtrl )
-        nModifyFlag |= MODIFY_SELECTION;
+        nModifyFlag |= ModifyFlags::Selection;
     else if ( m_pRegExpBtn == pCtrl )
-        nModifyFlag |= MODIFY_REGEXP;
+        nModifyFlag |= ModifyFlags::Regexp;
     else if ( m_pWildcardBtn == pCtrl )
-        nModifyFlag |= MODIFY_WILDCARD;
+        nModifyFlag |= ModifyFlags::Wildcard;
     else if ( m_pLayoutBtn == pCtrl )
-        nModifyFlag |= MODIFY_LAYOUT;
+        nModifyFlag |= ModifyFlags::Layout;
     else if ( m_pSimilarityBox == pCtrl )
-        nModifyFlag |= MODIFY_SIMILARITY;
+        nModifyFlag |= ModifyFlags::Similarity;
     else if ( m_pCalcSearchInLB == pCtrl )
     {
-        nModifyFlag |= MODIFY_FORMULAS;
-        nModifyFlag |= MODIFY_VALUES;
-        nModifyFlag |= MODIFY_CALC_NOTES;
+        nModifyFlag |= ModifyFlags::Formulas;
+        nModifyFlag |= ModifyFlags::Values;
+        nModifyFlag |= ModifyFlags::CalcNotes;
     }
     else if ( m_pRowsBtn == pCtrl )
-        nModifyFlag |= MODIFY_ROWS;
+        nModifyFlag |= ModifyFlags::Rows;
     else if ( m_pColumnsBtn == pCtrl )
-        nModifyFlag |= MODIFY_COLUMNS;
+        nModifyFlag |= ModifyFlags::Columns;
     else if ( m_pAllSheetsCB == pCtrl )
-        nModifyFlag |= MODIFY_ALLTABLES;
+        nModifyFlag |= ModifyFlags::AllTables;
 }
 
 
@@ -2324,7 +2331,7 @@ void SvxSearchDialog::SaveToModule_Impl()
     }
 
     pSearchItem->SetCommand( SvxSearchCmd::FIND );
-    nModifyFlag = 0;
+    nModifyFlag = ModifyFlags::NONE;
     const SfxPoolItem* ppArgs[] = { pSearchItem, nullptr };
     rBindings.GetDispatcher()->Execute( SID_SEARCH_ITEM, SfxCallMode::SLOT, ppArgs );
 }
