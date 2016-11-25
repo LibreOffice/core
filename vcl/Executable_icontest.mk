@@ -15,7 +15,7 @@ $(eval $(call gb_Executable_use_externals,icontest,\
 ))
 ifeq ($(ENABLE_HEADLESS),)
 $(eval $(call gb_Executable_use_externals,icontest,\
-    glew \
+    epoxy \
 ))
 endif
 

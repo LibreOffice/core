@@ -1,0 +1,11 @@
+--- configure
++++ configure
+@@ -18659,7 +18659,7 @@
+         EPOXY_LINK_LIBS=""
+         ;;
+     *)
+-        build_egl=yes
++        build_egl=no
+         build_glx=yes
+         build_wgl=no
+         # On platforms with dlopen, we load everything dynamically and

@@ -1634,6 +1634,11 @@ AC_ARG_WITH(system-cairo,
         [Use cairo libraries already on system.  Happens automatically for
          (implicit) --enable-gtk and for --enable-gtk3.]))
 
+AC_ARG_WITH(system-epoxy,
+    AS_HELP_STRING([--with-system-epoxy],
+        [Use epoxy libraries already on system.  Happens automatically for
+         --enable-gtk3.]))
+
 AC_ARG_WITH(myspell-dicts,
     AS_HELP_STRING([--with-myspell-dicts],
         [Adds myspell dictionaries to the LibreOffice installation set]),
@@ -8941,14 +8946,6 @@ AC_SUBST([GLM_CFLAGS])
 AC_SUBST([SYSTEM_GLM])
 
 dnl ===================================================================
-dnl Check for system glew
-dnl ===================================================================
-libo_CHECK_SYSTEM_MODULE([glew], [GLEW], [glew >= 1.10.0])
-AS_IF([test "$with_system_glew" = "yes"],
-    [PKG_CHECK_EXISTS([glew >= 1.12.0], [AC_DEFINE([HAVE_GLEW_1_12])])],
-    [AC_DEFINE([HAVE_GLEW_1_12])])
-
-dnl ===================================================================
 dnl Check for system odbc
 dnl ===================================================================
 AC_MSG_CHECKING([which odbc headers to use])
@@ -10121,11 +10118,15 @@ GTK3_CFLAGS=""
 GTK3_LIBS=""
 ENABLE_GTK3=""
 if test "x$enable_gtk3" = "xyes"; then
+    if test "$with_system_epoxy" = no; then
+        AC_MSG_ERROR([System epoxy required for gtk3 support, do not combine --enable-gtk3 with --without-system-epoxy])
+    fi
+    : ${with_system_epoxy:=yes}
     if test "$with_system_cairo" = no; then
         AC_MSG_ERROR([System cairo required for gtk3 support, do not combine --enable-gtk3 with --without-system-cairo])
     fi
     : ${with_system_cairo:=yes}
-    PKG_CHECK_MODULES(GTK3, gtk+-3.0 >= 3.8 gtk+-unix-print-3.0 gmodule-no-export-2.0 glib-2.0 >= 2.38 cairo, ENABLE_GTK3="TRUE", ENABLE_GTK3="")
+    PKG_CHECK_MODULES(GTK3, gtk+-3.0 >= 3.8 gtk+-unix-print-3.0 gmodule-no-export-2.0 glib-2.0 >= 2.38 cairo epoxy, ENABLE_GTK3="TRUE", ENABLE_GTK3="")
     if test "x$ENABLE_GTK3" = "xTRUE"; then
         R="gtk3"
         dnl Avoid installed by unpackaged files for now.
@@ -11726,6 +11727,11 @@ fi
 AC_SUBST(SYSTEM_CAIRO)
 AC_SUBST(CAIRO_CFLAGS)
 AC_SUBST(CAIRO_LIBS)
+
+dnl ===================================================================
+dnl Check for system epoxy
+dnl ===================================================================
+libo_CHECK_SYSTEM_MODULE([epoxy], [EPOXY], [epoxy >= 1.3.1], ["-I${WORKDIR}/UnpackedTarball/epoxy/include"])
 
 dnl ===================================================================
 dnl Test whether to use avahi

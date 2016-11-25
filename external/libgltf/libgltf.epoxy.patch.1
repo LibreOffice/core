@@ -1,0 +1,192 @@
+--- libgltf/inc/libgltf.h	2016-11-26 21:09:12.412551045 +0000
++++ libgltf/inc/libgltf.h	2016-11-26 21:11:06.459102534 +0000
+@@ -12,7 +12,7 @@
+ 
+ #include <stddef.h>
+ #include "types.h"
+-#include <GL/glew.h>
++#include <epoxy/gl.h>
+ #include <glm/glm.hpp>
+ #include <string>
+ #include <vector>
+--- libgltf/src/Camera.h	2016-11-26 21:09:12.451549182 +0000
++++ libgltf/src/Camera.h	2016-11-26 21:12:15.079824217 +0000
+@@ -10,7 +10,7 @@
+ #ifndef CAMERA_H
+ #define CAMERA_H
+ 
+-#include <GL/glew.h>
++#include <epoxy/gl.h>
+ #include <glm/glm.hpp>
+ 
+ namespace libgltf
+--- libgltf/src/Common.h	2016-11-26 21:09:12.452549134 +0000
++++ libgltf/src/Common.h	2016-11-26 21:12:06.515233386 +0000
+@@ -9,7 +9,7 @@
+ 
+ #ifndef COMMON_H
+ #define COMMON_H
+-#include <GL/glew.h>
++#include <epoxy/gl.h>
+ #include <glm/glm.hpp>
+ #include <string>
+ #include <vector>
+--- libgltf/src/Font.cpp	2016-11-26 21:09:12.450549230 +0000
++++ libgltf/src/Font.cpp	2016-11-26 21:12:11.168011102 +0000
+@@ -9,7 +9,7 @@
+ 
+ #include "Font.h"
+ 
+-#include <GL/glew.h>
++#include <epoxy/gl.h>
+ #include <glm/gtc/matrix_transform.hpp>
+ #include <cstdio>
+ 
+--- libgltf/src/RenderScene.cpp	2016-11-26 21:09:12.456548943 +0000
++++ libgltf/src/RenderScene.cpp	2016-11-26 21:15:45.021794354 +0000
+@@ -1084,7 +1084,7 @@
+ 
+ int RenderScene::initRender(const std::vector<glTFFile>& inputFiles)
+ {
+-    if( !glewIsSupported("GL_VERSION_3_0") )
++    if( epoxy_gl_version() < 30 )
+     {
+         return LIBGLTF_UNKNOWN_ERROR;
+     }
+--- libgltf/src/Shaders.cpp	2016-11-26 21:09:12.451549182 +0000
++++ libgltf/src/Shaders.cpp	2016-11-26 21:12:41.591557634 +0000
+@@ -9,7 +9,7 @@
+ 
+ #include "Shaders.h"
+ 
+-#include <GL/glew.h>
++#include <epoxy/gl.h>
+ #include <cstdio>
+ #include <cstring>
+ 
+--- libgltf/src/Texture.h	2016-11-26 21:09:12.454549039 +0000
++++ libgltf/src/Texture.h	2016-11-26 21:12:38.592700902 +0000
+@@ -10,7 +10,7 @@
+ #ifndef TEXTURE_H
+ #define TEXTURE_H
+ 
+-#include <GL/glew.h>
++#include <epoxy/gl.h>
+ 
+ namespace libgltf
+ {
+--- libgltf/configure	2016-11-28 10:15:59.782223873 +0000
++++ libgltf/configure	2016-11-28 10:16:08.191824453 +0000
+@@ -15534,112 +15534,6 @@
+ CPPFLAGS=$save_CPPFLAGS
+ 
+ 
+-# =========
+-# Find glew
+-# =========
+-save_CPPFLAGS=$CPPFLAGS
+-CPPFLAGS="$CPPFLAGS $GLEW_CFLAGS"
+-
+-pkg_failed=no
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for GLEW" >&5
+-$as_echo_n "checking for GLEW... " >&6; }
+-
+-if test -n "$GLEW_CFLAGS"; then
+-    pkg_cv_GLEW_CFLAGS="$GLEW_CFLAGS"
+- elif test -n "$PKG_CONFIG"; then
+-    if test -n "$PKG_CONFIG" && \
+-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"glew >= 1.8.0\""; } >&5
+-  ($PKG_CONFIG --exists --print-errors "glew >= 1.8.0") 2>&5
+-  ac_status=$?
+-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+-  test $ac_status = 0; }; then
+-  pkg_cv_GLEW_CFLAGS=`$PKG_CONFIG --cflags "glew >= 1.8.0" 2>/dev/null`
+-		      test "x$?" != "x0" && pkg_failed=yes
+-else
+-  pkg_failed=yes
+-fi
+- else
+-    pkg_failed=untried
+-fi
+-if test -n "$GLEW_LIBS"; then
+-    pkg_cv_GLEW_LIBS="$GLEW_LIBS"
+- elif test -n "$PKG_CONFIG"; then
+-    if test -n "$PKG_CONFIG" && \
+-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"glew >= 1.8.0\""; } >&5
+-  ($PKG_CONFIG --exists --print-errors "glew >= 1.8.0") 2>&5
+-  ac_status=$?
+-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+-  test $ac_status = 0; }; then
+-  pkg_cv_GLEW_LIBS=`$PKG_CONFIG --libs "glew >= 1.8.0" 2>/dev/null`
+-		      test "x$?" != "x0" && pkg_failed=yes
+-else
+-  pkg_failed=yes
+-fi
+- else
+-    pkg_failed=untried
+-fi
+-
+-
+-
+-if test $pkg_failed = yes; then
+-   	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+-$as_echo "no" >&6; }
+-
+-if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+-        _pkg_short_errors_supported=yes
+-else
+-        _pkg_short_errors_supported=no
+-fi
+-        if test $_pkg_short_errors_supported = yes; then
+-	        GLEW_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "glew >= 1.8.0" 2>&1`
+-        else
+-	        GLEW_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "glew >= 1.8.0" 2>&1`
+-        fi
+-	# Put the nasty error message in config.log where it belongs
+-	echo "$GLEW_PKG_ERRORS" >&5
+-
+-	as_fn_error $? "Package requirements (glew >= 1.8.0) were not met:
+-
+-$GLEW_PKG_ERRORS
+-
+-Consider adjusting the PKG_CONFIG_PATH environment variable if you
+-installed software in a non-standard prefix.
+-
+-Alternatively, you may set the environment variables GLEW_CFLAGS
+-and GLEW_LIBS to avoid the need to call pkg-config.
+-See the pkg-config man page for more details." "$LINENO" 5
+-elif test $pkg_failed = untried; then
+-     	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+-$as_echo "no" >&6; }
+-	{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+-$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+-as_fn_error $? "The pkg-config script could not be found or is too old.  Make sure it
+-is in your PATH or set the PKG_CONFIG environment variable to the full
+-path to pkg-config.
+-
+-Alternatively, you may set the environment variables GLEW_CFLAGS
+-and GLEW_LIBS to avoid the need to call pkg-config.
+-See the pkg-config man page for more details.
+-
+-To get pkg-config, see <http://pkg-config.freedesktop.org/>.
+-See \`config.log' for more details" "$LINENO" 5; }
+-else
+-	GLEW_CFLAGS=$pkg_cv_GLEW_CFLAGS
+-	GLEW_LIBS=$pkg_cv_GLEW_LIBS
+-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+-$as_echo "yes" >&6; }
+-
+- ac_fn_cxx_check_header_mongrel "$LINENO" "GL/glew.h" "ac_cv_header_GL_glew_h" "$ac_includes_default"
+-if test "x$ac_cv_header_GL_glew_h" = xyes; then :
+-
+-else
+-  as_fn_error $? "GL/glew.h not found. install glew" "$LINENO" 5
+-fi
+-
+-
+-
+-fi
+-CPPFLAGS=$save_CPPFLAGS
+ 
+ 
+ 

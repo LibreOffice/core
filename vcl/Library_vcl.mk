@@ -124,7 +124,7 @@ $(eval $(call gb_Library_use_externals,vcl,\
 ))
 ifeq ($(ENABLE_HEADLESS),)
 $(eval $(call gb_Library_use_externals,vcl,\
-     glew \
+     epoxy \
  ))
 endif
 

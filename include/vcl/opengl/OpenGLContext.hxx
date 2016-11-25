@@ -12,7 +12,8 @@
 
 #include <string.h>
 
-#include <GL/glew.h>
+#include <epoxy/gl.h>
+#include <epoxy/glx.h>
 
 #include <vcl/dllapi.h>
 #include <vcl/window.hxx>
@@ -158,8 +159,8 @@ private:
     virtual void destroyCurrentContext();
 
 protected:
-    bool InitGLEW();
-    static void InitGLEWDebugging();
+    bool InitGL();
+    static void InitGLDebugging();
     static void InitChildWindow(SystemChildWindow *pChildWindow);
     static void BuffersSwapped();
     virtual GLWindow& getModifiableOpenGLWindow() = 0;
