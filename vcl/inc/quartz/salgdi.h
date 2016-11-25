@@ -88,8 +88,6 @@ public:
     CoreTextStyle( const FontSelectPattern& );
     ~CoreTextStyle( void );
 
-    SalLayout* GetTextLayout( void ) const;
-
     void       GetFontMetric( ImplFontMetricDataRef& ) const;
     bool       GetGlyphBoundRect( sal_GlyphId, Rectangle& ) const;
     bool       GetGlyphOutline( sal_GlyphId, basegfx::B2DPolyPolygon& ) const;
@@ -136,8 +134,6 @@ private:
 
 class AquaSalGraphics : public SalGraphics
 {
-    friend class CTLayout;
-protected:
     CGLayerRef                              mxLayer;    // Quartz graphics layer
     CGContextRef                            mrContext;  // Quartz drawing context
 #ifdef MACOSX

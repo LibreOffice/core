@@ -1490,11 +1490,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 
         nScrPos = pScrArray[ 0 ];
 
-        if( bBullet
-#if defined(MACOSX) || defined(IOS)
-            && OutputDevice::UseCommonLayout()
-#endif
-          )
+        if( bBullet )
         {
             // !!! HACK !!!
             // The Arabic layout engine requires some context of the string
@@ -1557,23 +1553,11 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             if ( bSwitchH2V )
                 rInf.GetFrame()->SwitchHorizontalToVertical( aTextOriginPos );
 
-#if defined(MACOSX) || defined(IOS)
-            if (!OutputDevice::UseCommonLayout())
-            {
-                rInf.GetOut().DrawTextArray( aTextOriginPos, rInf.GetText(),
-                                         pKernArray, rInf.GetIdx(), 1, bBullet ? SalLayoutFlags::DrawBullet : SalLayoutFlags::NONE );
-            }
-            else
-            {
-#endif
             rInf.GetOut().DrawTextArray( aTextOriginPos, rInf.GetText(),
                                          pKernArray.get(), rInf.GetIdx(), 1 );
             if( bBullet )
                 rInf.GetOut().DrawTextArray( aTextOriginPos, *pStr, pKernArray.get(),
                                              rInf.GetIdx() ? 1 : 0, 1 );
-#if defined(MACOSX) || defined(IOS)
-            }
-#endif
         }
         else
         {
@@ -1754,15 +1738,6 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 if ( bSwitchH2V )
                     rInf.GetFrame()->SwitchHorizontalToVertical( aTextOriginPos );
 
-#if defined(MACOSX) || defined(IOS)
-                if (!OutputDevice::UseCommonLayout())
-                {
-                        rInf.GetOut().DrawTextArray( aTextOriginPos, *pStr, pKernArray + nOffs,
-                                             rInf.GetIdx() + nOffs , nLen - nOffs, bBullet ? SalLayoutFlags::DrawBullet : SalLayoutFlags::NONE );
-                }
-                else
-                {
-#endif
                 // If we paint bullets instead of spaces, we use a copy of
                 // the paragraph string. For the layout engine, the copy
                 // of the string has to be an environment of the range which
@@ -1817,9 +1792,6 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                     pTmpFont->SetStrikeout(aPreviousStrikeout);
                     rInf.GetOut().Pop();
                 }
-#if defined(MACOSX) || defined(IOS)
-                }
-#endif
             }
         }
     }

@@ -380,11 +380,8 @@ void AquaSalGraphics::GetDevFontList( PhysicalFontCollection* pFontCollection )
     // Copy all PhysicalFontFace objects contained in the SystemFontList
     pSalData->mpFontList->AnnounceFonts( *pFontCollection );
 
-    if (SalLayout::UseCommonLayout())
-    {
-        static CoreTextGlyphFallbackSubstititution aSubstFallback;
-        pFontCollection->SetFallbackHook(&aSubstFallback);
-    }
+    static CoreTextGlyphFallbackSubstititution aSubstFallback;
+    pFontCollection->SetFallbackHook(&aSubstFallback);
 }
 
 void AquaSalGraphics::ClearDevFontCache()
@@ -534,15 +531,10 @@ void AquaSalGraphics::SetFont(FontSelectPattern* pReqFont, int nFallbackLevel)
 
 SalLayout* AquaSalGraphics::GetTextLayout(ImplLayoutArgs& /*rArgs*/, int nFallbackLevel)
 {
-    SalLayout* pSalLayout = nullptr;
     if (mpTextStyle[nFallbackLevel])
-    {
-        if (SalLayout::UseCommonLayout())
-            pSalLayout = new CommonSalLayout(*mpTextStyle[nFallbackLevel]);
-        else
-            pSalLayout = mpTextStyle[nFallbackLevel]->GetTextLayout();
-    }
-    return pSalLayout;
+        return new CommonSalLayout(*mpTextStyle[nFallbackLevel]);
+
+    return nullptr;
 }
 
 const FontCharMapRef AquaSalGraphics::GetFontCharMap() const
