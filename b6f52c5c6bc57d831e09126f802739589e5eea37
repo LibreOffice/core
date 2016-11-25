@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a74a57a_cf30e1a1",
+        "filename": "vcl/opengl/texture.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1000863
+      },
+      "writtenOn": "2016-11-25T07:30:55Z",
+      "side": 0,
+      "message": "This seems to be causing the regression, should be !mpImpl maybe?",
+      "range": {
+        "startLine": 317,
+        "startChar": 11,
+        "endLine": 317,
+        "endChar": 17
+      },
+      "revId": "b6f52c5c6bc57d831e09126f802739589e5eea37",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
