@@ -7,12 +7,14 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Module_Module,glew))
+$(eval $(call gb_UnpackedTarball_UnpackedTarball,epoxy))
 
-$(eval $(call gb_Module_add_targets,glew,\
-	ExternalProject_glew \
-	UnpackedTarball_glew \
-	ExternalPackage_glew \
+$(eval $(call gb_UnpackedTarball_set_tarball,epoxy,$(EPOXY_TARBALL)))
+
+$(eval $(call gb_UnpackedTarball_set_patchlevel,epoxy,0))
+
+$(eval $(call gb_UnpackedTarball_add_patches,epoxy, \
+    external/epoxy/epoxy.windows.api.patch \
 ))
 
 # vim: set noet sw=4 ts=4:
