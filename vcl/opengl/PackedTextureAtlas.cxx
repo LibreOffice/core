@@ -109,7 +109,7 @@ Node* Node::insert(int nWidth, int nHeight, int nPadding)
 
 struct PackedTexture
 {
-    std::shared_ptr<ImplOpenGLTexture> mpTexture;
+    std::unique_ptr<ImplOpenGLTexture> mpTexture;
     std::unique_ptr<Node> mpRootNode;
 
     PackedTexture(int nWidth, int nHeight)
@@ -149,7 +149,7 @@ OpenGLTexture PackedTextureAtlasManager::Reserve(int nWidth, int nHeight)
         Node* pNode = pPackedTexture->mpRootNode->insert(nWidth, nHeight, 1);
         if (pNode != nullptr)
         {
-            return OpenGLTexture(pPackedTexture->mpTexture, pNode->mRectangle, -1);
+            return OpenGLTexture(pPackedTexture->mpTexture.get(), pNode->mRectangle, -1);
         }
     }
     CreateNewTexture();
@@ -157,7 +157,7 @@ OpenGLTexture PackedTextureAtlasManager::Reserve(int nWidth, int nHeight)
     Node* pNode = pPackedTexture->mpRootNode->insert(nWidth, nHeight, 1);
     if (pNode != nullptr)
     {
-        return OpenGLTexture(pPackedTexture->mpTexture, pNode->mRectangle, -1);
+        return OpenGLTexture(pPackedTexture->mpTexture.get(), pNode->mRectangle, -1);
     }
     return OpenGLTexture();
 }

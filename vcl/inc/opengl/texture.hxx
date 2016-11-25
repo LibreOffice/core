@@ -32,6 +32,7 @@
 
 class ImplOpenGLTexture
 {
+    int    mnRefCount;
 public:
     GLuint mnTexture;
     int    mnWidth;
@@ -51,6 +52,11 @@ public:
 
     void IncreaseRefCount(int nSlotNumber);
     void DecreaseRefCount(int nSlotNumber);
+
+    bool IsUnique()
+    {
+        return mnRefCount == 1;
+    }
 
     bool InitializeSlotMechanism(int nInitialSlotSize);
 
@@ -73,7 +79,7 @@ private:
     // if the rect size doesn't match the mpImpl one, this instance
     // is a sub-area from the real OpenGL texture
     Rectangle maRect;
-    std::shared_ptr<ImplOpenGLTexture> mpImpl;
+    ImplOpenGLTexture* mpImpl;
     int mnSlotNumber;
 
     inline bool GetTextureRect(const SalTwoRect& rPosAry, bool bInverted, GLfloat& x1, GLfloat& x2, GLfloat& y1, GLfloat& y2) const;
@@ -85,7 +91,7 @@ private:
 
 public:
                     OpenGLTexture();
-                    OpenGLTexture(const std::shared_ptr<ImplOpenGLTexture>& pImpl, Rectangle aRectangle, int nSlotNumber);
+                    OpenGLTexture(ImplOpenGLTexture* pImpl, Rectangle aRectangle, int nSlotNumber);
 
                     OpenGLTexture( int nWidth, int nHeight, bool bAllocate = true );
                     OpenGLTexture( int nWidth, int nHeight, int nFormat, int nType, void const * pData );
