@@ -5572,7 +5572,7 @@
         <info>
           <desc>Special font for rendering of emojis</desc>
         </info>
-        <value>Noto Emoji</value>
+        <value>EmojiOne Color</value>
       </prop>
       <prop oor:name="PluginsEnabled" oor:type="xs:boolean" oor:nillable="false">
         <!-- OldPath: ? -->
