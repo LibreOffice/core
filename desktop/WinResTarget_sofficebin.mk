@@ -14,6 +14,20 @@ $(eval $(call gb_WinResTarget_set_include,sofficebin/officeloader,\
     -I$(SRCDIR)/sysui/desktop \
 ))
 
+ifneq ($(WITH_DRAGON_SUPPORT),)
+$(eval $(call gb_WinResTarget_add_defs,sofficebin/officeloader,\
+    -DRES_APP_NAME=soffice \
+	-DRES_APP_FILEDESC="OpenOffice 4.1.1" \
+	-DVER_LEVEL="4.00.9774" \
+	-DVERSION="4" \
+	-DSUBVERSION="0" \
+	-DMICROVERSION="9774" \
+	-DVERVARIANT="500" \
+    -DRES_APP_ICON=icons/soffice.ico \
+    -DVERVARIANT=$(LIBO_VERSION_PATCH) \
+    -DRES_APP_VENDOR="$(OOO_VENDOR)" \
+))
+else
 $(eval $(call gb_WinResTarget_add_defs,sofficebin/officeloader,\
     -DRES_APP_NAME=soffice \
     -DRES_APP_FILEDESC="$(PRODUCTNAME)" \
@@ -21,6 +35,7 @@ $(eval $(call gb_WinResTarget_add_defs,sofficebin/officeloader,\
     -DVERVARIANT=$(LIBO_VERSION_PATCH) \
     -DRES_APP_VENDOR="$(OOO_VENDOR)" \
 ))
+endif
 
 $(eval $(call gb_WinResTarget_add_dependencies,sofficebin/officeloader,\
     sysui/desktop/icons/soffice.ico \

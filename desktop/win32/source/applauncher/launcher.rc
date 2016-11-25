@@ -24,8 +24,8 @@
 
 
 VS_VERSION_INFO VERSIONINFO
-    FILEVERSION    4,0,9774,500
-    PRODUCTVERSION 4,0,9774,500
+    FILEVERSION    VERSION, SUBVERSION, MICROVERSION, VERVARIANT
+    PRODUCTVERSION VERSION, SUBVERSION, MICROVERSION, VERVARIANT
     FILEFLAGSMASK 0x3F
     FILEFLAGS
 #if defined(DEBUG)
@@ -44,9 +44,9 @@ VS_VERSION_INFO VERSIONINFO
             {
                 // International StringTable
                 VALUE "CompanyName",      PPS(RES_APP_VENDOR) "\0"
-                VALUE "FileDescription",  "OpenOffice 4.1.1\0"
-                VALUE "FileVersion",      "4.00.9774\0"
-                VALUE "ProductVersion",   "4.00.9774\0"
+                VALUE "FileDescription",  PPS(RES_APP_FILEDESC) "\0"
+                VALUE "FileVersion",      PPS(VER_LEVEL) "\0"
+                VALUE "ProductVersion",   PPS(VER_LEVEL) "\0"
                 VALUE "ProductName",      "LibreOffice\0"
                 VALUE "OriginalFilename", PPS(RES_APP_NAME) ".exe\0"
                 VALUE "InternalName",     PPS(RES_APP_NAME) "\0"

@@ -2273,6 +2273,12 @@ AC_ARG_WITH(onedrive-client-secret,
         authentication on OneDrive. If either this or
         --with-onedrive-client-id is empty, the feature will be disabled]),
 )
+
+AC_ARG_WITH(dragon-support,
+    AS_HELP_STRING([--with-dragon-support],
+        [Fakes some process metadata to make Dragon NS believe we are
+        OpenOffice 4, not LibreOffice]),
+)
 dnl ===================================================================
 dnl Do we want to use pre-build binary tarball for recompile
 dnl ===================================================================
@@ -12355,6 +12361,16 @@ else
     AC_DEFINE(WITH_LOCALE_ALL)
 fi
 AC_SUBST(WITH_LOCALES)
+
+AC_MSG_CHECKING([whether to enable Dragon NS support])
+WITH_DRAGON_SUPPORT=
+if test -n "$with_dragon_support"; then
+    WITH_DRAGON_SUPPORT="TRUE"
+    AC_MSG_RESULT(yes)
+else
+    AC_MSG_RESULT(no)
+fi
+AC_SUBST(WITH_DRAGON_SUPPORT)
 
 dnl git submodule update --reference
 dnl ===================================================================

@@ -665,3 +665,6 @@ include $(BUILDDIR)/config_$(gb_Side)_lang.mk
 # tarball names
 # does use some of the variables defined above
 include @SRC_ROOT@/download.lst
+
+# Custom stuff
+export WITH_DRAGON_SUPPORT=@WITH_DRAGON_SUPPORT@
