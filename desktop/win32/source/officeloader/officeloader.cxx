@@ -23,6 +23,9 @@
 #include <cstddef>
 #include <cwchar>
 
+#if _WIN32_WINNT < 0x0501
+#define _WIN32_WINNT 0x0501
+#endif
 #define WIN32_LEAN_AND_MEAN
 #if defined _MSC_VER
 #pragma warning(push, 1)
@@ -71,10 +74,16 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
     ZeroMemory( &aStartupInfo, sizeof(aStartupInfo) );
     aStartupInfo.cb = sizeof(aStartupInfo);
 
-    GetStartupInfo( &aStartupInfo );
-
     // Create process with same command line, environment and stdio handles which
     // are directed to the created pipes
+    GetStartupInfo(&aStartupInfo);
+
+    // If this process hasn't its stdio handles set, then check if its parent
+    // has a console (i.e. this process is launched from command line), and if so,
+    // attach to it. It will enable child process to retrieve this console if it needs
+    // to output to console
+    if ((aStartupInfo.dwFlags & STARTF_USESTDHANDLES) == 0)
+        AttachConsole(ATTACH_PARENT_PROCESS);
 
     DWORD   dwExitCode = (DWORD)-1;
 
