@@ -35,7 +35,7 @@ class PDFArrayElement;
 class PDFStreamElement;
 
 /// A byte range in a PDF file.
-class PDFElement
+class XMLSECURITY_DLLPUBLIC PDFElement
 {
 public:
     virtual bool Read(SvStream& rStream) = 0;
