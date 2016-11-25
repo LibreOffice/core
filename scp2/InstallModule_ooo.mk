@@ -63,10 +63,6 @@ $(eval $(call gb_InstallModule_add_defs,scp2/ooo,\
 ))
 endif
 
-$(eval $(call gb_InstallModule_add_defs,scp2/ooo,\
-	-DICU_MAJOR=$(ICU_MAJOR) \
-))
-
 $(eval $(call gb_InstallModule_add_templates,scp2/ooo,\
     scp2/source/templates/module_helppack \
     scp2/source/templates/module_helppack_root \
