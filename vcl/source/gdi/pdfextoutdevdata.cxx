@@ -420,9 +420,10 @@ bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIMtfAc
                                 if ( !mbGroupIgnoreGDIMtfActions )
                                     mCurrentGraphic = rGraphic;
                             }
-                            else if ( eType == GFX_LINK_TYPE_NATIVE_PNG )
+                            else if ( eType == GFX_LINK_TYPE_NATIVE_PNG && mParaRects.size() >= 2 )
                             {
-                                mCurrentGraphic = rGraphic;
+                                if ( rOutDevData.HasAdequateCompression(rGraphic, mParaRects[0], mParaRects[1]) )
+                                    mCurrentGraphic = rGraphic;
                             }
                         }
                         break;
@@ -805,7 +806,7 @@ bool PDFExtOutDevData::HasAdequateCompression( const Graphic &rGraphic,
 {
     bool bReduceResolution = false;
 
-    assert( rGraphic.IsLink() && rGraphic.GetLink().GetType() == GFX_LINK_TYPE_NATIVE_JPG );
+    assert( rGraphic.IsLink() && (rGraphic.GetLink().GetType() == GFX_LINK_TYPE_NATIVE_JPG || rGraphic.GetLink().GetType() == GFX_LINK_TYPE_NATIVE_PNG));
 
     // small items better off as PNG anyway
     if ( rGraphic.GetSizePixel().Width() < 32 &&
