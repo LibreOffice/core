@@ -239,7 +239,6 @@ SecurityEnvironment_MSCryptImpl* SecurityEnvironment_MSCryptImpl::getImplementat
         return nullptr ;
 }
 
-/* Native methods */
 HCRYPTPROV SecurityEnvironment_MSCryptImpl::getCryptoProvider() throw( css::uno::Exception , css::uno::RuntimeException ) {
     return m_hProv ;
 }
@@ -1119,7 +1118,6 @@ OUString SecurityEnvironment_MSCryptImpl::getSecurityEnvironmentInformation() th
     return OUString("Microsoft Crypto API");
 }
 
-/* Native methods */
 xmlSecKeysMngrPtr SecurityEnvironment_MSCryptImpl::createKeysManager() throw( Exception, RuntimeException ) {
 
     unsigned int i ;

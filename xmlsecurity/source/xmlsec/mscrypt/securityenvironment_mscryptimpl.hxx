@@ -155,31 +155,29 @@ class SecurityEnvironment_MSCryptImpl : public ::cppu::WeakImplHelper<
         static const css::uno::Sequence< sal_Int8 >& getUnoTunnelId() ;
         static SecurityEnvironment_MSCryptImpl* getImplementation( const css::uno::Reference< css::uno::XInterface >& rObj ) ;
 
-        //Native methods
-        virtual HCRYPTPROV getCryptoProvider() throw( css::uno::Exception , css::uno::RuntimeException ) ;
-        virtual void setCryptoProvider( HCRYPTPROV aProv ) throw( css::uno::Exception , css::uno::RuntimeException ) ;
+        HCRYPTPROV getCryptoProvider() throw( css::uno::Exception , css::uno::RuntimeException ) ;
+        void setCryptoProvider( HCRYPTPROV aProv ) throw( css::uno::Exception , css::uno::RuntimeException ) ;
 
-        virtual LPCTSTR getKeyContainer() throw( css::uno::Exception , css::uno::RuntimeException ) ;
-        virtual void setKeyContainer( LPCTSTR aKeyContainer ) throw( css::uno::Exception , css::uno::RuntimeException ) ;
+        LPCTSTR getKeyContainer() throw( css::uno::Exception , css::uno::RuntimeException ) ;
+        void setKeyContainer( LPCTSTR aKeyContainer ) throw( css::uno::Exception , css::uno::RuntimeException ) ;
 
-        virtual HCERTSTORE getCryptoSlot() throw( css::uno::Exception , css::uno::RuntimeException ) ;
-        virtual void setCryptoSlot( HCERTSTORE aKeyStore ) throw( css::uno::Exception , css::uno::RuntimeException ) ;
+        HCERTSTORE getCryptoSlot() throw( css::uno::Exception , css::uno::RuntimeException ) ;
+        void setCryptoSlot( HCERTSTORE aKeyStore ) throw( css::uno::Exception , css::uno::RuntimeException ) ;
 
-        virtual HCERTSTORE getCertDb() throw( css::uno::Exception , css::uno::RuntimeException ) ;
-        virtual void setCertDb( HCERTSTORE aCertDb ) throw( css::uno::Exception , css::uno::RuntimeException ) ;
+        HCERTSTORE getCertDb() throw( css::uno::Exception , css::uno::RuntimeException ) ;
+        void setCertDb( HCERTSTORE aCertDb ) throw( css::uno::Exception , css::uno::RuntimeException ) ;
 
-        virtual void adoptSymKey( HCRYPTKEY aSymKey ) throw( css::uno::Exception , css::uno::RuntimeException ) ;
-        virtual HCRYPTKEY getSymKey( unsigned int position ) throw( css::uno::Exception , css::uno::RuntimeException ) ;
+        void adoptSymKey( HCRYPTKEY aSymKey ) throw( css::uno::Exception , css::uno::RuntimeException ) ;
+        HCRYPTKEY getSymKey( unsigned int position ) throw( css::uno::Exception , css::uno::RuntimeException ) ;
 
-        virtual HCRYPTKEY getPubKey( unsigned int position ) throw( css::uno::Exception , css::uno::RuntimeException ) ;
+        HCRYPTKEY getPubKey( unsigned int position ) throw( css::uno::Exception , css::uno::RuntimeException ) ;
 
-        virtual void enableDefaultCrypt( bool enable ) throw( css::uno::Exception , css::uno::RuntimeException ) ;
-        virtual bool defaultEnabled() throw( css::uno::Exception , css::uno::RuntimeException ) ;
+        void enableDefaultCrypt( bool enable ) throw( css::uno::Exception , css::uno::RuntimeException ) ;
+        bool defaultEnabled() throw( css::uno::Exception , css::uno::RuntimeException ) ;
 
-        //Native methods
-        virtual xmlSecKeysMngrPtr createKeysManager() throw( css::uno::Exception , css::uno::RuntimeException ) ;
+        xmlSecKeysMngrPtr createKeysManager() throw( css::uno::Exception , css::uno::RuntimeException ) ;
 
-        virtual void destroyKeysManager(xmlSecKeysMngrPtr pKeysMngr) throw( css::uno::Exception , css::uno::RuntimeException ) ;
+        void destroyKeysManager(xmlSecKeysMngrPtr pKeysMngr) throw( css::uno::Exception , css::uno::RuntimeException ) ;
 } ;
 
 #endif // INCLUDED_XMLSECURITY_SOURCE_XMLSEC_MSCRYPT_SECURITYENVIRONMENT_MSCRYPTIMPL_HXX
