@@ -49,7 +49,6 @@ GlyphSet::GlyphSet (sal_Int32 nFontID, bool bVertical)
           mbVertical (bVertical)
 {
     PrintFontManager &rMgr = PrintFontManager::get();
-    meBaseType          = rMgr.getFontType (mnFontID);
     maBaseName          = OUStringToOString (rMgr.getPSName(mnFontID),
                                            RTL_TEXTENCODING_ASCII_US);
     mnBaseEncoding      = rMgr.getFontEncoding(mnFontID);
@@ -181,20 +180,13 @@ GlyphSet::AddGlyphID (
 OString
 GlyphSet::GetGlyphSetName (sal_Int32 nGlyphSetID)
 {
-    if (meBaseType == fonttype::TrueType)
-    {
-        OStringBuffer aSetName( maBaseName.getLength() + 32 );
-        aSetName.append( maBaseName );
-        aSetName.append( "FID" );
-        aSetName.append( mnFontID );
-        aSetName.append( mbVertical ? "VGSet" : "HGSet" );
-        aSetName.append( nGlyphSetID );
-        return aSetName.makeStringAndClear();
-    }
-    else
-    {
-        return maBaseName;
-    }
+    OStringBuffer aSetName( maBaseName.getLength() + 32 );
+    aSetName.append( maBaseName );
+    aSetName.append( "FID" );
+    aSetName.append( mnFontID );
+    aSetName.append( mbVertical ? "VGSet" : "HGSet" );
+    aSetName.append( nGlyphSetID );
+    return aSetName.makeStringAndClear();
 }
 
 OString
@@ -341,10 +333,6 @@ static void CreatePSUploadableFont( TrueTypeFont* pSrcFont, FILE* pTmpFile,
 void
 GlyphSet::PSUploadFont (osl::File& rOutFile, PrinterGfx &rGfx, bool bAllowType42, std::list< OString >& rSuppliedFonts )
 {
-    // only for truetype fonts
-    if (meBaseType != fonttype::TrueType)
-        return;
-
     TrueTypeFont *pTTFont;
     OString aTTFileName (rGfx.GetFontMgr().getFontFileSysPath(mnFontID));
     int nFace = rGfx.GetFontMgr().getFontFaceNumber(mnFontID);

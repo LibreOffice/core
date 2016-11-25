@@ -43,7 +43,6 @@ private:
     sal_Int32           mnFontID;
     bool                mbVertical;
     OString             maBaseName;
-    fonttype::type      meBaseType;
     rtl_TextEncoding    mnBaseEncoding;
 
     typedef std::unordered_map< sal_Unicode, sal_uInt8 > char_map_t;
@@ -71,7 +70,6 @@ public:
     ~GlyphSet ();
 
     sal_Int32       GetFontID () { return mnFontID;}
-    fonttype::type  GetFontType () { return meBaseType;}
     static OString
     GetReencodedFontName (rtl_TextEncoding nEnc,
                           const OString &rFontName);

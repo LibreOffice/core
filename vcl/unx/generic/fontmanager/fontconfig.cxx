@@ -593,8 +593,7 @@ void PrintFontManager::countFontconfigFonts( std::unordered_map<OString, int, OS
                 {
                     for( std::list< PrintFont* >::iterator it = aFonts.begin(); it != aFonts.end(); ++it )
                     {
-                        if( (*it)->m_eType == fonttype::TrueType &&
-                            static_cast<TrueTypeFontFile*>(*it)->m_nCollectionEntry == nCollectionEntry )
+                        if( (*it)->m_nCollectionEntry == nCollectionEntry )
                         {
                             pUpdate = *it;
                             break;
@@ -604,8 +603,7 @@ void PrintFontManager::countFontconfigFonts( std::unordered_map<OString, int, OS
                     // additional entries will be created in the cache
                     // if this is a new index (that is if the loop above
                     // ran to the end of the list)
-                    if( pUpdate->m_eType == fonttype::TrueType ) // sanity check, this should always be the case here
-                        static_cast<TrueTypeFontFile*>(pUpdate)->m_nCollectionEntry = nCollectionEntry;
+                    pUpdate->m_nCollectionEntry = nCollectionEntry;
                 }
                 else
                 {
