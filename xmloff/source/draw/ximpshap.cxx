@@ -59,6 +59,7 @@
 
 #include <sax/tools/converter.hxx>
 #include <comphelper/sequence.hxx>
+#include <tools/diagnose_ex.h>
 
 #include "PropertySetMerger.hxx"
 #include <xmloff/families.hxx>
@@ -330,7 +331,7 @@ void SdXMLShapeContext::addGluePoint( const uno::Reference< xml::sax::XAttribute
         }
         catch(const uno::Exception&)
         {
-            OSL_FAIL( "exception during setting of glue points!");
+            DBG_UNHANDLED_EXCEPTION_WHEN( "during setting of glue points");
         }
     }
 }
@@ -402,7 +403,7 @@ void SdXMLShapeContext::EndElement()
     }
     catch(const Exception&)
     {
-        OSL_FAIL("xmloff::SdXMLShapeContext::EndElement(), exception caught while setting hyperlink!");
+        DBG_UNHANDLED_EXCEPTION_WHEN("while setting hyperlink");
     }
 
     if( mxLockable.is() )
@@ -444,7 +445,7 @@ void SdXMLShapeContext::AddShape(uno::Reference< drawing::XShape >& xShape)
         }
         catch(const Exception&)
         {
-            OSL_FAIL( "SdXMLShapeContext::AddShape(), exception caught!" );
+            DBG_UNHANDLED_EXCEPTION_WHEN( "while setting visible or printable" );
         }
 
         if(!mbTemporaryShape && (!GetImport().HasTextImport()
@@ -679,7 +680,7 @@ void SdXMLShapeContext::SetStyle( bool bSupportsStyle /* = true */)
                 }
                 catch(const uno::Exception&)
                 {
-                    OSL_FAIL( "could not find style for shape!" );
+                    DBG_UNHANDLED_EXCEPTION_WHEN( "finding style for shape" );
                 }
             }
 
@@ -692,7 +693,7 @@ void SdXMLShapeContext::SetStyle( bool bSupportsStyle /* = true */)
                 }
                 catch(const uno::Exception&)
                 {
-                    OSL_FAIL( "could not find style for shape!" );
+                    DBG_UNHANDLED_EXCEPTION_WHEN( "setting style for shape" );
                 }
             }
 
@@ -1055,7 +1056,7 @@ void SdXMLRectShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
                 }
                 catch(const uno::Exception&)
                 {
-                    OSL_FAIL( "exception during setting of corner radius!");
+                    DBG_UNHANDLED_EXCEPTION_WHEN( "setting corner radius");
                 }
             }
         }
@@ -1721,7 +1722,7 @@ void SdXMLTextBoxShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
                 }
                 catch(const uno::Exception&)
                 {
-                    OSL_FAIL( "exception during setting of corner radius!");
+                    DBG_UNHANDLED_EXCEPTION_WHEN( "setting corner radius");
                 }
             }
         }
@@ -1738,7 +1739,7 @@ void SdXMLTextBoxShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
                 }
                 catch(const uno::Exception&)
                 {
-                    OSL_FAIL( "exception during setting of name of next chain link!");
+                    DBG_UNHANDLED_EXCEPTION_WHEN( "setting name of next chain link");
                 }
             }
         }
@@ -2375,7 +2376,7 @@ void SdXMLCaptionShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
                 }
                 catch(const uno::Exception&)
                 {
-                    OSL_FAIL( "exception during setting of corner radius!");
+                    DBG_UNHANDLED_EXCEPTION_WHEN( "setting corner radius");
                 }
             }
         }
@@ -3445,7 +3446,7 @@ void SdXMLFrameShapeContext::removeGraphicFromImportContext(const SvXMLImportCon
         }
         catch( uno::Exception& )
         {
-            OSL_FAIL( "Error in cleanup of multiple graphic object import (!)" );
+            DBG_UNHANDLED_EXCEPTION_WHEN( "Error in cleanup of multiple graphic object import." );
         }
     }
 }
@@ -3474,7 +3475,7 @@ OUString SdXMLFrameShapeContext::getGraphicURLFromImportContext(const SvXMLImpor
         }
         catch( uno::Exception& )
         {
-            OSL_FAIL( "Error in cleanup of multiple graphic object import (!)" );
+            DBG_UNHANDLED_EXCEPTION_WHEN( "Error in cleanup of multiple graphic object import." );
         }
     }
 
@@ -3769,7 +3770,7 @@ void SdXMLCustomShapeContext::StartElement( const uno::Reference< xml::sax::XAtt
         }
         catch(const uno::Exception&)
         {
-            OSL_FAIL( "could not set enhanced customshape geometry" );
+            DBG_UNHANDLED_EXCEPTION_WHEN( "setting enhanced customshape geometry" );
         }
         SdXMLShapeContext::StartElement(xAttrList);
     }
@@ -3852,7 +3853,7 @@ void SdXMLCustomShapeContext::EndElement()
         }
         catch(const uno::Exception&)
         {
-            OSL_FAIL( "could not set enhanced customshape geometry" );
+            DBG_UNHANDLED_EXCEPTION_WHEN( "setting enhanced customshape geometry" );
         }
 
         sal_Int32 nUPD;
@@ -3891,7 +3892,7 @@ void SdXMLCustomShapeContext::EndElement()
     }
     catch(const uno::Exception&)
     {
-        OSL_FAIL("could not flush after load");
+        DBG_UNHANDLED_EXCEPTION_WHEN("flushing after load");
     }
 }
 
@@ -3979,7 +3980,7 @@ void SdXMLTableShapeContext::StartElement( const css::uno::Reference< css::xml::
             }
             catch(const Exception&)
             {
-                OSL_FAIL("SdXMLTableShapeContext::StartElement(), exception caught!");
+                DBG_UNHANDLED_EXCEPTION();
             }
 
             const XMLPropertyMapEntry* pEntry = &aXMLTableShapeAttributes[0];
@@ -3992,7 +3993,7 @@ void SdXMLTableShapeContext::StartElement( const css::uno::Reference< css::xml::
                 }
                 catch(const Exception&)
                 {
-                    OSL_FAIL("SdXMLTableShapeContext::StartElement(), exception caught!");
+                    DBG_UNHANDLED_EXCEPTION();
                 }
             }
         }
