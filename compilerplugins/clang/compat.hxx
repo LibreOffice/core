@@ -179,6 +179,12 @@ inline std::unique_ptr<llvm::raw_fd_ostream> create_raw_fd_ostream(
 #endif
 }
 
+#if CLANG_VERSION >= 30700
+using MacroDefinitionParam = clang::MacroDefinition const &;
+#else
+using MacroDefinitionParam = clang::MacroDirective const *;
+#endif
+
 inline void addPPCallbacks(
     clang::Preprocessor & preprocessor, clang::PPCallbacks * C)
 {

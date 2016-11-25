@@ -14,12 +14,6 @@
 
 namespace {
 
-#if CLANG_VERSION < 30700
-using MacroDefinitionParam = MacroDirective const *;
-#else
-using MacroDefinitionParam = MacroDefinition const &;
-#endif
-
 class OslEndian: public loplugin::Plugin, public PPCallbacks {
 public:
     explicit OslEndian(InstantiationData const & data): Plugin(data) {
@@ -64,8 +58,8 @@ private:
         }
     }
 
-    void MacroUndefined(Token const & MacroNameTok, MacroDefinitionParam)
-        override
+    void MacroUndefined(
+        Token const & MacroNameTok, compat::MacroDefinitionParam) override
     {
         auto id = MacroNameTok.getIdentifierInfo()->getName();
         if (id == "OSL_BIGENDIAN" || id == "OSL_LITENDIAN") {
@@ -76,21 +70,23 @@ private:
         }
     }
 
-    void Defined(Token const & MacroNameTok, MacroDefinitionParam, SourceRange)
+    void Defined(
+        Token const & MacroNameTok, compat::MacroDefinitionParam, SourceRange)
         override
     {
         check(MacroNameTok);
     }
 
-    void Ifdef(SourceLocation, Token const & MacroNameTok, MacroDefinitionParam)
-        override
+    void Ifdef(
+        SourceLocation, Token const & MacroNameTok,
+        compat::MacroDefinitionParam) override
     {
         check(MacroNameTok);
     }
 
     void Ifndef(
-        SourceLocation, Token const & MacroNameTok, MacroDefinitionParam)
-        override
+        SourceLocation, Token const & MacroNameTok,
+        compat::MacroDefinitionParam) override
     {
         check(MacroNameTok);
     }
