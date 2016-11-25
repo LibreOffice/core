@@ -19,6 +19,7 @@
 
 #include <config_folders.h>
 
+#include <o3tl/make_unique.hxx>
 #include <osl/mutex.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
@@ -1337,7 +1338,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
     GfxLinkType                    eLinkType = GfxLinkType::NONE;
     bool                           bDummyContext = rGraphic.IsDummyContext();
     const bool                     bLinkSet = rGraphic.IsLink();
-    FilterConfigItem*              pFilterConfigItem = nullptr;
+    std::unique_ptr<FilterConfigItem> pFilterConfigItem;
 
     Size                aPreviewSizeHint( 0, 0 );
     bool                bAllowPartialStreamRead = false;
@@ -1726,13 +1727,13 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
                 if( nFormat != GRFILTER_FORMAT_DONTKNOW )
                 {
                     aShortName = GetImportFormatShortName( nFormat ).toAsciiUpperCase();
-                    if ( ( pFilterConfigItem == nullptr ) && aShortName == "PCD" )
+                    if ( ( !pFilterConfigItem ) && aShortName == "PCD" )
                     {
                         OUString aFilterConfigPath( "Office.Common/Filter/Graphic/Import/PCD" );
-                        pFilterConfigItem = new FilterConfigItem( aFilterConfigPath );
+                        pFilterConfigItem = o3tl::make_unique<FilterConfigItem>( aFilterConfigPath );
                     }
                 }
-                if( !(*pFunc)( rIStream, rGraphic, pFilterConfigItem ) )
+                if( !(*pFunc)( rIStream, rGraphic, pFilterConfigItem.get() ) )
                     nStatus = GRFILTER_FORMATERROR;
                 else
                 {
@@ -1790,7 +1791,6 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
         rGraphic.Clear();
     }
 
-    delete pFilterConfigItem;
     return nStatus;
 }
 
