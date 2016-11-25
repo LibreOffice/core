@@ -35,6 +35,7 @@
 #include <vector>
 
 class Primitive;
+class OpenGLContext;
 class Operation;
 class SceneObject;
 class TransitionData;
@@ -135,10 +136,10 @@ public:
 
     /** Prepare transition.
       */
-    bool prepare( sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex );
+    bool prepare( sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex, OpenGLContext *pContext );
     /** Display a step of the transition.
       */
-    void display( double nTime, sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight );
+    void display( double nTime, sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight, OpenGLContext *pContext );
     /** Clean up after transition.
       */
     void finish();
@@ -181,7 +182,7 @@ private:
       *
       * Default implementation does nothing.
       */
-    virtual void prepareTransition( sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex );
+    virtual void prepareTransition( sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex, OpenGLContext *pContext );
 
     /** This function is called when the transition needs to clear after itself, like delete own textures etc.
       *
@@ -194,7 +195,7 @@ private:
       * Default implementation applies overall operations and then
       * displays both slides.
       */
-    virtual void displaySlides_( double nTime, sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale );
+    virtual void displaySlides_( double nTime, sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale, OpenGLContext *pContext );
 
     /** This function is called in prepare method to create the GL program.
       *

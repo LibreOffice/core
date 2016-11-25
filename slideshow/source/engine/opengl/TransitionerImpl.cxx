@@ -407,7 +407,7 @@ void OGLTransitionerImpl::impl_prepareSlides()
 bool OGLTransitionerImpl::impl_prepareTransition()
 {
     if( mpTransition && mpTransition->getSettings().mnRequiredGLVersion <= mnGLVersion )
-        return mpTransition->prepare( maLeavingSlideGL, maEnteringSlideGL );
+        return mpTransition->prepare( maLeavingSlideGL, maEnteringSlideGL, mpContext.get() );
     return false;
 }
 
@@ -1046,10 +1046,11 @@ void SAL_CALL OGLTransitionerImpl::update( double nTime ) throw (uno::RuntimeExc
     CHECK_GL_ERROR();
 
     const GLWindow& rGLWindow(mpContext->getOpenGLWindow());
-    mpTransition->display( nTime, maLeavingSlideGL, maEnteringSlideGL,
+    mpTransition->display(nTime, maLeavingSlideGL, maEnteringSlideGL,
                           maSlideSize.Width, maSlideSize.Height,
                           static_cast<double>(rGLWindow.Width),
-                          static_cast<double>(rGLWindow.Height) );
+                          static_cast<double>(rGLWindow.Height),
+                          mpContext.get());
 
     mpContext->swapBuffers();
 
