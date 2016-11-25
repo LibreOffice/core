@@ -1,0 +1,90 @@
+--- include/epoxy/gl.h
++++ include/epoxy/gl.h
+@@ -59,7 +59,8 @@
+ 
+ #else
+ #ifndef APIENTRY
+-#define APIENTRY __stdcall
++#define WINAPI __stdcall
++#define APIENTRY WINAPI
+ #endif
+ 
+ #ifndef GLAPIENTRY
+--- src/egl_generated_dispatch.c
++++ src/egl_generated_dispatch.c
+@@ -128,7 +128,11 @@
+ };
+ 
+ #if USING_DISPATCH_TABLE
++#if defined (_MSC_VER)
++static __inline struct dispatch_table *
++#else
+ static inline struct dispatch_table *
++#endif
+ get_dispatch_table(void);
+ 
+ #endif
+@@ -1642,7 +1646,11 @@
+ uint32_t egl_tls_index;
+ uint32_t egl_tls_size = sizeof(struct dispatch_table);
+ 
++#if defined (_MSC_VER)
++static __inline struct dispatch_table *
++#else
+ static inline struct dispatch_table *
++#endif
+ get_dispatch_table(void)
+ {
+ 	return TlsGetValue(egl_tls_index);
+--- src/gl_generated_dispatch.c
++++ src/gl_generated_dispatch.c
+@@ -3122,7 +3122,11 @@
+ };
+ 
+ #if USING_DISPATCH_TABLE
++#if defined (_MSC_VER)
++static __inline struct dispatch_table *
++#else
+ static inline struct dispatch_table *
++#endif
+ get_dispatch_table(void);
+ 
+ #endif
+@@ -51507,7 +51511,11 @@
+ uint32_t gl_tls_index;
+ uint32_t gl_tls_size = sizeof(struct dispatch_table);
+ 
++#if defined (_MSC_VER)
++static __inline struct dispatch_table *
++#else
+ static inline struct dispatch_table *
++#endif
+ get_dispatch_table(void)
+ {
+ 	return TlsGetValue(gl_tls_index);
+--- src/wgl_generated_dispatch.c
++++ src/wgl_generated_dispatch.c
+@@ -157,7 +157,11 @@
+ };
+ 
+ #if USING_DISPATCH_TABLE
++#if defined (_MSC_VER)
++static __inline struct dispatch_table *
++#else
+ static inline struct dispatch_table *
++#endif
+ get_dispatch_table(void);
+ 
+ #endif
+@@ -1701,7 +1705,11 @@
+ uint32_t wgl_tls_index;
+ uint32_t wgl_tls_size = sizeof(struct dispatch_table);
+ 
++#if defined (_MSC_VER)
++static __inline struct dispatch_table *
++#else
+ static inline struct dispatch_table *
++#endif
+ get_dispatch_table(void)
+ {
+ 	return TlsGetValue(wgl_tls_index);

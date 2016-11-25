@@ -17,7 +17,7 @@
 #include <win/saldata.hxx>
 #include <win/salframe.h>
 #include <win/salinst.h>
-#include <GL/wglew.h>
+#include <epoxy/wgl.h>
 
 static std::vector<HGLRC> g_vShareList;
 
@@ -573,7 +573,7 @@ bool WinOpenGLContext::ImplInit()
         return false;
     }
 
-    if (!InitGLEW())
+    if (!InitGL())
     {
         if (bFirstCall)
             disableOpenGLAndTerminateForRestart();
@@ -669,7 +669,7 @@ bool WinOpenGLContext::ImplInit()
         }
     }
 
-    InitGLEWDebugging();
+    InitGLDebugging();
 
     g_vShareList.push_back(m_aGLWin.hRC);
 
