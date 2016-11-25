@@ -314,7 +314,7 @@ OpenGLTexture::~OpenGLTexture()
 
 bool OpenGLTexture::IsUnique() const
 {
-    return mpImpl || mpImpl.unique();
+    return !mpImpl || mpImpl.unique();
 }
 
 GLuint OpenGLTexture::Id() const
