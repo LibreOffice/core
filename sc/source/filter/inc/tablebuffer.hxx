@@ -73,7 +73,7 @@ public:
     /** Returns the number of columns of this table. */
     inline SCCOL        getWidth() const { return maDestRange.aEnd.Col() - maDestRange.aStart.Col() + 1; }
     /** Returns the number of rows of this table. */
-    inline S    getHeight() const { return maDestRange.aEnd.Row() - maDestRange.aStart.Row() + 1; }
+    inline SCROW        getHeight() const { return maDestRange.aEnd.Row() - maDestRange.aStart.Row() + 1; }
     /** Returns the number of header rows in the table range. */
     inline sal_Int32    getHeaderRows() const { return maModel.mnHeaderRows; }
     /** Returns the number of totals rows in the table range. */

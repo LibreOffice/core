@@ -366,6 +366,10 @@ public:
                             const css::table::CellRangeAddress& rRange,
                             bool bAllowOverflow, bool bTrackOverflow );
 
+    bool                checkCellRange(
+                            const ScRange& rRange,
+                            bool bAllowOverflow, bool bTrackOverflow );
+
     /** Checks the passed cell range, may try to fit it to current sheet limits.
 
         First, this function reorders the column and row indexes so that the
@@ -409,6 +413,11 @@ public:
                             const OUString& rString,
                             sal_Int16 nSheet );
 
+    static bool         convertToCellRangeUnchecked(
+                            ScRange& orRange,
+                            const OUString& rString,
+                            sal_Int16 nSheet );
+
     /** Tries to convert the passed string to a cell range address.
 
         @param orRange  (out-parameter) Returns the converted cell range
@@ -448,6 +457,11 @@ public:
      */
     static void         convertToCellRangeUnchecked(
                             css::table::CellRangeAddress& orRange,
+                            const BinRange& rBinRange,
+                            sal_Int16 nSheet );
+
+    static void         convertToCellRangeUnchecked(
+                            ScRange& orRange,
                             const BinRange& rBinRange,
                             sal_Int16 nSheet );
 
