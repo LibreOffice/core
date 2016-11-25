@@ -1354,7 +1354,10 @@ SvxColorWindow::SvxColorWindow(const OUString&            rCommand,
     }
     OUString aPaletteName( officecfg::Office::Common::UserColors::PaletteName::get() );
     mpPaletteListBox->SelectEntry( aPaletteName );
-    SelectPaletteHdl( *mpPaletteListBox );
+    if (mpPaletteListBox->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND)
+    {
+        SelectPaletteHdl( *mpPaletteListBox );
+    }
 
     mpButtonAutoColor->SetClickHdl( LINK( this, SvxColorWindow, AutoColorClickHdl ) );
     mpButtonNoneColor->SetClickHdl( LINK( this, SvxColorWindow, AutoColorClickHdl ) );

@@ -220,7 +220,10 @@ void SvxColorTabPage::FillPaletteLB()
     }
     OUString aPaletteName( officecfg::Office::Common::UserColors::PaletteName::get() );
     m_pSelectPalette->SelectEntry(aPaletteName);
-    SelectPaletteLBHdl( *m_pSelectPalette );
+    if (m_pSelectPalette->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND)
+    {
+        SelectPaletteLBHdl( *m_pSelectPalette );
+    }
 }
 
 void SvxColorTabPage::Construct()
@@ -228,7 +231,6 @@ void SvxColorTabPage::Construct()
     if (pColorList.is())
     {
         FillPaletteLB();
-        SelectPaletteLBHdl( *m_pSelectPalette );
         ImpColorCountChanged();
     }
 }
