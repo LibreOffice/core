@@ -337,8 +337,7 @@ struct PCWorksheetSourceModel
     OUString     maRelId;            /// Relation identifier for an external document URL.
     OUString     maSheet;            /// Sheet name for cell range or sheet-local defined names.
     OUString     maDefName;          /// Defined name containing a cell range if present.
-    css::table::CellRangeAddress
-                 maRange;            /// Source cell range of the data.
+    ScRange      maRange;            /// Source cell range of the data.
 
     explicit            PCWorksheetSourceModel();
 };
@@ -373,7 +372,7 @@ public:
     /** Returns true, if the pivot cache is based on a dummy sheet created in finalizeImport. */
     inline bool         isBasedOnDummySheet() const { return mbDummySheet; }
     /** Returns the internal cell range the cache is based on. */
-    inline const css::table::CellRangeAddress&
+    inline const ScRange&
                         getSourceRange() const { return maSheetSrcModel.maRange; }
     /** Returns the relation identifier of the pivot cache records fragment. */
     inline const OUString& getRecordsRelId() const { return maDefModel.maRelId; }

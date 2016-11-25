@@ -90,9 +90,16 @@ void Table::finalizeImport()
     if( (maModel.mnId > 0) && !maModel.maDisplayName.isEmpty() ) try
     {
         maDBRangeName = maModel.maDisplayName;
+        ::css::table::CellRangeAddress aCellRangeAddress = ::css::table::CellRangeAddress(
+                    maModel.maRange.aStart.Tab(),
+                    maModel.maRange.aStart.Col(), maModel.maRange.aStart.Row(),
+                    maModel.maRange.aEnd.Col(), maModel.maRange.aEnd.Row() );
+
         Reference< XDatabaseRange > xDatabaseRange(
-            createDatabaseRangeObject( maDBRangeName, maModel.maRange ), UNO_SET_THROW);
-        maDestRange = xDatabaseRange->getDataArea();
+            createDatabaseRangeObject( maDBRangeName, aCellRangeAddress ), UNO_SET_THROW);
+        ::css::table::CellRangeAddress aAddressRange = xDatabaseRange->getDataArea();
+        maDestRange = ScRange( aAddressRange.StartColumn, aAddressRange.StartRow, aAddressRange.Sheet,
+                               aAddressRange.EndColumn, aAddressRange.EndRow, aAddressRange.Sheet );
 
         PropertySet aPropSet( xDatabaseRange );
 
