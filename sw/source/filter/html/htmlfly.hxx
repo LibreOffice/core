@@ -22,6 +22,7 @@
 
 #include <tools/solar.h>
 #include <o3tl/sorted_vector.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 class SdrObject;
 class SwFrameFormat;
@@ -48,48 +49,59 @@ enum SwHTMLFrameType
     HTML_FRMTYPE_END
 };
 
-#define HTML_OUT_TBLNODE    0x00
-#define HTML_OUT_GRFNODE    0x01
-#define HTML_OUT_OLENODE    0x02
-#define HTML_OUT_DIV        0x03
-#define HTML_OUT_MULTICOL   0x04
-#define HTML_OUT_SPACER     0x05
-#define HTML_OUT_CONTROL    0x06
-#define HTML_OUT_AMARQUEE   0x07
-#define HTML_OUT_MARQUEE    0x08
-#define HTML_OUT_GRFFRM     0x09
-#define HTML_OUT_OLEGRF     0x0a
-#define HTML_OUT_SPAN       0x0b
-#define HTML_OUT_MASK       0x0f
+enum class HtmlOut {
+    TableNode,
+    GraphicNode,
+    OleNode,
+    Div,
+    MultiCol,
+    Spacer,
+    Control,
+    AMarquee,
+    Marquee,
+    GraphicFrame,
+    OleGraphic,
+    Span
+};
 
-#define HTML_POS_PREFIX     0x00
-#define HTML_POS_BEFORE     0x10
-#define HTML_POS_INSIDE     0x20
-#define HTML_POS_ANY        0x30
-#define HTML_POS_MASK       0x30
+enum class HtmlPosition {
+    Prefix,
+    Before,
+    Inside,
+    Any
+};
 
-#define HTML_CNTNR_NONE     0x00
-#define HTML_CNTNR_SPAN     0x40
-#define HTML_CNTNR_DIV      0x80
-#define HTML_CNTNR_MASK     0xc0
+enum class HtmlContainerFlags {
+    NONE     = 0x00,
+    Span     = 0x01,
+    Div      = 0x02,
+};
+namespace o3tl {
+    template<> struct typed_flags<HtmlContainerFlags> : is_typed_flags<HtmlContainerFlags, 0x03> {};
+}
 
 const sal_uInt16 MAX_FRMTYPES = HTML_FRMTYPE_END;
 const sal_uInt16 MAX_BROWSERS = 4;
 
-extern sal_uInt8 aHTMLOutFramePageFlyTable[MAX_FRMTYPES][MAX_BROWSERS];
-extern sal_uInt8 aHTMLOutFrameParaFrameTable[MAX_FRMTYPES][MAX_BROWSERS];
-extern sal_uInt8 aHTMLOutFrameParaPrtAreaTable[MAX_FRMTYPES][MAX_BROWSERS];
-extern sal_uInt8 aHTMLOutFrameParaOtherTable[MAX_FRMTYPES][MAX_BROWSERS];
-extern sal_uInt8 aHTMLOutFrameAsCharTable[MAX_FRMTYPES][MAX_BROWSERS];
+struct AllHtmlFlags {
+    HtmlOut            nOut;
+    HtmlPosition       nPosition;
+    HtmlContainerFlags nContainer;
+};
+extern AllHtmlFlags aHTMLOutFramePageFlyTable[MAX_FRMTYPES][MAX_BROWSERS];
+extern AllHtmlFlags aHTMLOutFrameParaFrameTable[MAX_FRMTYPES][MAX_BROWSERS];
+extern AllHtmlFlags aHTMLOutFrameParaPrtAreaTable[MAX_FRMTYPES][MAX_BROWSERS];
+extern AllHtmlFlags aHTMLOutFrameParaOtherTable[MAX_FRMTYPES][MAX_BROWSERS];
+extern AllHtmlFlags aHTMLOutFrameAsCharTable[MAX_FRMTYPES][MAX_BROWSERS];
 
 class SwHTMLPosFlyFrame
 {
-    const SwFrameFormat      *pFrameFormat;       // der Rahmen
-    const SdrObject     *pSdrObject;    // ggf. Sdr-Objekt
-    SwNodeIndex         *pNdIdx;        // Node-Index
-    sal_uInt32              nOrdNum;        // Aus SwPosFlyFrame
-    sal_Int32          nContentIdx;      // seine Position im Content
-    sal_uInt8               nOutputMode;    // Ausgabe-Infos
+    const SwFrameFormat    *pFrameFormat;  // der Rahmen
+    const SdrObject        *pSdrObject;    // ggf. Sdr-Objekt
+    SwNodeIndex            *pNdIdx;        // Node-Index
+    sal_uInt32              nOrdNum;       // Aus SwPosFlyFrame
+    sal_Int32               nContentIdx;   // seine Position im Content
+    AllHtmlFlags            nAllFlags;
 
     SwHTMLPosFlyFrame(const SwHTMLPosFlyFrame&) = delete;
     SwHTMLPosFlyFrame& operator=(const SwHTMLPosFlyFrame&) = delete;
@@ -97,24 +109,17 @@ class SwHTMLPosFlyFrame
 public:
 
     SwHTMLPosFlyFrame( const SwPosFlyFrame& rPosFly,
-                     const SdrObject *pSdrObj, sal_uInt8 nOutMode );
+                     const SdrObject *pSdrObj, AllHtmlFlags nAllFlags );
 
     bool operator<( const SwHTMLPosFlyFrame& ) const;
 
-    const SwFrameFormat& GetFormat() const { return *pFrameFormat; }
-    const SdrObject *GetSdrObject() const { return pSdrObject; }
-
-    const SwNodeIndex& GetNdIndex() const { return *pNdIdx; }
-
-    sal_Int32 GetContentIndex() const    { return nContentIdx; }
-
-    sal_uInt8 GetOutMode() const { return nOutputMode; }
-
-    static sal_uInt8 GetOutFn( sal_uInt8 nMode ) { return nMode & HTML_OUT_MASK; }
-    static sal_uInt8 GetOutCntnr( sal_uInt8 nMode ) { return nMode & HTML_CNTNR_MASK; }
-
-    sal_uInt8 GetOutFn() const { return nOutputMode & HTML_OUT_MASK; }
-    sal_uInt8 GetOutPos() const { return nOutputMode & HTML_POS_MASK; }
+    const SwFrameFormat& GetFormat() const       { return *pFrameFormat; }
+    const SdrObject*     GetSdrObject() const    { return pSdrObject; }
+    const SwNodeIndex&   GetNdIndex() const      { return *pNdIdx; }
+    sal_Int32            GetContentIndex() const { return nContentIdx; }
+    AllHtmlFlags         GetOutMode() const      { return nAllFlags; }
+    HtmlOut              GetOutFn() const        { return nAllFlags.nOut; }
+    HtmlPosition         GetOutPos() const       { return nAllFlags.nPosition; }
 };
 
 class SwHTMLPosFlyFrames

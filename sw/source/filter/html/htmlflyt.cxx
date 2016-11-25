@@ -19,486 +19,486 @@
 
 #include "htmlfly.hxx"
 
-#define TE(t,p,c) (sal_uInt8)( HTML_OUT_##t | HTML_POS_##p | HTML_CNTNR_##c )
+#define TE(t,p,c) { HtmlOut::t, HtmlPosition::p, HtmlContainerFlags::c }
 
-sal_uInt8 aHTMLOutFramePageFlyTable[MAX_FRMTYPES][MAX_BROWSERS] =
+AllHtmlFlags aHTMLOutFramePageFlyTable[MAX_FRMTYPES][MAX_BROWSERS] =
 {
     {
         // Textrahmen mit Tabelle
-        TE(TBLNODE, BEFORE, NONE),      // HTML 3.2
-        TE(DIV,     PREFIX, NONE),      // IE 4
-        TE(DIV,     PREFIX, NONE),      // SW
-        TE(DIV,     PREFIX, NONE)       // Netscape 4!
+        TE(TableNode, Before, NONE),      // HTML 3.2
+        TE(Div,       Prefix, NONE),      // IE 4
+        TE(Div,       Prefix, NONE),      // SW
+        TE(Div,       Prefix, NONE)       // Netscape 4!
     },
     {
         // Textrahmen mit Tabelle und Ueberschrift
-        TE(TBLNODE, BEFORE, NONE),      // HTML 3.2
-        TE(DIV,     PREFIX, NONE),      // IE 4
-        TE(DIV,     PREFIX, NONE),      // SW
-        TE(DIV,     PREFIX, NONE)       // Netscape 4
+        TE(TableNode, Before, NONE),      // HTML 3.2
+        TE(Div,       Prefix, NONE),      // IE 4
+        TE(Div,       Prefix, NONE),      // SW
+        TE(Div,       Prefix, NONE)       // Netscape 4
     },
     {
         // spaltiger Rahmen
-        TE(GRFFRM,  INSIDE, NONE),      // HTML 3.2
-        TE(GRFFRM,  PREFIX, NONE),      // IE 4
-        TE(MULTICOL,PREFIX, NONE),      // SW
-        TE(MULTICOL,PREFIX, DIV)        // Netscape 4
+        TE(GraphicFrame,  Inside, NONE),      // HTML 3.2
+        TE(GraphicFrame,  Prefix, NONE),      // IE 4
+        TE(MultiCol,      Prefix, NONE),      // SW
+        TE(MultiCol,      Prefix, Div)        // Netscape 4
     },
     {
         // leerer Textreahmen
-        TE(GRFFRM,  INSIDE, NONE),      // HTML 3.2
-        TE(DIV,     PREFIX, NONE),      // IE 4
-        TE(DIV,     PREFIX, NONE),      // SW
-        TE(DIV,     PREFIX, NONE)       // Netscape 4
+        TE(GraphicFrame, Inside, NONE),      // HTML 3.2
+        TE(Div,          Prefix, NONE),      // IE 4
+        TE(Div,          Prefix, NONE),      // SW
+        TE(Div,          Prefix, NONE)       // Netscape 4
     },
     {
         // sonstiger Textreahmen
-        TE(GRFFRM,  INSIDE, NONE),      // HTML 3.2
-        TE(DIV,     PREFIX, NONE),      // IE 4
-        TE(DIV,     PREFIX, NONE),      // SW
-        TE(DIV,     PREFIX, NONE)       // Netscape 4
+        TE(GraphicFrame, Inside, NONE),      // HTML 3.2
+        TE(Div,          Prefix, NONE),      // IE 4
+        TE(Div,          Prefix, NONE),      // SW
+        TE(Div,          Prefix, NONE)       // Netscape 4
     },
     {
         // Grafik-Node
-        TE(GRFNODE, INSIDE, NONE),      // HTML 3.2
-        TE(GRFNODE, PREFIX, NONE),      // IE 4
-        TE(GRFNODE, PREFIX, NONE),      // SW
-        TE(GRFNODE, PREFIX, SPAN)       // Netscape 4
+        TE(GraphicNode, Inside, NONE),      // HTML 3.2
+        TE(GraphicNode, Prefix, NONE),      // IE 4
+        TE(GraphicNode, Prefix, NONE),      // SW
+        TE(GraphicNode, Prefix, Span)       // Netscape 4
     },
     {
         // Plugin
-        TE(OLENODE, INSIDE, NONE),      // HTML 3.2
-        TE(OLENODE, PREFIX, NONE),      // IE 4
-        TE(OLENODE, PREFIX, NONE),      // SW
-        TE(OLENODE, PREFIX, SPAN)       // Netscape 4
+        TE(OleNode, Inside, NONE),      // HTML 3.2
+        TE(OleNode, Prefix, NONE),      // IE 4
+        TE(OleNode, Prefix, NONE),      // SW
+        TE(OleNode, Prefix, Span)       // Netscape 4
     },
     {
         // Applet
-        TE(OLENODE, INSIDE, NONE),      // HTML 3.2
-        TE(OLENODE, PREFIX, NONE),      // IE 4
-        TE(OLENODE, PREFIX, NONE),      // SW
-        TE(OLENODE, PREFIX, SPAN)       // Netscape 4
+        TE(OleNode, Inside, NONE),      // HTML 3.2
+        TE(OleNode, Prefix, NONE),      // IE 4
+        TE(OleNode, Prefix, NONE),      // SW
+        TE(OleNode, Prefix, Span)       // Netscape 4
     },
     {
         // Floating-Frame
-        TE(OLEGRF,  INSIDE, NONE),      // HTML 3.2
-        TE(OLENODE, PREFIX, NONE),      // IE 4
-        TE(OLENODE, PREFIX, NONE),      // SW
-        TE(OLEGRF,  PREFIX, SPAN)       // Netscape 4
+        TE(OleGraphic, Inside, NONE),      // HTML 3.2
+        TE(OleNode,    Prefix, NONE),      // IE 4
+        TE(OleNode,    Prefix, NONE),      // SW
+        TE(OleGraphic, Prefix, Span)       // Netscape 4
     },
     {
         // sonstige OLE-Objekte
-        TE(OLEGRF,  INSIDE, NONE),      // HTML 3.2
-        TE(OLEGRF,  PREFIX, NONE),      // IE 4
-        TE(OLEGRF,  PREFIX, NONE),      // SW
-        TE(OLEGRF,  PREFIX, SPAN)       // Netscape 4
+        TE(OleGraphic,  Inside, NONE),      // HTML 3.2
+        TE(OleGraphic,  Prefix, NONE),      // IE 4
+        TE(OleGraphic,  Prefix, NONE),      // SW
+        TE(OleGraphic,  Prefix, Span)       // Netscape 4
     },
     {
         // Laufschrift
-        TE(GRFFRM,  INSIDE, NONE),      // HTML 3.2
-        TE(AMARQUEE,PREFIX, NONE),      // IE 4
-        TE(AMARQUEE,PREFIX, NONE),      // SW
-        TE(GRFFRM,  PREFIX, SPAN)       // Netscape 4
+        TE(GraphicFrame, Inside, NONE),      // HTML 3.2
+        TE(AMarquee,     Prefix, NONE),      // IE 4
+        TE(AMarquee,     Prefix, NONE),      // SW
+        TE(GraphicFrame, Prefix, Span)       // Netscape 4
     },
     {
         // Controls
-        TE(CONTROL, INSIDE, NONE),      // HTML 3.2
-        TE(CONTROL, PREFIX, NONE),      // IE 4
-        TE(CONTROL, PREFIX, NONE),      // SW
-        // Netscape schaltet FORM bei Controls in abs.-pos. SPAN aus.
-        TE(CONTROL, INSIDE, NONE)       // Netscape 4
+        TE(Control, Inside, NONE),      // HTML 3.2
+        TE(Control, Prefix, NONE),      // IE 4
+        TE(Control, Prefix, NONE),      // SW
+        // Netscape schaltet FORM bei Controls in abs.-pos. Span aus.
+        TE(Control, Inside, NONE)       // Netscape 4
     },
     {
         // sonstige Zeichen-Objekte
-        TE(GRFFRM,  INSIDE, NONE),      // HTML 3.2
-        TE(GRFFRM,  PREFIX, NONE),      // IE 4
-        TE(GRFFRM,  PREFIX, NONE),      // SW
-        TE(GRFFRM,  PREFIX, SPAN)       // Netscape 4
+        TE(GraphicFrame,  Inside, NONE),      // HTML 3.2
+        TE(GraphicFrame,  Prefix, NONE),      // IE 4
+        TE(GraphicFrame,  Prefix, NONE),      // SW
+        TE(GraphicFrame,  Prefix, Span)       // Netscape 4
     }
 };
 
-sal_uInt8 aHTMLOutFrameParaFrameTable[MAX_FRMTYPES][MAX_BROWSERS] =
+AllHtmlFlags aHTMLOutFrameParaFrameTable[MAX_FRMTYPES][MAX_BROWSERS] =
 {
     {
         // Textrahmen mit Tabelle
-        TE(TBLNODE, BEFORE, NONE),      // HTML 3.2
-        TE(TBLNODE, BEFORE, NONE),      // IE 4
-        TE(TBLNODE, BEFORE, NONE),      // SW
-        TE(TBLNODE, BEFORE, NONE)       // Netscape 4
+        TE(TableNode, Before, NONE),      // HTML 3.2
+        TE(TableNode, Before, NONE),      // IE 4
+        TE(TableNode, Before, NONE),      // SW
+        TE(TableNode, Before, NONE)       // Netscape 4
     },
     {
         // Textrahmen mit Tabelle und Ueberschrift
-        TE(TBLNODE, BEFORE, NONE),      // HTML 3.2
-        TE(DIV,     BEFORE, NONE),      // IE 4
-        TE(DIV,     BEFORE, NONE),      // SW
-        TE(TBLNODE, BEFORE, NONE)       // Netscape 4
+        TE(TableNode, Before, NONE),      // HTML 3.2
+        TE(Div,       Before, NONE),      // IE 4
+        TE(Div,       Before, NONE),      // SW
+        TE(TableNode, Before, NONE)       // Netscape 4
     },
     {
         // spaltiger Rahmen
-        TE(GRFFRM,  BEFORE, NONE),      // HTML 3.2
-        TE(GRFFRM,  BEFORE, NONE),      // IE 4
-        TE(MULTICOL,BEFORE, NONE),      // SW
-        TE(MULTICOL,BEFORE, DIV)        // Netscape 4
+        TE(GraphicFrame, Before, NONE),      // HTML 3.2
+        TE(GraphicFrame, Before, NONE),      // IE 4
+        TE(MultiCol,     Before, NONE),      // SW
+        TE(MultiCol,     Before, Div)        // Netscape 4
     },
     {
         // leerer Textreahmen
-        TE(GRFFRM,  BEFORE, NONE),      // HTML 3.2
-        TE(DIV,     BEFORE, NONE),      // IE 4
-        TE(SPACER,  BEFORE, NONE),      // SW
-        TE(SPACER,  BEFORE, NONE)       // Netscape 4
+        TE(GraphicFrame,  Before, NONE),      // HTML 3.2
+        TE(Div,           Before, NONE),      // IE 4
+        TE(Spacer,        Before, NONE),      // SW
+        TE(Spacer,        Before, NONE)       // Netscape 4
     },
     {
         // sonstiger Textreahmen
-        TE(GRFFRM,  BEFORE, NONE),      // HTML 3.2
-        TE(DIV,     BEFORE, NONE),      // IE 4
-        TE(DIV,     BEFORE, NONE),      // SW
-        TE(DIV,     BEFORE, NONE)       // Netscape 4
+        TE(GraphicFrame, Before, NONE),      // HTML 3.2
+        TE(Div,          Before, NONE),      // IE 4
+        TE(Div,          Before, NONE),      // SW
+        TE(Div,          Before, NONE)       // Netscape 4
     },
     {
         // Grafik-Node
-        TE(GRFNODE, BEFORE, NONE),      // HTML 3.2
-        TE(GRFNODE, BEFORE, NONE),      // IE 4
-        TE(GRFNODE, BEFORE, NONE),      // SW
-        TE(GRFNODE, BEFORE, NONE)       // Netscape 4
+        TE(GraphicNode, Before, NONE),      // HTML 3.2
+        TE(GraphicNode, Before, NONE),      // IE 4
+        TE(GraphicNode, Before, NONE),      // SW
+        TE(GraphicNode, Before, NONE)       // Netscape 4
     },
     {
         // Plugin
-        TE(OLENODE, BEFORE, NONE),      // HTML 3.2
-        TE(OLENODE, BEFORE, NONE),      // IE 4
-        TE(OLENODE, BEFORE, NONE),      // SW
-        TE(OLENODE, BEFORE, NONE)       // Netscape 4
+        TE(OleNode, Before, NONE),      // HTML 3.2
+        TE(OleNode, Before, NONE),      // IE 4
+        TE(OleNode, Before, NONE),      // SW
+        TE(OleNode, Before, NONE)       // Netscape 4
     },
     {
         // Applet
-        TE(OLENODE, BEFORE, NONE),      // HTML 3.2
-        TE(OLENODE, BEFORE, NONE),      // IE 4
-        TE(OLENODE, BEFORE, NONE),      // SW
-        TE(OLENODE, BEFORE, NONE)       // Netscape 4
+        TE(OleNode, Before, NONE),      // HTML 3.2
+        TE(OleNode, Before, NONE),      // IE 4
+        TE(OleNode, Before, NONE),      // SW
+        TE(OleNode, Before, NONE)       // Netscape 4
     },
     {
         // Floating-Frame
-        TE(OLEGRF,  BEFORE, NONE),      // HTML 3.2
-        TE(OLENODE, BEFORE, NONE),      // IE 4
-        TE(OLENODE, BEFORE, NONE),      // SW
-        TE(OLEGRF,  BEFORE, NONE)       // Netscape 4
+        TE(OleGraphic,  Before, NONE),      // HTML 3.2
+        TE(OleNode,     Before, NONE),      // IE 4
+        TE(OleNode,     Before, NONE),      // SW
+        TE(OleGraphic,  Before, NONE)       // Netscape 4
     },
     {
         // sonstige OLE-Objekte
-        TE(OLEGRF,  BEFORE, NONE),      // HTML 3.2
-        TE(OLEGRF,  BEFORE, NONE),      // IE 4
-        TE(OLEGRF,  BEFORE, NONE),      // SW
-        TE(OLEGRF,  BEFORE, NONE)       // Netscape 4
+        TE(OleGraphic,  Before, NONE),      // HTML 3.2
+        TE(OleGraphic,  Before, NONE),      // IE 4
+        TE(OleGraphic,  Before, NONE),      // SW
+        TE(OleGraphic,  Before, NONE)       // Netscape 4
     },
     {
         // Laufschrift (fuer Netscape 4 im Container, damit
         // die LAufschrift an der richtigen Stelle erscheint
-        TE(GRFFRM,  BEFORE, NONE),      // HTML 3.2
-        TE(AMARQUEE,BEFORE, NONE),      // IE 4
-        TE(AMARQUEE,BEFORE, NONE),      // SW
-        TE(GRFFRM,  BEFORE, NONE)       // Netscape 4
+        TE(GraphicFrame, Before, NONE),      // HTML 3.2
+        TE(AMarquee,     Before, NONE),      // IE 4
+        TE(AMarquee,     Before, NONE),      // SW
+        TE(GraphicFrame, Before, NONE)       // Netscape 4
     },
     {
         // Controls
-        TE(CONTROL, INSIDE, NONE),      // HTML 3.2
-        TE(CONTROL, BEFORE, NONE),      // IE 4
-        TE(CONTROL, BEFORE, NONE),      // SW
+        TE(Control, Inside, NONE),      // HTML 3.2
+        TE(Control, Before, NONE),      // IE 4
+        TE(Control, Before, NONE),      // SW
         // hier koennte man einen Container draus machen (Import fehlt)
-        TE(CONTROL, BEFORE, NONE)       // Netscape 4
+        TE(Control, Before, NONE)       // Netscape 4
     },
     {
         // sonstige Zeichen-Objekte
-        TE(GRFFRM,  BEFORE, NONE),      // HTML 3.2
-        TE(GRFFRM,  BEFORE, NONE),      // IE 4
-        TE(GRFFRM,  BEFORE, NONE),      // SW
-        TE(GRFFRM,  BEFORE, NONE)       // Netscape 4
+        TE(GraphicFrame,  Before, NONE),      // HTML 3.2
+        TE(GraphicFrame,  Before, NONE),      // IE 4
+        TE(GraphicFrame,  Before, NONE),      // SW
+        TE(GraphicFrame,  Before, NONE)       // Netscape 4
     }
 };
 
-sal_uInt8 aHTMLOutFrameParaPrtAreaTable[MAX_FRMTYPES][MAX_BROWSERS] =
+AllHtmlFlags aHTMLOutFrameParaPrtAreaTable[MAX_FRMTYPES][MAX_BROWSERS] =
 {
     {
         // Textrahmen mit Tabelle
-        TE(TBLNODE, INSIDE, NONE),      // HTML 3.2
-        TE(TBLNODE, INSIDE, NONE),      // IE 4
-        TE(TBLNODE, INSIDE, NONE),      // SW
-        TE(TBLNODE, INSIDE, NONE)       // Netscape 4
+        TE(TableNode, Inside, NONE),      // HTML 3.2
+        TE(TableNode, Inside, NONE),      // IE 4
+        TE(TableNode, Inside, NONE),      // SW
+        TE(TableNode, Inside, NONE)       // Netscape 4
     },
     {
         // Textrahmen mit Tabelle und Ueberschrift
-        TE(TBLNODE, INSIDE, NONE),      // HTML 3.2
-        TE(SPAN,    INSIDE, NONE),      // IE 4
-        TE(SPAN,    INSIDE, NONE),      // SW
-        TE(SPAN,    INSIDE, NONE)       // Netscape 4
+        TE(TableNode, Inside, NONE),      // HTML 3.2
+        TE(Span,      Inside, NONE),      // IE 4
+        TE(Span,      Inside, NONE),      // SW
+        TE(Span,      Inside, NONE)       // Netscape 4
     },
     {
         // spaltiger Rahmen
-        TE(GRFFRM,  INSIDE, NONE),      // HTML 3.2
-        TE(GRFFRM,  INSIDE, NONE),      // IE 4
-        TE(MULTICOL,INSIDE, NONE),      // SW
-        TE(MULTICOL,INSIDE, SPAN)       // Netscape 4
+        TE(GraphicFrame, Inside, NONE),      // HTML 3.2
+        TE(GraphicFrame, Inside, NONE),      // IE 4
+        TE(MultiCol,     Inside, NONE),      // SW
+        TE(MultiCol,     Inside, Span)       // Netscape 4
     },
     {
         // leerer Textreahmen
-        TE(GRFFRM,  INSIDE, NONE),      // HTML 3.2
-        TE(SPAN,    INSIDE, NONE),      // IE 4
-        TE(SPACER,  INSIDE, NONE),      // SW
-        TE(SPACER,  INSIDE, NONE)       // Netscape 4
+        TE(GraphicFrame, Inside, NONE),      // HTML 3.2
+        TE(Span,         Inside, NONE),      // IE 4
+        TE(Spacer,       Inside, NONE),      // SW
+        TE(Spacer,       Inside, NONE)       // Netscape 4
     },
     {
         // sonstiger Textreahmen
-        TE(GRFFRM,  INSIDE, NONE),      // HTML 3.2
-        TE(SPAN,    INSIDE, NONE),      // IE 4
-        TE(SPAN,    INSIDE, NONE),      // SW
-        TE(SPAN,    INSIDE, NONE)       // Netscape 4
+        TE(GraphicFrame, Inside, NONE),      // HTML 3.2
+        TE(Span,         Inside, NONE),      // IE 4
+        TE(Span,         Inside, NONE),      // SW
+        TE(Span,         Inside, NONE)       // Netscape 4
     },
     {
         // Grafik-Node
-        TE(GRFNODE, INSIDE, NONE),      // HTML 3.2
-        TE(GRFNODE, INSIDE, NONE),      // IE 4
-        TE(GRFNODE, INSIDE, NONE),      // SW
-        TE(GRFNODE, INSIDE, NONE)       // Netscape 4
+        TE(GraphicNode, Inside, NONE),      // HTML 3.2
+        TE(GraphicNode, Inside, NONE),      // IE 4
+        TE(GraphicNode, Inside, NONE),      // SW
+        TE(GraphicNode, Inside, NONE)       // Netscape 4
     },
     {
         // Plugin
-        TE(OLENODE, INSIDE, NONE),      // HTML 3.2
-        TE(OLENODE, INSIDE, NONE),      // IE 4
-        TE(OLENODE, INSIDE, NONE),      // SW
-        TE(OLENODE, INSIDE, NONE)       // Netscape 4
+        TE(OleNode, Inside, NONE),      // HTML 3.2
+        TE(OleNode, Inside, NONE),      // IE 4
+        TE(OleNode, Inside, NONE),      // SW
+        TE(OleNode, Inside, NONE)       // Netscape 4
     },
     {
         // Applet
-        TE(OLENODE, INSIDE, NONE),      // HTML 3.2
-        TE(OLENODE, INSIDE, NONE),      // IE 4
-        TE(OLENODE, INSIDE, NONE),      // SW
-        TE(OLENODE, INSIDE, NONE)       // Netscape 4
+        TE(OleNode, Inside, NONE),      // HTML 3.2
+        TE(OleNode, Inside, NONE),      // IE 4
+        TE(OleNode, Inside, NONE),      // SW
+        TE(OleNode, Inside, NONE)       // Netscape 4
     },
     {
         // Floating-Frame
-        TE(OLEGRF,  INSIDE, NONE),      // HTML 3.2
-        TE(OLENODE, INSIDE, NONE),      // IE 4
-        TE(OLENODE, INSIDE, NONE),      // SW
-        TE(OLEGRF,  INSIDE, NONE)       // Netscape 4
+        TE(OleGraphic,  Inside, NONE),      // HTML 3.2
+        TE(OleNode,     Inside, NONE),      // IE 4
+        TE(OleNode,     Inside, NONE),      // SW
+        TE(OleGraphic,  Inside, NONE)       // Netscape 4
     },
     {
         // sonstige OLE-Objekte
-        TE(OLEGRF,  INSIDE, NONE),      // HTML 3.2
-        TE(OLEGRF,  INSIDE, NONE),      // IE 4
-        TE(OLEGRF,  INSIDE, NONE),      // SW
-        TE(OLEGRF,  INSIDE, NONE)       // Netscape 4
+        TE(OleGraphic,  Inside, NONE),      // HTML 3.2
+        TE(OleGraphic,  Inside, NONE),      // IE 4
+        TE(OleGraphic,  Inside, NONE),      // SW
+        TE(OleGraphic,  Inside, NONE)       // Netscape 4
     },
     {
         // Laufschrift
-        TE(GRFFRM,  INSIDE, NONE),      // HTML 3.2
-        TE(AMARQUEE,INSIDE, NONE),      // IE 4
-        TE(AMARQUEE,INSIDE, NONE),      // SW
-        TE(GRFFRM,  INSIDE, NONE)       // Netscape 4
+        TE(GraphicFrame, Inside, NONE),      // HTML 3.2
+        TE(AMarquee,     Inside, NONE),      // IE 4
+        TE(AMarquee,     Inside, NONE),      // SW
+        TE(GraphicFrame, Inside, NONE)       // Netscape 4
     },
     {
         // Controls
-        TE(CONTROL, INSIDE, NONE),      // HTML 3.2
-        TE(CONTROL, INSIDE, NONE),      // IE 4
-        TE(CONTROL, INSIDE, NONE),      // SW
+        TE(Control, Inside, NONE),      // HTML 3.2
+        TE(Control, Inside, NONE),      // IE 4
+        TE(Control, Inside, NONE),      // SW
         // hier koennte man einen Container draus machen (Import fehlt)
-        TE(CONTROL, INSIDE, NONE)       // Netscape 4
+        TE(Control, Inside, NONE)       // Netscape 4
     },
     {
         // sonstige Zeichen-Objekte
-        TE(GRFFRM,  INSIDE, NONE),      // HTML 3.2
-        TE(GRFFRM,  INSIDE, NONE),      // IE 4
-        TE(GRFFRM,  INSIDE, NONE),      // SW
-        TE(GRFFRM,  INSIDE, NONE)       // Netscape 4
+        TE(GraphicFrame,  Inside, NONE),      // HTML 3.2
+        TE(GraphicFrame,  Inside, NONE),      // IE 4
+        TE(GraphicFrame,  Inside, NONE),      // SW
+        TE(GraphicFrame,  Inside, NONE)       // Netscape 4
     }
 };
 
-sal_uInt8 aHTMLOutFrameParaOtherTable[MAX_FRMTYPES][MAX_BROWSERS] =
+AllHtmlFlags aHTMLOutFrameParaOtherTable[MAX_FRMTYPES][MAX_BROWSERS] =
 {
     {
         // Textrahmen mit Tabelle
-        TE(TBLNODE, BEFORE, NONE),      // HTML 3.2
-        TE(SPAN,    INSIDE, NONE),      // IE 4
-        TE(SPAN,    INSIDE, NONE),      // SW
-        TE(SPAN,    INSIDE, NONE)       // Netscape 4
+        TE(TableNode, Before, NONE),      // HTML 3.2
+        TE(Span,      Inside, NONE),      // IE 4
+        TE(Span,      Inside, NONE),      // SW
+        TE(Span,      Inside, NONE)       // Netscape 4
     },
     {
         // Textrahmen mit Tabelle und Ueberschrift
-        TE(TBLNODE, BEFORE, NONE),      // HTML 3.2
-        TE(SPAN,    INSIDE, NONE),      // IE 4
-        TE(SPAN,    INSIDE, NONE),      // SW
-        TE(SPAN,    INSIDE, NONE)       // Netscape 4
+        TE(TableNode, Before, NONE),      // HTML 3.2
+        TE(Span,      Inside, NONE),      // IE 4
+        TE(Span,      Inside, NONE),      // SW
+        TE(Span,      Inside, NONE)       // Netscape 4
     },
     {
         // spaltiger Rahmen
-        TE(GRFFRM,  INSIDE, NONE),      // HTML 3.2
-        TE(GRFFRM,  INSIDE, NONE),      // IE 4
-        TE(MULTICOL,INSIDE, NONE),      // SW
-        TE(MULTICOL,INSIDE, SPAN)       // Netscape 4
+        TE(GraphicFrame, Inside, NONE),      // HTML 3.2
+        TE(GraphicFrame, Inside, NONE),      // IE 4
+        TE(MultiCol,     Inside, NONE),      // SW
+        TE(MultiCol,     Inside, Span)       // Netscape 4
     },
     {
         // leerer Textreahmen
-        TE(GRFFRM,  INSIDE, NONE),      // HTML 3.2
-        TE(SPAN,    INSIDE, NONE),      // IE 4
-        TE(SPAN,    INSIDE, NONE),      // SW
-        TE(SPAN,    INSIDE, NONE)       // Netscape 4
+        TE(GraphicFrame, Inside, NONE),      // HTML 3.2
+        TE(Span,         Inside, NONE),      // IE 4
+        TE(Span,         Inside, NONE),      // SW
+        TE(Span,         Inside, NONE)       // Netscape 4
     },
     {
         // sonstiger Textreahmen
-        TE(GRFFRM,  INSIDE, NONE),      // HTML 3.2
-        TE(SPAN,    INSIDE, NONE),      // IE 4
-        TE(SPAN,    INSIDE, NONE),      // SW
-        TE(SPAN,    INSIDE, NONE)       // Netscape 4
+        TE(GraphicFrame, Inside, NONE),      // HTML 3.2
+        TE(Span,         Inside, NONE),      // IE 4
+        TE(Span,         Inside, NONE),      // SW
+        TE(Span,         Inside, NONE)       // Netscape 4
     },
     {
         // Grafik-Node
-        TE(GRFNODE, INSIDE, NONE),      // HTML 3.2
-        TE(GRFNODE, INSIDE, NONE),      // IE 4
-        TE(GRFNODE, INSIDE, NONE),      // SW
-        TE(GRFNODE, INSIDE, SPAN)       // Netscape 4
+        TE(GraphicNode, Inside, NONE),      // HTML 3.2
+        TE(GraphicNode, Inside, NONE),      // IE 4
+        TE(GraphicNode, Inside, NONE),      // SW
+        TE(GraphicNode, Inside, Span)       // Netscape 4
     },
     {
         // Plugin
-        TE(OLENODE, INSIDE, NONE),      // HTML 3.2
-        TE(OLENODE, INSIDE, NONE),      // IE 4
-        TE(OLENODE, INSIDE, NONE),      // SW
-        TE(OLENODE, INSIDE, SPAN)       // Netscape 4
+        TE(OleNode, Inside, NONE),      // HTML 3.2
+        TE(OleNode, Inside, NONE),      // IE 4
+        TE(OleNode, Inside, NONE),      // SW
+        TE(OleNode, Inside, Span)       // Netscape 4
     },
     {
         // Applet
-        TE(OLENODE, INSIDE, NONE),      // HTML 3.2
-        TE(OLENODE, INSIDE, NONE),      // IE 4
-        TE(OLENODE, INSIDE, NONE),      // SW
-        TE(OLENODE, INSIDE, SPAN)       // Netscape 4
+        TE(OleNode, Inside, NONE),      // HTML 3.2
+        TE(OleNode, Inside, NONE),      // IE 4
+        TE(OleNode, Inside, NONE),      // SW
+        TE(OleNode, Inside, Span)       // Netscape 4
     },
     {
         // Floating-Frame
-        TE(OLEGRF,  INSIDE, NONE),      // HTML 3.2
-        TE(OLENODE, INSIDE, NONE),      // IE 4
-        TE(OLENODE, INSIDE, NONE),      // SW
-        TE(OLEGRF,  INSIDE, SPAN)       // Netscape 4
+        TE(OleGraphic,  Inside, NONE),      // HTML 3.2
+        TE(OleNode,     Inside, NONE),      // IE 4
+        TE(OleNode,     Inside, NONE),      // SW
+        TE(OleGraphic,  Inside, Span)       // Netscape 4
     },
     {
         // sonstige OLE-Objekte
-        TE(OLEGRF,  INSIDE, NONE),      // HTML 3.2
-        TE(OLEGRF,  INSIDE, NONE),      // IE 4
-        TE(OLEGRF,  INSIDE, NONE),      // SW
-        TE(OLEGRF,  INSIDE, SPAN)       // Netscape 4
+        TE(OleGraphic,  Inside, NONE),      // HTML 3.2
+        TE(OleGraphic,  Inside, NONE),      // IE 4
+        TE(OleGraphic,  Inside, NONE),      // SW
+        TE(OleGraphic,  Inside, Span)       // Netscape 4
     },
     {
         // Laufschrift
-        TE(GRFFRM,  INSIDE, NONE),      // HTML 3.2
-        TE(AMARQUEE,INSIDE, NONE),      // IE 4
-        TE(AMARQUEE,INSIDE, NONE),      // SW
-        TE(GRFFRM,  INSIDE, SPAN)       // Netscape 4
+        TE(GraphicFrame,  Inside, NONE),      // HTML 3.2
+        TE(AMarquee,      Inside, NONE),      // IE 4
+        TE(AMarquee,      Inside, NONE),      // SW
+        TE(GraphicFrame,  Inside, Span)       // Netscape 4
     },
     {
         // Controls
-        TE(CONTROL, INSIDE, NONE),      // HTML 3.2
-        TE(CONTROL, INSIDE, NONE),      // IE 4
-        TE(CONTROL, INSIDE, NONE),      // SW
-        // Netscape schaltet FORM bei Controls in abs.-pos. SPAN aus.
-        TE(CONTROL, INSIDE, NONE)       // Netscape 4
+        TE(Control, Inside, NONE),      // HTML 3.2
+        TE(Control, Inside, NONE),      // IE 4
+        TE(Control, Inside, NONE),      // SW
+        // Netscape schaltet FORM bei Controls in abs.-pos. Span aus.
+        TE(Control, Inside, NONE)       // Netscape 4
     },
     {
         // sonstige Zeichen-Objekte
-        TE(GRFFRM,  INSIDE, NONE),      // HTML 3.2
-        TE(GRFFRM,  INSIDE, NONE),      // IE 4
-        TE(GRFFRM,  INSIDE, NONE),      // SW
-        TE(GRFFRM,  INSIDE, SPAN)       // Netscape 4
+        TE(GraphicFrame,  Inside, NONE),      // HTML 3.2
+        TE(GraphicFrame,  Inside, NONE),      // IE 4
+        TE(GraphicFrame,  Inside, NONE),      // SW
+        TE(GraphicFrame,  Inside, Span)       // Netscape 4
     }
 };
 
-sal_uInt8 aHTMLOutFrameAsCharTable[MAX_FRMTYPES][MAX_BROWSERS] =
+AllHtmlFlags aHTMLOutFrameAsCharTable[MAX_FRMTYPES][MAX_BROWSERS] =
 {
     {
         // Textrahmen mit Tabelle
-        TE(GRFFRM,  INSIDE, NONE),      // HTML 3.2
-        TE(GRFFRM,  INSIDE, NONE),      // IE 4
-        TE(GRFFRM,  INSIDE, NONE),      // SW
-        TE(GRFFRM,  INSIDE, NONE)       // Netscape 4
+        TE(GraphicFrame,  Inside, NONE),      // HTML 3.2
+        TE(GraphicFrame,  Inside, NONE),      // IE 4
+        TE(GraphicFrame,  Inside, NONE),      // SW
+        TE(GraphicFrame,  Inside, NONE)       // Netscape 4
     },
     {
         // Textrahmen mit Tabelle und Ueberschrift
-        TE(GRFFRM,  INSIDE, NONE),      // HTML 3.2
-        TE(GRFFRM,  INSIDE, NONE),      // IE 4
-        TE(GRFFRM,  INSIDE, NONE),      // SW
-        TE(GRFFRM,  INSIDE, NONE)       // Netscape 4
+        TE(GraphicFrame,  Inside, NONE),      // HTML 3.2
+        TE(GraphicFrame,  Inside, NONE),      // IE 4
+        TE(GraphicFrame,  Inside, NONE),      // SW
+        TE(GraphicFrame,  Inside, NONE)       // Netscape 4
     },
     {
         // spaltiger Rahmen
-        TE(GRFFRM,  INSIDE, NONE),      // HTML 3.2
-        TE(GRFFRM,  INSIDE, NONE),      // IE 4
-        TE(MULTICOL,INSIDE, NONE),      // SW
-        TE(MULTICOL,INSIDE, NONE)       // Netscape 4
+        TE(GraphicFrame,  Inside, NONE),      // HTML 3.2
+        TE(GraphicFrame,  Inside, NONE),      // IE 4
+        TE(MultiCol,      Inside, NONE),      // SW
+        TE(MultiCol,      Inside, NONE)       // Netscape 4
     },
     {
         // leerer Textreahmen
-        TE(GRFFRM,  INSIDE, NONE),      // HTML 3.2
-        TE(GRFFRM,  INSIDE, NONE),      // IE 4
-        TE(SPACER,  INSIDE, NONE),      // SW
-        TE(SPACER,  INSIDE, NONE)       // Netscape 4
+        TE(GraphicFrame,  Inside, NONE),      // HTML 3.2
+        TE(GraphicFrame,  Inside, NONE),      // IE 4
+        TE(Spacer,        Inside, NONE),      // SW
+        TE(Spacer,        Inside, NONE)       // Netscape 4
     },
     {
         // sonstiger Textreahmen
-        TE(GRFFRM,  INSIDE, NONE),      // HTML 3.2
-        TE(GRFFRM,  INSIDE, NONE),      // IE 4
-        TE(GRFFRM,  INSIDE, NONE),      // SW
-        TE(GRFFRM,  INSIDE, NONE)       // Netscape 4
+        TE(GraphicFrame,  Inside, NONE),      // HTML 3.2
+        TE(GraphicFrame,  Inside, NONE),      // IE 4
+        TE(GraphicFrame,  Inside, NONE),      // SW
+        TE(GraphicFrame,  Inside, NONE)       // Netscape 4
     },
     {
         // Grafik-Node
-        TE(GRFNODE, INSIDE, NONE),      // HTML 3.2
-        TE(GRFNODE, INSIDE, NONE),      // IE 4
-        TE(GRFNODE, INSIDE, NONE),      // SW
-        TE(GRFNODE, INSIDE, NONE)       // Netscape 4
+        TE(GraphicNode, Inside, NONE),      // HTML 3.2
+        TE(GraphicNode, Inside, NONE),      // IE 4
+        TE(GraphicNode, Inside, NONE),      // SW
+        TE(GraphicNode, Inside, NONE)       // Netscape 4
     },
     {
         // Plugin
-        TE(OLENODE, INSIDE, NONE),      // HTML 3.2
-        TE(OLENODE, INSIDE, NONE),      // IE 4
-        TE(OLENODE, INSIDE, NONE),      // SW
-        TE(OLENODE, INSIDE, NONE)       // Netscape 4
+        TE(OleNode,     Inside, NONE),      // HTML 3.2
+        TE(OleNode,     Inside, NONE),      // IE 4
+        TE(OleNode,     Inside, NONE),      // SW
+        TE(OleNode,     Inside, NONE)       // Netscape 4
     },
     {
         // Applet
-        TE(OLENODE, INSIDE, NONE),      // HTML 3.2
-        TE(OLENODE, INSIDE, NONE),      // IE 4
-        TE(OLENODE, INSIDE, NONE),      // SW
-        TE(OLENODE, INSIDE, NONE)       // Netscape 4
+        TE(OleNode,     Inside, NONE),      // HTML 3.2
+        TE(OleNode,     Inside, NONE),      // IE 4
+        TE(OleNode,     Inside, NONE),      // SW
+        TE(OleNode,     Inside, NONE)       // Netscape 4
     },
     {
         // Floating-Frame
-        TE(OLEGRF,  INSIDE, NONE),      // HTML 3.2
-        TE(OLENODE, INSIDE, NONE),      // IE 4
-        TE(OLENODE, INSIDE, NONE),      // SW
-        TE(OLEGRF,  INSIDE, NONE)       // Netscape 4
+        TE(OleGraphic,  Inside, NONE),      // HTML 3.2
+        TE(OleNode,     Inside, NONE),      // IE 4
+        TE(OleNode,     Inside, NONE),      // SW
+        TE(OleGraphic,  Inside, NONE)       // Netscape 4
     },
     {
         // sonstige OLE-Objekte
-        TE(OLEGRF,  INSIDE, NONE),      // HTML 3.2
-        TE(OLEGRF,  INSIDE, NONE),      // IE 4
-        TE(OLEGRF,  INSIDE, NONE),      // SW
-        TE(OLEGRF,  INSIDE, NONE)       // Netscape 4
+        TE(OleGraphic,  Inside, NONE),      // HTML 3.2
+        TE(OleGraphic,  Inside, NONE),      // IE 4
+        TE(OleGraphic,  Inside, NONE),      // SW
+        TE(OleGraphic,  Inside, NONE)       // Netscape 4
     },
     {
-        // Laufschrift (kann immer als MARQUEE exportiert werden, weil
+        // Laufschrift (kann immer als Marquee exportiert werden, weil
         // der Inhalt an der richtigen Stelle erscheint
-        TE(MARQUEE, INSIDE, NONE),      // HTML 3.2
-        TE(MARQUEE, INSIDE, NONE),      // IE 4
-        TE(MARQUEE, INSIDE, NONE),      // SW
-        TE(MARQUEE, INSIDE, NONE)       // Netscape 4
+        TE(Marquee, Inside, NONE),      // HTML 3.2
+        TE(Marquee, Inside, NONE),      // IE 4
+        TE(Marquee, Inside, NONE),      // SW
+        TE(Marquee, Inside, NONE)       // Netscape 4
     },
     {
         // Controls
-        TE(CONTROL, INSIDE, NONE),      // HTML 3.2
-        TE(CONTROL, INSIDE, NONE),      // IE 4
-        TE(CONTROL, INSIDE, NONE),      // SW
-        TE(CONTROL, INSIDE, NONE)       // Netscape 4
+        TE(Control, Inside, NONE),      // HTML 3.2
+        TE(Control, Inside, NONE),      // IE 4
+        TE(Control, Inside, NONE),      // SW
+        TE(Control, Inside, NONE)       // Netscape 4
     },
     {
         // sonstige Zeichen-Objekte
-        TE(GRFFRM,  INSIDE, NONE),      // HTML 3.2
-        TE(GRFFRM,  INSIDE, NONE),      // IE 4
-        TE(GRFFRM,  INSIDE, NONE),      // SW
-        TE(GRFFRM,  INSIDE, NONE)       // Netscape 4
+        TE(GraphicFrame,  Inside, NONE),      // HTML 3.2
+        TE(GraphicFrame,  Inside, NONE),      // IE 4
+        TE(GraphicFrame,  Inside, NONE),      // SW
+        TE(GraphicFrame,  Inside, NONE)       // Netscape 4
     }
 };
 

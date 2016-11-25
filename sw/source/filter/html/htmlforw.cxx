@@ -1329,7 +1329,7 @@ void SwHTMLWriter::GetControls()
         for( size_t i=0; i<m_pHTMLPosFlyFrames->size(); i++ )
         {
             const SwHTMLPosFlyFrame* pPosFlyFrame = (*m_pHTMLPosFlyFrames)[ i ];
-            if( HTML_OUT_CONTROL != pPosFlyFrame->GetOutFn() )
+            if( HtmlOut::Control != pPosFlyFrame->GetOutFn() )
                 continue;
 
             const SdrObject *pSdrObj = pPosFlyFrame->GetSdrObject();

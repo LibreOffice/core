@@ -2024,7 +2024,7 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
         rHTMLWrt.ChangeParaToken( 0 );
 
         // Output all the nodes that are anchored to a frame
-        rHTMLWrt.OutFlyFrame( rNode.GetIndex(), 0, HTML_POS_ANY );
+        rHTMLWrt.OutFlyFrame( rNode.GetIndex(), 0, HtmlPosition::Any );
 
         if( rHTMLWrt.m_bLFPossible )
             rHTMLWrt.OutNewLine(); // paragraph tag on a new line
@@ -2136,7 +2136,7 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
                 rHTMLWrt.m_bLFPossible = !rHTMLWrt.m_nLastParaToken;
 
                 // Output all frames that are anchored to this node
-                rHTMLWrt.OutFlyFrame( rNode.GetIndex(), 0, HTML_POS_ANY );
+                rHTMLWrt.OutFlyFrame( rNode.GetIndex(), 0, HtmlPosition::Any );
                 rHTMLWrt.m_bLFPossible = false;
 
                 return rWrt;
@@ -2189,13 +2189,13 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
     rHTMLWrt.OutForm();
 
     // Output the page-anchored frames that are 'anchored' to this node
-    bool bFlysLeft = rHTMLWrt.OutFlyFrame( rNode.GetIndex(), 0, HTML_POS_PREFIX );
+    bool bFlysLeft = rHTMLWrt.OutFlyFrame( rNode.GetIndex(), 0, HtmlPosition::Prefix );
 
     // Output all frames that are anchored to this node that are supposed to
     // be written before the paragraph tag.
     if( bFlysLeft )
     {
-        bFlysLeft = rHTMLWrt.OutFlyFrame( rNode.GetIndex(), 0, HTML_POS_BEFORE );
+        bFlysLeft = rHTMLWrt.OutFlyFrame( rNode.GetIndex(), 0, HtmlPosition::Before );
     }
 
     if( rHTMLWrt.pCurPam->GetPoint()->nNode == rHTMLWrt.pCurPam->GetMark()->nNode )
@@ -2361,7 +2361,7 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
             {
                 aEndPosLst.OutEndAttrs( rHTMLWrt, nStrPos + nOffset, &aContext );
                 bFlysLeft = rHTMLWrt.OutFlyFrame( rNode.GetIndex(),
-                                                nStrPos, HTML_POS_INSIDE,
+                                                nStrPos, HtmlPosition::Inside,
                                                 &aContext );
             }
 
@@ -2510,7 +2510,7 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
     // Output the frames that are anchored to the last position
     if( bFlysLeft )
         bFlysLeft = rHTMLWrt.OutFlyFrame( rNode.GetIndex(),
-                                       nEnd, HTML_POS_INSIDE );
+                                       nEnd, HtmlPosition::Inside );
     OSL_ENSURE( !bFlysLeft, "Not all frames were saved!" );
 
     rHTMLWrt.m_bTextAttr = false;
@@ -2848,7 +2848,7 @@ static Writer& OutHTML_SwFlyCnt( Writer& rWrt, const SfxPoolItem& rHt )
 
     SwHTMLFrameType eType =
         (SwHTMLFrameType)rHTMLWrt.GuessFrameType( rFormat, pSdrObj );
-    sal_uInt8 nMode = aHTMLOutFrameAsCharTable[eType][rHTMLWrt.m_nExportMode];
+    AllHtmlFlags nMode = aHTMLOutFrameAsCharTable[eType][rHTMLWrt.m_nExportMode];
     rHTMLWrt.OutFrameFormat( nMode, rFormat, pSdrObj );
     return rWrt;
 }

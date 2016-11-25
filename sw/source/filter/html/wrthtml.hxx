@@ -32,6 +32,7 @@
 
 #include "shellio.hxx"
 #include "wrt_fn.hxx"
+#include "htmlfly.hxx"
 
 // einige Forward Deklarationen
 class Color;
@@ -54,6 +55,7 @@ class SvxFontItem;
 class SwHTMLNumRuleInfo;
 class SwHTMLPosFlyFrames;
 class SwTextFootnote;
+enum class HtmlPosition;
 
 typedef std::vector<SwTextFootnote*> SwHTMLTextFootnotes;
 
@@ -411,9 +413,9 @@ public:
 
     // gebe die evt. an der akt. Position stehenden FlyFrame aus.
     bool OutFlyFrame( sal_uLong nNdIdx, sal_Int32 nContentIdx,
-                        sal_uInt8 nPos, HTMLOutContext *pContext = nullptr );
-    void OutFrameFormat( sal_uInt8 nType, const SwFrameFormat& rFormat,
-                    const SdrObject *pSdrObj );
+                      HtmlPosition nPos, HTMLOutContext *pContext = nullptr );
+    void OutFrameFormat( AllHtmlFlags nType, const SwFrameFormat& rFormat,
+                         const SdrObject *pSdrObj );
 
     void OutForm( bool bTagOn=true, const SwStartNode *pStNd=nullptr );
     void OutHiddenForms();

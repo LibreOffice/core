@@ -303,7 +303,7 @@ void SwHTMLWriter::CollectFlyFrames()
         const SwContentNode *pACNd;
         SwHTMLFrameType eType = (SwHTMLFrameType)GuessFrameType( rFrameFormat, pSdrObj );
 
-        sal_uInt8 nMode;
+        AllHtmlFlags nMode;
         const SwFormatAnchor& rAnchor = rFrameFormat.GetAnchor();
         sal_Int16 eHoriRel = rFrameFormat.GetHoriOrient().GetRelationOrient();
         switch( rAnchor.GetAnchorId() )
@@ -352,7 +352,7 @@ void SwHTMLWriter::CollectFlyFrames()
     }
 }
 
-bool SwHTMLWriter::OutFlyFrame( sal_uLong nNdIdx, sal_Int32 nContentIdx, sal_uInt8 nPos,
+bool SwHTMLWriter::OutFlyFrame( sal_uLong nNdIdx, sal_Int32 nContentIdx, HtmlPosition nPos,
                               HTMLOutContext *pContext )
 {
     bool bFlysLeft = false; // Are there still Flys left at the current node position?
@@ -374,7 +374,7 @@ bool SwHTMLWriter::OutFlyFrame( sal_uLong nNdIdx, sal_Int32 nContentIdx, sal_uIn
             (*m_pHTMLPosFlyFrames)[i]->GetNdIndex().GetIndex() == nNdIdx; i++ )
         {
             SwHTMLPosFlyFrame *pPosFly = (*m_pHTMLPosFlyFrames)[i];
-            if( ( HTML_POS_ANY == nPos ||
+            if( ( HtmlPosition::Any == nPos ||
                   pPosFly->GetOutPos() == nPos ) &&
                 pPosFly->GetContentIndex() == nContentIdx )
             {
@@ -398,15 +398,16 @@ bool SwHTMLWriter::OutFlyFrame( sal_uLong nNdIdx, sal_Int32 nContentIdx, sal_uIn
                 }
 
                 OutFrameFormat( pPosFly->GetOutMode(), pPosFly->GetFormat(),
-                           pPosFly->GetSdrObject() );
+                                pPosFly->GetSdrObject() );
                 switch( pPosFly->GetOutFn() )
                 {
-                case HTML_OUT_DIV:
-                case HTML_OUT_SPAN:
-                case HTML_OUT_MULTICOL:
-                case HTML_OUT_TBLNODE:
+                case HtmlOut::Div:
+                case HtmlOut::Span:
+                case HtmlOut::MultiCol:
+                case HtmlOut::TableNode:
                     bRestart = true; // It could become recursive here
                     break;
+                default: break;
                 }
                 delete pPosFly;
             }
@@ -420,20 +421,20 @@ bool SwHTMLWriter::OutFlyFrame( sal_uLong nNdIdx, sal_Int32 nContentIdx, sal_uIn
     return bFlysLeft;
 }
 
-void SwHTMLWriter::OutFrameFormat( sal_uInt8 nMode, const SwFrameFormat& rFrameFormat,
+void SwHTMLWriter::OutFrameFormat( AllHtmlFlags nMode, const SwFrameFormat& rFrameFormat,
                               const SdrObject *pSdrObject )
 {
-    sal_uInt8 nCntnrMode = SwHTMLPosFlyFrame::GetOutCntnr( nMode );
-    sal_uInt8 nOutMode = SwHTMLPosFlyFrame::GetOutFn(nMode);
+    HtmlContainerFlags nCntnrMode = nMode.nContainer;
+    HtmlOut nOutMode = nMode.nOut;
     const sal_Char *pCntnrStr = nullptr;
-    if( HTML_CNTNR_NONE != nCntnrMode )
+    if( HtmlContainerFlags::NONE != nCntnrMode )
     {
 
-        if( m_bLFPossible && HTML_CNTNR_DIV == nCntnrMode )
+        if( m_bLFPossible && HtmlContainerFlags::Div == nCntnrMode )
             OutNewLine();
 
         OStringBuffer sOut;
-        pCntnrStr = (HTML_CNTNR_DIV == nCntnrMode)
+        pCntnrStr = (HtmlContainerFlags::Div == nCntnrMode)
                             ? OOO_STRING_SVTOOLS_HTML_division
                             : OOO_STRING_SVTOOLS_HTML_span;
         sOut.append('<').append(pCntnrStr).append(' ')
@@ -445,7 +446,7 @@ void SwHTMLWriter::OutFrameFormat( sal_uInt8 nMode, const SwFrameFormat& rFrameF
         sal_uLong nFrameFlags = HTML_FRMOPTS_CNTNR;
 
         // For frames with columns we can also output the background
-        if( HTML_OUT_MULTICOL == nOutMode )
+        if( HtmlOut::MultiCol == nOutMode )
             nFrameFlags |= HTML_FRMOPT_S_BACKGROUND|HTML_FRMOPT_S_BORDER;
 
         if( IsHTMLMode( HTMLMODE_BORDER_NONE ) )
@@ -453,7 +454,7 @@ void SwHTMLWriter::OutFrameFormat( sal_uInt8 nMode, const SwFrameFormat& rFrameF
         OutCSS1_FrameFormatOptions( rFrameFormat, nFrameFlags, pSdrObject );
         Strm().WriteChar( '>' );
 
-        if( HTML_CNTNR_DIV == nCntnrMode )
+        if( HtmlContainerFlags::Div == nCntnrMode )
         {
             IncIndentLevel();
             m_bLFPossible = true;
@@ -462,50 +463,50 @@ void SwHTMLWriter::OutFrameFormat( sal_uInt8 nMode, const SwFrameFormat& rFrameF
 
     switch( nOutMode )
     {
-    case HTML_OUT_TBLNODE:      // OK
+    case HtmlOut::TableNode:      // OK
         OSL_ENSURE( !pCntnrStr, "Table: Container is not supposed to be here" );
         OutHTML_FrameFormatTableNode( *this, rFrameFormat );
         break;
-    case HTML_OUT_GRFNODE:      // OK
+    case HtmlOut::GraphicNode:      // OK
         OutHTML_FrameFormatGrfNode( *this, rFrameFormat, pCntnrStr != nullptr );
         break;
-    case HTML_OUT_OLENODE:      // OK
+    case HtmlOut::OleNode:      // OK
         OutHTML_FrameFormatOLENode( *this, rFrameFormat, pCntnrStr != nullptr );
         break;
-    case HTML_OUT_OLEGRF:       // OK
+    case HtmlOut::OleGraphic:       // OK
         OutHTML_FrameFormatOLENodeGrf( *this, rFrameFormat, pCntnrStr != nullptr );
         break;
-    case HTML_OUT_DIV:
-    case HTML_OUT_SPAN:
+    case HtmlOut::Div:
+    case HtmlOut::Span:
         OSL_ENSURE( !pCntnrStr, "Div: Container is not supposed to be here" );
-        OutHTML_FrameFormatAsDivOrSpan( *this, rFrameFormat, HTML_OUT_SPAN==nOutMode );
+        OutHTML_FrameFormatAsDivOrSpan( *this, rFrameFormat, HtmlOut::Span==nOutMode );
         break;
-    case HTML_OUT_MULTICOL:     // OK
+    case HtmlOut::MultiCol:     // OK
         OutHTML_FrameFormatAsMulticol( *this, rFrameFormat, pCntnrStr != nullptr );
         break;
-    case HTML_OUT_SPACER:       // OK
+    case HtmlOut::Spacer:       // OK
         OSL_ENSURE( !pCntnrStr, "Spacer: Container is not supposed to be here" );
         OutHTML_FrameFormatAsSpacer( *this, rFrameFormat );
         break;
-    case HTML_OUT_CONTROL:      // OK
+    case HtmlOut::Control:      // OK
         OutHTML_DrawFrameFormatAsControl( *this,
                                     static_cast<const SwDrawFrameFormat &>(rFrameFormat), dynamic_cast<const SdrUnoObj&>(*pSdrObject),
                                     pCntnrStr != nullptr );
         break;
-    case HTML_OUT_AMARQUEE:
+    case HtmlOut::AMarquee:
         OutHTML_FrameFormatAsMarquee( *this, rFrameFormat, *pSdrObject );
         break;
-    case HTML_OUT_MARQUEE:
+    case HtmlOut::Marquee:
         OSL_ENSURE( !pCntnrStr, "Marquee: Container is not supposed to be here" );
         OutHTML_DrawFrameFormatAsMarquee( *this,
                     static_cast<const SwDrawFrameFormat &>(rFrameFormat), *pSdrObject );
         break;
-    case HTML_OUT_GRFFRM:
+    case HtmlOut::GraphicFrame:
         OutHTML_FrameFormatAsImage( *this, rFrameFormat, pCntnrStr != nullptr );
         break;
     }
 
-    if( HTML_CNTNR_DIV == nCntnrMode )
+    if( HtmlContainerFlags::Div == nCntnrMode )
     {
         DecIndentLevel();
         if( m_bLFPossible )
@@ -513,7 +514,7 @@ void SwHTMLWriter::OutFrameFormat( sal_uInt8 nMode, const SwFrameFormat& rFrameF
         HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_division, false );
         m_bLFPossible = true;
     }
-    else if( HTML_CNTNR_SPAN == nCntnrMode )
+    else if( HtmlContainerFlags::Span == nCntnrMode )
         HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_span, false );
 }
 
@@ -1684,7 +1685,7 @@ static Writer& OutHTML_FrameFormatAsDivOrSpan( Writer& rWrt,
     sal_uLong nStt = rFlyContent.GetContentIdx()->GetIndex();
 
     // Output frame-anchored frames that are anchored to the start node
-    rHTMLWrt.OutFlyFrame( nStt, 0, HTML_POS_ANY );
+    rHTMLWrt.OutFlyFrame( nStt, 0, HtmlPosition::Any );
 
     const SwStartNode* pSttNd = rWrt.pDoc->GetNodes()[nStt]->GetStartNode();
     OSL_ENSURE( pSttNd, "Where is the start node" );
