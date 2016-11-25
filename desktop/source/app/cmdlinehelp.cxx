@@ -27,6 +27,10 @@
 #include "cmdlinehelp.hxx"
 
 #ifdef _WIN32
+#if _WIN32_WINNT < 0x0501
+// For AttachConsole() and MAPVK_VK_TO_VSC
+#define _WIN32_WINNT 0x0501
+#endif
 #include "windows.h"
 #include "io.h"
 #include "fcntl.h"
@@ -165,45 +169,105 @@ namespace desktop
 #ifdef _WIN32
     namespace{
         class lcl_Console {
+            enum eConsoleMode { unknown, attached, allocated };
         public:
             explicit lcl_Console(short nBufHeight)
+                : mConsoleMode(unknown)
             {
-                bFreeConsole = AllocConsole() != FALSE;
-                CONSOLE_SCREEN_BUFFER_INFO cinfo;
-                GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cinfo);
-                cinfo.dwSize.Y = nBufHeight;
-                SetConsoleScreenBufferSize(GetStdHandle(STD_OUTPUT_HANDLE), cinfo.dwSize);
+                HANDLE hIn = GetStdHandle(STD_INPUT_HANDLE),
+                    hOut = GetStdHandle(STD_OUTPUT_HANDLE),
+                    hErr = GetStdHandle(STD_ERROR_HANDLE);
+                if (hOut == NULL) // application does not have associated standard handles
+                {
+                    STARTUPINFOA aStartupInfo{ sizeof(aStartupInfo) };
+                    GetStartupInfoA(&aStartupInfo);
+                    if ((aStartupInfo.dwFlags & STARTF_USESTDHANDLES) == STARTF_USESTDHANDLES)
+                    {
+                        // If standard handles had been passed to this process, use them
+                        hIn = aStartupInfo.hStdInput;
+                        hOut = aStartupInfo.hStdOutput;
+                        hErr = aStartupInfo.hStdError;
+                    }
+                    else
+                    {
+                        // Try to attach parent console; on error try to create new.
+                        // If this process already has its console, these will simply fail.
+                        if (AttachConsole(ATTACH_PARENT_PROCESS) != FALSE)
+                            mConsoleMode = attached;
+                        else if (AllocConsole() != FALSE)
+                            mConsoleMode = allocated;
+
+                        hIn = GetStdHandle(STD_INPUT_HANDLE);
+                        hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+                        hErr = GetStdHandle(STD_ERROR_HANDLE);
+
+                        // Ensure that console buffer is enough to hold required data
+                        CONSOLE_SCREEN_BUFFER_INFO cinfo;
+                        GetConsoleScreenBufferInfo(hOut, &cinfo);
+                        if (cinfo.dwSize.Y < nBufHeight)
+                        {
+                            cinfo.dwSize.Y = nBufHeight;
+                            SetConsoleScreenBufferSize(hOut, cinfo.dwSize);
+                        }
+                    }
+                }
+
                 // stdin
-                intptr_t stdHandle = reinterpret_cast<intptr_t>(GetStdHandle(STD_INPUT_HANDLE));
-                int fileHandle = _open_osfhandle(stdHandle, _O_TEXT);
+                int fileHandle = _open_osfhandle(reinterpret_cast<intptr_t>(hIn), _O_TEXT);
                 FILE *fp = _fdopen(fileHandle, "r");
                 *stdin = *fp;
                 setvbuf(stdin, nullptr, _IONBF, 0);
                 // stdout
-                stdHandle = reinterpret_cast<intptr_t>(GetStdHandle(STD_OUTPUT_HANDLE));
-                fileHandle = _open_osfhandle(stdHandle, _O_TEXT);
+                fileHandle = _open_osfhandle(reinterpret_cast<intptr_t>(hOut), _O_TEXT);
                 fp = _fdopen(fileHandle, "w");
                 *stdout = *fp;
                 setvbuf(stdout, nullptr, _IONBF, 0);
                 // stderr
-                stdHandle = reinterpret_cast<intptr_t>(GetStdHandle(STD_ERROR_HANDLE));
-                fileHandle = _open_osfhandle(stdHandle, _O_TEXT);
+                fileHandle = _open_osfhandle(reinterpret_cast<intptr_t>(hErr), _O_TEXT);
                 fp = _fdopen(fileHandle, "w");
                 *stderr = *fp;
                 setvbuf(stderr, nullptr, _IONBF, 0);
+
+                std::ios::sync_with_stdio(true);
+
+                // In case we use parent's console, emit an empty string
+                // to avoid output on a line with command prompt
+                if (mConsoleMode == attached)
+                    fprintf(stdout, "\n");
             }
 
             ~lcl_Console()
             {
-                if (bFreeConsole)
+                switch (mConsoleMode) {
+                case unknown:
+                    // Don't free the console
+                    return;
+                case attached:
                 {
-                    fprintf(stdout, "Press Enter to close this console...");
-                    fgetc(stdin);
-                    FreeConsole();
+                    // Put Enter keypress to console input buffer to emit next command prompt after the command
+                    INPUT_RECORD ir;
+                    ir.EventType = KEY_EVENT;
+                    KEY_EVENT_RECORD& ke = ir.Event.KeyEvent;
+                    ke.bKeyDown = TRUE;
+                    ke.wRepeatCount = 1;
+                    ke.wVirtualKeyCode = VK_RETURN;
+                    ke.wVirtualScanCode = MapVirtualKeyA(VK_RETURN, MAPVK_VK_TO_VSC);
+                    ke.uChar.AsciiChar = '\r';
+                    ke.dwControlKeyState = 0;
+                    DWORD nEvents;
+                    WriteConsoleInputA(GetStdHandle(STD_INPUT_HANDLE), &ir, 1, &nEvents);
+                    break;
                 }
+                case allocated:
+                    fprintf(stdout, "Press Enter to continue...");
+                    fgetc(stdin);
+                    break;
+                }
+
+                FreeConsole();
             }
         private:
-            bool bFreeConsole;
+            eConsoleMode mConsoleMode;
         };
     }
 #endif
