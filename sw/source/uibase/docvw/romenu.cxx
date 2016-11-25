@@ -266,7 +266,7 @@ void SwReadOnlyPopup::Execute( vcl::Window* pWin, sal_uInt16 nId )
 
     sal_uInt16 nExecId = USHRT_MAX;
     bool bFilterSet = false;
-    LoadUrlFlags nFilter;
+    LoadUrlFlags nFilter = LoadUrlFlags::NONE;
     switch( nId )
     {
         case SID_WIN_FULLSCREEN :           nExecId = SID_WIN_FULLSCREEN; break;
