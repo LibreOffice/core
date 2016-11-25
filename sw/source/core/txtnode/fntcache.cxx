@@ -1556,16 +1556,11 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             if ( bSwitchH2V )
                 rInf.GetFrame()->SwitchHorizontalToVertical( aTextOriginPos );
 
-#if defined(MACOSX) || defined(IOS)
-            rInf.GetOut().DrawTextArray( aTextOriginPos, rInf.GetText(),
-                                         pKernArray, rInf.GetIdx(), 1, bBullet ? SalLayoutFlags::DrawBullet : SalLayoutFlags::NONE );
-#else
             rInf.GetOut().DrawTextArray( aTextOriginPos, rInf.GetText(),
                                          pKernArray, rInf.GetIdx(), 1 );
             if( bBullet )
                 rInf.GetOut().DrawTextArray( aTextOriginPos, *pStr, pKernArray,
                                              rInf.GetIdx() ? 1 : 0, 1 );
-#endif
         }
         else
         {
@@ -1746,10 +1741,6 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 if ( bSwitchH2V )
                     rInf.GetFrame()->SwitchHorizontalToVertical( aTextOriginPos );
 
-#if defined(MACOSX) || defined(IOS)
-                rInf.GetOut().DrawTextArray( aTextOriginPos, *pStr, pKernArray + nOffs,
-                                             rInf.GetIdx() + nOffs , nLen - nOffs, bBullet ? SalLayoutFlags::DrawBullet : SalLayoutFlags::NONE );
-#else
                 // If we paint bullets instead of spaces, we use a copy of
                 // the paragraph string. For the layout engine, the copy
                 // of the string has to be an environment of the range which
@@ -1804,7 +1795,6 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                     pTmpFont->SetStrikeout(aPreviousStrikeout);
                     rInf.GetOut().Pop();
                 }
-#endif
             }
         }
         delete[] pScrArray;
