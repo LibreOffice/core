@@ -9186,7 +9186,7 @@ AC_SUBST(ICU_LIBS)
 dnl ===================================================================
 dnl Graphite
 dnl ===================================================================
-libo_CHECK_SYSTEM_MODULE([graphite],[GRAPHITE],[graphite2 >= 0.9.3],["-I${WORKDIR}/UnpackedTarball/graphite/include"],["-L${WORKDIR}/LinkTarget/StaticLibrary -lgraphite"])
+libo_CHECK_SYSTEM_MODULE([graphite],[GRAPHITE],[graphite2 >= 0.9.3],["-I${WORKDIR}/UnpackedTarball/graphite/include -DGRAPHITE2_STATIC"],["-L${WORKDIR}/LinkTarget/StaticLibrary -lgraphite"])
 if test "$with_system_graphite" = "yes"; then
     libo_MINGW_CHECK_DLL([libgraphite2])
 fi
