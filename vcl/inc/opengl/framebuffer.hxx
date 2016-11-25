@@ -10,7 +10,6 @@
 #ifndef INCLUDED_VCL_INC_OPENGL_FRAMEBUFFER_H
 #define INCLUDED_VCL_INC_OPENGL_FRAMEBUFFER_H
 
-#include <GL/glew.h>
 #include <vcl/dllapi.h>
 
 #include <opengl/texture.hxx>

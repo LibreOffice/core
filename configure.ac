@@ -1627,6 +1627,11 @@ AC_ARG_WITH(system-cairo,
         [Use cairo libraries already on system.  Happens automatically for
          (implicit) --enable-gtk and for --enable-gtk3.]))
 
+AC_ARG_WITH(system-epoxy,
+    AS_HELP_STRING([--with-system-epoxy],
+        [Use epoxy libraries already on system.  Happens automatically for
+         --enable-gtk3.]))
+
 AC_ARG_WITH(myspell-dicts,
     AS_HELP_STRING([--with-myspell-dicts],
         [Adds myspell dictionaries to the LibreOffice installation set]),
@@ -8965,14 +8970,6 @@ AC_SUBST([GLM_CFLAGS])
 AC_SUBST([SYSTEM_GLM])
 
 dnl ===================================================================
-dnl Check for system glew
-dnl ===================================================================
-libo_CHECK_SYSTEM_MODULE([glew], [GLEW], [glew >= 1.10.0])
-AS_IF([test "$with_system_glew" = "yes"],
-    [PKG_CHECK_EXISTS([glew >= 1.12.0], [AC_DEFINE([HAVE_GLEW_1_12])])],
-    [AC_DEFINE([HAVE_GLEW_1_12])])
-
-dnl ===================================================================
 dnl Check for system odbc
 dnl ===================================================================
 AC_MSG_CHECKING([which odbc headers to use])
@@ -11740,6 +11737,11 @@ AC_SUBST(CAIRO_CFLAGS)
 AC_SUBST(CAIRO_LIBS)
 
 dnl ===================================================================
+dnl Check for system epoxy
+dnl ===================================================================
+libo_CHECK_SYSTEM_MODULE([epoxy], [EPOXY], [epoxy >= 1.3.1], ["-I${WORKDIR}/UnpackedTarball/epoxy/include"])
+
+dnl ===================================================================
 dnl Test whether to use avahi
 dnl ===================================================================
 if test "$_os" = "WINNT"; then
@@ -12898,7 +12900,6 @@ AC_CONFIG_HEADERS([config_host/config_locales.h])
 AC_CONFIG_HEADERS([config_host/config_mpl.h])
 AC_CONFIG_HEADERS([config_host/config_kde4.h])
 AC_CONFIG_HEADERS([config_host/config_oox.h])
-AC_CONFIG_HEADERS([config_host/config_opengl.h])
 AC_CONFIG_HEADERS([config_host/config_options.h])
 AC_CONFIG_HEADERS([config_host/config_options_calc.h])
 AC_CONFIG_HEADERS([config_host/config_test.h])
