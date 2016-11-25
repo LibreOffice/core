@@ -1559,7 +1559,7 @@ bool OoxFormulaParserImpl::importTableToken( SequenceInputStream& rStrm )
                 }
                 else if( bThisRow )
                 {
-                    nStartRow = nEndRow = maBaseAddr.Row() - xTable->getRange().StartRow;
+                    nStartRow = nEndRow = maBaseAddr.Row() - xTable->getRange().aStart.Row();
                     bFixedHeight = true;
                 }
                 else
