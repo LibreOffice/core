@@ -16,7 +16,7 @@ $(eval $(call gb_Library_use_sdk_api,avmediaogl))
 $(eval $(call gb_Library_use_externals,avmediaogl, \
     boost_headers \
     libgltf \
-    glew \
+    epoxy \
     glm_headers \
 ))
 
@@ -50,10 +50,6 @@ $(eval $(call gb_Library_use_system_win32_libs,avmediaogl,\
 else ifeq ($(OS),MACOSX)
 $(eval $(call gb_Library_use_system_darwin_frameworks,avmediaogl,\
 	OpenGL \
-))
-else ifeq ($(OS), $(filter LINUX %BSD SOLARIS, $(OS)))
-$(eval $(call gb_Library_add_libs,avmediaogl,\
-    -lGL \
 ))
 endif
 
