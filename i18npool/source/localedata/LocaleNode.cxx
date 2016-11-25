@@ -661,6 +661,8 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
     NameSet  aDefaultsSet;
     bool bCtypeIsRef = false;
     bool bHaveEngineering = false;
+    bool bShowNextFreeFormatIndex = false;
+    const sal_Int16 nFirstFreeFormatIndex = 60;
 
     for (sal_Int32 i = 0; i< getNumberOfChildren() ; i++, formatCount++)
     {
@@ -707,10 +709,16 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
         sal_Int16 formatindex = (sal_Int16)aFormatIndex.toInt32();
         // Ensure the new reserved range is not used anymore, free usage start
         // was up'ed from 50 to 60.
-        if (50 <= formatindex && formatindex < 60)
-            incErrorInt( "Error: Reserved formatindex=\"%d\" in FormatElement, free usage starts at 60.\n", formatindex);
+        if (50 <= formatindex && formatindex < nFirstFreeFormatIndex)
+        {
+            incErrorInt( "Error: Reserved formatindex=\"%d\" in FormatElement.\n", formatindex);
+            bShowNextFreeFormatIndex = true;
+        }
         if (!aFormatIndexSet.insert( formatindex).second)
+        {
             incErrorInt( "Error: Duplicated formatindex=\"%d\" in FormatElement.\n", formatindex);
+            bShowNextFreeFormatIndex = true;
+        }
         of.writeIntParameter("Formatindex", formatCount, formatindex);
 
         // Ensure only one default per usage and type.
@@ -904,6 +912,22 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
         else
             of.writeParameter("FormatDefaultName", OUString(), formatCount);
 
+    }
+
+    if (bShowNextFreeFormatIndex)
+    {
+        sal_Int16 nNext = nFirstFreeFormatIndex;
+        std::set<sal_Int16>::const_iterator it( aFormatIndexSet.find( nNext));
+        if (it != aFormatIndexSet.end())
+        {
+            // nFirstFreeFormatIndex already used, find next free including gaps.
+            do
+            {
+                ++nNext;
+            }
+            while (++it != aFormatIndexSet.end() && *it == nNext);
+        }
+        fprintf( stderr, "Hint: Next free formatindex is %d.\n", (int)nNext);
     }
 
     // Check presence of all required format codes only in first section
