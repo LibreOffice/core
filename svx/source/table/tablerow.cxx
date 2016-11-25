@@ -273,7 +273,7 @@ void SAL_CALL TableRow::setFastPropertyValue( sal_Int32 nHandle, const Any& aVal
         }
     default:
         delete pUndo;
-        throw UnknownPropertyException();
+        throw UnknownPropertyException( OUString::number(nHandle), static_cast<cppu::OWeakObject*>(this));
     }
     if( !bOk )
     {
@@ -303,7 +303,7 @@ Any SAL_CALL TableRow::getFastPropertyValue( sal_Int32 nHandle ) throw (UnknownP
     case Property_OptimalHeight:    return Any( mbOptimalHeight );
     case Property_IsVisible:        return Any( mbIsVisible );
     case Property_IsStartOfNewPage: return Any( mbIsStartOfNewPage );
-    default:                        throw UnknownPropertyException();
+    default:                        throw UnknownPropertyException( OUString::number(nHandle), static_cast<cppu::OWeakObject*>(this));
     }
 }
 

@@ -1123,7 +1123,7 @@ void SAL_CALL Cell::setPropertyValue( const OUString& rPropertyName, const Any& 
         }
         }
     }
-    throw UnknownPropertyException();
+    throw UnknownPropertyException( rPropertyName, static_cast<cppu::OWeakObject*>(this));
 }
 
 
@@ -1206,7 +1206,7 @@ Any SAL_CALL Cell::getPropertyValue( const OUString& PropertyName ) throw(Unknow
         }
         }
     }
-    throw UnknownPropertyException();
+    throw UnknownPropertyException( PropertyName, static_cast<cppu::OWeakObject*>(this));
 }
 
 
@@ -1484,7 +1484,7 @@ void SAL_CALL Cell::setPropertyToDefault( const OUString& PropertyName ) throw(U
         GetModel()->SetChanged();
         return;
     }
-    throw UnknownPropertyException();
+    throw UnknownPropertyException( PropertyName, static_cast<cppu::OWeakObject*>(this));
 }
 
 
@@ -1526,7 +1526,7 @@ Any SAL_CALL Cell::getPropertyDefault( const OUString& aPropertyName ) throw(Unk
         }
         }
     }
-    throw UnknownPropertyException();
+    throw UnknownPropertyException( aPropertyName, static_cast<cppu::OWeakObject*>(this));
 }
 
 

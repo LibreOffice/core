@@ -947,7 +947,7 @@ uno::Any SAL_CALL SvxShapeControl::getPropertyDefault( const OUString& aProperty
             return aDefault;
         }
 
-        throw beans::UnknownPropertyException();
+        throw beans::UnknownPropertyException( aPropertyName, static_cast<cppu::OWeakObject*>(this));
     }
     else
     {

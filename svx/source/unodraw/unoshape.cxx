@@ -1630,7 +1630,7 @@ void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const 
     }
 
     if (!pMap)
-        throw beans::UnknownPropertyException();
+        throw beans::UnknownPropertyException( rPropertyName, static_cast<cppu::OWeakObject*>(this));
 
     if ((pMap->nFlags & beans::PropertyAttribute::READONLY) != 0)
         throw beans::PropertyVetoException(
@@ -1739,7 +1739,7 @@ uno::Any SvxShape::_getPropertyValue( const OUString& PropertyName )
     if( mpObj.is() && mpModel )
     {
         if(pMap == nullptr )
-            throw beans::UnknownPropertyException();
+            throw beans::UnknownPropertyException( PropertyName, static_cast<cppu::OWeakObject*>(this));
 
         if( !getPropertyValueImpl( PropertyName, pMap, aAny ) )
         {
@@ -2016,7 +2016,7 @@ beans::PropertyState SAL_CALL SvxShape::_getPropertyState( const OUString& Prope
     const SfxItemPropertySimpleEntry* pMap = mpPropSet->getPropertyMapEntry(PropertyName);
 
     if( !mpObj.is() || pMap == nullptr )
-        throw beans::UnknownPropertyException();
+        throw beans::UnknownPropertyException( PropertyName, static_cast<cppu::OWeakObject*>(this));
 
     beans::PropertyState eState;
     if( !getPropertyStateImpl( pMap, eState ) )
@@ -2993,7 +2993,7 @@ void SAL_CALL SvxShape::_setPropertyToDefault( const OUString& PropertyName )
     const SfxItemPropertySimpleEntry* pProperty = mpPropSet->getPropertyMapEntry(PropertyName);
 
     if( !mpObj.is() || mpModel == nullptr || pProperty == nullptr )
-        throw beans::UnknownPropertyException();
+        throw beans::UnknownPropertyException( PropertyName, static_cast<cppu::OWeakObject*>(this));
 
     if( !setPropertyToDefaultImpl( pProperty ) )
     {
@@ -3025,7 +3025,7 @@ uno::Any SAL_CALL SvxShape::_getPropertyDefault( const OUString& aPropertyName )
     const SfxItemPropertySimpleEntry* pMap = mpPropSet->getPropertyMapEntry(aPropertyName);
 
     if( !mpObj.is() || pMap == nullptr || mpModel == nullptr )
-        throw beans::UnknownPropertyException();
+        throw beans::UnknownPropertyException( aPropertyName, static_cast<cppu::OWeakObject*>(this));
 
     if(( pMap->nWID >= OWN_ATTR_VALUE_START && pMap->nWID <= OWN_ATTR_VALUE_END ) ||
        ( pMap->nWID >= SDRATTR_NOTPERSIST_FIRST && pMap->nWID <= SDRATTR_NOTPERSIST_LAST ))
@@ -3035,7 +3035,7 @@ uno::Any SAL_CALL SvxShape::_getPropertyDefault( const OUString& aPropertyName )
 
     // get default from ItemPool
     if(!SfxItemPool::IsWhich(pMap->nWID))
-        throw beans::UnknownPropertyException();
+        throw beans::UnknownPropertyException( "No WhichID " + OUString::number(pMap->nWID) + " for " + aPropertyName, static_cast<cppu::OWeakObject*>(this));
 
     SfxItemSet aSet( mpModel->GetItemPool(),    pMap->nWID, pMap->nWID);
     aSet.Put(mpModel->GetItemPool().GetDefaultItem(pMap->nWID));

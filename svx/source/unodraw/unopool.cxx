@@ -207,7 +207,7 @@ void SvxUnoDrawPool::_setPropertyValues( const comphelper::PropertyMapEntry** pp
 
     DBG_ASSERT( pPool, "I need a SfxItemPool!" );
     if( nullptr == pPool )
-        throw beans::UnknownPropertyException();
+        throw beans::UnknownPropertyException( "no pool, no properties..", static_cast<cppu::OWeakObject*>(this));
 
     while( *ppEntries )
         putAny( pPool, *ppEntries++, *pValues++ );
@@ -222,7 +222,7 @@ void SvxUnoDrawPool::_getPropertyValues( const comphelper::PropertyMapEntry** pp
 
     DBG_ASSERT( pPool, "I need a SfxItemPool!" );
     if( nullptr == pPool )
-        throw beans::UnknownPropertyException();
+        throw beans::UnknownPropertyException( "no pool, no properties..", static_cast<cppu::OWeakObject*>(this));
 
     while( *ppEntries )
         getAny( pPool, *ppEntries++, *pValue++ );

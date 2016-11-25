@@ -201,7 +201,7 @@ void SAL_CALL TableColumn::setFastPropertyValue( sal_Int32 nHandle, const Any& a
         }
     default:
         delete pUndo;
-        throw UnknownPropertyException();
+        throw UnknownPropertyException( OUString::number(nHandle), static_cast<cppu::OWeakObject*>(this));
     }
     if( !bOk )
     {
@@ -231,7 +231,7 @@ Any SAL_CALL TableColumn::getFastPropertyValue( sal_Int32 nHandle ) throw (Unkno
     case Property_OptimalWidth:     return Any( mbOptimalWidth );
     case Property_IsVisible:        return Any( mbIsVisible );
     case Property_IsStartOfNewPage: return Any( mbIsStartOfNewPage );
-    default:                        throw UnknownPropertyException();
+    default:                        throw UnknownPropertyException( OUString::number(nHandle), static_cast<cppu::OWeakObject*>(this));
     }
 }
 
