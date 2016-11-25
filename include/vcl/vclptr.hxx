@@ -133,7 +133,7 @@ public:
      *
      * @tparam reference_type must be a subclass of vcl::Window
      */
-    template<typename... Arg> static VclPtr< reference_type > Create(Arg &&... arg)
+    template<typename... Arg> static SAL_WARN_UNUSED_RESULT VclPtr< reference_type > Create(Arg &&... arg)
     {
         return VclPtr< reference_type >( new reference_type(std::forward<Arg>(arg)...), SAL_NO_ACQUIRE );
     }
