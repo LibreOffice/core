@@ -7,9 +7,12 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
+#include <config_clang.h>
 
 // '#if CLANG_VERSION >= 30800' covers large parts of compilerplugins/clang/datamembershadow.cxx
-#if (__clang_major__ == 3 && __clang_minor__ >= 8) || __clang_major__ > 3
+#if CLANG_VERSION >= 30800
 struct Bar {
     int x; // expected-note {{superclass member here [loplugin:datamembershadow]}}
 };
