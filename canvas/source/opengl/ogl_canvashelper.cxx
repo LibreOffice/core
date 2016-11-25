@@ -11,7 +11,7 @@
 
 #include <memory>
 #include <functional>
-#include <GL/glew.h>
+#include <epoxy/gl.h>
 
 #include <basegfx/polygon/b2dpolygontriangulator.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
