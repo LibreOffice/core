@@ -16,9 +16,10 @@
 #include <win/saldata.hxx>
 #include <win/salframe.h>
 #include <win/salinst.h>
-#include <GL/wglew.h>
+#include <epoxy/wgl.h>
 
 static std::vector<HGLRC> g_vShareList;
+static bool g_bAnyCurrent;
 
 class GLWinWindow : public GLWindow
 {
@@ -70,6 +71,7 @@ void WinOpenGLContext::resetCurrent()
     OpenGLZone aZone;
 
     wglMakeCurrent(nullptr, nullptr);
+    g_bAnyCurrent = false;
 }
 
 bool WinOpenGLContext::isCurrent()
@@ -81,7 +83,7 @@ bool WinOpenGLContext::isCurrent()
 
 bool WinOpenGLContext::isAnyCurrent()
 {
-    return wglGetCurrentContext() != nullptr;
+    return g_bAnyCurrent && wglGetCurrentContext() != nullptr;
 }
 
 void WinOpenGLContext::makeCurrent()
@@ -95,9 +97,12 @@ void WinOpenGLContext::makeCurrent()
 
     if (!wglMakeCurrent(m_aGLWin.hDC, m_aGLWin.hRC))
     {
+        g_bAnyCurrent = false;
         SAL_WARN("vcl.opengl", "wglMakeCurrent failed: " << WindowsErrorString(GetLastError()));
         return;
     }
+
+    g_bAnyCurrent = true;
 
     registerAsCurrent();
 }
@@ -140,7 +145,10 @@ void WinOpenGLContext::destroyCurrentContext()
             g_vShareList.erase(itr);
 
         if (wglGetCurrentContext() != nullptr)
+        {
             wglMakeCurrent(nullptr, nullptr);
+            g_bAnyCurrent = false;
+        }
         wglDeleteContext( m_aGLWin.hRC );
         ReleaseDC( m_aGLWin.hWnd, m_aGLWin.hDC );
         m_aGLWin.hRC = nullptr;
@@ -208,11 +216,13 @@ bool InitTempWindow(HWND& hwnd, int width, int height, const PIXELFORMATDESCRIPT
     if(!ret)
     {
         wglMakeCurrent(nullptr, nullptr);
+        g_bAnyCurrent = false;
         wglDeleteContext(glWin.hRC);
         ReleaseDC(hwnd, glWin.hDC);
         DestroyWindow(hwnd);
         return false;
     }
+    g_bAnyCurrent = false;
 
     return true;
 }
@@ -275,6 +285,7 @@ bool InitMultisample(const PIXELFORMATDESCRIPTOR& pfd, int& rPixelFormat,
     {
         SAL_WARN("vcl.opengl", "Device doesn't support multisample");
         wglMakeCurrent(nullptr, nullptr);
+        g_bAnyCurrent = false;
         wglDeleteContext(glWin.hRC);
         ReleaseDC(hWnd, glWin.hDC);
         DestroyWindow(hWnd);
@@ -285,6 +296,7 @@ bool InitMultisample(const PIXELFORMATDESCRIPTOR& pfd, int& rPixelFormat,
     if (!fn_wglChoosePixelFormatARB)
     {
         wglMakeCurrent(nullptr, nullptr);
+        g_bAnyCurrent = false;
         wglDeleteContext(glWin.hRC);
         ReleaseDC(hWnd, glWin.hDC);
         DestroyWindow(hWnd);
@@ -341,6 +353,7 @@ bool InitMultisample(const PIXELFORMATDESCRIPTOR& pfd, int& rPixelFormat,
         bArbMultisampleSupported = true;
         rPixelFormat = pixelFormat;
         wglMakeCurrent(nullptr, nullptr);
+        g_bAnyCurrent = false;
         wglDeleteContext(glWin.hRC);
         ReleaseDC(hWnd, glWin.hDC);
         DestroyWindow(hWnd);
@@ -355,6 +368,7 @@ bool InitMultisample(const PIXELFORMATDESCRIPTOR& pfd, int& rPixelFormat,
         bArbMultisampleSupported = true;
         rPixelFormat = pixelFormat;
         wglMakeCurrent(nullptr, nullptr);
+        g_bAnyCurrent = false;
         wglDeleteContext(glWin.hRC);
         ReleaseDC(hWnd, glWin.hDC);
         DestroyWindow(hWnd);
@@ -362,6 +376,7 @@ bool InitMultisample(const PIXELFORMATDESCRIPTOR& pfd, int& rPixelFormat,
     }
     // Return the valid format
     wglMakeCurrent(nullptr, nullptr);
+    g_bAnyCurrent = false;
     wglDeleteContext(glWin.hRC);
     ReleaseDC(hWnd, glWin.hDC);
     DestroyWindow(hWnd);
@@ -542,13 +557,17 @@ bool WinOpenGLContext::ImplInit()
 
     if (!wglMakeCurrent(m_aGLWin.hDC, hTempRC))
     {
+        g_bAnyCurrent = false;
         SAL_WARN("vcl.opengl", "wglMakeCurrent failed: "<< WindowsErrorString(GetLastError()));
         return false;
     }
 
-    if (!InitGLEW())
+    g_bAnyCurrent = true;
+
+    if (!InitGL())
     {
         wglMakeCurrent(NULL, NULL);
+        g_bAnyCurrent = false;
         wglDeleteContext(hTempRC);
         return false;
     }
@@ -560,6 +579,7 @@ bool WinOpenGLContext::ImplInit()
     if (!wglCreateContextAttribsARB)
     {
         wglMakeCurrent(nullptr, nullptr);
+        g_bAnyCurrent = false;
         wglDeleteContext(hTempRC);
         return false;
     }
@@ -578,6 +598,7 @@ bool WinOpenGLContext::ImplInit()
     {
         SAL_WARN("vcl.opengl", "wglCreateContextAttribsARB failed: "<< WindowsErrorString(GetLastError()));
         wglMakeCurrent(nullptr, nullptr);
+        g_bAnyCurrent = false;
         wglDeleteContext(hTempRC);
         return false;
     }
@@ -585,18 +606,23 @@ bool WinOpenGLContext::ImplInit()
     if (!compiledShaderBinariesWork())
     {
         wglMakeCurrent(nullptr, nullptr);
+        g_bAnyCurrent = false;
         wglDeleteContext(hTempRC);
         return false;
     }
 
     wglMakeCurrent(nullptr, nullptr);
+    g_bAnyCurrent = false;
     wglDeleteContext(hTempRC);
 
     if (!wglMakeCurrent(m_aGLWin.hDC, m_aGLWin.hRC))
     {
+        g_bAnyCurrent = false;
         SAL_WARN("vcl.opengl", "wglMakeCurrent failed: " << WindowsErrorString(GetLastError()));
         return false;
     }
+
+    g_bAnyCurrent = true;
 
     if (bFirstCall)
     {
@@ -629,7 +655,7 @@ bool WinOpenGLContext::ImplInit()
         }
     }
 
-    InitGLEWDebugging();
+    InitGLDebugging();
 
     g_vShareList.push_back(m_aGLWin.hRC);
 

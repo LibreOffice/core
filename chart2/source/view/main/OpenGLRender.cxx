@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <GL/glew.h>
+#include <epoxy/gl.h>
 #include <vector>
 #include "OpenGLRender.hxx"
 #include <vcl/graph.hxx>

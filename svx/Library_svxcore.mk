@@ -88,7 +88,7 @@ $(eval $(call gb_Library_use_externals,svxcore,\
 ))
 ifeq ($(ENABLE_HEADLESS),)
 $(eval $(call gb_Library_use_externals,svxcore,\
-     glew \
+     epoxy \
  ))
 endif
 

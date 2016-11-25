@@ -14,7 +14,6 @@
 
 #include <list>
 
-#include <GL/glew.h>
 #include <vcl/dllapi.h>
 
 #include <basegfx/point/b2dpoint.hxx>

@@ -32,6 +32,7 @@
 #include <o3tl/lru_map.hxx>
 
 static std::vector<GLXContext> g_vShareList;
+static bool g_bAnyCurrent;
 
 class X11OpenGLContext : public OpenGLContext
 {
@@ -184,22 +185,9 @@ namespace
         return pFBC;
     }
 
-    // we need them before glew can initialize them
-    // glew needs an OpenGL context so we need to get the address manually
-    void initOpenGLFunctionPointers()
-    {
-        glXChooseFBConfig = reinterpret_cast<GLXFBConfig*(*)(Display *dpy, int screen, const int *attrib_list, int *nelements)>(glXGetProcAddressARB(reinterpret_cast<GLubyte const *>("glXChooseFBConfig")));
-        glXGetVisualFromFBConfig = reinterpret_cast<XVisualInfo*(*)(Display *dpy, GLXFBConfig config)>(glXGetProcAddressARB(reinterpret_cast<GLubyte const *>("glXGetVisualFromFBConfig")));    // try to find a visual for the current set of attributes
-        glXGetFBConfigAttrib = reinterpret_cast<int(*)(Display *dpy, GLXFBConfig config, int attribute, int* value)>(glXGetProcAddressARB(reinterpret_cast<GLubyte const *>("glXGetFBConfigAttrib")));
-        glXCreateContextAttribsARB = reinterpret_cast<GLXContext(*)(Display*, GLXFBConfig, GLXContext, Bool, const int*)>(glXGetProcAddressARB(reinterpret_cast<const GLubyte *>("glXCreateContextAttribsARB")));
-        glXCreatePixmap = reinterpret_cast<GLXPixmap(*)(Display*, GLXFBConfig, Pixmap, const int*)>(glXGetProcAddressARB(reinterpret_cast<const GLubyte *>("glXCreatePixmap")));
-    }
-
     Visual* getVisual(Display* dpy, Window win)
     {
         OpenGLZone aZone;
-
-        initOpenGLFunctionPointers();
 
         XWindowAttributes xattr;
         if( !XGetWindowAttributes( dpy, win, &xattr ) )
@@ -235,7 +223,10 @@ void X11OpenGLContext::resetCurrent()
     OpenGLZone aZone;
 
     if (m_aGLWin.dpy)
+    {
         glXMakeCurrent(m_aGLWin.dpy, None, nullptr);
+        g_bAnyCurrent = false;
+    }
 }
 
 bool X11OpenGLContext::isCurrent()
@@ -247,7 +238,7 @@ bool X11OpenGLContext::isCurrent()
 
 bool X11OpenGLContext::isAnyCurrent()
 {
-    return glXGetCurrentContext() != None;
+    return g_bAnyCurrent && glXGetCurrentContext() != None;
 }
 
 SystemWindowData X11OpenGLContext::generateWinData(vcl::Window* pParent, bool /*bRequestLegacyContext*/)
@@ -265,8 +256,6 @@ SystemWindowData X11OpenGLContext::generateWinData(vcl::Window* pParent, bool /*
 
     if( dpy == nullptr || !glXQueryExtension( dpy, nullptr, nullptr ) )
         return aWinData;
-
-    initOpenGLFunctionPointers();
 
     int best_fbc = -1;
     GLXFBConfig* pFBC = getFBConfig(dpy, win, best_fbc, true, false);
@@ -355,9 +344,12 @@ bool X11OpenGLContext::ImplInit()
 
     if( !glXMakeCurrent( m_aGLWin.dpy, m_aGLWin.win, m_aGLWin.ctx ) )
     {
+        g_bAnyCurrent = false;
         SAL_WARN("vcl.opengl", "unable to select current GLX context");
         return false;
     }
+
+    g_bAnyCurrent = true;
 
     int glxMinor, glxMajor;
     double nGLXVersion = 0;
@@ -400,8 +392,8 @@ bool X11OpenGLContext::ImplInit()
         }
     }
 
-    bool bRet = InitGLEW();
-    InitGLEWDebugging();
+    bool bRet = InitGL();
+    InitGLDebugging();
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
@@ -427,10 +419,12 @@ void X11OpenGLContext::makeCurrent()
     {
         if (!glXMakeCurrent( m_aGLWin.dpy, m_aGLWin.win, m_aGLWin.ctx ))
         {
+            g_bAnyCurrent = false;
             SAL_WARN("vcl.opengl", "OpenGLContext::makeCurrent failed "
                      "on drawable " << m_aGLWin.win);
             return;
         }
+        g_bAnyCurrent = true;
     }
 
     registerAsCurrent();
@@ -445,6 +439,7 @@ void X11OpenGLContext::destroyCurrentContext()
             g_vShareList.erase(itr);
 
         glXMakeCurrent(m_aGLWin.dpy, None, nullptr);
+        g_bAnyCurrent = false;
         if( glGetError() != GL_NO_ERROR )
         {
             SAL_WARN("vcl.opengl", "glError: " << glGetError());
