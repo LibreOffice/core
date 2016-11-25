@@ -29,7 +29,7 @@ $(eval $(call gb_Library_use_externals,avmedia,\
 
 ifeq ($(ENABLE_HEADLESS),)
 $(eval $(call gb_Library_use_externals,avmedia,\
-    glew \
+    epoxy \
 ))
 endif
 

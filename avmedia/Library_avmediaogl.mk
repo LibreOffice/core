@@ -16,7 +16,7 @@ $(eval $(call gb_Library_use_sdk_api,avmediaogl))
 $(eval $(call gb_Library_use_externals,avmediaogl, \
     boost_headers \
     libgltf \
-    glew \
+    epoxy \
     glm_headers \
 ))
 
