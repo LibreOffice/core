@@ -1086,7 +1086,10 @@ void PivotCache::finalizeInternalSheetSource()
         else if( const Table* pTable = getTables().getTable( maSheetSrcModel.maDefName ).get() )
         {
             // get original range from table, but exclude the totals row(s)
-            maSheetSrcModel.maRange = pTable->getOriginalRange();
+            ScRange aRange = pTable->getOriginalRange();
+            maSheetSrcModel.maRange = CellRangeAddress( aRange.aStart.Tab(),
+                                                        aRange.aStart.Col(), aRange.aStart.Row(),
+                                                        aRange.aEnd.Col(), aRange.aEnd.Row() );
             mbValidSource = (pTable->getHeight() - pTable->getTotalsRows()) > 1;
             if( mbValidSource )
                 maSheetSrcModel.maRange.EndRow -= pTable->getTotalsRows();
