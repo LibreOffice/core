@@ -24,17 +24,24 @@
 #include <vcl/dialog.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/fixed.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 
-#define LF_NO_PATH              0x0001  // hide "path"
-#define LF_NO_USERNAME          0x0002  // hide "name"
-#define LF_NO_PASSWORD          0x0004  // hide "password"
-#define LF_NO_SAVEPASSWORD      0x0008  // hide "save password"
-#define LF_NO_ERRORTEXT         0x0010  // hide message
-#define LF_PATH_READONLY        0x0020  // "path" readonly
-#define LF_USERNAME_READONLY    0x0040  // "name" readonly
-#define LF_NO_ACCOUNT           0x0080  // hide "account"
-#define LF_NO_USESYSCREDS       0x0100  // hide "use system credentials"
+enum class LoginFlags {
+    NONE                = 0x0000,
+    NoPath              = 0x0001,  // hide "path"
+    NoUsername          = 0x0002,  // hide "name"
+    NoPassword          = 0x0004,  // hide "password"
+    NoSavePassword      = 0x0008,  // hide "save password"
+    NoErrorText         = 0x0010,  // hide message
+    PathReadonly        = 0x0020,  // "path" readonly
+    UsernameReadonly    = 0x0040,  // "name" readonly
+    NoAccount           = 0x0080,  // hide "account"
+    NoUseSysCreds       = 0x0100,  // hide "use system credentials"
+};
+namespace o3tl {
+    template<> struct typed_flags<LoginFlags> : is_typed_flags<LoginFlags, 0x01ff> {};
+}
 
 
 class LoginDialog : public ModalDialog
@@ -57,7 +64,7 @@ class LoginDialog : public ModalDialog
     OUString m_server;
     OUString m_realm;
 
-    void            HideControls_Impl( sal_uInt16 nFlags );
+    void            HideControls_Impl( LoginFlags nFlags );
     void            EnableUseSysCredsControls_Impl( bool bUseSysCredsEnabled );
     void            SetRequest();
 
@@ -66,7 +73,7 @@ class LoginDialog : public ModalDialog
     DECL_LINK(UseSysCredsHdl_Impl, Button*, void);
 
 public:
-    LoginDialog(vcl::Window* pParent, sal_uInt16 nFlags,
+    LoginDialog(vcl::Window* pParent, LoginFlags nFlags,
         const OUString& rServer, const OUString &rRealm);
     virtual ~LoginDialog() override;
     virtual void    dispose() override;

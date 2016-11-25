@@ -72,21 +72,21 @@ executeLoginDialog(
         bool bSavePassword   = rInfo.GetCanRememberPassword();
         bool bCanUseSysCreds = rInfo.GetCanUseSystemCredentials();
 
-        sal_uInt16 nFlags = 0;
+        LoginFlags nFlags = LoginFlags::NONE;
         if (rInfo.GetPath().isEmpty())
-            nFlags |= LF_NO_PATH;
+            nFlags |= LoginFlags::NoPath;
         if (rInfo.GetErrorText().isEmpty())
-            nFlags |= LF_NO_ERRORTEXT;
+            nFlags |= LoginFlags::NoErrorText;
         if (!bAccount)
-            nFlags |= LF_NO_ACCOUNT;
+            nFlags |= LoginFlags::NoAccount;
         if (!(rInfo.GetFlags() & LOGINERROR_FLAG_MODIFY_USER_NAME))
-            nFlags |= LF_USERNAME_READONLY;
+            nFlags |= LoginFlags::UsernameReadonly;
 
         if (!bSavePassword)
-            nFlags |= LF_NO_SAVEPASSWORD;
+            nFlags |= LoginFlags::NoSavePassword;
 
         if (!bCanUseSysCreds)
-            nFlags |= LF_NO_USESYSCREDS;
+            nFlags |= LoginFlags::NoUseSysCreds;
 
         ScopedVclPtrInstance< LoginDialog > xDialog(pParent, nFlags, rInfo.GetServer(), rRealm);
         if (!rInfo.GetErrorText().isEmpty())
