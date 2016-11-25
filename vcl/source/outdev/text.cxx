@@ -275,13 +275,12 @@ bool OutputDevice::ImplDrawRotateText( SalLayout& rSalLayout )
     return true;
 }
 
-bool OutputDevice::ImplDrawTextDirect( SalLayout& rSalLayout,
-                                       bool bTextLines,
-                                       sal_uInt32 flags )
+void OutputDevice::ImplDrawTextDirect( SalLayout& rSalLayout,
+                                       bool bTextLines)
 {
     if( mpFontInstance->mnOwnOrientation )
         if( ImplDrawRotateText( rSalLayout ) )
-            return true;
+            return;
 
     long nOldX = rSalLayout.DrawBase().X();
     if( HasMirroredGraphics() )
@@ -306,18 +305,7 @@ bool OutputDevice::ImplDrawTextDirect( SalLayout& rSalLayout,
         rSalLayout.DrawBase().X() = pOutDevRef->mnOutWidth - 1 - (rSalLayout.DrawBase().X() - devX) + devX;
     }
 
-    if(flags)
-    {
-        if( ! rSalLayout.DrawTextSpecial( *mpGraphics, flags ))
-        {
-            rSalLayout.DrawBase().X() = nOldX;
-            return false;
-        }
-    }
-    else
-    {
-        rSalLayout.DrawText( *mpGraphics );
-    }
+    rSalLayout.DrawText( *mpGraphics );
     rSalLayout.DrawBase().X() = nOldX;
 
     if( bTextLines )
@@ -328,8 +316,6 @@ bool OutputDevice::ImplDrawTextDirect( SalLayout& rSalLayout,
     // emphasis marks
     if( maFont.GetEmphasisMark() & FontEmphasisMark::Style )
         ImplDrawEmphasisMarks( rSalLayout );
-
-    return true;
 }
 
 void OutputDevice::ImplDrawSpecialText( SalLayout& rSalLayout )
@@ -420,36 +406,33 @@ void OutputDevice::ImplDrawSpecialText( SalLayout& rSalLayout )
 
         if ( maFont.IsOutline() )
         {
-            if(! ImplDrawTextDirect( rSalLayout, mbTextLines, DRAWTEXT_F_OUTLINE))
-            {
-                rSalLayout.DrawBase() = aOrigPos + Point(-1,-1);
-                ImplDrawTextDirect( rSalLayout, mbTextLines );
-                rSalLayout.DrawBase() = aOrigPos + Point(+1,+1);
-                ImplDrawTextDirect( rSalLayout, mbTextLines );
-                rSalLayout.DrawBase() = aOrigPos + Point(-1,+0);
-                ImplDrawTextDirect( rSalLayout, mbTextLines );
-                rSalLayout.DrawBase() = aOrigPos + Point(-1,+1);
-                ImplDrawTextDirect( rSalLayout, mbTextLines );
-                rSalLayout.DrawBase() = aOrigPos + Point(+0,+1);
-                ImplDrawTextDirect( rSalLayout, mbTextLines );
-                rSalLayout.DrawBase() = aOrigPos + Point(+0,-1);
-                ImplDrawTextDirect( rSalLayout, mbTextLines );
-                rSalLayout.DrawBase() = aOrigPos + Point(+1,-1);
-                ImplDrawTextDirect( rSalLayout, mbTextLines );
-                rSalLayout.DrawBase() = aOrigPos + Point(+1,+0);
-                ImplDrawTextDirect( rSalLayout, mbTextLines );
-                rSalLayout.DrawBase() = aOrigPos;
+            rSalLayout.DrawBase() = aOrigPos + Point(-1,-1);
+            ImplDrawTextDirect( rSalLayout, mbTextLines );
+            rSalLayout.DrawBase() = aOrigPos + Point(+1,+1);
+            ImplDrawTextDirect( rSalLayout, mbTextLines );
+            rSalLayout.DrawBase() = aOrigPos + Point(-1,+0);
+            ImplDrawTextDirect( rSalLayout, mbTextLines );
+            rSalLayout.DrawBase() = aOrigPos + Point(-1,+1);
+            ImplDrawTextDirect( rSalLayout, mbTextLines );
+            rSalLayout.DrawBase() = aOrigPos + Point(+0,+1);
+            ImplDrawTextDirect( rSalLayout, mbTextLines );
+            rSalLayout.DrawBase() = aOrigPos + Point(+0,-1);
+            ImplDrawTextDirect( rSalLayout, mbTextLines );
+            rSalLayout.DrawBase() = aOrigPos + Point(+1,-1);
+            ImplDrawTextDirect( rSalLayout, mbTextLines );
+            rSalLayout.DrawBase() = aOrigPos + Point(+1,+0);
+            ImplDrawTextDirect( rSalLayout, mbTextLines );
+            rSalLayout.DrawBase() = aOrigPos;
 
-                SetTextColor( Color( COL_WHITE ) );
-                SetTextLineColor( Color( COL_WHITE ) );
-                SetOverlineColor( Color( COL_WHITE ) );
-                ImplInitTextColor();
-                ImplDrawTextDirect( rSalLayout, mbTextLines );
-                SetTextColor( aOldColor );
-                SetTextLineColor( aOldTextLineColor );
-                SetOverlineColor( aOldOverlineColor );
-                ImplInitTextColor();
-            }
+            SetTextColor( Color( COL_WHITE ) );
+            SetTextLineColor( Color( COL_WHITE ) );
+            SetOverlineColor( Color( COL_WHITE ) );
+            ImplInitTextColor();
+            ImplDrawTextDirect( rSalLayout, mbTextLines );
+            SetTextColor( aOldColor );
+            SetTextLineColor( aOldTextLineColor );
+            SetOverlineColor( aOldOverlineColor );
+            ImplInitTextColor();
         }
     }
 }
