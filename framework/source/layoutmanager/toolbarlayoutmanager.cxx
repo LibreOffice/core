@@ -828,7 +828,7 @@ bool ToolbarLayoutManager::dockToolbar( const OUString& rResourceURL, ui::Dockin
 
                     {
                         SolarMutexGuard aGuard;
-                        pWindow = VCLUnoHelper::GetWindow( xWindow );
+                        pWindow = VCLUnoHelper::GetWindow( xWindow ).get();
                         if ( pWindow && pWindow->GetType() == WINDOW_TOOLBOX )
                         {
                             pToolBox = static_cast<ToolBox *>(pWindow);
@@ -1421,7 +1421,7 @@ void ToolbarLayoutManager::implts_setElementData( UIElement& rElement, const uno
     {
         {
             SolarMutexGuard aGuard;
-            pWindow = VCLUnoHelper::GetWindow( xWindow );
+            pWindow = VCLUnoHelper::GetWindow( xWindow ).get();
             if ( pWindow )
             {
                 OUString aText = pWindow->GetText();
@@ -2262,7 +2262,7 @@ void ToolbarLayoutManager::implts_findNextDockingPos( ui::DockingArea DockingAre
     {
         // Retrieve output size from container Window
         SolarMutexGuard aGuard;
-        pDockingWindow  = VCLUnoHelper::GetWindow( xDockingWindow );
+        pDockingWindow  = VCLUnoHelper::GetWindow( xDockingWindow ).get();
         if ( pDockingWindow )
             aDockingWinSize = pDockingWindow->GetOutputSizePixel();
     }
@@ -2600,7 +2600,7 @@ void ToolbarLayoutManager::implts_calcDockingPosSize(
     SolarMutexResettableGuard aReadLock;
     uno::Reference< awt::XWindow2 > xContainerWindow( m_xContainerWindow );
     ::Size                          aContainerWinSize;
-    vcl::Window*                         pContainerWindow( nullptr );
+    vcl::Window*                    pContainerWindow( nullptr );
     ::Rectangle                     aDockingAreaOffsets( m_aDockingAreaOffsets );
     aReadLock.clear();
 
@@ -2613,7 +2613,7 @@ void ToolbarLayoutManager::implts_calcDockingPosSize(
     {
         // Retrieve output size from container Window
         SolarMutexGuard aGuard;
-        pContainerWindow  = VCLUnoHelper::GetWindow( xContainerWindow );
+        pContainerWindow  = VCLUnoHelper::GetWindow( xContainerWindow ).get();
         aContainerWinSize = pContainerWindow->GetOutputSizePixel();
     }
 
@@ -2640,7 +2640,7 @@ void ToolbarLayoutManager::implts_calcDockingPosSize(
 
     {
         SolarMutexGuard aGuard;
-        pDockingAreaWindow = VCLUnoHelper::GetWindow( xDockingAreaWindow );
+        pDockingAreaWindow = VCLUnoHelper::GetWindow( xDockingAreaWindow ).get();
         VclPtr<vcl::Window> pDockWindow = VCLUnoHelper::GetWindow( xWindow );
         if ( pDockWindow && pDockWindow->GetType() == WINDOW_TOOLBOX )
             pToolBox = static_cast<ToolBox *>(pDockWindow.get());
@@ -3078,7 +3078,7 @@ framework::ToolbarLayoutManager::DockingOperation ToolbarLayoutManager::implts_d
         vcl::Window* pDockingAreaWindow( nullptr );
         {
             SolarMutexGuard aGuard;
-            pDockingAreaWindow = VCLUnoHelper::GetWindow( xDockingAreaWindow );
+            pDockingAreaWindow = VCLUnoHelper::GetWindow( xDockingAreaWindow ).get();
             VclPtr<vcl::Window> pContainerWindow = VCLUnoHelper::GetWindow( xContainerWindow );
             nDockPosY = pDockingAreaWindow->ScreenToOutputPixel( pContainerWindow->OutputToScreenPixel( ::Point( 0, nPosY ))).Y();
         }
@@ -3273,7 +3273,7 @@ throw (uno::RuntimeException, std::exception)
     ::Point aMousePos;
     {
         SolarMutexGuard aGuard;
-        pContainerWindow = VCLUnoHelper::GetWindow( xContainerWindow );
+        pContainerWindow = VCLUnoHelper::GetWindow( xContainerWindow ).get();
         aMousePos = pContainerWindow->ScreenToOutputPixel( ::Point( e.MousePos.X, e.MousePos.Y ));
     }
 
@@ -3642,7 +3642,7 @@ throw (uno::RuntimeException, std::exception)
     {
         SolarMutexGuard aGuard;
         xWindow.set( e.Source, uno::UNO_QUERY );
-        pWindow = VCLUnoHelper::GetWindow( xWindow );
+        pWindow = VCLUnoHelper::GetWindow( xWindow ).get();
 
         if ( pWindow && pWindow->GetType() == WINDOW_TOOLBOX )
             pToolBox = static_cast<ToolBox *>(pWindow);

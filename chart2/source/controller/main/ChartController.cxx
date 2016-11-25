@@ -460,7 +460,7 @@ void SAL_CALL ChartController::attachFrame(
         if (pParentComponent)
             pParentComponent->setVisible(true);
 
-        pParent = VCLUnoHelper::GetWindow( xContainerWindow );
+        pParent = VCLUnoHelper::GetWindow( xContainerWindow ).get();
     }
 
     if(m_pChartWindow)

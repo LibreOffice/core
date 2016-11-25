@@ -1390,9 +1390,8 @@ void Window::queue_resize(StateChangedType eReason)
     if (pWindowImpl->m_xSizeGroup && pWindowImpl->m_xSizeGroup->get_mode() != VCL_SIZE_GROUP_NONE)
     {
         std::set<VclPtr<vcl::Window> > &rWindows = pWindowImpl->m_xSizeGroup->get_widgets();
-        for (auto aI = rWindows.begin(), aEnd = rWindows.end(); aI != aEnd; ++aI)
+        for (VclPtr<vcl::Window> const & pOther : rWindows)
         {
-            vcl::Window *pOther = *aI;
             if (pOther == this)
                 continue;
             queue_ungrouped_resize(pOther);

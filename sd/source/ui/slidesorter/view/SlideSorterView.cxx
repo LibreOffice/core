@@ -209,7 +209,7 @@ sal_Int32 SlideSorterView::GetPageIndexAtPoint (const Point& rWindowPosition) co
 {
     sal_Int32 nIndex (-1);
 
-    sd::Window *pWindow (mrSlideSorter.GetContentWindow());
+    sd::Window *pWindow (mrSlideSorter.GetContentWindow().get());
     if (pWindow)
     {
         nIndex = mpLayouter->GetIndexAtPoint(pWindow->PixelToLogic(rWindowPosition), false, false);
@@ -309,7 +309,7 @@ void SlideSorterView::Rearrange()
     if (mrModel.GetPageCount() <= 0)
         return;
 
-    sd::Window *pWindow (mrSlideSorter.GetContentWindow());
+    sd::Window *pWindow (mrSlideSorter.GetContentWindow().get());
     if ( ! pWindow)
         return;
     const Size aWindowSize (pWindow->GetSizePixel());
@@ -401,7 +401,7 @@ void SlideSorterView::UpdateOrientation()
 
 void SlideSorterView::Layout ()
 {
-    sd::Window *pWindow (mrSlideSorter.GetContentWindow());
+    sd::Window *pWindow (mrSlideSorter.GetContentWindow().get());
     if (pWindow)
     {
         // Set the model area, i.e. the smallest rectangle that includes all
@@ -443,7 +443,7 @@ void SlideSorterView::InvalidatePageObjectVisibilities()
 
 void SlideSorterView::DeterminePageObjectVisibilities()
 {
-    sd::Window *pWindow (mrSlideSorter.GetContentWindow());
+    sd::Window *pWindow (mrSlideSorter.GetContentWindow().get());
     if (pWindow)
     {
         // Set this flag to true here so that an invalidate during the
@@ -538,7 +538,7 @@ bool SlideSorterView::SetOrientation (const Layouter::Orientation eOrientation)
 
 void SlideSorterView::RequestRepaint()
 {
-    sd::Window *pWindow (mrSlideSorter.GetContentWindow());
+    sd::Window *pWindow (mrSlideSorter.GetContentWindow().get());
     if (pWindow)
     {
         mpLayeredDevice->InvalidateAllLayers(
@@ -557,7 +557,7 @@ void SlideSorterView::RequestRepaint (const model::SharedPageDescriptor& rpDescr
 
 void SlideSorterView::RequestRepaint (const Rectangle& rRepaintBox)
 {
-    sd::Window *pWindow (mrSlideSorter.GetContentWindow());
+    sd::Window *pWindow (mrSlideSorter.GetContentWindow().get());
     if (pWindow)
     {
         mpLayeredDevice->InvalidateAllLayers(rRepaintBox);
@@ -567,7 +567,7 @@ void SlideSorterView::RequestRepaint (const Rectangle& rRepaintBox)
 
 void SlideSorterView::RequestRepaint (const vcl::Region& rRepaintRegion)
 {
-    sd::Window *pWindow (mrSlideSorter.GetContentWindow());
+    sd::Window *pWindow (mrSlideSorter.GetContentWindow().get());
     if (pWindow)
     {
         mpLayeredDevice->InvalidateAllLayers(rRepaintRegion);
@@ -691,7 +691,7 @@ void SlideSorterView::ConfigurationChanged (
 
 std::shared_ptr<cache::PageCache> const & SlideSorterView::GetPreviewCache()
 {
-    sd::Window *pWindow (mrSlideSorter.GetContentWindow());
+    sd::Window *pWindow (mrSlideSorter.GetContentWindow().get());
     if (pWindow && mpPreviewCache.get() == nullptr)
     {
         mpPreviewCache.reset(
@@ -757,7 +757,7 @@ void SlideSorterView::UpdatePageUnderMouse ()
         return;
     }
 
-    sd::Window *pWindow (mrSlideSorter.GetContentWindow());
+    sd::Window *pWindow (mrSlideSorter.GetContentWindow().get());
     if (pWindow && pWindow->IsVisible() && ! pWindow->IsMouseCaptured())
     {
         const Window::PointerState aPointerState (pWindow->GetPointerState());

@@ -28,10 +28,9 @@
 #include "sddll.hxx"
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
-
 #include <sfx2/objface.hxx>
-
 #include <svx/svxids.hrc>
+#include <svx/ruler.hxx>
 #include "FrameView.hxx"
 #include "sdresid.hxx"
 #include "DrawDocShell.hxx"
@@ -107,12 +106,12 @@ void PresentationViewShell::FinishInitialization( FrameView* pFrameView )
     GetActiveWindow()->GrabFocus();
 }
 
-SvxRuler* PresentationViewShell::CreateHRuler(::sd::Window*)
+VclPtr<SvxRuler> PresentationViewShell::CreateHRuler(::sd::Window*)
 {
     return nullptr;
 }
 
-SvxRuler* PresentationViewShell::CreateVRuler(::sd::Window*)
+VclPtr<SvxRuler> PresentationViewShell::CreateVRuler(::sd::Window*)
 {
     return nullptr;
 }

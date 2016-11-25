@@ -925,7 +925,7 @@ void SystemWindow::SetMenuBar(MenuBar* pMenuBar)
     {
         MenuBar* pOldMenuBar = mpMenuBar;
         vcl::Window*  pOldWindow = nullptr;
-        vcl::Window*  pNewWindow=nullptr;
+        VclPtr<vcl::Window> pNewWindow;
         mpMenuBar = pMenuBar;
 
         if ( mpWindowImpl->mpBorderWindow && (mpWindowImpl->mpBorderWindow->GetType() == WINDOW_BORDERWINDOW) )

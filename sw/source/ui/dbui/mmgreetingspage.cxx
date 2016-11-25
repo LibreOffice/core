@@ -112,7 +112,7 @@ IMPL_LINK(SwGreetingsHandler, GreetingHdl_Impl, Button*, pButton, void)
                         SwCustomizeAddressBlockDialog::GREETING_FEMALE ));
     if(RET_OK == pDlg->Execute())
     {
-        ListBox* pToInsert = pButton == m_pMalePB ? m_pMaleLB : m_pFemaleLB;
+        ListBox* pToInsert = pButton == m_pMalePB ? m_pMaleLB.get() : m_pFemaleLB.get();
         pToInsert->SelectEntryPos(pToInsert->InsertEntry(pDlg->GetAddress()));
         if(m_bIsTabPage)
         {

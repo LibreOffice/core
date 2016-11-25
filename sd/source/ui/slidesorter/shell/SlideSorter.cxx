@@ -168,7 +168,7 @@ void SlideSorter::Init()
     SetupListeners ();
 
     // Initialize the window.
-    sd::Window *pContentWindow (GetContentWindow());
+    sd::Window *pContentWindow = GetContentWindow().get();
     if (pContentWindow)
     {
         vcl::Window* pParentWindow = pContentWindow->GetParent();
@@ -249,7 +249,7 @@ void SlideSorter::SetupControls (vcl::Window* )
 
 void SlideSorter::SetupListeners()
 {
-    sd::Window *pWindow (GetContentWindow());
+    sd::Window *pWindow = GetContentWindow().get();
     if (pWindow)
     {
         vcl::Window* pParentWindow = pWindow->GetParent();
@@ -278,7 +278,7 @@ void SlideSorter::ReleaseListeners()
 {
     mpSlideSorterController->GetScrollBarManager().Disconnect();
 
-    sd::Window *pWindow (GetContentWindow());
+    sd::Window *pWindow (GetContentWindow().get());
     if (pWindow)
     {
         pWindow->RemoveEventListener(

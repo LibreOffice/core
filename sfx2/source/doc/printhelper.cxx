@@ -313,7 +313,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SfxPrintHelper::getPrinter() thro
 
 
 void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >& rPrinter,
-                                     SfxPrinter*& pPrinter,
+                                     VclPtr<SfxPrinter>& pPrinter,
                                      SfxPrinterChangeFlags& nChangeFlags,
                                      SfxViewShell*& pViewSh)
 
@@ -457,7 +457,7 @@ void SAL_CALL SfxPrintHelper::setPrinter(const uno::Sequence< beans::PropertyVal
     SolarMutexGuard aGuard;
 
     SfxViewShell* pViewSh = nullptr;
-    SfxPrinter* pPrinter = nullptr;
+    VclPtr<SfxPrinter> pPrinter;
     SfxPrinterChangeFlags nChangeFlags = SfxPrinterChangeFlags::NONE;
     impl_setPrinter(rPrinter,pPrinter,nChangeFlags,pViewSh);
     // set new printer

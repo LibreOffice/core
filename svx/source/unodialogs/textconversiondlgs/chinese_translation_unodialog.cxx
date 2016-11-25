@@ -131,7 +131,7 @@ sal_Int16 SAL_CALL ChineseTranslation_UnoDialog::execute() throw(uno::RuntimeExc
             {
                 VCLXWindow* pImplementation = VCLXWindow::GetImplementation(m_xParentWindow);
                 if (pImplementation)
-                    pParent = pImplementation->GetWindow();
+                    pParent = pImplementation->GetWindow().get();
             }
             uno::Reference< XComponent > xComp( this );
             m_pDialog = VclPtr<ChineseTranslationDialog>::Create( pParent );

@@ -2202,9 +2202,8 @@ void RadioButton::group(RadioButton &rOther)
         }
 
         //make all members of the group share the same button group
-        for (auto aI = m_xGroup->begin(), aEnd = m_xGroup->end(); aI != aEnd; ++aI)
+        for (VclPtr<RadioButton> const & pButton : *m_xGroup)
         {
-            RadioButton* pButton = *aI;
             pButton->m_xGroup = m_xGroup;
         }
     }
@@ -2221,9 +2220,8 @@ std::vector< VclPtr<RadioButton> > RadioButton::GetRadioButtonGroup(bool bInclud
         if (bIncludeThis)
             return *m_xGroup;
         std::vector< VclPtr<RadioButton> > aGroup;
-        for (auto aI = m_xGroup->begin(), aEnd = m_xGroup->end(); aI != aEnd; ++aI)
+        for (VclPtr<RadioButton> const & pRadioButton : *m_xGroup)
         {
-            RadioButton *pRadioButton = *aI;
             if (pRadioButton == this)
                 continue;
             aGroup.push_back(pRadioButton);

@@ -708,7 +708,7 @@ void SwPostItMgr::LayoutPostIts()
                 for(SwSidebarItem_iterator i = pPage->mList->begin(); i != pPage->mList->end(); ++i)
                 {
                     SwSidebarItem* pItem = (*i);
-                    SwSidebarWin* pPostIt = pItem->pPostIt;
+                    VclPtr<SwSidebarWin> pPostIt = pItem->pPostIt;
 
                     if (pPage->eSidebarPosition == sw::sidebarwindows::SidebarPosition::LEFT )
                     {
@@ -745,7 +745,7 @@ void SwPostItMgr::LayoutPostIts()
                             if (mpAnswer)
                             {
                                 if (pPostIt->CalcFollow()) //do we really have another note in front of this one
-                                    static_cast<sw::annotation::SwAnnotationWin*>(pPostIt)->InitAnswer(mpAnswer);
+                                    static_cast<sw::annotation::SwAnnotationWin*>(pPostIt.get())->InitAnswer(mpAnswer);
                                 delete mpAnswer;
                                 mpAnswer = nullptr;
                             }

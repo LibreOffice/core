@@ -180,7 +180,7 @@ void SlideSorterViewShell::Initialize()
     // the new view shell.  (One is created earlier while the constructor
     // of the base class is executed.  At that time the correct
     // accessibility object can not be constructed.)
-    sd::Window *pWindow (mpSlideSorter->GetContentWindow());
+    sd::Window *pWindow (mpSlideSorter->GetContentWindow().get());
     if (pWindow)
     {
         pWindow->Hide();

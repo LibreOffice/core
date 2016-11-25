@@ -892,8 +892,8 @@ void OJoinTableView::SelectConn(OTableConnection* pConn)
     OTableWindow* pConnDest = pConn->GetDestWin();
     if (pConnSource && pConnDest)
     {
-        OTableWindowListBox* pSourceBox = pConnSource->GetListBox();
-        OTableWindowListBox* pDestBox = pConnDest->GetListBox();
+        OTableWindowListBox* pSourceBox = pConnSource->GetListBox().get();
+        OTableWindowListBox* pDestBox = pConnDest->GetListBox().get();
         if (pSourceBox && pDestBox)
         {
             pSourceBox->SelectAll(false);
@@ -1200,12 +1200,8 @@ OTableConnection* OJoinTableView::GetTabConn(const OTableWindow* pLhs,const OTab
 
     if ((!pLhs || pLhs->ExistsAConn()) && (!pRhs || pRhs->ExistsAConn()))
     {
-        auto aIter = m_vTableConnection.begin();
-        auto aEnd = m_vTableConnection.end();
-        for(;aIter != aEnd;++aIter)
+        for(VclPtr<OTableConnection> const & pData : m_vTableConnection)
         {
-            OTableConnection* pData = *aIter;
-
             if  (   (   (pData->GetSourceWin() == pLhs)
                     &&  (   (pData->GetDestWin() == pRhs)
                         ||  (nullptr == pRhs)
@@ -1287,10 +1283,10 @@ bool OJoinTableView::PreNotify(NotifyEvent& rNEvt)
                             {
                                 if ((aIter->second == m_aTableMap.rbegin()->second) && bForward)
                                     // the last win is active and we're travelling forward -> select the first conn
-                                    pNextConn = *m_vTableConnection.begin();
+                                    pNextConn = m_vTableConnection.begin()->get();
                                 if ((aIter == m_aTableMap.begin()) && !bForward)
                                     // the first win is active an we're traveling backward -> select the last conn
-                                    pNextConn = *m_vTableConnection.rbegin();
+                                    pNextConn = m_vTableConnection.rbegin()->get();
                             }
 
                             if (!pNextConn)
@@ -1343,11 +1339,11 @@ bool OJoinTableView::PreNotify(NotifyEvent& rNEvt)
                                 // no win for any reason -> select the next or previous conn
                                 if (i < (sal_Int32)m_vTableConnection.size())
                                     // there is a currently active conn
-                                    pNextConn = m_vTableConnection[(i + (bForward ? 1 : m_vTableConnection.size() - 1)) % m_vTableConnection.size()];
+                                    pNextConn = m_vTableConnection[(i + (bForward ? 1 : m_vTableConnection.size() - 1)) % m_vTableConnection.size()].get();
                                 else
                                 {   // no tab win selected, no conn selected
                                     if (!m_vTableConnection.empty())
-                                        pNextConn = m_vTableConnection[bForward ? 0 : m_vTableConnection.size() - 1];
+                                        pNextConn = m_vTableConnection[bForward ? 0 : m_vTableConnection.size() - 1].get();
                                     else if (!m_aTableMap.empty())
                                     {
                                         if(bForward)

@@ -2478,9 +2478,9 @@ void MenuBar::SetDisplayable( bool bDisplayable )
     }
 }
 
-vcl::Window* MenuBar::ImplCreate(vcl::Window* pParent, vcl::Window* pWindow, MenuBar* pMenu)
+VclPtr<vcl::Window> MenuBar::ImplCreate(vcl::Window* pParent, vcl::Window* pWindow, MenuBar* pMenu)
 {
-    MenuBarWindow *pMenuBarWindow = dynamic_cast<MenuBarWindow*>(pWindow);
+    VclPtr<MenuBarWindow> pMenuBarWindow = dynamic_cast<MenuBarWindow*>(pWindow);
     if (!pMenuBarWindow)
     {
         pWindow = pMenuBarWindow = VclPtr<MenuBarWindow>::Create( pParent );

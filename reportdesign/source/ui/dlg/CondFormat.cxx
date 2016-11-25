@@ -284,7 +284,7 @@ namespace rptui
             m_xCopy->removeByIndex( (sal_Int32)nOldConditionIndex );
 
             Conditions::iterator aRemovePos( m_aConditions.begin() + nOldConditionIndex );
-            pMovedCondition = *aRemovePos;
+            pMovedCondition = aRemovePos->get();
             m_aConditions.erase( aRemovePos );
         }
         catch( const Exception& )

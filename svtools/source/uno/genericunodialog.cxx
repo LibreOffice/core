@@ -168,7 +168,7 @@ bool OGenericUnoDialog::impl_ensureDialog_lck()
     // get the parameters for the dialog from the current settings
 
     // the parent window
-    vcl::Window* pParent = nullptr;
+    VclPtr<vcl::Window> pParent;
     VCLXWindow* pImplementation = VCLXWindow::GetImplementation(m_xParent);
     if (pImplementation)
         pParent = pImplementation->GetWindow();

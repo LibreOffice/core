@@ -1197,7 +1197,7 @@ static OutputDevice* lcl_GetRenderDevice( const uno::Sequence<beans::PropertyVal
                 VCLXDevice* pDevice = VCLXDevice::GetImplementation( xRenderDevice );
                 if ( pDevice )
                 {
-                    pRet = pDevice->GetOutputDevice();
+                    pRet = pDevice->GetOutputDevice().get();
                     pRet->SetDigitLanguage( SC_MOD()->GetOptDigitLanguage() );
                 }
             }

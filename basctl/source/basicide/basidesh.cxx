@@ -313,9 +313,8 @@ void Shell::onDocumentClosed( const ScriptDocument& _rDocument )
         }
     }
     // delete windows outside main loop so we don't invalidate the original iterator
-    for (auto it = aDeleteVec.begin(); it != aDeleteVec.end(); ++it)
+    for (VclPtr<BaseWindow> const & pWin : aDeleteVec)
     {
-        BaseWindow* pWin = *it;
         pWin->StoreData();
         if ( pWin == pCurWin )
             bSetCurWindow = true;
@@ -440,7 +439,7 @@ void Shell::OuterResizePixel( const Point &rPos, const Size &rSize )
 IMPL_LINK( Shell, TabBarHdl, ::TabBar *, pCurTabBar, void )
 {
     sal_uInt16 nCurId = pCurTabBar->GetCurPageId();
-    BaseWindow* pWin = aWindowTable[ nCurId ];
+    BaseWindow* pWin = aWindowTable[ nCurId ].get();
     DBG_ASSERT( pWin, "Eintrag in TabBar passt zu keinem Fenster!" );
     SetCurWindow( pWin );
 }
@@ -559,9 +558,8 @@ void Shell::CheckWindows()
         if ( pWin->GetStatus() & BASWIN_TOBEKILLED )
             aDeleteVec.push_back( pWin );
     }
-    for ( auto it = aDeleteVec.begin(); it != aDeleteVec.end(); ++it )
+    for ( VclPtr<BaseWindow> const & pWin : aDeleteVec )
     {
-        BaseWindow* pWin = *it;
         pWin->StoreData();
         if ( pWin == pCurWin )
             bSetCurWindow = true;
@@ -582,9 +580,8 @@ void Shell::RemoveWindows( const ScriptDocument& rDocument, const OUString& rLib
         if ( pWin->IsDocument( rDocument ) && pWin->GetLibName() == rLibName )
             aDeleteVec.push_back( pWin );
     }
-    for ( auto it = aDeleteVec.begin(); it != aDeleteVec.end(); ++it )
+    for ( VclPtr<BaseWindow> const & pWin : aDeleteVec )
     {
-        BaseWindow* pWin = *it;
         if ( pWin == pCurWin )
             bChangeCurWindow = true;
         pWin->StoreData();
@@ -737,7 +734,7 @@ void Shell::UpdateWindows()
     {
         if ( !pNextActiveWindow )
         {
-            pNextActiveWindow = FindApplicationWindow();
+            pNextActiveWindow = FindApplicationWindow().get();
         }
         SetCurWindow( pNextActiveWindow, true );
     }

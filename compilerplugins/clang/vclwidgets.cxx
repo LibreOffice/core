@@ -46,7 +46,7 @@ public:
     bool VisitCXXConstructExpr(const CXXConstructExpr *);
     bool VisitBinaryOperator(const BinaryOperator *);
 private:
-    void checkAssignmentForVclPtrToRawConversion(const Type* lhsType, const Expr* rhs);
+    void checkAssignmentForVclPtrToRawConversion(const SourceLocation& sourceLoc, const Type* lhsType, const Expr* rhs);
     bool isDisposeCallingSuperclassDispose(const CXXMethodDecl* pMethodDecl);
     bool mbCheckingMemcpy = false;
 };
@@ -251,13 +251,15 @@ bool VCLWidgets::VisitBinaryOperator(const BinaryOperator * binaryOperator)
     if ( !binaryOperator->isAssignmentOp() ) {
         return true;
     }
-    checkAssignmentForVclPtrToRawConversion(binaryOperator->getLHS()->getType().getTypePtr(), binaryOperator->getRHS());
+    SourceLocation spellingLocation = compiler.getSourceManager().getSpellingLoc(
+                          binaryOperator->getLocStart());
+    checkAssignmentForVclPtrToRawConversion(spellingLocation, binaryOperator->getLHS()->getType().getTypePtr(), binaryOperator->getRHS());
     return true;
 }
 
 // Look for places where we are accidentally assigning a returned-by-value VclPtr<T> to a T*, which generally
 // ends up in a use-after-free.
-void VCLWidgets::checkAssignmentForVclPtrToRawConversion(const Type* lhsType, const Expr* rhs)
+void VCLWidgets::checkAssignmentForVclPtrToRawConversion(const SourceLocation& spellingLocation, const Type* lhsType, const Expr* rhs)
 {
     if (!lhsType || !isa<PointerType>(lhsType)) {
         return;
@@ -265,32 +267,72 @@ void VCLWidgets::checkAssignmentForVclPtrToRawConversion(const Type* lhsType, co
     if (!rhs) {
         return;
     }
-    // lots of null checking for something weird going in SW that tends to crash clang with:
-    // const clang::ExtQualsTypeCommonBase *clang::QualType::getCommonPtr() const: Assertion `!isNull() && "Cannot retrieve a NULL type pointer"'
-    if (rhs->getType().getTypePtrOrNull()) {
-        if (const PointerType* pt = dyn_cast<PointerType>(rhs->getType())) {
-             const Type* pointeeType = pt->getPointeeType().getTypePtrOrNull();
-             if (pointeeType && !isa<SubstTemplateTypeParmType>(pointeeType)) {
-                return;
-             }
-        }
+    StringRef filename = compiler.getSourceManager().getFilename(spellingLocation);
+    if (filename == SRCDIR "/include/rtl/ref.hxx") {
+        return;
     }
     const CXXRecordDecl* pointeeClass = lhsType->getPointeeType()->getAsCXXRecordDecl();
     if (!isDerivedFromVclReferenceBase(pointeeClass)) {
         return;
     }
-    const ExprWithCleanups* exprWithCleanups = dyn_cast<ExprWithCleanups>(rhs);
-    if (!exprWithCleanups) {
+
+    // if we have T* on the LHS and VclPtr<T> on the RHS, we expect to see either
+    // an ImplicitCastExpr
+    // or a ExprWithCleanups and then an ImplicitCastExpr
+    if (auto implicitCastExpr = dyn_cast<ImplicitCastExpr>(rhs)) {
+        if (implicitCastExpr->getCastKind() != CK_UserDefinedConversion) {
+            return;
+        }
+        rhs = rhs->IgnoreCasts();
+    } else if (auto exprWithCleanups = dyn_cast<ExprWithCleanups>(rhs)) {
+        if (auto implicitCastExpr = dyn_cast<ImplicitCastExpr>(exprWithCleanups->getSubExpr())) {
+            if (implicitCastExpr->getCastKind() != CK_UserDefinedConversion) {
+                return;
+            }
+            rhs = exprWithCleanups->IgnoreCasts();
+        } else {
+            return;
+        }
+    } else {
         return;
     }
-    const ImplicitCastExpr* implicitCast = dyn_cast<ImplicitCastExpr>(exprWithCleanups->getSubExpr());
-    if (!implicitCast) {
+    if (isa<CXXNullPtrLiteralExpr>(rhs)) {
         return;
     }
-    //rhs->getType().dump();
+    if (isa<CXXThisExpr>(rhs)) {
+        return;
+    }
+
+    // ignore assignments from a member field to a local variable, to avoid unnecessary refcounting traffic
+    if (auto callExpr = dyn_cast<CXXMemberCallExpr>(rhs)) {
+        if (auto calleeMemberExpr = dyn_cast<MemberExpr>(callExpr->getCallee())) {
+            if ((calleeMemberExpr = dyn_cast<MemberExpr>(calleeMemberExpr->getBase()->IgnoreImpCasts()))) {
+                if (isa<FieldDecl>(calleeMemberExpr->getMemberDecl())) {
+                    return;
+                }
+            }
+        }
+    }
+
+    // ignore assignments from a local variable to a local variable, to avoid unnecessary refcounting traffic
+    if (auto callExpr = dyn_cast<CXXMemberCallExpr>(rhs)) {
+        if (auto calleeMemberExpr = dyn_cast<MemberExpr>(callExpr->getCallee())) {
+            if (auto declRefExpr = dyn_cast<DeclRefExpr>(calleeMemberExpr->getBase()->IgnoreImpCasts())) {
+                if (isa<VarDecl>(declRefExpr->getDecl())) {
+                    return;
+                }
+            }
+        }
+    }
+    if (auto declRefExpr = dyn_cast<DeclRefExpr>(rhs->IgnoreImpCasts())) {
+        if (isa<VarDecl>(declRefExpr->getDecl())) {
+             return;
+        }
+    }
+
     report(
         DiagnosticsEngine::Warning,
-        "assigning a returned-by-value VclPtr<T> to a T* variable is dodgy, should be assigned to a VclPtr",
+        "assigning a returned-by-value VclPtr<T> to a T* variable is dodgy, should be assigned to a VclPtr. If you know that the RHS does not return a newly created T, then add a '.get()' to the RHS",
          rhs->getSourceRange().getBegin())
         << rhs->getSourceRange();
 }
@@ -302,10 +344,12 @@ bool VCLWidgets::VisitVarDecl(const VarDecl * pVarDecl) {
     if (isa<ParmVarDecl>(pVarDecl)) {
         return true;
     }
+    SourceLocation spellingLocation = compiler.getSourceManager().getSpellingLoc(
+                          pVarDecl->getLocStart());
     if (pVarDecl->getInit()) {
-        checkAssignmentForVclPtrToRawConversion(pVarDecl->getType().getTypePtr(), pVarDecl->getInit());
+        checkAssignmentForVclPtrToRawConversion(spellingLocation, pVarDecl->getType().getTypePtr(), pVarDecl->getInit());
     }
-    StringRef aFileName = compiler.getSourceManager().getFilename(compiler.getSourceManager().getSpellingLoc(pVarDecl->getLocStart()));
+    StringRef aFileName = compiler.getSourceManager().getFilename(spellingLocation);
     if (aFileName == SRCDIR "/include/vcl/vclptr.hxx")
         return true;
     if (aFileName == SRCDIR "/vcl/source/window/layout.cxx")

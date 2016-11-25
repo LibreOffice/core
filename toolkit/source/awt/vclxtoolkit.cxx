@@ -831,7 +831,7 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
     OUString aServiceName( rDescriptor.WindowServiceName );
     aServiceName = aServiceName.toAsciiLowerCase();
 
-    vcl::Window* pNewWindow = nullptr;
+    VclPtr<vcl::Window> pNewWindow;
     sal_uInt16 nType = ImplGetComponentType( aServiceName );
     bool bFrameControl = false;
     if ( aServiceName == "frame" )
@@ -886,7 +886,7 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
             break;
             case WINDOW_COMBOBOX:
                 pNewWindow = VclPtr<ComboBox>::Create( pParent, nWinBits|WB_AUTOHSCROLL );
-                static_cast<ComboBox*>(pNewWindow)->EnableAutoSize( false );
+                static_cast<ComboBox*>(pNewWindow.get())->EnableAutoSize( false );
                 *ppNewComp = new VCLXComboBox;
             break;
             case WINDOW_CURRENCYBOX:
@@ -894,18 +894,18 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
             break;
             case WINDOW_CURRENCYFIELD:
                 pNewWindow = VclPtr<CurrencyField>::Create( pParent, nWinBits );
-                static_cast<CurrencyField*>(pNewWindow)->EnableEmptyFieldValue( true );
+                static_cast<CurrencyField*>(pNewWindow.get())->EnableEmptyFieldValue( true );
                 *ppNewComp = new VCLXNumericField;
-                static_cast<VCLXFormattedSpinField*>(*ppNewComp)->SetFormatter( static_cast<FormatterBase*>(static_cast<CurrencyField*>(pNewWindow)) );
+                static_cast<VCLXFormattedSpinField*>(*ppNewComp)->SetFormatter( static_cast<FormatterBase*>(static_cast<CurrencyField*>(pNewWindow.get())) );
             break;
             case WINDOW_DATEBOX:
                 pNewWindow = VclPtr<DateBox>::Create( pParent, nWinBits );
             break;
             case WINDOW_DATEFIELD:
                 pNewWindow = VclPtr<DateField>::Create( pParent, nWinBits );
-                static_cast<DateField*>(pNewWindow)->EnableEmptyFieldValue( true );
+                static_cast<DateField*>(pNewWindow.get())->EnableEmptyFieldValue( true );
                 *ppNewComp = new VCLXDateField;
-                static_cast<VCLXFormattedSpinField*>(*ppNewComp)->SetFormatter( static_cast<FormatterBase*>(static_cast<DateField*>(pNewWindow)) );
+                static_cast<VCLXFormattedSpinField*>(*ppNewComp)->SetFormatter( static_cast<FormatterBase*>(static_cast<DateField*>(pNewWindow.get())) );
             break;
             case WINDOW_DOCKINGAREA:
                 pNewWindow = VclPtr<DockingAreaWindow>::Create( pParent );
@@ -940,7 +940,7 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                 pNewWindow = VclPtr<GroupBox>::Create( pParent, nWinBits );
                 if ( bFrameControl )
                 {
-                    GroupBox* pGroupBox =  static_cast< GroupBox* >( pNewWindow );
+                    GroupBox* pGroupBox =  static_cast< GroupBox* >( pNewWindow.get() );
                     *ppNewComp = new VCLXFrame;
                     // Frame control needs to receive
                     // Mouse events
@@ -961,7 +961,7 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
             break;
             case WINDOW_LISTBOX:
                 pNewWindow = VclPtr<ListBox>::Create( pParent, nWinBits|WB_SIMPLEMODE|WB_AUTOHSCROLL );
-                static_cast<ListBox*>(pNewWindow)->EnableAutoSize( false );
+                static_cast<ListBox*>(pNewWindow.get())->EnableAutoSize( false );
                 *ppNewComp = new VCLXListBox;
             break;
             case WINDOW_LONGCURRENCYBOX:
@@ -970,7 +970,7 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
             case WINDOW_LONGCURRENCYFIELD:
                 pNewWindow = VclPtr<LongCurrencyField>::Create( pParent, nWinBits );
                 *ppNewComp = new VCLXCurrencyField;
-                static_cast<VCLXFormattedSpinField*>(*ppNewComp)->SetFormatter( static_cast<FormatterBase*>(static_cast<LongCurrencyField*>(pNewWindow)) );
+                static_cast<VCLXFormattedSpinField*>(*ppNewComp)->SetFormatter( static_cast<FormatterBase*>(static_cast<LongCurrencyField*>(pNewWindow.get())) );
             break;
             case WINDOW_MENUBUTTON:
                 pNewWindow = VclPtr<MenuButton>::Create( pParent, nWinBits );
@@ -986,7 +986,7 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
             case WINDOW_METRICFIELD:
                 pNewWindow = VclPtr<MetricField>::Create( pParent, nWinBits );
                 *ppNewComp = new VCLXMetricField;
-                static_cast<VCLXFormattedSpinField*>(*ppNewComp)->SetFormatter( static_cast<FormatterBase*>(static_cast<MetricField*>(pNewWindow)) );
+                static_cast<VCLXFormattedSpinField*>(*ppNewComp)->SetFormatter( static_cast<FormatterBase*>(static_cast<MetricField*>(pNewWindow.get())) );
             break;
             case WINDOW_DIALOG:
             case WINDOW_MODALDIALOG:
@@ -1020,9 +1020,9 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
             break;
             case WINDOW_NUMERICFIELD:
                 pNewWindow = VclPtr<NumericField>::Create( pParent, nWinBits );
-                static_cast<NumericField*>(pNewWindow)->EnableEmptyFieldValue( true );
+                static_cast<NumericField*>(pNewWindow.get())->EnableEmptyFieldValue( true );
                 *ppNewComp = new VCLXNumericField;
-                static_cast<VCLXFormattedSpinField*>(*ppNewComp)->SetFormatter( static_cast<FormatterBase*>(static_cast<NumericField*>(pNewWindow)) );
+                static_cast<VCLXFormattedSpinField*>(*ppNewComp)->SetFormatter( static_cast<FormatterBase*>(static_cast<NumericField*>(pNewWindow.get())) );
             break;
             case WINDOW_OKBUTTON:
                 pNewWindow = VclPtr<OKButton>::Create( pParent, nWinBits );
@@ -1034,7 +1034,7 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
             case WINDOW_PATTERNFIELD:
                 pNewWindow = VclPtr<PatternField>::Create( pParent, nWinBits );
                 *ppNewComp = new VCLXPatternField;
-                static_cast<VCLXFormattedSpinField*>(*ppNewComp)->SetFormatter( static_cast<FormatterBase*>(static_cast<PatternField*>(pNewWindow)) );
+                static_cast<VCLXFormattedSpinField*>(*ppNewComp)->SetFormatter( static_cast<FormatterBase*>(static_cast<PatternField*>(pNewWindow.get())) );
             break;
             case WINDOW_PUSHBUTTON:
                 pNewWindow = VclPtr<PushButton>::Create( pParent, nWinBits );
@@ -1057,7 +1057,7 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                 // is not really valid: the controls are grouped after they have been created, but we're still in
                 // the creation process, so the RadioButton::Check relies on invalid grouping information.
                 // 07.08.2001 - #87254# - frank.schoenheit@sun.com
-                static_cast<RadioButton*>(pNewWindow)->EnableRadioCheck( false );
+                static_cast<RadioButton*>(pNewWindow.get())->EnableRadioCheck( false );
             break;
             case WINDOW_SCROLLBAR:
                 pNewWindow = VclPtr<ScrollBar>::Create( pParent, nWinBits );
@@ -1105,9 +1105,9 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
             break;
             case WINDOW_TIMEFIELD:
                 pNewWindow = VclPtr<TimeField>::Create( pParent, nWinBits );
-                static_cast<TimeField*>(pNewWindow)->EnableEmptyFieldValue( true );
+                static_cast<TimeField*>(pNewWindow.get())->EnableEmptyFieldValue( true );
                 *ppNewComp = new VCLXTimeField;
-                static_cast<VCLXFormattedSpinField*>(*ppNewComp)->SetFormatter( static_cast<FormatterBase*>(static_cast<TimeField*>(pNewWindow)) );
+                static_cast<VCLXFormattedSpinField*>(*ppNewComp)->SetFormatter( static_cast<FormatterBase*>(static_cast<TimeField*>(pNewWindow.get())) );
             break;
             case WINDOW_TOOLBOX:
                 pNewWindow = VclPtr<ToolBox>::Create( pParent, nWinBits );
@@ -1256,7 +1256,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
 
     css::uno::Reference< css::awt::XWindowPeer > xRef;
 
-    vcl::Window* pParent = nullptr;
+    VclPtr<vcl::Window> pParent;
     if ( rDescriptor.Parent.is() )
     {
         VCLXWindow* pParentComponent = VCLXWindow::GetImplementation( rDescriptor.Parent );

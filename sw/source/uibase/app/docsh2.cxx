@@ -641,7 +641,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 // the SourceView is not the 1 for SwWebDocShell
                 sal_uInt16 nSlot = SID_VIEWSHELL1;
                 bool bSetModified = false;
-                SfxPrinter* pSavePrinter = nullptr;
+                VclPtr<SfxPrinter> pSavePrinter;
                 if( nullptr != pSrcView)
                 {
                     SfxPrinter* pTemp = GetDoc()->getIDocumentDeviceAccess().getPrinter( false );

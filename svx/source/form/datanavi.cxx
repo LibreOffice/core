@@ -1814,7 +1814,7 @@ namespace svxform
     XFormsPage* DataNavigatorWindow::GetCurrentPage( sal_uInt16& rCurId )
     {
         rCurId = m_pTabCtrl->GetCurPageId();
-        XFormsPage* pPage = nullptr;
+        VclPtr<XFormsPage> pPage;
         OString sName(m_pTabCtrl->GetPageName(rCurId));
         if (sName == "submissions")
         {

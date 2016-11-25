@@ -1832,7 +1832,7 @@ bool SfxStoringHelper::WarnUnacceptableFormat( const uno::Reference< frame::XMod
 
 vcl::Window* SfxStoringHelper::GetModelWindow( const uno::Reference< frame::XModel >& xModel )
 {
-    vcl::Window* pWin = nullptr;
+    VclPtr<vcl::Window> pWin;
     try {
         if ( xModel.is() )
         {

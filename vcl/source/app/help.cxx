@@ -502,7 +502,7 @@ void ImplShowHelpWindow( vcl::Window* pParent, sal_uInt16 nHelpWinStyle, QuickHe
     if (rHelpText.isEmpty() && !pSVData->maHelpData.mbRequestingHelp)
         return;
 
-    HelpTextWindow* pHelpWin = pSVData->maHelpData.mpHelpWin;
+    VclPtr<HelpTextWindow> pHelpWin = pSVData->maHelpData.mpHelpWin;
     sal_uInt16 nDelayMode = HELPDELAY_NORMAL;
     if ( pHelpWin )
     {

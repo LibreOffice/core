@@ -3206,7 +3206,7 @@ void SvxCharTwoLinesPage::SelectCharacter( ListBox* pBox )
 void SvxCharTwoLinesPage::SetBracket( sal_Unicode cBracket, bool bStart )
 {
     sal_Int32 nEntryPos = 0;
-    ListBox* pBox = bStart ? m_pStartBracketLB : m_pEndBracketLB;
+    ListBox* pBox = bStart ? m_pStartBracketLB.get() : m_pEndBracketLB.get();
     if ( 0 == cBracket )
         pBox->SelectEntryPos(0);
     else

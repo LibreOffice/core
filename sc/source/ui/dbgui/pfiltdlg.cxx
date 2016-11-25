@@ -294,7 +294,7 @@ void ScPivotFilterDlg::UpdateValueList( sal_uInt16 nList )
 {
     if ( pDoc && nList>0 && nList<=3 )
     {
-        ComboBox*   pValList        = aValueEdArr[nList-1];
+        ComboBox*   pValList        = aValueEdArr[nList-1].get();
         sal_Int32   nFieldSelPos    = aFieldLbArr[nList-1]->GetSelectEntryPos();
         sal_Int32   nListPos        = 0;
         OUString    aCurValue       = pValList->GetText();
@@ -338,7 +338,7 @@ void ScPivotFilterDlg::ClearValueList( sal_uInt16 nList )
 {
     if ( nList>0 && nList<=3 )
     {
-        ComboBox* pValList = aValueEdArr[nList-1];
+        ComboBox* pValList = aValueEdArr[nList-1].get();
         pValList->Clear();
         pValList->InsertEntry( aStrNotEmpty, 0 );
         pValList->InsertEntry( aStrEmpty, 1 );

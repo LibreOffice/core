@@ -175,7 +175,7 @@ void ScrollBarManager::PlaceFiller (const Rectangle& aArea)
 void ScrollBarManager::UpdateScrollBars(bool bUseScrolling)
 {
     Rectangle aModelArea (mrSlideSorter.GetView().GetModelArea());
-    sd::Window *pWindow (mrSlideSorter.GetContentWindow());
+    sd::Window *pWindow (mrSlideSorter.GetContentWindow().get());
     Size aWindowModelSize (pWindow->PixelToLogic(pWindow->GetSizePixel()));
 
     // The horizontal scroll bar is only shown when the window is
@@ -275,7 +275,7 @@ void ScrollBarManager::SetWindowOrigin (
     mnHorizontalPosition = nHorizontalPosition;
     mnVerticalPosition = nVerticalPosition;
 
-    sd::Window *pWindow (mrSlideSorter.GetContentWindow());
+    sd::Window *pWindow (mrSlideSorter.GetContentWindow().get());
     Size aViewSize (pWindow->GetViewSize());
     Point aOrigin (
         (long int) (mnHorizontalPosition * aViewSize.Width()),
@@ -431,7 +431,7 @@ int ScrollBarManager::GetHorizontalScrollBarHeight() const
 
 void ScrollBarManager::CalcAutoScrollOffset (const Point& rMouseWindowPosition)
 {
-    sd::Window *pWindow (mrSlideSorter.GetContentWindow());
+    sd::Window *pWindow (mrSlideSorter.GetContentWindow().get());
 
     int nDx = 0;
     int nDy = 0;

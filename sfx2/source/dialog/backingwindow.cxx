@@ -175,9 +175,8 @@ void BackingWindow::dispose()
     // deregister drag&drop helper
     if (mxDropTargetListener.is())
     {
-        for (auto aI = maDndWindows.begin(), aEnd = maDndWindows.end(); aI != aEnd; ++aI)
+        for (auto const & pDndWin : maDndWindows)
         {
-            vcl::Window *pDndWin = *aI;
             css::uno::Reference< css::datatransfer::dnd::XDropTarget > xDropTarget =
                     pDndWin->GetDropTarget();
             if (xDropTarget.is())
@@ -499,9 +498,8 @@ void BackingWindow::setOwningFrame( const css::uno::Reference< css::frame::XFram
     // establish drag&drop mode
     mxDropTargetListener.set(new OpenFileDropTargetListener(mxContext, mxFrame));
 
-    for (auto aI = maDndWindows.begin(), aEnd = maDndWindows.end(); aI != aEnd; ++aI)
+    for (auto const & pDndWin : maDndWindows)
     {
-        vcl::Window *pDndWin = *aI;
         css::uno::Reference< css::datatransfer::dnd::XDropTarget > xDropTarget =
             pDndWin->GetDropTarget();
         if (xDropTarget.is())

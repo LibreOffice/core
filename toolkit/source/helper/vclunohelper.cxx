@@ -152,7 +152,7 @@ css::uno::Reference< css::awt::XWindow> VCLUnoHelper::GetInterface( vcl::Window*
 
 OutputDevice* VCLUnoHelper::GetOutputDevice( const css::uno::Reference< css::awt::XDevice>& rxDevice )
 {
-    OutputDevice* pOutDev = nullptr;
+    VclPtr<OutputDevice> pOutDev;
     VCLXDevice* pDev = VCLXDevice::GetImplementation( rxDevice );
     if ( pDev )
         pOutDev = pDev->GetOutputDevice();

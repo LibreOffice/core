@@ -16,6 +16,7 @@ $(eval $(call gb_CompilerTest_add_exception_objects,compilerplugins_clang, \
     compilerplugins/clang/test/oslendian-2 \
     compilerplugins/clang/test/oslendian-3 \
     compilerplugins/clang/test/salbool \
+    compilerplugins/clang/test/vclwidgets \
 ))
 
 # vim: set noet sw=4 ts=4:

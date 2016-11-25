@@ -58,7 +58,7 @@ namespace
         VDevBuffer();
         virtual ~VDevBuffer() override;
 
-        VirtualDevice* alloc(OutputDevice& rOutDev, const Size& rSizePixel, bool bClear, bool bMonoChrome);
+        VclPtr<VirtualDevice> alloc(OutputDevice& rOutDev, const Size& rSizePixel, bool bClear, bool bMonoChrome);
         void free(VirtualDevice& rDevice);
 
         // Timer virtuals
@@ -91,10 +91,10 @@ namespace
         }
     }
 
-    VirtualDevice* VDevBuffer::alloc(OutputDevice& rOutDev, const Size& rSizePixel, bool bClear, bool bMonoChrome)
+    VclPtr<VirtualDevice> VDevBuffer::alloc(OutputDevice& rOutDev, const Size& rSizePixel, bool bClear, bool bMonoChrome)
     {
         ::osl::MutexGuard aGuard(m_aMutex);
-        VirtualDevice* pRetval = nullptr;
+        VclPtr<VirtualDevice> pRetval;
 
         sal_Int32 nBits = bMonoChrome ? 1 : rOutDev.GetBitCount();
 

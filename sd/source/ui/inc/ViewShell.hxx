@@ -513,8 +513,8 @@ protected:
     virtual void VirtVScrollHdl(ScrollBar* pVScroll);
 
     // virtual functions ruler handling
-    virtual SvxRuler* CreateHRuler(::sd::Window* pWin);
-    virtual SvxRuler* CreateVRuler(::sd::Window* pWin);
+    virtual VclPtr<SvxRuler> CreateHRuler(::sd::Window* pWin);
+    virtual VclPtr<SvxRuler> CreateVRuler(::sd::Window* pWin);
     virtual void UpdateHRuler();
     virtual void UpdateVRuler();
 

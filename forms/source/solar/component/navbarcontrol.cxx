@@ -126,7 +126,7 @@ namespace frm
             {
                 VCLXWindow* pParentXWin = VCLXWindow::GetImplementation( _rParentPeer );
                 if ( pParentXWin )
-                    pParentWin = pParentXWin->GetWindow();
+                    pParentWin = pParentXWin->GetWindow().get();
                 DBG_ASSERT( pParentWin, "ONavigationBarControl::createPeer: could not obtain the VCL-level parent window!" );
             }
 

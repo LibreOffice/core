@@ -1593,7 +1593,7 @@ void SvxSearchDialog::Remember_Impl( const OUString &rStr, bool _bSearch )
         return;
 
     std::vector<OUString>* pArr = _bSearch ? &aSearchStrings : &aReplaceStrings;
-    ComboBox* pListBox = _bSearch ? m_pSearchLB : m_pReplaceLB;
+    ComboBox* pListBox = _bSearch ? m_pSearchLB.get() : m_pReplaceLB.get();
 
     // ignore identical strings
     for (std::vector<OUString>::const_iterator i = pArr->begin(); i != pArr->end(); ++i)

@@ -396,7 +396,7 @@ IMPL_LINK_NOARG(ThreeD_SceneIllumination_TabPage, PreviewSelectHdl, SvxLightCtl3
 IMPL_LINK( ThreeD_SceneIllumination_TabPage, ColorDialogHdl, Button*, pButton, void )
 {
     bool bIsAmbientLight = (pButton==m_pBtn_AmbientLight_Color);
-    SvxColorListBox* pListBox = ( bIsAmbientLight ? m_pLB_AmbientLight : m_pLB_LightSource);
+    SvxColorListBox* pListBox = bIsAmbientLight ? m_pLB_AmbientLight.get() : m_pLB_LightSource.get();
 
     SvColorDialog aColorDlg( this );
     aColorDlg.SetColor( pListBox->GetSelectEntryColor() );

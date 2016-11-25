@@ -581,7 +581,7 @@ void SfxWorkWindow::DeleteControllers_Impl()
     // DockingWindows)
     for (size_t n=0; n<SFX_SPLITWINDOWS_MAX; n++ )
     {
-        SfxSplitWindow *p = pSplit[n];
+        VclPtr<SfxSplitWindow> const &p = pSplit[n];
         if (p->GetWindowCount())
             p->Lock();
     }
@@ -1165,7 +1165,7 @@ void SfxWorkWindow::UpdateObjectBars_Impl2()
     sal_uInt16 n;
     for ( n=0; n<SFX_SPLITWINDOWS_MAX; n++ )
     {
-        SfxSplitWindow *p = pSplit[n];
+        VclPtr<SfxSplitWindow> const & p = pSplit[n];
         if (p->GetWindowCount())
             p->Lock();
     }
@@ -1250,7 +1250,7 @@ void SfxWorkWindow::UpdateObjectBars_Impl2()
     // Unlock the SplitWindows again
     for ( n=0; n<SFX_SPLITWINDOWS_MAX; n++ )
     {
-        SfxSplitWindow *p = pSplit[n];
+        VclPtr<SfxSplitWindow> const & p = pSplit[n];
         if (p->GetWindowCount())
             p->Lock(false);
     }
@@ -2388,7 +2388,7 @@ void SfxWorkWindow::ArrangeAutoHideWindows( SfxSplitWindow *pActSplitWin )
         // (not pinned, FadeIn).
         // Only the abandoned window may be invisible, because perhaps its
         // size is just being calculated before it is displayed.
-        SfxSplitWindow* pSplitWin = pSplit[n];
+        VclPtr<SfxSplitWindow> const & pSplitWin = pSplit[n];
         bool bDummyWindow = !pSplitWin->IsFadeIn();
         vcl::Window *pDummy = pSplitWin->GetSplitWindow();
         vcl::Window *pWin = bDummyWindow ? pDummy : pSplitWin;

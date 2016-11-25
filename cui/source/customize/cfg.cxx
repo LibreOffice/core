@@ -3730,7 +3730,7 @@ void ToolbarSaveInData::SetSystemStyle(
         if ( xUIElement.is() )
             xWindow.set( xUIElement->getRealInterface(), uno::UNO_QUERY );
 
-        window = VCLUnoHelper::GetWindow( xWindow );
+        window = VCLUnoHelper::GetWindow( xWindow ).get();
     }
 
     if ( window != nullptr && window->GetType() == WINDOW_TOOLBOX )

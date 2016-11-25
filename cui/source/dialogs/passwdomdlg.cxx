@@ -115,8 +115,8 @@ IMPL_LINK_NOARG( PasswordToOpenModifyDialog_Impl, OkBtnClickHdl, Button *, void 
             ScopedVclPtrInstance< MessageDialog > aErrorBox(m_pParent, nMismatch == 1 ? m_aOneMismatch : m_aTwoMismatch);
             aErrorBox->Execute();
 
-            Edit* pEdit = !bToOpenMatch ? m_pPasswdToOpenED : m_pPasswdToModifyED;
-            Edit* pRepeatEdit = !bToOpenMatch? m_pReenterPasswdToOpenED : m_pReenterPasswdToModifyED;
+            Edit* pEdit = !bToOpenMatch ? m_pPasswdToOpenED.get() : m_pPasswdToModifyED.get();
+            Edit* pRepeatEdit = !bToOpenMatch? m_pReenterPasswdToOpenED.get() : m_pReenterPasswdToModifyED.get();
             if (nMismatch == 1)
             {
                 pEdit->SetText( "" );

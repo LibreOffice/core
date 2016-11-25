@@ -687,7 +687,7 @@ void OAppDetailPageHelper::fillNames( const Reference< XNameAccess >& _xContaine
     OSL_ENSURE(_xContainer.is(),"Data source is NULL! -> GPF");
     OSL_ENSURE( ( _eType >= E_TABLE ) && ( _eType < E_ELEMENT_TYPE_COUNT ), "OAppDetailPageHelper::fillNames: invalid type!" );
 
-    DBTreeListBox* pList = m_pLists[ _eType ];
+    DBTreeListBox* pList = m_pLists[ _eType ].get();
     OSL_ENSURE( pList, "OAppDetailPageHelper::fillNames: you really should create the list before calling this!" );
     if ( !pList )
         return;
@@ -809,7 +809,7 @@ void OAppDetailPageHelper::elementReplaced(ElementType _eType
 SvTreeListEntry* OAppDetailPageHelper::elementAdded(ElementType _eType,const OUString& _rName, const Any& _rObject )
 {
     SvTreeListEntry* pRet = nullptr;
-    DBTreeListBox* pTreeView = m_pLists[_eType];
+    DBTreeListBox* pTreeView = m_pLists[_eType].get();
     if( _eType == E_TABLE && pTreeView )
     {
         pRet = static_cast<OTableTreeListBox*>(pTreeView)->addedTable( _rName );

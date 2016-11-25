@@ -500,9 +500,9 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
  * Generate horizontal ruler
  */
 
-SvxRuler* DrawViewShell::CreateHRuler (::sd::Window* pWin)
+VclPtr<SvxRuler> DrawViewShell::CreateHRuler (::sd::Window* pWin)
 {
-    Ruler* pRuler;
+    VclPtr<Ruler> pRuler;
     WinBits  aWBits;
     SvxRulerSupportFlags nFlags = SvxRulerSupportFlags::OBJECT;
 
@@ -538,9 +538,9 @@ SvxRuler* DrawViewShell::CreateHRuler (::sd::Window* pWin)
  * Generate vertical ruler
  */
 
-SvxRuler* DrawViewShell::CreateVRuler(::sd::Window* pWin)
+VclPtr<SvxRuler> DrawViewShell::CreateVRuler(::sd::Window* pWin)
 {
-    Ruler* pRuler;
+    VclPtr<SvxRuler> pRuler;
     WinBits  aWBits = WB_VSCROLL | WB_3DLOOK | WB_BORDER;
     SvxRulerSupportFlags nFlags = SvxRulerSupportFlags::OBJECT;
 

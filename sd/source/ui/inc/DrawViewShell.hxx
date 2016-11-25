@@ -390,8 +390,8 @@ protected:
     void            DeleteActualPage();
     void            DeleteActualLayer();
 
-    virtual SvxRuler* CreateHRuler(::sd::Window* pWin) override;
-    virtual SvxRuler* CreateVRuler(::sd::Window* pWin) override;
+    virtual VclPtr<SvxRuler> CreateHRuler(::sd::Window* pWin) override;
+    virtual VclPtr<SvxRuler> CreateVRuler(::sd::Window* pWin) override;
     virtual void    UpdateHRuler() override;
     virtual void    UpdateVRuler() override;
     virtual void    SetZoomFactor(const Fraction& rZoomX, const Fraction& rZoomY) override;

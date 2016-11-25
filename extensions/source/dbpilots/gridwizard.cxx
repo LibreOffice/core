@@ -390,7 +390,7 @@ namespace dbp
 
     IMPL_LINK(OGridFieldsSelection, OnEntryDoubleClicked, ListBox&, _rList, void)
     {
-        PushButton* pSimulateButton = m_pExistFields == &_rList ? m_pSelectOne : m_pDeselectOne;
+        PushButton* pSimulateButton = m_pExistFields == &_rList ? m_pSelectOne.get() : m_pDeselectOne.get();
         if (pSimulateButton->IsEnabled())
         {
             OnMoveOneEntry( pSimulateButton );

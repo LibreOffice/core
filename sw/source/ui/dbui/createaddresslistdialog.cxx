@@ -314,7 +314,7 @@ void SwAddressControl_Impl::SetCursorTo(sal_uInt32 nElement)
 {
     if(nElement < m_aEdits.size())
     {
-        Edit* pEdit = m_aEdits[nElement];
+        Edit* pEdit = m_aEdits[nElement].get();
         pEdit->GrabFocus();
         Rectangle aRect(pEdit->GetPosPixel(), pEdit->GetSizePixel());
         MakeVisible(aRect);
