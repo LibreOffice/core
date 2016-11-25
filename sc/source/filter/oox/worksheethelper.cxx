@@ -206,7 +206,7 @@ public:
                             const WorkbookHelper& rHelper,
                             const ISegmentProgressBarRef& rxProgressBar,
                             WorksheetType eSheetType,
-                            sal_Int16 nSheet );
+                            SCTAB nSheet );
     virtual            ~WorksheetGlobals() override {}
 
     /** Returns true, if this helper refers to an existing Calc sheet. */
@@ -400,7 +400,7 @@ private:
     bool                mbHasDefWidth;      /// True = default column width is set from defaultColWidth attribute.
 };
 
-WorksheetGlobals::WorksheetGlobals( const WorkbookHelper& rHelper, const ISegmentProgressBarRef& rxProgressBar, WorksheetType eSheetType, sal_Int16 nSheet ) :
+WorksheetGlobals::WorksheetGlobals( const WorkbookHelper& rHelper, const ISegmentProgressBarRef& rxProgressBar, WorksheetType eSheetType, SCTAB nSheet ) :
     WorkbookHelper( rHelper ),
     maSheetCellRanges( "com.sun.star.sheet.SheetCellRanges" ),
     mrMaxApiPos( rHelper.getAddressConverter().getMaxApiAddress() ),
@@ -1389,7 +1389,7 @@ WorksheetHelper::WorksheetHelper( WorksheetGlobals& rSheetGlob ) :
 }
 
 /*static*/ WorksheetGlobalsRef WorksheetHelper::constructGlobals( const WorkbookHelper& rHelper,
-        const ISegmentProgressBarRef& rxProgressBar, WorksheetType eSheetType, sal_Int16 nSheet )
+        const ISegmentProgressBarRef& rxProgressBar, WorksheetType eSheetType, SCTAB nSheet )
 {
     WorksheetGlobalsRef xSheetGlob( new WorksheetGlobals( rHelper, rxProgressBar, eSheetType, nSheet ) );
     if( !xSheetGlob->isValidSheet() )

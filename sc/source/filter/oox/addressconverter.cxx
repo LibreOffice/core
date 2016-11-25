@@ -363,6 +363,16 @@ ScAddress AddressConverter::createValidCellAddress(
     return aAddress;
 }
 
+bool AddressConverter::checkCellRange( const ScRange& rRange, bool bAllowOverflow, bool bTrackOverflow )
+{
+    return
+        (checkCol( rRange.aEnd.Col(), bTrackOverflow ) || bAllowOverflow) &&     // bAllowOverflow after checkCol to track overflow!
+        (checkRow( rRange.aEnd.Row(), bTrackOverflow ) || bAllowOverflow) &&     // bAllowOverflow after checkRow to track overflow!
+        checkTab( rRange.aStart.Tab(), bTrackOverflow ) &&
+        checkCol( rRange.aStart.Col(), bTrackOverflow ) &&
+        checkRow( rRange.aStart.Row(), bTrackOverflow );
+}
+
 bool AddressConverter::checkCellRange( const CellRangeAddress& rRange, bool bAllowOverflow, bool bTrackOverflow )
 {
     return
@@ -388,6 +398,23 @@ bool AddressConverter::validateCellRange( CellRangeAddress& orRange, bool bAllow
     return true;
 }
 
+bool AddressConverter::convertToCellRangeUnchecked( ScRange& orRange,
+        const OUString& rString, sal_Int16 nSheet )
+{
+    orRange.aStart.SetTab( nSheet );
+    orRange.aEnd.SetTab( nSheet );
+    sal_Int32 aStartCol = orRange.aStart.Col();
+    sal_Int32 aStartRow = orRange.aStart.Row();
+    sal_Int32 aEndCol = orRange.aEnd.Col();
+    sal_Int32 aEndRow = orRange.aEnd.Row();
+    bool bReturnValue = parseOoxRange2d( aStartCol, aStartRow, aEndCol, aEndRow, rString );
+    orRange.aStart.SetCol( aStartCol );
+    orRange.aStart.SetRow( aStartRow );
+    orRange.aEnd.SetCol( aEndCol );
+    orRange.aEnd.SetRow( aEndRow );
+    return bReturnValue;
+}
+
 bool AddressConverter::convertToCellRangeUnchecked( CellRangeAddress& orRange,
         const OUString& rString, sal_Int16 nSheet )
 {
@@ -411,6 +438,17 @@ void AddressConverter::convertToCellRangeUnchecked( CellRangeAddress& orRange,
     orRange.StartRow    = rBinRange.maFirst.mnRow;
     orRange.EndColumn   = rBinRange.maLast.mnCol;
     orRange.EndRow      = rBinRange.maLast.mnRow;
+}
+
+void AddressConverter::convertToCellRangeUnchecked( ScRange& orRange,
+        const BinRange& rBinRange, sal_Int16 nSheet )
+{
+    orRange.aStart.SetTab( nSheet );
+    orRange.aStart.SetCol( rBinRange.maFirst.mnCol );
+    orRange.aStart.SetRow( rBinRange.maFirst.mnRow );
+    orRange.aEnd.SetTab( nSheet );
+    orRange.aEnd.SetCol( rBinRange.maLast.mnCol );
+    orRange.aEnd.SetRow( rBinRange.maLast.mnRow );
 }
 
 bool AddressConverter::convertToCellRange( CellRangeAddress& orRange,

@@ -197,7 +197,7 @@ void PivotCacheDefinitionFragment::finalizeImport()
         OUString aRecFragmentPath = getRelations().getFragmentPathFromRelId( mrPivotCache.getRecordsRelId() );
         if( !aRecFragmentPath.isEmpty() )
         {
-            sal_Int16 nSheet = mrPivotCache.getSourceRange().Sheet;
+            SCTAB nSheet = mrPivotCache.getSourceRange().aStart.Tab();
             WorksheetGlobalsRef xSheetGlob = WorksheetHelper::constructGlobals( *this, ISegmentProgressBarRef(), SHEETTYPE_WORKSHEET, nSheet );
             if( xSheetGlob.get() )
                 importOoxFragment( new PivotCacheRecordsFragment( *xSheetGlob, aRecFragmentPath, mrPivotCache ) );
