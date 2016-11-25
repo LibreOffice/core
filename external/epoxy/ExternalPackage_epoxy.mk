@@ -7,12 +7,8 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Module_Module,glew))
+$(eval $(call gb_ExternalPackage_ExternalPackage,epoxy,epoxy))
 
-$(eval $(call gb_Module_add_targets,glew,\
-	ExternalProject_glew \
-	UnpackedTarball_glew \
-	ExternalPackage_glew \
-))
+$(eval $(call gb_ExternalPackage_use_external_project,epoxy,epoxy))
 
 # vim: set noet sw=4 ts=4:

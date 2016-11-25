@@ -1,0 +1,12 @@
+--- include/epoxy/gl.h
++++ include/epoxy/gl.h
+@@ -59,7 +59,8 @@
+ 
+ #else
+ #ifndef APIENTRY
+-#define APIENTRY __stdcall
++#define WINAPI __stdcall
++#define APIENTRY WINAPI
+ #endif
+ 
+ #ifndef GLAPIENTRY

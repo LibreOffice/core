@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-// Fully wrapped methods that have no exotic GL / GLEW header deps.
+// Fully wrapped methods that have no exotic GL header deps.
 
 #ifndef INCLUDED_VCL_OPENGL_OPENGLWRAPPER_HXX
 #define INCLUDED_VCL_OPENGL_OPENGLWRAPPER_HXX
