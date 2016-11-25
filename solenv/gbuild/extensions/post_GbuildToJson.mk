@@ -83,6 +83,15 @@ gb_LinkTarget_set_nativeres =
 gb_LinkTarget_add_nativeres =
 gb_Library_set_componentfile =
 gb_LinkTarget_use_restarget =
+# TODO: curious these are needed in addition
+gb_Executable_add_cxxobject = $(call gb_Executable_get_target,$(1)): CXXOBJECTS += $(2)
+gb_Executable_add_cxxobjects = $(call gb_Executable_get_target,$(1)): CXXOBJECTS += $(2)
+gb_Executable_add_exception_object = $(call gb_Executable_get_target,$(1)): CXXOBJECTS += $(2)
+gb_Executable_add_exception_objects = $(call gb_Executable_get_target,$(1)): CXXOBJECTS += $(2)
+gb_Library_add_cxxobject = $(call gb_Library_get_target,$(1)): CXXOBJECTS += $(2)
+gb_Library_add_cxxobjects = $(call gb_Library_get_target,$(1)): CXXOBJECTS += $(2)
+gb_Library_add_exception_object = $(call gb_Library_get_target,$(1)): CXXOBJECTS += $(2)
+gb_Library_add_exception_objects = $(call gb_Library_get_target,$(1)): CXXOBJECTS += $(2)
 
 
 #$(call gb_Library_get_exports_target,%):
