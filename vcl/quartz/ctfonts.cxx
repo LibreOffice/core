@@ -100,17 +100,6 @@ CoreTextStyle::CoreTextStyle( const FontSelectPattern& rFSD )
     CTFontRef pNewCTFont = CTFontCreateWithFontDescriptor( pFontDesc, fScaledFontHeight, &aMatrix );
     CFDictionarySetValue( mpStyleDict, kCTFontAttributeName, pNewCTFont );
     CFRelease( pNewCTFont);
-
-    // allow delayed setting the font color, i.e. after the text layout
-    CFDictionarySetValue( mpStyleDict, kCTForegroundColorFromContextAttributeName, kCFBooleanTrue );
-
-#if 0 // LastResort is implicit in CoreText's font cascading
-    const void* aGFBDescriptors[] = { CTFontDescriptorCreateWithNameAndSize( CFSTR("LastResort"), 0) }; // TODO: use the full GFB list
-    const int nGfbCount = sizeof(aGFBDescriptors) / sizeof(*aGFBDescriptors);
-    CFArrayRef pGfbList = CFArrayCreate( NULL, aGFBDescriptors, nGfbCount, &kCFTypeArrayCallBacks);
-    CFDictionaryAddValue( mpStyleDict, kCTFontCascadeListAttribute, pGfbList);
-    CFRelease( pGfbList);
-#endif
 }
 
 CoreTextStyle::~CoreTextStyle()
@@ -171,7 +160,6 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 bool CoreTextStyle::GetGlyphBoundRect( sal_GlyphId aGlyphId, Rectangle& rRect ) const
 {
     CGGlyph nCGGlyph = aGlyphId & GF_IDXMASK;
-    // XXX: this is broken if the glyph came from fallback font
     CTFontRef aCTFontRef = static_cast<CTFontRef>(CFDictionaryGetValue( mpStyleDict, kCTFontAttributeName ));
 
     SAL_WNODEPRECATED_DECLARATIONS_PUSH //TODO: 10.11 kCTFontDefaultOrientation
@@ -247,7 +235,6 @@ bool CoreTextStyle::GetGlyphOutline( sal_GlyphId aGlyphId, basegfx::B2DPolyPolyg
     rResult.clear();
 
     CGGlyph nCGGlyph = aGlyphId & GF_IDXMASK;
-    // XXX: this is broken if the glyph came from fallback font
     CTFontRef pCTFont = static_cast<CTFontRef>(CFDictionaryGetValue( mpStyleDict, kCTFontAttributeName ));
     CGPathRef xPath = CTFontCreatePathForGlyph( pCTFont, nCGGlyph, nullptr );
     if (!xPath)
@@ -368,9 +355,9 @@ FontAttributes DevFontFromCTFontDescriptor( CTFontDescriptorRef pFD, bool* bFont
     // get font attributes
     CFDictionaryRef pAttrDict = static_cast<CFDictionaryRef>(CTFontDescriptorCopyAttribute( pFD, kCTFontTraitsAttribute ));
 
-    if (bFontEnabled && *bFontEnabled && SalLayout::UseCommonLayout())
+    if (bFontEnabled && *bFontEnabled)
     {
-        // Ignore font formats not supported by CommonSalLayout.
+        // Ignore font formats not supported.
         int nFormat;
         CFNumberRef pFormat = static_cast<CFNumberRef>(CTFontDescriptorCopyAttribute(pFD, kCTFontFormatAttribute));
         CFNumberGetValue(pFormat, kCFNumberIntType, &nFormat);
