@@ -2326,7 +2326,6 @@ void Dxf::fillToItemSet( SfxItemSet& rSet ) const
 
 namespace {
 
-const sal_Char* const spcStyleNamePrefix = "Excel Built-in ";
 const sal_Char* const sppcStyleNames[] =
 {
     "Normal",
@@ -2389,8 +2388,7 @@ const sal_Int32 snStyleNamesCount = static_cast< sal_Int32 >( SAL_N_ELEMENTS( sp
 OUString lclGetBuiltinStyleName( sal_Int32 nBuiltinId, const OUString& rName, sal_Int32 nLevel = 0 )
 {
     OSL_ENSURE( (0 <= nBuiltinId) && (nBuiltinId < snStyleNamesCount), "lclGetBuiltinStyleName - unknown built-in style" );
-    OUStringBuffer aStyleName;
-    aStyleName.appendAscii( spcStyleNamePrefix );
+    OUStringBuffer aStyleName("Excel Built-in ");
     if( (0 <= nBuiltinId) && (nBuiltinId < snStyleNamesCount) && (sppcStyleNames[ nBuiltinId ] != nullptr) )
         aStyleName.appendAscii( sppcStyleNames[ nBuiltinId ] );
     else if( !rName.isEmpty() )

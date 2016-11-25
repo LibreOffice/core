@@ -32,9 +32,6 @@ namespace oox {
 namespace oox {
 namespace ole {
 
-
-const sal_Char* const AX_GUID_CFONT         = "{AFC20920-DA4E-11CE-B943-00AA006887B4}";
-
 const sal_uInt32 AX_FONTDATA_BOLD           = 0x00000001;
 const sal_uInt32 AX_FONTDATA_ITALIC         = 0x00000002;
 const sal_uInt32 AX_FONTDATA_UNDERLINE      = 0x00000004;

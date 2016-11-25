@@ -59,7 +59,7 @@ const sal_uInt16 BIFF_REFFLAG_ROW1REL       = 0x0002;
 const sal_uInt16 BIFF_REFFLAG_COL2REL       = 0x0004;
 const sal_uInt16 BIFF_REFFLAG_ROW2REL       = 0x0008;
 
-const sal_Char* const spcOoxPrefix = "_xlnm.";
+const OUStringLiteral spcOoxPrefix("_xlnm.");
 
 const sal_Char* const sppcBaseNames[] =
 {
@@ -92,21 +92,19 @@ OUString lclGetBaseName( sal_Unicode cBuiltinId )
 
 OUString lclGetPrefixedName( sal_Unicode cBuiltinId )
 {
-    return OUStringBuffer().appendAscii( spcOoxPrefix ).append( lclGetBaseName( cBuiltinId ) ).makeStringAndClear();
+    return OUStringBuffer( spcOoxPrefix ).append( lclGetBaseName( cBuiltinId ) ).makeStringAndClear();
 }
 
 /** returns the built-in name identifier from a prefixed built-in name, e.g. '_xlnm.Print_Area'. */
 sal_Unicode lclGetBuiltinIdFromPrefixedName( const OUString& rModelName )
 {
-    OUString aPrefix = OUString::createFromAscii( spcOoxPrefix );
-    sal_Int32 nPrefixLen = aPrefix.getLength();
-    if( rModelName.matchIgnoreAsciiCase( aPrefix ) )
+    if( rModelName.matchIgnoreAsciiCase( spcOoxPrefix ) )
     {
         for( sal_Unicode cBuiltinId = 0; cBuiltinId < SAL_N_ELEMENTS( sppcBaseNames ); ++cBuiltinId )
         {
             OUString aBaseName = lclGetBaseName( cBuiltinId );
             sal_Int32 nBaseNameLen = aBaseName.getLength();
-            if( (rModelName.getLength() == nPrefixLen + nBaseNameLen) && rModelName.matchIgnoreAsciiCase( aBaseName, nPrefixLen ) )
+            if( (rModelName.getLength() == spcOoxPrefix.size + nBaseNameLen) && rModelName.matchIgnoreAsciiCase( aBaseName, spcOoxPrefix.size ) )
                 return cBuiltinId;
         }
     }

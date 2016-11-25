@@ -102,7 +102,7 @@ bool AxFontData::importStdFont( BinaryInputStream& rInStrm )
 bool AxFontData::importGuidAndFont( BinaryInputStream& rInStrm )
 {
     OUString aGuid = OleHelper::importGuid( rInStrm );
-    if( aGuid.equalsAscii( AX_GUID_CFONT ) )
+    if( aGuid == "{AFC20920-DA4E-11CE-B943-00AA006887B4}" )
         return importBinaryModel( rInStrm );
     if ( aGuid == OLE_GUID_STDFONT )
         return importStdFont( rInStrm );

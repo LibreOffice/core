@@ -929,21 +929,17 @@ bool StringConstant::isStringConstant(
     // Look inside RTL_CONSTASCII_STRINGPARAM:
     if (loplugin::TypeCheck(t).Pointer().Const().Char()) {
         auto e2 = dyn_cast<UnaryOperator>(expr);
-        if (e2 == nullptr || e2->getOpcode() != UO_AddrOf) {
-            return false;
+        if (e2 != nullptr && e2->getOpcode() == UO_AddrOf) {
+            auto e3 = dyn_cast<ArraySubscriptExpr>(
+                e2->getSubExpr()->IgnoreParenImpCasts());
+            if (e3 == nullptr || !isZero(e3->getIdx()->IgnoreParenImpCasts())) {
+                return false;
+            }
+            expr = e3->getBase()->IgnoreParenImpCasts();
+            t = expr->getType();
         }
-        auto e3 = dyn_cast<ArraySubscriptExpr>(
-            e2->getSubExpr()->IgnoreParenImpCasts());
-        if (e3 == nullptr || !isZero(e3->getIdx()->IgnoreParenImpCasts())) {
-            return false;
-        }
-        expr = e3->getBase()->IgnoreParenImpCasts();
-        t = expr->getType();
     }
-    if (!(t->isConstantArrayType() && t.isConstQualified()
-          && (loplugin::TypeCheck(t->getAsArrayTypeUnsafe()->getElementType())
-              .Char())))
-    {
+    if (!t.isConstQualified()) {
         return false;
     }
     DeclRefExpr const * dre = dyn_cast<DeclRefExpr>(expr);
@@ -955,6 +951,14 @@ bool StringConstant::isStringConstant(
                 expr = init->IgnoreParenImpCasts();
             }
         }
+    }
+    if (!(loplugin::TypeCheck(t).Pointer().Const().Char()
+          || (t->isConstantArrayType()
+              && (loplugin::TypeCheck(
+                      t->getAsArrayTypeUnsafe()->getElementType())
+                  .Char()))))
+    {
+        return false;
     }
     StringLiteral const * lit = dyn_cast<StringLiteral>(expr);
     if (lit != nullptr) {
@@ -986,7 +990,9 @@ bool StringConstant::isStringConstant(
     case APValue::LValue:
         {
             Expr const * e = v.getLValueBase().dyn_cast<Expr const *>();
-            assert(e != nullptr); //TODO???
+            if (e == nullptr) {
+                return false;
+            }
             if (!v.getLValueOffset().isZero()) {
                 return false; //TODO
             }
@@ -1140,6 +1146,12 @@ void StringConstant::reportChange(
                                 << call->getSourceRange();
                             return;
                         }
+                        report(
+                            DiagnosticsEngine::Warning,
+                            "TODO call inside %0", getMemberLocation(expr))
+                            << fdecl->getQualifiedNameAsString()
+                            << expr->getSourceRange();
+                        return;
                     } else {
                         assert(pass == PassThrough::NonEmptyConstantString);
                         if ((dc.Function("equals").Class("OUString")
@@ -1160,29 +1172,17 @@ void StringConstant::reportChange(
                                 << expr->getSourceRange();
                             return;
                         }
-                        if ((dc.Operator(OO_Plus).Namespace("rtl")
-                             .GlobalNamespace())
-                            || (dc.Operator(OO_Plus).Class("OUString")
-                                .Namespace("rtl").GlobalNamespace()))
-                        {
-                            report(
-                                DiagnosticsEngine::Warning,
-                                ("rewrite call of " + original + " with "
-                                 + describeChangeKind(kind)
-                                 + (" in call of %0  as (implicit) construction"
-                                    " of rtl::OUString")),
-                                getMemberLocation(expr))
-                                << fdecl->getQualifiedNameAsString()
-                                << expr->getSourceRange();
-                            return;
-                        }
+                        report(
+                            DiagnosticsEngine::Warning,
+                            ("rewrite call of " + original + " with "
+                             + describeChangeKind(kind)
+                             + (" in call of %0 as (implicit) construction of"
+                                " rtl::OUString")),
+                            getMemberLocation(expr))
+                            << fdecl->getQualifiedNameAsString()
+                            << expr->getSourceRange();
+                        return;
                     }
-                    report(
-                        DiagnosticsEngine::Warning,
-                        "TODO call inside %0", getMemberLocation(expr))
-                        << fdecl->getQualifiedNameAsString()
-                        << expr->getSourceRange();
-                    return;
                 } else if (isa<CXXConstructExpr>(call)) {
                     auto cdecl = cast<CXXConstructExpr>(call)->getConstructor()
                         ->getParent();

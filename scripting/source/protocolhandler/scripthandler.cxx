@@ -67,9 +67,6 @@ using namespace ::com::sun::star::document;
 namespace scripting_protocolhandler
 {
 
-const sal_Char * const MYSERVICENAME = "com.sun.star.frame.ProtocolHandler";
-const sal_Char * const MYIMPLNAME = "com.sun.star.comp.ScriptProtocolHandler";
-
 void SAL_CALL ScriptProtocolHandler::initialize(
     const css::uno::Sequence < css::uno::Any >& aArguments )
     throw ( css::uno::Exception, std::exception )
@@ -468,14 +465,13 @@ throw( RuntimeException, std::exception )
 /* Helper for XServiceInfo */
 Sequence< OUString > ScriptProtocolHandler::impl_getStaticSupportedServiceNames()
 {
-    Sequence< OUString > seqServiceNames { OUString::createFromAscii(::scripting_protocolhandler::MYSERVICENAME) };
-    return seqServiceNames;
+    return {"com.sun.star.frame.ProtocolHandler"};
 }
 
 /* Helper for XServiceInfo */
 OUString ScriptProtocolHandler::impl_getStaticImplementationName()
 {
-    return OUString::createFromAscii( ::scripting_protocolhandler::MYIMPLNAME );
+    return OUString("com.sun.star.comp.ScriptProtocolHandler");
 }
 
 /* Helper for registry */
