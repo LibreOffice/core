@@ -844,9 +844,14 @@ sal_Bool SAL_CALL SvXMLExport::filter( const uno::Sequence< beans::PropertyValue
         // We must catch exceptions, because according to the
         // API definition export must not throw one!
         css::uno::Any ex(cppu::getCaughtException());
+        OUString sMessage( ex.getValueTypeName() + ": \"" + e.Message + "\"");
+        if (e.Context.is())
+        {
+            const char* pContext = typeid(*e.Context.get()).name();
+            sMessage += " (context: " + OUString::createFromAscii(pContext) + " )";
+        }
         SetError( XMLERROR_FLAG_ERROR | XMLERROR_FLAG_SEVERE | XMLERROR_API,
-                  Sequence<OUString>(),
-                  ex.getValueTypeName() + ": \"" + e.Message + "\"", nullptr );
+                  Sequence<OUString>(), sMessage, nullptr );
     }
 
     // return true only if no error occurred
