@@ -96,6 +96,7 @@
 #include <tools/globname.hxx>
 #include <tools/helpers.hxx>
 #include <tools/urlobj.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <xmloff/contextid.hxx>
 #include <xmloff/families.hxx>
@@ -527,7 +528,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
             }
             catch(const uno::Exception&)
             {
-                OSL_FAIL( "XMLShapeExport::collectShapeAutoStyles(): exception caught while collection auto styles for a table!" );
+                DBG_UNHANDLED_EXCEPTION_WHEN( "collecting auto styles for a table" );
             }
             break;
         }
@@ -719,7 +720,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
             }
             catch(const uno::Exception&)
             {
-                OSL_FAIL( "could not export layer name for shape!" );
+                DBG_UNHANDLED_EXCEPTION_WHEN( "exporting layer name for shape" );
             }
         }
     }
@@ -753,7 +754,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
         }
         catch(const uno::Exception&)
         {
-            OSL_FAIL( "XMLShapeExport::exportShape(), exception caught!" );
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 
@@ -1797,7 +1798,7 @@ void XMLShapeExport::ImpExportDescription( const uno::Reference< drawing::XShape
     }
     catch( uno::Exception& )
     {
-        OSL_FAIL( "could not export Title and/or Description for shape!" );
+        DBG_UNHANDLED_EXCEPTION_WHEN( "exporting Title and/or Description for shape" );
     }
 }
 
@@ -4913,7 +4914,7 @@ void XMLShapeExport::ImpExportTableShape( const uno::Reference< drawing::XShape 
                             }
                             catch( uno::Exception& )
                             {
-                            OSL_FAIL("XMLShapeExport::ImpExportTableShape(), exception caught!");
+                                DBG_UNHANDLED_EXCEPTION();
                             }
                         }
                     }
@@ -4996,7 +4997,7 @@ void XMLShapeExport::ImpExportTableShape( const uno::Reference< drawing::XShape 
             }
             catch( uno::Exception& )
             {
-                OSL_FAIL("xmloff::XMLShapeExport::ImpExportTableShape(), exception caught!");
+                DBG_UNHANDLED_EXCEPTION();
             }
         }
 
@@ -5006,7 +5007,7 @@ void XMLShapeExport::ImpExportTableShape( const uno::Reference< drawing::XShape 
     }
     catch( uno::Exception& )
     {
-        OSL_FAIL( "xmloff::XMLShapeExport::ImpExportTableShape(), exception caught!" );
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 
