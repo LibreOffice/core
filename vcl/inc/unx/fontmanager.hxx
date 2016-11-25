@@ -53,14 +53,6 @@ class FontSelectPattern;
 namespace psp {
 class PPDParser;
 
-namespace fonttype
-{
-enum type {
-    Unknown = 0,
-    TrueType = 2,
-};
-}
-
 /*
  *  the difference between FastPrintFontInfo and PrintFontInfo
  *  is that the information in FastPrintFontInfo can usually
@@ -74,7 +66,6 @@ enum type {
 struct FastPrintFontInfo
 {
     fontID                         m_nID; // FontID
-    fonttype::type                 m_eType;
 
     // font attributes
     OUString                       m_aFamilyName;
@@ -90,7 +81,6 @@ struct FastPrintFontInfo
 
     FastPrintFontInfo()
         : m_nID(0)
-        , m_eType(fonttype::Unknown)
         , m_eFamilyStyle(FAMILY_DONTKNOW)
         , m_eItalic(ITALIC_DONTKNOW)
         , m_eWidth(WIDTH_DONTKNOW)
@@ -131,16 +121,13 @@ struct CharacterMetric
 class FontCache;
 
 // a class to manage printable fonts
-// aims are type1 and truetype fonts
 
 class FontCache;
 
 class VCL_PLUGIN_PUBLIC PrintFontManager
 {
     struct PrintFont;
-    struct TrueTypeFontFile;
     friend struct PrintFont;
-    friend struct TrueTypeFontFile;
     friend class FontCache;
 
     struct PrintFontMetrics
@@ -171,46 +158,37 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
 
     struct PrintFont
     {
-        fonttype::type                              m_eType;
-
         // font attributes
-        int                                         m_nFamilyName;  // atom
-        std::vector< int >                          m_aAliases;
-        int                                         m_nPSName;      // atom
-        OUString                                    m_aStyleName;
-        FontItalic                                  m_eItalic;
-        FontWidth                                   m_eWidth;
-        FontWeight                                  m_eWeight;
-        FontPitch                                   m_ePitch;
-        rtl_TextEncoding                            m_aEncoding;
-        CharacterMetric                             m_aGlobalMetricX;
-        CharacterMetric                             m_aGlobalMetricY;
-        PrintFontMetrics*                           m_pMetrics;
-        int                                         m_nAscend;
-        int                                         m_nDescend;
-        int                                         m_nLeading;
-        int                                         m_nXMin; // font bounding box
-        int                                         m_nYMin;
-        int                                         m_nXMax;
-        int                                         m_nYMax;
-        bool                                        m_bHaveVerticalSubstitutedGlyphs;
-        bool                                        m_bUserOverride;
+        int               m_nFamilyName;  // atom
+        std::vector<int>  m_aAliases;
+        int               m_nPSName;      // atom
+        OUString          m_aStyleName;
+        FontItalic        m_eItalic;
+        FontWidth         m_eWidth;
+        FontWeight        m_eWeight;
+        FontPitch         m_ePitch;
+        rtl_TextEncoding  m_aEncoding;
+        CharacterMetric   m_aGlobalMetricX;
+        CharacterMetric   m_aGlobalMetricY;
+        PrintFontMetrics* m_pMetrics;
+        int               m_nAscend;
+        int               m_nDescend;
+        int               m_nLeading;
+        int               m_nXMin; // font bounding box
+        int               m_nYMin;
+        int               m_nXMax;
+        int               m_nYMax;
+        bool              m_bHaveVerticalSubstitutedGlyphs;
+        bool              m_bUserOverride;
 
-        explicit PrintFont( fonttype::type eType );
-        virtual ~PrintFont();
-        virtual bool queryMetricPage( int nPage, utl::MultiAtomProvider* pProvider ) = 0;
-    };
+        int               m_nDirectory;       // atom containing system dependent path
+        OString           m_aFontFile;        // relative to directory
+        int               m_nCollectionEntry; // 0 for regular fonts, 0 to ... for fonts stemming from collections
+        unsigned int      m_nTypeFlags;       // copyright bits and PS-OpenType flag
 
-    struct TrueTypeFontFile : public PrintFont
-    {
-        int           m_nDirectory;       // atom containing system dependent path
-        OString  m_aFontFile;        // relative to directory
-        int           m_nCollectionEntry; // 0 for regular fonts, 0 to ... for fonts stemming from collections
-        unsigned int  m_nTypeFlags;       // copyright bits and PS-OpenType flag
-
-        TrueTypeFontFile();
-        virtual ~TrueTypeFontFile() override;
-        virtual bool queryMetricPage( int nPage, utl::MultiAtomProvider* pProvider ) override;
+        explicit PrintFont();
+        ~PrintFont();
+        bool queryMetricPage(int nPage, utl::MultiAtomProvider* pProvider);
     };
 
     fontID                                      m_nNextFontID;
@@ -233,14 +211,14 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
     OString getFontFile( PrintFont* pFont ) const;
 
     bool analyzeFontFile( int nDirID, const OString& rFileName, std::list< PrintFont* >& rNewFonts, const char *pFormat=nullptr ) const;
-    static OUString convertTrueTypeName( void* pNameRecord ); // actually a NameRecord* formt font subsetting code
-    static void analyzeTrueTypeFamilyName( void* pTTFont, std::list< OUString >& rnames ); // actually a TrueTypeFont* from font subsetting code
-    bool analyzeTrueTypeFile( PrintFont* pFont ) const;
+    static OUString convertSfntName( void* pNameRecord ); // actually a NameRecord* formt font subsetting code
+    static void analyzeSfntFamilyName( void* pTTFont, std::list< OUString >& rnames ); // actually a TrueTypeFont* from font subsetting code
+    bool analyzeSfntFile(PrintFont* pFont) const;
     // finds the font id for the nFaceIndex face in this font file
-    // There may be multiple font ids for TrueType collections
+    // There may be multiple font ids for font collections
     fontID findFontFileID( int nDirID, const OString& rFile, int nFaceIndex ) const;
 
-    // There may be multiple font ids for TrueType collections
+    // There may be multiple font ids for font collections
     std::vector<fontID> findFontFileIDs( int nDirID, const OString& rFile ) const;
 
     static FontFamily matchFamilyName( const OUString& rFamily );
@@ -293,7 +271,7 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
 public:
     static PrintFontManager& get(); // one instance only
 
-    // There may be multiple font ids for TrueType collections
+    // There may be multiple font ids for font collections
     std::vector<fontID> addFontFile( const OString& rFileName );
 
     void initialize();
@@ -310,13 +288,6 @@ public:
 
     // get a specific fonts PSName name
     const OUString& getPSName( fontID nFontID ) const;
-
-    // get a specific fonts type
-    fonttype::type getFontType( fontID nFontID ) const
-    {
-        PrintFont* pFont = getFont( nFontID );
-        return pFont ? pFont->m_eType : fonttype::Unknown;
-    }
 
     // get a specific fonts italic type
     FontItalic getFontItalic( fontID nFontID ) const
@@ -363,7 +334,7 @@ public:
     // the user is responsible to allocate pArray large enough
     bool getMetrics( fontID nFontID, const sal_Unicode* pString, int nLen, CharacterMetric* pArray ) const;
 
-    // creates a new font subset of an existing TrueType font
+    // creates a new font subset of an existing SFNT font
     // returns true in case of success, else false
     // nFont: the font to be subsetted
     // rOutFile: the file to put the new subset into;
