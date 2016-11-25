@@ -130,8 +130,8 @@ public:
     static bool MayBePositioned( const SvxCSS1PropertyInfo& rPropInfo,
                                  bool bAutoWidth=false );
 
-    static sal_uInt16 GetScriptFromClass( OUString& rClass,
-                                      bool bSubClassOnly = true );
+    static Css1ScriptFlags GetScriptFromClass( OUString& rClass,
+                                               bool bSubClassOnly = true );
 
     bool IsBodyBGColorSet() const { return bBodyBGColorSet; }
     bool IsBodyBackgroundSet() const { return bBodyBackgroundSet; }

@@ -558,10 +558,10 @@ SvxBrushItem SwCSS1Parser::makePageDescBackground() const
         ->GetMaster().makeBackgroundBrushItem();
 }
 
-sal_uInt16 SwCSS1Parser::GetScriptFromClass( OUString& rClass,
-                                      bool bSubClassOnly )
+Css1ScriptFlags SwCSS1Parser::GetScriptFromClass( OUString& rClass,
+                                             bool bSubClassOnly )
 {
-    sal_uInt16 nScriptFlags = CSS1_SCRIPT_ALL;
+    Css1ScriptFlags nScriptFlags = Css1ScriptFlags::AllMask;
     sal_Int32 nLen = rClass.getLength();
     sal_Int32 nPos = nLen > 4 ? rClass.lastIndexOf( '-' ) : -1;
 
@@ -582,21 +582,21 @@ sal_uInt16 SwCSS1Parser::GetScriptFromClass( OUString& rClass,
     case 3:
         if( rClass.matchIgnoreAsciiCase( "cjk", nPos ) )
         {
-            nScriptFlags = CSS1_SCRIPT_CJK;
+            nScriptFlags = Css1ScriptFlags::CJK;
         }
         else if( rClass.matchIgnoreAsciiCase( "ctl", nPos ) )
         {
-            nScriptFlags = CSS1_SCRIPT_CTL;
+            nScriptFlags = Css1ScriptFlags::CTL;
         }
         break;
     case 7:
         if( rClass.matchIgnoreAsciiCase( "western", nPos ) )
         {
-            nScriptFlags = CSS1_SCRIPT_WESTERN;
+            nScriptFlags = Css1ScriptFlags::Western;
         }
         break;
     }
-    if( CSS1_SCRIPT_ALL != nScriptFlags )
+    if( Css1ScriptFlags::AllMask != nScriptFlags )
     {
         if( nPos )
         {
@@ -613,11 +613,11 @@ sal_uInt16 SwCSS1Parser::GetScriptFromClass( OUString& rClass,
 
 static CSS1SelectorType GetTokenAndClass( const CSS1Selector *pSelector,
                               OUString& rToken, OUString& rClass,
-                              sal_uInt16& rScriptFlags )
+                              Css1ScriptFlags& rScriptFlags )
 {
     rToken = pSelector->GetString();
     rClass.clear();
-    rScriptFlags = CSS1_SCRIPT_ALL;
+    rScriptFlags = Css1ScriptFlags::AllMask;
 
     CSS1SelectorType eType = pSelector->GetType();
     if( CSS1_SELTYPE_ELEM_CLASS==eType  )
@@ -639,7 +639,7 @@ static CSS1SelectorType GetTokenAndClass( const CSS1Selector *pSelector,
     return eType;
 }
 
-static void RemoveScriptItems( SfxItemSet& rItemSet, sal_uInt16 nScript,
+static void RemoveScriptItems( SfxItemSet& rItemSet, Css1ScriptFlags nScript,
                                const SfxItemSet *pParentItemSet = nullptr )
 {
     static const sal_uInt16 aWhichIds[3][5] =
@@ -655,16 +655,16 @@ static void RemoveScriptItems( SfxItemSet& rItemSet, sal_uInt16 nScript,
     bool aClearItems[3] = { false, false, false };
     switch( nScript )
     {
-    case CSS1_SCRIPT_WESTERN:
+    case Css1ScriptFlags::Western:
         aClearItems[1] = aClearItems[2] =  true;
         break;
-    case CSS1_SCRIPT_CJK:
+    case Css1ScriptFlags::CJK:
         aClearItems[0] = aClearItems[2] =  true;
         break;
-    case CSS1_SCRIPT_CTL:
+    case Css1ScriptFlags::CTL:
         aClearItems[0] = aClearItems[1] =  true;
         break;
-    case CSS1_SCRIPT_ALL:
+    case Css1ScriptFlags::AllMask:
         break;
     default:
         OSL_ENSURE( aClearItems[0], "unknown script type" );
@@ -706,8 +706,8 @@ void SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
     else if( CSS1_SELTYPE_CLASS==eSelType && !pNext )
     {
         OUString aClass( pSelector->GetString() );
-        sal_uInt16 nScript = GetScriptFromClass( aClass );
-        if( CSS1_SCRIPT_ALL != nScript )
+        Css1ScriptFlags nScript = GetScriptFromClass( aClass );
+        if( Css1ScriptFlags::AllMask != nScript )
         {
             SfxItemSet aScriptItemSet( rItemSet );
             RemoveScriptItems( aScriptItemSet, nScript );
@@ -742,7 +742,7 @@ void SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
     // Token und Class zu dem Selektor holen
     OUString aToken2;
     OUString aClass;
-    sal_uInt16 nScript;
+    Css1ScriptFlags nScript;
     eSelType = GetTokenAndClass( pSelector, aToken2, aClass, nScript );
     int nToken2 = GetHTMLToken( aToken2 );
 
@@ -786,7 +786,7 @@ void SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
                 if( bInsert )
                 {
                     OUString sTmp = aToken2 + ":" + aPseudo;
-                    if( CSS1_SCRIPT_ALL != nScript )
+                    if( Css1ScriptFlags::AllMask != nScript )
                     {
                         SfxItemSet aScriptItemSet( rItemSet );
                         RemoveScriptItems( aScriptItemSet, nScript );
@@ -851,7 +851,7 @@ void SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
             nPoolFormatId = RES_POOLCHR_FOOTNOTE;
         if( nPoolFormatId )
         {
-            if( CSS1_SCRIPT_ALL == nScript )
+            if( Css1ScriptFlags::AllMask == nScript )
             {
                 SetCharFormatAttrs( GetCharFormatFromPool(nPoolFormatId), rItemSet );
             }
@@ -953,7 +953,7 @@ void SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
                 {
                     OUString sTmp = aToken2 + " " OOO_STRING_SVTOOLS_HTML_parabreak;
 
-                    if( CSS1_SCRIPT_ALL == nScript )
+                    if( Css1ScriptFlags::AllMask == nScript )
                     {
                         InsertTag( sTmp, rItemSet, rPropInfo );
                     }
@@ -1006,7 +1006,7 @@ void SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
                         pColl->GetAttrSet().GetItemState(RES_BOX,true,&pItem) )
                     pBoxItem = static_cast<const SvxBoxItem *>(pItem);
                 rPropInfo.SetBoxItem( rItemSet, MIN_BORDER_DIST, pBoxItem );
-                if( CSS1_SCRIPT_ALL == nScript && !pParentColl )
+                if( Css1ScriptFlags::AllMask == nScript && !pParentColl )
                 {
                     SetTextCollAttrs( pColl, rItemSet, rPropInfo, this );
                 }
@@ -1025,7 +1025,7 @@ void SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
                 aDrop.GetChars() = 1;
 
                 // die Attribute in das DropCap-Attribut einfuegen
-                if( CSS1_SCRIPT_ALL == nScript )
+                if( Css1ScriptFlags::AllMask == nScript )
                 {
                     OUString sName(pColl->GetName());
                     FillDropCap( aDrop, rItemSet, &sName );
@@ -1033,21 +1033,21 @@ void SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
                 else
                 {
                     SfxItemSet aScriptItemSet( rItemSet );
-                    if( CSS1_SCRIPT_WESTERN != nScript )
+                    if( Css1ScriptFlags::Western != nScript )
                     {
                         aScriptItemSet.ClearItem( RES_CHRATR_FONT );
                         aScriptItemSet.ClearItem( RES_CHRATR_LANGUAGE );
                         aScriptItemSet.ClearItem( RES_CHRATR_POSTURE );
                         aScriptItemSet.ClearItem( RES_CHRATR_WEIGHT );
                     }
-                    if( CSS1_SCRIPT_CJK != nScript )
+                    if( Css1ScriptFlags::CJK != nScript )
                     {
                         aScriptItemSet.ClearItem( RES_CHRATR_CJK_FONT );
                         aScriptItemSet.ClearItem( RES_CHRATR_CJK_LANGUAGE );
                         aScriptItemSet.ClearItem( RES_CHRATR_CJK_POSTURE );
                         aScriptItemSet.ClearItem( RES_CHRATR_CJK_WEIGHT );
                     }
-                    if( CSS1_SCRIPT_CTL != nScript )
+                    if( Css1ScriptFlags::CTL != nScript )
                     {
                         aScriptItemSet.ClearItem( RES_CHRATR_CTL_FONT );
                         aScriptItemSet.ClearItem( RES_CHRATR_CTL_LANGUAGE );
@@ -1064,7 +1064,7 @@ void SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
                 // gesucht und gesetzt.
                 if( aDrop.GetLines() > 1 &&
                     (SVX_ADJUST_LEFT == rPropInfo.m_eFloat  ||
-                     CSS1_SCRIPT_ALL == nScript) )
+                     Css1ScriptFlags::AllMask == nScript) )
                 {
                     pColl->SetFormatAttr( aDrop );
                 }
@@ -1097,7 +1097,7 @@ void SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
             }
         }
 
-        if( CSS1_SCRIPT_ALL == nScript && !pParentCFormat )
+        if( Css1ScriptFlags::AllMask == nScript && !pParentCFormat )
         {
             SetCharFormatAttrs( pCFormat, rItemSet );
         }

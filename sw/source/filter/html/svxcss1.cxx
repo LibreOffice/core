@@ -696,7 +696,7 @@ SvxCSS1Parser::SvxCSS1Parser( SfxItemPool& rPool, const OUString& rBaseURL,
     pPropInfo( nullptr ),
     nMinFixLineSpace(  MM50/2 ),
     eDfltEnc( RTL_TEXTENCODING_DONTKNOW ),
-    nScriptFlags( CSS1_SCRIPT_ALL ),
+    nScriptFlags( Css1ScriptFlags::AllMask ),
     bIgnoreFontFamily( false )
 {
     // Item-Ids auch initialisieren

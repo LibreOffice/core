@@ -23,6 +23,7 @@
 #include <editeng/svxenum.hxx>
 #include <rtl/textenc.h>
 #include "parcss1.hxx"
+#include <o3tl/typed_flags_set.hxx>
 
 #include <memory>
 #include <vector>
@@ -73,15 +74,20 @@ enum SvxCSS1PageBreak
 };
 
 
-#define CSS1_SCRIPT_WESTERN 0x01
-#define CSS1_SCRIPT_CJK     0x02
-#define CSS1_SCRIPT_CTL     0x04
-#define CSS1_SCRIPT_ALL     0x07
+enum class Css1ScriptFlags {
+    Western = 0x01,
+    CJK     = 0x02,
+    CTL     = 0x04,
+    AllMask = Western | CJK | CTL,
+};
+namespace o3tl {
+    template<> struct typed_flags<Css1ScriptFlags> : is_typed_flags<Css1ScriptFlags, 0x07> {};
+}
 
 struct CSS1PropertyEnum
 {
     const sal_Char *pName;  // Wert einer Property
-    sal_uInt16 nEnum;           // und der dazugehoerige Wert eines Enums
+    sal_uInt16 nEnum;       // und der dazugehoerige Wert eines Enums
 };
 
 namespace editeng { class SvxBorderLine; }
@@ -198,7 +204,7 @@ class SvxCSS1Parser : public CSS1Parser
     sal_uInt16 nMinFixLineSpace;    // Mindest-Abstand fuer festen Zeilenabstand
 
     rtl_TextEncoding    eDfltEnc;
-    sal_uInt16          nScriptFlags;
+    Css1ScriptFlags     nScriptFlags;
 
     bool bIgnoreFontFamily;
 
@@ -304,9 +310,9 @@ public:
     virtual void SetDfltEncoding( rtl_TextEncoding eEnc );
     rtl_TextEncoding GetDfltEncoding() const { return eDfltEnc; }
 
-    bool IsSetWesternProps() const { return (nScriptFlags & CSS1_SCRIPT_WESTERN) != 0; }
-    bool IsSetCJKProps() const { return (nScriptFlags & CSS1_SCRIPT_CJK) != 0; }
-    bool IsSetCTLProps() const { return (nScriptFlags & CSS1_SCRIPT_CTL) != 0; }
+    bool IsSetWesternProps() const { return bool(nScriptFlags & Css1ScriptFlags::Western); }
+    bool IsSetCJKProps() const { return bool(nScriptFlags & Css1ScriptFlags::CJK); }
+    bool IsSetCTLProps() const { return bool(nScriptFlags & Css1ScriptFlags::CTL); }
 
     const OUString& GetBaseURL() const { return sBaseURL;}
 
