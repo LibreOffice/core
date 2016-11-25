@@ -19,7 +19,7 @@ $(eval $(call gb_CppunitTest_use_externals,vcl_bitmap_test,\
 ))
 ifeq ($(ENABLE_HEADLESS),)
 $(eval $(call gb_CppunitTest_use_externals,vcl_bitmap_test,\
-     glew \
+     epoxy \
  ))
 endif
 

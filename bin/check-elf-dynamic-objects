@@ -110,7 +110,7 @@ local file="$1"
         */libdesktop_detectorlo.so|*/ui-previewer|*/oosplash|*/gengal.bin)
             whitelist="${whitelist} ${x11whitelist}"
         ;;
-        */libvclplug_genlo.so|*/libGLEW.so.*|*/libchartcorelo.so|*/libavmediaogl.so|*/libOGLTranslo.so|*/liboglcanvaslo.so|*/libchartopengllo.so)
+        */libvclplug_genlo.so|*/libchartcorelo.so|*/libavmediaogl.so|*/libOGLTranslo.so|*/liboglcanvaslo.so|*/libchartopengllo.so)
             whitelist="${whitelist} ${x11whitelist} ${openglwhitelist}"
         ;;
         */libvcllo.so|*/libsofficeapp.so)

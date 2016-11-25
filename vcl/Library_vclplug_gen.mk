@@ -51,7 +51,7 @@ $(eval $(call gb_Library_use_externals,vclplug_gen,\
 	boost_headers \
 	cairo \
 	graphite \
-	glew \
+	epoxy \
 	glm_headers \
 	harfbuzz \
 	icu_headers \
