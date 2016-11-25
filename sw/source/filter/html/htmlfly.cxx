@@ -37,13 +37,13 @@ using namespace css;
 
 SwHTMLPosFlyFrame::SwHTMLPosFlyFrame( const SwPosFlyFrame& rPosFly,
                                   const SdrObject *pSdrObj,
-                                  AllHtmlFlags nAllFlags ) :
+                                  AllHtmlFlags nFlags ) :
     pFrameFormat( &rPosFly.GetFormat() ),
     pSdrObject( pSdrObj ),
     pNdIdx( new SwNodeIndex( rPosFly.GetNdIndex() ) ),
     nOrdNum( rPosFly.GetOrdNum() ),
     nContentIdx( 0 ),
-    nAllFlags( nAllFlags )
+    nAllFlags( nFlags )
 {
     const SwFormatAnchor& rAnchor = rPosFly.GetFormat().GetAnchor();
     if ((FLY_AT_CHAR == rAnchor.GetAnchorId()) &&
