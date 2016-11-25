@@ -400,14 +400,11 @@ bool X11OpenGLContext::ImplInit()
         }
     }
 
-    bool bRet = InitGLEW();
-    InitGLEWDebugging();
-
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
     registerAsCurrent();
 
-    return bRet;
+    return true;
 }
 
 void X11OpenGLContext::makeCurrent()
