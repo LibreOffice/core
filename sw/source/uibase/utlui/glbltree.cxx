@@ -81,16 +81,6 @@ using namespace ::com::sun::star::uno;
 
 #define GLOBAL_UPDATE_TIMEOUT 2000
 
-// Flags for PopupMenu-enable/disable
-#define ENABLE_INSERT_IDX   0x0001
-#define ENABLE_INSERT_FILE  0x0002
-#define ENABLE_INSERT_TEXT  0x0004
-#define ENABLE_EDIT         0x0008
-#define ENABLE_DELETE       0x0010
-#define ENABLE_UPDATE       0x0020
-#define ENABLE_UPDATE_SEL   0x0040
-#define ENABLE_EDIT_LINK    0x0080
-
 // TabPos: push to left
 #define  GLBL_TABPOS_SUB 5
 
@@ -338,7 +328,7 @@ VclPtr<PopupMenu> SwGlobalTree::CreateContextMenu()
     if(pActiveShell &&
         !pActiveShell->GetView().GetDocShell()->IsReadOnly())
     {
-        const sal_uInt16 nEnableFlags = GetEnableFlags();
+        const MenuEnableFlags nEnableFlags = GetEnableFlags();
         pPop = VclPtr<PopupMenu>::Create();
         VclPtrInstance<PopupMenu> pSubPop1;
         VclPtrInstance<PopupMenu> pSubPop2;
@@ -348,7 +338,7 @@ VclPtr<PopupMenu> SwGlobalTree::CreateContextMenu()
             pSubPop2->InsertItem( i, aContextStrings[STR_UPDATE_SEL - STR_GLOBAL_CONTEXT_FIRST - CTX_UPDATE_SEL+ i] );
             pSubPop2->SetHelpId(i, aHelpForMenu[i]);
         }
-        pSubPop2->EnableItem(CTX_UPDATE_SEL, 0 != (nEnableFlags & ENABLE_UPDATE_SEL));
+        pSubPop2->EnableItem(CTX_UPDATE_SEL, bool(nEnableFlags & MenuEnableFlags::UpdateSel));
 
         pSubPop1->InsertItem(CTX_INSERT_ANY_INDEX, aContextStrings[STR_INDEX  - STR_GLOBAL_CONTEXT_FIRST]);
         pSubPop1->SetHelpId(CTX_INSERT_ANY_INDEX, aHelpForMenu[CTX_INSERT_ANY_INDEX]);
@@ -363,7 +353,7 @@ VclPtr<PopupMenu> SwGlobalTree::CreateContextMenu()
         pPop->SetHelpId(CTX_UPDATE, aHelpForMenu[CTX_UPDATE]);
         pPop->InsertItem(CTX_EDIT, aContextStrings[STR_EDIT_CONTENT - STR_GLOBAL_CONTEXT_FIRST]);
         pPop->SetHelpId(CTX_EDIT, aHelpForMenu[CTX_EDIT]);
-        if(nEnableFlags&ENABLE_EDIT_LINK)
+        if(nEnableFlags&MenuEnableFlags::EditLink)
         {
             pPop->InsertItem(CTX_EDIT_LINK, aContextStrings[STR_EDIT_LINK - STR_GLOBAL_CONTEXT_FIRST]);
             pPop->SetHelpId(CTX_EDIT_LINK, aHelpForMenu[CTX_EDIT_LINK]);
@@ -375,15 +365,15 @@ VclPtr<PopupMenu> SwGlobalTree::CreateContextMenu()
         pPop->SetHelpId(CTX_DELETE, aHelpForMenu[CTX_DELETE]);
 
         //disabling if applicable
-        pSubPop1->EnableItem(CTX_INSERT_ANY_INDEX,  0 != (nEnableFlags & ENABLE_INSERT_IDX ));
-        pSubPop1->EnableItem(CTX_INSERT_TEXT,       0 != (nEnableFlags & ENABLE_INSERT_TEXT));
-        pSubPop1->EnableItem(CTX_INSERT_FILE,       0 != (nEnableFlags & ENABLE_INSERT_FILE));
-        pSubPop1->EnableItem(CTX_INSERT_NEW_FILE,   0 != (nEnableFlags & ENABLE_INSERT_FILE));
+        pSubPop1->EnableItem(CTX_INSERT_ANY_INDEX,  bool(nEnableFlags & MenuEnableFlags::InsertIdx ));
+        pSubPop1->EnableItem(CTX_INSERT_TEXT,       bool(nEnableFlags & MenuEnableFlags::InsertText));
+        pSubPop1->EnableItem(CTX_INSERT_FILE,       bool(nEnableFlags & MenuEnableFlags::InsertFile));
+        pSubPop1->EnableItem(CTX_INSERT_NEW_FILE,   bool(nEnableFlags & MenuEnableFlags::InsertFile));
 
-        pPop->EnableItem(CTX_UPDATE,    0 != (nEnableFlags & ENABLE_UPDATE));
-        pPop->EnableItem(CTX_INSERT,    0 != (nEnableFlags & ENABLE_INSERT_IDX));
-        pPop->EnableItem(CTX_EDIT,      0 != (nEnableFlags & ENABLE_EDIT));
-        pPop->EnableItem(CTX_DELETE,    0 != (nEnableFlags & ENABLE_DELETE));
+        pPop->EnableItem(CTX_UPDATE,    bool(nEnableFlags & MenuEnableFlags::Update));
+        pPop->EnableItem(CTX_INSERT,    bool(nEnableFlags & MenuEnableFlags::InsertIdx));
+        pPop->EnableItem(CTX_EDIT,      bool(nEnableFlags & MenuEnableFlags::Edit));
+        pPop->EnableItem(CTX_DELETE,    bool(nEnableFlags & MenuEnableFlags::Delete));
 
         pPop->SetPopupMenu( CTX_INSERT, pSubPop1 );
         pPop->SetPopupMenu( CTX_UPDATE, pSubPop2 );
@@ -393,7 +383,7 @@ VclPtr<PopupMenu> SwGlobalTree::CreateContextMenu()
 
 void SwGlobalTree::TbxMenuHdl(sal_uInt16 nTbxId, ToolBox* pBox)
 {
-    const sal_uInt16 nEnableFlags = GetEnableFlags();
+    const MenuEnableFlags nEnableFlags = GetEnableFlags();
     const OUString sCommand(pBox->GetItemCommand(nTbxId));
     if (sCommand == "insert")
     {
@@ -403,10 +393,10 @@ void SwGlobalTree::TbxMenuHdl(sal_uInt16 nTbxId, ToolBox* pBox)
             pMenu->InsertItem( i, aContextStrings[STR_INDEX  - STR_GLOBAL_CONTEXT_FIRST - CTX_INSERT_ANY_INDEX + i] );
             pMenu->SetHelpId(i, aHelpForMenu[i] );
         }
-        pMenu->EnableItem(CTX_INSERT_ANY_INDEX, 0 != (nEnableFlags & ENABLE_INSERT_IDX ));
-        pMenu->EnableItem(CTX_INSERT_TEXT,      0 != (nEnableFlags & ENABLE_INSERT_TEXT));
-        pMenu->EnableItem(CTX_INSERT_FILE,      0 != (nEnableFlags & ENABLE_INSERT_FILE));
-        pMenu->EnableItem(CTX_INSERT_NEW_FILE,  0 != (nEnableFlags & ENABLE_INSERT_FILE));
+        pMenu->EnableItem(CTX_INSERT_ANY_INDEX, bool(nEnableFlags & MenuEnableFlags::InsertIdx ));
+        pMenu->EnableItem(CTX_INSERT_TEXT,      bool(nEnableFlags & MenuEnableFlags::InsertText));
+        pMenu->EnableItem(CTX_INSERT_FILE,      bool(nEnableFlags & MenuEnableFlags::InsertFile));
+        pMenu->EnableItem(CTX_INSERT_NEW_FILE,  bool(nEnableFlags & MenuEnableFlags::InsertFile));
         pMenu->SetSelectHdl(LINK(this, SwGlobalTree, PopupHdl));
         pMenu->Execute(pBox, pBox->GetItemRect(nTbxId));
         pMenu.disposeAndClear();
@@ -421,7 +411,7 @@ void SwGlobalTree::TbxMenuHdl(sal_uInt16 nTbxId, ToolBox* pBox)
             pMenu->InsertItem( i, aContextStrings[STR_UPDATE_SEL - STR_GLOBAL_CONTEXT_FIRST - CTX_UPDATE_SEL+ i] );
             pMenu->SetHelpId(i, aHelpForMenu[i] );
         }
-        pMenu->EnableItem(CTX_UPDATE_SEL, 0 != (nEnableFlags & ENABLE_UPDATE_SEL));
+        pMenu->EnableItem(CTX_UPDATE_SEL, bool(nEnableFlags & MenuEnableFlags::UpdateSel));
         pMenu->SetSelectHdl(LINK(this, SwGlobalTree, PopupHdl));
         pMenu->Execute(pBox, pBox->GetItemRect(nTbxId));
         pMenu.disposeAndClear();
@@ -430,33 +420,33 @@ void SwGlobalTree::TbxMenuHdl(sal_uInt16 nTbxId, ToolBox* pBox)
     }
 }
 
-sal_uInt16  SwGlobalTree::GetEnableFlags() const
+MenuEnableFlags  SwGlobalTree::GetEnableFlags() const
 {
     SvTreeListEntry* pEntry = FirstSelected();
     sal_uLong nSelCount = GetSelectionCount();
     sal_uLong nEntryCount = GetEntryCount();
     SvTreeListEntry* pPrevEntry = pEntry ? Prev(pEntry) : nullptr;
 
-    sal_uInt16 nRet = 0;
+    MenuEnableFlags nRet = MenuEnableFlags::NONE;
     if(nSelCount == 1 || !nEntryCount)
-        nRet |= ENABLE_INSERT_IDX|ENABLE_INSERT_FILE;
+        nRet |= MenuEnableFlags::InsertIdx|MenuEnableFlags::InsertFile;
     if(nSelCount == 1)
     {
-        nRet |= ENABLE_EDIT;
+        nRet |= MenuEnableFlags::Edit;
         if (pEntry && static_cast<SwGlblDocContent*>(pEntry->GetUserData())->GetType() != GLBLDOC_UNKNOWN &&
                     (!pPrevEntry || static_cast<SwGlblDocContent*>(pPrevEntry->GetUserData())->GetType() != GLBLDOC_UNKNOWN))
-            nRet |= ENABLE_INSERT_TEXT;
+            nRet |= MenuEnableFlags::InsertText;
         if (pEntry && GLBLDOC_SECTION == static_cast<SwGlblDocContent*>(pEntry->GetUserData())->GetType())
-            nRet |= ENABLE_EDIT_LINK;
+            nRet |= MenuEnableFlags::EditLink;
     }
     else if(!nEntryCount)
     {
-        nRet |= ENABLE_INSERT_TEXT;
+        nRet |= MenuEnableFlags::InsertText;
     }
     if(nEntryCount)
-        nRet |= ENABLE_UPDATE|ENABLE_DELETE;
+        nRet |= MenuEnableFlags::Update|MenuEnableFlags::Delete;
     if(nSelCount)
-        nRet |= ENABLE_UPDATE_SEL;
+        nRet |= MenuEnableFlags::UpdateSel;
     return nRet;
 }
 
