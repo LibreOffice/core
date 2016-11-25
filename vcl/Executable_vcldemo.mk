@@ -21,7 +21,7 @@ $(eval $(call gb_Executable_use_externals,vcldemo,\
 ))
 ifeq ($(ENABLE_HEADLESS),)
 $(eval $(call gb_Executable_use_externals,vcldemo,\
-    glew \
+    epoxy \
 ))
 endif
 

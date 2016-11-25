@@ -810,7 +810,7 @@ void buildMipmaps(
     GLint internalFormat, GLsizei width, GLsizei height, GLenum format,
     GLenum type, const void * data)
 {
-    if (GLEW_ARB_framebuffer_object) {
+    if (epoxy_has_gl_extension("GL_ARB_framebuffer_object")) {
         glTexImage2D(
             GL_TEXTURE_2D, 0, internalFormat, width, height, 0, format, type,
             data);

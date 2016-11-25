@@ -32,7 +32,7 @@ $(eval $(call gb_Library_use_externals,chartcore,\
 
 ifeq ($(ENABLE_HEADLESS),)
 $(eval $(call gb_Library_use_externals,chartcore,\
-    glew \
+    epoxy \
 ))
 endif
 
@@ -264,13 +264,6 @@ else ifeq ($(OS), $(filter LINUX %BSD SOLARIS, $(OS)))
 $(eval $(call gb_Library_add_libs,chartcore,\
 	$(DLOPEN_LIBS) \
 ))
-ifeq ($(ENABLE_HEADLESS),)
-$(eval $(call gb_Library_add_libs,chartcore,\
-    -lGL \
-    -lX11 \
-))
-endif #!ENABLE_HEADLESS
-
 endif
 
 # vim: set noet sw=4 ts=4:

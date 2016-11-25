@@ -122,7 +122,7 @@ $(eval $(call gb_Library_use_externals,vcl,\
 ))
 ifeq ($(ENABLE_HEADLESS),)
 $(eval $(call gb_Library_use_externals,vcl,\
-     glew \
+     epoxy \
  ))
 endif
 
@@ -621,7 +621,6 @@ ifeq ($(OS), $(filter LINUX %BSD SOLARIS, $(OS)))
 $(eval $(call gb_Library_add_libs,vcl,\
     -lm $(DLOPEN_LIBS) \
     -lpthread \
-    -lGL \
     -lX11 \
     -lXext \
 ))

@@ -12,7 +12,7 @@
 #define INCLUDED_VCL_INC_OPENGL_VERTEXUTILS_H
 
 #include <basegfx/numeric/ftools.hxx>
-#include <GL/glew.h>
+#include <epoxy/gl.h>
 #include <glm/gtx/norm.hpp>
 #include <vcl/salgtype.hxx>
 #include <vector>

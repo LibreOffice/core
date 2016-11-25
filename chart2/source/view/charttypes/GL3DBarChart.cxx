@@ -9,7 +9,7 @@
 
 #include <GL3DBarChart.hxx>
 
-#include <GL/glew.h>
+#include <epoxy/gl.h>
 
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>

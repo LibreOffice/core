@@ -20,7 +20,7 @@
 #ifndef INCLUDED_VCL_INC_OPENGL_TEXTURE_H
 #define INCLUDED_VCL_INC_OPENGL_TEXTURE_H
 
-#include <GL/glew.h>
+#include <epoxy/gl.h>
 #include <vcl/dllapi.h>
 #include <vcl/salgtype.hxx>
 #include <rtl/ustring.hxx>

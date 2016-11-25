@@ -87,7 +87,7 @@ $(eval $(call gb_CppunitTest_use_externals,vcl_wmf_test,\
 ))
 ifeq ($(ENABLE_HEADLESS),)
 $(eval $(call gb_CppunitTest_use_externals,vcl_wmf_test,\
-     glew \
+     epoxy \
  ))
 endif
 
@@ -136,7 +136,6 @@ $(eval $(call gb_CppunitTest_add_libs,vcl_wmf_test,\
     -lm \
     -ldl \
     -lpthread \
-    -lGL \
     -lX11 \
 ))
 endif
@@ -190,7 +189,6 @@ ifeq ($(OS), $(filter LINUX %BSD SOLARIS, $(OS)))
 $(eval $(call gb_CppunitTest_add_libs,vcl_wmf_test,\
     -lm $(DLOPEN_LIBS) \
     -lpthread \
-    -lGL \
     -lX11 \
     -lXext \
 ))

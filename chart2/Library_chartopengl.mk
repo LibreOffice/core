@@ -22,7 +22,7 @@ $(eval $(call gb_Library_set_precompiled_header,chartopengl,$(SRCDIR)/chart2/inc
 $(eval $(call gb_Library_use_externals,chartopengl,\
 	boost_headers \
 	glm_headers \
-	glew \
+	epoxy \
 ))
 
 $(eval $(call gb_Library_use_sdk_api,chartopengl))
@@ -68,8 +68,6 @@ $(eval $(call gb_Library_use_system_darwin_frameworks,chartopengl,\
 else ifeq ($(OS), $(filter LINUX %BSD SOLARIS, $(OS)))
 $(eval $(call gb_Library_add_libs,chartopengl,\
 	$(DLOPEN_LIBS) \
-	-lGL \
-	-lX11 \
 ))
 endif
  

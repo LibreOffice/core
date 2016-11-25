@@ -401,7 +401,7 @@ GLint OpenGLHelper::LoadShaders(const OUString& rVertexShaderName,
         aGeometryShaderSource = getShaderSource(rGeometryShaderName);
 
     GLint bBinaryResult = GL_FALSE;
-    if( GLEW_ARB_get_program_binary && !rDigest.isEmpty() )
+    if (epoxy_has_gl_extension("GL_ARB_get_program_binary") && !rDigest.isEmpty())
     {
         OString aFileName =
                 createFileName(rVertexShaderName, rFragmentShaderName, rGeometryShaderName, rDigest);
@@ -473,7 +473,7 @@ GLint OpenGLHelper::LoadShaders(const OUString& rVertexShaderName,
     if (bHasGeometryShader)
         glAttachShader(ProgramID, GeometryShaderID);
 
-    if( GLEW_ARB_get_program_binary && !rDigest.isEmpty() )
+    if (epoxy_has_gl_extension("GL_ARB_get_program_binary") && !rDigest.isEmpty())
     {
         glProgramParameteri(ProgramID, GL_PROGRAM_BINARY_RETRIEVABLE_HINT, GL_TRUE);
         glLinkProgram(ProgramID);
@@ -1085,14 +1085,14 @@ void OpenGLHelper::debugMsgPrint(const int nType, const char *pFormat, ...)
     {
         OpenGLZone aZone;
 
-        if (GLEW_KHR_debug)
+        if (epoxy_has_gl_extension("GL_KHR_debug"))
             glDebugMessageInsert(GL_DEBUG_SOURCE_APPLICATION,
                                  GL_DEBUG_TYPE_OTHER,
                                  1, // one[sic] id is as good as another ?
                                  // GL_DEBUG_SEVERITY_NOTIFICATION for >= GL4.3 ?
                                  GL_DEBUG_SEVERITY_LOW,
                                  strlen(pStr), pStr);
-        else if (GLEW_AMD_debug_output)
+        else if (epoxy_has_gl_extension("GL_AMD_debug_output"))
             glDebugMessageInsertAMD(GL_DEBUG_CATEGORY_APPLICATION_AMD,
                                     GL_DEBUG_SEVERITY_LOW_AMD,
                                     1, // one[sic] id is as good as another ?

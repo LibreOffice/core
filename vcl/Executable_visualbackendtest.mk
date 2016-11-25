@@ -46,7 +46,6 @@ $(eval $(call gb_Executable_add_libs,visualbackendtest,\
 	-lm \
 	-ldl \
 	-lpthread \
-    -lGL \
     -lX11 \
 ))
 

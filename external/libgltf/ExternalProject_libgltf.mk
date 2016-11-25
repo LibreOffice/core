@@ -17,7 +17,7 @@ $(eval $(call gb_ExternalProject_register_targets,libgltf,\
 
 $(eval $(call gb_ExternalProject_use_externals,libgltf,\
 	boost_headers \
-	glew \
+	epoxy \
 	glm_headers \
 ))
 
@@ -30,8 +30,8 @@ ifeq ($(SYSTEM_BOOST),)
 libgltf_AdditionalIncludes += "$(call gb_UnpackedTarball_get_dir,boost)"
 endif
 
-ifeq ($(SYSTEM_GLEW),)
-libgltf_AdditionalIncludes += "$(call gb_UnpackedTarball_get_dir,glew)/include"
+ifeq ($(SYSTEM_EPOXY),)
+libgltf_AdditionalIncludes += "$(call gb_UnpackedTarball_get_dir,epoxy)/include"
 endif
 
 ifeq ($(SYSTEM_GLM),)
@@ -45,7 +45,7 @@ $(call gb_ExternalProject_get_state_target,libgltf,build) :
 			$(if $(filter 120,$(VCVER)),/p:PlatformToolset=v120 /p:VisualStudioVersion=12.0 /ToolsVersion:12.0) \
 			$(if $(filter 140,$(VCVER)),/p:PlatformToolset=v140 /p:VisualStudioVersion=14.0 /ToolsVersion:14.0) \
 			'/p:AdditionalIncludeDirectories=$(subst $(WHITESPACE),;,$(subst /,\,$(strip $(libgltf_AdditionalIncludes))))' \
-			/p:AdditionalLibraryDirectories=$(if $(SYSTEM_GLEW),,"$(subst /,\,$(call gb_UnpackedTarball_get_dir,glew))\lib\$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release)\Win32") \
+			/p:AdditionalLibraryDirectories=$(if $(SYSTEM_EPOXY),,"$(subst /,\,$(call gb_UnpackedTarball_get_dir,epoxy))\lib\$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release)\Win32") \
 	,build/win32)
 
 else # !ifeq($(COM),MSC)
@@ -67,7 +67,7 @@ $(call gb_ExternalProject_get_state_target,libgltf,build) :
 			$(if $(ENABLE_DEBUG),--enable-debug,--disable-debug) \
 			--disable-werror \
 			BOOST_CFLAGS="$(BOOST_CPPFLAGS)" \
-			GLEW_CFLAGS="$(if $(SYSTEM_GLEW),$(GLEW_CFLAGS),-I$(call gb_UnpackedTarball_get_dir,glew)/include) -DGLEW_NO_GLU" \
+			EPOXY_CFLAGS="$(if $(SYSTEM_EPOXY),$(EPOXY_CFLAGS),-I$(call gb_UnpackedTarball_get_dir,epoxy)/include)" \
 			GLM_CFLAGS="$(if $(SYSTEM_GLM),$(GLM_CFLAGS),-I$(call gb_UnpackedTarball_get_dir,glm))" \
 			$(if $(libgltf_CPPFLAGS),CPPFLAGS='$(libgltf_CPPFLAGS)') \
 		&& $(MAKE) \

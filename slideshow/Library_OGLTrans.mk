@@ -34,7 +34,7 @@ $(eval $(call gb_Library_use_libraries,OGLTrans,\
 
 $(eval $(call gb_Library_use_externals,OGLTrans,\
 	boost_headers \
-	glew \
+	epoxy \
 	glm_headers \
 ))
 
@@ -54,13 +54,6 @@ $(eval $(call gb_Library_use_system_win32_libs,OGLTrans,\
     gdi32 \
     glu32 \
     opengl32 \
-))
-
-else
-
-$(eval $(call gb_Library_add_libs,OGLTrans,\
-	-lGL \
-	-lX11 \
 ))
 
 endif

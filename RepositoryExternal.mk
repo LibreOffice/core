@@ -183,51 +183,43 @@ endef
 
 endif # SYSTEM_CPPUNIT
 
-ifneq ($(SYSTEM_GLEW),)
+ifneq ($(SYSTEM_EPOXY),)
 
-define gb_LinkTarget__use_glew
+define gb_LinkTarget__use_epoxy
 $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
-    $(GLEW_CFLAGS) \
+    $(EPOXY_CFLAGS) \
 )
-$(call gb_LinkTarget_add_libs,$(1),$(GLEW_LIBS))
+$(call gb_LinkTarget_add_libs,$(1),$(EPOXY_LIBS))
 
 endef
 
-gb_ExternalProject__use_glew :=
+gb_ExternalProject__use_epoxy :=
 
-else # !SYSTEM_GLEW
+else # !SYSTEM_EPOXY
 
-$(eval $(call gb_Helper_register_packages_for_install,ooo,\
-	glew \
+define gb_LinkTarget__use_epoxy
+$(call gb_LinkTarget_set_include,$(1),\
+       -I$(call gb_UnpackedTarball_get_dir,epoxy/include) \
+       $$(INCLUDE) \
+)
+
+$(call gb_LinkTarget_use_libraries,$(1),\
+    epoxy \
+)
+
+endef
+
+$(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo,\
+	epoxy \
 ))
 
-define gb_LinkTarget__use_glew
-$(call gb_LinkTarget_use_package,$(1),glew)
-$(call gb_LinkTarget_set_include,$(1),\
-	-I$(call gb_UnpackedTarball_get_dir,glew/include) \
-	-DGLEW_NO_GLU \
-	$$(INCLUDE) \
-)
-
-ifeq ($(COM),MSC)
-$(call gb_LinkTarget_add_libs,$(1),\
-	$(call gb_UnpackedTarball_get_dir,glew)/lib/$(if $(MSVC_USE_DEBUG_RUNTIME),Debug/$(wnt_arch_subdir_mandatory)/glew32d.lib,Release/$(wnt_arch_subdir_mandatory)/glew32.lib) \
-)
-else
-$(call gb_LinkTarget_add_libs,$(1),\
-	-L$(call gb_UnpackedTarball_get_dir,glew)/lib/ -lGLEW \
-)
-endif
+define gb_ExternalProject__use_epoxy
+$(call gb_ExternalProject_use_external_project,$(1),epoxy)
 
 endef
 
-define gb_ExternalProject__use_glew
-$(call gb_ExternalProject_use_external_project,$(1),glew)
-
-endef
-
-endif # SYSTEM_GLEW
+endif # SYSTEM_EPOXY
 
 define gb_LinkTarget__use_iconv
 $(call gb_LinkTarget_add_libs,$(1),-liconv)
@@ -3435,7 +3427,7 @@ $(call gb_LinkTarget_add_libs,$(1),\
 )
 else
 $(call gb_LinkTarget_add_libs,$(1),\
-	$(call gb_UnpackedTarball_get_dir,libgltf)/src/.libs/libgltf-0.0$(gb_StaticLibrary_PLAINEXT) \
+	$(call gb_UnpackedTarball_get_dir,libgltf)/src/.libs/libgltf-0.1$(gb_StaticLibrary_PLAINEXT) \
 )
 endif
 

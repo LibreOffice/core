@@ -28,7 +28,7 @@ class   SalXLib;
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/extensions/Xrender.h>
-#include "GL/glxew.h"
+#include <epoxy/glx.h>
 
 #include <unx/salunx.h>
 #include <unx/saltype.h>
