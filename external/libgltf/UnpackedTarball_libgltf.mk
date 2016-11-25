@@ -18,6 +18,7 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,libgltf,1))
 $(eval $(call gb_UnpackedTarball_add_patches,libgltf,\
 	external/libgltf/libgltf-msvc-disable-sse2.patch.1 \
 	external/libgltf/libgltf-msvc-x64.patch.1 \
+	external/libgltf/libgltf.epoxy.patch.1 \
 ))
 
 # vim: set noet sw=4 ts=4:
