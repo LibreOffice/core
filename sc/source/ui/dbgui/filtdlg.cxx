@@ -465,7 +465,7 @@ void ScFilterDlg::UpdateValueList( size_t nList )
 
     if (pDoc && nList > 0 && nList <= QUERY_ENTRY_COUNT)
     {
-        ComboBox*   pValList        = maValueEdArr[nList-1];
+        ComboBox*   pValList        = maValueEdArr[nList-1].get();
         const sal_Int32 nFieldSelPos = maFieldLbArr[nList-1]->GetSelectEntryPos();
         sal_Int32 nListPos = 0;
         OUString aCurValue = pValList->GetText();
@@ -576,7 +576,7 @@ void ScFilterDlg::UpdateHdrInValueList( size_t nList )
     if (nPos == INVALID_HEADER_POS)
         return;
 
-    ComboBox* pValList = maValueEdArr[nList-1];
+    ComboBox* pValList = maValueEdArr[nList-1].get();
     size_t nListPos = nPos + 2;                 // for "empty" and "non-empty"
 
     const ScTypedStrData& rHdrEntry = m_EntryLists[nColumn]->maList[nPos];
@@ -601,7 +601,7 @@ void ScFilterDlg::ClearValueList( size_t nList )
 {
     if (nList > 0 && nList <= QUERY_ENTRY_COUNT)
     {
-        ComboBox* pValList = maValueEdArr[nList-1];
+        ComboBox* pValList = maValueEdArr[nList-1].get();
         pValList->Clear();
         pValList->InsertEntry( aStrNotEmpty, 0 );
         pValList->InsertEntry( aStrEmpty, 1 );

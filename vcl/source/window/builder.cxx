@@ -472,11 +472,8 @@ VclBuilder::VclBuilder(vcl::Window *pParent, const OUString& sUIDir, const OUStr
     }
 
     //fdo#67378 merge the label into the disclosure button
-    for (auto aI = m_pParserState->m_aExpanderWidgets.begin(),
-        aEnd = m_pParserState->m_aExpanderWidgets.end(); aI != aEnd; ++aI)
+    for (VclPtr<VclExpander> const & pOne : m_pParserState->m_aExpanderWidgets)
     {
-        VclExpander *pOne = *aI;
-
         vcl::Window *pChild = pOne->get_child();
         vcl::Window* pLabel = pOne->GetWindow(GetWindowType::LastChild);
         if (pLabel && pLabel != pChild && pLabel->GetType() == WINDOW_FIXEDTEXT)
@@ -2111,7 +2108,7 @@ void VclBuilder::handleChild(vcl::Window *pParent, xmlreader::XmlReader &reader)
         {
             if (name.equals("object") || name.equals("placeholder"))
             {
-                pCurrentChild = handleObject(pParent, reader);
+                pCurrentChild = handleObject(pParent, reader).get();
 
                 bool bObjectInserted = pCurrentChild && pParent != pCurrentChild;
 

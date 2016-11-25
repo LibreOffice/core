@@ -452,7 +452,7 @@ namespace dbaui
         Reference< XWindow > xWindow = getTopMostContainerWindow();
         vcl::Window* pWin = nullptr;
         if ( xWindow.is() )
-            pWin = VCLUnoHelper::GetWindow(xWindow);
+            pWin = VCLUnoHelper::GetWindow(xWindow).get();
         if ( !pWin )
             pWin = getView()->Window::GetParent();
 

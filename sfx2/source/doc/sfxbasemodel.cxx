@@ -419,7 +419,7 @@ SfxOwnFramesLocker::~SfxOwnFramesLocker()
 
 vcl::Window* SfxOwnFramesLocker::GetVCLWindow( const Reference< frame::XFrame >& xFrame )
 {
-    vcl::Window* pWindow = nullptr;
+    VclPtr<vcl::Window> pWindow;
 
     if ( xFrame.is() )
     {

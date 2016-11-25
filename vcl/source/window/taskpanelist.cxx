@@ -176,7 +176,7 @@ bool TaskPaneList::HandleKeyEvent(const KeyEvent& rKeyEvent)
         auto p = mTaskPanes.begin();
         while( p != mTaskPanes.end() )
         {
-            vcl::Window *pWin = *p;
+            vcl::Window *pWin = p->get();
             if( pWin->HasChildPathFocus( true ) )
             {
                 // Ctrl-F6 goes directly to the document
@@ -252,7 +252,7 @@ vcl::Window* TaskPaneList::FindNextSplitter( vcl::Window *pWindow )
                     p = mTaskPanes.begin();
                 if( (*p)->ImplIsSplitter() && (*p)->IsReallyVisible() && !(*p)->IsDialog() && (*p)->GetParent()->HasChildPathFocus() )
                 {
-                    pWindow = *p;
+                    pWindow = (*p).get();
                     break;
                 }
                 if( !pWindow )  // increment after test, otherwise first element is skipped
@@ -291,7 +291,7 @@ vcl::Window* TaskPaneList::FindNextFloat( vcl::Window *pWindow, bool bForward )
                 if( (*p)->IsReallyVisible() && !(*p)->ImplIsSplitter() &&
                     ( (*p)->GetType() != WINDOW_MENUBARWINDOW || static_cast<MenuBarWindow*>(p->get())->CanGetFocus() ) )
                 {
-                    pWindow = *p;
+                    pWindow = (*p).get();
                     break;
                 }
                 if( !pWindow )  // increment after test, otherwise first element is skipped

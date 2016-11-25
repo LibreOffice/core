@@ -1367,7 +1367,7 @@ void MultiSelectionModeHandler::UpdatePosition (
     // Convert window coordinates into model coordinates (we need the
     // window coordinates for auto-scrolling because that remains
     // constant while scrolling.)
-    sd::Window *pWindow (mrSlideSorter.GetContentWindow());
+    sd::Window *pWindow (mrSlideSorter.GetContentWindow().get());
     const Point aMouseModelPosition (pWindow->PixelToLogic(rMousePosition));
 
     bool bDoAutoScroll = bAllowAutoScroll && mrSlideSorter.GetController().GetScrollBarManager().AutoScroll(

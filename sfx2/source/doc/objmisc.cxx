@@ -1659,7 +1659,7 @@ bool SfxObjectShell::AdjustMacroMode()
 
 vcl::Window* SfxObjectShell::GetDialogParent( SfxMedium* pLoadingMedium )
 {
-    vcl::Window* pWindow = nullptr;
+    VclPtr<vcl::Window> pWindow;
     SfxItemSet* pSet = pLoadingMedium ? pLoadingMedium->GetItemSet() : GetMedium()->GetItemSet();
     const SfxUnoFrameItem* pUnoItem = SfxItemSet::GetItem<SfxUnoFrameItem>(pSet, SID_FILLFRAME, false);
     if ( pUnoItem )

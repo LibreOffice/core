@@ -187,7 +187,7 @@ void CreationWizardUnoDlg::createDialogOnDemand()
         {
             VCLXWindow* pImplementation = VCLXWindow::GetImplementation(m_xParentWindow);
             if (pImplementation)
-                pParent = pImplementation->GetWindow();
+                pParent = pImplementation->GetWindow().get();
         }
         uno::Reference< XComponent > xComp( this );
         if( m_xChartModel.is() )

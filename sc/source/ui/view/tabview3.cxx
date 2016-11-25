@@ -717,7 +717,7 @@ void ScTabView::TestHintWindow()
         if ( pData && pData->GetInput( aTitle, aMessage ) && !aMessage.isEmpty() )
         {
             ScSplitPos eWhich = aViewData.GetActivePart();
-            ScGridWindow* pWin = pGridWin[eWhich];
+            ScGridWindow* pWin = pGridWin[eWhich].get();
             SCCOL nCol = aViewData.GetCurX();
             SCROW nRow = aViewData.GetCurY();
             Point aPos = aViewData.GetScrPos( nCol, nRow, eWhich );
@@ -2112,7 +2112,7 @@ void ScTabView::KillEditView( bool bNoPaint )
                     auto lInvalidateWindows =
                             [&rInvRect] (ScTabView* pTabView)
                             {
-                                for (ScGridWindow* pWin: pTabView->pGridWin)
+                                for (VclPtr<ScGridWindow> const & pWin: pTabView->pGridWin)
                                 {
                                     if (pWin)
                                         pWin->Invalidate(rInvRect);
@@ -2808,7 +2808,7 @@ void ScTabView::HideListBox()
 
 void ScTabView::UpdateInputContext()
 {
-    ScGridWindow* pWin = pGridWin[aViewData.GetActivePart()];
+    ScGridWindow* pWin = pGridWin[aViewData.GetActivePart()].get();
     if (pWin)
         pWin->UpdateInputContext();
 
@@ -2879,7 +2879,7 @@ void ScTabView::ZoomChanged()
     HideNoteMarker();
 
     // AW: To not change too much, use pWin here
-    ScGridWindow* pWin = pGridWin[aViewData.GetActivePart()];
+    ScGridWindow* pWin = pGridWin[aViewData.GetActivePart()].get();
 
     if ( pWin && aViewData.HasEditView( aViewData.GetActivePart() ) )
     {

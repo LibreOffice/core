@@ -851,8 +851,8 @@ namespace svx
 
         if (!_bTryBothDirections)
         {
-            CheckBox *pBox = _ePrimaryConversionDirection == HHC::eHangulToHanja?
-                                    m_pHangulOnly : m_pHanjaOnly;
+            CheckBox *pBox = _ePrimaryConversionDirection == HHC::eHangulToHanja ?
+                                    m_pHangulOnly.get() : m_pHanjaOnly.get();
             pBox->Check();
             OnConversionDirectionClicked( pBox );
         }

@@ -122,7 +122,7 @@ namespace pcr
 
     void FieldLinkRow::fillList( LinkParticipant _eWhich, const Sequence< OUString >& _rFieldNames )
     {
-        ComboBox* pBox = ( _eWhich == eDetailField ) ? m_pDetailColumn : m_pMasterColumn;
+        ComboBox* pBox = ( _eWhich == eDetailField ) ? m_pDetailColumn.get() : m_pMasterColumn.get();
 
         const OUString* pFieldName    = _rFieldNames.getConstArray();
         const OUString* pFieldNameEnd = pFieldName + _rFieldNames.getLength();
@@ -141,7 +141,7 @@ namespace pcr
 
     void FieldLinkRow::SetFieldName( LinkParticipant _eWhich, const OUString& _rName )
     {
-        ComboBox* pBox = ( _eWhich == eDetailField ) ? m_pDetailColumn : m_pMasterColumn;
+        ComboBox* pBox = ( _eWhich == eDetailField ) ? m_pDetailColumn.get() : m_pMasterColumn.get();
         pBox->SetText( _rName );
     }
 
