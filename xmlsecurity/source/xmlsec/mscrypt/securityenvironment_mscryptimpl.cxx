@@ -57,7 +57,7 @@ using ::com::sun::star::lang::XSingleServiceFactory ;
 using ::com::sun::star::xml::crypto::XSecurityEnvironment ;
 using ::com::sun::star::security::XCertificate ;
 
-extern X509Certificate_MSCryptImpl* MswcryCertContextToXCert( PCCERT_CONTEXT cert ) ;
+static X509Certificate_MSCryptImpl* MswcryCertContextToXCert( PCCERT_CONTEXT cert ) ;
 
 struct CertErrorToString{
     DWORD error;
@@ -1127,7 +1127,7 @@ bool SecurityEnvironment_MSCryptImpl::defaultEnabled() throw( Exception, Runtime
     return m_bEnableDefault ;
 }
 
-X509Certificate_MSCryptImpl* MswcryCertContextToXCert( PCCERT_CONTEXT cert )
+static X509Certificate_MSCryptImpl* MswcryCertContextToXCert( PCCERT_CONTEXT cert )
 {
     X509Certificate_MSCryptImpl* xcert ;
 
