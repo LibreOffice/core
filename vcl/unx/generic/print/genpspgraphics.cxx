@@ -914,18 +914,8 @@ FontAttributes GenPspGraphics::Info2FontAttributes( const psp::FastPrintFontInfo
     aDFA.SetSymbolFlag( (rInfo.m_aEncoding == RTL_TEXTENCODING_SYMBOL) );
     aDFA.SetSubsettableFlag( rInfo.m_bSubsettable );
     aDFA.SetEmbeddableFlag(false);
-
-    switch( rInfo.m_eType )
-    {
-        case psp::fonttype::TrueType:
-            aDFA.SetQuality( 512 );
-            aDFA.SetBuiltInFontFlag( false );
-            break;
-        default:
-            aDFA.SetQuality( 0 );
-            aDFA.SetBuiltInFontFlag( false );
-            break;
-    }
+    aDFA.SetQuality(512);
+    aDFA.SetBuiltInFontFlag(false);
 
     aDFA.SetOrientationFlag( true );
 
@@ -970,28 +960,24 @@ void GenPspGraphics::AnnounceFonts( PhysicalFontCollection* pFontCollection, con
 {
     int nQuality = 0;
 
-    if( aInfo.m_eType == psp::fonttype::TrueType )
+    psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
+    OString aFileName( rMgr.getFontFileSysPath( aInfo.m_nID ) );
+    int nPos = aFileName.lastIndexOf( '_' );
+    if( nPos == -1 || aFileName[nPos+1] == '.' )
+        nQuality += 5;
+    else
     {
-        // asian type 1 fonts are not known
-        psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
-        OString aFileName( rMgr.getFontFileSysPath( aInfo.m_nID ) );
-        int nPos = aFileName.lastIndexOf( '_' );
-        if( nPos == -1 || aFileName[nPos+1] == '.' )
-            nQuality += 5;
-        else
+        static const char* pLangBoost = nullptr;
+        static bool bOnce = true;
+        if( bOnce )
         {
-            static const char* pLangBoost = nullptr;
-            static bool bOnce = true;
-            if( bOnce )
-            {
-                bOnce = false;
-                pLangBoost = vcl::getLangBoost();
-            }
-
-            if( pLangBoost )
-                if( aFileName.copy( nPos+1, 3 ).equalsIgnoreAsciiCase( pLangBoost ) )
-                    nQuality += 10;
+            bOnce = false;
+            pLangBoost = vcl::getLangBoost();
         }
+
+        if( pLangBoost )
+            if( aFileName.copy( nPos+1, 3 ).equalsIgnoreAsciiCase( pLangBoost ) )
+                nQuality += 10;
     }
 
     ImplPspFontData* pFD = new ImplPspFontData( aInfo );
@@ -1127,15 +1113,7 @@ const void* GenPspGraphics::DoGetEmbedFontData( psp::fontID aFont, const sal_Ucs
     for (size_t i = 0; i < nLen; ++i)
         pWidths[i] = (aMetrics[i].width > 0 ? aMetrics[i].width : 0);
 
-    switch( aFontInfo.m_eType )
-    {
-        case psp::fonttype::TrueType:
-            rInfo.m_nFontType = FontSubsetInfo::SFNT_TTF;
-            break;
-        default:
-            DoFreeEmbedFontData( pFile, *pDataLen );
-            return nullptr;
-    }
+    rInfo.m_nFontType = FontSubsetInfo::SFNT_TTF;
 
     return pFile;
 }
