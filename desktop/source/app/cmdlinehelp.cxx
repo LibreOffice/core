@@ -27,6 +27,9 @@
 #include "cmdlinehelp.hxx"
 
 #ifdef _WIN32
+#if _WIN32_WINNT < 0x0501
+#define _WIN32_WINNT 0x0501
+#endif
 #include "windows.h"
 #include "io.h"
 #include "Fcntl.h"
@@ -113,36 +116,62 @@ namespace desktop
         public:
             explicit lcl_Console(short nBufHeight)
             {
-                bFreeConsole = AllocConsole() != FALSE;
-                CONSOLE_SCREEN_BUFFER_INFO cinfo;
-                GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cinfo);
-                cinfo.dwSize.Y = nBufHeight;
-                SetConsoleScreenBufferSize(GetStdHandle(STD_OUTPUT_HANDLE), cinfo.dwSize);
+                bFreeConsole = false;
+                HANDLE hIn, hOut, hErr;
+                STARTUPINFOA aStartupInfo{sizeof(aStartupInfo)};
+                GetStartupInfoA(&aStartupInfo);
+                if ((aStartupInfo.dwFlags & STARTF_USESTDHANDLES) == STARTF_USESTDHANDLES)
+                {
+                    // If standard handles had been passed to this process, use them
+                    hIn = aStartupInfo.hStdInput;
+                    hOut = aStartupInfo.hStdOutput;
+                    hErr = aStartupInfo.hStdError;
+                }
+                else
+                {
+                    // Try to attach parent console; on error try to create new.
+                    // If this process already has its console, these will simply fail.
+                    bFreeConsole = (AttachConsole(ATTACH_PARENT_PROCESS) != FALSE)
+                                || (AllocConsole() != FALSE);
+
+                    hIn = GetStdHandle(STD_INPUT_HANDLE);
+                    hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+                    hErr = GetStdHandle(STD_ERROR_HANDLE);
+
+                    // Ensure that console buffer is enough to hold required data
+                    CONSOLE_SCREEN_BUFFER_INFO cinfo;
+                    GetConsoleScreenBufferInfo(hOut, &cinfo);
+                    if (cinfo.dwSize.Y < nBufHeight)
+                    {
+                        cinfo.dwSize.Y = nBufHeight;
+                        SetConsoleScreenBufferSize(hOut, cinfo.dwSize);
+                    }
+                }
+
                 // stdin
-                intptr_t stdHandle = reinterpret_cast<intptr_t>(GetStdHandle(STD_INPUT_HANDLE));
-                int fileHandle = _open_osfhandle(stdHandle, _O_TEXT);
+                int fileHandle = _open_osfhandle(reinterpret_cast<intptr_t>(hIn), _O_TEXT);
                 FILE *fp = _fdopen(fileHandle, "r");
                 *stdin = *fp;
                 setvbuf(stdin, NULL, _IONBF, 0);
                 // stdout
-                stdHandle = reinterpret_cast<intptr_t>(GetStdHandle(STD_OUTPUT_HANDLE));
-                fileHandle = _open_osfhandle(stdHandle, _O_TEXT);
+                fileHandle = _open_osfhandle(reinterpret_cast<intptr_t>(hOut), _O_TEXT);
                 fp = _fdopen(fileHandle, "w");
                 *stdout = *fp;
                 setvbuf(stdout, NULL, _IONBF, 0);
                 // stderr
-                stdHandle = reinterpret_cast<intptr_t>(GetStdHandle(STD_ERROR_HANDLE));
-                fileHandle = _open_osfhandle(stdHandle, _O_TEXT);
+                fileHandle = _open_osfhandle(reinterpret_cast<intptr_t>(hErr), _O_TEXT);
                 fp = _fdopen(fileHandle, "w");
                 *stderr = *fp;
                 setvbuf(stderr, NULL, _IONBF, 0);
+
+                std::ios::sync_with_stdio(true);
             }
 
             ~lcl_Console()
             {
                 if (bFreeConsole)
                 {
-                    fprintf(stdout, "Press Enter to close this console...");
+                    fprintf(stdout, "Press Enter to continue...");
                     fgetc(stdin);
                     FreeConsole();
                 }
