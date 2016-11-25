@@ -31,7 +31,7 @@ $(eval $(call gb_Library_use_externals,slideshow,\
 ))
 ifeq ($(ENABLE_HEADLESS),)
 $(eval $(call gb_Library_use_externals,slideshow,\
-     glew \
+     epoxy \
  ))
 endif
 
