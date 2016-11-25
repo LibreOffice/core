@@ -171,11 +171,8 @@ void ORelationTableView::AddConnection(const OJoinExchangeData& jxdSource, const
     OTableWindow* pSourceWin = jxdSource.pListBox->GetTabWin();
     OTableWindow* pDestWin = jxdDest.pListBox->GetTabWin();
 
-    auto aIter = getTableConnections().begin();
-    auto aEnd = getTableConnections().end();
-    for(;aIter != aEnd;++aIter)
+    for(VclPtr<OTableConnection> const & pFirst : getTableConnections())
     {
-        OTableConnection* pFirst = *aIter;
         if((pFirst->GetSourceWin() == pSourceWin && pFirst->GetDestWin() == pDestWin) ||
            (pFirst->GetSourceWin() == pDestWin  && pFirst->GetDestWin() == pSourceWin))
         {

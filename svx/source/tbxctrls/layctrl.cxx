@@ -731,7 +731,7 @@ SvxColumnsToolBoxControl::~SvxColumnsToolBoxControl()
 
 VclPtr<SfxPopupWindow> SvxColumnsToolBoxControl::CreatePopupWindow()
 {
-    ColumnsWindow* pWin = nullptr;
+    VclPtr<ColumnsWindow> pWin;
     if(bEnabled)
     {
             pWin = VclPtr<ColumnsWindow>::Create( GetSlotId(), m_aCommandURL, GetToolBox().GetItemText( GetId() ), m_xFrame );

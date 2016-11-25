@@ -98,7 +98,7 @@ void SAL_CALL SfxUnoPanel::expand( const sal_Bool bCollapseOther )
         for ( SharedPanelContainer::iterator iPanel(aPanels.begin()), iEnd(aPanels.end());
               iPanel!=iEnd; ++iPanel)
         {
-            Panel* aPanel = *iPanel;
+            VclPtr<Panel> const & aPanel = *iPanel;
 
             if (! aPanel->HasIdPredicate(mPanelId))
                 aPanel->SetExpanded(false);

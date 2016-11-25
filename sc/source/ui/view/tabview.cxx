@@ -1715,7 +1715,7 @@ Point ScTabView::GetChartInsertPos( const Size& rSize, const ScRange& rCellRange
     if ( aViewData.GetVSplitMode() == SC_SPLIT_FIX )
         eUsedPart = (WhichH(eUsedPart)==SC_SPLIT_LEFT) ? SC_SPLIT_BOTTOMLEFT : SC_SPLIT_BOTTOMRIGHT;
 
-    ScGridWindow* pWin = pGridWin[eUsedPart];
+    ScGridWindow* pWin = pGridWin[eUsedPart].get();
     OSL_ENSURE( pWin, "Window not found" );
     if (pWin)
     {
@@ -1832,7 +1832,7 @@ Point ScTabView::GetChartDialogPos( const Size& rDialogSize, const Rectangle& rL
     if ( aViewData.GetVSplitMode() == SC_SPLIT_FIX )
         eUsedPart = (WhichH(eUsedPart)==SC_SPLIT_LEFT) ? SC_SPLIT_BOTTOMLEFT : SC_SPLIT_BOTTOMRIGHT;
 
-    ScGridWindow* pWin = pGridWin[eUsedPart];
+    ScGridWindow* pWin = pGridWin[eUsedPart].get();
     OSL_ENSURE( pWin, "Window not found" );
     if (pWin)
     {
@@ -2181,7 +2181,7 @@ void ScTabView::SetNewVisArea()
 
 bool ScTabView::HasPageFieldDataAtCursor() const
 {
-    ScGridWindow* pWin = pGridWin[aViewData.GetActivePart()];
+    ScGridWindow* pWin = pGridWin[aViewData.GetActivePart()].get();
     SCCOL nCol = aViewData.GetCurX();
     SCROW nRow = aViewData.GetCurY();
     if (pWin)
@@ -2192,7 +2192,7 @@ bool ScTabView::HasPageFieldDataAtCursor() const
 
 void ScTabView::StartDataSelect()
 {
-    ScGridWindow* pWin = pGridWin[aViewData.GetActivePart()];
+    ScGridWindow* pWin = pGridWin[aViewData.GetActivePart()].get();
     SCCOL nCol = aViewData.GetCurX();
     SCROW nRow = aViewData.GetCurY();
 

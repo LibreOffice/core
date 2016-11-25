@@ -404,7 +404,7 @@ void SwSelectAddressBlockDialog::SetSettings(
     RadioButton *pActive = m_pNeverRB;
     if(bIsCountry)
     {
-        pActive = !rCountry.isEmpty() ? m_pDependentRB : m_pAlwaysRB;
+        pActive = !rCountry.isEmpty() ? m_pDependentRB.get() : m_pAlwaysRB.get();
         m_pCountryED->SetText(rCountry);
     }
     pActive->Check();

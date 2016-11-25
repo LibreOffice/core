@@ -414,7 +414,7 @@ throw (UnknownPropertyException, PropertyVetoException,
 
     SdOptionsPrintItem aOptionsPrintItem;
 
-    SfxPrinter* pPrinter = pDocSh->GetPrinter( false );
+    VclPtr<SfxPrinter> pPrinter = pDocSh->GetPrinter( false );
     if( pPrinter )
     {
         SdOptionsPrintItem const * pPrinterOptions = nullptr;

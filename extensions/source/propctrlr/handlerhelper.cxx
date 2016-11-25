@@ -287,7 +287,7 @@ namespace pcr
         try
         {
             Reference< XWindow > xInspectorWindow( _rContext->getValueByName( "DialogParentWindow" ), UNO_QUERY_THROW );
-            pInspectorWindow = VCLUnoHelper::GetWindow( xInspectorWindow );
+            pInspectorWindow = VCLUnoHelper::GetWindow( xInspectorWindow ).get();
         }
         catch( const Exception& )
         {

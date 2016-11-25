@@ -2480,10 +2480,10 @@ sal_Bool SAL_CALL VCLXWindow::isInPopupMode(  ) throw (css::uno::RuntimeExceptio
 void SAL_CALL VCLXWindow::setOutputSize( const css::awt::Size& aSize ) throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    vcl::Window *pWindow;
+    VclPtr<vcl::Window> pWindow;
     if( (pWindow = GetWindow()) != nullptr )
     {
-        DockingWindow *pDockingWindow = dynamic_cast< DockingWindow* >(pWindow);
+        DockingWindow *pDockingWindow = dynamic_cast< DockingWindow* >(pWindow.get());
         if( pDockingWindow )
             pDockingWindow->SetOutputSizePixel( VCLSize( aSize ) );
         else
@@ -2494,10 +2494,10 @@ void SAL_CALL VCLXWindow::setOutputSize( const css::awt::Size& aSize ) throw (cs
 css::awt::Size SAL_CALL VCLXWindow::getOutputSize(  ) throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    vcl::Window *pWindow;
+    VclPtr<vcl::Window> pWindow;
     if( (pWindow = GetWindow()) != nullptr )
     {
-        DockingWindow *pDockingWindow = dynamic_cast< DockingWindow* >(pWindow);
+        DockingWindow *pDockingWindow = dynamic_cast< DockingWindow* >(pWindow.get());
         if( pDockingWindow )
             return AWTSize( pDockingWindow->GetOutputSizePixel() );
         else

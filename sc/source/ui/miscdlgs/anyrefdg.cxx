@@ -399,9 +399,8 @@ void ScFormulaReferenceHelper::RefInputDone( bool bForced )
             pRefBtn->SetStartImage();
 
         // All others: Show();
-        for (auto aI = m_aHiddenWidgets.begin(); aI != m_aHiddenWidgets.end(); ++aI)
+        for (VclPtr<vcl::Window> const & pWindow : m_aHiddenWidgets)
         {
-            vcl::Window *pWindow = *aI;
             pWindow->Show();
         }
         m_aHiddenWidgets.clear();

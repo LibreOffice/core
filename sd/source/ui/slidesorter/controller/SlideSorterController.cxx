@@ -120,7 +120,7 @@ SlideSorterController::SlideSorterController (SlideSorter& rSlideSorter)
       mnPaintEntranceCount(0),
       mbIsContextMenuOpen(false)
 {
-    sd::Window *pWindow (mrSlideSorter.GetContentWindow());
+    sd::Window *pWindow (mrSlideSorter.GetContentWindow().get());
     OSL_ASSERT(pWindow);
     if (pWindow)
     {
@@ -483,7 +483,7 @@ void SlideSorterController::PostModelChange()
     mbPostModelChangePending = false;
     mrModel.Resync();
 
-    sd::Window *pWindow (mrSlideSorter.GetContentWindow());
+    sd::Window *pWindow (mrSlideSorter.GetContentWindow().get());
     if (pWindow)
     {
         GetCurrentSlideManager()->HandleModelChange();
@@ -527,7 +527,7 @@ IMPL_LINK(SlideSorterController, ApplicationEventHandler, VclSimpleEvent&, rEven
 IMPL_LINK(SlideSorterController, WindowEventHandler, VclWindowEvent&, rEvent, void)
 {
         vcl::Window* pWindow = rEvent.GetWindow();
-        sd::Window *pActiveWindow (mrSlideSorter.GetContentWindow());
+        sd::Window *pActiveWindow (mrSlideSorter.GetContentWindow().get());
         switch (rEvent.GetId())
         {
             case VCLEVENT_WINDOW_ACTIVATE:
@@ -685,7 +685,7 @@ void  SlideSorterController::Rearrange (bool bForce)
     else
         mbIsForcedRearrangePending = false;
 
-    sd::Window *pWindow (mrSlideSorter.GetContentWindow());
+    sd::Window *pWindow (mrSlideSorter.GetContentWindow().get());
     if (pWindow)
     {
         if (bForce)
@@ -832,7 +832,7 @@ void SlideSorterController::PageNameHasChanged (int nPageIndex, const OUString& 
 
     // Get a pointer to the corresponding accessible object and notify
     // that of the name change.
-    sd::Window *pWindow (mrSlideSorter.GetContentWindow());
+    sd::Window *pWindow (mrSlideSorter.GetContentWindow().get());
     if ( ! pWindow)
         return;
 

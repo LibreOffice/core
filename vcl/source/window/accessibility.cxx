@@ -605,11 +605,10 @@ vcl::Window* Window::GetAccessibleRelationLabeledBy() const
     if (!aMnemonicLabels.empty())
     {
         //if we have multiple labels, then prefer the first that is visible
-        for (auto aI = aMnemonicLabels.begin(), aEnd = aMnemonicLabels.end(); aI != aEnd; ++aI)
+        for (auto const & rCandidate : aMnemonicLabels)
         {
-            vcl::Window *pCandidate = *aI;
-            if (pCandidate->IsVisible())
-                return pCandidate;
+            if (rCandidate->IsVisible())
+                return rCandidate;
         }
         return aMnemonicLabels[0];
     }
