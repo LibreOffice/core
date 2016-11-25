@@ -37,7 +37,7 @@
 #include <cstdio>
 #endif
 
-#define CACHE_MAGIC "LibreOffice PspFontCacheFile format 7"
+#define CACHE_MAGIC "LibreOffice PspFontCacheFile format 8"
 
 using namespace std;
 using namespace psp;
@@ -133,9 +133,7 @@ void FontCache::flush()
             aStream.WriteLine(aLine.makeStringAndClear());
 
             int nEntrySize = entry_it->second.m_aEntry.size();
-            // write: type;nfonts
-            aLine.append(static_cast<sal_Int32>(rEntry.front()->m_eType));
-            aLine.append(';');
+            // write: nfonts
             aLine.append(static_cast<sal_Int32>(nEntrySize));
             aStream.WriteLine(aLine.makeStringAndClear());
 
@@ -148,7 +146,7 @@ void FontCache::flush()
                  *  fontnr;PSName;italic;weight;width;pitch;encoding;ascend;descend;leading;vsubst;gxw;gxh;gyw;gyh;useroverride;embed;antialias[;{metricfile,typeflags}][;stylename]
                  */
                 if( nEntrySize > 1 )
-                    nSubEntry = static_cast<const PrintFontManager::TrueTypeFontFile*>(*it)->m_nCollectionEntry;
+                    nSubEntry = (*it)->m_nCollectionEntry;
                 else
                     nSubEntry = 0;
 
@@ -200,15 +198,8 @@ void FontCache::flush()
                 aLine.append(static_cast<sal_Int32>(0));
                 aLine.append(';');
                 aLine.append(static_cast<sal_Int32>(0));
-
-                switch( (*it)->m_eType )
-                {
-                    case fonttype::TrueType:
-                        aLine.append(';');
-                        aLine.append(static_cast<sal_Int32>(static_cast<const PrintFontManager::TrueTypeFontFile*>(*it)->m_nTypeFlags));
-                        break;
-                    default: break;
-                }
+                aLine.append(';');
+                aLine.append(static_cast<sal_Int32>((*it)->m_nTypeFlags));
                 if( !(*it)->m_aStyleName.isEmpty() )
                 {
                     aLine.append(';');
@@ -308,15 +299,6 @@ void FontCache::read()
 
             const char* pLine = aLine.getStr();
 
-            fonttype::type eType = (fonttype::type)atoi( pLine );
-            if( eType != fonttype::TrueType )
-                continue;
-            while( *pLine && *pLine != ';' )
-                pLine++;
-            if( *pLine != ';' )
-                continue;
-
-            pLine++;
             sal_Int32 nFonts = atoi( pLine );
             for( int n = 0; n < nFonts; n++ )
             {
@@ -324,14 +306,7 @@ void FontCache::read()
                 pLine = aLine.getStr();
                 int nLen = aLine.getLength();
 
-                PrintFontManager::PrintFont* pFont = nullptr;
-                switch( eType )
-                {
-                    case fonttype::TrueType:
-                        pFont = new PrintFontManager::TrueTypeFontFile();
-                        break;
-                    default: break;
-                }
+                PrintFontManager::PrintFont* pFont = new PrintFontManager::PrintFont();
 
                 sal_Int32 nIndex;
 
@@ -397,18 +372,11 @@ void FontCache::read()
                 pFont->m_bUserOverride
                                     = (atoi( pLine + nTokenPos[15] ) != 0);
                 int nStyleTokenNr = 18;
-                switch( eType )
-                {
-                    case fonttype::TrueType:
-                        static_cast<PrintFontManager::TrueTypeFontFile*>(pFont)->m_nTypeFlags = atoi( pLine + nTokenPos[18] );
-                        static_cast<PrintFontManager::TrueTypeFontFile*>(pFont)->m_nCollectionEntry = nCollEntry;
-                        static_cast<PrintFontManager::TrueTypeFontFile*>(pFont)->m_nDirectory = nDir;
-                        static_cast<PrintFontManager::TrueTypeFontFile*>(pFont)->m_aFontFile = aFile;
-                        nStyleTokenNr++;
-                        break;
-                    break;
-                    default: break;
-                }
+                pFont->m_nTypeFlags = atoi( pLine + nTokenPos[18] );
+                pFont->m_nCollectionEntry = nCollEntry;
+                pFont->m_nDirectory = nDir;
+                pFont->m_aFontFile = aFile;
+                nStyleTokenNr++;
                 if( nTokens > nStyleTokenNr )
                     pFont->m_aStyleName = OUString::intern( pLine + nTokenPos[nStyleTokenNr],
                                                             nLen - nTokenPos[nStyleTokenNr],
@@ -459,18 +427,10 @@ void FontCache::read()
  */
 void FontCache::copyPrintFont( const PrintFontManager::PrintFont* pFrom, PrintFontManager::PrintFont* pTo )
 {
-    if( pFrom->m_eType != pTo->m_eType )
-        return;
-    switch( pFrom->m_eType )
-    {
-        case fonttype::TrueType:
-            static_cast<PrintFontManager::TrueTypeFontFile*>(pTo)->m_nDirectory = static_cast<const PrintFontManager::TrueTypeFontFile*>(pFrom)->m_nDirectory;
-            static_cast<PrintFontManager::TrueTypeFontFile*>(pTo)->m_aFontFile = static_cast<const PrintFontManager::TrueTypeFontFile*>(pFrom)->m_aFontFile;
-            static_cast<PrintFontManager::TrueTypeFontFile*>(pTo)->m_nCollectionEntry = static_cast<const PrintFontManager::TrueTypeFontFile*>(pFrom)->m_nCollectionEntry;
-            static_cast<PrintFontManager::TrueTypeFontFile*>(pTo)->m_nTypeFlags = static_cast<const PrintFontManager::TrueTypeFontFile*>(pFrom)->m_nTypeFlags;
-            break;
-        default: break;
-    }
+    pTo->m_nDirectory       = pFrom->m_nDirectory;
+    pTo->m_aFontFile        = pFrom->m_aFontFile;
+    pTo->m_nCollectionEntry = pFrom->m_nCollectionEntry;
+    pTo->m_nTypeFlags       = pFrom->m_nTypeFlags;
     pTo->m_nFamilyName      = pFrom->m_nFamilyName;
     pTo->m_aStyleName       = pFrom->m_aStyleName;
     pTo->m_aAliases         = pFrom->m_aAliases;
@@ -498,24 +458,11 @@ void FontCache::copyPrintFont( const PrintFontManager::PrintFont* pFrom, PrintFo
  */
 bool FontCache::equalsPrintFont( const PrintFontManager::PrintFont* pLeft, PrintFontManager::PrintFont* pRight )
 {
-    if( pLeft->m_eType != pRight->m_eType )
-        return false;
-    switch( pLeft->m_eType )
-    {
-        case fonttype::TrueType:
-        {
-            const PrintFontManager::TrueTypeFontFile* pLT = static_cast<const PrintFontManager::TrueTypeFontFile*>(pLeft);
-            const PrintFontManager::TrueTypeFontFile* pRT = static_cast<const PrintFontManager::TrueTypeFontFile*>(pRight);
-            if( pRT->m_nDirectory       != pLT->m_nDirectory        ||
-                pRT->m_aFontFile        != pLT->m_aFontFile         ||
-                pRT->m_nCollectionEntry != pLT->m_nCollectionEntry  ||
-                pRT->m_nTypeFlags       != pLT->m_nTypeFlags )
-                return false;
-        }
-        break;
-        default: break;
-    }
-    if( pRight->m_nFamilyName       != pLeft->m_nFamilyName     ||
+    if (pRight->m_nDirectory        != pLeft->m_nDirectory      ||
+        pRight->m_aFontFile         != pLeft->m_aFontFile       ||
+        pRight->m_nCollectionEntry  != pLeft->m_nCollectionEntry ||
+        pRight->m_nTypeFlags        != pLeft->m_nTypeFlags      ||
+        pRight->m_nFamilyName       != pLeft->m_nFamilyName     ||
         pRight->m_aStyleName        != pLeft->m_aStyleName      ||
         pRight->m_nPSName           != pLeft->m_nPSName         ||
         pRight->m_eItalic           != pLeft->m_eItalic         ||
@@ -549,18 +496,8 @@ bool FontCache::equalsPrintFont( const PrintFontManager::PrintFont* pLeft, Print
  */
 PrintFontManager::PrintFont* FontCache::clonePrintFont( const PrintFontManager::PrintFont* pOldFont )
 {
-    PrintFontManager::PrintFont* pFont = nullptr;
-    switch( pOldFont->m_eType )
-    {
-        case fonttype::TrueType:
-            pFont = new PrintFontManager::TrueTypeFontFile();
-            break;
-        default: break;
-    }
-    if( pFont )
-    {
-        copyPrintFont( pOldFont, pFont );
-    }
+    PrintFontManager::PrintFont* pFont = new PrintFontManager::PrintFont();
+    copyPrintFont( pOldFont, pFont );
     return pFont;
  }
 
@@ -595,15 +532,8 @@ void FontCache::updateFontCacheEntry( const PrintFontManager::PrintFont* pFont, 
 {
     OString aFile;
     int nDirID = 0;
-    switch( pFont->m_eType )
-    {
-        case fonttype::TrueType:
-            nDirID = static_cast<const PrintFontManager::TrueTypeFontFile*>(pFont)->m_nDirectory;
-            aFile = static_cast<const PrintFontManager::TrueTypeFontFile*>(pFont)->m_aFontFile;
-            break;
-        default:
-            return;
-    }
+    nDirID = pFont->m_nDirectory;
+    aFile  = pFont->m_aFontFile;
     FontCacheData::const_iterator dir = m_aCache.find( nDirID );
     FontDirMap::const_iterator entry;
     std::list< PrintFontManager::PrintFont* >::const_iterator font;
@@ -616,10 +546,7 @@ void FontCache::updateFontCacheEntry( const PrintFontManager::PrintFont* pFont, 
         {
             for( font = entry->second.m_aEntry.begin(); font != entry->second.m_aEntry.end(); ++font )
             {
-                if( (*font)->m_eType == pFont->m_eType &&
-                    ( (*font)->m_eType != fonttype::TrueType ||
-                      static_cast<const PrintFontManager::TrueTypeFontFile*>(*font)->m_nCollectionEntry == static_cast<const PrintFontManager::TrueTypeFontFile*>(pFont)->m_nCollectionEntry
-                      ) )
+                if ((*font)->m_nCollectionEntry == pFont->m_nCollectionEntry)
                     break;
             }
             if( font != entry->second.m_aEntry.end() )
