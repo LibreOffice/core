@@ -31,8 +31,6 @@
 #include <config_lgpl.h>
 #include <glm/gtc/type_ptr.hpp>
 
-#include <GL/glew.h>
-
 #include <memory>
 #include <vector>
 

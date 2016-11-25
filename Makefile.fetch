@@ -129,7 +129,7 @@ $(WORKDIR)/download: $(BUILDDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)
 		$(call fetch_Optional,FONTCONFIG,FONTCONFIG_TARBALL) \
 		$(call fetch_Optional,FREEHAND,FREEHAND_TARBALL) \
 		$(call fetch_Optional,FREETYPE,FREETYPE_TARBALL) \
-		$(call fetch_Optional,GLEW,GLEW_TARBALL) \
+		$(call fetch_Optional,EPOXY,EPOXY_TARBALL) \
 		$(call fetch_Optional,GLM,GLM_TARBALL) \
 		$(call fetch_Optional_pack,GOOGLE_DOCS_EXTENSION_PACK) \
 		$(call fetch_Optional,GRAPHITE,GRAPHITE_TARBALL) \

@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <GL/glew.h>
+#include <epoxy/gl.h>
 
 #include "GL3DRenderer.hxx"
 
@@ -245,7 +245,7 @@ void OpenGL3DRenderer::ShaderResources::LoadShaders()
         m_3DBatchColorID = glGetAttribLocation(m_3DBatchProID, "barColor");
 #if !defined MACOSX
         //check whether the texture array is support
-        mbTexBatchSupport = GLEW_EXT_texture_array;
+        mbTexBatchSupport = GL_EXT_texture_array;
 #endif
         CHECK_GL_ERROR();
         if (mbTexBatchSupport)
@@ -401,7 +401,7 @@ void OpenGL3DRenderer::init()
     m_fViewAngle = 30.0f;
     m_3DProjection = glm::perspective(m_fViewAngle, (float)m_iWidth / (float)m_iHeight, 0.01f, 6000.0f);
 
-    maResources.m_b330Support = GLEW_VERSION_3_3;
+    maResources.m_b330Support = GL_VERSION_3_3;
     CHECK_GL_ERROR();
     maResources.LoadShaders();
     maPickingResources.LoadShaders();

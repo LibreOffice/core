@@ -11,7 +11,6 @@
 #ifndef INCLUDED_VCL_INC_OPENGL_LINERENDERUTILS_H
 #define INCLUDED_VCL_INC_OPENGL_LINERENDERUTILS_H
 
-#include <GL/glew.h>
 #include "opengl/VertexUtils.hxx"
 #include "opengl/RenderList.hxx"
 
