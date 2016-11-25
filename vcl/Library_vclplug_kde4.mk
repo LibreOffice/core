@@ -54,7 +54,7 @@ $(eval $(call gb_Library_use_externals,vclplug_kde4,\
 	boost_headers \
 	icuuc \
 	kde4 \
-	glew \
+	epoxy \
 ))
 
 $(eval $(call gb_Library_add_libs,vclplug_kde4,\

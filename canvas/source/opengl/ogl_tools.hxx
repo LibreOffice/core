@@ -11,8 +11,7 @@
 #define INCLUDED_CANVAS_SOURCE_OPENGL_OGL_TOOLS_HXX
 
 #include <sal/config.h>
-#include <GL/glew.h>
-
+#include <epoxy/gl.h>
 
 namespace oglcanvas
 {

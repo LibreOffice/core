@@ -27,7 +27,7 @@ $(eval $(call gb_Library_use_externals,tk,\
 
 ifeq ($(ENABLE_HEADLESS),)
 $(eval $(call gb_Library_use_externals,tk,\
-    glew \
+    epoxy \
 ))
 endif
 $(eval $(call gb_Library_set_include,tk,\
