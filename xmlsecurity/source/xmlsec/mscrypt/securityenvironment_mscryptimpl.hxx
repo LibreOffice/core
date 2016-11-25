@@ -173,8 +173,6 @@ class SecurityEnvironment_MSCryptImpl : public ::cppu::WeakImplHelper<
 
         virtual HCRYPTKEY getPubKey( unsigned int position ) throw( css::uno::Exception , css::uno::RuntimeException ) ;
 
-        virtual HCRYPTKEY getPriKey( unsigned int position ) throw( css::uno::Exception , css::uno::RuntimeException ) ;
-
         virtual void enableDefaultCrypt( bool enable ) throw( css::uno::Exception , css::uno::RuntimeException ) ;
         virtual bool defaultEnabled() throw( css::uno::Exception , css::uno::RuntimeException ) ;
 

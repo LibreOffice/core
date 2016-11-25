@@ -345,10 +345,6 @@ HCRYPTKEY SecurityEnvironment_MSCryptImpl::getPubKey( unsigned int position ) th
     return pubkey ;
 }
 
-HCRYPTKEY SecurityEnvironment_MSCryptImpl::getPriKey( unsigned int ) throw( Exception , RuntimeException ) {
-    return NULL ;
-}
-
 #ifdef SAL_LOG_INFO
 
 // Based on sample code from MSDN
@@ -1129,7 +1125,6 @@ xmlSecKeysMngrPtr SecurityEnvironment_MSCryptImpl::createKeysManager() throw( Ex
     unsigned int i ;
     HCRYPTKEY symKey ;
     HCRYPTKEY pubKey ;
-    HCRYPTKEY priKey ;
     xmlSecKeysMngrPtr pKeysMngr = nullptr ;
 
     /*-
@@ -1153,15 +1148,6 @@ xmlSecKeysMngrPtr SecurityEnvironment_MSCryptImpl::createKeysManager() throw( Ex
      */
     for( i = 0 ; ( pubKey = getPubKey( i ) ) != NULL ; i ++ ) {
         if( xmlSecMSCryptoAppliedKeysMngrPubKeyLoad( pKeysMngr, pubKey ) < 0 ) {
-            throw RuntimeException() ;
-        }
-    }
-
-    /*-
-     * Adopt asymmetric private key into keys manager
-     */
-    for( i = 0 ; ( priKey = getPriKey( i ) ) != NULL ; i ++ ) {
-        if( xmlSecMSCryptoAppliedKeysMngrPriKeyLoad( pKeysMngr, priKey ) < 0 ) {
             throw RuntimeException() ;
         }
     }
