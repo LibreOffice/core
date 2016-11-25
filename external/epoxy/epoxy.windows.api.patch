@@ -1,0 +1,38 @@
+--- include/epoxy/gl.h
++++ include/epoxy/gl.h
+@@ -59,7 +59,8 @@
+ 
+ #else
+ #ifndef APIENTRY
+-#define APIENTRY __stdcall
++#define WINAPI __stdcall
++#define APIENTRY WINAPI
+ #endif
+ 
+ #ifndef GLAPIENTRY
+--- src/gen_dispatch.py
++++ src/gen_dispatch.py
+@@ -768,7 +768,11 @@
+         # per-GL-call code, since it's the most interesting to see
+         # when you search for the implementation of a call)
+         self.outln('#if USING_DISPATCH_TABLE')
++        self.outln('#if defined (_MSC_VER)')
++        self.outln('static __inline struct dispatch_table *')
++        self.outln('#else')
+         self.outln('static inline struct dispatch_table *')
++        self.outln('#endif')
+         self.outln('get_dispatch_table(void);')
+         self.outln('')
+         self.outln('#endif')
+@@ -797,7 +801,11 @@
+         self.outln('uint32_t {0}_tls_size = sizeof(struct dispatch_table);'.format(self.target))
+         self.outln('')
+ 
++        self.outln('#if defined (_MSC_VER)')
++        self.outln('static __inline struct dispatch_table *')
++        self.outln('#else')
+         self.outln('static inline struct dispatch_table *')
++        self.outln('#endif')
+         self.outln('get_dispatch_table(void)')
+         self.outln('{')
+         self.outln('	return TlsGetValue({0}_tls_index);'.format(self.target))

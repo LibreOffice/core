@@ -47,7 +47,6 @@
 #include <X11/extensions/Xinerama.h>
 #endif
 
-#include "GL/glxew.h"
 #include <opengl/zone.hxx>
 
 #include <vcl/svapp.hxx>
