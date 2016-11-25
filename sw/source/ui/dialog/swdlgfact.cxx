@@ -647,7 +647,7 @@ VclPtr<SfxAbstractDialog> SwAbstractDialogFactory_Impl::CreateSfxDialog( vcl::Wi
                                                                   sal_uInt32 nResId
                                                                 )
 {
-    SfxModalDialog* pDlg=nullptr;
+    VclPtr<SfxModalDialog> pDlg;
     switch ( nResId )
     {
         case RC_DLG_ADDR :
@@ -667,7 +667,7 @@ VclPtr<SfxAbstractDialog> SwAbstractDialogFactory_Impl::CreateSfxDialog( vcl::Wi
     }
 
     if ( pDlg )
-        VclPtr<SwAbstractSfxDialog_Impl>::Create( pDlg );
+        return VclPtr<SwAbstractSfxDialog_Impl>::Create( pDlg );
     return nullptr;
 }
 
