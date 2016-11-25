@@ -76,10 +76,16 @@ void DbgTestSolarMutex()
 
 #endif
 
-void DbgUnhandledException(const css::uno::Any & caught, const char* currentFunction, const char* fileAndLineNo)
+void DbgUnhandledException(const css::uno::Any & caught, const char* currentFunction, const char* fileAndLineNo,
+        const char* explanatory)
 {
         OString sMessage( "DBG_UNHANDLED_EXCEPTION in " );
         sMessage += currentFunction;
+        if (explanatory)
+        {
+            sMessage += "\n    when: ";
+            sMessage += explanatory;
+        }
         sMessage += "\n    type: ";
         sMessage += OUStringToOString( caught.getValueTypeName(), osl_getThreadTextEncoding() );
         css::uno::Exception exception;
