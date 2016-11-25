@@ -232,10 +232,7 @@ PrinterGfx::writeResources( osl::File* pFile, std::list< OString >& rSuppliedFon
     std::list< GlyphSet >::iterator aIter;
     for (aIter = maPS3Font.begin(); aIter != maPS3Font.end(); ++aIter)
     {
-        if (aIter->GetFontType() == fonttype::TrueType)
-        {
-            aIter->PSUploadFont (*pFile, *this, mbUploadPS42Fonts, rSuppliedFonts );
-        }
+        aIter->PSUploadFont (*pFile, *this, mbUploadPS42Fonts, rSuppliedFonts );
     }
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
