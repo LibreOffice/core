@@ -235,7 +235,7 @@ void SAL_CALL SdLayer::setPropertyValue( const OUString& aPropertyName, const un
     }
 
     default:
-        throw beans::UnknownPropertyException();
+        throw beans::UnknownPropertyException( aPropertyName, static_cast<cppu::OWeakObject*>(this));
     }
 
     if( pLayerManager->GetDocShell() )
@@ -278,7 +278,7 @@ uno::Any SAL_CALL SdLayer::getPropertyValue( const OUString& PropertyName )
         aValue <<= OUString( pLayer->GetDescription() );
         break;
     default:
-        throw beans::UnknownPropertyException();
+        throw beans::UnknownPropertyException( PropertyName, static_cast<cppu::OWeakObject*>(this));
     }
 
     return aValue;

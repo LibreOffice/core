@@ -1011,7 +1011,7 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
         }
 
         default:
-            throw beans::UnknownPropertyException();
+            throw beans::UnknownPropertyException( aPropertyName, static_cast<cppu::OWeakObject*>(this));
     }
 
     GetModel()->SetModified();
@@ -1327,7 +1327,7 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
         break;
 
     default:
-        throw beans::UnknownPropertyException();
+        throw beans::UnknownPropertyException( PropertyName, static_cast<cppu::OWeakObject*>(this));
     }
     return aAny;
 }

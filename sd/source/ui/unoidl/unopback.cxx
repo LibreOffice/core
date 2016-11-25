@@ -217,7 +217,7 @@ void SAL_CALL SdUnoPageBackground::setPropertyValue( const OUString& aPropertyNa
 
     if( pEntry == nullptr )
     {
-        throw beans::UnknownPropertyException();
+        throw beans::UnknownPropertyException( aPropertyName, static_cast<cppu::OWeakObject*>(this));
     }
     else
     {
@@ -275,7 +275,7 @@ uno::Any SAL_CALL SdUnoPageBackground::getPropertyValue( const OUString& Propert
 
     if( pEntry == nullptr )
     {
-        throw beans::UnknownPropertyException();
+        throw beans::UnknownPropertyException( PropertyName, static_cast<cppu::OWeakObject*>(this));
     }
     else
     {
@@ -332,7 +332,7 @@ beans::PropertyState SAL_CALL SdUnoPageBackground::getPropertyState( const OUStr
     const SfxItemPropertySimpleEntry* pEntry = getPropertyMapEntry(PropertyName);
 
     if( pEntry == nullptr )
-        throw beans::UnknownPropertyException();
+        throw beans::UnknownPropertyException( PropertyName, static_cast<cppu::OWeakObject*>(this));
 
     if( mpSet )
     {
@@ -396,7 +396,7 @@ void SAL_CALL SdUnoPageBackground::setPropertyToDefault( const OUString& Propert
     const SfxItemPropertySimpleEntry* pEntry = getPropertyMapEntry(PropertyName);
 
     if( pEntry == nullptr )
-        throw beans::UnknownPropertyException();
+        throw beans::UnknownPropertyException( PropertyName, static_cast<cppu::OWeakObject*>(this));
 
     if( mpSet )
     {
@@ -419,7 +419,7 @@ uno::Any SAL_CALL SdUnoPageBackground::getPropertyDefault( const OUString& aProp
 
     const SfxItemPropertySimpleEntry* pEntry = getPropertyMapEntry(aPropertyName);
     if( pEntry == nullptr || mpSet == nullptr )
-        throw beans::UnknownPropertyException();
+        throw beans::UnknownPropertyException( aPropertyName, static_cast<cppu::OWeakObject*>(this));
 
     uno::Any aAny;
     if( mpSet )

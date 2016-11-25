@@ -503,7 +503,7 @@ void SAL_CALL SlideShow::setPropertyValue( const OUString& aPropertyName, const 
     }
 
     default:
-        throw UnknownPropertyException();
+        throw UnknownPropertyException( OUString::number(pEntry ? pEntry->nWID : -1), static_cast<cppu::OWeakObject*>(this));
     }
 
     if( bIllegalArgument )
@@ -575,7 +575,7 @@ Any SAL_CALL SlideShow::getPropertyValue( const OUString& PropertyName ) throw(U
     }
 
     default:
-        throw UnknownPropertyException();
+        throw UnknownPropertyException( OUString::number(pEntry ? pEntry->nWID : -1), static_cast<cppu::OWeakObject*>(this));
     }
 }
 

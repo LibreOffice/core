@@ -944,7 +944,7 @@ throw (UnknownPropertyException, PropertyVetoException,
             break;
 
             default:
-                throw UnknownPropertyException();
+                throw UnknownPropertyException( OUString::number((*ppEntries)->mnHandle), static_cast<cppu::OWeakObject*>(this));
         }
 
         if( !bOk )
@@ -1189,7 +1189,7 @@ throw (UnknownPropertyException, WrappedTargetException, RuntimeException, std::
             break;
 
             default:
-                throw UnknownPropertyException();
+                throw UnknownPropertyException( OUString::number((*ppEntries)->mnHandle), static_cast<cppu::OWeakObject*>(this));
         }
     }
 }

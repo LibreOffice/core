@@ -157,10 +157,9 @@ void SdUnoSlideView::setFastPropertyValue (
         css::lang::WrappedTargetException,
         css::uno::RuntimeException, std::exception)
 {
-    (void)nHandle;
     (void)rValue;
 
-    throw beans::UnknownPropertyException();
+    throw beans::UnknownPropertyException( OUString::number(nHandle), static_cast<cppu::OWeakObject*>(this));
 }
 
 Any SAL_CALL SdUnoSlideView::getFastPropertyValue (
@@ -169,10 +168,8 @@ Any SAL_CALL SdUnoSlideView::getFastPropertyValue (
         css::lang::WrappedTargetException,
         css::uno::RuntimeException, std::exception)
 {
-    (void)nHandle;
-
     if( nHandle != DrawController::PROPERTY_VIEWOFFSET )
-        throw beans::UnknownPropertyException();
+        throw beans::UnknownPropertyException( OUString::number(nHandle), static_cast<cppu::OWeakObject*>(this));
 
     return Any();
 }

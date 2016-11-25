@@ -125,7 +125,7 @@ void SdUnoOutlineView::setFastPropertyValue (
         break;
 
         default:
-            throw beans::UnknownPropertyException();
+            throw beans::UnknownPropertyException( OUString::number(nHandle), static_cast<cppu::OWeakObject*>(this));
     }
 }
 
@@ -150,7 +150,7 @@ Any SAL_CALL SdUnoOutlineView::getFastPropertyValue (
             break;
 
         default:
-            throw beans::UnknownPropertyException();
+            throw beans::UnknownPropertyException( OUString::number(nHandle), static_cast<cppu::OWeakObject*>(this));
     }
 
     return aValue;

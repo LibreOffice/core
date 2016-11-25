@@ -974,7 +974,7 @@ void SAL_CALL SdStyleSheet::setPropertyValue( const OUString& aPropertyName, con
     const SfxItemPropertySimpleEntry* pEntry = getPropertyMapEntry( aPropertyName );
     if( pEntry == nullptr )
     {
-        throw UnknownPropertyException();
+        throw UnknownPropertyException( aPropertyName, static_cast<cppu::OWeakObject*>(this));
     }
     else
     {
@@ -1061,7 +1061,7 @@ Any SAL_CALL SdStyleSheet::getPropertyValue( const OUString& PropertyName ) thro
     const SfxItemPropertySimpleEntry* pEntry = getPropertyMapEntry( PropertyName );
     if( pEntry == nullptr )
     {
-        throw UnknownPropertyException();
+        throw UnknownPropertyException( PropertyName, static_cast<cppu::OWeakObject*>(this));
     }
     else
     {
@@ -1174,7 +1174,7 @@ PropertyState SAL_CALL SdStyleSheet::getPropertyState( const OUString& PropertyN
     const SfxItemPropertySimpleEntry* pEntry = getPropertyMapEntry( PropertyName );
 
     if( pEntry == nullptr )
-        throw UnknownPropertyException();
+        throw UnknownPropertyException( PropertyName, static_cast<cppu::OWeakObject*>(this));
 
     if( pEntry->nWID == WID_STYLE_FAMILY )
     {
@@ -1268,7 +1268,7 @@ void SAL_CALL SdStyleSheet::setPropertyToDefault( const OUString& PropertyName )
 
     const SfxItemPropertySimpleEntry* pEntry = getPropertyMapEntry( PropertyName );
     if( pEntry == nullptr )
-        throw UnknownPropertyException();
+        throw UnknownPropertyException( PropertyName, static_cast<cppu::OWeakObject*>(this));
 
     SfxItemSet &rStyleSet = GetItemSet();
 
@@ -1292,7 +1292,7 @@ Any SAL_CALL SdStyleSheet::getPropertyDefault( const OUString& aPropertyName ) t
 
     const SfxItemPropertySimpleEntry* pEntry = getPropertyMapEntry( aPropertyName );
     if( pEntry == nullptr )
-        throw UnknownPropertyException();
+        throw UnknownPropertyException( aPropertyName, static_cast<cppu::OWeakObject*>(this));
     Any aRet;
     if( pEntry->nWID == WID_STYLE_FAMILY )
     {

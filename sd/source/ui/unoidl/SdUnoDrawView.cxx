@@ -370,7 +370,7 @@ void SdUnoDrawView::setFastPropertyValue (
             }
             break;
         default:
-            throw beans::UnknownPropertyException();
+            throw beans::UnknownPropertyException( OUString::number(nHandle), static_cast<cppu::OWeakObject*>(this));
     }
 }
 
@@ -414,7 +414,7 @@ Any SAL_CALL SdUnoDrawView::getFastPropertyValue (
             break;
 
         default:
-            throw beans::UnknownPropertyException();
+            throw beans::UnknownPropertyException( OUString::number(nHandle), static_cast<cppu::OWeakObject*>(this));
     }
 
     return aValue;

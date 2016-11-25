@@ -1294,7 +1294,7 @@ void SAL_CALL SdXImpressDocument::setPropertyValue( const OUString& aPropertyNam
             setGrabBagItem(aValue);
             break;
         default:
-            throw beans::UnknownPropertyException();
+            throw beans::UnknownPropertyException( aPropertyName, static_cast<cppu::OWeakObject*>(this));
     }
 
     SetModified();
@@ -1418,7 +1418,7 @@ uno::Any SAL_CALL SdXImpressDocument::getPropertyValue( const OUString& Property
             getGrabBagItem(aAny);
             break;
         default:
-            throw beans::UnknownPropertyException();
+            throw beans::UnknownPropertyException( PropertyName, static_cast<cppu::OWeakObject*>(this));
     }
 
     return aAny;

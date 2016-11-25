@@ -773,7 +773,7 @@ void SAL_CALL SdUnoSearchReplaceDescriptor::setPropertyValue( const OUString& aP
         bOk = (aValue >>= mbWords);
         break;
     default:
-        throw beans::UnknownPropertyException();
+        throw beans::UnknownPropertyException( aPropertyName, static_cast<cppu::OWeakObject*>(this));
     }
 
     if( !bOk )
@@ -801,7 +801,7 @@ uno::Any SAL_CALL SdUnoSearchReplaceDescriptor::getPropertyValue( const OUString
         aAny <<= mbWords;
         break;
     default:
-        throw beans::UnknownPropertyException();
+        throw beans::UnknownPropertyException( PropertyName, static_cast<cppu::OWeakObject*>(this));
     }
 
     return aAny;
