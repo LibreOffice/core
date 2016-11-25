@@ -78,7 +78,6 @@ class SecurityEnvironment_MSCryptImpl : public ::cppu::WeakImplHelper<
         //External keys
         std::list< HCRYPTKEY >              m_tSymKeyList ;
         std::list< HCRYPTKEY >              m_tPubKeyList ;
-        std::list< HCRYPTKEY >              m_tPriKeyList ;
 
         //Service manager
         css::uno::Reference< css::lang::XMultiServiceFactory > m_xServiceManager ;

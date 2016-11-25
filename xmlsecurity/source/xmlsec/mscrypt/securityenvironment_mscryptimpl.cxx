@@ -105,7 +105,7 @@ void traceTrustStatus(DWORD err)
     }
 }
 
-SecurityEnvironment_MSCryptImpl::SecurityEnvironment_MSCryptImpl( const Reference< XMultiServiceFactory >& aFactory ) : m_hProv( NULL ) , m_pszContainer( nullptr ) , m_hKeyStore( nullptr ), m_hCertStore( nullptr ), m_hMySystemStore(nullptr), m_hRootSystemStore(nullptr), m_hTrustSystemStore(nullptr), m_hCaSystemStore(nullptr), m_bEnableDefault( false ), m_tSymKeyList() , m_tPubKeyList() , m_tPriKeyList(), m_xServiceManager( aFactory ){
+SecurityEnvironment_MSCryptImpl::SecurityEnvironment_MSCryptImpl( const Reference< XMultiServiceFactory >& aFactory ) : m_hProv( NULL ) , m_pszContainer( nullptr ) , m_hKeyStore( nullptr ), m_hCertStore( nullptr ), m_hMySystemStore(nullptr), m_hRootSystemStore(nullptr), m_hTrustSystemStore(nullptr), m_hCaSystemStore(nullptr), m_bEnableDefault( false ), m_tSymKeyList() , m_tPubKeyList() , m_xServiceManager( aFactory ){
 
 }
 
@@ -165,14 +165,6 @@ SecurityEnvironment_MSCryptImpl::~SecurityEnvironment_MSCryptImpl() {
         for( pubKeyIt = m_tPubKeyList.begin() ; pubKeyIt != m_tPubKeyList.end() ; ++pubKeyIt )
             CryptDestroyKey( *pubKeyIt ) ;
     }
-
-    if( !m_tPriKeyList.empty()  ) {
-        std::list< HCRYPTKEY >::iterator priKeyIt ;
-
-        for( priKeyIt = m_tPriKeyList.begin() ; priKeyIt != m_tPriKeyList.end() ; ++priKeyIt )
-            CryptDestroyKey( *priKeyIt ) ;
-    }
-
 }
 
 /* XServiceInfo */
@@ -353,18 +345,8 @@ HCRYPTKEY SecurityEnvironment_MSCryptImpl::getPubKey( unsigned int position ) th
     return pubkey ;
 }
 
-HCRYPTKEY SecurityEnvironment_MSCryptImpl::getPriKey( unsigned int position ) throw( Exception , RuntimeException ) {
-    HCRYPTKEY prikey ;
-    std::list< HCRYPTKEY >::iterator keyIt ;
-    unsigned int pos ;
-
-    prikey = NULL ;
-    for( pos = 0, keyIt = m_tPriKeyList.begin() ; pos < position && keyIt != m_tPriKeyList.end() ; ++pos , ++keyIt ) ;
-
-    if( pos == position && keyIt != m_tPriKeyList.end() )
-        prikey = *keyIt ;
-
-    return prikey ;
+HCRYPTKEY SecurityEnvironment_MSCryptImpl::getPriKey( unsigned int ) throw( Exception , RuntimeException ) {
+    return NULL ;
 }
 
 #ifdef SAL_LOG_INFO
@@ -450,11 +432,6 @@ Sequence< Reference < XCertificate > > SecurityEnvironment_MSCryptImpl::getPerso
                 certsList.push_back( xcert ) ;
             pCertContext = CertEnumCertificatesInStore( m_hKeyStore, pCertContext );
         }
-    }
-
-    //secondly, we try to find certificate from registered private keys.
-    if( !m_tPriKeyList.empty()  ) {
-        //TODO: Don't know whether or not it is necessary ans possible.
     }
 
     //Thirdly, we try to find certificate from system default key store.
