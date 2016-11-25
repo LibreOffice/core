@@ -1952,8 +1952,8 @@ IMPL_LINK_NOARG(SwFramePage, AnchorTypeHdl, Button*, void)
 IMPL_LINK( SwFramePage, PosHdl, ListBox&, rLB, void )
 {
     bool bHori = &rLB == m_pHorizontalDLB;
-    ListBox *pRelLB = bHori ? m_pHoriRelationLB : m_pVertRelationLB;
-    FixedText *pRelFT = bHori ? m_pHoriRelationFT : m_pVertRelationFT;
+    ListBox *pRelLB = bHori ? m_pHoriRelationLB.get() : m_pVertRelationLB.get();
+    FixedText *pRelFT = bHori ? m_pHoriRelationFT.get() : m_pVertRelationFT.get();
     FrameMap *pMap = bHori ? m_pHMap : m_pVMap;
 
     const sal_Int32 nMapPos = GetMapPos(pMap, rLB);

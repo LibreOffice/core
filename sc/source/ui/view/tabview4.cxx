@@ -442,7 +442,7 @@ void ScTabView::InvertHorizontal( ScVSplitPos eWhich, long nDragPos )
     for (sal_uInt16 i=0; i<4; i++)
         if (WhichV((ScSplitPos)i)==eWhich)
         {
-            ScGridWindow* pWin = pGridWin[i];
+            ScGridWindow* pWin = pGridWin[i].get();
             if (pWin)
             {
                 Rectangle aRect( 0,nDragPos, pWin->GetOutputSizePixel().Width()-1,nDragPos+HDR_SLIDERSIZE-1 );
@@ -457,7 +457,7 @@ void ScTabView::InvertVertical( ScHSplitPos eWhich, long nDragPos )
     for (sal_uInt16 i=0; i<4; i++)
         if (WhichH((ScSplitPos)i)==eWhich)
         {
-            ScGridWindow* pWin = pGridWin[i];
+            ScGridWindow* pWin = pGridWin[i].get();
             if (pWin)
             {
                 Rectangle aRect( nDragPos,0, nDragPos+HDR_SLIDERSIZE-1,pWin->GetOutputSizePixel().Height()-1 );

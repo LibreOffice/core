@@ -1286,8 +1286,8 @@ IMPL_LINK( SvxSwPosSizeTabPage, RelHdl, ListBox&, rLB, void )
 IMPL_LINK( SvxSwPosSizeTabPage, PosHdl, ListBox&, rLB, void )
 {
     bool bHori = &rLB == m_pHoriLB;
-    ListBox *pRelLB = bHori ? m_pHoriToLB : m_pVertToLB;
-    FixedText *pRelFT = bHori ? m_pHoriToFT : m_pVertToFT;
+    ListBox *pRelLB = bHori ? m_pHoriToLB.get() : m_pVertToLB.get();
+    FixedText *pRelFT = bHori ? m_pHoriToFT.get() : m_pVertToFT.get();
     FrmMap *pMap = bHori ? m_pHMap : m_pVMap;
 
 

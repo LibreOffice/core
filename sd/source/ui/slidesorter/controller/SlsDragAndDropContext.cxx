@@ -86,7 +86,7 @@ void DragAndDropContext::UpdatePosition (
     // Convert window coordinates into model coordinates (we need the
     // window coordinates for auto-scrolling because that remains
     // constant while scrolling.)
-    sd::Window *pWindow (mpTargetSlideSorter->GetContentWindow());
+    sd::Window *pWindow = mpTargetSlideSorter->GetContentWindow().get();
     const Point aMouseModelPosition (pWindow->PixelToLogic(rMousePosition));
     std::shared_ptr<InsertionIndicatorHandler> pInsertionIndicatorHandler (
         mpTargetSlideSorter->GetController().GetInsertionIndicatorHandler());

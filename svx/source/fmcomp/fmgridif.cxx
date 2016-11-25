@@ -479,7 +479,7 @@ void SAL_CALL FmXGridControl::createPeer(const Reference< css::awt::XToolkit >& 
         {
             VCLXWindow* pParent = VCLXWindow::GetImplementation(rParentPeer);
             if (pParent)
-                pParentWin = pParent->GetWindow();
+                pParentWin = pParent->GetWindow().get();
         }
 
         FmXGridPeer* pPeer = imp_CreatePeer(pParentWin);

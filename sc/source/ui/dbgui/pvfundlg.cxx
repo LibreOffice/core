@@ -702,7 +702,7 @@ void ScDPSubtotalOptDlg::Init( const ScDPNameVec& rDataFields, bool bEnableLayou
             pRBtn = m_pRbSortMan;
         break;
         default:
-            pRBtn = maLabelData.maSortInfo.IsAscending ? m_pRbSortAsc : m_pRbSortDesc;
+            pRBtn = maLabelData.maSortInfo.IsAscending ? m_pRbSortAsc.get() : m_pRbSortDesc.get();
     }
     pRBtn->Check();
     RadioClickHdl( pRBtn );

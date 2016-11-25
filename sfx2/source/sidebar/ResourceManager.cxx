@@ -346,7 +346,7 @@ void ResourceManager::SaveDeckSettings(const DeckDescriptor* pDeckDesc)
     for ( SharedPanelContainer::iterator iPanel(rPanels.begin()), iEnd(rPanels.end());
               iPanel!=iEnd; ++iPanel)
     {
-        Panel* aPanel = *iPanel;
+        VclPtr<Panel> const & aPanel = *iPanel;
         OUString panelId = aPanel->GetId();
         std::shared_ptr<PanelDescriptor> xPanelDesc = GetPanelDescriptor(panelId);
 

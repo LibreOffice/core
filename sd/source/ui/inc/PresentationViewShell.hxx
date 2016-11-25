@@ -53,8 +53,8 @@ public:
     virtual void Resize() override;
 
 protected:
-    virtual SvxRuler* CreateHRuler(::sd::Window* pWin) override;
-    virtual SvxRuler* CreateVRuler(::sd::Window* pWin) override;
+    virtual VclPtr<SvxRuler> CreateHRuler(::sd::Window* pWin) override;
+    virtual VclPtr<SvxRuler> CreateVRuler(::sd::Window* pWin) override;
 
 private:
     Rectangle       maOldVisArea;

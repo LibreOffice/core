@@ -5591,7 +5591,7 @@ void ToolBox::ImplShowFocus()
         ImplToolItem* pItem = ImplGetItem( mnHighItemId );
         if( pItem->mpWindow && !pItem->mpWindow->IsDisposed() )
         {
-            vcl::Window *pWin = pItem->mpWindow->ImplGetWindowImpl()->mpBorderWindow ? pItem->mpWindow->ImplGetWindowImpl()->mpBorderWindow : pItem->mpWindow;
+            vcl::Window *pWin = pItem->mpWindow->ImplGetWindowImpl()->mpBorderWindow ? pItem->mpWindow->ImplGetWindowImpl()->mpBorderWindow.get() : pItem->mpWindow.get();
             pWin->ImplGetWindowImpl()->mbDrawSelectionBackground = true;
             pWin->Invalidate();
         }
@@ -5605,7 +5605,7 @@ void ToolBox::ImplHideFocus()
         ImplToolItem* pItem = ImplGetItem( mnHighItemId );
         if( pItem && pItem->mpWindow )
         {
-            vcl::Window *pWin = pItem->mpWindow->ImplGetWindowImpl()->mpBorderWindow ? pItem->mpWindow->ImplGetWindowImpl()->mpBorderWindow : pItem->mpWindow;
+            vcl::Window *pWin = pItem->mpWindow->ImplGetWindowImpl()->mpBorderWindow ? pItem->mpWindow->ImplGetWindowImpl()->mpBorderWindow.get() : pItem->mpWindow.get();
             pWin->ImplGetWindowImpl()->mbDrawSelectionBackground = false;
             pWin->Invalidate();
         }

@@ -37,7 +37,7 @@ ToolTip::ToolTip (SlideSorter& rSlideSorter)
       maShowTimer(),
       maHiddenTimer()
 {
-    sd::Window *window = rSlideSorter.GetContentWindow();
+    sd::Window *window = rSlideSorter.GetContentWindow().get();
     const HelpSettings& rHelpSettings = window->GetSettings().GetHelpSettings();
     maShowTimer.SetTimeout(rHelpSettings.GetTipDelay());
     maShowTimer.SetTimeoutHdl(LINK(this, ToolTip, DelayTrigger));
@@ -104,7 +104,7 @@ void ToolTip::DoShow()
         return;
     }
 
-    sd::Window *pWindow (mrSlideSorter.GetContentWindow());
+    sd::Window *pWindow (mrSlideSorter.GetContentWindow().get());
     if (!msCurrentHelpText.isEmpty() && pWindow)
     {
         Rectangle aBox (
@@ -141,7 +141,7 @@ bool ToolTip::Hide()
 {
     if (mnHelpWindowHandle>0)
     {
-        sd::Window *pWindow (mrSlideSorter.GetContentWindow());
+        sd::Window *pWindow (mrSlideSorter.GetContentWindow().get());
         Help::HidePopover(pWindow, mnHelpWindowHandle);
         mnHelpWindowHandle = 0;
         return true;

@@ -93,7 +93,7 @@ void CandidateMgr::PaintTransparentChildren(vcl::Window & rWindow, Rectangle con
 
     for (auto aI = m_aCandidates.begin(); aI != m_aCandidates.end(); ++aI)
     {
-        pCandidate = *aI;
+        pCandidate = aI->get();
         if (m_aDeletedCandidates.find(pCandidate) != m_aDeletedCandidates.end())
             continue;
         //rhbz#1007697 this can cause the window itself to be

@@ -141,7 +141,7 @@ void SAL_CALL ToolBarWrapper::initialize( const Sequence< Any >& aArguments ) th
         if ( xFrame.is() && m_xConfigSource.is() )
         {
             // Create VCL based toolbar which will be filled with settings data
-            ToolBox* pToolBar = nullptr;
+            VclPtr<ToolBox> pToolBar;
             ToolBarManager* pToolBarManager = nullptr;
             {
                 SolarMutexGuard aSolarMutexGuard;

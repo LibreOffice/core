@@ -585,7 +585,7 @@ void TabBar::Sort()
             sal_uInt16 nId = GetPageId( i );
             aTabBarSortHelper.nPageId = nId;
             aTabBarSortHelper.aPageText = GetPageText( nId );
-            BaseWindow* pWin = aWindowTable[ nId ];
+            BaseWindow* pWin = aWindowTable[ nId ].get();
 
             if (dynamic_cast<ModulWindow*>(pWin))
             {

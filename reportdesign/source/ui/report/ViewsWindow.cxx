@@ -219,11 +219,8 @@ void OViewsWindow::resize(const OSectionWindow& _rSectionWindow)
 {
     bool bSet = false;
     Point aStartPoint;
-    TSectionsMap::const_iterator aIter = m_aSections.begin();
-    TSectionsMap::const_iterator aEnd = m_aSections.end();
-    for (;aIter != aEnd ; ++aIter)
+    for (VclPtr<OSectionWindow> const & pSectionWindow : m_aSections)
     {
-        OSectionWindow* pSectionWindow = (*aIter);
         if ( pSectionWindow == &_rSectionWindow )
         {
             aStartPoint = pSectionWindow->GetPosPixel();
@@ -248,11 +245,8 @@ void OViewsWindow::Resize()
     {
         const Point aOffset(m_pParent->getThumbPos());
         Point aStartPoint(0,-aOffset.Y());
-        TSectionsMap::const_iterator aIter = m_aSections.begin();
-        TSectionsMap::const_iterator aEnd = m_aSections.end();
-        for (;aIter != aEnd ; ++aIter)
+        for (VclPtr<OSectionWindow> const & pSectionWindow : m_aSections)
         {
-            OSectionWindow* pSectionWindow = (*aIter);
             impl_resizeSectionWindow(*pSectionWindow,aStartPoint,true);
         }
     }
@@ -420,13 +414,11 @@ OSectionWindow* OViewsWindow::getSectionWindow(const uno::Reference< report::XSe
     OSL_ENSURE(_xSection.is(),"Section is NULL!");
 
     OSectionWindow* pSectionWindow = nullptr;
-    TSectionsMap::const_iterator aIter = m_aSections.begin();
-    TSectionsMap::const_iterator aEnd = m_aSections.end();
-    for (; aIter != aEnd ; ++aIter)
+    for (VclPtr<OSectionWindow> const & p : m_aSections)
     {
-        if ((*aIter)->getReportSection().getSection() == _xSection)
+        if (p->getReportSection().getSection() == _xSection)
         {
-            pSectionWindow = (*aIter);
+            pSectionWindow = p.get();
             break;
         }
     }
@@ -447,23 +439,23 @@ OSectionWindow* OViewsWindow::getMarkedSection(NearSectionAccess nsa) const
         {
             if (nsa == CURRENT)
             {
-                pRet = (*aIter);
+                pRet = aIter->get();
                 break;
             }
             else if ( nsa == PREVIOUS )
             {
                 if (nCurrentPosition > 0)
                 {
-                    pRet = (*(--aIter));
+                    pRet = (--aIter)->get();
                     if (pRet == nullptr)
                     {
-                        pRet = (*m_aSections.begin());
+                        pRet = m_aSections.begin()->get();
                     }
                 }
                 else
                 {
                     // if we are out of bounds return the first one
-                    pRet = (*m_aSections.begin());
+                    pRet = m_aSections.begin()->get();
                 }
                 break;
             }
@@ -472,16 +464,16 @@ OSectionWindow* OViewsWindow::getMarkedSection(NearSectionAccess nsa) const
                 sal_uInt32 nSize = m_aSections.size();
                 if ((nCurrentPosition + 1) < nSize)
                 {
-                    pRet = *(++aIter);
+                    pRet = (++aIter)->get();
                     if (pRet == nullptr)
                     {
-                        pRet = (*(--aEnd));
+                        pRet = (--aEnd)->get();
                     }
                 }
                 else
                 {
                     // if we are out of bounds return the last one
-                    pRet = (*(--aEnd));
+                    pRet = (--aEnd)->get();
                 }
                 break;
             }
@@ -946,7 +938,7 @@ OSectionWindow* OViewsWindow::getSectionWindow(const sal_uInt16 _nPos) const
     OSectionWindow* aReturn = nullptr;
 
     if ( _nPos < m_aSections.size() )
-        aReturn = m_aSections[_nPos];
+        aReturn = m_aSections[_nPos].get();
 
     return aReturn;
 }
