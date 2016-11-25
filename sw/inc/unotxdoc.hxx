@@ -577,6 +577,10 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( css::uno::RuntimeException, std::exception ) override;
 };
 
+enum class SwCreateDrawTable {
+    Dash = 1, Gradient, Hatch, Bitmap, TransGradient, Marker, Defaults
+};
+
 class SwXDocumentPropertyHelper : public SvxUnoForbiddenCharsTable
 {
     css::uno::Reference < css::uno::XInterface > xDashTable;
@@ -591,7 +595,7 @@ class SwXDocumentPropertyHelper : public SvxUnoForbiddenCharsTable
 public:
     SwXDocumentPropertyHelper(SwDoc& rDoc);
     virtual ~SwXDocumentPropertyHelper() override;
-    css::uno::Reference<css::uno::XInterface> GetDrawTable(short nWhich);
+    css::uno::Reference<css::uno::XInterface> GetDrawTable(SwCreateDrawTable nWhich);
     void Invalidate();
 
     virtual void onChange() override;

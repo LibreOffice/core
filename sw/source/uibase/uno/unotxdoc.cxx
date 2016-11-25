@@ -167,14 +167,6 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::document;
 using ::osl::FileBase;
 
-#define SW_CREATE_DASH_TABLE            0x01
-#define SW_CREATE_GRADIENT_TABLE        0x02
-#define SW_CREATE_HATCH_TABLE           0x03
-#define SW_CREATE_BITMAP_TABLE          0x04
-#define SW_CREATE_TRANSGRADIENT_TABLE   0x05
-#define SW_CREATE_MARKER_TABLE          0x06
-#define SW_CREATE_DRAW_DEFAULTS         0x07
-
 static SwPrintUIOptions * lcl_GetPrintUIOptions(
     SwDocShell * pDocShell,
     const SfxViewShell * pView )
@@ -1629,31 +1621,31 @@ css::uno::Reference<css::uno::XInterface> SwXTextDocument::create(
     }
     if (rServiceName == "com.sun.star.drawing.DashTable")
     {
-        return GetPropertyHelper()->GetDrawTable(SW_CREATE_DASH_TABLE);
+        return GetPropertyHelper()->GetDrawTable(SwCreateDrawTable::Dash);
     }
     if (rServiceName == "com.sun.star.drawing.GradientTable")
     {
-        return GetPropertyHelper()->GetDrawTable(SW_CREATE_GRADIENT_TABLE);
+        return GetPropertyHelper()->GetDrawTable(SwCreateDrawTable::Gradient);
     }
     if (rServiceName == "com.sun.star.drawing.HatchTable")
     {
-        return GetPropertyHelper()->GetDrawTable(SW_CREATE_HATCH_TABLE);
+        return GetPropertyHelper()->GetDrawTable(SwCreateDrawTable::Hatch);
     }
     if (rServiceName == "com.sun.star.drawing.BitmapTable")
     {
-        return GetPropertyHelper()->GetDrawTable(SW_CREATE_BITMAP_TABLE);
+        return GetPropertyHelper()->GetDrawTable(SwCreateDrawTable::Bitmap);
     }
     if (rServiceName == "com.sun.star.drawing.TransparencyGradientTable")
     {
-        return GetPropertyHelper()->GetDrawTable(SW_CREATE_TRANSGRADIENT_TABLE);
+        return GetPropertyHelper()->GetDrawTable(SwCreateDrawTable::TransGradient);
     }
     if (rServiceName == "com.sun.star.drawing.MarkerTable")
     {
-        return GetPropertyHelper()->GetDrawTable(SW_CREATE_MARKER_TABLE);
+        return GetPropertyHelper()->GetDrawTable(SwCreateDrawTable::Marker);
     }
     if (rServiceName == "com.sun.star.drawing.Defaults")
     {
-        return GetPropertyHelper()->GetDrawTable(SW_CREATE_DRAW_DEFAULTS);
+        return GetPropertyHelper()->GetDrawTable(SwCreateDrawTable::Defaults);
     }
     if (rServiceName == "com.sun.star.document.Settings")
     {
@@ -4217,7 +4209,7 @@ SwXDocumentPropertyHelper::~SwXDocumentPropertyHelper()
 {
 }
 
-Reference<XInterface> SwXDocumentPropertyHelper::GetDrawTable(short nWhich)
+Reference<XInterface> SwXDocumentPropertyHelper::GetDrawTable(SwCreateDrawTable nWhich)
 {
     Reference<XInterface> xRet;
     if(m_pDoc)
@@ -4226,37 +4218,37 @@ Reference<XInterface> SwXDocumentPropertyHelper::GetDrawTable(short nWhich)
         {
             // #i52858#
             // assure that Draw model is created, if it doesn't exist.
-            case SW_CREATE_DASH_TABLE         :
+            case SwCreateDrawTable::Dash         :
                 if(!xDashTable.is())
                     xDashTable = SvxUnoDashTable_createInstance( m_pDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel() );
                 xRet = xDashTable;
             break;
-            case SW_CREATE_GRADIENT_TABLE     :
+            case SwCreateDrawTable::Gradient     :
                 if(!xGradientTable.is())
                     xGradientTable = SvxUnoGradientTable_createInstance( m_pDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel() );
                 xRet = xGradientTable;
             break;
-            case SW_CREATE_HATCH_TABLE        :
+            case SwCreateDrawTable::Hatch        :
                 if(!xHatchTable.is())
                     xHatchTable = SvxUnoHatchTable_createInstance( m_pDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel() );
                 xRet = xHatchTable;
             break;
-            case SW_CREATE_BITMAP_TABLE       :
+            case SwCreateDrawTable::Bitmap       :
                 if(!xBitmapTable.is())
                     xBitmapTable = SvxUnoBitmapTable_createInstance( m_pDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel() );
                 xRet = xBitmapTable;
             break;
-            case SW_CREATE_TRANSGRADIENT_TABLE:
+            case SwCreateDrawTable::TransGradient:
                 if(!xTransGradientTable.is())
                     xTransGradientTable = SvxUnoTransGradientTable_createInstance( m_pDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel() );
                 xRet = xTransGradientTable;
             break;
-            case SW_CREATE_MARKER_TABLE       :
+            case SwCreateDrawTable::Marker       :
                 if(!xMarkerTable.is())
                     xMarkerTable = SvxUnoMarkerTable_createInstance( m_pDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel() );
                 xRet = xMarkerTable;
             break;
-            case  SW_CREATE_DRAW_DEFAULTS:
+            case  SwCreateDrawTable::Defaults:
                 if(!xDrawDefaults.is())
                     xDrawDefaults = static_cast<cppu::OWeakObject*>(new SwSvxUnoDrawPool(m_pDoc));
                 xRet = xDrawDefaults;
