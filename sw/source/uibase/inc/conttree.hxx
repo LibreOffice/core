@@ -28,6 +28,7 @@
 #include <memory>
 
 #include <o3tl/enumarray.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 class SwWrtShell;
 class SwContentType;
@@ -49,6 +50,22 @@ enum class EditEntryMode
     DELETE        = 4,
     RENAME        = 5,
 };
+
+// Flags for PopupMenu-enable/disable
+enum class MenuEnableFlags {
+    NONE        = 0x0000,
+    InsertIdx   = 0x0001,
+    InsertFile  = 0x0002,
+    InsertText  = 0x0004,
+    Edit        = 0x0008,
+    Delete      = 0x0010,
+    Update      = 0x0020,
+    UpdateSel   = 0x0040,
+    EditLink    = 0x0080
+};
+namespace o3tl {
+    template<> struct typed_flags<MenuEnableFlags> : is_typed_flags<MenuEnableFlags, 0x00ff> {};
+}
 
 /** TreeListBox for content indicator */
 class SwContentTree
@@ -318,7 +335,7 @@ protected:
 
     void            OpenDoc(const SwGlblDocContent*);
     void            GotoContent(const SwGlblDocContent*);
-    sal_uInt16          GetEnableFlags() const;
+    MenuEnableFlags GetEnableFlags() const;
 
     static void     SetShowShell(const SfxObjectShell*pSet) {pShowShell = pSet;}
     DECL_STATIC_LINK(SwGlobalTree, ShowFrameHdl, void*, void);
