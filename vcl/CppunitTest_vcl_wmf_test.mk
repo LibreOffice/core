@@ -87,7 +87,7 @@ $(eval $(call gb_CppunitTest_use_externals,vcl_wmf_test,\
 ))
 ifeq ($(ENABLE_HEADLESS),)
 $(eval $(call gb_CppunitTest_use_externals,vcl_wmf_test,\
-     glew \
+     epoxy \
  ))
 endif
 

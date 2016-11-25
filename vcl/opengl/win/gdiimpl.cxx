@@ -17,7 +17,7 @@
 #include <win/saldata.hxx>
 #include <win/salframe.h>
 #include <win/salinst.h>
-#include <GL/wglew.h>
+#include <epoxy/wgl.h>
 
 static std::vector<HGLRC> g_vShareList;
 
@@ -42,6 +42,12 @@ class WinOpenGLContext : public OpenGLContext
 public:
     bool init( HDC hDC, HWND hWnd );
     virtual bool initWindow() override;
+    WinOpenGLContext()
+    {
+        //call this to trigger filling dispatch tables, to make calling wglGetCurrent
+        //safe before wglMakeCurrentt has been called
+        epoxy_handle_external_wglMakeCurrent();
+    }
 private:
     GLWinWindow m_aGLWin;
     virtual const GLWindow& getOpenGLWindow() const override { return m_aGLWin; }
@@ -572,7 +578,7 @@ bool WinOpenGLContext::ImplInit()
         return false;
     }
 
-    if (!InitGLEW())
+    if (!InitGL())
     {
         if (bFirstCall)
             disableOpenGLAndTerminateForRestart();
@@ -668,7 +674,7 @@ bool WinOpenGLContext::ImplInit()
         }
     }
 
-    InitGLEWDebugging();
+    InitGLDebugging();
 
     g_vShareList.push_back(m_aGLWin.hRC);
 
