@@ -55,13 +55,13 @@
 
 using namespace css;
 
-const sal_uInt32 HTML_FRMOPTS_MARQUEE   =
-    HTML_FRMOPT_ALIGN |
-    HTML_FRMOPT_SPACE;
+const HtmlFrmOpts HTML_FRMOPTS_MARQUEE   =
+    HtmlFrmOpts::Align |
+    HtmlFrmOpts::Space;
 
-const sal_uInt32 HTML_FRMOPTS_MARQUEE_CSS1  =
-    HTML_FRMOPT_S_ALIGN |
-    HTML_FRMOPT_S_SPACE;
+const HtmlFrmOpts HTML_FRMOPTS_MARQUEE_CSS1  =
+    HtmlFrmOpts::SAlign |
+    HtmlFrmOpts::SSpace;
 
 const SdrObject *SwHTMLWriter::GetMarqueeTextObj( const SwDrawFrameFormat& rFormat )
 {
@@ -283,7 +283,7 @@ Writer& OutHTML_DrawFrameFormatAsMarquee( Writer& rWrt,
         rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
 
     // und nun noch ALIGN, HSPACE und VSPACE
-    sal_uInt32 nFrameFlags = HTML_FRMOPTS_MARQUEE;
+    HtmlFrmOpts nFrameFlags = HTML_FRMOPTS_MARQUEE;
     if( rHTMLWrt.IsHTMLMode( HTMLMODE_ABS_POS_DRAW ) )
         nFrameFlags |= HTML_FRMOPTS_MARQUEE_CSS1;
     OString aEndTags = rHTMLWrt.OutFrameFormatOptions( rFormat, aEmptyOUStr, nFrameFlags );

@@ -71,51 +71,51 @@ using namespace com::sun::star;
 #define HTML_DFLT_APPLET_HEIGHT ((MM50*5)/2)
 
 
-const sal_uLong HTML_FRMOPTS_EMBED_ALL      =
-    HTML_FRMOPT_ALT |
-    HTML_FRMOPT_SIZE |
-    HTML_FRMOPT_NAME;
-const sal_uLong HTML_FRMOPTS_EMBED_CNTNR    =
+const HtmlFrmOpts HTML_FRMOPTS_EMBED_ALL      =
+    HtmlFrmOpts::Alt |
+    HtmlFrmOpts::Size |
+    HtmlFrmOpts::Name;
+const HtmlFrmOpts HTML_FRMOPTS_EMBED_CNTNR    =
     HTML_FRMOPTS_EMBED_ALL |
-    HTML_FRMOPT_ABSSIZE;
-const sal_uLong HTML_FRMOPTS_EMBED          =
+    HtmlFrmOpts::AbsSize;
+const HtmlFrmOpts HTML_FRMOPTS_EMBED          =
     HTML_FRMOPTS_EMBED_ALL |
-    HTML_FRMOPT_ALIGN |
-    HTML_FRMOPT_SPACE |
-    HTML_FRMOPT_BRCLEAR |
-    HTML_FRMOPT_NAME;
-const sal_uLong HTML_FRMOPTS_HIDDEN_EMBED   =
-    HTML_FRMOPT_ALT |
-    HTML_FRMOPT_NAME;
+    HtmlFrmOpts::Align |
+    HtmlFrmOpts::Space |
+    HtmlFrmOpts::BrClear |
+    HtmlFrmOpts::Name;
+const HtmlFrmOpts HTML_FRMOPTS_HIDDEN_EMBED   =
+    HtmlFrmOpts::Alt |
+    HtmlFrmOpts::Name;
 
-const sal_uLong HTML_FRMOPTS_APPLET_ALL     =
-    HTML_FRMOPT_ALT |
-    HTML_FRMOPT_SIZE;
-const sal_uLong HTML_FRMOPTS_APPLET_CNTNR   =
+const HtmlFrmOpts HTML_FRMOPTS_APPLET_ALL     =
+    HtmlFrmOpts::Alt |
+    HtmlFrmOpts::Size;
+const HtmlFrmOpts HTML_FRMOPTS_APPLET_CNTNR   =
     HTML_FRMOPTS_APPLET_ALL |
-    HTML_FRMOPT_ABSSIZE;
-const sal_uLong HTML_FRMOPTS_APPLET         =
+    HtmlFrmOpts::AbsSize;
+const HtmlFrmOpts HTML_FRMOPTS_APPLET         =
     HTML_FRMOPTS_APPLET_ALL |
-    HTML_FRMOPT_ALIGN |
-    HTML_FRMOPT_SPACE |
-    HTML_FRMOPT_BRCLEAR;
+    HtmlFrmOpts::Align |
+    HtmlFrmOpts::Space |
+    HtmlFrmOpts::BrClear;
 
-const sal_uLong HTML_FRMOPTS_IFRAME_ALL     =
-    HTML_FRMOPT_ALT |
-    HTML_FRMOPT_SIZE;
-const sal_uLong HTML_FRMOPTS_IFRAME_CNTNR   =
+const HtmlFrmOpts HTML_FRMOPTS_IFRAME_ALL     =
+    HtmlFrmOpts::Alt |
+    HtmlFrmOpts::Size;
+const HtmlFrmOpts HTML_FRMOPTS_IFRAME_CNTNR   =
     HTML_FRMOPTS_IFRAME_ALL |
-    HTML_FRMOPT_ABSSIZE;
-const sal_uLong HTML_FRMOPTS_IFRAME         =
+    HtmlFrmOpts::AbsSize;
+const HtmlFrmOpts HTML_FRMOPTS_IFRAME         =
     HTML_FRMOPTS_IFRAME_ALL |
-    HTML_FRMOPT_ALIGN |
-    HTML_FRMOPT_SPACE |
-    HTML_FRMOPT_BORDER |
-    HTML_FRMOPT_BRCLEAR;
+    HtmlFrmOpts::Align |
+    HtmlFrmOpts::Space |
+    HtmlFrmOpts::Border |
+    HtmlFrmOpts::BrClear;
 
-const sal_uLong HTML_FRMOPTS_OLE_CSS1       =
-    HTML_FRMOPT_S_ALIGN |
-    HTML_FRMOPT_S_SPACE;
+const HtmlFrmOpts HTML_FRMOPTS_OLE_CSS1       =
+    HtmlFrmOpts::SAlign |
+    HtmlFrmOpts::SSpace;
 
 void SwHTMLParser::SetFixSize( const Size& rPixSize,
                                const Size& rTwipDfltSize,
@@ -1000,7 +1000,7 @@ Writer& OutHTML_FrameFormatOLENode( Writer& rWrt, const SwFrameFormat& rFrameFor
         return rWrt;
     }
 
-    sal_uLong nFrameOpts;
+    HtmlFrmOpts nFrameOpts;
 
     // wenn meoglich vor dem "Objekt" einen Zeilen-Umbruch ausgeben
     if( rHTMLWrt.m_bLFPossible )
@@ -1323,8 +1323,8 @@ Writer& OutHTML_FrameFormatOLENodeGrf( Writer& rWrt, const SwFrameFormat& rFrame
             URIHelper::GetMaybeFileHdl() );
 
     }
-    sal_uLong nFlags = bInCntnr ? HTML_FRMOPTS_GENIMG_CNTNR
-        : HTML_FRMOPTS_GENIMG;
+    HtmlFrmOpts nFlags = bInCntnr ? HtmlFrmOpts::GenImgAllMask
+        : HtmlFrmOpts::GenImgMask;
     OutHTML_Image( rWrt, rFrameFormat, aGraphicURL, aGraphic,
             pOLENd->GetTitle(), pOLENd->GetTwipSize(),
             nFlags, "ole" );

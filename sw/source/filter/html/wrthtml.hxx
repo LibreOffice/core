@@ -29,6 +29,7 @@
 #include <i18nlangtag/lang.h>
 #include <comphelper/stl_types.hxx>
 #include <o3tl/sorted_vector.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 #include "shellio.hxx"
 #include "wrt_fn.hxx"
@@ -67,46 +68,43 @@ extern SwAttrFnTab aHTMLAttrFnTab;
 // BORDER geht nur bei OutHTML_Image
 // ANYSIZE gibt an, ob auch VAR_SIZE und MIN_SIZE angaben exportiert werden
 // ABSSIZE gibt an, ob Abstand und Umrandung ignoriert werden sollen
-const sal_uInt32 HTML_FRMOPT_ALIGN      = 1<<0;
-const sal_uInt32 HTML_FRMOPT_S_ALIGN    = 1<<1;
+enum class HtmlFrmOpts {
+    NONE        = 0,
+    Align       = 1<<0,
+    SAlign      = 1<<1,
 
-const sal_uInt32 HTML_FRMOPT_WIDTH      = 1<<2;
-const sal_uInt32 HTML_FRMOPT_HEIGHT         = 1<<3;
-const sal_uInt32 HTML_FRMOPT_SIZE       = HTML_FRMOPT_WIDTH|HTML_FRMOPT_HEIGHT;
-const sal_uInt32 HTML_FRMOPT_S_WIDTH    = 1<<4;
-const sal_uInt32 HTML_FRMOPT_S_HEIGHT   = 1<<5;
-const sal_uInt32 HTML_FRMOPT_S_SIZE     = HTML_FRMOPT_S_WIDTH|HTML_FRMOPT_S_HEIGHT;
-const sal_uInt32 HTML_FRMOPT_ANYSIZE    = 1<<6;
-const sal_uInt32 HTML_FRMOPT_ABSSIZE    = 1<<7;
-const sal_uInt32 HTML_FRMOPT_MARGINSIZE     = 1<<8;
+    Width       = 1<<2,
+    Height      = 1<<3,
+    Size        = Width | Height,
+    SWidth      = 1<<4,
+    SHeight     = 1<<5,
+    SSize       = SWidth | SHeight,
+    AnySize     = 1<<6,
+    AbsSize     = 1<<7,
+    MarginSize  = 1<<8,
 
-const sal_uInt32 HTML_FRMOPT_SPACE      = 1<<9;
-const sal_uInt32 HTML_FRMOPT_S_SPACE    = 1<<10;
+    Space       = 1<<9,
+    SSpace      = 1<<10,
 
-const sal_uInt32 HTML_FRMOPT_BORDER     = 1<<11;
-const sal_uInt32 HTML_FRMOPT_S_BORDER   = 1<<12;
-const sal_uInt32 HTML_FRMOPT_S_NOBORDER     = 1<<13;
+    Border      = 1<<11,
+    SBorder     = 1<<12,
+    SNoBorder   = 1<<13,
 
-const sal_uInt32 HTML_FRMOPT_S_BACKGROUND = 1<<14;
+    SBackground = 1<<14,
 
-const sal_uInt32 HTML_FRMOPT_NAME           = 1<<15;
-const sal_uInt32 HTML_FRMOPT_ALT        = 1<<16;
-const sal_uInt32 HTML_FRMOPT_BRCLEAR    = 1<<17;
-const sal_uInt32 HTML_FRMOPT_S_PIXSIZE  = 1<<18;
-const sal_uInt32 HTML_FRMOPT_ID             = 1<<19;
-const sal_uInt32 HTML_FRMOPT_DIR            = 1<<20;
+    Name        = 1<<15,
+    Alt         = 1<<16,
+    BrClear     = 1<<17,
+    SPixSize    = 1<<18,
+    Id          = 1<<19,
+    Dir         = 1<<20,
 
-const sal_uInt32 HTML_FRMOPTS_GENIMG_ALL    =
-    HTML_FRMOPT_ALT     |
-    HTML_FRMOPT_SIZE    |
-    HTML_FRMOPT_ABSSIZE |
-    HTML_FRMOPT_NAME;
-const sal_uInt32 HTML_FRMOPTS_GENIMG_CNTNR = HTML_FRMOPTS_GENIMG_ALL;
-const sal_uInt32 HTML_FRMOPTS_GENIMG    =
-    HTML_FRMOPTS_GENIMG_ALL |
-    HTML_FRMOPT_ALIGN       |
-    HTML_FRMOPT_SPACE       |
-    HTML_FRMOPT_BRCLEAR;
+    GenImgAllMask = Alt | Size | AbsSize | Name,
+    GenImgMask    = GenImgAllMask | Align | Space | BrClear
+};
+namespace o3tl {
+    template<> struct typed_flags<HtmlFrmOpts> : is_typed_flags<HtmlFrmOpts, ((1<<21)-1)> {};
+}
 
 #define HTMLMODE_BLOCK_SPACER       0x00010000
 #define HTMLMODE_FLOAT_FRAME        0x00020000
@@ -466,16 +464,16 @@ public:
     // Frame-Formats ausgeben und ggf. ein <BR CLEAR=...> vorne an
     // rEndTags anhaengen
     OString OutFrameFormatOptions( const SwFrameFormat& rFrameFormat, const OUString& rAltText,
-        sal_uInt32 nFrameOpts );
+                                   HtmlFrmOpts nFrameOpts );
 
-    void writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrameFormat& rFrameFormat, const OUString& rAltText, sal_uInt32 nFrameOpts);
+    void writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrameFormat& rFrameFormat, const OUString& rAltText, HtmlFrmOpts nFrameOpts);
 
     void OutCSS1_TableFrameFormatOptions( const SwFrameFormat& rFrameFormat );
     void OutCSS1_TableCellBorderHack(const SwFrameFormat& rFrameFormat);
     void OutCSS1_SectionFormatOptions( const SwFrameFormat& rFrameFormat, const SwFormatCol *pCol );
-    void OutCSS1_FrameFormatOptions( const SwFrameFormat& rFrameFormat, sal_uInt32 nFrameOpts,
-                                const SdrObject *pSdrObj=nullptr,
-                                const SfxItemSet *pItemSet=nullptr );
+    void OutCSS1_FrameFormatOptions( const SwFrameFormat& rFrameFormat, HtmlFrmOpts nFrameOpts,
+                                     const SdrObject *pSdrObj=nullptr,
+                                     const SfxItemSet *pItemSet=nullptr );
     void OutCSS1_FrameFormatBackground( const SwFrameFormat& rFrameFormat );
 
     void ChangeParaToken( sal_uInt16 nNew );
@@ -648,7 +646,7 @@ Writer& OutHTML_HeaderFooter( Writer& rWrt, const SwFrameFormat& rFrameFormat,
 Writer& OutHTML_Image( Writer&, const SwFrameFormat& rFormat,
                        const OUString& rGraphicURL,
                        Graphic& rGraphic, const OUString& rAlternateText,
-                       const Size& rRealSize, sal_uInt32 nFrameOpts,
+                       const Size& rRealSize, HtmlFrmOpts nFrameOpts,
                        const sal_Char *pMarkType,
                        const ImageMap *pGenImgMap = nullptr );
 

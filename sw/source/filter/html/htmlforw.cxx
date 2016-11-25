@@ -68,19 +68,19 @@
 
 using namespace ::com::sun::star;
 
-const sal_uInt32 HTML_FRMOPTS_CONTROL   =
-    0;
-const sal_uInt32 HTML_FRMOPTS_CONTROL_CSS1  =
-    HTML_FRMOPT_S_ALIGN |
-    HTML_FRMOPT_S_SIZE |
-    HTML_FRMOPT_S_SPACE |
-    HTML_FRMOPT_BRCLEAR;
-const sal_uInt32 HTML_FRMOPTS_IMG_CONTROL   =
-    HTML_FRMOPT_ALIGN |
-    HTML_FRMOPT_BRCLEAR;
-const sal_uInt32 HTML_FRMOPTS_IMG_CONTROL_CSS1 =
-    HTML_FRMOPT_S_ALIGN |
-    HTML_FRMOPT_S_SPACE;
+const HtmlFrmOpts HTML_FRMOPTS_CONTROL   =
+    HtmlFrmOpts::NONE;
+const HtmlFrmOpts HTML_FRMOPTS_CONTROL_CSS1  =
+    HtmlFrmOpts::SAlign |
+    HtmlFrmOpts::SSize |
+    HtmlFrmOpts::SSpace |
+    HtmlFrmOpts::BrClear;
+const HtmlFrmOpts HTML_FRMOPTS_IMG_CONTROL   =
+    HtmlFrmOpts::Align |
+    HtmlFrmOpts::BrClear;
+const HtmlFrmOpts HTML_FRMOPTS_IMG_CONTROL_CSS1 =
+    HtmlFrmOpts::SAlign |
+    HtmlFrmOpts::SSpace;
 
 static void lcl_html_outEvents( SvStream& rStrm,
                          const uno::Reference< form::XFormComponent >& rFormComp,
@@ -718,7 +718,7 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
     bool bEmptyValue = false;
     uno::Any aTmp = xPropSet->getPropertyValue( "ClassId" );
     sal_Int16 nClassId = *o3tl::doAccess<sal_Int16>(aTmp);
-    sal_uInt32 nFrameOpts = HTML_FRMOPTS_CONTROL;
+    HtmlFrmOpts nFrameOpts = HTML_FRMOPTS_CONTROL;
     switch( nClassId )
     {
     case form::FormComponentType::CHECKBOX:
@@ -1039,7 +1039,7 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
                             : HTML_FRMOPTS_CONTROL_CSS1);
     }
     OString aEndTags;
-    if( nFrameOpts != 0 )
+    if( nFrameOpts != HtmlFrmOpts::NONE )
         aEndTags = rHTMLWrt.OutFrameFormatOptions( rFormat, aEmptyOUStr, nFrameOpts );
 
     if( rHTMLWrt.m_bCfgOutStyles )
