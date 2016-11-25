@@ -810,18 +810,10 @@ void buildMipmaps(
     GLint internalFormat, GLsizei width, GLsizei height, GLenum format,
     GLenum type, const void * data)
 {
-    if (GLEW_ARB_framebuffer_object) {
-        glTexImage2D(
-            GL_TEXTURE_2D, 0, internalFormat, width, height, 0, format, type,
-            data);
-        glGenerateMipmap(GL_TEXTURE_2D);
-    } else {
-        glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
-        glTexImage2D(
-            GL_TEXTURE_2D, 0, internalFormat, width, height, 0, format, type,
-            data);
-        glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_FALSE);
-    }
+    glTexImage2D(
+        GL_TEXTURE_2D, 0, internalFormat, width, height, 0, format, type,
+        data);
+    glGenerateMipmap(GL_TEXTURE_2D);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(
         GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);

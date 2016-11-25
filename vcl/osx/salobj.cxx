@@ -321,9 +321,7 @@ bool AquaOpenGLContext::ImplInit()
     NSOpenGLView* pView = getOpenGLView();
     [[pView openGLContext] makeCurrentContext];
 
-    bool bRet = InitGLEW();
-    InitGLEWDebugging();
-    return bRet;
+    return true;
 }
 
 NSOpenGLView* AquaOpenGLContext::getOpenGLView()

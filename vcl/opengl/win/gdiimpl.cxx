@@ -573,14 +573,6 @@ bool WinOpenGLContext::ImplInit()
         return false;
     }
 
-    if (!InitGLEW())
-    {
-        if (bFirstCall)
-            disableOpenGLAndTerminateForRestart();
-        bFirstCall = false;
-        return false;
-    }
-
     HGLRC hSharedCtx = nullptr;
     if (!g_vShareList.empty())
         hSharedCtx = g_vShareList.front();
@@ -668,8 +660,6 @@ bool WinOpenGLContext::ImplInit()
             }
         }
     }
-
-    InitGLEWDebugging();
 
     g_vShareList.push_back(m_aGLWin.hRC);
 

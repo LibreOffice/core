@@ -34,7 +34,7 @@ $(eval $(call gb_Library_use_libraries,OGLTrans,\
 
 $(eval $(call gb_Library_use_externals,OGLTrans,\
 	boost_headers \
-	glew \
+	epoxy \
 	glm_headers \
 ))
 
