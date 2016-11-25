@@ -302,7 +302,22 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
     if( xPropSet.is() && bObjSupportsText )
     {
         uno::Reference< text::XText > xText(xShape, uno::UNO_QUERY);
-        if(xText.is() && !xText->getString().isEmpty())
+        bool bSkip = false;
+        if (xText.is())
+        {
+            try
+            {
+                bSkip = xText->getString().isEmpty();
+            }
+            catch (uno::RuntimeException const&)
+            {
+                // tdf#102479: SwXTextFrame that contains only a table will
+                // throw, but the table must be iterated so that
+                // SwXMLExport::ExportTableLines() can find its auto styles
+                // so do not skip it!
+            }
+        }
+        if (!bSkip)
         {
             uno::Reference< beans::XPropertySetInfo > xPropSetInfo( xPropSet->getPropertySetInfo() );
 
