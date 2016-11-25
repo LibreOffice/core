@@ -956,13 +956,6 @@ sal_uInt16 GetLineIntersectionPoint(Point &rResult,
 }
 
 
-SmBinDiagonalNode::SmBinDiagonalNode(const SmToken &rNodeToken)
-    : SmStructureNode(NBINDIAGONAL, rNodeToken, 3)
-{
-    bAscending = false;
-}
-
-
 /// @return position and size of the diagonal line
 /// premise: SmRect of the node defines the limitation(!) consequently it has to be known upfront
 void SmBinDiagonalNode::GetOperPosSize(Point &rPos, Size &rSize,
@@ -1462,7 +1455,7 @@ void SmBracebodyNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
         aRefRect.ExtendBy(aTmpRect, RectCopyMBL::Xor);
     }
 
-    nBodyHeight = aRefRect.GetHeight();
+    mnBodyHeight = aRefRect.GetHeight();
 
     // scale separators to required height and arrange them
     bool bScale  = GetScaleMode() == SCALE_HEIGHT  ||  rFormat.IsScaleNormalBrackets();
