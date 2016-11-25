@@ -129,6 +129,8 @@ public:
     void registerAsCurrent();
     /// reset the GL context so this context is not implicit in subsequent GL calls.
     virtual void resetCurrent();
+    /// unbind the GL_FRAMEBUFFER to its default state, needed for gtk3
+    virtual void restoreDefaultFramebuffer();
     virtual void swapBuffers();
     virtual void sync();
     void show();
