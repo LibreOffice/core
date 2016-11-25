@@ -63,7 +63,7 @@ echo $INSTDIR/$LIBO_LIB_FOLDER/lib*.a \
      $WORKDIR/UnpackedTarball/coinmp/CoinMP/src/.libs/*.a \
      $WORKDIR/UnpackedTarball/coinmp/CoinUtils/src/.libs/*.a \
      $WORKDIR/UnpackedTarball/coinmp/Osi/src/Osi/.libs/*.a \
-     $WORKDIR/UnpackedTarball/glew/lib/*.a \
+     $WORKDIR/UnpackedTarball/epoxy/lib/*.a \
      $WORKDIR/UnpackedTarball/icu/source/lib/*.a \
      $WORKDIR/UnpackedTarball/langtag/liblangtag/.libs/*.a \
      $WORKDIR/UnpackedTarball/lcms2/src/.libs/*.a \
