@@ -250,17 +250,6 @@ UI_FILELIST_ALL_LANG(uui, uui)
 UI_FILELIST_ALL_LANG(vcl, vcl)
 UI_FILELIST_ALL_LANG(xmlsec, xmlsec)
 
-#ifdef WNT
-
-File gid_File_extras_newfiles
-    TXT_FILE_BODY;
-    Styles = (FILELIST, PACKED, WORKSTATION, OVERWRITE);
-    Dir = FILELIST_DIR;
-    Name = "extras_newfiles.filelist";
-End
-
-#endif
-
 #if defined UNX && ! defined MACOSX
 
 File gid_File_Txt_Pagein_Calc

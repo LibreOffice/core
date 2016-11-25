@@ -780,8 +780,35 @@ $(eval $(call gb_Helper_register_packages_for_install,ure,\
 $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	$(if $(SYSTEM_LIBEXTTEXTCAT),,libexttextcat_fingerprint) \
 	officecfg_misc \
+	extras_autocorr \
+	extras_autotextuser \
+	extras_cfgsrvnolang \
+	extras_cfgusr \
+	extras_database \
+	extras_databasebiblio \
+	extras_gallbullets \
+	extras_gallhtmlexpo \
+	extras_gallmytheme \
+	extras_gallroot \
+	extras_gallsystem \
+	extras_gallwwwback \
+	extras_gallwwwgraf \
 	extras_glade \
 	extras_labels \
+	$(if $(filter WNT,$(OS)),extras_newfiles) \
+	extras_palettes \
+	extras_tplofficorr \
+	extras_tploffimisc \
+	extras_tplpresnt \
+	extras_tpl_styles \
+	extras_tplpersonal \
+	extras_tplwizbitmap \
+	extras_tplwizdesktop \
+	extras_tplwizletter \
+	extras_tplwizfax \
+	extras_tplwizagenda \
+	extras_tplwizreport \
+	extras_tplwizstyles \
 	framework_dtd \
 	package_dtd \
 	xmloff_dtd \
