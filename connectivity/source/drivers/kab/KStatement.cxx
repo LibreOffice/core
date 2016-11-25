@@ -66,8 +66,7 @@ KabCommonStatement::KabCommonStatement(KabConnection* _pConnection )
     m_aParser(_pConnection->getComponentContext()),
     m_aSQLIterator(_pConnection, _pConnection->createCatalog()->getTables(), m_aParser),
     m_pParseTree(nullptr),
-    m_pConnection(_pConnection),
-    rBHelper(KabCommonStatement_BASE::rBHelper)
+    m_pConnection(_pConnection)
 {
     m_pConnection->acquire();
 }

@@ -31,7 +31,6 @@ namespace connectivity
         class KabCatalog : public connectivity::sdbcx::OCatalog
         {
             KabConnection* m_pConnection;       // used to get the metadata
-            css::uno::Reference< css::sdbc::XDatabaseMetaData > m_xMetaData; // just to make things easier
 
         public:
             explicit KabCatalog(KabConnection* _pCon);

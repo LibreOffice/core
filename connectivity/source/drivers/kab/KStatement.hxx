@@ -91,7 +91,7 @@ namespace connectivity
             virtual ~KabCommonStatement() override;
 
         public:
-            ::cppu::OBroadcastHelper& rBHelper;
+            using KabCommonStatement_BASE::rBHelper;
 
             explicit KabCommonStatement(KabConnection *_pConnection);
             using KabCommonStatement_BASE::operator css::uno::Reference< css::uno::XInterface >;
