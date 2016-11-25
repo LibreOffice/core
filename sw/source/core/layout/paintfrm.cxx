@@ -98,6 +98,7 @@
 #include <edtwin.hxx>
 #include <view.hxx>
 #include <paintfrm.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 #include <vcl/BitmapTools.hxx>
 
@@ -130,24 +131,28 @@ struct SwPaintProperties;
                        SwViewOption::IsObjectBoundaries())
 
 //Class declaration; here because they are only used in this file
-
-#define SUBCOL_PAGE     0x01    //Helplines of the page
-#define SUBCOL_TAB      0x08    //Helplines inside tables
-#define SUBCOL_FLY      0x10    //Helplines inside fly frames
-#define SUBCOL_SECT     0x20    //Helplines inside sections
+enum class SubColFlags {
+    Page     = 0x01,    //Helplines of the page
+    Tab      = 0x08,   //Helplines inside tables
+    Fly      = 0x10,    //Helplines inside fly frames
+    Sect     = 0x20,    //Helplines inside sections
+};
+namespace o3tl {
+    template<> struct typed_flags<SubColFlags> : is_typed_flags<SubColFlags, 0x39> {};
+}
 
 // Classes collecting the border lines and help lines
 class SwLineRect : public SwRect
 {
-    Color aColor;
-    SvxBorderStyle  nStyle;
+    Color             aColor;
+    SvxBorderStyle    nStyle;
     const SwTabFrame *pTab;
-          sal_uInt8     nSubColor;  //colorize subsidiary lines
-          bool          bPainted;   //already painted?
-          sal_uInt8     nLock;      //To distinguish the line and the hell layer.
+    SubColFlags       nSubColor;  //colorize subsidiary lines
+    bool              bPainted;   //already painted?
+    sal_uInt8         nLock;      //To distinguish the line and the hell layer.
 public:
     SwLineRect( const SwRect &rRect, const Color *pCol, const SvxBorderStyle nStyle,
-                const SwTabFrame *pT , const sal_uInt8 nSCol );
+                const SwTabFrame *pT , const SubColFlags nSCol );
 
     const Color&         GetColor() const { return aColor;}
     SvxBorderStyle       GetStyle() const { return nStyle; }
@@ -158,9 +163,9 @@ public:
                                             else if ( nLock )
                                                 --nLock;
                                           }
-    bool  IsPainted()               const { return bPainted; }
-    bool  IsLocked()                const { return nLock != 0;  }
-    sal_uInt8  GetSubColor()                const { return nSubColor;}
+    bool        IsPainted()               const { return bPainted; }
+    bool        IsLocked()                const { return nLock != 0;  }
+    SubColFlags GetSubColor()             const { return nSubColor;}
 
     bool MakeUnion( const SwRect &rRect, SwPaintProperties &properties );
 };
@@ -194,7 +199,7 @@ public:
 #endif
     }
     void AddLineRect( const SwRect& rRect,  const Color *pColor, const SvxBorderStyle nStyle,
-                      const SwTabFrame *pTab, const sal_uInt8 nSCol, SwPaintProperties &properties );
+                      const SwTabFrame *pTab, const SubColFlags nSCol, SwPaintProperties &properties );
     void ConnectEdges( OutputDevice *pOut, SwPaintProperties &properties );
     void PaintLines  ( OutputDevice *pOut, SwPaintProperties &properties );
     void LockLines( bool bLock );
@@ -621,7 +626,7 @@ void BorderLines::AddBorderLine(
 }
 
 SwLineRect::SwLineRect( const SwRect &rRect, const Color *pCol, const SvxBorderStyle nStyl,
-                        const SwTabFrame *pT, const sal_uInt8 nSCol ) :
+                        const SwTabFrame *pT, const SubColFlags nSCol ) :
     SwRect( rRect ),
     nStyle( nStyl ),
     pTab( pT ),
@@ -671,7 +676,7 @@ bool SwLineRect::MakeUnion( const SwRect &rRect, SwPaintProperties& properties)
 }
 
 void SwLineRects::AddLineRect( const SwRect &rRect, const Color *pCol, const SvxBorderStyle nStyle,
-                               const SwTabFrame *pTab, const sal_uInt8 nSCol, SwPaintProperties& properties )
+                               const SwTabFrame *pTab, const SubColFlags nSCol, SwPaintProperties& properties )
 {
     // Loop backwards because lines which can be combined, can usually be painted
     // in the same context
@@ -796,7 +801,7 @@ void SwLineRects::ConnectEdges( OutputDevice *pOut, SwPaintProperties& propertie
                                 continue;
                             aLineRects.push_back( SwLineRect( aIns, &rL1.GetColor(),
                                         table::BorderLineStyle::SOLID,
-                                        rL1.GetTab(), SUBCOL_TAB ) );
+                                        rL1.GetTab(), SubColFlags::Tab ) );
                             if ( isFull() )
                             {
                                 --i;
@@ -837,7 +842,7 @@ void SwLineRects::ConnectEdges( OutputDevice *pOut, SwPaintProperties& propertie
                                 continue;
                             aLineRects.push_back( SwLineRect( aIns, &rL1.GetColor(),
                                         table::BorderLineStyle::SOLID,
-                                        rL1.GetTab(), SUBCOL_TAB ) );
+                                        rL1.GetTab(), SubColFlags::Tab ) );
                             if ( isFull() )
                             {
                                 --i;
@@ -1208,10 +1213,10 @@ void SwSubsRects::PaintSubsidiary( OutputDevice *pOut,
                     const Color *pCol = nullptr;
                     switch ( rLRect.GetSubColor() )
                     {
-                        case SUBCOL_PAGE: pCol = &SwViewOption::GetDocBoundariesColor(); break;
-                        case SUBCOL_FLY: pCol = &SwViewOption::GetObjectBoundariesColor(); break;
-                        case SUBCOL_TAB: pCol = &SwViewOption::GetTableBoundariesColor(); break;
-                        case SUBCOL_SECT: pCol = &SwViewOption::GetSectionBoundColor(); break;
+                        case SubColFlags::Page: pCol = &SwViewOption::GetDocBoundariesColor(); break;
+                        case SubColFlags::Fly: pCol = &SwViewOption::GetObjectBoundariesColor(); break;
+                        case SubColFlags::Tab: pCol = &SwViewOption::GetTableBoundariesColor(); break;
+                        case SubColFlags::Sect: pCol = &SwViewOption::GetSectionBoundColor(); break;
                     }
 
                     if (pCol && pOut->GetFillColor() != *pCol)
@@ -4662,9 +4667,11 @@ void SwFrame::PaintBorderLine( const SwRect& rRect,
     aOut.Intersection_( rRect );
 
     const SwTabFrame *pTab = IsCellFrame() ? FindTabFrame() : nullptr;
-    sal_uInt8 nSubCol = ( IsCellFrame() || IsRowFrame() ) ? SUBCOL_TAB :
-                   ( IsInSct() ? SUBCOL_SECT :
-                   ( IsInFly() ? SUBCOL_FLY : SUBCOL_PAGE ) );
+    SubColFlags nSubCol = ( IsCellFrame() || IsRowFrame() )
+                          ? SubColFlags::Tab
+                          : ( IsInSct()
+                              ? SubColFlags::Sect
+                              : ( IsInFly() ? SubColFlags::Fly : SubColFlags::Page ) );
     if( pColor && gProp.pSGlobalShell->GetWin() &&
         Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
     {
@@ -6777,7 +6784,7 @@ static void lcl_RefreshLine( const SwLayoutFrame *pLay,
                                   const SwPageFrame *pPage,
                                   const Point &rP1,
                                   const Point &rP2,
-                                  const sal_uInt8 nSubColor,
+                                  const SubColFlags nSubColor,
                                   SwLineRects* pSubsLines )
 {
     //In which direction do we loop? Can only be horizontal or vertical.
@@ -7134,9 +7141,11 @@ void SwLayoutFrame::PaintSubsidiaryLines( const SwPageFrame *pPage,
     const Point aRB( nRight, nBottom );
     const Point aLB( aOut.Left(), nBottom );
 
-    sal_uInt8 nSubColor = ( bCell || IsRowFrame() ) ? SUBCOL_TAB :
-                     ( IsInSct() ? SUBCOL_SECT :
-                     ( IsInFly() ? SUBCOL_FLY : SUBCOL_PAGE ) );
+    SubColFlags nSubColor = ( bCell || IsRowFrame() )
+                            ? SubColFlags::Tab
+                            : ( IsInSct()
+                                ? SubColFlags::Sect
+                                : ( IsInFly() ? SubColFlags::Fly : SubColFlags::Page ) );
 
     // OD 18.11.2002 #99672# - collect body, header, footer, footnote and section
     // sub-lines in <pSpecSubsLine> array.
