@@ -330,6 +330,11 @@ void OpenGLContext::InitGLDebugging()
 #endif
 }
 
+void OpenGLContext::restoreDefaultFramebuffer()
+{
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
 void OpenGLContext::setWinPosAndSize(const Point &rPos, const Size& rSize)
 {
     if(m_xWindow)
