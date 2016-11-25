@@ -10,7 +10,7 @@
 #ifndef INCLUDED_VCL_OPENGL_OPENGLHELPER_HXX
 #define INCLUDED_VCL_OPENGL_OPENGLHELPER_HXX
 
-#include <GL/glew.h>
+#include <epoxy/gl.h>
 #include <sal/log.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/bitmapex.hxx>

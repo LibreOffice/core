@@ -7,7 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <config_opengl.h>
 #include <chrono>
 
 #include <vcl/opengl/OpenGLContext.hxx>
@@ -205,13 +204,8 @@ extern "C" void
 APIENTRY
 #endif
 debug_callback(GLenum source, GLenum type, GLuint id,
-        GLenum severity, GLsizei , const GLchar* message,
-#if HAVE_GLEW_1_12
-        const GLvoid*
-#else
-        GLvoid*
-#endif
-        )
+               GLenum severity, GLsizei , const GLchar* message,
+               const GLvoid*)
 {
     // ignore Nvidia's 131218: "Program/shader state performance warning: Fragment Shader is going to be recompiled because the shader key based on GL state mismatches."
     // the GLSL compiler is a bit too aggressive in optimizing the state based on the current OpenGL state
@@ -280,30 +274,14 @@ OUString getGLString(GLenum eGlEnum)
     return sString;
 }
 
-bool OpenGLContext::InitGLEW()
+bool OpenGLContext::InitGL()
 {
-    static bool bGlewInit = false;
-    if(!bGlewInit)
-    {
-        OpenGLZone aZone;
-
-        glewExperimental = GL_TRUE;
-        GLenum err = glewInit();
-        if (err != GLEW_OK)
-        {
-            SAL_WARN("vcl.opengl", "Failed to initialize GLEW: " << glewGetErrorString(err));
-            return false;
-        }
-        else
-            bGlewInit = true;
-    }
-
     VCL_GL_INFO("OpenGLContext::ImplInit----end");
     VCL_GL_INFO("Vendor: " << getGLString(GL_VENDOR) << " Renderer: " << getGLString(GL_RENDERER) << " GL version: " << OpenGLHelper::getGLVersion());
     mbInitialized = true;
 
     // I think we need at least GL 3.0
-    if (!GLEW_VERSION_3_0)
+    if (epoxy_gl_version() < 30)
     {
         SAL_WARN("vcl.opengl", "We don't have at least OpenGL 3.0");
         return false;
@@ -319,11 +297,11 @@ bool OpenGLContext::InitGLEW()
     return true;
 }
 
-void OpenGLContext::InitGLEWDebugging()
+void OpenGLContext::InitGLDebugging()
 {
 #ifdef DBG_UTIL
     // only enable debug output in dbgutil build
-    if( GLEW_ARB_debug_output)
+    if (epoxy_has_gl_extension("GL_ARB_debug_output"))
     {
         OpenGLZone aZone;
 

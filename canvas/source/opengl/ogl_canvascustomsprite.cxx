@@ -9,7 +9,7 @@
 
 #include <sal/config.h>
 
-#include <GL/glew.h>
+#include <epoxy/gl.h>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/point/b2dpoint.hxx>
