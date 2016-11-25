@@ -56,6 +56,7 @@
 #include <boost/math/special_functions/sinc.hpp>
 #include <boost/multi_array.hpp>
 #include <boost/optional.hpp>
+#include <epoxy/gl.h>
 #include <osl/conditn.hxx>
 #include <osl/diagnose.h>
 #include <osl/diagnose.hxx>
@@ -184,7 +185,6 @@
 #include <vcl/virdev.hxx>
 #include <vcl/window.hxx>
 #include <vcl/wrkwin.hxx>
-#include <GL/glew.h>
 #include <PhysicalFontCollection.hxx>
 #include <PhysicalFontFace.hxx>
 #include <PhysicalFontFamily.hxx>

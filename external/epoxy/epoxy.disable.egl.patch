@@ -1,0 +1,11 @@
+--- configure
++++ configure
+@@ -18634,7 +18634,7 @@
+ has_znow=yes
+ 
+ case $host_os in
+-    mingw*)
++    cygwin*)
+         build_egl=no
+         build_glx=no
+         build_wgl=yes
