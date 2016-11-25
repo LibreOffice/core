@@ -916,4 +916,98 @@ Reference< XInterface > GtkInstance::CreateDragSource()
     return Reference< XInterface >( static_cast<cppu::OWeakObject *>(new GtkDragSource()) );
 }
 
+class GtkOpenGLContext : public OpenGLContext
+{
+    GLWindow m_aGLWin;
+    GtkWidget *m_pGLArea;
+
+public:
+    GtkOpenGLContext()
+        : OpenGLContext()
+        , m_pGLArea(nullptr)
+    {
+    }
+
+    virtual bool initWindow() override
+    {
+        if( !m_pChildWindow )
+        {
+            SystemWindowData winData = generateWinData(mpWindow, mbRequestLegacyContext);
+            m_pChildWindow = VclPtr<SystemChildWindow>::Create(mpWindow, 0, &winData, false);
+        }
+
+        if (m_pChildWindow)
+        {
+            InitChildWindow(m_pChildWindow.get());
+        }
+
+        return true;
+    }
+
+private:
+    virtual const GLWindow& getOpenGLWindow() const override { return m_aGLWin; }
+    virtual GLWindow& getModifiableOpenGLWindow() override { return m_aGLWin; }
+
+    virtual bool ImplInit() override
+    {
+        const SystemEnvData* pEnvData = m_pChildWindow->GetSystemData();
+        GtkWidget *pParent = static_cast<GtkWidget*>(pEnvData->pWidget);
+        m_pGLArea = gtk_gl_area_new();
+        gtk_gl_area_set_auto_render(GTK_GL_AREA(m_pGLArea), false);
+        gtk_widget_set_hexpand(m_pGLArea, true);
+        gtk_widget_set_vexpand(m_pGLArea, true);
+        gtk_container_add(GTK_CONTAINER(pParent), m_pGLArea);
+        gtk_widget_show_all(pParent);
+
+        gtk_gl_area_make_current(GTK_GL_AREA(m_pGLArea));
+        gtk_gl_area_attach_buffers(GTK_GL_AREA(m_pGLArea));
+
+        return true;
+    }
+
+    virtual void makeCurrent() override
+    {
+        if (isCurrent())
+            return;
+
+        clearCurrent();
+
+        gtk_gl_area_make_current(GTK_GL_AREA(m_pGLArea));
+
+        registerAsCurrent();
+    }
+
+    virtual void destroyCurrentContext() override
+    {
+        gdk_gl_context_clear_current();
+    }
+
+    virtual bool isCurrent() override
+    {
+        return gdk_gl_context_get_current() == gtk_gl_area_get_context(GTK_GL_AREA(m_pGLArea));
+    }
+
+    virtual void sync() override
+    {
+        gtk_gl_area_queue_render(GTK_GL_AREA(m_pGLArea));
+    }
+
+    virtual void resetCurrent() override
+    {
+        clearCurrent();
+        gdk_gl_context_clear_current();
+    }
+
+    virtual void swapBuffers() override
+    {
+        gtk_gl_area_queue_render(GTK_GL_AREA(m_pGLArea));
+        BuffersSwapped();
+    }
+};
+
+OpenGLContext* GtkInstance::CreateOpenGLContext()
+{
+    return new GtkOpenGLContext;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
