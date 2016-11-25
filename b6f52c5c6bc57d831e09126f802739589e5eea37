@@ -22,6 +22,30 @@
       "revId": "b6f52c5c6bc57d831e09126f802739589e5eea37",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a74a57a_4f921159",
+        "filename": "vcl/opengl/texture.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2016-11-25T10:25:25Z",
+      "side": 0,
+      "message": "Nice catch - this is probably it..",
+      "parentUuid": "5a74a57a_cf30e1a1",
+      "range": {
+        "startLine": 317,
+        "startChar": 11,
+        "endLine": 317,
+        "endChar": 17
+      },
+      "revId": "b6f52c5c6bc57d831e09126f802739589e5eea37",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
