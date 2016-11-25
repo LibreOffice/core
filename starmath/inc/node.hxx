@@ -788,16 +788,20 @@ public:
  */
 class SmBinDiagonalNode : public SmStructureNode
 {
-    bool    bAscending;
+    bool mbAscending;
 
     void    GetOperPosSize(Point &rPos, Size &rSize,
                            const Point &rDiagPoint, double fAngleDeg) const;
 
 public:
-    explicit SmBinDiagonalNode(const SmToken &rNodeToken);
+    explicit SmBinDiagonalNode(const SmToken &rNodeToken)
+        : SmStructureNode(NBINDIAGONAL, rNodeToken, 3)
+        , mbAscending(false)
+    {
+    }
 
-    bool    IsAscending() const { return bAscending; }
-    void    SetAscending(bool bVal)  { bAscending = bVal; }
+    bool    IsAscending() const { return mbAscending; }
+    void    SetAscending(bool bVal)  { mbAscending = bVal; }
 
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
     void Accept(SmVisitor* pVisitor) override;
@@ -846,13 +850,13 @@ enum SmSubSup
  */
 class SmSubSupNode : public SmStructureNode
 {
-    bool  bUseLimits;
+    bool mbUseLimits;
 
 public:
     explicit SmSubSupNode(const SmToken &rNodeToken)
         : SmStructureNode(NSUBSUP, rNodeToken, 1 + SUBSUP_NUM_ENTRIES)
+        , mbUseLimits(false)
     {
-        bUseLimits = false;
     }
 
     /** Get body (Not NULL) */
@@ -863,8 +867,8 @@ public:
         return const_cast<SmSubSupNode *>(this)->GetBody();
     }
 
-    void  SetUseLimits(bool bVal) { bUseLimits = bVal; }
-    bool  IsUseLimits() const { return bUseLimits; };
+    void  SetUseLimits(bool bVal) { mbUseLimits = bVal; }
+    bool  IsUseLimits() const { return mbUseLimits; };
 
     /** Get super- or subscript
      * @remarks this method may return NULL.
@@ -928,22 +932,19 @@ public:
  */
 class SmBracebodyNode : public SmStructureNode
 {
-    long  nBodyHeight;
+    long mnBodyHeight;
 
 public:
-    explicit inline SmBracebodyNode(const SmToken &rNodeToken);
+    explicit SmBracebodyNode(const SmToken &rNodeToken)
+        : SmStructureNode(NBRACEBODY, rNodeToken)
+        , mnBodyHeight(0)
+    {
+    }
 
     virtual void    Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
-    long            GetBodyHeight() const { return nBodyHeight; }
+    long GetBodyHeight() const { return mnBodyHeight; }
     void Accept(SmVisitor* pVisitor) override;
 };
-
-
-inline SmBracebodyNode::SmBracebodyNode(const SmToken &rNodeToken) :
-    SmStructureNode(NBRACEBODY, rNodeToken)
-{
-    nBodyHeight = 0;
-}
 
 
 /** Node for vertical brace construction
