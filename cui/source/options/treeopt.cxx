@@ -85,6 +85,7 @@
 #include <sfx2/viewsh.hxx>
 #include <svl/languageoptions.hxx>
 #include <svtools/helpopt.hxx>
+#include <svtools/miscopt.hxx>
 #include <svx/drawitem.hxx>
 #include <svx/xtable.hxx>
 #include <svx/xpool.hxx>
@@ -1482,6 +1483,15 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
                     continue;
                 }
             }
+
+            // Disable Basic IDE options, if experimental features are not enabled
+            if( RID_SVXPAGE_BASICIDE_OPTIONS == nPageId )
+            {
+                    SvtMiscOptions aMiscOpt;
+                    if( ! aMiscOpt.IsExperimentalMode() )
+                        continue;
+            }
+
             AddTabPage( nPageId, sNewTitle, nGroup );
         }
     }
