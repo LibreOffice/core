@@ -151,6 +151,13 @@ void EmojiView::Populate()
     }
 }
 
+void EmojiView::ApplySettings(vcl::RenderContext& rRenderContext)
+{
+    ThumbnailView::ApplySettings(rRenderContext);
+    mpItemAttrs->aFontSize.setX(ITEM_MAX_WIDTH - 2*ITEM_PADDING);
+    mpItemAttrs->aFontSize.setY(ITEM_MAX_HEIGHT - 2*ITEM_PADDING);
+}
+
 void EmojiView::MouseButtonDown( const MouseEvent& rMEvt )
 {
     GrabFocus();
