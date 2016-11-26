@@ -751,6 +751,9 @@ bool SalLayout::GetBoundRect( SalGraphics& rSalGraphics, Rectangle& rRect ) cons
     return bRet;
 }
 
+// FIXME: This function is just broken, it assumes any glyph at index 3 in the
+// font is space, which though common is not a hard requirement and not the
+// only glyph for space characters. Fix the call sites and fix them.
 bool SalLayout::IsSpacingGlyph( sal_GlyphId nGlyph )
 {
     bool bRet = false;
@@ -782,80 +785,6 @@ GenericSalLayout::~GenericSalLayout()
 void GenericSalLayout::AppendGlyph( const GlyphItem& rGlyphItem )
 {
     m_GlyphItems.push_back(rGlyphItem);
-}
-
-bool GenericSalLayout::GetCharWidths( DeviceCoordinate* pCharWidths ) const
-{
-    // initialize character extents buffer
-    int nCharCount = mnEndCharPos - mnMinCharPos;
-    for( int n = 0; n < nCharCount; ++n )
-        pCharWidths[n] = 0;
-
-    // determine cluster extents
-    for( std::vector<GlyphItem>::const_iterator pGlyphIter = m_GlyphItems.begin(), end = m_GlyphItems.end(); pGlyphIter != end ; ++pGlyphIter)
-    {
-        // use cluster start to get char index
-        if( !pGlyphIter->IsClusterStart() )
-            continue;
-
-        int n = pGlyphIter->mnCharPos;
-        if( n >= mnEndCharPos )
-            continue;
-        n -= mnMinCharPos;
-        if( n < 0 )
-            continue;
-
-        // left glyph in cluster defines default extent
-        long nXPosMin = pGlyphIter->maLinearPos.X();
-        long nXPosMax = nXPosMin + pGlyphIter->mnNewWidth;
-
-        // calculate right x-position for this glyph cluster
-        // break if no more glyphs in layout
-        // break at next glyph cluster start
-        while( (pGlyphIter+1 != end) && !pGlyphIter[1].IsClusterStart() )
-        {
-            // advance to next glyph in cluster
-            ++pGlyphIter;
-
-            if( pGlyphIter->IsDiacritic() )
-                continue; // ignore diacritics
-            // get leftmost x-extent of this glyph
-            long nXPos = pGlyphIter->maLinearPos.X();
-            if( nXPosMin > nXPos )
-                nXPosMin = nXPos;
-
-            // get rightmost x-extent of this glyph
-            nXPos += pGlyphIter->mnNewWidth;
-            if( nXPosMax < nXPos )
-                nXPosMax = nXPos;
-        }
-
-        // when the current cluster overlaps with the next one assume
-        // rightmost cluster edge is the leftmost edge of next cluster
-        // for clusters that do not have x-sorted glyphs
-        // TODO: avoid recalculation of left bound in next cluster iteration
-        for( std::vector<GlyphItem>::const_iterator pN = pGlyphIter; ++pN != end; )
-        {
-            if( pN->IsClusterStart() )
-                break;
-            if( pN->IsDiacritic() )
-                continue;   // ignore diacritics
-            if( nXPosMax > pN->maLinearPos.X() )
-                nXPosMax = pN->maLinearPos.X();
-        }
-        if( nXPosMax < nXPosMin )
-            nXPosMin = nXPosMax = 0;
-
-        // character width is sum of glyph cluster widths
-        pCharWidths[n] += nXPosMax - nXPosMin;
-    }
-
-    // TODO: distribute the cluster width proportionally to the characters
-    // clusters (e.g. ligatures) correspond to more than one char index,
-    // so some character widths are still uninitialized. This is solved
-    // by setting the first charwidth of the cluster to the cluster width
-
-    return true;
 }
 
 DeviceCoordinate GenericSalLayout::FillDXArray( DeviceCoordinate* pCharWidths ) const
@@ -890,157 +819,6 @@ DeviceCoordinate GenericSalLayout::GetTextWidth() const
 
     DeviceCoordinate nWidth = nMaxPos - nMinPos;
     return nWidth;
-}
-
-void GenericSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
-{
-    SalLayout::AdjustLayout( rArgs );
-
-    if( rArgs.mpDXArray )
-        ApplyDXArray( rArgs );
-    else if( rArgs.mnLayoutWidth )
-        Justify( rArgs.mnLayoutWidth );
-}
-
-// This DXArray thing is one of the stupidest ideas I have ever seen (I've been
-// told that it probably a one-to-one mapping of some Windows 3.1 API, which is
-// telling).
-
-// Note: That would be the EMRTEXT structure, which is part of the EMF spec (see
-// [MS-EMF] section 2.2.5. Basically the field in question is OutputDx, which is:
-//
-//      "An array of 32-bit unsigned integers that specify the output spacing
-//      between the origins of adjacent character cells in logical units."
-//
-// This obviously makes sense for ASCII text (the EMR_EXTTEXTOUTA record), but it
-// doesn't make sense for Unicode text (the EMR_EXTTEXTOUTW record) because it is
-// mapping character codes to output spacing, which obviously can cause problems
-// with CTL. MANY of our concepts are based around Microsoft data structures, this
-// is obviously one of them and we probably need a rethink about how we go about
-// this.
-
-// To justify a text string, Writer calls OutputDevice::GetTextArray()
-// to get an array that maps input characters (not glyphs) to their absolute
-// position, GetTextArray() in turn calls SalLayout::FillDXArray() to get an
-// array of character widths that it converts to absolute positions.
-
-// Writer would then apply justification adjustments to that array of absolute
-// character positions and return to OutputDevice, which eventually calls
-// ApplyDXArray(), which needs to extract the individual adjustments for each
-// character to apply it to corresponding glyphs, and since that information is
-// already lost it tries to do some heuristics to guess it again. Those
-// heuristics often fail, and have always been a source of all sorts of weird
-// text layout bugs, and instead of fixing the broken design a hack after hack
-// have been applied on top of it, making it a complete mess that nobody
-// understands.
-
-// As you can see by now, this is utterly stupid, why doesn't Writer just send
-// us the advance width transformations it wants to apply to each character directly
-// instead of this whole mess?
-
-void GenericSalLayout::ApplyDXArray( ImplLayoutArgs& rArgs )
-{
-    if( m_GlyphItems.empty())
-        return;
-
-    // determine cluster boundaries and x base offset
-    const int nCharCount = rArgs.mnEndCharPos - rArgs.mnMinCharPos;
-    std::unique_ptr<int[]> const pLogCluster(new int[nCharCount]);
-    size_t i;
-    int n,p;
-    long nBasePointX = -1;
-    if( mnLayoutFlags & SalLayoutFlags::ForFallback )
-        nBasePointX = 0;
-    for(p = 0; p < nCharCount; ++p )
-        pLogCluster[ p ] = -1;
-
-    for( i = 0; i < m_GlyphItems.size(); ++i)
-    {
-        n = m_GlyphItems[i].mnCharPos - rArgs.mnMinCharPos;
-        if( (n < 0) || (nCharCount <= n) )
-            continue;
-        if( pLogCluster[ n ] < 0 )
-            pLogCluster[ n ] = i;
-        if( nBasePointX < 0 )
-            nBasePointX = m_GlyphItems[i].maLinearPos.X();
-    }
-    // retarget unresolved pLogCluster[n] to a glyph inside the cluster
-    // TODO: better do it while the deleted-glyph markers are still there
-    for( n = 0; n < nCharCount; ++n )
-        if( (p = pLogCluster[n]) >= 0 )
-            break;
-    if( n >= nCharCount )
-        return;
-    for( n = 0; n < nCharCount; ++n )
-    {
-        if( pLogCluster[ n ] < 0 )
-            pLogCluster[ n ] = p;
-        else
-            p = pLogCluster[ n ];
-    }
-
-    // calculate adjusted cluster widths
-    std::unique_ptr<long[]> const pNewGlyphWidths(new long[m_GlyphItems.size()]);
-    for( i = 0; i < m_GlyphItems.size(); ++i )
-        pNewGlyphWidths[ i ] = 0;
-
-    bool bRTL;
-    for( int nCharPos = p = -1; rArgs.GetNextPos( &nCharPos, &bRTL ); )
-    {
-        n = nCharPos - rArgs.mnMinCharPos;
-        if( (n < 0) || (nCharCount <= n) )  continue;
-
-        if( pLogCluster[ n ] >= 0 )
-            p = pLogCluster[ n ];
-        if( p >= 0 )
-        {
-            long nDelta = rArgs.mpDXArray[ n ] ;
-            if( n > 0 )
-                nDelta -= rArgs.mpDXArray[ n-1 ];
-            pNewGlyphWidths[ p ] += nDelta * mnUnitsPerPixel;
-        }
-    }
-
-    // move cluster positions using the adjusted widths
-    long nDelta = 0;
-    long nNewPos = 0;
-    for( i = 0; i < m_GlyphItems.size(); ++i)
-    {
-        if( m_GlyphItems[i].IsClusterStart() )
-        {
-            // calculate original and adjusted cluster width
-            int nOldClusterWidth = m_GlyphItems[i].mnNewWidth - m_GlyphItems[i].mnXOffset;
-            int nNewClusterWidth = pNewGlyphWidths[i];
-            size_t j;
-            for( j = i; ++j < m_GlyphItems.size(); )
-            {
-                if( m_GlyphItems[j].IsClusterStart() )
-                    break;
-                if( !m_GlyphItems[j].IsDiacritic() ) // #i99367# ignore diacritics
-                    nOldClusterWidth += m_GlyphItems[j].mnNewWidth - m_GlyphItems[j].mnXOffset;
-                nNewClusterWidth += pNewGlyphWidths[j];
-            }
-            const int nDiff = nNewClusterWidth - nOldClusterWidth;
-
-            // adjust cluster glyph widths and positions
-            nDelta = nBasePointX + (nNewPos - m_GlyphItems[i].maLinearPos.X());
-            if( !m_GlyphItems[i].IsRTLGlyph() )
-            {
-                // for LTR case extend rightmost glyph in cluster
-                m_GlyphItems[j - 1].mnNewWidth += nDiff;
-            }
-            else
-            {
-                // right align cluster in new space for RTL case
-                m_GlyphItems[i].mnNewWidth += nDiff;
-                nDelta += nDiff;
-            }
-
-            nNewPos += nNewClusterWidth;
-        }
-
-        m_GlyphItems[i].maLinearPos.X() += nDelta;
-    }
 }
 
 void GenericSalLayout::Justify( DeviceCoordinate nNewWidth )
@@ -1157,57 +935,6 @@ void GenericSalLayout::ApplyAsianKerning(const OUString& rStr)
         // adjust the glyph positions to the new glyph widths
         if( pGlyphIter+1 != pGlyphIterEnd )
             pGlyphIter->maLinearPos.X() += nOffset;
-    }
-}
-
-void GenericSalLayout::KashidaJustify( long nKashidaIndex, int nKashidaWidth )
-{
-    // TODO: reimplement method when container type for GlyphItems changes
-
-    // skip if the kashida glyph in the font looks suspicious
-    if( nKashidaWidth <= 0 )
-        return;
-
-    // calculate max number of needed kashidas
-    int nKashidaCount = 0;
-    for (std::vector<GlyphItem>::iterator pGlyphIter = m_GlyphItems.begin();
-            pGlyphIter != m_GlyphItems.end(); ++pGlyphIter)
-    {
-        // only inject kashidas in RTL contexts
-        if( !pGlyphIter->IsRTLGlyph() )
-            continue;
-        // no kashida-injection for blank justified expansion either
-        if( IsSpacingGlyph( pGlyphIter->maGlyphId) )
-            continue;
-
-        // calculate gap, ignore if too small
-        int nGapWidth = pGlyphIter->mnNewWidth - pGlyphIter->mnOrigWidth;
-        // worst case is one kashida even for mini-gaps
-        if( nGapWidth < nKashidaWidth )
-            continue;
-
-        nKashidaCount = 0;
-        Point aPos = pGlyphIter->maLinearPos;
-        aPos.X() -= nGapWidth; // cluster is already right aligned
-        int const nCharPos = pGlyphIter->mnCharPos;
-        std::vector<GlyphItem>::iterator pGlyphIter2 = pGlyphIter;
-        for(; nGapWidth > nKashidaWidth; nGapWidth -= nKashidaWidth, ++nKashidaCount )
-        {
-            pGlyphIter2 = m_GlyphItems.insert(pGlyphIter2, GlyphItem(nCharPos, nKashidaIndex, aPos,
-                                                      GlyphItem::IS_IN_CLUSTER|GlyphItem::IS_RTL_GLYPH, nKashidaWidth ));
-            ++pGlyphIter2;
-            aPos.X() += nKashidaWidth;
-        }
-
-        // fixup rightmost kashida for gap remainder
-        if( nGapWidth > 0 )
-        {
-            pGlyphIter2 = m_GlyphItems.insert(pGlyphIter2, GlyphItem(nCharPos, nKashidaIndex, aPos,
-                                                      GlyphItem::IS_IN_CLUSTER|GlyphItem::IS_RTL_GLYPH, nKashidaCount ? nGapWidth : nGapWidth/2 ));
-            ++pGlyphIter2;
-            aPos.X() += nGapWidth;
-        }
-        pGlyphIter = pGlyphIter2;
     }
 }
 
