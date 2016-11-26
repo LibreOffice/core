@@ -13,8 +13,8 @@
 #include <sfx2/thumbnailview.hxx>
 
 //unicode item defines
-#define ITEM_MAX_WIDTH 20
-#define ITEM_MAX_HEIGHT 20
+#define ITEM_MAX_WIDTH 30
+#define ITEM_MAX_HEIGHT 30
 #define ITEM_PADDING 5
 #define ITEM_MAX_TEXT_LENGTH 10
 
@@ -72,6 +72,8 @@ protected:
     virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
 
     virtual void KeyInput( const KeyEvent& rKEvt ) override;
+
+    virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
 
 protected:
     std::string msJSONData;

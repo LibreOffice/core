@@ -85,6 +85,10 @@ SfxEmojiControl::SfxEmojiControl(sal_uInt16 nId, const css::uno::Reference< css:
     nCurPageId = mpTabControl->GetPageId(FILTER_UNICODE9);
     mpTabControl->SetTabPage(nCurPageId, pTabPage);
     ConvertLabelToUnicode(nCurPageId);
+
+    vcl::Font rFont = mpTabControl->GetControlFont();
+    rFont.SetFontHeight(TAB_FONT_SIZE);
+    mpTabControl->SetControlFont(rFont);
     pTabPage->Show();
 
     mpEmojiView->SetStyle(mpEmojiView->GetStyle() | WB_VSCROLL);
