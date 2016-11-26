@@ -13,6 +13,9 @@
 
 #if defined(MAR_NSS)
 
+#pragma warning(push)
+#pragma warning(disable: 4204)
+
 /**
  * Loads the public key for the specified cert name from the NSS store.
  *
@@ -266,6 +269,8 @@ CryptoAPI_VerifyUpdate(HCRYPTHASH* hash, BYTE *buf, DWORD len)
   result = CryptHashData(*hash, buf, len, 0);
   return result ? CryptoX_Success : CryptoX_Error;
 }
+
+#pragma warning(pop)
 
 #endif
 
