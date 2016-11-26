@@ -16,6 +16,24 @@
       "revId": "c0315cd64fc3f57d19bfdb46037576ada5997793",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a71b18c_942a84e6",
+        "filename": "include/vcl/outdev.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1000381
+      },
+      "writtenOn": "2016-11-26T10:26:25Z",
+      "side": 1,
+      "message": "How is that value calculated? (I have another change which will remove DrawBullet).",
+      "parentUuid": "3a71b18c_54f2ac9b",
+      "revId": "c0315cd64fc3f57d19bfdb46037576ada5997793",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
