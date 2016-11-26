@@ -34,6 +34,7 @@ public:
     void testMaction();
     void testMspace();
     void testtdf99556();
+    void testTdf103430();
     void testTdf103500();
 
     CPPUNIT_TEST_SUITE(Test);
@@ -42,6 +43,7 @@ public:
     CPPUNIT_TEST(testMaction);
     CPPUNIT_TEST(testMspace);
     CPPUNIT_TEST(testtdf99556);
+    CPPUNIT_TEST(testTdf103430);
     CPPUNIT_TEST(testTdf103500);
     CPPUNIT_TEST_SUITE_END();
 
@@ -122,10 +124,17 @@ void Test::testtdf99556()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("loaded text", sExpected, mxDocShell->GetText());
 }
 
+void Test::testTdf103430()
+{
+    loadURL(m_directories.getURLFromSrc("starmath/qa/extras/data/tdf103430.mml"));
+    CPPUNIT_ASSERT_EQUAL(OUString("{{nitalic d}^2 {nitalic {color blue y}}} over {{nitalic d} {font sans {bold {italic {color red x}}}}}"),
+                         mxDocShell->GetText());
+}
+
 void Test::testTdf103500()
 {
     loadURL(m_directories.getURLFromSrc("starmath/qa/extras/data/tdf103500.mml"));
-    CPPUNIT_ASSERT_EQUAL(OUString("{{ int csub a csup b {1 over x ` d x}} = {intd csub a csup b {1 over y ` d y}}}"),
+    CPPUNIT_ASSERT_EQUAL(OUString("{{ int csub a csup b {1 over x ` {nitalic d} x}} = {intd csub a csup b {1 over y ` {nitalic d} y}}}"),
                          mxDocShell->GetText());
 }
 

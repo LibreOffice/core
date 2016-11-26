@@ -10,6 +10,7 @@
 #include "mathmlattr.hxx"
 
 #include <cassert>
+#include <unordered_map>
 
 namespace {
 
@@ -142,6 +143,40 @@ sal_Int32 ParseMathMLAttributeLengthValue(const OUString &rStr, MathMLAttributeL
         return nIdx + 2;
     }
     return nIdx;
+}
+
+
+bool GetMathMLMathvariantValue(const OUString &rStr, MathMLMathvariantValue *pV)
+{
+    static const std::unordered_map<OUString, MathMLMathvariantValue, OUStringHash> aMap{
+        {"normal", MathMLMathvariantValue::Normal},
+        {"bold", MathMLMathvariantValue::Bold},
+        {"italic", MathMLMathvariantValue::Italic},
+        {"bold-italic", MathMLMathvariantValue::BoldItalic},
+        {"double-struck", MathMLMathvariantValue::DoubleStruck},
+        {"bold-fraktur", MathMLMathvariantValue::BoldFraktur},
+        {"script", MathMLMathvariantValue::Script},
+        {"bold-script", MathMLMathvariantValue::BoldScript},
+        {"fraktur", MathMLMathvariantValue::Fraktur},
+        {"sans-serif", MathMLMathvariantValue::SansSerif},
+        {"bold-sans-serif", MathMLMathvariantValue::BoldSansSerif},
+        {"sans-serif-italic", MathMLMathvariantValue::SansSerifItalic},
+        {"sans-serif-bold-italic", MathMLMathvariantValue::SansSerifBoldItalic},
+        {"monospace", MathMLMathvariantValue::Monospace},
+        {"initial", MathMLMathvariantValue::Initial},
+        {"tailed", MathMLMathvariantValue::Tailed},
+        {"looped", MathMLMathvariantValue::Looped},
+        {"stretched", MathMLMathvariantValue::Stretched}
+    };
+
+    assert(pV);
+    auto it = aMap.find(rStr);
+    if (it != aMap.end())
+    {
+        *pV = it->second;
+        return true;
+    }
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
