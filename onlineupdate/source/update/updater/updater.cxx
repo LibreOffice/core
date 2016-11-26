@@ -1376,7 +1376,7 @@ PatchFile::~PatchFile()
     // this call is here in case Execute errors out.
 #ifdef _WIN32
     if (mPatchStream) {
-        UnlockFile((HANDLE)_get_osfhandle(fileno(mPatchStream)), 0, 0, -1, -1);
+        UnlockFile((HANDLE)_get_osfhandle(fileno(mPatchStream)), (DWORD)0, (DWORD)0, (DWORD)-1, (DWORD)-1);
     }
 #endif
 
@@ -1486,7 +1486,7 @@ PatchFile::Prepare()
 #ifdef _WIN32
     // Lock the patch file, so it can't be messed with between
     // when we're done creating it and when we go to apply it.
-    if (!LockFile((HANDLE)_get_osfhandle(fileno(mPatchStream)), 0, 0, -1, -1)) {
+    if (!LockFile((HANDLE)_get_osfhandle(fileno(mPatchStream)), (DWORD)0, (DWORD)0, (DWORD)-1, (DWORD)-1)) {
         LOG(("Couldn't lock patch file: %d", GetLastError()));
         return LOCK_ERROR_PATCH_FILE;
     }
@@ -1624,7 +1624,7 @@ PatchFile::Execute()
     // Make sure mPatchStream gets unlocked on Windows; the system will do that,
     // but not until some indeterminate future time, and we want determinism.
 #ifdef XP_WIN
-    UnlockFile((HANDLE)_get_osfhandle(fileno(mPatchStream)), 0, 0, -1, -1);
+    UnlockFile((HANDLE)_get_osfhandle(fileno(mPatchStream)), (DWORD)0, (DWORD)0, (DWORD)-1, (DWORD)-1);
 #endif
     // Set mPatchStream to nullptr to make AutoFile close the file,
     // so it can be deleted on Windows.
