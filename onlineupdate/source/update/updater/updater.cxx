@@ -65,6 +65,12 @@
 #include <winhelper/windowsStart.hxx>
 #include "uachelper.h"
 #include "pathhash.h"
+
+// TODO:moggi taken from the mozilla code -- find a better solution
+#define INVALID_APPLYTO_DIR_ERROR 74
+#define REMOVE_FILE_SPEC_ERROR 71
+#define INVALID_APPLYTO_DIR_STAGED_ERROR 72
+
 #endif
 
 
