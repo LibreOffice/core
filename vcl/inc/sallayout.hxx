@@ -176,7 +176,7 @@ public:
     virtual DeviceCoordinate FillDXArray( DeviceCoordinate* pDXArray ) const = 0;
     virtual DeviceCoordinate GetTextWidth() const { return FillDXArray( nullptr ); }
     virtual void    GetCaretPositions( int nArraySize, long* pCaretXArray ) const = 0;
-    virtual bool    IsKashidaPosValid ( int /*nCharPos*/ ) const { return true; } // i60594
+    virtual bool    IsKashidaPosValid ( int /*nCharPos*/ ) const = 0; // i60594
 
     // methods using glyph indexing
     virtual int     GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIdAry, Point& rPos, int&,
@@ -332,8 +332,7 @@ public:
     // used by layout engines
     void            AppendGlyph( const GlyphItem& );
     void            Reserve(int size) { m_GlyphItems.reserve(size + 1); }
-    virtual void    AdjustLayout( ImplLayoutArgs& ) override;
-    virtual void    ApplyDXArray( ImplLayoutArgs& );
+    virtual void    ApplyDXArray( ImplLayoutArgs& ) = 0;
     void    Justify( DeviceCoordinate nNewWidth );
     void            KashidaJustify( long nIndex, int nWidth );
     void            ApplyAsianKerning(const OUString& rStr);
@@ -359,7 +358,7 @@ protected:
     virtual void    DropGlyph( int nStart ) override;
     virtual void    Simplify( bool bIsBase ) override;
 
-    virtual bool    GetCharWidths( DeviceCoordinate* pCharWidths ) const;
+    virtual bool    GetCharWidths( DeviceCoordinate* pCharWidths ) const = 0;
 
     std::vector<GlyphItem>     m_GlyphItems;
 
