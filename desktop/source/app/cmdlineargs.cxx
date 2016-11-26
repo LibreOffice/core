@@ -329,7 +329,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
             {
                 m_version = true;
             }
-            else if ( oArg.startsWith("splash-pipe=") )
+            else if ( oArg.startsWith("splash-pipe") )
             {
                 m_splashpipe = true;
             }
