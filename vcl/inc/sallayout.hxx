@@ -324,8 +324,6 @@ public:
     bool    AllowKashida() const    { return ((mnFlags & ALLOW_KASHIDA) != 0); }
 };
 
-typedef std::list<GlyphItem> GlyphList;
-
 class VCL_PLUGIN_PUBLIC GenericSalLayout : public SalLayout
 {
 public:

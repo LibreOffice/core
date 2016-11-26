@@ -45,8 +45,6 @@ private:
     OString             maBaseName;
     rtl_TextEncoding    mnBaseEncoding;
 
-    typedef std::unordered_map< sal_Unicode, sal_uInt8 > char_map_t;
-    typedef std::list< char_map_t > char_list_t;
     typedef std::unordered_map< sal_GlyphId, sal_uInt8 > glyph_map_t;
     typedef std::list< glyph_map_t > glyph_list_t;
 
