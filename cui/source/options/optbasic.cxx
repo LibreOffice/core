@@ -19,7 +19,6 @@
 
 #include "optbasic.hxx"
 #include <basic/codecompletecache.hxx>
-#include <svtools/miscopt.hxx>
 #include <iostream>
 #include <officecfg/Office/BasicIDE.hxx>
 #include <cuires.hrc>
@@ -27,12 +26,6 @@
 SvxBasicIDEOptionsPage::SvxBasicIDEOptionsPage( vcl::Window* pParent, const SfxItemSet& rSet )
 : SfxTabPage(pParent, "OptBasicIDEPage", "cui/ui/optbasicidepage.ui", &rSet)
 {
-    SvtMiscOptions aMiscOpt;
-    if( ! aMiscOpt.IsExperimentalMode() )
-    {
-        Disable();
-    }
-
     get(pCodeCompleteChk, "codecomplete_enable");
     get(pAutocloseProcChk, "autoclose_proc");
     get(pAutocloseParenChk, "autoclose_paren");
@@ -41,7 +34,6 @@ SvxBasicIDEOptionsPage::SvxBasicIDEOptionsPage( vcl::Window* pParent, const SfxI
     get(pUseExtendedTypesChk, "extendedtypes_enable");
 
     LoadConfig();
-
 }
 
 SvxBasicIDEOptionsPage::~SvxBasicIDEOptionsPage()
