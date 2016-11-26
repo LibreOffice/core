@@ -1630,7 +1630,7 @@ PatchFile::Execute()
     // Go ahead and do a bit of cleanup now to minimize runtime overhead.
     // Make sure mPatchStream gets unlocked on Windows; the system will do that,
     // but not until some indeterminate future time, and we want determinism.
-#ifdef XP_WIN
+#ifdef _WIN32
     UnlockFile((HANDLE)_get_osfhandle(fileno(mPatchStream)), (DWORD)0, (DWORD)0, (DWORD)-1, (DWORD)-1);
 #endif
     // Set mPatchStream to nullptr to make AutoFile close the file,
@@ -3344,7 +3344,7 @@ int NS_main(int argc, NS_tchar **argv)
                 NS_tmkdir(gDeleteDirPath, 0755);
             }
         }
-#endif /* XP_WIN */
+#endif /* _WIN32 */
 
         // Run update process on a background thread. ShowProgressUI may return
         // before QuitProgressUI has been called, so wait for UpdateThreadFunc to
@@ -3360,7 +3360,7 @@ int NS_main(int argc, NS_tchar **argv)
         }
         t.join();
 
-#ifdef XP_WIN
+#ifdef _WIN32
         if (argc > callbackIndex && !sReplaceRequest) {
             if (callbackFile != INVALID_HANDLE_VALUE) {
                 CloseHandle(callbackFile);
@@ -3447,7 +3447,7 @@ int NS_main(int argc, NS_tchar **argv)
     LogFinish();
 
     int retVal = LaunchCallbackAndPostProcessApps(argc, argv, callbackIndex
-#ifdef XP_WIN
+#ifdef _WIN32
             , elevatedLockFilePath
             , updateLockFileHandle
 #elif XP_MACOSX
