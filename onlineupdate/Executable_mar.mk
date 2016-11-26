@@ -32,13 +32,9 @@ $(eval $(call gb_Executable_add_libs,mar,\
 ))
 endif
 
-ifeq ($(filter WNT MACOSX,$(OS)),)
-$(eval $(call gb_Executable_use_externals,mar,nss3))
-
 $(eval $(call gb_Executable_add_defs,mar,\
 	-DMAR_NSS \
 ))
-endif
 
 $(eval $(call gb_Executable_add_defs,mar,\
 	-DAPP_VERSION=\"$(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)\" \
