@@ -314,6 +314,11 @@ update_info parse_response(const std::string& rResponse)
     }
 
     auto aRootKeys = aDocumentRoot.keys();
+    if (std::find(aRootKeys.begin(), aRootKeys.end(), "error") != aRootKeys.end())
+    {
+        throw invalid_update_info();
+    }
+
     if (aRootKeys.size() != 5)
     {
         SAL_WARN("desktop.Update", "invalid root entries: " << rResponse);
