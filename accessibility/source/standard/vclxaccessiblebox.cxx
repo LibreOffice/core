@@ -236,7 +236,7 @@ void VCLXAccessibleBox::ProcessWindowEvent (const VclWindowEvent& rVclWindowEven
 
         case VCLEVENT_EDIT_MODIFY:
         case VCLEVENT_EDIT_SELECTIONCHANGED:
-     // case VCLEVENT_EDIT_CARETCHANGED:
+        case VCLEVENT_EDIT_CARETCHANGED:
             // Modify/Selection events are handled by the combo box instead of
             // directly by the edit field (Why?).  Therefore, delegate this
             // call to the edit field.
