@@ -18,6 +18,8 @@
 #include <sfx2/tbxctrl.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
 
+#define TAB_FONT_SIZE 15
+
 class EmojiView;
 class ThumbnailViewItem;
 enum class FILTER_CATEGORY;
