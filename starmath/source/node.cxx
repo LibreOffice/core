@@ -1780,34 +1780,34 @@ void SmFontNode::CreateTextFromNode(OUString &rText)
             rText += "color yellow ";
             break;
         case TTEAL:
-            rText += "color teal";
+            rText += "color teal ";
             break;
         case TSILVER:
-            rText += "color silver";
+            rText += "color silver ";
             break;
         case TGRAY:
-            rText += "color gray";
+            rText += "color gray ";
             break;
         case TMAROON:
-            rText += "color maroon";
+            rText += "color maroon ";
             break;
         case TPURPLE:
-            rText += "color purple";
+            rText += "color purple ";
             break;
         case TLIME:
-            rText += "color lime";
+            rText += "color lime ";
             break;
         case TOLIVE:
-            rText += "color olive";
+            rText += "color olive ";
             break;
         case TNAVY:
-            rText += "color navy";
+            rText += "color navy ";
             break;
         case TAQUA:
-            rText += "color aqua";
+            rText += "color aqua ";
             break;
         case TFUCHSIA:
-            rText += "color fuchsia";
+            rText += "color fuchsia ";
             break;
         case TSANS:
             rText += "font sans ";
