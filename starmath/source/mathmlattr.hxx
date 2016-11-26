@@ -47,6 +47,33 @@ struct MathMLAttributeLengthValue
 
 sal_Int32 ParseMathMLAttributeLengthValue(const OUString &rStr, MathMLAttributeLengthValue *pV);
 
+
+// MathML 3: 3.2.2 Mathematics style attributes common to token elements
+// <https://www.w3.org/TR/MathML3/chapter3.html#presm.commatt>
+
+enum class MathMLMathvariantValue {
+    Normal,
+    Bold,
+    Italic,
+    BoldItalic,
+    DoubleStruck,
+    BoldFraktur,
+    Script,
+    BoldScript,
+    Fraktur,
+    SansSerif,
+    BoldSansSerif,
+    SansSerifItalic,
+    SansSerifBoldItalic,
+    Monospace,
+    Initial,
+    Tailed,
+    Looped,
+    Stretched
+};
+
+bool GetMathMLMathvariantValue(const OUString &rStr, MathMLMathvariantValue *pV);
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
