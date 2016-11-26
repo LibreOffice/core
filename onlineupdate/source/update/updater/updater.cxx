@@ -1825,10 +1825,6 @@ PatchIfFile::Finish(int status)
 //-----------------------------------------------------------------------------
 
 #ifdef _WIN32
-#include "nsWindowsRestart.cpp"
-#include "nsWindowsHelpers.h"
-#include "uachelper.h"
-#include "pathhash.h"
 
 /**
  * Launch the post update application (helper.exe). It takes in the path of the
