@@ -1089,7 +1089,7 @@ void ScTable::StartListeningFormulaCells(
 void ScTable::CopyToTable(
     sc::CopyToDocContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     InsertDeleteFlags nFlags, bool bMarked, ScTable* pDestTab, const ScMarkData* pMarkData,
-    bool bAsLink, bool bColRowFlags, bool bGlobalNamesToLocal )
+    bool bAsLink, bool bColRowFlags, bool bGlobalNamesToLocal, bool bCopyCaptions )
 {
     if (!ValidColRow(nCol1, nRow1) || !ValidColRow(nCol2, nRow2))
         return;
@@ -1209,14 +1209,23 @@ void ScTable::CopyToTable(
     if(nFlags & InsertDeleteFlags::OUTLINE) // also only when bColRowFlags
         pDestTab->SetOutlineTable( pOutlineTable );
 
-    if (nFlags & (InsertDeleteFlags::NOTE|InsertDeleteFlags::ADDNOTES))
+    if (bCopyCaptions && (nFlags & (InsertDeleteFlags::NOTE | InsertDeleteFlags::ADDNOTES)))
     {
         bool bCloneCaption = (nFlags & InsertDeleteFlags::NOCAPTIONS) == InsertDeleteFlags::NONE;
-        for (SCCOL i = nCol1; i <= nCol2; i++)
-        {
-            aCol[i].CopyCellNotesToDocument(nRow1, nRow2, pDestTab->aCol[i], bCloneCaption);
-            pDestTab->aCol[i].UpdateNoteCaptions(nRow1, nRow2);
-        }
+        CopyCaptionsToTable( nCol1, nRow1, nCol2, nRow2, pDestTab, bCloneCaption);
+    }
+}
+
+void ScTable::CopyCaptionsToTable( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScTable* pDestTab,
+        bool bCloneCaption )
+{
+    if (!ValidColRow(nCol1, nRow1) || !ValidColRow(nCol2, nRow2))
+        return;
+
+    for (SCCOL i = nCol1; i <= nCol2; i++)
+    {
+        aCol[i].CopyCellNotesToDocument(nRow1, nRow2, pDestTab->aCol[i], bCloneCaption);
+        pDestTab->aCol[i].UpdateNoteCaptions(nRow1, nRow2);
     }
 }
 
