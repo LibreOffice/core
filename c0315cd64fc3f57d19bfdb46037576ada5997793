@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a71b18c_54f2ac9b",
+        "filename": "include/vcl/outdev.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-11-26T10:17:19Z",
+      "side": 1,
+      "message": "need to change this constant there. the new value would be 0x6f77",
+      "revId": "c0315cd64fc3f57d19bfdb46037576ada5997793",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
