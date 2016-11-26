@@ -1488,7 +1488,8 @@ PatchFile::Prepare()
     // when we're done creating it and when we go to apply it.
     if (!LockFile((HANDLE)_get_osfhandle(fileno(mPatchStream)), (DWORD)0, (DWORD)0, (DWORD)-1, (DWORD)-1)) {
         LOG(("Couldn't lock patch file: %d", GetLastError()));
-        return LOCK_ERROR_PATCH_FILE;
+        // TODO: moggi: fix the build problem with LOCK_ERROR_PATCH_FILE
+        return WRITE_ERROR; //return LOCK_ERROR_PATCH_FILE;
     }
     char sourcefile[MAXPATHLEN];
     if (!WideCharToMultiByte(CP_UTF8, 0, mPatchFile, -1, sourcefile, MAXPATHLEN,
