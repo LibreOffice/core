@@ -397,8 +397,10 @@ void SvxSaveTabPage::Reset( const SfxItemSet* )
     SvtSaveOptions aSaveOpt;
     aLoadUserSettingsCB->Check(aSaveOpt.IsLoadUserSettings());
     aLoadUserSettingsCB->SaveValue();
+    aLoadUserSettingsCB->Enable(!aSaveOpt.IsReadOnly(SvtSaveOptions::E_USEUSERDATA));
     aLoadDocPrinterCB->Check( aSaveOpt.IsLoadDocumentPrinter() );
     aLoadDocPrinterCB->SaveValue();
+    aLoadDocPrinterCB->Enable(!aSaveOpt.IsReadOnly(SvtSaveOptions::E_LOADDOCPRINTER));
 
     if ( !pImpl->bInitialized )
     {
@@ -471,25 +473,33 @@ void SvxSaveTabPage::Reset( const SfxItemSet* )
     }
 
     aDocInfoCB->Check(aSaveOpt.IsDocInfoSave());
+    aDocInfoCB->Enable(!aSaveOpt.IsReadOnly(SvtSaveOptions::E_DOCINFSAVE));
 
     aBackupCB->Check(aSaveOpt.IsBackup());
-    bool bBackupRO = aSaveOpt.IsReadOnly(SvtSaveOptions::E_BACKUP);
-    aBackupCB->Enable(!bBackupRO);
+    aBackupCB->Enable(!aSaveOpt.IsReadOnly(SvtSaveOptions::E_BACKUP));
 
     aAutoSaveCB->Check(aSaveOpt.IsAutoSave());
+    aAutoSaveCB->Enable(!aSaveOpt.IsReadOnly(SvtSaveOptions::E_AUTOSAVE));
+
     aUserAutoSaveCB->Check(aSaveOpt.IsUserAutoSave());
+    aUserAutoSaveCB->Enable(!aSaveOpt.IsReadOnly(SvtSaveOptions::E_USERAUTOSAVE));
+
     aWarnAlienFormatCB->Check(aSaveOpt.IsWarnAlienFormat());
     aWarnAlienFormatCB->Enable(!aSaveOpt.IsReadOnly(SvtSaveOptions::E_WARNALIENFORMAT));
 
-    aAutoSaveEdit->SetValue( aSaveOpt.GetAutoSaveTime() );
+    aAutoSaveEdit->SetValue(aSaveOpt.GetAutoSaveTime());
+    aAutoSaveEdit->Enable(!aSaveOpt.IsReadOnly(SvtSaveOptions::E_AUTOSAVETIME));
 
     // save relatively
-    aRelativeFsysCB->Check( aSaveOpt.IsSaveRelFSys() );
+    aRelativeFsysCB->Check(aSaveOpt.IsSaveRelFSys());
+    aRelativeFsysCB->Enable(!aSaveOpt.IsReadOnly(SvtSaveOptions::E_SAVERELFSYS));
 
-    aRelativeInetCB->Check( aSaveOpt.IsSaveRelINet() );
+    aRelativeInetCB->Check(aSaveOpt.IsSaveRelINet());
+    aRelativeInetCB->Enable(!aSaveOpt.IsReadOnly(SvtSaveOptions::E_SAVERELINET));
 
     void* pDefaultVersion = reinterpret_cast<void*>( aSaveOpt.GetODFDefaultVersion() );
     aODFVersionLB->SelectEntryPos( aODFVersionLB->GetEntryPos( pDefaultVersion ) );
+    aODFVersionLB->Enable(!aSaveOpt.IsReadOnly(SvtSaveOptions::E_ODFDEFAULTVERSION));
 
     AutoClickHdl_Impl( aAutoSaveCB );
     ODFVersionHdl_Impl( *aODFVersionLB );
