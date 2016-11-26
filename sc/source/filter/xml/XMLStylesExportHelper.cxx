@@ -68,9 +68,7 @@ bool ScMyValidation::IsEqual(const ScMyValidation& aVal) const
     if (aVal.bIgnoreBlanks == bIgnoreBlanks &&
         aVal.bShowImputMessage == bShowImputMessage &&
         aVal.bShowErrorMessage == bShowErrorMessage &&
-        aVal.aBaseCell.Tab() == aBaseCell.Tab() &&
-        aVal.aBaseCell.Col() == aBaseCell.Col() &&
-        aVal.aBaseCell.Row() == aBaseCell.Row() &&
+        aVal.aBaseCell == aBaseCell &&
         aVal.aAlertStyle == aAlertStyle &&
         aVal.aValidationType == aValidationType &&
         aVal.aOperator == aOperator &&
