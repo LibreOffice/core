@@ -332,10 +332,8 @@ public:
     // used by layout engines
     void            AppendGlyph( const GlyphItem& );
     void            Reserve(int size) { m_GlyphItems.reserve(size + 1); }
-    virtual void    AdjustLayout( ImplLayoutArgs& ) override;
-    virtual void    ApplyDXArray( ImplLayoutArgs& );
-    void    Justify( DeviceCoordinate nNewWidth );
-    void            KashidaJustify( long nIndex, int nWidth );
+    virtual void    ApplyDXArray(ImplLayoutArgs&) = 0;
+    void            Justify(DeviceCoordinate nNewWidth);
     void            ApplyAsianKerning(const OUString& rStr);
     void            SortGlyphItems();
 
@@ -359,7 +357,7 @@ protected:
     virtual void    DropGlyph( int nStart ) override;
     virtual void    Simplify( bool bIsBase ) override;
 
-    virtual bool    GetCharWidths( DeviceCoordinate* pCharWidths ) const;
+    virtual bool    GetCharWidths(DeviceCoordinate* pCharWidths) const = 0;
 
     std::vector<GlyphItem>     m_GlyphItems;
 

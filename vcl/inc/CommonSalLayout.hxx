@@ -61,6 +61,8 @@ class CommonSalLayout : public GenericSalLayout
     hb_set_t*               mpVertGlyphs;
     bool                    IsVerticalAlternate(hb_codepoint_t nGlyphIndex);
 
+    void                    SetNeedFallback(ImplLayoutArgs&, sal_Int32, bool);
+
 public:
 #if defined(_WIN32)
     explicit                CommonSalLayout(HDC, WinFontInstance&, const WinFontFace&);
@@ -74,16 +76,15 @@ public:
 #endif
 
     virtual void            InitFont() const override;
-    void                    SetNeedFallback(ImplLayoutArgs&, sal_Int32, bool);
-    void                    AdjustLayout(ImplLayoutArgs&) override;
-    bool                    LayoutText(ImplLayoutArgs&) override;
-    void                    DrawText(SalGraphics&) const override;
-    std::shared_ptr<vcl::TextLayoutCache> CreateTextLayoutCache(OUString const&) const override;
+    void                    AdjustLayout(ImplLayoutArgs&) final override;
+    bool                    LayoutText(ImplLayoutArgs&) final override;
+    void                    DrawText(SalGraphics&) const final override;
+    std::shared_ptr<vcl::TextLayoutCache> CreateTextLayoutCache(OUString const&) const final override;
 
-    virtual bool            GetCharWidths(DeviceCoordinate* pCharWidths) const override;
-    virtual void            ApplyDXArray(ImplLayoutArgs&) override;
+    bool                    GetCharWidths(DeviceCoordinate* pCharWidths) const final override;
+    void                    ApplyDXArray(ImplLayoutArgs&) final override;
 
-    virtual bool            IsKashidaPosValid(int nCharPos) const override;
+    bool                    IsKashidaPosValid(int nCharPos) const final override;
 };
 
 enum class VerticalOrientation {
