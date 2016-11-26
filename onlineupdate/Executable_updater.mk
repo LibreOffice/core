@@ -43,13 +43,14 @@ endif
 
 $(eval $(call gb_Executable_use_externals,updater,\
 	bzip2 \
+	nss3 \
 	$(if $(filter LINUX,$(OS)), \
-		gtk \
-		nss3 )\
+		gtk )\
 ))
 
 $(eval $(call gb_Executable_add_defs,updater,\
 	-DVERIFY_MAR_SIGNATURE \
+	-DNSS3 \
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,updater,\
