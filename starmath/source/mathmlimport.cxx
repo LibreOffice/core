@@ -43,6 +43,7 @@ one go*/
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/string.hxx>
 #include <o3tl/make_unique.hxx>
+#include <rtl/character.hxx>
 #include <rtl/math.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/docfile.hxx>
@@ -573,7 +574,6 @@ struct SmXMLContext_Helper
     sal_Int8 nIsBold;
     sal_Int8 nIsItalic;
     double nFontSize;
-    bool bFontNodeNeeded;
     OUString sFontFamily;
     OUString sColor;
 
@@ -583,22 +583,28 @@ struct SmXMLContext_Helper
         : nIsBold( -1 )
         , nIsItalic( -1 )
         , nFontSize( 0.0 )
-        , bFontNodeNeeded( false )
         , rContext( rImport )
         {}
 
+    bool IsFontNodeNeeded() const;
     void RetrieveAttrs(const uno::Reference< xml::sax::XAttributeList > &xAttrList );
     void ApplyAttrs();
 };
 
+bool SmXMLContext_Helper::IsFontNodeNeeded() const
+{
+    return nIsBold != -1 ||
+        nIsItalic != -1 ||
+        nFontSize != 0.0 ||
+        !sFontFamily.isEmpty() ||
+        !sColor.isEmpty();
+}
+
 void SmXMLContext_Helper::RetrieveAttrs(const uno::Reference<
     xml::sax::XAttributeList > & xAttrList )
 {
-    sal_Int8 nOldIsBold=nIsBold;
-    sal_Int8 nOldIsItalic=nIsItalic;
-    double nOldFontSize=nFontSize;
+    bool bMvFound = false;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    OUString sOldFontFamily = sFontFamily;
     for (sal_Int16 i=0;i<nAttrCount;i++)
     {
         OUString sAttrName = xAttrList->getNameByIndex(i);
@@ -640,24 +646,30 @@ void SmXMLContext_Helper::RetrieveAttrs(const uno::Reference<
             case XML_TOK_MATHCOLOR:
                 sColor = sValue;
                 break;
+            case XML_TOK_MATHVARIANT:
+                bMvFound = true;
+                break;
             default:
                 break;
         }
     }
 
-    if ((nOldIsBold!=nIsBold) || (nOldIsItalic!=nIsItalic) ||
-        (nOldFontSize!=nFontSize) || (sOldFontFamily!=sFontFamily)
-        || !sColor.isEmpty())
-        bFontNodeNeeded=true;
-    else
-        bFontNodeNeeded=false;
+    if (bMvFound)
+    {
+        // Ignore deprecated attributes fontfamily, fontweight, and fontstyle
+        // in favor of mathvariant, as specified in
+        // <https://www.w3.org/TR/MathML3/chapter3.html#presm.deprecatt>.
+        sFontFamily.clear();
+        nIsBold = -1;
+        nIsItalic = -1;
+    }
 }
 
 void SmXMLContext_Helper::ApplyAttrs()
 {
     SmNodeStack &rNodeStack = rContext.GetSmImport().GetNodeStack();
 
-    if (bFontNodeNeeded)
+    if (IsFontNodeNeeded())
     {
         SmToken aToken;
         aToken.cMathChar = '\0';
@@ -737,6 +749,131 @@ void SmXMLContext_Helper::ApplyAttrs()
             }
         }
 
+    }
+}
+
+
+class SmXMLTokenAttrHelper
+{
+    SmXMLImportContext& mrContext;
+    MathMLMathvariantValue meMv;
+    bool mbMvFound;
+
+public:
+    SmXMLTokenAttrHelper(SmXMLImportContext& rContext)
+        : mrContext(rContext)
+        , meMv(MathMLMathvariantValue::Normal)
+        , mbMvFound(false)
+    {}
+
+    void RetrieveAttrs(const uno::Reference<xml::sax::XAttributeList>& xAttrList);
+    void ApplyAttrs(MathMLMathvariantValue eDefaultMv);
+};
+
+void SmXMLTokenAttrHelper::RetrieveAttrs(const uno::Reference<xml::sax::XAttributeList>& xAttrList)
+{
+    if (!xAttrList.is())
+        return;
+    sal_Int16 nAttrCount = xAttrList->getLength();
+    for (sal_Int16 i=0;i<nAttrCount;i++)
+    {
+        OUString sAttrName = xAttrList->getNameByIndex(i);
+        OUString aLocalName;
+        sal_uInt16 nPrefix = mrContext.GetSmImport().GetNamespaceMap().
+            GetKeyByAttrName(sAttrName, &aLocalName);
+        OUString sValue = xAttrList->getValueByIndex(i);
+        const SvXMLTokenMap &rAttrTokenMap =
+            mrContext.GetSmImport().GetPresLayoutAttrTokenMap();
+        switch(rAttrTokenMap.Get(nPrefix, aLocalName))
+        {
+            case XML_TOK_MATHVARIANT:
+                if (!GetMathMLMathvariantValue(sValue, &meMv))
+                    SAL_WARN("starmath", "failed to recognize mathvariant: " << sValue);
+                mbMvFound = true;
+                break;
+            default:
+                break;
+        }
+    }
+}
+
+void SmXMLTokenAttrHelper::ApplyAttrs(MathMLMathvariantValue eDefaultMv)
+{
+    assert( eDefaultMv == MathMLMathvariantValue::Normal ||
+            eDefaultMv == MathMLMathvariantValue::Italic );
+
+    std::vector<SmTokenType> vVariant;
+    MathMLMathvariantValue eMv = mbMvFound ? meMv : eDefaultMv;
+    switch(eMv)
+    {
+        case MathMLMathvariantValue::Normal:
+            vVariant.push_back(TNITALIC);
+            break;
+        case MathMLMathvariantValue::Bold:
+            vVariant.push_back(TBOLD);
+            break;
+        case MathMLMathvariantValue::Italic:
+            // nothing to do
+            break;
+        case MathMLMathvariantValue::BoldItalic:
+            vVariant.push_back(TITALIC);
+            vVariant.push_back(TBOLD);
+            break;
+        case MathMLMathvariantValue::DoubleStruck:
+            // TODO
+            break;
+        case MathMLMathvariantValue::BoldFraktur:
+            // TODO: Fraktur
+            vVariant.push_back(TBOLD);
+            break;
+        case MathMLMathvariantValue::Script:
+            // TODO
+            break;
+        case MathMLMathvariantValue::BoldScript:
+            // TODO: Script
+            vVariant.push_back(TBOLD);
+            break;
+        case MathMLMathvariantValue::Fraktur:
+            // TODO
+            break;
+        case MathMLMathvariantValue::SansSerif:
+            vVariant.push_back(TSANS);
+            break;
+        case MathMLMathvariantValue::BoldSansSerif:
+            vVariant.push_back(TSANS);
+            vVariant.push_back(TBOLD);
+            break;
+        case MathMLMathvariantValue::SansSerifItalic:
+            vVariant.push_back(TITALIC);
+            vVariant.push_back(TSANS);
+            break;
+        case MathMLMathvariantValue::SansSerifBoldItalic:
+            vVariant.push_back(TITALIC);
+            vVariant.push_back(TBOLD);
+            vVariant.push_back(TSANS);
+            break;
+        case MathMLMathvariantValue::Monospace:
+            vVariant.push_back(TFIXED);
+            break;
+        case MathMLMathvariantValue::Initial:
+        case MathMLMathvariantValue::Tailed:
+        case MathMLMathvariantValue::Looped:
+        case MathMLMathvariantValue::Stretched:
+            // TODO
+            break;
+    }
+    if (vVariant.empty())
+        return;
+    SmNodeStack &rNodeStack = mrContext.GetSmImport().GetNodeStack();
+    for (auto eType : vVariant)
+    {
+        SmToken aToken;
+        aToken.eType = eType;
+        aToken.cMathChar = '\0';
+        aToken.nLevel = 5;
+        std::unique_ptr<SmFontNode> pFontNode(new SmFontNode(aToken));
+        pFontNode->SetSubNodes(nullptr, popOrZero(rNodeStack));
+        rNodeStack.push_front(std::move(pFontNode));
     }
 }
 
@@ -1198,14 +1335,16 @@ void SmXMLStringContext_Impl::EndElement()
 
 class SmXMLIdentifierContext_Impl : public SmXMLImportContext
 {
-protected:
+    SmXMLTokenAttrHelper maTokenAttrHelper;
     SmXMLContext_Helper aStyleHelper;
     SmToken aToken;
 
 public:
     SmXMLIdentifierContext_Impl(SmXMLImport &rImport,sal_uInt16 nPrefix,
         const OUString& rLName)
-        : SmXMLImportContext(rImport,nPrefix,rLName),aStyleHelper(*this)
+        : SmXMLImportContext(rImport,nPrefix,rLName)
+        , maTokenAttrHelper(*this)
+        , aStyleHelper(*this)
     {
         aToken.cMathChar = '\0';
         aToken.nLevel = 5;
@@ -1215,6 +1354,7 @@ public:
     void TCharacters(const OUString &rChars) override;
     void StartElement(const uno::Reference< xml::sax::XAttributeList > & xAttrList ) override
     {
+        maTokenAttrHelper.RetrieveAttrs(xAttrList);
         aStyleHelper.RetrieveAttrs(xAttrList);
     };
     void EndElement() override;
@@ -1234,23 +1374,20 @@ void SmXMLIdentifierContext_Impl::EndElement()
     }
     else
         pNode.reset(new SmTextNode(aToken,FNT_VARIABLE));
-    if (aStyleHelper.bFontNodeNeeded && aStyleHelper.nIsItalic != -1)
+    if (aStyleHelper.nIsItalic != -1)
     {
         if (aStyleHelper.nIsItalic)
             pNode->GetFont().SetItalic(ITALIC_NORMAL);
         else
             pNode->GetFont().SetItalic(ITALIC_NONE);
+        aStyleHelper.nIsItalic = -1;
     }
-
-    if ((-1!=aStyleHelper.nIsBold) || (0.0!=aStyleHelper.nFontSize) ||
-        (!aStyleHelper.sFontFamily.isEmpty()) ||
-        !aStyleHelper.sColor.isEmpty())
-        aStyleHelper.bFontNodeNeeded=true;
-    else
-        aStyleHelper.bFontNodeNeeded=false;
-    if (aStyleHelper.bFontNodeNeeded)
-        aStyleHelper.ApplyAttrs();
     GetSmImport().GetNodeStack().push_front(std::move(pNode));
+    aStyleHelper.ApplyAttrs();
+
+    maTokenAttrHelper.ApplyAttrs( (aToken.aText.getLength() == 1)
+                                  ? MathMLMathvariantValue::Italic
+                                  : MathMLMathvariantValue::Normal );
 }
 
 void SmXMLIdentifierContext_Impl::TCharacters(const OUString &rChars)
@@ -1261,15 +1398,16 @@ void SmXMLIdentifierContext_Impl::TCharacters(const OUString &rChars)
 
 class SmXMLOperatorContext_Impl : public SmXMLImportContext
 {
+    SmXMLTokenAttrHelper maTokenAttrHelper;
     bool bIsStretchy;
-
-protected:
     SmToken aToken;
 
 public:
     SmXMLOperatorContext_Impl(SmXMLImport &rImport,sal_uInt16 nPrefix,
         const OUString& rLName)
-        : SmXMLImportContext(rImport,nPrefix,rLName), bIsStretchy(false)
+        : SmXMLImportContext(rImport,nPrefix,rLName)
+        , maTokenAttrHelper(*this)
+        , bIsStretchy(false)
     {
         aToken.eType = TSPECIAL;
         aToken.nLevel = 5;
@@ -1294,12 +1432,18 @@ void SmXMLOperatorContext_Impl::EndElement()
     if (bIsStretchy)
         pNode->SetScaleMode(SCALE_HEIGHT);
     GetSmImport().GetNodeStack().push_front(std::move(pNode));
+
+    // TODO: apply to non-alphabetic characters too
+    if (rtl::isAsciiAlpha(aToken.cMathChar))
+        maTokenAttrHelper.ApplyAttrs(MathMLMathvariantValue::Normal);
 }
 
 
 void SmXMLOperatorContext_Impl::StartElement(const uno::Reference<
     xml::sax::XAttributeList > & xAttrList )
 {
+    maTokenAttrHelper.RetrieveAttrs(xAttrList);
+
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for (sal_Int16 i=0;i<nAttrCount;i++)
     {
@@ -1885,6 +2029,7 @@ static const SvXMLTokenMapEntry aPresLayoutAttrTokenMap[] =
     { XML_NAMESPACE_MATH,   XML_FONTFAMILY,      XML_TOK_FONTFAMILY    },
     { XML_NAMESPACE_MATH,   XML_COLOR,           XML_TOK_COLOR },
     { XML_NAMESPACE_MATH,   XML_MATHCOLOR,       XML_TOK_MATHCOLOR },
+    { XML_NAMESPACE_MATH,   XML_MATHVARIANT,     XML_TOK_MATHVARIANT },
     XML_TOKEN_MAP_END
 };
 

@@ -1710,6 +1710,8 @@ void SmAttributNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 
 void SmFontNode::CreateTextFromNode(OUString &rText)
 {
+    rText += "{";
+
     switch (GetToken().eType)
     {
         case TBOLD:
@@ -1823,6 +1825,9 @@ void SmFontNode::CreateTextFromNode(OUString &rText)
     }
     if(GetNumSubNodes() > 1)
         GetSubNode(1)->CreateTextFromNode(rText);
+
+    rText = comphelper::string::stripEnd(rText, ' ');
+    rText += "} ";
 }
 
 void SmFontNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell)
