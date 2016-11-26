@@ -536,11 +536,17 @@ void Window::dispose()
         else
         {
             vcl::Window* pSysWin = pSVData->maWinData.mpFirstFrame;
-            while ( pSysWin->mpWindowImpl->mpFrameData->mpNextFrame.get() != this )
+            while ( pSysWin && pSysWin->mpWindowImpl->mpFrameData->mpNextFrame.get() != this )
                 pSysWin = pSysWin->mpWindowImpl->mpFrameData->mpNextFrame;
 
-            assert (mpWindowImpl->mpFrameData->mpNextFrame.get() != pSysWin);
-            pSysWin->mpWindowImpl->mpFrameData->mpNextFrame = mpWindowImpl->mpFrameData->mpNextFrame;
+            if ( pSysWin )
+            {
+                assert (mpWindowImpl->mpFrameData->mpNextFrame.get() != pSysWin);
+                pSysWin->mpWindowImpl->mpFrameData->mpNextFrame = mpWindowImpl->mpFrameData->mpNextFrame;
+            }
+            else // if it is not in the list, we can't remove it.
+                SAL_WARN("vcl", "Window " << this << " marked as frame window, but "
+                         "not present in the list of frames");
         }
         mpWindowImpl->mpFrame->SetCallback( nullptr, nullptr );
         pSVData->mpDefInst->DestroyFrame( mpWindowImpl->mpFrame );
