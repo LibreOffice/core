@@ -180,9 +180,6 @@
 #define SV_APP_GL                                   10803
 #define SV_APP_DEFAULT                              10804
 #define SV_APP_VCLBACKEND                           10805
-#define SV_APP_LAYOUT_ENGINE                        10806
-#define SV_APP_LAYOUT_NEW                           10807
-#define SV_APP_LAYOUT_OLD                           10808
 
 #define SV_ICON_SIZE48_START                        20000
 #define SV_ICON_SIZE32_START                        21000

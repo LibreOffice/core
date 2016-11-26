@@ -39,19 +39,4 @@ String SV_APP_VCLBACKEND
     Text [ en-US ] = "VCL: ";
 };
 
-String SV_APP_LAYOUT_ENGINE
-{
-    Text [ en-US ] = "Layout Engine: ";
-};
-
-String SV_APP_LAYOUT_NEW
-{
-    Text [ en-US ] = "new";
-};
-
-String SV_APP_LAYOUT_OLD
-{
-    Text [ en-US ] = "old";
-};
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
