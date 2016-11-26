@@ -175,18 +175,6 @@ DECLARE_OOXMLIMPORT_TEST(testN751017, "n751017.docx")
     CPPUNIT_ASSERT(bFoundGet);
 }
 
-DECLARE_OOXMLIMPORT_TEST(testRhbz988516, "rhbz988516.docx")
-{
-    // The problem was that the list properties of the footer leaked into body
-    CPPUNIT_ASSERT_EQUAL(OUString(),
-            getProperty<OUString>(getParagraph(1), "NumberingStyleName"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Enclosure 3"), getParagraph(2)->getString());
-    CPPUNIT_ASSERT_EQUAL(OUString(),
-            getProperty<OUString>(getParagraph(2), "NumberingStyleName"));
-    CPPUNIT_ASSERT_EQUAL(OUString(),
-            getProperty<OUString>(getParagraph(3), "NumberingStyleName"));
-}
-
 DECLARE_OOXMLIMPORT_TEST(testN751077, "n751077.docx")
 {
 /*

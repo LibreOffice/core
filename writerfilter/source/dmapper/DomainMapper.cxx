@@ -3267,6 +3267,7 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
             // no runs, we should not create a paragraph for it in Writer, unless that would remove the whole section.
             bool bRemove = !m_pImpl->GetParaChanged() && m_pImpl->GetParaSectpr()
                            && !bSingleParagraph
+                           && !( pContext && pContext->isSet(PROP_BREAK_TYPE) )
                            && !m_pImpl->GetIsDummyParaAddedForTableInSection()
                            && !m_pImpl->GetIsLastParagraphFramed();
             PropertyMapPtr xContext = bRemove ? m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH) : PropertyMapPtr();
