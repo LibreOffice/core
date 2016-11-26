@@ -899,7 +899,7 @@ bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
         sc::CopyToDocContext aCopyDocCxt(*this);
         maTabs[nOldPos]->CopyToTable(aCopyDocCxt, 0, 0, MAXCOL, MAXROW, InsertDeleteFlags::ALL,
                 (pOnlyMarked != nullptr), maTabs[nNewPos], pOnlyMarked,
-                false /*bAsLink*/, true /*bColRowFlags*/, bGlobalNamesToLocal );
+                false /*bAsLink*/, true /*bColRowFlags*/, bGlobalNamesToLocal, false /*bCopyCaptions*/ );
         maTabs[nNewPos]->SetTabBgColor(maTabs[nOldPos]->GetTabBgColor());
 
         SCTAB nDz = nNewPos - nOldPos;
@@ -938,6 +938,12 @@ bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
         // Copy the RTL settings
         maTabs[nNewPos]->SetLayoutRTL(maTabs[nOldPos]->IsLayoutRTL());
         maTabs[nNewPos]->SetLoadingRTL(maTabs[nOldPos]->IsLoadingRTL());
+
+        // Finally copy the note captions, which need
+        // 1. the updated source ScColumn::nTab members if nNewPos <= nOldPos
+        // 2. row heights and column widths of the destination
+        // 3. RTL settings of the destination
+        maTabs[nOldPos]->CopyCaptionsToTable( 0, 0, MAXCOL, MAXROW, maTabs[nNewPos], true /*bCloneCaption*/);
     }
 
     return bValid;

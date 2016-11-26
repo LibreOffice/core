@@ -454,7 +454,9 @@ public:
         sc::CopyToDocContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         InsertDeleteFlags nFlags, bool bMarked, ScTable* pDestTab,
         const ScMarkData* pMarkData = nullptr, bool bAsLink = false, bool bColRowFlags = true,
-        bool bGlobalNamesToLocal = false );
+        bool bGlobalNamesToLocal = false, bool bCopyCaptions = true );
+
+    void CopyCaptionsToTable( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScTable* pDestTab, bool bCloneCaption );
 
     void UndoToTable(
         sc::CopyToDocContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
