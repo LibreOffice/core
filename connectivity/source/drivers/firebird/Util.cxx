@@ -127,6 +127,8 @@ sal_Int32 firebird::getColumnTypeFromFBType(short aType, short aSubType)
         return DataType::SQLNULL;
     case SQL_QUAD:      // Is a "Blob ID" according to the docs
         return 0;       // TODO: verify
+    case SQL_BOOLEAN:
+        return DataType::BOOLEAN;
     default:
         assert(false); // Should never happen
         return 0;
@@ -185,6 +187,8 @@ OUString firebird::getColumnTypeNameFromFBType(short aType, short aSubType)
         return OUString("SQL_NULL");
     case SQL_QUAD:
         return OUString("SQL_QUAD");
+    case SQL_BOOLEAN:
+        return OUString("SQL_BOOLEAN");
     default:
         assert(false); // Should never happen
         return OUString();
@@ -231,6 +235,8 @@ short firebird::getFBTypeFromBlrType(short blrType)
 //         return OUString("SQL_NULL");
     case blr_quad:
         return SQL_QUAD;
+    case blr_bool:
+        return SQL_BOOLEAN;
     default:
         // If this happens we have hit one of the extra types in ibase.h
         // look up blr_* for a list, e.g. blr_domain_name, blr_not_nullable etc.
@@ -286,6 +292,9 @@ void firebird::mallocSQLVAR(XSQLDA* pSqlda)
         case SQL_INT64:
             pVar->sqldata = static_cast<char *>(malloc(sizeof(sal_Int64)));
             break;
+        case SQL_BOOLEAN:
+            pVar->sqldata = static_cast<char *>(malloc(sizeof(sal_Bool)));
+            break;
         case SQL_NULL:
             assert(false); // TODO: implement
             break;
@@ -321,6 +330,7 @@ void firebird::freeSQLVAR(XSQLDA* pSqlda)
         case SQL_INT64:
         case SQL_TYPE_TIME:
         case SQL_TYPE_DATE:
+        case SQL_BOOLEAN:
             if(pVar->sqldata)
             {
                 free(pVar->sqldata);
