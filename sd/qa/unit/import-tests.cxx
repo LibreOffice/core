@@ -1606,7 +1606,7 @@ void SdImportTest::testTdf104201()
             pObj->GetMergedItem(XATTR_FILLCOLOR));
         CPPUNIT_ASSERT_EQUAL(ColorData(0x00FF00), rColorItem.GetColorValue().GetColor());
     }
-    // Scond shape has blue fill, but this should be overwritten by green group fill
+    // Second shape has blue fill, but this should be overwritten by green group fill
     {
         SdrObject *const pObj = pPage->GetObj(0);
         CPPUNIT_ASSERT_MESSAGE("Wrong object", pObj != nullptr);
