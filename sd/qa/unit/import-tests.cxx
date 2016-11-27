@@ -130,6 +130,7 @@ public:
     void testTdf103792();
     void testTdf103876();
     void testTdf104015();
+    void testTdf104201();
 
     CPPUNIT_TEST_SUITE(SdImportTest);
 
@@ -185,6 +186,7 @@ public:
     CPPUNIT_TEST(testTdf103792);
     CPPUNIT_TEST(testTdf103876);
     CPPUNIT_TEST(testTdf104015);
+    CPPUNIT_TEST(testTdf104201);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -1580,6 +1582,40 @@ void SdImportTest::testTdf104015()
         const SdrOnOffItem& rShadowItem = dynamic_cast<const SdrOnOffItem&>(
                 pObj->GetMergedItem(SDRATTR_SHADOW));
         CPPUNIT_ASSERT(rShadowItem.GetValue());
+    }
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTest::testTdf104201()
+{
+    // Group shape properties did not overwrite the child shapes' fill
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf104201.pptx"), PPTX);
+
+    const SdrPage *pPage = GetPage(1, xDocShRef);
+    CPPUNIT_ASSERT_MESSAGE("No page found", pPage != nullptr);
+
+    // First shape has red fill, but this should be overwritten by green group fill
+    {
+        SdrObject *const pObj = pPage->GetObj(0);
+        CPPUNIT_ASSERT_MESSAGE("Wrong object", pObj != nullptr);
+        const XFillStyleItem& rStyleItem = dynamic_cast<const XFillStyleItem&>(
+            pObj->GetMergedItem(XATTR_FILLSTYLE));
+        CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, rStyleItem.GetValue());
+        const XFillColorItem& rColorItem = dynamic_cast<const XFillColorItem&>(
+            pObj->GetMergedItem(XATTR_FILLCOLOR));
+        CPPUNIT_ASSERT_EQUAL(ColorData(0x00FF00), rColorItem.GetColorValue().GetColor());
+    }
+    // Scond shape has blue fill, but this should be overwritten by green group fill
+    {
+        SdrObject *const pObj = pPage->GetObj(0);
+        CPPUNIT_ASSERT_MESSAGE("Wrong object", pObj != nullptr);
+        const XFillStyleItem& rStyleItem = dynamic_cast<const XFillStyleItem&>(
+            pObj->GetMergedItem(XATTR_FILLSTYLE));
+        CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, rStyleItem.GetValue());
+        const XFillColorItem& rColorItem = dynamic_cast<const XFillColorItem&>(
+            pObj->GetMergedItem(XATTR_FILLCOLOR));
+        CPPUNIT_ASSERT_EQUAL(ColorData(0x00FF00), rColorItem.GetColorValue().GetColor());
     }
 
     xDocShRef->DoClose();
