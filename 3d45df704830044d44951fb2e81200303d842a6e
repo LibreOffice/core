@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a71b18c_77efaab0",
+        "filename": "desktop/source/app/cmdlinehelp.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2016-11-27T10:42:47Z",
+      "side": 1,
+      "message": "This assumption is wrong. They do have effect for some generic file type (html,rtf,txt):\n\nsoffice test.html -\u003e will open the file in Writer/Web module\n\nsoffice --writer test.html -\u003e will open in Writer\n\nsoffice --calc test.html -\u003e will open in Calc\n\nAlso:\n\nsoffice --convert-to doc test.html -\u003e will return \"Error: no export filter\" (because there is no doc filter registered for Writer/Web).\n\nbut:\n\nsoffice --writer --convert-to doc test.html -\u003e will successfully create the doc file.",
+      "range": {
+        "startLine": 104,
+        "startChar": 50,
+        "endLine": 105,
+        "endChar": 32
+      },
+      "revId": "3d45df704830044d44951fb2e81200303d842a6e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
