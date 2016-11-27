@@ -21,8 +21,12 @@ urebootstrap = os.environ["URE_BOOTSTRAP"]
 if "vnd.sun.star.pathname" in urebootstrap:
     __lngpath__ = re.sub(r"^vnd.sun.star.pathname:(.*)program(/|\\)fundamental([.]ini|rc)$", "\\1", urebootstrap)
 else:
-    __lngpath__ = unohelper.fileUrlToSystemPath(re.sub("program/(fundamental.ini|fundamentalrc)$", "", urebootstrap))
-__lngpath__ = __lngpath__ + "share/Scripts/python/LibreLogo/".replace("/", os.sep)
+    # A way to know if we use MacOs
+    if "Resources" in urebootstrap:
+        __lngpath__ = unohelper.fileUrlToSystemPath(re.sub("fundamentalrc$", "", urebootstrap))
+    else:
+        __lngpath__ = unohelper.fileUrlToSystemPath(re.sub("program/(fundamental.ini|fundamentalrc)$", "share", urebootstrap))
+__lngpath__ = __lngpath__ + "/Scripts/python/LibreLogo/".replace("/", os.sep)
 __translang__ = "am|ca|cs|de|dk|el|en|eo|es|et|fr|hu|it|ja|nl|no|pl|pt|ru|se|sl" # FIXME supported languages for language guessing, expand this list, according to the localizations
 __lng__ = {}
 __docs__ = {}
