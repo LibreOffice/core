@@ -1,0 +1,174 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a71b18c_57db8e1b",
+        "filename": "desktop/source/app/cmdlinehelp.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000059
+      },
+      "writtenOn": "2016-11-27T09:52:02Z",
+      "side": 1,
+      "message": "Where is the list of these filters?",
+      "revId": "f3a21ab1161c895f98d1d44fe9cb5c4c9d0019ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a71b18c_d7af9e7b",
+        "filename": "desktop/source/app/cmdlinehelp.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000059
+      },
+      "writtenOn": "2016-11-27T09:52:02Z",
+      "side": 1,
+      "message": "drop one of the \"following\" word.",
+      "revId": "f3a21ab1161c895f98d1d44fe9cb5c4c9d0019ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a71b18c_f7b49ad2",
+        "filename": "desktop/source/app/cmdlinehelp.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1000059
+      },
+      "writtenOn": "2016-11-27T09:52:02Z",
+      "side": 1,
+      "message": "drop comma",
+      "revId": "f3a21ab1161c895f98d1d44fe9cb5c4c9d0019ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a71b18c_17caf64f",
+        "filename": "desktop/source/app/cmdlinehelp.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000059
+      },
+      "writtenOn": "2016-11-27T09:52:02Z",
+      "side": 1,
+      "message": "Can it be multiple files? If affirmative, put word file in plural.",
+      "revId": "f3a21ab1161c895f98d1d44fe9cb5c4c9d0019ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a71b18c_37c7f246",
+        "filename": "desktop/source/app/cmdlinehelp.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1000059
+      },
+      "writtenOn": "2016-11-27T09:52:02Z",
+      "side": 1,
+      "message": "files or filenames?",
+      "revId": "f3a21ab1161c895f98d1d44fe9cb5c4c9d0019ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a71b18c_57c46e3f",
+        "filename": "desktop/source/app/cmdlinehelp.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1000059
+      },
+      "writtenOn": "2016-11-27T09:52:02Z",
+      "side": 1,
+      "message": "space after period.",
+      "revId": "f3a21ab1161c895f98d1d44fe9cb5c4c9d0019ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a71b18c_77c16a2e",
+        "filename": "desktop/source/app/cmdlinehelp.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1000059
+      },
+      "writtenOn": "2016-11-27T09:52:02Z",
+      "side": 1,
+      "message": "Files other than Impress documents...",
+      "revId": "f3a21ab1161c895f98d1d44fe9cb5c4c9d0019ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a71b18c_d7e6bee7",
+        "filename": "desktop/source/app/cmdlinehelp.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1000059
+      },
+      "writtenOn": "2016-11-27T09:52:02Z",
+      "side": 1,
+      "message": "I once had trouble finding the correct name to define the file extension allowed. Where is described the term \"pdf:writer_pdf_Export\"? How can the user get all possibilities?",
+      "revId": "f3a21ab1161c895f98d1d44fe9cb5c4c9d0019ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a71b18c_17d116fc",
+        "filename": "desktop/source/app/cmdlinehelp.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1000059
+      },
+      "writtenOn": "2016-11-27T09:52:02Z",
+      "side": 1,
+      "message": "Agains, where is \"env:UserInstalation\u003d\" defined?",
+      "revId": "f3a21ab1161c895f98d1d44fe9cb5c4c9d0019ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a71b18c_37ce125b",
+        "filename": "desktop/source/app/cmdlinehelp.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1000059
+      },
+      "writtenOn": "2016-11-27T09:52:02Z",
+      "side": 1,
+      "message": "spelling",
+      "revId": "f3a21ab1161c895f98d1d44fe9cb5c4c9d0019ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
