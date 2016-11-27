@@ -22,6 +22,30 @@
       "revId": "3d45df704830044d44951fb2e81200303d842a6e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a71b18c_d734fe4b",
+        "filename": "desktop/source/app/cmdlinehelp.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2016-11-27T10:49:03Z",
+      "side": 1,
+      "message": "So, they are short form of --infilter?",
+      "parentUuid": "3a71b18c_77efaab0",
+      "range": {
+        "startLine": 104,
+        "startChar": 50,
+        "endLine": 105,
+        "endChar": 32
+      },
+      "revId": "3d45df704830044d44951fb2e81200303d842a6e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
