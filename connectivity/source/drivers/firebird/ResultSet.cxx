@@ -480,6 +480,8 @@ ORowSetValue OResultSet::retrieveValue(const sal_Int32 nColumnIndex, const ISC_S
             if(nSqlSubType == 0 || nSqlSubType == 1) //numeric or decimal
                 return getString(nColumnIndex);
             return getLong(nColumnIndex);
+        case SQL_BOOLEAN:
+            return getBoolean(nColumnIndex);
         case SQL_BLOB:
         case SQL_NULL:
         case SQL_QUAD:
@@ -641,8 +643,7 @@ sal_Bool SAL_CALL OResultSet::wasNull() throw(SQLException, RuntimeException, st
 sal_Bool SAL_CALL OResultSet::getBoolean(sal_Int32 nColumnIndex)
     throw(SQLException, RuntimeException, std::exception)
 {
-    // Not a native firebird type hence we always have to convert.
-    return safelyRetrieveValue< ORowSetValue >(nColumnIndex);
+    return safelyRetrieveValue< sal_Bool >(nColumnIndex, SQL_BOOLEAN);
 }
 
 sal_Int8 SAL_CALL OResultSet::getByte(sal_Int32 nColumnIndex)

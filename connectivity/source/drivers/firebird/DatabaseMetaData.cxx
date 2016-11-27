@@ -1050,6 +1050,19 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
         aRow[15] = ODatabaseMetaDataResultSet::get0Value(); // Max scale
         aResults.push_back(aRow);
 
+        // SQL_BOOLEAN
+        // TODO FIXME precision
+        aRow[1] = new ORowSetValueDecorator(OUString("BOOLEAN"));
+        aRow[2] = new ORowSetValueDecorator(getColumnTypeFromFBType(SQL_BOOLEAN, 0));
+        aRow[3] = new ORowSetValueDecorator(sal_Int32(1)); // Prevision = max length
+        aRow[6] = new ORowSetValueDecorator(); // Create Params
+        aRow[9] = new ORowSetValueDecorator(
+                sal_Int16(ColumnSearch::BASIC)); // Searchable
+        aRow[12] = new ORowSetValueDecorator(false); // Autoincrement
+        aRow[14] = ODatabaseMetaDataResultSet::get0Value(); // Minimum scale
+        aRow[15] = ODatabaseMetaDataResultSet::get0Value(); // Max scale
+        aResults.push_back(aRow);
+
         // TODO: complete
 //     case SQL_ARRAY:
 //     case SQL_NULL:
@@ -1124,7 +1137,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumnPrivileges(
         aCurrentRow[5] = new ORowSetValueDecorator(xRow->getString(2)); // 5. GRANTOR
         aCurrentRow[6] = new ORowSetValueDecorator(xRow->getString(3)); // 6. GRANTEE
         aCurrentRow[7] = new ORowSetValueDecorator(xRow->getString(4)); // 7. Privilege
-        aCurrentRow[7] = new ORowSetValueDecorator(xRow->getBoolean(5)); // 8. Grantable
+        aCurrentRow[7] = new ORowSetValueDecorator(xRow->getShort(5)); // 8. Grantable
 
         aResults.push_back(aCurrentRow);
     }
@@ -1721,7 +1734,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getIndexInfo(
         }
 
         // 4. NON_UNIQUE -- i.e. specifically negate here.
-        aCurrentRow[4] = new ORowSetValueDecorator(!xRow->getBoolean(5));
+        aCurrentRow[4] = new ORowSetValueDecorator(!xRow->getShort(5));
         // 6. INDEX NAME
         aCurrentRow[6] = new ORowSetValueDecorator(sanitizeIdentifier(xRow->getString(4)));
 
