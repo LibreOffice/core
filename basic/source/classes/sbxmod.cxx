@@ -100,8 +100,10 @@ class DocObjectWrapper : public DocObjectWrapper_BASE
 public:
     explicit DocObjectWrapper( SbModule* pMod );
 
+#if OSL_DEBUG_LEVEL > 0
     virtual void SAL_CALL acquire() throw() override;
     virtual void SAL_CALL release() throw() override;
+#endif
 
     virtual Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (RuntimeException, std::exception) override
     {
@@ -171,6 +173,8 @@ DocObjectWrapper::DocObjectWrapper( SbModule* pVar ) : m_pMod( pVar ), mName( pV
     }
 }
 
+#if OSL_DEBUG_LEVEL > 0
+
 void SAL_CALL
 DocObjectWrapper::acquire() throw ()
 {
@@ -183,6 +187,8 @@ DocObjectWrapper::release() throw ()
     SAL_INFO("basic","DocObjectWrapper::release("<< OUStringToOString( mName, RTL_TEXTENCODING_UTF8 ).getStr() << ") 0x" << this << " decrementing refcount, was " << m_refCount );
     OWeakObject::release();
 }
+
+#endif
 
 Sequence< Type > SAL_CALL DocObjectWrapper::getTypes()
     throw ( RuntimeException, std::exception )
