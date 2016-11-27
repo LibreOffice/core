@@ -7121,7 +7121,7 @@ then
             my_java_arch=i386
             ;;
         m68k)
-            my_java_arch=mk68
+            my_java_arch=m68k
             ;;
         powerpc)
             my_java_arch=ppc
