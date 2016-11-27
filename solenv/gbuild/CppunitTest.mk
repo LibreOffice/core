@@ -140,8 +140,12 @@ $(call gb_CppunitTest__CppunitTest_impl,$(1),$(call gb_CppunitTest_get_linktarge
 
 endef
 
+define gb_CppunitTest_register_target
+endef
+
 # call gb_CppunitTest__CppunitTest_impl,cppunittest,linktarget
 define gb_CppunitTest__CppunitTest_impl
+$(call gb_CppunitTest_register_target, $(1), $(2), "test")
 $(call gb_LinkTarget_LinkTarget,$(2),CppunitTest_$(1),NONE)
 $(call gb_LinkTarget_set_targettype,$(2),CppunitTest)
 $(call gb_LinkTarget_add_libs,$(2),$(gb_STDLIBS))
