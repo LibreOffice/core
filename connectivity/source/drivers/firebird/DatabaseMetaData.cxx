@@ -1050,6 +1050,19 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
         aRow[15] = ODatabaseMetaDataResultSet::get0Value(); // Max scale
         aResults.push_back(aRow);
 
+        // SQL_BOOLEAN
+        // TODO FIXME precision
+        aRow[1] = new ORowSetValueDecorator(OUString("BOOLEAN"));
+        aRow[2] = new ORowSetValueDecorator(getColumnTypeFromFBType(SQL_BOOLEAN, 0));
+        aRow[3] = new ORowSetValueDecorator(sal_Int32(1)); // Prevision = max length
+        aRow[6] = new ORowSetValueDecorator(); // Create Params
+        aRow[9] = new ORowSetValueDecorator(
+                sal_Int16(ColumnSearch::BASIC)); // Searchable
+        aRow[12] = new ORowSetValueDecorator(false); // Autoincrement
+        aRow[14] = ODatabaseMetaDataResultSet::get0Value(); // Minimum scale
+        aRow[15] = ODatabaseMetaDataResultSet::get0Value(); // Max scale
+        aResults.push_back(aRow);
+
         // TODO: complete
 //     case SQL_ARRAY:
 //     case SQL_NULL:

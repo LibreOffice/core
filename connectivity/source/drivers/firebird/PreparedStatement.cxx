@@ -355,11 +355,10 @@ void SAL_CALL OPreparedStatement::setNull(sal_Int32 nIndex, sal_Int32 /*nSqlType
     setParameterNull(nIndex);
 }
 
-void SAL_CALL OPreparedStatement::setBoolean(sal_Int32 /*nIndex*/, sal_Bool /*bValue*/)
+void SAL_CALL OPreparedStatement::setBoolean(sal_Int32 nIndex, sal_Bool bValue)
     throw(SQLException, RuntimeException, std::exception)
 {
-    // FIREBIRD3: will need to be implemented.
-    ::dbtools::throwFunctionNotSupportedSQLException("XParameters::setBoolean", *this);
+    setValue< sal_Bool >(nIndex, bValue, SQL_BOOLEAN);
 }
 
 template <typename T>
