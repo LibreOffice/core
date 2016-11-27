@@ -40,9 +40,9 @@ class error_updater : public std::exception
 
 static const char kUserAgent[] = "UpdateChecker/1.0 (Linux)";
 
-#if UNX
+#ifdef UNX
 const char* pUpdaterName = "updater";
-#elif WNT
+#elif defined(WNT)
 const char* pUpdaterName = "updater.exe";
 #else
 #error "Need implementation"
