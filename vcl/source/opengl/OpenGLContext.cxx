@@ -568,6 +568,9 @@ void OpenGLContext::registerAsCurrent()
         pSVData->maGDIData.mpLastContext->mpNextContext = this;
         pSVData->maGDIData.mpLastContext = this;
     }
+
+    // sync the render state with the current context
+    mpRenderState->sync();
 }
 
 void OpenGLContext::resetCurrent()

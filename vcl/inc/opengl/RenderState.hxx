@@ -20,10 +20,8 @@ protected:
     bool mbTest;
 
     GenericCapabilityState()
-        : mbTest(readState())
+        : mbTest(false)
     {
-        if (mbTest)
-            disable();
     }
 
     static bool readState()
