@@ -93,13 +93,13 @@ typedef enum
      *
      * @see LOK_FEATURE_PART_IN_INVALIDATION_CALLBACK.
      */
-    LOK_CALLBACK_INVALIDATE_TILES,
+    LOK_CALLBACK_INVALIDATE_TILES = 0,
     /**
      * The size and/or the position of the visible cursor changed.
      *
      * Rectangle format is the same as LOK_CALLBACK_INVALIDATE_TILES.
      */
-    LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR,
+    LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR = 1,
     /**
      * The list of rectangles representing the current text selection changed.
      *
@@ -108,7 +108,7 @@ typedef enum
      * LOK_CALLBACK_INVALIDATE_TILES. When there is no selection, an empty
      * string is provided.
      */
-    LOK_CALLBACK_TEXT_SELECTION,
+    LOK_CALLBACK_TEXT_SELECTION = 2,
     /**
      * The position and size of the cursor rectangle at the text
      * selection start. It is used to draw the selection handles.
@@ -118,7 +118,7 @@ typedef enum
      *
      * Rectangle format is the same as LOK_CALLBACK_INVALIDATE_TILES.
      */
-    LOK_CALLBACK_TEXT_SELECTION_START,
+    LOK_CALLBACK_TEXT_SELECTION_START = 3,
     /**
      * The position and size of the cursor rectangle at the text
      * selection end. It is used to draw the selection handles.
@@ -128,7 +128,7 @@ typedef enum
      *
      * Rectangle format is the same as LOK_CALLBACK_INVALIDATE_TILES.
      */
-    LOK_CALLBACK_TEXT_SELECTION_END,
+    LOK_CALLBACK_TEXT_SELECTION_END = 4,
     /**
      * The blinking text cursor is now visible or not.
      *
@@ -137,26 +137,26 @@ typedef enum
      * LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR once it becomes false. Payload is
      * either the "true" or the "false" string.
      */
-    LOK_CALLBACK_CURSOR_VISIBLE,
+    LOK_CALLBACK_CURSOR_VISIBLE = 5,
     /**
      * The size and/or the position of the graphic selection changed.
      *
      * Rectangle format is the same as LOK_CALLBACK_INVALIDATE_TILES.
      */
-    LOK_CALLBACK_GRAPHIC_SELECTION,
+    LOK_CALLBACK_GRAPHIC_SELECTION = 6,
 
     /**
      * User clicked on an hyperlink that should be handled by other
      * applications accordingly.
      */
-    LOK_CALLBACK_HYPERLINK_CLICKED,
+    LOK_CALLBACK_HYPERLINK_CLICKED = 7,
 
     /**
      * Emit state update to the client.
      * For example, when cursor is on bold text, this callback is triggered
      * with payload: ".uno:Bold=true"
      */
-    LOK_CALLBACK_STATE_CHANGED,
+    LOK_CALLBACK_STATE_CHANGED = 8,
 
     /**
      * Start a "status indicator" (here restricted to a progress bar type
@@ -172,25 +172,25 @@ typedef enum
      * loading a document and then constructing a LibreOfficeKitDocument
      * object.
      */
-    LOK_CALLBACK_STATUS_INDICATOR_START,
+    LOK_CALLBACK_STATUS_INDICATOR_START = 9,
 
     /**
      * Sets the numeric value of the status indicator.
      * The payload should be a percentage, an integer between 0 and 100.
      */
-    LOK_CALLBACK_STATUS_INDICATOR_SET_VALUE,
+    LOK_CALLBACK_STATUS_INDICATOR_SET_VALUE = 10,
 
     /**
      * Ends the status indicator.
      *
      * Not necessarily ever emitted.
      */
-    LOK_CALLBACK_STATUS_INDICATOR_FINISH,
+    LOK_CALLBACK_STATUS_INDICATOR_FINISH = 11,
 
     /**
      * No match was found for the search input
      */
-    LOK_CALLBACK_SEARCH_NOT_FOUND,
+    LOK_CALLBACK_SEARCH_NOT_FOUND = 12,
 
     /**
      * Size of the document changed.
@@ -198,14 +198,14 @@ typedef enum
      * Payload format is "width, height", i.e. clients get the new size without
      * having to do an explicit lok::Document::getDocumentSize() call.
      */
-    LOK_CALLBACK_DOCUMENT_SIZE_CHANGED,
+    LOK_CALLBACK_DOCUMENT_SIZE_CHANGED = 13,
 
     /**
      * The current part number is changed.
      *
      * Payload is a single 0-based integer.
      */
-    LOK_CALLBACK_SET_PART,
+    LOK_CALLBACK_SET_PART = 14,
 
     /**
      * Selection rectangles of the search result when find all is performed.
@@ -231,7 +231,7 @@ typedef enum
      * - searchResultSelection is an array of part-number and rectangle list
      *   pairs, in LOK_CALLBACK_SET_PART / LOK_CALLBACK_TEXT_SELECTION format.
      */
-    LOK_CALLBACK_SEARCH_RESULT_SELECTION,
+    LOK_CALLBACK_SEARCH_RESULT_SELECTION = 15,
 
     /**
      * Result of the UNO command execution when bNotifyWhenFinished was set
@@ -246,26 +246,26 @@ typedef enum
      *     // TODO "result": "..."  // UNO Any converted to JSON (not implemented yet)
      * }
      */
-    LOK_CALLBACK_UNO_COMMAND_RESULT,
+    LOK_CALLBACK_UNO_COMMAND_RESULT = 16,
 
     /**
      * The size and/or the position of the cell cursor changed.
      *
      * Rectangle format is the same as LOK_CALLBACK_INVALIDATE_TILES.
      */
-    LOK_CALLBACK_CELL_CURSOR,
+    LOK_CALLBACK_CELL_CURSOR = 17,
 
     /**
      * The current mouse pointer style.
      *
      * Payload is a css mouse pointer style.
      */
-    LOK_CALLBACK_MOUSE_POINTER,
+    LOK_CALLBACK_MOUSE_POINTER = 18,
 
     /**
      * The text content of the formula bar in Calc.
      */
-    LOK_CALLBACK_CELL_FORMULA,
+    LOK_CALLBACK_CELL_FORMULA = 19,
 
     /**
      * Loading a document requires a password.
@@ -274,7 +274,7 @@ typedef enum
      * lok::Office::setDocumentPassword().  The document cannot be loaded
      * without the password.
      */
-    LOK_CALLBACK_DOCUMENT_PASSWORD,
+    LOK_CALLBACK_DOCUMENT_PASSWORD = 20,
 
     /**
      * Editing a document requires a password.
@@ -282,7 +282,7 @@ typedef enum
      * Loading the document is blocked until the password is provided via
      * lok::Office::setDocumentPassword().
      */
-    LOK_CALLBACK_DOCUMENT_PASSWORD_TO_MODIFY,
+    LOK_CALLBACK_DOCUMENT_PASSWORD_TO_MODIFY = 21,
 
     /**
      * An error happened.
@@ -296,7 +296,7 @@ typedef enum
      *     "message": freeform description
      * }
      */
-    LOK_CALLBACK_ERROR,
+    LOK_CALLBACK_ERROR = 22,
 
     /**
      * Context menu structure
@@ -318,7 +318,7 @@ typedef enum
      *
      *     {"text": "label text3", "type": "command", "command": ".uno:Something3", "checktype": "checkmark|radio|auto", "checked": "true|false"}
      */
-    LOK_CALLBACK_CONTEXT_MENU,
+    LOK_CALLBACK_CONTEXT_MENU = 23,
 
     /**
      * The size and/or the position of the view cursor changed. A view cursor
@@ -334,7 +334,7 @@ typedef enum
      * - viewId is a value returned earlier by lok::Document::createView()
      * - rectangle uses the format of LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR
      */
-    LOK_CALLBACK_INVALIDATE_VIEW_CURSOR,
+    LOK_CALLBACK_INVALIDATE_VIEW_CURSOR = 24,
 
     /**
      * The text selection in one of the other views has changed.
@@ -349,7 +349,7 @@ typedef enum
      * - viewId is a value returned earlier by lok::Document::createView()
      * - selection uses the format of LOK_CALLBACK_TEXT_SELECTION.
      */
-    LOK_CALLBACK_TEXT_VIEW_SELECTION,
+    LOK_CALLBACK_TEXT_VIEW_SELECTION = 25,
 
     /**
      * The cell cursor in one of the other views has changed.
@@ -364,7 +364,7 @@ typedef enum
      * - viewId is a value returned earlier by lok::Document::createView()
      * - rectangle uses the format of LOK_CALLBACK_CELL_CURSOR.
      */
-    LOK_CALLBACK_CELL_VIEW_CURSOR,
+    LOK_CALLBACK_CELL_VIEW_CURSOR = 26,
 
     /**
      * The size and/or the position of a graphic selection in one of the other
@@ -380,7 +380,7 @@ typedef enum
      * - viewId is a value returned earlier by lok::Document::createView()
      * - selection uses the format of LOK_CALLBACK_INVALIDATE_TILES.
      */
-    LOK_CALLBACK_GRAPHIC_VIEW_SELECTION,
+    LOK_CALLBACK_GRAPHIC_VIEW_SELECTION = 27,
 
     /**
      * The blinking text cursor in one of the other views is now visible or
@@ -396,7 +396,7 @@ typedef enum
      * - viewId is a value returned earlier by lok::Document::createView()
      * - visible uses the format of LOK_CALLBACK_CURSOR_VISIBLE.
      */
-    LOK_CALLBACK_VIEW_CURSOR_VISIBLE,
+    LOK_CALLBACK_VIEW_CURSOR_VISIBLE = 28,
 
     /**
      * The size and/or the position of a lock rectangle in one of the other
@@ -412,7 +412,7 @@ typedef enum
      * - viewId is a value returned earlier by lok::Document::createView()
      * - rectangle uses the format of LOK_CALLBACK_INVALIDATE_TILES.
      */
-    LOK_CALLBACK_VIEW_LOCK,
+    LOK_CALLBACK_VIEW_LOCK = 29,
 
     /**
      * The size of the change tracking table has changed.
@@ -437,7 +437,7 @@ typedef enum
      * - 'action' is either 'Add' or 'Remove', depending on if this is an
      *   insertion into the table or a removal.
      */
-    LOK_CALLBACK_REDLINE_TABLE_SIZE_CHANGED,
+    LOK_CALLBACK_REDLINE_TABLE_SIZE_CHANGED = 30,
 
     /**
      * An entry in the change tracking table has been modified.
@@ -461,7 +461,7 @@ typedef enum
      *
      * - 'action' is 'Modify'.
      */
-    LOK_CALLBACK_REDLINE_TABLE_ENTRY_MODIFIED,
+    LOK_CALLBACK_REDLINE_TABLE_ENTRY_MODIFIED = 31,
 }
 LibreOfficeKitCallbackType;
 
