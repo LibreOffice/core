@@ -2587,6 +2587,9 @@ unsigned char* doc_renderFont(LibreOfficeKitDocument* /*pThis*/,
             aFont.SetSize(Size(0, 25));
             aDevice->SetFont(aFont);
             aDevice->GetTextBoundRect(aRect, aText);
+            if (aRect.IsEmpty())
+                break;
+
             int nFontWidth = aRect.BottomRight().X() + 1;
             *pFontWidth = nFontWidth;
             int nFontHeight = aRect.BottomRight().Y() + 1;
