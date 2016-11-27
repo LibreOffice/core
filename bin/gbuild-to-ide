@@ -53,6 +53,21 @@ class GbuildLib(GbuildLinkTarget):
     def library_name(self):
         return self.library
 
+class GbuildTest(GbuildLinkTarget):
+    def __init__(self, name, test, location, include, include_sys, defs, cxxobjects, cxxflags, linked_libs):
+        GbuildLinkTarget.__init__(self, name, location, include, include_sys, defs, cxxobjects, cxxflags, linked_libs)
+        self.test = test
+
+    def short_name(self):
+        """Return the short name of target based n the CppunitTest_* makefile names"""
+        return 'Library %s' % self.name
+
+    def target_name(self):
+        return 'CppunitTest_%s' % self.test
+
+    def test_name(self):
+        return self.test
+
 
 class GbuildExe(GbuildLinkTarget):
     def __init__(self, name, executable, location, include, include_sys, defs, cxxobjects, cxxflags, linked_libs):
@@ -72,14 +87,15 @@ class GbuildParser:
         self.makecmd = makecmd
         self.binpath = os.path.dirname(os.environ['GPERF']) # woha, this is quite a hack
         (self.srcdir, self.builddir, self.instdir, self.workdir) = (os.environ['SRCDIR'], os.environ['BUILDDIR'], os.environ['INSTDIR'], os.environ['WORKDIR'])
-        (self.libs, self.exes, self.modulenamelist) = ([], [], [])
-        (self.libnames, self.exenames, self.target_by_path, self.target_by_location) = ({}, {}, {}, {})
+        (self.libs, self.exes, self.tests, self.modulenamelist) = ([], [], [], [])
+        (self.libnames, self.exenames, self.testnames, self.target_by_path, self.target_by_location) = ({}, {}, {}, {}, {})
 
     includepattern = re.compile('-I(\S+)')
     isystempattern = re.compile('-isystem\s*(\S+)')
     warningpattern = re.compile('-W\S+')
     libpattern = re.compile('Library_(.*)\.mk')
     exepattern = re.compile('Executable_(.*)\.mk')
+    testpattern = re.compile('CppunitTest_(.*)\.mk')
 
     @staticmethod
     def __split_includes(includes):
@@ -123,6 +139,28 @@ class GbuildParser:
             json['LINKED_LIBS'].strip().split(' '))
 
     @staticmethod
+    def __test_from_json(json):
+        (foundincludes, foundisystem) = GbuildParser.__split_includes(json['INCLUDE'])
+        testname_match = GbuildParser.testpattern.match(os.path.basename(json['MAKEFILE']))
+
+        # Workaround strange writer test makefile setup
+        if testname_match is None:
+            testname = "StrangeWriterMakefiles"
+        else:
+            testname = testname_match.group(1)
+
+        return GbuildTest(
+            testname,
+            json['LINKTARGET'],
+            os.path.dirname(json['MAKEFILE']),
+            foundincludes,
+            foundisystem,
+            GbuildParser.__split_defs(json['DEFS']),
+            GbuildParser.__split_objs(json['CXXOBJECTS']),
+            GbuildParser.__split_flags(json['CXXFLAGS'], json['CXXFLAGSAPPEND']),
+            json['LINKED_LIBS'].strip().split(' '))
+
+    @staticmethod
     def __exe_from_json(json):
         (foundincludes, foundisystem) = GbuildParser.__split_includes(json['INCLUDE'])
         return GbuildExe(
@@ -147,7 +185,12 @@ class GbuildParser:
                 exe = self.__exe_from_json(json.load(f))
                 self.exenames[exe.executable] = exe.name
                 self.exes.append(exe)
-        for target in set(self.libs) | set(self.exes):
+        for jsonfilename in os.listdir(os.path.join(self.workdir, 'GbuildToJson', 'CppunitTest')):
+            with open(os.path.join(self.workdir, 'GbuildToJson', 'CppunitTest', jsonfilename), 'r') as f:
+                test = self.__test_from_json(json.load(f))
+                self.testnames[test.test] = test.name
+                self.tests.append(test)
+        for target in set(self.libs) | set(self.exes) | set(self.tests):
             if target.location not in self.target_by_location:
                 self.target_by_location[target.location] = set()
             self.target_by_location[target.location] |= set([target])
@@ -304,6 +347,8 @@ class DebugIntegrationGenerator(IdeIntegrationGenerator):
             print(lib)
         for exe in self.gbuildparser.exes:
             print(exe)
+        for test in self.gbuildparser.tests:
+            print(test)
 
 
 class VimIntegrationGenerator(IdeIntegrationGenerator):
