@@ -815,6 +815,24 @@ void CallbackFlushHandler::queue(const int type, const char* data)
                 }
             }
             break;
+
+            // State changes with same name override previous ones with a different value.
+            // Ex. ".uno:PageStatus=Slide 20 of 83" overwrites any previous PageStatus.
+            case LOK_CALLBACK_STATE_CHANGED:
+            {
+                // Compare the state name=value and overwrite earlier entries with same name.
+                const auto pos = payload.find('=');
+                if (pos != std::string::npos)
+                {
+                    const std::string name = payload.substr(0, pos + 1);
+                    removeAll(
+                        [type, &payload, &name] (const queue_type::value_type& elem) {
+                            return (elem.first == type) && (elem.second.compare(0, name.size(), name) == 0);
+                        }
+                    );
+                }
+            }
+            break;
         }
     }
 
