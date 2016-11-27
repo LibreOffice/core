@@ -1750,7 +1750,8 @@ int Desktop::doShutdown()
     if( ! pExecGlobals )
         return EXIT_SUCCESS;
 
-    m_aUpdateThread.join();
+    if (m_aUpdateThread.joinable())
+        m_aUpdateThread.join();
 
     pExecGlobals->bRestartRequested = pExecGlobals->bRestartRequested ||
         OfficeRestartManager::get(comphelper::getProcessComponentContext())->
