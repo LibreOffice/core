@@ -95,7 +95,7 @@ class GbuildParser:
     @staticmethod
     def __split_defs(defsline):
         defs = {}
-        alldefs = [defswitch.strip()[2:] for defswitch in defsline.strip().split(' ') if len(defswitch) > 2]
+        alldefs = [defswitch.strip() for defswitch in defsline.strip().split(' -D') if len(defswitch) > 2]
         for d in alldefs:
             defparts = d.split('=')
             if len(defparts) == 1:
