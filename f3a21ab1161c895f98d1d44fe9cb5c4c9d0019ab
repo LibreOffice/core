@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "3a71b18c_b7086293",
+        "filename": "desktop/source/app/cmdlinehelp.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2016-11-27T10:10:32Z",
+      "side": 1,
+      "message": "Hmm... they have different semantics. Following arguments \u003d Arguments in following subtable. Following filenames \u003d filenames that follow any of these agruments in command line.\n\nIt is not good to have the same word twice, could you please advise a good synonym here?",
+      "parentUuid": "3a71b18c_d7af9e7b",
+      "revId": "f3a21ab1161c895f98d1d44fe9cb5c4c9d0019ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a71b18c_f7b49ad2",
         "filename": "desktop/source/app/cmdlinehelp.cxx",
         "patchSetId": 4
