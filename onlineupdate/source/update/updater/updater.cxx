@@ -2518,7 +2518,7 @@ int LaunchCallbackAndPostProcessApps(int argc, NS_tchar** argv,
 #ifdef _WIN32
         , const WCHAR* elevatedLockFilePath
         , HANDLE updateLockFileHandle
-#elif MACOSX
+#elif defined(MACOSX)
         , bool isElevated
 #endif
         )
@@ -2542,7 +2542,7 @@ int LaunchCallbackAndPostProcessApps(int argc, NS_tchar** argv,
             }
         }
         EXIT_WHEN_ELEVATED(elevatedLockFilePath, updateLockFileHandle, 0);
-#elif MACOSX
+#elif defined(MACOSX)
         if (!isElevated) {
             if (gSucceeded) {
                 LaunchMacPostProcess(gInstallDirPath);
@@ -3450,7 +3450,7 @@ int NS_main(int argc, NS_tchar **argv)
 #ifdef _WIN32
             , elevatedLockFilePath
             , updateLockFileHandle
-#elif XP_MACOSX
+#elif defined(MACOSX)
             , isElevated
 #endif
             );
