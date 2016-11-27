@@ -1462,13 +1462,13 @@ FillProperties Shape::getActualFillProperties(const Theme* pTheme, const FillPro
         }
     }
 
+    // Properties specified directly for this shape
+    aFillProperties.assignUsed(getFillProperties());
+
     // Parent shape's properties
     if ( pParentShapeFillProps != nullptr)
         if( getFillProperties().moFillType.has() && getFillProperties().moFillType.get() == XML_grpFill )
             aFillProperties.assignUsed( *pParentShapeFillProps );
-
-    // Properties specified directly for this shape
-    aFillProperties.assignUsed( getFillProperties() );
 
     return aFillProperties;
 }
