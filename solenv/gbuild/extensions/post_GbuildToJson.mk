@@ -61,6 +61,13 @@ $(call gb_LinkTarget_get_target,$(call gb_$(2)_get_linktarget,$(3))): $(gb_Helpe
 $(call gb_LinkTarget_get_target,$(call gb_$(2)_get_linktarget,$(3))): T_MAKEFILE := $(lastword $(MAKEFILE_LIST))
 endef
 
+define gb_CppunitTest_register_target
+gbuildtojson : $(call gb_LinkTarget_get_target,$(2))
+
+$(call gb_LinkTarget_get_target,$(2)): $(gb_Helper_MISCDUMMY) $(gb_GbuildToJson_PHONY)
+$(call gb_LinkTarget_get_target,$(2)): T_MAKEFILE := $(lastword $(MAKEFILE_LIST))
+endef
+
 gb_LinkTarget_use_static_libraries =
 gb_UnoApiHeadersTarget_get_target = $(gb_Helper_MISCDUMMY)
 gb_UnpackedTarball_get_final_target = $(gb_Helper_MISCDUMMY)
@@ -111,8 +118,19 @@ $(call gb_Module_get_nonl10n_target,$(1)) : $(3)
 
 endef
 
+define gb_Module__add_check_target_impl
+$(call gb_Module__read_targetfile,$(1),$(2),check target)
+
+$(call gb_Module_get_check_target,$(1)) : $(3)
+
+endef
+
 define gb_Module_add_target
 $(if $(filter Library_% Executable_%,$(2)),$(call gb_Module__add_target_impl,$(1),$(2),$$(gb_Module_CURRENTTARGET)))
+endef
+
+define gb_Module_add_check_target
+$(if $(filter CppunitTest_%,$(2)),$(call gb_Module__add_check_target_impl,$(1),$(2),$$(gb_Module_CURRENTTARGET)))
 endef
 
 gb_Module_add_l10n_target =
