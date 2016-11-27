@@ -13,8 +13,10 @@
 
 #if defined(MAR_NSS)
 
+#ifdef _WIN32
 #pragma warning(push)
 #pragma warning(disable: 4204)
+#endif
 
 /**
  * Loads the public key for the specified cert name from the NSS store.
@@ -270,7 +272,9 @@ CryptoAPI_VerifyUpdate(HCRYPTHASH* hash, BYTE *buf, DWORD len)
   return result ? CryptoX_Success : CryptoX_Error;
 }
 
+#ifdef _WIN32
 #pragma warning(pop)
+#endif
 
 #endif
 
