@@ -573,7 +573,12 @@ InternalDataProvider::createDataSequenceFromArray( const OUString& rArrayStr, co
         std::vector<double> aValues;
         aValues.reserve(aRawElems.size());
         for (OUString & aRawElem : aRawElems)
-            aValues.push_back(aRawElem.toDouble());
+        {
+            if (aRawElem.isEmpty())
+                aValues.push_back(NAN);
+            else
+                aValues.push_back(aRawElem.toDouble());
+        }
         sal_Int32 n = m_aInternalData.appendColumn();
 
         m_aInternalData.setColumnValues(n, aValues);
