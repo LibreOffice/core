@@ -24,7 +24,7 @@
 #define MNI_DELETE             4
 
 TemplateSearchView::TemplateSearchView (vcl::Window *pParent)
-    : ThumbnailView(pParent,WB_TABSTOP | WB_VSCROLL),
+    : ThumbnailView(pParent,WB_TABSTOP | WB_VSCROLL | WB_BORDER),
     maSelectedItem(nullptr),
     maPosition(0,0)
 {

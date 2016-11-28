@@ -26,7 +26,7 @@ VCL_BUILDER_FACTORY(TemplateDefaultView)
 static const int gnItemPadding(5); //TODO:: Change padding to 10. It looks really crowded and occupied.
 
 TemplateDefaultView::TemplateDefaultView( Window* pParent)
-    : TemplateLocalView(pParent)
+    : TemplateLocalView(pParent, WB_TABSTOP)
     , mnTextHeight(30)
 {
     Rectangle aScreen = Application::GetScreenPosSizePixel(Application::GetDisplayBuiltInScreen());
