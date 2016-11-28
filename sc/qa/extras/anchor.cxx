@@ -95,13 +95,13 @@ void ScAnchorTest::testUndoAnchor()
     ScDrawLayer::SetCellAnchoredFromPosition(*pObject, rDoc, 0);
     // Check state
     ScAnchorType oldType = ScDrawLayer::GetAnchorType(*pObject);
-    CPPUNIT_ASSERT(oldType == SCA_CELL );
+    CPPUNIT_ASSERT_EQUAL(SCA_CELL, oldType);
 
     // Change all selected objects to page anchor
     pViewShell->GetViewData().GetDispatcher().Execute(SID_ANCHOR_PAGE);
     // Check state
     ScAnchorType newType = ScDrawLayer::GetAnchorType(*pObject);
-    CPPUNIT_ASSERT(newType == SCA_PAGE );
+    CPPUNIT_ASSERT_EQUAL(SCA_PAGE, newType);
 
     // Undo and check its result.
     SfxUndoManager* pUndoMgr = rDoc.GetUndoManager();
@@ -109,39 +109,39 @@ void ScAnchorTest::testUndoAnchor()
     pUndoMgr->Undo();
 
     // Check anchor type
-    CPPUNIT_ASSERT(oldType == ScDrawLayer::GetAnchorType(*pObject) );
+    CPPUNIT_ASSERT_EQUAL(oldType, ScDrawLayer::GetAnchorType(*pObject));
     CPPUNIT_ASSERT_EQUAL(int(GraphicType::Bitmap), int(rGraphicObj.GetGraphic().GetType()));
     CPPUNIT_ASSERT_EQUAL(sal_uLong(864900), rGraphicObj.GetSizeBytes());
 
     pUndoMgr->Redo();
 
     // Check anchor type
-    CPPUNIT_ASSERT(newType == ScDrawLayer::GetAnchorType(*pObject) );
+    CPPUNIT_ASSERT_EQUAL(newType, ScDrawLayer::GetAnchorType(*pObject));
     CPPUNIT_ASSERT_EQUAL(int(GraphicType::Bitmap), int(rGraphicObj.GetGraphic().GetType()));
     CPPUNIT_ASSERT_EQUAL(sal_uLong(864900), rGraphicObj.GetSizeBytes());
 
     ScDrawLayer::SetPageAnchored(*pObject);
     // Check state
     oldType = ScDrawLayer::GetAnchorType(*pObject);
-    CPPUNIT_ASSERT(oldType == SCA_PAGE );
+    CPPUNIT_ASSERT_EQUAL(SCA_PAGE, oldType);
 
     // Change all selected objects to cell anchor
     pViewShell->GetViewData().GetDispatcher().Execute(SID_ANCHOR_CELL);
     // Check state
     newType = ScDrawLayer::GetAnchorType(*pObject);
-    CPPUNIT_ASSERT(newType == SCA_CELL );
+    CPPUNIT_ASSERT_EQUAL(SCA_CELL, newType);
 
     pUndoMgr->Undo();
 
     // Check anchor type
-    CPPUNIT_ASSERT(oldType == ScDrawLayer::GetAnchorType(*pObject) );
+    CPPUNIT_ASSERT_EQUAL(oldType, ScDrawLayer::GetAnchorType(*pObject));
     CPPUNIT_ASSERT_EQUAL(int(GraphicType::Bitmap), int(rGraphicObj.GetGraphic().GetType()));
     CPPUNIT_ASSERT_EQUAL(sal_uLong(864900), rGraphicObj.GetSizeBytes());
 
     pUndoMgr->Redo();
 
     // Check anchor type
-    CPPUNIT_ASSERT(newType == ScDrawLayer::GetAnchorType(*pObject) );
+    CPPUNIT_ASSERT_EQUAL(newType, ScDrawLayer::GetAnchorType(*pObject));
     CPPUNIT_ASSERT_EQUAL(int(GraphicType::Bitmap), int(rGraphicObj.GetGraphic().GetType()));
     CPPUNIT_ASSERT_EQUAL(sal_uLong(864900), rGraphicObj.GetSizeBytes());
 
