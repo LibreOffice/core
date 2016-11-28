@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a71b18c_5a4e55c2",
+        "filename": "desktop/source/app/cmdlinehelp.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2016-11-28T09:04:52Z",
+      "side": 1,
+      "message": "Typo: LbreOffice -\u003e LibreOffice (and in the following lines too).",
+      "range": {
+        "startLine": 46,
+        "startChar": 38,
+        "endLine": 46,
+        "endChar": 48
+      },
+      "revId": "6aeecab350f7387c61fa76588f53eaa3c9655318",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
