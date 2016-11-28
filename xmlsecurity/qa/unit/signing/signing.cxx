@@ -69,6 +69,8 @@ public:
     void testODFGood();
     /// Test a typical broken ODF signature where one stream is corrupted.
     void testODFBroken();
+    /// Document has a signature stream, but no actual signatures.
+    void testODFNo();
     /// Test a typical OOXML where a number of (but not all) streams are signed.
     void testOOXMLPartial();
     /// Test a typical broken OOXML signature where one stream is corrupted.
@@ -90,12 +92,16 @@ public:
 #endif
     void test96097Calc();
     void test96097Doc();
+    /// Creates a XAdES signature from scratch.
     void testXAdES();
+    /// Works with an existing good XAdES signature.
+    void testXAdESGood();
 
     CPPUNIT_TEST_SUITE(SigningTest);
     CPPUNIT_TEST(testDescription);
     CPPUNIT_TEST(testODFGood);
     CPPUNIT_TEST(testODFBroken);
+    CPPUNIT_TEST(testODFNo);
     CPPUNIT_TEST(testODFBroken);
     CPPUNIT_TEST(testOOXMLPartial);
     CPPUNIT_TEST(testOOXMLBroken);
@@ -111,6 +117,7 @@ public:
     CPPUNIT_TEST(test96097Calc);
     CPPUNIT_TEST(test96097Doc);
     CPPUNIT_TEST(testXAdES);
+    CPPUNIT_TEST(testXAdESGood);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -380,6 +387,16 @@ void SigningTest::testODFBroken()
     CPPUNIT_ASSERT_EQUAL(static_cast<int>(SignatureState::BROKEN), static_cast<int>(pObjectShell->GetDocumentSignatureState()));
 }
 
+void SigningTest::testODFNo()
+{
+    createDoc(m_directories.getURLFromSrc(DATA_DIRECTORY) + "no.odt");
+    SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
+    CPPUNIT_ASSERT(pBaseModel);
+    SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
+    CPPUNIT_ASSERT(pObjectShell);
+    CPPUNIT_ASSERT_EQUAL(static_cast<int>(SignatureState::NOSIGNATURES), static_cast<int>(pObjectShell->GetDocumentSignatureState()));
+}
+
 void SigningTest::testOOXMLPartial()
 {
     createDoc(m_directories.getURLFromSrc(DATA_DIRECTORY) + "partial.docx");
@@ -591,6 +608,22 @@ void SigningTest::testXAdES()
     assertXPath(pXmlDoc, "//xd:CertDigest", 1);
 }
 
+void SigningTest::testXAdESGood()
+{
+    createDoc(m_directories.getURLFromSrc(DATA_DIRECTORY) + "good-xades.odt");
+    SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
+    CPPUNIT_ASSERT(pBaseModel);
+    SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
+    CPPUNIT_ASSERT(pObjectShell);
+    // We expect NOTVALIDATED in case the root CA is not imported on the system, and OK otherwise, so accept both.
+    SignatureState nActual = pObjectShell->GetDocumentSignatureState();
+    CPPUNIT_ASSERT_MESSAGE(
+        (OString::number(
+             static_cast<std::underlying_type<SignatureState>::type>(nActual))
+         .getStr()),
+        (nActual == SignatureState::NOTVALIDATED
+         || nActual == SignatureState::OK));
+}
 void SigningTest::registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
 {
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("odfds"), BAD_CAST("urn:oasis:names:tc:opendocument:xmlns:digitalsignature:1.0"));
