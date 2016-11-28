@@ -76,24 +76,24 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::system;
 
-class NoHelpErrorBox : public MessageDialog
-{
-public:
-    explicit NoHelpErrorBox( vcl::Window* _pParent );
-
-    virtual void    RequestHelp( const HelpEvent& rHEvt ) override;
-};
-
-NoHelpErrorBox::NoHelpErrorBox( vcl::Window* _pParent )
-    : MessageDialog(_pParent, SfxResId(RID_STR_HLPFILENOTEXIST))
-{
-    // Error message: "No help available"
-}
-
-void NoHelpErrorBox::RequestHelp( const HelpEvent& )
-{
-    // do nothing, because no help available
-}
+// class NoHelpErrorBox : public MessageDialog
+// {
+// public:
+//     explicit NoHelpErrorBox( vcl::Window* _pParent );
+//
+//     virtual void    RequestHelp( const HelpEvent& rHEvt ) override;
+// };
+//
+// NoHelpErrorBox::NoHelpErrorBox( vcl::Window* _pParent )
+//     : MessageDialog(_pParent, SfxResId(RID_STR_HLPFILENOTEXIST))
+// {
+//     // Error message: "No help available"
+// }
+//
+// void NoHelpErrorBox::RequestHelp( const HelpEvent& )
+// {
+//     // do nothing, because no help available
+// }
 
 static bool impl_hasHelpInstalled( const OUString &rLang );
 
@@ -613,12 +613,16 @@ bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow, const
 
     if ( !impl_hasHelpInstalled() )
     {
-        if ( impl_showOnlineHelp( aHelpURL ) )
-            return true;
-
-        ScopedVclPtrInstance< NoHelpErrorBox > aErrBox(const_cast< vcl::Window* >( pWindow ));
-        aErrBox->Execute();
-        return false;
+        ScopedVclPtrInstance< MessageDialog > aQueryBox(const_cast< vcl::Window* >( pWindow ),"onlinehelpmanual","sfx/ui/helpmanual.ui");
+         if(aQueryBox->Execute() == RET_OK)
+         {
+             if ( impl_showOnlineHelp( aHelpURL ) )
+                 return true;
+         }
+         else
+         {
+             return false;
+         }
     }
 
     Reference < XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
