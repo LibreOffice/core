@@ -114,9 +114,6 @@ protected:
     sal_uInt16 nMaxItems;
     std::deque<vcl::Font> aFontVec;
 
-    static bool     CompareItem(const vcl::Font & rFirstFont, const vcl::Font & rSecondFont);
-    static OUString GetStringItem(const vcl::Font &rItem);
-
 public:
     explicit SmFontPickList(sal_uInt16 nMax = 5) : nMaxItems(nMax) {}
     virtual ~SmFontPickList() { Clear(); }

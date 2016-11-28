@@ -59,7 +59,9 @@ vcl::Font SmFontPickList::Get(sal_uInt16 nPos) const
     return nPos < aFontVec.size() ? aFontVec[nPos] : vcl::Font();
 }
 
-bool SmFontPickList::CompareItem(const vcl::Font & rFirstFont, const vcl::Font & rSecondFont)
+namespace {
+
+bool lcl_CompareItem(const vcl::Font & rFirstFont, const vcl::Font & rSecondFont)
 {
   return rFirstFont.GetFamilyName() == rSecondFont.GetFamilyName() &&
          rFirstFont.GetFamilyType() == rSecondFont.GetFamilyType() &&
@@ -68,7 +70,7 @@ bool SmFontPickList::CompareItem(const vcl::Font & rFirstFont, const vcl::Font &
          rFirstFont.GetItalic()     == rSecondFont.GetItalic();
 }
 
-OUString SmFontPickList::GetStringItem(const vcl::Font &rFont)
+OUString lcl_GetStringItem(const vcl::Font &rFont)
 {
     OUStringBuffer aString(rFont.GetFamilyName());
 
@@ -86,10 +88,12 @@ OUString SmFontPickList::GetStringItem(const vcl::Font &rFont)
     return aString.makeStringAndClear();
 }
 
+}
+
 void SmFontPickList::Insert(const vcl::Font &rFont)
 {
     for (size_t nPos = 0; nPos < aFontVec.size(); nPos++)
-        if (CompareItem( aFontVec[nPos], rFont))
+        if (lcl_CompareItem( aFontVec[nPos], rFont))
         {
             aFontVec.erase( aFontVec.begin() + nPos );
             break;
@@ -149,10 +153,10 @@ SmFontPickListBox& SmFontPickListBox::operator=(const SmFontPickList& rList)
     *static_cast<SmFontPickList *>(this) = rList;
 
     for (nPos = 0; nPos < aFontVec.size(); nPos++)
-        InsertEntry(GetStringItem(aFontVec[nPos]), nPos);
+        InsertEntry(lcl_GetStringItem(aFontVec[nPos]), nPos);
 
     if (aFontVec.size() > 0)
-        SelectEntry(GetStringItem(aFontVec.front()));
+        SelectEntry(lcl_GetStringItem(aFontVec.front()));
 
     return *this;
 }
@@ -161,9 +165,9 @@ void SmFontPickListBox::Insert(const vcl::Font &rFont)
 {
     SmFontPickList::Insert(rFont);
 
-    RemoveEntry(GetStringItem(aFontVec.front()));
-    InsertEntry(GetStringItem(aFontVec.front()), 0);
-    SelectEntry(GetStringItem(aFontVec.front()));
+    RemoveEntry(lcl_GetStringItem(aFontVec.front()));
+    InsertEntry(lcl_GetStringItem(aFontVec.front()), 0);
+    SelectEntry(lcl_GetStringItem(aFontVec.front()));
 
     while (GetEntryCount() > nMaxItems)
         RemoveEntry(GetEntryCount() - 1);
