@@ -24,6 +24,7 @@
 #include <com/sun/star/document/XEmbeddedObjectSupplier2.hpp>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/style/BreakType.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
@@ -127,6 +128,12 @@ DECLARE_OOXMLIMPORT_TEST(testImageHyperlink, "image-hyperlink.docx")
 DECLARE_SW_IMPORT_TEST(testMathMalformedXml, "math-malformed_xml.docx", FailTest)
 {
     CPPUNIT_ASSERT(!mxComponent.is());
+}
+
+DECLARE_OOXMLIMPORT_TEST(testTdf103975_notPageBreakE, "tdf103975_notPageBreakE.docx")
+{
+    // The problem was that the column break was getting lost.
+    CPPUNIT_ASSERT_EQUAL(style::BreakType_COLUMN_BEFORE, getProperty<style::BreakType>(getParagraph(2), "BreakType"));
 }
 
 DECLARE_OOXMLIMPORT_TEST(testN751017, "n751017.docx")
