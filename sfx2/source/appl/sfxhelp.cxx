@@ -613,11 +613,12 @@ bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow, const
 
     if ( !impl_hasHelpInstalled() )
     {
-        if ( impl_showOnlineHelp( aHelpURL ) )
-            return true;
-
-        ScopedVclPtrInstance< NoHelpErrorBox > aErrBox(const_cast< vcl::Window* >( pWindow ));
-        aErrBox->Execute();
+        // if ( impl_showOnlineHelp( aHelpURL ) )
+            // return true;
+            ScopedVclPtrInstance< MessageDialog > aQueryBox(const_cast< vcl::Window* >( pWindow ),"onlinehelpmanual","sfx/ui/helpmanual.ui");
+            aQueryBox->Execute();//opens a dialog box and ask the user whether to read help online or to close it
+        // ScopedVclPtrInstance< NoHelpErrorBox > aErrBox(const_cast< vcl::Window* >( pWindow ));
+        // aErrBox->Execute();
         return false;
     }
 
