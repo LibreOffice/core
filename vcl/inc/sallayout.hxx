@@ -333,7 +333,6 @@ public:
     virtual void    ApplyDXArray(ImplLayoutArgs&) = 0;
     void            Justify(DeviceCoordinate nNewWidth);
     void            ApplyAsianKerning(const OUString& rStr);
-    void            SortGlyphItems();
 
     // used by upper layers
     virtual DeviceCoordinate GetTextWidth() const override;
