@@ -65,16 +65,12 @@
 #include <formula/errorcodes.hxx>
 #include "externalrefmgr.hxx"
 #include <stlpool.hxx>
-#include <config_orcus.h>
 #include <attrib.hxx>
 
-#if ENABLE_ORCUS
 #include <orcusfiltersimpl.hxx>
 #include "orcusfilters.hxx"
 #include "filter.hxx"
 #include "orcusinterface.hxx"
-#endif
-
 
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
@@ -163,9 +159,7 @@ public:
     void testCondFormatParentXLSX();
     void testColorScaleNumWithRefXLSX();
 
-    #if ENABLE_ORCUS
     void testOrcusODSStyleInterface();
-    #endif
 
     void testLiteralInFormulaXLS();
 
@@ -295,9 +289,7 @@ public:
     CPPUNIT_TEST(testCondFormatParentXLSX);
     CPPUNIT_TEST(testColorScaleNumWithRefXLSX);
 
-    #if ENABLE_ORCUS
     CPPUNIT_TEST(testOrcusODSStyleInterface);
-    #endif
 
     CPPUNIT_TEST(testLiteralInFormulaXLS);
 
@@ -2854,7 +2846,6 @@ void ScFiltersTest::testColorScaleNumWithRefXLSX()
     xDocSh->DoClose();
 }
 
-#if ENABLE_ORCUS
 void ScFiltersTest::testOrcusODSStyleInterface()
 {
     ScDocument aDoc;
@@ -3069,7 +3060,6 @@ void ScFiltersTest::testOrcusODSStyleInterface()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Style Name10 :Error with ver justify", static_cast<sal_uInt16>(SVX_VER_JUSTIFY_CENTER), pVerJustify->GetValue());
 
 }
-#endif
 
 void ScFiltersTest::testLiteralInFormulaXLS()
 {

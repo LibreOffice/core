@@ -35,11 +35,7 @@
 #include "stlsheet.hxx"
 #include "compiler.hxx"
 
-#include <config_orcus.h>
-
-#if ENABLE_ORCUS
 #include "orcusfiltersimpl.hxx"
-#endif
 
 
 // ScFilterTools::ReadLongDouble()
@@ -357,12 +353,8 @@ ScFormatFilterPluginImpl::~ScFormatFilterPluginImpl() {}
 
 ScOrcusFilters* ScFormatFilterPluginImpl::GetOrcusFilters()
 {
-#if ENABLE_ORCUS
     static ScOrcusFiltersImpl aImpl;
     return &aImpl;
-#else
-    return NULL;
-#endif
 }
 
 ScFormatFilterPlugin * SAL_CALL ScFilterCreate()

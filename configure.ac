@@ -1044,11 +1044,6 @@ AC_ARG_ENABLE(breakpad,
         [Enables breakpad for crash reporting.])
 )
 
-AC_ARG_ENABLE(orcus,
-    AS_HELP_STRING([--enable-orcus],
-        [Enables orcus for extra file import filters for Calc.])
-)
-
 AC_ARG_ENABLE(fetch-external,
     AS_HELP_STRING([--disable-fetch-external],
         [Disables fetching external tarballs from web sources.])
@@ -9206,48 +9201,36 @@ AC_SUBST(ENABLE_BREAKPAD)
 dnl ===================================================================
 dnl Orcus
 dnl ===================================================================
-
-AC_MSG_CHECKING([whether to enable orcus])
-if test -z "$enable_orcus" -o "$enable_orcus" != no; then
-    AC_MSG_RESULT([yes])
-    ENABLE_ORCUS="TRUE"
-    AC_DEFINE(ENABLE_ORCUS)
-
-    libo_CHECK_SYSTEM_MODULE([orcus],[ORCUS],[liborcus-0.12 >= 0.12.0])
-    if test "$with_system_orcus" != "yes"; then
-        if test "$SYSTEM_BOOST" = "TRUE"; then
-            # ===========================================================
-            # Determine if we are going to need to link with Boost.System
-            # ===========================================================
-            dnl This seems to be necessary since boost 1.50 (1.48 does not need it,
-            dnl 1.49 is untested). The macro BOOST_THREAD_DONT_USE_SYSTEM mentioned
-            dnl in documentation has no effect.
-            AC_MSG_CHECKING([if we need to link with Boost.System])
-            AC_LANG_PUSH([C++])
-            AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
-                    @%:@include <boost/version.hpp>
-                ]],[[
-                    #if BOOST_VERSION >= 105000
-                    #   error yes, we need to link with Boost.System
-                    #endif
-                ]])],[
-                    AC_MSG_RESULT([no])
-                ],[
-                    AC_MSG_RESULT([yes])
-                    AX_BOOST_SYSTEM
-            ])
-            AC_LANG_POP([C++])
-        fi
+libo_CHECK_SYSTEM_MODULE([orcus],[ORCUS],[liborcus-0.12 >= 0.12.0])
+if test "$with_system_orcus" != "yes"; then
+    if test "$SYSTEM_BOOST" = "TRUE"; then
+        # ===========================================================
+        # Determine if we are going to need to link with Boost.System
+        # ===========================================================
+        dnl This seems to be necessary since boost 1.50 (1.48 does not need it,
+        dnl 1.49 is untested). The macro BOOST_THREAD_DONT_USE_SYSTEM mentioned
+        dnl in documentation has no effect.
+        AC_MSG_CHECKING([if we need to link with Boost.System])
+        AC_LANG_PUSH([C++])
+        AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
+                @%:@include <boost/version.hpp>
+            ]],[[
+                #if BOOST_VERSION >= 105000
+                #   error yes, we need to link with Boost.System
+                #endif
+            ]])],[
+                AC_MSG_RESULT([no])
+            ],[
+                AC_MSG_RESULT([yes])
+                AX_BOOST_SYSTEM
+        ])
+        AC_LANG_POP([C++])
     fi
-    dnl FIXME by renaming SYSTEM_LIBORCUS to SYSTEM_ORCUS in the build system world
-    SYSTEM_LIBORCUS=$SYSTEM_ORCUS
-    AC_SUBST([BOOST_SYSTEM_LIB])
-    AC_SUBST(SYSTEM_LIBORCUS)
-
-else
-    AC_MSG_RESULT([no])
 fi
-AC_SUBST(ENABLE_ORCUS)
+dnl FIXME by renaming SYSTEM_LIBORCUS to SYSTEM_ORCUS in the build system world
+SYSTEM_LIBORCUS=$SYSTEM_ORCUS
+AC_SUBST([BOOST_SYSTEM_LIB])
+AC_SUBST(SYSTEM_LIBORCUS)
 
 dnl ===================================================================
 dnl HarfBuzz
@@ -12862,7 +12845,6 @@ AC_CONFIG_HEADERS([config_host/config_lgpl.h])
 AC_CONFIG_HEADERS([config_host/config_liblangtag.h])
 AC_CONFIG_HEADERS([config_host/config_locales.h])
 AC_CONFIG_HEADERS([config_host/config_mpl.h])
-AC_CONFIG_HEADERS([config_host/config_orcus.h])
 AC_CONFIG_HEADERS([config_host/config_kde4.h])
 AC_CONFIG_HEADERS([config_host/config_oox.h])
 AC_CONFIG_HEADERS([config_host/config_opengl.h])

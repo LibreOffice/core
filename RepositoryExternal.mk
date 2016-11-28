@@ -3128,8 +3128,6 @@ endef
 endif # SYSTEM_PYTHON
 
 # ORCUS
-ifeq ($(ENABLE_ORCUS),TRUE)
-
 ifneq ($(SYSTEM_LIBORCUS),)
 
 define gb_LinkTarget__use_orcus
@@ -3219,13 +3217,6 @@ endef
 endif # MSC
 
 endif # SYSTEM_LIBORCUS
-
-else # ENABLE_ORCUS != TRUE
-
-gb_LinkTarget__use_orcus :=
-gb_LinkTarget__use_orcus-parser :=
-
-endif
 
 ifeq ($(ENABLE_EOT),TRUE)
 

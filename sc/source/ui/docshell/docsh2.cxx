@@ -26,7 +26,6 @@
 #include <editeng/unolingu.hxx>
 #include <orcus/orcus_import_ods.hpp>
 #include <orcusfiltersimpl.hxx>
-#include <config_orcus.h>
 #include <config_folders.h>
 
 #include "drwlayer.hxx"
@@ -60,7 +59,6 @@ bool ScDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
     aDocument.GetStyleSheetPool()->CreateStandardStyles();
     aDocument.UpdStlShtPtrsFrmNms();
 
-#if ENABLE_ORCUS
     if (!mbUcalcTest)
     {
         /* Create styles that are imported through Orcus */
@@ -75,7 +73,6 @@ bool ScDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
         if (pOrcus)
             pOrcus->importODS_Styles(aDocument, aPath);
     }
-#endif
 
     //  SetDocumentModified is not allowed anymore in Load/InitNew!
     InitItems();
