@@ -186,7 +186,9 @@ ifeq ($(HAVE_GCC_FNO_DEFAULT_INLINE),TRUE)
 FNO_DEFAULT_INLINE=-fno-default-inline
 endif
 
-gb_DEBUG_CFLAGS := $(FINLINE_LIMIT0) $(FNO_INLINE)
+# note: this overrides -O0 from the gb_COMPILERNOOPTFLAGS with -Og if
+# available, so that the former remains no-optimization for when that is needed
+gb_DEBUG_CFLAGS := $(if $(HAVE_GCC_OG),-Og) $(FINLINE_LIMIT0) $(FNO_INLINE)
 gb_DEBUG_CXXFLAGS := $(FNO_DEFAULT_INLINE)
 
 
