@@ -774,10 +774,6 @@ namespace cppcanvas
             {
             }
 
-            virtual ~EMFPCustomLineCap() override
-            {
-            }
-
             void SetAttributes(rendering::StrokeAttributes& aAttributes)
             {
                 aAttributes.StartCapType = lcl_convertStrokeCap(strokeStartCap);

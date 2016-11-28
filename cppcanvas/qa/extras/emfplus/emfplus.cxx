@@ -29,10 +29,6 @@ public:
     {
     }
 
-    virtual ~Test() override
-    {
-    }
-
     virtual void setUp() override
     {
         UnoApiTest::setUp();
