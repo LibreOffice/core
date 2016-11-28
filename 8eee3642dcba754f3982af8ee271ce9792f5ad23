@@ -45,6 +45,30 @@
       "revId": "8eee3642dcba754f3982af8ee271ce9792f5ad23",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a71b18c_bda5a3b6",
+        "filename": "connectivity/source/drivers/firebird/DatabaseMetaData.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1737,
+      "author": {
+        "id": 1001240
+      },
+      "writtenOn": "2016-11-28T16:10:38Z",
+      "side": 1,
+      "message": "Right, that\u0027s another bug (Bug 104227). I\u0027ll move that to another gerrit change later.",
+      "parentUuid": "3a71b18c_5a065521",
+      "range": {
+        "startLine": 1737,
+        "startChar": 61,
+        "endLine": 1737,
+        "endChar": 66
+      },
+      "revId": "8eee3642dcba754f3982af8ee271ce9792f5ad23",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
