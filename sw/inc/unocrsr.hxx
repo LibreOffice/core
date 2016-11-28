@@ -20,7 +20,8 @@
 #define INCLUDED_SW_INC_UNOCRSR_HXX
 
 #include <swcrsr.hxx>
-#include <calbck.hxx>
+#include <svl/SfxBroadcaster.hxx>
+#include <svl/lstner.hxx>
 
 namespace sw
 {
@@ -39,7 +40,7 @@ namespace sw
     };
 }
 
-class SwUnoCursor : public virtual SwCursor, public SwModify
+class SwUnoCursor : public virtual SwCursor
 {
 private:
     bool m_bRemainInSection : 1;
@@ -47,6 +48,7 @@ private:
     bool m_bSkipOverProtectSections : 1;
 
 public:
+    SfxBroadcaster m_aNotifier;
     SwUnoCursor( const SwPosition &rPos );
     virtual ~SwUnoCursor() override;
 
@@ -111,7 +113,7 @@ public:
 
 namespace sw
 {
-    class UnoCursorPointer : public SwClient
+    class UnoCursorPointer : public SfxListener
     {
         public:
             UnoCursorPointer()
@@ -120,30 +122,29 @@ namespace sw
             UnoCursorPointer(std::shared_ptr<SwUnoCursor> pCursor, bool bSectionRestricted=false)
                 : m_pCursor(pCursor), m_bSectionRestricted(bSectionRestricted)
             {
-                m_pCursor->Add(this);
+                StartListening(m_pCursor->m_aNotifier);
             }
             UnoCursorPointer(const UnoCursorPointer& rOther)
-                : SwClient(nullptr)
+                : SfxListener()
                 , m_pCursor(rOther.m_pCursor)
                 , m_bSectionRestricted(rOther.m_bSectionRestricted)
             {
                 if(m_pCursor)
-                    m_pCursor->Add(this);
+                    StartListening(m_pCursor->m_aNotifier);
             }
             virtual ~UnoCursorPointer() override
             {
                 if(m_pCursor)
-                    m_pCursor->Remove(this);
+                    EndListening(m_pCursor->m_aNotifier);
             }
-            virtual void SwClientNotify(const SwModify& rModify, const SfxHint& rHint) override
+            virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override
             {
-                SwClient::SwClientNotify(rModify, rHint);
                 if(m_pCursor)
                 {
                     if(typeid(rHint) == typeid(UnoCursorHint))
-                        m_pCursor->Remove(this);
+                        EndListening(rBC);
                 }
-                if(!GetRegisteredIn())
+                if(!GetBroadcasterCount())
                     m_pCursor.reset();
             };
             SwUnoCursor* get() const
@@ -155,7 +156,7 @@ namespace sw
             UnoCursorPointer& operator=(UnoCursorPointer aOther)
             {
                 if(aOther.m_pCursor)
-                    aOther.m_pCursor->Add(this);
+                    StartListening(aOther.m_pCursor->m_aNotifier);
                 m_pCursor = aOther.m_pCursor;
                 return *this;
             }
@@ -164,9 +165,9 @@ namespace sw
             void reset(std::shared_ptr<SwUnoCursor> pNew)
             {
                 if(pNew)
-                    pNew->Add(this);
+                    StartListening(pNew->m_aNotifier);
                 else if(m_pCursor)
-                    m_pCursor->Remove(this);
+                    EndListening(m_pCursor->m_aNotifier);
                 m_pCursor = pNew;
             }
         private:
