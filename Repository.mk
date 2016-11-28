@@ -766,6 +766,10 @@ $(eval $(call gb_Helper_register_jars,NONE,\
 ))
 endif
 
+$(eval $(call gb_Helper_register_packages_for_install,impress,\
+	sd_xml \
+))
+
 $(eval $(call gb_Helper_register_packages_for_install,ure,\
 	instsetoo_native_setup_ure \
 	ure_install \
@@ -803,6 +807,10 @@ $(eval $(call gb_Helper_register_packages_for_install,sdk,\
 $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	$(if $(SYSTEM_LIBEXTTEXTCAT),,libexttextcat_fingerprint) \
 	officecfg_misc \
+	$(if $(filter $(OS),MACOSX), \
+		extensions_mdibundle \
+		extensions_OOoSpotlightImporter \
+	) \
 	extras_autocorr \
 	extras_autotextuser \
 	extras_cfgsrvnolang \
@@ -833,7 +841,12 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	extras_tplwizreport \
 	extras_tplwizstyles \
 	framework_dtd \
+	$(if $(filter $(OS),MACOSX),infoplist) \
 	package_dtd \
+	sd_web \
+	sfx2_emojiconfig \
+	$(if $(USING_X11),vcl_fontunxppds) \
+	$(if $(filter $(OS),MACOSX),vcl_osxres) \
 	xmloff_dtd \
 	xmlscript_dtd \
 	xmlhelp_helpxsl \
@@ -844,15 +857,19 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 		$(if $(ENABLE_SCRIPTING_JAVASCRIPT),scripting_ScriptsJavaScript) \
 	) \
 	$(if $(DISABLE_SCRIPTING),,scripting_scriptbindinglib) \
+	$(if $(filter $(OS),MACOSX),sysui_osxicons) \
+	wizards_basicshare \
 	wizards_basicsrvaccess2base \
 	wizards_basicsrvdepot \
 	wizards_basicsrveuro \
 	wizards_basicsrvgimmicks \
 	wizards_basicsrvimport \
 	wizards_basicsrvform \
+	wizards_basicsrvstandard \
 	wizards_basicsrvtemplate \
 	wizards_basicsrvtools \
 	wizards_basicsrvtutorials \
+	wizards_basicusr \
 	xmlsec \
 	chart2_opengl_shader \
 	vcl_opengl_shader \
@@ -873,6 +890,7 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 ))
 
 $(eval $(call gb_Helper_register_packages_for_install,ogltrans,\
+	sd_opengl \
 	slideshow_opengl_shader \
 ))
 
