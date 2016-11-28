@@ -223,7 +223,7 @@ private:
     OUString                aStyleName;
     SfxStyleSheetBase*      pStyle_cached;
 
-    SfxStyleSheetBase*      GetStyle_Impl( bool useCachedValue = false );
+    SfxStyleSheetBase*      GetStyle_Impl( bool bUseCachedValue = false );
     const SfxItemSet*       GetStyleItemSet_Impl( const OUString& rPropName, const SfxItemPropertySimpleEntry*& rpEntry );
     css::beans::PropertyState getPropertyState_Impl( const OUString& PropertyName )
                                 throw(css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception);

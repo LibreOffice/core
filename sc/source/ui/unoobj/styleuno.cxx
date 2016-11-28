@@ -582,8 +582,11 @@ void ScStyleFamiliesObj::loadStylesFromDocShell( ScDocShell* pSource,
         bool bLoadCellStyles = true;
         bool bLoadPageStyles = true;
 
-        for ( const beans::PropertyValue& rProp : aOptions )
+        const beans::PropertyValue* pPropArray = aOptions.getConstArray();
+        sal_Int32 nPropCount = aOptions.getLength();
+        for (sal_Int32 i = 0; i < nPropCount; i++)
         {
+            const beans::PropertyValue& rProp = pPropArray[i];
             OUString aPropName(rProp.Name);
 
             if (aPropName == SC_UNONAME_OVERWSTL)
@@ -1013,10 +1016,11 @@ void ScStyleObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
 }
 
-SfxStyleSheetBase* ScStyleObj::GetStyle_Impl( bool useCachedValue )
+SfxStyleSheetBase* ScStyleObj::GetStyle_Impl( bool bUseCachedValue )
 {
-    if ( useCachedValue )
+    if ( bUseCachedValue )
         return pStyle_cached;
+
     pStyle_cached = nullptr;
     if ( pDocShell )
     {
@@ -1249,10 +1253,11 @@ uno::Sequence<beans::PropertyState> SAL_CALL ScStyleObj::getPropertyStates( cons
     SolarMutexGuard aGuard;
     GetStyle_Impl();
 
+    const OUString* pNames = aPropertyNames.getConstArray();
     uno::Sequence<beans::PropertyState> aRet( aPropertyNames.getLength() );
     beans::PropertyState* pStates = aRet.getArray();
     for ( sal_Int32 i = 0; i < aPropertyNames.getLength(); i++ )
-        pStates[i] = getPropertyState_Impl( aPropertyNames[i] );
+        pStates[i] = getPropertyState_Impl( pNames[i] );
     return aRet;
 }
 
