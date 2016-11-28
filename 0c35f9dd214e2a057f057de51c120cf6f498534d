@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a71b18c_9a2aade6",
+        "filename": "sc/source/filter/oox/addressconverter.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 451,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-11-28T07:18:35Z",
+      "side": 1,
+      "message": "I don\u0027t know this stuff all that well, but don\u0027t you need to call\n  orRange.aEnd.SetTab \n?",
+      "revId": "0c35f9dd214e2a057f057de51c120cf6f498534d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
