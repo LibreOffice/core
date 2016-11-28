@@ -539,11 +539,13 @@ void DrawView::DeleteMarked()
             if( pObj && !pObj->IsEmptyPresObj() && pObj->GetUserCall() )
             {
                 pPage = static_cast< SdPage* >( pObj->GetPage() );
-                PresObjKind ePresObjKind;
-                if( pPage && ((ePresObjKind = pPage->GetPresObjKind(pObj)) != PRESOBJ_NONE))
+                if (pPage)
                 {
+                    PresObjKind ePresObjKind(pPage->GetPresObjKind(pObj));
                     switch( ePresObjKind )
                     {
+                    case PRESOBJ_NONE:
+                        continue; // ignore it
                     case PRESOBJ_GRAPHIC:
                     case PRESOBJ_OBJECT:
                     case PRESOBJ_CHART:

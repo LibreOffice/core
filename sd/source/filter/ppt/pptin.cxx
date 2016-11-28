@@ -725,10 +725,12 @@ bool ImplSdPPTImport::Import()
             }
         }
     }
-    SdPage* pMPage;
     sal_uInt16 i;
-    for ( i = 0; i < mpDoc->GetMasterPageCount() && ( (pMPage = static_cast<SdPage*>(mpDoc->GetMasterPage( i ))) != nullptr ); i++ )
+    for (i = 0; i < mpDoc->GetMasterPageCount(); ++i)
     {
+        SdPage *const pMPage(static_cast<SdPage*>(mpDoc->GetMasterPage(i)));
+        if (pMPage == nullptr)
+            break;
         SetPageNum( i, PPT_MASTERPAGE );
 
         // importing master page objects
