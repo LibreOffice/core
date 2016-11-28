@@ -95,7 +95,6 @@ class ImplEventAttacherManager
 public:
     ImplEventAttacherManager( const Reference< XIntrospection > & rIntrospection,
                               const Reference< XComponentContext >& rContext );
-    virtual ~ImplEventAttacherManager() override;
 
     // Methods of XEventAttacherManager
     virtual void SAL_CALL registerScriptEvent(sal_Int32 Index, const ScriptEventDescriptor& ScriptEvent)
@@ -378,11 +377,6 @@ ImplEventAttacherManager::ImplEventAttacherManager( const Reference< XIntrospect
         Arguments[0] <<= rIntrospection;
         xInit->initialize( Arguments );
     }
-}
-
-
-ImplEventAttacherManager::~ImplEventAttacherManager()
-{
 }
 
 Reference< XIdlReflection > ImplEventAttacherManager::getReflection() throw( Exception )

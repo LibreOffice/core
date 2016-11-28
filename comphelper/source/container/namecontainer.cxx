@@ -42,7 +42,6 @@ namespace comphelper
     {
     public:
         explicit NameContainer( css::uno::Type aType );
-        virtual ~NameContainer() override;
 
         // XNameContainer
         virtual void SAL_CALL insertByName( const OUString& aName, const css::uno::Any& aElement )
@@ -87,10 +86,6 @@ using namespace ::com::sun::star::lang;
 
 NameContainer::NameContainer( css::uno::Type aType )
 : maType( aType )
-{
-}
-
-NameContainer::~NameContainer()
 {
 }
 

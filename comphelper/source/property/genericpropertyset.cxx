@@ -63,7 +63,6 @@ namespace comphelper
 
     public:
         explicit GenericPropertySet( PropertySetInfo* pInfo ) throw();
-        virtual ~GenericPropertySet() throw() override;
 
         // XInterface
         virtual  Any SAL_CALL queryAggregation( const  Type & rType ) throw( RuntimeException, std::exception) override;
@@ -94,9 +93,6 @@ GenericPropertySet::GenericPropertySet( PropertySetInfo* pInfo ) throw()
 {
 }
 
-GenericPropertySet::~GenericPropertySet() throw()
-{
-}
 void SAL_CALL GenericPropertySet::addPropertyChangeListener( const OUString& aPropertyName, const Reference< XPropertyChangeListener >& xListener ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
 {
     Reference < XPropertySetInfo > xInfo = getPropertySetInfo(  );

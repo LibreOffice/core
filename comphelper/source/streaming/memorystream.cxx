@@ -45,7 +45,6 @@ class UNOMemoryStream : public WeakImplHelper<XServiceInfo, XStream, XSeekableIn
 {
 public:
     UNOMemoryStream();
-    virtual ~UNOMemoryStream() override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException, std::exception) override;
@@ -83,10 +82,6 @@ private:
 
 UNOMemoryStream::UNOMemoryStream()
 : mnCursor(0)
-{
-}
-
-UNOMemoryStream::~UNOMemoryStream()
 {
 }
 
