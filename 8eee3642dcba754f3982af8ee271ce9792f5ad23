@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a71b18c_9a30ed09",
+        "filename": "connectivity/source/drivers/firebird/DatabaseMetaData.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1140,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2016-11-28T10:34:18Z",
+      "side": 1,
+      "message": "I don\u0027t see the link between this change and the subject of this gerrit change, but maybe I missed it. Maybe the other changes uncover a latent bug here and this corrects it? Then it is right to do it in the same gerrit change.\n\nAnyway, according to the documentation\nhttp://api.libreoffice.org/docs/idl/ref/interfacecom_1_1sun_1_1star_1_1sdbc_1_1XDatabaseMetaData.html#a9415c373123dbfdba5888bf9ea112274\nhttp://docs.oracle.com/javase/7/docs/api/java/sql/DatabaseMetaData.html#getColumnPrivileges%28java.lang.String,%20java.lang.String,%20java.lang.String,%20java.lang.String%29\n\nThis should be a string \u0027YES\u0027 or \u0027NO\u0027 or NULL. So need to convert from the firebird format (a smallint indeed) to SDBC format (string). You can do it either in the C++ code or in the SQL query.",
+      "range": {
+        "startLine": 1140,
+        "startChar": 60,
+        "endLine": 1140,
+        "endChar": 65
+      },
+      "revId": "8eee3642dcba754f3982af8ee271ce9792f5ad23",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a71b18c_5a065521",
+        "filename": "connectivity/source/drivers/firebird/DatabaseMetaData.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1737,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2016-11-28T10:34:18Z",
+      "side": 1,
+      "message": "same here, what is the link with the subject of this change?\n\nThis one looks like it will actually work since the negation will make it a bool again (which it is supposed to be in the SDBC result). Stylistically, I prefer\n xRow-\u003egetShort(5) \u003d\u003d 0\nwhich would IMHO be more clear, since it more clearly shows we are going from a (short) integer to a bool rather than by implicit C++ into-to-bool rule.\n\n\nAfter checking more carefully, neither of these will produce exactly the right result. It will create an ORowSetValue with TypeKind css::sdbc::DataType::BIT, not BOOL.\n(from include/connectivity/FValue.hxx:\n         ORowSetValue(bool _rRH)\n            :m_eTypeKind(css::sdbc::DataType::BIT)\n)\n\nSo to me, looks like we have to add an explicit \"setTypeKind(TypeKind css::sdbc::DataType::BOOL)\" there. And probably in sefveral other similar places throughout this file and other \"FooMetaData.cxx\" files in the driver...\n\nAll this is IMHO best done in a different gerrit change.",
+      "range": {
+        "startLine": 1737,
+        "startChar": 61,
+        "endLine": 1737,
+        "endChar": 66
+      },
+      "revId": "8eee3642dcba754f3982af8ee271ce9792f5ad23",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
