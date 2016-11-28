@@ -669,8 +669,9 @@ void SmUnHorNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 
 /**************************************************************************/
 
+namespace {
 
-void SmRootNode::GetHeightVerOffset(const SmRect &rRect,
+void lcl_GetHeightVerOffset(const SmRect &rRect,
                                     long &rHeight, long &rVerOffset)
     // calculate height and vertical offset of root sign suitable for 'rRect'
 {
@@ -682,7 +683,7 @@ void SmRootNode::GetHeightVerOffset(const SmRect &rRect,
 }
 
 
-Point SmRootNode::GetExtraPos(const SmRect &rRootSymbol,
+Point lcl_GetExtraPos(const SmRect &rRootSymbol,
                               const SmRect &rExtra)
 {
     const Size &rSymSize = rRootSymbol.GetSize();
@@ -704,6 +705,7 @@ Point SmRootNode::GetExtraPos(const SmRect &rRootSymbol,
     return aPos;
 }
 
+}
 
 void SmRootNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 {
@@ -721,7 +723,7 @@ void SmRootNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 
     long  nHeight,
           nVerOffset;
-    GetHeightVerOffset(*pBody, nHeight, nVerOffset);
+    lcl_GetHeightVerOffset(*pBody, nHeight, nVerOffset);
     nHeight += rFormat.GetDistance(DIS_ROOT)
                * GetFont().GetFontSize().Height() / 100L;
 
@@ -741,7 +743,7 @@ void SmRootNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     {   pExtra->SetSize(Fraction(rFormat.GetRelSize(SIZ_INDEX), 100));
         pExtra->Arrange(rDev, rFormat);
 
-        aPos = GetExtraPos(*pRootSym, *pExtra);
+        aPos = lcl_GetExtraPos(*pRootSym, *pExtra);
         pExtra->MoveTo(aPos);
     }
 
