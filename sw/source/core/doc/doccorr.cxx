@@ -159,8 +159,8 @@ void PaMCorrAbs( const SwPaM& rRange,
         if (bChange && bLeaveSection)
         {
             // the UNO cursor has left its section. We need to notify it!
-            SwMsgPoolItem aHint( RES_UNOCURSOR_LEAVES_SECTION );
-            pUnoCursor->ModifyNotification( &aHint, nullptr );
+            sw::UnoCursorHint aHint(sw::UnoCursorHintType::LEAVES_SECTION);
+            pUnoCursor->CallSwClientNotify(aHint);
         }
     }
 }

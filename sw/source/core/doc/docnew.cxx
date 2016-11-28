@@ -413,7 +413,7 @@ SwDoc::~SwDoc()
     getIDocumentRedlineAccess().GetRedlineTable().DeleteAndDestroyAll();
     getIDocumentRedlineAccess().GetExtraRedlineTable().DeleteAndDestroyAll();
 
-    const sw::DocDisposingHint aHint;
+    const sw::UnoCursorHint aHint(sw::UnoCursorHintType::DOC_DISPOSING);
     cleanupUnoCursorTable();
     for(const auto& pWeakCursor : mvUnoCursorTable)
     {
