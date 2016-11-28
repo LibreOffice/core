@@ -849,12 +849,13 @@ uno::Reference< XSpellAlternatives >
     SwPosition aPos( *pCursor->GetPoint() );
      Point aPt( *pPt );
     SwCursorMoveState eTmpState( MV_SETONLYTEXT );
-    SwTextNode *pNode;
-    SwWrongList *pWrong;
-    if( GetLayout()->GetCursorOfst( &aPos, aPt, &eTmpState ) &&
-        nullptr != (pNode = aPos.nNode.GetNode().GetTextNode()) &&
-        nullptr != (pWrong = pNode->GetWrong()) &&
-        !pNode->IsInProtectSect() )
+    SwTextNode *pNode = nullptr;
+    SwWrongList *pWrong = nullptr;
+    if (GetLayout()->GetCursorOfst( &aPos, aPt, &eTmpState ))
+        pNode = aPos.nNode.GetNode().GetTextNode();
+    if (nullptr != pNode)
+        pWrong = pNode->GetWrong();
+    if (nullptr != pWrong && !pNode->IsInProtectSect())
     {
         sal_Int32 nBegin = aPos.nContent.GetIndex();
         sal_Int32 nLen = 1;
@@ -960,12 +961,13 @@ bool SwEditShell::GetGrammarCorrection(
     SwPosition aPos( *pCursor->GetPoint() );
     Point aPt( *pPt );
     SwCursorMoveState eTmpState( MV_SETONLYTEXT );
-    SwTextNode *pNode;
-    SwGrammarMarkUp *pWrong;
-    if( GetLayout()->GetCursorOfst( &aPos, aPt, &eTmpState ) &&
-        nullptr != (pNode = aPos.nNode.GetNode().GetTextNode()) &&
-        nullptr != (pWrong = pNode->GetGrammarCheck()) &&
-        !pNode->IsInProtectSect() )
+    SwTextNode *pNode = nullptr;
+    SwGrammarMarkUp *pWrong = nullptr;
+    if (GetLayout()->GetCursorOfst( &aPos, aPt, &eTmpState ))
+        pNode = aPos.nNode.GetNode().GetTextNode();
+    if (nullptr != pNode)
+        pWrong = pNode->GetGrammarCheck();
+    if (nullptr != pWrong && !pNode->IsInProtectSect())
     {
         sal_Int32 nBegin = aPos.nContent.GetIndex();
         sal_Int32 nLen = 1;

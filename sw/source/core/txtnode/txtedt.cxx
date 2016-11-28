@@ -446,7 +446,7 @@ void SwTextNode::RstTextAttr(
 
     // iterate over attribute array until start of attribute is behind deletion range
     size_t i = 0;
-    sal_Int32 nAttrStart;
+    sal_Int32 nAttrStart = sal_Int32();
     SwTextAttr *pHt = nullptr;
     while ( (i < m_pSwpHints->Count())
             && ( ( ( nAttrStart = m_pSwpHints->Get(i)->GetStart()) < nEnd )
