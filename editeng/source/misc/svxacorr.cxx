@@ -104,13 +104,13 @@ static inline bool IsWordDelim( const sal_Unicode c )
 static inline bool IsLowerLetter( sal_Int32 nCharType )
 {
     return CharClass::isLetterType( nCharType ) &&
-            0 == ( css::i18n::KCharacterType::UPPER & nCharType);
+           ( css::i18n::KCharacterType::LOWER & nCharType);
 }
 
 static inline bool IsUpperLetter( sal_Int32 nCharType )
 {
     return CharClass::isLetterType( nCharType ) &&
-            0 == ( css::i18n::KCharacterType::LOWER & nCharType);
+            ( css::i18n::KCharacterType::UPPER & nCharType);
 }
 
 bool lcl_IsUnsupportedUnicodeChar( CharClass& rCC, const OUString& rTxt,
@@ -407,7 +407,7 @@ bool SvxAutoCorrect::FnCapitalStartWord( SvxAutoCorrDoc& rDoc, const OUString& r
                 if( xSpeller->hasLanguage(eLang) )
                 {
                     Sequence< css::beans::PropertyValue > aEmptySeq;
-                    if (!xSpeller->spell(sWord, eLang, aEmptySeq).is())
+                    if (xSpeller->isValid(sWord, eLang, aEmptySeq))
                     {
                         return false;
                     }
