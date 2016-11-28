@@ -252,7 +252,6 @@ private:
 
 public:
     MailMergeCfg_Impl();
-    virtual ~MailMergeCfg_Impl() override;
 
     virtual void Notify( const css::uno::Sequence< OUString >& _rPropertyNames) override;
 
@@ -271,10 +270,6 @@ MailMergeCfg_Impl::MailMergeCfg_Impl() :
         pValues[0] >>= bIsEmailSupported;
 }
 
-MailMergeCfg_Impl::~MailMergeCfg_Impl()
-{
-}
-/* -------------------------------------------------------------------------*/
 void MailMergeCfg_Impl::ImplCommit()
 {
 }

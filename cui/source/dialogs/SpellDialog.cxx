@@ -118,8 +118,6 @@ public:
         m_nOffset(0)
         {}
 
-    virtual ~SpellUndoAction_Impl() override;
-
     virtual void            Undo() override;
     virtual sal_uInt16          GetId() const override;
 
@@ -152,12 +150,6 @@ public:
 };
 }//namespace svx
 using namespace ::svx;
-
-
-SpellUndoAction_Impl::~SpellUndoAction_Impl()
-{
-}
-
 
 void SpellUndoAction_Impl::Undo()
 {
