@@ -634,7 +634,8 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                                     *rReq.GetArgs(),
                                      aDispatchArgs );
 
-                const SfxSlot* pSlot = GetModule()->GetSlotPool()->GetSlot( nId );
+                bool bForceSaveAs = nId == SID_SAVEDOC && IsReadOnlyMedium();
+                const SfxSlot* pSlot = GetModule()->GetSlotPool()->GetSlot( bForceSaveAs ? SID_SAVEASDOC : nId );
                 if ( !pSlot )
                     throw uno::Exception();
 
@@ -968,7 +969,7 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                 }
             case SID_SAVEDOC:
                 {
-                    if ( !IsReadOnlyMedium() )
+                    if ( !IsReadOnly() )
                         rSet.Put(SfxStringItem(
                             nWhich, SfxResId(STR_SAVEDOC).toString()));
                     else
