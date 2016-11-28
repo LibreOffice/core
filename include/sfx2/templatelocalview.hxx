@@ -78,7 +78,7 @@ class SFX2_DLLPUBLIC TemplateLocalView : public ThumbnailView
 
 public:
 
-    TemplateLocalView ( vcl::Window* pParent );
+    TemplateLocalView ( vcl::Window* pParent, WinBits nWinStyle = WB_TABSTOP | WB_BORDER );
 
     virtual ~TemplateLocalView () override;
     virtual void dispose() override;
