@@ -1035,10 +1035,11 @@ void SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
 
                         for( int nLoop = 0; nLoop < 2; ++nLoop )
                         {
-                            const sal_uInt8* pParams;
-                            while( aSprmIter.GetSprms()
-                                && (nullptr != (pParams = aSprmIter.GetAktParams())) )
+                            while (aSprmIter.GetSprms())
                             {
+                                const sal_uInt8 *const pParams(aSprmIter.GetAktParams());
+                                if (nullptr == pParams)
+                                    break;
                                 sal_uInt16 nAktId = aSprmIter.GetAktId();
                                 switch( nAktId )
                                 {
@@ -2033,8 +2034,9 @@ SwWW8ImplReader::SetAttributesAtGrfNode(SvxMSDffImportRec const*const pRecord,
     SwFrameFormat *pFlyFormat, WW8_FSPA *pF )
 {
     const SwNodeIndex* pIdx = pFlyFormat->GetContent(false).GetContentIdx();
-    SwGrfNode* pGrfNd;
-    if( pIdx && nullptr != (pGrfNd = m_rDoc.GetNodes()[pIdx->GetIndex() + 1]->GetGrfNode() ))
+    SwGrfNode *const pGrfNd(
+        pIdx ? m_rDoc.GetNodes()[pIdx->GetIndex() + 1]->GetGrfNode() : nullptr);
+    if (pGrfNd)
     {
         Size aSz(pGrfNd->GetTwipSize());
         // use type <sal_uInt64> instead of sal_uLong to get correct results

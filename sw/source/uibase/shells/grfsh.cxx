@@ -495,10 +495,11 @@ void SwGrfShell::Execute(SfxRequest &rReq)
 
 void SwGrfShell::ExecAttr( SfxRequest &rReq )
 {
-    GraphicType nGrfType;
-    if( CNT_GRF == GetShell().GetCntType() &&
-        ( GraphicType::Bitmap == ( nGrfType = GetShell().GetGraphicType()) ||
-          GraphicType::GdiMetafile == nGrfType ))
+    GraphicType nGrfType = GraphicType::NONE;
+    if (CNT_GRF == GetShell().GetCntType())
+        nGrfType = GetShell().GetGraphicType();
+    if (GraphicType::Bitmap == nGrfType ||
+        GraphicType::GdiMetafile == nGrfType)
     {
         SfxItemSet aGrfSet( GetShell().GetAttrPool(), RES_GRFATR_BEGIN,
                                                       RES_GRFATR_END -1 );

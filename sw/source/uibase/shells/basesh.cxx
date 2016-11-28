@@ -1273,10 +1273,11 @@ void SwBaseShell::Execute(SfxRequest &rReq)
 
 IMPL_LINK_NOARG(SwBaseShell, GraphicArrivedHdl, SwCursorShell&, void)
 {
-    GraphicType nGrfType;
     SwWrtShell &rSh = GetShell();
-    if( CNT_GRF == rSh.SwEditShell::GetCntType() &&
-        GraphicType::NONE != ( nGrfType = rSh.GetGraphicType() ) &&
+    if (CNT_GRF != rSh.SwEditShell::GetCntType())
+        return;
+    GraphicType const nGrfType(rSh.GetGraphicType());
+    if (GraphicType::NONE != nGrfType &&
         !aGrfUpdateSlots.empty() )
     {
         bool bProtect = FlyProtectFlags::NONE != rSh.IsSelObjProtected(FlyProtectFlags::Content|FlyProtectFlags::Parent);
