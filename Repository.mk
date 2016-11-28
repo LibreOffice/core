@@ -777,6 +777,29 @@ $(eval $(call gb_Helper_register_packages_for_install,ure,\
 	) \
 ))
 
+$(eval $(call gb_Helper_register_packages_for_install,sdk,\
+	odk_share_readme \
+	odk_share_readme_generated \
+	$(if $(filter WNT,$(OS)),odk_cli) \
+	odk_config \
+	$(if $(filter WNT,$(OS)),odk_config_win) \
+	odk_docs \
+	$(if $(DOXYGEN),odk_doxygen) \
+	odk_examples \
+	odk_headers \
+	odk_html \
+	odk_lib \
+	odk_settings \
+	odk_settings_generated \
+	offapi_idl \
+	udkapi_idl \
+	$(if $(ENABLE_JAVA), \
+		odk_javadoc \
+		odk_uno_loader_classes \
+		odk_unowinreg \
+	) \
+))
+
 $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	$(if $(SYSTEM_LIBEXTTEXTCAT),,libexttextcat_fingerprint) \
 	officecfg_misc \
