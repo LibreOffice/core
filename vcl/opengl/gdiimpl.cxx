@@ -215,7 +215,7 @@ void OpenGLSalGraphicsImpl::InitializePreDrawState(XOROption eOpt)
     CheckOffscreenTexture();
     CHECK_GL_ERROR();
 
-    mpContext->state()->viewport(Rectangle(Point(0, 0), Size(GetWidth(), GetHeight())));
+    mpContext->state().viewport(Rectangle(Point(0, 0), Size(GetWidth(), GetHeight())));
 
     ImplInitClipRegion();
     CHECK_GL_ERROR();
@@ -290,8 +290,8 @@ void OpenGLSalGraphicsImpl::freeResources()
 
 void OpenGLSalGraphicsImpl::ImplSetClipBit( const vcl::Region& rClip, GLuint nMask )
 {
-    mpContext->state()->scissor().disable();
-    mpContext->state()->stencil().enable();
+    mpContext->state().scissor().disable();
+    mpContext->state().stencil().enable();
 
     VCL_GL_INFO( "Adding complex clip / stencil" );
     GLuint nStencil = maOffscreenTex.StencilId();
@@ -331,7 +331,7 @@ void OpenGLSalGraphicsImpl::ImplSetClipBit( const vcl::Region& rClip, GLuint nMa
     glStencilMask( 0x00 );
     CHECK_GL_ERROR();
 
-    mpContext->state()->stencil().disable();
+    mpContext->state().stencil().disable();
 }
 
 void OpenGLSalGraphicsImpl::ImplInitClipRegion()
@@ -349,23 +349,23 @@ void OpenGLSalGraphicsImpl::ImplInitClipRegion()
     if (mbUseScissor)
     {
         Rectangle aRect(maClipRegion.GetBoundRect());
-        mpContext->state()->scissor().set(aRect.Left(), GetHeight() - aRect.Bottom() - 1, aRect.GetWidth(), aRect.GetHeight());
-        mpContext->state()->scissor().enable();
+        mpContext->state().scissor().set(aRect.Left(), GetHeight() - aRect.Bottom() - 1, aRect.GetWidth(), aRect.GetHeight());
+        mpContext->state().scissor().enable();
     }
     else
     {
-        mpContext->state()->scissor().disable();
+        mpContext->state().scissor().disable();
     }
 
     if (mbUseStencil)
     {
         glStencilFunc( GL_EQUAL, 1, 0x1 );
         CHECK_GL_ERROR();
-        mpContext->state()->stencil().enable();
+        mpContext->state().stencil().enable();
     }
     else
     {
-        mpContext->state()->stencil().disable();
+        mpContext->state().stencil().disable();
     }
 }
 
@@ -543,8 +543,8 @@ bool OpenGLSalGraphicsImpl::CheckOffscreenTexture()
         // TODO: lfrb: User GL_ARB_copy_image?
         OpenGLTexture aNewTex = OpenGLTexture( GetWidth(), GetHeight() );
 
-        mpContext->state()->scissor().disable();
-        mpContext->state()->stencil().disable();
+        mpContext->state().scissor().disable();
+        mpContext->state().stencil().disable();
 
         mpContext->AcquireFramebuffer( aNewTex );
         DrawTexture( maOffscreenTex, aPosAry );
@@ -1096,8 +1096,8 @@ void OpenGLSalGraphicsImpl::DrawTransformedTexture(
             // The scissor area is set to the current window size in PreDraw,
             // so if we do not disable the scissor test, the texture produced
             // by the first downscaling is clipped to the current window size.
-            mpContext->state()->scissor().disable();
-            mpContext->state()->stencil().disable();
+            mpContext->state().scissor().disable();
+            mpContext->state().stencil().disable();
 
             // the square root of the whole inverted scale ratio
             double ixscalesqrt = std::floor(std::sqrt(ixscale));
@@ -1118,10 +1118,10 @@ void OpenGLSalGraphicsImpl::DrawTransformedTexture(
 
             // Re-enable scissor and stencil tests if needed.
             if (mbUseScissor)
-                mpContext->state()->scissor().enable();
+                mpContext->state().scissor().enable();
 
             if (mbUseStencil)
-                mpContext->state()->stencil().enable();
+                mpContext->state().stencil().enable();
         }
     }
 
@@ -1985,14 +1985,14 @@ bool OpenGLSalGraphicsImpl::drawGradient(const tools::PolyPolygon& rPolyPoly,
     ImplSetClipBit( vcl::Region( rPolyPoly ), 0x02 );
     if( mbUseStencil )
     {
-        mpContext->state()->stencil().enable();
+        mpContext->state().stencil().enable();
         CHECK_GL_ERROR();
         glStencilFunc( GL_EQUAL, 3, 0xFF );
         CHECK_GL_ERROR();
     }
     else
     {
-        mpContext->state()->stencil().enable();
+        mpContext->state().stencil().enable();
         CHECK_GL_ERROR();
         glStencilFunc( GL_EQUAL, 2, 0xFF );
         CHECK_GL_ERROR();
@@ -2032,7 +2032,7 @@ bool OpenGLSalGraphicsImpl::drawGradient(const tools::PolyPolygon& rPolyPoly,
 #if FIXME_BROKEN_STENCIL_FOR_GRADIENTS
     if( !mbUseStencil )
     {
-        mpContext->state()->stencil().disable();
+        mpContext->state().stencil().disable();
         CHECK_GL_ERROR();
     }
 #endif
@@ -2063,8 +2063,8 @@ void OpenGLSalGraphicsImpl::doFlush()
 
     if (OpenGLContext::hasCurrent())
     {
-        mpContext->state()->scissor().disable();
-        mpContext->state()->stencil().disable();
+        mpContext->state().scissor().disable();
+        mpContext->state().stencil().disable();
     }
 
     if( IsOffscreen() )
@@ -2108,10 +2108,10 @@ void OpenGLSalGraphicsImpl::doFlush()
 
     CHECK_GL_ERROR();
 
-    mpWindowContext->state()->sync();
-    mpWindowContext->state()->viewport(Rectangle(Point(0, 0), Size(GetWidth(), GetHeight())));
-    mpWindowContext->state()->scissor().disable();
-    mpWindowContext->state()->stencil().disable();
+    mpWindowContext->state().sync();
+    mpWindowContext->state().viewport(Rectangle(Point(0, 0), Size(GetWidth(), GetHeight())));
+    mpWindowContext->state().scissor().disable();
+    mpWindowContext->state().stencil().disable();
 
 #if OSL_DEBUG_LEVEL > 0 // random background glClear
     glClearColor((float)rand()/RAND_MAX, (float)rand()/RAND_MAX,

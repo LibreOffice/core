@@ -185,7 +185,7 @@ GLuint OpenGLProgram::GetUniformLocation( const OString& rName )
 void OpenGLProgram::DrawArrays(GLenum aMode, std::vector<GLfloat>& aVertices)
 {
     if (!mbBlending)
-        OpenGLContext::getVCLContext()->state()->blend().disable();
+        OpenGLContext::getVCLContext()->state().blend().disable();
 
     SetVertices(aVertices.data());
     glDrawArrays(aMode, 0, aVertices.size() / 2);
@@ -194,7 +194,7 @@ void OpenGLProgram::DrawArrays(GLenum aMode, std::vector<GLfloat>& aVertices)
 void OpenGLProgram::DrawElements(GLenum aMode, GLuint nNumberOfVertices)
 {
     if (!mbBlending)
-        OpenGLContext::getVCLContext()->state()->blend().disable();
+        OpenGLContext::getVCLContext()->state().blend().disable();
 
     glDrawElements(aMode, nNumberOfVertices, GL_UNSIGNED_INT, nullptr);
 }
@@ -295,8 +295,7 @@ void OpenGLProgram::SetTexture( const OString& rName, OpenGLTexture& rTexture )
     glUniform1i( nUniform, nIndex );
     CHECK_GL_ERROR();
 
-    std::unique_ptr<RenderState>& rState = OpenGLContext::getVCLContext()->state();
-    rState->texture().active(nIndex);
+    OpenGLContext::getVCLContext()->state().texture().active(nIndex);
 
     rTexture.Bind();
     maTextures.push_back(rTexture);
@@ -359,8 +358,8 @@ void OpenGLProgram::ApplyMatrix(float fWidth, float fHeight, float fPixelOffset)
 
 void OpenGLProgram::SetBlendMode(GLenum nSFactor, GLenum nDFactor)
 {
-    OpenGLContext::getVCLContext()->state()->blend().enable();
-    OpenGLContext::getVCLContext()->state()->blend().func(nSFactor, nDFactor);
+    OpenGLContext::getVCLContext()->state().blend().enable();
+    OpenGLContext::getVCLContext()->state().blend().func(nSFactor, nDFactor);
     mbBlending = true;
 }
 

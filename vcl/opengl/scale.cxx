@@ -334,8 +334,8 @@ bool OpenGLSalBitmap::ImplScale( const double& rScaleX, const double& rScaleY, B
     mpUserBuffer.reset();
     OpenGLVCLContextZone aContextZone;
     rtl::Reference<OpenGLContext> xContext = OpenGLContext::getVCLContext();
-    xContext->state()->scissor().disable();
-    xContext->state()->stencil().disable();
+    xContext->state().scissor().disable();
+    xContext->state().stencil().disable();
 
     if (rScaleX <= 1 && rScaleY <= 1)
     {

@@ -98,9 +98,9 @@ public:
     OpenGLProgram*      UseProgram( const OUString& rVertexShader, const OUString& rFragmentShader, const OString& preamble = "" );
     void                UseNoProgram();
 
-    std::unique_ptr<RenderState>& state()
+    RenderState& state()
     {
-        return mpRenderState;
+        return *mpRenderState;
     }
 
     OpenGLCapabilitySwitch& getOpenGLCapabilitySwitch()

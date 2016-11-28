@@ -50,8 +50,8 @@ ImplOpenGLTexture::ImplOpenGLTexture( int nWidth, int nHeight, bool bAllocate ) 
 
     auto& rState = OpenGLContext::getVCLContext()->state();
     TextureState::generate(mnTexture);
-    rState->texture().active(0);
-    rState->texture().bind(mnTexture);
+    rState.texture().active(0);
+    rState.texture().bind(mnTexture);
 
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
     CHECK_GL_ERROR();
@@ -85,8 +85,8 @@ ImplOpenGLTexture::ImplOpenGLTexture( int nX, int nY, int nWidth, int nHeight ) 
 
     auto& rState = OpenGLContext::getVCLContext()->state();
     TextureState::generate(mnTexture);
-    rState->texture().active(0);
-    rState->texture().bind(mnTexture);
+    rState.texture().active(0);
+    rState.texture().bind(mnTexture);
 
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
     CHECK_GL_ERROR();
@@ -114,8 +114,8 @@ ImplOpenGLTexture::ImplOpenGLTexture( int nWidth, int nHeight, int nFormat, int 
 
     auto& rState = OpenGLContext::getVCLContext()->state();
     TextureState::generate(mnTexture);
-    rState->texture().active(0);
-    rState->texture().bind(mnTexture);
+    rState.texture().active(0);
+    rState.texture().bind(mnTexture);
 
     glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
     CHECK_GL_ERROR();
@@ -179,7 +179,7 @@ ImplOpenGLTexture::~ImplOpenGLTexture()
                 mnOptStencil = 0;
             }
             auto& rState = pContext->state();
-            rState->texture().unbindAndDelete(mnTexture);
+            rState.texture().unbindAndDelete(mnTexture);
             mnTexture = 0;
         }
         else
@@ -196,8 +196,8 @@ bool ImplOpenGLTexture::InsertBuffer(int nX, int nY, int nWidth, int nHeight, in
         return false;
 
     rtl::Reference<OpenGLContext> xContext = OpenGLContext::getVCLContext();
-    xContext->state()->texture().active(0);
-    xContext->state()->texture().bind(mnTexture);
+    xContext->state().texture().active(0);
+    xContext->state().texture().bind(mnTexture);
 
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     CHECK_GL_ERROR();
@@ -482,8 +482,7 @@ void OpenGLTexture::Bind()
 {
     if (IsValid())
     {
-        std::unique_ptr<RenderState>& rState = OpenGLContext::getVCLContext()->state();
-        rState->texture().bind(mpImpl->mnTexture);
+        OpenGLContext::getVCLContext()->state().texture().bind(mpImpl->mnTexture);
     }
     else
         VCL_GL_INFO( "OpenGLTexture::Binding invalid texture" );
@@ -495,8 +494,7 @@ void OpenGLTexture::Unbind()
 {
     if (IsValid())
     {
-        std::unique_ptr<RenderState>& rState = OpenGLContext::getVCLContext()->state();
-        rState->texture().unbind(mpImpl->mnTexture);
+        OpenGLContext::getVCLContext()->state().texture().unbind(mpImpl->mnTexture);
     }
 }
 
