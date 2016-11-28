@@ -3258,7 +3258,16 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
                 if (m_pImpl->isBreakDeferred(PAGE_BREAK))
                     pContext->Insert(PROP_BREAK_TYPE, uno::makeAny(style::BreakType_PAGE_BEFORE));
                 else if (m_pImpl->isBreakDeferred(COLUMN_BREAK))
+                {
+                    if ( m_pImpl->GetIsFirstParagraphInSection() || !m_pImpl->IsFirstRun() )
+                    {
+                        mbIsSplitPara = true;
+                        m_pImpl->finishParagraph( m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH) );
+                        lcl_startParagraphGroup();
+                    }
+
                     pContext->Insert(PROP_BREAK_TYPE, uno::makeAny(style::BreakType_COLUMN_BEFORE));
+                }
                 m_pImpl->clearDeferredBreaks();
             }
 
