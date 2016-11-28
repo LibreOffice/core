@@ -22,14 +22,10 @@
 #include <cppunit/Asserter.h>
 #include <cppunit/AdditionalMessage.h>
 
-#include <config_orcus.h>
-
-#if ENABLE_ORCUS
 #if defined(_WIN32)
 #define __ORCUS_STATIC_LIB
 #endif
 #include <orcus/csv_parser.hpp>
-#endif
 
 #include <fstream>
 
@@ -120,8 +116,6 @@ void loadFile(const OUString& aFileName, std::string& aContent)
     aContent = aOStream.str();
 }
 
-#if ENABLE_ORCUS
-
 void testFile(OUString& aFileName, ScDocument& rDoc, SCTAB nTab, StringType aStringFormat)
 {
     csv_handler aHandler(&rDoc, nTab, aStringFormat);
@@ -169,13 +163,6 @@ void testCondFile(OUString& aFileName, ScDocument* pDoc, SCTAB nTab)
         CPPUNIT_ASSERT_MESSAGE(aErrorMsg.getStr(), false);
     }
 }
-
-#else
-
-void testFile(OUString&, ScDocument&, SCTAB, StringType) {}
-void testCondFile(OUString&, ScDocument*, SCTAB) {}
-
-#endif
 
 void testFormats(ScBootstrapFixture* pTest, ScDocument* pDoc, sal_Int32 nFormat)
 {

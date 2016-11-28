@@ -221,7 +221,6 @@ $(eval $(call gb_Library_add_exception_objects,scfilt,\
 	sc/source/filter/oox/worksheetsettings \
 ))
 
-ifeq ($(ENABLE_ORCUS),TRUE)
 $(eval $(call gb_Library_use_externals,scfilt,\
 	orcus \
 	orcus-parser \
@@ -237,7 +236,5 @@ $(eval $(call gb_Library_add_exception_objects,scfilt,\
 	sc/source/filter/orcus/xmlcontext \
 	sc/source/filter/orcus/filterdetect \
 ))
-
-endif
 
 # vim: set noet sw=4 ts=4:

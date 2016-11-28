@@ -66,8 +66,6 @@
 #include "markdata.hxx"
 #include <documentlinkmgr.hxx>
 
-#include <config_orcus.h>
-
 #include <memory>
 
 using namespace com::sun::star;
@@ -1208,7 +1206,6 @@ void ScCellShell::GetDBState( SfxItemSet& rSet )
                     }
                 }
                 break;
-#if !ENABLE_ORCUS
             case SID_MANAGE_XML_SOURCE:
                 {
                     SvtMiscOptions aMiscOptions;
@@ -1216,7 +1213,6 @@ void ScCellShell::GetDBState( SfxItemSet& rSet )
                         rSet.DisableItem( nWhich );
                 }
             break;
-#endif
         }
         nWhich = aIter.NextWhich();
     }

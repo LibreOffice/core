@@ -119,7 +119,6 @@ $(eval $(call gb_CppunitTest_use_components,sc_subsequent_filters_test,\
 ))
 endif
 
-ifeq ($(ENABLE_ORCUS),TRUE)
 $(eval $(call gb_CppunitTest_use_externals,sc_subsequent_filters_test,\
 	orcus \
 	orcus-parser \
@@ -128,8 +127,6 @@ $(eval $(call gb_CppunitTest_use_externals,sc_subsequent_filters_test,\
 	boost_iostreams \
 	zlib \
 ))
-
-endif
 
 $(eval $(call gb_CppunitTest_use_configuration,sc_subsequent_filters_test))
 

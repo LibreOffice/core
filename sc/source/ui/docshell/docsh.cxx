@@ -116,7 +116,6 @@
 #include "refreshtimerprotector.hxx"
 #include <orcus/orcus_import_ods.hpp>
 #include <orcusfiltersimpl.hxx>
-#include <config_orcus.h>
 
 #include <officecfg/Office/Calc.hxx>
 #include <comphelper/processfactory.hxx>
@@ -594,7 +593,6 @@ bool ScDocShell::Load( SfxMedium& rMedium )
             aDocument.GetStyleSheetPool()->CreateStandardStyles();
             aDocument.UpdStlShtPtrsFrmNms();
 
-#if ENABLE_ORCUS
             if (!mbUcalcTest)
             {
                 /* Create styles that are imported through Orcus */
@@ -613,7 +611,6 @@ bool ScDocShell::Load( SfxMedium& rMedium )
                     aDocument.GetStyleSheetPool()->setAllStandard();
                 }
             }
-#endif
 
             bRet = LoadXML( &rMedium, nullptr );
         }

@@ -77,8 +77,6 @@
 
 #include "PivotLayoutDialog.hxx"
 
-#include <config_orcus.h>
-
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <sfx2/lokhelper.hxx>
 
@@ -447,9 +445,7 @@ VclPtr<SfxModelessDialog> ScTabViewShell::CreateRefDialog(
 
         case SID_MANAGE_XML_SOURCE:
         {
-#if ENABLE_ORCUS
             pResult = VclPtr<ScXMLSourceDlg>::Create(pB, pCW, pParent, pDoc);
-#endif
         }
         break;
 
