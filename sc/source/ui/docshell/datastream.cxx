@@ -26,16 +26,13 @@
 #include <stringutil.hxx>
 #include <documentlinkmgr.hxx>
 
-#include <config_orcus.h>
 #include "officecfg/Office/Calc.hxx"
 
 
-#if ENABLE_ORCUS
 #if defined(_WIN32)
 #define __ORCUS_STATIC_LIB
 #endif
 #include <orcus/csv_parser.hpp>
-#endif
 
 #include <queue>
 
@@ -65,8 +62,6 @@ inline double getNow()
     osl_getSystemTime(&now);
     return static_cast<double>(now.Seconds) + static_cast<double>(now.Nanosec) / 1000000000.0;
 }
-
-#if ENABLE_ORCUS
 
 class CSVHandler
 {
@@ -106,8 +101,6 @@ public:
     }
 };
 
-#endif
-
 }
 
 namespace datastreams {
@@ -135,9 +128,7 @@ class ReaderThread : public salhelper::Thread
     osl::Condition maCondReadStream;
     osl::Condition maCondConsume;
 
-#if ENABLE_ORCUS
     orcus::csv::parser_config maConfig;
-#endif
 
 public:
 
@@ -147,10 +138,8 @@ public:
         mnColCount(nColCount),
         mbTerminate(false)
     {
-#if ENABLE_ORCUS
         maConfig.delimiters.push_back(',');
         maConfig.text_qualifier = '"';
-#endif
     }
 
     virtual ~ReaderThread() override
@@ -238,11 +227,9 @@ private:
             {
                 rLine.maCells.clear();
                 mpStream->ReadLine(rLine.maLine);
-#if ENABLE_ORCUS
                 CSVHandler aHdl(rLine, mnColCount);
                 orcus::csv_parser<CSVHandler> parser(rLine.maLine.getStr(), rLine.maLine.getLength(), aHdl, maConfig);
                 parser.parse();
-#endif
             }
 
             aGuard.reset(); // lock
@@ -510,8 +497,6 @@ void DataStream::MoveData()
     }
 }
 
-#if ENABLE_ORCUS
-
 void DataStream::Text2Doc()
 {
     Line aLine = ConsumeLine();
@@ -565,12 +550,6 @@ void DataStream::Text2Doc()
 
     ++mnLinesSinceRefresh;
 }
-
-#else
-
-void DataStream::Text2Doc() {}
-
-#endif
 
 bool DataStream::ImportData()
 {
