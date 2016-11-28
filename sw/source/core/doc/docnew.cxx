@@ -419,7 +419,7 @@ SwDoc::~SwDoc()
     {
         auto pCursor(pWeakCursor.lock());
         if(pCursor)
-            pCursor->CallSwClientNotify(aHint);
+            pCursor->m_aNotifier.Broadcast(aHint);
     }
     delete mpACEWord;
 
