@@ -38,6 +38,11 @@ create-update-info:
 	MAR=$(INSTDIR)/program/mar $(SRCDIR)/bin/update/create_full_mar.py "$(PRODUCTNAME)" "$(WORKDIR)" "$(UPDATE_DIR)" "$(MAR_DIR)/current-build/" "$(MAR_NAME_PREFIX)" "$(UPDATE_CONFIG)"
 	MAR=$(INSTDIR)/program/mar $(SRCDIR)/bin/update/create_full_mar_for_languages.py "$(PRODUCTNAME)" "$(WORKDIR)" "$(UPDATE_DIR)" "$(MAR_DIR)/language" "$(MAR_NAME_PREFIX)" "$(UPDATE_CONFIG)"
 	$(SRCDIR)/bin/update/create_build_config.py "$(PRODUCTNAME)" "$(VERSION)" "$(BUILDID)" "$(PLATFORM)" "$(UPDATE_DIR)" "$(UPDATE_CONFIG)" "$(UPDATE_CONFIG)"
+
+upload-update-info:
+	$(eval BUILDID := $(shell git -C $(SRCDIR) log -1 --format=%H))
+	$(eval PLATFORM := $(RTL_OS)_$(RTL_ARCH))
+	$(eval UPDATE_DIR := $(WORKDIR)/update-info)
 	$(SRCDIR)/bin/update/upload_builds.py "$(PRODUCTNAME)" "$(BUILDID)" "$(PLATFORM)" "$(UPDATE_DIR)" "$(UPDATE_CONFIG)"
 	$(SRCDIR)/bin/update/upload_build_config.py "$(UPDATE_DIR)" "$(UPDATE_CONFIG)"
 
