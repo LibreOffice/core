@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.18.3 -->
 <interface>
   <requires lib="gtk+" version="3.12"/>
   <object class="GtkDialog" id="SafeModeDialog">
@@ -18,6 +18,21 @@
             <property name="can_focus">False</property>
             <property name="layout_style">end</property>
             <child>
+              <object class="GtkButton" id="help">
+                <property name="label">gtk-help</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_stock">True</property>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+                <property name="secondary">True</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkButton" id="btn_continue">
                 <property name="label" translatable="yes">_Continue in Safe Mode</property>
                 <property name="visible">True</property>
@@ -29,7 +44,7 @@
               <packing>
                 <property name="expand">True</property>
                 <property name="fill">True</property>
-                <property name="position">0</property>
+                <property name="position">1</property>
               </packing>
             </child>
             <child>
@@ -43,12 +58,12 @@
               <packing>
                 <property name="expand">True</property>
                 <property name="fill">True</property>
-                <property name="position">1</property>
+                <property name="position">2</property>
               </packing>
             </child>
             <child>
               <object class="GtkButton" id="btn_restart">
-                <property name="label" translatable="yes">_Make Changes and Restart</property>
+                <property name="label" translatable="yes">_Apply Changes and Restart</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -72,11 +87,11 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">%PRODUCTNAME is now running in Safe Mode wich temporarily disables your configuration and extensions.
+            <property name="label" translatable="yes">%PRODUCTNAME is now running in safe mode which temporarily disables your user configuration and extensions.
 
-You can make one or more of the following changes to return to a working state.
+You can make one or more of the following changes to your user profile to return %PRODUCTNAME to a working state.
 
-The offered possible changes get more radical from top to bottom, so it is recommended to try them thoroughly one after the other.</property>
+The proposed changes get more radical from top down so it is recommended to try them successively one after another.</property>
             <property name="wrap">True</property>
             <property name="xalign">0</property>
             <property name="yalign">0</property>
@@ -118,7 +133,7 @@ The offered possible changes get more radical from top to bottom, so it is recom
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkCheckButton" id="check_profilesafe_config">
-                    <property name="label" translatable="yes">Restore user configuration to last known working state</property>
+                    <property name="label" translatable="yes">Restore user configuration to the last known working state</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -133,7 +148,7 @@ The offered possible changes get more radical from top to bottom, so it is recom
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="check_profilesafe_extensions">
-                    <property name="label" translatable="yes">Restore enabled/disabled state of installed user extensions to last known working state</property>
+                    <property name="label" translatable="yes">Restore state of installed user extensions to the last known working state</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -216,7 +231,7 @@ The offered possible changes get more radical from top to bottom, so it is recom
             </child>
             <child>
               <object class="GtkRadioButton" id="radio_deinstall">
-                <property name="label" translatable="yes">Deinstall extensions</property>
+                <property name="label" translatable="yes">Uninstall extensions</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
@@ -239,7 +254,7 @@ The offered possible changes get more radical from top to bottom, so it is recom
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkCheckButton" id="check_deinstall_user_extensions">
-                    <property name="label" translatable="yes">Deinstall all user extensions</property>
+                    <property name="label" translatable="yes">Uninstall all user extensions</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -254,7 +269,7 @@ The offered possible changes get more radical from top to bottom, so it is recom
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="check_deinstall_all_extensions">
-                    <property name="label" translatable="yes">Deinstall all extensions (including shared and bundled)</property>
+                    <property name="label" translatable="yes">Uninstall all extensions (including shared and bundled)</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -314,7 +329,7 @@ The offered possible changes get more radical from top to bottom, so it is recom
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="check_reset_whole_userprofile">
-                    <property name="label" translatable="yes">Reset the whole user profile</property>
+                    <property name="label" translatable="yes">Reset entire user profile</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -356,7 +371,7 @@ The offered possible changes get more radical from top to bottom, so it is recom
                   <object class="GtkLabel" id="label3">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">If you experience problems that are not resolved by using the Safe Mode, visit the following link to get help or report a bug.</property>
+                    <property name="label" translatable="yes">If you experience problems that are not resolved by using safe mode, visit the following link to get help or report a bug.</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
@@ -383,7 +398,7 @@ The offered possible changes get more radical from top to bottom, so it is recom
                   <object class="GtkLabel" id="label4">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">You can also include the relevant parts of your User Profile. Beware that it might contain personal data.</property>
+                    <property name="label" translatable="yes">You can also include relevant parts of your user profile in the bugreport (be aware it might contain personal data).</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
@@ -399,7 +414,7 @@ The offered possible changes get more radical from top to bottom, so it is recom
                     <property name="homogeneous">True</property>
                     <child>
                       <object class="GtkButton" id="btn_create_zip">
-                        <property name="label" translatable="yes">Create zip archive from User Profile</property>
+                        <property name="label" translatable="yes">Create Zip Archive from User Profile</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
