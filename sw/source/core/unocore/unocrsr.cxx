@@ -31,7 +31,6 @@ IMPL_FIXEDMEMPOOL_NEWDEL( SwUnoCursor )
 
 SwUnoCursor::SwUnoCursor( const SwPosition &rPos )
     : SwCursor( rPos, nullptr )
-    , SwModify(nullptr)
     , m_bRemainInSection(true)
     , m_bSkipOverHiddenSections(false)
     , m_bSkipOverProtectSections(false)
@@ -42,7 +41,7 @@ SwUnoCursor::~SwUnoCursor()
     SwDoc* pDoc = GetDoc();
     if( !pDoc->IsInDtor() )
     {
-        assert(!static_cast<bool>(SwIterator<SwClient, SwUnoCursor>(*this).First()));
+        assert(!m_aNotifier.HasListeners());
     }
 
     // delete the whole ring
