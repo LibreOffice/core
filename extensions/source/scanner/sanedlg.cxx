@@ -1470,8 +1470,10 @@ bool SaneDlg::SetAdjustedNumericalValue(
     double fValue,
     int nElement )
 {
-    int nOption;
-    if( ! Sane::IsSane() || ! mrSane.IsOpen() || ( nOption = mrSane.GetOptionByName( pOption ) ) == -1 )
+    if (! Sane::IsSane() || ! mrSane.IsOpen())
+        return false;
+    int const nOption(mrSane.GetOptionByName(pOption));
+    if (nOption == -1)
         return false;
 
     if( nElement < 0 || nElement >= mrSane.GetOptionElements( nOption ) )
