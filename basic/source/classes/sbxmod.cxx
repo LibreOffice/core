@@ -95,7 +95,6 @@ class DocObjectWrapper : public DocObjectWrapper_BASE
     SbModule*                m_pMod;
     SbMethodRef getMethod( const OUString& aName ) throw (RuntimeException, std::exception);
     SbPropertyRef getProperty( const OUString& aName ) throw (RuntimeException, std::exception);
-    OUString mName; // for debugging
 
 public:
     explicit DocObjectWrapper( SbModule* pMod );
@@ -117,7 +116,7 @@ public:
     virtual Sequence< Type > SAL_CALL getTypes() throw ( RuntimeException, std::exception ) override;
 };
 
-DocObjectWrapper::DocObjectWrapper( SbModule* pVar ) : m_pMod( pVar ), mName( pVar->GetName() )
+DocObjectWrapper::DocObjectWrapper( SbModule* pVar ) : m_pMod( pVar )
 {
     SbObjModule* pMod = dynamic_cast<SbObjModule*>( pVar );
     if ( pMod )
