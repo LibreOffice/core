@@ -1420,11 +1420,10 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
     // replace bullet character with defined one
     const OUString& rStr = m_pCurTextNd->GetText();
     sal_Int32 nTextStt = 0;
-    const sal_Unicode* pFndBulletChr;
-    if( m_aFlags.bChgEnumNum &&
-        2 < rStr.getLength() &&
-        nullptr != ( pFndBulletChr = StrChr( pBulletChar, rStr[ nTextStt ] ))
-        && IsSpace( rStr[ nTextStt + 1 ] ) )
+    const sal_Unicode* pFndBulletChr = nullptr;
+    if (m_aFlags.bChgEnumNum && 2 < rStr.getLength())
+        pFndBulletChr = StrChr(pBulletChar, rStr[nTextStt]);
+    if (nullptr != pFndBulletChr && IsSpace(rStr[nTextStt + 1]))
     {
         if( m_aFlags.bAFormatByInput )
         {

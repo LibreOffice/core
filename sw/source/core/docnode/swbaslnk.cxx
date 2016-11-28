@@ -300,9 +300,10 @@ static bool SetGrfFlySize( const Size& rGrfSz, SwGrfNode* pGrfNd, const Size& rO
     if ( !(aSz.Width() && aSz.Height()) &&
             rGrfSz.Width() && rGrfSz.Height() )
     {
-        SwFrameFormat* pFormat;
-        if( pGrfNd->IsChgTwipSize() &&
-            nullptr != (pFormat = pGrfNd->GetFlyFormat()) )
+        SwFrameFormat* pFormat = nullptr;
+        if (pGrfNd->IsChgTwipSize())
+            pFormat = pGrfNd->GetFlyFormat();
+        if (nullptr != pFormat)
         {
             Size aCalcSz( aSz );
             if ( !aSz.Height() && aSz.Width() )

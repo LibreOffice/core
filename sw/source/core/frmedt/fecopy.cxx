@@ -580,11 +580,11 @@ bool SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
         // Sizes will be corrected by percentage.
 
         // find boxes via the layout
-        const SwTableNode* pTableNd;
         SwSelBoxes aBoxes;
         GetTableSel( *this, aBoxes );
-        if( !aBoxes.empty() &&
-            nullptr != (pTableNd = aBoxes[0]->GetSttNd()->FindTableNode()) )
+        SwTableNode const*const pTableNd(
+            aBoxes.empty() ? nullptr : aBoxes[0]->GetSttNd()->FindTableNode());
+        if (nullptr != pTableNd)
         {
             SwPosition* pDstPos = nullptr;
             if( this == pDestShell )
@@ -696,7 +696,7 @@ bool SwFEShell::Paste( SwDoc* pClpDoc )
     // (individual boxes in the area are retrieved via the layout)
     SwFieldType* pTableFieldTyp = GetDoc()->getIDocumentFieldsAccess().GetSysFieldType( RES_TABLEFLD );
 
-    SwTableNode *pDestNd, *pSrcNd = aCpyPam.GetNode().GetTableNode();
+    SwTableNode *const pSrcNd = aCpyPam.GetNode().GetTableNode();
     if( !pSrcNd )                               // TabellenNode ?
     {                                           // nicht ueberspringen!!
         SwContentNode* pCNd = aCpyPam.GetNode().GetContentNode();
@@ -830,8 +830,8 @@ bool SwFEShell::Paste( SwDoc* pClpDoc )
         for(SwPaM& rPaM : GetCursor()->GetRingContainer())
         {
 
-            if( pSrcNd &&
-                nullptr != ( pDestNd = GetDoc()->IsIdxInTable( rPaM.GetPoint()->nNode )) &&
+            SwTableNode *const pDestNd(GetDoc()->IsIdxInTable(rPaM.GetPoint()->nNode));
+            if (pSrcNd && nullptr != pDestNd &&
                 // are we at the beginning of the cell? (if not, we will insert a nested table)
                 // first paragraph of the cell?
                 rPaM.GetNode().GetIndex() == rPaM.GetNode().FindTableBoxStartNode()->GetIndex()+1 &&

@@ -734,9 +734,13 @@ bool SwTOXBaseSection::SetPosAtStartEnd( SwPosition& rPos ) const
 void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
                               const bool        _bNewTOX )
 {
-    const SwSectionNode* pSectNd;
-    if( !SwTOXBase::GetRegisteredIn()->HasWriterListeners() ||
-        !GetFormat() || nullptr == (pSectNd = GetFormat()->GetSectionNode() ) ||
+    if (!SwTOXBase::GetRegisteredIn()->HasWriterListeners() ||
+        !GetFormat())
+    {
+        return;
+    }
+    SwSectionNode const*const pSectNd(GetFormat()->GetSectionNode());
+    if (nullptr == pSectNd ||
         !pSectNd->GetNodes().IsDocNodes() ||
         IsHiddenFlag() )
     {
@@ -1119,15 +1123,15 @@ void SwTOXBaseSection::UpdateMarks( const SwTOXInternational& rIntl,
     TOXTypes eTOXTyp = GetTOXType()->GetType();
     SwIterator<SwTOXMark,SwTOXType> aIter( *pType );
 
-    SwTextTOXMark* pTextMark;
-    SwTOXMark* pMark;
-    for( pMark = aIter.First(); pMark; pMark = aIter.Next() )
+    for (SwTOXMark* pMark = aIter.First(); pMark; pMark = aIter.Next())
     {
         ::SetProgressState( 0, pDoc->GetDocShell() );
 
-        if( pMark->GetTOXType()->GetType() == eTOXTyp &&
-            nullptr != ( pTextMark = pMark->GetTextTOXMark() ) )
+        if (pMark->GetTOXType()->GetType() == eTOXTyp)
         {
+            SwTextTOXMark *const pTextMark(pMark->GetTextTOXMark());
+            if (nullptr == pTextMark)
+                continue;
             const SwTextNode* pTOXSrc = pTextMark->GetpTextNd();
             // Only insert TOXMarks from the Doc, not from the
             // UNDO.

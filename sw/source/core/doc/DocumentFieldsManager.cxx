@@ -670,9 +670,10 @@ void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
                 // new fields are inserted at the beginning of the modify chain
                 // that gives faster calculation on import
                 // mba: do we really need &m_rDoc "optimization"? Is it still valid?
-                SwTableField* pField;
-                if( !pFormatField->GetTextField() || (nsSwExtendedSubType::SUB_CMD &
-                    (pField = static_cast<SwTableField*>(pFormatField->GetField()))->GetSubType() ))
+                if (!pFormatField->GetTextField())
+                    continue;
+                SwTableField *const pField(static_cast<SwTableField*>(pFormatField->GetField()));
+                if (nsSwExtendedSubType::SUB_CMD & pField->GetSubType())
                     continue;
 
                 // needs to be recalculated

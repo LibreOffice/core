@@ -7634,8 +7634,9 @@ Graphic SwFlyFrameFormat::MakeGraphic( ImageMap* pMap )
     //search any Fly!
     SwIterator<SwFrame,SwFormat> aIter( *this );
     SwFrame *pFirst = aIter.First();
-    SwViewShell *pSh;
-    if ( pFirst && nullptr != ( pSh = pFirst->getRootFrame()->GetCurrShell()) )
+    SwViewShell *const pSh =
+        (pFirst) ? pFirst->getRootFrame()->GetCurrShell() : nullptr;
+    if (nullptr != pSh)
     {
         SwViewShell *pOldGlobal = gProp.pSGlobalShell;
         gProp.pSGlobalShell = pSh;

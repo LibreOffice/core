@@ -750,10 +750,16 @@ void SwTextFrame::CalcLineSpace()
     if( IsLocked() || !HasPara() )
         return;
 
-    SwParaPortion *pPara;
     if( GetDrawObjs() ||
-        GetTextNode()->GetSwAttrSet().GetLRSpace().IsAutoFirst() ||
-        ( pPara = GetPara() )->IsFixLineHeight() )
+        GetTextNode()->GetSwAttrSet().GetLRSpace().IsAutoFirst())
+    {
+        Init();
+        return;
+    }
+
+    SwParaPortion *const pPara(GetPara());
+    assert(pPara);
+    if (pPara->IsFixLineHeight())
     {
         Init();
         return;

@@ -1531,9 +1531,10 @@ static void lcl_DelBox( SwTableBox* pBox, DelTabPara* pDelPara )
                             *pBox->GetSttNd()->EndOfSectionNode() );
         // Delete the Section
         pDelPara->rNds.SectionUp( &aDelRg );
-        const SwTextNode* pCurTextNd;
-        if( T2T_PARA != pDelPara->cCh && pDelPara->pLastNd &&
-            nullptr != ( pCurTextNd = aDelRg.aStart.GetNode().GetTextNode() ))
+        const SwTextNode* pCurTextNd = nullptr;
+        if (T2T_PARA != pDelPara->cCh && pDelPara->pLastNd)
+            pCurTextNd = aDelRg.aStart.GetNode().GetTextNode();
+        if (nullptr != pCurTextNd)
         {
             // Join the current text node with the last from the previous box if possible
             sal_uLong nNdIdx = aDelRg.aStart.GetIndex();
@@ -1579,9 +1580,10 @@ bool SwNodes::TableToText( const SwNodeRange& rRange, sal_Unicode cCh,
                             SwUndoTableToText* pUndo )
 {
     // Is a Table selected?
-    SwTableNode* pTableNd;
-    if( rRange.aStart.GetIndex() >= rRange.aEnd.GetIndex() ||
-        nullptr == ( pTableNd = rRange.aStart.GetNode().GetTableNode()) ||
+    if (rRange.aStart.GetIndex() >= rRange.aEnd.GetIndex())
+        return false;
+    SwTableNode *const pTableNd(rRange.aStart.GetNode().GetTableNode());
+    if (nullptr == pTableNd ||
         &rRange.aEnd.GetNode() != pTableNd->EndOfSectionNode() )
         return false;
 
