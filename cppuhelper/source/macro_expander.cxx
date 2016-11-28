@@ -129,7 +129,6 @@ public:
     inline Bootstrap_MacroExpander()
         : t_uno_impl( m_mutex )
         {}
-    virtual ~Bootstrap_MacroExpander() override;
 
     // XMacroExpander impl
     virtual OUString SAL_CALL expandMacros( OUString const & exp )
@@ -145,9 +144,6 @@ public:
 
 
 void Bootstrap_MacroExpander::disposing()
-{}
-
-Bootstrap_MacroExpander::~Bootstrap_MacroExpander()
 {}
 
 // XServiceInfo impl
