@@ -2179,13 +2179,13 @@ SwNode* SwNodes::FindPrvNxtFrameNode( SwNodeIndex& rFrameIdx,
 void SwNodes::ForEach( sal_uLong nStart, sal_uLong nEnd,
                        FnForEach_SwNodes fn, void* pArgs )
 {
-    if( nEnd > nSize )
-        nEnd = nSize;
+    if( nEnd > m_nSize )
+        nEnd = m_nSize;
 
     if( nStart < nEnd )
     {
         sal_uInt16 cur = Index2Block( nStart );
-        BlockInfo** pp = ppInf + cur;
+        BlockInfo** pp = m_ppInf + cur;
         BlockInfo* p = *pp;
         sal_uInt16 nElem = sal_uInt16( nStart - p->nStart );
         ElementPtr* pElem = p->pData + nElem;
