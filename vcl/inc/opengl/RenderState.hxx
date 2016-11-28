@@ -22,8 +22,6 @@ protected:
     GenericCapabilityState()
         : mbTest(readState())
     {
-        if (mbTest)
-            disable();
     }
 
     static bool readState()
