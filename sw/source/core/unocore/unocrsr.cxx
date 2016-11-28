@@ -25,7 +25,7 @@
 #include <rootfrm.hxx>
 #include <calbck.hxx>
 
-sw::DocDisposingHint::~DocDisposingHint() {}
+sw::UnoCursorHint::~UnoCursorHint() {}
 
 IMPL_FIXEDMEMPOOL_NEWDEL( SwUnoCursor )
 

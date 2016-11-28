@@ -24,10 +24,18 @@
 
 namespace sw
 {
-    struct SW_DLLPUBLIC DocDisposingHint final : public SfxHint
+    enum class UnoCursorHintType
     {
-        DocDisposingHint() {}
-        virtual ~DocDisposingHint() override;
+        DOC_DISPOSING,
+        LEAVES_SECTION
+    };
+
+    struct SW_DLLPUBLIC UnoCursorHint final : public SfxHint
+    {
+        UnoCursorHintType m_eType;
+        UnoCursorHint(UnoCursorHintType eType)
+                : m_eType(eType) {};
+        virtual ~UnoCursorHint() override;
     };
 }
 
@@ -132,14 +140,8 @@ namespace sw
                 SwClient::SwClientNotify(rModify, rHint);
                 if(m_pCursor)
                 {
-                    if(typeid(rHint) == typeid(DocDisposingHint))
+                    if(typeid(rHint) == typeid(UnoCursorHint))
                         m_pCursor->Remove(this);
-                    else if(m_bSectionRestricted && typeid(rHint) == typeid(LegacyModifyHint))
-                    {
-                        const auto pLegacyHint = static_cast<const LegacyModifyHint*>(&rHint);
-                        if(pLegacyHint->m_pOld && pLegacyHint->m_pOld->Which() == RES_UNOCURSOR_LEAVES_SECTION)
-                            m_pCursor->Remove(this);
-                    }
                 }
                 if(!GetRegisteredIn())
                     m_pCursor.reset();
