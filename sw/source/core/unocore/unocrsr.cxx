@@ -31,7 +31,6 @@ IMPL_FIXEDMEMPOOL_NEWDEL( SwUnoCursor )
 
 SwUnoCursor::SwUnoCursor( const SwPosition &rPos )
     : SwCursor( rPos, nullptr )
-    , SwModify(nullptr)
     , m_bRemainInSection(true)
     , m_bSkipOverHiddenSections(false)
     , m_bSkipOverProtectSections(false)
