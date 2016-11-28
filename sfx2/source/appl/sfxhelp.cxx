@@ -613,12 +613,24 @@ bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow, const
 
     if ( !impl_hasHelpInstalled() )
     {
-        if ( impl_showOnlineHelp( aHelpURL ) )
-            return true;
+        ScopedVclPtrInstance< MessageDialog > aQueryBox(const_cast< vcl::Window* >( pWindow ),"onlinehelpmanual","sfx/ui/helpmanual.ui");
+        short OnlineHelpBox = aQueryBox->Execute();
+         if(OnlineHelpBox == RET_OK)
+         {
+             if ( impl_showOnlineHelp( aHelpURL ) )
+                 return true;
+             else
+             {
+                 ScopedVclPtrInstance< NoHelpErrorBox > aErrBox(const_cast< vcl::Window* >( pWindow ));
+                 aErrBox->Execute();
+                 return false;
+             }
+         }
+         else
+         {
+             return false;
+         }
 
-        ScopedVclPtrInstance< NoHelpErrorBox > aErrBox(const_cast< vcl::Window* >( pWindow ));
-        aErrBox->Execute();
-        return false;
     }
 
     Reference < XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
