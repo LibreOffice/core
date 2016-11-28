@@ -59,9 +59,6 @@ namespace
             : m_aNameMap(_bCase)
         {
         }
-        virtual ~OHardRefMap() override
-        {
-        }
 
         virtual bool exists(const OUString& _sName ) override
         {

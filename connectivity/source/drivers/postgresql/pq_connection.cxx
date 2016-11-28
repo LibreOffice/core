@@ -105,10 +105,6 @@ public:
     {
     }
 
-    virtual ~ClosableReference() override
-    {
-    }
-
     virtual void SAL_CALL dispose() throw (std::exception) override
     {
         if( m_conn.is() )
