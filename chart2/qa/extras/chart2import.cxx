@@ -25,6 +25,7 @@
 
 #include <com/sun/star/util/Color.hpp>
 
+#include <cppunit/portability/FloatingPoint.h>
 
 class Chart2ImportTest : public ChartTest
 {
@@ -413,13 +414,13 @@ void Chart2ImportTest::testPPTXSparseChartSeries()
 
     std::vector<std::vector<double> > aValues = getDataSeriesYValuesFromChartType(xCT);
     CPPUNIT_ASSERT_EQUAL(size_t(2), aValues.size());
-    CPPUNIT_ASSERT_EQUAL(0.0,  aValues[0][0]);
+    CPPUNIT_ASSERT( CPPUNIT_NS::floatingPointIsUnordered( aValues[0][0] ) );
     CPPUNIT_ASSERT_EQUAL(2.5,  aValues[0][1]);
     CPPUNIT_ASSERT_EQUAL(3.5,  aValues[0][2]);
-    CPPUNIT_ASSERT_EQUAL(0.0,  aValues[0][3]);
+    CPPUNIT_ASSERT( CPPUNIT_NS::floatingPointIsUnordered( aValues[0][3] ) );
     CPPUNIT_ASSERT_EQUAL(-2.4, aValues[1][0]);
-    CPPUNIT_ASSERT_EQUAL(0.0,  aValues[1][1]);
-    CPPUNIT_ASSERT_EQUAL(0.0,  aValues[1][2]);
+    CPPUNIT_ASSERT( CPPUNIT_NS::floatingPointIsUnordered( aValues[1][1] ) );
+    CPPUNIT_ASSERT( CPPUNIT_NS::floatingPointIsUnordered( aValues[1][2] ) );
     CPPUNIT_ASSERT_EQUAL(-2.8, aValues[1][3]);
 }
 
@@ -1169,17 +1170,17 @@ void Chart2ImportTest::testInternalDataProvider() {
     // Parse empty first and last
     xDataSeq = rxDataProvider->createDataSequenceByValueArray("values-y", "{\"\";42;42;\"\"}");
     xSequence = xDataSeq->getData();
-    CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(0)),  xSequence[0]);
+    CPPUNIT_ASSERT( CPPUNIT_NS::floatingPointIsUnordered( *(double*)xSequence[0].getValue() ) );
     CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(42)), xSequence[1]);
     CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(42)), xSequence[2]);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(0)),  xSequence[3]);
+    CPPUNIT_ASSERT( CPPUNIT_NS::floatingPointIsUnordered( *(double*)xSequence[3].getValue() ) );
 
     // Parse empty middle
     xDataSeq = rxDataProvider->createDataSequenceByValueArray("values-y", "{42;\"\";\"\";42}");
     xSequence = xDataSeq->getData();
     CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(42)), xSequence[0]);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(0)),  xSequence[1]);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(0)),  xSequence[2]);
+    CPPUNIT_ASSERT( CPPUNIT_NS::floatingPointIsUnordered( *(double*)xSequence[1].getValue() ) );
+    CPPUNIT_ASSERT( CPPUNIT_NS::floatingPointIsUnordered( *(double*)xSequence[2].getValue() ) );
     CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(42)), xSequence[3]);
 
     // Parse mixed types, numeric only role
