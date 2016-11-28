@@ -805,13 +805,13 @@ DeviceCoordinate GenericSalLayout::GetTextWidth() const
     DeviceCoordinate nMinPos = 0;
     DeviceCoordinate nMaxPos = 0;
 
-    for( std::vector<GlyphItem>::const_iterator pGlyphIter = m_GlyphItems.begin(), end = m_GlyphItems.end(); pGlyphIter != end ; ++pGlyphIter )
+    for (auto const& aGlyphItem : m_GlyphItems)
     {
         // update the text extent with the glyph extent
-        DeviceCoordinate nXPos = pGlyphIter->maLinearPos.X();
+        DeviceCoordinate nXPos = aGlyphItem.maLinearPos.X();
         if( nMinPos > nXPos )
             nMinPos = nXPos;
-        nXPos += pGlyphIter->mnNewWidth - pGlyphIter->mnXOffset;
+        nXPos += aGlyphItem.mnNewWidth - aGlyphItem.mnXOffset;
         if( nMaxPos < nXPos )
             nMaxPos = nXPos;
     }
@@ -944,16 +944,16 @@ void GenericSalLayout::GetCaretPositions( int nMaxIndex, long* pCaretXArray ) co
         pCaretXArray[i] = -1;
 
     // calculate caret positions using glyph array
-    for( std::vector<GlyphItem>::const_iterator pGlyphIter = m_GlyphItems.begin(), pGlyphIterEnd = m_GlyphItems.end(); pGlyphIter != pGlyphIterEnd; ++pGlyphIter )
+    for (auto const& aGlyphItem : m_GlyphItems)
     {
-        long nXPos = pGlyphIter->maLinearPos.X();
-        long nXRight = nXPos + pGlyphIter->mnOrigWidth;
-        int n = pGlyphIter->mnCharPos;
+        long nXPos = aGlyphItem.maLinearPos.X();
+        long nXRight = nXPos + aGlyphItem.mnOrigWidth;
+        int n = aGlyphItem.mnCharPos;
         int nCurrIdx = 2 * (n - mnMinCharPos);
         // tdf#86399 if this is not the start of a cluster, don't overwrite the caret bounds of the cluster start
-        if (!pGlyphIter->IsClusterStart() && pCaretXArray[nCurrIdx] != -1)
+        if (!aGlyphItem.IsClusterStart() && pCaretXArray[nCurrIdx] != -1)
             continue;
-        if( !pGlyphIter->IsRTLGlyph() )
+        if (!aGlyphItem.IsRTLGlyph() )
         {
             // normal positions for LTR case
             pCaretXArray[ nCurrIdx ]   = nXPos;
