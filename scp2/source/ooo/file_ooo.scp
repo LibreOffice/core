@@ -27,27 +27,6 @@
 
 #include "macros.inc"
 
-File gid_File_Basic_User
-    Dir = FILELIST_DIR;
-    USER_FILE_BODY;
-    Styles = (FILELIST, WORKSTATION);
-    Name = "wizards_basicusr.filelist";
-End
-
-File gid_File_Basic_Share
-    Dir = FILELIST_DIR;
-    USER_FILE_BODY;
-    Styles = (FILELIST, WORKSTATION);
-    Name = "wizards_basicshare.filelist";
-End
-
-File gid_File_Basic_User_Standard
-    Dir = FILELIST_DIR;
-    USER_FILE_BODY;
-    Styles = (FILELIST, WORKSTATION);
-    Name = "wizards_basicsrvstandard.filelist";
-End
-
 #if defined UNX && !defined MACOSX
 
 File gid_File_Script_Gengal
@@ -295,49 +274,6 @@ File gid_Starregistry_Services_Rdb
     Dir = gid_Brand_Dir_Program_Services;
     Styles = (PACKED);
 End
-
-#ifdef MACOSX
-File gid_File_App_InfoPlist
-    TXT_FILE_BODY;
-    Dir = FILELIST_DIR;
-    Name = "infoplist.filelist";
-    Styles = (FILELIST);
-End
-#endif
-
-#ifdef MACOSX
-File gid_File_Icns_Bundle
-    Dir = FILELIST_DIR;
-    TXT_FILE_BODY;
-    Styles = (FILELIST);
-    Name = "sysui_osxicons.filelist";
-End
-#endif
-
-#ifdef MACOSX
-File gid_File_Res_Bundle
-    Dir = FILELIST_DIR;
-    TXT_FILE_BODY;
-    Styles = (FILELIST);
-    Name = "vcl_osxres.filelist";
-End
-#endif
-
-#ifdef MACOSX
-File gid_File_Spotlight_Bundle
-    TXT_FILE_BODY;
-    Dir = FILELIST_DIR;
-    Name = "extensions_mdibundle.filelist";
-    Styles = (FILELIST,USE_INTERNAL_RIGHTS);
-End
-
-File gid_File_Spotlight_Bundle_lib
-    TXT_FILE_BODY;
-    Dir = FILELIST_DIR;
-    Name = "extensions_OOoSpotlightImporter.filelist";
-    Styles = (FILELIST,USE_INTERNAL_RIGHTS);
-End
-#endif
 
 File gid_File_Images
     TXT_FILE_BODY;

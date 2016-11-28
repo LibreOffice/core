@@ -25,28 +25,7 @@ File gid_File_Extra_Autotextshare_Lang
     EXTRA_ALL_LANG(autotextshare,filelist);
 End
 
-File gid_File_sd_web
-    Dir = FILELIST_DIR;
-    TXT_FILE_BODY;
-    Styles = (FILELIST, PACKED);
-    Name = "sd_web.filelist";
-End
-
-File gid_File_Extra_Emojiconfig
-    Dir = FILELIST_DIR;
-    USER_FILE_BODY;
-    Styles = (FILELIST, WORKSTATION);
-    Name = "sfx2_emojiconfig.filelist";
-End
-
 #ifdef USING_X11
-
-File gid_File_Extra_Fontunxppds
-    Dir = FILELIST_DIR;
-    TXT_FILE_BODY;
-    Styles = (FILELIST);
-    Name = "vcl_fontunxppds.filelist";
-End
 
 File gid_File_Extra_Fontunxpsprint
     Dir = FILELIST_DIR;

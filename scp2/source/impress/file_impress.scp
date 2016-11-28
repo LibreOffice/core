@@ -32,12 +32,3 @@ File gid_File_Help_Simpress_Zip
     EXTRA_ALL_GOOD_HELP_LOCALIZATIONS_LANG(simpress);
 End
 #endif
-
-// configuration files for custom animation effects
-
-File gid_File_sd_xml
-    TXT_FILE_BODY;
-    Styles = (FILELIST, PACKED);
-    Dir = FILELIST_DIR;
-    Name = "sd_xml.filelist";
-End

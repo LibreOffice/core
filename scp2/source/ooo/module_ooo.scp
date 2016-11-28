@@ -44,10 +44,6 @@ Module gid_Module_Root
              gid_File_Lib_Cli_Oootypes_Assembly,
              gid_File_Lib_Policy_Cli_Oootypes_Assembly,
              gid_File_Lib_Policy_Cli_Oootypes_Config,
-             gid_File_Basic_User,
-             gid_File_Basic_Share,
-             gid_File_Basic_User_Standard,
-             gid_File_Extra_Emojiconfig,
              gid_File_Extra_Gallsound,
              gid_File_Extra_Gallarrows,
              gid_File_Extra_Gallcomputers,
@@ -61,7 +57,6 @@ Module gid_Module_Root
              gid_File_Extra_Galltxtshapes,
              gid_File_Extra_Gallsounds,
              gid_File_Basic_Form,
-             gid_File_sd_web,
              gid_File_Share_Config_Sofficecfg_uiconfig_basicide,
              gid_File_Share_Config_Sofficecfg_uiconfig_cui,
 #ifdef DBCONNECTIVITY
@@ -106,7 +101,6 @@ Module gid_Module_Root
              gid_File_Share_Registry_Main_Xcd,
              gid_File_Share_Registry_Forcedefault_Xcd,
              gid_File_Extra_Fontunxpsprint,
-             gid_File_Extra_Fontunxppds,
              gid_File_Extra_Fontunxafm);
     Unixlinks = (gid_Unixlink_File_Lib_Curl,
                  gid_Unixlink_File_Lib_Raptor,
