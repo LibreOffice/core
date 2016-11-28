@@ -97,8 +97,8 @@ void SwTemplateControl::Command( const CommandEvent& rCEvt )
         ScopedVclPtrInstance<SwTemplatePopup_Impl> aPop;
         {
             SwView* pView = ::GetActiveView();
-            SwWrtShell* pWrtShell;
-            if( pView && nullptr != (pWrtShell = pView->GetWrtShellPtr()) &&
+            SwWrtShell *const pWrtShell(pView ? pView->GetWrtShellPtr() : nullptr);
+            if (nullptr != pWrtShell &&
                 !pWrtShell->SwCursorShell::HasSelection()&&
                 !pWrtShell->IsSelFrameMode() &&
                 !pWrtShell->IsObjSelected())

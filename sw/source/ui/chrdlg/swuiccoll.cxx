@@ -242,11 +242,14 @@ IMPL_LINK( SwCondCollPage, AssignRemoveHdl, ListBox&, rBox, void)
 void SwCondCollPage::AssignRemove(void* pBtn)
 {
     SvTreeListEntry* pE = m_pTbLinks->FirstSelected();
-    sal_uLong nPos;
-    if( !pE || LISTBOX_ENTRY_NOTFOUND ==
-        ( nPos = m_pTbLinks->GetModel()->GetAbsPos( pE ) ) )
+    if (!pE)
     {
-        OSL_ENSURE( pE, "where's the empty entry from?" );
+        OSL_ENSURE(false, "where's the empty entry from?");
+        return;
+    }
+    sal_uLong const nPos(m_pTbLinks->GetModel()->GetAbsPos(pE));
+    if (LISTBOX_ENTRY_NOTFOUND == nPos)
+    {
         return;
     }
 

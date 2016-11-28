@@ -4047,9 +4047,6 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                     // event processing for resizing
                     if (pSdrView && pSdrView->AreObjectsMarked())
                     {
-                        const SwFrameFormat* pFlyFormat;
-                        const SvxMacro* pMacro;
-
                         const Point aSttPt( PixelToLogic( m_aStartPos ) );
 
                         // can we start?
@@ -4059,13 +4056,16 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                             g_eSdrMoveHdl = pHdl ? pHdl->GetKind() : SdrHdlKind::Move;
                         }
 
+                        const SwFrameFormat *const pFlyFormat(rSh.GetFlyFrameFormat());
+                        const SvxMacro* pMacro = nullptr;
+
                         sal_uInt16 nEvent = SdrHdlKind::Move == g_eSdrMoveHdl
                                             ? SW_EVENT_FRM_MOVE
                                             : SW_EVENT_FRM_RESIZE;
 
-                        if( nullptr != ( pFlyFormat = rSh.GetFlyFrameFormat() ) &&
-                            nullptr != ( pMacro = pFlyFormat->GetMacro().GetMacroTable().
-                            Get( nEvent )) &&
+                        if (nullptr != pFlyFormat)
+                            pMacro = pFlyFormat->GetMacro().GetMacroTable().Get(nEvent);
+                        if (nullptr != pMacro &&
                         // or notify only e.g. every 20 Twip?
                             m_aRszMvHdlPt != aDocPt )
                         {
@@ -4520,16 +4520,16 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                 else
                 {
                     {
-                        const SwFrameFormat* pFlyFormat;
-                        const SvxMacro* pMacro;
+                        const SwFrameFormat *const pFlyFormat(rSh.GetFlyFrameFormat());
+                        const SvxMacro* pMacro = nullptr;
 
                         sal_uInt16 nEvent = SdrHdlKind::Move == eOldSdrMoveHdl
                                             ? SW_EVENT_FRM_MOVE
                                             : SW_EVENT_FRM_RESIZE;
 
-                        if( nullptr != ( pFlyFormat = rSh.GetFlyFrameFormat() ) &&
-                            nullptr != ( pMacro = pFlyFormat->GetMacro().GetMacroTable().
-                            Get( nEvent )) )
+                        if (nullptr != pFlyFormat)
+                            pMacro = pFlyFormat->GetMacro().GetMacroTable().Get(nEvent);
+                        if (nullptr != pMacro)
                         {
                             const Point aSttPt( PixelToLogic( m_aStartPos ) );
                             m_aRszMvHdlPt = aDocPt;
