@@ -2315,6 +2315,28 @@ bool PDFDocument::ValidateSignature(SvStream& rStream, PDFObjectElement* pSignat
         return false;
     }
 
+    // Get the CRYPT_ALGORITHM_IDENTIFIER from the message.
+    DWORD nDigestID = 0;
+    if (!CryptMsgGetParam(hMsg, CMSG_SIGNER_HASH_ALGORITHM_PARAM, 0, nullptr, &nDigestID))
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ValidateSignature: CryptMsgGetParam() failed: " << WindowsErrorString(GetLastError()));
+        return false;
+    }
+    std::unique_ptr<BYTE[]> pDigestBytes(new BYTE[nDigestID]);
+    if (!CryptMsgGetParam(hMsg, CMSG_SIGNER_HASH_ALGORITHM_PARAM, 0, pDigestBytes.get(), &nDigestID))
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ValidateSignature: CryptMsgGetParam() failed: " << WindowsErrorString(GetLastError()));
+        return false;
+    }
+    auto pDigestID = reinterpret_cast<CRYPT_ALGORITHM_IDENTIFIER*>(pDigestBytes.get());
+    if (OString(szOID_NIST_sha256) == pDigestID->pszObjId)
+        rInformation.nDigestID = xml::crypto::DigestID::SHA256;
+    else if (OString(szOID_RSA_SHA1RSA) == pDigestID->pszObjId)
+        rInformation.nDigestID = xml::crypto::DigestID::SHA1;
+    else
+        // Don't error out here, we can still verify the message digest correctly, just the digest ID won't be set.
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ValidateSignature: unhandled algorithm identifier '"<<pDigestID->pszObjId<<"'");
+
     // Get the signer CERT_INFO from the message.
     DWORD nSignerCertInfo = 0;
     if (!CryptMsgGetParam(hMsg, CMSG_SIGNER_CERT_INFO_PARAM, 0, nullptr, &nSignerCertInfo))

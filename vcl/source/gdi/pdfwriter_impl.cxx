@@ -6807,8 +6807,52 @@ typedef BOOL (WINAPI *PointerTo_CryptRetrieveTimeStamp)(LPCWSTR wszUrl,
 
 namespace
 {
+
+/// Counts how many bytes are needed to encode a given length.
+size_t GetDERLengthOfLength(size_t nLength)
+{
+    size_t nRet = 1;
+
+    if(nLength > 127)
+    {
+        while (nLength >> (nRet * 8))
+            ++nRet;
+        // Long form means one additional byte: the length of the length and
+        // the length itself.
+        ++nRet;
+    }
+    return nRet;
+}
+
+/// Writes the length part of the header.
+void WriteDERLength(SvStream& rStream, size_t nLength)
+{
+    size_t nLengthOfLength = GetDERLengthOfLength(nLength);
+    if (nLengthOfLength == 1)
+    {
+        // We can use the short form.
+        rStream.WriteUInt8(nLength);
+        return;
+    }
+
+    // 0x80 means that the we use the long form: the first byte is the length
+    // of length with the highest bit set to 1, not the actual length.
+    rStream.WriteUInt8(0x80 | (nLengthOfLength - 1));
+    for (size_t i = 1; i < nLengthOfLength; ++i)
+        rStream.WriteUInt8(nLength >> ((nLengthOfLength - i - 1) * 8));
+}
+
+const unsigned nASN1_INTEGER = 0x02;
+const unsigned nASN1_OCTET_STRING = 0x04;
+const unsigned nASN1_NULL = 0x05;
+const unsigned nASN1_OBJECT_IDENTIFIER = 0x06;
+const unsigned nASN1_SEQUENCE = 0x10;
+/// An explicit tag on a constructed value.
+const unsigned nASN1_TAGGED_CONSTRUCTED = 0xa0;
+const unsigned nASN1_CONSTRUCTED = 0x20;
+
 /// Create payload for the 'signing-certificate' signed attribute.
-bool CreateSigningCertificateAttribute(vcl::PDFWriter::PDFSignContext& rContext, SvStream& rEncodedCertificate)
+bool CreateSigningCertificateAttribute(vcl::PDFWriter::PDFSignContext& rContext, PCCERT_CONTEXT pCertContext, SvStream& rEncodedCertificate)
 {
     // CryptEncodeObjectEx() does not support encoding arbitrary ASN.1
     // structures, like SigningCertificateV2 from RFC 5035, so let's build it
@@ -6855,46 +6899,79 @@ bool CreateSigningCertificateAttribute(vcl::PDFWriter::PDFSignContext& rContext,
     CryptDestroyHash(hHash);
     CryptReleaseContext(hProv, 0);
 
+    // Collect info for IssuerSerial.
+    BYTE* pIssuer = pCertContext->pCertInfo->Issuer.pbData;
+    DWORD nIssuer = pCertContext->pCertInfo->Issuer.cbData;
+    BYTE* pSerial = pCertContext->pCertInfo->SerialNumber.pbData;
+    DWORD nSerial = pCertContext->pCertInfo->SerialNumber.cbData;
+    // pSerial is LE, aSerial is BE.
+    std::vector<BYTE> aSerial(nSerial);
+    for (size_t i = 0; i < nSerial; ++i)
+        aSerial[i] = *(pSerial + nSerial - i - 1);
+
     // We now have all the info to count the lengths.
     // The layout of the payload is:
     // SEQUENCE: SigningCertificateV2
     //     SEQUENCE: SEQUENCE OF ESSCertIDv2
-    //      SEQUENCE: ESSCertIDv2
-    //          SEQUENCE: AlgorithmIdentifier
-    //              OBJECT: algorithm
-    //              NULL: parameters
-    //       OCTET STRING: certHash
+    //         SEQUENCE: ESSCertIDv2
+    //             SEQUENCE: AlgorithmIdentifier
+    //                 OBJECT: algorithm
+    //                 NULL: parameters
+    //             OCTET STRING: certHash
+    //             SEQUENCE: IssuerSerial
+    //                 SEQUENCE: GeneralNames
+    //                     cont [ 4 ]: Name
+    //                         SEQUENCE: Issuer blob
+    //                 INTEGER: CertificateSerialNumber
 
-    size_t nAlgorithm = aSHA256.size() + 2;
-    size_t nParameters = 2;
-    size_t nAlgorithmIdentifier = nAlgorithm + nParameters + 2;
-    size_t nCertHash = aHash.size() + 2;
-    size_t nESSCertIDv2 = nAlgorithmIdentifier + nCertHash + 2;
-    size_t nESSCertIDv2s = nESSCertIDv2 + 2;
+    size_t nAlgorithm = 1 + GetDERLengthOfLength(aSHA256.size()) + aSHA256.size();
+    size_t nParameters = 1 + GetDERLengthOfLength(1);
+    size_t nAlgorithmIdentifier = 1 + GetDERLengthOfLength(nAlgorithm + nParameters) + nAlgorithm + nParameters;
+    size_t nCertHash = 1 + GetDERLengthOfLength(aHash.size()) + aHash.size();
+    size_t nName = 1 + GetDERLengthOfLength(nIssuer) + nIssuer;
+    size_t nGeneralNames = 1 + GetDERLengthOfLength(nName) + nName;
+    size_t nCertificateSerialNumber = 1 + GetDERLengthOfLength(nSerial) + nSerial;
+    size_t nIssuerSerial = 1 + GetDERLengthOfLength(nGeneralNames + nCertificateSerialNumber) + nGeneralNames + nCertificateSerialNumber;
+    size_t nESSCertIDv2 = 1 + GetDERLengthOfLength(nAlgorithmIdentifier + nCertHash + nIssuerSerial) + nAlgorithmIdentifier + nCertHash + nIssuerSerial;
+    size_t nESSCertIDv2s = 1 + GetDERLengthOfLength(nESSCertIDv2) + nESSCertIDv2;
 
     // Write SigningCertificateV2.
-    rEncodedCertificate.WriteUInt8(0x30);
-    rEncodedCertificate.WriteUInt8(nESSCertIDv2s);
+    rEncodedCertificate.WriteUInt8(nASN1_SEQUENCE | nASN1_CONSTRUCTED);
+    WriteDERLength(rEncodedCertificate, nESSCertIDv2s);
     // Write SEQUENCE OF ESSCertIDv2.
-    rEncodedCertificate.WriteUInt8(0x30);
-    rEncodedCertificate.WriteUInt8(nESSCertIDv2);
+    rEncodedCertificate.WriteUInt8(nASN1_SEQUENCE | nASN1_CONSTRUCTED);
+    WriteDERLength(rEncodedCertificate, nESSCertIDv2);
     // Write ESSCertIDv2.
-    rEncodedCertificate.WriteUInt8(0x30);
-    rEncodedCertificate.WriteUInt8(nAlgorithmIdentifier + nCertHash);
+    rEncodedCertificate.WriteUInt8(nASN1_SEQUENCE | nASN1_CONSTRUCTED);
+    WriteDERLength(rEncodedCertificate, nAlgorithmIdentifier + nCertHash + nIssuerSerial);
     // Write AlgorithmIdentifier.
-    rEncodedCertificate.WriteUInt8(0x30);
-    rEncodedCertificate.WriteUInt8(nAlgorithm + nParameters);
+    rEncodedCertificate.WriteUInt8(nASN1_SEQUENCE | nASN1_CONSTRUCTED);
+    WriteDERLength(rEncodedCertificate, nAlgorithm + nParameters);
     // Write algorithm.
-    rEncodedCertificate.WriteUInt8(0x06);
-    rEncodedCertificate.WriteUInt8(aSHA256.size());
+    rEncodedCertificate.WriteUInt8(nASN1_OBJECT_IDENTIFIER);
+    WriteDERLength(rEncodedCertificate, aSHA256.size());
     rEncodedCertificate.WriteBytes(aSHA256.data(), aSHA256.size());
     // Write parameters.
-    rEncodedCertificate.WriteUInt8(0x05);
-    rEncodedCertificate.WriteUInt8(0x00);
+    rEncodedCertificate.WriteUInt8(nASN1_NULL);
+    rEncodedCertificate.WriteUInt8(0);
     // Write certHash.
-    rEncodedCertificate.WriteUInt8(0x04);
-    rEncodedCertificate.WriteUInt8(aHash.size());
+    rEncodedCertificate.WriteUInt8(nASN1_OCTET_STRING);
+    WriteDERLength(rEncodedCertificate, aHash.size());
     rEncodedCertificate.WriteBytes(aHash.data(), aHash.size());
+    // Write IssuerSerial.
+    rEncodedCertificate.WriteUInt8(nASN1_SEQUENCE | nASN1_CONSTRUCTED);
+    WriteDERLength(rEncodedCertificate, nGeneralNames + nCertificateSerialNumber);
+    // Write GeneralNames.
+    rEncodedCertificate.WriteUInt8(nASN1_SEQUENCE | nASN1_CONSTRUCTED);
+    WriteDERLength(rEncodedCertificate, nName);
+    // Write Name.
+    rEncodedCertificate.WriteUInt8(nASN1_TAGGED_CONSTRUCTED | 4);
+    WriteDERLength(rEncodedCertificate, nIssuer);
+    rEncodedCertificate.WriteBytes(pIssuer, nIssuer);
+    // Write CertificateSerialNumber.
+    rEncodedCertificate.WriteUInt8(nASN1_INTEGER);
+    WriteDERLength(rEncodedCertificate, nSerial);
+    rEncodedCertificate.WriteBytes(aSerial.data(), aSerial.size());
 
     return true;
 }
@@ -7436,7 +7513,7 @@ bool PDFWriter::Sign(PDFSignContext& rContext)
     // Add the signing certificate as a signed attribute.
     CRYPT_INTEGER_BLOB aCertificateBlob;
     SvMemoryStream aEncodedCertificate;
-    if (!CreateSigningCertificateAttribute(rContext, aEncodedCertificate))
+    if (!CreateSigningCertificateAttribute(rContext, pCertContext, aEncodedCertificate))
     {
         SAL_WARN("vcl.pdfwriter", "CreateSigningCertificateAttribute() failed");
         return false;
