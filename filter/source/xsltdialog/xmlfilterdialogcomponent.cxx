@@ -68,7 +68,6 @@ class XMLFilterDialogComponent :    public XMLFilterDialogComponentBase,
 {
 public:
     explicit XMLFilterDialogComponent( const Reference< XComponentContext >& rxContext );
-    virtual ~XMLFilterDialogComponent() override;
 
 protected:
     // XInterface
@@ -118,12 +117,6 @@ XMLFilterDialogComponent::XMLFilterDialogComponent( const css::uno::Reference< X
     Reference< XTerminateListener > xListener( this );
     xDesktop->addTerminateListener( xListener );
 }
-
-
-XMLFilterDialogComponent::~XMLFilterDialogComponent()
-{
-}
-
 
 // XInterface
 Any SAL_CALL XMLFilterDialogComponent::queryInterface( const Type& aType ) throw (RuntimeException, std::exception)

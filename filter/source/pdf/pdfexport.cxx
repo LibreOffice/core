@@ -264,16 +264,9 @@ public:
     : m_xSrcDoc( xDoc ),
       m_aPreparedPassword( rPwd )
     {}
-    virtual ~PDFExportStreamDoc() override;
 
     virtual void write( const Reference< XOutputStream >& xStream ) override;
 };
-
-
-PDFExportStreamDoc::~PDFExportStreamDoc()
-{
-}
-
 
 void PDFExportStreamDoc::write( const Reference< XOutputStream >& xStream )
 {
