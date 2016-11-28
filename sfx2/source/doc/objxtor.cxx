@@ -611,7 +611,7 @@ bool SfxObjectShell::PrepareClose
             {
                 SfxBoolItem aWarnItem( SID_FAIL_ON_WARNING, bUI );
                 const SfxPoolItem* ppArgs[] = { &aWarnItem, nullptr };
-                pPoolItem = pFrame->GetBindings().ExecuteSynchron( IsReadOnlyMedium() ? SID_SAVEASDOC : SID_SAVEDOC, ppArgs );
+                pPoolItem = pFrame->GetBindings().ExecuteSynchron( SID_SAVEDOC, ppArgs );
             }
 
             if ( !pPoolItem || dynamic_cast< const SfxVoidItem *>( pPoolItem ) != nullptr || ( dynamic_cast< const SfxBoolItem *>( pPoolItem ) != nullptr && !static_cast<const SfxBoolItem*>( pPoolItem )->GetValue() ) )
