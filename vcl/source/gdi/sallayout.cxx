@@ -1129,41 +1129,6 @@ void GenericSalLayout::Simplify( bool bIsBase )
     m_GlyphItems.erase(m_GlyphItems.begin() + j, m_GlyphItems.end());
 }
 
-// make sure GlyphItems are sorted left to right
-void GenericSalLayout::SortGlyphItems()
-{
-    // move cluster components behind their cluster start (especially for RTL)
-    // using insertion sort because the glyph items are "almost sorted"
-
-    for( std::vector<GlyphItem>::iterator pGlyphIter = m_GlyphItems.begin(), pGlyphIterEnd = m_GlyphItems.end(); pGlyphIter != pGlyphIterEnd; ++pGlyphIter )
-    {
-        // find a cluster starting with a diacritic
-        if( !pGlyphIter->IsDiacritic() )
-            continue;
-        if( !pGlyphIter->IsClusterStart() )
-            continue;
-        for( std::vector<GlyphItem>::iterator pBaseGlyph = pGlyphIter; ++pBaseGlyph != pGlyphIterEnd; )
-        {
-            // find the base glyph matching to the misplaced diacritic
-            if( pBaseGlyph->IsClusterStart() )
-                break;
-            if( pBaseGlyph->IsDiacritic() )
-                continue;
-
-            // found the matching base glyph
-            // => this base glyph becomes the new cluster start
-            iter_swap(pGlyphIter, pBaseGlyph);
-
-            // update glyph flags of swapped glyphitems
-            pGlyphIter->mnFlags &= ~GlyphItem::IS_IN_CLUSTER;
-            pBaseGlyph->mnFlags |= GlyphItem::IS_IN_CLUSTER;
-            // prepare for checking next cluster
-            pGlyphIter = pBaseGlyph;
-            break;
-        }
-    }
-}
-
 MultiSalLayout::MultiSalLayout( SalLayout& rBaseLayout )
 :   SalLayout()
 ,   mnLevel( 1 )

@@ -598,29 +598,15 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
                 sal_Int32 indexUtf16 = nCharPos;
                 sal_UCS4 aChar = rArgs.mrStr.iterateCodePoints(&indexUtf16, 0);
 
-                bool bDiacritic = false;
-                if (hb_ot_layout_has_glyph_classes(pHbFace))
-                {
-                    // the font has GDEF table
-                    if (pHbPositions[i].x_advance == 0)
-                        bDiacritic = hb_ot_layout_get_glyph_class(pHbFace, nGlyphIndex) == HB_OT_LAYOUT_GLYPH_CLASS_MARK;
-                }
-                else
-                {
 #if HB_VERSION_ATLEAST(0, 9, 42)
-                    if (u_getIntPropertyValue(aChar, UCHAR_GENERAL_CATEGORY) == U_NON_SPACING_MARK)
-                        bDiacritic = true;
-#else
-                    // the font lacks GDEF table
-                    if (pHbPositions[i].x_advance == 0)
-                        bDiacritic = true;
-#endif
-                }
-
-                if (bDiacritic)
+                if (u_getIntPropertyValue(aChar, UCHAR_GENERAL_CATEGORY) == U_NON_SPACING_MARK)
                     nGlyphFlags |= GlyphItem::IS_DIACRITIC;
+#endif
 
-                if ((aSubRun.maScript == HB_SCRIPT_ARABIC) || (aSubRun.maScript == HB_SCRIPT_SYRIAC))
+                if ((aSubRun.maScript == HB_SCRIPT_ARABIC ||
+                     aSubRun.maScript == HB_SCRIPT_SYRIAC) &&
+                    HB_DIRECTION_IS_BACKWARD(aSubRun.maDirection) &&
+                    !u_isUWhiteSpace(aChar))
                 {
                     nGlyphFlags |= GlyphItem::ALLOW_KASHIDA;
                     rArgs.mnFlags |= SalLayoutFlags::KashidaJustification;
@@ -663,11 +649,6 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
     }
 
     hb_buffer_destroy(pHbBuffer);
-
-    // sort glyphs in visual order
-    // and then in logical order (e.g. diacritics after cluster start)
-    // XXX: why?
-    SortGlyphItems();
 
     return true;
 }
@@ -753,14 +734,10 @@ void CommonSalLayout::ApplyDXArray(ImplLayoutArgs& rArgs)
         int nCharPos = m_GlyphItems[i].mnCharPos - mnMinCharPos;
         DeviceCoordinate nDiff = pNewCharWidths[nCharPos] - pOldCharWidths[nCharPos];
 
-        // nDiff > 1 to ignore rounding errors.
-        if (bKashidaJustify && m_GlyphItems[i].AllowKashida() && nDiff > 1)
-            pKashidas[i] = nDiff;
-
-        // Adjust the width of the first glyph belonging to current character.
+        // Adjust the width of the first glyph in the cluster.
         m_GlyphItems[i].mnNewWidth += nDiff;
 
-        // Apply the X position of all glyphs belonging to current character.
+        // Apply the X position of all glyphs in the cluster.
         size_t j = i;
         while (j < m_GlyphItems.size())
         {
@@ -773,10 +750,31 @@ void CommonSalLayout::ApplyDXArray(ImplLayoutArgs& rArgs)
             ++j;
         }
 
+        // Id this glyph is Kashida-justifiable, then mark this as a Kashida
+        // position. Since this must be a RTL glyph, we mark the last glyph in
+        // the cluster not the fisrt as this would be the base glyph.
+        // nDiff > 1 to ignore rounding errors.
+        if (bKashidaJustify && m_GlyphItems[i].AllowKashida() && nDiff > 1)
+        {
+            pKashidas[j - 1] = nDiff;
+            // Move any non-spacing marks attached to this cluster as well.
+            // Looping backward because this is RTL glyph.
+            if (i > 0)
+            {
+                auto pGlyph = m_GlyphItems.begin() + i - 1;
+                while (pGlyph != m_GlyphItems.begin() && pGlyph->IsDiacritic())
+                {
+                    pGlyph->maLinearPos.X() += nDiff;
+                    --pGlyph;
+                }
+            }
+        }
+
+
         // Increment the delta, the loop above makes sure we do so only once
-        // for every character not for every glyph (otherwise we would apply it
-        // multiple times for each glyphs belonging to the same character which
-        // is wrong since DX adjustments are character based).
+        // for every character (cluster) not for every glyph (otherwise we
+        // would apply it multiple times for each glyphs belonging to the same
+        // character which is wrong since DX adjustments are character based).
         nDelta += nDiff;
         i = j;
     }
@@ -788,16 +786,6 @@ void CommonSalLayout::ApplyDXArray(ImplLayoutArgs& rArgs)
         for (auto const& pKashida : pKashidas)
         {
             auto pGlyphIter = m_GlyphItems.begin() + nInserted + pKashida.first;
-
-            // Don’t insert Kashida after LTR glyphs.
-            if (!pGlyphIter->IsRTLGlyph())
-                continue;
-
-            // Don’t insert Kashida after space.
-            sal_Int32 indexUtf16 = pGlyphIter->mnCharPos;
-            sal_UCS4 aChar = rArgs.mrStr.iterateCodePoints(&indexUtf16, 0);
-            if (u_isUWhiteSpace(aChar))
-                continue;
 
             // The total Kashida width.
             DeviceCoordinate nTotalWidth = pKashida.second;
