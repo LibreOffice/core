@@ -57,8 +57,7 @@ public:
 #if defined DBG_UTIL && defined LINUX
         gbIsWorkerThread = true;
 #endif
-        ThreadTask *pTask;
-        while ( ( pTask = waitForWork() ) )
+        while ( ThreadTask * pTask = waitForWork() )
         {
             std::shared_ptr<ThreadTaskTag> pTag(pTask->getTag());
             try {
@@ -189,8 +188,7 @@ void ThreadPool::waitAndCleanupWorkers()
 
     if( maWorkers.empty() )
     { // no threads at all -> execute the work in-line
-        ThreadTask *pTask;
-        while ( ( pTask = popWork() ) )
+        while ( ThreadTask * pTask = popWork() )
         {
             std::shared_ptr<ThreadTaskTag> pTag(pTask->getTag());
             pTask->doWork();
@@ -269,8 +267,7 @@ void ThreadPool::waitUntilDone(const std::shared_ptr<ThreadTaskTag>& rTag)
 
     if( maWorkers.empty() )
     { // no threads at all -> execute the work in-line
-        ThreadTask *pTask;
-        while ( ( pTask = popWork() ) )
+        while ( ThreadTask * pTask = popWork() )
         {
             std::shared_ptr<ThreadTaskTag> pTag(pTask->getTag());
             pTask->doWork();
