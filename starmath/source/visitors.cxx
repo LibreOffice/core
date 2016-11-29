@@ -846,9 +846,9 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmSubSupNode* pNode )
     bodyRight->SetRight( right );
     right->SetLeft( bodyRight );
 
-    SmNode* pChild;
     //If there's an LSUP
-    if( ( pChild = pNode->GetSubSup( LSUP ) ) ){
+    SmNode* pChild = pNode->GetSubSup( LSUP );
+    if( pChild ){
         SmCaretPosGraphEntry *cLeft; //Child left
         cLeft = mpGraph->Add( SmCaretPos( pChild, 0 ), left );
 
@@ -858,7 +858,8 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmSubSupNode* pNode )
         mpRightMost->SetRight( bodyLeft );
     }
     //If there's an LSUB
-    if( ( pChild = pNode->GetSubSup( LSUB ) ) ){
+    pChild = pNode->GetSubSup( LSUB );
+    if( pChild ){
         SmCaretPosGraphEntry *cLeft; //Child left
         cLeft = mpGraph->Add( SmCaretPos( pChild, 0 ), left );
 
@@ -868,7 +869,8 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmSubSupNode* pNode )
         mpRightMost->SetRight( bodyLeft );
     }
     //If there's an CSUP
-    if( ( pChild = pNode->GetSubSup( CSUP ) ) ){
+    pChild = pNode->GetSubSup( CSUP );
+    if( pChild ){
         SmCaretPosGraphEntry *cLeft; //Child left
         cLeft = mpGraph->Add( SmCaretPos( pChild, 0 ), left );
 
@@ -878,7 +880,8 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmSubSupNode* pNode )
         mpRightMost->SetRight( right );
     }
     //If there's an CSUB
-    if( ( pChild = pNode->GetSubSup( CSUB ) ) ){
+    pChild = pNode->GetSubSup( CSUB );
+    if( pChild ){
         SmCaretPosGraphEntry *cLeft; //Child left
         cLeft = mpGraph->Add( SmCaretPos( pChild, 0 ), left );
 
@@ -888,7 +891,8 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmSubSupNode* pNode )
         mpRightMost->SetRight( right );
     }
     //If there's an RSUP
-    if( ( pChild = pNode->GetSubSup( RSUP ) ) ){
+    pChild = pNode->GetSubSup( RSUP );
+    if( pChild ){
         SmCaretPosGraphEntry *cLeft; //Child left
         cLeft = mpGraph->Add( SmCaretPos( pChild, 0 ), bodyRight );
 
@@ -898,7 +902,8 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmSubSupNode* pNode )
         mpRightMost->SetRight( right );
     }
     //If there's an RSUB
-    if( ( pChild = pNode->GetSubSup( RSUB ) ) ){
+    pChild = pNode->GetSubSup( RSUB );
+    if( pChild ){
         SmCaretPosGraphEntry *cLeft; //Child left
         cLeft = mpGraph->Add( SmCaretPos( pChild, 0 ), bodyRight );
 
@@ -976,59 +981,77 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmOperNode* pNode )
 
     SmNode* pChild;
     SmCaretPosGraphEntry *childLeft;
-    if( pSubSup && ( pChild = pSubSup->GetSubSup( LSUP ) ) ) {
-        //Create position in front of pChild
-        childLeft = mpGraph->Add( SmCaretPos( pChild, 0 ), left );
-        //Visit pChild
-        mpRightMost = childLeft;
-        pChild->Accept( this );
-        //Set right on mpRightMost from pChild
-        mpRightMost->SetRight( bodyLeft );
+    if( pSubSup ) {
+        pChild = pSubSup->GetSubSup( LSUP );
+        if( pChild ) {
+            //Create position in front of pChild
+            childLeft = mpGraph->Add( SmCaretPos( pChild, 0 ), left );
+            //Visit pChild
+            mpRightMost = childLeft;
+            pChild->Accept( this );
+            //Set right on mpRightMost from pChild
+            mpRightMost->SetRight( bodyLeft );
+        }
     }
-    if( pSubSup && ( pChild = pSubSup->GetSubSup( LSUB ) ) ) {
-        //Create position in front of pChild
-        childLeft = mpGraph->Add( SmCaretPos( pChild, 0 ), left );
-        //Visit pChild
-        mpRightMost = childLeft;
-        pChild->Accept( this );
-        //Set right on mpRightMost from pChild
-        mpRightMost->SetRight( bodyLeft );
+    if( pSubSup ) {
+        pChild = pSubSup->GetSubSup( LSUB );
+        if( pChild ) {
+            //Create position in front of pChild
+            childLeft = mpGraph->Add( SmCaretPos( pChild, 0 ), left );
+            //Visit pChild
+            mpRightMost = childLeft;
+            pChild->Accept( this );
+            //Set right on mpRightMost from pChild
+            mpRightMost->SetRight( bodyLeft );
+        }
     }
-    if( pSubSup && ( pChild = pSubSup->GetSubSup( CSUP ) ) ) {//TO
-        //Create position in front of pChild
-        childLeft = mpGraph->Add( SmCaretPos( pChild, 0 ), left );
-        //Visit pChild
-        mpRightMost = childLeft;
-        pChild->Accept( this );
-        //Set right on mpRightMost from pChild
-        mpRightMost->SetRight( bodyLeft );
+    if( pSubSup ) {
+        pChild = pSubSup->GetSubSup( CSUP );
+        if ( pChild ) {//TO
+            //Create position in front of pChild
+            childLeft = mpGraph->Add( SmCaretPos( pChild, 0 ), left );
+            //Visit pChild
+            mpRightMost = childLeft;
+            pChild->Accept( this );
+            //Set right on mpRightMost from pChild
+            mpRightMost->SetRight( bodyLeft );
+        }
     }
-    if( pSubSup && ( pChild = pSubSup->GetSubSup( CSUB ) ) ) { //FROM
-        //Create position in front of pChild
-        childLeft = mpGraph->Add( SmCaretPos( pChild, 0 ), left );
-        //Visit pChild
-        mpRightMost = childLeft;
-        pChild->Accept( this );
-        //Set right on mpRightMost from pChild
-        mpRightMost->SetRight( bodyLeft );
+    if( pSubSup ) {
+        pChild = pSubSup->GetSubSup( CSUB );
+        if( pChild ) { //FROM
+            //Create position in front of pChild
+            childLeft = mpGraph->Add( SmCaretPos( pChild, 0 ), left );
+            //Visit pChild
+            mpRightMost = childLeft;
+            pChild->Accept( this );
+            //Set right on mpRightMost from pChild
+            mpRightMost->SetRight( bodyLeft );
+        }
     }
-    if( pSubSup && ( pChild = pSubSup->GetSubSup( RSUP ) ) ) {
-        //Create position in front of pChild
-        childLeft = mpGraph->Add( SmCaretPos( pChild, 0 ), left );
-        //Visit pChild
-        mpRightMost = childLeft;
-        pChild->Accept( this );
-        //Set right on mpRightMost from pChild
-        mpRightMost->SetRight( bodyLeft );
+    if( pSubSup ) {
+        pChild = pSubSup->GetSubSup( RSUP );
+        if ( pChild ) {
+            //Create position in front of pChild
+            childLeft = mpGraph->Add( SmCaretPos( pChild, 0 ), left );
+            //Visit pChild
+            mpRightMost = childLeft;
+            pChild->Accept( this );
+            //Set right on mpRightMost from pChild
+            mpRightMost->SetRight( bodyLeft );
+        }
     }
-    if( pSubSup && ( pChild = pSubSup->GetSubSup( RSUB ) ) ) {
-        //Create position in front of pChild
-        childLeft = mpGraph->Add( SmCaretPos( pChild, 0 ), left );
-        //Visit pChild
-        mpRightMost = childLeft;
-        pChild->Accept( this );
-        //Set right on mpRightMost from pChild
-        mpRightMost->SetRight( bodyLeft );
+    if( pSubSup ) {
+        pChild = pSubSup->GetSubSup( RSUB );
+        if ( pChild ) {
+            //Create position in front of pChild
+            childLeft = mpGraph->Add( SmCaretPos( pChild, 0 ), left );
+            //Visit pChild
+            mpRightMost = childLeft;
+            pChild->Accept( this );
+            //Set right on mpRightMost from pChild
+            mpRightMost->SetRight( bodyLeft );
+        }
     }
 
     //Return right
@@ -1988,32 +2011,36 @@ void SmNodeToTextVisitor::Visit( SmOperNode* pNode )
     }
     if( pNode->GetSubNode( 0 )->GetType( ) == NSUBSUP ) {
         SmSubSupNode *pSubSup = static_cast<SmSubSupNode*>( pNode->GetSubNode( 0 ) );
-        SmNode* pChild;
-        if( ( pChild = pSubSup->GetSubSup( LSUP ) ) ) {
+        SmNode* pChild = pSubSup->GetSubSup( LSUP );
+        if( pChild ) {
             Separate( );
             Append( "lsup { " );
             LineToText( pChild );
             Append( "} " );
         }
-        if( ( pChild = pSubSup->GetSubSup( LSUB ) ) ) {
+        pChild = pSubSup->GetSubSup( LSUB );
+        if( pChild ) {
             Separate( );
             Append( "lsub { " );
             LineToText( pChild );
             Append( "} " );
         }
-        if( ( pChild = pSubSup->GetSubSup( RSUP ) ) ) {
+        pChild = pSubSup->GetSubSup( RSUP );
+        if( pChild ) {
             Separate( );
             Append( "^ { " );
             LineToText( pChild );
             Append( "} " );
         }
-        if( ( pChild = pSubSup->GetSubSup( RSUB ) ) ) {
+        pChild = pSubSup->GetSubSup( RSUB );
+        if( pChild ) {
             Separate( );
             Append( "_ { " );
             LineToText( pChild );
             Append( "} " );
         }
-        if( ( pChild = pSubSup->GetSubSup( CSUP ) ) ) {
+        pChild = pSubSup->GetSubSup( CSUP );
+        if( pChild ) {
             Separate( );
             if (pSubSup->IsUseLimits())
                 Append( "to { " );
@@ -2022,7 +2049,8 @@ void SmNodeToTextVisitor::Visit( SmOperNode* pNode )
             LineToText( pChild );
             Append( "} " );
         }
-        if( ( pChild = pSubSup->GetSubSup( CSUB ) ) ) {
+        pChild = pSubSup->GetSubSup( CSUB );
+        if( pChild ) {
             Separate( );
             if (pSubSup->IsUseLimits())
                 Append( "from { " );
@@ -2199,28 +2227,32 @@ void SmNodeToTextVisitor::Visit( SmBinDiagonalNode* pNode )
 void SmNodeToTextVisitor::Visit( SmSubSupNode* pNode )
 {
     LineToText( pNode->GetBody( ) );
-    SmNode *pChild;
-    if( ( pChild = pNode->GetSubSup( LSUP ) ) ) {
+    SmNode *pChild = pNode->GetSubSup( LSUP );
+    if( pChild ) {
         Separate( );
         Append( "lsup " );
         LineToText( pChild );
     }
-    if( ( pChild = pNode->GetSubSup( LSUB ) ) ) {
+    pChild = pNode->GetSubSup( LSUB );
+    if( pChild ) {
         Separate( );
         Append( "lsub " );
         LineToText( pChild );
     }
-    if( ( pChild = pNode->GetSubSup( RSUP ) ) ) {
+    pChild = pNode->GetSubSup( RSUP );
+    if( pChild ) {
         Separate( );
         Append( "^ " );
         LineToText( pChild );
     }
-    if( ( pChild = pNode->GetSubSup( RSUB ) ) ) {
+    pChild = pNode->GetSubSup( RSUB );
+    if( pChild ) {
         Separate( );
         Append( "_ " );
         LineToText( pChild );
     }
-    if( ( pChild = pNode->GetSubSup( CSUP ) ) ) {
+    pChild = pNode->GetSubSup( CSUP );
+    if( pChild ) {
         Separate( );
         if (pNode->IsUseLimits())
             Append( "to " );
@@ -2228,7 +2260,8 @@ void SmNodeToTextVisitor::Visit( SmSubSupNode* pNode )
             Append( "csup " );
         LineToText( pChild );
     }
-    if( ( pChild = pNode->GetSubSup( CSUB ) ) ) {
+    pChild = pNode->GetSubSup( CSUB );
+    if( pChild ) {
         Separate( );
         if (pNode->IsUseLimits())
             Append( "from " );
