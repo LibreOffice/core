@@ -1892,8 +1892,14 @@ void ScInputHandler::UpdateActiveView()
         }
     }
 
-    if (pInputWin && eMode == SC_INPUT_TOP )
+    if (pInputWin)
+    {
+        // tdf#71409: Always create the edit engine instance for the input
+        // window, in order to properly manage accessibility events.
         pTopView = pInputWin->GetEditView();
+        if (eMode != SC_INPUT_TOP)
+            pTopView = nullptr;
+    }
     else
         pTopView = nullptr;
 }
