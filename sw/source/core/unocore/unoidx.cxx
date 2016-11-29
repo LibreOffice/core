@@ -109,11 +109,28 @@ throw (lang::IllegalArgumentException)
 }
 
 static void
+lcl_AnyToBitMask(uno::Any const& rValue,
+        SwTOXElement & rBitMask, const SwTOXElement nBit)
+throw (lang::IllegalArgumentException)
+{
+    rBitMask = lcl_AnyToBool(rValue)
+        ? (rBitMask |  nBit)
+        : (rBitMask & ~nBit);
+}
+
+static void
 lcl_BitMaskToAny(uno::Any & o_rValue,
         const sal_uInt16 nBitMask, const sal_uInt16 nBit)
 {
     const bool bRet = 0 != (nBitMask & nBit);
     o_rValue <<= bRet;
+}
+
+static void
+lcl_BitMaskToAny(uno::Any & o_rValue,
+        const SwTOXElement nBitMask, const SwTOXElement nBit)
+{
+    o_rValue <<= bool(nBitMask & nBit);
 }
 
 static void
@@ -290,7 +307,7 @@ SwDocIndexDescriptorProperties_Impl::SwDocIndexDescriptorProperties_Impl(
 {
     SwForm aForm(pType->GetType());
     m_pTOXBase.reset(new SwTOXBase(pType, aForm,
-                             nsSwTOXElement::TOX_MARK, pType->GetTypeName()));
+                             SwTOXElement::Mark, pType->GetTypeName()));
     if(pType->GetType() == TOX_CONTENT || pType->GetType() == TOX_USER)
     {
         m_pTOXBase->SetLevel(MAXLEVEL);
@@ -576,7 +593,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
     SwSectionFormat *const pSectionFormat(m_pImpl->GetSectionFormat());
     SwTOXBase & rTOXBase( m_pImpl->GetTOXSectionOrThrow() );
 
-    sal_uInt16 nCreate = rTOXBase.GetCreateType();
+    SwTOXElement nCreate = rTOXBase.GetCreateType();
     sal_uInt16 nOLEOptions = rTOXBase.GetOLEOptions();
     const TOXTypes eTxBaseType = rTOXBase.GetTOXType()->GetType();
     sal_uInt16 nTOIOptions = (eTxBaseType == TOX_INDEX)
@@ -657,36 +674,36 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
         case WID_TOC_BOOKMARK:
         {
            rTOXBase.SetBookmarkName(lcl_AnyToString(rValue));
-           nCreate = nsSwTOXElement::TOX_BOOKMARK;
+           nCreate = SwTOXElement::Bookmark;
            rTOXBase.SetCreate(nCreate);
         }
         break;
         case WID_INDEX_ENTRY_TYPE:
         {
             rTOXBase.SetEntryTypeName(lcl_AnyToString(rValue));
-            nCreate = nsSwTOXElement::TOX_INDEX_ENTRY_TYPE;
+            nCreate = SwTOXElement::IndexEntryType;
             rTOXBase.SetCreate(nCreate);
         }
         break;
         case WID_CREATE_FROM_MARKS:
-            lcl_AnyToBitMask(rValue, nCreate, nsSwTOXElement::TOX_MARK);
+            lcl_AnyToBitMask(rValue, nCreate, SwTOXElement::Mark);
         break;
         case WID_CREATE_FROM_OUTLINE:
-            lcl_AnyToBitMask(rValue, nCreate, nsSwTOXElement::TOX_OUTLINELEVEL);
+            lcl_AnyToBitMask(rValue, nCreate, SwTOXElement::OutlineLevel);
         break;
         case WID_TOC_PARAGRAPH_OUTLINE_LEVEL:
-            lcl_AnyToBitMask(rValue, nCreate, nsSwTOXElement::TOX_PARAGRAPH_OUTLINE_LEVEL);
+            lcl_AnyToBitMask(rValue, nCreate, SwTOXElement::ParagraphOutlineLevel);
         break;
         case WID_TAB_IN_TOC:
-             lcl_AnyToBitMask(rValue, nCreate, nsSwTOXElement::TOX_TAB_IN_TOC);
+             lcl_AnyToBitMask(rValue, nCreate, SwTOXElement::TableInToc);
         break;
         case WID_TOC_NEWLINE:
-            lcl_AnyToBitMask(rValue, nCreate, nsSwTOXElement::TOX_NEWLINE);
+            lcl_AnyToBitMask(rValue, nCreate, SwTOXElement::Newline);
         break;
 //          case WID_PARAGRAPH_STYLE_NAMES             :OSL_FAIL("not implemented")
 //          break;
         case WID_HIDE_TABLEADER_PAGENUMBERS:
-              lcl_AnyToBitMask(rValue, nCreate, nsSwTOXElement::TOX_TABLEADER);
+              lcl_AnyToBitMask(rValue, nCreate, SwTOXElement::TableLeader);
         break ;
         case WID_CREATE_FROM_CHAPTER:
             rTOXBase.SetFromChapter(lcl_AnyToBool(rValue));
@@ -775,16 +792,16 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
         }
         break;
         case WID_CREATE_FROM_TABLES:
-            lcl_AnyToBitMask(rValue, nCreate, nsSwTOXElement::TOX_TABLE);
+            lcl_AnyToBitMask(rValue, nCreate, SwTOXElement::Table);
         break;
         case WID_CREATE_FROM_TEXT_FRAMES:
-            lcl_AnyToBitMask(rValue, nCreate, nsSwTOXElement::TOX_FRAME);
+            lcl_AnyToBitMask(rValue, nCreate, SwTOXElement::Frame);
         break;
         case WID_CREATE_FROM_GRAPHIC_OBJECTS:
-            lcl_AnyToBitMask(rValue, nCreate, nsSwTOXElement::TOX_GRAPHIC);
+            lcl_AnyToBitMask(rValue, nCreate, SwTOXElement::Graphic);
         break;
         case WID_CREATE_FROM_EMBEDDED_OBJECTS:
-            lcl_AnyToBitMask(rValue, nCreate, nsSwTOXElement::TOX_OLE);
+            lcl_AnyToBitMask(rValue, nCreate, SwTOXElement::Ole);
         break;
         case WID_CREATE_FROM_STAR_MATH:
             lcl_AnyToBitMask(rValue, nOLEOptions, nsSwTOOElements::TOO_MATH);
@@ -826,7 +843,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
         }
         break;
         case WID_CREATE_FROM_PARAGRAPH_STYLES:
-            lcl_AnyToBitMask(rValue, nCreate, nsSwTOXElement::TOX_TEMPLATE);
+            lcl_AnyToBitMask(rValue, nCreate, SwTOXElement::Template);
         break;
 
         case WID_PARA_LEV1:
@@ -914,7 +931,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     }
     if(pTOXBase)
     {
-        const sal_uInt16 nCreate = pTOXBase->GetCreateType();
+        const SwTOXElement nCreate = pTOXBase->GetCreateType();
         const sal_uInt16 nOLEOptions = pTOXBase->GetOLEOptions();
         const sal_uInt16 nTOIOptions =
             (pTOXBase->GetTOXType()->GetType() == TOX_INDEX)
@@ -983,11 +1000,11 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                aRet <<= pTOXBase->GetEntryTypeName();
             break;
             case WID_CREATE_FROM_MARKS:
-                lcl_BitMaskToAny(aRet, nCreate, nsSwTOXElement::TOX_MARK);
+                lcl_BitMaskToAny(aRet, nCreate, SwTOXElement::Mark);
             break;
             case WID_CREATE_FROM_OUTLINE:
                 lcl_BitMaskToAny(aRet, nCreate,
-                        nsSwTOXElement::TOX_OUTLINELEVEL);
+                        SwTOXElement::OutlineLevel);
             break;
             case WID_CREATE_FROM_CHAPTER:
             {
@@ -1108,16 +1125,16 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
             }
             break;
             case WID_CREATE_FROM_TABLES:
-                lcl_BitMaskToAny(aRet, nCreate, nsSwTOXElement::TOX_TABLE);
+                lcl_BitMaskToAny(aRet, nCreate, SwTOXElement::Table);
             break;
             case WID_CREATE_FROM_TEXT_FRAMES:
-                lcl_BitMaskToAny(aRet, nCreate, nsSwTOXElement::TOX_FRAME);
+                lcl_BitMaskToAny(aRet, nCreate, SwTOXElement::Frame);
             break;
             case WID_CREATE_FROM_GRAPHIC_OBJECTS:
-                lcl_BitMaskToAny(aRet, nCreate, nsSwTOXElement::TOX_GRAPHIC);
+                lcl_BitMaskToAny(aRet, nCreate, SwTOXElement::Graphic);
             break;
             case WID_CREATE_FROM_EMBEDDED_OBJECTS:
-                lcl_BitMaskToAny(aRet, nCreate, nsSwTOXElement::TOX_OLE);
+                lcl_BitMaskToAny(aRet, nCreate, SwTOXElement::Ole);
             break;
             case WID_CREATE_FROM_STAR_MATH:
                 lcl_BitMaskToAny(aRet, nOLEOptions, nsSwTOOElements::TOO_MATH);
@@ -1136,7 +1153,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                 lcl_BitMaskToAny(aRet, nOLEOptions, nsSwTOOElements::TOO_OTHER);
             break;
             case WID_CREATE_FROM_PARAGRAPH_STYLES:
-                lcl_BitMaskToAny(aRet, nCreate, nsSwTOXElement::TOX_TEMPLATE);
+                lcl_BitMaskToAny(aRet, nCreate, SwTOXElement::Template);
             break;
             case WID_PARA_HEAD:
             {

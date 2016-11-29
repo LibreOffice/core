@@ -2783,7 +2783,7 @@ static void EnsureMaxLevelForTemplates(SwTOXBase& rBase)
     //all styles above that level, while word just cuts off the "standard"
     //outline styles, we have no option but to expand to the highest level
     //Word included.
-    if ((rBase.GetLevel() != MAXLEVEL) && (nsSwTOXElement::TOX_TEMPLATE & rBase.GetCreateType()))
+    if ((rBase.GetLevel() != MAXLEVEL) && (SwTOXElement::Template & rBase.GetCreateType()))
     {
         for (sal_uInt16 nI = MAXLEVEL; nI > 0; --nI)
         {
@@ -2931,7 +2931,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, OUString& rStr )
             break;
     }
 
-    sal_uInt16 nCreateOf = (eTox == TOX_CONTENT) ? nsSwTOXElement::TOX_OUTLINELEVEL : nsSwTOXElement::TOX_MARK;
+    SwTOXElement nCreateOf = (eTox == TOX_CONTENT) ? SwTOXElement::OutlineLevel : SwTOXElement::Mark;
 
     sal_uInt16 nIndexCols = 1;
 
@@ -2944,7 +2944,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, OUString& rStr )
         {
             sal_uInt16 eOptions = nsSwTOIOptions::TOI_SAME_ENTRY | nsSwTOIOptions::TOI_CASE_SENSITIVE;
 
-            // TOX_OUTLINELEVEL setzen wir genau dann, wenn
+            // SwTOXElement::OutlineLevel setzen wir genau dann, wenn
             // die Parameter \o in 1 bis 9 liegen
             // oder der Parameter \f existiert
             // oder GARKEINE Switches Parameter angegeben sind.
@@ -3041,11 +3041,11 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, OUString& rStr )
         {
             bool bIsHyperlink = false;
             bool bShowPage = true;
-            // TOX_OUTLINELEVEL setzen wir genau dann, wenn
+            // SwTOXElement::OutlineLevel setzen wir genau dann, wenn
             // die Parameter \o in 1 bis 9 liegen
             // oder der Parameter \f existiert
             // oder GARKEINE Switches Parameter angegeben sind.
-            sal_uInt16 eCreateFrom = 0;
+            SwTOXElement eCreateFrom = SwTOXElement::NONE;
             sal_Int32 nMaxLevel = 0;
             WW8ReadFieldParams aReadParam( rStr );
             for (;;)
@@ -3072,11 +3072,11 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, OUString& rStr )
                             nVal = lcl_GetMaxValidWordTOCLevel(aOrigForm);
                         if( nMaxLevel < nVal )
                             nMaxLevel = nVal;
-                        eCreateFrom |= nsSwTOXElement::TOX_OUTLINELEVEL;
+                        eCreateFrom |= SwTOXElement::OutlineLevel;
                     }
                     break;
                 case 'f':
-                    eCreateFrom |= nsSwTOXElement::TOX_MARK;
+                    eCreateFrom |= SwTOXElement::Mark;
                     break;
                 case 'l':
                     {
@@ -3085,14 +3085,14 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, OUString& rStr )
                         {
                             if( nMaxLevel < nVal )
                                 nMaxLevel = nVal;
-                            eCreateFrom |= nsSwTOXElement::TOX_MARK;
+                            eCreateFrom |= SwTOXElement::Mark;
                         }
                     }
                     break;
                 case 't': // paragraphs using special styles shall
                           // provide the TOX's content
                     lcl_toxMatchTSwitch(*this, *pBase, aReadParam);
-                    eCreateFrom |= nsSwTOXElement::TOX_TEMPLATE;
+                    eCreateFrom |= SwTOXElement::Template;
                     break;
                 case 'p':
                     {
@@ -3254,8 +3254,8 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, OUString& rStr )
                     {
                         //If we would be created from outlines, either explicitly or by default
                         //then see if we need extra styles added to the outlines
-                        sal_uInt16 eEffectivelyFrom = eCreateFrom ? eCreateFrom : nsSwTOXElement::TOX_OUTLINELEVEL;
-                        if (eEffectivelyFrom & nsSwTOXElement::TOX_OUTLINELEVEL)
+                        SwTOXElement eEffectivelyFrom = eCreateFrom != SwTOXElement::NONE ? eCreateFrom : SwTOXElement::OutlineLevel;
+                        if (eEffectivelyFrom & SwTOXElement::OutlineLevel)
                         {
                             // #i19683# Insert a text token " " between the number and entry token.
                             // In an ideal world we could handle the tab stop between the number and
@@ -3297,15 +3297,15 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, OUString& rStr )
                             }
                         }
 
-                        if (eCreateFrom)
+                        if (eCreateFrom != SwTOXElement::NONE)
                             pBase->SetCreate(eCreateFrom);
                         EnsureMaxLevelForTemplates(*pBase);
                     }
                     break;
                 case TOX_ILLUSTRATIONS:
                     {
-                        if( !eCreateFrom )
-                            eCreateFrom = nsSwTOXElement::TOX_SEQUENCE;
+                        if( eCreateFrom == SwTOXElement::NONE )
+                            eCreateFrom = SwTOXElement::Sequence;
                         pBase->SetCreate( eCreateFrom );
 
                         /*

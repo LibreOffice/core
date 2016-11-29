@@ -423,7 +423,7 @@ OUString SwForm::GetFormText()        {return OUString("<X>");}
 OUString SwForm::GetFormAuth()        {return OUString("<A>");}
 
 SwTOXBase::SwTOXBase(const SwTOXType* pTyp, const SwForm& rForm,
-                     sal_uInt16 nCreaType, const OUString& rTitle )
+                     SwTOXElement nCreaType, const OUString& rTitle )
     : SwClient(const_cast<SwModify*>(static_cast<SwModify const *>(pTyp)))
     , m_aForm(rForm)
     , m_aTitle(rTitle)

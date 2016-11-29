@@ -29,6 +29,7 @@
 #include <swtypes.hxx>
 #include <toxe.hxx>
 #include <calbck.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 #include <vector>
 
@@ -326,23 +327,26 @@ public:
 };
 
 // Content to create indexes of
-typedef sal_uInt16 SwTOXElement;
-namespace nsSwTOXElement
+enum class SwTOXElement : sal_uInt16
 {
-    const SwTOXElement TOX_MARK             = 1;
-    const SwTOXElement TOX_OUTLINELEVEL     = 2;
-    const SwTOXElement TOX_TEMPLATE         = 4;
-    const SwTOXElement TOX_OLE              = 8;
-    const SwTOXElement TOX_TABLE            = 16;
-    const SwTOXElement TOX_GRAPHIC          = 32;
-    const SwTOXElement TOX_FRAME            = 64;
-    const SwTOXElement TOX_SEQUENCE         = 128;
-    const SwTOXElement TOX_TABLEADER        = 256;
-    const SwTOXElement TOX_TAB_IN_TOC       = 512;
-    const SwTOXElement TOX_BOOKMARK         = 1024;
-    const SwTOXElement TOX_NEWLINE          = 2048;
-    const SwTOXElement TOX_PARAGRAPH_OUTLINE_LEVEL = 4096;
-    const SwTOXElement TOX_INDEX_ENTRY_TYPE       = 8192;
+    NONE                  = 0x0000,
+    Mark                  = 0x0001,
+    OutlineLevel          = 0x0002,
+    Template              = 0x0004,
+    Ole                   = 0x0008,
+    Table                 = 0x0010,
+    Graphic               = 0x0020,
+    Frame                 = 0x0040,
+    Sequence              = 0x0080,
+    TableLeader           = 0x0100,
+    TableInToc            = 0x0200,
+    Bookmark              = 0x0400,
+    Newline               = 0x0800,
+    ParagraphOutlineLevel = 0x1000,
+    IndexEntryType        = 0x2000,
+};
+namespace o3tl {
+    template<> struct typed_flags<SwTOXElement> : is_typed_flags<SwTOXElement, 0x3fff> {};
 }
 
 typedef sal_uInt16 SwTOIOptions;
@@ -399,7 +403,7 @@ class SW_DLLPUBLIC SwTOXBase : public SwClient
         sal_uInt16      nOptions;           // options of alphabetical index
     } m_aData;
 
-    sal_uInt16      m_nCreateType;        // sources to create the index from
+    SwTOXElement    m_nCreateType;        // sources to create the index from
     sal_uInt16      m_nOLEOptions;        // OLE sources
     SwCaptionDisplay m_eCaptionDisplay;
     bool        m_bProtected : 1;         // index protected ?
@@ -416,7 +420,7 @@ protected:
 
 public:
     SwTOXBase( const SwTOXType* pTyp, const SwForm& rForm,
-               sal_uInt16 nCreaType, const OUString& rTitle );
+               SwTOXElement nCreaType, const OUString& rTitle );
     SwTOXBase( const SwTOXBase& rCopy, SwDoc* pDoc = nullptr );
     virtual ~SwTOXBase() override;
 
@@ -428,7 +432,7 @@ public:
 
     const SwTOXType*    GetTOXType() const;
 
-    sal_uInt16          GetCreateType() const;      // creation types
+    SwTOXElement        GetCreateType() const;      // creation types
 
     const OUString&     GetTOXName() const {return m_aName;}
     void                SetTOXName(const OUString& rSet) {m_aName = rSet;}
@@ -444,10 +448,10 @@ public:
     OUString            GetTypeName() const;        // Name
     const SwForm&       GetTOXForm() const;         // description of the lines
 
-    void                SetCreate(sal_uInt16);
+    void                SetCreate(SwTOXElement);
     void                SetTitle(const OUString& rTitle);
     void                SetTOXForm(const SwForm& rForm);
-    void  SetBookmarkName(const OUString& bName);
+    void                SetBookmarkName(const OUString& bName);
 
     TOXTypes            GetType() const;
 
@@ -460,15 +464,15 @@ public:
 
     // content index only
     inline void             SetLevel(sal_uInt16);                   // consider outline level
-    inline sal_uInt16           GetLevel() const;
+    inline sal_uInt16       GetLevel() const;
 
     // alphabetical index only
-    inline sal_uInt16           GetOptions() const;                 // alphabetical index options
+    inline sal_uInt16       GetOptions() const;                 // alphabetical index options
     inline void             SetOptions(sal_uInt16 nOpt);
 
     // index of objects
     sal_uInt16      GetOLEOptions() const {return m_nOLEOptions;}
-    void        SetOLEOptions(sal_uInt16 nOpt) {m_nOLEOptions = nOpt;}
+    void            SetOLEOptions(sal_uInt16 nOpt) {m_nOLEOptions = nOpt;}
 
     // index of objects
 
@@ -666,7 +670,7 @@ inline TOXTypes SwTOXType::GetType() const
 inline const SwTOXType* SwTOXBase::GetTOXType() const
     { return static_cast<const SwTOXType*>(GetRegisteredIn()); }
 
-inline sal_uInt16 SwTOXBase::GetCreateType() const
+inline SwTOXElement SwTOXBase::GetCreateType() const
     { return m_nCreateType; }
 
 inline const OUString& SwTOXBase::GetTitle() const
@@ -684,7 +688,7 @@ inline OUString SwTOXBase::GetTypeName() const
 inline const SwForm& SwTOXBase::GetTOXForm() const
     { return m_aForm; }
 
-inline void SwTOXBase::SetCreate(sal_uInt16 nCreate)
+inline void SwTOXBase::SetCreate(SwTOXElement nCreate)
     { m_nCreateType = nCreate; }
 
 inline void SwTOXBase::SetTOXForm(const SwForm& rForm)

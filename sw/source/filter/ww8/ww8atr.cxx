@@ -1964,7 +1964,7 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                 if (nsSwTOIOptions::TOI_ALPHA_DELIMITTER & pTOX->GetOptions())
                     sStr += "\\h \"A\" ";
 
-                if(nsSwTOXElement::TOX_INDEX_ENTRY_TYPE & pTOX->GetCreateType())
+                if(SwTOXElement::IndexEntryType & pTOX->GetCreateType())
                 {
                     sStr += "\\f ";
                     OUString sName = pTOX->GetEntryTypeName();
@@ -2040,21 +2040,21 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                     if( !nTOXLvl )
                         ++nTOXLvl;
 
-                    if(nsSwTOXElement::TOX_TABLEADER & pTOX->GetCreateType())
+                    if(SwTOXElement::TableLeader & pTOX->GetCreateType())
                     {
                         sStr +="\\z " ;
                         GetExport( ).m_bHideTabLeaderAndPageNumbers = true ;
                     }
-                    if(nsSwTOXElement::TOX_TAB_IN_TOC & pTOX->GetCreateType())
+                    if(SwTOXElement::TableInToc & pTOX->GetCreateType())
                     {
                         sStr +="\\w " ;
                         GetExport( ).m_bTabInTOC = true ;
                     }
-                    if(nsSwTOXElement::TOX_NEWLINE & pTOX->GetCreateType())
+                    if(SwTOXElement::Newline & pTOX->GetCreateType())
                     {
                         sStr +="\\x " ;
                     }
-                    if( nsSwTOXElement::TOX_MARK & pTOX->GetCreateType() )
+                    if( SwTOXElement::Mark & pTOX->GetCreateType() )
                     {
                         sStr += "\\f ";
 
@@ -2065,7 +2065,7 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                             sStr += sEntryEnd;
                         }
                     }
-                    if(nsSwTOXElement::TOX_BOOKMARK & pTOX->GetCreateType())
+                    if(SwTOXElement::Bookmark & pTOX->GetCreateType())
                     {
                         sStr += "\\b ";
                         OUString bName = pTOX->GetBookmarkName();
@@ -2073,7 +2073,7 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                         sStr += sEntryEnd;
                     }
 
-                    if( nsSwTOXElement::TOX_OUTLINELEVEL & pTOX->GetCreateType() )
+                    if( SwTOXElement::OutlineLevel & pTOX->GetCreateType() )
                     {
                         // Take the TOC value of the max level to evaluate to as
                         // the starting point for the \o flag, but reduce it to the
@@ -2149,12 +2149,12 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                         }
                     }
 
-                    if( nsSwTOXElement::TOX_PARAGRAPH_OUTLINE_LEVEL & pTOX->GetCreateType() )
+                    if( SwTOXElement::ParagraphOutlineLevel & pTOX->GetCreateType() )
                     {
                         sStr +="\\u " ;
                     }
 
-                        if( nsSwTOXElement::TOX_TEMPLATE & pTOX->GetCreateType() )
+                        if( SwTOXElement::Template & pTOX->GetCreateType() )
                         {
                             // #i99641# - Consider additional styles regardless of TOX-outlinelevel
                             for( n = 0; n < MAXLEVEL; ++n )

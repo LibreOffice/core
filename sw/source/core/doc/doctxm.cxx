@@ -456,7 +456,7 @@ const SwTOXBase* SwDoc::GetDefaultTOXBase( TOXTypes eTyp, bool bCreate )
     {
         SwForm aForm(eTyp);
         const SwTOXType* pType = GetTOXType(eTyp, 0);
-        (*prBase) = new SwTOXBase(pType, aForm, 0, pType->GetTypeName());
+        (*prBase) = new SwTOXBase(pType, aForm, SwTOXElement::NONE, pType->GetTypeName());
     }
     return (*prBase);
 }
@@ -887,34 +887,34 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
     // This would be a good time to update the Numbering
     pDoc->UpdateNumRule();
 
-    if( GetCreateType() & nsSwTOXElement::TOX_MARK )
+    if( GetCreateType() & SwTOXElement::Mark )
         UpdateMarks( aIntl, pOwnChapterNode );
 
-    if( GetCreateType() & nsSwTOXElement::TOX_OUTLINELEVEL )
+    if( GetCreateType() & SwTOXElement::OutlineLevel )
         UpdateOutline( pOwnChapterNode );
 
-    if( GetCreateType() & nsSwTOXElement::TOX_TEMPLATE )
+    if( GetCreateType() & SwTOXElement::Template )
         UpdateTemplate( pOwnChapterNode );
 
-    if( GetCreateType() & nsSwTOXElement::TOX_OLE ||
+    if( GetCreateType() & SwTOXElement::Ole ||
             TOX_OBJECTS == SwTOXBase::GetType())
-        UpdateContent( nsSwTOXElement::TOX_OLE, pOwnChapterNode );
+        UpdateContent( SwTOXElement::Ole, pOwnChapterNode );
 
-    if( GetCreateType() & nsSwTOXElement::TOX_TABLE ||
+    if( GetCreateType() & SwTOXElement::Table ||
             (TOX_TABLES == SwTOXBase::GetType() && IsFromObjectNames()) )
         UpdateTable( pOwnChapterNode );
 
-    if( GetCreateType() & nsSwTOXElement::TOX_GRAPHIC ||
+    if( GetCreateType() & SwTOXElement::Graphic ||
         (TOX_ILLUSTRATIONS == SwTOXBase::GetType() && IsFromObjectNames()))
-        UpdateContent( nsSwTOXElement::TOX_GRAPHIC, pOwnChapterNode );
+        UpdateContent( SwTOXElement::Graphic, pOwnChapterNode );
 
     if( !GetSequenceName().isEmpty() && !IsFromObjectNames() &&
         (TOX_TABLES == SwTOXBase::GetType() ||
          TOX_ILLUSTRATIONS == SwTOXBase::GetType() ) )
         UpdateSequence( pOwnChapterNode );
 
-    if( GetCreateType() & nsSwTOXElement::TOX_FRAME )
-        UpdateContent( nsSwTOXElement::TOX_FRAME, pOwnChapterNode );
+    if( GetCreateType() & SwTOXElement::Frame )
+        UpdateContent( SwTOXElement::Frame, pOwnChapterNode );
 
     if(TOX_AUTHORITIES == SwTOXBase::GetType())
         UpdateAuthorities( aIntl );
@@ -1199,7 +1199,7 @@ void SwTOXBaseSection::UpdateOutline( const SwTextNode* pOwnChapterNode )
             ( !IsFromChapter() ||
                ::lcl_FindChapterNode( *pTextNd ) == pOwnChapterNode ))
         {
-            SwTOXPara * pNew = new SwTOXPara( *pTextNd, nsSwTOXElement::TOX_OUTLINELEVEL );
+            SwTOXPara * pNew = new SwTOXPara( *pTextNd, SwTOXElement::OutlineLevel );
             InsertSorted( pNew );
         }
     }
@@ -1223,7 +1223,7 @@ void SwTOXBaseSection::UpdateTemplate( const SwTextNode* pOwnChapterNode )
             //TODO: no outline Collections in content indexes if OutlineLevels are already included
             if( !pColl ||
                 ( TOX_CONTENT == SwTOXBase::GetType() &&
-                  GetCreateType() & nsSwTOXElement::TOX_OUTLINELEVEL &&
+                  GetCreateType() & SwTOXElement::OutlineLevel &&
                     pColl->IsAssignedToListLevelOfOutlineStyle()) )
                 continue;
 
@@ -1238,7 +1238,7 @@ void SwTOXBaseSection::UpdateTemplate( const SwTextNode* pOwnChapterNode )
                     ( !IsFromChapter() || pOwnChapterNode ==
                         ::lcl_FindChapterNode( *pTextNd ) ) )
                 {
-                    SwTOXPara * pNew = new SwTOXPara( *pTextNd, nsSwTOXElement::TOX_TEMPLATE, i + 1 );
+                    SwTOXPara * pNew = new SwTOXPara( *pTextNd, SwTOXElement::Template, i + 1 );
                     InsertSorted(pNew);
                 }
             }
@@ -1273,7 +1273,7 @@ void SwTOXBaseSection::UpdateSequence( const SwTextNode* pOwnChapterNode )
             const OUString sName = GetSequenceName()
                 + OUStringLiteral1(cSequenceMarkSeparator)
                 + OUString::number( rSeqField.GetSeqNumber() );
-            SwTOXPara * pNew = new SwTOXPara( rTextNode, nsSwTOXElement::TOX_SEQUENCE, 1, sName );
+            SwTOXPara * pNew = new SwTOXPara( rTextNode, SwTOXElement::Sequence, 1, sName );
             // set indexes if the number or the reference text are to be displayed
             if( GetCaptionDisplay() == CAPTION_TEXT )
             {
@@ -1390,7 +1390,7 @@ void SwTOXBaseSection::UpdateContent( SwTOXElement eMyType,
         SwContentNode* pCNd = nullptr;
         switch( eMyType )
         {
-        case nsSwTOXElement::TOX_FRAME:
+        case SwTOXElement::Frame:
             if( !pNd->IsNoTextNode() )
             {
                 pCNd = pNd->GetContentNode();
@@ -1401,11 +1401,11 @@ void SwTOXBaseSection::UpdateContent( SwTOXElement eMyType,
                 }
             }
             break;
-        case nsSwTOXElement::TOX_GRAPHIC:
+        case SwTOXElement::Graphic:
             if( pNd->IsGrfNode() )
                 pCNd = static_cast<SwContentNode*>(pNd);
             break;
-        case nsSwTOXElement::TOX_OLE:
+        case SwTOXElement::Ole:
             if( pNd->IsOLENode() )
             {
                 bool bInclude = true;
