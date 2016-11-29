@@ -1959,7 +1959,7 @@ Rectangle BrowseBox::calcHeaderRect(bool _bIsColumnBar, bool _bOnScreen)
     {
         aTopLeft.Y() = GetDataRowHeight();
         nWidth = GetColumnWidth(0);
-        nHeight = GetWindowExtentsRelative( pParent ).GetHeight() - aTopLeft.Y() - GetControlArea().GetSize().B();
+        nHeight = GetWindowExtentsRelative( pParent ).GetHeight() - aTopLeft.Y() - GetControlArea().GetSize().Height();
     }
     aTopLeft += GetWindowExtentsRelative( pParent ).TopLeft();
     return Rectangle(aTopLeft,Size(nWidth,nHeight));

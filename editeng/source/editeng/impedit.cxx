@@ -1068,7 +1068,7 @@ Pair ImpEditView::Scroll( long ndX, long ndY, ScrollRangeCheck nRangeCheck )
 {
     DBG_ASSERT( pEditEngine->pImpEditEngine->IsFormatted(), "Scroll: Not formatted!" );
     if ( !ndX && !ndY )
-        return Range( 0, 0 );
+        return Pair( 0, 0 );
 
 #ifdef DBG_UTIL
     Rectangle aR( aOutArea );

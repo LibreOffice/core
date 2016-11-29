@@ -2026,8 +2026,8 @@ void SwHTMLWriter::OutCSS1_FrameFormatOptions( const SwFrameFormat& rFrameFormat
                     if( pSdrObj )
                     {
                         Point aPos( pSdrObj->GetRelativePos() );
-                        nXPos = aPos.A();
-                        nYPos = aPos.B();
+                        nXPos = aPos.X();
+                        nYPos = aPos.Y();
                     }
                     bOutXPos = bOutYPos = true;
                 }
