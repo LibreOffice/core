@@ -134,7 +134,6 @@ private:
 
     OUString                maMapBoth;
     OUString                maMapPrinterOnly;
-    OUString                maMapScreenOnly;
     OUString                maMapStyleNotAvailable;
     mutable OUString        maMapNotAvailable;
     OUString                maLight;
