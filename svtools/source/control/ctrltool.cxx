@@ -238,8 +238,7 @@ ImplFontListNameInfo* FontList::ImplFindByName(const OUString& rStr) const
     return ImplFind( aSearchName, nullptr );
 }
 
-void FontList::ImplInsertFonts( OutputDevice* pDevice, bool bAll,
-                                bool bInsertData )
+void FontList::ImplInsertFonts(OutputDevice* pDevice, bool bInsertData)
 {
     rtl_TextEncoding eSystemEncoding = osl_getThreadTextEncoding();
 
@@ -260,11 +259,6 @@ void FontList::ImplInsertFonts( OutputDevice* pDevice, bool bAll,
     for (int i = 0; i < n; ++i)
     {
         FontMetric aFontMetric = pDevice->GetDevFont( i );
-
-        // ignore raster-fonts if they are not to be displayed
-        if ( !bAll && (aFontMetric.GetType() == TYPE_RASTER) )
-            continue;
-
         OUString aSearchName(aFontMetric.GetFamilyName());
         ImplFontListNameInfo*   pData;
         sal_uLong                   nIndex;
@@ -338,7 +332,7 @@ void FontList::ImplInsertFonts( OutputDevice* pDevice, bool bAll,
     }
 }
 
-FontList::FontList( OutputDevice* pDevice, OutputDevice* pDevice2, bool bAll )
+FontList::FontList(OutputDevice* pDevice, OutputDevice* pDevice2)
 {
     // initialise variables
     mpDev = pDevice;
@@ -355,7 +349,7 @@ FontList::FontList( OutputDevice* pDevice, OutputDevice* pDevice2, bool bAll )
     maBlack         = SVT_RESSTR(STR_SVT_STYLE_BLACK);
     maBlackItalic   = SVT_RESSTR(STR_SVT_STYLE_BLACK_ITALIC);
 
-    ImplInsertFonts( pDevice, bAll, true );
+    ImplInsertFonts(pDevice, true);
 
     // if required compare to the screen fonts
     // in order to map the duplicates to Equal
@@ -368,7 +362,7 @@ FontList::FontList( OutputDevice* pDevice, OutputDevice* pDevice2, bool bAll )
 
     if ( pDevice2 &&
          (pDevice2->GetOutDevType() != pDevice->GetOutDevType()) )
-        ImplInsertFonts( pDevice2, bAll, !bCompareWindow );
+        ImplInsertFonts(pDevice2, !bCompareWindow);
 }
 
 FontList::~FontList()
@@ -392,8 +386,7 @@ FontList::~FontList()
 
 FontList* FontList::Clone() const
 {
-    FontList* pReturn = new FontList(
-            mpDev, mpDev2, sal::static_int_cast<int>(GetFontNameCount()) == mpDev->GetDevFontCount());
+    FontList* pReturn = new FontList(mpDev, mpDev2);
     return pReturn;
 }
 
@@ -537,14 +530,6 @@ OUString FontList::GetFontMapText( const FontMetric& rInfo ) const
         if (maMapPrinterOnly.isEmpty())
             const_cast<FontList*>(this)->maMapPrinterOnly = SVT_RESSTR(STR_SVT_FONTMAP_PRINTERONLY);
         return maMapPrinterOnly;
-    }
-    // Only Screen-Font?
-    else if ( nType == FontListFontNameType::SCREEN
-            && rInfo.GetType() == TYPE_RASTER )
-    {
-        if (maMapScreenOnly.isEmpty())
-            const_cast<FontList*>(this)->maMapScreenOnly = SVT_RESSTR(STR_SVT_FONTMAP_SCREENONLY);
-        return maMapScreenOnly;
     }
     else
     {

@@ -78,16 +78,6 @@ public:
     void                DecreaseQualityBy( int nQualityAmount )         { mnQuality -= nQualityAmount; }
     void                SetMapNames( OUString const & aMapNames )       { maMapNames = aMapNames; }
 
-    bool                IsBuiltInFont() const                           { return mbDevice; }
-    bool                CanEmbed() const                                { return mbEmbeddable; }
-    bool                CanSubset() const                               { return mbSubsettable; }
-    bool                CanRotate() const                               { return mbRotatable; }
-
-    void                SetBuiltInFontFlag( bool bIsBuiltInFont )       { mbDevice = bIsBuiltInFont; }
-    void                SetEmbeddableFlag( bool bEmbeddable )           { mbEmbeddable = bEmbeddable; }
-    void                SetSubsettableFlag( bool bSubsettable )         { mbSubsettable = bSubsettable; }
-    void                SetOrientationFlag( bool bCanRotate )           { mbRotatable = bCanRotate; }
-
     bool                operator==( const ImplFont& ) const;
 
 private:
@@ -132,11 +122,7 @@ private:
 
     // Device dependent variables
     OUString            maMapNames;
-    bool                mbWordLine:1,
-                        mbEmbeddable:1,
-                        mbSubsettable:1,
-                        mbRotatable:1,      // is "rotatable" even a word?!? I'll keep it for consistency for now
-                        mbDevice:1;
+    bool                mbWordLine:1;
 
     // TODO: metric data, should be migrated to ImplFontMetric
     short               mnOrientation;
