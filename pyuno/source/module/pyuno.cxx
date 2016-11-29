@@ -1338,8 +1338,7 @@ int PyUNO_contains( PyObject *self, PyObject *pKey )
         PyRef rIterator( PyUNO_iter( self ), SAL_NO_ACQUIRE );
         if ( rIterator.is() )
         {
-            PyObject* pItem;
-            while ( (pItem = PyIter_Next( rIterator.get() )) )
+            while ( PyObject* pItem = PyIter_Next( rIterator.get() ) )
             {
                 PyRef rItem( pItem, SAL_NO_ACQUIRE );
                 if ( PyObject_RichCompareBool( pKey, rItem.get(), Py_EQ ) == 1 )
