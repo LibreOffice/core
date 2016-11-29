@@ -857,7 +857,8 @@ bool SvxAutoCorrect::FnCapitalStartSentence( SvxAutoCorrDoc& rDoc,
             else
                 break;
         }
-    } while( ! ( bAtStart = (pStart == pStr) ) );
+        bAtStart = (pStart == pStr);
+    } while( !bAtStart );
 
     if (!pWordStt)
         return false;    // no character to be replaced
@@ -923,7 +924,8 @@ bool SvxAutoCorrect::FnCapitalStartSentence( SvxAutoCorrDoc& rDoc,
             --pStr;
             if (!IsAutoCapitalizeWordDelim(*pStr))
                 break;
-        } while( ! ( bAtStart = (pStart == pStr) ) );
+            bAtStart = (pStart == pStr);
+        } while( !bAtStart );
 
         if( bAtStart )
             return false;  // no valid separator -> no replacement
