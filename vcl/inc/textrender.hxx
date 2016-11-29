@@ -51,7 +51,6 @@ public:
                                         int nGlyphs,
                                         FontSubsetInfo& rInfo) = 0;
 
-    virtual const Ucs2SIntMap*      GetFontEncodingVector( const PhysicalFontFace*, const Ucs2OStrMap** ppNonEncoded, std::set<sal_Unicode> const** ppPriority) = 0;
     virtual const void*             GetEmbedFontData(
                                         const PhysicalFontFace*,
                                         const sal_Ucs* pUnicodes,

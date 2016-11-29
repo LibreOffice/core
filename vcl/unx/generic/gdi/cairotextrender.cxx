@@ -552,11 +552,6 @@ void CairoTextRender::FreeEmbedFontData( const void* pData, long nLen )
     GenPspGraphics::DoFreeEmbedFontData( pData, nLen );
 }
 
-const Ucs2SIntMap* CairoTextRender::GetFontEncodingVector(const PhysicalFontFace*, const Ucs2OStrMap**, std::set<sal_Unicode> const**)
-{
-    return nullptr;
-}
-
 void CairoTextRender::GetGlyphWidths( const PhysicalFontFace* pFont,
                                    bool bVertical,
                                    std::vector< sal_Int32 >& rWidths,

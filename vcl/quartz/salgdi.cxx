@@ -840,13 +840,6 @@ void AquaSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFontData, bool bV
     ::CloseTTFont( pSftFont );
 }
 
-const Ucs2SIntMap* AquaSalGraphics::GetFontEncodingVector( const PhysicalFontFace*,
-                                                           const Ucs2OStrMap** /*ppNonEncoded*/,
-                                                           std::set<sal_Unicode> const** )
-{
-    return nullptr;
-}
-
 const void* AquaSalGraphics::GetEmbedFontData( const PhysicalFontFace*,
                                                const sal_Ucs* /*pUnicodes*/,
                                                sal_Int32* /*pWidths*/,

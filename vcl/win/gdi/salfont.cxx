@@ -1963,11 +1963,6 @@ void WinSalGraphics::FreeEmbedFontData( const void* pData, long /*nLen*/ )
     delete[] static_cast<char const *>(pData);
 }
 
-const Ucs2SIntMap* WinSalGraphics::GetFontEncodingVector(const PhysicalFontFace*, const Ucs2OStrMap**, std::set<sal_Unicode> const**)
-{
-    return nullptr;
-}
-
 void WinSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFont,
                                      bool bVertical,
                                      std::vector< sal_Int32 >& rWidths,
