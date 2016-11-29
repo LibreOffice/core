@@ -130,94 +130,85 @@ class PropertyValues : public std::vector< ucbhelper_impl::PropertyValue > {};
 // Welcome to the macro hell...
 
 
-#define GETVALUE_IMPL_TYPE( _type_, _type_name_, _member_name_, _cppu_type_ ) \
-                                                                              \
-    osl::MutexGuard aGuard( m_aMutex );                                       \
-                                                                              \
-    _type_ aValue = _type_();   /* default ctor */                            \
-                                                                              \
-    m_bWasNull = true;                                                    \
-                                                                              \
-    if ( ( columnIndex < 1 )                                                  \
-         || ( columnIndex > sal_Int32( m_pValues->size() ) ) )                \
-    {                                                                         \
-        OSL_FAIL( "PropertyValueSet - index out of range!" );    \
-    }                                                                         \
-    else                                                                      \
-    {                                                                         \
-        ucbhelper_impl::PropertyValue& rValue                                 \
-            = (*m_pValues)[ columnIndex - 1 ];                                \
-                                                                              \
-        if ( rValue.nOrigValue != PropsSet::NONE )                              \
-        {                                                                     \
-            if ( rValue.nPropsSet & _type_name_ )                             \
-            {                                                                 \
-                /* Values is present natively... */                           \
-                aValue = rValue._member_name_;                                \
-                m_bWasNull = false;                                       \
-            }                                                                 \
-            else                                                              \
-            {                                                                 \
-                if ( !(rValue.nPropsSet & PropsSet::Object) )                 \
-                {                                                             \
-                    /* Value is not (yet) available as Any. Create it. */     \
-                    getObject( columnIndex, Reference< XNameAccess >() );     \
-                }                                                             \
-                                                                              \
-                if ( rValue.nPropsSet & PropsSet::Object )                    \
-                {                                                             \
-                    /* Value is available as Any. */                          \
-                                                                              \
-                    if ( rValue.aObject.hasValue() )                          \
-                    {                                                         \
-                        /* Try to convert into native value. */               \
-                        if ( rValue.aObject >>= aValue )                      \
-                        {                                                     \
-                            rValue._member_name_ = aValue;                    \
-                            rValue.nPropsSet |= _type_name_;                  \
-                            m_bWasNull = false;                           \
-                        }                                                     \
-                        else                                                  \
-                        {                                                     \
-                            /* Last chance. Try type converter service... */  \
-                                                                              \
-                            Reference< XTypeConverter > xConverter            \
-                                                    = getTypeConverter();     \
-                            if ( xConverter.is() )                            \
-                            {                                                 \
-                                try                                           \
-                                {                                             \
-                                    Any aConvAny = xConverter->convertTo(     \
-                                                             rValue.aObject,      \
-                                                            _cppu_type_ );    \
-                                                                              \
-                                    if ( aConvAny >>= aValue )                \
-                                    {                                         \
-                                        rValue._member_name_ = aValue;        \
-                                        rValue.nPropsSet |= _type_name_;      \
-                                        m_bWasNull = false;               \
-                                    }                                         \
-                                }                                             \
-                                catch (const IllegalArgumentException&)       \
-                                {                                             \
-                                }                                             \
-                                catch (const CannotConvertException&)         \
-                                {                                             \
-                                }                                             \
-                            }                                                 \
-                        }                                                     \
-                    }                                                         \
-                }                                                             \
-            }                                                                 \
-        }                                                                     \
-    }                                                                         \
+#define GETVALUE_IMPL( _type_, _type_name_, _member_name_ ) \
+                                                                  \
+    osl::MutexGuard aGuard( m_aMutex );                           \
+                                                                  \
+    _type_ aValue = _type_();   /* default ctor */                \
+                                                                  \
+    m_bWasNull = true;                                            \
+                                                                  \
+    if ( ( columnIndex < 1 )                                      \
+         || ( columnIndex > sal_Int32( m_pValues->size() ) ) )    \
+    {                                                             \
+        OSL_FAIL( "PropertyValueSet - index out of range!" );     \
+        return aValue;                                            \
+    }                                                             \
+    ucbhelper_impl::PropertyValue& rValue                         \
+        = (*m_pValues)[ columnIndex - 1 ];                        \
+                                                                  \
+    if ( rValue.nOrigValue == PropsSet::NONE )                    \
+        return aValue;                                            \
+                                                                  \
+    if ( rValue.nPropsSet & _type_name_ )                         \
+    {                                                             \
+        /* Values is present natively... */                       \
+        aValue = rValue._member_name_;                            \
+        m_bWasNull = false;                                       \
+        return aValue;                                            \
+    }                                                             \
+                                                                  \
+    if ( !(rValue.nPropsSet & PropsSet::Object) )                 \
+    {                                                             \
+        /* Value is not (yet) available as Any. Create it. */     \
+        getObject( columnIndex, Reference< XNameAccess >() );     \
+    }                                                             \
+                                                                  \
+    if ( rValue.nPropsSet & PropsSet::Object )                    \
+    {                                                             \
+        /* Value is available as Any. */                          \
+                                                                  \
+        if ( rValue.aObject.hasValue() )                          \
+        {                                                         \
+            /* Try to convert into native value. */               \
+            if ( rValue.aObject >>= aValue )                      \
+            {                                                     \
+                rValue._member_name_ = aValue;                    \
+                rValue.nPropsSet |= _type_name_;                  \
+                m_bWasNull = false;                               \
+            }                                                     \
+            else                                                  \
+            {                                                     \
+                /* Last chance. Try type converter service... */  \
+                                                                  \
+                Reference< XTypeConverter > xConverter            \
+                                        = getTypeConverter();     \
+                if ( xConverter.is() )                            \
+                {                                                 \
+                    try                                           \
+                    {                                             \
+                        Any aConvAny = xConverter->convertTo(     \
+                                                 rValue.aObject,      \
+                                                 cppu::UnoType<_type_>::get() );    \
+                                                                  \
+                        if ( aConvAny >>= aValue )                \
+                        {                                         \
+                            rValue._member_name_ = aValue;        \
+                            rValue.nPropsSet |= _type_name_;      \
+                            m_bWasNull = false;               \
+                        }                                         \
+                    }                                             \
+                    catch (const IllegalArgumentException&)       \
+                    {                                             \
+                    }                                             \
+                    catch (const CannotConvertException&)         \
+                    {                                             \
+                    }                                             \
+                }                                                 \
+            }                                                     \
+        }                                                         \
+    }                                                             \
     return aValue;
-
-#define GETVALUE_IMPL( _type_, _type_name_, _member_name_ )                   \
-    GETVALUE_IMPL_TYPE( _type_,                                               \
-                        _type_name_,                                          \
-                        _member_name_,                                        \
-                        cppu::UnoType<_type_>::get() )
 
 #define SETVALUE_IMPL( _prop_name_, _type_name_, _member_name_, _value_ )     \
                                                                               \
@@ -314,8 +305,7 @@ OUString SAL_CALL PropertyValueSet::getString( sal_Int32 columnIndex )
 sal_Bool SAL_CALL PropertyValueSet::getBoolean( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException, std::exception )
 {
-    GETVALUE_IMPL_TYPE(
-            bool, PropsSet::Boolean, bBoolean, cppu::UnoType<bool>::get() );
+    GETVALUE_IMPL( bool, PropsSet::Boolean, bBoolean );
 }
 
 
