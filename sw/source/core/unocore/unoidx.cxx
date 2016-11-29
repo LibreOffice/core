@@ -577,7 +577,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
     SwTOXBase & rTOXBase( m_pImpl->GetTOXSectionOrThrow() );
 
     SwTOXElement nCreate = rTOXBase.GetCreateType();
-    sal_uInt16 nOLEOptions = rTOXBase.GetOLEOptions();
+    SwTOOElements nOLEOptions = rTOXBase.GetOLEOptions();
     const TOXTypes eTxBaseType = rTOXBase.GetTOXType()->GetType();
     SwTOIOptions nTOIOptions = (eTxBaseType == TOX_INDEX)
         ? rTOXBase.GetOptions() : SwTOIOptions::NONE;
@@ -787,20 +787,20 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
             lcl_AnyToBitMask(rValue, nCreate, SwTOXElement::Ole);
         break;
         case WID_CREATE_FROM_STAR_MATH:
-            lcl_AnyToBitMask(rValue, nOLEOptions, nsSwTOOElements::TOO_MATH);
+            lcl_AnyToBitMask(rValue, nOLEOptions, SwTOOElements::Math);
         break;
         case WID_CREATE_FROM_STAR_CHART:
-            lcl_AnyToBitMask(rValue, nOLEOptions, nsSwTOOElements::TOO_CHART);
+            lcl_AnyToBitMask(rValue, nOLEOptions, SwTOOElements::Chart);
         break;
         case WID_CREATE_FROM_STAR_CALC:
-            lcl_AnyToBitMask(rValue, nOLEOptions, nsSwTOOElements::TOO_CALC);
+            lcl_AnyToBitMask(rValue, nOLEOptions, SwTOOElements::Calc);
         break;
         case WID_CREATE_FROM_STAR_DRAW:
             lcl_AnyToBitMask(rValue, nOLEOptions,
-                    nsSwTOOElements::TOO_DRAW_IMPRESS);
+                    SwTOOElements::DrawImpress);
         break;
         case WID_CREATE_FROM_OTHER_EMBEDDED_OBJECTS:
-            lcl_AnyToBitMask(rValue, nOLEOptions, nsSwTOOElements::TOO_OTHER);
+            lcl_AnyToBitMask(rValue, nOLEOptions, SwTOOElements::Other);
         break;
         case WID_PARA_HEAD:
         {
@@ -915,7 +915,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     if(pTOXBase)
     {
         const SwTOXElement nCreate = pTOXBase->GetCreateType();
-        const sal_uInt16 nOLEOptions = pTOXBase->GetOLEOptions();
+        const SwTOOElements nOLEOptions = pTOXBase->GetOLEOptions();
         const SwTOIOptions nTOIOptions =
             (pTOXBase->GetTOXType()->GetType() == TOX_INDEX)
             ? pTOXBase->GetOptions()
@@ -1120,20 +1120,20 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                 lcl_BitMaskToAny(aRet, nCreate, SwTOXElement::Ole);
             break;
             case WID_CREATE_FROM_STAR_MATH:
-                lcl_BitMaskToAny(aRet, nOLEOptions, nsSwTOOElements::TOO_MATH);
+                lcl_BitMaskToAny(aRet, nOLEOptions, SwTOOElements::Math);
             break;
             case WID_CREATE_FROM_STAR_CHART:
-                lcl_BitMaskToAny(aRet, nOLEOptions, nsSwTOOElements::TOO_CHART);
+                lcl_BitMaskToAny(aRet, nOLEOptions, SwTOOElements::Chart);
             break;
             case WID_CREATE_FROM_STAR_CALC:
-                lcl_BitMaskToAny(aRet, nOLEOptions, nsSwTOOElements::TOO_CALC);
+                lcl_BitMaskToAny(aRet, nOLEOptions, SwTOOElements::Calc);
             break;
             case WID_CREATE_FROM_STAR_DRAW:
                 lcl_BitMaskToAny(aRet, nOLEOptions,
-                        nsSwTOOElements::TOO_DRAW_IMPRESS);
+                        SwTOOElements::DrawImpress);
             break;
             case WID_CREATE_FROM_OTHER_EMBEDDED_OBJECTS:
-                lcl_BitMaskToAny(aRet, nOLEOptions, nsSwTOOElements::TOO_OTHER);
+                lcl_BitMaskToAny(aRet, nOLEOptions, SwTOOElements::Other);
             break;
             case WID_CREATE_FROM_PARAGRAPH_STYLES:
                 lcl_BitMaskToAny(aRet, nCreate, SwTOXElement::Template);

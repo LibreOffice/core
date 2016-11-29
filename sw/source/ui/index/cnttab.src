@@ -141,12 +141,12 @@ String STR_CHARSTYLE
 StringArray RES_SRCTYPES
 {
     /* ids from tox.hxx
-    TOO_MATH        = 0x01,
-    TOO_CHART       = 0x02,
+    SwTOOElements::Math        = 0x01,
+    SwTOOElements::Chart       = 0x02,
     TOO_IMAGE       = 0x04,
-    TOO_CALC        = 0x08,
-    TOO_DRAW_IMPRESS= 0x10,
-    TOO_OTHER       = 0x80
+    SwTOOElements::Calc        = 0x08,
+    SwTOOElements::DrawImpress= 0x10,
+    SwTOOElements::Other       = 0x80
     */
     ItemList [ en-US ] =
     {

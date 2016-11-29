@@ -372,14 +372,17 @@ enum SwCaptionDisplay
     CAPTION_TEXT
 };
 
-typedef sal_uInt16 SwTOOElements;
-namespace nsSwTOOElements
+enum class SwTOOElements : sal_uInt16
 {
-    const SwTOOElements TOO_MATH            = 0x01;
-    const SwTOOElements TOO_CHART           = 0x02;
-    const SwTOOElements TOO_CALC            = 0x08;
-    const SwTOOElements TOO_DRAW_IMPRESS    = 0x10;
-    const SwTOOElements TOO_OTHER           = 0x80;
+    NONE            = 0x00,
+    Math            = 0x01,
+    Chart           = 0x02,
+    Calc            = 0x08,
+    DrawImpress     = 0x10,
+    Other           = 0x80,
+};
+namespace o3tl {
+    template<> struct typed_flags<SwTOOElements> : is_typed_flags<SwTOOElements, 0x9b> {};
 }
 
 #define TOX_STYLE_DELIMITER ((sal_Unicode)0x01)
@@ -406,8 +409,8 @@ class SW_DLLPUBLIC SwTOXBase : public SwClient
         SwTOIOptions    nOptions;           // options of alphabetical index
     } m_aData;
 
-    SwTOXElement    m_nCreateType;        // sources to create the index from
-    sal_uInt16      m_nOLEOptions;        // OLE sources
+    SwTOXElement     m_nCreateType;        // sources to create the index from
+    SwTOOElements    m_nOLEOptions;        // OLE sources
     SwCaptionDisplay m_eCaptionDisplay;
     bool        m_bProtected : 1;         // index protected ?
     bool        m_bFromChapter : 1;       // create from chapter or document
@@ -474,8 +477,8 @@ public:
     inline void             SetOptions(SwTOIOptions nOpt);
 
     // index of objects
-    sal_uInt16      GetOLEOptions() const {return m_nOLEOptions;}
-    void            SetOLEOptions(sal_uInt16 nOpt) {m_nOLEOptions = nOpt;}
+    SwTOOElements           GetOLEOptions() const {return m_nOLEOptions;}
+    void                    SetOLEOptions(SwTOOElements nOpt) {m_nOLEOptions = nOpt;}
 
     // index of objects
 

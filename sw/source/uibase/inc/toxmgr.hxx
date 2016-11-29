@@ -41,7 +41,7 @@ class SW_DLLPUBLIC SwTOXDescription
     SwForm*             m_pForm;
     SwTOXElement        m_nContent;
     SwTOIOptions        m_nIndexOptions;
-    sal_uInt16          m_nOLEOptions;
+    SwTOOElements       m_nOLEOptions;
     LanguageType        m_eLanguage;
     OUString            m_sSortAlgorithm;
 
@@ -73,7 +73,7 @@ public:
         m_pForm(nullptr),
         m_nContent(SwTOXElement::Mark | SwTOXElement::OutlineLevel),
         m_nIndexOptions(SwTOIOptions::SameEntry|SwTOIOptions::FF|SwTOIOptions::CaseSensitive),
-        m_nOLEOptions(0),
+        m_nOLEOptions(SwTOOElements::NONE),
         m_eLanguage((LanguageType)::GetAppLanguage()),
         m_eCaptionDisplay(CAPTION_COMPLETE),
         m_nLevel(MAXLEVEL),
@@ -137,8 +137,8 @@ public:
     void            SetReadonly(bool bSet){m_bReadonly = bSet;}
     bool            IsReadonly() const {return m_bReadonly;}
 
-    sal_uInt16          GetOLEOptions() const {return m_nOLEOptions;}
-    void            SetOLEOptions(sal_uInt16 nOpt) {m_nOLEOptions = nOpt;}
+    SwTOOElements   GetOLEOptions() const {return m_nOLEOptions;}
+    void            SetOLEOptions(SwTOOElements nOpt) {m_nOLEOptions = nOpt;}
 
     bool            IsLevelFromChapter() const {return m_bLevelFromChapter;}
     void            SetLevelFromChapter(bool bSet) {m_bLevelFromChapter = bSet;}
