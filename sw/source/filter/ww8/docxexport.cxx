@@ -274,7 +274,7 @@ void DocxExport::WriteHeadersFooters( sal_uInt8 nHeadFootFlags,
 #endif
 }
 
-void DocxExport::OutputField( const SwField* pField, ww::eField eFieldType, const OUString& rFieldCmd, sal_uInt8 nMode )
+void DocxExport::OutputField( const SwField* pField, ww::eField eFieldType, const OUString& rFieldCmd, FieldFlags nMode )
 {
     m_pAttrOutput->WriteField_Impl( pField, eFieldType, rFieldCmd, nMode );
 }

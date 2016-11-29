@@ -105,7 +105,6 @@ using namespace ::com::sun::star::i18n;
 using namespace sw::util;
 using namespace sw::types;
 using namespace sw::mark;
-using namespace nsFieldFlags;
 using namespace ::oox::vml;
 
 static OUString lcl_getFieldCode( const IFieldmark* pFieldmark )
@@ -877,13 +876,13 @@ void WW8AttributeOutput::StartRuby( const SwTextNode& rNode, sal_Int32 /*nPos*/,
         aStr += ";";
 
     m_rWW8Export.OutputField( nullptr, ww::eEQ, aStr,
-            WRITEFIELD_START | WRITEFIELD_CMD_START );
+            FieldFlags::Start | FieldFlags::CmdStart );
 }
 
 void WW8AttributeOutput::EndRuby()
 {
     m_rWW8Export.WriteChar( ')' );
-    m_rWW8Export.OutputField( nullptr, ww::eEQ, OUString(), WRITEFIELD_END | WRITEFIELD_CLOSE );
+    m_rWW8Export.OutputField( nullptr, ww::eEQ, OUString(), FieldFlags::End | FieldFlags::Close );
 }
 
 /*#i15387# Better ideas welcome*/
@@ -974,7 +973,7 @@ bool WW8AttributeOutput::StartURL( const OUString &rUrl, const OUString &rTarget
 
     bool bBookMarkOnly = AnalyzeURL( rUrl, rTarget, &sURL, &sMark );
 
-    m_rWW8Export.OutputField( nullptr, ww::eHYPERLINK, sURL, WRITEFIELD_START | WRITEFIELD_CMD_START );
+    m_rWW8Export.OutputField( nullptr, ww::eHYPERLINK, sURL, FieldFlags::Start | FieldFlags::CmdStart );
 
     // write the refence to the "picture" structure
     sal_uLong nDataStt = m_rWW8Export.pDataStrm->Tell();
@@ -995,7 +994,7 @@ bool WW8AttributeOutput::StartURL( const OUString &rUrl, const OUString &rTarget
 
     m_rWW8Export.m_pChpPlc->AppendFkpEntry( m_rWW8Export.Strm().Tell(), sizeof( aArr1 ), aArr1 );
 
-    m_rWW8Export.OutputField( nullptr, ww::eHYPERLINK, sURL, WRITEFIELD_CMD_END );
+    m_rWW8Export.OutputField( nullptr, ww::eHYPERLINK, sURL, FieldFlags::CmdEnd );
 
     // now write the picture structure
     sURL = aURL.GetURLNoMark();
@@ -1120,7 +1119,7 @@ bool WW8AttributeOutput::StartURL( const OUString &rUrl, const OUString &rTarget
 
 bool WW8AttributeOutput::EndURL(bool const)
 {
-    m_rWW8Export.OutputField( nullptr, ww::eHYPERLINK, OUString(), WRITEFIELD_CLOSE );
+    m_rWW8Export.OutputField( nullptr, ww::eHYPERLINK, OUString(), FieldFlags::Close );
 
     return true;
 }
@@ -2233,13 +2232,13 @@ void MSWordExportBase::OutputTextNode( const SwTextNode& rNode )
                     }
                 }
 
-                OutputField( nullptr, eFieldId, sCode, WRITEFIELD_START | WRITEFIELD_CMD_START );
+                OutputField( nullptr, eFieldId, sCode, FieldFlags::Start | FieldFlags::CmdStart );
 
                 if ( pFieldmark && pFieldmark->GetFieldname( ) == ODF_FORMTEXT )
                     WriteFormData( *pFieldmark );
                 else if ( pFieldmark && pFieldmark->GetFieldname( ) == ODF_HYPERLINK )
                     WriteHyperlinkData( *pFieldmark );
-                OutputField( nullptr, lcl_getFieldId( pFieldmark ), OUString(), WRITEFIELD_CMD_END );
+                OutputField( nullptr, lcl_getFieldId( pFieldmark ), OUString(), FieldFlags::CmdEnd );
 
                 if ( pFieldmark && pFieldmark->GetFieldname() == ODF_UNHANDLED )
                 {
@@ -2274,7 +2273,7 @@ void MSWordExportBase::OutputTextNode( const SwTextNode& rNode )
                     }
                 }
 
-                OutputField( nullptr, eFieldId, OUString(), WRITEFIELD_CLOSE );
+                OutputField( nullptr, eFieldId, OUString(), FieldFlags::Close );
 
                 if ( pFieldmark && pFieldmark->GetFieldname() == ODF_FORMTEXT )
                     AppendBookmark( pFieldmark->GetName() );
@@ -2292,10 +2291,10 @@ void MSWordExportBase::OutputTextNode( const SwTextNode& rNode )
                     AppendBookmark( pFieldmark->GetName() );
                 OutputField( nullptr, lcl_getFieldId( pFieldmark ),
                         lcl_getFieldCode( pFieldmark ),
-                        WRITEFIELD_START | WRITEFIELD_CMD_START );
+                        FieldFlags::Start | FieldFlags::CmdStart );
                 if ( isDropdownOrCheckbox )
                     WriteFormData( *pFieldmark );
-                OutputField( nullptr, lcl_getFieldId( pFieldmark ), OUString(), WRITEFIELD_CLOSE );
+                OutputField( nullptr, lcl_getFieldId( pFieldmark ), OUString(), FieldFlags::Close );
                 if ( isDropdownOrCheckbox )
                     AppendBookmark( pFieldmark->GetName() );
             }

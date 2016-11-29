@@ -152,7 +152,7 @@ public:
 
     /// Write the field
     virtual void OutputField( const SwField* pField, ww::eField eFieldType,
-            const OUString& rFieldCmd, sal_uInt8 nMode = nsFieldFlags::WRITEFIELD_ALL ) override;
+            const OUString& rFieldCmd, FieldFlags nMode = FieldFlags::All ) override;
 
     /// Write the data of the form field
     virtual void WriteFormData( const ::sw::mark::IFieldmark& rFieldmark ) override;

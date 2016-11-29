@@ -291,7 +291,7 @@ void RtfExport::WriteHeadersFooters(sal_uInt8 nHeadFootFlags,
         WriteHeaderFooter(rFirstPageFormat, false, OOO_STRING_SVTOOLS_RTF_FOOTERF, true);
 }
 
-void RtfExport::OutputField(const SwField* pField, ww::eField eFieldType, const OUString& rFieldCmd, sal_uInt8 nMode)
+void RtfExport::OutputField(const SwField* pField, ww::eField eFieldType, const OUString& rFieldCmd, FieldFlags nMode)
 {
     m_pAttrOutput->WriteField_Impl(pField, eFieldType, rFieldCmd, nMode);
 }

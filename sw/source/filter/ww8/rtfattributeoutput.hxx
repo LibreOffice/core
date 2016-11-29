@@ -213,7 +213,7 @@ public:
                                 const OUString& rNumberingString,
                                 const SvxBrushItem* pBrush) override;//For i120928,to export graphic of bullet
 
-    void WriteField_Impl(const SwField* pField, ww::eField eType, const OUString& rFieldCmd, sal_uInt8 nMode);
+    void WriteField_Impl(const SwField* pField, ww::eField eType, const OUString& rFieldCmd, FieldFlags nMode);
     void WriteBookmarks_Impl(std::vector< OUString >& rStarts, std::vector< OUString >& rEnds);
     void WriteAnnotationMarks_Impl(std::vector< OUString >& rStarts, std::vector< OUString >& rEnds);
     void WriteHeaderFooter_Impl(const SwFrameFormat& rFormat, bool bHeader, const sal_Char* pStr, bool bTitlepg);
