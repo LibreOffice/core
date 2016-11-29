@@ -365,16 +365,8 @@ public:
     // GetEmbedFontData: gets the font data for a font marked
     // embeddable by GetDevFontList or NULL in case of error
     // parameters: pFont: describes the font in question
-    //             pWidths: the widths of all glyphs from char code 0 to 255
-    //                      pWidths MUST support at least 256 members;
-    //             rInfo: additional outgoing information
     //             pDataLen: out parameter, contains the byte length of the returned buffer
-    virtual const void*     GetEmbedFontData( const PhysicalFontFace*,
-                                              const sal_Ucs* pUnicodes,
-                                              sal_Int32* pWidths,
-                                              size_t nLen,
-                                              FontSubsetInfo& rInfo,
-                                              long* pDataLen ) override;
+    virtual const void*     GetEmbedFontData(const PhysicalFontFace*, long* pDataLen) override;
     // frees the font data again
     virtual void            FreeEmbedFontData( const void* pData, long nDataLen ) override;
 
