@@ -2942,7 +2942,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, OUString& rStr )
     switch( eTox ){
     case TOX_INDEX:
         {
-            sal_uInt16 eOptions = nsSwTOIOptions::TOI_SAME_ENTRY | nsSwTOIOptions::TOI_CASE_SENSITIVE;
+            SwTOIOptions eOptions = SwTOIOptions::SameEntry | SwTOIOptions::CaseSensitive;
 
             // SwTOXElement::OutlineLevel setzen wir genau dann, wenn
             // die Parameter \o in 1 bis 9 liegen
@@ -3028,7 +3028,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, OUString& rStr )
                     break;
                 case 'h':
                     {
-                        eOptions |= nsSwTOIOptions::TOI_ALPHA_DELIMITTER;
+                        eOptions |= SwTOIOptions::AlphaDelimiter;
                     }
                     break;
                 }

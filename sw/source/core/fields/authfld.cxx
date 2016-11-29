@@ -246,7 +246,7 @@ sal_uInt16  SwAuthorityFieldType::GetSequencePos(sal_IntPtr nHandle)
         SwTOXSortTabBases aSortArr;
         SwIterator<SwFormatField,SwFieldType> aIter( *this );
 
-        SwTOXInternational aIntl(m_eLanguage, 0, m_sSortAlgorithm);
+        SwTOXInternational aIntl(m_eLanguage, SwTOIOptions::NONE, m_sSortAlgorithm);
 
         for( SwFormatField* pFormatField = aIter.First(); pFormatField; pFormatField = aIter.Next() )
         {

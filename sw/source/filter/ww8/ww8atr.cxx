@@ -1961,7 +1961,7 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                 if (pTOX->GetTOXForm().IsCommaSeparated())
                     sStr += "\\r ";
 
-                if (nsSwTOIOptions::TOI_ALPHA_DELIMITTER & pTOX->GetOptions())
+                if (SwTOIOptions::AlphaDelimiter & pTOX->GetOptions())
                     sStr += "\\h \"A\" ";
 
                 if(SwTOXElement::IndexEntryType & pTOX->GetCreateType())

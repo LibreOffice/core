@@ -48,9 +48,9 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
 // Initialize strings
-sal_uInt16 SwTOXSortTabBase::nOpt = 0;
+SwTOIOptions SwTOXSortTabBase::nOpt = SwTOIOptions::NONE;
 
-SwTOXInternational::SwTOXInternational( LanguageType nLang, sal_uInt16 nOpt,
+SwTOXInternational::SwTOXInternational( LanguageType nLang, SwTOIOptions nOpt,
                                         const OUString& rSortAlgorithm ) :
     eLang( nLang ),
     sSortAlgorithm(rSortAlgorithm),
@@ -81,7 +81,7 @@ void SwTOXInternational::Init()
             sSortAlgorithm = aSeq.getConstArray()[0];
     }
 
-    if ( nOptions & nsSwTOIOptions::TOI_CASE_SENSITIVE )
+    if ( nOptions & SwTOIOptions::CaseSensitive )
         pIndexWrapper->LoadAlgorithm( aLcl, sSortAlgorithm, 0 );
     else
         pIndexWrapper->LoadAlgorithm( aLcl, sSortAlgorithm, SW_COLLATOR_IGNORES );
@@ -265,7 +265,7 @@ bool SwTOXSortTabBase::operator<( const SwTOXSortTabBase& rCmp )
 
 // Sorted keyword entry
 SwTOXIndex::SwTOXIndex( const SwTextNode& rNd,
-                        const SwTextTOXMark* pMark, sal_uInt16 nOptions,
+                        const SwTextTOXMark* pMark, SwTOIOptions nOptions,
                         sal_uInt8 nKyLevel,
                         const SwTOXInternational& rIntl,
                         const lang::Locale& rLocale )
@@ -292,7 +292,7 @@ bool SwTOXIndex::operator==( const SwTOXSortTabBase& rCmpBase )
                                    rCmp.GetText(), rCmp.GetLocale() );
 
     // If we don't summarize we need to evaluate the Pos
-    if(bRet && !(GetOptions() & nsSwTOIOptions::TOI_SAME_ENTRY))
+    if(bRet && !(GetOptions() & SwTOIOptions::SameEntry))
         bRet = nPos == rCmp.nPos;
 
     return bRet;
@@ -314,7 +314,7 @@ bool SwTOXIndex::operator<( const SwTOXSortTabBase& rCmpBase )
                                   aOtherTaR, rCmp.GetLocale() );
 
     // If we don't summarize we need to evaluate the Pos
-    if( !bRet && !(GetOptions() & nsSwTOIOptions::TOI_SAME_ENTRY) )
+    if( !bRet && !(GetOptions() & SwTOIOptions::SameEntry) )
     {
         bRet = pTOXIntl->IsEqual( aMyTaR, GetLocale(),
                                   aOtherTaR, rCmp.GetLocale() ) &&
@@ -353,8 +353,8 @@ TextAndReading SwTOXIndex::GetText_Impl() const
         }
         break;
     }
-    // if TOI_INITIAL_CAPS is set, first character is to be capitalized
-    if( nsSwTOIOptions::TOI_INITIAL_CAPS & nOpt && pTOXIntl && !aRet.sText.isEmpty())
+    // if SwTOIOptions::InitialCaps is set, first character is to be capitalized
+    if( SwTOIOptions::InitialCaps & nOpt && pTOXIntl && !aRet.sText.isEmpty())
     {
         aRet.sText = pTOXIntl->ToUpper( aRet.sText, 0 ) + aRet.sText.copy(1);
     }
@@ -368,12 +368,12 @@ void SwTOXIndex::FillText( SwTextNode& rNd, const SwIndex& rInsPos, sal_uInt16 )
 
     TextAndReading aRet;
     if( pEnd && !pTextMark->GetTOXMark().IsAlternativeText() &&
-            0 == (GetOptions() & nsSwTOIOptions::TOI_KEY_AS_ENTRY))
+            !(GetOptions() & SwTOIOptions::KeyAsEntry))
     {
         aRet.sText = static_cast<const SwTextNode*>(aTOXSources[0].pNd)->GetExpandText(
                             pTextMark->GetStart(),
                             *pEnd - pTextMark->GetStart());
-        if(nsSwTOIOptions::TOI_INITIAL_CAPS & nOpt && pTOXIntl && !aRet.sText.isEmpty())
+        if(SwTOIOptions::InitialCaps & nOpt && pTOXIntl && !aRet.sText.isEmpty())
         {
             aRet.sText = pTOXIntl->ToUpper( aRet.sText, 0 ) + aRet.sText.copy(1);
         }
@@ -390,7 +390,7 @@ sal_uInt16 SwTOXIndex::GetLevel() const
 
     sal_uInt16 nForm = FORM_PRIMARY_KEY;
 
-    if( 0 == (GetOptions() & nsSwTOIOptions::TOI_KEY_AS_ENTRY)&&
+    if( !(GetOptions() & SwTOIOptions::KeyAsEntry)&&
         !pTextMark->GetTOXMark().GetPrimaryKey().isEmpty() )
     {
         nForm = FORM_SECONDARY_KEY;

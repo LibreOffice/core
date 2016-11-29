@@ -70,15 +70,15 @@ struct TextAndReading
 class SwTOXInternational
 {
     IndexEntrySupplierWrapper* pIndexWrapper;
-    CharClass* pCharClass;
-    LanguageType eLang;
-    OUString sSortAlgorithm;
-    sal_uInt16 nOptions;
+    CharClass*                 pCharClass;
+    LanguageType               eLang;
+    OUString                   sSortAlgorithm;
+    SwTOIOptions               nOptions;
 
     void Init();
 
 public:
-    SwTOXInternational( LanguageType nLang, sal_uInt16 nOptions,
+    SwTOXInternational( LanguageType nLang, SwTOIOptions nOptions,
                         const OUString& rSortAlgorithm );
     SwTOXInternational( const SwTOXInternational& );
     ~SwTOXInternational();
@@ -126,7 +126,7 @@ struct SwTOXSortTabBase
     sal_uLong nPos;
     sal_Int32 nCntPos;
     sal_uInt16 nType;
-    static sal_uInt16 nOpt;
+    static SwTOIOptions nOpt;
 
     SwTOXSortTabBase( TOXSortType nType,
                       const SwContentNode* pTOXSrc,
@@ -136,7 +136,7 @@ struct SwTOXSortTabBase
     virtual ~SwTOXSortTabBase() {}
 
     sal_uInt16  GetType() const         { return nType; }
-    static sal_uInt16  GetOptions()     { return nOpt; }
+    static SwTOIOptions  GetOptions()   { return nOpt; }
 
     virtual void    FillText( SwTextNode& rNd, const SwIndex& rInsPos, sal_uInt16 nAuthField ) const;
     virtual sal_uInt16  GetLevel()  const = 0;
@@ -177,7 +177,7 @@ inline const css::lang::Locale& SwTOXSortTabBase::GetLocale() const
  */
 struct SwTOXIndex : public SwTOXSortTabBase
 {
-    SwTOXIndex( const SwTextNode&, const SwTextTOXMark*, sal_uInt16 nOptions, sal_uInt8 nKeyLevel,
+    SwTOXIndex( const SwTextNode&, const SwTextTOXMark*, SwTOIOptions nOptions, sal_uInt8 nKeyLevel,
                 const SwTOXInternational& rIntl,
                 const css::lang::Locale& rLocale );
     virtual ~SwTOXIndex() override {}

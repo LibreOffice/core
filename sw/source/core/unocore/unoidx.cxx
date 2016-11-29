@@ -98,9 +98,9 @@ lcl_AnyToBool(uno::Any const& rVal) throw (lang::IllegalArgumentException)
     return bRet;
 }
 
-static void
-lcl_AnyToBitMask(uno::Any const& rValue,
-        sal_uInt16 & rBitMask, const sal_uInt16 nBit)
+template<typename T>
+void lcl_AnyToBitMask(uno::Any const& rValue,
+        T & rBitMask, const T nBit)
 throw (lang::IllegalArgumentException)
 {
     rBitMask = lcl_AnyToBool(rValue)
@@ -108,29 +108,12 @@ throw (lang::IllegalArgumentException)
         : (rBitMask & ~nBit);
 }
 
-static void
-lcl_AnyToBitMask(uno::Any const& rValue,
-        SwTOXElement & rBitMask, const SwTOXElement nBit)
-throw (lang::IllegalArgumentException)
+template<typename T>
+void lcl_BitMaskToAny(uno::Any & o_rValue,
+        const T nBitMask, const T nBit)
 {
-    rBitMask = lcl_AnyToBool(rValue)
-        ? (rBitMask |  nBit)
-        : (rBitMask & ~nBit);
-}
-
-static void
-lcl_BitMaskToAny(uno::Any & o_rValue,
-        const sal_uInt16 nBitMask, const sal_uInt16 nBit)
-{
-    const bool bRet = 0 != (nBitMask & nBit);
+    const bool bRet(nBitMask & nBit);
     o_rValue <<= bRet;
-}
-
-static void
-lcl_BitMaskToAny(uno::Any & o_rValue,
-        const SwTOXElement nBitMask, const SwTOXElement nBit)
-{
-    o_rValue <<= bool(nBitMask & nBit);
 }
 
 static void
@@ -596,8 +579,8 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
     SwTOXElement nCreate = rTOXBase.GetCreateType();
     sal_uInt16 nOLEOptions = rTOXBase.GetOLEOptions();
     const TOXTypes eTxBaseType = rTOXBase.GetTOXType()->GetType();
-    sal_uInt16 nTOIOptions = (eTxBaseType == TOX_INDEX)
-        ? rTOXBase.GetOptions() : 0;
+    SwTOIOptions nTOIOptions = (eTxBaseType == TOX_INDEX)
+        ? rTOXBase.GetOptions() : SwTOIOptions::NONE;
     SwForm  aForm(rTOXBase.GetTOXForm());
     bool bForm = false;
     switch (pEntry->nWID)
@@ -723,29 +706,29 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
         break;
         case WID_USE_ALPHABETICAL_SEPARATORS:
             lcl_AnyToBitMask(rValue, nTOIOptions,
-                    nsSwTOIOptions::TOI_ALPHA_DELIMITTER);
+                    SwTOIOptions::AlphaDelimiter);
         break;
         case WID_USE_KEY_AS_ENTRY:
             lcl_AnyToBitMask(rValue, nTOIOptions,
-                    nsSwTOIOptions::TOI_KEY_AS_ENTRY);
+                    SwTOIOptions::KeyAsEntry);
         break;
         case WID_USE_COMBINED_ENTRIES:
             lcl_AnyToBitMask(rValue, nTOIOptions,
-                    nsSwTOIOptions::TOI_SAME_ENTRY);
+                    SwTOIOptions::SameEntry);
         break;
         case WID_IS_CASE_SENSITIVE:
             lcl_AnyToBitMask(rValue, nTOIOptions,
-                    nsSwTOIOptions::TOI_CASE_SENSITIVE);
+                    SwTOIOptions::CaseSensitive);
         break;
         case WID_USE_P_P:
-            lcl_AnyToBitMask(rValue, nTOIOptions, nsSwTOIOptions::TOI_FF);
+            lcl_AnyToBitMask(rValue, nTOIOptions, SwTOIOptions::FF);
         break;
         case WID_USE_DASH:
-            lcl_AnyToBitMask(rValue, nTOIOptions, nsSwTOIOptions::TOI_DASH);
+            lcl_AnyToBitMask(rValue, nTOIOptions, SwTOIOptions::Dash);
         break;
         case WID_USE_UPPER_CASE:
             lcl_AnyToBitMask(rValue, nTOIOptions,
-                    nsSwTOIOptions::TOI_INITIAL_CAPS);
+                    SwTOIOptions::InitialCaps);
         break;
         case WID_IS_COMMA_SEPARATED:
             bForm = true;
@@ -933,10 +916,10 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     {
         const SwTOXElement nCreate = pTOXBase->GetCreateType();
         const sal_uInt16 nOLEOptions = pTOXBase->GetOLEOptions();
-        const sal_uInt16 nTOIOptions =
+        const SwTOIOptions nTOIOptions =
             (pTOXBase->GetTOXType()->GetType() == TOX_INDEX)
             ? pTOXBase->GetOptions()
-            : 0U;
+            : SwTOIOptions::NONE;
         const SwForm& rForm = pTOXBase->GetTOXForm();
         switch(pEntry->nWID)
         {
@@ -1026,29 +1009,29 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
             break;
             case WID_USE_ALPHABETICAL_SEPARATORS:
                 lcl_BitMaskToAny(aRet, nTOIOptions,
-                        nsSwTOIOptions::TOI_ALPHA_DELIMITTER);
+                        SwTOIOptions::AlphaDelimiter);
             break;
             case WID_USE_KEY_AS_ENTRY:
                 lcl_BitMaskToAny(aRet, nTOIOptions,
-                        nsSwTOIOptions::TOI_KEY_AS_ENTRY);
+                        SwTOIOptions::KeyAsEntry);
             break;
             case WID_USE_COMBINED_ENTRIES:
                 lcl_BitMaskToAny(aRet, nTOIOptions,
-                        nsSwTOIOptions::TOI_SAME_ENTRY);
+                        SwTOIOptions::SameEntry);
             break;
             case WID_IS_CASE_SENSITIVE:
                 lcl_BitMaskToAny(aRet, nTOIOptions,
-                        nsSwTOIOptions::TOI_CASE_SENSITIVE);
+                        SwTOIOptions::CaseSensitive);
             break;
             case WID_USE_P_P:
-                lcl_BitMaskToAny(aRet, nTOIOptions, nsSwTOIOptions::TOI_FF);
+                lcl_BitMaskToAny(aRet, nTOIOptions, SwTOIOptions::FF);
             break;
             case WID_USE_DASH:
-                lcl_BitMaskToAny(aRet, nTOIOptions, nsSwTOIOptions::TOI_DASH);
+                lcl_BitMaskToAny(aRet, nTOIOptions, SwTOIOptions::Dash);
             break;
             case WID_USE_UPPER_CASE:
                 lcl_BitMaskToAny(aRet, nTOIOptions,
-                        nsSwTOIOptions::TOI_INITIAL_CAPS);
+                        SwTOIOptions::InitialCaps);
             break;
             case WID_IS_COMMA_SEPARATED:
             {
