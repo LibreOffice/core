@@ -131,8 +131,6 @@ public:
                                         int nGlyphs,
                                         FontSubsetInfo& rInfo ) override;
 
-    virtual const Ucs2SIntMap*      GetFontEncodingVector( const PhysicalFontFace*, const Ucs2OStrMap** ppNonEncoded, std::set<sal_Unicode> const**) override;
-
     virtual const void*             GetEmbedFontData(
                                         const PhysicalFontFace*,
                                         const sal_Ucs* pUnicodes,

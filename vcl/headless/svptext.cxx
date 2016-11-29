@@ -73,11 +73,6 @@ bool SvpSalGraphics::CreateFontSubset(
     return m_aTextRenderImpl.CreateFontSubset(rToFile, pFont, pGlyphIds, pEncoding, pWidths, nGlyphCount, rInfo);
 }
 
-const Ucs2SIntMap* SvpSalGraphics::GetFontEncodingVector( const PhysicalFontFace* pFont, const Ucs2OStrMap** pNonEncoded, std::set<sal_Unicode> const** ppPriority)
-{
-    return m_aTextRenderImpl.GetFontEncodingVector(pFont, pNonEncoded, ppPriority);
-}
-
 const void* SvpSalGraphics::GetEmbedFontData(
     const PhysicalFontFace* pFont,
     const sal_Ucs* pUnicodes,
