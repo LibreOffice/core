@@ -1779,8 +1779,8 @@ inline bool isUpperAscii( sal_Unicode c )
 bool LanguageTag::isIsoLanguage( const OUString& rLanguage )
 {
     /* TODO: ignore case? For now let's see where rubbish is used. */
-    bool b2chars;
-    if (((b2chars = (rLanguage.getLength() == 2)) || rLanguage.getLength() == 3) &&
+    bool b2chars = rLanguage.getLength() == 2;
+    if ((b2chars || rLanguage.getLength() == 3) &&
             isLowerAscii( rLanguage[0]) && isLowerAscii( rLanguage[1]) &&
             (b2chars || isLowerAscii( rLanguage[2])))
         return true;
