@@ -627,7 +627,6 @@ private:
     std::list< TransparencyEmit >       m_aTransparentObjects;
     /*  contains all font subsets in use */
     FontSubsetData                      m_aSubsets;
-    FontEmbedData                       m_aEmbeddedFonts;
     FontEmbedData                       m_aSystemFonts;
     sal_Int32                           m_nNextFID;
     PDFFontCache                        m_aFontCache;
@@ -806,8 +805,6 @@ i12626
     bool emitGradients();
     /* writes a builtin font object and returns its objectid (or 0 in case of failure ) */
     sal_Int32 emitBuiltinFont( const PdfBuiltinFontFace*, sal_Int32 nObject );
-    /* writes a type1 embedded font object and returns its mapping from font ids to object ids (or 0 in case of failure ) */
-    std::map< sal_Int32, sal_Int32 > emitEmbeddedFont( const PhysicalFontFace*, EmbedFont& );
     /* writes a type1 system font object and returns its mapping from font ids to object ids (or 0 in case of failure ) */
     std::map< sal_Int32, sal_Int32 > emitSystemFont( const PhysicalFontFace*, EmbedFont& );
     /* writes a font descriptor and returns its object id (or 0) */
