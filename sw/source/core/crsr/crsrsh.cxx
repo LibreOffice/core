@@ -656,8 +656,8 @@ bool SwCursorShell::MovePage( SwWhichPage fnWhichPage, SwPosPage fnPosPage )
                             getLayoutFrame( GetLayout(), &rPt, m_pCurrentCursor->GetPoint(), false );
         if( pFrame && ( bRet = GetFrameInPage( pFrame, fnWhichPage,
                                            fnPosPage, m_pCurrentCursor )  ) &&
-            !m_pCurrentCursor->IsSelOvr( nsSwCursorSelOverFlags::SELOVER_TOGGLE |
-                                 nsSwCursorSelOverFlags::SELOVER_CHANGEPOS ))
+            !m_pCurrentCursor->IsSelOvr( SwCursorSelOverFlags::Toggle |
+                                 SwCursorSelOverFlags::ChangePos ))
             UpdateCursor();
         else
             bRet = false;
@@ -833,7 +833,7 @@ int SwCursorShell::SetCursor( const Point &rLPt, bool bOnlyText, bool bBlock )
         m_pCurrentCursor->SetInFrontOfLabel_( !bNewInFrontOfLabel );
     SetInFrontOfLabel( bNewInFrontOfLabel );
 
-    if( !pCursor->IsSelOvr( nsSwCursorSelOverFlags::SELOVER_CHANGEPOS ) )
+    if( !pCursor->IsSelOvr( SwCursorSelOverFlags::ChangePos ) )
     {
         sal_uInt16 nFlag = SwCursorShell::SCROLLWIN | SwCursorShell::CHKRANGE;
         UpdateCursor( nFlag );
@@ -1096,8 +1096,8 @@ bool SwCursorShell::GotoPage( sal_uInt16 nPage )
     SwCallLink aLk( *this ); // watch Cursor-Moves; call Link if needed
     SwCursorSaveState aSaveState( *m_pCurrentCursor );
     bool bRet = GetLayout()->SetCurrPage( m_pCurrentCursor, nPage ) &&
-                    !m_pCurrentCursor->IsSelOvr( nsSwCursorSelOverFlags::SELOVER_TOGGLE |
-                                         nsSwCursorSelOverFlags::SELOVER_CHANGEPOS );
+                    !m_pCurrentCursor->IsSelOvr( SwCursorSelOverFlags::Toggle |
+                                         SwCursorSelOverFlags::ChangePos );
     if( bRet )
         UpdateCursor(SwCursorShell::SCROLLWIN|SwCursorShell::CHKRANGE|SwCursorShell::READONLY);
     return bRet;
@@ -2070,8 +2070,8 @@ bool SwCursorShell::Pop( bool bOldCursor )
         delete pOldStack;
 
         if( !m_pCurrentCursor->IsInProtectTable( true ) &&
-            !m_pCurrentCursor->IsSelOvr( nsSwCursorSelOverFlags::SELOVER_TOGGLE |
-                                 nsSwCursorSelOverFlags::SELOVER_CHANGEPOS ) )
+            !m_pCurrentCursor->IsSelOvr( SwCursorSelOverFlags::Toggle |
+                                 SwCursorSelOverFlags::ChangePos ) )
             UpdateCursor(); // update current cursor
     }
     return true;
@@ -2108,8 +2108,8 @@ void SwCursorShell::Combine()
     m_pCursorStack->MoveTo(nullptr); // remove from ring
     m_pCursorStack = pTmp;
     if( !m_pCurrentCursor->IsInProtectTable( true ) &&
-        !m_pCurrentCursor->IsSelOvr( nsSwCursorSelOverFlags::SELOVER_TOGGLE |
-                             nsSwCursorSelOverFlags::SELOVER_CHANGEPOS ) )
+        !m_pCurrentCursor->IsSelOvr( SwCursorSelOverFlags::Toggle |
+                             SwCursorSelOverFlags::ChangePos ) )
     {
         UpdateCursor(); // update current cursor
     }

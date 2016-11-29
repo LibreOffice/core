@@ -634,8 +634,8 @@ bool SwCursor::MoveTable( SwWhichTable fnWhichTable, SwMoveFnCollection const & 
     {
         SwCursorSaveState aSaveState( *this );
         bRet = (*fnWhichTable)( *this, fnPosTable, IsReadOnlyAvailable() ) &&
-                !IsSelOvr( nsSwCursorSelOverFlags::SELOVER_CHECKNODESSECTION |
-                           nsSwCursorSelOverFlags::SELOVER_TOGGLE );
+                !IsSelOvr( SwCursorSelOverFlags::CheckNodeSection |
+                           SwCursorSelOverFlags::Toggle );
     }
     return bRet;
 }

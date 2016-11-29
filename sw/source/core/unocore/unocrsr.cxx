@@ -69,7 +69,7 @@ void SwUnoCursor::DoSetBidiLevelUpDown()
     return; // not for uno cursor
 }
 
-bool SwUnoCursor::IsSelOvr( int eFlags )
+bool SwUnoCursor::IsSelOvr( SwCursorSelOverFlags eFlags )
 {
     if (m_bRemainInSection)
     {
@@ -170,7 +170,7 @@ SwUnoTableCursor::~SwUnoTableCursor()
         delete m_aTableSel.GetNext();
 }
 
-bool SwUnoTableCursor::IsSelOvr( int eFlags )
+bool SwUnoTableCursor::IsSelOvr( SwCursorSelOverFlags eFlags )
 {
     bool bRet = SwUnoCursor::IsSelOvr( eFlags );
     if( !bRet )

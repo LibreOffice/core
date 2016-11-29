@@ -50,8 +50,8 @@ namespace
         /// returns true if the Cursor had been rolled back
         bool RollbackIfIllegal()
         {
-            if(m_pCursor->IsSelOvr(nsSwCursorSelOverFlags::SELOVER_CHECKNODESSECTION
-                | nsSwCursorSelOverFlags::SELOVER_TOGGLE))
+            if(m_pCursor->IsSelOvr(SwCursorSelOverFlags::CheckNodeSection
+                | SwCursorSelOverFlags::Toggle))
             {
                 m_pCursor->DeleteMark();
                 m_pCursor->RestoreSavePos();
