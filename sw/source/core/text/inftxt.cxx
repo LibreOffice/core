@@ -748,22 +748,22 @@ void SwTextPaintInfo::CalcRect( const SwLinePortion& rPor,
         aSize.Height() = nTmp;
         if ( 1 == GetDirection() )
         {
-            aPoint.A() = X() - rPor.GetAscent();
-            aPoint.B() = Y() - aSize.Height();
+            aPoint.X() = X() - rPor.GetAscent();
+            aPoint.Y() = Y() - aSize.Height();
         }
         else
         {
-            aPoint.A() = X() - rPor.Height() + rPor.GetAscent();
-            aPoint.B() = Y();
+            aPoint.X() = X() - rPor.Height() + rPor.GetAscent();
+            aPoint.Y() = Y();
         }
     }
     else
     {
-        aPoint.A() = X();
+        aPoint.X() = X();
         if ( GetTextFrame()->IsVertLR() )
-            aPoint.B() = Y() - rPor.Height() + rPor.GetAscent();
+            aPoint.Y() = Y() - rPor.Height() + rPor.GetAscent();
         else
-            aPoint.B() = Y() - rPor.GetAscent();
+            aPoint.Y() = Y() - rPor.GetAscent();
     }
 
     // Adjust x coordinate if we are inside a bidi portion
@@ -772,7 +772,7 @@ void SwTextPaintInfo::CalcRect( const SwLinePortion& rPor,
                              (  bFrameDir && DIR_LEFT2RIGHT == GetDirection() );
 
     if ( bCounterDir )
-        aPoint.A() -= aSize.Width();
+        aPoint.X() -= aSize.Width();
 
     SwRect aRect( aPoint, aSize );
 

@@ -1570,17 +1570,17 @@ void SwTOXEdit::KeyInput( const KeyEvent& rKEvt )
 {
     const Selection& rSel = GetSelection();
     const sal_Int32 nTextLen = GetText().getLength();
-    if((rSel.A() == rSel.B() &&
-        !rSel.A()) || rSel.A() == nTextLen )
+    if((rSel.Min() == rSel.Max() &&
+        !rSel.Min()) || rSel.Min() == nTextLen )
     {
         bool bCall = false;
         vcl::KeyCode aCode = rKEvt.GetKeyCode();
-        if(aCode.GetCode() == KEY_RIGHT && rSel.A() == nTextLen)
+        if(aCode.GetCode() == KEY_RIGHT && rSel.Min() == nTextLen)
         {
             bNextControl = true;
             bCall = true;
         }
-        else if(aCode.GetCode() == KEY_LEFT && !rSel.A() )
+        else if(aCode.GetCode() == KEY_LEFT && !rSel.Min() )
         {
             bNextControl = false;
             bCall = true;
@@ -3080,8 +3080,8 @@ void SwTokenWindow::InsertAtSelection(const OUString& rText, const SwFormToken& 
         aSel.Justify();
 
         const OUString sEditText = static_cast<SwTOXEdit*>(pActiveCtrl.get())->GetText();
-        const OUString sLeft = sEditText.copy( 0, aSel.A() );
-        const OUString sRight = sEditText.copy( aSel.B() );
+        const OUString sLeft = sEditText.copy( 0, aSel.Min() );
+        const OUString sRight = sEditText.copy( aSel.Max() );
 
         static_cast<SwTOXEdit*>(pActiveCtrl.get())->SetText(sLeft);
         static_cast<SwTOXEdit*>(pActiveCtrl.get())->AdjustSize();
@@ -3511,8 +3511,8 @@ IMPL_LINK(SwTokenWindow, NextItemBtnHdl, SwTOXButton&, rBtn, void )
         {
             const sal_Int32 nLen = static_cast<SwTOXEdit*>(pCtrlFocus)->GetText().getLength();
 
-            aSel.A() = nLen;
-            aSel.B() = nLen;
+            aSel.Min() = nLen;
+            aSel.Max() = nLen;
         }
 
         static_cast<SwTOXEdit*>(pCtrlFocus)->SetSelection(aSel);

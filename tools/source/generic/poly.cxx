@@ -1129,7 +1129,7 @@ private:
     double              mfX;
     double              mfY;
 public:
-    explicit     Vector2D( const Point& rPair ) : mfX( rPair.A() ), mfY( rPair.B() ) {};
+    explicit     Vector2D( const Point& rPoint ) : mfX( rPoint.X() ), mfY( rPoint.Y() ) {};
     double       GetLength() const { return hypot( mfX, mfY ); }
     Vector2D&    operator-=( const Vector2D& rVec ) { mfX -= rVec.mfX; mfY -= rVec.mfY; return *this; }
     double       Scalar( const Vector2D& rVec ) const { return mfX * rVec.mfX + mfY * rVec.mfY ; }
