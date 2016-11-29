@@ -1137,7 +1137,8 @@ bool ImpGraphic::ImplSwapOut()
                 xOStm->SetVersion( SOFFICE_FILEFORMAT_50 );
                 xOStm->SetCompressMode( SvStreamCompressFlags::NATIVE );
 
-                if( ( bRet = ImplSwapOut( xOStm.get() ) ) )
+                bRet = ImplSwapOut( xOStm.get() );
+                if( bRet )
                 {
                     mpSwapFile = o3tl::make_unique<ImpSwapFile>();
                     mpSwapFile->aSwapURL = aTmpURL;

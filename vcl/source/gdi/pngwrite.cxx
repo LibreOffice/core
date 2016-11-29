@@ -180,7 +180,8 @@ PNGWriterImpl::PNGWriterImpl( const BitmapEx& rBmpEx,
                 mpAccess = aBmp.AcquireReadAccess(); // true RGB with alphachannel
                 if (mpAccess)
                 {
-                    if ((mbTrueAlpha = rBmpEx.IsAlpha()))
+                    mbTrueAlpha = rBmpEx.IsAlpha();
+                    if (mbTrueAlpha)
                     {
                         AlphaMask aMask(rBmpEx.GetAlpha());
                         mpMaskAccess = aMask.AcquireReadAccess();

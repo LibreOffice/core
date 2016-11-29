@@ -356,7 +356,8 @@ bool ImplLayoutRuns::PosIsInAnyRun( int nCharPos ) const
 
     for (size_t i = 0; i < maRuns.size(); i+=2)
     {
-        if( (bRet = PosIsInRun( nCharPos )) )
+        bRet = PosIsInRun( nCharPos );
+        if( bRet )
             break;
         pThis->NextRun();
     }

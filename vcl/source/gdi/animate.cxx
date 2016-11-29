@@ -601,7 +601,8 @@ bool Animation::Mirror( BmpMirrorFlags nMirrorFlags )
             for( size_t i = 0, n = maList.size(); ( i < n ) && bRet; ++i )
             {
                 AnimationBitmap* pStepBmp = maList[ i ];
-                if( ( bRet = pStepBmp->aBmpEx.Mirror( nMirrorFlags ) ) )
+                bRet = pStepBmp->aBmpEx.Mirror( nMirrorFlags );
+                if( bRet )
                 {
                     if( nMirrorFlags & BmpMirrorFlags::Horizontal )
                         pStepBmp->aPosPix.X() = maGlobalSize.Width() - pStepBmp->aPosPix.X() - pStepBmp->aSizePix.Width();

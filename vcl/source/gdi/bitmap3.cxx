@@ -774,7 +774,8 @@ bool Bitmap::ImplConvertDown(sal_uInt16 nBitCount, Color* pExtColor)
 
                 // Refill/copy row buffer
                 pQLine1 = pQLine2;
-                pQLine2 = (bQ1 = !bQ1) ? aErrQuad2.data() : aErrQuad1.data();
+                bQ1 = !bQ1;
+                pQLine2 = bQ1 ? aErrQuad2.data() : aErrQuad1.data();
 
                 if (nYTmp < nHeight)
                 {
@@ -1608,7 +1609,8 @@ bool Bitmap::ImplDitherFloyd16()
 
             // Refill/copy row buffer
             pQLine1 = pQLine2;
-            pQLine2 = ( bQ1 = !bQ1 ) ? pErrQuad2.get() : pErrQuad1.get();
+            bQ1 = !bQ1;
+            pQLine2 = bQ1 ? pErrQuad2.get() : pErrQuad1.get();
 
             if( nYTmp < nHeight )
                 for( nX = 0; nX < nWidth; nX++ )

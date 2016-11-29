@@ -841,7 +841,8 @@ void TabControl::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplTabItem* p
         }
     }
 
-    if ( (bNativeOK = rRenderContext.IsNativeControlSupported(ControlType::TabItem, ControlPart::Entire)) )
+    bNativeOK = rRenderContext.IsNativeControlSupported(ControlType::TabItem, ControlPart::Entire);
+    if ( bNativeOK )
     {
         TabitemValue tiValue(Rectangle(pItem->maRect.Left() + TAB_TABOFFSET_X,
                                        pItem->maRect.Top() + TAB_TABOFFSET_Y,

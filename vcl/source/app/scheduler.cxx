@@ -172,11 +172,9 @@ void Scheduler::CallbackTaskScheduling(bool)
 
 bool Scheduler::ProcessTaskScheduling( bool bTimerOnly )
 {
-    ImplSchedulerData* pSchedulerData;
-
     DBG_TESTSOLARMUTEX();
 
-    if ((pSchedulerData = ImplSchedulerData::GetMostImportantTask(bTimerOnly)))
+    if (ImplSchedulerData * pSchedulerData = ImplSchedulerData::GetMostImportantTask(bTimerOnly))
     {
         SAL_INFO("vcl.schedule", "Invoke task " << pSchedulerData->GetDebugName());
 

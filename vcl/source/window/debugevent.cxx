@@ -35,18 +35,19 @@ static double getRandom()
 
 vcl::Window *DebugEventInjector::ChooseWindow()
 {
-    vcl::Window *pWindow, *pParent;
+    vcl::Window *pParent;
 
-    if (getRandom() < 0.80 &&
-        (pWindow = Application::GetFocusWindow()))
-        return pWindow;
+    if (getRandom() < 0.80)
+        if (vcl::Window * pWindow = Application::GetFocusWindow())
+            return pWindow;
 
     if (getRandom() > 0.50 ||
         !(pParent = Application::GetActiveTopWindow()))
     {
         // select a top window at random
         long nIdx = Application::GetTopWindowCount() * getRandom();
-        if (!(pParent = Application::GetTopWindow( nIdx )))
+        pParent = Application::GetTopWindow( nIdx );
+        if (!pParent)
             pParent = static_cast<vcl::Window *>(Application::GetAppWindow());
     }
     assert (pParent != nullptr);

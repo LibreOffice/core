@@ -2188,7 +2188,8 @@ bool PDFWriterImpl::writeBuffer( const void* pBuffer, sal_uInt64 nBytes )
         if( m_bEncryptThisStream )
         {
             /* implement the encryption part of the PDF spec encryption algorithm 3.1 */
-            if( ( buffOK = checkEncryptionBufferSize( static_cast<sal_Int32>(nBytes) ) ) )
+            buffOK = checkEncryptionBufferSize( static_cast<sal_Int32>(nBytes) );
+            if( buffOK )
                 rtl_cipher_encodeARCFOUR( m_aCipher,
                                           pBuffer, static_cast<sal_Size>(nBytes),
                                           m_pEncryptionBuffer, static_cast<sal_Size>(nBytes) );
@@ -7444,13 +7445,13 @@ bool PDFWriter::Sign(PDFSignContext& rContext)
     aSignedInfo.cCertEncoded = 1;
     aSignedInfo.rgCertEncoded = &aCertBlob;
 
-    HCRYPTMSG hMsg;
-    if (!(hMsg = CryptMsgOpenToEncode(PKCS_7_ASN_ENCODING | X509_ASN_ENCODING,
-                                      CMSG_DETACHED_FLAG,
-                                      CMSG_SIGNED,
-                                      &aSignedInfo,
-                                      nullptr,
-                                      nullptr)))
+    HCRYPTMSG hMsg = CryptMsgOpenToEncode(PKCS_7_ASN_ENCODING | X509_ASN_ENCODING,
+                                          CMSG_DETACHED_FLAG,
+                                          CMSG_SIGNED,
+                                          &aSignedInfo,
+                                          nullptr,
+                                          nullptr);
+    if (!hMsg)
     {
         SAL_WARN("vcl.pdfwriter", "CryptMsgOpenToEncode failed: " << WindowsErrorString(GetLastError()));
         CertFreeCertificateContext(pCertContext);
@@ -7479,13 +7480,13 @@ bool PDFWriter::Sign(PDFSignContext& rContext)
             return false;
         }
 
-        HCRYPTMSG hDecodedMsg;
-        if (!(hDecodedMsg = CryptMsgOpenToDecode(PKCS_7_ASN_ENCODING | X509_ASN_ENCODING,
-                                                 CMSG_DETACHED_FLAG,
-                                                 CMSG_SIGNED,
-                                                 NULL,
-                                                 nullptr,
-                                                 nullptr)))
+        HCRYPTMSG hDecodedMsg = CryptMsgOpenToDecode(PKCS_7_ASN_ENCODING | X509_ASN_ENCODING,
+                                                     CMSG_DETACHED_FLAG,
+                                                     CMSG_SIGNED,
+                                                     NULL,
+                                                     nullptr,
+                                                     nullptr);
+        if (!hDecodedMsg)
         {
             SAL_WARN("vcl.pdfwriter", "CryptMsgOpenToDecode failed: " << WindowsErrorString(GetLastError()));
             CryptMsgClose(hMsg);
@@ -7608,12 +7609,13 @@ bool PDFWriter::Sign(PDFSignContext& rContext)
 
         CryptMsgClose(hMsg);
 
-        if (!(hMsg = CryptMsgOpenToEncode(PKCS_7_ASN_ENCODING | X509_ASN_ENCODING,
-                                          CMSG_DETACHED_FLAG,
-                                          CMSG_SIGNED,
-                                          &aSignedInfo,
-                                          nullptr,
-                                          nullptr)) ||
+        hMsg = CryptMsgOpenToEncode(PKCS_7_ASN_ENCODING | X509_ASN_ENCODING,
+                                    CMSG_DETACHED_FLAG,
+                                    CMSG_SIGNED,
+                                    &aSignedInfo,
+                                    nullptr,
+                                    nullptr);
+        if (!hMsg ||
             !CryptMsgUpdate(hMsg, static_cast<const BYTE *>(rContext.m_pByteRange1), rContext.m_nByteRange1, FALSE) ||
             !CryptMsgUpdate(hMsg, static_cast<const BYTE *>(rContext.m_pByteRange1), rContext.m_nByteRange2, TRUE))
         {
