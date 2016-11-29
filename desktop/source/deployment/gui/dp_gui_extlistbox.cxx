@@ -376,45 +376,52 @@ void ExtensionBox_Impl::DeleteRemoved()
 //This function may be called with nPos < 0
 void ExtensionBox_Impl::selectEntry( const long nPos )
 {
-    //ToDo whe should not use the guard at such a big scope here.
-    //Currently it is used to guard m_vEntries and m_nActive. m_nActive will be
-    //modified in this function.
-    //It would be probably best to always use a copy of m_vEntries
-    //and some other state variables from ExtensionBox_Impl for
-    //the whole painting operation. See issue i86993
-    ::osl::ClearableMutexGuard guard(m_entriesMutex);
-
-    if ( m_bInCheckMode )
-        return;
-
-    if ( m_bHasActive )
+    bool invalidate = false;
     {
-        if ( nPos == m_nActive )
+        //ToDo whe should not use the guard at such a big scope here.
+        //Currently it is used to guard m_vEntries and m_nActive. m_nActive will be
+        //modified in this function.
+        //It would be probably best to always use a copy of m_vEntries
+        //and some other state variables from ExtensionBox_Impl for
+        //the whole painting operation. See issue i86993
+        ::osl::MutexGuard guard(m_entriesMutex);
+
+        if ( m_bInCheckMode )
             return;
 
-        m_bHasActive = false;
-        m_vEntries[ m_nActive ]->m_bActive = false;
-    }
+        if ( m_bHasActive )
+        {
+            if ( nPos == m_nActive )
+                return;
 
-    if ( ( nPos >= 0 ) && ( nPos < (long) m_vEntries.size() ) )
-    {
-        m_bHasActive = true;
-        m_nActive = nPos;
-        m_vEntries[ nPos ]->m_bActive = true;
+            m_bHasActive = false;
+            m_vEntries[ m_nActive ]->m_bActive = false;
+        }
+
+        if ( ( nPos >= 0 ) && ( nPos < (long) m_vEntries.size() ) )
+        {
+            m_bHasActive = true;
+            m_nActive = nPos;
+            m_vEntries[ nPos ]->m_bActive = true;
+
+            if ( IsReallyVisible() )
+            {
+                m_bAdjustActive = true;
+            }
+        }
 
         if ( IsReallyVisible() )
         {
-            m_bAdjustActive = true;
+            m_bNeedsRecalc = true;
+            invalidate = true;
         }
     }
 
-    if ( IsReallyVisible() )
+    if (invalidate)
     {
-        m_bNeedsRecalc = true;
+        SolarMutexGuard g;
         Invalidate();
     }
-
-    guard.clear();
 }
 
 
@@ -1011,45 +1018,52 @@ void ExtensionBox_Impl::removeEntry( const uno::Reference< deployment::XPackage 
 {
    if ( ! m_bInDelete )
     {
-        ::osl::ClearableMutexGuard aGuard( m_entriesMutex );
-
-        typedef std::vector< TEntry_Impl >::iterator ITER;
-
-        for ( ITER iIndex = m_vEntries.begin(); iIndex < m_vEntries.end(); ++iIndex )
+        bool invalidate = false;
         {
-            if ( (*iIndex)->m_xPackage == xPackage )
+            ::osl::ClearableMutexGuard aGuard( m_entriesMutex );
+            typedef std::vector< TEntry_Impl >::iterator ITER;
+
+            for ( ITER iIndex = m_vEntries.begin(); iIndex < m_vEntries.end(); ++iIndex )
             {
-                long nPos = iIndex - m_vEntries.begin();
-
-                // Entries mustn't be removed here, because they contain a hyperlink control
-                // which can only be deleted when the thread has the solar mutex. Therefore
-                // the entry will be moved into the m_vRemovedEntries list which will be
-                // cleared on the next paint event
-                m_vRemovedEntries.push_back( *iIndex );
-                (*iIndex)->m_xPackage->removeEventListener(
-                    uno::Reference<lang::XEventListener>(m_xRemoveListener, uno::UNO_QUERY));
-                m_vEntries.erase( iIndex );
-
-                m_bNeedsRecalc = true;
-
-                if ( IsReallyVisible() )
-                    Invalidate();
-
-                if ( m_bHasActive )
+                if ( (*iIndex)->m_xPackage == xPackage )
                 {
-                    if ( nPos < m_nActive )
-                        m_nActive -= 1;
-                    else if ( ( nPos == m_nActive ) &&
-                              ( nPos == (long) m_vEntries.size() ) )
-                        m_nActive -= 1;
+                    long nPos = iIndex - m_vEntries.begin();
 
-                    m_bHasActive = false;
-                    //clear before calling out of this method
-                    aGuard.clear();
-                    selectEntry( m_nActive );
+                    // Entries mustn't be removed here, because they contain a hyperlink control
+                    // which can only be deleted when the thread has the solar mutex. Therefore
+                    // the entry will be moved into the m_vRemovedEntries list which will be
+                    // cleared on the next paint event
+                    m_vRemovedEntries.push_back( *iIndex );
+                    (*iIndex)->m_xPackage->removeEventListener(m_xRemoveListener.get());
+                    m_vEntries.erase( iIndex );
+
+                    m_bNeedsRecalc = true;
+
+                    if ( IsReallyVisible() )
+                        invalidate = true;
+
+                    if ( m_bHasActive )
+                    {
+                        if ( nPos < m_nActive )
+                            m_nActive -= 1;
+                        else if ( ( nPos == m_nActive ) &&
+                                  ( nPos == (long) m_vEntries.size() ) )
+                            m_nActive -= 1;
+
+                        m_bHasActive = false;
+                        //clear before calling out of this method
+                        aGuard.clear();
+                        selectEntry( m_nActive );
+                    }
+                    break;
                 }
-                break;
             }
+        }
+
+        if (invalidate)
+        {
+            SolarMutexGuard g;
+            Invalidate();
         }
     }
 }
