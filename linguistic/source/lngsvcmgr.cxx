@@ -29,6 +29,7 @@
 #include <com/sun/star/linguistic2/ProofreadingIterator.hpp>
 
 #include <unotools/lingucfg.hxx>
+#include <vcl/svapp.hxx>
 #include <comphelper/processfactory.hxx>
 #include <i18nlangtag/lang.h>
 #include <i18nlangtag/languagetag.hxx>
@@ -480,17 +481,22 @@ LngSvcMgr::LngSvcMgr()
 void LngSvcMgr::modified(const lang::EventObject&)
     throw(uno::RuntimeException, std::exception)
 {
-    osl::MutexGuard aGuard(GetLinguMutex());
-    //assume that if an extension has been added/removed that
-    //it might be a dictionary extension, so drop our cache
+    {
+        osl::MutexGuard aGuard(GetLinguMutex());
+        //assume that if an extension has been added/removed that
+        //it might be a dictionary extension, so drop our cache
 
-    clearSvcInfoArray(pAvailSpellSvcs);
-    clearSvcInfoArray(pAvailGrammarSvcs);
-    clearSvcInfoArray(pAvailHyphSvcs);
-    clearSvcInfoArray(pAvailThesSvcs);
+        clearSvcInfoArray(pAvailSpellSvcs);
+        clearSvcInfoArray(pAvailGrammarSvcs);
+        clearSvcInfoArray(pAvailHyphSvcs);
+        clearSvcInfoArray(pAvailThesSvcs);
+    }
 
-    //schedule in an update to execute in the main thread
-    aUpdateIdle.Start();
+    {
+        SolarMutexGuard aGuard;
+        //schedule in an update to execute in the main thread
+        aUpdateIdle.Start();
+    }
 }
 
 //run update, and inform everyone that dictionaries (may) have changed, this
