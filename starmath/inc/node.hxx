@@ -442,7 +442,7 @@ public:
  */
 class SmSpecialNode : public SmTextNode
 {
-    bool    bIsFromGreekSymbolSet;
+    bool mbIsFromGreekSymbolSet;
 
 protected:
     SmSpecialNode(SmNodeType eNodeType, const SmToken &rNodeToken, sal_uInt16 _nFontDesc);
@@ -528,16 +528,16 @@ public:
  */
 class SmRootSymbolNode : public SmMathSymbolNode
 {
-    sal_uLong  nBodyWidth;  // width of body (argument) of root sign
+    sal_uLong mnBodyWidth;  // width of body (argument) of root sign
 
 public:
     explicit SmRootSymbolNode(const SmToken &rNodeToken)
         : SmMathSymbolNode(NROOTSYMBOL, rNodeToken)
-        , nBodyWidth(0)
+        , mnBodyWidth(0)
     {
     }
 
-    sal_uLong GetBodyWidth() const {return nBodyWidth;};
+    sal_uLong GetBodyWidth() const {return mnBodyWidth;};
     virtual void AdaptToX(OutputDevice &rDev, sal_uLong nHeight) override;
     virtual void AdaptToY(OutputDevice &rDev, sal_uLong nHeight) override;
 
@@ -595,11 +595,11 @@ public:
  */
 class SmTableNode : public SmStructureNode
 {
-    long nFormulaBaseline;
+    long mnFormulaBaseline;
 public:
     explicit SmTableNode(const SmToken &rNodeToken)
         :   SmStructureNode(NTABLE, rNodeToken)
-        , nFormulaBaseline(0)
+        , mnFormulaBaseline(0)
     {
     }
 
@@ -619,24 +619,24 @@ public:
  */
 class SmLineNode : public SmStructureNode
 {
-    bool  bUseExtraSpaces;
+    bool mbUseExtraSpaces;
 
 protected:
     SmLineNode(SmNodeType eNodeType, const SmToken &rNodeToken)
-    :   SmStructureNode(eNodeType, rNodeToken)
+        : SmStructureNode(eNodeType, rNodeToken)
+        , mbUseExtraSpaces(true)
     {
-        bUseExtraSpaces = true;
     }
 
 public:
     explicit SmLineNode(const SmToken &rNodeToken)
-    :   SmStructureNode(NLINE, rNodeToken)
+        : SmStructureNode(NLINE, rNodeToken)
+        , mbUseExtraSpaces(true)
     {
-        bUseExtraSpaces = true;
     }
 
-    void  SetUseExtraSpaces(bool bVal) { bUseExtraSpaces = bVal; }
-    bool  IsUseExtraSpaces() const { return bUseExtraSpaces; };
+    void  SetUseExtraSpaces(bool bVal) { mbUseExtraSpaces = bVal; }
+    bool  IsUseExtraSpaces() const { return mbUseExtraSpaces; };
 
     virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell) override;
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
