@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a71b18c_c89fffb2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2016-11-29T07:48:55Z",
+      "side": 1,
+      "message": "Icu seems to be broken on MSVC 15.0: [1].\n\n* [1] http://paste.openstack.org/show/590755",
+      "revId": "033b4df7c80d7fe13d4a4b0da4c6b9cabb7d1c9f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
