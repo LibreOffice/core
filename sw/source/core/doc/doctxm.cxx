@@ -818,7 +818,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
     // get current Language
     SwTOXInternational aIntl(  GetLanguage(),
                                TOX_INDEX == GetTOXType()->GetType() ?
-                               GetOptions() : 0,
+                               GetOptions() : SwTOIOptions::NONE,
                                GetSortAlgorithm() );
 
     for (SwTOXSortTabBases::const_iterator it = aSortArr.begin(); it != aSortArr.end(); ++it)
@@ -925,7 +925,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
 
     // Insert AlphaDelimitters if needed (just for keywords)
     if( TOX_INDEX == SwTOXBase::GetType() &&
-        ( GetOptions() & nsSwTOIOptions::TOI_ALPHA_DELIMITTER ) )
+        ( GetOptions() & SwTOIOptions::AlphaDelimiter ) )
         InsertAlphaDelimitter( aIntl );
 
     // Sort the List of all TOC Marks and TOC Sections
@@ -1158,7 +1158,7 @@ void SwTOXBaseSection::UpdateMarks( const SwTOXInternational& rIntl,
                     pBase = new SwTOXIndex( *pTOXSrc, pTextMark,
                                             GetOptions(), FORM_ENTRY, rIntl, aLocale );
                     InsertSorted(pBase);
-                    if(GetOptions() & nsSwTOIOptions::TOI_KEY_AS_ENTRY &&
+                    if(GetOptions() & SwTOIOptions::KeyAsEntry &&
                         !pTextMark->GetTOXMark().GetPrimaryKey().isEmpty())
                     {
                         pBase = new SwTOXIndex( *pTOXSrc, pTextMark,
@@ -1538,7 +1538,7 @@ void SwTOXBaseSection::UpdatePageNum()
 
     SwTOXInternational aIntl( GetLanguage(),
                               TOX_INDEX == GetTOXType()->GetType() ?
-                              GetOptions() : 0,
+                              GetOptions() : SwTOIOptions::NONE,
                               GetSortAlgorithm() );
 
     for( SwTOXSortTabBases::size_type nCnt = 0; nCnt < aSortArr.size(); ++nCnt )
@@ -1715,12 +1715,12 @@ void SwTOXBaseSection::UpdatePageNum_( SwTextNode* pNd,
                     != lcl_HasMainEntry(pMainEntryNums, rNums[i]);
 
             if(nOld == rNums[i]-1 && !bMainEntryChanges &&
-                0 != (GetOptions() & (nsSwTOIOptions::TOI_FF|nsSwTOIOptions::TOI_DASH)))
+                (GetOptions() & (SwTOIOptions::FF|SwTOIOptions::Dash)))
                 nCount++;
             else
             {
                 // Flush for the following old values
-                if(GetOptions() & nsSwTOIOptions::TOI_FF)
+                if(GetOptions() & SwTOIOptions::FF)
                 {
                     if ( nCount >= 1 )
                         aNumStr += rIntl.GetFollowingText( nCount > 1 );
@@ -1758,7 +1758,7 @@ void SwTOXBaseSection::UpdatePageNum_( SwTextNode* pNd,
     // Flush when ending and the following old values
     if( TOX_INDEX == SwTOXBase::GetType() )
     {
-        if(GetOptions() & nsSwTOIOptions::TOI_FF)
+        if(GetOptions() & SwTOIOptions::FF)
         {
             if( nCount >= 1 )
                 aNumStr += rIntl.GetFollowingText( nCount > 1 );
@@ -1820,7 +1820,7 @@ void SwTOXBaseSection::InsertSorted(SwTOXSortTabBase* pNew)
         const SwTOXMark& rMark = pNew->pTextMark->GetTOXMark();
         // Evaluate Key
         // Calculate the range where to insert
-        if( 0 == (GetOptions() & nsSwTOIOptions::TOI_KEY_AS_ENTRY) &&
+        if( !(GetOptions() & SwTOIOptions::KeyAsEntry) &&
             !rMark.GetPrimaryKey().isEmpty() )
         {
             aRange = GetKeyRange( rMark.GetPrimaryKey(),
@@ -1870,10 +1870,10 @@ void SwTOXBaseSection::InsertSorted(SwTOXSortTabBase* pNew)
             {
                 // Own entry for double entries or keywords
                 if( pOld->GetType() == TOX_SORT_CUSTOM &&
-                    SwTOXSortTabBase::GetOptions() & nsSwTOIOptions::TOI_KEY_AS_ENTRY)
+                    SwTOXSortTabBase::GetOptions() & SwTOIOptions::KeyAsEntry)
                     continue;
 
-                if(!(SwTOXSortTabBase::GetOptions() & nsSwTOIOptions::TOI_SAME_ENTRY))
+                if(!(SwTOXSortTabBase::GetOptions() & SwTOIOptions::SameEntry))
                 {   // Own entry
                     aSortArr.insert(aSortArr.begin() + i, pNew);
                     return;
@@ -1909,7 +1909,7 @@ Range SwTOXBaseSection::GetKeyRange(const OUString& rStr, const OUString& rStrRe
     const SwTOXInternational& rIntl = *rNew.pTOXIntl;
     TextAndReading aToCompare(rStr, rStrReading);
 
-    if( 0 != (nsSwTOIOptions::TOI_INITIAL_CAPS & GetOptions()) )
+    if( SwTOIOptions::InitialCaps & GetOptions() )
     {
         aToCompare.sText = rIntl.ToUpper( aToCompare.sText, 0 )
                          + aToCompare.sText.copy(1);

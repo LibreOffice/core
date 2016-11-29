@@ -438,7 +438,7 @@ SwTOXBase::SwTOXBase(const SwTOXType* pTyp, const SwForm& rForm,
     , maMSTOCExpression()
     , mbKeepExpression(true)
 {
-    m_aData.nOptions = 0;
+    m_aData.nOptions = SwTOIOptions::NONE;
 }
 
 SwTOXBase::SwTOXBase( const SwTOXBase& rSource, SwDoc* pDoc )

@@ -349,16 +349,19 @@ namespace o3tl {
     template<> struct typed_flags<SwTOXElement> : is_typed_flags<SwTOXElement, 0x3fff> {};
 }
 
-typedef sal_uInt16 SwTOIOptions;
-namespace nsSwTOIOptions
+enum class SwTOIOptions : sal_uInt16
 {
-    const SwTOIOptions TOI_SAME_ENTRY       = 1;
-    const SwTOIOptions TOI_FF               = 2;
-    const SwTOIOptions TOI_CASE_SENSITIVE   = 4;
-    const SwTOIOptions TOI_KEY_AS_ENTRY     = 8;
-    const SwTOIOptions TOI_ALPHA_DELIMITTER = 16;
-    const SwTOIOptions TOI_DASH             = 32;
-    const SwTOIOptions TOI_INITIAL_CAPS     = 64;
+    NONE            = 0x00,
+    SameEntry       = 0x01,
+    FF              = 0x02,
+    CaseSensitive   = 0x04,
+    KeyAsEntry      = 0x08,
+    AlphaDelimiter  = 0x10,
+    Dash            = 0x20,
+    InitialCaps     = 0x40,
+};
+namespace o3tl {
+    template<> struct typed_flags<SwTOIOptions> : is_typed_flags<SwTOIOptions, 0x7f> {};
 }
 
 //which part of the caption is to be displayed
@@ -400,7 +403,7 @@ class SW_DLLPUBLIC SwTOXBase : public SwClient
 
     union {
         sal_uInt16      nLevel;             // consider outline levels
-        sal_uInt16      nOptions;           // options of alphabetical index
+        SwTOIOptions    nOptions;           // options of alphabetical index
     } m_aData;
 
     SwTOXElement    m_nCreateType;        // sources to create the index from
@@ -467,8 +470,8 @@ public:
     inline sal_uInt16       GetLevel() const;
 
     // alphabetical index only
-    inline sal_uInt16       GetOptions() const;                 // alphabetical index options
-    inline void             SetOptions(sal_uInt16 nOpt);
+    inline SwTOIOptions     GetOptions() const;                 // alphabetical index options
+    inline void             SetOptions(SwTOIOptions nOpt);
 
     // index of objects
     sal_uInt16      GetOLEOptions() const {return m_nOLEOptions;}
@@ -709,13 +712,13 @@ inline sal_uInt16 SwTOXBase::GetLevel() const
     return m_aData.nLevel;
 }
 
-inline sal_uInt16 SwTOXBase::GetOptions() const
+inline SwTOIOptions SwTOXBase::GetOptions() const
 {
     SAL_WARN_IF(GetTOXType()->GetType() != TOX_INDEX, "sw", "Wrong type");
     return m_aData.nOptions;
 }
 
-inline void SwTOXBase::SetOptions(sal_uInt16 nOpt)
+inline void SwTOXBase::SetOptions(SwTOIOptions nOpt)
 {
     SAL_WARN_IF(GetTOXType()->GetType() != TOX_INDEX, "sw", "Wrong type");
     m_aData.nOptions = nOpt;

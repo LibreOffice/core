@@ -40,7 +40,7 @@ class SW_DLLPUBLIC SwTOXDescription
     OUString*           m_pTOUName;
     SwForm*             m_pForm;
     SwTOXElement        m_nContent;
-    sal_uInt16          m_nIndexOptions;
+    SwTOIOptions        m_nIndexOptions;
     sal_uInt16          m_nOLEOptions;
     LanguageType        m_eLanguage;
     OUString            m_sSortAlgorithm;
@@ -72,7 +72,7 @@ public:
         m_pTOUName(nullptr),
         m_pForm(nullptr),
         m_nContent(SwTOXElement::Mark | SwTOXElement::OutlineLevel),
-        m_nIndexOptions(nsSwTOIOptions::TOI_SAME_ENTRY|nsSwTOIOptions::TOI_FF|nsSwTOIOptions::TOI_CASE_SENSITIVE),
+        m_nIndexOptions(SwTOIOptions::SameEntry|SwTOIOptions::FF|SwTOIOptions::CaseSensitive),
         m_nOLEOptions(0),
         m_eLanguage((LanguageType)::GetAppLanguage()),
         m_eCaptionDisplay(CAPTION_COMPLETE),
@@ -113,8 +113,8 @@ public:
     void            SetContentOptions(SwTOXElement nSet) { m_nContent = nSet;}
     SwTOXElement    GetContentOptions() const { return m_nContent;}
 
-    void            SetIndexOptions(sal_uInt16 nSet) { m_nIndexOptions = nSet;}
-    sal_uInt16      GetIndexOptions() const { return m_nIndexOptions;}
+    void            SetIndexOptions(SwTOIOptions nSet) { m_nIndexOptions = nSet;}
+    SwTOIOptions    GetIndexOptions() const { return m_nIndexOptions;}
 
     const OUString& GetMainEntryCharStyle() const {return m_sMainEntryCharStyle;}
     void            SetMainEntryCharStyle(const OUString& rSet)  {m_sMainEntryCharStyle = rSet;}

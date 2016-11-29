@@ -195,7 +195,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
          uno::Reference< beans::XPropertySet >  xIdxProps(pxIndexSectionsArr[nTOXIndex]->xDocumentIndex, uno::UNO_QUERY);
          uno::Reference< beans::XPropertySetInfo >  xInfo = xIdxProps->getPropertySetInfo();
          SwTOXDescription& rDesc = GetTOXDescription(eCurrentTOXType);
-         sal_uInt16 nIdxOptions = rDesc.GetIndexOptions();
+         SwTOIOptions nIdxOptions = rDesc.GetIndexOptions();
          if(bInitialCreate || !nPage || nPage == TOX_PAGE_SELECT)
          {
             //title
@@ -242,13 +242,13 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
             lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_CREATE_FROM_CHAPTER, rDesc.IsFromChapter());
             lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_IS_PROTECTED, rDesc.IsReadonly());
 
-            lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_USE_COMBINED_ENTRIES,        0 != (nIdxOptions&nsSwTOIOptions::TOI_SAME_ENTRY        ));
-            lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_USE_P_P,                     0 != (nIdxOptions&nsSwTOIOptions::TOI_FF                   ));
-            lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_IS_CASE_SENSITIVE,           0 != (nIdxOptions&nsSwTOIOptions::TOI_CASE_SENSITIVE     ));
-            lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_USE_KEY_AS_ENTRY,            0 != (nIdxOptions&nsSwTOIOptions::TOI_KEY_AS_ENTRY     ));
-            lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_USE_ALPHABETICAL_SEPARATORS, 0 != (nIdxOptions&nsSwTOIOptions::TOI_ALPHA_DELIMITTER));
-            lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_USE_DASH,                    0 != (nIdxOptions&nsSwTOIOptions::TOI_DASH             ));
-            lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_USE_UPPER_CASE,              0 != (nIdxOptions&nsSwTOIOptions::TOI_INITIAL_CAPS     ));
+            lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_USE_COMBINED_ENTRIES,        bool(nIdxOptions & SwTOIOptions::SameEntry        ));
+            lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_USE_P_P,                     bool(nIdxOptions & SwTOIOptions::FF                   ));
+            lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_IS_CASE_SENSITIVE,           bool(nIdxOptions & SwTOIOptions::CaseSensitive     ));
+            lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_USE_KEY_AS_ENTRY,            bool(nIdxOptions & SwTOIOptions::KeyAsEntry     ));
+            lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_USE_ALPHABETICAL_SEPARATORS, bool(nIdxOptions & SwTOIOptions::AlphaDelimiter));
+            lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_USE_DASH,                    bool(nIdxOptions & SwTOIOptions::Dash             ));
+            lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_USE_UPPER_CASE,              bool(nIdxOptions & SwTOIOptions::InitialCaps     ));
 
             OUString aTmpName( SwStyleNameMapper::GetSpecialExtraProgName( rDesc.GetSequenceName() ) );
             lcl_SetProp(xInfo, xIdxProps, UNO_NAME_LABEL_CATEGORY, aTmpName );
@@ -274,7 +274,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
          if(bInitialCreate || !nPage || nPage == TOX_PAGE_ENTRY)
          {
             lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_IS_COMMA_SEPARATED, pForm->IsCommaSeparated());
-            lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_USE_ALPHABETICAL_SEPARATORS, 0 != (nIdxOptions&nsSwTOIOptions::TOI_ALPHA_DELIMITTER));
+            lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_USE_ALPHABETICAL_SEPARATORS, bool(nIdxOptions&SwTOIOptions::AlphaDelimiter));
             const bool bUseCurrent = nCurrentLevel < pForm->GetFormMax();
             const sal_uInt16 nStartLevel = bUseCurrent ? nCurrentLevel : 0;
             const sal_uInt16 nEndLevel = bUseCurrent ? nCurrentLevel : pForm->GetFormMax() - 1;

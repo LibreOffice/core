@@ -1082,18 +1082,18 @@ void SwTOXSelectTabPage::ApplyTOXDescription()
     //index only
     else if(TOX_INDEX == aCurType.eType)
     {
-        const sal_uInt16 nIndexOptions = rDesc.GetIndexOptions();
-        m_pCollectSameCB->     Check( 0 != (nIndexOptions & nsSwTOIOptions::TOI_SAME_ENTRY) );
-        m_pUseFFCB->           Check( 0 != (nIndexOptions & nsSwTOIOptions::TOI_FF) );
-        m_pUseDashCB->         Check( 0 != (nIndexOptions & nsSwTOIOptions::TOI_DASH) );
+        const SwTOIOptions nIndexOptions = rDesc.GetIndexOptions();
+        m_pCollectSameCB->     Check( bool(nIndexOptions & SwTOIOptions::SameEntry) );
+        m_pUseFFCB->           Check( bool(nIndexOptions & SwTOIOptions::FF) );
+        m_pUseDashCB->         Check( bool(nIndexOptions & SwTOIOptions::Dash) );
         if(m_pUseFFCB->IsChecked())
             m_pUseDashCB->Enable(false);
         else if(m_pUseDashCB->IsChecked())
             m_pUseFFCB->Enable(false);
 
-        m_pCaseSensitiveCB->   Check( 0 != (nIndexOptions & nsSwTOIOptions::TOI_CASE_SENSITIVE) );
-        m_pInitialCapsCB->     Check( 0 != (nIndexOptions & nsSwTOIOptions::TOI_INITIAL_CAPS) );
-        m_pKeyAsEntryCB->      Check( 0 != (nIndexOptions & nsSwTOIOptions::TOI_KEY_AS_ENTRY) );
+        m_pCaseSensitiveCB->   Check( bool(nIndexOptions & SwTOIOptions::CaseSensitive) );
+        m_pInitialCapsCB->     Check( bool(nIndexOptions & SwTOIOptions::InitialCaps) );
+        m_pKeyAsEntryCB->      Check( bool(nIndexOptions & SwTOIOptions::KeyAsEntry) );
     }
     else if(TOX_ILLUSTRATIONS == aCurType.eType ||
         TOX_TABLES == aCurType.eType)
@@ -1153,7 +1153,7 @@ void SwTOXSelectTabPage::FillTOXDescription()
     if(m_pTOXMarksCB->IsVisible() && m_pTOXMarksCB->IsChecked())
         nContentOptions |= SwTOXElement::Mark;
 
-    sal_uInt16 nIndexOptions = rDesc.GetIndexOptions()&nsSwTOIOptions::TOI_ALPHA_DELIMITTER;
+    SwTOIOptions nIndexOptions = rDesc.GetIndexOptions()&SwTOIOptions::AlphaDelimiter;
     switch(rDesc.GetTOXType())
     {
         case TOX_CONTENT:
@@ -1179,17 +1179,17 @@ void SwTOXSelectTabPage::FillTOXDescription()
             nContentOptions = SwTOXElement::Mark;
 
             if(m_pCollectSameCB->IsChecked())
-                nIndexOptions |= nsSwTOIOptions::TOI_SAME_ENTRY;
+                nIndexOptions |= SwTOIOptions::SameEntry;
             if(m_pUseFFCB->IsChecked())
-                nIndexOptions |= nsSwTOIOptions::TOI_FF;
+                nIndexOptions |= SwTOIOptions::FF;
             if(m_pUseDashCB->IsChecked())
-                nIndexOptions |= nsSwTOIOptions::TOI_DASH;
+                nIndexOptions |= SwTOIOptions::Dash;
             if(m_pCaseSensitiveCB->IsChecked())
-                nIndexOptions |= nsSwTOIOptions::TOI_CASE_SENSITIVE;
+                nIndexOptions |= SwTOIOptions::CaseSensitive;
             if(m_pInitialCapsCB->IsChecked())
-                nIndexOptions |= nsSwTOIOptions::TOI_INITIAL_CAPS;
+                nIndexOptions |= SwTOIOptions::InitialCaps;
             if(m_pKeyAsEntryCB->IsChecked())
-                nIndexOptions |= nsSwTOIOptions::TOI_KEY_AS_ENTRY;
+                nIndexOptions |= SwTOIOptions::KeyAsEntry;
             if(m_pFromFileCB->IsChecked())
                 rDesc.SetAutoMarkURL(sAutoMarkURL);
             else
@@ -2056,7 +2056,7 @@ void SwTOXEntryTabPage::Reset( const SfxItemSet* )
         }
         else
             m_pMainEntryStyleLB->SelectEntry(sNoCharStyle);
-        m_pAlphaDelimCB->Check( 0 != (rDesc.GetIndexOptions() & nsSwTOIOptions::TOI_ALPHA_DELIMITTER) );
+        m_pAlphaDelimCB->Check( bool(rDesc.GetIndexOptions() & SwTOIOptions::AlphaDelimiter) );
     }
     m_pRelToStyleCB->Check(m_pCurrentForm->IsRelTabPos());
     m_pCommaSeparatedCB->Check(m_pCurrentForm->IsCommaSeparated());
@@ -2178,9 +2178,9 @@ void SwTOXEntryTabPage::UpdateDescriptor()
     {
         const OUString sTemp(m_pMainEntryStyleLB->GetSelectEntry());
         rDesc.SetMainEntryCharStyle(sNoCharStyle == sTemp ? aEmptyOUStr : sTemp);
-        sal_uInt16 nIdxOptions = rDesc.GetIndexOptions() & ~nsSwTOIOptions::TOI_ALPHA_DELIMITTER;
+        SwTOIOptions nIdxOptions = rDesc.GetIndexOptions() & ~SwTOIOptions::AlphaDelimiter;
         if(m_pAlphaDelimCB->IsChecked())
-            nIdxOptions |= nsSwTOIOptions::TOI_ALPHA_DELIMITTER;
+            nIdxOptions |= SwTOIOptions::AlphaDelimiter;
         rDesc.SetIndexOptions(nIdxOptions);
     }
     else if(TOX_AUTHORITIES == aLastTOXType.eType)
