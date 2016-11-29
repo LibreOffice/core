@@ -2436,10 +2436,12 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
                             if ( pTextObj->Count() == 1 )
                             {
                                 PPTParagraphObj* pPara = pTextObj->First();
-                                PPTPortionObj* pPor = nullptr;
-                                if ( pPara && pPara->GetTextSize() == 0 && (pPor = pPara->First()))
+                                if ( pPara && pPara->GetTextSize() == 0 )
                                 {
-                                    pPor->ApplyTo(aSet, (SdrPowerPointImport&)*this, pTextObj->GetDestinationInstance());
+                                    if ( PPTPortionObj * pPor = pPara->First() )
+                                    {
+                                        pPor->ApplyTo(aSet, (SdrPowerPointImport&)*this, pTextObj->GetDestinationInstance());
+                                    }
                                 }
                             }
                             pPresObj->SetMergedItemSet(aSet);

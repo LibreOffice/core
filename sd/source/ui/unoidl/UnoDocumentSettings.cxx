@@ -332,7 +332,8 @@ uno::Sequence<beans::PropertyValue>
     for( size_t i = 0; i < SAL_N_ELEMENTS( aURLPropertyNames ); i++ )
     {
         XPropertyListRef pList = pDoc->GetPropertyList( (XPropertyListType) i );
-        if( ( bHasEmbed = pList.is() && pList->IsEmbedInDocument() ) )
+        bHasEmbed = pList.is() && pList->IsEmbedInDocument();
+        if( bHasEmbed )
             break;
     }
     if( !bHasEmbed )
