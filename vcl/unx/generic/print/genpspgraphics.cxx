@@ -892,12 +892,7 @@ FontAttributes GenPspGraphics::Info2FontAttributes( const psp::FastPrintFontInfo
     aDFA.SetWidthType( rInfo.m_eWidth );
     aDFA.SetPitch( rInfo.m_ePitch );
     aDFA.SetSymbolFlag( (rInfo.m_aEncoding == RTL_TEXTENCODING_SYMBOL) );
-    aDFA.SetSubsettableFlag( rInfo.m_bSubsettable );
-    aDFA.SetEmbeddableFlag(false);
     aDFA.SetQuality(512);
-    aDFA.SetBuiltInFontFlag(false);
-
-    aDFA.SetOrientationFlag( true );
 
     // add font family name aliases
     ::std::list< OUString >::const_iterator it = rInfo.m_aAliases.begin();

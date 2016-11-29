@@ -158,9 +158,6 @@ void PhysicalFontCollection::ImplInitGenericGlyphFallback() const
         if( !pFallbackFont )
             continue;
 
-        if( !pFallbackFont->IsScalable() )
-            continue;
-
         // keep the best font of the glyph fallback sub-list
         if( nBestQuality < pFallbackFont->GetMinQuality() )
         {
@@ -919,7 +916,7 @@ PhysicalFontFamily* PhysicalFontCollection::ImplFindFontFamilyOfDefaultFont() co
     return pFoundData;
 }
 
-PhysicalFontCollection* PhysicalFontCollection::Clone( bool bEmbeddable ) const
+PhysicalFontCollection* PhysicalFontCollection::Clone() const
 {
     PhysicalFontCollection* pClonedCollection = new PhysicalFontCollection;
     pClonedCollection->mbMapNames     = mbMapNames;
@@ -933,7 +930,7 @@ PhysicalFontCollection* PhysicalFontCollection::Clone( bool bEmbeddable ) const
     for(; it != maPhysicalFontFamilies.end(); ++it )
     {
         const PhysicalFontFamily* pFontFace = (*it).second;
-        pFontFace->UpdateCloneFontList( *pClonedCollection, bEmbeddable );
+        pFontFace->UpdateCloneFontList(*pClonedCollection);
     }
 
     return pClonedCollection;

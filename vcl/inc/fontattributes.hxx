@@ -63,18 +63,10 @@ public:
     int                 GetQuality() const                          { return mnQuality; }
     const OUString&     GetMapNames() const                         { return maMapNames; }
 
-    bool                IsBuiltInFont() const                       { return mbDevice; }
-    bool                CanEmbed() const                            { return mbEmbeddable; }
-    bool                CanSubset() const                           { return mbSubsettable; }
 
     void                SetQuality( int nQuality )                  { mnQuality = nQuality; }
     void                IncreaseQualityBy( int nQualityAmount )     { mnQuality += nQualityAmount; }
     void                AddMapName( OUString const& );
-
-    void                SetBuiltInFontFlag( bool bIsBuiltInFont )   { mbDevice = bIsBuiltInFont; }
-    void                SetEmbeddableFlag ( bool bEmbeddable )      { mbEmbeddable = bEmbeddable; }
-    void                SetSubsettableFlag( bool bSubsettable )     { mbSubsettable = bSubsettable; }
-    void                SetOrientationFlag( bool bCanRotate )       { mbOrientation = bCanRotate; }
 
 private:
     // device independent variables
@@ -91,10 +83,6 @@ private:
     // device dependent variables
     OUString            maMapNames;                 // List of family name aliases separated with ';'
     int                 mnQuality;                  // Quality (used when similar fonts compete)
-    bool                mbOrientation;              // true: physical font can be rotated
-    bool                mbDevice;                   // true: built in font
-    bool                mbSubsettable;              // true: a subset of the font can be created
-    bool                mbEmbeddable;               // true: the font can be embedded
 
 };
 

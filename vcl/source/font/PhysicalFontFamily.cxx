@@ -128,8 +128,7 @@ bool PhysicalFontFamily::AddFontFace( PhysicalFontFace* pNewFontFace )
     }
 
     // set attributes for attribute based font matching
-    if( pNewFontFace->IsScalable() )
-        mnTypeFaces |= FontTypeFaces::Scalable;
+    mnTypeFaces |= FontTypeFaces::Scalable;
 
     if( pNewFontFace->IsSymbolFont() )
         mnTypeFaces |= FontTypeFaces::Symbol;
@@ -173,7 +172,7 @@ bool PhysicalFontFamily::AddFontFace( PhysicalFontFace* pNewFontFace )
             return false;
 
         // keep the device font if its quality is good enough
-        if( (pNewFontFace->GetQuality() == pFoundFontFace->GetQuality()) && (pFoundFontFace->IsBuiltInFont() || !pNewFontFace->IsBuiltInFont()) )
+        if( pNewFontFace->GetQuality() == pFoundFontFace->GetQuality() )
             return false;
 
         // replace existing font face with a better one
@@ -260,8 +259,7 @@ void PhysicalFontFamily::GetFontHeights( std::set<int>& rHeights ) const
     }
 }
 
-void PhysicalFontFamily::UpdateCloneFontList( PhysicalFontCollection& rFontCollection,
-                                              bool bEmbeddable ) const
+void PhysicalFontFamily::UpdateCloneFontList(PhysicalFontCollection& rFontCollection) const
 {
     OUString aFamilyName = GetEnglishSearchFontName( GetFamilyName() );
     PhysicalFontFamily* pFamily(nullptr);
@@ -269,11 +267,6 @@ void PhysicalFontFamily::UpdateCloneFontList( PhysicalFontCollection& rFontColle
     for( std::vector< PhysicalFontFace* >::const_iterator it=maFontFaces.begin(); it != maFontFaces.end(); ++it )
     {
         PhysicalFontFace *pFoundFontFace = *it;
-
-        if( !pFoundFontFace->IsScalable() )
-            continue;
-        if( bEmbeddable && !pFoundFontFace->CanEmbed() && !pFoundFontFace->CanSubset() )
-            continue;
 
         if (!pFamily)
         {   // tdf#98989 lazy create as family without faces won't work

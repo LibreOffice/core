@@ -152,13 +152,11 @@ private:
 
     SVT_DLLPRIVATE ImplFontListNameInfo*    ImplFind( const OUString& rSearchName, sal_uLong* pIndex ) const;
     SVT_DLLPRIVATE ImplFontListNameInfo*    ImplFindByName( const OUString& rStr ) const;
-    SVT_DLLPRIVATE void                 ImplInsertFonts( OutputDevice* pDev, bool bAll,
-                                             bool bInsertData );
+    SVT_DLLPRIVATE void                     ImplInsertFonts(OutputDevice* pDev, bool bInsertData);
 
 public:
                             FontList( OutputDevice* pDevice,
-                                      OutputDevice* pDevice2 = nullptr,
-                                      bool bAll = true );
+                                      OutputDevice* pDevice2 = nullptr);
                             ~FontList();
 
     FontList*               Clone() const;

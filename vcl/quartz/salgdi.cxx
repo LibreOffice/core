@@ -777,16 +777,6 @@ void AquaSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFontData, bool bV
     rGlyphWidths.clear();
     rUnicodeEnc.clear();
 
-    if( !pFontData->CanSubset() )
-    {
-        if( pFontData->CanEmbed() )
-        {
-            // get individual character widths
-            OSL_FAIL("not implemented for non-subsettable fonts!\n");
-        }
-        return;
-    }
-
     std::vector<unsigned char> aBuffer;
     if( !GetRawFontData( pFontData, aBuffer, nullptr ) )
         return;

@@ -38,8 +38,6 @@ public:
                         FontMetric( const FontMetric& );  // TODO make this explicit
     virtual             ~FontMetric() override;
 
-    FontType            GetType() const;
-
     long                GetAscent() const;
     long                GetDescent() const;
     long                GetInternalLeading() const;
@@ -56,13 +54,9 @@ public:
     void                SetSlant(long);
     void                SetBulletOffset(long);
 
-    bool                IsScalable() const;
     bool                IsFullstopCentered() const;
-    bool                IsBuiltInFont() const;
 
-    void                SetScalableFlag(bool);
     void                SetFullstopCenteredFlag(bool);
-    void                SetBuiltInFontFlag(bool);
 
     FontMetric&         operator=( const FontMetric& rMetric );
     FontMetric&         operator=( FontMetric&& rMetric );

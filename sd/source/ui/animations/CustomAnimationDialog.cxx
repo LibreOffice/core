@@ -280,7 +280,7 @@ FontPropertyBox::FontPropertyBox( sal_Int32 nControlType, vcl::Window* pParent, 
 
     if(!pFontList)
     {
-        pFontList = new FontList( Application::GetDefaultDevice(), nullptr, false );
+        pFontList = new FontList(Application::GetDefaultDevice(), nullptr);
         bMustDelete = true;
     }
 

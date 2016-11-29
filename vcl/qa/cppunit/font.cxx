@@ -28,10 +28,6 @@ public:
     void testItalic();
     void testAlignment();
     void testQuality();
-    void testBuiltInFontFlag();
-    void testEmbeddableFontFlag();
-    void testSubsettableFontFlag();
-    void testOrientationFlag();
     void testSymbolFlagAndCharSet();
 
     CPPUNIT_TEST_SUITE(VclFontTest);
@@ -42,10 +38,6 @@ public:
     CPPUNIT_TEST(testItalic);
     CPPUNIT_TEST(testAlignment);
     CPPUNIT_TEST(testQuality);
-    CPPUNIT_TEST(testBuiltInFontFlag);
-    CPPUNIT_TEST(testEmbeddableFontFlag);
-    CPPUNIT_TEST(testSubsettableFontFlag);
-    CPPUNIT_TEST(testOrientationFlag);
     CPPUNIT_TEST(testSymbolFlagAndCharSet);
     CPPUNIT_TEST_SUITE_END();
 };
@@ -129,48 +121,6 @@ void VclFontTest::testQuality()
 
     aFont.DecreaseQualityBy( 100 );
     CPPUNIT_ASSERT_EQUAL( (int)50, aFont.GetQuality() );
-}
-
-void VclFontTest::testBuiltInFontFlag()
-{
-    vcl::Font aFont;
-
-    CPPUNIT_ASSERT_EQUAL( false, aFont.IsBuiltInFont() );
-
-    aFont.SetBuiltInFontFlag( true );
-    CPPUNIT_ASSERT_EQUAL( true, aFont.IsBuiltInFont() );
-}
-
-void VclFontTest::testEmbeddableFontFlag()
-{
-    vcl::Font aFont;
-
-    CPPUNIT_ASSERT_EQUAL( false, aFont.CanEmbed() );
-
-    aFont.SetEmbeddableFlag( true );
-    CPPUNIT_ASSERT_EQUAL( true, aFont.CanEmbed() );
-}
-
-
-void VclFontTest::testSubsettableFontFlag()
-{
-    vcl::Font aFont;
-
-    CPPUNIT_ASSERT_EQUAL( false, aFont.CanSubset() );
-
-    aFont.SetSubsettableFlag( true );
-    CPPUNIT_ASSERT_EQUAL( true, aFont.CanSubset() );
-}
-
-
-void VclFontTest::testOrientationFlag()
-{
-    vcl::Font aFont;
-
-    CPPUNIT_ASSERT_EQUAL( false, aFont.CanRotate() );
-
-    aFont.SetOrientationFlag( true );
-    CPPUNIT_ASSERT_EQUAL( true, aFont.CanRotate() );
 }
 
 

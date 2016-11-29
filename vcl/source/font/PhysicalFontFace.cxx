@@ -158,45 +158,15 @@ bool PhysicalFontFace::IsBetterMatch( const FontSelectPattern& rFSD, FontMatchSt
             nMatch += 600;
     }
 
-    if( IsBuiltInFont() )
-        nMatch += 1;
-
     int nHeightMatch = 0;
     int nWidthMatch = 0;
 
-    if( IsScalable() )
-    {
-        if( rFSD.mnOrientation != 0 )
-            nMatch += 80;
-        else if( rFSD.mnWidth != 0 )
-            nMatch += 25;
-        else
-            nMatch += 5;
-    }
+    if( rFSD.mnOrientation != 0 )
+        nMatch += 80;
+    else if( rFSD.mnWidth != 0 )
+        nMatch += 25;
     else
-    {
-        if( rFSD.mnHeight == mnHeight )
-        {
-            nMatch += 20;
-            if( rFSD.mnWidth == mnWidth )
-                nMatch += 10;
-        }
-        else
-        {
-            // for non-scalable fonts the size difference is very important
-            // prefer the smaller font face because of clipping/overlapping issues
-            int nHeightDiff = (rFSD.mnHeight - mnHeight) * 1000;
-            nHeightMatch = (nHeightDiff >= 0) ? -nHeightDiff : 100+nHeightDiff;
-            if( rFSD.mnHeight )
-                nHeightMatch /= rFSD.mnHeight;
-
-            if( (rFSD.mnWidth != 0) && (mnWidth != 0) && (rFSD.mnWidth != mnWidth) )
-            {
-                int nWidthDiff = (rFSD.mnWidth - mnWidth) * 100;
-                nWidthMatch = (nWidthDiff >= 0) ? -nWidthDiff : +nWidthDiff;
-            }
-        }
-    }
+        nMatch += 5;
 
     if( rStatus.mnFaceMatch > nMatch )
         return false;

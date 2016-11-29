@@ -54,7 +54,6 @@ public:
     const OUString&     GetFamilyName() const    { return maFamilyName; }
     const OUString&     GetSearchName() const    { return maSearchName; }
     const OUString&     GetAliasNames() const    { return maMapNames; }
-    bool                IsScalable() const       { return maFontFaces[0]->IsScalable(); }
     int                 GetMinQuality() const    { return mnMinQuality; }
     FontTypeFaces       GetTypeFaces() const     { return mnTypeFaces; }
     void                GetFontHeights( std::set<int>& rHeights ) const;
@@ -71,8 +70,7 @@ public:
     PhysicalFontFace*   FindBestFontFace( const FontSelectPattern& rFSD ) const;
 
     void                UpdateDevFontList( ImplDeviceFontList& ) const;
-    void                UpdateCloneFontList( PhysicalFontCollection&,
-                                             bool bEmbeddable ) const;
+    void                UpdateCloneFontList(PhysicalFontCollection&) const;
 
 static void             CalcType( ImplFontAttrs& rType, FontWeight& rWeight, FontWidth& rWidth,
                                   FontFamily eFamily, const utl::FontNameAttr* pFontAttr );
