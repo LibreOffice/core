@@ -37,7 +37,7 @@
 #include <cstdio>
 #endif
 
-#define CACHE_MAGIC "LibreOffice PspFontCacheFile format 8"
+#define CACHE_MAGIC "LibreOffice PspFontCacheFile format 9"
 
 using namespace std;
 using namespace psp;
@@ -183,7 +183,7 @@ void FontCache::flush()
                 aLine.append(';');
                 aLine.append(static_cast<sal_Int32>((*it)->m_nLeading));
                 aLine.append(';');
-                aLine.append((*it)->m_bHaveVerticalSubstitutedGlyphs ? '1' : '0');
+                aLine.append('0');
                 aLine.append(';');
                 aLine.append(static_cast<sal_Int32>((*it)->m_aGlobalMetricX.width ));
                 aLine.append(';');
@@ -359,8 +359,7 @@ void FontCache::read()
                 pFont->m_nAscend    = atoi( pLine + nTokenPos[7] );
                 pFont->m_nDescend   = atoi( pLine + nTokenPos[8] );
                 pFont->m_nLeading   = atoi( pLine + nTokenPos[9] );
-                pFont->m_bHaveVerticalSubstitutedGlyphs
-                                    = (atoi( pLine + nTokenPos[10] ) != 0);
+                /* removed */   (void)atoi( pLine + nTokenPos[10] );
                 pFont->m_aGlobalMetricX.width
                                     = atoi( pLine + nTokenPos[11] );
                 pFont->m_aGlobalMetricX.height
@@ -449,7 +448,6 @@ void FontCache::copyPrintFont( const PrintFontManager::PrintFont* pFrom, PrintFo
     pTo->m_nYMin            = pFrom->m_nYMin;
     pTo->m_nXMax            = pFrom->m_nXMax;
     pTo->m_nYMax            = pFrom->m_nYMax;
-    pTo->m_bHaveVerticalSubstitutedGlyphs = pFrom->m_bHaveVerticalSubstitutedGlyphs;
     pTo->m_bUserOverride    = pFrom->m_bUserOverride;
 }
 
@@ -479,7 +477,6 @@ bool FontCache::equalsPrintFont( const PrintFontManager::PrintFont* pLeft, Print
         pRight->m_nYMin             != pLeft->m_nYMin           ||
         pRight->m_nXMax             != pLeft->m_nXMax           ||
         pRight->m_nYMax             != pLeft->m_nYMax           ||
-        pRight->m_bHaveVerticalSubstitutedGlyphs != pLeft->m_bHaveVerticalSubstitutedGlyphs ||
         pRight->m_bUserOverride     != pLeft->m_bUserOverride
         )
         return false;

@@ -130,32 +130,6 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
     friend struct PrintFont;
     friend class FontCache;
 
-    struct PrintFontMetrics
-    {
-        // character metrics are stored by the following keys:
-        // lower two bytes contain a sal_Unicode (a UCS2 character)
-        // upper byte contains: 0 for horizontal metric
-        //                      1 for vertical metric
-        // highest byte: 0 for now
-        std::unordered_map< int, CharacterMetric >     m_aMetrics;
-        // contains the unicode blocks for which metrics were queried
-        // this implies that metrics should be queried in terms of
-        // unicode blocks. here a unicode block is identified
-        // by the upper byte of the UCS2 encoding.
-        // note that the corresponding bit should be set even
-        // if the font does not support a single character of that page
-        // this map shows, which pages were queried already
-        // if (like in AFM metrics) all metrics are queried in
-        // a single pass, then all bits should be set
-        char                                        m_aPages[32];
-
-        std::unordered_map< sal_Unicode, bool >       m_bVerticalSubstitutions;
-
-        PrintFontMetrics() {}
-
-        bool isEmpty() const { return m_aMetrics.empty(); }
-    };
-
     struct PrintFont
     {
         // font attributes
@@ -170,7 +144,6 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
         rtl_TextEncoding  m_aEncoding;
         CharacterMetric   m_aGlobalMetricX;
         CharacterMetric   m_aGlobalMetricY;
-        PrintFontMetrics* m_pMetrics;
         int               m_nAscend;
         int               m_nDescend;
         int               m_nLeading;
@@ -178,7 +151,6 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
         int               m_nYMin;
         int               m_nXMax;
         int               m_nYMax;
-        bool              m_bHaveVerticalSubstitutedGlyphs;
         bool              m_bUserOverride;
 
         int               m_nDirectory;       // atom containing system dependent path
@@ -187,8 +159,6 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
         unsigned int      m_nTypeFlags;       // copyright bits and PS-OpenType flag
 
         explicit PrintFont();
-        ~PrintFont();
-        bool queryMetricPage(int nPage, utl::MultiAtomProvider* pProvider);
     };
 
     fontID                                      m_nNextFontID;
@@ -327,12 +297,6 @@ public:
 
     // get a fonts glyph bounding box
     void getFontBoundingBox( fontID nFont, int& xMin, int& yMin, int& xMax, int& yMax );
-
-    // get a specific fonts metrics
-
-    // get metrics for an array of sal_Unicode characters
-    // the user is responsible to allocate pArray large enough
-    bool getMetrics( fontID nFontID, const sal_Unicode* pString, int nLen, CharacterMetric* pArray ) const;
 
     // creates a new font subset of an existing SFNT font
     // returns true in case of success, else false
