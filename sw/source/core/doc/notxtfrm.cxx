@@ -580,7 +580,7 @@ void SwNoTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         break;
 
     case RES_GRF_REREAD_AND_INCACHE:
-        if( ND_GRFNODE == GetNode()->GetNodeType() )
+        if( SwNodeType::Grf == GetNode()->GetNodeType() )
         {
             bComplete = false;
             SwGrfNode* pNd = static_cast<SwGrfNode*>( GetNode());
@@ -609,7 +609,7 @@ void SwNoTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         break;
 
     case RES_UPDATE_ATTR:
-        if (GetNode()->GetNodeType() != ND_GRFNODE) {
+        if (GetNode()->GetNodeType() != SwNodeType::Grf) {
             break;
         }
         SAL_FALLTHROUGH;
@@ -636,7 +636,7 @@ void SwNoTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
     case RES_GRAPHIC_ARRIVED:
     // i73788# - handle RES_LINKED_GRAPHIC_STREAM_ARRIVED as RES_GRAPHIC_ARRIVED
     case RES_LINKED_GRAPHIC_STREAM_ARRIVED:
-        if ( GetNode()->GetNodeType() == ND_GRFNODE )
+        if ( GetNode()->GetNodeType() == SwNodeType::Grf )
         {
             bComplete = false;
             SwGrfNode* pNd = static_cast<SwGrfNode*>( GetNode());

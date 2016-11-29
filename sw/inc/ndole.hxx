@@ -153,12 +153,12 @@ public:
 /// Inline methods from Node.hxx
 inline SwOLENode *SwNode::GetOLENode()
 {
-     return ND_OLENODE == m_nNodeType ? static_cast<SwOLENode*>(this) : nullptr;
+     return SwNodeType::Ole == m_nNodeType ? static_cast<SwOLENode*>(this) : nullptr;
 }
 
 inline const SwOLENode *SwNode::GetOLENode() const
 {
-     return ND_OLENODE == m_nNodeType ? static_cast<const SwOLENode*>(this) : nullptr;
+     return SwNodeType::Ole == m_nNodeType ? static_cast<const SwOLENode*>(this) : nullptr;
 }
 
 #endif  // _ INCLUDED_SW_INC_NDOLE_HXX

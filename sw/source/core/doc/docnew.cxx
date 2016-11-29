@@ -965,7 +965,7 @@ SwNodeIndex SwDoc::AppendDoc(const SwDoc& rSource, sal_uInt16 const nStartPageNu
     aSourceIdx++;
     SAL_INFO( "sw.docappend", "NodeType 0x" << std::hex << (int) aSourceIdx.GetNode().GetNodeType()
                                             << std::dec << " " << aSourceIdx.GetNode().GetIndex() );
-    if ( aSourceIdx.GetNode().GetNodeType() != ND_ENDNODE ) {
+    if ( aSourceIdx.GetNode().GetNodeType() != SwNodeType::End ) {
         aSourceIdx++;
         SAL_INFO( "sw.docappend", "NodeType 0x" << std::hex << (int) aSourceIdx.GetNode().GetNodeType() << std::dec );
         aSourceIdx--;

@@ -278,7 +278,7 @@ void SwCursorShell::EndAction( const bool bIdleEnd, const bool DoSetPosX )
 
             {
                 // watch Cursor-Moves, call Link if needed, the DTOR is key here!
-                SwCallLink aLk( *this, m_nAktNode, m_nAktContent, (sal_uInt8)m_nAktNdTyp,
+                SwCallLink aLk( *this, m_nAktNode, m_nAktContent, m_nAktNdTyp,
                                 m_nLeftFramePos, m_bAktSelection );
 
             }
@@ -299,7 +299,7 @@ void SwCursorShell::EndAction( const bool bIdleEnd, const bool DoSetPosX )
     {
         SwCallLink aLk( *this );        // watch Cursor-Moves
         aLk.nNode = m_nAktNode;           // call Link if needed
-        aLk.nNdTyp = (sal_uInt8)m_nAktNdTyp;
+        aLk.nNdTyp = m_nAktNdTyp;
         aLk.nContent = m_nAktContent;
         aLk.nLeftFramePos = m_nLeftFramePos;
 
@@ -2647,7 +2647,7 @@ SwCursorShell::SwCursorShell( SwCursorShell& rShell, vcl::Window *pInitWin )
     , m_nLeftFramePos(0)
     , m_nAktNode(0)
     , m_nAktContent(0)
-    , m_nAktNdTyp(0)
+    , m_nAktNdTyp(SwNodeType::NONE)
     , m_bAktSelection(false)
     , m_nCursorMove( 0 )
     , m_nBasicActionCnt( 0 )
@@ -2685,7 +2685,7 @@ SwCursorShell::SwCursorShell( SwDoc& rDoc, vcl::Window *pInitWin,
     , m_nLeftFramePos(0)
     , m_nAktNode(0)
     , m_nAktContent(0)
-    , m_nAktNdTyp(0)
+    , m_nAktNdTyp(SwNodeType::NONE)
     , m_bAktSelection(false)
     , m_nCursorMove( 0 )
     , m_nBasicActionCnt( 0 )
@@ -2937,7 +2937,7 @@ bool SwCursorShell::FindValidContentNode( bool bOnlyText )
                     {
                         SwCallLink aTmp( *this );
                         SwCursorSaveState aSaveState( *m_pCurrentCursor );
-                        aTmp.nNdTyp = 0; // don't do anything in DTOR
+                        aTmp.nNdTyp = SwNodeType::NONE; // don't do anything in DTOR
                         if( !m_pCurrentCursor->IsInProtectTable( true ) )
                         {
                             const SwSectionNode* pSNd = pCNd->FindSectionNode();

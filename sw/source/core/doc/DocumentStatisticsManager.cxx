@@ -140,10 +140,10 @@ bool DocumentStatisticsManager::IncrementalDocStatCalculate(long nChars, bool bF
     // This is the inner loop - at least while the paras are dirty.
     for( sal_uLong i = m_rDoc.GetNodes().Count(); i > 0 && nChars > 0; )
     {
-        SwNode* pNd;
-        switch( ( pNd = m_rDoc.GetNodes()[ --i ])->GetNodeType() )
+        SwNode* pNd = m_rDoc.GetNodes()[ --i ];
+        switch( pNd->GetNodeType() )
         {
-        case ND_TEXTNODE:
+        case SwNodeType::Text:
         {
             long const nOldChars(mpDocStat->nChar);
             SwTextNode *pText = static_cast< SwTextNode * >( pNd );
@@ -153,10 +153,11 @@ bool DocumentStatisticsManager::IncrementalDocStatCalculate(long nChars, bool bF
             }
             break;
         }
-        case ND_TABLENODE:      ++mpDocStat->nTable;   break;
-        case ND_GRFNODE:        ++mpDocStat->nGrf;   break;
-        case ND_OLENODE:        ++mpDocStat->nOLE;   break;
-        case ND_SECTIONNODE:    break;
+        case SwNodeType::Table:      ++mpDocStat->nTable;   break;
+        case SwNodeType::Grf:        ++mpDocStat->nGrf;   break;
+        case SwNodeType::Ole:        ++mpDocStat->nOLE;   break;
+        case SwNodeType::Section:    break;
+        default: break;
         }
     }
 

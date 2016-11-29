@@ -443,14 +443,14 @@ uno::Any SwXRedline::getPropertyValue( const OUString& rPropertyName )
             pNode = &pRedline->GetNode(false);
         switch(pNode->GetNodeType())
         {
-            case ND_SECTIONNODE:
+            case SwNodeType::Section:
             {
                 SwSectionNode* pSectNode = pNode->GetSectionNode();
                 OSL_ENSURE(pSectNode, "No section node!");
                 xRet = SwXTextSections::GetObject( *pSectNode->GetSection().GetFormat() );
             }
             break;
-            case ND_TABLENODE :
+            case SwNodeType::Table :
             {
                 SwTableNode* pTableNode = pNode->GetTableNode();
                 OSL_ENSURE(pTableNode, "No table node!");
@@ -459,7 +459,7 @@ uno::Any SwXRedline::getPropertyValue( const OUString& rPropertyName )
                 xRet = SwXTextTables::GetObject( *pTableFormat );
             }
             break;
-            case ND_TEXTNODE :
+            case SwNodeType::Text :
             {
                 SwPosition* pPoint = nullptr;
                 if(bStart || !pRedline->HasMark())

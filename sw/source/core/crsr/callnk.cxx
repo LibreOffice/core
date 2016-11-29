@@ -37,7 +37,7 @@
 #include <vcl/window.hxx>
 
 SwCallLink::SwCallLink( SwCursorShell & rSh, sal_uLong nAktNode, sal_Int32 nAktContent,
-                        sal_uInt8 nAktNdTyp, long nLRPos, bool bAktSelection )
+                        SwNodeType nAktNdTyp, long nLRPos, bool bAktSelection )
     : rShell( rSh ), nNode( nAktNode ), nContent( nAktContent ),
       nNdTyp( nAktNdTyp ), nLeftFramePos( nLRPos ),
       bHasSelection( bAktSelection )
@@ -66,9 +66,9 @@ SwCallLink::SwCallLink( SwCursorShell & rSh )
         // When deleting the header/footer, footnotes SwFeShell sets the
         // Cursor to NULL (Node + Content).
         // If the Cursor is not on a ContentNode (ContentNode) this fact gets
-        // saved in NdType.
-        if( ND_CONTENTNODE & nNdTyp )
-            nNdTyp = 0;
+        // saved in nNdType.
+        if( SwNodeType::ContentMask & nNdTyp )
+            nNdTyp = SwNodeType::NONE;
     }
 }
 
@@ -105,7 +105,7 @@ static void lcl_notifyRow(const SwContentNode* pNode, SwCursorShell& rShell)
 
 SwCallLink::~SwCallLink()
 {
-    if( !nNdTyp || !rShell.m_bCallChgLnk ) // see ctor
+    if( nNdTyp == SwNodeType::NONE || !rShell.m_bCallChgLnk ) // see ctor
         return ;
 
     // If travelling over Nodes check formats and register them anew at the
@@ -126,7 +126,7 @@ SwCallLink::~SwCallLink()
     lcl_notifyRow(pNode, rShell);
 
     sal_Int32 nCmp, nAktContent = pCurrentCursor->GetPoint()->nContent.GetIndex();
-    sal_uInt16 nNdWhich = pCNd->GetNodeType();
+    SwNodeType nNdWhich = pCNd->GetNodeType();
     sal_uLong nAktNode = pCurrentCursor->GetPoint()->nNode.GetIndex();
 
     // Register the Shell as dependent at the current Node. By doing this all
@@ -146,7 +146,7 @@ SwCallLink::~SwCallLink()
         // always call change link when selection changes
         rShell.CallChgLnk();
     }
-    else if( rShell.m_aChgLnk.IsSet() && ND_TEXTNODE == nNdWhich &&
+    else if( rShell.m_aChgLnk.IsSet() && SwNodeType::Text == nNdWhich &&
              nContent != nAktContent )
     {
         // If travelling with left/right only and the frame is

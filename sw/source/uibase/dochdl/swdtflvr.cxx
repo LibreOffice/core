@@ -329,7 +329,7 @@ uno::Reference < embed::XEmbeddedObject > SwTransferable::FindOLEObj( sal_Int64&
     {
         SwIterator<SwContentNode,SwFormatColl> aIter( *m_pClpDocFac->GetDoc()->GetDfltGrfFormatColl() );
         for( SwContentNode* pNd = aIter.First(); pNd; pNd = aIter.Next() )
-            if( ND_OLENODE == pNd->GetNodeType() )
+            if( SwNodeType::Ole == pNd->GetNodeType() )
             {
                 xObj = static_cast<SwOLENode*>(pNd)->GetOLEObj().GetOleRef();
                 nAspect = static_cast<SwOLENode*>(pNd)->GetAspect();
@@ -345,7 +345,7 @@ const Graphic* SwTransferable::FindOLEReplacementGraphic() const
     {
         SwIterator<SwContentNode,SwFormatColl> aIter( *m_pClpDocFac->GetDoc()->GetDfltGrfFormatColl() );
         for( SwContentNode* pNd = aIter.First(); pNd; pNd = aIter.Next() )
-            if( ND_OLENODE == pNd->GetNodeType() )
+            if( SwNodeType::Ole == pNd->GetNodeType() )
             {
                 return static_cast<SwOLENode*>(pNd)->GetGraphic();
             }

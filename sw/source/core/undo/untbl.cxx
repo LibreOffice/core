@@ -365,7 +365,7 @@ SwTableToTextSave::SwTableToTextSave( SwDoc& rDoc, sal_uLong nNd, sal_uLong nEnd
     {
         m_pHstry = new SwHistory;
 
-        m_pHstry->Add( pNd->GetTextColl(), nNd, ND_TEXTNODE );
+        m_pHstry->Add( pNd->GetTextColl(), nNd, SwNodeType::Text );
         if ( pNd->GetpSwpHints() )
         {
             m_pHstry->CopyAttr( pNd->GetpSwpHints(), nNd, 0,
@@ -606,7 +606,7 @@ SwTableNode* SwNodes::UndoTableToText( sal_uLong nSttNd, sal_uLong nEndNd,
         }
 
         aEndIdx = pSave->m_nEndNd;
-        SwStartNode* pSttNd = new SwStartNode( aSttIdx, ND_STARTNODE,
+        SwStartNode* pSttNd = new SwStartNode( aSttIdx, SwNodeType::Start,
                                                 SwTableBoxStartNode );
         pSttNd->m_pStartOfSection = pTableNd;
         new SwEndNode( aEndIdx, *pSttNd );

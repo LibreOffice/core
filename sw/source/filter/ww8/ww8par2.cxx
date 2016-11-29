@@ -2674,7 +2674,7 @@ void WW8TabDesc::ParkPaM()
         {
             m_pIo->m_pPaM->GetPoint()->nNode = nSttNd;
         }
-        while (m_pIo->m_pPaM->GetNode().GetNodeType() != ND_TEXTNODE && ++nSttNd < nEndNd);
+        while (m_pIo->m_pPaM->GetNode().GetNodeType() != SwNodeType::Text && ++nSttNd < nEndNd);
 
         m_pIo->m_pPaM->GetPoint()->nContent.Assign(m_pIo->m_pPaM->GetContentNode(), 0);
         m_pIo->m_rDoc.SetTextFormatColl(*m_pIo->m_pPaM, const_cast<SwTextFormatColl*>(m_pIo->m_pDfltTextFormatColl));
@@ -2967,7 +2967,7 @@ void WW8TabDesc::SetPamInCell(short nWwCol, bool bPam)
             {
                 m_pIo->m_pPaM->GetPoint()->nNode = nSttNd;
             }
-            while (m_pIo->m_pPaM->GetNode().GetNodeType() != ND_TEXTNODE && ++nSttNd < nEndNd);
+            while (m_pIo->m_pPaM->GetNode().GetNodeType() != SwNodeType::Text && ++nSttNd < nEndNd);
             m_pIo->m_pPaM->GetPoint()->nContent.Assign(m_pIo->m_pPaM->GetContentNode(), 0);
             // Precautionally set now, otherwise the style is not set for cells
             // that are inserted for margin balancing.

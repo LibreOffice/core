@@ -746,7 +746,7 @@ void SwEditShell::SetNumberingRestart()
                 SwNode* pNd = GetDoc()->GetNodes()[ nCurrNd ];
                 switch( pNd->GetNodeType() )
                 {
-                case ND_TEXTNODE:
+                case SwNodeType::Text:
                     if( nullptr != ( pContentFrame = static_cast<SwTextNode*>(pNd)->getLayoutFrame( GetLayout() )) )
                     {
                         // skip hidden frames - ignore protection!
@@ -787,15 +787,12 @@ void SwEditShell::SetNumberingRestart()
                         }
                     }
                     break;
-                case ND_SECTIONNODE:
+                case SwNodeType::Section:
                     // skip hidden sections  - ignore protection!
                     if(static_cast<SwSectionNode*>(pNd)->GetSection().IsHidden() )
                         nCurrNd = pNd->EndOfSectionIndex();
                     break;
-                case ND_ENDNODE:
-                    {
-                        break;
-                    }
+                default: break;
                 }
 
                 bGoOn = nCurrNd < nEndNd;

@@ -116,9 +116,10 @@ sal_uInt16 SwEditShell::GetCntType() const
     else
         switch( GetCursor()->GetNode().GetNodeType() )
         {
-        case ND_TEXTNODE:   nRet = CNT_TXT; break;
-        case ND_GRFNODE:    nRet = CNT_GRF; break;
-        case ND_OLENODE:    nRet = CNT_OLE; break;
+        case SwNodeType::Text:   nRet = CNT_TXT; break;
+        case SwNodeType::Grf:    nRet = CNT_GRF; break;
+        case SwNodeType::Ole:    nRet = CNT_OLE; break;
+        default: break;
         }
 
     OSL_ASSERT( nRet );

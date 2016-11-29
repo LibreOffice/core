@@ -221,11 +221,11 @@ namespace ww8
                     }
                     switch (rNd.GetNodeType())
                     {
-                        case ND_GRFNODE:
+                        case SwNodeType::Grf:
                             meWriterType = eGraphic;
                             maSize = rNd.GetNoTextNode()->GetTwipSize();
                             break;
-                        case ND_OLENODE:
+                        case SwNodeType::Ole:
                             meWriterType = eOle;
                             maSize = rNd.GetNoTextNode()->GetTwipSize();
                             break;

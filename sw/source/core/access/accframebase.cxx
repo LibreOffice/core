@@ -94,9 +94,9 @@ void SwAccessibleFrameBase::GetStates(
         rStateSet.AddState( AccessibleStateType::SELECTED );
 }
 
-sal_uInt8 SwAccessibleFrameBase::GetNodeType( const SwFlyFrame *pFlyFrame )
+SwNodeType SwAccessibleFrameBase::GetNodeType( const SwFlyFrame *pFlyFrame )
 {
-    sal_uInt8 nType = ND_TEXTNODE;
+    SwNodeType nType = SwNodeType::Text;
     if( pFlyFrame->Lower() )
     {
          if( pFlyFrame->Lower()->IsNoTextFrame() )

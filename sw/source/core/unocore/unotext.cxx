@@ -944,8 +944,8 @@ SwXText::setString(const OUString& rString) throw (uno::RuntimeException, std::e
         {
             ++aStartIdx;
             SwNode& rCurrentNode = aStartIdx.GetNode();
-            if(rCurrentNode.GetNodeType() == ND_SECTIONNODE
-                ||rCurrentNode.GetNodeType() == ND_TABLENODE)
+            if(rCurrentNode.GetNodeType() == SwNodeType::Section
+                ||rCurrentNode.GetNodeType() == SwNodeType::Table)
             {
                 bInsertNodes = true;
                 break;

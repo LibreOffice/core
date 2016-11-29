@@ -2915,10 +2915,10 @@ sal_Int32 SwEscherEx::WriteFlyFrame(const DrawObj &rObj, sal_uInt32 &rShapeId,
         SwNodeIndex aIdx( *pNdIdx, 1 );
         switch( aIdx.GetNode().GetNodeType() )
         {
-        case ND_GRFNODE:
+        case SwNodeType::Grf:
             nBorderThick = WriteGrfFlyFrame( rFormat, rShapeId = GenerateShapeId() );
             break;
-        case ND_OLENODE:
+        case SwNodeType::Ole:
             nBorderThick = WriteOLEFlyFrame( rFormat, rShapeId = GenerateShapeId() );
             break;
         default:
