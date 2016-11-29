@@ -526,7 +526,7 @@ void SmTableNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     }
     // #i972#
     if (HasBaseline())
-        nFormulaBaseline = GetBaseline();
+        mnFormulaBaseline = GetBaseline();
     else
     {
         SmTmpDevice aTmpDev (rDev, true);
@@ -534,10 +534,10 @@ void SmTableNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 
         SmRect aRect = (SmRect(aTmpDev, &rFormat, OUString("a"),
                                GetFont().GetBorderWidth()));
-        nFormulaBaseline = GetAlignM();
+        mnFormulaBaseline = GetAlignM();
         // move from middle position by constant - distance
         // between middle and baseline for single letter
-        nFormulaBaseline += aRect.GetBaseline() - aRect.GetAlignM();
+        mnFormulaBaseline += aRect.GetBaseline() - aRect.GetAlignM();
     }
 }
 
@@ -549,7 +549,7 @@ const SmNode * SmTableNode::GetLeftMost() const
 
 long SmTableNode::GetFormulaBaseline() const
 {
-    return nFormulaBaseline;
+    return mnFormulaBaseline;
 }
 
 
@@ -1981,7 +1981,7 @@ void SmPolyLineNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 
 void SmRootSymbolNode::AdaptToX(OutputDevice &/*rDev*/, sal_uLong nWidth)
 {
-    nBodyWidth = nWidth;
+    mnBodyWidth = nWidth;
 }
 
 
@@ -2582,17 +2582,17 @@ static bool lcl_IsFromGreekSymbolSet( const OUString &rTokenText )
 }
 
 
-SmSpecialNode::SmSpecialNode(SmNodeType eNodeType, const SmToken &rNodeToken, sal_uInt16 _nFontDesc) :
-    SmTextNode(eNodeType, rNodeToken, _nFontDesc)
+SmSpecialNode::SmSpecialNode(SmNodeType eNodeType, const SmToken &rNodeToken, sal_uInt16 _nFontDesc)
+    : SmTextNode(eNodeType, rNodeToken, _nFontDesc)
+    , mbIsFromGreekSymbolSet(lcl_IsFromGreekSymbolSet( rNodeToken.aText ))
 {
-    bIsFromGreekSymbolSet = lcl_IsFromGreekSymbolSet( rNodeToken.aText );
 }
 
 
-SmSpecialNode::SmSpecialNode(const SmToken &rNodeToken) :
-    SmTextNode(NSPECIAL, rNodeToken, FNT_MATH)  // default Font isn't always correct!
+SmSpecialNode::SmSpecialNode(const SmToken &rNodeToken)
+    : SmTextNode(NSPECIAL, rNodeToken, FNT_MATH)  // default Font isn't always correct!
+    , mbIsFromGreekSymbolSet(lcl_IsFromGreekSymbolSet( rNodeToken.aText ))
 {
-    bIsFromGreekSymbolSet = lcl_IsFromGreekSymbolSet( rNodeToken.aText );
 }
 
 
@@ -2631,7 +2631,7 @@ void SmSpecialNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell
 
     Flags() |= FontChangeMask::Face;
 
-    if (bIsFromGreekSymbolSet)
+    if (mbIsFromGreekSymbolSet)
     {
         OSL_ENSURE( GetText().getLength() == 1, "a symbol should only consist of 1 char!" );
         bool bItalic = false;
