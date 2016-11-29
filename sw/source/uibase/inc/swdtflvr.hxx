@@ -25,6 +25,7 @@
 #include <vcl/graph.hxx>
 #include <sfx2/lnkbase.hxx>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
+#include <o3tl/typed_flags_set.hxx>
 
 class Graphic;
 class ImageMap;
@@ -39,18 +40,20 @@ class SwFrameShell;
 class SwView_Impl;
 enum class SwPasteSdr;
 
-typedef sal_uInt16 TransferBufferType;
-namespace nsTransferBufferType
+enum class TransferBufferType : sal_uInt16
 {
-    const sal_uInt16 TRNSFR_NONE            = 0x0000;
-    const sal_uInt16 TRNSFR_DOCUMENT        = 0x0001;
-    const sal_uInt16 TRNSFR_DOCUMENT_WORD   = 0x0002;
-    const sal_uInt16 TRNSFR_GRAPHIC         = 0x0004;
-    const sal_uInt16 TRNSFR_TABELLE         = 0x0008;
-    const sal_uInt16 TRNSFR_DDELINK         = 0x0010;
-    const sal_uInt16 TRNSFR_OLE             = 0x0020;
-    const sal_uInt16 TRNSFR_INETFLD         = 0x0040;
-    const sal_uInt16 TRNSFR_DRAWING         = 0x0081;   // drawing is internal too!
+        NONE          = 0x0000,
+        Document      = 0x0001,
+        DocumentWord  = 0x0002,
+        Graphic       = 0x0004,
+        Table         = 0x0008,
+        DdeLink       = 0x0010,
+        Ole           = 0x0020,
+        InetField     = 0x0040,
+        Drawing       = 0x0081,   // drawing is internal too!
+};
+namespace o3tl {
+    template<> struct typed_flags<TransferBufferType> : is_typed_flags<TransferBufferType, 0x00ff> {};
 }
 
 class SW_DLLPUBLIC SwTransferable : public TransferableHelper
