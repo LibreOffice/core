@@ -6774,6 +6774,14 @@ typedef BOOL (WINAPI *PointerTo_CryptRetrieveTimeStamp)(LPCWSTR wszUrl,
 
 namespace
 {
+
+/// Counts how many bytes are needed to encode a given length.
+size_t GetLengthOfLength(size_t nLength)
+{
+    assert(nLength <= 127);
+    return 1;
+}
+
 /// Create payload for the 'signing-certificate' signed attribute.
 bool CreateSigningCertificateAttribute(vcl::PDFWriter::PDFSignContext& rContext, SvStream& rEncodedCertificate)
 {
@@ -6832,12 +6840,12 @@ bool CreateSigningCertificateAttribute(vcl::PDFWriter::PDFSignContext& rContext,
     //              NULL: parameters
     //       OCTET STRING: certHash
 
-    size_t nAlgorithm = aSHA256.size() + 2;
-    size_t nParameters = 2;
-    size_t nAlgorithmIdentifier = nAlgorithm + nParameters + 2;
-    size_t nCertHash = aHash.size() + 2;
-    size_t nESSCertIDv2 = nAlgorithmIdentifier + nCertHash + 2;
-    size_t nESSCertIDv2s = nESSCertIDv2 + 2;
+    size_t nAlgorithm = 1 + GetLengthOfLength(aSHA256.size()) + aSHA256.size();
+    size_t nParameters = 1 + GetLengthOfLength(1);
+    size_t nAlgorithmIdentifier = 1 + GetLengthOfLength(nAlgorithm + nParameters) + nAlgorithm + nParameters;
+    size_t nCertHash = 1 + GetLengthOfLength(aHash.size()) + aHash.size();
+    size_t nESSCertIDv2 = 1 + GetLengthOfLength(nAlgorithmIdentifier + nCertHash) + nAlgorithmIdentifier + nCertHash;
+    size_t nESSCertIDv2s = 1 + GetLengthOfLength(nESSCertIDv2) + nESSCertIDv2;
 
     // Write SigningCertificateV2.
     rEncodedCertificate.WriteUInt8(0x30);
