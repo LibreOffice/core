@@ -93,19 +93,23 @@ void lclProcessAttribs( OStringBuffer& rBuffer, const sal_Char* pcBeg, const sal
     {
         // pcNameBeg points to begin of attribute name, find equality sign
         const sal_Char* pcEqualSign = lclFindCharacter( pcNameBeg, pcEnd, '=' );
-        if ((bOk = (pcEqualSign < pcEnd)))
+        bOk = (pcEqualSign < pcEnd);
+        if (bOk)
         {
             // find end of attribute name (ignore whitespace between name and equality sign)
             const sal_Char* pcNameEnd = lclTrimWhiteSpaceFromEnd( pcNameBeg, pcEqualSign );
-            if( (bOk = (pcNameBeg < pcNameEnd)) )
+            bOk = (pcNameBeg < pcNameEnd);
+            if( bOk )
             {
                 // find begin of attribute value (must be single or double quote)
                 const sal_Char* pcValueBeg = lclFindNonWhiteSpace( pcEqualSign + 1, pcEnd );
-                if( (bOk = (pcValueBeg < pcEnd) && ((*pcValueBeg == '\'') || (*pcValueBeg == '"'))) )
+                bOk = (pcValueBeg < pcEnd) && ((*pcValueBeg == '\'') || (*pcValueBeg == '"'));
+                if( bOk )
                 {
                     // find end of attribute value (matching quote character)
                     const sal_Char* pcValueEnd = lclFindCharacter( pcValueBeg + 1, pcEnd, *pcValueBeg );
-                    if( (bOk = (pcValueEnd < pcEnd)) )
+                    bOk = (pcValueEnd < pcEnd);
+                    if( bOk )
                     {
                         ++pcValueEnd;
                         OString aAttribName( pcNameBeg, static_cast< sal_Int32 >( pcNameEnd - pcNameBeg ) );
@@ -120,8 +124,12 @@ void lclProcessAttribs( OStringBuffer& rBuffer, const sal_Char* pcBeg, const sal
                         aAttributes[ pcNameBeg ] = aAttribData;
                         // continue with next attribute (skip whitespace after this attribute)
                         pcNameBeg = pcValueEnd;
-                        if( (pcNameBeg < pcEnd) && ((bOk = lclIsWhiteSpace( *pcNameBeg ))) )
-                            pcNameBeg = lclFindNonWhiteSpace( pcNameBeg + 1, pcEnd );
+                        if( pcNameBeg < pcEnd )
+                        {
+                            bOk = lclIsWhiteSpace( *pcNameBeg );
+                            if( bOk )
+                                pcNameBeg = lclFindNonWhiteSpace( pcNameBeg + 1, pcEnd );
+                        }
                     }
                 }
             }
