@@ -56,9 +56,7 @@ public:
                                   SalInfoPrinter* pInfoPrinter );
 
     // helper methods
-    static const void *     DoGetEmbedFontData ( psp::fontID aFont, const sal_Ucs* pUnicodes,
-                                                 sal_Int32* pWidths, size_t nLen, FontSubsetInfo& rInfo,
-                                                 long* pDataLen );
+    static const void *     DoGetEmbedFontData(psp::fontID aFont, long* pDataLen);
     static void             DoFreeEmbedFontData( const void* pData, long nLen );
 
     // helper methods for sharing with X11SalGraphics
@@ -111,12 +109,7 @@ public:
                                               sal_Int32* pWidths,
                                               int nGlyphs,
                                               FontSubsetInfo& rInfo ) override;
-    virtual const void*     GetEmbedFontData( const PhysicalFontFace*,
-                                              const sal_Ucs* pUnicodes,
-                                              sal_Int32* pWidths,
-                                              size_t nLen,
-                                              FontSubsetInfo& rInfo,
-                                              long* pDataLen ) override;
+    virtual const void*     GetEmbedFontData(const PhysicalFontFace*, long* pDataLen) override;
     virtual void            FreeEmbedFontData( const void* pData, long nDataLen ) override;
     virtual void            GetGlyphWidths( const PhysicalFontFace*,
                                             bool bVertical,

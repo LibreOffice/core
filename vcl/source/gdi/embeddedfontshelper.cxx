@@ -261,9 +261,8 @@ OUString EmbeddedFontsHelper::fontFileUrl( const OUString& familyName, FontFamil
     }
     if( selected != nullptr )
     {
-        FontSubsetInfo info;
         long size;
-        if( const void* data = graphics->GetEmbedFontData( selected, nullptr, nullptr, 0, info, &size ))
+        if (const void* data = graphics->GetEmbedFontData(selected, &size))
         {
             if( sufficientTTFRights( data, size, rights ))
             {
