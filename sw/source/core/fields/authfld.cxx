@@ -423,7 +423,8 @@ bool    SwAuthorityFieldType::PutValue( const Any& rAny, sal_uInt16 nWhichId )
     case FIELD_PROP_LOCALE:
         {
             css::lang::Locale aLocale;
-            if( (bRet = rAny >>= aLocale ))
+            bRet = rAny >>= aLocale;
+            if( bRet )
                 SetLanguage( LanguageTag::convertToLanguageType( aLocale ));
         }
         break;
@@ -431,7 +432,8 @@ bool    SwAuthorityFieldType::PutValue( const Any& rAny, sal_uInt16 nWhichId )
     case FIELD_PROP_PROP_SEQ:
         {
             Sequence<PropertyValues> aSeq;
-            if( (bRet = rAny >>= aSeq) )
+            bRet = rAny >>= aSeq;
+            if( bRet )
             {
                 m_SortKeyArr.clear();
                 const PropertyValues* pValues = aSeq.getConstArray();

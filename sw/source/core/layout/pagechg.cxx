@@ -192,7 +192,8 @@ SwPageFrame::SwPageFrame( SwFrameFormat *pFormat, SwFrame* pSib, SwPageDesc *pPg
 
     // create and insert body area if it is not a blank page
     SwDoc *pDoc = pFormat->GetDoc();
-    if ( !(m_bEmptyPage = (pFormat == pDoc->GetEmptyPageFormat())) )
+    m_bEmptyPage = pFormat == pDoc->GetEmptyPageFormat();
+    if ( !m_bEmptyPage )
     {
         m_bEmptyPage = false;
         Calc(pRenderContext); // so that the PrtArea is correct

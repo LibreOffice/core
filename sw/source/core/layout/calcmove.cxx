@@ -269,14 +269,18 @@ void SwFrame::PrepareMake(vcl::RenderContext* pRenderContext)
             bFoll = pThis->IsFollow();
             bNoSect = false;
         }
-        else if ( bCnt && (bFoll = pThis->IsFollow()) && GetPrev() )
+        else if ( bCnt )
         {
-            //Do not follow the chain when we need only one instance
-            const SwTextFrame* pMaster = static_cast<SwContentFrame*>(this)->FindMaster();
-            if ( pMaster && pMaster->IsLocked() )
+            bFoll = pThis->IsFollow();
+            if ( bFoll && GetPrev() )
             {
-                MakeAll(pRenderContext);
-                return;
+                //Do not follow the chain when we need only one instance
+                const SwTextFrame* pMaster = static_cast<SwContentFrame*>(this)->FindMaster();
+                if ( pMaster && pMaster->IsLocked() )
+                {
+                    MakeAll(pRenderContext);
+                    return;
+                }
             }
         }
 

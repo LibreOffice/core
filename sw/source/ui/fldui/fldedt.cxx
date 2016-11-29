@@ -143,7 +143,8 @@ void SwFieldEditDlg::Init()
             rMgr.GoPrev();
         m_pNextBT->Enable(bMove);
 
-        if( ( bMove = rMgr.GoPrev() ) )
+        bMove = rMgr.GoPrev();
+        if( bMove )
             rMgr.GoNext();
         m_pPrevBT->Enable( bMove );
 

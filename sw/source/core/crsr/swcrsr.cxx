@@ -593,16 +593,17 @@ bool SwCursor::IsInProtectTable( bool bMove, bool bChgCursor )
         SwNodeIndex aCellStt( *GetNode().FindTableBoxStartNode()->EndOfSectionNode(), 1 );
         bool bProt = true;
 GoNextCell:
-        do {
+        for (;;) {
             if( !aCellStt.GetNode().IsStartNode() )
                 break;
             ++aCellStt;
             if( nullptr == ( pCNd = aCellStt.GetNode().GetContentNode() ))
                 pCNd = aCellStt.GetNodes().GoNext( &aCellStt );
-            if( !( bProt = pCNd->IsProtect() ))
+            bProt = pCNd->IsProtect();
+            if( !bProt )
                 break;
             aCellStt.Assign( *pCNd->FindTableBoxStartNode()->EndOfSectionNode(), 1 );
-        } while( bProt );
+        }
 
 SetNextCursor:
         if( !bProt ) // found free cell
@@ -642,16 +643,17 @@ SetNextCursor:
         SwNode* pNd;
         bool bProt = true;
 GoPrevCell:
-        do {
+        for (;;) {
             if( !( pNd = &aCellStt.GetNode())->IsEndNode() )
                 break;
             aCellStt.Assign( *pNd->StartOfSectionNode(), +1 );
             if( nullptr == ( pCNd = aCellStt.GetNode().GetContentNode() ))
                 pCNd = pNd->GetNodes().GoNext( &aCellStt );
-            if( !( bProt = pCNd->IsProtect() ))
+            bProt = pCNd->IsProtect();
+            if( !bProt )
                 break;
             aCellStt.Assign( *pNd->FindTableBoxStartNode(), -1 );
-        } while( bProt );
+        }
 
 SetPrevCursor:
         if( !bProt ) // found free cell

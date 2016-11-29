@@ -753,7 +753,8 @@ FlatFndBox::FlatFndBox(SwDoc* pDocPtr, const FndBox_& rBox) :
     nRow(0),
     nCol(0)
 { // If the array is symmetric
-    if( (bSym = CheckLineSymmetry(rBoxRef)) )
+    bSym = CheckLineSymmetry(rBoxRef);
+    if( bSym )
     {
         // Determine column/row count
         nCols = GetColCount(rBoxRef);

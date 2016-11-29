@@ -2672,10 +2672,10 @@ bool SwContentFrame::MoveFootnoteCntFwd( bool bMakePage, SwFootnoteBossFrame *pO
 
     if ( pNewUpper )
     {
-        bool bSameBoss = true;
         SwFootnoteBossFrame * const pNewBoss = pNewUpper->FindFootnoteBossFrame();
         // Are we changing the column/page?
-        if ( !( bSameBoss = (pNewBoss == pOldBoss) ) )
+        bool bSameBoss = pNewBoss == pOldBoss;
+        if ( !bSameBoss )
         {
             bSamePage = pOldBoss->FindPageFrame() == pNewBoss->FindPageFrame(); // page change?
             pNewUpper->Calc(getRootFrame()->GetCurrShell()->GetOut());

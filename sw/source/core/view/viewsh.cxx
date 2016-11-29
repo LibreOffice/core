@@ -1604,7 +1604,8 @@ bool SwViewShell::CheckInvalidForPaint( const SwRect &rRect )
             for ( size_t i = 0; i < pRegion->size(); ++i )
             {
                 const SwRect &rTmp = (*pRegion)[i];
-                if ( !(bStop = rTmp.IsOver( VisArea() )) )
+                bStop = rTmp.IsOver( VisArea() );
+                if ( !bStop )
                     break;
             }
             if ( bStop )

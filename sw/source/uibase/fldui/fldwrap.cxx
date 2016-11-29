@@ -91,9 +91,8 @@ SwFieldDlgWrapper::SwFieldDlgWrapper( vcl::Window* _pParent, sal_uInt16 nId,
 // newly initialise dialog after Doc switch
 bool SwFieldDlgWrapper::ReInitDlg(SwDocShell *pDocSh)
 {
-    bool bRet;
-
-    if ((bRet = SwChildWinWrapper::ReInitDlg(pDocSh)))  // update immediately, Doc switch
+    bool bRet = SwChildWinWrapper::ReInitDlg(pDocSh);
+    if (bRet)  // update immediately, Doc switch
     {
         pDlgInterface->ReInitDlg();
     }
@@ -138,8 +137,8 @@ SwFieldDataOnlyDlgWrapper::SwFieldDataOnlyDlgWrapper( vcl::Window* _pParent, sal
 // re-init after doc activation
 bool SwFieldDataOnlyDlgWrapper::ReInitDlg(SwDocShell *pDocSh)
 {
-    bool bRet;
-    if ((bRet = SwChildWinWrapper::ReInitDlg(pDocSh)))  // update immediately, Doc switch
+    bool bRet = SwChildWinWrapper::ReInitDlg(pDocSh);
+    if (bRet)  // update immediately, Doc switch
     {
         pDlgInterface->ReInitDlg();
     }

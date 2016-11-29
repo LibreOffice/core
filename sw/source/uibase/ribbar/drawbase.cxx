@@ -201,7 +201,8 @@ bool SwDrawBase::MouseButtonDown(const MouseEvent& rMEvt)
                 if (!m_pSh->IsSelFrameMode())
                     m_pSh->EnterSelFrameMode();
 
-                if( (bReturn = m_pSh->BeginMark(m_aStartPos)) )
+                bReturn = m_pSh->BeginMark(m_aStartPos);
+                if( bReturn )
                     m_pWin->SetDrawAction(true);
 
                 SetDrawPointer();

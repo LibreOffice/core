@@ -1648,7 +1648,8 @@ void SwView::StateTabWin(SfxItemSet& rSet)
             {
                 SwTabCols aTabCols;
                 size_t nNum = 0;
-                if ( ( m_bSetTabColFromDoc = IsTabColFromDoc() ) )
+                m_bSetTabColFromDoc = IsTabColFromDoc();
+                if ( m_bSetTabColFromDoc )
                 {
                     rSh.GetMouseTabCols( aTabCols, m_aTabColFromDocPos );
                     nNum = rSh.GetCurMouseTabColNum( m_aTabColFromDocPos );
@@ -1892,7 +1893,8 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     !(nFrameType & FrameTypeFlags::COLSECT ) ) )
             {
                 SwTabCols aTabCols;
-                if ( ( m_bSetTabRowFromDoc = IsTabRowFromDoc() ) )
+                m_bSetTabRowFromDoc = IsTabRowFromDoc();
+                if ( m_bSetTabRowFromDoc )
                 {
                     rSh.GetMouseTabRows( aTabCols, m_aTabColFromDocPos );
                 }

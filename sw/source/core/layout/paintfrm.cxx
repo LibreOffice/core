@@ -3589,8 +3589,8 @@ void SwLayoutFrame::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRec
         return;
 
     SwShortCut aShortCut( *pFrame, rRect );
-    bool bCnt;
-    if ( (bCnt = pFrame->IsContentFrame()) )
+    bool bCnt = pFrame->IsContentFrame();
+    if ( bCnt )
         pFrame->Calc(&rRenderContext);
 
     if ( pFrame->IsFootnoteContFrame() )
@@ -3652,8 +3652,12 @@ void SwLayoutFrame::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRec
                 {
                     gProp.pSGlobalShell->InvalidateWindows( aPaintRect );
                     pFrame = pFrame->GetNext();
-                    if ( pFrame && (bCnt = pFrame->IsContentFrame()) )
-                        pFrame->Calc(&rRenderContext);
+                    if ( pFrame )
+                    {
+                        bCnt = pFrame->IsContentFrame();
+                        if ( bCnt )
+                            pFrame->Calc(&rRenderContext);
+                    }
                     continue;
                 }
             }
@@ -3684,8 +3688,12 @@ void SwLayoutFrame::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRec
 
         pFrame = pFrame->GetNext();
 
-        if ( pFrame && (bCnt = pFrame->IsContentFrame()) )
-            pFrame->Calc(&rRenderContext);
+        if ( pFrame )
+        {
+            bCnt = pFrame->IsContentFrame();
+            if ( bCnt )
+                pFrame->Calc(&rRenderContext);
+        }
     }
 }
 

@@ -256,7 +256,8 @@ namespace sw
             WriterListener* GetRightOfPos() { return m_pPosition->m_pRight; }
             WriterListener* GoStart()
             {
-                if((m_pPosition = m_rRoot.m_pWriterListeners))
+                m_pPosition = m_rRoot.m_pWriterListeners;
+                if(m_pPosition)
                     while( m_pPosition->m_pLeft )
                         m_pPosition = m_pPosition->m_pLeft;
                 return m_pCurrent = m_pPosition;

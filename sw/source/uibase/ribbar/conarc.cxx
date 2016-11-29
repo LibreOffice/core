@@ -32,9 +32,8 @@ ConstArc::ConstArc(SwWrtShell* pWrtShell, SwEditWin* pEditWin, SwView* pSwView)
 
 bool ConstArc::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    bool bReturn;
-
-    if ((bReturn = SwDrawBase::MouseButtonDown(rMEvt)))
+    bool bReturn = SwDrawBase::MouseButtonDown(rMEvt);
+    if (bReturn)
     {
         if (!m_nButtonUpCount)
             m_aStartPoint = m_pWin->PixelToLogic(rMEvt.GetPosPixel());

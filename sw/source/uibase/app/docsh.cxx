@@ -806,8 +806,8 @@ void SwDocShell::Draw( OutputDevice* pDev, const JobSetup& rSetup,
                                sal_uInt16 nAspect )
 {
     //fix #25341# Draw should not affect the Modified
-    bool bResetModified;
-    if ( (bResetModified = IsEnableSetModified()) )
+    bool bResetModified = IsEnableSetModified();
+    if ( bResetModified )
         EnableSetModified( false );
 
     // When there is a JobSetup connected to the Document, we copy it to

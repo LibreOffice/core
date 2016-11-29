@@ -2269,7 +2269,8 @@ bool SwTransferable::PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
     case SotClipboardFormatId::NETSCAPE_BOOKMARK:
     case SotClipboardFormatId::FILEGRPDESCRIPTOR:
     case SotClipboardFormatId::UNIFORMRESOURCELOCATOR:
-        if( ( bRet = rData.GetINetBookmark( nFormat, aBkmk ) ))
+        bRet = rData.GetINetBookmark( nFormat, aBkmk );
+        if( bRet )
         {
             if( SwPasteSdr::SetAttr == nAction )
                 nFormat = SotClipboardFormatId::NETSCAPE_BOOKMARK;
@@ -2281,7 +2282,8 @@ bool SwTransferable::PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
     case SotClipboardFormatId::SIMPLE_FILE:
         {
             OUString sText;
-            if( ( bRet = rData.GetString( nFormat, sText ) ) )
+            bRet = rData.GetString( nFormat, sText );
+            if( bRet )
             {
                 OUString sDesc;
                 SwTransferable::CheckForURLOrLNKFile( rData, sText, &sDesc );

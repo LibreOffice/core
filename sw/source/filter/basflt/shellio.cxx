@@ -119,7 +119,8 @@ sal_uLong SwReader::Read( const Reader& rOptions )
     if( bSaveUndo )
     {
         // the reading of the page template cannot be undone!
-        if( ( bReadPageDescs = po->aOpt.IsPageDescs() ) )
+        bReadPageDescs = po->aOpt.IsPageDescs();
+        if( bReadPageDescs )
         {
             bSaveUndo = false;
             pDoc->GetIDocumentUndoRedo().DelAllUndoObj();

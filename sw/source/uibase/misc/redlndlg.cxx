@@ -75,9 +75,8 @@ SwRedlineAcceptChild::SwRedlineAcceptChild( vcl::Window* _pParent,
 // newly initialise dialog after document switch
 bool SwRedlineAcceptChild::ReInitDlg(SwDocShell *pDocSh)
 {
-    bool bRet;
-
-    if ((bRet = SwChildWinWrapper::ReInitDlg(pDocSh)))  // update immediately, doc switch!
+    bool bRet = SwChildWinWrapper::ReInitDlg(pDocSh);
+    if (bRet)  // update immediately, doc switch!
         static_cast<SwModelessRedlineAcceptDlg*>(GetWindow())->Activate();
 
     return bRet;

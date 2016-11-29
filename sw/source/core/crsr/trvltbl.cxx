@@ -95,7 +95,8 @@ bool SwCursorShell::GoNextCell( bool bAppendLine )
                 static_cast<SwEditShell*>(this)->EndAllAction();
             }
         }
-        if( bRet && ( bRet = pCursor->GoNextCell() ) )
+        bRet = bRet && pCursor->GoNextCell();
+        if( bRet )
             UpdateCursor();
     }
     return bRet;

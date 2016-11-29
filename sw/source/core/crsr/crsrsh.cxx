@@ -1320,7 +1320,8 @@ void SwCursorShell::VisPortChgd( const SwRect & rRect )
     bool bVis; // switch off all cursors when scrolling
 
     // if a cursor is visible then hide the SV cursor
-    if( ( bVis = m_pVisibleCursor->IsVisible() ) )
+    bVis = m_pVisibleCursor->IsVisible();
+    if( bVis )
         m_pVisibleCursor->Hide();
 
     m_bVisPortChgd = true;
@@ -2543,7 +2544,8 @@ void SwCursorShell::ParkPams( SwPaM* pDelRg, SwShellCursor** ppDelRing )
             {
                 if( *ppDelRing == m_pCurrentCursor )
                 {
-                    if( ( bDelete = GoNextCursor() ) )
+                    bDelete = GoNextCursor();
+                    if( bDelete )
                     {
                         bGoNext = false;
                         pTmp = pTmp->GetNext();

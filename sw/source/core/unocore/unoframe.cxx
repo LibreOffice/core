@@ -2552,18 +2552,21 @@ void SwXFrame::setPropertyToDefault( const OUString& rPropertyName )
                     pFormat->SetFormatAttr(aSet);
             }
         }
-        else if((bNextFrame = (rPropertyName == UNO_NAME_CHAIN_NEXT_NAME))
-                || rPropertyName == UNO_NAME_CHAIN_PREV_NAME)
+        else
         {
-            SwDoc* pDoc = pFormat->GetDoc();
-            if(bNextFrame)
-                pDoc->Unchain(*pFormat);
-            else
+            bNextFrame = rPropertyName == UNO_NAME_CHAIN_NEXT_NAME;
+            if( bNextFrame || rPropertyName == UNO_NAME_CHAIN_PREV_NAME )
             {
-                SwFormatChain aChain( pFormat->GetChain() );
-                SwFrameFormat *pPrev = aChain.GetPrev();
-                if(pPrev)
-                    pDoc->Unchain(*pPrev);
+                SwDoc* pDoc = pFormat->GetDoc();
+                if(bNextFrame)
+                    pDoc->Unchain(*pFormat);
+                else
+                {
+                    SwFormatChain aChain( pFormat->GetChain() );
+                    SwFrameFormat *pPrev = aChain.GetPrev();
+                    if(pPrev)
+                        pDoc->Unchain(*pPrev);
+                }
             }
         }
     }

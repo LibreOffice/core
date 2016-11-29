@@ -770,8 +770,8 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 OUString sFormula(static_cast<const SfxStringItem*>(pItem)->GetValue());
                 SwFieldMgr aFieldMgr;
                 rWrtSh.StartAllAction();
-                bool bDelSel;
-                if( (bDelSel = rWrtSh.HasSelection()) )
+                bool bDelSel = rWrtSh.HasSelection();
+                if( bDelSel )
                 {
                     rWrtSh.StartUndo( UNDO_START );
                     rWrtSh.DelRight();

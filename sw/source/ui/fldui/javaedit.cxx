@@ -154,7 +154,8 @@ void SwJavaEditDialog::CheckTravel()
         if( bNext )
             pMgr->GoPrev();
 
-        if( ( bPrev = pMgr->GoPrev() ) )
+        bPrev = pMgr->GoPrev();
+        if( bPrev )
             pMgr->GoNext();
         bTravel |= bNext || bPrev;
 

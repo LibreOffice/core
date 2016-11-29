@@ -687,8 +687,11 @@ bool SwView::HasDrwObj(SdrObject *pSdrObj) const
         const size_t nCnt = pList->GetObjCount();
 
         for (size_t i = 0; i < nCnt; ++i)
-            if ((bRet = HasDrwObj(pList->GetObj(i))))
+        {
+            bRet = HasDrwObj(pList->GetObj(i));
+            if (bRet)
                 break;
+        }
     }
     else if (SdrInventor::Default == pSdrObj->GetObjInventor() || pSdrObj->Is3DObj())
         return true;
@@ -706,8 +709,11 @@ bool SwView::HasOnlyObj(SdrObject *pSdrObj, SdrInventor eObjInventor) const
         const size_t nCnt = pList->GetObjCount();
 
         for (size_t i = 0; i < nCnt; ++i)
-            if (!(bRet = HasOnlyObj(pList->GetObj(i), eObjInventor)))
+        {
+            bRet = HasOnlyObj(pList->GetObj(i), eObjInventor);
+            if (!bRet)
                 break;
+        }
     }
     else if (eObjInventor == pSdrObj->GetObjInventor())
         return true;

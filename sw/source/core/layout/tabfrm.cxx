@@ -3307,7 +3307,8 @@ bool SwTabFrame::ShouldBwdMoved( SwLayoutFrame *pNewUpper, bool, bool &rReformat
             long nNewWidth = (pNewUpper->Prt().*fnRectX->fnGetWidth)();
             if( std::abs( nNewWidth - nOldWidth ) < 2 )
             {
-                if( !( bMoveAnyway = (BwdMoveNecessary( pOldPage, Frame() ) > 1) ) )
+                bMoveAnyway = BwdMoveNecessary( pOldPage, Frame() ) > 1;
+                if( !bMoveAnyway )
                 {
                     SwRect aRect( pNewUpper->Prt() );
                     aRect.Pos() += pNewUpper->Frame().Pos();

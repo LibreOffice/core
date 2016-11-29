@@ -3627,8 +3627,8 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
                 }
                 else
                 {
-                    if( ( bRet = bLeft ? nDist != 0
-                                            : ( rSz.GetWidth() - nDist ) > COLFUZZY ) )
+                    bRet = bLeft ? nDist != 0 : ( rSz.GetWidth() - nDist ) > COLFUZZY;
+                    if( bRet )
                     {
                         for( n = 0; n < m_aLines.size(); ++n )
                         {
@@ -3780,9 +3780,8 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
             // First, see if there is enough room at all
             if( bInsDel )
             {
-                if( ( bRet = bLeft ? nDist != 0
-                                : ( rSz.GetWidth() - nDist ) > COLFUZZY ) &&
-                    !aParam.bBigger )
+                bRet = bLeft ? nDist != 0 : ( rSz.GetWidth() - nDist ) > COLFUZZY;
+                if( bRet && !aParam.bBigger )
                 {
                     bRet = (*fnOtherBox)( pLine, aParam, 0, true );
                     if( bRet && !aParam.bAnyBoxFnd )

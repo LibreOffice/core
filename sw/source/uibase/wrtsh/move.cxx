@@ -87,8 +87,12 @@ bool SwWrtShell::SimpleMove( FNSimpleMove FnSimpleMove, bool bSelect )
         bRet = (this->*FnSimpleMove)();
         EndCursorMove();
     }
-    else if( ( bRet = (this->*FnSimpleMove)() ) )
-        MoveCursor();
+    else
+    {
+        bRet = (this->*FnSimpleMove)();
+        if( bRet )
+            MoveCursor();
+    }
     return bRet;
 }
 

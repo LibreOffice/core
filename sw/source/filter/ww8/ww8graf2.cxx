@@ -287,7 +287,8 @@ bool SwWW8ImplReader::ReadGrafFile(OUString& rFileName, Graphic*& rpGraphic,
     if (nData > 0)
     {
         rpGraphic = new Graphic();
-        if (!(bOk = SwWW8ImplReader::GetPictGrafFromStream(*rpGraphic, *pSt)))
+        bOk = SwWW8ImplReader::GetPictGrafFromStream(*rpGraphic, *pSt);
+        if (!bOk)
             DELETEZ(rpGraphic);
     }
     return bOk; // Contains graphic

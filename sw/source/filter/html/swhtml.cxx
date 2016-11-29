@@ -593,10 +593,13 @@ void SwHTMLParser::Continue( int nToken )
     }
 
     m_bSetModEnabled = false;
-    if( m_pDoc->GetDocShell() &&
-        (m_bSetModEnabled = m_pDoc->GetDocShell()->IsEnableSetModified()) )
+    if( m_pDoc->GetDocShell() )
     {
-        m_pDoc->GetDocShell()->EnableSetModified( false );
+        m_bSetModEnabled = m_pDoc->GetDocShell()->IsEnableSetModified();
+        if( m_bSetModEnabled )
+        {
+            m_pDoc->GetDocShell()->EnableSetModified( false );
+        }
     }
 
     // waehrend des einlesens kein OLE-Modified rufen

@@ -495,7 +495,8 @@ bool SwFormat::SetFormatAttr( const SfxPoolItem& rAttr )
 
         if(IsModifyLocked())
         {
-            if( ( bRet = m_aSet.Put( aTempSet ) ) )
+            bRet = m_aSet.Put( aTempSet );
+            if( bRet )
             {
                 m_aSet.SetModifyAtAttr( this );
             }
@@ -528,7 +529,8 @@ bool SwFormat::SetFormatAttr( const SfxPoolItem& rAttr )
           (RES_GRFFMTCOLL == nFormatWhich  ||
            RES_TXTFMTCOLL == nFormatWhich ) ) )
     {
-        if( ( bRet = (nullptr != m_aSet.Put( rAttr ))) )
+        bRet = nullptr != m_aSet.Put( rAttr );
+        if( bRet )
             m_aSet.SetModifyAtAttr( this );
         // #i71574#
         if ( nFormatWhich == RES_TXTFMTCOLL && rAttr.Which() == RES_PARATR_NUMRULE )
@@ -599,7 +601,8 @@ bool SwFormat::SetFormatAttr( const SfxItemSet& rSet )
 
             if(IsModifyLocked())
             {
-                if( ( bRet = m_aSet.Put( aTempSet ) ) )
+                bRet = m_aSet.Put( aTempSet );
+                if( bRet )
                 {
                     m_aSet.SetModifyAtAttr( this );
                 }
@@ -633,7 +636,8 @@ bool SwFormat::SetFormatAttr( const SfxItemSet& rSet )
            ( RES_GRFFMTCOLL == nFormatWhich ||
              RES_TXTFMTCOLL == nFormatWhich ) ) )
     {
-        if( ( bRet = m_aSet.Put( aTempSet )) )
+        bRet = m_aSet.Put( aTempSet );
+        if( bRet )
             m_aSet.SetModifyAtAttr( this );
         // #i71574#
         if ( nFormatWhich == RES_TXTFMTCOLL )
