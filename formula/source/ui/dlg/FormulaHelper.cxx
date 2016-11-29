@@ -223,8 +223,12 @@ sal_Int32 FormulaHelper::GetFunctionStart( const OUString&   rFormula,
                     if (nParPos > 0)
                         nParPos--;
                 }
-                else if ( !(bFound = ( rFormula[nParPos] == '(' ) ) )
-                    nParPos--;
+                else
+                {
+                    bFound = rFormula[nParPos] == '(';
+                    if ( !bFound )
+                        nParPos--;
+                }
             }
         }
         else
@@ -238,8 +242,12 @@ sal_Int32 FormulaHelper::GetFunctionStart( const OUString&   rFormula,
                         nParPos++;
                     nParPos++;
                 }
-                else if ( !(bFound = ( rFormula[nParPos] == '(' ) ) )
-                    nParPos++;
+                else
+                {
+                    bFound = rFormula[nParPos] == '(';
+                    if ( !bFound )
+                        nParPos++;
+                }
             }
         }
 
