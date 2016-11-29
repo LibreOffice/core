@@ -1107,11 +1107,11 @@ void SwTOXSelectTabPage::ApplyTOXDescription()
     }
     else if(TOX_OBJECTS == aCurType.eType)
     {
-        long nOLEData = rDesc.GetOLEOptions();
+        SwTOOElements nOLEData = rDesc.GetOLEOptions();
         for(sal_uLong nFromObj = 0; nFromObj < m_pFromObjCLB->GetEntryCount(); nFromObj++)
         {
-            sal_IntPtr nData = reinterpret_cast<sal_IntPtr>(m_pFromObjCLB->GetEntryData(nFromObj));
-            m_pFromObjCLB->CheckEntryPos(nFromObj, 0 != (nData & nOLEData));
+            SwTOOElements nData = static_cast<SwTOOElements>(reinterpret_cast<sal_IntPtr>(m_pFromObjCLB->GetEntryData(nFromObj)));
+            m_pFromObjCLB->CheckEntryPos(nFromObj, bool(nData & nOLEData));
         }
     }
     else if(TOX_AUTHORITIES == aCurType.eType)
@@ -1204,16 +1204,16 @@ void SwTOXSelectTabPage::FillTOXDescription()
         break;
         case TOX_OBJECTS:
         {
-            long nOLEData = 0;
+            SwTOOElements nOLEData = SwTOOElements::NONE;
             for(sal_uLong i = 0; i < m_pFromObjCLB->GetEntryCount(); i++)
             {
                 if(m_pFromObjCLB->IsChecked(i))
                 {
-                    sal_IntPtr nData = reinterpret_cast<sal_IntPtr>(m_pFromObjCLB->GetEntryData(i));
+                    SwTOOElements nData = static_cast<SwTOOElements>(reinterpret_cast<sal_IntPtr>(m_pFromObjCLB->GetEntryData(i)));
                     nOLEData |= nData;
                 }
             }
-            rDesc.SetOLEOptions((sal_uInt16)nOLEData);
+            rDesc.SetOLEOptions(nOLEData);
         }
         break;
         case TOX_AUTHORITIES:

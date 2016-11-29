@@ -263,12 +263,12 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
             }
             lcl_SetProp(xInfo, xIdxProps, UNO_NAME_LABEL_DISPLAY_TYPE, nSet);
 
-            sal_uInt16  nOLEOptions = rDesc.GetOLEOptions();
-            lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_CREATE_FROM_STAR_MATH,   0 != (nsSwTOOElements::TOO_MATH &nOLEOptions           ));
-            lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_CREATE_FROM_STAR_CHART,  0 != (nsSwTOOElements::TOO_CHART    &nOLEOptions       ));
-            lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_CREATE_FROM_STAR_CALC,   0 != (nsSwTOOElements::TOO_CALC &nOLEOptions           ));
-            lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_CREATE_FROM_STAR_DRAW,   0 != (nsSwTOOElements::TOO_DRAW_IMPRESS&nOLEOptions));
-            lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_CREATE_FROM_OTHER_EMBEDDED_OBJECTS, 0 != (nsSwTOOElements::TOO_OTHER & nOLEOptions));
+            SwTOOElements  nOLEOptions = rDesc.GetOLEOptions();
+            lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_CREATE_FROM_STAR_MATH,   bool(SwTOOElements::Math &nOLEOptions           ));
+            lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_CREATE_FROM_STAR_CHART,  bool(SwTOOElements::Chart    &nOLEOptions       ));
+            lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_CREATE_FROM_STAR_CALC,   bool(SwTOOElements::Calc &nOLEOptions           ));
+            lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_CREATE_FROM_STAR_DRAW,   bool(SwTOOElements::DrawImpress&nOLEOptions));
+            lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_CREATE_FROM_OTHER_EMBEDDED_OBJECTS, bool(SwTOOElements::Other & nOLEOptions));
          }
          const SwForm* pForm = GetForm(eCurrentTOXType);
          if(bInitialCreate || !nPage || nPage == TOX_PAGE_ENTRY)

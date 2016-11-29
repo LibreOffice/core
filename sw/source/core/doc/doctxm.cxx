@@ -1329,10 +1329,10 @@ void SwTOXBaseSection::UpdateAuthorities( const SwTOXInternational& rIntl )
     }
 }
 
-static long lcl_IsSOObject( const SvGlobalName& rFactoryNm )
+static SwTOOElements lcl_IsSOObject( const SvGlobalName& rFactoryNm )
 {
-    static struct SoObjType {
-        long nFlag;
+    static const struct SoObjType {
+        SwTOOElements nFlag;
         // GlobalNameId
         struct GlobalNameIds {
             sal_uInt32 n1;
@@ -1340,27 +1340,24 @@ static long lcl_IsSOObject( const SvGlobalName& rFactoryNm )
             sal_uInt8 b8, b9, b10, b11, b12, b13, b14, b15;
         } aGlNmIds[4];
     } aArr[] = {
-        { nsSwTOOElements::TOO_MATH,
+        { SwTOOElements::Math,
           { {SO3_SM_CLASSID_60},{SO3_SM_CLASSID_50},
             {SO3_SM_CLASSID_40},{SO3_SM_CLASSID_30} } },
-        { nsSwTOOElements::TOO_CHART,
+        { SwTOOElements::Chart,
           { {SO3_SCH_CLASSID_60},{SO3_SCH_CLASSID_50},
             {SO3_SCH_CLASSID_40},{SO3_SCH_CLASSID_30} } },
-        { nsSwTOOElements::TOO_CALC,
+        { SwTOOElements::Calc,
           { {SO3_SC_CLASSID_60},{SO3_SC_CLASSID_50},
             {SO3_SC_CLASSID_40},{SO3_SC_CLASSID_30} } },
-        { nsSwTOOElements::TOO_DRAW_IMPRESS,
+        { SwTOOElements::DrawImpress,
           { {SO3_SIMPRESS_CLASSID_60},{SO3_SIMPRESS_CLASSID_50},
             {SO3_SIMPRESS_CLASSID_40},{SO3_SIMPRESS_CLASSID_30} } },
-        { nsSwTOOElements::TOO_DRAW_IMPRESS,
-          { {SO3_SDRAW_CLASSID_60},{SO3_SDRAW_CLASSID_50}}},
-        { 0,{{0,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0} } }
+        { SwTOOElements::DrawImpress,
+          { {SO3_SDRAW_CLASSID_60},{SO3_SDRAW_CLASSID_50} } }
     };
 
-    long nRet = 0;
-    for( const SoObjType* pArr = aArr; !nRet && pArr->nFlag; ++pArr )
-        for (auto & rId : pArr->aGlNmIds)
+    for( SoObjType const & rArr : aArr )
+        for (auto & rId : rArr.aGlNmIds)
         {
             if( !rId.n1 )
                 break;
@@ -1369,12 +1366,11 @@ static long lcl_IsSOObject( const SvGlobalName& rFactoryNm )
                         rId.b12, rId.b13, rId.b14, rId.b15 );
             if( rFactoryNm == aGlbNm )
             {
-                nRet = pArr->nFlag;
-                break;
+                return rArr.nFlag;
             }
         }
 
-    return nRet;
+    return SwTOOElements::NONE;
 }
 
 void SwTOXBaseSection::UpdateContent( SwTOXElement eMyType,
@@ -1416,15 +1412,15 @@ void SwTOXBaseSection::UpdateContent( SwTOXElement eMyType,
                 if(TOX_OBJECTS == SwTOXBase::GetType())
                 {
                     SwOLENode* pOLENode = pNd->GetOLENode();
-                    long nMyOLEOptions = GetOLEOptions();
+                    SwTOOElements nMyOLEOptions = GetOLEOptions();
                     SwOLEObj& rOLEObj = pOLENode->GetOLEObj();
 
                     if( rOLEObj.IsOleRef() )    // Not yet loaded
                     {
                         SvGlobalName aTmpName = SvGlobalName( rOLEObj.GetOleRef()->getClassID() );
-                        long nObj = ::lcl_IsSOObject( aTmpName );
-                        bInclude = ( (nMyOLEOptions & nsSwTOOElements::TOO_OTHER) && 0 == nObj)
-                                                    || (0 != (nMyOLEOptions & nObj));
+                        SwTOOElements nObj = ::lcl_IsSOObject( aTmpName );
+                        bInclude = ( (nMyOLEOptions & SwTOOElements::Other) && SwTOOElements::NONE == nObj )
+                                   || (nMyOLEOptions & nObj);
                     }
                     else
                     {
