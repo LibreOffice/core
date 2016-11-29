@@ -56,13 +56,9 @@ public:
     void                SetSlant(long);
     void                SetBulletOffset(long);
 
-    bool                IsScalable() const;
     bool                IsFullstopCentered() const;
-    bool                IsBuiltInFont() const;
 
-    void                SetScalableFlag(bool);
     void                SetFullstopCenteredFlag(bool);
-    void                SetBuiltInFontFlag(bool);
 
     FontMetric&         operator=( const FontMetric& rMetric );
     FontMetric&         operator=( FontMetric&& rMetric );
