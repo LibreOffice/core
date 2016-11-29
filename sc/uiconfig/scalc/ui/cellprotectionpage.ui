@@ -98,7 +98,7 @@
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">Cell protection is only effective after the current sheet has been protected.
 
-Select 'Protect Document' from the 'Tools' menu, and specify 'Sheet'.</property>
+Select 'Protect Sheet' from the 'Tools' menu.</property>
                     <property name="wrap">True</property>
                     <property name="max_width_chars">52</property>
                   </object>
