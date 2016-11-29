@@ -2344,57 +2344,6 @@ int  CreateT42FromTTGlyphs(TrueTypeFont  *ttf,
     return SF_OK;
 }
 
-int MapString(TrueTypeFont *ttf, sal_uInt16 *str, int nchars, sal_uInt16 *glyphArray, bool bvertical)
-{
-    int i;
-    sal_uInt16 *cp;
-
-    if (ttf->cmapType == CMAP_NOT_USABLE ) return -1;
-    if (!nchars) return 0;
-
-    if (glyphArray == nullptr) {
-        cp = str;
-    } else {
-        cp = glyphArray;
-    }
-
-    switch (ttf->cmapType) {
-        case CMAP_MS_Symbol:
-            if( ttf->mapper == getGlyph0 ) {
-                sal_uInt16 aChar;
-                for( i = 0; i < nchars; i++ ) {
-                    aChar = str[i];
-                    if( ( aChar & 0xf000 ) == 0xf000 )
-                        aChar &= 0x00ff;
-                    cp[i] = aChar;
-                }
-            }
-            else if( glyphArray )
-                memcpy(glyphArray, str, nchars * 2);
-            break;
-
-        case CMAP_MS_Unicode:
-            if (glyphArray != nullptr) {
-                memcpy(glyphArray, str, nchars * 2);
-            }
-            break;
-
-        case CMAP_MS_ShiftJIS:  TranslateString12(str, cp, nchars); break;
-        case CMAP_MS_Big5:      TranslateString13(str, cp, nchars); break;
-        case CMAP_MS_PRC:       TranslateString14(str, cp, nchars); break;
-        case CMAP_MS_Wansung:   TranslateString15(str, cp, nchars); break;
-        case CMAP_MS_Johab:     TranslateString16(str, cp, nchars); break;
-    }
-
-    const sal_uInt32 nMaxCmapSize = ttf->ptr + ttf->fsize - ttf->cmap;
-    for (i = 0; i < nchars; i++) {
-        cp[i] = (sal_uInt16)ttf->mapper(ttf->cmap, nMaxCmapSize, cp[i]);
-        if (cp[i]!=0 && bvertical)
-            cp[i] = (sal_uInt16)UseGSUB(ttf,cp[i]);
-    }
-    return nchars;
-}
-
 #if defined(_WIN32) || defined(MACOSX) || defined(IOS)
 sal_uInt16 MapChar(TrueTypeFont *ttf, sal_uInt16 ch, bool bvertical)
 {
@@ -2423,14 +2372,6 @@ sal_uInt16 MapChar(TrueTypeFont *ttf, sal_uInt16 ch, bool bvertical)
 }
 #endif
 
-
-int DoesVerticalSubstitution( TrueTypeFont *ttf, int bvertical)
-{
-    int nRet = 0;
-    if( bvertical)
-        nRet = HasVerticalGSUB( ttf);
-    return nRet;
-}
 
 int GetTTGlyphCount( TrueTypeFont* ttf )
 {
@@ -2498,24 +2439,6 @@ TTSimpleGlyphMetrics *GetTTSimpleGlyphMetrics(TrueTypeFont *ttf, sal_uInt16 *gly
             res[i].sb  = static_cast<sal_Int16>(
                 XUnits( UPEm, GetInt16( pTable, nLsbOffset) ) );
     }
-
-    return res;
-}
-
-TTSimpleGlyphMetrics *GetTTSimpleCharMetrics(TrueTypeFont * ttf, sal_uInt16 firstChar, int nChars, bool vertical)
-{
-    TTSimpleGlyphMetrics *res = nullptr;
-    int i, n;
-
-    sal_uInt16* str = static_cast<sal_uInt16*>(malloc(nChars * 2));
-    assert(str != nullptr);
-
-    for (i=0; i<nChars; i++) str[i] = (sal_uInt16)(firstChar + i);
-    if ((n = MapString(ttf, str, nChars, nullptr, vertical)) != -1) {
-        res = GetTTSimpleGlyphMetrics(ttf, str, n, vertical);
-    }
-
-    free(str);
 
     return res;
 }

@@ -437,43 +437,6 @@ namespace vcl
  */
     TTSimpleGlyphMetrics *GetTTSimpleGlyphMetrics(TrueTypeFont *ttf, sal_uInt16 *glyphArray, int nGlyphs, bool vertical);
 
-/**
- * Queries glyph metrics. Allocates an array of TTSimpleGlyphMetrics structs and returns it.
- * This function behaves just like GetTTSimpleGlyphMetrics() but it takes a range of Unicode
- * characters instead of an array of glyphs.
- *
- * @param ttf         pointer to the TrueTypeFont structure
- * @param firstChar   Unicode value of the first character in the range
- * @param nChars      number of Unicode characters in the range
- * @param vertical    writing mode: false - horizontal, true - vertical
- *
- * @see GetTTSimpleGlyphMetrics
- * @ingroup sft
- *
- */
-    TTSimpleGlyphMetrics *GetTTSimpleCharMetrics(TrueTypeFont *ttf, sal_uInt16 firstChar, int nChars, bool vertical);
-
-/**
- * Maps a Unicode (UCS-2) string to a glyph array. Returns the number of glyphs in the array,
- * which for TrueType fonts is always the same as the number of input characters.
- *
- * @param ttf         pointer to the TrueTypeFont structure
- * @param str         pointer to a UCS-2 string
- * @param nchars      number of characters in <b>str</b>
- * @param glyphArray  pointer to the glyph array where glyph IDs are to be recorded.
- * @param bvertical   vertical text
- *
- * @return MapString() returns -1 if the TrueType font has no usable 'cmap' tables.
- *         Otherwise it returns the number of characters processed: <b>nChars</b>
- *
- * glyphIDs of TrueType fonts are 2 byte positive numbers. glyphID of 0 denotes a missing
- * glyph and traditionally defaults to an empty square.
- * glyphArray should be at least sizeof(sal_uInt16) * nchars bytes long. If glyphArray is NULL
- * MapString() replaces the UCS-2 characters in str with glyphIDs.
- * @ingroup sft
- */
-    int VCL_DLLPUBLIC MapString(TrueTypeFont *ttf, sal_uInt16 *str, int nchars, sal_uInt16 *glyphArray, bool bvertical);
-
 #if defined(_WIN32) || defined(MACOSX) || defined(IOS)
 /**
  * Maps a Unicode (UCS-2) character to a glyph ID and returns it. Missing glyph has
@@ -488,15 +451,6 @@ namespace vcl
  */
     sal_uInt16 MapChar(TrueTypeFont *ttf, sal_uInt16 ch, bool bvertical);
 #endif
-
-/**
- * Returns 0 when the font does not substitute vertical glyphs
- *
- * @param ttf         pointer to the TrueTypeFont structure
- * @param bvertical   flag to function that we want to find the vertical
- *                    GlobalSUBstitution attribute
- */
-    int DoesVerticalSubstitution( TrueTypeFont *ttf, int bvertical);
 
 /**
  * Returns global font information about the TrueType font.
