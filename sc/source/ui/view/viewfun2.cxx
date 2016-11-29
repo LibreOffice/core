@@ -314,7 +314,8 @@ static bool lcl_GetAutoSumForColumnRange( ScDocument* pDoc, ScRangeList& rRangeL
         {
             rRangeList.Append( ScRange( nCol, nStartRow, nTab, nCol, nEndRow, nTab ) );
             nEndRow = static_cast< SCROW >( nExtend );
-            if ( ( bContinue = lcl_FindNextSumEntryInColumn( pDoc, nCol, nEndRow /*inout*/, nTab, nExtend /*out*/, aStart.Row() ) ) )
+            bContinue = lcl_FindNextSumEntryInColumn( pDoc, nCol, nEndRow /*inout*/, nTab, nExtend /*out*/, aStart.Row() );
+            if ( bContinue )
             {
                 nStartRow = nEndRow;
             }
@@ -356,7 +357,8 @@ static bool lcl_GetAutoSumForRowRange( ScDocument* pDoc, ScRangeList& rRangeList
         {
             rRangeList.Append( ScRange( nStartCol, nRow, nTab, nEndCol, nRow, nTab ) );
             nEndCol = static_cast< SCCOL >( nExtend );
-            if ( ( bContinue = lcl_FindNextSumEntryInRow( pDoc, nEndCol /*inout*/, nRow, nTab, nExtend /*out*/, aStart.Col() ) ) )
+            bContinue = lcl_FindNextSumEntryInRow( pDoc, nEndCol /*inout*/, nRow, nTab, nExtend /*out*/, aStart.Col() );
+            if ( bContinue )
             {
                 nStartCol = nEndCol;
             }
@@ -459,7 +461,8 @@ bool ScViewFunc::GetAutoSumArea( ScRangeList& rRangeList )
                 if ( bRow )
                 {
                     nEndRow = static_cast< SCROW >( nExtend );
-                    if ( ( bContinue = lcl_FindNextSumEntryInColumn( pDoc, nCol, nEndRow /*inout*/, nTab, nExtend /*out*/, 0 ) ) )
+                    bContinue = lcl_FindNextSumEntryInColumn( pDoc, nCol, nEndRow /*inout*/, nTab, nExtend /*out*/, 0 );
+                    if ( bContinue )
                     {
                         nStartRow = nEndRow;
                     }
@@ -467,7 +470,8 @@ bool ScViewFunc::GetAutoSumArea( ScRangeList& rRangeList )
                 else
                 {
                     nEndCol = static_cast< SCCOL >( nExtend );
-                    if ( ( bContinue = lcl_FindNextSumEntryInRow( pDoc, nEndCol /*inout*/, nRow, nTab, nExtend /*out*/, 0 ) ) )
+                    bContinue = lcl_FindNextSumEntryInRow( pDoc, nEndCol /*inout*/, nRow, nTab, nExtend /*out*/, 0 );
+                    if ( bContinue )
                     {
                         nStartCol = nEndCol;
                     }

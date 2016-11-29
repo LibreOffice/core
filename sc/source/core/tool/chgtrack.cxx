@@ -1013,21 +1013,18 @@ bool ScChangeActionDel::Reject( ScDocument* pDoc )
                 case SC_CAT_DELETE_COLS :
                     if ( !(aRange.aStart.Col() == 0 && aRange.aEnd.Col() == MAXCOL) )
                     {   // Only if not TabDelete
-                        if ( ( bOk = pDoc->CanInsertCol( aRange ) ) )
-                            bOk = pDoc->InsertCol( aRange );
+                        bOk = pDoc->CanInsertCol( aRange ) && pDoc->InsertCol( aRange );
                     }
                 break;
                 case SC_CAT_DELETE_ROWS :
-                    if ( ( bOk = pDoc->CanInsertRow( aRange ) ) )
-                        bOk = pDoc->InsertRow( aRange );
+                    bOk = pDoc->CanInsertRow( aRange ) && pDoc->InsertRow( aRange );
                 break;
                 case SC_CAT_DELETE_TABS :
                 {
                     //TODO: Remember table names?
                     OUString aName;
                     pDoc->CreateValidTabName( aName );
-                    if ( ( bOk = pDoc->ValidNewTabName( aName ) ) )
-                        bOk = pDoc->InsertTab( aRange.aStart.Tab(), aName );
+                    bOk = pDoc->ValidNewTabName( aName ) && pDoc->InsertTab( aRange.aStart.Tab(), aName );
                 }
                 break;
                 default:
@@ -4239,11 +4236,15 @@ bool ScChangeTrack::Reject(
                     bOk = Reject( itChangeAction->second, nullptr, true ); // Recursion!
             }
         }
-        if ( bOk && (bRejected = pAct->Reject( pDoc )) )
+        if ( bOk )
         {
-            // pRefDoc NULL := Do not save deleted Cells
-            AppendDeleteRange( pAct->GetBigRange().MakeRange(), nullptr, (short) 0,
-                pAct->GetActionNumber() );
+            bRejected = pAct->Reject( pDoc );
+            if ( bRejected )
+            {
+                // pRefDoc NULL := Do not save deleted Cells
+                AppendDeleteRange( pAct->GetBigRange().MakeRange(), nullptr, (short) 0,
+                    pAct->GetActionNumber() );
+            }
         }
     }
     else if ( pAct->IsDeleteType() )
@@ -4352,14 +4353,18 @@ bool ScChangeTrack::Reject(
                 bOk = Reject( itChangeAction->second, nullptr, true ); // Recursion!
             }
         }
-        if ( bOk && (bRejected = pAct->Reject( pDoc )) )
+        if ( bOk )
         {
-            ScChangeActionMove* pReject = new ScChangeActionMove(
-                pAct->GetBigRange().MakeRange(),
-                static_cast<ScChangeActionMove*>(pAct)->GetFromRange().MakeRange(), this );
-            pReject->SetRejectAction( pAct->GetActionNumber() );
-            pReject->SetState( SC_CAS_ACCEPTED );
-            Append( pReject );
+            bRejected = pAct->Reject( pDoc );
+            if ( bRejected )
+            {
+                ScChangeActionMove* pReject = new ScChangeActionMove(
+                    pAct->GetBigRange().MakeRange(),
+                    static_cast<ScChangeActionMove*>(pAct)->GetFromRange().MakeRange(), this );
+                pReject->SetRejectAction( pAct->GetActionNumber() );
+                pReject->SetState( SC_CAS_ACCEPTED );
+                Append( pReject );
+            }
         }
     }
     else if ( pAct->GetType() == SC_CAT_CONTENT )
@@ -4376,7 +4381,8 @@ bool ScChangeTrack::Reject(
             aCell.assign(*pDoc, aRange.aStart);
             pReject->SetOldValue(aCell, pDoc, pDoc);
         }
-        if ( (bRejected = pAct->Reject( pDoc )) && !bRecursion )
+        bRejected = pAct->Reject( pDoc );
+        if ( bRejected && !bRecursion )
         {
             ScCellValue aCell;
             aCell.assign(*pDoc, aRange.aStart);

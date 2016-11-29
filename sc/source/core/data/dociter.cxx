@@ -82,8 +82,8 @@ void ScAttrArray_IterGetNumberFormat( sal_uLong& nFormat, const ScAttrArray*& rp
     {
         SCROW nRowStart = 0;
         SCROW nRowEnd = MAXROW;
-        const ScPatternAttr* pPattern;
-        if( !(pPattern = pNewArr->GetPatternRange( nRowStart, nRowEnd, nRow ) ) )
+        const ScPatternAttr* pPattern = pNewArr->GetPatternRange( nRowStart, nRowEnd, nRow );
+        if( !pPattern )
         {
             pPattern = pDoc->GetDefPattern();
             nRowEnd = MAXROW;

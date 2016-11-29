@@ -723,13 +723,11 @@ OString ScModelObj::getTextSelection(const char* pMimeType, OString& rUsedMimeTy
 {
     SolarMutexGuard aGuard;
 
-    ScEditShell* pShell;
-    ScDrawShell* pDrawShell;
     TransferableDataHelper aDataHelper;
     ScViewData* pViewData = ScDocShell::GetViewData();
     uno::Reference<datatransfer::XTransferable> xTransferable;
 
-    if (( pShell = dynamic_cast<ScEditShell*>( pViewData->GetViewShell()->GetViewFrame()->GetDispatcher()->GetShell(0) )) )
+    if ( ScEditShell * pShell = dynamic_cast<ScEditShell*>( pViewData->GetViewShell()->GetViewFrame()->GetDispatcher()->GetShell(0) ) )
         xTransferable = pShell->GetEditView()->GetTransferable();
     else if ( nullptr != dynamic_cast<ScDrawTextObjectBar*>( pViewData->GetViewShell()->GetViewFrame()->GetDispatcher()->GetShell(0) ))
     {
@@ -738,7 +736,7 @@ OString ScModelObj::getTextSelection(const char* pMimeType, OString& rUsedMimeTy
         if (pOutView)
             xTransferable = pOutView->GetEditView().GetTransferable();
     }
-    else if (( pDrawShell = dynamic_cast<ScDrawShell*>( pViewData->GetViewShell()->GetViewFrame()->GetDispatcher()->GetShell(0) )) )
+    else if ( ScDrawShell * pDrawShell = dynamic_cast<ScDrawShell*>( pViewData->GetViewShell()->GetViewFrame()->GetDispatcher()->GetShell(0) ) )
         xTransferable = pDrawShell->GetDrawView()->CopyToTransferable();
     else
     {

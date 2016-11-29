@@ -662,7 +662,8 @@ static const sal_Unicode* lcl_r1c1_get_col( const sal_Unicode* p,
         return nullptr;
 
     p++;
-    if( ( isRelative = (*p == '[') ) )
+    isRelative = *p == '[';
+    if( isRelative )
         p++;
     n = sal_Unicode_strtol( p, &pEnd );
     if( nullptr == pEnd )
@@ -708,7 +709,8 @@ static inline const sal_Unicode* lcl_r1c1_get_row(
         return nullptr;
 
     p++;
-    if( ( isRelative = (*p == '[') ) )
+    isRelative = *p == '[';
+    if( isRelative )
         p++;
     n = sal_Unicode_strtol( p, &pEnd );
     if( nullptr == pEnd )
