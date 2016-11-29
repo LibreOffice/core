@@ -515,7 +515,7 @@ inline BYTE ImplPitchToWin( FontPitch ePitch )
 }
 
 static FontAttributes WinFont2DevFontAttributes( const ENUMLOGFONTEXW& rEnumFont,
-    const NEWTEXTMETRICW& rMetric, DWORD nFontType )
+    const NEWTEXTMETRICW& rMetric)
 {
     FontAttributes aDFA;
 
@@ -542,46 +542,13 @@ static FontAttributes WinFont2DevFontAttributes( const ENUMLOGFONTEXW& rEnumFont
     if( p < pEnd )
         aDFA.SetStyleName(OUString(reinterpret_cast<const sal_Unicode*>(pStyleName)));
 
-    // get device specific font attributes
-    aDFA.SetOrientationFlag( ((nFontType & RASTER_FONTTYPE) == 0) );
-    aDFA.SetBuiltInFontFlag( ((rMetric.tmPitchAndFamily & TMPF_DEVICE) != 0) );
-
-    aDFA.SetEmbeddableFlag( false );
-    aDFA.SetSubsettableFlag( false );
-    if( 0 != (rMetric.ntmFlags & (NTM_TT_OPENTYPE | NTM_PS_OPENTYPE))
-     || 0 != (rMetric.tmPitchAndFamily & TMPF_TRUETYPE))
-        aDFA.SetSubsettableFlag( true );
-    else if( 0 != (rMetric.ntmFlags & NTM_TYPE1) ) // TODO: implement subsetting for type1 too
-        aDFA.SetEmbeddableFlag( true );
-
     // heuristics for font quality
-    // -   standard-type1 > opentypeTT > truetype > non-standard-type1 > raster
-    // -   subsetting > embedding > none
+    // -   opentypeTT > truetype
     aDFA.SetQuality( 0 );
     if( rMetric.tmPitchAndFamily & TMPF_TRUETYPE )
         aDFA.IncreaseQualityBy( 50 );
     if( 0 != (rMetric.ntmFlags & (NTM_TT_OPENTYPE | NTM_PS_OPENTYPE)) )
         aDFA.IncreaseQualityBy( 10 );
-    if( aDFA.CanSubset() )
-        aDFA.IncreaseQualityBy( 200 );
-    else if( aDFA.CanEmbed() )
-        aDFA.IncreaseQualityBy( 100 );
-
-    // #i38665# prefer Type1 versions of the standard postscript fonts
-    if( aDFA.CanEmbed() )
-    {
-        if( aDFA.GetFamilyName() == "AvantGarde"
-        ||  aDFA.GetFamilyName() == "Bookman"
-        ||  aDFA.GetFamilyName() == "Courier"
-        ||  aDFA.GetFamilyName() == "Helvetica"
-        ||  aDFA.GetFamilyName() == "NewCenturySchlbk"
-        ||  aDFA.GetFamilyName() == "Palatino"
-        ||  aDFA.GetFamilyName() == "Symbol"
-        ||  aDFA.GetFamilyName() == "Times"
-        ||  aDFA.GetFamilyName() == "ZapfChancery"
-        ||  aDFA.GetFamilyName() == "ZapfDingbats" )
-            aDFA.IncreaseQualityBy( 500 );
-    }
 
     // TODO: add alias names
     return aDFA;
@@ -597,7 +564,7 @@ static WinFontFace* ImplLogMetricToDevFontDataW( const ENUMLOGFONTEXW* pLogFont,
         nHeight = pMetric->tmHeight - pMetric->tmInternalLeading;
 
     WinFontFace* pData = new WinFontFace(
-        WinFont2DevFontAttributes(*pLogFont, *pMetric, nFontType),
+        WinFont2DevFontAttributes(*pLogFont, *pMetric),
         nHeight,
         pLogFont->elfLogFont.lfCharSet,
         pMetric->tmPitchAndFamily );
@@ -1129,25 +1096,6 @@ void WinSalGraphics::GetFontMetric( ImplFontMetricDataRef& rxFontMetric, int nFa
     rxFontMetric->SetItalic(aWinMetric.tmItalic ? ITALIC_NORMAL : ITALIC_NONE);
     rxFontMetric->SetSlant( 0 );
 
-    // device dependent font attributes
-    rxFontMetric->SetBuiltInFontFlag( (aWinMetric.tmPitchAndFamily & TMPF_DEVICE) != 0 );
-    rxFontMetric->SetScalableFlag( (aWinMetric.tmPitchAndFamily & (TMPF_VECTOR|TMPF_TRUETYPE)) != 0 );
-    rxFontMetric->SetTrueTypeFlag( (aWinMetric.tmPitchAndFamily & TMPF_TRUETYPE) != 0 );
-    if( rxFontMetric->IsScalable() )
-    {
-        // check if there are kern pairs
-        // TODO: does this work with GPOS kerning?
-        DWORD nKernPairs = ::GetKerningPairsA( getHDC(), 0, nullptr );
-        rxFontMetric->SetKernableFlag( (nKernPairs > 0) );
-    }
-    else
-    {
-        // bitmap fonts cannot be rotated directly
-        rxFontMetric->SetOrientation( 0 );
-        // bitmap fonts have no kerning
-        rxFontMetric->SetKernableFlag( false );
-    }
-
     // transformation dependent font metrics
     rxFontMetric->SetWidth( static_cast<int>( mfFontScale[nFallbackLevel] * aWinMetric.tmAveCharWidth ) );
 
@@ -1334,14 +1282,11 @@ static bool ImplGetFontAttrFromFile( const OUString& rFontFileURL,
     // get FontAttributes from a *fot file
     // TODO: use GetTTGlobalFontInfo() to access the font directly
     rDFA.SetQuality( 1000 );
-    rDFA.SetBuiltInFontFlag( true );
     rDFA.SetFamilyType(FAMILY_DONTKNOW);
     rDFA.SetWidthType(WIDTH_DONTKNOW);
     rDFA.SetWeight(WEIGHT_DONTKNOW);
     rDFA.SetItalic(ITALIC_DONTKNOW);
     rDFA.SetPitch(PITCH_DONTKNOW);
-    rDFA.SetSubsettableFlag( true );
-    rDFA.SetEmbeddableFlag( false );
 
     // Create temporary file name
     char aFileName[] = "soAAT.fot";
@@ -1427,7 +1372,6 @@ bool WinSalGraphics::AddTempDevFont( PhysicalFontCollection* pFontCollection,
     FontAttributes aDFA;
     aDFA.SetFamilyName(rFontName);
     aDFA.SetQuality( 1000 );
-    aDFA.SetBuiltInFontFlag( true );
 
     // Retrieve font name from font resource
     if( aDFA.GetFamilyName().isEmpty() )
@@ -1449,8 +1393,6 @@ bool WinSalGraphics::AddTempDevFont( PhysicalFontCollection* pFontCollection,
     aDFA.SetWeight(WEIGHT_DONTKNOW);
     aDFA.SetItalic(ITALIC_DONTKNOW);
     aDFA.SetPitch(PITCH_DONTKNOW);
-    aDFA.SetSubsettableFlag( true );
-    aDFA.SetEmbeddableFlag( false );
 
     /*
     // TODO: improve FontAttributes using the "font resource file"
@@ -2021,29 +1963,9 @@ void WinSalGraphics::FreeEmbedFontData( const void* pData, long /*nLen*/ )
     delete[] static_cast<char const *>(pData);
 }
 
-const Ucs2SIntMap* WinSalGraphics::GetFontEncodingVector( const PhysicalFontFace* pFont, const Ucs2OStrMap** pNonEncoded, std::set<sal_Unicode> const**)
+const Ucs2SIntMap* WinSalGraphics::GetFontEncodingVector(const PhysicalFontFace*, const Ucs2OStrMap**, std::set<sal_Unicode> const**)
 {
-    // TODO: even for builtin fonts we get here... why?
-    if( !pFont->CanEmbed() )
-        return nullptr;
-
-    // fill the encoding vector
-    // currently no nonencoded vector
-    if( pNonEncoded )
-        *pNonEncoded = nullptr;
-
-    const WinFontFace* pWinFontData = static_cast<const WinFontFace*>(pFont);
-    const Ucs2SIntMap* pEncoding = pWinFontData->GetEncodingVector();
-    if( pEncoding == nullptr )
-    {
-        Ucs2SIntMap* pNewEncoding = new Ucs2SIntMap;
-        for( sal_Unicode i = 32; i < 256; ++i )
-            (*pNewEncoding)[i] = i;
-        pWinFontData->SetEncodingVector( pNewEncoding );
-    pEncoding = pNewEncoding;
-    }
-
-    return pEncoding;
+    return nullptr;
 }
 
 void WinSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFont,
@@ -2062,78 +1984,59 @@ void WinSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFont,
     HFONT hOldFont = nullptr;
     ImplDoSetFont( &aIFSD, fScale, hOldFont );
 
-    if( pFont->CanSubset() )
+    // get raw font file data
+    const RawFontData xRawFontData( getHDC() );
+    if( !xRawFontData.get() )
+        return;
+
+    // open font file
+    sal_uInt32 nFaceNum = 0;
+    if( !*xRawFontData.get() )  // TTC candidate
+        nFaceNum = ~0U;  // indicate "TTC font extracts only"
+
+    ScopedTrueTypeFont aSftTTF;
+    int nRC = aSftTTF.open( xRawFontData.get(), xRawFontData.size(), nFaceNum );
+    if( nRC != SF_OK )
+        return;
+
+    int nGlyphs = GetTTGlyphCount( aSftTTF.get() );
+    if( nGlyphs > 0 )
     {
-        // get raw font file data
-        const RawFontData xRawFontData( getHDC() );
-        if( !xRawFontData.get() )
-            return;
-
-        // open font file
-        sal_uInt32 nFaceNum = 0;
-        if( !*xRawFontData.get() )  // TTC candidate
-            nFaceNum = ~0U;  // indicate "TTC font extracts only"
-
-        ScopedTrueTypeFont aSftTTF;
-        int nRC = aSftTTF.open( xRawFontData.get(), xRawFontData.size(), nFaceNum );
-        if( nRC != SF_OK )
-            return;
-
-        int nGlyphs = GetTTGlyphCount( aSftTTF.get() );
-        if( nGlyphs > 0 )
+        rWidths.resize(nGlyphs);
+        std::vector<sal_uInt16> aGlyphIds(nGlyphs);
+        for( int i = 0; i < nGlyphs; i++ )
+            aGlyphIds[i] = sal_uInt16(i);
+        TTSimpleGlyphMetrics* pMetrics = ::GetTTSimpleGlyphMetrics( aSftTTF.get(),
+                                                                    &aGlyphIds[0],
+                                                                    nGlyphs,
+                                                                    bVertical );
+        if( pMetrics )
         {
-            rWidths.resize(nGlyphs);
-            std::vector<sal_uInt16> aGlyphIds(nGlyphs);
-            for( int i = 0; i < nGlyphs; i++ )
-                aGlyphIds[i] = sal_uInt16(i);
-            TTSimpleGlyphMetrics* pMetrics = ::GetTTSimpleGlyphMetrics( aSftTTF.get(),
-                                                                        &aGlyphIds[0],
-                                                                        nGlyphs,
-                                                                        bVertical );
-            if( pMetrics )
-            {
-                for( int i = 0; i< nGlyphs; i++ )
-                    rWidths[i] = pMetrics[i].adv;
-                free( pMetrics );
-                rUnicodeEnc.clear();
-            }
-            const WinFontFace* pWinFont = static_cast<const WinFontFace*>(pFont);
-            FontCharMapRef xFCMap = pWinFont->GetFontCharMap();
-            SAL_WARN_IF( !xFCMap.Is() || !xFCMap->GetCharCount(), "vcl", "no map" );
-
-            int nCharCount = xFCMap->GetCharCount();
-            sal_uInt32 nChar = xFCMap->GetFirstChar();
-            for( int i = 0; i < nCharCount; i++ )
-            {
-                if( nChar < 0x00010000 )
-                {
-                    sal_uInt16 nGlyph = ::MapChar( aSftTTF.get(),
-                                                   static_cast<sal_Ucs>(nChar),
-                                                   bVertical );
-                    if( nGlyph )
-                        rUnicodeEnc[ static_cast<sal_Unicode>(nChar) ] = nGlyph;
-                }
-                nChar = xFCMap->GetNextChar( nChar );
-            }
-
-            xFCMap = nullptr;
+            for( int i = 0; i< nGlyphs; i++ )
+                rWidths[i] = pMetrics[i].adv;
+            free( pMetrics );
+            rUnicodeEnc.clear();
         }
-    }
-    else if( pFont->CanEmbed() )
-    {
-        // get individual character widths
-        rWidths.clear();
-        rUnicodeEnc.clear();
-        rWidths.reserve( 224 );
-        for( sal_Unicode i = 32; i < 256; ++i )
+        const WinFontFace* pWinFont = static_cast<const WinFontFace*>(pFont);
+        FontCharMapRef xFCMap = pWinFont->GetFontCharMap();
+        SAL_WARN_IF( !xFCMap.Is() || !xFCMap->GetCharCount(), "vcl", "no map" );
+
+        int nCharCount = xFCMap->GetCharCount();
+        sal_uInt32 nChar = xFCMap->GetFirstChar();
+        for( int i = 0; i < nCharCount; i++ )
         {
-            int nCharWidth = 0;
-            if( ::GetCharWidth32W( getHDC(), i, i, &nCharWidth ) )
+            if( nChar < 0x00010000 )
             {
-                rUnicodeEnc[ i ] = rWidths.size();
-                rWidths.push_back( nCharWidth );
+                sal_uInt16 nGlyph = ::MapChar( aSftTTF.get(),
+                                               static_cast<sal_Ucs>(nChar),
+                                               bVertical );
+                if( nGlyph )
+                    rUnicodeEnc[ static_cast<sal_Unicode>(nChar) ] = nGlyph;
             }
+            nChar = xFCMap->GetNextChar( nChar );
         }
+
+        xFCMap = nullptr;
     }
 }
 
