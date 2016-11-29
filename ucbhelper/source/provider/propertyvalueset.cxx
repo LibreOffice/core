@@ -34,6 +34,7 @@
 #include "osl/diagnose.h"
 #include "osl/mutex.hxx"
 #include <ucbhelper/propertyvalueset.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
@@ -44,44 +45,45 @@ using namespace com::sun::star::sdbc;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::util;
 
+enum class PropsSet {
+    NONE             = 0x00000000,
+    String           = 0x00000001,
+    Boolean          = 0x00000002,
+    Byte             = 0x00000004,
+    Short            = 0x00000008,
+    Int              = 0x00000010,
+    Long             = 0x00000020,
+    Float            = 0x00000040,
+    Double           = 0x00000080,
+    Bytes            = 0x00000100,
+    Date             = 0x00000200,
+    Time             = 0x00000400,
+    Timestamp        = 0x00000800,
+    BinaryStream     = 0x00001000,
+    CharacterStream  = 0x00002000,
+    Ref              = 0x00004000,
+    Blob             = 0x00008000,
+    Clob             = 0x00010000,
+    Array            = 0x00020000,
+    Object           = 0x00040000
+};
+namespace o3tl {
+    template<> struct typed_flags<PropsSet> : is_typed_flags<PropsSet, 0x0007ffff> {};
+}
+
 namespace ucbhelper_impl
 {
 
 
-// PropertyValue.
-
-
-const sal_uInt32 NO_VALUE_SET               = 0x00000000;
-const sal_uInt32 STRING_VALUE_SET           = 0x00000001;
-const sal_uInt32 BOOLEAN_VALUE_SET          = 0x00000002;
-const sal_uInt32 BYTE_VALUE_SET             = 0x00000004;
-const sal_uInt32 SHORT_VALUE_SET            = 0x00000008;
-const sal_uInt32 INT_VALUE_SET              = 0x00000010;
-const sal_uInt32 LONG_VALUE_SET             = 0x00000020;
-const sal_uInt32 FLOAT_VALUE_SET            = 0x00000040;
-const sal_uInt32 DOUBLE_VALUE_SET           = 0x00000080;
-const sal_uInt32 BYTES_VALUE_SET            = 0x00000100;
-const sal_uInt32 DATE_VALUE_SET             = 0x00000200;
-const sal_uInt32 TIME_VALUE_SET             = 0x00000400;
-const sal_uInt32 TIMESTAMP_VALUE_SET        = 0x00000800;
-const sal_uInt32 BINARYSTREAM_VALUE_SET     = 0x00001000;
-const sal_uInt32 CHARACTERSTREAM_VALUE_SET  = 0x00002000;
-const sal_uInt32 REF_VALUE_SET              = 0x00004000;
-const sal_uInt32 BLOB_VALUE_SET             = 0x00008000;
-const sal_uInt32 CLOB_VALUE_SET             = 0x00010000;
-const sal_uInt32 ARRAY_VALUE_SET            = 0x00020000;
-const sal_uInt32 OBJECT_VALUE_SET           = 0x00040000;
-
 struct PropertyValue
 {
-    OUString
-                sPropertyName;
+    OUString    sPropertyName;
 
-    sal_uInt32  nPropsSet;
-    sal_uInt32  nOrigValue;
+    PropsSet    nPropsSet;
+    PropsSet    nOrigValue;
 
     OUString    aString;    // getString
-    bool    bBoolean;   // getBoolean
+    bool        bBoolean;   // getBoolean
     sal_Int8    nByte;      // getByte
     sal_Int16   nShort;     // getShort
     sal_Int32   nInt;       // getInt
@@ -102,7 +104,7 @@ struct PropertyValue
     Any                         aObject;            // getObject
 
     inline PropertyValue()
-        : nPropsSet( NO_VALUE_SET ), nOrigValue( NO_VALUE_SET ),
+        : nPropsSet( PropsSet::NONE ), nOrigValue( PropsSet::NONE ),
           bBoolean(false),
           nByte(0),
           nShort(0),
@@ -146,7 +148,7 @@ class PropertyValues : public std::vector< ucbhelper_impl::PropertyValue > {};
         ucbhelper_impl::PropertyValue& rValue                                 \
             = (*m_pValues)[ columnIndex - 1 ];                                \
                                                                               \
-        if ( rValue.nOrigValue != NO_VALUE_SET )                              \
+        if ( rValue.nOrigValue != PropsSet::NONE )                              \
         {                                                                     \
             if ( rValue.nPropsSet & _type_name_ )                             \
             {                                                                 \
@@ -156,13 +158,13 @@ class PropertyValues : public std::vector< ucbhelper_impl::PropertyValue > {};
             }                                                                 \
             else                                                              \
             {                                                                 \
-                if ( !(rValue.nPropsSet & OBJECT_VALUE_SET) )                 \
+                if ( !(rValue.nPropsSet & PropsSet::Object) )                 \
                 {                                                             \
                     /* Value is not (yet) available as Any. Create it. */     \
                     getObject( columnIndex, Reference< XNameAccess >() );     \
                 }                                                             \
                                                                               \
-                if ( rValue.nPropsSet & OBJECT_VALUE_SET )                    \
+                if ( rValue.nPropsSet & PropsSet::Object )                    \
                 {                                                             \
                     /* Value is available as Any. */                          \
                                                                               \
@@ -304,7 +306,7 @@ sal_Bool SAL_CALL PropertyValueSet::wasNull()
 OUString SAL_CALL PropertyValueSet::getString( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException, std::exception )
 {
-    GETVALUE_IMPL( OUString, STRING_VALUE_SET, aString );
+    GETVALUE_IMPL( OUString, PropsSet::String, aString );
 }
 
 
@@ -313,7 +315,7 @@ sal_Bool SAL_CALL PropertyValueSet::getBoolean( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException, std::exception )
 {
     GETVALUE_IMPL_TYPE(
-            bool, BOOLEAN_VALUE_SET, bBoolean, cppu::UnoType<bool>::get() );
+            bool, PropsSet::Boolean, bBoolean, cppu::UnoType<bool>::get() );
 }
 
 
@@ -321,7 +323,7 @@ sal_Bool SAL_CALL PropertyValueSet::getBoolean( sal_Int32 columnIndex )
 sal_Int8 SAL_CALL PropertyValueSet::getByte( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException, std::exception )
 {
-    GETVALUE_IMPL( sal_Int8, BYTE_VALUE_SET, nByte );
+    GETVALUE_IMPL( sal_Int8, PropsSet::Byte, nByte );
 }
 
 
@@ -329,7 +331,7 @@ sal_Int8 SAL_CALL PropertyValueSet::getByte( sal_Int32 columnIndex )
 sal_Int16 SAL_CALL PropertyValueSet::getShort( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException, std::exception )
 {
-    GETVALUE_IMPL( sal_Int16, SHORT_VALUE_SET, nShort );
+    GETVALUE_IMPL( sal_Int16, PropsSet::Short, nShort );
 }
 
 
@@ -337,7 +339,7 @@ sal_Int16 SAL_CALL PropertyValueSet::getShort( sal_Int32 columnIndex )
 sal_Int32 SAL_CALL PropertyValueSet::getInt( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException, std::exception )
 {
-    GETVALUE_IMPL( sal_Int32, INT_VALUE_SET, nInt );
+    GETVALUE_IMPL( sal_Int32, PropsSet::Int, nInt );
 }
 
 
@@ -345,7 +347,7 @@ sal_Int32 SAL_CALL PropertyValueSet::getInt( sal_Int32 columnIndex )
 sal_Int64 SAL_CALL PropertyValueSet::getLong( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException, std::exception )
 {
-    GETVALUE_IMPL( sal_Int64, LONG_VALUE_SET, nLong );
+    GETVALUE_IMPL( sal_Int64, PropsSet::Long, nLong );
 }
 
 
@@ -353,7 +355,7 @@ sal_Int64 SAL_CALL PropertyValueSet::getLong( sal_Int32 columnIndex )
 float SAL_CALL PropertyValueSet::getFloat( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException, std::exception )
 {
-    GETVALUE_IMPL( float, FLOAT_VALUE_SET, nFloat );
+    GETVALUE_IMPL( float, PropsSet::Float, nFloat );
 }
 
 
@@ -361,7 +363,7 @@ float SAL_CALL PropertyValueSet::getFloat( sal_Int32 columnIndex )
 double SAL_CALL PropertyValueSet::getDouble( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException, std::exception )
 {
-    GETVALUE_IMPL( double, DOUBLE_VALUE_SET, nDouble );
+    GETVALUE_IMPL( double, PropsSet::Double, nDouble );
 }
 
 
@@ -370,7 +372,7 @@ Sequence< sal_Int8 > SAL_CALL
 PropertyValueSet::getBytes( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException, std::exception )
 {
-    GETVALUE_IMPL( Sequence< sal_Int8 >, BYTES_VALUE_SET, aBytes );
+    GETVALUE_IMPL( Sequence< sal_Int8 >, PropsSet::Bytes, aBytes );
 }
 
 
@@ -378,7 +380,7 @@ PropertyValueSet::getBytes( sal_Int32 columnIndex )
 Date SAL_CALL PropertyValueSet::getDate( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException, std::exception )
 {
-    GETVALUE_IMPL( Date, DATE_VALUE_SET, aDate );
+    GETVALUE_IMPL( Date, PropsSet::Date, aDate );
 }
 
 
@@ -386,7 +388,7 @@ Date SAL_CALL PropertyValueSet::getDate( sal_Int32 columnIndex )
 Time SAL_CALL PropertyValueSet::getTime( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException, std::exception )
 {
-    GETVALUE_IMPL( Time, TIME_VALUE_SET, aTime );
+    GETVALUE_IMPL( Time, PropsSet::Time, aTime );
 }
 
 
@@ -394,7 +396,7 @@ Time SAL_CALL PropertyValueSet::getTime( sal_Int32 columnIndex )
 DateTime SAL_CALL PropertyValueSet::getTimestamp( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException, std::exception )
 {
-    GETVALUE_IMPL( DateTime, TIMESTAMP_VALUE_SET, aTimestamp );
+    GETVALUE_IMPL( DateTime, PropsSet::Timestamp, aTimestamp );
 }
 
 
@@ -404,7 +406,7 @@ PropertyValueSet::getBinaryStream( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException, std::exception )
 {
     GETVALUE_IMPL(
-        Reference< XInputStream >, BINARYSTREAM_VALUE_SET, xBinaryStream );
+        Reference< XInputStream >, PropsSet::BinaryStream, xBinaryStream );
 }
 
 
@@ -414,7 +416,7 @@ PropertyValueSet::getCharacterStream( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException, std::exception )
 {
     GETVALUE_IMPL(
-        Reference< XInputStream >, CHARACTERSTREAM_VALUE_SET, xCharacterStream );
+        Reference< XInputStream >, PropsSet::CharacterStream, xCharacterStream );
 }
 
 
@@ -440,7 +442,7 @@ Any SAL_CALL PropertyValueSet::getObject(
         ucbhelper_impl::PropertyValue& rValue
             = (*m_pValues)[ columnIndex - 1 ];
 
-        if ( rValue.nPropsSet & OBJECT_VALUE_SET )
+        if ( rValue.nPropsSet & PropsSet::Object )
         {
             // Values is present natively...
             aValue = rValue.aObject;
@@ -452,82 +454,82 @@ Any SAL_CALL PropertyValueSet::getObject(
 
             switch ( rValue.nOrigValue )
             {
-                case NO_VALUE_SET:
+                case PropsSet::NONE:
                     break;
 
-                case STRING_VALUE_SET:
+                case PropsSet::String:
                     aValue <<= rValue.aString;
                     break;
 
-                case BOOLEAN_VALUE_SET:
+                case PropsSet::Boolean:
                     aValue <<= rValue.bBoolean;
                     break;
 
-                case BYTE_VALUE_SET:
+                case PropsSet::Byte:
                     aValue <<= rValue.nByte;
                     break;
 
-                case SHORT_VALUE_SET:
+                case PropsSet::Short:
                     aValue <<= rValue.nShort;
                     break;
 
-                case INT_VALUE_SET:
+                case PropsSet::Int:
                     aValue <<= rValue.nInt;
                     break;
 
-                case LONG_VALUE_SET:
+                case PropsSet::Long:
                     aValue <<= rValue.nLong;
                     break;
 
-                case FLOAT_VALUE_SET:
+                case PropsSet::Float:
                     aValue <<= rValue.nFloat;
                     break;
 
-                case DOUBLE_VALUE_SET:
+                case PropsSet::Double:
                     aValue <<= rValue.nDouble;
                     break;
 
-                case BYTES_VALUE_SET:
+                case PropsSet::Bytes:
                     aValue <<= rValue.aBytes;
                     break;
 
-                case DATE_VALUE_SET:
+                case PropsSet::Date:
                     aValue <<= rValue.aDate;
                     break;
 
-                case TIME_VALUE_SET:
+                case PropsSet::Time:
                     aValue <<= rValue.aTime;
                     break;
 
-                case TIMESTAMP_VALUE_SET:
+                case PropsSet::Timestamp:
                     aValue <<= rValue.aTimestamp;
                     break;
 
-                case BINARYSTREAM_VALUE_SET:
+                case PropsSet::BinaryStream:
                     aValue <<= rValue.xBinaryStream;
                     break;
 
-                case CHARACTERSTREAM_VALUE_SET:
+                case PropsSet::CharacterStream:
                     aValue <<= rValue.xCharacterStream;
                     break;
 
-                case REF_VALUE_SET:
+                case PropsSet::Ref:
                     aValue <<= rValue.xRef;
                     break;
 
-                case BLOB_VALUE_SET:
+                case PropsSet::Blob:
                     aValue <<= rValue.xBlob;
                     break;
 
-                case CLOB_VALUE_SET:
+                case PropsSet::Clob:
                     aValue <<= rValue.xClob;
                     break;
 
-                case ARRAY_VALUE_SET:
+                case PropsSet::Array:
                     aValue <<= rValue.xArray;
                     break;
 
-                case OBJECT_VALUE_SET:
+                case PropsSet::Object:
                     // Fall-through is intended!
                 default:
                     OSL_FAIL( "PropertyValueSet::getObject - "
@@ -538,7 +540,7 @@ Any SAL_CALL PropertyValueSet::getObject(
             if ( aValue.hasValue() )
             {
                 rValue.aObject = aValue;
-                rValue.nPropsSet |= OBJECT_VALUE_SET;
+                rValue.nPropsSet |= PropsSet::Object;
                 m_bWasNull = false;
             }
         }
@@ -552,7 +554,7 @@ Any SAL_CALL PropertyValueSet::getObject(
 Reference< XRef > SAL_CALL PropertyValueSet::getRef( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException, std::exception )
 {
-    GETVALUE_IMPL( Reference< XRef >, REF_VALUE_SET, xRef );
+    GETVALUE_IMPL( Reference< XRef >, PropsSet::Ref, xRef );
 }
 
 
@@ -560,7 +562,7 @@ Reference< XRef > SAL_CALL PropertyValueSet::getRef( sal_Int32 columnIndex )
 Reference< XBlob > SAL_CALL PropertyValueSet::getBlob( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException, std::exception )
 {
-    GETVALUE_IMPL( Reference< XBlob >, BLOB_VALUE_SET, xBlob );
+    GETVALUE_IMPL( Reference< XBlob >, PropsSet::Blob, xBlob );
 }
 
 
@@ -568,7 +570,7 @@ Reference< XBlob > SAL_CALL PropertyValueSet::getBlob( sal_Int32 columnIndex )
 Reference< XClob > SAL_CALL PropertyValueSet::getClob( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException, std::exception )
 {
-    GETVALUE_IMPL( Reference< XClob >, CLOB_VALUE_SET, xClob );
+    GETVALUE_IMPL( Reference< XClob >, PropsSet::Clob, xClob );
 }
 
 
@@ -576,7 +578,7 @@ Reference< XClob > SAL_CALL PropertyValueSet::getClob( sal_Int32 columnIndex )
 Reference< XArray > SAL_CALL PropertyValueSet::getArray( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException, std::exception )
 {
-    GETVALUE_IMPL( Reference< XArray >, ARRAY_VALUE_SET, xArray );
+    GETVALUE_IMPL( Reference< XArray >, PropsSet::Array, xArray );
 }
 
 
@@ -625,41 +627,41 @@ const Reference< XTypeConverter >& PropertyValueSet::getTypeConverter()
 void PropertyValueSet::appendString( const OUString& rPropName,
                                      const OUString& rValue )
 {
-    SETVALUE_IMPL( rPropName, STRING_VALUE_SET, aString, rValue );
+    SETVALUE_IMPL( rPropName, PropsSet::String, aString, rValue );
 }
 
 
 void PropertyValueSet::appendBoolean( const OUString& rPropName,
                                       bool bValue )
 {
-    SETVALUE_IMPL( rPropName, BOOLEAN_VALUE_SET, bBoolean, bValue );
+    SETVALUE_IMPL( rPropName, PropsSet::Boolean, bBoolean, bValue );
 }
 
 
 void PropertyValueSet::appendLong( const OUString& rPropName,
                                    sal_Int64 nValue )
 {
-    SETVALUE_IMPL( rPropName, LONG_VALUE_SET, nLong, nValue );
+    SETVALUE_IMPL( rPropName, PropsSet::Long, nLong, nValue );
 }
 
 
 void PropertyValueSet::appendTimestamp( const OUString& rPropName,
                                         const DateTime& rValue )
 {
-    SETVALUE_IMPL( rPropName, TIMESTAMP_VALUE_SET, aTimestamp, rValue );
+    SETVALUE_IMPL( rPropName, PropsSet::Timestamp, aTimestamp, rValue );
 }
 
 
 void PropertyValueSet::appendObject( const OUString& rPropName,
                                      const Any& rValue )
 {
-    SETVALUE_IMPL( rPropName, OBJECT_VALUE_SET, aObject, rValue );
+    SETVALUE_IMPL( rPropName, PropsSet::Object, aObject, rValue );
 }
 
 
 void PropertyValueSet::appendVoid( const OUString& rPropName )
 {
-    SETVALUE_IMPL( rPropName, NO_VALUE_SET, aObject, Any() );
+    SETVALUE_IMPL( rPropName, PropsSet::NONE, aObject, Any() );
 }
 
 
