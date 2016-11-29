@@ -3979,6 +3979,15 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     Color aDarkShadowColor = getColor( pStyle->fg[GTK_STATE_INSENSITIVE] );
     aStyleSet.SetDarkShadowColor( aDarkShadowColor );
 
+    int nRedDiff = aBackFieldColor.GetRed() - aDarkShadowColor.GetRed();
+    int nGreenDiff = aBackFieldColor.GetGreen() - aDarkShadowColor.GetGreen();
+    int nBlueDiff = aBackFieldColor.GetBlue() - aDarkShadowColor.GetBlue();
+
+    Color aShadowColor(aBackFieldColor.GetRed() + nRedDiff / 2,
+                       aBackFieldColor.GetGreen() + nGreenDiff / 2,
+                       aBackFieldColor.GetBlue() + nBlueDiff / 2);
+    aStyleSet.SetShadowColor( aShadowColor );
+
     // highlighting colors
     Color aHighlightColor = getColor( pStyle->base[GTK_STATE_SELECTED] );
     Color aHighlightTextColor = getColor( pStyle->text[GTK_STATE_SELECTED] );
@@ -4043,21 +4052,6 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     std::fprintf( stderr, "ShadowColor = %x (%d)\n", (int)aStyleSet.GetShadowColor().GetColor(), aStyleSet.GetShadowColor().GetLuminance() );
     std::fprintf( stderr, "DarkShadowColor = %x (%d)\n", (int)aStyleSet.GetDarkShadowColor().GetColor(), aStyleSet.GetDarkShadowColor().GetLuminance() );
 #endif
-
-    // Awful hack for menu separators in the Sonar and similar themes.
-    // If the menu color is not too dark, and the menu text color is lighter,
-    // make the "light" color lighter than the menu color and the "shadow"
-    // color darker than it.
-    if ( aStyleSet.GetMenuColor().GetLuminance() >= 32 &&
-     aStyleSet.GetMenuColor().GetLuminance() <= aStyleSet.GetMenuTextColor().GetLuminance() )
-    {
-      Color temp = aStyleSet.GetMenuColor();
-      temp.IncreaseLuminance( 8 );
-      aStyleSet.SetLightColor( temp );
-      temp = aStyleSet.GetMenuColor();
-      temp.DecreaseLuminance( 16 );
-      aStyleSet.SetShadowColor( temp );
-    }
 
     aHighlightColor = getColor( pMenuItemStyle->bg[ GTK_STATE_SELECTED ] );
     aHighlightTextColor = getColor( pMenuItemStyle->fg[ GTK_STATE_SELECTED ] );
