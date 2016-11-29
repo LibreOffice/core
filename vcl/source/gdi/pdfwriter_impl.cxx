@@ -3063,9 +3063,6 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( const Physical
     assert(pGraphics);
 
     // prepare font encoding
-    std::set<sal_Unicode> const * pPriority(nullptr);
-    const Ucs2SIntMap *const pEncoding =
-        pGraphics->GetFontEncodingVector( pFont, nullptr, &pPriority );
     sal_Int32 nToUnicodeStream = 0;
     sal_uInt8 nEncoding[256];
     sal_Ucs nEncodedCodes[256];
@@ -3073,58 +3070,6 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( const Physical
     aUnicodes.reserve( 256 );
     sal_Int32 pUnicodesPerGlyph[256];
     sal_Int32 pEncToUnicodeIndex[256];
-    if( pEncoding )
-    {
-        memset( nEncoding, 0, sizeof(nEncoding) );
-        memset( nEncodedCodes, 0, sizeof(nEncodedCodes) );
-        memset( pUnicodesPerGlyph, 0, sizeof(pUnicodesPerGlyph) );
-        memset( pEncToUnicodeIndex, 0, sizeof(pEncToUnicodeIndex) );
-        for( Ucs2SIntMap::const_reverse_iterator it = pEncoding->rbegin(); it != pEncoding->rend(); ++it )
-        {
-            if(it->second == -1)
-                continue;
-            sal_Int32 nCode = (sal_Int32)(it->second & 0x000000ff);
-            SAL_WARN_IF(nCode != it->second, "vcl.gdi", "emitEmbeddedFont: FIXME: cannot handle Type 1 font with code points > 256");
-            //We're not doing this right here. We have taken a unicode-to-font_index map
-            //and are trying to generate a font_index-to-unicode mapping from it
-            //Which assumes that there is a 1-to-1 mapping there, but that might not be
-            //true.
-            //
-            //Instead perhaps we could try and get the GetFontCharMap and loop
-            //over sal_UCS4 GetCharFromIndex( int nCharIndex ) const from 0 to 255
-            //to build it up
-            if (nEncoding[nCode] != 0)
-            {
-                // should not have 2 identical mappings
-                assert(nEncodedCodes[nCode] != it->first);
-                if (pPriority)
-                {
-                    bool bExist = pPriority->find(nEncodedCodes[nCode]) != pPriority->end();
-                    bool bIter  = pPriority->find(it->first) != pPriority->end();
-                    SAL_WARN_IF(bExist && bIter, "vcl.gdi", "both are preferred? odd...");
-                    if (bExist)
-                    {
-                        continue;
-                    }
-                    // note: aUnicodes will contain the old one but that
-                    // does not matter because there's nothing iterating it
-                }
-                else
-                {
-                    // is this fallback important? let's prefer lower one.
-                    // actually the map is sorted so just rely on that
-                    assert(nEncodedCodes[nCode] < it->first);
-                    SAL_WARN("vcl.gdi", "emitEmbeddedFont: ignoring code " << nCode << " mapping to " << it->first << " in favor of " << nEncodedCodes[nCode]);
-                    continue;
-                }
-            }
-            nEncodedCodes[ nCode ] = it->first;
-            nEncoding[ nCode ] = static_cast<sal_uInt8>( nCode );
-            pEncToUnicodeIndex[ nCode ] = static_cast<sal_Int32>(aUnicodes.size());
-            aUnicodes.push_back( it->first );
-            pUnicodesPerGlyph[ nCode ] = 1;
-        }
-    }
 
     FontSubsetInfo aInfo;
     sal_Int32 pWidths[256];
@@ -3510,9 +3455,6 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( const Physical
 
         if( nFontDescriptor )
         {
-            if( pEncoding )
-                nToUnicodeStream = createToUnicodeCMap( nEncoding, &aUnicodes[0], pUnicodesPerGlyph, pEncToUnicodeIndex, SAL_N_ELEMENTS(nEncoding) );
-
             // write font object
             sal_Int32 nObject = createObject();
             if( ! updateObject( nObject ) )
@@ -3524,7 +3466,7 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( const Physical
                 "<</Type/Font/Subtype/Type1/BaseFont/" );
             appendName( aInfo.m_aPSName, aLine );
             aLine.append( "\n" );
-            if( !pFont->IsSymbolFont() && ( pEncoding == nullptr || pFont->GetCharSet() == RTL_TEXTENCODING_MS_1252 ))
+            if (!pFont->IsSymbolFont())
                 aLine.append( "/Encoding/WinAnsiEncoding\n" );
             if( nToUnicodeStream )
             {

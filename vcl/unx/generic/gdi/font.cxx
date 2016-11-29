@@ -151,11 +151,6 @@ void X11SalGraphics::FreeEmbedFontData( const void* pData, long nLen )
     mxTextRenderImpl->FreeEmbedFontData(pData, nLen);
 }
 
-const Ucs2SIntMap* X11SalGraphics::GetFontEncodingVector( const PhysicalFontFace* pFont, const Ucs2OStrMap** pNonEncoded, std::set<sal_Unicode> const** ppPriority)
-{
-    return mxTextRenderImpl->GetFontEncodingVector(pFont, pNonEncoded, ppPriority);
-}
-
 void X11SalGraphics::GetGlyphWidths( const PhysicalFontFace* pFont,
                                    bool bVertical,
                                    std::vector< sal_Int32 >& rWidths,
