@@ -3966,7 +3966,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
 
     // background colors
     Color aBackColor = getColor( pStyle->bg[GTK_STATE_NORMAL] );
-    Color aBackFieldColor = getColor( pStyle->base[ GTK_STATE_NORMAL ] );
+    Color aBackFieldColor = getColor( pStyle->base[GTK_STATE_NORMAL] );
     aStyleSet.Set3DColors( aBackColor );
     aStyleSet.SetFaceColor( aBackColor );
     aStyleSet.SetDialogColor( aBackColor );
@@ -3974,6 +3974,10 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     aStyleSet.SetFieldColor( aBackFieldColor );
     aStyleSet.SetWindowColor( aBackFieldColor );
     aStyleSet.SetCheckedColorSpecialCase( );
+
+    // Dark shadow color
+    Color aDarkShadowColor = getColor( pStyle->fg[GTK_STATE_INSENSITIVE] );
+    aStyleSet.SetDarkShadowColor( aDarkShadowColor );
 
     // highlighting colors
     Color aHighlightColor = getColor( pStyle->base[GTK_STATE_SELECTED] );
