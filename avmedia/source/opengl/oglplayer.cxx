@@ -74,7 +74,7 @@ bool OGLPlayer::create( const OUString& rURL )
     const std::string sFilePath = OUStringToOString( aURLObj.getFSysPath(INetURLObject::FSYS_DETECT), RTL_TEXTENCODING_UTF8 ).getStr();
 
     // Load *.json file and init renderer
-    m_pHandle = gltf_renderer_init(sFilePath, m_vInputFiles);
+    m_pHandle = gltf_renderer_init(sFilePath, m_vInputFiles, m_xContext->supportMultiSampling());
 
     if( !m_pHandle )
     {
@@ -265,12 +265,6 @@ uno::Reference< media::XPlayerWindow > SAL_CALL OGLPlayer::createPlayerWindow( c
         return uno::Reference< media::XPlayerWindow >();
     }
 
-    if( !m_xContext->supportMultiSampling() )
-    {
-        SAL_WARN("avmedia.opengl", "Context does not support multisampling!");
-        return uno::Reference< media::XPlayerWindow >();
-    }
-
     if( !lcl_CheckOpenGLRequirements() )
     {
         SAL_WARN("avmedia.opengl", "Your platform does not have the minimal OpenGL requiremenets!");
@@ -308,12 +302,6 @@ uno::Reference< media::XFrameGrabber > SAL_CALL OGLPlayer::createFrameGrabber()
     if( !m_xContext->init() )
     {
         SAL_WARN("avmedia.opengl", "Offscreen context initialization failed");
-        return uno::Reference< media::XFrameGrabber >();
-    }
-
-    if( !m_xContext->supportMultiSampling() )
-    {
-        SAL_WARN("avmedia.opengl", "Context does not support multisampling!");
         return uno::Reference< media::XFrameGrabber >();
     }
 
