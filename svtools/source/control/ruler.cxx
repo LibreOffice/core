@@ -1515,6 +1515,7 @@ bool Ruler::ImplHitTest( const Point& rPos, RulerSelection* pHitTest,
 
     // test if outside
     nX -= mnVirOff;
+#if 0
     if ( (nX < mpData->nRulVirOff - nXExtraOff) ||
          (nX > mpData->nRulVirOff + mpData->nRulWidth + nXExtraOff) ||
          (nY < 0) ||
@@ -1524,7 +1525,7 @@ bool Ruler::ImplHitTest( const Point& rPos, RulerSelection* pHitTest,
         pHitTest->eType = RulerType::Outside;
         return false;
     }
-
+#endif
     nX -= mpData->nNullVirOff;
     pHitTest->nPos  = nX;
     pHitTest->eType = RulerType::DontKnow;
