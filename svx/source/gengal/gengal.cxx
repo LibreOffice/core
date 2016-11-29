@@ -100,7 +100,8 @@ static void createTheme( const OUString& aThemeName, const OUString& aGalleryURL
 
     SfxListener aListener;
 
-    if ( !( pGalTheme = pGallery->AcquireTheme( aThemeName, aListener ) ) ) {
+    pGalTheme = pGallery->AcquireTheme( aThemeName, aListener );
+    if ( !pGalTheme ) {
             fprintf( stderr, "Failed to acquire theme\n" );
             exit( 1 );
     }
