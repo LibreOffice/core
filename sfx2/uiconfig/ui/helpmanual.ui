@@ -15,7 +15,7 @@
             <property name="can_focus">False</property>
             <property name="xpad">0</property>
             <property name="ypad">29</property>
-            <property name="label" translatable="yes">The Libre Office user manual is not installed on your computer..</property>
+            <property name="label" translatable="yes">Libre Office user manual is not installed on your computer..</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -36,7 +36,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="ypad">24</property>
-                <property name="label" translatable="yes">Do you want to install the packages.</property>
+                <property name="label" translatable="yes">Do you want to install the packages?</property>
                 <property name="xalign">0.10999999940395355</property>
                 <attributes>
                   <attribute name="weight" value="book"/>
