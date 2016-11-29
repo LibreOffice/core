@@ -2712,8 +2712,13 @@ unsigned char* doc_renderFont(LibreOfficeKitDocument* /*pThis*/,
             *pFontWidth = nFontWidth;
             int nFontHeight = aRect.BottomRight().Y() + 1;
             *pFontHeight = nFontHeight;
+            if (!(nFontWidth > 0 && nFontHeight > 0))
+                break;
 
             unsigned char* pBuffer = static_cast<unsigned char*>(malloc(4 * nFontWidth * nFontHeight));
+            if (!pBuffer)
+                break;
+
             memset(pBuffer, 0, nFontWidth * nFontHeight * 4);
 
             aDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
