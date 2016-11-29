@@ -1714,14 +1714,16 @@ bool TransferableDataHelper::GetGraphic( const css::datatransfer::DataFlavor& rF
         // try to get PNG first
         BitmapEx aBmpEx;
 
-        if( ( bRet = GetBitmapEx( aFlavor, aBmpEx ) ) )
+        bRet = GetBitmapEx( aFlavor, aBmpEx );
+        if( bRet )
             rGraphic = aBmpEx;
     }
     else if (SotExchange::GetFormatDataFlavor(SotClipboardFormatId::JPEG, aFlavor) && TransferableDataHelper::IsEqual(aFlavor, rFlavor))
     {
         BitmapEx aBitmapEx;
 
-        if ((bRet = GetBitmapEx(aFlavor, aBitmapEx)))
+        bRet = GetBitmapEx(aFlavor, aBitmapEx);
+        if (bRet)
             rGraphic = aBitmapEx;
     }
     else if(SotExchange::GetFormatDataFlavor( SotClipboardFormatId::BITMAP, aFlavor ) &&
@@ -1729,7 +1731,8 @@ bool TransferableDataHelper::GetGraphic( const css::datatransfer::DataFlavor& rF
     {
         BitmapEx aBmpEx;
 
-        if( ( bRet = GetBitmapEx( aFlavor, aBmpEx ) ) )
+        bRet = GetBitmapEx( aFlavor, aBmpEx );
+        if( bRet )
             rGraphic = aBmpEx;
     }
     else if( SotExchange::GetFormatDataFlavor( SotClipboardFormatId::GDIMETAFILE, aFlavor ) &&
@@ -1737,7 +1740,8 @@ bool TransferableDataHelper::GetGraphic( const css::datatransfer::DataFlavor& rF
     {
         GDIMetaFile aMtf;
 
-        if( ( bRet = GetGDIMetaFile( aFlavor, aMtf ) ) )
+        bRet = GetGDIMetaFile( aFlavor, aMtf );
+        if( bRet )
             rGraphic = aMtf;
     }
     else

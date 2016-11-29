@@ -139,7 +139,8 @@ bool SvEmbedTransferHelper::GetData( const css::datatransfer::DataFlavor& rFlavo
                             if ( bDeleteStream )
                                 delete pStream;
 
-                            if( ( bRet = ( aSeq.getLength() > 0 ) ) )
+                            bRet = ( aSeq.getLength() > 0 );
+                            if( bRet )
                             {
                                 SetAny( uno::Any(aSeq), rFlavor );
                             }
