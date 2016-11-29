@@ -138,11 +138,6 @@ void CoreTextStyle::GetFontMetric( ImplFontMetricDataRef& rxFontMetric ) const
     // it also makes the calculation of the stretch factor simple
     rxFontMetric->SetWidth( lrint( CTFontGetSize( aCTFontRef ) * mfFontStretch) );
 
-    // all CoreText fonts are scalable
-    rxFontMetric->SetScalableFlag( true );
-    rxFontMetric->SetTrueTypeFlag( true ); // Not sure, but this field is used only for Windows so far
-    rxFontMetric->SetKernableFlag( true );
-
     UniChar nKashidaCh = 0x0640;
     CGGlyph nKashidaGid = 0;
     if (CTFontGetGlyphsForCharacters(aCTFontRef, &nKashidaCh, &nKashidaGid, 1))
@@ -297,8 +292,6 @@ FontAttributes DevFontFromCTFontDescriptor( CTFontDescriptorRef pFD, bool* bFont
 {
     // all CoreText fonts are device fonts that can rotate just fine
     FontAttributes rDFA;
-    rDFA.SetOrientationFlag( true );
-    rDFA.SetBuiltInFontFlag( true );
     rDFA.SetQuality( 0 );
 
     // reset the font attributes
@@ -308,10 +301,6 @@ FontAttributes DevFontFromCTFontDescriptor( CTFontDescriptorRef pFD, bool* bFont
     rDFA.SetWeight( WEIGHT_NORMAL );
     rDFA.SetItalic( ITALIC_NONE );
     rDFA.SetSymbolFlag( false );
-
-    // all scalable fonts on this platform are subsettable
-    rDFA.SetEmbeddableFlag( false );
-    rDFA.SetSubsettableFlag( true );
 
     // get font name
 #ifdef MACOSX

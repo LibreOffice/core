@@ -76,7 +76,7 @@ bool FontMetric::operator==( const FontMetric& rFontMetric ) const
 
 FontType FontMetric::GetType() const
 {
-    return (mxImplMetric->IsScalable() ? TYPE_SCALABLE : TYPE_RASTER);
+    return TYPE_SCALABLE;
 }
 
 long FontMetric::GetAscent() const
@@ -149,16 +149,6 @@ void FontMetric::SetBulletOffset( long nOffset )
     mxImplMetric->SetBulletOffset( nOffset );
 }
 
-bool FontMetric::IsScalable() const
-{
-    return mxImplMetric->IsScalable();
-}
-
-void FontMetric::SetScalableFlag(bool bScalable)
-{
-    mxImplMetric->SetScalableFlag( bScalable );
-}
-
 bool FontMetric::IsFullstopCentered() const
 {
     return mxImplMetric->IsFullstopCentered();
@@ -167,16 +157,6 @@ bool FontMetric::IsFullstopCentered() const
 void FontMetric::SetFullstopCenteredFlag(bool bScalable)
 {
     mxImplMetric->SetFullstopCenteredFlag( bScalable );
-}
-
-bool FontMetric::IsBuiltInFont() const
-{
-    return mxImplMetric->IsBuiltInFont();
-}
-
-void FontMetric::SetBuiltInFontFlag( bool bIsBuiltInFont )
-{
-    mxImplMetric->SetBuiltInFontFlag( bIsBuiltInFont );
 }
 
 
@@ -188,16 +168,12 @@ ImplFontMetric::ImplFontMetric()
     mnLineHeight( 0 ),
     mnSlant( 0 ),
     mnBulletOffset( 0 ),
-    mbScalableFont( false ),
-    mbFullstopCentered( false ),
-    mbDevice( false )
+    mbFullstopCentered( false )
 {}
 
 bool ImplFontMetric::operator==( const ImplFontMetric& r ) const
 {
-    if(    mbScalableFont     != r.mbScalableFont
-        || mbFullstopCentered != r.mbFullstopCentered
-        || mbDevice           != r.mbDevice) // mbDevice == built-in font flag
+    if (mbFullstopCentered != r.mbFullstopCentered)
         return false;
     if( mnAscent     != r.mnAscent )
         return false;
@@ -224,9 +200,6 @@ ImplFontMetricData::ImplFontMetricData( const FontSelectPattern& rFontSelData )
     , mnExtLeading( 0 )
     , mnSlant( 0 )
     , mnMinKashida( 0 )
-    , mbScalableFont( false )
-    , mbTrueTypeFont( false )
-    , mbKernableFont( false )
     , mbFullstopCentered( false )
     , mnBulletOffset( 0 )
     , mnUnderlineSize( 0 )
@@ -260,16 +233,12 @@ ImplFontMetricData::ImplFontMetricData( const FontSelectPattern& rFontSelData )
     {
         SetFamilyName( rFontSelData.mpFontData->GetFamilyName() );
         SetStyleName( rFontSelData.mpFontData->GetStyleName() );
-        SetBuiltInFontFlag( rFontSelData.mpFontData->IsBuiltInFont() );
-        SetKernableFlag( true );
     }
     else
     {
         sal_Int32 nTokenPos = 0;
         SetFamilyName( GetNextFontToken( rFontSelData.GetFamilyName(), nTokenPos ) );
         SetStyleName( rFontSelData.GetStyleName() );
-        SetBuiltInFontFlag( false );
-        SetKernableFlag( false );
     }
 }
 
