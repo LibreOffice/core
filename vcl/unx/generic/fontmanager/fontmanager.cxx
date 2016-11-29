@@ -102,7 +102,6 @@ PrintFontManager::PrintFont::PrintFont()
 ,   m_eWeight(WEIGHT_DONTKNOW)
 ,   m_ePitch(PITCH_DONTKNOW)
 ,   m_aEncoding(RTL_TEXTENCODING_DONTKNOW)
-,   m_pMetrics(nullptr)
 ,   m_nAscend(0)
 ,   m_nDescend(0)
 ,   m_nLeading(0)
@@ -110,82 +109,11 @@ PrintFontManager::PrintFont::PrintFont()
 ,   m_nYMin(0)
 ,   m_nXMax(0)
 ,   m_nYMax(0)
-,   m_bHaveVerticalSubstitutedGlyphs(false)
 ,   m_bUserOverride( false )
 ,   m_nDirectory(0)
 ,   m_nCollectionEntry(0)
 ,   m_nTypeFlags(TYPEFLAG_INVALID)
 {
-}
-
-PrintFontManager::PrintFont::~PrintFont()
-{
-    delete m_pMetrics;
-}
-
-bool PrintFontManager::PrintFont::queryMetricPage( int nPage, MultiAtomProvider* /*pProvider*/ )
-{
-    bool bSuccess = false;
-
-    OString aFile( PrintFontManager::get().getFontFile( this ) );
-
-    TrueTypeFont* pTTFont = nullptr;
-
-    if( OpenTTFontFile( aFile.getStr(), m_nCollectionEntry, &pTTFont ) == SF_OK )
-    {
-        if( ! m_pMetrics )
-        {
-            m_pMetrics = new PrintFontMetrics;
-            memset (m_pMetrics->m_aPages, 0, sizeof(m_pMetrics->m_aPages));
-        }
-        m_pMetrics->m_aPages[ nPage/8 ] |= (1 << ( nPage & 7 ));
-        int i;
-        sal_uInt16 table[256], table_vert[256];
-
-        for( i = 0; i < 256; i++ )
-            table[ i ] = 256*nPage + i;
-
-        int nCharacters = nPage < 255 ? 256 : 254;
-        MapString( pTTFont, table, nCharacters, nullptr, false );
-        TTSimpleGlyphMetrics* pMetrics = GetTTSimpleCharMetrics( pTTFont, nPage*256, nCharacters, false );
-        if( pMetrics )
-        {
-            for( i = 0; i < nCharacters; i++ )
-            {
-                if( table[i] )
-                {
-                    CharacterMetric& rChar = m_pMetrics->m_aMetrics[ nPage*256 + i ];
-                    rChar.width = pMetrics[ i ].adv;
-                    rChar.height = m_aGlobalMetricX.height;
-                }
-            }
-
-            free( pMetrics );
-        }
-
-        for( i = 0; i < 256; i++ )
-            table_vert[ i ] = 256*nPage + i;
-        MapString( pTTFont, table_vert, nCharacters, nullptr, true );
-        pMetrics = GetTTSimpleCharMetrics( pTTFont, nPage*256, nCharacters, true );
-        if( pMetrics )
-        {
-            for( i = 0; i < nCharacters; i++ )
-            {
-                if( table_vert[i] )
-                {
-                    CharacterMetric& rChar = m_pMetrics->m_aMetrics[ nPage*256 + i + ( 1 << 16 ) ];
-                    rChar.width = m_aGlobalMetricY.width;
-                    rChar.height = pMetrics[ i ].adv;
-                    if( table_vert[i] != table[i] )
-                        m_pMetrics->m_bVerticalSubstitutions[ nPage*256 + i ] = true;
-                }
-            }
-            free( pMetrics );
-        }
-        CloseTTFont( pTTFont );
-        bSuccess = true;
-    }
-    return bSuccess;
 }
 
 /*
@@ -788,9 +716,6 @@ bool PrintFontManager::analyzeSfntFile( PrintFont* pFont ) const
         // get type flags
         pFont->m_nTypeFlags = (unsigned int)aInfo.typeFlags;
 
-        // get vertical substitutions flag
-        pFont->m_bHaveVerticalSubstitutedGlyphs = DoesVerticalSubstitution( pTTFont, 1 );
-
         CloseTTFont( pTTFont );
         bSuccess = true;
     }
@@ -989,9 +914,7 @@ void PrintFontManager::fillPrintFontInfo( PrintFont* pFont, FastPrintFontInfo& r
 
 void PrintFontManager::fillPrintFontInfo( PrintFont* pFont, PrintFontInfo& rInfo ) const
 {
-    if( ( pFont->m_nAscend == 0 && pFont->m_nDescend == 0 ) ||
-        ! pFont->m_pMetrics || pFont->m_pMetrics->isEmpty()
-        )
+    if (pFont->m_nAscend == 0 && pFont->m_nDescend == 0)
     {
         analyzeSfntFile(pFont);
     }
@@ -1160,39 +1083,6 @@ int PrintFontManager::getFontDescend( fontID nFontID ) const
         analyzeSfntFile(pFont);
     }
     return pFont ? pFont->m_nDescend : 0;
-}
-
-bool PrintFontManager::getMetrics( fontID nFontID, const sal_Unicode* pString, int nLen, CharacterMetric* pArray ) const
-{
-    PrintFont* pFont = getFont( nFontID );
-    if( ! pFont )
-        return false;
-
-    if( ( pFont->m_nAscend == 0 && pFont->m_nDescend == 0 )
-        || ! pFont->m_pMetrics || pFont->m_pMetrics->isEmpty()
-        )
-    {
-        analyzeSfntFile(pFont);
-    }
-
-    for( int i = 0; i < nLen; i++ )
-    {
-        if( ! pFont->m_pMetrics ||
-            ! ( pFont->m_pMetrics->m_aPages[ pString[i] >> 11 ] & ( 1 << ( ( pString[i] >> 8 ) & 7 ) ) ) )
-            pFont->queryMetricPage( pString[i] >> 8, m_pAtoms );
-        pArray[i].width = pArray[i].height = -1;
-        if( pFont->m_pMetrics )
-        {
-            int effectiveCode = pString[i];
-            std::unordered_map< int, CharacterMetric >::const_iterator it =
-                  pFont->m_pMetrics->m_aMetrics.find( effectiveCode );
-            // the character metrics are in it->second
-            if( it != pFont->m_pMetrics->m_aMetrics.end() )
-                pArray[ i ] = it->second;
-        }
-    }
-
-    return true;
 }
 
 // TODO: move most of this stuff into the central font-subsetting code
