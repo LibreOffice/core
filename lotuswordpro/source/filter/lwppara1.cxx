@@ -225,7 +225,8 @@ void LwpPara::GetParaNumber(sal_uInt16 nPosition, ParaNumbering* pParaNumbering)
                     pParaNumbering->nNumLevel = nHideLevels;
 
                     //get suffix text frib
-                    if ( (pFrib = pFrib->GetNext()) )
+                    pFrib = pFrib->GetNext();
+                    if ( pFrib )
                     {
                         if( pFrib->GetType() == FRIB_TAG_TEXT )
                         {
@@ -259,7 +260,8 @@ void LwpPara::GetParaNumber(sal_uInt16 nPosition, ParaNumbering* pParaNumbering)
                     pParaNumbering->pParaNumber = static_cast<LwpFribParaNumber*>(pFrib);
 
                     //get suffix text frib
-                    if ( (pFrib = pFrib->GetNext()) )
+                    pFrib = pFrib->GetNext();
+                    if ( pFrib )
                     {
                         if (pFrib->GetType() == FRIB_TAG_TEXT)
                         {
