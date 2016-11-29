@@ -457,11 +457,11 @@ void SwWW8ImplReader::PicRead(SvStream *pDataStream, WW8_PIC *pPic,
 
 namespace
 {
-    sal_uInt8 GetNodeType(SwFrameFormat &rSource)
+    SwNodeType GetNodeType(SwFrameFormat &rSource)
     {
         const SwNodeIndex* pNodeIndex = rSource.GetContent().GetContentIdx();
         if (!pNodeIndex)
-            return 0;
+            return SwNodeType::NONE;
         const SwNode& rCSttNd = pNodeIndex->GetNode();
         SwNodeRange aRg(rCSttNd, 1, *rCSttNd.EndOfSectionNode());
         return aRg.aStart.GetNode().GetNodeType();

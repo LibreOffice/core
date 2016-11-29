@@ -21,22 +21,29 @@
 #define INCLUDED_SW_INC_NDTYP_HXX
 
 #include <tools/solar.h>
+#include <o3tl/typed_flags_set.hxx>
 
 // IDs for different nodes. The member indicating the type of node is
 // in base class.
-const sal_uInt8 ND_ENDNODE      = 0x01;
-const sal_uInt8 ND_STARTNODE    = 0x02;
-const sal_uInt8 ND_TABLENODE    = 0x04 | ND_STARTNODE; ///< SwTableNode is derived from SwStartNode.
-const sal_uInt8 ND_TEXTNODE     = 0x08;
-const sal_uInt8 ND_GRFNODE      = 0x10;
-const sal_uInt8 ND_OLENODE      = 0x20;
-const sal_uInt8 ND_SECTIONNODE  = 0x40 | ND_STARTNODE; ///< SwSectionNode is derived from SwStartNode.
-const sal_uInt8 ND_PLACEHOLDER  = 0x80;
+enum class SwNodeType : sal_uInt8 {
+    NONE         = 0x00,
+    End          = 0x01,
+    Start        = 0x02,
+    Table        = 0x04 | Start, ///< SwTableNode is derived from SwStartNode.
+    Text         = 0x08,
+    Grf          = 0x10,
+    Ole          = 0x20,
+    Section      = 0x40 | Start, ///< SwSectionNode is derived from SwStartNode.
+    PlaceHolder  = 0x80,
 
 // NoTextNode (if any of the 2 bits are set).
-const sal_uInt8 ND_NOTXTNODE    = ND_GRFNODE | ND_OLENODE;
+    NoTextMask   = Grf | Ole,
 // ContentNode (if any of the 3 bits are set).
-const sal_uInt8 ND_CONTENTNODE  = ND_TEXTNODE | ND_NOTXTNODE;
+    ContentMask  = Text | NoTextMask,
+};
+namespace o3tl {
+    template<> struct typed_flags<SwNodeType> : is_typed_flags<SwNodeType, 0xff> {};
+}
 
 // Special types of StartNodes that are not derivations but keep
 // "sections" together.

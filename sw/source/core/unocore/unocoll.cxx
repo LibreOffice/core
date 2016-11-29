@@ -1219,13 +1219,13 @@ uno::Any SwXFrames::getByName(const OUString& rName)
     switch(m_eType)
     {
         case FLYCNTTYPE_GRF:
-            pFormat = GetDoc()->FindFlyByName(rName, ND_GRFNODE);
+            pFormat = GetDoc()->FindFlyByName(rName, SwNodeType::Grf);
             break;
         case FLYCNTTYPE_OLE:
-            pFormat = GetDoc()->FindFlyByName(rName, ND_OLENODE);
+            pFormat = GetDoc()->FindFlyByName(rName, SwNodeType::Ole);
             break;
         default:
-            pFormat = GetDoc()->FindFlyByName(rName, ND_TEXTNODE);
+            pFormat = GetDoc()->FindFlyByName(rName, SwNodeType::Text);
             break;
     }
     if(!pFormat)
@@ -1258,11 +1258,11 @@ sal_Bool SwXFrames::hasByName(const OUString& rName) throw( uno::RuntimeExceptio
     switch(m_eType)
     {
         case FLYCNTTYPE_GRF:
-            return GetDoc()->FindFlyByName(rName, ND_GRFNODE) != nullptr;
+            return GetDoc()->FindFlyByName(rName, SwNodeType::Grf) != nullptr;
         case FLYCNTTYPE_OLE:
-            return GetDoc()->FindFlyByName(rName, ND_OLENODE) != nullptr;
+            return GetDoc()->FindFlyByName(rName, SwNodeType::Ole) != nullptr;
         default:
-            return GetDoc()->FindFlyByName(rName, ND_TEXTNODE) != nullptr;
+            return GetDoc()->FindFlyByName(rName, SwNodeType::Text) != nullptr;
     }
 }
 

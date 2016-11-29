@@ -1381,18 +1381,20 @@ static bool lcl_IsValidPrevNextNumNode( const SwNodeIndex& rIdx )
     const SwNode& rNd = rIdx.GetNode();
     switch( rNd.GetNodeType() )
     {
-    case ND_ENDNODE:
+    case SwNodeType::End:
         bRet = SwTableBoxStartNode == rNd.StartOfSectionNode()->GetStartNodeType() ||
                 rNd.StartOfSectionNode()->IsSectionNode();
         break;
 
-    case ND_STARTNODE:
+    case SwNodeType::Start:
         bRet = SwTableBoxStartNode == static_cast<const SwStartNode&>(rNd).GetStartNodeType();
         break;
 
-    case ND_SECTIONNODE:            // that one's valid, so proceed
+    case SwNodeType::Section:            // that one's valid, so proceed
         bRet = true;
         break;
+
+    default: break;
     }
     return bRet;
 }

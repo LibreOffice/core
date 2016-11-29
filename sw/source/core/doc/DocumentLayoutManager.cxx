@@ -416,16 +416,16 @@ SwFrameFormat *DocumentLayoutManager::CopyLayoutFormat(
             else
             {
                 // Test first if the name is already taken, if so generate a new one.
-                sal_Int8 nNdTyp = aRg.aStart.GetNode().GetNodeType();
+                SwNodeType nNdTyp = aRg.aStart.GetNode().GetNodeType();
 
                 OUString sOld( pDest->GetName() );
                 pDest->SetName( OUString() );
                 if( m_rDoc.FindFlyByName( sOld, nNdTyp ) )     // found one
                     switch( nNdTyp )
                     {
-                    case ND_GRFNODE:    sOld = m_rDoc.GetUniqueGrfName();      break;
-                    case ND_OLENODE:    sOld = m_rDoc.GetUniqueOLEName();      break;
-                    default:            sOld = m_rDoc.GetUniqueFrameName();    break;
+                    case SwNodeType::Grf:    sOld = m_rDoc.GetUniqueGrfName();      break;
+                    case SwNodeType::Ole:    sOld = m_rDoc.GetUniqueOLEName();      break;
+                    default:                 sOld = m_rDoc.GetUniqueFrameName();    break;
                     }
 
                 pDest->SetName( sOld );
