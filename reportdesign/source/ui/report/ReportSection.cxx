@@ -202,8 +202,8 @@ void OReportSection::fill()
     m_pView->SetGridFine(aGridSizeFine);
 
     // #i93595# set snap grid width to snap to all existing subdivisions
-    const Fraction aX(aGridSizeFine.A());
-    const Fraction aY(aGridSizeFine.B());
+    const Fraction aX(aGridSizeFine.Width());
+    const Fraction aY(aGridSizeFine.Height());
     m_pView->SetSnapGridWidth(aX, aY);
 
     m_pView->SetGridSnap( true );

@@ -505,8 +505,8 @@ void OCustomShape::NbcMove( const Size& rSize )
         {
             OReportModel* pRptModel = static_cast<OReportModel*>(GetModel());
             OXUndoEnvironment::OUndoEnvLock aLock(pRptModel->GetUndoEnv());
-            m_xReportComponent->setPositionX(m_xReportComponent->getPositionX() + rSize.A());
-            m_xReportComponent->setPositionY(m_xReportComponent->getPositionY() + rSize.B());
+            m_xReportComponent->setPositionX(m_xReportComponent->getPositionX() + rSize.Width());
+            m_xReportComponent->setPositionY(m_xReportComponent->getPositionY() + rSize.Height());
         }
 
         // set geometry properties
@@ -677,12 +677,12 @@ void OUnoObject::NbcMove( const Size& rSize )
             OXUndoEnvironment::OUndoEnvLock aLock(pRptModel->GetUndoEnv());
 
             // LLA: why there exists getPositionX and getPositionY and NOT getPosition() which return a Point?
-            int nNewX = m_xReportComponent->getPositionX() + rSize.A();
+            int nNewX = m_xReportComponent->getPositionX() + rSize.Width();
             m_xReportComponent->setPositionX(nNewX);
-            int nNewY = m_xReportComponent->getPositionY() + rSize.B();
+            int nNewY = m_xReportComponent->getPositionY() + rSize.Height();
             if (nNewY < 0 && !bUndoMode)
             {
-                aUndoSize.B() = abs(nNewY);
+                aUndoSize.Height() = abs(nNewY);
                 bPositionFixed = true;
                 nNewY = 0;
             }
@@ -957,17 +957,17 @@ void OOle2Obj::NbcMove( const Size& rSize )
             OXUndoEnvironment::OUndoEnvLock aLock(pRptModel->GetUndoEnv());
 
             // LLA: why there exists getPositionX and getPositionY and NOT getPosition() which return a Point?
-            int nNewX = m_xReportComponent->getPositionX() + rSize.A();
+            int nNewX = m_xReportComponent->getPositionX() + rSize.Width();
             // can this hinder us to set components outside the area?
             // if (nNewX < 0)
             // {
             //     nNewX = 0;
             // }
             m_xReportComponent->setPositionX(nNewX);
-            int nNewY = m_xReportComponent->getPositionY() + rSize.B();
+            int nNewY = m_xReportComponent->getPositionY() + rSize.Height();
             if (nNewY < 0 && !bUndoMode)
             {
-                aUndoSize.B() = abs(nNewY);
+                aUndoSize.Height() = abs(nNewY);
                 bPositionFixed = true;
                 nNewY = 0;
             }

@@ -849,8 +849,8 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider* pBuProv, sal_Int1
                         if (auto aSize = o3tl::tryAccess<css::awt::Size>(pPropValue[i].Value))
                         {
                             // don't cast awt::Size to Size as on 64-bits they are not the same.
-                            aBuGraSize.A() = aSize->Width;
-                            aBuGraSize.B() = aSize->Height;
+                            aBuGraSize.Width() = aSize->Width;
+                            aBuGraSize.Height() = aSize->Height;
                         }
                     }
                     else if ( aPropName == "StartWith" )

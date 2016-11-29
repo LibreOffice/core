@@ -543,8 +543,8 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                                                         {
                                                             const SdrGluePoint& rGluePoint = (*pGlueList)[nInd];
                                                             Point aPosition = rGluePoint.GetAbsolutePos(*pConnObj);
-                                                            aPosition.X() += aVector.A();
-                                                            aPosition.Y() += aVector.B();
+                                                            aPosition.X() += aVector.Width();
+                                                            aPosition.Y() += aVector.Height();
                                                             pCloneEdge->SetTailPoint(false, aPosition);
                                                         }
                                                     }
@@ -575,8 +575,8 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                                                         {
                                                             const SdrGluePoint& rGluePoint = (*pGlueList)[nInd];
                                                             Point aPosition = rGluePoint.GetAbsolutePos(*pConnObj);
-                                                            aPosition.X() += aVector.A();
-                                                            aPosition.Y() += aVector.B();
+                                                            aPosition.X() += aVector.Width();
+                                                            aPosition.Y() += aVector.Height();
                                                             pCloneEdge->SetTailPoint(true, aPosition);
                                                         }
                                                     }

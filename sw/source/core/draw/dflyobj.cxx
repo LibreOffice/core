@@ -751,7 +751,7 @@ void SwVirtFlyDrawObj::NbcCrop(const Point& rRef, const Fraction& xFact, const F
         aGraphicSize = Application::GetDefaultDevice()->PixelToLogic( aGraphicSize, aMapMode100thmm );
     else
         aGraphicSize = OutputDevice::LogicToLogic( aGraphicSize, pGraphicObject->GetPrefMapMode(), aMapMode100thmm);
-    if( aGraphicSize.A() == 0 || aGraphicSize.B() == 0 )
+    if( aGraphicSize.Width() == 0 || aGraphicSize.Height() == 0 )
         return ;
 
     // Get old values for crop in 10th of mm

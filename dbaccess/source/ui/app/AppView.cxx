@@ -245,9 +245,9 @@ void OApplicationView::resizeDocumentView(Rectangle& _rPlayground)
     if ( m_pWin && !_rPlayground.IsEmpty() )
     {
         Size aFLSize = LogicToPixel( Size( 3, 3 ), MapUnit::MapAppFont );
-        _rPlayground.Move( aFLSize.A(),aFLSize.B() );
+        _rPlayground.Move( aFLSize.Width(),aFLSize.Height() );
         Size aOldSize = _rPlayground.GetSize();
-        _rPlayground.SetSize( Size(aOldSize.A() - 2*aFLSize.A(), aOldSize.B() - 2*aFLSize.B()) );
+        _rPlayground.SetSize( Size(aOldSize.Width() - 2*aFLSize.Width(), aOldSize.Height() - 2*aFLSize.Height()) );
 
         m_pWin->SetPosSizePixel(_rPlayground.TopLeft() , _rPlayground.GetSize() );
     }

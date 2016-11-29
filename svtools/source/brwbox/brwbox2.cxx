@@ -1978,7 +1978,7 @@ Rectangle BrowseBox::calcTableRect(bool _bOnScreen)
     long nY = aRowBar.Top() - aRect.Top();
     Size aSize(aRect.GetSize());
 
-    return Rectangle(aRowBar.TopRight(), Size(aSize.A() - nX, aSize.B() - nY - aHScroll->GetSizePixel().Height()) );
+    return Rectangle(aRowBar.TopRight(), Size(aSize.Width() - nX, aSize.Height() - nY - aHScroll->GetSizePixel().Height()) );
 }
 
 Rectangle BrowseBox::GetFieldRectPixelAbs( sal_Int32 _nRowId, sal_uInt16 _nColId, bool /*_bIsHeader*/, bool _bOnScreen )

@@ -96,7 +96,7 @@ static void lcl_GetPos(SwView* pView,
 
     long lDelta = lPos - (bHori ? rSh.VisArea().Pos().X() : rSh.VisArea().Pos().Y());
 
-    const long lSize = (bHori ? aDocSz.A() : aDocSz.B()) + lBorder;
+    const long lSize = (bHori ? aDocSz.Width() : aDocSz.Height()) + lBorder;
     // Should right or below are too much space,
     // then they must be subtracted out of the VisArea!
     long nTmp = pView->GetVisArea().Right()+lDelta;

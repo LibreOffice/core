@@ -3778,7 +3778,7 @@ bool SdrDragCrop::EndSdrDrag(bool /*bCopy*/)
     else
         aGraphicSize = OutputDevice::LogicToLogic( aGraphicSize, rGraphicObject.GetPrefMapMode(), aMapMode100thmm);
 
-    if( aGraphicSize.A() == 0 || aGraphicSize.B() == 0 )
+    if( aGraphicSize.Width() == 0 || aGraphicSize.Height() == 0 )
         return false;
 
     const SdrGrafCropItem& rOldCrop = static_cast<const SdrGrafCropItem&>(pObj->GetMergedItem(SDRATTR_GRAFCROP));
