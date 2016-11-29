@@ -101,7 +101,8 @@ bool RASReader::ReadRAS(Graphic & rGraphic)
 
     // Kopf einlesen:
 
-    if ( !( mbStatus = ImplReadHeader() ) )
+    mbStatus = ImplReadHeader();
+    if ( !mbStatus )
         return false;
 
     maBmp = Bitmap( Size( mnWidth, mnHeight ), mnDstBitsPerPix );

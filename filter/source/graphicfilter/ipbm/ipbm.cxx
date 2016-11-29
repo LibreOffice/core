@@ -80,7 +80,8 @@ bool PBMReader::ReadPBM(Graphic & rGraphic )
 
     // read header:
 
-    if ( !( mbStatus = ImplReadHeader() ) )
+    mbStatus = ImplReadHeader();
+    if ( !mbStatus )
         return false;
 
     if ( ( mnMaxVal == 0 ) || ( mnWidth <= 0 ) || ( mnHeight <= 0 ) )
