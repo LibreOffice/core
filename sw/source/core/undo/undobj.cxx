@@ -471,7 +471,7 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
     ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
 
     // 1. Footnotes
-    if( nsDelContentType::DELCNT_FTN & nDelContentType )
+    if( DelContentType::Ftn & nDelContentType )
     {
         SwFootnoteIdxs& rFootnoteArr = pDoc->GetFootnoteIdxs();
         if( !rFootnoteArr.empty() )
@@ -487,7 +487,7 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                         <= pEnd->nNode.GetIndex() )
             {
                 const sal_Int32 nFootnoteSttIdx = pSrch->GetStart();
-                if( (nsDelContentType::DELCNT_CHKNOCNTNT & nDelContentType )
+                if( (DelContentType::CheckNoCntnt & nDelContentType )
                     ? (&pEnd->nNode.GetNode() == pFootnoteNd )
                     : (( &pStt->nNode.GetNode() == pFootnoteNd &&
                     pStt->nContent.GetIndex() > nFootnoteSttIdx) ||
@@ -517,7 +517,7 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                     GetTextNode())->GetIndex() >= pStt->nNode.GetIndex() )
             {
                 const sal_Int32 nFootnoteSttIdx = pSrch->GetStart();
-                if( !(nsDelContentType::DELCNT_CHKNOCNTNT & nDelContentType) && (
+                if( !(DelContentType::CheckNoCntnt & nDelContentType) && (
                     ( &pStt->nNode.GetNode() == pFootnoteNd &&
                     pStt->nContent.GetIndex() > nFootnoteSttIdx ) ||
                     ( &pEnd->nNode.GetNode() == pFootnoteNd &&
@@ -541,7 +541,7 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
     }
 
     // 2. Flys
-    if( nsDelContentType::DELCNT_FLY & nDelContentType )
+    if( DelContentType::Fly & nDelContentType )
     {
         sal_uInt16 nChainInsPos = pHistory ? pHistory->Count() : 0;
         const SwFrameFormats& rSpzArr = *pDoc->GetSpzFrameFormats();
@@ -561,7 +561,7 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                 {
                 case FLY_AS_CHAR:
                     if( nullptr != (pAPos = pAnchor->GetContentAnchor() ) &&
-                        (( nsDelContentType::DELCNT_CHKNOCNTNT & nDelContentType )
+                        (( DelContentType::CheckNoCntnt & nDelContentType )
                         ? ( pStt->nNode <= pAPos->nNode &&
                             pAPos->nNode < pEnd->nNode )
                         : ( *pStt <= *pAPos && *pAPos < *pEnd )) )
@@ -584,7 +584,7 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                         if( pAPos )
                         {
                             bool bTmp;
-                            if( nsDelContentType::DELCNT_CHKNOCNTNT & nDelContentType )
+                            if( DelContentType::CheckNoCntnt & nDelContentType )
                                 bTmp = pStt->nNode <= pAPos->nNode && pAPos->nNode < pEnd->nNode;
                             else
                             {
@@ -602,7 +602,7 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                                     pHistory = new SwHistory;
 
                                 // Moving the anchor?
-                                if( !( nsDelContentType::DELCNT_CHKNOCNTNT & nDelContentType ) &&
+                                if( !( DelContentType::CheckNoCntnt & nDelContentType ) &&
                                     ( rPoint.nNode.GetIndex() == pAPos->nNode.GetIndex() ) )
                                 {
                                     // Do not try to move the anchor to a table!
@@ -638,7 +638,7 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                             pHistory->Add( *static_cast<SwFlyFrameFormat *>(pFormat), nChainInsPos );
                             n = n >= rSpzArr.size() ? rSpzArr.size() : n+1;
                         }
-                        else if( !( nsDelContentType::DELCNT_CHKNOCNTNT & nDelContentType ) )
+                        else if( !( DelContentType::CheckNoCntnt & nDelContentType ) )
                         {
                             if( *pStt <= *pAPos && *pAPos < *pEnd )
                             {
@@ -677,7 +677,7 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
     }
 
     // 3. Bookmarks
-    if( nsDelContentType::DELCNT_BKM & nDelContentType )
+    if( DelContentType::Bkm & nDelContentType )
     {
         IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
         if( pMarkAccess->getAllMarksCount() )
@@ -690,7 +690,7 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                 bool bSaveOtherPos = false;
                 const ::sw::mark::IMark* pBkmk = (pMarkAccess->getAllMarksBegin() + n)->get();
 
-                if( nsDelContentType::DELCNT_CHKNOCNTNT & nDelContentType )
+                if( DelContentType::CheckNoCntnt & nDelContentType )
                 {
                     if ( pStt->nNode <= pBkmk->GetMarkPos().nNode
                          && pBkmk->GetMarkPos().nNode < pEnd->nNode )
@@ -1155,7 +1155,7 @@ bool IsDestroyFrameAnchoredAtChar(SwPosition const & rAnchorPos,
     // - anchored in start of the selection with "CheckNoContent"
     // - anchored in start of sel. and the selection start at pos 0
     return  inSelection
-         && (   (nsDelContentType::DELCNT_CHKNOCNTNT & nDelContentType)
+         && (   (DelContentType::CheckNoCntnt & nDelContentType)
             ||  (rStart.nNode < rAnchorPos.nNode)
             ||  !rStart.nContent.GetIndex()
             );

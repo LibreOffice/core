@@ -129,7 +129,7 @@ SwUndoMove::SwUndoMove( SwDoc* pDoc, const SwNodeRange& rRg,
         if( nullptr != ( pCNd = aMkPos.nNode.GetNode().GetContentNode() ))
             aMkPos.nContent.Assign( pCNd, 0 );
 
-        DelContentIndex( aMkPos, aPtPos, nsDelContentType::DELCNT_FTN );
+        DelContentIndex( aMkPos, aPtPos, DelContentType::Ftn );
 
         if( pHistory && !pHistory->Count() )
             DELETEZ( pHistory );
@@ -338,7 +338,7 @@ void SwUndoMove::DelFootnote( const SwPaM& rRange )
     {
         // delete all footnotes since they are undesired there
         DelContentIndex( *rRange.GetMark(), *rRange.GetPoint(),
-                            nsDelContentType::DELCNT_FTN );
+                            DelContentType::Ftn );
 
         if( pHistory && !pHistory->Count() )
         {
