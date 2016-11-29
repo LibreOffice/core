@@ -44,13 +44,9 @@ public:
     void                SetSlant( long nSlant )                     { mnSlant = nSlant; }
     void                SetBulletOffset( long nOffset )             { mnBulletOffset = nOffset; }
 
-    bool                IsScalable() const                          { return mbScalableFont; }
     bool                IsFullstopCentered() const                  { return mbFullstopCentered; }
-    bool                IsBuiltInFont() const                       { return mbDevice; }
 
-    void                SetScalableFlag( bool bScalable )           { mbScalableFont = bScalable; }
     void                SetFullstopCenteredFlag( bool bCentered )   { mbFullstopCentered = bCentered; }
-    void                SetBuiltInFontFlag( bool bIsBuiltInFont )   { mbDevice = bIsBuiltInFont; }
 
     bool                operator==( const ImplFontMetric& ) const;
 
@@ -65,9 +61,7 @@ private:
     long                mnSlant;                       // Slant
     long                mnBulletOffset;                // Offset for non-printing character
 
-    bool                mbScalableFont;
     bool                mbFullstopCentered;
-    bool                mbDevice;
 
 };
 

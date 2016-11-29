@@ -58,15 +58,9 @@ public:
     void            SetMinKashida( long nMinKashida )                               { mnMinKashida=nMinKashida; }
 
     // font attributes queried from the font instance
-    bool            IsScalable()                                                    { return mbScalableFont; }
-    bool            IsTrueTypeFont()                                                { return mbTrueTypeFont; }
-    bool            IsKernable()                                                    { return mbKernableFont; }
     bool            IsFullstopCentered()                                            { return mbFullstopCentered; }
     long            GetBulletOffset()                                               { return mnBulletOffset; }
 
-    void            SetScalableFlag(bool bScalable)                                 { mbScalableFont = bScalable; }
-    void            SetTrueTypeFlag(bool bTrueTypeFont)                             { mbTrueTypeFont = bTrueTypeFont; }
-    void            SetKernableFlag(bool bKernable)                                 { mbKernableFont = bKernable; }
     void            SetFullstopCenteredFlag(bool bFullstopCentered)                 { mbFullstopCentered = bFullstopCentered; }
 
     // font metrics that are usually derived from the measurements
@@ -117,9 +111,6 @@ private:
     long            mnMinKashida;               // Minimal width of kashida (Arabic)
 
     // font attributes queried from the font instance
-    bool            mbScalableFont;
-    bool            mbTrueTypeFont;
-    bool            mbKernableFont;
     bool            mbFullstopCentered;
     long            mnBulletOffset;             // Offset to position non-print character
 

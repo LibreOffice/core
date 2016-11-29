@@ -454,22 +454,6 @@ void Window::SetZoomedPointFont(vcl::RenderContext& rRenderContext, const vcl::F
         aSize.Height() = WinFloatRound(n);
         aFont.SetFontSize(aSize);
         SetPointFont(rRenderContext, aFont);
-
-        // Use another font if the representation is to be scaled,
-        // and the actual font is not scalable
-        FontMetric aMetric = rRenderContext.GetFontMetric();
-        long nFontDiff = std::abs(rRenderContext.GetFont().GetFontSize().Height() - aMetric.GetFontSize().Height());
-        if ((aMetric.GetType() == TYPE_RASTER) && (nFontDiff >= 2))
-        {
-            DefaultFontType nType;
-            if (aMetric.GetPitch() == PITCH_FIXED)
-                nType = DefaultFontType::FIXED;
-            else
-                nType = DefaultFontType::UI_SANS;
-            vcl::Font aTempFont = OutputDevice::GetDefaultFont(nType, rRenderContext.GetSettings().GetLanguageTag().getLanguageType(), GetDefaultFontFlags::NONE);
-            aFont.SetFamilyName(aTempFont.GetFamilyName());
-            SetPointFont(rRenderContext, aFont);
-        }
     }
     else
     {
