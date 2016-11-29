@@ -1,0 +1,251 @@
+--- libgltf/inc/libgltf.h	2016-11-29 15:09:49.449591824 +0000
++++ libgltf/inc/libgltf.h	2016-11-29 15:19:02.116629656 +0000
+@@ -40,7 +40,7 @@
+  *              null pointer,                           if any error occured during parsing the *.json file.
+  *
+ **/
+-glTFHandle* gltf_renderer_init(const std::string& jsonfile, std::vector<glTFFile>& o_glTFFiles);
++glTFHandle* gltf_renderer_init(const std::string& jsonfile, std::vector<glTFFile>& o_glTFFiles, bool bCanUseMSAA);
+ 
+ /**
+  * Apply the content of the files included in inputFiles vector on the renderer object.
+--- libgltf/src/libgltf.cpp	2016-11-29 15:09:49.468590932 +0000
++++ libgltf/src/libgltf.cpp	2016-11-29 15:12:31.417983426 +0000
+@@ -14,9 +14,9 @@
+ namespace libgltf
+ {
+ 
+-glTFHandle* gltf_renderer_init(const std::string& jsonfile, std::vector<glTFFile>& o_glTFFiles)
++glTFHandle* gltf_renderer_init(const std::string& jsonfile, std::vector<glTFFile>& o_glTFFiles, bool bUseMSAA)
+ {
+-    RenderScene* renderScene = new RenderScene();
++    RenderScene* renderScene = new RenderScene(bUseMSAA);
+     bool bRet = renderScene->initScene(jsonfile, o_glTFFiles);
+     if( bRet )
+     {
+--- libgltf/src/RenderScene.cpp	2016-11-29 15:09:49.468590932 +0000
++++ libgltf/src/RenderScene.cpp	2016-11-29 15:17:34.875727955 +0000
+@@ -21,8 +21,9 @@
+ namespace libgltf
+ {
+ 
+-RenderWithFBO::RenderWithFBO()
+-    : mFboProId(0)
++RenderWithFBO::RenderWithFBO(bool bCanUseMSAA)
++    : bUseMSAA(bCanUseMSAA)
++    , mFboProId(0)
+     , mFboId(0)
+     , mRboId(0)
+     , mTexId(0)
+@@ -329,14 +330,17 @@
+     {
+         return status;
+     }
+-#if USE_MSAA
+-    status = createMultiSampleTextureFrameBufObj(mMSAAFboId, mMSAATexId,
+-                                                 mMSAARboId, width, height);
+-    if (LIBGLTF_SUCCESS != status)
++
++    if (bUseMSAA)
+     {
+-        return status;
++        status = createMultiSampleTextureFrameBufObj(mMSAAFboId, mMSAATexId,
++                                                     mMSAARboId, width, height);
++        if (LIBGLTF_SUCCESS != status)
++        {
++            return status;
++        }
+     }
+-#endif //USE_MSAA
++
+     GLfloat coordVertices[] =
+     {
+         0.0f, 0.0f,
+@@ -698,7 +702,7 @@
+ 
+ ShaderProgram RenderScene::mShaderProgram = ShaderProgram();
+ 
+-RenderScene::RenderScene()
++RenderScene::RenderScene(bool bCanUseMSAA)
+     : maCamera()
+     , cCamera(0)
+     , vCameraIndex()
+@@ -709,6 +713,7 @@
+     , oldTime(0.0)
+     , flyInfo(1.0f)
+     , flyTime(0.0)
++    , bUseMSAA(bCanUseMSAA)
+     , bFlyCamera(false)
+     , bAnimation(true)
+     , pLight(0)
+@@ -726,7 +731,7 @@
+     , mLoadJson()
+     , mBindBufferMap()
+     , mCurrentViewport()
+-    , fbo()
++    , fbo(bCanUseMSAA)
+     , mEnableTransparency(false)
+     , mEnableRotation(true)
+     , mLastModelView(glm::mat4(0.0))
+@@ -1592,11 +1597,11 @@
+     int status = fbo.createAndBindFbo(width, height);
+     if (LIBGLTF_SUCCESS != status)
+         return status;
+-#if USE_MSAA
+-    glBindFramebuffer(GL_FRAMEBUFFER, fbo.getMSAAFboId());
+-#else
+-    glBindFramebuffer(GL_FRAMEBUFFER, fbo.getFboId());
+-#endif  //USE_MSAA
++
++    if (bUseMSAA)
++        glBindFramebuffer(GL_FRAMEBUFFER, fbo.getMSAAFboId());
++    else
++        glBindFramebuffer(GL_FRAMEBUFFER, fbo.getFboId());
+     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+     glViewport(pViewport->x, pViewport->y, width, height);
+     return LIBGLTF_SUCCESS;
+@@ -1727,25 +1732,27 @@
+         unsigned int height = SSAA * mCurrentViewport.height;
+ #endif //DEFAULT_VIEW
+ 
+-#if USE_MSAA
+-        glBindFramebuffer(GL_READ_FRAMEBUFFER, fbo.getMSAAFboId());
+-        GLenum status = glCheckFramebufferStatus(GL_READ_FRAMEBUFFER);
+-        if (status != GL_FRAMEBUFFER_COMPLETE)
++        if (bUseMSAA)
+         {
+-            return LIBGLTF_BIND_FBO_ERROR;
+-        }
+-        glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fbo.getFboId());
+-        status = glCheckFramebufferStatus(GL_DRAW_FRAMEBUFFER);
+-        if (status != GL_FRAMEBUFFER_COMPLETE)
+-        {
+-            return LIBGLTF_BIND_FBO_ERROR;
++            glBindFramebuffer(GL_READ_FRAMEBUFFER, fbo.getMSAAFboId());
++            GLenum status = glCheckFramebufferStatus(GL_READ_FRAMEBUFFER);
++            if (status != GL_FRAMEBUFFER_COMPLETE)
++            {
++                return LIBGLTF_BIND_FBO_ERROR;
++            }
++            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fbo.getFboId());
++            status = glCheckFramebufferStatus(GL_DRAW_FRAMEBUFFER);
++            if (status != GL_FRAMEBUFFER_COMPLETE)
++            {
++                return LIBGLTF_BIND_FBO_ERROR;
++            }
++
++            glBlitFramebuffer(0, 0 ,width, height, 0, 0,width ,height,
++                              GL_COLOR_BUFFER_BIT, GL_LINEAR);
++            glBindFramebuffer(GL_READ_FRAMEBUFFER,0);
++            glBindFramebuffer(GL_DRAW_FRAMEBUFFER,0);
+         }
+ 
+-        glBlitFramebuffer(0, 0 ,width, height, 0, 0,width ,height,
+-                          GL_COLOR_BUFFER_BIT, GL_LINEAR);
+-        glBindFramebuffer(GL_READ_FRAMEBUFFER,0);
+-        glBindFramebuffer(GL_DRAW_FRAMEBUFFER,0);
+-#endif //USE_MSAA
+         glViewport(mCurrentViewport.x, mCurrentViewport.y,
+                    mCurrentViewport.width, mCurrentViewport.height);
+         fbo.renderFbo(width, height);
+@@ -1757,9 +1764,8 @@
+ {
+     delete pScene->getGltfHandle();
+     fbo.releaseFbo();
+-#if USE_MSAA
+-    fbo.releaseMSAAFBO();
+-#endif  //USE_MSAA
++    if (bUseMSAA)
++        fbo.releaseMSAAFBO();
+     return;
+ }
+ 
+@@ -1928,24 +1934,25 @@
+ #endif //DEFAULT_VIEW
+     glBindFramebuffer(GL_FRAMEBUFFER, 0);
+ 
+-#if USE_MSAA
+-    glBindFramebuffer(GL_READ_FRAMEBUFFER, fbo.getMSAAFboId());
+-    GLenum status = glCheckFramebufferStatus(GL_READ_FRAMEBUFFER);
+-    if (status != GL_FRAMEBUFFER_COMPLETE)
+-    {
+-        return LIBGLTF_BIND_FBO_ERROR;
+-    }
+-    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fbo.getFboId());
+-    status = glCheckFramebufferStatus(GL_DRAW_FRAMEBUFFER);
+-    if (status != GL_FRAMEBUFFER_COMPLETE)
+-    {
+-        return LIBGLTF_BIND_FBO_ERROR;
+-    }
+-    glBlitFramebuffer(0, 0 ,width, height, 0, 0,width ,height,
+-        GL_COLOR_BUFFER_BIT, GL_LINEAR);
+-    glBindFramebuffer(GL_READ_FRAMEBUFFER,0);
+-    glBindFramebuffer(GL_DRAW_FRAMEBUFFER,0);
+-#endif //USE_MSAA
++    if (bUseMSAA)
++    {
++        glBindFramebuffer(GL_READ_FRAMEBUFFER, fbo.getMSAAFboId());
++        GLenum status = glCheckFramebufferStatus(GL_READ_FRAMEBUFFER);
++        if (status != GL_FRAMEBUFFER_COMPLETE)
++        {
++            return LIBGLTF_BIND_FBO_ERROR;
++        }
++        glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fbo.getFboId());
++        status = glCheckFramebufferStatus(GL_DRAW_FRAMEBUFFER);
++        if (status != GL_FRAMEBUFFER_COMPLETE)
++        {
++            return LIBGLTF_BIND_FBO_ERROR;
++        }
++        glBlitFramebuffer(0, 0 ,width, height, 0, 0,width ,height,
++            GL_COLOR_BUFFER_BIT, GL_LINEAR);
++        glBindFramebuffer(GL_READ_FRAMEBUFFER,0);
++        glBindFramebuffer(GL_DRAW_FRAMEBUFFER,0);
++    }
+ 
+     glDisable(GL_DEPTH_TEST);
+     glViewport(pViewport->x, pViewport->y, width, height);
+--- libgltf/src/RenderScene.h	2016-11-29 15:09:49.468590932 +0000
++++ libgltf/src/RenderScene.h	2016-11-29 15:17:08.213980438 +0000
+@@ -18,7 +18,6 @@
+ #include "FPSCounter.h"
+ #include "Timer.h"
+ #include "trackball.h"
+-#define USE_MSAA       1
+ #define SSAA           2
+ #define DEFAULT_VIEW   0
+ #define LOAD_ONCE      1
+@@ -76,7 +75,7 @@
+ class RenderWithFBO
+ {
+ public:
+-    RenderWithFBO();
++    RenderWithFBO(bool bCanUseMSAA);
+     int createAndBindFbo(int width, int height);
+     void releaseFbo();
+     int renderFbo(int srcWidth, int srcHeight);
+@@ -102,6 +101,8 @@
+     int renderFboTexture();
+ private:
+ 
++    bool bUseMSAA;
++
+     GLuint mFboProId;
+     GLuint mFboId;
+     GLuint mRboId;
+@@ -274,7 +275,7 @@
+     void enableTransparency();
+     void disableTransparency();
+     void initFPS();
+-    RenderScene();
++    RenderScene(bool bCanUseMSAA);
+     ~RenderScene();
+ 
+ private:
+@@ -326,6 +327,7 @@
+     double  oldTime;
+     glm::mat4 flyInfo;
+     double flyTime;
++    bool bUseMSAA;
+     bool bFlyCamera;
+     bool bAnimation;
+     Light* pLight;
