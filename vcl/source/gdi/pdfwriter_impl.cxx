@@ -11515,9 +11515,9 @@ void PDFWriterImpl::updateGraphicsState(Mode const mode)
     GraphicsState& rNewState = m_aGraphicsStack.front();
     // first set clip region since it might invalidate everything else
 
-    if( (rNewState.m_nUpdateFlags & GraphicsState::updateClipRegion) )
+    if( (rNewState.m_nUpdateFlags & GraphicsStateUpdateFlags::ClipRegion) )
     {
-        rNewState.m_nUpdateFlags &= ~GraphicsState::updateClipRegion;
+        rNewState.m_nUpdateFlags &= ~GraphicsStateUpdateFlags::ClipRegion;
 
         if( m_aCurrentPDFState.m_bClipRegion != rNewState.m_bClipRegion ||
             ( rNewState.m_bClipRegion && m_aCurrentPDFState.m_aClipRegion != rNewState.m_aClipRegion ) )
@@ -11527,7 +11527,7 @@ void PDFWriterImpl::updateGraphicsState(Mode const mode)
                 aLine.append( "Q " );
                 // invalidate everything but the clip region
                 m_aCurrentPDFState = GraphicsState();
-                rNewState.m_nUpdateFlags = sal::static_int_cast<sal_uInt16>(~GraphicsState::updateClipRegion);
+                rNewState.m_nUpdateFlags = ~GraphicsStateUpdateFlags::ClipRegion;
             }
             if( rNewState.m_bClipRegion )
             {
@@ -11550,34 +11550,34 @@ void PDFWriterImpl::updateGraphicsState(Mode const mode)
         }
     }
 
-    if( (rNewState.m_nUpdateFlags & GraphicsState::updateMapMode) )
+    if( (rNewState.m_nUpdateFlags & GraphicsStateUpdateFlags::MapMode) )
     {
-        rNewState.m_nUpdateFlags &= ~GraphicsState::updateMapMode;
+        rNewState.m_nUpdateFlags &= ~GraphicsStateUpdateFlags::MapMode;
         getReferenceDevice()->SetMapMode( rNewState.m_aMapMode );
     }
 
-    if( (rNewState.m_nUpdateFlags & GraphicsState::updateFont) )
+    if( (rNewState.m_nUpdateFlags & GraphicsStateUpdateFlags::Font) )
     {
-        rNewState.m_nUpdateFlags &= ~GraphicsState::updateFont;
+        rNewState.m_nUpdateFlags &= ~GraphicsStateUpdateFlags::Font;
         getReferenceDevice()->SetFont( rNewState.m_aFont );
         getReferenceDevice()->ImplNewFont();
     }
 
-    if( (rNewState.m_nUpdateFlags & GraphicsState::updateLayoutMode) )
+    if( (rNewState.m_nUpdateFlags & GraphicsStateUpdateFlags::LayoutMode) )
     {
-        rNewState.m_nUpdateFlags &= ~GraphicsState::updateLayoutMode;
+        rNewState.m_nUpdateFlags &= ~GraphicsStateUpdateFlags::LayoutMode;
         getReferenceDevice()->SetLayoutMode( rNewState.m_nLayoutMode );
     }
 
-    if( (rNewState.m_nUpdateFlags & GraphicsState::updateDigitLanguage) )
+    if( (rNewState.m_nUpdateFlags & GraphicsStateUpdateFlags::DigitLanguage) )
     {
-        rNewState.m_nUpdateFlags &= ~GraphicsState::updateDigitLanguage;
+        rNewState.m_nUpdateFlags &= ~GraphicsStateUpdateFlags::DigitLanguage;
         getReferenceDevice()->SetDigitLanguage( rNewState.m_aDigitLanguage );
     }
 
-    if( (rNewState.m_nUpdateFlags & GraphicsState::updateLineColor) )
+    if( (rNewState.m_nUpdateFlags & GraphicsStateUpdateFlags::LineColor) )
     {
-        rNewState.m_nUpdateFlags &= ~GraphicsState::updateLineColor;
+        rNewState.m_nUpdateFlags &= ~GraphicsStateUpdateFlags::LineColor;
         if( m_aCurrentPDFState.m_aLineColor != rNewState.m_aLineColor &&
             rNewState.m_aLineColor != Color( COL_TRANSPARENT ) )
         {
@@ -11586,9 +11586,9 @@ void PDFWriterImpl::updateGraphicsState(Mode const mode)
         }
     }
 
-    if( (rNewState.m_nUpdateFlags & GraphicsState::updateFillColor) )
+    if( (rNewState.m_nUpdateFlags & GraphicsStateUpdateFlags::FillColor) )
     {
-        rNewState.m_nUpdateFlags &= ~GraphicsState::updateFillColor;
+        rNewState.m_nUpdateFlags &= ~GraphicsStateUpdateFlags::FillColor;
         if( m_aCurrentPDFState.m_aFillColor != rNewState.m_aFillColor &&
             rNewState.m_aFillColor != Color( COL_TRANSPARENT ) )
         {
@@ -11597,9 +11597,9 @@ void PDFWriterImpl::updateGraphicsState(Mode const mode)
         }
     }
 
-    if( (rNewState.m_nUpdateFlags & GraphicsState::updateTransparentPercent) )
+    if( (rNewState.m_nUpdateFlags & GraphicsStateUpdateFlags::TransparentPercent) )
     {
-        rNewState.m_nUpdateFlags &= ~GraphicsState::updateTransparentPercent;
+        rNewState.m_nUpdateFlags &= ~GraphicsStateUpdateFlags::TransparentPercent;
         if( m_aContext.Version >= PDFWriter::PDF_1_4 && m_aCurrentPDFState.m_nTransparentPercent != rNewState.m_nTransparentPercent )
         {
             // TODO: switch extended graphicsstate
@@ -11623,7 +11623,7 @@ void PDFWriterImpl::setFont( const vcl::Font& rFont )
         aColor = m_aGraphicsStack.front().m_aFont.GetColor();
     m_aGraphicsStack.front().m_aFont = rFont;
     m_aGraphicsStack.front().m_aFont.SetColor( aColor );
-    m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsState::updateFont;
+    m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsStateUpdateFlags::Font;
 }
 
 void PDFWriterImpl::push( PushFlags nFlags )
@@ -11675,7 +11675,7 @@ void PDFWriterImpl::pop()
         // what ?
     }
     // invalidate graphics state
-    m_aGraphicsStack.front().m_nUpdateFlags = sal::static_int_cast<sal_uInt16>(~0U);
+    m_aGraphicsStack.front().m_nUpdateFlags = GraphicsStateUpdateFlags::All;
 }
 
 void PDFWriterImpl::setMapMode( const MapMode& rMapMode )
@@ -11691,7 +11691,7 @@ void PDFWriterImpl::setClipRegion( const basegfx::B2DPolyPolygon& rRegion )
     aRegion = getReferenceDevice()->PixelToLogic( aRegion, m_aMapMode );
     m_aGraphicsStack.front().m_aClipRegion = aRegion;
     m_aGraphicsStack.front().m_bClipRegion = true;
-    m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsState::updateClipRegion;
+    m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsStateUpdateFlags::ClipRegion;
 }
 
 void PDFWriterImpl::moveClipRegion( sal_Int32 nX, sal_Int32 nY )
@@ -11709,7 +11709,7 @@ void PDFWriterImpl::moveClipRegion( sal_Int32 nX, sal_Int32 nY )
         basegfx::B2DHomMatrix aMat;
         aMat.translate( aPoint.X(), aPoint.Y() );
         m_aGraphicsStack.front().m_aClipRegion.transform( aMat );
-        m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsState::updateClipRegion;
+        m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsStateUpdateFlags::ClipRegion;
     }
 }
 
@@ -11724,7 +11724,7 @@ bool PDFWriterImpl::intersectClipRegion( const basegfx::B2DPolyPolygon& rRegion 
 {
     basegfx::B2DPolyPolygon aRegion( getReferenceDevice()->LogicToPixel( rRegion, m_aGraphicsStack.front().m_aMapMode ) );
     aRegion = getReferenceDevice()->PixelToLogic( aRegion, m_aMapMode );
-    m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsState::updateClipRegion;
+    m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsStateUpdateFlags::ClipRegion;
     if( m_aGraphicsStack.front().m_bClipRegion )
     {
         basegfx::B2DPolyPolygon aOld( basegfx::tools::prepareForPolygonOperation( m_aGraphicsStack.front().m_aClipRegion ) );

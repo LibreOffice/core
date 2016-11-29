@@ -38,6 +38,7 @@
 #include <vcl/outdev.hxx>
 #include <vcl/pdfwriter.hxx>
 #include <vcl/wall.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 #include "sallayout.hxx"
 #include "outdata.hxx"
@@ -63,6 +64,24 @@ class SvMemoryStream;
 // maximum length of MD5 digest input, in step 2 of algorithm 3.1
 // PDF spec ver. 1.4: see there for details
 #define MAXIMUM_RC4_KEY_LENGTH (SECUR_128BIT_KEY+3+2)
+
+enum class GraphicsStateUpdateFlags {
+    Font                  = 0x0001,
+    MapMode               = 0x0002,
+    LineColor             = 0x0004,
+    FillColor             = 0x0008,
+    TextLineColor         = 0x0010,
+    OverlineColor         = 0x0020,
+    ClipRegion            = 0x0040,
+    AntiAlias             = 0x0080,
+    LayoutMode            = 0x0100,
+    TransparentPercent    = 0x0200,
+    DigitLanguage         = 0x0400,
+    All                   = 0x07ff
+};
+namespace o3tl {
+    template<> struct typed_flags<GraphicsStateUpdateFlags> : is_typed_flags<GraphicsStateUpdateFlags, 0x07ff> {};
+}
 
 namespace vcl
 {
@@ -676,19 +695,7 @@ private:
         LanguageType                     m_aDigitLanguage;
         sal_Int32                        m_nTransparentPercent;
         PushFlags                        m_nFlags;
-        sal_uInt16                       m_nUpdateFlags;
-
-        static const sal_uInt16 updateFont                  = 0x0001;
-        static const sal_uInt16 updateMapMode               = 0x0002;
-        static const sal_uInt16 updateLineColor             = 0x0004;
-        static const sal_uInt16 updateFillColor             = 0x0008;
-        static const sal_uInt16 updateTextLineColor         = 0x0010;
-        static const sal_uInt16 updateOverlineColor         = 0x0020;
-        static const sal_uInt16 updateClipRegion            = 0x0040;
-        static const sal_uInt16 updateAntiAlias             = 0x0080;
-        static const sal_uInt16 updateLayoutMode            = 0x0100;
-        static const sal_uInt16 updateTransparentPercent    = 0x0200;
-        static const sal_uInt16 updateDigitLanguage         = 0x0400;
+        GraphicsStateUpdateFlags         m_nUpdateFlags;
 
         GraphicsState() :
                 m_aLineColor( COL_TRANSPARENT ),
@@ -700,7 +707,7 @@ private:
                 m_aDigitLanguage( 0 ),
                 m_nTransparentPercent( 0 ),
                 m_nFlags( PushFlags::ALL ),
-                m_nUpdateFlags( 0xffff )
+                m_nUpdateFlags( GraphicsStateUpdateFlags::All )
         {}
     };
     std::list< GraphicsState >              m_aGraphicsStack;
@@ -1037,62 +1044,62 @@ public:
     void setLineColor( const Color& rColor )
     {
         m_aGraphicsStack.front().m_aLineColor = ImplIsColorTransparent(rColor) ? Color( COL_TRANSPARENT ) : rColor;
-        m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsState::updateLineColor;
+        m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsStateUpdateFlags::LineColor;
     }
 
     void setFillColor( const Color& rColor )
     {
         m_aGraphicsStack.front().m_aFillColor = ImplIsColorTransparent(rColor) ? Color( COL_TRANSPARENT ) : rColor;
-        m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsState::updateFillColor;
+        m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsStateUpdateFlags::FillColor;
     }
 
     void setTextLineColor()
     {
         m_aGraphicsStack.front().m_aTextLineColor = Color( COL_TRANSPARENT );
-        m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsState::updateTextLineColor;
+        m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsStateUpdateFlags::TextLineColor;
     }
 
     void setTextLineColor( const Color& rColor )
     {
         m_aGraphicsStack.front().m_aTextLineColor = rColor;
-        m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsState::updateTextLineColor;
+        m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsStateUpdateFlags::TextLineColor;
     }
 
     void setOverlineColor()
     {
         m_aGraphicsStack.front().m_aOverlineColor = Color( COL_TRANSPARENT );
-        m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsState::updateOverlineColor;
+        m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsStateUpdateFlags::OverlineColor;
     }
 
     void setOverlineColor( const Color& rColor )
     {
         m_aGraphicsStack.front().m_aOverlineColor = rColor;
-        m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsState::updateOverlineColor;
+        m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsStateUpdateFlags::OverlineColor;
     }
 
     void setTextFillColor( const Color& rColor )
     {
         m_aGraphicsStack.front().m_aFont.SetFillColor( rColor );
         m_aGraphicsStack.front().m_aFont.SetTransparent( ImplIsColorTransparent( rColor ) );
-        m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsState::updateFont;
+        m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsStateUpdateFlags::Font;
     }
     void setTextFillColor()
     {
         m_aGraphicsStack.front().m_aFont.SetFillColor( Color( COL_TRANSPARENT ) );
         m_aGraphicsStack.front().m_aFont.SetTransparent( true );
-        m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsState::updateFont;
+        m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsStateUpdateFlags::Font;
     }
     void setTextColor( const Color& rColor )
     {
         m_aGraphicsStack.front().m_aFont.SetColor( rColor );
-        m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsState::updateFont;
+        m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsStateUpdateFlags::Font;
     }
 
     void clearClipRegion()
     {
         m_aGraphicsStack.front().m_aClipRegion.clear();
         m_aGraphicsStack.front().m_bClipRegion = false;
-        m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsState::updateClipRegion;
+        m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsStateUpdateFlags::ClipRegion;
     }
 
     void setClipRegion( const basegfx::B2DPolyPolygon& rRegion );
@@ -1106,19 +1113,19 @@ public:
     void setLayoutMode( ComplexTextLayoutFlags nLayoutMode )
     {
         m_aGraphicsStack.front().m_nLayoutMode = nLayoutMode;
-        m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsState::updateLayoutMode;
+        m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsStateUpdateFlags::LayoutMode;
     }
 
     void setDigitLanguage( LanguageType eLang )
     {
         m_aGraphicsStack.front().m_aDigitLanguage = eLang;
-        m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsState::updateDigitLanguage;
+        m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsStateUpdateFlags::DigitLanguage;
     }
 
     void setTextAlign( TextAlign eAlign )
     {
         m_aGraphicsStack.front().m_aFont.SetAlignment( eAlign );
-        m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsState::updateFont;
+        m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsStateUpdateFlags::Font;
     }
 
     /* actual drawing functions */
