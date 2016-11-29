@@ -569,7 +569,7 @@ FreetypeFont::~FreetypeFont()
 }
 
 
-void FreetypeFont::GetFontMetric( ImplFontMetricDataRef& rxTo, long& rFactor ) const
+void FreetypeFont::GetFontMetric(ImplFontMetricDataRef& rxTo) const
 {
     rxTo->FontAttributes::operator =(mpFontInfo->GetFontAttributes());
 
@@ -584,8 +584,6 @@ void FreetypeFont::GetFontMetric( ImplFontMetricDataRef& rxTo, long& rFactor ) c
         rxTo->SetSymbolFlag( true );
 
     FT_Activate_Size( maSizeFT );
-
-    rFactor = 0x100;
 
     sal_uLong nHhea = 0;
     const uint8_t* pHheaBuf = mpFontInfo->GetTable("hhea", &nHhea);

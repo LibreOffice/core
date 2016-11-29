@@ -426,10 +426,7 @@ void CairoTextRender::GetFontMetric( ImplFontMetricDataRef& rxFontMetric, int nF
         return;
 
     if( mpFreetypeFont[nFallbackLevel] != nullptr )
-    {
-        long rDummyFactor;
-        mpFreetypeFont[nFallbackLevel]->GetFontMetric( rxFontMetric, rDummyFactor );
-    }
+        mpFreetypeFont[nFallbackLevel]->GetFontMetric(rxFontMetric);
 }
 
 bool CairoTextRender::GetGlyphBoundRect( sal_GlyphId aGlyphId, Rectangle& rRect )
