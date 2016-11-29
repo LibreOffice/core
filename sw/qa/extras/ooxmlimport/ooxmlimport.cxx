@@ -130,6 +130,13 @@ DECLARE_SW_IMPORT_TEST(testMathMalformedXml, "math-malformed_xml.docx", FailTest
     CPPUNIT_ASSERT(!mxComponent.is());
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf103975_notPageBreakD, "tdf103975_notPageBreakD.docx")
+{
+    // The problem was that the column break was moving outside of the columns, making a page break.
+    CPPUNIT_ASSERT_EQUAL(style::BreakType_COLUMN_BEFORE, getProperty<style::BreakType>(getParagraph(2), "BreakType"));
+    CPPUNIT_ASSERT_EQUAL( 1, getPages() );
+}
+
 DECLARE_OOXMLIMPORT_TEST(testTdf103975_notPageBreakE, "tdf103975_notPageBreakE.docx")
 {
     // The problem was that the column break was getting lost.
