@@ -429,7 +429,8 @@ OUString OResultSet::makeNumericString(const sal_Int32 nColumnIndex)
 template <typename T>
 T OResultSet::retrieveValue(const sal_Int32 nColumnIndex, const ISC_SHORT nType)
 {
-    if ((m_bWasNull = isNull(nColumnIndex)))
+    m_bWasNull = isNull(nColumnIndex);
+    if (m_bWasNull)
         return T();
 
     if ((m_pSqlda->sqlvar[nColumnIndex-1].sqltype & ~1) == nType)
@@ -622,7 +623,8 @@ T OResultSet::safelyRetrieveValue(const sal_Int32 nColumnIndex, const ISC_SHORT 
     checkColumnIndex(nColumnIndex);
     checkRowIndex();
 
-    if ((m_bWasNull = isNull(nColumnIndex)))
+    m_bWasNull = isNull(nColumnIndex);
+    if (m_bWasNull)
         return T();
 
     return retrieveValue< T >(nColumnIndex, nType);

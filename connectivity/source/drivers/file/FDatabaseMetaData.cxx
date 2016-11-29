@@ -274,8 +274,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
         }
         else // no extension, filter myself
         {
-            bool bErg = false;
-            do
+            for (;;)
             {
                 if (aURL.getExtension().isEmpty())
                 {
@@ -287,12 +286,13 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
                     }
                     break;
                 }
-                else if ( ( bErg = xResultSet->next() ) )
+                if ( !xResultSet->next() )
                 {
-                    aName = xRow->getString(1);
-                    aURL.SetSmartURL(aName);
+                    break;
                 }
-            } while (bErg);
+                aName = xRow->getString(1);
+                aURL.SetSmartURL(aName);
+            }
         }
         if(bNewRow)
         {

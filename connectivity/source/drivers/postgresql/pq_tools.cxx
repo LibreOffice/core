@@ -870,7 +870,8 @@ css::uno::Sequence< sal_Int32 > string2intarray( const OUString & str )
                     break;
                 if ( start == strlen)
                     return ret;
-            } while ( (c=str.iterateCodePoints(&start)) );
+                c=str.iterateCodePoints(&start);
+            } while ( c );
             do
             {
                 if (!iswdigit(c))
@@ -878,7 +879,8 @@ css::uno::Sequence< sal_Int32 > string2intarray( const OUString & str )
                 if ( start == strlen)
                     return ret;
                 digits += OUString(&c, 1);
-            } while ( (c = str.iterateCodePoints(&start)) );
+                c = str.iterateCodePoints(&start);
+            } while ( c );
             vec.push_back( digits.toInt32() );
             do
             {
@@ -886,7 +888,8 @@ css::uno::Sequence< sal_Int32 > string2intarray( const OUString & str )
                     break;
                 if ( start == strlen)
                     return ret;
-            } while ( (c=str.iterateCodePoints(&start)) );
+                c = str.iterateCodePoints(&start);
+            } while ( c );
             if ( c == L'}' )
                 break;
             if ( str.iterateCodePoints(&start) != L',' )
