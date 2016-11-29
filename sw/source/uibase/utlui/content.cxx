@@ -2237,7 +2237,7 @@ void SwContentTree::Notify(SfxBroadcaster & rBC, SfxHint const& rHint)
 void SwContentTree::ExecCommand(const OUString& rCmd, bool bModifier)
 {
     const bool bUp = rCmd == "up";
-    const bool bUpDown = bUp || rCmd == "up";
+    const bool bUpDown = bUp || rCmd == "down";
     const bool bLeft = rCmd == "promote";
     const bool bLeftRight = bLeft || rCmd == "demote";
     if (!bUpDown && !bLeftRight)
