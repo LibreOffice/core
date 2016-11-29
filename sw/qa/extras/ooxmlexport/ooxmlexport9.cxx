@@ -141,6 +141,16 @@ DECLARE_OOXMLEXPORT_TEST(testTdf103982, "tdf103982.docx")
     CPPUNIT_ASSERT(nDistB >= 0);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf104115, "tdf104115.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    // This found 0 nodes: the custom geometry was not written for the Bezier
+    // curve -> Word refused to open the document.
+    assertXPath(pXmlDoc, "//a:custGeom", 1);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

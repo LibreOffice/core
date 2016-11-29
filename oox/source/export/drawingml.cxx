@@ -2540,7 +2540,9 @@ bool DrawingML::WriteCustomGeometry( const Reference< XShape >& rXShape )
 
 void DrawingML::WritePolyPolygon( const tools::PolyPolygon& rPolyPolygon )
 {
-    if( rPolyPolygon.Count() < 1 )
+    // In case of Writer, the parent element is <wps:spPr>, and there the
+    // <a:custGeom> element is not optional.
+    if (rPolyPolygon.Count() < 1 && GetDocumentType() != DOCUMENT_DOCX)
         return;
 
     mpFS->startElementNS( XML_a, XML_custGeom, FSEND );
