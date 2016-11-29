@@ -172,18 +172,6 @@ public:
                                     int nGlyphs,
                                     FontSubsetInfo& rInfo ) = 0;
 
-    // GetFontEncodingVector: a method to get the encoding map Unicode
-    // to font encoded character; this is only used for type1 fonts and
-    // may return NULL in case of unknown encoding vector
-    // if ppNonEncoded is set and non encoded characters (that is type1
-    // glyphs with only a name) exist it is set to the corresponding
-    // map for non encoded glyphs; the encoding vector contains -1
-    // as encoding for these cases
-    virtual const Ucs2SIntMap*  GetFontEncodingVector(
-                                    const PhysicalFontFace*,
-                                    const Ucs2OStrMap** ppNonEncoded,
-                                    std::set<sal_Unicode> const** ppPriority) = 0;
-
     // GetEmbedFontData: gets the font data for a font marked
     // embeddable by GetDevFontList or NULL in case of error
     // parameters: pFont: describes the font in question

@@ -853,11 +853,6 @@ bool GenPspGraphics::CreateFontSubset(
     return bSuccess;
 }
 
-const Ucs2SIntMap* GenPspGraphics::GetFontEncodingVector(const PhysicalFontFace*, const Ucs2OStrMap**, std::set<sal_Unicode> const**)
-{
-    return nullptr;
-}
-
 void GenPspGraphics::GetGlyphWidths( const PhysicalFontFace* pFont,
                                   bool bVertical,
                                   std::vector< sal_Int32 >& rWidths,
