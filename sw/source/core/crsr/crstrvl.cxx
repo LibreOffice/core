@@ -96,8 +96,8 @@ void SwCursorShell::MoveCursorToNum()
         aPt.setX(pFrame->Frame().Left() + GetUpDownX());
     }
     pFrame->GetCursorOfst( m_pCurrentCursor->GetPoint(), aPt );
-    if ( !m_pCurrentCursor->IsSelOvr( nsSwCursorSelOverFlags::SELOVER_TOGGLE |
-                                nsSwCursorSelOverFlags::SELOVER_CHANGEPOS ))
+    if ( !m_pCurrentCursor->IsSelOvr( SwCursorSelOverFlags::Toggle |
+                                SwCursorSelOverFlags::ChangePos ))
     {
         UpdateCursor(SwCursorShell::UPDOWN |
                 SwCursorShell::SCROLLWIN | SwCursorShell::CHKRANGE |
@@ -774,8 +774,8 @@ bool SwCursorShell::MoveFieldType(
     SwCursorSaveState aSaveState( *pCursor );
 
     rFnd.GetPosOfContent( *pCursor->GetPoint() );
-    bool bRet = !m_pCurrentCursor->IsSelOvr( nsSwCursorSelOverFlags::SELOVER_CHECKNODESSECTION |
-                                     nsSwCursorSelOverFlags::SELOVER_TOGGLE );
+    bool bRet = !m_pCurrentCursor->IsSelOvr( SwCursorSelOverFlags::CheckNodeSection |
+                                     SwCursorSelOverFlags::Toggle );
     if( bRet )
         UpdateCursor(SwCursorShell::SCROLLWIN|SwCursorShell::CHKRANGE|SwCursorShell::READONLY);
     return bRet;
@@ -1204,7 +1204,7 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                             SwCallLink aLk( *this ); // watch Cursor-Moves
                             m_pCurrentCursor->DeleteMark();
                             *m_pCurrentCursor->GetPoint() = aPos;
-                            if( m_pCurrentCursor->IsSelOvr( nsSwCursorSelOverFlags::SELOVER_CHECKNODESSECTION | nsSwCursorSelOverFlags::SELOVER_TOGGLE) )
+                            if( m_pCurrentCursor->IsSelOvr( SwCursorSelOverFlags::CheckNodeSection | SwCursorSelOverFlags::Toggle) )
                                 bRet = false;
                             else
                                 UpdateCursor();
@@ -1317,8 +1317,8 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                             if( pCNd )
                             {
                                 m_pCurrentCursor->GetPoint()->nContent.Assign( pCNd, 0 );
-                                if( m_pCurrentCursor->IsSelOvr( nsSwCursorSelOverFlags::SELOVER_CHECKNODESSECTION |
-                                    nsSwCursorSelOverFlags::SELOVER_TOGGLE ))
+                                if( m_pCurrentCursor->IsSelOvr( SwCursorSelOverFlags::CheckNodeSection |
+                                    SwCursorSelOverFlags::Toggle ))
                                     bRet = false;
                                 else
                                     UpdateCursor();
@@ -1376,7 +1376,7 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                             SwCursorSaveState aSaveState( *m_pCurrentCursor );
                             m_pCurrentCursor->DeleteMark();
                             *m_pCurrentCursor->GetPoint() = aPos;
-                            if( m_pCurrentCursor->IsSelOvr( nsSwCursorSelOverFlags::SELOVER_CHECKNODESSECTION | nsSwCursorSelOverFlags::SELOVER_TOGGLE ) )
+                            if( m_pCurrentCursor->IsSelOvr( SwCursorSelOverFlags::CheckNodeSection | SwCursorSelOverFlags::Toggle ) )
                                 bRet = false;
                             else
                                 UpdateCursor();
@@ -1421,8 +1421,8 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                             SwCallLink aLk( *this ); // watch Cursor-Moves
                             m_pCurrentCursor->DeleteMark();
                             *m_pCurrentCursor->GetPoint() = aPos;
-                            if( m_pCurrentCursor->IsSelOvr( nsSwCursorSelOverFlags::SELOVER_CHECKNODESSECTION |
-                                nsSwCursorSelOverFlags::SELOVER_TOGGLE) )
+                            if( m_pCurrentCursor->IsSelOvr( SwCursorSelOverFlags::CheckNodeSection |
+                                SwCursorSelOverFlags::Toggle) )
                                 bRet = false;
                             else
                                 UpdateCursor();
@@ -1528,8 +1528,8 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                             SwCallLink aLk( *this ); // watch Cursor-Moves
                             SwCursorSaveState aSaveState( *m_pCurrentCursor );
                             *m_pCurrentCursor->GetPoint() = aPos;
-                            if( m_pCurrentCursor->IsSelOvr( nsSwCursorSelOverFlags::SELOVER_CHECKNODESSECTION |
-                                nsSwCursorSelOverFlags::SELOVER_TOGGLE) )
+                            if( m_pCurrentCursor->IsSelOvr( SwCursorSelOverFlags::CheckNodeSection |
+                                SwCursorSelOverFlags::Toggle) )
                                 bRet = false;
                             else
                                 UpdateCursor();

@@ -67,8 +67,8 @@ bool SwCursor::GotoFootnoteText()
         if( pCNd )
         {
             GetPoint()->nContent.Assign( pCNd, 0 );
-            bRet = !IsSelOvr( nsSwCursorSelOverFlags::SELOVER_CHECKNODESSECTION |
-                              nsSwCursorSelOverFlags::SELOVER_TOGGLE );
+            bRet = !IsSelOvr( SwCursorSelOverFlags::CheckNodeSection |
+                              SwCursorSelOverFlags::Toggle );
         }
     }
     return bRet;
@@ -140,8 +140,8 @@ bool SwCursor::GotoFootnoteAnchor()
                 GetPoint()->nNode = rTNd;
                 GetPoint()->nContent.Assign( &rTNd, pTextFootnote->GetStart() );
 
-                return !IsSelOvr( nsSwCursorSelOverFlags::SELOVER_CHECKNODESSECTION |
-                                  nsSwCursorSelOverFlags::SELOVER_TOGGLE );
+                return !IsSelOvr( SwCursorSelOverFlags::CheckNodeSection |
+                                  SwCursorSelOverFlags::Toggle );
             }
     }
     return false;

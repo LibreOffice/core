@@ -46,14 +46,16 @@ protected:
     ~SwFindParas() {}
 };
 
-typedef sal_uInt16 SwCursorSelOverFlags;
-namespace nsSwCursorSelOverFlags
+enum class SwCursorSelOverFlags : sal_uInt16
 {
-    const SwCursorSelOverFlags SELOVER_NONE                = 0x00;
-    const SwCursorSelOverFlags SELOVER_CHECKNODESSECTION   = 0x01;
-    const SwCursorSelOverFlags SELOVER_TOGGLE              = 0x02;
-    const SwCursorSelOverFlags SELOVER_ENABLEREVDIREKTION  = 0x04;
-    const SwCursorSelOverFlags SELOVER_CHANGEPOS           = 0x08;
+    NONE                = 0x00,
+    CheckNodeSection    = 0x01,
+    Toggle              = 0x02,
+    EnableRevDirection  = 0x04,
+    ChangePos           = 0x08
+};
+namespace o3tl {
+    template<> struct typed_flags<SwCursorSelOverFlags> : is_typed_flags<SwCursorSelOverFlags, 0x0f> {};
 }
 
 // define for cursor travelling normally in western text cells and chars do
@@ -89,7 +91,7 @@ protected:
     virtual const SwContentFrame* DoSetBidiLevelLeftRight(
         bool & io_rbLeft, bool bVisualAllowed, bool bInsertCursor);
     virtual void DoSetBidiLevelUpDown();
-    virtual bool IsSelOvrCheck(int eFlags);
+    virtual bool IsSelOvrCheck(SwCursorSelOverFlags eFlags);
 
 public:
     // single argument ctors shall be explicit.
@@ -191,10 +193,10 @@ public:
 
     // Is there a selection of content in table?
     // Return value indicates if cursor remains at its old position.
-    virtual bool IsSelOvr( int eFlags =
-                                ( nsSwCursorSelOverFlags::SELOVER_CHECKNODESSECTION |
-                                  nsSwCursorSelOverFlags::SELOVER_TOGGLE |
-                                  nsSwCursorSelOverFlags::SELOVER_CHANGEPOS ));
+    virtual bool IsSelOvr( SwCursorSelOverFlags eFlags =
+                                ( SwCursorSelOverFlags::CheckNodeSection |
+                                  SwCursorSelOverFlags::Toggle |
+                                  SwCursorSelOverFlags::ChangePos ));
     bool IsInProtectTable( bool bMove = false,
                                    bool bChgCursor = true );
     bool IsNoContent() const;
@@ -267,7 +269,7 @@ protected:
     bool m_bChanged : 1;
     bool m_bParked : 1;       // Table-cursor was parked.
 
-    virtual bool IsSelOvrCheck(int eFlags) override;
+    virtual bool IsSelOvrCheck(SwCursorSelOverFlags eFlags) override;
 
 public:
     SwTableCursor( const SwPosition &rPos );
