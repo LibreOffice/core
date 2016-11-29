@@ -280,7 +280,7 @@ sal_uInt16 SwNode::GetSectionLevel() const
 long SwNode::s_nSerial = 0;
 #endif
 
-SwNode::SwNode( const SwNodeIndex &rWhere, const sal_uInt8 nNdType )
+SwNode::SwNode( const SwNodeIndex &rWhere, const SwNodeType nNdType )
     : m_nNodeType( nNdType )
     , m_nAFormatNumLvl( 0 )
     , m_bSetNumLSpace( false )
@@ -313,7 +313,7 @@ SwNode::SwNode( const SwNodeIndex &rWhere, const sal_uInt8 nNdType )
  * @param nPos position within the array where the node will be inserted
  * @param nNdType the type of node to insert
  */
-SwNode::SwNode( SwNodes& rNodes, sal_uLong nPos, const sal_uInt8 nNdType )
+SwNode::SwNode( SwNodes& rNodes, sal_uLong nPos, const SwNodeType nNdType )
     : m_nNodeType( nNdType )
     , m_nAFormatNumLvl( 0 )
     , m_bSetNumLSpace( false )
@@ -362,12 +362,12 @@ bool SwNode::IsInVisibleArea( SwViewShell const * pSh ) const
     bool bRet = false;
     const SwContentNode* pNd;
 
-    if( ND_STARTNODE & m_nNodeType )
+    if( SwNodeType::Start & m_nNodeType )
     {
         SwNodeIndex aIdx( *this );
         pNd = GetNodes().GoNext( &aIdx );
     }
-    else if( ND_ENDNODE & m_nNodeType )
+    else if( SwNodeType::End & m_nNodeType )
     {
         SwNodeIndex aIdx( *EndOfSectionNode() );
         pNd = SwNodes::GoPrevious( &aIdx );
@@ -403,7 +403,7 @@ bool SwNode::IsInVisibleArea( SwViewShell const * pSh ) const
 
 bool SwNode::IsInProtectSect() const
 {
-    const SwNode* pNd = ND_SECTIONNODE == m_nNodeType ? m_pStartOfSection : this;
+    const SwNode* pNd = SwNodeType::Section == m_nNodeType ? m_pStartOfSection : this;
     const SwSectionNode* pSectNd = pNd->FindSectionNode();
     return pSectNd && pSectNd->GetSection().IsProtectFlag();
 }
@@ -413,7 +413,7 @@ bool SwNode::IsInProtectSect() const
 /// Frames/Footnotes/...
 bool SwNode::IsProtect() const
 {
-    const SwNode* pNd = ND_SECTIONNODE == m_nNodeType ? m_pStartOfSection : this;
+    const SwNode* pNd = SwNodeType::Section == m_nNodeType ? m_pStartOfSection : this;
     const SwStartNode* pSttNd = pNd->FindSectionNode();
     if( pSttNd && static_cast<const SwSectionNode*>(pSttNd)->GetSection().IsProtectFlag() )
         return true;
@@ -467,12 +467,12 @@ const SwPageDesc* SwNode::FindPageDesc( size_t* pPgDescNdIdx ) const
     const SwPageDesc* pPgDesc = nullptr;
 
     const SwContentNode* pNode;
-    if( ND_STARTNODE & m_nNodeType )
+    if( SwNodeType::Start & m_nNodeType )
     {
         SwNodeIndex aIdx( *this );
         pNode = GetNodes().GoNext( &aIdx );
     }
-    else if( ND_ENDNODE & m_nNodeType )
+    else if( SwNodeType::End & m_nNodeType )
     {
         SwNodeIndex aIdx( *EndOfSectionNode() );
         pNode = SwNodes::GoPrevious( &aIdx );
@@ -810,10 +810,10 @@ const SwTextNode* SwNode::FindOutlineNodeOfLevel( sal_uInt8 nLvl ) const
 
 inline bool IsValidNextPrevNd( const SwNode& rNd )
 {
-    return ND_TABLENODE == rNd.GetNodeType() ||
-           ( ND_CONTENTNODE & rNd.GetNodeType() ) ||
-            ( ND_ENDNODE == rNd.GetNodeType() && rNd.StartOfSectionNode() &&
-            ND_TABLENODE == rNd.StartOfSectionNode()->GetNodeType() );
+    return SwNodeType::Table == rNd.GetNodeType() ||
+           ( SwNodeType::ContentMask & rNd.GetNodeType() ) ||
+            ( SwNodeType::End == rNd.GetNodeType() && rNd.StartOfSectionNode() &&
+            SwNodeType::Table == rNd.StartOfSectionNode()->GetNodeType() );
 }
 
 sal_uInt8 SwNode::HasPrevNextLayNode() const
@@ -852,34 +852,35 @@ void SwNode::dumpAsXml(xmlTextWriterPtr pWriter) const
     const char* pName = "???";
     switch (GetNodeType())
     {
-    case ND_ENDNODE:
+    case SwNodeType::End:
         pName = "end";
         break;
-    case ND_STARTNODE:
-    case ND_TEXTNODE:
+    case SwNodeType::Start:
+    case SwNodeType::Text:
         abort(); // overridden
-    case ND_TABLENODE:
+    case SwNodeType::Table:
         pName = "table";
         break;
-    case ND_GRFNODE:
+    case SwNodeType::Grf:
         pName = "grf";
         break;
-    case ND_OLENODE:
+    case SwNodeType::Ole:
         pName = "ole";
         break;
+    default: break;
     }
     xmlTextWriterStartElement(pWriter, BAD_CAST(pName));
 
     xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("type"), BAD_CAST(OString::number(GetNodeType()).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("type"), BAD_CAST(OString::number((sal_uInt8)GetNodeType()).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("index"), BAD_CAST(OString::number(GetIndex()).getStr()));
 
     xmlTextWriterEndElement(pWriter);
-    if (GetNodeType() == ND_ENDNODE)
+    if (GetNodeType() == SwNodeType::End)
         xmlTextWriterEndElement(pWriter); // end start node
 }
 
-SwStartNode::SwStartNode( const SwNodeIndex &rWhere, const sal_uInt8 nNdType,
+SwStartNode::SwStartNode( const SwNodeIndex &rWhere, const SwNodeType nNdType,
                             SwStartNodeType eSttNd )
     : SwNode( rWhere, nNdType ), m_eStartNodeType( eSttNd )
 {
@@ -894,7 +895,7 @@ SwStartNode::SwStartNode( const SwNodeIndex &rWhere, const sal_uInt8 nNdType,
 }
 
 SwStartNode::SwStartNode( SwNodes& rNodes, sal_uLong nPos )
-    : SwNode( rNodes, nPos, ND_STARTNODE ), m_eStartNodeType( SwNormalStartNode )
+    : SwNode( rNodes, nPos, SwNodeType::Start ), m_eStartNodeType( SwNormalStartNode )
 {
     if( !nPos )
     {
@@ -922,10 +923,10 @@ void SwStartNode::dumpAsXml(xmlTextWriterPtr pWriter) const
     const char* pName = "???";
     switch (GetNodeType())
     {
-    case ND_TABLENODE:
+    case SwNodeType::Table:
         pName = "table";
         break;
-    case ND_SECTIONNODE:
+    case SwNodeType::Section:
         pName = "section";
         break;
     default:
@@ -955,7 +956,7 @@ void SwStartNode::dumpAsXml(xmlTextWriterPtr pWriter) const
 
     xmlTextWriterStartElement(pWriter, BAD_CAST(pName));
     xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("type"), BAD_CAST(OString::number(GetNodeType()).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("type"), BAD_CAST(OString::number((sal_uInt8)GetNodeType()).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("index"), BAD_CAST(OString::number(GetIndex()).getStr()));
 
     if (IsTableNode())
@@ -980,20 +981,20 @@ void SwStartNode::dumpAsXml(xmlTextWriterPtr pWriter) const
  */
 
 SwEndNode::SwEndNode( const SwNodeIndex &rWhere, SwStartNode& rSttNd )
-    : SwNode( rWhere, ND_ENDNODE )
+    : SwNode( rWhere, SwNodeType::End )
 {
     m_pStartOfSection = &rSttNd;
     m_pStartOfSection->m_pEndOfSection = this;
 }
 
 SwEndNode::SwEndNode( SwNodes& rNds, sal_uLong nPos, SwStartNode& rSttNd )
-    : SwNode( rNds, nPos, ND_ENDNODE )
+    : SwNode( rNds, nPos, SwNodeType::End )
 {
     m_pStartOfSection = &rSttNd;
     m_pStartOfSection->m_pEndOfSection = this;
 }
 
-SwContentNode::SwContentNode( const SwNodeIndex &rWhere, const sal_uInt8 nNdType,
+SwContentNode::SwContentNode( const SwNodeIndex &rWhere, const SwNodeType nNdType,
                             SwFormatColl *pColl )
     : SwModify( pColl ),     // CursorsShell, FrameFormat,
     SwNode( rWhere, nNdType ),
@@ -1813,8 +1814,8 @@ bool SwContentNode::IsAnyCondition( SwCollCondition& rTmp ) const
         {
             switch( pSttNd->GetNodeType() )
             {
-            case ND_TABLENODE:      nCond = PARA_IN_TABLEBODY; break;
-            case ND_SECTIONNODE:    nCond = PARA_IN_SECTION; break;
+            case SwNodeType::Table:      nCond = PARA_IN_TABLEBODY; break;
+            case SwNodeType::Section:    nCond = PARA_IN_SECTION; break;
 
             default:
                 switch( pSttNd->GetStartNodeType() )

@@ -3099,20 +3099,17 @@ void MSWordExportBase::OutputContentNode( const SwContentNode& rNode )
 {
     switch ( rNode.GetNodeType() )
     {
-        case ND_TEXTNODE:
-        {
-            const SwTextNode& rTextNode = *rNode.GetTextNode();
-            OutputTextNode( rTextNode );
-        }
-        break;
-        case ND_GRFNODE:
+        case SwNodeType::Text:
+            OutputTextNode( *rNode.GetTextNode() );
+            break;
+        case SwNodeType::Grf:
             OutputGrfNode( *rNode.GetGrfNode() );
             break;
-        case ND_OLENODE:
+        case SwNodeType::Ole:
             OutputOLENode( *rNode.GetOLENode() );
             break;
         default:
-            OSL_TRACE("Unhandled node, type == %d", rNode.GetNodeType() );
+            OSL_TRACE("Unhandled node, type == %d", (int)rNode.GetNodeType() );
             break;
     }
 }

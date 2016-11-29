@@ -290,7 +290,7 @@ bool SwNodes::InsBoxen( SwTableNode* pTableNd,
     SwNodeIndex aEndIdx( *this, nIdxPos );
     for( sal_uInt16 n = 0; n < nCnt; ++n )
     {
-        SwStartNode* pSttNd = new SwStartNode( aEndIdx, ND_STARTNODE,
+        SwStartNode* pSttNd = new SwStartNode( aEndIdx, SwNodeType::Start,
                                                 SwTableBoxStartNode );
         pSttNd->m_pStartOfSection = pTableNd;
         new SwEndNode( aEndIdx, *pSttNd );
@@ -584,7 +584,7 @@ SwTableNode* SwNodes::InsertTable( const SwNodeIndex& rNdIdx,
     {
         for( sal_uInt16 nB = 0; nB < nBoxes; ++nB )
         {
-            SwStartNode* pSttNd = new SwStartNode( aIdx, ND_STARTNODE,
+            SwStartNode* pSttNd = new SwStartNode( aIdx, SwNodeType::Start,
                                                     SwTableBoxStartNode );
             pSttNd->m_pStartOfSection = pTableNd;
 
@@ -1073,7 +1073,7 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
 
                     // Set the TableNode as StartNode for all TextNodes in the Table
                     const SwNodeIndex aTmpIdx( aCntPos.nNode, -1 );
-                    pSttNd = new SwStartNode( aTmpIdx, ND_STARTNODE,
+                    pSttNd = new SwStartNode( aTmpIdx, SwNodeType::Start,
                                                 SwTableBoxStartNode );
                     new SwEndNode( aCntPos.nNode, *pSttNd );
                     pNewNd->m_pStartOfSection = pSttNd;
@@ -1093,7 +1093,7 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
         if( !pContentStore->Empty())
             pContentStore->Restore( *pTextNd, pTextNd->GetText().getLength(), pTextNd->GetText().getLength()+1 );
 
-        pSttNd = new SwStartNode( aCntPos.nNode, ND_STARTNODE, SwTableBoxStartNode );
+        pSttNd = new SwStartNode( aCntPos.nNode, SwNodeType::Start, SwTableBoxStartNode );
         const SwNodeIndex aTmpIdx( aCntPos.nNode, 1 );
         new SwEndNode( aTmpIdx, *pSttNd  );
         pTextNd->m_pStartOfSection = pSttNd;
@@ -1404,7 +1404,7 @@ SwTableNode* SwNodes::TextToTable( const SwNodes::TableRanges_t & rTableNodes,
 
                SwNodeIndex aCellEndIdx(aCellIter->aEnd);
                ++aCellEndIdx;
-               SwStartNode* pSttNd = new SwStartNode( aTmpIdx, ND_STARTNODE,
+               SwStartNode* pSttNd = new SwStartNode( aTmpIdx, SwNodeType::Start,
                                             SwTableBoxStartNode );
 
                 // Quotation of http://nabble.documentfoundation.org/Some-strange-lines-by-taking-a-look-at-the-bt-of-fdo-51916-tp3994561p3994639.html
@@ -2340,7 +2340,7 @@ sal_uInt16 SwDoc::MergeTable( SwPaM& rPam )
 }
 
 SwTableNode::SwTableNode( const SwNodeIndex& rIdx )
-    : SwStartNode( rIdx, ND_TABLENODE )
+    : SwStartNode( rIdx, SwNodeType::Table )
 {
     m_pTable = new SwTable;
 }
@@ -2929,7 +2929,7 @@ void SwDoc::SetRowsToRepeat( SwTable &rTable, sal_uInt16 nSet )
 void SwCollectTableLineBoxes::AddToUndoHistory( const SwContentNode& rNd )
 {
     if( pHst )
-        pHst->Add( rNd.GetFormatColl(), rNd.GetIndex(), ND_TEXTNODE );
+        pHst->Add( rNd.GetFormatColl(), rNd.GetIndex(), SwNodeType::Text );
 }
 
 void SwCollectTableLineBoxes::AddBox( const SwTableBox& rBox )

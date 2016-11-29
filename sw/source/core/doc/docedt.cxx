@@ -520,7 +520,7 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
             SwNode* pNd = GetNodes()[ nCurrNd ];
             switch( pNd->GetNodeType() )
             {
-            case ND_TEXTNODE:
+            case SwNodeType::Text:
                 if( nullptr != ( pContentFrame = pNd->GetTextNode()->getLayoutFrame( getIDocumentLayoutAccess().GetCurrentLayout() )) )
                 {
                     // skip protected and hidden Cells and Flys
@@ -638,15 +638,16 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
                     }
                 }
                 break;
-            case ND_SECTIONNODE:
+            case SwNodeType::Section:
                 if( ( static_cast<SwSectionNode*>(pNd)->GetSection().IsProtect() ||
                     static_cast<SwSectionNode*>(pNd)->GetSection().IsHidden() ) )
                     nCurrNd = pNd->EndOfSectionIndex();
                 break;
-            case ND_ENDNODE:
+            case SwNodeType::End:
                 {
                     break;
                 }
+            default: break;
             }
 
             bGoOn = nCurrNd < nEndNd;

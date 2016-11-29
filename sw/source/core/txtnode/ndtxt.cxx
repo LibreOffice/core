@@ -140,11 +140,11 @@ SwTextNode *SwNodes::MakeTextNode( const SwNodeIndex & rWhere,
         SwNode * pNd = & aTmp.GetNode();
         switch (pNd->GetNodeType())
         {
-        case ND_TABLENODE:
+        case SwNodeType::Table:
             static_cast<SwTableNode*>(pNd)->MakeFrames( aIdx );
             return pNode;
 
-        case ND_SECTIONNODE:
+        case SwNodeType::Section:
             if( static_cast<SwSectionNode*>(pNd)->GetSection().IsHidden() ||
                 static_cast<SwSectionNode*>(pNd)->IsContentHidden() )
             {
@@ -158,13 +158,13 @@ SwTextNode *SwNodes::MakeTextNode( const SwNodeIndex & rWhere,
             static_cast<SwSectionNode*>(pNd)->MakeFrames( aIdx );
             return pNode;
 
-        case ND_TEXTNODE:
-        case ND_GRFNODE:
-        case ND_OLENODE:
+        case SwNodeType::Text:
+        case SwNodeType::Grf:
+        case SwNodeType::Ole:
             static_cast<SwContentNode*>(pNd)->MakeFrames( *pNode );
             return pNode;
 
-        case ND_ENDNODE:
+        case SwNodeType::End:
             if( pNd->StartOfSectionNode()->IsSectionNode() &&
                 aTmp.GetIndex() < rWhere.GetIndex() )
             {
@@ -198,7 +198,7 @@ SwTextNode *SwNodes::MakeTextNode( const SwNodeIndex & rWhere,
 }
 
 SwTextNode::SwTextNode( const SwNodeIndex &rWhere, SwTextFormatColl *pTextColl, const SfxItemSet* pAutoAttr )
-:   SwContentNode( rWhere, ND_TEXTNODE, pTextColl ),
+:   SwContentNode( rWhere, SwNodeType::Text, pTextColl ),
     m_pSwpHints( nullptr ),
     mpNodeNum( nullptr ),
     m_Text(),

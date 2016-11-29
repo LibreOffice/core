@@ -715,7 +715,7 @@ public:
     std::set<SwRootFrame*> GetAllLayouts();
 
     void SetFlyName( SwFlyFrameFormat& rFormat, const OUString& rName );
-    const SwFlyFrameFormat* FindFlyByName( const OUString& rName, sal_Int8 nNdTyp = 0 ) const;
+    const SwFlyFrameFormat* FindFlyByName( const OUString& rName, SwNodeType nNdTyp = SwNodeType::NONE ) const;
 
     static void GetGrfNms( const SwFlyFrameFormat& rFormat, OUString* pGrfName, OUString* pFltName );
 

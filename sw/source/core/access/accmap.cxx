@@ -1887,10 +1887,10 @@ uno::Reference< XAccessible> SwAccessibleMap::GetContext( const SwFrame *pFrame,
                             static_cast < const SwFlyFrame * >( pFrame );
                         switch( SwAccessibleFrameBase::GetNodeType( pFlyFrame ) )
                         {
-                        case ND_GRFNODE:
+                        case SwNodeType::Grf:
                             pAcc = new SwAccessibleGraphic( this, pFlyFrame );
                             break;
-                        case ND_OLENODE:
+                        case SwNodeType::Ole:
                             pAcc = new SwAccessibleEmbeddedObject( this, pFlyFrame );
                             break;
                         default:

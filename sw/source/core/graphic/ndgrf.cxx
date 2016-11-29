@@ -64,7 +64,7 @@ SwGrfNode::SwGrfNode(
         const Graphic* pGraphic,
         SwGrfFormatColl *pGrfColl,
         SwAttrSet* pAutoAttr ) :
-    SwNoTextNode( rWhere, ND_GRFNODE, pGrfColl, pAutoAttr ),
+    SwNoTextNode( rWhere, SwNodeType::Grf, pGrfColl, pAutoAttr ),
     maGrfObj(),
     mpReplacementGraphic(nullptr),
     // #i73788#
@@ -82,7 +82,7 @@ SwGrfNode::SwGrfNode(
 SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
                           const GraphicObject& rGrfObj,
                       SwGrfFormatColl *pGrfColl, SwAttrSet* pAutoAttr ) :
-    SwNoTextNode( rWhere, ND_GRFNODE, pGrfColl, pAutoAttr ),
+    SwNoTextNode( rWhere, SwNodeType::Grf, pGrfColl, pAutoAttr ),
     maGrfObj(rGrfObj),
     mpReplacementGraphic(nullptr),
     // #i73788#
@@ -105,7 +105,7 @@ SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
                       const OUString& rGrfName, const OUString& rFltName,
                       SwGrfFormatColl *pGrfColl,
                       SwAttrSet* pAutoAttr ) :
-    SwNoTextNode( rWhere, ND_GRFNODE, pGrfColl, pAutoAttr ),
+    SwNoTextNode( rWhere, SwNodeType::Grf, pGrfColl, pAutoAttr ),
     maGrfObj(),
     mpReplacementGraphic(nullptr),
     // #i73788#
