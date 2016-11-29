@@ -1,0 +1,9 @@
+Verified+1: Jenkins <ci@libreoffice.org>
+Code-Review+1: Thorsten Behrens <Thorsten.Behrens@CIB.de>
+Code-Review+1: Jan Holesovsky <kendy@collabora.com>
+Code-Review+2: Justin Luth <justin_luth@sil.org>
+Submitted-by: Justin Luth <justin_luth@sil.org>
+Submitted-at: Tue, 29 Nov 2016 06:12:07 +0000
+Reviewed-on: https://gerrit.libreoffice.org/30869
+Project: core
+Branch: refs/heads/libreoffice-5-2
