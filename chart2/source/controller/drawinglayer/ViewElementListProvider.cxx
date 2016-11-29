@@ -185,8 +185,7 @@ FontList* ViewElementListProvider::getFontList() const
         OutputDevice* pRefDev    = m_pDrawModelWrapper ? m_pDrawModelWrapper->getReferenceDevice() : nullptr;
         OutputDevice* pDefaultOut = Application::GetDefaultDevice();
         m_pFontList = new FontList( pRefDev ? pRefDev    : pDefaultOut
-                                , pRefDev ? pDefaultOut : nullptr
-                                , false );
+                                , pRefDev ? pDefaultOut : nullptr);
     }
     return m_pFontList;
 }

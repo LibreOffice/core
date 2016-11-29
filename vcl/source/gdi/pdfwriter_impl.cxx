@@ -2245,11 +2245,7 @@ static FontAttributes GetDevFontAttributes( const PDFWriterImpl::BuiltinFont& rB
     aDFA.SetItalic( rBuiltin.m_eItalic );
     aDFA.SetWidthType( rBuiltin.m_eWidthType );
 
-    aDFA.SetOrientationFlag( true );
-    aDFA.SetBuiltInFontFlag( true );
     aDFA.SetQuality( 50000 );
-    aDFA.SetSubsettableFlag( false );
-    aDFA.SetEmbeddableFlag( false );
     return aDFA;
 }
 
@@ -2950,63 +2946,34 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitSystemFont( const PhysicalFo
 
     assert(pGraphics);
 
-    if( pFont->CanEmbed() )
+    aSubType = OString( "/TrueType" );
+    std::vector< sal_Int32 > aGlyphWidths;
+    Ucs2UIntMap aUnicodeMap;
+    pGraphics->GetGlyphWidths( pFont, false, aGlyphWidths, aUnicodeMap );
+
+    OUString aTmpName;
+    osl_createTempFile( nullptr, nullptr, &aTmpName.pData );
+    sal_GlyphId aGlyphIds[ 256 ];
+    sal_uInt8 pEncoding[ 256 ];
+    sal_Int32 pDuWidths[ 256 ];
+
+    memset( aGlyphIds, 0, sizeof( aGlyphIds ) );
+    memset( pEncoding, 0, sizeof( pEncoding ) );
+    memset( pDuWidths, 0, sizeof( pDuWidths ) );
+
+    for( sal_Ucs c = 32; c < 256; c++ )
     {
-        const unsigned char* pFontData = nullptr;
-        long nFontLen = 0;
-        sal_Ucs nEncodedCodes[256];
-        sal_Int32 pEncWidths[256];
-
-        //TODO: surely this is utterly broken because GetEmbedFontData loops over the uninitialized nEncodedCodes as input
-        pFontData = static_cast<const unsigned char*>(pGraphics->GetEmbedFontData( pFont, nEncodedCodes, pEncWidths, 256, aInfo, &nFontLen ));
-
-        if( pFontData )
-        {
-            pGraphics->FreeEmbedFontData( pFontData, nFontLen );
-            for( int i = 0; i < 256; i++ )
-            {
-                if( nEncodedCodes[i] >= 32 && nEncodedCodes[i] < 256 )
-                {
-                    pWidths[i] = pEncWidths[ i ];
-                }
-            }
-        }
+        pEncoding[c] = c;
+        aGlyphIds[c] = 0;
+        if( aUnicodeMap.find( c ) != aUnicodeMap.end() )
+            pWidths[ c ] = aGlyphWidths[ aUnicodeMap[ c ] ];
     }
-    else if( pFont->CanSubset() )
-    {
-        aSubType = OString( "/TrueType" );
-        std::vector< sal_Int32 > aGlyphWidths;
-        Ucs2UIntMap aUnicodeMap;
-        pGraphics->GetGlyphWidths( pFont, false, aGlyphWidths, aUnicodeMap );
-
-        OUString aTmpName;
-        osl_createTempFile( nullptr, nullptr, &aTmpName.pData );
-        sal_GlyphId aGlyphIds[ 256 ];
-        sal_uInt8 pEncoding[ 256 ];
-        sal_Int32 pDuWidths[ 256 ];
-
-        memset( aGlyphIds, 0, sizeof( aGlyphIds ) );
-        memset( pEncoding, 0, sizeof( pEncoding ) );
-        memset( pDuWidths, 0, sizeof( pDuWidths ) );
-
-        for( sal_Ucs c = 32; c < 256; c++ )
-        {
-            pEncoding[c] = c;
-            aGlyphIds[c] = 0;
-            if( aUnicodeMap.find( c ) != aUnicodeMap.end() )
-                pWidths[ c ] = aGlyphWidths[ aUnicodeMap[ c ] ];
-        }
-        //TODO: surely this is utterly broken because aGlyphIds is just all zeros, if we
-        //had the right glyphids here then I imagine we could replace pDuWidths with
-        //pWidths and remove pWidths assignment above. i.e. start with the glyph ids
-        //and map those to unicode rather than try and reverse map them ?
-        pGraphics->CreateFontSubset( aTmpName, pFont, aGlyphIds, pEncoding, pDuWidths, 256, aInfo );
-        osl_removeFile( aTmpName.pData );
-    }
-    else
-    {
-        OSL_FAIL( "system font neither embeddable nor subsettable" );
-    }
+    //TODO: surely this is utterly broken because aGlyphIds is just all zeros, if we
+    //had the right glyphids here then I imagine we could replace pDuWidths with
+    //pWidths and remove pWidths assignment above. i.e. start with the glyph ids
+    //and map those to unicode rather than try and reverse map them ?
+    pGraphics->CreateFontSubset( aTmpName, pFont, aGlyphIds, pEncoding, pDuWidths, 256, aInfo );
+    osl_removeFile( aTmpName.pData );
 
     // write font descriptor
     nFontDescriptor = emitFontDescriptor( pFont, aInfo, 0, 0 );
@@ -8722,139 +8689,47 @@ void PDFWriterImpl::registerGlyphs( int nGlyphs,
         const int nFontGlyphId = pGlyphs[i] & (GF_IDXMASK | GF_ISCHAR | GF_GSUB);
         const PhysicalFontFace* pCurrentFont = pFallbackFonts[i] ? pFallbackFonts[i] : pDevFont;
 
-        if( pCurrentFont->CanSubset() )
+        FontSubset& rSubset = m_aSubsets[ pCurrentFont ];
+        // search for font specific glyphID
+        FontMapping::iterator it = rSubset.m_aMapping.find( nFontGlyphId );
+        if( it != rSubset.m_aMapping.end() )
         {
-            FontSubset& rSubset = m_aSubsets[ pCurrentFont ];
-            // search for font specific glyphID
-            FontMapping::iterator it = rSubset.m_aMapping.find( nFontGlyphId );
-            if( it != rSubset.m_aMapping.end() )
-            {
-                pMappedFontObjects[i] = it->second.m_nFontID;
-                pMappedGlyphs[i] = it->second.m_nSubsetGlyphID;
-            }
-            else
-            {
-                // create new subset if necessary
-                if( rSubset.m_aSubsets.empty()
-                || (rSubset.m_aSubsets.back().m_aMapping.size() > 254) )
-                {
-                    rSubset.m_aSubsets.push_back( FontEmit( m_nNextFID++ ) );
-                }
-
-                // copy font id
-                pMappedFontObjects[i] = rSubset.m_aSubsets.back().m_nFontID;
-                // create new glyph in subset
-                sal_uInt8 nNewId = sal::static_int_cast<sal_uInt8>(rSubset.m_aSubsets.back().m_aMapping.size()+1);
-                pMappedGlyphs[i] = nNewId;
-
-                // add new glyph to emitted font subset
-                GlyphEmit& rNewGlyphEmit = rSubset.m_aSubsets.back().m_aMapping[ nFontGlyphId ];
-                rNewGlyphEmit.setGlyphId( nNewId );
-                for( sal_Int32 n = 0; n < pUnicodesPerGlyph[i]; n++ )
-                    rNewGlyphEmit.addCode( pCurUnicode[n] );
-
-                // add new glyph to font mapping
-                Glyph& rNewGlyph = rSubset.m_aMapping[ nFontGlyphId ];
-                rNewGlyph.m_nFontID = pMappedFontObjects[i];
-                rNewGlyph.m_nSubsetGlyphID = nNewId;
-            }
-            if (!getReferenceDevice()->AcquireGraphics())
-                return;
-            const bool bVertical = ((pGlyphs[i] & GF_ROTMASK) != 0);
-            pGlyphWidths[i] = m_aFontCache.getGlyphWidth( pCurrentFont,
-                                                          nFontGlyphId,
-                                                          bVertical,
-                                                          pGraphics );
+            pMappedFontObjects[i] = it->second.m_nFontID;
+            pMappedGlyphs[i] = it->second.m_nSubsetGlyphID;
         }
-        else if( pCurrentFont->CanEmbed() )
+        else
         {
-            sal_Int32 nFontID = 0;
-            FontEmbedData::iterator it = m_aEmbeddedFonts.find( pCurrentFont );
-            if( it != m_aEmbeddedFonts.end() )
-                nFontID = it->second.m_nNormalFontID;
-            else
+            // create new subset if necessary
+            if( rSubset.m_aSubsets.empty()
+            || (rSubset.m_aSubsets.back().m_aMapping.size() > 254) )
             {
-                nFontID = m_nNextFID++;
-                m_aEmbeddedFonts[ pCurrentFont ] = EmbedFont();
-                m_aEmbeddedFonts[ pCurrentFont ].m_nNormalFontID = nFontID;
-            }
-            EmbedFont& rEmbedFont = m_aEmbeddedFonts[pCurrentFont];
-
-            const Ucs2SIntMap* pEncoding = nullptr;
-            const Ucs2OStrMap* pNonEncoded = nullptr;
-            if (!getReferenceDevice()->AcquireGraphics())
-                return;
-            pEncoding = pGraphics->GetFontEncodingVector( pCurrentFont, &pNonEncoded, nullptr);
-
-            Ucs2SIntMap::const_iterator enc_it;
-            Ucs2OStrMap::const_iterator nonenc_it;
-
-            sal_Int32 nCurFontID = nFontID;
-            sal_Ucs cChar = *pCurUnicode;
-            if( pEncoding )
-            {
-                enc_it = pEncoding->find( cChar );
-                if( enc_it != pEncoding->end() && enc_it->second > 0 )
-                {
-                    SAL_WARN_IF( (enc_it->second & 0xffffff00) != 0, "vcl", "Invalid character code" );
-                    cChar = (sal_Ucs)enc_it->second;
-                }
-                else if( (enc_it == pEncoding->end() || enc_it->second == -1) &&
-                         pNonEncoded &&
-                         (nonenc_it = pNonEncoded->find( cChar )) != pNonEncoded->end() )
-                {
-                    nCurFontID = 0;
-                    // find non encoded glyph
-                    for( std::list< EmbedEncoding >::iterator nec_it = rEmbedFont.m_aExtendedEncodings.begin(); nec_it != rEmbedFont.m_aExtendedEncodings.end(); ++nec_it )
-                    {
-                        if( nec_it->m_aCMap.find( cChar ) != nec_it->m_aCMap.end() )
-                        {
-                            nCurFontID = nec_it->m_nFontID;
-                            cChar = (sal_Ucs)nec_it->m_aCMap[ cChar ];
-                            break;
-                        }
-                    }
-                    if( nCurFontID == 0 ) // new nonencoded glyph
-                    {
-                        if( rEmbedFont.m_aExtendedEncodings.empty() || rEmbedFont.m_aExtendedEncodings.back().m_aEncVector.size() == 255 )
-                        {
-                            rEmbedFont.m_aExtendedEncodings.push_back( EmbedEncoding() );
-                            rEmbedFont.m_aExtendedEncodings.back().m_nFontID = m_nNextFID++;
-                        }
-                        EmbedEncoding& rEncoding = rEmbedFont.m_aExtendedEncodings.back();
-                        rEncoding.m_aEncVector.push_back( EmbedCode() );
-                        rEncoding.m_aEncVector.back().m_aUnicode = cChar;
-                        rEncoding.m_aEncVector.back().m_aName = nonenc_it->second;
-                        rEncoding.m_aCMap[ cChar ] = (sal_Int8)(rEncoding.m_aEncVector.size()-1);
-                        nCurFontID = rEncoding.m_nFontID;
-                        cChar = (sal_Ucs)rEncoding.m_aCMap[ cChar ];
-                    }
-                }
-                else
-                    pEncoding = nullptr;
-            }
-            if( ! pEncoding )
-            {
-                if( cChar & 0xff00 )
-                {
-                    // some characters can be used by conversion
-                    if( cChar >= 0xf000 && cChar <= 0xf0ff ) // symbol encoding in private use area
-                        cChar -= 0xf000;
-                    else
-                    {
-                        OString aChar(&cChar, 1, RTL_TEXTENCODING_MS_1252);
-                        cChar = !aChar.isEmpty() ? (static_cast<sal_Ucs>(aChar[0]) & 0x00ff) : 0;
-                    }
-                }
+                rSubset.m_aSubsets.push_back( FontEmit( m_nNextFID++ ) );
             }
 
-            pMappedGlyphs[ i ] = (sal_Int8)cChar;
-            pMappedFontObjects[ i ] = nCurFontID;
-            pGlyphWidths[ i ] = m_aFontCache.getGlyphWidth( pCurrentFont,
-                                                            (pEncoding ? *pCurUnicode : cChar) | GF_ISCHAR,
-                                                            false,
-                                                            pGraphics );
+            // copy font id
+            pMappedFontObjects[i] = rSubset.m_aSubsets.back().m_nFontID;
+            // create new glyph in subset
+            sal_uInt8 nNewId = sal::static_int_cast<sal_uInt8>(rSubset.m_aSubsets.back().m_aMapping.size()+1);
+            pMappedGlyphs[i] = nNewId;
+
+            // add new glyph to emitted font subset
+            GlyphEmit& rNewGlyphEmit = rSubset.m_aSubsets.back().m_aMapping[ nFontGlyphId ];
+            rNewGlyphEmit.setGlyphId( nNewId );
+            for( sal_Int32 n = 0; n < pUnicodesPerGlyph[i]; n++ )
+                rNewGlyphEmit.addCode( pCurUnicode[n] );
+
+            // add new glyph to font mapping
+            Glyph& rNewGlyph = rSubset.m_aMapping[ nFontGlyphId ];
+            rNewGlyph.m_nFontID = pMappedFontObjects[i];
+            rNewGlyph.m_nSubsetGlyphID = nNewId;
         }
+        if (!getReferenceDevice()->AcquireGraphics())
+            return;
+        const bool bVertical = ((pGlyphs[i] & GF_ROTMASK) != 0);
+        pGlyphWidths[i] = m_aFontCache.getGlyphWidth( pCurrentFont,
+                                                      nFontGlyphId,
+                                                      bVertical,
+                                                      pGraphics );
     }
 }
 

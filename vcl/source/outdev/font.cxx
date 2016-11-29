@@ -55,8 +55,6 @@ FontMetric OutputDevice::GetDevFont( int nDevFontIndex ) const
         aFontMetric.SetItalic( rData.GetItalic() );
         aFontMetric.SetAlignment( TextAlign::ALIGN_TOP );
         aFontMetric.SetWidthType( rData.GetWidthType() );
-        aFontMetric.SetScalableFlag( rData.IsScalable() );
-        aFontMetric.SetBuiltInFontFlag( rData.IsBuiltInFont() );
         aFontMetric.SetQuality( rData.GetQuality() );
         aFontMetric.SetMapNames( rData.GetMapNames() );
     }
@@ -194,12 +192,8 @@ FontMetric OutputDevice::GetFontMetric() const
         aMetric.SetOrientation( pFontInstance->mnOwnOrientation );
     else
         aMetric.SetOrientation( xFontMetric->GetOrientation() );
-    if( !pFontInstance->mxFontMetric->IsKernable() )
-         aMetric.SetKerning( maFont.GetKerning() & ~FontKerning::FontSpecific );
 
     // set remaining metric fields
-    aMetric.SetBuiltInFontFlag( xFontMetric->IsBuiltInFont() );
-    aMetric.SetScalableFlag( xFontMetric->IsScalable() );
     aMetric.SetFullstopCenteredFlag( xFontMetric->IsFullstopCentered() );
     aMetric.SetBulletOffset( xFontMetric->GetBulletOffset() );
     aMetric.SetAscent( ImplDevicePixelToLogicHeight( xFontMetric->GetAscent() + mnEmphasisAscent ) );
@@ -560,7 +554,7 @@ void OutputDevice::ImplRefreshFontData( const bool bNewFontLists )
             {
                 if( mpPDFWriter )
                 {
-                    mpFontCollection = pSVData->maGDIData.mpScreenFontList->Clone( true );
+                    mpFontCollection = pSVData->maGDIData.mpScreenFontList->Clone();
                     mpFontCache = new ImplFontCache();
                 }
                 else
@@ -1104,9 +1098,7 @@ bool OutputDevice::ImplNewFont() const
     // enable kerning array if requested
     if ( maFont.GetKerning() & FontKerning::FontSpecific )
     {
-        // TODO: test if physical font supports kerning and disable if not
-        if( pFontInstance->mxFontMetric->IsKernable() )
-            mbKerning = true;
+        mbKerning = true;
     }
     else
     {
