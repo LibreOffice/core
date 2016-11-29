@@ -833,12 +833,12 @@ inline SwTextFormatColl* SwTextNode::GetTextColl() const
 /// Inline methods from Node.hxx
 inline SwTextNode *SwNode::GetTextNode()
 {
-     return ND_TEXTNODE == m_nNodeType ? static_cast<SwTextNode*>(this) : nullptr;
+     return SwNodeType::Text == m_nNodeType ? static_cast<SwTextNode*>(this) : nullptr;
 }
 
 inline const SwTextNode *SwNode::GetTextNode() const
 {
-     return ND_TEXTNODE == m_nNodeType ? static_cast<const SwTextNode*>(this) : nullptr;
+     return SwNodeType::Text == m_nNodeType ? static_cast<const SwTextNode*>(this) : nullptr;
 }
 
 inline void

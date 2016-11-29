@@ -172,8 +172,8 @@ SwFlyFrameFormat* SwDoc::MakeFlySection_( const SwPosition& rAnchPos,
     if( !mbInReading )
         switch( rNode.GetNodeType() )
         {
-        case ND_GRFNODE:        sName = GetUniqueGrfName();     break;
-        case ND_OLENODE:        sName = GetUniqueOLEName();     break;
+        case SwNodeType::Grf:        sName = GetUniqueGrfName();     break;
+        case SwNodeType::Ole:        sName = GetUniqueOLEName();     break;
         default:                sName = GetUniqueFrameName();   break;
         }
     SwFlyFrameFormat* pFormat = MakeFlyFrameFormat( sName, pFrameFormat );
@@ -1356,7 +1356,7 @@ OUString SwDoc::GetUniqueShapeName() const
     return lcl_GetUniqueFlyName(this, STR_SHAPE_DEFNAME, RES_DRAWFRMFMT);
 }
 
-const SwFlyFrameFormat* SwDoc::FindFlyByName( const OUString& rName, sal_Int8 nNdTyp ) const
+const SwFlyFrameFormat* SwDoc::FindFlyByName( const OUString& rName, SwNodeType nNdTyp ) const
 {
     auto range = GetSpzFrameFormats()->rangeFind( RES_FLYFRMFMT, rName );
     for( auto it = range.first; it != range.second; it++ )
@@ -1367,11 +1367,11 @@ const SwFlyFrameFormat* SwDoc::FindFlyByName( const OUString& rName, sal_Int8 nN
             nullptr != ( pIdx = pFlyFormat->GetContent().GetContentIdx() ) &&
             pIdx->GetNode().GetNodes().IsDocNodes() )
         {
-            if( nNdTyp )
+            if( nNdTyp != SwNodeType::NONE )
             {
                 // query for the right NodeType
                 const SwNode* pNd = GetNodes()[ pIdx->GetIndex()+1 ];
-                if( nNdTyp == ND_TEXTNODE
+                if( nNdTyp == SwNodeType::Text
                         ? !pNd->IsNoTextNode()
                         : nNdTyp == pNd->GetNodeType() )
                     return static_cast<const SwFlyFrameFormat*>(pFlyFormat);
@@ -1394,12 +1394,13 @@ void SwDoc::SetFlyName( SwFlyFrameFormat& rFormat, const OUString& rName )
         {
             switch( GetNodes()[ pIdx->GetIndex() + 1 ]->GetNodeType() )
             {
-                case ND_GRFNODE:
+                case SwNodeType::Grf:
                     nTyp = STR_GRAPHIC_DEFNAME;
                     break;
-                case ND_OLENODE:
+                case SwNodeType::Ole:
                     nTyp = STR_OBJECT_DEFNAME;
                     break;
+                default: break;
             }
         }
         sName = lcl_GetUniqueFlyName(this, nTyp, RES_FLYFRMFMT);
@@ -1484,10 +1485,10 @@ void SwDoc::SetAllUniqueFlyNames()
         {
             switch( GetNodes()[ pIdx->GetIndex() + 1 ]->GetNodeType() )
             {
-            case ND_GRFNODE:
+            case SwNodeType::Grf:
                 pFlyFormat->SetName( sGrfNm + OUString::number( ++nGrfNum ));
                 break;
-            case ND_OLENODE:
+            case SwNodeType::Ole:
                 pFlyFormat->SetName( sOLENm + OUString::number( ++nOLENum ));
                 break;
             default:

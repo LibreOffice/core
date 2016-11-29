@@ -188,7 +188,7 @@ private:
     long m_nLeftFramePos;
     sal_uLong m_nAktNode;             // save CursorPos at Start-Action
     sal_Int32 m_nAktContent;
-    sal_uInt16 m_nAktNdTyp;
+    SwNodeType m_nAktNdTyp;
     bool m_bAktSelection;
 
     /*

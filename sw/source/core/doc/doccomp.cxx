@@ -1029,11 +1029,11 @@ sal_uLong SwCompareLine::GetHashValue() const
     sal_uLong nRet = 0;
     switch( rNode.GetNodeType() )
     {
-    case ND_TEXTNODE:
+    case SwNodeType::Text:
         nRet = GetTextNodeHashValue( *rNode.GetTextNode(), nRet );
         break;
 
-    case ND_TABLENODE:
+    case SwNodeType::Table:
         {
             const SwNode* pEndNd = rNode.EndOfSectionNode();
             SwNodeIndex aIdx( rNode );
@@ -1046,7 +1046,7 @@ sal_uLong SwCompareLine::GetHashValue() const
         }
         break;
 
-    case ND_SECTIONNODE:
+    case SwNodeType::Section:
         {
             OUString sStr( GetText() );
             for( sal_Int32 n = 0; n < sStr.getLength(); ++n )
@@ -1054,10 +1054,11 @@ sal_uLong SwCompareLine::GetHashValue() const
         }
         break;
 
-    case ND_GRFNODE:
-    case ND_OLENODE:
+    case SwNodeType::Grf:
+    case SwNodeType::Ole:
         // Fixed ID? Should never occur ...
         break;
+    default: break;
     }
     return nRet;
 }
@@ -1067,11 +1068,11 @@ const SwNode& SwCompareLine::GetEndNode() const
     const SwNode* pNd = &rNode;
     switch( rNode.GetNodeType() )
     {
-    case ND_TABLENODE:
+    case SwNodeType::Table:
         pNd = rNode.EndOfSectionNode();
         break;
 
-    case ND_SECTIONNODE:
+    case SwNodeType::Section:
         {
             const SwSectionNode& rSNd = static_cast<const SwSectionNode&>(rNode);
             const SwSection& rSect = rSNd.GetSection();
@@ -1079,6 +1080,7 @@ const SwNode& SwCompareLine::GetEndNode() const
                 pNd = rNode.EndOfSectionNode();
         }
         break;
+    default: break;
     }
     return *pNd;
 }
@@ -1120,12 +1122,12 @@ bool SwCompareLine::CompareNode( const SwNode& rDstNd, const SwNode& rSrcNd )
 
     switch( rDstNd.GetNodeType() )
     {
-    case ND_TEXTNODE:
+    case SwNodeType::Text:
         bRet = CompareTextNd( *rDstNd.GetTextNode(), *rSrcNd.GetTextNode() )
             && ( !CmpOptions.bUseRsid || rDstNd.GetTextNode()->CompareParRsid( *rSrcNd.GetTextNode() ) );
         break;
 
-    case ND_TABLENODE:
+    case SwNodeType::Table:
         {
             const SwTableNode& rTSrcNd = static_cast<const SwTableNode&>(rSrcNd);
             const SwTableNode& rTDstNd = static_cast<const SwTableNode&>(rDstNd);
@@ -1141,7 +1143,7 @@ bool SwCompareLine::CompareNode( const SwNode& rDstNd, const SwNode& rSrcNd )
         }
         break;
 
-    case ND_SECTIONNODE:
+    case SwNodeType::Section:
         {
             const SwSectionNode& rSSrcNd = static_cast<const SwSectionNode&>(rSrcNd),
                                & rSDstNd = static_cast<const SwSectionNode&>(rDstNd);
@@ -1188,18 +1190,20 @@ bool SwCompareLine::CompareNode( const SwNode& rDstNd, const SwNode& rSrcNd )
         }
         break;
 
-    case ND_ENDNODE:
+    case SwNodeType::End:
         bRet = rSrcNd.StartOfSectionNode()->GetNodeType() ==
                rDstNd.StartOfSectionNode()->GetNodeType();
 
         // --> #i107826#: compare actual table content
-        if (bRet && rSrcNd.StartOfSectionNode()->GetNodeType() == ND_TABLENODE)
+        if (bRet && rSrcNd.StartOfSectionNode()->GetNodeType() == SwNodeType::Table)
         {
             bRet = CompareNode(
                 *rSrcNd.StartOfSectionNode(), *rDstNd.StartOfSectionNode());
         }
 
         break;
+
+    default: break;
     }
     return bRet;
 }
@@ -1209,17 +1213,17 @@ OUString SwCompareLine::GetText() const
     OUString sRet;
     switch( rNode.GetNodeType() )
     {
-    case ND_TEXTNODE:
+    case SwNodeType::Text:
         sRet = rNode.GetTextNode()->GetExpandText();
         break;
 
-    case ND_TABLENODE:
+    case SwNodeType::Table:
         {
             sRet = "Tabelle: " + SimpleTableToText(rNode);
         }
         break;
 
-    case ND_SECTIONNODE:
+    case SwNodeType::Section:
         {
             sRet = "Section - Node:";
 
@@ -1251,12 +1255,13 @@ OUString SwCompareLine::GetText() const
         }
         break;
 
-    case ND_GRFNODE:
+    case SwNodeType::Grf:
         sRet = "Grafik - Node:";
         break;
-    case ND_OLENODE:
+    case SwNodeType::Ole:
         sRet = "OLE - Node:";
         break;
+    default: break;
     }
     return sRet;
 }
@@ -1288,8 +1293,8 @@ bool SwCompareLine::ChangesInLine( const SwCompareLine& rLine,
     bool bRet = false;
 
     // Only compare textnodes
-    if( ND_TEXTNODE == rNode.GetNodeType() &&
-        ND_TEXTNODE == rLine.GetNode().GetNodeType() )
+    if( SwNodeType::Text == rNode.GetNodeType() &&
+        SwNodeType::Text == rLine.GetNode().GetNodeType() )
     {
         SwTextNode& rDstNd = *const_cast<SwTextNode*>(rNode.GetTextNode());
         const SwTextNode& rSrcNd = *rLine.GetNode().GetTextNode();

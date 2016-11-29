@@ -214,7 +214,7 @@ SwOLENode::SwOLENode( const SwNodeIndex &rWhere,
                     const svt::EmbeddedObjectRef& xObj,
                     SwGrfFormatColl *pGrfColl,
                     SwAttrSet* pAutoAttr ) :
-    SwNoTextNode( rWhere, ND_OLENODE, pGrfColl, pAutoAttr ),
+    SwNoTextNode( rWhere, SwNodeType::Ole, pGrfColl, pAutoAttr ),
     aOLEObj( xObj ),
     bOLESizeInvalid( false ),
     mpObjectLink( nullptr )
@@ -227,7 +227,7 @@ SwOLENode::SwOLENode( const SwNodeIndex &rWhere,
                     sal_Int64 nAspect,
                     SwGrfFormatColl *pGrfColl,
                     SwAttrSet* pAutoAttr ) :
-    SwNoTextNode( rWhere, ND_OLENODE, pGrfColl, pAutoAttr ),
+    SwNoTextNode( rWhere, SwNodeType::Ole, pGrfColl, pAutoAttr ),
     aOLEObj( rString, nAspect ),
     bOLESizeInvalid( false ),
     mpObjectLink( nullptr )

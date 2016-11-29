@@ -45,7 +45,7 @@ class SW_DLLPUBLIC SwNoTextNode : public SwContentNode
     SwNoTextNode &operator=( const SwNoTextNode& ) = delete;
 
 protected:
-    SwNoTextNode( const SwNodeIndex &rWhere, const sal_uInt8 nNdType,
+    SwNoTextNode( const SwNodeIndex &rWhere, const SwNodeType nNdType,
                 SwGrfFormatColl *pGrColl, SwAttrSet* pAutoAttr );
 
 public:
@@ -93,11 +93,11 @@ public:
 // Inline methods from Node.hxx - we know TextNode only here!!
 inline SwNoTextNode *SwNode::GetNoTextNode()
 {
-    return ND_NOTXTNODE & m_nNodeType ? static_cast<SwNoTextNode*>(this) : nullptr;
+    return SwNodeType::NoTextMask & m_nNodeType ? static_cast<SwNoTextNode*>(this) : nullptr;
 }
 inline const SwNoTextNode *SwNode::GetNoTextNode() const
 {
-    return ND_NOTXTNODE & m_nNodeType ? static_cast<const SwNoTextNode*>(this) : nullptr;
+    return SwNodeType::NoTextMask & m_nNodeType ? static_cast<const SwNoTextNode*>(this) : nullptr;
 }
 
 #endif // INCLUDED_SW_INC_NDNOTXT_HXX

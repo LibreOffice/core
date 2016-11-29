@@ -397,7 +397,7 @@ void SwUndoInsert::RepeatImpl(::sw::RepeatContext & rContext)
 
     switch( pCNd->GetNodeType() )
     {
-    case ND_TEXTNODE:
+    case SwNodeType::Text:
         if( bIsAppend )
         {
             rDoc.getIDocumentContentOperations().AppendTextNode( *rContext.GetRepeatPaM().GetPoint() );
@@ -410,7 +410,7 @@ void SwUndoInsert::RepeatImpl(::sw::RepeatContext & rContext)
                 aText.copy(nContent - nLen, nLen) );
         }
         break;
-    case ND_GRFNODE:
+    case SwNodeType::Grf:
         {
             SwGrfNode* pGrfNd = static_cast<SwGrfNode*>(pCNd);
             OUString sFile;
@@ -424,7 +424,7 @@ void SwUndoInsert::RepeatImpl(::sw::RepeatContext & rContext)
         }
         break;
 
-    case ND_OLENODE:
+    case SwNodeType::Ole:
         {
             // StarView does not yet provide an option to copy a StarOBJ
             tools::SvRef<SotStorage> aRef = new SotStorage( OUString() );
@@ -446,6 +446,8 @@ void SwUndoInsert::RepeatImpl(::sw::RepeatContext & rContext)
 
             break;
         }
+
+    default: break;
     }
 }
 
@@ -623,7 +625,7 @@ SwUndoReplace::Impl::Impl(
     {
         if( pNd->HasSwAttrSet() )
             pHistory->CopyFormatAttr( *pNd->GetpSwAttrSet(), nNewPos );
-        pHistory->Add( pNd->GetTextColl(), nNewPos, ND_TEXTNODE );
+        pHistory->Add( pNd->GetTextColl(), nNewPos, SwNodeType::Text );
 
         SwTextNode* pNext = pEnd->nNode.GetNode().GetTextNode();
         sal_uLong nTmp = pNext->GetIndex();
@@ -631,7 +633,7 @@ SwUndoReplace::Impl::Impl(
                             pNext->GetText().getLength(), true );
         if( pNext->HasSwAttrSet() )
             pHistory->CopyFormatAttr( *pNext->GetpSwAttrSet(), nTmp );
-        pHistory->Add( pNext->GetTextColl(),nTmp, ND_TEXTNODE );
+        pHistory->Add( pNext->GetTextColl(),nTmp, SwNodeType::Text );
         // METADATA: store
         m_pMetadataUndoStart = pNd  ->CreateUndo();
         m_pMetadataUndoEnd   = pNext->CreateUndo();

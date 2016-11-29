@@ -397,7 +397,7 @@ void SwUnoCursorHelper::GetCursorAttr(SwPaM & rPam,
             SwNode *const pNd = rPam.GetDoc()->GetNodes()[ n ];
             switch (pNd->GetNodeType())
             {
-                case ND_TEXTNODE:
+                case SwNodeType::Text:
                 {
                     const sal_Int32 nStart = (n == nSttNd)
                         ? rStart.nContent.GetIndex() : 0;
@@ -408,8 +408,8 @@ void SwUnoCursorHelper::GetCursorAttr(SwPaM & rPam,
                 }
                 break;
 
-                case ND_GRFNODE:
-                case ND_OLENODE:
+                case SwNodeType::Grf:
+                case SwNodeType::Ole:
                     static_cast<SwContentNode*>(pNd)->GetAttr( *pSet );
                 break;
 

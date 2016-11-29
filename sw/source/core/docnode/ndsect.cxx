@@ -985,7 +985,7 @@ lcl_initParent(SwSectionNode & rThis, SwSectionFormat & rFormat)
 
 SwSectionNode::SwSectionNode(SwNodeIndex const& rIdx,
         SwSectionFormat & rFormat, SwTOXBase const*const pTOXBase)
-    : SwStartNode( rIdx, ND_SECTIONNODE )
+    : SwStartNode( rIdx, SwNodeType::Section )
     , m_pSection( (pTOXBase)
         ? new SwTOXBaseSection(*pTOXBase, lcl_initParent(*this, rFormat))
         : new SwSection( CONTENT_SECTION, rFormat.GetName(),

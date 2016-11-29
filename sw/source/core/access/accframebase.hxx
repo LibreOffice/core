@@ -54,7 +54,7 @@ public:
 
     virtual bool HasCursor() override;   // required by map to remember that object
 
-    static sal_uInt8 GetNodeType( const SwFlyFrame *pFlyFrame );
+    static SwNodeType GetNodeType( const SwFlyFrame *pFlyFrame );
 
     // The object is not visible an longer and should be destroyed
     virtual void Dispose(bool bRecursive, bool bCanSkipInvisible = true) override;

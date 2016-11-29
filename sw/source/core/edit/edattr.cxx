@@ -131,7 +131,7 @@ bool SwEditShell::GetPaMAttr( SwPaM* pPaM, SfxItemSet& rSet,
             SwNode* pNd = GetDoc()->GetNodes()[ n ];
             switch( pNd->GetNodeType() )
             {
-            case ND_TEXTNODE:
+            case SwNodeType::Text:
                 {
                     const sal_Int32 nStt = (n == nSttNd) ? nSttCnt : 0;
                     const sal_Int32 nEnd = (n == nEndNd)
@@ -143,8 +143,8 @@ bool SwEditShell::GetPaMAttr( SwPaM* pPaM, SfxItemSet& rSet,
                                                 bMergeIndentValuesOfNumRule );
                 }
                 break;
-            case ND_GRFNODE:
-            case ND_OLENODE:
+            case SwNodeType::Grf:
+            case SwNodeType::Ole:
                 static_cast<SwContentNode*>(pNd)->GetAttr( *pSet );
                 break;
 

@@ -215,10 +215,10 @@ class SwHistoryChangeFormatColl : public SwHistoryHint
 {
     SwFormatColl * const m_pColl;
     const sal_uLong m_nNodeIndex;
-    const sal_uInt8 m_nNodeType;
+    const SwNodeType m_nNodeType;
 
 public:
-    SwHistoryChangeFormatColl( SwFormatColl* pColl, sal_uLong nNode, sal_uInt8 nNodeWhich );
+    SwHistoryChangeFormatColl( SwFormatColl* pColl, sal_uLong nNode, SwNodeType nNodeWhich );
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet ) override;
 
 };
@@ -329,7 +329,7 @@ public:
     void Add( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue,
               sal_uLong nNodeIdx );
     void Add( SwTextAttr* pTextHt, sal_uLong nNodeIdx, bool bNewAttr );
-    void Add( SwFormatColl*, sal_uLong nNodeIdx, sal_uInt8 nWhichNd );
+    void Add( SwFormatColl*, sal_uLong nNodeIdx, SwNodeType nWhichNd );
     void Add( const ::sw::mark::IMark&, bool bSavePos, bool bSaveOtherPos );
     void Add( SwFrameFormat& rFormat );
     void Add( SwFlyFrameFormat&, sal_uInt16& rSetPos );

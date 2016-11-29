@@ -1059,7 +1059,7 @@ static bool lcl_SetTextFormatColl( const SwNodePtr& rpNode, void* pArgs )
     // add to History so that old data is saved, if necessary
     if( pPara->pHistory )
         pPara->pHistory->Add( pCNd->GetFormatColl(), pCNd->GetIndex(),
-                ND_TEXTNODE );
+                SwNodeType::Text );
 
     pCNd->ChgFormatColl( pFormat );
 

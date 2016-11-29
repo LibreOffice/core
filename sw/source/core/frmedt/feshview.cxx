@@ -2452,11 +2452,11 @@ void SwFEShell::MirrorSelection( bool bHorizontal )
 bool SwFEShell::GotoFly( const OUString& rName, FlyCntType eType, bool bSelFrame )
 {
     bool bRet = false;
-    static sal_uInt8 const aChkArr[ 4 ] = {
-             /* FLYCNTTYPE_ALL */   0,
-             /* FLYCNTTYPE_FRM */   ND_TEXTNODE,
-             /* FLYCNTTYPE_GRF */   ND_GRFNODE,
-             /* FLYCNTTYPE_OLE */   ND_OLENODE
+    static SwNodeType const aChkArr[ 4 ] = {
+             /* FLYCNTTYPE_ALL */   SwNodeType::NONE,
+             /* FLYCNTTYPE_FRM */   SwNodeType::Text,
+             /* FLYCNTTYPE_GRF */   SwNodeType::Grf,
+             /* FLYCNTTYPE_OLE */   SwNodeType::Ole
             };
 
     const SwFlyFrameFormat* pFlyFormat = mpDoc->FindFlyByName( rName, aChkArr[ eType]);

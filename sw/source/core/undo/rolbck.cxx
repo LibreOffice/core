@@ -503,7 +503,7 @@ void SwHistorySetFootnote::SetInDoc( SwDoc* pDoc, bool )
 }
 
 SwHistoryChangeFormatColl::SwHistoryChangeFormatColl( SwFormatColl* pFormatColl, sal_uLong nNd,
-                            sal_uInt8 nNodeWhich )
+                            SwNodeType nNodeWhich )
     : SwHistoryHint( HSTRY_CHGFMTCOLL )
     , m_pColl( pFormatColl )
     , m_nNodeIndex( nNd )
@@ -520,7 +520,7 @@ void SwHistoryChangeFormatColl::SetInDoc( SwDoc* pDoc, bool )
     // document. if it has been deleted, there is no undo!
     if ( pContentNd && m_nNodeType == pContentNd->GetNodeType() )
     {
-        if ( ND_TEXTNODE == m_nNodeType )
+        if ( SwNodeType::Text == m_nNodeType )
         {
             if (pDoc->GetTextFormatColls()->Contains( static_cast<SwTextFormatColl * const>(m_pColl) ))
             {
@@ -965,7 +965,7 @@ void SwHistory::Add( SwTextAttr* pHint, sal_uLong nNodeIdx, bool bNewAttr )
     m_SwpHstry.push_back( pHt );
 }
 
-void SwHistory::Add( SwFormatColl* pColl, sal_uLong nNodeIdx, sal_uInt8 nWhichNd )
+void SwHistory::Add( SwFormatColl* pColl, sal_uLong nNodeIdx, SwNodeType nWhichNd )
 {
     OSL_ENSURE( !m_nEndDiff, "History was not deleted after REDO" );
 
