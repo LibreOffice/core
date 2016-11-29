@@ -147,7 +147,7 @@ private:
                     DECL_LINK(WindowEventHdl, VclWindowEvent&, void);
                     DECL_LINK(ApplicationEventHdl, VclSimpleEvent&, void);
 
-    BubbleWindow*   GetBubbleWindow();
+    VclPtr<BubbleWindow> GetBubbleWindow();
     void            RemoveBubbleWindow( bool bRemoveIcon );
     Image           GetMenuBarIcon( MenuBar* pMBar );
     void            AddMenuBarIcon( SystemWindow* pSysWin, bool bAddEventHdl );
@@ -509,7 +509,7 @@ void UpdateCheckUI::removeVetoableChangeListener( const OUString& /*aPropertyNam
 }
 
 
-BubbleWindow * UpdateCheckUI::GetBubbleWindow()
+VclPtr<BubbleWindow> UpdateCheckUI::GetBubbleWindow()
 {
     if ( !mpIconSysWin )
         return nullptr;
@@ -518,7 +518,7 @@ BubbleWindow * UpdateCheckUI::GetBubbleWindow()
     if( aIconRect.IsEmpty() )
         return nullptr;
 
-    BubbleWindow* pBubbleWin = mpBubbleWin;
+    auto pBubbleWin = mpBubbleWin;
 
     if ( !pBubbleWin ) {
         pBubbleWin = VclPtr<BubbleWindow>::Create( mpIconSysWin, maBubbleTitle,
