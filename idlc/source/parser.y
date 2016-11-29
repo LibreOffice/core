@@ -445,12 +445,11 @@ module_dcl :
 
         AstScope*       pScope = idlc()->scopes()->topNonNull();
         AstModule*      pModule = nullptr;
-        AstDeclaration* pExists = nullptr;
 
         if ( pScope )
         {
             pModule = new AstModule(*$3, pScope);
-            if( (pExists = pScope->lookupForAdd(pModule)) )
+            if( AstDeclaration* pExists = pScope->lookupForAdd(pModule) )
             {
                 pExists->setInMainfile(idlc()->isInMainFile());
                 pExists->setFileName(pModule->getFileName());
@@ -556,7 +555,6 @@ interface_dcl :
         AstScope*       pScope = idlc()->scopes()->topNonNull();
         AstInterface*   pInterface = nullptr;
         AstInterface*   pForward = nullptr;
-        AstDeclaration* pDecl = nullptr;
 
         /*
          * Make a new interface node and add it to its enclosing scope
@@ -566,7 +564,7 @@ interface_dcl :
             pInterface = new AstInterface(
                 *$1->getName(),
                 static_cast< AstInterface const * >(resolveTypedefs($1->getInherits())), pScope);
-            if ( (pDecl = pScope->lookupByName(pInterface->getScopedName())) )
+            if ( AstDeclaration* pDecl = pScope->lookupByName(pInterface->getScopedName()) )
             {
                 /*
                  * See if we're defining a forward declared interface.
@@ -1279,12 +1277,11 @@ constants_dcl :
 
         AstScope*       pScope = idlc()->scopes()->topNonNull();
         AstConstants*   pConstants = nullptr;
-        AstDeclaration* pExists = nullptr;
 
         if ( pScope )
         {
             pConstants = new AstConstants(*$3, pScope);
-            if( (pExists = pScope->lookupForAdd(pConstants)) )
+            if( AstDeclaration* pExists = pScope->lookupForAdd(pConstants) )
             {
                 pExists->setInMainfile(idlc()->isInMainFile());
                 delete(pConstants);

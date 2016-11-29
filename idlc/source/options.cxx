@@ -69,14 +69,16 @@ bool Options::checkArgument (std::vector< std::string > & rArgs, char const * ar
     switch(arg[0])
     {
     case '@':
-      if ((result = (len > 1)))
+      result = len > 1;
+      if (result)
       {
         // "@<cmdfile>"
         result = Options::checkCommandFile (rArgs, &(arg[1]));
       }
       break;
     case '-':
-      if ((result = (len > 1)))
+      result = len > 1;
+      if (result)
       {
         // "-<option>"
         switch (arg[1])
