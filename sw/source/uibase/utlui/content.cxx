@@ -2242,143 +2242,142 @@ void SwContentTree::ExecCommand(const OUString& rCmd, bool bModifier)
     const bool bLeftRight = bLeft || rCmd == "demote";
     if (!bUpDown && !bLeftRight)
         return;
-    if( !GetWrtShell()->GetView().GetDocShell()->IsReadOnly() &&
-            (State::ACTIVE == m_eState ||
-                (State::CONSTANT == m_eState && m_pActiveShell == GetParentWindow()->GetCreateView()->GetWrtShellPtr())))
+    if (GetWrtShell()->GetView().GetDocShell()->IsReadOnly() ||
+        (State::ACTIVE != m_eState &&
+         (State::CONSTANT != m_eState || m_pActiveShell != GetParentWindow()->GetCreateView()->GetWrtShellPtr())))
     {
-        SwWrtShell* pShell = GetWrtShell();
-        sal_Int8 nActOutlineLevel = m_nOutlineLevel;
-        sal_uInt16 nActPos = pShell->GetOutlinePos(nActOutlineLevel);
-        SvTreeListEntry* pFirstEntry = FirstSelected();
-        if (pFirstEntry && lcl_IsContent(pFirstEntry))
+        return;
+    }
+
+    SwWrtShell *const pShell = GetWrtShell();
+    sal_Int8 nActOutlineLevel = m_nOutlineLevel;
+    sal_uInt16 nActPos = pShell->GetOutlinePos(nActOutlineLevel);
+    SvTreeListEntry* pFirstEntry = FirstSelected();
+    if (pFirstEntry && lcl_IsContent(pFirstEntry))
+    {
+        assert(dynamic_cast<SwContent*>(static_cast<SwTypeNumber*>(pFirstEntry->GetUserData())));
+        if ((m_bIsRoot && m_nRootType == ContentTypeId::OUTLINE) ||
+            static_cast<SwContent*>(pFirstEntry->GetUserData())->GetParent()->GetType()
+                                        ==  ContentTypeId::OUTLINE)
         {
-            assert(dynamic_cast<SwContent*>(static_cast<SwTypeNumber*>(pFirstEntry->GetUserData())));
-            if ( (m_bIsRoot && m_nRootType == ContentTypeId::OUTLINE) ||
-                static_cast<SwContent*>(pFirstEntry->GetUserData())->GetParent()->GetType()
-                                            ==  ContentTypeId::OUTLINE)
-            {
-                nActPos = static_cast<SwOutlineContent*>(pFirstEntry->GetUserData())->GetPos();
-            }
+            nActPos = static_cast<SwOutlineContent*>(pFirstEntry->GetUserData())->GetPos();
         }
-        if ( nActPos < USHRT_MAX &&
-                ( !bUpDown || pShell->IsOutlineMovable( nActPos )) )
+    }
+    if (nActPos < USHRT_MAX && (!bUpDown || pShell->IsOutlineMovable(nActPos)))
+    {
+        pShell->StartAllAction();
+        pShell->GotoOutline( nActPos); // If text selection != box selection
+        pShell->Push();
+        pShell->MakeOutlineSel(nActPos, nActPos, bModifier);
+        if (bUpDown)
         {
-            pShell->StartAllAction();
-            pShell->GotoOutline( nActPos); // If text selection != box selection
-            pShell->Push();
-            pShell->MakeOutlineSel( nActPos, nActPos,
-                                bModifier);
-            if (bUpDown)
+            short nDir = bUp ? -1 : 1;
+            if (!bModifier && ((nDir == -1 && nActPos > 0) ||
+                               (nDir == 1 && nActPos < GetEntryCount() - 2)))
             {
-                short nDir = bUp ? -1 : 1;
-                if( !bModifier && ( (nDir == -1 && nActPos > 0) ||
-                    (nDir == 1 && nActPos < GetEntryCount() - 2) ) )
+                pShell->MoveOutlinePara( nDir );
+                // Set cursor back to the current position
+                pShell->GotoOutline( nActPos + nDir);
+            }
+            else if (bModifier && pFirstEntry)
+            {
+                sal_uInt16 nActEndPos = nActPos;
+                SvTreeListEntry* pEntry = pFirstEntry;
+                assert(dynamic_cast<SwOutlineContent*>(static_cast<SwTypeNumber*>(pFirstEntry->GetUserData())));
+                const auto nActLevel = static_cast<SwOutlineContent*>(
+                        pFirstEntry->GetUserData())->GetOutlineLevel();
+                pEntry = Next(pEntry);
+                while (pEntry && CTYPE_CNT ==
+                    static_cast<SwTypeNumber*>(pEntry->GetUserData())->GetTypeId())
                 {
-                    pShell->MoveOutlinePara( nDir );
-                    // Set cursor back to the current position
-                    pShell->GotoOutline( nActPos + nDir);
-                }
-                else if(bModifier && pFirstEntry)
-                {
-                    sal_uInt16 nActEndPos = nActPos;
-                    SvTreeListEntry* pEntry = pFirstEntry;
-                    assert(dynamic_cast<SwOutlineContent*>(static_cast<SwTypeNumber*>(pFirstEntry->GetUserData())));
-                    const auto nActLevel = static_cast<SwOutlineContent*>(
-                            pFirstEntry->GetUserData())->GetOutlineLevel();
+                    assert(dynamic_cast<SwOutlineContent*>(static_cast<SwTypeNumber*>(pEntry->GetUserData())));
+                    if (nActLevel >= static_cast<SwOutlineContent*>(pEntry->GetUserData())->GetOutlineLevel())
+                        break;
                     pEntry = Next(pEntry);
-                    while( pEntry && CTYPE_CNT ==
-                        static_cast<SwTypeNumber*>(pEntry->GetUserData())->GetTypeId() )
+                    assert(pEntry == nullptr || dynamic_cast<SwTypeNumber*>(static_cast<SwTypeNumber*>(pEntry->GetUserData())));
+                    nActEndPos++;
+                }
+                if (nDir == 1)
+                {
+                    // If the last entry is to be moved we're done
+                    if (pEntry && CTYPE_CNT ==
+                        static_cast<SwTypeNumber*>(pEntry->GetUserData())->GetTypeId())
                     {
-                        assert(dynamic_cast<SwOutlineContent*>(static_cast<SwTypeNumber*>(pEntry->GetUserData())));
-                        if(nActLevel >= static_cast<SwOutlineContent*>(
-                            pEntry->GetUserData())->GetOutlineLevel())
-                            break;
-                        pEntry = Next(pEntry);
-                        assert(pEntry == nullptr || dynamic_cast<SwTypeNumber*>(static_cast<SwTypeNumber*>(pEntry->GetUserData())));
-                        nActEndPos++;
-                    }
-                    if(nDir == 1)
-                    {
-                        // If the last entry is to be moved it is over!
-                        if(pEntry && CTYPE_CNT ==
-                            static_cast<SwTypeNumber*>(pEntry->GetUserData())->GetTypeId())
+                        // pEntry now points to the entry following the last
+                        // selected entry.
+                        sal_uInt16 nDest = nActEndPos + 1;
+                        // here needs to found the next entry after next.
+                        // The selection must be inserted in front of that.
+                        while (pEntry)
                         {
-                            // pEntry now points to the following entry of the last
-                            // selected entry.
-                            sal_uInt16 nDest = nActEndPos + 1;
-                            // here needs to found the next record after next.
-                            // The selection must be inserted in front of.
-                            while(pEntry )
-                            {
-                                pEntry = Next(pEntry);
-                                assert(pEntry == nullptr || dynamic_cast<SwOutlineContent*>(static_cast<SwTypeNumber*>(pEntry->GetUserData())));
-                                // nDest++ may only executed if pEntry != 0
-                                if(pEntry && nDest++ &&
-                                   ( nActLevel >= static_cast<SwOutlineContent*>(pEntry->GetUserData())->GetOutlineLevel()||
-                                     CTYPE_CNT != static_cast<SwTypeNumber*>(pEntry->GetUserData())->GetTypeId()))
-                                {
-                                    nDest--;
-                                    break;
-                                }
-                            }
-                            nDir = nDest - nActEndPos;
-                            // If no entry was found which corresponds the condition
-                            // of the previously paste, it needs to be pushed slightly less.
-                        }
-                        else
-                            nDir = 0;
-                    }
-                    else
-                    {
-                        sal_uInt16 nDest = nActPos;
-                        pEntry = pFirstEntry;
-                        while(pEntry && nDest )
-                        {
-                            nDest--;
-                            pEntry = Prev(pEntry);
+                            pEntry = Next(pEntry);
                             assert(pEntry == nullptr || dynamic_cast<SwOutlineContent*>(static_cast<SwTypeNumber*>(pEntry->GetUserData())));
-                            if(pEntry &&
-                                (nActLevel >= static_cast<SwOutlineContent*>(pEntry->GetUserData())->GetOutlineLevel()||
+                            // nDest++ may only executed if pEntry != 0
+                            if (pEntry && nDest++ &&
+                                (nActLevel >= static_cast<SwOutlineContent*>(pEntry->GetUserData())->GetOutlineLevel() ||
                                  CTYPE_CNT != static_cast<SwTypeNumber*>(pEntry->GetUserData())->GetTypeId()))
                             {
+                                nDest--;
                                 break;
                             }
                         }
-                        nDir = nDest - nActPos;
+                        nDir = nDest - nActEndPos;
+                        // If no entry was found that allows insertion before
+                        // it, we just move it to the end.
                     }
-                    if(nDir)
+                    else
+                        nDir = 0;
+                }
+                else
+                {
+                    sal_uInt16 nDest = nActPos;
+                    pEntry = pFirstEntry;
+                    while (pEntry && nDest)
                     {
-                        pShell->MoveOutlinePara( nDir );
-                        //Set cursor back to the current position
-                        pShell->GotoOutline( nActPos + nDir);
+                        nDest--;
+                        pEntry = Prev(pEntry);
+                        assert(pEntry == nullptr || dynamic_cast<SwOutlineContent*>(static_cast<SwTypeNumber*>(pEntry->GetUserData())));
+                        if (pEntry &&
+                            (nActLevel >= static_cast<SwOutlineContent*>(pEntry->GetUserData())->GetOutlineLevel() ||
+                             CTYPE_CNT != static_cast<SwTypeNumber*>(pEntry->GetUserData())->GetTypeId()))
+                        {
+                            break;
+                        }
                     }
+                    nDir = nDest - nActPos;
+                }
+                if (nDir)
+                {
+                    pShell->MoveOutlinePara( nDir );
+                    // Set cursor back to the current position
+                    pShell->GotoOutline(nActPos + nDir);
                 }
             }
-            else
-            {
-                if( !pShell->IsProtectedOutlinePara() )
-                    pShell->OutlineUpDown(bLeft ? -1 : 1);
-            }
+        }
+        else
+        {
+            if (!pShell->IsProtectedOutlinePara())
+                pShell->OutlineUpDown(bLeft ? -1 : 1);
+        }
 
-            pShell->ClearMark();
-            pShell->Pop(false); // Cursor is now back at the current superscription.
-            pShell->EndAllAction();
-            if(m_aActiveContentArr[ContentTypeId::OUTLINE])
-                m_aActiveContentArr[ContentTypeId::OUTLINE]->Invalidate();
-            Display(true);
-            if(!m_bIsRoot)
-            {
-                const sal_uInt16 nCurrPos = pShell->GetOutlinePos(MAXLEVEL);
-                SvTreeListEntry* pFirst = First();
+        pShell->ClearMark();
+        pShell->Pop(false); // Cursor is now back at the current heading.
+        pShell->EndAllAction();
+        if (m_aActiveContentArr[ContentTypeId::OUTLINE])
+            m_aActiveContentArr[ContentTypeId::OUTLINE]->Invalidate();
+        Display(true);
+        if (!m_bIsRoot)
+        {
+            const sal_uInt16 nCurrPos = pShell->GetOutlinePos(MAXLEVEL);
+            SvTreeListEntry* pFirst = First();
 
-                while( nullptr != (pFirst = Next(pFirst)) && lcl_IsContent(pFirst))
+            while (nullptr != (pFirst = Next(pFirst)) && lcl_IsContent(pFirst))
+            {
+                assert(dynamic_cast<SwOutlineContent*>(static_cast<SwTypeNumber*>(pFirst->GetUserData())));
+                if (static_cast<SwOutlineContent*>(pFirst->GetUserData())->GetPos() == nCurrPos)
                 {
-                    assert(dynamic_cast<SwOutlineContent*>(static_cast<SwTypeNumber*>(pFirst->GetUserData())));
-                    if(static_cast<SwOutlineContent*>(pFirst->GetUserData())->GetPos() == nCurrPos)
-                    {
-                        Select(pFirst);
-                        MakeVisible(pFirst);
-                    }
+                    Select(pFirst);
+                    MakeVisible(pFirst);
                 }
             }
         }
