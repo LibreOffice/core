@@ -68,7 +68,6 @@
 #include <o3tl/enumrange.hxx>
 
 using namespace ::com::sun::star;
-using namespace nsFieldFlags;
 
 // TODO:
 // 5. convert the MapModes that Widows can't handle
@@ -262,8 +261,8 @@ void WW8Export::OutputOLENode( const SwOLENode& rOLENode )
                 // in the escher export
                 OUString sServer = FieldString(ww::eEMBED) + xOleStg->GetUserName() + " ";
 
-                OutputField(nullptr, ww::eEMBED, sServer, WRITEFIELD_START |
-                    WRITEFIELD_CMD_START | WRITEFIELD_CMD_END);
+                OutputField(nullptr, ww::eEMBED, sServer, FieldFlags::Start |
+                    FieldFlags::CmdStart | FieldFlags::CmdEnd);
 
                 m_pChpPlc->AppendFkpEntry( Strm().Tell(),
                         nSize, pSpecOLE );
@@ -309,7 +308,7 @@ void WW8Export::OutputOLENode( const SwOLENode& rOLENode )
                 }
 
                 OutputField(nullptr, ww::eEMBED, OUString(),
-                    WRITEFIELD_END | WRITEFIELD_CLOSE);
+                    FieldFlags::End | FieldFlags::Close);
 
                 if (bEndCR) //No newline in inline case
                     WriteCR();
@@ -394,7 +393,7 @@ void WW8Export::OutGrf(const ww8::Frame &rFrame)
         sStr += "\" \\d";
 
         OutputField( nullptr, ww::eINCLUDEPICTURE, sStr,
-                   WRITEFIELD_START | WRITEFIELD_CMD_START | WRITEFIELD_CMD_END );
+                   FieldFlags::Start | FieldFlags::CmdStart | FieldFlags::CmdEnd );
     }
 
     WriteChar( (char)1 );   // paste graphic symbols in the main text
@@ -472,7 +471,7 @@ void WW8Export::OutGrf(const ww8::Frame &rFrame)
     // linked, as-character anchored graphics have to be exported as fields.
     else if ( pGrfNd && pGrfNd->IsLinkedFile() )
     {
-        OutputField( nullptr, ww::eINCLUDEPICTURE, OUString(), WRITEFIELD_CLOSE );
+        OutputField( nullptr, ww::eINCLUDEPICTURE, OUString(), FieldFlags::Close );
     }
     //Added for i120568,the hyperlink info within a graphic whose anchor type is
     //"As character" will be exported to ensure the fidelity

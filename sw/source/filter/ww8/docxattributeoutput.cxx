@@ -137,7 +137,6 @@ using namespace oox;
 using namespace docx;
 using namespace sax_fastparser;
 using namespace nsSwDocInfoSubType;
-using namespace nsFieldFlags;
 using namespace sw::util;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::drawing;
@@ -2384,7 +2383,7 @@ bool DocxAttributeOutput::EndURL(bool const)
 
 void DocxAttributeOutput::FieldVanish( const OUString& rText, ww::eField eType )
 {
-    WriteField_Impl( nullptr, eType, rText, WRITEFIELD_ALL );
+    WriteField_Impl( nullptr, eType, rText, FieldFlags::All );
 }
 
 // The difference between 'Redline' and 'StartRedline'+'EndRedline' is that:
@@ -6752,15 +6751,15 @@ void DocxAttributeOutput::WriteExpand( const SwField* pField )
     m_rExport.OutputField( pField, ww::eUNKNOWN, sCmd );
 }
 
-void DocxAttributeOutput::WriteField_Impl( const SwField* pField, ww::eField eType, const OUString& rFieldCmd, sal_uInt8 nMode )
+void DocxAttributeOutput::WriteField_Impl( const SwField* pField, ww::eField eType, const OUString& rFieldCmd, FieldFlags nMode )
 {
     struct FieldInfos infos;
     if (pField)
         infos.pField.reset(pField->CopyField());
     infos.sCmd = rFieldCmd;
     infos.eType = eType;
-    infos.bClose = WRITEFIELD_CLOSE & nMode;
-    infos.bOpen = WRITEFIELD_START & nMode;
+    infos.bClose = bool(FieldFlags::Close & nMode);
+    infos.bOpen = bool(FieldFlags::Start & nMode);
     m_Fields.push_back( infos );
 
     if ( pField )

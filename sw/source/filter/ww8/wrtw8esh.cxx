@@ -106,7 +106,6 @@ using ::editeng::SvxBorderLine;
 using namespace com::sun::star;
 using namespace sw::util;
 using namespace sw::types;
-using namespace nsFieldFlags;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::drawing::XShape;
 
@@ -448,7 +447,7 @@ void WW8Export::DoComboBox(const OUString &rName,
                              uno::Sequence<OUString> &rListItems)
 {
     OutputField(nullptr, ww::eFORMDROPDOWN, FieldString(ww::eFORMDROPDOWN),
-             WRITEFIELD_START | WRITEFIELD_CMD_START);
+             FieldFlags::Start | FieldFlags::CmdStart);
     // write the refence to the "picture" structure
     sal_uLong nDataStt = pDataStrm->Tell();
     m_pChpPlc->AppendFkpEntry( Strm().Tell() );
@@ -468,7 +467,7 @@ void WW8Export::DoComboBox(const OUString &rName,
     m_pChpPlc->AppendFkpEntry(Strm().Tell(), sizeof(aArr1), aArr1);
 
     OutputField(nullptr, ww::eFORMDROPDOWN, FieldString(ww::eFORMDROPDOWN),
-             WRITEFIELD_CLOSE);
+             FieldFlags::Close);
 
     ::sw::WW8FFData aFFData;
 
@@ -495,7 +494,7 @@ void WW8Export::DoCheckBox(uno::Reference<beans::XPropertySet> const & xPropSet)
         xPropSet->getPropertySetInfo();
 
     OutputField(nullptr, ww::eFORMCHECKBOX, FieldString(ww::eFORMCHECKBOX),
-        WRITEFIELD_START | WRITEFIELD_CMD_START);
+        FieldFlags::Start | FieldFlags::CmdStart);
     // write the refence to the "picture" structure
     sal_uLong nDataStt = pDataStrm->Tell();
     m_pChpPlc->AppendFkpEntry( Strm().Tell() );
@@ -549,13 +548,13 @@ void WW8Export::DoCheckBox(uno::Reference<beans::XPropertySet> const & xPropSet)
 
     aFFData.Write(pDataStrm);
 
-    OutputField(nullptr, ww::eFORMCHECKBOX, OUString(), WRITEFIELD_CLOSE);
+    OutputField(nullptr, ww::eFORMCHECKBOX, OUString(), FieldFlags::Close);
 }
 
 void WW8Export::DoFormText(const SwInputField * pField)
 {
     OutputField(nullptr, ww::eFORMTEXT, FieldString(ww::eFORMTEXT),
-        WRITEFIELD_START | WRITEFIELD_CMD_START);
+        FieldFlags::Start | FieldFlags::CmdStart);
     // write the refence to the "picture" structure
     sal_uLong nDataStt = pDataStrm->Tell();
     m_pChpPlc->AppendFkpEntry( Strm().Tell() );
@@ -582,7 +581,7 @@ void WW8Export::DoFormText(const SwInputField * pField)
     aFFData.setStatus(pField->GetToolTip());
     aFFData.Write(pDataStrm);
 
-    OutputField(nullptr, ww::eFORMTEXT, OUString(), WRITEFIELD_CMD_END);
+    OutputField(nullptr, ww::eFORMTEXT, OUString(), FieldFlags::CmdEnd);
 
     const OUString fieldStr( pField->ExpandField(true) );
     SwWW8Writer::WriteString16(Strm(), fieldStr, false);
@@ -597,7 +596,7 @@ void WW8Export::DoFormText(const SwInputField * pField)
     m_pChpPlc->AppendFkpEntry(Strm().Tell(),
                 sizeof( aArr2 ), aArr2 );
 
-    OutputField(nullptr, ww::eFORMTEXT, OUString(), WRITEFIELD_CLOSE);
+    OutputField(nullptr, ww::eFORMTEXT, OUString(), FieldFlags::Close);
 }
 
 PlcDrawObj::~PlcDrawObj()
@@ -1037,7 +1036,7 @@ void WW8Export::AppendFlyInFlys(const ww8::Frame& rFrameFormat,
     if (rFrameFormat.IsInline())
     {
         OutputField(nullptr, ww::eSHAPE, FieldString(ww::eSHAPE),
-            WRITEFIELD_START | WRITEFIELD_CMD_START | WRITEFIELD_CMD_END);
+            FieldFlags::Start | FieldFlags::CmdStart | FieldFlags::CmdEnd);
     }
 
     WW8_CP nCP = Fc2Cp(Strm().Tell());
@@ -1064,7 +1063,7 @@ void WW8Export::AppendFlyInFlys(const ww8::Frame& rFrameFormat,
     }
 
     if (rFrameFormat.IsInline())
-        OutputField(nullptr, ww::eSHAPE, OUString(), WRITEFIELD_CLOSE);
+        OutputField(nullptr, ww::eSHAPE, OUString(), FieldFlags::Close);
 }
 
 MSWord_SdrAttrIter::MSWord_SdrAttrIter( MSWordExportBase& rWr,
@@ -3240,12 +3239,12 @@ void SwMSConvertControls::ExportControl(WW8Export &rWW8Wrt, const SdrUnoObj& rFo
     OUString sField = FieldString(ww::eCONTROL) + "Forms." + sUName + ".1 \\s ";
 
     rWW8Wrt.OutputField(nullptr, ww::eCONTROL, sField,
-        WRITEFIELD_START|WRITEFIELD_CMD_START|WRITEFIELD_CMD_END);
+        FieldFlags::Start|FieldFlags::CmdStart|FieldFlags::CmdEnd);
 
     rWW8Wrt.m_pChpPlc->AppendFkpEntry(rWW8Wrt.Strm().Tell(),sizeof(aSpecOLE),
         aSpecOLE);
     rWW8Wrt.WriteChar( 0x1 );
-    rWW8Wrt.OutputField(nullptr, ww::eCONTROL, OUString(), WRITEFIELD_END | WRITEFIELD_CLOSE);
+    rWW8Wrt.OutputField(nullptr, ww::eCONTROL, OUString(), FieldFlags::End | FieldFlags::Close);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

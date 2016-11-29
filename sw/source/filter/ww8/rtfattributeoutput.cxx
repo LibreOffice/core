@@ -81,7 +81,6 @@
 
 using namespace ::com::sun::star;
 using namespace sw::util;
-using namespace nsFieldFlags;
 
 static OString OutTBLBorderLine(RtfExport& rExport, const editeng::SvxBorderLine* pLine, const sal_Char* pStr)
 {
@@ -534,16 +533,16 @@ void RtfAttributeOutput::StartRuby(const SwTextNode& rNode, sal_Int32 /*nPos*/, 
     aStr += OUString::number(nHeight);
     aStr += "(";
     EndRun();
-    m_rExport.OutputField(nullptr, ww::eEQ, aStr, WRITEFIELD_START | WRITEFIELD_CMD_START);
+    m_rExport.OutputField(nullptr, ww::eEQ, aStr, FieldFlags::Start | FieldFlags::CmdStart);
     aStr  = rRuby.GetText();
     aStr += ")";
     aStr += ",";
-    m_rExport.OutputField(nullptr, ww::eEQ, aStr, 0);
+    m_rExport.OutputField(nullptr, ww::eEQ, aStr, FieldFlags::NONE);
 }
 
 void RtfAttributeOutput::EndRuby()
 {
-    m_rExport.OutputField(nullptr, ww::eEQ, ")", WRITEFIELD_END | WRITEFIELD_CLOSE);
+    m_rExport.OutputField(nullptr, ww::eEQ, ")", FieldFlags::End | FieldFlags::Close);
     EndRun();
 }
 
@@ -1567,11 +1566,11 @@ void RtfAttributeOutput::NumberingLevel(sal_uInt8 nLevel,
         m_rExport.Strm().WriteChar('}');
 }
 
-void RtfAttributeOutput::WriteField_Impl(const SwField* pField, ww::eField eType, const OUString& rFieldCmd, sal_uInt8 nMode)
+void RtfAttributeOutput::WriteField_Impl(const SwField* pField, ww::eField eType, const OUString& rFieldCmd, FieldFlags nMode)
 {
     // If there are no field instructions, don't export it as a field.
     bool bHasInstructions = !rFieldCmd.isEmpty();
-    if (WRITEFIELD_ALL == nMode)
+    if (FieldFlags::All == nMode)
     {
         if (bHasInstructions)
         {
@@ -1587,14 +1586,14 @@ void RtfAttributeOutput::WriteField_Impl(const SwField* pField, ww::eField eType
     }
     else if (eType == ww::eEQ)
     {
-        if (WRITEFIELD_START & nMode)
+        if (FieldFlags::Start & nMode)
         {
             m_aRunText->append("{" OOO_STRING_SVTOOLS_RTF_FIELD);
             m_aRunText->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FLDINST " ");
         }
         if (bHasInstructions)
             m_aRunText->append(msfilter::rtfutil::OutString(rFieldCmd, m_rExport.m_eCurrentEncoding));
-        if (WRITEFIELD_END & nMode)
+        if (FieldFlags::End & nMode)
         {
             m_aRunText->append("}{" OOO_STRING_SVTOOLS_RTF_FLDRSLT " ");
             m_aRunText->append("}}");

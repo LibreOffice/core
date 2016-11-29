@@ -40,6 +40,7 @@
 #include <vcl/graph.hxx>
 
 #include <boost/optional.hpp>
+#include <o3tl/typed_flags_set.hxx>
 
 #include <memory>
 #include <map>
@@ -133,15 +134,18 @@ class SvxBrushItem;
 
 #define OLE_PREVIEW_AS_EMF  //If we want to export ole2 previews as emf in ww8+
 
-typedef sal_uInt8 FieldFlags;
-namespace nsFieldFlags // for InsertField- Method
+enum class FieldFlags : sal_uInt8 // for InsertField- Method
 {
-    const FieldFlags WRITEFIELD_START         = 0x01;
-    const FieldFlags WRITEFIELD_CMD_START     = 0x02;
-    const FieldFlags WRITEFIELD_CMD_END     = 0x04;
-    const FieldFlags WRITEFIELD_END         = 0x10;
-    const FieldFlags WRITEFIELD_CLOSE         = 0x20;
-    const FieldFlags WRITEFIELD_ALL         = 0xFF;
+    NONE        = 0x00,
+    Start       = 0x01,
+    CmdStart    = 0x02,
+    CmdEnd      = 0x04,
+    End         = 0x10,
+    Close       = 0x20,
+    All         = 0x37
+};
+namespace o3tl {
+    template<> struct typed_flags<FieldFlags> : is_typed_flags<FieldFlags, 0x37> {};
 }
 
 enum TextTypes  //enums for TextTypes
@@ -752,7 +756,7 @@ public:
 
     /// Write the field
     virtual void OutputField( const SwField* pField, ww::eField eFieldType,
-            const OUString& rFieldCmd, sal_uInt8 nMode = nsFieldFlags::WRITEFIELD_ALL ) = 0;
+            const OUString& rFieldCmd, FieldFlags nMode = FieldFlags::All ) = 0;
 
     /// Write the data of the form field
     virtual void WriteFormData( const ::sw::mark::IFieldmark& rFieldmark ) = 0;
@@ -1023,7 +1027,7 @@ public:
 
     /// Write the field
     virtual void OutputField( const SwField* pField, ww::eField eFieldType,
-            const OUString& rFieldCmd, sal_uInt8 nMode = nsFieldFlags::WRITEFIELD_ALL ) override;
+            const OUString& rFieldCmd, FieldFlags nMode = FieldFlags::All ) override;
 
     void StartCommentOutput( const OUString& rName );
     void EndCommentOutput(   const OUString& rName );

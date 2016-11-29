@@ -141,7 +141,6 @@
 
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
-using namespace nsFieldFlags;
 using namespace nsSwDocInfoSubType;
 using namespace sw::util;
 using namespace sw::types;
@@ -1667,7 +1666,7 @@ WW8_WrPlcField* WW8Export::CurrentFieldPlc() const
 }
 
 void WW8Export::OutputField( const SwField* pField, ww::eField eFieldType,
-    const OUString& rFieldCmd, sal_uInt8 nMode )
+    const OUString& rFieldCmd, FieldFlags nMode )
 {
     OUString sFieldCmd(rFieldCmd);
     switch (eFieldType)
@@ -1693,7 +1692,7 @@ void WW8Export::OutputField( const SwField* pField, ww::eField eFieldType,
     WW8_WrPlcField* pFieldP = CurrentFieldPlc();
 
     const bool bIncludeEmptyPicLocation = ( eFieldType == ww::ePAGE );
-    if (WRITEFIELD_START & nMode)
+    if (FieldFlags::Start & nMode)
     {
         sal_uInt8 aField13[2] = { 0x13, 0x00 };  // will change
         //#i3958#, Needed to make this field work correctly in Word 2000
@@ -1703,7 +1702,7 @@ void WW8Export::OutputField( const SwField* pField, ww::eField eFieldType,
         pFieldP->Append( Fc2Cp( Strm().Tell() ), aField13 );
         InsertSpecialChar( *this, 0x13, nullptr, bIncludeEmptyPicLocation );
     }
-    if (WRITEFIELD_CMD_START & nMode)
+    if (FieldFlags::CmdStart & nMode)
     {
         SwWW8Writer::WriteString16(Strm(), sFieldCmd, false);
         // #i43956# - write hyperlink character including
@@ -1743,14 +1742,14 @@ void WW8Export::OutputField( const SwField* pField, ww::eField eFieldType,
             InsertSpecialChar( *this, 0x01, &aLinkStr );
         }
     }
-    if (WRITEFIELD_CMD_END & nMode)
+    if (FieldFlags::CmdEnd & nMode)
     {
         static const sal_uInt8 aField14[2] = { 0x14, 0xff };
         pFieldP->Append( Fc2Cp( Strm().Tell() ), aField14 );
         pFieldP->ResultAdded();
         InsertSpecialChar( *this, 0x14, nullptr, bIncludeEmptyPicLocation );
     }
-    if (WRITEFIELD_END & nMode)
+    if (FieldFlags::End & nMode)
     {
         OUString sOut;
         if( pField )
@@ -1783,7 +1782,7 @@ void WW8Export::OutputField( const SwField* pField, ww::eField eFieldType,
             }
         }
     }
-    if (WRITEFIELD_CLOSE & nMode)
+    if (FieldFlags::Close & nMode)
     {
         sal_uInt8 aField15[2] = { 0x15, 0x80 };
 
@@ -1808,15 +1807,15 @@ void WW8Export::StartCommentOutput(const OUString& rName)
 {
     OUString sStr(FieldString(ww::eQUOTE));
     sStr += "[" + rName + "] ";
-    OutputField(nullptr, ww::eQUOTE, sStr, WRITEFIELD_START | WRITEFIELD_CMD_START);
+    OutputField(nullptr, ww::eQUOTE, sStr, FieldFlags::Start | FieldFlags::CmdStart);
 }
 
 void WW8Export::EndCommentOutput(const OUString& rName)
 {
     OUString sStr(" [");
     sStr += rName + "] ";
-    OutputField(nullptr, ww::eQUOTE, sStr, WRITEFIELD_CMD_END | WRITEFIELD_END |
-        WRITEFIELD_CLOSE);
+    OutputField(nullptr, ww::eQUOTE, sStr, FieldFlags::CmdEnd | FieldFlags::End |
+        FieldFlags::Close);
 }
 
 sal_uInt16 MSWordExportBase::GetId( const SwTOXType& rTOXType )
@@ -2253,8 +2252,8 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
         if (!sStr.isEmpty())
         {
             GetExport( ).m_bInWriteTOX = true;
-            GetExport( ).OutputField( nullptr, eCode, sStr, WRITEFIELD_START | WRITEFIELD_CMD_START |
-                WRITEFIELD_CMD_END );
+            GetExport( ).OutputField( nullptr, eCode, sStr, FieldFlags::Start | FieldFlags::CmdStart |
+                FieldFlags::CmdEnd );
         }
     }
 
@@ -2267,7 +2266,7 @@ void AttributeOutputBase::EndTOX( const SwSection& rSect,bool bCareEnd )
     if ( pTOX )
     {
         ww::eField eCode = TOX_INDEX == pTOX->GetType() ? ww::eINDEX : ww::eTOC;
-        GetExport( ).OutputField( nullptr, eCode, OUString(), WRITEFIELD_CLOSE );
+        GetExport( ).OutputField( nullptr, eCode, OUString(), FieldFlags::Close );
 
         if ( pTOX->GetType() == TOX_INDEX && GetExport().AddSectionBreaksForTOX() )
         {
@@ -2393,8 +2392,8 @@ void WW8AttributeOutput::SetField( const SwField& rField, ww::eField eType, cons
 
     sal_uLong nFrom = m_rWW8Export.Fc2Cp(m_rWW8Export.Strm().Tell());
 
-    GetExport().OutputField(&rField, eType, rCmd, WRITEFIELD_START |
-        WRITEFIELD_CMD_START | WRITEFIELD_CMD_END);
+    GetExport().OutputField(&rField, eType, rCmd, FieldFlags::Start |
+        FieldFlags::CmdStart | FieldFlags::CmdEnd);
 
     /*
     Is there a bookmark at the start position of this field, if so
@@ -2410,7 +2409,7 @@ void WW8AttributeOutput::SetField( const SwField& rField, ww::eField eType, cons
     {
         SwWW8Writer::WriteString16(m_rWW8Export.Strm(), rVar, false);
     }
-    GetExport().OutputField(&rField, eType, rCmd, WRITEFIELD_CLOSE);
+    GetExport().OutputField(&rField, eType, rCmd, FieldFlags::Close);
 }
 
 void WW8AttributeOutput::PostitField( const SwField* pField )
@@ -2441,14 +2440,14 @@ void WW8AttributeOutput::RefField( const SwField &rField, const OUString &rRef)
 {
     OUString sStr( FieldString( ww::eREF ) );
     sStr += "\"" + rRef + "\" ";
-    m_rWW8Export.OutputField( &rField, ww::eREF, sStr, WRITEFIELD_START |
-        WRITEFIELD_CMD_START | WRITEFIELD_CMD_END );
+    m_rWW8Export.OutputField( &rField, ww::eREF, sStr, FieldFlags::Start |
+        FieldFlags::CmdStart | FieldFlags::CmdEnd );
     OUString sVar = lcl_GetExpandedField( rField );
     if ( !sVar.isEmpty() )
     {
         SwWW8Writer::WriteString16( m_rWW8Export.Strm(), sVar, false );
     }
-    m_rWW8Export.OutputField( &rField, ww::eREF, sStr, WRITEFIELD_CLOSE );
+    m_rWW8Export.OutputField( &rField, ww::eREF, sStr, FieldFlags::Close );
 }
 
 void WW8AttributeOutput::WriteExpand( const SwField* pField )
