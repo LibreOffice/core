@@ -774,33 +774,13 @@ void GenPspGraphics::ClearDevFontCache()
     GlyphCache::GetInstance().ClearFontCache();
 }
 
-void GenPspGraphics::GetFontMetric( ImplFontMetricDataRef& rxFontMetric, int )
+void GenPspGraphics::GetFontMetric(ImplFontMetricDataRef& rxFontMetric, int nFallbackLevel)
 {
-    const psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
-    psp::PrintFontInfo aInfo;
+    if (nFallbackLevel >= MAX_FALLBACK)
+        return;
 
-    if (rMgr.getFontInfo (m_pPrinterGfx->GetFontID(), aInfo))
-    {
-        FontAttributes aDFA = Info2FontAttributes( aInfo );
-        static_cast< FontAttributes& >(*rxFontMetric) = aDFA;
-        rxFontMetric->SetBuiltInFontFlag( aDFA.IsBuiltInFont() );
-        rxFontMetric->SetScalableFlag( true );
-        rxFontMetric->SetTrueTypeFlag( false ); // FIXME, needed?
-
-        rxFontMetric->SetOrientation( m_pPrinterGfx->GetFontAngle() );
-        rxFontMetric->SetSlant( 0 );
-
-        sal_Int32 nTextHeight   = m_pPrinterGfx->GetFontHeight();
-        sal_Int32 nTextWidth    = m_pPrinterGfx->GetFontWidth();
-        if( ! nTextWidth )
-            nTextWidth = nTextHeight;
-
-        rxFontMetric->SetWidth( nTextWidth );
-        rxFontMetric->SetAscent( ( aInfo.m_nAscend * nTextHeight + 500 ) / 1000 );
-        rxFontMetric->SetDescent( ( aInfo.m_nDescend * nTextHeight + 500 ) / 1000 );
-        rxFontMetric->SetInternalLeading( ( aInfo.m_nLeading * nTextHeight + 500 ) / 1000 );
-        rxFontMetric->SetExternalLeading( 0 );
-    }
+    if (m_pFreetypeFont[nFallbackLevel])
+        m_pFreetypeFont[nFallbackLevel]->GetFontMetric(rxFontMetric);
 }
 
 bool GenPspGraphics::GetGlyphBoundRect( sal_GlyphId aGlyphId, Rectangle& rRect )
