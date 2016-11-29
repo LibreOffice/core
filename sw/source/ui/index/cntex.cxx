@@ -203,10 +203,10 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
                 lcl_SetProp(xInfo, xIdxProps, UNO_NAME_TITLE, *rDesc.GetTitle());
 
             //stylenames
-            sal_uInt16  nContentOptions = rDesc.GetContentOptions();
+            SwTOXElement  nContentOptions = rDesc.GetContentOptions();
             if(xInfo->hasPropertyByName(UNO_NAME_LEVEL_PARAGRAPH_STYLES))
             {
-                bool bOn = 0!=(nContentOptions&nsSwTOXElement::TOX_TEMPLATE    );
+                bool bOn( nContentOptions&SwTOXElement::Template );
                 uno::Any aStyleNames(xIdxProps->getPropertyValue(UNO_NAME_LEVEL_PARAGRAPH_STYLES));
                 uno::Reference< container::XIndexReplace >  xAcc;
                 aStyleNames >>= xAcc;
@@ -227,17 +227,17 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
                 }
             }
             lcl_SetProp(xInfo, xIdxProps, UNO_NAME_LEVEL, (sal_Int16)rDesc.GetLevel());
-            lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_CREATE_FROM_MARKS,           0!=(nContentOptions&nsSwTOXElement::TOX_MARK        ));
-            lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_CREATE_FROM_OUTLINE,         0!=(nContentOptions&nsSwTOXElement::TOX_OUTLINELEVEL));
-            lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_CREATE_FROM_EMBEDDED_OBJECTS,0!=(nContentOptions&nsSwTOXElement::TOX_OLE            ));
-            lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_CREATE_FROM_TABLES ,         0!=(nContentOptions&nsSwTOXElement::TOX_TABLE          ));
-            lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_CREATE_FROM_GRAPHIC_OBJECTS, 0!=(nContentOptions&nsSwTOXElement::TOX_GRAPHIC        ));
-            lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_CREATE_FROM_TEXT_FRAMES,     0!=(nContentOptions&nsSwTOXElement::TOX_FRAME          ));
-            lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_CREATE_FROM_LABELS,          0!=(nContentOptions&nsSwTOXElement::TOX_SEQUENCE       ));
-            lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_HIDE_TAB_LEADER_AND_PAGE_NUMBERS,          0!=(nContentOptions&nsSwTOXElement::TOX_TABLEADER       ));
-            lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_TAB_IN_TOC,                  0!=(nContentOptions&nsSwTOXElement::TOX_TAB_IN_TOC       ));
-            lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_TOC_NEWLINE,                 0!=(nContentOptions&nsSwTOXElement::TOX_NEWLINE));
-            lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_TOC_PARAGRAPH_OUTLINE_LEVEL,                 0!=(nContentOptions&nsSwTOXElement::TOX_PARAGRAPH_OUTLINE_LEVEL));
+            lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_CREATE_FROM_MARKS,           bool(nContentOptions & SwTOXElement::Mark        ));
+            lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_CREATE_FROM_OUTLINE,         bool(nContentOptions & SwTOXElement::OutlineLevel));
+            lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_CREATE_FROM_EMBEDDED_OBJECTS,bool(nContentOptions & SwTOXElement::Ole            ));
+            lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_CREATE_FROM_TABLES ,         bool(nContentOptions & SwTOXElement::Table          ));
+            lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_CREATE_FROM_GRAPHIC_OBJECTS, bool(nContentOptions & SwTOXElement::Graphic        ));
+            lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_CREATE_FROM_TEXT_FRAMES,     bool(nContentOptions & SwTOXElement::Frame          ));
+            lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_CREATE_FROM_LABELS,          bool(nContentOptions & SwTOXElement::Sequence       ));
+            lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_HIDE_TAB_LEADER_AND_PAGE_NUMBERS, bool(nContentOptions & SwTOXElement::TableLeader       ));
+            lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_TAB_IN_TOC,                  bool(nContentOptions & SwTOXElement::TableInToc       ));
+            lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_TOC_NEWLINE,                 bool(nContentOptions & SwTOXElement::Newline));
+            lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_TOC_PARAGRAPH_OUTLINE_LEVEL, bool(nContentOptions & SwTOXElement::ParagraphOutlineLevel));
 
             lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_CREATE_FROM_CHAPTER, rDesc.IsFromChapter());
             lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_IS_PROTECTED, rDesc.IsReadonly());

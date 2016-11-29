@@ -291,7 +291,7 @@ bool SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
             {
                 const SwTOXType* pType = pSh->GetTOXType(eCurTOXType, 0);
                 SwForm aForm(eCurTOXType);
-                pNewTOX = new SwTOXBase(pType, aForm, nsSwTOXElement::TOX_MARK, pType->GetTypeName());
+                pNewTOX = new SwTOXBase(pType, aForm, SwTOXElement::Mark, pType->GetTypeName());
             }
             pNewTOX->SetOptions(rDesc.GetIndexOptions());
             pNewTOX->SetMainEntryCharStyle(rDesc.GetMainEntryCharStyle());
@@ -376,7 +376,8 @@ bool SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
                 SwForm aForm(eCurTOXType);
                 pNewTOX = new SwTOXBase(
                     pType, aForm,
-                    TOX_AUTHORITIES == eCurTOXType ? nsSwTOXElement::TOX_MARK : 0, pType->GetTypeName());
+                    TOX_AUTHORITIES == eCurTOXType ? SwTOXElement::Mark : SwTOXElement::NONE,
+                    pType->GetTypeName());
             }
             else
             {

@@ -152,7 +152,7 @@ DECLARE_OOXMLEXPORT_TEST(testFieldFlagO,"TOC_field_f.docx")
 DECLARE_OOXMLEXPORT_TEST(testTOCFlag_f, "toc_doc.docx")
 {
     // Export logic for all TOC field flags was enclosed inside
-    // if( nsSwTOXElement::TOX_MARK & pTOX->GetCreateType() ) in ww8atr.cxx which gets true for \f,
+    // if( SwTOXElement::Mark & pTOX->GetCreateType() ) in ww8atr.cxx which gets true for \f,
     // this was the reason if there is \f flag present in original doc then only other flags like
     // \o \h \n used to come after RoundTrip.
     // This test case is to verify even if there is no \f flag in original doc, \h flag is getting

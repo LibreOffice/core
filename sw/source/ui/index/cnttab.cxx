@@ -1049,7 +1049,7 @@ void SwTOXSelectTabPage::ApplyTOXDescription()
     if(aCurType.eType != TOX_INDEX)
         m_pLevelNF->SetValue(rDesc.GetLevel());   //content, user
 
-    sal_uInt16 nCreateType = rDesc.GetContentOptions();
+    SwTOXElement nCreateType = rDesc.GetContentOptions();
 
     //user + content
     bool bHasStyleNames = false;
@@ -1060,22 +1060,22 @@ void SwTOXSelectTabPage::ApplyTOXDescription()
             bHasStyleNames = true;
             break;
         }
-    m_pAddStylesCB->Check(bHasStyleNames && (nCreateType & nsSwTOXElement::TOX_TEMPLATE));
+    m_pAddStylesCB->Check(bHasStyleNames && (nCreateType & SwTOXElement::Template));
 
-    m_pFromOLECB->     Check( 0 != (nCreateType & nsSwTOXElement::TOX_OLE) );
-    m_pFromTablesCB->  Check( 0 != (nCreateType & nsSwTOXElement::TOX_TABLE) );
-    m_pFromGraphicsCB->Check( 0 != (nCreateType & nsSwTOXElement::TOX_GRAPHIC) );
-    m_pFromFramesCB->  Check( 0 != (nCreateType & nsSwTOXElement::TOX_FRAME) );
+    m_pFromOLECB->     Check( bool(nCreateType & SwTOXElement::Ole) );
+    m_pFromTablesCB->  Check( bool(nCreateType & SwTOXElement::Table) );
+    m_pFromGraphicsCB->Check( bool(nCreateType & SwTOXElement::Graphic) );
+    m_pFromFramesCB->  Check( bool(nCreateType & SwTOXElement::Frame) );
 
     m_pLevelFromChapterCB->Check(rDesc.IsLevelFromChapter());
 
     //all but illustration and table
-    m_pTOXMarksCB->Check( 0 != (nCreateType & nsSwTOXElement::TOX_MARK) );
+    m_pTOXMarksCB->Check( bool(nCreateType & SwTOXElement::Mark) );
 
     //content
     if(TOX_CONTENT == aCurType.eType)
     {
-        m_pFromHeadingsCB->Check( 0 != (nCreateType & nsSwTOXElement::TOX_OUTLINELEVEL) );
+        m_pFromHeadingsCB->Check( bool(nCreateType & SwTOXElement::OutlineLevel) );
         m_pAddStylesCB->SetText(sAddStyleContent);
         m_pAddStylesPB->Enable(m_pAddStylesCB->IsChecked());
     }
@@ -1149,34 +1149,34 @@ void SwTOXSelectTabPage::FillTOXDescription()
     SwTOXDescription& rDesc = pTOXDlg->GetTOXDescription(aCurType);
     rDesc.SetTitle(m_pTitleED->GetText());
     rDesc.SetFromChapter(1 == m_pAreaLB->GetSelectEntryPos());
-    sal_uInt16 nContentOptions = 0;
+    SwTOXElement nContentOptions = SwTOXElement::NONE;
     if(m_pTOXMarksCB->IsVisible() && m_pTOXMarksCB->IsChecked())
-        nContentOptions |= nsSwTOXElement::TOX_MARK;
+        nContentOptions |= SwTOXElement::Mark;
 
     sal_uInt16 nIndexOptions = rDesc.GetIndexOptions()&nsSwTOIOptions::TOI_ALPHA_DELIMITTER;
     switch(rDesc.GetTOXType())
     {
         case TOX_CONTENT:
             if(m_pFromHeadingsCB->IsChecked())
-                nContentOptions |= nsSwTOXElement::TOX_OUTLINELEVEL;
+                nContentOptions |= SwTOXElement::OutlineLevel;
         break;
         case TOX_USER:
         {
             rDesc.SetTOUName(m_pTypeLB->GetSelectEntry());
 
             if(m_pFromOLECB->IsChecked())
-                nContentOptions |= nsSwTOXElement::TOX_OLE;
+                nContentOptions |= SwTOXElement::Ole;
             if(m_pFromTablesCB->IsChecked())
-                nContentOptions |= nsSwTOXElement::TOX_TABLE;
+                nContentOptions |= SwTOXElement::Table;
             if(m_pFromFramesCB->IsChecked())
-                nContentOptions |= nsSwTOXElement::TOX_FRAME;
+                nContentOptions |= SwTOXElement::Frame;
             if(m_pFromGraphicsCB->IsChecked())
-                nContentOptions |= nsSwTOXElement::TOX_GRAPHIC;
+                nContentOptions |= SwTOXElement::Graphic;
         }
         break;
         case TOX_INDEX:
         {
-            nContentOptions = nsSwTOXElement::TOX_MARK;
+            nContentOptions = SwTOXElement::Mark;
 
             if(m_pCollectSameCB->IsChecked())
                 nIndexOptions |= nsSwTOIOptions::TOI_SAME_ENTRY;
@@ -1233,11 +1233,11 @@ void SwTOXSelectTabPage::FillTOXDescription()
     rDesc.SetLevelFromChapter(  m_pLevelFromChapterCB->IsVisible() &&
                                 m_pLevelFromChapterCB->IsChecked());
     if(m_pTOXMarksCB->IsChecked() && m_pTOXMarksCB->IsVisible())
-        nContentOptions |= nsSwTOXElement::TOX_MARK;
+        nContentOptions |= SwTOXElement::Mark;
     if(m_pFromHeadingsCB->IsChecked() && m_pFromHeadingsCB->IsVisible())
-        nContentOptions |= nsSwTOXElement::TOX_OUTLINELEVEL;
+        nContentOptions |= SwTOXElement::OutlineLevel;
     if(m_pAddStylesCB->IsChecked() && m_pAddStylesCB->IsVisible())
-        nContentOptions |= nsSwTOXElement::TOX_TEMPLATE;
+        nContentOptions |= SwTOXElement::Template;
 
     rDesc.SetContentOptions(nContentOptions);
     rDesc.SetIndexOptions(nIndexOptions);

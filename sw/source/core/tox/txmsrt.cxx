@@ -496,9 +496,9 @@ TextAndReading SwTOXPara::GetText_Impl() const
     const SwContentNode* pNd = aTOXSources[0].pNd;
     switch( eType )
     {
-    case nsSwTOXElement::TOX_SEQUENCE:
-    case nsSwTOXElement::TOX_TEMPLATE:
-    case nsSwTOXElement::TOX_OUTLINELEVEL:
+    case SwTOXElement::Sequence:
+    case SwTOXElement::Template:
+    case SwTOXElement::OutlineLevel:
         {
             return TextAndReading(static_cast<const SwTextNode*>(pNd)->GetExpandText(
                     nStartIndex,
@@ -508,9 +508,9 @@ TextAndReading SwTOXPara::GetText_Impl() const
         }
         break;
 
-    case nsSwTOXElement::TOX_OLE:
-    case nsSwTOXElement::TOX_GRAPHIC:
-    case nsSwTOXElement::TOX_FRAME:
+    case SwTOXElement::Ole:
+    case SwTOXElement::Graphic:
+    case SwTOXElement::Frame:
         {
             // Find the FlyFormat; the object/graphic name is there
             SwFrameFormat* pFly = pNd->GetFlyFormat();
@@ -518,9 +518,9 @@ TextAndReading SwTOXPara::GetText_Impl() const
                 return TextAndReading(pFly->GetName(), OUString());
 
             OSL_ENSURE( false, "Graphic/object without name" );
-            sal_uInt16 nId = nsSwTOXElement::TOX_OLE == eType
+            sal_uInt16 nId = SwTOXElement::Ole == eType
                             ? STR_OBJECT_DEFNAME
-                            : nsSwTOXElement::TOX_GRAPHIC == eType
+                            : SwTOXElement::Graphic == eType
                                 ? STR_GRAPHIC_DEFNAME
                                 : STR_FRAME_DEFNAME;
             return TextAndReading(SW_RESSTR( nId ), OUString());
@@ -533,7 +533,7 @@ TextAndReading SwTOXPara::GetText_Impl() const
 
 void SwTOXPara::FillText( SwTextNode& rNd, const SwIndex& rInsPos, sal_uInt16 ) const
 {
-    if( nsSwTOXElement::TOX_TEMPLATE == eType || nsSwTOXElement::TOX_SEQUENCE == eType  || nsSwTOXElement::TOX_OUTLINELEVEL == eType)
+    if( SwTOXElement::Template == eType || SwTOXElement::Sequence == eType  || SwTOXElement::OutlineLevel == eType)
     {
         const SwTextNode* pSrc = static_cast<const SwTextNode*>(aTOXSources[0].pNd);
         pSrc->GetExpandText( rNd, &rInsPos, nStartIndex,
@@ -551,7 +551,7 @@ sal_uInt16 SwTOXPara::GetLevel() const
     sal_uInt16 nRet = m_nLevel;
     const SwContentNode*  pNd = aTOXSources[0].pNd;
 
-    if( nsSwTOXElement::TOX_OUTLINELEVEL == eType && pNd->GetTextNode() )
+    if( SwTOXElement::OutlineLevel == eType && pNd->GetTextNode() )
     {
         const int nTmp = static_cast<const SwTextNode*>(pNd)->GetAttrOutlineLevel();
         if(nTmp != 0 )
@@ -566,8 +566,8 @@ OUString SwTOXPara::GetURL() const
     const SwContentNode* pNd = aTOXSources[0].pNd;
     switch( eType )
     {
-    case nsSwTOXElement::TOX_TEMPLATE:
-    case nsSwTOXElement::TOX_OUTLINELEVEL:
+    case SwTOXElement::Template:
+    case SwTOXElement::OutlineLevel:
         {
             const SwTextNode * pTextNd = pNd->GetTextNode();
 
@@ -579,9 +579,9 @@ OUString SwTOXPara::GetURL() const
         }
         break;
 
-    case nsSwTOXElement::TOX_OLE:
-    case nsSwTOXElement::TOX_GRAPHIC:
-    case nsSwTOXElement::TOX_FRAME:
+    case SwTOXElement::Ole:
+    case SwTOXElement::Graphic:
+    case SwTOXElement::Frame:
         {
             // Find the FlyFormat; the object/graphic name is there
             SwFrameFormat* pFly = pNd->GetFlyFormat();
@@ -591,9 +591,9 @@ OUString SwTOXPara::GetURL() const
                 const sal_Char* pStr;
                 switch( eType )
                 {
-                case nsSwTOXElement::TOX_OLE:       pStr = "ole"; break;
-                case nsSwTOXElement::TOX_GRAPHIC:   pStr = "graphic"; break;
-                case nsSwTOXElement::TOX_FRAME:     pStr = "frame"; break;
+                case SwTOXElement::Ole:       pStr = "ole"; break;
+                case SwTOXElement::Graphic:   pStr = "graphic"; break;
+                case SwTOXElement::Frame:     pStr = "frame"; break;
                 default:            pStr = nullptr;
                 }
                 if( pStr )
@@ -601,7 +601,7 @@ OUString SwTOXPara::GetURL() const
             }
         }
         break;
-    case nsSwTOXElement::TOX_SEQUENCE:
+    case SwTOXElement::Sequence:
         {
             aText = "#" + m_sSequenceName + OUStringLiteral1(cMarkSeparator)
                  + "sequence";
