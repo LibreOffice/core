@@ -32,6 +32,7 @@
 #include <unotools/bootstrap.hxx>
 
 #include <unotools/ucbhelper.hxx>
+#include <comphelper/getexpandeduri.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -236,6 +237,22 @@ const OUString& SvtPathOptions_Impl::GetPath( SvtPathOptions::Paths ePath )
             // These office paths have to be converted to system pates
             osl::FileBase::getSystemPathFromFileURL( aPathValue, aResult );
             aPathValue = aResult;
+        }
+        else if (ePath == SvtPathOptions::PATH_PALETTE)
+        {
+            auto ctx = comphelper::getProcessComponentContext();
+            OUStringBuffer buf;
+            for (sal_Int32 i = 0;;)
+            {
+                buf.append(
+                    comphelper::getExpandedUri(
+                        ctx, aPathValue.getToken(0, ';', i)));
+                if (i == -1) {
+                    break;
+                }
+                buf.append(';');
+            }
+            aPathValue = buf.makeStringAndClear();
         }
 
         m_aPathArray[ ePath ] = aPathValue;
