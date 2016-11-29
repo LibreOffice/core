@@ -365,8 +365,6 @@ FreetypeFontFace::FreetypeFontFace( FreetypeFontInfo* pFI, const FontAttributes&
 :   PhysicalFontFace( rDFA ),
     mpFreetypeFontInfo( pFI )
 {
-    SetBuiltInFontFlag( false );
-    SetOrientationFlag( true );
 }
 
 LogicalFontInstance* FreetypeFontFace::CreateFontInstance( FontSelectPattern& rFSD ) const
@@ -573,10 +571,6 @@ void FreetypeFont::GetFontMetric(ImplFontMetricDataRef& rxTo) const
 {
     rxTo->FontAttributes::operator =(mpFontInfo->GetFontAttributes());
 
-    rxTo->SetScalableFlag( true ); // FIXME: Shouldn't this check FT_IS_SCALABLE( maFaceFT )?
-    rxTo->SetTrueTypeFlag( FT_IS_SFNT( maFaceFT ) != 0 );
-    rxTo->SetBuiltInFontFlag( true );
-    rxTo->SetKernableFlag( FT_HAS_KERNING( maFaceFT ) != 0 );
     rxTo->SetOrientation( GetFontSelData().mnOrientation );
 
     //Always consider [star]symbol as symbol fonts
