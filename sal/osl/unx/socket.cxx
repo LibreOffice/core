@@ -1227,8 +1227,10 @@ oslSocketResult SAL_CALL osl_getHostnameOfSocketAddr(oslSocketAddr Addr, rtl_uSt
     pszHostname[0] = '\0';
 
     Result = osl_psz_getHostnameOfSocketAddr(Addr,pszHostname,sizeof(pszHostname));
-
-    rtl_uString_newFromAscii(ustrHostname,pszHostname);
+    if (Result == osl_Socket_Ok)
+    {
+        rtl_uString_newFromAscii(ustrHostname,pszHostname);
+    }
 
     return Result;
 }
