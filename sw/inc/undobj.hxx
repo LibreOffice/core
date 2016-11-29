@@ -26,6 +26,7 @@
 #include <tools/solar.h>
 #include <SwRewriter.hxx>
 #include <swundo.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 class SwHistory;
 class SwIndex;
@@ -125,21 +126,23 @@ public:
     static bool HasHiddenRedlines( const SwRedlineSaveDatas& rSData );
 };
 
-typedef sal_uInt16 DelContentType;
-namespace nsDelContentType
+enum class DelContentType : sal_uInt16
 {
-    const DelContentType DELCNT_FTN = 0x01;
-    const DelContentType DELCNT_FLY = 0x02;
-    const DelContentType DELCNT_TOC = 0x04;
-    const DelContentType DELCNT_BKM = 0x08;
-    const DelContentType DELCNT_ALL = 0x0F;
-    const DelContentType DELCNT_CHKNOCNTNT = 0x80;
+    Ftn          = 0x01,
+    Fly          = 0x02,
+    Toc          = 0x04,
+    Bkm          = 0x08,
+    AllMask      = 0x0F,
+    CheckNoCntnt = 0x80,
+};
+namespace o3tl {
+    template<> struct typed_flags<DelContentType> : is_typed_flags<DelContentType, 0x8f> {};
 }
 
 /// will DelContentIndex destroy a frame anchored at character at rAnchorPos?
 bool IsDestroyFrameAnchoredAtChar(SwPosition const & rAnchorPos,
         SwPosition const & rStart, SwPosition const & rEnd, const SwDoc* doc,
-        DelContentType const nDelContentType = nsDelContentType::DELCNT_ALL);
+        DelContentType const nDelContentType = DelContentType::AllMask);
 
 // This class has to be inherited into an Undo-object if it saves content
 // for Redo/Undo...
@@ -171,7 +174,7 @@ protected:
     // Before moving stuff into UndoNodes-Array care has to be taken that
     // the content-bearing attributes are removed from the nodes-array.
     void DelContentIndex( const SwPosition& pMark, const SwPosition& pPoint,
-                        DelContentType nDelContentType = nsDelContentType::DELCNT_ALL );
+                        DelContentType nDelContentType = DelContentType::AllMask );
 
 public:
     SwUndoSaveContent();

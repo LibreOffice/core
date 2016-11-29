@@ -147,7 +147,7 @@ SwUndoDelete::SwUndoDelete(
     {
         OSL_ENSURE( rPam.HasMark(), "PaM ohne Mark" );
         DelContentIndex( *rPam.GetMark(), *rPam.GetPoint(),
-                        DelContentType(nsDelContentType::DELCNT_ALL | nsDelContentType::DELCNT_CHKNOCNTNT) );
+                        DelContentType(DelContentType::AllMask | DelContentType::CheckNoCntnt) );
 
         ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
         DelBookmarks(pStt->nNode, pEnd->nNode);
@@ -990,7 +990,7 @@ void SwUndoDelete::RedoImpl(::sw::UndoRedoContext & rContext)
         {
             OSL_ENSURE( rPam.HasMark(), "PaM without Mark" );
             DelContentIndex( *rPam.GetMark(), *rPam.GetPoint(),
-                            DelContentType(nsDelContentType::DELCNT_ALL | nsDelContentType::DELCNT_CHKNOCNTNT) );
+                            DelContentType(DelContentType::AllMask | DelContentType::CheckNoCntnt) );
 
             DelBookmarks(rPam.GetMark()->nNode, rPam.GetPoint()->nNode);
         }
@@ -1006,7 +1006,7 @@ void SwUndoDelete::RedoImpl(::sw::UndoRedoContext & rContext)
         {
             OSL_ENSURE( rPam.HasMark(), "PaM without Mark" );
             DelContentIndex( *rPam.GetMark(), *rPam.GetPoint(),
-                            DelContentType(nsDelContentType::DELCNT_ALL | nsDelContentType::DELCNT_CHKNOCNTNT) );
+                            DelContentType(DelContentType::AllMask | DelContentType::CheckNoCntnt) );
 
             DelBookmarks( rPam.GetMark()->nNode, rPam.GetPoint()->nNode );
         }
