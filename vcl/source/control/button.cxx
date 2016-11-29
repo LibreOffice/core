@@ -1036,7 +1036,8 @@ void PushButton::ImplDrawPushButton(vcl::RenderContext& rRenderContext)
         if (!bRollOver && !HasFocus())
             bDrawMenuSep = false;
     }
-    if ((bNativeOK = rRenderContext.IsNativeControlSupported(ControlType::Pushbutton, ControlPart::Entire)))
+    bNativeOK = rRenderContext.IsNativeControlSupported(ControlType::Pushbutton, ControlPart::Entire);
+    if (bNativeOK)
     {
         PushButtonValue aControlValue;
         Rectangle aCtrlRegion(aInRect);
@@ -1904,7 +1905,7 @@ void RadioButton::ImplDrawRadioButtonState(vcl::RenderContext& rRenderContext)
     bool bNativeOK = false;
 
     // no native drawing for image radio buttons
-    if (!maImage && (bNativeOK = rRenderContext.IsNativeControlSupported(ControlType::Radiobutton, ControlPart::Entire)))
+    if (!maImage && rRenderContext.IsNativeControlSupported(ControlType::Radiobutton, ControlPart::Entire))
     {
         ImplControlValue aControlValue( mbChecked ? ButtonValue::On : ButtonValue::Off );
         Rectangle aCtrlRect(maStateRect.TopLeft(), maStateRect.GetSize());
@@ -2988,9 +2989,8 @@ void CheckBox::ImplInitSettings( bool bFont,
 
 void CheckBox::ImplDrawCheckBoxState(vcl::RenderContext& rRenderContext)
 {
-    bool bNativeOK = true;
-
-    if ((bNativeOK = rRenderContext.IsNativeControlSupported(ControlType::Checkbox, ControlPart::Entire)))
+    bool bNativeOK = rRenderContext.IsNativeControlSupported(ControlType::Checkbox, ControlPart::Entire);
+    if (bNativeOK)
     {
         ImplControlValue aControlValue(meState == TRISTATE_TRUE ? ButtonValue::On : ButtonValue::Off);
         Rectangle aCtrlRegion(maStateRect);

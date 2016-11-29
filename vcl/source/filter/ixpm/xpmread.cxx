@@ -150,7 +150,8 @@ ReadState XPMReader::ReadXPM( Graphic& rGraphic )
             mpStringBuf = new sal_uInt8 [ XPMSTRINGBUF ];
             mpTempBuf = new sal_uInt8 [ XPMTEMPBUFSIZE ];
 
-            if ( ( mbStatus = ImplGetString() ) )
+            mbStatus = ImplGetString();
+            if ( mbStatus )
             {
                 mnIdentifier = XPMVALUES;           // fetch Bitmap information
                 mnWidth = ImplGetULONG( 0 );

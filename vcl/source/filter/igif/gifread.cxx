@@ -715,7 +715,8 @@ bool GIFReader::ProcessGIF()
         // read ScreenDescriptor
         case GLOBAL_HEADER_READING:
         {
-            if( ( bRead = ReadGlobalHeader() ) )
+            bRead = ReadGlobalHeader();
+            if( bRead )
             {
                 ClearImageExtensions();
                 eActAction = MARKER_READING;
@@ -726,7 +727,8 @@ bool GIFReader::ProcessGIF()
         // read extension
         case EXTENSION_READING:
         {
-            if( ( bRead = ReadExtension() ) )
+            bRead = ReadExtension();
+            if( bRead )
                 eActAction = MARKER_READING;
         }
         break;
@@ -734,7 +736,8 @@ bool GIFReader::ProcessGIF()
         // read Image-Descriptor
         case LOCAL_HEADER_READING:
         {
-            if( ( bRead = ReadLocalHeader() ) )
+            bRead = ReadLocalHeader();
+            if( bRead )
             {
                 nYAcc = nImageX = nImageY = 0;
                 eActAction = FIRST_BLOCK_READING;
