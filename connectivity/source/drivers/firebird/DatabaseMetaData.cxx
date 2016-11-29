@@ -1124,7 +1124,8 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumnPrivileges(
         aCurrentRow[5] = new ORowSetValueDecorator(xRow->getString(2)); // 5. GRANTOR
         aCurrentRow[6] = new ORowSetValueDecorator(xRow->getString(3)); // 6. GRANTEE
         aCurrentRow[7] = new ORowSetValueDecorator(xRow->getString(4)); // 7. Privilege
-        aCurrentRow[7] = new ORowSetValueDecorator(xRow->getBoolean(5)); // 8. Grantable
+        aCurrentRow[7] = new ORowSetValueDecorator( ( xRow->getShort(5) == 1 ) ?
+                    OUString("YES") : OUString("NO")); // 8. Grantable
 
         aResults.push_back(aCurrentRow);
     }
@@ -1721,7 +1722,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getIndexInfo(
         }
 
         // 4. NON_UNIQUE -- i.e. specifically negate here.
-        aCurrentRow[4] = new ORowSetValueDecorator(!xRow->getBoolean(5));
+        aCurrentRow[4] = new ORowSetValueDecorator(xRow->getShort(5) == 0);
         // 6. INDEX NAME
         aCurrentRow[6] = new ORowSetValueDecorator(sanitizeIdentifier(xRow->getString(4)));
 
