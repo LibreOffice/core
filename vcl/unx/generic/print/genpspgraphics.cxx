@@ -1039,26 +1039,10 @@ void GenPspGraphics::DoFreeEmbedFontData( const void* pData, long nLen )
         munmap( const_cast<void *>(pData), nLen );
 }
 
-const void* GenPspGraphics::DoGetEmbedFontData( psp::fontID aFont, const sal_Ucs* pUnicodes, sal_Int32* pWidths, size_t nLen, FontSubsetInfo& rInfo, long* pDataLen )
+const void* GenPspGraphics::DoGetEmbedFontData(psp::fontID aFont, long* pDataLen)
 {
 
     psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
-
-    psp::PrintFontInfo aFontInfo;
-    if( ! rMgr.getFontInfo( aFont, aFontInfo ) )
-        return nullptr;
-
-    // fill in font info
-    rInfo.m_nAscent     = aFontInfo.m_nAscend;
-    rInfo.m_nDescent    = aFontInfo.m_nDescend;
-    rInfo.m_aPSName     = rMgr.getPSName( aFont );
-
-    int xMin, yMin, xMax, yMax;
-    rMgr.getFontBoundingBox( aFont, xMin, yMin, xMax, yMax );
-
-    std::vector<psp::CharacterMetric> aMetrics(nLen);
-    if (!rMgr.getMetrics(aFont, pUnicodes, nLen, aMetrics.data()))
-        return nullptr;
 
     OString aSysPath = rMgr.getFontFileSysPath( aFont );
 
@@ -1077,14 +1061,6 @@ const void* GenPspGraphics::DoGetEmbedFontData( psp::fontID aFont, const sal_Ucs
         return nullptr;
     *pDataLen = aStat.st_size;
 
-    rInfo.m_aFontBBox   = Rectangle( Point( xMin, yMin ), Size( xMax-xMin, yMax-yMin ) );
-    rInfo.m_nCapHeight  = yMax; // Well ...
-
-    for (size_t i = 0; i < nLen; ++i)
-        pWidths[i] = (aMetrics[i].width > 0 ? aMetrics[i].width : 0);
-
-    rInfo.m_nFontType = FontSubsetInfo::SFNT_TTF;
-
     return pFile;
 }
 
@@ -1093,7 +1069,7 @@ void GenPspGraphics::FreeEmbedFontData( const void* pData, long nLen )
     DoFreeEmbedFontData( pData, nLen );
 }
 
-const void* GenPspGraphics::GetEmbedFontData( const PhysicalFontFace* pFont, const sal_Ucs* pUnicodes, sal_Int32* pWidths, size_t nLen, FontSubsetInfo& rInfo, long* pDataLen )
+const void* GenPspGraphics::GetEmbedFontData(const PhysicalFontFace* pFont, long* pDataLen)
 {
     // in this context the pFont->GetFontId() is a valid PSP
     // font since they are the only ones left after the PDF
@@ -1101,7 +1077,7 @@ const void* GenPspGraphics::GetEmbedFontData( const PhysicalFontFace* pFont, con
     // which this method was created). The correct way would
     // be to have the GlyphCache search for the PhysicalFontFace pFont
     psp::fontID aFont = pFont->GetFontId();
-    return DoGetEmbedFontData(aFont, pUnicodes, pWidths, nLen, rInfo, pDataLen);
+    return DoGetEmbedFontData(aFont, pDataLen);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

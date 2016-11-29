@@ -175,23 +175,13 @@ public:
     // GetEmbedFontData: gets the font data for a font marked
     // embeddable by GetDevFontList or NULL in case of error
     // parameters: pFont: describes the font in question
-    //             pUnicodes: contains the Unicodes assigned to code points 0 to 255
-    //             pWidths: the widths of all glyphs from char code 0 to 255
-    //             nLen: the number of elements in each of pWidths and pUnicodes
-    //             rInfo: additional outgoing information
     //             pDataLen: out parameter, contains the byte length of the returned buffer
-    virtual const void*         GetEmbedFontData(
-                                    const PhysicalFontFace* pFont,
-                                    const sal_Ucs* pUnicodes,
-                                    sal_Int32* pWidths,
-                                    size_t nLen,
-                                    FontSubsetInfo& rInfo,
-                                    long* pDataLen ) = 0;
+    virtual const void*         GetEmbedFontData(const PhysicalFontFace* pFont, long* pDataLen) = 0;
 
     // free the font data again
     virtual void                FreeEmbedFontData( const void* pData, long nDataLen ) = 0;
 
-    // get the same widths as in CreateFontSubset and GetEmbedFontData
+    // get the same widths as in CreateFontSubset
     // in case of an embeddable font also fill the mapping
     // between unicode and glyph id
     // leave widths vector and mapping untouched in case of failure

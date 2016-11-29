@@ -1903,15 +1903,12 @@ bool WinSalGraphics::CreateFontSubset( const OUString& rToFile,
     return (nRC == SF_OK);
 }
 
-const void* WinSalGraphics::GetEmbedFontData( const PhysicalFontFace* pFont,
-    const sal_Unicode* pUnicodes, sal_Int32* pCharWidths, size_t nLen,
-    FontSubsetInfo& rInfo, long* pDataLen )
+const void* WinSalGraphics::GetEmbedFontData(const PhysicalFontFace* pFont, long* pDataLen)
 {
     // create matching FontSelectPattern
     // we need just enough to get to the font file data
     FontSelectPattern aIFSD( *pFont, Size(0,1000), 1000.0, 0, false );
 
-    // TODO: much better solution: move SetFont and restoration of old font to caller
     ScopedFont aOldFont(*this);
     SetFont( &aIFSD, 0 );
 
@@ -1919,39 +1916,6 @@ const void* WinSalGraphics::GetEmbedFontData( const PhysicalFontFace* pFont,
     RawFontData aRawFontData( getHDC() );
     *pDataLen = aRawFontData.size();
     if( !aRawFontData.get() )
-        return nullptr;
-
-    // get important font properties
-    TEXTMETRICA aTm;
-    if( !::GetTextMetricsA( getHDC(), &aTm ) )
-        *pDataLen = 0;
-    const bool bPFA = (*aRawFontData.get() < 0x80);
-    rInfo.m_nFontType = bPFA ? FontSubsetInfo::TYPE1_PFA : FontSubsetInfo::TYPE1_PFB;
-    WCHAR aFaceName[64];
-    sal_Int32 nFNLen = ::GetTextFaceW( getHDC(), 64, aFaceName );
-    // #i59854# strip eventual null byte
-    while( nFNLen > 0 && aFaceName[nFNLen-1] == 0 )
-        nFNLen--;
-    if( nFNLen == 0 )
-        *pDataLen = 0;
-    rInfo.m_aPSName     = OUString(reinterpret_cast<const sal_Unicode*>(aFaceName), nFNLen);
-    rInfo.m_nAscent     = +aTm.tmAscent;
-    rInfo.m_nDescent    = -aTm.tmDescent;
-    rInfo.m_aFontBBox   = Rectangle( Point( -aTm.tmOverhang, -aTm.tmDescent ),
-              Point( aTm.tmMaxCharWidth, aTm.tmAscent+aTm.tmExternalLeading ) );
-    rInfo.m_nCapHeight  = aTm.tmAscent; // Well ...
-
-    // get individual character widths
-    for (size_t i = 0; i < nLen; ++i)
-    {
-        int nCharWidth = 0;
-        const sal_Unicode cChar = pUnicodes[i];
-        if( !::GetCharWidth32W( getHDC(), cChar, cChar, &nCharWidth ) )
-            *pDataLen = 0;
-        pCharWidths[i] = nCharWidth;
-    }
-
-    if( !*pDataLen )
         return nullptr;
 
     const unsigned char* pData = aRawFontData.steal();
