@@ -342,8 +342,6 @@ bool ISO8601parseDate(const OUString &aDateStr, css::util::Date& rDate)
 /** convert ISO8601 Time String to util::Time */
 bool ISO8601parseTime(const OUString &aTimeStr, css::util::Time& rTime)
 {
-    bool bSuccess = true;
-
     sal_Int32 nHour    = 0;
     sal_Int32 nMin     = 0;
     sal_Int32 nSec     = 0;
@@ -355,7 +353,8 @@ bool ISO8601parseTime(const OUString &aTimeStr, css::util::Time& rTime)
     OUString tokTz;
     bool bFrac = false;
     // hours
-    if (bSuccess && (bSuccess = getISO8601TimeToken(aTimeStr, n, tokInt, bFrac, tokFrac)))
+    bool bSuccess = getISO8601TimeToken(aTimeStr, n, tokInt, bFrac, tokFrac);
+    if (bSuccess)
     {
         if ( bFrac && n < aTimeStr.getLength())
             // is it junk or the timezone?
