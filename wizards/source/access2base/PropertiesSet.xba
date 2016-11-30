@@ -334,13 +334,14 @@ Dim vItem As Variant, sProperty As String
 	If IsMissing(pvObject) Or IsMissing(pvValue) Or IsEmpty(pvObject) Then Call _TraceArguments(&quot;setValue&quot;)
 	If VarType(pvObject) = vbString Then
 		Utils._SetCalledSub(&quot;setValue&quot;)
-		vItem = getObject(pvObject)
+		Set vItem = getObject(pvObject)
 		sProperty = Utils._FinalProperty(pvObject)
 		If sProperty = &quot;&quot; Then sProperty = &quot;Value&quot;
-		setValue = PropertiesSet._setProperty(vItem, sProperty, pvValue)
+		setValue = vItem.setProperty(sProperty, pvValue)
 		Utils._ResetCalledSub(&quot;setValue&quot;)
 	Else
-		setValue = PropertiesSet._setProperty(pvObject, &quot;Value&quot;, pvValue)
+		Set vItem = pvObject
+		setValue = vItem.setProperty(&quot;Value&quot;, pvValue)
 	End If
 End Function		&apos;	setValue
 

@@ -461,7 +461,7 @@ Dim oDoc As Object
 			Case OBJFORM, OBJSUBFORM, OBJCONTROL, OBJDIALOG
 				vCurrentObject = vCurrentObject.Controls(sComponents(iCurrentIndex))
 		End Select
-		If sCurrentProperty &lt;&gt; &quot;&quot; Then vCurrentObject = PropertiesGet._getProperty(vCurrentObject, sCurrentProperty)
+		If sCurrentProperty &lt;&gt; &quot;&quot; Then vCurrentObject = vCurrentObject.getProperty(sCurrentProperty)
 	Next iCurrentIndex
 	
 	Set getObject = vCurrentObject
@@ -714,10 +714,11 @@ Dim vItem As Variant, sProperty As String
 		Set vItem = getObject(pvObject)
 		sProperty = Utils._FinalProperty(pvObject)
 		If sProperty = &quot;&quot; Then sProperty = &quot;Value&quot;			&apos;	Default value if final property in shortcut is absent
-		getValue = PropertiesGet._getProperty(vItem, sProperty)
+		getValue = vItem.getProperty(sproperty)
 		Utils._ResetCalledSub(&quot;getValue&quot;)
 	Else
-		getValue = PropertiesGet._getProperty(pvObject, &quot;Value&quot;)
+		Set vItem = pvObject
+		getValue = vItem.getProperty(&quot;Value&quot;)
 	End If
 End Function		&apos;	getValue
 
