@@ -592,46 +592,77 @@ void DesktopLOKTest::testRowColumnHeaders()
 
     pDocument->pClass->initializeForRendering(pDocument, nullptr);
 
+    long nWidth = 0;
+    long nHeight = 0;
+    pDocument->m_pDocumentClass->getDocumentSize(pDocument, &nWidth, &nHeight);
+    long nX = rtl::math::round(nWidth / 4.0);
+    long nY = rtl::math::round(nHeight / 4.0);
+    nWidth = rtl::math::round(nWidth / 2.0);
+    nHeight = rtl::math::round(nHeight / 2.0);
+
+    std::stringstream aPayload;
+    aPayload << ".uno:ViewRowColumnHeaders?x=" << nX << "&y=" << nY << "&width=" << nWidth << "&height=" << nHeight;
+
     boost::property_tree::ptree aTree;
-    char* pJSON = pDocument->m_pDocumentClass->getCommandValues(pDocument, ".uno:ViewRowColumnHeaders");
+    char* pJSON = pDocument->m_pDocumentClass->getCommandValues(pDocument, aPayload.str().c_str());
     std::stringstream aStream(pJSON);
     free(pJSON);
+
     CPPUNIT_ASSERT(!aStream.str().empty());
 
     boost::property_tree::read_json(aStream, aTree);
     sal_Int32 nPrevious = 0;
+    bool bFirstHeader = true;
+    bool bNotEnoughHeaders = true;
     for (boost::property_tree::ptree::value_type& rValue : aTree.get_child("rows"))
     {
         sal_Int32 nSize = OString(rValue.second.get<std::string>("size").c_str()).toInt32();
-        CPPUNIT_ASSERT(nSize > 0);
         OString aText(rValue.second.get<std::string>("text").c_str());
-        if (!nPrevious)
-            // This failed, as the first item did not contain the text of the first row.
-            CPPUNIT_ASSERT_EQUAL(OString("1"), aText);
+
+        if (bFirstHeader)
+        {
+            CPPUNIT_ASSERT(nSize <= nY);
+            bFirstHeader = false;
+        }
         else
         {
-            // Make sure that size is absolute: the first two items have the same relative size.
+            CPPUNIT_ASSERT(nSize > 0);
             CPPUNIT_ASSERT(nPrevious < nSize);
-            break;
+            if (nSize > nY + nHeight)
+            {
+                bNotEnoughHeaders = false;
+                break;
+            }
         }
         nPrevious = nSize;
     }
+    CPPUNIT_ASSERT(!bNotEnoughHeaders);
 
     nPrevious = 0;
+    bFirstHeader = true;
+    bNotEnoughHeaders = true;
     for (boost::property_tree::ptree::value_type& rValue : aTree.get_child("columns"))
     {
         sal_Int32 nSize = OString(rValue.second.get<std::string>("size").c_str()).toInt32();
-        CPPUNIT_ASSERT(nSize > 0);
         OString aText(rValue.second.get<std::string>("text").c_str());
-        if (!nPrevious)
-            CPPUNIT_ASSERT_EQUAL(OString("A"), aText);
+        if (bFirstHeader)
+        {
+            CPPUNIT_ASSERT(nSize <= nX);
+            bFirstHeader = false;
+        }
         else
         {
+            CPPUNIT_ASSERT(nSize > 0);
             CPPUNIT_ASSERT(nPrevious < nSize);
-            break;
+            if (nSize > nX + nWidth)
+            {
+                bNotEnoughHeaders = false;
+                break;
+            }
         }
         nPrevious = nSize;
     }
+    CPPUNIT_ASSERT(!bNotEnoughHeaders);
 }
 
 void DesktopLOKTest::testHiddenRowHeaders()
@@ -640,29 +671,34 @@ void DesktopLOKTest::testHiddenRowHeaders()
 
     pDocument->pClass->initializeForRendering(pDocument, nullptr);
 
+    long nX = 0;
+    long nY = 0;
+    long nWidth = 0;
+    long nHeight = 0;
+    pDocument->m_pDocumentClass->getDocumentSize(pDocument, &nWidth, &nHeight);
+
+    std::stringstream aPayload;
+    aPayload << ".uno:ViewRowColumnHeaders?x=" << nX << "&y=" << nY << "&width=" << nWidth << "&height=" << nHeight;
+
     boost::property_tree::ptree aTree;
-    char* pJSON = pDocument->m_pDocumentClass->getCommandValues(pDocument, ".uno:ViewRowColumnHeaders");
+    char* pJSON = pDocument->m_pDocumentClass->getCommandValues(pDocument, aPayload.str().c_str());
     std::stringstream aStream(pJSON);
     free(pJSON);
     CPPUNIT_ASSERT(!aStream.str().empty());
 
     boost::property_tree::read_json(aStream, aTree);
     sal_Int32 nPrevious = 0;
-    bool bFirst = true;
+    sal_Int32 nIndex = 0;
     for (boost::property_tree::ptree::value_type& rValue : aTree.get_child("rows"))
     {
         sal_Int32 nSize = OString(rValue.second.get<std::string>("size").c_str()).toInt32();
-        CPPUNIT_ASSERT(nSize > 0);
 
-        if (bFirst)
-            bFirst = false;
-        else
+        if (nIndex++ == 2)
         {
-            // nSize was 509, nPrevious was 254, i.e. hidden row wasn't reported as 0 height.
+            // nSize was 510, nPrevious was 255, i.e. hidden row wasn't reported as 0 height.
             CPPUNIT_ASSERT_EQUAL(nPrevious, nSize);
             break;
         }
-
         nPrevious = nSize;
     }
 }
