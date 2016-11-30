@@ -62,6 +62,8 @@ public:
     void testPDF16Add();
     /// Test a PDF 1.4 document, signed by LO on Windows.
     void testPDF14LOWin();
+    /// Test a PAdES document, signed by LO on Linux.
+    void testPDFPAdESGood();
 
     CPPUNIT_TEST_SUITE(PDFSigningTest);
     CPPUNIT_TEST(testPDFAdd);
@@ -72,6 +74,7 @@ public:
     CPPUNIT_TEST(testPDF16Adobe);
     CPPUNIT_TEST(testPDF16Add);
     CPPUNIT_TEST(testPDF14LOWin);
+    CPPUNIT_TEST(testPDFPAdESGood);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -312,6 +315,11 @@ void PDFSigningTest::testPDF14LOWin()
     // platforms.
     // This failed, as NSS HASH_Create() didn't handle the sign algorithm.
     verify(m_directories.getURLFromSrc(DATA_DIRECTORY) + "pdf14lowin.pdf", 1, /*rExpectedSubFilter=*/OString());
+}
+
+void PDFSigningTest::testPDFPAdESGood()
+{
+    verify(m_directories.getURLFromSrc(DATA_DIRECTORY) + "good-pades.pdf", 1, "ETSI.CAdES.detached");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(PDFSigningTest);
