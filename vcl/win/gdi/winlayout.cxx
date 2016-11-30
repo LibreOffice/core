@@ -3427,6 +3427,11 @@ bool D2DWriteTextOutRenderer::GetDWriteInkBox(SalLayout const &rLayout, Rectangl
         rOut.Union(b);
     }
 
+    // The clipping rectangle is sometimes overzealous, add an extra pixel to
+    // remedy this.
+    if (!rOut.IsEmpty())
+        rOut.expand(1);
+
     return true;
 }
 
