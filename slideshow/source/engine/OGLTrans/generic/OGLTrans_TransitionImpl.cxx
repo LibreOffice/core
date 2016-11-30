@@ -366,7 +366,7 @@ void Primitive::display(GLint primitiveTransformLocation, double nTime, double W
     CHECK_GL_ERROR();
     glVertexPointer( 3, GL_FLOAT, sizeof(Vertex), &Vertices[0] );
     CHECK_GL_ERROR();
-    glDrawArrays( GL_TRIANGLES, 0, getVerticesSize() );
+    glDrawArrays( GL_TRIANGLES, 0, Vertices.size() );
     CHECK_GL_ERROR();
     glPopClientAttrib();
 
