@@ -26,7 +26,7 @@ Private _DbEntry				As Integer
 Private	_ControlType			As Integer
 Private	_SubType				As String
 Private	ControlModel			As Object				&apos;	com.sun.star.comp.forms.XXXModel
-Private	ControlView				As Object				&apos;	com.sun.star.comp.forms.XXXControl
+Private	ControlView				As Object				&apos;	com.sun.star.comp.forms.XXXControl	(NULL if form open in edit mode)
 Private	BoundField				As Object				&apos;	com.sun.star.sdb.ODataColumn
 Private	LabelControl			As Object				&apos;	com.sun.star.form.component.FixedText or com.sun.star.form.component.GroupBox
 
@@ -282,6 +282,195 @@ REM ----------------------------------------------------------------------------
 Property Get ObjectType() As String
 	ObjectType = _PropertyGet(&quot;ObjectType&quot;)
 End Property		&apos;	ObjectType (get)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get OnActionPerformed() As Variant
+	OnActionPerformed = _PropertyGet(&quot;OnActionPerformed&quot;)
+End Property		&apos;	OnActionPerformed (get)
+
+Property Let OnActionPerformed(ByVal pvValue As Variant)
+	Call _PropertySet(&quot;OnActionPerformed&quot;, pvValue)
+End Property		&apos;	OnActionPerformed (set)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get OnAdjustmentValueChanged() As Variant
+	OnAdjustmentValueChanged = _PropertyGet(&quot;OnAdjustmentValueChanged&quot;)
+End Property		&apos;	OnAdjustmentValueChanged (get)
+
+Property Let OnAdjustmentValueChanged(ByVal pvValue As Variant)
+	Call _PropertySet(&quot;OnAdjustmentValueChanged&quot;, pvValue)
+End Property		&apos;	OnAdjustmentValueChanged (set)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get OnApproveAction() As Variant
+	OnApproveAction = _PropertyGet(&quot;OnApproveAction&quot;)
+End Property		&apos;	OnApproveAction (get)
+
+Property Let OnApproveAction(ByVal pvValue As Variant)
+	Call _PropertySet(&quot;OnApproveAction&quot;, pvValue)
+End Property		&apos;	OnApproveAction (set)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get OnApproveReset() As Variant
+	OnApproveReset = _PropertyGet(&quot;OnApproveReset&quot;)
+End Property		&apos;	OnApproveReset (get)
+
+Property Let OnApproveReset(ByVal pvValue As Variant)
+	Call _PropertySet(&quot;OnApproveReset&quot;, pvValue)
+End Property		&apos;	OnApproveReset (set)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get OnApproveUpdate() As Variant
+	OnApproveUpdate = _PropertyGet(&quot;OnApproveUpdate&quot;)
+End Property		&apos;	OnApproveUpdate (get)
+
+Property Let OnApproveUpdate(ByVal pvValue As Variant)
+	Call _PropertySet(&quot;OnApproveUpdate&quot;, pvValue)
+End Property		&apos;	OnApproveUpdate (set)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get OnChanged() As Variant
+	OnChanged = _PropertyGet(&quot;OnChanged&quot;)
+End Property		&apos;	OnChanged (get)
+
+Property Let OnChanged(ByVal pvValue As Variant)
+	Call _PropertySet(&quot;OnChanged&quot;, pvValue)
+End Property		&apos;	OnChanged (set)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get OnErrorOccurred() As Variant
+	OnErrorOccurred = _PropertyGet(&quot;OnErrorOccurred&quot;)
+End Property		&apos;	OnErrorOccurred (get)
+
+Property Let OnErrorOccurred(ByVal pvValue As Variant)
+	Call _PropertySet(&quot;OnErrorOccurred&quot;, pvValue)
+End Property		&apos;	OnErrorOccurred (set)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get OnFocusGained() As Variant
+	OnFocusGained = _PropertyGet(&quot;OnFocusGained&quot;)
+End Property		&apos;	OnFocusGained (get)
+
+Property Let OnFocusGained(ByVal pvValue As Variant)
+	Call _PropertySet(&quot;OnFocusGained&quot;, pvValue)
+End Property		&apos;	OnFocusGained (set)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get OnFocusLost() As Variant
+	OnFocusLost = _PropertyGet(&quot;OnFocusLost&quot;)
+End Property		&apos;	OnFocusLost (get)
+
+Property Let OnFocusLost(ByVal pvValue As Variant)
+	Call _PropertySet(&quot;OnFocusLost&quot;, pvValue)
+End Property		&apos;	OnFocusLost (set)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get OnItemStateChanged() As Variant
+	OnItemStateChanged = _PropertyGet(&quot;OnItemStateChanged&quot;)
+End Property		&apos;	OnItemStateChanged (get)
+
+Property Let OnItemStateChanged(ByVal pvValue As Variant)
+	Call _PropertySet(&quot;OnItemStateChanged&quot;, pvValue)
+End Property		&apos;	OnItemStateChanged (set)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get OnKeyPressed() As Variant
+	OnKeyPressed = _PropertyGet(&quot;OnKeyPressed&quot;)
+End Property		&apos;	OnKeyPressed (get)
+
+Property Let OnKeyPressed(ByVal pvValue As Variant)
+	Call _PropertySet(&quot;OnKeyPressed&quot;, pvValue)
+End Property		&apos;	OnKeyPressed (set)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get OnKeyReleased() As Variant
+	OnKeyReleased = _PropertyGet(&quot;OnKeyReleased&quot;)
+End Property		&apos;	OnKeyReleased (get)
+
+Property Let OnKeyReleased(ByVal pvValue As Variant)
+	Call _PropertySet(&quot;OnKeyReleased&quot;, pvValue)
+End Property		&apos;	OnKeyReleased (set)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get OnMouseDragged() As Variant
+	OnMouseDragged = _PropertyGet(&quot;OnMouseDragged&quot;)
+End Property		&apos;	OnMouseDragged (get)
+
+Property Let OnMouseDragged(ByVal pvValue As Variant)
+	Call _PropertySet(&quot;OnMouseDragged&quot;, pvValue)
+End Property		&apos;	OnMouseDragged (set)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get OnMouseEntered() As Variant
+	OnMouseEntered = _PropertyGet(&quot;OnMouseEntered&quot;)
+End Property		&apos;	OnMouseEntered (get)
+
+Property Let OnMouseEntered(ByVal pvValue As Variant)
+	Call _PropertySet(&quot;OnMouseEntered&quot;, pvValue)
+End Property		&apos;	OnMouseEntered (set)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get OnMouseExited() As Variant
+	OnMouseExited = _PropertyGet(&quot;OnMouseExited&quot;)
+End Property		&apos;	OnMouseExited (get)
+
+Property Let OnMouseExited(ByVal pvValue As Variant)
+	Call _PropertySet(&quot;OnMouseExited&quot;, pvValue)
+End Property		&apos;	OnMouseExited (set)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get OnMouseMoved() As Variant
+	OnMouseMoved = _PropertyGet(&quot;OnMouseMoved&quot;)
+End Property		&apos;	OnMouseMoved (get)
+
+Property Let OnMouseMoved(ByVal pvValue As Variant)
+	Call _PropertySet(&quot;OnMouseMoved&quot;, pvValue)
+End Property		&apos;	OnMouseMoved (set)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get OnMousePressed() As Variant
+	OnMousePressed = _PropertyGet(&quot;OnMousePressed&quot;)
+End Property		&apos;	OnMousePressed (get)
+
+Property Let OnMousePressed(ByVal pvValue As Variant)
+	Call _PropertySet(&quot;OnMousePressed&quot;, pvValue)
+End Property		&apos;	OnMousePressed (set)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get OnMouseReleased() As Variant
+	OnMouseReleased = _PropertyGet(&quot;OnMouseReleased&quot;)
+End Property		&apos;	OnMouseReleased (get)
+
+Property Let OnMouseReleased(ByVal pvValue As Variant)
+	Call _PropertySet(&quot;OnMouseReleased&quot;, pvValue)
+End Property		&apos;	OnMouseReleased (set)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get OnResetted() As Variant
+	OnResetted = _PropertyGet(&quot;OnResetted&quot;)
+End Property		&apos;	OnResetted (get)
+
+Property Let OnResetted(ByVal pvValue As Variant)
+	Call _PropertySet(&quot;OnResetted&quot;, pvValue)
+End Property		&apos;	OnResetted (set)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get OnTextChanged() As Variant
+	OnTextChanged = _PropertyGet(&quot;OnTextChanged&quot;)
+End Property		&apos;	OnTextChanged (get)
+
+Property Let OnTextChanged(ByVal pvValue As Variant)
+	Call _PropertySet(&quot;OnTextChanged&quot;, pvValue)
+End Property		&apos;	OnTextChanged (set)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get OnUpdated() As Variant
+	OnUpdated = _PropertyGet(&quot;OnUpdated&quot;)
+End Property		&apos;	OnUpdated (get)
+
+Property Let OnUpdated(ByVal pvValue As Variant)
+	Call _PropertySet(&quot;OnUpdated&quot;, pvValue)
+End Property		&apos;	OnUpdated (set)
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Property Get OptionValue() As Variant
@@ -557,8 +746,9 @@ REM ----------------------------------------------------------------------------
 Public Function Controls(Optional ByVal pvIndex As Variant) As Variant
 &apos;	Return a Control object with name or index = pvIndex
 
+Const cstThisSub = &quot;Control.Controls&quot;
 If _ErrorHandler() Then On Local Error Goto Error_Function
-	Utils._SetCalledSub(&quot;Grid.Controls&quot;)
+	Utils._SetCalledSub(cstThisSub)
 
 Dim ocControl As Variant, sParentShortcut As String, iControlCount As Integer
 Dim oCounter As Variant, sControls() As Variant, i As Integer, bFound As Boolean, sIndex As String
@@ -609,13 +799,17 @@ Dim j As Integer, oView As Object
 	ocControl._FormComponent = ParentComponent
 	If Utils._hasUNOProperty(ocControl.ControlModel, &quot;ClassId&quot;) Then ocControl._ClassId = ocControl.ControlModel.ClassId
 	&apos;	Complex bypass to find View of grid subcontrols !
-	For i = 0 to ControlView.getCount() - 1
-		Set oView = ControlView.GetByIndex(i)
-		If oView.getModel.Name = ocControl._Name Then
-			Set ocControl.ControlView = oView
-			Exit For
-		End If
-	Next i
+	If Not IsNull(ControlView) Then		&apos;	Anticipate absence of ControlView in grid controls when edit mode
+		For i = 0 to ControlView.getCount() - 1
+			Set oView = ControlView.GetByIndex(i)
+			If Not IsNull(oView) Then
+				If oView.getModel.Name = ocControl._Name Then
+					Set ocControl.ControlView = oView
+					Exit For
+				End If
+			End If
+		Next i
+	End If
 
 	ocControl._Initialize()
 	ocControl._DocEntry = _DocEntry
@@ -623,7 +817,7 @@ Dim j As Integer, oView As Object
 	Set Controls = ocControl
 	
 Exit_Function:
-	Utils._ResetCalledSub(&quot;Grid.Controls&quot;)
+	Utils._ResetCalledSub(cstThisSub)
 	Exit Function
 Trace_Error_Index:
 	TraceError(TRACEFATAL, ERRCOLLECTION, Utils._CalledSub(), 0, 1)
@@ -638,7 +832,7 @@ Trace_Error_Context:
 	Set Controls = Nothing
 	Goto Exit_Function
 Error_Function:
-	TraceError(TRACEABORT, Err, &quot;Grid.Controls&quot;, Erl)
+	TraceError(TRACEABORT, Err, cstThisSub, Erl)
 	Set Controls = Nothing
 	GoTo Exit_Function
 End Function		&apos;	Controls
@@ -787,6 +981,8 @@ Public Function setFocus() As Boolean
 
 Dim i As Integer, j As Integer, iColPosition As Integer
 Dim ocControl As Object, ocGrid As Variant, oGridModel As Object
+
+	If IsNull(ControlView) Then GoTo Exit_Function
 	If _ParentType = CTLPARENTISGRID Then 		&apos;setFocus method does not work on controlviews in grid ?!?
 		&apos;	Find column position of control
 		iColPosition = -1
@@ -872,6 +1068,41 @@ Dim vFormats() As Variant
 	_Formats = vFormats
 
 End Function	&apos;	_Formats	V0.9.1
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Private Function _GetListener(ByVal psProperty As String) As String
+&apos;	Return the X...Listener corresponding with the property in argument
+
+	Select Case UCase(psProperty)
+		Case UCase(&quot;OnActionPerformed&quot;)
+			_GetListener = &quot;XActionListener&quot;
+		Case UCase(&quot;OnAdjustmentValueChanged&quot;)
+			_GetListener = &quot;XAdjustmentListener&quot;
+		Case UCase(&quot;OnApproveAction&quot;)
+			_GetListener = &quot;XApproveActionListener&quot;
+		Case UCase(&quot;OnApproveReset&quot;), UCase(&quot;OnResetted&quot;)
+			_GetListener = &quot;XResetListener&quot;
+		Case UCase(&quot;OnApproveUpdate&quot;), UCase(&quot;OnUpdated&quot;)
+			_GetListener = &quot;XUpdateListener&quot;
+		Case UCase(&quot;OnChanged&quot;)
+			_GetListener = &quot;XChangeListener&quot;
+		Case UCase(&quot;OnErrorOccurred&quot;)
+			_GetListener = &quot;XErrorListener&quot;
+		Case UCase(&quot;OnFocusGained&quot;), UCase(&quot;OnFocusLost&quot;)
+			_GetListener = &quot;XFocusListener&quot;
+		Case UCase(&quot;OnItemStateChanged&quot;)
+			_GetListener = &quot;XItemListener&quot;
+		Case UCase(&quot;OnKeyPressed&quot;), UCase(&quot;OnKeyReleased&quot;)
+			_GetListener = &quot;XKeyListener&quot;
+		Case UCase(&quot;OnMouseDragged&quot;), UCase(&quot;OnMouseMoved&quot;)
+			_GetListener = &quot;XMouseMotionListener&quot;
+		Case UCase(&quot;OnMouseEntered&quot;), UCase(&quot;OnMouseExited&quot;), UCase(&quot;OnMousePressed&quot;), UCase(&quot;OnMouseReleased&quot;)
+			_GetListener = &quot;XMouseListener&quot;
+		Case UCase(&quot;OnTextChanged&quot;)
+			_GetListener = &quot;XTextListener&quot;
+	End Select
+	
+End Function	&apos;	_GetListener	V1.7.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Public Sub _Initialize()
@@ -1024,6 +1255,27 @@ Dim vFullPropertiesList() As Variant
 		, &quot;MultiSelect&quot; _
 		, &quot;Name&quot; _
 		, &quot;ObjectType&quot; _
+		, &quot;OnActionPerformed&quot; _
+		, &quot;OnAdjustmentValueChanged&quot; _
+		, &quot;OnApproveAction&quot; _
+		, &quot;OnApproveReset&quot; _
+		, &quot;OnApproveUpdate&quot; _
+		, &quot;OnChanged&quot; _
+		, &quot;OnErrorOccurred&quot; _
+		, &quot;OnFocusGained&quot; _
+		, &quot;OnFocusLost&quot; _
+		, &quot;OnItemStateChanged&quot; _
+		, &quot;OnKeyPressed&quot; _
+		, &quot;OnKeyReleased&quot; _
+		, &quot;OnMouseDragged&quot; _
+		, &quot;OnMouseEntered&quot; _
+		, &quot;OnMouseExited&quot; _
+		, &quot;OnMouseMoved&quot; _
+		, &quot;OnMousePressed&quot; _
+		, &quot;OnMouseReleased&quot; _
+		, &quot;OnResetted&quot; _
+		, &quot;OnTextChanged&quot; _
+		, &quot;OnUpdated&quot; _
 		, &quot;OptionValue&quot; _
 		, &quot;Page&quot; _
 		, &quot;Parent&quot; _
@@ -1049,65 +1301,64 @@ Dim vFullPropertiesList() As Variant
 Dim vPropertiesMatrix(25) As Variant
 	Select Case _ParentType
 		Case CTLPARENTISFORM, CTLPARENTISSUBFORM
-			vPropertiesMatrix(acCheckBox) = Array(0,4,5,6,7,9,10,11,12,13,14,15,16,17,27,28,31,33,40,41,42,43,44,46,47,48,49)
-			vPropertiesMatrix(acComboBox) = Array(0,1,2,5,6,7,9,10,11,12,13,14,15,16,17,20,23,24,25,27,28,31,33,34,35,41,42,43,44,45,46,48,49)
-			vPropertiesMatrix(acCommandButton) = Array(0,3,4,6,7,8,10,11,12,13,14,15,16,17,27,28,31,41,42,43,44,46,48,49)
-			vPropertiesMatrix(acCurrencyField) = Array(0,1,2,5,6,7,9,10,11,12,13,14,15,16,17,25,27,28,31,33,41,42,43,44,46,48,49)
-			vPropertiesMatrix(acDateField) = Array(0,1,2,5,6,7,9,10,11,12,13,14,15,16,17,19,25,27,28,31,33,41,42,43,44,45,46,48,49)
-			vPropertiesMatrix(acFileControl) = Array(0,1,2,6,7,9,10,11,12,13,14,15,16,17,25,27,28,31,41,42,43,44,45,48,49)
-			vPropertiesMatrix(acFixedLine) = Array()
-			vPropertiesMatrix(acFixedText) = Array(0,1,2,4,6,7,10,11,12,13,14,15,16,17,27,28,31,41,44,46,49)
-			vPropertiesMatrix(acFormattedField) = Array(0,1,2,5,6,7,9,10,11,12,13,14,15,16,17,19,25,27,28,31,33,41,42,43,44,45,46,48,49)
-			vPropertiesMatrix(acGridControl) = Array(0,1,2,6,7,10,11,12,13,14,15,16,17,27,28,31,41,42,43,44,49)
-			vPropertiesMatrix(acGroupBox) = Array(4,6,7,10,11,12,13,14,15,16,17,27,28,31,41,44,49)
-			vPropertiesMatrix(acHiddenControl) = Array(7,27,28,31,41,44,48,49)
-			vPropertiesMatrix(acImageButton) = Array(0,1,2,6,7,10,27,28,31,32,41,42,43,44,49)
-			vPropertiesMatrix(acImageControl) = Array(0,1,2,5,6,7,10,25,27,28,31,32,33,41,42,43,44,49)
-			vPropertiesMatrix(acListBox) = Array(0,1,2,5,6,7,9,10,11,12,13,14,15,16,17,20,23,24,25,26,27,28,31,33,34,35,36,41,42,43,44,46,48,49)
-			vPropertiesMatrix(acNavigationBar) = Array(0,2,6,7,10,11,12,13,14,15,16,17,27,28,31,41,42,43,44,49)
-			vPropertiesMatrix(acNumericField) = Array(0,1,2,5,6,7,9,10,11,12,13,14,15,16,17,25,27,28,31,33,41,42,43,44,46,48,49)
-			vPropertiesMatrix(acPatternField) = Array(0,1,2,5,6,7,9,10,11,12,13,14,15,16,17,25,27,28,31,33,37,38,39,41,42,43,44,45,46,48,49)
-			vPropertiesMatrix(acProgressBar) = Array()
-			vPropertiesMatrix(acRadioButton) = Array(0,4,5,6,7,9,10,11,12,13,14,15,16,17,27,28,29,31,33,40,41,42,43,44,46,48,49)
-			vPropertiesMatrix(acScrollBar) = Array(0,1,2,6,7,10,27,28,31,41,42,43,44,48,49)
-			vPropertiesMatrix(acSpinButton) = Array(0,1,2,6,7,9,10,27,28,31,41,42,43,44,48,49)
-			vPropertiesMatrix(0) = Array(7,18,21,22,27,28,31,41)
-			vPropertiesMatrix(acTextField) = Array(0,1,2,5,6,7,9,10,11,12,13,14,15,16,17,25,27,28,31,33,37,38,39,41,42,43,44,45,46,48,49)
-			vPropertiesMatrix(acTimeField) = Array(0,1,2,5,6,7,9,10,11,12,13,14,15,16,17,19,25,27,28,31,33,41,42,43,44,45,46,48,49)
+			vPropertiesMatrix(acCheckBox) = Array(0,4,5,6,7,9,10,11,12,13,14,15,16,17,27,28,29,32,36,37,38,39,40,41,42,43,44,45,46,47,52,54,61,62,63,64,65,67,68,69,70)
+			vPropertiesMatrix(acComboBox) = Array(0,1,2,5,6,7,9,10,11,12,13,14,15,16,17,20,23,24,25,27,28,29,32,33,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,52,54,55,56,62,63,64,65,66,67,69,70)
+			vPropertiesMatrix(acCommandButton) = Array(0,3,4,6,7,8,10,11,12,13,14,15,16,17,27,28,29,31,32,36,37,38,39,40,41,42,43,44,45,46,47,52,53,62,63,64,65,67,69,70)
+			vPropertiesMatrix(acCurrencyField) = Array(0,1,2,5,6,7,9,10,11,12,13,14,15,16,17,25,27,28,32,33,36,37,39,40,41,42,43,44,45,46,47,48,49,52,54,62,63,64,65,67,69,70)
+			vPropertiesMatrix(acDateField) = Array(0,1,2,5,6,7,9,10,11,12,13,14,15,16,17,19,25,27,28,32,33,36,37,39,40,41,42,43,44,45,46,47,48,49,52,54,62,63,64,65,66,67,69,70)
+			vPropertiesMatrix(acFileControl) = Array(0,1,2,6,7,9,10,11,12,13,14,15,16,17,25,27,28,32,36,37,39,40,41,42,43,44,45,46,47,48,52,62,63,64,65,66,69,70)
+			vPropertiesMatrix(acFixedText) = Array(0,1,2,4,6,7,10,11,12,13,14,15,16,17,27,28,36,37,39,40,41,42,43,44,45,46,52,62,65,67,70)
+			vPropertiesMatrix(acFormattedField) = Array(0,1,2,5,6,7,9,10,11,12,13,14,15,16,17,19,25,27,28,32,33,35,36,37,39,40,41,42,43,44,45,46,47,48,49,52,54,62,63,64,65,66,67,69,70)
+			vPropertiesMatrix(acGridControl) = Array(0,1,2,6,7,10,11,12,13,14,15,16,17,27,28,32,33,35,36,37,39,40,41,42,43,44,45,46,47,49,52,62,63,64,65,70)
+			vPropertiesMatrix(acGroupBox) = Array(4,6,7,10,11,12,13,14,15,16,17,27,28,32,36,37,39,40,41,42,43,44,45,46,47,52,62,65,70)
+			vPropertiesMatrix(acHiddenControl) = Array(7,27,28,52,62,65,69,70)
+			vPropertiesMatrix(acImageButton) = Array(0,1,2,6,7,10,27,28,31,36,37,39,40,41,42,43,44,45,46,52,53,62,63,64,65,70)
+			vPropertiesMatrix(acImageControl) = Array(0,1,2,5,6,7,10,25,27,28,32,36,37,39,40,41,42,43,44,45,46,47,52,53,54,62,63,64,65,70)
+			vPropertiesMatrix(acListBox) = Array(0,1,2,5,6,7,9,10,11,12,13,14,15,16,17,20,23,24,25,26,27,28,29,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,49,52,54,55,56,57,62,63,64,65,67,69,70)
+			vPropertiesMatrix(acNavigationBar) = Array(0,2,6,7,10,11,12,13,14,15,16,17,27,28,36,37,39,40,41,42,43,44,45,46,52,62,63,64,65,70)
+			vPropertiesMatrix(acNumericField) = Array(0,1,2,5,6,7,9,10,11,12,13,14,15,16,17,25,27,28,32,33,36,37,39,40,41,42,43,44,45,46,47,48,49,52,54,62,63,64,65,67,69,70)
+			vPropertiesMatrix(acPatternField) = Array(0,1,2,5,6,7,9,10,11,12,13,14,15,16,17,25,27,28,32,33,36,37,39,40,41,42,43,44,45,46,47,48,49,52,54,58,59,60,62,63,64,65,66,67,69,70)
+			vPropertiesMatrix(acRadioButton) = Array(0,4,5,6,7,9,10,11,12,13,14,15,16,17,27,28,29,32,36,37,38,39,40,41,42,43,44,45,46,47,50,52,54,61,62,63,64,65,67,69,70)
+			vPropertiesMatrix(acScrollBar) = Array(0,1,2,6,7,10,27,28,30,32,33,36,37,39,40,41,42,43,44,45,46,47,49,52,62,63,64,65,69,70)
+			vPropertiesMatrix(acSpinButton) = Array(0,1,2,6,7,9,10,27,28,30,32,33,36,37,39,40,41,42,43,44,45,46,47,49,52,62,63,64,65,69,70)
+			vPropertiesMatrix(0) = Array(7,18,21,22,27,28,52,62)
+			vPropertiesMatrix(acTextField) = Array(0,1,2,5,6,7,9,10,11,12,13,14,15,16,17,25,27,28,32,33,34,36,37,39,40,41,42,43,44,45,46,47,48,49,52,54,58,59,60,62,63,64,65,66,67,69,70)
+			vPropertiesMatrix(acTimeField) = Array(0,1,2,5,6,7,9,10,11,12,13,14,15,16,17,19,25,27,28,32,33,36,37,39,40,41,42,43,44,45,46,47,48,49,52,54,62,63,64,65,66,67,69,70)
 		Case CTLPARENTISGROUP
 			&apos;	To be duplicated from above !!!
-			vPropertiesMatrix(acRadioButton) = Array(0,4,5,6,7,9,10,11,12,13,14,15,16,17,27,28,29,31,33,40,41,42,43,44,46,48,49)
+			vPropertiesMatrix(acRadioButton) = Array(0,4,5,6,7,9,10,11,12,13,14,15,16,17,27,28,29,32,36,37,38,39,40,41,42,43,44,45,46,47,50,52,54,61,62,63,64,65,67,69,70)
 		Case CTLPARENTISGRID
-			vPropertiesMatrix(acCheckBox) = Array(4,5,6,7,9,10,27,28,31,33,40,41,44,46,47,48)
-			vPropertiesMatrix(acComboBox) = Array(4,5,6,7,9,10,20,23,24,25,27,28,31,33,34,35,41,44,45,46,48)
-			vPropertiesMatrix(acCurrencyField) = Array(4,5,6,7,9,10,25,27,28,31,33,41,44,46,48)
-			vPropertiesMatrix(acDateField) = Array(4,5,6,7,9,10,19,25,27,28,31,33,41,44,45,46,48)
-			vPropertiesMatrix(acFormattedField) = Array(4,5,6,7,9,10,19,25,27,28,31,33,41,44,45,46,48)
-			vPropertiesMatrix(acListBox) = Array(4,5,6,7,9,10,20,23,24,25,26,27,28,31,33,34,35,36,41,44,46,48)
-			vPropertiesMatrix(acNumericField) = Array(4,5,6,7,9,10,25,27,28,31,33,41,44,46,48)
-			vPropertiesMatrix(acPatternField) = Array(4,5,6,7,9,10,25,27,28,31,33,37,38,39,41,44,45,46,48)
-			vPropertiesMatrix(acTextField) = Array(4,5,6,7,9,10,25,27,28,31,33,37,38,39,41,44,45,46,48)
-			vPropertiesMatrix(acTimeField) = Array(4,5,6,7,9,10,19,25,27,28,31,33,41,44,45,46,48)
+			vPropertiesMatrix(acCheckBox) = Array(4,5,6,7,9,10,27,28,29,32,36,37,38,39,40,41,42,43,44,45,46,47,52,54,61,62,65,67,68,69)
+			vPropertiesMatrix(acComboBox) = Array(4,5,6,7,9,10,20,23,24,25,27,28,32,33,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,52,54,55,56,62,65,66,67,69)
+			vPropertiesMatrix(acCurrencyField) = Array(4,5,6,7,9,10,25,27,28,32,33,36,37,39,40,41,42,43,44,45,46,47,48,49,52,54,62,65,67,69)
+			vPropertiesMatrix(acDateField) = Array(4,5,6,7,9,10,19,25,27,28,32,33,36,37,39,40,41,42,43,44,45,46,47,48,49,52,54,62,65,66,67,69)
+			vPropertiesMatrix(acFormattedField) = Array(4,5,6,7,9,10,19,25,27,28,32,33,35,36,37,39,40,41,42,43,44,45,46,47,48,49,52,54,62,65,66,67,69)
+			vPropertiesMatrix(acListBox) = Array(4,5,6,7,9,10,20,23,24,25,26,27,28,32,33,35,36,37,38,39,40,41,42,43,44,45,46,47,49,52,54,55,56,57,62,65,67,69)
+			vPropertiesMatrix(acNumericField) = Array(4,5,6,7,9,10,25,27,28,32,33,36,37,39,40,41,42,43,44,45,46,47,48,49,52,54,62,65,67,69)
+			vPropertiesMatrix(acPatternField) = Array(4,5,6,7,9,10,25,27,28,32,33,36,37,39,40,41,42,43,44,45,46,47,48,49,52,54,58,59,60,62,65,66,67,69)
+			vPropertiesMatrix(acTextField) = Array(4,5,6,7,9,10,25,27,28,32,33,34,36,37,39,40,41,42,43,44,45,46,47,48,49,52,54,58,59,60,62,65,66,67,69)
+			vPropertiesMatrix(acTimeField) = Array(4,5,6,7,9,10,19,25,27,28,32,33,36,37,39,40,41,42,43,44,45,46,47,48,49,52,54,62,65,66,67,69)
 		Case CTLPARENTISDIALOG
-			vPropertiesMatrix(acCheckBox) = Array(0,4,6,7,10,11,12,13,14,15,16,17,27,28,30,31,40,41,42,43,44,46,47,48,49)
-			vPropertiesMatrix(acComboBox) = Array(0,1,2,6,7,10,11,12,13,14,15,16,17,20,23,24,25,27,28,30,31,34,41,42,43,44,45,46,48,49)
-			vPropertiesMatrix(acCommandButton) = Array(0,3,4,6,7,8,10,11,12,13,14,15,16,17,27,28,30,31,41,42,43,44,46,49)
-			vPropertiesMatrix(acCurrencyField) = Array(0,1,2,6,7,10,11,12,13,14,15,16,17,25,27,28,30,31,41,42,43,44,46,48,49)
-			vPropertiesMatrix(acDateField) = Array(0,1,2,6,7,10,11,12,13,14,15,16,17,19,25,27,28,30,31,41,42,43,44,45,46,48,49)
-			vPropertiesMatrix(acFileControl) = Array(0,1,2,6,7,10,11,12,13,14,15,16,17,25,27,28,30,31,41,42,43,44,45,46,48,49)
-			vPropertiesMatrix(acFixedLine) = Array(0,4,6,7,10,11,12,13,14,15,16,17,27,28,30,31,41,42,44,49)
-			vPropertiesMatrix(acFixedText) = Array(0,1,2,4,6,7,10,11,12,13,14,15,16,17,27,28,30,31,41,42,43,44,46,49)
-			vPropertiesMatrix(acFormattedField) = Array(0,1,2,6,7,10,11,12,13,14,15,16,17,19,25,27,28,30,31,41,42,43,44,45,46,48,49)
-			vPropertiesMatrix(acGroupBox) = Array(4,6,7,10,11,12,13,14,15,16,17,27,28,30,31,41,42,44,49)
-			vPropertiesMatrix(acImageControl) = Array(0,1,2,6,7,10,27,28,30,31,41,42,43,44,49)
-			vPropertiesMatrix(acListBox) = Array(0,1,2,6,7,10,11,12,13,14,15,16,17,20,23,24,25,26,27,28,30,31,34,36,41,42,43,44,46,48,49)
-			vPropertiesMatrix(acNumericField) = Array(0,1,2,6,7,10,11,12,13,14,15,16,17,25,27,28,30,31,41,42,43,44,46,48,49)
-			vPropertiesMatrix(acPatternField) = Array(0,1,2,6,7,10,11,12,13,14,15,16,17,25,27,28,30,31,37,38,39,41,42,43,44,45,46,48,49)
-			vPropertiesMatrix(acProgressBar) = Array(0,1,2,6,7,10,27,28,30,31,41,42,44,48,49)
-			vPropertiesMatrix(acRadioButton) = Array(0,4,6,7,10,11,12,13,14,15,16,17,27,28,29,30,31,40,41,42,43,44,46,48,49)
-			vPropertiesMatrix(acScrollBar) = Array(0,1,2,6,7,10,27,28,30,31,41,42,43,44,48,49)
-			vPropertiesMatrix(acTextField) = Array(0,1,2,6,7,10,11,12,13,14,15,16,17,25,27,28,30,31,37,38,39,41,42,43,44,45,46,48,49)
-			vPropertiesMatrix(acTimeField) = Array(0,1,2,6,7,10,11,12,13,14,15,16,17,19,25,27,28,30,31,41,42,43,44,45,46,48,49)
+			vPropertiesMatrix(acCheckBox) = Array(0,4,6,7,10,11,12,13,14,15,16,17,27,28,29,36,37,38,39,40,41,42,43,44,45,46,51,52,61,62,63,64,65,67,68,69,70)
+			vPropertiesMatrix(acComboBox) = Array(0,1,2,6,7,10,11,12,13,14,15,16,17,20,23,24,25,27,28,29,36,37,38,39,40,41,42,43,44,45,46,48,51,52,55,62,63,64,65,66,67,69,70)
+			vPropertiesMatrix(acCommandButton) = Array(0,3,4,6,7,8,10,11,12,13,14,15,16,17,27,28,29,36,37,38,39,40,41,42,43,44,45,46,51,52,53,62,63,64,65,67,70)
+			vPropertiesMatrix(acCurrencyField) = Array(0,1,2,6,7,10,11,12,13,14,15,16,17,25,27,28,36,37,39,40,41,42,43,44,45,46,48,51,52,62,63,64,65,67,69,70)
+			vPropertiesMatrix(acDateField) = Array(0,1,2,6,7,10,11,12,13,14,15,16,17,19,25,27,28,36,37,39,40,41,42,43,44,45,46,48,51,52,62,63,64,65,66,67,69,70)
+			vPropertiesMatrix(acFileControl) = Array(0,1,2,6,7,10,11,12,13,14,15,16,17,25,27,28,36,37,39,40,41,42,43,44,45,46,48,51,52,62,63,64,65,66,67,69,70)
+			vPropertiesMatrix(acFixedLine) = Array(0,4,6,7,10,11,12,13,14,15,16,17,27,28,36,37,39,40,41,42,43,44,45,46,51,52,62,63,65,70)
+			vPropertiesMatrix(acFixedText) = Array(0,1,2,4,6,7,10,11,12,13,14,15,16,17,27,28,36,37,39,40,41,42,43,44,45,46,51,52,62,63,64,65,67,70)
+			vPropertiesMatrix(acFormattedField) = Array(0,1,2,6,7,10,11,12,13,14,15,16,17,19,25,27,28,36,37,39,40,41,42,43,44,45,46,48,51,52,62,63,64,65,66,67,69,70)
+			vPropertiesMatrix(acGroupBox) = Array(4,6,7,10,11,12,13,14,15,16,17,27,28,36,37,39,40,41,42,43,44,45,46,51,52,62,63,65,70)
+			vPropertiesMatrix(acImageControl) = Array(0,1,2,6,7,10,27,28,36,37,39,40,41,42,43,44,45,46,51,52,53,62,63,64,65,70)
+			vPropertiesMatrix(acListBox) = Array(0,1,2,6,7,10,11,12,13,14,15,16,17,20,23,24,25,26,27,28,29,36,37,38,39,40,41,42,43,44,45,46,51,52,55,57,62,63,64,65,67,69,70)
+			vPropertiesMatrix(acNavigationBar) = Array(36,37,39,40,41,42,43,44,45,46)
+			vPropertiesMatrix(acNumericField) = Array(0,1,2,6,7,10,11,12,13,14,15,16,17,25,27,28,36,37,39,40,41,42,43,44,45,46,48,51,52,62,63,64,65,67,69,70)
+			vPropertiesMatrix(acPatternField) = Array(0,1,2,6,7,10,11,12,13,14,15,16,17,25,27,28,36,37,39,40,41,42,43,44,45,46,48,51,52,58,59,60,62,63,64,65,66,67,69,70)
+			vPropertiesMatrix(acProgressBar) = Array(0,1,2,6,7,10,27,28,36,37,39,40,41,42,43,44,45,46,51,52,62,63,65,69,70)
+			vPropertiesMatrix(acRadioButton) = Array(0,4,6,7,10,11,12,13,14,15,16,17,27,28,29,36,37,38,39,40,41,42,43,44,45,46,50,51,52,61,62,63,64,65,67,69,70)
+			vPropertiesMatrix(acScrollBar) = Array(0,1,2,6,7,10,27,28,30,36,37,39,40,41,42,43,44,45,46,51,52,62,63,64,65,69,70)
+			vPropertiesMatrix(acTextField) = Array(0,1,2,6,7,10,11,12,13,14,15,16,17,25,27,28,36,37,39,40,41,42,43,44,45,46,48,51,52,58,59,60,62,63,64,65,66,67,69,70)
+			vPropertiesMatrix(acTimeField) = Array(0,1,2,6,7,10,11,12,13,14,15,16,17,19,25,27,28,36,37,39,40,41,42,43,44,45,46,48,51,52,62,63,64,65,66,67,69,70)
 	End Select
 	
 Dim vProperties() As Variant, i As Integer, iIndex As Integer
@@ -1332,6 +1583,13 @@ Dim vSelection As Variant, sSelectedText As String
 			End If
 		Case UCase(&quot;Name&quot;)
 			_PropertyGet = _Name
+		Case UCase(&quot;OnActionPerformed&quot;), UCase(&quot;OnAdjustmentValueChanged&quot;), UCase(&quot;OnApproveAction&quot;), UCase(&quot;OnApproveReset&quot;) _
+				, UCase(&quot;OnApproveUpdate&quot;), UCase(&quot;OnChanged&quot;), UCase(&quot;OnErrorOccurred&quot;), UCase(&quot;OnFocusGained&quot;) _
+				, UCase(&quot;OnFocusLost&quot;), UCase(&quot;OnItemStateChanged&quot;), UCase(&quot;OnKeyPressed&quot;), UCase(&quot;OnKeyReleased&quot;) _
+				, UCase(&quot;OnMouseDragged&quot;), UCase(&quot;OnMouseEntered&quot;), UCase(&quot;OnMouseExited&quot;), UCase(&quot;OnMouseMoved&quot;) _
+				, UCase(&quot;OnMousePressed&quot;), UCase(&quot;OnMouseReleased&quot;), UCase(&quot;OnResetted&quot;), UCase(&quot;OnTextChanged&quot;) _
+				, UCase(&quot;OnUpdated&quot;)
+			_PropertyGet = Utils._GetEventScriptCode(ControlModel, psProperty, _Name)
 		Case UCase(&quot;OptionValue&quot;)
 			If Utils._hasUNOProperty(ControlModel, &quot;RefValue&quot;) Then
 				If ControlModel.RefValue &lt;&gt; &quot;&quot; Then
@@ -1815,6 +2073,18 @@ Dim vSelection As Variant, sText As String, lStart As long
 				ControlModel.MultiSelectionSimpleMode = pvValue
 			End If
 			If Not pvValue Then ControlModel.SelectedItems = Array()	&apos;	Cancel selections when MultiSelect becomes False
+		Case UCase(&quot;OnActionPerformed&quot;), UCase(&quot;OnAdjustmentValueChanged&quot;), UCase(&quot;OnApproveAction&quot;), UCase(&quot;OnApproveReset&quot;) _
+				, UCase(&quot;OnApproveUpdate&quot;), UCase(&quot;OnChanged&quot;), UCase(&quot;OnErrorOccurred&quot;), UCase(&quot;OnFocusGained&quot;) _
+				, UCase(&quot;OnFocusLost&quot;), UCase(&quot;OnItemStateChanged&quot;), UCase(&quot;OnKeyPressed&quot;), UCase(&quot;OnKeyReleased&quot;) _
+				, UCase(&quot;OnMouseDragged&quot;), UCase(&quot;OnMouseEntered&quot;), UCase(&quot;OnMouseExited&quot;), UCase(&quot;OnMouseMoved&quot;) _
+				, UCase(&quot;OnMousePressed&quot;), UCase(&quot;OnMouseReleased&quot;), UCase(&quot;OnResetted&quot;), UCase(&quot;OnTextChanged&quot;) _
+				, UCase(&quot;OnUpdated&quot;)
+			If Not Utils._CheckArgument(pvValue, iArgNr, vbString, , False) Then Goto Trace_Error_Value
+			If Not Utils._RegisterEventScript(ControlModel _
+						, psProperty _
+						, _GetListener(psProperty) _
+						, pvValue, _Name _
+						) Then GoTo Trace_Error
 		Case UCase(&quot;OptionValue&quot;)
 			If Not Utils._hasUNOProperty(ControlModel, &quot;RefValue&quot;) Then Goto Trace_Error
 			If Not Utils._CheckArgument(pvValue, iArgNr, vbString, , False) Then Goto Trace_Error_Value

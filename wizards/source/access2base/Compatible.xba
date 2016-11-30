@@ -19,7 +19,7 @@ Dim vVarTypes() As Variant, i As Integer
 Const cstTab = 5
 	On Local Error Goto Exit_Sub	&apos;	Never interrupt processing
 	Utils._SetCalledSub(&quot;DebugPrint&quot;)
-	vVarTypes = Utils._AddNumeric(Array(vbEmpty, vbNull, vbDate, vbString, vbBoolean, vbObject, vbVariant, vbByte, 8192 + vbByte))
+	vVarTypes = Utils._AddNumeric(Array(vbEmpty, vbNull, vbDate, vbString, vbBoolean, vbObject, vbVariant, vbByte, vbArray + vbByte))
 	
 	If UBound(pvArgs) &gt;= 0 Then
 		For i = 0 To UBound(pvArgs)
@@ -34,7 +34,7 @@ Const cstTab = 5
 Dim sOutput As String, sArg As String
 	sOutput = &quot;&quot;	
 	For i = 0 To UBound(pvArgs)
-		sArg = Utils._CStr(pvArgs(i))
+		sArg = Utils._CStr(pvArgs(i), _A2B_.DebugPrintShort)
 		&apos; Add argument to output
 		If i = 0 Then
 			sOutput = sArg

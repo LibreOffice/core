@@ -105,8 +105,10 @@ Dim vNames() As Variant, oProperty As Object
 			End Select
 		Case COLLPROPERTIES
 			Select Case _ParentType
-				Case OBJCONTROL, OBJSUBFORM
+				Case OBJCONTROL
 					Set Item = getObject(_ParentName).Properties(pvItem)
+				Case OBJSUBFORM
+					Set Item = getValue(_ParentName).Properties(pvItem)
 				Case OBJDATABASE
 					Set Item = _ParentDatabase.Properties(pvItem)
 				Case OBJDIALOG

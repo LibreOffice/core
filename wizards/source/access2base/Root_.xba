@@ -25,6 +25,7 @@ Private TraceLogCount		As Integer
 Private TraceLogLast		As Integer
 Private TraceLogMaxEntries	As Integer
 Private CalledSub			As String
+Private DebugPrintShort		As Boolean
 Private Introspection		As Object				&apos;	com.sun.star.beans.Introspection	
 Private VersionNumber		As String				&apos;	Actual Access2Base version number
 Private Locale				As String
@@ -47,6 +48,7 @@ Dim vCurrentDoc() As Variant
 	TraceLogLast = 0
 	TraceLogMaxEntries = 0
 	CalledSub = &quot;&quot;
+	DebugPrintShort = True
 	Locale = L10N._GetLocale()
 	Set Introspection = CreateUnoService(&quot;com.sun.star.beans.Introspection&quot;)
 	Set FindRecord = Nothing

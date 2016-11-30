@@ -124,6 +124,141 @@ Public Function pName() As String		&apos;	For compatibility with &lt; V0.9.0
 End Function	&apos;	pName (get)
 
 REM -----------------------------------------------------------------------------------------------------------------------
+Property Get OnApproveCursorMove() As Variant
+	OnApproveCursorMove = _PropertyGet(&quot;OnApproveCursorMove&quot;)
+End Property	&apos;	OnApproveCursorMove (get)
+
+Property Let OnApproveCursorMove(ByVal pvValue As Variant)
+	Call _PropertySet(&quot;OnApproveCursorMove&quot;, pvValue)
+End Property	&apos;	OnApproveCursorMove (set)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get OnApproveParameter() As Variant
+	OnApproveParameter = _PropertyGet(&quot;OnApproveParameter&quot;)
+End Property	&apos;	OnApproveParameter (get)
+
+Property Let OnApproveParameter(ByVal pvValue As Variant)
+	Call _PropertySet(&quot;OnApproveParameter&quot;, pvValue)
+End Property	&apos;	OnApproveParameter (set)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get OnApproveReset() As Variant
+	OnApproveReset = _PropertyGet(&quot;OnApproveReset&quot;)
+End Property	&apos;	OnApproveReset (get)
+
+Property Let OnApproveReset(ByVal pvValue As Variant)
+	Call _PropertySet(&quot;OnApproveReset&quot;, pvValue)
+End Property	&apos;	OnApproveReset (set)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get OnApproveRowChange() As Variant
+	OnApproveRowChange = _PropertyGet(&quot;OnApproveRowChange&quot;)
+End Property	&apos;	OnApproveRowChange (get)
+
+Property Let OnApproveRowChange(ByVal pvValue As Variant)
+	Call _PropertySet(&quot;OnApproveRowChange&quot;, pvValue)
+End Property	&apos;	OnApproveRowChange (set)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get OnApproveSubmit() As Variant
+	OnApproveSubmit = _PropertyGet(&quot;OnApproveSubmit&quot;)
+End Property	&apos;	OnApproveSubmit (get)
+
+Property Let OnApproveSubmit(ByVal pvValue As Variant)
+	Call _PropertySet(&quot;OnApproveSubmit&quot;, pvValue)
+End Property	&apos;	OnApproveSubmit (set)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get OnConfirmDelete() As Variant
+	OnConfirmDelete = _PropertyGet(&quot;OnConfirmDelete&quot;)
+End Property	&apos;	OnConfirmDelete (get)
+
+Property Let OnConfirmDelete(ByVal pvValue As Variant)
+	Call _PropertySet(&quot;OnConfirmDelete&quot;, pvValue)
+End Property	&apos;	OnConfirmDelete (set)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get OnCursorMoved() As Variant
+	OnCursorMoved = _PropertyGet(&quot;OnCursorMoved&quot;)
+End Property	&apos;	OnCursorMoved (get)
+
+Property Let OnCursorMoved(ByVal pvValue As Variant)
+	Call _PropertySet(&quot;OnCursorMoved&quot;, pvValue)
+End Property	&apos;	OnCursorMoved (set)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get OnErrorOccurred() As Variant
+	OnErrorOccurred = _PropertyGet(&quot;OnErrorOccurred&quot;)
+End Property	&apos;	OnErrorOccurred (get)
+
+Property Let OnErrorOccurred(ByVal pvValue As Variant)
+	Call _PropertySet(&quot;OnErrorOccurred&quot;, pvValue)
+End Property	&apos;	OnErrorOccurred (set)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get OnLoaded() As Variant
+	OnLoaded = _PropertyGet(&quot;OnLoaded&quot;)
+End Property	&apos;	OnLoaded (get)
+
+Property Let OnLoaded(ByVal pvValue As Variant)
+	Call _PropertySet(&quot;OnLoaded&quot;, pvValue)
+End Property	&apos;	OnLoaded (set)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get OnReloaded() As Variant
+	OnReloaded = _PropertyGet(&quot;OnReloaded&quot;)
+End Property	&apos;	OnReloaded (get)
+
+Property Let OnReloaded(ByVal pvValue As Variant)
+	Call _PropertySet(&quot;OnReloaded&quot;, pvValue)
+End Property	&apos;	OnReloaded (set)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get OnReloading() As Variant
+	OnReloading = _PropertyGet(&quot;OnReloading&quot;)
+End Property	&apos;	OnReloading (get)
+
+Property Let OnReloading(ByVal pvValue As Variant)
+	Call _PropertySet(&quot;OnReloading&quot;, pvValue)
+End Property	&apos;	OnReloading (set)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get OnResetted() As Variant
+	OnResetted = _PropertyGet(&quot;OnResetted&quot;)
+End Property	&apos;	OnResetted (get)
+
+Property Let OnResetted(ByVal pvValue As Variant)
+	Call _PropertySet(&quot;OnResetted&quot;, pvValue)
+End Property	&apos;	OnResetted (set)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get OnRowChanged() As Variant
+	OnRowChanged = _PropertyGet(&quot;OnRowChanged&quot;)
+End Property	&apos;	OnRowChanged (get)
+
+Property Let OnRowChanged(ByVal pvValue As Variant)
+	Call _PropertySet(&quot;OnRowChanged&quot;, pvValue)
+End Property	&apos;	OnRowChanged (set)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get OnUnloaded() As Variant
+	OnUnloaded = _PropertyGet(&quot;OnUnloaded&quot;)
+End Property	&apos;	OnUnloaded (get)
+
+Property Let OnUnloaded(ByVal pvValue As Variant)
+	Call _PropertySet(&quot;OnUnloaded&quot;, pvValue)
+End Property	&apos;	OnUnloaded (set)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get OnUnloading() As Variant
+	OnUnloading = _PropertyGet(&quot;OnUnloading&quot;)
+End Property	&apos;	OnUnloading (get)
+
+Property Let OnUnloading(ByVal pvValue As Variant)
+	Call _PropertySet(&quot;OnUnloading&quot;, pvValue)
+End Property	&apos;	OnUnloading (set)
+
+REM -----------------------------------------------------------------------------------------------------------------------
 Property Get ObjectType() As String
 	ObjectType = _PropertyGet(&quot;ObjectType&quot;)
 End Property		&apos;	ObjectType (get)
@@ -198,9 +333,9 @@ Dim vProperty As Variant, vPropertiesList() As Variant, sObject As String
 	vPropertiesList = _PropertiesList()
 	sObject = Utils._PCase(_Type)
 	If IsMissing(pvIndex) Then
-		vProperty = PropertiesGet._Properties(sObject, _Name, vPropertiesList)
+		vProperty = PropertiesGet._Properties(sObject, _Shortcut, vPropertiesList)
 	Else
-		vProperty = PropertiesGet._Properties(sObject, _Name, vPropertiesList, pvIndex)
+		vProperty = PropertiesGet._Properties(sObject, _Shortcut, vPropertiesList, pvIndex)
 		vProperty._Value = _PropertyGet(vPropertiesList(pvIndex))
 	End If
 	
@@ -377,12 +512,43 @@ End Function
 REM -----------------------------------------------------------------------------------------------------------------------
 REM --- PRIVATE FUNCTIONS 								        														---
 REM -----------------------------------------------------------------------------------------------------------------------
+
+Private Function _GetListener(ByVal psProperty As String) As String
+&apos;	Return the X...Listener corresponding with the property in argument
+
+	Select Case UCase(psProperty)
+		Case UCase(&quot;OnApproveCursorMove&quot;)
+			_GetListener = &quot;XRowSetApproveListener&quot;
+		Case UCase(&quot;OnApproveParameter&quot;)
+			_GetListener = &quot;XDatabaseParameterListener&quot;
+		Case UCase(&quot;OnApproveReset&quot;), UCase(&quot;OnResetted&quot;)
+			_GetListener = &quot;XResetListener&quot;
+		Case UCase(&quot;OnApproveRowChange&quot;)
+			_GetListener = &quot;XRowSetApproveListener&quot;
+		Case UCase(&quot;OnApproveSubmit&quot;)
+			_GetListener = &quot;XSubmitListener&quot;
+		Case UCase(&quot;OnConfirmDelete&quot;)
+			_GetListener = &quot;XConfirmDeleteListener&quot;
+		Case UCase(&quot;OnCursorMoved&quot;), UCase(&quot;OnRowChanged&quot;)
+			_GetListener = &quot;XRowSetListener&quot;
+		Case UCase(&quot;OnErrorOccurred&quot;)
+			_GetListener = &quot;XSQLErrorListener&quot;
+		Case UCase(&quot;OnLoaded&quot;), UCase(&quot;OnReloaded&quot;), UCase(&quot;OnReloading&quot;), UCase(&quot;OnUnloaded&quot;), UCase(&quot;OnUnloading&quot;)
+			_GetListener = &quot;XLoadListener&quot;
+	End Select
+	
+End Function	&apos;	_GetListener	V1.7.0
+
 REM -----------------------------------------------------------------------------------------------------------------------
 Private Function _PropertiesList() As Variant
 
 	_PropertiesList =  Array(&quot;AllowAdditions&quot;, &quot;AllowDeletions&quot;, &quot;AllowEdits&quot;, &quot;CurrentRecord&quot; _
 								, &quot;Filter&quot;, &quot;FilterOn&quot;, &quot;LinkChildFields&quot;, &quot;LinkMasterFields&quot;, &quot;Name&quot; _
-								, &quot;ObjectType&quot;, &quot;OrderBy&quot;, &quot;OrderByOn&quot;, &quot;Parent&quot;, &quot;RecordSource&quot; _
+								, &quot;ObjectType&quot;, &quot;OnApproveCursorMove&quot;, &quot;OnApproveParameter&quot; _
+								, &quot;OnApproveReset&quot;, &quot;OnApproveRowChange&quot;, &quot;OnApproveSubmit&quot;, &quot;OnConfirmDelete&quot; _
+								, &quot;OnCursorMoved&quot;, &quot;OnErrorOccurred&quot;, &quot;OnLoaded&quot;, &quot;OnReloaded&quot;, &quot;OnReloading&quot; _
+								, &quot;OnResetted&quot;, &quot;OnRowChanged&quot;, &quot;OnUnloaded&quot;, &quot;OnUnloading&quot;, &quot;OrderBy&quot; _
+								, &quot;OrderByOn&quot;, &quot;Parent&quot;, &quot;RecordSource&quot; _
 									)	&apos;	Recordset removed
 	
 End Function	&apos;	_PropertiesList
@@ -442,10 +608,17 @@ Dim oDatabase As Object, vBookmark As Variant, vEMPTY As Variant
 			_PropertyGet = _Name
 		Case UCase(&quot;ObjectType&quot;)
 			_PropertyGet = _Type
+		Case UCase(&quot;OnApproveCursorMove&quot;), UCase(&quot;OnApproveParameter&quot;), UCase(&quot;OnApproveReset&quot;), UCase(&quot;OnApproveRowChange&quot;) _
+					, UCase(&quot;OnApproveSubmit&quot;), UCase(&quot;OnConfirmDelete&quot;), UCase(&quot;OnCursorMoved&quot;), UCase(&quot;OnErrorOccurred&quot;) _
+					, UCase(&quot;OnLoaded&quot;), UCase(&quot;OnReloaded&quot;), UCase(&quot;OnReloading&quot;), UCase(&quot;OnResetted&quot;), UCase(&quot;OnRowChanged&quot;) _
+					, UCase(&quot;OnUnloaded&quot;), UCase(&quot;OnUnloading&quot;)
+			_PropertyGet = Utils._GetEventScriptCode(DatabaseForm, psProperty, _Name)
 		Case UCase(&quot;OrderBy&quot;)
 			_PropertyGet = _OrderBy
 		Case UCase(&quot;OrderByOn&quot;)
 			If DatabaseForm.Order = &quot;&quot; Then _PropertyGet = False Else _PropertyGet = True
+		Case UCase(&quot;Parent&quot;)		&apos;	Only for indirect access from property object
+			_PropertyGet = Parent
 		Case UCase(&quot;Recordset&quot;)
 			If DatabaseForm.Command = &quot;&quot; Then Goto Trace_Error		&apos;	No underlying data ??
 			Set oObject = New Recordset
@@ -525,6 +698,16 @@ Dim iArgNr As Integer
 			If Not Utils._CheckArgument(pvValue, iArgNr, vbBoolean, , False) Then Goto Trace_Error_Value
 			DatabaseForm.ApplyFilter = pvValue
 			DatabaseForm.reload()
+		Case UCase(&quot;OnApproveCursorMove&quot;), UCase(&quot;OnApproveParameter&quot;), UCase(&quot;OnApproveReset&quot;), UCase(&quot;OnApproveRowChange&quot;) _
+					, UCase(&quot;OnApproveSubmit&quot;), UCase(&quot;OnConfirmDelete&quot;), UCase(&quot;OnCursorMoved&quot;), UCase(&quot;OnErrorOccurred&quot;) _
+					, UCase(&quot;OnLoaded&quot;), UCase(&quot;OnReloaded&quot;), UCase(&quot;OnReloading&quot;), UCase(&quot;OnResetted&quot;), UCase(&quot;OnRowChanged&quot;) _
+					, UCase(&quot;OnUnloaded&quot;), UCase(&quot;OnUnloading&quot;)
+			If Not Utils._CheckArgument(pvValue, iArgNr, vbString, , False) Then Goto Trace_Error_Value
+			If Not Utils._RegisterEventScript(DatabaseForm _
+						, psProperty _
+						, _GetListener(psProperty) _
+						, pvValue, _Name _
+						) Then GoTo Trace_Error
 		Case UCase(&quot;OrderBy&quot;)
 			If Not Utils._CheckArgument(pvValue, iArgNr, vbString, , False) Then Goto Trace_Error_Value
 			_OrderBy = Application._CurrentDb(_DocEntry, _DbEntry)._ReplaceSquareBrackets(pvValue)

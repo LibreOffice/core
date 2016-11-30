@@ -216,6 +216,45 @@ Dim oDialogLib As Object
 End Function
 
 REM -----------------------------------------------------------------------------------------------------------------------
+Public Function _GetEventScriptCode(poObject As Object _
+					, ByVal psEvent As String _
+					, ByVal psName As String _
+					, Optional ByVal pbExtendName As Boolean _
+					) As String
+&apos;	Extract from the parent of poObject the macro linked to psEvent.
+&apos;	psName is the name of the object
+
+Dim i As Integer, vEvents As Variant, sEvent As String, oParent As Object, iIndex As Integer, sName As String
+
+	_GetEventScriptCode = &quot;&quot;
+	If Not Utils._hasUNOMethod(poObject, &quot;getParent&quot;) Then Exit Function
+
+	&apos;	Find form index i.e. find control via getByIndex() 
+	If IsMissing(pbExtendName) Then pbExtendName = False
+	Set oParent = poObject.getParent()
+	iIndex = -1
+	For i = 0 To oParent.getCount() - 1
+		sName = oParent.getByIndex(i).Name
+		If (sName = psName) Or (pbExtendName And (sName = &quot;MainForm&quot; Or sName = &quot;Form&quot;)) Then
+			iIndex = i
+			Exit For
+		End If
+	Next i
+	If iIndex &lt; 0 Then Exit Function
+	
+	&apos;	Find script event
+	vEvents = oParent.getScriptEvents(iIndex)			&apos;	Returns an array
+	sEvent = Utils._GetEventName(psEvent)			&apos;	Targeted event method
+	For i = 0 To UBound(vEvents)
+		If vEvents(i).EventMethod = sEvent Then
+			_GetEventScriptCode = vEvents(i).ScriptCode
+			Exit For
+		End If
+	Next i
+
+End Function	&apos;	_GetEventScriptCode	V1.7.0
+
+REM -----------------------------------------------------------------------------------------------------------------------
 Private Function _GetResultSetColumnValue(poResultSet As Object _
 											, ByVal piColIndex As Integer _
 											, Optional ByVal pbReturnBinary As Boolean _
@@ -327,6 +366,15 @@ Dim sComponents() As String, sSubComponents() As String
 End Function	&apos;	FinalProperty
 
 REM -----------------------------------------------------------------------------------------------------------------------
+Public Function _GetEventName(ByVal psProperty As String) As String
+&apos;	Return the LO internal event name
+&apos;	Corrects the typo on ErrorOccur(r?)ed
+
+	_GetEventName = Replace(LCase(Mid(psProperty, 3, 1)) &amp; Right(psProperty, Len(psProperty) - 3), &quot;errorOccurred&quot;, &quot;errorOccured&quot;)
+	
+End Function	&apos;	_GetEventName	V1.7.0
+
+REM -----------------------------------------------------------------------------------------------------------------------
 Public Function _GetProductName(ByVal Optional psFlag As String) as String
 &apos;Return OO product (&quot;PRODUCT&quot;) and version numbers (&quot;VERSION&quot;)
 &apos;Derived from Tools library
@@ -418,6 +466,7 @@ Public Function _hasUNOMethod(pvObject As Variant, psMethod As String) As Boolea
 
 Dim vInspect as Variant
 	_hasUNOMethod = False
+	If IsNull(pvObject) Then Exit Function
 	On Local Error Resume Next
 	vInspect = _A2B_.Introspection.Inspect(pvObject)
 	_hasUNOMethod = vInspect.hasMethod(psMethod, com.sun.star.beans.MethodConcept.ALL)
@@ -431,6 +480,7 @@ Public Function _hasUNOProperty(pvObject As Variant, psProperty As String) As Bo
 
 Dim vInspect as Variant
 	_hasUNOProperty = False
+	If IsNull(pvObject) Then Exit Function
 	On Local Error Resume Next
 	vInspect = _A2B_.Introspection.Inspect(pvObject)
 	_hasUNOProperty = vInspect.hasProperty(psProperty, com.sun.star.beans.PropertyConcept.ALL)
@@ -778,6 +828,51 @@ Error_Function:
 	vLines = Array()
 	Resume Exit_Function
 End Function	&apos;	_ReadFileIntoArray	V1.4.0
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Function _RegisterEventScript(poObject As Object _
+								, ByVal psEvent As String _
+								, ByVal psListener As String _
+								, ByVal psScriptCode As String _
+								, ByVal psName As String _
+								, Optional ByVal pbExtendName As Boolean _
+								) As Boolean
+&apos;	Register a script event (psEvent) to poObject (Form, SubForm or Control)
+
+Dim i As Integer, oEvent As Object, sEvent As String, oParent As Object, iIndex As Integer, sName As String
+
+	_RegisterEventScript = False
+	If Not _hasUNOMethod(poObject, &quot;getParent&quot;) Then Exit Function
+
+	&apos;	Find object internal index i.e. how to reach it via getByIndex() 
+	If IsMissing(pbExtendName) Then pbExtendName = False
+	Set oParent = poObject.getParent()
+	iIndex = -1
+	For i = 0 To oParent.getCount() - 1
+		sName = oParent.getByIndex(i).Name
+		If (sName = psName) Or (pbExtendName And (sName = &quot;MainForm&quot; Or sName = &quot;Form&quot;)) Then
+			iIndex = i
+			Exit For
+		End If
+	Next i
+	If iIndex &lt; 0 Then Exit Function
+
+	sEvent = Utils._GetEventName(psEvent)			&apos;	Targeted event method
+	If psScriptCode = &quot;&quot; Then
+		oParent.revokeScriptEvent(iIndex, psListener, sEvent, &quot;&quot;)
+	Else
+		Set oEvent = CreateUnoStruct(&quot;com.sun.star.script.ScriptEventDescriptor&quot;)
+		With oEvent
+			.ListenerType = psListener
+			.EventMethod = sEvent
+			.ScriptType = &quot;Script&quot;			&apos;	Better than &quot;Basic&quot;
+			.ScriptCode = psScriptCode
+		End With
+		oParent.registerScriptEvent(iIndex, oEvent)
+	End If
+	_RegisterEventScript = True
+
+End Function	&apos;	_RegisterEventScript	V1.7.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Public Sub _ResetCalledSub(ByVal psSub As String)
