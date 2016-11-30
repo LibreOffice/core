@@ -223,7 +223,7 @@ void ScPreviewShell::AdjustPosSizePixel( const Point &rPos, const Size &rSize )
     UpdateNeededScrollBars(false);
 }
 
-void ScPreviewShell::InnerResizePixel( const Point &rOfs, const Size &rSize )
+void ScPreviewShell::InnerResizePixel( const Point &rOfs, const Size &rSize, bool )
 {
     AdjustPosSizePixel( rOfs,rSize );
 }
