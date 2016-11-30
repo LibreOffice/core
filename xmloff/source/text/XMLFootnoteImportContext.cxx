@@ -65,7 +65,6 @@ XMLFootnoteImportContext::XMLFootnoteImportContext(
     sal_uInt16 nPrfx,
     const OUString& rLocalName )
 :   SvXMLImportContext(rImport, nPrfx, rLocalName)
-,   sPropertyReferenceId("ReferenceId")
 ,   mbListContextPushed(false)
 ,   rHelper(rHlp)
 {
@@ -120,7 +119,7 @@ void XMLFootnoteImportContext::StartElement(
             {
                 // get ID ...
                 Reference<XPropertySet> xPropertySet(xTextContent, UNO_QUERY);
-                Any aAny =xPropertySet->getPropertyValue(sPropertyReferenceId);
+                Any aAny =xPropertySet->getPropertyValue("ReferenceId");
                 sal_Int16 nID = 0;
                 aAny >>= nID;
 

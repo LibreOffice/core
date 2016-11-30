@@ -54,11 +54,6 @@ XMLIndexObjectSourceContext::XMLIndexObjectSourceContext(
     Reference<XPropertySet> & rPropSet) :
         XMLIndexSourceBaseContext(rImport, nPrfx, rLocalName,
                                   rPropSet, false),
-        sCreateFromStarCalc("CreateFromStarCalc"),
-        sCreateFromStarChart("CreateFromStarChart"),
-        sCreateFromStarDraw("CreateFromStarDraw"),
-        sCreateFromStarMath("CreateFromStarMath"),
-        sCreateFromOtherEmbeddedObjects("CreateFromOtherEmbeddedObjects"),
         bUseCalc(false),
         bUseChart(false),
         bUseDraw(false),
@@ -122,11 +117,11 @@ void XMLIndexObjectSourceContext::ProcessAttribute(
 
 void XMLIndexObjectSourceContext::EndElement()
 {
-    rIndexPropertySet->setPropertyValue(sCreateFromStarCalc, css::uno::Any(bUseCalc));
-    rIndexPropertySet->setPropertyValue(sCreateFromStarChart, css::uno::Any(bUseChart));
-    rIndexPropertySet->setPropertyValue(sCreateFromStarDraw, css::uno::Any(bUseDraw));
-    rIndexPropertySet->setPropertyValue(sCreateFromStarMath, css::uno::Any(bUseMath));
-    rIndexPropertySet->setPropertyValue(sCreateFromOtherEmbeddedObjects, css::uno::Any(bUseOtherObjects));
+    rIndexPropertySet->setPropertyValue("CreateFromStarCalc", css::uno::Any(bUseCalc));
+    rIndexPropertySet->setPropertyValue("CreateFromStarChart", css::uno::Any(bUseChart));
+    rIndexPropertySet->setPropertyValue("CreateFromStarDraw", css::uno::Any(bUseDraw));
+    rIndexPropertySet->setPropertyValue("CreateFromStarMath", css::uno::Any(bUseMath));
+    rIndexPropertySet->setPropertyValue("CreateFromOtherEmbeddedObjects", css::uno::Any(bUseOtherObjects));
 
     XMLIndexSourceBaseContext::EndElement();
 }

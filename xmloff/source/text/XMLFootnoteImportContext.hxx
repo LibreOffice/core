@@ -38,8 +38,6 @@ class XMLTextImportHelper;
 /// import footnote elements (<text:footnote>)
 class XMLFootnoteImportContext : public SvXMLImportContext
 {
-    const OUString sPropertyReferenceId;
-
     /// old document cursor
     css::uno::Reference<css::text::XTextCursor> xOldCursor;
 
