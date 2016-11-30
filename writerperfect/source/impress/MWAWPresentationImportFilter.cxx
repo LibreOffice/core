@@ -58,6 +58,9 @@ bool MWAWPresentationImportFilter::doDetectFormat(librevenge::RVNGInputStream &r
             case MWAWDocument::MWAW_T_CLARISWORKS:
                 rTypeName = "impress_ClarisWorks";
                 break;
+            case MWAWDocument::MWAW_T_RESERVED9:
+                rTypeName = "impress_PowerPoint3";
+                break;
             default:
                 rTypeName = "MWAW_Presentation";
                 break;
