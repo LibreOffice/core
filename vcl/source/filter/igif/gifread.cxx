@@ -20,6 +20,7 @@
 #include "decode.hxx"
 #include "gifread.hxx"
 #include <memory>
+#include <o3tl/make_unique.hxx>
 
 #define NO_PENDING( rStm ) ( ( rStm ).GetError() != ERRCODE_IO_PENDING )
 
@@ -55,8 +56,8 @@ class GIFReader : public GraphicReader
     BitmapPalette       aGPalette;
     BitmapPalette       aLPalette;
     SvStream&           rIStm;
-    sal_uInt8*          pSrcBuf;
-    GIFLZWDecompressor* pDecomp;
+    std::vector<sal_uInt8> aSrcBuf;
+    std::unique_ptr<GIFLZWDecompressor> pDecomp;
     BitmapWriteAccess*  pAcc8;
     BitmapWriteAccess*  pAcc1;
     long                nYAcc;
@@ -112,7 +113,6 @@ GIFReader::GIFReader( SvStream& rStm )
     : aGPalette ( 256 )
     , aLPalette ( 256 )
     , rIStm ( rStm )
-    , pDecomp ( nullptr )
     , pAcc8 ( nullptr )
     , pAcc1 ( nullptr )
     , nYAcc ( 0 )
@@ -143,7 +143,7 @@ GIFReader::GIFReader( SvStream& rStm )
     , cNonTransIndex1 ( 0 )
 {
     maUpperName = "SVIGIF";
-    pSrcBuf = new sal_uInt8[ 256 ];
+    aSrcBuf.resize(256);    // Memory buffer for ReadNextBlock
     ClearImageExtensions();
 }
 
@@ -156,8 +156,6 @@ GIFReader::~GIFReader()
 
     if( pAcc8 )
         Bitmap::ReleaseAccess( pAcc8 );
-
-    delete[] pSrcBuf;
 }
 
 void GIFReader::ClearImageExtensions()
@@ -493,7 +491,7 @@ sal_uLong GIFReader::ReadNextBlock()
             nRet = 2UL;
         else
         {
-            rIStm.ReadBytes( pSrcBuf, cBlockSize );
+            rIStm.ReadBytes( aSrcBuf.data(), cBlockSize );
 
             if( NO_PENDING( rIStm ) )
             {
@@ -502,7 +500,7 @@ sal_uLong GIFReader::ReadNextBlock()
                 else
                 {
                     bool       bEOI;
-                    sal_uInt8* pTarget = pDecomp->DecompressBlock( pSrcBuf, cBlockSize, nRead, bEOI );
+                    sal_uInt8* pTarget = pDecomp->DecompressBlock( aSrcBuf.data(), cBlockSize, nRead, bEOI );
 
                     nRet = ( bEOI ? 3 : 1 );
 
@@ -768,7 +766,7 @@ bool GIFReader::ProcessGIF()
             else if( NO_PENDING( rIStm ) )
             {
                 bRead = true;
-                pDecomp = new GIFLZWDecompressor( cDataSize );
+                pDecomp = o3tl::make_unique<GIFLZWDecompressor>( cDataSize );
                 eActAction = NEXT_BLOCK_READING;
                 bOverreadBlock = false;
             }
@@ -799,7 +797,7 @@ bool GIFReader::ProcessGIF()
                 {
                     if( nRet == 2UL )
                     {
-                        delete pDecomp;
+                        pDecomp.reset();
                         CreateNewBitmaps();
                         eActAction = MARKER_READING;
                         ClearImageExtensions();
@@ -811,7 +809,7 @@ bool GIFReader::ProcessGIF()
                     }
                     else
                     {
-                        delete pDecomp;
+                        pDecomp.reset();
                         CreateNewBitmaps();
                         eActAction = ABORT_READING;
                         ClearImageExtensions();
