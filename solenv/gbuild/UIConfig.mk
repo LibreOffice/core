@@ -200,6 +200,10 @@ gb_UIConfig_get_zipname_for_lang = UIConfig/$(1)/$(2)
 #
 # gb_UIConfig_UIConfig modulename
 define gb_UIConfig_UIConfig
+ifeq (,$$(filter $(1),$$(gb_UIConfig_REGISTERED)))
+$$(eval $$(call gb_Output_info,Currently known UI configs are: $(sort $(gb_UIConfig_REGISTERED)),ALL))
+$$(eval $$(call gb_Output_error,UIConfig $(1) must be registered in Repository.mk))
+endif
 $(call gb_UIConfig_get_imagelist_target,$(1)) : UI_IMAGELISTS :=
 
 $(call gb_PackageSet_PackageSet_internal,$(call gb_UIConfig_get_packagesetname,$(1)))

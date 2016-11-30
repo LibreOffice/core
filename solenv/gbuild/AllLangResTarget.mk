@@ -329,9 +329,11 @@ $(call gb_AllLangResTarget_get_target,%) :
 
 gb_ResTarget_get_install_target = $(INSTROOT)/$(LIBO_SHARE_RESOURCE_FOLDER)/$(1).res
 
-gb_AllLangResTarget_ALLTARGETS :=
 define gb_AllLangResTarget_AllLangResTarget
-gb_AllLangResTarget_ALLTARGETS += $(1)
+ifeq (,$$(filter $(1),$$(gb_AllLangResTarget_REGISTERED)))
+$$(eval $$(call gb_Output_info,Currently known AllLangResTargets are: $(sort $(gb_AllLangResTarget_REGISTERED)),ALL))
+$$(eval $$(call gb_Output_error,AllLangResTarget $(1) must be registered in Repository.mk))
+endif
 $(foreach lang,$(gb_AllLangResTarget_LANGS),\
 	$(call gb_ResTarget_ResTarget,$(1)$(lang),$(1),$(lang)))
 
