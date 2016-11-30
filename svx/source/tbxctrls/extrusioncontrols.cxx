@@ -295,7 +295,7 @@ ExtrusionDepthDialog::ExtrusionDepthDialog( vcl::Window* pParent, double fDepth,
 {
     get(m_pMtrDepth, "depth");
     m_pMtrDepth->SetUnit( eDefaultUnit );
-    m_pMtrDepth->SetValue( (int) fDepth * 100, FUNIT_100TH_MM );
+    m_pMtrDepth->SetValue( (int) fDepth * 100, FieldUnit::Fld100thMM );
 }
 
 ExtrusionDepthDialog::~ExtrusionDepthDialog()
@@ -311,7 +311,7 @@ void ExtrusionDepthDialog::dispose()
 
 double ExtrusionDepthDialog::getDepth() const
 {
-    return (double)( m_pMtrDepth->GetValue( FUNIT_100TH_MM ) ) / 100.0;
+    return (double)( m_pMtrDepth->GetValue( FieldUnit::Fld100thMM ) ) / 100.0;
 }
 
 double aDepthListInch[] = { 0, 1270,2540,5080,10160 };
@@ -328,7 +328,7 @@ ExtrusionDepthWindow::ExtrusionDepthWindow(
     , maImgDepth3(SVX_RES(RID_SVXIMG_DEPTH_3))
     , maImgDepth4(SVX_RES(RID_SVXIMG_DEPTH_4))
     , maImgDepthInfinity(SVX_RES(RID_SVXIMG_DEPTH_INFINITY))
-    , meUnit(FUNIT_NONE)
+    , meUnit(FieldUnit::NONE)
     , mfDepth( -1.0 )
     , msExtrusionDepth( ".uno:ExtrusionDepth" )
     , msMetricUnit(     ".uno:MetricUnit"     )

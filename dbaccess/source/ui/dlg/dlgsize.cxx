@@ -66,14 +66,14 @@ void DlgSize::dispose()
 
 void DlgSize::SetValue( sal_Int32 nVal )
 {
-    m_pMF_VALUE->SetValue(nVal, FUNIT_CM );
+    m_pMF_VALUE->SetValue(nVal, FieldUnit::FldCM );
 }
 
 sal_Int32 DlgSize::GetValue()
 {
     if (m_pCB_STANDARD->IsChecked())
         return -1;
-    return (sal_Int32)m_pMF_VALUE->GetValue( FUNIT_CM );
+    return (sal_Int32)m_pMF_VALUE->GetValue( FieldUnit::FldCM );
 }
 
 IMPL_LINK( DlgSize, CbClickHdl, Button *, pButton, void )
@@ -83,7 +83,7 @@ IMPL_LINK( DlgSize, CbClickHdl, Button *, pButton, void )
         m_pMF_VALUE->Enable(!m_pCB_STANDARD->IsChecked());
         if (m_pCB_STANDARD->IsChecked())
         {
-            m_nPrevValue = static_cast<sal_Int32>(m_pMF_VALUE->GetValue(FUNIT_CM));
+            m_nPrevValue = static_cast<sal_Int32>(m_pMF_VALUE->GetValue(FieldUnit::FldCM));
                 // don't use getValue as this will use m_pCB_STANDARD->to determine if we're standard
             m_pMF_VALUE->SetEmptyFieldValue();
         }

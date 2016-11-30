@@ -173,7 +173,7 @@ IMPL_LINK_NOARG(SvxStdParagraphTabPage, ELRLoseFocusHdl, Control&, void)
     OUString aTmp = m_pFLineIndent->GetText();
 
     if( m_pLeftIndent->GetMin() < 0 )
-        m_pFLineIndent->SetMin( -99999, FUNIT_MM );
+        m_pFLineIndent->SetMin( -99999, FieldUnit::FldMM );
     else
         m_pFLineIndent->SetMin( m_pFLineIndent->Normalize( -nL ), eUnit );
 
@@ -418,16 +418,16 @@ void SvxStdParagraphTabPage::Reset( const SfxItemSet* rSet )
 
     SvtCJKOptions aCJKOptions;
     if(aCJKOptions.IsAsianTypographyEnabled() && bApplyCharUnit )
-        eFUnit = FUNIT_CHAR;
+        eFUnit = FieldUnit::FldChar;
 
     SetFieldUnit( *m_pLeftIndent, eFUnit );
     SetFieldUnit( *m_pRightIndent, eFUnit );
     SetFieldUnit( *m_pFLineIndent, eFUnit );
-    if ( eFUnit == FUNIT_CHAR )
+    if ( eFUnit == FieldUnit::FldChar )
     {
-        SetFieldUnit( *m_pTopDist, FUNIT_LINE );
-        SetFieldUnit( *m_pBottomDist, FUNIT_LINE );
-        SetFieldUnit( *m_pLineDistAtMetricBox, FUNIT_POINT );
+        SetFieldUnit( *m_pTopDist, FieldUnit::FldLine );
+        SetFieldUnit( *m_pBottomDist, FieldUnit::FldLine );
+        SetFieldUnit( *m_pLineDistAtMetricBox, FieldUnit::FldPoint );
     }
     else
     {
@@ -526,8 +526,8 @@ void SvxStdParagraphTabPage::Reset( const SfxItemSet* rSet )
             else
             {
                 m_pTopDist->SetRelative(false);
-                if ( eFUnit == FUNIT_CHAR )
-                    SetFieldUnit( *m_pTopDist, FUNIT_LINE );
+                if ( eFUnit == FieldUnit::FldChar )
+                    SetFieldUnit( *m_pTopDist, FieldUnit::FldLine );
                 else
                     SetFieldUnit( *m_pTopDist, eFUnit );
                 SetMetricValue( *m_pTopDist, rOldItem.GetUpper(), eUnit );
@@ -541,8 +541,8 @@ void SvxStdParagraphTabPage::Reset( const SfxItemSet* rSet )
             else
             {
                 m_pBottomDist->SetRelative(false);
-                if ( eFUnit == FUNIT_CHAR )
-                    SetFieldUnit( *m_pBottomDist, FUNIT_LINE );
+                if ( eFUnit == FieldUnit::FldChar )
+                    SetFieldUnit( *m_pBottomDist, FieldUnit::FldLine );
                 else
                     SetFieldUnit( *m_pBottomDist, eFUnit );
                 SetMetricValue( *m_pBottomDist, rOldItem.GetLower(), eUnit );
@@ -813,7 +813,7 @@ IMPL_LINK( SvxStdParagraphTabPage, LineDistHdl_Impl, ListBox&, rBox, void )
             m_pLineDistAtMetricBox->SetMin(0);
 
             if ( m_pLineDistAtMetricBox->GetText().isEmpty() )
-                m_pLineDistAtMetricBox->SetValue( m_pLineDistAtMetricBox->Normalize( 10 ), FUNIT_TWIP );
+                m_pLineDistAtMetricBox->SetValue( m_pLineDistAtMetricBox->Normalize( 10 ), FieldUnit::FldTwip );
             m_pLineDistAtPercentBox->Hide();
             m_pLineDistAtMetricBox->Show();
             m_pLineDistAtMetricBox->Enable();
@@ -823,7 +823,7 @@ IMPL_LINK( SvxStdParagraphTabPage, LineDistHdl_Impl, ListBox&, rBox, void )
         case LLINESPACE_PROP:
 
             if ( m_pLineDistAtPercentBox->GetText().isEmpty() )
-                m_pLineDistAtPercentBox->SetValue( m_pLineDistAtPercentBox->Normalize( 100 ), FUNIT_TWIP );
+                m_pLineDistAtPercentBox->SetValue( m_pLineDistAtPercentBox->Normalize( 100 ), FieldUnit::FldTwip );
             m_pLineDistAtMetricBox->Hide();
             m_pLineDistAtPercentBox->Show();
             m_pLineDistAtPercentBox->Enable();
@@ -832,7 +832,7 @@ IMPL_LINK( SvxStdParagraphTabPage, LineDistHdl_Impl, ListBox&, rBox, void )
         case LLINESPACE_FIX:
         {
             sal_Int64 nTemp = m_pLineDistAtMetricBox->GetValue();
-            m_pLineDistAtMetricBox->SetMin(m_pLineDistAtMetricBox->Normalize(nMinFixDist), FUNIT_TWIP);
+            m_pLineDistAtMetricBox->SetMin(m_pLineDistAtMetricBox->Normalize(nMinFixDist), FieldUnit::FldTwip);
 
             // if the value has been changed at SetMin,
             // it is time for the default
@@ -882,11 +882,11 @@ void SvxStdParagraphTabPage::Init_Impl()
 
 void SvxStdParagraphTabPage::UpdateExample_Impl()
 {
-    m_pExampleWin->SetFirstLineOfst( (short)m_pFLineIndent->Denormalize( m_pFLineIndent->GetValue( FUNIT_TWIP ) ) );
-    m_pExampleWin->SetLeftMargin( static_cast<long>(m_pLeftIndent->Denormalize( m_pLeftIndent->GetValue( FUNIT_TWIP ) ) ) );
-    m_pExampleWin->SetRightMargin( static_cast<long>(m_pRightIndent->Denormalize( m_pRightIndent->GetValue( FUNIT_TWIP ) ) ) );
-    m_pExampleWin->SetUpper( (sal_uInt16)m_pTopDist->Denormalize( m_pTopDist->GetValue( FUNIT_TWIP ) ) );
-    m_pExampleWin->SetLower( (sal_uInt16)m_pBottomDist->Denormalize( m_pBottomDist->GetValue( FUNIT_TWIP ) ) );
+    m_pExampleWin->SetFirstLineOfst( (short)m_pFLineIndent->Denormalize( m_pFLineIndent->GetValue( FieldUnit::FldTwip ) ) );
+    m_pExampleWin->SetLeftMargin( static_cast<long>(m_pLeftIndent->Denormalize( m_pLeftIndent->GetValue( FieldUnit::FldTwip ) ) ) );
+    m_pExampleWin->SetRightMargin( static_cast<long>(m_pRightIndent->Denormalize( m_pRightIndent->GetValue( FieldUnit::FldTwip ) ) ) );
+    m_pExampleWin->SetUpper( (sal_uInt16)m_pTopDist->Denormalize( m_pTopDist->GetValue( FieldUnit::FldTwip ) ) );
+    m_pExampleWin->SetLower( (sal_uInt16)m_pBottomDist->Denormalize( m_pBottomDist->GetValue( FieldUnit::FldTwip ) ) );
 
     sal_Int32 nPos = m_pLineDist->GetSelectEntryPos();
 

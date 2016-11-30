@@ -860,7 +860,7 @@ inspection::LineDescriptor SAL_CALL GeometryHandler::describePropertyLine(const 
         )
     {
         const MeasurementSystem eSystem = SvtSysLocale().GetLocaleData().getMeasurementSystemEnum();
-        const sal_Int16 nDisplayUnit = VCLUnoHelper::ConvertToMeasurementUnit( MEASURE_METRIC == eSystem ? FUNIT_CM : FUNIT_INCH, 1 );
+        const sal_Int16 nDisplayUnit = VCLUnoHelper::ConvertToMeasurementUnit( MEASURE_METRIC == eSystem ? FieldUnit::FldCM : FieldUnit::FldInch, 1 );
         uno::Reference< inspection::XNumericControl > xNumericControl(aOut.Control,uno::UNO_QUERY);
         xNumericControl->setDecimalDigits( 2 );
         xNumericControl->setValueUnit( util::MeasureUnit::MM_100TH );

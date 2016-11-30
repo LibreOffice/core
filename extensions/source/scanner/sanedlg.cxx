@@ -465,12 +465,12 @@ void SaneDlg::InitFields()
             {
                 if( mrSane.GetOptionUnit( nOption ) == SANE_UNIT_MM )
                 {
-                    pField->SetUnit( FUNIT_MM );
-                    pField->SetValue( (int)fValue, FUNIT_MM );
+                    pField->SetUnit( FieldUnit::FldMM );
+                    pField->SetValue( (int)fValue, FieldUnit::FldMM );
                 }
                 else // SANE_UNIT_PIXEL
                 {
-                    pField->SetValue( (int)fValue, FUNIT_CUSTOM );
+                    pField->SetValue( (int)fValue, FieldUnit::FldCustom );
                     pField->SetCustomUnitText("Pixel");
                 }
                 switch( i ) {

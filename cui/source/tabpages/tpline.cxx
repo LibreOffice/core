@@ -154,17 +154,17 @@ SvxLineTabPage::SvxLineTabPage
 
     switch ( eFUnit )
     {
-        case FUNIT_M:
-        case FUNIT_KM:
-            eFUnit = FUNIT_MM;
+        case FieldUnit::FldM:
+        case FieldUnit::FldKM:
+            eFUnit = FieldUnit::FldMM;
             SAL_FALLTHROUGH; // we now have mm
-        case FUNIT_MM:
+        case FieldUnit::FldMM:
             m_pMtrLineWidth->SetSpinSize( 50 );
             m_pMtrStartWidth->SetSpinSize( 50 );
             m_pMtrEndWidth->SetSpinSize( 50 );
             break;
 
-            case FUNIT_INCH:
+            case FieldUnit::FldInch:
             m_pMtrLineWidth->SetSpinSize( 2 );
             m_pMtrStartWidth->SetSpinSize( 2 );
             m_pMtrEndWidth->SetSpinSize( 2 );
@@ -1703,8 +1703,8 @@ IMPL_LINK( SvxLineTabPage, SizeHdl_Impl, Edit&, rField, void)
     bool bWidth = &rField == m_pSymbolWidthMF;
     m_bLastWidthModified = bWidth;
     bool bRatio = m_pSymbolRatioCB->IsChecked();
-    long nWidthVal = static_cast<long>(m_pSymbolWidthMF->Denormalize(m_pSymbolWidthMF->GetValue(FUNIT_100TH_MM)));
-    long nHeightVal= static_cast<long>(m_pSymbolHeightMF->Denormalize(m_pSymbolHeightMF->GetValue(FUNIT_100TH_MM)));
+    long nWidthVal = static_cast<long>(m_pSymbolWidthMF->Denormalize(m_pSymbolWidthMF->GetValue(FieldUnit::Fld100thMM)));
+    long nHeightVal= static_cast<long>(m_pSymbolHeightMF->Denormalize(m_pSymbolHeightMF->GetValue(FieldUnit::Fld100thMM)));
     nWidthVal = OutputDevice::LogicToLogic(nWidthVal,MapUnit::Map100thMM,(MapUnit)m_ePoolUnit );
     nHeightVal = OutputDevice::LogicToLogic(nHeightVal,MapUnit::Map100thMM,(MapUnit)m_ePoolUnit);
     m_aSymbolSize = Size(nWidthVal,nHeightVal);
@@ -1726,7 +1726,7 @@ IMPL_LINK( SvxLineTabPage, SizeHdl_Impl, Edit&, rField, void)
         {
             m_aSymbolSize.Height() = m_aSymbolLastSize.Height() + (long)((double)nDelta / fSizeRatio);
             m_aSymbolSize.Height() = OutputDevice::LogicToLogic( m_aSymbolSize.Height(),(MapUnit)m_ePoolUnit, MapUnit::Map100thMM );
-            m_pSymbolHeightMF->SetUserValue(m_pSymbolHeightMF->Normalize(m_aSymbolSize.Height()), FUNIT_100TH_MM);
+            m_pSymbolHeightMF->SetUserValue(m_pSymbolHeightMF->Normalize(m_aSymbolSize.Height()), FieldUnit::Fld100thMM);
         }
     }
     else
@@ -1737,7 +1737,7 @@ IMPL_LINK( SvxLineTabPage, SizeHdl_Impl, Edit&, rField, void)
         {
             m_aSymbolSize.Width() = m_aSymbolLastSize.Width() + (long)((double)nDelta * fSizeRatio);
             m_aSymbolSize.Width() = OutputDevice::LogicToLogic( m_aSymbolSize.Width(), (MapUnit)m_ePoolUnit, MapUnit::Map100thMM );
-            m_pSymbolWidthMF->SetUserValue(m_pSymbolWidthMF->Normalize(m_aSymbolSize.Width()), FUNIT_100TH_MM);
+            m_pSymbolWidthMF->SetUserValue(m_pSymbolWidthMF->Normalize(m_aSymbolSize.Width()), FieldUnit::Fld100thMM);
         }
     }
     m_pCtlPreview->ResizeSymbol(m_aSymbolSize);

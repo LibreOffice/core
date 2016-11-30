@@ -61,7 +61,7 @@ OUString SvxPosSizeStatusBarControl::GetMetricStr_Impl( long nVal )
 {
     // deliver and set the Metric of the application
     FieldUnit eOutUnit = SfxModule::GetModuleFieldUnit( getFrameInterface() );
-    FieldUnit eInUnit = FUNIT_100TH_MM;
+    FieldUnit eInUnit = FieldUnit::Fld100thMM;
 
     OUString sMetric;
     const sal_Unicode cSep = Application::GetSettings().GetLocaleDataWrapper().getNumDecimalSep()[0];
@@ -71,7 +71,7 @@ OUString SvxPosSizeStatusBarControl::GetMetricStr_Impl( long nVal )
         sMetric += "-";
     sMetric += OUString::number(nConvVal / 100);
 
-    if( FUNIT_NONE != eOutUnit )
+    if( FieldUnit::NONE != eOutUnit )
     {
         sMetric += OUStringLiteral1(cSep);
         sal_Int64 nFract = nConvVal % 100;

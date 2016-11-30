@@ -281,10 +281,10 @@ void SwWrapTabPage::Reset(const SfxItemSet *rSet)
     const SvxLRSpaceItem& rLR = static_cast<const SvxLRSpaceItem&>(rSet->Get(RES_LR_SPACE));
 
     // gap to text
-    m_pLeftMarginED->SetValue(m_pLeftMarginED->Normalize(rLR.GetLeft()), FUNIT_TWIP);
-    m_pRightMarginED->SetValue(m_pRightMarginED->Normalize(rLR.GetRight()), FUNIT_TWIP);
-    m_pTopMarginED->SetValue(m_pTopMarginED->Normalize(rUL.GetUpper()), FUNIT_TWIP);
-    m_pBottomMarginED->SetValue(m_pBottomMarginED->Normalize(rUL.GetLower()), FUNIT_TWIP);
+    m_pLeftMarginED->SetValue(m_pLeftMarginED->Normalize(rLR.GetLeft()), FieldUnit::FldTwip);
+    m_pRightMarginED->SetValue(m_pRightMarginED->Normalize(rLR.GetRight()), FieldUnit::FldTwip);
+    m_pTopMarginED->SetValue(m_pTopMarginED->Normalize(rUL.GetUpper()), FieldUnit::FldTwip);
+    m_pBottomMarginED->SetValue(m_pBottomMarginED->Normalize(rUL.GetLower()), FieldUnit::FldTwip);
 
     ContourHdl(nullptr);
     ActivatePage( *rSet );
@@ -352,8 +352,8 @@ bool SwWrapTabPage::FillItemSet(SfxItemSet *rSet)
     bool bBottomMod = m_pBottomMarginED->IsValueModified();
 
     SvxULSpaceItem aUL( RES_UL_SPACE );
-    aUL.SetUpper((sal_uInt16)m_pTopMarginED->Denormalize(m_pTopMarginED->GetValue(FUNIT_TWIP)));
-    aUL.SetLower((sal_uInt16)m_pBottomMarginED->Denormalize(m_pBottomMarginED->GetValue(FUNIT_TWIP)));
+    aUL.SetUpper((sal_uInt16)m_pTopMarginED->Denormalize(m_pTopMarginED->GetValue(FieldUnit::FldTwip)));
+    aUL.SetLower((sal_uInt16)m_pBottomMarginED->Denormalize(m_pBottomMarginED->GetValue(FieldUnit::FldTwip)));
 
     if ( bTopMod || bBottomMod )
     {
@@ -369,8 +369,8 @@ bool SwWrapTabPage::FillItemSet(SfxItemSet *rSet)
     bool bRightMod = m_pRightMarginED->IsValueModified();
 
     SvxLRSpaceItem aLR( RES_LR_SPACE );
-    aLR.SetLeft((sal_uInt16)m_pLeftMarginED->Denormalize(m_pLeftMarginED->GetValue(FUNIT_TWIP)));
-    aLR.SetRight((sal_uInt16)m_pRightMarginED->Denormalize(m_pRightMarginED->GetValue(FUNIT_TWIP)));
+    aLR.SetLeft((sal_uInt16)m_pLeftMarginED->Denormalize(m_pLeftMarginED->GetValue(FieldUnit::FldTwip)));
+    aLR.SetRight((sal_uInt16)m_pRightMarginED->Denormalize(m_pRightMarginED->GetValue(FieldUnit::FldTwip)));
 
     if ( bLeftMod || bRightMod )
     {
@@ -485,11 +485,11 @@ void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
             nRight = nLeft;
         }
 
-        m_pLeftMarginED->SetMax(m_pLeftMarginED->Normalize(nLeft), FUNIT_TWIP);
-        m_pRightMarginED->SetMax(m_pRightMarginED->Normalize(nRight), FUNIT_TWIP);
+        m_pLeftMarginED->SetMax(m_pLeftMarginED->Normalize(nLeft), FieldUnit::FldTwip);
+        m_pRightMarginED->SetMax(m_pRightMarginED->Normalize(nRight), FieldUnit::FldTwip);
 
-        m_pTopMarginED->SetMax(m_pTopMarginED->Normalize(nTop), FUNIT_TWIP);
-        m_pBottomMarginED->SetMax(m_pBottomMarginED->Normalize(nBottom), FUNIT_TWIP);
+        m_pTopMarginED->SetMax(m_pTopMarginED->Normalize(nTop), FieldUnit::FldTwip);
+        m_pBottomMarginED->SetMax(m_pBottomMarginED->Normalize(nBottom), FieldUnit::FldTwip);
 
         RangeModifyHdl(*m_pLeftMarginED);
         RangeModifyHdl(*m_pTopMarginED);

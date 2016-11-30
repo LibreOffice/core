@@ -32,8 +32,8 @@
 
 #include "envimg.hxx"
 
-#define GetFieldVal(rField)         (rField).Denormalize((rField).GetValue(FUNIT_TWIP))
-#define SetFieldVal(rField, lValue) (rField).SetValue((rField).Normalize(lValue), FUNIT_TWIP)
+#define GetFieldVal(rField)         (rField).Denormalize((rField).GetValue(FieldUnit::FldTwip))
+#define SetFieldVal(rField, lValue) (rField).SetValue((rField).Normalize(lValue), FieldUnit::FldTwip)
 
 class SwEnvPage;
 class SwEnvFormatPage;

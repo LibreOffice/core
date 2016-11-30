@@ -338,13 +338,13 @@ void SdTpOptionsMisc::ActivatePage( const SfxItemSet& rSet )
         if( eFUnit != m_pMtrFldOriginalWidth->GetUnit() )
         {
             // set metrics
-            sal_Int64 nVal = m_pMtrFldOriginalWidth->Denormalize( m_pMtrFldOriginalWidth->GetValue( FUNIT_TWIP ) );
+            sal_Int64 nVal = m_pMtrFldOriginalWidth->Denormalize( m_pMtrFldOriginalWidth->GetValue( FieldUnit::FldTwip ) );
             SetFieldUnit( *m_pMtrFldOriginalWidth, eFUnit, true );
-            m_pMtrFldOriginalWidth->SetValue( m_pMtrFldOriginalWidth->Normalize( nVal ), FUNIT_TWIP );
+            m_pMtrFldOriginalWidth->SetValue( m_pMtrFldOriginalWidth->Normalize( nVal ), FieldUnit::FldTwip );
 
-            nVal = m_pMtrFldOriginalHeight->Denormalize( m_pMtrFldOriginalHeight->GetValue( FUNIT_TWIP ) );
+            nVal = m_pMtrFldOriginalHeight->Denormalize( m_pMtrFldOriginalHeight->GetValue( FieldUnit::FldTwip ) );
             SetFieldUnit( *m_pMtrFldOriginalHeight, eFUnit, true );
-            m_pMtrFldOriginalHeight->SetValue( m_pMtrFldOriginalHeight->Normalize( nVal ), FUNIT_TWIP );
+            m_pMtrFldOriginalHeight->SetValue( m_pMtrFldOriginalHeight->Normalize( nVal ), FieldUnit::FldTwip );
 
             if( nWidth != 0 && nHeight != 0 )
             {
@@ -543,9 +543,9 @@ IMPL_LINK_NOARG(SdTpOptionsMisc, SelectMetricHdl_Impl, ListBox&, void)
     {
         FieldUnit eUnit = (FieldUnit)reinterpret_cast<sal_IntPtr>(m_pLbMetric->GetEntryData( nPos ));
         sal_Int64 nVal =
-            m_pMtrFldTabstop->Denormalize( m_pMtrFldTabstop->GetValue( FUNIT_TWIP ) );
+            m_pMtrFldTabstop->Denormalize( m_pMtrFldTabstop->GetValue( FieldUnit::FldTwip ) );
         SetFieldUnit( *m_pMtrFldTabstop, eUnit );
-        m_pMtrFldTabstop->SetValue( m_pMtrFldTabstop->Normalize( nVal ), FUNIT_TWIP );
+        m_pMtrFldTabstop->SetValue( m_pMtrFldTabstop->Normalize( nVal ), FieldUnit::FldTwip );
     }
 }
 

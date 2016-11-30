@@ -89,12 +89,12 @@ IMPL_LINK_NOARG( GraphicExportOptionsDialog, resolutionModifiedHandle, Edit&, vo
 
 double GraphicExportOptionsDialog::getViewWidthInch()
 {
-    return (double) MetricField::ConvertValue(mSize100mm.Width(),  2, MapUnit::Map100thMM, FUNIT_INCH) / 100.0;
+    return (double) MetricField::ConvertValue(mSize100mm.Width(),  2, MapUnit::Map100thMM, FieldUnit::FldInch) / 100.0;
 }
 
 double GraphicExportOptionsDialog::getViewHeightInch()
 {
-    return (double) MetricField::ConvertValue(mSize100mm.Height(),  2, MapUnit::Map100thMM, FUNIT_INCH) / 100.0;
+    return (double) MetricField::ConvertValue(mSize100mm.Height(),  2, MapUnit::Map100thMM, FieldUnit::FldInch) / 100.0;
 }
 
 void GraphicExportOptionsDialog::updateWidth()

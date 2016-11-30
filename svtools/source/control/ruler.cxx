@@ -258,7 +258,7 @@ void Ruler::ImplInit( WinBits nWinBits )
 
     // Initialize Units
     mnUnitIndex     = RULER_UNIT_CM;
-    meUnit          = FUNIT_CM;
+    meUnit          = FieldUnit::FldCM;
     maZoom          = Fraction( 1, 1 );
     meSourceUnit    = MapUnit::Map100thMM;
 
@@ -2444,37 +2444,37 @@ void Ruler::SetUnit( FieldUnit eNewUnit )
         meUnit = eNewUnit;
         switch ( meUnit )
         {
-            case FUNIT_MM:
+            case FieldUnit::FldMM:
                 mnUnitIndex = RULER_UNIT_MM;
                 break;
-            case FUNIT_CM:
+            case FieldUnit::FldCM:
                 mnUnitIndex = RULER_UNIT_CM;
                 break;
-            case FUNIT_M:
+            case FieldUnit::FldM:
                 mnUnitIndex = RULER_UNIT_M;
                 break;
-            case FUNIT_KM:
+            case FieldUnit::FldKM:
                 mnUnitIndex = RULER_UNIT_KM;
                 break;
-            case FUNIT_INCH:
+            case FieldUnit::FldInch:
                 mnUnitIndex = RULER_UNIT_INCH;
                 break;
-            case FUNIT_FOOT:
+            case FieldUnit::FldFoot:
                 mnUnitIndex = RULER_UNIT_FOOT;
                 break;
-            case FUNIT_MILE:
+            case FieldUnit::FldMile:
                 mnUnitIndex = RULER_UNIT_MILE;
                 break;
-            case FUNIT_POINT:
+            case FieldUnit::FldPoint:
                 mnUnitIndex = RULER_UNIT_POINT;
                 break;
-            case FUNIT_PICA:
+            case FieldUnit::FldPica:
                 mnUnitIndex = RULER_UNIT_PICA;
                 break;
-            case FUNIT_CHAR:
+            case FieldUnit::FldChar:
                 mnUnitIndex = RULER_UNIT_CHAR;
                 break;
-            case FUNIT_LINE:
+            case FieldUnit::FldLine:
                 mnUnitIndex = RULER_UNIT_LINE;
                 break;
             default:

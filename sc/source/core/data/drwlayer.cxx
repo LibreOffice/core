@@ -204,13 +204,13 @@ ScTabSizeChangedHint::~ScTabSizeChangedHint()
 inline long TwipsToHmm (long nVal)
 {
     return static_cast< long >( MetricField::ConvertDoubleValue (static_cast<sal_Int64>(nVal), 0, 0,
-            FUNIT_TWIP, FUNIT_100TH_MM) );
+            FieldUnit::FldTwip, FieldUnit::Fld100thMM) );
 }
 
 inline long HmmToTwips (long nVal)
 {
     return static_cast< long > ( MetricField::ConvertDoubleValue (static_cast<sal_Int64>(nVal), 0, 0,
-            FUNIT_100TH_MM, FUNIT_TWIP) );
+            FieldUnit::Fld100thMM, FieldUnit::FldTwip) );
 }
 
 inline void TwipsToMM( long& nVal )

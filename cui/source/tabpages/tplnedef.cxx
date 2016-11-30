@@ -102,9 +102,9 @@ SvxLineDefTabPage::SvxLineDefTabPage
 
     switch ( eFUnit )
     {
-        case FUNIT_M:
-        case FUNIT_KM:
-            eFUnit = FUNIT_MM;
+        case FieldUnit::FldM:
+        case FieldUnit::FldKM:
+            eFUnit = FieldUnit::FldMM;
             break;
         default: ; //prevent warning
     }
@@ -458,7 +458,7 @@ IMPL_LINK( SvxLineDefTabPage, ChangeMetricHdl_Impl, Button*, p, void )
         SetMetricValue( *m_pMtrLength2, nTmp2, ePoolUnit );
         SetMetricValue( *m_pMtrDistance, nTmp3, ePoolUnit );
     }
-    else if( m_pCbxSynchronize->IsChecked() && m_pMtrLength1->GetUnit() != FUNIT_PERCENT )
+    else if( m_pCbxSynchronize->IsChecked() && m_pMtrLength1->GetUnit() != FieldUnit::FldPercent )
     {
         long nTmp1, nTmp2, nTmp3;
 
@@ -480,9 +480,9 @@ IMPL_LINK( SvxLineDefTabPage, ChangeMetricHdl_Impl, Button*, p, void )
         m_pMtrLength2->SetDecimalDigits( 0 );
         m_pMtrDistance->SetDecimalDigits( 0 );
 
-        m_pMtrLength1->SetUnit( FUNIT_PERCENT );
-        m_pMtrLength2->SetUnit( FUNIT_PERCENT );
-        m_pMtrDistance->SetUnit( FUNIT_PERCENT );
+        m_pMtrLength1->SetUnit( FieldUnit::FldPercent );
+        m_pMtrLength2->SetUnit( FieldUnit::FldPercent );
+        m_pMtrDistance->SetUnit( FieldUnit::FldPercent );
 
         SetMetricValue( *m_pMtrLength1, nTmp1, ePoolUnit );
         SetMetricValue( *m_pMtrLength2, nTmp2, ePoolUnit );

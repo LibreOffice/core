@@ -1023,18 +1023,18 @@ bool SvxMeasureUnitToFieldUnit( const short eApi, FieldUnit& eVcl ) throw()
 {
     switch( eApi )
     {
-    case util::MeasureUnit::MM:         eVcl = FUNIT_MM;        break;
-    case util::MeasureUnit::CM:         eVcl = FUNIT_CM;        break;
-    case util::MeasureUnit::M:          eVcl = FUNIT_M;         break;
-    case util::MeasureUnit::KM:         eVcl = FUNIT_KM;        break;
-    case util::MeasureUnit::TWIP:       eVcl = FUNIT_TWIP;      break;
-    case util::MeasureUnit::POINT:      eVcl = FUNIT_POINT;     break;
-    case util::MeasureUnit::PICA:       eVcl = FUNIT_PICA;      break;
-    case util::MeasureUnit::INCH:       eVcl = FUNIT_INCH;      break;
-    case util::MeasureUnit::FOOT:       eVcl = FUNIT_FOOT;      break;
-    case util::MeasureUnit::MILE:       eVcl = FUNIT_MILE;      break;
-    case util::MeasureUnit::PERCENT:    eVcl = FUNIT_PERCENT;   break;
-    case util::MeasureUnit::MM_100TH:   eVcl = FUNIT_100TH_MM;  break;
+    case util::MeasureUnit::MM:         eVcl = FieldUnit::FldMM;        break;
+    case util::MeasureUnit::CM:         eVcl = FieldUnit::FldCM;        break;
+    case util::MeasureUnit::M:          eVcl = FieldUnit::FldM;         break;
+    case util::MeasureUnit::KM:         eVcl = FieldUnit::FldKM;        break;
+    case util::MeasureUnit::TWIP:       eVcl = FieldUnit::FldTwip;      break;
+    case util::MeasureUnit::POINT:      eVcl = FieldUnit::FldPoint;     break;
+    case util::MeasureUnit::PICA:       eVcl = FieldUnit::FldPica;      break;
+    case util::MeasureUnit::INCH:       eVcl = FieldUnit::FldInch;      break;
+    case util::MeasureUnit::FOOT:       eVcl = FieldUnit::FldFoot;      break;
+    case util::MeasureUnit::MILE:       eVcl = FieldUnit::FldMile;      break;
+    case util::MeasureUnit::PERCENT:    eVcl = FieldUnit::FldPercent;   break;
+    case util::MeasureUnit::MM_100TH:   eVcl = FieldUnit::Fld100thMM;  break;
     default:
         return false;
     }
@@ -1049,18 +1049,18 @@ bool SvxFieldUnitToMeasureUnit( const FieldUnit eVcl, short& eApi ) throw()
 {
     switch( eVcl )
     {
-    case FUNIT_MM:          eApi = util::MeasureUnit::MM;       break;
-    case FUNIT_CM:          eApi = util::MeasureUnit::CM;       break;
-    case FUNIT_M:           eApi = util::MeasureUnit::M;        break;
-    case FUNIT_KM:          eApi = util::MeasureUnit::KM;       break;
-    case FUNIT_TWIP:        eApi = util::MeasureUnit::TWIP;     break;
-    case FUNIT_POINT:       eApi = util::MeasureUnit::POINT;    break;
-    case FUNIT_PICA:        eApi = util::MeasureUnit::PICA;     break;
-    case FUNIT_INCH:        eApi = util::MeasureUnit::INCH;     break;
-    case FUNIT_FOOT:        eApi = util::MeasureUnit::FOOT;     break;
-    case FUNIT_MILE:        eApi = util::MeasureUnit::MILE;     break;
-    case FUNIT_PERCENT:     eApi = util::MeasureUnit::PERCENT;  break;
-    case FUNIT_100TH_MM:    eApi = util::MeasureUnit::MM_100TH; break;
+    case FieldUnit::FldMM:          eApi = util::MeasureUnit::MM;       break;
+    case FieldUnit::FldCM:          eApi = util::MeasureUnit::CM;       break;
+    case FieldUnit::FldM:           eApi = util::MeasureUnit::M;        break;
+    case FieldUnit::FldKM:          eApi = util::MeasureUnit::KM;       break;
+    case FieldUnit::FldTwip:        eApi = util::MeasureUnit::TWIP;     break;
+    case FieldUnit::FldPoint:       eApi = util::MeasureUnit::POINT;    break;
+    case FieldUnit::FldPica:        eApi = util::MeasureUnit::PICA;     break;
+    case FieldUnit::FldInch:        eApi = util::MeasureUnit::INCH;     break;
+    case FieldUnit::FldFoot:        eApi = util::MeasureUnit::FOOT;     break;
+    case FieldUnit::FldMile:        eApi = util::MeasureUnit::MILE;     break;
+    case FieldUnit::FldPercent:     eApi = util::MeasureUnit::PERCENT;  break;
+    case FieldUnit::Fld100thMM:    eApi = util::MeasureUnit::MM_100TH; break;
     default:
         return false;
     }

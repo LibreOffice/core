@@ -586,7 +586,7 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem( ImpPDFTabDialog* paParent )
     else
         mpRbJPEGCompression->Check();
 
-    mpNfQuality->SetValue( paParent->mnQuality, FUNIT_PERCENT );
+    mpNfQuality->SetValue( paParent->mnQuality, FieldUnit::FldPercent );
     mpQualityFrame->Enable(!bUseLosslessCompression);
 
     mpCbReduceImageResolution->SetToggleHdl( LINK( this, ImpPDFTabGeneralPage, ToggleReduceImageResolutionHdl ) );

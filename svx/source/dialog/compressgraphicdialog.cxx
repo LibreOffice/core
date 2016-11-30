@@ -243,12 +243,12 @@ void CompressGraphicsDialog::UpdateResolutionLB()
 
 double CompressGraphicsDialog::GetViewWidthInch()
 {
-    return (double) MetricField::ConvertValue(m_aViewSize100mm.Width(),  2, MapUnit::Map100thMM, FUNIT_INCH) / 100.0;
+    return (double) MetricField::ConvertValue(m_aViewSize100mm.Width(),  2, MapUnit::Map100thMM, FieldUnit::FldInch) / 100.0;
 }
 
 double CompressGraphicsDialog::GetViewHeightInch()
 {
-    return (double) MetricField::ConvertValue(m_aViewSize100mm.Height(),  2, MapUnit::Map100thMM, FUNIT_INCH) / 100.0;
+    return (double) MetricField::ConvertValue(m_aViewSize100mm.Height(),  2, MapUnit::Map100thMM, FieldUnit::FldInch) / 100.0;
 }
 
 BmpScaleFlag CompressGraphicsDialog::GetSelectedInterpolationType()

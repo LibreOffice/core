@@ -82,9 +82,9 @@ const sal_uInt16 SvxBorderTabPage::pRanges[] =
 
 static void lcl_SetDecimalDigitsTo1(MetricField& rField)
 {
-    sal_Int64 nMin = rField.Denormalize( rField.GetMin( FUNIT_TWIP ) );
+    sal_Int64 nMin = rField.Denormalize( rField.GetMin( FieldUnit::FldTwip ) );
     rField.SetDecimalDigits(1);
-    rField.SetMin( rField.Normalize( nMin ), FUNIT_TWIP );
+    rField.SetMin( rField.Normalize( nMin ), FieldUnit::FldTwip );
 }
 
 
@@ -191,17 +191,17 @@ SvxBorderTabPage::SvxBorderTabPage(vcl::Window* pParent, const SfxItemSet& rCore
         {
             //  #103396# the default value (1pt) can't be accurately represented in
             //  inches or pica with two decimals, so point is used instead.
-            case FUNIT_PICA:
-            case FUNIT_INCH:
-            case FUNIT_FOOT:
-            case FUNIT_MILE:
-                eFUnit = FUNIT_POINT;
+            case FieldUnit::FldPica:
+            case FieldUnit::FldInch:
+            case FieldUnit::FldFoot:
+            case FieldUnit::FldMile:
+                eFUnit = FieldUnit::FldPoint;
                 break;
 
-            case FUNIT_CM:
-            case FUNIT_M:
-            case FUNIT_KM:
-                eFUnit = FUNIT_MM;
+            case FieldUnit::FldCM:
+            case FieldUnit::FldM:
+            case FieldUnit::FldKM:
+                eFUnit = FieldUnit::FldMM;
                 break;
             default: ;//prevent warning
         }
@@ -210,9 +210,9 @@ SvxBorderTabPage::SvxBorderTabPage(vcl::Window* pParent, const SfxItemSet& rCore
     {
         switch ( eFUnit )
         {
-            case FUNIT_M:
-            case FUNIT_KM:
-                eFUnit = FUNIT_MM;
+            case FieldUnit::FldM:
+            case FieldUnit::FldKM:
+                eFUnit = FieldUnit::FldMM;
                 break;
             default: ; //prevent warning
         }
@@ -252,7 +252,7 @@ SvxBorderTabPage::SvxBorderTabPage(vcl::Window* pParent, const SfxItemSet& rCore
         }
         bIsDontCare = !pBoxInfo->IsValid( SvxBoxInfoItemValidFlags::DISABLE );
     }
-    if(!mbUseMarginItem && eFUnit == FUNIT_MM && MapUnit::MapTwip == rCoreAttrs.GetPool()->GetMetric( GetWhich( SID_ATTR_BORDER_INNER ) ))
+    if(!mbUseMarginItem && eFUnit == FieldUnit::FldMM && MapUnit::MapTwip == rCoreAttrs.GetPool()->GetMetric( GetWhich( SID_ATTR_BORDER_INNER ) ))
     {
         //#i91548# changing the number of decimal digits changes the minimum values, too
         lcl_SetDecimalDigitsTo1(*m_pLeftMF);
@@ -1056,7 +1056,7 @@ void SvxBorderTabPage::FillLineListBox_Impl()
         { INSET,  10, &SvxBorderLine::darkColor, &SvxBorderLine::lightColor, &sameDistColor }
     };
 
-    m_pLbLineStyle->SetSourceUnit( FUNIT_TWIP );
+    m_pLbLineStyle->SetSourceUnit( FieldUnit::FldTwip );
 
     m_pLbLineStyle->SetNone( SVX_RESSTR( RID_SVXSTR_NONE ) );
 

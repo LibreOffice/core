@@ -1063,9 +1063,9 @@ void SvxHFPage::RangeHdl()
     long nFDist   = m_pBspWin->GetFtDist();
 
     long nHeight = std::max( (long)MINBODY,
-        static_cast<long>(m_pHeightEdit->Denormalize( m_pHeightEdit->GetValue( FUNIT_TWIP ) ) ) );
+        static_cast<long>(m_pHeightEdit->Denormalize( m_pHeightEdit->GetValue( FieldUnit::FldTwip ) ) ) );
     long nDist   = m_pTurnOnBox->IsChecked() ?
-        static_cast<long>(m_pDistEdit->Denormalize( m_pDistEdit->GetValue( FUNIT_TWIP ) )) : 0;
+        static_cast<long>(m_pDistEdit->Denormalize( m_pDistEdit->GetValue( FieldUnit::FldTwip ) )) : 0;
 
     long nMin;
     long nMax;
@@ -1097,11 +1097,11 @@ void SvxHFPage::RangeHdl()
         nMin = ( nH - nBB - nBT ) / 5; // 20%
         nMax = std::max( nH - nMin - nHDist - nFDist - nFHeight - nBB - nBT,
                     nMin );
-        m_pHeightEdit->SetMax( m_pHeightEdit->Normalize( nMax ), FUNIT_TWIP );
+        m_pHeightEdit->SetMax( m_pHeightEdit->Normalize( nMax ), FieldUnit::FldTwip );
         nMin = ( nH - nBB - nBT ) / 5; // 20%
         nDist = std::max( nH - nMin - nHHeight - nFDist - nFHeight - nBB - nBT,
                      long(0) );
-        m_pDistEdit->SetMax( m_pDistEdit->Normalize( nDist ), FUNIT_TWIP );
+        m_pDistEdit->SetMax( m_pDistEdit->Normalize( nDist ), FieldUnit::FldTwip );
     }
     else
     {
@@ -1109,21 +1109,21 @@ void SvxHFPage::RangeHdl()
         nMin = ( nH - nBT - nBB ) / 5; // 20%
         nMax = std::max( nH - nMin - nFDist - nHDist - nHHeight - nBT - nBB,
                     nMin );
-        m_pHeightEdit->SetMax( m_pHeightEdit->Normalize( nMax ), FUNIT_TWIP );
+        m_pHeightEdit->SetMax( m_pHeightEdit->Normalize( nMax ), FieldUnit::FldTwip );
         nMin = ( nH - nBT - nBB ) / 5; // 20%
         nDist = std::max( nH - nMin - nFHeight - nHDist - nHHeight - nBT - nBB,
                      long(0) );
-        m_pDistEdit->SetMax( m_pDistEdit->Normalize( nDist ), FUNIT_TWIP );
+        m_pDistEdit->SetMax( m_pDistEdit->Normalize( nDist ), FieldUnit::FldTwip );
     }
 
     // Limit Indentation
     nMax = nW - nBL - nBR -
-           static_cast<long>(m_pRMEdit->Denormalize( m_pRMEdit->GetValue( FUNIT_TWIP ) )) - MINBODY;
-    m_pLMEdit->SetMax( m_pLMEdit->Normalize( nMax ), FUNIT_TWIP );
+           static_cast<long>(m_pRMEdit->Denormalize( m_pRMEdit->GetValue( FieldUnit::FldTwip ) )) - MINBODY;
+    m_pLMEdit->SetMax( m_pLMEdit->Normalize( nMax ), FieldUnit::FldTwip );
 
     nMax = nW - nBL - nBR -
-           static_cast<long>(m_pLMEdit->Denormalize( m_pLMEdit->GetValue( FUNIT_TWIP ) )) - MINBODY;
-    m_pRMEdit->SetMax( m_pLMEdit->Normalize( nMax ), FUNIT_TWIP );
+           static_cast<long>(m_pLMEdit->Denormalize( m_pLMEdit->GetValue( FieldUnit::FldTwip ) )) - MINBODY;
+    m_pRMEdit->SetMax( m_pLMEdit->Normalize( nMax ), FieldUnit::FldTwip );
 }
 
 static void lcl_Move(vcl::Window& rWin, sal_Int32 nDiff)

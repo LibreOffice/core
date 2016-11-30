@@ -65,17 +65,17 @@ public:
     void SetMetricFieldMin(sal_Int64 nNewMin) { m_pField->SetMin(nNewMin); }
     void SetMetricFieldMax(sal_Int64 nNewMax) { m_pField->SetMax(nNewMax); }
 
-    void SetValue(sal_Int64 nNewValue) { m_pField->SetValue(nNewValue, FUNIT_NONE); }
+    void SetValue(sal_Int64 nNewValue) { m_pField->SetValue(nNewValue, FieldUnit::NONE); }
 
     void SetLast(sal_Int64 nNewLast) { m_pField->SetLast(nNewLast); }
 
-    void SetPrcntValue(sal_Int64 nNewValue, FieldUnit eInUnit = FUNIT_NONE);
+    void SetPrcntValue(sal_Int64 nNewValue, FieldUnit eInUnit = FieldUnit::NONE);
 
     void SetUserValue(sal_Int64 nNewValue, FieldUnit eInUnit);
 
     void SetBaseValue(sal_Int64 nNewValue, FieldUnit eInUnit);
 
-    sal_Int64 GetValue(FieldUnit eOutUnit = FUNIT_NONE);
+    sal_Int64 GetValue(FieldUnit eOutUnit = FieldUnit::NONE);
 
     bool IsValueModified();
 

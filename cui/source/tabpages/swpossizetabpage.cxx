@@ -811,9 +811,9 @@ bool SvxSwPosSizeTabPage::FillItemSet( SfxItemSet* rSet)
             if( m_pHoriByMF->IsValueModified() || m_pVertByMF->IsValueModified() )
             {
                 long nHoriByPos =
-                            static_cast<long>(m_pHoriByMF->Denormalize(m_pHoriByMF->GetValue(FUNIT_TWIP)));
+                            static_cast<long>(m_pHoriByMF->Denormalize(m_pHoriByMF->GetValue(FieldUnit::FldTwip)));
                 long nVertByPos =
-                            static_cast<long>(m_pVertByMF->Denormalize(m_pVertByMF->GetValue(FUNIT_TWIP)));
+                            static_cast<long>(m_pVertByMF->Denormalize(m_pVertByMF->GetValue(FieldUnit::FldTwip)));
 
                 // old rectangle with CoreUnit
                 m_aRect = m_pSdrView->GetAllMarkedRect();
@@ -843,7 +843,7 @@ bool SvxSwPosSizeTabPage::FillItemSet( SfxItemSet* rSet)
                 short nAlign = GetAlignment(m_pHMap, nMapPos, *m_pHoriLB, *m_pHoriToLB);
                 short nRel = GetRelation(m_pHMap, *m_pHoriToLB);
                 const long nHoriByPos =
-                            static_cast<long>(m_pHoriByMF->Denormalize(m_pHoriByMF->GetValue(FUNIT_TWIP)));
+                            static_cast<long>(m_pHoriByMF->Denormalize(m_pHoriByMF->GetValue(FieldUnit::FldTwip)));
                 if (
                     nAlign != rHoriOrient.GetValue() ||
                     nRel != rHoriRelation.GetValue() ||
@@ -875,7 +875,7 @@ bool SvxSwPosSizeTabPage::FillItemSet( SfxItemSet* rSet)
                 // #i34055# - convert vertical position for
                 // as-character anchored objects
                 long nVertByPos =
-                        static_cast<long>(m_pVertByMF->Denormalize(m_pVertByMF->GetValue(FUNIT_TWIP)));
+                        static_cast<long>(m_pVertByMF->Denormalize(m_pVertByMF->GetValue(FieldUnit::FldTwip)));
                 if ( GetAnchorType() == TextContentAnchorType_AS_CHARACTER )
                 {
                     nVertByPos *= -1;
@@ -909,8 +909,8 @@ bool SvxSwPosSizeTabPage::FillItemSet( SfxItemSet* rSet)
     }
     if ( m_pWidthMF->IsValueModified() || m_pHeightMF->IsValueModified() )
     {
-        sal_uInt32 nWidth = static_cast<sal_uInt32>(m_pWidthMF->Denormalize(m_pWidthMF->GetValue(FUNIT_TWIP)));
-        sal_uInt32 nHeight = static_cast<sal_uInt32>(m_pHeightMF->Denormalize(m_pHeightMF->GetValue(FUNIT_TWIP)));
+        sal_uInt32 nWidth = static_cast<sal_uInt32>(m_pWidthMF->Denormalize(m_pWidthMF->GetValue(FieldUnit::FldTwip)));
+        sal_uInt32 nHeight = static_cast<sal_uInt32>(m_pHeightMF->Denormalize(m_pHeightMF->GetValue(FieldUnit::FldTwip)));
         rSet->Put( SfxUInt32Item( GetWhich( SID_ATTR_TRANSFORM_WIDTH ),
                         (sal_uInt32) nWidth ) );
         rSet->Put( SfxUInt32Item( GetWhich( SID_ATTR_TRANSFORM_HEIGHT ),
@@ -1032,11 +1032,11 @@ void SvxSwPosSizeTabPage::Reset( const SfxItemSet* rSet)
     pItem = GetItem( *rSet, SID_ATTR_TRANSFORM_WIDTH );
     sal_Int32 nWidth = std::max( pItem ? ( static_cast<const SfxUInt32Item*>(pItem)->GetValue()) : 0, (sal_uInt32)1 );
 
-    m_pWidthMF->SetValue(m_pWidthMF->Normalize(nWidth), FUNIT_TWIP);
+    m_pWidthMF->SetValue(m_pWidthMF->Normalize(nWidth), FieldUnit::FldTwip);
 
     pItem = GetItem( *rSet, SID_ATTR_TRANSFORM_HEIGHT );
     sal_Int32 nHeight = std::max( pItem ? ( static_cast<const SfxUInt32Item*>(pItem)->GetValue()) : 0, (sal_uInt32)1 );
-    m_pHeightMF->SetValue(m_pHeightMF->Normalize(nHeight), FUNIT_TWIP);
+    m_pHeightMF->SetValue(m_pHeightMF->Normalize(nHeight), FieldUnit::FldTwip);
     m_fWidthHeightRatio = nHeight ? double(nWidth) / double(nHeight) : 1.0;
 
     if(!m_bPositioningDisabled)
@@ -1190,42 +1190,42 @@ IMPL_LINK_NOARG(SvxSwPosSizeTabPage, RangeModifyHdl, Control&, void)
         aVal.nVertOrient = VertOrientation::NONE;
 
     const long nAtHorzPosVal =
-                    static_cast<long>(m_pHoriByMF->Denormalize(m_pHoriByMF->GetValue(FUNIT_TWIP)));
+                    static_cast<long>(m_pHoriByMF->Denormalize(m_pHoriByMF->GetValue(FieldUnit::FldTwip)));
     const long nAtVertPosVal =
-                    static_cast<long>(m_pVertByMF->Denormalize(m_pVertByMF->GetValue(FUNIT_TWIP)));
+                    static_cast<long>(m_pVertByMF->Denormalize(m_pVertByMF->GetValue(FieldUnit::FldTwip)));
 
     aVal.nHPos = nAtHorzPosVal;
     aVal.nVPos = nAtVertPosVal;
 
-    sal_Int32 nWidth = static_cast<sal_uInt32>(m_pWidthMF-> Denormalize(m_pWidthMF->GetValue(FUNIT_TWIP)));
-    sal_Int32 nHeight = static_cast<sal_uInt32>(m_pHeightMF->Denormalize(m_pHeightMF->GetValue(FUNIT_TWIP)));
+    sal_Int32 nWidth = static_cast<sal_uInt32>(m_pWidthMF-> Denormalize(m_pWidthMF->GetValue(FieldUnit::FldTwip)));
+    sal_Int32 nHeight = static_cast<sal_uInt32>(m_pHeightMF->Denormalize(m_pHeightMF->GetValue(FieldUnit::FldTwip)));
     aVal.nWidth  = nWidth;
     aVal.nHeight = nHeight;
 
     m_aValidateLink.Call(aVal);
 
     // minimum width also for style
-    m_pHeightMF->SetMin(m_pHeightMF->Normalize(aVal.nMinHeight), FUNIT_TWIP);
-    m_pWidthMF-> SetMin(m_pWidthMF->Normalize(aVal.nMinWidth), FUNIT_TWIP);
+    m_pHeightMF->SetMin(m_pHeightMF->Normalize(aVal.nMinHeight), FieldUnit::FldTwip);
+    m_pWidthMF-> SetMin(m_pWidthMF->Normalize(aVal.nMinWidth), FieldUnit::FldTwip);
 
     sal_Int32 nMaxWidth(aVal.nMaxWidth);
     sal_Int32 nMaxHeight(aVal.nMaxHeight);
 
     sal_Int64 nTmp = m_pHeightMF->Normalize(nMaxHeight);
-    m_pHeightMF->SetMax(nTmp, FUNIT_TWIP);
+    m_pHeightMF->SetMax(nTmp, FieldUnit::FldTwip);
 
     nTmp = m_pWidthMF->Normalize(nMaxWidth);
-    m_pWidthMF->SetMax(nTmp, FUNIT_TWIP);
+    m_pWidthMF->SetMax(nTmp, FieldUnit::FldTwip);
 
-    m_pHoriByMF->SetMin(m_pHoriByMF->Normalize(aVal.nMinHPos), FUNIT_TWIP);
-    m_pHoriByMF->SetMax(m_pHoriByMF->Normalize(aVal.nMaxHPos), FUNIT_TWIP);
+    m_pHoriByMF->SetMin(m_pHoriByMF->Normalize(aVal.nMinHPos), FieldUnit::FldTwip);
+    m_pHoriByMF->SetMax(m_pHoriByMF->Normalize(aVal.nMaxHPos), FieldUnit::FldTwip);
     if ( aVal.nHPos != nAtHorzPosVal )
-        m_pHoriByMF->SetValue(m_pHoriByMF->Normalize(aVal.nHPos), FUNIT_TWIP);
+        m_pHoriByMF->SetValue(m_pHoriByMF->Normalize(aVal.nHPos), FieldUnit::FldTwip);
 
-    m_pVertByMF->SetMin(m_pVertByMF->Normalize(aVal.nMinVPos ), FUNIT_TWIP);
-    m_pVertByMF->SetMax(m_pVertByMF->Normalize(aVal.nMaxVPos), FUNIT_TWIP);
+    m_pVertByMF->SetMin(m_pVertByMF->Normalize(aVal.nMinVPos ), FieldUnit::FldTwip);
+    m_pVertByMF->SetMax(m_pVertByMF->Normalize(aVal.nMaxVPos), FieldUnit::FldTwip);
     if ( aVal.nVPos != nAtVertPosVal )
-        m_pVertByMF->SetValue(m_pVertByMF->Normalize(aVal.nVPos), FUNIT_TWIP);
+        m_pVertByMF->SetValue(m_pVertByMF->Normalize(aVal.nVPos), FieldUnit::FldTwip);
 }
 
 IMPL_LINK_NOARG(SvxSwPosSizeTabPage, AnchorTypeHdl, Button*, void)
@@ -1387,19 +1387,19 @@ IMPL_LINK( SvxSwPosSizeTabPage, PosHdl, ListBox&, rLB, void )
 
 IMPL_LINK( SvxSwPosSizeTabPage, ModifyHdl, Edit&, rEdit, void )
 {
-    sal_Int64 nWidth = m_pWidthMF->Denormalize(m_pWidthMF->GetValue(FUNIT_TWIP));
-    sal_Int64 nHeight = m_pHeightMF->Denormalize(m_pHeightMF->GetValue(FUNIT_TWIP));
+    sal_Int64 nWidth = m_pWidthMF->Denormalize(m_pWidthMF->GetValue(FieldUnit::FldTwip));
+    sal_Int64 nHeight = m_pHeightMF->Denormalize(m_pHeightMF->GetValue(FieldUnit::FldTwip));
     if ( m_pKeepRatioCB->IsChecked() )
     {
         if ( &rEdit == m_pWidthMF )
         {
             nHeight = sal_Int64((double)nWidth / m_fWidthHeightRatio);
-            m_pHeightMF->SetValue(m_pHeightMF->Normalize(nHeight), FUNIT_TWIP);
+            m_pHeightMF->SetValue(m_pHeightMF->Normalize(nHeight), FieldUnit::FldTwip);
         }
         else if(&rEdit == m_pHeightMF)
         {
             nWidth = sal_Int64((double)nHeight * m_fWidthHeightRatio);
-            m_pWidthMF->SetValue(m_pWidthMF->Normalize(nWidth), FUNIT_TWIP);
+            m_pWidthMF->SetValue(m_pWidthMF->Normalize(nWidth), FieldUnit::FldTwip);
         }
     }
     m_fWidthHeightRatio = nHeight ? double(nWidth) / double(nHeight) : 1.0;
@@ -1598,18 +1598,18 @@ void SvxSwPosSizeTabPage::InitPos(short nAnchor,
             nAnchor != TextContentAnchorType_AS_CHARACTER;//#61359# why not in formats&& !bFormat;
     if (!bEnable)
     {
-        m_pHoriByMF->SetValue( 0, FUNIT_TWIP );
+        m_pHoriByMF->SetValue( 0, FieldUnit::FldTwip );
         if (nX != LONG_MAX && m_bHtmlMode)
             m_pHoriByMF->SetModifyFlag();
     }
     else if(m_bIsMultiSelection)
     {
-         m_pHoriByMF->SetValue( m_pHoriByMF->Normalize(m_aRect.Left()), FUNIT_TWIP );
+         m_pHoriByMF->SetValue( m_pHoriByMF->Normalize(m_aRect.Left()), FieldUnit::FldTwip );
     }
     else
     {
         if (nX != LONG_MAX)
-            m_pHoriByMF->SetValue( m_pHoriByMF->Normalize(nX), FUNIT_TWIP );
+            m_pHoriByMF->SetValue( m_pHoriByMF->Normalize(nX), FieldUnit::FldTwip );
     }
     m_pHoriByFT->Enable( bEnable );
     m_pHoriByMF->Enable( bEnable );
@@ -1617,13 +1617,13 @@ void SvxSwPosSizeTabPage::InitPos(short nAnchor,
     bEnable = nV == VertOrientation::NONE;
     if ( !bEnable )
     {
-        m_pVertByMF->SetValue( 0, FUNIT_TWIP );
+        m_pVertByMF->SetValue( 0, FieldUnit::FldTwip );
         if(nY != LONG_MAX && m_bHtmlMode)
             m_pVertByMF->SetModifyFlag();
     }
     else if(m_bIsMultiSelection)
     {
-         m_pVertByMF->SetValue( m_pVertByMF->Normalize(m_aRect.Top()), FUNIT_TWIP );
+         m_pVertByMF->SetValue( m_pVertByMF->Normalize(m_aRect.Top()), FieldUnit::FldTwip );
     }
     else
     {
@@ -1635,7 +1635,7 @@ void SvxSwPosSizeTabPage::InitPos(short nAnchor,
                 nY *= -1;
         }
         if ( nY != LONG_MAX )
-            m_pVertByMF->SetValue( m_pVertByMF->Normalize(nY), FUNIT_TWIP );
+            m_pVertByMF->SetValue( m_pVertByMF->Normalize(nY), FieldUnit::FldTwip );
     }
     m_pVertByFT->Enable( bEnable );
     m_pVertByMF->Enable( bEnable );
@@ -1667,8 +1667,8 @@ void SvxSwPosSizeTabPage::UpdateExample()
     }
 
     // Size
-    long nXPos = static_cast<long>(m_pHoriByMF->Denormalize(m_pHoriByMF->GetValue(FUNIT_TWIP)));
-    long nYPos = static_cast<long>(m_pVertByMF->Denormalize(m_pVertByMF->GetValue(FUNIT_TWIP)));
+    long nXPos = static_cast<long>(m_pHoriByMF->Denormalize(m_pHoriByMF->GetValue(FieldUnit::FldTwip)));
+    long nYPos = static_cast<long>(m_pVertByMF->Denormalize(m_pVertByMF->GetValue(FieldUnit::FldTwip)));
     m_pExampleWN->SetRelPos(Point(nXPos, nYPos));
 
     m_pExampleWN->SetAnchor( GetAnchorType() );

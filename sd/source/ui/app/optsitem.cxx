@@ -180,7 +180,7 @@ SdOptionsLayout::SdOptionsLayout(  sal_uInt16 nConfigId, bool bUseConfig ) :
     bDragStripes( false ),
     bHandlesBezier( false ),
     bHelplines( true ),
-    nMetric((sal_uInt16)(isMetricSystem() ? FUNIT_CM : FUNIT_INCH)),
+    nMetric((sal_uInt16)(isMetricSystem() ? FieldUnit::FldCM : FieldUnit::FldInch)),
     nDefTab( 1250 )
 {
     EnableModify( true );

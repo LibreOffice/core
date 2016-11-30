@@ -2366,7 +2366,7 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
     };
 
     MeasurementSystem eSystem = SvtSysLocale().GetLocaleData().getMeasurementSystemEnum();
-    FieldUnit eUserMetric = MEASURE_METRIC == eSystem ? FUNIT_CM : FUNIT_INCH;
+    FieldUnit eUserMetric = MEASURE_METRIC == eSystem ? FieldUnit::FldCM : FieldUnit::FldInch;
     static const sal_uInt16 pRanges[] =
     {
         RPTUI_ID_LRSPACE, XATTR_FILL_LAST,

@@ -430,7 +430,7 @@ void LineListBox::ImpGetLine( long nLine1, long nLine2, long nDistance,
     aSize.Height() = aTxtSize.Height();
 
     // SourceUnit nach Twips
-    if ( eSourceUnit == FUNIT_POINT )
+    if ( eSourceUnit == FieldUnit::FldPoint )
     {
         nLine1      /= 5;
         nLine2      /= 5;
@@ -484,8 +484,8 @@ void LineListBox::ImplInit()
     aTxtSize.Width()  = GetTextWidth( " " );
     aTxtSize.Height() = GetTextHeight();
     pLineList   = new ImpLineList();
-    eUnit       = FUNIT_POINT;
-    eSourceUnit = FUNIT_POINT;
+    eUnit       = FieldUnit::FldPoint;
+    eSourceUnit = FieldUnit::FldPoint;
 
     aVirDev->SetLineColor();
     aVirDev->SetMapMode( MapMode( MapUnit::MapTwip ) );
@@ -1465,7 +1465,7 @@ void FontSizeBox::Fill( const FontMetric* pFontMetric, const FontList* pList )
     pTempAry = pAry;
     while ( *pTempAry )
     {
-        InsertValue( *pTempAry, FUNIT_NONE, nPos );
+        InsertValue( *pTempAry, FieldUnit::NONE, nPos );
         ComboBox::SetEntryData( nPos, reinterpret_cast<void*>(*pTempAry) );
         nPos++;
         pTempAry++;
@@ -1481,7 +1481,7 @@ void FontSizeBox::EnableRelativeMode( sal_uInt16 nMin, sal_uInt16 nMax, sal_uInt
     nRelMin       = nMin;
     nRelMax       = nMax;
     nRelStep      = nStep;
-    SetUnit( FUNIT_POINT );
+    SetUnit( FieldUnit::FldPoint );
 }
 
 void FontSizeBox::EnablePtRelativeMode( short nMin, short nMax, short nStep )
@@ -1490,7 +1490,7 @@ void FontSizeBox::EnablePtRelativeMode( short nMin, short nMax, short nStep )
     nPtRelMin     = nMin;
     nPtRelMax     = nMax;
     nPtRelStep    = nStep;
-    SetUnit( FUNIT_POINT );
+    SetUnit( FieldUnit::FldPoint );
 }
 
 void FontSizeBox::SetRelative( bool bNewRelative )
@@ -1512,7 +1512,7 @@ void FontSizeBox::SetRelative( bool bNewRelative )
                 SetDecimalDigits( 1 );
                 SetMin( nPtRelMin );
                 SetMax( nPtRelMax );
-                SetUnit( FUNIT_POINT );
+                SetUnit( FieldUnit::FldPoint );
 
                 short i = nPtRelMin, n = 0;
                 // JP 30.06.98: more than 100 values are not useful
@@ -1529,7 +1529,7 @@ void FontSizeBox::SetRelative( bool bNewRelative )
                 SetDecimalDigits( 0 );
                 SetMin( nRelMin );
                 SetMax( nRelMax );
-                SetUnit( FUNIT_PERCENT );
+                SetUnit( FieldUnit::FldPercent );
 
                 sal_uInt16 i = nRelMin;
                 while ( i <= nRelMax )
@@ -1547,7 +1547,7 @@ void FontSizeBox::SetRelative( bool bNewRelative )
             SetDecimalDigits( 1 );
             SetMin( 20 );
             SetMax( 9999 );
-            SetUnit( FUNIT_POINT );
+            SetUnit( FieldUnit::FldPoint );
             if ( pFontList )
                 Fill( &aFontMetric, pFontList );
         }
@@ -1589,7 +1589,7 @@ void FontSizeBox::SetValue( sal_Int64 nNewValue, FieldUnit eInUnit )
 
 void FontSizeBox::SetValue( sal_Int64 nNewValue )
 {
-    SetValue( nNewValue, FUNIT_NONE );
+    SetValue( nNewValue, FieldUnit::NONE );
 }
 
 sal_Int64 FontSizeBox::GetValue( FieldUnit eOutUnit ) const
@@ -1608,7 +1608,7 @@ sal_Int64 FontSizeBox::GetValue( FieldUnit eOutUnit ) const
 sal_Int64 FontSizeBox::GetValue() const
 {
     // implementation not inline, because it is a virtual function
-    return GetValue( FUNIT_NONE );
+    return GetValue( FieldUnit::NONE );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -37,7 +37,7 @@
 
 void SwTableHeightDlg::Apply()
 {
-    SwTwips nHeight = static_cast< SwTwips >(m_pHeightEdit->Denormalize(m_pHeightEdit->GetValue(FUNIT_TWIP)));
+    SwTwips nHeight = static_cast< SwTwips >(m_pHeightEdit->Denormalize(m_pHeightEdit->GetValue(FieldUnit::FldTwip)));
     SwFormatFrameSize aSz(ATT_FIX_SIZE, 0, nHeight);
 
     SwFrameSize eFrameSize = m_pAutoHeightCB->IsChecked() ?
@@ -60,7 +60,7 @@ SwTableHeightDlg::SwTableHeightDlg(vcl::Window *pParent, SwWrtShell &rS)
                                 rSh.GetView().GetDocShell() ) != nullptr  )->GetMetric();
     ::SetFieldUnit(*m_pHeightEdit, eFieldUnit);
 
-    m_pHeightEdit->SetMin(MINLAY, FUNIT_TWIP);
+    m_pHeightEdit->SetMin(MINLAY, FieldUnit::FldTwip);
     if(!m_pHeightEdit->GetMin())
         m_pHeightEdit->SetMin(1);
     SwFormatFrameSize *pSz;
@@ -69,7 +69,7 @@ SwTableHeightDlg::SwTableHeightDlg(vcl::Window *pParent, SwWrtShell &rS)
     {
         long nHeight = pSz->GetHeight();
         m_pAutoHeightCB->Check(pSz->GetHeightSizeType() != ATT_FIX_SIZE);
-        m_pHeightEdit->SetValue(m_pHeightEdit->Normalize(nHeight), FUNIT_TWIP);
+        m_pHeightEdit->SetValue(m_pHeightEdit->Normalize(nHeight), FieldUnit::FldTwip);
 
         delete pSz;
     }

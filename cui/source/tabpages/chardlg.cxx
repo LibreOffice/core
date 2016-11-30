@@ -509,7 +509,7 @@ namespace
 
             // conversion twips for the example-window
             aSize.Height() =
-                ItemToControl( nHeight, _pPage->GetItemSet().GetPool()->GetMetric( _nFontHeightWhich ), FUNIT_TWIP );
+                ItemToControl( nHeight, _pPage->GetItemSet().GetPool()->GetMetric( _nFontHeightWhich ), FieldUnit::FldTwip );
         }
         else if ( !_pFontSizeLB->GetText().isEmpty() )
             aSize.Height() = PointToTwips( static_cast<long>(_pFontSizeLB->GetValue() / 10) );

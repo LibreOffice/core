@@ -35,8 +35,8 @@ IMPL_LINK_NOARG(SwTableWidthDlg, LoseFocusHdl, Edit&, void)
 {
     sal_uInt16 nId = (sal_uInt16)m_pColNF->GetValue()-1;
     const SwTwips lWidth = rFnc.GetColWidth(nId);
-    m_pWidthMF->SetMax(m_pWidthMF->Normalize(rFnc.GetMaxColWidth(nId)), FUNIT_TWIP);
-    m_pWidthMF->SetValue(m_pWidthMF->Normalize(lWidth), FUNIT_TWIP);
+    m_pWidthMF->SetMax(m_pWidthMF->Normalize(rFnc.GetMaxColWidth(nId)), FieldUnit::FldTwip);
+    m_pWidthMF->SetValue(m_pWidthMF->Normalize(lWidth), FieldUnit::FldTwip);
 }
 
 SwTableWidthDlg::SwTableWidthDlg(vcl::Window *pParent, SwTableFUNC &rTableFnc )
@@ -53,12 +53,12 @@ SwTableWidthDlg::SwTableWidthDlg(vcl::Window *pParent, SwTableFUNC &rTableFnc )
     ::SetFieldUnit(*m_pWidthMF, eFieldUnit);
 
     m_pColNF->SetValue( rFnc.GetCurColNum() +1 );
-    m_pWidthMF->SetMin(m_pWidthMF->Normalize(MINLAY), FUNIT_TWIP);
+    m_pWidthMF->SetMin(m_pWidthMF->Normalize(MINLAY), FieldUnit::FldTwip);
     if(!m_pWidthMF->GetMin())
         m_pWidthMF->SetMin(1);
 
     if(rFnc.GetColCount() == 0)
-        m_pWidthMF->SetMin(m_pWidthMF->Normalize(rFnc.GetColWidth(0)), FUNIT_TWIP);
+        m_pWidthMF->SetMin(m_pWidthMF->Normalize(rFnc.GetColWidth(0)), FieldUnit::FldTwip);
     m_pColNF->SetMax(rFnc.GetColCount() +1 );
     m_pColNF->SetModifyHdl(LINK(this,SwTableWidthDlg, LoseFocusHdl));
     LoseFocusHdl(*m_pColNF);
@@ -81,7 +81,7 @@ void SwTableWidthDlg::Apply()
     rFnc.InitTabCols();
     rFnc.SetColWidth(
             static_cast< sal_uInt16 >(m_pColNF->GetValue() - 1),
-            static_cast< sal_uInt16 >(m_pWidthMF->Denormalize(m_pWidthMF->GetValue(FUNIT_TWIP))));
+            static_cast< sal_uInt16 >(m_pWidthMF->Denormalize(m_pWidthMF->GetValue(FieldUnit::FldTwip))));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

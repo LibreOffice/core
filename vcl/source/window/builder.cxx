@@ -993,44 +993,44 @@ namespace
 
     FieldUnit detectMetricUnit(const OString& sUnit)
     {
-        FieldUnit eUnit = FUNIT_NONE;
+        FieldUnit eUnit = FieldUnit::NONE;
 
         if (sUnit == "mm")
-            eUnit = FUNIT_MM;
+            eUnit = FieldUnit::FldMM;
         else if (sUnit == "cm")
-            eUnit = FUNIT_CM;
+            eUnit = FieldUnit::FldCM;
         else if (sUnit == "m")
-            eUnit = FUNIT_M;
+            eUnit = FieldUnit::FldM;
         else if (sUnit == "km")
-            eUnit = FUNIT_KM;
+            eUnit = FieldUnit::FldKM;
         else if ((sUnit == "twips") || (sUnit == "twip"))
-            eUnit = FUNIT_TWIP;
+            eUnit = FieldUnit::FldTwip;
         else if (sUnit == "pt")
-            eUnit = FUNIT_POINT;
+            eUnit = FieldUnit::FldPoint;
         else if (sUnit == "pc")
-            eUnit = FUNIT_PICA;
+            eUnit = FieldUnit::FldPica;
         else if (sUnit == "\"" || (sUnit == "in") || (sUnit == "inch"))
-            eUnit = FUNIT_INCH;
+            eUnit = FieldUnit::FldInch;
         else if ((sUnit == "'") || (sUnit == "ft") || (sUnit == "foot") || (sUnit == "feet"))
-            eUnit = FUNIT_FOOT;
+            eUnit = FieldUnit::FldFoot;
         else if (sUnit == "mile" || (sUnit == "miles"))
-            eUnit = FUNIT_MILE;
+            eUnit = FieldUnit::FldMile;
         else if (sUnit == "ch")
-            eUnit = FUNIT_CHAR;
+            eUnit = FieldUnit::FldChar;
         else if (sUnit == "line")
-            eUnit = FUNIT_LINE;
+            eUnit = FieldUnit::FldLine;
         else if (sUnit == "%")
-            eUnit = FUNIT_PERCENT;
+            eUnit = FieldUnit::FldPercent;
         else if ((sUnit == "pixels") || (sUnit == "pixel") || (sUnit == "px"))
-            eUnit = FUNIT_PIXEL;
+            eUnit = FieldUnit::FldPixel;
         else if ((sUnit == "degrees") || (sUnit == "degree"))
-            eUnit = FUNIT_DEGREE;
+            eUnit = FieldUnit::FldDegree;
         else if ((sUnit == "sec") || (sUnit == "seconds") || (sUnit == "second"))
-            eUnit = FUNIT_SECOND;
+            eUnit = FieldUnit::FldSecond;
         else if ((sUnit == "ms") || (sUnit == "milliseconds") || (sUnit == "millisecond"))
-            eUnit = FUNIT_MILLISECOND;
+            eUnit = FieldUnit::FldMilliSecond;
         else if (sUnit != "0")
-            eUnit = FUNIT_CUSTOM;
+            eUnit = FieldUnit::FldCustom;
 
         return eUnit;
     }
@@ -1469,7 +1469,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
                 SAL_INFO("vcl.layout", "making metric field for " << name.getStr() << " " << sUnit.getStr());
                 VclPtrInstance<MetricField> xField(pParent, nBits);
                 xField->SetUnit(eUnit);
-                if (eUnit == FUNIT_CUSTOM)
+                if (eUnit == FieldUnit::FldCustom)
                     xField->SetCustomUnitText(OStringToOUString(sUnit, RTL_TEXTENCODING_UTF8));
                 xWindow = xField;
             }
@@ -1503,7 +1503,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
             xBox->EnableAutoSize(true);
             xBox->SetUnit(eUnit);
             xBox->SetDecimalDigits(extractDecimalDigits(sPattern));
-            if (eUnit == FUNIT_CUSTOM)
+            if (eUnit == FieldUnit::FldCustom)
                 xBox->SetCustomUnitText(OStringToOUString(sUnit, RTL_TEXTENCODING_UTF8));
             xWindow = xBox;
         }
@@ -1543,7 +1543,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
             xBox->EnableAutoSize(true);
             xBox->SetUnit(eUnit);
             xBox->SetDecimalDigits(extractDecimalDigits(sPattern));
-            if (eUnit == FUNIT_CUSTOM)
+            if (eUnit == FieldUnit::FldCustom)
                 xBox->SetCustomUnitText(OStringToOUString(sUnit, RTL_TEXTENCODING_UTF8));
             xWindow = xBox;
         }

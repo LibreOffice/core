@@ -107,24 +107,24 @@ sal_Int32 ExportDialog::GetDefaultUnit()
     sal_Int32 nDefaultUnit = UNIT_CM;
     switch( mrFltCallPara.eFieldUnit )
     {
-//      case FUNIT_NONE :
-//      case FUNIT_PERCENT :
-//      case FUNIT_CUSTOM :
+//      case FieldUnit::NONE :
+//      case FieldUnit::FldPercent :
+//      case FieldUnit::FldCustom :
         default:                nDefaultUnit = UNIT_CM; break;
 
-        case FUNIT_MILE :       // PASSTHROUGH INTENDED
-        case FUNIT_FOOT :
-        case FUNIT_TWIP :
-        case FUNIT_PICA :       nDefaultUnit = UNIT_INCH; break;
+        case FieldUnit::FldMile :       // PASSTHROUGH INTENDED
+        case FieldUnit::FldFoot :
+        case FieldUnit::FldTwip :
+        case FieldUnit::FldPica :       nDefaultUnit = UNIT_INCH; break;
 
-        case FUNIT_KM :         // PASSTHROUGH INTENDED
-        case FUNIT_M :
-        case FUNIT_100TH_MM :   nDefaultUnit = UNIT_CM; break;
+        case FieldUnit::FldKM :         // PASSTHROUGH INTENDED
+        case FieldUnit::FldM :
+        case FieldUnit::Fld100thMM :   nDefaultUnit = UNIT_CM; break;
 
-        case FUNIT_INCH :       nDefaultUnit = UNIT_INCH; break;
-        case FUNIT_CM :         nDefaultUnit = UNIT_CM; break;
-        case FUNIT_MM :         nDefaultUnit = UNIT_MM; break;
-        case FUNIT_POINT :      nDefaultUnit = UNIT_POINT; break;
+        case FieldUnit::FldInch :       nDefaultUnit = UNIT_INCH; break;
+        case FieldUnit::FldCM :         nDefaultUnit = UNIT_CM; break;
+        case FieldUnit::FldMM :         nDefaultUnit = UNIT_MM; break;
+        case FieldUnit::FldPoint :      nDefaultUnit = UNIT_POINT; break;
     }
     return nDefaultUnit;
 }

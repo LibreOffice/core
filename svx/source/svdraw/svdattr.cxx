@@ -1856,7 +1856,7 @@ OUString SdrMeasureUnitItem::GetValueTextByPos(sal_uInt16 nPos) const
 {
     OUString aRetval;
 
-    if((FieldUnit)nPos == FUNIT_NONE)
+    if((FieldUnit)nPos == FieldUnit::NONE)
         aRetval = "default";
     else
         SdrFormatter::TakeUnitStr((FieldUnit)nPos, aRetval);

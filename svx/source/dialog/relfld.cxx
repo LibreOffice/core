@@ -92,7 +92,7 @@ void SvxRelativeField::EnableRelativeMode( sal_uInt16 nMin,
     nRelMin       = nMin;
     nRelMax       = nMax;
     nRelStep      = nStep;
-    SetUnit( FUNIT_CM );
+    SetUnit( FieldUnit::FldCM );
 }
 
 
@@ -107,7 +107,7 @@ void SvxRelativeField::SetRelative( bool bNewRelative )
         SetDecimalDigits( 0 );
         SetMin( nRelMin );
         SetMax( nRelMax );
-        SetUnit( FUNIT_PERCENT );
+        SetUnit( FieldUnit::FldPercent );
     }
     else
     {
@@ -115,7 +115,7 @@ void SvxRelativeField::SetRelative( bool bNewRelative )
         SetDecimalDigits( 2 );
         SetMin( bNegativeEnabled ? -9999 : 0 );
         SetMax( 9999 );
-        SetUnit( FUNIT_CM );
+        SetUnit( FieldUnit::FldCM );
     }
 
     SetText( aStr );

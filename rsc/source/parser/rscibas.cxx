@@ -170,25 +170,25 @@ RscEnum * RscTypCont::InitFieldUnitsType()
     RscEnum * pFieldUnits;
     pFieldUnits = new RscEnum( pHS->getID( "EnumFieldUnit" ), RSC_NOTYPE );
 
-    SETCONST( pFieldUnits, "FUNIT_NONE", FUNIT_NONE );
-    SETCONST( pFieldUnits, "FUNIT_MM", FUNIT_MM );
-    SETCONST( pFieldUnits, "FUNIT_CM", FUNIT_CM );
-    SETCONST( pFieldUnits, "FUNIT_M", FUNIT_M );
-    SETCONST( pFieldUnits, "FUNIT_KM", FUNIT_KM );
-    SETCONST( pFieldUnits, "FUNIT_TWIP", FUNIT_TWIP );
-    SETCONST( pFieldUnits, "FUNIT_POINT", FUNIT_POINT );
-    SETCONST( pFieldUnits, "FUNIT_PICA", FUNIT_PICA );
-    SETCONST( pFieldUnits, "FUNIT_INCH", FUNIT_INCH );
-    SETCONST( pFieldUnits, "FUNIT_FOOT", FUNIT_FOOT );
-    SETCONST( pFieldUnits, "FUNIT_MILE", FUNIT_MILE );
-    SETCONST( pFieldUnits, "FUNIT_CUSTOM", FUNIT_CUSTOM );
-    SETCONST( pFieldUnits, "FUNIT_CHAR", FUNIT_CHAR );
-    SETCONST( pFieldUnits, "FUNIT_LINE", FUNIT_LINE );
-    SETCONST( pFieldUnits, "FUNIT_PERCENT", FUNIT_PERCENT );
-    SETCONST( pFieldUnits, "FUNIT_DEGREE",  FUNIT_DEGREE);
-    SETCONST( pFieldUnits, "FUNIT_SECOND",  FUNIT_SECOND);
-    SETCONST( pFieldUnits, "FUNIT_MILLISECOND",  FUNIT_MILLISECOND);
-    SETCONST( pFieldUnits, "FUNIT_PIXEL",   FUNIT_PIXEL );
+    SETCONST( pFieldUnits, "FUNIT_NONE", FieldUnit::NONE );
+    SETCONST( pFieldUnits, "FUNIT_MM", FieldUnit::FldMM );
+    SETCONST( pFieldUnits, "FUNIT_CM", FieldUnit::FldCM );
+    SETCONST( pFieldUnits, "FUNIT_M", FieldUnit::FldM );
+    SETCONST( pFieldUnits, "FUNIT_KM", FieldUnit::FldKM );
+    SETCONST( pFieldUnits, "FUNIT_TWIP", FieldUnit::FldTwip );
+    SETCONST( pFieldUnits, "FUNIT_POINT", FieldUnit::FldPoint );
+    SETCONST( pFieldUnits, "FUNIT_PICA", FieldUnit::FldPica );
+    SETCONST( pFieldUnits, "FUNIT_INCH", FieldUnit::FldInch );
+    SETCONST( pFieldUnits, "FUNIT_FOOT", FieldUnit::FldFoot );
+    SETCONST( pFieldUnits, "FUNIT_MILE", FieldUnit::FldMile );
+    SETCONST( pFieldUnits, "FUNIT_CUSTOM", FieldUnit::FldCustom );
+    SETCONST( pFieldUnits, "FUNIT_CHAR", FieldUnit::FldChar );
+    SETCONST( pFieldUnits, "FUNIT_LINE", FieldUnit::FldLine );
+    SETCONST( pFieldUnits, "FUNIT_PERCENT", FieldUnit::FldPercent );
+    SETCONST( pFieldUnits, "FUNIT_DEGREE",  FieldUnit::FldDegree);
+    SETCONST( pFieldUnits, "FUNIT_SECOND",  FieldUnit::FldSecond);
+    SETCONST( pFieldUnits, "FUNIT_MILLISECOND",  FieldUnit::FldMilliSecond);
+    SETCONST( pFieldUnits, "FUNIT_PIXEL",   FieldUnit::FldPixel );
 
     return pFieldUnits;
 }

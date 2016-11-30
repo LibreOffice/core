@@ -295,7 +295,7 @@ public:
     typedef typename ItemControlConnectionType::ControlWrapperType MetricFieldWrapperType;
 
     explicit            MetricConnection( sal_uInt16 nSlot, MetricField& rField,
-                            FieldUnit eItemUnit = FUNIT_NONE, ItemConnFlags nFlags = ItemConnFlags::NONE );
+                            FieldUnit eItemUnit = FieldUnit::NONE, ItemConnFlags nFlags = ItemConnFlags::NONE );
 };
 
 

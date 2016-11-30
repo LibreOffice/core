@@ -53,7 +53,7 @@ SdPagesField::SdPagesField( vcl::Window* pParent,
     SetSizePixel( aSize );
 
     // set parameter of MetricFields
-    SetUnit( FUNIT_CUSTOM );
+    SetUnit( FieldUnit::FldCustom );
     SetMin( 1 );
     SetFirst( 1 );
     SetMax( 15 );

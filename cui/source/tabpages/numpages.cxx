@@ -1226,7 +1226,7 @@ void SvxNumOptionsTabPage::dispose()
 
 void SvxNumOptionsTabPage::SetMetric(FieldUnit eMetric)
 {
-    if(eMetric == FUNIT_MM)
+    if(eMetric == FieldUnit::FldMM)
     {
         m_pWidthMF->SetDecimalDigits(1);
         m_pHeightMF->SetDecimalDigits(1);
@@ -2131,8 +2131,8 @@ IMPL_LINK( SvxNumOptionsTabPage, SizeHdl_Impl, Edit&, rField, void)
     bool bWidth = &rField == m_pWidthMF;
     bLastWidthModified = bWidth;
     bool bRatio = m_pRatioCB->IsChecked();
-    long nWidthVal = static_cast<long>(m_pWidthMF->Denormalize(m_pWidthMF->GetValue(FUNIT_100TH_MM)));
-    long nHeightVal = static_cast<long>(m_pHeightMF->Denormalize(m_pHeightMF->GetValue(FUNIT_100TH_MM)));
+    long nWidthVal = static_cast<long>(m_pWidthMF->Denormalize(m_pWidthMF->GetValue(FieldUnit::Fld100thMM)));
+    long nHeightVal = static_cast<long>(m_pHeightMF->Denormalize(m_pHeightMF->GetValue(FieldUnit::Fld100thMM)));
     nWidthVal = OutputDevice::LogicToLogic( nWidthVal ,
                                                 MapUnit::Map100thMM, (MapUnit)eCoreUnit );
     nHeightVal = OutputDevice::LogicToLogic( nHeightVal,
@@ -2165,7 +2165,7 @@ IMPL_LINK( SvxNumOptionsTabPage, SizeHdl_Impl, Edit&, rField, void)
                         aSize.Height() = aInitSize[i].Height() + (long)((double)nDelta / fSizeRatio);
                         m_pHeightMF->SetUserValue(m_pHeightMF->Normalize(
                             OutputDevice::LogicToLogic( aSize.Height(), (MapUnit)eCoreUnit, MapUnit::Map100thMM )),
-                                FUNIT_100TH_MM);
+                                FieldUnit::Fld100thMM);
                     }
                 }
                 else
@@ -2177,7 +2177,7 @@ IMPL_LINK( SvxNumOptionsTabPage, SizeHdl_Impl, Edit&, rField, void)
                         aSize.Width() = aInitSize[i].Width() + (long)((double)nDelta * fSizeRatio);
                         m_pWidthMF->SetUserValue(m_pWidthMF->Normalize(
                             OutputDevice::LogicToLogic( aSize.Width(), (MapUnit)eCoreUnit, MapUnit::Map100thMM )),
-                                FUNIT_100TH_MM);
+                                FieldUnit::Fld100thMM);
                     }
                 }
                 const SvxBrushItem* pBrushItem =  aNumFmt.GetBrush();
@@ -3176,7 +3176,7 @@ VclPtr<SfxTabPage> SvxNumPositionTabPage::Create( vcl::Window* pParent,
 
 void    SvxNumPositionTabPage::SetMetric(FieldUnit eMetric)
 {
-    if(eMetric == FUNIT_MM)
+    if(eMetric == FieldUnit::FldMM)
     {
         m_pDistBorderMF->SetDecimalDigits(1);
         m_pDistNumMF->SetDecimalDigits(1);

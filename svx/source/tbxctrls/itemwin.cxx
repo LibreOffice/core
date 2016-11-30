@@ -253,7 +253,7 @@ SvxMetricField::SvxMetricField(
     aSize.Height() += 6;
     SetSizePixel( aSize );
     aLogicalSize = PixelToLogic(aSize, MapUnit::MapAppFont);
-    SetUnit( FUNIT_MM );
+    SetUnit( FieldUnit::FldMM );
     SetDecimalDigits( 2 );
     SetMax( 5000 );
     SetMin( 0 );

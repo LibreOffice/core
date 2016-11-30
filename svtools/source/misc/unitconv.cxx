@@ -22,23 +22,23 @@
 
 void SetFieldUnit( MetricField& rField, FieldUnit eUnit, bool bAll )
 {
-    sal_Int64 nFirst    = rField.Denormalize( rField.GetFirst( FUNIT_TWIP ) );
-    sal_Int64 nLast = rField.Denormalize( rField.GetLast( FUNIT_TWIP ) );
-    sal_Int64 nMin = rField.Denormalize( rField.GetMin( FUNIT_TWIP ) );
-    sal_Int64 nMax = rField.Denormalize( rField.GetMax( FUNIT_TWIP ) );
+    sal_Int64 nFirst    = rField.Denormalize( rField.GetFirst( FieldUnit::FldTwip ) );
+    sal_Int64 nLast = rField.Denormalize( rField.GetLast( FieldUnit::FldTwip ) );
+    sal_Int64 nMin = rField.Denormalize( rField.GetMin( FieldUnit::FldTwip ) );
+    sal_Int64 nMax = rField.Denormalize( rField.GetMax( FieldUnit::FldTwip ) );
 
     if ( !bAll )
     {
         switch ( eUnit )
         {
-            case FUNIT_M:
-            case FUNIT_KM:
-                eUnit = FUNIT_CM;
+            case FieldUnit::FldM:
+            case FieldUnit::FldKM:
+                eUnit = FieldUnit::FldCM;
                 break;
 
-            case FUNIT_FOOT:
-            case FUNIT_MILE:
-                eUnit = FUNIT_INCH;
+            case FieldUnit::FldFoot:
+            case FieldUnit::FldMile:
+                eUnit = FieldUnit::FldInch;
                 break;
             default: ;//prevent warning
         }
@@ -46,14 +46,14 @@ void SetFieldUnit( MetricField& rField, FieldUnit eUnit, bool bAll )
     rField.SetUnit( eUnit );
     switch( eUnit )
     {
-        // _CHAR and _LINE sets the step of "char" and "line" unit, they are same as FUNIT_MM
-        case FUNIT_CHAR:
-        case FUNIT_LINE:
-        case FUNIT_MM:
+        // _CHAR and _LINE sets the step of "char" and "line" unit, they are same as FieldUnit::FldMM
+        case FieldUnit::FldChar:
+        case FieldUnit::FldLine:
+        case FieldUnit::FldMM:
             rField.SetSpinSize( 50 );
             break;
 
-        case FUNIT_INCH:
+        case FieldUnit::FldInch:
             rField.SetSpinSize( 2 );
             break;
 
@@ -61,7 +61,7 @@ void SetFieldUnit( MetricField& rField, FieldUnit eUnit, bool bAll )
             rField.SetSpinSize( 10 );
     }
 
-    if ( FUNIT_POINT == eUnit )
+    if ( FieldUnit::FldPoint == eUnit )
     {
         if( rField.GetDecimalDigits() > 1 )
             rField.SetDecimalDigits( 1 );
@@ -71,41 +71,41 @@ void SetFieldUnit( MetricField& rField, FieldUnit eUnit, bool bAll )
 
     if ( !bAll )
     {
-        rField.SetFirst( rField.Normalize( nFirst ), FUNIT_TWIP );
-        rField.SetLast( rField.Normalize( nLast ), FUNIT_TWIP );
-        rField.SetMin( rField.Normalize( nMin ), FUNIT_TWIP );
-        rField.SetMax( rField.Normalize( nMax ), FUNIT_TWIP );
+        rField.SetFirst( rField.Normalize( nFirst ), FieldUnit::FldTwip );
+        rField.SetLast( rField.Normalize( nLast ), FieldUnit::FldTwip );
+        rField.SetMin( rField.Normalize( nMin ), FieldUnit::FldTwip );
+        rField.SetMax( rField.Normalize( nMax ), FieldUnit::FldTwip );
     }
 }
 
 
 void SetFieldUnit( MetricBox& rBox, FieldUnit eUnit )
 {
-    sal_Int64 nMin = rBox.Denormalize( rBox.GetMin( FUNIT_TWIP ) );
-    sal_Int64 nMax = rBox.Denormalize( rBox.GetMax( FUNIT_TWIP ) );
+    sal_Int64 nMin = rBox.Denormalize( rBox.GetMin( FieldUnit::FldTwip ) );
+    sal_Int64 nMax = rBox.Denormalize( rBox.GetMax( FieldUnit::FldTwip ) );
 
     switch ( eUnit )
     {
-        case FUNIT_M:
-        case FUNIT_KM:
-            eUnit = FUNIT_CM;
+        case FieldUnit::FldM:
+        case FieldUnit::FldKM:
+            eUnit = FieldUnit::FldCM;
             break;
 
-        case FUNIT_FOOT:
-        case FUNIT_MILE:
-            eUnit = FUNIT_INCH;
+        case FieldUnit::FldFoot:
+        case FieldUnit::FldMile:
+            eUnit = FieldUnit::FldInch;
             break;
         default: ;//prevent warning
     }
     rBox.SetUnit( eUnit );
 
-    if ( FUNIT_POINT == eUnit && rBox.GetDecimalDigits() > 1 )
+    if ( FieldUnit::FldPoint == eUnit && rBox.GetDecimalDigits() > 1 )
         rBox.SetDecimalDigits( 1 );
     else
         rBox.SetDecimalDigits( 2 );
 
-    rBox.SetMin( rBox.Normalize( nMin ), FUNIT_TWIP );
-    rBox.SetMax( rBox.Normalize( nMax ), FUNIT_TWIP );
+    rBox.SetMin( rBox.Normalize( nMin ), FieldUnit::FldTwip );
+    rBox.SetMax( rBox.Normalize( nMax ), FieldUnit::FldTwip );
 }
 
 
@@ -113,14 +113,14 @@ void SetMetricValue( MetricField& rField, long nCoreValue, MapUnit eUnit )
 {
     sal_Int64 nVal = OutputDevice::LogicToLogic( nCoreValue, (MapUnit)eUnit, MapUnit::Map100thMM );
     nVal = rField.Normalize( nVal );
-    rField.SetValue( nVal, FUNIT_100TH_MM );
+    rField.SetValue( nVal, FieldUnit::Fld100thMM );
 
 }
 
 
 long GetCoreValue( const MetricField& rField, MapUnit eUnit )
 {
-    sal_Int64 nVal = rField.GetValue( FUNIT_100TH_MM );
+    sal_Int64 nVal = rField.GetValue( FieldUnit::Fld100thMM );
     // avoid rounding issues
     const sal_Int64 nSizeMask = 0xffffffffff000000LL;
     bool bRoundBefore = true;
@@ -188,13 +188,13 @@ long ItemToControl( long nIn, MapUnit eItem, FieldUnit eCtrl )
                 nIn /= 10;
             else if ( eItem == MapUnit::Map100thMM )
                 nIn /= 100;
-            nOut = TransformMetric( nIn, FUNIT_MM, eCtrl );
+            nOut = TransformMetric( nIn, FieldUnit::FldMM, eCtrl );
         }
         break;
 
         case MapUnit::MapCM:
         {
-            nOut = TransformMetric( nIn, FUNIT_CM, eCtrl );
+            nOut = TransformMetric( nIn, FieldUnit::FldCM, eCtrl );
         }
         break;
 
@@ -209,19 +209,19 @@ long ItemToControl( long nIn, MapUnit eItem, FieldUnit eCtrl )
                 nIn /= 100;
             else if ( eItem == MapUnit::Map1000thInch )
                 nIn /= 1000;
-            nOut = TransformMetric( nIn, FUNIT_INCH, eCtrl );
+            nOut = TransformMetric( nIn, FieldUnit::FldInch, eCtrl );
         }
         break;
 
         case MapUnit::MapPoint:
         {
-            nOut = TransformMetric( nIn, FUNIT_POINT, eCtrl );
+            nOut = TransformMetric( nIn, FieldUnit::FldPoint, eCtrl );
         }
         break;
 
         case MapUnit::MapTwip:
         {
-            nOut = TransformMetric( nIn, FUNIT_TWIP, eCtrl );
+            nOut = TransformMetric( nIn, FieldUnit::FldTwip, eCtrl );
         }
         break;
         default: ;//prevent warning
@@ -243,25 +243,25 @@ FieldUnit MapToFieldUnit( const MapUnit eUnit )
         case MapUnit::Map100thMM:
         case MapUnit::Map10thMM:
         case MapUnit::MapMM:
-            return FUNIT_MM;
+            return FieldUnit::FldMM;
 
         case MapUnit::MapCM:
-            return FUNIT_CM;
+            return FieldUnit::FldCM;
 
         case MapUnit::Map1000thInch:
         case MapUnit::Map100thInch:
         case MapUnit::Map10thInch:
         case MapUnit::MapInch:
-            return FUNIT_INCH;
+            return FieldUnit::FldInch;
 
         case MapUnit::MapPoint:
-            return FUNIT_POINT;
+            return FieldUnit::FldPoint;
 
         case MapUnit::MapTwip:
-            return FUNIT_TWIP;
+            return FieldUnit::FldTwip;
         default: ;//prevent warning
     }
-    return FUNIT_NONE;
+    return FieldUnit::NONE;
 }
 
 
@@ -599,8 +599,8 @@ FUNC_CONVERT ConvertTable[6][6] =
 
 long TransformMetric( long nVal, FieldUnit aOld, FieldUnit aNew )
 {
-    if ( aOld == FUNIT_NONE   || aNew == FUNIT_NONE ||
-         aOld == FUNIT_CUSTOM || aNew == FUNIT_CUSTOM )
+    if ( aOld == FieldUnit::NONE   || aNew == FieldUnit::NONE ||
+         aOld == FieldUnit::FldCustom || aNew == FieldUnit::FldCustom )
     {
         return nVal;
     }
@@ -610,34 +610,34 @@ long TransformMetric( long nVal, FieldUnit aOld, FieldUnit aNew )
 
     switch ( aOld )
     {
-        case FUNIT_CM:
+        case FieldUnit::FldCM:
             nOld = 0; break;
-        case FUNIT_MM:
+        case FieldUnit::FldMM:
             nOld = 1; break;
-        case FUNIT_INCH:
+        case FieldUnit::FldInch:
             nOld = 2; break;
-        case FUNIT_POINT:
+        case FieldUnit::FldPoint:
             nOld = 3; break;
-        case FUNIT_PICA:
+        case FieldUnit::FldPica:
             nOld = 4; break;
-        case FUNIT_TWIP:
+        case FieldUnit::FldTwip:
             nOld = 5; break;
         default: ;//prevent warning
     }
 
     switch ( aNew )
     {
-        case FUNIT_CM:
+        case FieldUnit::FldCM:
             nNew = 0; break;
-        case FUNIT_MM:
+        case FieldUnit::FldMM:
             nNew = 1; break;
-        case FUNIT_INCH:
+        case FieldUnit::FldInch:
             nNew = 2; break;
-        case FUNIT_POINT:
+        case FieldUnit::FldPoint:
             nNew = 3; break;
-        case FUNIT_PICA:
+        case FieldUnit::FldPica:
             nNew = 4; break;
-        case FUNIT_TWIP:
+        case FieldUnit::FldTwip:
             nNew = 5; break;
         default: ;//prevent warning
     }

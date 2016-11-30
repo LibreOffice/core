@@ -30,18 +30,18 @@
 // local functions
 static void    lcl_GetMinMax(MetricField& rField, long& nFirst, long& nLast, long& nMin, long& nMax)
 {
-    nFirst  = static_cast<long>(rField.Denormalize( rField.GetFirst( FUNIT_TWIP ) ));
-    nLast = static_cast<long>(rField.Denormalize( rField.GetLast( FUNIT_TWIP ) ));
-    nMin = static_cast<long>(rField.Denormalize( rField.GetMin( FUNIT_TWIP ) ));
-    nMax = static_cast<long>(rField.Denormalize( rField.GetMax( FUNIT_TWIP ) ));
+    nFirst  = static_cast<long>(rField.Denormalize( rField.GetFirst( FieldUnit::FldTwip ) ));
+    nLast = static_cast<long>(rField.Denormalize( rField.GetLast( FieldUnit::FldTwip ) ));
+    nMin = static_cast<long>(rField.Denormalize( rField.GetMin( FieldUnit::FldTwip ) ));
+    nMax = static_cast<long>(rField.Denormalize( rField.GetMax( FieldUnit::FldTwip ) ));
 }
 
 static void    lcl_SetMinMax(MetricField& rField, long nFirst, long nLast, long nMin, long nMax)
 {
-    rField.SetFirst( rField.Normalize( nFirst ), FUNIT_TWIP );
-    rField.SetLast( rField.Normalize( nLast ), FUNIT_TWIP );
-    rField.SetMin( rField.Normalize( nMin ), FUNIT_TWIP );
-    rField.SetMax( rField.Normalize( nMax ), FUNIT_TWIP );
+    rField.SetFirst( rField.Normalize( nFirst ), FieldUnit::FldTwip );
+    rField.SetLast( rField.Normalize( nLast ), FieldUnit::FldTwip );
+    rField.SetMin( rField.Normalize( nMin ), FieldUnit::FldTwip );
+    rField.SetMax( rField.Normalize( nMax ), FieldUnit::FldTwip );
 }
 
 SvxOptionsGrid::SvxOptionsGrid() :
@@ -283,19 +283,19 @@ void SvxGridTabPage::ActivatePage( const SfxItemSet& rSet )
         {
             // Set Metrics
             long nFirst, nLast, nMin, nMax;
-            long nVal = static_cast<long>(pMtrFldDrawX->Denormalize( pMtrFldDrawX->GetValue( FUNIT_TWIP ) ));
+            long nVal = static_cast<long>(pMtrFldDrawX->Denormalize( pMtrFldDrawX->GetValue( FieldUnit::FldTwip ) ));
 
             lcl_GetMinMax(*pMtrFldDrawX, nFirst, nLast, nMin, nMax);
             SetFieldUnit( *pMtrFldDrawX, eFUnit, true );
             lcl_SetMinMax(*pMtrFldDrawX, nFirst, nLast, nMin, nMax);
 
-            pMtrFldDrawX->SetValue( pMtrFldDrawX->Normalize( nVal ), FUNIT_TWIP );
+            pMtrFldDrawX->SetValue( pMtrFldDrawX->Normalize( nVal ), FieldUnit::FldTwip );
 
-            nVal = static_cast<long>(pMtrFldDrawY->Denormalize( pMtrFldDrawY->GetValue( FUNIT_TWIP ) ));
+            nVal = static_cast<long>(pMtrFldDrawY->Denormalize( pMtrFldDrawY->GetValue( FieldUnit::FldTwip ) ));
             lcl_GetMinMax(*pMtrFldDrawY, nFirst, nLast, nMin, nMax);
             SetFieldUnit(*pMtrFldDrawY, eFUnit, true );
             lcl_SetMinMax(*pMtrFldDrawY, nFirst, nLast, nMin, nMax);
-            pMtrFldDrawY->SetValue( pMtrFldDrawY->Normalize( nVal ), FUNIT_TWIP );
+            pMtrFldDrawY->SetValue( pMtrFldDrawY->Normalize( nVal ), FieldUnit::FldTwip );
 
         }
     }

@@ -822,12 +822,12 @@ void SmDistanceDialog::SetCategory(sal_uInt16 nCategory)
         sal_uInt16     nDigits;
         if (nCategory < 9)
         {
-            eUnit = FUNIT_PERCENT;
+            eUnit = FieldUnit::FldPercent;
             nDigits = 0;
         }
         else
         {
-            eUnit   = FUNIT_100TH_MM;
+            eUnit   = FieldUnit::Fld100thMM;
             nDigits = 2;
         }
         pMF->SetUnit(eUnit);            // changes the value

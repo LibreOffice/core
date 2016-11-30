@@ -29,7 +29,7 @@
 
 FieldUnit GetModuleFieldUnit( const SfxItemSet& rSet )
 {
-    FieldUnit eUnit = FUNIT_INCH;
+    FieldUnit eUnit = FieldUnit::FldInch;
     const SfxPoolItem* pItem = nullptr;
     if ( SfxItemState::SET == rSet.GetItemState( SID_ATTR_METRIC, false, &pItem ) )
         eUnit = (FieldUnit) static_cast<const SfxUInt16Item*>(pItem)->GetValue();

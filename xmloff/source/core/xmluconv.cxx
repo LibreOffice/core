@@ -135,25 +135,25 @@ sal_Int16 SvXMLUnitConverter::GetMeasureUnit(FieldUnit const nFieldUnit)
     sal_Int16 eUnit = util::MeasureUnit::INCH;
     switch( nFieldUnit )
     {
-    case FUNIT_MM:
+    case FieldUnit::FldMM:
         eUnit = util::MeasureUnit::MM;
         break;
-    case FUNIT_CM:
-    case FUNIT_M:
-    case FUNIT_KM:
+    case FieldUnit::FldCM:
+    case FieldUnit::FldM:
+    case FieldUnit::FldKM:
         eUnit = util::MeasureUnit::CM;
         break;
-    case FUNIT_TWIP:
+    case FieldUnit::FldTwip:
         eUnit = util::MeasureUnit::TWIP;
         break;
-    case FUNIT_POINT:
-    case FUNIT_PICA:
+    case FieldUnit::FldPoint:
+    case FieldUnit::FldPica:
         eUnit = util::MeasureUnit::POINT;
         break;
-    case FUNIT_100TH_MM:
+    case FieldUnit::Fld100thMM:
         eUnit = util::MeasureUnit::MM_100TH;
         break;
-    case FUNIT_INCH:
+    case FieldUnit::FldInch:
         eUnit = util::MeasureUnit::INCH;
         break;
     default:

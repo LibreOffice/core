@@ -312,7 +312,7 @@ void SvxTextAnimationPage::Reset( const SfxItemSet* rAttrs )
             nValue = -nValue;
             if( nValue == 0 )
                 nValue++;
-            m_pMtrFldAmount->SetUnit( FUNIT_CUSTOM );
+            m_pMtrFldAmount->SetUnit( FieldUnit::FldCustom );
             m_pMtrFldAmount->SetDecimalDigits( 0 );
 
             m_pMtrFldAmount->SetSpinSize( 1 );
@@ -578,8 +578,8 @@ IMPL_LINK_NOARG(SvxTextAnimationPage, ClickPixelHdl_Impl, Button*, void)
     {
         sal_Int64 nValue = m_pMtrFldAmount->GetValue() / 10;
         m_pMtrFldAmount->Enable();
-        m_pMtrFldAmount->SetUnit( FUNIT_CUSTOM );
-        //SetFieldUnit( aMtrFldAmount, FUNIT_CUSTOM );
+        m_pMtrFldAmount->SetUnit( FieldUnit::FldCustom );
+        //SetFieldUnit( aMtrFldAmount, FieldUnit::FldCustom );
         m_pMtrFldAmount->SetDecimalDigits( 0 );
 
         m_pMtrFldAmount->SetSpinSize( 1 );

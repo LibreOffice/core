@@ -2083,7 +2083,7 @@ SvxLineWindow_Impl::SvxLineWindow_Impl( svt::ToolboxController& rController, vcl
     m_aLineStyleLb->setPosSizePixel( 2, 2, 110, 140 );
     SetOutputSizePixel( Size( 114, 144 ) );
 
-    m_aLineStyleLb->SetSourceUnit( FUNIT_TWIP );
+    m_aLineStyleLb->SetSourceUnit( FieldUnit::FldTwip );
     m_aLineStyleLb->SetNone( SVX_RESSTR(RID_SVXSTR_NONE) );
 
     using namespace table::BorderLineStyle;

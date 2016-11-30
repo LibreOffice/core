@@ -131,18 +131,18 @@ SwContentOptPage::SwContentOptPage( vcl::Window* pParent,
 
         switch ( eFUnit )
         {
-            case FUNIT_MM:
-            case FUNIT_CM:
-            case FUNIT_POINT:
-            case FUNIT_PICA:
-            case FUNIT_INCH:
-            case FUNIT_CHAR:    // add two units , 'character' and 'line' , their ticks are not fixed
-            case FUNIT_LINE:
+            case FieldUnit::FldMM:
+            case FieldUnit::FldCM:
+            case FieldUnit::FldPoint:
+            case FieldUnit::FldPica:
+            case FieldUnit::FldInch:
+            case FieldUnit::FldChar:    // add two units , 'character' and 'line' , their ticks are not fixed
+            case FieldUnit::FldLine:
             {
                 // only use these metrics
                 // a horizontal ruler has not the 'line' unit
                 // there isn't 'line' unit in HTML format
-                if ( eFUnit != FUNIT_LINE )
+                if ( eFUnit != FieldUnit::FldLine )
                 {
                    sal_Int32 nPos = m_pMetricLB->InsertEntry( sMetric );
                    m_pMetricLB->SetEntryData( nPos, reinterpret_cast<void*>((sal_IntPtr)eFUnit) );
@@ -150,7 +150,7 @@ SwContentOptPage::SwContentOptPage( vcl::Window* pParent,
                    m_pHMetric->SetEntryData( nPos, reinterpret_cast<void*>((sal_IntPtr)eFUnit) );
                 }
                 // a vertical ruler has not the 'character' unit
-                if ( eFUnit != FUNIT_CHAR )
+                if ( eFUnit != FieldUnit::FldChar )
                 {
                    sal_Int32 nPos = m_pVMetric->InsertEntry( sMetric );
                    m_pVMetric->SetEntryData( nPos, reinterpret_cast<void*>((sal_IntPtr)eFUnit) );
@@ -1030,13 +1030,13 @@ IMPL_LINK( SwStdFontTabPage, ModifyHeightHdl, Edit&, rBox, void )
 {
     if(&rBox == m_pStandardHeightLB)
     {
-        sal_Int64 nValue = static_cast<FontSizeBox&>(rBox).GetValue(FUNIT_TWIP);
+        sal_Int64 nValue = static_cast<FontSizeBox&>(rBox).GetValue(FieldUnit::FldTwip);
         if(m_bSetListHeightDefault && m_bListHeightDefault)
-            m_pListHeightLB->SetValue(nValue, FUNIT_TWIP);
+            m_pListHeightLB->SetValue(nValue, FieldUnit::FldTwip);
         if(m_bSetLabelHeightDefault && m_bLabelHeightDefault)
-            m_pLabelHeightLB->SetValue(nValue, FUNIT_TWIP);
+            m_pLabelHeightLB->SetValue(nValue, FieldUnit::FldTwip);
         if(m_bSetIndexHeightDefault && m_bIndexHeightDefault)
-            m_pIndexHeightLB->SetValue(nValue, FUNIT_TWIP);
+            m_pIndexHeightLB->SetValue(nValue, FieldUnit::FldTwip);
     }
     else if(&rBox == m_pListHeightLB)
     {
@@ -1150,16 +1150,16 @@ bool SwTableOptionsTabPage::FillItemSet( SfxItemSet* )
     SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
 
     if(m_pRowMoveMF->IsModified())
-        pModOpt->SetTableHMove( (sal_uInt16)m_pRowMoveMF->Denormalize( m_pRowMoveMF->GetValue(FUNIT_TWIP)));
+        pModOpt->SetTableHMove( (sal_uInt16)m_pRowMoveMF->Denormalize( m_pRowMoveMF->GetValue(FieldUnit::FldTwip)));
 
     if(m_pColMoveMF->IsModified())
-        pModOpt->SetTableVMove( (sal_uInt16)m_pColMoveMF->Denormalize( m_pColMoveMF->GetValue(FUNIT_TWIP)));
+        pModOpt->SetTableVMove( (sal_uInt16)m_pColMoveMF->Denormalize( m_pColMoveMF->GetValue(FieldUnit::FldTwip)));
 
     if(m_pRowInsertMF->IsModified())
-        pModOpt->SetTableHInsert((sal_uInt16)m_pRowInsertMF->Denormalize( m_pRowInsertMF->GetValue(FUNIT_TWIP)));
+        pModOpt->SetTableHInsert((sal_uInt16)m_pRowInsertMF->Denormalize( m_pRowInsertMF->GetValue(FieldUnit::FldTwip)));
 
     if(m_pColInsertMF->IsModified())
-        pModOpt->SetTableVInsert((sal_uInt16)m_pColInsertMF->Denormalize( m_pColInsertMF->GetValue(FUNIT_TWIP)));
+        pModOpt->SetTableVInsert((sal_uInt16)m_pColInsertMF->Denormalize( m_pColInsertMF->GetValue(FieldUnit::FldTwip)));
 
     TableChgMode eMode;
     if(m_pFixRB->IsChecked())
@@ -1244,10 +1244,10 @@ void SwTableOptionsTabPage::Reset( const SfxItemSet* rSet)
         ::SetFieldUnit( *m_pColInsertMF, eFieldUnit );
     }
 
-    m_pRowMoveMF->SetValue(m_pRowMoveMF->Normalize(pModOpt->GetTableHMove()), FUNIT_TWIP);
-    m_pColMoveMF->SetValue(m_pColMoveMF->Normalize(pModOpt->GetTableVMove()), FUNIT_TWIP);
-    m_pRowInsertMF->SetValue(m_pRowInsertMF->Normalize(pModOpt->GetTableHInsert()), FUNIT_TWIP);
-    m_pColInsertMF->SetValue(m_pColInsertMF->Normalize(pModOpt->GetTableVInsert()), FUNIT_TWIP);
+    m_pRowMoveMF->SetValue(m_pRowMoveMF->Normalize(pModOpt->GetTableHMove()), FieldUnit::FldTwip);
+    m_pColMoveMF->SetValue(m_pColMoveMF->Normalize(pModOpt->GetTableVMove()), FieldUnit::FldTwip);
+    m_pRowInsertMF->SetValue(m_pRowInsertMF->Normalize(pModOpt->GetTableHInsert()), FieldUnit::FldTwip);
+    m_pColInsertMF->SetValue(m_pColInsertMF->Normalize(pModOpt->GetTableVInsert()), FieldUnit::FldTwip);
 
     switch(pModOpt->GetTableMode())
     {

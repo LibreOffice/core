@@ -117,7 +117,7 @@ public:
 
 SvFilterOptionsDialog::SvFilterOptionsDialog( const uno::Reference< uno::XComponentContext >& rxContext ) :
     mxContext           ( rxContext ),
-    meFieldUnit         ( FUNIT_CM ),
+    meFieldUnit         ( FieldUnit::FldCM ),
     mbExportSelection   ( false )
 {
 }
@@ -281,7 +281,7 @@ void SvFilterOptionsDialog::setSourceDocument( const uno::Reference< lang::XComp
                 aPropertyName = "Metric";
             else
                 aPropertyName = "NonMetric";
-            meFieldUnit = (FieldUnit)aConfigItem.ReadInt32( aPropertyName, FUNIT_CM );
+            meFieldUnit = (FieldUnit)aConfigItem.ReadInt32( aPropertyName, (int)FieldUnit::FldCM );
         }
     }
 }

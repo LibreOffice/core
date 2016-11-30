@@ -217,7 +217,7 @@ AlignmentTabPage::AlignmentTabPage( vcl::Window* pParent, const SfxItemSet& rCor
 
     AddItemConnection( new HorJustConnection( SID_ATTR_ALIGN_HOR_JUSTIFY, *m_pLbHorAlign, s_pHorJustMap, ItemConnFlags::HideUnknown ) );
     AddItemConnection( new sfx::DummyItemConnection( SID_ATTR_ALIGN_INDENT, *m_pFtIndent, ItemConnFlags::HideUnknown ) );
-    AddItemConnection( new sfx::MetricConnection<sfx::UInt16ItemWrapper>( SID_ATTR_ALIGN_INDENT, *m_pEdIndent, FUNIT_TWIP, ItemConnFlags::HideUnknown ) );
+    AddItemConnection( new sfx::MetricConnection<sfx::UInt16ItemWrapper>( SID_ATTR_ALIGN_INDENT, *m_pEdIndent, FieldUnit::FldTwip, ItemConnFlags::HideUnknown ) );
     AddItemConnection( new sfx::DummyItemConnection( SID_ATTR_ALIGN_VER_JUSTIFY, *m_pFtVerAlign, ItemConnFlags::HideUnknown ) );
     AddItemConnection( new VerJustConnection( SID_ATTR_ALIGN_VER_JUSTIFY, *m_pLbVerAlign, s_pVerJustMap, ItemConnFlags::HideUnknown ) );
     AddItemConnection( new DialControlConnection( SID_ATTR_ALIGN_DEGREES, *m_pCtrlDial, ItemConnFlags::HideUnknown ) );

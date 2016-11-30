@@ -639,7 +639,7 @@ void  SwDropCapsPage::Reset(const SfxItemSet *rSet)
     {
         m_pDropCapsField->SetValue(aFormatDrop.GetChars());
         m_pLinesField->SetValue(aFormatDrop.GetLines());
-        m_pDistanceField->SetValue(m_pDistanceField->Normalize(aFormatDrop.GetDistance()), FUNIT_TWIP);
+        m_pDistanceField->SetValue(m_pDistanceField->Normalize(aFormatDrop.GetDistance()), FieldUnit::FldTwip);
         m_pWholeWordCB->Check(aFormatDrop.GetWholeWord());
     }
     else
@@ -673,7 +673,7 @@ void  SwDropCapsPage::Reset(const SfxItemSet *rSet)
     // Preview
     m_pPict->SetValues(m_pTextEdit->GetText(),
                        sal_uInt8(m_pLinesField->GetValue()),
-                       sal_uInt16(m_pDistanceField->Denormalize(m_pDistanceField->GetValue(FUNIT_TWIP))));
+                       sal_uInt16(m_pDistanceField->Denormalize(m_pDistanceField->GetValue(FieldUnit::FldTwip))));
 
     ClickHdl(m_pDropCapsBox);
     bModified = false;
@@ -761,7 +761,7 @@ IMPL_LINK( SwDropCapsPage, ModifyHdl, Edit&, rEdit, void )
     else if (&rEdit == m_pLinesField)
         m_pPict->SetLines((sal_uInt8)m_pLinesField->GetValue());
     else
-        m_pPict->SetDistance((sal_uInt16)m_pDistanceField->Denormalize(m_pDistanceField->GetValue(FUNIT_TWIP)));
+        m_pPict->SetDistance((sal_uInt16)m_pDistanceField->Denormalize(m_pDistanceField->GetValue(FieldUnit::FldTwip)));
 
     bModified = true;
 }
@@ -784,7 +784,7 @@ void SwDropCapsPage::FillSet( SfxItemSet &rSet )
             // quantity, lines, gap
             aFormat.GetChars()     = (sal_uInt8) m_pDropCapsField->GetValue();
             aFormat.GetLines()     = (sal_uInt8) m_pLinesField->GetValue();
-            aFormat.GetDistance()  = (sal_uInt16) m_pDistanceField->Denormalize(m_pDistanceField->GetValue(FUNIT_TWIP));
+            aFormat.GetDistance()  = (sal_uInt16) m_pDistanceField->Denormalize(m_pDistanceField->GetValue(FieldUnit::FldTwip));
             aFormat.GetWholeWord() = m_pWholeWordCB->IsChecked();
 
             // template

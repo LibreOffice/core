@@ -466,9 +466,9 @@ void SlideTransitionPane::Initialize(SdDrawDocument* pDoc)
         VALUESET_APPEND, /* show legend */ true );
     mpVS_TRANSITION_ICONS->RecalculateItemSizes();
 
-    mpCBX_duration->InsertValue(100, FUNIT_CUSTOM);
-    mpCBX_duration->InsertValue(200, FUNIT_CUSTOM);
-    mpCBX_duration->InsertValue(300, FUNIT_CUSTOM);
+    mpCBX_duration->InsertValue(100, FieldUnit::FldCustom);
+    mpCBX_duration->InsertValue(200, FieldUnit::FldCustom);
+    mpCBX_duration->InsertValue(300, FieldUnit::FldCustom);
     mpCBX_duration->AdaptDropDownLineCountToMaximum();
 
     // set defaults

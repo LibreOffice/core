@@ -251,7 +251,7 @@ template< typename ValueT >
 class MetricFieldWrapper : public SingleControlWrapper< MetricField, ValueT >
 {
 public:
-    inline explicit     MetricFieldWrapper( MetricField& rField, FieldUnit eUnit = FUNIT_NONE ) :
+    inline explicit     MetricFieldWrapper( MetricField& rField, FieldUnit eUnit = FieldUnit::NONE ) :
                             SingleControlWrapper< MetricField, ValueT >( rField ), meUnit( eUnit ) {}
 
     virtual bool        IsControlDontKnow() const SAL_OVERRIDE;

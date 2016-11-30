@@ -124,10 +124,10 @@ private:
 
 MarginControlsWrapper::MarginControlsWrapper(
         MetricField& rMfLeft, MetricField& rMfRight, MetricField& rMfTop, MetricField& rMfBottom ) :
-    maLeftWrp( rMfLeft, FUNIT_TWIP ),
-    maRightWrp( rMfRight, FUNIT_TWIP ),
-    maTopWrp( rMfTop, FUNIT_TWIP ),
-    maBottomWrp( rMfBottom, FUNIT_TWIP )
+    maLeftWrp( rMfLeft, FieldUnit::FldTwip ),
+    maRightWrp( rMfRight, FieldUnit::FldTwip ),
+    maTopWrp( rMfTop, FieldUnit::FldTwip ),
+    maBottomWrp( rMfBottom, FieldUnit::FldTwip )
 {
     RegisterControlWrapper( maLeftWrp );
     RegisterControlWrapper( maRightWrp );
@@ -216,7 +216,7 @@ private:
 ShadowControlsWrapper::ShadowControlsWrapper(
         ValueSet& rVsPos, MetricField& rMfSize, SvxColorListBox& rLbColor ) :
     maPosWrp( rVsPos, s_pShadowPosMap ),
-    maSizeWrp( rMfSize, FUNIT_TWIP ),
+    maSizeWrp( rMfSize, FieldUnit::FldTwip ),
     maColorWrp( rLbColor )
 {
     RegisterControlWrapper( maPosWrp );

@@ -343,29 +343,29 @@ void SvxGrfCropPage::ActivatePage(const SfxItemSet& rSet)
     sal_Int64 nWidth = m_pWidthMF->Normalize(nOldWidth);
     sal_Int64 nHeight = m_pHeightMF->Normalize(nOldHeight);
 
-    if (nWidth != m_pWidthMF->GetValue(FUNIT_TWIP))
+    if (nWidth != m_pWidthMF->GetValue(FieldUnit::FldTwip))
     {
         if(!bReset)
         {
             // value was changed by wrap-tabpage and has to
             // be set with modify-flag
-            m_pWidthMF->SetUserValue(nWidth, FUNIT_TWIP);
+            m_pWidthMF->SetUserValue(nWidth, FieldUnit::FldTwip);
         }
         else
-            m_pWidthMF->SetValue(nWidth, FUNIT_TWIP);
+            m_pWidthMF->SetValue(nWidth, FieldUnit::FldTwip);
     }
     m_pWidthMF->SaveValue();
 
-    if (nHeight != m_pHeightMF->GetValue(FUNIT_TWIP))
+    if (nHeight != m_pHeightMF->GetValue(FieldUnit::FldTwip))
     {
         if (!bReset)
         {
             // value was changed by wrap-tabpage and has to
             // be set with modify-flag
-            m_pHeightMF->SetUserValue(nHeight, FUNIT_TWIP);
+            m_pHeightMF->SetUserValue(nHeight, FieldUnit::FldTwip);
         }
         else
-            m_pHeightMF->SetValue(nHeight, FUNIT_TWIP);
+            m_pHeightMF->SetValue(nHeight, FieldUnit::FldTwip);
     }
     m_pHeightMF->SaveValue();
     bInitialized = true;

@@ -55,9 +55,9 @@ ScAppOptions::~ScAppOptions()
 void ScAppOptions::SetDefaults()
 {
     if ( ScOptionsUtil::IsMetricSystem() )
-        eMetric     = FUNIT_CM;             // default for countries with metric system
+        eMetric     = FieldUnit::FldCM;             // default for countries with metric system
     else
-        eMetric     = FUNIT_INCH;           // default for others
+        eMetric     = FieldUnit::FldInch;           // default for others
 
     nZoom           = 100;
     eZoomType       = SvxZoomType::PERCENT;

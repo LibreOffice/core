@@ -427,7 +427,7 @@ CharHeightPropertyBox::CharHeightPropertyBox( sal_Int32 nControlType, vcl::Windo
 : PropertySubControl( nControlType ), maModifyHdl(rModifyHdl)
 {
     mpMetric.set( VclPtr<MetricField>::Create( pParent, WB_TABSTOP|WB_IGNORETAB| WB_NOBORDER) );
-    mpMetric->SetUnit( FUNIT_PERCENT );
+    mpMetric->SetUnit( FieldUnit::FldPercent );
     mpMetric->SetMin( 0 );
     mpMetric->SetMax( 1000 );
 
@@ -513,7 +513,7 @@ TransparencyPropertyBox::TransparencyPropertyBox( sal_Int32 nControlType, vcl::W
 , maModifyHdl( rModifyHdl )
 {
     mpMetric.set( VclPtr<MetricField>::Create( pParent ,WB_TABSTOP|WB_IGNORETAB| WB_NOBORDER) );
-    mpMetric->SetUnit( FUNIT_PERCENT );
+    mpMetric->SetUnit( FieldUnit::FldPercent );
     mpMetric->SetMin( 0 );
     mpMetric->SetMax( 100 );
 
@@ -613,7 +613,7 @@ RotationPropertyBox::RotationPropertyBox( sal_Int32 nControlType, vcl::Window* p
 , maModifyHdl( rModifyHdl )
 {
     mpMetric.set( VclPtr<MetricField>::Create( pParent ,WB_TABSTOP|WB_IGNORETAB| WB_NOBORDER) );
-    mpMetric->SetUnit( FUNIT_CUSTOM );
+    mpMetric->SetUnit( FieldUnit::FldCustom );
     mpMetric->SetCustomUnitText( OUString( sal_Unicode(0xb0)) ); // degree sign
     mpMetric->SetMin( -10000 );
     mpMetric->SetMax( 10000 );
@@ -735,7 +735,7 @@ ScalePropertyBox::ScalePropertyBox( sal_Int32 nControlType, vcl::Window* pParent
 , maModifyHdl( rModifyHdl )
 {
     mpMetric.set( VclPtr<MetricField>::Create( pParent ,WB_TABSTOP|WB_IGNORETAB| WB_NOBORDER) );
-    mpMetric->SetUnit( FUNIT_PERCENT );
+    mpMetric->SetUnit( FieldUnit::FldPercent );
     mpMetric->SetMin( 0 );
     mpMetric->SetMax( 10000 );
 
@@ -1601,11 +1601,11 @@ CustomAnimationDurationTabPage::CustomAnimationDurationTabPage(vcl::Window* pPar
     fillRepeatComboBox( mpCBRepeat );
 
     //fillDurationMetricComboBox
-    mpCBXDuration->InsertValue(50, FUNIT_CUSTOM);
-    mpCBXDuration->InsertValue(100, FUNIT_CUSTOM);
-    mpCBXDuration->InsertValue(200, FUNIT_CUSTOM);
-    mpCBXDuration->InsertValue(300, FUNIT_CUSTOM);
-    mpCBXDuration->InsertValue(500, FUNIT_CUSTOM);
+    mpCBXDuration->InsertValue(50, FieldUnit::FldCustom);
+    mpCBXDuration->InsertValue(100, FieldUnit::FldCustom);
+    mpCBXDuration->InsertValue(200, FieldUnit::FldCustom);
+    mpCBXDuration->InsertValue(300, FieldUnit::FldCustom);
+    mpCBXDuration->InsertValue(500, FieldUnit::FldCustom);
     mpCBXDuration->AdaptDropDownLineCountToMaximum();
 
     mpRBClickSequence->SetClickHdl( LINK( this, CustomAnimationDurationTabPage, implClickHdl ) );

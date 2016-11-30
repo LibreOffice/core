@@ -124,8 +124,8 @@ SwMailMergeLayoutPage::SwMailMergeLayoutPage( SwMailMergeWizard* _pParent) :
 
     m_pExampleContainerWIN->Show(false);
 
-    m_pLeftMF->SetValue(m_pLeftMF->Normalize(DEFAULT_LEFT_DISTANCE), FUNIT_TWIP);
-    m_pTopMF->SetValue(m_pTopMF->Normalize(DEFAULT_TOP_DISTANCE), FUNIT_TWIP);
+    m_pLeftMF->SetValue(m_pLeftMF->Normalize(DEFAULT_LEFT_DISTANCE), FieldUnit::FldTwip);
+    m_pTopMF->SetValue(m_pTopMF->Normalize(DEFAULT_TOP_DISTANCE), FieldUnit::FldTwip);
 
     const LanguageTag& rLang = Application::GetSettings().GetUILanguageTag();
     m_pZoomLB->InsertEntry(unicode::formatPercent(50, rLang), 1);
@@ -218,8 +218,8 @@ void SwMailMergeLayoutPage::ActivatePage()
             }
             else
             {
-                long nLeft = static_cast< long >(m_pLeftMF->Denormalize(m_pLeftMF->GetValue(FUNIT_TWIP)));
-                long nTop  = static_cast< long >(m_pTopMF->Denormalize(m_pTopMF->GetValue(FUNIT_TWIP)));
+                long nLeft = static_cast< long >(m_pLeftMF->Denormalize(m_pLeftMF->GetValue(FieldUnit::FldTwip)));
+                long nTop  = static_cast< long >(m_pTopMF->Denormalize(m_pTopMF->GetValue(FieldUnit::FldTwip)));
                 m_pAddressBlockFormat = InsertAddressFrame(
                         *m_pExampleWrtShell, m_pWizard->GetConfigItem(),
                         Point(nLeft, nTop),
@@ -236,8 +236,8 @@ bool SwMailMergeLayoutPage::commitPage(::svt::WizardTypes::CommitPageReason eRea
     SwMailMergeConfigItem& rConfigItem = m_pWizard->GetConfigItem();
     if (eReason == ::svt::WizardTypes::eTravelForward || eReason == ::svt::WizardTypes::eFinish)
     {
-        long nLeft = static_cast< long >(m_pLeftMF->Denormalize(m_pLeftMF->GetValue(FUNIT_TWIP)));
-        long nTop  = static_cast< long >(m_pTopMF->Denormalize(m_pTopMF->GetValue(FUNIT_TWIP)));
+        long nLeft = static_cast< long >(m_pLeftMF->Denormalize(m_pLeftMF->GetValue(FieldUnit::FldTwip)));
+        long nTop  = static_cast< long >(m_pTopMF->Denormalize(m_pTopMF->GetValue(FieldUnit::FldTwip)));
         InsertAddressAndGreeting(
                     m_pWizard->GetSwView(),
                     rConfigItem,
@@ -690,8 +690,8 @@ IMPL_LINK_NOARG(SwMailMergeLayoutPage, ChangeAddressHdl_Impl, SpinField&, void)
 {
     if(m_pExampleWrtShell && m_pAddressBlockFormat)
     {
-        long nLeft = static_cast< long >(m_pLeftMF->Denormalize(m_pLeftMF->GetValue(FUNIT_TWIP)));
-        long nTop  = static_cast< long >(m_pTopMF->Denormalize(m_pTopMF->GetValue(FUNIT_TWIP)));
+        long nLeft = static_cast< long >(m_pLeftMF->Denormalize(m_pLeftMF->GetValue(FieldUnit::FldTwip)));
+        long nTop  = static_cast< long >(m_pTopMF->Denormalize(m_pTopMF->GetValue(FieldUnit::FldTwip)));
 
         SfxItemSet aSet(m_pExampleWrtShell->GetAttrPool(), RES_ANCHOR, RES_ANCHOR,
                             RES_VERT_ORIENT, RES_VERT_ORIENT,

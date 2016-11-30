@@ -39,7 +39,7 @@ namespace
 {
     FieldUnit lcl_GetFieldUnit()
     {
-        FieldUnit eUnit = FUNIT_INCH;
+        FieldUnit eUnit = FieldUnit::FldInch;
         const SfxPoolItem* pItem = nullptr;
         SfxItemState eState = SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState( SID_ATTR_METRIC, pItem );
         if ( pItem && eState >= SfxItemState::DEFAULT )
@@ -73,7 +73,7 @@ PageSizeControl::PageSizeControl( sal_uInt16 nId )
     mpSizeValueSet = VclPtr<svx::sidebar::ValueSetWithTextControl>::Create( maContainer.get(), WB_BORDER );
     maWidthHeightField = VclPtr<MetricField>::Create( maContainer.get(), 0 );
     maWidthHeightField->Hide();
-    maWidthHeightField->SetUnit(FUNIT_CM);
+    maWidthHeightField->SetUnit(FieldUnit::FldCM);
     maWidthHeightField->SetMax(9999);
     maWidthHeightField->SetDecimalDigits(2);
     maWidthHeightField->SetSpinSize(10);
@@ -139,14 +139,14 @@ PageSizeControl::PageSizeControl( sal_uInt16 nId )
                 Swap( aPaperSize );
             }
 
-                maWidthHeightField->SetValue( maWidthHeightField->Normalize( aPaperSize.Width() ), FUNIT_TWIP );
+                maWidthHeightField->SetValue( maWidthHeightField->Normalize( aPaperSize.Width() ), FieldUnit::FldTwip );
             aWidthStr = localeDataWrapper.getNum(
                 maWidthHeightField->GetValue(),
                 maWidthHeightField->GetDecimalDigits(),
                 maWidthHeightField->IsUseThousandSep(),
                 maWidthHeightField->IsShowTrailingZeros() );
 
-            maWidthHeightField->SetValue( maWidthHeightField->Normalize( aPaperSize.Height() ), FUNIT_TWIP);
+            maWidthHeightField->SetValue( maWidthHeightField->Normalize( aPaperSize.Height() ), FieldUnit::FldTwip);
             aHeightStr = localeDataWrapper.getNum(
                 maWidthHeightField->GetValue(),
                 maWidthHeightField->GetDecimalDigits(),

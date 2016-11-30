@@ -28,8 +28,8 @@
 #include <label.hxx>
 #include <labimg.hxx>
 
-#define GETFLDVAL(rField)         (rField).Denormalize((rField).GetValue(FUNIT_TWIP))
-#define SETFLDVAL(rField, lValue) (rField).SetValue((rField).Normalize(lValue), FUNIT_TWIP)
+#define GETFLDVAL(rField)         (rField).Denormalize((rField).GetValue(FieldUnit::FldTwip))
+#define SETFLDVAL(rField, lValue) (rField).SetValue((rField).Normalize(lValue), FieldUnit::FldTwip)
 
 #endif // INCLUDED_SW_SOURCE_UIBASE_INC_LABIMP_HXX
 

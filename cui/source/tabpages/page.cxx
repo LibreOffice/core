@@ -304,28 +304,28 @@ SvxPageDescPage::SvxPageDescPage( vcl::Window* pParent, const SfxItemSet& rAttr 
     mpDefPrinter->SetMapMode( aOldMode );
 
     long nOffset = !aPrintOffset.X() && !aPrintOffset.Y() ? 0 : PRINT_OFFSET;
-    m_pLeftMarginEdit->SetFirst( m_pLeftMarginEdit->Normalize( aPrintOffset.X() ), FUNIT_TWIP );
+    m_pLeftMarginEdit->SetFirst( m_pLeftMarginEdit->Normalize( aPrintOffset.X() ), FieldUnit::FldTwip );
     nFirstLeftMargin = static_cast<long>(m_pLeftMarginEdit->GetFirst());
 
-    m_pRightMarginEdit->SetFirst( m_pRightMarginEdit->Normalize( aPaperSize.Width() - aPrintSize.Width() - aPrintOffset.X() + nOffset ), FUNIT_TWIP);
+    m_pRightMarginEdit->SetFirst( m_pRightMarginEdit->Normalize( aPaperSize.Width() - aPrintSize.Width() - aPrintOffset.X() + nOffset ), FieldUnit::FldTwip);
     nFirstRightMargin = static_cast<long>(m_pRightMarginEdit->GetFirst());
 
-    m_pTopMarginEdit->SetFirst( m_pTopMarginEdit->Normalize( aPrintOffset.Y() ), FUNIT_TWIP );
+    m_pTopMarginEdit->SetFirst( m_pTopMarginEdit->Normalize( aPrintOffset.Y() ), FieldUnit::FldTwip );
     nFirstTopMargin = static_cast<long>(m_pTopMarginEdit->GetFirst());
 
-    m_pBottomMarginEdit->SetFirst( m_pBottomMarginEdit->Normalize( aPaperSize.Height() - aPrintSize.Height() - aPrintOffset.Y() + nOffset ), FUNIT_TWIP );
+    m_pBottomMarginEdit->SetFirst( m_pBottomMarginEdit->Normalize( aPaperSize.Height() - aPrintSize.Height() - aPrintOffset.Y() + nOffset ), FieldUnit::FldTwip );
     nFirstBottomMargin = static_cast<long>(m_pBottomMarginEdit->GetFirst());
 
-    m_pLeftMarginEdit->SetLast( m_pLeftMarginEdit->Normalize( aPrintOffset.X() + aPrintSize.Width() ), FUNIT_TWIP );
+    m_pLeftMarginEdit->SetLast( m_pLeftMarginEdit->Normalize( aPrintOffset.X() + aPrintSize.Width() ), FieldUnit::FldTwip );
     nLastLeftMargin = static_cast<long>(m_pLeftMarginEdit->GetLast());
 
-    m_pRightMarginEdit->SetLast( m_pRightMarginEdit->Normalize( aPrintOffset.X() + aPrintSize.Width() ), FUNIT_TWIP );
+    m_pRightMarginEdit->SetLast( m_pRightMarginEdit->Normalize( aPrintOffset.X() + aPrintSize.Width() ), FieldUnit::FldTwip );
     nLastRightMargin = static_cast<long>(m_pRightMarginEdit->GetLast());
 
-    m_pTopMarginEdit->SetLast( m_pTopMarginEdit->Normalize( aPrintOffset.Y() + aPrintSize.Height() ), FUNIT_TWIP );
+    m_pTopMarginEdit->SetLast( m_pTopMarginEdit->Normalize( aPrintOffset.Y() + aPrintSize.Height() ), FieldUnit::FldTwip );
     nLastTopMargin = static_cast<long>(m_pTopMarginEdit->GetLast());
 
-    m_pBottomMarginEdit->SetLast( m_pBottomMarginEdit->Normalize( aPrintOffset.Y() + aPrintSize.Height() ), FUNIT_TWIP );
+    m_pBottomMarginEdit->SetLast( m_pBottomMarginEdit->Normalize( aPrintOffset.Y() + aPrintSize.Height() ), FieldUnit::FldTwip );
     nLastBottomMargin = static_cast<long>(m_pBottomMarginEdit->GetLast());
 
     // #i4219# get DrawingLayer options
@@ -333,20 +333,20 @@ SvxPageDescPage::SvxPageDescPage( vcl::Window* pParent, const SfxItemSet& rAttr 
 
     // #i4219# take Maximum now from configuration (1/100th cm)
     // was: 11900 -> 119 cm ;new value 3 meters -> 300 cm -> 30000
-    m_pPaperWidthEdit->SetMax(m_pPaperWidthEdit->Normalize(aDrawinglayerOpt.GetMaximumPaperWidth()), FUNIT_CM);
-    m_pPaperWidthEdit->SetLast(m_pPaperWidthEdit->Normalize(aDrawinglayerOpt.GetMaximumPaperWidth()), FUNIT_CM);
-    m_pPaperHeightEdit->SetMax(m_pPaperHeightEdit->Normalize(aDrawinglayerOpt.GetMaximumPaperHeight()), FUNIT_CM);
-    m_pPaperHeightEdit->SetLast(m_pPaperHeightEdit->Normalize(aDrawinglayerOpt.GetMaximumPaperHeight()), FUNIT_CM);
+    m_pPaperWidthEdit->SetMax(m_pPaperWidthEdit->Normalize(aDrawinglayerOpt.GetMaximumPaperWidth()), FieldUnit::FldCM);
+    m_pPaperWidthEdit->SetLast(m_pPaperWidthEdit->Normalize(aDrawinglayerOpt.GetMaximumPaperWidth()), FieldUnit::FldCM);
+    m_pPaperHeightEdit->SetMax(m_pPaperHeightEdit->Normalize(aDrawinglayerOpt.GetMaximumPaperHeight()), FieldUnit::FldCM);
+    m_pPaperHeightEdit->SetLast(m_pPaperHeightEdit->Normalize(aDrawinglayerOpt.GetMaximumPaperHeight()), FieldUnit::FldCM);
 
     // #i4219# also for margins (1/100th cm). Was: 9999, keeping.
-    m_pLeftMarginEdit->SetMax(m_pLeftMarginEdit->Normalize(aDrawinglayerOpt.GetMaximumPaperLeftMargin()), FUNIT_MM);
-    m_pLeftMarginEdit->SetLast(m_pLeftMarginEdit->Normalize(aDrawinglayerOpt.GetMaximumPaperLeftMargin()), FUNIT_MM);
-    m_pRightMarginEdit->SetMax(m_pRightMarginEdit->Normalize(aDrawinglayerOpt.GetMaximumPaperRightMargin()), FUNIT_MM);
-    m_pRightMarginEdit->SetLast(m_pRightMarginEdit->Normalize(aDrawinglayerOpt.GetMaximumPaperRightMargin()), FUNIT_MM);
-    m_pTopMarginEdit->SetMax(m_pTopMarginEdit->Normalize(aDrawinglayerOpt.GetMaximumPaperTopMargin()), FUNIT_MM);
-    m_pTopMarginEdit->SetLast(m_pTopMarginEdit->Normalize(aDrawinglayerOpt.GetMaximumPaperTopMargin()), FUNIT_MM);
-    m_pBottomMarginEdit->SetMax(m_pBottomMarginEdit->Normalize(aDrawinglayerOpt.GetMaximumPaperBottomMargin()), FUNIT_MM);
-    m_pBottomMarginEdit->SetLast(m_pBottomMarginEdit->Normalize(aDrawinglayerOpt.GetMaximumPaperBottomMargin()), FUNIT_MM);
+    m_pLeftMarginEdit->SetMax(m_pLeftMarginEdit->Normalize(aDrawinglayerOpt.GetMaximumPaperLeftMargin()), FieldUnit::FldMM);
+    m_pLeftMarginEdit->SetLast(m_pLeftMarginEdit->Normalize(aDrawinglayerOpt.GetMaximumPaperLeftMargin()), FieldUnit::FldMM);
+    m_pRightMarginEdit->SetMax(m_pRightMarginEdit->Normalize(aDrawinglayerOpt.GetMaximumPaperRightMargin()), FieldUnit::FldMM);
+    m_pRightMarginEdit->SetLast(m_pRightMarginEdit->Normalize(aDrawinglayerOpt.GetMaximumPaperRightMargin()), FieldUnit::FldMM);
+    m_pTopMarginEdit->SetMax(m_pTopMarginEdit->Normalize(aDrawinglayerOpt.GetMaximumPaperTopMargin()), FieldUnit::FldMM);
+    m_pTopMarginEdit->SetLast(m_pTopMarginEdit->Normalize(aDrawinglayerOpt.GetMaximumPaperTopMargin()), FieldUnit::FldMM);
+    m_pBottomMarginEdit->SetMax(m_pBottomMarginEdit->Normalize(aDrawinglayerOpt.GetMaximumPaperBottomMargin()), FieldUnit::FldMM);
+    m_pBottomMarginEdit->SetLast(m_pBottomMarginEdit->Normalize(aDrawinglayerOpt.GetMaximumPaperBottomMargin()), FieldUnit::FldMM);
 
     // Get the i18n framework numberings and add them to the listbox.
     SvxNumOptionsTabPageHelper::GetI18nNumbering( *m_pNumberFormatBox, ::std::numeric_limits<sal_uInt16>::max());
@@ -958,12 +958,12 @@ IMPL_LINK( SvxPageDescPage, PaperSizeSelect_Impl, ListBox&, rBox, void )
         if ( m_pLandscapeBtn->IsChecked() )
             Swap( aSize );
 
-        if ( aSize.Height() < m_pPaperHeightEdit->GetMin( FUNIT_100TH_MM ) )
+        if ( aSize.Height() < m_pPaperHeightEdit->GetMin( FieldUnit::Fld100thMM ) )
             m_pPaperHeightEdit->SetMin(
-                m_pPaperHeightEdit->Normalize( aSize.Height() ), FUNIT_100TH_MM );
-        if ( aSize.Width() < m_pPaperWidthEdit->GetMin( FUNIT_100TH_MM ) )
+                m_pPaperHeightEdit->Normalize( aSize.Height() ), FieldUnit::Fld100thMM );
+        if ( aSize.Width() < m_pPaperWidthEdit->GetMin( FieldUnit::Fld100thMM ) )
             m_pPaperWidthEdit->SetMin(
-                m_pPaperWidthEdit->Normalize( aSize.Width() ), FUNIT_100TH_MM );
+                m_pPaperWidthEdit->Normalize( aSize.Width() ), FieldUnit::Fld100thMM );
         SetMetricValue( *m_pPaperHeightEdit, aSize.Height(), MapUnit::Map100thMM );
         SetMetricValue( *m_pPaperWidthEdit, aSize.Width(), MapUnit::Map100thMM );
 
@@ -1080,13 +1080,13 @@ void SvxPageDescPage::SwapFirstValues_Impl( bool bSet )
     mpDefPrinter->SetOrientation( eOldOri );
 
     sal_Int64 nSetL = m_pLeftMarginEdit->Denormalize(
-                    m_pLeftMarginEdit->GetValue( FUNIT_TWIP ) );
+                    m_pLeftMarginEdit->GetValue( FieldUnit::FldTwip ) );
     sal_Int64 nSetR = m_pRightMarginEdit->Denormalize(
-                    m_pRightMarginEdit->GetValue( FUNIT_TWIP ) );
+                    m_pRightMarginEdit->GetValue( FieldUnit::FldTwip ) );
     sal_Int64 nSetT = m_pTopMarginEdit->Denormalize(
-                    m_pTopMarginEdit->GetValue( FUNIT_TWIP ) );
+                    m_pTopMarginEdit->GetValue( FieldUnit::FldTwip ) );
     sal_Int64 nSetB = m_pBottomMarginEdit->Denormalize(
-                    m_pBottomMarginEdit->GetValue( FUNIT_TWIP ) );
+                    m_pBottomMarginEdit->GetValue( FieldUnit::FldTwip ) );
 
     long nOffset = !aPrintOffset.X() && !aPrintOffset.Y() ? 0 : PRINT_OFFSET;
     long nNewL = aPrintOffset.X();
@@ -1096,29 +1096,29 @@ void SvxPageDescPage::SwapFirstValues_Impl( bool bSet )
     long nNewB =
         aPaperSize.Height() - aPrintSize.Height() - aPrintOffset.Y() + nOffset;
 
-    m_pLeftMarginEdit->SetFirst( m_pLeftMarginEdit->Normalize( nNewL ), FUNIT_TWIP );
+    m_pLeftMarginEdit->SetFirst( m_pLeftMarginEdit->Normalize( nNewL ), FieldUnit::FldTwip );
     nFirstLeftMargin = static_cast<long>(m_pLeftMarginEdit->GetFirst());
-    m_pRightMarginEdit->SetFirst( m_pRightMarginEdit->Normalize( nNewR ), FUNIT_TWIP );
+    m_pRightMarginEdit->SetFirst( m_pRightMarginEdit->Normalize( nNewR ), FieldUnit::FldTwip );
     nFirstRightMargin = static_cast<long>(m_pRightMarginEdit->GetFirst());
-    m_pTopMarginEdit->SetFirst( m_pTopMarginEdit->Normalize( nNewT ), FUNIT_TWIP );
+    m_pTopMarginEdit->SetFirst( m_pTopMarginEdit->Normalize( nNewT ), FieldUnit::FldTwip );
     nFirstTopMargin = static_cast<long>(m_pTopMarginEdit->GetFirst());
-    m_pBottomMarginEdit->SetFirst( m_pBottomMarginEdit->Normalize( nNewB ), FUNIT_TWIP );
+    m_pBottomMarginEdit->SetFirst( m_pBottomMarginEdit->Normalize( nNewB ), FieldUnit::FldTwip );
     nFirstBottomMargin = static_cast<long>(m_pBottomMarginEdit->GetFirst());
 
     if ( bSet )
     {
         if ( nSetL < nNewL )
             m_pLeftMarginEdit->SetValue( m_pLeftMarginEdit->Normalize( nNewL ),
-                                      FUNIT_TWIP );
+                                      FieldUnit::FldTwip );
         if ( nSetR < nNewR )
             m_pRightMarginEdit->SetValue( m_pRightMarginEdit->Normalize( nNewR ),
-                                       FUNIT_TWIP );
+                                       FieldUnit::FldTwip );
         if ( nSetT < nNewT )
             m_pTopMarginEdit->SetValue( m_pTopMarginEdit->Normalize( nNewT ),
-                                     FUNIT_TWIP );
+                                     FieldUnit::FldTwip );
         if ( nSetB < nNewB )
             m_pBottomMarginEdit->SetValue( m_pBottomMarginEdit->Normalize( nNewB ),
-                                        FUNIT_TWIP );
+                                        FieldUnit::FldTwip );
     }
 }
 
@@ -1483,10 +1483,10 @@ IMPL_LINK_NOARG(SvxPageDescPage, RangeHdl_Impl, Control&, void)
     long nHFRight = std::max( m_pBspWin->GetHdRight(), m_pBspWin->GetFtRight() );
 
     // current values for page margins
-    long nBT = static_cast<long>(m_pTopMarginEdit->Denormalize(m_pTopMarginEdit->GetValue(FUNIT_TWIP)));
-    long nBB = static_cast<long>(m_pBottomMarginEdit->Denormalize(m_pBottomMarginEdit->GetValue(FUNIT_TWIP)));
-    long nBL = static_cast<long>(m_pLeftMarginEdit->Denormalize(m_pLeftMarginEdit->GetValue(FUNIT_TWIP)));
-    long nBR = static_cast<long>(m_pRightMarginEdit->Denormalize(m_pRightMarginEdit->GetValue(FUNIT_TWIP)));
+    long nBT = static_cast<long>(m_pTopMarginEdit->Denormalize(m_pTopMarginEdit->GetValue(FieldUnit::FldTwip)));
+    long nBB = static_cast<long>(m_pBottomMarginEdit->Denormalize(m_pBottomMarginEdit->GetValue(FieldUnit::FldTwip)));
+    long nBL = static_cast<long>(m_pLeftMarginEdit->Denormalize(m_pLeftMarginEdit->GetValue(FieldUnit::FldTwip)));
+    long nBR = static_cast<long>(m_pRightMarginEdit->Denormalize(m_pRightMarginEdit->GetValue(FieldUnit::FldTwip)));
 
     // calculate width of page border
     const SfxItemSet* _pSet = &GetItemSet();
@@ -1507,33 +1507,33 @@ IMPL_LINK_NOARG(SvxPageDescPage, RangeHdl_Impl, Control&, void)
 
     long nMin = nHHeight + nHDist + nFDist + nFHeight + nBT + nBB +
                 MINBODY + aBorder.Height();
-    m_pPaperHeightEdit->SetMin(m_pPaperHeightEdit->Normalize(nMin), FUNIT_TWIP);
+    m_pPaperHeightEdit->SetMin(m_pPaperHeightEdit->Normalize(nMin), FieldUnit::FldTwip);
 
     nMin = MINBODY + nBL + nBR + aBorder.Width();
-    m_pPaperWidthEdit->SetMin(m_pPaperWidthEdit->Normalize(nMin), FUNIT_TWIP);
+    m_pPaperWidthEdit->SetMin(m_pPaperWidthEdit->Normalize(nMin), FieldUnit::FldTwip);
 
-    long nH = static_cast<long>(m_pPaperHeightEdit->Denormalize(m_pPaperHeightEdit->GetValue(FUNIT_TWIP)));
-    long nW = static_cast<long>(m_pPaperWidthEdit->Denormalize(m_pPaperWidthEdit->GetValue(FUNIT_TWIP)));
+    long nH = static_cast<long>(m_pPaperHeightEdit->Denormalize(m_pPaperHeightEdit->GetValue(FieldUnit::FldTwip)));
+    long nW = static_cast<long>(m_pPaperWidthEdit->Denormalize(m_pPaperWidthEdit->GetValue(FieldUnit::FldTwip)));
 
     // Top
     long nMax = nH - nBB - aBorder.Height() - MINBODY -
                 nFDist - nFHeight - nHDist - nHHeight;
 
-    m_pTopMarginEdit->SetMax(m_pTopMarginEdit->Normalize(nMax), FUNIT_TWIP);
+    m_pTopMarginEdit->SetMax(m_pTopMarginEdit->Normalize(nMax), FieldUnit::FldTwip);
 
     // Bottom
     nMax = nH - nBT - aBorder.Height() - MINBODY -
            nFDist - nFHeight - nHDist - nHHeight;
 
-    m_pBottomMarginEdit->SetMax(m_pTopMarginEdit->Normalize(nMax), FUNIT_TWIP);
+    m_pBottomMarginEdit->SetMax(m_pTopMarginEdit->Normalize(nMax), FieldUnit::FldTwip);
 
     // Left
     nMax = nW - nBR - MINBODY - aBorder.Width() - nHFLeft - nHFRight;
-    m_pLeftMarginEdit->SetMax(m_pLeftMarginEdit->Normalize(nMax), FUNIT_TWIP);
+    m_pLeftMarginEdit->SetMax(m_pLeftMarginEdit->Normalize(nMax), FieldUnit::FldTwip);
 
     // Right
     nMax = nW - nBL - MINBODY - aBorder.Width() - nHFLeft - nHFRight;
-    m_pRightMarginEdit->SetMax(m_pRightMarginEdit->Normalize(nMax), FUNIT_TWIP);
+    m_pRightMarginEdit->SetMax(m_pRightMarginEdit->Normalize(nMax), FieldUnit::FldTwip);
 }
 
 

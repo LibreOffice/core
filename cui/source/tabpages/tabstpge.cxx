@@ -94,7 +94,7 @@ SvxTabulatorTabPage::SvxTabulatorTabPage(vcl::Window* pParent, const SfxItemSet&
     , aAktTab(0)
     , aNewTabs(0, 0, SvxTabAdjust::Left, GetWhich(SID_ATTR_TABSTOP))
     , nDefDist(0)
-    , eDefUnit(FUNIT_100TH_MM)
+    , eDefUnit(FieldUnit::Fld100thMM)
     , bCheck(false)
 {
     get(m_pTabBox,"ED_TABPOS");

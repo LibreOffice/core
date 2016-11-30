@@ -295,17 +295,17 @@ void SwNumPositionTabPage::InitControls()
         {
             nDistBorderNum = (long)aNumFormatArr[nLvl]->GetAbsLSpace()+ aNumFormatArr[nLvl]->GetFirstLineOffset();
         }
-        m_pDistBorderMF->SetValue(m_pDistBorderMF->Normalize(nDistBorderNum),FUNIT_TWIP);
+        m_pDistBorderMF->SetValue(m_pDistBorderMF->Normalize(nDistBorderNum),FieldUnit::FldTwip);
     }
     else
         bSetDistEmpty = true;
 
     if(bSameDist)
-        m_pDistNumMF->SetValue(m_pDistNumMF->Normalize(aNumFormatArr[nLvl]->GetCharTextDistance()), FUNIT_TWIP);
+        m_pDistNumMF->SetValue(m_pDistNumMF->Normalize(aNumFormatArr[nLvl]->GetCharTextDistance()), FieldUnit::FldTwip);
     else
         m_pDistNumMF->SetText(aEmptyOUStr);
     if(bSameIndent)
-        m_pIndentMF->SetValue(m_pIndentMF->Normalize(-aNumFormatArr[nLvl]->GetFirstLineOffset()), FUNIT_TWIP);
+        m_pIndentMF->SetValue(m_pIndentMF->Normalize(-aNumFormatArr[nLvl]->GetFirstLineOffset()), FieldUnit::FldTwip);
     else
         m_pIndentMF->SetText(aEmptyOUStr);
 
@@ -349,7 +349,7 @@ void SwNumPositionTabPage::InitControls()
         m_pListtabMF->Enable();
         if ( bSameListtab )
         {
-            m_pListtabMF->SetValue(m_pListtabMF->Normalize(aNumFormatArr[nLvl]->GetListtabPos()),FUNIT_TWIP);
+            m_pListtabMF->SetValue(m_pListtabMF->Normalize(aNumFormatArr[nLvl]->GetListtabPos()),FieldUnit::FldTwip);
         }
         else
         {
@@ -368,7 +368,7 @@ void SwNumPositionTabPage::InitControls()
         m_pAlignedAtMF->SetValue(
             m_pAlignedAtMF->Normalize( aNumFormatArr[nLvl]->GetIndentAt() +
                                     aNumFormatArr[nLvl]->GetFirstLineIndent()),
-            FUNIT_TWIP );
+            FieldUnit::FldTwip );
     }
     else
     {
@@ -378,7 +378,7 @@ void SwNumPositionTabPage::InitControls()
     if ( bSameIndentAt )
     {
         m_pIndentAtMF->SetValue(
-            m_pIndentAtMF->Normalize( aNumFormatArr[nLvl]->GetIndentAt()), FUNIT_TWIP );
+            m_pIndentAtMF->Normalize( aNumFormatArr[nLvl]->GetIndentAt()), FieldUnit::FldTwip );
     }
     else
     {
@@ -555,24 +555,24 @@ void SwNumPositionTabPage::SetWrtShell(SwWrtShell* pSh)
 
     const SwTwips nWidth = pWrtSh->GetAnyCurRect(RECT_FRM).Width();
 
-    m_pDistBorderMF->SetMax(m_pDistBorderMF->Normalize( nWidth ), FUNIT_TWIP );
-    m_pDistNumMF->SetMax(m_pDistNumMF->Normalize( nWidth ), FUNIT_TWIP);
-    m_pIndentMF->SetMax(m_pIndentMF->Normalize( nWidth ), FUNIT_TWIP );
-    m_pListtabMF->SetMax(m_pListtabMF->Normalize( nWidth ), FUNIT_TWIP );
-    m_pAlignedAtMF->SetMax(m_pAlignedAtMF->Normalize( nWidth ), FUNIT_TWIP );
-    m_pIndentAtMF->SetMax(m_pIndentAtMF->Normalize( nWidth ), FUNIT_TWIP );
+    m_pDistBorderMF->SetMax(m_pDistBorderMF->Normalize( nWidth ), FieldUnit::FldTwip );
+    m_pDistNumMF->SetMax(m_pDistNumMF->Normalize( nWidth ), FieldUnit::FldTwip);
+    m_pIndentMF->SetMax(m_pIndentMF->Normalize( nWidth ), FieldUnit::FldTwip );
+    m_pListtabMF->SetMax(m_pListtabMF->Normalize( nWidth ), FieldUnit::FldTwip );
+    m_pAlignedAtMF->SetMax(m_pAlignedAtMF->Normalize( nWidth ), FieldUnit::FldTwip );
+    m_pIndentAtMF->SetMax(m_pIndentAtMF->Normalize( nWidth ), FieldUnit::FldTwip );
     const SwTwips nLast2 = nWidth /2;
-    m_pDistBorderMF->SetLast( m_pDistBorderMF->Normalize(   nLast2 ), FUNIT_TWIP );
-    m_pDistNumMF->SetLast(m_pDistNumMF->Normalize( nLast2 ), FUNIT_TWIP);
-    m_pIndentMF->SetLast(m_pIndentMF->Normalize( nLast2 ), FUNIT_TWIP );
-    m_pListtabMF->SetLast(m_pListtabMF->Normalize( nLast2 ), FUNIT_TWIP );
-    m_pAlignedAtMF->SetLast(m_pAlignedAtMF->Normalize( nLast2 ), FUNIT_TWIP );
-    m_pIndentAtMF->SetLast(m_pIndentAtMF->Normalize( nLast2 ), FUNIT_TWIP );
+    m_pDistBorderMF->SetLast( m_pDistBorderMF->Normalize(   nLast2 ), FieldUnit::FldTwip );
+    m_pDistNumMF->SetLast(m_pDistNumMF->Normalize( nLast2 ), FieldUnit::FldTwip);
+    m_pIndentMF->SetLast(m_pIndentMF->Normalize( nLast2 ), FieldUnit::FldTwip );
+    m_pListtabMF->SetLast(m_pListtabMF->Normalize( nLast2 ), FieldUnit::FldTwip );
+    m_pAlignedAtMF->SetLast(m_pAlignedAtMF->Normalize( nLast2 ), FieldUnit::FldTwip );
+    m_pIndentAtMF->SetLast(m_pIndentAtMF->Normalize( nLast2 ), FieldUnit::FldTwip );
 
     const SwRect& rPrtRect = pWrtSh->GetAnyCurRect(RECT_PAGE);
     m_pPreviewWIN->SetPageWidth(rPrtRect.Width());
     FieldUnit eMetric = ::GetDfltMetric( dynamic_cast<SwWebView*>( &pWrtSh->GetView()) != nullptr  );
-    if(eMetric == FUNIT_MM)
+    if(eMetric == FieldUnit::FldMM)
     {
         m_pDistBorderMF->SetDecimalDigits(1);
         m_pDistNumMF->SetDecimalDigits(1);
@@ -668,7 +668,7 @@ IMPL_LINK( SwNumPositionTabPage, DistanceHdl, SpinField&, rSpin, void )
     if(bInInintControl)
         return;
     MetricField& rField = static_cast<MetricField&>(rSpin);
-    long nValue = static_cast< long >(rField.Denormalize(rField.GetValue(FUNIT_TWIP)));
+    long nValue = static_cast< long >(rField.Denormalize(rField.GetValue(FieldUnit::FldTwip)));
     sal_uInt16 nMask = 1;
     for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
     {
@@ -753,7 +753,7 @@ IMPL_LINK( SwNumPositionTabPage, RelativeHdl, Button *, pBox, void )
 
     }
     if(bSetValue)
-        m_pDistBorderMF->SetValue(m_pDistBorderMF->Normalize(nValue), FUNIT_TWIP);
+        m_pDistBorderMF->SetValue(m_pDistBorderMF->Normalize(nValue), FieldUnit::FldTwip);
     else
         m_pDistBorderMF->SetText(aEmptyOUStr);
     m_pDistBorderMF->Enable(bOn || bSingleSelection || pOutlineDlg);
@@ -809,7 +809,7 @@ IMPL_LINK_NOARG(SwNumPositionTabPage, LabelFollowedByHdl_Impl, ListBox&, void)
     {
         m_pListtabMF->SetValue(
             m_pListtabMF->Normalize( pActNum->Get( nFirstLvl ).GetListtabPos() ),
-            FUNIT_TWIP );
+            FieldUnit::FldTwip );
     }
     else
     {
@@ -827,7 +827,7 @@ IMPL_LINK( SwNumPositionTabPage, ListtabPosHdl_Impl, SpinField&, rSpin, void )
 {
     MetricField& rField = static_cast<MetricField&>(rSpin);
     // determine value to be set at the chosen list levels
-    const long nValue = static_cast< long >(rField.Denormalize(rField.GetValue(FUNIT_TWIP)));
+    const long nValue = static_cast< long >(rField.Denormalize(rField.GetValue(FieldUnit::FldTwip)));
 
     // set value at the chosen list levels
     sal_uInt16 nMask = 1;
@@ -853,7 +853,7 @@ IMPL_LINK( SwNumPositionTabPage, AlignAtHdl_Impl, SpinField&, rSpin, void )
 {
     MetricField& rField = static_cast<MetricField&>(rSpin);
     // determine value to be set at the chosen list levels
-    const long nValue = static_cast< long >(rField.Denormalize(rField.GetValue(FUNIT_TWIP)));
+    const long nValue = static_cast< long >(rField.Denormalize(rField.GetValue(FieldUnit::FldTwip)));
 
     // set value at the chosen list levels
     sal_uInt16 nMask = 1;
@@ -880,7 +880,7 @@ IMPL_LINK( SwNumPositionTabPage, IndentAtHdl_Impl, SpinField&, rSpin, void )
 {
     MetricField& rField = static_cast<MetricField&>(rSpin);
     // determine value to be set at the chosen list levels
-    const long nValue = static_cast< long >(rField.Denormalize(rField.GetValue(FUNIT_TWIP)));
+    const long nValue = static_cast< long >(rField.Denormalize(rField.GetValue(FieldUnit::FldTwip)));
 
     // set value at the chosen list levels
     sal_uInt16 nMask = 1;

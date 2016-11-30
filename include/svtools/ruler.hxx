@@ -106,15 +106,15 @@ The values are computed as described below:
 SetUnit() and SetZoom() configure which unit is used to display
 the values on the ruler. The following units are accepted:
 
-    FUNIT_MM
-    FUNIT_CM (Default)
-    FUNIT_M
-    FUNIT_KM
-    FUNIT_INCH
-    FUNIT_FOOT
-    FUNIT_MILE
-    FUNIT_POINT
-    FUNIT_PICA
+    FieldUnit::FldMM
+    FieldUnit::FldCM (Default)
+    FieldUnit::FldM
+    FieldUnit::FldKM
+    FieldUnit::FldInch
+    FieldUnit::FldFoot
+    FieldUnit::FldMile
+    FieldUnit::FldPoint
+    FieldUnit::FldPica
 
 --------------------------------------------------------------------------
 

@@ -2144,8 +2144,8 @@ bool SwSectionIndentTabPage::FillItemSet( SfxItemSet* rSet)
             m_pAfterMF->IsValueModified())
     {
         SvxLRSpaceItem aLRSpace(
-                static_cast< long >(m_pBeforeMF->Denormalize(m_pBeforeMF->GetValue(FUNIT_TWIP))) ,
-                static_cast< long >(m_pAfterMF->Denormalize(m_pAfterMF->GetValue(FUNIT_TWIP))), 0, 0, RES_LR_SPACE);
+                static_cast< long >(m_pBeforeMF->Denormalize(m_pBeforeMF->GetValue(FieldUnit::FldTwip))) ,
+                static_cast< long >(m_pAfterMF->Denormalize(m_pAfterMF->GetValue(FieldUnit::FldTwip))), 0, 0, RES_LR_SPACE);
         rSet->Put(aLRSpace);
     }
     return true;
@@ -2164,8 +2164,8 @@ void SwSectionIndentTabPage::Reset( const SfxItemSet* rSet)
         const SvxLRSpaceItem& rSpace =
             static_cast<const SvxLRSpaceItem&>(rSet->Get( RES_LR_SPACE ));
 
-        m_pBeforeMF->SetValue( m_pBeforeMF->Normalize(rSpace.GetLeft()), FUNIT_TWIP );
-        m_pAfterMF->SetValue( m_pAfterMF->Normalize(rSpace.GetRight()), FUNIT_TWIP );
+        m_pBeforeMF->SetValue( m_pBeforeMF->Normalize(rSpace.GetLeft()), FieldUnit::FldTwip );
+        m_pAfterMF->SetValue( m_pAfterMF->Normalize(rSpace.GetRight()), FieldUnit::FldTwip );
     }
     else
     {
@@ -2194,8 +2194,8 @@ void SwSectionIndentTabPage::SetWrtShell(SwWrtShell& rSh)
 
 IMPL_LINK_NOARG(SwSectionIndentTabPage, IndentModifyHdl, Edit&, void)
 {
-    m_pPreviewWin->SetLeftMargin( static_cast< long >(m_pBeforeMF->Denormalize(m_pBeforeMF->GetValue(FUNIT_TWIP))) );
-    m_pPreviewWin->SetRightMargin( static_cast< long >(m_pAfterMF->Denormalize(m_pAfterMF->GetValue(FUNIT_TWIP))) );
+    m_pPreviewWin->SetLeftMargin( static_cast< long >(m_pBeforeMF->Denormalize(m_pBeforeMF->GetValue(FieldUnit::FldTwip))) );
+    m_pPreviewWin->SetRightMargin( static_cast< long >(m_pAfterMF->Denormalize(m_pAfterMF->GetValue(FieldUnit::FldTwip))) );
     m_pPreviewWin->Invalidate();
 }
 

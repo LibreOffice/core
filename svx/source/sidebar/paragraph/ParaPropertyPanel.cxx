@@ -345,9 +345,9 @@ void ParaPropertyPanel::StateChangedIndentImpl( sal_uInt16 /*nSID*/, SfxItemStat
     case CombinedEnumContext(Application_WriterVariants, Context_Text):
     case CombinedEnumContext(Application_WriterVariants, Context_Table):
         {
-            mpLeftIndent->SetMin( NEGA_MAXVALUE, FUNIT_100TH_MM );
-            mpRightIndent->SetMin( NEGA_MAXVALUE, FUNIT_100TH_MM );
-            mpFLineIndent->SetMin( NEGA_MAXVALUE, FUNIT_100TH_MM );
+            mpLeftIndent->SetMin( NEGA_MAXVALUE, FieldUnit::Fld100thMM );
+            mpRightIndent->SetMin( NEGA_MAXVALUE, FieldUnit::Fld100thMM );
+            mpFLineIndent->SetMin( NEGA_MAXVALUE, FieldUnit::Fld100thMM );
         }
         break;
     }
@@ -375,7 +375,7 @@ void ParaPropertyPanel::StateChangedIndentImpl( sal_uInt16 /*nSID*/, SfxItemStat
              && maContext.GetCombinedContext_DI() != CombinedEnumContext(Application_WriterVariants, Context_Default)
              && maContext.GetCombinedContext_DI() != CombinedEnumContext(Application_WriterVariants, Context_Table))
         {
-            mpFLineIndent->SetMin( nVal*(-1), FUNIT_100TH_MM );
+            mpFLineIndent->SetMin( nVal*(-1), FieldUnit::Fld100thMM );
         }
 
         long nrVal = OutputDevice::LogicToLogic( aTxtRight, (MapUnit)(MapUnit::MapTwip), MapUnit::Map100thMM );
@@ -389,9 +389,9 @@ void ParaPropertyPanel::StateChangedIndentImpl( sal_uInt16 /*nSID*/, SfxItemStat
         case CombinedEnumContext(Application_WriterVariants, Context_Table):
         case CombinedEnumContext(Application_WriterVariants, Context_Annotation):
             {
-                mpLeftIndent->SetMax( MAX_SW - nrVal, FUNIT_100TH_MM );
-                mpRightIndent->SetMax( MAX_SW - nVal, FUNIT_100TH_MM );
-                mpFLineIndent->SetMax( MAX_SW - nVal - nrVal, FUNIT_100TH_MM );
+                mpLeftIndent->SetMax( MAX_SW - nrVal, FieldUnit::Fld100thMM );
+                mpRightIndent->SetMax( MAX_SW - nVal, FieldUnit::Fld100thMM );
+                mpFLineIndent->SetMax( MAX_SW - nVal - nrVal, FieldUnit::Fld100thMM );
             }
             break;
         case CombinedEnumContext(Application_DrawImpress, Context_DrawText):
@@ -400,18 +400,18 @@ void ParaPropertyPanel::StateChangedIndentImpl( sal_uInt16 /*nSID*/, SfxItemStat
         case CombinedEnumContext(Application_DrawImpress, Context_TextObject):
         case CombinedEnumContext(Application_DrawImpress, Context_Graphic):
             {
-                mpLeftIndent->SetMax( MAX_SC_SD - nrVal, FUNIT_100TH_MM );
-                mpRightIndent->SetMax( MAX_SC_SD - nVal, FUNIT_100TH_MM );
-                mpFLineIndent->SetMax( MAX_SC_SD - nVal - nrVal, FUNIT_100TH_MM );
+                mpLeftIndent->SetMax( MAX_SC_SD - nrVal, FieldUnit::Fld100thMM );
+                mpRightIndent->SetMax( MAX_SC_SD - nVal, FieldUnit::Fld100thMM );
+                mpFLineIndent->SetMax( MAX_SC_SD - nVal - nrVal, FieldUnit::Fld100thMM );
             }
         }
 
-        mpLeftIndent->SetValue( nVal, FUNIT_100TH_MM );
-        mpRightIndent->SetValue( nrVal, FUNIT_100TH_MM );
+        mpLeftIndent->SetValue( nVal, FieldUnit::Fld100thMM );
+        mpRightIndent->SetValue( nrVal, FieldUnit::Fld100thMM );
 
         long nfVal = OutputDevice::LogicToLogic( aTxtFirstLineOfst, (MapUnit)(MapUnit::MapTwip), MapUnit::Map100thMM );
         nfVal = (long)mpFLineIndent->Normalize( (long)nfVal );
-        mpFLineIndent->SetValue( nfVal, FUNIT_100TH_MM );
+        mpFLineIndent->SetValue( nfVal, FieldUnit::Fld100thMM );
 
         mpTbxIndent_IncDec->Enable();
 
@@ -472,11 +472,11 @@ void ParaPropertyPanel::StateChangedULImpl( sal_uInt16 /*nSID*/, SfxItemState eS
 
         sal_Int64 nVal = OutputDevice::LogicToLogic( maUpper, (MapUnit)(MapUnit::MapTwip), MapUnit::Map100thMM );
         nVal = mpTopDist->Normalize( nVal );
-        mpTopDist->SetValue( nVal, FUNIT_100TH_MM );
+        mpTopDist->SetValue( nVal, FieldUnit::Fld100thMM );
 
         nVal = OutputDevice::LogicToLogic( maLower, (MapUnit)(MapUnit::MapTwip), MapUnit::Map100thMM );
         nVal = mpBottomDist->Normalize( nVal );
-        mpBottomDist->SetValue( nVal, FUNIT_100TH_MM );
+        mpBottomDist->SetValue( nVal, FieldUnit::Fld100thMM );
     }
     else if(eState == SfxItemState::DISABLED )
     {
@@ -510,7 +510,7 @@ void ParaPropertyPanel::StateChangeIncDecImpl( sal_uInt16 nSID, SfxItemState eSt
 
 FieldUnit ParaPropertyPanel::GetCurrentUnit( SfxItemState eState, const SfxPoolItem* pState )
 {
-    FieldUnit eUnit = FUNIT_NONE;
+    FieldUnit eUnit = FieldUnit::NONE;
 
     if ( pState && eState >= SfxItemState::DEFAULT )
         eUnit = (FieldUnit) static_cast<const SfxUInt16Item*>(pState)->GetValue();
@@ -549,8 +549,8 @@ ParaPropertyPanel::ParaPropertyPanel(vcl::Window* pParent,
       maTxtLeft (0),
       maUpper (0),
       maLower (0),
-      m_eMetricUnit(FUNIT_NONE),
-      m_last_eMetricUnit(FUNIT_NONE),
+      m_eMetricUnit(FieldUnit::NONE),
+      m_last_eMetricUnit(FieldUnit::NONE),
       m_eLRSpaceUnit(),
       m_eULSpaceUnit(),
       maLRSpaceControl (SID_ATTR_PARA_LRSPACE,*pBindings,*this),

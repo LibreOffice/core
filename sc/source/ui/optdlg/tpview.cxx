@@ -363,11 +363,11 @@ ScTpLayoutOptions::ScTpLayoutOptions(   vcl::Window* pParent,
 
         switch ( eFUnit )
         {
-            case FUNIT_MM:
-            case FUNIT_CM:
-            case FUNIT_POINT:
-            case FUNIT_PICA:
-            case FUNIT_INCH:
+            case FieldUnit::FldMM:
+            case FieldUnit::FldCM:
+            case FieldUnit::FldPoint:
+            case FieldUnit::FldPica:
+            case FieldUnit::FldInch:
             {
                 // nur diese Metriken benutzen
                 sal_Int32 nPos = m_pUnitLB->InsertEntry( sMetric );
@@ -435,7 +435,7 @@ bool    ScTpLayoutOptions::FillItemSet( SfxItemSet* rCoreSet )
     if(m_pTabMF->IsValueChangedFromSaved())
     {
         rCoreSet->Put(SfxUInt16Item(SID_ATTR_DEFTABSTOP,
-                    sal::static_int_cast<sal_uInt16>( m_pTabMF->Denormalize(m_pTabMF->GetValue(FUNIT_TWIP)) )));
+                    sal::static_int_cast<sal_uInt16>( m_pTabMF->Denormalize(m_pTabMF->GetValue(FieldUnit::FldTwip)) )));
         bRet = true;
     }
 
@@ -545,7 +545,7 @@ void    ScTpLayoutOptions::Reset( const SfxItemSet* rCoreSet )
 
     const SfxPoolItem* pItem;
     if(SfxItemState::SET == rCoreSet->GetItemState(SID_ATTR_DEFTABSTOP, false, &pItem))
-        m_pTabMF->SetValue(m_pTabMF->Normalize(static_cast<const SfxUInt16Item*>(pItem)->GetValue()), FUNIT_TWIP);
+        m_pTabMF->SetValue(m_pTabMF->Normalize(static_cast<const SfxUInt16Item*>(pItem)->GetValue()), FieldUnit::FldTwip);
     m_pTabMF->SaveValue();
 
     m_pUnitLB       ->SaveValue();
@@ -642,9 +642,9 @@ IMPL_LINK_NOARG(ScTpLayoutOptions, MetricHdl, ListBox&, void)
     {
         FieldUnit eFieldUnit = (FieldUnit)reinterpret_cast<sal_IntPtr>(m_pUnitLB->GetEntryData( nMPos ));
         sal_Int64 nVal =
-            m_pTabMF->Denormalize( m_pTabMF->GetValue( FUNIT_TWIP ) );
+            m_pTabMF->Denormalize( m_pTabMF->GetValue( FieldUnit::FldTwip ) );
         ::SetFieldUnit( *m_pTabMF, eFieldUnit );
-        m_pTabMF->SetValue( m_pTabMF->Normalize( nVal ), FUNIT_TWIP );
+        m_pTabMF->SetValue( m_pTabMF->Normalize( nVal ), FieldUnit::FldTwip );
     }
 }
 

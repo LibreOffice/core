@@ -1038,7 +1038,7 @@ static FieldUnit ImplStringToMetric(const OUString &rMetricString)
         }
     }
 
-    return FUNIT_NONE;
+    return FieldUnit::NONE;
 }
 
 static FieldUnit ImplMetricGetUnit(const OUString& rStr)
@@ -1054,7 +1054,7 @@ static FieldUnit ImplMetricGetUnit(const OUString& rStr)
 // twip in km = 254 / 14 400 000 000
 // expressions too big for default size 32 bit need LL to avoid overflow
 
-static const sal_Int64 aImplFactor[FUNIT_LINE+1][FUNIT_LINE+1] =
+static const sal_Int64 aImplFactor[(int)(FieldUnit::FldLine)+1][(int)(FieldUnit::FldLine)+1] =
 { /*
 mm/100    mm    cm       m     km  twip point  pica  inch    foot       mile     char     line  */
 {    1,  100,  1 K,  100 K, 100 M, 2540, 2540, 2540, 2540,2540*12,2540*12 X ,   53340, 396240},
@@ -1075,7 +1075,7 @@ mm/100    mm    cm       m     km  twip point  pica  inch    foot       mile    
 #undef M
 #undef K
 
-static FieldUnit eDefaultUnit = FUNIT_NONE;
+static FieldUnit eDefaultUnit = FieldUnit::NONE;
 
 FieldUnit MetricField::GetDefaultUnit() { return eDefaultUnit; }
 void MetricField::SetDefaultUnit( FieldUnit meUnit ) { eDefaultUnit = meUnit; }
@@ -1086,34 +1086,34 @@ static FieldUnit ImplMap2FieldUnit( MapUnit meUnit, long& nDecDigits )
     {
         case MapUnit::Map100thMM :
             nDecDigits -= 2;
-            return FUNIT_MM;
+            return FieldUnit::FldMM;
         case MapUnit::Map10thMM :
             nDecDigits -= 1;
-            return FUNIT_MM;
+            return FieldUnit::FldMM;
         case MapUnit::MapMM :
-            return FUNIT_MM;
+            return FieldUnit::FldMM;
         case MapUnit::MapCM :
-            return FUNIT_CM;
+            return FieldUnit::FldCM;
         case MapUnit::Map1000thInch :
             nDecDigits -= 3;
-            return FUNIT_INCH;
+            return FieldUnit::FldInch;
         case MapUnit::Map100thInch :
             nDecDigits -= 2;
-            return FUNIT_INCH;
+            return FieldUnit::FldInch;
         case MapUnit::Map10thInch :
             nDecDigits -= 1;
-            return FUNIT_INCH;
+            return FieldUnit::FldInch;
         case MapUnit::MapInch :
-            return FUNIT_INCH;
+            return FieldUnit::FldInch;
         case MapUnit::MapPoint :
-            return FUNIT_POINT;
+            return FieldUnit::FldPoint;
         case MapUnit::MapTwip :
-            return FUNIT_TWIP;
+            return FieldUnit::FldTwip;
         default:
             OSL_FAIL( "default eInUnit" );
             break;
     }
-    return FUNIT_NONE;
+    return FieldUnit::NONE;
 }
 
 static double nonValueDoubleToValueDouble( double nValue )
@@ -1154,7 +1154,7 @@ double MetricField::ConvertDoubleValue( double nValue, sal_Int64 mnBaseValue, sa
     {
         sal_Int64 nMult = 1, nDiv = 1;
 
-        if ( eInUnit == FUNIT_PERCENT )
+        if ( eInUnit == FieldUnit::FldPercent )
         {
             if ( (mnBaseValue <= 0) || (nValue <= 0) )
                 return nValue;
@@ -1162,28 +1162,28 @@ double MetricField::ConvertDoubleValue( double nValue, sal_Int64 mnBaseValue, sa
 
             nMult = mnBaseValue;
         }
-        else if ( eOutUnit == FUNIT_PERCENT ||
-                  eOutUnit == FUNIT_CUSTOM ||
-                  eOutUnit == FUNIT_NONE ||
-                  eOutUnit == FUNIT_DEGREE ||
-                  eOutUnit == FUNIT_SECOND ||
-                  eOutUnit == FUNIT_MILLISECOND ||
-                  eOutUnit == FUNIT_PIXEL ||
-                  eInUnit  == FUNIT_CUSTOM ||
-                  eInUnit  == FUNIT_NONE ||
-                  eInUnit  == FUNIT_DEGREE ||
-                  eInUnit  == FUNIT_MILLISECOND ||
-                  eInUnit  == FUNIT_PIXEL )
+        else if ( eOutUnit == FieldUnit::FldPercent ||
+                  eOutUnit == FieldUnit::FldCustom ||
+                  eOutUnit == FieldUnit::NONE ||
+                  eOutUnit == FieldUnit::FldDegree ||
+                  eOutUnit == FieldUnit::FldSecond ||
+                  eOutUnit == FieldUnit::FldMilliSecond ||
+                  eOutUnit == FieldUnit::FldPixel ||
+                  eInUnit  == FieldUnit::FldCustom ||
+                  eInUnit  == FieldUnit::NONE ||
+                  eInUnit  == FieldUnit::FldDegree ||
+                  eInUnit  == FieldUnit::FldMilliSecond ||
+                  eInUnit  == FieldUnit::FldPixel )
              return nValue;
         else
         {
-            if ( eOutUnit == FUNIT_100TH_MM )
-                eOutUnit = FUNIT_NONE;
-            if ( eInUnit == FUNIT_100TH_MM )
-                eInUnit = FUNIT_NONE;
+            if ( eOutUnit == FieldUnit::Fld100thMM )
+                eOutUnit = FieldUnit::NONE;
+            if ( eInUnit == FieldUnit::Fld100thMM )
+                eInUnit = FieldUnit::NONE;
 
-            nDiv  = aImplFactor[eInUnit][eOutUnit];
-            nMult = aImplFactor[eOutUnit][eInUnit];
+            nDiv  = aImplFactor[(int)eInUnit][(int)eOutUnit];
+            nMult = aImplFactor[(int)eOutUnit][(int)eInUnit];
 
             SAL_WARN_IF( nMult <= 0, "vcl", "illegal *" );
             SAL_WARN_IF( nDiv  <= 0, "vcl", "illegal /" );
@@ -1204,9 +1204,9 @@ double MetricField::ConvertDoubleValue( double nValue, sal_Int64 mnBaseValue, sa
 double MetricField::ConvertDoubleValue( double nValue, sal_uInt16 nDigits,
                                         MapUnit eInUnit, FieldUnit eOutUnit )
 {
-    if ( eOutUnit == FUNIT_PERCENT ||
-         eOutUnit == FUNIT_CUSTOM ||
-         eOutUnit == FUNIT_NONE ||
+    if ( eOutUnit == FieldUnit::FldPercent ||
+         eOutUnit == FieldUnit::FldCustom ||
+         eOutUnit == FieldUnit::NONE ||
          eInUnit == MapUnit::MapPixel ||
          eInUnit == MapUnit::MapSysFont ||
          eInUnit == MapUnit::MapAppFont ||
@@ -1235,8 +1235,8 @@ double MetricField::ConvertDoubleValue( double nValue, sal_uInt16 nDigits,
 
     if ( eFieldUnit != eOutUnit )
     {
-        sal_Int64 nDiv  = aImplFactor[eFieldUnit][eOutUnit];
-        sal_Int64 nMult = aImplFactor[eOutUnit][eFieldUnit];
+        sal_Int64 nDiv  = aImplFactor[(int)eFieldUnit][(int)eOutUnit];
+        sal_Int64 nMult = aImplFactor[(int)eOutUnit][(int)eFieldUnit];
 
         SAL_WARN_IF( nMult <= 0, "vcl", "illegal *" );
         SAL_WARN_IF( nDiv  <= 0, "vcl", "illegal /" );
@@ -1255,13 +1255,13 @@ double MetricField::ConvertDoubleValue( double nValue, sal_uInt16 nDigits,
 double MetricField::ConvertDoubleValue( double nValue, sal_uInt16 nDigits,
                                         FieldUnit eInUnit, MapUnit eOutUnit )
 {
-    if ( eInUnit == FUNIT_PERCENT ||
-         eInUnit == FUNIT_CUSTOM ||
-         eInUnit == FUNIT_NONE ||
-         eInUnit == FUNIT_DEGREE ||
-         eInUnit == FUNIT_SECOND ||
-         eInUnit == FUNIT_MILLISECOND ||
-         eInUnit == FUNIT_PIXEL ||
+    if ( eInUnit == FieldUnit::FldPercent ||
+         eInUnit == FieldUnit::FldCustom ||
+         eInUnit == FieldUnit::NONE ||
+         eInUnit == FieldUnit::FldDegree ||
+         eInUnit == FieldUnit::FldSecond ||
+         eInUnit == FieldUnit::FldMilliSecond ||
+         eInUnit == FieldUnit::FldPixel ||
          eOutUnit == MapUnit::MapPixel ||
          eOutUnit == MapUnit::MapSysFont ||
          eOutUnit == MapUnit::MapAppFont ||
@@ -1285,8 +1285,8 @@ double MetricField::ConvertDoubleValue( double nValue, sal_uInt16 nDigits,
 
     if ( eFieldUnit != eInUnit )
     {
-        sal_Int64 nDiv  = aImplFactor[eInUnit][eFieldUnit];
-        sal_Int64 nMult = aImplFactor[eFieldUnit][eInUnit];
+        sal_Int64 nDiv  = aImplFactor[(int)eInUnit][(int)eFieldUnit];
+        sal_Int64 nMult = aImplFactor[(int)eFieldUnit][(int)eInUnit];
 
         SAL_WARN_IF( nMult <= 0, "vcl", "illegal *" );
         SAL_WARN_IF( nDiv  <= 0, "vcl", "illegal /" );
@@ -1356,10 +1356,10 @@ MetricFormatter::~MetricFormatter()
 
 void MetricFormatter::SetUnit( FieldUnit eNewUnit )
 {
-    if ( eNewUnit == FUNIT_100TH_MM )
+    if ( eNewUnit == FieldUnit::Fld100thMM )
     {
         SetDecimalDigits( GetDecimalDigits() + 2 );
-        meUnit = FUNIT_MM;
+        meUnit = FieldUnit::FldMM;
     }
     else
         meUnit = eNewUnit;
@@ -1382,7 +1382,7 @@ OUString MetricFormatter::CreateFieldText( sal_Int64 nValue ) const
 {
     //whether percent is separated from its number is locale
     //specific, pawn it off to icu to decide
-    if (meUnit == FUNIT_PERCENT)
+    if (meUnit == FieldUnit::FldPercent)
     {
         double dValue = nValue;
         dValue /= ImplPower10(GetDecimalDigits());
@@ -1391,13 +1391,13 @@ OUString MetricFormatter::CreateFieldText( sal_Int64 nValue ) const
 
     OUString aStr = NumericFormatter::CreateFieldText( nValue );
 
-    if( meUnit == FUNIT_CUSTOM )
+    if( meUnit == FieldUnit::FldCustom )
         aStr += maCustomUnitText;
     else
     {
-        if (meUnit != FUNIT_NONE && meUnit != FUNIT_DEGREE)
+        if (meUnit != FieldUnit::NONE && meUnit != FieldUnit::FldDegree)
             aStr += " ";
-        assert(meUnit != FUNIT_PERCENT);
+        assert(meUnit != FieldUnit::FldPercent);
         aStr += ImplMetricToString( meUnit );
     }
     return aStr;
@@ -1433,13 +1433,13 @@ sal_Int64 MetricFormatter::GetValue( FieldUnit eOutUnit ) const
 void MetricFormatter::SetValue( sal_Int64 nValue )
 {
     // Implementation not inline, because it is a virtual Function
-    SetValue( nValue, FUNIT_NONE );
+    SetValue( nValue, FieldUnit::NONE );
 }
 
 sal_Int64 MetricFormatter::GetValue() const
 {
     // Implementation not inline, because it is a virtual Function
-    return GetValue( FUNIT_NONE );
+    return GetValue( FieldUnit::NONE );
 }
 
 void MetricFormatter::SetMin( sal_Int64 nNewMin, FieldUnit eInUnit )
@@ -1480,7 +1480,7 @@ sal_Int64 MetricFormatter::GetBaseValue() const
 {
     // convert to requested units
     return MetricField::ConvertValue( mnBaseValue, mnBaseValue, GetDecimalDigits(),
-                                      meUnit, FUNIT_NONE );
+                                      meUnit, FieldUnit::NONE );
 }
 
 void MetricFormatter::Reformat()
@@ -1489,7 +1489,7 @@ void MetricFormatter::Reformat()
         return;
 
     OUString aText = GetField()->GetText();
-    if ( meUnit == FUNIT_CUSTOM )
+    if ( meUnit == FieldUnit::FldCustom )
         maCurUnitText = ImplMetricGetUnitText( aText );
 
     OUString aStr;
@@ -1504,7 +1504,7 @@ void MetricFormatter::Reformat()
     if ( !aStr.isEmpty() )
     {
         ImplSetText( aStr );
-        if ( meUnit == FUNIT_CUSTOM )
+        if ( meUnit == FieldUnit::FldCustom )
             CustomConvert();
     }
     else
@@ -1781,7 +1781,7 @@ sal_Int64 MetricBox::GetValue( sal_Int32 nPos ) const
 
     // convert to previously configured units
     sal_Int64 nRetValue = MetricField::ConvertValue( (sal_Int64)nValue, mnBaseValue, GetDecimalDigits(),
-                                                     meUnit, FUNIT_NONE );
+                                                     meUnit, FieldUnit::NONE );
 
     return nRetValue;
 }
@@ -1803,7 +1803,7 @@ sal_Int64 MetricBox::GetValue( FieldUnit eOutUnit ) const
 sal_Int64 MetricBox::GetValue() const
 {
     // Implementation not inline, because it is a virtual Function
-    return GetValue( FUNIT_NONE );
+    return GetValue( FieldUnit::NONE );
 }
 
 static bool ImplCurrencyProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,

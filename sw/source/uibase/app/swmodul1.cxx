@@ -307,20 +307,20 @@ void SwModule::ApplyUserCharUnit(bool bApplyChar, bool bWeb)
     FieldUnit eVScrollMetric = pPref->IsVScrollMetric() ? pPref->GetVScrollMetric() : pPref->GetMetric();
     if(bApplyChar)
     {
-        eHScrollMetric = FUNIT_CHAR;
-        eVScrollMetric = FUNIT_LINE;
+        eHScrollMetric = FieldUnit::FldChar;
+        eVScrollMetric = FieldUnit::FldLine;
     }
     else
     {
         SvtCJKOptions aCJKOptions;
-        if ( !aCJKOptions.IsAsianTypographyEnabled() && ( eHScrollMetric == FUNIT_CHAR ))
-            eHScrollMetric = FUNIT_INCH;
-        else if ( eHScrollMetric == FUNIT_CHAR )
-            eHScrollMetric = FUNIT_CM;
-        if ( !aCJKOptions.IsAsianTypographyEnabled() && ( eVScrollMetric == FUNIT_LINE ))
-            eVScrollMetric = FUNIT_INCH;
-        else if ( eVScrollMetric == FUNIT_LINE )
-            eVScrollMetric = FUNIT_CM;
+        if ( !aCJKOptions.IsAsianTypographyEnabled() && ( eHScrollMetric == FieldUnit::FldChar ))
+            eHScrollMetric = FieldUnit::FldInch;
+        else if ( eHScrollMetric == FieldUnit::FldChar )
+            eHScrollMetric = FieldUnit::FldCM;
+        if ( !aCJKOptions.IsAsianTypographyEnabled() && ( eVScrollMetric == FieldUnit::FldLine ))
+            eVScrollMetric = FieldUnit::FldInch;
+        else if ( eVScrollMetric == FieldUnit::FldLine )
+            eVScrollMetric = FieldUnit::FldCM;
     }
     SwView* pTmpView = SwModule::GetFirstView();
     // switch rulers for all MDI-Windows

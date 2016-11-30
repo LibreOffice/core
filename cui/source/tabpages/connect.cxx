@@ -106,7 +106,7 @@ SvxConnectionPage::SvxConnectionPage( vcl::Window* pWindow, const SfxItemSet& rI
     SetFieldUnit( *m_pMtrFldLine1, eFUnit );
     SetFieldUnit( *m_pMtrFldLine2, eFUnit );
     SetFieldUnit( *m_pMtrFldLine3, eFUnit );
-    if( eFUnit == FUNIT_MM )
+    if( eFUnit == FieldUnit::FldMM )
     {
         m_pMtrFldHorz1->SetSpinSize( 50 );
         m_pMtrFldHorz2->SetSpinSize( 50 );

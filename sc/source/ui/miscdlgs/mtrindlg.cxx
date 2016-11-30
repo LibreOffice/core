@@ -46,14 +46,14 @@ ScMetricInputDlg::ScMetricInputDlg( vcl::Window*         pParent,
 
     m_pEdValue->SetUnit            ( eFUnit );
     m_pEdValue->SetDecimalDigits   ( nDecimals );
-    m_pEdValue->SetMax             ( m_pEdValue->Normalize( nMaximum ), FUNIT_TWIP );
-    m_pEdValue->SetMin             ( m_pEdValue->Normalize( nMinimum ), FUNIT_TWIP );
-    m_pEdValue->SetLast            ( m_pEdValue->Normalize( nLast ),    FUNIT_TWIP );
-    m_pEdValue->SetFirst           ( m_pEdValue->Normalize( nFirst ),   FUNIT_TWIP );
+    m_pEdValue->SetMax             ( m_pEdValue->Normalize( nMaximum ), FieldUnit::FldTwip );
+    m_pEdValue->SetMin             ( m_pEdValue->Normalize( nMinimum ), FieldUnit::FldTwip );
+    m_pEdValue->SetLast            ( m_pEdValue->Normalize( nLast ),    FieldUnit::FldTwip );
+    m_pEdValue->SetFirst           ( m_pEdValue->Normalize( nFirst ),   FieldUnit::FldTwip );
     m_pEdValue->SetSpinSize        ( m_pEdValue->Normalize( 1 ) / 10 );
-    m_pEdValue->SetValue           ( m_pEdValue->Normalize( nDefault ), FUNIT_TWIP );
+    m_pEdValue->SetValue           ( m_pEdValue->Normalize( nDefault ), FieldUnit::FldTwip );
     nDefaultValue = sal::static_int_cast<long>( m_pEdValue->GetValue() );
-    m_pEdValue->SetValue           ( m_pEdValue->Normalize( nCurrent ), FUNIT_TWIP );
+    m_pEdValue->SetValue           ( m_pEdValue->Normalize( nCurrent ), FieldUnit::FldTwip );
     nCurrentValue = sal::static_int_cast<long>( m_pEdValue->GetValue() );
     m_pBtnDefVal->Check( nCurrentValue == nDefaultValue );
 }
@@ -91,7 +91,7 @@ long ScMetricInputDlg::GetInputValue() const
 */
     // first cut off the decimal digits - not that great...
 
-    return sal::static_int_cast<long>( m_pEdValue->Denormalize( m_pEdValue->GetValue( FUNIT_TWIP ) ) );
+    return sal::static_int_cast<long>( m_pEdValue->Denormalize( m_pEdValue->GetValue( FieldUnit::FldTwip ) ) );
 }
 
 // Handler:

@@ -505,8 +505,8 @@ SwColumnPage::SwColumnPage(vcl::Window *pParent, const SfxItemSet &rSet)
     m_pLinePosDLB->SetSelectHdl(LINK(this, SwColumnPage, UpdateColMgrListBox));
 
     // Separator line
-    m_pLineTypeDLB->SetUnit( FUNIT_POINT );
-    m_pLineTypeDLB->SetSourceUnit( FUNIT_TWIP );
+    m_pLineTypeDLB->SetUnit( FieldUnit::FldPoint );
+    m_pLineTypeDLB->SetSourceUnit( FieldUnit::FldTwip );
 
     // Fill the line styles listbox
     m_pLineTypeDLB->SetNone( SVX_RESSTR( RID_SVXSTR_NONE ) );
@@ -567,11 +567,11 @@ void SwColumnPage::SetPageWidth(long nPageWidth)
 {
     long nNewMaxWidth = static_cast< long >(m_aEd1.NormalizePercent(nPageWidth));
 
-    m_aDistEd1.SetMax(nNewMaxWidth, FUNIT_TWIP);
-    m_aDistEd2.SetMax(nNewMaxWidth, FUNIT_TWIP);
-    m_aEd1.SetMax(nNewMaxWidth, FUNIT_TWIP);
-    m_aEd2.SetMax(nNewMaxWidth, FUNIT_TWIP);
-    m_aEd3.SetMax(nNewMaxWidth, FUNIT_TWIP);
+    m_aDistEd1.SetMax(nNewMaxWidth, FieldUnit::FldTwip);
+    m_aDistEd2.SetMax(nNewMaxWidth, FieldUnit::FldTwip);
+    m_aEd1.SetMax(nNewMaxWidth, FieldUnit::FldTwip);
+    m_aEd2.SetMax(nNewMaxWidth, FieldUnit::FldTwip);
+    m_aEd3.SetMax(nNewMaxWidth, FieldUnit::FldTwip);
 }
 
 void SwColumnPage::connectPercentField(PercentField &rWrap, const OString &rName)
@@ -826,7 +826,7 @@ void SwColumnPage::Init()
         else
         {
             // Need to multiply by 100 because of the 2 decimals
-            m_pLineWidthEdit->SetValue( m_pColMgr->GetLineWidth() * 100, FUNIT_TWIP );
+            m_pLineWidthEdit->SetValue( m_pColMgr->GetLineWidth() * 100, FieldUnit::FldTwip );
             m_pLineColorDLB->SelectEntry( m_pColMgr->GetLineColor() );
             m_pLineTypeDLB->SelectEntry( m_pColMgr->GetLineStyle() );
             m_pLineTypeDLB->SetWidth( m_pColMgr->GetLineWidth( ) );
@@ -973,7 +973,7 @@ void SwColumnPage::ColModify(NumericField* pNF)
     {
         if(pNF)
             m_pDefaultVS->SetNoSelection();
-        long nDist = static_cast< long >(m_aDistEd1.DenormalizePercent(m_aDistEd1.GetValue(FUNIT_TWIP)));
+        long nDist = static_cast< long >(m_aDistEd1.DenormalizePercent(m_aDistEd1.GetValue(FieldUnit::FldTwip)));
         m_pColMgr->SetCount(m_nCols, (sal_uInt16)nDist);
         for(sal_uInt16 i = 0; i < m_nCols; i++)
             m_nColDist[i] = nDist;
@@ -998,7 +998,7 @@ IMPL_LINK( SwColumnPage, GapModify, Edit&, rEdit, void )
     MetricField* pMetricField = static_cast<MetricField*>(&rEdit);
     PercentField *pField = m_aPercentFieldsMap[pMetricField];
     assert(pField);
-    long nActValue = static_cast< long >(pField->DenormalizePercent(pField->GetValue(FUNIT_TWIP)));
+    long nActValue = static_cast< long >(pField->DenormalizePercent(pField->GetValue(FieldUnit::FldTwip)));
     if(m_pAutoWidthBox->IsChecked())
     {
         const long nMaxGap = static_cast< long >
@@ -1006,7 +1006,7 @@ IMPL_LINK( SwColumnPage, GapModify, Edit&, rEdit, void )
         if(nActValue > nMaxGap)
         {
             nActValue = nMaxGap;
-            m_aDistEd1.SetPrcntValue(m_aDistEd1.NormalizePercent(nMaxGap), FUNIT_TWIP);
+            m_aDistEd1.SetPrcntValue(m_aDistEd1.NormalizePercent(nMaxGap), FieldUnit::FldTwip);
         }
         m_pColMgr->SetGutterWidth((sal_uInt16)nActValue);
         for(sal_uInt16 i = 0; i < m_nCols; i++)
@@ -1072,7 +1072,7 @@ IMPL_LINK( SwColumnPage, EdModify, Edit&, rEdit, void )
 IMPL_LINK( SwColumnPage, AutoWidthHdl, Button*, pButton, void )
 {
     CheckBox* pBox = static_cast<CheckBox*>(pButton);
-    long nDist = static_cast< long >(m_aDistEd1.DenormalizePercent(m_aDistEd1.GetValue(FUNIT_TWIP)));
+    long nDist = static_cast< long >(m_aDistEd1.DenormalizePercent(m_aDistEd1.GetValue(FieldUnit::FldTwip)));
     m_pColMgr->SetCount(m_nCols, (sal_uInt16)nDist);
     for(sal_uInt16 i = 0; i < m_nCols; i++)
         m_nColDist[i] = nDist;
@@ -1123,7 +1123,7 @@ void SwColumnPage::Timeout()
             nChanged += 2;
 
         long nNewWidth = static_cast< long >
-            (m_pModifiedField->DenormalizePercent(m_pModifiedField->GetValue(FUNIT_TWIP)));
+            (m_pModifiedField->DenormalizePercent(m_pModifiedField->GetValue(FieldUnit::FldTwip)));
         long nDiff = nNewWidth - m_nColWidth[nChanged];
 
         // when it's the last column
@@ -1161,35 +1161,35 @@ void SwColumnPage::Update(MetricField *pInteractiveField)
     {
         sal_Int64 nCurrentValue, nNewValue;
 
-        nCurrentValue = m_aEd1.NormalizePercent(m_aEd1.DenormalizePercent(m_aEd1.GetValue(FUNIT_TWIP)));
+        nCurrentValue = m_aEd1.NormalizePercent(m_aEd1.DenormalizePercent(m_aEd1.GetValue(FieldUnit::FldTwip)));
         nNewValue = m_aEd1.NormalizePercent(m_nColWidth[m_nFirstVis]);
 
         //fdo#87612 if we're interacting with this widget and the value will be the same
         //then leave it alone (i.e. don't change equivalent values of e.g. .8 -> 0.8)
         if (nNewValue != nCurrentValue || pInteractiveField != m_aEd1.get())
-            m_aEd1.SetPrcntValue(nNewValue, FUNIT_TWIP);
+            m_aEd1.SetPrcntValue(nNewValue, FieldUnit::FldTwip);
 
-        nCurrentValue = m_aDistEd1.NormalizePercent(m_aDistEd1.DenormalizePercent(m_aDistEd1.GetValue(FUNIT_TWIP)));
+        nCurrentValue = m_aDistEd1.NormalizePercent(m_aDistEd1.DenormalizePercent(m_aDistEd1.GetValue(FieldUnit::FldTwip)));
         nNewValue = m_aDistEd1.NormalizePercent(m_nColDist[m_nFirstVis]);
         if (nNewValue != nCurrentValue || pInteractiveField != m_aDistEd1.get())
-            m_aDistEd1.SetPrcntValue(nNewValue, FUNIT_TWIP);
+            m_aDistEd1.SetPrcntValue(nNewValue, FieldUnit::FldTwip);
 
-        nCurrentValue = m_aEd2.NormalizePercent(m_aEd2.DenormalizePercent(m_aEd2.GetValue(FUNIT_TWIP)));
+        nCurrentValue = m_aEd2.NormalizePercent(m_aEd2.DenormalizePercent(m_aEd2.GetValue(FieldUnit::FldTwip)));
         nNewValue = m_aEd2.NormalizePercent(m_nColWidth[m_nFirstVis+1]);
         if (nNewValue != nCurrentValue || pInteractiveField != m_aEd2.get())
-            m_aEd2.SetPrcntValue(nNewValue, FUNIT_TWIP);
+            m_aEd2.SetPrcntValue(nNewValue, FieldUnit::FldTwip);
 
         if(m_nCols >= 3)
         {
-            nCurrentValue = m_aDistEd2.NormalizePercent(m_aDistEd2.DenormalizePercent(m_aDistEd2.GetValue(FUNIT_TWIP)));
+            nCurrentValue = m_aDistEd2.NormalizePercent(m_aDistEd2.DenormalizePercent(m_aDistEd2.GetValue(FieldUnit::FldTwip)));
             nNewValue = m_aDistEd2.NormalizePercent(m_nColDist[m_nFirstVis+1]);
             if (nNewValue != nCurrentValue || pInteractiveField != m_aDistEd2.get())
-                m_aDistEd2.SetPrcntValue(nNewValue, FUNIT_TWIP);
+                m_aDistEd2.SetPrcntValue(nNewValue, FieldUnit::FldTwip);
 
-            nCurrentValue = m_aEd3.NormalizePercent(m_aEd3.DenormalizePercent(m_aEd3.GetValue(FUNIT_TWIP)));
+            nCurrentValue = m_aEd3.NormalizePercent(m_aEd3.DenormalizePercent(m_aEd3.GetValue(FieldUnit::FldTwip)));
             nNewValue = m_aEd3.NormalizePercent(m_nColWidth[m_nFirstVis+2]);
             if (nNewValue != nCurrentValue || pInteractiveField != m_aEd3.get())
-                m_aEd3.SetPrcntValue(nNewValue, FUNIT_TWIP);
+                m_aEd3.SetPrcntValue(nNewValue, FieldUnit::FldTwip);
         }
         else
         {
@@ -1342,12 +1342,12 @@ IMPL_LINK( SwColumnPage, SetDefaultsHdl, ValueSet *, pVS, void )
         const long nSmall = static_cast< long >(m_pColMgr->GetActualSize() / 3);
         if(nItem == 4)
         {
-            m_aEd2.SetPrcntValue(m_aEd2.NormalizePercent(nSmall), FUNIT_TWIP);
+            m_aEd2.SetPrcntValue(m_aEd2.NormalizePercent(nSmall), FieldUnit::FldTwip);
             m_pModifiedField = &m_aEd2;
         }
         else
         {
-            m_aEd1.SetPrcntValue(m_aEd1.NormalizePercent(nSmall), FUNIT_TWIP);
+            m_aEd1.SetPrcntValue(m_aEd1.NormalizePercent(nSmall), FieldUnit::FldTwip);
             m_pModifiedField = &m_aEd1;
         }
         m_bLockUpdate = false;

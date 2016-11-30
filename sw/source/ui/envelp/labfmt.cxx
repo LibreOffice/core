@@ -423,31 +423,31 @@ void SwLabFormatPage::ChangeMinMax()
          lMinPWidth  = lLeft  + (nCols - 1) * lHDist + lWidth,
          lMinPHeight = lUpper + (nRows - 1) * lVDist + lHeight;
 
-    m_pHDistField->SetMin(nMinSize, FUNIT_CM);
-    m_pVDistField->SetMin(nMinSize, FUNIT_CM);
+    m_pHDistField->SetMin(nMinSize, FieldUnit::FldCM);
+    m_pVDistField->SetMin(nMinSize, FieldUnit::FldCM);
 
-    m_pHDistField->SetMax((long) 100 * ((lMax - lLeft ) / std::max(1L, (long) nCols)), FUNIT_TWIP);
-    m_pVDistField->SetMax((long) 100 * ((lMax - lUpper) / std::max(1L, (long) nRows)), FUNIT_TWIP);
+    m_pHDistField->SetMax((long) 100 * ((lMax - lLeft ) / std::max(1L, (long) nCols)), FieldUnit::FldTwip);
+    m_pVDistField->SetMax((long) 100 * ((lMax - lUpper) / std::max(1L, (long) nRows)), FieldUnit::FldTwip);
 
-    m_pWidthField->SetMin(nMinSize, FUNIT_CM);
-    m_pHeightField->SetMin(nMinSize, FUNIT_CM);
+    m_pWidthField->SetMin(nMinSize, FieldUnit::FldCM);
+    m_pHeightField->SetMin(nMinSize, FieldUnit::FldCM);
 
-    m_pWidthField->SetMax((long) 100 * (lHDist), FUNIT_TWIP);
-    m_pHeightField->SetMax((long) 100 * (lVDist), FUNIT_TWIP);
+    m_pWidthField->SetMax((long) 100 * (lHDist), FieldUnit::FldTwip);
+    m_pHeightField->SetMax((long) 100 * (lVDist), FieldUnit::FldTwip);
 
-    m_pLeftField->SetMax((long) 100 * (lMax - nCols * lHDist), FUNIT_TWIP);
-    m_pUpperField->SetMax((long) 100 * (lMax - nRows * lVDist), FUNIT_TWIP);
+    m_pLeftField->SetMax((long) 100 * (lMax - nCols * lHDist), FieldUnit::FldTwip);
+    m_pUpperField->SetMax((long) 100 * (lMax - nRows * lVDist), FieldUnit::FldTwip);
 
     m_pColsField->SetMin( 1 );
     m_pRowsField->SetMin( 1 );
 
     m_pColsField->SetMax((lMax - lLeft ) / std::max(1L, lHDist));
     m_pRowsField->SetMax((lMax - lUpper) / std::max(1L, lVDist));
-    m_pPWidthField->SetMin( (long) 100 * lMinPWidth,  FUNIT_TWIP );
-    m_pPHeightField->SetMin( (long) 100 * lMinPHeight, FUNIT_TWIP );
+    m_pPWidthField->SetMin( (long) 100 * lMinPWidth,  FieldUnit::FldTwip );
+    m_pPHeightField->SetMin( (long) 100 * lMinPHeight, FieldUnit::FldTwip );
 
-    m_pPWidthField->SetMax( (long) 100 * lMax, FUNIT_TWIP);
-    m_pPHeightField->SetMax( (long) 100 * lMax, FUNIT_TWIP);
+    m_pPWidthField->SetMax( (long) 100 * lMax, FieldUnit::FldTwip);
+    m_pPHeightField->SetMax( (long) 100 * lMax, FieldUnit::FldTwip);
     // First and Last
 
     m_pHDistField->SetFirst(m_pHDistField->GetMin());
@@ -536,14 +536,14 @@ void SwLabFormatPage::Reset(const SfxItemSet* )
     // Initialise fields
     GetParentSwLabDlg()->GetLabItem(aItem);
 
-    m_pHDistField->SetMax(100 * aItem.m_lHDist , FUNIT_TWIP);
-    m_pVDistField->SetMax(100 * aItem.m_lVDist , FUNIT_TWIP);
-    m_pWidthField->SetMax(100 * aItem.m_lWidth , FUNIT_TWIP);
-    m_pHeightField->SetMax(100 * aItem.m_lHeight, FUNIT_TWIP);
-    m_pLeftField->SetMax(100 * aItem.m_lLeft  , FUNIT_TWIP);
-    m_pUpperField->SetMax(100 * aItem.m_lUpper , FUNIT_TWIP);
-    m_pPWidthField->SetMax(100 * aItem.m_lPWidth , FUNIT_TWIP);
-    m_pPHeightField->SetMax(100 * aItem.m_lPHeight, FUNIT_TWIP);
+    m_pHDistField->SetMax(100 * aItem.m_lHDist , FieldUnit::FldTwip);
+    m_pVDistField->SetMax(100 * aItem.m_lVDist , FieldUnit::FldTwip);
+    m_pWidthField->SetMax(100 * aItem.m_lWidth , FieldUnit::FldTwip);
+    m_pHeightField->SetMax(100 * aItem.m_lHeight, FieldUnit::FldTwip);
+    m_pLeftField->SetMax(100 * aItem.m_lLeft  , FieldUnit::FldTwip);
+    m_pUpperField->SetMax(100 * aItem.m_lUpper , FieldUnit::FldTwip);
+    m_pPWidthField->SetMax(100 * aItem.m_lPWidth , FieldUnit::FldTwip);
+    m_pPHeightField->SetMax(100 * aItem.m_lPHeight, FieldUnit::FldTwip);
 
     SETFLDVAL(*m_pHDistField, aItem.m_lHDist );
     SETFLDVAL(*m_pVDistField , aItem.m_lVDist );

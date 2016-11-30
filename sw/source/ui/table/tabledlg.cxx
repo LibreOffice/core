@@ -172,8 +172,8 @@ IMPL_LINK( SwFormatTablePage, RelWidthClickHdl, Button*, p, void )
     CheckBox* pBtn = static_cast<CheckBox*>(p);
     OSL_ENSURE(pTableData, "table data not available?");
     bool bIsChecked = pBtn->IsChecked();
-    sal_Int64 nLeft  = m_aLeftMF.DenormalizePercent(m_aLeftMF.GetValue(FUNIT_TWIP ));
-    sal_Int64 nRight = m_aRightMF.DenormalizePercent(m_aRightMF.GetValue(FUNIT_TWIP ));
+    sal_Int64 nLeft  = m_aLeftMF.DenormalizePercent(m_aLeftMF.GetValue(FieldUnit::FldTwip ));
+    sal_Int64 nRight = m_aRightMF.DenormalizePercent(m_aRightMF.GetValue(FieldUnit::FldTwip ));
     m_aWidthMF.ShowPercent(bIsChecked);
     m_aLeftMF.ShowPercent(bIsChecked);
     m_aRightMF.ShowPercent(bIsChecked);
@@ -187,8 +187,8 @@ IMPL_LINK( SwFormatTablePage, RelWidthClickHdl, Button*, p, void )
         m_aRightMF.SetMetricFieldMin(0); //dito
         m_aLeftMF.SetMetricFieldMax(99);
         m_aRightMF.SetMetricFieldMax(99);
-        m_aLeftMF.SetPrcntValue(m_aLeftMF.NormalizePercent(nLeft ), FUNIT_TWIP );
-        m_aRightMF.SetPrcntValue(m_aRightMF.NormalizePercent(nRight ), FUNIT_TWIP );
+        m_aLeftMF.SetPrcntValue(m_aLeftMF.NormalizePercent(nLeft ), FieldUnit::FldTwip );
+        m_aRightMF.SetPrcntValue(m_aRightMF.NormalizePercent(nRight ), FieldUnit::FldTwip );
     }
     else
         ModifyHdl(m_aLeftMF.get());    //correct values again
@@ -213,8 +213,8 @@ IMPL_LINK( SwFormatTablePage, AutoClickHdl, Button*, pControl, void )
     {
         m_aLeftMF.SetPrcntValue(0);
         m_aRightMF.SetPrcntValue(0);
-        nSaveWidth = static_cast< SwTwips >(m_aWidthMF.DenormalizePercent(m_aWidthMF.GetValue(FUNIT_TWIP )));
-        m_aWidthMF.SetPrcntValue(m_aWidthMF.NormalizePercent(pTableData->GetSpace() ), FUNIT_TWIP );
+        nSaveWidth = static_cast< SwTwips >(m_aWidthMF.DenormalizePercent(m_aWidthMF.GetValue(FieldUnit::FldTwip )));
+        m_aWidthMF.SetPrcntValue(m_aWidthMF.NormalizePercent(pTableData->GetSpace() ), FieldUnit::FldTwip );
         bFull = true;
         bRestore = false;
     }
@@ -260,7 +260,7 @@ IMPL_LINK( SwFormatTablePage, AutoClickHdl, Button*, pControl, void )
         //After being switched on automatic, the width was pinned
         //in order to restore the width while switching back to.
         bFull = false;
-        m_aWidthMF.SetPrcntValue(m_aWidthMF.NormalizePercent(nSaveWidth ), FUNIT_TWIP );
+        m_aWidthMF.SetPrcntValue(m_aWidthMF.NormalizePercent(nSaveWidth ), FieldUnit::FldTwip );
     }
     ModifyHdl(m_aWidthMF.get());
     bModified = true;
@@ -296,10 +296,10 @@ IMPL_LINK( SwFormatTablePage, UpDownHdl, SpinField&, rEdit, void )
 
 void  SwFormatTablePage::ModifyHdl(const Edit * pEdit)
 {
-    SwTwips nCurWidth  = static_cast< SwTwips >(m_aWidthMF.DenormalizePercent(m_aWidthMF.GetValue( FUNIT_TWIP )));
+    SwTwips nCurWidth  = static_cast< SwTwips >(m_aWidthMF.DenormalizePercent(m_aWidthMF.GetValue( FieldUnit::FldTwip )));
     SwTwips nPrevWidth = nCurWidth;
-    SwTwips nRight = static_cast< SwTwips >(m_aRightMF.DenormalizePercent(m_aRightMF.GetValue( FUNIT_TWIP )));
-    SwTwips nLeft  = static_cast< SwTwips >(m_aLeftMF.DenormalizePercent(m_aLeftMF.GetValue( FUNIT_TWIP )));
+    SwTwips nRight = static_cast< SwTwips >(m_aRightMF.DenormalizePercent(m_aRightMF.GetValue( FieldUnit::FldTwip )));
+    SwTwips nLeft  = static_cast< SwTwips >(m_aLeftMF.DenormalizePercent(m_aLeftMF.GetValue( FieldUnit::FldTwip )));
     SwTwips nDiff;
 
     if (pEdit == m_aWidthMF.get())
@@ -389,9 +389,9 @@ void  SwFormatTablePage::ModifyHdl(const Edit * pEdit)
         }
     }
     if (nCurWidth != nPrevWidth )
-        m_aWidthMF.SetPrcntValue( m_aWidthMF.NormalizePercent( nCurWidth ), FUNIT_TWIP );
-    m_aRightMF.SetPrcntValue( m_aRightMF.NormalizePercent( nRight ), FUNIT_TWIP );
-    m_aLeftMF.SetPrcntValue( m_aLeftMF.NormalizePercent( nLeft ), FUNIT_TWIP );
+        m_aWidthMF.SetPrcntValue( m_aWidthMF.NormalizePercent( nCurWidth ), FieldUnit::FldTwip );
+    m_aRightMF.SetPrcntValue( m_aRightMF.NormalizePercent( nRight ), FieldUnit::FldTwip );
+    m_aLeftMF.SetPrcntValue( m_aLeftMF.NormalizePercent( nLeft ), FieldUnit::FldTwip );
     bModified = true;
 }
 
@@ -421,8 +421,8 @@ bool  SwFormatTablePage::FillItemSet( SfxItemSet* rCoreSet )
             m_pTopMF->IsValueChangedFromSaved() )
         {
             SvxULSpaceItem aULSpace(RES_UL_SPACE);
-            aULSpace.SetUpper( m_pTopMF->Denormalize(m_pTopMF->GetValue( FUNIT_TWIP )));
-            aULSpace.SetLower( m_pBottomMF->Denormalize(m_pBottomMF->GetValue( FUNIT_TWIP )));
+            aULSpace.SetUpper( m_pTopMF->Denormalize(m_pTopMF->GetValue( FieldUnit::FldTwip )));
+            aULSpace.SetLower( m_pBottomMF->Denormalize(m_pBottomMF->GetValue( FieldUnit::FldTwip )));
             rCoreSet->Put(aULSpace);
         }
 
@@ -485,15 +485,15 @@ void  SwFormatTablePage::Reset( const SfxItemSet* )
         {
             m_pRelWidthCB->Check();
             RelWidthClickHdl(m_pRelWidthCB);
-            m_aWidthMF.SetPrcntValue(pTableData->GetWidthPercent(), FUNIT_CUSTOM);
+            m_aWidthMF.SetPrcntValue(pTableData->GetWidthPercent(), FieldUnit::FldCustom);
 
             m_aWidthMF.SaveValue();
-            nSaveWidth = static_cast< SwTwips >(m_aWidthMF.GetValue(FUNIT_CUSTOM));
+            nSaveWidth = static_cast< SwTwips >(m_aWidthMF.GetValue(FieldUnit::FldCustom));
         }
         else
         {
             m_aWidthMF.SetPrcntValue(m_aWidthMF.NormalizePercent(
-                    pTableData->GetWidth()), FUNIT_TWIP);
+                    pTableData->GetWidth()), FieldUnit::FldTwip);
             m_aWidthMF.SaveValue();
             nSaveWidth = pTableData->GetWidth();
             nMinTableWidth = std::min( nSaveWidth, nMinTableWidth );
@@ -505,9 +505,9 @@ void  SwFormatTablePage::Reset( const SfxItemSet* )
         m_aRightMF.SetLast(m_aRightMF.NormalizePercent( pTableData->GetSpace() ));
 
         m_aLeftMF.SetPrcntValue(m_aLeftMF.NormalizePercent(
-                    pTableData->GetLeftSpace()), FUNIT_TWIP);
+                    pTableData->GetLeftSpace()), FieldUnit::FldTwip);
         m_aRightMF.SetPrcntValue(m_aRightMF.NormalizePercent(
-                    pTableData->GetRightSpace()), FUNIT_TWIP);
+                    pTableData->GetRightSpace()), FieldUnit::FldTwip);
         m_aLeftMF.SaveValue();
         m_aRightMF.SaveValue();
 
@@ -570,9 +570,9 @@ void  SwFormatTablePage::Reset( const SfxItemSet* )
     if(SfxItemState::SET == rSet.GetItemState( RES_UL_SPACE, false,&pItem ))
     {
         m_pTopMF->SetValue(m_pTopMF->Normalize(
-                        static_cast<const SvxULSpaceItem*>(pItem)->GetUpper()), FUNIT_TWIP);
+                        static_cast<const SvxULSpaceItem*>(pItem)->GetUpper()), FieldUnit::FldTwip);
         m_pBottomMF->SetValue(m_pBottomMF->Normalize(
-                        static_cast<const SvxULSpaceItem*>(pItem)->GetLower()), FUNIT_TWIP);
+                        static_cast<const SvxULSpaceItem*>(pItem)->GetLower()), FieldUnit::FldTwip);
         m_pTopMF->SaveValue();
         m_pBottomMF->SaveValue();
     }
@@ -586,10 +586,10 @@ void  SwFormatTablePage::Reset( const SfxItemSet* )
         m_pTextDirectionLB->SaveValue();
     }
 
-    m_aWidthMF.SetMax( 2*m_aWidthMF.NormalizePercent( pTableData->GetSpace() ), FUNIT_TWIP );
-    m_aRightMF.SetMax( m_aRightMF.NormalizePercent( pTableData->GetSpace() ), FUNIT_TWIP );
-    m_aLeftMF.SetMax( m_aLeftMF.NormalizePercent( pTableData->GetSpace() ), FUNIT_TWIP );
-    m_aWidthMF.SetMin( m_aWidthMF.NormalizePercent( nMinTableWidth ), FUNIT_TWIP );
+    m_aWidthMF.SetMax( 2*m_aWidthMF.NormalizePercent( pTableData->GetSpace() ), FieldUnit::FldTwip );
+    m_aRightMF.SetMax( m_aRightMF.NormalizePercent( pTableData->GetSpace() ), FieldUnit::FldTwip );
+    m_aLeftMF.SetMax( m_aLeftMF.NormalizePercent( pTableData->GetSpace() ), FieldUnit::FldTwip );
+    m_aWidthMF.SetMin( m_aWidthMF.NormalizePercent( nMinTableWidth ), FieldUnit::FldTwip );
 
 }
 
@@ -602,17 +602,17 @@ void    SwFormatTablePage::ActivatePage( const SfxItemSet& rSet )
                                         pTableData->GetWidth() :
                                             pTableData->GetSpace();
         if(pTableData->GetWidthPercent() == 0 &&
-                nCurWidth != m_aWidthMF.DenormalizePercent(m_aWidthMF.GetValue(FUNIT_TWIP )))
+                nCurWidth != m_aWidthMF.DenormalizePercent(m_aWidthMF.GetValue(FieldUnit::FldTwip )))
         {
             m_aWidthMF.SetPrcntValue(m_aWidthMF.NormalizePercent(
-                            nCurWidth), FUNIT_TWIP);
+                            nCurWidth), FieldUnit::FldTwip);
             m_aWidthMF.SaveValue();
             nSaveWidth = nCurWidth;
             m_aLeftMF.SetPrcntValue(m_aLeftMF.NormalizePercent(
-                            pTableData->GetLeftSpace()), FUNIT_TWIP);
+                            pTableData->GetLeftSpace()), FieldUnit::FldTwip);
             m_aLeftMF.SaveValue();
             m_aRightMF.SetPrcntValue(m_aRightMF.NormalizePercent(
-                            pTableData->GetRightSpace()), FUNIT_TWIP);
+                            pTableData->GetRightSpace()), FieldUnit::FldTwip);
             m_aRightMF.SaveValue();
         }
     }
@@ -637,8 +637,8 @@ DeactivateRC SwFormatTablePage::DeactivatePage( SfxItemSet* _pSet )
         FillItemSet(_pSet);
         if(bModified)
         {
-            SwTwips lLeft  = static_cast< SwTwips >(m_aLeftMF.DenormalizePercent(m_aLeftMF.GetValue( FUNIT_TWIP )));
-            SwTwips lRight = static_cast< SwTwips >(m_aRightMF.DenormalizePercent(m_aRightMF.GetValue( FUNIT_TWIP )));
+            SwTwips lLeft  = static_cast< SwTwips >(m_aLeftMF.DenormalizePercent(m_aLeftMF.GetValue( FieldUnit::FldTwip )));
+            SwTwips lRight = static_cast< SwTwips >(m_aRightMF.DenormalizePercent(m_aRightMF.GetValue( FieldUnit::FldTwip )));
 
             if( m_aLeftMF.GetText() != m_aLeftMF.GetSavedValue() ||
                 m_aRightMF.GetText() != m_aRightMF.GetSavedValue() )
@@ -652,7 +652,7 @@ DeactivateRC SwFormatTablePage::DeactivatePage( SfxItemSet* _pSet )
             if (m_pRelWidthCB->IsChecked() && m_pRelWidthCB->IsEnabled())
             {
                 lWidth = pTableData->GetSpace() - lRight - lLeft;
-                const sal_uInt16 nPercentWidth = m_aWidthMF.GetValue(FUNIT_CUSTOM);
+                const sal_uInt16 nPercentWidth = m_aWidthMF.GetValue(FieldUnit::FldCustom);
                 if(pTableData->GetWidthPercent() != nPercentWidth)
                 {
                     pTableData->SetWidthPercent(nPercentWidth);
@@ -662,7 +662,7 @@ DeactivateRC SwFormatTablePage::DeactivatePage( SfxItemSet* _pSet )
             else
             {
                 pTableData->SetWidthPercent(0);
-                lWidth = static_cast< SwTwips >(m_aWidthMF.DenormalizePercent(m_aWidthMF.GetValue( FUNIT_TWIP )));
+                lWidth = static_cast< SwTwips >(m_aWidthMF.DenormalizePercent(m_aWidthMF.GetValue( FieldUnit::FldTwip )));
             }
             pTableData->SetWidth(lWidth);
 
@@ -822,9 +822,9 @@ void  SwTableColumnPage::Reset( const SfxItemSet* )
         for( sal_uInt16 i = 0; (i < MET_FIELDS) && (i < nNoOfVisibleCols); i++ )
         {
             m_aFieldArr[i].SetPrcntValue( m_aFieldArr[i].NormalizePercent(
-                                                GetVisibleWidth(i) ), FUNIT_TWIP );
-            m_aFieldArr[i].SetMin( nMinTwips , FUNIT_TWIP );
-            m_aFieldArr[i].SetMax( nMaxTwips , FUNIT_TWIP );
+                                                GetVisibleWidth(i) ), FieldUnit::FldTwip );
+            m_aFieldArr[i].SetMin( nMinTwips , FieldUnit::FldTwip );
+            m_aFieldArr[i].SetMax( nMaxTwips , FieldUnit::FldTwip );
             m_aFieldArr[i].Enable();
             m_pTextArr[i]->Enable();
         }
@@ -970,7 +970,7 @@ void   SwTableColumnPage::ModifyHdl( MetricField* pField )
             return;
         }
 
-        SetVisibleWidth(aValueTable[i], static_cast< SwTwips >(pEdit->DenormalizePercent(pEdit->GetValue( FUNIT_TWIP ))) );
+        SetVisibleWidth(aValueTable[i], static_cast< SwTwips >(pEdit->DenormalizePercent(pEdit->GetValue( FieldUnit::FldTwip ))) );
 
         UpdateCols( aValueTable[i] );
 }
@@ -1078,12 +1078,12 @@ void SwTableColumnPage::UpdateCols( sal_uInt16 nAktPos )
     }
 
     if(!bPercentMode)
-        m_pSpaceED->SetValue(m_pSpaceED->Normalize( pTableData->GetSpace() - nTableWidth) , FUNIT_TWIP);
+        m_pSpaceED->SetValue(m_pSpaceED->Normalize( pTableData->GetSpace() - nTableWidth) , FieldUnit::FldTwip);
 
     for( sal_uInt16 i = 0; ( i < nNoOfVisibleCols ) && ( i < MET_FIELDS ); i++)
     {
         m_aFieldArr[i].SetPrcntValue(m_aFieldArr[i].NormalizePercent(
-                        GetVisibleWidth(aValueTable[i]) ), FUNIT_TWIP);
+                        GetVisibleWidth(aValueTable[i]) ), FieldUnit::FldTwip);
         m_aFieldArr[i].ClearModifyFlag();
     }
 }
@@ -1127,7 +1127,7 @@ void    SwTableColumnPage::ActivatePage( const SfxItemSet& )
     m_pProportionalCB->Enable(!bPercentMode && bModifyTable );
 
     m_pSpaceED->SetValue(m_pSpaceED->Normalize(
-                pTableData->GetSpace() - nTableWidth) , FUNIT_TWIP);
+                pTableData->GetSpace() - nTableWidth) , FieldUnit::FldTwip);
 
 }
 

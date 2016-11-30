@@ -3415,22 +3415,22 @@ void SvxRuler::Command( const CommandEvent& rCommandEvent )
             bool bReduceMetric = bool(nFlags & SvxRulerSupportFlags::REDUCED_METRIC);
             for ( sal_uInt16 i = nCount; i; --i )
             {
-                const sal_uInt16 nId = aMenu->GetItemId(i - 1);
-                aMenu->CheckItem(nId, nId == (sal_uInt16)eUnit);
+                const FieldUnit nId = (FieldUnit)aMenu->GetItemId(i - 1);
+                aMenu->CheckItem((sal_uInt16)nId, nId == eUnit);
                 if( bReduceMetric )
                 {
-                    if ( nId == FUNIT_M    ||
-                         nId == FUNIT_KM   ||
-                         nId == FUNIT_FOOT ||
-                         nId == FUNIT_MILE )
+                    if ( nId == FieldUnit::FldM    ||
+                         nId == FieldUnit::FldKM   ||
+                         nId == FieldUnit::FldFoot ||
+                         nId == FieldUnit::FldMile )
                     {
                         aMenu->RemoveItem(i - 1);
                     }
-                    else if (( nId == FUNIT_CHAR ) && !bHorz )
+                    else if (( nId == FieldUnit::FldChar ) && !bHorz )
                     {
                         aMenu->RemoveItem(i - 1);
                     }
-                    else if (( nId == FUNIT_LINE ) && bHorz )
+                    else if (( nId == FieldUnit::FldLine ) && bHorz )
                     {
                         aMenu->RemoveItem(i - 1);
                     }

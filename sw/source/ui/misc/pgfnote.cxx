@@ -68,21 +68,21 @@ IMPL_LINK_NOARG(SwFootNotePage, HeightMetric, Button*, void)
 IMPL_LINK_NOARG(SwFootNotePage, HeightModify, Control&, void)
 {
     m_pMaxHeightEdit->SetMax(m_pMaxHeightEdit->Normalize(lMaxHeight -
-            (m_pDistEdit->Denormalize(m_pDistEdit->GetValue(FUNIT_TWIP)) +
-            m_pLineDistEdit->Denormalize(m_pLineDistEdit->GetValue(FUNIT_TWIP)))),
-            FUNIT_TWIP);
+            (m_pDistEdit->Denormalize(m_pDistEdit->GetValue(FieldUnit::FldTwip)) +
+            m_pLineDistEdit->Denormalize(m_pLineDistEdit->GetValue(FieldUnit::FldTwip)))),
+            FieldUnit::FldTwip);
     if(m_pMaxHeightEdit->GetValue() < 0)
         m_pMaxHeightEdit->SetValue(0);
     m_pDistEdit->SetMax(m_pDistEdit->Normalize(lMaxHeight -
-            (m_pMaxHeightEdit->Denormalize(m_pMaxHeightEdit->GetValue(FUNIT_TWIP)) +
-            m_pLineDistEdit->Denormalize(m_pLineDistEdit->GetValue(FUNIT_TWIP)))),
-            FUNIT_TWIP);
+            (m_pMaxHeightEdit->Denormalize(m_pMaxHeightEdit->GetValue(FieldUnit::FldTwip)) +
+            m_pLineDistEdit->Denormalize(m_pLineDistEdit->GetValue(FieldUnit::FldTwip)))),
+            FieldUnit::FldTwip);
     if(m_pDistEdit->GetValue() < 0)
         m_pDistEdit->SetValue(0);
     m_pLineDistEdit->SetMax(m_pLineDistEdit->Normalize(lMaxHeight -
-            (m_pMaxHeightEdit->Denormalize(m_pMaxHeightEdit->GetValue(FUNIT_TWIP)) +
-            m_pDistEdit->Denormalize(m_pDistEdit->GetValue(FUNIT_TWIP)))),
-            FUNIT_TWIP);
+            (m_pMaxHeightEdit->Denormalize(m_pMaxHeightEdit->GetValue(FieldUnit::FldTwip)) +
+            m_pDistEdit->Denormalize(m_pDistEdit->GetValue(FieldUnit::FldTwip)))),
+            FieldUnit::FldTwip);
 }
 
 IMPL_LINK_NOARG(SwFootNotePage, LineWidthChanged_Impl, Edit&, void)
@@ -123,7 +123,7 @@ SwFootNotePage::SwFootNotePage(vcl::Window *pParent, const SfxItemSet &rSet)
     SetMetric(*m_pLineDistEdit, aMetric);
     MeasurementSystem eSys = SvtSysLocale().GetLocaleData().getMeasurementSystemEnum();
     long nHeightValue = MEASURE_METRIC != eSys ? 1440 : 1134;
-    m_pMaxHeightEdit->SetValue(m_pMaxHeightEdit->Normalize(nHeightValue),FUNIT_TWIP);
+    m_pMaxHeightEdit->SetValue(m_pMaxHeightEdit->Normalize(nHeightValue),FieldUnit::FldTwip);
 }
 
 SwFootNotePage::~SwFootNotePage()
@@ -172,7 +172,7 @@ void SwFootNotePage::Reset(const SfxItemSet *rSet)
     SwTwips lHeight = pFootnoteInfo->GetHeight();
     if(lHeight)
     {
-        m_pMaxHeightEdit->SetValue(m_pMaxHeightEdit->Normalize(lHeight),FUNIT_TWIP);
+        m_pMaxHeightEdit->SetValue(m_pMaxHeightEdit->Normalize(lHeight),FieldUnit::FldTwip);
         m_pMaxHeightBtn->Check();
     }
     else
@@ -196,7 +196,7 @@ void SwFootNotePage::Reset(const SfxItemSet *rSet)
     m_pLineWidthEdit->SetValue( nWidthPt );
 
     // Separator style
-    m_pLineTypeBox->SetSourceUnit( FUNIT_TWIP );
+    m_pLineTypeBox->SetSourceUnit( FieldUnit::FldTwip );
 
     m_pLineTypeBox->SetNone(SW_RESSTR(SW_STR_NONE));
     m_pLineTypeBox->InsertEntry(
@@ -225,9 +225,9 @@ void SwFootNotePage::Reset(const SfxItemSet *rSet)
     m_pLineLengthEdit->SetValue( static_cast<long>(aTmp) );
 
         // gap footnote area
-    m_pDistEdit->SetValue(m_pDistEdit->Normalize(pFootnoteInfo->GetTopDist()),FUNIT_TWIP);
+    m_pDistEdit->SetValue(m_pDistEdit->Normalize(pFootnoteInfo->GetTopDist()),FieldUnit::FldTwip);
     m_pLineDistEdit->SetValue(
-        m_pLineDistEdit->Normalize(pFootnoteInfo->GetBottomDist()), FUNIT_TWIP);
+        m_pLineDistEdit->Normalize(pFootnoteInfo->GetBottomDist()), FieldUnit::FldTwip);
     ActivatePage( *rSet );
 }
 
@@ -242,15 +242,15 @@ bool SwFootNotePage::FillItemSet(SfxItemSet *rSet)
         // footnote area's height
     if(m_pMaxHeightBtn->IsChecked())
         rFootnoteInfo.SetHeight( static_cast< SwTwips >(
-                m_pMaxHeightEdit->Denormalize(m_pMaxHeightEdit->GetValue(FUNIT_TWIP))));
+                m_pMaxHeightEdit->Denormalize(m_pMaxHeightEdit->GetValue(FieldUnit::FldTwip))));
     else
         rFootnoteInfo.SetHeight(0);
 
         // gap footnote area
     rFootnoteInfo.SetTopDist(  static_cast< SwTwips >(
-            m_pDistEdit->Denormalize(m_pDistEdit->GetValue(FUNIT_TWIP))));
+            m_pDistEdit->Denormalize(m_pDistEdit->GetValue(FieldUnit::FldTwip))));
     rFootnoteInfo.SetBottomDist(  static_cast< SwTwips >(
-            m_pLineDistEdit->Denormalize(m_pLineDistEdit->GetValue(FUNIT_TWIP))));
+            m_pLineDistEdit->Denormalize(m_pLineDistEdit->GetValue(FieldUnit::FldTwip))));
 
     // Separator style
     rFootnoteInfo.SetLineStyle( ::editeng::SvxBorderStyle( m_pLineTypeBox->GetSelectEntryStyle() ) );

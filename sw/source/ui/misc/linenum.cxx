@@ -128,7 +128,7 @@ SwLineNumberingDlg::SwLineNumberingDlg(SwView *pVw)
     if (nOffset == USHRT_MAX)
         nOffset = 0;
 
-    m_pOffsetMF->SetValue(m_pOffsetMF->Normalize(nOffset), FUNIT_TWIP);
+    m_pOffsetMF->SetValue(m_pOffsetMF->Normalize(nOffset), FieldUnit::FldTwip);
 
     // numbering offset
     m_pNumIntervalNF->SetValue(rInf.GetCountBy());
@@ -223,7 +223,7 @@ IMPL_LINK_NOARG(SwLineNumberingDlg, OKHdl, Button*, void)
     aInf.SetPos((LineNumberPosition)m_pPosLB->GetSelectEntryPos());
 
     // offset
-    aInf.SetPosFromLeft((sal_uInt16)m_pOffsetMF->Denormalize(m_pOffsetMF->GetValue(FUNIT_TWIP)));
+    aInf.SetPosFromLeft((sal_uInt16)m_pOffsetMF->Denormalize(m_pOffsetMF->GetValue(FieldUnit::FldTwip)));
 
     // numbering offset
     aInf.SetCountBy((sal_uInt16)m_pNumIntervalNF->GetValue());

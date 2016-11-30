@@ -194,11 +194,11 @@ void CustomAnimationPane::initialize()
     maStrProperty = mpFTProperty->GetText();
 
     //fillDurationMetricComboBox
-    mpCBXDuration->InsertValue(50, FUNIT_CUSTOM);
-    mpCBXDuration->InsertValue(100, FUNIT_CUSTOM);
-    mpCBXDuration->InsertValue(200, FUNIT_CUSTOM);
-    mpCBXDuration->InsertValue(300, FUNIT_CUSTOM);
-    mpCBXDuration->InsertValue(500, FUNIT_CUSTOM);
+    mpCBXDuration->InsertValue(50, FieldUnit::FldCustom);
+    mpCBXDuration->InsertValue(100, FieldUnit::FldCustom);
+    mpCBXDuration->InsertValue(200, FieldUnit::FldCustom);
+    mpCBXDuration->InsertValue(300, FieldUnit::FldCustom);
+    mpCBXDuration->InsertValue(500, FieldUnit::FldCustom);
     mpCBXDuration->AdaptDropDownLineCountToMaximum();
 
 

@@ -117,7 +117,7 @@ SvxMeasurePage::SvxMeasurePage( vcl::Window* pWindow, const SfxItemSet& rInAttrs
     SetFieldUnit( *m_pMtrFldHelplineDist, eFUnit );
     SetFieldUnit( *m_pMtrFldHelpline1Len, eFUnit );
     SetFieldUnit( *m_pMtrFldHelpline2Len, eFUnit );
-    if( eFUnit == FUNIT_MM )
+    if( eFUnit == FieldUnit::FldMM )
     {
         m_pMtrFldLineDist->SetSpinSize( 50 );
         m_pMtrFldHelplineOverhang->SetSpinSize( 50 );
@@ -804,7 +804,7 @@ void SvxMeasurePage::FillUnitLB()
     // fill ListBox with metrics
     SvxStringArray aMetricArr( SVX_RES( RID_SVXSTR_FIELDUNIT_TABLE ) );
 
-    sal_IntPtr nUnit = FUNIT_NONE;
+    FieldUnit nUnit = FieldUnit::NONE;
     OUString aStrMetric( m_pFtAutomatic->GetText());
     sal_Int32 nPos = m_pLbUnit->InsertEntry( aStrMetric );
     m_pLbUnit->SetEntryData( nPos, reinterpret_cast<void*>(nUnit) );
@@ -812,7 +812,7 @@ void SvxMeasurePage::FillUnitLB()
     for( sal_uInt32 i = 0; i < aMetricArr.Count(); ++i )
     {
         aStrMetric = aMetricArr.GetStringByPos( i );
-        nUnit = aMetricArr.GetValue( i );
+        nUnit = (FieldUnit)aMetricArr.GetValue( i );
         nPos = m_pLbUnit->InsertEntry( aStrMetric );
         m_pLbUnit->SetEntryData( nPos, reinterpret_cast<void*>(nUnit) );
     }

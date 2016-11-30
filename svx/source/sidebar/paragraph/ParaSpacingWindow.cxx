@@ -82,11 +82,11 @@ void ParaULSpacingWindow::SetValue(const SvxULSpaceItem* pItem)
 {
     sal_Int64 nVal = pItem->GetUpper();
     nVal = m_pAboveSpacing->Normalize(nVal);
-    m_pAboveSpacing->SetValue(nVal, FUNIT_100TH_MM);
+    m_pAboveSpacing->SetValue(nVal, FieldUnit::Fld100thMM);
 
     nVal = pItem->GetLower();
     nVal = m_pBelowSpacing->Normalize(nVal);
-    m_pBelowSpacing->SetValue(nVal, FUNIT_100TH_MM);
+    m_pBelowSpacing->SetValue(nVal, FieldUnit::Fld100thMM);
 }
 
 IMPL_LINK_NOARG(ParaULSpacingWindow, ModifySpacingHdl, Edit&, void)
@@ -165,9 +165,9 @@ void ParaLRSpacingWindow::SetValue(SfxItemState eState, const SfxPoolItem* pStat
     case CombinedEnumContext(Application_WriterVariants, Context_Text):
     case CombinedEnumContext(Application_WriterVariants, Context_Table):
         {
-            m_pBeforeSpacing->SetMin(NEGA_MAXVALUE, FUNIT_100TH_MM);
-            m_pAfterSpacing->SetMin(NEGA_MAXVALUE, FUNIT_100TH_MM);
-            m_pFLSpacing->SetMin(NEGA_MAXVALUE, FUNIT_100TH_MM);
+            m_pBeforeSpacing->SetMin(NEGA_MAXVALUE, FieldUnit::Fld100thMM);
+            m_pAfterSpacing->SetMin(NEGA_MAXVALUE, FieldUnit::Fld100thMM);
+            m_pFLSpacing->SetMin(NEGA_MAXVALUE, FieldUnit::Fld100thMM);
         }
         break;
     }
@@ -189,7 +189,7 @@ void ParaLRSpacingWindow::SetValue(SfxItemState eState, const SfxPoolItem* pStat
              && m_aContext.GetCombinedContext_DI() != CombinedEnumContext(Application_WriterVariants, Context_Default)
              && m_aContext.GetCombinedContext_DI() != CombinedEnumContext(Application_WriterVariants, Context_Table))
         {
-            m_pFLSpacing->SetMin(aTxtLeft*(-1), FUNIT_100TH_MM);
+            m_pFLSpacing->SetMin(aTxtLeft*(-1), FieldUnit::Fld100thMM);
         }
 
         aTxtRight = (long)m_pAfterSpacing->Normalize(aTxtRight);
@@ -202,9 +202,9 @@ void ParaLRSpacingWindow::SetValue(SfxItemState eState, const SfxPoolItem* pStat
         case CombinedEnumContext(Application_WriterVariants, Context_Table):
         case CombinedEnumContext(Application_WriterVariants, Context_Annotation):
             {
-                m_pBeforeSpacing->SetMax(MAX_SW - aTxtRight, FUNIT_100TH_MM);
-                m_pAfterSpacing->SetMax(MAX_SW - aTxtLeft, FUNIT_100TH_MM);
-                m_pFLSpacing->SetMax(MAX_SW - aTxtLeft - aTxtRight, FUNIT_100TH_MM);
+                m_pBeforeSpacing->SetMax(MAX_SW - aTxtRight, FieldUnit::Fld100thMM);
+                m_pAfterSpacing->SetMax(MAX_SW - aTxtLeft, FieldUnit::Fld100thMM);
+                m_pFLSpacing->SetMax(MAX_SW - aTxtLeft - aTxtRight, FieldUnit::Fld100thMM);
             }
             break;
         case CombinedEnumContext(Application_DrawImpress, Context_DrawText):
@@ -213,17 +213,17 @@ void ParaLRSpacingWindow::SetValue(SfxItemState eState, const SfxPoolItem* pStat
         case CombinedEnumContext(Application_DrawImpress, Context_TextObject):
         case CombinedEnumContext(Application_DrawImpress, Context_Graphic):
             {
-                m_pBeforeSpacing->SetMax(MAX_SC_SD - aTxtRight, FUNIT_100TH_MM);
-                m_pAfterSpacing->SetMax(MAX_SC_SD - aTxtLeft, FUNIT_100TH_MM);
-                m_pFLSpacing->SetMax(MAX_SC_SD - aTxtLeft - aTxtRight, FUNIT_100TH_MM);
+                m_pBeforeSpacing->SetMax(MAX_SC_SD - aTxtRight, FieldUnit::Fld100thMM);
+                m_pAfterSpacing->SetMax(MAX_SC_SD - aTxtLeft, FieldUnit::Fld100thMM);
+                m_pFLSpacing->SetMax(MAX_SC_SD - aTxtLeft - aTxtRight, FieldUnit::Fld100thMM);
             }
         }
 
-        m_pBeforeSpacing->SetValue(aTxtLeft, FUNIT_100TH_MM);
-        m_pAfterSpacing->SetValue(aTxtRight, FUNIT_100TH_MM);
+        m_pBeforeSpacing->SetValue(aTxtLeft, FieldUnit::Fld100thMM);
+        m_pAfterSpacing->SetValue(aTxtRight, FieldUnit::Fld100thMM);
 
         aTxtFirstLineOfst = (long)m_pFLSpacing->Normalize(aTxtFirstLineOfst);
-        m_pFLSpacing->SetValue(aTxtFirstLineOfst, FUNIT_100TH_MM);
+        m_pFLSpacing->SetValue(aTxtFirstLineOfst, FieldUnit::Fld100thMM);
     }
     else if(eState == SfxItemState::DISABLED)
     {

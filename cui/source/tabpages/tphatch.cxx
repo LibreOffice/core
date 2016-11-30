@@ -92,9 +92,9 @@ SvxHatchTabPage::SvxHatchTabPage
 
     switch ( eFUnit )
     {
-        case FUNIT_M:
-        case FUNIT_KM:
-            eFUnit = FUNIT_MM;
+        case FieldUnit::FldM:
+        case FieldUnit::FldKM:
+            eFUnit = FieldUnit::FldMM;
             break;
         default: ;//prevent warning
     }

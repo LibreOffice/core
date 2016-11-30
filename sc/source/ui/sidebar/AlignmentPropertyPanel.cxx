@@ -122,14 +122,14 @@ void AlignmentPropertyPanel::Initialize()
     mpRefEdgeTop->SetClickHdl(aLink2);
     mpRefEdgeStd->SetClickHdl(aLink2);
 
-    mpMtrAngle->InsertValue(0, FUNIT_CUSTOM);
-    mpMtrAngle->InsertValue(45, FUNIT_CUSTOM);
-    mpMtrAngle->InsertValue(90, FUNIT_CUSTOM);
-    mpMtrAngle->InsertValue(135, FUNIT_CUSTOM);
-    mpMtrAngle->InsertValue(180, FUNIT_CUSTOM);
-    mpMtrAngle->InsertValue(225, FUNIT_CUSTOM);
-    mpMtrAngle->InsertValue(270, FUNIT_CUSTOM);
-    mpMtrAngle->InsertValue(315, FUNIT_CUSTOM);
+    mpMtrAngle->InsertValue(0, FieldUnit::FldCustom);
+    mpMtrAngle->InsertValue(45, FieldUnit::FldCustom);
+    mpMtrAngle->InsertValue(90, FieldUnit::FldCustom);
+    mpMtrAngle->InsertValue(135, FieldUnit::FldCustom);
+    mpMtrAngle->InsertValue(180, FieldUnit::FldCustom);
+    mpMtrAngle->InsertValue(225, FieldUnit::FldCustom);
+    mpMtrAngle->InsertValue(270, FieldUnit::FldCustom);
+    mpMtrAngle->InsertValue(315, FieldUnit::FldCustom);
     mpMtrAngle->SetDropDownLineCount(mpMtrAngle->GetEntryCount());
 }
 

@@ -48,7 +48,7 @@ namespace
 {
     FieldUnit lcl_GetFieldUnit()
     {
-        FieldUnit eUnit = FUNIT_INCH;
+        FieldUnit eUnit = FieldUnit::FldInch;
         const SfxPoolItem* pItem = nullptr;
         SfxItemState eState = SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState( SID_ATTR_METRIC, pItem );
         if ( pItem && eState >= SfxItemState::DEFAULT )
@@ -171,7 +171,7 @@ PageMarginControl::PageMarginControl( sal_uInt16 nId )
     get( m_pContainer, "container" );
     m_pWidthHeightField = VclPtr<MetricField>::Create( m_pContainer.get(), (WinBits)0 );
     m_pWidthHeightField->Hide();
-    m_pWidthHeightField->SetUnit( FUNIT_CM );
+    m_pWidthHeightField->SetUnit( FieldUnit::FldCM );
     m_pWidthHeightField->SetMax( 9999 );
     m_pWidthHeightField->SetDecimalDigits( 2 );
     m_pWidthHeightField->SetSpinSize( 10 );
@@ -256,29 +256,29 @@ void PageMarginControl::dispose()
 
 void PageMarginControl::SetMetricFieldMaxValues( const Size& rPageSize )
 {
-    const long nML = m_pLeftMarginEdit->Denormalize( m_pLeftMarginEdit->GetValue( FUNIT_TWIP ) );
-    const long nMR = m_pRightMarginEdit->Denormalize( m_pRightMarginEdit->GetValue( FUNIT_TWIP ) );
-    const long nMT = m_pTopMarginEdit->Denormalize( m_pTopMarginEdit->GetValue( FUNIT_TWIP ) );
-    const long nMB = m_pBottomMarginEdit->Denormalize( m_pBottomMarginEdit->GetValue( FUNIT_TWIP ) );
+    const long nML = m_pLeftMarginEdit->Denormalize( m_pLeftMarginEdit->GetValue( FieldUnit::FldTwip ) );
+    const long nMR = m_pRightMarginEdit->Denormalize( m_pRightMarginEdit->GetValue( FieldUnit::FldTwip ) );
+    const long nMT = m_pTopMarginEdit->Denormalize( m_pTopMarginEdit->GetValue( FieldUnit::FldTwip ) );
+    const long nMB = m_pBottomMarginEdit->Denormalize( m_pBottomMarginEdit->GetValue( FieldUnit::FldTwip ) );
 
     const long nPH  = LogicToLogic( rPageSize.Height(), (MapUnit)m_eUnit, MapUnit::MapTwip );
     const long nPW  = LogicToLogic( rPageSize.Width(),  (MapUnit)m_eUnit, MapUnit::MapTwip );
 
     // Left
     long nMax = nPW - nMR - MINBODY;
-    m_pLeftMarginEdit->SetMax( m_pLeftMarginEdit->Normalize( nMax ), FUNIT_TWIP );
+    m_pLeftMarginEdit->SetMax( m_pLeftMarginEdit->Normalize( nMax ), FieldUnit::FldTwip );
 
     // Right
     nMax = nPW - nML - MINBODY;
-    m_pRightMarginEdit->SetMax( m_pRightMarginEdit->Normalize( nMax ), FUNIT_TWIP );
+    m_pRightMarginEdit->SetMax( m_pRightMarginEdit->Normalize( nMax ), FieldUnit::FldTwip );
 
     //Top
     nMax = nPH - nMB - MINBODY;
-    m_pTopMarginEdit->SetMax( m_pTopMarginEdit->Normalize( nMax ), FUNIT_TWIP );
+    m_pTopMarginEdit->SetMax( m_pTopMarginEdit->Normalize( nMax ), FieldUnit::FldTwip );
 
     //Bottom
     nMax = nPH - nMT -  MINBODY;
-    m_pBottomMarginEdit->SetMax( m_pTopMarginEdit->Normalize( nMax ), FUNIT_TWIP );
+    m_pBottomMarginEdit->SetMax( m_pTopMarginEdit->Normalize( nMax ), FieldUnit::FldTwip );
 }
 
 void PageMarginControl::FillHelpText( const bool bUserCustomValuesAvailable )

@@ -19,10 +19,18 @@
 #ifndef INCLUDED_TOOLS_FLDUNIT_HXX
 #define INCLUDED_TOOLS_FLDUNIT_HXX
 
-enum FieldUnit { FUNIT_NONE, FUNIT_MM, FUNIT_CM, FUNIT_M, FUNIT_KM,
-                 FUNIT_TWIP, FUNIT_POINT, FUNIT_PICA,
-                 FUNIT_INCH, FUNIT_FOOT, FUNIT_MILE, FUNIT_CHAR, FUNIT_LINE, FUNIT_CUSTOM,
-                 FUNIT_PERCENT, FUNIT_100TH_MM, FUNIT_PIXEL, FUNIT_DEGREE, FUNIT_SECOND, FUNIT_MILLISECOND };
+enum class FieldUnit {
+    NONE, FldMM, FldCM, FldM, FldKM,
+    FldTwip, FldPoint, FldPica,
+    FldInch, FldFoot, FldMile,
+    FldChar, FldLine,
+    FldCustom,
+    FldPercent,
+    Fld100thMM,
+    FldPixel,
+    FldDegree,
+    FldSecond, FldMilliSecond
+};
 
 #endif
 

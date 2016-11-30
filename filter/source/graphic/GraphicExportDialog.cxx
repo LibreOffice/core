@@ -37,7 +37,7 @@ using namespace css::beans;
 using namespace css::lang;
 
 GraphicExportDialog::GraphicExportDialog( const Reference< XComponentContext >& )
-    : meFieldUnit(FUNIT_NONE)
+    : meFieldUnit(FieldUnit::NONE)
     , mbExportSelection( false )
 {
 }
@@ -152,7 +152,7 @@ void GraphicExportDialog::setSourceDocument( const Reference<XComponent>& xDocum
             {
                 aPropertyName = "NonMetric";
             }
-            meFieldUnit = (FieldUnit) aConfigItem.ReadInt32( aPropertyName, FUNIT_CM );
+            meFieldUnit = (FieldUnit) aConfigItem.ReadInt32( aPropertyName, (sal_Int32)FieldUnit::FldCM );
         }
     }
 }

@@ -416,11 +416,11 @@ void ScModule::Execute( SfxRequest& rReq )
                     FieldUnit eUnit = (FieldUnit)static_cast<const SfxUInt16Item*>(pItem)->GetValue();
                     switch( eUnit )
                     {
-                        case FUNIT_MM:      // Just the units that are also in the dialog
-                        case FUNIT_CM:
-                        case FUNIT_INCH:
-                        case FUNIT_PICA:
-                        case FUNIT_POINT:
+                        case FieldUnit::FldMM:      // Just the units that are also in the dialog
+                        case FieldUnit::FldCM:
+                        case FieldUnit::FldInch:
+                        case FieldUnit::FldPica:
+                        case FieldUnit::FldPoint:
                             {
                                 PutItem( *pItem );
                                 ScAppOptions aNewOpts( GetAppOptions() );

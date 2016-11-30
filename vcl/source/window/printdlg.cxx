@@ -444,11 +444,11 @@ void PrintDialog::NUpTabPage::initFromMultiPageSetup( const vcl::PrinterControll
 
     // setup field units for metric fields
     const LocaleDataWrapper& rLocWrap( mpPageMarginEdt->GetLocaleDataWrapper() );
-    FieldUnit eUnit = FUNIT_MM;
+    FieldUnit eUnit = FieldUnit::FldMM;
     sal_uInt16 nDigits = 0;
     if( rLocWrap.getMeasurementSystemEnum() == MEASURE_US )
     {
-        eUnit = FUNIT_INCH;
+        eUnit = FieldUnit::FldInch;
         nDigits = 2;
     }
     // set units
@@ -459,8 +459,8 @@ void PrintDialog::NUpTabPage::initFromMultiPageSetup( const vcl::PrinterControll
     mpPageMarginEdt->SetDecimalDigits( nDigits );
     mpSheetMarginEdt->SetDecimalDigits( nDigits );
 
-    mpSheetMarginEdt->SetValue( mpSheetMarginEdt->Normalize( i_rMPS.nLeftMargin ), FUNIT_100TH_MM );
-    mpPageMarginEdt->SetValue( mpPageMarginEdt->Normalize( i_rMPS.nHorizontalSpacing ), FUNIT_100TH_MM );
+    mpSheetMarginEdt->SetValue( mpSheetMarginEdt->Normalize( i_rMPS.nLeftMargin ), FieldUnit::Fld100thMM );
+    mpPageMarginEdt->SetValue( mpPageMarginEdt->Normalize( i_rMPS.nHorizontalSpacing ), FieldUnit::Fld100thMM );
     mpBorderCB->Check( i_rMPS.bDrawBorder );
     mpNupRowsEdt->SetValue( i_rMPS.nRows );
     mpNupColEdt->SetValue( i_rMPS.nColumns );
@@ -1371,8 +1371,8 @@ void PrintDialog::updateNupFromPages()
     sal_IntPtr nPages = sal_IntPtr(maNUpPage.mpNupPagesBox->GetSelectEntryData());
     int nRows   = int(maNUpPage.mpNupRowsEdt->GetValue());
     int nCols   = int(maNUpPage.mpNupColEdt->GetValue());
-    long nPageMargin  = long(maNUpPage.mpPageMarginEdt->Denormalize(maNUpPage.mpPageMarginEdt->GetValue( FUNIT_100TH_MM )));
-    long nSheetMargin = long(maNUpPage.mpSheetMarginEdt->Denormalize(maNUpPage.mpSheetMarginEdt->GetValue( FUNIT_100TH_MM )));
+    long nPageMargin  = long(maNUpPage.mpPageMarginEdt->Denormalize(maNUpPage.mpPageMarginEdt->GetValue( FieldUnit::Fld100thMM )));
+    long nSheetMargin = long(maNUpPage.mpSheetMarginEdt->Denormalize(maNUpPage.mpSheetMarginEdt->GetValue( FieldUnit::Fld100thMM )));
     bool bCustom = false;
 
     if( nPages == 1 )
@@ -1438,7 +1438,7 @@ void PrintDialog::updateNupFromPages()
 
         maNUpPage.mpSheetMarginEdt->SetMax(
                   maNUpPage.mpSheetMarginEdt->Normalize(
-                           nHorzMax > nVertMax ? nVertMax : nHorzMax ), FUNIT_100TH_MM );
+                           nHorzMax > nVertMax ? nVertMax : nHorzMax ), FieldUnit::Fld100thMM );
 
         // maximum page distance
         nHorzMax = (aSize.Width() - 2*nSheetMargin);
@@ -1455,13 +1455,13 @@ void PrintDialog::updateNupFromPages()
 
         maNUpPage.mpPageMarginEdt->SetMax(
                  maNUpPage.mpSheetMarginEdt->Normalize(
-                           nHorzMax > nVertMax ? nVertMax : nHorzMax ), FUNIT_100TH_MM );
+                           nHorzMax > nVertMax ? nVertMax : nHorzMax ), FieldUnit::Fld100thMM );
     }
 
     maNUpPage.mpNupRowsEdt->SetValue( nRows );
     maNUpPage.mpNupColEdt->SetValue( nCols );
-    maNUpPage.mpPageMarginEdt->SetValue( maNUpPage.mpPageMarginEdt->Normalize( nPageMargin ), FUNIT_100TH_MM );
-    maNUpPage.mpSheetMarginEdt->SetValue( maNUpPage.mpSheetMarginEdt->Normalize( nSheetMargin ), FUNIT_100TH_MM );
+    maNUpPage.mpPageMarginEdt->SetValue( maNUpPage.mpPageMarginEdt->Normalize( nPageMargin ), FieldUnit::Fld100thMM );
+    maNUpPage.mpSheetMarginEdt->SetValue( maNUpPage.mpSheetMarginEdt->Normalize( nSheetMargin ), FieldUnit::Fld100thMM );
 
     maNUpPage.showAdvancedControls( bCustom );
 
@@ -1472,8 +1472,8 @@ void PrintDialog::updateNup()
 {
     int nRows         = int(maNUpPage.mpNupRowsEdt->GetValue());
     int nCols         = int(maNUpPage.mpNupColEdt->GetValue());
-    long nPageMargin  = long(maNUpPage.mpPageMarginEdt->Denormalize(maNUpPage.mpPageMarginEdt->GetValue( FUNIT_100TH_MM )));
-    long nSheetMargin = long(maNUpPage.mpSheetMarginEdt->Denormalize(maNUpPage.mpSheetMarginEdt->GetValue( FUNIT_100TH_MM )));
+    long nPageMargin  = long(maNUpPage.mpPageMarginEdt->Denormalize(maNUpPage.mpPageMarginEdt->GetValue( FieldUnit::Fld100thMM )));
+    long nSheetMargin = long(maNUpPage.mpSheetMarginEdt->Denormalize(maNUpPage.mpSheetMarginEdt->GetValue( FieldUnit::Fld100thMM )));
 
     PrinterController::MultiPageSetup aMPS;
     aMPS.nRows         = nRows;

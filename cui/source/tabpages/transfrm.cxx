@@ -178,7 +178,7 @@ SvxAngleTabPage::SvxAngleTabPage(vcl::Window* pParent, const SfxItemSet& rInAttr
     : SvxTabPage( pParent,"Rotation","cui/ui/rotationtabpage.ui", rInAttrs)
     , rOutAttrs(rInAttrs)
     , pView(nullptr)
-    , eDlgUnit(FUNIT_NONE)
+    , eDlgUnit(FieldUnit::NONE)
 {
     get(m_pFlPosition, "FL_POSITION");
     get(m_pMtrPosX, "MTR_FLD_POS_X");
@@ -221,7 +221,7 @@ void SvxAngleTabPage::Construct()
     SetFieldUnit(*m_pMtrPosX, eDlgUnit, true);
     SetFieldUnit(*m_pMtrPosY, eDlgUnit, true);
 
-    if(FUNIT_MILE == eDlgUnit || FUNIT_KM == eDlgUnit)
+    if(FieldUnit::FldMile == eDlgUnit || FieldUnit::FldKM == eDlgUnit)
     {
         m_pMtrPosX->SetDecimalDigits( 3 );
         m_pMtrPosY->SetDecimalDigits( 3 );
@@ -352,56 +352,56 @@ void SvxAngleTabPage::PointChanged(vcl::Window* pWindow, RectPoint eRP)
         {
             case RectPoint::LT:
             {
-                m_pMtrPosX->SetUserValue( basegfx::fround64(maRange.getMinX()), FUNIT_NONE );
-                m_pMtrPosY->SetUserValue( basegfx::fround64(maRange.getMinY()), FUNIT_NONE );
+                m_pMtrPosX->SetUserValue( basegfx::fround64(maRange.getMinX()), FieldUnit::NONE );
+                m_pMtrPosY->SetUserValue( basegfx::fround64(maRange.getMinY()), FieldUnit::NONE );
                 break;
             }
             case RectPoint::MT:
             {
-                m_pMtrPosX->SetUserValue( basegfx::fround64(maRange.getCenter().getX()), FUNIT_NONE );
-                m_pMtrPosY->SetUserValue( basegfx::fround64(maRange.getMinY()), FUNIT_NONE );
+                m_pMtrPosX->SetUserValue( basegfx::fround64(maRange.getCenter().getX()), FieldUnit::NONE );
+                m_pMtrPosY->SetUserValue( basegfx::fround64(maRange.getMinY()), FieldUnit::NONE );
                 break;
             }
             case RectPoint::RT:
             {
-                m_pMtrPosX->SetUserValue( basegfx::fround64(maRange.getMaxX()), FUNIT_NONE );
-                m_pMtrPosY->SetUserValue( basegfx::fround64(maRange.getMinY()), FUNIT_NONE );
+                m_pMtrPosX->SetUserValue( basegfx::fround64(maRange.getMaxX()), FieldUnit::NONE );
+                m_pMtrPosY->SetUserValue( basegfx::fround64(maRange.getMinY()), FieldUnit::NONE );
                 break;
             }
             case RectPoint::LM:
             {
-                m_pMtrPosX->SetUserValue( basegfx::fround64(maRange.getMinX()), FUNIT_NONE );
-                m_pMtrPosY->SetUserValue( basegfx::fround64(maRange.getCenter().getY()), FUNIT_NONE );
+                m_pMtrPosX->SetUserValue( basegfx::fround64(maRange.getMinX()), FieldUnit::NONE );
+                m_pMtrPosY->SetUserValue( basegfx::fround64(maRange.getCenter().getY()), FieldUnit::NONE );
                 break;
             }
             case RectPoint::MM:
             {
-                m_pMtrPosX->SetUserValue( basegfx::fround64(maRange.getCenter().getX()), FUNIT_NONE );
-                m_pMtrPosY->SetUserValue( basegfx::fround64(maRange.getCenter().getY()), FUNIT_NONE );
+                m_pMtrPosX->SetUserValue( basegfx::fround64(maRange.getCenter().getX()), FieldUnit::NONE );
+                m_pMtrPosY->SetUserValue( basegfx::fround64(maRange.getCenter().getY()), FieldUnit::NONE );
                 break;
             }
             case RectPoint::RM:
             {
-                m_pMtrPosX->SetUserValue( basegfx::fround64(maRange.getMaxX()), FUNIT_NONE );
-                m_pMtrPosY->SetUserValue( basegfx::fround64(maRange.getCenter().getY()), FUNIT_NONE );
+                m_pMtrPosX->SetUserValue( basegfx::fround64(maRange.getMaxX()), FieldUnit::NONE );
+                m_pMtrPosY->SetUserValue( basegfx::fround64(maRange.getCenter().getY()), FieldUnit::NONE );
                 break;
             }
             case RectPoint::LB:
             {
-                m_pMtrPosX->SetUserValue( basegfx::fround64(maRange.getMinX()), FUNIT_NONE );
-                m_pMtrPosY->SetUserValue( basegfx::fround64(maRange.getMaxY()), FUNIT_NONE );
+                m_pMtrPosX->SetUserValue( basegfx::fround64(maRange.getMinX()), FieldUnit::NONE );
+                m_pMtrPosY->SetUserValue( basegfx::fround64(maRange.getMaxY()), FieldUnit::NONE );
                 break;
             }
             case RectPoint::MB:
             {
-                m_pMtrPosX->SetUserValue( basegfx::fround64(maRange.getCenter().getX()), FUNIT_NONE );
-                m_pMtrPosY->SetUserValue( basegfx::fround64(maRange.getMaxY()), FUNIT_NONE );
+                m_pMtrPosX->SetUserValue( basegfx::fround64(maRange.getCenter().getX()), FieldUnit::NONE );
+                m_pMtrPosY->SetUserValue( basegfx::fround64(maRange.getMaxY()), FieldUnit::NONE );
                 break;
             }
             case RectPoint::RB:
             {
-                m_pMtrPosX->SetUserValue( basegfx::fround64(maRange.getMaxX()), FUNIT_NONE );
-                m_pMtrPosY->SetUserValue( basegfx::fround64(maRange.getMaxY()), FUNIT_NONE );
+                m_pMtrPosX->SetUserValue( basegfx::fround64(maRange.getMaxX()), FieldUnit::NONE );
+                m_pMtrPosY->SetUserValue( basegfx::fround64(maRange.getMaxY()), FieldUnit::NONE );
                 break;
             }
         }
@@ -418,7 +418,7 @@ SvxSlantTabPage::SvxSlantTabPage(vcl::Window* pParent, const SfxItemSet& rInAttr
         rInAttrs)
     , rOutAttrs(rInAttrs)
     , pView(nullptr)
-    , eDlgUnit(FUNIT_NONE)
+    , eDlgUnit(FieldUnit::NONE)
 {
     get(m_pFlRadius, "FL_RADIUS");
     get(m_pMtrRadius, "MTR_FLD_RADIUS");
@@ -663,15 +663,15 @@ void SvxSlantTabPage::Reset(const SfxItemSet* rAttrs)
                     m_aControlGroupX[i]->Disable();
                 else
                 {
-                    m_aControlX[i]->SetMin(aMinPosition.X(), FUNIT_MM);
-                    m_aControlX[i]->SetMax(aMaxPosition.X(), FUNIT_MM);
+                    m_aControlX[i]->SetMin(aMinPosition.X(), FieldUnit::FldMM);
+                    m_aControlX[i]->SetMax(aMaxPosition.X(), FieldUnit::FldMM);
                 }
                 if (aMaxPosition.Y() == aMinPosition.Y())
                     m_aControlGroupY[i]->Disable();
                 else
                 {
-                    m_aControlY[i]->SetMin(aMinPosition.Y(), FUNIT_MM);
-                    m_aControlY[i]->SetMax(aMaxPosition.Y(), FUNIT_MM);
+                    m_aControlY[i]->SetMin(aMinPosition.Y(), FieldUnit::FldMM);
+                    m_aControlY[i]->SetMax(aMaxPosition.Y(), FieldUnit::FldMM);
                 }
             }
 
@@ -727,7 +727,7 @@ SvxPositionSizeTabPage::SvxPositionSizeTabPage(vcl::Window* pParent, const SfxIt
     : SvxTabPage(pParent,"PositionAndSize","cui/ui/possizetabpage.ui", rInAttrs)
     , mrOutAttrs(rInAttrs)
     , mpView(nullptr)
-    , meDlgUnit(FUNIT_NONE)
+    , meDlgUnit(FieldUnit::NONE)
     , mnProtectSizeState(TRISTATE_FALSE)
     , mbPageDisabled(false)
     , mbProtectDisabled(false)
@@ -820,7 +820,7 @@ void SvxPositionSizeTabPage::Construct()
     SetFieldUnit( *m_pMtrWidth, meDlgUnit, true );
     SetFieldUnit( *m_pMtrHeight, meDlgUnit, true );
 
-    if(FUNIT_MILE == meDlgUnit || FUNIT_KM == meDlgUnit)
+    if(FieldUnit::FldMile == meDlgUnit || FieldUnit::FldKM == meDlgUnit)
     {
         m_pMtrPosX->SetDecimalDigits( 3 );
         m_pMtrPosY->SetDecimalDigits( 3 );
@@ -967,14 +967,14 @@ bool SvxPositionSizeTabPage::FillItemSet( SfxItemSet* rOutAttrs )
 
         // get Width
         double nWidth = static_cast<double>(m_pMtrWidth->GetValue( meDlgUnit ));
-        nWidth = MetricField::ConvertDoubleValue( nWidth, m_pMtrWidth->GetBaseValue(), m_pMtrWidth->GetDecimalDigits(), meDlgUnit, FUNIT_100TH_MM );
+        nWidth = MetricField::ConvertDoubleValue( nWidth, m_pMtrWidth->GetBaseValue(), m_pMtrWidth->GetDecimalDigits(), meDlgUnit, FieldUnit::Fld100thMM );
         long lWidth = long(nWidth * (double)aUIScale);
         lWidth = OutputDevice::LogicToLogic( lWidth, MapUnit::Map100thMM, mePoolUnit );
         lWidth = static_cast<long>(m_pMtrWidth->Denormalize( lWidth ));
 
         // get Height
         double nHeight = static_cast<double>(m_pMtrHeight->GetValue( meDlgUnit ));
-        nHeight = MetricField::ConvertDoubleValue( nHeight, m_pMtrHeight->GetBaseValue(), m_pMtrHeight->GetDecimalDigits(), meDlgUnit, FUNIT_100TH_MM );
+        nHeight = MetricField::ConvertDoubleValue( nHeight, m_pMtrHeight->GetBaseValue(), m_pMtrHeight->GetDecimalDigits(), meDlgUnit, FieldUnit::Fld100thMM );
         long lHeight = long(nHeight * (double)aUIScale);
         lHeight = OutputDevice::LogicToLogic( lHeight, MapUnit::Map100thMM, mePoolUnit );
         lHeight = static_cast<long>(m_pMtrHeight->Denormalize( lHeight ));
@@ -1078,7 +1078,7 @@ void SvxPositionSizeTabPage::Reset( const SfxItemSet*  )
         if(m_pMtrWidth->GetDecimalDigits())
             fTmpWidth *= pow(10.0, m_pMtrWidth->GetDecimalDigits());
 
-        fTmpWidth = MetricField::ConvertDoubleValue(fTmpWidth, m_pMtrWidth->GetBaseValue(), m_pMtrWidth->GetDecimalDigits(), FUNIT_100TH_MM, meDlgUnit);
+        fTmpWidth = MetricField::ConvertDoubleValue(fTmpWidth, m_pMtrWidth->GetBaseValue(), m_pMtrWidth->GetDecimalDigits(), FieldUnit::Fld100thMM, meDlgUnit);
         m_pMtrWidth->SetValue(static_cast<sal_Int64>(fTmpWidth), meDlgUnit);
     }
 
@@ -1090,7 +1090,7 @@ void SvxPositionSizeTabPage::Reset( const SfxItemSet*  )
         if(m_pMtrHeight->GetDecimalDigits())
             fTmpHeight *= pow(10.0, m_pMtrHeight->GetDecimalDigits());
 
-        fTmpHeight = MetricField::ConvertDoubleValue(fTmpHeight, m_pMtrHeight->GetBaseValue(), m_pMtrHeight->GetDecimalDigits(), FUNIT_100TH_MM, meDlgUnit);
+        fTmpHeight = MetricField::ConvertDoubleValue(fTmpHeight, m_pMtrHeight->GetBaseValue(), m_pMtrHeight->GetDecimalDigits(), FieldUnit::Fld100thMM, meDlgUnit);
         m_pMtrHeight->SetValue(static_cast<sal_Int64>(fTmpHeight), meDlgUnit);
     }
 
@@ -1553,17 +1553,17 @@ IMPL_LINK_NOARG(SvxPositionSizeTabPage, ChangeWidthHdl, Edit&, void)
     {
         sal_Int64 nHeight(basegfx::fround64((mfOldHeight * (double)m_pMtrWidth->GetValue()) / mfOldWidth));
 
-        if(nHeight <= m_pMtrHeight->GetMax(FUNIT_NONE))
+        if(nHeight <= m_pMtrHeight->GetMax(FieldUnit::NONE))
         {
-            m_pMtrHeight->SetUserValue(nHeight, FUNIT_NONE);
+            m_pMtrHeight->SetUserValue(nHeight, FieldUnit::NONE);
         }
         else
         {
-            nHeight = m_pMtrHeight->GetMax(FUNIT_NONE);
+            nHeight = m_pMtrHeight->GetMax(FieldUnit::NONE);
             m_pMtrHeight->SetUserValue(nHeight);
 
             const sal_Int64 nWidth(basegfx::fround64((mfOldWidth * (double)nHeight) / mfOldHeight));
-            m_pMtrWidth->SetUserValue(nWidth, FUNIT_NONE);
+            m_pMtrWidth->SetUserValue(nWidth, FieldUnit::NONE);
         }
     }
 }
@@ -1575,17 +1575,17 @@ IMPL_LINK_NOARG(SvxPositionSizeTabPage, ChangeHeightHdl, Edit&, void)
     {
         sal_Int64 nWidth(basegfx::fround64((mfOldWidth * (double)m_pMtrHeight->GetValue()) / mfOldHeight));
 
-        if(nWidth <= m_pMtrWidth->GetMax(FUNIT_NONE))
+        if(nWidth <= m_pMtrWidth->GetMax(FieldUnit::NONE))
         {
-            m_pMtrWidth->SetUserValue(nWidth, FUNIT_NONE);
+            m_pMtrWidth->SetUserValue(nWidth, FieldUnit::NONE);
         }
         else
         {
-            nWidth = m_pMtrWidth->GetMax(FUNIT_NONE);
+            nWidth = m_pMtrWidth->GetMax(FieldUnit::NONE);
             m_pMtrWidth->SetUserValue(nWidth);
 
             const sal_Int64 nHeight(basegfx::fround64((mfOldHeight * (double)nWidth) / mfOldWidth));
-            m_pMtrHeight->SetUserValue(nHeight, FUNIT_NONE);
+            m_pMtrHeight->SetUserValue(nHeight, FieldUnit::NONE);
         }
     }
 }
