@@ -9,7 +9,16 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <com/sun/star/container/XChild.hpp>
+#include <com/sun/star/sdbc/XResultSet.hpp>
+#include <com/sun/star/sdbc/XRow.hpp>
+#include <com/sun/star/ucb/XContent.hpp>
+#include <com/sun/star/ucb/XContentAccess.hpp>
+#include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <ucbhelper/content.hxx>
+
+#include <librevenge-stream/librevenge-stream.h>
 
 #include <libwps/libwps.h>
 
@@ -18,12 +27,170 @@
 #include "MSWorksCalcImportFilter.hxx"
 #include "strings.hrc"
 
-using com::sun::star::uno::Sequence;
-using com::sun::star::uno::XInterface;
-using com::sun::star::uno::Exception;
-using com::sun::star::uno::RuntimeException;
-using com::sun::star::uno::XComponentContext;
+#include <iostream>
 
+using namespace ::com::sun::star;
+
+using uno::Sequence;
+using uno::XInterface;
+using uno::Exception;
+using uno::RuntimeException;
+using uno::XComponentContext;
+
+namespace MSWorksCalcImportFilterInternal
+{
+
+/// returns the list of stream name present in a folder
+uno::Reference<sdbc::XResultSet> getResultSet(const css::uno::Reference<css::ucb::XContent> &xPackageContent)
+try
+{
+    if (xPackageContent.is())
+    {
+        ucbhelper::Content packageContent(xPackageContent, uno::Reference<ucb::XCommandEnvironment>(), comphelper::getProcessComponentContext());
+        uno::Sequence<OUString> lPropNames { "Title" };
+        uno::Reference<sdbc::XResultSet> xResultSet(packageContent.createCursor(lPropNames, ucbhelper::INCLUDE_DOCUMENTS_ONLY));
+        return xResultSet;
+    }
+    return uno::Reference<sdbc::XResultSet>();
+}
+catch (...)
+{
+    SAL_WARN("writerperfect", "ignoring Exception in MSWorksCalcImportFilterInternal:getResultSet");
+    return uno::Reference<sdbc::XResultSet>();
+}
+
+/** internal class used to create a structrured RVNGInputStream from a list of path and their short names
+ */
+class FolderStream: public librevenge::RVNGInputStream
+{
+public:
+    //! constructor
+    explicit FolderStream(const css::uno::Reference<css::ucb::XContent> &xContent) :
+        librevenge::RVNGInputStream(), m_xContent(xContent), m_nameToPathMap()
+    {
+    }
+
+    //! destructor
+    ~FolderStream() override
+    {
+    }
+
+    //! add a file
+    void addFile(rtl::OUString const &path, std::string const &shortName)
+    {
+        m_nameToPathMap[shortName]=path;
+    }
+    /**! reads numbytes data.
+
+     * \return a pointer to the read elements
+     */
+    const unsigned char *read(unsigned long, unsigned long &) override
+    {
+        return nullptr;
+    }
+    //! returns actual offset position
+    long tell() override
+    {
+        return 0;
+    }
+    /*! \brief seeks to a offset position, from actual, beginning or ending position
+     * \return 0 if ok
+     */
+    int seek(long , librevenge::RVNG_SEEK_TYPE) override
+    {
+        return 1;
+    }
+    //! returns true if we are at the end of the section/file
+    bool isEnd() override
+    {
+        return true;
+    }
+
+    /** returns true if the stream is ole
+
+     \sa returns always false*/
+    bool isStructured() override
+    {
+        return true;
+    }
+    /** returns the number of sub streams.
+
+     \sa returns always 2*/
+    unsigned subStreamCount() override
+    {
+        return unsigned(m_nameToPathMap.size());
+    }
+    /** returns the ith sub streams name */
+    const char *subStreamName(unsigned id) override
+    {
+        std::map<std::string, rtl::OUString>::const_iterator it=m_nameToPathMap.begin();
+        for (unsigned i=0; i<id; ++i)
+        {
+            if (it==m_nameToPathMap.end()) return nullptr;
+            ++it;
+        }
+        if (it==m_nameToPathMap.end()) return nullptr;
+        return it->first.c_str();
+    }
+    /** returns true if a substream with name exists */
+    bool existsSubStream(const char *name) override
+    {
+        return name && m_nameToPathMap.find(name)!= m_nameToPathMap.end();
+    }
+    /** return a new stream for a ole zone */
+    librevenge::RVNGInputStream *getSubStreamByName(const char *name) override;
+    /** return a new stream for a ole zone */
+    librevenge::RVNGInputStream *getSubStreamById(unsigned id) override
+    {
+        char const *name=subStreamName(id);
+        return name ? getSubStreamByName(name) : nullptr;
+    }
+private:
+    /// the main container
+    uno::Reference<ucb::XContent> m_xContent;
+    /// the map short name to path
+    std::map<std::string, rtl::OUString> m_nameToPathMap;
+    FolderStream(const FolderStream &) = delete;
+    FolderStream &operator=(const FolderStream &) = delete;
+};
+
+librevenge::RVNGInputStream *FolderStream::getSubStreamByName(const char *name)
+{
+    if (m_nameToPathMap.find(name)== m_nameToPathMap.end() || !m_xContent.is()) return nullptr;
+
+    try
+    {
+        const uno::Reference<sdbc::XResultSet> xResultSet=getResultSet(m_xContent);
+        if (xResultSet.is() && xResultSet->first())
+        {
+            const uno::Reference<ucb::XContentAccess> xContentAccess(xResultSet, uno::UNO_QUERY_THROW);
+            const uno::Reference<sdbc::XRow> xRow(xResultSet, uno::UNO_QUERY_THROW);
+            OUString lPath=m_nameToPathMap.find(name)->second;
+            do
+            {
+                const rtl::OUString aTitle(xRow->getString(1));
+                if (aTitle != lPath) continue;
+
+                const uno::Reference<ucb::XContent> xSubContent(xContentAccess->queryContent());
+                ucbhelper::Content aSubContent(xSubContent, uno::Reference<ucb::XCommandEnvironment>(), comphelper::getProcessComponentContext());
+                uno::Reference<io::XInputStream> xInputStream = aSubContent.openStream();
+                if (xInputStream.is())
+                    return new writerperfect::WPXSvInputStream(xInputStream);
+                break;
+            }
+            while (xResultSet->next());
+        }
+    }
+    catch (...)
+    {
+        SAL_WARN("writerperfect", "ignoring Exception in MSWorksCalcImportFilterInternal::FolderStream::getSubStreamByName");
+    }
+
+    return nullptr;
+}
+}
+
+////////////////////////////////////////////////////////////
 bool MSWorksCalcImportFilter::doImportDocument(librevenge::RVNGInputStream &rInput, OdsGenerator &rGenerator, utl::MediaDescriptor &)
 {
     libwps::WPSKind kind = libwps::WPS_TEXT;
@@ -67,12 +234,142 @@ bool MSWorksCalcImportFilter::doImportDocument(librevenge::RVNGInputStream &rInp
             else if (pDlg->hasUserCalledCancel())
                 return false;
         }
-        catch (css::uno::Exception &e)
+        catch (...)
         {
-            SAL_WARN("writerperfect", "ignoring Exception " << e.Message);
+            SAL_WARN("writerperfect", "ignoring Exception in MSWorksCalcImportFilter::doImportDocument");
         }
     }
     return libwps::WPS_OK == libwps::WPSDocument::parse(&rInput, &rGenerator, "", fileEncoding.c_str());
+}
+
+//XExtendedFilterDetection
+sal_Bool MSWorksCalcImportFilter::filter(const css::uno::Sequence< css::beans::PropertyValue > &rDescriptor)
+throw (css::uno::RuntimeException, std::exception)
+{
+    OUString sUrl;
+    css::uno::Reference < css::io::XInputStream > xInputStream;
+    css::uno::Reference < ucb::XContent > xContent;
+
+    sal_Int32 nLength = rDescriptor.getLength();
+    const css::beans::PropertyValue *pValue = rDescriptor.getConstArray();
+    for (sal_Int32 i = 0 ; i < nLength; i++)
+    {
+        if (pValue[i].Name == "InputStream")
+            pValue[i].Value >>= xInputStream;
+        else if (pValue[i].Name == "UCBContent")
+            pValue[i].Value >>= xContent;
+        else if (pValue[i].Name == "FileName" || pValue[i].Name == "URL")
+            pValue[i].Value >>= sUrl;
+    }
+
+    if (!getXContext().is() || !xInputStream.is())
+    {
+        OSL_ASSERT(false);
+        return false;
+    }
+
+    // An XML import service: what we push sax messages to..
+    css::uno::Reference < css::xml::sax::XDocumentHandler > xInternalHandler
+    (getXContext()->getServiceManager()->createInstanceWithContext
+     (writerperfect::DocumentHandlerFor<OdsGenerator>::name(), getXContext()),
+     css::uno::UNO_QUERY_THROW);
+
+    // The XImporter sets up an empty target document for XDocumentHandler to write to..
+    css::uno::Reference < css::document::XImporter > xImporter(xInternalHandler, css::uno::UNO_QUERY);
+    xImporter->setTargetDocument(getTargetDocument());
+
+    // OO Graphics Handler: abstract class to handle document SAX messages, concrete implementation here
+    // writes to in-memory target doc
+    writerperfect::DocumentHandler aHandler(xInternalHandler);
+
+    writerperfect::WPXSvInputStream input(xInputStream);
+    OdsGenerator exporter;
+    exporter.addDocumentHandler(&aHandler, ODF_FLAT_XML);
+    this->doRegisterHandlers(exporter);
+
+    utl::MediaDescriptor aDescriptor(rDescriptor);
+    try
+    {
+        // time to check if the file is a WK3 file and a FM3 file is
+        // present
+        bool checkForFM3=false;
+        if (input.seek(0, librevenge::RVNG_SEEK_SET)==0 && xContent.is() && sUrl.getLength()>4)
+        {
+            // check if the file header corresponds to a .wk3 file
+            unsigned long numBytesRead;
+            const unsigned char *data=input.read(6, numBytesRead);
+            if (data && numBytesRead==6 && data[0]==0 && data[1]==0 && data[2]==0x1a &&
+                    data[3]==0 && data[4]<2 && data[5]==0x10)
+                checkForFM3=true;
+        }
+        OUString wk3Url;
+        if (checkForFM3)
+        {
+            // try to retrieve the base name
+            sal_Int32 idSlash=sUrl.lastIndexOf('/');
+            if (idSlash!=-1)
+            {
+                wk3Url=sUrl.copy(idSlash+1);
+                checkForFM3=wk3Url.getLength()>4;
+            }
+            else
+                checkForFM3=false;
+        }
+        OUString fm3Url;
+        if (checkForFM3)
+        {
+            // check if the file extension corresponds to a .wk3 file and update the format expected name
+            if (wk3Url.endsWithAsciiL(".WK3", 4))
+                fm3Url=wk3Url.copy(0,wk3Url.getLength()-4)+OUString(".FM3");
+            else if (wk3Url.endsWithAsciiL(".wk3", 4))
+                fm3Url=wk3Url.copy(0,wk3Url.getLength()-4)+OUString(".fm3");
+            else
+                checkForFM3=false;
+        }
+        if (checkForFM3)
+        {
+            // check if the format file exists
+            const css::uno::Reference < container::XChild > xChild(xContent, uno::UNO_QUERY);
+            if (xChild.is())
+            {
+                bool findFM3=false, findWK3=false;
+                const css::uno::Reference < ucb::XContent > xPackageContent(xChild->getParent(), uno::UNO_QUERY);
+                uno::Reference<sdbc::XResultSet> xResultSet=MSWorksCalcImportFilterInternal::getResultSet(xPackageContent);
+                if (xResultSet.is() && xResultSet->first())
+                {
+                    const uno::Reference<ucb::XContentAccess> xContentAccess(xResultSet, uno::UNO_QUERY_THROW);
+                    const uno::Reference<sdbc::XRow> xRow(xResultSet, uno::UNO_QUERY_THROW);
+                    do
+                    {
+                        const rtl::OUString aTitle(xRow->getString(1));
+                        if (aTitle == wk3Url)
+                            findWK3=true;
+                        else if (aTitle == fm3Url)
+                            findFM3=true;
+                    }
+                    while (xResultSet->next() && (!findWK3 || !findFM3));
+                }
+                if (findWK3 && findFM3)
+                {
+                    MSWorksCalcImportFilterInternal::FolderStream structuredInput(xPackageContent);
+                    structuredInput.addFile(wk3Url,"WK3");
+                    structuredInput.addFile(fm3Url,"FM3");
+
+                    // If the file is valid and libwps is at least 0.4.4, doImportDocument will convert it.
+                    // If libwps is at most 0.4.3, doImportDocument will fail when checking if the file is supported
+                    //    and it is ok to call again doImportDocument with the main input.
+                    // If the file is corrupted beyond all retrieval, doImportDocument will fail two times :-~
+                    if (this->doImportDocument(structuredInput, exporter, aDescriptor))
+                        return true;
+                }
+            }
+        }
+    }
+    catch (...)
+    {
+    }
+
+    return this->doImportDocument(input, exporter, aDescriptor);
 }
 
 bool MSWorksCalcImportFilter::doDetectFormat(librevenge::RVNGInputStream &rInput, OUString &rTypeName)
