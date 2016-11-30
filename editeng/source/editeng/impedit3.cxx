@@ -914,6 +914,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                 // paragraph lead to a11y attempting to format the doc to
                 // obtain content when notified.
                 nTmpPortion = nTextPortions - 1;
+                SAL_WARN("editeng","ImpEditEngine::CreateLines - continuation of a broken portion");
             }
 
             nPortionStart = nTmpPos;
