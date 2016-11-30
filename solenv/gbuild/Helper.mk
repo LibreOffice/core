@@ -231,9 +231,27 @@ gb_Jar_MODULE_$(2) += $(3)
 
 endef
 
+define gb_Helper__register_packages
+$(foreach target,$(1),\
+ $(if $(filter $(target),$(gb_Package_REGISTERED)),\
+  $(call gb_Output_error,gb_Helper_register_packages: already registered: $(target))))
+$(if $(filter-out $(words $(1)),$(words $(sort $(1)))),\
+ $(call gb_Output_error,gb_Helper_register_packages: contains duplicates: $(1)))
+
+gb_Package_REGISTERED += $(1)
+
+endef
+
+# $(call gb_Helper_register_packages,packages)
+define gb_Helper_register_packages
+$(call gb_Helper__register_packages,$(1))
+
+endef
+
 # $(call gb_Helper_register_packages_for_install,installmodule,packages)
 define gb_Helper_register_packages_for_install
 $(if $(2),,$(call gb_Output_error,gb_Helper_register_packages_for_install: no packages - need 2 parameters))
+$(call gb_Helper__register_packages,$(2))
 
 gb_Package_MODULE_$(1) += $(2)
 
