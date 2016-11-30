@@ -28,7 +28,7 @@ SfxGrabBagItem::~SfxGrabBagItem() = default;
 
 bool SfxGrabBagItem::operator==(const SfxPoolItem& rItem) const
 {
-    const SfxGrabBagItem* pItem = static_cast<const SfxGrabBagItem*>(&rItem);
+    auto pItem = static_cast<const SfxGrabBagItem*>(&rItem);
 
     return m_aMap == pItem->m_aMap;
 }

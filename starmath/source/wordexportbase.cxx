@@ -51,7 +51,7 @@ void SmWordExportBase::HandleNode(const SmNode* pNode, int nLevel)
         break;
     case NSPECIAL:
     {
-        const SmTextNode* pText= static_cast< const SmTextNode* >(pNode);
+        auto pText= static_cast<const SmTextNode*>(pNode);
         //if the token str and the result text are the same then this
         //is to be seen as text, else assume it's a mathchar
         if (pText->GetText() == pText->GetToken().aText)

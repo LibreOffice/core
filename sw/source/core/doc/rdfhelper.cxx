@@ -28,7 +28,7 @@ std::map<OUString, OUString> SwRDFHelper::getTextNodeStatements(const OUString& 
     std::map<OUString, OUString> aRet;
 
     // We only read the node, but CreateXParagraph() needs a non-cost one.
-    SwTextNode& rTextNode = const_cast<SwTextNode&>(rNode);
+    auto& rTextNode = const_cast<SwTextNode&>(rNode);
 
     uno::Reference<uno::XComponentContext> xComponentContext(comphelper::getProcessComponentContext());
     uno::Reference<rdf::XURI> xType = rdf::URI::create(xComponentContext, rType);

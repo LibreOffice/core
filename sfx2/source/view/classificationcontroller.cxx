@@ -154,7 +154,7 @@ void ClassificationCategoriesController::dispose() throw (uno::RuntimeException,
 uno::Reference<awt::XWindow> ClassificationCategoriesController::createItemWindow(const uno::Reference<awt::XWindow>& rParent) throw (uno::RuntimeException, std::exception)
 {
     VclPtr<vcl::Window> pParent = VCLUnoHelper::GetWindow(rParent);
-    ToolBox* pToolbar = dynamic_cast<ToolBox*>(pParent.get());
+    auto pToolbar = dynamic_cast<ToolBox*>(pParent.get());
     if (pToolbar)
     {
         m_pClassification = VclPtr<ClassificationControl>::Create(pToolbar);

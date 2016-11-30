@@ -67,9 +67,9 @@ sal_Bool MathTypeFilter::filter(const uno::Sequence<beans::PropertyValue>& rDesc
                 // Is this a MathType Storage?
                 if (aStorage->IsStream("Equation Native"))
                 {
-                    if (SmModel* pModel = dynamic_cast<SmModel*>(m_xDstDoc.get()))
+                    if (auto pModel = dynamic_cast<SmModel*>(m_xDstDoc.get()))
                     {
-                        SmDocShell* pDocShell = static_cast<SmDocShell*>(pModel->GetObjectShell());
+                        auto pDocShell = static_cast<SmDocShell*>(pModel->GetObjectShell());
                         OUString aText = pDocShell->GetText();
                         MathType aEquation(aText);
                         bSuccess = aEquation.Parse(aStorage.get());

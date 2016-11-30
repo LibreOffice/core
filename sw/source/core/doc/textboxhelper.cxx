@@ -59,7 +59,7 @@ void SwTextBoxHelper::create(SwFrameFormat* pShape)
 
         // Link FLY and DRAW formats, so it becomes a text box (needed for syncProperty calls).
         uno::Reference<text::XTextFrame> xRealTextFrame(xTextFrame, uno::UNO_QUERY);
-        SwXTextFrame* pTextFrame = dynamic_cast<SwXTextFrame*>(xRealTextFrame.get());
+        auto pTextFrame = dynamic_cast<SwXTextFrame*>(xRealTextFrame.get());
         assert(nullptr != pTextFrame);
         SwFrameFormat* pFormat = pTextFrame->GetFrameFormat();
 
@@ -151,7 +151,7 @@ bool SwTextBoxHelper::isTextBox(const SwFrameFormat* pShape, sal_uInt16 nType)
 
 bool SwTextBoxHelper::isTextBox(const SdrObject* pObject)
 {
-    const SwVirtFlyDrawObj* pVirtFlyDrawObj = dynamic_cast<const SwVirtFlyDrawObj*>(pObject);
+    auto pVirtFlyDrawObj = dynamic_cast<const SwVirtFlyDrawObj*>(pObject);
     if (!pVirtFlyDrawObj)
         return false;
     return isTextBox(pVirtFlyDrawObj->GetFormat(), RES_FLYFRMFMT);
@@ -241,7 +241,7 @@ SwFrameFormat* SwTextBoxHelper::getOtherTextBoxFormat(const SwFrameFormat* pForm
 
 SwFrameFormat* SwTextBoxHelper::getOtherTextBoxFormat(uno::Reference<drawing::XShape> const& xShape)
 {
-    SwXShape* pShape = dynamic_cast<SwXShape*>(xShape.get());
+    auto pShape = dynamic_cast<SwXShape*>(xShape.get());
     if (!pShape)
         return nullptr;
 
@@ -286,7 +286,7 @@ Rectangle SwTextBoxHelper::getTextRectangle(SwFrameFormat* pShape, bool bAbsolut
 {
     Rectangle aRet;
     aRet.SetEmpty();
-    SdrObjCustomShape* pCustomShape = dynamic_cast<SdrObjCustomShape*>(pShape->FindRealSdrObject());
+    auto pCustomShape = dynamic_cast<SdrObjCustomShape*>(pShape->FindRealSdrObject());
     if (pCustomShape)
     {
         // Need to temporarily release the lock acquired in
@@ -608,7 +608,7 @@ void SwTextBoxHelper::syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet& rSet)
             {
             case RES_VERT_ORIENT:
             {
-                const SwFormatVertOrient& rOrient = static_cast<const SwFormatVertOrient&>(*aIter.GetCurItem());
+                auto& rOrient = static_cast<const SwFormatVertOrient&>(*aIter.GetCurItem());
                 SwFormatVertOrient aOrient(rOrient);
 
                 Rectangle aRect = getTextRectangle(&rShape, /*bAbsolute=*/false);
@@ -628,7 +628,7 @@ void SwTextBoxHelper::syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet& rSet)
             break;
             case RES_HORI_ORIENT:
             {
-                const SwFormatHoriOrient& rOrient = static_cast<const SwFormatHoriOrient&>(*aIter.GetCurItem());
+                auto& rOrient = static_cast<const SwFormatHoriOrient&>(*aIter.GetCurItem());
                 SwFormatHoriOrient aOrient(rOrient);
 
                 Rectangle aRect = getTextRectangle(&rShape, /*bAbsolute=*/false);
