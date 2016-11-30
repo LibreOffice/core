@@ -992,7 +992,7 @@ $(eval $(call gb_Helper_register_resources,\
 	eur \
 	for \
 	forui \
-	$(call gb_Helper_optional_for_host,DESKTOP,fps_office) \
+	$(call gb_Helper_optional,DESKTOP,fps_office) \
 	frm \
 	fwe \
 	gal \

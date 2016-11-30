@@ -299,6 +299,7 @@ endef
 endif
 
 define gb_Helper_optional_for_host
+$(if $(filter build,$(gb_Side)),,$(call gb_Output_error,gb_Helper_optional_for_host: Use only when gb_Side=build))
 $(if $(filter $(1),$(BUILD_TYPE_FOR_HOST)),$(2))
 endef
 

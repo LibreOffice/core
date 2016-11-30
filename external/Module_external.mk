@@ -101,13 +101,6 @@ $(eval $(call gb_Module_add_moduledirs,external,\
 	$(call gb_Helper_optional,XSLTML,xsltml) \
 	$(call gb_Helper_optional,ZLIB,zlib) \
 	$(call gb_Helper_optional,ZMF,libzmf) \
-	$(call gb_Helper_optional_for_host,DESKTOP, \
-		$(if $(WITH_GALLERY_BUILD), \
-			$(call gb_Helper_optional,HARFBUZZ,harfbuzz) \
-			$(call gb_Helper_optional,LCMS2,lcms2) \
-			$(call gb_Helper_optional,NSS,nss) \
-		) \
-	) \
 ))
 
 # vim: set noet sw=4 ts=4:
