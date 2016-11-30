@@ -64,6 +64,7 @@ public:
     void testPDF14LOWin();
     /// Test a PAdES document, signed by LO on Linux.
     void testPDFPAdESGood();
+    void testSigningCertificateAttribute();
 
     CPPUNIT_TEST_SUITE(PDFSigningTest);
     CPPUNIT_TEST(testPDFAdd);
@@ -75,6 +76,7 @@ public:
     CPPUNIT_TEST(testPDF16Add);
     CPPUNIT_TEST(testPDF14LOWin);
     CPPUNIT_TEST(testPDFPAdESGood);
+    CPPUNIT_TEST(testSigningCertificateAttribute);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -320,6 +322,25 @@ void PDFSigningTest::testPDF14LOWin()
 void PDFSigningTest::testPDFPAdESGood()
 {
     verify(m_directories.getURLFromSrc(DATA_DIRECTORY) + "good-pades.pdf", 1, "ETSI.CAdES.detached");
+}
+
+void PDFSigningTest::testSigningCertificateAttribute()
+{
+    // Create a new signature.
+    OUString aSourceDir = m_directories.getURLFromSrc(DATA_DIRECTORY);
+    OUString aInURL = aSourceDir + "no.pdf";
+    OUString aTargetDir = m_directories.getURLFromWorkdir("/CppunitTest/xmlsecurity_pdfsigning.test.user/");
+    OUString aOutURL = aTargetDir + "signing-certificate-attribute.pdf";
+    bool bHadCertificates = sign(aInURL, aOutURL, 0);
+    if (!bHadCertificates)
+        return;
+
+    // Verify it.
+    std::vector<SignatureInformation> aInfos = verify(aOutURL, 1, "ETSI.CAdES.detached");
+    CPPUNIT_ASSERT(!aInfos.empty());
+    SignatureInformation& rInformation = aInfos[0];
+    // Assert that it has a signed signingCertificateV2 attribute.
+    CPPUNIT_ASSERT(rInformation.bHasSigningCertificate);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(PDFSigningTest);
