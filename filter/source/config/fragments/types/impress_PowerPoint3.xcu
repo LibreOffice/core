@@ -1,0 +1,22 @@
+<!--
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+-->
+
+<node oor:name="impress_PowerPoint3" oor:op="replace">
+    <prop oor:name="DetectService">
+        <value>com.sun.star.comp.Impress.MWAWPresentationImportFilter</value>
+    </prop>
+    <prop oor:name="Extensions">
+        <value>ppt</value>
+    </prop>
+    <prop oor:name="PreferredFilter">
+        <value>PowerPoint 3</value>
+    </prop>
+    <prop oor:name="UIName">
+        <value>Microsoft PowerPoint 3</value>
+    </prop>
+</node>
