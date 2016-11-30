@@ -967,7 +967,8 @@ void SfxViewShell::OuterResizePixel
 void SfxViewShell::InnerResizePixel
 (
     const Point&    /*rToolOffset*/,// Upper left corner Tools in Frame-Window
-    const Size&     /*rSize*/       // All available sizes.
+    const Size&     /*rSize*/,      // All available sizes.
+    bool
 )
 
 /*  [Description]
