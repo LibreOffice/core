@@ -3,8 +3,6 @@ from org.libreoffice.unotest import UnoInProcess
 
 
 class CheckFields(unittest.TestCase):
-    _uno = None
-    _xDoc = None
 
     @classmethod
     def setUpClass(cls):
