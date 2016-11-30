@@ -34,6 +34,7 @@
 #include <cert.h>
 #include <cms.h>
 #include <nss.h>
+#include <secerr.h>
 #include <sechash.h>
 #endif
 
@@ -1227,8 +1228,12 @@ bool PDFDocument::Tokenize(SvStream& rStream, TokenizeMode eMode, std::vector< s
                 }
                 else if (aKeyword == "trailer")
                 {
-                    m_pTrailer = new PDFTrailerElement(*this);
-                    rElements.push_back(std::unique_ptr<PDFElement>(m_pTrailer));
+                    auto pTrailer = new PDFTrailerElement(*this);
+                    // When reading till the first EOF token only, remember
+                    // just the first trailer token.
+                    if (eMode != TokenizeMode::EOF_TOKEN || !m_pTrailer)
+                        m_pTrailer = pTrailer;
+                    rElements.push_back(std::unique_ptr<PDFElement>(pTrailer));
                 }
                 else if (aKeyword == "startxref")
                 {
@@ -1551,7 +1556,7 @@ void PDFDocument::ReadXRefStream(SvStream& rStream)
         nLineLength += aW[i];
     }
 
-    if (nLineLength - 1 != nColumns)
+    if (nPredictor > 1 && nLineLength - 1 != nColumns)
     {
         SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRefStream: /DecodeParms/Columns is inconsistent with /W");
         return;
@@ -1572,7 +1577,7 @@ void PDFDocument::ReadXRefStream(SvStream& rStream)
             size_t nIndex = nFirstObject + nEntry;
 
             aStream.ReadBytes(aOrigLine.data(), aOrigLine.size());
-            if (aOrigLine[0] + 10 != nPredictor)
+            if (nPredictor > 1 && aOrigLine[0] + 10 != nPredictor)
             {
                 SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRefStream: in-stream predictor is inconsistent with /DecodeParms/Predictor for object #" << nIndex);
                 return;
@@ -1679,9 +1684,9 @@ void PDFDocument::ReadXRef(SvStream& rStream)
             return;
         }
 
-        if (aNumberOfEntries.GetValue() <= 0)
+        if (aNumberOfEntries.GetValue() < 0)
         {
-            SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRef: expected one or more entries");
+            SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRef: expected zero or more entries");
             return;
         }
 
@@ -1936,6 +1941,161 @@ std::vector<unsigned char> PDFDocument::DecodeHexString(PDFHexStringElement* pEl
     return aRet;
 }
 
+#ifdef XMLSEC_CRYPTO_NSS
+namespace
+{
+/// Similar to NSS_CMSAttributeArray_FindAttrByOidTag(), but works directly with a SECOidData.
+NSSCMSAttribute* CMSAttributeArray_FindAttrByOidData(NSSCMSAttribute** attrs, SECOidData* oid, PRBool only)
+{
+    NSSCMSAttribute* attr1, *attr2;
+
+    if (attrs == nullptr)
+        return nullptr;
+
+    if (oid == nullptr)
+        return nullptr;
+
+    while ((attr1 = *attrs++) != nullptr)
+    {
+        if (attr1->type.len == oid->oid.len && PORT_Memcmp(attr1->type.data,
+                oid->oid.data,
+                oid->oid.len) == 0)
+            break;
+    }
+
+    if (attr1 == nullptr)
+        return nullptr;
+
+    if (!only)
+        return attr1;
+
+    while ((attr2 = *attrs++) != nullptr)
+    {
+        if (attr2->type.len == oid->oid.len && PORT_Memcmp(attr2->type.data,
+                oid->oid.data,
+                oid->oid.len) == 0)
+            break;
+    }
+
+    if (attr2 != nullptr)
+        return nullptr;
+
+    return attr1;
+}
+
+/// Same as SEC_StringToOID(), which is private to us.
+SECStatus StringToOID(SECItem* to, const char* from, PRUint32 len)
+{
+    PRUint32 decimal_numbers = 0;
+    PRUint32 result_bytes = 0;
+    SECStatus rv;
+    PRUint8 result[1024];
+
+    static const PRUint32 max_decimal = (0xffffffff / 10);
+    static const char OIDstring[] = {"OID."};
+
+    if (!from || !to)
+    {
+        PORT_SetError(SEC_ERROR_INVALID_ARGS);
+        return SECFailure;
+    }
+    if (!len)
+    {
+        len = PL_strlen(from);
+    }
+    if (len >= 4 && !PL_strncasecmp(from, OIDstring, 4))
+    {
+        from += 4; /* skip leading "OID." if present */
+        len  -= 4;
+    }
+    if (!len)
+    {
+bad_data:
+        PORT_SetError(SEC_ERROR_BAD_DATA);
+        return SECFailure;
+    }
+    do
+    {
+        PRUint32 decimal = 0;
+        while (len > 0 && isdigit(*from))
+        {
+            PRUint32 addend = (*from++ - '0');
+            --len;
+            if (decimal > max_decimal)  /* overflow */
+                goto bad_data;
+            decimal = (decimal * 10) + addend;
+            if (decimal < addend)   /* overflow */
+                goto bad_data;
+        }
+        if (len != 0 && *from != '.')
+        {
+            goto bad_data;
+        }
+        if (decimal_numbers == 0)
+        {
+            if (decimal > 2)
+                goto bad_data;
+            result[0] = decimal * 40;
+            result_bytes = 1;
+        }
+        else if (decimal_numbers == 1)
+        {
+            if (decimal > 40)
+                goto bad_data;
+            result[0] += decimal;
+        }
+        else
+        {
+            /* encode the decimal number,  */
+            PRUint8* rp;
+            PRUint32 num_bytes = 0;
+            PRUint32 tmp = decimal;
+            while (tmp)
+            {
+                num_bytes++;
+                tmp >>= 7;
+            }
+            if (!num_bytes)
+                ++num_bytes;  /* use one byte for a zero value */
+            if (num_bytes + result_bytes > sizeof result)
+                goto bad_data;
+            tmp = num_bytes;
+            rp = result + result_bytes - 1;
+            rp[tmp] = (PRUint8)(decimal & 0x7f);
+            decimal >>= 7;
+            while (--tmp > 0)
+            {
+                rp[tmp] = (PRUint8)(decimal | 0x80);
+                decimal >>= 7;
+            }
+            result_bytes += num_bytes;
+        }
+        ++decimal_numbers;
+        if (len > 0)   /* skip trailing '.' */
+        {
+            ++from;
+            --len;
+        }
+    }
+    while (len > 0);
+    /* now result contains result_bytes of data */
+    if (to->data && to->len >= result_bytes)
+    {
+        PORT_Memcpy(to->data, result, to->len = result_bytes);
+        rv = SECSuccess;
+    }
+    else
+    {
+        SECItem result_item = {siBuffer, nullptr, 0 };
+        result_item.data = result;
+        result_item.len  = result_bytes;
+        rv = SECITEM_CopyItem(nullptr, to, &result_item);
+    }
+    return rv;
+}
+}
+#endif
+
 bool PDFDocument::ValidateSignature(SvStream& rStream, PDFObjectElement* pSignature, SignatureInformation& rInformation, bool bLast)
 {
     PDFObjectElement* pValue = pSignature->LookupObject("V");
@@ -1960,9 +2120,9 @@ bool PDFDocument::ValidateSignature(SvStream& rStream, PDFObjectElement* pSignat
     }
 
     auto pSubFilter = dynamic_cast<PDFNameElement*>(pValue->Lookup("SubFilter"));
-    if (!pSubFilter || (pSubFilter->GetValue() != "adbe.pkcs7.detached" && pSubFilter->GetValue() != "ETSI.CAdES.detached"))
+    if (!pSubFilter || (pSubFilter->GetValue() != "adbe.pkcs7.detached" && pSubFilter->GetValue() != "adbe.pkcs7.sha1" && pSubFilter->GetValue() != "ETSI.CAdES.detached"))
     {
-        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ValidateSignature: no or unsupported sub-filter");
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ValidateSignature: unsupported sub-filter: '"<<pSubFilter->GetValue()<<"'");
         return false;
     }
 
@@ -2235,18 +2395,43 @@ bool PDFDocument::ValidateSignature(SvStream& rStream, PDFObjectElement* pSignat
         rInformation.stDateTime = aDateTime.GetUNODateTime();
     }
 
+    // Check if we have a signing certificate attribute.
+    SECOidData aOidData;
+    aOidData.oid.data = nullptr;
+    /*
+     * id-aa-signingCertificateV2 OBJECT IDENTIFIER ::=
+     * { iso(1) member-body(2) us(840) rsadsi(113549) pkcs(1) pkcs9(9)
+     *   smime(16) id-aa(2) 47 }
+     */
+    if (StringToOID(&aOidData.oid, "1.2.840.113549.1.9.16.2.47", 0) != SECSuccess)
+    {
+        SAL_WARN("xmlsecurity.pdfio", "StringToOID() failed");
+        return false;
+    }
+    aOidData.offset = SEC_OID_UNKNOWN;
+    aOidData.desc = "id-aa-signingCertificateV2";
+    aOidData.mechanism = CKM_SHA_1;
+    aOidData.supportedExtension = UNSUPPORTED_CERT_EXTENSION;
+    NSSCMSAttribute* pAttribute = CMSAttributeArray_FindAttrByOidData(pCMSSignerInfo->authAttr, &aOidData, PR_TRUE);
+    if (pAttribute)
+        rInformation.bHasSigningCertificate = true;
+
     SECItem* pContentInfoContentData = pCMSSignedData->contentInfo.content.data;
     if (pContentInfoContentData && pContentInfoContentData->data)
     {
-        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ValidateSignature: expected nullptr content info");
-        return false;
+        // Not a detached signature.
+        if (!memcmp(pActualResultBuffer, pContentInfoContentData->data, nMaxResultLen) && nActualResultLen == pContentInfoContentData->len)
+            rInformation.nStatus = xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED;
     }
-
-    SECItem aActualResultItem;
-    aActualResultItem.data = pActualResultBuffer;
-    aActualResultItem.len = nActualResultLen;
-    if (NSS_CMSSignerInfo_Verify(pCMSSignerInfo, &aActualResultItem, nullptr) == SECSuccess)
-        rInformation.nStatus = xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED;
+    else
+    {
+        // Detached, the usual case.
+        SECItem aActualResultItem;
+        aActualResultItem.data = pActualResultBuffer;
+        aActualResultItem.len = nActualResultLen;
+        if (NSS_CMSSignerInfo_Verify(pCMSSignerInfo, &aActualResultItem, nullptr) == SECSuccess)
+            rInformation.nStatus = xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED;
+    }
 
     // Everything went fine
     PORT_Free(pActualResultBuffer);
@@ -2389,6 +2574,34 @@ bool PDFDocument::ValidateSignature(SvStream& rStream, PDFObjectElement* pSignat
     if (CryptMsgControl(hMsg, 0, CMSG_CTRL_VERIFY_SIGNATURE, pSignerCertContext->pCertInfo))
         rInformation.nStatus = xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED;
 
+    // Check if we have a signing certificate attribute.
+    DWORD nSignedAttributes = 0;
+    if (CryptMsgGetParam(hMsg, CMSG_SIGNER_AUTH_ATTR_PARAM, 0, nullptr, &nSignedAttributes))
+    {
+        std::unique_ptr<BYTE[]> pSignedAttributesBuf(new BYTE[nSignedAttributes]);
+        if (!CryptMsgGetParam(hMsg, CMSG_SIGNER_AUTH_ATTR_PARAM, 0, pSignedAttributesBuf.get(), &nSignedAttributes))
+        {
+            SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ValidateSignature: CryptMsgGetParam() failed");
+            return false;
+        }
+        auto pSignedAttributes = reinterpret_cast<PCRYPT_ATTRIBUTES>(pSignedAttributesBuf.get());
+        for (size_t nAttr = 0; nAttr < pSignedAttributes->cAttr; ++nAttr)
+        {
+            CRYPT_ATTRIBUTE& rAttr = pSignedAttributes->rgAttr[nAttr];
+            /*
+             * id-aa-signingCertificateV2 OBJECT IDENTIFIER ::=
+             * { iso(1) member-body(2) us(840) rsadsi(113549) pkcs(1) pkcs9(9)
+             *   smime(16) id-aa(2) 47 }
+             */
+            OString aOid("1.2.840.113549.1.9.16.2.47");
+            if (aOid == rAttr.pszObjId)
+            {
+                rInformation.bHasSigningCertificate = true;
+                break;
+            }
+        }
+    }
+
     CertCloseStore(hStoreHandle, CERT_CLOSE_STORE_FORCE_FLAG);
     CryptMsgClose(hMsg);
     return true;
@@ -2414,7 +2627,7 @@ bool PDFCommentElement::Read(SvStream& rStream)
     rStream.ReadChar(ch);
     while (!rStream.IsEof())
     {
-        if (ch == 0x0a)
+        if (ch == '\n' || ch == '\r')
         {
             m_aComment = aBuf.makeStringAndClear();
 
@@ -2757,6 +2970,16 @@ size_t PDFDictionaryElement::Parse(const std::vector< std::unique_ptr<PDFElement
         if (pLiteralString)
         {
             rDictionary[aName] = pLiteralString;
+            if (pThisDictionary)
+                pThisDictionary->SetKeyOffset(aName, nNameOffset);
+            aName.clear();
+            continue;
+        }
+
+        auto pBoolean = dynamic_cast<PDFBooleanElement*>(rElements[i].get());
+        if (pBoolean)
+        {
+            rDictionary[aName] = pBoolean;
             if (pThisDictionary)
                 pThisDictionary->SetKeyOffset(aName, nNameOffset);
             aName.clear();

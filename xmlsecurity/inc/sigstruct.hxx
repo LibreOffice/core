@@ -104,12 +104,15 @@ struct SignatureInformation
     css::uno::Sequence<sal_Int8> aSignatureBytes;
     /// For PDF: digest format, from css::xml::crypto::DigestID
     sal_Int32 nDigestID;
+    /// For PDF: has id-aa-signingCertificateV2 as a signed attribute.
+    bool bHasSigningCertificate;
 
     SignatureInformation( sal_Int32 nId )
     {
         nSecurityId = nId;
         nStatus = css::xml::crypto::SecurityOperationStatus_UNKNOWN;
         nDigestID = 0;
+        bHasSigningCertificate = false;
     }
 };
 
