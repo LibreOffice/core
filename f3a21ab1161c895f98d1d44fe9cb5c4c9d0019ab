@@ -242,6 +242,24 @@
     },
     {
       "key": {
+        "uuid": "3a71b18c_43ce705b",
+        "filename": "desktop/source/app/cmdlinehelp.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2016-11-30T07:58:02Z",
+      "side": 1,
+      "message": "Because these switches may be passed to program in some circumstances (e.g. by OS), and we should not error out in those cases",
+      "parentUuid": "3a71b18c_03ec78c6",
+      "revId": "f3a21ab1161c895f98d1d44fe9cb5c4c9d0019ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a71b18c_37ce125b",
         "filename": "desktop/source/app/cmdlinehelp.cxx",
         "patchSetId": 4
