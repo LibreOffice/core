@@ -74,7 +74,8 @@ $(eval $(call gb_Module_add_slowcheck_targets,sc, \
 
 ifneq ($(PLATFORMID),linux_x86)
 $(eval $(call gb_Module_add_slowcheck_targets,sc, \
-	CppunitTest_sc_functions_test \
+	CppunitTest_sc_functions_test_old \
+	CppunitTest_sc_database_functions_test \
 ))
 endif
 

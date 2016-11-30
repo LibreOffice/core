@@ -7,42 +7,12 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <sal/config.h>
 
-#include <unotest/filters-test.hxx>
-#include "scdll.hxx"
-#include "helper/qahelper.hxx"
-
+#include "functions_test.hxx"
 #include "document.hxx"
 
-class FunctionsTest : public ScBootstrapFixture, public test::FiltersTest
-{
-public:
-
-    FunctionsTest();
-
-    virtual void setUp() override;
-
-    virtual bool load(
-        const OUString &rFilter,
-        const OUString &rURL,
-        const OUString &rUserData,
-        SfxFilterFlags nFilterFlags,
-        SotClipboardFormatId nClipboardID,
-        unsigned int nFilterVersion) override;
-
-    void testFormulasFODS();
-
-    CPPUNIT_TEST_SUITE(FunctionsTest);
-    CPPUNIT_TEST(testFormulasFODS);
-    CPPUNIT_TEST_SUITE_END();
-
-private:
-    uno::Reference<uno::XInterface> m_xCalcComponent;
-};
-
-FunctionsTest::FunctionsTest():
-    ScBootstrapFixture("sc/qa/unit/data/functions/fods")
+FunctionsTest::FunctionsTest(const OUString& rPath):
+    ScBootstrapFixture(rPath)
 {
 }
 
@@ -76,18 +46,5 @@ bool FunctionsTest::load(const OUString& rFilter, const OUString& rURL,
 
     return true;
 }
-
-void FunctionsTest::testFormulasFODS()
-{
-    OUString aDirectoryURL = m_directories.getURLFromSrc("/sc/qa/unit/data/functions/fods/");
-    recursiveScan(test::pass, "OpenDocument Spreadsheet Flat XML", aDirectoryURL,
-            "com.sun.star.comp.filter.OdfFlatXml,,com.sun.star.comp.Calc.XMLOasisImporter,com.sun.star.comp.Calc.XMLOasisExporter,,,true",
-            FODS_FORMAT_TYPE, SotClipboardFormatId::NONE, 0, false);
-}
-
-CPPUNIT_TEST_SUITE_REGISTRATION(FunctionsTest);
-
-
-CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
