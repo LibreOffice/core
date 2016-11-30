@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a71b18c_631a8c19",
+        "filename": "chart2/qa/extras/chart2import.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 416,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-11-30T13:01:22Z",
+      "side": 1,
+      "message": "Better use rtl::math::isNan.",
+      "revId": "f49f128c8bec2510a6c575a6bfa986eaeee21e15",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
