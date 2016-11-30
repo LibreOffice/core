@@ -134,7 +134,7 @@ if ( true )
 if ( true )
     SHA1 = f65fbbd72926c8e7cf0dbd4ada03b0d226f461fd
     name = serf-1.2.1.tar.bz2
-    URL1 = http://serf.googlecode.com/files/serf-1.2.1.tar.bz2
+    URL1 = https://archive.apache.org/dist/serf/serf-1.2.1.tar.bz2
     URL2 = $(OOO_EXTRAS)$(SHA1)-$(name)
 
 if (SOLAR_JAVA==TRUE && (ENABLE_MEDIAWIKI==YES || ENABLE_REPORTBUILDER==YES))
