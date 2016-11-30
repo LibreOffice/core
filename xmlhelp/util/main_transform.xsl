@@ -111,6 +111,7 @@
   <!-- parts of help and image urls -->
 <xsl:variable name="help_url_prefix" select="'vnd.sun.star.help://'"/>
 <xsl:variable name="img_url_prefix" select="concat('vnd.libreoffice.image://',$imgtheme,'/')"/>
+<xsl:variable name="img_url_internal" select="'vnd.libreoffice.image://helpimg/'"/>
 <xsl:variable name="urlpost" select="concat('?Language=',$lang,$am,'System=',$System,$am,'UseDB=no')"/>
 <xsl:variable name="urlpre" select="$help_url_prefix" /> 
 <xsl:variable name="linkprefix" select="$urlpre"/>
@@ -119,9 +120,9 @@
 <xsl:variable name="css" select="'default.css'"/>
 
 <!-- images for notes, tips and warnings -->
-<xsl:variable name="note_img" select="concat($img_url_prefix,'res/helpimg/note.png')"/>
-<xsl:variable name="tip_img" select="concat($img_url_prefix,'res/helpimg/tip.png')"/>
-<xsl:variable name="warning_img" select="concat($img_url_prefix,'res/helpimg/warning.png')"/>
+<xsl:variable name="note_img" select="concat($img_url_internal,'media/helpimg/note.png')"/>
+<xsl:variable name="tip_img" select="concat($img_url_internal,'media/helpimg/tip.png')"/>
+<xsl:variable name="warning_img" select="concat($img_url_internal,'media/helpimg/warning.png')"/>
 
 <!--
 #############
@@ -800,6 +801,9 @@
 <xsl:template name="insertimage">
   <xsl:variable name="src">
     <xsl:choose>
+      <xsl:when test="starts-with(@src,'media/')">
+        <xsl:value-of select="concat($img_url_internal,@src)"/>
+      </xsl:when>
       <xsl:when test="not($ExtensionId='') and starts-with(@src,$ExtensionId)">
         <xsl:value-of select="concat($ExtensionPath,'/',@src)"/>
       </xsl:when>
