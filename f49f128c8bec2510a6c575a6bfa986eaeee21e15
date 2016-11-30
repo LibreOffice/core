@@ -16,6 +16,24 @@
       "revId": "f49f128c8bec2510a6c575a6bfa986eaeee21e15",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a71b18c_6ee513a7",
+        "filename": "chart2/qa/extras/chart2import.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 416,
+      "author": {
+        "id": 1000108
+      },
+      "writtenOn": "2016-11-30T22:41:44Z",
+      "side": 1,
+      "message": "Thanks !",
+      "parentUuid": "3a71b18c_631a8c19",
+      "revId": "f49f128c8bec2510a6c575a6bfa986eaeee21e15",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
