@@ -193,7 +193,7 @@ protected:
 
     virtual void    AdjustPosSizePixel( const Point &rPos, const Size &rSize ) override;     // alt
 
-    virtual void    InnerResizePixel( const Point &rOfs, const Size &rSize ) override;       // neu
+    virtual void    InnerResizePixel( const Point &rOfs, const Size &rSize, bool inplaceEditModeChange ) override; // neu
     virtual void    OuterResizePixel( const Point &rOfs, const Size &rSize ) override;
     virtual void    SetZoomFactor( const Fraction &rZoomX, const Fraction &rZoomY ) override;
 

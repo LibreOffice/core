@@ -269,7 +269,7 @@ protected:
     virtual void Deactivate(bool IsMDIActivate) override;
     virtual void Activate(bool IsMDIActivate) override;
     virtual void AdjustPosSizePixel(const Point &rPos, const Size &rSize) override;
-    virtual void InnerResizePixel(const Point &rOfs, const Size  &rSize) override;
+    virtual void InnerResizePixel(const Point &rOfs, const Size  &rSize, bool inplaceEditModeChange) override;
     virtual void OuterResizePixel(const Point &rOfs, const Size  &rSize) override;
     virtual void QueryObjAreaPixel( Rectangle& rRect ) const override;
     virtual void SetZoomFactor( const Fraction &rX, const Fraction &rY ) override;

@@ -218,7 +218,7 @@ class SW_DLLPUBLIC SwPagePreview: public SfxViewShell
                              SfxRequest* _pReq = nullptr );
 
 protected:
-    virtual void    InnerResizePixel( const Point &rOfs, const Size &rSize ) override;
+    virtual void    InnerResizePixel( const Point &rOfs, const Size &rSize, bool inplaceEditModeChange ) override;
     virtual void    OuterResizePixel( const Point &rOfs, const Size &rSize ) override;
 
     void         SetZoom(SvxZoomType eSet, sal_uInt16 nFactor);

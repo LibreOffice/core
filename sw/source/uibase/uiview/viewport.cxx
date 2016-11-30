@@ -949,7 +949,7 @@ void SwView::ShowAtResize()
         m_pHRuler->Show();
 }
 
-void SwView::InnerResizePixel( const Point &rOfst, const Size &rSize )
+void SwView::InnerResizePixel( const Point &rOfst, const Size &rSize, bool )
 {
     Size aObjSize = GetObjectShell()->GetVisArea().GetSize();
     if ( aObjSize.Width() > 0 && aObjSize.Height() > 0 )

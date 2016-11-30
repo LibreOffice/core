@@ -457,7 +457,7 @@ bool ViewShellBase::HasSelection(bool bText) const
         :   SfxViewShell::HasSelection(bText);
 }
 
-void ViewShellBase::InnerResizePixel (const Point& rOrigin, const Size &rSize)
+void ViewShellBase::InnerResizePixel (const Point& rOrigin, const Size &rSize, bool)
 {
     Size aObjSize = GetObjectShell()->GetVisArea().GetSize();
     if ( aObjSize.Width() > 0 && aObjSize.Height() > 0 )

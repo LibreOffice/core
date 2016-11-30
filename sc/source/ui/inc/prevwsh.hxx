@@ -65,7 +65,7 @@ protected:
     virtual void    Deactivate(bool bMDI) override;
     virtual void    AdjustPosSizePixel( const Point &rPos, const Size &rSize ) override;
 
-    virtual void    InnerResizePixel( const Point &rOfs, const Size &rSize ) override;
+    virtual void    InnerResizePixel( const Point &rOfs, const Size &rSize, bool inplaceEditModeChange ) override;
     virtual void    OuterResizePixel( const Point &rOfs, const Size &rSize ) override;
 
     virtual void    WriteUserData(OUString &, bool bBrowse = false) override;

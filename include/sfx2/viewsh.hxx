@@ -159,7 +159,7 @@ protected:
     virtual void                Activate(bool IsMDIActivate) override;
     virtual void                Deactivate(bool IsMDIActivate) override;
 
-    virtual void                InnerResizePixel( const Point &rOfs, const Size &rSize );
+    virtual void                InnerResizePixel( const Point &rOfs, const Size &rSize, bool inplaceEditModeChange );
     virtual void                OuterResizePixel( const Point &rOfs, const Size &rSize );
     virtual void                SetZoomFactor( const Fraction &rZoomX, const Fraction &rZoomY );
 
