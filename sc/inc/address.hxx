@@ -71,7 +71,7 @@ const SCCOL       MAXCOL         = MAXCOLCOUNT - 1;
 const SCTAB       MAXTAB         = MAXTABCOUNT - 1;
 const SCCOLROW    MAXCOLROW      = MAXROW;
 // Maximun tiled rendering values
-const SCROW       MAXTILEDROW    = 1000;
+const SCROW       MAXTILEDROW    = 10000;
 // Limit the initial tab count to prevent users to set the count too high,
 // which could cause the memory usage of blank documents to exceed the
 // available system memory.
