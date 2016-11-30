@@ -191,7 +191,7 @@ private:
     SwFlyDrawObj* mpMasterObj;
 
 protected:
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew ) override;
+    virtual void SwClientNotify(const SwModify&, const SfxHint& rHint) override;
 
 public:
 
@@ -377,8 +377,7 @@ class SwDrawContact : public SwContact
         SwDrawContact& operator=( const SwDrawContact& ) = delete;
 
     protected:
-        /// virtuelle Methoden von SwClient
-        virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew ) override;
+        virtual void SwClientNotify(const SwModify&, const SfxHint& rHint) override;
 
     public:
 
