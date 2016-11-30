@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a71b18c_8346c8bd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-11-30T08:46:41Z",
+      "side": 1,
+      "message": "Please mention bug ID here (tdf#10xxxx)",
+      "revId": "c49606010f506adc8ff13dfb768c806c14082cee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a71b18c_233fb426",
+        "filename": "sfx2/UIConfig_sfx.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-11-30T08:46:41Z",
+      "side": 1,
+      "message": "It is a common practice to have those items sorted alphabetically, so please sort it in appropriately",
+      "revId": "c49606010f506adc8ff13dfb768c806c14082cee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a71b18c_63f28c9c",
+        "filename": "sfx2/uiconfig/ui/helpmanual.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-11-30T08:46:41Z",
+      "side": 1,
+      "message": "I think the official term for this is \"built-in help\". \"on your computer\" is then slightly redundant",
+      "revId": "c49606010f506adc8ff13dfb768c806c14082cee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a71b18c_83efa8af",
+        "filename": "sfx2/uiconfig/ui/helpmanual.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-11-30T08:46:41Z",
+      "side": 1,
+      "message": "Installing packages in a multi-platfrom, multi-architecture environment is a HARD problem, not to be tackled by a beginner. Therefore, pretty please, leave installing packages out and make this a binary choice: \"read help online\" or \"cancel\" (i.e. do nothing). That said, remove this label",
+      "revId": "c49606010f506adc8ff13dfb768c806c14082cee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a71b18c_a32ae4e5",
+        "filename": "sfx2/uiconfig/ui/helpmanual.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-11-30T08:46:41Z",
+      "side": 1,
+      "message": "Please drop this checkbox too. Making the checkbox work (remembering the choice) is less hard problem than the previous one, but still ... \n\n... let\u0027s initially make this work in as simple form as possible and once it is done, we can proceed to more complex things",
+      "revId": "c49606010f506adc8ff13dfb768c806c14082cee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a71b18c_c32fe0f4",
+        "filename": "sfx2/uiconfig/ui/helpmanual.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-11-30T08:46:41Z",
+      "side": 1,
+      "message": "As mentioned above, make this \u0027Cancel\u0027 i.e. a button that\u0027ll close the dialog and otherwise do nothing",
+      "revId": "c49606010f506adc8ff13dfb768c806c14082cee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
