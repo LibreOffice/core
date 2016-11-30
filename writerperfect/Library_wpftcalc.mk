@@ -36,6 +36,7 @@ $(eval $(call gb_Library_use_libraries,wpftcalc,\
 	sot \
 	svx \
 	tl \
+	ucbhelper \
 	utl \
 	vcl \
 	writerperfect \
