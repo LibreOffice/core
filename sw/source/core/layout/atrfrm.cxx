@@ -3326,10 +3326,14 @@ SwHandleAnchorNodeChg::~SwHandleAnchorNodeChg()
 
 IMPL_FIXEDMEMPOOL_NEWDEL( SwDrawFrameFormat )
 
+namespace sw
+{
+    DrawFrameFormatHint::~DrawFrameFormatHint() {}
+}
+
 SwDrawFrameFormat::~SwDrawFrameFormat()
 {
-    SwContact *pContact = FindContactObj();
-    delete pContact;
+    CallSwClientNotify(sw::DrawFrameFormatHint(sw::DrawFrameFormatHintId::DYING));
 }
 
 void SwDrawFrameFormat::MakeFrames()

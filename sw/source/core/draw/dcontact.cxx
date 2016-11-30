@@ -1529,6 +1529,17 @@ void SwDrawContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
         // #i51474#
         GetAnchoredObj(nullptr)->ResetLayoutProcessBools();
     }
+    else if (auto pDrawFrameFormatHint = dynamic_cast<const sw::DrawFrameFormatHint*>(&rHint))
+    {
+        switch(pDrawFrameFormatHint->m_eId)
+        {
+            case sw::DrawFrameFormatHintId::DYING:
+                delete this;
+                break;
+            default:
+                SAL_WARN("sw.core", "unhandled DrawFrameFormatHintId");
+        }
+    }
 }
 
 // #i26791#

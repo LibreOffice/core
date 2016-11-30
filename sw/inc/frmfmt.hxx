@@ -234,6 +234,19 @@ public:
 
 //The DrawFrame-Format
 
+namespace sw
+{
+    enum class DrawFrameFormatHintId {
+        DYING
+    };
+    struct SW_DLLPUBLIC DrawFrameFormatHint final: SfxHint
+    {
+        DrawFrameFormatHintId m_eId;
+        DrawFrameFormatHint(DrawFrameFormatHintId eId) : m_eId(eId) {};
+        virtual ~DrawFrameFormatHint() override;
+    };
+}
+
 class SW_DLLPUBLIC SwDrawFrameFormat: public SwFrameFormat
 {
     friend class SwDoc;
