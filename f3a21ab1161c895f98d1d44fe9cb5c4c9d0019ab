@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "3a71b18c_c3e1a0d2",
+        "filename": "desktop/source/app/cmdlinehelp.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-11-30T07:51:38Z",
+      "side": 1,
+      "message": "I wouldn\u0027t put this in a new line, since it can be empty.",
+      "revId": "f3a21ab1161c895f98d1d44fe9cb5c4c9d0019ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a71b18c_57db8e1b",
         "filename": "desktop/source/app/cmdlinehelp.cxx",
         "patchSetId": 4
@@ -13,6 +30,23 @@
       "writtenOn": "2016-11-27T09:52:02Z",
       "side": 1,
       "message": "Where is the list of these filters?",
+      "revId": "f3a21ab1161c895f98d1d44fe9cb5c4c9d0019ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a71b18c_e3e69ce7",
+        "filename": "desktop/source/app/cmdlinehelp.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-11-30T07:51:38Z",
+      "side": 1,
+      "message": "Please use %PRODUCTNAME instead of \"LibreOffice\" and replace it afterwards. See e.g. http://opengrok.libreoffice.org/xref/core/desktop/source/deployment/misc/dp_resource.cxx#73",
       "revId": "f3a21ab1161c895f98d1d44fe9cb5c4c9d0019ab",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -185,6 +219,23 @@
       "writtenOn": "2016-11-27T09:52:02Z",
       "side": 1,
       "message": "Agains, where is \"env:UserInstalation\u003d\" defined?",
+      "revId": "f3a21ab1161c895f98d1d44fe9cb5c4c9d0019ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a71b18c_03ec78c6",
+        "filename": "desktop/source/app/cmdlinehelp.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-11-30T07:51:38Z",
+      "side": 1,
+      "message": "Why do we need these?",
       "revId": "f3a21ab1161c895f98d1d44fe9cb5c4c9d0019ab",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
