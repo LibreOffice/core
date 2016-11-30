@@ -40,6 +40,10 @@ void WpftImpressFilterTest::test()
     const writerperfect::test::WpftOptionalMap_t aMWAWOptional
     {
         {"ClarisWorks_6.0.cwk", REQUIRE_MWAW_VERSION(0, 3, 3)},
+        {"PowerPoint_Mac_1", REQUIRE_MWAW_VERSION(0, 3, 9)},
+        {"PowerPoint_Mac_2", REQUIRE_MWAW_VERSION(0, 3, 9)},
+        {"PowerPoint_Mac_3", REQUIRE_MWAW_VERSION(0, 3, 9)},
+        {"PowerPoint_3.ppt", REQUIRE_MWAW_VERSION(0, 3, 9)},
     };
 
     doTest("org.libreoffice.comp.Impress.KeynoteImportFilter", "/writerperfect/qa/unit/data/impress/libetonyek/", aEtonyekOptional);
