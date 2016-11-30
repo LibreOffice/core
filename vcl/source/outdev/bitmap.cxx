@@ -1188,6 +1188,7 @@ void OutputDevice::DrawTransformedBitmapEx(
     const bool bMirroredY(basegfx::fTools::less(aScale.getY(), 0.0));
 
     static bool bForceToOwnTransformer(false);
+    const bool bMetafile = mpMetaFile != nullptr;
 
     if(!bForceToOwnTransformer && !bRotated && !bSheared && !bMirroredX && !bMirroredY)
     {
@@ -1199,14 +1200,14 @@ void OutputDevice::DrawTransformedBitmapEx(
             basegfx::fround(aScale.getX() + aTranslate.getX()) - aDestPt.X(),
             basegfx::fround(aScale.getY() + aTranslate.getY()) - aDestPt.Y());
         const Point aOrigin = GetMapMode().GetOrigin();
-        if (comphelper::LibreOfficeKit::isActive() && GetMapMode().GetMapUnit() != MapUnit::MapPixel)
+        if (!bMetafile && comphelper::LibreOfficeKit::isActive() && GetMapMode().GetMapUnit() != MapUnit::MapPixel)
         {
             aDestPt.Move(aOrigin.getX(), aOrigin.getY());
             EnableMapMode(false);
         }
 
         DrawBitmapEx(aDestPt, aDestSize, rBitmapEx);
-        if (comphelper::LibreOfficeKit::isActive() && GetMapMode().GetMapUnit() != MapUnit::MapPixel)
+        if (!bMetafile && comphelper::LibreOfficeKit::isActive() && GetMapMode().GetMapUnit() != MapUnit::MapPixel)
         {
             EnableMapMode();
             aDestPt.Move(-aOrigin.getX(), -aOrigin.getY());
@@ -1218,7 +1219,6 @@ void OutputDevice::DrawTransformedBitmapEx(
     // created transformed bitmap
     const bool bInvert(RasterOp::Invert == meRasterOp);
     const bool bBitmapChangedColor(mnDrawMode & (DrawModeFlags::BlackBitmap | DrawModeFlags::WhiteBitmap | DrawModeFlags::GrayBitmap | DrawModeFlags::GhostedBitmap));
-    const bool bMetafile(mpMetaFile);
     bool bDone(false);
     const basegfx::B2DHomMatrix aFullTransform(GetViewTransformation() * rTransformation);
     const bool bTryDirectPaint(!bInvert && !bBitmapChangedColor && !bMetafile );
