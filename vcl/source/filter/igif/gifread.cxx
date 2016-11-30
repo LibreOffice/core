@@ -307,7 +307,6 @@ bool GIFReader::ReadExtension()
         sal_uInt8 cSize(0);
         // Block length
         rIStm.ReadUChar( cSize );
-
         switch( cFunction )
         {
             // 'Graphic Control Extension'
@@ -412,13 +411,14 @@ bool GIFReader::ReadExtension()
                 const sal_uInt64 nMaxPossible = rIStm.remainingSize();
                 if (nCount > nMaxPossible)
                     nCount = nMaxPossible;
-                std::unique_ptr<sal_uInt8[]> pBuffer(new sal_uInt8[nCount]);
+
+                if (nCount)
+                    rIStm.SeekRel( nCount - 1 );    // Skip subblock data
 
                 bRet = false;
-                std::size_t nRead = rIStm.ReadBytes(pBuffer.get(), nCount);
-                if (NO_PENDING(rIStm) && cSize < nRead)
+                std::size_t nRead = rIStm.ReadBytes(&cSize, 1);
+                if (NO_PENDING(rIStm) && nRead == 1)
                 {
-                    cSize = pBuffer[cSize];
                     bRet = true;
                 }
                 else
