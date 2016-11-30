@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a71b18c_0e11ffac",
+        "filename": "scp2/inc/macros.inc",
+        "patchSetId": 1
+      },
+      "lineNbr": 473,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-11-30T21:36:46Z",
+      "side": 1,
+      "message": "not sure i like this, the alternative would be to add another parameter to gb_AutoInstall_add_module...",
+      "revId": "c70bde43ca866ac8e14fd101e67ec2ece955239b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
