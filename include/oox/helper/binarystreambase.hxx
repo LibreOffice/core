@@ -100,7 +100,7 @@ public:
         @param nAnchorPos
             Position in the stream the data blocks are aligned to.
      */
-    void                alignToBlock( sal_Int32 nBlockSize, sal_Int64 nAnchorPos = 0 );
+    void                alignToBlock( sal_Int32 nBlockSize, sal_Int64 nAnchorPos );
 
 protected:
     explicit            BinaryStreamBase( bool bSeekable ) : mbEof( false ), mbSeekable( bSeekable ) {}

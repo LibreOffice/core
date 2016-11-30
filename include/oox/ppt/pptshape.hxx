@@ -54,7 +54,7 @@ class PPTShape : public oox::drawingml::Shape
 public:
 
     PPTShape( const oox::ppt::ShapeLocation eShapeLocation,
-                const sal_Char* pServiceType = nullptr );
+                const sal_Char* pServiceType );
     virtual ~PPTShape() override;
 
     using oox::drawingml::Shape::addShape;
@@ -65,7 +65,7 @@ public:
             const oox::drawingml::Theme* pTheme,
             const css::uno::Reference< css::drawing::XShapes >& rxShapes,
             basegfx::B2DHomMatrix& aTransformation,
-            ::oox::drawingml::ShapeIdMap* pShapeMap = nullptr );
+            ::oox::drawingml::ShapeIdMap* pShapeMap );
 
     ShapeLocation getShapeLocation() const { return meShapeLocation; };
     void setReferenced( bool bReferenced ){ mbReferenced = bReferenced; };

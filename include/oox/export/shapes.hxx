@@ -126,7 +126,10 @@ private:
 
 public:
 
-    ShapeExport( sal_Int32 nXmlNamespace, ::sax_fastparser::FSHelperPtr pFS, ShapeHashMap* pShapeMap = nullptr, ::oox::core::XmlFilterBase* pFB = nullptr, DocumentType eDocumentType = DOCUMENT_PPTX, DMLTextExport* pTextExport = nullptr );
+    ShapeExport( sal_Int32 nXmlNamespace, ::sax_fastparser::FSHelperPtr pFS,
+                 ShapeHashMap* pShapeMap, ::oox::core::XmlFilterBase* pFB,
+                 DocumentType eDocumentType = DOCUMENT_PPTX,
+                 DMLTextExport* pTextExport = nullptr );
     virtual ~ShapeExport() {}
 
     void SetURLTranslator(const std::shared_ptr<URLTransformer>& pTransformer);

@@ -191,7 +191,7 @@ public:
                             const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                             const css::uno::Reference< css::frame::XModel >& rxDocModel,
                             const GraphicHelper& rGraphicHelper,
-                            bool bDefaultColorBgr = true );
+                            bool bDefaultColorBgr );
 
     /** Imports the form and its embedded controls, and inserts the form with
         all its controls into the passed dialog library. */
