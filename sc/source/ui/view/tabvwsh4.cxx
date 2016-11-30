@@ -339,7 +339,7 @@ void ScTabViewShell::AdjustPosSizePixel( const Point &rPos, const Size &rSize )
     OuterResizePixel( rPos, rSize );
 }
 
-void ScTabViewShell::InnerResizePixel( const Point &rOfs, const Size &rSize )
+void ScTabViewShell::InnerResizePixel( const Point &rOfs, const Size &rSize, bool inplaceEditModeChange )
 {
     Size aNewSize( rSize );
     if ( GetViewFrame()->GetFrame().IsInPlace() )
@@ -379,7 +379,10 @@ void ScTabViewShell::InnerResizePixel( const Point &rOfs, const Size &rSize )
 
     UpdateOleZoom();                                    // calculate zoom for in-place
 
-    GetViewData().GetDocShell()->SetDocumentModified();
+    if (!inplaceEditModeChange)
+    {
+        GetViewData().GetDocShell()->SetDocumentModified();
+    }
 }
 
 void ScTabViewShell::OuterResizePixel( const Point &rOfs, const Size &rSize )
