@@ -1891,10 +1891,15 @@ void SwContentTree::ToggleToRoot()
             m_nRootType = pCntType->GetType();
             m_bIsRoot = true;
             Display(State::HIDDEN != m_eState);
+            if (m_nRootType == ContentTypeId::OUTLINE)
+            {
+                SetSelectionMode(SelectionMode::Multiple);
+            }
         }
     }
     else
     {
+        SetSelectionMode(SelectionMode::Single);
         m_nRootType = ContentTypeId::UNKNOWN;
         m_bIsRoot = false;
         FindActiveTypeAndRemoveUserData();
@@ -2234,7 +2239,9 @@ void SwContentTree::Notify(SfxBroadcaster & rBC, SfxHint const& rHint)
     }
 }
 
-void SwContentTree::ExecCommand(const OUString& rCmd, bool bModifier)
+
+
+void SwContentTree::ExecCommand(const OUString& rCmd, bool bOutlineWithChildren)
 {
     const bool bUp = rCmd == "up";
     const bool bUpDown = bUp || rCmd == "down";
@@ -2252,40 +2259,80 @@ void SwContentTree::ExecCommand(const OUString& rCmd, bool bModifier)
     SwWrtShell *const pShell = GetWrtShell();
     sal_Int8 nActOutlineLevel = m_nOutlineLevel;
     sal_uInt16 nActPos = pShell->GetOutlinePos(nActOutlineLevel);
-    SvTreeListEntry* pFirstEntry = FirstSelected();
-    if (pFirstEntry && lcl_IsContent(pFirstEntry))
+
+    std::vector<SvTreeListEntry*> selected;
+    for (SvTreeListEntry * pEntry = FirstSelected(); pEntry; pEntry = NextSelected(pEntry))
     {
-        assert(dynamic_cast<SwContent*>(static_cast<SwTypeNumber*>(pFirstEntry->GetUserData())));
-        if ((m_bIsRoot && m_nRootType == ContentTypeId::OUTLINE) ||
-            static_cast<SwContent*>(pFirstEntry->GetUserData())->GetParent()->GetType()
-                                        ==  ContentTypeId::OUTLINE)
+        // it's possible to select the root node too which is a really bad idea
+        bool bSkip = lcl_IsContentType(pEntry);
+        // filter out children of selected parents so they don't get promoted
+        // or moved twice (except if there is Ctrl modifier, since in that
+        // case children are re-parented)
+        if ((bLeftRight || bOutlineWithChildren) && !selected.empty())
         {
-            nActPos = static_cast<SwOutlineContent*>(pFirstEntry->GetUserData())->GetPos();
+            for (auto pParent = GetParent(pEntry); pParent; pParent = GetParent(pParent))
+            {
+                if (selected.back() == pParent)
+                {
+                    bSkip = true;
+                    break;
+                }
+            }
+        }
+        if (!bSkip)
+        {
+            selected.push_back(pEntry);
         }
     }
-    if (nActPos < USHRT_MAX && (!bUpDown || pShell->IsOutlineMovable(nActPos)))
+    if (bUpDown && !bUp)
+    {   // to move down, start at the end!
+        std::reverse(selected.begin(), selected.end());
+    }
+
+    bool bStartedAction = false;
+    for (auto pCurrentEntry : selected)
     {
-        pShell->StartAllAction();
+        if (pCurrentEntry && lcl_IsContent(pCurrentEntry))
+        {
+            assert(dynamic_cast<SwContent*>(static_cast<SwTypeNumber*>(pCurrentEntry->GetUserData())));
+            if ((m_bIsRoot && m_nRootType == ContentTypeId::OUTLINE) ||
+                static_cast<SwContent*>(pCurrentEntry->GetUserData())->GetParent()->GetType()
+                                            ==  ContentTypeId::OUTLINE)
+            {
+                nActPos = static_cast<SwOutlineContent*>(pCurrentEntry->GetUserData())->GetPos();
+            }
+        }
+        if (nActPos == USHRT_MAX || (bUpDown && !pShell->IsOutlineMovable(nActPos)))
+        {
+            continue;
+        }
+
+        if (!bStartedAction)
+        {
+            pShell->StartAllAction();
+            pShell->StartUndo(bLeftRight ? UNDO_OUTLINE_LR : UNDO_OUTLINE_UD);
+            bStartedAction = true;
+        }
         pShell->GotoOutline( nActPos); // If text selection != box selection
         pShell->Push();
-        pShell->MakeOutlineSel(nActPos, nActPos, bModifier);
+        pShell->MakeOutlineSel(nActPos, nActPos, bOutlineWithChildren);
         if (bUpDown)
         {
             short nDir = bUp ? -1 : 1;
-            if (!bModifier && ((nDir == -1 && nActPos > 0) ||
+            if (!bOutlineWithChildren && ((nDir == -1 && nActPos > 0) ||
                                (nDir == 1 && nActPos < GetEntryCount() - 2)))
             {
                 pShell->MoveOutlinePara( nDir );
                 // Set cursor back to the current position
                 pShell->GotoOutline( nActPos + nDir);
             }
-            else if (bModifier && pFirstEntry)
+            else if (bOutlineWithChildren && pCurrentEntry)
             {
                 sal_uInt16 nActEndPos = nActPos;
-                SvTreeListEntry* pEntry = pFirstEntry;
-                assert(dynamic_cast<SwOutlineContent*>(static_cast<SwTypeNumber*>(pFirstEntry->GetUserData())));
+                SvTreeListEntry* pEntry = pCurrentEntry;
+                assert(dynamic_cast<SwOutlineContent*>(static_cast<SwTypeNumber*>(pCurrentEntry->GetUserData())));
                 const auto nActLevel = static_cast<SwOutlineContent*>(
-                        pFirstEntry->GetUserData())->GetOutlineLevel();
+                        pCurrentEntry->GetUserData())->GetOutlineLevel();
                 pEntry = Next(pEntry);
                 while (pEntry && CTYPE_CNT ==
                     static_cast<SwTypeNumber*>(pEntry->GetUserData())->GetTypeId())
@@ -2331,7 +2378,7 @@ void SwContentTree::ExecCommand(const OUString& rCmd, bool bModifier)
                 else
                 {
                     sal_uInt16 nDest = nActPos;
-                    pEntry = pFirstEntry;
+                    pEntry = pCurrentEntry;
                     while (pEntry && nDest)
                     {
                         nDest--;
@@ -2362,6 +2409,11 @@ void SwContentTree::ExecCommand(const OUString& rCmd, bool bModifier)
 
         pShell->ClearMark();
         pShell->Pop(false); // Cursor is now back at the current heading.
+    }
+
+    if (bStartedAction)
+    {
+        pShell->EndUndo();
         pShell->EndAllAction();
         if (m_aActiveContentArr[ContentTypeId::OUTLINE])
             m_aActiveContentArr[ContentTypeId::OUTLINE]->Invalidate();
