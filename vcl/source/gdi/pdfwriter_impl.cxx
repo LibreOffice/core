@@ -39,6 +39,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <o3tl/numeric.hxx>
+#include <o3tl/make_unique.hxx>
 #include <osl/file.hxx>
 #include <osl/thread.h>
 #include <rtl/crc.h>
@@ -1724,8 +1725,6 @@ void PDFWriterImpl::PDFPage::appendWaveLine( sal_Int32 nWidth, sal_Int32 nY, sal
         m_aContext(rContext),
         m_aFile(m_aContext.URL),
         m_bOpen(false),
-        m_pCodec( nullptr ),
-        m_pMemStream(nullptr),
         m_aDocDigest( rtl_digest_createMD5() ),
         m_aCipher( nullptr ),
         m_aDigest( nullptr ),
@@ -2141,8 +2140,8 @@ void PDFWriterImpl::beginCompression()
 {
     if (!g_bDebugDisableCompression)
     {
-        m_pCodec = new ZCodec( 0x4000, 0x4000 );
-        m_pMemStream = new SvMemoryStream();
+        m_pCodec = o3tl::make_unique<ZCodec>( 0x4000, 0x4000 );
+        m_pMemStream = o3tl::make_unique<SvMemoryStream>();
         m_pCodec->BeginCompression();
     }
 }
@@ -2152,13 +2151,11 @@ void PDFWriterImpl::endCompression()
     if (!g_bDebugDisableCompression && m_pCodec)
     {
         m_pCodec->EndCompression();
-        delete m_pCodec;
-        m_pCodec = nullptr;
+        m_pCodec.reset();
         sal_uInt64 nLen = m_pMemStream->Tell();
         m_pMemStream->Seek( 0 );
         writeBuffer( m_pMemStream->GetData(), nLen );
-        delete m_pMemStream;
-        m_pMemStream = nullptr;
+        m_pMemStream.reset();
     }
 }
 
