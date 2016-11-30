@@ -34,6 +34,9 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
     throw (css::uno::RuntimeException, std::exception) override;
 
+    //XFilter
+    virtual sal_Bool SAL_CALL filter(const css::uno::Sequence< css::beans::PropertyValue > &rDescriptor)
+    throw (css::uno::RuntimeException, std::exception) override;
 private:
     virtual bool doDetectFormat(librevenge::RVNGInputStream &rInput, OUString &rTypeName) override;
     virtual bool doImportDocument(librevenge::RVNGInputStream &rInput, OdsGenerator &rGenerator, utl::MediaDescriptor &) override;
