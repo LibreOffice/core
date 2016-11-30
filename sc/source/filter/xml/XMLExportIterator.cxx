@@ -52,7 +52,7 @@ void ScMyIteratorBase::UpdateAddress( ScAddress& rCellAddress )
 
 inline bool ScMyShape::operator<(const ScMyShape& aShape) const
 {
-    return ( aAddress < aShape.aAddress );
+    return aAddress.lessThanByRow( aShape.aAddress );
 }
 
 ScMyShapesContainer::ScMyShapesContainer()
@@ -108,7 +108,7 @@ void ScMyShapesContainer::Sort()
 
 inline bool ScMyNoteShape::operator<(const ScMyNoteShape& aNote) const
 {
-    return ( aPos < aNote.aPos );
+    return aPos.lessThanByRow( aNote.aPos );
 }
 
 ScMyNoteShapesContainer::ScMyNoteShapesContainer()
@@ -159,7 +159,7 @@ void ScMyNoteShapesContainer::Sort()
 
 inline bool ScMyMergedRange::operator<(const ScMyMergedRange& aRange) const
 {
-    return ( aCellRange.aStart < aRange.aCellRange.aStart );
+    return aCellRange.aStart.lessThanByRow( aRange.aCellRange.aStart );
 }
 
 ScMyMergedRangesContainer::ScMyMergedRangesContainer()
@@ -253,7 +253,7 @@ bool ScMyAreaLink::Compare( const ScMyAreaLink& rAreaLink ) const
 
 inline bool ScMyAreaLink::operator<(const ScMyAreaLink& rAreaLink ) const
 {
-    return ( aDestRange.aStart < rAreaLink.aDestRange.aStart );
+    return aDestRange.aStart.lessThanByRow( rAreaLink.aDestRange.aStart );
 }
 
 ScMyAreaLinksContainer::ScMyAreaLinksContainer() :
@@ -379,7 +379,7 @@ void ScMyEmptyDatabaseRangesContainer::Sort()
 
 inline bool ScMyDetectiveObj::operator<( const ScMyDetectiveObj& rDetObj) const
 {
-    return ( aPosition < rDetObj.aPosition );
+    return aPosition.lessThanByRow( rDetObj.aPosition );
 }
 
 ScMyDetectiveObjContainer::ScMyDetectiveObjContainer() :
@@ -461,7 +461,7 @@ void ScMyDetectiveObjContainer::Sort()
 
 inline bool ScMyDetectiveOp::operator<( const ScMyDetectiveOp& rDetOp) const
 {
-    return ( aPosition < rDetOp.aPosition );
+    return aPosition.lessThanByRow( rDetOp.aPosition );
 }
 
 ScMyDetectiveOpContainer::ScMyDetectiveOpContainer() :

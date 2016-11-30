@@ -344,6 +344,7 @@ public:
     inline bool operator!=( const ScAddress& rAddress ) const;
     inline bool operator<( const ScAddress& rAddress ) const;
     inline bool operator<=( const ScAddress& rAddress ) const;
+    inline bool lessThanByRow( const ScAddress& rAddress ) const;
 
     inline size_t hash() const;
 
@@ -398,8 +399,7 @@ inline bool ScAddress::operator!=( const ScAddress& rAddress ) const
     return !operator==( rAddress );
 }
 
-/** Same behavior as the old sal_uInt32 nAddress < r.nAddress with encoded
-    tab|col|row bit fields. */
+/** Less than ordered by tab,col,row. */
 inline bool ScAddress::operator<( const ScAddress& rAddress ) const
 {
     if (nTab == rAddress.nTab)
@@ -416,6 +416,20 @@ inline bool ScAddress::operator<( const ScAddress& rAddress ) const
 inline bool ScAddress::operator<=( const ScAddress& rAddress ) const
 {
     return operator<( rAddress ) || operator==( rAddress );
+}
+
+/** Less than ordered by tab,row,col as needed by row-wise import/export */
+inline bool ScAddress::lessThanByRow( const ScAddress& rAddress ) const
+{
+    if (nTab == rAddress.nTab)
+    {
+        if (nRow == rAddress.nRow)
+            return nCol < rAddress.nCol;
+        else
+            return nRow < rAddress.nRow;
+    }
+    else
+        return nTab < rAddress.nTab;
 }
 
 inline size_t ScAddress::hash() const
@@ -609,6 +623,7 @@ public:
     inline bool operator!=( const ScRange& rRange ) const;
     inline bool operator<( const ScRange& rRange ) const;
     inline bool operator<=( const ScRange& rRange ) const;
+    inline bool lessThanByRow( const ScRange& rRange ) const;
 
     /// Hash 2D area ignoring table number.
     inline size_t hashArea() const;
@@ -645,7 +660,7 @@ inline bool ScRange::operator!=( const ScRange& rRange ) const
     return !operator==( rRange );
 }
 
-/// Sort on upper left corner, if equal then use lower right too.
+/// Sort on upper left corner tab,col,row, if equal then use lower right too.
 inline bool ScRange::operator<( const ScRange& r ) const
 {
     return aStart < r.aStart || (aStart == r.aStart && aEnd < r.aEnd) ;
@@ -654,6 +669,12 @@ inline bool ScRange::operator<( const ScRange& r ) const
 inline bool ScRange::operator<=( const ScRange& rRange ) const
 {
     return operator<( rRange ) || operator==( rRange );
+}
+
+/// Sort on upper left corner tab,row,col, if equal then use lower right too.
+inline bool ScRange::lessThanByRow( const ScRange& r ) const
+{
+    return aStart.lessThanByRow( r.aStart) || (aStart == r.aStart && aEnd.lessThanByRow( r.aEnd)) ;
 }
 
 inline bool ScRange::In( const ScAddress& rAddress ) const
