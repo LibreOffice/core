@@ -307,6 +307,7 @@ bool GIFReader::ReadExtension()
         sal_uInt8 cSize(0);
         // Block length
         rIStm.ReadUChar( cSize );
+
         switch( cFunction )
         {
             // 'Graphic Control Extension'
@@ -639,6 +640,11 @@ void GIFReader::CreateNewBitmaps()
     aAnimBmp.aSizePix = Size( nImageWidth, nImageHeight );
     aAnimBmp.nWait = ( nTimer != 65535 ) ? nTimer : ANIMATION_TIMEOUT_ON_CLICK;
     aAnimBmp.bUserInput = false;
+
+    // tdf#104121 . Internet Explorer, Firefox, Chrome and Safari all set a minimum default playback speed.
+    // IE10 Consumer Preview sets default of 100ms for rates less that 20ms. We do the same
+    if (aAnimBmp.nWait < 2) // 20ms, specified in 100's of a second
+        aAnimBmp.nWait = 10;
 
     if( nGCDisposalMethod == 2 )
         aAnimBmp.eDisposal = Disposal::Back;
