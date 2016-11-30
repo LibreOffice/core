@@ -100,6 +100,10 @@ define gb_Package_Package
 $$(if $$(gb_Package_SOURCEDIR_$(1)),$$(call gb_Output_error,gb_Package__check: Package $(1) has already been defined))
 $(if $(filter postprocess% instsetoo_native%,$(1)),,\
     $(call gb_Postprocess_register_target,AllPackages,Package,$(1)))
+ifeq (,$$(filter $(1),$$(gb_Package_REGISTERED)))
+$$(eval $$(call gb_Output_info,Currently known packages are: $(sort $(gb_Package_REGISTERED)),ALL))
+$$(eval $$(call gb_Output_error,Package $(1) must be registered in Repository.mk or RepositoryExternal.mk))
+endif
 $(call gb_Package_Package_internal,$(1),$(2))
 $$(eval $$(call gb_Module_register_target,$(call gb_Package_get_target,$(1)),$(call gb_Package_get_clean_target,$(1))))
 $(call gb_Helper_make_userfriendly_targets,$(1),Package)

@@ -768,6 +768,41 @@ $(eval $(call gb_Helper_register_jars,NONE,\
 ))
 endif
 
+# 'test_unittest' is only package delivering to workdir.
+# Other packages could be potentially autoinstalled.
+$(eval $(call gb_Helper_register_packages, \
+	test_unittest \
+	cli_basetypes_copy \
+	$(if $(BUILD_POSTGRESQL_SDBC),connectivity_postgresql-sdbc) \
+	$(if $(and $(filter MSC,$(COM)),$(ENABLE_CRASHDUMP)),dbghelp) \
+	desktop_install \
+	$(if $(filter DESKTOP,$(BUILD_TYPE)),desktop_scripts_install) \
+	extras_fonts \
+	extras_wordbook \
+	$(if $(filter WNTGCC,$(OS)$(COM)), \
+		mingw_dlls \
+		mingw_gccdlls \
+	) \
+	$(if $(filter MSC,$(COM)),msvc_dlls) \
+	more_fonts_conf \
+	instsetoo_native_setup \
+	$(if $(ENABLE_OOENV),instsetoo_native_ooenv) \
+	libreofficekit_selectionhandles \
+	odk_headers_generated \
+	oox_customshapes \
+	oox_generated \
+	postprocess_images \
+	postprocess_registry \
+	python_zipcore \
+	readlicense_oo_readmes \
+	sc_res_xml \
+	sdext_pdfimport_pdf \
+	setup_native_misc \
+	share \
+	shell_senddoc \
+	vcl_fontunxpsprint \
+))
+
 $(eval $(call gb_Helper_register_packages_for_install,impress,\
 	sd_xml \
 ))
