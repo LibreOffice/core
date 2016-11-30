@@ -459,7 +459,7 @@ void SwFlyDrawContact::SetMaster( SdrObject* _pNewMaster )
     mpMasterObj = static_cast<SwFlyDrawObj *>(_pNewMaster);
 }
 
-void SwFlyDrawContact::Modify( const SfxPoolItem*, const SfxPoolItem * )
+void SwFlyDrawContact::SwClientNotify(const SwModify&, const SfxHint&)
 {
 }
 
@@ -1434,120 +1434,101 @@ namespace
     }
 }
 
-void SwDrawContact::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
+void SwDrawContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
 {
-    OSL_ENSURE( !mbDisconnectInProgress,
-            "<SwDrawContact::Modify(..)> called during disconnection.");
-
-    sal_uInt16 nWhich = pNew ? pNew->Which() : 0;
-    const SwFormatAnchor* pNewAnchorFormat = pNew ? lcl_getAnchorFormat( *pNew ) : nullptr;
-
-    if ( pNewAnchorFormat )
+    SwClient::SwClientNotify(rMod, rHint);
+    if (auto pLegacyHint = dynamic_cast<const sw::LegacyModifyHint*>(&rHint))
     {
-        // Do not respond to a Reset Anchor !!!!!
-        if ( SfxItemState::SET ==
-                GetFormat()->GetAttrSet().GetItemState( RES_ANCHOR, false ) )
-        {
-            // no connect to layout during disconnection
-            if ( !mbDisconnectInProgress )
-            {
-                // determine old object rectangle of 'master' drawing object
-                // for notification
-                const Rectangle* pOldRect = nullptr;
-                Rectangle aOldRect;
-                if ( GetAnchorFrame() )
-                {
-                    // --> #i36181# - include spacing in object
-                    // rectangle for notification.
-                    aOldRect = maAnchoredDrawObj.GetObjRectWithSpaces().SVRect();
-                    pOldRect = &aOldRect;
-                }
-                // re-connect to layout due to anchor format change
-                ConnectToLayout( pNewAnchorFormat );
-                // notify background of drawing objects
-                lcl_NotifyBackgroundOfObj( *this, *GetMaster(), pOldRect );
-                NotifyBackgrdOfAllVirtObjs( pOldRect );
+        SAL_WARN_IF(mbDisconnectInProgress, "sw", "<SwDrawContact::Modify(..)> called during disconnection.");
 
-                const SwFormatAnchor* pOldAnchorFormat = pOld ? lcl_getAnchorFormat( *pOld ) : nullptr;
-                if ( !pOldAnchorFormat || ( pOldAnchorFormat->GetAnchorId() != pNewAnchorFormat->GetAnchorId() ) )
+        const SfxPoolItem* pNew = pLegacyHint->m_pNew;
+        sal_uInt16 nWhich = pNew ? pNew->Which() : 0;
+        if(const SwFormatAnchor* pNewAnchorFormat = pNew ? lcl_getAnchorFormat(*pNew) : nullptr)
+        {
+            // Do not respond to a Reset Anchor!
+            if(GetFormat()->GetAttrSet().GetItemState(RES_ANCHOR, false) == SfxItemState::SET)
+            {
+                // no connect to layout during disconnection
+                if(!mbDisconnectInProgress)
                 {
-                    OSL_ENSURE( maAnchoredDrawObj.DrawObj(), "SwDrawContact::Modify: no draw object here?" );
-                    if ( maAnchoredDrawObj.DrawObj() )
+                    // determine old object rectangle of 'master' drawing object
+                    // for notification
+                    const Rectangle* pOldRect = nullptr;
+                    Rectangle aOldRect;
+                    if(GetAnchorFrame())
                     {
-                        // --> #i102752#
-                        // assure that a ShapePropertyChangeNotifier exists
-                        maAnchoredDrawObj.DrawObj()->notifyShapePropertyChange( svx::ShapeProperty::TextDocAnchor );
+                        // --> #i36181# - include spacing in object
+                        // rectangle for notification.
+                        aOldRect = maAnchoredDrawObj.GetObjRectWithSpaces().SVRect();
+                        pOldRect = &aOldRect;
+                    }
+                    // re-connect to layout due to anchor format change
+                    ConnectToLayout(pNewAnchorFormat);
+                    // notify background of drawing objects
+                    lcl_NotifyBackgroundOfObj(*this, *GetMaster(), pOldRect);
+                    NotifyBackgrdOfAllVirtObjs(pOldRect);
+
+                    const SwFormatAnchor* pOldAnchorFormat = pLegacyHint->m_pOld ? lcl_getAnchorFormat(*pLegacyHint->m_pOld) : nullptr;
+                    if(!pOldAnchorFormat || (pOldAnchorFormat->GetAnchorId() != pNewAnchorFormat->GetAnchorId()))
+                    {
+                        if(maAnchoredDrawObj.DrawObj())
+                        {
+                            // --> #i102752#
+                            // assure that a ShapePropertyChangeNotifier exists
+                            maAnchoredDrawObj.DrawObj()->notifyShapePropertyChange(svx::ShapeProperty::TextDocAnchor);
+                        }
+                        else
+                            SAL_WARN("sw", "SwDrawContact::Modify: no draw object here?");
                     }
                 }
             }
+            else
+                DisconnectFromLayout();
         }
-        else
-            DisconnectFromLayout();
-    }
-    // --> #i62875# - no further notification, if not connected to Writer layout
-    else if ( maAnchoredDrawObj.GetAnchorFrame() &&
-              maAnchoredDrawObj.GetDrawObj()->GetUserCall() )
-    {
-        // --> #i28701# - on change of wrapping style, hell|heaven layer,
-        // or wrapping style influence an update of the <SwSortedObjs> list,
-        // the drawing object is registered in, has to be performed. This is triggered
-        // by the 1st parameter of method call <InvalidateObjs_(..)>.
-        if ( RES_SURROUND == nWhich ||
-             RES_OPAQUE == nWhich ||
-             RES_WRAP_INFLUENCE_ON_OBJPOS == nWhich ||
-             ( RES_ATTRSET_CHG == nWhich &&
-               ( SfxItemState::SET == static_cast<const SwAttrSetChg*>(pNew)->GetChgSet()->GetItemState(
-                           RES_SURROUND, false ) ||
-                 SfxItemState::SET == static_cast<const SwAttrSetChg*>(pNew)->GetChgSet()->GetItemState(
-                           RES_OPAQUE, false ) ||
-                 SfxItemState::SET == static_cast<const SwAttrSetChg*>(pNew)->GetChgSet()->GetItemState(
-                           RES_WRAP_INFLUENCE_ON_OBJPOS, false ) ) ) )
+        else if (nWhich == RES_REMOVE_UNO_OBJECT)
+        {} // nothing to do
+        // --> #i62875# - no further notification, if not connected to Writer layout
+        else if ( maAnchoredDrawObj.GetAnchorFrame() &&
+                  maAnchoredDrawObj.GetDrawObj()->GetUserCall() )
         {
-            lcl_NotifyBackgroundOfObj( *this, *GetMaster(), nullptr );
-            NotifyBackgrdOfAllVirtObjs( nullptr );
-            InvalidateObjs_( true );
+            bool bUpdateSortedObjsList(false);
+            switch(nWhich)
+            {
+                case RES_UL_SPACE:
+                case RES_LR_SPACE:
+                case RES_HORI_ORIENT:
+                case RES_VERT_ORIENT:
+                case RES_FOLLOW_TEXT_FLOW: // #i28701# - add attribute 'Follow text flow'
+                    break;
+                case RES_SURROUND:
+                case RES_OPAQUE:
+                case RES_WRAP_INFLUENCE_ON_OBJPOS:
+                    // --> #i28701# - on change of wrapping style, hell|heaven layer,
+                    // or wrapping style influence an update of the <SwSortedObjs> list,
+                    // the drawing object is registered in, has to be performed. This is triggered
+                    // by the 1st parameter of method call <InvalidateObjs_(..)>.
+                    bUpdateSortedObjsList = true;
+                    break;
+                case RES_ATTRSET_CHG: // #i35443#
+                {
+                    auto pChgSet = static_cast<const SwAttrSetChg*>(pNew)->GetChgSet();
+                    if(pChgSet->GetItemState(RES_SURROUND, false) == SfxItemState::SET ||
+                            pChgSet->GetItemState(RES_OPAQUE, false) == SfxItemState::SET ||
+                            pChgSet->GetItemState(RES_WRAP_INFLUENCE_ON_OBJPOS, false) == SfxItemState::SET)
+                        bUpdateSortedObjsList = true;
+                }
+                break;
+                default:
+                    OSL_FAIL("<SwDraw Contact::Modify(..)> - unhandled attribute? - please inform od@openoffice.org");
+            }
+            lcl_NotifyBackgroundOfObj(*this, *GetMaster(), nullptr);
+            NotifyBackgrdOfAllVirtObjs(nullptr);
+            InvalidateObjs_(bUpdateSortedObjsList);
         }
-        else if ( RES_UL_SPACE == nWhich || RES_LR_SPACE == nWhich ||
-                  RES_HORI_ORIENT == nWhich || RES_VERT_ORIENT == nWhich ||
-                  // #i28701# - add attribute 'Follow text flow'
-                  RES_FOLLOW_TEXT_FLOW == nWhich ||
-                  ( RES_ATTRSET_CHG == nWhich &&
-                    ( SfxItemState::SET == static_cast<const SwAttrSetChg*>(pNew)->GetChgSet()->GetItemState(
-                                RES_LR_SPACE, false ) ||
-                      SfxItemState::SET == static_cast<const SwAttrSetChg*>(pNew)->GetChgSet()->GetItemState(
-                                RES_UL_SPACE, false ) ||
-                      SfxItemState::SET == static_cast<const SwAttrSetChg*>(pNew)->GetChgSet()->GetItemState(
-                                RES_HORI_ORIENT, false ) ||
-                      SfxItemState::SET == static_cast<const SwAttrSetChg*>(pNew)->GetChgSet()->GetItemState(
-                                RES_VERT_ORIENT, false ) ||
-                      SfxItemState::SET == static_cast<const SwAttrSetChg*>(pNew)->GetChgSet()->GetItemState(
-                                RES_FOLLOW_TEXT_FLOW, false ) ) ) )
-        {
-            lcl_NotifyBackgroundOfObj( *this, *GetMaster(), nullptr );
-            NotifyBackgrdOfAllVirtObjs( nullptr );
-            InvalidateObjs_();
-        }
-        // #i35443#
-        else if ( RES_ATTRSET_CHG == nWhich )
-        {
-            lcl_NotifyBackgroundOfObj( *this, *GetMaster(), nullptr );
-            NotifyBackgrdOfAllVirtObjs( nullptr );
-            InvalidateObjs_();
-        }
-        else if ( RES_REMOVE_UNO_OBJECT == nWhich )
-        {
-            // nothing to do
-        }
-#if OSL_DEBUG_LEVEL > 0
-        else
-        {
-            OSL_FAIL( "<SwDrawContact::Modify(..)> - unhandled attribute? - please inform od@openoffice.org" );
-        }
-#endif
-    }
 
-    // #i51474#
-    GetAnchoredObj( nullptr )->ResetLayoutProcessBools();
+        // #i51474#
+        GetAnchoredObj(nullptr)->ResetLayoutProcessBools();
+    }
 }
 
 // #i26791#

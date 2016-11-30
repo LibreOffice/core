@@ -278,10 +278,13 @@ namespace sw
     };
 }
 
+class SwPageDesc;
+
 template< typename TElementType, typename TSource > class SwIterator final : private sw::ClientIteratorBase
 {
-    static_assert(std::is_base_of<SwClient,TElementType>::value, "TElementType needs to be derived from SwClient");
-    static_assert(std::is_base_of<SwModify,TSource>::value, "TSource needs to be derived from SwModify");
+    //static_assert(!std::is_base_of<SwPageDesc,TSource>::value, "SwPageDesc as TSource is deprecated.");
+    static_assert(std::is_base_of<SwClient,TElementType>::value, "TElementType needs to be derived from SwClient.");
+    static_assert(std::is_base_of<SwModify,TSource>::value, "TSource needs to be derived from SwModify.");
 public:
     SwIterator( const TSource& rSrc ) : sw::ClientIteratorBase(rSrc) {}
     TElementType* First()
