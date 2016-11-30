@@ -897,7 +897,7 @@ void SmViewShell::AdjustPosSizePixel(const Point &rPos, const Size &rSize)
     aGraphic->SetPosSizePixel(rPos, rSize);
 }
 
-void SmViewShell::InnerResizePixel(const Point &rOfs, const Size &rSize)
+void SmViewShell::InnerResizePixel(const Point &rOfs, const Size &rSize, bool)
 {
     Size aObjSize = GetObjectShell()->GetVisArea().GetSize();
     if ( aObjSize.Width() > 0 && aObjSize.Height() > 0 )

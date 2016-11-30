@@ -355,7 +355,7 @@ protected:
 
     virtual void    Activate(bool) override;
     virtual void    Deactivate(bool) override;
-    virtual void    InnerResizePixel( const Point &rOfs, const Size &rSize ) override;
+    virtual void    InnerResizePixel( const Point &rOfs, const Size &rSize, bool inplaceEditModeChange ) override;
     virtual void    OuterResizePixel( const Point &rOfs, const Size &rSize ) override;
 
     const SwFrameFormat* GetLastTableFrameFormat() const {return m_pLastTableFormat;}

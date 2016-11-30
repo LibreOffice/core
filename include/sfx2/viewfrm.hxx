@@ -128,7 +128,8 @@ public:
     void                    UnlockAdjustPosSizePixel()
                             { m_nAdjustPosPixelLock--; }
     void                    DoAdjustPosSizePixel( SfxViewShell * pSh,
-                                        const Point &rPos, const Size &rSize );
+                                        const Point &rPos, const Size &rSize,
+                                        bool inplaceEditModeChange );
     void                    Show();
     bool                    IsVisible() const;
     void                    ToTop();

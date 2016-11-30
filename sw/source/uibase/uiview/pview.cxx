@@ -1332,7 +1332,7 @@ void SwPagePreview::CalcAndSetBorderPixel( SvBorder &rToFill, bool /*bInner*/ )
     SetBorderPixel( rToFill );
 }
 
-void  SwPagePreview::InnerResizePixel( const Point &rOfst, const Size &rSize )
+void  SwPagePreview::InnerResizePixel( const Point &rOfst, const Size &rSize, bool )
 {
     SvBorder aBorder;
     CalcAndSetBorderPixel( aBorder, true );

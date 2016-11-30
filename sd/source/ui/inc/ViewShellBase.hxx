@@ -118,7 +118,7 @@ public:
     virtual bool HasSelection(bool) const override;
 
     SvBorder GetBorder (bool bOuterResize);
-    virtual void InnerResizePixel (const Point& rOrigin, const Size& rSize) override;
+    virtual void InnerResizePixel (const Point& rOrigin, const Size& rSize, bool inplaceEditModeChange) override;
     virtual void OuterResizePixel (const Point& rOrigin, const Size& rSize) override;
 
     /** This call is forwarded to the main sub-shell.
