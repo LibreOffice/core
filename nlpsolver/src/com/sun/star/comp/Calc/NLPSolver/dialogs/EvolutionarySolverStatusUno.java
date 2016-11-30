@@ -177,7 +177,7 @@ public class EvolutionarySolverStatusUno extends BaseDialog
     }
 
     public void setBestSolution(double solution, boolean feasible) {
-        lblSolutionValue.setLabel(String.format("%.2f", solution));
+        lblSolutionValue.setLabel(String.format("%g", solution));
         if (feasible)
             lblSolutionValue.setTextColor(defaultTextColor);
         else
