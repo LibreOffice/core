@@ -519,9 +519,21 @@ void ScGlobal::Init()
 void ScGlobal::InitPPT()
 {
     OutputDevice* pDev = Application::GetDefaultDevice();
-    Point aPix1000 = pDev->LogicToPixel( Point(100000,100000), MapUnit::MapTwip );
-    nScreenPPTX = aPix1000.X() / 100000.0;
-    nScreenPPTY = aPix1000.Y() / 100000.0;
+
+    if ( !comphelper::LibreOfficeKit::isActive() )
+    {
+        Point aPix1000 = pDev->LogicToPixel( Point(100000,100000), MapUnit::MapTwip );
+        nScreenPPTX = aPix1000.X() / 100000.0;
+        nScreenPPTY = aPix1000.Y() / 100000.0;
+    }
+    else
+    {
+        // we need more precision in order to get
+        // the cell cursor correctly aligned to the grid
+        Point aPix1000 = pDev->LogicToPixel( Point(1e12,1e12), MapUnit::MapTwip );
+        nScreenPPTX = aPix1000.X() / 1e12;
+        nScreenPPTY = aPix1000.Y() / 1e12;
+    }
 }
 
 const OUString& ScGlobal::GetClipDocName()

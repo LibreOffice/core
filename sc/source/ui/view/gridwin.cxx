@@ -5732,8 +5732,9 @@ OString ScGridWindow::getCellCursor(const Fraction& rZoomX, const Fraction& rZoo
 
     double fPPTX = pViewData->GetPPTX();
     double fPPTY = pViewData->GetPPTY();
-    Rectangle aRect(Point(aScrPos.getX() / fPPTX, aScrPos.getY() / fPPTY),
-                    Size(nSizeXPix / fPPTX, nSizeYPix / fPPTY));
+
+    Rectangle aRect(Point(rtl::math::round(aScrPos.getX() / fPPTX), rtl::math::round(aScrPos.getY() / fPPTY)),
+                    Size(rtl::math::round(nSizeXPix / fPPTX), rtl::math::round(nSizeYPix / fPPTY)));
 
     pViewData->SetZoom(defaultZoomX, defaultZoomY, true);
 

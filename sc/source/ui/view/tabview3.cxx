@@ -333,6 +333,9 @@ void ScTabView::SetCursor( SCCOL nPosX, SCROW nPosY, bool bNew )
 
     //  DeactivateIP only for MarkListHasChanged
 
+    if (comphelper::LibreOfficeKit::isActive())
+        nPosY = std::min(nPosY, MAXTILEDROW);
+
     if ( nPosX != nOldX || nPosY != nOldY || bNew )
     {
         ScTabViewShell* pViewShell = aViewData.GetViewShell();
@@ -362,10 +365,10 @@ void ScTabView::SetCursor( SCCOL nPosX, SCROW nPosY, bool bNew )
                     aOldSize = pModelObj->getDocumentSize();
 
                 if (nPosX > aViewData.GetMaxTiledCol() - 10)
-                    aViewData.SetMaxTiledCol(std::max(nPosX, aViewData.GetMaxTiledCol()) + 10);
+                    aViewData.SetMaxTiledCol(std::min<SCCOL>(std::max(nPosX, aViewData.GetMaxTiledCol()) + 10, MAXCOL));
 
                 if (nPosY > aViewData.GetMaxTiledRow() - 25)
-                    aViewData.SetMaxTiledRow(std::max(nPosY, aViewData.GetMaxTiledRow()) + 25);
+                    aViewData.SetMaxTiledRow(std::min<SCROW>(std::max(nPosY, aViewData.GetMaxTiledRow()) + 25,  MAXTILEDROW));
 
                 Size aNewSize(0, 0);
                 if (pModelObj)
