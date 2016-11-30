@@ -54,7 +54,7 @@ void SmRtfExport::HandleText(const SmNode* pNode, int /*nLevel*/)
     if (pNode->GetToken().eType == TTEXT)  // literal text
         m_pBuffer->append(LO_STRING_SVTOOLS_RTF_MNOR " ");
 
-    const SmTextNode* pTemp = static_cast<const SmTextNode*>(pNode);
+    auto pTemp = static_cast<const SmTextNode*>(pNode);
     SAL_INFO("starmath.rtf", "Text: " << pTemp->GetText());
     for (sal_Int32 i = 0; i < pTemp->GetText().getLength(); i++)
     {
@@ -180,7 +180,7 @@ namespace
 OString mathSymbolToString(const SmNode* node, rtl_TextEncoding nEncoding)
 {
     assert(node->GetType() == NMATH || node->GetType() == NMATHIDENT);
-    const SmTextNode* txtnode = static_cast<const SmTextNode*>(node);
+    auto txtnode = static_cast<const SmTextNode*>(node);
     if (txtnode->GetText().isEmpty())
         return OString();
     assert(txtnode->GetText().getLength() == 1);
@@ -405,7 +405,7 @@ void SmRtfExport::HandleBrace(const SmBraceNode* pNode, int nLevel)
     std::vector< const SmNode* > subnodes;
     if (pNode->Body()->GetType() == NBRACEBODY)
     {
-        const SmBracebodyNode* body = static_cast<const SmBracebodyNode*>(pNode->Body());
+        auto body = static_cast<const SmBracebodyNode*>(pNode->Body());
         bool separatorWritten = false; // assume all separators are the same
         for (int i = 0; i < body->GetNumSubNodes(); ++i)
         {
@@ -413,7 +413,7 @@ void SmRtfExport::HandleBrace(const SmBraceNode* pNode, int nLevel)
             if (subnode->GetType() == NMATH || subnode->GetType() == NMATHIDENT)
             {
                 // do not write, but write what separator it is
-                const SmMathSymbolNode* math = static_cast<const SmMathSymbolNode*>(subnode);
+                auto math = static_cast<const SmMathSymbolNode*>(subnode);
                 if (!separatorWritten)
                 {
                     m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MSEPCHR " ");

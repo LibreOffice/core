@@ -950,7 +950,7 @@ void DocxSdrExport::writeDMLAndVMLDrawing(const SdrObject* sdrObj, const SwFrame
     {
         m_pImpl->m_pSerializer->startElementNS(XML_mc, XML_AlternateContent, FSEND);
 
-        const SdrObjGroup* pObjGroup = dynamic_cast<const SdrObjGroup*>(sdrObj);
+        auto pObjGroup = dynamic_cast<const SdrObjGroup*>(sdrObj);
         m_pImpl->m_pSerializer->startElementNS(XML_mc, XML_Choice,
                                                XML_Requires, (pObjGroup ? "wpg" : "wps"),
                                                FSEND);
@@ -1769,7 +1769,7 @@ bool DocxSdrExport::Impl::checkFrameBtlr(SwNode* pStartNode, bool bDML)
 
     if (bItemSet)
     {
-        const SvxCharRotateItem& rCharRotate = static_cast<const SvxCharRotateItem&>(*pItem);
+        auto& rCharRotate = static_cast<const SvxCharRotateItem&>(*pItem);
         if (rCharRotate.GetValue() == 900)
         {
             if (bDML)
