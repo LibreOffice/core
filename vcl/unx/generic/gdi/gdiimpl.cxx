@@ -377,17 +377,8 @@ GC X11SalGraphicsImpl::GetInvert50GC()
                                   | GCFillStyle
                                   | GCStipple;
 
-        char* pEnv = getenv( "SAL_DO_NOT_USE_INVERT50" );
-        if( pEnv && ! strcasecmp( pEnv, "true" ) )
-        {
-            values.fill_style = FillSolid;
-            nValueMask &= ~ GCStipple;
-        }
-        else
-        {
-            values.fill_style           = FillStippled;
-            values.stipple              = mrParent.GetDisplay()->GetInvert50( mrParent.m_nXScreen );
-        }
+        values.fill_style           = FillStippled;
+        values.stipple              = mrParent.GetDisplay()->GetInvert50( mrParent.m_nXScreen );
 
         mpInvert50GC = XCreateGC( mrParent.GetXDisplay(), mrParent.GetDrawable(),
                                   nValueMask,
