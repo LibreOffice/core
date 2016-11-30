@@ -76,6 +76,16 @@ ifneq ($(PLATFORMID),linux_x86)
 $(eval $(call gb_Module_add_slowcheck_targets,sc, \
 	CppunitTest_sc_functions_test_old \
 	CppunitTest_sc_database_functions_test \
+	CppunitTest_sc_array_functions_test \
+	CppunitTest_sc_addin_functions_test \
+	CppunitTest_sc_datetime_functions_test \
+	CppunitTest_sc_financial_functions_test \
+	CppunitTest_sc_information_functions_test \
+	CppunitTest_sc_logical_functions_test \
+	CppunitTest_sc_mathematical_functions_test \
+	CppunitTest_sc_spreadsheet_functions_test \
+	CppunitTest_sc_statistical_functions_test \
+	CppunitTest_sc_text_functions_test \
 ))
 endif
 
