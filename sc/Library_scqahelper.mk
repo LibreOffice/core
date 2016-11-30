@@ -61,6 +61,7 @@ $(eval $(call gb_Library_use_libraries,scqahelper,\
 $(eval $(call gb_Library_add_exception_objects,scqahelper,\
 	sc/qa/unit/helper/qahelper \
 	sc/qa/unit/helper/xpath \
+	sc/qa/unit/functions_test \
 ))
 
 # vim: set noet sw=4 ts=4:
