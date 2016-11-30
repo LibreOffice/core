@@ -1328,7 +1328,7 @@ void SwContentTree::RequestingChildren( SvTreeListEntry* pParent )
                                     )
                                 {
                                     pChild = Prev(pChild);
-                                    assert(!pChild || dynamic_cast<SwOutlineContent*>(static_cast<SwTypeNumber*>(pChild->GetUserData())));
+                                    assert(!pChild || dynamic_cast<SwTypeNumber*>(static_cast<SwTypeNumber*>(pChild->GetUserData())));
                                 }
                                 if(pChild)
                                     pChild = InsertEntry(sEntry, pChild,
