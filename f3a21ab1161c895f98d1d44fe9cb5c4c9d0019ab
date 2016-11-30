@@ -260,6 +260,24 @@
     },
     {
       "key": {
+        "uuid": "3a71b18c_2302543f",
+        "filename": "desktop/source/app/cmdlinehelp.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-11-30T10:32:44Z",
+      "side": 1,
+      "message": "I mean, why do we need to mention these in the help text?",
+      "parentUuid": "3a71b18c_43ce705b",
+      "revId": "f3a21ab1161c895f98d1d44fe9cb5c4c9d0019ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a71b18c_37ce125b",
         "filename": "desktop/source/app/cmdlinehelp.cxx",
         "patchSetId": 4
