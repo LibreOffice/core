@@ -196,6 +196,10 @@ generated the following PDF content.
 
 touch vcl/source/gdi/pdfwriter* && make vcl dbglevel=3
 
+The compression can be disabled even using a env. var:
+
+export VCL_DEBUG_DISABLE_PDFCOMPRESSION=1
+
 To de-compress the contents of a PDF file written by a release build or
 other programs, use the "pdfunzip" tool:
 
