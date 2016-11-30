@@ -236,12 +236,12 @@ oslFileError SAL_CALL osl_getFileURLFromSystemPath( rtl_uString *ustrSystemPath,
     rtl_uString *pTmp = nullptr;
     sal_Int32 nIndex;
 
-    if( 0 == ustrSystemPath->length )
+    if( ustrSystemPath->length == 0 )
         return osl_File_E_INVAL;
 
     /* temporary hack: if already file url, return ustrSystemPath */
 
-    if( 0 == rtl_ustr_ascii_shortenedCompare_WithLength( ustrSystemPath->buffer, ustrSystemPath->length,"file:", 5 ) )
+    if( rtl_ustr_ascii_shortenedCompare_WithLength( ustrSystemPath->buffer, ustrSystemPath->length,"file:", 5 ) == 0 )
     {
     /*
         if( 0 == rtl_ustr_ascii_shortenedCompare_WithLength( ustrSystemPath->buffer, ustrSystemPath->length,"file://", 7 ) )
@@ -265,11 +265,11 @@ oslFileError SAL_CALL osl_getFileURLFromSystemPath( rtl_uString *ustrSystemPath,
     }
 
     /* check if system path starts with ~ or ~user and replace it with the appropriate home dir */
-    if( '~' == ustrSystemPath->buffer[0] )
+    if( ustrSystemPath->buffer[0] == '~' )
     {
         /* check if another user is specified */
-        if( ( 1 == ustrSystemPath->length ) ||
-            ( '/' == ustrSystemPath->buffer[1] ) )
+        if( ( ustrSystemPath->length == 1 ) ||
+            ( ustrSystemPath->buffer[1] == '/' ) )
         {
             /* osl_getHomeDir returns file URL */
             oslSecurity pSecurity = osl_getCurrentSecurity();
@@ -294,7 +294,7 @@ oslFileError SAL_CALL osl_getFileURLFromSystemPath( rtl_uString *ustrSystemPath,
 
     /* check if initial string contains double instances of '/' */
     nIndex = rtl_ustr_indexOfStr_WithLength( ustrSystemPath->buffer, ustrSystemPath->length, pDoubleSlash, 2 );
-    if( -1 != nIndex )
+    if( nIndex != -1 )
     {
         sal_Int32 nSrcIndex;
         sal_Int32 nDeleted = 0;
@@ -309,7 +309,7 @@ oslFileError SAL_CALL osl_getFileURLFromSystemPath( rtl_uString *ustrSystemPath,
         /* remove all occurrences of '//' */
         for( nSrcIndex = nIndex + 1; nSrcIndex < pTmp->length; nSrcIndex++ )
         {
-            if( ('/' == pTmp->buffer[nSrcIndex]) && ('/' == pTmp->buffer[nIndex]) )
+            if( (pTmp->buffer[nSrcIndex] == '/') && (pTmp->buffer[nIndex] == '/') )
                 nDeleted++;
             else
                 pTmp->buffer[++nIndex] = pTmp->buffer[nSrcIndex];
@@ -328,7 +328,7 @@ oslFileError SAL_CALL osl_getFileURLFromSystemPath( rtl_uString *ustrSystemPath,
     rtl_uString_release( pTmp );
 
     /* absolute urls should start with 'file://' */
-    if( '/' == (*pustrFileURL)->buffer[0] )
+    if( (*pustrFileURL)->buffer[0] == '/' )
     {
         rtl_uString *pProtocol = nullptr;
 
@@ -349,9 +349,9 @@ oslFileError osl_getSystemPathFromFileURL_Ex(
     rtl_uString* temp = nullptr;
     oslFileError osl_error = osl_getSystemPathFromFileURL(ustrFileURL, &temp);
 
-    if (osl_File_E_None == osl_error)
+    if (osl_error == osl_File_E_None)
     {
-        if ('/' == temp->buffer[0])
+        if (temp->buffer[0] == '/')
         {
             *pustrSystemPath = temp;
         }
@@ -417,7 +417,7 @@ namespace
 
         if (p >= aPath)
         {
-            if ('/' == *p)
+            if (*p == '/')
             {
                 p++;
                *p = '\0';
@@ -494,25 +494,25 @@ namespace
         {
             // ignore '/.' , skip one part back when '/..'
 
-            if (('.' == *punresolved) && ('/' == *presolvedsf))
+            if ((*punresolved == '.') && (*presolvedsf == '/'))
             {
-                if ('\0' == *(punresolved + 1))
+                if (*(punresolved + 1) == '\0')
                 {
                     punresolved++;
                     continue;
                 }
-                else if ('/' == *(punresolved + 1))
+                else if (*(punresolved + 1) == '/')
                 {
                     punresolved += 2;
                     continue;
                 }
-                else if (('.' == *(punresolved + 1)) && ('\0' == *(punresolved + 2) || ('/' == *(punresolved + 2))))
+                else if ((*(punresolved + 1) == '.') && (*(punresolved + 2) == '\0' || (*(punresolved + 2) == '/')))
                 {
                     _rmlastpathtoken(path_resolved_so_far);
 
                     presolvedsf = ustrtoend(path_resolved_so_far) - 1;
 
-                    if ('/' == *(punresolved + 2))
+                    if (*(punresolved + 2) == '/')
                         punresolved += 3;
                     else
                         punresolved += 2;
@@ -526,18 +526,18 @@ namespace
 
                     ustrchrcat(*punresolved++, path_resolved_so_far);
 
-                    if ('\0' == *punresolved && !realpath_failed)
+                    if (*punresolved == '\0' && !realpath_failed)
                     {
                         ferr = _osl_resolvepath(
                             path_resolved_so_far,
                             &realpath_failed);
 
-                        if (osl_File_E_None != ferr)
+                        if (ferr != osl_File_E_None)
                             return ferr;
                     }
                 }
             }
-            else if ('/' == *punresolved)
+            else if (*punresolved == '/')
             {
                 if ((presolvedsf = ustrtoend(path_resolved_so_far)) > sentinel)
                     return oslTranslateFileError(OSL_FET_ERROR, ENAMETOOLONG);
@@ -550,7 +550,7 @@ namespace
                         path_resolved_so_far,
                         &realpath_failed);
 
-                    if (osl_File_E_None != ferr)
+                    if (ferr != osl_File_E_None)
                         return ferr;
 
                     if (!_islastchr(path_resolved_so_far, '/'))
@@ -569,13 +569,13 @@ namespace
 
                 ustrchrcat(*punresolved++, path_resolved_so_far);
 
-                if ('\0' == *punresolved && !realpath_failed)
+                if (*punresolved == '\0' && !realpath_failed)
                 {
                     ferr = _osl_resolvepath(
                         path_resolved_so_far,
                         &realpath_failed);
 
-                    if (osl_File_E_None != ferr)
+                    if (ferr != osl_File_E_None)
                         return ferr;
                 }
             }
@@ -609,7 +609,7 @@ oslFileError osl_getAbsoluteFileURL(rtl_uString*  ustrBaseDirURL, rtl_uString* u
 
     rc = FileBase::getSystemPathFromFileURL(relUrl, unresolved_path);
 
-    if(FileBase::E_None != rc)
+    if(rc != FileBase::E_None)
         return oslFileError(rc);
 
     if (systemPathIsRelativePath(unresolved_path))
@@ -617,7 +617,7 @@ oslFileError osl_getAbsoluteFileURL(rtl_uString*  ustrBaseDirURL, rtl_uString* u
         rtl::OUString base_path;
         rc = (FileBase::RC) osl_getSystemPathFromFileURL_Ex(ustrBaseDirURL, &base_path.pData);
 
-        if (FileBase::E_None != rc)
+        if (rc != FileBase::E_None)
             return oslFileError(rc);
 
         rtl::OUString abs_path;
@@ -628,7 +628,7 @@ oslFileError osl_getAbsoluteFileURL(rtl_uString*  ustrBaseDirURL, rtl_uString* u
 
     rtl::OUString resolved_path;
     rc = (FileBase::RC) osl_getAbsoluteFileURL_impl_(unresolved_path, resolved_path);
-    if (FileBase::E_None == rc)
+    if (rc == FileBase::E_None)
     {
         rc = (FileBase::RC) osl_getFileURLFromSystemPath(resolved_path.pData, pustrAbsoluteURL);
         OSL_ASSERT(FileBase::E_None == rc);
@@ -651,7 +651,7 @@ namespace osl { namespace detail {
         rtl::OUString path("PATH");
         rtl::OUString env_path;
 
-        if (osl_Process_E_None == osl_getEnvironment(path.pData, &env_path.pData))
+        if (osl_getEnvironment(path.pData, &env_path.pData) == osl_Process_E_None)
             bfound = osl::searchPath(file_path, env_path, result);
 
         return bfound;
@@ -672,7 +672,7 @@ namespace
         bool bfound = false;
         rtl::OUString cwd_url;
 
-        if (osl_Process_E_None == osl_getProcessWorkingDir(&cwd_url.pData))
+        if (osl_getProcessWorkingDir(&cwd_url.pData) == osl_Process_E_None)
         {
             rtl::OUString cwd;
             FileBase::getSystemPathFromFileURL(cwd_url, cwd);
@@ -697,9 +697,9 @@ oslFileError osl_searchFileURL(rtl_uString* ustrFilePath, rtl_uString* ustrSearc
 
     // try to interpret search path as file url else assume it's a system path list
     rc = FileBase::getSystemPathFromFileURL(ustrFilePath, file_path);
-    if (FileBase::E_INVAL == rc)
+    if (rc == FileBase::E_INVAL)
         file_path = ustrFilePath;
-    else if (FileBase::E_None != rc)
+    else if (rc != FileBase::E_None)
         return oslFileError(rc);
 
     bool          bfound = false;
@@ -726,7 +726,7 @@ oslFileError FileURLToPath(char * buffer, size_t bufLen, rtl_uString* ustrFileUR
     rtl_uString* ustrSystemPath = nullptr;
     oslFileError osl_error      = osl_getSystemPathFromFileURL(ustrFileURL, &ustrSystemPath);
 
-    if(osl_File_E_None != osl_error)
+    if(osl_error != osl_File_E_None)
         return osl_error;
 
     osl_systemPathRemoveSeparator(ustrSystemPath);

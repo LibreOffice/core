@@ -163,11 +163,11 @@ static bool getFromCommandLineArgs(
         {
             rtl_uString *pArg = nullptr;
             osl_getCommandArg( i, &pArg );
-            if( ('-' == pArg->buffer[0] || '/' == pArg->buffer[0] ) &&
-                'e' == pArg->buffer[1] &&
-                'n' == pArg->buffer[2] &&
-                'v' == pArg->buffer[3] &&
-                ':' == pArg->buffer[4] )
+            if( (pArg->buffer[0] == '-' || pArg->buffer[0] == '/' ) &&
+                pArg->buffer[1] == 'e' &&
+                pArg->buffer[2] == 'n' &&
+                pArg->buffer[3] == 'v' &&
+                pArg->buffer[4] == ':' )
             {
                 sal_Int32 nIndex = rtl_ustr_indexOfChar( pArg->buffer, '=' );
                 if( nIndex >= 0 )
@@ -338,8 +338,8 @@ Bootstrap_Impl::Bootstrap_Impl( OUString const & rIniName )
     // normalize path
     FileStatus status( osl_FileStatus_Mask_FileURL );
     DirectoryItem dirItem;
-    if (DirectoryItem::E_None == DirectoryItem::get( base_ini, dirItem ) &&
-        DirectoryItem::E_None == dirItem.getFileStatus( status ))
+    if (DirectoryItem::get( base_ini, dirItem ) == DirectoryItem::E_None &&
+        dirItem.getFileStatus( status ) == DirectoryItem::E_None)
     {
         base_ini = status.getFileURL();
         if (! rIniName.equals( base_ini ))
@@ -351,11 +351,11 @@ Bootstrap_Impl::Bootstrap_Impl( OUString const & rIniName )
     SAL_INFO("sal.rtl", "Bootstrap_Impl(): sFile=" << _iniName);
     oslFileHandle handle;
     if (!_iniName.isEmpty() &&
-        osl_File_E_None == osl_openFile(_iniName.pData, &handle, osl_File_OpenFlag_Read))
+        osl_openFile(_iniName.pData, &handle, osl_File_OpenFlag_Read) == osl_File_E_None)
     {
         rtl::ByteSequence seq;
 
-        while (osl_File_E_None == osl_readLine(handle , reinterpret_cast<sal_Sequence **>(&seq)))
+        while (osl_readLine(handle , reinterpret_cast<sal_Sequence **>(&seq)) == osl_File_E_None)
         {
             OString line( reinterpret_cast<const char *>(seq.getConstArray()), seq.getLength() );
             sal_Int32 nIndex = line.indexOf('=');
@@ -622,8 +622,8 @@ rtlBootstrapHandle SAL_CALL rtl_bootstrap_args_open (
     // normalize path
     FileStatus status( osl_FileStatus_Mask_FileURL );
     DirectoryItem dirItem;
-    if (DirectoryItem::E_None != DirectoryItem::get( iniName, dirItem ) ||
-        DirectoryItem::E_None != dirItem.getFileStatus( status ))
+    if (DirectoryItem::get( iniName, dirItem ) != DirectoryItem::E_None ||
+        dirItem.getFileStatus( status ) != DirectoryItem::E_None)
     {
         return nullptr;
     }
