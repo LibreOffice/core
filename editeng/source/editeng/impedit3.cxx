@@ -893,14 +893,32 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
 
         // search for Portion that no longer fits in line ....
         TextPortion* pPortion = nullptr;
+        sal_Int32 nPortionLen = 0;
+        bool bContinueLastPortion = false;
         bool bBrokenLine = false;
         bLineBreak = false;
         const EditCharAttrib* pNextFeature = pNode->GetCharAttribs().FindFeature( pLine->GetStart() );
-        while ( ( nTmpWidth < nXWidth ) && !bEOL && ( nTmpPortion < pParaPortion->GetTextPortions().Count() ) )
+        while ( ( nTmpWidth < nXWidth ) && !bEOL )
         {
+            const sal_Int32 nTextPortions = pParaPortion->GetTextPortions().Count();
+            assert(nTextPortions > 0);
+            bContinueLastPortion = (nTmpPortion >= nTextPortions);
+            if (bContinueLastPortion)
+            {
+                if (nTmpPos >= pNode->Len())
+                    break;  // while
+
+                // Continue with remainder. This only to have *some* valid
+                // X-values and not endlessly create new lines until DOOM..
+                // Happened in the scenario of tdf#104152 where inserting a
+                // paragraph lead to a11y attempting to format the doc to
+                // obtain content when notified.
+                nTmpPortion = nTextPortions - 1;
+            }
+
             nPortionStart = nTmpPos;
             pPortion = &pParaPortion->GetTextPortions()[nTmpPortion];
-            if ( pPortion->GetKind() == PortionKind::HYPHENATOR )
+            if ( !bContinueLastPortion && pPortion->GetKind() == PortionKind::HYPHENATOR )
             {
                 // Throw away a Portion, if necessary correct the one before,
                 // if the Hyph portion has swallowed a character ...
@@ -920,11 +938,25 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                 DBG_ASSERT( nTmpPortion < pParaPortion->GetTextPortions().Count(), "No more Portions left!" );
                 pPortion = &pParaPortion->GetTextPortions()[nTmpPortion];
             }
+
+            if (bContinueLastPortion)
+            {
+                // Note that this may point behind the portion and is only to
+                // be used with the node's string offsets to generate X-values.
+                nPortionLen = pNode->Len() - nPortionStart;
+            }
+            else
+            {
+                nPortionLen = pPortion->GetLen();
+            }
+
             DBG_ASSERT( pPortion->GetKind() != PortionKind::HYPHENATOR, "CreateLines: Hyphenator-Portion!" );
-            DBG_ASSERT( pPortion->GetLen() || bProcessingEmptyLine, "Empty Portion in CreateLines ?!" );
+            DBG_ASSERT( nPortionLen || bProcessingEmptyLine, "Empty Portion in CreateLines ?!" );
             (void)bProcessingEmptyLine;
             if ( pNextFeature && ( pNextFeature->GetStart() == nTmpPos ) )
             {
+                SAL_WARN_IF( bContinueLastPortion,
+                        "editeng","ImpEditEngine::CreateLines - feature in continued portion will be wrong");
                 sal_uInt16 nWhich = pNextFeature->GetItem()->Which();
                 switch ( nWhich )
                 {
@@ -1068,36 +1100,48 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
             }
             else
             {
-                DBG_ASSERT( pPortion->GetLen() || bProcessingEmptyLine, "Empty Portion - Extra Space?!" );
+                DBG_ASSERT( nPortionLen || bProcessingEmptyLine, "Empty Portion - Extra Space?!" );
                 (void)bProcessingEmptyLine;
                 SeekCursor( pNode, nTmpPos+1, aTmpFont );
                 aTmpFont.SetPhysFont( GetRefDevice() );
                 ImplInitDigitMode(GetRefDevice(), aTmpFont.GetLanguage());
 
-                pPortion->SetRightToLeftLevel( GetRightToLeft( nPara, nTmpPos+1 ) );
+                if (!bContinueLastPortion)
+                    pPortion->SetRightToLeftLevel( GetRightToLeft( nPara, nTmpPos+1 ) );
 
                 if ( bCalcCharPositions || !pPortion->HasValidSize() )
                 {
-                    pPortion->GetSize() = aTmpFont.QuickGetTextSize( GetRefDevice(), pParaPortion->GetNode()->GetString(), nTmpPos, pPortion->GetLen(), pBuf.get() );
+                    if (bContinueLastPortion)
+                    {
+                         Size aSize( aTmpFont.QuickGetTextSize( GetRefDevice(),
+                                pParaPortion->GetNode()->GetString(), nTmpPos, nPortionLen, pBuf.get() ));
+                         pPortion->GetSize().Width() += aSize.Width();
+                         if (pPortion->GetSize().Height() < aSize.Height())
+                             pPortion->GetSize().Height() = aSize.Height();
+                    }
+                    else
+                    {
+                        pPortion->GetSize() = aTmpFont.QuickGetTextSize( GetRefDevice(),
+                                pParaPortion->GetNode()->GetString(), nTmpPos, nPortionLen, pBuf.get() );
+                    }
 
                     // #i9050# Do Kerning also behind portions...
-                    if ( ( aTmpFont.GetFixKerning() > 0 ) && ( ( nTmpPos + pPortion->GetLen() ) < pNode->Len() ) )
+                    if ( ( aTmpFont.GetFixKerning() > 0 ) && ( ( nTmpPos + nPortionLen ) < pNode->Len() ) )
                         pPortion->GetSize().Width() += aTmpFont.GetFixKerning();
                     if ( IsFixedCellHeight() )
                         pPortion->GetSize().Height() = ImplCalculateFontIndependentLineSpacing( aTmpFont.GetFontHeight() );
                 }
                 if ( bCalcCharPositions )
                 {
-                    sal_Int32 nLen = pPortion->GetLen();
                     // The array is  generally flattened at the beginning
                     // => Always simply quick inserts.
                     size_t nPos = nTmpPos - pLine->GetStart();
                     EditLine::CharPosArrayType& rArray = pLine->GetCharPosArray();
-                    rArray.insert(rArray.begin()+nPos, pBuf.get(), pBuf.get()+nLen);
+                    rArray.insert( rArray.begin() + nPos, pBuf.get(), pBuf.get() + nPortionLen);
                 }
 
                 // And now check for Compression:
-                if ( pPortion->GetLen() && GetAsianCompressionMode() )
+                if ( !bContinueLastPortion && nPortionLen && GetAsianCompressionMode() )
                 {
                     EditLine::CharPosArrayType& rArray = pLine->GetCharPosArray();
                     long* pDXArray = rArray.data() + nTmpPos - pLine->GetStart();
@@ -1107,7 +1151,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
 
                 nTmpWidth += pPortion->GetSize().Width();
 
-                sal_Int32 _nPortionEnd = nTmpPos + pPortion->GetLen();
+                sal_Int32 _nPortionEnd = nTmpPos + nPortionLen;
                 if( bScriptSpace && ( _nPortionEnd < pNode->Len() ) && ( nTmpWidth < nXWidth ) && IsScriptChange( EditPaM( pNode, _nPortionEnd ) ) )
                 {
                     bool bAllow = false;
@@ -1146,7 +1190,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                 else if ( aCurrentTab.aTabStop.GetAdjustment() == SvxTabAdjust::Decimal )
                 {
                     OUString aText = GetSelected( EditSelection(  EditPaM( pParaPortion->GetNode(), nTmpPos ),
-                                                                EditPaM( pParaPortion->GetNode(), nTmpPos + pPortion->GetLen() ) ) );
+                                                                EditPaM( pParaPortion->GetNode(), nTmpPos + nPortionLen ) ) );
                     sal_Int32 nDecPos = aText.indexOf( aCurrentTab.aTabStop.GetDecimal() );
                     if ( nDecPos != -1 )
                     {
@@ -1170,7 +1214,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                 nTmpWidth = aCurrentTab.nStartPosX + rTabPortion.GetSize().Width() + nWidthAfterTab;
             }
 
-            nTmpPos = nTmpPos + pPortion->GetLen();
+            nTmpPos = nTmpPos + nPortionLen;
             nPortionEnd = nTmpPos;
             nTmpPortion++;
             if ( aStatus.OneCharPerLine() )
@@ -1186,7 +1230,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
         if ( aStatus.OneCharPerLine() )
         {
             // State before Portion (apart from nTmpWidth):
-            nTmpPos -= pPortion ? pPortion->GetLen() : 0;
+            nTmpPos -= pPortion ? nPortionLen : 0;
             nPortionStart = nTmpPos;
             nTmpPortion--;
 
@@ -1198,7 +1242,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
             nTmpPortion++;
             nPortionEnd = nTmpPortion;
             // one Non-Feature-Portion has to be wrapped
-            if ( pPortion && pPortion->GetLen() > 1 )
+            if ( pPortion && nPortionLen > 1 )
             {
                 DBG_ASSERT( pPortion->GetKind() == PortionKind::TEXT, "Len>1, but no TextPortion?" );
                 nTmpWidth -= pPortion->GetSize().Width();
@@ -1209,7 +1253,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
         else if ( nTmpWidth >= nXWidth )
         {
             nPortionEnd = nTmpPos;
-            nTmpPos -= pPortion ? pPortion->GetLen() : 0;
+            nTmpPos -= pPortion ? nPortionLen : 0;
             nPortionStart = nTmpPos;
             nTmpPortion--;
             bEOL = false;
@@ -1263,7 +1307,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
             pLine->SetEndPortion( nTmpPortion-1 );
             bEOC = false; // was set above, maybe change the sequence of the if's?
         }
-        else if ( !bEOL )
+        else if ( !bEOL && !bContinueLastPortion )
         {
             DBG_ASSERT( pPortion && ((nPortionEnd-nPortionStart) == pPortion->GetLen()), "However, another portion?!" );
             long nRemainingWidth = nMaxLineWidth - nTmpWidth;
