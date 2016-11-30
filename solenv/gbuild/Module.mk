@@ -144,10 +144,12 @@ $(call gb_Module_get_target,%) :
 
 all : build $(if $(CROSS_COMPILING),,unitcheck $(if $(gb_PARTIAL_BUILD),,slowcheck))
 
+ifeq ($(gb_Side),build)
 build-tools : $(gb_BUILD_TOOLS)
 	$(call gb_Output_announce,loaded tools: $(gb_BUILD_TOOLS),$(true),ALL,6)
 	$(call gb_Output_announce_title,build-tools done.)
 	$(call gb_Output_announce_bell)
+endif
 
 build :
 	$(call gb_Output_announce,top level modules: $(foreach module,$(filter-out deliverlog $(WORKDIR)/bootstrap,$^),$(notdir $(module))),$(true),ALL,6)

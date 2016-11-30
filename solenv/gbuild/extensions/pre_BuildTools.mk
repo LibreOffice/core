@@ -8,6 +8,7 @@
 #
 
 # Tools we need to build for cross-compiling
+ifeq ($(gb_Side),build)
 gb_BUILD_TOOLS = \
 	$(foreach executable, \
 		bestreversemap \
@@ -43,5 +44,7 @@ gb_BUILD_TOOLS = \
 		xsltproc \
 	,$(call gb_ExternalExecutable_get_dependencies,$(executable))) \
 	$(INSTROOT)/$(LIBO_URE_ETC_FOLDER)/$(call gb_Helper_get_rcfile,uno) \
+
+endif
 
 # vim: set noet sw=4 ts=4:
