@@ -64,6 +64,11 @@ public:
     {
     }
 
+    const css::uno::Reference< css::uno::XComponentContext > &getXContext() const
+    {
+        return mxContext;
+    }
+
     // XFilter
     virtual sal_Bool SAL_CALL filter(const css::uno::Sequence< css::beans::PropertyValue > &rDescriptor)
     throw (css::uno::RuntimeException, std::exception) override
@@ -107,6 +112,10 @@ public:
     }
 
     // XImporter
+    const css::uno::Reference< css::lang::XComponent > &getTargetDocument() const
+    {
+        return mxDoc;
+    }
     virtual void SAL_CALL setTargetDocument(const css::uno::Reference< css::lang::XComponent > &xDoc)
     throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override
     {
