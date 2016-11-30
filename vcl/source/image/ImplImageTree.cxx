@@ -255,6 +255,8 @@ OUString ImplImageTree::fallbackStyle(const OUString& rsStyle)
         sResult = "galaxy";
     else if (rsStyle == "sifr" || rsStyle == "breeze_dark")
         sResult = "breeze";
+    else if (rsStyle == "helpimg")
+        sResult = "";
     else
         sResult = "tango";
 
