@@ -6165,11 +6165,11 @@ size_t GetDERLengthOfLength(size_t nLength)
 
     if(nLength > 127)
     {
-        // Long form means at least two bytes: the length of the length and the
-        // length itself.
-        ++nRet;
         while (nLength >> (nRet * 8))
             ++nRet;
+        // Long form means one additional byte: the length of the length and
+        // the length itself.
+        ++nRet;
     }
     return nRet;
 }
@@ -6186,11 +6186,20 @@ void WriteDERLength(SvStream& rStream, size_t nLength)
     }
 
     // 0x80 means that the we use the long form: the first byte is the length
-    // of length, not the actual length.
+    // of length with the highest bit set to 1, not the actual length.
     rStream.WriteUInt8(0x80 | (nLengthOfLength - 1));
     for (size_t i = 1; i < nLengthOfLength; ++i)
         rStream.WriteUInt8(nLength >> ((nLengthOfLength - i - 1) * 8));
 }
+
+const unsigned nASN1_INTEGER = 0x02;
+const unsigned nASN1_OCTET_STRING = 0x04;
+const unsigned nASN1_NULL = 0x05;
+const unsigned nASN1_OBJECT_IDENTIFIER = 0x06;
+const unsigned nASN1_SEQUENCE = 0x10;
+/// An explicit tag on a constructed value.
+const unsigned nASN1_TAGGED_CONSTRUCTED = 0xa0;
+const unsigned nASN1_CONSTRUCTED = 0x20;
 
 /// Create payload for the 'signing-certificate' signed attribute.
 bool CreateSigningCertificateAttribute(vcl::PDFWriter::PDFSignContext& rContext, PCCERT_CONTEXT pCertContext, SvStream& rEncodedCertificate)
@@ -6277,42 +6286,40 @@ bool CreateSigningCertificateAttribute(vcl::PDFWriter::PDFSignContext& rContext,
     size_t nESSCertIDv2s = 1 + GetDERLengthOfLength(nESSCertIDv2) + nESSCertIDv2;
 
     // Write SigningCertificateV2.
-    rEncodedCertificate.WriteUInt8(0x30);
+    rEncodedCertificate.WriteUInt8(nASN1_SEQUENCE | nASN1_CONSTRUCTED);
     WriteDERLength(rEncodedCertificate, nESSCertIDv2s);
     // Write SEQUENCE OF ESSCertIDv2.
-    rEncodedCertificate.WriteUInt8(0x30);
+    rEncodedCertificate.WriteUInt8(nASN1_SEQUENCE | nASN1_CONSTRUCTED);
     WriteDERLength(rEncodedCertificate, nESSCertIDv2);
     // Write ESSCertIDv2.
-    rEncodedCertificate.WriteUInt8(0x30);
+    rEncodedCertificate.WriteUInt8(nASN1_SEQUENCE | nASN1_CONSTRUCTED);
     WriteDERLength(rEncodedCertificate, nAlgorithmIdentifier + nCertHash + nIssuerSerial);
     // Write AlgorithmIdentifier.
-    rEncodedCertificate.WriteUInt8(0x30);
+    rEncodedCertificate.WriteUInt8(nASN1_SEQUENCE | nASN1_CONSTRUCTED);
     WriteDERLength(rEncodedCertificate, nAlgorithm + nParameters);
     // Write algorithm.
-    rEncodedCertificate.WriteUInt8(0x06);
+    rEncodedCertificate.WriteUInt8(nASN1_OBJECT_IDENTIFIER);
     WriteDERLength(rEncodedCertificate, aSHA256.size());
     rEncodedCertificate.WriteBytes(aSHA256.data(), aSHA256.size());
     // Write parameters.
-    rEncodedCertificate.WriteUInt8(0x05);
-    rEncodedCertificate.WriteUInt8(0x00);
+    rEncodedCertificate.WriteUInt8(nASN1_NULL);
+    rEncodedCertificate.WriteUInt8(0);
     // Write certHash.
-    rEncodedCertificate.WriteUInt8(0x04);
+    rEncodedCertificate.WriteUInt8(nASN1_OCTET_STRING);
     WriteDERLength(rEncodedCertificate, aHash.size());
     rEncodedCertificate.WriteBytes(aHash.data(), aHash.size());
     // Write IssuerSerial.
-    rEncodedCertificate.WriteUInt8(0x30);
+    rEncodedCertificate.WriteUInt8(nASN1_SEQUENCE | nASN1_CONSTRUCTED);
     WriteDERLength(rEncodedCertificate, nGeneralNames + nCertificateSerialNumber);
     // Write GeneralNames.
-    rEncodedCertificate.WriteUInt8(0x30);
+    rEncodedCertificate.WriteUInt8(nASN1_SEQUENCE | nASN1_CONSTRUCTED);
     WriteDERLength(rEncodedCertificate, nName);
     // Write Name.
-    // 0xa0 means we're writing an explicit tag on a constructed value, the
-    // rest is the tag number.
-    rEncodedCertificate.WriteUInt8(0xa0 | 4);
+    rEncodedCertificate.WriteUInt8(nASN1_TAGGED_CONSTRUCTED | 4);
     WriteDERLength(rEncodedCertificate, nIssuer);
     rEncodedCertificate.WriteBytes(pIssuer, nIssuer);
     // Write CertificateSerialNumber.
-    rEncodedCertificate.WriteUInt8(0x02);
+    rEncodedCertificate.WriteUInt8(nASN1_INTEGER);
     WriteDERLength(rEncodedCertificate, nSerial);
     rEncodedCertificate.WriteBytes(aSerial.data(), aSerial.size());
 
