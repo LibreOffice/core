@@ -77,7 +77,7 @@ css::uno::Sequence< css::uno::Reference< css::graphic::XPrimitive2D > > SAL_CALL
         if(pSource)
         {
             const sdr::contact::ViewContact& rSource(pSource->GetViewContact());
-            aRetval = comphelper::containerToSequence(rSource.getViewIndependentPrimitive2DSequence());
+            aRetval = comphelper::containerToSequence(rSource.getViewIndependentPrimitive2DContainer());
         }
     }
 
@@ -98,7 +98,7 @@ css::uno::Sequence< css::uno::Reference< css::graphic::XPrimitive2D > > SAL_CALL
         {
             const sdr::contact::ViewContact& rSource(pSource->GetViewContact());
 
-            aRetval = comphelper::containerToSequence(rSource.getViewIndependentPrimitive2DSequence());
+            aRetval = comphelper::containerToSequence(rSource.getViewIndependentPrimitive2DContainer());
         }
     }
 

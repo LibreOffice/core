@@ -138,7 +138,7 @@ namespace sdr
                         b3DShape = true;
                     }
 
-                    const drawinglayer::primitive2d::Primitive2DContainer xNew(rCandidate.GetViewContact().getViewIndependentPrimitive2DSequence());
+                    const drawinglayer::primitive2d::Primitive2DContainer xNew(rCandidate.GetViewContact().getViewIndependentPrimitive2DContainer());
                     xGroup.insert(xGroup.end(), xNew.begin(), xNew.end());
                 }
             }

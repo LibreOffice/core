@@ -71,7 +71,7 @@ protected:
 
     // This method is responsible for creating the graphical visualisation data which is
     // stored/cached in the local primitive. Default gets view-independent Primitive
-    // from the ViewContact using ViewContact::getViewIndependentPrimitive2DSequence(), takes care of
+    // from the ViewContact using ViewContact::getViewIndependentPrimitive2DContainer(), takes care of
     // visibility, handles glue and ghosted.
     // This method will not handle included hierarchies and not check geometric visibility.
     virtual drawinglayer::primitive2d::Primitive2DContainer createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const;

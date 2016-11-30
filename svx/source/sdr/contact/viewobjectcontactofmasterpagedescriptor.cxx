@@ -86,7 +86,7 @@ namespace sdr
                 if(!GetObjectContact().isDrawModeGray() && !GetObjectContact().isDrawModeHighContrast())
                 {
                     // if visible, create the default background primitive sequence
-                    xRetval = static_cast< ViewContactOfMasterPageDescriptor& >(GetViewContact()).getViewIndependentPrimitive2DSequence();
+                    xRetval = static_cast< ViewContactOfMasterPageDescriptor& >(GetViewContact()).getViewIndependentPrimitive2DContainer();
                 }
             }
 

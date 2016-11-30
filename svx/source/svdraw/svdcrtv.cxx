@@ -149,7 +149,7 @@ void ImpSdrCreateViewExtraData::CreateAndShowOverlay(const SdrCreateView& rView,
             if(pObject)
             {
                 const sdr::contact::ViewContact& rVC = pObject->GetViewContact();
-                const drawinglayer::primitive2d::Primitive2DContainer aSequence = rVC.getViewIndependentPrimitive2DSequence();
+                const drawinglayer::primitive2d::Primitive2DContainer aSequence = rVC.getViewIndependentPrimitive2DContainer();
                 sdr::overlay::OverlayObject* pNew = new sdr::overlay::OverlayPrimitive2DSequenceObject(aSequence);
 
                 xOverlayManager->add(*pNew);

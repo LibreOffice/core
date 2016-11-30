@@ -1990,7 +1990,7 @@ namespace sdr
             /**
              * This method is responsible for creating the graphical visualisation data which is
              * stored/cached in the local primitive. Default gets view-independent Primitive from
-             * the ViewContact using ViewContact::getViewIndependentPrimitive2DSequence(), takes
+             * the ViewContact using ViewContact::getViewIndependentPrimitive2DContainer(), takes
              * care of visibility, handles glue and ghosted.
              *
              * This method will not handle included hierarchies and not check geometric visibility.
@@ -2116,7 +2116,7 @@ namespace sdr
             else
             {
                 // single object, use method from referenced object to get the Primitive2DSequence
-                xRetval = rReferencedObject.GetViewContact().getViewIndependentPrimitive2DSequence();
+                xRetval = rReferencedObject.GetViewContact().getViewIndependentPrimitive2DContainer();
             }
 
             if(!xRetval.empty())

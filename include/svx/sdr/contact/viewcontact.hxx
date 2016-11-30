@@ -122,13 +122,13 @@ public:
 
     // access to the local primitive. This will ensure that the primitive is
     // current in comparing the local one with a fresh created incarnation
-    drawinglayer::primitive2d::Primitive2DContainer const & getViewIndependentPrimitive2DSequence() const;
+    drawinglayer::primitive2d::Primitive2DContainer const & getViewIndependentPrimitive2DContainer() const;
 
     // add Gluepoints (if available)
     virtual drawinglayer::primitive2d::Primitive2DContainer createGluePointPrimitive2DSequence() const;
 
     // allow embedding if needed (e.g. for SdrObjects, evtl. Name, Title and description get added). This
-    // is a helper normally used from getViewIndependentPrimitive2DSequence(), but there is one exception
+    // is a helper normally used from getViewIndependentPrimitive2DContainer(), but there is one exception
     // for 3D scenes
     virtual drawinglayer::primitive2d::Primitive2DContainer embedToObjectSpecificInformation(const drawinglayer::primitive2d::Primitive2DContainer& rSource) const;
 

@@ -399,7 +399,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfPageHierarchy::crea
     for(sal_uInt32 a(0); a < nObjectCount; a++)
     {
         const ViewContact& rCandidate(GetViewContact(a));
-        const drawinglayer::primitive2d::Primitive2DContainer aCandSeq(rCandidate.getViewIndependentPrimitive2DSequence());
+        const drawinglayer::primitive2d::Primitive2DContainer aCandSeq(rCandidate.getViewIndependentPrimitive2DContainer());
 
         xRetval.insert(xRetval.end(), aCandSeq.begin(), aCandSeq.end());
     }
@@ -587,26 +587,26 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrPage::createView
     drawinglayer::primitive2d::Primitive2DContainer xRetval;
 
     // collect all sub-sequences including sub hierarchy.
-    xRetval.append(maViewContactOfPageBackground.getViewIndependentPrimitive2DSequence());
-    xRetval.append(maViewContactOfPageShadow.getViewIndependentPrimitive2DSequence());
-    xRetval.append(maViewContactOfPageFill.getViewIndependentPrimitive2DSequence());
+    xRetval.append(maViewContactOfPageBackground.getViewIndependentPrimitive2DContainer());
+    xRetval.append(maViewContactOfPageShadow.getViewIndependentPrimitive2DContainer());
+    xRetval.append(maViewContactOfPageFill.getViewIndependentPrimitive2DContainer());
 
     const SdrPage& rPage = GetSdrPage();
 
     if(rPage.TRG_HasMasterPage())
     {
         xRetval.append(
-            rPage.TRG_GetMasterPageDescriptorViewContact().getViewIndependentPrimitive2DSequence());
+            rPage.TRG_GetMasterPageDescriptorViewContact().getViewIndependentPrimitive2DContainer());
     }
     else if(rPage.IsMasterPage())
     {
         xRetval.append(
-            maViewContactOfMasterPage.getViewIndependentPrimitive2DSequence());
+            maViewContactOfMasterPage.getViewIndependentPrimitive2DContainer());
     }
 
-    xRetval.append(maViewContactOfOuterPageBorder.getViewIndependentPrimitive2DSequence());
-    xRetval.append(maViewContactOfInnerPageBorder.getViewIndependentPrimitive2DSequence());
-    xRetval.append(maViewContactOfPageHierarchy.getViewIndependentPrimitive2DSequence());
+    xRetval.append(maViewContactOfOuterPageBorder.getViewIndependentPrimitive2DContainer());
+    xRetval.append(maViewContactOfInnerPageBorder.getViewIndependentPrimitive2DContainer());
+    xRetval.append(maViewContactOfPageHierarchy.getViewIndependentPrimitive2DContainer());
 
     // Only add front versions of grid and helplines since no visibility test is done,
     // so adding the back incarnations is not necessary. This makes the Front
@@ -617,8 +617,8 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrPage::createView
     // do not need to be called ATM. This may change later if grid or helpline info gets
     // model data (it should not). Keeping the lines commented to hold this hint.
 
-    // drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(xRetval, maViewContactOfGridFront.getViewIndependentPrimitive2DSequence());
-    // drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(xRetval, maViewContactOfHelplinesFront.getViewIndependentPrimitive2DSequence());
+    // drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(xRetval, maViewContactOfGridFront.getViewIndependentPrimitive2DContainer());
+    // drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(xRetval, maViewContactOfHelplinesFront.getViewIndependentPrimitive2DContainer());
 
     return xRetval;
 }
