@@ -44,7 +44,7 @@ struct ValueRange
     sal_Int32           mnFirst;
     sal_Int32           mnLast;
 
-    explicit     ValueRange( sal_Int32 nValue = 0 ) : mnFirst( nValue ), mnLast( nValue ) {}
+    explicit     ValueRange( sal_Int32 nValue ) : mnFirst( nValue ), mnLast( nValue ) {}
     explicit     ValueRange( sal_Int32 nFirst, sal_Int32 nLast ) : mnFirst( nFirst ), mnLast( nLast ) {}
 
     bool         operator==( const ValueRange& rRange ) const { return (mnFirst == rRange.mnFirst) && (mnLast == rRange.mnLast); }

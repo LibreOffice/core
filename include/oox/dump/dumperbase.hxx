@@ -1039,8 +1039,8 @@ private:
 class ItemGuard
 {
 public:
-    explicit            ItemGuard( const OutputRef& rxOut, const String& rName = EMPTY_STRING ) :
-                     mrOut( *rxOut ) { mrOut.startItem( rName ); }
+    explicit            ItemGuard( const OutputRef& rxOut, const String& rName ) :
+                            mrOut( *rxOut ) { mrOut.startItem( rName ); }
                         ~ItemGuard() { mrOut.endItem(); }
     void                cont() { mrOut.contItem(); }
 private:
@@ -1632,7 +1632,7 @@ protected:
                             const OUString& rSysFileName,
                             const BinaryInputStreamRef& rxRecStrm,
                             const String& rRecNames,
-                            const String& rSimpleRecs = EMPTY_STRING );
+                            const String& rSimpleRecs );
 
     sal_Int64           getRecId() const { return mnRecId; }
     sal_Int64           getRecSize() const { return mnRecSize; }
@@ -1675,7 +1675,7 @@ protected:
                             const BinaryInputStreamRef& rxBaseStrm,
                             const OUString& rSysFileName,
                             const String& rRecNames,
-                            const String& rSimpleRecs = EMPTY_STRING );
+                            const String& rSimpleRecs );
 
     virtual bool        implStartRecord( BinaryInputStream& rBaseStrm, sal_Int64& ornRecPos, sal_Int64& ornRecId, sal_Int64& ornRecSize ) override;
     virtual bool        implReadRecordHeader( BinaryInputStream& rBaseStrm, sal_Int64& ornRecId, sal_Int64& ornRecSize ) = 0;

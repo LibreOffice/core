@@ -120,7 +120,7 @@ public:
     struct OOX_DLLPUBLIC AttributeList
     {
         OUString& operator[] (int token);
-        OUString attribute( int token, const OUString& def = OUString()) const;
+        OUString attribute( int token, const OUString& def) const;
         bool attribute( int token, bool def ) const;
         sal_Unicode attribute( int token, sal_Unicode def ) const;
         // when adding more attribute() overloads, add also to XmlStream itself

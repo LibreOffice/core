@@ -67,8 +67,8 @@ public:
     /** convert measure to string */
     static void convertMeasure( OUStringBuffer& rBuffer,
                                 sal_Int32 nMeasure,
-                                sal_Int16 SourceUnit = css::util::MeasureUnit::MM_100TH,
-                                sal_Int16 nTargetUnit = css::util::MeasureUnit::INCH  );
+                                sal_Int16 SourceUnit,
+                                sal_Int16 nTargetUnit  );
 
     /** convert string to boolean */
     static bool convertBool( bool& rBool,

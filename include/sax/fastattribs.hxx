@@ -65,10 +65,9 @@ class SAX_DLLPUBLIC FastTokenHandlerBase
      * @return Tokenized form of pStr
      */
     static sal_Int32 getTokenFromChars(
-                         const css::uno::Reference<
-                             css::xml::sax::XFastTokenHandler > &xTokenHandler,
+                         const css::uno::Reference<css::xml::sax::XFastTokenHandler > &xTokenHandler,
                          FastTokenHandlerBase *pTokenHandler /* can be NULL */,
-                         const char *pStr, size_t nLength = 0 );
+                         const char *pStr, size_t nLength );
 };
 
 class SAX_DLLPUBLIC FastAttributeList : public ::cppu::WeakImplHelper1< css::xml::sax::XFastAttributeList >

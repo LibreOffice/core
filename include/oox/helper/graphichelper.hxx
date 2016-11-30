@@ -133,7 +133,7 @@ public:
         @return  The URL of the created and internally cached graphic object. */
     OUString     importGraphicObject(
                             const css::uno::Reference< css::io::XInputStream >& rxInStrm,
-                            const WMF_EXTERNALHEADER* pExtHeader = nullptr ) const;
+                            const WMF_EXTERNALHEADER* pExtHeader ) const;
 
     /** Creates a persistent graphic object from the passed binary memory block.
         @return  The URL of the created and internally cached graphic object. */

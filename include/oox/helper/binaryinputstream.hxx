@@ -152,7 +152,7 @@ public:
             True = NUL characters are inserted into the imported string.
             False = NUL characters are replaced by question marks (default).
      */
-    OString      readCharArray( sal_Int32 nChars, bool bAllowNulChars = false );
+    OString      readCharArray( sal_Int32 nChars, bool bAllowNulChars );
 
     /** Reads a byte character array and returns a Unicode string.
 
@@ -351,7 +351,7 @@ public:
      */
     explicit            RelativeInputStream(
                             BinaryInputStream& rInStrm,
-                            sal_Int64 nSize = SAL_MAX_INT64 );
+                            sal_Int64 nSize );
 
     /** Returns the size of the data block in the wrapped stream offered by
         this wrapper. */

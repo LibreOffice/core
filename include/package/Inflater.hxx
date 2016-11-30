@@ -39,7 +39,7 @@ protected:
     sal_Int32   doInflateBytes (css::uno::Sequence < sal_Int8 > &rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength);
 
 public:
-    Inflater(bool bNoWrap = false);
+    Inflater(bool bNoWrap);
     ~Inflater();
     void SAL_CALL setInput( const css::uno::Sequence< sal_Int8 >& rBuffer );
     bool SAL_CALL needsDictionary(  ) { return bNeedDict;}

@@ -105,7 +105,7 @@ namespace OleHelper
     OOX_DLLPUBLIC sal_Int32    decodeOleColor(
                             const GraphicHelper& rGraphicHelper,
                             sal_uInt32 nOleColor,
-                            bool bDefaultColorBgr = true );
+                            bool bDefaultColorBgr );
 
     /** Returns the OLE color from the passed UNO RGB color.
      */
