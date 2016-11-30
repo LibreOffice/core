@@ -1519,9 +1519,14 @@ void ImpEditView::Paste( css::uno::Reference< css::datatransfer::clipboard::XCli
             }
             else
             {
+                // Prevent notifications of paragraph inserts et al that would trigger
+                // a11y to format content in a half-ready state when obtaining
+                // paragraphs. Collect and broadcast when done instead.
+                pEditEngine->pImpEditEngine->EnterBlockNotifications();
                 aSel = pEditEngine->InsertText(
                     xDataObj, OUString(), aSel.Min(),
                     bUseSpecial && pEditEngine->GetInternalEditStatus().AllowPasteSpecial());
+                pEditEngine->pImpEditEngine->LeaveBlockNotifications();
             }
 
             aPasteOrDropInfos.nEndPara = pEditEngine->GetEditDoc().GetPos( aSel.Max().GetNode() );
