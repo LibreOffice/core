@@ -23,18 +23,14 @@ Const cstTab = 5
 	
 	If UBound(pvArgs) &gt;= 0 Then
 		For i = 0 To UBound(pvArgs)
-&apos;			If IsError(pvArgs(i)) Then		&apos;	IsError gives &quot;Object variable not set&quot; in LO 4,0 ?!?
-&apos;				pvArgs(i) = &quot;[ERROR]&quot;
-&apos;			Else
-				If Not Utils._CheckArgument(pvArgs(i), i + 1, vVarTypes(), , False) Then pvArgs(i) = &quot;[TYPE?]&quot;
-&apos;			End If
+			If Not Utils._CheckArgument(pvArgs(i), i + 1, vVarTypes(), , False) Then pvArgs(i) = &quot;[TYPE?]&quot;
 		Next i
 	End If
 
 Dim sOutput As String, sArg As String
 	sOutput = &quot;&quot;	
 	For i = 0 To UBound(pvArgs)
-		sArg = Utils._CStr(pvArgs(i), _A2B_.DebugPrintShort)
+		sArg = Replace(Utils._CStr(pvArgs(i), _A2B_.DebugPrintShort), &quot;\;&quot;, &quot;;&quot;)
 		&apos; Add argument to output
 		If i = 0 Then
 			sOutput = sArg

@@ -132,15 +132,24 @@ Public Function _CStr(ByVal pvArg As Variant, ByVal Optional pbShort As Boolean)
 Dim sArg As String, sObject As String, oArg As Object, sLength As String, i As Long, iMax As Long
 Const cstLength = 50
 Const cstByteLength = 25
+
+	If IsMissing(pbShort) Then pbShort = True
 	If IsArray(pvArg) Then
-		If VarType(pvArg) = vbByte Or VarType(pvArg) - 8192 = vbByte Then
-			sArg = &quot;&quot;
+		sArg = &quot;&quot;
+		If VarType(pvArg) = vbByte Or VarType(pvArg) = vbArray + vbByte Then
 			If pbShort And UBound(pvArg) &gt; cstByteLength Then iMax = cstByteLength Else iMax = UBound(pvArg)
 			For i = 0 To iMax
 				sArg = sArg &amp; Right(&quot;00&quot; &amp; Hex(pvArg(i)), 2)
 			Next i
 		Else
-			sArg = &quot;[ARRAY]&quot;
+			If pbShort Then
+				sArg = &quot;[ARRAY]&quot;
+			Else	&apos;	One-dimension arrays only
+				For i = LBound(pvArg) To UBound(pvArg)
+					sArg = sArg &amp; Utils._CStr(pvArg(i)) &amp; &quot;;&quot;	&apos;	Recursive call
+				Next i
+				If Len(sArg) &gt; 1 Then sArg = Left(sArg, Len(sArg) - 1)
+			End If
 		End If
 	Else
 		Select Case VarType(pvArg)
@@ -164,13 +173,21 @@ Const cstByteLength = 25
 					End If
 				End If
 			Case vbVariant			:		sArg = &quot;[VARIANT]&quot;
-			Case vbString			:		sArg = pvArg
-			Case vbBoolean			:		sArg = Iif(pvArg, &quot;TRUE&quot;, &quot;FALSE&quot;)
+			Case vbString
+				&apos;	Replace CR + LF by \n
+				&apos;	Replace semicolon by \; to allow semicolon separated rows
+				sArg = Replace(Replace(Replace(pvArg, Chr(13), &quot;&quot;), Chr(10), &quot;\n&quot;), &quot;;&quot;, &quot;\;&quot;)
+			Case vbBoolean			:		sArg = Iif(pvArg, &quot;[TRUE]&quot;, &quot;[FALSE]&quot;)
 			Case vbByte				:		sArg = Right(&quot;00&quot; &amp; Hex(pvArg), 2)
+			Case vbSingle, vbDouble, vbCurrency
+				sArg = Format(pvArg)
+				If InStr(UCase(sArg), &quot;E&quot;) = 0 Then sArg = Format(pvArg, &quot;##0.0##&quot;)
+				sArg = Replace(sArg, &quot;,&quot;, &quot;.&quot;)
+			Case vbDate				:		sArg = Year(pvArg) &amp; &quot;-&quot; &amp; Right(&quot;0&quot; &amp; Month(pvArg), 2) &amp; &quot;-&quot; &amp; Right(&quot;0&quot; &amp; Day(pvArg), 2) _
+													&amp; &quot; &quot; &amp; Right(&quot;0&quot; &amp; Hour(pvArg), 2) &amp; &quot;:&quot; &amp; Right(&quot;0&quot; &amp; Minute(pvArg), 2)
 			Case Else				:		sArg = CStr(pvArg)
 		End Select
 	End If
-	If IsMissing(pbShort) Then pbShort = True
 	If pbShort And Len(sArg) &gt; cstLength Then 
 		sLength = &quot;(&quot; &amp; Len(sArg) &amp; &quot;)&quot;
 		sArg = Left(sArg, cstLength - 5 - Len(slength)) &amp; &quot; ... &quot; &amp; sLength
