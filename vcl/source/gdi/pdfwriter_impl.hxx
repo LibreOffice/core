@@ -776,8 +776,8 @@ private:
     std::list< GraphicsState >              m_aGraphicsStack;
     GraphicsState                           m_aCurrentPDFState;
 
-    ZCodec*                                 m_pCodec;
-    SvMemoryStream*                         m_pMemStream;
+    std::unique_ptr<ZCodec>                 m_pCodec;
+    std::unique_ptr<SvMemoryStream>         m_pMemStream;
 
     std::vector< PDFAddStream >             m_aAdditionalStreams;
     std::set< PDFWriter::ErrorCode >        m_aErrors;

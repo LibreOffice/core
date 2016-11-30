@@ -28,6 +28,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/alpha.hxx>
 #include <osl/endian.h>
+#include <o3tl/make_unique.hxx>
 
 namespace vcl
 {
@@ -74,11 +75,12 @@ private:
     std::vector<vcl::PNGReader::ChunkData>::iterator maChunkIter;
     std::vector<sal_uInt8>::iterator maDataIter;
 
-    Bitmap*             mpBmp;
-    BitmapWriteAccess*  mpAcc;
-    Bitmap*             mpMaskBmp;
-    AlphaMask*          mpAlphaMask;
-    BitmapWriteAccess*  mpMaskAcc;
+    std::unique_ptr<Bitmap>    mpBmp;
+    BitmapWriteAccess*         mpAcc;
+    std::unique_ptr<Bitmap>    mpMaskBmp;
+    std::unique_ptr<AlphaMask> mpAlphaMask;
+    BitmapWriteAccess*         mpMaskAcc;
+
     ZCodec              mpZCodec;
     sal_uInt8*          mpInflateInBuf; // as big as the size of a scanline + alphachannel + 1
     sal_uInt8*          mpScanPrior;    // pointer to the latest scanline
@@ -166,10 +168,7 @@ public:
 
 PNGReaderImpl::PNGReaderImpl( SvStream& rPNGStream )
 :   mrPNGStream( rPNGStream ),
-    mpBmp           ( nullptr ),
     mpAcc           ( nullptr ),
-    mpMaskBmp       ( nullptr ),
-    mpAlphaMask     ( nullptr ),
     mpMaskAcc       ( nullptr ),
     mpInflateInBuf  ( nullptr ),
     mpScanPrior     ( nullptr ),
@@ -248,9 +247,6 @@ PNGReaderImpl::~PNGReaderImpl()
     if( mpColorTable != mpDefaultColorTable )
         delete[] mpColorTable;
 
-    delete mpBmp;
-    delete mpAlphaMask;
-    delete mpMaskBmp;
     delete[] mpTransTab;
     delete[] mpInflateInBuf;
     delete[] mpScanPrior;
@@ -667,14 +663,14 @@ bool PNGReaderImpl::ImplReadHeader( const Size& rPreviewSizeHint )
     if ( !mpInflateInBuf || !mpScanPrior )
         return false;
 
-    mpBmp = new Bitmap( maTargetSize, mnTargetDepth );
+    mpBmp = o3tl::make_unique<Bitmap>( maTargetSize, mnTargetDepth );
     mpAcc = mpBmp->AcquireWriteAccess();
     if( !mpAcc )
         return false;
 
     if ( mbAlphaChannel )
     {
-        mpAlphaMask = new AlphaMask( maTargetSize );
+        mpAlphaMask = o3tl::make_unique<AlphaMask>( maTargetSize );
         mpAlphaMask->Erase( 128 );
         mpMaskAcc = mpAlphaMask->AcquireWriteAccess();
         if( !mpMaskAcc )
@@ -791,12 +787,12 @@ bool PNGReaderImpl::ImplReadTransparent()
     {
         if( bNeedAlpha)
         {
-            mpAlphaMask = new AlphaMask( maTargetSize );
+            mpAlphaMask = o3tl::make_unique<AlphaMask>( maTargetSize );
             mpMaskAcc = mpAlphaMask->AcquireWriteAccess();
         }
         else
         {
-            mpMaskBmp = new Bitmap( maTargetSize, 1 );
+            mpMaskBmp = o3tl::make_unique<Bitmap>( maTargetSize, 1 );
             mpMaskAcc = mpMaskBmp->AcquireWriteAccess();
         }
         mbTransparent = (mpMaskAcc != nullptr);
