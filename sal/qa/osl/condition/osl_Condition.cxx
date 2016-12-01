@@ -39,11 +39,6 @@ public:
     //get the Condition to operate
     ConditionThread( ::osl::Condition& Con, ConditionType tType): m_MyCon( Con ), m_MyType( tType ) { }
 
-    virtual ~ConditionThread( ) override
-    {
-        // LLA: do not throw in DTors!
-        // LLA: CPPUNIT_ASSERT_MESSAGE( "#ConditionThread does not shutdown properly.\n", sal_False == this -> isRunning( ) );
-    }
 protected:
     ::osl::Condition& m_MyCon;
     ConditionType m_MyType;
