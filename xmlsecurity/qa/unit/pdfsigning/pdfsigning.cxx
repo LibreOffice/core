@@ -394,6 +394,8 @@ void PDFSigningTest::testTokenize()
         OUStringLiteral("name-bracket.pdf"),
         // %%EOF at the end wasn't followed by a newline.
         OUStringLiteral("noeol.pdf"),
+        // File that's intentionally smaller than 1024 bytes.
+        OUStringLiteral("small.pdf"),
     };
 
     for (const auto& rName : aNames)
