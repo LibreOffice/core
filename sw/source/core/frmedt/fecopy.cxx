@@ -1007,11 +1007,7 @@ bool SwFEShell::Paste( SwDoc* pClpDoc )
                                 OSL_ENSURE( RES_DRAWFRMFMT == pNew->Which(), "Neues Format.");
                                 // #i52780# - drawing object has
                                 // to be made visible on paste.
-                                {
-                                    SwDrawContact* pContact =
-                                        static_cast<SwDrawContact*>(pNew->FindContactObj());
-                                    pContact->MoveObjToVisibleLayer( pContact->GetMaster() );
-                                }
+                                pNew->CallSwClientNotify(sw::DrawFrameFormatHint(sw::DrawFrameFormatHintId::PREPPASTING));
                                 SdrObject *pObj = pNew->FindSdrObject();
                                 SwDrawView  *pDV = Imp()->GetDrawView();
                                 pDV->MarkObj( pObj, pDV->GetSdrPageView() );
