@@ -190,7 +190,7 @@ static rtl_Locale * parse_locale( const char * locale )
             rtl_Locale * ret;
 
             /* language is a two or three letter code */
-            if( (len > 3 && '_' == locale[3]) || (len == 3 && '_' != locale[2]) )
+            if( (len > 3 && locale[3] == '_') || (len == 3 && locale[2] != '_') )
                 offset = 3;
 
             /* convert language code to unicode */
@@ -198,7 +198,7 @@ static rtl_Locale * parse_locale( const char * locale )
             OSL_ASSERT(pLanguage != nullptr);
 
             /* convert country code to unicode */
-            if( len >= offset+3 && '_' == locale[offset] )
+            if( len >= offset+3 && locale[offset] == '_' )
             {
                 rtl_string2UString( &pCountry, locale + offset + 1, 2, RTL_TEXTENCODING_ASCII_US, OSTRING_TO_OUSTRING_CVTFLAGS );
                 OSL_ASSERT(pCountry != nullptr);

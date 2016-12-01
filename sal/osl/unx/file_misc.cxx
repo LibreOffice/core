@@ -103,7 +103,7 @@ void DirectoryItem_Impl::acquire()
 }
 void DirectoryItem_Impl::release()
 {
-    if (0 == --m_RefCount)
+    if (--m_RefCount == 0)
         delete this;
 }
 
@@ -143,13 +143,13 @@ oslFileError SAL_CALL osl_openDirectory(rtl_uString* ustrDirectoryURL, oslDirect
 
     char path[PATH_MAX];
 
-    if ((nullptr == ustrDirectoryURL) || (0 == ustrDirectoryURL->length) || (nullptr == pDirectory))
+    if ((nullptr == ustrDirectoryURL) || (ustrDirectoryURL->length == 0) || (nullptr == pDirectory))
         return osl_File_E_INVAL;
 
     /* convert file URL to system path */
     eRet = osl_getSystemPathFromFileURL_Ex(ustrDirectoryURL, &ustrSystemPath);
 
-    if( osl_File_E_None != eRet )
+    if( eRet != osl_File_E_None )
         return eRet;
 
     osl_systemPathRemoveSeparator(ustrSystemPath);
@@ -272,7 +272,7 @@ static struct dirent* osl_readdir_impl_(DIR* pdir, bool bFilterLocalAndParentDir
     while ((pdirent = readdir(pdir)) != nullptr)
     {
         if (bFilterLocalAndParentDir &&
-            ((0 == strcmp(pdirent->d_name, ".")) || (0 == strcmp(pdirent->d_name, ".."))))
+            ((strcmp(pdirent->d_name, ".") == 0) || (strcmp(pdirent->d_name, "..") == 0)))
             continue;
         else
             break;
@@ -354,16 +354,16 @@ oslFileError SAL_CALL osl_getDirectoryItem( rtl_uString* ustrFileURL, oslDirecto
     oslFileError osl_error      = osl_File_E_INVAL;
 
     OSL_ASSERT((nullptr != ustrFileURL) && (nullptr != pItem));
-    if ((nullptr == ustrFileURL) || (0 == ustrFileURL->length) || (nullptr == pItem))
+    if ((nullptr == ustrFileURL) || (ustrFileURL->length == 0) || (nullptr == pItem))
         return osl_File_E_INVAL;
 
     osl_error = osl_getSystemPathFromFileURL_Ex(ustrFileURL, &ustrSystemPath);
-    if (osl_File_E_None != osl_error)
+    if (osl_error != osl_File_E_None)
         return osl_error;
 
     osl_systemPathRemoveSeparator(ustrSystemPath);
 
-    if (-1 == access_u(ustrSystemPath, F_OK))
+    if (access_u(ustrSystemPath, F_OK) == -1)
     {
         osl_error = oslTranslateFileError(OSL_FET_ERROR, errno);
     }
@@ -543,7 +543,7 @@ static oslFileError create_dir_recursively_(
     oslFileError osl_error = create_dir_recursively_(
         dir_path, aDirectoryCreationCallbackFunc, pData);
 
-    if (osl_File_E_None != osl_error)
+    if (osl_error != osl_File_E_None)
         return osl_error;
 
        dir_path[pos] = '/';
