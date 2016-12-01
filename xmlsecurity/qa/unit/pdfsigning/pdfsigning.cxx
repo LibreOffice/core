@@ -357,6 +357,8 @@ void PDFSigningTest::testGood()
     {
         // We failed to determine if this is good or bad.
         OUStringLiteral("good-non-detached.pdf"),
+        // Boolean value for dictionary key caused read error.
+        OUStringLiteral("dict-bool.pdf"),
     };
 
     for (const auto& rName : aNames)
