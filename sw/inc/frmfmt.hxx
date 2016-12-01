@@ -237,7 +237,8 @@ public:
 namespace sw
 {
     enum class DrawFrameFormatHintId {
-        DYING
+        DYING,
+        PREPPASTING
     };
     struct SW_DLLPUBLIC DrawFrameFormatHint final: SfxHint
     {
