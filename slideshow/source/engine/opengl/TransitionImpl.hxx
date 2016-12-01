@@ -340,7 +340,7 @@ public:
         @return
         the size in bytes of the Vertices data
     */
-    int getVerticesSize() const {return Vertices.size() * sizeof(Vertex);}
+    int getVerticesByteSize() const {return Vertices.size() * sizeof(Vertex);}
 
     /** copies all vertices to the C array passed
 

@@ -111,7 +111,7 @@ static std::vector<int> uploadPrimitives(const Primitives_t& primitives)
 {
     int size = 0;
     for (const Primitive& primitive: primitives)
-        size += primitive.getVerticesSize();
+        size += primitive.getVerticesByteSize();
 
     CHECK_GL_ERROR();
     glBufferData(GL_ARRAY_BUFFER, size, nullptr, GL_STATIC_DRAW);
@@ -1998,7 +1998,7 @@ void GlitterTransition::prepareTransition( sal_Int32 glLeavingSlideTex, sal_Int3
 
     // Upload the center of each hexagon.
     const Primitive& primitive = getScene().getLeavingSlide()[0];
-    int nbVertices = primitive.getVerticesSize() / sizeof(Vertex);
+    int nbVertices = primitive.getVerticesByteSize() / sizeof(Vertex);
     std::vector<ThreeFloats> vertices;
     for (int i = 2; i < nbVertices; i += 18) {
         const glm::vec3& center = primitive.getVertex(i);
