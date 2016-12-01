@@ -65,17 +65,7 @@ void SwUndoFlyBase::InsFly(::sw::UndoRedoContext & rContext, bool bShowSelFrame)
 
     // OD 26.06.2003 #108784# - insert 'master' drawing object into drawing page
     if ( RES_DRAWFRMFMT == pFrameFormat->Which() )
-    {
-        SwDrawContact* pDrawContact =
-            static_cast<SwDrawContact*>(pFrameFormat->FindContactObj());
-        if ( pDrawContact )
-        {
-            pDrawContact->InsertMasterIntoDrawPage();
-            // #i40845# - follow-up of #i35635#
-            // move object to visible layer
-            pDrawContact->MoveObjToVisibleLayer( pDrawContact->GetMaster() );
-        }
-    }
+        pFrameFormat->CallSwClientNotify(sw::DrawFrameFormatHint(sw::DrawFrameFormatHintId::PREP_INSERT_FLY));
 
     SwFormatAnchor aAnchor( (RndStdIds)nRndId );
 

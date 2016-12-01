@@ -1539,6 +1539,12 @@ void SwDrawContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
             case sw::DrawFrameFormatHintId::PREPPASTING:
                 MoveObjToVisibleLayer(GetMaster());
                 break;
+            case sw::DrawFrameFormatHintId::PREP_INSERT_FLY:
+                InsertMasterIntoDrawPage();
+                // #i40845# - follow-up of #i35635#
+                // move object to visible layer
+                MoveObjToVisibleLayer(GetMaster());
+                break;
             case sw::DrawFrameFormatHintId::PAGE_OUT_OF_BOUNDS:
                 DisconnectFromLayout();
                 break;
