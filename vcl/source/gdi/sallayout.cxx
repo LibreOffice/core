@@ -133,34 +133,6 @@ std::ostream &operator <<(std::ostream& s, ImplLayoutArgs &rArgs)
     return s;
 }
 
-int GetVerticalFlags( sal_UCS4 nChar )
-{
-    if( (nChar >= 0x1100 && nChar <= 0x11f9)    // Hangul Jamo
-     || (nChar == 0x2030 || nChar == 0x2031)    // per mille sign
-     || (nChar >= 0x3000 && nChar <= 0xfaff)    // unified CJK
-     || (nChar >= 0xfe20 && nChar <= 0xfe6f)    // CJK compatibility
-     || (nChar >= 0xff00 && nChar <= 0xfffd) )  // other CJK
-    {
-        /* #i52932# remember:
-         nChar == 0x2010 || nChar == 0x2015
-         nChar == 0x2016 || nChar == 0x2026
-         are GF_NONE also, but already handled in the outer if condition
-        */
-        if((nChar >= 0x3008 && nChar <= 0x301C && nChar != 0x3012)
-        || (nChar == 0xFF3B || nChar == 0xFF3D || nChar==0xFF08 || nChar==0xFF09)
-        || (nChar >= 0xFF5B && nChar <= 0xFF9F) // halfwidth forms
-        || (nChar == 0xFFE3) )
-            return GF_NONE; // not rotated
-        else if( nChar == 0x30fc )
-            return GF_ROTR; // right
-        return GF_ROTL;     // left
-    }
-    else if( (nChar >= 0x20000) && (nChar <= 0x3FFFF) ) // all SIP/TIP ideographs
-        return GF_ROTL; // left
-
-    return GF_NONE; // not rotated as default
-}
-
 sal_UCS4 GetMirroredChar( sal_UCS4 nChar )
 {
     nChar = u_charMirror( nChar );
@@ -758,16 +730,7 @@ bool SalLayout::GetBoundRect( SalGraphics& rSalGraphics, Rectangle& rRect ) cons
 bool SalLayout::IsSpacingGlyph( sal_GlyphId nGlyph )
 {
     bool bRet = false;
-    if( nGlyph & GF_ISCHAR )
-    {
-        long nChar = nGlyph & GF_IDXMASK;
-        bRet = (nChar <= 0x0020)                    // blank
-            //|| (nChar == 0x00A0)                  // non breaking space
-            || (nChar >= 0x2000 && nChar <= 0x200F) // whitespace
-            || (nChar == 0x3000);                   // ideographic space
-    }
-    else
-        bRet = ((nGlyph & GF_IDXMASK) == 3);
+    bRet = ((nGlyph & GF_IDXMASK) == 3);
     return bRet;
 }
 

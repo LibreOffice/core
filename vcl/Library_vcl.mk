@@ -388,7 +388,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/font/font \
     vcl/source/fontsubset/cff \
     vcl/source/fontsubset/fontsubset \
-    vcl/source/fontsubset/gsub \
     vcl/source/fontsubset/list \
     vcl/source/fontsubset/sft \
     vcl/source/fontsubset/ttcr \

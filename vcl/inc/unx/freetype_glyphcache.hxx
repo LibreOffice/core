@@ -71,9 +71,6 @@ public:
 
     void                  AnnounceFont( PhysicalFontCollection* );
 
-    int                   GetGlyphIndex( sal_UCS4 cChar ) const;
-    void                  CacheGlyphIndex( sal_UCS4 cChar, int nGI ) const;
-
     bool                  GetFontCodeRanges( CmapResult& ) const;
     const FontCharMapRef& GetFontCharMap();
 
@@ -86,34 +83,7 @@ private:
     FontAttributes  maDevFontAttributes;
 
     FontCharMapRef  mxFontCharMap;
-
-    // cache unicode->glyphid mapping because looking it up is expensive
-    // TODO: change to std::unordered_multimap when a use case requires a m:n mapping
-    typedef std::unordered_map<int,int> Int2IntMap;
-    mutable Int2IntMap* mpChar2Glyph;
-    mutable Int2IntMap* mpGlyph2Char;
-    void InitHashes() const;
 };
-
-// these two inlines are very important for performance
-
-inline int FreetypeFontInfo::GetGlyphIndex( sal_UCS4 cChar ) const
-{
-    if( !mpChar2Glyph )
-        return -1;
-    Int2IntMap::const_iterator it = mpChar2Glyph->find( cChar );
-    if( it == mpChar2Glyph->end() )
-        return -1;
-    return it->second;
-}
-
-inline void FreetypeFontInfo::CacheGlyphIndex( sal_UCS4 cChar, int nIndex ) const
-{
-    if( !mpChar2Glyph )
-        InitHashes();
-    (*mpChar2Glyph)[ cChar ] = nIndex;
-    (*mpGlyph2Char)[ nIndex ] = cChar;
-}
 
 class FreetypeManager
 {
