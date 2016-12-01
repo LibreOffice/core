@@ -33,6 +33,7 @@
 
 #include <GL/glew.h>
 
+#include <limits>
 #include <memory>
 #include <vector>
 
@@ -334,6 +335,12 @@ public:
         the list of vertices
     */
     const glm::vec3& getVertex(int n) const {return Vertices[n].position;}
+
+    int getVerticesCount() const
+    {
+        assert(Vertices.size() < std::numeric_limits<int>::max());
+        return int(unsigned(Vertices.size()));
+    }
 
     /** accessor for the size of the vertices data
 

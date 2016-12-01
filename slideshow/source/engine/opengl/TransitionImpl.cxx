@@ -1998,9 +1998,8 @@ void GlitterTransition::prepareTransition( sal_Int32 glLeavingSlideTex, sal_Int3
 
     // Upload the center of each hexagon.
     const Primitive& primitive = getScene().getLeavingSlide()[0];
-    int nbVertices = primitive.getVerticesByteSize() / sizeof(Vertex);
     std::vector<ThreeFloats> vertices;
-    for (int i = 2; i < nbVertices; i += 18) {
+    for (int i = 2; i < primitive.getVerticesCount(); i += 18) {
         const glm::vec3& center = primitive.getVertex(i);
         for (int j = 0; j < 18; ++j)
             vertices.push_back({center.x, center.y, center.z});
