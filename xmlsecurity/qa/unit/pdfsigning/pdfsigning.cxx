@@ -64,7 +64,10 @@ public:
     void testPDF14LOWin();
     /// Test a PAdES document, signed by LO on Linux.
     void testPDFPAdESGood();
+    /// Test writing a PAdES signature.
     void testSigningCertificateAttribute();
+    /// Test that we accept files which are supposed to be good.
+    void testGood();
 
     CPPUNIT_TEST_SUITE(PDFSigningTest);
     CPPUNIT_TEST(testPDFAdd);
@@ -77,6 +80,7 @@ public:
     CPPUNIT_TEST(testPDF14LOWin);
     CPPUNIT_TEST(testPDFPAdESGood);
     CPPUNIT_TEST(testSigningCertificateAttribute);
+    CPPUNIT_TEST(testGood);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -341,6 +345,25 @@ void PDFSigningTest::testSigningCertificateAttribute()
     SignatureInformation& rInformation = aInfos[0];
     // Assert that it has a signed signingCertificateV2 attribute.
     CPPUNIT_ASSERT(rInformation.bHasSigningCertificate);
+}
+
+void PDFSigningTest::testGood()
+{
+#ifndef _WIN32
+    const std::initializer_list<OUStringLiteral> aNames =
+    {
+        // We failed to determine if this is good or bad.
+        OUStringLiteral("good-non-detached.pdf"),
+    };
+
+    for (const auto& rName : aNames)
+    {
+        std::vector<SignatureInformation> aInfos = verify(m_directories.getURLFromSrc(DATA_DIRECTORY) + rName, 1, /*rExpectedSubFilter=*/OString());
+        CPPUNIT_ASSERT(!aInfos.empty());
+        SignatureInformation& rInformation = aInfos[0];
+        CPPUNIT_ASSERT_EQUAL(xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED, rInformation.nStatus);
+    }
+#endif
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(PDFSigningTest);
