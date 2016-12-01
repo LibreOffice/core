@@ -2895,6 +2895,8 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
                 // Release Solar Mutex, lo_startmain thread should acquire it.
                 Application::ReleaseSolarMutex();
             }
+
+            force_c_locale();
         }
 
         // This is horrible crack. I really would want to go back to simply just call
@@ -2918,8 +2920,6 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
 
         if (eStage != PRE_INIT)
         {
-            force_c_locale();
-
             SAL_INFO("lok", "Enabling OfficeIPCThread");
             OfficeIPCThread::EnableOfficeIPCThread();
             SAL_INFO("lok", "Starting soffice_main");
