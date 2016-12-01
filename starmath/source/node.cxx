@@ -2037,17 +2037,17 @@ void SmRectangleNode::Arrange(OutputDevice &rDev, const SmFormat &/*rFormat*/)
 
 SmTextNode::SmTextNode( SmNodeType eNodeType, const SmToken &rNodeToken, sal_uInt16 nFontDescP )
     : SmVisibleNode(eNodeType, rNodeToken)
-    , nFontDesc(nFontDescP)
-    , nSelectionStart(0)
-    , nSelectionEnd(0)
+    , mnFontDesc(nFontDescP)
+    , mnSelectionStart(0)
+    , mnSelectionEnd(0)
 {
 }
 
 SmTextNode::SmTextNode( const SmToken &rNodeToken, sal_uInt16 nFontDescP )
     : SmVisibleNode(NTEXT, rNodeToken)
-    , nFontDesc(nFontDescP)
-    , nSelectionStart(0)
-    , nSelectionEnd(0)
+    , mnFontDesc(nFontDescP)
+    , mnSelectionStart(0)
+    , mnSelectionEnd(0)
 {
 }
 
@@ -2061,7 +2061,7 @@ void SmTextNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell)
     if (TTEXT == GetToken().eType)
         SetRectHorAlign( RectHorAlign::Left );
 
-    aText = GetToken().aText;
+    maText = GetToken().aText;
     GetFont() = rFormat.GetFont(GetFontDesc());
 
     if (IsItalic( GetFont() ))
@@ -2088,7 +2088,7 @@ void SmTextNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     SmTmpDevice aTmpDev (rDev, true);
     aTmpDev.SetFont(GetFont());
 
-    SmRect::operator = (SmRect(aTmpDev, &rFormat, aText, GetFont().GetBorderWidth()));
+    SmRect::operator = (SmRect(aTmpDev, &rFormat, maText, GetFont().GetBorderWidth()));
 }
 
 void SmTextNode::CreateTextFromNode(OUString &rText)
@@ -2140,31 +2140,31 @@ void SmTextNode::CreateTextFromNode(OUString &rText)
 
 void SmTextNode::GetAccessibleText( OUStringBuffer &rText ) const
 {
-    rText.append(aText);
+    rText.append(maText);
 }
 
 void SmTextNode::AdjustFontDesc()
 {
     if (GetToken().eType == TTEXT)
-        nFontDesc = FNT_TEXT;
+        mnFontDesc = FNT_TEXT;
     else if(GetToken().eType == TFUNC)
-        nFontDesc = FNT_FUNCTION;
+        mnFontDesc = FNT_FUNCTION;
     else {
         SmTokenType nTok;
-        const SmTokenTableEntry *pEntry = SmParser::GetTokenTableEntry( aText );
+        const SmTokenTableEntry *pEntry = SmParser::GetTokenTableEntry( maText );
         if (pEntry && pEntry->nGroup == TG::Function) {
             nTok = pEntry->eType;
-            nFontDesc = FNT_FUNCTION;
+            mnFontDesc = FNT_FUNCTION;
         } else {
-            sal_Unicode firstChar = aText[0];
+            sal_Unicode firstChar = maText[0];
             if( ('0' <= firstChar && firstChar <= '9') || firstChar == '.' || firstChar == ',') {
-                nFontDesc = FNT_NUMBER;
+                mnFontDesc = FNT_NUMBER;
                 nTok = TNUMBER;
-            } else if (aText.getLength() > 1) {
-                nFontDesc = FNT_VARIABLE;
+            } else if (maText.getLength() > 1) {
+                mnFontDesc = FNT_VARIABLE;
                 nTok = TIDENT;
             } else {
-                nFontDesc = FNT_VARIABLE;
+                mnFontDesc = FNT_VARIABLE;
                 nTok = TCHARACTER;
             }
         }
