@@ -317,8 +317,6 @@ OGLTransitionImpl::displayUnbufferedSlide(
         double SlideWidthScale, double SlideHeightScale )
 {
     CHECK_GL_ERROR();
-    glPushMatrix();
-    CHECK_GL_ERROR();
     glBindTexture(GL_TEXTURE_2D, glSlideTex);
     CHECK_GL_ERROR();
     glBindVertexArray(0);
@@ -335,8 +333,6 @@ OGLTransitionImpl::displayUnbufferedSlide(
     glBindVertexArray(m_nVertexArrayObject);
     CHECK_GL_ERROR();
     glBindBuffer(GL_ARRAY_BUFFER, m_nVertexBufferObject);
-    CHECK_GL_ERROR();
-    glPopMatrix();
     CHECK_GL_ERROR();
 }
 
@@ -360,16 +356,30 @@ void Primitive::display(GLint primitiveTransformLocation, double nTime, double W
         CHECK_GL_ERROR();
     }
 
-    glPushClientAttrib(GL_CLIENT_VERTEX_ARRAY_BIT);
+    GLuint nVertexArrayObject;
+    glGenVertexArrays(1, &nVertexArrayObject);
     CHECK_GL_ERROR();
-    glEnableClientState( GL_VERTEX_ARRAY );
+    glBindVertexArray(nVertexArrayObject);
     CHECK_GL_ERROR();
-    glVertexPointer( 3, GL_FLOAT, sizeof(Vertex), &Vertices[0] );
+
+    GLuint nBuffer;
+    glGenBuffers(1, &nBuffer);
+    CHECK_GL_ERROR();
+    glBindBuffer(GL_ARRAY_BUFFER, nBuffer);
+    CHECK_GL_ERROR();
+    glBufferData(GL_ARRAY_BUFFER, getVerticesSize(), Vertices.data(), GL_STATIC_DRAW);
+
+    glEnableVertexAttribArray(0);
+    CHECK_GL_ERROR();
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), nullptr);
     CHECK_GL_ERROR();
     glDrawArrays( GL_TRIANGLES, 0, Vertices.size() );
     CHECK_GL_ERROR();
-    glPopClientAttrib();
 
+    glDeleteBuffers(1, &nBuffer);
+    CHECK_GL_ERROR();
+
+    glDeleteVertexArrays(1, &nVertexArrayObject);
     CHECK_GL_ERROR();
 }
 
