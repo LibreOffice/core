@@ -35,10 +35,6 @@ namespace com { namespace sun { namespace star {
  */
 class XMLIndexTableSourceContext : public XMLIndexSourceBaseContext
 {
-    const OUString sCreateFromLabels;
-    const OUString sLabelCategory;
-    const OUString sLabelDisplayType;
-
     OUString sSequence;
     sal_Int16 nDisplayFormat;
 

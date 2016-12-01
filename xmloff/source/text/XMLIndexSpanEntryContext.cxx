@@ -33,7 +33,7 @@ XMLIndexSpanEntryContext::XMLIndexSpanEntryContext(
     XMLIndexTemplateContext& rTemplate,
     sal_uInt16 nPrfx,
     const OUString& rLocalName ) :
-        XMLIndexSimpleEntryContext(rImport, rTemplate.sTokenText,
+        XMLIndexSimpleEntryContext(rImport, "TokenText",
                                    rTemplate, nPrfx, rLocalName)
 {
     nValues++;  // one more for the text string
@@ -57,7 +57,7 @@ void XMLIndexSpanEntryContext::FillPropertyValues(
     // content
     Any aAny;
     aAny <<= sContent.makeStringAndClear();
-    rValues[nValues-1].Name = rTemplateContext.sText;
+    rValues[nValues-1].Name = "Text";
     rValues[nValues-1].Value = aAny;
 }
 

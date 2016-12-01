@@ -28,18 +28,6 @@ class SvXMLExport;
 /** export <text:linenumbering-configuration> and its child elements */
 class XMLLineNumberingExport
 {
-    const OUString sCharStyleName;
-    const OUString sCountEmptyLines;
-    const OUString sCountLinesInFrames;
-    const OUString sDistance;
-    const OUString sInterval;
-    const OUString sSeparatorText;
-    const OUString sNumberPosition;
-    const OUString sNumberingType;
-    const OUString sIsOn;
-    const OUString sRestartAtEachPage;
-    const OUString sSeparatorInterval;
-
     SvXMLExport& rExport;
 
 public:

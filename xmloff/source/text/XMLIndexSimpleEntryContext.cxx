@@ -107,13 +107,13 @@ void XMLIndexSimpleEntryContext::FillPropertyValues(
     Any aAny;
 
     // token type
-    rValues[0].Name = rTemplateContext.sTokenType;
+    rValues[0].Name = "TokenType";
     rValues[0].Value = css::uno::Any(rEntryType);
 
     // char style
     if (bCharStyleNameOK)
     {
-        rValues[1].Name = rTemplateContext.sCharacterStyleName;
+        rValues[1].Name = "CharacterStyleName";
         aAny <<= GetImport().GetStyleDisplayName(
                                     XML_STYLE_FAMILY_TEXT_TEXT,
                                     sCharStyleName );

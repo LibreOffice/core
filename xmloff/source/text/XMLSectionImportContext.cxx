@@ -85,13 +85,6 @@ XMLSectionImportContext::XMLSectionImportContext(
     sal_uInt16 nPrfx,
     const OUString& rLocalName )
 :   SvXMLImportContext(rImport, nPrfx, rLocalName)
-,   sTextSection("com.sun.star.text.TextSection")
-,   sIndexHeaderSection("com.sun.star.text.IndexHeaderSection")
-,   sCondition("Condition")
-,   sIsVisible("IsVisible")
-,   sProtectionKey("ProtectionKey")
-,   sIsProtected("IsProtected")
-,   sIsCurrentlyVisible("IsCurrentlyVisible")
 ,   bProtect(false)
 ,   bCondOK(false)
 ,   bIsVisible(true)
@@ -131,8 +124,8 @@ void XMLSectionImportContext::StartElement(
         if (xFactory.is())
         {
             Reference<XInterface> xIfc =
-                xFactory->createInstance( bIsIndexHeader ? sIndexHeaderSection
-                                                        : sTextSection );
+                xFactory->createInstance( bIsIndexHeader ? OUString("com.sun.star.text.IndexHeaderSection")
+                                                         : OUString("com.sun.star.text.TextSection") );
             if (xIfc.is())
             {
                 Reference<XPropertySet> xPropSet(xIfc, UNO_QUERY);
@@ -159,19 +152,19 @@ void XMLSectionImportContext::StartElement(
                 // IsVisible and condition (not for index headers)
                 if (! bIsIndexHeader)
                 {
-                    xPropSet->setPropertyValue( sIsVisible, Any(bIsVisible) );
+                    xPropSet->setPropertyValue( "IsVisible", Any(bIsVisible) );
 
                     // #97450# hidden sections must be hidden on reload
                     // For backwards compatibility, set flag only if it is
                     // present
                     if( bIsCurrentlyVisibleOK )
                     {
-                        xPropSet->setPropertyValue( sIsCurrentlyVisible, Any(bIsCurrentlyVisible));
+                        xPropSet->setPropertyValue( "IsCurrentlyVisible", Any(bIsCurrentlyVisible));
                     }
 
                     if (bCondOK)
                     {
-                        xPropSet->setPropertyValue( sCondition, Any(sCond) );
+                        xPropSet->setPropertyValue( "Condition", Any(sCond) );
                     }
                 }
 
@@ -179,11 +172,11 @@ void XMLSectionImportContext::StartElement(
                 if ( bSequenceOK &&
                      IsXMLToken(GetLocalName(), XML_SECTION) )
                 {
-                    xPropSet->setPropertyValue(sProtectionKey, Any(aSequence));
+                    xPropSet->setPropertyValue("ProtectionKey", Any(aSequence));
                 }
 
                 // protection
-                xPropSet->setPropertyValue( sIsProtected, Any(bProtect) );
+                xPropSet->setPropertyValue( "IsProtected", Any(bProtect) );
 
                 // insert marker, <paragraph>, marker; then insert
                 // section over the first marker character, and delete the

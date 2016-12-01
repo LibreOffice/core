@@ -83,32 +83,6 @@ class XMLIndexTemplateContext : public SvXMLImportContext
     css::uno::Reference<css::beans::XPropertySet> & rPropertySet;
 
 public:
-
-    // constants made available to other contexts (template entry
-    // contexts, in particular)
-    const OUString sTokenEntryNumber;
-    const OUString sTokenEntryText;
-    const OUString sTokenTabStop;
-    const OUString sTokenText;
-    const OUString sTokenPageNumber;
-    const OUString sTokenChapterInfo;
-    const OUString sTokenHyperlinkStart;
-    const OUString sTokenHyperlinkEnd;
-    const OUString sTokenBibliographyDataField;
-
-    const OUString sCharacterStyleName;
-    const OUString sTokenType;
-    const OUString sText;
-    const OUString sTabStopRightAligned;
-    const OUString sTabStopPosition;
-    const OUString sTabStopFillCharacter;
-    const OUString sBibliographyDataField;
-    const OUString sChapterFormat;
-    const OUString sChapterLevel;//i53420
-
-    const OUString sLevelFormat;
-
-
     XMLIndexTemplateContext(
         SvXMLImport& rImport,
         css::uno::Reference<css::beans::XPropertySet> & rPropSet,

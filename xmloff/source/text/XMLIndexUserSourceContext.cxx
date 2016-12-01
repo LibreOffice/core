@@ -48,14 +48,6 @@ XMLIndexUserSourceContext::XMLIndexUserSourceContext(
     Reference<XPropertySet> & rPropSet) :
         XMLIndexSourceBaseContext(rImport, nPrfx, rLocalName,
                                   rPropSet, true),
-        sCreateFromEmbeddedObjects("CreateFromEmbeddedObjects"),
-        sCreateFromGraphicObjects("CreateFromGraphicObjects"),
-        sCreateFromMarks("CreateFromMarks"),
-        sCreateFromTables("CreateFromTables"),
-        sCreateFromTextFrames("CreateFromTextFrames"),
-        sUseLevelFromSource("UseLevelFromSource"),
-        sCreateFromLevelParagraphStyles("CreateFromLevelParagraphStyles"),
-        sUserIndexName("UserIndexName"),
         bUseObjects(false),
         bUseGraphic(false),
         bUseMarks(false),
@@ -140,17 +132,17 @@ void XMLIndexUserSourceContext::ProcessAttribute(
 
 void XMLIndexUserSourceContext::EndElement()
 {
-    rIndexPropertySet->setPropertyValue(sCreateFromEmbeddedObjects, css::uno::Any(bUseObjects));
-    rIndexPropertySet->setPropertyValue(sCreateFromGraphicObjects, css::uno::Any(bUseGraphic));
-    rIndexPropertySet->setPropertyValue(sUseLevelFromSource, css::uno::Any(bUseLevelFromSource));
-    rIndexPropertySet->setPropertyValue(sCreateFromMarks, css::uno::Any(bUseMarks));
-    rIndexPropertySet->setPropertyValue(sCreateFromTables, css::uno::Any(bUseTables));
-    rIndexPropertySet->setPropertyValue(sCreateFromTextFrames, css::uno::Any(bUseFrames));
-    rIndexPropertySet->setPropertyValue(sCreateFromLevelParagraphStyles, css::uno::Any(bUseLevelParagraphStyles));
+    rIndexPropertySet->setPropertyValue("CreateFromEmbeddedObjects", css::uno::Any(bUseObjects));
+    rIndexPropertySet->setPropertyValue("CreateFromGraphicObjects", css::uno::Any(bUseGraphic));
+    rIndexPropertySet->setPropertyValue("UseLevelFromSource", css::uno::Any(bUseLevelFromSource));
+    rIndexPropertySet->setPropertyValue("CreateFromMarks", css::uno::Any(bUseMarks));
+    rIndexPropertySet->setPropertyValue("CreateFromTables", css::uno::Any(bUseTables));
+    rIndexPropertySet->setPropertyValue("CreateFromTextFrames", css::uno::Any(bUseFrames));
+    rIndexPropertySet->setPropertyValue("CreateFromLevelParagraphStyles", css::uno::Any(bUseLevelParagraphStyles));
 
     if( !sIndexName.isEmpty() )
     {
-        rIndexPropertySet->setPropertyValue(sUserIndexName, css::uno::Any(sIndexName));
+        rIndexPropertySet->setPropertyValue("UserIndexName", css::uno::Any(sIndexName));
     }
 
     XMLIndexSourceBaseContext::EndElement();

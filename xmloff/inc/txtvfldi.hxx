@@ -33,12 +33,6 @@
 /** helper class: parses value-type and associated value attributes */
 class XMLValueImportHelper final
 {
-
-    const OUString sPropertyContent;
-    const OUString sPropertyValue;
-    const OUString sPropertyNumberFormat;
-    const OUString sPropertyIsFixedLanguage;
-
     SvXMLImport& rImport;
     XMLTextImportHelper& rHelper;
 
@@ -116,15 +110,6 @@ public:
  */
 class XMLVarFieldImportContext : public XMLTextFieldImportContext
 {
-protected:
-    const OUString sPropertyContent;
-    const OUString sPropertyHint;
-    const OUString sPropertyHelp;
-    const OUString sPropertyTooltip;
-    const OUString sPropertyIsVisible;
-    const OUString sPropertyIsDisplayFormula;
-    const OUString sPropertyCurrentPresentation;
-
 private:
     OUString sName;              /// name attribute
     OUString sFormula;           /// formula attribute
@@ -214,10 +199,7 @@ protected:
 /** import expression fields (<text:expression>) */
 class XMLExpressionFieldImportContext : public XMLVarFieldImportContext
 {
-    const OUString sPropertySubType;
-
 public:
-
 
     XMLExpressionFieldImportContext(
         SvXMLImport& rImport,                   /// XML Import
@@ -298,10 +280,7 @@ protected:
 /** import variable set fields (<text:variable-set>) */
 class XMLVariableSetFieldImportContext : public XMLSetVarFieldImportContext
 {
-    const OUString sPropertySubType;
-
 public:
-
 
     XMLVariableSetFieldImportContext(
         SvXMLImport& rImport,                   /// XML Import
@@ -319,9 +298,6 @@ protected:
 /** variable input fields (<text:variable-input>) */
 class XMLVariableInputFieldImportContext : public XMLSetVarFieldImportContext
 {
-    const OUString sPropertySubType;
-    const OUString sPropertyIsInput;
-
 public:
 
 
@@ -374,8 +350,6 @@ public:
 /** sequence fields (<text:sequence>) */
 class XMLSequenceFieldImportContext : public XMLSetVarFieldImportContext
 {
-    const OUString sPropertyNumberFormat;
-    const OUString sPropertySequenceValue;
     OUString sNumFormat;
     OUString sNumFormatSync;
     OUString sRefName;
@@ -434,11 +408,6 @@ public:
  */
 class XMLVariableDeclImportContext : public SvXMLImportContext
 {
-    const OUString sPropertySubType;
-    const OUString sPropertyNumberingLevel;
-    const OUString sPropertyNumberingSeparator;
-    const OUString sPropertyIsExpression;
-
     OUString sName;
     XMLValueImportHelper aValueHelper;
     sal_Int8 nNumLevel;
@@ -467,9 +436,6 @@ public:
 /** import table formula fields (deprecated; for Writer 2.0 compatibility) */
 class XMLTableFormulaImportContext : public XMLTextFieldImportContext
 {
-    const OUString sPropertyIsShowFormula;
-    const OUString sPropertyCurrentPresentation;
-
     XMLValueImportHelper aValueHelper;
 
     bool bIsShowFormula;
@@ -499,11 +465,6 @@ protected:
 /** import database display fields (<text:database-display>) */
 class XMLDatabaseDisplayImportContext : public XMLDatabaseFieldImportContext
 {
-    const OUString sPropertyColumnName;
-    const OUString sPropertyDatabaseFormat;
-    const OUString sPropertyCurrentPresentation;
-    const OUString sPropertyIsVisible;
-
     XMLValueImportHelper aValueHelper;
 
     OUString sColumnName;

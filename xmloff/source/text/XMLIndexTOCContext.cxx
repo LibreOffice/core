@@ -96,8 +96,6 @@ SvXMLEnumMapEntry const aIndexTypeMap[] =
 XMLIndexTOCContext::XMLIndexTOCContext(SvXMLImport& rImport,
     sal_uInt16 nPrfx, const OUString& rLocalName)
     : SvXMLImportContext(rImport, nPrfx, rLocalName)
-    , sIsProtected("IsProtected")
-    , sName("Name")
     , eIndexType(TEXT_INDEX_UNKNOWN)
     , bValid(false)
 {
@@ -240,11 +238,11 @@ void XMLIndexTOCContext::StartElement(
             pStyle->FillPropertySet( xTOCPropertySet );
         }
 
-        xTOCPropertySet->setPropertyValue( sIsProtected, Any(bProtected) );
+        xTOCPropertySet->setPropertyValue( "IsProtected", Any(bProtected) );
 
         if (!sIndexName.isEmpty())
         {
-            xTOCPropertySet->setPropertyValue( sName, Any(sIndexName) );
+            xTOCPropertySet->setPropertyValue( "Name", Any(sIndexName) );
         }
     }
 }

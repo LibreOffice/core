@@ -45,7 +45,7 @@ XMLIndexBibliographyEntryContext::XMLIndexBibliographyEntryContext(
     sal_uInt16 nPrfx,
     const OUString& rLocalName ) :
         XMLIndexSimpleEntryContext(rImport,
-                                   rTemplate.sTokenBibliographyDataField,
+                                   "TokenBibliographyDataField",
                                    rTemplate,
                                    nPrfx, rLocalName),
         nBibliographyInfo(BibliographyDataField::IDENTIFIER),
@@ -154,7 +154,7 @@ void XMLIndexBibliographyEntryContext::FillPropertyValues(
 
     // bibliography data field
     sal_Int32 nIndex = bCharStyleNameOK ? 2 : 1;
-    rValues[nIndex].Name = rTemplateContext.sBibliographyDataField;
+    rValues[nIndex].Name = "BibliographyDataField";
     rValues[nIndex].Value = css::uno::Any(nBibliographyInfo);
 }
 

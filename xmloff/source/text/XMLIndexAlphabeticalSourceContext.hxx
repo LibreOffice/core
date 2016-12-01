@@ -37,18 +37,6 @@ namespace com { namespace sun { namespace star {
  */
 class XMLIndexAlphabeticalSourceContext : public XMLIndexSourceBaseContext
 {
-    const OUString sMainEntryCharacterStyleName;
-    const OUString sUseAlphabeticalSeparators;
-    const OUString sUseCombinedEntries;
-    const OUString sIsCaseSensitive;
-    const OUString sUseKeyAsEntry;
-    const OUString sUseUpperCase;
-    const OUString sUseDash;
-    const OUString sUsePP;
-    const OUString sIsCommaSeparated;
-    const OUString sSortAlgorithm;
-    const OUString sLocale;
-
     LanguageTagODF maLanguageTagODF;
     OUString sAlgorithm;
 
