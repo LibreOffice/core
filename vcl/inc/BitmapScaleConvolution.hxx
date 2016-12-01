@@ -20,7 +20,7 @@
 #ifndef INCLUDED_VCL_BITMAPSCALECONVOLUTION_HXX
 #define INCLUDED_VCL_BITMAPSCALECONVOLUTION_HXX
 
-#include <vcl/bitmapfilter.hxx>
+#include <bitmapfilter.hxx>
 
 namespace vcl
 {

@@ -8,12 +8,12 @@
  *
  */
 
-#ifndef INCLUDED_VCL_BITMAPFILTER_HXX
-#define INCLUDED_VCL_BITMAPFILTER_HXX
+#ifndef INCLUDED_VCL_INC_BITMAPFILTER_HXX
+#define INCLUDED_VCL_INC_BITMAPFILTER_HXX
 
 #include <vcl/bitmap.hxx>
 
-class VCL_DLLPUBLIC BitmapFilter
+class BitmapFilter
 {
 public:
                  BitmapFilter();
@@ -22,6 +22,6 @@ public:
     virtual bool filter(Bitmap& rBitmap) = 0;
 };
 
-#endif // INCLUDED_VCL_BITMAPFILTER_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
