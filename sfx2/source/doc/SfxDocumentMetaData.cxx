@@ -491,14 +491,14 @@ getQualifier(const char* i_name) {
 // NB: only call this with statically known strings!
 OUString SAL_CALL getNameSpace(const char* i_qname) throw ()
 {
-    DBG_ASSERT(i_qname, "SfxDocumentMetaData: getNameSpace: argument is null");
+    assert(i_qname);
     const char * ns = "";
     OUString n = getQualifier(i_qname).first;
     if ( n == "xlink" ) ns = s_nsXLink;
     if ( n == "dc" ) ns = s_nsDC;
     if ( n == "office" ) ns = s_nsODF;
     if ( n == "meta" ) ns = s_nsODFMeta;
-    DBG_ASSERT(*ns, "SfxDocumentMetaData: unknown namespace prefix");
+    assert(*ns);
     return OUString::createFromAscii(ns);
 }
 
@@ -679,8 +679,7 @@ SfxDocumentMetaData::getMetaText(const char* i_name) const
     checkInit();
 
     const OUString name( OUString::createFromAscii(i_name) );
-    DBG_ASSERT(m_meta.find(name) != m_meta.end(),
-        "SfxDocumentMetaData::getMetaText: not found");
+    assert(m_meta.find(name) != m_meta.end());
     css::uno::Reference<css::xml::dom::XNode> xNode = m_meta.find(name)->second;
     return (xNode.is()) ? getNodeText(xNode) : OUString();
 }
@@ -693,8 +692,7 @@ SfxDocumentMetaData::setMetaText(const char* i_name,
     checkInit();
 
     const OUString name( OUString::createFromAscii(i_name) );
-    DBG_ASSERT(m_meta.find(name) != m_meta.end(),
-        "SfxDocumentMetaData::setMetaText: not found");
+    assert(m_meta.find(name) != m_meta.end());
     css::uno::Reference<css::xml::dom::XNode> xNode = m_meta.find(name)->second;
 
     try {
@@ -758,8 +756,7 @@ SfxDocumentMetaData::getMetaAttr(const char* i_name, const char* i_attr) const
 //        throw (css::uno::RuntimeException)
 {
     OUString name = OUString::createFromAscii(i_name);
-    DBG_ASSERT(m_meta.find(name) != m_meta.end(),
-        "SfxDocumentMetaData::getMetaAttr: not found");
+    assert(m_meta.find(name) != m_meta.end());
     css::uno::Reference<css::xml::dom::XNode> xNode = m_meta.find(name)->second;
     if (xNode.is()) {
         css::uno::Reference<css::xml::dom::XElement> xElem(xNode,
@@ -777,8 +774,7 @@ SfxDocumentMetaData::getMetaList(const char* i_name) const
 {
     checkInit();
     OUString name = OUString::createFromAscii(i_name);
-    DBG_ASSERT(m_metaList.find(name) != m_metaList.end(),
-        "SfxDocumentMetaData::getMetaList: not found");
+    assert(m_metaList.find(name) != m_metaList.end());
     std::vector<css::uno::Reference<css::xml::dom::XNode> > const & vec =
         m_metaList.find(name)->second;
     css::uno::Sequence< OUString> ret(vec.size());
@@ -790,19 +786,17 @@ SfxDocumentMetaData::getMetaList(const char* i_name) const
 
 bool SAL_CALL
 SfxDocumentMetaData::setMetaList(const char* i_name,
-        const css::uno::Sequence< OUString> & i_rValue,
+        const css::uno::Sequence<OUString> & i_rValue,
         AttrVector const* i_pAttrs)
     // throw (css::uno::RuntimeException)
 {
     checkInit();
-    DBG_ASSERT((i_pAttrs == nullptr) ||
-               (static_cast<size_t>(i_rValue.getLength()) == i_pAttrs->size()),
-        "SfxDocumentMetaData::setMetaList: invalid args");
+    assert((i_pAttrs == nullptr) ||
+           (static_cast<size_t>(i_rValue.getLength()) == i_pAttrs->size()));
 
     try {
         OUString name = OUString::createFromAscii(i_name);
-        DBG_ASSERT(m_metaList.find(name) != m_metaList.end(),
-            "SfxDocumentMetaData::setMetaList: not found");
+        assert(m_metaList.find(name) != m_metaList.end());
         std::vector<css::uno::Reference<css::xml::dom::XNode> > & vec =
             m_metaList[name];
 
@@ -1113,8 +1107,7 @@ SfxDocumentMetaData::checkInit() const // throw (css::uno::RuntimeException)
                 "SfxDocumentMetaData::checkInit: not initialized"),
                 *const_cast<SfxDocumentMetaData*>(this));
     }
-    DBG_ASSERT((m_xDoc.is() && m_xParent.is() ),
-                "SfxDocumentMetaData::checkInit: reference is null");
+    assert(m_xDoc.is() && m_xParent.is());
 }
 
 // initialize state from DOM tree
@@ -1163,10 +1156,9 @@ void SAL_CALL SfxDocumentMetaData::init(
                     }
                     else
                     {
-                        OSL_TRACE("SfxDocumentMetaData::init(): "
-                                "deleting unexpected root element: %s",
-                            OUStringToOString(xNode->getLocalName(),
-                                RTL_TEXTENCODING_UTF8).getStr());
+                        SAL_INFO("sfx.doc", "SfxDocumentMetaData::init(): "
+                                "deleting unexpected root element: "
+                                << xNode->getLocalName());
                         i_xDoc->removeChild(xNode);
                         xNode = i_xDoc->getFirstChild(); // start over
                     }
@@ -1321,11 +1313,9 @@ void SAL_CALL SfxDocumentMetaData::init(
             SAL_WARN("sfx.doc", "Duplicate: " << name);
             // ignore; duplicate
         } catch (const css::beans::IllegalTypeException &) {
-            OSL_TRACE("SfxDocumentMetaData: illegal type: %s",
-                    OUStringToOString(name, RTL_TEXTENCODING_UTF8).getStr());
+            SAL_INFO("sfx.doc", "SfxDocumentMetaData: illegal type: " << name);
         } catch (const css::lang::IllegalArgumentException &) {
-            OSL_TRACE("SfxDocumentMetaData: illegal arg: %s",
-                    OUStringToOString(name, RTL_TEXTENCODING_UTF8).getStr());
+            SAL_INFO("sfx.doc", "SfxDocumentMetaData: illegal arg: " << name);
         }
     }
 
@@ -1344,9 +1334,8 @@ SfxDocumentMetaData::SfxDocumentMetaData(
     , m_isModified(false)
     , m_AutoloadSecs(0)
 {
-    DBG_ASSERT(context.is(), "SfxDocumentMetaData: context is null");
-    DBG_ASSERT(context->getServiceManager().is(),
-        "SfxDocumentMetaData: context has no service manager");
+    assert(context.is());
+    assert(context->getServiceManager().is());
     init(createDOM());
 }
 
@@ -2164,7 +2153,7 @@ void SAL_CALL SfxDocumentMetaData::setModified( sal_Bool bModified )
         if ( !bModified && m_xUserDefined.is() )
         {
             xMB.set(m_xUserDefined, css::uno::UNO_QUERY);
-            DBG_ASSERT(xMB.is(),
+            assert(xMB.is() &&
                 "SfxDocumentMetaData::setModified: PropertyBag not Modifiable?");
         }
     }
