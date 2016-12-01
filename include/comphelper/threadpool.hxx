@@ -11,11 +11,11 @@
 #define INCLUDED_COMPHELPER_THREADPOOL_HXX
 
 #include <sal/config.h>
-#include <salhelper/thread.hxx>
-#include <osl/mutex.hxx>
-#include <osl/conditn.hxx>
 #include <rtl/ref.hxx>
 #include <comphelper/comphelperdllapi.h>
+#include <mutex>
+#include <thread>
+#include <condition_variable>
 #include <vector>
 #include <memory>
 
@@ -28,14 +28,19 @@ class COMPHELPER_DLLPUBLIC ThreadTask
 {
 friend class ThreadPool;
     std::shared_ptr<ThreadTaskTag>  mpTag;
+
+    /// execute and delete this task
+    void      execAndDelete();
+protected:
+    /// override to get your task performed by the pool
+    virtual void doWork() = 0;
+    /// once pushed ThreadTasks are destroyed by the pool
+    virtual   ~ThreadTask() {}
 public:
     ThreadTask(const std::shared_ptr<ThreadTaskTag>& pTag);
-    virtual      ~ThreadTask() {}
-    virtual void doWork() = 0;
-    const std::shared_ptr<ThreadTaskTag>& getTag() { return mpTag; }
 };
 
-/// A very basic thread pool implementation
+/// A very basic thread-safe thread pool implementation
 class COMPHELPER_DLLPUBLIC ThreadPool final
 {
 public:
@@ -50,7 +55,7 @@ public:
     /// returns a configurable max-concurrency
     /// limit to avoid spawning an unnecessarily
     /// large number of threads on high-core boxes.
-    /// MAX_CONCURRENCY envar controls the cap.
+    /// MAX_CONCURRENCY env. var. controls the cap.
     static      sal_Int32 getPreferredConcurrency();
 
     ThreadPool( sal_Int32 nWorkers );
@@ -65,6 +70,9 @@ public:
     /// return the number of live worker threads
     sal_Int32   getWorkerCount() const { return maWorkers.size(); }
 
+    /// wait until all work is completed, then join all threads
+    void        shutdown();
+
 private:
     ThreadPool(const ThreadPool&) = delete;
     ThreadPool& operator=(const ThreadPool&) = delete;
@@ -72,20 +80,21 @@ private:
     class ThreadWorker;
     friend class ThreadWorker;
 
-    /// wait until all work is completed, then join all threads
-    void        waitAndCleanupWorkers();
+    /** Pop a work task
+        @param  bWait - if set wait until task present or termination
+        @return a new task to perform, or NULL if list empty or terminated
+    */
+    ThreadTask *popWorkLocked( std::unique_lock< std::mutex > & rGuard, bool bWait );
+    void        startWorkLocked();
+    void        stopWorkLocked();
 
-    ThreadTask *popWork();
-    void        startWork();
-    void        stopWork();
-
-    osl::Mutex     maGuard;
-    sal_Int32      mnThreadsWorking;
     /// signalled when all in-progress tasks are complete
-    osl::Condition maTasksComplete;
-    bool           mbTerminate;
-    std::vector< rtl::Reference< ThreadWorker > > maWorkers;
+    std::mutex              maMutex;
+    std::condition_variable maTasksChanged;
+    sal_Int32               mnThreadsWorking;
+    bool                    mbTerminate;
     std::vector< ThreadTask * >   maTasks;
+    std::vector< rtl::Reference< ThreadWorker > > maWorkers;
 };
 
 } // namespace comphelper
