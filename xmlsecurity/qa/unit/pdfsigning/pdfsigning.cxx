@@ -64,12 +64,16 @@ public:
     void testPDF14LOWin();
     /// Test a PAdES document, signed by LO on Linux.
     void testPDFPAdESGood();
+    /// Test a valid signature that does not cover the whole file.
+    void testPartial();
     /// Test writing a PAdES signature.
     void testSigningCertificateAttribute();
     /// Test that we accept files which are supposed to be good.
     void testGood();
     /// Test that we don't crash / loop while tokenizing these files.
     void testTokenize();
+    /// Test handling of unknown SubFilter values.
+    void testUnknownSubFilter();
 
     CPPUNIT_TEST_SUITE(PDFSigningTest);
     CPPUNIT_TEST(testPDFAdd);
@@ -81,9 +85,11 @@ public:
     CPPUNIT_TEST(testPDF16Add);
     CPPUNIT_TEST(testPDF14LOWin);
     CPPUNIT_TEST(testPDFPAdESGood);
+    CPPUNIT_TEST(testPartial);
     CPPUNIT_TEST(testSigningCertificateAttribute);
     CPPUNIT_TEST(testGood);
     CPPUNIT_TEST(testTokenize);
+    CPPUNIT_TEST(testUnknownSubFilter);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -331,6 +337,14 @@ void PDFSigningTest::testPDFPAdESGood()
     verify(m_directories.getURLFromSrc(DATA_DIRECTORY) + "good-pades.pdf", 1, "ETSI.CAdES.detached");
 }
 
+void PDFSigningTest::testPartial()
+{
+    std::vector<SignatureInformation> aInfos = verify(m_directories.getURLFromSrc(DATA_DIRECTORY) + "partial.pdf", 1, /*rExpectedSubFilter=*/OString());
+    CPPUNIT_ASSERT(!aInfos.empty());
+    SignatureInformation& rInformation = aInfos[0];
+    CPPUNIT_ASSERT(rInformation.bPartialDocumentSignature);
+}
+
 void PDFSigningTest::testSigningCertificateAttribute()
 {
     // Create a new signature.
@@ -377,8 +391,12 @@ void PDFSigningTest::testTokenize()
     {
         // We looped on this broken input.
         OUStringLiteral("no-eof.pdf"),
-        // Failed to read as \r wasn't handled as terminating a comment.
-        OUStringLiteral("cr-comment.pdf"),
+        // ']' in a name token was mishandled.
+        OUStringLiteral("name-bracket.pdf"),
+        // %%EOF at the end wasn't followed by a newline.
+        OUStringLiteral("noeol.pdf"),
+        // File that's intentionally smaller than 1024 bytes.
+        OUStringLiteral("small.pdf"),
     };
 
     for (const auto& rName : aNames)
@@ -388,6 +406,22 @@ void PDFSigningTest::testTokenize()
         // Just make sure the tokenizer finishes without an error, don't look at the signature.
         CPPUNIT_ASSERT(aDocument.Read(aStream));
     }
+}
+
+void PDFSigningTest::testUnknownSubFilter()
+{
+    // Tokenize the bugdoc.
+    uno::Reference<xml::crypto::XSEInitializer> xSEInitializer = xml::crypto::SEInitializer::create(mxComponentContext);
+    uno::Reference<xml::crypto::XXMLSecurityContext> xSecurityContext = xSEInitializer->createSecurityContext(OUString());
+    SvStream* pStream = utl::UcbStreamHelper::CreateStream(m_directories.getURLFromSrc(DATA_DIRECTORY) + "cr-comment.pdf", StreamMode::READ | StreamMode::WRITE);
+    uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(*pStream));
+    DocumentSignatureManager aManager(mxComponentContext, DocumentSignatureMode::Content);
+    aManager.mxSignatureStream = xStream;
+    aManager.read(/*bUseTempStream=*/false);
+
+    // Make sure we find both signatures, even if the second has unknown SubFilter.
+    std::vector<SignatureInformation>& rInformations = aManager.maCurrentSignatureInformations;
+    CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(2), rInformations.size());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(PDFSigningTest);
