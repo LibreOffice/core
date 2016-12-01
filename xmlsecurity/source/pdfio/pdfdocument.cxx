@@ -1009,7 +1009,10 @@ bool PDFDocument::Tokenize(SvStream& rStream, TokenizeMode eMode, std::vector< s
             rElements.push_back(std::unique_ptr<PDFElement>(pComment));
             rStream.SeekRel(-1);
             if (!rElements.back()->Read(rStream))
+            {
+                SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Tokenize: PDFCommentElement::Read() failed");
                 return false;
+            }
             if (eMode == TokenizeMode::EOF_TOKEN && !m_aEOFs.empty() && m_aEOFs.back() == rStream.Tell())
             {
                 // Found EOF and partial parsing requested, we're done.
@@ -1030,7 +1033,10 @@ bool PDFDocument::Tokenize(SvStream& rStream, TokenizeMode eMode, std::vector< s
             else
                 rElements.push_back(std::unique_ptr<PDFElement>(new PDFHexStringElement()));
             if (!rElements.back()->Read(rStream))
+            {
+                SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Tokenize: PDFDictionaryElement::Read() failed");
                 return false;
+            }
             break;
         }
         case '>':
@@ -1039,7 +1045,10 @@ bool PDFDocument::Tokenize(SvStream& rStream, TokenizeMode eMode, std::vector< s
             --nDictionaryDepth;
             rStream.SeekRel(-1);
             if (!rElements.back()->Read(rStream))
+            {
+                SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Tokenize: PDFEndDictionaryElement::Read() failed");
                 return false;
+            }
             break;
         }
         case '[':
@@ -1055,7 +1064,10 @@ bool PDFDocument::Tokenize(SvStream& rStream, TokenizeMode eMode, std::vector< s
             }
             rStream.SeekRel(-1);
             if (!rElements.back()->Read(rStream))
+            {
+                SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Tokenize: PDFArrayElement::Read() failed");
                 return false;
+            }
             break;
         }
         case ']':
@@ -1064,7 +1076,10 @@ bool PDFDocument::Tokenize(SvStream& rStream, TokenizeMode eMode, std::vector< s
             pArray = nullptr;
             rStream.SeekRel(-1);
             if (!rElements.back()->Read(rStream))
+            {
+                SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Tokenize: PDFEndArrayElement::Read() failed");
                 return false;
+            }
             break;
         }
         case '/':
@@ -1073,7 +1088,10 @@ bool PDFDocument::Tokenize(SvStream& rStream, TokenizeMode eMode, std::vector< s
             rElements.push_back(std::unique_ptr<PDFElement>(pNameElement));
             rStream.SeekRel(-1);
             if (!pNameElement->Read(rStream))
+            {
+                SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Tokenize: PDFNameElement::Read() failed");
                 return false;
+            }
             if (pObject && pObjectKey && pObjectKey->GetValue() == "Type" && pNameElement->GetValue() == "ObjStm")
                 pObjectStream = pObject;
             else
@@ -1085,7 +1103,10 @@ bool PDFDocument::Tokenize(SvStream& rStream, TokenizeMode eMode, std::vector< s
             rElements.push_back(std::unique_ptr<PDFElement>(new PDFLiteralStringElement()));
             rStream.SeekRel(-1);
             if (!rElements.back()->Read(rStream))
+            {
+                SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Tokenize: PDFLiteralStringElement::Read() failed");
                 return false;
+            }
             break;
         }
         default:
@@ -1097,7 +1118,10 @@ bool PDFDocument::Tokenize(SvStream& rStream, TokenizeMode eMode, std::vector< s
                 rElements.push_back(std::unique_ptr<PDFElement>(pNumberElement));
                 rStream.SeekRel(-1);
                 if (!pNumberElement->Read(rStream))
+                {
+                    SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Tokenize: PDFNumberElement::Read() failed");
                     return false;
+                }
                 if (bInStartXRef)
                 {
                     bInStartXRef = false;
@@ -1147,7 +1171,10 @@ bool PDFDocument::Tokenize(SvStream& rStream, TokenizeMode eMode, std::vector< s
                             pArray->PushBack(rElements.back().get());
                     }
                     if (!rElements.back()->Read(rStream))
+                    {
+                        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Tokenize: PDFElement::Read() failed");
                         return false;
+                    }
                 }
                 else if (aKeyword == "stream")
                 {
@@ -1189,19 +1216,28 @@ bool PDFDocument::Tokenize(SvStream& rStream, TokenizeMode eMode, std::vector< s
                         pObject->SetStream(pStreamElement);
                     rElements.push_back(std::unique_ptr<PDFElement>(pStreamElement));
                     if (!rElements.back()->Read(rStream))
+                    {
+                        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Tokenize: PDFStreamElement::Read() failed");
                         return false;
+                    }
                 }
                 else if (aKeyword == "endstream")
                 {
                     rElements.push_back(std::unique_ptr<PDFElement>(new PDFEndStreamElement()));
                     if (!rElements.back()->Read(rStream))
+                    {
+                        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Tokenize: PDFEndStreamElement::Read() failed");
                         return false;
+                    }
                 }
                 else if (aKeyword == "endobj")
                 {
                     rElements.push_back(std::unique_ptr<PDFElement>(new PDFEndObjectElement()));
                     if (!rElements.back()->Read(rStream))
+                    {
+                        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Tokenize: PDFEndObjectElement::Read() failed");
                         return false;
+                    }
                     if (eMode == TokenizeMode::END_OF_OBJECT)
                     {
                         // Found endobj and only object parsing was requested, we're done.
@@ -2619,13 +2655,13 @@ PDFCommentElement::PDFCommentElement(PDFDocument& rDoc)
 
 bool PDFCommentElement::Read(SvStream& rStream)
 {
-    // Read from (including) the % char till (excluding) the end of the line.
+    // Read from (including) the % char till (excluding) the end of the line/stream.
     OStringBuffer aBuf;
     char ch;
     rStream.ReadChar(ch);
-    while (!rStream.IsEof())
+    while (true)
     {
-        if (ch == '\n' || ch == '\r')
+        if (ch == '\n' || ch == '\r' || rStream.IsEof())
         {
             m_aComment = aBuf.makeStringAndClear();
 
