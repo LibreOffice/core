@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_WRITERPERFECT_QA_UNIT_WPFTIMPORTTESTBASE_HXX
-#define INCLUDED_WRITERPERFECT_QA_UNIT_WPFTIMPORTTESTBASE_HXX
+#ifndef INCLUDED_WRITERPERFECT_QA_UNIT_WPFTFILTERTESTBASE_HXX
+#define INCLUDED_WRITERPERFECT_QA_UNIT_WPFTFILTERTESTBASE_HXX
 
 #include "config_writerperfect.h"
 
@@ -81,12 +81,12 @@ namespace test
 
 typedef std::unordered_map<rtl::OUString, bool, rtl::OUStringHash> WpftOptionalMap_t;
 
-class WpftImportTestBase
+class WpftFilterTestBase
     : public ::test::FiltersTest
     , public ::test::BootstrapFixture
 {
 public:
-    explicit WpftImportTestBase(const rtl::OUString &rFactoryURL);
+    explicit WpftFilterTestBase(const rtl::OUString &rFactoryURL);
 
     virtual void setUp() override;
     virtual void tearDown() override;
@@ -112,6 +112,6 @@ private:
 }
 }
 
-#endif // INCLUDED_WRITERPERFECT_QA_UNIT_WPFTIMPORTTESTBASE_HXX
+#endif // INCLUDED_WRITERPERFECT_QA_UNIT_WPFTFILTERTESTBASE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
