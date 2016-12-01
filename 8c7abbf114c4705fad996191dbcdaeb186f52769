@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a71b18c_e9259d5c",
+        "filename": "sfx2/uiconfig/ui/helpmanual.ui",
+        "patchSetId": 3
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-12-01T10:28:14Z",
+      "side": 1,
+      "message": "This whole .ui file looks very odd -- none of the widgets has id. They normally look like this \u003cobject class\u003dGtkWindow id\u003d\"FooWindow\"\u003e\n\nDid you do some manual changes after generating it with glade? I\u0027m afraid you need to add widget IDs back, the code building the dialog from .ui file requires IDs to be there, otherwise strange crashes happen",
+      "revId": "8c7abbf114c4705fad996191dbcdaeb186f52769",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
