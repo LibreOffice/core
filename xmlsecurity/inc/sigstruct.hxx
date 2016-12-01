@@ -106,6 +106,8 @@ struct SignatureInformation
     sal_Int32 nDigestID;
     /// For PDF: has id-aa-signingCertificateV2 as a signed attribute.
     bool bHasSigningCertificate;
+    /// For PDF: the byte range doesn't cover the whole document.
+    bool bPartialDocumentSignature;
 
     SignatureInformation( sal_Int32 nId )
     {
@@ -113,6 +115,7 @@ struct SignatureInformation
         nStatus = css::xml::crypto::SecurityOperationStatus_UNKNOWN;
         nDigestID = 0;
         bHasSigningCertificate = false;
+        bPartialDocumentSignature = false;
     }
 };
 

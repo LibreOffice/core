@@ -56,10 +56,7 @@ bool PDFSignatureHelper::ReadAndVerifySignature(const uno::Reference<io::XInputS
 
         bool bLast = i == aSignatures.size() - 1;
         if (!xmlsecurity::pdfio::PDFDocument::ValidateSignature(*pStream, aSignatures[i], aInfo, bLast))
-        {
             SAL_WARN("xmlsecurity.helper", "failed to determine digest match");
-            continue;
-        }
 
         m_aSignatureInfos.push_back(aInfo);
     }
@@ -82,6 +79,7 @@ uno::Sequence<security::DocumentSignatureInformation> PDFSignatureHelper::GetDoc
         security::DocumentSignatureInformation& rExternal = aRet[i];
         rExternal.SignatureIsValid = rInternal.nStatus == xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED;
         rExternal.Signer = xSecEnv->createCertificateFromAscii(rInternal.ouX509Certificate);
+        rExternal.PartialDocumentSignature = rInternal.bPartialDocumentSignature;
 
         // Verify certificate.
         if (rExternal.Signer.is())
