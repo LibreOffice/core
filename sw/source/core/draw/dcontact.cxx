@@ -1539,6 +1539,9 @@ void SwDrawContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
             case sw::DrawFrameFormatHintId::PREPPASTING:
                 MoveObjToVisibleLayer(GetMaster());
                 break;
+            case sw::DrawFrameFormatHintId::PAGE_OUT_OF_BOUNDS:
+                DisconnectFromLayout();
+                break;
             default:
                 SAL_WARN("sw.core", "unhandled DrawFrameFormatHintId");
         }

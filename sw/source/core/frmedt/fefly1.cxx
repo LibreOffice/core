@@ -961,11 +961,7 @@ void SwFEShell::SetPageObjsNewPage( std::vector<SwFrameFormat*>& rFillArr )
             if( sal_uInt16(nNewPage) > nMaxPage )
             {
                 if ( RES_DRAWFRMFMT == pFormat->Which() )
-                {
-                    SwContact *pCon = pFormat->FindContactObj();
-                    if( pCon )
-                        static_cast<SwDrawContact*>(pCon)->DisconnectFromLayout();
-                }
+                    pFormat->CallSwClientNotify(sw::DrawFrameFormatHint(sw::DrawFrameFormatHintId::PAGE_OUT_OF_BOUNDS));
                 else
                     pFormat->DelFrames();
                 bTmpAssert = true;
