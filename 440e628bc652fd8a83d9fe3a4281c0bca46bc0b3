@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a71b18c_89c5095d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-12-01T10:47:11Z",
+      "side": 1,
+      "message": "But the current code is not limited to \u0027\u003d\u003d\u0027 and \u0027!\u003d\u0027.",
+      "revId": "440e628bc652fd8a83d9fe3a4281c0bca46bc0b3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
