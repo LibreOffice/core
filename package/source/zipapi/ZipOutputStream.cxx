@@ -27,6 +27,7 @@
 #include <osl/diagnose.h>
 
 #include <osl/time.h>
+#include <osl/thread.hxx>
 
 #include <PackageConstants.hxx>
 #include <ZipEntry.hxx>
