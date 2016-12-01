@@ -94,7 +94,6 @@ class XMLTableImportContext : public SvXMLImportContext
 {
 public:
     XMLTableImportContext( const rtl::Reference< XMLTableImport >& xThis, sal_uInt16 nPrfx, const OUString& rLName, Reference< XColumnRowRange >& xColumnRowRange );
-    virtual ~XMLTableImportContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList ) override;
 
@@ -132,8 +131,6 @@ public:
                           const OUString& sDefaultCellStyleName,
                           sal_uInt16 nPrfx, const OUString& rLName,
                           const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList );
-
-    virtual ~XMLCellImportContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList ) override;
 
@@ -372,10 +369,6 @@ XMLTableImportContext::XMLTableImportContext( const rtl::Reference< XMLTableImpo
 , mxRows( xColumnRowRange->getRows() )
 , mnCurrentRow( -1 )
 , mnCurrentColumn( -1 )
-{
-}
-
-XMLTableImportContext::~XMLTableImportContext()
 {
 }
 
@@ -707,10 +700,6 @@ XMLCellImportContext::XMLCellImportContext( SvXMLImport& rImport, const Referenc
             }
         }
     }
-}
-
-XMLCellImportContext::~XMLCellImportContext()
-{
 }
 
 SvXMLImportContext * XMLCellImportContext::CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList )

@@ -105,8 +105,6 @@ public:
                                        xml::sax::XAttributeList > & xAttrList,
                                const SvXMLTokenMap& rTokenMap );
 
-    virtual ~XMLTextColumnContext_Impl() override;
-
     text::TextColumn& getTextColumn() { return aColumn; }
 };
 
@@ -165,10 +163,6 @@ XMLTextColumnContext_Impl::XMLTextColumnContext_Impl(
     }
 }
 
-XMLTextColumnContext_Impl::~XMLTextColumnContext_Impl()
-{
-}
-
 class XMLTextColumnSepContext_Impl: public SvXMLImportContext
 {
     sal_Int32 nWidth;
@@ -184,8 +178,6 @@ public:
                                const uno::Reference<
                                        xml::sax::XAttributeList > & xAttrList,
                                const SvXMLTokenMap& rTokenMap );
-
-    virtual ~XMLTextColumnSepContext_Impl() override;
 
     sal_Int32 GetWidth() const { return nWidth; }
     sal_Int32 GetColor() const { return  nColor; }
@@ -255,11 +247,6 @@ XMLTextColumnSepContext_Impl::XMLTextColumnSepContext_Impl(
         }
     }
 }
-
-XMLTextColumnSepContext_Impl::~XMLTextColumnSepContext_Impl()
-{
-}
-
 
 XMLTextColumnsContext::XMLTextColumnsContext(
                                 SvXMLImport& rImport, sal_uInt16 nPrfx,

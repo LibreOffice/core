@@ -139,7 +139,6 @@ public:
                                     const OUString& rLName,
                                     SvXMLNumFormatContext& rParentContext, sal_uInt16 nNewType,
                                     const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList );
-    virtual     ~SvXMLNumFmtElementContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                     const OUString& rLocalName,
@@ -161,7 +160,6 @@ public:
                                     const OUString& rLName,
                                     SvXMLNumFmtElementContext& rParentContext,
                                     const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList );
-    virtual     ~SvXMLNumFmtEmbeddedTextContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                     const OUString& rLocalName,
@@ -181,7 +179,6 @@ public:
                                     const OUString& rLName,
                                     SvXMLNumFormatContext& rParentContext,
                                     const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList );
-    virtual     ~SvXMLNumFmtMapContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                     const OUString& rLocalName,
@@ -201,7 +198,6 @@ public:
                                     const OUString& rLName,
                                     SvXMLNumFormatContext& rParentContext,
                                     const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList );
-    virtual     ~SvXMLNumFmtPropContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                     const OUString& rLocalName,
@@ -623,10 +619,6 @@ SvXMLNumFmtMapContext::SvXMLNumFmtMapContext( SvXMLImport& rImport,
     }
 }
 
-SvXMLNumFmtMapContext::~SvXMLNumFmtMapContext()
-{
-}
-
 SvXMLImportContext* SvXMLNumFmtMapContext::CreateChildContext(
                                     sal_uInt16 nPrfx, const OUString& rLName,
                                     const uno::Reference<xml::sax::XAttributeList>& )
@@ -669,10 +661,6 @@ SvXMLNumFmtPropContext::SvXMLNumFmtPropContext( SvXMLImport& rImport,
             bColSet = ::sax::Converter::convertColor( m_nColor, sValue );
         }
     }
-}
-
-SvXMLNumFmtPropContext::~SvXMLNumFmtPropContext()
-{
 }
 
 SvXMLImportContext* SvXMLNumFmtPropContext::CreateChildContext(
@@ -720,10 +708,6 @@ SvXMLNumFmtEmbeddedTextContext::SvXMLNumFmtEmbeddedTextContext( SvXMLImport& rIm
                 nTextPosition = nAttrVal;
         }
     }
-}
-
-SvXMLNumFmtEmbeddedTextContext::~SvXMLNumFmtEmbeddedTextContext()
-{
 }
 
 SvXMLImportContext* SvXMLNumFmtEmbeddedTextContext::CreateChildContext(
@@ -1091,10 +1075,6 @@ SvXMLNumFmtElementContext::SvXMLNumFmtElementContext( SvXMLImport& rImport,
 
     if ( aNumInfo.aIntegerFractionDelimiter.isEmpty() )
         aNumInfo.aIntegerFractionDelimiter = " ";
-}
-
-SvXMLNumFmtElementContext::~SvXMLNumFmtElementContext()
-{
 }
 
 SvXMLImportContext* SvXMLNumFmtElementContext::CreateChildContext(

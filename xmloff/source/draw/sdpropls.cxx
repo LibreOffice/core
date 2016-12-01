@@ -810,15 +810,9 @@ bool XMLMoveSizeProtectHdl::exportXML( OUString& rStrExpValue, const Any& rValue
 class XMLSdHeaderFooterVisibilityTypeHdl : public XMLPropertyHandler
 {
 public:
-    virtual ~XMLSdHeaderFooterVisibilityTypeHdl() override;
-
     virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
     virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
 };
-
-XMLSdHeaderFooterVisibilityTypeHdl::~XMLSdHeaderFooterVisibilityTypeHdl()
-{
-}
 
 bool XMLSdHeaderFooterVisibilityTypeHdl::importXML(
         const OUString& rStrImpValue,

@@ -384,7 +384,6 @@ public:
         const OUString& rLocalName,
         const Reference< XAttributeList >& xAttrList,
         const std::shared_ptr<AnimImpImpl>& pImpl);
-    virtual ~XMLAnimationsEffectContext() override;
 
     virtual void EndElement() override;
 
@@ -399,7 +398,6 @@ class XMLAnimationsSoundContext : public SvXMLImportContext
 public:
 
     XMLAnimationsSoundContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList, XMLAnimationsEffectContext* pParent );
-    virtual ~XMLAnimationsSoundContext() override;
 };
 
 
@@ -433,11 +431,6 @@ XMLAnimationsSoundContext::XMLAnimationsSoundContext( SvXMLImport& rImport, sal_
         }
     }
 }
-
-XMLAnimationsSoundContext::~XMLAnimationsSoundContext()
-{
-}
-
 
 XMLAnimationsEffectContext::XMLAnimationsEffectContext( SvXMLImport& rImport,  sal_uInt16 nPrfx, const OUString& rLocalName,  const Reference< XAttributeList >& xAttrList, const std::shared_ptr<AnimImpImpl>& pImpl )
 :   SvXMLImportContext(rImport, nPrfx, rLocalName),
@@ -532,10 +525,6 @@ XMLAnimationsEffectContext::XMLAnimationsEffectContext( SvXMLImport& rImport,  s
             break;
         }
     }
-}
-
-XMLAnimationsEffectContext::~XMLAnimationsEffectContext()
-{
 }
 
 SvXMLImportContext * XMLAnimationsEffectContext::CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList>& xAttrList )

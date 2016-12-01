@@ -44,7 +44,6 @@ class XMLLegendPositionPropertyHdl : public XMLEnumPropertyHdl
 public:
     XMLLegendPositionPropertyHdl()
         : XMLEnumPropertyHdl( aXMLLegendPositionEnumMap, cppu::UnoType<chart::ChartLegendPosition>::get()) {}
-    virtual ~XMLLegendPositionPropertyHdl() override {};
 };
 
 struct TheLegendPositionPropertyHdl : public rtl::Static< XMLLegendPositionPropertyHdl, TheLegendPositionPropertyHdl >
@@ -65,7 +64,6 @@ class XMLLegendExpansionPropertyHdl : public XMLEnumPropertyHdl
 public:
     XMLLegendExpansionPropertyHdl()
         : XMLEnumPropertyHdl( aXMLLegendExpansionEnumMap, cppu::UnoType<chart::ChartLegendExpansion>::get()) {}
-    virtual ~XMLLegendExpansionPropertyHdl() override {};
 };
 
 struct TheLegendExpansionPropertyHdl : public rtl::Static< XMLLegendExpansionPropertyHdl, TheLegendExpansionPropertyHdl >

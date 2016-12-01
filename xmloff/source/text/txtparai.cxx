@@ -478,8 +478,6 @@ public:
             XMLHints_Impl& rHints,
             bool& rIgnLeadSpace );
 
-    virtual ~XMLImpRubyBaseContext_Impl() override;
-
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix, const OUString& rLocalName,
             const Reference< xml::sax::XAttributeList > & xAttrList ) override;
@@ -498,10 +496,6 @@ XMLImpRubyBaseContext_Impl::XMLImpRubyBaseContext_Impl(
     : SvXMLImportContext( rImport, nPrfx, rLName )
     , m_rHints( rHints )
     , rIgnoreLeadingSpace( rIgnLeadSpace )
-{
-}
-
-XMLImpRubyBaseContext_Impl::~XMLImpRubyBaseContext_Impl()
 {
 }
 
@@ -569,8 +563,6 @@ public:
             const Reference< xml::sax::XAttributeList > & xAttrList,
             XMLImpRubyContext_Impl & rParent );
 
-    virtual ~XMLImpRubyTextContext_Impl() override;
-
     virtual void Characters( const OUString& rChars ) override;
 };
 
@@ -601,10 +593,6 @@ XMLImpRubyTextContext_Impl::XMLImpRubyTextContext_Impl(
             break;
         }
     }
-}
-
-XMLImpRubyTextContext_Impl::~XMLImpRubyTextContext_Impl()
-{
 }
 
 void XMLImpRubyTextContext_Impl::Characters( const OUString& rChars )
@@ -708,8 +696,6 @@ public:
         XMLHints_Impl& i_rHints,
         bool & i_rIgnoreLeadingSpace );
 
-    virtual ~XMLMetaImportContextBase() override;
-
     virtual void StartElement(
             const Reference<xml::sax::XAttributeList> & i_xAttrList) override;
 
@@ -739,10 +725,6 @@ XMLMetaImportContextBase::XMLMetaImportContextBase(
     , m_rHints( i_rHints )
     , m_rIgnoreLeadingSpace( i_rIgnoreLeadingSpace )
     , m_xStart( GetImport().GetTextImport()->GetCursorAsRange()->getStart() )
-{
-}
-
-XMLMetaImportContextBase::~XMLMetaImportContextBase()
 {
 }
 

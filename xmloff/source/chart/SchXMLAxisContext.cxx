@@ -77,7 +77,6 @@ public:
                                    sal_uInt16 nPrefix,
                                    const OUString& rLocalName,
                                    OUString& rAddress );
-    virtual ~SchXMLCategoriesContext() override;
     virtual void StartElement( const Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 };
 
@@ -88,7 +87,6 @@ public:
                         sal_uInt16 nPrefix, const OUString& rLocalName,
                         const Reference< beans::XPropertySet >& rAxisProps );
 
-    virtual ~DateScaleContext() override;
     virtual void StartElement( const Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 
 private:
@@ -850,10 +848,6 @@ SchXMLCategoriesContext::SchXMLCategoriesContext(
 {
 }
 
-SchXMLCategoriesContext::~SchXMLCategoriesContext()
-{
-}
-
 void SchXMLCategoriesContext::StartElement( const Reference< xml::sax::XAttributeList >& xAttrList )
 {
     sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
@@ -880,10 +874,6 @@ DateScaleContext::DateScaleContext(
     const Reference< beans::XPropertySet >& rAxisProps ) :
         SvXMLImportContext( rImport, nPrefix, rLocalName ),
         m_xAxisProps( rAxisProps )
-{
-}
-
-DateScaleContext::~DateScaleContext()
 {
 }
 

@@ -61,7 +61,6 @@ public:
     SdXMLBodyContext_Impl( SdXMLImport& rImport, sal_uInt16 nPrfx,
                 const OUString& rLName,
                 const uno::Reference< xml::sax::XAttributeList > & xAttrList );
-    virtual ~SdXMLBodyContext_Impl() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                 const OUString& rLocalName,
@@ -72,10 +71,6 @@ SdXMLBodyContext_Impl::SdXMLBodyContext_Impl( SdXMLImport& rImport,
                 sal_uInt16 nPrfx, const OUString& rLName,
                 const uno::Reference< xml::sax::XAttributeList > & ) :
     SvXMLImportContext( rImport, nPrfx, rLName )
-{
-}
-
-SdXMLBodyContext_Impl::~SdXMLBodyContext_Impl()
 {
 }
 
@@ -100,8 +95,6 @@ public:
         sal_uInt16 nPrfx,
         const OUString& rLName,
         const uno::Reference<xml::sax::XAttributeList>& xAttrList);
-    virtual ~SdXMLDocContext_Impl() override;
-
 
     virtual SvXMLImportContext *CreateChildContext(sal_uInt16 nPrefix,
         const OUString& rLocalName,
@@ -116,11 +109,6 @@ SdXMLDocContext_Impl::SdXMLDocContext_Impl(
 :   SvXMLImportContext(rImport, nPrfx, rLName)
 {
 }
-
-SdXMLDocContext_Impl::~SdXMLDocContext_Impl()
-{
-}
-
 
 SvXMLImportContext *SdXMLDocContext_Impl::CreateChildContext(
     sal_uInt16 nPrefix,
@@ -215,8 +203,6 @@ public:
         const uno::Reference<xml::sax::XAttributeList>& i_xAttrList,
         const uno::Reference<document::XDocumentProperties>& i_xDocProps);
 
-    virtual ~SdXMLFlatDocContext_Impl() override;
-
     virtual SvXMLImportContext *CreateChildContext(
         sal_uInt16 i_nPrefix, const OUString& i_rLocalName,
         const uno::Reference<xml::sax::XAttributeList>& i_xAttrList) override;
@@ -232,8 +218,6 @@ SdXMLFlatDocContext_Impl::SdXMLFlatDocContext_Impl( SdXMLImport& i_rImport,
         i_xDocProps)
 {
 }
-
-SdXMLFlatDocContext_Impl::~SdXMLFlatDocContext_Impl() { }
 
 SvXMLImportContext *SdXMLFlatDocContext_Impl::CreateChildContext(
     sal_uInt16 i_nPrefix, const OUString& i_rLocalName,

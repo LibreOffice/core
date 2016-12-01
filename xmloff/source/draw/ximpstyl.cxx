@@ -63,8 +63,6 @@ public:
                  ::std::vector< XMLPropertyState > &rProps,
                  const rtl::Reference < SvXMLImportPropertyMapper > &rMap );
 
-    virtual ~SdXMLDrawingPagePropertySetContext() override;
-
     using SvXMLPropertySetContext::CreateChildContext;
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                    const OUString& rLocalName,
@@ -82,10 +80,6 @@ SdXMLDrawingPagePropertySetContext::SdXMLDrawingPagePropertySetContext(
                  const rtl::Reference < SvXMLImportPropertyMapper > &rMap ) :
     SvXMLPropertySetContext( rImport, nPrfx, rLName, xAttrList,
                              XML_TYPE_PROP_DRAWING_PAGE, rProps, rMap )
-{
-}
-
-SdXMLDrawingPagePropertySetContext::~SdXMLDrawingPagePropertySetContext()
 {
 }
 
@@ -138,7 +132,6 @@ public:
         const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
         SvXMLStylesContext& rStyles,
         sal_uInt16 nFamily = XML_STYLE_FAMILY_SD_DRAWINGPAGE_ID);
-    virtual ~SdXMLDrawingPageStyleContext() override;
 
     SvXMLImportContext * CreateChildContext(
         sal_uInt16 nPrefix,
@@ -160,10 +153,6 @@ SdXMLDrawingPageStyleContext::SdXMLDrawingPageStyleContext(
     SvXMLStylesContext& rStyles,
     sal_uInt16 nFamily)
 :   XMLPropStyleContext(rImport, nPrfx, rLName, xAttrList, rStyles, nFamily )
-{
-}
-
-SdXMLDrawingPageStyleContext::~SdXMLDrawingPageStyleContext()
 {
 }
 

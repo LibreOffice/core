@@ -83,8 +83,6 @@ public:
                            const OUString& rStyleFamily,
                            bool _bControlStyle );
 
-    virtual ~XMLPropertiesTContext_Impl() override;
-
     virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 
     virtual void Export() override;
@@ -106,10 +104,6 @@ XMLPropertiesTContext_Impl::XMLPropertiesTContext_Impl(
     m_ePropType( eP ),
     m_bControlStyle( _bControlStyle ),
     m_aStyleFamily( rStyleFamily )
-{
-}
-
-XMLPropertiesTContext_Impl::~XMLPropertiesTContext_Impl()
 {
 }
 

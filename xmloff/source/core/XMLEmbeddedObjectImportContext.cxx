@@ -78,8 +78,6 @@ public:
                                     const OUString& rLName,
     const css::uno::Reference< css::xml::sax::XDocumentHandler >& rHandler );
 
-    virtual ~XMLEmbeddedObjectImportContext_Impl() override;
-
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                    const OUString& rLocalName,
                                    const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
@@ -98,10 +96,6 @@ XMLEmbeddedObjectImportContext_Impl::XMLEmbeddedObjectImportContext_Impl(
         const Reference< XDocumentHandler >& rHandler ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     xHandler( rHandler )
-{
-}
-
-XMLEmbeddedObjectImportContext_Impl::~XMLEmbeddedObjectImportContext_Impl()
 {
 }
 

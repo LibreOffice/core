@@ -40,7 +40,6 @@ private:
 
 public:
     PropertySetMergerImpl( const Reference< XPropertySet > & rPropSet1, const Reference< XPropertySet > & rPropSet2 );
-    virtual ~PropertySetMergerImpl() override;
 
     // XPropertySet
     virtual Reference< XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(RuntimeException, std::exception) override;
@@ -72,10 +71,6 @@ PropertySetMergerImpl::PropertySetMergerImpl( Reference< XPropertySet > const & 
 , mxPropSet2( rPropSet2 )
 , mxPropSet2State( rPropSet2, UNO_QUERY )
 , mxPropSet2Info( rPropSet2->getPropertySetInfo() )
-{
-}
-
-PropertySetMergerImpl::~PropertySetMergerImpl()
 {
 }
 

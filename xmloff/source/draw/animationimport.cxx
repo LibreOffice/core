@@ -1248,7 +1248,6 @@ class AnimationsImport: public SvXMLImport, public XAnimationNodeSupplier
 {
 public:
     explicit AnimationsImport( const Reference< XComponentContext > & rxContext );
-    virtual ~AnimationsImport() throw () override;
 
     SvXMLImportContext* CreateContext(sal_uInt16 nPrefix, const OUString& rLocalName,   const Reference<XAttributeList>& xAttrList) override;
 
@@ -1287,10 +1286,6 @@ AnimationsImport::AnimationsImport( const Reference< XComponentContext > & rxCon
         XML_NAMESPACE_ANIMATION);
 
     mxRootNode.set( SequenceTimeContainer::create(rxContext), UNO_QUERY_THROW );
-}
-
-AnimationsImport::~AnimationsImport() throw ()
-{
 }
 
 // XInterface

@@ -41,8 +41,6 @@ public:
         const css::uno::Reference< css::uno::XComponentContext >& xContext
         ) throw();
 
-    virtual ~XMLMetaImportComponent() throw() override;
-
 protected:
 
     virtual SvXMLImportContext* CreateContext(
@@ -68,10 +66,6 @@ XMLMetaImportComponent_get_implementation(
 XMLMetaImportComponent::XMLMetaImportComponent(
     const uno::Reference< uno::XComponentContext >& xContext) throw()
     :   SvXMLImport(xContext, ""), mxDocProps()
-{
-}
-
-XMLMetaImportComponent::~XMLMetaImportComponent() throw()
 {
 }
 

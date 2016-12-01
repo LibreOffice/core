@@ -79,7 +79,6 @@ public:
              const OUString& rLName,
               const Reference< xml::sax::XAttributeList >& xAttrList,
             SvxXMLListLevelStyleContext_Impl& rLLevel   );
-    virtual ~SvxXMLListLevelStyleAttrContext_Impl() override;
 
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix, const OUString& rLocalName,
@@ -97,7 +96,6 @@ public:
             const OUString& rLName,
             const Reference< xml::sax::XAttributeList >& xAttrList,
             SvxXMLListLevelStyleContext_Impl& rLLevel   );
-    virtual ~SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl() override;
 };
 
 enum SvxXMLTextListLevelStyleAttrTokens
@@ -218,7 +216,6 @@ public:
             SvXMLImport& rImport, sal_uInt16 nPrfx,
             const OUString& rLName,
             const Reference< xml::sax::XAttributeList > & xAttrList );
-    virtual ~SvxXMLListLevelStyleContext_Impl() override;
 
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix, const OUString& rLocalName,
@@ -362,10 +359,6 @@ SvxXMLListLevelStyleContext_Impl::SvxXMLListLevelStyleContext_Impl(
             break;
         }
     }
-}
-
-SvxXMLListLevelStyleContext_Impl::~SvxXMLListLevelStyleContext_Impl()
-{
 }
 
 SvXMLImportContext *SvxXMLListLevelStyleContext_Impl::CreateChildContext(
@@ -897,10 +890,6 @@ SvxXMLListLevelStyleAttrContext_Impl::SvxXMLListLevelStyleAttrContext_Impl(
     rListLevel.SetImageVertOrient( eVertOrient );
 }
 
-SvxXMLListLevelStyleAttrContext_Impl::~SvxXMLListLevelStyleAttrContext_Impl()
-{
-}
-
 SvXMLImportContext* SvxXMLListLevelStyleAttrContext_Impl::CreateChildContext(
         sal_uInt16 nPrefix, const OUString& rLocalName,
         const Reference< xml::sax::XAttributeList > & xAttrList )
@@ -997,10 +986,6 @@ SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl::SvxXMLListLevelStyleLabelAli
             break;
         }
     }
-}
-
-SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl::~SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl()
-{
 }
 
 void SvxXMLListStyleContext::SetAttribute( sal_uInt16 nPrefixKey,

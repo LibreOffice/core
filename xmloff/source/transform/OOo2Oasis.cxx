@@ -1096,8 +1096,6 @@ public:
                               sal_uInt16 nPrefix,
                               ::xmloff::token::XMLTokenEnum eToken  );
 
-    virtual ~XMLDocumentTransformerContext_Impl() override;
-
     virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
     virtual void EndElement() override;
 };
@@ -1117,10 +1115,6 @@ XMLDocumentTransformerContext_Impl::XMLDocumentTransformerContext_Impl(
     XMLTransformerContext( rImp, rQName ),
     m_aElemQName( rImp.GetNamespaceMap().GetQNameByKey( nPrefix,
                             ::xmloff::token::GetXMLToken( eToken ) ) )
-{
-}
-
-XMLDocumentTransformerContext_Impl::~XMLDocumentTransformerContext_Impl()
 {
 }
 
@@ -1237,8 +1231,6 @@ public:
     XMLBodyTransformerContext_Impl( XMLTransformerBase& rTransformer,
                            const OUString& rQName );
 
-    virtual ~XMLBodyTransformerContext_Impl() override;
-
     virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
     virtual void EndElement() override;
 };
@@ -1247,10 +1239,6 @@ XMLBodyTransformerContext_Impl::XMLBodyTransformerContext_Impl(
         XMLTransformerBase& rImp,
         const OUString& rQName ) :
     XMLTransformerContext( rImp, rQName )
-{
-}
-
-XMLBodyTransformerContext_Impl::~XMLBodyTransformerContext_Impl()
 {
 }
 
@@ -1295,8 +1283,6 @@ public:
     XMLTabStopOOoTContext_Impl( XMLTransformerBase& rTransformer,
                            const OUString& rQName );
 
-    virtual ~XMLTabStopOOoTContext_Impl() override;
-
     virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 };
 
@@ -1304,10 +1290,6 @@ XMLTabStopOOoTContext_Impl::XMLTabStopOOoTContext_Impl(
         XMLTransformerBase& rImp,
         const OUString& rQName ) :
     XMLPersElemContentTContext( rImp, rQName )
-{
-}
-
-XMLTabStopOOoTContext_Impl::~XMLTabStopOOoTContext_Impl()
 {
 }
 
@@ -1393,8 +1375,6 @@ public:
                                sal_uInt16 nPrefix,
                             XMLTokenEnum eToken );
 
-    virtual ~XMLTrackedChangesOOoTContext_Impl() override;
-
     virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 };
 
@@ -1406,10 +1386,6 @@ XMLTrackedChangesOOoTContext_Impl::XMLTrackedChangesOOoTContext_Impl(
     XMLTransformerContext( rImp, rQName ),
     m_nPrefix( nPrefix ),
     m_eToken( eToken )
-{
-}
-
-XMLTrackedChangesOOoTContext_Impl::~XMLTrackedChangesOOoTContext_Impl()
 {
 }
 
@@ -1461,8 +1437,6 @@ public:
     XMLTableOOoTransformerContext_Impl( XMLTransformerBase& rTransformer,
                            const OUString& rQName );
 
-    virtual ~XMLTableOOoTransformerContext_Impl() override;
-
     virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
     virtual void EndElement() override;
 };
@@ -1472,10 +1446,6 @@ XMLTableOOoTransformerContext_Impl::XMLTableOOoTransformerContext_Impl(
         const OUString& rQName ) :
     XMLTransformerContext( rImp, rQName ),
     m_aElemQName( rQName )
-{
-}
-
-XMLTableOOoTransformerContext_Impl::~XMLTableOOoTransformerContext_Impl()
 {
 }
 

@@ -122,7 +122,6 @@ public:
                                          sal_uInt16 nPrfx,
                                          const OUString& rLName,
                                          OUString& rTitleOrDesc );
-    virtual ~XMLTextFrameTitleOrDescContext_Impl() override;
 
     virtual void Characters( const OUString& rText ) override;
 };
@@ -135,10 +134,6 @@ XMLTextFrameTitleOrDescContext_Impl::XMLTextFrameTitleOrDescContext_Impl(
         OUString& rTitleOrDesc )
     : SvXMLImportContext( rImport, nPrfx, rLName )
     , mrTitleOrDesc( rTitleOrDesc )
-{
-}
-
-XMLTextFrameTitleOrDescContext_Impl::~XMLTextFrameTitleOrDescContext_Impl()
 {
 }
 
@@ -157,13 +152,7 @@ public:
             const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
             sal_uInt16 nType,
             ParamMap &rParamMap);
-    virtual ~XMLTextFrameParam_Impl() override;
 };
-
-
-XMLTextFrameParam_Impl::~XMLTextFrameParam_Impl()
-{
-}
 
 XMLTextFrameParam_Impl::XMLTextFrameParam_Impl(
         SvXMLImport& rImport, sal_uInt16 nPrfx,
@@ -211,7 +200,6 @@ public:
             const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
             const Reference < XPropertySet >& rPropSet,
             bool bPath );
-    virtual ~XMLTextFrameContourContext_Impl() override;
 };
 
 
@@ -336,10 +324,6 @@ XMLTextFrameContourContext_Impl::XMLTextFrameContourContext_Impl(
     }
 }
 
-XMLTextFrameContourContext_Impl::~XMLTextFrameContourContext_Impl()
-{
-}
-
 class XMLTextFrameContext_Impl : public SvXMLImportContext
 {
     css::uno::Reference < css::text::XTextCursor > xOldTextCursor;
@@ -426,7 +410,6 @@ public:
             css::text::TextContentAnchorType eAnchorType,
             sal_uInt16 nType,
             const css::uno::Reference<css::xml::sax::XAttributeList > & rFrameAttrList );
-    virtual ~XMLTextFrameContext_Impl() override;
 
     virtual void EndElement() override;
 
@@ -1082,10 +1065,6 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
         return; // no URL: no image or OLE object
 
     Create( true );
-}
-
-XMLTextFrameContext_Impl::~XMLTextFrameContext_Impl()
-{
 }
 
 void XMLTextFrameContext_Impl::EndElement()

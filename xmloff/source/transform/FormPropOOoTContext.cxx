@@ -42,8 +42,6 @@ public:
     XMLFormPropValueTContext_Impl( XMLTransformerBase& rTransformer,
                            const OUString& rQName );
 
-    virtual ~XMLFormPropValueTContext_Impl() override;
-
     virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 
     virtual void EndElement() override;
@@ -61,10 +59,6 @@ XMLFormPropValueTContext_Impl::XMLFormPropValueTContext_Impl(
         const OUString& rQName ) :
     XMLTransformerContext( rTransformer, rQName ),
     m_bIsVoid( false )
-{
-}
-
-XMLFormPropValueTContext_Impl::~XMLFormPropValueTContext_Impl()
 {
 }
 

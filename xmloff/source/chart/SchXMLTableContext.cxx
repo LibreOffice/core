@@ -596,7 +596,6 @@ public:
                             sal_uInt16 nPrefix,
                             const OUString& rLocalName,
                             OUString& rRangeString );
-    virtual ~SchXMLRangeSomewhereContext() override;
 
     virtual SvXMLImportContext* CreateChildContext(
         sal_uInt16 nPrefix,
@@ -1092,10 +1091,6 @@ SchXMLRangeSomewhereContext::SchXMLRangeSomewhereContext( SvXMLImport& rImport,
                                                 OUString& rRangeString ) :
         SvXMLImportContext( rImport, nPrefix, rLocalName ),
         mrRangeString( rRangeString )
-{
-}
-
-SchXMLRangeSomewhereContext::~SchXMLRangeSomewhereContext()
 {
 }
 

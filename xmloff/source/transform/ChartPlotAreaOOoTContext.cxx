@@ -37,7 +37,6 @@ class XMLAxisOOoContext : public XMLPersElemContentTContext
 public:
     XMLAxisOOoContext( XMLTransformerBase& rTransformer,
                        const OUString& rQName );
-    virtual ~XMLAxisOOoContext() override;
 
     virtual void StartElement( const Reference< xml::sax::XAttributeList >& rAttrList ) override;
 
@@ -52,9 +51,6 @@ XMLAxisOOoContext::XMLAxisOOoContext(
     const OUString& rQName ) :
         XMLPersElemContentTContext( rTransformer, rQName ),
         m_bIsCategoryAxis( false )
-{}
-
-XMLAxisOOoContext::~XMLAxisOOoContext()
 {}
 
 void XMLAxisOOoContext::StartElement(

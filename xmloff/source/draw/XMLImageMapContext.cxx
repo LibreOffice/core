@@ -311,8 +311,6 @@ public:
         const OUString& rLocalName,
         css::uno::Reference<css::container::XIndexContainer> const & xMap);
 
-    virtual ~XMLImageMapRectangleContext() override;
-
 protected:
     virtual void ProcessAttribute(
         enum XMLImageMapToken eToken,
@@ -334,10 +332,6 @@ XMLImageMapRectangleContext::XMLImageMapRectangleContext(
         bYOK(false),
         bWidthOK(false),
         bHeightOK(false)
-{
-}
-
-XMLImageMapRectangleContext::~XMLImageMapRectangleContext()
 {
 }
 
@@ -413,8 +407,6 @@ public:
         const OUString& rLocalName,
         css::uno::Reference<css::container::XIndexContainer> const & xMap);
 
-    virtual ~XMLImageMapPolygonContext() override;
-
 protected:
     virtual void ProcessAttribute(
         enum XMLImageMapToken eToken,
@@ -434,10 +426,6 @@ XMLImageMapPolygonContext::XMLImageMapPolygonContext(
                                  "com.sun.star.image.ImageMapPolygonObject"),
         bViewBoxOK(false),
         bPointsOK(false)
-{
-}
-
-XMLImageMapPolygonContext::~XMLImageMapPolygonContext()
 {
 }
 
@@ -502,8 +490,6 @@ public:
         const OUString& rLocalName,
         css::uno::Reference<css::container::XIndexContainer> const & xMap);
 
-    virtual ~XMLImageMapCircleContext() override;
-
 protected:
     virtual void ProcessAttribute(
         enum XMLImageMapToken eToken,
@@ -525,10 +511,6 @@ XMLImageMapCircleContext::XMLImageMapCircleContext(
     , bXOK(false)
     , bYOK(false)
     , bRadiusOK(false)
-{
-}
-
-XMLImageMapCircleContext::~XMLImageMapCircleContext()
 {
 }
 

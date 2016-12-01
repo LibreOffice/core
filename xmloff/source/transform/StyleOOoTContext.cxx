@@ -149,8 +149,6 @@ public:
     XMLTypedPropertiesOOoTContext_Impl( XMLTransformerBase& rTransformer,
                            const OUString& rQName );
 
-    virtual ~XMLTypedPropertiesOOoTContext_Impl() override;
-
     using XMLPersAttrListTContext::AddAttribute;
     void AddAttribute( const OUString &sName ,
                        const OUString &sValue );
@@ -167,10 +165,6 @@ XMLTypedPropertiesOOoTContext_Impl::XMLTypedPropertiesOOoTContext_Impl(
     const OUString& rQName ) :
     XMLPersElemContentTContext( rImp, rQName ),
     m_xAttrList( new XMLMutableAttributeList() )
-{
-}
-
-XMLTypedPropertiesOOoTContext_Impl::~XMLTypedPropertiesOOoTContext_Impl()
 {
 }
 
@@ -233,8 +227,6 @@ public:
                            const OUString& rQName,
                                const XMLPropTypes& rTypes,
                                bool bPersistent );
-
-    virtual ~XMLPropertiesOOoTContext_Impl() override;
 
     rtl::Reference<XMLTransformerContext> CreateChildContext(
             sal_uInt16 nPrefix,
@@ -371,10 +363,6 @@ XMLPropertiesOOoTContext_Impl::XMLPropertiesOOoTContext_Impl(
         // remember the types that belong to the attribute and element lists
         m_aPropTypes[i] = rTypes[i];
     }
-}
-
-XMLPropertiesOOoTContext_Impl::~XMLPropertiesOOoTContext_Impl()
-{
 }
 
 rtl::Reference<XMLTransformerContext> XMLPropertiesOOoTContext_Impl::CreateChildContext(

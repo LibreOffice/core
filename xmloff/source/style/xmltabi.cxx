@@ -66,8 +66,6 @@ public:
                                const OUString& rLName,
                                const uno::Reference< xml::sax::XAttributeList > & xAttrList );
 
-    virtual ~SvxXMLTabStopContext_Impl() override;
-
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                    const OUString& rLocalName,
                                    const uno::Reference< xml::sax::XAttributeList > & xAttrList ) override;
@@ -153,10 +151,6 @@ SvxXMLTabStopContext_Impl::SvxXMLTabStopContext_Impl(
 
     if( cTextFillChar != 0 && aTabStop.FillChar != ' ' )
         aTabStop.FillChar = cTextFillChar;
-}
-
-SvxXMLTabStopContext_Impl::~SvxXMLTabStopContext_Impl()
-{
 }
 
 SvXMLImportContext *SvxXMLTabStopContext_Impl::CreateChildContext(
