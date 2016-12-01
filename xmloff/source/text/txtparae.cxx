@@ -1659,6 +1659,9 @@ void XMLTextParagraphExport::exportText(
         GetExport().GetShapeExport(); // make sure the graphics styles family
                                       // is added
     Reference < XEnumerationAccess > xEA( rText, UNO_QUERY );
+    if( ! xEA.is() )
+        return;
+
     Reference < XEnumeration > xParaEnum(xEA->createEnumeration());
     Reference < XPropertySet > xPropertySet( rText, UNO_QUERY );
     Reference < XTextSection > xBaseSection;
