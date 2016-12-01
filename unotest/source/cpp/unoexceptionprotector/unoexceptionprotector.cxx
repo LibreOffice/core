@@ -48,8 +48,6 @@ class Prot : public CppUnit::Protector
 public:
     Prot() {}
 
-    virtual ~Prot() override {}
-
     Prot(const Prot&) = delete;
     Prot& operator=(const Prot&) = delete;
 
