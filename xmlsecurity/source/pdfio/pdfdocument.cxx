@@ -2122,7 +2122,7 @@ bool PDFDocument::ValidateSignature(SvStream& rStream, PDFObjectElement* pSignat
     auto pSubFilter = dynamic_cast<PDFNameElement*>(pValue->Lookup("SubFilter"));
     if (!pSubFilter || (pSubFilter->GetValue() != "adbe.pkcs7.detached" && pSubFilter->GetValue() != "adbe.pkcs7.sha1" && pSubFilter->GetValue() != "ETSI.CAdES.detached"))
     {
-        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ValidateSignature: no or unsupported sub-filter");
+        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ValidateSignature: unsupported sub-filter: '"<<pSubFilter->GetValue()<<"'");
         return false;
     }
 
@@ -2970,6 +2970,16 @@ size_t PDFDictionaryElement::Parse(const std::vector< std::unique_ptr<PDFElement
         if (pLiteralString)
         {
             rDictionary[aName] = pLiteralString;
+            if (pThisDictionary)
+                pThisDictionary->SetKeyOffset(aName, nNameOffset);
+            aName.clear();
+            continue;
+        }
+
+        auto pBoolean = dynamic_cast<PDFBooleanElement*>(rElements[i].get());
+        if (pBoolean)
+        {
+            rDictionary[aName] = pBoolean;
             if (pThisDictionary)
                 pThisDictionary->SetKeyOffset(aName, nNameOffset);
             aName.clear();
