@@ -615,9 +615,6 @@ WinSalGraphics::WinSalGraphics(WinSalGraphics::Type eType, bool bScreen, HWND hW
     mhDefFont(nullptr),
     mhDefPal(nullptr),
     mpStdClipRgnData(nullptr),
-    mbFontKernInit(false),
-    mpFontKernPairs(nullptr),
-    mnFontKernPairCount(0),
     mnPenWidth(GSL_PEN_WIDTH)
 {
     if (OpenGLHelper::isVCLOpenGLEnabled() && !mbPrinter)
@@ -647,8 +644,6 @@ WinSalGraphics::~WinSalGraphics()
 
     // delete cache data
     delete [] reinterpret_cast<BYTE*>(mpStdClipRgnData);
-
-    delete [] mpFontKernPairs;
 }
 
 SalGraphicsImpl* WinSalGraphics::GetImpl() const
