@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a71b18c_c98c6138",
+        "filename": "sw/source/core/access/accmap.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1744,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-12-01T11:13:39Z",
+      "side": 1,
+      "message": "no that is wrong:\nif the mpEvents list exists, it is never empty\n\nsee SwAccessibleMap::FireEvents() which clearly should have been called before this dtor but somehow was not",
+      "revId": "3fd93689e3a2d17c6a261e95bddc7364fbd08962",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
