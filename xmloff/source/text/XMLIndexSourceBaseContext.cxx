@@ -148,8 +148,6 @@ XMLIndexSourceBaseContext::XMLIndexSourceBaseContext(
     Reference<XPropertySet> & rPropSet,
     bool bLevelFormats)
 :   SvXMLImportContext(rImport, nPrfx, rLocalName)
-,   sCreateFromChapter("CreateFromChapter")
-,   sIsRelativeTabstops("IsRelativeTabstops")
 ,   bUseLevelFormats(bLevelFormats)
 ,   bChapterIndex(false)
 ,   bRelativeTabs(true)
@@ -213,8 +211,8 @@ void XMLIndexSourceBaseContext::ProcessAttribute(
 
 void XMLIndexSourceBaseContext::EndElement()
 {
-    rIndexPropertySet->setPropertyValue(sIsRelativeTabstops, css::uno::Any(bRelativeTabs));
-    rIndexPropertySet->setPropertyValue(sCreateFromChapter, css::uno::Any(bChapterIndex));
+    rIndexPropertySet->setPropertyValue("IsRelativeTabstops", css::uno::Any(bRelativeTabs));
+    rIndexPropertySet->setPropertyValue("CreateFromChapter", css::uno::Any(bChapterIndex));
 }
 
 SvXMLImportContext* XMLIndexSourceBaseContext::CreateChildContext(

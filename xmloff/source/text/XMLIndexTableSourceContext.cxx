@@ -52,9 +52,6 @@ XMLIndexTableSourceContext::XMLIndexTableSourceContext(
     const OUString& rLocalName, Reference<XPropertySet> & rPropSet)
     : XMLIndexSourceBaseContext(rImport, nPrfx, rLocalName,
                                   rPropSet, false)
-    , sCreateFromLabels("CreateFromLabels")
-    , sLabelCategory("LabelCategory")
-    , sLabelDisplayType("LabelDisplayType")
     , nDisplayFormat(0)
     , bSequenceOK(false)
     , bDisplayFormatOK(false)
@@ -121,16 +118,16 @@ void XMLIndexTableSourceContext::ProcessAttribute(
 
 void XMLIndexTableSourceContext::EndElement()
 {
-    rIndexPropertySet->setPropertyValue(sCreateFromLabels, css::uno::Any(bUseCaption));
+    rIndexPropertySet->setPropertyValue("CreateFromLabels", css::uno::Any(bUseCaption));
 
     if (bSequenceOK)
     {
-        rIndexPropertySet->setPropertyValue(sLabelCategory, css::uno::Any(sSequence));
+        rIndexPropertySet->setPropertyValue("LabelCategory", css::uno::Any(sSequence));
     }
 
     if (bDisplayFormatOK)
     {
-        rIndexPropertySet->setPropertyValue(sLabelDisplayType, css::uno::Any(nDisplayFormat));
+        rIndexPropertySet->setPropertyValue("LabelDisplayType", css::uno::Any(nDisplayFormat));
     }
 
     XMLIndexSourceBaseContext::EndElement();

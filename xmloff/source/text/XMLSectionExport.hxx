@@ -74,62 +74,6 @@ enum SectionTypeEnum
  */
 class XMLSectionExport
 {
-    const OUString sCondition;
-    const OUString sCreateFromChapter;
-    const OUString sCreateFromEmbeddedObjects;
-    const OUString sCreateFromGraphicObjects;
-    const OUString sCreateFromLabels;
-    const OUString sCreateFromMarks;
-    const OUString sCreateFromOtherEmbeddedObjects;
-    const OUString sCreateFromOutline;
-    const OUString sCreateFromStarCalc;
-    const OUString sCreateFromStarChart;
-    const OUString sCreateFromStarDraw;
-    const OUString sCreateFromStarMath;
-    const OUString sCreateFromTables;
-    const OUString sCreateFromTextFrames;
-    const OUString sDdeCommandElement;
-    const OUString sDdeCommandFile;
-    const OUString sDdeCommandType;
-    const OUString sFileLink;
-    const OUString sIsCaseSensitive;
-    const OUString sIsProtected;
-    const OUString sIsVisible;
-    const OUString sLabelCategory;
-    const OUString sLabelDisplayType;
-    const OUString sLevel;
-    const OUString sLevelFormat;
-    const OUString sLevelParagraphStyles;
-    const OUString sLinkRegion;
-    const OUString sMainEntryCharacterStyleName;
-    const OUString sParaStyleHeading;
-    const OUString sTitle;
-    const OUString sName;
-    const OUString sUseAlphabeticalSeparators;
-    const OUString sUseCombinedEntries;
-    const OUString sUseDash;
-    const OUString sUseKeyAsEntry;
-    const OUString sUseLevelFromSource;
-    const OUString sUsePP;
-    const OUString sUseUpperCase;
-    const OUString sIsCommaSeparated;
-    const OUString sIsAutomaticUpdate;
-    const OUString sIsRelativeTabstops;
-    const OUString sCreateFromLevelParagraphStyles;
-    const OUString sDocumentIndex;
-    const OUString sContentSection;
-    const OUString sHeaderSection;
-
-    const OUString sTextSection;
-    const OUString sIsGlobalDocumentSection;
-    const OUString sProtectionKey;
-    const OUString sSortAlgorithm;
-    const OUString sLocale;
-    const OUString sUserIndexName;
-
-    const OUString sIsCurrentlyVisible;
-    const OUString sHeadingStyleName;
-
     SvXMLExport& rExport;
     XMLTextParagraphExport& rParaExport;
 
@@ -175,7 +119,7 @@ public:
      * Determine whether rContent is contained in rEnclosingSection. If the
      * current section of rContent can not be determined, return bDefault.
      */
-    bool IsInSection(
+    static bool IsInSection(
         const css::uno::Reference < css::text::XTextSection > & rEnclosingSection,
         const css::uno::Reference < css::text::XTextContent > & rContent,
         /// return value if this content doesn't support the section property
@@ -254,9 +198,9 @@ protected:
      * return sal_False: regular section
      * return sal_True, xIndex is empty: index header section
      * return sal_True, xIndex is set: index section */
-    bool GetIndex(
+    static bool GetIndex(
         const css::uno::Reference < css::text::XTextSection > & rSection,
-        css::uno::Reference < css::text::XDocumentIndex > & rIndex) const;
+        css::uno::Reference < css::text::XDocumentIndex > & rIndex);
 
     /// map service name to section type
     static enum SectionTypeEnum MapSectionType(const OUString& rSectionName);

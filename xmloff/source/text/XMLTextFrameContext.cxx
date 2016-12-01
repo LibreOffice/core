@@ -333,29 +333,6 @@ class XMLTextFrameContext_Impl : public SvXMLImportContext
     /// old list item and block (#89891#)
     bool mbListContextPushed;
 
-    const OUString sWidth;
-    const OUString sWidthType;
-    const OUString sRelativeWidth;
-    const OUString sHeight;
-    const OUString sRelativeHeight;
-    const OUString sSizeType;
-    const OUString sIsSyncWidthToHeight;
-    const OUString sIsSyncHeightToWidth;
-    const OUString sHoriOrient;
-    const OUString sHoriOrientPosition;
-    const OUString sVertOrient;
-    const OUString sVertOrientPosition;
-    const OUString sAnchorType;
-    const OUString sAnchorPageNo;
-    const OUString sGraphicURL;
-    const OUString sGraphicFilter;
-    const OUString sTitle;
-    const OUString sDescription;
-    const OUString sFrameStyleName;
-    const OUString sGraphicRotation;
-    const OUString sTextBoxServiceName;
-    const OUString sGraphicServiceName;
-
     OUString m_sOrigName;
     OUString sName;
     OUString sStyleName;
@@ -527,8 +504,8 @@ void XMLTextFrameContext_Impl::Create( bool /*bHRefOrBase64*/ )
                 OUString sServiceName;
                 switch( nType )
                 {
-                    case XML_TEXT_FRAME_TEXTBOX: sServiceName = sTextBoxServiceName; break;
-                    case XML_TEXT_FRAME_GRAPHIC: sServiceName = sGraphicServiceName; break;
+                    case XML_TEXT_FRAME_TEXTBOX: sServiceName = "com.sun.star.text.TextFrame"; break;
+                    case XML_TEXT_FRAME_GRAPHIC: sServiceName = "com.sun.star.text.GraphicObject"; break;
                 }
                 Reference<XInterface> xIfc = xFactory->createInstance( sServiceName );
                 SAL_WARN_IF( !xIfc.is(), "xmloff", "couldn't create frame" );
@@ -596,14 +573,14 @@ void XMLTextFrameContext_Impl::Create( bool /*bHRefOrBase64*/ )
         if( rStyles.is() &&
             rStyles->hasByName( sDisplayStyleName ) )
         {
-            xPropSet->setPropertyValue( sFrameStyleName, Any(sDisplayStyleName) );
+            xPropSet->setPropertyValue( "FrameStyleName", Any(sDisplayStyleName) );
         }
     }
 
     // anchor type (must be set before any other properties, because
     // otherwise some orientations cannot be set or will be changed
     // afterwards)
-    xPropSet->setPropertyValue( sAnchorType, Any(eAnchorType) );
+    xPropSet->setPropertyValue( "AnchorType", Any(eAnchorType) );
 
     // hard properties
     if( pStyle )
@@ -611,62 +588,62 @@ void XMLTextFrameContext_Impl::Create( bool /*bHRefOrBase64*/ )
 
     // x and y
     sal_Int16 nHoriOrient =  HoriOrientation::NONE;
-    aAny = xPropSet->getPropertyValue( sHoriOrient );
+    aAny = xPropSet->getPropertyValue( "HoriOrient" );
     aAny >>= nHoriOrient;
     if( HoriOrientation::NONE == nHoriOrient )
     {
-        xPropSet->setPropertyValue( sHoriOrientPosition, Any(nX) );
+        xPropSet->setPropertyValue( "HoriOrientPosition", Any(nX) );
     }
 
     sal_Int16 nVertOrient =  VertOrientation::NONE;
-    aAny = xPropSet->getPropertyValue( sVertOrient );
+    aAny = xPropSet->getPropertyValue( "VertOrient" );
     aAny >>= nVertOrient;
     if( VertOrientation::NONE == nVertOrient )
     {
-        xPropSet->setPropertyValue( sVertOrientPosition, Any(nY) );
+        xPropSet->setPropertyValue( "VertOrientPosition", Any(nY) );
     }
 
     // width
     if( nWidth > 0 )
     {
-        xPropSet->setPropertyValue( sWidth, Any(nWidth) );
+        xPropSet->setPropertyValue( "Width", Any(nWidth) );
     }
     if( nRelWidth > 0 || nWidth > 0 )
     {
-        xPropSet->setPropertyValue( sRelativeWidth, Any(nRelWidth) );
+        xPropSet->setPropertyValue( "RelativeWidth", Any(nRelWidth) );
     }
     if( bSyncWidth || nWidth > 0 )
     {
-        xPropSet->setPropertyValue( sIsSyncWidthToHeight, Any(bSyncWidth) );
+        xPropSet->setPropertyValue( "IsSyncWidthToHeight", Any(bSyncWidth) );
     }
-    if( xPropSetInfo->hasPropertyByName( sWidthType ) &&
+    if( xPropSetInfo->hasPropertyByName( "WidthType" ) &&
         (bMinWidth || nWidth > 0 || nRelWidth > 0 ) )
     {
         sal_Int16 nSizeType =
             (bMinWidth && XML_TEXT_FRAME_TEXTBOX == nType) ? SizeType::MIN
                                                            : SizeType::FIX;
-        xPropSet->setPropertyValue( sWidthType, Any(nSizeType) );
+        xPropSet->setPropertyValue( "WidthType", Any(nSizeType) );
     }
 
     if( nHeight > 0 )
     {
-        xPropSet->setPropertyValue( sHeight, Any(nHeight) );
+        xPropSet->setPropertyValue( "Height", Any(nHeight) );
     }
     if( nRelHeight > 0 || nHeight > 0 )
     {
-        xPropSet->setPropertyValue( sRelativeHeight, Any(nRelHeight) );
+        xPropSet->setPropertyValue( "RelativeHeight", Any(nRelHeight) );
     }
     if( bSyncHeight || nHeight > 0 )
     {
-        xPropSet->setPropertyValue( sIsSyncHeightToWidth, Any(bSyncHeight) );
+        xPropSet->setPropertyValue( "IsSyncHeightToWidth", Any(bSyncHeight) );
     }
-    if( xPropSetInfo->hasPropertyByName( sSizeType ) &&
+    if( xPropSetInfo->hasPropertyByName( "SizeType" ) &&
         (bMinHeight || nHeight > 0 || nRelHeight > 0 ) )
     {
         sal_Int16 nSizeType =
             (bMinHeight && XML_TEXT_FRAME_TEXTBOX == nType) ? SizeType::MIN
                                                             : SizeType::FIX;
-        xPropSet->setPropertyValue( sSizeType, Any(nSizeType) );
+        xPropSet->setPropertyValue( "SizeType", Any(nSizeType) );
     }
 
     if( XML_TEXT_FRAME_GRAPHIC == nType )
@@ -689,20 +666,20 @@ void XMLTextFrameContext_Impl::Create( bool /*bHRefOrBase64*/ )
             sHRef = GetImport().ResolveGraphicObjectURLFromBase64( xBase64Stream );
             xBase64Stream = nullptr;
         }
-        xPropSet->setPropertyValue( sGraphicURL, Any(sHRef) );
+        xPropSet->setPropertyValue( "GraphicURL", Any(sHRef) );
 
         // filter name
-        xPropSet->setPropertyValue( sGraphicFilter, Any(sFilterName) );
+        xPropSet->setPropertyValue( "GraphicFilter", Any(sFilterName) );
 
         // rotation
-        xPropSet->setPropertyValue( sGraphicRotation, Any(nRotation) );
+        xPropSet->setPropertyValue( "GraphicRotation", Any(nRotation) );
     }
 
     // page number (must be set after the frame is inserted, because it
     // will be overwritten then inserting the frame.
     if( TextContentAnchorType_AT_PAGE == eAnchorType && nPage > 0 )
     {
-        xPropSet->setPropertyValue( sAnchorPageNo, Any(nPage) );
+        xPropSet->setPropertyValue( "AnchorPageNo", Any(nPage) );
     }
 
     if( XML_TEXT_FRAME_OBJECT != nType  &&
@@ -811,28 +788,6 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
         const Reference< XAttributeList > & rFrameAttrList )
 :   SvXMLImportContext( rImport, nPrfx, rLName )
 ,   mbListContextPushed( false )
-,   sWidth("Width")
-,   sWidthType("WidthType")
-,   sRelativeWidth("RelativeWidth")
-,   sHeight("Height")
-,   sRelativeHeight("RelativeHeight")
-,   sSizeType("SizeType")
-,   sIsSyncWidthToHeight("IsSyncWidthToHeight")
-,   sIsSyncHeightToWidth("IsSyncHeightToWidth")
-,   sHoriOrient("HoriOrient")
-,   sHoriOrientPosition("HoriOrientPosition")
-,   sVertOrient("VertOrient")
-,   sVertOrientPosition("VertOrientPosition")
-,   sAnchorType("AnchorType")
-,   sAnchorPageNo("AnchorPageNo")
-,   sGraphicURL("GraphicURL")
-,   sGraphicFilter("GraphicFilter")
-,   sTitle("Title")
-,   sDescription("Description")
-,   sFrameStyleName("FrameStyleName")
-,   sGraphicRotation("GraphicRotation")
-,   sTextBoxServiceName("com.sun.star.text.TextFrame")
-,   sGraphicServiceName("com.sun.star.text.GraphicObject")
 ,   nType( nNewType )
 ,   eAnchorType( eATyp )
 {
@@ -1280,9 +1235,9 @@ void XMLTextFrameContext_Impl::SetTitle( const OUString& rTitle )
     if ( xPropSet.is() )
     {
         Reference< XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
-        if( xPropSetInfo->hasPropertyByName( sTitle ) )
+        if( xPropSetInfo->hasPropertyByName( "Title" ) )
         {
-            xPropSet->setPropertyValue( sTitle, makeAny( rTitle ) );
+            xPropSet->setPropertyValue( "Title", makeAny( rTitle ) );
         }
     }
 }
@@ -1292,9 +1247,9 @@ void XMLTextFrameContext_Impl::SetDesc( const OUString& rDesc )
     if ( xPropSet.is() )
     {
         Reference< XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
-        if( xPropSetInfo->hasPropertyByName( sDescription ) )
+        if( xPropSetInfo->hasPropertyByName( "Description" ) )
         {
-            xPropSet->setPropertyValue( sDescription, makeAny( rDesc ) );
+            xPropSet->setPropertyValue( "Description", makeAny( rDesc ) );
         }
     }
 }

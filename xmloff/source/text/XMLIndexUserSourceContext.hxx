@@ -35,15 +35,6 @@ namespace com { namespace sun { namespace star {
  */
 class XMLIndexUserSourceContext : public XMLIndexSourceBaseContext
 {
-    const OUString sCreateFromEmbeddedObjects;
-    const OUString sCreateFromGraphicObjects;
-    const OUString sCreateFromMarks;
-    const OUString sCreateFromTables;
-    const OUString sCreateFromTextFrames;
-    const OUString sUseLevelFromSource;
-    const OUString sCreateFromLevelParagraphStyles;
-    const OUString sUserIndexName;
-
     bool bUseObjects;
     bool bUseGraphic;
     bool bUseMarks;

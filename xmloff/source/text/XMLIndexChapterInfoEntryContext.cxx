@@ -51,8 +51,8 @@ XMLIndexChapterInfoEntryContext::XMLIndexChapterInfoEntryContext(
     const OUString& rLocalName,
     bool bT ) :
         XMLIndexSimpleEntryContext(rImport,
-                                   (bT ? rTemplate.sTokenEntryNumber
-                                          : rTemplate.sTokenChapterInfo),
+                                   (bT ? OUString("TokenEntryNumber")
+                                       : OUString("TokenChapterInfo")),
                                    rTemplate, nPrfx, rLocalName),
         nChapterInfo(ChapterFormat::NAME_NUMBER),
         bChapterInfoOK(false),
@@ -176,13 +176,13 @@ void XMLIndexChapterInfoEntryContext::FillPropertyValues(
     if( bChapterInfoOK )
     {
         // chapter info field
-        rValues[nIndex].Name = rTemplateContext.sChapterFormat;
+        rValues[nIndex].Name = "ChapterFormat";
         rValues[nIndex].Value = css::uno::Any(nChapterInfo);
         nIndex++;
     }
     if( bOutlineLevelOK )
     {
-        rValues[nIndex].Name = rTemplateContext.sChapterLevel;
+        rValues[nIndex].Name = "ChapterLevel";
         rValues[nIndex].Value = css::uno::Any(nOutlineLevel);
     }
 }

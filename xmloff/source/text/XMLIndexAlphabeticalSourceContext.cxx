@@ -52,17 +52,6 @@ XMLIndexAlphabeticalSourceContext::XMLIndexAlphabeticalSourceContext(
     const OUString& rLocalName,
     Reference<XPropertySet> & rPropSet)
 :   XMLIndexSourceBaseContext(rImport, nPrfx, rLocalName, rPropSet, false)
-,   sMainEntryCharacterStyleName("MainEntryCharacterStyleName")
-,   sUseAlphabeticalSeparators("UseAlphabeticalSeparators")
-,   sUseCombinedEntries("UseCombinedEntries")
-,   sIsCaseSensitive("IsCaseSensitive")
-,   sUseKeyAsEntry("UseKeyAsEntry")
-,   sUseUpperCase("UseUpperCase")
-,   sUseDash("UseDash")
-,   sUsePP("UsePP")
-,   sIsCommaSeparated("IsCommaSeparated")
-,   sSortAlgorithm("SortAlgorithm")
-,   sLocale("Locale")
 ,   bMainEntryStyleNameOK(false)
 ,   bSeparators(false)
 ,   bCombineEntries(true)
@@ -184,28 +173,28 @@ void XMLIndexAlphabeticalSourceContext::EndElement()
     {
         aAny <<= GetImport().GetStyleDisplayName(
                             XML_STYLE_FAMILY_TEXT_TEXT, sMainEntryStyleName );
-        rIndexPropertySet->setPropertyValue(sMainEntryCharacterStyleName,aAny);
+        rIndexPropertySet->setPropertyValue("MainEntryCharacterStyleName",aAny);
     }
 
-    rIndexPropertySet->setPropertyValue(sUseAlphabeticalSeparators, css::uno::Any(bSeparators));
-    rIndexPropertySet->setPropertyValue(sUseCombinedEntries, css::uno::Any(bCombineEntries));
-    rIndexPropertySet->setPropertyValue(sIsCaseSensitive, css::uno::Any(bCaseSensitive));
-    rIndexPropertySet->setPropertyValue(sUseKeyAsEntry, css::uno::Any(bEntry));
-    rIndexPropertySet->setPropertyValue(sUseUpperCase, css::uno::Any(bUpperCase));
-    rIndexPropertySet->setPropertyValue(sUseDash, css::uno::Any(bCombineDash));
-    rIndexPropertySet->setPropertyValue(sUsePP, css::uno::Any(bCombinePP));
-    rIndexPropertySet->setPropertyValue(sIsCommaSeparated, css::uno::Any(bCommaSeparated));
+    rIndexPropertySet->setPropertyValue("UseAlphabeticalSeparators", css::uno::Any(bSeparators));
+    rIndexPropertySet->setPropertyValue("UseCombinedEntries", css::uno::Any(bCombineEntries));
+    rIndexPropertySet->setPropertyValue("IsCaseSensitive", css::uno::Any(bCaseSensitive));
+    rIndexPropertySet->setPropertyValue("UseKeyAsEntry", css::uno::Any(bEntry));
+    rIndexPropertySet->setPropertyValue("UseUpperCase", css::uno::Any(bUpperCase));
+    rIndexPropertySet->setPropertyValue("UseDash", css::uno::Any(bCombineDash));
+    rIndexPropertySet->setPropertyValue("UsePP", css::uno::Any(bCombinePP));
+    rIndexPropertySet->setPropertyValue("IsCommaSeparated", css::uno::Any(bCommaSeparated));
 
 
     if (!sAlgorithm.isEmpty())
     {
-        rIndexPropertySet->setPropertyValue(sSortAlgorithm, css::uno::Any(sAlgorithm));
+        rIndexPropertySet->setPropertyValue("SortAlgorithm", css::uno::Any(sAlgorithm));
     }
 
     if ( !maLanguageTagODF.isEmpty() )
     {
         aAny <<= maLanguageTagODF.getLanguageTag().getLocale( false);
-        rIndexPropertySet->setPropertyValue(sLocale, aAny);
+        rIndexPropertySet->setPropertyValue("Locale", aAny);
     }
 
     XMLIndexSourceBaseContext::EndElement();

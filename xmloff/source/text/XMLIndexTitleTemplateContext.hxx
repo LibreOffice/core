@@ -37,10 +37,6 @@ namespace com { namespace sun { namespace star {
  */
 class XMLIndexTitleTemplateContext : public SvXMLImportContext
 {
-
-    const OUString sTitle;
-    const OUString sParaStyleHeading;
-
     // paragraph style
     OUString sStyleName;
     bool bStyleNameOK;

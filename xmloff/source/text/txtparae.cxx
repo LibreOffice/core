@@ -1805,7 +1805,7 @@ bool XMLTextParagraphExport::exportTextContentEnumeration(
                     pSectionExport->ExportMasterDocHeadingDummies();
 
                 while (rContEnum->hasMoreElements() &&
-                       pSectionExport->IsInSection( xCurrentTextSection,
+                       XMLSectionExport::IsInSection( xCurrentTextSection,
                                                     xTxtCntnt, true ))
                 {
                     xTxtCntnt.set(rContEnum->nextElement(), uno::UNO_QUERY);
@@ -1814,7 +1814,7 @@ bool XMLTextParagraphExport::exportTextContentEnumeration(
                 }
                 // the first non-mute element still needs to be processed
                 bHoldElement =
-                    ! pSectionExport->IsInSection( xCurrentTextSection,
+                    ! XMLSectionExport::IsInSection( xCurrentTextSection,
                                                    xTxtCntnt, false );
             }
             else
