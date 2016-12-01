@@ -16,6 +16,7 @@
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <tools/urlobj.hxx>
 #include <ucbhelper/content.hxx>
 
 #include <libwps/libwps.h>
@@ -292,7 +293,7 @@ throw (css::uno::RuntimeException, std::exception)
         // time to check if the file is a WK3 file and a FM3 file is
         // present
         bool checkForFM3=false;
-        if (input.seek(0, librevenge::RVNG_SEEK_SET)==0 && xContent.is() && sUrl.getLength()>4)
+        if (input.seek(0, librevenge::RVNG_SEEK_SET)==0 && xContent.is() && INetURLObject(sUrl).getExtension().equalsIgnoreAsciiCase("WK3"))
         {
             // check if the file header corresponds to a .wk3 file
             unsigned long numBytesRead;
@@ -301,58 +302,37 @@ throw (css::uno::RuntimeException, std::exception)
                     data[3]==0 && data[4]<2 && data[5]==0x10)
                 checkForFM3=true;
         }
-        OUString wk3Url;
-        if (checkForFM3)
-        {
-            // try to retrieve the base name
-            sal_Int32 idSlash=sUrl.lastIndexOf('/');
-            if (idSlash!=-1)
-            {
-                wk3Url=sUrl.copy(idSlash+1);
-                checkForFM3=wk3Url.getLength()>4;
-            }
-            else
-                checkForFM3=false;
-        }
-        OUString fm3Url;
-        if (checkForFM3)
-        {
-            // check if the file extension corresponds to a .wk3 file and update the format expected name
-            if (wk3Url.endsWithAsciiL(".WK3", 4))
-                fm3Url=wk3Url.copy(0,wk3Url.getLength()-4)+OUString(".FM3");
-            else if (wk3Url.endsWithAsciiL(".wk3", 4))
-                fm3Url=wk3Url.copy(0,wk3Url.getLength()-4)+OUString(".fm3");
-            else
-                checkForFM3=false;
-        }
         if (checkForFM3)
         {
             // check if the format file exists
             const css::uno::Reference < container::XChild > xChild(xContent, uno::UNO_QUERY);
             if (xChild.is())
             {
-                bool findFM3=false, findWK3=false;
+                rtl::OUString sWM3Name;
+                rtl::OUString sFM3Name;
                 const css::uno::Reference < ucb::XContent > xPackageContent(xChild->getParent(), uno::UNO_QUERY);
                 uno::Reference<sdbc::XResultSet> xResultSet=MSWorksCalcImportFilterInternal::getResultSet(xPackageContent);
                 if (xResultSet.is() && xResultSet->first())
                 {
                     const uno::Reference<ucb::XContentAccess> xContentAccess(xResultSet, uno::UNO_QUERY_THROW);
                     const uno::Reference<sdbc::XRow> xRow(xResultSet, uno::UNO_QUERY_THROW);
+                    INetURLObject aTmpUrl(sUrl);
+                    sWM3Name = aTmpUrl.getName(INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET);
+                    aTmpUrl.setExtension("FM3");
+                    const rtl::OUString &sTestFM3Name = aTmpUrl.getName(INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET);
                     do
                     {
-                        const rtl::OUString aTitle(xRow->getString(1));
-                        if (aTitle == wk3Url)
-                            findWK3=true;
-                        else if (aTitle == fm3Url)
-                            findFM3=true;
+                        const rtl::OUString &aTitle(xRow->getString(1));
+                        if (aTitle.equalsIgnoreAsciiCase(sTestFM3Name))
+                            sFM3Name = aTitle;
                     }
-                    while (xResultSet->next() && (!findWK3 || !findFM3));
+                    while (xResultSet->next() && sFM3Name.isEmpty());
                 }
-                if (findWK3 && findFM3)
+                if (!sFM3Name.isEmpty())
                 {
                     MSWorksCalcImportFilterInternal::FolderStream structuredInput(xPackageContent);
-                    structuredInput.addFile(wk3Url,"WK3");
-                    structuredInput.addFile(fm3Url,"FM3");
+                    structuredInput.addFile(sWM3Name,"WK3");
+                    structuredInput.addFile(sFM3Name,"FM3");
 
                     // If the file is valid and libwps is at least 0.4.4, doImportDocument will convert it.
                     // If libwps is at most 0.4.3, doImportDocument will fail when checking if the file is supported
