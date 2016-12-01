@@ -120,7 +120,7 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *ustrModuleName, sal_Int32 nRtldMo
     SAL_WARN_IF(ustrModuleName == nullptr, "sal.osl", "string is not valid");
 
     /* ensure ustrTmp hold valid string */
-    if (osl_File_E_None != osl_getSystemPathFromFileURL(ustrModuleName, &ustrTmp))
+    if (osl_getSystemPathFromFileURL(ustrModuleName, &ustrTmp) != osl_File_E_None)
         rtl_uString_assign(&ustrTmp, ustrModuleName);
 
     if (ustrTmp)
