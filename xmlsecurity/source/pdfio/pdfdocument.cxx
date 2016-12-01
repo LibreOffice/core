@@ -2627,7 +2627,7 @@ bool PDFCommentElement::Read(SvStream& rStream)
     rStream.ReadChar(ch);
     while (!rStream.IsEof())
     {
-        if (ch == 0x0a)
+        if (ch == '\n' || ch == '\r')
         {
             m_aComment = aBuf.makeStringAndClear();
 
