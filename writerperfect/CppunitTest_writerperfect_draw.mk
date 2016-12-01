@@ -28,7 +28,7 @@ $(eval $(call gb_CppunitTest_use_libraries,writerperfect_draw,\
 ))
 
 $(eval $(call gb_CppunitTest_use_static_libraries,writerperfect_draw,\
-	writerperfect_importtestbase \
+	writerperfect_filtertestbase \
 ))
 
 $(eval $(call gb_CppunitTest_use_ure,writerperfect_draw))

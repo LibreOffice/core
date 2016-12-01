@@ -7,12 +7,12 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "WpftImportTestBase.hxx"
+#include "WpftFilterTestBase.hxx"
 
 namespace
 {
 
-class WpftDrawFilterTest : public writerperfect::test::WpftImportTestBase
+class WpftDrawFilterTest : public writerperfect::test::WpftFilterTestBase
 {
 public:
     WpftDrawFilterTest();
@@ -25,7 +25,7 @@ public:
 };
 
 WpftDrawFilterTest::WpftDrawFilterTest()
-    : writerperfect::test::WpftImportTestBase("private:factory/sdraw")
+    : writerperfect::test::WpftFilterTestBase("private:factory/sdraw")
 {
 }
 
