@@ -239,7 +239,6 @@
                 </menu:menupopup>
             </menu:menu>
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:InsertPageNumber"/>
             <menu:menu menu:id=".uno:FieldMenu">
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:InsertDateFieldFix"/>
@@ -254,7 +253,6 @@
                     <menu:menuitem menu:id=".uno:InsertFileField"/>
                 </menu:menupopup>
             </menu:menu>
-            <menu:menuitem menu:id=".uno:HeaderAndFooter"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:ImportFromFile"/>
             <menu:menuseparator/>
@@ -518,6 +516,7 @@
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:PresentationLayout"/>
             <menu:menuitem menu:id=".uno:MasterLayouts"/>
+            <menu:menuitem menu:id=".uno:HeaderAndFooter"/>
             <menu:menuitem menu:id=".uno:DisplayMasterBackground"/>
             <menu:menuitem menu:id=".uno:DisplayMasterObjects"/>
             <menu:menuseparator/>
