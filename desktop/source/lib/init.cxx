@@ -2939,6 +2939,8 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
                 // Release Solar Mutex, lo_startmain thread should acquire it.
                 Application::ReleaseSolarMutex();
             }
+
+            force_c_locale();
         }
 
         // We could use InitVCL() here -- and used to before using soffice_main,
@@ -2961,8 +2963,6 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
 
         if (eStage != PRE_INIT)
         {
-            force_c_locale();
-
             SAL_INFO("lok", "Enabling RequestHandler");
             RequestHandler::Enable(false);
             SAL_INFO("lok", "Starting soffice_main");
