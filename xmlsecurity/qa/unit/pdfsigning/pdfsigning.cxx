@@ -390,6 +390,8 @@ void PDFSigningTest::testTokenize()
         OUStringLiteral("no-eof.pdf"),
         // Failed to read as \r wasn't handled as terminating a comment.
         OUStringLiteral("cr-comment.pdf"),
+        // ']' in a name token was mishandled.
+        OUStringLiteral("name-bracket.pdf"),
     };
 
     for (const auto& rName : aNames)

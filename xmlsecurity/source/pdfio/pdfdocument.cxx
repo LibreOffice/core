@@ -2906,14 +2906,19 @@ size_t PDFDictionaryElement::Parse(const std::vector< std::unique_ptr<PDFElement
             }
             else
             {
-                // Name-name key-value.
-                rDictionary[aName] = pName;
-                if (pThisDictionary)
+                if (pArray)
+                    pArray->PushBack(pName);
+                else
                 {
-                    pThisDictionary->SetKeyOffset(aName, nNameOffset);
-                    pThisDictionary->SetKeyValueLength(aName, pName->GetLocation() + pName->GetLength() - nNameOffset);
+                    // Name-name key-value.
+                    rDictionary[aName] = pName;
+                    if (pThisDictionary)
+                    {
+                        pThisDictionary->SetKeyOffset(aName, nNameOffset);
+                        pThisDictionary->SetKeyValueLength(aName, pName->GetLocation() + pName->GetLength() - nNameOffset);
+                    }
+                    aName.clear();
                 }
-                aName.clear();
             }
             continue;
         }
@@ -3487,7 +3492,7 @@ bool PDFNameElement::Read(SvStream& rStream)
     rStream.ReadChar(ch);
     while (!rStream.IsEof())
     {
-        if (isspace(ch) || ch == '/' || ch == '[' || ch == '<' || ch == '>' || ch == '(')
+        if (isspace(ch) || ch == '/' || ch == '[' || ch == ']' || ch == '<' || ch == '>' || ch == '(')
         {
             rStream.SeekRel(-1);
             m_aValue = aBuf.makeStringAndClear();
