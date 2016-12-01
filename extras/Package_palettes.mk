@@ -12,14 +12,10 @@ $(eval $(call gb_Package_Package,extras_palettes,$(SRCDIR)/extras/source/palette
 $(eval $(call gb_Package_add_files,extras_palettes,$(LIBO_SHARE_FOLDER)/palette,\
 	arrowhd.soe \
 	classic.sog \
-	cmyk.soc \
-	gallery.soc \
 	hatching.soh \
 	html.soc \
 	libreoffice.soc \
 	modern.sog \
-	palette.soc \
-	scribus.soc \
 	standard.sob \
 	standard.soc \
 	standard.sod \
@@ -30,7 +26,6 @@ $(eval $(call gb_Package_add_files,extras_palettes,$(LIBO_SHARE_FOLDER)/palette,
 	styles.sod \
 	tango.soc \
 	tonal.soc \
-	web.soc \
 ))
 
 # vim: set noet sw=4 ts=4:
