@@ -26,8 +26,9 @@ static thread_local bool gbIsWorkerThread;
 // used to group thread-tasks for waiting in waitTillDone()
 class COMPHELPER_DLLPUBLIC ThreadTaskTag
 {
-    oslInterlockedCount  mnTasksWorking;
-    osl::Condition       maTasksComplete;
+    osl::Mutex mMutex;
+    std::size_t mnTasksWorking;
+    osl::Condition maTasksComplete;
 
 public:
     ThreadTaskTag();
@@ -302,17 +303,18 @@ ThreadTaskTag::ThreadTaskTag() : mnTasksWorking(0)
 
 void ThreadTaskTag::onTaskPushed()
 {
-    oslInterlockedCount n = osl_atomic_increment(&mnTasksWorking);
-    assert( n < 65536 ); // sanity checking
-    (void)n; // avoid -Wunused-variable in release build
+    osl::MutexGuard g(mMutex);
+    assert( mnTasksWorking < 65535 ); // sanity checking
+    ++mnTasksWorking;
     maTasksComplete.reset();
 }
 
 void ThreadTaskTag::onTaskWorkerDone()
 {
-    sal_Int32 nCount = osl_atomic_decrement(&mnTasksWorking);
-    assert(nCount >= 0);
-    if (nCount == 0)
+    osl::MutexGuard g(mMutex);
+    assert(mnTasksWorking > 0);
+    --mnTasksWorking;
+    if (mnTasksWorking == 0)
         maTasksComplete.set();
 }
 
