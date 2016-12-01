@@ -25,7 +25,25 @@
 namespace oox {
 namespace xls {
 
-class DataValidationsContext : public WorksheetContextBase
+class DataValidationsContext_Base {
+public:
+                                   DataValidationsContext_Base() {}
+    void                           SetSqref(const OUString& rChars) { mSqref = rChars; }
+    void                           SetFormula1(const OUString& rChars) { mFormula1 = rChars; }
+    void                           SetFormula2(const OUString& rChars) { mFormula2 = rChars; }
+    void                           SetValidation(::oox::xls::WorksheetHelper& rTarget);
+    /** Imports the dataValidation element containing data validation settings. */
+    void                           importDataValidation(const AttributeList& rAttribs);
+    /** Imports the DATAVALIDATION record containing data validation settings. */
+    static void                    importDataValidation(SequenceInputStream& rStrm, ::oox::xls::WorksheetHelper& rTarget);
+private:
+    ::std::unique_ptr< ValidationModel > mxValModel;
+    OUString                             mSqref;
+    OUString                             mFormula1;
+    OUString                             mFormula2;
+};
+
+class DataValidationsContext : public WorksheetContextBase, private DataValidationsContext_Base
 {
 public:
     explicit            DataValidationsContext( WorksheetFragmentBase& rFragment );
@@ -36,15 +54,19 @@ protected:
     virtual void        onEndElement() override;
 
     virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm ) override;
+};
 
-private:
-    /** Imports the dataValidation element containing data validation settings. */
-    void                importDataValidation( const AttributeList& rAttribs );
-    /** Imports the DATAVALIDATION record containing data validation settings. */
-    void                importDataValidation( SequenceInputStream& rStrm );
+class ExtDataValidationsContext : public WorksheetContextBase, private DataValidationsContext_Base
+{
+public:
+    explicit            ExtDataValidationsContext( WorksheetContextBase& rFragment );
 
+protected:
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
+    virtual void        onCharacters( const OUString& rChars ) override;
+    virtual void        onEndElement() override;
 private:
-    ::std::unique_ptr< ValidationModel > mxValModel;
+    sal_Int32 mCurrFormula;
 };
 
 class WorksheetFragment : public WorksheetFragmentBase
