@@ -141,7 +141,7 @@ protected: // Data
     int defaultTableId_;
 
     // Indicates entity is being parsed
-    enum { NPColumns, NPValues, NPRows } nowParsing_;
+    enum class NP { Columns, Values, Rows } nowParsing_;
 
 private:
     MorkParser(const MorkParser &) = delete;
