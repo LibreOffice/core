@@ -375,6 +375,8 @@ void PDFSigningTest::testTokenize()
     {
         // We looped on this broken input.
         OUStringLiteral("no-eof.pdf"),
+        // Failed to read as \r wasn't handled as terminating a comment.
+        OUStringLiteral("cr-comment.pdf"),
     };
 
     for (const auto& rName : aNames)
