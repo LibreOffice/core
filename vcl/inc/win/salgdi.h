@@ -74,27 +74,16 @@ public:
 
     BYTE                    GetCharSet() const          { return meWinCharSet; }
     BYTE                    GetPitchAndFamily() const   { return mnPitchAndFamily; }
-    bool                    SupportsCJK() const         { return mbHasCJKSupport; }
-    bool                    SupportsArabic() const      { return mbHasArabicSupport; }
 
     FontCharMapRef          GetFontCharMap() const;
     bool GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const;
-    const Ucs2SIntMap* GetEncodingVector() const { return mpEncodingVector; }
-    void SetEncodingVector( const Ucs2SIntMap* pNewVec ) const
-    {
-        if( mpEncodingVector )
-            delete mpEncodingVector;
-        mpEncodingVector = pNewVec;
-    }
+
 private:
     sal_IntPtr              mnId;
 
     // some members that are initalized lazily when the font gets selected into a HDC
-    mutable bool                    mbHasCJKSupport;
-    mutable bool                    mbHasArabicSupport;
     mutable bool                    mbFontCapabilitiesRead;
     mutable FontCharMapRef          mxUnicodeMap;
-    mutable const Ucs2SIntMap*      mpEncodingVector;
     mutable vcl::FontCapabilities   maFontCapabilities;
 
     BYTE                    meWinCharSet;
@@ -105,14 +94,8 @@ private:
     void                    ReadCmapTable( HDC ) const;
     void                    GetFontCapabilities( HDC hDC ) const;
 
-    void                    ReadGsubTable( HDC ) const;
-
-    mutable std::unordered_set<sal_UCS4>      maGsubTable;
-    mutable bool            mbGsubRead;
     mutable hb_font_t*      mpHbFont;
 public:
-    bool                    HasGSUBstitutions( HDC ) const;
-    bool                    IsGSUBstituted( sal_UCS4 ) const;
     hb_font_t*              GetHbFont() const { return mpHbFont; }
     void                    SetHbFont( hb_font_t* pHbFont ) const { mpHbFont = pHbFont; }
 };
@@ -168,9 +151,6 @@ class WinSalGraphics : public SalGraphics
     friend class WinOpenGLSalGraphicsImpl;
     friend class ScopedFont;
     friend class OpenGLCompatibleDC;
-    friend class WinLayout;
-    friend class SimpleWinLayout;
-    friend class UniscribeLayout;
 
 protected:
     std::unique_ptr<SalGraphicsImpl> mpImpl;
@@ -196,9 +176,6 @@ private:
     COLORREF                mnTextColor;        // TextColor
     RGNDATA*                mpClipRgnData;      // ClipRegion-Data
     RGNDATA*                mpStdClipRgnData;   // Cache Standard-ClipRegion-Data
-    bool                    mbFontKernInit;     // FALSE: FontKerns must be queried
-    KERNINGPAIR*            mpFontKernPairs;    // Kerning Pairs of the current Font
-    sal_uIntPtr             mnFontKernPairCount;// Number of Kerning Pairs of the current Font
     int                     mnPenWidth;         // Linienbreite
 
     LogicalFontInstance* GetWinFontEntry(int nFallbackLevel);
@@ -321,9 +298,6 @@ protected:
 private:
     // local helpers
 
-    // get kernign pairs of the current font
-    sal_uLong               GetKernPairs();
-
     static void             DrawTextLayout(const CommonSalLayout&, HDC, bool bUseDWrite);
 
 public:
@@ -426,17 +400,6 @@ void    ImplGetLogFontFromFontSelect( HDC, const FontSelectPattern*,
             LOGFONTW&, bool bTestVerticalAvail );
 
 #define MAX_64KSALPOINTS    ((((sal_uInt16)0xFFFF)-8)/sizeof(POINTS))
-
-// #102411# Win's GCP mishandles kerning => we need to do it ourselves
-// SalGraphicsData::mpFontKernPairs is sorted by
-inline bool ImplCmpKernData( const KERNINGPAIR& a, const KERNINGPAIR& b )
-{
-    if( a.wFirst < b.wFirst )
-        return true;
-    if( a.wFirst > b.wFirst )
-        return false;
-    return (a.wSecond < b.wSecond);
-}
 
 // called extremely often from just one spot => inline
 inline bool WinFontFace::HasChar( sal_uInt32 cChar ) const
