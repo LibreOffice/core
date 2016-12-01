@@ -78,7 +78,6 @@ Module gid_Module_Root_Brand
              gid_Brand_File_Share_Xdg_StartCenter,
              gid_Brand_File_Share_Xdg_Writer,
              gid_Brand_File_Share_Xdg_XsltFilter,
-             gid_Brand_File_Txt_Package,
 	     gid_License_Txt,
 	     git_License_Odt,
 	     gid_Credits_Odt,
@@ -519,13 +518,6 @@ File gid_Brand_File_Script_Unopkg
     Name = "unopkg";
 End
 #endif
-
-File gid_Brand_File_Txt_Package
-    TXT_FILE_BODY;
-    Dir = gid_Brand_Dir_Share_Extensions;
-    Name = "package.txt";
-    Styles = (PACKED);
-End
 
 File gid_Brand_File_Share_Registry_Cjk_Xcd
     TXT_FILE_BODY;

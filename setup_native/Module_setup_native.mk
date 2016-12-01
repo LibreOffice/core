@@ -11,25 +11,19 @@ $(eval $(call gb_Module_Module,setup_native))
 
 $(eval $(call gb_Module_add_targets,setup_native,\
 	$(if $(filter LINUX SOLARIS,$(OS)),Library_getuid) \
+	$(if $(filter MACOSX,$(OS)),CustomTarget_mac) \
 	CustomTarget_spell \
+	$(if $(filter WNT,$(OS)),Package_misc) \
 	Package_packinfo \
+	$(if $(filter LINUX SOLARIS,$(OS)), \
+		CustomTarget_scripts \
+		$(if $(ENABLE_ONLINE_UPDATE),Package_scripts) \
+	) \
 ))
-
-ifeq ($(OS),MACOSX)
-$(eval $(call gb_Module_add_targets,setup_native,\
-	CustomTarget_mac \
-))
-endif
-
-ifeq ($(OS),WNT)
-$(eval $(call gb_Module_add_targets,setup_native,\
-	Package_misc \
-))
-endif
 
 ifeq ($(OS)$(COM),WNTMSC)
 $(eval $(call gb_Module_add_targets,setup_native,\
-        Library_instooofiltmsi \
+	Library_instooofiltmsi \
 	Library_qslnkmsi \
 	Library_reg4allmsdoc \
 	$(if $(DISABLE_ACTIVEX),,Library_regactivex) \
@@ -52,10 +46,6 @@ $(eval $(call gb_Module_add_targets,setup_native,\
 ))
 endif
 
-$(eval $(call gb_Module_add_targets,setup_native,\
-	CustomTarget_scripts \
-	Package_scripts \
-))
 endif
 
 # vim: set noet sw=4 ts=4:

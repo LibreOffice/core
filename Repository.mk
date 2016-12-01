@@ -909,6 +909,7 @@ $(eval $(call gb_Helper_register_packages_for_install,brand,\
 	desktop_branding \
 	$(if $(CUSTOM_BRAND_DIR),desktop_branding_custom) \
 	$(if $(and $(filter-out MACOSX WNT,$(OS)),$(filter DESKTOP,$(BUILD_TYPE))),desktop_soffice_sh) \
+	$(call gb_Helper_optional,DESKTOP,setup_native_packinfo) \
 ))
 
 ifeq ($(USING_X11), TRUE)
@@ -936,6 +937,10 @@ $(eval $(call gb_Helper_register_packages_for_install,writer_brand,\
 	desktop_swriter_sh \
 ))
 endif # USING_X11=TRUE
+
+$(eval $(call gb_Helper_register_packages_for_install,onlineupdate,\
+	$(if $(ENABLE_ONLINE_UPDATE),$(if $(filter LINUX SOLARIS,$(OS)),setup_native_scripts)) \
+))
 
 ifneq ($(DISABLE_PYTHON),TRUE)
 $(eval $(call gb_Helper_register_packages_for_install,python, \
