@@ -205,13 +205,13 @@ oslFileError SAL_CALL osl_getFileStatus(oslDirectoryItem Item, oslFileStatus* pS
 
     rtl::OUString file_path;
     oslFileError  osl_error = setup_osl_getFileStatus(pImpl, pStat, file_path);
-    if (osl_File_E_None != osl_error)
+    if (osl_error != osl_File_E_None)
         return osl_error;
 
     struct stat file_stat;
 
     bool bStatNeeded = is_stat_call_necessary(uFieldMask, pImpl->getFileType());
-    if (bStatNeeded && (0 != osl::lstat(file_path, file_stat)))
+    if (bStatNeeded && (osl::lstat(file_path, file_stat) != 0))
         return oslTranslateFileError(OSL_FET_ERROR, errno);
 
     if (bStatNeeded)

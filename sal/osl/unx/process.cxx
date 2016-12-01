@@ -1136,7 +1136,7 @@ static bool is_timeout(const struct timeval* tend)
 
 static bool is_process_dead(pid_t pid)
 {
-    return ((-1 == kill(pid, 0)) && (ESRCH == errno));
+    return ((kill(pid, 0) == -1) && (ESRCH == errno));
 }
 
 /**********************************************
@@ -1171,9 +1171,9 @@ oslProcessError SAL_CALL osl_joinProcessWithTimeout(oslProcess Process, const Ti
     {
         oslConditionResult cond_res = osl_waitCondition(pChild->m_terminated, pTimeout);
 
-        if (osl_cond_result_timeout == cond_res)
+        if (cond_res == osl_cond_result_timeout)
             osl_error = osl_Process_E_TimedOut;
-        else if (osl_cond_result_ok != cond_res)
+        else if (cond_res != osl_cond_result_ok)
             osl_error = osl_Process_E_Unknown;
     }
     else /* alien process; StatusThread will not be able
