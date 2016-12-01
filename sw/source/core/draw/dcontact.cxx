@@ -1536,6 +1536,9 @@ void SwDrawContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
             case sw::DrawFrameFormatHintId::DYING:
                 delete this;
                 break;
+            case sw::DrawFrameFormatHintId::PREPPASTING:
+                MoveObjToVisibleLayer(GetMaster());
+                break;
             default:
                 SAL_WARN("sw.core", "unhandled DrawFrameFormatHintId");
         }
