@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a71b18c_7b4b105a",
+        "filename": "sw/source/uibase/shells/grfsh.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 869,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-12-01T17:44:00Z",
+      "side": 1,
+      "message": "With less code:\nlong nRotatedWidth \u003d aManager.GetSize().Height();\nlong nRotatedHeight \u003d aManager.GetSize().Weight();\n\nif (GetSlot \u003d\u003d SID_ROTATE_GRAPHIC_180) \n   std::swap(nRotatedWidth, nRotatedHeight);\n\n:)) but of course I won\u0027t hold the patch back b/c of this",
+      "revId": "eb95587089df3ee654484a688c99527a7296e517",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
