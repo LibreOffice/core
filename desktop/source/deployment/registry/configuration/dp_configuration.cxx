@@ -710,20 +710,20 @@ void BackendImpl::PackageImpl::processPackage_(
             }
             //No need for live-deployment for bundled extension, because OOo
             //restarts after installation
-            if (that->m_eContext != CONTEXT_BUNDLED
+            if (that->m_eContext != Context::Bundled
                 && !startup)
             {
                 if (m_isSchema)
                 {
                     css::configuration::Update::get(
                         that->m_xComponentContext)->insertExtensionXcsFile(
-                            that->m_eContext == CONTEXT_SHARED, expandUnoRcUrl(url));
+                            that->m_eContext == Context::Shared, expandUnoRcUrl(url));
                 }
                 else
                 {
                     css::configuration::Update::get(
                         that->m_xComponentContext)->insertExtensionXcuFile(
-                            that->m_eContext == CONTEXT_SHARED, expandUnoRcUrl(url));
+                            that->m_eContext == Context::Shared, expandUnoRcUrl(url));
                 }
             }
             that->addToConfigmgrIni( m_isSchema, true, url, xCmdEnv );

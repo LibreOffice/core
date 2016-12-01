@@ -76,7 +76,7 @@ PackageRegistryBackend::PackageRegistryBackend(
     Reference<XComponentContext> const & xContext )
     : t_BackendBase( getMutex() ),
       m_xComponentContext( xContext ),
-      m_eContext( CONTEXT_UNKNOWN ),
+      m_eContext( Context::Unknown ),
       m_readOnly( false )
 {
     assert(xContext.is());
@@ -89,17 +89,17 @@ PackageRegistryBackend::PackageRegistryBackend(
         m_readOnly = *readOnly;
 
     if ( m_context == "user" )
-        m_eContext = CONTEXT_USER;
+        m_eContext = Context::User;
     else if ( m_context == "shared" )
-        m_eContext = CONTEXT_SHARED;
+        m_eContext = Context::Shared;
     else if ( m_context == "bundled" )
-        m_eContext = CONTEXT_BUNDLED;
+        m_eContext = Context::Bundled;
     else if ( m_context == "tmp" )
-        m_eContext = CONTEXT_TMP;
+        m_eContext = Context::Tmp;
     else if (m_context.matchIgnoreAsciiCase("vnd.sun.star.tdoc:/"))
-        m_eContext = CONTEXT_DOCUMENT;
+        m_eContext = Context::Document;
     else
-        m_eContext = CONTEXT_UNKNOWN;
+        m_eContext = Context::Unknown;
 }
 
 
