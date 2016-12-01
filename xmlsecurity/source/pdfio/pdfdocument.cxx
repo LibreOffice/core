@@ -1552,7 +1552,7 @@ void PDFDocument::ReadXRefStream(SvStream& rStream)
         nLineLength += aW[i];
     }
 
-    if (nLineLength - 1 != nColumns)
+    if (nPredictor > 1 && nLineLength - 1 != nColumns)
     {
         SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRefStream: /DecodeParms/Columns is inconsistent with /W");
         return;
@@ -1573,7 +1573,7 @@ void PDFDocument::ReadXRefStream(SvStream& rStream)
             size_t nIndex = nFirstObject + nEntry;
 
             aStream.ReadBytes(aOrigLine.data(), aOrigLine.size());
-            if (aOrigLine[0] + 10 != nPredictor)
+            if (nPredictor > 1 && aOrigLine[0] + 10 != nPredictor)
             {
                 SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRefStream: in-stream predictor is inconsistent with /DecodeParms/Predictor for object #" << nIndex);
                 return;
@@ -2116,7 +2116,7 @@ bool PDFDocument::ValidateSignature(SvStream& rStream, PDFObjectElement* pSignat
     }
 
     auto pSubFilter = dynamic_cast<PDFNameElement*>(pValue->Lookup("SubFilter"));
-    if (!pSubFilter || (pSubFilter->GetValue() != "adbe.pkcs7.detached" && pSubFilter->GetValue() != "ETSI.CAdES.detached"))
+    if (!pSubFilter || (pSubFilter->GetValue() != "adbe.pkcs7.detached" && pSubFilter->GetValue() != "adbe.pkcs7.sha1" && pSubFilter->GetValue() != "ETSI.CAdES.detached"))
     {
         SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ValidateSignature: no or unsupported sub-filter");
         return false;
@@ -2415,15 +2415,19 @@ bool PDFDocument::ValidateSignature(SvStream& rStream, PDFObjectElement* pSignat
     SECItem* pContentInfoContentData = pCMSSignedData->contentInfo.content.data;
     if (pContentInfoContentData && pContentInfoContentData->data)
     {
-        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ValidateSignature: expected nullptr content info");
-        return false;
+        // Not a detached signature.
+        if (!memcmp(pActualResultBuffer, pContentInfoContentData->data, nMaxResultLen) && nActualResultLen == pContentInfoContentData->len)
+            rInformation.nStatus = xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED;
     }
-
-    SECItem aActualResultItem;
-    aActualResultItem.data = pActualResultBuffer;
-    aActualResultItem.len = nActualResultLen;
-    if (NSS_CMSSignerInfo_Verify(pCMSSignerInfo, &aActualResultItem, nullptr) == SECSuccess)
-        rInformation.nStatus = xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED;
+    else
+    {
+        // Detached, the usual case.
+        SECItem aActualResultItem;
+        aActualResultItem.data = pActualResultBuffer;
+        aActualResultItem.len = nActualResultLen;
+        if (NSS_CMSSignerInfo_Verify(pCMSSignerInfo, &aActualResultItem, nullptr) == SECSuccess)
+            rInformation.nStatus = xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED;
+    }
 
     // Everything went fine
     PORT_Free(pActualResultBuffer);
