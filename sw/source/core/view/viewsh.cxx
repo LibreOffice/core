@@ -235,6 +235,12 @@ void SwViewShell::ImplEndAction( const bool bIdleEnd )
     {
         mbPaintWorks = true;
         UISizeNotify();
+        // tdf#101464 print preview may generate events if another view shell
+        // performs layout...
+        if (IsPreview() && Imp()->IsAccessible())
+        {
+            Imp()->FireAccessibleEvents();
+        }
         return;
     }
 
