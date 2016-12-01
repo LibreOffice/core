@@ -1228,8 +1228,12 @@ bool PDFDocument::Tokenize(SvStream& rStream, TokenizeMode eMode, std::vector< s
                 }
                 else if (aKeyword == "trailer")
                 {
-                    m_pTrailer = new PDFTrailerElement(*this);
-                    rElements.push_back(std::unique_ptr<PDFElement>(m_pTrailer));
+                    auto pTrailer = new PDFTrailerElement(*this);
+                    // When reading till the first EOF token only, remember
+                    // just the first trailer token.
+                    if (eMode != TokenizeMode::EOF_TOKEN || !m_pTrailer)
+                        m_pTrailer = pTrailer;
+                    rElements.push_back(std::unique_ptr<PDFElement>(pTrailer));
                 }
                 else if (aKeyword == "startxref")
                 {
@@ -1680,9 +1684,9 @@ void PDFDocument::ReadXRef(SvStream& rStream)
             return;
         }
 
-        if (aNumberOfEntries.GetValue() <= 0)
+        if (aNumberOfEntries.GetValue() < 0)
         {
-            SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRef: expected one or more entries");
+            SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRef: expected zero or more entries");
             return;
         }
 

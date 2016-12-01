@@ -68,6 +68,8 @@ public:
     void testSigningCertificateAttribute();
     /// Test that we accept files which are supposed to be good.
     void testGood();
+    /// Test that we don't crash / loop while tokenizing these files.
+    void testTokenize();
 
     CPPUNIT_TEST_SUITE(PDFSigningTest);
     CPPUNIT_TEST(testPDFAdd);
@@ -81,6 +83,7 @@ public:
     CPPUNIT_TEST(testPDFPAdESGood);
     CPPUNIT_TEST(testSigningCertificateAttribute);
     CPPUNIT_TEST(testGood);
+    CPPUNIT_TEST(testTokenize);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -364,6 +367,23 @@ void PDFSigningTest::testGood()
         CPPUNIT_ASSERT_EQUAL(xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED, rInformation.nStatus);
     }
 #endif
+}
+
+void PDFSigningTest::testTokenize()
+{
+    const std::initializer_list<OUStringLiteral> aNames =
+    {
+        // We looped on this broken input.
+        OUStringLiteral("no-eof.pdf"),
+    };
+
+    for (const auto& rName : aNames)
+    {
+        SvFileStream aStream(m_directories.getURLFromSrc(DATA_DIRECTORY) + rName, StreamMode::READ);
+        xmlsecurity::pdfio::PDFDocument aDocument;
+        // Just make sure the tokenizer finishes without an error, don't look at the signature.
+        CPPUNIT_ASSERT(aDocument.Read(aStream));
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(PDFSigningTest);
