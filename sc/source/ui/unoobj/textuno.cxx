@@ -332,7 +332,8 @@ OUString SAL_CALL ScHeaderFooterTextObj::getString() throw(uno::RuntimeException
 
     uno::Reference<css::sheet::XHeaderFooterContent> xContentObj = aTextData.GetContentObj();
     if (!xContentObj.is())
-        throw css::uno::RuntimeException("");
+        throw css::uno::RuntimeException(
+            "ScHeaderFooterTextObj::getString: no ContentObj");
 
     rtl::Reference<ScHeaderFooterContentObj> pObj = ScHeaderFooterContentObj::getImplementation(xContentObj);
 
