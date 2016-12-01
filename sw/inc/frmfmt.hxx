@@ -239,7 +239,8 @@ namespace sw
     enum class DrawFrameFormatHintId {
         DYING,
         PREPPASTING,
-        PAGE_OUT_OF_BOUNDS
+        PREP_INSERT_FLY,
+        PAGE_OUT_OF_BOUNDS,
     };
     struct SW_DLLPUBLIC DrawFrameFormatHint final: SfxHint
     {
