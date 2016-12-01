@@ -7,66 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <sal/config.h>
-#include <unotest/filters-test.hxx>
-#include <test/bootstrapfixture.hxx>
-#include <rtl/strbuf.hxx>
-#include <osl/file.hxx>
-
-#include <sfx2/app.hxx>
-#include <sfx2/docfilt.hxx>
-#include <sfx2/docfile.hxx>
-#include <sfx2/sfxmodelfactory.hxx>
-#include <svl/stritem.hxx>
-#include <svx/svdograf.hxx>
-
-#include "drwlayer.hxx"
-#include <svx/svdpage.hxx>
-#include <svx/svdoole2.hxx>
-#include <editeng/wghtitem.hxx>
-#include <editeng/postitem.hxx>
-#include <editeng/udlnitem.hxx>
-#include <editeng/editobj.hxx>
-#include <editeng/borderline.hxx>
-#include <editeng/flditem.hxx>
-#include <dbdata.hxx>
-#include "validat.hxx"
-#include "formulacell.hxx"
-#include "userdat.hxx"
-#include "dpobject.hxx"
-#include "dpsave.hxx"
-#include "stlsheet.hxx"
-#include "docfunc.hxx"
-#include "markdata.hxx"
-#include "colorscale.hxx"
-#include "olinetab.hxx"
-#include "patattr.hxx"
-#include "scitems.hxx"
-#include "docsh.hxx"
-#include "editutil.hxx"
-#include "cellvalue.hxx"
-#include "attrib.hxx"
-#include "dpshttab.hxx"
 #include "tabvwsh.hxx"
-#include <scopetools.hxx>
-#include <columnspanset.hxx>
-#include <tokenstringcontext.hxx>
-
-#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
-#include <com/sun/star/drawing/XControlShape.hpp>
-#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
-#include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
-#include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
-#include <com/sun/star/sheet/GeneralFunction.hpp>
-#include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/text/textfield/Type.hpp>
-#include <com/sun/star/chart2/XChartDocument.hpp>
-#include <com/sun/star/chart2/data/XDataReceiver.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
-
 #include "helper/qahelper.hxx"
-#include "helper/shared_test_impl.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
