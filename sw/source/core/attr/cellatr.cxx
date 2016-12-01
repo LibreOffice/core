@@ -115,8 +115,10 @@ void SwTableBoxFormula::ChangeState( const SfxPoolItem* pItem )
     // detect table that contains this attribute
     const SwTableNode* pTableNd;
     const SwNode* pNd = GetNodeOfFormula();
-    if( pNd && &pNd->GetNodes() == &pNd->GetDoc()->GetNodes() &&
-        nullptr != ( pTableNd = pNd->FindTableNode() ))
+    if (!pNd || &pNd->GetNodes() != &pNd->GetDoc()->GetNodes())
+        return;
+    pTableNd = pNd->FindTableNode();
+    if( pTableNd != nullptr )
     {
         switch( pUpdateField->m_eFlags )
         {
