@@ -2522,7 +2522,7 @@ bool OutputDevice::GetTextBoundRect( Rectangle& rRect,
 
     // find extents using the bitmap
     Bitmap aBmp = aVDev->GetBitmap( Point(), aOutSize );
-    BitmapReadAccess* pAcc = aBmp.AcquireReadAccess();
+    Bitmap::ScopedReadAccess pAcc(aBmp);
     if( !pAcc )
         return false;
     const BitmapColor aBlack( pAcc->GetBestMatchingColor( Color( COL_BLACK ) ) );
@@ -2575,7 +2575,7 @@ bool OutputDevice::GetTextBoundRect( Rectangle& rRect,
         nRight = nX;
     }
 
-    Bitmap::ReleaseAccess( pAcc );
+    pAcc.reset();
 
     if( nTop <= nBottom )
     {

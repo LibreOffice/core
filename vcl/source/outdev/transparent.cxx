@@ -466,8 +466,8 @@ void OutputDevice::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
                 // #107766# check for non-empty bitmaps before accessing them
                 if( !!aPaint && !!aPolyMask )
                 {
-                    BitmapWriteAccess* pW = aPaint.AcquireWriteAccess();
-                    BitmapReadAccess* pR = aPolyMask.AcquireReadAccess();
+                    Bitmap::ScopedWriteAccess pW(aPaint);
+                    Bitmap::ScopedReadAccess pR(aPolyMask);
 
                     if( pW && pR )
                     {
@@ -579,8 +579,8 @@ void OutputDevice::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
                         }
                     }
 
-                    Bitmap::ReleaseAccess( pR );
-                    Bitmap::ReleaseAccess( pW );
+                    pR.reset();
+                    pW.reset();
 
                     DrawBitmap( aDstRect.TopLeft(), aPaint );
 

@@ -51,20 +51,50 @@ template < class Access, class Bitmap, Access* (Bitmap::* Acquire)() > class Sco
 public:
     explicit ScopedBitmapAccess( Bitmap& rBitmap ) :
         mpAccess( nullptr ),
-        mrBitmap( rBitmap )
+        mpBitmap( &rBitmap )
     {
-        mpAccess = (mrBitmap.*Acquire)();
+        mpAccess = (mpBitmap->*Acquire)();
     }
 
     ScopedBitmapAccess( Access* pAccess, Bitmap& rBitmap ) :
         mpAccess( pAccess ),
-        mrBitmap( rBitmap )
+        mpBitmap( &rBitmap )
     {
     }
 
+    ScopedBitmapAccess( ) :
+        mpAccess( nullptr ),
+        mpBitmap( nullptr )
+    {
+    }
+
+    // Move semantics
+    ScopedBitmapAccess &operator=(ScopedBitmapAccess&&other)
+    {
+        mpAccess=other.mpAccess;
+        mpBitmap=other.mpBitmap;
+        other.mpAccess = nullptr;
+        other.mpBitmap = nullptr;
+        return *this;
+     }
+
+    // Disable copy from lvalue.
+    ScopedBitmapAccess(const ScopedBitmapAccess&) = delete;
+    ScopedBitmapAccess &operator=(const ScopedBitmapAccess&) = delete;
+
     ~ScopedBitmapAccess()
     {
-        mrBitmap.ReleaseAccess( mpAccess );
+        if (mpAccess)
+           mpBitmap->ReleaseAccess( mpAccess );
+    }
+
+    void reset()
+    {
+        if (mpAccess)
+        {
+           mpBitmap->ReleaseAccess( mpAccess );
+           mpAccess = nullptr;
+        }
     }
 
     bool operator!() const { return !mpAccess; }
@@ -84,7 +114,7 @@ public:
 
 private:
     Access*     mpAccess;
-    Bitmap&     mrBitmap;
+    Bitmap*     mpBitmap;
 };
 
 }
