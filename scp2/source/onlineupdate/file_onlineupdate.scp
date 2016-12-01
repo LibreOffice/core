@@ -25,12 +25,3 @@ File gid_File_Share_Registry_Onlineupdate_Xcd
     Name = "onlineupdate.xcd";
     ComponentCondition="ISCHECKFORPRODUCTUPDATES=1";
 End
-
-#if defined LINUX || defined SOLARIS
-File gid_File_Bin_UnpackUpdate
-    BIN_FILE_BODY;
-    Dir = gid_Brand_Dir_Program;
-    Name = "unpack_update";
-    Styles = (PACKED);
-End
-#endif

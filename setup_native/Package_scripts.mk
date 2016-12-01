@@ -9,10 +9,6 @@
 
 $(eval $(call gb_Package_Package,setup_native_scripts,$(SRCDIR)/setup_native/scripts))
 
-ifeq ($(ENABLE_ONLINE_UPDATE),TRUE)
-ifneq ($(filter LINUX SOLARIS,$(OS)),)
 $(eval $(call gb_Package_add_file,setup_native_scripts,$(LIBO_BIN_FOLDER)/unpack_update,unpack_update.sh))
-endif
-endif
 
 # vim: set noet sw=4 ts=4:
