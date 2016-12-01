@@ -134,7 +134,6 @@ private:
 public:
     explicit InternetProxyDecider_Impl(
         const uno::Reference< uno::XComponentContext >& rxContext );
-    virtual ~InternetProxyDecider_Impl() override;
 
     void dispose();
 
@@ -375,13 +374,6 @@ InternetProxyDecider_Impl::InternetProxyDecider_Impl(
         OSL_FAIL( "InternetProxyDecider - Exception!" );
     }
 }
-
-
-// virtual
-InternetProxyDecider_Impl::~InternetProxyDecider_Impl()
-{
-}
-
 
 void InternetProxyDecider_Impl::dispose()
 {
