@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a71b18c_6eaa731b",
+        "filename": "sfx2/uiconfig/ui/helpmanual.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2016-12-01T00:35:04Z",
+      "side": 1,
+      "message": "Instead of hardcoding the name, please write “%PRODUCTNAME”",
+      "range": {
+        "startLine": 39,
+        "startChar": 18,
+        "endLine": 39,
+        "endChar": 30
+      },
+      "revId": "3bac50fd4f3a5b31fe0a8fe4a0198c4ff9c015d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
