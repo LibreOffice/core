@@ -286,10 +286,8 @@ protected:
 
     OUString m_context;
     // currently only for library containers:
-    enum {
-        CONTEXT_UNKNOWN,
-        CONTEXT_USER, CONTEXT_SHARED,CONTEXT_BUNDLED, CONTEXT_TMP,
-        CONTEXT_DOCUMENT
+    enum class Context {
+        Unknown, User, Shared, Bundled, Tmp, Document
     } m_eContext;
     bool m_readOnly;
 

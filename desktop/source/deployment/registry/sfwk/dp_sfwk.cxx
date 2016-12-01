@@ -289,15 +289,15 @@ void BackendImpl::PackageImpl:: initPackageHandler()
     BackendImpl * that = getMyBackend();
     Any aContext;
 
-    if ( that->m_eContext == CONTEXT_USER )
+    if ( that->m_eContext == Context::User )
     {
         aContext  <<= OUString("user");
     }
-    else if ( that->m_eContext == CONTEXT_SHARED )
+    else if ( that->m_eContext == Context::Shared )
     {
         aContext  <<= OUString("share");
     }
-    else if ( that->m_eContext == CONTEXT_BUNDLED )
+    else if ( that->m_eContext == Context::Bundled )
     {
         aContext  <<= OUString("bundled");
     }
