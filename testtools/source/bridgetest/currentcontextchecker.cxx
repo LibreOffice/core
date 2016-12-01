@@ -48,8 +48,6 @@ class CurrentContext:
 public:
     CurrentContext();
 
-    virtual ~CurrentContext() override;
-
     CurrentContext(const CurrentContext&) = delete;
     CurrentContext& operator=(const CurrentContext&) = delete;
 
@@ -58,8 +56,6 @@ public:
 };
 
 CurrentContext::CurrentContext() {}
-
-CurrentContext::~CurrentContext() {}
 
 css::uno::Any CurrentContext::getValueByName(OUString const & Name)
     throw (css::uno::RuntimeException, std::exception)

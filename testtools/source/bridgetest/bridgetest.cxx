@@ -111,9 +111,6 @@ public:
     explicit TestBridgeImpl( const Reference< XComponentContext > & xContext )
         : m_xContext( xContext )
         {}
-    virtual ~TestBridgeImpl() override
-    {
-    }
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw (RuntimeException, std::exception) override;
@@ -339,15 +336,10 @@ class MyClass : public osl::DebugBase<MyClass>, public OWeakObject
 {
 public:
     MyClass();
-    virtual ~MyClass() override;
 };
 
 
 MyClass::MyClass()
-{
-}
-
-MyClass::~MyClass()
 {
 }
 
