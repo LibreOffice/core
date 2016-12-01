@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_BITMAPSCALESUPER_HXX
-#define INCLUDED_VCL_BITMAPSCALESUPER_HXX
+#ifndef INCLUDED_VCL_INC_BITMAPSCALESUPER_HXX
+#define INCLUDED_VCL_INC_BITMAPSCALESUPER_HXX
 
-#include <vcl/bitmapfilter.hxx>
+#include <bitmapfilter.hxx>
 
-class VCL_DLLPUBLIC BitmapScaleSuper : public BitmapFilter
+class BitmapScaleSuper : public BitmapFilter
 {
 public:
                     BitmapScaleSuper(const double& rScaleX, const double& rScaleY);
@@ -36,6 +36,6 @@ private:
 
 };
 
-#endif // INCLUDED_VCL_BITMAPSCALESUPER_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
