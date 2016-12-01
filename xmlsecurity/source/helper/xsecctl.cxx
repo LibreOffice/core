@@ -20,6 +20,7 @@
 
 #include "xsecctl.hxx"
 #include "documentsignaturehelper.hxx"
+#include "framework/saxeventkeeperimpl.hxx"
 #include <algorithm>
 #include <initializer_list>
 
@@ -46,13 +47,6 @@ namespace cssl = com::sun::star::lang;
 namespace cssxc = com::sun::star::xml::crypto;
 namespace cssxs = com::sun::star::xml::sax;
 using namespace com::sun::star;
-
-/* bridge component names */
-#define XMLSIGNATURE_COMPONENT "com.sun.star.xml.crypto.XMLSignature"
-#define XMLDOCUMENTWRAPPER_COMPONENT "com.sun.star.xml.wrapper.XMLDocumentWrapper"
-
-/* xml security framework components */
-#define SAXEVENTKEEPER_COMPONENT "com.sun.star.xml.crypto.sax.SAXEventKeeper"
 
 XSecController::XSecController( const cssu::Reference<cssu::XComponentContext>& rxCtx )
     : mxCtx(rxCtx)
@@ -117,15 +111,11 @@ void XSecController::createXSecComponent( )
  *
  *   FUNCTION
  *  Creates xml security components, including:
- *  1. an xml signature bridge component ( Java based or C based)
- *  2. an XMLDocumentWrapper component ( Java based or C based)
+ *  1. an xml signature bridge component
+ *  2. an XMLDocumentWrapper component
  *  3. a SAXEventKeeper component
  ******************************************************************************/
 {
-    OUString sSAXEventKeeper( SAXEVENTKEEPER_COMPONENT );
-    OUString sXMLSignature( XMLSIGNATURE_COMPONENT );
-    OUString sXMLDocument( XMLDOCUMENTWRAPPER_COMPONENT );
-
     /*
      * marks all security components are not available.
      */
@@ -137,7 +127,7 @@ void XSecController::createXSecComponent( )
     cssu::Reference< cssl::XMultiComponentFactory > xMCF( mxCtx->getServiceManager() );
 
     m_xXMLSignature.set(
-        xMCF->createInstanceWithContext( sXMLSignature, mxCtx ),
+        xMCF->createInstanceWithContext("com.sun.star.xml.crypto.XMLSignature", mxCtx ),
         cssu::UNO_QUERY );
 
     bool bSuccess = m_xXMLSignature.is();
@@ -147,20 +137,13 @@ void XSecController::createXSecComponent( )
      */
     {
         m_xXMLDocumentWrapper.set(
-            xMCF->createInstanceWithContext( sXMLDocument, mxCtx ),
+            xMCF->createInstanceWithContext("com.sun.star.xml.wrapper.XMLDocumentWrapper", mxCtx),
             cssu::UNO_QUERY );
     }
 
     bSuccess &= m_xXMLDocumentWrapper.is();
     if ( bSuccess )
-    /*
-     * XMLDocumentWrapper created successfully.
-     */
-    {
-        m_xSAXEventKeeper.set(
-            xMCF->createInstanceWithContext( sSAXEventKeeper, mxCtx ),
-            cssu::UNO_QUERY );
-    }
+        m_xSAXEventKeeper = new SAXEventKeeperImpl();
 
     bSuccess &= m_xSAXEventKeeper.is();
 
