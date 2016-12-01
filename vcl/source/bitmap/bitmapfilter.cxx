@@ -8,7 +8,7 @@
  *
  */
 
-#include <vcl/bitmapfilter.hxx>
+#include <bitmapfilter.hxx>
 
 BitmapFilter::BitmapFilter()
 {}

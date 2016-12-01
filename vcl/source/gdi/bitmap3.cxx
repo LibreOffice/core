@@ -23,7 +23,6 @@
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/bitmap.hxx>
-#include <vcl/bitmapscalesuper.hxx>
 #include <config_features.h>
 #if HAVE_FEATURE_OPENGL
 #include <vcl/opengl/OpenGLHelper.hxx>
@@ -34,6 +33,7 @@
 #include "impoctree.hxx"
 #include "impvect.hxx"
 
+#include <bitmapscalesuper.hxx>
 #include "octree.hxx"
 #include "BitmapScaleConvolution.hxx"
 

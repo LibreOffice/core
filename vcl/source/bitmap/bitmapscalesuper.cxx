@@ -18,7 +18,7 @@
  */
 
 #include <vcl/bitmapaccess.hxx>
-#include <vcl/bitmapscalesuper.hxx>
+#include <bitmapscalesuper.hxx>
 
 #include <algorithm>
 #include <memory>
