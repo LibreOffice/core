@@ -1392,7 +1392,11 @@ size_t PDFDocument::FindStartXRef(SvStream& rStream)
     // Find the "startxref" token, somewhere near the end of the document.
     std::vector<char> aBuf(1024);
     rStream.Seek(STREAM_SEEK_TO_END);
-    rStream.SeekRel(static_cast<sal_Int64>(-1) * aBuf.size());
+    if (rStream.Tell() > aBuf.size())
+        rStream.SeekRel(static_cast<sal_Int64>(-1) * aBuf.size());
+    else
+        // The document is really short, then just read it from the start.
+        rStream.Seek(0);
     size_t nBeforePeek = rStream.Tell();
     size_t nSize = rStream.ReadBytes(aBuf.data(), aBuf.size());
     rStream.Seek(nBeforePeek);
