@@ -376,16 +376,16 @@ public:
  */
 class SmTextNode : public SmVisibleNode
 {
-    OUString   aText;
-    sal_uInt16      nFontDesc;
+    OUString   maText;
+    sal_uInt16 mnFontDesc;
     /** Index within text where the selection starts
      * @remarks Only valid if SmNode::IsSelected() is true
      */
-    sal_Int32  nSelectionStart;
+    sal_Int32  mnSelectionStart;
     /** Index within text where the selection ends
      * @remarks Only valid if SmNode::IsSelected() is true
      */
-    sal_Int32  nSelectionEnd;
+    sal_Int32  mnSelectionEnd;
 
 protected:
     SmTextNode(SmNodeType eNodeType, const SmToken &rNodeToken, sal_uInt16 nFontDescP );
@@ -393,12 +393,12 @@ protected:
 public:
     SmTextNode(const SmToken &rNodeToken, sal_uInt16 nFontDescP );
 
-    sal_uInt16              GetFontDesc() const { return nFontDesc; }
-    void                SetText(const OUString &rText) { aText = rText; }
-    const OUString &    GetText() const { return aText; }
+    sal_uInt16              GetFontDesc() const { return mnFontDesc; }
+    void                SetText(const OUString &rText) { maText = rText; }
+    const OUString &    GetText() const { return maText; }
     /** Change the text of this node, including the underlying token */
     void                ChangeText(const OUString &rText) {
-        aText = rText;
+        maText = rText;
         SmToken token = GetToken();
         token.aText = rText;
         SetToken(token); //TODO: Merge this with AdjustFontDesc for better performance
@@ -409,15 +409,15 @@ public:
     /** Index within GetText() where the selection starts
      * @remarks Only valid of SmNode::IsSelected() is true
      */
-    sal_Int32           GetSelectionStart() const {return nSelectionStart;}
+    sal_Int32           GetSelectionStart() const {return mnSelectionStart;}
     /** Index within GetText() where the selection end
      * @remarks Only valid of SmNode::IsSelected() is true
      */
-    sal_Int32           GetSelectionEnd() const {return nSelectionEnd;}
+    sal_Int32           GetSelectionEnd() const {return mnSelectionEnd;}
     /** Set the index within GetText() where the selection starts */
-    void                SetSelectionStart(sal_Int32 index) {nSelectionStart = index;}
+    void                SetSelectionStart(sal_Int32 index) {mnSelectionStart = index;}
     /** Set the index within GetText() where the selection end */
-    void                SetSelectionEnd(sal_Int32 index) {nSelectionEnd = index;}
+    void                SetSelectionEnd(sal_Int32 index) {mnSelectionEnd = index;}
 
     virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell) override;
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
