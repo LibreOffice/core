@@ -127,7 +127,7 @@ End Function	&apos;	CheckArgument	V0.9.0
 REM -----------------------------------------------------------------------------------------------------------------------
 Public Function _CStr(ByVal pvArg As Variant, ByVal Optional pbShort As Boolean) As String
 &apos;	Convert pvArg into a readable string (truncated if too long and pbShort = True or missing)
-&apos;	pvArg may be a byte-array. Other arrays are rejected
+&apos;	pvArg may be a byte-array. Other arrays are processed recursively into a semicolon separated string
 
 Dim sArg As String, sObject As String, oArg As Object, sLength As String, i As Long, iMax As Long
 Const cstLength = 50
@@ -174,9 +174,17 @@ Const cstByteLength = 25
 				End If
 			Case vbVariant			:		sArg = &quot;[VARIANT]&quot;
 			Case vbString
-				&apos;	Replace CR + LF by \n
+				&apos;	Replace CR + LF by \n and HT by \t
 				&apos;	Replace semicolon by \; to allow semicolon separated rows
-				sArg = Replace(Replace(Replace(pvArg, Chr(13), &quot;&quot;), Chr(10), &quot;\n&quot;), &quot;;&quot;, &quot;\;&quot;)
+				sArg = Replace( _
+							Replace( _
+								Replace( _
+									Replace( _
+										Replace(pvArg, &quot;\&quot;, &quot;\\&quot;) _
+									, Chr(13), &quot;&quot;) _
+								, Chr(10), &quot;\n&quot;) _
+							, Chr(9), &quot;\t&quot;) _
+						, &quot;;&quot;, &quot;\;&quot;)
 			Case vbBoolean			:		sArg = Iif(pvArg, &quot;[TRUE]&quot;, &quot;[FALSE]&quot;)
 			Case vbByte				:		sArg = Right(&quot;00&quot; &amp; Hex(pvArg), 2)
 			Case vbSingle, vbDouble, vbCurrency
@@ -195,6 +203,61 @@ Const cstByteLength = 25
 	_CStr = sArg
 	
 End Function	&apos;	CStr			V0.9.5
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function _CVar(ByRef psArg As String) As Variant
+&apos;	psArg is presumed an output of _CStr (stored in the mean time in a text file f.i.)
+&apos;	_CVar returns the corresponding original variant variable or Null/Nothing if not possible
+&apos;	Return values may of types Array, Long, Double, Date, Boolean, String, Null or Empty
+
+Dim cstEscape1 As String, cstEscape2 As String, vEMPTY As Variant
+	cstEscape1 = Chr(14)			&apos;	Form feed used as temporary escape character for \\
+	cstEscape2 = Chr(27)			&apos;	ESC used as temporary escape character for \;
+
+	_CVar = &quot;&quot;
+	If Len(psArg) = 0 Then Exit Function
+
+Dim sArg As String, vArgs() As Variant, vVars() As Variant, i As Integer
+	sArg = Replace( _
+				Replace( _
+					Replace( _
+						Replace(psArg, &quot;\\&quot;, cstEscape1) _
+					, &quot;\;&quot;, cstEscape2) _
+				, &quot;\n&quot;, Chr(10)) _
+			, &quot;\t&quot;, Chr(9))
+
+	&apos;	Semicolon separated string
+	vArgs = Split(sArg, &quot;;&quot;)
+	If UBound(vArgs) &gt; LBound(vArgs) Then		&apos;	Process each item recursively
+		vVars = Array()
+		Redim vVars(LBound(vArgs) To UBound(vArgs))
+		For i = LBound(vVars) To UBound(vVars)
+			vVars(i) = _CVar(vArgs(i))
+		Next i
+		_CVar = vVars
+		Exit Function
+	End If
+
+	&apos;	Usual case
+	Select Case True
+		Case sArg = &quot;[EMPTY]&quot;						:	_CVar = vEMPTY
+		Case sArg = &quot;[NULL]&quot; Or sArg = &quot;[VARIANT]&quot;	:	_CVar = Null
+		Case sArg = &quot;[OBJECT]&quot;						:	_CVar = Nothing
+		Case sArg = &quot;[TRUE]&quot;						:	_CVar = True
+		Case sArg = &quot;[FALSE]&quot;						:	_CVar = False
+		Case IsDate(sArg)							:	_CVar = CDate(sArg)
+		Case IsNumeric(sArg)
+			If InStr(sArg, &quot;.&quot;) &gt; 0 Then
+				_CVar = Val(sArg)
+			Else
+				_CVar = CLng(Val(sArg))		&apos;	Val always returns a double
+			End If
+		Case _RegexSearch(sArg, &quot;^[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$&quot; &lt;&gt; &quot;&quot;
+			_CVar = Val(sArg)					&apos;	Scientific notation
+		Case Else									:	_CVar = Replace(Replace(sArg, cstEscape1, &quot;\&quot;), cstEscape2, &quot;;&quot;)
+	End Select
+
+End Function	&apos;	CVar			V1.7.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Public Function _DecimalPoint() As String
@@ -845,6 +908,41 @@ Error_Function:
 	vLines = Array()
 	Resume Exit_Function
 End Function	&apos;	_ReadFileIntoArray	V1.4.0
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Function _RegexSearch(ByRef psString As String _
+						, ByVal psRegex As String _
+						, Optional ByRef plStart As Long _
+						) As String
+&apos;	Return &quot;&quot; if regex not found, otherwise returns the matching string
+&apos;	plStart = start position of psString to search (starts at 1)
+&apos;	In output plStart contains the first position of the matching string
+&apos;	To search again the same or another pattern =&gt; plStart = plStart + Len(matching string)
+
+Dim oTextSearch As Object
+Dim vOptions As New com.sun.star.util.SearchOptions, vResult As Object
+Dim lEnd As Long
+
+	_RegexSearch = &quot;&quot;
+	Set oTextSearch = _A2B_.TextSearch		&apos;	UNO XTextSearch service
+	With vOptions
+		.algorithmType = com.sun.star.util.SearchAlgorithms.REGEXP
+		.searchFlag = 0
+		.searchString = psRegex				&apos;	Pattern to be searched
+	End With
+	oTextSearch.setOptions(vOptions)
+	If IsMissing(plStart) Then plStart = 1
+	lEnd = Len(psString)
+	vResult = oTextSearch.searchForward(psString, plStart - 1, lEnd)
+	With vResult
+		If .subRegExpressions &gt;= 1 Then
+			plStart = .startOffset(0) + 1
+			lEnd = .endOffset(0) + 1
+			_RegexSearch = Mid(psString, plStart, lEnd - plStart)
+		End If
+	End With
+
+End Function
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Function _RegisterEventScript(poObject As Object _

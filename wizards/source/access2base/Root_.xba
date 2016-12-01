@@ -29,6 +29,7 @@ Private DebugPrintShort		As Boolean
 Private Introspection		As Object				&apos;	com.sun.star.beans.Introspection	
 Private VersionNumber		As String				&apos;	Actual Access2Base version number
 Private Locale				As String
+Private TextSearch			As Object
 Private FindRecord			As Object
 Private StatusBar			As Object
 Private Dialogs				As Object				&apos;	Collection
@@ -51,6 +52,7 @@ Dim vCurrentDoc() As Variant
 	DebugPrintShort = True
 	Locale = L10N._GetLocale()
 	Set Introspection = CreateUnoService(&quot;com.sun.star.beans.Introspection&quot;)
+	Set TextSearch = CreateUnoService(&quot;com.sun.star.util.TextSearch&quot;)
 	Set FindRecord = Nothing
 	Set StatusBar = Nothing
 	Set Dialogs = New Collection
