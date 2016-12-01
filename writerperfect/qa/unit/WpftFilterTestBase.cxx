@@ -28,7 +28,7 @@
 
 #include <ucbhelper/content.hxx>
 
-#include "WpftImportTestBase.hxx"
+#include "WpftFilterTestBase.hxx"
 
 namespace beans = com::sun::star::beans;
 namespace container = com::sun::star::container;
@@ -45,7 +45,7 @@ namespace writerperfect
 namespace test
 {
 
-WpftImportTestBase::WpftImportTestBase(const rtl::OUString &rFactoryURL)
+WpftFilterTestBase::WpftFilterTestBase(const rtl::OUString &rFactoryURL)
     : ::test::FiltersTest()
     , ::test::BootstrapFixture()
     , m_aFactoryURL(rFactoryURL)
@@ -56,7 +56,7 @@ WpftImportTestBase::WpftImportTestBase(const rtl::OUString &rFactoryURL)
 {
 }
 
-void WpftImportTestBase::setUp()
+void WpftFilterTestBase::setUp()
 {
     ::test::BootstrapFixture::setUp();
 
@@ -68,14 +68,14 @@ void WpftImportTestBase::setUp()
     m_xTypeMap.set(xTypeDetection, uno::UNO_QUERY_THROW);
 }
 
-void WpftImportTestBase::tearDown()
+void WpftFilterTestBase::tearDown()
 {
     m_xDesktop->terminate();
 
     ::test::BootstrapFixture::tearDown();
 }
 
-bool WpftImportTestBase::load(const OUString &, const OUString &rURL, const OUString &,
+bool WpftFilterTestBase::load(const OUString &, const OUString &rURL, const OUString &,
                               SfxFilterFlags, SotClipboardFormatId, unsigned int)
 {
     if (m_pOptionalMap)
@@ -169,13 +169,13 @@ bool WpftImportTestBase::load(const OUString &, const OUString &rURL, const OUSt
     return result;
 }
 
-void WpftImportTestBase::doTest(const rtl::OUString &rFilter, const rtl::OUString &rPath)
+void WpftFilterTestBase::doTest(const rtl::OUString &rFilter, const rtl::OUString &rPath)
 {
     m_xFilter.set(m_xFactory->createInstanceWithContext(rFilter, m_xContext), uno::UNO_QUERY_THROW);
     testDir(OUString(), m_directories.getURLFromSrc(rPath));
 }
 
-void WpftImportTestBase::doTest(const rtl::OUString &rFilter, const rtl::OUString &rPath, const WpftOptionalMap_t &rOptionalMap)
+void WpftFilterTestBase::doTest(const rtl::OUString &rFilter, const rtl::OUString &rPath, const WpftOptionalMap_t &rOptionalMap)
 {
     m_xFilter.set(m_xFactory->createInstanceWithContext(rFilter, m_xContext), uno::UNO_QUERY_THROW);
     m_pOptionalMap = &rOptionalMap;
@@ -183,7 +183,7 @@ void WpftImportTestBase::doTest(const rtl::OUString &rFilter, const rtl::OUStrin
     m_pOptionalMap = nullptr;
 }
 
-void WpftImportTestBase::impl_detectFilterName(uno::Sequence<beans::PropertyValue> &rDescriptor, const rtl::OUString &rTypeName)
+void WpftFilterTestBase::impl_detectFilterName(uno::Sequence<beans::PropertyValue> &rDescriptor, const rtl::OUString &rTypeName)
 {
     const sal_Int32 nDescriptorLen = rDescriptor.getLength();
 
