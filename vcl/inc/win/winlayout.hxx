@@ -35,7 +35,6 @@
 typedef std::unordered_map<int,int> IntMap;
 
 class WinFontInstance;
-struct VisualItem;
 
 namespace
 {
@@ -53,7 +52,6 @@ struct OpenGLGlyphDrawElement
     int mnBaselineOffset;
     int mnHeight;
     bool mbVertical;
-    bool mbRealGlyphIndices;
 
     int getExtraSpace() const
     {
@@ -160,24 +158,12 @@ private:
     // TODO: also add HFONT??? Watch out for issues with too many active fonts...
 
 public:
-    bool                    HasKernData() const;
-    void                    SetKernData( int, const KERNINGPAIR* );
-    int                     GetKerning( sal_Unicode, sal_Unicode ) const;
-
-private:
-    KERNINGPAIR*            mpKerningPairs;
-    int                     mnKerningPairs;
-
-public:
     SCRIPT_CACHE&           GetScriptCache() const
                             { return maScriptCache; }
 private:
     mutable SCRIPT_CACHE    maScriptCache;
 
 public:
-    int                     GetCachedGlyphWidth( int nCharCode ) const;
-    void                    CacheGlyphWidth( int nCharCode, int nCharWidth );
-
     bool                    InitKashidaHandling( HDC );
     int                     GetMinKashidaWidth() const { return mnMinKashidaWidth; }
     int                     GetMinKashidaGlyph() const { return mnMinKashidaGlyph; }
@@ -185,7 +171,7 @@ public:
 private:
     GlyphCache maGlyphCache;
 public:
-    bool CacheGlyphToAtlas(bool bRealGlyphIndices, int nGlyphIndex, const WinLayout& rLayout, SalGraphics& rGraphics);
+    bool CacheGlyphToAtlas(HDC hDC, HFONT hFont, int nGlyphIndex, SalGraphics& rGraphics);
 
     GlyphCache& GetGlyphCache()
     {
@@ -193,153 +179,8 @@ public:
     }
 
 private:
-    std::unordered_map<int, int>    maWidthMap;
     mutable int                     mnMinKashidaWidth;
     mutable int                     mnMinKashidaGlyph;
-};
-
-class WinLayout : public SalLayout
-{
-public:
-                        WinLayout(HDC, const WinFontFace&, WinFontInstance&, bool bUseOpenGL);
-    virtual             ~WinLayout() override;
-    virtual void        InitFont() const override;
-    void                SetFontScale( float f ) { mfFontScale = f; }
-    HFONT               DisableFontScaling() const;
-
-    SCRIPT_CACHE&       GetScriptCache() const;
-
-    /// In the non-OpenGL case, call the DrawTextImpl directly, otherwise make
-    /// sure we draw to an interim texture.
-    virtual void        DrawText(SalGraphics&) const override;
-
-    /// Draw to the provided HDC.
-    virtual bool        DrawTextImpl(HDC hDC, const Rectangle* pRectToErase, Point* pPos, int* pGetNextGlypInfo) const = 0;
-
-    virtual bool        CacheGlyphs(SalGraphics& rGraphics) const = 0;
-    virtual bool        DrawCachedGlyphs(SalGraphics& rGraphics) const = 0;
-
-    HDC                 mhDC;               // WIN32 device handle
-    HFONT               mhFont;             // WIN32 font handle
-    int                 mnBaseAdv;          // x-offset relative to Layout origin
-    float               mfFontScale;        // allows metrics emulation of huge font sizes
-    bool                mbUseOpenGL;        ///< We need to render via OpenGL
-
-    const WinFontFace& mrWinFontData;
-    WinFontInstance&   mrWinFontEntry;
-};
-
-class SimpleWinLayout : public WinLayout
-{
-public:
-                    SimpleWinLayout(HDC, const WinFontFace&, WinFontInstance&, bool bUseOpenGL);
-    virtual         ~SimpleWinLayout() override;
-
-    virtual bool    LayoutText( ImplLayoutArgs& ) override;
-    virtual void    AdjustLayout( ImplLayoutArgs& ) override;
-    virtual bool    DrawTextImpl(HDC hDC, const Rectangle* pRectToErase, Point* pPos, int* pGetNextGlypInfo) const override;
-
-    virtual bool    CacheGlyphs(SalGraphics& rGraphics) const override;
-    virtual bool    DrawCachedGlyphs(SalGraphics& rGraphics) const override;
-    virtual int     GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos, int&,
-                                   DeviceCoordinate* pGlyphAdvances = nullptr, int* pCharIndexes = nullptr,
-                                   const PhysicalFontFace** pFallbackFonts = nullptr ) const override;
-
-    virtual DeviceCoordinate FillDXArray( DeviceCoordinate* pDXArray ) const override;
-    virtual sal_Int32 GetTextBreak(DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra, int nFactor) const override;
-    virtual void    GetCaretPositions( int nArraySize, long* pCaretXArray ) const override;
-
-    // for glyph+font+script fallback
-    virtual void    MoveGlyph( int nStart, long nNewXPos ) override;
-    virtual void    DropGlyph( int nStart ) override;
-    virtual void    Simplify( bool bIsBase ) override;
-
-protected:
-    void            Justify( DeviceCoordinate nNewWidth );
-    void            ApplyDXArray( const ImplLayoutArgs& );
-
-private:
-    int             mnGlyphCount;
-    int             mnCharCount;
-    WCHAR*          mpOutGlyphs;
-    int*            mpGlyphAdvances;    // if possible this is shared with mpGlyphAdvances[]
-    int*            mpGlyphOrigAdvs;
-    int*            mpCharWidths;       // map rel char pos to char width
-    int*            mpChars2Glyphs;     // map rel char pos to abs glyph pos
-    int*            mpGlyphs2Chars;     // map abs glyph pos to abs char pos
-    bool*           mpGlyphRTLFlags;    // BiDi status for glyphs: true=>RTL
-    mutable long    mnWidth;
-
-    int             mnNotdefWidth;
-};
-
-class UniscribeLayout : public WinLayout
-{
-public:
-                    UniscribeLayout(HDC, const WinFontFace&, WinFontInstance&, bool bUseOpenGL);
-
-    virtual bool    LayoutText( ImplLayoutArgs& ) override;
-    virtual void    AdjustLayout( ImplLayoutArgs& ) override;
-    virtual bool    DrawTextImpl(HDC hDC, const Rectangle* pRectToErase, Point* pPos, int* pGetNextGlypInfo) const override;
-    virtual bool    CacheGlyphs(SalGraphics& rGraphics) const override;
-    virtual bool    DrawCachedGlyphs(SalGraphics& rGraphics) const override;
-    virtual int     GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos, int&,
-                                   DeviceCoordinate* pGlyphAdvances = nullptr, int* pCharPosAry = nullptr,
-                                   const PhysicalFontFace** pFallbackFonts = nullptr ) const override;
-
-    virtual DeviceCoordinate FillDXArray( DeviceCoordinate* pDXArray ) const override;
-    virtual sal_Int32 GetTextBreak(DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra, int nFactor) const override;
-    virtual void    GetCaretPositions( int nArraySize, long* pCaretXArray ) const override;
-    virtual bool    IsKashidaPosValid ( int nCharPos ) const override;
-
-    // for glyph+font+script fallback
-    virtual void    MoveGlyph( int nStart, long nNewXPos ) override;
-    virtual void    DropGlyph( int nStart ) override;
-    virtual void    Simplify( bool bIsBase ) override;
-    virtual void    DisableGlyphInjection( bool bDisable ) override { mbDisableGlyphInjection = bDisable; }
-
-protected:
-    virtual         ~UniscribeLayout() override;
-
-    void            Justify( DeviceCoordinate nNewWidth );
-    void            ApplyDXArray( const ImplLayoutArgs& );
-
-    bool            GetItemSubrange( const VisualItem&,
-                        int& rMinIndex, int& rEndIndex ) const;
-
-private:
-    // item specific info
-    SCRIPT_ITEM*    mpScriptItems;      // in logical order
-    VisualItem*     mpVisualItems;      // in visual order
-    int             mnItemCount;        // number of visual items
-
-    // string specific info
-    // everything is in logical order
-    OUString        msTheString;        // Sadly we need it in GetNextGlyphs(), to be able to call GetVerticalFlags()
-    int             mnCharCapacity;
-    WORD*           mpLogClusters;      // map from absolute_char_pos to relative_glyph_pos
-    int*            mpCharWidths;       // map from absolute_char_pos to char_width
-    int             mnSubStringMin;     // char_pos of first char in context
-
-    // glyph specific info
-    // everything is in visual order
-    int             mnGlyphCount;
-    int             mnGlyphCapacity;
-    int*            mpGlyphAdvances;    // glyph advance width before justification
-    int*            mpJustifications;   // glyph advance width after justification
-    WORD*           mpOutGlyphs;        // glyphids in visual order
-    GOFFSET*        mpGlyphOffsets;     // glyph offsets to the "naive" layout
-    SCRIPT_VISATTR* mpVisualAttrs;      // glyph visual attributes
-    mutable int*    mpGlyphs2Chars;     // map from absolute_glyph_pos to absolute_char_pos
-
-    // kashida stuff
-    void InitKashidaHandling();
-    void KashidaItemFix( int nMinGlyphPos, int nEndGlyphPos );
-    bool KashidaWordFix( int nMinGlyphPos, int nEndGlyphPos, int* pnCurrentPos );
-
-    int            mnMinKashidaWidth;
-    int            mnMinKashidaGlyph;
-    bool           mbDisableGlyphInjection;
 };
 
 class TextOutRenderer
