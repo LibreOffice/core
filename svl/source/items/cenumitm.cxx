@@ -65,7 +65,7 @@ bool SfxEnumItemInterface::PutValue(const css::uno::Any& rVal,
         SetEnumValue(sal_uInt16(nTheValue));
         return true;
     }
-    OSL_FAIL("SfxEnumItemInterface::PutValue(): Wrong type");
+    SAL_WARN("svl.items", "SfxEnumItemInterface::PutValue(): Wrong type");
     return false;
 }
 
@@ -141,7 +141,7 @@ void SfxEnumItem::SetEnumValue(sal_uInt16 const nTheValue)
 
 void SfxEnumItem::SetValue(sal_uInt16 const nTheValue)
 {
-    DBG_ASSERT(GetRefCount() == 0, "SfxEnumItem::SetValue(): Pooled item");
+    assert(GetRefCount() == 0 && "SfxEnumItem::SetValue(): Pooled item");
     m_nValue = nTheValue;
 }
 
@@ -199,7 +199,7 @@ bool SfxBoolItem::PutValue(const css::uno::Any& rVal, sal_uInt8)
         m_bValue = bTheValue;
         return true;
     }
-    OSL_FAIL("SfxBoolItem::PutValue(): Wrong type");
+    SAL_WARN("svl.items", "SfxBoolItem::PutValue(): Wrong type");
     return false;
 }
 

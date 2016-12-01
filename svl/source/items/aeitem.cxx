@@ -93,13 +93,13 @@ sal_uInt16 SfxAllEnumItem::GetValueCount() const
 
 OUString SfxAllEnumItem::GetValueTextByPos( sal_uInt16 nPos ) const
 {
-    DBG_ASSERT( pValues && nPos < pValues->size(), "enum overflow" );
+    assert(pValues && nPos < pValues->size());
     return (*pValues)[nPos].aText;
 }
 
 sal_uInt16 SfxAllEnumItem::GetValueByPos( sal_uInt16 nPos ) const
 {
-    DBG_ASSERT( pValues && nPos < pValues->size(), "enum overflow" );
+    assert(pValues && nPos < pValues->size());
     return (*pValues)[nPos].nValue;
 }
 
@@ -192,7 +192,7 @@ bool SfxAllEnumItem::IsEnabled( sal_uInt16 nValue ) const
 void SfxAllEnumItem::RemoveValue( sal_uInt16 nValue )
 {
     sal_uInt16 nPos = GetPosByValue(nValue);
-    DBG_ASSERT( nPos != USHRT_MAX, "removing value not in enum" );
+    assert(nPos != USHRT_MAX);
     pValues->erase( pValues->begin() + nPos );
 }
 

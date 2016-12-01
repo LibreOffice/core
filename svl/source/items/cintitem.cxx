@@ -57,7 +57,7 @@ bool CntByteItem::PutValue(const css::uno::Any& rVal, sal_uInt8)
         return true;
     }
 
-    OSL_FAIL( "CntByteItem::PutValue - Wrong type!" );
+    SAL_WARN("svl.items", "CntByteItem::PutValue - Wrong type!");
     return false;
 }
 
@@ -123,12 +123,12 @@ bool CntUInt16Item::PutValue(const css::uno::Any& rVal, sal_uInt8)
     sal_Int32 nValue = 0;
     if (rVal >>= nValue)
     {
-        DBG_ASSERT( nValue <= USHRT_MAX, "Overflow in UInt16 value!");
-        m_nValue = (sal_uInt16)nValue;
+        SAL_WARN_IF(nValue > USHRT_MAX, "svl.items", "Overflow in UInt16 value!");
+        m_nValue = static_cast<sal_uInt16>(nValue);
         return true;
     }
 
-    OSL_FAIL( "CntUInt16Item::PutValue - Wrong type!" );
+    SAL_WARN("svl.items", "CntUInt16Item::PutValue - Wrong type!");
     return false;
 }
 
@@ -194,7 +194,7 @@ bool CntInt32Item::PutValue(const css::uno::Any& rVal, sal_uInt8)
         return true;
     }
 
-    OSL_FAIL( "CntInt32Item::PutValue - Wrong type!" );
+    SAL_WARN("svl.items", "CntInt32Item::PutValue - Wrong type!");
     return false;
 }
 
@@ -248,7 +248,7 @@ bool CntUInt32Item::GetPresentation(SfxItemPresentation,
 bool CntUInt32Item::QueryValue(css::uno::Any& rVal, sal_uInt8) const
 {
     sal_Int32 nValue = m_nValue;
-    DBG_ASSERT( nValue>=0, "Overflow in UInt32 value!");
+    SAL_WARN_IF(nValue < 0, "svl.items", "Overflow in UInt32 value!");
     rVal <<= nValue;
     return true;
 }
@@ -259,12 +259,12 @@ bool CntUInt32Item::PutValue(const css::uno::Any& rVal, sal_uInt8)
     sal_Int32 nValue = 0;
     if (rVal >>= nValue)
     {
-        DBG_ASSERT( nValue>=0, "Overflow in UInt32 value!");
+        SAL_WARN_IF(nValue < 0, "svl.items", "Overflow in UInt32 value!");
         m_nValue = nValue;
         return true;
     }
 
-    OSL_FAIL( "CntUInt32Item::PutValue - Wrong type!" );
+    SAL_WARN("svl.items", "CntUInt32Item::PutValue - Wrong type!");
     return false;
 }
 
