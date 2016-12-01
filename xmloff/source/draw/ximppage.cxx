@@ -182,10 +182,9 @@ void DrawAnnotationContext::EndElement()
     if(mxCursor.is())
     {
         // delete addition newline
-        const OUString aEmpty;
         mxCursor->gotoEnd( false );
         mxCursor->goLeft( 1, true );
-        mxCursor->setString( aEmpty );
+        mxCursor->setString( "" );
 
         // reset cursor
         GetImport().GetTextImport()->ResetCursor();

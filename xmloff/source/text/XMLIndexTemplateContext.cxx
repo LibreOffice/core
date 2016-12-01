@@ -67,27 +67,6 @@ XMLIndexTemplateContext::XMLIndexTemplateContext(
 ,   bOutlineLevelOK(false)
 ,   bTOC( bT )
 ,   rPropertySet(rPropSet)
-,   sTokenEntryNumber("TokenEntryNumber")
-,   sTokenEntryText("TokenEntryText")
-,   sTokenTabStop("TokenTabStop")
-,   sTokenText("TokenText")
-,   sTokenPageNumber("TokenPageNumber")
-,   sTokenChapterInfo("TokenChapterInfo")
-,   sTokenHyperlinkStart("TokenHyperlinkStart")
-,   sTokenHyperlinkEnd("TokenHyperlinkEnd")
-,   sTokenBibliographyDataField("TokenBibliographyDataField")
-
-,   sCharacterStyleName("CharacterStyleName")
-,   sTokenType("TokenType")
-,   sText("Text")
-,   sTabStopRightAligned("TabStopRightAligned")
-,   sTabStopPosition("TabStopPosition")
-,   sTabStopFillCharacter("TabStopFillCharacter")
-,   sBibliographyDataField("BibliographyDataField")
-,   sChapterFormat("ChapterFormat")
-,   sChapterLevel("ChapterLevel") //#i53420
-
-,   sLevelFormat("LevelFormat")
 {
     DBG_ASSERT( ((XML_TOKEN_INVALID != eLevelAttrName) &&  (nullptr != pLevelNameMap))
                 || ((XML_TOKEN_INVALID == eLevelAttrName) &&  (nullptr == pLevelNameMap)),
@@ -170,7 +149,7 @@ void XMLIndexTemplateContext::EndElement()
         }
 
         // get LevelFormat IndexReplace ...
-        Any aAny = rPropertySet->getPropertyValue(sLevelFormat);
+        Any aAny = rPropertySet->getPropertyValue("LevelFormat");
         Reference<XIndexReplace> xIndexReplace;
         aAny >>= xIndexReplace;
 
@@ -251,25 +230,25 @@ SvXMLImportContext *XMLIndexTemplateContext::CreateChildContext(
                 {
                     case XML_TOK_INDEX_TYPE_ENTRY_TEXT:
                         pContext = new XMLIndexSimpleEntryContext(
-                            GetImport(), sTokenEntryText, *this,
+                            GetImport(), "TokenEntryText", *this,
                             nPrefix, rLocalName);
                         break;
 
                     case XML_TOK_INDEX_TYPE_PAGE_NUMBER:
                         pContext = new XMLIndexSimpleEntryContext(
-                            GetImport(), sTokenPageNumber, *this,
+                            GetImport(), "TokenPageNumber", *this,
                             nPrefix, rLocalName);
                         break;
 
                     case XML_TOK_INDEX_TYPE_LINK_START:
                         pContext = new XMLIndexSimpleEntryContext(
-                            GetImport(), sTokenHyperlinkStart, *this,
+                            GetImport(), "TokenHyperlinkStart", *this,
                             nPrefix, rLocalName);
                         break;
 
                     case XML_TOK_INDEX_TYPE_LINK_END:
                         pContext = new XMLIndexSimpleEntryContext(
-                            GetImport(), sTokenHyperlinkEnd, *this,
+                            GetImport(), "TokenHyperlinkEnd", *this,
                             nPrefix, rLocalName);
                         break;
 

@@ -85,13 +85,6 @@ XMLVarFieldImportContext::XMLVarFieldImportContext(
     bool bType, bool bStyle, bool bValue,
     bool bPresentation) :
         XMLTextFieldImportContext(rImport, rHlp, pServiceName, nPrfx, rLocalName),
-        sPropertyContent(sAPI_content),
-        sPropertyHint("Hint"),
-        sPropertyHelp("Help"),
-        sPropertyTooltip("Tooltip"),
-        sPropertyIsVisible(sAPI_is_visible),
-        sPropertyIsDisplayFormula("IsShowFormula"),
-        sPropertyCurrentPresentation(sAPI_current_presentation),
         aValueHelper(rImport, rHlp, bType, bStyle, bValue, false),
         bDisplayFormula(false),
         bDisplayNone(false),
@@ -193,34 +186,34 @@ void XMLVarFieldImportContext::PrepareField(
 
         if (bFormulaOK)
         {
-            xPropertySet->setPropertyValue(sPropertyContent, Any(sFormula));
+            xPropertySet->setPropertyValue(sAPI_content, Any(sFormula));
         }
     }
 
     if (bSetDescription && bDescriptionOK)
     {
-        xPropertySet->setPropertyValue(sPropertyHint, Any(sDescription));
+        xPropertySet->setPropertyValue("Hint", Any(sDescription));
     }
 
     if (bSetHelp && bHelpOK)
     {
-        xPropertySet->setPropertyValue(sPropertyHelp, Any(sHelp));
+        xPropertySet->setPropertyValue("Help", Any(sHelp));
     }
 
     if (bSetHint && bHintOK)
     {
-        xPropertySet->setPropertyValue(sPropertyTooltip, Any(sHint));
+        xPropertySet->setPropertyValue("Tooltip", Any(sHint));
     }
 
     if (bSetVisible && bDisplayOK)
     {
         bool bTmp = ! (bDisplayNone && bDisplayOK);
-        xPropertySet->setPropertyValue(sPropertyIsVisible, Any(bTmp));
+        xPropertySet->setPropertyValue(sAPI_is_visible, Any(bTmp));
     }
 
     // workaround for #no-bug#: display formula by default
     if (xPropertySet->getPropertySetInfo()->
-                hasPropertyByName(sPropertyIsDisplayFormula) &&
+                hasPropertyByName("IsShowFormula") &&
         !bSetDisplayFormula)
     {
         bDisplayFormula = false;
@@ -231,7 +224,7 @@ void XMLVarFieldImportContext::PrepareField(
     if (bSetDisplayFormula)
     {
         bool bTmp = bDisplayFormula && bDisplayOK;
-        xPropertySet->setPropertyValue(sPropertyIsDisplayFormula, Any(bTmp));
+        xPropertySet->setPropertyValue("IsShowFormula", Any(bTmp));
     }
 
     // delegate to value helper
@@ -243,7 +236,7 @@ void XMLVarFieldImportContext::PrepareField(
     {
         Any aAny;
         aAny <<= GetContent();
-        xPropertySet->setPropertyValue(sPropertyCurrentPresentation, aAny);
+        xPropertySet->setPropertyValue(sAPI_current_presentation, aAny);
     }
 }
 
@@ -346,8 +339,6 @@ XMLSequenceFieldImportContext::XMLSequenceFieldImportContext(
                                     false,
                                     false, false, false, true),
 
-        sPropertyNumberFormat(sAPI_number_format),
-        sPropertySequenceValue("SequenceValue"),
         sNumFormat(OUString('1')),
         sNumFormatSync(GetXMLToken(XML_FALSE)),
         bRefNameOK(false)
@@ -386,13 +377,13 @@ void XMLSequenceFieldImportContext::PrepareField(
     // set format
     sal_Int16 nNumType = NumberingType::ARABIC;
     GetImport().GetMM100UnitConverter().convertNumFormat( nNumType, sNumFormat, sNumFormatSync );
-    xPropertySet->setPropertyValue(sPropertyNumberFormat, Any(nNumType));
+    xPropertySet->setPropertyValue(sAPI_number_format, Any(nNumType));
 
     // handle reference name
     if (bRefNameOK)
     {
         Any aAny;
-        aAny = xPropertySet->getPropertyValue(sPropertySequenceValue);
+        aAny = xPropertySet->getPropertyValue("SequenceValue");
         sal_Int16 nValue = 0;
         aAny >>= nValue;
         GetImportHelper().InsertSequenceID(sRefName, GetName(), nValue);
@@ -414,8 +405,7 @@ XMLVariableSetFieldImportContext::XMLVariableSetFieldImportContext(
                                     false, false, false,
                                     true, false,
                                     true, true, true,
-                                    true),
-        sPropertySubType(sAPI_sub_type)
+                                    true)
 {
 }
 
@@ -425,7 +415,7 @@ void XMLVariableSetFieldImportContext::PrepareField(
     // set type
     Any aAny;
     aAny <<= (IsStringValue()? SetVariableType::STRING : SetVariableType::VAR);
-    xPropertySet->setPropertyValue(sPropertySubType, aAny);
+    xPropertySet->setPropertyValue(sAPI_sub_type, aAny);
 
     // the remainder is handled by super class
     XMLSetVarFieldImportContext::PrepareField(xPropertySet);
@@ -446,9 +436,7 @@ XMLVariableInputFieldImportContext::XMLVariableInputFieldImportContext(
                                     true, true, true,
                                     true, false,
                                     true, true, true,
-                                    true),
-        sPropertySubType(sAPI_sub_type),
-        sPropertyIsInput("Input")
+                                    true)
 {
 }
 
@@ -457,11 +445,11 @@ void XMLVariableInputFieldImportContext::PrepareField(
 {
     // set type (input field)
     Any aAny;
-    xPropertySet->setPropertyValue(sPropertyIsInput, Any(true));
+    xPropertySet->setPropertyValue("Input", Any(true));
 
     // set type
     aAny <<= (IsStringValue()? SetVariableType::STRING : SetVariableType::VAR);
-    xPropertySet->setPropertyValue(sPropertySubType, aAny);
+    xPropertySet->setPropertyValue(sAPI_sub_type, aAny);
 
     // the remainder is handled by super class
     XMLSetVarFieldImportContext::PrepareField(xPropertySet);
@@ -507,7 +495,7 @@ XMLUserFieldInputImportContext::XMLUserFieldInputImportContext(
 void XMLUserFieldInputImportContext::PrepareField(
     const Reference<XPropertySet> & xPropertySet)
 {
-    xPropertySet->setPropertyValue(sPropertyContent, Any(GetName()));
+    xPropertySet->setPropertyValue(sAPI_content, Any(GetName()));
 
     // delegate to super class
     XMLVarFieldImportContext::PrepareField(xPropertySet);
@@ -535,7 +523,7 @@ void XMLVariableGetFieldImportContext::PrepareField(
         const Reference<XPropertySet> & xPropertySet)
 {
     // set name
-    xPropertySet->setPropertyValue(sPropertyContent, Any(GetName()));
+    xPropertySet->setPropertyValue(sAPI_content, Any(GetName()));
 
     // the remainder is handled by super class
     XMLVarFieldImportContext::PrepareField(xPropertySet);
@@ -555,8 +543,7 @@ XMLExpressionFieldImportContext::XMLExpressionFieldImportContext(
                                  false, false, false,
                                  false, true,
                                  true, true, false,
-                                 true),
-        sPropertySubType(sAPI_sub_type)
+                                 true)
 {
     bValid = true;  // always valid
 }
@@ -566,7 +553,7 @@ void XMLExpressionFieldImportContext::PrepareField(
     const Reference<XPropertySet> & xPropertySet)
 {
     sal_Int16 nSubType = SetVariableType::FORMULA;
-    xPropertySet->setPropertyValue(sPropertySubType, Any(nSubType));
+    xPropertySet->setPropertyValue(sAPI_sub_type, Any(nSubType));
 
     // delegate to super class
     XMLVarFieldImportContext::PrepareField(xPropertySet);
@@ -596,7 +583,7 @@ void XMLTextInputFieldImportContext::PrepareField(
 {
     XMLVarFieldImportContext::PrepareField(xPropertySet);
 
-    xPropertySet->setPropertyValue(sPropertyContent, Any(GetContent()));
+    xPropertySet->setPropertyValue(sAPI_content, Any(GetContent()));
 }
 
 
@@ -610,9 +597,6 @@ XMLTableFormulaImportContext::XMLTableFormulaImportContext(
     const OUString& rLocalName) :
         XMLTextFieldImportContext(rImport, rHlp, "TableFormula",
                                   nPrfx, rLocalName),
-        sPropertyIsShowFormula("IsShowFormula"),
-        sPropertyCurrentPresentation(
-            "CurrentPresentation"),
         aValueHelper(rImport, rHlp, false, true, false, true),
         bIsShowFormula(false)
 {
@@ -655,10 +639,10 @@ void XMLTableFormulaImportContext::PrepareField(
     Any aAny;
 
     // set 'show formula' and presentation
-    xPropertySet->setPropertyValue( sPropertyIsShowFormula, Any(bIsShowFormula) );
+    xPropertySet->setPropertyValue( "IsShowFormula", Any(bIsShowFormula) );
 
     aAny <<= GetContent();
-    xPropertySet->setPropertyValue( sPropertyCurrentPresentation, aAny );
+    xPropertySet->setPropertyValue( "CurrentPresentation", aAny );
 }
 
 
@@ -734,10 +718,6 @@ XMLVariableDeclImportContext::XMLVariableDeclImportContext(
     enum VarType eVarType) :
         SvXMLImportContext(rImport, nPrfx, rLocalName),
         // bug?? which properties for userfield/userfieldmaster
-        sPropertySubType(sAPI_sub_type),
-        sPropertyNumberingLevel("ChapterNumberingLevel"),
-        sPropertyNumberingSeparator("NumberingSeparator"),
-        sPropertyIsExpression("IsExpression"),
         aValueHelper(rImport, rHlp, true, false, true, false),
         nNumLevel(-1), cSeparationChar('.')
 {
@@ -800,13 +780,13 @@ XMLVariableDeclImportContext::XMLVariableDeclImportContext(
             switch (eVarType)
             {
             case VarTypeSequence:
-                xFieldMaster->setPropertyValue(sPropertyNumberingLevel, Any(nNumLevel));
+                xFieldMaster->setPropertyValue("ChapterNumberingLevel", Any(nNumLevel));
 
                 if (nNumLevel >= 0)
                 {
                     OUString sStr(&cSeparationChar, 1);
                     xFieldMaster->setPropertyValue(
-                        sPropertyNumberingSeparator, Any(sStr));
+                        "NumberingSeparator", Any(sStr));
                 }
                 break;
             case VarTypeSimple:
@@ -816,13 +796,13 @@ XMLVariableDeclImportContext::XMLVariableDeclImportContext(
                     // method, but it needs to be adjusted if it's a string.
                     aAny <<= aValueHelper.IsStringValue()
                         ? SetVariableType::STRING : SetVariableType::VAR;
-                    xFieldMaster->setPropertyValue(sPropertySubType, aAny);
+                    xFieldMaster->setPropertyValue(sAPI_sub_type, aAny);
                 }
                 break;
             case VarTypeUserField:
             {
                 bool bTmp = !aValueHelper.IsStringValue();
-                xFieldMaster->setPropertyValue(sPropertyIsExpression, Any(bTmp));
+                xFieldMaster->setPropertyValue("IsExpression", Any(bTmp));
                 aValueHelper.PrepareField(xFieldMaster);
                 break;
             }
@@ -975,10 +955,6 @@ XMLDatabaseDisplayImportContext::XMLDatabaseDisplayImportContext(
     const OUString& rLocalName) :
         XMLDatabaseFieldImportContext(rImport, rHlp, sAPI_database,
                                       nPrfx, rLocalName, false),
-        sPropertyColumnName("DataColumnName"),
-        sPropertyDatabaseFormat("DataBaseFormat"),
-        sPropertyCurrentPresentation(sAPI_current_presentation),
-        sPropertyIsVisible(sAPI_is_visible),
         aValueHelper(rImport, rHlp, false, true, false, false),
         bColumnOK(false),
         bDisplay( true ),
@@ -1037,7 +1013,7 @@ void XMLDatabaseDisplayImportContext::EndElement()
                         "com.sun.star.text.FieldMaster.Database"))
         {
             Any aAny;
-            xMaster->setPropertyValue(sPropertyColumnName, Any(sColumnName));
+            xMaster->setPropertyValue("DataColumnName", Any(sColumnName));
 
             // fieldmaster takes database, table and column name
             XMLDatabaseFieldImportContext::PrepareField(xMaster);
@@ -1063,7 +1039,7 @@ void XMLDatabaseDisplayImportContext::EndElement()
 
                         // prepare field: format from database?
                         bool bTmp = !aValueHelper.IsFormatOK();
-                        xField->setPropertyValue(sPropertyDatabaseFormat, Any(bTmp));
+                        xField->setPropertyValue("DataBaseFormat", Any(bTmp));
 
                         // value, value-type and format done by value helper
                         aValueHelper.PrepareField(xField);
@@ -1071,13 +1047,12 @@ void XMLDatabaseDisplayImportContext::EndElement()
                         // visibility
                         if( bDisplayOK )
                         {
-                            xField->setPropertyValue(sPropertyIsVisible, Any(bDisplay));
+                            xField->setPropertyValue(sAPI_is_visible, Any(bDisplay));
                         }
 
                         // set presentation
                         aAny <<= GetContent();
-                        xField->setPropertyValue(sPropertyCurrentPresentation,
-                                                    aAny);
+                        xField->setPropertyValue(sAPI_current_presentation, aAny);
 
                         // success!
                         return;
@@ -1123,10 +1098,6 @@ XMLValueImportHelper::XMLValueImportHelper(
     SvXMLImport& rImprt,
     XMLTextImportHelper& rHlp,
     bool bType, bool bStyle, bool bValue, bool bFormula) :
-        sPropertyContent(sAPI_content),
-        sPropertyValue("Value"),
-        sPropertyNumberFormat(sAPI_number_format),
-        sPropertyIsFixedLanguage("IsFixedLanguage"),
 
         rImport(rImprt),
         rHelper(rHlp),
@@ -1294,19 +1265,19 @@ void XMLValueImportHelper::PrepareField(
     if (bSetFormula)
     {
         aAny <<= !bFormulaOK ? sDefault : sFormula;
-        xPropertySet->setPropertyValue(sPropertyContent, aAny);
+        xPropertySet->setPropertyValue(sAPI_content, aAny);
     }
 
     // format/style
     if (bSetStyle && bFormatOK)
     {
-        xPropertySet->setPropertyValue(sPropertyNumberFormat, Any(nFormatKey));
+        xPropertySet->setPropertyValue(sAPI_number_format, Any(nFormatKey));
 
         if( xPropertySet->getPropertySetInfo()->
-                hasPropertyByName( sPropertyIsFixedLanguage ) )
+                hasPropertyByName( "IsFixedLanguage" ) )
         {
             bool bIsFixedLanguage = ! bIsDefaultLanguage;
-            xPropertySet->setPropertyValue( sPropertyIsFixedLanguage, Any(bIsFixedLanguage) );
+            xPropertySet->setPropertyValue( "IsFixedLanguage", Any(bIsFixedLanguage) );
         }
     }
 
@@ -1316,11 +1287,11 @@ void XMLValueImportHelper::PrepareField(
         if (bStringType)
         {
             aAny <<= !bStringValueOK ? sDefault : sValue;
-            xPropertySet->setPropertyValue(sPropertyContent, aAny);
+            xPropertySet->setPropertyValue(sAPI_content, aAny);
         }
         else
         {
-            xPropertySet->setPropertyValue(sPropertyValue, Any(fValue));
+            xPropertySet->setPropertyValue("Value", Any(fValue));
         }
     }
 }

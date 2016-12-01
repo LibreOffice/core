@@ -414,8 +414,6 @@ void SAL_CALL SdXMLExport::setSourceDocument( const Reference< lang::XComponent 
 {
     SvXMLExport::setSourceDocument( xDoc );
 
-    const OUString aEmpty;
-
     // prepare factory parts
     mpSdPropHdlFactory = new XMLSdPropHdlFactory( GetModel(), *this );
 
@@ -465,7 +463,7 @@ void SAL_CALL SdXMLExport::setSourceDocument( const Reference< lang::XComponent 
         if(mxDocMasterPages.is())
         {
             mnDocMasterPageCount = mxDocMasterPages->getCount();
-            maMasterPagesStyleNames.insert( maMasterPagesStyleNames.begin(), mnDocMasterPageCount, aEmpty );
+            maMasterPagesStyleNames.insert( maMasterPagesStyleNames.begin(), mnDocMasterPageCount, "" );
         }
     }
 
@@ -477,8 +475,8 @@ void SAL_CALL SdXMLExport::setSourceDocument( const Reference< lang::XComponent 
         if(mxDocDrawPages.is())
         {
             mnDocDrawPageCount = mxDocDrawPages->getCount();
-            maDrawPagesStyleNames.insert( maDrawPagesStyleNames.begin(), mnDocDrawPageCount, aEmpty );
-            maDrawNotesPagesStyleNames.insert( maDrawNotesPagesStyleNames.begin(), mnDocDrawPageCount, aEmpty );
+            maDrawPagesStyleNames.insert( maDrawPagesStyleNames.begin(), mnDocDrawPageCount, "" );
+            maDrawNotesPagesStyleNames.insert( maDrawNotesPagesStyleNames.begin(), mnDocDrawPageCount, "" );
             if( !mbIsDraw )
                 maDrawPagesAutoLayoutNames.realloc( mnDocDrawPageCount + 1 );
 

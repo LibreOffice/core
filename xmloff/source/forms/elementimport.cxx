@@ -1471,7 +1471,7 @@ namespace xmloff
 
     struct EqualName : public ::std::unary_function< PropertyValue, bool >
     {
-        const OUString m_sName;
+        const OUString & m_sName;
         explicit EqualName( const OUString& _rName ) : m_sName( _rName ) { }
 
         inline bool operator()( const PropertyValue& _rProp )

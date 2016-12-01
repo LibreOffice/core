@@ -42,8 +42,7 @@ XMLAutoMarkFileContext::XMLAutoMarkFileContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrefix,
     const OUString& rLocalName) :
-        SvXMLImportContext(rImport, nPrefix, rLocalName),
-        sIndexAutoMarkFileURL("IndexAutoMarkFileURL")
+        SvXMLImportContext(rImport, nPrefix, rLocalName)
 {
 }
 
@@ -74,7 +73,7 @@ void XMLAutoMarkFileContext::StartElement(
                 GetImport().GetModel(), UNO_QUERY );
             if (xPropertySet.is())
             {
-                xPropertySet->setPropertyValue( sIndexAutoMarkFileURL, aAny );
+                xPropertySet->setPropertyValue( "IndexAutoMarkFileURL", aAny );
             }
         }
     }

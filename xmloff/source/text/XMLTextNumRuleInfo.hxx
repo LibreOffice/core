@@ -38,36 +38,25 @@ class XMLTextListAutoStylePool;
 */
 class XMLTextNumRuleInfo
 {
-    const OUString msNumberingRules;
-    const OUString msNumberingLevel;
-    const OUString msNumberingStartValue;
-    const OUString msParaIsNumberingRestart;
-    const OUString msNumberingIsNumber;
-    const OUString msNumberingIsOutline;
-    const OUString msPropNameListId;
-    const OUString msPropNameStartWith;
-    const OUString msContinueingPreviousSubTree;
-    const OUString msListLabelStringProp;
-
     // numbering rules instance and its name
     css::uno::Reference < css::container::XIndexReplace > mxNumRules;
-    OUString     msNumRulesName;
+    OUString            msNumRulesName;
 
     // paragraph's list attributes
-    OUString     msListId;
+    OUString            msListId;
     sal_Int16           mnListStartValue;
     sal_Int16           mnListLevel;
-    bool            mbIsNumbered;
-    bool            mbIsRestart;
+    bool                mbIsNumbered;
+    bool                mbIsRestart;
 
     // numbering rules' attributes
     sal_Int16           mnListLevelStartValue;
 
     // Written OpenDocument file format doesn't fit to the created text document (#i69627#)
-    bool mbOutlineStyleAsNormalListStyle;
+    bool                mbOutlineStyleAsNormalListStyle;
 
-    bool mbContinueingPreviousSubTree;
-    OUString msListLabelString;
+    bool                mbContinueingPreviousSubTree;
+    OUString            msListLabelString;
 
 public:
 

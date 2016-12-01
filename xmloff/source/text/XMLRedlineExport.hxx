@@ -52,29 +52,9 @@ typedef ::std::map<
  */
 class XMLRedlineExport
 {
-    const OUString sDelete;
     const OUString sDeletion;
-    const OUString sFormat;
     const OUString sFormatChange;
-    const OUString sInsert;
     const OUString sInsertion;
-    const OUString sIsCollapsed;
-    const OUString sIsStart;
-    const OUString sRedlineAuthor;
-    const OUString sRedlineComment;
-    const OUString sRedlineDateTime;
-    const OUString sRedlineSuccessorData;
-    const OUString sRedlineText;
-    const OUString sRedlineType;
-    const OUString sUnknownChange;
-    const OUString sStartRedline;
-    const OUString sEndRedline;
-    const OUString sRedlineIdentifier;
-    const OUString sIsInHeaderFooter;
-    const OUString sRecordChanges;
-    const OUString sMergeLastPara;
-
-    const OUString sChangePrefix;
 
     SvXMLExport& rExport;
 
@@ -174,7 +154,7 @@ private:
     OUString const & ConvertTypeName(const OUString& sApiName);
 
     /// Get ID string!
-    const OUString GetRedlineID(
+    static OUString GetRedlineID(
         const css::uno::Reference<css::beans::XPropertySet> & rPropSet);
 
     /// write a comment string as sequence of <text:p> elements

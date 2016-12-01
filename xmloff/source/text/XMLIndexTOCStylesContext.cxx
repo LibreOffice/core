@@ -46,7 +46,6 @@ XMLIndexTOCStylesContext::XMLIndexTOCStylesContext(
     SvXMLImport& rImport, Reference<XPropertySet> & rPropSet,
     sal_uInt16 nPrfx, const OUString& rLocalName)
     : SvXMLImportContext(rImport, nPrfx, rLocalName)
-    , sLevelParagraphStyles("LevelParagraphStyles")
     , rTOCPropertySet(rPropSet)
     , nOutlineLevel(0)
 {
@@ -99,7 +98,7 @@ void XMLIndexTOCStylesContext::EndElement()
         }
 
         // get index replace
-        Any aAny = rTOCPropertySet->getPropertyValue(sLevelParagraphStyles);
+        Any aAny = rTOCPropertySet->getPropertyValue("LevelParagraphStyles");
         Reference<XIndexReplace> xIndexReplace;
         aAny >>= xIndexReplace;
 

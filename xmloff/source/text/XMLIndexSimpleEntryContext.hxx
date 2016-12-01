@@ -38,7 +38,7 @@ class XMLIndexSimpleEntryContext : public SvXMLImportContext
 {
 
     // entry type
-    const OUString& rEntryType;
+    const OUString rEntryType;
 
 protected:
     // character style
