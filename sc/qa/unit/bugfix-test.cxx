@@ -7,66 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <sal/config.h>
-#include <unotest/filters-test.hxx>
-#include <test/bootstrapfixture.hxx>
-#include <rtl/strbuf.hxx>
-#include <osl/file.hxx>
-
-#include <sfx2/app.hxx>
-#include <sfx2/docfilt.hxx>
-#include <sfx2/docfile.hxx>
-#include <sfx2/sfxmodelfactory.hxx>
-#include <svl/stritem.hxx>
-#include <svx/svdograf.hxx>
-
-#include "drwlayer.hxx"
-#include <svx/svdpage.hxx>
-#include <svx/svdoole2.hxx>
-#include <editeng/wghtitem.hxx>
-#include <editeng/postitem.hxx>
-#include <editeng/udlnitem.hxx>
-#include <editeng/editobj.hxx>
-#include <editeng/borderline.hxx>
-#include <editeng/flditem.hxx>
-#include <dbdata.hxx>
 #include "validat.hxx"
-#include "formulacell.hxx"
-#include "userdat.hxx"
-#include "dpobject.hxx"
-#include "dpsave.hxx"
-#include "stlsheet.hxx"
-#include "docfunc.hxx"
-#include "markdata.hxx"
-#include "colorscale.hxx"
-#include "olinetab.hxx"
-#include "patattr.hxx"
-#include "scitems.hxx"
-#include "docsh.hxx"
-#include "editutil.hxx"
-#include "cellvalue.hxx"
-#include "attrib.hxx"
-#include "dpshttab.hxx"
 #include "tabvwsh.hxx"
-#include <scopetools.hxx>
-#include <columnspanset.hxx>
-#include <tokenstringcontext.hxx>
-
-#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
-#include <com/sun/star/drawing/XControlShape.hpp>
-#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
-#include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
-#include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
-#include <com/sun/star/sheet/GeneralFunction.hpp>
-#include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/text/textfield/Type.hpp>
-#include <com/sun/star/chart2/XChartDocument.hpp>
-#include <com/sun/star/chart2/data/XDataReceiver.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
-
 #include "helper/qahelper.hxx"
-#include "helper/shared_test_impl.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -91,6 +35,7 @@ public:
     void testTdf88821_2();
     void testTdf103960();
     void testRhbz1390776();
+    void testTdf104310();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testTdf64229);
@@ -104,6 +49,7 @@ public:
     CPPUNIT_TEST(testTdf88821_2);
     CPPUNIT_TEST(testTdf103960);
     CPPUNIT_TEST(testRhbz1390776);
+    CPPUNIT_TEST(testTdf104310);
     CPPUNIT_TEST_SUITE_END();
 private:
     uno::Reference<uno::XInterface> m_xCalcComponent;
@@ -290,6 +236,24 @@ void ScFiltersTest::testRhbz1390776()
     ScDocument& rDoc = xDocSh->GetDocument();
 
     ASSERT_FORMULA_EQUAL(rDoc, ScAddress(0, 27, 0), "SUM(A18:A23)", "Wrong range");
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testTdf104310()
+{
+    ScDocShellRef xDocSh = loadDoc("tdf104310.", FORMAT_XLSX);
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    const ScValidationData* pData = rDoc.GetValidationEntry(1);
+    CPPUNIT_ASSERT(pData);
+
+    // Make sure the list is correct.
+    std::vector<ScTypedStrData> aList;
+    pData->FillSelectionList(aList, ScAddress(0, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(size_t(5), aList.size());
+    for (size_t i = 0; i < 5; ++i)
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(double(i+1), aList[i].GetValue(), 1e-8);
 
     xDocSh->DoClose();
 }
