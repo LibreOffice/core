@@ -2212,10 +2212,8 @@ bool PDFDocument::ValidateSignature(SvStream& rStream, PDFObjectElement* pSignat
     rStream.Seek(STREAM_SEEK_TO_END);
     size_t nFileEnd = rStream.Tell();
     if (bLast && (aByteRanges[1].first + aByteRanges[1].second) != nFileEnd)
-    {
-        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ValidateSignature: second range end is not the end of the file");
-        return false;
-    }
+        // Second range end is not the end of the file.
+        rInformation.bPartialDocumentSignature = true;
 
     // At this point there is no obviously missing info to validate the
     // signature.

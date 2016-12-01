@@ -64,6 +64,8 @@ public:
     void testPDF14LOWin();
     /// Test a PAdES document, signed by LO on Linux.
     void testPDFPAdESGood();
+    /// Test a valid signature that does not cover the whole file.
+    void testPartial();
     /// Test writing a PAdES signature.
     void testSigningCertificateAttribute();
     /// Test that we accept files which are supposed to be good.
@@ -81,6 +83,7 @@ public:
     CPPUNIT_TEST(testPDF16Add);
     CPPUNIT_TEST(testPDF14LOWin);
     CPPUNIT_TEST(testPDFPAdESGood);
+    CPPUNIT_TEST(testPartial);
     CPPUNIT_TEST(testSigningCertificateAttribute);
     CPPUNIT_TEST(testGood);
     CPPUNIT_TEST(testTokenize);
@@ -329,6 +332,14 @@ void PDFSigningTest::testPDF14LOWin()
 void PDFSigningTest::testPDFPAdESGood()
 {
     verify(m_directories.getURLFromSrc(DATA_DIRECTORY) + "good-pades.pdf", 1, "ETSI.CAdES.detached");
+}
+
+void PDFSigningTest::testPartial()
+{
+    std::vector<SignatureInformation> aInfos = verify(m_directories.getURLFromSrc(DATA_DIRECTORY) + "partial.pdf", 1, /*rExpectedSubFilter=*/OString());
+    CPPUNIT_ASSERT(!aInfos.empty());
+    SignatureInformation& rInformation = aInfos[0];
+    CPPUNIT_ASSERT(rInformation.bPartialDocumentSignature);
 }
 
 void PDFSigningTest::testSigningCertificateAttribute()
