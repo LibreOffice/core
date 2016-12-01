@@ -97,22 +97,17 @@ private:
 class GlyphMetric
 {
 public:
-                            GlyphMetric() : mnAdvanceWidth(0) {}
+                            GlyphMetric() {}
 
     const Point&            GetOffset() const   { return maOffset; }
     const Size&             GetSize() const     { return maSize; }
-    long                    GetCharWidth() const { return mnAdvanceWidth; }
 
 protected:
     friend class GlyphData;
     void                    SetOffset( int nX, int nY ) { maOffset = Point( nX, nY); }
-    void                    SetDelta( int nX, int nY )  { maDelta = Point( nX, nY); }
     void                    SetSize( const Size& s )    { maSize = s; }
-    void                    SetCharWidth( long nW )     { mnAdvanceWidth = nW; }
 
 private:
-    long                    mnAdvanceWidth;
-    Point                   maDelta;
     Point                   maOffset;
     Size                    maSize;
 };
@@ -126,8 +121,6 @@ public:
 
     void                    SetSize( const Size& s)     { maGlyphMetric.SetSize( s ); }
     void                    SetOffset( int nX, int nY ) { maGlyphMetric.SetOffset( nX, nY ); }
-    void                    SetDelta( int nX, int nY )  { maGlyphMetric.SetDelta( nX, nY ); }
-    void                    SetCharWidth( long nW )     { maGlyphMetric.SetCharWidth( nW ); }
 
     void                    SetLruValue( int n ) const  { mnLruValue = n; }
     long                    GetLruValue() const         { return mnLruValue;}
@@ -166,9 +159,6 @@ public:
 
     const GlyphMetric&      GetGlyphMetric(sal_GlyphId aGlyphId);
 
-    sal_GlyphId             GetGlyphIndex( sal_UCS4 ) const;
-    sal_GlyphId             GetRawGlyphIndex( sal_UCS4, sal_UCS4 = 0 ) const;
-    sal_GlyphId             FixupGlyphIndex( sal_GlyphId aGlyphId, sal_UCS4 ) const;
     bool                    GetGlyphOutline( sal_GlyphId aGlyphId, basegfx::B2DPolyPolygon& ) const;
     bool                    GetAntialiasAdvice() const;
     hb_font_t*              GetHbFont() { return mpHbFont; }

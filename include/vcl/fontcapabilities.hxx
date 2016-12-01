@@ -198,7 +198,6 @@ namespace vcl
     {
         boost::optional<std::bitset<UnicodeCoverage::MAX_UC_ENUM>> oUnicodeRange;
         boost::optional<std::bitset<CodePageCoverage::MAX_CP_ENUM>> oCodePageRange;
-        std::vector< sal_uInt32 > maGSUBScriptTags;
     };
 }
 

@@ -173,9 +173,7 @@ FreetypeFontInfo::FreetypeFontInfo( const FontAttributes& rDevFontAttributes,
     mnRefCount( 0 ),
     mnFontId( nFontId ),
     maDevFontAttributes( rDevFontAttributes ),
-    mxFontCharMap( nullptr ),
-    mpChar2Glyph( nullptr ),
-    mpGlyph2Char( nullptr )
+    mxFontCharMap( nullptr )
 {
     // prefer font with low ID
     maDevFontAttributes.IncreaseQualityBy( 10000 - nFontId );
@@ -187,15 +185,6 @@ FreetypeFontInfo::~FreetypeFontInfo()
 {
     if( mxFontCharMap.Is() )
         mxFontCharMap.Clear();
-    delete mpChar2Glyph;
-    delete mpGlyph2Char;
-}
-
-void FreetypeFontInfo::InitHashes() const
-{
-    // TODO: avoid pointers when empty stl::hash_* objects become cheap
-    mpChar2Glyph = new Int2IntMap();
-    mpGlyph2Char = new Int2IntMap();
 }
 
 FT_FaceRec_* FreetypeFontInfo::GetFaceFT()
@@ -626,24 +615,22 @@ void FreetypeFont::GetFontMetric(ImplFontMetricDataRef& rxTo) const
     }
 
     // initialize kashida width
-    // TODO: what if there are different versions of this glyph available
-    const int nKashidaGlyphId = GetRawGlyphIndex( 0x0640 );
+    const int nKashidaGlyphId = FT_Get_Char_Index(maFaceFT, 0x0640);
     if( nKashidaGlyphId )
     {
-        GlyphData aGlyphData;
-        InitGlyphData( nKashidaGlyphId, aGlyphData );
-        rxTo->SetMinKashida( aGlyphData.GetMetric().GetCharWidth() );
+        if (FT_Load_Glyph(maFaceFT, nKashidaGlyphId, mnLoadFlags) == FT_Err_Ok)
+        {
+            int nWidth = (maFaceFT->glyph->metrics.horiAdvance + 32) >> 6;
+            rxTo->SetMinKashida(nWidth);
+        }
     }
 
 }
 
-static inline void SplitGlyphFlags( const FreetypeFont& rFont, sal_GlyphId& rGlyphId, int& nGlyphFlags )
+static inline void SplitGlyphFlags(sal_GlyphId& rGlyphId, int& nGlyphFlags)
 {
     nGlyphFlags = rGlyphId & GF_FLAGMASK;
     rGlyphId &= GF_IDXMASK;
-
-    if( rGlyphId & GF_ISCHAR )
-        rGlyphId = rFont.GetRawGlyphIndex( rGlyphId );
 }
 
 void FreetypeFont::ApplyGlyphTransform( int nGlyphFlags, FT_Glyph pGlyphFT ) const
@@ -709,133 +696,30 @@ void FreetypeFont::ApplyGlyphTransform( int nGlyphFlags, FT_Glyph pGlyphFT ) con
     }
 }
 
-sal_GlyphId FreetypeFont::GetRawGlyphIndex(sal_UCS4 aChar, sal_UCS4 aVS) const
-{
-    if( mpFontInfo->IsSymbolFont() )
-    {
-        if( !FT_IS_SFNT( maFaceFT ) )
-        {
-            if( (aChar & 0xFF00) == 0xF000 )
-                aChar &= 0xFF;    // PS font symbol mapping
-            else if( aChar > 0xFF )
-                return 0;
-        }
-    }
-
-    int nGlyphIndex = 0;
-#if HAVE_FT_FACE_GETCHARVARIANTINDEX
-    // If asked, check first for variant glyph with the given Unicode variation
-    // selector. This is quite uncommon so we don't bother with caching here.
-    // Disabled for buggy FreeType versions:
-    // https://bugzilla.mozilla.org/show_bug.cgi?id=618406#c8
-    if (aVS && nFTVERSION >= 2404)
-        nGlyphIndex = FT_Face_GetCharVariantIndex(maFaceFT, aChar, aVS);
-#endif
-
-    if (nGlyphIndex == 0)
-    {
-        // cache glyph indexes in font info to share between different sizes
-        nGlyphIndex = mpFontInfo->GetGlyphIndex( aChar );
-        if( nGlyphIndex < 0 )
-        {
-            nGlyphIndex = FT_Get_Char_Index( maFaceFT, aChar );
-            if( !nGlyphIndex)
-            {
-                // check if symbol aliasing helps
-                if( (aChar <= 0x00FF) && mpFontInfo->IsSymbolFont() )
-                    nGlyphIndex = FT_Get_Char_Index( maFaceFT, aChar | 0xF000 );
-            }
-            mpFontInfo->CacheGlyphIndex( aChar, nGlyphIndex );
-        }
-    }
-
-    return sal_GlyphId( nGlyphIndex);
-}
-
-sal_GlyphId FreetypeFont::FixupGlyphIndex( sal_GlyphId aGlyphId, sal_UCS4 aChar ) const
-{
-    int nGlyphFlags = GF_NONE;
-
-    // do glyph substitution if necessary
-    // CJK vertical writing needs special treatment
-    if( GetFontSelData().mbVertical )
-    {
-        // TODO: rethink when GSUB is used for non-vertical case
-        GlyphSubstitution::const_iterator it = maGlyphSubstitution.find( aGlyphId );
-        if( it == maGlyphSubstitution.end() )
-        {
-            nGlyphFlags |= GetVerticalFlags( aChar );
-        }
-        else
-        {
-            // for vertical GSUB also compensate for nOrientation=2700
-            aGlyphId = (*it).second;
-            nGlyphFlags |= GF_GSUB | GF_ROTL;
-        }
-    }
-
-    if( aGlyphId != 0 )
-        aGlyphId |= nGlyphFlags;
-
-    return aGlyphId;
-}
-
-sal_GlyphId FreetypeFont::GetGlyphIndex( sal_UCS4 aChar ) const
-{
-    sal_GlyphId aGlyphId = GetRawGlyphIndex( aChar );
-    aGlyphId = FixupGlyphIndex( aGlyphId, aChar );
-    return aGlyphId;
-}
-
-static int lcl_GetCharWidth( FT_FaceRec_* pFaceFT, double fStretch, int nGlyphFlags )
-{
-    int nCharWidth = pFaceFT->glyph->metrics.horiAdvance;
-
-    if( nGlyphFlags & GF_ROTMASK )  // for bVertical rotated glyphs
-    {
-        const FT_Size_Metrics& rMetrics = pFaceFT->size->metrics;
-        nCharWidth = (int)((rMetrics.height + rMetrics.descender) * fStretch);
-    }
-
-    return (nCharWidth + 32) >> 6;
-}
-
 void FreetypeFont::InitGlyphData( sal_GlyphId aGlyphId, GlyphData& rGD ) const
 {
     FT_Activate_Size( maSizeFT );
 
     int nGlyphFlags;
-    SplitGlyphFlags( *this, aGlyphId, nGlyphFlags );
+    SplitGlyphFlags(aGlyphId, nGlyphFlags );
 
-    int nLoadFlags = mnLoadFlags;
-
-//  if( mbArtItalic )
-//      nLoadFlags |= FT_LOAD_NO_BITMAP;
-
-    FT_Error rc = FT_Load_Glyph( maFaceFT, aGlyphId, nLoadFlags );
+    FT_Error rc = FT_Load_Glyph(maFaceFT, aGlyphId, mnLoadFlags);
 
     if( rc != FT_Err_Ok )
     {
         // we get here e.g. when a PS font lacks the default glyph
-        rGD.SetCharWidth( 0 );
-        rGD.SetDelta( 0, 0 );
         rGD.SetOffset( 0, 0 );
         rGD.SetSize( Size( 0, 0 ) );
         return;
     }
 
-    const bool bOriginallyZeroWidth = (maFaceFT->glyph->metrics.horiAdvance == 0);
     if (mbArtBold)
         FT_GlyphSlot_Embolden(maFaceFT->glyph);
-
-    const int nCharWidth = bOriginallyZeroWidth ? 0 : lcl_GetCharWidth( maFaceFT, mfStretch, nGlyphFlags );
-    rGD.SetCharWidth( nCharWidth );
 
     FT_Glyph pGlyphFT;
     FT_Get_Glyph( maFaceFT->glyph, &pGlyphFT );
 
     ApplyGlyphTransform( nGlyphFlags, pGlyphFT );
-    rGD.SetDelta( (pGlyphFT->advance.x + 0x8000) >> 16, -((pGlyphFT->advance.y + 0x8000) >> 16) );
 
     FT_BBox aBbox;
     FT_Glyph_Get_CBox( pGlyphFT, FT_GLYPH_BBOX_PIXELS, &aBbox );
@@ -947,10 +831,6 @@ bool FreetypeFont::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities)
     bool bRet = false;
 
     sal_uLong nLength = 0;
-    // load GSUB table
-    const FT_Byte* pGSUB = mpFontInfo->GetTable("GSUB", &nLength);
-    if (pGSUB)
-        vcl::getTTScripts(rFontCapabilities.maGSUBScriptTags, pGSUB, nLength);
 
     // load OS/2 table
     const FT_Byte* pOS2 = mpFontInfo->GetTable("OS/2", &nLength);
@@ -1130,7 +1010,7 @@ bool FreetypeFont::GetGlyphOutline( sal_GlyphId aGlyphId,
     rB2DPolyPoly.clear();
 
     int nGlyphFlags;
-    SplitGlyphFlags( *this, aGlyphId, nGlyphFlags );
+    SplitGlyphFlags(aGlyphId, nGlyphFlags);
 
     FT_Int nLoadFlags = FT_LOAD_DEFAULT | FT_LOAD_IGNORE_TRANSFORM;
 

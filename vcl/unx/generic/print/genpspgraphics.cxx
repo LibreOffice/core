@@ -618,7 +618,7 @@ void GenPspGraphics::DrawTextLayout(const CommonSalLayout& rLayout)
             if( pText )
                 aUnicodes[i] = (aCharPosAry[i] >= nMinCharPos && aCharPosAry[i] <= nMaxCharPos) ? pText[ aCharPosAry[i] ] : 0;
             else
-                aUnicodes[i] = (aGlyphAry[i] & GF_ISCHAR) ? aGlyphId : 0;
+                aUnicodes[i] = 0;
             aGlyphAry[i] = aGlyphId;
         }
 

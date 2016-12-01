@@ -269,7 +269,6 @@ namespace vcl
     int VCL_DLLPUBLIC OpenTTFontFile(const char *fname, sal_uInt32 facenum, TrueTypeFont** ttf);
 #endif
 
-    void getTTScripts(std::vector< sal_uInt32 > &rScriptTags, const unsigned char* pTable, size_t nLength);
     bool getTTCoverage(
         boost::optional<std::bitset<UnicodeCoverage::MAX_UC_ENUM>> & rUnicodeCoverage,
         boost::optional<std::bitset<CodePageCoverage::MAX_CP_ENUM>> & rCodePageCoverage,
@@ -444,12 +443,10 @@ namespace vcl
  *
  * @param ttf         pointer to the TrueTypeFont structure
  * @param ch          Unicode (UCS-2) character
- * @param bvertical   flag to function that we want to find the vertical
- *                    GlobalSUBstitution attribute
  * @return glyph ID, if the character is missing in the font, the return value is 0.
  * @ingroup sft
  */
-    sal_uInt16 MapChar(TrueTypeFont *ttf, sal_uInt16 ch, bool bvertical);
+    sal_uInt16 MapChar(TrueTypeFont *ttf, sal_uInt16 ch);
 #endif
 
 /**
