@@ -49,7 +49,6 @@ class MutableTreeDataModel : public ::cppu::WeakAggImplHelper2< XMutableTreeData
 {
 public:
     MutableTreeDataModel();
-    virtual ~MutableTreeDataModel() override;
 
     void broadcast( broadcast_type eType, const Reference< XTreeNode >& xParentNode, const Reference< XTreeNode >& rNode );
 
@@ -138,10 +137,6 @@ private:
 
 MutableTreeDataModel::MutableTreeDataModel()
 : mbDisposed( false )
-{
-}
-
-MutableTreeDataModel::~MutableTreeDataModel()
 {
 }
 

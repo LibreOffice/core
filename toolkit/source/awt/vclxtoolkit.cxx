@@ -154,10 +154,6 @@ public:
         Start();
     }
 
-    virtual ~Pause() override
-    {
-    }
-
     virtual void Invoke() override
     {
         SolarMutexGuard aSolarGuard;
@@ -219,7 +215,6 @@ protected:
 public:
 
     VCLXToolkit();
-    virtual ~VCLXToolkit() override;
 
     // css::awt::XToolkitExperimental
     virtual void SAL_CALL processEventsToIdle()
@@ -727,11 +722,6 @@ VCLXToolkit::VCLXToolkit():
         getInitCondition().wait();
     }
 }
-
-VCLXToolkit::~VCLXToolkit()
-{
-}
-
 
 void SAL_CALL VCLXToolkit::disposing()
 {

@@ -53,7 +53,6 @@ class DefaultGridDataModel  :public ::cppu::BaseMutex
 public:
     DefaultGridDataModel();
     DefaultGridDataModel( DefaultGridDataModel const & i_copySource );
-    virtual ~DefaultGridDataModel() override;
 
     // XMutableGridDataModel
     virtual void SAL_CALL addRow( const Any& i_heading, const css::uno::Sequence< css::uno::Any >& Data ) throw (css::uno::RuntimeException, std::exception) override;
@@ -129,12 +128,6 @@ private:
         ,m_nColumnCount( i_copySource.m_nColumnCount )
     {
     }
-
-
-    DefaultGridDataModel::~DefaultGridDataModel()
-    {
-    }
-
 
     void DefaultGridDataModel::broadcast( GridDataEvent const & i_event,
         void ( SAL_CALL XGridDataListener::*i_listenerMethod )( GridDataEvent const & ), ::comphelper::ComponentGuard & i_instanceLock )

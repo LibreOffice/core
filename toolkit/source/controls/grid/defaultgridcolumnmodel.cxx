@@ -56,7 +56,6 @@ class DefaultGridColumnModel    :public ::cppu::BaseMutex
 public:
     DefaultGridColumnModel();
     DefaultGridColumnModel( DefaultGridColumnModel const & i_copySource );
-    virtual ~DefaultGridColumnModel() override;
 
     // XGridColumnModel
     virtual ::sal_Int32 SAL_CALL getColumnCount() throw (css::uno::RuntimeException, std::exception) override;
@@ -132,12 +131,6 @@ private:
         if ( aColumns.size() == i_copySource.m_aColumns.size() )
             m_aColumns.swap( aColumns );
     }
-
-
-    DefaultGridColumnModel::~DefaultGridColumnModel()
-    {
-    }
-
 
     ::sal_Int32 SAL_CALL DefaultGridColumnModel::getColumnCount() throw (RuntimeException, std::exception)
     {
