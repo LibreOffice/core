@@ -24,7 +24,6 @@ Module gid_Module_Root
     InstallOrder = "20";
     MOD_NAME_DESC(MODULE_ROOT_OSL);
     Files = (gid_File_Bin_Senddoc,
-             gid_File_Script_Gengal,
              gid_File_Txt_Pagein_Common,
              gid_File_Txt_Pagein_Calc,
              gid_File_Txt_Pagein_Draw,

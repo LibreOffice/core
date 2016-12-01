@@ -845,6 +845,7 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	package_dtd \
 	sd_web \
 	sfx2_emojiconfig \
+	$(call gb_Helper_optional,DESKTOP,$(if $(filter-out MACOSX WNT,$(OS)),svx_gengal)) \
 	$(if $(USING_X11),vcl_fontunxppds) \
 	$(if $(filter $(OS),MACOSX),vcl_osxres) \
 	xmloff_dtd \
