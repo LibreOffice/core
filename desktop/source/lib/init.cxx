@@ -356,11 +356,20 @@ struct RectangleAndPart
         return ss.str().c_str();
     }
 
+    /// Infinite Rectangle is when both dimensions are >= 2e7.
+    // ~2 billion twips is INT_MAX, which is full-area.
+    bool isInfinite() const
+    {
+        return m_aRectangle.GetWidth() >= 2e7 &&
+               m_aRectangle.GetHeight() >= 2e7;
+    }
+
     static RectangleAndPart Create(const std::string& rPayload)
     {
         RectangleAndPart aRet;
         if (rPayload.find("EMPTY") == 0) // payload starts with "EMPTY"
         {
+            aRet.m_aRectangle = Rectangle(0, 0, INT_MAX, INT_MAX);
             if (comphelper::LibreOfficeKit::isPartInInvalidation())
                 aRet.m_nPart = std::stol(rPayload.substr(6));
 
@@ -673,9 +682,9 @@ void CallbackFlushHandler::queue(const int type, const char* data)
         {
             RectangleAndPart rcOld = RectangleAndPart::Create(pos->second);
             RectangleAndPart rcNew = RectangleAndPart::Create(payload);
-            if (rcOld.m_aRectangle.IsEmpty() && rcOld.m_nPart == rcNew.m_nPart)
+            if (rcOld.isInfinite() && rcOld.m_nPart == rcNew.m_nPart)
             {
-                //SAL_WARN("lok", "Skipping queue [" + std::to_string(type) + "]: [" + payload + "] since all tiles need to be invalidated.");
+                SAL_WARN("lok", "Skipping queue [" << type << "]: [" << payload << "] since all tiles need to be invalidated.");
                 return;
             }
         }
@@ -762,8 +771,9 @@ void CallbackFlushHandler::queue(const int type, const char* data)
             {
                 RectangleAndPart rcNew = RectangleAndPart::Create(payload);
                 //SAL_WARN("lok", "New: " << rcNew.toString());
-                if (rcNew.m_aRectangle.IsEmpty())
+                if (rcNew.isInfinite())
                 {
+                    SAL_WARN("lok", "Have Empty [" << type << "]: [" << payload << "] so removing all.");
                     removeAll(
                         [type, &rcNew] (const queue_type::value_type& elem) {
                             if (elem.first == type)
