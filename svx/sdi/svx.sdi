@@ -6242,7 +6242,7 @@ SvxPageItem Orientation SID_ATTR_PAGE_ORIENTATION
 
     AccelConfig = FALSE,
     MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
+    ToolBoxConfig = TRUE,
     GroupId = GID_FORMAT;
 ]
 
