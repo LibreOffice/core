@@ -240,6 +240,7 @@ namespace sw
         DYING,
         PREPPASTING,
         PREP_INSERT_FLY,
+        PREP_DELETE_FLY,
         PAGE_OUT_OF_BOUNDS,
     };
     struct SW_DLLPUBLIC DrawFrameFormatHint final: SfxHint

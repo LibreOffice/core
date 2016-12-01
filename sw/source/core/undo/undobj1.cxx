@@ -162,14 +162,7 @@ void SwUndoFlyBase::DelFly( SwDoc* pDoc )
     }
     // OD 02.07.2003 #108784# - remove 'master' drawing object from drawing page
     else
-    {
-        SwDrawContact* pDrawContact =
-            static_cast<SwDrawContact*>(pFrameFormat->FindContactObj());
-        if ( pDrawContact )
-        {
-            pDrawContact->RemoveMasterFromDrawPage();
-        }
-    }
+        pFrameFormat->CallSwClientNotify(sw::DrawFrameFormatHint(sw::DrawFrameFormatHintId::PREP_DELETE_FLY));
 
     const SwFormatAnchor& rAnchor = pFrameFormat->GetAnchor();
     const SwPosition* pPos = rAnchor.GetContentAnchor();
