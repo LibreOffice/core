@@ -8,6 +8,7 @@
  */
 
 #include <cassert>
+#include <set>
 #include <string>
 #include <iostream>
 #include "plugin.hxx"

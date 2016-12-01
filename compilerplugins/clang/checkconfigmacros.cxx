@@ -9,6 +9,8 @@
  *
  */
 
+#include <set>
+
 #include "compat.hxx"
 #include "plugin.hxx"
 
