@@ -87,9 +87,6 @@ gb_AFLAGS := $(AFLAGS)
 
 # C4201: nonstandard extension used : nameless struct/union
 
-# C4242: 'identifier' : conversion from 'type1' to 'type2', possible
-#   loss of data
-
 # C4244: nonstandard extension used : formal parameter 'identifier'
 #   was previously defined as a type
 
@@ -108,8 +105,7 @@ gb_AFLAGS := $(AFLAGS)
 
 # C4351: new behavior: elements of array 'array' will be default
 #   initialized
-
-# C4355: 'this' : used in base member initializer list
+# (an issue with MSVC 2013 that appears to be gone with MSVC 2015)
 
 # C4373: '%$S': virtual function overrides '%$pS', previous versions
 #   of the compiler did not override when parameters only differed by
@@ -117,21 +113,13 @@ gb_AFLAGS := $(AFLAGS)
 # [translation: ancient compilers that don't actually support C++ do
 #  stupid things]
 
-# C4481: nonstandard extension used: override specifier 'override'
-# (MSVC 2010 warns about this, even though it's C++11 keyword)
-
 # C4505: 'function' : unreferenced local function has been removed
 
 # C4512: 'class' : assignment operator could not be generated
-
-# C4589: Constructor of abstract class 'Derived' ignores initializer for
-# virtual base class 'Base'  https://codereview.chromium.org/1234253003
+# (an issue with MSVC 2013 that appears to be gone with MSVC 2015)
 
 # C4611: interaction between 'function' and C++ object destruction is
 #   non-portable
-
-# C4626: 'derived class' : assignment operator could not be generated
-#   because a base class assignment operator is inaccessible
 
 # C4702: unreachable code
 
@@ -139,9 +127,6 @@ gb_AFLAGS := $(AFLAGS)
 
 # C4800: 'type' : forcing value to bool 'true' or 'false' (performance
 #   warning)
-
-# C4913: user defined binary operator ',' exists but no overload could
-#    convert all operands, default built-in binary operator ',' used
 
 gb_CFLAGS := \
 	-Gd \
@@ -156,14 +141,10 @@ gb_CFLAGS := \
 	-wd4127 \
 	$(if $(filter 0,$(gb_DEBUGLEVEL)),-wd4189) \
 	-wd4200 \
-	-wd4242 \
 	-wd4244 \
 	-wd4251 \
-	-wd4355 \
 	-wd4505 \
 	-wd4512 \
-	-wd4589 \
-	-wd4626 \
 	-wd4706 \
 	-wd4800 \
 
@@ -203,16 +184,12 @@ gb_CXXFLAGS := \
 	-wd4275 \
 	-wd4290 \
 	-wd4351 \
-	-wd4355 \
 	-wd4373 \
-	-wd4481 \
 	-wd4505 \
 	-wd4512 \
-	-wd4589 \
 	-wd4611 \
 	-wd4706 \
 	-wd4800 \
-	-wd4913 \
 
 ifeq ($(CPUNAME),X86_64)
 
