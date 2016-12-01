@@ -34,7 +34,6 @@
 #include <sys/stat.h>
 #endif
 #include "sft.hxx"
-#include "gsub.h"
 #include "ttcr.hxx"
 #include "xlat.hxx"
 #include <rtl/crc.h>
@@ -1711,7 +1710,6 @@ static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
     GetNames(t);
     FindCmap(t);
     GetKern(t);
-    ReadGSUB( t, 0, 0 );
 
     return SF_OK;
 }
@@ -1734,8 +1732,6 @@ void CloseTTFont(TrueTypeFont *ttf)
     free(ttf->tables);
     free(ttf->tlens);
     free(ttf->kerntables);
-
-    ReleaseGSUB(ttf);
 
     free(ttf);
     return;
@@ -2345,7 +2341,7 @@ int  CreateT42FromTTGlyphs(TrueTypeFont  *ttf,
 }
 
 #if defined(_WIN32) || defined(MACOSX) || defined(IOS)
-sal_uInt16 MapChar(TrueTypeFont *ttf, sal_uInt16 ch, bool bvertical)
+sal_uInt16 MapChar(TrueTypeFont *ttf, sal_uInt16 ch)
 {
     switch (ttf->cmapType) {
         case CMAP_MS_Symbol:
@@ -2366,8 +2362,6 @@ sal_uInt16 MapChar(TrueTypeFont *ttf, sal_uInt16 ch, bool bvertical)
     }
     const sal_uInt32 nMaxCmapSize = ttf->ptr + ttf->fsize - ttf->cmap;
     ch = (sal_uInt16)ttf->mapper(ttf->cmap, nMaxCmapSize, ch);
-    if (ch!=0 && bvertical)
-        ch = (sal_uInt16)UseGSUB(ttf,ch);
     return ch;
 }
 #endif
@@ -2733,30 +2727,6 @@ bool getTTCoverage(
         }
     }
     return bRet;
-}
-
-void getTTScripts(std::vector< sal_uInt32 > &rScriptTags, const unsigned char* pTable, size_t nLength)
-{
-    if (nLength < 6)
-        return;
-
-    // parse GSUB/GPOS header
-    const sal_uInt16 nOfsScriptList = GetUInt16(pTable, 4);
-
-    // parse Script Table
-    const sal_uInt16 nCntScript = GetUInt16(pTable, nOfsScriptList);
-    sal_uInt32 nCurrentPos = nOfsScriptList+2;
-    for( sal_uInt16 nScriptIndex = 0;
-         nScriptIndex < nCntScript && nLength >= 6; ++nScriptIndex,
-         nLength-=6 )
-    {
-        sal_uInt32 nTag = GetUInt32(pTable, nCurrentPos);
-        nCurrentPos+=6;
-        rScriptTags.push_back(nTag); // e.g. hani/arab/kana/hang
-    }
-
-    std::sort(rScriptTags.begin(), rScriptTags.end());
-    rScriptTags.erase(std::unique(rScriptTags.begin(), rScriptTags.end()), rScriptTags.end());
 }
 
 } // namespace vcl

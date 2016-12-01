@@ -120,9 +120,6 @@ protected:
 // For nice SAL_INFO logging of ImplLayoutArgs values
 std::ostream &operator <<(std::ostream& s, ImplLayoutArgs &rArgs);
 
-// helper functions often used with ImplLayoutArgs
-int GetVerticalFlags( sal_UCS4 );
-
 // all positions/widths are in font units
 // one exception: drawposition is in pixel units
 

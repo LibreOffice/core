@@ -8144,7 +8144,7 @@ void PDFWriterImpl::registerGlyphs( int nGlyphs,
     sal_Ucs* pCurUnicode = pUnicodes;
     for( int i = 0; i < nGlyphs; pCurUnicode += pUnicodesPerGlyph[i] , i++ )
     {
-        const int nFontGlyphId = pGlyphs[i] & (GF_IDXMASK | GF_ISCHAR | GF_GSUB);
+        const int nFontGlyphId = pGlyphs[i] & GF_IDXMASK;
         const PhysicalFontFace* pCurrentFont = pFallbackFonts[i] ? pFallbackFonts[i] : pDevFont;
 
         FontSubset& rSubset = m_aSubsets[ pCurrentFont ];
@@ -8610,11 +8610,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
         {
             // default case: 1 glyph is one unicode
             pUnicodesPerGlyph[i] = 1;
-            if( (pGlyphs[i] & GF_ISCHAR) )
-            {
-                aUnicodes.push_back( static_cast<sal_Ucs>(pGlyphs[i] & GF_IDXMASK) );
-            }
-            else if( pCharPosAry[i] >= nMinCharPos && pCharPosAry[i] <= nMaxCharPos )
+            if( pCharPosAry[i] >= nMinCharPos && pCharPosAry[i] <= nMaxCharPos )
             {
                 int nChars = 1;
                 pUnicodesPerGlyph[i] = 1;

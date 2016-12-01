@@ -1364,8 +1364,7 @@ bool WinSalGraphics::GetGlyphBoundRect( sal_GlyphId aGlyphId, Rectangle& rRect )
     aMat.eM12 = aMat.eM21 = FixedFromDouble( 0.0 );
 
     UINT nGGOFlags = GGO_METRICS;
-    if( !(aGlyphId & GF_ISCHAR) )
-        nGGOFlags |= GGO_GLYPH_INDEX;
+    nGGOFlags |= GGO_GLYPH_INDEX;
     aGlyphId &= GF_IDXMASK;
 
     GLYPHMETRICS aGM;
@@ -1397,8 +1396,7 @@ bool WinSalGraphics::GetGlyphOutline( sal_GlyphId aGlyphId,
     aMat.eM12 = aMat.eM21 = FixedFromDouble( 0.0 );
 
     UINT nGGOFlags = GGO_NATIVE;
-    if( !(aGlyphId & GF_ISCHAR) )
-        nGGOFlags |= GGO_GLYPH_INDEX;
+    nGGOFlags |= GGO_GLYPH_INDEX;
     aGlyphId &= GF_IDXMASK;
 
     GLYPHMETRICS aGlyphMetrics;
@@ -1673,11 +1671,6 @@ bool WinSalGraphics::CreateFontSubset( const OUString& rToFile,
             // TODO: remap notdef glyph if needed
             // TODO: use GDI's GetGlyphIndices instead? Does it handle GSUB properly?
             sal_GlyphId aGlyphId = pGlyphIds[i] & GF_IDXMASK;
-            if( pGlyphIds[i] & GF_ISCHAR ) // remaining pseudo-glyphs need to be translated
-                aGlyphId = xFontCharMap->GetGlyphIndex( aGlyphId );
-            if( (pGlyphIds[i] & (GF_ROTMASK|GF_GSUB)) != 0) // TODO: vertical substitution
-                {/*####*/}
-
             aRealGlyphIds[i] = aGlyphId;
         }
 
@@ -1728,18 +1721,6 @@ bool WinSalGraphics::CreateFontSubset( const OUString& rToFile,
     {
         aTempEncs[i] = pEncoding[i];
         sal_GlyphId aGlyphId = pGlyphIds[i] & GF_IDXMASK;
-        if( pGlyphIds[i] & GF_ISCHAR )
-        {
-            sal_Unicode cChar = static_cast<sal_Unicode>(aGlyphId); // TODO: sal_UCS4
-            const bool bVertical = ((pGlyphIds[i] & (GF_ROTMASK|GF_GSUB)) != 0);
-            aGlyphId = ::MapChar( aSftTTF.get(), cChar, bVertical );
-            if( (aGlyphId == 0) && pFont->IsSymbolFont() )
-            {
-                // #i12824# emulate symbol aliasing U+FXXX <-> U+0XXX
-                cChar = (cChar & 0xF000) ? (cChar & 0x00FF) : (cChar | 0xF000);
-                aGlyphId = ::MapChar( aSftTTF.get(), cChar, bVertical );
-            }
-        }
         aShortIDs[i] = static_cast<sal_uInt16>( aGlyphId );
         if( !aGlyphId )
             if( nNotDef < 0 )
@@ -1862,8 +1843,7 @@ void WinSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFont,
             if( nChar < 0x00010000 )
             {
                 sal_uInt16 nGlyph = ::MapChar( aSftTTF.get(),
-                                               static_cast<sal_Ucs>(nChar),
-                                               bVertical );
+                                               static_cast<sal_Ucs>(nChar));
                 if( nGlyph )
                     rUnicodeEnc[ static_cast<sal_Unicode>(nChar) ] = nGlyph;
             }

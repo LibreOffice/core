@@ -176,22 +176,7 @@ bool CoreTextFontFace::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilit
     }
     mbFontCapabilitiesRead = true;
 
-    int nBufSize = 0;
-    // prepare to get the GSUB table raw data
-    nBufSize = GetFontTable( "GSUB", nullptr );
-    if( nBufSize > 0 )
-    {
-        // allocate a buffer for the GSUB raw data
-        std::vector<unsigned char> aBuffer( nBufSize );
-        // get the GSUB raw data
-        const int nRawLength = GetFontTable( "GSUB", &aBuffer[0] );
-        if( nRawLength > 0 )
-        {
-            const unsigned char* pGSUBTable = &aBuffer[0];
-            vcl::getTTScripts(maFontCapabilities.maGSUBScriptTags, pGSUBTable, nRawLength);
-        }
-    }
-    nBufSize = GetFontTable( "OS/2", nullptr );
+    int nBufSize = GetFontTable( "OS/2", nullptr );
     if( nBufSize > 0 )
     {
         // allocate a buffer for the OS/2 raw data
@@ -827,7 +812,7 @@ void AquaSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFontData, bool bV
                 break;
 
             sal_Ucs nUcsChar = static_cast<sal_Ucs>(nChar);
-            sal_uInt32 nGlyph = ::MapChar( pSftFont, nUcsChar, bVertical );
+            sal_uInt32 nGlyph = ::MapChar( pSftFont, nUcsChar );
             if( nGlyph > 0 )
             {
                 rUnicodeEnc[ nUcsChar ] = nGlyph;

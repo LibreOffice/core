@@ -7943,13 +7943,6 @@ if test  "$test_freetype" = "yes"; then
     FilterLibs "${FREETYPE_LIBS}"
     FREETYPE_LIBS="${filteredlibs}"
     SYSTEM_FREETYPE=TRUE
-    _save_libs="$LIBS"
-    _save_cflags="$CFLAGS"
-    LIBS="$LIBS $FREETYPE_LIBS"
-    CFLAGS="$CFLAGS $FREETYPE_CFLAGS"
-    AC_CHECK_FUNC(FT_Face_GetCharVariantIndex, AC_DEFINE(HAVE_FT_FACE_GETCHARVARIANTINDEX), [])
-    LIBS="$_save_libs"
-    CFLAGS="$_save_cflags"
 fi
 AC_SUBST(FREETYPE_CFLAGS)
 AC_SUBST(FREETYPE_LIBS)

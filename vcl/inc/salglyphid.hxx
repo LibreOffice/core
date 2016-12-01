@@ -26,7 +26,6 @@ typedef sal_uInt32 sal_GlyphId;
 #define GF_NONE     0x00000000
 #define GF_FLAGMASK 0xFF800000
 #define GF_IDXMASK  ~GF_FLAGMASK
-#define GF_ISCHAR   0x00800000
 #define GF_ROTL     0x01000000
 
 #ifdef _WIN32
@@ -39,8 +38,6 @@ typedef sal_uInt32 sal_GlyphId;
 
 #define GF_ROTR     0x03000000
 #define GF_ROTMASK  0x03000000
-#define GF_UNHINTED 0x04000000
-#define GF_GSUB     0x08000000
 #define GF_FONTMASK 0xF0000000
 #define GF_FONTSHIFT 28
 

@@ -275,18 +275,6 @@ bool AquaSalGraphics::CreateFontSubset( const OUString& rToFile,
         aTempEncs[i] = pEncoding[i];
 
         sal_GlyphId aGlyphId(pGlyphIds[i] & GF_IDXMASK);
-        if( pGlyphIds[i] & GF_ISCHAR )
-        {
-            bool bVertical = (pGlyphIds[i] & GF_ROTMASK) != 0;
-            aGlyphId = ::MapChar( pSftFont, static_cast<sal_uInt16>(aGlyphId), bVertical );
-            if( aGlyphId == 0 && pFontData->IsSymbolFont() )
-            {
-                // #i12824# emulate symbol aliasing U+FXXX <-> U+0XXX
-                aGlyphId = pGlyphIds[i] & GF_IDXMASK;
-                aGlyphId = (aGlyphId & 0xF000) ? (aGlyphId & 0x00FF) : (aGlyphId | 0xF000 );
-                aGlyphId = ::MapChar( pSftFont, static_cast<sal_uInt16>(aGlyphId), bVertical );
-            }
-        }
         aShortIDs[i] = static_cast<sal_uInt16>( aGlyphId );
         if( !aGlyphId && nNotDef < 0 )
         {
