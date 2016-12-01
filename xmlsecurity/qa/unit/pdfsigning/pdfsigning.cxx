@@ -392,6 +392,8 @@ void PDFSigningTest::testTokenize()
         OUStringLiteral("cr-comment.pdf"),
         // ']' in a name token was mishandled.
         OUStringLiteral("name-bracket.pdf"),
+        // %%EOF at the end wasn't followed by a newline.
+        OUStringLiteral("noeol.pdf"),
     };
 
     for (const auto& rName : aNames)
