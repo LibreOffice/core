@@ -613,16 +613,12 @@ WinFontFace::WinFontFace( const FontAttributes& rDFS,
     int nHeight, BYTE eWinCharSet, BYTE nPitchAndFamily )
 :   PhysicalFontFace( rDFS ),
     mnId( 0 ),
-    mbHasCJKSupport( false ),
-    mbHasArabicSupport ( false ),
     mbFontCapabilitiesRead( false ),
     mxUnicodeMap( nullptr ),
-    mpEncodingVector( nullptr ),
     meWinCharSet( eWinCharSet ),
     mnPitchAndFamily( nPitchAndFamily ),
     mbAliasSymbolsHigh( false ),
     mbAliasSymbolsLow( false ),
-    mbGsubRead( false ),
     mpHbFont( nullptr )
 {
     SetBitmapSize( 0, nHeight );
@@ -657,8 +653,6 @@ WinFontFace::~WinFontFace()
     if( mxUnicodeMap.Is() )
         mxUnicodeMap = nullptr;
 
-    delete mpEncodingVector;
-
     if( mpHbFont )
         hb_font_destroy( mpHbFont );
 }
@@ -681,18 +675,6 @@ void WinFontFace::UpdateFromHDC( HDC hDC ) const
     GetFontCapabilities( hDC );
 }
 
-bool WinFontFace::HasGSUBstitutions( HDC hDC ) const
-{
-    if( !mbGsubRead )
-        ReadGsubTable( hDC );
-    return !maGsubTable.empty();
-}
-
-bool WinFontFace::IsGSUBstituted( sal_UCS4 cChar ) const
-{
-    return( maGsubTable.find( cChar ) != maGsubTable.end() );
-}
-
 FontCharMapRef WinFontFace::GetFontCharMap() const
 {
     return mxUnicodeMap;
@@ -702,51 +684,6 @@ bool WinFontFace::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) 
 {
     rFontCapabilities = maFontCapabilities;
     return rFontCapabilities.oUnicodeRange || rFontCapabilities.oCodePageRange;
-}
-
-void WinFontFace::ReadGsubTable( HDC hDC ) const
-{
-    mbGsubRead = true;
-
-    // check the existence of a GSUB table
-    const DWORD GsubTag = CalcTag( "GSUB" );
-    DWORD nRC = ::GetFontData( hDC, GsubTag, 0, nullptr, 0 );
-    if( (nRC == GDI_ERROR) || !nRC )
-        return;
-
-    // parse the GSUB table through sft
-    // TODO: parse it directly
-
-    // sft needs the full font file data => get it
-    const RawFontData aRawFontData( hDC );
-    if( !aRawFontData.get() )
-        return;
-
-    // open font file
-    sal_uInt32 nFaceNum = 0;
-    if( !*aRawFontData.get() )  // TTC candidate
-        nFaceNum = ~0U;  // indicate "TTC font extracts only"
-
-    TrueTypeFont* pTTFont = nullptr;
-    ::OpenTTFontBuffer( aRawFontData.get(), aRawFontData.size(), nFaceNum, &pTTFont );
-    if( !pTTFont )
-        return;
-
-    // add vertically substituted characters to list
-    static const sal_Unicode aGSUBCandidates[] = {
-        0x0020, 0x0080, // ASCII
-        0x2000, 0x2600, // misc
-        0x3000, 0x3100, // CJK punctutation
-        0x3300, 0x3400, // squared words
-        0xFF00, 0xFFF0, // halfwidth|fullwidth forms
-    0 };
-
-    for( const sal_Unicode* pPair = aGSUBCandidates; *pPair; pPair += 2 )
-        for( sal_Unicode cChar = pPair[0]; cChar < pPair[1]; ++cChar )
-            if( ::MapChar( pTTFont, cChar, false ) != ::MapChar( pTTFont, cChar, true ) )
-                maGsubTable.insert( cChar ); // insert GSUBbed unicodes
-
-    CloseTTFont( pTTFont );
 }
 
 void WinFontFace::ReadCmapTable( HDC hDC ) const
@@ -784,37 +721,15 @@ void WinFontFace::GetFontCapabilities( HDC hDC ) const
 
     mbFontCapabilitiesRead = true;
 
-    // GSUB table
-    DWORD nLength;
-    const DWORD GsubTag = CalcTag( "GSUB" );
-    nLength = ::GetFontData( hDC, GsubTag, 0, nullptr, 0 );
-    if( (nLength != GDI_ERROR) && nLength )
-    {
-        std::vector<unsigned char> aTable( nLength );
-        unsigned char* pTable = &aTable[0];
-        ::GetFontData( hDC, GsubTag, 0, pTable, nLength );
-        vcl::getTTScripts(maFontCapabilities.maGSUBScriptTags, pTable, nLength);
-    }
-
     // OS/2 table
     const DWORD OS2Tag = CalcTag( "OS/2" );
-    nLength = ::GetFontData( hDC, OS2Tag, 0, nullptr, 0 );
+    DWORD nLength = ::GetFontData( hDC, OS2Tag, 0, nullptr, 0 );
     if( (nLength != GDI_ERROR) && nLength )
     {
         std::vector<unsigned char> aTable( nLength );
         unsigned char* pTable = &aTable[0];
         ::GetFontData( hDC, OS2Tag, 0, pTable, nLength );
-        if (vcl::getTTCoverage(maFontCapabilities.oUnicodeRange, maFontCapabilities.oCodePageRange, pTable, nLength))
-        {
-            // Check for CJK capabilities of the current font
-            // TODO, we have this info already from getTT, decode bits to
-            // a readable bitset
-            sal_uInt32 ulUnicodeRange1 = GetUInt( pTable + 42 );
-            sal_uInt32 ulUnicodeRange2 = GetUInt( pTable + 46 );
-
-            mbHasCJKSupport = (ulUnicodeRange2 & 0x2DF00000);
-            mbHasArabicSupport = (ulUnicodeRange1 & 0x00002000);
-        }
+        vcl::getTTCoverage(maFontCapabilities.oUnicodeRange, maFontCapabilities.oCodePageRange, pTable, nLength);
     }
 }
 
@@ -1051,17 +966,6 @@ void WinSalGraphics::SetFont( FontSelectPattern* pFont, int nFallbackLevel )
     // now the font is live => update font face
     if( mpWinFontData[ nFallbackLevel ] )
         mpWinFontData[ nFallbackLevel ]->UpdateFromHDC( getHDC() );
-
-    if( !nFallbackLevel )
-    {
-        mbFontKernInit = TRUE;
-        if ( mpFontKernPairs )
-        {
-            delete[] mpFontKernPairs;
-            mpFontKernPairs = nullptr;
-        }
-        mnFontKernPairCount = 0;
-    }
 }
 
 void WinSalGraphics::GetFontMetric( ImplFontMetricDataRef& rxFontMetric, int nFallbackLevel )
@@ -1104,35 +1008,6 @@ void WinSalGraphics::GetFontMetric( ImplFontMetricDataRef& rxFontMetric, int nFa
     rxFontMetric->ImplCalcLineSpacing(rHhea, rOS2, aOutlineMetric.otmEMSquare);
 
     rxFontMetric->SetMinKashida( GetMinKashidaWidth() );
-}
-
-sal_uLong WinSalGraphics::GetKernPairs()
-{
-    if ( mbFontKernInit )
-    {
-        if( mpFontKernPairs )
-        {
-            delete[] mpFontKernPairs;
-            mpFontKernPairs = nullptr;
-        }
-        mnFontKernPairCount = 0;
-
-        KERNINGPAIR* pPairs = nullptr;
-        int nCount = ::GetKerningPairsW( getHDC(), 0, nullptr );
-        if( nCount )
-        {
-            pPairs = new KERNINGPAIR[ nCount+1 ];
-            mpFontKernPairs = pPairs;
-            mnFontKernPairCount = nCount;
-            ::GetKerningPairsW( getHDC(), nCount, pPairs );
-        }
-
-        mbFontKernInit = FALSE;
-
-        std::sort( mpFontKernPairs, mpFontKernPairs + mnFontKernPairCount, ImplCmpKernData );
-    }
-
-    return mnFontKernPairCount;
 }
 
 const FontCharMapRef WinSalGraphics::GetFontCharMap() const
