@@ -96,7 +96,7 @@ bool ImplScaleConvolutionHor(Bitmap& rSource, Bitmap& rTarget, const double& rSc
         return true;
     }
 
-    BitmapReadAccess* pReadAcc = rSource.AcquireReadAccess();
+    Bitmap::ScopedReadAccess pReadAcc(rSource);
 
     if(pReadAcc)
     {
@@ -108,7 +108,7 @@ bool ImplScaleConvolutionHor(Bitmap& rSource, Bitmap& rTarget, const double& rSc
         const long nHeight(rSource.GetSizePixel().Height());
         ImplCalculateContributions(nWidth, nNewWidth, aNumberOfContributions, pWeights, pPixels, pCount, aKernel);
         rTarget = Bitmap(Size(nNewWidth, nHeight), 24);
-        BitmapWriteAccess* pWriteAcc = rTarget.AcquireWriteAccess();
+        Bitmap::ScopedWriteAccess pWriteAcc(rTarget);
         bool bResult(nullptr != pWriteAcc);
 
         if(bResult)
@@ -154,10 +154,9 @@ bool ImplScaleConvolutionHor(Bitmap& rSource, Bitmap& rTarget, const double& rSc
                 }
             }
 
-            Bitmap::ReleaseAccess(pWriteAcc);
+            pWriteAcc.reset();
         }
 
-        Bitmap::ReleaseAccess(pReadAcc);
         delete[] pWeights;
         delete[] pCount;
         delete[] pPixels;
@@ -183,7 +182,7 @@ bool ImplScaleConvolutionVer(Bitmap& rSource, Bitmap& rTarget, const double& rSc
         return true;
     }
 
-    BitmapReadAccess* pReadAcc = rSource.AcquireReadAccess();
+    Bitmap::ScopedReadAccess pReadAcc(rSource);
 
     if(pReadAcc)
     {
@@ -195,7 +194,7 @@ bool ImplScaleConvolutionVer(Bitmap& rSource, Bitmap& rTarget, const double& rSc
         const long nWidth(rSource.GetSizePixel().Width());
         ImplCalculateContributions(nHeight, nNewHeight, aNumberOfContributions, pWeights, pPixels, pCount, aKernel);
         rTarget = Bitmap(Size(nWidth, nNewHeight), 24);
-        BitmapWriteAccess* pWriteAcc = rTarget.AcquireWriteAccess();
+        Bitmap::ScopedWriteAccess pWriteAcc(rTarget);
         bool bResult(nullptr != pWriteAcc);
 
         if(pWriteAcc)
@@ -248,9 +247,6 @@ bool ImplScaleConvolutionVer(Bitmap& rSource, Bitmap& rTarget, const double& rSc
                 }
             }
         }
-
-        Bitmap::ReleaseAccess(pWriteAcc);
-        Bitmap::ReleaseAccess(pReadAcc);
 
         delete[] pWeights;
         delete[] pCount;

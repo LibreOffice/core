@@ -98,8 +98,7 @@ VclCanvasBitmap::VclCanvasBitmap( const BitmapEx& rBitmap ) :
     m_aBmpEx( rBitmap ),
     m_aBitmap( rBitmap.GetBitmap() ),
     m_aAlpha(),
-    m_pBmpAcc( m_aBitmap.AcquireReadAccess() ),
-    m_pAlphaAcc( nullptr ),
+    m_pBmpAcc( m_aBitmap ),
     m_aComponentTags(),
     m_aComponentBitCounts(),
     m_aLayout(),
@@ -116,7 +115,7 @@ VclCanvasBitmap::VclCanvasBitmap( const BitmapEx& rBitmap ) :
     if( m_aBmpEx.IsTransparent() )
     {
         m_aAlpha = m_aBmpEx.IsAlpha() ? m_aBmpEx.GetAlpha().GetBitmap() : m_aBmpEx.GetMask();
-        m_pAlphaAcc = m_aAlpha.AcquireReadAccess();
+        m_pAlphaAcc = Bitmap::ScopedReadAccess(m_aAlpha);
     }
 
     m_aLayout.ScanLines      = 0;
@@ -423,10 +422,6 @@ VclCanvasBitmap::VclCanvasBitmap( const BitmapEx& rBitmap ) :
 
 VclCanvasBitmap::~VclCanvasBitmap()
 {
-    if( m_pAlphaAcc )
-        Bitmap::ReleaseAccess(m_pAlphaAcc);
-    if( m_pBmpAcc )
-        Bitmap::ReleaseAccess(m_pBmpAcc);
 }
 
 // XBitmap

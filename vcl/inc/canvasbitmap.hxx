@@ -42,8 +42,8 @@ namespace unotools
         BitmapEx                                       m_aBmpEx;
         ::Bitmap                                       m_aBitmap;
         ::Bitmap                                       m_aAlpha;
-        BitmapReadAccess*                              m_pBmpAcc;
-        BitmapReadAccess*                              m_pAlphaAcc;
+        Bitmap::ScopedReadAccess                       m_pBmpAcc;
+        Bitmap::ScopedReadAccess                       m_pAlphaAcc;
         css::uno::Sequence<sal_Int8>                   m_aComponentTags;
         css::uno::Sequence<sal_Int32>                  m_aComponentBitCounts;
         css::rendering::IntegerBitmapLayout            m_aLayout;
