@@ -1409,14 +1409,14 @@ Bitmap OutputDevice::BlendBitmapWithAlpha(
     mpAlphaVDev->EnableMapMode(false);
 
     Bitmap aAlphaBitmap( mpAlphaVDev->GetBitmap( aDstRect.TopLeft(), aDstRect.GetSize() ) );
-    BitmapWriteAccess*  pAlphaW = aAlphaBitmap.AcquireWriteAccess();
+    Bitmap::ScopedWriteAccess pAlphaW(aAlphaBitmap);
 
     if( GetBitCount() <= 8 )
     {
         Bitmap              aDither( aBmp.GetSizePixel(), 8 );
         BitmapColor         aIndex( 0 );
-        BitmapReadAccess*   pB = aBmp.AcquireReadAccess();
-        BitmapWriteAccess*  pW = aDither.AcquireWriteAccess();
+        Bitmap::ScopedReadAccess pB(aBmp);
+        Bitmap::ScopedWriteAccess pW(aDither);
 
         if (pB && pP && pA && pW && pAlphaW)
         {
@@ -1433,7 +1433,7 @@ Bitmap OutputDevice::BlendBitmapWithAlpha(
                     const long  nMapX = pMapX[ nX ];
                     const sal_uLong nD = nVCLDitherLut[ nModY | ( nOutX & 0x0FL ) ];
 
-                    aDstCol = AlphaBlend( nX, nY, nMapX, nMapY, pP, pA, pB, pAlphaW, nResAlpha );
+                    aDstCol = AlphaBlend( nX, nY, nMapX, nMapY, pP, pA, pB.get(), pAlphaW.get(), nResAlpha );
 
                     aIndex.SetIndex( (sal_uInt8) ( nVCLRLut[ ( nVCLLut[ aDstCol.GetRed() ] + nD ) >> 16UL ] +
                                               nVCLGLut[ ( nVCLLut[ aDstCol.GetGreen() ] + nD ) >> 16UL ] +
@@ -1447,14 +1447,13 @@ Bitmap OutputDevice::BlendBitmapWithAlpha(
                 }
             }
         }
-
-        Bitmap::ReleaseAccess( pB );
-        Bitmap::ReleaseAccess( pW );
+        pB.reset();
+        pW.reset();
         res = aDither;
     }
     else
     {
-        BitmapWriteAccess*  pB = aBmp.AcquireWriteAccess();
+        Bitmap::ScopedWriteAccess pB(aBmp);
         if (pB && pP && pA && pAlphaW)
         {
             for( nY = 0; nY < nDstHeight; nY++ )
@@ -1464,19 +1463,18 @@ Bitmap OutputDevice::BlendBitmapWithAlpha(
                 for( nX = 0; nX < nDstWidth; nX++ )
                 {
                     const long nMapX = pMapX[ nX ];
-                    aDstCol = AlphaBlend( nX, nY, nMapX, nMapY, pP, pA, pB, pAlphaW, nResAlpha );
+                    aDstCol = AlphaBlend( nX, nY, nMapX, nMapY, pP, pA, pB.get(), pAlphaW.get(), nResAlpha );
 
                     pB->SetPixel( nY, nX, aDstCol );
                     pAlphaW->SetPixel( nY, nX, Color(255L-nResAlpha, 255L-nResAlpha, 255L-nResAlpha) );
                 }
             }
         }
-
-        Bitmap::ReleaseAccess( pB );
+        pB.reset();
         res = aBmp;
     }
 
-    Bitmap::ReleaseAccess( pAlphaW );
+    pAlphaW.reset();
     mpAlphaVDev->DrawBitmap( aDstRect.TopLeft(), aAlphaBitmap );
     mpAlphaVDev->EnableMapMode( bOldMapMode );
 
@@ -1506,8 +1504,8 @@ Bitmap OutputDevice::BlendBitmap(
     {
         Bitmap              aDither( aBmp.GetSizePixel(), 8 );
         BitmapColor         aIndex( 0 );
-        BitmapReadAccess*   pB = aBmp.AcquireReadAccess();
-        BitmapWriteAccess*  pW = aDither.AcquireWriteAccess();
+        Bitmap::ScopedReadAccess pB(aBmp);
+        Bitmap::ScopedWriteAccess pW(aDither);
 
         if( pB && pP && pA && pW )
         {
@@ -1542,13 +1540,13 @@ Bitmap OutputDevice::BlendBitmap(
             }
         }
 
-        Bitmap::ReleaseAccess( pB );
-        Bitmap::ReleaseAccess( pW );
+        pB.reset();
+        pW.reset();
         res = aDither;
     }
     else
     {
-        BitmapWriteAccess*  pB = aBmp.AcquireWriteAccess();
+        Bitmap::ScopedWriteAccess pB(aBmp);
 
         bool bFastBlend = false;
         if( pP && pA && pB )
@@ -1625,7 +1623,7 @@ Bitmap OutputDevice::BlendBitmap(
             }
         }
 
-        Bitmap::ReleaseAccess( pB );
+        pB.reset();
         res = aBmp;
     }
 
