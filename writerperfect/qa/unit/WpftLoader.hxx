@@ -10,6 +10,8 @@
 #ifndef INCLUDED_WRITERPERFECT_QA_UNIT_WPFTLOADER_HXX
 #define INCLUDED_WRITERPERFECT_QA_UNIT_WPFTLOADER_HXX
 
+#include "wpftqahelperdllapi.h"
+
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
@@ -55,7 +57,7 @@ namespace writerperfect
 namespace test
 {
 
-class WpftLoader
+class WPFTQAHELPER_DLLPUBLIC WpftLoader
 {
 public:
     WpftLoader(
