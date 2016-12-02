@@ -83,6 +83,7 @@ p14                     http://schemas.microsoft.com/office/powerpoint/2010/main
 # MSO 2012/2013 extensions ---------------------------------------------------------
 
 p15                     http://schemas.microsoft.com/office/powerpoint/2012/main
+x12ac                   http://schemas.microsoft.com/office/spreadsheetml/2011/1/ac
 
 # extlst namespaces
 
