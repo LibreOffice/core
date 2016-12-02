@@ -599,8 +599,6 @@ void GenPspGraphics::DrawTextLayout(const CommonSalLayout& rLayout)
 
     Point aPos;
     long nUnitsPerPixel = rLayout.GetUnitsPerPixel();
-    int nMinCharPos = 0;
-    int nMaxCharPos = 0;
     for( int nStart = 0;; )
     {
         int nGlyphCount = rLayout.GetNextGlyphs( nMaxGlyphs, aGlyphAry, aPos, nStart, aWidthAry, nullptr );
