@@ -137,7 +137,10 @@ struct NamespaceIds: public rtl::StaticWithInit<
             {"http://schemas.microsoft.com/office/powerpoint/2010/main",
              NMSP_p14},
             {"http://schemas.microsoft.com/office/powerpoint/2012/main",
-             NMSP_p15}};
+             NMSP_p15},
+            {"http://schemas.microsoft.com/office/spreadsheetml/2011/1/ac",
+             NMSP_x12ac},
+        };
     }
 };
 

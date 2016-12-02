@@ -75,6 +75,81 @@ const sal_uInt16 BIFF12_OLEOBJECT_AUTOLOAD  = 0x0002;
 
 } // namespace
 
+void DataValidationsContext_Base::SetValidation(::oox::xls::WorksheetHelper& rTarget)
+{
+    if (!mxValModel.get())
+        return;
+
+    rTarget.getAddressConverter().convertToCellRangeList(mxValModel->maRanges, mSqref, rTarget.getSheetIndex(), true);
+    mxValModel->msRef = mSqref;
+
+    mxValModel->maTokens1 = rTarget.getFormulaParser().importFormula(mxValModel->maRanges.getBaseAddress(), mFormula1);
+    // process string list of a list validation (convert to list of string tokens)
+    if (mxValModel->mnType == XML_list)
+        rTarget.getFormulaParser().convertStringToStringList(mxValModel->maTokens1, ',', true);
+
+    mxValModel->maTokens2 = rTarget.getFormulaParser().importFormula(mxValModel->maRanges.getBaseAddress(), mFormula2);
+
+    rTarget.setValidation(*mxValModel);
+    mxValModel.reset();
+}
+
+void DataValidationsContext_Base::importDataValidation(const AttributeList& rAttribs)
+{
+    mxValModel.reset(new ValidationModel);
+    mFormula1.clear();
+    mFormula2.clear();
+    mSqref = rAttribs.getString(XML_sqref, OUString());
+    mxValModel->maInputTitle = rAttribs.getXString(XML_promptTitle, OUString());
+    mxValModel->maInputMessage = rAttribs.getXString(XML_prompt, OUString());
+    mxValModel->maErrorTitle = rAttribs.getXString(XML_errorTitle, OUString());
+    mxValModel->maErrorMessage = rAttribs.getXString(XML_error, OUString());
+    mxValModel->mnType = rAttribs.getToken(XML_type, XML_none);
+    mxValModel->mnOperator = rAttribs.getToken(XML_operator, XML_between);
+    mxValModel->mnErrorStyle = rAttribs.getToken(XML_errorStyle, XML_stop);
+    mxValModel->mbShowInputMsg = rAttribs.getBool(XML_showInputMessage, false);
+    mxValModel->mbShowErrorMsg = rAttribs.getBool(XML_showErrorMessage, false);
+    /*  The attribute showDropDown@dataValidation is in fact a "suppress
+    dropdown" flag, as it was in the BIFF format! ECMA specification
+    and attribute name are plain wrong! */
+    mxValModel->mbNoDropDown = rAttribs.getBool(XML_showDropDown, false);
+    mxValModel->mbAllowBlank = rAttribs.getBool(XML_allowBlank, false);
+}
+
+void DataValidationsContext_Base::importDataValidation(SequenceInputStream& rStrm, ::oox::xls::WorksheetHelper& rTarget)
+{
+    ValidationModel aModel;
+
+    sal_uInt32 nFlags;
+    BinRangeList aRanges;
+    nFlags = rStrm.readuInt32();
+    rStrm >> aRanges >> aModel.maErrorTitle >> aModel.maErrorMessage >> aModel.maInputTitle >> aModel.maInputMessage;
+
+    // equal flags in all BIFFs
+    aModel.setBiffType(extractValue< sal_uInt8 >(nFlags, 0, 4));
+    aModel.setBiffOperator(extractValue< sal_uInt8 >(nFlags, 20, 4));
+    aModel.setBiffErrorStyle(extractValue< sal_uInt8 >(nFlags, 4, 3));
+    aModel.mbAllowBlank = getFlag(nFlags, BIFF_DATAVAL_ALLOWBLANK);
+    aModel.mbNoDropDown = getFlag(nFlags, BIFF_DATAVAL_NODROPDOWN);
+    aModel.mbShowInputMsg = getFlag(nFlags, BIFF_DATAVAL_SHOWINPUT);
+    aModel.mbShowErrorMsg = getFlag(nFlags, BIFF_DATAVAL_SHOWERROR);
+
+    // cell range list
+    rTarget.getAddressConverter().convertToCellRangeList(aModel.maRanges, aRanges, rTarget.getSheetIndex(), true);
+
+    // condition formula(s)
+    FormulaParser& rParser = rTarget.getFormulaParser();
+    CellAddress aBaseAddr = aModel.maRanges.getBaseAddress();
+    aModel.maTokens1 = rParser.importFormula(aBaseAddr, FORMULATYPE_VALIDATION, rStrm);
+    aModel.maTokens2 = rParser.importFormula(aBaseAddr, FORMULATYPE_VALIDATION, rStrm);
+    // process string list of a list validation (convert to list of string tokens)
+    if ((aModel.mnType == XML_list) && getFlag(nFlags, BIFF_DATAVAL_STRINGLIST))
+        rParser.convertStringToStringList(aModel.maTokens1, ',', true);
+
+    // set validation data
+    rTarget.setValidation(aModel);
+}
+
 DataValidationsContext::DataValidationsContext( WorksheetFragmentBase& rFragment ) :
     WorksheetContextBase( rFragment )
 {
@@ -82,7 +157,7 @@ DataValidationsContext::DataValidationsContext( WorksheetFragmentBase& rFragment
 
 ContextHandlerRef DataValidationsContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
-    switch( getCurrentElement() )
+    switch( getCurrentElementWithMce() )
     {
         case XLS_TOKEN( dataValidations ):
             if( nElement == XLS_TOKEN( dataValidation ) )
@@ -94,100 +169,173 @@ ContextHandlerRef DataValidationsContext::onCreateContext( sal_Int32 nElement, c
         case XLS_TOKEN( dataValidation ):
             switch( nElement )
             {
+                case MCE_TOKEN( AlternateContent ):
                 case XLS_TOKEN( formula1 ):
                 case XLS_TOKEN( formula2 ):
                     return this;    // collect formulas in onCharacters()
+            }
+        break;
+        case MCE_TOKEN( AlternateContent ):
+            switch( nElement )
+            {
+                case MCE_TOKEN( Choice ):
+                case MCE_TOKEN( Fallback ):
+                    return this;
+            }
+        break;
+        case MCE_TOKEN( Choice ):
+            switch( nElement )
+            {
+                case X12AC_TOKEN( list ):
+                    return this;
+            }
+        break;
+        case MCE_TOKEN( Fallback ):
+            switch( nElement )
+            {
+                case XLS_TOKEN( formula1 ):
+                    if (!isFormula1Set()) // only if more preferable choice was not used
+                        return this;      // collect formulas in onCharacters()
+                break;
+                case XLS_TOKEN( formula2 ):
+                    if (!isFormula2Set()) // only if more preferable choice was not used
+                        return this;      // collect formulas in onCharacters()
+                break;
             }
         break;
     }
     return nullptr;
 }
 
+namespace {
+// Convert strings like 1,"2,3",4 to form "1","2,3","4"
+OUString NormalizeOoxList(const OUString& aList)
+{
+    OUStringBuffer aResult("\"");
+    bool bInsideQuotes = false;
+    const sal_Int32 nLen = aList.getLength();
+    for (sal_Int32 i = 0; i < nLen; ++i)
+    {
+        sal_Unicode ch = aList[i];
+
+        switch (ch)
+        {
+            case L'"':
+                bInsideQuotes = !bInsideQuotes;
+                break;
+            case L',':
+                if (!bInsideQuotes)
+                {
+                    aResult.append("\",\"");
+                    break;
+                }
+                SAL_FALLTHROUGH;
+            default:
+                aResult.append(ch);
+                break;
+        }
+    }
+    return aResult.append('"').makeStringAndClear();
+}
+}
+
 void DataValidationsContext::onCharacters( const OUString& rChars )
 {
-    if( mxValModel.get() ) switch( getCurrentElement() )
+    switch( getCurrentElement() )
     {
         case XLS_TOKEN( formula1 ):
-            mxValModel->maTokens1 = getFormulaParser().importFormula( mxValModel->maRanges.getBaseAddress(), rChars );
-            // process string list of a list validation (convert to list of string tokens)
-            if( mxValModel->mnType == XML_list )
-                getFormulaParser().convertStringToStringList( mxValModel->maTokens1, ',', true );
+            SetFormula1( rChars );
         break;
         case XLS_TOKEN( formula2 ):
-            mxValModel->maTokens2 = getFormulaParser().importFormula( mxValModel->maRanges.getBaseAddress(), rChars );
+            SetFormula2( rChars );
+        break;
+        case X12AC_TOKEN( list ):
+            SetFormula1( NormalizeOoxList( rChars ) );
         break;
     }
 }
 
 void DataValidationsContext::onEndElement()
 {
-    if( isCurrentElement( XLS_TOKEN( dataValidation ) ) && mxValModel.get() )
+    if( getCurrentElementWithMce() == XLS_TOKEN( dataValidation ) )
     {
-        setValidation( *mxValModel );
-        mxValModel.reset();
+        SetValidation( *this );
     }
 }
 
 ContextHandlerRef DataValidationsContext::onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm )
 {
     if( nRecId == BIFF12_ID_DATAVALIDATION )
-        importDataValidation( rStrm );
+        importDataValidation( rStrm, *this );
     return nullptr;
 }
 
-void DataValidationsContext::importDataValidation( const AttributeList& rAttribs )
+ExtDataValidationsContext::ExtDataValidationsContext( WorksheetContextBase& rFragment ) :
+    WorksheetContextBase( rFragment ), mCurrFormula( 0 )
 {
-    mxValModel.reset( new ValidationModel );
-    getAddressConverter().convertToCellRangeList( mxValModel->maRanges, rAttribs.getString( XML_sqref, OUString() ), getSheetIndex(), true );
-    mxValModel->msRef          = rAttribs.getString( XML_sqref, OUString() );
-    mxValModel->maInputTitle   = rAttribs.getXString( XML_promptTitle, OUString() );
-    mxValModel->maInputMessage = rAttribs.getXString( XML_prompt, OUString() );
-    mxValModel->maErrorTitle   = rAttribs.getXString( XML_errorTitle, OUString() );
-    mxValModel->maErrorMessage = rAttribs.getXString( XML_error, OUString() );
-    mxValModel->mnType         = rAttribs.getToken( XML_type, XML_none );
-    mxValModel->mnOperator     = rAttribs.getToken( XML_operator, XML_between );
-    mxValModel->mnErrorStyle   = rAttribs.getToken( XML_errorStyle, XML_stop );
-    mxValModel->mbShowInputMsg = rAttribs.getBool( XML_showInputMessage, false );
-    mxValModel->mbShowErrorMsg = rAttribs.getBool( XML_showErrorMessage, false );
-    /*  The attribute showDropDown@dataValidation is in fact a "suppress
-        dropdown" flag, as it was in the BIFF format! ECMA specification
-        and attribute name are plain wrong! */
-    mxValModel->mbNoDropDown   = rAttribs.getBool( XML_showDropDown, false );
-    mxValModel->mbAllowBlank   = rAttribs.getBool( XML_allowBlank, false );
 }
 
-void DataValidationsContext::importDataValidation( SequenceInputStream& rStrm )
+ContextHandlerRef ExtDataValidationsContext::onCreateContext(sal_Int32 nElement, const AttributeList& rAttribs)
 {
-    ValidationModel aModel;
+    switch( getCurrentElement() )
+    {
+    case XLS14_TOKEN( dataValidations ):
+        if ( nElement == XLS14_TOKEN( dataValidation ) )
+        {
+            importDataValidation( rAttribs );
+            return this;
+        }
+        break;
+    case XLS14_TOKEN( dataValidation ):
+        switch ( nElement )
+        {
+        case XLS14_TOKEN( formula1 ):
+        case XLS14_TOKEN( formula2 ):
+            mCurrFormula = nElement;
+            return this;
+        case XM_TOKEN( sqref ):
+            return this;    // collect sqref in onCharacters()
+        }
+        break;
+    case XLS14_TOKEN( formula1 ):
+    case XLS14_TOKEN( formula2 ):
+        switch( nElement )
+        {
+        case XM_TOKEN( f ):
+            return this;    // collect formulas in onCharacters()
+        }
+        break;
+    }
+    return nullptr;
+}
 
-    sal_uInt32 nFlags;
-    BinRangeList aRanges;
-    nFlags = rStrm.readuInt32();
-    rStrm >> aRanges >> aModel.maErrorTitle >> aModel.maErrorMessage >> aModel.maInputTitle >> aModel.maInputMessage;
+void ExtDataValidationsContext::onCharacters( const OUString& rChars )
+{
+    switch( getCurrentElement() )
+    {
+        case XM_TOKEN( f ):
+            switch( mCurrFormula )
+            {
+                case XLS14_TOKEN( formula1 ):
+                    SetFormula1( rChars );
+                break;
+                case XLS14_TOKEN( formula2 ):
+                    SetFormula2( rChars );
+                break;
+            }
+        break;
+        case XM_TOKEN( sqref ):
+            SetSqref( rChars );
+        break;
+    }
+}
 
-    // equal flags in all BIFFs
-    aModel.setBiffType( extractValue< sal_uInt8 >( nFlags, 0, 4 ) );
-    aModel.setBiffOperator( extractValue< sal_uInt8 >( nFlags, 20, 4 ) );
-    aModel.setBiffErrorStyle( extractValue< sal_uInt8 >( nFlags, 4, 3 ) );
-    aModel.mbAllowBlank   = getFlag( nFlags, BIFF_DATAVAL_ALLOWBLANK );
-    aModel.mbNoDropDown   = getFlag( nFlags, BIFF_DATAVAL_NODROPDOWN );
-    aModel.mbShowInputMsg = getFlag( nFlags, BIFF_DATAVAL_SHOWINPUT );
-    aModel.mbShowErrorMsg = getFlag( nFlags, BIFF_DATAVAL_SHOWERROR );
-
-    // cell range list
-    getAddressConverter().convertToCellRangeList( aModel.maRanges, aRanges, getSheetIndex(), true );
-
-    // condition formula(s)
-    FormulaParser& rParser = getFormulaParser();
-    CellAddress aBaseAddr = aModel.maRanges.getBaseAddress();
-    aModel.maTokens1 = rParser.importFormula( aBaseAddr, FORMULATYPE_VALIDATION, rStrm );
-    aModel.maTokens2 = rParser.importFormula( aBaseAddr, FORMULATYPE_VALIDATION, rStrm );
-    // process string list of a list validation (convert to list of string tokens)
-    if( (aModel.mnType == XML_list) && getFlag( nFlags, BIFF_DATAVAL_STRINGLIST ) )
-        rParser.convertStringToStringList( aModel.maTokens1, ',', true );
-
-    // set validation data
-    setValidation( aModel );
+void ExtDataValidationsContext::onEndElement()
+{
+    if( isCurrentElement( XLS14_TOKEN( dataValidation ) ) )
+    {
+        SetValidation( *this );
+    }
 }
 
 WorksheetFragment::WorksheetFragment( const WorksheetHelper& rHelper, const OUString& rFragmentPath ) :
