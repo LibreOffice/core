@@ -314,7 +314,7 @@ SwAccessibleObjShape_Impl
             }
             ++aIter;
         }
-        OSL_ENSURE( pSelShape == pShape, "copying shapes went wrong!" );
+        assert(pSelShape == pShape);
     }
 
     if( pSelStart )
@@ -552,9 +552,9 @@ void SwAccessibleEventList_Impl::MoveMissingXAccToEnd()
         else
             ++li;
     }
-    OSL_ENSURE(size() + lstEvent.size() == nSize ,"");
+    assert(size() + lstEvent.size() == nSize);
     maEvents.insert(end(),lstEvent.begin(),lstEvent.end());
-    OSL_ENSURE(size() == nSize ,"");
+    assert(size() == nSize);
 }
 
 struct SwAccessibleChildFunc
@@ -751,7 +751,7 @@ void SwAccPreviewData::Update( const SwAccessibleMap& rAccMap,
 void SwAccPreviewData::InvalidateSelection( const SwPageFrame* _pSelectedPageFrame )
 {
     mpSelPage = _pSelectedPageFrame;
-    OSL_ENSURE( mpSelPage, "selected page not found" );
+    assert(mpSelPage);
 }
 
 struct ContainsPredicate
@@ -905,8 +905,7 @@ void SwAccessibleMap::FireEvent( const SwAccessibleEvent_Impl& rEvent )
                                        rEvent.GetOldBox() );
             break;
         case SwAccessibleEvent_Impl::DISPOSE:
-            OSL_ENSURE( xAccImpl.is(),
-                    "dispose event has been stored" );
+            assert(!"dispose event has been stored");
             break;
         case SwAccessibleEvent_Impl::INVALID_ATTR:
             // nothing to do here - handled above
@@ -969,7 +968,7 @@ void SwAccessibleMap::AppendEvent( const SwAccessibleEvent_Impl& rEvent )
         if( aIter != mpEventMap->end() )
         {
             SwAccessibleEvent_Impl aEvent( *(*aIter).second );
-            OSL_ENSURE( aEvent.GetType() != SwAccessibleEvent_Impl::DISPOSE,
+            assert( aEvent.GetType() != SwAccessibleEvent_Impl::DISPOSE &&
                     "dispose events should not be stored" );
             bool bAppendEvent = true;
             switch( rEvent.GetType() )
@@ -1062,8 +1061,8 @@ void SwAccessibleMap::InvalidateCursorPosition(
 {
     SwAccessibleContext *pAccImpl =
         static_cast< SwAccessibleContext *>( rAcc.get() );
-    OSL_ENSURE( pAccImpl, "no caret context" );
-    OSL_ENSURE( pAccImpl->GetFrame(), "caret context is disposed" );
+    assert(pAccImpl);
+    assert(pAccImpl->GetFrame());
     if( GetShell()->ActionPend() )
     {
         SwAccessibleEvent_Impl aEvent( SwAccessibleEvent_Impl::CARET_OR_STATES,
@@ -1770,7 +1769,7 @@ uno::Reference< XAccessible > SwAccessibleMap::GetDocumentView_(
         }
 
 #if OSL_DEBUG_LEVEL > 0
-        OSL_ENSURE( !mpFrameMap->mbLocked, "Map is locked" );
+        assert(!mpFrameMap->mbLocked);
         mpFrameMap->mbLocked = true;
 #endif
 
@@ -3026,8 +3025,8 @@ void SwAccessibleMap::UpdatePreview( const std::vector<PreviewPage*>& _rPreviewP
 
 void SwAccessibleMap::InvalidatePreviewSelection( sal_uInt16 nSelPage )
 {
-    OSL_ENSURE( GetShell()->IsPreview(), "no preview?" );
-    OSL_ENSURE( mpPreview != nullptr, "no preview data?" );
+    assert(GetShell()->IsPreview());
+    assert(mpPreview != nullptr);
 
     mpPreview->InvalidateSelection( GetShell()->GetLayout()->GetPageByPageNum( nSelPage ) );
 
@@ -3314,8 +3313,7 @@ void SwAccessibleMap::GetMapMode( const Point& _rPoint,
     MapMode aMapMode = GetShell()->GetWin()->GetMapMode();
     if( GetShell()->IsPreview() )
     {
-        OSL_ENSURE( mpPreview != nullptr, "need preview data" );
-
+        assert(mpPreview != nullptr);
         mpPreview->AdjustMapMode( aMapMode, _rPoint );
     }
     _orMapMode = aMapMode;
@@ -3534,8 +3532,7 @@ void SwAccessibleMap::InvalidateTextSelectionOfAllParas()
 
 const SwRect& SwAccessibleMap::GetVisArea() const
 {
-    OSL_ENSURE( !GetShell()->IsPreview() || (mpPreview != nullptr),
-                "preview without preview data?" );
+    assert(!GetShell()->IsPreview() || (mpPreview != nullptr));
 
     return GetShell()->IsPreview()
            ? mpPreview->GetVisArea()
