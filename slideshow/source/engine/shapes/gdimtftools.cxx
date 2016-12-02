@@ -127,7 +127,7 @@ public:
         against unsupported content, and, if necessary,
         returned as a pre-rendererd bitmap.
     */
-    GDIMetaFile getMtf( bool bForeignSource ) const
+    GDIMetaFileSharedPtr getMtf( bool bForeignSource ) const
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -138,22 +138,19 @@ public:
              hasUnsupportedActions(aGraphic.GetGDIMetaFile()) ) )
         {
             // wrap bitmap into GDIMetafile
-            GDIMetaFile     aMtf;
+            GDIMetaFileSharedPtr xMtf(new GDIMetaFile);
             ::Point         aEmptyPoint;
 
             ::BitmapEx      aBmpEx( aGraphic.GetBitmapEx() );
 
-            aMtf.AddAction( new MetaBmpExAction( aEmptyPoint,
+            xMtf->AddAction( new MetaBmpExAction( aEmptyPoint,
                                                  aBmpEx ) );
-            aMtf.SetPrefSize( aBmpEx.GetPrefSize() );
-            aMtf.SetPrefMapMode( aBmpEx.GetPrefMapMode() );
+            xMtf->SetPrefSize( aBmpEx.GetPrefSize() );
+            xMtf->SetPrefMapMode( aBmpEx.GetPrefMapMode() );
 
-            return aMtf;
+            return xMtf;
         }
-        else
-        {
-            return aGraphic.GetGDIMetaFile();
-        }
+        return GDIMetaFileSharedPtr(new GDIMetaFile(aGraphic.GetGDIMetaFile()));
     }
 
 private:
@@ -164,14 +161,16 @@ private:
 
 // Quick'n'dirty way: tunnel Graphic (only works for
 // in-process slideshow, of course)
-bool getMetaFile( const uno::Reference< lang::XComponent >&       xSource,
-                  const uno::Reference< drawing::XDrawPage >&     xContainingPage,
-                  GDIMetaFile&                                    rMtf,
-                  int                                             mtfLoadFlags,
-                  const uno::Reference< uno::XComponentContext >& rxContext )
+GDIMetaFileSharedPtr getMetaFile( const uno::Reference< lang::XComponent >&       xSource,
+                                  const uno::Reference< drawing::XDrawPage >&     xContainingPage,
+                                  int                                             mtfLoadFlags,
+                                  const uno::Reference< uno::XComponentContext >& rxContext )
 {
-    ENSURE_OR_RETURN_FALSE( rxContext.is(),
-                       "getMetaFile(): Invalid context" );
+    if (!rxContext.is())
+    {
+        SAL_WARN("slideshow.opengl", "getMetaFile(): Invalid context" );
+        return GDIMetaFileSharedPtr();
+    }
 
     // create dummy XGraphicRenderer, which receives the
     // generated XGraphic from the GraphicExporter
@@ -212,9 +211,9 @@ bool getMetaFile( const uno::Reference< lang::XComponent >&       xSource,
 
     xExporter->setSourceDocument( xSource );
     if( !xExporter->filter( aProps ) )
-        return false;
+        return GDIMetaFileSharedPtr();
 
-    rMtf = pRenderer->getMtf( (mtfLoadFlags & MTF_LOAD_FOREIGN_SOURCE) != 0 );
+    GDIMetaFileSharedPtr xMtf = pRenderer->getMtf( (mtfLoadFlags & MTF_LOAD_FOREIGN_SOURCE) != 0 );
 
     // pRenderer is automatically destroyed when xRenderer
     // goes out of scope
@@ -222,7 +221,7 @@ bool getMetaFile( const uno::Reference< lang::XComponent >&       xSource,
     // TODO(E3): Error handling. Exporter might have
     // generated nothing, a bitmap, threw an exception,
     // whatever.
-    return true;
+    return xMtf;
 }
 
 sal_Int32 getNextActionOffset( MetaAction * pCurrAct )

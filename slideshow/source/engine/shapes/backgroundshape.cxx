@@ -123,16 +123,20 @@ namespace slideshow
         {
             uno::Reference< beans::XPropertySet > xPropSet( xDrawPage,
                                                             uno::UNO_QUERY_THROW );
-            GDIMetaFileSharedPtr pMtf( new GDIMetaFile() );
-
             // first try the page background (overrides
             // masterpage background), then try masterpage
-            if( !getMetaFile( uno::Reference<lang::XComponent>(xDrawPage, uno::UNO_QUERY),
-                              xDrawPage, *pMtf, MTF_LOAD_BACKGROUND_ONLY,
-                              rContext.mxComponentContext ) &&
-                !getMetaFile( uno::Reference<lang::XComponent>(xMasterPage, uno::UNO_QUERY),
-                              xDrawPage, *pMtf, MTF_LOAD_BACKGROUND_ONLY,
-                              rContext.mxComponentContext ))
+            GDIMetaFileSharedPtr xMtf = getMetaFile(uno::Reference<lang::XComponent>(xDrawPage, uno::UNO_QUERY),
+                                                    xDrawPage, MTF_LOAD_BACKGROUND_ONLY,
+                                                    rContext.mxComponentContext);
+
+            if (!xMtf)
+            {
+                xMtf = getMetaFile( uno::Reference<lang::XComponent>(xMasterPage, uno::UNO_QUERY),
+                                    xDrawPage, MTF_LOAD_BACKGROUND_ONLY,
+                                    rContext.mxComponentContext );
+            }
+
+            if (!xMtf)
             {
                 throw ShapeLoadFailedException();
             }
@@ -140,13 +144,12 @@ namespace slideshow
             // there is a special background shape, add it
             // as the first one
 
-
             sal_Int32 nDocWidth=0;
             sal_Int32 nDocHeight=0;
             xPropSet->getPropertyValue("Width") >>= nDocWidth;
             xPropSet->getPropertyValue("Height") >>= nDocHeight;
 
-            mpMtf = pMtf;
+            mpMtf = xMtf;
             maBounds = ::basegfx::B2DRectangle( 0,0,nDocWidth, nDocHeight );
         }
 

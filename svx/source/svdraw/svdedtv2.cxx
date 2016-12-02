@@ -2003,10 +2003,18 @@ void SdrEditView::ConvertMarkedToPolyObj()
     ImpConvertTo(false, false/*bLineToArea*/);
 }
 
+namespace
+{
+    GDIMetaFile GetMetaFile(SdrGrafObj* pGraf)
+    {
+        if (pGraf->HasGDIMetaFile())
+            return pGraf->GetTransformedGraphic(SdrGrafObjTransformsAttrs::COLOR|SdrGrafObjTransformsAttrs::MIRROR).GetGDIMetaFile();
+        assert(pGraf->isEmbeddedSvg());
+        return pGraf->getMetafileFromEmbeddedSvg();
+    }
+}
 
 // Metafile Import
-
-
 void SdrEditView::DoImportMarkedMtf(SvdProgressInfo *pProgrInfo)
 {
     const bool bUndo = IsUndoEnabled();
@@ -2040,19 +2048,9 @@ void SdrEditView::DoImportMarkedMtf(SvdProgressInfo *pProgrInfo)
         sal_uIntPtr        nInsAnz=0;
         Rectangle aLogicRect;
 
-        if(pGraf && (pGraf->HasGDIMetaFile() || pGraf->isEmbeddedSvg()))
+        if (pGraf && (pGraf->HasGDIMetaFile() || pGraf->isEmbeddedSvg()))
         {
-            GDIMetaFile aMetaFile;
-
-            if(pGraf->HasGDIMetaFile())
-            {
-                aMetaFile = pGraf->GetTransformedGraphic(SdrGrafObjTransformsAttrs::COLOR|SdrGrafObjTransformsAttrs::MIRROR).GetGDIMetaFile();
-            }
-            else if(pGraf->isEmbeddedSvg())
-            {
-                aMetaFile = pGraf->getMetafileFromEmbeddedSvg();
-            }
-
+            GDIMetaFile aMetaFile(GetMetaFile(pGraf));
             if(aMetaFile.GetActionSize())
             {
                 aLogicRect = pGraf->GetLogicRect();

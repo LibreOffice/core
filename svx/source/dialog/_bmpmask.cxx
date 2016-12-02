@@ -608,7 +608,6 @@ sal_uInt16 SvxBmpMask::InitColorArrays( Color* pSrcCols, Color* pDstCols, sal_uI
     return nCount;
 }
 
-
 Bitmap SvxBmpMask::ImpMask( const Bitmap& rBitmap )
 {
     Bitmap          aBitmap( rBitmap );
@@ -623,7 +622,6 @@ Bitmap SvxBmpMask::ImpMask( const Bitmap& rBitmap )
 
     return aBitmap;
 }
-
 
 BitmapEx SvxBmpMask::ImpMaskTransparent( const BitmapEx& rBitmapEx, const Color& rColor, const long nTol )
 {
@@ -979,6 +977,13 @@ GDIMetaFile SvxBmpMask::ImpReplaceTransparency( const GDIMetaFile& rMtf, const C
     return aMtf;
 }
 
+GDIMetaFile SvxBmpMask::GetMetaFile(const Graphic& rGraphic)
+{
+    // Replace transparency?
+    if (m_pCbxTrans->IsChecked())
+        return ImpReplaceTransparency(rGraphic.GetGDIMetaFile(), m_pLbColorTrans->GetSelectEntryColor());
+    return ImpMask(rGraphic.GetGDIMetaFile());
+}
 
 Graphic SvxBmpMask::Mask( const Graphic& rGraphic )
 {
@@ -1054,14 +1059,7 @@ Graphic SvxBmpMask::Mask( const Graphic& rGraphic )
 
         case GraphicType::GdiMetafile:
         {
-            GDIMetaFile aMtf( aGraphic.GetGDIMetaFile() );
-
-            // Replace transparency?
-            if( m_pCbxTrans->IsChecked() )
-                aMtf = ImpReplaceTransparency( aMtf, aReplColor );
-            else
-                aMtf = ImpMask( aMtf );
-
+            GDIMetaFile aMtf(GetMetaFile(rGraphic));
             Size aSize( aMtf.GetPrefSize() );
             if ( aSize.Width() && aSize.Height() )
                 aGraphic = Graphic( aMtf );

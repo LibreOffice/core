@@ -87,6 +87,18 @@ namespace
 
         return nSteps;
     }
+
+    // get metafile (copy it)
+    GDIMetaFile GetMetaFile(const drawinglayer::primitive2d::MetafilePrimitive2D& rMetaCandidate, const basegfx::BColorModifierStack& rColorModifierStack)
+    {
+        if (rColorModifierStack.count())
+        {
+            const basegfx::BColor aRGBBaseColor(0, 0, 0);
+            const basegfx::BColor aRGBColor(rColorModifierStack.getModifiedColor(aRGBBaseColor));
+            return rMetaCandidate.getMetaFile().GetMonochromeMtf(Color(aRGBColor));
+        }
+        return rMetaCandidate.getMetaFile();
+    }
 }
 
 namespace drawinglayer
@@ -736,18 +748,7 @@ namespace drawinglayer
                 (sal_Int32)floor(aOutlineRange.getMaxX()), (sal_Int32)floor(aOutlineRange.getMaxY()));
 
             // get metafile (copy it)
-            GDIMetaFile aMetaFile;
-
-            if(maBColorModifierStack.count())
-            {
-                const basegfx::BColor aRGBBaseColor(0, 0, 0);
-                const basegfx::BColor aRGBColor(maBColorModifierStack.getModifiedColor(aRGBBaseColor));
-                aMetaFile = rMetaCandidate.getMetaFile().GetMonochromeMtf(Color(aRGBColor));
-            }
-            else
-            {
-                aMetaFile = rMetaCandidate.getMetaFile();
-            }
+            GDIMetaFile aMetaFile(GetMetaFile(rMetaCandidate, maBColorModifierStack));
 
             // rotation
             if(!basegfx::fTools::equalZero(fRotate))
