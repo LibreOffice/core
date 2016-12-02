@@ -1534,7 +1534,7 @@ void SwAnnotationShell::ExecUndo(SfxRequest &rReq)
 
         case SID_REDO:
         {
-            rSh.GetFirstRedoInfo(nullptr, &nUndoId);
+            (void)rSh.GetFirstRedoInfo(nullptr, &nUndoId);
             if (nUndoId == UNDO_CONFLICT)
             {
                 rReq.SetReturnValue( SfxUInt32Item(nId, static_cast<sal_uInt32>(nUndoId)) );
