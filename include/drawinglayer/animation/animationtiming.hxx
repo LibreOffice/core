@@ -56,7 +56,7 @@ namespace drawinglayer
             double                                      mfState;
 
         public:
-            AnimationEntryFixed(double fDuration, double fState = 0.0);
+            AnimationEntryFixed(double fDuration, double fState);
             virtual ~AnimationEntryFixed() override;
             virtual AnimationEntry* clone() const override;
 
@@ -76,7 +76,7 @@ namespace drawinglayer
             double                                      mfStop;
 
         public:
-            AnimationEntryLinear(double fDuration, double fFrequency = 250.0, double fStart = 0.0, double fStop = 1.0);
+            AnimationEntryLinear(double fDuration, double fFrequency, double fStart, double fStop);
             virtual ~AnimationEntryLinear() override;
             virtual AnimationEntry* clone() const override;
 
@@ -115,7 +115,7 @@ namespace drawinglayer
             sal_uInt32                                  mnRepeat;
 
         public:
-            AnimationEntryLoop(sal_uInt32 nRepeat = 0xffffffff);
+            AnimationEntryLoop(sal_uInt32 nRepeat);
             virtual ~AnimationEntryLoop() override;
             virtual AnimationEntry* clone() const override;
 

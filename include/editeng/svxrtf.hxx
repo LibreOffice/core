@@ -59,7 +59,7 @@ class ContentNode;
 class EditNodeIdx
 {
 public:
-    EditNodeIdx(EditEngine* pEE, ContentNode* pNd = nullptr);
+    EditNodeIdx(EditEngine* pEE, ContentNode* pNd);
     ~EditNodeIdx() {}
     sal_Int32   GetIdx() const;
     EditNodeIdx* Clone() const;  // Cloning itself
@@ -343,7 +343,7 @@ class EDITENG_DLLPUBLIC SvxRTFItemStackType
 
 public:
     SvxRTFItemStackType( const SvxRTFItemStackType&, const EditPosition&,
-                        bool bCopyAttr = false );
+                        bool bCopyAttr );
     ~SvxRTFItemStackType();
     //cmc, I'm very suspicios about SetStartPos, it doesn't change
     //its children's starting position, and the implementation looks

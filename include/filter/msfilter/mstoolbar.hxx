@@ -95,7 +95,7 @@ public:
 class Indent
 {
 public:
-    Indent( bool binit = false )
+    Indent( bool binit )
     {
         if ( binit )
             TBBase::nIndent = 0;

@@ -115,7 +115,7 @@ public:
 
                             SvxDateField();
     explicit                SvxDateField( const Date& rDate,
-                                SvxDateType eType = SVXDATETYPE_VAR,
+                                SvxDateType eType,
                                 SvxDateFormat eFormat = SVXDATEFORMAT_STDSMALL );
 
     sal_Int32               GetFixDate() const { return nFixDate; }
@@ -274,7 +274,7 @@ public:
     SV_DECL_PERSIST1( SvxExtTimeField, SvxFieldData, css::text::textfield::Type::EXTENDED_TIME )
                             SvxExtTimeField();
     explicit                SvxExtTimeField( const tools::Time& rTime,
-                                SvxTimeType eType = SVXTIMETYPE_VAR,
+                                SvxTimeType eType,
                                 SvxTimeFormat eFormat = SVXTIMEFORMAT_STANDARD );
 
     sal_Int64               GetFixTime() const { return m_nFixTime; }

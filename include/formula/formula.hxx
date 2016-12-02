@@ -65,7 +65,7 @@ class FORMULA_DLLPUBLIC FormulaModalDialog :   public ModalDialog, public formul
 public:
                     FormulaModalDialog( vcl::Window* pParent
                                             ,IFunctionManager* _pFunctionMgr
-                                            ,IControlReferenceHandler* _pDlg = nullptr );
+                                            ,IControlReferenceHandler* _pDlg );
     virtual ~FormulaModalDialog() override;
     virtual void dispose() override;
 
@@ -101,7 +101,7 @@ public:
                                     , SfxChildWindow* pCW
                                     , vcl::Window* pParent
                                     , IFunctionManager* _pFunctionMgr
-                                    , IControlReferenceHandler* _pDlg = nullptr );
+                                    , IControlReferenceHandler* _pDlg );
     virtual ~FormulaDlg() override;
     virtual void dispose() override;
 private:

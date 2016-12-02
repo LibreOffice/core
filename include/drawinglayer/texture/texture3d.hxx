@@ -107,8 +107,8 @@ namespace drawinglayer
             GeoTexSvxBitmapExTiled(
                 const BitmapEx& rBitmapEx,
                 const basegfx::B2DRange& rRange,
-                double fOffsetX = 0.0,
-                double fOffsetY = 0.0);
+                double fOffsetX,
+                double fOffsetY);
 
             virtual void modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& rfOpacity) const override;
             virtual void modifyOpacity(const basegfx::B2DPoint& rUV, double& rfOpacity) const override;

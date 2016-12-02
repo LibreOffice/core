@@ -347,7 +347,7 @@ public:
 
     // Load, Set, Get - the exception list for capital letters at the
     // beginning of a sentence
-    void SaveCplSttExceptList( LanguageType eLang = LANGUAGE_SYSTEM );
+    void SaveCplSttExceptList( LanguageType eLang );
     SvStringsISortDtor* LoadCplSttExceptList(LanguageType eLang)
         {   return GetLanguageList_( eLang ).LoadCplSttExceptList(); }
     const SvStringsISortDtor* GetCplSttExceptList( LanguageType eLang )
