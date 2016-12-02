@@ -909,6 +909,8 @@ $(eval $(call gb_Helper_register_packages_for_install,brand,\
 	desktop_branding \
 	$(if $(CUSTOM_BRAND_DIR),desktop_branding_custom) \
 	$(if $(and $(filter-out MACOSX WNT,$(OS)),$(filter DESKTOP,$(BUILD_TYPE))),desktop_soffice_sh) \
+	readlicense_oo_files \
+	$(if $(filter WNT,$(OS)),readlicense_oo_license) \
 	$(call gb_Helper_optional,DESKTOP,setup_native_packinfo) \
 ))
 

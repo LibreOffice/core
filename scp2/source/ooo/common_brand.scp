@@ -58,7 +58,6 @@ Module gid_Module_Root_Brand
              gid_Brand_File_Gdb_Trace,
              gid_Brand_File_Bin_Unoinfo,
 	     gid_Brand_File_Desktophelper_Txt,
-             gid_Brand_File_Html_Thirdpartylicensereadme,
              gid_Brand_File_Lib_Dbghelp,
              gid_Brand_File_Lib_Mingw_GccS,
              gid_Brand_File_Lib_Mingw_Stdcpp,
@@ -77,11 +76,7 @@ Module gid_Module_Root_Brand
              gid_Brand_File_Share_Xdg_QStart,
              gid_Brand_File_Share_Xdg_StartCenter,
              gid_Brand_File_Share_Xdg_Writer,
-             gid_Brand_File_Share_Xdg_XsltFilter,
-	     gid_License_Txt,
-	     git_License_Odt,
-	     gid_Credits_Odt,
-	     gid_Apache_Notice);
+             gid_Brand_File_Share_Xdg_XsltFilter);
 End
 
 // Language specific brand module
@@ -468,17 +463,6 @@ End
 #endif
 
 // Files
-
-File gid_Brand_File_Html_Thirdpartylicensereadme
-    Name = "LICENSE.html";
-#if defined MACOSX
-    Dir = gid_Dir_Bundle_Contents_Resources;
-#else
-    Dir = gid_Dir_Brand_Root;
-#endif
-    Styles = (WORKSTATION);
-    TXT_FILE_BODY;
-End
 
 #if defined UNX && !defined MACOSX
 
@@ -1231,52 +1215,3 @@ ProfileItem gid_Brand_Profileitem_Setup_Install
     Styles = (INIFILETABLE);
 End
 #endif
-
-File gid_License_Txt
-  TXT_FILE_BODY;
-#if defined MACOSX
-    Dir = gid_Dir_Bundle_Contents_Resources;
-#else
-    Dir = gid_Dir_Brand_Root;
-#endif
-  #ifdef UNX
-    Name = "LICENSE";
-  #endif
-  #ifdef WNT
-    Name = "license.txt";
-  #endif
-    Styles = (PACKED);
-End
-
-File gid_License_Odt
-    TXT_FILE_BODY;
-#if defined MACOSX
-    Dir = gid_Dir_Bundle_Contents_Resources;
-#else
-    Dir = gid_Dir_Brand_Root;
-#endif
-    Name = "LICENSE.fodt";
-    Styles = (PACKED);
-End
-
-File gid_Credits_Odt
-    TXT_FILE_BODY;
-#if defined MACOSX
-    Dir = gid_Dir_Bundle_Contents_Resources;
-#else
-    Dir = gid_Dir_Brand_Root;
-#endif
-    Name = "CREDITS.fodt";
-    Styles = (PACKED);
-End
-
-File gid_Apache_Notice
-    TXT_FILE_BODY;
-#if defined MACOSX
-    Dir = gid_Dir_Bundle_Contents_Resources;
-#else
-    Dir = gid_Dir_Brand_Root;
-#endif
-    Name = "NOTICE";
-    Styles = (PACKED);
-End
