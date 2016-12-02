@@ -24,11 +24,8 @@ $(eval $(call gb_CppunitTest_use_libraries,writerperfect_draw,\
 	tl \
 	ucbhelper \
 	unotest \
+	wpftqahelper \
 	$(gb_UWINAPI) \
-))
-
-$(eval $(call gb_CppunitTest_use_static_libraries,writerperfect_draw,\
-	writerperfect_filtertestbase \
 ))
 
 $(eval $(call gb_CppunitTest_use_ure,writerperfect_draw))
