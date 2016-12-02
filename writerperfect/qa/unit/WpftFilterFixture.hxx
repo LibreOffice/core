@@ -12,6 +12,8 @@
 
 #include "config_writerperfect.h"
 
+#include "wpftqahelperdllapi.h"
+
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
@@ -63,7 +65,7 @@ namespace writerperfect
 namespace test
 {
 
-class WpftFilterFixture : public ::test::BootstrapFixture
+class WPFTQAHELPER_DLLPUBLIC WpftFilterFixture : public ::test::BootstrapFixture
 {
 public:
     virtual void setUp() override;
