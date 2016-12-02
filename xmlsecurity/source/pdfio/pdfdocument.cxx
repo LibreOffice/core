@@ -1981,9 +1981,9 @@ std::vector<unsigned char> PDFDocument::DecodeHexString(PDFHexStringElement* pEl
     return aRet;
 }
 
-#ifdef XMLSEC_CRYPTO_NSS
 namespace
 {
+#ifdef XMLSEC_CRYPTO_NSS
 /// Similar to NSS_CMSAttributeArray_FindAttrByOidTag(), but works directly with a SECOidData.
 NSSCMSAttribute* CMSAttributeArray_FindAttrByOidData(NSSCMSAttribute** attrs, SECOidData* oid, PRBool only)
 {
@@ -2133,8 +2133,79 @@ bad_data:
     }
     return rv;
 }
+#elif defined XMLSEC_CRYPTO_MSCRYPTO
+/// Verifies a non-detached signature using CryptoAPI.
+bool VerifyNonDetachedSignature(SvStream& rStream, std::vector<std::pair<size_t, size_t>>& rByteRanges, std::vector<BYTE>& rExpectedHash)
+{
+    HCRYPTPROV hProv = 0;
+    if (!CryptAcquireContext(&hProv, nullptr, nullptr, PROV_RSA_AES, CRYPT_VERIFYCONTEXT))
+    {
+        SAL_WARN("xmlsecurity.pdfio", "CryptAcquireContext() failed");
+        return false;
+    }
+
+    HCRYPTHASH hHash = 0;
+    if (!CryptCreateHash(hProv, CALG_SHA1, 0, 0, &hHash))
+    {
+        SAL_WARN("xmlsecurity.pdfio", "CryptCreateHash() failed");
+        return false;
+    }
+
+    for (const auto& rByteRange : rByteRanges)
+    {
+        rStream.Seek(rByteRange.first);
+        const int nChunkLen = 4096;
+        std::vector<unsigned char> aBuffer(nChunkLen);
+        for (size_t nByte = 0; nByte < rByteRange.second;)
+        {
+            size_t nRemainingSize = rByteRange.second - nByte;
+            if (nRemainingSize < nChunkLen)
+            {
+                rStream.ReadBytes(aBuffer.data(), nRemainingSize);
+                if (!CryptHashData(hHash, aBuffer.data(), nRemainingSize, 0))
+                {
+                    SAL_WARN("xmlsecurity.pdfio", "CryptHashData() failed");
+                    return false;
+                }
+                nByte = rByteRange.second;
+            }
+            else
+            {
+                rStream.ReadBytes(aBuffer.data(), nChunkLen);
+                if (!CryptHashData(hHash, aBuffer.data(), nChunkLen, 0))
+                {
+                    SAL_WARN("xmlsecurity.pdfio", "CryptHashData() failed");
+                    return false;
+                }
+                nByte += nChunkLen;
+            }
+        }
+    }
+
+    DWORD nActualHash = 0;
+    if (!CryptGetHashParam(hHash, HP_HASHVAL, nullptr, &nActualHash, 0))
+    {
+        SAL_WARN("xmlsecurity.pdfio", "CryptGetHashParam() failed to provide the hash length");
+        return false;
+    }
+
+    std::vector<unsigned char> aActualHash(nActualHash);
+    if (!CryptGetHashParam(hHash, HP_HASHVAL, aActualHash.data(), &nActualHash, 0))
+    {
+        SAL_WARN("xmlsecurity.pdfio", "CryptGetHashParam() failed to provide the hash");
+        return false;
+    }
+
+    CryptDestroyHash(hHash);
+    CryptReleaseContext(hProv, 0);
+
+    if (!std::memcmp(aActualHash.data(), rExpectedHash.data(), aActualHash.size()) && aActualHash.size() == rExpectedHash.size())
+        return true;
+
+    return false;
 }
 #endif
+}
 
 bool PDFDocument::ValidateSignature(SvStream& rStream, PDFObjectElement* pSignature, SignatureInformation& rInformation, bool bLast)
 {
@@ -2160,7 +2231,8 @@ bool PDFDocument::ValidateSignature(SvStream& rStream, PDFObjectElement* pSignat
     }
 
     auto pSubFilter = dynamic_cast<PDFNameElement*>(pValue->Lookup("SubFilter"));
-    if (!pSubFilter || (pSubFilter->GetValue() != "adbe.pkcs7.detached" && pSubFilter->GetValue() != "adbe.pkcs7.sha1" && pSubFilter->GetValue() != "ETSI.CAdES.detached"))
+    bool bNonDetached = pSubFilter && pSubFilter->GetValue() == "adbe.pkcs7.sha1";
+    if (!pSubFilter || (pSubFilter->GetValue() != "adbe.pkcs7.detached" && !bNonDetached && pSubFilter->GetValue() != "ETSI.CAdES.detached"))
     {
         SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ValidateSignature: unsupported sub-filter: '"<<pSubFilter->GetValue()<<"'");
         return false;
@@ -2455,10 +2527,10 @@ bool PDFDocument::ValidateSignature(SvStream& rStream, PDFObjectElement* pSignat
         rInformation.bHasSigningCertificate = true;
 
     SECItem* pContentInfoContentData = pCMSSignedData->contentInfo.content.data;
-    if (pContentInfoContentData && pContentInfoContentData->data)
+    if (bNonDetached && pContentInfoContentData && pContentInfoContentData->data)
     {
         // Not a detached signature.
-        if (!memcmp(pActualResultBuffer, pContentInfoContentData->data, nMaxResultLen) && nActualResultLen == pContentInfoContentData->len)
+        if (!std::memcmp(pActualResultBuffer, pContentInfoContentData->data, nMaxResultLen) && nActualResultLen == pContentInfoContentData->len)
             rInformation.nStatus = xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED;
     }
     else
@@ -2554,7 +2626,7 @@ bool PDFDocument::ValidateSignature(SvStream& rStream, PDFObjectElement* pSignat
     auto pDigestID = reinterpret_cast<CRYPT_ALGORITHM_IDENTIFIER*>(pDigestBytes.get());
     if (OString(szOID_NIST_sha256) == pDigestID->pszObjId)
         rInformation.nDigestID = xml::crypto::DigestID::SHA256;
-    else if (OString(szOID_RSA_SHA1RSA) == pDigestID->pszObjId)
+    else if (OString(szOID_RSA_SHA1RSA) == pDigestID->pszObjId || OString(szOID_OIWSEC_sha1) == pDigestID->pszObjId)
         rInformation.nDigestID = xml::crypto::DigestID::SHA1;
     else
         // Don't error out here, we can still verify the message digest correctly, just the digest ID won't be set.
@@ -2608,9 +2680,33 @@ bool PDFDocument::ValidateSignature(SvStream& rStream, PDFObjectElement* pSignat
         rInformation.ouX509Certificate = aBuffer.makeStringAndClear();
     }
 
-    // Use the CERT_INFO from the signer certificate to verify the signature.
-    if (CryptMsgControl(hMsg, 0, CMSG_CTRL_VERIFY_SIGNATURE, pSignerCertContext->pCertInfo))
-        rInformation.nStatus = xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED;
+    if (bNonDetached)
+    {
+        // Not a detached signature.
+        DWORD nContentParam = 0;
+        if (!CryptMsgGetParam(hMsg, CMSG_CONTENT_PARAM, 0, nullptr, &nContentParam))
+        {
+            SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ValidateSignature: CryptMsgGetParam() failed");
+            return false;
+        }
+
+        std::vector<BYTE> aContentParam(nContentParam);
+        if (!CryptMsgGetParam(hMsg, CMSG_CONTENT_PARAM, 0, aContentParam.data(), &nContentParam))
+        {
+            SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ValidateSignature: CryptMsgGetParam() failed");
+            return false;
+        }
+
+        if (VerifyNonDetachedSignature(rStream, aByteRanges, aContentParam))
+            rInformation.nStatus = xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED;
+    }
+    else
+    {
+        // Detached, the usual case.
+        // Use the CERT_INFO from the signer certificate to verify the signature.
+        if (CryptMsgControl(hMsg, 0, CMSG_CTRL_VERIFY_SIGNATURE, pSignerCertContext->pCertInfo))
+            rInformation.nStatus = xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED;
+    }
 
     // Check if we have a signing certificate attribute.
     DWORD nSignedAttributes = 0;
