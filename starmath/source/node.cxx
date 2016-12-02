@@ -1918,23 +1918,24 @@ void SmFontNode::SetSizeParameter(const Fraction& rValue, FontSizeType eType)
 
 
 SmPolyLineNode::SmPolyLineNode(const SmToken &rNodeToken)
-:   SmGraphicNode(NPOLYLINE, rNodeToken)
+    : SmGraphicNode(NPOLYLINE, rNodeToken)
+    , maPoly(2)
+    , maToSize()
+    , mnWidth(0)
 {
-    aPoly.SetSize(2);
-    nWidth = 0;
 }
 
 
 void SmPolyLineNode::AdaptToX(OutputDevice &/*rDev*/, sal_uLong nNewWidth)
 {
-    aToSize.Width() = nNewWidth;
+    maToSize.Width() = nNewWidth;
 }
 
 
 void SmPolyLineNode::AdaptToY(OutputDevice &/*rDev*/, sal_uLong nNewHeight)
 {
     GetFont().FreezeBorderWidth();
-    aToSize.Height() = nNewHeight;
+    maToSize.Height() = nNewHeight;
 }
 
 
@@ -1949,13 +1950,13 @@ void SmPolyLineNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     long  nBorderwidth = GetFont().GetBorderWidth();
 
     // create polygon using both endpoints
-    OSL_ENSURE(aPoly.GetSize() == 2, "Sm : wrong number of points");
+    assert(maPoly.GetSize() == 2);
     Point  aPointA, aPointB;
     if (GetToken().eType == TWIDESLASH)
     {
         aPointA.X() = nBorderwidth;
-        aPointA.Y() = aToSize.Height() - nBorderwidth;
-        aPointB.X() = aToSize.Width() - nBorderwidth;
+        aPointA.Y() = maToSize.Height() - nBorderwidth;
+        aPointB.X() = maToSize.Width() - nBorderwidth;
         aPointB.Y() = nBorderwidth;
     }
     else
@@ -1963,17 +1964,17 @@ void SmPolyLineNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
         OSL_ENSURE(GetToken().eType == TWIDEBACKSLASH, "Sm : unexpected token");
         aPointA.X() =
         aPointA.Y() = nBorderwidth;
-        aPointB.X() = aToSize.Width() - nBorderwidth;
-        aPointB.Y() = aToSize.Height() - nBorderwidth;
+        aPointB.X() = maToSize.Width() - nBorderwidth;
+        aPointB.Y() = maToSize.Height() - nBorderwidth;
     }
-    aPoly.SetPoint(aPointA, 0);
-    aPoly.SetPoint(aPointB, 1);
+    maPoly.SetPoint(aPointA, 0);
+    maPoly.SetPoint(aPointB, 1);
 
     long  nThick       = GetFont().GetFontSize().Height()
                             * rFormat.GetDistance(DIS_STROKEWIDTH) / 100L;
-    nWidth = nThick + 2 * nBorderwidth;
+    mnWidth = nThick + 2 * nBorderwidth;
 
-    SmRect::operator = (SmRect(aToSize.Width(), aToSize.Height()));
+    SmRect::operator = (SmRect(maToSize.Width(), maToSize.Height()));
 }
 
 
@@ -1998,22 +1999,22 @@ void SmRootSymbolNode::AdaptToY(OutputDevice &rDev, sal_uLong nHeight)
 
 void SmRectangleNode::AdaptToX(OutputDevice &/*rDev*/, sal_uLong nWidth)
 {
-    aToSize.Width() = nWidth;
+    maToSize.Width() = nWidth;
 }
 
 
 void SmRectangleNode::AdaptToY(OutputDevice &/*rDev*/, sal_uLong nHeight)
 {
     GetFont().FreezeBorderWidth();
-    aToSize.Height() = nHeight;
+    maToSize.Height() = nHeight;
 }
 
 
 void SmRectangleNode::Arrange(OutputDevice &rDev, const SmFormat &/*rFormat*/)
 {
     long  nFontHeight = GetFont().GetFontSize().Height();
-    long  nWidth  = aToSize.Width(),
-          nHeight = aToSize.Height();
+    long  nWidth  = maToSize.Width(),
+          nHeight = maToSize.Height();
     if (nHeight == 0)
         nHeight = nFontHeight / 30;
     if (nWidth == 0)

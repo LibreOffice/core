@@ -328,7 +328,7 @@ public:
  */
 class SmRectangleNode : public SmGraphicNode
 {
-    Size  aToSize;
+    Size maToSize;
 
 public:
     explicit SmRectangleNode(const SmToken &rNodeToken)
@@ -351,15 +351,15 @@ public:
  */
 class SmPolyLineNode : public SmGraphicNode
 {
-    tools::Polygon aPoly;
-    Size        aToSize;
-    long        nWidth;
+    tools::Polygon maPoly;
+    Size maToSize;
+    long mnWidth;
 
 public:
     explicit SmPolyLineNode(const SmToken &rNodeToken);
 
-    long         GetWidth() const { return nWidth; }
-    tools::Polygon &GetPolygon() { return aPoly; }
+    long         GetWidth() const { return mnWidth; }
+    tools::Polygon &GetPolygon() { return maPoly; }
 
     virtual void AdaptToX(OutputDevice &rDev, sal_uLong nWidth) override;
     virtual void AdaptToY(OutputDevice &rDev, sal_uLong nHeight) override;
