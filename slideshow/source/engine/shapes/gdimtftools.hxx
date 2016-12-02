@@ -90,14 +90,11 @@ namespace slideshow
             import (currently, the UnoGraphicExporter needs this
             information).
 
-            @param o_rMtf
-            Metafile to extract shape content into
         */
-        bool getMetaFile( const css::uno::Reference< css::lang::XComponent >&        xSource,
-                          const css::uno::Reference< css::drawing::XDrawPage >&      xContainingPage,
-                          GDIMetaFile&                                               o_rMtf,
-                          int                                                        mtfLoadFlags,
-                          const css::uno::Reference< css::uno::XComponentContext >&  rxContext );
+        GDIMetaFileSharedPtr getMetaFile( const css::uno::Reference< css::lang::XComponent >&        xSource,
+                                          const css::uno::Reference< css::drawing::XDrawPage >&      xContainingPage,
+                                          int                                                        mtfLoadFlags,
+                                          const css::uno::Reference< css::uno::XComponentContext >&  rxContext );
 
         /** Gets the next action offset for iterating meta actions which is most
             often returns 1.

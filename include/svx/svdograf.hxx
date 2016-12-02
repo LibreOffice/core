@@ -114,6 +114,7 @@ private:
                             DECL_LINK( ImpSwapHdl, const GraphicObject*, SvStream* );
                             DECL_LINK( ReplacementSwapHdl, const GraphicObject*, SvStream* );
     void onGraphicChanged();
+    GDIMetaFile             GetMetaFile(GraphicType &rGraphicType) const;
 
 public:
 
