@@ -10,6 +10,8 @@
 #ifndef INCLUDED_WRITERPERFECT_QA_UNIT_WPFTFILTERTESTBASE_HXX
 #define INCLUDED_WRITERPERFECT_QA_UNIT_WPFTFILTERTESTBASE_HXX
 
+#include "wpftqahelperdllapi.h"
+
 #include <unordered_map>
 
 #include <com/sun/star/uno/Reference.hxx>
@@ -41,7 +43,7 @@ namespace test
 
 typedef std::unordered_map<rtl::OUString, bool, rtl::OUStringHash> WpftOptionalMap_t;
 
-class WpftFilterTestBase
+class WPFTQAHELPER_DLLPUBLIC WpftFilterTestBase
     : public ::test::FiltersTest
     , public WpftFilterFixture
 {
