@@ -1914,43 +1914,40 @@ uno::Reference< XAccessible> SwAccessibleMap::GetContext( const SwFrame *pFrame,
                 default: break;
                 }
                 xAcc = pAcc;
+                assert(xAcc.is());
 
-                OSL_ENSURE( xAcc.is(), "unknown frame type" );
-                if( xAcc.is() )
+                if( aIter != mpFrameMap->end() )
                 {
-                    if( aIter != mpFrameMap->end() )
-                    {
-                        (*aIter).second = xAcc;
-                    }
-                    else
-                    {
-                        SwAccessibleContextMap_Impl::value_type aEntry( pFrame, xAcc );
-                        mpFrameMap->insert( aEntry );
-                    }
+                    (*aIter).second = xAcc;
+                }
+                else
+                {
+                    SwAccessibleContextMap_Impl::value_type aEntry( pFrame, xAcc );
+                    mpFrameMap->insert( aEntry );
+                }
 
-                    if( pAcc->HasCursor() &&
-                        !AreInSameTable( mxCursorContext, pFrame ) )
-                    {
-                        // If the new context has the focus, and if we know
-                        // another context that had the focus, then the focus
-                        // just moves from the old context to the new one. We
-                        // then have to send a focus event and a caret event for
-                        // the old context. We have to do that now,
-                        // because after we have left this method, anyone might
-                        // call getStates for the new context and will get a
-                        // focused state then. Sending the focus changes event
-                        // after that seems to be strange. However, we cannot
-                        // send a focus event for the new context now, because
-                        // no one except us knows it. In any case, we remember
-                        // the new context as the one that has the focus
-                        // currently.
+                if( pAcc->HasCursor() &&
+                    !AreInSameTable( mxCursorContext, pFrame ) )
+                {
+                    // If the new context has the focus, and if we know
+                    // another context that had the focus, then the focus
+                    // just moves from the old context to the new one. We
+                    // then have to send a focus event and a caret event for
+                    // the old context. We have to do that now,
+                    // because after we have left this method, anyone might
+                    // call getStates for the new context and will get a
+                    // focused state then. Sending the focus changes event
+                    // after that seems to be strange. However, we cannot
+                    // send a focus event for the new context now, because
+                    // no one except us knows it. In any case, we remember
+                    // the new context as the one that has the focus
+                    // currently.
 
-                        xOldCursorAcc = mxCursorContext;
-                        mxCursorContext = xAcc;
+                    xOldCursorAcc = mxCursorContext;
+                    mxCursorContext = xAcc;
 
-                        bOldShapeSelected = mbShapeSelected;
-                        mbShapeSelected = false;
-                    }
+                    bOldShapeSelected = mbShapeSelected;
+                    mbShapeSelected = false;
                 }
             }
         }
@@ -2014,25 +2011,20 @@ uno::Reference< XAccessible> SwAccessibleMap::GetContext(
                                 aShapeInfo, mpShapeMap->GetInfo() );
                 }
                 xAcc = pAcc.get();
-
-                OSL_ENSURE( xAcc.is(), "unknown shape type" );
-                if( xAcc.is() )
+                assert(xAcc.is());
+                pAcc->Init();
+                if( aIter != mpShapeMap->end() )
                 {
-                    pAcc->Init();
-                    if( aIter != mpShapeMap->end() )
-                    {
-                        (*aIter).second = xAcc;
-                    }
-                    else
-                    {
-                        SwAccessibleShapeMap_Impl::value_type aEntry( pObj,
-                                                                      xAcc );
-                        mpShapeMap->insert( aEntry );
-                    }
-                    // TODO: focus!!!
+                    (*aIter).second = xAcc;
                 }
-                if (xAcc.is())
-                    AddGroupContext(pObj, xAcc);
+                else
+                {
+                    SwAccessibleShapeMap_Impl::value_type aEntry( pObj,
+                                                                  xAcc );
+                    mpShapeMap->insert( aEntry );
+                }
+                // TODO: focus!!!
+                AddGroupContext(pObj, xAcc);
             }
         }
     }
