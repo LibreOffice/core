@@ -219,8 +219,6 @@ OUString const & psp::getFontPath()
             {
                 aPathBuffer.append( aInstallationRootPath );
                 aPathBuffer.append( "/" LIBO_SHARE_FOLDER "/fonts/truetype;");
-                aPathBuffer.append( aInstallationRootPath );
-                aPathBuffer.append( "/" LIBO_SHARE_FOLDER "/fonts/type1;" );
             }
             if( !aUserPath.isEmpty() )
             {

@@ -17,9 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "unx/fontcache.hxx"
-#include "impfont.hxx"
 #include "unx/fontmanager.hxx"
+#include "impfont.hxx"
 #include <vcl/svapp.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/vclenum.hxx>
@@ -555,21 +554,19 @@ void PrintFontManager::countFontconfigFonts( std::unordered_map<OString, int, OS
             o_rVisitedPaths[aDir] = 1;
 
             int nDirID = getDirectoryAtom( aDir, true );
-            if( ! m_pFontCache->getFontCacheFile( nDirID, aBase, aFonts ) )
-            {
 #if OSL_DEBUG_LEVEL > 2
-                fprintf( stderr, "file %s not cached\n", aBase.getStr() );
+            fprintf( stderr, "file %s not cached\n", aBase.getStr() );
 #endif
-                // not known, analyze font file to get attributes
-                // not described by fontconfig (e.g. alias names, PSName)
-                if (eFormatRes != FcResultMatch)
-                    format = nullptr;
-                analyzeFontFile( nDirID, aBase, aFonts, reinterpret_cast<char*>(format) );
+            // not known, analyze font file to get attributes
+            // not described by fontconfig (e.g. alias names, PSName)
+            if (eFormatRes != FcResultMatch)
+                format = nullptr;
+            analyzeFontFile( nDirID, aBase, aFonts, reinterpret_cast<char*>(format) );
 #if OSL_DEBUG_LEVEL > 1
-                if( aFonts.empty() )
-                    fprintf( stderr, "Warning: file \"%s\" is unusable to psprint\n", aOrgPath.getStr() );
+            if( aFonts.empty() )
+                fprintf( stderr, "Warning: file \"%s\" is unusable to psprint\n", aOrgPath.getStr() );
 #endif
-            }
+
             if( aFonts.empty() )
             {
                 //remove font, reuse index
@@ -636,8 +633,6 @@ void PrintFontManager::countFontconfigFonts( std::unordered_map<OString, int, OS
                     pUpdate->m_aStyleName = OStringToOUString( OString( reinterpret_cast<char*>(style) ), RTL_TEXTENCODING_UTF8 );
                 }
 
-                // update font cache
-                m_pFontCache->updateFontCacheEntry( pUpdate, false );
                 // sort into known fonts
                 fontID aFont = m_nNextFontID++;
                 m_aFonts[ aFont ] = pUpdate;
@@ -648,15 +643,6 @@ void PrintFontManager::countFontconfigFonts( std::unordered_map<OString, int, OS
 #if OSL_DEBUG_LEVEL > 2
                 fprintf( stderr, "inserted font %s as fontID %d\n", family, aFont );
 #endif
-            }
-            // clean up the fonts we did not put into the list
-            for( std::list< PrintFont* >::iterator it = aFonts.begin(); it != aFonts.end(); ++it )
-            {
-                if( *it != pUpdate )
-                {
-                    m_pFontCache->updateFontCacheEntry( *it, false ); // prepare a cache entry for a collection item
-                    delete *it;
-                }
             }
         }
     }

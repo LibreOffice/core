@@ -25,7 +25,7 @@
 
 #include "unotools/atom.hxx"
 
-#include "unx/fontcache.hxx"
+#include "unx/fontmanager.hxx"
 #include "fontsubset.hxx"
 #include "impfontcharmap.hxx"
 #include "svdata.hxx"
@@ -139,7 +139,6 @@ PrintFontManager::PrintFontManager()
     : m_nNextFontID( 1 )
     , m_pAtoms( new MultiAtomProvider() )
     , m_nNextDirAtom( 1 )
-    , m_pFontCache( nullptr )
 {
 #if ENABLE_DBUS
     m_aFontInstallerTimer.SetTimeoutHdl(LINK(this, PrintFontManager, autoInstallFontLangSupport));
@@ -154,7 +153,6 @@ PrintFontManager::~PrintFontManager()
     for( std::unordered_map< fontID, PrintFont* >::const_iterator it = m_aFonts.begin(); it != m_aFonts.end(); ++it )
         delete (*it).second;
     delete m_pAtoms;
-    delete m_pFontCache;
 }
 
 OString PrintFontManager::getDirectory( int nAtom ) const
@@ -200,7 +198,6 @@ std::vector<fontID> PrintFontManager::addFontFile( const OString& rFileName )
                 fontID nFontId = m_nNextFontID++;
                 m_aFonts[nFontId] = *it;
                 m_aFontFileToFontID[ aName ].insert( nFontId );
-                m_pFontCache->updateFontCacheEntry( *it, true );
                 aFontIds.push_back(nFontId);
             }
         }
@@ -737,21 +734,6 @@ void PrintFontManager::initialize()
     CALLGRIND_ZERO_STATS();
     #endif
 
-    if( ! m_pFontCache )
-    {
-#if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "creating font cache ... " );
-        clock_t aStart;
-        struct tms tms;
-        aStart = times( &tms );
-#endif
-        m_pFontCache = new FontCache();
-#if OSL_DEBUG_LEVEL > 1
-        clock_t aStop = times( &tms );
-        fprintf( stderr, "done in %lf s\n", (double)(aStop - aStart)/(double)sysconf( _SC_CLK_TCK ) );
-#endif
-    }
-
     // initialize can be called more than once, e.g.
     // gtk-fontconfig-timestamp changes to reflect new font installed and
     // PrintFontManager::initialize called again
@@ -813,42 +795,6 @@ void PrintFontManager::initialize()
     // Don't search directories that fontconfig already did
     countFontconfigFonts( visited_dirs );
 
-    // search for font files in each path
-    std::list< OString >::iterator dir_it;
-    for( dir_it = m_aFontDirectories.begin(); dir_it != m_aFontDirectories.end(); ++dir_it )
-    {
-        OString aPath( *dir_it );
-        // see if we were here already
-        if( visited_dirs.find( aPath ) != visited_dirs.end() )
-            continue;
-        visited_dirs[ aPath ] = 1;
-
-        // there may be ":unscaled" directories (see XFree86)
-        // it should be safe to ignore them since they should not
-        // contain any of our recognizeable fonts
-
-        // ask the font cache whether it handles this directory
-        std::list< PrintFont* > aCacheFonts;
-        if( m_pFontCache->listDirectory( aPath, aCacheFonts ) )
-        {
-#if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "adding cache directory: %s\n", aPath.getStr() );
-#endif
-            for( ::std::list< PrintFont* >::iterator it = aCacheFonts.begin(); it != aCacheFonts.end(); ++it )
-            {
-                fontID aFont = m_nNextFontID++;
-                m_aFonts[ aFont ] = *it;
-                m_aFontFileToFontID[(*it)->m_aFontFile].insert(aFont);
-#if OSL_DEBUG_LEVEL > 2
-                fprintf( stderr, "adding cached font %d: %s\n", aFont, getFontFileSysPath( aFont ).getStr() );
-#endif
-            }
-            if( ! m_pFontCache->scanAdditionalFiles( aPath ) )
-                continue;
-        }
-
-    }
-
 #if OSL_DEBUG_LEVEL > 1
     aStep1 = times( &tms );
 #endif
@@ -874,8 +820,6 @@ void PrintFontManager::initialize()
     fprintf( stderr, "Step 1 took %lf seconds\n", (double)(aStep1 - aStart)/fTick );
     fprintf( stderr, "Step 2 took %lf seconds\n", (double)(aStep2 - aStep1)/fTick );
 #endif
-
-    m_pFontCache->flush();
 
     #ifdef CALLGRIND_COMPILE
     CALLGRIND_DUMP_STATS();

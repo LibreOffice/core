@@ -540,7 +540,6 @@ vcl_headless_freetype_code=\
     vcl/unx/generic/glyphs/freetype_glyphcache \
     vcl/unx/generic/glyphs/glyphcache \
     vcl/unx/generic/fontmanager/fontsubst \
-    vcl/unx/generic/fontmanager/fontcache \
     vcl/unx/generic/fontmanager/fontconfig \
     vcl/unx/generic/fontmanager/fontmanager \
     vcl/unx/generic/fontmanager/helper \
