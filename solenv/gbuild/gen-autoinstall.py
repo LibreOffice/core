@@ -82,6 +82,6 @@ for (gid, jarfile) in autojars:
     print(scp2jartemplate + "(" + gid + "," + jarfile + scp2componentcondition + ")")
 
 for (gid, pkgfilelist) in autopkgs:
-    print("PACKAGE_FILELIST(" + gid + "," + pkgfilelist + scp2componentcondition + ")")
+    print("PACKAGE_FILELIST(" + gid + "," + pkgfilelist + ")")
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:
