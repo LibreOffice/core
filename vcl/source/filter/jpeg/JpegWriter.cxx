@@ -105,7 +105,6 @@ void jpeg_svstream_dest (j_compress_ptr cinfo, void* output)
 
 JPEGWriter::JPEGWriter( SvStream& rStream, const css::uno::Sequence< css::beans::PropertyValue >* pFilterData, bool* pExportWasGrey ) :
     mrStream     ( rStream ),
-    mpReadAccess ( nullptr ),
     mpBuffer     ( nullptr ),
     mbNative     ( false ),
     mpExpWasGrey ( pExportWasGrey )
@@ -198,7 +197,7 @@ bool JPEGWriter::Write( const Graphic& rGraphic )
             aGraphicBmp = rGraphic.GetBitmap();
     }
 
-    mpReadAccess = aGraphicBmp.AcquireReadAccess();
+    mpReadAccess = Bitmap::ScopedReadAccess(aGraphicBmp);
     if( mpReadAccess )
     {
         if ( !mbGreys )  // bitmap was not explicitly converted into greyscale,
@@ -236,8 +235,7 @@ bool JPEGWriter::Write( const Graphic& rGraphic )
         delete[] mpBuffer;
         mpBuffer = nullptr;
 
-        Bitmap::ReleaseAccess( mpReadAccess );
-        mpReadAccess = nullptr;
+        mpReadAccess.reset();
     }
     if ( mxStatusIndicator.is() )
         mxStatusIndicator->end();

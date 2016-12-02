@@ -651,8 +651,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
             if (bOk)
             {
                 Bitmap aBmp( Size( nWidth, nHeight ), nBitCount );
-                BitmapWriteAccess* pAcc;
-                pAcc = aBmp.AcquireWriteAccess();
+                Bitmap::ScopedWriteAccess pAcc(aBmp);
                 if ( pAcc )
                 {
                     for (sal_uInt16 y = 0; y < nHeight && pWMF->good(); ++y)
@@ -672,7 +671,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                             }
                         }
                     }
-                    Bitmap::ReleaseAccess( pAcc );
+                    pAcc.reset();
                     if ( nSye && nSxe &&
                         ( ( nSx + nSxe ) <= aBmp.GetSizePixel().Width() ) &&
                             ( ( nSy + nSye <= aBmp.GetSizePixel().Height() ) ) )
@@ -740,14 +739,13 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
         case W_META_DIBCREATEPATTERNBRUSH:
         {
             Bitmap  aBmp;
-            BitmapReadAccess* pBmp;
             sal_uInt32  nRed = 0, nGreen = 0, nBlue = 0, nCount = 1;
             sal_uInt16  nFunction = 0;
 
             pWMF->ReadUInt16( nFunction ).ReadUInt16( nFunction );
 
             ReadDIB(aBmp, *pWMF, false);
-            pBmp = aBmp.AcquireReadAccess();
+            Bitmap::ScopedReadAccess pBmp(aBmp);
             if ( pBmp )
             {
                 for ( long y = 0; y < pBmp->Height(); y++ )
@@ -764,7 +762,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                 nCount = pBmp->Height() * pBmp->Width();
                 if ( !nCount )
                     nCount++;
-                Bitmap::ReleaseAccess( pBmp );
+                pBmp.reset();
             }
             Color aColor( (sal_uInt8)( nRed / nCount ), (sal_uInt8)( nGreen / nCount ), (sal_uInt8)( nBlue / nCount ) );
             pOut->CreateObject(o3tl::make_unique<WinMtfFillStyle>( aColor, false ));

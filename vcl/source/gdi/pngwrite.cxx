@@ -66,7 +66,7 @@ private:
     sal_uInt32 mnMaxChunkSize;
     bool mbStatus;
 
-    BitmapReadAccess* mpAccess;
+    Bitmap::ScopedReadAccess mpAccess;
     BitmapReadAccess* mpMaskAccess;
     ZCodec mpZCodec;
 
@@ -102,7 +102,6 @@ PNGWriterImpl::PNGWriterImpl( const BitmapEx& rBmpEx,
     , mnInterlaced(0)
     , mnMaxChunkSize(0)
     , mbStatus(true)
-    , mpAccess(nullptr)
     , mpMaskAccess(nullptr)
     , mpDeflateInBuf(nullptr)
     , mpPreviousScan(nullptr)
@@ -157,7 +156,7 @@ PNGWriterImpl::PNGWriterImpl( const BitmapEx& rBmpEx,
                 aBmp.Convert(BMP_CONVERSION_8BIT_TRANS);
                 aBmp.Replace(rBmpEx.GetMask(), BMP_COL_TRANS);
                 mnBitsPerPixel = 8;
-                mpAccess = aBmp.AcquireReadAccess();
+                mpAccess = Bitmap::ScopedReadAccess(aBmp);
                 if (mpAccess)
                 {
                     if (ImplWriteHeader())
@@ -167,8 +166,7 @@ PNGWriterImpl::PNGWriterImpl( const BitmapEx& rBmpEx,
                         ImplWriteTransparent();
                         ImplWriteIDAT();
                     }
-                    Bitmap::ReleaseAccess(mpAccess);
-                    mpAccess = nullptr;
+                    mpAccess.reset();
                 }
                 else
                 {
@@ -177,7 +175,7 @@ PNGWriterImpl::PNGWriterImpl( const BitmapEx& rBmpEx,
             }
             else
             {
-                mpAccess = aBmp.AcquireReadAccess(); // true RGB with alphachannel
+                mpAccess = Bitmap::ScopedReadAccess(aBmp); // true RGB with alphachannel
                 if (mpAccess)
                 {
                     mbTrueAlpha = rBmpEx.IsAlpha();
@@ -219,8 +217,7 @@ PNGWriterImpl::PNGWriterImpl( const BitmapEx& rBmpEx,
                             mbStatus = false;
                         }
                     }
-                    Bitmap::ReleaseAccess(mpAccess);
-                    mpAccess = nullptr;
+                    mpAccess.reset();
                 }
                 else
                 {
@@ -230,7 +227,7 @@ PNGWriterImpl::PNGWriterImpl( const BitmapEx& rBmpEx,
         }
         else
         {
-            mpAccess = aBmp.AcquireReadAccess(); // palette + RGB without alphachannel
+            mpAccess = Bitmap::ScopedReadAccess(aBmp); // palette + RGB without alphachannel
             if (mpAccess)
             {
                 if (ImplWriteHeader())
@@ -241,8 +238,7 @@ PNGWriterImpl::PNGWriterImpl( const BitmapEx& rBmpEx,
 
                     ImplWriteIDAT();
                 }
-                Bitmap::ReleaseAccess(mpAccess);
-                mpAccess = nullptr;
+                mpAccess.reset();
             }
             else
             {

@@ -293,11 +293,11 @@ void doTestCode()
 
     // prepare an alpha mask
     Bitmap aTransMask( Size( 256, 256 ), 8, &Bitmap::GetGreyPalette( 256 ) );
-    BitmapWriteAccess* pAcc = aTransMask.AcquireWriteAccess();
+    Bitmap::ScopedWriteAccess pAcc(aTransMask);
     for( int nX = 0; nX < 256; nX++ )
         for( int nY = 0; nY < 256; nY++ )
             pAcc->SetPixel( nX, nY, BitmapColor( (sal_uInt8)((nX+nY)/2) ) );
-    aTransMask.ReleaseAccess( pAcc );
+    pAcc.reset();
     aTransMask.SetPrefMapMode( MapUnit::MapMM );
     aTransMask.SetPrefSize( Size( 10, 10 ) );
 
@@ -317,10 +317,10 @@ void doTestCode()
     aWriter.DrawRect( aTranspRect );
 
     Bitmap aImageBmp( Size( 256, 256 ), 24 );
-    pAcc = aImageBmp.AcquireWriteAccess();
+    pAcc = Bitmap::ScopedWriteAccess(aImageBmp);
     pAcc->SetFillColor( Color( 0xff, 0, 0xff ) );
     pAcc->FillRect( Rectangle( Point( 0, 0 ), Size( 256, 256 ) ) );
-    aImageBmp.ReleaseAccess( pAcc );
+    pAcc.reset();
     BitmapEx aBmpEx( aImageBmp, AlphaMask( aTransMask ) );
     aWriter.DrawBitmapEx( Point( 1500, 19500 ), Size( 4800, 3000 ), aBmpEx );
 
