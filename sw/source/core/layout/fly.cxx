@@ -2135,7 +2135,9 @@ void SwFrame::AppendDrawObj( SwAnchoredObject& _rNewObj )
     {
         SwRootFrame* pLayout = getRootFrame();
         if( pLayout && pLayout->IsAnyShellAccessible() )
-        pSh->Imp()->AddAccessibleObj( _rNewObj.GetDrawObj() );
+        {
+            pSh->Imp()->AddAccessibleObj( _rNewObj.GetDrawObj() );
+        }
     }
 
     assert(!mpDrawObjs || mpDrawObjs->is_sorted());
