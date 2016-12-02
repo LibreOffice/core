@@ -44,7 +44,6 @@ using namespace psp;
 #include <cstdio>
 #include <cstdarg>
 
-#include <unotools/atom.hxx>
 #include <unotools/configmgr.hxx>
 
 #include "osl/module.h"
@@ -579,7 +578,7 @@ void PrintFontManager::countFontconfigFonts( std::unordered_map<OString, int, OS
                 continue;
             }
 
-            int nFamilyName = m_pAtoms->getAtom( ATOM_FAMILYNAME, OStringToOUString( OString( reinterpret_cast<char*>(family) ), RTL_TEXTENCODING_UTF8 ) );
+            OUString aFamilyName = OStringToOUString(OString(reinterpret_cast<char*>(family)), RTL_TEXTENCODING_UTF8);
             PrintFont* pUpdate = aFonts.front();
             std::list<PrintFont*>::const_iterator second_font = aFonts.begin();
             ++second_font;
@@ -617,7 +616,7 @@ void PrintFontManager::countFontconfigFonts( std::unordered_map<OString, int, OS
             if( pUpdate )
             {
                 // set family name
-                if( pUpdate->m_nFamilyName != nFamilyName )
+                if( pUpdate->m_aFamilyName != aFamilyName )
                 {
                 }
                 if( eWeightRes == FcResultMatch )
