@@ -97,12 +97,9 @@ void DataValidationsContext_Base::SetValidation(::oox::xls::WorksheetHelper& rTa
 void DataValidationsContext_Base::importDataValidation(const AttributeList& rAttribs)
 {
     mxValModel.reset(new ValidationModel);
-    OUString aSqref = rAttribs.getString(XML_sqref, OUString());
-    // Only set mSqref if it is set in attributes, to avoid owerwriting already set using SetSqref
-    if (!aSqref.isEmpty())
-    {
-        mSqref = aSqref;
-    }
+    mFormula1.clear();
+    mFormula2.clear();
+    mSqref = rAttribs.getString(XML_sqref, OUString());
     mxValModel->maInputTitle = rAttribs.getXString(XML_promptTitle, OUString());
     mxValModel->maInputMessage = rAttribs.getXString(XML_prompt, OUString());
     mxValModel->maErrorTitle = rAttribs.getXString(XML_errorTitle, OUString());
@@ -160,7 +157,7 @@ DataValidationsContext::DataValidationsContext( WorksheetFragmentBase& rFragment
 
 ContextHandlerRef DataValidationsContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
-    switch( getCurrentElement() )
+    switch( getCurrentElementWithMce() )
     {
         case XLS_TOKEN( dataValidations ):
             if( nElement == XLS_TOKEN( dataValidation ) )
@@ -172,13 +169,74 @@ ContextHandlerRef DataValidationsContext::onCreateContext( sal_Int32 nElement, c
         case XLS_TOKEN( dataValidation ):
             switch( nElement )
             {
+                case MCE_TOKEN( AlternateContent ):
                 case XLS_TOKEN( formula1 ):
                 case XLS_TOKEN( formula2 ):
                     return this;    // collect formulas in onCharacters()
             }
         break;
+        case MCE_TOKEN( AlternateContent ):
+            switch( nElement )
+            {
+                case MCE_TOKEN( Choice ):
+                case MCE_TOKEN( Fallback ):
+                    return this;
+            }
+        break;
+        case MCE_TOKEN( Choice ):
+            switch( nElement )
+            {
+                case X12AC_TOKEN( list ):
+                    return this;
+            }
+        break;
+        case MCE_TOKEN( Fallback ):
+            switch( nElement )
+            {
+                case XLS_TOKEN( formula1 ):
+                    if (!isFormula1Set()) // only if more preferable choice was not used
+                        return this;      // collect formulas in onCharacters()
+                break;
+                case XLS_TOKEN( formula2 ):
+                    if (!isFormula2Set()) // only if more preferable choice was not used
+                        return this;      // collect formulas in onCharacters()
+                break;
+            }
+        break;
     }
     return nullptr;
+}
+
+namespace {
+// Convert strings like 1,"2,3",4 to form "1","2,3","4"
+OUString NormalizeOoxList(const OUString& aList)
+{
+    OUStringBuffer aResult("\"");
+    bool bInsideQuotes = false;
+    const sal_Int32 nLen = aList.getLength();
+    for (sal_Int32 i = 0; i < nLen; ++i)
+    {
+        sal_Unicode ch = aList[i];
+
+        switch (ch)
+        {
+            case L'"':
+                bInsideQuotes = !bInsideQuotes;
+                break;
+            case L',':
+                if (!bInsideQuotes)
+                {
+                    aResult.append("\",\"");
+                    break;
+                }
+                SAL_FALLTHROUGH;
+            default:
+                aResult.append(ch);
+                break;
+        }
+    }
+    return aResult.append('"').makeStringAndClear();
+}
 }
 
 void DataValidationsContext::onCharacters( const OUString& rChars )
@@ -191,12 +249,15 @@ void DataValidationsContext::onCharacters( const OUString& rChars )
         case XLS_TOKEN( formula2 ):
             SetFormula2( rChars );
         break;
+        case X12AC_TOKEN( list ):
+            SetFormula1( NormalizeOoxList( rChars ) );
+        break;
     }
 }
 
 void DataValidationsContext::onEndElement()
 {
-    if( isCurrentElement( XLS_TOKEN( dataValidation ) ) )
+    if( getCurrentElementWithMce() == XLS_TOKEN( dataValidation ) )
     {
         SetValidation( *this );
     }

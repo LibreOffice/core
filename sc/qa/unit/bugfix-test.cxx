@@ -242,20 +242,42 @@ void ScFiltersTest::testRhbz1390776()
 
 void ScFiltersTest::testTdf104310()
 {
-    ScDocShellRef xDocSh = loadDoc("tdf104310.", FORMAT_XLSX);
-    ScDocument& rDoc = xDocSh->GetDocument();
+    // 1. Test x14 extension
+    {
+        ScDocShellRef xDocSh = loadDoc("tdf104310.", FORMAT_XLSX);
+        ScDocument& rDoc = xDocSh->GetDocument();
 
-    const ScValidationData* pData = rDoc.GetValidationEntry(1);
-    CPPUNIT_ASSERT(pData);
+        const ScValidationData* pData = rDoc.GetValidationEntry(1);
+        CPPUNIT_ASSERT(pData);
 
-    // Make sure the list is correct.
-    std::vector<ScTypedStrData> aList;
-    pData->FillSelectionList(aList, ScAddress(0, 1, 0));
-    CPPUNIT_ASSERT_EQUAL(size_t(5), aList.size());
-    for (size_t i = 0; i < 5; ++i)
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(double(i+1), aList[i].GetValue(), 1e-8);
+        // Make sure the list is correct.
+        std::vector<ScTypedStrData> aList;
+        pData->FillSelectionList(aList, ScAddress(0, 1, 0));
+        CPPUNIT_ASSERT_EQUAL(size_t(5), aList.size());
+        for (size_t i = 0; i < 5; ++i)
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(double(i + 1), aList[i].GetValue(), 1e-8);
 
-    xDocSh->DoClose();
+        xDocSh->DoClose();
+    }
+
+    // 2. Test x12ac extension
+    {
+        ScDocShellRef xDocSh = loadDoc("tdf104310-2.", FORMAT_XLSX);
+        ScDocument& rDoc = xDocSh->GetDocument();
+
+        const ScValidationData* pData = rDoc.GetValidationEntry(1);
+        CPPUNIT_ASSERT(pData);
+
+        // Make sure the list is correct.
+        std::vector<ScTypedStrData> aList;
+        pData->FillSelectionList(aList, ScAddress(0, 1, 0));
+        CPPUNIT_ASSERT_EQUAL(size_t(3), aList.size());
+        CPPUNIT_ASSERT_EQUAL(OUString("1"),   aList[0].GetString());
+        CPPUNIT_ASSERT_EQUAL(OUString("2,3"), aList[1].GetString());
+        CPPUNIT_ASSERT_EQUAL(OUString("4"),   aList[2].GetString());
+
+        xDocSh->DoClose();
+    }
 }
 
 ScFiltersTest::ScFiltersTest()

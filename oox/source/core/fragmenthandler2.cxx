@@ -76,6 +76,7 @@ bool FragmentHandler2::prepareMceContext( sal_Int32 nElement, const AttributeLis
                 {
                     "p14",
                     "p15",
+                    "x12ac",
                 };
 
                 if (std::find(aSupportedNS.begin(), aSupportedNS.end(), aRequires) != aSupportedNS.end())
