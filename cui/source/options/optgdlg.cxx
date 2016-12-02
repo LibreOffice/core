@@ -1400,9 +1400,9 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet* rSet )
         SAL_WARN("cui.options", "ignoring Exception \"" << e.Message << "\"");
     }
 
-    OUString sLang = pLangConfig->aSysLocaleOptions.GetLocaleConfigString();
-    LanguageType eOldLocale = (!sLang.isEmpty() ?
-        LanguageTag::convertToLanguageTypeWithFallback( sLang ) : LANGUAGE_SYSTEM);
+    LanguageTag aLanguageTag( pLangConfig->aSysLocaleOptions.GetLanguageTag());
+    LanguageType eOldLocale = (aLanguageTag.isSystemLocale() ? LANGUAGE_SYSTEM :
+            aLanguageTag.makeFallback().getLanguageType());
     LanguageType eNewLocale = m_pLocaleSettingLB->GetSelectLanguage();
 
     // If the "Default ..." entry was selected that means SYSTEM, the actual
@@ -1569,11 +1569,11 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet* rSet )
 
 void OfaLanguagesTabPage::Reset( const SfxItemSet* rSet )
 {
-    OUString sLang = pLangConfig->aSysLocaleOptions.GetLocaleConfigString();
-    if ( !sLang.isEmpty() )
-        m_pLocaleSettingLB->SelectLanguage(LanguageTag::convertToLanguageTypeWithFallback(sLang));
-    else
+    LanguageTag aLanguageTag( pLangConfig->aSysLocaleOptions.GetLanguageTag());
+    if ( aLanguageTag.isSystemLocale() )
         m_pLocaleSettingLB->SelectLanguage( LANGUAGE_USER_SYSTEM_CONFIG );
+    else
+        m_pLocaleSettingLB->SelectLanguage( aLanguageTag.makeFallback().getLanguageType());
     bool bReadonly = pLangConfig->aSysLocaleOptions.IsReadOnly(SvtSysLocaleOptions::E_LOCALE);
     m_pLocaleSettingLB->Enable(!bReadonly);
     m_pLocaleSettingFT->Enable(!bReadonly);
@@ -1594,10 +1594,10 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet* rSet )
     OUString aAbbrev;
     LanguageType eLang;
     const NfCurrencyEntry* pCurr = nullptr;
-    sLang = pLangConfig->aSysLocaleOptions.GetCurrencyConfigString();
-    if ( !sLang.isEmpty() )
+    OUString sCurrency = pLangConfig->aSysLocaleOptions.GetCurrencyConfigString();
+    if ( !sCurrency.isEmpty() )
     {
-        SvtSysLocaleOptions::GetCurrencyAbbrevAndLanguage( aAbbrev, eLang, sLang );
+        SvtSysLocaleOptions::GetCurrencyAbbrevAndLanguage( aAbbrev, eLang, sCurrency );
         pCurr = SvNumberFormatter::GetCurrencyEntry( aAbbrev, eLang );
     }
     // if pCurr==NULL the SYSTEM entry is selected
