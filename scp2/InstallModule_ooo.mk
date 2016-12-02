@@ -38,16 +38,9 @@ $(eval $(call gb_InstallModule_define_value_if_set,scp2/ooo,\
 ))
 
 $(eval $(call gb_InstallModule_add_defs,scp2/ooo,\
-	$(if $(WINDOWS_SDK_HOME),\
-		-DHAVE_WINDOWS_SDK \
-	) \
 	$(if $(SYSTEM_HSQLDB),\
 		-DHSQLDB_JAR=\""$(call gb_Helper_make_path,$(HSQLDB_JAR))"\" \
 	) \
-	$(if $(MACOSX_SDK_VERSION),\
-		-DMACOSX_SDK_VERSION=$(MACOSX_SDK_VERSION) \
-	) \
-	$(if $(filter MSC,$(COM)),$(if $(MSVC_USE_DEBUG_RUNTIME),-DMSVC_PKG_DEBUG_RUNTIME)) \
 ))
 
 ifeq ($(USING_X11),TRUE)
@@ -71,7 +64,6 @@ $(eval $(call gb_InstallModule_add_templates,scp2/ooo,\
 
 $(eval $(call gb_InstallModule_add_scpfiles,scp2/ooo,\
     scp2/source/ooo/common_brand \
-    scp2/source/ooo/common_brand_readme \
     scp2/source/ooo/directory_ooo \
     scp2/source/ooo/directory_ooo_macosx \
     scp2/source/ooo/file_extra_ooo \

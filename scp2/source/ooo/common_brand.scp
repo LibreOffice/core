@@ -58,19 +58,10 @@ Module gid_Module_Root_Brand
              gid_Brand_File_Gdb_Trace,
              gid_Brand_File_Bin_Unoinfo,
 	     gid_Brand_File_Desktophelper_Txt,
-             gid_Brand_File_Lib_Dbghelp,
-             gid_Brand_File_Lib_Mingw_GccS,
-             gid_Brand_File_Lib_Mingw_Stdcpp,
-             gid_Brand_File_Lib_Msvcr80,
-             gid_Brand_File_Lib_Msvcp80,
-             gid_Brand_File_Lib_Msvcm80,
-             gid_Brand_File_Msvcm80crt_Manifest,
-             gid_Brand_File_Share_Registry_O5oo_Xcd,
              gid_Brand_File_Script_Unopkg,
              gid_Brand_File_Share_Xdg_Base,
              gid_Brand_File_Share_Xdg_Calc,
              gid_Brand_File_Share_Xdg_Draw,
-             gid_Brand_File_Share_Xdg_Extension,
              gid_Brand_File_Share_Xdg_Impress,
              gid_Brand_File_Share_Xdg_Math,
              gid_Brand_File_Share_Xdg_QStart,
@@ -90,8 +81,7 @@ Module gid_Module_Langpack_Brand_Template
     Dirs = (gid_Brand_Dir_Program_Shell,
             gid_Brand_Dir_Readme);
     Files = (gid_Brand_File_Readme_Readme,
-             gid_Brand_File_Share_Registry_Cjk_Xcd,
-             gid_Brand_File_Txt_Readme);
+             gid_Brand_File_Share_Registry_Cjk_Xcd);
 End
 
 // Directories
@@ -502,6 +492,18 @@ File gid_Brand_File_Script_Unopkg
     Name = "unopkg";
 End
 #endif
+
+File gid_Brand_File_Readme_Readme
+  TXT_FILE_BODY;
+  Dir = gid_Brand_Dir_Readme;
+  #ifdef UNX
+    README_ALL_LANG(Name, README);
+  #endif
+  #ifdef WNT
+    README_TXT_ALL_LANG(Name, readme, txt);
+  #endif
+    Styles = (PACKED, SCPZIP_REPLACE);
+End
 
 File gid_Brand_File_Share_Registry_Cjk_Xcd
     TXT_FILE_BODY;
