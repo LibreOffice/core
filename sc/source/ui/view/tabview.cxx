@@ -2290,6 +2290,9 @@ OUString ScTabView::getRowColumnHeaders(const Rectangle& rRectangle)
     SCROW nEndRow = 0;
     pDoc->GetTiledRenderingArea(aViewData.GetTabNo(), nEndCol, nEndRow);
 
+    if (nEndCol > MAXCOL) nEndCol = MAXCOL;
+    if (nEndRow >= MAXTILEDROW) nEndRow = MAXTILEDROW - 1;
+
     rtl::OUStringBuffer aBuffer(256 + (50 * nEndRow) + (50 * nEndCol));
 
     aBuffer.append("{ \"commandName\": \".uno:ViewRowColumnHeaders\",\n");
