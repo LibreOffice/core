@@ -23,8 +23,6 @@
 #include <stdlib.h>
 #include <osl/thread.h>
 
-#include "unotools/atom.hxx"
-
 #include "unx/fontmanager.hxx"
 #include "fontsubset.hxx"
 #include "impfontcharmap.hxx"
@@ -95,8 +93,7 @@ inline sal_uInt16 getUInt16BE( const sal_uInt8*& pBuffer )
  *  PrintFont implementations
  */
 PrintFontManager::PrintFont::PrintFont()
-:   m_nFamilyName(0)
-,   m_nPSName(0)
+:   m_eFamilyStyle(FAMILY_DONTKNOW)
 ,   m_eItalic(ITALIC_DONTKNOW)
 ,   m_eWidth(WIDTH_DONTKNOW)
 ,   m_eWeight(WEIGHT_DONTKNOW)
@@ -137,7 +134,6 @@ PrintFontManager& PrintFontManager::get()
 
 PrintFontManager::PrintFontManager()
     : m_nNextFontID( 1 )
-    , m_pAtoms( new MultiAtomProvider() )
     , m_nNextDirAtom( 1 )
 {
 #if ENABLE_DBUS
@@ -152,7 +148,6 @@ PrintFontManager::~PrintFontManager()
     deinitFontconfig();
     for( std::unordered_map< fontID, PrintFont* >::const_iterator it = m_aFonts.begin(); it != m_aFonts.end(); ++it )
         delete (*it).second;
-    delete m_pAtoms;
 }
 
 OString PrintFontManager::getDirectory( int nAtom ) const
@@ -586,11 +581,11 @@ bool PrintFontManager::analyzeSfntFile( PrintFont* pFont ) const
         analyzeSfntFamilyName( pTTFont, aNames );
 
         // set family name from XLFD if possible
-        if( ! pFont->m_nFamilyName )
+        if (pFont->m_aFamilyName.isEmpty())
         {
             if( !aNames.empty() )
             {
-                pFont->m_nFamilyName = m_pAtoms->getAtom( ATOM_FAMILYNAME, aNames.front() );
+                pFont->m_aFamilyName = aNames.front();
                 aNames.pop_front();
             }
             else
@@ -603,20 +598,18 @@ bool PrintFontManager::analyzeSfntFile( PrintFont* pFont ) const
                  if ( dotIndex == -1 )
                      dotIndex = pFont->m_aFontFile.getLength();
 
-                 pFont->m_nFamilyName = m_pAtoms->getAtom( ATOM_FAMILYNAME, OStringToOUString( pFont->m_aFontFile.copy( 0, dotIndex ), aEncoding ) );
+                 pFont->m_aFamilyName = OStringToOUString(pFont->m_aFontFile.copy(0, dotIndex), aEncoding);
             }
         }
-        for( ::std::list< OUString >::iterator it = aNames.begin(); it != aNames.end(); ++it )
+        for (auto const& aAlias : aNames)
         {
-            if( !it->isEmpty() )
+            if (!aAlias.isEmpty())
             {
-                int nAlias = m_pAtoms->getAtom( ATOM_FAMILYNAME, *it );
-                if( nAlias != pFont->m_nFamilyName )
+                if (pFont->m_aFamilyName != aAlias)
                 {
-                    std::vector< int >::const_iterator al_it =
-                        std::find( pFont->m_aAliases.begin(), pFont->m_aAliases.end(), nAlias );
+                    auto al_it = std::find(pFont->m_aAliases.begin(), pFont->m_aAliases.end(), aAlias);
                     if( al_it == pFont->m_aAliases.end() )
-                        pFont->m_aAliases.push_back( nAlias );
+                        pFont->m_aAliases.push_back(aAlias);
                 }
             }
         }
@@ -626,11 +619,11 @@ bool PrintFontManager::analyzeSfntFile( PrintFont* pFont ) const
 
         SAL_WARN_IF( !aInfo.psname, "vcl", "No PostScript name in font:" << aFile.getStr() );
 
-        OUString sPSName = aInfo.psname ?
+        pFont->m_aPSName = aInfo.psname ?
             OUString(aInfo.psname, rtl_str_getLength(aInfo.psname), aEncoding) :
-            m_pAtoms->getString(ATOM_FAMILYNAME, pFont->m_nFamilyName); // poor font does not have a postscript name
+            pFont->m_aFamilyName; // poor font does not have a postscript name
 
-        pFont->m_nPSName = m_pAtoms->getAtom( ATOM_PSNAME, sPSName );
+        pFont->m_eFamilyStyle = matchFamilyName(pFont->m_aFamilyName);
 
         switch( aInfo.weight )
         {
@@ -788,20 +781,6 @@ void PrintFontManager::initialize()
     aStep1 = times( &tms );
 #endif
 
-    // part three - fill in family styles
-    std::unordered_map< fontID, PrintFont* >::iterator font_it;
-    for (font_it = m_aFonts.begin(); font_it != m_aFonts.end(); ++font_it)
-    {
-        std::unordered_map< int, FontFamily >::const_iterator it =
-              m_aFamilyTypes.find( font_it->second->m_nFamilyName );
-        if (it != m_aFamilyTypes.end())
-            continue;
-        const OUString& rFamily =
-            m_pAtoms->getString( ATOM_FAMILYNAME, font_it->second->m_nFamilyName);
-        FontFamily eType = matchFamilyName( rFamily );
-        m_aFamilyTypes[ font_it->second->m_nFamilyName ] = eType;
-    }
-
 #if OSL_DEBUG_LEVEL > 1
     aStep2 = times( &tms );
     fprintf( stderr, "PrintFontManager::initialize: collected %" SAL_PRI_SIZET "u fonts\n", m_aFonts.size() );
@@ -825,13 +804,11 @@ void PrintFontManager::getFontList( ::std::list< fontID >& rFontIDs )
         rFontIDs.push_back( it->first );
 }
 
-void PrintFontManager::fillPrintFontInfo( PrintFont* pFont, FastPrintFontInfo& rInfo ) const
+void PrintFontManager::fillPrintFontInfo(PrintFont* pFont, FastPrintFontInfo& rInfo)
 {
-    std::unordered_map< int, FontFamily >::const_iterator style_it =
-          m_aFamilyTypes.find( pFont->m_nFamilyName );
-    rInfo.m_aFamilyName     = m_pAtoms->getString( ATOM_FAMILYNAME, pFont->m_nFamilyName );
+    rInfo.m_aFamilyName     = pFont->m_aFamilyName;
     rInfo.m_aStyleName      = pFont->m_aStyleName;
-    rInfo.m_eFamilyStyle    = style_it != m_aFamilyTypes.end() ? style_it->second : FAMILY_DONTKNOW;
+    rInfo.m_eFamilyStyle    = pFont->m_eFamilyStyle;
     rInfo.m_eItalic         = pFont->m_eItalic;
     rInfo.m_eWidth          = pFont->m_eWidth;
     rInfo.m_eWeight         = pFont->m_eWeight;
@@ -841,8 +818,8 @@ void PrintFontManager::fillPrintFontInfo( PrintFont* pFont, FastPrintFontInfo& r
     rInfo.m_bSubsettable    = true;
 
     rInfo.m_aAliases.clear();
-    for( int i : pFont->m_aAliases )
-        rInfo.m_aAliases.push_back( m_pAtoms->getString( ATOM_FAMILYNAME, i ) );
+    for (auto const& aAlias : pFont->m_aAliases)
+        rInfo.m_aAliases.push_back(aAlias);
 }
 
 void PrintFontManager::fillPrintFontInfo( PrintFont* pFont, PrintFontInfo& rInfo ) const
@@ -992,13 +969,14 @@ OString PrintFontManager::getFontFile( PrintFont* pFont ) const
 
 const OUString& PrintFontManager::getPSName( fontID nFontID ) const
 {
+    static OUString aEmpty;
     PrintFont* pFont = getFont( nFontID );
-    if( pFont && pFont->m_nPSName == 0 )
+    if (pFont && pFont->m_aPSName.isEmpty())
     {
         analyzeSfntFile(pFont);
     }
 
-    return m_pAtoms->getString( ATOM_PSNAME, pFont ? pFont->m_nPSName : INVALID_ATOM );
+    return pFont ? pFont->m_aPSName : aEmpty;
 }
 
 int PrintFontManager::getFontAscend( fontID nFontID ) const

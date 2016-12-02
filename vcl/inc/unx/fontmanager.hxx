@@ -36,15 +36,10 @@
 
 #include "config_dbus.h"
 
-#define ATOM_FAMILYNAME                     2
-#define ATOM_PSNAME                         3
-
 /*
  *  some words on metrics: every length returned by PrintFontManager and
  *  friends are PostScript afm style, that is they are 1/1000 font height
  */
-
-namespace utl { class MultiAtomProvider; }
 
 class FontSubsetInfo;
 class FontConfigFontOptions;
@@ -128,10 +123,11 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
     struct PrintFont
     {
         // font attributes
-        int               m_nFamilyName;  // atom
-        std::vector<int>  m_aAliases;
-        int               m_nPSName;      // atom
+        OUString          m_aFamilyName;
+        std::vector<OUString> m_aAliases;
+        OUString          m_aPSName;
         OUString          m_aStyleName;
+        FontFamily        m_eFamilyStyle;
         FontItalic        m_eItalic;
         FontWidth         m_eWidth;
         FontWeight        m_eWeight;
@@ -158,8 +154,6 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
 
     fontID                                      m_nNextFontID;
     std::unordered_map< fontID, PrintFont* >    m_aFonts;
-    std::unordered_map< int, FontFamily >       m_aFamilyTypes;
-    utl::MultiAtomProvider*                     m_pAtoms;
     // for speeding up findFontFileID
     std::unordered_map< OString, std::set< fontID >, OStringHash >
                                                 m_aFontFileToFontID;
@@ -190,7 +184,7 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
         it = m_aFonts.find( nID );
         return it == m_aFonts.end() ? nullptr : it->second;
     }
-    void fillPrintFontInfo( PrintFont* pFont, FastPrintFontInfo& rInfo ) const;
+    static void fillPrintFontInfo(PrintFont* pFont, FastPrintFontInfo& rInfo);
     void fillPrintFontInfo( PrintFont* pFont, PrintFontInfo& rInfo ) const;
 
     OString getDirectory( int nAtom ) const;
