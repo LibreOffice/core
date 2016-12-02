@@ -9,10 +9,6 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,writerperfect_writer))
 
-$(eval $(call gb_CppunitTest_use_externals,writerperfect_writer,\
-	boost_headers \
-))
-
 $(eval $(call gb_CppunitTest_use_sdk_api,writerperfect_writer))
 
 $(eval $(call gb_CppunitTest_use_libraries,writerperfect_writer,\
