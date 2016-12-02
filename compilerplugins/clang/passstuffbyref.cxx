@@ -185,23 +185,49 @@ void PassStuffByRef::checkParams(const FunctionDecl * functionDecl) {
     if (!functionDecl->doesThisDeclarationHaveABody()) {
         return;
     }
+    auto cxxConstructorDecl = dyn_cast<CXXConstructorDecl>(functionDecl);
     unsigned n = functionDecl->getNumParams();
     for (unsigned i = 0; i != n; ++i) {
         const ParmVarDecl * pvDecl = functionDecl->getParamDecl(i);
         auto const t = pvDecl->getType();
-        if (isFat(t)) {
-            report(
-                DiagnosticsEngine::Warning,
-                ("passing %0 by value, rather pass by const lvalue reference"),
-                pvDecl->getLocation())
-                << t << pvDecl->getSourceRange();
-            auto can = functionDecl->getCanonicalDecl();
-            if (can->getLocation() != functionDecl->getLocation()) {
-                report(
-                    DiagnosticsEngine::Note, "function is declared here:",
-                    can->getLocation())
-                    << can->getSourceRange();
+        if (!isFat(t)) {
+            continue;
+        }
+        // Ignore cases where the parameter is std::move'd.
+        // This is a fairly simple check, might need some more complexity if the parameter is std::move'd
+        // somewhere else in the constructor.
+        bool bFoundMove = false;
+        if (cxxConstructorDecl) {
+            for (CXXCtorInitializer const * cxxCtorInitializer : cxxConstructorDecl->inits()) {
+                if (cxxCtorInitializer->isMemberInitializer())
+                {
+                    auto cxxConstructExpr = dyn_cast<CXXConstructExpr>(cxxCtorInitializer->getInit());
+                    if (cxxConstructExpr && cxxConstructExpr->getNumArgs() == 1)
+                    {
+                        if (auto callExpr = dyn_cast<CallExpr>(cxxConstructExpr->getArg(0))) {
+                            if (loplugin::DeclCheck(callExpr->getCalleeDecl()).Function("move").StdNamespace()) {
+                                bFoundMove = true;
+                                break;
+                            }
+                        }
+                    }
+                }
             }
+        }
+        if (bFoundMove) {
+            continue;
+        }
+        report(
+            DiagnosticsEngine::Warning,
+            ("passing %0 by value, rather pass by const lvalue reference"),
+            pvDecl->getLocation())
+            << t << pvDecl->getSourceRange();
+        auto can = functionDecl->getCanonicalDecl();
+        if (can->getLocation() != functionDecl->getLocation()) {
+            report(
+                DiagnosticsEngine::Note, "function is declared here:",
+                can->getLocation())
+                << can->getSourceRange();
         }
     }
     // ignore stuff that forms part of the stable URE interface
