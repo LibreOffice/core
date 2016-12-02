@@ -595,8 +595,10 @@ void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
                         // table where &m_rDoc field is located
                         const SwTableNode* pTableNd;
                         const SwTextNode& rTextNd = pFormatField->GetTextField()->GetTextNode();
-                        if( !rTextNd.GetNodes().IsDocNodes() ||
-                            nullptr == ( pTableNd = rTextNd.FindTableNode() ) )
+                        if(!rTextNd.GetNodes().IsDocNodes())
+                            continue;
+                        pTableNd = rTextNd.FindTableNode();
+                        if (pTableNd == nullptr)
                             continue;
 
                         switch( pUpdateField->m_eFlags )
