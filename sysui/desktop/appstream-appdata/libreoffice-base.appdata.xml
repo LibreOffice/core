@@ -28,9 +28,9 @@ to connect to virtually any other existing database engine as well.
   <url type="homepage">http://www.libreoffice.org/discover/base/</url>
   <url type="bugtracker">https://bugs.documentfoundation.org/</url>
   <url type="donation">https://donate.libreoffice.org/</url>
-  <url type="faq">https://wiki.documentfoundation.org/Faq</url>
+  <url type="faq">https://hub.libreoffice.org/faq</url>
   <url type="help">http://www.libreoffice.org/get-help/documentation/</url>
-  <url type="translate">https://wiki.documentfoundation.org/Translating_LibreOffice</url>
+  <url type="translate">https://hub.libreoffice.org/translate</url>
   <screenshots>
     <screenshot type="default">
       <image>http://www.libreoffice.org/assets/Uploads/Screenshots/Base/Screenshot-78.png</image>
