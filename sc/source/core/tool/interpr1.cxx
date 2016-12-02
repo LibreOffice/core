@@ -6755,17 +6755,17 @@ void ScInterpreter::ScAggregate()
             cPar = nParamCount - 2;
             switch ( nFunc )
             {
-                case SUBTOTAL_FUNC_AVE      : ScAverage(); break;
-                case SUBTOTAL_FUNC_CNT      : ScCount();   break;
-                case SUBTOTAL_FUNC_CNT2     : ScCount2();  break;
-                case SUBTOTAL_FUNC_MAX      : ScMax();     break;
-                case SUBTOTAL_FUNC_MIN      : ScMin();     break;
-                case SUBTOTAL_FUNC_PROD     : ScProduct(); break;
-                case SUBTOTAL_FUNC_STD      : ScStDev();   break;
-                case SUBTOTAL_FUNC_STDP     : ScStDevP();  break;
-                case SUBTOTAL_FUNC_SUM      : ScSum();     break;
-                case SUBTOTAL_FUNC_VAR      : ScVar();     break;
-                case SUBTOTAL_FUNC_VARP     : ScVarP();    break;
+                case AGGREGATE_FUNC_AVE     : ScAverage(); break;
+                case AGGREGATE_FUNC_CNT     : ScCount();   break;
+                case AGGREGATE_FUNC_CNT2    : ScCount2();  break;
+                case AGGREGATE_FUNC_MAX     : ScMax();     break;
+                case AGGREGATE_FUNC_MIN     : ScMin();     break;
+                case AGGREGATE_FUNC_PROD    : ScProduct(); break;
+                case AGGREGATE_FUNC_STD     : ScStDev();   break;
+                case AGGREGATE_FUNC_STDP    : ScStDevP();  break;
+                case AGGREGATE_FUNC_SUM     : ScSum();     break;
+                case AGGREGATE_FUNC_VAR     : ScVar();     break;
+                case AGGREGATE_FUNC_VARP    : ScVarP();    break;
                 case AGGREGATE_FUNC_MEDIAN  : ScMedian();            break;
                 case AGGREGATE_FUNC_MODSNGL : ScModalValue();        break;
                 case AGGREGATE_FUNC_LARGE   : ScLarge();             break;
