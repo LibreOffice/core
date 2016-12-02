@@ -3319,19 +3319,11 @@ void SwAccessibleMap::GetMapMode( const Point& _rPoint,
     _orMapMode = aMapMode;
 }
 
-Size SwAccessibleMap::GetPreviewPageSize( sal_uInt16 _nPreviewPageNum ) const
+Size SwAccessibleMap::GetPreviewPageSize(sal_uInt16 const nPreviewPageNum) const
 {
-    OSL_ENSURE( mpVSh->IsPreview(), "no page preview accessible." );
-    OSL_ENSURE( mpVSh->IsPreview() && ( mpPreview != nullptr ),
-                "missing accessible preview data at page preview" );
-    if ( mpVSh->IsPreview() && ( mpPreview != nullptr ) )
-    {
-        return mpVSh->PagePreviewLayout()->GetPreviewPageSizeByPageNum( _nPreviewPageNum );
-    }
-    else
-    {
-        return Size( 0, 0 );
-    }
+    assert(mpVSh->IsPreview());
+    assert(mpPreview != nullptr);
+    return mpVSh->PagePreviewLayout()->GetPreviewPageSizeByPageNum(nPreviewPageNum);
 }
 
 /** method to build up a new data structure of the accessible paragraphs,
