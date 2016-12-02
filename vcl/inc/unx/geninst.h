@@ -109,7 +109,6 @@ public:
 
     // prolly belongs somewhere else ... just a font help
     static void RegisterFontSubstitutors( PhysicalFontCollection* pFontCollection );
-    static int  FetchFontSubstitutionFlags();
 
 protected:
     static void configurePspInfoPrinter( PspSalInfoPrinter* pInfoPrinter,
