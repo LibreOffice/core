@@ -596,16 +596,14 @@ void GenPspGraphics::DrawTextLayout(const CommonSalLayout& rLayout)
     DeviceCoordinate aWidthAry[ nMaxGlyphs ];
     sal_Int32   aIdxAry  [ nMaxGlyphs ];
     sal_Unicode aUnicodes[ nMaxGlyphs ];
-    int         aCharPosAry [ nMaxGlyphs ];
 
     Point aPos;
     long nUnitsPerPixel = rLayout.GetUnitsPerPixel();
-    const sal_Unicode* pText = nullptr;
     int nMinCharPos = 0;
     int nMaxCharPos = 0;
     for( int nStart = 0;; )
     {
-        int nGlyphCount = rLayout.GetNextGlyphs( nMaxGlyphs, aGlyphAry, aPos, nStart, aWidthAry, pText ? aCharPosAry : nullptr );
+        int nGlyphCount = rLayout.GetNextGlyphs( nMaxGlyphs, aGlyphAry, aPos, nStart, aWidthAry, nullptr );
         if( !nGlyphCount )
             break;
 
@@ -615,10 +613,7 @@ void GenPspGraphics::DrawTextLayout(const CommonSalLayout& rLayout)
             nXOffset += aWidthAry[ i ];
             aIdxAry[ i ] = nXOffset / nUnitsPerPixel;
             sal_GlyphId aGlyphId = aGlyphAry[i] & (GF_IDXMASK | GF_ROTMASK);
-            if( pText )
-                aUnicodes[i] = (aCharPosAry[i] >= nMinCharPos && aCharPosAry[i] <= nMaxCharPos) ? pText[ aCharPosAry[i] ] : 0;
-            else
-                aUnicodes[i] = 0;
+            aUnicodes[i] = 0;
             aGlyphAry[i] = aGlyphId;
         }
 
