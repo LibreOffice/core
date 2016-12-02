@@ -43,55 +43,15 @@ public:
     bool FindFontSubstitute( FontSelectPattern&, OUString& rMissingCodes ) const override;
 };
 
-int SalGenericInstance::FetchFontSubstitutionFlags()
-{
-    // init font substitution defaults
-    int nDisableBits = 0;
-#ifdef SOLARIS
-    nDisableBits = 1; // disable "font fallback" here on default
-#endif
-    // apply the environment variable if any
-    const char* pEnvStr = ::getenv( "SAL_DISABLE_FC_SUBST" );
-    if( pEnvStr )
-    {
-        if( (*pEnvStr >= '0') && (*pEnvStr <= '9') )
-            nDisableBits = (*pEnvStr - '0');
-        else
-            nDisableBits = ~0U; // no specific bits set: disable all
-    }
-    return nDisableBits;
-}
-
 void SalGenericInstance::RegisterFontSubstitutors( PhysicalFontCollection* pFontCollection )
 {
-    // init font substitution defaults
-    int nDisableBits = 0;
-#ifdef SOLARIS
-    nDisableBits = 1; // disable "font fallback" here on default
-#endif
-    // apply the environment variable if any
-    const char* pEnvStr = ::getenv( "SAL_DISABLE_FC_SUBST" );
-    if( pEnvStr )
-    {
-        if( (*pEnvStr >= '0') && (*pEnvStr <= '9') )
-            nDisableBits = (*pEnvStr - '0');
-        else
-            nDisableBits = ~0U; // no specific bits set: disable all
-    }
+    // register font fallback substitutions
+    static FcPreMatchSubstitution aSubstPreMatch;
+    pFontCollection->SetPreMatchHook( &aSubstPreMatch );
 
-    // register font fallback substitutions (unless disabled by bit0)
-    if( (nDisableBits & 1) == 0 )
-    {
-        static FcPreMatchSubstitution aSubstPreMatch;
-        pFontCollection->SetPreMatchHook( &aSubstPreMatch );
-    }
-
-    // register glyph fallback substitutions (unless disabled by bit1)
-    if( (nDisableBits & 2) == 0 )
-    {
-        static FcGlyphFallbackSubstitution aSubstFallback;
-        pFontCollection->SetFallbackHook( &aSubstFallback );
-    }
+    // register glyph fallback substitutions
+    static FcGlyphFallbackSubstitution aSubstFallback;
+    pFontCollection->SetFallbackHook( &aSubstFallback );
 }
 
 static FontSelectPattern GetFcSubstitute(const FontSelectPattern &rFontSelData, OUString& rMissingCodes )

@@ -722,11 +722,6 @@ bool PrintFontManager::analyzeSfntFile( PrintFont* pFont ) const
     return bSuccess;
 }
 
-static bool AreFCSubstitutionsEnabled()
-{
-    return (SalGenericInstance::FetchFontSubstitutionFlags() & 3) == 0;
-}
-
 void PrintFontManager::initialize()
 {
     #ifdef CALLGRIND_COMPILE
@@ -742,8 +737,6 @@ void PrintFontManager::initialize()
             delete (*it).second;
         m_nNextFontID = 1;
         m_aFonts.clear();
-        m_aFontDirectories.clear();
-        m_aPrivateFontDirectories.clear();
     }
 
 #if OSL_DEBUG_LEVEL > 1
@@ -768,7 +761,6 @@ void PrintFontManager::initialize()
     if( !rSalPrivatePath.isEmpty() )
     {
         OString aPath = OUStringToOString( rSalPrivatePath, aEncoding );
-        const bool bAreFCSubstitutionsEnabled = AreFCSubstitutionsEnabled();
         sal_Int32 nIndex = 0;
         do
         {
@@ -782,10 +774,7 @@ void PrintFontManager::initialize()
             // and fontconfig-based substitutions are enabled
             // then trying to use these app-specific fonts doesn't make sense
             if( !addFontconfigDir( aToken ) )
-                if( bAreFCSubstitutionsEnabled )
-                    continue;
-            m_aFontDirectories.push_back( aToken );
-            m_aPrivateFontDirectories.push_back( getDirectoryAtom( aToken, true ) );
+                continue;
         } while( nIndex >= 0 );
     }
 

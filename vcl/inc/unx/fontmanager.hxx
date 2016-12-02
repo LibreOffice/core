@@ -159,8 +159,6 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
     fontID                                      m_nNextFontID;
     std::unordered_map< fontID, PrintFont* >    m_aFonts;
     std::unordered_map< int, FontFamily >       m_aFamilyTypes;
-    std::list< OString >                        m_aFontDirectories;
-    std::vector< int >                          m_aPrivateFontDirectories;
     utl::MultiAtomProvider*                     m_pAtoms;
     // for speeding up findFontFileID
     std::unordered_map< OString, std::set< fontID >, OStringHash >
