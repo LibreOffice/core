@@ -1525,6 +1525,7 @@ void XclExpDimensions::SaveXml( XclExpXmlStream& rStrm )
         aRange.aEnd.SetCol( (SCCOL) (mnFirstFreeXclCol-1) );
     }
 
+    aRange.PutInOrder();
     rStrm.GetCurrentStream()->singleElement( XML_dimension,
             XML_ref, XclXmlUtils::ToOString( aRange ).getStr(),
             FSEND );
