@@ -257,7 +257,7 @@ gb_LinkTarget_LDFLAGS := \
 
 # Prevent warning spamming
 # Happens because of the way we link our unit tests with our libraries.
-# LNK4049: locally defined symbol 
+# LNK4049: locally defined symbol
 gb_LinkTarget_LDFLAGS += \
 	/ignore:4217 /ignore:4049
 
