@@ -48,7 +48,6 @@ namespace svgio
         public:
             explicit XSvgParser(
                 uno::Reference< uno::XComponentContext > const & context);
-            virtual ~XSvgParser() override;
             XSvgParser(const XSvgParser&) = delete;
             XSvgParser& operator=(const XSvgParser&) = delete;
 
@@ -94,10 +93,6 @@ namespace svgio
         XSvgParser::XSvgParser(
             uno::Reference< uno::XComponentContext > const & context):
             context_(context)
-        {
-        }
-
-        XSvgParser::~XSvgParser()
         {
         }
 
