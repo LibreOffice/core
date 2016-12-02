@@ -366,7 +366,6 @@ void PDFSigningTest::testSigningCertificateAttribute()
 
 void PDFSigningTest::testGood()
 {
-#ifndef _WIN32
     const std::initializer_list<OUStringLiteral> aNames =
     {
         // We failed to determine if this is good or bad.
@@ -382,7 +381,6 @@ void PDFSigningTest::testGood()
         SignatureInformation& rInformation = aInfos[0];
         CPPUNIT_ASSERT_EQUAL(xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED, rInformation.nStatus);
     }
-#endif
 }
 
 void PDFSigningTest::testTokenize()
