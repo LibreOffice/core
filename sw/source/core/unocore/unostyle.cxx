@@ -197,8 +197,6 @@ namespace sw
             StartListening(*m_pBasePool);
         }
 
-        virtual ~XStyleFamily() override {};
-
         //XIndexAccess
         virtual sal_Int32 SAL_CALL getCount() throw( uno::RuntimeException, std::exception ) override
         {
@@ -397,7 +395,6 @@ public:
                                 const OUString& rStyleName) :
         SwXStyle(&rPool, SfxStyleFamily::Frame, pDoc, rStyleName){}
     explicit SwXFrameStyle(SwDoc *pDoc);
-    virtual ~SwXFrameStyle() override;
 
     virtual void SAL_CALL acquire(  ) throw() override {SwXStyle::acquire();}
     virtual void SAL_CALL release(  ) throw() override {SwXStyle::release();}
@@ -423,7 +420,6 @@ protected:
 public:
     SwXPageStyle(SfxStyleSheetBasePool& rPool, SwDocShell* pDocSh, const OUString& rStyleName);
     explicit SwXPageStyle(SwDocShell* pDocSh);
-    virtual ~SwXPageStyle() override;
 
     virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue ) throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
@@ -2799,9 +2795,6 @@ SwXPageStyle::SwXPageStyle(SwDocShell* pDocSh)
     : SwXStyle(pDocSh->GetDoc(), SfxStyleFamily::Page)
 { }
 
-SwXPageStyle::~SwXPageStyle()
-{ }
-
 void SwXStyle::PutItemToSet(const SvxSetItem* pSetItem, const SfxItemPropertySet& rPropSet, const SfxItemPropertySimpleEntry& rEntry, const uno::Any& rVal, SwStyleBase_Impl& rBaseImpl)
 {
     // create a new SvxSetItem and get it's ItemSet as new target
@@ -3296,9 +3289,6 @@ void SwXPageStyle::setPropertyValue(const OUString& rPropertyName, const uno::An
 
 SwXFrameStyle::SwXFrameStyle(SwDoc *pDoc)
     : SwXStyle(pDoc, SfxStyleFamily::Frame, false)
-{ }
-
-SwXFrameStyle::~SwXFrameStyle()
 { }
 
 void SwXFrameStyle::SetItem(enum RES_FRMATR eAtr, const SfxPoolItem& rItem)

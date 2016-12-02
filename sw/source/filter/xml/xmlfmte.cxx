@@ -263,7 +263,6 @@ protected:
 public:
 
     explicit SwXMLAutoStylePoolP( SvXMLExport& rExport );
-    virtual ~SwXMLAutoStylePoolP() override;
 };
 
 void SwXMLAutoStylePoolP::exportStyleAttributes(
@@ -325,10 +324,6 @@ SwXMLAutoStylePoolP::SwXMLAutoStylePoolP(SvXMLExport& rExp ) :
     rExport( rExp ),
     sListStyleName( GetXMLToken( XML_LIST_STYLE_NAME ) ),
     sMasterPageName( GetXMLToken( XML_MASTER_PAGE_NAME ) )
-{
-}
-
-SwXMLAutoStylePoolP::~SwXMLAutoStylePoolP()
 {
 }
 

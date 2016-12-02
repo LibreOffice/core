@@ -457,7 +457,7 @@ struct SBBItem
 
 public:
     Sttb();
-    virtual ~Sttb() override;
+
     bool Read(SvStream &rS) override;
 #if OSL_DEBUG_LEVEL > 1
     virtual void Print( FILE* fp ) override;
@@ -469,10 +469,6 @@ Sttb::Sttb()
     : fExtend(0)
     , cData(0)
     , cbExtra(0)
-{
-}
-
-Sttb::~Sttb()
 {
 }
 

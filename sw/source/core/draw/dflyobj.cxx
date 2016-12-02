@@ -92,7 +92,6 @@ namespace sdr
             :   ViewContactOfSdrObj(rObj)
             {
             }
-            virtual ~VCOfSwFlyDrawObj() override;
         };
 
         drawinglayer::primitive2d::Primitive2DContainer VCOfSwFlyDrawObj::createViewIndependentPrimitive2DSequence() const
@@ -101,9 +100,6 @@ namespace sdr
             return drawinglayer::primitive2d::Primitive2DContainer();
         }
 
-        VCOfSwFlyDrawObj::~VCOfSwFlyDrawObj()
-        {
-        }
     } // end of namespace contact
 } // end of namespace sdr
 
@@ -265,7 +261,6 @@ namespace sdr
             :   ViewContactOfVirtObj(rObj)
             {
             }
-            virtual ~VCOfSwVirtFlyDrawObj() override;
 
             /// access to SwVirtFlyDrawObj
             SwVirtFlyDrawObj& GetSwVirtFlyDrawObj() const
@@ -305,9 +300,6 @@ namespace sdr
             return xRetval;
         }
 
-        VCOfSwVirtFlyDrawObj::~VCOfSwVirtFlyDrawObj()
-        {
-        }
     } // end of namespace contact
 } // end of namespace sdr
 

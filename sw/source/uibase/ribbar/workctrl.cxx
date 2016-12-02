@@ -360,7 +360,6 @@ public:
     SwZoomBox_Impl(
         vcl::Window* pParent,
         sal_uInt16 nSlot );
-    virtual ~SwZoomBox_Impl() override;
 
 protected:
     virtual void    Select() override;
@@ -391,9 +390,6 @@ SwZoomBox_Impl::SwZoomBox_Impl(vcl::Window* pParent, sal_uInt16 nSlot)
     }
 
 }
-
-SwZoomBox_Impl::~SwZoomBox_Impl()
-{}
 
 void    SwZoomBox_Impl::Select()
 {

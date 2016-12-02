@@ -139,7 +139,6 @@ class SwMailDispatcherListener_Impl : public IMailDispatcherListener
 
 public:
     explicit SwMailDispatcherListener_Impl(SwSendMailDialog& rParentDlg);
-    virtual ~SwMailDispatcherListener_Impl() override;
 
     virtual void started(::rtl::Reference<MailDispatcher> xMailDispatcher) override;
     virtual void stopped(::rtl::Reference<MailDispatcher> xMailDispatcher) override;
@@ -154,10 +153,6 @@ public:
 
 SwMailDispatcherListener_Impl::SwMailDispatcherListener_Impl(SwSendMailDialog& rParentDlg) :
     m_pSendMailDialog(&rParentDlg)
-{
-}
-
-SwMailDispatcherListener_Impl::~SwMailDispatcherListener_Impl()
 {
 }
 

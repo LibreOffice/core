@@ -956,7 +956,6 @@ class SwFrameProperties_Impl : public BaseFrameProperties_Impl
 {
 public:
     SwFrameProperties_Impl();
-    virtual ~SwFrameProperties_Impl() override {}
 
     bool AnyToItemSet( SwDoc* pDoc, SfxItemSet& rFrameSet, SfxItemSet& rSet, bool& rSizeFound) override;
 };
@@ -1021,7 +1020,6 @@ class SwGraphicProperties_Impl : public BaseFrameProperties_Impl
 {
 public:
     SwGraphicProperties_Impl();
-    virtual ~SwGraphicProperties_Impl() override {}
 
     virtual bool AnyToItemSet( SwDoc* pDoc, SfxItemSet& rFrameSet, SfxItemSet& rSet, bool& rSizeFound) override;
 };
@@ -1123,7 +1121,6 @@ class SwOLEProperties_Impl : public SwFrameProperties_Impl
 public:
     SwOLEProperties_Impl() :
         SwFrameProperties_Impl(/*aSwMapProvider.GetPropertyMap(PROPERTY_MAP_EMBEDDED_OBJECT)*/ ){}
-    virtual ~SwOLEProperties_Impl() override {}
 
     virtual bool AnyToItemSet( SwDoc* pDoc, SfxItemSet& rFrameSet, SfxItemSet& rSet, bool& rSizeFound) override;
 };

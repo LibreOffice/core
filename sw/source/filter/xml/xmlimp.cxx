@@ -123,8 +123,6 @@ public:
     SwXMLBodyContext_Impl( SwXMLImport& rImport, sal_uInt16 nPrfx,
                 const OUString& rLName,
                 const Reference< xml::sax::XAttributeList > & xAttrList );
-    virtual ~SwXMLBodyContext_Impl() override;
-
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                 const OUString& rLocalName,
@@ -137,11 +135,6 @@ SwXMLBodyContext_Impl::SwXMLBodyContext_Impl( SwXMLImport& rImport,
     SvXMLImportContext( rImport, nPrfx, rLName )
 {
 }
-
-SwXMLBodyContext_Impl::~SwXMLBodyContext_Impl()
-{
-}
-
 
 SvXMLImportContext *SwXMLBodyContext_Impl::CreateChildContext(
         sal_uInt16 /*nPrefix*/,
@@ -166,8 +159,6 @@ public:
     SwXMLDocContext_Impl( SwXMLImport& rImport, sal_uInt16 nPrfx,
                 const OUString& rLName,
                 const Reference< xml::sax::XAttributeList > & xAttrList );
-    virtual ~SwXMLDocContext_Impl() override;
-
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                 const OUString& rLocalName,
@@ -180,11 +171,6 @@ SwXMLDocContext_Impl::SwXMLDocContext_Impl( SwXMLImport& rImport,
     SvXMLImportContext( rImport, nPrfx, rLName )
 {
 }
-
-SwXMLDocContext_Impl::~SwXMLDocContext_Impl()
-{
-}
-
 
 SvXMLImportContext *SwXMLDocContext_Impl::CreateChildContext(
         sal_uInt16 nPrefix,
@@ -254,8 +240,6 @@ public:
                 const OUString& rLName,
                 const Reference< xml::sax::XAttributeList > & xAttrList,
                 const Reference< document::XDocumentProperties >& xDocProps);
-    virtual ~SwXMLOfficeDocContext_Impl() override;
-
 
     virtual SvXMLImportContext *CreateChildContext(
                 sal_uInt16 nPrefix,
@@ -274,11 +258,6 @@ SwXMLOfficeDocContext_Impl::SwXMLOfficeDocContext_Impl(
     SvXMLMetaDocumentContext( rImport, nPrfx, rLName, xDocProps)
 {
 }
-
-SwXMLOfficeDocContext_Impl::~SwXMLOfficeDocContext_Impl()
-{
-}
-
 
 SvXMLImportContext* SwXMLOfficeDocContext_Impl::CreateChildContext(
                 sal_uInt16 nPrefix,
@@ -316,8 +295,6 @@ public:
                                 sal_uInt16 nPrfx,
                                 const OUString& rLName,
                                 const Reference< xml::sax::XAttributeList > & xAttrList );
-    virtual ~SwXMLDocStylesContext_Impl() override;
-
 
     virtual void EndElement() override;
 };
@@ -331,11 +308,6 @@ SwXMLDocStylesContext_Impl::SwXMLDocStylesContext_Impl(
     SwXMLDocContext_Impl( rImport, nPrfx, rLName, xAttrList )
 {
 }
-
-SwXMLDocStylesContext_Impl::~SwXMLDocStylesContext_Impl()
-{
-}
-
 
 void SwXMLDocStylesContext_Impl::EndElement()
 {

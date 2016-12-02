@@ -68,8 +68,6 @@ public:
             SvXMLItemMapEntriesRef rMapEntries,
             SwXMLExport& rExp );
 
-    virtual ~SwXMLTableItemMapper_Impl() override;
-
     virtual void handleSpecialItem( SvXMLAttributeList& rAttrList,
                                     const SvXMLItemMapEntry& rEntry,
                                     const SfxPoolItem& rItem,
@@ -94,10 +92,6 @@ SwXMLTableItemMapper_Impl::SwXMLTableItemMapper_Impl(
     SvXMLExportItemMapper( rMapEntries ),
     aBrushItemExport( rExp ),
     nAbsWidth( USHRT_MAX )
-{
-}
-
-SwXMLTableItemMapper_Impl::~SwXMLTableItemMapper_Impl()
 {
 }
 

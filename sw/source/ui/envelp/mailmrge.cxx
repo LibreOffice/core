@@ -89,7 +89,6 @@ class SwXSelChgLstnr_Impl : public cppu::WeakImplHelper
     SwMailMergeDlg& rParent;
 public:
     explicit SwXSelChgLstnr_Impl(SwMailMergeDlg& rParentDlg);
-    virtual ~SwXSelChgLstnr_Impl() override;
 
     virtual void SAL_CALL selectionChanged( const EventObject& aEvent ) throw (RuntimeException, std::exception) override;
     virtual void SAL_CALL disposing( const EventObject& Source ) throw (RuntimeException, std::exception) override;
@@ -97,9 +96,6 @@ public:
 
 SwXSelChgLstnr_Impl::SwXSelChgLstnr_Impl(SwMailMergeDlg& rParentDlg) :
     rParent(rParentDlg)
-{}
-
-SwXSelChgLstnr_Impl::~SwXSelChgLstnr_Impl()
 {}
 
 void SwXSelChgLstnr_Impl::selectionChanged( const EventObject&  ) throw (RuntimeException, std::exception)

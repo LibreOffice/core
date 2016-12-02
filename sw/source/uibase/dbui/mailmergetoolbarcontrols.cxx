@@ -50,10 +50,6 @@ public:
     {
     }
 
-    virtual ~MMCurrentEntryController() override
-    {
-    }
-
     // XInterface
     virtual uno::Any SAL_CALL queryInterface(const uno::Type& aType) throw (uno::RuntimeException, std::exception) override
     {
@@ -112,10 +108,6 @@ public:
     explicit MMExcludeEntryController(const uno::Reference<uno::XComponentContext>& rContext)
         : svt::ToolboxController(rContext, uno::Reference<frame::XFrame>(), OUString(".uno:MailMergeExcludeEntry"))
         , m_pExcludeCheckbox(nullptr)
-    {
-    }
-
-    virtual ~MMExcludeEntryController() override
     {
     }
 

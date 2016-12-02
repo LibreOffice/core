@@ -426,8 +426,6 @@ public:
             const Reference< xml::sax::XAttributeList > & xAttrList,
             SwXMLTableContext *pTable );
 
-    virtual ~SwXMLTableCellContext_Impl() override;
-
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix, const OUString& rLocalName,
             const Reference< xml::sax::XAttributeList > & xAttrList ) override;
@@ -568,10 +566,6 @@ SwXMLTableCellContext_Impl::SwXMLTableCellContext_Impl(
             break;
         }
     }
-}
-
-SwXMLTableCellContext_Impl::~SwXMLTableCellContext_Impl()
-{
 }
 
 inline void SwXMLTableCellContext_Impl::InsertContent_()
@@ -740,8 +734,6 @@ public:
             const Reference< xml::sax::XAttributeList > & xAttrList,
             SwXMLTableContext *pTable );
 
-    virtual ~SwXMLTableColContext_Impl() override;
-
     SwXMLImport& GetSwImport() { return static_cast<SwXMLImport&>(GetImport()); }
 };
 
@@ -808,10 +800,6 @@ SwXMLTableColContext_Impl::SwXMLTableColContext_Impl(
     }
 }
 
-SwXMLTableColContext_Impl::~SwXMLTableColContext_Impl()
-{
-}
-
 class SwXMLTableColsContext_Impl : public SvXMLImportContext
 {
     SvXMLImportContextRef   xMyTable;
@@ -826,8 +814,6 @@ public:
             const Reference< xml::sax::XAttributeList > & xAttrList,
             SwXMLTableContext *pTable );
 
-    virtual ~SwXMLTableColsContext_Impl() override;
-
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix, const OUString& rLocalName,
             const Reference< xml::sax::XAttributeList > & xAttrList ) override;
@@ -841,10 +827,6 @@ SwXMLTableColsContext_Impl::SwXMLTableColsContext_Impl(
         SwXMLTableContext *pTable ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     xMyTable( pTable )
-{
-}
-
-SwXMLTableColsContext_Impl::~SwXMLTableColsContext_Impl()
 {
 }
 
@@ -882,8 +864,6 @@ public:
             SwXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
             const Reference< xml::sax::XAttributeList > & xAttrList,
             SwXMLTableContext *pTable, bool bInHead=false );
-
-    virtual ~SwXMLTableRowContext_Impl() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
             const OUString& rLocalName,
@@ -956,10 +936,6 @@ void SwXMLTableRowContext_Impl::EndElement()
     }
 }
 
-SwXMLTableRowContext_Impl::~SwXMLTableRowContext_Impl()
-{
-}
-
 SvXMLImportContext *SwXMLTableRowContext_Impl::CreateChildContext(
         sal_uInt16 nPrefix, const OUString& rLocalName,
         const Reference< xml::sax::XAttributeList > & xAttrList )
@@ -1004,8 +980,6 @@ public:
             SwXMLTableContext *pTable,
             bool bHead );
 
-    virtual ~SwXMLTableRowsContext_Impl() override;
-
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
             const OUString& rLocalName,
             const Reference< xml::sax::XAttributeList > & xAttrList ) override;
@@ -1022,10 +996,6 @@ SwXMLTableRowsContext_Impl::SwXMLTableRowsContext_Impl( SwXMLImport& rImport,
     SvXMLImportContext( rImport, nPrfx, rLName ),
     xMyTable( pTable ),
     bHeader( bHead )
-{
-}
-
-SwXMLTableRowsContext_Impl::~SwXMLTableRowsContext_Impl()
 {
 }
 
@@ -1064,8 +1034,6 @@ public:
     SwXMLDDETableContext_Impl(
         SwXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName);
 
-    virtual ~SwXMLDDETableContext_Impl() override;
-
     virtual void StartElement(
         const Reference<xml::sax::XAttributeList> & xAttrList) override;
 
@@ -1085,10 +1053,6 @@ SwXMLDDETableContext_Impl::SwXMLDDETableContext_Impl(
         sDDEItem(),
         sDDETopic(),
         bIsAutomaticUpdate(false)
-{
-}
-
-SwXMLDDETableContext_Impl::~SwXMLDDETableContext_Impl()
 {
 }
 

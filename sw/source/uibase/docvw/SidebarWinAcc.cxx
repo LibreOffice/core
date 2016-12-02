@@ -43,9 +43,6 @@ class SidebarWinAccessibleContext : public VCLXAccessibleComponent
             rSidebarWin.SetAccessibleRole( css::accessibility::AccessibleRole::COMMENT );
         }
 
-        virtual ~SidebarWinAccessibleContext() override
-        {}
-
         void ChangeAnchor( const SwFrame* pAnchorFrame )
         {
             osl::MutexGuard aGuard(maMutex);

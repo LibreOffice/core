@@ -210,7 +210,6 @@ private:
 
 public:
     explicit SwConnectionDisposedListener_Impl(SwDBManager& rMgr);
-    virtual ~SwConnectionDisposedListener_Impl() override;
 
     void Dispose() { m_pDBManager = nullptr; }
 
@@ -3066,10 +3065,6 @@ void SwDBManager::releaseRevokeListener()
 
 SwConnectionDisposedListener_Impl::SwConnectionDisposedListener_Impl(SwDBManager& rManager)
     : m_pDBManager(&rManager)
-{
-}
-
-SwConnectionDisposedListener_Impl::~SwConnectionDisposedListener_Impl()
 {
 }
 

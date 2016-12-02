@@ -75,8 +75,6 @@ public:
         }
     }
 
-    virtual ~TableOfContentsCollectionHelper() override {}
-
     virtual sal_Int32 SAL_CALL getCount(  ) throw (uno::RuntimeException, std::exception) override
     {
         return maToc.size();

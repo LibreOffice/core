@@ -1314,7 +1314,7 @@ private:
 
 public:
     SwRTFWriter(const OUString& rFilterName, const OUString& rBaseURL);
-    ~SwRTFWriter() override;
+
     sal_uLong WriteStream() override;
 };
 
@@ -1324,8 +1324,6 @@ SwRTFWriter::SwRTFWriter(const OUString& rFltName, const OUString& rBaseURL)
     // export outline nodes, only (send outline to clipboard/presentation)
     m_bOutOutlineOnly = rFltName.startsWith("O");
 }
-
-SwRTFWriter::~SwRTFWriter() = default;
 
 sal_uLong SwRTFWriter::WriteStream()
 {

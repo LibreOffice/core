@@ -45,10 +45,6 @@ namespace /* private */
         {
         }
 
-        virtual ~BigPtrEntryMock() override
-        {
-        }
-
         sal_uLong getCount() const
         {
             return count_;

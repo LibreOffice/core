@@ -107,10 +107,6 @@ class XmlPortionDumper:public SwPortionHandler
     {
     }
 
-    virtual ~ XmlPortionDumper(  ) override
-    {
-    }
-
     /**
         @param nLength
                 length of this portion in the model string

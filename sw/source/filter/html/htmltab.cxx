@@ -2953,7 +2953,6 @@ public:
     HTMLTable *m_pTable;
 
     explicit SectionSaveStruct( SwHTMLParser& rParser );
-    virtual ~SectionSaveStruct() override;
 
 #if OSL_DEBUG_LEVEL > 0
     size_t GetContextStAttrMin() const { return m_nContextStAttrMinSave; }
@@ -2984,9 +2983,6 @@ SectionSaveStruct::SectionSaveStruct( SwHTMLParser& rParser ) :
     m_nDefListDeepSave = rParser.m_nDefListDeep;
     rParser.m_nDefListDeep = 0;
 }
-
-SectionSaveStruct::~SectionSaveStruct()
-{}
 
 void SectionSaveStruct::Restore( SwHTMLParser& rParser )
 {
@@ -4726,12 +4722,7 @@ public:
         // Die alte Numerierung wieder aufspannen
         rParser.GetNumInfo().Set( aNumRuleInfo );
     }
-
-    virtual ~CaptionSaveStruct() override;
 };
-
-CaptionSaveStruct::~CaptionSaveStruct()
-{}
 
 void SwHTMLParser::BuildTableCaption( HTMLTable *pCurTable )
 {
@@ -4932,16 +4923,11 @@ public:
         m_pCurrentTable( pCurTable )
     {}
 
-    virtual ~TableSaveStruct() override;
-
     // Aufbau der Tabelle anstossen und die Tabelle ggf. in einen
     // Rahmen packen. Wenn true zurueckgegeben wird muss noch ein
     // Absatz eingefuegt werden!
     void MakeTable( sal_uInt16 nWidth, SwPosition& rPos, SwDoc *pDoc );
 };
-
-TableSaveStruct::~TableSaveStruct()
-{}
 
 void TableSaveStruct::MakeTable( sal_uInt16 nWidth, SwPosition& rPos, SwDoc *pDoc )
 {

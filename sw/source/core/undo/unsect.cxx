@@ -288,8 +288,6 @@ public:
     SwUndoDelSection(
         SwSectionFormat const&, SwSection const&, SwNodeIndex const*const);
 
-    virtual ~SwUndoDelSection() override;
-
     virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
 };
@@ -312,10 +310,6 @@ SwUndoDelSection::SwUndoDelSection(
     , m_pMetadataUndo( rSectionFormat.CreateUndo() )
     , m_nStartNode( pIndex->GetIndex() )
     , m_nEndNode( pIndex->GetNode().EndOfSectionIndex() )
-{
-}
-
-SwUndoDelSection::~SwUndoDelSection()
 {
 }
 
@@ -396,8 +390,6 @@ public:
     SwUndoUpdateSection(
         SwSection const&, SwNodeIndex const*const, bool const bOnlyAttr);
 
-    virtual ~SwUndoUpdateSection() override;
-
     virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
 };
@@ -417,10 +409,6 @@ SwUndoUpdateSection::SwUndoUpdateSection(
     , m_pAttrSet( ::lcl_GetAttrSet(rSection) )
     , m_nStartNode( pIndex->GetIndex() )
     , m_bOnlyAttrChanged( bOnlyAttr )
-{
-}
-
-SwUndoUpdateSection::~SwUndoUpdateSection()
 {
 }
 

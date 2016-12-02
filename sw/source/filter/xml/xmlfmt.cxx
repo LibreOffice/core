@@ -203,8 +203,6 @@ public:
             SvXMLImport& rImport, sal_uInt16 nPrfx,
             const OUString& rLName,
             const uno::Reference< xml::sax::XAttributeList > & xAttrList );
-    virtual ~SwXMLConditionContext_Impl() override;
-
 
     bool IsValid() const { return 0 != nCondition; }
 };
@@ -246,11 +244,6 @@ SwXMLConditionContext_Impl::SwXMLConditionContext_Impl(
         }
     }
 }
-
-SwXMLConditionContext_Impl::~SwXMLConditionContext_Impl()
-{
-}
-
 
 typedef std::vector<rtl::Reference<SwXMLConditionContext_Impl>> SwXMLConditions_Impl;
 
@@ -662,7 +655,6 @@ public:
             const OUString& rLName ,
             const uno::Reference< xml::sax::XAttributeList > & xAttrList,
             bool bAuto );
-    virtual ~SwXMLStylesContext_Impl() override;
 
     virtual bool InsertStyleFamily( sal_uInt16 nFamily ) const override;
 
@@ -766,10 +758,6 @@ SwXMLStylesContext_Impl::SwXMLStylesContext_Impl(
 {
 }
 
-SwXMLStylesContext_Impl::~SwXMLStylesContext_Impl()
-{
-}
-
 bool SwXMLStylesContext_Impl::InsertStyleFamily( sal_uInt16 nFamily ) const
 {
     const SwXMLImport& rSwImport = GetSwImport();
@@ -870,7 +858,7 @@ public:
             SwXMLImport& rImport,
             const OUString& rLName ,
             const uno::Reference< xml::sax::XAttributeList > & xAttrList );
-    virtual ~SwXMLMasterStylesContext_Impl() override;
+
     virtual void EndElement() override;
 };
 
@@ -880,10 +868,6 @@ SwXMLMasterStylesContext_Impl::SwXMLMasterStylesContext_Impl(
         const OUString& rLName ,
         const uno::Reference< xml::sax::XAttributeList > & xAttrList ) :
     XMLTextMasterStylesContext( rImport, XML_NAMESPACE_OFFICE, rLName, xAttrList )
-{
-}
-
-SwXMLMasterStylesContext_Impl::~SwXMLMasterStylesContext_Impl()
 {
 }
 

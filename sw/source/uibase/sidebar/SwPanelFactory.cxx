@@ -60,7 +60,6 @@ private:
 
 public:
     SwPanelFactory();
-    virtual ~SwPanelFactory() override;
 
     // XUIElementFactory
     css::uno::Reference<css::ui::XUIElement> SAL_CALL createUIElement(
@@ -86,10 +85,6 @@ public:
 
 SwPanelFactory::SwPanelFactory()
     : PanelFactoryInterfaceBase(m_aMutex)
-{
-}
-
-SwPanelFactory::~SwPanelFactory()
 {
 }
 

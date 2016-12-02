@@ -2002,8 +2002,6 @@ namespace sdr
             :   ViewObjectContactOfSdrObj(rObjectContact, rViewContact)
             {
             }
-
-            virtual ~VOCOfDrawVirtObj() override;
         };
 
         class VCOfDrawVirtObj : public ViewContactOfVirtObj
@@ -2022,7 +2020,6 @@ namespace sdr
             :   ViewContactOfVirtObj(rObj)
             {
             }
-            virtual ~VCOfDrawVirtObj() override;
 
             /// access to SwDrawVirtObj
             SwDrawVirtObj& GetSwDrawVirtObj() const
@@ -2129,18 +2126,11 @@ namespace sdr
             return xRetval;
         }
 
-        VOCOfDrawVirtObj::~VOCOfDrawVirtObj()
-        {
-        }
-
         ViewObjectContact& VCOfDrawVirtObj::CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact)
         {
             return *(new VOCOfDrawVirtObj(rObjectContact, *this));
         }
 
-        VCOfDrawVirtObj::~VCOfDrawVirtObj()
-        {
-        }
     } // end of namespace contact
 } // end of namespace sdr
 
