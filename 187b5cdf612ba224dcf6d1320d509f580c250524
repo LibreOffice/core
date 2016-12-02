@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a71b18c_bbeda890",
+        "filename": "include/vcl/scopedbitmapaccess.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-12-02T06:58:49Z",
+      "side": 1,
+      "message": "mpAccess \u003d std::move(other.mpAccess);\nmpBitmap \u003d std::move(other.mpBitmap);\n\nthen you don\u0027t need the assignments to zero",
+      "revId": "187b5cdf612ba224dcf6d1320d509f580c250524",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
