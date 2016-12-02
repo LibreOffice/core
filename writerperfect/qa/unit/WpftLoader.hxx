@@ -1,0 +1,97 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#ifndef INCLUDED_WRITERPERFECT_QA_UNIT_WPFTLOADER_HXX
+#define INCLUDED_WRITERPERFECT_QA_UNIT_WPFTLOADER_HXX
+
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
+
+#include <rtl/ustring.hxx>
+
+namespace com
+{
+namespace sun
+{
+namespace star
+{
+namespace beans
+{
+struct PropertyValue;
+}
+namespace container
+{
+struct XNameAccess;
+}
+namespace document
+{
+class XFilter;
+}
+namespace frame
+{
+class XDesktop2;
+class XFrame;
+}
+namespace lang
+{
+class XComponent;
+}
+namespace uno
+{
+class XComponentContext;
+}
+}
+}
+}
+
+namespace writerperfect
+{
+namespace test
+{
+
+class WpftLoader
+{
+public:
+    WpftLoader(
+        const rtl::OUString &rURL,
+        const css::uno::Reference<css::document::XFilter> &rxFilter,
+        const rtl::OUString &rFactoryURL,
+        const css::uno::Reference<css::frame::XDesktop2> &rxDesktop,
+        const css::uno::Reference<css::container::XNameAccess> &rxTypeMap,
+        const css::uno::Reference<css::uno::XComponentContext> &rxContext
+    );
+    WpftLoader(const WpftLoader &) = delete;
+    WpftLoader &operator=(const WpftLoader &) = delete;
+    ~WpftLoader();
+
+    const css::uno::Reference<css::lang::XComponent> &getDocument() const;
+
+private:
+    bool impl_load();
+    void impl_dispose();
+
+    void impl_detectFilterName(css::uno::Sequence<css::beans::PropertyValue> &rDescriptor, const rtl::OUString &rTypeName);
+
+private:
+    const rtl::OUString m_aURL;
+    const rtl::OUString m_aFactoryURL;
+    const css::uno::Reference<css::document::XFilter> m_xFilter;
+    const css::uno::Reference<css::frame::XDesktop2> m_xDesktop;
+    const css::uno::Reference<css::container::XNameAccess> m_xTypeMap;
+    const css::uno::Reference<css::uno::XComponentContext> m_xContext;
+    css::uno::Reference<css::lang::XComponent> m_xDoc;
+    css::uno::Reference<css::frame::XFrame> m_xFrame;
+};
+
+}
+}
+
+#endif // INCLUDED_WRITERPERFECT_QA_UNIT_WPFTLOADER_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
