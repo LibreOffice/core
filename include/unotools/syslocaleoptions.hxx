@@ -87,10 +87,8 @@ public:
     // config value access methods
 
     /// The config string may be empty to denote the SYSTEM locale
-            const OUString&     GetLocaleConfigString() const;
             void                SetLocaleConfigString( const OUString& rStr );
-            /** Get locale set, if empty denotes SYSTEM locale, not resolved
-                to the real locale. */
+            /** Get locale set, not resolved to the real locale. */
             LanguageTag         GetLanguageTag() const;
             /** Get locale set, always resolved to the real locale. */
             const LanguageTag&  GetRealLanguageTag() const;

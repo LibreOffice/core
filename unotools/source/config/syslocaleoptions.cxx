@@ -566,12 +566,6 @@ void SvtSysLocaleOptions::BlockBroadcasts( bool bBlock )
     pImpl->BlockBroadcasts( bBlock );
 }
 
-const OUString& SvtSysLocaleOptions::GetLocaleConfigString() const
-{
-    MutexGuard aGuard( GetMutex() );
-    return pImpl->GetLocaleString();
-}
-
 void SvtSysLocaleOptions::SetLocaleConfigString( const OUString& rStr )
 {
     MutexGuard aGuard( GetMutex() );
@@ -702,7 +696,8 @@ void SvtSysLocaleOptions::ConfigurationChanged( utl::ConfigurationBroadcaster* p
 
 LanguageTag SvtSysLocaleOptions::GetLanguageTag() const
 {
-    return LanguageTag( GetLocaleConfigString() );
+    MutexGuard aGuard( GetMutex() );
+    return LanguageTag( pImpl->GetLocaleString() );
 }
 
 const LanguageTag & SvtSysLocaleOptions::GetRealLanguageTag() const
