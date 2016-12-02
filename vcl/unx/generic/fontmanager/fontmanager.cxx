@@ -902,9 +902,12 @@ int PrintFontManager::getFontFaceNumber( fontID nFontID ) const
 {
     int nRet = 0;
     PrintFont* pFont = getFont( nFontID );
-    nRet = pFont->m_nCollectionEntry;
-    if (nRet < 0)
-        nRet = 0;
+    if (pFont)
+    {
+        nRet = pFont->m_nCollectionEntry;
+        if (nRet < 0)
+            nRet = 0;
+    }
     return nRet;
 }
 
