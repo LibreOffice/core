@@ -613,6 +613,9 @@ class UsageInfo {
     /// Command vs. how many times it was used
     UsageMap maUsage;
 
+    /// config path, get it long before atexit time
+    OUString msConfigPath;
+
 public:
     UsageInfo() : mbIsCollecting(false)
     {
@@ -630,7 +633,12 @@ public:
     void save();
 
     /// Modify the flag whether we are collecting.
-    void setCollecting(bool bIsCollecting) { mbIsCollecting = bIsCollecting; }
+    void setCollecting(bool bIsCollecting)
+    {
+        mbIsCollecting = bIsCollecting;
+        if (mbIsCollecting)
+            msConfigPath = SvtPathOptions().GetConfigPath();
+    }
 };
 
 void UsageInfo::increment(const OUString &rCommand)
@@ -648,7 +656,7 @@ void UsageInfo::save()
     if (!mbIsCollecting)
         return;
 
-    OUString path(SvtPathOptions().GetConfigPath());
+    OUString path(msConfigPath);
     path += "usage/";
     osl::Directory::createPath(path);
 
