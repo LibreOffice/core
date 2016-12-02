@@ -72,6 +72,8 @@ public:
     void testGood();
     /// Test that we don't crash / loop while tokenizing these files.
     void testTokenize();
+    /// Test handling of unknown SubFilter values.
+    void testUnknownSubFilter();
 
     CPPUNIT_TEST_SUITE(PDFSigningTest);
     CPPUNIT_TEST(testPDFAdd);
@@ -87,6 +89,7 @@ public:
     CPPUNIT_TEST(testSigningCertificateAttribute);
     CPPUNIT_TEST(testGood);
     CPPUNIT_TEST(testTokenize);
+    CPPUNIT_TEST(testUnknownSubFilter);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -388,8 +391,6 @@ void PDFSigningTest::testTokenize()
     {
         // We looped on this broken input.
         OUStringLiteral("no-eof.pdf"),
-        // Failed to read as \r wasn't handled as terminating a comment.
-        OUStringLiteral("cr-comment.pdf"),
         // ']' in a name token was mishandled.
         OUStringLiteral("name-bracket.pdf"),
         // %%EOF at the end wasn't followed by a newline.
@@ -405,6 +406,22 @@ void PDFSigningTest::testTokenize()
         // Just make sure the tokenizer finishes without an error, don't look at the signature.
         CPPUNIT_ASSERT(aDocument.Read(aStream));
     }
+}
+
+void PDFSigningTest::testUnknownSubFilter()
+{
+    // Tokenize the bugdoc.
+    uno::Reference<xml::crypto::XSEInitializer> xSEInitializer = xml::crypto::SEInitializer::create(mxComponentContext);
+    uno::Reference<xml::crypto::XXMLSecurityContext> xSecurityContext = xSEInitializer->createSecurityContext(OUString());
+    SvStream* pStream = utl::UcbStreamHelper::CreateStream(m_directories.getURLFromSrc(DATA_DIRECTORY) + "cr-comment.pdf", StreamMode::READ | StreamMode::WRITE);
+    uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(*pStream));
+    DocumentSignatureManager aManager(mxComponentContext, DocumentSignatureMode::Content);
+    aManager.mxSignatureStream = xStream;
+    aManager.read(/*bUseTempStream=*/false);
+
+    // Make sure we find both signatures, even if the second has unknown SubFilter.
+    std::vector<SignatureInformation>& rInformations = aManager.maCurrentSignatureInformations;
+    CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(2), rInformations.size());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(PDFSigningTest);
