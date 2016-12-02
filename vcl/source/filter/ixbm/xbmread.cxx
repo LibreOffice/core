@@ -38,7 +38,7 @@ class XBMReader : public GraphicReader
 {
     SvStream&           rIStm;
     Bitmap              aBmp1;
-    BitmapWriteAccess*  pAcc1;
+    Bitmap::ScopedWriteAccess pAcc1;
     short*              pHexTable;
     BitmapColor         aWhite;
     BitmapColor         aBlack;
@@ -62,7 +62,6 @@ public:
 
 XBMReader::XBMReader( SvStream& rStm ) :
             rIStm           ( rStm ),
-            pAcc1           ( nullptr ),
             nLastPos        ( rStm.Tell() ),
             nWidth          ( 0 ),
             nHeight         ( 0 ),
@@ -76,9 +75,6 @@ XBMReader::XBMReader( SvStream& rStm ) :
 XBMReader::~XBMReader()
 {
     delete[] pHexTable;
-
-    if( pAcc1 )
-        Bitmap::ReleaseAccess( pAcc1 );
 }
 
 void XBMReader::InitTable()
@@ -332,7 +328,7 @@ ReadState XBMReader::ReadXBM( Graphic& rGraphic )
                         if ( bStatus && nWidth && nHeight )
                         {
                             aBmp1 = Bitmap( Size( nWidth, nHeight ), 1 );
-                            pAcc1 = aBmp1.AcquireWriteAccess();
+                            pAcc1 = Bitmap::ScopedWriteAccess(aBmp1);
 
                             if( pAcc1 )
                             {
@@ -352,8 +348,7 @@ ReadState XBMReader::ReadXBM( Graphic& rGraphic )
         {
             Bitmap aBlackBmp( Size( pAcc1->Width(), pAcc1->Height() ), 1 );
 
-            Bitmap::ReleaseAccess( pAcc1 );
-            pAcc1 = nullptr;
+            pAcc1.reset();
             aBlackBmp.Erase( Color( COL_BLACK ) );
             rGraphic = BitmapEx( aBlackBmp, aBmp1 );
             eReadState = XBMREAD_OK;

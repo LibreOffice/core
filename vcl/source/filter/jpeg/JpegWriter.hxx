@@ -29,7 +29,7 @@
 class JPEGWriter final
 {
     SvStream&           mrStream;
-    BitmapReadAccess*   mpReadAccess;
+    Bitmap::ScopedReadAccess mpReadAccess;
     sal_uInt8*          mpBuffer;
     bool                mbNative;
     bool                mbGreys;
