@@ -2293,75 +2293,78 @@ void SdrObjEditView::ApplyFormatPaintBrushToText( SfxItemSet& rFormatSet, SdrTex
 
 void SdrObjEditView::ApplyFormatPaintBrush( SfxItemSet& rFormatSet, bool bNoCharacterFormats, bool bNoParagraphFormats )
 {
-    if( !mxSelectionController.is() || !mxSelectionController->ApplyFormatPaintBrush( rFormatSet, bNoCharacterFormats, bNoParagraphFormats ) )
+    if( mxSelectionController.is() &&
+        mxSelectionController->ApplyFormatPaintBrush( rFormatSet, bNoCharacterFormats, bNoParagraphFormats ) )
     {
-        OutlinerView* pOLV = GetTextEditOutlinerView();
-        if( !pOLV )
+        return;
+    }
+
+    OutlinerView* pOLV = GetTextEditOutlinerView();
+    if( !pOLV )
+    {
+        const SdrMarkList& rMarkList = GetMarkedObjectList();
+        SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+        const SfxItemSet& rShapeSet = pObj->GetMergedItemSet();
+
+        // if not in text edit mode (aka the user selected text or clicked on a word)
+        // apply formatting attributes to selected shape
+        // All formatting items (see ranges above) that are unequal in selected shape and
+        // the format paintbrush are hard set on the selected shape.
+
+        const sal_uInt16* pRanges = rFormatSet.GetRanges();
+        bool bTextOnly = true;
+
+        while( *pRanges )
         {
-            const SdrMarkList& rMarkList = GetMarkedObjectList();
-            SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-            const SfxItemSet& rShapeSet = pObj->GetMergedItemSet();
-
-            // if not in text edit mode (aka the user selected text or clicked on a word)
-            // apply formatting attributes to selected shape
-            // All formatting items (see ranges above) that are unequal in selected shape and
-            // the format paintbrush are hard set on the selected shape.
-
-            const sal_uInt16* pRanges = rFormatSet.GetRanges();
-            bool bTextOnly = true;
-
-            while( *pRanges )
+            if( (*pRanges != EE_PARA_START) && (*pRanges != EE_CHAR_START) )
             {
-                if( (*pRanges != EE_PARA_START) && (*pRanges != EE_CHAR_START) )
-                {
-                    bTextOnly = false;
-                    break;
-                }
-                pRanges += 2;
+                bTextOnly = false;
+                break;
             }
+            pRanges += 2;
+        }
 
-            if( !bTextOnly )
+        if( !bTextOnly )
+        {
+            SfxItemSet aPaintSet( CreatePaintSet(
+                                    GetFormatRangeImpl(false), *rShapeSet.GetPool(),
+                                    rFormatSet, rShapeSet,
+                                    bNoCharacterFormats, bNoParagraphFormats ) );
+            SetAttrToMarked(aPaintSet, false/*bReplaceAll*/);
+        }
+
+        // now apply character and paragraph formatting to text, if the shape has any
+        SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>(pObj);
+        if( pTextObj )
+        {
+            sal_Int32 nText = pTextObj->getTextCount();
+
+            while( --nText >= 0 )
             {
-                SfxItemSet aPaintSet( CreatePaintSet(
-                                        GetFormatRangeImpl(false), *rShapeSet.GetPool(),
-                                        rFormatSet, rShapeSet,
-                                        bNoCharacterFormats, bNoParagraphFormats ) );
-                SetAttrToMarked(aPaintSet, false/*bReplaceAll*/);
-            }
-
-            // now apply character and paragraph formatting to text, if the shape has any
-            SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>(pObj);
-            if( pTextObj )
-            {
-                sal_Int32 nText = pTextObj->getTextCount();
-
-                while( --nText >= 0 )
-                {
-                    SdrText* pText = pTextObj->getText( nText );
-                    ApplyFormatPaintBrushToText( rFormatSet, *pTextObj, pText, bNoCharacterFormats, bNoParagraphFormats );
-                }
+                SdrText* pText = pTextObj->getText( nText );
+                ApplyFormatPaintBrushToText( rFormatSet, *pTextObj, pText, bNoCharacterFormats, bNoParagraphFormats );
             }
         }
-        else
+    }
+    else
+    {
+        ::Outliner* pOutliner = pOLV->GetOutliner();
+        if( pOutliner )
         {
-            ::Outliner* pOutliner = pOLV->GetOutliner();
-            if( pOutliner )
-            {
-                const EditEngine& rEditEngine = pOutliner->GetEditEngine();
+            const EditEngine& rEditEngine = pOutliner->GetEditEngine();
 
-                ESelection aSel( pOLV->GetSelection() );
-                if( !aSel.HasRange() )
-                    pOLV->SetSelection( rEditEngine.GetWord( aSel, css::i18n::WordType::DICTIONARY_WORD ) );
+            ESelection aSel( pOLV->GetSelection() );
+            if( !aSel.HasRange() )
+                pOLV->SetSelection( rEditEngine.GetWord( aSel, css::i18n::WordType::DICTIONARY_WORD ) );
 
-                const bool bRemoveParaAttribs = !bNoParagraphFormats;
-                pOLV->RemoveAttribsKeepLanguages( bRemoveParaAttribs );
-                SfxItemSet aSet( pOLV->GetAttribs() );
-                SfxItemSet aPaintSet( CreatePaintSet(
-                                        GetFormatRangeImpl(true), *aSet.GetPool(),
-                                        rFormatSet, aSet,
-                                        bNoCharacterFormats, bNoParagraphFormats ) );
-                pOLV->SetAttribs( aPaintSet );
-            }
+            const bool bRemoveParaAttribs = !bNoParagraphFormats;
+            pOLV->RemoveAttribsKeepLanguages( bRemoveParaAttribs );
+            SfxItemSet aSet( pOLV->GetAttribs() );
+            SfxItemSet aPaintSet( CreatePaintSet(
+                                    GetFormatRangeImpl(true), *aSet.GetPool(),
+                                    rFormatSet, aSet,
+                                    bNoCharacterFormats, bNoParagraphFormats ) );
+            pOLV->SetAttribs( aPaintSet );
         }
     }
 }
