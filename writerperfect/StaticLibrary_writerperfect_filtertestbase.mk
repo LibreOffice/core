@@ -29,7 +29,9 @@ $(eval $(call gb_StaticLibrary_use_libraries,writerperfect_filtertestbase,\
 ))
 
 $(eval $(call gb_StaticLibrary_add_exception_objects,writerperfect_filtertestbase,\
+    writerperfect/qa/unit/WpftFilterFixture \
     writerperfect/qa/unit/WpftFilterTestBase \
+    writerperfect/qa/unit/WpftLoader \
 ))
 
 # vim: set noet sw=4 ts=4:
