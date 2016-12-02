@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a71b18c_1e876a10",
+        "filename": "vcl/source/gdi/pngwrite.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-12-02T13:25:57Z",
+      "side": 1,
+      "message": "you missed one?",
+      "revId": "ac16fc21c61d048a4aa952c9454f816770fd0af3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
