@@ -226,9 +226,11 @@ ExtGlobalContext::ExtGlobalContext( WorksheetContextBase& rFragment ):
 
 ContextHandlerRef ExtGlobalContext::onCreateContext( sal_Int32 nElement, const AttributeList& /*rAttribs*/ )
 {
-    if (nElement == XLS14_TOKEN(conditionalFormatting))
-        return new ExtConditionalFormattingContext(*this);
-
+    switch (nElement)
+    {
+        case XLS14_TOKEN(conditionalFormatting): return new ExtConditionalFormattingContext(*this);
+        case XLS14_TOKEN(dataValidations):       return new ExtDataValidationsContext(*this);
+    }
     return this;
 }
 

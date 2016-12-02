@@ -25,7 +25,51 @@
 namespace oox {
 namespace xls {
 
-class DataValidationsContext : public WorksheetContextBase
+class DataValidationsContext_Base {
+public:
+                                   DataValidationsContext_Base() {}
+    void                           SetSqref(const OUString& rChars) { mSqref = rChars; }
+    void                           SetFormula1(const OUString& rChars) { mFormula1 = rChars; }
+    void                           SetFormula2(const OUString& rChars) { mFormula2 = rChars; }
+    void                           SetValidation(::oox::xls::WorksheetHelper& rTarget);
+    /** Imports the dataValidation element containing data validation settings. */
+    void                           importDataValidation(const AttributeList& rAttribs);
+    /** Imports the DATAVALIDATION record containing data validation settings. */
+    static void                    importDataValidation(SequenceInputStream& rStrm, ::oox::xls::WorksheetHelper& rTarget);
+    bool                           isFormula1Set() const { return !mFormula1.isEmpty(); }
+    bool                           isFormula2Set() const { return !mFormula2.isEmpty(); }
+private:
+    ::std::unique_ptr< ValidationModel > mxValModel;
+    OUString                             mSqref;
+    OUString                             mFormula1;
+    OUString                             mFormula2;
+};
+
+// For following types of validations:
+//
+//  <dataValidations count="1">
+//    <dataValidation allowBlank="true" operator="equal" showDropDown="false" showErrorMessage="true" showInputMessage="false" sqref="C1:C5" type="list">
+//      <formula1>Sheet1!$A$1:$A$5</formula1>
+//      <formula2>0</formula2>
+//    </dataValidation>
+//  </dataValidations>
+//
+// or
+//
+//  <dataValidations count="1">
+//    <dataValidation type="list" operator="equal" allowBlank="1" showErrorMessage="1" sqref="A1">
+//      <mc:AlternateContent xmlns:x12ac="http://schemas.microsoft.com/office/spreadsheetml/2011/1/ac" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006">
+//        <mc:Choice Requires="x12ac">
+//          <x12ac:list>1,"2,3",4</x12ac:list>
+//        </mc:Choice>
+//        <mc:Fallback>
+//          <formula1>"1,2,3,4"</formula1>
+//        </mc:Fallback>
+//      </mc:AlternateContent>
+//    </dataValidation>
+//  </dataValidations>
+
+class DataValidationsContext : public WorksheetContextBase, private DataValidationsContext_Base
 {
 public:
     explicit            DataValidationsContext( WorksheetFragmentBase& rFragment );
@@ -36,15 +80,34 @@ protected:
     virtual void        onEndElement() override;
 
     virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm ) override;
+};
 
-private:
-    /** Imports the dataValidation element containing data validation settings. */
-    void                importDataValidation( const AttributeList& rAttribs );
-    /** Imports the DATAVALIDATION record containing data validation settings. */
-    void                importDataValidation( SequenceInputStream& rStrm );
+// For following types of validations:
+//
+//  <extLst>
+//    <ext uri="{CCE6A557-97BC-4b89-ADB6-D9C93CAAB3DF}" xmlns:x14="http://schemas.microsoft.com/office/spreadsheetml/2009/9/main">
+//      <x14:dataValidations count="1" xmlns:xm="http://schemas.microsoft.com/office/excel/2006/main">
+//        <x14:dataValidation type="list" allowBlank="1" showInputMessage="1" showErrorMessage="1">
+//          <x14:formula1>
+//            <xm:f>Sheet1!$A$2:$A$272</xm:f>
+//          </x14:formula1>
+//          <xm:sqref>A6:A22</xm:sqref>
+//        </x14:dataValidation>
+//      </x14:dataValidations>
+//    </ext>
+//  </extLst>
 
+class ExtDataValidationsContext : public WorksheetContextBase, private DataValidationsContext_Base
+{
+public:
+    explicit            ExtDataValidationsContext( WorksheetContextBase& rFragment );
+
+protected:
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
+    virtual void        onCharacters( const OUString& rChars ) override;
+    virtual void        onEndElement() override;
 private:
-    ::std::unique_ptr< ValidationModel > mxValModel;
+    sal_Int32 mCurrFormula;
 };
 
 class WorksheetFragment : public WorksheetFragmentBase
