@@ -58,8 +58,8 @@ class GIFReader : public GraphicReader
     SvStream&           rIStm;
     std::vector<sal_uInt8> aSrcBuf;
     std::unique_ptr<GIFLZWDecompressor> pDecomp;
-    BitmapWriteAccess*  pAcc8;
-    BitmapWriteAccess*  pAcc1;
+    Bitmap::ScopedWriteAccess pAcc8;
+    Bitmap::ScopedWriteAccess pAcc1;
     long                nYAcc;
     long                nLastPos;
     sal_uInt32          nLogWidth100;
@@ -113,8 +113,6 @@ GIFReader::GIFReader( SvStream& rStm )
     : aGPalette ( 256 )
     , aLPalette ( 256 )
     , rIStm ( rStm )
-    , pAcc8 ( nullptr )
-    , pAcc1 ( nullptr )
     , nYAcc ( 0 )
     , nLastPos ( rStm.Tell() )
     , nLogWidth100 ( 0UL )
@@ -150,12 +148,6 @@ GIFReader::GIFReader( SvStream& rStm )
 GIFReader::~GIFReader()
 {
     aImGraphic.SetContext( nullptr );
-
-    if( pAcc1 )
-        Bitmap::ReleaseAccess( pAcc1 );
-
-    if( pAcc8 )
-        Bitmap::ReleaseAccess( pAcc8 );
 }
 
 void GIFReader::ClearImageExtensions()
@@ -193,7 +185,7 @@ void GIFReader::CreateBitmaps( long nWidth, long nHeight, BitmapPalette* pPal,
         if( !aAnimation.Count() )
             aBmp1.Erase( aWhite );
 
-        pAcc1 = aBmp1.AcquireWriteAccess();
+        pAcc1 = Bitmap::ScopedWriteAccess(aBmp1);
 
         if( pAcc1 )
         {
@@ -213,7 +205,7 @@ void GIFReader::CreateBitmaps( long nWidth, long nHeight, BitmapPalette* pPal,
         else
           aBmp8.Erase( Color( COL_WHITE ) );
 
-        pAcc8 = aBmp8.AcquireWriteAccess();
+        pAcc8 = Bitmap::ScopedWriteAccess(aBmp8);
         bStatus = ( pAcc8 != nullptr );
     }
 }
@@ -623,13 +615,11 @@ void GIFReader::CreateNewBitmaps()
 {
     AnimationBitmap aAnimBmp;
 
-    Bitmap::ReleaseAccess( pAcc8 );
-    pAcc8 = nullptr;
+    pAcc8.reset();
 
     if( bGCTransparent )
     {
-        Bitmap::ReleaseAccess( pAcc1 );
-        pAcc1 = nullptr;
+        pAcc1.reset();
         aAnimBmp.aBmpEx = BitmapEx( aBmp8, aBmp1 );
     }
     else
@@ -664,20 +654,20 @@ const Graphic& GIFReader::GetIntermediateGraphic()
     {
         Bitmap  aBmp;
 
-        Bitmap::ReleaseAccess( pAcc8 );
+        pAcc8.reset();
 
         if ( bGCTransparent )
         {
-            Bitmap::ReleaseAccess( pAcc1 );
+            pAcc1.reset();
             aImGraphic = BitmapEx( aBmp8, aBmp1 );
 
-            pAcc1 = aBmp1.AcquireWriteAccess();
+            pAcc1 = Bitmap::ScopedWriteAccess(aBmp1);
             bStatus = bStatus && ( pAcc1 != nullptr );
         }
         else
             aImGraphic = aBmp8;
 
-        pAcc8 = aBmp8.AcquireWriteAccess();
+        pAcc8 = Bitmap::ScopedWriteAccess(aBmp8);
         bStatus = bStatus && ( pAcc8 != nullptr );
     }
 
