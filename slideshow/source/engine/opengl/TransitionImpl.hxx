@@ -338,7 +338,7 @@ public:
 
     int getVerticesCount() const
     {
-        assert(Vertices.size() < std::numeric_limits<int>::max());
+        assert(Vertices.size() < unsigned(std::numeric_limits<int>::max()));
         return int(unsigned(Vertices.size()));
     }
 
