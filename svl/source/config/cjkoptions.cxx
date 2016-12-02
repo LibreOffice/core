@@ -62,7 +62,6 @@ class SvtCJKOptions_Impl : public utl::ConfigItem
 
 public:
     SvtCJKOptions_Impl();
-    virtual ~SvtCJKOptions_Impl() override;
 
     virtual void    Notify( const css::uno::Sequence< OUString >& rPropertyNames ) override;
     void            Load();
@@ -111,10 +110,6 @@ SvtCJKOptions_Impl::SvtCJKOptions_Impl() :
     bRODoubleLines(CFG_READONLY_DEFAULT),
     bROEmphasisMarks(CFG_READONLY_DEFAULT),
     bROVerticalCallOut(CFG_READONLY_DEFAULT)
-{
-}
-
-SvtCJKOptions_Impl::~SvtCJKOptions_Impl()
 {
 }
 

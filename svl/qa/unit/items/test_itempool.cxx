@@ -19,7 +19,6 @@ class PoolItemTest : public CppUnit::TestFixture
 {
   public:
              PoolItemTest() {}
-    virtual ~PoolItemTest() override {}
 
     void testPool();
 
