@@ -97,7 +97,8 @@ static bool dumpCallback(const wchar_t* path, const wchar_t* id,
     // TODO: moggi: can we avoid this conversion
     std::wstring_convert<std::codecvt_utf8<wchar_t>> conv1;
     std::string aPath = conv1.to_bytes(std::wstring(path)) + conv1.to_bytes(std::wstring(id)) + ".dmp";
-    minidump_file << "DumpFile=" << aPath << "\n";;
+    minidump_file << "DumpFile=" << aPath << "\n";
+    minidump_file << "GDIHandles=" << ::GetGuiResources (::GetCurrentProcess(), GR_GDIOBJECTS) << "\n";
     minidump_file.close();
     SAL_WARN("desktop", "minidump generated: " << aPath);
     return succeeded;
