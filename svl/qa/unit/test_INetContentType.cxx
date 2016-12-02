@@ -48,7 +48,7 @@ void Test::testBad() {
     CPPUNIT_ASSERT(!INetContentTypes::parse(in, t, s, &ps));
     CPPUNIT_ASSERT(t.isEmpty());
     CPPUNIT_ASSERT(s.isEmpty());
-    CPPUNIT_ASSERT(ps.end() == ps.find("foo"));
+    CPPUNIT_ASSERT(bool(ps.end() == ps.find("foo")));
 }
 
 void Test::testFull() {
@@ -78,7 +78,7 @@ void Test::testFollow() {
     CPPUNIT_ASSERT(!INetContentTypes::parse(in, t, s));
     CPPUNIT_ASSERT(t.isEmpty());
     CPPUNIT_ASSERT(s.isEmpty());
-    CPPUNIT_ASSERT(ps.end() == ps.find("baz"));
+    CPPUNIT_ASSERT(bool(ps.end() == ps.find("baz")));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

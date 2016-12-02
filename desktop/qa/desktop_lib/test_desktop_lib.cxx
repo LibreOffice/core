@@ -1644,7 +1644,7 @@ void DesktopLOKTest::testGetFontSubset()
     std::stringstream aStream(pJSON);
     boost::property_tree::read_json(aStream, aTree);
     CPPUNIT_ASSERT( aTree.size() > 0 );
-    CPPUNIT_ASSERT( aTree.get_child("commandName").get_value<std::string>() == ".uno:FontSubset" );
+    CPPUNIT_ASSERT_EQUAL( std::string(".uno:FontSubset"), aTree.get_child("commandName").get_value<std::string>() );
     boost::property_tree::ptree aValues = aTree.get_child("commandValues");
     CPPUNIT_ASSERT( aValues.size() > 0 );
     free(pJSON);
