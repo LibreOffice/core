@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a71b18c_be4cb677",
+        "filename": "sfx2/source/appl/sfxhelp.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 615,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-12-02T10:22:27Z",
+      "side": 1,
+      "message": "So what you want to do at this spot is to show your aQueryBox (if the build-in help ain\u0027t installed, which is here)",
+      "revId": "63009ebaed30a0cb2b2d133415d3f5a7b329abd1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a71b18c_de517210",
+        "filename": "sfx2/source/appl/sfxhelp.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 619,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-12-02T10:22:27Z",
+      "side": 1,
+      "message": "Here you have to take the return value of Execute() method, likely it\u0027ll be something like RET_OK or RET_CANCEL (put a breakpoint here and see for yourself what Execute() returns when you activate either one of the buttons)",
+      "revId": "63009ebaed30a0cb2b2d133415d3f5a7b329abd1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a71b18c_3e41863a",
+        "filename": "sfx2/source/appl/sfxhelp.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 620,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-12-02T10:22:27Z",
+      "side": 1,
+      "message": "and if the return value is positive (yes, I want to see help online), you\u0027ll call impl_showOnlineHelp (just move the if statement from above here)",
+      "revId": "63009ebaed30a0cb2b2d133415d3f5a7b329abd1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
