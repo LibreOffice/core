@@ -1251,38 +1251,8 @@ DECLARE_WW8EXPORT_TEST(testTableKeep, "tdf91083.odt")
     //emulate table "keep with next" -do not split table
     CPPUNIT_ASSERT_EQUAL( OUString("Row 1"), parseDump("/root/page[3]/body/tab[1]/row[2]/cell[1]/txt[1]") );
     CPPUNIT_ASSERT_EQUAL( OUString("Row 1"), parseDump("/root/page[6]/body/tab[1]/row[2]/cell[1]/txt[1]") );
-
-    // detect and re-enable keep-with-next and dont-split-table settings
-    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
-    uno::Reference<text::XTextTable> xTable (xTables->getByIndex(0), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xTable, "Split"));
 }
 #endif
-
-DECLARE_WW8EXPORT_TEST(testTdf91083_tableKeep, "tdf91083_tableKeep.doc")
-{
-    // detect and re-enable keep-with-next and dont-split-table settings
-    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
-
-    // single-row table - kept with next
-    uno::Reference<text::XTextTable> xTable (xTables->getByIndex(0), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xTable, "Split"));
-    // I don't know how to test for SvxFormatKeepItem
-
-    // complex table - kept with next
-    xTables->getByIndex(1) >>= xTable;
-    CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xTable, "Split"));
-
-    //single row table - do not split
-    xTables->getByIndex(3) >>= xTable;
-    CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xTable, "Split"));
-
-    //multi-row table - do not split
-    xTables->getByIndex(4) >>= xTable;
-    CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xTable, "Split"));
-}
 
 DECLARE_WW8EXPORT_TEST(testTdf76349_textboxMargins, "tdf76349_textboxMargins.doc")
 {
