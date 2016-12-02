@@ -29,7 +29,6 @@ $(eval $(call gb_Library_set_include,writerperfect, \
 ))
 
 $(eval $(call gb_Library_use_externals,writerperfect,\
-	boost_headers \
 	odfgen \
 	revenge \
 ))
