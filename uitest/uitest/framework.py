@@ -31,6 +31,15 @@ class UITestCase(unittest.TestCase):
     def tearDown(self):
         t = time.time() - self.startTime
         print("Execution time for %s: %.3f" % (self.id(), t))
+        if self.xContext is not None:
+            desktop = self.ui_test.get_desktop()
+            components = desktop.getComponents()
+            for component in components:
+                try:
+                    component.close(False)
+                except Exception as e:
+                    print(e)
+
         self.connection.tearDown()
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
