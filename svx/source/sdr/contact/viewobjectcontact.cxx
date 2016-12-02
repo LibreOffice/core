@@ -73,7 +73,6 @@ public:
         const drawinglayer::geometry::ViewInformation2D& rViewInformation,
         bool bTextAnimationAllowed,
         bool bGraphicAnimationAllowed);
-    virtual ~AnimatedExtractingProcessor2D() override;
 
     // data access
     const drawinglayer::primitive2d::Primitive2DContainer& getPrimitive2DSequence() const { return maPrimitive2DSequence; }
@@ -89,10 +88,6 @@ AnimatedExtractingProcessor2D::AnimatedExtractingProcessor2D(
     maPrimitive2DSequence(),
     mbTextAnimationAllowed(bTextAnimationAllowed),
     mbGraphicAnimationAllowed(bGraphicAnimationAllowed)
-{
-}
-
-AnimatedExtractingProcessor2D::~AnimatedExtractingProcessor2D()
 {
 }
 

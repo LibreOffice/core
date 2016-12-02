@@ -55,7 +55,6 @@ namespace svx
 
     public:
         NamespaceMap( sal_uInt16* pWhichIds, SfxItemPool* pPool );
-        virtual ~NamespaceMap() override;
 
         // XNameAccess
         virtual Any SAL_CALL getByName( const OUString& aName ) throw (NoSuchElementException, WrappedTargetException, RuntimeException, std::exception) override;
@@ -183,10 +182,6 @@ bool NamespaceIteratorImpl::next( OUString& rPrefix, OUString& rURL )
 
 NamespaceMap::NamespaceMap( sal_uInt16* pWhichIds, SfxItemPool* pPool )
 : mpWhichIds( pWhichIds ), mpPool( pPool )
-{
-}
-
-NamespaceMap::~NamespaceMap()
 {
 }
 

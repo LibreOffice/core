@@ -78,11 +78,6 @@ class RecoveryUI : public ::cppu::WeakImplHelper< css::lang::XServiceInfo       
         /** @short  TODO */
         explicit RecoveryUI(const css::uno::Reference< css::uno::XComponentContext >& xContext);
 
-
-        /** @short  TODO */
-        virtual ~RecoveryUI() override;
-
-
         // css.lang.XServiceInfo
 
         virtual OUString SAL_CALL getImplementationName()
@@ -117,10 +112,6 @@ RecoveryUI::RecoveryUI(const css::uno::Reference< css::uno::XComponentContext >&
     : m_xContext     (xContext                 )
     , m_pParentWindow(nullptr                        )
     , m_eJob         (RecoveryUI::E_JOB_UNKNOWN)
-{
-}
-
-RecoveryUI::~RecoveryUI()
 {
 }
 

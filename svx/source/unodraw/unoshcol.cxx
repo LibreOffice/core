@@ -53,7 +53,6 @@ private:
 
 public:
     SvxShapeCollection() throw();
-    virtual ~SvxShapeCollection() throw() override;
 
     // XInterface
     virtual void SAL_CALL release() throw() override;
@@ -83,11 +82,6 @@ public:
 
 SvxShapeCollection::SvxShapeCollection() throw()
 : maShapeContainer( maMutex ), mrBHelper( maMutex )
-{
-}
-
-
-SvxShapeCollection::~SvxShapeCollection() throw()
 {
 }
 

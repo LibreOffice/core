@@ -159,9 +159,6 @@ namespace sdr
             // constructor for copying, but using new object
             CellProperties(const CellProperties& rProps, SdrObject& rObj, sdr::table::Cell* pCell);
 
-            // destructor
-            virtual ~CellProperties() override;
-
             // Clone() operator, normally just calls the local copy constructor
             BaseProperties& Clone(SdrObject& rObj) const override;
 
@@ -213,10 +210,6 @@ namespace sdr
         :   TextProperties(rProps, rObj)
         ,   mxCell( pCell )
         ,   maTextProvider(mxCell)
-        {
-        }
-
-        CellProperties::~CellProperties()
         {
         }
 

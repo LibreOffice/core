@@ -140,7 +140,6 @@ namespace {
     {
     public:
         GraphicExporter();
-        virtual ~GraphicExporter() override;
 
         // XFilter
         virtual sal_Bool SAL_CALL filter( const Sequence< PropertyValue >& aDescriptor ) throw(RuntimeException, std::exception) override;
@@ -283,7 +282,6 @@ class ImplExportCheckVisisbilityRedirector : public sdr::contact::ViewObjectCont
 {
 public:
     explicit ImplExportCheckVisisbilityRedirector( SdrPage* pCurrentPage );
-    virtual ~ImplExportCheckVisisbilityRedirector() override;
 
     virtual drawinglayer::primitive2d::Primitive2DContainer createRedirectedPrimitive2DSequence(
         const sdr::contact::ViewObjectContact& rOriginal,
@@ -295,10 +293,6 @@ private:
 
 ImplExportCheckVisisbilityRedirector::ImplExportCheckVisisbilityRedirector( SdrPage* pCurrentPage )
 :   ViewObjectContactRedirector(), mpCurrentPage( pCurrentPage )
-{
-}
-
-ImplExportCheckVisisbilityRedirector::~ImplExportCheckVisisbilityRedirector()
 {
 }
 
@@ -330,10 +324,6 @@ drawinglayer::primitive2d::Primitive2DContainer ImplExportCheckVisisbilityRedire
 
 GraphicExporter::GraphicExporter()
 : mpUnoPage( nullptr ), mnPageNumber(-1), mpCurrentPage(nullptr), mpDoc( nullptr )
-{
-}
-
-GraphicExporter::~GraphicExporter()
 {
 }
 

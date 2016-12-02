@@ -53,8 +53,6 @@ private:
 public:
     SvxUnoXPropertyTable( sal_Int16 nWhich, XPropertyList* pList ) throw();
 
-    virtual ~SvxUnoXPropertyTable() throw() override;
-
     virtual uno::Any getAny( const XPropertyEntry* pEntry ) const throw(uno::RuntimeException) = 0;
     virtual std::unique_ptr<XPropertyEntry> createEntry(const OUString& rName, const uno::Any& rAny) const throw(uno::RuntimeException, lang::IllegalArgumentException) = 0;
 
@@ -79,10 +77,6 @@ public:
 
 SvxUnoXPropertyTable::SvxUnoXPropertyTable( sal_Int16 nWhich, XPropertyList* pList ) throw()
 : mpList( pList ), mnWhich( nWhich )
-{
-}
-
-SvxUnoXPropertyTable::~SvxUnoXPropertyTable() throw()
 {
 }
 

@@ -65,7 +65,6 @@ class PanelFactory
 {
 public:
     PanelFactory();
-    virtual ~PanelFactory() override;
     PanelFactory(const PanelFactory&) = delete;
     PanelFactory& operator=(const PanelFactory&) = delete;
 
@@ -95,12 +94,6 @@ PanelFactory::PanelFactory()
     : PanelFactoryInterfaceBase(m_aMutex)
 {
 }
-
-
-PanelFactory::~PanelFactory()
-{
-}
-
 
 Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
     const ::rtl::OUString& rsResourceURL,

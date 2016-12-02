@@ -52,7 +52,6 @@ protected:
 
 public:
     OverlayTableEdge( const basegfx::B2DPolyPolygon& rPolyPolygon, bool bVisible );
-    virtual ~OverlayTableEdge() override;
 };
 
 
@@ -202,10 +201,6 @@ OverlayTableEdge::OverlayTableEdge( const basegfx::B2DPolyPolygon& rPolyPolygon,
 :   OverlayObject(Color(COL_GRAY))
 ,   maPolyPolygon( rPolyPolygon )
 ,   mbVisible(bVisible)
-{
-}
-
-OverlayTableEdge::~OverlayTableEdge()
 {
 }
 

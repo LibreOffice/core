@@ -89,7 +89,6 @@ private:
 public:
 
     explicit                        SvXMLGraphicInputStream( const OUString& rGraphicId );
-    virtual                         ~SvXMLGraphicInputStream() override;
                                     SvXMLGraphicInputStream(const SvXMLGraphicInputStream&) = delete;
     SvXMLGraphicInputStream&        operator=(const SvXMLGraphicInputStream&) = delete;
 
@@ -149,10 +148,6 @@ SvXMLGraphicInputStream::SvXMLGraphicInputStream( const OUString& rGraphicId )
                 delete pStm;
         }
     }
-}
-
-SvXMLGraphicInputStream::~SvXMLGraphicInputStream()
-{
 }
 
 sal_Int32 SAL_CALL SvXMLGraphicInputStream::readBytes( Sequence< sal_Int8 >& rData, sal_Int32 nBytesToRead )
