@@ -118,17 +118,12 @@ struct CharacterMetric
     { return rOther.width != width || rOther.height != height; }
 };
 
-class FontCache;
-
 // a class to manage printable fonts
-
-class FontCache;
 
 class VCL_PLUGIN_PUBLIC PrintFontManager
 {
     struct PrintFont;
     friend struct PrintFont;
-    friend class FontCache;
 
     struct PrintFont
     {
@@ -175,8 +170,6 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
     m_aDirToAtom;
     std::unordered_map< int, OString >          m_aAtomToDir;
     int                                         m_nNextDirAtom;
-
-    mutable FontCache*                         m_pFontCache;
 
     OString getFontFile( PrintFont* pFont ) const;
 
