@@ -40,7 +40,7 @@ ScreenshotTest::ScreenshotTest()
     maKnownDialogs()
 {
     SvtSysLocaleOptions localeOptions;
-    maCurrentLanguage = localeOptions.GetLocaleConfigString();
+    maCurrentLanguage = localeOptions.GetRealUILanguageTag().getBcp47();
 }
 
 ScreenshotTest::~ScreenshotTest()
