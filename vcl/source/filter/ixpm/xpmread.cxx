@@ -56,12 +56,12 @@ class XPMReader : public GraphicReader
 {
 private:
 
-    SvStream&           mrIStm;
-    Bitmap              maBmp;
-    BitmapWriteAccess*  mpAcc;
-    Bitmap              maMaskBmp;
-    BitmapWriteAccess*  mpMaskAcc;
-    long                mnLastPos;
+    SvStream&                   mrIStm;
+    Bitmap                      maBmp;
+    Bitmap::ScopedWriteAccess   mpAcc;
+    Bitmap                      maMaskBmp;
+    Bitmap::ScopedWriteAccess   mpMaskAcc;
+    long                        mnLastPos;
 
     sal_uLong               mnWidth;
     sal_uLong               mnHeight;
@@ -102,8 +102,6 @@ public:
 
 XPMReader::XPMReader(SvStream& rStm)
     : mrIStm(rStm)
-    , mpAcc(nullptr)
-    , mpMaskAcc(nullptr)
     , mnLastPos(rStm.Tell())
     , mnWidth(0)
     , mnHeight(0)
@@ -129,8 +127,6 @@ XPMReader::XPMReader(SvStream& rStm)
 
 XPMReader::~XPMReader()
 {
-    if( mpAcc )
-        Bitmap::ReleaseAccess( mpAcc );
 }
 
 ReadState XPMReader::ReadXPM( Graphic& rGraphic )
@@ -199,13 +195,14 @@ ReadState XPMReader::ReadXPM( Graphic& rGraphic )
                         nBits = 1;
 
                     maBmp = Bitmap( Size( mnWidth, mnHeight ), nBits );
-                    mpAcc = maBmp.AcquireWriteAccess();
+                    mpAcc = Bitmap::ScopedWriteAccess(maBmp);
 
                     // mbTransparent is TRUE if at least one colour is transparent
                     if ( mbTransparent )
                     {
                         maMaskBmp = Bitmap( Size( mnWidth, mnHeight ), 1 );
-                        if ( ( mpMaskAcc = maMaskBmp.AcquireWriteAccess() ) == nullptr )
+                        mpMaskAcc = Bitmap::ScopedWriteAccess(maMaskBmp);
+                        if ( !mpMaskAcc )
                             mbStatus = false;
                     }
                     if( mpAcc && mbStatus )
@@ -256,34 +253,23 @@ ReadState XPMReader::ReadXPM( Graphic& rGraphic )
         }
         if( mbStatus )
         {
+            mpAcc.reset();
             if ( mpMaskAcc )
             {
-                Bitmap::ReleaseAccess ( mpMaskAcc);
-                mpMaskAcc = nullptr;
-                Bitmap::ReleaseAccess( mpAcc );
-                mpAcc = nullptr;
+                mpMaskAcc.reset();
                 rGraphic = Graphic( BitmapEx( maBmp, maMaskBmp ) );
             }
             else
             {
-                Bitmap::ReleaseAccess( mpAcc );
-                mpAcc = nullptr;
                 rGraphic = maBmp;
             }
             eReadState = XPMREAD_OK;
         }
         else
         {
-            if ( mpMaskAcc )
-            {
-                Bitmap::ReleaseAccess ( mpMaskAcc);
-                mpMaskAcc = nullptr;
-            }
-            if ( mpAcc )
-            {
-                Bitmap::ReleaseAccess( mpAcc );
-                mpAcc = nullptr;
-            }
+            mpMaskAcc.reset();
+            mpAcc.reset();
+
             eReadState = XPMREAD_ERROR;
         }
     }
