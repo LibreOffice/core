@@ -98,7 +98,7 @@ using namespace ::com::sun::star;
 
 PPTExBulletProvider::PPTExBulletProvider()
 {
-    pGraphicProv = new EscherGraphicProvider( E_GRAPH_PROV_USE_INSTANCES  | E_GRAPH_PROV_DO_NOT_ROTATE_METAFILES );
+    pGraphicProv = new EscherGraphicProvider( EscherGraphicProviderFlags::UseInstances );
 }
 
 PPTExBulletProvider::~PPTExBulletProvider()

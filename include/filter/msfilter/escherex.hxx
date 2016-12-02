@@ -39,6 +39,7 @@
 #include <tools/solar.h>
 #include <tools/stream.hxx>
 #include <vcl/mapmod.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace awt { struct Rectangle; }
@@ -545,13 +546,18 @@ public:
 };
 
 
-#define E_GRAPH_PROV_USE_INSTANCES             1
-#define E_GRAPH_PROV_DO_NOT_ROTATE_METAFILES   2
+enum class EscherGraphicProviderFlags {
+    NONE                    = 0,
+    UseInstances            = 1,
+};
+namespace o3tl {
+    template<> struct typed_flags<EscherGraphicProviderFlags> : is_typed_flags<EscherGraphicProviderFlags, 0x01> {};
+}
 
 class MSFILTER_DLLPUBLIC EscherGraphicProvider
 {
-    sal_uInt32              mnFlags;
-
+    EscherGraphicProviderFlags
+                            mnFlags;
     EscherBlibEntry**       mpBlibEntrys;
     sal_uInt32              mnBlibBufSize;
     sal_uInt32              mnBlibEntrys;
@@ -585,7 +591,7 @@ public:
     void        SetBaseURI( const OUString& rBaseURI ) { maBaseURI = rBaseURI; };
     const OUString& GetBaseURI() { return maBaseURI; };
 
-    EscherGraphicProvider( sal_uInt32 nFlags = E_GRAPH_PROV_DO_NOT_ROTATE_METAFILES );
+    EscherGraphicProvider( EscherGraphicProviderFlags nFlags  = EscherGraphicProviderFlags::NONE );
     virtual ~EscherGraphicProvider();
 };
 
@@ -939,7 +945,7 @@ public:
 class MSFILTER_DLLPUBLIC EscherExGlobal : public EscherGraphicProvider
 {
 public:
-    explicit            EscherExGlobal( sal_uInt32 nGraphicProvFlags = E_GRAPH_PROV_DO_NOT_ROTATE_METAFILES );
+    explicit            EscherExGlobal( EscherGraphicProviderFlags nGraphicProvFlags = EscherGraphicProviderFlags::NONE );
     virtual             ~EscherExGlobal() override;
 
     /** Returns a new drawing ID for a new drawing container (DGCONTAINER). */
