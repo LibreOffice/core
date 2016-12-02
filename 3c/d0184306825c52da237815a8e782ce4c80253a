@@ -1,0 +1,9 @@
+Verified+1: Jenkins <ci@libreoffice.org>
+Code-Review+1: Bartosz Kosiorek <gang65@poczta.onet.pl>
+Code-Review+1: Justin Luth <justin_luth@sil.org>
+Code-Review+2: Eike Rathke <erack@redhat.com>
+Submitted-by: Eike Rathke <erack@redhat.com>
+Submitted-at: Fri, 02 Dec 2016 13:08:59 +0000
+Reviewed-on: https://gerrit.libreoffice.org/31526
+Project: core
+Branch: refs/heads/libreoffice-5-2
