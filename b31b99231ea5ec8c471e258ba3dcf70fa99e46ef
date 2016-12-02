@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a71b18c_9e1d3ac0",
+        "filename": "compilerplugins/clang/test/passstuffbyref.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-12-02T15:47:39Z",
+      "side": 1,
+      "message": "s/request from vmiklos: //, you already mentioned that in the commit message, that\u0027s enough I guess.",
+      "revId": "b31b99231ea5ec8c471e258ba3dcf70fa99e46ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
