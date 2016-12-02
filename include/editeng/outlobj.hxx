@@ -60,7 +60,7 @@ class EDITENG_DLLPUBLIC OutlinerParaObject
 
 public:
     // constructors/destructor
-    OutlinerParaObject( const EditTextObject&, const ParagraphDataVector&, bool bIsEditDoc = true);
+    OutlinerParaObject( const EditTextObject&, const ParagraphDataVector&, bool bIsEditDoc);
     OutlinerParaObject( const EditTextObject&);
     OutlinerParaObject( const OutlinerParaObject&);
     ~OutlinerParaObject();

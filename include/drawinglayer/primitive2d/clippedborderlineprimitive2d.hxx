@@ -47,7 +47,7 @@ namespace drawinglayer
                 const basegfx::BColor& rRGBColorGap,
                 bool bHasGapColor,
                 const short nStyle,
-                double fPatternScale = 1.0 );
+                double fPatternScale );
 
             /// compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;

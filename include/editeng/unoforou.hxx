@@ -50,7 +50,7 @@ private:
     mutable sal_Int32   mnParaAttribsCache;
 
 public:
-                        SvxOutlinerForwarder( Outliner& rOutl, bool bOutlText = false );
+                        SvxOutlinerForwarder( Outliner& rOutl, bool bOutlText );
     virtual             ~SvxOutlinerForwarder() override;
 
     virtual sal_Int32   GetParagraphCount() const override;

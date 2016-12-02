@@ -60,8 +60,8 @@ class EDITENG_DLLPUBLIC SvxBulletItem : public SfxPoolItem
 public:
     static SfxPoolItem* CreateDefault();
 
-    explicit SvxBulletItem( sal_uInt16 nWhich = 0 );
-    explicit SvxBulletItem( SvStream& rStrm, sal_uInt16 nWhich = 0 );
+    explicit SvxBulletItem( sal_uInt16 nWhich );
+    explicit SvxBulletItem( SvStream& rStrm, sal_uInt16 nWhich );
     SvxBulletItem( const SvxBulletItem& );
     virtual ~SvxBulletItem() override;
 
