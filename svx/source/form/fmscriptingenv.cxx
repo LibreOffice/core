@@ -151,7 +151,6 @@ namespace svxform
 
     public:
         explicit FormScriptingEnvironment( FmFormModel& _rModel );
-        virtual ~FormScriptingEnvironment() override;
         FormScriptingEnvironment(const FormScriptingEnvironment&) = delete;
         FormScriptingEnvironment& operator=(const FormScriptingEnvironment&) = delete;
 
@@ -907,12 +906,6 @@ namespace svxform
         // note that this is a cyclic reference between the FormScriptListener and the FormScriptingEnvironment
         // This cycle is broken up when our instance is disposed.
     }
-
-
-    FormScriptingEnvironment::~FormScriptingEnvironment()
-    {
-    }
-
 
     void FormScriptingEnvironment::impl_registerOrRevoke_throw( const Reference< XEventAttacherManager >& _rxManager, bool _bRegister )
     {

@@ -25,7 +25,6 @@ class SafeModeUI : public ::cppu::WeakImplHelper< css::lang::XServiceInfo,
 {
 public:
     SafeModeUI();
-    virtual ~SafeModeUI() override;
 
     // css.lang.XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
@@ -44,10 +43,6 @@ public:
 };
 
 SafeModeUI::SafeModeUI()
-{
-}
-
-SafeModeUI::~SafeModeUI()
 {
 }
 

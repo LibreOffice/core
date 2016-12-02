@@ -36,7 +36,6 @@ class SvxUnoTransGradientTable : public SvxUnoNameItemTable
 {
 public:
     explicit SvxUnoTransGradientTable( SdrModel* pModel ) throw();
-    virtual ~SvxUnoTransGradientTable() throw() override;
 
     virtual NameOrIndex* createItem() const throw() override;
 
@@ -50,10 +49,6 @@ public:
 
 SvxUnoTransGradientTable::SvxUnoTransGradientTable( SdrModel* pModel ) throw()
 : SvxUnoNameItemTable( pModel, XATTR_FILLFLOATTRANSPARENCE, MID_FILLGRADIENT )
-{
-}
-
-SvxUnoTransGradientTable::~SvxUnoTransGradientTable() throw()
 {
 }
 

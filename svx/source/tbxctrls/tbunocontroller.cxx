@@ -49,7 +49,6 @@ class FontHeightToolBoxControl : public svt::ToolboxController,
     public:
         explicit FontHeightToolBoxControl(
             const css::uno::Reference< css::uno::XComponentContext >& rServiceManager );
-        virtual ~FontHeightToolBoxControl() override;
 
         // XInterface
         virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) throw (css::uno::RuntimeException, std::exception) override;
@@ -270,10 +269,6 @@ FontHeightToolBoxControl::FontHeightToolBoxControl( const uno::Reference< uno::X
    m_pBox( nullptr )
 {
     addStatusListener( ".uno:CharFontName");
-}
-
-FontHeightToolBoxControl::~FontHeightToolBoxControl()
-{
 }
 
 // XInterface

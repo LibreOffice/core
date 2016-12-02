@@ -37,7 +37,6 @@ class SvxUnoDashTable : public SvxUnoNameItemTable
 {
 public:
     explicit SvxUnoDashTable( SdrModel* pModel ) throw();
-    virtual ~SvxUnoDashTable() throw() override;
 
     virtual NameOrIndex* createItem() const throw() override;
 
@@ -51,10 +50,6 @@ public:
 
 SvxUnoDashTable::SvxUnoDashTable( SdrModel* pModel ) throw()
 : SvxUnoNameItemTable( pModel, XATTR_LINEDASH, MID_LINEDASH )
-{
-}
-
-SvxUnoDashTable::~SvxUnoDashTable() throw()
 {
 }
 

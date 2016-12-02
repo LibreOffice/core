@@ -73,7 +73,6 @@ class SvxXMLTableImportContext : public SvXMLImportContext
 public:
     SvxXMLTableImportContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName, const uno::Reference< XAttributeList >& xAttrList, SvxXMLTableImportContextEnum eContext, const uno::Reference< XNameContainer >& xTable,
         bool bOOoFormat );
-    virtual ~SvxXMLTableImportContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList ) override;
 
@@ -95,10 +94,6 @@ private:
 SvxXMLTableImportContext::SvxXMLTableImportContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName, const uno::Reference< XAttributeList >&, SvxXMLTableImportContextEnum eContext, const uno::Reference< XNameContainer >& xTable, bool bOOoFormat )
 : SvXMLImportContext( rImport, nPrfx, rLName ), mxTable( xTable ), meContext( eContext ),
     mbOOoFormat( bOOoFormat )
-{
-}
-
-SvxXMLTableImportContext::~SvxXMLTableImportContext()
 {
 }
 

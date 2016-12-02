@@ -25,7 +25,6 @@ class CrashReportUI : public ::cppu::WeakImplHelper< css::lang::XServiceInfo    
 {
 public:
     explicit CrashReportUI(const css::uno::Reference< css::uno::XComponentContext >& xContext);
-    virtual ~CrashReportUI() override;
 
     // css.lang.XServiceInfo
 
@@ -51,10 +50,6 @@ CrashReportUI::CrashReportUI(const css::uno::Reference<css::uno::XComponentConte
     mxContext(xContext)
 {
 
-}
-
-CrashReportUI::~CrashReportUI()
-{
 }
 
 OUString SAL_CALL CrashReportUI::getImplementationName()

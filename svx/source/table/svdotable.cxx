@@ -94,9 +94,6 @@ public:
     // constructor for copying, but using new object
     TableProperties(const TableProperties& rProps, SdrObject& rObj );
 
-    // destructor
-    virtual ~TableProperties() override;
-
     // Clone() operator, normally just calls the local copy constructor
     BaseProperties& Clone(SdrObject& rObj) const override;
 
@@ -110,10 +107,6 @@ TableProperties::TableProperties(SdrObject& rObj)
 
 TableProperties::TableProperties(const TableProperties& rProps, SdrObject& rObj)
 : TextProperties(rProps, rObj)
-{
-}
-
-TableProperties::~TableProperties()
 {
 }
 

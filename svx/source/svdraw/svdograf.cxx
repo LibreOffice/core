@@ -131,7 +131,6 @@ class SdrGraphicUpdater : public ::osl::Thread
 {
 public:
     SdrGraphicUpdater( const OUString& rFileName, const OUString& rFilterName, SdrGraphicLink& );
-    virtual ~SdrGraphicUpdater() override;
 
     void SAL_CALL Terminate();
 
@@ -165,10 +164,6 @@ SdrGraphicUpdater::SdrGraphicUpdater( const OUString& rFileName, const OUString&
 , mbIsTerminated( false )
 {
     create();
-}
-
-SdrGraphicUpdater::~SdrGraphicUpdater()
-{
 }
 
 void SdrGraphicUpdater::Terminate()

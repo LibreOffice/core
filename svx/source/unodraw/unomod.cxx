@@ -73,7 +73,6 @@ private:
 
 public:
     explicit SvxUnoDrawPagesAccess( SvxUnoDrawingModel& rMyModel ) throw();
-    virtual ~SvxUnoDrawPagesAccess() throw() override;
 
     // XDrawPages
     virtual css::uno::Reference< css::drawing::XDrawPage > SAL_CALL insertNewByIndex( sal_Int32 nIndex ) throw(css::uno::RuntimeException, std::exception) override;
@@ -574,10 +573,6 @@ uno::Reference< css::ucb::XAnyCompare > SAL_CALL SvxUnoDrawingModel::createAnyCo
 
 SvxUnoDrawPagesAccess::SvxUnoDrawPagesAccess( SvxUnoDrawingModel& rMyModel )  throw()
 :   mrModel(rMyModel)
-{
-}
-
-SvxUnoDrawPagesAccess::~SvxUnoDrawPagesAccess() throw()
 {
 }
 

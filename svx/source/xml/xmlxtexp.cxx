@@ -79,7 +79,6 @@ class SvxXMLColorEntryExporter : public SvxXMLTableEntryExporter
 {
 public:
     explicit SvxXMLColorEntryExporter( SvXMLExport& rExport );
-    virtual ~SvxXMLColorEntryExporter() override;
 
     virtual void exportEntry( const OUString& rStrName, const Any& rValue ) override;
 };
@@ -88,7 +87,6 @@ class SvxXMLLineEndEntryExporter : public SvxXMLTableEntryExporter
 {
 public:
     explicit SvxXMLLineEndEntryExporter( SvXMLExport& rExport );
-    virtual ~SvxXMLLineEndEntryExporter() override;
 
     virtual void exportEntry( const OUString& rStrName, const Any& rValue ) override;
 private:
@@ -99,7 +97,6 @@ class SvxXMLDashEntryExporter : public SvxXMLTableEntryExporter
 {
 public:
     explicit SvxXMLDashEntryExporter( SvXMLExport& rExport );
-    virtual ~SvxXMLDashEntryExporter() override;
 
     virtual void exportEntry( const OUString& rStrName, const Any& rValue ) override;
 
@@ -111,7 +108,6 @@ class SvxXMLHatchEntryExporter : public SvxXMLTableEntryExporter
 {
 public:
     explicit SvxXMLHatchEntryExporter( SvXMLExport& rExport );
-    virtual ~SvxXMLHatchEntryExporter() override;
 
     virtual void exportEntry( const OUString& rStrName, const Any& rValue ) override;
 private:
@@ -122,7 +118,6 @@ class SvxXMLGradientEntryExporter : public SvxXMLTableEntryExporter
 {
 public:
     explicit SvxXMLGradientEntryExporter( SvXMLExport& rExport );
-    virtual ~SvxXMLGradientEntryExporter() override;
 
     virtual void exportEntry( const OUString& rStrName, const Any& rValue ) override;
 private:
@@ -133,7 +128,6 @@ class SvxXMLBitmapEntryExporter : public SvxXMLTableEntryExporter
 {
 public:
     explicit SvxXMLBitmapEntryExporter( SvXMLExport& rExport );
-    virtual ~SvxXMLBitmapEntryExporter() override;
 
     virtual void exportEntry( const OUString& rStrName, const Any& rValue ) override;
 };
@@ -428,10 +422,6 @@ SvxXMLColorEntryExporter::SvxXMLColorEntryExporter( SvXMLExport& rExport )
 {
 }
 
-SvxXMLColorEntryExporter::~SvxXMLColorEntryExporter()
-{
-}
-
 void SvxXMLColorEntryExporter::exportEntry( const OUString& rStrName, const Any& rValue )
 {
     mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, rStrName );
@@ -452,10 +442,6 @@ SvxXMLLineEndEntryExporter::SvxXMLLineEndEntryExporter( SvXMLExport& rExport )
 {
 }
 
-SvxXMLLineEndEntryExporter::~SvxXMLLineEndEntryExporter()
-{
-}
-
 void SvxXMLLineEndEntryExporter::exportEntry( const OUString& rStrName, const Any& rValue )
 {
     maMarkerStyle.exportXML( rStrName, rValue );
@@ -464,10 +450,6 @@ void SvxXMLLineEndEntryExporter::exportEntry( const OUString& rStrName, const An
 
 SvxXMLDashEntryExporter::SvxXMLDashEntryExporter( SvXMLExport& rExport )
 : SvxXMLTableEntryExporter( rExport ), maDashStyle( rExport )
-{
-}
-
-SvxXMLDashEntryExporter::~SvxXMLDashEntryExporter()
 {
 }
 
@@ -482,10 +464,6 @@ SvxXMLHatchEntryExporter::SvxXMLHatchEntryExporter( SvXMLExport& rExport )
 {
 }
 
-SvxXMLHatchEntryExporter::~SvxXMLHatchEntryExporter()
-{
-}
-
 void SvxXMLHatchEntryExporter::exportEntry( const OUString& rStrName, const Any& rValue )
 {
     maHatchStyle.exportXML( rStrName, rValue );
@@ -497,10 +475,6 @@ SvxXMLGradientEntryExporter::SvxXMLGradientEntryExporter( SvXMLExport& rExport )
 {
 }
 
-SvxXMLGradientEntryExporter::~SvxXMLGradientEntryExporter()
-{
-}
-
 void SvxXMLGradientEntryExporter::exportEntry( const OUString& rStrName, const Any& rValue )
 {
     maGradientStyle.exportXML( rStrName, rValue );
@@ -509,10 +483,6 @@ void SvxXMLGradientEntryExporter::exportEntry( const OUString& rStrName, const A
 
 SvxXMLBitmapEntryExporter::SvxXMLBitmapEntryExporter( SvXMLExport& rExport )
 : SvxXMLTableEntryExporter( rExport )
-{
-}
-
-SvxXMLBitmapEntryExporter::~SvxXMLBitmapEntryExporter()
 {
 }
 
