@@ -19,7 +19,6 @@ $(eval $(call gb_Library_add_defs,wpftqahelper,\
 ))
 
 $(eval $(call gb_Library_use_externals,wpftqahelper,\
-	boost_headers \
     cppunit \
 ))
 
