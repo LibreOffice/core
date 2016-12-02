@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "3a71b18c_5ea00291",
+        "filename": "desktop/source/app/cmdlinehelp.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-12-02T14:02:01Z",
+      "side": 1,
+      "message": "also, there may be clients out there parsing the output of \u0027soffice -version\u0027, for better or worse; don\u0027t unnecessarily make that harder by arbitrarily changing the output format",
+      "parentUuid": "3a71b18c_c3e1a0d2",
+      "revId": "f3a21ab1161c895f98d1d44fe9cb5c4c9d0019ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a71b18c_57db8e1b",
         "filename": "desktop/source/app/cmdlinehelp.cxx",
         "patchSetId": 4
