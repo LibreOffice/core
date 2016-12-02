@@ -551,9 +551,8 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
             hb_buffer_add_utf16(
                 pHbBuffer, reinterpret_cast<uint16_t const *>(pStr), nLength,
                 nMinRunPos, nRunLen);
-#if HB_VERSION_ATLEAST(0, 9, 42)
             hb_buffer_set_cluster_level(pHbBuffer, HB_BUFFER_CLUSTER_LEVEL_MONOTONE_CHARACTERS);
-#endif
+
             // The shapers that we want HarfBuzz to use, in the order of
             // preference. The coretext_aat shaper is available only on macOS,
             // but there is no harm in always including it, HarfBuzz will
@@ -598,10 +597,8 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
                 sal_Int32 indexUtf16 = nCharPos;
                 sal_UCS4 aChar = rArgs.mrStr.iterateCodePoints(&indexUtf16, 0);
 
-#if HB_VERSION_ATLEAST(0, 9, 42)
                 if (u_getIntPropertyValue(aChar, UCHAR_GENERAL_CATEGORY) == U_NON_SPACING_MARK)
                     nGlyphFlags |= GlyphItem::IS_DIACRITIC;
-#endif
 
                 if ((aSubRun.maScript == HB_SCRIPT_ARABIC ||
                      aSubRun.maScript == HB_SCRIPT_SYRIAC) &&
