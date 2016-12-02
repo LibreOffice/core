@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a71b18c_5ba01491",
+        "filename": "sc/source/filter/inc/worksheetfragment.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2016-12-02T01:23:08Z",
+      "side": 1,
+      "message": "These two methods should be marked const.",
+      "revId": "48f8e4c61a00e459bb8292169e116c30c2692ed6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a71b18c_7badd087",
+        "filename": "sc/source/filter/oox/worksheetfragment.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2016-12-02T01:23:08Z",
+      "side": 1,
+      "message": "We typically don\u0027t indent for namespaces in sc.  Also, you can drop the lcl prefix for local functions, and avoid use of underscores in function names.",
+      "revId": "48f8e4c61a00e459bb8292169e116c30c2692ed6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a71b18c_9baaac6f",
+        "filename": "sc/source/filter/oox/worksheetfragment.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2016-12-02T01:23:08Z",
+      "side": 1,
+      "message": "For consistency, it\u0027s better to prefix a boolean value with \u0027b\u0027.  You can rename it to bInsideQuotes.",
+      "revId": "48f8e4c61a00e459bb8292169e116c30c2692ed6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
