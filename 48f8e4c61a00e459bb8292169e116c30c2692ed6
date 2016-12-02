@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "3a71b18c_1bb5bccc",
+        "filename": "sc/source/filter/inc/worksheetfragment.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2016-12-02T01:29:00Z",
+      "side": 1,
+      "message": "Thanks; my bad!",
+      "parentUuid": "3a71b18c_5ba01491",
+      "revId": "48f8e4c61a00e459bb8292169e116c30c2692ed6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a71b18c_7badd087",
         "filename": "sc/source/filter/oox/worksheetfragment.cxx",
         "patchSetId": 1
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "3a71b18c_fbaf207b",
+        "filename": "sc/source/filter/oox/worksheetfragment.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2016-12-02T01:29:00Z",
+      "side": 1,
+      "message": "Ok",
+      "parentUuid": "3a71b18c_7badd087",
+      "revId": "48f8e4c61a00e459bb8292169e116c30c2692ed6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a71b18c_9baaac6f",
         "filename": "sc/source/filter/oox/worksheetfragment.cxx",
         "patchSetId": 1
@@ -47,6 +83,24 @@
       "writtenOn": "2016-12-02T01:23:08Z",
       "side": 1,
       "message": "For consistency, it\u0027s better to prefix a boolean value with \u0027b\u0027.  You can rename it to bInsideQuotes.",
+      "revId": "48f8e4c61a00e459bb8292169e116c30c2692ed6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a71b18c_dbba64c0",
+        "filename": "sc/source/filter/oox/worksheetfragment.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2016-12-02T01:29:00Z",
+      "side": 1,
+      "message": "I just tried to follow what\u0027s written in style guides available at \"Development\" wiki (https://wiki.openoffice.org/wiki/Writer/Code_Conventions#local_variables); and there it\u0027s put plain that isXXX is preferable to bXXX :)",
+      "parentUuid": "3a71b18c_9baaac6f",
       "revId": "48f8e4c61a00e459bb8292169e116c30c2692ed6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
