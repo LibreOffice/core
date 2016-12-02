@@ -1088,8 +1088,8 @@ void SwInsertConfig::Load()
             {
                 //#i61007#  initialize caption order, right now only HUNGARIAN seems to need a different order
                 SvtSysLocaleOptions aSysLocaleOptions;
-                OUString sLang = aSysLocaleOptions.GetLocaleConfigString();
-                bCaptionOrderNumberingFirst = sLang.startsWith( "hu" );
+                const LanguageTag& rLang = aSysLocaleOptions.GetRealLanguageTag();
+                bCaptionOrderNumberingFirst = (rLang.getLanguage() == "hu");
             }
         }
 
