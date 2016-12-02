@@ -1537,6 +1537,7 @@ void XclExpDimensions::SaveXml( XclExpXmlStream& rStrm )
         aRange.aEnd.SetCol( (SCCOL) (mnFirstFreeXclCol-1) );
     }
 
+    aRange.PutInOrder();
     rStrm.GetCurrentStream()->singleElement( XML_dimension,
             // To be compatible with MS Office 2007,
             // we need full address notation format
