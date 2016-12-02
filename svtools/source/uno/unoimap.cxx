@@ -73,7 +73,6 @@ class SvUnoImageMapObject : public OWeakAggObject,
 public:
     SvUnoImageMapObject( sal_uInt16 nType, const SvEventDescription* pSupportedMacroItems );
     SvUnoImageMapObject( const IMapObject& rMapObject, const SvEventDescription* pSupportedMacroItems );
-    virtual ~SvUnoImageMapObject() throw() override;
 
     UNO3_GETIMPLEMENTATION_DECL( SvUnoImageMapObject )
 
@@ -243,10 +242,6 @@ SvUnoImageMapObject::SvUnoImageMapObject( const IMapObject& rMapObject, const Sv
     }
 
     mxEvents = new SvMacroTableEventDescriptor( rMapObject.GetMacroTable(), pSupportedMacroItems );
-}
-
-SvUnoImageMapObject::~SvUnoImageMapObject() throw()
-{
 }
 
 IMapObject* SvUnoImageMapObject::createIMapObject() const

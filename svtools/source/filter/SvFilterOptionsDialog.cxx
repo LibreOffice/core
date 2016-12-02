@@ -77,7 +77,6 @@ class SvFilterOptionsDialog : public cppu::WeakImplHelper
 public:
 
     explicit SvFilterOptionsDialog( const uno::Reference< uno::XComponentContext >& _rxORB );
-    virtual ~SvFilterOptionsDialog() override;
 
     // XInterface
     virtual void SAL_CALL acquire() throw() override;
@@ -121,12 +120,6 @@ SvFilterOptionsDialog::SvFilterOptionsDialog( const uno::Reference< uno::XCompon
     mbExportSelection   ( false )
 {
 }
-
-
-SvFilterOptionsDialog::~SvFilterOptionsDialog()
-{
-}
-
 
 void SAL_CALL SvFilterOptionsDialog::acquire() throw()
 {

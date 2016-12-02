@@ -256,7 +256,6 @@ namespace svt
 
     public:
         AssignmentPersistentData();
-        virtual ~AssignmentPersistentData() override;
 
         // IAssigmentData overridables
         virtual OUString getDatasourceName() const override;
@@ -294,12 +293,6 @@ void AssignmentPersistentData::ImplCommit()
         for (sal_Int32 i=0; i<aStoredNames.getLength(); ++i, ++pStoredNames)
             m_aStoredFields.insert(*pStoredNames);
     }
-
-
-    AssignmentPersistentData::~AssignmentPersistentData()
-    {
-    }
-
 
     bool AssignmentPersistentData::hasFieldAssignment(const OUString& _rLogicalName)
     {

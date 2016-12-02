@@ -107,7 +107,7 @@ class UnoTreeListItem : public SvLBoxString
 {
 public:
                     UnoTreeListItem();
-    virtual         ~UnoTreeListItem() override;
+
     void            InitViewData( SvTreeListBox*,SvTreeListEntry*,SvViewDataItem * = nullptr ) override;
     void            SetImage( const Image& rImage );
     const OUString& GetGraphicURL() const { return maGraphicURL;}
@@ -1494,12 +1494,6 @@ UnoTreeListItem::UnoTreeListItem()
 : SvLBoxString(OUString())
 {
 }
-
-
-UnoTreeListItem::~UnoTreeListItem()
-{
-}
-
 
 void UnoTreeListItem::Paint(
     const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext, const SvViewDataEntry* /*pView*/, const SvTreeListEntry& rEntry)

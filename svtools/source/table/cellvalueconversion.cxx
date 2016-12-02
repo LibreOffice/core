@@ -152,8 +152,6 @@ namespace svt
             OSL_VERIFY( i_value >>= returnValue );
             return returnValue;
         }
-
-        virtual ~DoubleNormalization() override { }
     };
 
 
@@ -166,8 +164,6 @@ namespace svt
             :StandardFormatNormalizer( i_formatter, NumberFormat::NUMBER )
         {
         }
-
-        virtual ~IntegerNormalization() override {}
 
         virtual double convertToDouble( Any const & i_value ) const override
         {
@@ -188,8 +184,6 @@ namespace svt
         {
         }
 
-        virtual ~BooleanNormalization() override {}
-
         virtual double convertToDouble( Any const & i_value ) const override
         {
             bool value( false );
@@ -208,8 +202,6 @@ namespace svt
             :StandardFormatNormalizer( i_formatter, NumberFormat::DATETIME )
         {
         }
-
-        virtual ~DateTimeNormalization() override {}
 
         virtual double convertToDouble( Any const & i_value ) const override
         {
@@ -243,8 +235,6 @@ namespace svt
         {
         }
 
-        virtual ~DateNormalization() override {}
-
         virtual double convertToDouble( Any const & i_value ) const override
         {
             double returnValue(0);
@@ -272,8 +262,6 @@ namespace svt
             :StandardFormatNormalizer( i_formatter, NumberFormat::TIME )
         {
         }
-
-        virtual ~TimeNormalization() override {}
 
         virtual double convertToDouble( Any const & i_value ) const override
         {
