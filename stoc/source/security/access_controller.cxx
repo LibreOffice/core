@@ -79,8 +79,6 @@ class acc_Intersection
         Reference< security::XAccessControlContext > const & x2 );
 
 public:
-    virtual ~acc_Intersection() override;
-
     static inline Reference< security::XAccessControlContext > create(
         Reference< security::XAccessControlContext > const & x1,
         Reference< security::XAccessControlContext > const & x2 );
@@ -96,9 +94,6 @@ inline acc_Intersection::acc_Intersection(
     Reference< security::XAccessControlContext > const & x2 )
     : m_x1( x1 )
     , m_x2( x2 )
-{}
-
-acc_Intersection::~acc_Intersection()
 {}
 
 inline Reference< security::XAccessControlContext > acc_Intersection::create(
@@ -132,8 +127,6 @@ class acc_Union
         Reference< security::XAccessControlContext > const & x2 );
 
 public:
-    virtual ~acc_Union() override;
-
     static inline Reference< security::XAccessControlContext > create(
         Reference< security::XAccessControlContext > const & x1,
         Reference< security::XAccessControlContext > const & x2 );
@@ -149,9 +142,6 @@ inline acc_Union::acc_Union(
     Reference< security::XAccessControlContext > const & x2 )
     : m_x1( x1 )
     , m_x2( x2 )
-{}
-
-acc_Union::~acc_Union()
 {}
 
 inline Reference< security::XAccessControlContext > acc_Union::create(
@@ -192,16 +182,11 @@ public:
         : m_permissions( permissions )
     {}
 
-    virtual ~acc_Policy() override;
-
     // XAccessControlContext impl
     virtual void SAL_CALL checkPermission(
         Any const & perm )
         throw (RuntimeException, std::exception) override;
 };
-
-acc_Policy::~acc_Policy()
-{}
 
 void acc_Policy::checkPermission(
     Any const & perm )
@@ -338,7 +323,6 @@ protected:
 
 public:
     explicit AccessController( Reference< XComponentContext > const & xComponentContext );
-    virtual ~AccessController() override;
 
     //  XInitialization impl
     virtual void SAL_CALL initialize(
@@ -430,9 +414,6 @@ AccessController::AccessController( Reference< XComponentContext > const & xComp
         m_user2permissions.setSize( cacheSize );
     }
 }
-
-AccessController::~AccessController()
-{}
 
 void AccessController::disposing()
 {

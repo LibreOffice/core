@@ -42,7 +42,6 @@ public:
         : IdlMemberImpl( pReflection, rName, pTypeDescr, pTypeDescr )
         , _nValue( nValue )
         {}
-    virtual ~IdlEnumFieldImpl() override;
 
     // XInterface
     virtual Any SAL_CALL queryInterface( const Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
@@ -64,10 +63,6 @@ public:
     // XIdlField2: getType, getAccessMode and get are equal to XIdlField
     virtual void SAL_CALL set( Any & rObj, const Any & rValue ) throw(css::lang::IllegalArgumentException, css::lang::IllegalAccessException, css::uno::RuntimeException, std::exception) override;
 };
-
-IdlEnumFieldImpl::~IdlEnumFieldImpl()
-{
-}
 
 // XInterface
 

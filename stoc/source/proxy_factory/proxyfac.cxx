@@ -75,7 +75,6 @@ struct FactoryImpl : public ::cppu::WeakImplHelper< lang::XServiceInfo,
         typelib_InterfaceTypeDescription * pTypeDescr );
 
     FactoryImpl();
-    virtual ~FactoryImpl() override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
@@ -169,7 +168,6 @@ struct ProxyRoot : public ::cppu::OWeakAggObject
     virtual Any SAL_CALL queryAggregation( Type const & rType )
         throw (RuntimeException, std::exception) override;
 
-    virtual ~ProxyRoot() override;
     inline ProxyRoot( ::rtl::Reference< FactoryImpl > const & factory,
                       Reference< XInterface > const & xTarget );
 
@@ -303,12 +301,6 @@ inline binuno_Proxy::binuno_Proxy(
     uno_Interface::pDispatcher = binuno_proxy_dispatch;
 }
 
-
-ProxyRoot::~ProxyRoot()
-{
-}
-
-
 inline ProxyRoot::ProxyRoot(
     ::rtl::Reference< FactoryImpl > const & factory,
     Reference< XInterface > const & xTarget )
@@ -416,9 +408,6 @@ FactoryImpl::FactoryImpl()
         m_cpp_env.get(), m_uno_env.get(), nullptr );
     OSL_ENSURE( m_cpp2uno.is(), "### cannot get bridge C++ <-> uno!" );
 }
-
-
-FactoryImpl::~FactoryImpl() {}
 
 // XProxyFactory
 

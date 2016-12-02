@@ -58,8 +58,6 @@ class SimpleRegistry:
 public:
     SimpleRegistry() {}
 
-    virtual ~SimpleRegistry() override {}
-
     osl::Mutex mutex_;
 
 private:

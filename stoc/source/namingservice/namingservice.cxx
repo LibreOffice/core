@@ -76,7 +76,6 @@ class NamingService_Impl
     HashMap_OWString_Interface          aMap;
 public:
     NamingService_Impl();
-    virtual ~NamingService_Impl() override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
@@ -100,9 +99,6 @@ static Reference<XInterface> SAL_CALL NamingService_Impl_create(
 
 
 NamingService_Impl::NamingService_Impl() {}
-
-
-NamingService_Impl::~NamingService_Impl() {}
 
 // XServiceInfo
 OUString NamingService_Impl::getImplementationName()

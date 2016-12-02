@@ -99,7 +99,6 @@ public:
     Invocation_Impl( const Any & rAdapted, const Reference<XTypeConverter> &,
                                            const Reference<XIntrospection> &,
                                            const Reference<XIdlReflection> & );
-    virtual ~Invocation_Impl() override;
 
     // XInterface
     virtual Any         SAL_CALL queryInterface( const Type & aType) throw( RuntimeException, std::exception ) override;
@@ -245,9 +244,6 @@ Invocation_Impl::Invocation_Impl
 {
     setMaterial( rAdapted );
 }
-
-Invocation_Impl::~Invocation_Impl() {}
-
 
 //### INTERFACE IMPLEMENTATIONS ####################################################################
 
@@ -1072,7 +1068,6 @@ class InvocationService
 {
 public:
     explicit InvocationService( const Reference<XComponentContext> & xCtx );
-    virtual ~InvocationService() override;
 
     // XServiceInfo
     OUString                    SAL_CALL getImplementationName() throw( RuntimeException, std::exception ) override;
@@ -1101,8 +1096,6 @@ InvocationService::InvocationService( const Reference<XComponentContext> & xCtx 
         UNO_QUERY );
     xIntrospection = theIntrospection::get(xCtx);
 }
-
-InvocationService::~InvocationService() {}
 
 // XServiceInfo
 OUString InvocationService::getImplementationName() throw( RuntimeException, std::exception )

@@ -59,7 +59,6 @@ class DllComponentLoader
 {
 public:
     explicit DllComponentLoader( const Reference<XComponentContext> & xCtx );
-    virtual ~DllComponentLoader() override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) throw(css::uno::RuntimeException, std::exception) override;
@@ -82,10 +81,6 @@ DllComponentLoader::DllComponentLoader( const Reference<XComponentContext> & xCt
 {
     m_xSMgr.set( xCtx->getServiceManager(), UNO_QUERY );
 }
-
-
-DllComponentLoader::~DllComponentLoader() {}
-
 
 OUString SAL_CALL DllComponentLoader::getImplementationName(  )
     throw(css::uno::RuntimeException, std::exception)

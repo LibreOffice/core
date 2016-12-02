@@ -707,7 +707,6 @@ class ImplIntrospectionAccess : public IntrospectionAccessHelper
 
 public:
     ImplIntrospectionAccess( const Any& obj, rtl::Reference< IntrospectionAccessStatic_Impl > const & pStaticImpl_ );
-    virtual ~ImplIntrospectionAccess() override;
 
     // Methods from XIntrospectionAccess
     virtual sal_Int32 SAL_CALL getSuppliedMethodConcepts()
@@ -831,11 +830,6 @@ ImplIntrospectionAccess::ImplIntrospectionAccess
     mnLastPropertyConcept = -1;
     mnLastMethodConcept = -1;
 }
-
-ImplIntrospectionAccess::~ImplIntrospectionAccess()
-{
-}
-
 
 Reference<XElementAccess> ImplIntrospectionAccess::getXElementAccess()
 {

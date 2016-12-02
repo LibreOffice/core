@@ -161,7 +161,6 @@ public:
         : aFactories( rFactories )
         , nIt( 0 )
         {}
-    virtual ~ServiceEnumeration_Impl() override {}
 
     // XEnumeration
     sal_Bool SAL_CALL hasMoreElements()
@@ -253,7 +252,6 @@ public:
         : aImplementationMap( rImplementationMap )
         , aIt( aImplementationMap.begin() )
         {}
-    virtual ~ImplementationEnumeration_Impl() override;
 
     // XEnumeration
     virtual sal_Bool SAL_CALL hasMoreElements()
@@ -266,8 +264,6 @@ private:
     HashSet_Ref                     aImplementationMap;
     HashSet_Ref::iterator           aIt;
 };
-
-ImplementationEnumeration_Impl::~ImplementationEnumeration_Impl() {}
 
 // XEnumeration
 sal_Bool ImplementationEnumeration_Impl::hasMoreElements()
@@ -372,7 +368,6 @@ class OServiceManager
 {
 public:
     explicit OServiceManager( Reference< XComponentContext > const & xContext );
-    virtual ~OServiceManager() override;
 
     // XInitialization
     void SAL_CALL initialize( Sequence< Any > const & args )
@@ -512,7 +507,6 @@ protected:
 public:
     explicit OServiceManagerWrapper(
         Reference< XComponentContext > const & xContext );
-    virtual ~OServiceManagerWrapper() override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw (RuntimeException, std::exception) override
@@ -642,8 +636,6 @@ void OServiceManagerWrapper::disposing()
     m_root.clear();
 }
 
-OServiceManagerWrapper::~OServiceManagerWrapper() {}
-
 OServiceManagerWrapper::OServiceManagerWrapper(
     Reference< XComponentContext > const & xContext )
     : t_OServiceManagerWrapper_impl( m_mutex )
@@ -666,11 +658,6 @@ OServiceManager::OServiceManager( Reference< XComponentContext > const & xContex
     , m_xContext( xContext )
     , m_bInDisposing( false )
 {}
-
-/**
- * Destroy the ServiceManager
- */
-OServiceManager::~OServiceManager() {}
 
 // XComponent
 void OServiceManager::dispose()
@@ -1270,7 +1257,6 @@ class ORegistryServiceManager : public OServiceManager
 {
 public:
     explicit ORegistryServiceManager( Reference< XComponentContext > const & xContext );
-    virtual ~ORegistryServiceManager() override;
 
     // XInitialization
     void SAL_CALL initialize(const Sequence< Any >& Arguments)
@@ -1329,13 +1315,6 @@ ORegistryServiceManager::ORegistryServiceManager( Reference< XComponentContext >
 #if OSL_DEBUG_LEVEL > 0
     , m_init( false )
 #endif
-{
-}
-
-/**
- * Destroy the ServiceManager
- */
-ORegistryServiceManager::~ORegistryServiceManager()
 {
 }
 
