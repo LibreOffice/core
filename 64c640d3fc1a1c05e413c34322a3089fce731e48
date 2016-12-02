@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a71b18c_1e73eab2",
+        "filename": "sc/source/filter/excel/xetable.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1540,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2016-12-02T10:29:24Z",
+      "side": 1,
+      "message": "Let\u0027s say we will have two points:\naRange.aStart \u003d B1\naRange.aEnd   \u003d A2\n\nAfter run this function we will receive:\naRange.aStart \u003d A1\naRange.aEnd   \u003d B2\n\nThe points are completely different, but the data dimension are correct.\nFor me it is perfectly fine to go with this fix.",
+      "revId": "64c640d3fc1a1c05e413c34322a3089fce731e48",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
