@@ -82,12 +82,13 @@ namespace slideshow
             if ((mnCurrMtfLoadFlags & MTF_LOAD_SCROLL_TEXT_MTF) != MTF_LOAD_SCROLL_TEXT_MTF)
             {
                 // reload with added flags:
-                mpCurrMtf.reset( new GDIMetaFile );
                 mnCurrMtfLoadFlags |= MTF_LOAD_SCROLL_TEXT_MTF;
-                getMetaFile(
-                    uno::Reference<lang::XComponent>(mxShape, uno::UNO_QUERY),
-                    mxPage, *mpCurrMtf, mnCurrMtfLoadFlags,
-                    mxComponentContext );
+                mpCurrMtf = getMetaFile(uno::Reference<lang::XComponent>(mxShape, uno::UNO_QUERY),
+                                        mxPage, mnCurrMtfLoadFlags,
+                                        mxComponentContext);
+
+                if (!mpCurrMtf)
+                    mpCurrMtf.reset( new GDIMetaFile );
 
                 // TODO(F1): Currently, the scroll metafile will
                 // never contain any verbose text comments. Thus,
@@ -402,13 +403,12 @@ namespace slideshow
 
             // must NOT be called from within initializer list, uses
             // state from mnCurrMtfLoadFlags!
-            mpCurrMtf.reset( new GDIMetaFile );
-            getMetaFile(
-                uno::Reference<lang::XComponent>(xShape, uno::UNO_QUERY),
-                xContainingPage, *mpCurrMtf, mnCurrMtfLoadFlags,
-                mxComponentContext );
-            ENSURE_OR_THROW( mpCurrMtf,
-                              "DrawShape::DrawShape(): Invalid metafile" );
+            mpCurrMtf = getMetaFile(uno::Reference<lang::XComponent>(xShape, uno::UNO_QUERY),
+                                    xContainingPage, mnCurrMtfLoadFlags,
+                                    mxComponentContext );
+            if (!mpCurrMtf)
+                mpCurrMtf.reset(new GDIMetaFile);
+
             maSubsetting.reset( mpCurrMtf );
 
             prepareHyperlinkIndices();

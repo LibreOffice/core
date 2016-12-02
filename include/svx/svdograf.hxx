@@ -113,6 +113,7 @@ private:
     void                    ImpSetLinkedGraphic( const Graphic& rGraphic );
                             DECL_LINK( ImpSwapHdl, const GraphicObject*, SvStream* );
     void onGraphicChanged();
+    GDIMetaFile             GetMetaFile(GraphicType &rGraphicType) const;
 
 public:
 

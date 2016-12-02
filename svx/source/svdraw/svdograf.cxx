@@ -1044,27 +1044,30 @@ GDIMetaFile SdrGrafObj::getMetafileFromEmbeddedSvg() const
     return aRetval;
 }
 
-SdrObject* SdrGrafObj::DoConvertToPolyObj(bool bBezier, bool bAddText ) const
+GDIMetaFile SdrGrafObj::GetMetaFile(GraphicType &rGraphicType) const
 {
-    SdrObject* pRetval = nullptr;
-    GraphicType aGraphicType(GetGraphicType());
-    GDIMetaFile aMtf;
-
-    if(isEmbeddedSvg())
+    if (isEmbeddedSvg())
     {
         // Embedded Svg
         // There is currently no helper to create SdrObjects from primitives (even if I'm thinking
         // about writing one for some time). To get the roundtrip to SdrObjects it is necessary to
         // use the old converter path over the MetaFile mechanism. Create Metafile from Svg
         // primitives here pretty directly
-        aMtf = getMetafileFromEmbeddedSvg();
-        aGraphicType = GraphicType::GdiMetafile;
+        rGraphicType = GraphicType::GdiMetafile;
+        return getMetafileFromEmbeddedSvg();
     }
-    else if(GraphicType::GdiMetafile == aGraphicType)
+    else if (GraphicType::GdiMetafile == rGraphicType)
     {
-        aMtf = GetTransformedGraphic(SdrGrafObjTransformsAttrs::COLOR|SdrGrafObjTransformsAttrs::MIRROR).GetGDIMetaFile();
+        return GetTransformedGraphic(SdrGrafObjTransformsAttrs::COLOR|SdrGrafObjTransformsAttrs::MIRROR).GetGDIMetaFile();
     }
+    return GDIMetaFile();
+}
 
+SdrObject* SdrGrafObj::DoConvertToPolyObj(bool bBezier, bool bAddText ) const
+{
+    SdrObject* pRetval = nullptr;
+    GraphicType aGraphicType(GetGraphicType());
+    GDIMetaFile aMtf(GetMetaFile(aGraphicType));
     switch(aGraphicType)
     {
         case GraphicType::GdiMetafile:
