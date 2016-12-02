@@ -2735,60 +2735,6 @@ void WW8TabDesc::FinishSwTable()
         m_pIo->m_pFormatOfJustInsertedApo = nullptr;
         m_MergeGroups.clear();
     }
-
-    // since Word formats don't have table "keep with next paragraph" and "don't split table" settings,
-    // they were emulated in MSWordExportBase::OutputTextNode. Now we need to re-create those settings, reversing that logic.
-    // bKeep: if first paragraph of EVERY row is marked keep-with-next (implies bDontSplit).
-    bool bKeep = true;
-    // bDontSplit table: if first paragraph of every row EXCEPT the last one is kept.
-    bool bDontSplit = false;
-    sal_uInt32 nRow=0;
-    std::vector< SwTextNode* > vEmulatedNodes;
-    while( bKeep && nRow < m_pTabLines->size() )
-    {
-        const SwTableLine* pIterTableRow = (*m_pTabLines)[ nRow ];
-        const SwTableBoxes& rIterTableBoxes = pIterTableRow->GetTabBoxes();
-        const SwTableBox* pIterFirstCell = rIterTableBoxes.empty() ? nullptr : rIterTableBoxes.front();
-        // only for non-complex tables
-        if( pIterFirstCell && !pIterTableRow->GetUpper() )
-        {
-            // check the first paragraph from each row
-            SwPaM aPam( *pIterFirstCell->GetSttNd(), 0 );
-            aPam.GetPoint()->nNode++;
-            SwNode & rNode = aPam.GetPoint()->nNode.GetNode();
-            SwTextNode* pFirstParagraphNode = nullptr;
-            if( rNode.IsTextNode() )
-                pFirstParagraphNode = rNode.GetTextNode();
-
-            if( pFirstParagraphNode )
-            {
-                if( !pFirstParagraphNode->GetSwAttrSet().GetKeep().GetValue() )
-                    bKeep = false;
-                // all rows except the last one have been kept
-                else if ( nRow == m_pTabLines->size() - 2 )
-                    bDontSplit = true;
-
-                // save the node, so the paragraph's keep-with-next-paragraph setting can be removed later if it was added for the emulation
-                vEmulatedNodes.push_back( pFirstParagraphNode );
-            }
-        }
-        ++nRow;
-    }
-
-    if( bDontSplit || (bKeep && !vEmulatedNodes.empty()) )
-    {
-        // clear the emulated row's paragraph property
-        while( !vEmulatedNodes.empty() )
-        {
-            vEmulatedNodes.back()->ResetAttr( RES_KEEP );
-            vEmulatedNodes.pop_back();
-        }
-
-        // Set the table properties
-        m_pTable->GetFrameFormat()->SetFormatAttr(SwFormatLayoutSplit( false ));
-        if( bKeep )
-            m_pTable->GetFrameFormat()->SetFormatAttr(SvxFormatKeepItem( true, RES_KEEP ));
-    }
 }
 
 // browse m_MergeGroups, detect the index of the first fitting group or -1 otherwise
