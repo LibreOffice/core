@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a71b18c_3bdb58ef",
+        "filename": "vcl/unx/generic/fontmanager/fontmanager.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 615,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-12-02T06:49:38Z",
+      "side": 1,
+      "message": "if we\n(a) don\u0027t put empty strings into aNames\n(b) make aNames a std::unordered_set\n(c) make pFont-\u003em_aAliases a std::unordered_set\n\nthen we could just reduce this loop to\n\n  aNames.erase(pFont-\u003em_aFamilyName);\n  pFont-\u003em_aAliases.insert(aNames.begin(), aNames.end());\n\nunless of course we need to scan aliases in some fixed order\n\nBut this is just a suggestion for future, not a critique of the current patch :-)",
+      "revId": "98493a6cd32c34fb4bcc3c16b0f5331365cab198",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
