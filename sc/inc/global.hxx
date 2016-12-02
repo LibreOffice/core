@@ -857,6 +857,17 @@ enum ScSubTotalFunc
 
 enum ScAggregateFunc
     {
+        AGGREGATE_FUNC_AVE     = 1,
+        AGGREGATE_FUNC_CNT     = 2,
+        AGGREGATE_FUNC_CNT2    = 3,
+        AGGREGATE_FUNC_MAX     = 4,
+        AGGREGATE_FUNC_MIN     = 5,
+        AGGREGATE_FUNC_PROD    = 6,
+        AGGREGATE_FUNC_STD     = 7,
+        AGGREGATE_FUNC_STDP    = 8,
+        AGGREGATE_FUNC_SUM     = 9,
+        AGGREGATE_FUNC_VAR     = 10,
+        AGGREGATE_FUNC_VARP    = 11,
         AGGREGATE_FUNC_MEDIAN  = 12,
         AGGREGATE_FUNC_MODSNGL = 13,
         AGGREGATE_FUNC_LARGE   = 14,
