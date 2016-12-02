@@ -943,11 +943,12 @@ void SAL_CALL ScStyleFamilyObj::removeVetoableChangeListener( const OUString&, c
 
 //  Default-ctor wird fuer die Reflection gebraucht
 
-ScStyleObj::ScStyleObj(ScDocShell* pDocSh, SfxStyleFamily eFam, const OUString& rName) :
-    pPropSet( (eFam == SfxStyleFamily::Para) ? lcl_GetCellStyleSet() : lcl_GetPageStyleSet() ),
-    pDocShell( pDocSh ),
-    eFamily( eFam ),
-    aStyleName( rName )
+ScStyleObj::ScStyleObj(ScDocShell* pDocSh, SfxStyleFamily eFam, const OUString& rName)
+    : pPropSet( (eFam == SfxStyleFamily::Para) ? lcl_GetCellStyleSet() : lcl_GetPageStyleSet() )
+    , pDocShell(pDocSh)
+    , eFamily(eFam)
+    , aStyleName(rName)
+    , pStyle_cached(nullptr)
 {
     //  pDocShell ist Null, wenn per ServiceProvider erzeugt
 
