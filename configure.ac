@@ -9281,7 +9281,7 @@ AC_SUBST(ENABLE_ORCUS)
 dnl ===================================================================
 dnl HarfBuzz
 dnl ===================================================================
-libo_CHECK_SYSTEM_MODULE([harfbuzz],[HARFBUZZ],[harfbuzz-icu >= 0.9.18],["-I${WORKDIR}/UnpackedTarball/harfbuzz/src"],["-L${WORKDIR}/UnpackedTarball/harfbuzz/src/.libs -lharfbuzz"])
+libo_CHECK_SYSTEM_MODULE([harfbuzz],[HARFBUZZ],[harfbuzz-icu >= 0.9.42],["-I${WORKDIR}/UnpackedTarball/harfbuzz/src"],["-L${WORKDIR}/UnpackedTarball/harfbuzz/src/.libs -lharfbuzz"])
 if test "$COM" = "MSC"; then # override the above
     HARFBUZZ_LIBS="${WORKDIR}/UnpackedTarball/harfbuzz/src/.libs/libharfbuzz.lib"
 fi
