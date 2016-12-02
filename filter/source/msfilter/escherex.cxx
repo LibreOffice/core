@@ -4065,7 +4065,7 @@ bool EscherBlibEntry::operator==( const EscherBlibEntry& rEscherBlibEntry ) cons
     return true;
 }
 
-EscherGraphicProvider::EscherGraphicProvider( sal_uInt32 nFlags ) :
+EscherGraphicProvider::EscherGraphicProvider( EscherGraphicProviderFlags nFlags ) :
     mnFlags         ( nFlags ),
     mpBlibEntrys    ( nullptr ),
     mnBlibBufSize   ( 0 ),
@@ -4326,7 +4326,7 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const OStrin
             sal_uInt32 nExtra, nAtomSize = 0;
             sal_uInt32 nInstance, nUncompressedSize = p_EscherBlibEntry->mnSize;
 
-            if ( mnFlags & E_GRAPH_PROV_USE_INSTANCES )
+            if ( mnFlags & EscherGraphicProviderFlags::UseInstances )
             {
                 rPicOutStrm.WriteUInt32( 0x7f90000 | (sal_uInt16)( mnBlibEntrys << 4 ) )
                            .WriteUInt32( 0 );
@@ -4798,7 +4798,7 @@ void EscherSolverContainer::WriteSolver( SvStream& rStrm )
     }
 }
 
-EscherExGlobal::EscherExGlobal( sal_uInt32 nGraphicProvFlags ) :
+EscherExGlobal::EscherExGlobal( EscherGraphicProviderFlags nGraphicProvFlags ) :
     EscherGraphicProvider( nGraphicProvFlags ),
     mpPicStrm( nullptr ),
     mbHasDggCont( false ),
