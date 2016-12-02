@@ -57,7 +57,7 @@ namespace
     // Note that '-' isn't a hyphen to RemoveHyphens.
     bModified = linguistic::RemoveHyphens(str2);
     CPPUNIT_ASSERT(!bModified);
-    CPPUNIT_ASSERT( str2 == "a-b--c---" );
+    CPPUNIT_ASSERT_EQUAL( OUString("a-b--c---"), str2 );
 
     bModified = linguistic::RemoveHyphens(str3);
     CPPUNIT_ASSERT(bModified);
@@ -65,7 +65,7 @@ namespace
 
     bModified = linguistic::RemoveHyphens(str4);
     CPPUNIT_ASSERT(!bModified);
-    CPPUNIT_ASSERT( str4 == "asdf" );
+    CPPUNIT_ASSERT_EQUAL( OUString("asdf"), str4 );
   }
 
   void LngMiscTest::testRemoveControlChars()
@@ -88,15 +88,15 @@ namespace
 
     bModified = linguistic::RemoveControlChars(str2);
     CPPUNIT_ASSERT(!bModified);
-    CPPUNIT_ASSERT( str2 == "asdf" );
+    CPPUNIT_ASSERT_EQUAL( OUString("asdf"), str2 );
 
     bModified = linguistic::RemoveControlChars(str3);
     CPPUNIT_ASSERT(bModified);
-    CPPUNIT_ASSERT( str3 == "asdfasdf" );
+    CPPUNIT_ASSERT_EQUAL( OUString("asdfasdf"), str3 );
 
     bModified = linguistic::RemoveControlChars(str4);
     CPPUNIT_ASSERT(bModified);
-    CPPUNIT_ASSERT( str4 == " " );
+    CPPUNIT_ASSERT_EQUAL( OUString(" "), str4 );
   }
 
   void LngMiscTest::testReplaceControlChars()
@@ -119,17 +119,17 @@ namespace
 
     bModified = linguistic::ReplaceControlChars(str2);
     CPPUNIT_ASSERT(!bModified);
-    CPPUNIT_ASSERT( str2 == "asdf" );
+    CPPUNIT_ASSERT_EQUAL( OUString("asdf"), str2 );
 
     bModified = linguistic::ReplaceControlChars(str3);
     CPPUNIT_ASSERT(bModified);
-    CPPUNIT_ASSERT( str3 == "asdf asdf" );
+    CPPUNIT_ASSERT_EQUAL(OUString("asdf asdf"),  str3 );
 
     bModified = linguistic::ReplaceControlChars(str4);
     CPPUNIT_ASSERT(bModified);
-    CPPUNIT_ASSERT(str4.getLength() == 32);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(32), str4.getLength());
     for(int i = 0; i < 32; i++)
-      CPPUNIT_ASSERT(str4[i] == ' ');
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Unicode>(' '), str4[i]);
   }
 
   void LngMiscTest::testGetThesaurusReplaceText()
@@ -147,22 +147,22 @@ namespace
     CPPUNIT_ASSERT(r.isEmpty());
 
     r = linguistic::GetThesaurusReplaceText(str2);
-    CPPUNIT_ASSERT(r == str2);
+    CPPUNIT_ASSERT_EQUAL(str2, r);
 
     r = linguistic::GetThesaurusReplaceText(str3);
-    CPPUNIT_ASSERT(r == str2);
+    CPPUNIT_ASSERT_EQUAL(str2, r);
 
     r = linguistic::GetThesaurusReplaceText(str4);
-    CPPUNIT_ASSERT(r == str2);
+    CPPUNIT_ASSERT_EQUAL(str2, r);
 
     r = linguistic::GetThesaurusReplaceText(str5);
-    CPPUNIT_ASSERT(r == str2);
+    CPPUNIT_ASSERT_EQUAL(str2, r);
 
     r = linguistic::GetThesaurusReplaceText(str6);
-    CPPUNIT_ASSERT(r == str2);
+    CPPUNIT_ASSERT_EQUAL(str2, r);
 
     r = linguistic::GetThesaurusReplaceText(str7);
-    CPPUNIT_ASSERT(r == "asdf asdf");
+    CPPUNIT_ASSERT_EQUAL(OUString("asdf asdf"), r);
 
     r = linguistic::GetThesaurusReplaceText(str8);
     CPPUNIT_ASSERT(r.isEmpty());

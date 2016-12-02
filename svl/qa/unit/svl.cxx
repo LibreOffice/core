@@ -246,8 +246,8 @@ void Test::testNumberFormat()
         size_t nStart = aTests[i].eStart;
         size_t nEnd = aTests[i].eEnd;
 
-        CPPUNIT_ASSERT_MESSAGE("Unexpected number of formats for this category.",
-                               (nEnd - nStart + 1) == aTests[i].nSize);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Unexpected number of formats for this category.",
+                               aTests[i].nSize, (nEnd - nStart + 1));
 
         for (size_t j = nStart; j <= nEnd; ++j)
         {
@@ -291,7 +291,7 @@ void Test::testSharedString()
 {
     // Use shared string as normal, non-shared string, which is allowed.
     SharedString aSS1("Test"), aSS2("Test");
-    CPPUNIT_ASSERT_MESSAGE("Equality check should return true.", aSS1 == aSS2);
+    CPPUNIT_ASSERT_MESSAGE("Equality check should return true.", bool(aSS1 == aSS2));
     SharedString aSS3("test");
     CPPUNIT_ASSERT_MESSAGE("Equality check is case sensitive.", aSS1 != aSS3);
 }
@@ -322,11 +322,11 @@ void Test::testSharedStringPool()
     p2 = aPool.intern(aAndyLower);
     CPPUNIT_ASSERT_MESSAGE("Failed to intern strings.", p1.getData() && p2.getData());
     CPPUNIT_ASSERT_MESSAGE("These two ID's should differ.", p1.getData() != p2.getData());
-    CPPUNIT_ASSERT_MESSAGE("These two ID's should be equal.", p1.getDataIgnoreCase() == p2.getDataIgnoreCase());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("These two ID's should be equal.", p2.getDataIgnoreCase(), p1.getDataIgnoreCase());
     p2 = aPool.intern(aAndyUpper);
     CPPUNIT_ASSERT_MESSAGE("Failed to intern string.", p2.getData());
     CPPUNIT_ASSERT_MESSAGE("These two ID's should differ.", p1.getData() != p2.getData());
-    CPPUNIT_ASSERT_MESSAGE("These two ID's should be equal.", p1.getDataIgnoreCase() == p2.getDataIgnoreCase());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("These two ID's should be equal.", p2.getDataIgnoreCase(), p1.getDataIgnoreCase());
 }
 
 void Test::testSharedStringPoolPurge()
@@ -337,8 +337,8 @@ void Test::testSharedStringPoolPurge()
     aPool.intern("andy");
     aPool.intern("ANDY");
 
-    CPPUNIT_ASSERT_MESSAGE("Wrong string count.", aPool.getCount() == 3);
-    CPPUNIT_ASSERT_MESSAGE("Wrong case insensitive string count.", aPool.getCountIgnoreCase() == 1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong string count.", static_cast<size_t>(3), aPool.getCount());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong case insensitive string count.", static_cast<size_t>(1), aPool.getCountIgnoreCase());
 
     // Since no string objects referencing the pooled strings exist, purging
     // the pool should empty it.
