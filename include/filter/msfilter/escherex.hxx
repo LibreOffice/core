@@ -533,7 +533,7 @@ public:
                         sal_uInt32 nPictureOffset,
                         const GraphicObject& rObj,
                         const OString& rId,
-                        const GraphicAttr* pAttr = nullptr
+                        const GraphicAttr* pAttr
                     );
 
                     ~EscherBlibEntry();

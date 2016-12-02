@@ -53,7 +53,7 @@ namespace drawinglayer
             FillGraphicAttribute(
                 const Graphic& rGraphic,
                 const basegfx::B2DRange& rGraphicRange,
-                bool bTiling = false,
+                bool bTiling,
                 double fOffsetX = 0.0,
                 double fOffsetY = 0.0);
             FillGraphicAttribute(const FillGraphicAttribute& rCandidate);

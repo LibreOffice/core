@@ -39,7 +39,7 @@ public:
     static Size     GetDefaultPaperSize( MapUnit eUnit = MapUnit::MapTwip );
     static Size     GetPaperSize( Paper ePaper, MapUnit eUnit = MapUnit::MapTwip );
     static Size     GetPaperSize( const Printer* pPrinter );
-    static Paper    GetSvxPaper( const Size &rSize, MapUnit eUnit, bool bSloppy = false );
+    static Paper    GetSvxPaper( const Size &rSize, MapUnit eUnit, bool bSloppy );
     static long     GetSloppyPaperDimension( long nSize );
     static OUString GetName( Paper ePaper );
 };

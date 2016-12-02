@@ -44,7 +44,7 @@ namespace drawinglayer
             double              mfOpacity;
 
         public:
-            SvgGradientEntry(double fOffset, const basegfx::BColor& rColor = basegfx::BColor(0.0, 0.0, 0.0), double fOpacity = 1.0)
+            SvgGradientEntry(double fOffset, const basegfx::BColor& rColor, double fOpacity)
             :   mfOffset(fOffset),
                 maColor(rColor),
                 mfOpacity(fOpacity)
@@ -155,7 +155,7 @@ namespace drawinglayer
                 const SvgGradientEntryVector& rGradientEntries,
                 const basegfx::B2DPoint& rStart,
                 bool bUseUnitCoordinates,
-                SpreadMethod aSpreadMethod = SpreadMethod::Pad);
+                SpreadMethod aSpreadMethod);
             virtual ~SvgGradientHelper();
 
             /// data read access
@@ -208,7 +208,7 @@ namespace drawinglayer
                 const basegfx::B2DPoint& rStart,
                 const basegfx::B2DPoint& rEnd,
                 bool bUseUnitCoordinates,
-                SpreadMethod aSpreadMethod = SpreadMethod::Pad);
+                SpreadMethod aSpreadMethod);
             virtual ~SvgLinearGradientPrimitive2D() override;
 
             /// data read access
@@ -276,8 +276,8 @@ namespace drawinglayer
                 const basegfx::B2DPoint& rStart,
                 double fRadius,
                 bool bUseUnitCoordinates,
-                SpreadMethod aSpreadMethod = SpreadMethod::Pad,
-                const basegfx::B2DPoint* pFocal = nullptr);
+                SpreadMethod aSpreadMethod,
+                const basegfx::B2DPoint* pFocal);
             virtual ~SvgRadialGradientPrimitive2D() override;
 
             /// data read access

@@ -514,7 +514,7 @@ public:
                 private use, like 'x-...', are not allowed and FALSE is
                 returned in this case.
      */
-    static bool         isValidBcp47( const OUString& rString, OUString* o_pCanonicalized = nullptr,
+    static bool         isValidBcp47( const OUString& rString, OUString* o_pCanonicalized,
                                       bool bDisallowPrivate = false );
 
     /** If nLang is a generated on-the-fly LangID */

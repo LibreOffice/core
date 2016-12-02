@@ -399,7 +399,7 @@ public:
     void            QuickDelete( const ESelection& rSel );
     void            QuickMarkToBeRepainted( sal_Int32 nPara );
 
-    void            SetGlobalCharStretching( sal_uInt16 nX, sal_uInt16 nY = 100 );
+    void            SetGlobalCharStretching( sal_uInt16 nX, sal_uInt16 nY );
     void            GetGlobalCharStretching( sal_uInt16& rX, sal_uInt16& rY ) const;
 
     void            SetEditTextObjectPool( SfxItemPool* pPool );

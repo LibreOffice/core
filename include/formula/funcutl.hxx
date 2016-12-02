@@ -101,7 +101,7 @@ protected:
     virtual void LoseFocus() override;
 
 public:
-    RefButton(vcl::Window* _pParent, WinBits nStyle = 0);
+    RefButton(vcl::Window* _pParent, WinBits nStyle);
     virtual ~RefButton() override;
     virtual void dispose() override;
     void SetReferences( IControlReferenceHandler* pDlg, RefEdit* pEdit );
