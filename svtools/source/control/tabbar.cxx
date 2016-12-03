@@ -61,7 +61,6 @@ private:
 
     bool mbSelected:1;
     bool mbCustomColored:1;
-    bool mbSpecialTab:1;
     bool mbEnabled:1;
 
 public:
@@ -71,7 +70,6 @@ public:
         , mrStyleSettings(rRenderContext.GetSettings().GetStyleSettings())
         , mbSelected(false)
         , mbCustomColored(false)
-        , mbSpecialTab(false)
         , mbEnabled(false)
     {
     }
@@ -179,11 +177,6 @@ public:
     void setCustomColored(bool bCustomColored)
     {
         mbCustomColored = bCustomColored;
-    }
-
-    void setSpecialTab(bool bSpecialTab)
-    {
-        mbSpecialTab = bSpecialTab;
     }
 
     void setEnabled(bool bEnabled)
@@ -1212,7 +1205,6 @@ void TabBar::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rect)
             aDrawer.setRect(aRect);
             aDrawer.setSelected(bSelected);
             aDrawer.setCustomColored(bCustomBgColor);
-            aDrawer.setSpecialTab(bSpecialTab);
             aDrawer.setEnabled(true);
             aDrawer.setCustomColor(pItem->maTabBgColor);
             aDrawer.drawTab();
