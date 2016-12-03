@@ -30,6 +30,7 @@
 #include "unx/desktops.hxx"
 #include <vcl/printerinfomanager.hxx>
 #include <config_vclplug.h>
+#include <desktop/crashreport.hxx>
 
 #include <cstdio>
 #include <unistd.h>
@@ -288,7 +289,10 @@ void SalAbort( const OUString& rErrorText, bool bDumpCore )
     if( rErrorText.isEmpty() )
         std::fprintf( stderr, "Application Error\n" );
     else
+    {
+        CrashReporter::AddKeyValue("AbortMessage", rErrorText);
         std::fprintf( stderr, "%s\n", OUStringToOString(rErrorText, osl_getThreadTextEncoding()).getStr() );
+    }
     if( bDumpCore )
         abort();
     else
