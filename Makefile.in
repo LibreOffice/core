@@ -9,7 +9,7 @@
 
 gb_Top_MODULE_CHECK_TARGETS := slowcheck unitcheck subsequentcheck perfcheck uicheck screenshot
 
-.PHONY : all check-if-root bootstrap gbuild build build-non-l10n-only build-l10n-only check clean clean-build clean-host test-install distclean distro-pack-install docs download etags fetch findunusedcode get-submodules id install install-strip tags debugrun help showmodules translations packageinfo internal.clean $(gb_Top_MODULE_CHECK_TARGETS)
+.PHONY : all bootstrap gbuild build build-non-l10n-only build-l10n-only check clean clean-build clean-host test-install distclean distro-pack-install docs download etags fetch findunusedcode get-submodules id install install-strip tags debugrun help showmodules translations packageinfo internal.clean $(gb_Top_MODULE_CHECK_TARGETS)
 
 MAKECMDGOALS?=all
 build_goal:=$(if $(filter build check,$(MAKECMDGOALS)),all)\
@@ -53,14 +53,6 @@ $(BUILDDIR)/config_host.mk : $(wildcard \
 else # MAKE_RESTARTS
 
 all: build
-
-check-if-root:
-	@if test `id -u` = 0; then \
-		echo; \
-		echo 'No. You make ME a sandwich.'; \
-		echo; \
-		exit 1; \
-	fi
 
 gb_Side ?= host
 
@@ -250,7 +242,7 @@ endif
 #
 # Bootstrap
 #
-bootstrap: check-if-root compilerplugins
+bootstrap: compilerplugins
 
 #
 # Build
