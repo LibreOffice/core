@@ -75,31 +75,31 @@ const sal_uInt16 BIFF12_OLEOBJECT_AUTOLOAD  = 0x0002;
 
 } // namespace
 
-void DataValidationsContext_Base::SetValidation(::oox::xls::WorksheetHelper& rTarget)
+void DataValidationsContextBase::SetValidation( WorksheetHelper& rTarget )
 {
     if (!mxValModel.get())
         return;
 
-    rTarget.getAddressConverter().convertToCellRangeList(mxValModel->maRanges, mSqref, rTarget.getSheetIndex(), true);
-    mxValModel->msRef = mSqref;
+    rTarget.getAddressConverter().convertToCellRangeList(mxValModel->maRanges, maSqref, rTarget.getSheetIndex(), true);
+    mxValModel->msRef = maSqref;
 
-    mxValModel->maTokens1 = rTarget.getFormulaParser().importFormula(mxValModel->maRanges.getBaseAddress(), mFormula1);
+    mxValModel->maTokens1 = rTarget.getFormulaParser().importFormula(mxValModel->maRanges.getBaseAddress(), maFormula1);
     // process string list of a list validation (convert to list of string tokens)
     if (mxValModel->mnType == XML_list)
         rTarget.getFormulaParser().convertStringToStringList(mxValModel->maTokens1, ',', true);
 
-    mxValModel->maTokens2 = rTarget.getFormulaParser().importFormula(mxValModel->maRanges.getBaseAddress(), mFormula2);
+    mxValModel->maTokens2 = rTarget.getFormulaParser().importFormula(mxValModel->maRanges.getBaseAddress(), maFormula2);
 
     rTarget.setValidation(*mxValModel);
     mxValModel.reset();
 }
 
-void DataValidationsContext_Base::importDataValidation(const AttributeList& rAttribs)
+void DataValidationsContextBase::importDataValidation( const AttributeList& rAttribs )
 {
     mxValModel.reset(new ValidationModel);
-    mFormula1.clear();
-    mFormula2.clear();
-    mSqref = rAttribs.getString(XML_sqref, OUString());
+    maFormula1.clear();
+    maFormula2.clear();
+    maSqref = rAttribs.getString(XML_sqref, OUString());
     mxValModel->maInputTitle = rAttribs.getXString(XML_promptTitle, OUString());
     mxValModel->maInputMessage = rAttribs.getXString(XML_prompt, OUString());
     mxValModel->maErrorTitle = rAttribs.getXString(XML_errorTitle, OUString());
@@ -116,7 +116,7 @@ void DataValidationsContext_Base::importDataValidation(const AttributeList& rAtt
     mxValModel->mbAllowBlank = rAttribs.getBool(XML_allowBlank, false);
 }
 
-void DataValidationsContext_Base::importDataValidation(SequenceInputStream& rStrm, ::oox::xls::WorksheetHelper& rTarget)
+void DataValidationsContextBase::importDataValidation( SequenceInputStream& rStrm, WorksheetHelper& rTarget )
 {
     ValidationModel aModel;
 
