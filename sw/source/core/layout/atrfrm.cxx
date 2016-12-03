@@ -3329,6 +3329,7 @@ IMPL_FIXEDMEMPOOL_NEWDEL( SwDrawFrameFormat )
 namespace sw
 {
     DrawFrameFormatHint::~DrawFrameFormatHint() {}
+    CheckDrawFrameFormatLayerHint::~CheckDrawFrameFormatLayerHint() {}
 }
 
 SwDrawFrameFormat::~SwDrawFrameFormat()

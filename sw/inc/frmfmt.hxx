@@ -249,6 +249,12 @@ namespace sw
         DrawFrameFormatHint(DrawFrameFormatHintId eId) : m_eId(eId) {};
         virtual ~DrawFrameFormatHint() override;
     };
+    struct SW_DLLPUBLIC CheckDrawFrameFormatLayerHint final: SfxHint
+    {
+        bool* m_bCheckControlLayer;
+        CheckDrawFrameFormatLayerHint(bool* bCheckControlLayer) : m_bCheckControlLayer(bCheckControlLayer) {};
+        virtual ~CheckDrawFrameFormatLayerHint() override;
+    };
 }
 
 class SW_DLLPUBLIC SwDrawFrameFormat: public SwFrameFormat
