@@ -128,7 +128,7 @@ class HeaderFooterContext
 {
     bool m_bTextInserted;
 public:
-    HeaderFooterContext(bool bTextInserted);
+    explicit HeaderFooterContext(bool bTextInserted);
     bool getTextInserted();
 };
 
@@ -156,7 +156,7 @@ class FieldContext
     PropertyMapPtr m_pProperties;
 
 public:
-    FieldContext(css::uno::Reference<css::text::XTextRange> const& xStart);
+    explicit FieldContext(css::uno::Reference<css::text::XTextRange> const& xStart);
     ~FieldContext();
 
     const css::uno::Reference<css::text::XTextRange>& GetStartRange() const { return m_xStartRange; }
@@ -219,7 +219,7 @@ struct AnchoredContext
     css::uno::Reference<css::text::XTextContent> xTextContent;
     bool bToRemove;
 
-    AnchoredContext(const css::uno::Reference<css::text::XTextContent>& xContent)
+    explicit AnchoredContext(const css::uno::Reference<css::text::XTextContent>& xContent)
         : xTextContent(xContent), bToRemove(false)
     {
     }
@@ -233,7 +233,7 @@ typedef std::shared_ptr<FieldContext>  FieldContextPtr;
 struct DeletableTabStop : public css::style::TabStop
 {
     bool bDeleted;
-    DeletableTabStop()
+    explicit DeletableTabStop()
         : bDeleted(false)
     {
         // same defaults as SvxXMLTabStopContext_Impl

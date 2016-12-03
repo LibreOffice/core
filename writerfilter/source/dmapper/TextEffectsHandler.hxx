@@ -43,7 +43,7 @@ private:
     virtual void lcl_sprm(Sprm& sprm) override;
 
 public:
-    TextEffectsHandler(sal_uInt32 aElementId);
+    explicit TextEffectsHandler(sal_uInt32 aElementId);
     virtual ~TextEffectsHandler() override;
 
     const boost::optional<PropertyIds>& getGrabBagPropertyId() { return maPropertyId;}

@@ -1859,14 +1859,14 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
             // shapes for OLE objects.
             m_aTextAppendStack.push(TextAppendContext(uno::Reference<text::XTextAppend>(xShape, uno::UNO_QUERY), uno::Reference<text::XTextCursor>()));
             uno::Reference<text::XTextContent> xTxtContent(xShape, uno::UNO_QUERY);
-            m_aAnchoredStack.push(xTxtContent);
+            m_aAnchoredStack.push(AnchoredContext(xTxtContent));
         }
         else if (xSInfo->supportsService("com.sun.star.drawing.OLE2Shape"))
         {
             // OLE2Shape from oox should be converted to a TextEmbeddedObject for sw.
             m_aTextAppendStack.push(TextAppendContext(uno::Reference<text::XTextAppend>(xShape, uno::UNO_QUERY), uno::Reference<text::XTextCursor>()));
             uno::Reference<text::XTextContent> xTextContent(xShape, uno::UNO_QUERY);
-            m_aAnchoredStack.push(xTextContent);
+            m_aAnchoredStack.push(AnchoredContext(xTextContent));
             uno::Reference<beans::XPropertySet> xShapePropertySet(xShape, uno::UNO_QUERY);
 
             m_xEmbedded.set(m_xTextFactory->createInstance("com.sun.star.text.TextEmbeddedObject"), uno::UNO_QUERY_THROW);
@@ -1887,7 +1887,7 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
 
             // Add the shape to the anchored objects stack
             uno::Reference< text::XTextContent > xTxtContent( xShape, uno::UNO_QUERY_THROW );
-            m_aAnchoredStack.push( xTxtContent );
+            m_aAnchoredStack.push( AnchoredContext(xTxtContent) );
 
             uno::Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY_THROW );
 #ifdef DEBUG_WRITERFILTER

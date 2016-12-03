@@ -20,7 +20,7 @@ namespace rtftok
 class RTFSkipDestination final
 {
 public:
-    RTFSkipDestination(RTFListener& rImport);
+    explicit RTFSkipDestination(RTFListener& rImport);
     ~RTFSkipDestination();
     void setParsed(bool bParsed);
     void setReset(bool bReset);

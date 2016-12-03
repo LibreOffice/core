@@ -77,7 +77,7 @@ class OLEHandler : public LoggedProperties
     virtual void lcl_sprm(Sprm & sprm) override;
 
 public:
-    OLEHandler(DomainMapper& rDomainMapper);
+    explicit OLEHandler(DomainMapper& rDomainMapper);
     virtual ~OLEHandler() override;
 
     const css::uno::Reference<css::drawing::XShape>& getShape() { return m_xShape; };

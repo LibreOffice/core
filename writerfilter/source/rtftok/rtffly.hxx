@@ -22,7 +22,7 @@ namespace rtftok
 class RTFVertOrient
 {
 public:
-    RTFVertOrient(sal_uInt16 nValue)
+    explicit RTFVertOrient(sal_uInt16 nValue)
         : m_nVal(nValue)
     {
     }
@@ -83,7 +83,7 @@ private:
 class RTFHoriOrient
 {
 public:
-    RTFHoriOrient(sal_uInt16 nValue)
+    explicit RTFHoriOrient(sal_uInt16 nValue)
         : m_nVal(nValue)
     {
     }

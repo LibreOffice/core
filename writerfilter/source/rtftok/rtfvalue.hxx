@@ -32,14 +32,14 @@ public:
              css::uno::Reference<css::embed::XEmbeddedObject> const& xObject,
              bool bForceString, const RTFShape& aShape);
     RTFValue();
-    RTFValue(int nValue);
+    explicit RTFValue(int nValue);
     RTFValue(const OUString& sValue, bool bForce = false);
-    RTFValue(RTFSprms rAttributes);
+    explicit RTFValue(RTFSprms rAttributes);
     RTFValue(RTFSprms rAttributes, RTFSprms rSprms);
-    RTFValue(css::uno::Reference<css::drawing::XShape> const& xShape);
-    RTFValue(css::uno::Reference<css::io::XInputStream> const& xStream);
-    RTFValue(css::uno::Reference<css::embed::XEmbeddedObject> const& xObject);
-    RTFValue(const RTFShape& aShape);
+    explicit RTFValue(css::uno::Reference<css::drawing::XShape> const& xShape);
+    explicit RTFValue(css::uno::Reference<css::io::XInputStream> const& xStream);
+    explicit RTFValue(css::uno::Reference<css::embed::XEmbeddedObject> const& xObject);
+    explicit RTFValue(const RTFShape& aShape);
     virtual ~RTFValue() override;
     void setString(const OUString& sValue);
     virtual int getInt() const override;

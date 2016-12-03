@@ -69,7 +69,7 @@ class SdtHelper final
     /// Create and append the drawing::XControlShape, containing the various models.
     void createControlShape(css::awt::Size aSize, css::uno::Reference<css::awt::XControlModel> const&, const css::uno::Sequence<css::beans::PropertyValue>& rGrabBag);
 public:
-    SdtHelper(DomainMapper_Impl& rDM_Impl);
+    explicit SdtHelper(DomainMapper_Impl& rDM_Impl);
     ~SdtHelper();
 
     std::vector<OUString>& getDropDownItems()

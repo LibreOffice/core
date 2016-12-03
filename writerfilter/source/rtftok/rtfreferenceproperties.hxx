@@ -22,7 +22,7 @@ class RTFReferenceProperties
 {
 public:
     RTFReferenceProperties(RTFSprms rAttributes, RTFSprms rSprms);
-    RTFReferenceProperties(RTFSprms rAttributes);
+    explicit RTFReferenceProperties(RTFSprms rAttributes);
     virtual ~RTFReferenceProperties();
     virtual void resolve(Properties& rHandler) override;
     RTFSprms& getAttributes()
