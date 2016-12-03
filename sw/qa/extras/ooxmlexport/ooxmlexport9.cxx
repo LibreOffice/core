@@ -128,6 +128,15 @@ DECLARE_OOXMLEXPORT_TEST(testTdf103982, "tdf103982.docx")
     CPPUNIT_ASSERT(nDistB >= 0);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf103651, "tdf103651.docx")
+{
+    uno::Reference<beans::XPropertySet> xTextField = getProperty< uno::Reference<beans::XPropertySet> >(getRun(getParagraph(1), 1), "TextField");
+    OUString sContent;
+    xTextField->getPropertyValue("Content") >>= sContent;
+    // Comment in the first paragraph should not have smiley ( 0xf04a ).
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( -1 ) , sContent.indexOf( sal_Unicode( 0xf04a ) ));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
