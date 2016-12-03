@@ -135,13 +135,15 @@ void SheetDataBuffer::setBlankCell( const CellModel& rModel )
 
 void SheetDataBuffer::setValueCell( const CellModel& rModel, double fValue )
 {
-    putValue( rModel.maCellAddr, fValue );
+    getDocImport().setNumericCell(rModel.maCellAddr, fValue);
     setCellFormat( rModel );
 }
 
 void SheetDataBuffer::setStringCell( const CellModel& rModel, const OUString& rText )
 {
-    putString( rModel.maCellAddr, rText );
+    if (!rText.isEmpty())
+        getDocImport().setStringCell(rModel.maCellAddr, rText);
+
     setCellFormat( rModel );
 }
 

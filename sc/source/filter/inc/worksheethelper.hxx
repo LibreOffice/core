@@ -274,12 +274,6 @@ public:
         are cached and converted in the finalizeWorksheetImport() call. */
     void                setRowModel( const RowModel& rModel );
 
-    /** Inserts a value cell directly into the Calc sheet. */
-    void putValue( const ScAddress& rAddress, double fValue );
-
-    /** Inserts a string cell directly into the Calc sheet. */
-    void putString( const ScAddress& rAddress, const OUString& rText );
-
     /** Inserts a rich-string cell directly into the Calc sheet. */
     void putRichString(
         const ScAddress& rAddress,
