@@ -1322,6 +1322,8 @@ Const cstMaxRows = 200
 					If i = iNumFields - 1 Then vTdClass() = _AddArray(vTdClass, &quot;lastcol&quot;)
 					If Not vFieldsBin(i) Then
 						If bDataArray Then vDataCell = pvData(i, j) Else vDataCell = vData(i, j)
+						If vDataCell Is Nothing Then vDataCell = Null		&apos;	Necessary because Null object has not a VarType = vbNull
+						If IsDate(vDataCell) And VarType(vDataCell) = vbString Then vDataCell = CDate(vDataCell)
 						Select Case VarType(vDataCell)
 							Case vbEmpty, vbNull
 								vTdClass() = _AddArray(vTdClass, &quot;null&quot;)

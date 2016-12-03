@@ -146,7 +146,7 @@ Const cstByteLength = 25
 				sArg = &quot;[ARRAY]&quot;
 			Else	&apos;	One-dimension arrays only
 				For i = LBound(pvArg) To UBound(pvArg)
-					sArg = sArg &amp; Utils._CStr(pvArg(i)) &amp; &quot;;&quot;	&apos;	Recursive call
+					sArg = sArg &amp; Utils._CStr(pvArg(i), pbShort) &amp; &quot;;&quot;	&apos;	Recursive call
 				Next i
 				If Len(sArg) &gt; 1 Then sArg = Left(sArg, Len(sArg) - 1)
 			End If
@@ -205,10 +205,11 @@ Const cstByteLength = 25
 End Function	&apos;	CStr			V0.9.5
 
 REM -----------------------------------------------------------------------------------------------------------------------
-Public Function _CVar(ByRef psArg As String) As Variant
+Public Function _CVar(ByRef psArg As String, ByVal Optional pbStrDate As Boolean) As Variant
 &apos;	psArg is presumed an output of _CStr (stored in the mean time in a text file f.i.)
 &apos;	_CVar returns the corresponding original variant variable or Null/Nothing if not possible
 &apos;	Return values may of types Array, Long, Double, Date, Boolean, String, Null or Empty
+&apos;	pbStrDate = True keeps dates as strings
 
 Dim cstEscape1 As String, cstEscape2 As String, vEMPTY As Variant
 	cstEscape1 = Chr(14)			&apos;	Form feed used as temporary escape character for \\
@@ -218,6 +219,7 @@ Dim cstEscape1 As String, cstEscape2 As String, vEMPTY As Variant
 	If Len(psArg) = 0 Then Exit Function
 
 Dim sArg As String, vArgs() As Variant, vVars() As Variant, i As Integer
+	If IsMissing(pbStrDate) Then pbStrDate = False
 	sArg = Replace( _
 				Replace( _
 					Replace( _
@@ -232,7 +234,7 @@ Dim sArg As String, vArgs() As Variant, vVars() As Variant, i As Integer
 		vVars = Array()
 		Redim vVars(LBound(vArgs) To UBound(vArgs))
 		For i = LBound(vVars) To UBound(vVars)
-			vVars(i) = _CVar(vArgs(i))
+			vVars(i) = _CVar(vArgs(i), pbStrDate)
 		Next i
 		_CVar = vVars
 		Exit Function
@@ -245,14 +247,15 @@ Dim sArg As String, vArgs() As Variant, vVars() As Variant, i As Integer
 		Case sArg = &quot;[OBJECT]&quot;						:	_CVar = Nothing
 		Case sArg = &quot;[TRUE]&quot;						:	_CVar = True
 		Case sArg = &quot;[FALSE]&quot;						:	_CVar = False
-		Case IsDate(sArg)							:	_CVar = CDate(sArg)
+		Case IsDate(sArg)
+			If pbStrDate Then _CVar = sArg Else _CVar = CDate(sArg)
 		Case IsNumeric(sArg)
 			If InStr(sArg, &quot;.&quot;) &gt; 0 Then
 				_CVar = Val(sArg)
 			Else
 				_CVar = CLng(Val(sArg))		&apos;	Val always returns a double
 			End If
-		Case _RegexSearch(sArg, &quot;^[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$&quot; &lt;&gt; &quot;&quot;
+		Case _RegexSearch(sArg, &quot;^[-+]?[0-9]*\.?[0-9]+(e[-+]?[0-9]+)?$&quot;) &lt;&gt; &quot;&quot;
 			_CVar = Val(sArg)					&apos;	Scientific notation
 		Case Else									:	_CVar = Replace(Replace(sArg, cstEscape1, &quot;\&quot;), cstEscape2, &quot;;&quot;)
 	End Select
@@ -914,6 +917,7 @@ Function _RegexSearch(ByRef psString As String _
 						, ByVal psRegex As String _
 						, Optional ByRef plStart As Long _
 						) As String
+&apos;	Search is not case-sensitive
 &apos;	Return &quot;&quot; if regex not found, otherwise returns the matching string
 &apos;	plStart = start position of psString to search (starts at 1)
 &apos;	In output plStart contains the first position of the matching string
@@ -929,9 +933,11 @@ Dim lEnd As Long
 		.algorithmType = com.sun.star.util.SearchAlgorithms.REGEXP
 		.searchFlag = 0
 		.searchString = psRegex				&apos;	Pattern to be searched
+		.transliterateFlags = com.sun.star.i18n.TransliterationModules.IGNORE_CASE
 	End With
 	oTextSearch.setOptions(vOptions)
 	If IsMissing(plStart) Then plStart = 1
+	If plStart &lt;= 0 Then Exit Function
 	lEnd = Len(psString)
 	vResult = oTextSearch.searchForward(psString, plStart - 1, lEnd)
 	With vResult
@@ -939,6 +945,8 @@ Dim lEnd As Long
 			plStart = .startOffset(0) + 1
 			lEnd = .endOffset(0) + 1
 			_RegexSearch = Mid(psString, plStart, lEnd - plStart)
+		Else
+			plStart = 0
 		End If
 	End With
 
