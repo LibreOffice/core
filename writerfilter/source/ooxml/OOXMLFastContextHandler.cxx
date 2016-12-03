@@ -551,6 +551,12 @@ void OOXMLFastContextHandler::tab()
         mpStream->utext(reinterpret_cast<const sal_uInt8*>(&uTab), 1);
 }
 
+void OOXMLFastContextHandler::symbol()
+{
+    if (isForwardEvents())
+        sendPropertiesWithId(NS_ooxml::LN_EG_RunInnerContent_sym);
+}
+
 void OOXMLFastContextHandler::cr()
 {
     if (isForwardEvents())

@@ -17857,7 +17857,7 @@
     <resource name="CT_Sym" resource="Properties">
       <attribute name="font" tokenid="ooxml:CT_Sym_font"/>
       <attribute name="char" tokenid="ooxml:CT_Sym_char"/>
-      <action name="end" tokenid="ooxml:EG_RunInnerContent_sym" action="sendPropertiesWithId" sendtokenid="ooxml:EG_RunInnerContent_sym"/>
+      <action name="end" action="symbol"/>
     </resource>
     <resource name="CT_Text" resource="Stream">
       <attribute name="xml:space" tokenid="ooxml:CT_Text_space"/>
