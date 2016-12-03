@@ -1314,11 +1314,9 @@ bool SwTextNode::InsertHint( SwTextAttr * const pAttr, const SetAttrMode nMode )
                 if( RES_DRAWFRMFMT == pFormat->Which() &&
                     pDoc->IsInHeaderFooter( pFormat->GetAnchor().GetContentAnchor()->nNode ) )
                 {
-                    SwDrawContact* pDrawContact =
-                        static_cast<SwDrawContact*>(pFormat->FindContactObj());
-                    if ( pDrawContact &&
-                         pDrawContact->GetMaster() &&
-                         ::CheckControlLayer( pDrawContact->GetMaster() ) )
+                    bool bCheckControlLayer = false;
+                    pFormat->CallSwClientNotify(sw::CheckDrawFrameFormatLayerHint(&bCheckControlLayer));
+                    if( bCheckControlLayer )
                     {
                         // das soll nicht meoglich sein; hier verhindern
                         // Der Dtor des TextHints loescht nicht das Zeichen.
