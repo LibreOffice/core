@@ -1555,6 +1555,10 @@ void SwDrawContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
                 SAL_WARN("sw.core", "unhandled DrawFrameFormatHintId");
         }
     }
+    else if (auto pCheckDrawFrameFormatLayerHint = dynamic_cast<const sw::CheckDrawFrameFormatLayerHint*>(&rHint))
+    {
+        *(pCheckDrawFrameFormatLayerHint->m_bCheckControlLayer) |= (GetMaster() && CheckControlLayer(GetMaster()));
+    }
 }
 
 // #i26791#
