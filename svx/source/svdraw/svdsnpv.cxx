@@ -328,8 +328,8 @@ SdrSnap SdrSnapView::SnapPos(Point& rPnt, const SdrPageView* pPV) const
         a=y- ys     ; if (std::abs(a)<=my) { dy1=-a; if (std::abs(dy1)<std::abs(dy)) dy=dy1; } // right edge of paper
     }
     if (bOFrmSnap || bOPntSnap) {
-        sal_uIntPtr nMaxPointSnapCount=200;
-        sal_uIntPtr nMaxFrameSnapCount=200;
+        sal_uInt32 nMaxPointSnapCount=200;
+        sal_uInt32 nMaxFrameSnapCount=200;
 
         // go back to SdrIterMode::DeepNoGroups runthrough for snap to object comparisons
         SdrObjListIter aIter(*pPV->GetPage(),SdrIterMode::DeepNoGroups,true);
