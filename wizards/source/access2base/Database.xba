@@ -1221,6 +1221,14 @@ Const cstSQLITE = &quot;SQLite&quot;
 End Sub			&apos;	_LoadMetadata	V1.6.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
+Private Function _OutputBinaryToHTML() As String
+&apos;	Converts Binary value to HTML compatible string
+
+	_OutputBinaryToHTML = &quot;&amp;nbsp;&quot;
+
+End Function	&apos;	_OutputBinaryToHTML	V1.4.0
+
+REM -----------------------------------------------------------------------------------------------------------------------
 Private Function _OutputBooleanToHTML(ByVal pbBool As Boolean) As String
 &apos;	Converts input boolean value to HTML compatible string
 
@@ -1367,14 +1375,6 @@ Error_Function:
 	_OutputDataToHTML = False
 	Resume Exit_Function
 End Function	&apos;	_OutputDataToHTML	V1.4.0
-
-REM -----------------------------------------------------------------------------------------------------------------------
-Private Function _OutputBinaryToHTML() As String
-&apos;	Converts Binary value to HTML compatible string
-
-	_OutputBinaryToHTML = &quot;&amp;nbsp;&quot;
-
-End Function	&apos;	_OutputBinaryToHTML	V1.4.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Private Function _OutputDateToHTML(ByVal psDate As Date) As String
