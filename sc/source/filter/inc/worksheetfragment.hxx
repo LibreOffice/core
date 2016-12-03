@@ -25,24 +25,26 @@
 namespace oox {
 namespace xls {
 
-class DataValidationsContext_Base {
+class DataValidationsContextBase
+{
 public:
-                                   DataValidationsContext_Base() {}
-    void                           SetSqref(const OUString& rChars) { mSqref = rChars; }
-    void                           SetFormula1(const OUString& rChars) { mFormula1 = rChars; }
-    void                           SetFormula2(const OUString& rChars) { mFormula2 = rChars; }
-    void                           SetValidation(::oox::xls::WorksheetHelper& rTarget);
+    void SetSqref( const OUString& rChars ) { maSqref = rChars; }
+    void SetFormula1( const OUString& rChars ) { maFormula1 = rChars; }
+    void SetFormula2( const OUString& rChars ) { maFormula2 = rChars; }
+    void SetValidation( WorksheetHelper& rTarget );
     /** Imports the dataValidation element containing data validation settings. */
-    void                           importDataValidation(const AttributeList& rAttribs);
+    void importDataValidation( const AttributeList& rAttribs );
     /** Imports the DATAVALIDATION record containing data validation settings. */
-    static void                    importDataValidation(SequenceInputStream& rStrm, ::oox::xls::WorksheetHelper& rTarget);
-    bool                           isFormula1Set() const { return !mFormula1.isEmpty(); }
-    bool                           isFormula2Set() const { return !mFormula2.isEmpty(); }
+    static void importDataValidation( SequenceInputStream& rStrm, WorksheetHelper& rTarget );
+    bool isFormula1Set() const { return !maFormula1.isEmpty(); }
+    bool isFormula2Set() const { return !maFormula2.isEmpty(); }
+
 private:
-    ::std::unique_ptr< ValidationModel > mxValModel;
-    OUString                             mSqref;
-    OUString                             mFormula1;
-    OUString                             mFormula2;
+    std::unique_ptr< ValidationModel > mxValModel;
+
+    OUString maSqref;
+    OUString maFormula1;
+    OUString maFormula2;
 };
 
 // For following types of validations:
@@ -69,7 +71,7 @@ private:
 //    </dataValidation>
 //  </dataValidations>
 
-class DataValidationsContext : public WorksheetContextBase, private DataValidationsContext_Base
+class DataValidationsContext : public WorksheetContextBase, private DataValidationsContextBase
 {
 public:
     explicit            DataValidationsContext( WorksheetFragmentBase& rFragment );
@@ -97,7 +99,7 @@ protected:
 //    </ext>
 //  </extLst>
 
-class ExtDataValidationsContext : public WorksheetContextBase, private DataValidationsContext_Base
+class ExtDataValidationsContext : public WorksheetContextBase, private DataValidationsContextBase
 {
 public:
     explicit            ExtDataValidationsContext( WorksheetContextBase& rFragment );
