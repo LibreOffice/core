@@ -263,7 +263,7 @@ class TableData
 public:
     typedef std::shared_ptr<TableData> Pointer_t;
 
-    TableData(unsigned int nDepth) : mnDepth(nDepth) { newRow(); }
+    explicit TableData(unsigned int nDepth) : mnDepth(nDepth) { newRow(); }
     ~TableData() {}
 
     /**
