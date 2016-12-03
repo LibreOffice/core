@@ -1562,21 +1562,10 @@ void WorksheetHelper::setRowModel( const RowModel& rModel )
     mrSheetGlob.setRowModel( rModel );
 }
 
-void WorksheetHelper::putValue( const ScAddress& rAddress, double fValue )
-{
-    getDocImport().setNumericCell(rAddress, fValue);
-}
-
 void WorksheetHelper::setCellFormulaValue(
     const ScAddress& rAddress, const OUString& rValueStr, sal_Int32 nCellType )
 {
     getFormulaBuffer().setCellFormulaValue(rAddress, rValueStr, nCellType);
-}
-
-void WorksheetHelper::putString( const ScAddress& rAddress, const OUString& rText )
-{
-    if ( !rText.isEmpty() )
-        getDocImport().setStringCell(rAddress, rText);
 }
 
 void WorksheetHelper::putRichString( const ScAddress& rAddress, const RichString& rString, const oox::xls::Font* pFirstPortionFont )
