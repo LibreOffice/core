@@ -507,45 +507,92 @@ sub DownloadFile ($$$)
     my $URL = shift;
     my $checksum = shift;
 
-    if (defined $checksum)
+    my $filename = File::Spec->catfile($ENV{'TARFILE_LOCATION'}, $name);
+
+    my $temporary_filename = $filename . ".part";
+
+    print "downloading to $temporary_filename\n";
+    my $out;
+    open $out, ">$temporary_filename";
+    binmode($out);
+
+    # Prepare checksum
+    my $digest;
+    if (defined $checksum && $checksum->{'type'} eq "SHA1")
     {
-        system(
-            $ENV{'JAVAINTERPRETER'},
-            "-cp",
-            File::Spec->catfile(
-                File::Spec->catfile($ENV{'SOLARENV'}, $ENV{'INPATH'}),
-                "class"),
-            "AOOJavaDownloader",
-            $name,
-            $URL,
-            $checksum->{'type'},
-            $checksum->{'value'});
+        # Use SHA1 only when explicitly requested (by the presence of a "SHA1=..." line.)
+        $digest = Digest::SHA->new("1");
+    }
+    elsif ( ! defined $checksum || $checksum->{'type'} eq "MD5")
+    {
+        # Use MD5 when explicitly requested or when no checksum type is given.
+        $digest = Digest::MD5->new();
     }
     else
     {
-        system(
-            $ENV{'JAVAINTERPRETER'},
-            "-cp",
-            File::Spec->catfile(
-                File::Spec->catfile($ENV{'SOLARENV'}, $ENV{'INPATH'}),
-                "class"),
-            "AOOJavaDownloader",
-            $name,
-            $URL);
+        die "checksum type ".$checksum->{'type'}." is not supported";
     }
 
-    my $rc = $? >> 8;
-    if ($rc == 0)
+    # Download the extension.
+    my $success = 0;
+
+    my $agent = LWP::UserAgent->new();
+    $agent->env_proxy;
+    my $response = $agent->get($URL);
+
+    $success = $response->is_success;
+    if ($success)
     {
-        return 1;
-    }
-    elsif ($rc == 1)
-    {
-        return 0;
+        my $content = $response->content;
+        open $out, ">$temporary_filename";
+        binmode($out);
+        print $out $content;
+        $digest->add($content);
     }
     else
     {
-        exit $rc;
+        print "download from $URL failed (" . $response->status_line . ")\n";
+    }
+    close($out);
+
+    # When download was successful then check the checksum and rename the .part file
+    # into the actual extension name.
+    if ($success)
+    {
+        my $file_checksum = $digest->hexdigest();
+        if (defined $checksum)
+        {
+            if ($checksum->{'value'} eq $file_checksum)
+            {
+                printf("%s checksum is OK\n", $checksum->{'type'});
+            }
+            else
+            {
+                unlink($temporary_filename);
+                printf("    %s checksum does not match (%s instead of %s)\n",
+                       $checksum->{'type'},
+                       $file_checksum,
+                       $checksum->{'value'});
+                return 0;
+            }
+        }
+        else
+        {
+            # The datafile does not contain a checksum to match against.
+            # Display the one that was calculated for the downloaded file so that
+            # it can be integrated manually into the data file.
+            printf("checksum not given, md5 of file is %s\n", $file_checksum);
+            $filename = File::Spec->catfile($ENV{'TARFILE_LOCATION'}, $file_checksum . "-" . $name);
+        }
+
+        rename($temporary_filename, $filename) || die "can not rename $temporary_filename to $filename";
+        return 1;
+    }
+    else
+    {
+        unlink($temporary_filename);
+        print "    download failed\n";
+        return 0;
     }
 }
 

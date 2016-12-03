@@ -468,19 +468,53 @@ sub Download (@)
     {
         my ($protocol, $name, $URL, $md5sum) = @{$entry};
 
-        system(
-            $ENV{'JAVAINTERPRETER'},
-            "-cp",
-            File::Spec->catfile(
-                File::Spec->catfile($ENV{'SOLARENV'}, $ENV{'INPATH'}),
-                "class"),
-            "AOOJavaDownloader",
-            $name,
-            $URL,
-            'MD5',
-            $md5sum);
+        # Open a .part file for writing.
+        my $filename = File::Spec->catfile($download_path, $name);
+        my $temporary_filename = $filename . ".part";
+        print "downloading to $temporary_filename\n";
 
-        if ($? != 0)
+        # Prepare md5
+        my $md5 = Digest::MD5->new();
+
+        # Download the extension.
+        my $agent = LWP::UserAgent->new();
+        $agent->timeout(120);
+        $agent->env_proxy;
+        my $last_was_redirect = 0;
+        my $response = $agent->get($URL);
+
+        # When download was successfull then check the md5 checksum and rename the .part file
+        # into the actual extension name.
+        if ($response->is_success())
+        {
+            my $content = $response->content;
+            open $out, ">$temporary_filename";
+            binmode($out);
+            print $out $content;
+            $md5->add($content);
+            close $out;
+            if (defined $md5sum && length($md5sum)==32)
+            {
+                my $file_md5 = $md5->hexdigest();
+                if ($md5sum eq $file_md5)
+                {
+                    print "md5 is OK\n";
+                }
+                else
+                {
+                    unlink($temporary_filename) if ! $Debug;
+                    die "downloaded file has the wrong md5 checksum: $file_md5 instead of $md5sum";
+                }
+            }
+            else
+            {
+                print "md5 is not present\n";
+                printf "   is %s, length is %d\n", $md5sum, length(md5sum);
+            }
+
+            rename($temporary_filename, $filename) || die "can not rename $temporary_filename to $filename";
+        }
+        else
         {
             die "failed to download $URL";
         }
