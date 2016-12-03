@@ -77,6 +77,15 @@ DECLARE_OOXMLEXPORT_TEST(testMSwordHang,"test_msword_hang.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[1]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:txbx/w:txbxContent/w:p/w:r[2]/w:drawing/wp:inline", "distT", "0");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf103651, "tdf103651.docx")
+{
+    uno::Reference<beans::XPropertySet> xTextField = getProperty< uno::Reference<beans::XPropertySet> >(getRun(getParagraph(1), 1), "TextField");
+    OUString sContent;
+    xTextField->getPropertyValue("Content") >>= sContent;
+    // Comment in the first paragraph should not have smiley ( 0xf04a ).
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( -1 ) , sContent.indexOf( sal_Unicode( 0xf04a ) ));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testGroupshapeThemeFont, "groupshape-theme-font.docx")
 {
     // Font was specified using a theme reference, which wasn't handled.

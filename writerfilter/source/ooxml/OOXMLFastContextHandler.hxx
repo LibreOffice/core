@@ -156,6 +156,7 @@ public:
     void ftnednsep();
     void pgNum();
     void tab();
+    void symbol();
     void cr();
     void noBreakHyphen();
     void softHyphen();
