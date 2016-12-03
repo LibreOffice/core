@@ -43,6 +43,8 @@
 #include "salimestatus.hxx"
 #include "salsys.hxx"
 
+#include <desktop/crashreport.hxx>
+
 #if defined _MSC_VER
 #ifndef min
 #define min(a,b)    (((a) < (b)) ? (a) : (b))
@@ -100,6 +102,7 @@ void SalAbort( const OUString& rErrorText, bool )
     }
     else
     {
+        CrashReporter::AddKeyValue("AbortMessage", rErrorText);
         // make sure crash reporter is triggered
         RaiseException( 0, EXCEPTION_NONCONTINUABLE, 0, nullptr );
         FatalAppExitW( 0, reinterpret_cast<LPCWSTR>(rErrorText.getStr()) );
