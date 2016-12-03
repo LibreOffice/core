@@ -277,8 +277,8 @@ if (SOLAR_JAVA==TRUE && SYSTEM_BSH!=YES)
 if (ENABLE_CATEGORY_B==YES && SYSTEM_COINMP!=YES)
     MD5 = 1cce53bf4b40ae29790d2c5c9f8b1129
     name = CoinMP-1.7.6.tgz
-    # URL1 = $(OOO_EXTRAS)$(MD5)-$(name)
     URL1 = https://www.coin-or.org/download/source/CoinMP/$(name)
+    URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (WITH_CATB_FONTS==YES)
     MD5 = c74b7223abe75949b4af367942d96c7a
