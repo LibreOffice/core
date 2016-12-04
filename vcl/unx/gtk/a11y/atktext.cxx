@@ -494,12 +494,20 @@ text_wrapper_get_run_attributes( AtkText        *text,
 
         css::uno::Reference<css::accessibility::XAccessibleText> pText
             = getText( text );
-        css::uno::Reference<css::accessibility::XAccessibleTextAttributes>
-            pTextAttributes = getTextAttributes( text );
-        if( pText.is() && pTextAttributes.is() )
+        if( pText.is())
         {
-            uno::Sequence< beans::PropertyValue > aAttributeList =
-                pTextAttributes->getRunAttributes( offset, uno::Sequence< OUString > () );
+            uno::Sequence< beans::PropertyValue > aAttributeList;
+
+            css::uno::Reference<css::accessibility::XAccessibleTextAttributes>
+                pTextAttributes = getTextAttributes( text );
+            if(pTextAttributes.is()) // Text attributes are available for paragraphs only
+            {
+                aAttributeList = pTextAttributes->getRunAttributes( offset, uno::Sequence< OUString > () );
+            }
+            else // For other text objects use character attributes
+            {
+                aAttributeList = pText->getCharacterAttributes( offset, uno::Sequence< OUString > () );
+            }
 
             pSet = attribute_set_new_from_property_values( aAttributeList, true, text );
             //  #i100938#
