@@ -2287,21 +2287,19 @@ static void lcl_eraseImpl( SbxVariableRef& refVar, bool bVBAEnabled )
         {
             SbxBase* pElemObj = refVar->GetObject();
             SbxDimArray* pDimArray = dynamic_cast<SbxDimArray*>( pElemObj );
-            bool bClearValues = true;
             if( pDimArray )
             {
                 if ( pDimArray->hasFixedSize() )
                 {
                     // Clear all Value(s)
                     pDimArray->SbxArray::Clear();
-                    bClearValues = false;
                 }
                 else
                 {
-                    pDimArray->Clear(); // clear Dims
+                    pDimArray->Clear(); // clear dims and values
                 }
             }
-            if ( bClearValues )
+            else
             {
                 SbxArray* pArray = dynamic_cast<SbxArray*>( pElemObj );
                 if ( pArray )
