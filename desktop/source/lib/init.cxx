@@ -601,6 +601,7 @@ void CallbackFlushHandler::callback(const int type, const char* payload, void* d
 void CallbackFlushHandler::queue(const int type, const char* data)
 {
     std::string payload(data ? data : "(nil)");
+    //SAL_WARN("lok", "Queue: " << type << " : " << payload);
     if (m_bPartTilePainting)
     {
         // We drop notifications when this is set, except for important ones.
@@ -617,7 +618,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
             type != LOK_CALLBACK_VIEW_CURSOR_VISIBLE &&
             type != LOK_CALLBACK_TEXT_SELECTION)
         {
-            SAL_WARN("lok", "Skipping while painting [" + std::to_string(type) + "]: [" + payload + "].");
+            SAL_WARN("lok", "Skipping while painting [" << type << "]: [" << payload << "].");
             return;
         }
 
@@ -634,7 +635,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
         // issuing it, instead of the absolute one that we expect.
         // This is temporary however, and, once the control is created and initialized
         // correctly, it eventually emits the correct absolute coordinates.
-        SAL_WARN("lok", "Skipping invalid event [" + std::to_string(type) + "]: [" + payload + "].");
+        SAL_WARN("lok", "Skipping invalid event [" << type << "]: [" << payload << "].");
         return;
     }
 
@@ -665,7 +666,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
 
             if (pos != m_queue.rend() && pos->second == payload)
             {
-                //SAL_WARN("lok", "Skipping queue duplicate [" + std::to_string(type) + "]: [" + payload + "].");
+                //SAL_WARN("lok", "Skipping queue duplicate [" << type << + "]: [" << payload << "].");
                 return;
             }
         }
@@ -714,6 +715,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
             case LOK_CALLBACK_GRAPHIC_SELECTION:
             case LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
             case LOK_CALLBACK_INVALIDATE_TILES:
+                //SAL_WARN("lok", "Removing dups of [" << type << "]: [" << payload << "].");
                 removeAll([type] (const queue_type::value_type& elem) { return (elem.first == type); });
             break;
         }
@@ -773,7 +775,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
                 //SAL_WARN("lok", "New: " << rcNew.toString());
                 if (rcNew.isInfinite())
                 {
-                    SAL_WARN("lok", "Have Empty [" << type << "]: [" << payload << "] so removing all.");
+                    SAL_WARN("lok", "Have Empty [" << type << "]: [" << payload << "] so removing all with part " << rcNew.m_nPart << ".");
                     removeAll(
                         [type, &rcNew] (const queue_type::value_type& elem) {
                             if (elem.first == type)
@@ -792,6 +794,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
                 {
                     const auto rcOrig = rcNew;
 
+                    //SAL_WARN("lok", "Have [" << type << "]: [" << payload << "] so merging overlapping.");
                     removeAll(
                         [type, &rcNew] (const queue_type::value_type& elem) {
                             if (elem.first == type)
@@ -799,14 +802,15 @@ void CallbackFlushHandler::queue(const int type, const char* data)
                                 const RectangleAndPart rcOld = RectangleAndPart::Create(elem.second);
                                 if (rcOld.m_nPart != rcNew.m_nPart)
                                     return false;
-                                //SAL_WARN("lok", "#" << i << " Old: " << rcOld.toString());
+
                                 const Rectangle rcOverlap = rcNew.m_aRectangle.GetIntersection(rcOld.m_aRectangle);
-                                //SAL_WARN("lok", "#" << i << " Overlap: " << rcOverlap.toString());
                                 bool bOverlap = (rcOverlap.GetWidth() > 0 && rcOverlap.GetHeight() > 0);
+                                SAL_WARN("lok", "Merging " << rcNew.toString() << " & " << rcOld.toString() << " => " <<
+                                         rcOverlap.toString() << " Overlap: " << bOverlap);
                                 if (bOverlap)
                                 {
-                                    //SAL_WARN("lok", rcOld.toString() << " U " << rcNew.toString());
                                     rcNew.m_aRectangle.Union(rcOld.m_aRectangle);
+                                    SAL_WARN("lok", "Merged: " << rcNew.toString());
                                 }
                                 return bOverlap;
                             }
@@ -820,6 +824,12 @@ void CallbackFlushHandler::queue(const int type, const char* data)
                     if (rcNew.m_aRectangle != rcOrig.m_aRectangle)
                     {
                         SAL_WARN("lok", "Replacing: " << rcOrig.toString() << " by " << rcNew.toString());
+                        if (rcNew.m_aRectangle.GetWidth() < rcOrig.m_aRectangle.GetWidth() ||
+                            rcNew.m_aRectangle.GetHeight() < rcOrig.m_aRectangle.GetHeight())
+                        {
+                            SAL_WARN("lok", "Error: merged rect smaller.");
+                        }
+
                         payload = rcNew.toString().getStr();
                     }
                 }
@@ -847,6 +857,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
     }
 
     m_queue.emplace_back(type, payload);
+    SAL_WARN("lok", "Queued [" << type << "]: [" << payload << "] to have " << m_queue.size() << " entries.");
 
     lock.unlock();
     if (!IsActive())
@@ -861,6 +872,7 @@ void CallbackFlushHandler::Invoke()
     {
         std::unique_lock<std::mutex> lock(m_mutex);
 
+        //SAL_WARN("lok", "Flushing " << m_queue.size() << " elements.");
         for (auto& pair : m_queue)
         {
             const int type = pair.first;
@@ -875,7 +887,7 @@ void CallbackFlushHandler::Invoke()
                     // If the state didn't change, it's safe to ignore.
                     if (stateIt->second == payload)
                     {
-                        //SAL_WARN("lok", "Skipping duplicate [" + std::to_string(type) + "]: [" + payload + "].");
+                        //SAL_WARN("lok", "Skipping duplicate [" << type << "]: [" << payload << "].");
                         continue;
                     }
 
@@ -894,24 +906,26 @@ void CallbackFlushHandler::Invoke()
                         // If the state didn't change, it's safe to ignore.
                         if (stateIt->second == payload)
                         {
-                            //SAL_WARN("lok", "Skipping view duplicate [" + std::to_string(type) + "," + std::to_string(viewId) + "]: [" + payload + "].");
+                            //SAL_WARN("lok", "Skipping view duplicate [" << type << ',' << viewId << "]: [" << payload << "].");
                             continue;
                         }
 
                         stateIt->second = payload;
-                        //SAL_WARN("lok", "Replacing an element in view states [" + std::to_string(type) + "," + std::to_string(viewId) + "]: [" + payload + "].");
+                        //SAL_WARN("lok", "Replacing an element in view states [" << type << ',' << viewId << "]: [" << payload << "].");
                     }
                     else
                     {
                         states.emplace(type, payload);
-                        //SAL_WARN("lok", "Inserted a new element in view states: [" + std::to_string(type) + "," + std::to_string(viewId) + "]: [" + payload + "]");
+                        //SAL_WARN("lok", "Inserted a new element in view states: [" << type << ',' << viewId << "]: [" << payload << "]");
                     }
                 }
             }
 
+            //SAL_WARN("lok", "Emitting [" << type << "]: [" << payload << "].");
             m_pCallback(type, payload.c_str(), m_pData);
         }
 
+        //SAL_WARN("lok", "Done flushing.");
         m_queue.clear();
     }
 }
