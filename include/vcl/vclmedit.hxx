@@ -32,6 +32,8 @@ class TextView;
 
 class VCL_DLLPUBLIC VclMultiLineEdit : public Edit
 {
+    friend class VCLXAccessibleEdit;
+
 private:
     ImpVclMEdit*      pImpVclMEdit;
 
