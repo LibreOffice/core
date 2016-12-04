@@ -2521,7 +2521,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
     //////////////////////// handle (POLAR) we will convert the adjustment value from a fixed float to double
 
     // checking the last used adjustment handle, so we can determine how many handles are to allocate
-    sal_Int32 i = DFF_Prop_adjust10Value;
+    sal_uInt32 i = DFF_Prop_adjust10Value;
     while ( ( i >= DFF_Prop_adjustValue ) && !IsProperty( i ) )
         i--;
     sal_Int32 nAdjustmentValues = ( i - DFF_Prop_adjustValue ) + 1;
