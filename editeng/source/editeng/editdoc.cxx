@@ -552,19 +552,18 @@ void ExtraPortionInfo::SaveOrgDXArray( const long* pDXArray, sal_Int32 nLen )
         pOrgDXArray = nullptr;
 }
 
-ParaPortion::ParaPortion( ContentNode* pN )
+ParaPortion::ParaPortion( ContentNode* pN ) :
+    pNode(pN),
+    nHeight(0),
+    nInvalidPosStart(0),
+    nFirstLineOffset(0),
+    nBulletX(0),
+    nInvalidDiff(0),
+    bInvalid(true),
+    bSimple(false),
+    bVisible(true),
+    bForceRepaint(false)
 {
-
-    pNode               = pN;
-    bInvalid            = true;
-    bVisible            = true;
-    bSimple             = false;
-    bForceRepaint       = false;
-    nInvalidPosStart    = 0;
-    nInvalidDiff        = 0;
-    nHeight             = 0;
-    nFirstLineOffset    = 0;
-    nBulletX            = 0;
 }
 
 ParaPortion::~ParaPortion()
@@ -964,38 +963,36 @@ void ConvertAndPutItems( SfxItemSet& rDest, const SfxItemSet& rSource, const Map
 }
 
 EditLine::EditLine() :
+    nTxtWidth(0),
+    nStartPosX(0),
+    nStart(0),
+    nEnd(0),
+    nStartPortion(0),   // to be able to tell the difference between a line
+                        // without Portions from one with the Portion number 0
+    nEndPortion(0),
+    nHeight(0),
+    nTxtHeight(0),
+    nCrsrHeight(0),
+    nMaxAscent(0),
     bHangingPunctuation(false),
     bInvalid(true)
 {
-
-    nStart = nEnd = 0;
-    nStartPortion = 0;  // to be able to tell the difference between a line
-                        // without Portions from one with the Portion number 0
-    nEndPortion = 0;
-    nHeight = 0;
-    nStartPosX = 0;
-    nTxtHeight = 0;
-    nTxtWidth = 0;
-    nCrsrHeight = 0;
-    nMaxAscent = 0;
 }
 
 EditLine::EditLine( const EditLine& r ) :
+    nTxtWidth(0),
+    nStartPosX(0),
+    nStart(r.nStart),
+    nEnd(r.nEnd),
+    nStartPortion(r.nStartPortion),
+    nEndPortion(r.nEndPortion),
+    nHeight(0),
+    nTxtHeight(0),
+    nCrsrHeight(0),
+    nMaxAscent(0),
     bHangingPunctuation(r.bHangingPunctuation),
     bInvalid(true)
 {
-
-    nEnd = r.nEnd;
-    nStart = r.nStart;
-    nStartPortion = r.nStartPortion;
-    nEndPortion = r.nEndPortion;
-
-    nHeight = 0;
-    nStartPosX = 0;
-    nTxtHeight = 0;
-    nTxtWidth = 0;
-    nCrsrHeight = 0;
-    nMaxAscent = 0;
 }
 
 EditLine::~EditLine()
@@ -1188,19 +1185,16 @@ EditSelection::EditSelection()
 {
 }
 
-EditSelection::EditSelection( const EditPaM& rStartAndAnd )
+EditSelection::EditSelection( const EditPaM& rStartAndAnd ) :
+    aStartPaM(rStartAndAnd),
+    aEndPaM(rStartAndAnd)
 {
-    // could still be optimized!
-    // do no first call the Def-constructor from PaM!
-    aStartPaM = rStartAndAnd;
-    aEndPaM = rStartAndAnd;
 }
 
-EditSelection::EditSelection( const EditPaM& rStart, const EditPaM& rEnd )
+EditSelection::EditSelection( const EditPaM& rStart, const EditPaM& rEnd ) :
+    aStartPaM(rStart),
+    aEndPaM(rEnd)
 {
-    // could still be optimized!
-    aStartPaM = rStart;
-    aEndPaM = rEnd;
 }
 
 EditSelection& EditSelection::operator = ( const EditPaM& rPaM )
