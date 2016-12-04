@@ -406,9 +406,9 @@ sal_Bool ZipPackageStream::ParsePackageRawStream()
         {
             const sal_Int8 *pHeader = aHeader.getConstArray();
             sal_uInt32 nHeader = ( pHeader [0] & 0xFF )       |
-                                 ( pHeader [1] & 0xFF ) << 8  |
-                                 ( pHeader [2] & 0xFF ) << 16 |
-                                 ( pHeader [3] & 0xFF ) << 24;
+                                ( pHeader [1] & 0xFF ) << 8  |
+                                ( pHeader [2] & 0xFF ) << 16 |
+                                ( pHeader [3] & 0xFF ) << 24;
             if ( nHeader == n_ConstHeader )
             {
                 // this is one of our god-awful, but extremely devious hacks, everyone cheer
@@ -720,7 +720,7 @@ void SAL_CALL ZipPackageStream::setPropertyValue( const OUString& aPropertyName,
             if ( sMediaType.getLength() > 0 )
             {
                 if ( sMediaType.indexOf ( OUString( RTL_CONSTASCII_USTRINGPARAM ( "text" ) ) ) != -1
-                 || sMediaType.equals( OUString( RTL_CONSTASCII_USTRINGPARAM ( "application/vnd.sun.star.oleobject" ) ) ) )
+                || sMediaType.equals( OUString( RTL_CONSTASCII_USTRINGPARAM ( "application/vnd.sun.star.oleobject" ) ) ) )
                     bToBeCompressed = sal_True;
                 else if ( !m_bCompressedIsSetFromOutside )
                     bToBeCompressed = sal_False;

@@ -76,6 +76,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     odbc \
     odbcbase \
     oox \
+    package2 \
     qstart_gtk \
     rpt \
     rptui \
@@ -117,6 +118,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     xcr \
     xo \
     xof \
+    xstor \
 ))
 
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \

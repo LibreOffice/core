@@ -390,7 +390,7 @@ void SAL_CALL OZipFileAccess::dispose()
 
     if ( m_pListenersContainer )
     {
-           lang::EventObject aSource( static_cast< ::cppu::OWeakObject* >(this) );
+        lang::EventObject aSource( static_cast< ::cppu::OWeakObject* >(this) );
         m_pListenersContainer->disposeAndClear( aSource );
         delete m_pListenersContainer;
         m_pListenersContainer = NULL;

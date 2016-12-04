@@ -21,39 +21,5 @@
 
 
 
-PRJ=..$/..
-PRJNAME=package
-TARGET=zippackage
-AUTOSEG=true
-
-ENABLE_EXCEPTIONS=TRUE
-
-# --- Settings -----------------------------------------------------
-
-.INCLUDE : settings.mk
-
-.IF "$(L10N_framework)"==""
-
-# --- Files --------------------------------------------------------
-# the following flag un-inlines function calls and disables optimisations
-#CFLAGS+=/Ob0 /Od
-
-SLOFILES= \
-        $(SLO)$/ZipPackage.obj			\
-        $(SLO)$/ZipPackageBuffer.obj	\
-        $(SLO)$/ZipPackageEntry.obj		\
-        $(SLO)$/ZipPackageFolder.obj	\
-        $(SLO)$/ZipPackageFolderEnumeration.obj	\
-        $(SLO)$/ZipPackageSink.obj		\
-        $(SLO)$/ZipPackageStream.obj	\
-        $(SLO)$/wrapstreamforshare.obj	\
-        $(SLO)$/zipfileaccess.obj
-
-#		$(SLO)$/InteractionRequest.obj  \
-#		$(SLO)$/InteractionContinuation.obj
-
-.ENDIF # L10N_framework
-
-# --- Targets ------------------------------------------------------
-
-.INCLUDE : target.mk
+$(eval $(call gb_Package_Package,package_dtd,$(SRCDIR)/package/dtd))
+$(eval $(call gb_Package_add_file,package_dtd,bin/Manifest.dtd,Manifest.dtd))

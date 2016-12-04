@@ -480,7 +480,7 @@ sal_Bool ZipFile::StaticHasValidPassword( const uno::Reference< lang::XMultiServ
     if (  rData->m_aDigest.getLength() != 0  &&
           ( aDigestSeq.getLength() != rData->m_aDigest.getLength() ||
             0 != rtl_compareMemory ( aDigestSeq.getConstArray(),
-                                     rData->m_aDigest.getConstArray(),
+                                    rData->m_aDigest.getConstArray(),
                                     aDigestSeq.getLength() ) ) )
     {
         // We should probably tell the user that the password they entered was wrong
@@ -913,7 +913,7 @@ sal_Int32 ZipFile::recover()
                                 // read always in UTF8, some tools seem not to set UTF8 bit
                                 if( nPos + 30 + aEntry.nPathLen <= nBufSize )
                                     aEntry.sPath = OUString ( (sal_Char *) &pBuffer[nPos + 30],
-                                                                  aEntry.nPathLen,
+                                                                aEntry.nPathLen,
                                                                 RTL_TEXTENCODING_UTF8 );
                                 else
                                 {

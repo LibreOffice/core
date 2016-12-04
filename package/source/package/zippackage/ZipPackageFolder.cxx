@@ -169,7 +169,7 @@ void ZipPackageFolder::setChildStreamsTypeByExtension( const beans::StringPair& 
 
 void ZipPackageFolder::copyZipEntry( ZipEntry &rDest, const ZipEntry &rSource)
 {
-      rDest.nVersion            = rSource.nVersion;
+    rDest.nVersion          = rSource.nVersion;
     rDest.nFlag             = rSource.nFlag;
     rDest.nMethod           = rSource.nMethod;
     rDest.nTime             = rSource.nTime;

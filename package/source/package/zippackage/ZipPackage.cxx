@@ -123,7 +123,7 @@ sal_Bool isLocalFile_Impl( ::rtl::OUString aURL )
                 pBroker->getContentProviderManagerInterface();
         try
         {
-               aSystemPath = getSystemPathFromFileURL( xManager, aURL );
+            aSystemPath = getSystemPathFromFileURL( xManager, aURL );
         }
         catch ( Exception& )
         {
@@ -624,7 +624,7 @@ void SAL_CALL ZipPackage::initialize( const uno::Sequence< Any >& aArguments )
                         m_aURL = aParamUrl.copy( 0, nParam );
                         OUString aParam = aParamUrl.copy( nParam + 1 );
 
-                          sal_Int32 nIndex = 0;
+                        sal_Int32 nIndex = 0;
                         do
                         {
                             ::rtl::OUString aCommand = aParam.getToken( 0, '&', nIndex );
@@ -1369,10 +1369,10 @@ uno::Reference< XActiveDataStreamer > ZipPackage::openOriginalForOutput()
             }
 
             OpenCommandArgument2 aArg;
-               aArg.Mode        = OpenMode::DOCUMENT;
-               aArg.Priority    = 0; // unused
-               aArg.Sink       = xSink;
-               aArg.Properties = uno::Sequence< Property >( 0 ); // unused
+            aArg.Mode       = OpenMode::DOCUMENT;
+            aArg.Priority   = 0; // unused
+            aArg.Sink       = xSink;
+            aArg.Properties = uno::Sequence< Property >( 0 ); // unused
 
             aOriginalContent.executeCommand( OUString::createFromAscii( "open" ), makeAny( aArg ) );
         }

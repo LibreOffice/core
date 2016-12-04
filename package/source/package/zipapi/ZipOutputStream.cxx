@@ -197,7 +197,7 @@ void SAL_CALL ZipOutputStream::write( const Sequence< sal_Int8 >& rBuffer, sal_I
             if (!aDeflater.finished())
             {
                 aDeflater.setInputSegment(rBuffer, nNewOffset, nNewLength);
-                 while (!aDeflater.needsInput())
+                while (!aDeflater.needsInput())
                     doDeflate();
                 if (!bEncryptCurrentEntry)
                     aCRC.updateSegment(rBuffer, nNewOffset, nNewLength);
@@ -421,7 +421,7 @@ sal_uInt32 ZipOutputStream::getCurrentDosTime( )
                                           ( 32 * (aDateTime.Month)) +
                                           ( 512 * nYear ) ) << 16) |
                                         ( ( aDateTime.Seconds/2) +
-                                            ( 32 * aDateTime.Minutes) +
+                                          ( 32 * aDateTime.Minutes) +
                                           ( 2048 * static_cast <sal_uInt32 > (aDateTime.Hours) ) ) );
     return nResult;
 }

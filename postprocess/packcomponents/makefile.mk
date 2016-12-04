@@ -85,6 +85,8 @@ my_components = \
     component/io/source/TextOutputStream/textoutstream \
     component/linguistic/source/lng \
     component/oox/util/oox \
+    component/package/source/xstor/xstor \
+    component/package/util/package2 \
     component/reportdesign/util/rptxml \
     component/reportdesign/util/rpt \
     component/reportdesign/util/rptui \
@@ -150,7 +152,6 @@ my_components = \
     odbc \
     offacc \
     oooimprovecore \
-    package2 \
     pcr \
     pdffilter \
     placeware \
@@ -192,7 +193,6 @@ my_components = \
     xmlfd \
     xmx \
     xsltdlg \
-    xstor \
     PresentationMinimizer \
     PresenterScreen
 

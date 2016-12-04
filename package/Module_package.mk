@@ -20,24 +20,13 @@
 #**************************************************************
 
 
-PRJ=..
 
-PRJNAME=package
-TARGET=inc
+$(eval $(call gb_Module_Module,package))
 
-# --- Settings -----------------------------------------------------
+$(eval $(call gb_Module_add_targets,package,\
+	Library_package2 \
+	Library_xstor \
+	Package_dtd \
+))
 
-.INCLUDE :  settings.mk
-
-# --- Files --------------------------------------------------------
-# --- Targets -------------------------------------------------------
-
-.INCLUDE :  target.mk
-
-.IF "$(ENABLE_PCH)"!=""
-ALLTAR : \
-    $(SLO)$/precompiled.pch \
-    $(SLO)$/precompiled_ex.pch
-    
-.ENDIF			# "$(ENABLE_PCH)"!=""
-
+# vim: set noet sw=4 ts=4:
