@@ -14,6 +14,9 @@ from testcollections_base import CollectionsTestBase
 from com.sun.star.beans import PropertyValue
 from com.sun.star.table import CellAddress
 
+# TextTable instance factory
+def getTextTableInstance(doc):
+    return doc.createInstance('com.sun.star.text.TextTable')
 
 # Tests behaviour of objects implementing XCellRange using the new-style
 # collection accessors
@@ -48,10 +51,10 @@ class TestXCellRange(CollectionsTestBase):
     def test_XCellRange_Table_Cell_00(self):
         # Given
         doc = self.createBlankTextDocument()
-        textTable = doc.createInstance('com.sun.star.text.TextTable')
-        textTable.initialize(10, 10)
+        text_table = getTextTableInstance(doc)
+        text_table.initialize(10, 10)
         cursor = doc.Text.createTextCursor()
-        doc.Text.insertTextContent(cursor, textTable, False)
+        doc.Text.insertTextContent(cursor, text_table, False)
         tbl = doc.TextTables.getByIndex(0)
 
         # When
@@ -86,10 +89,10 @@ class TestXCellRange(CollectionsTestBase):
     def test_XCellRange_Table_Cell_37(self):
         # Given
         doc = self.createBlankTextDocument()
-        textTable = doc.createInstance('com.sun.star.text.TextTable')
-        textTable.initialize(10, 10)
+        text_table = getTextTableInstance(doc)
+        text_table.initialize(10, 10)
         cursor = doc.Text.createTextCursor()
-        doc.Text.insertTextContent(cursor, textTable, False)
+        doc.Text.insertTextContent(cursor, text_table, False)
         tbl = doc.TextTables.getByIndex(0)
 
         # When
@@ -124,10 +127,10 @@ class TestXCellRange(CollectionsTestBase):
     def test_XCellRange_Table_Range_Index_Slice(self):
         # Given
         doc = self.createBlankTextDocument()
-        textTable = doc.createInstance('com.sun.star.text.TextTable')
-        textTable.initialize(10, 10)
+        text_table = getTextTableInstance(doc)
+        text_table.initialize(10, 10)
         cursor = doc.Text.createTextCursor()
-        doc.Text.insertTextContent(cursor, textTable, False)
+        doc.Text.insertTextContent(cursor, text_table, False)
         tbl = doc.TextTables.getByIndex(0)
         doc.lockControllers()
         tbl.DataArray = tuple(tuple(str(100 + y) for y in range(10*x, 10*x + 10)) for x in range(10))
@@ -165,10 +168,10 @@ class TestXCellRange(CollectionsTestBase):
     def test_XCellRange_Table_Range_Slice_Index(self):
         # Given
         doc = self.createBlankTextDocument()
-        textTable = doc.createInstance('com.sun.star.text.TextTable')
-        textTable.initialize(10, 10)
+        text_table = getTextTableInstance(doc)
+        text_table.initialize(10, 10)
         cursor = doc.Text.createTextCursor()
-        doc.Text.insertTextContent(cursor, textTable, False)
+        doc.Text.insertTextContent(cursor, text_table, False)
         tbl = doc.TextTables.getByIndex(0)
         doc.lockControllers()
         tbl.DataArray = tuple(tuple(str(100 + y) for y in range(10*x, 10*x + 10)) for x in range(10))
@@ -222,10 +225,10 @@ class TestXCellRange(CollectionsTestBase):
     def test_XCellRange_Table_Range_Slices(self):
         # Given
         doc = self.createBlankTextDocument()
-        textTable = doc.createInstance('com.sun.star.text.TextTable')
-        textTable.initialize(10, 10)
+        text_table = getTextTableInstance(doc)
+        text_table.initialize(10, 10)
         cursor = doc.Text.createTextCursor()
-        doc.Text.insertTextContent(cursor, textTable, False)
+        doc.Text.insertTextContent(cursor, text_table, False)
         tbl = doc.TextTables.getByIndex(0)
         doc.lockControllers()
         tbl.DataArray = tuple(tuple(str(100 + y) for y in range(10*x, 10*x + 10)) for x in range(10))
@@ -263,10 +266,10 @@ class TestXCellRange(CollectionsTestBase):
     def test_XCellRange_Table_Range_Descriptor(self):
         # Given
         doc = self.createBlankTextDocument()
-        textTable = doc.createInstance('com.sun.star.text.TextTable')
-        textTable.initialize(10, 10)
+        text_table = getTextTableInstance(doc)
+        text_table.initialize(10, 10)
         cursor = doc.Text.createTextCursor()
-        doc.Text.insertTextContent(cursor, textTable, False)
+        doc.Text.insertTextContent(cursor, text_table, False)
         tbl = doc.TextTables.getByIndex(0)
         doc.lockControllers()
         tbl.DataArray = tuple(tuple(str(100 + y) for y in range(10*x, 10*x + 10)) for x in range(10))

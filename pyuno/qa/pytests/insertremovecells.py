@@ -23,13 +23,13 @@ class InsertRemoveCells(unittest.TestCase):
 
         smgr = ctxt.ServiceManager
         desktop = smgr.createInstanceWithContext('com.sun.star.frame.Desktop', ctxt)
-        loadProps = tuple(mkPropertyValue(k, v) for (k, v) in (
+        load_props = tuple(mkPropertyValue(k, v) for (k, v) in (
           ('Hidden', True),
           ('ReadOnly', False)
         ))
         tdoc_dir = getenv('TDOC')
         url = 'file://' + quote(path.join(tdoc_dir, 'fdo74824.ods'))
-        doc = desktop.loadComponentFromURL(url, "_blank", 0, loadProps)
+        doc = desktop.loadComponentFromURL(url, "_blank", 0, load_props)
 
         sheet = doc.Sheets.Sheet1
         area = sheet.getCellRangeByName('A2:B4')
