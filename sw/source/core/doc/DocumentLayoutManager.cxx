@@ -347,20 +347,15 @@ SwFrameFormat *DocumentLayoutManager::CopyLayoutFormat(
     //                     2) anchored in a header/footer
     //                     3) anchored (to paragraph?)
     bool bMayNotCopy = false;
-    if( bDraw )
+    if(bDraw)
     {
-        const SwDrawContact* pDrawContact =
-            static_cast<const SwDrawContact*>( rSource.FindContactObj() );
-
+        const auto pCAnchor = rNewAnchor.GetContentAnchor();
+        bool bCheckControlLayer = false;
+        rSource.CallSwClientNotify(sw::CheckDrawFrameFormatLayerHint(&bCheckControlLayer));
         bMayNotCopy =
-            ((FLY_AT_PARA == rNewAnchor.GetAnchorId()) ||
-             (FLY_AT_FLY  == rNewAnchor.GetAnchorId()) ||
-             (FLY_AT_CHAR == rNewAnchor.GetAnchorId())) &&
-            rNewAnchor.GetContentAnchor() &&
-            m_rDoc.IsInHeaderFooter( rNewAnchor.GetContentAnchor()->nNode ) &&
-            pDrawContact != nullptr  &&
-            pDrawContact->GetMaster() != nullptr  &&
-            CheckControlLayer( pDrawContact->GetMaster() );
+            bCheckControlLayer &&
+            ((FLY_AT_PARA == rNewAnchor.GetAnchorId()) || (FLY_AT_FLY  == rNewAnchor.GetAnchorId()) || (FLY_AT_CHAR == rNewAnchor.GetAnchorId())) &&
+            pCAnchor && m_rDoc.IsInHeaderFooter(pCAnchor->nNode);
     }
 
     // just return if we can't copy this
