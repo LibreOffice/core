@@ -193,11 +193,11 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
             }
             else
             {
-                OSL_ENSURE(0,"OConnection::construct: ::ucbhelper::Content isn't a folde nor a document! How that?!");
+                OSL_ENSURE(0,"OConnection::construct: ::ucbhelper::Content is neither a folder nor a document! How's that?!");
                 throw SQLException();
             }
         }
-        catch(Exception& e) // a execption is thrown when no file exists
+        catch(Exception& e) // an exception is thrown when no file exists
         {
             throwUrlNotValid(getURL(),e.Message);
         }
