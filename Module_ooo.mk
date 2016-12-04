@@ -32,6 +32,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     dbaccess \
     drawinglayer \
     editeng \
+    fileaccess \
     formula \
     framework \
     idl \
