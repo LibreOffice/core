@@ -122,7 +122,7 @@ void SAL_CALL OutputStorageWrapper_Impl::closeOutput()
 }
 
 SvXMLEmbeddedObjectHelper::SvXMLEmbeddedObjectHelper() :
-    WeakComponentImplHelper2< XEmbeddedObjectResolver, XNameAccess >( maMutex ),
+    WeakComponentImplHelper< XEmbeddedObjectResolver, XNameAccess >( maMutex ),
     maReplacementGraphicsContainerStorageName( XML_CONTAINERSTORAGE_NAME ),
     maReplacementGraphicsContainerStorageName60( XML_CONTAINERSTORAGE_NAME_60 ),
     mpDocPersist( nullptr ),
@@ -132,7 +132,7 @@ SvXMLEmbeddedObjectHelper::SvXMLEmbeddedObjectHelper() :
 }
 
 SvXMLEmbeddedObjectHelper::SvXMLEmbeddedObjectHelper( ::comphelper::IEmbeddedHelper& rDocPersist, SvXMLEmbeddedObjectHelperMode eCreateMode ) :
-    WeakComponentImplHelper2< XEmbeddedObjectResolver, XNameAccess >( maMutex ),
+    WeakComponentImplHelper< XEmbeddedObjectResolver, XNameAccess >( maMutex ),
     maReplacementGraphicsContainerStorageName( XML_CONTAINERSTORAGE_NAME ),
     maReplacementGraphicsContainerStorageName60( XML_CONTAINERSTORAGE_NAME_60 ),
     mpDocPersist( nullptr ),

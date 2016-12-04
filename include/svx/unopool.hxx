@@ -21,8 +21,9 @@
 #define INCLUDED_SVX_UNOPOOL_HXX
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XTypeProvider.hpp>
 #include <comphelper/propertysethelper.hxx>
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/weakagg.hxx>
 #include <svx/svxdllapi.h>
 
 class SdrModel;
