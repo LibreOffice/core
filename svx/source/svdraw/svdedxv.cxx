@@ -2129,7 +2129,7 @@ sal_uInt16 SdrObjEditView::GetSelectionLevel() const
             nLevel = 0;
             for( sal_uInt16 nPara = nStartPara; nPara <= nEndPara; nPara++ )
             {
-                sal_uInt16 nParaDepth = 1 << pTextEditOutliner->GetDepth( nPara );
+                sal_uInt16 nParaDepth = 1 << static_cast<sal_uInt16>(pTextEditOutliner->GetDepth(nPara));
                 if( !(nLevel & nParaDepth) )
                     nLevel += nParaDepth;
             }
