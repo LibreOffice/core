@@ -2551,7 +2551,7 @@ WW8PLCFx_Fc_FKP::WW8Fkp::WW8Fkp(const WW8Fib& rFib, SvStream* pSt,
                         */
                         bool bExpand = IsExpandableSprm(nSpId);
                         const sal_uInt8* pStartData = aEntry.mpData + 2;
-                        const sal_uInt8* pLastValidDataPos = maRawData + sizeof(maRawData) - sizeof(sal_uInt32);
+                        const sal_uInt8* pLastValidDataPos = maRawData + 512 - sizeof(sal_uInt32);
                         if ((IsReplaceAllSprm(nSpId) || bExpand) && pStartData <= pLastValidDataPos)
                         {
                             sal_uInt32 nCurr = pDataSt->Tell();
