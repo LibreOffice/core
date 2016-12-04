@@ -6526,7 +6526,7 @@ _ACEOF
             dnl moot, though):
             my_linkflagsnoundefs=$LINKFLAGSNOUNDEFS
             if test "$COM_IS_CLANG" = TRUE; then
-                for i in $CXX; do
+                for i in $CXX $CXXFLAGS; do
                     case $i in
                     -fsanitize=*)
                         my_linkflagsnoundefs=
