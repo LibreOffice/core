@@ -35,10 +35,8 @@ GTK_TWO_FOUR=$(shell @+-$(PKG_CONFIG) --exists 'gtk+-2.0 >= 2.4.0' && echo YES)
 .END
 
 my_components = \
-    acceptor \
     binaryurp \
     bootstrap \
-    connector \
     introspection \
     invocadapt \
     invocation \
@@ -49,9 +47,6 @@ my_components = \
     proxyfac \
     reflection \
     stocservices \
-    streams \
-    textinstream \
-    textoutstream \
     uuresolver \
     abp \
     analysis \
@@ -83,6 +78,11 @@ my_components = \
     component/framework/util/fwk \
     component/framework/util/fwl \
     component/framework/util/fwm \
+    component/io/source/acceptor/acceptor \
+    component/io/source/connector/connector \
+    component/io/source/stm/streams \
+    component/io/source/TextInputStream/textinstream \
+    component/io/source/TextOutputStream/textoutstream \
     component/linguistic/source/lng \
     component/oox/util/oox \
     component/reportdesign/util/rptxml \

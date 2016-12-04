@@ -21,50 +21,24 @@
 
 
 
-$(eval $(call gb_Module_Module,ooo))
+PRJ=..
+TARGET=prj
 
-$(eval $(call gb_Module_add_moduledirs,ooo,\
-    basebmp \
-    basegfx \
-    canvas \
-    comphelper \
-    cppcanvas \
-    dbaccess \
-    drawinglayer \
-    editeng \
-    formula \
-    framework \
-    idl \
-    io \
-    linguistic \
-    offapi \
-    oovbaapi \
-    oox \
-    padmin \
-    reportdesign \
-    sax \
-    sd \
-    sfx2 \
-    sot \
-    starmath \
-    svgio \
-    svl \
-    svtools \
-    svx \
-    sw \
-    toolkit \
-    tools \
-    ucbhelper \
-    udkapi \
-    unotools \
-    unoxml \
-    vbahelper \
-    vcl \
-    wizards \
-    writerfilter \
-    xmloff \
-    xmlreader \
-    xmlscript \
-))
+.INCLUDE : settings.mk
 
-# vim: set noet ts=4 sw=4:
+.IF "$(VERBOSE)"!=""
+VERBOSEFLAG :=
+.ELSE
+VERBOSEFLAG := -s
+.ENDIF
+
+.IF "$(DEBUG)"!=""
+DEBUG_ARGUMENT=DEBUG=$(DEBUG)
+.ELIF "$(debug)"!=""
+DEBUG_ARGUMENT=debug=$(debug)
+.ELSE
+DEBUG_ARGUMENT=
+.ENDIF
+
+all:
+    cd $(PRJ) && $(GNUMAKE) $(VERBOSEFLAG) -r -j$(MAXPROCESS) $(gb_MAKETARGET) $(DEBUG_ARGUMENT) && $(GNUMAKE) $(VERBOSEFLAG) -r deliverlog

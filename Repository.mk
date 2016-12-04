@@ -146,8 +146,10 @@ $(eval $(call gb_Helper_register_libraries,STLLIBS, \
 ))
 
 $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
+    acceptor \
     cairocanvas \
     canvasfactory \
+    connector \
     directx5canvas \
     directx9canvas \
     expwrap \
@@ -158,6 +160,9 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
     nullcanvas \
     passwordcontainer \
     simplecanvas \
+    streams \
+    textinstream \
+    textoutstream \
     vbaswobj \
     msforms \
     vclcanvas \

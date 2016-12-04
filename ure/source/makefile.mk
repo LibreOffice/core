@@ -30,10 +30,10 @@ ZIP1FLAGS = -r
 ZIP1LIST = uretest
 
 my_components = \
-    acceptor \
+    component/io/source/acceptor/acceptor \
     binaryurp \
     bootstrap \
-    connector \
+    component/io/source/connector/connector \
     introspection \
     invocadapt \
     invocation \
@@ -44,9 +44,9 @@ my_components = \
     proxyfac \
     reflection \
     stocservices \
-    streams \
-    textinstream \
-    textoutstream \
+    component/io/source/stm/streams \
+    component/io/source/TextInputStream/textinstream \
+    component/io/source/TextOutputStream/textoutstream \
     uuresolver
 
 .INCLUDE: settings.mk

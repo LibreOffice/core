@@ -37,6 +37,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include "acceptor.hxx"
+#include "io/dllapi.h"
 
 #define IMPLEMENTATION_NAME "com.sun.star.comp.io.Acceptor"
 #define SERVICE_NAME "com.sun.star.connection.Acceptor"
@@ -350,19 +351,19 @@ static struct ImplementationEntry g_entries[] =
 extern "C"
 {
 
-sal_Bool SAL_CALL component_canUnload( TimeValue *pTime )
+IO_DLLPUBLIC sal_Bool SAL_CALL component_canUnload( TimeValue *pTime )
 {
     return g_moduleCount.canUnload( &g_moduleCount , pTime );
 }
 
 //==================================================================================================
-void SAL_CALL component_getImplementationEnvironment(
+IO_DLLPUBLIC void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 //==================================================================================================
-void * SAL_CALL component_getFactory(
+IO_DLLPUBLIC void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
 {
     return component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey , g_entries );

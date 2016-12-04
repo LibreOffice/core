@@ -21,50 +21,38 @@
 
 
 
-$(eval $(call gb_Module_Module,ooo))
+$(eval $(call gb_Library_Library,acceptor))
 
-$(eval $(call gb_Module_add_moduledirs,ooo,\
-    basebmp \
-    basegfx \
-    canvas \
-    comphelper \
-    cppcanvas \
-    dbaccess \
-    drawinglayer \
-    editeng \
-    formula \
-    framework \
-    idl \
-    io \
-    linguistic \
-    offapi \
-    oovbaapi \
-    oox \
-    padmin \
-    reportdesign \
-    sax \
-    sd \
-    sfx2 \
-    sot \
-    starmath \
-    svgio \
-    svl \
-    svtools \
-    svx \
-    sw \
-    toolkit \
-    tools \
-    ucbhelper \
-    udkapi \
-    unotools \
-    unoxml \
-    vbahelper \
-    vcl \
-    wizards \
-    writerfilter \
-    xmloff \
-    xmlreader \
-    xmlscript \
+$(eval $(call gb_Library_add_precompiled_header,acceptor,$(SRCDIR)/io/inc/pch/precompiled_io))
+
+$(eval $(call gb_Library_set_componentfile,acceptor,io/source/acceptor/acceptor))
+
+$(eval $(call gb_Library_set_include,acceptor,\
+        $$(INCLUDE) \
+	-I$(SRCDIR)/io/inc \
+	-I$(SRCDIR)/io/inc/pch \
 ))
 
-# vim: set noet ts=4 sw=4:
+$(eval $(call gb_Library_add_defs,acceptor,\
+	-DIO_DLLIMPLEMENTATION \
+))
+
+$(eval $(call gb_Library_add_api,acceptor,\
+	udkapi \
+))
+
+$(eval $(call gb_Library_add_linked_libs,acceptor,\
+	cppuhelper \
+	cppu \
+	sal \
+	$(gb_STDLIBS) \
+))
+
+
+$(eval $(call gb_Library_add_exception_objects,acceptor,\
+	io/source/acceptor/acc_pipe \
+	io/source/acceptor/acc_socket \
+	io/source/acceptor/acceptor \
+))
+
+# vim: set noet sw=4 ts=4:

@@ -21,50 +21,14 @@
 
 
 
-$(eval $(call gb_Module_Module,ooo))
+$(eval $(call gb_Module_Module,io))
 
-$(eval $(call gb_Module_add_moduledirs,ooo,\
-    basebmp \
-    basegfx \
-    canvas \
-    comphelper \
-    cppcanvas \
-    dbaccess \
-    drawinglayer \
-    editeng \
-    formula \
-    framework \
-    idl \
-    io \
-    linguistic \
-    offapi \
-    oovbaapi \
-    oox \
-    padmin \
-    reportdesign \
-    sax \
-    sd \
-    sfx2 \
-    sot \
-    starmath \
-    svgio \
-    svl \
-    svtools \
-    svx \
-    sw \
-    toolkit \
-    tools \
-    ucbhelper \
-    udkapi \
-    unotools \
-    unoxml \
-    vbahelper \
-    vcl \
-    wizards \
-    writerfilter \
-    xmloff \
-    xmlreader \
-    xmlscript \
+$(eval $(call gb_Module_add_targets,io,\
+	Library_acceptor \
+	Library_connector \
+	Library_streams \
+	Library_textinstream \
+	Library_textoutstream \
 ))
 
-# vim: set noet ts=4 sw=4:
+# vim: set noet sw=4 ts=4:
