@@ -150,12 +150,12 @@ class TestXNameAccess(CollectionsTestBase):
             i += 1
 
         # When
-        readLinks = []
+        read_links = []
         for link in drw.Links:
-            readLinks.append(link)
+            read_links.append(link)
 
         # Then
-        self.assertEqual(['foo0', 'foo1'], readLinks)
+        self.assertEqual(['foo0', 'foo1'], read_links)
 
     # Tests syntax:
     #    itr = iter(obj)             # Named iterator (keys)

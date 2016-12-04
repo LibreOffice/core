@@ -26,20 +26,20 @@ class TestMixedNameIndex(CollectionsTestBase):
     def testWriterTextTableNameAndIndex(self):
         # Given
         doc = self.createBlankTextDocument()
-        textTable = doc.createInstance("com.sun.star.text.TextTable")
-        textTable.initialize(2, 2)
-        textTable.Name = 'foo'
+        text_table = doc.createInstance("com.sun.star.text.TextTable")
+        text_table.initialize(2, 2)
+        text_table.Name = 'foo'
         cursor = doc.Text.createTextCursor()
-        doc.Text.insertTextContent(cursor, textTable, False)
+        doc.Text.insertTextContent(cursor, text_table, False)
 
         # When
-        tableByName = doc.TextTables['foo']
-        tableByIndex = doc.TextTables[0]
+        table_by_name = doc.TextTables['foo']
+        table_by_index = doc.TextTables[0]
 
         # Then
-        self.assertEqual('foo', tableByName.Name)
-        self.assertEqual('foo', tableByIndex.Name)
-        self.assertEqual(tableByName, tableByIndex)
+        self.assertEqual('foo', table_by_name.Name)
+        self.assertEqual('foo', table_by_index.Name)
+        self.assertEqual(table_by_name, table_by_index)
 
 
 if __name__ == '__main__':
