@@ -301,7 +301,11 @@ FontSlant2Style(const uno::Any& rAny)
 {
     const gchar * value = nullptr;
 
-    switch( rAny.get<awt::FontSlant>() )
+    awt::FontSlant aFontSlant;
+    if(!(rAny >>= aFontSlant))
+        return nullptr;
+
+    switch( aFontSlant )
     {
         case awt::FontSlant_NONE:
             value = "normal";
