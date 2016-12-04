@@ -36,7 +36,6 @@
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/compbase5.hxx>
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/implbase5.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <vcl/vclptr.hxx>
 

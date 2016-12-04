@@ -31,7 +31,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/lang/NotInitializedException.hpp>
 
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/propshlp.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/uno3.hxx>
@@ -56,10 +56,9 @@ namespace svt
 #define     UNODIALOG_PROPERTY_PARENT       "ParentWindow"
 
 
-    typedef ::cppu::WeakImplHelper3 <   css::ui::dialogs::XExecutableDialog
-                                    ,   css::lang::XServiceInfo
-                                    ,   css::lang::XInitialization
-                                    >   OGenericUnoDialogBase;
+    typedef cppu::WeakImplHelper< css::ui::dialogs::XExecutableDialog,
+                                  css::lang::XServiceInfo,
+                                  css::lang::XInitialization > OGenericUnoDialogBase;
 
     /** abstract base class for implementing UNO objects representing dialogs (com.sun.star.awt::XDialog)
     */

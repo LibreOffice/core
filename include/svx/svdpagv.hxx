@@ -21,7 +21,6 @@
 #define INCLUDED_SVX_SVDPAGV_HXX
 
 #include <com/sun/star/awt/XControlContainer.hpp>
-#include <cppuhelper/implbase4.hxx>
 #include <rtl/ustring.hxx>
 #include <svl/lstner.hxx>
 #include <svx/svdhlpln.hxx>
@@ -29,7 +28,6 @@
 #include <svx/svdtypes.hxx>
 #include <svx/svxdllapi.h>
 
-#include <cppuhelper/implbase3.hxx>
 #include <vector>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 

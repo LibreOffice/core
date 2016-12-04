@@ -23,7 +23,7 @@
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 class SvxMacroTableDtor;
 class SvxMacroItem;
@@ -54,7 +54,7 @@ struct SvEventDescription
  * All details of how to actually get and set SvxMacroItem(s) have to
  * be supplied by the base class.
  */
-class SVT_DLLPUBLIC SvBaseEventDescriptor : public cppu::WeakImplHelper2
+class SVT_DLLPUBLIC SvBaseEventDescriptor : public cppu::WeakImplHelper
 <
     css::container::XNameReplace,
     css::lang::XServiceInfo
