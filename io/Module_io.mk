@@ -29,6 +29,7 @@ $(eval $(call gb_Module_add_targets,io,\
 	Library_streams \
 	Library_textinstream \
 	Library_textoutstream \
+	Package_xml \
 ))
 
 # vim: set noet sw=4 ts=4:

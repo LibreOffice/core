@@ -1,4 +1,4 @@
-#**************************************************************
+###############################################################
 #  
 #  Licensed to the Apache Software Foundation (ASF) under one
 #  or more contributor license agreements.  See the NOTICE file
@@ -17,15 +17,12 @@
 #  specific language governing permissions and limitations
 #  under the License.
 #  
-#**************************************************************
+###############################################################
 
 
 
-$(eval $(call gb_Module_Module,fileaccess))
+$(eval $(call gb_Package_Package,io_xml,$(SRCDIR)/io/source))
 
-$(eval $(call gb_Module_add_targets,fileaccess,\
-	Library_fileacc \
-	Package_xml \
-))
-
-# vim: set noet sw=4 ts=4:
+$(eval $(call gb_Package_add_file,io_xml,xml/acceptor.xml,acceptor/acceptor.xml))
+$(eval $(call gb_Package_add_file,io_xml,xml/connectr.xml,connector/connectr.xml))
+$(eval $(call gb_Package_add_file,io_xml,xml/stm.xml,stm/stm.xml))
