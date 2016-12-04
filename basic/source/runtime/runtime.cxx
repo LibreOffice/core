@@ -1400,11 +1400,11 @@ namespace
 {
     bool NeedEsc(sal_Unicode cCode)
     {
-        if((cCode & 0xFF80))
+        if(!rtl::isAscii(cCode))
         {
             return false;
         }
-        switch((sal_uInt8)(cCode & 0x07F))
+        switch(cCode)
         {
         case '.':
         case '^':
