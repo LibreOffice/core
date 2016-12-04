@@ -19,8 +19,6 @@ from com.sun.star.ui import XPanels
 from com.sun.star.ui import XPanel
 
 class CheckSidebar(unittest.TestCase):
-    _uno = None
-    _xDoc = None
 
     @classmethod
     def setUpClass(cls):
