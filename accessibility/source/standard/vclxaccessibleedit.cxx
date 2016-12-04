@@ -36,6 +36,10 @@
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/edit.hxx>
+#include <vcl/vclmedit.hxx>
+#include <vcl/textdata.hxx>
+#include <vcl/txtattr.hxx>
+#include <vcl/xtextedt.hxx>
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
 
@@ -305,8 +309,46 @@ sal_Unicode VCLXAccessibleEdit::getCharacter( sal_Int32 nIndex ) throw (IndexOut
 Sequence< PropertyValue > VCLXAccessibleEdit::getCharacterAttributes( sal_Int32 nIndex, const Sequence< OUString >& aRequestedAttributes ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
+    Sequence< PropertyValue > aProperties = VCLXAccessibleTextComponent::getCharacterAttributes( nIndex, aRequestedAttributes );
 
-    return VCLXAccessibleTextComponent::getCharacterAttributes( nIndex, aRequestedAttributes );
+    // Handle multiline edit character properties
+    VclPtr<VclMultiLineEdit> pMulitLineEdit = GetAsDynamic< VclMultiLineEdit >();
+    if ( pMulitLineEdit )
+    {
+        ExtTextEngine* pTextEngine = pMulitLineEdit->GetTextEngine();
+        TextPaM aCursor( 0, nIndex );
+        const TextAttribFontColor* pFontColor = static_cast<const TextAttribFontColor* >(pTextEngine->FindAttrib( aCursor, TEXTATTR_FONTCOLOR ));
+        if ( pFontColor )
+        {
+            for (PropertyValue& aValue : aProperties )
+            {
+                if (aValue.Name == "CharColor")
+                {
+                    aValue.Value = css::uno::makeAny(static_cast< sal_Int32 >(COLORDATA_RGB(pFontColor->GetColor().GetColor())));
+                    break;
+                }
+            }
+        }
+    }
+
+    // Set default character color if it is not set yet to a valid value
+    for (PropertyValue& aValue : aProperties )
+    {
+        if (aValue.Name == "CharColor")
+        {
+            if ( aValue.Value == sal_Int32(-1) )
+            {
+                OutputDevice* pDev = Application::GetDefaultDevice();
+                if ( pDev )
+                {
+                    aValue.Value = css::uno::makeAny(static_cast< sal_Int32 >(pDev->GetSettings().GetStyleSettings().GetFieldTextColor().GetColor()));
+                }
+            }
+            break;
+        }
+    }
+
+    return aProperties;
 }
 
 
