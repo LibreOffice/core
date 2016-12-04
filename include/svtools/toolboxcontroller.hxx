@@ -30,7 +30,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XUpdatable.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/proparrhlp.hxx>
@@ -46,7 +46,7 @@ class ToolBox;
 namespace svt
 {
 
-typedef cppu::WeakImplHelper5<
+typedef cppu::WeakImplHelper<
         css::frame::XStatusListener, css::frame::XToolbarController,
         css::lang::XInitialization, css::util::XUpdatable,
         css::lang::XComponent >

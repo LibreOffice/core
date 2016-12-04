@@ -22,14 +22,14 @@
 
 #include <svtools/svtdllapi.h>
 #include <tools/link.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/datatransfer/clipboard/XClipboardListener.hpp>
 
 namespace vcl { class Window; }
 
 class TransferableDataHelper;
 
-class SVT_DLLPUBLIC TransferableClipboardListener : public ::cppu::WeakImplHelper1<
+class SVT_DLLPUBLIC TransferableClipboardListener : public cppu::WeakImplHelper<
                             css::datatransfer::clipboard::XClipboardListener >
 {
     Link<TransferableDataHelper*,void>  aLink;

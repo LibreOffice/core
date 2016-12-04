@@ -25,7 +25,7 @@
 #include <com/sun/star/datatransfer/dnd/XDropTargetListener.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <sot/exchange.hxx>
 
@@ -35,7 +35,7 @@ namespace com { namespace sun { namespace star { namespace uno {
 
 /** DropTargetListener that takes care of opening a file when it is dropped in the frame.
 */
-class SVT_DLLPUBLIC OpenFileDropTargetListener : public ::cppu::WeakImplHelper1< css::datatransfer::dnd::XDropTargetListener >
+class SVT_DLLPUBLIC OpenFileDropTargetListener : public cppu::WeakImplHelper< css::datatransfer::dnd::XDropTargetListener >
 {
     private:
         /// uno service manager to create necessary services

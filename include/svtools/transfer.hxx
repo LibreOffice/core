@@ -27,8 +27,7 @@
 #include <tools/ref.hxx>
 #include <sot/formats.hxx>
 #include <sot/exchange.hxx>
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/datatransfer/XTransferable2.hpp>
@@ -122,7 +121,7 @@ struct ExecuteDropEvent
         mbDefault( false ) {}
 };
 
-class SVT_DLLPUBLIC TransferableHelper : public ::cppu::WeakImplHelper4< css::datatransfer::XTransferable2,
+class SVT_DLLPUBLIC TransferableHelper : public cppu::WeakImplHelper< css::datatransfer::XTransferable2,
                                                            css::datatransfer::clipboard::XClipboardOwner,
                                                            css::datatransfer::dnd::XDragSourceListener,
                                                            css::lang::XUnoTunnel >
@@ -130,7 +129,7 @@ class SVT_DLLPUBLIC TransferableHelper : public ::cppu::WeakImplHelper4< css::da
 private:
 
     // nested class to implement the XTerminateListener interface
-    class TerminateListener : public ::cppu::WeakImplHelper1< css::frame::XTerminateListener >
+    class TerminateListener : public cppu::WeakImplHelper< css::frame::XTerminateListener >
     {
     private:
 
@@ -370,7 +369,7 @@ class SVT_DLLPUBLIC DragSourceHelper
 private:
 
     // nested class to implement the XDragGestureListener interface
-    class DragGestureListener : public ::cppu::WeakImplHelper1< css::datatransfer::dnd::XDragGestureListener >
+    class DragGestureListener : public cppu::WeakImplHelper< css::datatransfer::dnd::XDragGestureListener >
     {
     private:
 
@@ -416,7 +415,7 @@ class SVT_DLLPUBLIC DropTargetHelper
 private:
 
     // nested class to implement the XDropTargetListener interface
-    class DropTargetListener : public ::cppu::WeakImplHelper1< css::datatransfer::dnd::XDropTargetListener >
+    class DropTargetListener : public cppu::WeakImplHelper< css::datatransfer::dnd::XDropTargetListener >
     {
     private:
 

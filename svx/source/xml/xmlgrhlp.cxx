@@ -345,14 +345,14 @@ const GraphicObject& SvXMLGraphicOutputStream::GetGraphicObject()
 }
 
 SvXMLGraphicHelper::SvXMLGraphicHelper( SvXMLGraphicHelperMode eCreateMode ) :
-    ::cppu::WeakComponentImplHelper2< css::document::XGraphicObjectResolver,
+    cppu::WeakComponentImplHelper< css::document::XGraphicObjectResolver,
                                       css::document::XBinaryStreamResolver >( maMutex )
 {
     Init( nullptr, eCreateMode, false );
 }
 
 SvXMLGraphicHelper::SvXMLGraphicHelper()
-    : ::cppu::WeakComponentImplHelper2< css::document::XGraphicObjectResolver,
+    : cppu::WeakComponentImplHelper< css::document::XGraphicObjectResolver,
                                       css::document::XBinaryStreamResolver >( maMutex )
     , meCreateMode(SvXMLGraphicHelperMode::Read)
     , mbDirect(false)

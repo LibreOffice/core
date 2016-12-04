@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVX_SMARTTAGMGR_HXX
 #define INCLUDED_SVX_SMARTTAGMGR_HXX
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/util/XModifyListener.hpp>
@@ -81,7 +81,7 @@ struct ActionReference
     This class organizes the available smarttag libraries and provides access functions
     to these libraries. The smart tag manager is a singleton.
 */
-class SVX_DLLPUBLIC SmartTagMgr : public cppu::WeakImplHelper2< css::util::XModifyListener,
+class SVX_DLLPUBLIC SmartTagMgr : public cppu::WeakImplHelper< css::util::XModifyListener,
                                                                 css::util::XChangesListener >
 {
 private:
