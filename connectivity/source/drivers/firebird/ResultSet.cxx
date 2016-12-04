@@ -456,17 +456,17 @@ ORowSetValue OResultSet::retrieveValue(const sal_Int32 nColumnIndex, const ISC_S
         case SQL_VARYING:
             return getString(nColumnIndex);
         case SQL_SHORT:
-            if(nSqlSubType == 0 || nSqlSubType == 1) //numeric or decimal
+            if(nSqlSubType == 1 || nSqlSubType == 2) //numeric or decimal
                 return getString(nColumnIndex);
             return getShort(nColumnIndex);
         case SQL_LONG:
-            if(nSqlSubType == 0 || nSqlSubType == 1) //numeric or decimal
+            if(nSqlSubType == 1 || nSqlSubType == 2) //numeric or decimal
                 return getString(nColumnIndex);
             return getInt(nColumnIndex);
         case SQL_FLOAT:
             return getFloat(nColumnIndex);
         case SQL_DOUBLE:
-            if(nSqlSubType == 0 || nSqlSubType == 1) //numeric or decimal
+            if(nSqlSubType == 1 || nSqlSubType == 2) //numeric or decimal
                 return getString(nColumnIndex);
             return getDouble(nColumnIndex);
         case SQL_D_FLOAT:
@@ -478,7 +478,7 @@ ORowSetValue OResultSet::retrieveValue(const sal_Int32 nColumnIndex, const ISC_S
         case SQL_TYPE_DATE:
             return getDate(nColumnIndex);
         case SQL_INT64:
-            if(nSqlSubType == 0 || nSqlSubType == 1) //numeric or decimal
+            if(nSqlSubType == 1 || nSqlSubType == 2) //numeric or decimal
                 return getString(nColumnIndex);
             return getLong(nColumnIndex);
         case SQL_BLOB:
