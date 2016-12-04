@@ -36,7 +36,7 @@ using uno::Exception;
 using uno::RuntimeException;
 using uno::XComponentContext;
 
-namespace MSWorksCalcImportFilterInternal
+namespace
 {
 
 /// returns the list of stream name present in a folder
@@ -54,7 +54,7 @@ try
 }
 catch (...)
 {
-    SAL_WARN("writerperfect", "ignoring Exception in MSWorksCalcImportFilterInternal:getResultSet");
+    SAL_WARN("writerperfect", "ignoring Exception in getResultSet");
     return uno::Reference<sdbc::XResultSet>();
 }
 
@@ -183,7 +183,7 @@ librevenge::RVNGInputStream *FolderStream::getSubStreamByName(const char *name)
     }
     catch (...)
     {
-        SAL_WARN("writerperfect", "ignoring Exception in MSWorksCalcImportFilterInternal::FolderStream::getSubStreamByName");
+        SAL_WARN("writerperfect", "ignoring Exception in FolderStream::getSubStreamByName");
     }
 
     return nullptr;
@@ -311,7 +311,7 @@ throw (css::uno::RuntimeException, std::exception)
                 rtl::OUString sWM3Name;
                 rtl::OUString sFM3Name;
                 const css::uno::Reference < ucb::XContent > xPackageContent(xChild->getParent(), uno::UNO_QUERY);
-                uno::Reference<sdbc::XResultSet> xResultSet=MSWorksCalcImportFilterInternal::getResultSet(xPackageContent);
+                uno::Reference<sdbc::XResultSet> xResultSet = getResultSet(xPackageContent);
                 if (xResultSet.is() && xResultSet->first())
                 {
                     const uno::Reference<ucb::XContentAccess> xContentAccess(xResultSet, uno::UNO_QUERY_THROW);
@@ -330,7 +330,7 @@ throw (css::uno::RuntimeException, std::exception)
                 }
                 if (!sFM3Name.isEmpty())
                 {
-                    MSWorksCalcImportFilterInternal::FolderStream structuredInput(xPackageContent);
+                    FilterInternal::FolderStream structuredInput(xPackageContent);
                     structuredInput.addFile(sWM3Name,"WK3");
                     structuredInput.addFile(sFM3Name,"FM3");
 
