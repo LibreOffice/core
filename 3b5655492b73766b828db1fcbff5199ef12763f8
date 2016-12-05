@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "3a71b18c_4f968e95",
+        "filename": "sfx2/uiconfig/ui/helpmanual.ui",
+        "patchSetId": 6
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-12-05T13:14:09Z",
+      "side": 1,
+      "message": "Oh, and I\u0027d make this \"cancel\", \"close\" would make the user believe the entire Libreoffice window\u0027s gonna be closed ... but no strong opinions here really",
+      "revId": "3b5655492b73766b828db1fcbff5199ef12763f8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a71b18c_0f7c9671",
         "filename": "vcl/source/src/app.src",
         "patchSetId": 6
