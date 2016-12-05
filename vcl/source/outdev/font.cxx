@@ -292,9 +292,16 @@ void OutputDevice::ImplGetEmphasisMark( tools::PolyPolygon& rPolyPoly, bool& rPo
                                         FontEmphasisMark eEmphasis,
                                         long nHeight, short /*nOrient*/ )
 {
-    static const sal_uInt8 aAccentPolyFlags[24] =
+    static const PolyFlags aAccentPolyFlags[24] =
     {
-        0, 2, 2, 0, 2, 2, 0, 2, 2, 0, 2, 2, 0, 2, 2, 0, 2, 2, 0, 0, 2, 0, 2, 2
+        PolyFlags::Normal, PolyFlags::Control, PolyFlags::Control,
+        PolyFlags::Normal, PolyFlags::Control, PolyFlags::Control,
+        PolyFlags::Normal, PolyFlags::Control, PolyFlags::Control,
+        PolyFlags::Normal, PolyFlags::Control, PolyFlags::Control,
+        PolyFlags::Normal, PolyFlags::Control, PolyFlags::Control,
+        PolyFlags::Normal, PolyFlags::Control, PolyFlags::Control,
+        PolyFlags::Normal, PolyFlags::Normal,  PolyFlags::Control,
+        PolyFlags::Normal, PolyFlags::Control, PolyFlags::Control
     };
 
     static const long aAccentPos[48] =

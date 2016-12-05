@@ -1416,7 +1416,7 @@ bool WinSalGraphics::GetGlyphOutline( sal_GlyphId aGlyphId,
     // TODO: avoid tools polygon by creating B2DPolygon directly
     int     nPtSize = 512;
     Point*  pPoints = new Point[ nPtSize ];
-    BYTE*   pFlags = new BYTE[ nPtSize ];
+    PolyFlags* pFlags = new PolyFlags[ nPtSize ];
 
     TTPOLYGONHEADER* pHeader = reinterpret_cast<TTPOLYGONHEADER*>(pData);
     while( reinterpret_cast<BYTE*>(pHeader) < pData+nSize2 )
@@ -1432,7 +1432,7 @@ bool WinSalGraphics::GetGlyphOutline( sal_GlyphId aGlyphId,
         long nX = IntTimes256FromFixed( pHeader->pfxStart.x );
         long nY = IntTimes256FromFixed( pHeader->pfxStart.y );
         pPoints[ nPnt ] = Point( nX, nY );
-        pFlags[ nPnt++ ] = POLY_NORMAL;
+        pFlags[ nPnt++ ] = PolyFlags::Normal;
 
         bool bHasOfflinePoints = false;
         TTPOLYCURVE* pCurve = reinterpret_cast<TTPOLYCURVE*>( pHeader + 1 );
@@ -1443,10 +1443,10 @@ bool WinSalGraphics::GetGlyphOutline( sal_GlyphId aGlyphId,
             if( nPtSize < nNeededSize )
             {
                 Point* pOldPoints = pPoints;
-                BYTE* pOldFlags = pFlags;
+                PolyFlags * pOldFlags = pFlags;
                 nPtSize = 2 * nNeededSize;
                 pPoints = new Point[ nPtSize ];
-                pFlags = new BYTE[ nPtSize ];
+                pFlags = new PolyFlags[ nPtSize ];
                 for( sal_uInt16 i = 0; i < nPnt; ++i )
                 {
                     pPoints[ i ] = pOldPoints[ i ];
@@ -1465,7 +1465,7 @@ bool WinSalGraphics::GetGlyphOutline( sal_GlyphId aGlyphId,
                     nY = IntTimes256FromFixed( pCurve->apfx[ i ].y );
                     ++i;
                     pPoints[ nPnt ] = Point( nX, nY );
-                    pFlags[ nPnt ] = POLY_NORMAL;
+                    pFlags[ nPnt ] = PolyFlags::Normal;
                     ++nPnt;
                 }
             }
@@ -1485,7 +1485,7 @@ bool WinSalGraphics::GetGlyphOutline( sal_GlyphId aGlyphId,
                     nX = pPoints[ nPnt-1 ].X() + 2 * aControlP.X();
                     nY = pPoints[ nPnt-1 ].Y() + 2 * aControlP.Y();
                     pPoints[ nPnt+0 ] = Point( (2*nX+3)/6, (2*nY+3)/6 );
-                    pFlags[ nPnt+0 ] = POLY_CONTROL;
+                    pFlags[ nPnt+0 ] = PolyFlags::Control;
 
                     // calculate endpoint of segment
                     nX = IntTimes256FromFixed( pCurve->apfx[ i ].x );
@@ -1508,14 +1508,14 @@ bool WinSalGraphics::GetGlyphOutline( sal_GlyphId aGlyphId,
                     }
 
                     pPoints[ nPnt+2 ] = Point( nX, nY );
-                    pFlags[ nPnt+2 ] = POLY_NORMAL;
+                    pFlags[ nPnt+2 ] = PolyFlags::Normal;
 
                     // calculate second cubic control point
                     // P1 = 1/3 * (PEnd + 2 * PQControl)
                     nX = pPoints[ nPnt+2 ].X() + 2 * aControlP.X();
                     nY = pPoints[ nPnt+2 ].Y() + 2 * aControlP.Y();
                     pPoints[ nPnt+1 ] = Point( (2*nX+3)/6, (2*nY+3)/6 );
-                    pFlags[ nPnt+1 ] = POLY_CONTROL;
+                    pFlags[ nPnt+1 ] = PolyFlags::Control;
 
                     nPnt += 3;
                 }

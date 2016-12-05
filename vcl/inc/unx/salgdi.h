@@ -174,18 +174,18 @@ public:
     virtual bool                    drawPolyLineBezier(
                                         sal_uInt32 nPoints,
                                         const SalPoint* pPtAry,
-                                        const sal_uInt8* pFlgAry ) override;
+                                        const PolyFlags* pFlgAry ) override;
 
     virtual bool                    drawPolygonBezier(
                                         sal_uInt32 nPoints,
                                         const SalPoint* pPtAry,
-                                        const sal_uInt8* pFlgAry ) override;
+                                        const PolyFlags* pFlgAry ) override;
 
     virtual bool                    drawPolyPolygonBezier(
                                         sal_uInt32 nPoly,
                                         const sal_uInt32* pPoints,
                                         const SalPoint* const* pPtAry,
-                                        const sal_uInt8* const* pFlgAry ) override;
+                                        const PolyFlags* const* pFlgAry ) override;
 #endif
 
     virtual void                    copyArea(

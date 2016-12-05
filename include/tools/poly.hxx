@@ -49,12 +49,12 @@ enum PolyStyle
     POLY_CHORD = 3
 };
 
-enum PolyFlags
+enum class PolyFlags : sal_uInt8
 {
-    POLY_NORMAL,
-    POLY_SMOOTH,
-    POLY_CONTROL,
-    POLY_SYMMTR
+    Normal,   // start-/endpoint of a curve or a line
+    Smooth,   // smooth transition between curves
+    Control,  // control handles of a Bezier curve
+    Symmetric // smooth and symmetrical transition between curves
 };
 
 class SvStream;
@@ -86,7 +86,7 @@ public:
                         Polygon();
                         Polygon( sal_uInt16 nSize );
                         Polygon( sal_uInt16 nPoints, const Point* pPtAry,
-                                 const sal_uInt8* pFlagAry = nullptr );
+                                 const PolyFlags* pFlagAry = nullptr );
                         Polygon( const Rectangle& rRect );
                         Polygon( const Rectangle& rRect,
                                  sal_uInt32 nHorzRound, sal_uInt32 nVertRound );
@@ -174,7 +174,7 @@ public:
     void                Write( SvStream& rOStream ) const;
 
     const Point*        GetConstPointAry() const;
-    const sal_uInt8*    GetConstFlagAry() const;
+    const PolyFlags*    GetConstFlagAry() const;
 
     // convert to ::basegfx::B2DPolygon and return
     ::basegfx::B2DPolygon getB2DPolygon() const;
