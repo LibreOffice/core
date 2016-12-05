@@ -43,7 +43,6 @@ namespace logging
     {
     public:
         PlainTextFormatter();
-        virtual ~PlainTextFormatter() override;
 
     private:
         // XLogFormatter
@@ -60,12 +59,6 @@ namespace logging
     PlainTextFormatter::PlainTextFormatter()
     {
     }
-
-
-    PlainTextFormatter::~PlainTextFormatter()
-    {
-    }
-
 
     OUString SAL_CALL PlainTextFormatter::getHead(  ) throw (RuntimeException, std::exception)
     {

@@ -103,7 +103,6 @@ private:
 public:
                     BubbleWindow( vcl::Window* pParent, const OUString& rTitle,
                                   const OUString& rText, const Image& rImage );
-                   virtual ~BubbleWindow() override;
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual void    Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
@@ -752,12 +751,6 @@ BubbleWindow::BubbleWindow( vcl::Window* pParent, const OUString& rTitle,
 {
     SetBackground( Wallpaper( GetSettings().GetStyleSettings().GetHelpColor() ) );
 }
-
-
-BubbleWindow::~BubbleWindow()
-{
-}
-
 
 void BubbleWindow::Resize()
 {

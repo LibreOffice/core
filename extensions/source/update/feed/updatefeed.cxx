@@ -233,8 +233,6 @@ public:
     {
     };
 
-    virtual ~UpdateInformationEnumeration() override {};
-
     // XEnumeration
     sal_Bool SAL_CALL hasMoreElements() throw (uno::RuntimeException, std::exception) override { return m_nCount < m_nNodes; };
     uno::Any SAL_CALL nextElement() throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception) override
@@ -292,7 +290,6 @@ class SingleUpdateInformationEnumeration : public ::cppu::WeakImplHelper< contai
 public:
     explicit SingleUpdateInformationEnumeration(const uno::Reference< xml::dom::XElement >& xElement)
         : m_nCount(0) { m_aEntry.UpdateDocument = xElement; };
-    virtual ~SingleUpdateInformationEnumeration() override {};
 
     // XEnumeration
     sal_Bool SAL_CALL hasMoreElements() throw (uno::RuntimeException, std::exception) override { return 0 == m_nCount; };
