@@ -25,7 +25,7 @@
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
-
+#include <memory>
 
 // predefines
 namespace drawinglayer { namespace animation {
@@ -58,7 +58,7 @@ namespace drawinglayer
                 to an animation state [0.0 .. 1.0]. This member contains a cloned
                 definition and is owned by this implementation.
              */
-            animation::AnimationEntry*                      mpAnimationEntry;
+            std::unique_ptr<animation::AnimationEntry>      mpAnimationEntry;
 
             /** flag if this is a text or graphic animation. Necessary since SdrViews need to differentiate
                 between both types if they are on/off
