@@ -21,53 +21,10 @@
 
 
 
-$(eval $(call gb_Module_Module,ooo))
+$(eval $(call gb_Package_Package,o3tl_inc,$(SRCDIR)/o3tl/inc))
 
-$(eval $(call gb_Module_add_moduledirs,ooo,\
-    basebmp \
-    basegfx \
-    canvas \
-    comphelper \
-    cppcanvas \
-    dbaccess \
-    drawinglayer \
-    editeng \
-    fileaccess \
-    formula \
-    framework \
-    idl \
-    io \
-    linguistic \
-    o3tl \
-    offapi \
-    oovbaapi \
-    oox \
-    padmin \
-    package \
-    reportdesign \
-    sax \
-    sd \
-    sfx2 \
-    sot \
-    starmath \
-    svgio \
-    svl \
-    svtools \
-    svx \
-    sw \
-    toolkit \
-    tools \
-    ucbhelper \
-    udkapi \
-    unotools \
-    unoxml \
-    vbahelper \
-    vcl \
-    wizards \
-    writerfilter \
-    xmloff \
-    xmlreader \
-    xmlscript \
-))
-
-# vim: set noet ts=4 sw=4:
+$(eval $(call gb_Package_add_file,o3tl_inc,inc/o3tl/cow_wrapper.hxx,o3tl/cow_wrapper.hxx))
+$(eval $(call gb_Package_add_file,o3tl_inc,inc/o3tl/range.hxx,o3tl/range.hxx))
+$(eval $(call gb_Package_add_file,o3tl_inc,inc/o3tl/vector_pool.hxx,o3tl/vector_pool.hxx))
+$(eval $(call gb_Package_add_file,o3tl_inc,inc/o3tl/lazy_update.hxx,o3tl/lazy_update.hxx))
+$(eval $(call gb_Package_add_file,o3tl_inc,inc/o3tl/heap_ptr.hxx,o3tl/heap_ptr.hxx))

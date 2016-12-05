@@ -1,2 +1,0 @@
-mkdir: %_DEST%\inc%_EXT%\o3tl
-..\inc\o3tl\*.hxx %_DEST%\inc%_EXT%\o3tl\*.hxx

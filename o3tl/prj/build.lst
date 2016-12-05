@@ -1,5 +1,2 @@
 ot	o3tl	:	sal BOOST:boost NULL
-ot	o3tl									usr1	-	all	ot_mkout NULL
-ot	o3tl\inc								get		-	all	ot_inc NULL
-ot	o3tl\prj								get		-	all	ot_prj NULL
-ot	o3tl\qa									nmake	-	all	ot_qa NULL
+ot	o3tl\prj								nmake	-	all	ot_prj	NULL
