@@ -131,8 +131,6 @@ double ScrollTextAnimNode::GetStateAtRelativeTime(
 class ActivityImpl : public Activity
 {
 public:
-    virtual ~ActivityImpl() override;
-
     ActivityImpl(
         SlideShowContext const& rContext,
         std::shared_ptr<WakeupEvent> const& pWakeupEvent,
@@ -847,10 +845,6 @@ bool ActivityImpl::enableAnimations()
 {
     mbIsActive = true;
     return maContext.mrActivitiesQueue.addActivity( std::dynamic_pointer_cast<Activity>(shared_from_this()) );
-}
-
-ActivityImpl::~ActivityImpl()
-{
 }
 
 void ActivityImpl::dispose()

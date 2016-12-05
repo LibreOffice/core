@@ -43,7 +43,7 @@ class RewinderEventHandler : public EventHandler
 public:
     typedef ::std::function<bool ()> Action;
     explicit RewinderEventHandler (const Action& rAction) : maAction(rAction) {}
-    virtual ~RewinderEventHandler() override {}
+
 private:
     const Action maAction;
     virtual bool handleEvent() override { return maAction(); }
@@ -55,7 +55,7 @@ class RewinderAnimationEventHandler : public AnimationEventHandler
 public:
     typedef ::std::function<bool (const AnimationNodeSharedPtr& rpNode)> Action;
     explicit RewinderAnimationEventHandler (const Action& rAction) : maAction(rAction) {}
-    virtual ~RewinderAnimationEventHandler() override {}
+
 private:
     const Action maAction;
     virtual bool handleAnimationEvent (const AnimationNodeSharedPtr& rpNode) override
