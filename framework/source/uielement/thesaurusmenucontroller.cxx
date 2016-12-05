@@ -30,7 +30,6 @@ class ThesaurusMenuController : public svt::PopupMenuControllerBase
 {
 public:
     explicit ThesaurusMenuController( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
-    virtual ~ThesaurusMenuController() override;
 
     // XStatusListener
     virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& rEvent ) throw ( css::uno::RuntimeException, std::exception ) override;
@@ -52,10 +51,6 @@ ThesaurusMenuController::ThesaurusMenuController( const css::uno::Reference< css
     svt::PopupMenuControllerBase( rxContext ),
     m_xLinguServiceManager( css::linguistic2::LinguServiceManager::create( rxContext ) ),
     m_xThesaurus( m_xLinguServiceManager->getThesaurus() )
-{
-}
-
-ThesaurusMenuController::~ThesaurusMenuController()
 {
 }
 

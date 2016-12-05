@@ -64,7 +64,6 @@ private:
 public:
 
     explicit TaskCreatorService(const css::uno::Reference< css::uno::XComponentContext >& xContext);
-    virtual ~TaskCreatorService(                                                                   ) override;
 
     virtual OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException, std::exception) override
@@ -116,10 +115,6 @@ private:
 TaskCreatorService::TaskCreatorService(const css::uno::Reference< css::uno::XComponentContext >& xContext)
     : TaskCreatorService_BASE(m_aMutex)
     , m_xContext         (xContext                     )
-{
-}
-
-TaskCreatorService::~TaskCreatorService()
 {
 }
 

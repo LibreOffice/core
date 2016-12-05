@@ -68,9 +68,6 @@ public:
             const css::uno::Reference< css::uno::XComponentContext >& xContext,
             const css::uno::Sequence< css::uno::Any >& lArguments);
 
-    /** TODO */
-    virtual ~ModuleAcceleratorConfiguration() override;
-
     virtual OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException, std::exception) override
     {
@@ -122,10 +119,6 @@ ModuleAcceleratorConfiguration::ModuleAcceleratorConfiguration(
         throw css::uno::RuntimeException(
                 OUString("The module dependent accelerator configuration service was initialized with an empty module identifier!"),
                 static_cast< ::cppu::OWeakObject* >(this));
-}
-
-ModuleAcceleratorConfiguration::~ModuleAcceleratorConfiguration()
-{
 }
 
 void ModuleAcceleratorConfiguration::fillCache()

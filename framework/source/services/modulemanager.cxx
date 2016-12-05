@@ -61,8 +61,6 @@ public:
 
     explicit ModuleManager(const css::uno::Reference< css::uno::XComponentContext >& xContext);
 
-    virtual ~ModuleManager() override;
-
     ModuleManager(const ModuleManager&) = delete;
     ModuleManager& operator=(const ModuleManager&) = delete;
 
@@ -149,10 +147,6 @@ ModuleManager::ModuleManager(const css::uno::Reference< css::uno::XComponentCont
                 m_xContext, "/org.openoffice.Setup/Office/Factories",
                 comphelper::EConfigurationModes::ReadOnly ),
             css::uno::UNO_QUERY_THROW );
-}
-
-ModuleManager::~ModuleManager()
-{
 }
 
 OUString ModuleManager::getImplementationName()

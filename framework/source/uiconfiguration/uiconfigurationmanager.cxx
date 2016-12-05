@@ -84,7 +84,6 @@ public:
     }
 
     explicit UIConfigurationManager( const css::uno::Reference< css::uno::XComponentContext > & rxContext );
-    virtual ~UIConfigurationManager() override;
 
     // XComponent
     virtual void SAL_CALL dispose() throw (css::uno::RuntimeException, std::exception) override;
@@ -691,10 +690,6 @@ UIConfigurationManager::UIConfigurationManager( const css::uno::Reference< css::
     // Make sure we have a default initialized entry for every layer and user interface element type!
     // The following code depends on this!
     m_aUIElements.resize( css::ui::UIElementType::COUNT );
-}
-
-UIConfigurationManager::~UIConfigurationManager()
-{
 }
 
 // XComponent

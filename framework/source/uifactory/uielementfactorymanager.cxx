@@ -352,7 +352,6 @@ class UIElementFactoryManager : private cppu::BaseMutex,
     virtual void SAL_CALL disposing() override;
 public:
     explicit UIElementFactoryManager( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
-    virtual ~UIElementFactoryManager() override;
 
     virtual OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException, std::exception) override
@@ -396,8 +395,6 @@ UIElementFactoryManager::UIElementFactoryManager( const Reference< XComponentCon
             rxContext,
             "/org.openoffice.Office.UI.Factories/Registered/UIElementFactories"))
 {}
-
-UIElementFactoryManager::~UIElementFactoryManager() {}
 
 void SAL_CALL UIElementFactoryManager::disposing()
 {

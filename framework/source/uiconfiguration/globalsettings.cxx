@@ -50,7 +50,6 @@ class GlobalSettings_Access : public ::cppu::WeakImplHelper<
 {
     public:
         explicit GlobalSettings_Access( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
-        virtual ~GlobalSettings_Access() override;
 
         // XComponent
         virtual void SAL_CALL dispose() throw (css::uno::RuntimeException, std::exception) override;
@@ -86,10 +85,6 @@ GlobalSettings_Access::GlobalSettings_Access( const css::uno::Reference< css::un
     m_aPropLocked( "Locked" ),
     m_aPropDocked( "Docked" ),
     m_xContext( rxContext )
-{
-}
-
-GlobalSettings_Access::~GlobalSettings_Access()
 {
 }
 

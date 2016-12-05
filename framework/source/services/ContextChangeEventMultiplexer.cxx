@@ -53,7 +53,6 @@ class ContextChangeEventMultiplexer
 {
 public:
     ContextChangeEventMultiplexer();
-    virtual ~ContextChangeEventMultiplexer() override;
     ContextChangeEventMultiplexer(const ContextChangeEventMultiplexer&) = delete;
     ContextChangeEventMultiplexer& operator=(const ContextChangeEventMultiplexer&) = delete;
 
@@ -118,10 +117,6 @@ public:
 ContextChangeEventMultiplexer::ContextChangeEventMultiplexer()
     : ContextChangeEventMultiplexerInterfaceBase(m_aMutex),
       maListeners()
-{
-}
-
-ContextChangeEventMultiplexer::~ContextChangeEventMultiplexer()
 {
 }
 

@@ -136,7 +136,6 @@ class SubstitutePathVariables : private cppu::BaseMutex,
 {
 public:
     explicit SubstitutePathVariables(const css::uno::Reference< css::uno::XComponentContext >& xContext);
-    virtual ~SubstitutePathVariables() override;
 
     virtual OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException, std::exception) override
@@ -226,10 +225,6 @@ SubstitutePathVariables::SubstitutePathVariables( const Reference< XComponentCon
         }
     }
     m_aReSubstFixedVarOrder.sort();
-}
-
-SubstitutePathVariables::~SubstitutePathVariables()
-{
 }
 
 // XStringSubstitution

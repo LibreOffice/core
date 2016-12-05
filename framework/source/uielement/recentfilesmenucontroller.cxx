@@ -54,7 +54,6 @@ class RecentFilesMenuController :  public svt::PopupMenuControllerBase
 public:
     RecentFilesMenuController( const uno::Reference< uno::XComponentContext >& xContext,
                                const uno::Sequence< uno::Any >& args );
-    virtual ~RecentFilesMenuController() override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
@@ -117,10 +116,6 @@ RecentFilesMenuController::RecentFilesMenuController( const uno::Reference< uno:
             break;
         }
     }
-}
-
-RecentFilesMenuController::~RecentFilesMenuController()
-{
 }
 
 // private function

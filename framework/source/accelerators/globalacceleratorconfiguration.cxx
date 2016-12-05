@@ -54,9 +54,6 @@ public:
      */
     explicit GlobalAcceleratorConfiguration(const css::uno::Reference< css::uno::XComponentContext >& xContext);
 
-    /** TODO */
-    virtual ~GlobalAcceleratorConfiguration() override {}
-
     virtual OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException, std::exception) override
     {

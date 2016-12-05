@@ -37,8 +37,6 @@ class URLTransformer : public ::cppu::WeakImplHelper< css::util::XURLTransformer
 public:
     URLTransformer() {}
 
-    virtual ~URLTransformer() override {}
-
     virtual OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException, std::exception) override
     {

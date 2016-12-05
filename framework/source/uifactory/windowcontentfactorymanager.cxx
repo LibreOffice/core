@@ -50,7 +50,6 @@ class WindowContentFactoryManager : private cppu::BaseMutex,
 {
 public:
     explicit WindowContentFactoryManager( const css::uno::Reference< css::uno::XComponentContext>& rxContext );
-    virtual ~WindowContentFactoryManager() override;
 
     virtual OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException, std::exception) override
@@ -91,8 +90,6 @@ WindowContentFactoryManager::WindowContentFactoryManager( const uno::Reference< 
             m_xContext,
             "/org.openoffice.Office.UI.WindowContentFactories/Registered/ContentFactories"))
 {}
-
-WindowContentFactoryManager::~WindowContentFactoryManager() {}
 
 void SAL_CALL WindowContentFactoryManager::disposing()
 {
