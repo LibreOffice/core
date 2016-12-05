@@ -404,11 +404,7 @@ void SwUndoDrawUnGroup::RedoImpl(::sw::UndoRedoContext &)
 
     // save group object
     SwDrawFrameFormat* pFormat = pObjArr->pFormat;
-    SwDrawContact* pContact = static_cast<SwDrawContact*>(pFormat->FindContactObj());
-
-        // object will destroy itself
-    pContact->Changed( *pObjArr->pObj, SdrUserCallType::Delete,
-        pObjArr->pObj->GetLastBoundRect() );
+    pFormat->CallSwClientNotify(sw::ContactChangedHint(pObjArr->pObj));
     pObjArr->pObj->SetUserCall( nullptr );
 
     ::lcl_SaveAnchor( pFormat, pObjArr->nNodeIdx );

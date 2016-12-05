@@ -1563,6 +1563,10 @@ void SwDrawContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
     {
         *(pCheckDrawFrameFormatLayerHint->m_bCheckControlLayer) |= (GetMaster() && CheckControlLayer(GetMaster()));
     }
+    else if (auto pContactChangedHint = dynamic_cast<const sw::ContactChangedHint*>(&rHint))
+    {
+        Changed(*pContactChangedHint->m_pObject, SdrUserCallType::Delete, pContactChangedHint->m_pObject->GetLastBoundRect() );
+    }
 }
 
 // #i26791#

@@ -257,6 +257,12 @@ namespace sw
         CheckDrawFrameFormatLayerHint(bool* bCheckControlLayer) : m_bCheckControlLayer(bCheckControlLayer) {};
         virtual ~CheckDrawFrameFormatLayerHint() override;
     };
+    struct SW_DLLPUBLIC ContactChangedHint final: SfxHint
+    {
+        SdrObject* m_pObject;
+        ContactChangedHint(SdrObject* pObject) : m_pObject(pObject) {};
+        virtual ~ContactChangedHint() override;
+    };
 }
 
 class SW_DLLPUBLIC SwDrawFrameFormat: public SwFrameFormat
