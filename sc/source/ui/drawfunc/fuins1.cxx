@@ -41,6 +41,9 @@
 #include "sc.hrc"
 #include "globstr.hrc"
 
+#include <comphelper/lok.hxx>
+#include <sfx2/lokhelper.hxx>
+
 using namespace ::com::sun::star;
 
 void ScLimitSizeOnDrawPage( Size& rSize, Point& rPos, const Size& rPage )
@@ -251,6 +254,16 @@ FuInsertGraphic::FuInsertGraphic( ScTabViewShell*   pViewSh,
         if ( nError == GRFILTER_OK )
         {
             lcl_InsertGraphic( aGraphic, aFileName, aFilterName, bAsLink, true, pViewSh, pWindow, pView );
+
+            // FIXME HACK: The ViewObjectContact sdr thing is not set up well
+            // enough for the invalidate to work here automagically, because
+            // we set it up for each tile, and it does not survive for too
+            // long.  Luckily for inserting an image, we can live with a full
+            // invalidate, so let's just do it for now.
+            if (comphelper::LibreOfficeKit::isActive())
+            {
+                SfxLokHelper::notifyInvalidation(pViewSh, "EMPTY");
+            }
         }
     }
     else
