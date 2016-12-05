@@ -215,7 +215,7 @@ void ImplConvertTransparentAction( GDIMetaFile&        o_rMtf,
         if( !aBmpEx.IsAlpha() )
         {
             // blend with mask
-            BitmapReadAccess* pRA = aBmp.AcquireReadAccess();
+            Bitmap::ScopedReadAccess pRA(aBmp);
 
             if( !pRA )
                 return; // what else should I do?
@@ -225,7 +225,7 @@ void ImplConvertTransparentAction( GDIMetaFile&        o_rMtf,
             if( pRA->HasPalette() )
                 aActualColor = pRA->GetBestPaletteColor( aBgColor ).operator Color();
 
-            Bitmap::ReleaseAccess(pRA);
+            pRA.reset();
 
             // did we get true white?
             if( aActualColor.GetColorError( aBgColor ) )

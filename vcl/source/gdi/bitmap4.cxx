@@ -113,13 +113,13 @@ bool Bitmap::Filter( BmpFilter eFilter, const BmpFilterParam* pFilterParam )
 bool Bitmap::ImplConvolute3( const long* pMatrix )
 {
     const long          nDivisor = 8;
-    BitmapReadAccess*   pReadAcc = AcquireReadAccess();
+    ScopedReadAccess    pReadAcc(*this);
     bool                bRet = false;
 
     if( pReadAcc )
     {
         Bitmap              aNewBmp( GetSizePixel(), 24 );
-        BitmapWriteAccess*  pWriteAcc = aNewBmp.AcquireWriteAccess();
+        ScopedWriteAccess   pWriteAcc(aNewBmp);
 
         if( pWriteAcc )
         {
@@ -246,12 +246,12 @@ bool Bitmap::ImplConvolute3( const long* pMatrix )
             delete[] pColm;
             delete[] pRows;
 
-            Bitmap::ReleaseAccess( pWriteAcc );
+            pWriteAcc.reset();
 
             bRet = true;
         }
 
-        ReleaseAccess( pReadAcc );
+        pReadAcc.reset();
 
         if( bRet )
         {
@@ -270,13 +270,13 @@ bool Bitmap::ImplConvolute3( const long* pMatrix )
 
 bool Bitmap::ImplMedianFilter()
 {
-    BitmapReadAccess*   pReadAcc = AcquireReadAccess();
+    ScopedReadAccess    pReadAcc(*this);
     bool                bRet = false;
 
     if( pReadAcc )
     {
         Bitmap              aNewBmp( GetSizePixel(), 24 );
-        BitmapWriteAccess*  pWriteAcc = aNewBmp.AcquireWriteAccess();
+        ScopedWriteAccess   pWriteAcc(aNewBmp);
 
         if( pWriteAcc )
         {
@@ -405,12 +405,12 @@ bool Bitmap::ImplMedianFilter()
             delete[] pColm;
             delete[] pRows;
 
-            Bitmap::ReleaseAccess( pWriteAcc );
+            pWriteAcc.reset();
 
             bRet = true;
         }
 
-        ReleaseAccess( pReadAcc );
+        pReadAcc.reset();
 
         if( bRet )
         {
@@ -435,12 +435,12 @@ bool Bitmap::ImplSobelGrey()
     {
         bRet = false;
 
-        BitmapReadAccess* pReadAcc = AcquireReadAccess();
+        ScopedReadAccess pReadAcc(*this);
 
         if( pReadAcc )
         {
             Bitmap              aNewBmp( GetSizePixel(), 8, &pReadAcc->GetPalette() );
-            BitmapWriteAccess*  pWriteAcc = aNewBmp.AcquireWriteAccess();
+            ScopedWriteAccess   pWriteAcc(aNewBmp);
 
             if( pWriteAcc )
             {
@@ -531,11 +531,11 @@ bool Bitmap::ImplSobelGrey()
 
                 delete[] pHMap;
                 delete[] pVMap;
-                Bitmap::ReleaseAccess( pWriteAcc );
+                pWriteAcc.reset();
                 bRet = true;
             }
 
-            ReleaseAccess( pReadAcc );
+            pReadAcc.reset();
 
             if( bRet )
             {
@@ -561,12 +561,12 @@ bool Bitmap::ImplEmbossGrey( const BmpFilterParam* pFilterParam )
     {
         bRet = false;
 
-        BitmapReadAccess* pReadAcc = AcquireReadAccess();
+        ScopedReadAccess pReadAcc(*this);
 
         if( pReadAcc )
         {
             Bitmap              aNewBmp( GetSizePixel(), 8, &pReadAcc->GetPalette() );
-            BitmapWriteAccess*  pWriteAcc = aNewBmp.AcquireWriteAccess();
+            ScopedWriteAccess   pWriteAcc(aNewBmp);
 
             if( pWriteAcc )
             {
@@ -643,11 +643,11 @@ bool Bitmap::ImplEmbossGrey( const BmpFilterParam* pFilterParam )
 
                 delete[] pHMap;
                 delete[] pVMap;
-                Bitmap::ReleaseAccess( pWriteAcc );
+                pWriteAcc.reset();
                 bRet = true;
             }
 
-            ReleaseAccess( pReadAcc );
+            pReadAcc.reset();
 
             if( bRet )
             {
@@ -668,7 +668,7 @@ bool Bitmap::ImplEmbossGrey( const BmpFilterParam* pFilterParam )
 bool Bitmap::ImplSolarize( const BmpFilterParam* pFilterParam )
 {
     bool                bRet = false;
-    BitmapWriteAccess*  pWriteAcc = AcquireWriteAccess();
+    ScopedWriteAccess   pWriteAcc(*this);
 
     if( pWriteAcc )
     {
@@ -706,7 +706,7 @@ bool Bitmap::ImplSolarize( const BmpFilterParam* pFilterParam )
             }
         }
 
-        ReleaseAccess( pWriteAcc );
+        pWriteAcc.reset();
         bRet = true;
     }
 
@@ -715,7 +715,7 @@ bool Bitmap::ImplSolarize( const BmpFilterParam* pFilterParam )
 
 bool Bitmap::ImplSepia( const BmpFilterParam* pFilterParam )
 {
-    BitmapReadAccess*   pReadAcc = AcquireReadAccess();
+    ScopedReadAccess    pReadAcc(*this);
     bool                bRet = false;
 
     if( pReadAcc )
@@ -736,7 +736,7 @@ bool Bitmap::ImplSepia( const BmpFilterParam* pFilterParam )
         }
 
         Bitmap              aNewBmp( GetSizePixel(), 8, &aSepiaPal );
-        BitmapWriteAccess*  pWriteAcc = aNewBmp.AcquireWriteAccess();
+        ScopedWriteAccess   pWriteAcc(aNewBmp);
 
         if( pWriteAcc )
         {
@@ -775,11 +775,11 @@ bool Bitmap::ImplSepia( const BmpFilterParam* pFilterParam )
                 }
             }
 
-            Bitmap::ReleaseAccess( pWriteAcc );
+            pWriteAcc.reset();
             bRet = true;
         }
 
-        ReleaseAccess( pReadAcc );
+        pReadAcc.reset();
 
         if( bRet )
         {
@@ -961,6 +961,7 @@ bool Bitmap::ImplMosaic( const BmpFilterParam* pFilterParam )
     return bRet;
 }
 
+
 struct PopArtEntry
 {
     sal_uInt32  mnIndex;
@@ -990,7 +991,7 @@ bool Bitmap::ImplPopArt()
     {
         bRet = false;
 
-        BitmapWriteAccess* pWriteAcc = AcquireWriteAccess();
+        ScopedWriteAccess pWriteAcc(*this);
 
         if( pWriteAcc )
         {
@@ -1034,7 +1035,7 @@ bool Bitmap::ImplPopArt()
 
             // cleanup
             delete[] pPopArtTable;
-            ReleaseAccess( pWriteAcc );
+            pWriteAcc.reset();
             bRet = true;
         }
     }
@@ -1135,15 +1136,15 @@ bool Bitmap::ImplSeparableBlurFilter(const double radius)
     // Do horizontal filtering
     ImplBlurContributions( nWidth, aNumberOfContributions, pBlurVector, pWeights, pPixels, pCount);
 
-    BitmapReadAccess* pReadAcc = AcquireReadAccess();
+    ScopedReadAccess pReadAcc(*this);
 
     // switch coordinates as convolution pass transposes result
     Bitmap aNewBitmap( Size( nHeight, nWidth ), 24 );
 
-    bool bResult = ImplConvolutionPass( aNewBitmap, pReadAcc, aNumberOfContributions, pWeights, pPixels, pCount );
+    bool bResult = ImplConvolutionPass( aNewBitmap, pReadAcc.get(), aNumberOfContributions, pWeights, pPixels, pCount );
 
     // Cleanup
-    ReleaseAccess( pReadAcc );
+    pReadAcc.reset();
     delete[] pWeights;
     delete[] pPixels;
     delete[] pCount;
@@ -1160,12 +1161,12 @@ bool Bitmap::ImplSeparableBlurFilter(const double radius)
     // Do vertical filtering
     ImplBlurContributions(nHeight, aNumberOfContributions, pBlurVector, pWeights, pPixels, pCount );
 
-    pReadAcc = AcquireReadAccess();
+    pReadAcc = ScopedReadAccess(*this);
     aNewBitmap = Bitmap( Size( nWidth, nHeight ), 24 );
-    bResult = ImplConvolutionPass( aNewBitmap, pReadAcc, aNumberOfContributions, pWeights, pPixels, pCount );
+    bResult = ImplConvolutionPass( aNewBitmap, pReadAcc.get(), aNumberOfContributions, pWeights, pPixels, pCount );
 
     // Cleanup
-    ReleaseAccess( pReadAcc );
+    pReadAcc.reset();
     delete[] pWeights;
     delete[] pCount;
     delete[] pPixels;
@@ -1194,9 +1195,9 @@ bool Bitmap::ImplSeparableUnsharpenFilter(const double radius) {
 
     Bitmap aResultBitmap( Size( nWidth, nHeight ), 24);
 
-    BitmapReadAccess* pReadAccBlur = aBlur.AcquireReadAccess();
-    BitmapReadAccess* pReadAcc = AcquireReadAccess();
-    BitmapWriteAccess* pWriteAcc = aResultBitmap.AcquireWriteAccess();
+    ScopedReadAccess pReadAccBlur(aBlur);
+    ScopedReadAccess pReadAcc(*this);
+    ScopedWriteAccess pWriteAcc(aResultBitmap);
 
     BitmapColor aColor, aColorBlur;
 
@@ -1217,9 +1218,9 @@ bool Bitmap::ImplSeparableUnsharpenFilter(const double radius) {
         }
     }
 
-    ReleaseAccess( pWriteAcc );
-    ReleaseAccess( pReadAcc );
-    ReleaseAccess( pReadAccBlur );
+    pWriteAcc.reset();
+    pReadAcc.reset();
+    pReadAccBlur.reset();
     ImplAssignWithSize ( aResultBitmap );
     return true;
 }
@@ -1230,8 +1231,8 @@ bool Bitmap::ImplDuotoneFilter( const sal_uLong nColorOne, const sal_uLong nColo
     const long  nHeight = GetSizePixel().Height();
 
     Bitmap aResultBitmap( GetSizePixel(), 24);
-    BitmapReadAccess* pReadAcc = AcquireReadAccess();
-    BitmapWriteAccess* pWriteAcc = aResultBitmap.AcquireWriteAccess();
+    ScopedReadAccess pReadAcc(*this);
+    ScopedWriteAccess pWriteAcc(aResultBitmap);
     const BitmapColor aColorOne( static_cast< sal_uInt8 >( nColorOne >> 16 ), static_cast< sal_uInt8 >( nColorOne >> 8 ), static_cast< sal_uInt8 >( nColorOne ) );
     const BitmapColor aColorTwo( static_cast< sal_uInt8 >( nColorTwo >> 16 ), static_cast< sal_uInt8 >( nColorTwo >> 8 ), static_cast< sal_uInt8 >( nColorTwo ) );
 
@@ -1249,8 +1250,8 @@ bool Bitmap::ImplDuotoneFilter( const sal_uLong nColorOne, const sal_uLong nColo
         }
     }
 
-    ReleaseAccess( pWriteAcc );
-    ReleaseAccess( pReadAcc );
+    pWriteAcc.reset();
+    pReadAcc.reset();
     ImplAssignWithSize ( aResultBitmap );
     return true;
 }
