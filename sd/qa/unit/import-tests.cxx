@@ -1384,7 +1384,7 @@ void SdImportTest::testTdf99729()
         vcl::PNGReader aPNGReader(aFileStream);
         BitmapEx aBMPEx = aPNGReader.Read();
         Bitmap aBMP = aBMPEx.GetBitmap();
-        BitmapReadAccess* pRead = aBMP.AcquireReadAccess();
+        Bitmap::ScopedReadAccess pRead(aBMP);
         for (long nX = 154; nX < (154 + 12); ++nX)
         {
             for (long nY = 16; nY < (16 + 96); ++nY)

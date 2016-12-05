@@ -1414,7 +1414,7 @@ DECLARE_OOXMLEXPORT_TEST(testPictureWithSchemeColor, "picture-with-schemecolor.d
     uno::Reference<graphic::XGraphic> xGraphic = getProperty<uno::Reference<graphic::XGraphic> >(xImage, "Graphic");
     Graphic aVclGraphic(xGraphic);
     Bitmap aBitmap(aVclGraphic.GetBitmap());
-    BitmapReadAccess* pAccess = aBitmap.AcquireReadAccess();
+    Bitmap::ScopedReadAccess pAccess(aBitmap);
     CPPUNIT_ASSERT(pAccess);
     CPPUNIT_ASSERT_EQUAL(341L, pAccess->Width());
     CPPUNIT_ASSERT_EQUAL(181L, pAccess->Height());
@@ -1422,7 +1422,6 @@ DECLARE_OOXMLEXPORT_TEST(testPictureWithSchemeColor, "picture-with-schemecolor.d
     CPPUNIT_ASSERT_EQUAL(aColor.GetColor(), RGB_COLORDATA( 0xb1, 0xc8, 0xdd ));
     aColor = pAccess->GetPixel(130, 260);
     CPPUNIT_ASSERT_EQUAL(aColor.GetColor(), RGB_COLORDATA( 0xb1, 0xc8, 0xdd ));
-    Bitmap::ReleaseAccess(pAccess);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFdo69656, "Table_cell_auto_width_fdo69656.docx")
@@ -1593,13 +1592,12 @@ DECLARE_OOXMLEXPORT_TEST(testMsoBrightnessContrast, "msobrightnesscontrast.docx"
     uno::Reference<awt::XBitmap> bitmap(graphic, uno::UNO_QUERY);
     Graphic aVclGraphic(graphic);
     Bitmap aBitmap(aVclGraphic.GetBitmap());
-    BitmapReadAccess* pAccess = aBitmap.AcquireReadAccess();
+    Bitmap::ScopedReadAccess pAccess(aBitmap);
     CPPUNIT_ASSERT(pAccess);
     CPPUNIT_ASSERT_EQUAL(58L, pAccess->Width());
     CPPUNIT_ASSERT_EQUAL(320L, pAccess->Height());
     Color aColor(pAccess->GetPixel(30, 20));
     CPPUNIT_ASSERT_EQUAL(aColor.GetColor(), RGB_COLORDATA( 0xce, 0xce, 0xce ));
-    Bitmap::ReleaseAccess(pAccess);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testChartSize, "chart-size.docx")

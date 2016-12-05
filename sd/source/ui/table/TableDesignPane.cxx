@@ -622,7 +622,7 @@ const Bitmap CreateDesignPreview( const Reference< XIndexAccess >& xTableStyle, 
 // bbbbbbbbbbbb
 
     Bitmap aPreviewBmp( Size( nBitmapWidth, nBitmapHeight), 24, nullptr );
-    BitmapWriteAccess* pAccess = aPreviewBmp.AcquireWriteAccess();
+    Bitmap::ScopedWriteAccess pAccess(aPreviewBmp);
     if( pAccess )
     {
         pAccess->Erase( Color( bIsPageDark ? COL_BLACK : COL_WHITE ) );
@@ -715,7 +715,7 @@ const Bitmap CreateDesignPreview( const Reference< XIndexAccess >& xTableStyle, 
             }
         }
 
-        Bitmap::ReleaseAccess( pAccess );
+        pAccess.reset();
     }
 
     return aPreviewBmp;

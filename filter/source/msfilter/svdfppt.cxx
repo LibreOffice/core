@@ -5665,7 +5665,7 @@ void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, T
                         if ( aSize.Height() > 64 )
                             aSize.Height() = 64;
 
-                        BitmapReadAccess*   pAcc = aBmp.AcquireReadAccess();
+                        Bitmap::ScopedReadAccess pAcc(aBmp);
                         if( pAcc )
                         {
                             sal_uLong nRt = 0, nGn = 0, nBl = 0;
@@ -5694,7 +5694,7 @@ void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, T
                                     }
                                 }
                             }
-                            Bitmap::ReleaseAccess( pAcc );
+                            pAcc.reset();
                             sal_uInt32 nC = ( aSize.Width() * aSize.Height() );
                             nRt /= nC;
                             nGn /= nC;
