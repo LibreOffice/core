@@ -19,7 +19,7 @@
 
 #include <drawinglayer/animation/animationtiming.hxx>
 #include <basegfx/numeric/ftools.hxx>
-
+#include <o3tl/make_unique.hxx>
 
 namespace drawinglayer
 {
@@ -46,9 +46,9 @@ namespace drawinglayer
         {
         }
 
-        AnimationEntry* AnimationEntryFixed::clone() const
+        std::unique_ptr<AnimationEntry> AnimationEntryFixed::clone() const
         {
-            return new AnimationEntryFixed(mfDuration, mfState);
+            return o3tl::make_unique<AnimationEntryFixed>(mfDuration, mfState);
         }
 
         bool AnimationEntryFixed::operator==(const AnimationEntry& rCandidate) const
@@ -95,9 +95,9 @@ namespace drawinglayer
         {
         }
 
-        AnimationEntry* AnimationEntryLinear::clone() const
+        std::unique_ptr<AnimationEntry> AnimationEntryLinear::clone() const
         {
-            return new AnimationEntryLinear(mfDuration, mfFrequency, mfStart, mfStop);
+            return o3tl::make_unique<AnimationEntryLinear>(mfDuration, mfFrequency, mfStart, mfStop);
         }
 
         bool AnimationEntryLinear::operator==(const AnimationEntry& rCandidate) const
@@ -178,22 +178,18 @@ namespace drawinglayer
 
         AnimationEntryList::~AnimationEntryList()
         {
-            for(AnimationEntry* i : maEntries)
-            {
-                delete i;
-            }
         }
 
-        AnimationEntry* AnimationEntryList::clone() const
+        std::unique_ptr<AnimationEntry> AnimationEntryList::clone() const
         {
-            AnimationEntryList* pNew = new AnimationEntryList();
+            std::unique_ptr<AnimationEntryList> pNew(o3tl::make_unique<AnimationEntryList>());
 
-            for(AnimationEntry* i : maEntries)
+            for(const auto &i : maEntries)
             {
                 pNew->append(*i);
             }
 
-            return pNew;
+            return std::move(pNew);
         }
 
         bool AnimationEntryList::operator==(const AnimationEntry& rCandidate) const
@@ -277,16 +273,16 @@ namespace drawinglayer
         {
         }
 
-        AnimationEntry* AnimationEntryLoop::clone() const
+        std::unique_ptr<AnimationEntry> AnimationEntryLoop::clone() const
         {
-            AnimationEntryLoop* pNew = new AnimationEntryLoop(mnRepeat);
+            std::unique_ptr<AnimationEntryLoop> pNew(o3tl::make_unique<AnimationEntryLoop>(mnRepeat));
 
-            for(AnimationEntry* i : maEntries)
+            for(const auto &i : maEntries)
             {
                 pNew->append(*i);
             }
 
-            return pNew;
+            return std::move(pNew);
         }
 
         bool AnimationEntryLoop::operator==(const AnimationEntry& rCandidate) const
