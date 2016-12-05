@@ -52,7 +52,7 @@ class SwOutlineTabDialog : public SfxTabDialog
     OUString            aCollNames[MAXLEVEL];
 
     SwWrtShell&         rWrtSh;
-    SwNumRule*          pNumRule;
+    std::unique_ptr<SwNumRule>  xNumRule;
     SwChapterNumRules*  pChapterNumRules;
 
     bool                bModified : 1;
@@ -72,7 +72,7 @@ public:
         virtual ~SwOutlineTabDialog() override;
     virtual void        dispose() override;
 
-    SwNumRule*          GetNumRule() {return pNumRule;}
+    SwNumRule*          GetNumRule() { return xNumRule.get(); }
     sal_uInt16          GetLevel(const OUString &rFormatName) const;
     OUString*           GetCollNames() {return aCollNames;}
 

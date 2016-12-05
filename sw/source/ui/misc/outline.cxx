@@ -167,7 +167,7 @@ SwOutlineTabDialog::SwOutlineTabDialog(vcl::Window* pParent, const SfxItemSet* p
     pUserButton->SetClickHdl(LINK(this, SwOutlineTabDialog, FormHdl));
     pUserButton->SetAccessibleRole( css::accessibility::AccessibleRole::BUTTON_MENU );
 
-    pNumRule = new SwNumRule( *rSh.GetOutlineNumRule() );
+    xNumRule.reset(new SwNumRule(*rSh.GetOutlineNumRule()));
     GetCancelButton().SetClickHdl(LINK(this, SwOutlineTabDialog, CancelHdl));
 
     m_nNumPosId = AddTabPage("position", &SwNumPositionTabPage::Create, nullptr);
@@ -208,7 +208,7 @@ SwOutlineTabDialog::~SwOutlineTabDialog()
 
 void SwOutlineTabDialog::dispose()
 {
-    delete pNumRule;
+    xNumRule.reset();
     SfxTabDialog::dispose();
 }
 
@@ -294,7 +294,7 @@ IMPL_LINK( SwOutlineTabDialog, MenuSelectHdl, Menu *, pMenu, bool )
         {
             const OUString aName(pDlg->GetName());
             pChapterNumRules->ApplyNumRules( SwNumRulesWithName(
-                    *pNumRule, aName ), pDlg->GetCurEntryPos() );
+                    *xNumRule, aName ), pDlg->GetCurEntryPos() );
             pMenu->SetItemText(pMenu->GetItemId(pDlg->GetCurEntryPos()), aName);
         }
         return false;
@@ -305,11 +305,11 @@ IMPL_LINK( SwOutlineTabDialog, MenuSelectHdl, Menu *, pMenu, bool )
         const SwNumRulesWithName *pRules = pChapterNumRules->GetRules( nLevelNo );
         if( pRules )
         {
-            *pNumRule = pRules->MakeNumRule(rWrtSh);
-            pNumRule->SetRuleType( OUTLINE_RULE );
+            *xNumRule = pRules->MakeNumRule(rWrtSh);
+            xNumRule->SetRuleType( OUTLINE_RULE );
         }
         else
-            *pNumRule = *rWrtSh.GetOutlineNumRule();
+            *xNumRule = *rWrtSh.GetOutlineNumRule();
     }
 
     sal_uInt16  nPageId = GetCurPageId();
@@ -406,7 +406,7 @@ short SwOutlineTabDialog::Ok()
         }
     }
 
-    rWrtSh.SetOutlineNumRule( *pNumRule);
+    rWrtSh.SetOutlineNumRule(*xNumRule);
 
     // #i30443#
     rWrtSh.EndAction();
