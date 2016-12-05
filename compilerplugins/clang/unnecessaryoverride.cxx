@@ -71,10 +71,90 @@ private:
 
 bool UnnecessaryOverride::VisitCXXMethodDecl(const CXXMethodDecl* methodDecl)
 {
-    if (ignoreLocation(methodDecl->getCanonicalDecl()) || !methodDecl->doesThisDeclarationHaveABody()) {
+    if (ignoreLocation(methodDecl->getCanonicalDecl())) {
         return true;
     }
-    if (isa<CXXConstructorDecl>(methodDecl) || isa<CXXDestructorDecl>(methodDecl)) {
+    if (isa<CXXConstructorDecl>(methodDecl)) {
+        return true;
+    }
+
+    if (isa<CXXDestructorDecl>(methodDecl)) {
+        // Warn about unnecessarily user-declared overriding virtual
+        // destructors; such a destructor is deemed unnecessary if
+        // * it is public;
+        // * its class is only defined in the .cxx file (i.e., the virtual
+        //   destructor is neither used to controll the place of vtable
+        //   emission, nor is its definition depending on types that may still
+        //   be incomplete);
+        // * it either does not have an explicit exception specification, or has
+        //   a non-dependent explicit exception specification that is compatible
+        //   with a non-dependent exception specification the destructor would
+        //   have if it did not have an explicit one (TODO);
+        // * it is either defined as defaulted or with an empty body.
+        // Removing the user-declared destructor may cause the class to get an
+        // implicitly declared move constructor and/or move assignment operator;
+        // that is considered acceptable:  If any subobject cannot be moved, the
+        // implicitly declared function will be defined as deleted (which is in
+        // practice not much different from not having it declared), and
+        // otherwise offering movability is likely even an improvement over not
+        // offering it due to a "pointless" user-declared destructor.
+        // Similarly, removing the user-declared destructor may cause the
+        // implicit definition of a copy constructor and/or copy assignment
+        // operator to change from being an obsolete feature to being a standard
+        // feature.  That difference is not taken into account here.
+        if ((methodDecl->begin_overridden_methods()
+             == methodDecl->end_overridden_methods())
+            || methodDecl->getAccess() != AS_public)
+        {
+            return true;
+        }
+        if (!compiler.getSourceManager().isInMainFile(
+                methodDecl->getCanonicalDecl()->getLocation()))
+        {
+            return true;
+        }
+        if (!methodDecl->isExplicitlyDefaulted()) {
+            if (!methodDecl->doesThisDeclarationHaveABody()) {
+                return true;
+            }
+            auto stmt = dyn_cast<CompoundStmt>(methodDecl->getBody());
+            if (stmt == nullptr || stmt->size() != 0) {
+                return true;
+            }
+        }
+        //TODO: exception specification
+        auto cls = methodDecl->getParent();
+        if (!(cls->hasUserDeclaredCopyConstructor()
+              || cls->hasUserDeclaredCopyAssignment()
+              || cls->hasUserDeclaredMoveConstructor()
+              || cls->hasUserDeclaredMoveAssignment()))
+        {
+        }
+        if ((cls->needsImplicitMoveConstructor()
+             && !(cls->hasUserDeclaredCopyConstructor()
+                  || cls->hasUserDeclaredCopyAssignment()
+                  || cls->hasUserDeclaredMoveAssignment()))
+            || (cls->needsImplicitMoveAssignment()
+                && !(cls->hasUserDeclaredCopyConstructor()
+                     || cls->hasUserDeclaredCopyAssignment()
+                     || cls->hasUserDeclaredMoveConstructor())))
+        {
+            report(DiagnosticsEngine::Fatal, "TODO", methodDecl->getLocation());
+            return true;
+        }
+        report(
+            DiagnosticsEngine::Warning, "unnecessary user-declared destructor",
+            methodDecl->getLocation())
+            << methodDecl->getSourceRange();
+        auto cd = methodDecl->getCanonicalDecl();
+        if (cd->getLocation() != methodDecl->getLocation()) {
+            report(DiagnosticsEngine::Note, "declared here", cd->getLocation())
+                << cd->getSourceRange();
+        }
+        return true;
+    }
+
+    if (!methodDecl->doesThisDeclarationHaveABody()) {
         return true;
     }
 
