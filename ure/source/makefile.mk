@@ -30,8 +30,8 @@ ZIP1FLAGS = -r
 ZIP1LIST = uretest
 
 my_components = \
+    component/binaryurp/source/binaryurp \
     component/io/source/acceptor/acceptor \
-    binaryurp \
     bootstrap \
     component/io/source/connector/connector \
     introspection \
