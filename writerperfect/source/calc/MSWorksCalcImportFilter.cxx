@@ -315,9 +315,9 @@ throw (css::uno::RuntimeException, std::exception)
                     const uno::Reference<ucb::XContentAccess> xContentAccess(xResultSet, uno::UNO_QUERY_THROW);
                     const uno::Reference<sdbc::XRow> xRow(xResultSet, uno::UNO_QUERY_THROW);
                     INetURLObject aTmpUrl(sUrl);
-                    sWM3Name = aTmpUrl.getName(INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET);
+                    sWM3Name = aTmpUrl.getName(INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset);
                     aTmpUrl.setExtension("FM3");
-                    const rtl::OUString &sTestFM3Name = aTmpUrl.getName(INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET);
+                    const rtl::OUString &sTestFM3Name = aTmpUrl.getName(INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset);
                     do
                     {
                         const rtl::OUString &aTitle(xRow->getString(1));
