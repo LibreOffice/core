@@ -42,7 +42,6 @@ public:
 
     ImgProdLockBytes( SvStream* pStm, bool bOwner );
     explicit ImgProdLockBytes( css::uno::Reference< css::io::XInputStream > & rStreamRef );
-    virtual             ~ImgProdLockBytes() override;
 
     virtual ErrCode     ReadAt( sal_uInt64 nPos, void* pBuffer, std::size_t nCount, std::size_t * pRead ) const override;
     virtual ErrCode     WriteAt( sal_uInt64 nPos, const void* pBuffer, std::size_t nCount, std::size_t * pWritten ) override;
@@ -82,12 +81,6 @@ ImgProdLockBytes::ImgProdLockBytes( css::uno::Reference< css::io::XInputStream >
         while( nBytesToRead == nRead );
     }
 }
-
-
-ImgProdLockBytes::~ImgProdLockBytes()
-{
-}
-
 
 ErrCode ImgProdLockBytes::ReadAt(sal_uInt64 const nPos,
         void* pBuffer, std::size_t nCount, std::size_t * pRead) const

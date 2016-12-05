@@ -59,9 +59,6 @@ namespace frm
         {
             impl_init_nothrow( _rContext, _rxDocument );
         }
-        virtual ~DocumentCommandImageProvider() override
-        {
-        }
 
         // ICommandImageProvider
         virtual CommandImages getCommandImages( const css::uno::Sequence< OUString >& _rCommandURLs, const bool _bLarge ) const override;
