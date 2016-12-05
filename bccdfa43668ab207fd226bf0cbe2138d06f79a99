@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a71b18c_af4ba2af",
+        "filename": "sc/source/ui/drawfunc/fuins1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2016-12-05T21:52:48Z",
+      "side": 1,
+      "message": "This will invalidate the *current* part for each view. Is that what we want, or do we want to invalidate the part where the image is inserted?",
+      "revId": "bccdfa43668ab207fd226bf0cbe2138d06f79a99",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
