@@ -31,7 +31,7 @@ public:
     void SetUrl(const  OUString& aUrl ) { maUrl.SetURL( aUrl ); }
 
     OUString& GetName( ) { return msName; }
-    OUString GetUrl( ) { return maUrl.GetMainURL( INetURLObject::NO_DECODE ); }
+    OUString GetUrl( ) { return maUrl.GetMainURL( INetURLObject::DecodeMechanism::NONE ); }
     INetURLObject& GetUrlObject( ) { return maUrl; }
     bool  IsLocal( ) { return maUrl.GetProtocol() == INetProtocol::File; }
     bool  IsEditable( ) { return mbEditable; }

@@ -313,7 +313,7 @@ OUString SvtPathOptions_Impl::ExpandMacros( const OUString& rPath ) const
 
     const INetURLObject aParser( rPath );
     if ( aParser.GetProtocol() == INetProtocol::VndSunStarExpand )
-        sExpanded = m_xMacroExpander->expandMacros( aParser.GetURLPath( INetURLObject::DECODE_WITH_CHARSET ) );
+        sExpanded = m_xMacroExpander->expandMacros( aParser.GetURLPath( INetURLObject::DecodeMechanism::WithCharset ) );
 
     return sExpanded;
 }
@@ -744,15 +744,15 @@ bool SvtPathOptions::SearchFile( OUString& rIniFile, Paths ePath )
             }
             while ( nIniIndex >= 0 );
 
-            if ( !::utl::UCBContentHelper::Exists( aObj.GetMainURL( INetURLObject::NO_DECODE ) ) )
+            if ( !::utl::UCBContentHelper::Exists( aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ) ) )
             {
                 aObj.SetSmartURL( GetConfigPath() );
                 aObj.insertName( aIniFile );
-                bRet = ::utl::UCBContentHelper::Exists( aObj.GetMainURL( INetURLObject::NO_DECODE ) );
+                bRet = ::utl::UCBContentHelper::Exists( aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
             }
 
             if ( bRet )
-                rIniFile = aObj.GetMainURL( INetURLObject::NO_DECODE );
+                rIniFile = aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
             break;
         }
@@ -809,7 +809,7 @@ bool SvtPathOptions::SearchFile( OUString& rIniFile, Paths ePath )
                 if ( aObj.GetProtocol() == INetProtocol::VndSunStarExpand )
                 {
                     Reference< XMacroExpander > xMacroExpander = theMacroExpander::get( ::comphelper::getProcessComponentContext() );
-                    const OUString sExpandedPath = xMacroExpander->expandMacros( aObj.GetURLPath( INetURLObject::DECODE_WITH_CHARSET ) );
+                    const OUString sExpandedPath = xMacroExpander->expandMacros( aObj.GetURLPath( INetURLObject::DecodeMechanism::WithCharset ) );
                     aObj.SetURL( sExpandedPath );
                 }
 
@@ -821,7 +821,7 @@ bool SvtPathOptions::SearchFile( OUString& rIniFile, Paths ePath )
                 }
                 while ( nIniIndex >= 0 );
 
-                bRet = ::utl::UCBContentHelper::Exists( aObj.GetMainURL( INetURLObject::NO_DECODE ) );
+                bRet = ::utl::UCBContentHelper::Exists( aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
 
                 if ( bRet )
                 {
@@ -829,11 +829,11 @@ bool SvtPathOptions::SearchFile( OUString& rIniFile, Paths ePath )
                     {
                         OUString sTmp;
                         osl::FileBase::getSystemPathFromFileURL(
-                                            aObj.GetMainURL( INetURLObject::NO_DECODE ), sTmp );
+                                            aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), sTmp );
                         rIniFile = sTmp;
                     }
                     else
-                        rIniFile = aObj.GetMainURL( INetURLObject::NO_DECODE );
+                        rIniFile = aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
                     break;
                 }
             }

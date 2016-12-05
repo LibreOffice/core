@@ -2869,7 +2869,7 @@ bool HtmlExport::CopyScript( const OUString& rPath, const OUString& rSource, con
     meEC.SetContext( STR_HTMLEXP_ERROR_OPEN_FILE, rSource );
 
     sal_uLong       nErr = 0;
-    SvStream*   pIStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::NO_DECODE ), StreamMode::READ );
+    SvStream*   pIStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::READ );
 
     if( pIStm )
     {
@@ -3204,7 +3204,7 @@ sal_uLong EasyFile::createFileName(  const OUString& rURL, OUString& rFileName )
             aURL = INetURLObject( aURLStr );
         }
         DBG_ASSERT( aURL.GetProtocol() != INetProtocol::NotValid, "invalid URL" );
-        rFileName = aURL.GetMainURL( INetURLObject::NO_DECODE );
+        rFileName = aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
     }
 
     return nErr;

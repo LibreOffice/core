@@ -212,7 +212,7 @@ namespace dbp
 
             INetURLObject aURL( sDataSource );
             if( aURL.GetProtocol() != INetProtocol::NotValid )
-                sDataSource = aURL.GetName(INetURLObject::DECODE_WITH_CHARSET);
+                sDataSource = aURL.GetName(INetURLObject::DecodeMechanism::WithCharset);
             m_pFormDatasource->SetText(sDataSource);
             m_pFormTable->SetText(sCommand);
 

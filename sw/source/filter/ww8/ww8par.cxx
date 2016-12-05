@@ -198,7 +198,7 @@ void lclGetAbsPath(OUString& rPath, sal_uInt16 nLevel, SwDocShell* pDocShell)
     if (!aTmpStr.isEmpty())
     {
         bool bWasAbs = false;
-        rPath = pDocShell->GetMedium()->GetURLObject().smartRel2Abs( aTmpStr, bWasAbs ).GetMainURL( INetURLObject::NO_DECODE );
+        rPath = pDocShell->GetMedium()->GetURLObject().smartRel2Abs( aTmpStr, bWasAbs ).GetMainURL( INetURLObject::DecodeMechanism::NONE );
         // full path as stored in SvxURLField must be encoded
     }
 }
@@ -4744,7 +4744,7 @@ void SwWW8ImplReader::ReadDocInfo()
                 {
                     OUString aName = pMedium->GetName();
                     INetURLObject aURL( aName );
-                    sTemplateURL = aURL.GetMainURL(INetURLObject::DECODE_TO_IURI);
+                    sTemplateURL = aURL.GetMainURL(INetURLObject::DecodeMechanism::ToIUri);
                     if ( !sTemplateURL.isEmpty() )
                         xDocProps->setTemplateURL( sTemplateURL );
                 }
@@ -5523,7 +5523,7 @@ namespace
                 {
                     ::comphelper::DocPasswordRequest* pRequest = new ::comphelper::DocPasswordRequest(
                         ::comphelper::DocPasswordRequestType::MS, task::PasswordRequestMode_PASSWORD_ENTER,
-                        INetURLObject( rMedium.GetOrigURL() ).GetName( INetURLObject::DECODE_WITH_CHARSET ) );
+                        INetURLObject( rMedium.GetOrigURL() ).GetName( INetURLObject::DecodeMechanism::WithCharset ) );
                     uno::Reference< task::XInteractionRequest > xRequest( pRequest );
 
                     xHandler->handle( xRequest );

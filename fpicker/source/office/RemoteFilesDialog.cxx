@@ -412,7 +412,7 @@ OUString lcl_GetServiceType( const ServicePtr& pService )
             return OUString( "FTP" );
         case INetProtocol::Cmis:
         {
-            OUString sHost = pService->GetUrlObject().GetHost( INetURLObject::DECODE_WITH_CHARSET );
+            OUString sHost = pService->GetUrlObject().GetHost( INetURLObject::DecodeMechanism::WithCharset );
 
             if( sHost.startsWith( GDRIVE_BASE_URL ) )
                 return OUString( "Google Drive" );
@@ -988,9 +988,9 @@ IMPL_LINK_NOARG( RemoteFilesDialog, SelectHdl, SvTreeListBox*, void )
                 INetURLObject aCurrentURL( m_sLastServiceUrl );
                 aURL.SetUser( aCurrentURL.GetUser() );
 
-                m_sPath = aURL.GetMainURL( INetURLObject::NO_DECODE );
+                m_sPath = aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
-                m_pName_ed->SetText( INetURLObject::decode( aURL.GetLastName(), INetURLObject::DECODE_WITH_CHARSET ) );
+                m_pName_ed->SetText( INetURLObject::decode( aURL.GetLastName(), INetURLObject::DecodeMechanism::WithCharset ) );
             }
             else
             {
@@ -1143,7 +1143,7 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, OkHdl, Button*, void )
         INetURLObject aCurrentURL( m_sLastServiceUrl );
         aURL.SetUser( aCurrentURL.GetUser() );
 
-        m_sPath = aURL.GetMainURL( INetURLObject::NO_DECODE );
+        m_sPath = aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
     }
 
     bool bExists = false;
@@ -1236,7 +1236,7 @@ void RemoteFilesDialog::SetPath( const OUString& rNewURL )
     if( m_eMode == REMOTEDLG_MODE_SAVE )
     {
         INetURLObject aUrl( m_sPath );
-        OUString sFileName = aUrl.GetLastName( INetURLObject::DECODE_WITH_CHARSET );
+        OUString sFileName = aUrl.GetLastName( INetURLObject::DecodeMechanism::WithCharset );
 
         m_pName_ed->SetText( sFileName );
     }
@@ -1370,7 +1370,7 @@ void RemoteFilesDialog::UpdateControls( const OUString& rURL )
         {
             OUString sTitle( INetURLObject::decode(
                                 aFolderName.copy( nTitleStart + 1 ),
-                                INetURLObject::DECODE_WITH_CHARSET ) );
+                                INetURLObject::DecodeMechanism::WithCharset ) );
 
             if( rFolder.mbIsFolder )
             {
@@ -1414,7 +1414,7 @@ std::vector<OUString> RemoteFilesDialog::GetPathList() const
         INetURLObject aCurrentURL( m_sLastServiceUrl );
         aURL.SetUser( aCurrentURL.GetUser() );
 
-        aList.push_back( aURL.GetMainURL( INetURLObject::NO_DECODE ) );
+        aList.push_back( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
         pEntry = m_pFileView->NextSelected( pEntry );
     }
 

@@ -466,7 +466,7 @@ OUString ODatabaseForm::GetDataEncoded(bool _bURLEncoded,const Reference<XContro
             aURL.SetSmartProtocol(INetProtocol::File);
             aURL.SetSmartURL(aValue);
             if( INetProtocol::File == aURL.GetProtocol() )
-                aValue = INetURLObject::decode(aURL.PathToFileName(), INetURLObject::DECODE_UNAMBIGUOUS);
+                aValue = INetURLObject::decode(aURL.PathToFileName(), INetURLObject::DecodeMechanism::Unambiguous);
         }
         Encode( aName );
         Encode( aValue );
@@ -1008,7 +1008,7 @@ bool ODatabaseForm::InsertFilePart( INetMIMEMessage& rParent, const OUString& rN
         aURL.SetSmartURL(rFileName);
         if( INetProtocol::File == aURL.GetProtocol() )
         {
-            aFileName = INetURLObject::decode(aURL.PathToFileName(), INetURLObject::DECODE_UNAMBIGUOUS);
+            aFileName = INetURLObject::decode(aURL.PathToFileName(), INetURLObject::DecodeMechanism::Unambiguous);
             pStream = ::utl::UcbStreamHelper::CreateStream(aFileName, StreamMode::READ);
             if (!pStream || (pStream->GetError() != ERRCODE_NONE))
             {
@@ -2191,7 +2191,7 @@ void ODatabaseForm::submit_impl(const Reference<XControl>& Control, const css::a
         {
             INetURLObject aUrlObj( aURLStr, INetURLObject::EncodeMechanism::WasEncoded );
             aUrlObj.SetParam( aData, INetURLObject::EncodeMechanism::All );
-            aURL.Complete = aUrlObj.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS );
+            aURL.Complete = aUrlObj.GetMainURL( INetURLObject::DecodeMechanism::Unambiguous );
             if (xTransformer.is())
                 xTransformer->parseStrict(aURL);
 
@@ -3823,7 +3823,7 @@ void SAL_CALL ODatabaseForm::write(const Reference<XObjectOutputStream>& _rxOutS
     _rxOutStream->writeBoolean(m_bAllowDelete);
 
     // html form stuff
-    OUString sTmp = INetURLObject::decode( m_aTargetURL, INetURLObject::DECODE_UNAMBIGUOUS);
+    OUString sTmp = INetURLObject::decode( m_aTargetURL, INetURLObject::DecodeMechanism::Unambiguous);
     _rxOutStream << sTmp;
     _rxOutStream->writeShort( (sal_Int16)m_eSubmitMethod );
     _rxOutStream->writeShort( (sal_Int16)m_eSubmitEncoding );
@@ -3933,7 +3933,7 @@ void SAL_CALL ODatabaseForm::read(const Reference<XObjectInputStream>& _rxInStre
     // html stuff
     OUString sTmp;
     _rxInStream >> sTmp;
-    m_aTargetURL = INetURLObject::decode( sTmp, INetURLObject::DECODE_UNAMBIGUOUS);
+    m_aTargetURL = INetURLObject::decode( sTmp, INetURLObject::DecodeMechanism::Unambiguous);
     m_eSubmitMethod     = (FormSubmitMethod)_rxInStream->readShort();
     m_eSubmitEncoding       = (FormSubmitEncoding)_rxInStream->readShort();
     _rxInStream >> m_aTargetFrame;

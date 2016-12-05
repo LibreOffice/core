@@ -98,9 +98,9 @@ PlaceEditDialog::PlaceEditDialog(vcl::Window* pParent, const std::shared_ptr<Pla
             if ( rUrl.HasUserData( ) )
             {
                 m_pEDUsername->SetText( INetURLObject::decode( rUrl.GetUser( ),
-                                                              INetURLObject::DECODE_WITH_CHARSET ) );
+                                                              INetURLObject::DecodeMechanism::WithCharset ) );
                 m_aDetailsContainers[i]->setUsername( INetURLObject::decode( rUrl.GetUser( ),
-                                                              INetURLObject::DECODE_WITH_CHARSET ) );
+                                                              INetURLObject::DecodeMechanism::WithCharset ) );
             }
 
             m_pLBServerType->SelectEntryPos( i );
@@ -144,7 +144,7 @@ OUString PlaceEditDialog::GetServerUrl()
         if ( !sUsername.isEmpty( ) )
             aUrl.SetUser( sUsername );
         if ( !aUrl.HasError( ) )
-            sUrl = aUrl.GetMainURL( INetURLObject::NO_DECODE );
+            sUrl = aUrl.GetMainURL( INetURLObject::DecodeMechanism::NONE );
     }
 
     return sUrl;
@@ -225,7 +225,7 @@ IMPL_LINK( PlaceEditDialog, OKHdl, Button*, /*pBtn*/, void)
 {
     if ( m_xCurrentDetails.get() )
     {
-        OUString sUrl = m_xCurrentDetails->getUrl().GetHost( INetURLObject::DECODE_WITH_CHARSET );
+        OUString sUrl = m_xCurrentDetails->getUrl().GetHost( INetURLObject::DecodeMechanism::WithCharset );
         OUString sGDriveHost( GDRIVE_BASE_URL );
         OUString sAlfrescoHost( ALFRESCO_CLOUD_BASE_URL );
         OUString sOneDriveHost( ONEDRIVE_BASE_URL );
@@ -236,7 +236,7 @@ IMPL_LINK( PlaceEditDialog, OKHdl, Button*, /*pBtn*/, void)
         {
             m_pBTRepoRefresh->Click();
 
-            sUrl = m_xCurrentDetails->getUrl().GetHost( INetURLObject::DECODE_WITH_CHARSET );
+            sUrl = m_xCurrentDetails->getUrl().GetHost( INetURLObject::DecodeMechanism::WithCharset );
             INetURLObject aHostUrl( sUrl );
             OUString sRepoId = aHostUrl.GetMark();
 

@@ -379,7 +379,7 @@ uno::Reference< text::XAutoTextEntry >  SwXAutoTextGroup::insertNewByName(const 
         if(rCfg.IsSaveRelFile())
         {
             INetURLObject aTemp(pGlosGroup->GetFileName());
-            pGlosGroup->SetBaseURL( aTemp.GetMainURL(INetURLObject::NO_DECODE));
+            pGlosGroup->SetBaseURL( aTemp.GetMainURL(INetURLObject::DecodeMechanism::NONE));
         }
         else
             pGlosGroup->SetBaseURL( OUString() );

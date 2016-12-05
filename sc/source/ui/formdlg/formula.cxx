@@ -406,7 +406,7 @@ void ScFormulaDlg::SetReference( const ScRange& rRef, ScDocument* pRefDoc )
 
             // #i75893# convert escaped URL of the document to something user friendly
 //           OUString aFileName = pObjSh->GetMedium()->GetName();
-            OUString aFileName = pObjSh->GetMedium()->GetURLObject().GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS );
+            OUString aFileName = pObjSh->GetMedium()->GetURLObject().GetMainURL( INetURLObject::DecodeMechanism::Unambiguous );
 
             aRefStr = "'";
             aRefStr += aFileName;

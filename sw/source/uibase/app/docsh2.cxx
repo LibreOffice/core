@@ -1567,7 +1567,7 @@ int SwFindDocShell( SfxObjectShellRef& xDocSh,
 
     // 2. Open the file ourselves
     std::unique_ptr<SfxMedium> xMed(new SfxMedium( aTmpObj.GetMainURL(
-                             INetURLObject::NO_DECODE ), StreamMode::READ ));
+                             INetURLObject::DecodeMechanism::NONE ), StreamMode::READ ));
     if( INetProtocol::File == aTmpObj.GetProtocol() )
         xMed->Download(); // Touch the medium (download it)
 

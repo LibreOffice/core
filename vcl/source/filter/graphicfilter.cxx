@@ -111,7 +111,7 @@ static bool DirEntryExists( const INetURLObject& rObj )
 
     try
     {
-        ::ucbhelper::Content aCnt( rObj.GetMainURL( INetURLObject::NO_DECODE ),
+        ::ucbhelper::Content aCnt( rObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ),
                              css::uno::Reference< css::ucb::XCommandEnvironment >(),
                              comphelper::getProcessComponentContext() );
 
@@ -1280,7 +1280,7 @@ sal_uInt16 GraphicFilter::CanImportGraphic( const INetURLObject& rPath,
     sal_uInt16  nRetValue = GRFILTER_FORMATERROR;
     SAL_WARN_IF( rPath.GetProtocol() == INetProtocol::NotValid, "vcl", "GraphicFilter::CanImportGraphic() : ProtType == INetProtocol::NotValid" );
 
-    OUString    aMainUrl( rPath.GetMainURL( INetURLObject::NO_DECODE ) );
+    OUString    aMainUrl( rPath.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
     std::unique_ptr<SvStream> xStream(::utl::UcbStreamHelper::CreateStream( aMainUrl, StreamMode::READ | StreamMode::SHARE_DENYNONE ));
     if (xStream)
     {
@@ -1310,7 +1310,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const INetURLObject&
     sal_uInt16 nRetValue = GRFILTER_FORMATERROR;
     SAL_WARN_IF( rPath.GetProtocol() == INetProtocol::NotValid, "vcl", "GraphicFilter::ImportGraphic() : ProtType == INetProtocol::NotValid" );
 
-    OUString    aMainUrl( rPath.GetMainURL( INetURLObject::NO_DECODE ) );
+    OUString    aMainUrl( rPath.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
     std::unique_ptr<SvStream> xStream(::utl::UcbStreamHelper::CreateStream( aMainUrl, StreamMode::READ | StreamMode::SHARE_DENYNONE ));
     if (xStream)
     {
@@ -1810,7 +1810,7 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const INetURLO
     SAL_WARN_IF( rPath.GetProtocol() == INetProtocol::NotValid, "vcl", "GraphicFilter::ExportGraphic() : ProtType == INetProtocol::NotValid" );
     bool bAlreadyExists = DirEntryExists( rPath );
 
-    OUString    aMainUrl( rPath.GetMainURL( INetURLObject::NO_DECODE ) );
+    OUString    aMainUrl( rPath.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
     std::unique_ptr<SvStream> xStream(::utl::UcbStreamHelper::CreateStream( aMainUrl, StreamMode::WRITE | StreamMode::TRUNC ));
     if (xStream)
     {

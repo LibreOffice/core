@@ -167,7 +167,7 @@ namespace
                                 p->sText,
                                 INetURLObject::decode(
                                     p->rINetAttr.GetINetFormat().GetValue(),
-                                    INetURLObject::DECODE_UNAMBIGUOUS ),
+                                    INetURLObject::DecodeMechanism::Unambiguous ),
                                 &p->rINetAttr,
                                 n );
             pMember->insert( pCnt );
@@ -570,7 +570,7 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                     pWrtShell->GetGrfNms( &sLink, nullptr, static_cast<const SwFlyFrameFormat*>( pFrameFormat));
                     pCnt = new SwGraphicContent(this, sFrameName,
                                 INetURLObject::decode( sLink,
-                                           INetURLObject::DECODE_UNAMBIGUOUS ),
+                                           INetURLObject::DecodeMechanism::Unambiguous ),
                                 pFrameFormat->FindLayoutRect(false, &aNullPt).Top());
                 }
                 else

@@ -173,7 +173,7 @@ bool GetHelpAnchor_Impl( const OUString& _rURL, OUString& _rAnchor )
 
     try
     {
-        ::ucbhelper::Content aCnt( INetURLObject( _rURL ).GetMainURL( INetURLObject::NO_DECODE ),
+        ::ucbhelper::Content aCnt( INetURLObject( _rURL ).GetMainURL( INetURLObject::DecodeMechanism::NONE ),
                              Reference< css::ucb::XCommandEnvironment >(),
                              comphelper::getProcessComponentContext() );
         if ( ( aCnt.getPropertyValue("AnchorName") >>= sAnchor ) )

@@ -148,7 +148,7 @@ OUString SwBasicEscherEx::BuildFileName(sal_uInt16& rnLevel, bool& rbRel, const 
         // try to convert to relative file name
         OUString aTmpName( aDosName );
         aDosName = INetURLObject::GetRelURL( GetBasePath(), rUrl,
-        INetURLObject::EncodeMechanism::WasEncoded, INetURLObject::DECODE_WITH_CHARSET );
+        INetURLObject::EncodeMechanism::WasEncoded, INetURLObject::DecodeMechanism::WithCharset );
 
         if (aDosName.startsWith(INET_FILE_SCHEME))
         {

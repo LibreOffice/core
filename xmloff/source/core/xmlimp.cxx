@@ -1674,7 +1674,7 @@ OUString SvXMLImport::GetAbsoluteReference(const OUString& rValue) const
 
     INetURLObject aAbsURL;
     if( mpImpl->aBaseURL.GetNewAbsURL( rValue, &aAbsURL ) )
-        return aAbsURL.GetMainURL( INetURLObject::DECODE_TO_IURI );
+        return aAbsURL.GetMainURL( INetURLObject::DecodeMechanism::ToIUri );
     else
         return rValue;
 }
@@ -1878,12 +1878,12 @@ SvXMLImport::GetComponentContext() const
 
 OUString SvXMLImport::GetBaseURL() const
 {
-    return mpImpl->aBaseURL.GetMainURL( INetURLObject::NO_DECODE );
+    return mpImpl->aBaseURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 }
 
 OUString SvXMLImport::GetDocumentBase() const
 {
-    return mpImpl->aDocBase.GetMainURL( INetURLObject::NO_DECODE );
+    return mpImpl->aDocBase.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 }
 
 // Convert drawing object positions from OOo file format to OASIS (#i28749#)

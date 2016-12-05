@@ -304,7 +304,7 @@ bool SdTPAction::FillItemSet( SfxItemSet* rAttrs )
                 eCA == presentation::ClickAction_PROGRAM )
                 aFileName = ::URIHelper::SmartRel2Abs( INetURLObject(aBaseURL), aFileName, URIHelper::GetMaybeFileHdl(), true, false,
                                                         INetURLObject::EncodeMechanism::WasEncoded,
-                                                        INetURLObject::DECODE_UNAMBIGUOUS );
+                                                        INetURLObject::DecodeMechanism::Unambiguous );
 
             rAttrs->Put( SfxStringItem( ATTR_ACTION_FILENAME, aFileName ) );
             bModified = true;
@@ -821,7 +821,7 @@ OUString SdTPAction::GetEditText( bool bFullDocDestination )
         aURL = INetURLObject( ::URIHelper::SmartRel2Abs( INetURLObject(aBaseURL), aStr, URIHelper::GetMaybeFileHdl() ) );
 
     // get adjusted file name
-    aStr = aURL.GetMainURL( INetURLObject::NO_DECODE );
+    aStr = aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
     if( bFullDocDestination &&
         eCA == presentation::ClickAction_DOCUMENT &&

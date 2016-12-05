@@ -64,7 +64,7 @@ SfxItemSet* SfxFrameDescriptor::GetArgs()
 void SfxFrameDescriptor::SetURL( const OUString& rURL )
 {
     aURL = INetURLObject(rURL);
-    SetActualURL(aURL.GetMainURL( INetURLObject::DECODE_TO_IURI ));
+    SetActualURL(aURL.GetMainURL( INetURLObject::DecodeMechanism::ToIUri ));
 }
 
 void SfxFrameDescriptor::SetActualURL( const OUString& rURL )

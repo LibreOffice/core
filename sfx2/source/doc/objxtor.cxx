@@ -358,7 +358,7 @@ SfxObjectShell::~SfxObjectShell()
 
 #if HAVE_FEATURE_MULTIUSER_ENVIRONMENT
         if ( IsDocShared() && pMedium )
-            FreeSharedFile( pMedium->GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) );
+            FreeSharedFile( pMedium->GetURLObject().GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
 #endif
         DELETEX( SfxMedium, pMedium );
     }

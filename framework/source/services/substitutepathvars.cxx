@@ -514,14 +514,14 @@ throw ( RuntimeException )
 
     INetURLObject aUrl( rURL );
     if ( !aUrl.HasError() )
-        aURL = aUrl.GetMainURL( INetURLObject::NO_DECODE );
+        aURL = aUrl.GetMainURL( INetURLObject::DecodeMechanism::NONE );
     else
     {
         // Convert a system path to a UCB compliant URL before resubstitution
         OUString aTemp;
         if ( osl::FileBase::getFileURLFromSystemPath( rURL, aTemp ) == osl::FileBase::E_None )
         {
-            aURL = INetURLObject( aTemp ).GetMainURL( INetURLObject::NO_DECODE );
+            aURL = INetURLObject( aTemp ).GetMainURL( INetURLObject::DecodeMechanism::NONE );
             if( aURL.isEmpty() )
                 return rURL;
         }
@@ -656,7 +656,7 @@ void SubstitutePathVariables::SetPredefinedPathVariables()
         m_aPreDefVars.m_FixedVar[PREDEFVAR_BRANDBASEURL] );
     if ( !aProgObj.HasError() && aProgObj.insertName( LIBO_BIN_FOLDER ) )
     {
-        m_aPreDefVars.m_FixedVar[ PREDEFVAR_PROGPATH ] = aProgObj.GetMainURL(INetURLObject::NO_DECODE);
+        m_aPreDefVars.m_FixedVar[ PREDEFVAR_PROGPATH ] = aProgObj.GetMainURL(INetURLObject::DecodeMechanism::NONE);
         m_aPreDefVars.m_FixedVar[ PREDEFVAR_PROGURL ]  = m_aPreDefVars.m_FixedVar[ PREDEFVAR_PROGPATH ];
         m_aPreDefVars.m_FixedVar[ PREDEFVAR_PROG ]     = m_aPreDefVars.m_FixedVar[ PREDEFVAR_PROGPATH ];
     }

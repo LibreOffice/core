@@ -242,7 +242,7 @@ void SfxFrameHTMLWriter::Out_FrameDescriptor(
         uno::Any aAny = xSet->getPropertyValue("FrameURL");
         if ( (aAny >>= aStr) && !aStr.isEmpty() )
         {
-            OUString aURL = INetURLObject( aStr ).GetMainURL( INetURLObject::DECODE_TO_IURI );
+            OUString aURL = INetURLObject( aStr ).GetMainURL( INetURLObject::DecodeMechanism::ToIUri );
             if( !aURL.isEmpty() )
             {
                 aURL = URIHelper::simpleNormalizedMakeRelative(

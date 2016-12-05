@@ -290,7 +290,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
             {
                 SfxApplication* pApp = SfxGetpApp();
                 SfxAllItemSet aSet( pApp->GetPool() );
-                aSet.Put( SfxStringItem( SID_FILE_NAME, pMed->GetURLObject().GetMainURL(INetURLObject::NO_DECODE) ) );
+                aSet.Put( SfxStringItem( SID_FILE_NAME, pMed->GetURLObject().GetMainURL(INetURLObject::DecodeMechanism::NONE) ) );
                 aSet.Put( SfxBoolItem( SID_TEMPLATE, true ) );
                 aSet.Put( SfxStringItem( SID_TARGETNAME, OUString("_blank") ) );
                 const SfxStringItem* pReferer = SfxItemSet::GetItem<SfxStringItem>(pMed->GetItemSet(), SID_REFERER, false);
@@ -340,7 +340,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                   && ( pSh->GetModifyPasswordHash() || pSh->GetModifyPasswordInfo().getLength() )
                   && !pSh->IsModifyPasswordEntered() )
                 {
-                    OUString aDocumentName = INetURLObject( pMed->GetOrigURL() ).GetMainURL( INetURLObject::DECODE_WITH_CHARSET );
+                    OUString aDocumentName = INetURLObject( pMed->GetOrigURL() ).GetMainURL( INetURLObject::DecodeMechanism::WithCharset );
                     if( !AskPasswordToModify_Impl( pMed->GetInteractionHandler(), aDocumentName, pMed->GetOrigFilter(), pSh->GetModifyPasswordHash(), pSh->GetModifyPasswordInfo() ) )
                     {
                         // this is a read-only document, if it has "Password to modify"
@@ -403,8 +403,8 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
             // etag tells that the cache representation (e.g. in LO) is different from the one on the server,
             // but tells nothing about the age
             // Details at this link: http://tools.ietf.org/html/rfc4918#section-15, section 15.7
-            bool bPhysObjIsYounger = ::utl::UCBContentHelper::IsYounger( aMedObj.GetMainURL( INetURLObject::NO_DECODE ),
-                                                                         aPhysObj.GetMainURL( INetURLObject::NO_DECODE ) );
+            bool bPhysObjIsYounger = ::utl::UCBContentHelper::IsYounger( aMedObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ),
+                                                                         aPhysObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
             bool bIsWebDAV = aMedObj.isAnyKnownWebDAVScheme();
 
             if ( ( !bNeedsReload && ( ( aMedObj.GetProtocol() == INetProtocol::File &&

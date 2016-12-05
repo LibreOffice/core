@@ -510,7 +510,7 @@ bool SwXMLTextBlocks::IsFileUCBStorage( const OUString & rFileName)
         OUString aURL;
         osl::FileBase::getFileURLFromSystemPath( aName, aURL );
         aObj.SetURL( aURL );
-        aName = aObj.GetMainURL( INetURLObject::NO_DECODE );
+        aName = aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
     }
 
     SvStream * pStm = ::utl::UcbStreamHelper::CreateStream( aName, StreamMode::STD_READ );

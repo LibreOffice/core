@@ -1091,7 +1091,7 @@ sal_Int16 UCBStorageStream_Impl::Commit()
 
                 INetURLObject aObj( m_aURL );
                 aObj.SetName( m_aName );
-                m_aURL = aObj.GetMainURL( INetURLObject::NO_DECODE );
+                m_aURL = aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
                 m_bModified = false;
                 m_bSourceRead = true;
             }
@@ -1631,7 +1631,7 @@ void UCBStorage_Impl::Init()
                     aObj.Append( "manifest.xml" );
 
                     // create input stream
-                    std::unique_ptr<SvStream> pStream(::utl::UcbStreamHelper::CreateStream( aObj.GetMainURL( INetURLObject::NO_DECODE ), StreamMode::STD_READ ));
+                    std::unique_ptr<SvStream> pStream(::utl::UcbStreamHelper::CreateStream( aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::STD_READ ));
                     // no stream means no manifest.xml
                     if ( pStream )
                     {
@@ -2794,7 +2794,7 @@ BaseStorage* UCBStorage::OpenStorage_Impl( const OUString& rEleName, StreamMode 
             INetURLObject aFolderObj( pImp->m_aURL );
             aFolderObj.removeSegment();
 
-            Content aFolder( aFolderObj.GetMainURL( INetURLObject::NO_DECODE ), Reference < XCommandEnvironment >(), comphelper::getProcessComponentContext() );
+            Content aFolder( aFolderObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), Reference < XCommandEnvironment >(), comphelper::getProcessComponentContext() );
             pImp->m_pContent = new Content;
             bool bRet = ::utl::UCBContentHelper::MakeFolder( aFolder, pImp->m_aName, *pImp->m_pContent );
             if ( !bRet )

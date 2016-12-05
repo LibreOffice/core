@@ -1095,7 +1095,7 @@ bool transformURL(const OUString& rOldURL, OUString& rNewURL, ScDocument* pDoc)
     {
         //  URL has to be decoded for escaped characters (%20)
         OUString aURL = INetURLObject::decode( rOldURL,
-                INetURLObject::DECODE_WITH_CHARSET );
+                INetURLObject::DecodeMechanism::WithCharset );
         OUString aAddressString = aURL.copy(1);
 
         ScRange aRange;

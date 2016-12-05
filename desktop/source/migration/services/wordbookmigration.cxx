@@ -95,13 +95,13 @@ namespace migration
 
     void WordbookMigration::checkAndCreateDirectory( INetURLObject& rDirURL )
     {
-        ::osl::FileBase::RC aResult = ::osl::Directory::create( rDirURL.GetMainURL( INetURLObject::DECODE_TO_IURI ) );
+        ::osl::FileBase::RC aResult = ::osl::Directory::create( rDirURL.GetMainURL( INetURLObject::DecodeMechanism::ToIUri ) );
         if ( aResult == ::osl::FileBase::E_NOENT )
         {
             INetURLObject aBaseURL( rDirURL );
             aBaseURL.removeSegment();
             checkAndCreateDirectory( aBaseURL );
-            ::osl::Directory::create( rDirURL.GetMainURL( INetURLObject::DECODE_TO_IURI ) );
+            ::osl::Directory::create( rDirURL.GetMainURL( INetURLObject::DecodeMechanism::ToIUri ) );
         }
     }
 

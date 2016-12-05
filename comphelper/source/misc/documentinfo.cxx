@@ -114,7 +114,7 @@ namespace comphelper {
                 return sTitle;
 
             // 5. try the last segment of the document URL
-            // this formerly was an INetURLObject::getName( LAST_SEGMENT, true, DECODE_WITH_CHARSET ),
+            // this formerly was an INetURLObject::getName( LAST_SEGMENT, true, DecodeMechanism::WithCharset ),
             // but since we moved this code to comphelper, we do not have access to an INetURLObject anymore
             // This heuristics here should be sufficient - finally, we will get an UNO title API in a not
             // too distant future (hopefully), then  this complete class is superfluous)

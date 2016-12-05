@@ -1806,7 +1806,7 @@ OUString StringResourcePersistenceImpl::implGetPathForLocaleItem
         aInetObj.setExtension( "default" );
     else
         aInetObj.setExtension( "properties" );
-    OUString aCompleteFileName = aInetObj.GetMainURL( INetURLObject::NO_DECODE );
+    OUString aCompleteFileName = aInetObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
     return aCompleteFileName;
 }
 

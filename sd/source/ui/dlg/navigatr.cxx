@@ -484,7 +484,7 @@ bool SdNavigatorWin::InsertFile(const OUString& rFileName)
     }
 
     // get adjusted FileName
-    OUString aFileName( aURL.GetMainURL( INetURLObject::NO_DECODE ) );
+    OUString aFileName( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
 
     if (aFileName.isEmpty())
     {

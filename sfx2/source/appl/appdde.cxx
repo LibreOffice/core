@@ -87,7 +87,7 @@ namespace
 
         try
         {
-            ::ucbhelper::Content aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
+            ::ucbhelper::Content aCnt( aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), uno::Reference< ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
             bRet = aCnt.isDocument();
         }
         catch( const ucb::CommandAbortedException& )
@@ -141,10 +141,10 @@ bool ImplDdeService::MakeTopic( const OUString& rNm )
         INetURLObject aWorkPath( SvtPathOptions().GetWorkPath() );
         INetURLObject aFile;
         if ( aWorkPath.GetNewAbsURL( rNm, &aFile ) &&
-             lcl_IsDocument( aFile.GetMainURL( INetURLObject::NO_DECODE ) ) )
+             lcl_IsDocument( aFile.GetMainURL( INetURLObject::DecodeMechanism::NONE ) ) )
         {
             // File exists? then try to load it:
-            SfxStringItem aName( SID_FILE_NAME, aFile.GetMainURL( INetURLObject::NO_DECODE ) );
+            SfxStringItem aName( SID_FILE_NAME, aFile.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
             SfxBoolItem aNewView(SID_OPEN_NEW_VIEW, true);
 
             SfxBoolItem aSilent(SID_SILENT, true);
@@ -439,7 +439,7 @@ bool SfxApplication::InitializeDde()
         INetURLObject aOfficeLockFile( SvtPathOptions().GetUserConfigPath() );
         aOfficeLockFile.insertName( "soffice.lck" );
         OUString aService( SfxDdeServiceName_Impl(
-                    aOfficeLockFile.GetMainURL(INetURLObject::DECODE_TO_IURI) ) );
+                    aOfficeLockFile.GetMainURL(INetURLObject::DecodeMechanism::ToIUri) ) );
         aService = aService.toAsciiUpperCase();
         pImpl->pDdeService2 = new ImplDdeService( aService );
         pImpl->pTriggerTopic = new SfxDdeTriggerTopic_Impl;

@@ -463,7 +463,7 @@ SwDoc* Reader::GetTemplateDoc()
     else
     {
         INetURLObject aTDir( aTemplateNm );
-        const OUString aFileName = aTDir.GetMainURL( INetURLObject::NO_DECODE );
+        const OUString aFileName = aTDir.GetMainURL( INetURLObject::DecodeMechanism::NONE );
         OSL_ENSURE( !aTDir.HasError(), "No absolute path for template name!" );
         DateTime aCurrDateTime( DateTime::SYSTEM );
         bool bLoad = false;
@@ -474,7 +474,7 @@ SwDoc* Reader::GetTemplateDoc()
             Date aTstDate( Date::EMPTY );
             tools::Time aTstTime( tools::Time::EMPTY );
             if( FStatHelper::GetModifiedDateTimeOfFile(
-                            aTDir.GetMainURL( INetURLObject::NO_DECODE ),
+                            aTDir.GetMainURL( INetURLObject::DecodeMechanism::NONE ),
                             &aTstDate, &aTstTime ) &&
                 ( !pTemplate || aDStamp != aTstDate || aTStamp != aTstTime ))
             {

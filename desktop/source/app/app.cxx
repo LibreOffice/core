@@ -2337,7 +2337,7 @@ OUString GetURL_Impl(
     bool bWasAbsolute;
     INetURLObject aURL     = aObj.smartRel2Abs( rName, bWasAbsolute, false, INetURLObject::EncodeMechanism::WasEncoded,
                                                 RTL_TEXTENCODING_UTF8, true );
-    OUString      aFileURL = aURL.GetMainURL(INetURLObject::NO_DECODE);
+    OUString      aFileURL = aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
 
     ::osl::FileStatus aStatus( osl_FileStatus_Mask_FileURL );
     ::osl::DirectoryItem aItem;

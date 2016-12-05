@@ -458,12 +458,12 @@ migrations_vr MigrationImpl::readMigrationSteps(const OUString& rMigrationName)
 
 static FileBase::RC _checkAndCreateDirectory(INetURLObject& dirURL)
 {
-    FileBase::RC result = Directory::create(dirURL.GetMainURL(INetURLObject::DECODE_TO_IURI));
+    FileBase::RC result = Directory::create(dirURL.GetMainURL(INetURLObject::DecodeMechanism::ToIUri));
     if (result == FileBase::E_NOENT) {
         INetURLObject baseURL(dirURL);
         baseURL.removeSegment();
         _checkAndCreateDirectory(baseURL);
-        return Directory::create(dirURL.GetMainURL(INetURLObject::DECODE_TO_IURI));
+        return Directory::create(dirURL.GetMainURL(INetURLObject::DecodeMechanism::ToIUri));
     } else
         return result;
 }
@@ -507,7 +507,7 @@ void MigrationImpl::setInstallInfoIfExist(
     const OUString& rConfigDir,
     const OUString& rVersion)
 {
-    OUString url(INetURLObject(rConfigDir).GetMainURL(INetURLObject::NO_DECODE));
+    OUString url(INetURLObject(rConfigDir).GetMainURL(INetURLObject::DecodeMechanism::NONE));
     osl::DirectoryItem item;
     osl::FileStatus stat(osl_FileStatus_Mask_Type);
 

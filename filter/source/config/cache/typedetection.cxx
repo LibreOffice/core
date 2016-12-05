@@ -674,7 +674,7 @@ bool TypeDetection::impl_getPreselectionForType(
         INetURLObject   aParser    (aParsedURL.Main);
         OUString sExtension = aParser.getExtension(INetURLObject::LAST_SEGMENT       ,
                                                           true                          ,
-                                                          INetURLObject::DECODE_WITH_CHARSET);
+                                                          INetURLObject::DecodeMechanism::WithCharset);
         sExtension = sExtension.toAsciiLowerCase();
 
         // otherwise we must know, if it matches to the given URL really.

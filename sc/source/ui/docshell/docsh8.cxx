@@ -107,11 +107,11 @@ namespace
         aURL.SetSmartProtocol( INetProtocol::File );
         aURL.SetSmartURL( rFullFileName );
         _rTabName = aURL.getBase( INetURLObject::LAST_SEGMENT, true,
-                INetURLObject::DECODE_UNAMBIGUOUS );
+                INetURLObject::DecodeMechanism::Unambiguous );
         OUString aExtension = aURL.getExtension();
         aURL.removeSegment();
         aURL.removeFinalSlash();
-        OUString aPath = aURL.GetMainURL(INetURLObject::NO_DECODE);
+        OUString aPath = aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
         uno::Reference<uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
 
         _rDrvMgr.set( sdbc::DriverManager::create( xContext ) );
@@ -169,7 +169,7 @@ bool ScDocShell::MoveFile( const INetURLObject& rSourceObj, const INetURLObject&
 
     try
     {
-        ::ucbhelper::Content aDestPath( aDestPathObj.GetMainURL(INetURLObject::NO_DECODE),
+        ::ucbhelper::Content aDestPath( aDestPathObj.GetMainURL(INetURLObject::DecodeMechanism::NONE),
                             uno::Reference< css::ucb::XCommandEnvironment >(),
                             comphelper::getProcessComponentContext() );
         uno::Reference< css::ucb::XCommandInfo > xInfo = aDestPath.getCommands();
@@ -177,7 +177,7 @@ bool ScDocShell::MoveFile( const INetURLObject& rSourceObj, const INetURLObject&
         if ( xInfo->hasCommandByName( aTransferName ) )
         {
             aDestPath.executeCommand( aTransferName, uno::makeAny(
-                css::ucb::TransferInfo( bMoveData, rSourceObj.GetMainURL(INetURLObject::NO_DECODE), aName,
+                css::ucb::TransferInfo( bMoveData, rSourceObj.GetMainURL(INetURLObject::DecodeMechanism::NONE), aName,
                                                        css::ucb::NameClash::ERROR ) ) );
         }
         else
@@ -202,7 +202,7 @@ bool ScDocShell::KillFile( const INetURLObject& rURL )
     bool bRet = true;
     try
     {
-        ::ucbhelper::Content aCnt( rURL.GetMainURL(INetURLObject::NO_DECODE),
+        ::ucbhelper::Content aCnt( rURL.GetMainURL(INetURLObject::DecodeMechanism::NONE),
                         uno::Reference< css::ucb::XCommandEnvironment >(),
                         comphelper::getProcessComponentContext() );
         aCnt.executeCommand( "delete", css::uno::Any( true ) );
@@ -221,7 +221,7 @@ bool ScDocShell::IsDocument( const INetURLObject& rURL )
     bool bRet = false;
     try
     {
-        ::ucbhelper::Content aCnt( rURL.GetMainURL(INetURLObject::NO_DECODE),
+        ::ucbhelper::Content aCnt( rURL.GetMainURL(INetURLObject::DecodeMechanism::NONE),
                         uno::Reference< css::ucb::XCommandEnvironment >(),
                         comphelper::getProcessComponentContext() );
         bRet = aCnt.isDocument();

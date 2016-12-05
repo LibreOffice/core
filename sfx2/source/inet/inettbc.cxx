@@ -224,7 +224,7 @@ void SfxURLToolBoxControl_Impl::StateChanged
                         continue;
 
                     INetURLObject aURL    ( sURL );
-                    OUString      sMainURL( aURL.GetMainURL( INetURLObject::DECODE_WITH_CHARSET ) );
+                    OUString      sMainURL( aURL.GetMainURL( INetURLObject::DecodeMechanism::WithCharset ) );
                     OUString      sFile;
 
                     if (osl::FileBase::getSystemPathFromFileURL(sMainURL, sFile) == osl::FileBase::E_None)

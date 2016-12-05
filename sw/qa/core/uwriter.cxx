@@ -186,7 +186,7 @@ void SwDocTest::testFileNameFields()
     aTempFile.EnableKillingFile();
 
     INetURLObject aTempFileURL(aTempFile.GetURL());
-    OUString sFileURL = aTempFileURL.GetMainURL(INetURLObject::NO_DECODE);
+    OUString sFileURL = aTempFileURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
     SfxMedium aDstMed(sFileURL, StreamMode::STD_READWRITE);
 
     std::shared_ptr<SfxFilter> pFilter(new SfxFilter(
@@ -205,7 +205,7 @@ void SwDocTest::testFileNameFields()
     {
         OUString sResult(aNameField.Expand(FF_NAME));
         OUString sExpected(rUrlObj.getName(INetURLObject::LAST_SEGMENT,
-            true,INetURLObject::DECODE_WITH_CHARSET));
+            true,INetURLObject::DecodeMechanism::WithCharset));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected Readable FileName", sExpected, sResult);
     }
 
@@ -226,7 +226,7 @@ void SwDocTest::testFileNameFields()
     {
         OUString sResult(aNameField.Expand(FF_NAME_NOEXT));
         OUString sExpected(rUrlObj.getName(INetURLObject::LAST_SEGMENT,
-            true,INetURLObject::DECODE_WITH_CHARSET));
+            true,INetURLObject::DecodeMechanism::WithCharset));
         //Chop off .tmp
         sExpected = sExpected.copy(0, sExpected.getLength() - 4);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected Readable FileName", sExpected, sResult);

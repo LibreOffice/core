@@ -167,7 +167,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OU
     INetURLObject aParser( rURL );
     Reference< XController2 > xController;
 
-    const OUString sComponentURL( aParser.GetMainURL( INetURLObject::DECODE_TO_IURI ) );
+    const OUString sComponentURL( aParser.GetMainURL( INetURLObject::DecodeMechanism::ToIUri ) );
     for (const ServiceNameToImplName& aImplementation : aImplementations)
     {
         if ( sComponentURL.equalsAscii( aImplementation.pAsciiServiceName ) )

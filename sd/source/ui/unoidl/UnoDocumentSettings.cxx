@@ -969,7 +969,7 @@ void DocumentSettings::ExtractURL( XPropertyListType t, Any* pValue )
     INetURLObject aPathURL( pList->GetPath() );
     aPathURL.insertName( pList->GetName() );
     aPathURL.setExtension( pList->GetDefaultExt() );
-    OUString aPath( aPathURL.GetMainURL( INetURLObject::NO_DECODE ) );
+    OUString aPath( aPathURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
     *pValue <<= aPath;
 }
 

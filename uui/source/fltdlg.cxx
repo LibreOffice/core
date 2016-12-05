@@ -212,7 +212,7 @@ OUString FilterDialog::impl_buildUIFileName( const OUString& sName )
         {
             INetURLObject aBuilder   ( sName );
             Size          aSize      = m_pFtURL->GetOutputSizePixel();
-                          sShortName = aBuilder.getAbbreviated( xStringCalculator, aSize.Width(), INetURLObject::DECODE_UNAMBIGUOUS );
+                          sShortName = aBuilder.getAbbreviated( xStringCalculator, aSize.Width(), INetURLObject::DecodeMechanism::Unambiguous );
         }
     }
 

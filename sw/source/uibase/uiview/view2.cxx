@@ -265,7 +265,7 @@ int SwView::InsertGraphic( const OUString &rPath, const OUString &rFilter,
                 SwDocShell* pDocSh = GetDocShell();
                 INetURLObject aTemp(
                     pDocSh->HasName() ?
-                        pDocSh->GetMedium()->GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) :
+                        pDocSh->GetMedium()->GetURLObject().GetMainURL( INetURLObject::DecodeMechanism::NONE ) :
                         OUString());
 
                 OUString sURL = URIHelper::SmartRel2Abs(
@@ -1937,7 +1937,7 @@ bool SwView::JumpToSwMark( const OUString& rMark )
         const SwFormatINetFormat* pINet;
         OUString sCmp;
         OUString  sMark( INetURLObject::decode( rMark,
-                                           INetURLObject::DECODE_WITH_CHARSET ));
+                                           INetURLObject::DecodeMechanism::WithCharset ));
 
         sal_Int32 nLastPos, nPos = sMark.indexOf( cMarkSeparator );
         if( -1 != nPos )

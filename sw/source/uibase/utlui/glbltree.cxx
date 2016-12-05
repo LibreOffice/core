@@ -722,7 +722,7 @@ void SwGlobalTree::InsertRegion( const SwGlblDocContent* pCont, const OUString* 
         aFileNames.realloc(1);
         INetURLObject aFileName;
         aFileName.SetSmartURL( *pFileName );
-        aFileNames.getArray()[0] = aFileName.GetMainURL( INetURLObject::NO_DECODE );
+        aFileNames.getArray()[0] = aFileName.GetMainURL( INetURLObject::DecodeMechanism::NONE );
         InsertRegion( pCont, aFileNames );
     }
 }
@@ -934,7 +934,7 @@ void    SwGlobalTree::ExecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry )
                                 SID_SAVEASDOC, SfxCallMode::SYNCHRON ));
                 SfxObjectShell& rObj = *pViewFrame->GetObjectShell();
                 const SfxMedium* pMedium = rObj.GetMedium();
-                OUString sNewFile(pMedium->GetURLObject().GetMainURL(INetURLObject::DECODE_TO_IURI));
+                OUString sNewFile(pMedium->GetURLObject().GetMainURL(INetURLObject::DecodeMechanism::ToIUri));
                 // Insert the area with the Doc-Name
                 // Bring the own Doc in the foreground
                 if(aFrameListener.IsValid() && !sNewFile.isEmpty())
@@ -1160,7 +1160,7 @@ void SwGlobalTree::OpenDoc(const SwGlblDocContent* pCont)
     while( !bFound && pCurr )
     {
         if(pCurr->GetMedium() &&
-           pCurr->GetMedium()->GetURLObject().GetMainURL(INetURLObject::DECODE_TO_IURI) == sFileName)
+           pCurr->GetMedium()->GetURLObject().GetMainURL(INetURLObject::DecodeMechanism::ToIUri) == sFileName)
         {
             bFound = true;
             SwGlobalTree::SetShowShell(pCurr);
@@ -1297,7 +1297,7 @@ void SwGlobalTree::InsertRegion( const SwGlblDocContent* _pContent, const Sequen
             INetURLObject aFileUrl;
             aFileUrl.SetSmartURL( sFileName );
             OUString sSectionName(aFileUrl.GetLastName(
-                INetURLObject::DECODE_UNAMBIGUOUS).getToken(0, sfx2::cTokenSeparator));
+                INetURLObject::DecodeMechanism::Unambiguous).getToken(0, sfx2::cTokenSeparator));
             sal_uInt16 nSectCount = rSh.GetSectionFormatCount();
             OUString sTempSectionName(sSectionName);
             sal_uInt16 nAddNumber = 0;
@@ -1355,7 +1355,7 @@ IMPL_LINK( SwGlobalTree, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg, vo
         sal_Int32 nPos = 0;
         for (SfxMedium* pMed : *pMedList)
         {
-            OUString sFileName = pMed->GetURLObject().GetMainURL( INetURLObject::NO_DECODE )
+            OUString sFileName = pMed->GetURLObject().GetMainURL( INetURLObject::DecodeMechanism::NONE )
                 + OUStringLiteral1(sfx2::cTokenSeparator)
                 + pMed->GetFilter()->GetFilterName()
                 + OUStringLiteral1(sfx2::cTokenSeparator);

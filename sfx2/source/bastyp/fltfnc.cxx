@@ -378,7 +378,7 @@ sal_uInt32  SfxFilterMatcher::GuessFilterIgnoringContent(
     OUString sTypeName;
     try
     {
-        sTypeName = xDetection->queryTypeByURL( rMedium.GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) );
+        sTypeName = xDetection->queryTypeByURL( rMedium.GetURLObject().GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
     }
     catch (uno::Exception&)
     {
@@ -419,7 +419,7 @@ sal_uInt32  SfxFilterMatcher::GuessFilterControlDefaultUI( SfxMedium& rMedium, s
         // open the stream one times only ...
         // Otherwhise it will be tried more than once and show the same interaction more than once ...
 
-        OUString sURL( rMedium.GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) );
+        OUString sURL( rMedium.GetURLObject().GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
         uno::Reference< io::XInputStream > xInStream = rMedium.GetInputStream();
         OUString aFilterName;
 

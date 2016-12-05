@@ -1838,7 +1838,7 @@ void SAL_CALL SfxBaseModel::load(   const Sequence< beans::PropertyValue >& seqA
         nError = m_pData->m_pObjectShell->GetErrorCode();
         if ( nError == ERRCODE_IO_BROKENPACKAGE && xHandler.is() )
         {
-            OUString aDocName = pMedium->GetURLObject().getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
+            OUString aDocName = pMedium->GetURLObject().getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset );
             const SfxBoolItem* pRepairItem = SfxItemSet::GetItem<SfxBoolItem>(pMedium->GetItemSet(), SID_REPAIRPACKAGE, false);
             if ( !pRepairItem || !pRepairItem->GetValue() )
             {

@@ -314,7 +314,7 @@ ScVbaWorkbook::SaveAs( const uno::Any& FileName, const uno::Any& FileFormat, con
     // detect if there is no path if there is no path then we need
     // to use the current current folder
     INetURLObject aURL( sURL );
-    sURL = aURL.GetMainURL( INetURLObject::DECODE_TO_IURI );
+    sURL = aURL.GetMainURL( INetURLObject::DecodeMechanism::ToIUri );
     if( sURL.isEmpty() )
     {
         // need to add cur dir ( of this workbook ) or else the 'Work' dir
@@ -335,7 +335,7 @@ ScVbaWorkbook::SaveAs( const uno::Any& FileName, const uno::Any& FileFormat, con
             aURL.SetURL( sURL );
             aURL.Append( sFileName );
         }
-        sURL = aURL.GetMainURL( INetURLObject::DECODE_TO_IURI );
+        sURL = aURL.GetMainURL( INetURLObject::DecodeMechanism::ToIUri );
 
     }
 

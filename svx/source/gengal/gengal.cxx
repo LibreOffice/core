@@ -122,10 +122,10 @@ static void createTheme( const OUString& aThemeName, const OUString& aGalleryURL
 
         if ( ! pGalTheme->InsertURL( *aIter ) )
             fprintf( stderr, "Failed to import '%s'\n",
-                     OUStringToOString( aIter->GetMainURL(INetURLObject::NO_DECODE), RTL_TEXTENCODING_UTF8 ).getStr() );
+                     OUStringToOString( aIter->GetMainURL(INetURLObject::DecodeMechanism::NONE), RTL_TEXTENCODING_UTF8 ).getStr() );
         else
             fprintf( stderr, "Imported file '%s' (%" SAL_PRI_SIZET "u)\n",
-                     OUStringToOString( aIter->GetMainURL(INetURLObject::NO_DECODE), RTL_TEXTENCODING_UTF8 ).getStr(),
+                     OUStringToOString( aIter->GetMainURL(INetURLObject::DecodeMechanism::NONE), RTL_TEXTENCODING_UTF8 ).getStr(),
                      pGalTheme->GetObjectCount() );
     }
 
@@ -298,7 +298,7 @@ int GalApp::Main()
                 aName = GetCommandLineParam( ++i );
             else if ( aParam == "--path" )
                 aPath = Smartify( GetCommandLineParam( ++i ) ).
-                    GetMainURL(INetURLObject::NO_DECODE);
+                    GetMainURL(INetURLObject::DecodeMechanism::NONE);
             else if ( aParam == "--destdir" )
                 aDestDir = GetCommandLineParam( ++i );
             else if ( aParam == "--relative-urls" )

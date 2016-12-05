@@ -398,7 +398,7 @@ void ImplImageTree::createStyle()
 
         bool ok = aUrl.Append("images_" + maCurrentStyle, INetURLObject::EncodeMechanism::All);
         OSL_ASSERT(ok); (void) ok;
-        sThemeUrl = aUrl.GetMainURL(INetURLObject::NO_DECODE) + ".zip";
+        sThemeUrl = aUrl.GetMainURL(INetURLObject::DecodeMechanism::NONE) + ".zip";
 
     }
     else

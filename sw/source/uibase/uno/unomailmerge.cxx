@@ -716,7 +716,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
                 if (aCurOutputURL.isEmpty())
                 {
                     aURLObj.removeSegment();
-                    aCurOutputURL = aURLObj.GetMainURL( INetURLObject::DECODE_TO_IURI );
+                    aCurOutputURL = aURLObj.GetMainURL( INetURLObject::DecodeMechanism::ToIUri );
                 }
             }
             else    // default empty document without URL
@@ -726,7 +726,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
             }
 
             aURLObj.SetSmartURL( aCurOutputURL );
-            OUString aPath = aURLObj.GetMainURL( INetURLObject::DECODE_TO_IURI );
+            OUString aPath = aURLObj.GetMainURL( INetURLObject::DecodeMechanism::ToIUri );
 
             const OUString aDelim( "/" );
             if (!aPath.isEmpty() && !aPath.endsWith(aDelim))

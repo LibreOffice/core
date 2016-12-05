@@ -525,10 +525,10 @@ void ODbaseTable::construct()
             // If the memo file isn't found, the data will be displayed anyhow.
             // However, updates can't be done
             // but the operation is executed
-            m_pMemoStream = createStream_simpleError( aURL.GetMainURL(INetURLObject::NO_DECODE), StreamMode::READWRITE | StreamMode::NOCREATE | StreamMode::SHARE_DENYWRITE);
+            m_pMemoStream = createStream_simpleError( aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE), StreamMode::READWRITE | StreamMode::NOCREATE | StreamMode::SHARE_DENYWRITE);
             if ( !m_pMemoStream )
             {
-                m_pMemoStream = createStream_simpleError( aURL.GetMainURL(INetURLObject::NO_DECODE), StreamMode::READ | StreamMode::NOCREATE | StreamMode::SHARE_DENYNONE);
+                m_pMemoStream = createStream_simpleError( aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE), StreamMode::READ | StreamMode::NOCREATE | StreamMode::SHARE_DENYNONE);
             }
             if (m_pMemoStream)
                 ReadMemoHeader();
@@ -701,7 +701,7 @@ void ODbaseTable::refreshIndexes()
                 aURL.setName(OStringToOUString(aIndexName, m_eEncoding));
                 try
                 {
-                    Content aCnt(aURL.GetMainURL(INetURLObject::NO_DECODE),Reference<XCommandEnvironment>(), comphelper::getProcessComponentContext());
+                    Content aCnt(aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE),Reference<XCommandEnvironment>(), comphelper::getProcessComponentContext());
                     if (aCnt.isDocument())
                     {
                         aVector.push_back(aURL.getBase());
@@ -1048,11 +1048,11 @@ bool ODbaseTable::CreateImpl()
 
     try
     {
-        Content aContent(aURL.GetMainURL(INetURLObject::NO_DECODE),Reference<XCommandEnvironment>(), comphelper::getProcessComponentContext());
+        Content aContent(aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE),Reference<XCommandEnvironment>(), comphelper::getProcessComponentContext());
         if (aContent.isDocument())
         {
             // Only if the file exists with length > 0 raise an error
-            SvStream* pFileStream = createStream_simpleError( aURL.GetMainURL(INetURLObject::NO_DECODE), StreamMode::READ);
+            SvStream* pFileStream = createStream_simpleError( aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE), StreamMode::READ);
 
             if (pFileStream && pFileStream->Seek(STREAM_SEEK_TO_END))
             {
@@ -1075,7 +1075,7 @@ bool ODbaseTable::CreateImpl()
     {
         try
         {
-            Content aContent(aURL.GetMainURL(INetURLObject::NO_DECODE),Reference<XCommandEnvironment>(), comphelper::getProcessComponentContext());
+            Content aContent(aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE),Reference<XCommandEnvironment>(), comphelper::getProcessComponentContext());
             aContent.executeCommand( "delete", css::uno::Any( true ) );
         }
         catch(const Exception&) // an exception is thrown when no file exists
@@ -1092,7 +1092,7 @@ bool ODbaseTable::CreateImpl()
         bool bMemoAlreadyExists = false;
         try
         {
-            Content aMemo1Content(aURL.GetMainURL(INetURLObject::NO_DECODE),Reference<XCommandEnvironment>(), comphelper::getProcessComponentContext());
+            Content aMemo1Content(aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE),Reference<XCommandEnvironment>(), comphelper::getProcessComponentContext());
             bMemoAlreadyExists = aMemo1Content.isDocument();
         }
         catch(const Exception&) // an exception is thrown when no file exists
@@ -1103,7 +1103,7 @@ bool ODbaseTable::CreateImpl()
             aURL.setExtension(aExt);      // kill dbf file
             try
             {
-                Content aMemoContent(aURL.GetMainURL(INetURLObject::NO_DECODE),Reference<XCommandEnvironment>(), comphelper::getProcessComponentContext());
+                Content aMemoContent(aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE),Reference<XCommandEnvironment>(), comphelper::getProcessComponentContext());
                 aMemoContent.executeCommand( "delete", css::uno::Any( true ) );
             }
             catch(const Exception&)
@@ -1121,7 +1121,7 @@ bool ODbaseTable::CreateImpl()
             aURL.setExtension(aExt);      // kill dbf file
             try
             {
-                Content aMemoContent(aURL.GetMainURL(INetURLObject::NO_DECODE),Reference<XCommandEnvironment>(), comphelper::getProcessComponentContext());
+                Content aMemoContent(aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE),Reference<XCommandEnvironment>(), comphelper::getProcessComponentContext());
                 aMemoContent.executeCommand( "delete", css::uno::Any( true ) );
             }
             catch(const ContentCreationException&)
@@ -1166,7 +1166,7 @@ bool ODbaseTable::CreateFile(const INetURLObject& aFile, bool& bCreateMemo)
     bCreateMemo = false;
     Date aDate( Date::SYSTEM );                     // current date
 
-    m_pFileStream = createStream_simpleError( aFile.GetMainURL(INetURLObject::NO_DECODE),StreamMode::READWRITE | StreamMode::SHARE_DENYWRITE | StreamMode::TRUNC );
+    m_pFileStream = createStream_simpleError( aFile.GetMainURL(INetURLObject::DecodeMechanism::NONE),StreamMode::READWRITE | StreamMode::SHARE_DENYWRITE | StreamMode::TRUNC );
 
     if (!m_pFileStream)
         return false;
@@ -1412,7 +1412,7 @@ bool ODbaseTable::CreateFile(const INetURLObject& aFile, bool& bCreateMemo)
 bool ODbaseTable::CreateMemoFile(const INetURLObject& aFile)
 {
     // filehandling macro for table creation
-    m_pMemoStream = createStream_simpleError( aFile.GetMainURL(INetURLObject::NO_DECODE),StreamMode::READWRITE | StreamMode::SHARE_DENYWRITE);
+    m_pMemoStream = createStream_simpleError( aFile.GetMainURL(INetURLObject::DecodeMechanism::NONE),StreamMode::READWRITE | StreamMode::SHARE_DENYWRITE);
 
     if (!m_pMemoStream)
         return false;
@@ -1433,14 +1433,14 @@ bool ODbaseTable::Drop_Static(const OUString& _sUrl, bool _bHasMemoFields, OColl
     INetURLObject aURL;
     aURL.SetURL(_sUrl);
 
-    bool bDropped = ::utl::UCBContentHelper::Kill(aURL.GetMainURL(INetURLObject::NO_DECODE));
+    bool bDropped = ::utl::UCBContentHelper::Kill(aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE));
 
     if(bDropped)
     {
         if (_bHasMemoFields)
         {  // delete the memo fields
             aURL.setExtension("dbt");
-            bDropped = ::utl::UCBContentHelper::Kill(aURL.GetMainURL(INetURLObject::NO_DECODE));
+            bDropped = ::utl::UCBContentHelper::Kill(aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE));
         }
 
         if(bDropped)
@@ -1464,7 +1464,7 @@ bool ODbaseTable::Drop_Static(const OUString& _sUrl, bool _bHasMemoFields, OColl
             // as the inf file does not necessarily exist, we aren't allowed to use UCBContentHelper::Kill
             try
             {
-                ::ucbhelper::Content aDeleteContent( aURL.GetMainURL( INetURLObject::NO_DECODE ), Reference< XCommandEnvironment >(), comphelper::getProcessComponentContext() );
+                ::ucbhelper::Content aDeleteContent( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), Reference< XCommandEnvironment >(), comphelper::getProcessComponentContext() );
                 aDeleteContent.executeCommand( "delete", makeAny( true ) );
             }
             catch(const Exception&)
@@ -2339,7 +2339,7 @@ namespace
 
         try
         {
-            Content aContent(aURL.GetMainURL(INetURLObject::NO_DECODE),Reference<XCommandEnvironment>(), comphelper::getProcessComponentContext());
+            Content aContent(aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE),Reference<XCommandEnvironment>(), comphelper::getProcessComponentContext());
 
             Sequence< PropertyValue > aProps( 1 );
             aProps[0].Name      = "Title";

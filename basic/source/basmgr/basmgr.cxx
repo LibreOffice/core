@@ -468,7 +468,7 @@ BasicManager::BasicManager( SotStorage& rStorage, const OUString& rBaseURL, Star
         mpImpl->aBasicLibPath = *pLibPath;
     }
     OUString aStorName( rStorage.GetName() );
-    maStorageName = INetURLObject(aStorName, INetProtocol::File).GetMainURL( INetURLObject::NO_DECODE );
+    maStorageName = INetURLObject(aStorName, INetProtocol::File).GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
 
     // If there is no Manager Stream, no further actions are necessary
@@ -688,7 +688,7 @@ void BasicManager::LoadBasicManager( SotStorage& rStorage, const OUString& rBase
         return;
     }
 
-    maStorageName = INetURLObject(aStorName, INetProtocol::File).GetMainURL( INetURLObject::NO_DECODE );
+    maStorageName = INetURLObject(aStorName, INetProtocol::File).GetMainURL( INetURLObject::DecodeMechanism::NONE );
     // #i13114 removed, DBG_ASSERT(aStorageName.Len() != 0, "Bad storage name");
 
     OUString aRealStorageName = maStorageName;  // for relative paths, can be modified through BaseURL
@@ -828,10 +828,10 @@ void BasicManager::LoadOldBasicManager( SotStorage& rStorage )
             else
             {
                 xStorageRef = new SotStorage( false, aLibAbsStorage.GetMainURL
-                    ( INetURLObject::NO_DECODE ), eStorageReadMode );
+                    ( INetURLObject::DecodeMechanism::NONE ), eStorageReadMode );
                 if ( xStorageRef->GetError() != ERRCODE_NONE )
                     xStorageRef = new SotStorage( false, aLibRelStorage.
-                    GetMainURL( INetURLObject::NO_DECODE ), eStorageReadMode );
+                    GetMainURL( INetURLObject::DecodeMechanism::NONE ), eStorageReadMode );
             }
             if ( xStorageRef.Is() )
             {
@@ -903,10 +903,10 @@ bool BasicManager::ImpLoadLibrary( BasicLibInfo* pLibInfo, SotStorage* pCurStora
         // #i13114 removed, DBG_ASSERT( aStorName.Len(), "No Storage Name!" );
 
         INetURLObject aCurStorageEntry(aStorName, INetProtocol::File);
-        // #i13114 removed, DBG_ASSERT(aCurStorageEntry.GetMainURL( INetURLObject::NO_DECODE ).Len() != 0, "Bad storage name");
+        // #i13114 removed, DBG_ASSERT(aCurStorageEntry.GetMainURL( INetURLObject::DecodeMechanism::NONE ).Len() != 0, "Bad storage name");
 
         INetURLObject aStorageEntry(aStorageName, INetProtocol::File);
-        // #i13114 removed, DBG_ASSERT(aCurStorageEntry.GetMainURL( INetURLObject::NO_DECODE ).Len() != 0, "Bad storage name");
+        // #i13114 removed, DBG_ASSERT(aCurStorageEntry.GetMainURL( INetURLObject::DecodeMechanism::NONE ).Len() != 0, "Bad storage name");
 
         if ( aCurStorageEntry == aStorageEntry )
         {
@@ -1068,7 +1068,7 @@ StarBASIC* BasicManager::AddLib( SotStorage& rStorage, const OUString& rLibName,
     OUString aStorName( rStorage.GetName() );
     DBG_ASSERT( !aStorName.isEmpty(), "No Storage Name!" );
 
-    OUString aStorageName = INetURLObject(aStorName, INetProtocol::File).GetMainURL( INetURLObject::NO_DECODE );
+    OUString aStorageName = INetURLObject(aStorName, INetProtocol::File).GetMainURL( INetURLObject::DecodeMechanism::NONE );
     DBG_ASSERT(!aStorageName.isEmpty(), "Bad storage name");
 
     OUString aNewLibName( rLibName );

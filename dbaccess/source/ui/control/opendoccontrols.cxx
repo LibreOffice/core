@@ -178,9 +178,9 @@ namespace dbaui
                         aURL.SetPass( sPassword );
 
                     if ( sTitle.isEmpty() )
-                        sTitle = aURL.getBase( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_UNAMBIGUOUS );
+                        sTitle = aURL.getBase( INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::Unambiguous );
 
-                    OUString sDecodedURL = aURL.GetMainURL( INetURLObject::NO_DECODE );
+                    OUString sDecodedURL = aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
                     sal_Int32 nPos = InsertEntry( sTitle );
                     m_aURLs.insert( MapIndexToStringPair::value_type( nPos, StringPair( sDecodedURL, sFilter ) ) );

@@ -344,7 +344,7 @@ IMPL_LINK( GalleryThemePopup, BackgroundMenuSelectHdl, Menu*, pMenu, bool )
         return false;
 
     sal_uInt16 nPos( pMenu->GetCurItemId() - 1 );
-    OUString aURL( mpBrowser->GetURL().GetMainURL( INetURLObject::NO_DECODE ) );
+    OUString aURL( mpBrowser->GetURL().GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
     OUString aFilterName( mpBrowser->GetFilterName() );
 
     css::uno::Sequence< css::beans::PropertyValue > aArgs( 6 );
@@ -1221,11 +1221,11 @@ OUString GalleryBrowser2::GetItemText( const GalleryTheme& rTheme, const SgaObje
         OUString aTitle( rObj.GetTitle() );
 
         if( aTitle.isEmpty() )
-            aTitle = aURL.getBase( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_UNAMBIGUOUS );
+            aTitle = aURL.getBase( INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::Unambiguous );
 
         if( aTitle.isEmpty() )
         {
-            aTitle = aURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS );
+            aTitle = aURL.GetMainURL( INetURLObject::DecodeMechanism::Unambiguous );
             aTitle = aTitle.getToken( comphelper::string::getTokenCount(aTitle, '/') - 1, '/' );
         }
 

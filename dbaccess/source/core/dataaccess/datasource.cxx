@@ -1054,7 +1054,7 @@ Reference< XConnection > SAL_CALL ODatabaseSource::connectWithCompletion( const 
         OUString sServerName( m_pImpl->m_sName );
         INetURLObject aURLCheck( sServerName );
         if ( aURLCheck.GetProtocol() != INetProtocol::NotValid )
-            sServerName = aURLCheck.getBase( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_UNAMBIGUOUS );
+            sServerName = aURLCheck.getBase( INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::Unambiguous );
 
         // the request
         AuthenticationRequest aRequest;

@@ -748,7 +748,7 @@ void SAL_CALL SvXMLExport::initialize( const uno::Sequence< uno::Any >& aArgumen
             if( !sRelPath.isEmpty() )
                 aBaseURL.insertName( sRelPath );
             aBaseURL.insertName( sName );
-            msOrigFileName = aBaseURL.GetMainURL(INetURLObject::DECODE_TO_IURI);
+            msOrigFileName = aBaseURL.GetMainURL(INetURLObject::DecodeMechanism::ToIUri);
         }
         mpImpl->mStreamName = sName; // Note: may be empty (XSLT)
 
@@ -2152,7 +2152,7 @@ OUString SvXMLExport::GetRelativeReference(const OUString& rValue)
                 //#i61943# relative URLs need special handling
                 INetURLObject aTemp( mpImpl->msPackageURI );
                 bool bWasAbsolute = false;
-                sValue = aTemp.smartRel2Abs(sValue, bWasAbsolute ).GetMainURL(INetURLObject::DECODE_TO_IURI);
+                sValue = aTemp.smartRel2Abs(sValue, bWasAbsolute ).GetMainURL(INetURLObject::DecodeMechanism::ToIUri);
             }
         }
         catch(const uno::Exception&)

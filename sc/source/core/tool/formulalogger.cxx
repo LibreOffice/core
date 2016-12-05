@@ -35,7 +35,7 @@ std::unique_ptr<osl::File> initFile()
     OUString aPath = OUString::createFromAscii(pPath);
     INetURLObject aURL;
     aURL.SetSmartURL(aPath);
-    aPath = aURL.GetMainURL(INetURLObject::NO_DECODE);
+    aPath = aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
 
     return o3tl::make_unique<osl::File>(aPath);
 }

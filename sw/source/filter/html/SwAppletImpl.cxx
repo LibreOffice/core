@@ -124,7 +124,7 @@ void SwApplet_Impl::CreateApplet( const OUString& rCode, const OUString& rName,
     INetURLObject aUrlBase(rDocumentBaseURL);
     aUrlBase.removeSegment();
 
-    OUString sDocBase = aUrlBase.GetMainURL(INetURLObject::NO_DECODE);
+    OUString sDocBase = aUrlBase.GetMainURL(INetURLObject::DecodeMechanism::NONE);
     uno::Reference < beans::XPropertySet > xSet( xApplet->getComponent(), uno::UNO_QUERY );
     if ( xSet.is() )
     {

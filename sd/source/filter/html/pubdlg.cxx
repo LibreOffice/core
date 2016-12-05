@@ -868,7 +868,7 @@ void SdPublishingDlg::GetParameterSequence( Sequence< PropertyValue >& rParams )
                             INetURLObject::EncodeMechanism::All );
 
     aValue.Name = "HomepageURL";
-    aValue.Value <<= OUString( aHomeURL.GetMainURL( INetURLObject::NO_DECODE ) );
+    aValue.Value <<= OUString( aHomeURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
     aProps.push_back( aValue );
 
     aValue.Name = "UserText";
@@ -1513,7 +1513,7 @@ void SdPublishingDlg::Load()
 
     // check if file exists, SfxMedium shows an errorbox else
     {
-        SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::NO_DECODE ), StreamMode::READ );
+        SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::READ );
 
         bool bOk = pIStm && ( pIStm->GetError() == 0);
 
@@ -1523,7 +1523,7 @@ void SdPublishingDlg::Load()
             return;
     }
 
-    SfxMedium aMedium( aURL.GetMainURL( INetURLObject::NO_DECODE ), StreamMode::READ | StreamMode::NOCREATE );
+    SfxMedium aMedium( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::READ | StreamMode::NOCREATE );
 
     SvStream* pStream = aMedium.GetInStream();
 
@@ -1557,7 +1557,7 @@ bool SdPublishingDlg::Save()
 {
     INetURLObject aURL( SvtPathOptions().GetUserConfigPath() );
     aURL.Append( "designs.sod" );
-    SfxMedium aMedium( aURL.GetMainURL( INetURLObject::NO_DECODE ), StreamMode::WRITE | StreamMode::TRUNC );
+    SfxMedium aMedium( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::WRITE | StreamMode::TRUNC );
 
     SvStream* pStream = aMedium.GetOutStream();
 

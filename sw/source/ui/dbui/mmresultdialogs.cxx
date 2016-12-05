@@ -165,7 +165,7 @@ SwSaveWarningBox_Impl::SwSaveWarningBox_Impl(vcl::Window* pParent, const OUStrin
 
     INetURLObject aTmp(rFileName);
     m_pPrimaryMessage->SetText(m_pPrimaryMessage->GetText().replaceAll("%1", aTmp.getName(
-            INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET)));
+            INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset)));
 
     ModifyHdl(*m_pEdit);
 }
@@ -429,7 +429,7 @@ void SwMMResultEmailDialog::FillInEmailSettings()
         {
             INetURLObject aTmp(pDocShell->GetMedium()->GetName());
             m_pAttachmentED->SetText(aTmp.getName(
-                    INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET ));
+                    INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset ));
         }
     }
 
@@ -713,7 +713,7 @@ IMPL_LINK(SwMMResultSaveDialog, SaveOutputHdl_Impl, Button*, pButton, void)
                 documentStartPageNumber(xConfigItem.get(), nDoc), documentEndPageNumber(xConfigItem.get(), nDoc));
             pTargetView->GetWrtShell().EndAction();
             //then save it
-            OUString sOutPath = aURL.GetMainURL(INetURLObject::DECODE_TO_IURI);
+            OUString sOutPath = aURL.GetMainURL(INetURLObject::DecodeMechanism::ToIUri);
             OUString sCounter = "_" + OUString::number(nDoc);
             sOutPath = sOutPath.replaceAt( sOutPath.getLength() - sExtension.getLength() - 1, 0, sCounter);
 

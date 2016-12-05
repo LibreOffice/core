@@ -364,7 +364,7 @@ bool CmisDetailsContainer::setUrl( const INetURLObject& rUrl )
 
     if ( bSuccess )
     {
-        OUString sDecodedHost = rUrl.GetHost( INetURLObject::DECODE_WITH_CHARSET );
+        OUString sDecodedHost = rUrl.GetHost( INetURLObject::DecodeMechanism::WithCharset );
         INetURLObject aHostUrl( sDecodedHost );
         m_sBinding = aHostUrl.GetURLNoMark( );
         m_sRepoId = aHostUrl.GetMark( );
@@ -461,7 +461,7 @@ IMPL_LINK_NOARG( CmisDetailsContainer, RefreshReposHdl, Button*, void  )
         {
             OUString sURL = xAccess->queryContentIdentifierString( );
             INetURLObject aURL( sURL );
-            OUString sId = aURL.GetURLPath( INetURLObject::DECODE_WITH_CHARSET );
+            OUString sId = aURL.GetURLPath( INetURLObject::DecodeMechanism::WithCharset );
             sId = sId.copy( 1 );
             m_aRepoIds.push_back( sId );
 

@@ -38,7 +38,7 @@ MasterPageDescriptor::MasterPageDescriptor (
     const std::shared_ptr<PreviewProvider>& rpPreviewProvider)
     : maToken(MasterPageContainer::NIL_TOKEN),
       meOrigin(eOrigin),
-      msURL(INetURLObject(rsURL).GetMainURL(INetURLObject::DECODE_UNAMBIGUOUS)),
+      msURL(INetURLObject(rsURL).GetMainURL(INetURLObject::DecodeMechanism::Unambiguous)),
       msPageName(rsPageName),
       msStyleName(rsStyleName),
       mbIsPrecious(bIsPrecious),

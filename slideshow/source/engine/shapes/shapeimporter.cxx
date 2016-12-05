@@ -117,7 +117,7 @@ bool importShapeGraphic(
         INetURLObject aTmp( aURL );
         std::unique_ptr<SvStream> pGraphicStream(
             utl::UcbStreamHelper::CreateStream(
-                aTmp.GetMainURL( INetURLObject::NO_DECODE ),
+                aTmp.GetMainURL( INetURLObject::DecodeMechanism::NONE ),
                 StreamMode::READ ) );
         if( !pGraphicStream )
         {

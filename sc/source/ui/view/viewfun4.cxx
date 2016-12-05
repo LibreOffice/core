@@ -570,7 +570,7 @@ bool ScViewFunc::PasteFile( const Point& rPos, const OUString& rFile, bool bLink
 {
     INetURLObject aURL;
     aURL.SetSmartURL( rFile );
-    OUString aStrURL = aURL.GetMainURL( INetURLObject::NO_DECODE );
+    OUString aStrURL = aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
     // is it a media URL?
     if( ::avmedia::MediaWindow::isMediaURL( aStrURL, ""/*TODO?*/ ) )

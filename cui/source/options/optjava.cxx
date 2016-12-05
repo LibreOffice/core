@@ -1005,7 +1005,7 @@ IMPL_LINK_NOARG(SvxJavaClassPathDlg, AddArchiveHdl_Impl, Button*, void)
     if ( m_pPathList->GetSelectEntryCount() > 0 )
     {
         INetURLObject aObj( m_pPathList->GetSelectEntry(), INetURLObject::FSYS_DETECT );
-        sFolder = aObj.GetMainURL( INetURLObject::NO_DECODE );
+        sFolder = aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
     }
     else
          sFolder = SvtPathOptions().GetWorkPath();
@@ -1040,7 +1040,7 @@ IMPL_LINK_NOARG(SvxJavaClassPathDlg, AddPathHdl_Impl, Button*, void)
     if ( m_pPathList->GetSelectEntryCount() > 0 )
     {
         INetURLObject aObj( m_pPathList->GetSelectEntry(), INetURLObject::FSYS_DETECT );
-        sOldFolder = aObj.GetMainURL( INetURLObject::NO_DECODE );
+        sOldFolder = aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
     }
     else
         sOldFolder = SvtPathOptions().GetWorkPath();

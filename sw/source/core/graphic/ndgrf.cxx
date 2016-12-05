@@ -126,7 +126,7 @@ SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
     {
         INetURLObject aUrl( rGrfName );
         if( INetProtocol::File == aUrl.GetProtocol() &&
-            FStatHelper::IsDocument( aUrl.GetMainURL( INetURLObject::NO_DECODE ) ))
+            FStatHelper::IsDocument( aUrl.GetMainURL( INetURLObject::DecodeMechanism::NONE ) ))
         {
             // file exists, so create connection without an update
             static_cast<SwBaseLink*>( refLink.get() )->Connect();

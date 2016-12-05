@@ -950,7 +950,7 @@ sal_Int16 SAL_CALL SalGtkFilePicker::execute() throw( uno::RuntimeException, std
                                 aFileObj.getName(
                                   INetURLObject::LAST_SEGMENT,
                                   true,
-                                  INetURLObject::DECODE_WITH_CHARSET
+                                  INetURLObject::DecodeMechanism::WithCharset
                                 ),
                                 RTL_TEXTENCODING_UTF8
                               )
@@ -985,7 +985,7 @@ sal_Int16 SAL_CALL SalGtkFilePicker::execute() throw( uno::RuntimeException, std
                                     aFileObj.getName(
                                       nSegmentCount-2,
                                       true,
-                                      INetURLObject::DECODE_WITH_CHARSET
+                                      INetURLObject::DecodeMechanism::WithCharset
                                     ),
                                     RTL_TEXTENCODING_UTF8
                                   )

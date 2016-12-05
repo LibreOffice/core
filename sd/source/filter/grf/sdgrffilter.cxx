@@ -169,7 +169,7 @@ void SdGRFFilter::HandleGraphicFilterError( sal_uInt16 nFilterError, sal_uLong n
 bool SdGRFFilter::Import()
 {
     Graphic         aGraphic;
-    const OUString  aFileName( mrMedium.GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) );
+    const OUString  aFileName( mrMedium.GetURLObject().GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
     GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
     const sal_uInt16 nFilter = rGraphicFilter.GetImportFormatNumberForTypeName( mrMedium.GetFilter()->GetTypeName() );
     bool        bRet = false;

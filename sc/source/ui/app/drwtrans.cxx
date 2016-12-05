@@ -161,7 +161,7 @@ ScDrawTransferObj::ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContain
                                     {
                                         bool bWasAbs = true;
                                         aAbs = pMedium->GetURLObject().smartRel2Abs( aUrl, bWasAbs ).
-                                                    GetMainURL(INetURLObject::NO_DECODE);
+                                                    GetMainURL(INetURLObject::DecodeMechanism::NONE);
                                         // full path as stored INetBookmark must be encoded
                                     }
                                     else

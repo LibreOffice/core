@@ -118,7 +118,7 @@ void SearchThread::ImplSearch( const INetURLObject& rStartURL,
     try
     {
         css::uno::Reference< XCommandEnvironment > xEnv;
-        Content aCnt( rStartURL.GetMainURL( INetURLObject::NO_DECODE ), xEnv, comphelper::getProcessComponentContext() );
+        Content aCnt( rStartURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), xEnv, comphelper::getProcessComponentContext() );
         Sequence< OUString > aProps( 2 );
 
         aProps.getArray()[ 0 ] = "IsFolder";
@@ -166,7 +166,7 @@ void SearchThread::ImplSearch( const INetURLObject& rStartURL,
                             SolarMutexGuard aGuard;
 
                             mpBrowser->aFoundList.push_back(
-                                aFoundURL.GetMainURL( INetURLObject::NO_DECODE )
+                                aFoundURL.GetMainURL( INetURLObject::DecodeMechanism::NONE )
                             );
                             mpBrowser->m_pLbxFound->InsertEntry(
                                 GetReducedString( aFoundURL, 50 ),
@@ -661,7 +661,7 @@ void TPGalleryThemeGeneral::SetXChgData( ExchangeData* _pData )
         aType += CUI_RES( RID_SVXSTR_GALLERY_READONLY );
 
     m_pFtMSShowType->SetText( aType );
-    m_pFtMSShowPath->SetText( pThm->GetSdgURL().GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ) );
+    m_pFtMSShowPath->SetText( pThm->GetSdgURL().GetMainURL( INetURLObject::DecodeMechanism::Unambiguous ) );
 
     // singular or plural?
     if ( 1 == pThm->GetObjectCount() )
@@ -1075,9 +1075,9 @@ void TPGalleryThemeProperties::DoPreview()
             ErrorHandler::HandleError( ERRCODE_IO_NOTEXISTSPATH );
             GetParent()->EnterWait();
         }
-        else if( ::avmedia::MediaWindow::isMediaURL( _aURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ), "" ) )
+        else if( ::avmedia::MediaWindow::isMediaURL( _aURL.GetMainURL( INetURLObject::DecodeMechanism::Unambiguous ), "" ) )
         {
-            xMediaPlayer = ::avmedia::MediaWindow::createPlayer( _aURL.GetMainURL( INetURLObject::NO_DECODE ), "" );
+            xMediaPlayer = ::avmedia::MediaWindow::createPlayer( _aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), "" );
             if( xMediaPlayer.is() )
                 xMediaPlayer->start();
         }

@@ -160,7 +160,7 @@ std::shared_ptr<const SfxFilter> SwIoSystem::GetFileFilter(const OUString& rFile
         INetURLObject aObj;
         aObj.SetSmartProtocol( INetProtocol::File );
         aObj.SetSmartURL( rFileName );
-        SfxMedium aMedium(aObj.GetMainURL(INetURLObject::NO_DECODE), StreamMode::STD_READ);
+        SfxMedium aMedium(aObj.GetMainURL(INetURLObject::DecodeMechanism::NONE), StreamMode::STD_READ);
 
         // templates should not get precedence over "normal" filters (#i35508, #i33168)
         std::shared_ptr<const SfxFilter> pTemplateFilter;

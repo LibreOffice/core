@@ -3902,7 +3902,7 @@ we check in the following sequence:
                 if( m_aContext.RelFsys && eBaseProtocol == eTargetProtocol && eTargetProtocol == INetProtocol::File )
                     bSetRelative = true;
 
-                OUString aFragment = aTargetURL.GetMark( INetURLObject::NO_DECODE /*DECODE_WITH_CHARSET*/ ); //fragment as is,
+                OUString aFragment = aTargetURL.GetMark( INetURLObject::DecodeMechanism::NONE /*DecodeMechanism::WithCharset*/ ); //fragment as is,
                 if( !bSetGoToRMode )
                 {
                     switch( m_aContext.DefaultLinkAction )
@@ -3938,12 +3938,12 @@ we check in the following sequence:
                 if( bSetGoToRMode )
                 {
                     //add the fragment
-                    OUString aURLNoMark = aTargetURL.GetURLNoMark( INetURLObject::DECODE_WITH_CHARSET );
+                    OUString aURLNoMark = aTargetURL.GetURLNoMark( INetURLObject::DecodeMechanism::WithCharset );
                     aLine.append("/GoToR");
                     aLine.append("/F");
                     appendLiteralStringEncrypt( bSetRelative ? INetURLObject::GetRelURL( m_aContext.BaseURL, aURLNoMark,
                                                                                          INetURLObject::EncodeMechanism::WasEncoded,
-                                                                                         INetURLObject::DECODE_WITH_CHARSET ) :
+                                                                                         INetURLObject::DecodeMechanism::WithCharset ) :
                                                                    aURLNoMark, rLink.m_nObject, aLine, osl_getThreadTextEncoding() );
                     if( !aFragment.isEmpty() )
                     {
@@ -3963,10 +3963,10 @@ we check in the following sequence:
                         //substitute the fragment
                         aTargetURL.SetMark( OStringToOUString(aLineLoc.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US) );
                     }
-                    OUString aURL = aTargetURL.GetMainURL( bFileSpec ? INetURLObject::DECODE_WITH_CHARSET : INetURLObject::NO_DECODE );
+                    OUString aURL = aTargetURL.GetMainURL( bFileSpec ? INetURLObject::DecodeMechanism::WithCharset : INetURLObject::DecodeMechanism::NONE );
                     appendLiteralStringEncrypt(bSetRelative ? INetURLObject::GetRelURL( m_aContext.BaseURL, aURL,
                                                                                         INetURLObject::EncodeMechanism::WasEncoded,
-                                                                                            bFileSpec ? INetURLObject::DECODE_WITH_CHARSET : INetURLObject::NO_DECODE
+                                                                                            bFileSpec ? INetURLObject::DecodeMechanism::WithCharset : INetURLObject::DecodeMechanism::NONE
                                                                                             ) :
                                                                                aURL , rLink.m_nObject, aLine, osl_getThreadTextEncoding() );
                 }
@@ -7367,7 +7367,7 @@ sal_Int32 PDFWriterImpl::emitNamedDestinations()
                 OUString( "http://ahost.ax"  ) ); //dummy location, won't be used
             aLocalURL.SetMark( rDest.m_aDestName );
 
-            const OUString aName   = aLocalURL.GetMark( INetURLObject::NO_DECODE ); //same coding as
+            const OUString aName   = aLocalURL.GetMark( INetURLObject::DecodeMechanism::NONE ); //same coding as
             // in link creation ( see PDFWriterImpl::emitLinkAnnotations )
             const PDFPage& rDestPage    = m_aPages[ rDest.m_nPage ];
 

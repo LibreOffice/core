@@ -273,7 +273,7 @@ bool XPropertyList::Load()
             if( aURL.getExtension().isEmpty() )
                 aURL.setExtension( GetDefaultExt() );
 
-            bool bRet = SvxXMLXTableImport::load(aURL.GetMainURL(INetURLObject::NO_DECODE),
+            bool bRet = SvxXMLXTableImport::load(aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE),
                                              maReferer, uno::Reference < embed::XStorage >(),
                                              createInstance(), nullptr );
             if (bRet)
@@ -316,7 +316,7 @@ bool XPropertyList::Save()
     if( aURL.getExtension().isEmpty() )
         aURL.setExtension( GetDefaultExt() );
 
-    return SvxXMLXTableExportComponent::save( aURL.GetMainURL( INetURLObject::NO_DECODE ),
+    return SvxXMLXTableExportComponent::save( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ),
                                               createInstance(),
                                               uno::Reference< embed::XStorage >(), nullptr );
 }
@@ -375,7 +375,7 @@ XPropertyList::CreatePropertyListFromURL( XPropertyListType t,
     aPathURL.removeFinalSlash();
 
     XPropertyListRef pList = XPropertyList::CreatePropertyList(
-        t, aPathURL.GetMainURL( INetURLObject::NO_DECODE ), "" );
+        t, aPathURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), "" );
     pList->SetName( aURL.getName() );
 
     return pList;

@@ -457,7 +457,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
                 {
                     // Determine file name from model
                     INetURLObject aFileObj( xStorable->getLocation() );
-                    aFileName = aFileObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::NO_DECODE );
+                    aFileName = aFileObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::NONE );
                 }
             }
 
@@ -478,7 +478,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
             aFilePathObj.insertName( aFileName );
             aFilePathObj.setExtension( aExtension );
 
-            OUString aFileURL = aFilePathObj.GetMainURL( INetURLObject::NO_DECODE );
+            OUString aFileURL = aFilePathObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
             sal_Int32 nNumArgs(0);
             const OUString aPasswordPropName( "Password" );
@@ -785,9 +785,9 @@ SfxMailModel::SendMailResult SfxMailModel::Send( const css::uno::Reference< css:
                         url.getBase(
                             INetURLObject::LAST_SEGMENT, false,
 #ifdef _WIN32
-                            INetURLObject::NO_DECODE)); // MAPISendMail does not accept Unicode
+                            INetURLObject::DecodeMechanism::NONE)); // MAPISendMail does not accept Unicode
 #else
-                            INetURLObject::DECODE_WITH_CHARSET));
+                            INetURLObject::DecodeMechanism::WithCharset));
 #endif
                     if (subject.isEmpty()) {
                         subject = maAttachedDocuments[0];

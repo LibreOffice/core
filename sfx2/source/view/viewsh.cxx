@@ -639,7 +639,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                 {
                     // Determine file name from model
                     INetURLObject aFObj( xStorable->getLocation() );
-                    aFileName = aFObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::NO_DECODE );
+                    aFileName = aFObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::NONE );
                 }
 
                 OSL_ASSERT( !aFilterName.isEmpty() );
@@ -652,7 +652,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                 aFilePathObj.insertName( aFileName );
                 aFilePathObj.setExtension( aExtension );
 
-                OUString aFileURL = aFilePathObj.GetMainURL( INetURLObject::NO_DECODE );
+                OUString aFileURL = aFilePathObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
                 css::uno::Sequence< css::beans::PropertyValue > aArgs( 1 );
                 aArgs[0].Name  = "FilterName";

@@ -1012,7 +1012,7 @@ IMPL_LINK_NOARG(SvxBitmapPickTabPage, ClickAddBrowseHdl_Impl, Button*, void)
             xSimpleFileAccess->copy( aUserImageURL, aUserGalleryURL );
             INetURLObject gURL( aUserGalleryURL );
                  std::unique_ptr<SvStream> pIn(::utl::UcbStreamHelper::CreateStream(
-                          gURL.GetMainURL( INetURLObject::NO_DECODE ), StreamMode::READ ));
+                          gURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::READ ));
             if ( pIn )
             {
                 Graphic aGraphic;

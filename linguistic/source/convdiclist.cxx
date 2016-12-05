@@ -72,7 +72,7 @@ OUString GetConvDicMainURL( const OUString &rDicName, const OUString &rDirectory
     if (aURLObj.HasError())
         return OUString();
     else
-        return aURLObj.GetMainURL( INetURLObject::DECODE_TO_IURI );
+        return aURLObj.GetMainURL( INetURLObject::DecodeMechanism::ToIUri );
 }
 
 class ConvDicNameContainer :
@@ -263,7 +263,7 @@ void SAL_CALL ConvDicNameContainer::removeByName( const OUString& rName )
     {
         try
         {
-            ::ucbhelper::Content    aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ),
+            ::ucbhelper::Content    aCnt( aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ),
                                     uno::Reference< css::ucb::XCommandEnvironment >(),
                                     comphelper::getProcessComponentContext() );
             aCnt.executeCommand( "delete", makeAny( true ) );
@@ -307,7 +307,7 @@ void ConvDicNameContainer::AddConvDics(
             // get decoded dictionary file name
             INetURLObject aURLObj( aURL );
             OUString aDicName = aURLObj.getBase( INetURLObject::LAST_SEGMENT,
-                        true, INetURLObject::DECODE_WITH_CHARSET );
+                        true, INetURLObject::DecodeMechanism::WithCharset );
 
             uno::Reference < XConversionDictionary > xDic;
             if (nLang == LANGUAGE_KOREAN &&

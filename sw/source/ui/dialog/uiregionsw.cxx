@@ -204,7 +204,7 @@ SectRepr::SectRepr( size_t nPos, SwSection& rSect )
 void SectRepr::SetFile( const OUString& rFile )
 {
     OUString sNewFile( INetURLObject::decode( rFile,
-                                           INetURLObject::DECODE_UNAMBIGUOUS ));
+                                           INetURLObject::DecodeMechanism::Unambiguous ));
     const OUString sOldFileName( m_SectionData.GetLinkFileName() );
     const OUString sSub( sOldFileName.getToken( 2, sfx2::cTokenSeparator ) );
 
@@ -289,7 +289,7 @@ OUString SectRepr::GetFile() const
                         .replaceFirst( OUStringLiteral1(sfx2::cTokenSeparator), " ", &n );
     }
     return INetURLObject::decode( sLinkFile.getToken( 0, sfx2::cTokenSeparator ),
-                                  INetURLObject::DECODE_UNAMBIGUOUS );
+                                  INetURLObject::DecodeMechanism::Unambiguous );
 }
 
 OUString SectRepr::GetSubRegion() const
@@ -1319,7 +1319,7 @@ IMPL_LINK( SwEditRegionDlg, DlgClosedHdl, sfx2::FileDialogHelper *, _pFileDlg, v
         std::unique_ptr<SfxMedium> pMedium(m_pDocInserter->CreateMedium("sglobal"));
         if ( pMedium )
         {
-            sFileName = pMedium->GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
+            sFileName = pMedium->GetURLObject().GetMainURL( INetURLObject::DecodeMechanism::NONE );
             sFilterName = pMedium->GetFilter()->GetFilterName();
             const SfxPoolItem* pItem;
             if ( SfxItemState::SET == pMedium->GetItemSet()->GetItemState( SID_PASSWORD, false, &pItem ) )
@@ -1358,7 +1358,7 @@ IMPL_LINK( SwEditRegionDlg, SubRegionEventHdl, VclWindowEvent&, rEvent, void )
 
             //load file and set the shell
             SfxMedium aMedium( sFileName, StreamMode::STD_READ );
-            sFileName = aMedium.GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
+            sFileName = aMedium.GetURLObject().GetMainURL( INetURLObject::DecodeMechanism::NONE );
             ::lcl_ReadSections(aMedium, *m_pSubRegionED);
         }
         else
@@ -1786,13 +1786,13 @@ IMPL_LINK( SwInsertSectionTabPage, DlgClosedHdl, sfx2::FileDialogHelper *, _pFil
         std::unique_ptr<SfxMedium> pMedium(m_pDocInserter->CreateMedium("sglobal"));
         if ( pMedium )
         {
-            m_sFileName = pMedium->GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
+            m_sFileName = pMedium->GetURLObject().GetMainURL( INetURLObject::DecodeMechanism::NONE );
             m_sFilterName = pMedium->GetFilter()->GetFilterName();
             const SfxPoolItem* pItem;
             if ( SfxItemState::SET == pMedium->GetItemSet()->GetItemState( SID_PASSWORD, false, &pItem ) )
                 m_sFilePasswd = static_cast<const SfxStringItem*>(pItem)->GetValue();
             m_pFileNameED->SetText( INetURLObject::decode(
-                m_sFileName, INetURLObject::DECODE_UNAMBIGUOUS ) );
+                m_sFileName, INetURLObject::DecodeMechanism::Unambiguous ) );
             ::lcl_ReadSections(*pMedium, *m_pSubRegionED);
         }
     }

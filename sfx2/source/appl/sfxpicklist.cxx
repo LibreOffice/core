@@ -154,14 +154,14 @@ void SfxPickList::AddDocumentToPickList( SfxObjectShell* pDocSh )
 
     // add to svtool history options
     SvtHistoryOptions().AppendItem( ePICKLIST,
-            aURL.GetURLNoPass( INetURLObject::NO_DECODE ),
+            aURL.GetURLNoPass( INetURLObject::DecodeMechanism::NONE ),
             aFilter,
             aTitle,
             OUString(),
             aThumbnail);
 
     if ( aURL.GetProtocol() == INetProtocol::File )
-        Application::AddToRecentDocumentList( aURL.GetURLNoPass( INetURLObject::NO_DECODE ),
+        Application::AddToRecentDocumentList( aURL.GetURLNoPass( INetURLObject::DecodeMechanism::NONE ),
                                                                  (pFilter) ? pFilter->GetMimeType() : OUString(),
                                                                  (pFilter) ? pFilter->GetServiceName() : OUString() );
 }

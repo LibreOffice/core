@@ -720,7 +720,7 @@ void BmapType::Draw(OutputDevice& rOut)
         (sal_Int32)Filename[ 0 ], RTL_TEXTENCODING_UTF8 );
     INetURLObject   aFNam( aStr );
 
-    SvStream* pInp = ::utl::UcbStreamHelper::CreateStream( aFNam.GetMainURL( INetURLObject::NO_DECODE ), StreamMode::READ );
+    SvStream* pInp = ::utl::UcbStreamHelper::CreateStream( aFNam.GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::READ );
     if ( pInp )
     {
         unsigned char nSgfTyp = CheckSgfTyp( *pInp,nVersion);
@@ -919,7 +919,7 @@ bool SgfSDrwFilter(SvStream& rInp, GDIMetaFile& rMtf, const INetURLObject& _aIni
 
     pSgfFonts = new SgfFontLst;
 
-    pSgfFonts->AssignFN( aIniPath.GetMainURL( INetURLObject::NO_DECODE ) );
+    pSgfFonts->AssignFN( aIniPath.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
     nFileStart=rInp.Tell();
     ReadSgfHeader( rInp, aHead );
     if (aHead.ChkMagic() && aHead.Typ==SgfStarDraw && aHead.Version==SGV_VERSION) {

@@ -28,7 +28,7 @@
 OUString GalleryThemeEntry::ReadStrFromIni(const OUString &aKeyName )
 {
     std::unique_ptr<SvStream> pStrm(::utl::UcbStreamHelper::CreateStream(
-                                GetStrURL().GetMainURL( INetURLObject::NO_DECODE ),
+                                GetStrURL().GetMainURL( INetURLObject::DecodeMechanism::NONE ),
                                 StreamMode::READ ));
 
     const LanguageTag &rLangTag = Application::GetSettings().GetUILanguageTag();

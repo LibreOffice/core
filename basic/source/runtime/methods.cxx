@@ -152,7 +152,7 @@ OUString getFullPath( const OUString& aRelPath )
 
     // #80204 Try first if it already is a valid URL
     INetURLObject aURLObj( aRelPath );
-    aFileURL = aURLObj.GetMainURL( INetURLObject::NO_DECODE );
+    aFileURL = aURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
     if( aFileURL.isEmpty() )
     {
@@ -642,7 +642,7 @@ RTLFUNC(MkDir)
 
                 aURLObj.SetURL( sCurPathURL );
                 aURLObj.Append( aPath );
-                File::getSystemPathFromFileURL(aURLObj.GetMainURL( INetURLObject::DECODE_TO_IURI  ),aPath ) ;
+                File::getSystemPathFromFileURL(aURLObj.GetMainURL( INetURLObject::DecodeMechanism::ToIUri  ),aPath ) ;
             }
         }
 
@@ -2813,7 +2813,7 @@ bool isRootDir( const OUString& aDirURLStr )
     else if( nCount == 1 )
     {
         OUString aSeg1 = aDirURLObj.getName( 0, true,
-                                             INetURLObject::DECODE_WITH_CHARSET );
+                                             INetURLObject::DecodeMechanism::WithCharset );
         if( aSeg1[1] == (sal_Unicode)':' )
         {
             bRoot = true;
@@ -2868,7 +2868,7 @@ RTLFUNC(Dir)
                         {
                             INetURLObject aFileURL( aFileURLStr );
                             aNameOnlyStr = aFileURL.getName( INetURLObject::LAST_SEGMENT,
-                                                             true, INetURLObject::DECODE_WITH_CHARSET );
+                                                             true, INetURLObject::DecodeMechanism::WithCharset );
                         }
                         rPar.Get(0)->PutString( aNameOnlyStr );
                         return;
@@ -2979,7 +2979,7 @@ RTLFUNC(Dir)
 
                             INetURLObject aURL( aFile );
                             aPath = aURL.getName( INetURLObject::LAST_SEGMENT, true,
-                                                  INetURLObject::DECODE_WITH_CHARSET );
+                                                  INetURLObject::DecodeMechanism::WithCharset );
                         }
 
                         bool bMatch = implCheckWildcard( aPath, pRTLData );

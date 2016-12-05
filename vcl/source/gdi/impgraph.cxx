@@ -316,7 +316,7 @@ ImpSwapFile::~ImpSwapFile()
 {
     try
     {
-        ::ucbhelper::Content aCnt( aSwapURL.GetMainURL( INetURLObject::NO_DECODE ),
+        ::ucbhelper::Content aCnt( aSwapURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ),
             css::uno::Reference< css::ucb::XCommandEnvironment >(),
             comphelper::getProcessComponentContext() );
 
@@ -1122,12 +1122,12 @@ bool ImpGraphic::ImplSwapOut()
         ::utl::TempFile     aTempFile;
         const INetURLObject aTmpURL( aTempFile.GetURL() );
 
-        if( !aTmpURL.GetMainURL( INetURLObject::NO_DECODE ).isEmpty() )
+        if( !aTmpURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ).isEmpty() )
         {
             std::unique_ptr<SvStream> xOStm;
             try
             {
-                xOStm.reset(::utl::UcbStreamHelper::CreateStream( aTmpURL.GetMainURL( INetURLObject::NO_DECODE ), StreamMode::READWRITE | StreamMode::SHARE_DENYWRITE ));
+                xOStm.reset(::utl::UcbStreamHelper::CreateStream( aTmpURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::READWRITE | StreamMode::SHARE_DENYWRITE ));
             }
             catch( const css::uno::Exception& )
             {
@@ -1149,7 +1149,7 @@ bool ImpGraphic::ImplSwapOut()
 
                     try
                     {
-                        ::ucbhelper::Content aCnt( aTmpURL.GetMainURL( INetURLObject::NO_DECODE ),
+                        ::ucbhelper::Content aCnt( aTmpURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ),
                                             css::uno::Reference< css::ucb::XCommandEnvironment >(),
                                             comphelper::getProcessComponentContext() );
 
@@ -1217,7 +1217,7 @@ bool ImpGraphic::ImplSwapIn()
         OUString aSwapURL;
 
         if( mpSwapFile )
-            aSwapURL = mpSwapFile->aSwapURL.GetMainURL( INetURLObject::NO_DECODE );
+            aSwapURL = mpSwapFile->aSwapURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
         if( !aSwapURL.isEmpty() )
         {

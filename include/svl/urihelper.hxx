@@ -55,7 +55,7 @@ SVL_DLLPUBLIC OUString SmartRel2Abs(INetURLObject const & rTheBaseURIRef,
                                     bool bCheckFileExists = true,
                                     bool bIgnoreFragment = false,
                                     INetURLObject::EncodeMechanism eEncodeMechanism = INetURLObject::EncodeMechanism::WasEncoded,
-                                    INetURLObject::DecodeMechanism eDecodeMechanism = INetURLObject::DECODE_TO_IURI,
+                                    INetURLObject::DecodeMechanism eDecodeMechanism = INetURLObject::DecodeMechanism::ToIUri,
                                     rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8,
                                     bool bRelativeNonURIs = false,
                                     INetURLObject::FSysStyle eStyle = INetURLObject::FSYS_DETECT);
@@ -149,7 +149,7 @@ SVL_DLLPUBLIC OUString FindFirstURLInText(OUString const & rText,
  */
 SVL_DLLPUBLIC OUString removePassword(OUString const & rURI,
                                       INetURLObject::EncodeMechanism eEncodeMechanism = INetURLObject::EncodeMechanism::WasEncoded,
-                                      INetURLObject::DecodeMechanism eDecodeMechanism = INetURLObject::DECODE_TO_IURI,
+                                      INetURLObject::DecodeMechanism eDecodeMechanism = INetURLObject::DecodeMechanism::ToIUri,
                                       rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8);
 
 /** Resolve a URL's host component domain name in IDNA syntax to plain DNS

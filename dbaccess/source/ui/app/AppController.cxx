@@ -388,7 +388,7 @@ void SAL_CALL OApplicationController::disposing()
 
                     // add to svtool history options
                     SvtHistoryOptions().AppendItem( ePICKLIST,
-                            aURL.GetURLNoPass( INetURLObject::NO_DECODE ),
+                            aURL.GetURLNoPass( INetURLObject::DecodeMechanism::NONE ),
                             aFilter,
                             getStrippedDatabaseName(),
                             OUString(),
@@ -396,7 +396,7 @@ void SAL_CALL OApplicationController::disposing()
 
                     // add to recent document list
                     if ( aURL.GetProtocol() == INetProtocol::File )
-                        Application::AddToRecentDocumentList( aURL.GetURLNoPass( INetURLObject::NO_DECODE ),
+                        Application::AddToRecentDocumentList( aURL.GetURLNoPass( INetURLObject::DecodeMechanism::NONE ),
                                                               (pFilter) ? pFilter->GetMimeType() : OUString(),
                                                               (pFilter) ? pFilter->GetServiceName() : OUString() );
                 }
@@ -1141,7 +1141,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                     INetURLObject aURL( aFileDlg.GetPath() );
                     try
                     {
-                        xStore->storeAsURL( aURL.GetMainURL( INetURLObject::NO_DECODE ), Sequence< PropertyValue >() );
+                        xStore->storeAsURL( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), Sequence< PropertyValue >() );
                     }
                     catch( const Exception& )
                     {

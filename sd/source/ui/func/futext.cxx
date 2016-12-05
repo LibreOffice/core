@@ -1187,7 +1187,7 @@ bool FuText::RequestHelp(const HelpEvent& rHEvt)
         if (pField && dynamic_cast< const SvxURLField *>( pField ) !=  nullptr)
         {
             // URL-Field
-            aHelpText = INetURLObject::decode( static_cast<const SvxURLField*>(pField)->GetURL(), INetURLObject::DECODE_WITH_CHARSET );
+            aHelpText = INetURLObject::decode( static_cast<const SvxURLField*>(pField)->GetURL(), INetURLObject::DecodeMechanism::WithCharset );
         }
         if (!aHelpText.isEmpty())
         {

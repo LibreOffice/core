@@ -459,7 +459,7 @@ void PPDParser::initPPDFiles(PPDCache &rPPDCache)
     for( std::list< OUString >::const_iterator ppd_it = aPathList.begin(); ppd_it != aPathList.end(); ++ppd_it )
     {
         INetURLObject aPPDDir( *ppd_it, INetProtocol::File, INetURLObject::EncodeMechanism::All );
-        scanPPDDir( aPPDDir.GetMainURL( INetURLObject::NO_DECODE ) );
+        scanPPDDir( aPPDDir.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
     }
     if( rPPDCache.pAllPPDFiles->find( OUString( "SGENPRT" ) ) == rPPDCache.pAllPPDFiles->end() )
     {
@@ -470,8 +470,8 @@ void PPDParser::initPPDFiles(PPDCache &rPPDCache)
             INetURLObject aDir( aExe );
             aDir.removeSegment();
             SAL_INFO("vcl.unx.print", "scanning last chance dir: "
-                    << aDir.GetMainURL(INetURLObject::NO_DECODE));
-            scanPPDDir( aDir.GetMainURL( INetURLObject::NO_DECODE ) );
+                    << aDir.GetMainURL(INetURLObject::DecodeMechanism::NONE));
+            scanPPDDir( aDir.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
             SAL_INFO("vcl.unx.print", "SGENPRT "
                     << (rPPDCache.pAllPPDFiles->find("SGENPRT") ==
                         rPPDCache.pAllPPDFiles->end() ? "not found" : "found"));

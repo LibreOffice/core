@@ -320,7 +320,7 @@ OUString ScGlobal::GetAbsDocName( const OUString& rFileName,
         aObj.SetSmartURL( aPathOpt.GetWorkPath() );
         aObj.setFinalSlash();       // it IS a path
         bool bWasAbs = true;
-        aAbsName = aObj.smartRel2Abs( rFileName, bWasAbs ).GetMainURL(INetURLObject::NO_DECODE);
+        aAbsName = aObj.smartRel2Abs( rFileName, bWasAbs ).GetMainURL(INetURLObject::DecodeMechanism::NONE);
         //  returned string must be encoded because it's used directly to create SfxMedium
     }
     else
@@ -329,14 +329,14 @@ OUString ScGlobal::GetAbsDocName( const OUString& rFileName,
         if ( pMedium )
         {
             bool bWasAbs = true;
-            aAbsName = pMedium->GetURLObject().smartRel2Abs( rFileName, bWasAbs ).GetMainURL(INetURLObject::NO_DECODE);
+            aAbsName = pMedium->GetURLObject().smartRel2Abs( rFileName, bWasAbs ).GetMainURL(INetURLObject::DecodeMechanism::NONE);
         }
         else
         {   // This can't happen, but ...
             // just to be sure to have the same encoding
             INetURLObject aObj;
             aObj.SetSmartURL( aAbsName );
-            aAbsName = aObj.GetMainURL(INetURLObject::NO_DECODE);
+            aAbsName = aObj.GetMainURL(INetURLObject::DecodeMechanism::NONE);
         }
     }
     return aAbsName;

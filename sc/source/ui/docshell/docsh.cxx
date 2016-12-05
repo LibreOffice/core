@@ -1676,7 +1676,7 @@ void popFileName(OUString& rPath)
     {
         INetURLObject aURLObj(rPath);
         aURLObj.removeSegment();
-        rPath = aURLObj.GetMainURL(INetURLObject::NO_DECODE);
+        rPath = aURLObj.GetMainURL(INetURLObject::DecodeMechanism::NONE);
     }
 }
 

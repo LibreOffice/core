@@ -536,9 +536,9 @@ namespace cmis
                     // It's weird, but needed to handle case where the path isn't the folders/files
                     // names separated by '/' (as in Lotus Live)
                     INetURLObject aParentUrl( m_sURL );
-                    string sName = OUSTR_TO_STDSTR( aParentUrl.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET ) );
+                    string sName = OUSTR_TO_STDSTR( aParentUrl.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset ) );
                     aParentUrl.removeSegment( );
-                    OUString sParentUrl = aParentUrl.GetMainURL( INetURLObject::NO_DECODE );
+                    OUString sParentUrl = aParentUrl.GetMainURL( INetURLObject::DecodeMechanism::NONE );
                     // Avoid infinite recursion if sParentUrl == m_sURL
                     if (sParentUrl != m_sURL)
                     {
@@ -1697,7 +1697,7 @@ namespace cmis
             {
                 URL aCmisUrl( m_sURL );
                 aUrl.removeSegment( );
-                aCmisUrl.setObjectPath( aUrl.GetURLPath( INetURLObject::DECODE_WITH_CHARSET ) );
+                aCmisUrl.setObjectPath( aUrl.GetURLPath( INetURLObject::DecodeMechanism::WithCharset ) );
                 parentUrl = aCmisUrl.asString( );
             }
         }
@@ -2043,7 +2043,7 @@ namespace cmis
                     // TODO Cache the objects
 
                     INetURLObject aURL( m_sURL );
-                    OUString sUser = aURL.GetUser( INetURLObject::DECODE_WITH_CHARSET );
+                    OUString sUser = aURL.GetUser( INetURLObject::DecodeMechanism::WithCharset );
 
                     URL aUrl( m_sURL );
                     OUString sPath( m_sObjectPath );

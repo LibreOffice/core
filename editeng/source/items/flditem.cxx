@@ -996,11 +996,11 @@ OUString SvxExtFileField::GetFormatted() const
             break;
 
             case SVXFILEFORMAT_NAME:
-                aString = aURLObj.getBase(INetURLObject::LAST_SEGMENT,true,INetURLObject::DECODE_UNAMBIGUOUS);
+                aString = aURLObj.getBase(INetURLObject::LAST_SEGMENT,true,INetURLObject::DecodeMechanism::Unambiguous);
             break;
 
             case SVXFILEFORMAT_NAME_EXT:
-                aString = aURLObj.getName(INetURLObject::LAST_SEGMENT,true,INetURLObject::DECODE_UNAMBIGUOUS);
+                aString = aURLObj.getName(INetURLObject::LAST_SEGMENT,true,INetURLObject::DecodeMechanism::Unambiguous);
             break;
         }
     }
@@ -1009,14 +1009,14 @@ OUString SvxExtFileField::GetFormatted() const
         switch( eFormat )
         {
             case SVXFILEFORMAT_FULLPATH:
-                aString = aURLObj.GetMainURL( INetURLObject::DECODE_TO_IURI );
+                aString = aURLObj.GetMainURL( INetURLObject::DecodeMechanism::ToIUri );
             break;
 
             case SVXFILEFORMAT_PATH:
                 aURLObj.removeSegment(INetURLObject::LAST_SEGMENT, false);
                 // #101742# Leave trailing slash at the pathname
                 aURLObj.setFinalSlash();
-                aString = aURLObj.GetMainURL( INetURLObject::DECODE_TO_IURI );
+                aString = aURLObj.GetMainURL( INetURLObject::DecodeMechanism::ToIUri );
             break;
 
             case SVXFILEFORMAT_NAME:

@@ -1031,7 +1031,7 @@ void SfxDocumentPage::Reset( const SfxItemSet* rSet )
 
     // determine name
     INetURLObject aURL(aFile);
-    OUString aName = aURL.GetName( INetURLObject::DECODE_WITH_CHARSET );
+    OUString aName = aURL.GetName( INetURLObject::DecodeMechanism::WithCharset );
     if ( aName.isEmpty() || aURL.GetProtocol() == INetProtocol::PrivSoffice )
         aName = SfxResId( STR_NONAME ).toString();
     m_pNameED->SetText( aName );
@@ -1039,7 +1039,7 @@ void SfxDocumentPage::Reset( const SfxItemSet* rSet )
     // determine context symbol
     aURL.SetSmartProtocol( INetProtocol::File );
     aURL.SetSmartURL( aFactory);
-    const OUString& rMainURL = aURL.GetMainURL( INetURLObject::NO_DECODE );
+    const OUString& rMainURL = aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
     Image aImage = SvFileInformationManager::GetImage( aURL, true );
 
     if ( GetDPIScaleFactor() > 1)
@@ -1055,7 +1055,7 @@ void SfxDocumentPage::Reset( const SfxItemSet* rSet )
     OUString aSizeText( m_aUnknownSize );
     if ( aURL.GetProtocol() == INetProtocol::File ||
          aURL.isAnyKnownWebDAVScheme() )
-        aSizeText = CreateSizeText( SfxContentHelper::GetSize( aURL.GetMainURL( INetURLObject::NO_DECODE ) ) );
+        aSizeText = CreateSizeText( SfxContentHelper::GetSize( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) ) );
     m_pShowSizeFT->SetText( aSizeText );
 
     OUString aDescription = SvFileInformationManager::GetDescription( INetURLObject(rMainURL) );

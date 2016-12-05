@@ -1969,7 +1969,7 @@ void ScDocument::InitUndo( ScDocument* pSrcDoc, SCTAB nTab1, SCTAB nTab2,
     SharePooledResources(pSrcDoc);
 
     if (pSrcDoc->pShell->GetMedium())
-        maFileURL = pSrcDoc->pShell->GetMedium()->GetURLObject().GetMainURL(INetURLObject::DECODE_TO_IURI);
+        maFileURL = pSrcDoc->pShell->GetMedium()->GetURLObject().GetMainURL(INetURLObject::DecodeMechanism::ToIUri);
 
     OUString aString;
     if ( nTab2 >= static_cast<SCTAB>(maTabs.size()))
@@ -2153,7 +2153,7 @@ void ScDocument::CopyToClip(const ScClipParam& rClipParam,
 
     if (pShell->GetMedium())
     {
-        pClipDoc->maFileURL = pShell->GetMedium()->GetURLObject().GetMainURL(INetURLObject::DECODE_TO_IURI);
+        pClipDoc->maFileURL = pShell->GetMedium()->GetURLObject().GetMainURL(INetURLObject::DecodeMechanism::ToIUri);
         // for unsaved files use the title name and adjust during save of file
         if (pClipDoc->maFileURL.isEmpty())
             pClipDoc->maFileURL = pShell->GetName();
@@ -2253,7 +2253,7 @@ void ScDocument::CopyTabToClip(SCCOL nCol1, SCROW nRow1,
 
         if (pShell->GetMedium())
         {
-            pClipDoc->maFileURL = pShell->GetMedium()->GetURLObject().GetMainURL(INetURLObject::DECODE_TO_IURI);
+            pClipDoc->maFileURL = pShell->GetMedium()->GetURLObject().GetMainURL(INetURLObject::DecodeMechanism::ToIUri);
             // for unsaved files use the title name and adjust during save of file
             if (pClipDoc->maFileURL.isEmpty())
                 pClipDoc->maFileURL = pShell->GetName();

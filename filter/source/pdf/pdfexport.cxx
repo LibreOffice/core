@@ -554,7 +554,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                     rFilterData[ nData ].Value >>= mbExportPlaceholders;
             }
 
-            aContext.URL        = aURL.GetMainURL(INetURLObject::DECODE_TO_IURI);
+            aContext.URL        = aURL.GetMainURL(INetURLObject::DecodeMechanism::ToIUri);
 
             // set the correct version, depending on user request
             switch( mnPDFTypeSelection )

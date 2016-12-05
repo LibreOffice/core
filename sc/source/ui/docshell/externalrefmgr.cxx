@@ -2501,7 +2501,7 @@ SfxObjectShellRef ScExternalRefManager::loadSrcDocument(sal_uInt16 nFileId, OUSt
         aBaseURL.insertName("content.xml");
 
         OUString aStr = URIHelper::simpleNormalizedMakeRelative(
-            aBaseURL.GetMainURL(INetURLObject::NO_DECODE), aFile);
+            aBaseURL.GetMainURL(INetURLObject::DecodeMechanism::NONE), aFile);
 
         setRelativeFileName(nFileId, aStr);
     }
@@ -2673,7 +2673,7 @@ void ScExternalRefManager::SrcFileData::maybeCreateRealFileName(const OUString& 
     INetURLObject aBaseURL(rOwnDocName);
     aBaseURL.insertName("content.xml");
     bool bWasAbs = false;
-    maRealFileName = aBaseURL.smartRel2Abs(rRelPath, bWasAbs).GetMainURL(INetURLObject::NO_DECODE);
+    maRealFileName = aBaseURL.smartRel2Abs(rRelPath, bWasAbs).GetMainURL(INetURLObject::DecodeMechanism::NONE);
 }
 
 void ScExternalRefManager::maybeCreateRealFileName(sal_uInt16 nFileId)
@@ -3179,7 +3179,7 @@ void ScExternalRefManager::transformUnsavedRefToSavedRef( SfxObjectShell* pShell
         if ( itr->second.maShell.get() == pShell )
         {
             // found that the shell is marked as unsaved
-            OUString aFileURL = pShell->GetMedium()->GetURLObject().GetMainURL(INetURLObject::DECODE_TO_IURI);
+            OUString aFileURL = pShell->GetMedium()->GetURLObject().GetMainURL(INetURLObject::DecodeMechanism::ToIUri);
             switchSrcFile(itr->first, aFileURL, OUString());
             EndListening(*pShell);
             maUnsavedDocShells.erase(itr++);

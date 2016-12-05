@@ -276,7 +276,7 @@ bool MediaWindow::executeMediaURLDialog(vcl::Window*,
     if( aDlg.Execute() == ERRCODE_NONE )
     {
         const INetURLObject aURL( aDlg.GetPath() );
-        rURL = aURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS );
+        rURL = aURL.GetMainURL( INetURLObject::DecodeMechanism::Unambiguous );
 
         if (o_pbLink)
         {
@@ -317,7 +317,7 @@ bool MediaWindow::isMediaURL( const OUString& rURL, const OUString& rReferer, bo
             try
             {
                 uno::Reference< media::XPlayer > xPlayer( priv::MediaWindowImpl::createPlayer(
-                                                            aURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ),
+                                                            aURL.GetMainURL( INetURLObject::DecodeMechanism::Unambiguous ),
                                                             rReferer, nullptr ) );
 
                 if( xPlayer.is() )

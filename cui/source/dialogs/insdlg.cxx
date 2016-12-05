@@ -296,7 +296,7 @@ short SvInsertOleDlg::Execute()
             INetURLObject aURL;
             aURL.SetSmartProtocol( INetProtocol::File );
             aURL.SetSmartURL( aFileName );
-            aFileName = aURL.GetMainURL( INetURLObject::NO_DECODE );
+            aFileName = aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
             bool bLink = m_pCbFilelink->IsChecked();
 
             if ( !aFileName.isEmpty() )
@@ -522,7 +522,7 @@ short SfxInsertFloatingFrameDialog::Execute()
             INetURLObject aObj;
             aObj.SetSmartProtocol( INetProtocol::File );
             if ( aObj.SetSmartURL( m_pEDURL->GetText() ) )
-                aURL = aObj.GetMainURL( INetURLObject::NO_DECODE );
+                aURL = aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
         }
 
         if ( !m_xObj.is() && !aURL.isEmpty() )
@@ -626,7 +626,7 @@ IMPL_LINK_NOARG( SfxInsertFloatingFrameDialog, OpenHdl, Button*, void)
     // show the dialog
     if ( aFileDlg.Execute() == ERRCODE_NONE )
         m_pEDURL->SetText(
-            INetURLObject( aFileDlg.GetPath() ).GetMainURL( INetURLObject::DECODE_WITH_CHARSET ) );
+            INetURLObject( aFileDlg.GetPath() ).GetMainURL( INetURLObject::DecodeMechanism::WithCharset ) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

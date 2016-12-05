@@ -165,7 +165,7 @@ bool SdrTextObj::ReloadLinkedText( bool bForceLoad)
             INetURLObject aURL( pData->aFileName );
             DBG_ASSERT( aURL.GetProtocol() != INetProtocol::NotValid, "invalid URL" );
 
-            ::ucbhelper::Content aCnt( aURL.GetMainURL( INetURLObject::NO_DECODE ), css::uno::Reference< css::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
+            ::ucbhelper::Content aCnt( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), css::uno::Reference< css::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
             css::uno::Any aAny( aCnt.getPropertyValue("DateModified") );
             css::util::DateTime aDateTime;
 
@@ -214,7 +214,7 @@ bool SdrTextObj::LoadText(const OUString& rFileName, const OUString& /*rFilterNa
 
     DBG_ASSERT( aFileURL.GetProtocol() != INetProtocol::NotValid, "invalid URL" );
 
-    std::unique_ptr<SvStream> pIStm(::utl::UcbStreamHelper::CreateStream( aFileURL.GetMainURL( INetURLObject::NO_DECODE ), StreamMode::READ ));
+    std::unique_ptr<SvStream> pIStm(::utl::UcbStreamHelper::CreateStream( aFileURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::READ ));
 
     if( pIStm )
     {
@@ -230,7 +230,7 @@ bool SdrTextObj::LoadText(const OUString& rFileName, const OUString& /*rFilterNa
 
         if( !pIStm->GetError() )
         {
-            SetText( *pIStm, aFileURL.GetMainURL( INetURLObject::NO_DECODE ), sal::static_int_cast< sal_uInt16 >( bRTF ? EE_FORMAT_RTF : EE_FORMAT_TEXT ) );
+            SetText( *pIStm, aFileURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), sal::static_int_cast< sal_uInt16 >( bRTF ? EE_FORMAT_RTF : EE_FORMAT_TEXT ) );
             bRet = true;
         }
     }

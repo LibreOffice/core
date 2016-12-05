@@ -354,7 +354,7 @@ XclExpHyperlink::XclExpHyperlink( const XclExpRoot& rRoot, const SvxURLField& rU
         if( eProtocol == INetProtocol::Smb )
         {
             // #n382718# (and #n261623#) Convert smb notation to '\\'
-            aFileName = aUrlObj.GetMainURL( INetURLObject::NO_DECODE );
+            aFileName = aUrlObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
             aFileName = aFileName.copy(4); // skip the 'smb:' part
             aFileName = aFileName.replace('/', '\\');
         }
@@ -457,7 +457,7 @@ OUString XclExpHyperlink::BuildFileName(
         OUString aTmpName( aDosName );
         aDosName = INetURLObject::GetRelURL( rRoot.GetBasePath(), rUrl,
             INetURLObject::EncodeMechanism::WasEncoded,
-            (bEncoded ? INetURLObject::DECODE_TO_IURI : INetURLObject::DECODE_WITH_CHARSET));
+            (bEncoded ? INetURLObject::DecodeMechanism::ToIUri : INetURLObject::DecodeMechanism::WithCharset));
 
         if (aDosName.startsWith(INET_FILE_SCHEME))
         {

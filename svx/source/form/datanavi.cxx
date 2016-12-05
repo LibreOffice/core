@@ -3396,7 +3396,7 @@ namespace svxform
         OUString sFilterName( "XML" );
         aDlg.AddFilter( sFilterName, "*.xml" );
         aDlg.SetCurrentFilter( sFilterName );
-        aDlg.SetDisplayDirectory( aFile.GetMainURL( INetURLObject::NO_DECODE ) );
+        aDlg.SetDisplayDirectory( aFile.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
 
         if( aDlg.Execute() == ERRCODE_NONE )
             m_pURLED->SetText( aDlg.GetPath() );

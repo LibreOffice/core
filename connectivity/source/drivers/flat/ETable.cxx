@@ -426,7 +426,7 @@ void OFlatTable::construct()
     if(aURL.getExtension() != m_pConnection->getExtension())
         aURL.setExtension(m_pConnection->getExtension());
 
-    OUString aFileName = aURL.GetMainURL(INetURLObject::NO_DECODE);
+    OUString aFileName = aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
 
     m_pFileStream = createStream_simpleError( aFileName, StreamMode::READWRITE | StreamMode::NOCREATE | StreamMode::SHARE_DENYWRITE);
 

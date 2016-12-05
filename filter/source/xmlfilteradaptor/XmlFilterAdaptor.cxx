@@ -89,7 +89,7 @@ bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< css::beans::Property
         INetURLObject aURLObj(aBaseURI);
         // base URI in this case is the URI of the actual saving location
         // aURLObj.removeSegment();
-        aBaseURI = aURLObj.GetMainURL(INetURLObject::NO_DECODE);
+        aBaseURI = aURLObj.GetMainURL(INetURLObject::DecodeMechanism::NONE);
     }
 
     // create an XProperty set to configure the exporter for pretty printing
@@ -242,7 +242,7 @@ bool SAL_CALL XmlFilterAdaptor::exportImpl( const Sequence< css::beans::Property
             INetURLObject aURLObj(aBaseURI);
             // base URI in this case is the URI of the actual saving location
             // aURLObj.removeSegment();
-            aBaseURI = aURLObj.GetMainURL(INetURLObject::NO_DECODE);
+            aBaseURI = aURLObj.GetMainURL(INetURLObject::DecodeMechanism::NONE);
         }
 
         // create an XProperty set to configure the exporter for pretty printing

@@ -62,7 +62,7 @@ bool GalleryExplorer::FillObjList( const OUString& rThemeName, std::vector<OUStr
         if( pTheme )
         {
             for( sal_uInt32 i = 0, nCount = pTheme->GetObjectCount(); i < nCount; i++ )
-                rObjList.push_back( pTheme->GetObjectURL( i ).GetMainURL( INetURLObject::NO_DECODE ) );
+                rObjList.push_back( pTheme->GetObjectURL( i ).GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
 
             pGal->ReleaseTheme( pTheme, aListener );
         }

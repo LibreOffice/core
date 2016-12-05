@@ -1656,7 +1656,7 @@ void ODatabaseDocument::impl_writeStorage_throw( const Reference< XStorage >& _r
     {
         // In this case the host contains the real path, and the path is the embedded stream name.
         INetURLObject aURL(sURL);
-        sStreamRelPath = aURL.GetURLPath(INetURLObject::DECODE_WITH_CHARSET);
+        sStreamRelPath = aURL.GetURLPath(INetURLObject::DecodeMechanism::WithCharset);
         if (sStreamRelPath.startsWith("/"))
             sStreamRelPath = sStreamRelPath.copy(1);
     }

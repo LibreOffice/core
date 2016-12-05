@@ -90,7 +90,7 @@
 #include <calbck.hxx>
 #include <docary.hxx>
 
-#define URL_DECODE  INetURLObject::DECODE_UNAMBIGUOUS
+#define URL_DECODE  INetURLObject::DecodeMechanism::Unambiguous
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -424,7 +424,7 @@ OUString SwFileNameFieldType::Expand(sal_uLong nFormat) const
                     else
                     {
                         aRet = URIHelper::removePassword(
-                                    rURLObj.GetMainURL( INetURLObject::NO_DECODE ),
+                                    rURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ),
                                     INetURLObject::EncodeMechanism::WasEncoded, URL_DECODE );
                         const sal_Int32 nPos = aRet.indexOf(rURLObj.GetLastName( URL_DECODE ));
                         if (nPos>=0)
@@ -436,7 +436,7 @@ OUString SwFileNameFieldType::Expand(sal_uLong nFormat) const
                 break;
 
             case FF_NAME:
-                aRet = rURLObj.GetLastName( INetURLObject::DECODE_WITH_CHARSET );
+                aRet = rURLObj.GetLastName( INetURLObject::DecodeMechanism::WithCharset );
                 break;
 
             case FF_NAME_NOEXT:
@@ -448,7 +448,7 @@ OUString SwFileNameFieldType::Expand(sal_uLong nFormat) const
                     aRet = rURLObj.GetFull();
                 else
                     aRet = URIHelper::removePassword(
-                                    rURLObj.GetMainURL( INetURLObject::NO_DECODE ),
+                                    rURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ),
                                     INetURLObject::EncodeMechanism::WasEncoded, URL_DECODE );
         }
     }

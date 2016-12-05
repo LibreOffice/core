@@ -928,8 +928,8 @@ bool AttributeOutputBase::AnalyzeURL( const OUString& rUrl, const OUString& /*rT
     else
     {
         INetURLObject aURL( rUrl, INetProtocol::NotValid );
-        sURL = aURL.GetURLNoMark( INetURLObject::DECODE_UNAMBIGUOUS );
-        sMark = aURL.GetMark( INetURLObject::DECODE_UNAMBIGUOUS );
+        sURL = aURL.GetURLNoMark( INetURLObject::DecodeMechanism::Unambiguous );
+        sMark = aURL.GetMark( INetURLObject::DecodeMechanism::Unambiguous );
     }
 
     if ( !sMark.isEmpty() && sURL.isEmpty() )
@@ -1135,7 +1135,7 @@ OUString BookmarkToWord(const OUString &rBookmark)
 OUString BookmarkToWriter(const OUString &rBookmark)
 {
     return INetURLObject::decode(rBookmark,
-        INetURLObject::DECODE_UNAMBIGUOUS, RTL_TEXTENCODING_ASCII_US);
+        INetURLObject::DecodeMechanism::Unambiguous, RTL_TEXTENCODING_ASCII_US);
 }
 
 void SwWW8AttrIter::OutSwFormatRefMark(const SwFormatRefMark& rAttr, bool)

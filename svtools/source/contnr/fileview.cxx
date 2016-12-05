@@ -240,7 +240,7 @@ inline const OUString& NameTranslationList::GetTransTableFileName() const
 
 NameTranslationList::NameTranslationList( const INetURLObject& rBaseURL ):
     maTransFile( rBaseURL ),
-    m_HashedURL(rBaseURL.GetMainURL(INetURLObject::NO_DECODE)),
+    m_HashedURL(rBaseURL.GetMainURL(INetURLObject::DecodeMechanism::NONE)),
     maTransFileName( OUString(".nametranslation.table") )
 {
     maTransFile.insertName( maTransFileName );
@@ -251,7 +251,7 @@ NameTranslationList::NameTranslationList( const INetURLObject& rBaseURL ):
     // See examples of such a files in the samples-folder of an Office installation
     try
     {
-        ::ucbhelper::Content aTestContent( maTransFile.GetMainURL( INetURLObject::NO_DECODE ), Reference< XCommandEnvironment >(), comphelper::getProcessComponentContext() );
+        ::ucbhelper::Content aTestContent( maTransFile.GetMainURL( INetURLObject::DecodeMechanism::NONE ), Reference< XCommandEnvironment >(), comphelper::getProcessComponentContext() );
 
         if( aTestContent.isDocument() )
         {
@@ -765,7 +765,7 @@ void ViewTabListBox_Impl::DeleteEntries()
         if ( eResult != svtools::QUERYDELETE_ALL )
         {
             INetURLObject aObj( aURL );
-            ScopedVclPtrInstance< svtools::QueryDeleteDlg_Impl > aDlg(nullptr, aObj.GetName( INetURLObject::DECODE_WITH_CHARSET ) );
+            ScopedVclPtrInstance< svtools::QueryDeleteDlg_Impl > aDlg(nullptr, aObj.GetName( INetURLObject::DecodeMechanism::WithCharset ) );
             if ( sDialogPosition.getLength() )
                 aDlg->SetWindowState( sDialogPosition );
 
@@ -1412,7 +1412,7 @@ void NameTranslator_Impl::SetActualFolder( const INetURLObject& rActualFolder )
 {
     if( mpActFolder )
     {
-        if (mpActFolder->GetHashedURL() != rActualFolder.GetMainURL(INetURLObject::NO_DECODE))
+        if (mpActFolder->GetHashedURL() != rActualFolder.GetMainURL(INetURLObject::DecodeMechanism::NONE))
         {
             delete mpActFolder;
             mpActFolder = new NameTranslationList( rActualFolder );
@@ -1514,7 +1514,7 @@ FileViewResult SvtFileView_Impl::GetFolderContent_Impl(
     // prepare name translation
     SetActualFolder( aFolderObj );
 
-    FolderDescriptor aFolder( aFolderObj.GetMainURL( INetURLObject::NO_DECODE ) );
+    FolderDescriptor aFolder( aFolderObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
 
     aGuard.clear();
     return GetFolderContent_Impl( aFolder, pAsyncDescriptor, rBlackList );
@@ -2109,7 +2109,7 @@ void SvtFileView_Impl::EntryRenamed( OUString& rURL,
             INetURLObject aURLObj( rURL );
             aURLObj.SetName( rTitle, INetURLObject::EncodeMechanism::All );
 
-            rURL = aURLObj.GetMainURL( INetURLObject::NO_DECODE );
+            rURL = aURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
             (*aIt)->maTargetURL = rURL;
             break;

@@ -3967,7 +3967,7 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
                     GraphicFilter &rGrfFilter = GraphicFilter::GetGraphicFilter();
                     aLinkFilterName = rGrfFilter.GetImportFormatName(
                         rGrfFilter.GetImportFormatNumberForShortName( aAbsURL.getExtension() ) );
-                    aLinkFileName = aAbsURL.GetMainURL( INetURLObject::DECODE_TO_IURI );
+                    aLinkFileName = aAbsURL.GetMainURL( INetURLObject::DecodeMechanism::ToIUri );
                 }
                 else
                     aLinkFileName = aFileName;
@@ -6417,7 +6417,7 @@ bool SvxMSDffManager::GetBLIPDirect( SvStream& rBLIPStream, Graphic& rData, Rect
             aURL.removeFinalSlash();
             aURL.Append( aFileName );
 
-            aURLStr = aURL.GetMainURL( INetURLObject::NO_DECODE );
+            aURLStr = aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
             SAL_INFO("filter.ms", "dumping " << aURLStr);
 

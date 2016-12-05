@@ -688,7 +688,7 @@ void FilterCache::detectFlatForURL(const css::util::URL& aURL      ,
     INetURLObject   aParser    (aURL.Main);
     OUString sExtension = aParser.getExtension(INetURLObject::LAST_SEGMENT       ,
                                                       true                          ,
-                                                      INetURLObject::DECODE_WITH_CHARSET);
+                                                      INetURLObject::DecodeMechanism::WithCharset);
     sExtension = sExtension.toAsciiLowerCase();
 
     // SAFE -> ----------------------------------

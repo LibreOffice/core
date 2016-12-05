@@ -224,7 +224,7 @@ bool SfxContentHelper::IsHelpErrorDocument( const OUString& rURL )
     bool bRet = false;
     try
     {
-        ::ucbhelper::Content aCnt( INetURLObject( rURL ).GetMainURL( INetURLObject::NO_DECODE ),
+        ::ucbhelper::Content aCnt( INetURLObject( rURL ).GetMainURL( INetURLObject::DecodeMechanism::NONE ),
                       uno::Reference< ucb::XCommandEnvironment >(),
                       comphelper::getProcessComponentContext() );
         if ( !( aCnt.getPropertyValue( "IsErrorDocument" ) >>= bRet ) )
@@ -247,7 +247,7 @@ sal_Int64 SfxContentHelper::GetSize( const OUString& rContent )
     DBG_ASSERT( aObj.GetProtocol() != INetProtocol::NotValid, "Invalid URL!" );
     try
     {
-        ::ucbhelper::Content aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
+        ::ucbhelper::Content aCnt( aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), uno::Reference< ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
         aCnt.getPropertyValue( "Size" ) >>= nSize;
     }
     catch( const ucb::CommandAbortedException& )

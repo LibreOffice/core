@@ -226,7 +226,7 @@ void XMLFilterTestDialog::test( const filter_info_impl& rFilterInfo )
 static OUString getFileNameFromURL( OUString& rURL )
 {
     INetURLObject aURL( rURL );
-    OUString aName( aURL.getName(INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET) );
+    OUString aName( aURL.getName(INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset) );
     return aName;
 }
 

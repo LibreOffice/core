@@ -204,7 +204,7 @@ void RecentDocsView::Reload()
         {
             INetURLObject  aURLObj( aURL );
             //Remove extension from url's last segment and use it as title
-            aTitle = aURLObj.GetBase(); //DECODE_WITH_CHARSET
+            aTitle = aURLObj.GetBase(); //DecodeMechanism::WithCharset
         }
 
         if (isAcceptedFile(aURL))

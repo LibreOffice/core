@@ -145,7 +145,7 @@ void OButtonModel::write(const Reference<XObjectOutputStream>& _rxOutStream) thr
 
         _rxOutStream->writeShort( (sal_uInt16)m_eButtonType );
 
-        OUString sTmp = INetURLObject::decode( m_sTargetURL, INetURLObject::DECODE_UNAMBIGUOUS);
+        OUString sTmp = INetURLObject::decode( m_sTargetURL, INetURLObject::DecodeMechanism::Unambiguous);
         _rxOutStream << sTmp;
         _rxOutStream << m_sTargetFrame;
         writeHelpTextCompatibly(_rxOutStream);

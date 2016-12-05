@@ -261,7 +261,7 @@ namespace XSLT
         bool bWasAbsolute;
         INetURLObject aURL = aObj.smartRel2Abs(s, bWasAbsolute, false,
                 INetURLObject::EncodeMechanism::WasEncoded, RTL_TEXTENCODING_UTF8, true);
-        return aURL.GetMainURL(INetURLObject::NO_DECODE);
+        return aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
     }
 
     sal_Bool
@@ -461,7 +461,7 @@ namespace XSLT
         nv.Name = "TargetBaseURL";
         INetURLObject ineturl(sURL);
         ineturl.removeSegment();
-        m_aExportBaseUrl = ineturl.GetMainURL(INetURLObject::NO_DECODE);
+        m_aExportBaseUrl = ineturl.GetMainURL(INetURLObject::DecodeMechanism::NONE);
         nv.Value <<= m_aExportBaseUrl;
         args[3] <<= nv;
 

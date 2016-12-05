@@ -385,7 +385,7 @@ IMPL_LINK(SwAddressListDialog, CreateHdl_Impl, Button*, pButton, void)
             INetURLObject aTempURL(aURL);
             aTempURL.removeSegment();
             aTempURL.removeFinalSlash();
-            const OUString sDBURL("sdbc:flat:" + aTempURL.GetMainURL(INetURLObject::NO_DECODE));
+            const OUString sDBURL("sdbc:flat:" + aTempURL.GetMainURL(INetURLObject::DecodeMechanism::NONE));
             xDataProperties->setPropertyValue("URL", Any(sDBURL));
             //set the filter to the file name without extension
             uno::Sequence<OUString> aFilters { sNewName };

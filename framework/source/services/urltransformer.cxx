@@ -74,9 +74,9 @@ namespace
     {
         // Get all information about this URL.
         _rURL.Protocol  = INetURLObject::GetScheme( _rParser.GetProtocol() );
-        _rURL.User      = _rParser.GetUser  ( INetURLObject::DECODE_WITH_CHARSET );
-        _rURL.Password  = _rParser.GetPass  ( INetURLObject::DECODE_WITH_CHARSET );
-        _rURL.Server        = _rParser.GetHost  ( INetURLObject::DECODE_WITH_CHARSET );
+        _rURL.User      = _rParser.GetUser  ( INetURLObject::DecodeMechanism::WithCharset );
+        _rURL.Password  = _rParser.GetPass  ( INetURLObject::DecodeMechanism::WithCharset );
+        _rURL.Server        = _rParser.GetHost  ( INetURLObject::DecodeMechanism::WithCharset );
         _rURL.Port      = (sal_Int16)_rParser.GetPort();
 
         sal_Int32 nCount = _rParser.getSegmentCount( false );
@@ -89,34 +89,34 @@ namespace
             for ( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++ )
             {
                 aPath.append( '/');
-                aPath.append( _rParser.getName( nIndex, false, INetURLObject::NO_DECODE ));
+                aPath.append( _rParser.getName( nIndex, false, INetURLObject::DecodeMechanism::NONE ));
             }
 
             if ( nCount > 0 )
                 aPath.append( '/' ); // final slash!
 
             _rURL.Path = aPath.makeStringAndClear();
-            _rURL.Name = _rParser.getName( INetURLObject::LAST_SEGMENT, false, INetURLObject::NO_DECODE );
+            _rURL.Name = _rParser.getName( INetURLObject::LAST_SEGMENT, false, INetURLObject::DecodeMechanism::NONE );
         }
         else
         {
-            _rURL.Path       = _rParser.GetURLPath( INetURLObject::NO_DECODE           );
+            _rURL.Path       = _rParser.GetURLPath( INetURLObject::DecodeMechanism::NONE           );
             _rURL.Name      = _rParser.GetName  (                                    );
         }
 
         _rURL.Arguments  = _rParser.GetParam();
-        _rURL.Mark      = _rParser.GetMark( INetURLObject::DECODE_WITH_CHARSET );
+        _rURL.Mark      = _rParser.GetMark( INetURLObject::DecodeMechanism::WithCharset );
 
         // INetURLObject supports only an intelligent method of parsing URL's. So write
         // back Complete to have a valid encoded URL in all cases!
-        _rURL.Complete  = _rParser.GetMainURL( INetURLObject::NO_DECODE           );
+        _rURL.Complete  = _rParser.GetMainURL( INetURLObject::DecodeMechanism::NONE           );
         if ( _bUseIntern )
             _rURL.Complete   = _rURL.Complete.intern();
 
         _rParser.SetMark    ( OUString() );
         _rParser.SetParam( OUString() );
 
-        _rURL.Main       = _rParser.GetMainURL( INetURLObject::NO_DECODE           );
+        _rURL.Main       = _rParser.GetMainURL( INetURLObject::DecodeMechanism::NONE           );
     }
 }
 
@@ -259,11 +259,11 @@ sal_Bool SAL_CALL URLTransformer::assemble( css::util::URL& aURL ) throw( css::u
             return false;
 
         // First parse URL WITHOUT ...
-        aURL.Main = aParser.GetMainURL( INetURLObject::NO_DECODE );
+        aURL.Main = aParser.GetMainURL( INetURLObject::DecodeMechanism::NONE );
         // ...and then WITH parameter and mark.
         aParser.SetParam( aURL.Arguments);
         aParser.SetMark ( aURL.Mark, INetURLObject::EncodeMechanism::All );
-        aURL.Complete = aParser.GetMainURL( INetURLObject::NO_DECODE );
+        aURL.Complete = aParser.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
         // Return "URL is assembled".
         return true;
@@ -306,7 +306,7 @@ OUString SAL_CALL URLTransformer::getPresentation( const css::util::URL& aURL,
 
         // Convert internal URLs to "praesentation"-URLs!
         OUString sPraesentationURL;
-        INetURLObject::translateToExternal( aTestURL.Complete, sPraesentationURL, INetURLObject::DECODE_UNAMBIGUOUS );
+        INetURLObject::translateToExternal( aTestURL.Complete, sPraesentationURL, INetURLObject::DecodeMechanism::Unambiguous );
 
         return sPraesentationURL;
     }

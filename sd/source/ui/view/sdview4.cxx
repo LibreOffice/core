@@ -412,7 +412,7 @@ IMPL_LINK_NOARG(View, DropInsertFileHdl, Idle *, void)
         GraphicFilter&  rGraphicFilter = GraphicFilter::GetGraphicFilter();
         Graphic         aGraphic;
 
-        aCurrentDropFile = aURL.GetMainURL( INetURLObject::NO_DECODE );
+        aCurrentDropFile = aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
         if( !::avmedia::MediaWindow::isMediaURL( aCurrentDropFile, ""/*TODO?*/ ) )
         {

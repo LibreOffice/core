@@ -1888,7 +1888,7 @@ bool TransferableDataHelper::GetINetBookmark( const css::datatransfer::DataFlavo
 
                     if( ( aDesc.getLength() > 4 ) && aDesc.copy(aDesc.getLength() - 4).equalsIgnoreAsciiCase(".URL") )
                     {
-                        std::unique_ptr<SvStream> pStream(::utl::UcbStreamHelper::CreateStream( INetURLObject( OStringToOUString(aDesc, eTextEncoding) ).GetMainURL( INetURLObject::NO_DECODE ),
+                        std::unique_ptr<SvStream> pStream(::utl::UcbStreamHelper::CreateStream( INetURLObject( OStringToOUString(aDesc, eTextEncoding) ).GetMainURL( INetURLObject::DecodeMechanism::NONE ),
                                                                                   StreamMode::STD_READ ));
 
                         if( !pStream || pStream->GetError() )

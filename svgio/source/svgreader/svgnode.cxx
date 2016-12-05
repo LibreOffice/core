@@ -577,7 +577,7 @@ namespace svgio
                                     aObjectName = aURL.getName(
                                         INetURLObject::LAST_SEGMENT,
                                         true,
-                                        INetURLObject::DECODE_WITH_CHARSET);
+                                        INetURLObject::DecodeMechanism::WithCharset);
                                 }
                             }
 

@@ -262,7 +262,7 @@ void SAL_CALL SwDataSourceRemovedListener::revokedDatabaseLocation(const sdb::Da
     if (!pDocShell)
         return;
 
-    OUString aOwnURL = pDocShell->GetMedium()->GetURLObject().GetMainURL(INetURLObject::DECODE_WITH_CHARSET);
+    OUString aOwnURL = pDocShell->GetMedium()->GetURLObject().GetMainURL(INetURLObject::DecodeMechanism::WithCharset);
     OUString sTmpName = "vnd.sun.star.pkg://";
     sTmpName += INetURLObject::encode(aOwnURL, INetURLObject::PART_AUTHORITY, INetURLObject::EncodeMechanism::All);
     sTmpName += "/" + m_pDBManager->getEmbeddedName();
@@ -853,7 +853,7 @@ static void lcl_SaveDebugDoc( SfxObjectShell *xTargetDocShell,
         if( aTempDir.IsValid() )
         {
             INetURLObject aTempDirURL( aTempDir.GetURL() );
-            sTempDirURL = aTempDirURL.GetMainURL( INetURLObject::NO_DECODE );
+            sTempDirURL = aTempDirURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
             SAL_INFO( "sw.mailmerge", "Dump directory: " << sTempDirURL );
         }
     }
@@ -868,7 +868,7 @@ static void lcl_SaveDebugDoc( SfxObjectShell *xTargetDocShell,
     utl::TempFile aTempFile( basename, true, &sExt, &sTempDirURL );
     INetURLObject aTempFileURL( aTempFile.GetURL() );
     SfxMedium* pDstMed = new SfxMedium(
-        aTempFileURL.GetMainURL( INetURLObject::NO_DECODE ),
+        aTempFileURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ),
         StreamMode::STD_READWRITE );
     bool bAnyError = !xTargetDocShell->DoSaveAs( *pDstMed );
     // xObjectShell->DoSaveCompleted crashes the mail merge unit tests, so skip it
@@ -890,7 +890,7 @@ static bool lcl_SaveDoc(
     SwWrtShell& rWorkShell,
     OUString * const decodedURL = nullptr )
 {
-    OUString url = pFileURL->GetMainURL( INetURLObject::NO_DECODE );
+    OUString url = pFileURL->GetMainURL( INetURLObject::DecodeMechanism::NONE );
     if( decodedURL )
         (*decodedURL) = url;
 
@@ -1167,7 +1167,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
 
     // setup the output format
     std::shared_ptr<const SfxFilter> pStoreToFilter = SwIoSystem::GetFileFilter(
-        pSourceDocSh->GetMedium()->GetURLObject().GetMainURL(INetURLObject::NO_DECODE));
+        pSourceDocSh->GetMedium()->GetURLObject().GetMainURL(INetURLObject::DecodeMechanism::NONE));
     SfxFilterContainer* pFilterContainer = SwDocShell::Factory().GetFilterContainer();
     const OUString* pStoreToFilterOptions = nullptr;
 
@@ -1335,7 +1335,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                 INetURLObject aEntry( sPrefix );
                 sLeading = aEntry.GetBase();
                 aEntry.removeSegment();
-                sPrefix = aEntry.GetMainURL( INetURLObject::NO_DECODE );
+                sPrefix = aEntry.GetMainURL( INetURLObject::DecodeMechanism::NONE );
             }
 
             OUString sExt(comphelper::string::stripStart(pStoreToFilter->GetDefaultExtension(), '*'));
@@ -2574,7 +2574,7 @@ SwDBManager::DBConnURITypes SwDBManager::GetDBunoURI(const OUString &rURI, uno::
             || sExt.equalsIgnoreAsciiCase("xls"))
     {
         OUString sDBURL("sdbc:calc:");
-        sDBURL += aURL.GetMainURL(INetURLObject::NO_DECODE);
+        sDBURL += aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
         aURLAny <<= sDBURL;
         type = DBCONN_CALC;
     }
@@ -2583,7 +2583,7 @@ SwDBManager::DBConnURITypes SwDBManager::GetDBunoURI(const OUString &rURI, uno::
         aURL.removeSegment();
         aURL.removeFinalSlash();
         OUString sDBURL("sdbc:dbase:");
-        sDBURL += aURL.GetMainURL(INetURLObject::NO_DECODE);
+        sDBURL += aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
         aURLAny <<= sDBURL;
         type = DBCONN_DBASE;
     }
@@ -2593,7 +2593,7 @@ SwDBManager::DBConnURITypes SwDBManager::GetDBunoURI(const OUString &rURI, uno::
         aURL.removeFinalSlash();
         OUString sDBURL("sdbc:flat:");
         //only the 'path' has to be added
-        sDBURL += aURL.GetMainURL(INetURLObject::NO_DECODE);
+        sDBURL += aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
         aURLAny <<= sDBURL;
         type = DBCONN_FLAT;
     }
@@ -2625,7 +2625,7 @@ OUString lcl_getOwnURL(SwDocShell* pDocShell)
         return aRet;
 
     const INetURLObject& rURLObject = pDocShell->GetMedium()->GetURLObject();
-    aRet = rURLObject.GetMainURL(INetURLObject::DECODE_WITH_CHARSET);
+    aRet = rURLObject.GetMainURL(INetURLObject::DecodeMechanism::WithCharset);
     return aRet;
 }
 
@@ -2666,7 +2666,7 @@ OUString SwDBManager::LoadAndRegisterDataSource(const DBConnURITypes type, const
         uno::Reference<sdb::XDatabaseContext> xDBContext = sdb::DatabaseContext::create(xContext);
 
         OUString sNewName = INetURLObject::decode( aURL.getName(),
-                                                 INetURLObject::DECODE_UNAMBIGUOUS );
+                                                 INetURLObject::DecodeMechanism::Unambiguous );
         sal_Int32 nExtLen = aURL.GetExtension().getLength();
         sNewName = sNewName.replaceAt( sNewName.getLength() - nExtLen - 1, nExtLen + 1, "" );
         if (pPrefix)
@@ -2685,7 +2685,7 @@ OUString SwDBManager::LoadAndRegisterDataSource(const DBConnURITypes type, const
         if(!bStore)
         {
             //odb-file
-            uno::Any aDataSource = xDBContext->getByName(aURL.GetMainURL(INetURLObject::NO_DECODE));
+            uno::Any aDataSource = xDBContext->getByName(aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE));
             aDataSource >>= xNewInstance;
         }
         else
@@ -2797,7 +2797,7 @@ void SwDBManager::LoadAndRegisterEmbeddedDataSource(const SwDBData& rData, const
     // Encode the stream name and the real path into a single URL.
     const INetURLObject& rURLObject = rDocShell.GetMedium()->GetURLObject();
     OUString aURL = "vnd.sun.star.pkg://";
-    aURL += INetURLObject::encode(rURLObject.GetMainURL(INetURLObject::DECODE_WITH_CHARSET), INetURLObject::PART_AUTHORITY, INetURLObject::EncodeMechanism::All);
+    aURL += INetURLObject::encode(rURLObject.GetMainURL(INetURLObject::DecodeMechanism::WithCharset), INetURLObject::PART_AUTHORITY, INetURLObject::EncodeMechanism::All);
     aURL += "/" + INetURLObject::encode(m_sEmbeddedName, INetURLObject::PART_FPATH, INetURLObject::EncodeMechanism::All);
 
     uno::Reference<uno::XInterface> xDataSource(xDatabaseContext->getByName(aURL), uno::UNO_QUERY);

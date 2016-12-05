@@ -801,7 +801,7 @@ void FuInsert3DModel::DoExecute( SfxRequest& )
     if( aDlg.Execute() == ERRCODE_NONE )
     {
         const INetURLObject aURL( aDlg.GetPath() );
-        sURL = aURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS );
+        sURL = aURL.GetMainURL( INetURLObject::DecodeMechanism::Unambiguous );
     }
     else if( !sURL.isEmpty() )
         sURL.clear();

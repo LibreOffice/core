@@ -91,22 +91,22 @@ void GalleryTheme::ImplCreateSvDrawStorage()
 {
     try
     {
-        aSvDrawStorageRef = new SotStorage( false, GetSdvURL().GetMainURL( INetURLObject::NO_DECODE ), pThm->IsReadOnly() ? StreamMode::READ : StreamMode::STD_READWRITE );
+        aSvDrawStorageRef = new SotStorage( false, GetSdvURL().GetMainURL( INetURLObject::DecodeMechanism::NONE ), pThm->IsReadOnly() ? StreamMode::READ : StreamMode::STD_READWRITE );
         // #i50423# ReadOnly may not been set though the file can't be written (because of security reasons)
         if ( ( aSvDrawStorageRef->GetError() != ERRCODE_NONE ) && !pThm->IsReadOnly() )
-            aSvDrawStorageRef = new SotStorage( false, GetSdvURL().GetMainURL( INetURLObject::NO_DECODE ), StreamMode::READ );
+            aSvDrawStorageRef = new SotStorage( false, GetSdvURL().GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::READ );
     }
     catch (const css::ucb::ContentCreationException& e)
     {
         SAL_WARN("svx", "failed to open: "
-                  << GetSdvURL().GetMainURL(INetURLObject::NO_DECODE)
+                  << GetSdvURL().GetMainURL(INetURLObject::DecodeMechanism::NONE)
                   << "due to : " << e.Message);
     }
 }
 
 bool GalleryTheme::ImplWriteSgaObject( const SgaObject& rObj, size_t nPos, GalleryObject* pExistentEntry )
 {
-    std::unique_ptr<SvStream> pOStm(::utl::UcbStreamHelper::CreateStream( GetSdgURL().GetMainURL( INetURLObject::NO_DECODE ), StreamMode::WRITE ));
+    std::unique_ptr<SvStream> pOStm(::utl::UcbStreamHelper::CreateStream( GetSdgURL().GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::WRITE ));
     bool        bRet = false;
 
     if( pOStm )
@@ -150,7 +150,7 @@ SgaObject* GalleryTheme::ImplReadSgaObject( GalleryObject* pEntry )
 
     if( pEntry )
     {
-        std::unique_ptr<SvStream> pIStm(::utl::UcbStreamHelper::CreateStream( GetSdgURL().GetMainURL( INetURLObject::NO_DECODE ), StreamMode::READ ));
+        std::unique_ptr<SvStream> pIStm(::utl::UcbStreamHelper::CreateStream( GetSdgURL().GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::READ ));
 
         if( pIStm )
         {
@@ -202,9 +202,9 @@ void GalleryTheme::ImplWrite()
         if( FileExists( aPathURL ) || CreateDir( aPathURL ) )
         {
 #ifdef UNX
-            std::unique_ptr<SvStream> pOStm(::utl::UcbStreamHelper::CreateStream( GetThmURL().GetMainURL( INetURLObject::NO_DECODE ), StreamMode::WRITE | StreamMode::COPY_ON_SYMLINK | StreamMode::TRUNC ));
+            std::unique_ptr<SvStream> pOStm(::utl::UcbStreamHelper::CreateStream( GetThmURL().GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::WRITE | StreamMode::COPY_ON_SYMLINK | StreamMode::TRUNC ));
 #else
-            std::unique_ptr<SvStream> pOStm(::utl::UcbStreamHelper::CreateStream( GetThmURL().GetMainURL( INetURLObject::NO_DECODE ), StreamMode::WRITE | StreamMode::TRUNC ));
+            std::unique_ptr<SvStream> pOStm(::utl::UcbStreamHelper::CreateStream( GetThmURL().GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::WRITE | StreamMode::TRUNC ));
 #endif
 
             if( pOStm )
@@ -253,7 +253,7 @@ INetURLObject GalleryTheme::ImplCreateUniqueURL( SgaObjKind eObjKind, ConvertDat
     // read next possible number
     if( FileExists( aInfoFileURL ) )
     {
-        std::unique_ptr<SvStream> pIStm(::utl::UcbStreamHelper::CreateStream( aInfoFileURL.GetMainURL( INetURLObject::NO_DECODE ), StreamMode::READ ));
+        std::unique_ptr<SvStream> pIStm(::utl::UcbStreamHelper::CreateStream( aInfoFileURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::READ ));
 
         if( pIStm )
         {
@@ -318,7 +318,7 @@ INetURLObject GalleryTheme::ImplCreateUniqueURL( SgaObjKind eObjKind, ConvertDat
     while( bExists );
 
     // write updated number
-    std::unique_ptr<SvStream> pOStm(::utl::UcbStreamHelper::CreateStream( aInfoFileURL.GetMainURL( INetURLObject::NO_DECODE ), StreamMode::WRITE ));
+    std::unique_ptr<SvStream> pOStm(::utl::UcbStreamHelper::CreateStream( aInfoFileURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::WRITE ));
 
     if( pOStm )
     {
@@ -468,7 +468,7 @@ bool GalleryTheme::RemoveObject( size_t nPos )
     if( pEntry )
     {
         if( SgaObjKind::SvDraw == pEntry->eObjKind )
-            aSvDrawStorageRef->Remove( pEntry->aURL.GetMainURL( INetURLObject::NO_DECODE ) );
+            aSvDrawStorageRef->Remove( pEntry->aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
 
         Broadcast( GalleryHint( GalleryHintType::CLOSE_OBJECT, GetName(), reinterpret_cast< sal_uIntPtr >( pEntry ) ) );
         Broadcast( GalleryHint( GalleryHintType::OBJECT_REMOVED, GetName(), reinterpret_cast< sal_uIntPtr >( pEntry ) ) );
@@ -610,8 +610,8 @@ void GalleryTheme::Actualize( const Link<const INetURLObject&, void>& rActualize
         DBG_ASSERT( aInURL.GetProtocol() != INetProtocol::NotValid, "invalid URL" );
         DBG_ASSERT( aTmpURL.GetProtocol() != INetProtocol::NotValid, "invalid URL" );
 
-        std::unique_ptr<SvStream> pIStm(::utl::UcbStreamHelper::CreateStream( aInURL.GetMainURL( INetURLObject::NO_DECODE ), StreamMode::READ ));
-        std::unique_ptr<SvStream> pTmpStm(::utl::UcbStreamHelper::CreateStream( aTmpURL.GetMainURL( INetURLObject::NO_DECODE ), StreamMode::WRITE | StreamMode::TRUNC ));
+        std::unique_ptr<SvStream> pIStm(::utl::UcbStreamHelper::CreateStream( aInURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::READ ));
+        std::unique_ptr<SvStream> pTmpStm(::utl::UcbStreamHelper::CreateStream( aTmpURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::WRITE | StreamMode::TRUNC ));
 
         if( pIStm && pTmpStm )
         {
@@ -656,14 +656,14 @@ void GalleryTheme::Actualize( const Link<const INetURLObject&, void>& rActualize
 
         try
         {
-            tools::SvRef<SotStorage> aTempStorageRef( new SotStorage( false, aTmpURL.GetMainURL( INetURLObject::NO_DECODE ), StreamMode::STD_READWRITE ) );
+            tools::SvRef<SotStorage> aTempStorageRef( new SotStorage( false, aTmpURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::STD_READWRITE ) );
             aSvDrawStorageRef->CopyTo( aTempStorageRef.get() );
             nStorErr = aSvDrawStorageRef->GetError();
         }
         catch (const css::ucb::ContentCreationException& e)
         {
             SAL_WARN("svx", "failed to open: "
-                      << aTmpURL.GetMainURL(INetURLObject::NO_DECODE)
+                      << aTmpURL.GetMainURL(INetURLObject::DecodeMechanism::NONE)
                       << "due to : " << e.Message);
             nStorErr = ERRCODE_IO_GENERAL;
         }
@@ -690,7 +690,7 @@ GalleryThemeEntry* GalleryTheme::CreateThemeEntry( const INetURLObject& rURL, bo
 
     if( FileExists( rURL ) )
     {
-        std::unique_ptr<SvStream> pIStm(::utl::UcbStreamHelper::CreateStream( rURL.GetMainURL( INetURLObject::NO_DECODE ), StreamMode::READ ));
+        std::unique_ptr<SvStream> pIStm(::utl::UcbStreamHelper::CreateStream( rURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::READ ));
 
         if( pIStm )
         {
@@ -884,7 +884,7 @@ bool GalleryTheme::InsertGraphic( const Graphic& rGraphic, sal_uIntPtr nInsertPo
         }
 
         const INetURLObject aURL( ImplCreateUniqueURL( SgaObjKind::Bitmap, nExportFormat ) );
-        std::unique_ptr<SvStream> pOStm(::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::NO_DECODE ), StreamMode::WRITE | StreamMode::TRUNC ));
+        std::unique_ptr<SvStream> pOStm(::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::WRITE | StreamMode::TRUNC ));
 
         if( pOStm )
         {
@@ -1110,7 +1110,7 @@ bool GalleryTheme::InsertURL( const INetURLObject& rURL, sal_uIntPtr nInsertPos 
             pNewObj.reset(static_cast<SgaObject*>(new SgaObjectBmp( aGraphic, rURL, aFormat )));
     }
 #if HAVE_FEATURE_AVMEDIA
-    else if( ::avmedia::MediaWindow::isMediaURL( rURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ), ""/*TODO?*/ ) )
+    else if( ::avmedia::MediaWindow::isMediaURL( rURL.GetMainURL( INetURLObject::DecodeMechanism::Unambiguous ), ""/*TODO?*/ ) )
         pNewObj.reset(static_cast<SgaObject*>(new SgaObjectSound( rURL )));
 #endif
     if( pNewObj && InsertObject( *pNewObj, nInsertPos ) )
@@ -1127,7 +1127,7 @@ bool GalleryTheme::InsertFileOrDirURL( const INetURLObject& rFileOrDirURL, sal_u
 
     try
     {
-        ::ucbhelper::Content         aCnt( rFileOrDirURL.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
+        ::ucbhelper::Content         aCnt( rFileOrDirURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), uno::Reference< ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
         bool        bFolder = false;
 
         aCnt.getPropertyValue("IsFolder") >>= bFolder;
@@ -1301,28 +1301,28 @@ SvStream& GalleryTheme::WriteData( SvStream& rOStm ) const
         }
         else
         {
-            aPath = pObj->aURL.GetMainURL( INetURLObject::NO_DECODE );
-            aPath = aPath.copy( 0, std::min(aRelURL1.GetMainURL( INetURLObject::NO_DECODE ).getLength(), aPath.getLength()) );
-            bRel = aPath == aRelURL1.GetMainURL( INetURLObject::NO_DECODE );
+            aPath = pObj->aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
+            aPath = aPath.copy( 0, std::min(aRelURL1.GetMainURL( INetURLObject::DecodeMechanism::NONE ).getLength(), aPath.getLength()) );
+            bRel = aPath == aRelURL1.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
-            if( bRel && ( pObj->aURL.GetMainURL( INetURLObject::NO_DECODE ).getLength() > ( aRelURL1.GetMainURL( INetURLObject::NO_DECODE ).getLength() + 1 ) ) )
+            if( bRel && ( pObj->aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ).getLength() > ( aRelURL1.GetMainURL( INetURLObject::DecodeMechanism::NONE ).getLength() + 1 ) ) )
             {
-                aPath = pObj->aURL.GetMainURL( INetURLObject::NO_DECODE );
-                aPath = aPath.copy( std::min(aRelURL1.GetMainURL( INetURLObject::NO_DECODE ).getLength(), aPath.getLength()) );
+                aPath = pObj->aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
+                aPath = aPath.copy( std::min(aRelURL1.GetMainURL( INetURLObject::DecodeMechanism::NONE ).getLength(), aPath.getLength()) );
             }
             else
             {
-                aPath = pObj->aURL.GetMainURL( INetURLObject::NO_DECODE );
-                aPath = aPath.copy( 0, std::min(aRelURL2.GetMainURL( INetURLObject::NO_DECODE ).getLength(), aPath.getLength()) );
-                bRel = aPath == aRelURL2.GetMainURL( INetURLObject::NO_DECODE );
+                aPath = pObj->aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
+                aPath = aPath.copy( 0, std::min(aRelURL2.GetMainURL( INetURLObject::DecodeMechanism::NONE ).getLength(), aPath.getLength()) );
+                bRel = aPath == aRelURL2.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
-                if( bRel && ( pObj->aURL.GetMainURL( INetURLObject::NO_DECODE ).getLength() > ( aRelURL2.GetMainURL( INetURLObject::NO_DECODE ).getLength() + 1 ) ) )
+                if( bRel && ( pObj->aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ).getLength() > ( aRelURL2.GetMainURL( INetURLObject::DecodeMechanism::NONE ).getLength() + 1 ) ) )
                 {
-                    aPath = pObj->aURL.GetMainURL( INetURLObject::NO_DECODE );
-                    aPath = aPath.copy( std::min(aRelURL2.GetMainURL( INetURLObject::NO_DECODE ).getLength(), aPath.getLength()) );
+                    aPath = pObj->aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
+                    aPath = aPath.copy( std::min(aRelURL2.GetMainURL( INetURLObject::DecodeMechanism::NONE ).getLength(), aPath.getLength()) );
                 }
                 else
-                    aPath = pObj->aURL.GetMainURL( INetURLObject::NO_DECODE );
+                    aPath = pObj->aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
             }
         }
 
@@ -1423,7 +1423,7 @@ SvStream& GalleryTheme::ReadData( SvStream& rIStm )
             if( bRel )
             {
                 aFileName = aFileName.replaceAll( "\\", "/" );
-                aPath = aRelURL1.GetMainURL( INetURLObject::NO_DECODE );
+                aPath = aRelURL1.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
                 if( aFileName[ 0 ] != '/' )
                         aPath += "/";
@@ -1434,7 +1434,7 @@ SvStream& GalleryTheme::ReadData( SvStream& rIStm )
 
                 if( !FileExists( pObj->aURL ) )
                 {
-                    aPath = aRelURL2.GetMainURL( INetURLObject::NO_DECODE );
+                    aPath = aRelURL2.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
                     if( aFileName[0] != '/' )
                         aPath += "/";

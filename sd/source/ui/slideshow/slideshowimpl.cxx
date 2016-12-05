@@ -1535,11 +1535,11 @@ void SlideshowImpl::click( const Reference< XShape >& xShape, const css::awt::Mo
                 INetURLObject(mpDocSh->GetMedium()->GetBaseURL()),
                 pEvent->maStrBookmark, ::URIHelper::GetMaybeFileHdl(), true,
                 false, INetURLObject::EncodeMechanism::WasEncoded,
-                INetURLObject::DECODE_UNAMBIGUOUS ) );
+                INetURLObject::DecodeMechanism::Unambiguous ) );
 
         if( INetProtocol::File == aURL.GetProtocol() )
         {
-            SfxStringItem aUrl( SID_FILE_NAME, aURL.GetMainURL( INetURLObject::NO_DECODE ) );
+            SfxStringItem aUrl( SID_FILE_NAME, aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
             SfxBoolItem aBrowsing( SID_BROWSE, true );
 
             SfxViewFrame* pViewFrm = SfxViewFrame::Current();
