@@ -88,8 +88,6 @@ public:
     StyleLBoxString(const OUString& sText,
                     const SfxStyleFamily& eStyleFamily);
 
-    virtual ~StyleLBoxString() override;
-
     virtual void Paint(const Point& aPos,
                        SvTreeListBox& rDevice,
                        vcl::RenderContext& rRenderContext,
@@ -106,9 +104,6 @@ StyleLBoxString::StyleLBoxString(const OUString& sText, const SfxStyleFamily& eS
     : SvLBoxString(sText)
     , meStyleFamily(eStyleFamily)
     , mpViewData(nullptr)
-{}
-
-StyleLBoxString::~StyleLBoxString()
 {}
 
 void StyleLBoxString::InitViewData(SvTreeListBox* pView, SvTreeListEntry* pEntry, SvViewDataItem* pViewData)

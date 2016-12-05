@@ -45,8 +45,6 @@ public:
     explicit OwnSubFilterService(const css::uno::Sequence< css::uno::Any >& aArguments)
         throw (uno::Exception, uno::RuntimeException);
 
-    virtual ~OwnSubFilterService() override;
-
     // XFilter
     virtual sal_Bool SAL_CALL filter( const uno::Sequence< beans::PropertyValue >& aDescriptor ) throw (uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL cancel() throw (uno::RuntimeException, std::exception) override;
@@ -79,10 +77,6 @@ OwnSubFilterService::OwnSubFilterService(const css::uno::Sequence< css::uno::Any
 
     if ( !m_pObjectShell )
         throw lang::IllegalArgumentException();
-}
-
-OwnSubFilterService::~OwnSubFilterService()
-{
 }
 
 sal_Bool SAL_CALL OwnSubFilterService::filter( const uno::Sequence< beans::PropertyValue >& aDescriptor )

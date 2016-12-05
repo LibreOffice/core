@@ -62,7 +62,6 @@ class ClassificationCategoriesController : public ClassificationCategoriesContro
 
 public:
     explicit ClassificationCategoriesController(const uno::Reference<uno::XComponentContext>& rContext);
-    ~ClassificationCategoriesController() override;
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName() throw (uno::RuntimeException, std::exception) override;
@@ -119,8 +118,6 @@ ClassificationCategoriesController::ClassificationCategoriesController(const uno
 {
 
 }
-
-ClassificationCategoriesController::~ClassificationCategoriesController() = default;
 
 OUString ClassificationCategoriesController::getImplementationName() throw (uno::RuntimeException, std::exception)
 {

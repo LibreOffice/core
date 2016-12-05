@@ -120,8 +120,6 @@ public:
     , m_bResizeNoScale( false )
     {}
 
-    virtual ~SfxInPlaceClient_Impl() override;
-
     void SizeHasChanged();
     DECL_LINK(TimerHdl, Timer *, void);
     uno::Reference < frame::XFrame > GetFrame() const;
@@ -158,10 +156,6 @@ public:
     virtual void SAL_CALL stateChanged( const css::lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) throw (css::uno::RuntimeException, std::exception) override;
 };
-
-SfxInPlaceClient_Impl::~SfxInPlaceClient_Impl()
-{
-}
 
 void SAL_CALL SfxInPlaceClient_Impl::changingState(
     const css::lang::EventObject& /*aEvent*/,

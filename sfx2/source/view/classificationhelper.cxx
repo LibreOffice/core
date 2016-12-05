@@ -117,7 +117,6 @@ public:
     SfxClassificationCategory* m_pCategory;
 
     SfxClassificationParser();
-    ~SfxClassificationParser() override;
 
     void SAL_CALL startDocument() throw (xml::sax::SAXException, uno::RuntimeException, std::exception) override;
 
@@ -149,8 +148,6 @@ SfxClassificationParser::SfxClassificationParser()
     , m_pCategory(nullptr)
 {
 }
-
-SfxClassificationParser::~SfxClassificationParser() = default;
 
 void SAL_CALL SfxClassificationParser::startDocument() throw (xml::sax::SAXException, uno::RuntimeException, std::exception)
 {

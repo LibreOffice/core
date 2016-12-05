@@ -56,9 +56,7 @@ namespace
             if (mxFrame.is())
                 mxFrame->addFrameActionListener(this);
         }
-        virtual ~FrameActionListener() override
-        {
-        }
+
         virtual void SAL_CALL disposing() override
         {
             SolarMutexGuard g;

@@ -63,8 +63,6 @@ public:
         lclDetermineLightDarkColor(m_aBackgroundColor, m_aForegroundColor);
     }
 
-    virtual ~SfxCloseButton() override {}
-
     virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
 
     void setBackgroundColor(const basegfx::BColor& rColor);

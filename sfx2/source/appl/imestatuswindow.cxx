@@ -55,10 +55,6 @@ class WeakPropertyChangeListener : public ::cppu::WeakImplHelper<css::beans::XPr
         {
         }
 
-        virtual ~WeakPropertyChangeListener() override
-        {
-        }
-
         virtual void SAL_CALL propertyChange(const css::beans::PropertyChangeEvent &rEvent )
             throw(css::uno::RuntimeException, std::exception) override
         {

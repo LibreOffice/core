@@ -85,7 +85,6 @@ public:
                           const uno::Sequence< beans::PropertyValue >& rProps
                         );
 
-    virtual ~SfxPrinterController() override;
     virtual void Notify( SfxBroadcaster&, const SfxHint& ) override;
 
     virtual int  getPageCount() const override;
@@ -176,10 +175,6 @@ void SfxPrinterController::Notify( SfxBroadcaster& , const SfxHint& rHint )
         mpViewShell = nullptr;
         mpObjectShell = nullptr;
     }
-}
-
-SfxPrinterController::~SfxPrinterController()
-{
 }
 
 const Any& SfxPrinterController::getSelectionObject() const

@@ -47,10 +47,6 @@ class SfxRefreshListener : public ::cppu::WeakImplHelper<css::util::XRefreshList
         {
         }
 
-        virtual ~SfxRefreshListener() override
-        {
-        }
-
         // util.XRefreshListener
         virtual void SAL_CALL refreshed( const css::lang::EventObject& rEvent )
             throw(css::uno::RuntimeException, std::exception) override

@@ -141,8 +141,6 @@ class XmlIdRegistry : public sfx2::IXmlIdRegistry
 public:
     XmlIdRegistry();
 
-    virtual ~XmlIdRegistry() override;
-
     /** get the ODF element with the given metadata reference. */
     virtual css::uno::Reference< css::rdf::XMetadatable >
         GetElementByMetadataReference(
@@ -304,7 +302,6 @@ class XmlIdRegistryClipboard : public XmlIdRegistry
 
 public:
     XmlIdRegistryClipboard();
-    virtual ~XmlIdRegistryClipboard() override;
 
     virtual void RegisterMetadatableAndCreateID(Metadatable& i_xObject) override;
 
@@ -349,10 +346,6 @@ private:
 }
 
 XmlIdRegistry::XmlIdRegistry()
-{
-}
-
-XmlIdRegistry::~XmlIdRegistry()
 {
 }
 
@@ -1053,10 +1046,6 @@ XmlIdRegistryClipboard::XmlIdRegistry_Impl::TryInsertMetadatable(
 
 XmlIdRegistryClipboard::XmlIdRegistryClipboard()
     :   m_pImpl( new XmlIdRegistry_Impl )
-{
-}
-
-XmlIdRegistryClipboard::~XmlIdRegistryClipboard()
 {
 }
 

@@ -320,7 +320,7 @@ class IMPL_SfxBaseController_ListenerHelper : public ::cppu::WeakImplHelper< fra
 {
 public:
     explicit IMPL_SfxBaseController_ListenerHelper(  SfxBaseController*  pController ) ;
-    virtual ~IMPL_SfxBaseController_ListenerHelper() override ;
+
     virtual void SAL_CALL frameAction( const frame::FrameActionEvent& aEvent ) throw (RuntimeException, std::exception) override ;
     virtual void SAL_CALL disposing( const lang::EventObject& aEvent ) throw (RuntimeException, std::exception) override ;
 
@@ -334,7 +334,7 @@ class IMPL_SfxBaseController_CloseListenerHelper : public ::cppu::WeakImplHelper
 {
 public:
     explicit IMPL_SfxBaseController_CloseListenerHelper( SfxBaseController*  pController ) ;
-    virtual ~IMPL_SfxBaseController_CloseListenerHelper() override ;
+
     virtual void SAL_CALL queryClosing( const lang::EventObject& aEvent, sal_Bool bDeliverOwnership )
         throw (RuntimeException, util::CloseVetoException, std::exception) override ;
     virtual void SAL_CALL notifyClosing( const lang::EventObject& aEvent ) throw (RuntimeException, std::exception) override ;
@@ -348,10 +348,6 @@ private:
 
 IMPL_SfxBaseController_CloseListenerHelper::IMPL_SfxBaseController_CloseListenerHelper( SfxBaseController*  pController )
         : m_pController ( pController   )
-{
-}
-
-IMPL_SfxBaseController_CloseListenerHelper::~IMPL_SfxBaseController_CloseListenerHelper()
 {
 }
 
@@ -431,14 +427,6 @@ struct IMPL_SfxBaseController_DataContainer
 
 IMPL_SfxBaseController_ListenerHelper::IMPL_SfxBaseController_ListenerHelper(   SfxBaseController*  pController )
         : m_pController ( pController   )
-{
-}
-
-
-//  IMPL_SfxBaseController_ListenerHelper destructor
-
-
-IMPL_SfxBaseController_ListenerHelper::~IMPL_SfxBaseController_ListenerHelper()
 {
 }
 
