@@ -9,7 +9,7 @@
 
 gb__LinkTarget_LDFLAGS_zdefs := -Wl,-z,defs
 ifeq ($(COM_IS_CLANG),TRUE)
-ifneq ($(filter -fsanitize=%,$(CC)),)
+ifneq ($(filter -fsanitize=%,$(CC) $(LDFLAGS)),)
 gb__LinkTarget_LDFLAGS_zdefs :=
 endif
 endif
