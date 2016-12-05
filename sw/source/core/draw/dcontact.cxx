@@ -1565,7 +1565,10 @@ void SwDrawContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
     }
     else if (auto pContactChangedHint = dynamic_cast<const sw::ContactChangedHint*>(&rHint))
     {
-        Changed(*pContactChangedHint->m_pObject, SdrUserCallType::Delete, pContactChangedHint->m_pObject->GetLastBoundRect() );
+        if(!*pContactChangedHint->m_ppObject)
+            *pContactChangedHint->m_ppObject = GetMaster();
+        auto pObject = *pContactChangedHint->m_ppObject;
+        Changed(*pObject, SdrUserCallType::Delete, pObject->GetLastBoundRect());
     }
 }
 
