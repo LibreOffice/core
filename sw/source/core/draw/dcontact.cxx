@@ -1551,6 +1551,9 @@ void SwDrawContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
             case sw::DrawFrameFormatHintId::PAGE_OUT_OF_BOUNDS:
                 DisconnectFromLayout();
                 break;
+            case sw::DrawFrameFormatHintId::MAKE_FRAMES:
+                 ConnectToLayout();
+                 break;
             default:
                 SAL_WARN("sw.core", "unhandled DrawFrameFormatHintId");
         }
