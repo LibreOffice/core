@@ -178,14 +178,14 @@ Bitmap RID_SVXBMP_GALLERY_SOUND_7
     File = "galsnd7.png";
 };
 
-Image RID_SVXIMG_GALLERY_VIEW_ICON
+Bitmap RID_SVXBMP_GALLERY_VIEW_ICON
 {
-    ImageBitmap = Bitmap { File = "galicon.png"; };
+    File = "galicon.png";
 };
 
-Image RID_SVXIMG_GALLERY_VIEW_LIST
+Bitmap RID_SVXBMP_GALLERY_VIEW_LIST
 {
-    ImageBitmap = Bitmap { File = "gallist.png"; };
+    File = "gallist.png";
 };
 
 Menu RID_SVXMN_GALLERY1

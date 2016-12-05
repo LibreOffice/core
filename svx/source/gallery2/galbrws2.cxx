@@ -1304,8 +1304,8 @@ IMPL_LINK_NOARG(GalleryBrowser2, MiscHdl, LinkParamNone*, void)
 {
     maViewBox->SetOutStyle( maMiscOptions.GetToolboxStyle() );
 
-    BitmapEx aIconBmpEx = BitmapEx( Image( GAL_RES( RID_SVXIMG_GALLERY_VIEW_ICON ) ).GetBitmapEx() );
-    BitmapEx aListBmpEx = BitmapEx( Image( GAL_RES( RID_SVXIMG_GALLERY_VIEW_LIST ) ).GetBitmapEx() );
+    BitmapEx aIconBmpEx(GAL_RES(RID_SVXBMP_GALLERY_VIEW_ICON));
+    BitmapEx aListBmpEx(GAL_RES(RID_SVXBMP_GALLERY_VIEW_LIST));
 
     if( maMiscOptions.AreCurrentSymbolsLarge() )
     {
