@@ -95,7 +95,6 @@ private:
 
 public:
     explicit            XPMReader( SvStream& rStm );
-    virtual             ~XPMReader() override;
 
     ReadState           ReadXPM( Graphic& rGraphic );
 };
@@ -122,10 +121,6 @@ XPMReader::XPMReader(SvStream& rStm)
     , mpStringBuf(nullptr)
     , mnParaSize(0)
     , mpPara(nullptr)
-{
-}
-
-XPMReader::~XPMReader()
 {
 }
 
