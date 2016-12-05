@@ -406,7 +406,7 @@ void CGM::ImplDoClass4()
                     {
                         Rectangle aBoundingBox( Point( (long)( aCenterPoint.X - fRadius ), long( aCenterPoint.Y - fRadius ) ),
                             Size( ( static_cast< long >( 2 * fRadius ) ), (long)( 2 * fRadius) ) );
-                        tools::Polygon aPolygon( aBoundingBox, Point( (long)aStartingPoint.X, (long)aStartingPoint.Y ) ,Point( (long)aEndingPoint.X, (long)aEndingPoint.Y ), POLY_ARC );
+                        tools::Polygon aPolygon( aBoundingBox, Point( (long)aStartingPoint.X, (long)aStartingPoint.Y ) ,Point( (long)aEndingPoint.X, (long)aEndingPoint.Y ), PolyStyle::Arc );
                         if ( nSwitch )
                             mpOutAct->RegPolyLine( aPolygon, true );
                         else
@@ -525,7 +525,7 @@ void CGM::ImplDoClass4()
                         Size( static_cast< long >( 2 * aRadius.X ), (long)( 2 * aRadius.X ) ) );
                     tools::Polygon aPolygon( aBoundingBox,
                         Point( (long)vector[ 0 ], (long)vector[ 1 ] ),
-                        Point( (long)vector[ 2 ], (long)vector[ 3 ] ), POLY_ARC );
+                        Point( (long)vector[ 2 ], (long)vector[ 3 ] ), PolyStyle::Arc );
                     mpOutAct->RegPolyLine( aPolygon );
                 }
                 else

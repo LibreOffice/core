@@ -1077,21 +1077,21 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
                         case( MetaActionType::ARC ):
                         {
                             const MetaArcAction* pA = static_cast<const MetaArcAction*>(pAction);
-                            aPoly = tools::Polygon( pA->GetRect(), pA->GetStartPoint(), pA->GetEndPoint(), POLY_ARC );
+                            aPoly = tools::Polygon( pA->GetRect(), pA->GetStartPoint(), pA->GetEndPoint(), PolyStyle::Arc );
                         }
                         break;
 
                         case( MetaActionType::PIE ):
                         {
                             const MetaPieAction* pA = static_cast<const MetaPieAction*>(pAction);
-                            aPoly = tools::Polygon( pA->GetRect(), pA->GetStartPoint(), pA->GetEndPoint(), POLY_PIE );
+                            aPoly = tools::Polygon( pA->GetRect(), pA->GetStartPoint(), pA->GetEndPoint(), PolyStyle::Pie );
                         }
                         break;
 
                         case( MetaActionType::CHORD ):
                         {
                             const MetaChordAction* pA = static_cast<const MetaChordAction*>(pAction);
-                            aPoly = tools::Polygon( pA->GetRect(), pA->GetStartPoint(), pA->GetEndPoint(), POLY_CHORD );
+                            aPoly = tools::Polygon( pA->GetRect(), pA->GetStartPoint(), pA->GetEndPoint(), PolyStyle::Chord );
                         }
                         break;
 

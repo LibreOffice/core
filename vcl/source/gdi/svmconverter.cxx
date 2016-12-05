@@ -705,7 +705,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
                     if( bFatLine )
                     {
-                        const tools::Polygon aPoly( aRect, aPt, aPt1, POLY_ARC );
+                        const tools::Polygon aPoly( aRect, aPt, aPt1, PolyStyle::Arc );
 
                         rMtf.AddAction( new MetaPushAction( PushFlags::LINECOLOR ) );
                         rMtf.AddAction( new MetaLineColorAction( COL_TRANSPARENT, false ) );
@@ -726,7 +726,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
                     if( bFatLine )
                     {
-                        const tools::Polygon aPoly( aRect, aPt, aPt1, POLY_PIE );
+                        const tools::Polygon aPoly( aRect, aPt, aPt1, PolyStyle::Pie );
 
                         rMtf.AddAction( new MetaPushAction( PushFlags::LINECOLOR ) );
                         rMtf.AddAction( new MetaLineColorAction( COL_TRANSPARENT, false ) );
@@ -1580,7 +1580,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             {
                 const MetaChordAction* pAct = static_cast<const MetaChordAction*>(pAction);
                 tools::Polygon aChordPoly( pAct->GetRect(), pAct->GetStartPoint(),
-                                           pAct->GetEndPoint(), POLY_CHORD );
+                                           pAct->GetEndPoint(), PolyStyle::Chord );
                 const sal_uInt16       nPoints = aChordPoly.GetSize();
 
                 rOStm.WriteInt16( GDI_POLYGON_ACTION );

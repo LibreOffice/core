@@ -678,7 +678,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
             case MetaActionType::ARC :
             {
                 tools::Polygon aPoly( static_cast<const MetaArcAction*>(pMA)->GetRect(), static_cast<const MetaArcAction*>(pMA)->GetStartPoint(),
-                    static_cast<const MetaArcAction*>(pMA)->GetEndPoint(), POLY_ARC );
+                    static_cast<const MetaArcAction*>(pMA)->GetEndPoint(), PolyStyle::Arc );
                 tools::PolyPolygon aPolyPoly( aPoly );
                 ImplPolyPoly( aPolyPoly );
             }
@@ -687,7 +687,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
             case MetaActionType::PIE :
             {
                 tools::Polygon aPoly( static_cast<const MetaPieAction*>(pMA)->GetRect(), static_cast<const MetaPieAction*>(pMA)->GetStartPoint(),
-                    static_cast<const MetaPieAction*>(pMA)->GetEndPoint(), POLY_PIE );
+                    static_cast<const MetaPieAction*>(pMA)->GetEndPoint(), PolyStyle::Pie );
                 tools::PolyPolygon aPolyPoly( aPoly );
                 ImplPolyPoly( aPolyPoly );
             }
@@ -696,7 +696,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
             case MetaActionType::CHORD :
             {
                 tools::Polygon aPoly( static_cast<const MetaChordAction*>(pMA)->GetRect(), static_cast<const MetaChordAction*>(pMA)->GetStartPoint(),
-                    static_cast<const MetaChordAction*>(pMA)->GetEndPoint(), POLY_CHORD );
+                    static_cast<const MetaChordAction*>(pMA)->GetEndPoint(), PolyStyle::Chord );
                 tools::PolyPolygon aPolyPoly( aPoly );
                 ImplPolyPoly( aPolyPoly );
             }

@@ -335,18 +335,18 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                 {
                     case CircleKind_SECTION :
                     {
-                        ePolyKind = POLY_PIE;
+                        ePolyKind = PolyStyle::Pie;
                     }
                     break;
                     case CircleKind_ARC :
                     {
-                        ePolyKind = POLY_ARC;
+                        ePolyKind = PolyStyle::Arc;
                     }
                     break;
 
                     case CircleKind_CUT :
                     {
-                        ePolyKind = POLY_CHORD;
+                        ePolyKind = PolyStyle::Chord;
                     }
                     break;
 
@@ -397,15 +397,15 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                 css::awt::Rectangle aNewRect;
                 switch ( ePolyKind )
                 {
-                    case POLY_PIE :
-                    case POLY_CHORD :
+                    case PolyStyle::Pie :
+                    case PolyStyle::Chord :
                     {
                         aPropOpt.CreatePolygonProperties( rObj.mXPropSet, ESCHER_CREATEPOLYGON_POLYPOLYGON, false, aNewRect, &aPolygon );
                         aPropOpt.CreateFillProperties( rObj.mXPropSet, true  );
                     }
                     break;
 
-                    case POLY_ARC :
+                    case PolyStyle::Arc :
                     {
                         aPropOpt.CreatePolygonProperties( rObj.mXPropSet, ESCHER_CREATEPOLYGON_POLYLINE, false, aNewRect, &aPolygon );
                         aPropOpt.CreateLineProperties( rObj.mXPropSet, false );
