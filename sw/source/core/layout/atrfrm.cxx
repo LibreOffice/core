@@ -3330,6 +3330,7 @@ namespace sw
 {
     DrawFrameFormatHint::~DrawFrameFormatHint() {}
     CheckDrawFrameFormatLayerHint::~CheckDrawFrameFormatLayerHint() {}
+    ContactChangedHint::~ContactChangedHint() {}
 }
 
 SwDrawFrameFormat::~SwDrawFrameFormat()
