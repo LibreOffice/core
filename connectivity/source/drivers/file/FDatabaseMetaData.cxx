@@ -87,7 +87,7 @@ namespace
                     aContent1 = aFolderOrDoc;
                 else
                 {
-                    aContentURL = INetURLObject( _rFolderOrDoc, INetURLObject::WAS_ENCODED );
+                    aContentURL = INetURLObject( _rFolderOrDoc, INetURLObject::EncodeMechanism::WasEncoded );
                     aContentURL.Append( _rDocName );
                     aContent1 = ::ucbhelper::Content( aContentURL.GetMainURL( INetURLObject::NO_DECODE ), Reference< XCommandEnvironment >(), comphelper::getProcessComponentContext() );
                 }

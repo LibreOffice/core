@@ -456,7 +456,7 @@ OUString XclExpHyperlink::BuildFileName(
         // try to convert to relative file name
         OUString aTmpName( aDosName );
         aDosName = INetURLObject::GetRelURL( rRoot.GetBasePath(), rUrl,
-            INetURLObject::WAS_ENCODED,
+            INetURLObject::EncodeMechanism::WasEncoded,
             (bEncoded ? INetURLObject::DECODE_TO_IURI : INetURLObject::DECODE_WITH_CHARSET));
 
         if (aDosName.startsWith(INET_FILE_SCHEME))

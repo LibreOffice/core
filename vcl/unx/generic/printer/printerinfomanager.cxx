@@ -206,7 +206,7 @@ void PrinterInfoManager::initialize()
     std::list< OUString >::const_iterator print_dir_it;
     for( print_dir_it = aDirList.begin(); print_dir_it != aDirList.end(); ++print_dir_it )
     {
-        INetURLObject aFile( *print_dir_it, INetProtocol::File, INetURLObject::ENCODE_ALL );
+        INetURLObject aFile( *print_dir_it, INetProtocol::File, INetURLObject::EncodeMechanism::All );
         aFile.Append( PRINT_FILENAME );
         Config aConfig( aFile.PathToFileName() );
         if( aConfig.HasGroup( GLOBAL_DEFAULTS_GROUP ) )
@@ -273,7 +273,7 @@ void PrinterInfoManager::initialize()
     // now collect all available printers
     for( print_dir_it = aDirList.begin(); print_dir_it != aDirList.end(); ++print_dir_it )
     {
-        INetURLObject aDir( *print_dir_it, INetProtocol::File, INetURLObject::ENCODE_ALL );
+        INetURLObject aDir( *print_dir_it, INetProtocol::File, INetURLObject::EncodeMechanism::All );
         INetURLObject aFile( aDir );
         aFile.Append( PRINT_FILENAME );
 

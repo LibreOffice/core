@@ -3942,7 +3942,7 @@ we check in the following sequence:
                     aLine.append("/GoToR");
                     aLine.append("/F");
                     appendLiteralStringEncrypt( bSetRelative ? INetURLObject::GetRelURL( m_aContext.BaseURL, aURLNoMark,
-                                                                                         INetURLObject::WAS_ENCODED,
+                                                                                         INetURLObject::EncodeMechanism::WasEncoded,
                                                                                          INetURLObject::DECODE_WITH_CHARSET ) :
                                                                    aURLNoMark, rLink.m_nObject, aLine, osl_getThreadTextEncoding() );
                     if( !aFragment.isEmpty() )
@@ -3965,7 +3965,7 @@ we check in the following sequence:
                     }
                     OUString aURL = aTargetURL.GetMainURL( bFileSpec ? INetURLObject::DECODE_WITH_CHARSET : INetURLObject::NO_DECODE );
                     appendLiteralStringEncrypt(bSetRelative ? INetURLObject::GetRelURL( m_aContext.BaseURL, aURL,
-                                                                                        INetURLObject::WAS_ENCODED,
+                                                                                        INetURLObject::EncodeMechanism::WasEncoded,
                                                                                             bFileSpec ? INetURLObject::DECODE_WITH_CHARSET : INetURLObject::NO_DECODE
                                                                                             ) :
                                                                                aURL , rLink.m_nObject, aLine, osl_getThreadTextEncoding() );

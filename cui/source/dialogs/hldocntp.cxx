@@ -70,7 +70,7 @@ bool SvxHyperlinkNewDocTp::ImplGetURLObject( const OUString& rPath, const OUStri
             INetURLObject base(rBase);
             base.setFinalSlash();
             aURLObject = base.smartRel2Abs(
-                rPath, wasAbs, true, INetURLObject::ENCODE_ALL,
+                rPath, wasAbs, true, INetURLObject::EncodeMechanism::All,
                 RTL_TEXTENCODING_UTF8, true);
         }
         bIsValidURL = aURLObject.GetProtocol() != INetProtocol::NotValid;

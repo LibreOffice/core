@@ -157,7 +157,7 @@ OUString  GetWritableDictionaryURL( const OUString &rDicName )
     aURLObj.SetSmartProtocol( INetProtocol::File );
     aURLObj.SetSmartURL( aDirName );
     DBG_ASSERT(!aURLObj.HasError(), "lng : invalid URL");
-    aURLObj.Append( rDicName, INetURLObject::ENCODE_ALL );
+    aURLObj.Append( rDicName, INetURLObject::EncodeMechanism::All );
     DBG_ASSERT(!aURLObj.HasError(), "lng : invalid URL");
 
     // NO_DECODE preserves the escape sequences that might be included in aDirName

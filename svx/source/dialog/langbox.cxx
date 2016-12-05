@@ -45,7 +45,7 @@ OUString GetDicInfoStr( const OUString& rName, const sal_uInt16 nLang, bool bNeg
 {
     INetURLObject aURLObj;
     aURLObj.SetSmartProtocol( INetProtocol::File );
-    aURLObj.SetSmartURL( rName, INetURLObject::ENCODE_ALL );
+    aURLObj.SetSmartURL( rName, INetURLObject::EncodeMechanism::All );
     OUString aTmp( aURLObj.GetBase() );
     aTmp += " ";
 

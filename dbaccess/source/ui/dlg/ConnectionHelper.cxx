@@ -198,7 +198,7 @@ namespace dbaui
                     while (bDoBrowse);
 
                     OUString sSelectedDirectory = xFolderPicker->getDirectory();
-                    INetURLObject aSelectedDirectory( sSelectedDirectory, INetURLObject::WAS_ENCODED, RTL_TEXTENCODING_UTF8 );
+                    INetURLObject aSelectedDirectory( sSelectedDirectory, INetURLObject::EncodeMechanism::WasEncoded, RTL_TEXTENCODING_UTF8 );
 
                     // for UI purpose, we don't want to have the path encoded
                     sSelectedDirectory = aSelectedDirectory.GetMainURL( INetURLObject::DECODE_WITH_CHARSET );
@@ -428,7 +428,7 @@ namespace dbaui
                 }
 
                 // encode the URL
-                INetURLObject aFileURL( sFileURLDecoded, INetURLObject::ENCODE_ALL, RTL_TEXTENCODING_UTF8 );
+                INetURLObject aFileURL( sFileURLDecoded, INetURLObject::EncodeMechanism::All, RTL_TEXTENCODING_UTF8 );
                 sFileURLDecoded = aFileURL.GetMainURL( INetURLObject::NO_DECODE );
             }
         }

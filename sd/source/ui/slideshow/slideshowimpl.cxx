@@ -1534,7 +1534,7 @@ void SlideshowImpl::click( const Reference< XShape >& xShape, const css::awt::Mo
             ::URIHelper::SmartRel2Abs(
                 INetURLObject(mpDocSh->GetMedium()->GetBaseURL()),
                 pEvent->maStrBookmark, ::URIHelper::GetMaybeFileHdl(), true,
-                false, INetURLObject::WAS_ENCODED,
+                false, INetURLObject::EncodeMechanism::WasEncoded,
                 INetURLObject::DECODE_UNAMBIGUOUS ) );
 
         if( INetProtocol::File == aURL.GetProtocol() )

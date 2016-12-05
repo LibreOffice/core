@@ -262,7 +262,7 @@ sal_Bool SAL_CALL URLTransformer::assemble( css::util::URL& aURL ) throw( css::u
         aURL.Main = aParser.GetMainURL( INetURLObject::NO_DECODE );
         // ...and then WITH parameter and mark.
         aParser.SetParam( aURL.Arguments);
-        aParser.SetMark ( aURL.Mark, INetURLObject::ENCODE_ALL );
+        aParser.SetMark ( aURL.Mark, INetURLObject::EncodeMechanism::All );
         aURL.Complete = aParser.GetMainURL( INetURLObject::NO_DECODE );
 
         // Return "URL is assembled".

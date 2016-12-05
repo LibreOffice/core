@@ -2335,7 +2335,7 @@ OUString GetURL_Impl(
     // Use the provided parameters for smartRel2Abs to support the usage of '%' in system paths.
     // Otherwise this char won't get encoded and we are not able to load such files later,
     bool bWasAbsolute;
-    INetURLObject aURL     = aObj.smartRel2Abs( rName, bWasAbsolute, false, INetURLObject::WAS_ENCODED,
+    INetURLObject aURL     = aObj.smartRel2Abs( rName, bWasAbsolute, false, INetURLObject::EncodeMechanism::WasEncoded,
                                                 RTL_TEXTENCODING_UTF8, true );
     OUString      aFileURL = aURL.GetMainURL(INetURLObject::NO_DECODE);
 

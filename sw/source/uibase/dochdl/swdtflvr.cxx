@@ -225,7 +225,7 @@ SwTransferable::SwTransferable( SwWrtShell& rSh )
             const INetURLObject& rURLObj = pDShell->GetMedium()->GetURLObject();
             m_aObjDesc.maDisplayName = URIHelper::removePassword(
                                 rURLObj.GetMainURL( INetURLObject::NO_DECODE ),
-                                INetURLObject::WAS_ENCODED,
+                                INetURLObject::EncodeMechanism::WasEncoded,
                                 INetURLObject::DECODE_UNAMBIGUOUS );
         }
 

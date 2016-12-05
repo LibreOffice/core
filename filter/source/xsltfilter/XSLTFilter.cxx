@@ -260,7 +260,7 @@ namespace XSLT
         aObj.setFinalSlash();
         bool bWasAbsolute;
         INetURLObject aURL = aObj.smartRel2Abs(s, bWasAbsolute, false,
-                INetURLObject::WAS_ENCODED, RTL_TEXTENCODING_UTF8, true);
+                INetURLObject::EncodeMechanism::WasEncoded, RTL_TEXTENCODING_UTF8, true);
         return aURL.GetMainURL(INetURLObject::NO_DECODE);
     }
 

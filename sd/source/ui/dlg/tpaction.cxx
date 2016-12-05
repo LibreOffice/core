@@ -303,7 +303,7 @@ bool SdTPAction::FillItemSet( SfxItemSet* rAttrs )
                 eCA == presentation::ClickAction_DOCUMENT ||
                 eCA == presentation::ClickAction_PROGRAM )
                 aFileName = ::URIHelper::SmartRel2Abs( INetURLObject(aBaseURL), aFileName, URIHelper::GetMaybeFileHdl(), true, false,
-                                                        INetURLObject::WAS_ENCODED,
+                                                        INetURLObject::EncodeMechanism::WasEncoded,
                                                         INetURLObject::DECODE_UNAMBIGUOUS );
 
             rAttrs->Put( SfxStringItem( ATTR_ACTION_FILENAME, aFileName ) );

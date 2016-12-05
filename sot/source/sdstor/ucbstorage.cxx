@@ -1540,7 +1540,7 @@ UCBStorage_Impl::UCBStorage_Impl( const OUString& rName, StreamMode nMode, UCBSt
     {
         // create the special package URL for the package content
         OUString aTemp = "vnd.sun.star.pkg://";
-        aTemp += INetURLObject::encode( aName, INetURLObject::PART_AUTHORITY, INetURLObject::ENCODE_ALL );
+        aTemp += INetURLObject::encode( aName, INetURLObject::PART_AUTHORITY, INetURLObject::EncodeMechanism::All );
         m_aURL = aTemp;
 
         if ( m_nMode & StreamMode::WRITE )
@@ -1584,7 +1584,7 @@ UCBStorage_Impl::UCBStorage_Impl( SvStream& rStream, UCBStorage* pStorage, bool 
     // accessed readonly
     // the root storage opens the package; create the special package URL for the package content
     OUString aTemp = "vnd.sun.star.pkg://";
-    aTemp += INetURLObject::encode( m_pTempFile->GetURL(), INetURLObject::PART_AUTHORITY, INetURLObject::ENCODE_ALL );
+    aTemp += INetURLObject::encode( m_pTempFile->GetURL(), INetURLObject::PART_AUTHORITY, INetURLObject::EncodeMechanism::All );
     m_aURL = aTemp;
 
     // copy data into the temporary file

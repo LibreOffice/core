@@ -780,7 +780,7 @@ SfxMailModel::SendMailResult SfxMailModel::Send( const css::uno::Reference< css:
 
                 if ( xSimpleMailMessage->getSubject().isEmpty() ) {
                     INetURLObject url(
-                        maAttachedDocuments[0], INetURLObject::WAS_ENCODED);
+                        maAttachedDocuments[0], INetURLObject::EncodeMechanism::WasEncoded);
                     OUString subject(
                         url.getBase(
                             INetURLObject::LAST_SEGMENT, false,

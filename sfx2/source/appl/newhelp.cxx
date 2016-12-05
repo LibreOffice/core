@@ -973,7 +973,7 @@ void SearchTabPage_Impl::dispose()
         OUString aText = m_pSearchED->GetEntry(i);
         aUserData += INetURLObject::encode(
             aText, INetURLObject::PART_UNO_PARAM_VALUE,
-            INetURLObject::ENCODE_ALL );
+            INetURLObject::EncodeMechanism::All );
         aUserData += ";";
     }
 

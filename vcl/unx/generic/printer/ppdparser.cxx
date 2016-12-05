@@ -458,7 +458,7 @@ void PPDParser::initPPDFiles(PPDCache &rPPDCache)
     psp::getPrinterPathList( aPathList, PRINTER_PPDDIR );
     for( std::list< OUString >::const_iterator ppd_it = aPathList.begin(); ppd_it != aPathList.end(); ++ppd_it )
     {
-        INetURLObject aPPDDir( *ppd_it, INetProtocol::File, INetURLObject::ENCODE_ALL );
+        INetURLObject aPPDDir( *ppd_it, INetProtocol::File, INetURLObject::EncodeMechanism::All );
         scanPPDDir( aPPDDir.GetMainURL( INetURLObject::NO_DECODE ) );
     }
     if( rPPDCache.pAllPPDFiles->find( OUString( "SGENPRT" ) ) == rPPDCache.pAllPPDFiles->end() )
@@ -481,7 +481,7 @@ void PPDParser::initPPDFiles(PPDCache &rPPDCache)
 
 OUString PPDParser::getPPDFile( const OUString& rFile )
 {
-    INetURLObject aPPD( rFile, INetProtocol::File, INetURLObject::ENCODE_ALL );
+    INetURLObject aPPD( rFile, INetProtocol::File, INetURLObject::EncodeMechanism::All );
     // someone might enter a full qualified name here
     PPDDecompressStream aStream( aPPD.PathToFileName() );
     if( ! aStream.IsOpen() )

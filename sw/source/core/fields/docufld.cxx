@@ -425,7 +425,7 @@ OUString SwFileNameFieldType::Expand(sal_uLong nFormat) const
                     {
                         aRet = URIHelper::removePassword(
                                     rURLObj.GetMainURL( INetURLObject::NO_DECODE ),
-                                    INetURLObject::WAS_ENCODED, URL_DECODE );
+                                    INetURLObject::EncodeMechanism::WasEncoded, URL_DECODE );
                         const sal_Int32 nPos = aRet.indexOf(rURLObj.GetLastName( URL_DECODE ));
                         if (nPos>=0)
                         {
@@ -449,7 +449,7 @@ OUString SwFileNameFieldType::Expand(sal_uLong nFormat) const
                 else
                     aRet = URIHelper::removePassword(
                                     rURLObj.GetMainURL( INetURLObject::NO_DECODE ),
-                                    INetURLObject::WAS_ENCODED, URL_DECODE );
+                                    INetURLObject::EncodeMechanism::WasEncoded, URL_DECODE );
         }
     }
     return aRet;

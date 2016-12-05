@@ -90,7 +90,7 @@ bool CommandImageResolver::registerCommands(Sequence<OUString>& aCommandSequence
 
         if (aCommandName.indexOf(".uno:") != 0)
         {
-            INetURLObject aUrlObject(aCommandName, INetURLObject::ENCODE_ALL);
+            INetURLObject aUrlObject(aCommandName, INetURLObject::EncodeMechanism::All);
             aImageName = aUrlObject.GetURLPath();
             aImageName = lclConvertToCanonicalName(aImageName);
         }

@@ -168,7 +168,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
             {
                 sText = static_cast<const SfxStringItem*>(aContentAtPos.aFnd.pAttr)->GetValue();
                 sText = URIHelper::removePassword( sText,
-                                        INetURLObject::WAS_ENCODED,
+                                        INetURLObject::EncodeMechanism::WasEncoded,
                                            INetURLObject::DECODE_UNAMBIGUOUS);
                 //#i63832# remove the link target type
                 sal_Int32 nFound = sText.indexOf(cMarkSeparator);
