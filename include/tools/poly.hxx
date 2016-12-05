@@ -42,11 +42,11 @@ namespace o3tl
     template<> struct typed_flags<PolyOptimizeFlags> : is_typed_flags<PolyOptimizeFlags, 0x001f> {};
 }
 
-enum PolyStyle
+enum class PolyStyle
 {
-    POLY_ARC = 1,
-    POLY_PIE = 2,
-    POLY_CHORD = 3
+    Arc = 1,
+    Pie = 2,
+    Chord = 3
 };
 
 enum PolyFlags
@@ -94,7 +94,7 @@ public:
                                  long nRadX, long nRadY );
                         Polygon( const Rectangle& rBound,
                                  const Point& rStart, const Point& rEnd,
-                                 PolyStyle ePolyStyle = POLY_ARC,
+                                 PolyStyle ePolyStyle = PolyStyle::Arc,
                                  bool bWholeCircle = false );
                         Polygon( const Point& rBezPt1, const Point& rCtrlPt1,
                                  const Point& rBezPt2, const Point& rCtrlPt2,

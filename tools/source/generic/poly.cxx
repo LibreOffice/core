@@ -710,7 +710,7 @@ Polygon::Polygon( const Rectangle& rBound, const Point& rStart, const Point& rEn
         nPoints = std::max( (sal_uInt16) ( ( fDiff * 0.1591549 ) * nPoints ), (sal_uInt16) 16 );
         fStep = fDiff / ( nPoints - 1 );
 
-        if( POLY_PIE == eStyle )
+        if( PolyStyle::Pie == eStyle )
         {
             const Point aCenter2( FRound( fCenterX ), FRound( fCenterY ) );
 
@@ -722,7 +722,7 @@ Polygon::Polygon( const Rectangle& rBound, const Point& rStart, const Point& rEn
         }
         else
         {
-            mpImplPolygon = new ImplPolygon( ( POLY_CHORD == eStyle ) ? ( nPoints + 1 ) : nPoints );
+            mpImplPolygon = new ImplPolygon( ( PolyStyle::Chord == eStyle ) ? ( nPoints + 1 ) : nPoints );
             nStart = 0;
             nEnd = nPoints;
         }
@@ -735,7 +735,7 @@ Polygon::Polygon( const Rectangle& rBound, const Point& rStart, const Point& rEn
             rPt.Y() = FRound( fCenterY - fRadY * sin( fStart ) );
         }
 
-        if( POLY_CHORD == eStyle )
+        if( PolyStyle::Chord == eStyle )
             mpImplPolygon->mpPointAry[ nPoints ] = mpImplPolygon->mpPointAry[ 0 ];
     }
     else

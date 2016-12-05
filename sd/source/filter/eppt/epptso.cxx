@@ -1820,7 +1820,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
             else if ( mType == "drawing.Ellipse" )
             {
                 css::drawing::CircleKind  eCircleKind( css::drawing::CircleKind_FULL );
-                PolyStyle ePolyKind = POLY_CHORD;
+                PolyStyle ePolyKind = PolyStyle::Chord;
                 if ( ImplGetPropertyValue( "CircleKind" ) )
                 {
                     mAny >>= eCircleKind;
@@ -1828,18 +1828,18 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                     {
                         case css::drawing::CircleKind_SECTION :
                         {
-                            ePolyKind = POLY_PIE;
+                            ePolyKind = PolyStyle::Pie;
                         }
                         break;
                         case css::drawing::CircleKind_ARC :
                         {
-                            ePolyKind = POLY_ARC;
+                            ePolyKind = PolyStyle::Arc;
                         }
                         break;
 
                         case css::drawing::CircleKind_CUT :
                         {
-                            ePolyKind = POLY_CHORD;
+                            ePolyKind = PolyStyle::Chord;
                         }
                         break;
 
@@ -1899,15 +1899,15 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                     css::awt::Rectangle aNewRect;
                     switch ( ePolyKind )
                     {
-                        case POLY_PIE :
-                        case POLY_CHORD :
+                        case PolyStyle::Pie :
+                        case PolyStyle::Chord :
                         {
                             if ( aPropOpt.CreatePolygonProperties( mXPropSet, ESCHER_CREATEPOLYGON_POLYPOLYGON, false, aNewRect, &aPolygon ) )
                                 aPropOpt.CreateFillProperties( mXPropSet, true, mXShape );
                         }
                         break;
 
-                        case POLY_ARC :
+                        case PolyStyle::Arc :
                         {
                             if ( aPropOpt.CreatePolygonProperties( mXPropSet, ESCHER_CREATEPOLYGON_POLYLINE, false, aNewRect, &aPolygon ) )
                                 aPropOpt.CreateLineProperties( mXPropSet, false );

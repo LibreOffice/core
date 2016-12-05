@@ -1845,7 +1845,7 @@ namespace
                     if(rPropertyHolders.Current().getLineColorActive())
                     {
                         const MetaArcAction* pA = static_cast<const MetaArcAction*>(pAction);
-                        const tools::Polygon aToolsPoly(pA->GetRect(), pA->GetStartPoint(), pA->GetEndPoint(), POLY_ARC);
+                        const tools::Polygon aToolsPoly(pA->GetRect(), pA->GetStartPoint(), pA->GetEndPoint(), PolyStyle::Arc);
                         const basegfx::B2DPolygon aOutline(aToolsPoly.getB2DPolygon());
 
                         createHairlinePrimitive(aOutline, rTargetHolders.Current(), rPropertyHolders.Current());
@@ -1859,7 +1859,7 @@ namespace
                     if(rPropertyHolders.Current().getLineOrFillActive())
                     {
                         const MetaPieAction* pA = static_cast<const MetaPieAction*>(pAction);
-                        const tools::Polygon aToolsPoly(pA->GetRect(), pA->GetStartPoint(), pA->GetEndPoint(), POLY_PIE);
+                        const tools::Polygon aToolsPoly(pA->GetRect(), pA->GetStartPoint(), pA->GetEndPoint(), PolyStyle::Pie);
                         const basegfx::B2DPolygon aOutline(aToolsPoly.getB2DPolygon());
 
                         createHairlineAndFillPrimitive(aOutline, rTargetHolders.Current(), rPropertyHolders.Current());
@@ -1873,7 +1873,7 @@ namespace
                     if(rPropertyHolders.Current().getLineOrFillActive())
                     {
                         const MetaChordAction* pA = static_cast<const MetaChordAction*>(pAction);
-                        const tools::Polygon aToolsPoly(pA->GetRect(), pA->GetStartPoint(), pA->GetEndPoint(), POLY_CHORD);
+                        const tools::Polygon aToolsPoly(pA->GetRect(), pA->GetStartPoint(), pA->GetEndPoint(), PolyStyle::Chord);
                         const basegfx::B2DPolygon aOutline(aToolsPoly.getB2DPolygon());
 
                         createHairlineAndFillPrimitive(aOutline, rTargetHolders.Current(), rPropertyHolders.Current());
