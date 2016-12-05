@@ -259,8 +259,9 @@ namespace sw
     };
     struct SW_DLLPUBLIC ContactChangedHint final: SfxHint
     {
-        SdrObject* m_pObject;
-        ContactChangedHint(SdrObject* pObject) : m_pObject(pObject) {};
+        SdrObject** m_ppObject;
+        ContactChangedHint() : m_ppObject(nullptr) {};
+        ContactChangedHint(SdrObject** ppObject) : m_ppObject(ppObject) {};
         virtual ~ContactChangedHint() override;
     };
 }
