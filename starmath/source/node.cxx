@@ -381,13 +381,13 @@ SmStructureNode::~SmStructureNode()
 void SmStructureNode::SetSubNodes(SmNode *pFirst, SmNode *pSecond, SmNode *pThird)
 {
     size_t nSize = pThird ? 3 : (pSecond ? 2 : (pFirst ? 1 : 0));
-    aSubNodes.resize( nSize );
+    maSubNodes.resize( nSize );
     if (pFirst)
-        aSubNodes[0] = pFirst;
+        maSubNodes[0] = pFirst;
     if (pSecond)
-        aSubNodes[1] = pSecond;
+        maSubNodes[1] = pSecond;
     if (pThird)
-        aSubNodes[2] = pThird;
+        maSubNodes[2] = pThird;
 
     ClaimPaternity();
 }
@@ -395,7 +395,7 @@ void SmStructureNode::SetSubNodes(SmNode *pFirst, SmNode *pSecond, SmNode *pThir
 
 void SmStructureNode::SetSubNodes(const SmNodeArray &rNodeArray)
 {
-    aSubNodes = rNodeArray;
+    maSubNodes = rNodeArray;
     ClaimPaternity();
 }
 
@@ -408,13 +408,13 @@ bool SmStructureNode::IsVisible() const
 
 sal_uInt16 SmStructureNode::GetNumSubNodes() const
 {
-    return sal::static_int_cast<sal_uInt16>(aSubNodes.size());
+    return sal::static_int_cast<sal_uInt16>(maSubNodes.size());
 }
 
 
 SmNode * SmStructureNode::GetSubNode(sal_uInt16 nIndex)
 {
-    return aSubNodes[nIndex];
+    return maSubNodes[nIndex];
 }
 
 
