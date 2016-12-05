@@ -43,7 +43,6 @@ namespace io_acceptor
     {
     public:
         explicit PipeConnection( const OUString &sConnectionDescription);
-        virtual ~PipeConnection() override;
 
         virtual sal_Int32 SAL_CALL read( Sequence< sal_Int8 >& aReadBytes, sal_Int32 nBytesToRead )
             throw(css::io::IOException,
@@ -75,10 +74,6 @@ namespace io_acceptor
         m_sDescription += OUString::number(
             sal::static_int_cast<sal_Int64 >(
                 reinterpret_cast< sal_IntPtr >(&m_pipe)) );
-    }
-
-    PipeConnection::~PipeConnection()
-    {
     }
 
     sal_Int32 PipeConnection::read( Sequence < sal_Int8 > & aReadBytes , sal_Int32 nBytesToRead )

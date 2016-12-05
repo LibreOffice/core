@@ -62,7 +62,6 @@ public:
         {
         }
 
-    virtual ~ODataInputStream() override;
 public: // XInputStream
     virtual sal_Int32 SAL_CALL readBytes(Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead)
                                                             throw ( NotConnectedException,
@@ -116,10 +115,6 @@ protected:
     Reference < XInputStream >  m_input;
     bool m_bValidStream;
 };
-
-ODataInputStream::~ODataInputStream()
-{
-}
 
 // XInputStream
 sal_Int32 ODataInputStream::readBytes(Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead)
@@ -498,7 +493,6 @@ public:
         : m_bValidStream( false )
         {
         }
-    virtual ~ODataOutputStream() override;
 
 public: // XOutputStream
     virtual void SAL_CALL writeBytes(const Sequence< sal_Int8 >& aData)
@@ -551,11 +545,6 @@ protected:
     Reference<  XOutputStream > m_output;
     bool m_bValidStream;
 };
-
-ODataOutputStream::~ODataOutputStream()
-{
-}
-
 
 // XOutputStream
 void ODataOutputStream::writeBytes(const Sequence< sal_Int8 >& aData)
@@ -908,8 +897,6 @@ public:
         {
         }
 
-    virtual ~OObjectOutputStream() override;
-
 public:
     // XOutputStream
     virtual void SAL_CALL writeBytes(const Sequence< sal_Int8 >& aData)
@@ -975,10 +962,6 @@ private:
     Reference< XMarkableStream >        m_rMarkable;
     bool                            m_bValidMarkable;
 };
-
-OObjectOutputStream::~OObjectOutputStream()
-{
-}
 
 void OObjectOutputStream::writeObject( const Reference< XPersistObject > & xPObj ) throw (css::io::IOException, css::uno::RuntimeException, std::exception)
 {
@@ -1171,7 +1154,6 @@ public:
         , m_bValidMarkable(false)
         {
         }
-    virtual ~OObjectInputStream() override;
 
 public: // XInputStream
     virtual sal_Int32 SAL_CALL readBytes(Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead)
@@ -1249,10 +1231,6 @@ private:
     vector < Reference<  XPersistObject > > m_aPersistVector;
 
 };
-
-OObjectInputStream::~OObjectInputStream()
-{
-}
 
 Reference< XPersistObject >  OObjectInputStream::readObject() throw (css::io::IOException, css::uno::RuntimeException, std::exception)
 {

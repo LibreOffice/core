@@ -53,7 +53,7 @@ namespace stoc_connector
         Reference< XComponentContext > _xCtx;
     public:
         explicit OConnector(const Reference< XComponentContext > &xCtx);
-        virtual ~OConnector() override;
+
         // Methods
         virtual Reference< XConnection > SAL_CALL connect(
             const OUString& sConnectionDescription )
@@ -69,8 +69,6 @@ namespace stoc_connector
         : _xSMgr( xCtx->getServiceManager() )
         , _xCtx( xCtx )
     {}
-
-    OConnector::~OConnector() {}
 
     Reference< XConnection > SAL_CALL OConnector::connect( const OUString& sConnectionDescription )
         throw( NoConnectException, ConnectionSetupException, RuntimeException, std::exception)
