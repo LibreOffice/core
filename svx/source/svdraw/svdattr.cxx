@@ -100,6 +100,7 @@
 #include <svx/xflclit.hxx>
 #include <svx/xlineit0.hxx>
 #include <svx/xtable.hxx>
+#include <libxml/xmlwriter.h>
 
 using namespace ::com::sun::star;
 
@@ -1129,6 +1130,13 @@ bool SdrTextVertAdjustItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberI
     return true;
 }
 
+void SdrTextVertAdjustItem::dumpAsXml(struct _xmlTextWriter* pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SdrTextVertAdjustItem"));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(OString::number(GetValue()).getStr()));
+    xmlTextWriterEndElement(pWriter);
+}
 
 SfxPoolItem* SdrTextHorzAdjustItem::Clone(SfxItemPool* /*pPool*/) const            { return new SdrTextHorzAdjustItem(*this); }
 

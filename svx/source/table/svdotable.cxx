@@ -1179,6 +1179,10 @@ const SfxItemSet& SdrTableObj::GetActiveCellItemSet() const
     return getActiveCell()->GetItemSet();
 }
 
+void SdrTableObj::SetMergedItemSetAndBroadcastOnActiveCell(const SfxItemSet& rSet, bool bClearAllItems)
+{
+    return getActiveCell()->SetMergedItemSetAndBroadcast(rSet, bClearAllItems);
+}
 
 void SdrTableObj::setTableStyle( const Reference< XIndexAccess >& xTableStyle )
 {
