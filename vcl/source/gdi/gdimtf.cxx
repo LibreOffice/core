@@ -920,7 +920,7 @@ void GDIMetaFile::Rotate( long nAngle10 )
                 case( MetaActionType::ARC ):
                 {
                     MetaArcAction*  pAct = static_cast<MetaArcAction*>(pAction);
-                    const tools::Polygon aArcPoly( pAct->GetRect(), pAct->GetStartPoint(), pAct->GetEndPoint(), POLY_ARC );
+                    const tools::Polygon aArcPoly( pAct->GetRect(), pAct->GetStartPoint(), pAct->GetEndPoint(), PolyStyle::Arc );
 
                     aMtf.AddAction( new MetaPolygonAction( ImplGetRotatedPolygon( aArcPoly, aRotAnchor, aRotOffset, fSin, fCos ) ) );
                 }
@@ -929,7 +929,7 @@ void GDIMetaFile::Rotate( long nAngle10 )
                 case( MetaActionType::PIE ):
                 {
                     MetaPieAction*  pAct = static_cast<MetaPieAction*>(pAction);
-                    const tools::Polygon aPiePoly( pAct->GetRect(), pAct->GetStartPoint(), pAct->GetEndPoint(), POLY_PIE );
+                    const tools::Polygon aPiePoly( pAct->GetRect(), pAct->GetStartPoint(), pAct->GetEndPoint(), PolyStyle::Pie );
 
                     aMtf.AddAction( new MetaPolygonAction( ImplGetRotatedPolygon( aPiePoly, aRotAnchor, aRotOffset, fSin, fCos ) ) );
                 }
@@ -938,7 +938,7 @@ void GDIMetaFile::Rotate( long nAngle10 )
                 case( MetaActionType::CHORD ):
                 {
                     MetaChordAction*    pAct = static_cast<MetaChordAction*>(pAction);
-                    const tools::Polygon aChordPoly( pAct->GetRect(), pAct->GetStartPoint(), pAct->GetEndPoint(), POLY_CHORD );
+                    const tools::Polygon aChordPoly( pAct->GetRect(), pAct->GetStartPoint(), pAct->GetEndPoint(), PolyStyle::Chord );
 
                     aMtf.AddAction( new MetaPolygonAction( ImplGetRotatedPolygon( aChordPoly, aRotAnchor, aRotOffset, fSin, fCos ) ) );
                 }

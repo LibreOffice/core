@@ -603,7 +603,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                                 rRect,
                                 pA->GetStartPoint(),
                                 pA->GetEndPoint(),
-                                POLY_ARC);
+                                PolyStyle::Arc);
 
                         bDone = handleGeometricContent(
                             aClips.back(),
@@ -629,7 +629,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                                 rRect,
                                 pA->GetStartPoint(),
                                 pA->GetEndPoint(),
-                                POLY_PIE);
+                                PolyStyle::Pie);
 
                         bDone = handleGeometricContent(
                             aClips.back(),
@@ -655,7 +655,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                                 rRect,
                                 pA->GetStartPoint(),
                                 pA->GetEndPoint(),
-                                POLY_CHORD);
+                                PolyStyle::Chord);
 
                         bDone = handleGeometricContent(
                             aClips.back(),
