@@ -69,11 +69,6 @@ public:
     {
     }
 
-    //! destructor
-    ~FolderStream() override
-    {
-    }
-
     //! add a file
     void addFile(rtl::OUString const &path, std::string const &shortName)
     {
