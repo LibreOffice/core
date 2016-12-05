@@ -31,6 +31,7 @@
 #include <DocumentSettingManager.hxx>
 #include <IDocumentState.hxx>
 #include <txtfly.hxx>
+#include <viewimp.hxx>
 
 using namespace ::com::sun::star;
 
@@ -112,6 +113,12 @@ SwPosNotify::~SwPosNotify()
             // re-format of the invalid previous frames of the anchor frame.
             mpAnchoredDrawObj->AnchorFrame()->InvalidatePos();
         }
+    }
+    // tdf#101464 notify SwAccessibleMap about new drawing object position
+    if (mpOldPageFrame->getRootFrame()->IsAnyShellAccessible())
+    {
+        mpOldPageFrame->getRootFrame()->GetCurrShell()->Imp()->MoveAccessible(
+                nullptr, mpAnchoredDrawObj->GetDrawObj(), maOldObjRect);
     }
 }
 
