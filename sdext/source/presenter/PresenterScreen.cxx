@@ -66,7 +66,6 @@ namespace {
         PresenterScreenListener (
             const css::uno::Reference<css::uno::XComponentContext>& rxContext,
             const css::uno::Reference<css::frame::XModel2>& rxModel);
-        virtual ~PresenterScreenListener() override;
         PresenterScreenListener(const PresenterScreenListener&) = delete;
         PresenterScreenListener& operator=(const PresenterScreenListener&) = delete;
 
@@ -188,10 +187,6 @@ void PresenterScreenListener::Initialize()
     Reference< document::XEventBroadcaster > xDocBroadcaster( mxModel, UNO_QUERY );
     if( xDocBroadcaster.is() )
         xDocBroadcaster->addEventListener(xDocListener);
-}
-
-PresenterScreenListener::~PresenterScreenListener()
-{
 }
 
 void SAL_CALL PresenterScreenListener::disposing()

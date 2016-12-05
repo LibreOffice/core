@@ -72,8 +72,6 @@ public:
         const OUString& rsName);
     void LateInitialization();
 
-    virtual ~AccessibleObject() override;
-
     virtual void SetWindow (
         const css::uno::Reference<css::awt::XWindow>& rxContentWindow,
         const css::uno::Reference<css::awt::XWindow>& rxBorderWindow);
@@ -235,7 +233,6 @@ class AccessibleStateSet
 {
 public:
     explicit AccessibleStateSet (const sal_Int32 nStateSet);
-    virtual ~AccessibleStateSet() override;
 
     static sal_uInt32 GetStateMask (const sal_Int16 nType);
 
@@ -271,7 +268,6 @@ class AccessibleRelationSet
 {
 public:
     AccessibleRelationSet();
-    virtual ~AccessibleRelationSet() override;
 
     void AddRelation (
         const sal_Int16 nRelationType,
@@ -313,8 +309,6 @@ public:
         const OUString& rsName,
         const SharedPresenterTextParagraph& rpParagraph,
         const sal_Int32 nParagraphIndex);
-
-    virtual ~AccessibleParagraph() override;
 
     //----- XAccessibleContext ------------------------------------------------
 
@@ -808,10 +802,6 @@ PresenterAccessible::AccessibleObject::AccessibleObject (
 void PresenterAccessible::AccessibleObject::LateInitialization()
 {
     AccessibleFocusManager::Instance()->AddFocusableObject(this);
-}
-
-PresenterAccessible::AccessibleObject::~AccessibleObject()
-{
 }
 
 void PresenterAccessible::AccessibleObject::SetWindow (
@@ -1353,10 +1343,6 @@ AccessibleStateSet::AccessibleStateSet (const sal_Int32 nStateSet)
 {
 }
 
-AccessibleStateSet::~AccessibleStateSet()
-{
-}
-
 sal_uInt32 AccessibleStateSet::GetStateMask (const sal_Int16 nState)
 {
     if (nState<0 || nState>=sal_Int16(sizeof(sal_uInt32)*8))
@@ -1408,10 +1394,6 @@ css::uno::Sequence<sal_Int16> SAL_CALL AccessibleStateSet::getStates()
 AccessibleRelationSet::AccessibleRelationSet()
     : AccessibleRelationSetInterfaceBase(m_aMutex),
       maRelations()
-{
-}
-
-AccessibleRelationSet::~AccessibleRelationSet()
 {
 }
 
@@ -1478,10 +1460,6 @@ PresenterAccessible::AccessibleParagraph::AccessibleParagraph (
     : PresenterAccessibleParagraphInterfaceBase(rLocale, AccessibleRole::PARAGRAPH, rsName),
       mpParagraph(rpParagraph),
       mnParagraphIndex(nParagraphIndex)
-{
-}
-
-PresenterAccessible::AccessibleParagraph::~AccessibleParagraph()
 {
 }
 

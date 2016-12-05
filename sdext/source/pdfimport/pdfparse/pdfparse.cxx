@@ -49,7 +49,7 @@ class StringEmitContext : public EmitContext
     OStringBuffer m_aBuf;
     public:
     StringEmitContext() : EmitContext(), m_aBuf(256) {}
-    virtual ~StringEmitContext() override {}
+
     virtual bool write( const void* pBuf, unsigned int nLen ) throw() override
     {
         m_aBuf.append( static_cast<const sal_Char*>(pBuf), nLen );

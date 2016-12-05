@@ -82,8 +82,6 @@ namespace
             m_bImageSeen(false)
         {}
 
-        virtual ~TestSink() override {}
-
         void check()
         {
             CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "A4 page size (in 100th of points): Width", 79400, m_aPageSize.Width, 0.00000001);

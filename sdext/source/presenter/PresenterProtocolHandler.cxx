@@ -60,7 +60,6 @@ namespace {
     public:
         explicit GotoPreviousSlideCommand (
             const rtl::Reference<PresenterController>& rpPresenterController);
-        virtual ~GotoPreviousSlideCommand() override {}
         virtual void Execute() override;
         virtual bool IsEnabled() const override;
     private:
@@ -72,7 +71,6 @@ namespace {
     public:
         explicit GotoNextSlideCommand (
             const rtl::Reference<PresenterController>& rpPresenterController);
-        virtual ~GotoNextSlideCommand() override {}
         virtual void Execute() override;
         // The next slide command is always enabled, even when the current slide
         // is the last slide:  from the last slide it goes to the pause slide,
@@ -87,7 +85,6 @@ namespace {
     public:
         explicit GotoNextEffectCommand (
             const rtl::Reference<PresenterController>& rpPresenterController);
-        virtual ~GotoNextEffectCommand() override {}
         virtual void Execute() override;
     private:
         rtl::Reference<PresenterController> mpPresenterController;
@@ -98,7 +95,6 @@ namespace {
     public:
         explicit SwitchMonitorCommand (
             const rtl::Reference<PresenterController>& rpPresenterController);
-        virtual ~SwitchMonitorCommand() override {}
         virtual void Execute() override;
     private:
         rtl::Reference<PresenterController> mpPresenterController;
@@ -109,7 +105,6 @@ namespace {
     {
     public:
         explicit RestartTimerCommand(const rtl::Reference<PresenterController>& rpPresenterController);
-        virtual ~RestartTimerCommand() override;
         virtual void Execute() override;
     private:
         rtl::Reference<PresenterController> mpPresenterController;
@@ -121,7 +116,6 @@ namespace {
         SetNotesViewCommand (
             const bool bOn,
             const rtl::Reference<PresenterController>& rpPresenterController);
-        virtual ~SetNotesViewCommand() override {}
         virtual void Execute() override;
         virtual Any GetState() const override;
     private:
@@ -135,7 +129,6 @@ namespace {
         SetSlideSorterCommand (
             const bool bOn,
             const rtl::Reference<PresenterController>& rpPresenterController);
-        virtual ~SetSlideSorterCommand() override {}
         virtual void Execute() override;
         virtual Any GetState() const override;
     private:
@@ -149,7 +142,6 @@ namespace {
         SetHelpViewCommand (
             const bool bOn,
             const rtl::Reference<PresenterController>& rpPresenterController);
-        virtual ~SetHelpViewCommand() override {}
         virtual void Execute() override;
         virtual Any GetState() const override;
     private:
@@ -163,7 +155,6 @@ namespace {
         NotesFontSizeCommand(
             const rtl::Reference<PresenterController>& rpPresenterController,
             const sal_Int32 nSizeChange);
-        virtual ~NotesFontSizeCommand() override {}
         virtual void Execute() override;
         virtual Any GetState() const override;
     protected:
@@ -616,10 +607,6 @@ void SwitchMonitorCommand::Execute()
 
 RestartTimerCommand::RestartTimerCommand (const rtl::Reference<PresenterController>& rpPresenterController)
 : mpPresenterController(rpPresenterController)
-{
-}
-
-RestartTimerCommand::~RestartTimerCommand()
 {
 }
 

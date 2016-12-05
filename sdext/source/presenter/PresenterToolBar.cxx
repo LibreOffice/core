@@ -133,7 +133,6 @@ namespace {
     {
     public:
         explicit Element (const ::rtl::Reference<PresenterToolBar>& rpToolBar);
-        virtual ~Element() override;
         Element(const Element&) = delete;
         Element& operator=(const Element&) = delete;
 
@@ -212,7 +211,6 @@ namespace {
         static ::rtl::Reference<Element> Create (
             const ::rtl::Reference<PresenterToolBar>& rpToolBar);
 
-        virtual ~Button() override;
         virtual void SAL_CALL disposing() override;
 
         virtual void Paint (
@@ -1223,10 +1221,6 @@ Element::Element (
     }
 }
 
-Element::~Element()
-{
-}
-
 void Element::SetModes (
     const SharedElementMode& rpNormalMode,
     const SharedElementMode& rpMouseOverMode,
@@ -1491,10 +1485,6 @@ Button::Button (
     OSL_ASSERT(mpToolBar.get() != nullptr);
     OSL_ASSERT(mpToolBar->GetPresenterController().is());
     OSL_ASSERT(mpToolBar->GetPresenterController()->GetWindowManager().is());
-}
-
-Button::~Button()
-{
 }
 
 void Button::Initialize()
