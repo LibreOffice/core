@@ -517,7 +517,7 @@ static void lcl_PreprocessRowsInCells( SwTabFrame& rTab, SwRowFrame& rLastLine,
             // Check if we can move pTmpLastLineRow to the follow table,
             // or if we have to split the line:
             SwFrame* pCell = pTmpLastLineRow->Lower();
-            bool bTableLayoutToComplex = false;
+            bool bTableLayoutTooComplex = false;
             long nMinHeight = 0;
 
             // We have to take into account:
@@ -533,7 +533,7 @@ static void lcl_PreprocessRowsInCells( SwTabFrame& rTab, SwRowFrame& rLastLine,
                     if ( static_cast<SwCellFrame*>(pCell)->Lower() &&
                          static_cast<SwCellFrame*>(pCell)->Lower()->IsRowFrame() )
                     {
-                        bTableLayoutToComplex = true;
+                        bTableLayoutTooComplex = true;
                         break;
                     }
 
@@ -555,10 +555,10 @@ static void lcl_PreprocessRowsInCells( SwTabFrame& rTab, SwRowFrame& rLastLine,
 
             // 2. Case:
             // The line has to be split, the minimum height still fits into
-            // the master table, and the table structure is not to complex.
+            // the master table, and the table structure is not too complex.
             if ( nTmpCut > nCurrentHeight ||
                  ( pTmpLastLineRow->IsRowSplitAllowed() &&
-                  !bTableLayoutToComplex && nMinHeight < nTmpCut ) )
+                  !bTableLayoutTooComplex && nMinHeight < nTmpCut ) )
             {
                 // The line has to be split:
                 SwRowFrame* pNewRow = new SwRowFrame( *pTmpLastLineRow->GetTabLine(), &rTab, false );
