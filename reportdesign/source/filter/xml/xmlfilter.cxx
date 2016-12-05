@@ -89,7 +89,7 @@ public:
             ORptFilter& rImport, sal_uInt16 nPrfx,
             const OUString& rLName ,
             const uno::Reference< xml::sax::XAttributeList > & xAttrList );
-    virtual ~RptMLMasterStylesContext_Impl() override;
+
     RptMLMasterStylesContext_Impl(const RptMLMasterStylesContext_Impl&) = delete;
     RptMLMasterStylesContext_Impl& operator=(const RptMLMasterStylesContext_Impl&) = delete;
     virtual void EndElement() override;
@@ -101,10 +101,6 @@ RptMLMasterStylesContext_Impl::RptMLMasterStylesContext_Impl(
         const uno::Reference< xml::sax::XAttributeList > & xAttrList ) :
     XMLTextMasterStylesContext( rImport, nPrfx, rLName, xAttrList )
     ,m_rImport(rImport)
-{
-}
-
-RptMLMasterStylesContext_Impl::~RptMLMasterStylesContext_Impl()
 {
 }
 
