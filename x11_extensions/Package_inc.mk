@@ -23,8 +23,8 @@
 
 $(eval $(call gb_Package_Package,x11_extensions_inc,$(SRCDIR)/x11_extensions))
 
-$(eval $(call gb_Package_add_file,x11_extensions_inc,inc/X11/extensions/Xrandr,inc/Xrandr.h))
-$(eval $(call gb_Package_add_file,x11_extensions_inc,inc/X11/extensions/Xrender,inc/Xrender.h))
+$(eval $(call gb_Package_add_file,x11_extensions_inc,inc/X11/extensions/Xrandr.h,inc/Xrandr.h))
+$(eval $(call gb_Package_add_file,x11_extensions_inc,inc/X11/extensions/Xrender.h,inc/Xrender.h))
 $(eval $(call gb_Package_add_file,x11_extensions_inc,inc/X11/extensions/randr.h,inc/randr.h))
 $(eval $(call gb_Package_add_file,x11_extensions_inc,inc/X11/extensions/randrproto.h,inc/randrproto.h))
 $(eval $(call gb_Package_add_file,x11_extensions_inc,inc/X11/extensions/render.h,inc/render.h))
