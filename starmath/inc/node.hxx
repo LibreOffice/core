@@ -227,12 +227,12 @@ private:
  */
 class SmStructureNode : public SmNode
 {
-    SmNodeArray  aSubNodes;
+    SmNodeArray maSubNodes;
 
 protected:
     SmStructureNode(SmNodeType eNodeType, const SmToken &rNodeToken, size_t nSize = 0)
         : SmNode(eNodeType, rNodeToken)
-        , aSubNodes(nSize)
+        , maSubNodes(nSize)
     {}
 
 public:
@@ -249,10 +249,10 @@ public:
 
     virtual void  GetAccessibleText( OUStringBuffer &rText ) const override;
 
-    SmNodeArray::iterator begin() {return aSubNodes.begin();}
-    SmNodeArray::iterator end() {return aSubNodes.end();}
-    SmNodeArray::reverse_iterator rbegin() {return aSubNodes.rbegin();}
-    SmNodeArray::reverse_iterator rend() {return aSubNodes.rend();}
+    SmNodeArray::iterator begin() {return maSubNodes.begin();}
+    SmNodeArray::iterator end() {return maSubNodes.end();}
+    SmNodeArray::reverse_iterator rbegin() {return maSubNodes.rbegin();}
+    SmNodeArray::reverse_iterator rend() {return maSubNodes.rend();}
 
     /** Get the index of a child node
      *
@@ -269,16 +269,16 @@ public:
 
     void SetSubNode(size_t nIndex, SmNode* pNode)
     {
-        size_t size = aSubNodes.size();
+        size_t size = maSubNodes.size();
         if (size <= nIndex)
         {
             //Resize subnodes array
-            aSubNodes.resize(nIndex + 1);
+            maSubNodes.resize(nIndex + 1);
             //Set new slots to NULL
             for (size_t i = size; i < nIndex+1; i++)
-                aSubNodes[i] = nullptr;
+                maSubNodes[i] = nullptr;
         }
-        aSubNodes[nIndex] = pNode;
+        maSubNodes[nIndex] = pNode;
         ClaimPaternity();
     }
 
@@ -803,7 +803,7 @@ public:
 };
 
 
-/** Enum used to index sub-/supscripts in the 'aSubNodes' array
+/** Enum used to index sub-/supscripts in the 'maSubNodes' array
  * in 'SmSubSupNode'
  *
  * See graphic for positions at char:
