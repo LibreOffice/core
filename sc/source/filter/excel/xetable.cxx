@@ -1679,7 +1679,14 @@ void XclExpColinfo::SaveXml( XclExpXmlStream& rStrm )
     // 100 number - used to limit precision to 0.01 with formula =Truncate( {value}*100+0.5 ) / 100
     // 0.5 number (0.005 to output value) - used to increase value before truncating,
     //            to avoid situation when 2.997 will be truncated to 2.99 and not to 3.00
-    const double nTruncatedExcelColumnWidth = std::trunc( nExcelColumnWidth * 100.0 + 0.5 ) / 100.0;
+
+    // First create an integer value to not have a double floating point with
+    // something optimized away or into.. yes that was significant in a
+    // Linux-rpm_deb-x86_71-TDF tinderbox build that oddly produced 24.23
+    // instead of 24 in a test case but only for 5-2 ...
+    const sal_Int32 nTruncatedInt = static_cast<sal_Int32>(std::trunc( nExcelColumnWidth * 100.0 + 0.5 ));
+    const double nTruncatedExcelColumnWidth = static_cast<double>(nTruncatedInt) / 100.0;
+
     rStrm.GetCurrentStream()->singleElement( XML_col,
             // OOXTODO: XML_bestFit,
             XML_collapsed,      XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_COLINFO_COLLAPSED ) ),
