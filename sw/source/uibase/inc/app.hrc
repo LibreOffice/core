@@ -104,9 +104,14 @@
 #define RID_PAGESTYLEFAMILY             (RC_APP_BEGIN + 149)
 #define RID_LISTSTYLEFAMILY             (RC_APP_BEGIN + 150)
 #define RID_TABLESTYLEFAMILY            (RC_APP_BEGIN + 151)
-#define RID_STYLEFAMILY_IMAGELIST       (RC_APP_BEGIN + 152)
+#define BMP_STYLES_FAMILY_PARA          (RC_APP_BEGIN + 152)
+#define BMP_STYLES_FAMILY_CHAR          (RC_APP_BEGIN + 153)
+#define BMP_STYLES_FAMILY_FRAME         (RC_APP_BEGIN + 154)
+#define BMP_STYLES_FAMILY_PAGE          (RC_APP_BEGIN + 155)
+#define BMP_STYLES_FAMILY_LIST          (RC_APP_BEGIN + 156)
+#define BMP_STYLES_FAMILY_TABLE         (RC_APP_BEGIN + 157)
 
-#define APP_ACT_END                RID_STYLEFAMILY_IMAGELIST
+#define APP_ACT_END                  BMP_STYLES_FAMILY_TABLE
 
 #if APP_ACT_END > RC_APP_END
 #error Resource-Id Ueberlauf in #file, #line

@@ -171,18 +171,41 @@ StringArray RID_TABLESTYLEFAMILY
     };
 };
 
-ImageList RID_STYLEFAMILY_IMAGELIST
+Bitmap BMP_STYLES_FAMILY_PARA
 {
-    Prefix = "sf";
-    IdList =
-    {
-        1; 2; 3; 4; 5; 6;
-    };
-    IdCount = 6;
+    File = "sf01.png" ;
+};
+
+Bitmap BMP_STYLES_FAMILY_CHAR
+{
+    File = "sf02.png" ;
+};
+
+Bitmap BMP_STYLES_FAMILY_FRAME
+{
+    File = "sf03.png" ;
+};
+
+Bitmap BMP_STYLES_FAMILY_PAGE
+{
+    File = "sf04.png" ;
+};
+
+Bitmap BMP_STYLES_FAMILY_LIST
+{
+    File = "sf05.png" ;
+};
+
+Bitmap BMP_STYLES_FAMILY_TABLE
+{
+    File = "sf06.png" ;
 };
 
 // Bitmap for the NumberingTemplates in the Organizer
-Bitmap BMP_STYLES_FAMILY_NUM { File = "styfamnu.bmp" ; };
+Bitmap BMP_STYLES_FAMILY_NUM
+{
+    File = "styfamnu.bmp" ;
+};
 
 String STR_ENV_TITLE
 {
