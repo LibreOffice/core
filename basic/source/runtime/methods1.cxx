@@ -1643,7 +1643,7 @@ RTLFUNC(ConvertToUrl)
     {
         OUString aStr = rPar.Get(1)->GetOUString();
         INetURLObject aURLObj( aStr, INetProtocol::File );
-        OUString aFileURL = aURLObj.GetMainURL( INetURLObject::NO_DECODE );
+        OUString aFileURL = aURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
         if( aFileURL.isEmpty() )
         {
             ::osl::File::getFileURLFromSystemPath( aFileURL, aFileURL );

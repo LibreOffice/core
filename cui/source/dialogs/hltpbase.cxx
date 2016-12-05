@@ -45,19 +45,19 @@ OUString CreateUiNameFromURL( const OUString& aStrURL )
     switch(aURLObj.GetProtocol())
     {
         case INetProtocol::File:
-            osl::FileBase::getSystemPathFromFileURL(aURLObj.GetMainURL(INetURLObject::NO_DECODE), aStrUiURL);
+            osl::FileBase::getSystemPathFromFileURL(aURLObj.GetMainURL(INetURLObject::DecodeMechanism::NONE), aStrUiURL);
             break;
         case INetProtocol::Ftp :
             {
                 //remove password from name
                 INetURLObject   aTmpURL(aURLObj);
                 aTmpURL.SetPass("");
-                aStrUiURL = aTmpURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS );
+                aStrUiURL = aTmpURL.GetMainURL( INetURLObject::DecodeMechanism::Unambiguous );
             }
             break;
         default :
             {
-                aStrUiURL = aURLObj.GetMainURL(INetURLObject::DECODE_UNAMBIGUOUS);
+                aStrUiURL = aURLObj.GetMainURL(INetURLObject::DecodeMechanism::Unambiguous);
             }
     }
     if(aStrUiURL.isEmpty())

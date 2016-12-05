@@ -55,7 +55,7 @@ OUString SAL_CALL UriAbbreviation::abbreviateString(const css::uno::Reference< c
     {
         // Use INetURLObject to abbreviate URLs
         INetURLObject aURL( aString );
-        aResult = aURL.getAbbreviated( xStringWidth, nWidth, INetURLObject::DECODE_UNAMBIGUOUS );
+        aResult = aURL.getAbbreviated( xStringWidth, nWidth, INetURLObject::DecodeMechanism::Unambiguous );
     }
 
     return aResult;

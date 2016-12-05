@@ -2589,7 +2589,7 @@ IMPL_LINK_NOARG(SwGrfExtPage, BrowseHdl, Button*, void)
     {   // remember selected filter
         aFilterName = pGrfDlg->GetCurrentFilter();
         aNewGrfName = INetURLObject::decode( pGrfDlg->GetPath(),
-                                           INetURLObject::DECODE_UNAMBIGUOUS );
+                                           INetURLObject::DecodeMechanism::Unambiguous );
         m_pConnectED->SetModifyFlag();
         m_pConnectED->SetText( aNewGrfName );
         //reset mirrors because maybe a Bitmap was swapped with
@@ -2781,7 +2781,7 @@ void SwFrameURLPage::Reset( const SfxItemSet *rSet )
     {
         const SwFormatURL* pFormatURL = static_cast<const SwFormatURL*>(pItem);
         pURLED->SetText( INetURLObject::decode( pFormatURL->GetURL(),
-                                           INetURLObject::DECODE_UNAMBIGUOUS ));
+                                           INetURLObject::DecodeMechanism::Unambiguous ));
         pNameED->SetText( pFormatURL->GetName());
 
         pClientCB->Enable( pFormatURL->GetMap() != nullptr );

@@ -109,7 +109,7 @@ void IMapObject::Read( SvStream& rIStm, const OUString& rBaseURL )
     aTarget = read_uInt16_lenPrefixed_uInt8s_ToOUString(rIStm, nTextEncoding);
 
     // make URL absolute
-    aURL = URIHelper::SmartRel2Abs( INetURLObject(rBaseURL), aURL, URIHelper::GetMaybeFileHdl(), true, false, INetURLObject::EncodeMechanism::WasEncoded, INetURLObject::DECODE_UNAMBIGUOUS );
+    aURL = URIHelper::SmartRel2Abs( INetURLObject(rBaseURL), aURL, URIHelper::GetMaybeFileHdl(), true, false, INetURLObject::EncodeMechanism::WasEncoded, INetURLObject::DecodeMechanism::Unambiguous );
     std::unique_ptr<IMapCompat> pCompat(new IMapCompat( rIStm, StreamMode::READ ));
 
     ReadIMapObject( rIStm );

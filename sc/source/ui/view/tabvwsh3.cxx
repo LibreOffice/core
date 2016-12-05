@@ -316,7 +316,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 {
                     //  URL has to be decoded for escaped characters (%20)
                     aAddress = INetURLObject::decode( aAddress,
-                                               INetURLObject::DECODE_WITH_CHARSET );
+                                               INetURLObject::DecodeMechanism::WithCharset );
                 }
 
                 bool bFound = false;

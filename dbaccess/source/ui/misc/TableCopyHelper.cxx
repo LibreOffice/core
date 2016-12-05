@@ -309,7 +309,7 @@ void OTableCopyHelper::asyncCopyTagTable(  DropDescriptor& _rDesc
         // we now have to delete the temp file created in executeDrop
         INetURLObject aURL;
         aURL.SetURL(_rDesc.aUrl);
-        ::utl::UCBContentHelper::Kill(aURL.GetMainURL(INetURLObject::NO_DECODE));
+        ::utl::UCBContentHelper::Kill(aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE));
     }
     else if ( !_rDesc.bError )
         pasteTable(_rDesc.aDroppedData,i_rDestDataSource,_xConnection);

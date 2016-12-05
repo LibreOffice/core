@@ -85,7 +85,7 @@ static OUString getMasterCommand( const OUString& rCommand )
         if ( nIndex )
         {
             aURL.SetURLPath( aURL.GetURLPath().copy( 0, nIndex ) );
-            aMasterCommand = aURL.GetMainURL( INetURLObject::NO_DECODE );
+            aMasterCommand = aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
         }
     }
     return aMasterCommand;

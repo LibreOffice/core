@@ -109,7 +109,7 @@ namespace toolkit
             if ( aURL.GetProtocol() != INetProtocol::PrivSoffice )
             {
                 OSL_VERIFY( aURL.insertName( "hicontrast", false, 0 ) );
-                return aURL.GetMainURL( INetURLObject::NO_DECODE );
+                return aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
             }
             // the private: scheme is not considered to be hierarchical by INetURLObject, so manually insert the
             // segment

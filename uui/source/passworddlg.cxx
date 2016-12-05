@@ -75,7 +75,7 @@ PasswordDialog::PasswordDialog(vcl::Window* _pParent,
     OUString aMessage(ResId(nStrId, *pResourceMgr).toString());
     INetURLObject url(aDocURL);
     aMessage += url.HasError()
-        ? aDocURL : url.GetMainURL(INetURLObject::DECODE_UNAMBIGUOUS);
+        ? aDocURL : url.GetMainURL(INetURLObject::DecodeMechanism::Unambiguous);
     m_pFTPassword->SetText(aMessage);
 
     if (bIsSimplePasswordRequest)

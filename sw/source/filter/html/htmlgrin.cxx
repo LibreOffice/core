@@ -1158,7 +1158,7 @@ ANCHOR_SETEVENT:
     if( !aName.isEmpty() )
     {
         OUString sDecoded( INetURLObject::decode( aName,
-                                           INetURLObject::DECODE_UNAMBIGUOUS ));
+                                           INetURLObject::DecodeMechanism::Unambiguous ));
         sal_Int32 nPos = sDecoded.lastIndexOf( cMarkSeparator );
         if( nPos != -1 )
         {

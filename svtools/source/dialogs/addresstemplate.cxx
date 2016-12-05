@@ -692,7 +692,7 @@ void AssignmentPersistentData::ImplCommit()
         INetURLObject aURL( sName );
         if( aURL.GetProtocol() != INetProtocol::NotValid )
         {
-            OFileNotation aFileNotation( aURL.GetMainURL( INetURLObject::NO_DECODE ) );
+            OFileNotation aFileNotation( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
             sName = aFileNotation.get(OFileNotation::N_SYSTEM);
         }
 
@@ -1186,7 +1186,7 @@ void AssignmentPersistentData::ImplCommit()
                     INetURLObject aURL( sName );
                     if( aURL.GetProtocol() != INetProtocol::NotValid )
                     {
-                        OFileNotation aFileNotation( aURL.GetMainURL( INetURLObject::NO_DECODE ) );
+                        OFileNotation aFileNotation( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
                         sName = aFileNotation.get(OFileNotation::N_SYSTEM);
                     }
                     m_pDatasource->InsertEntry(sName);

@@ -415,7 +415,7 @@ bool ImplSdPPTImport::Import()
 
                                         // Convert '\\' notation to 'smb://'
                                         INetURLObject aUrl( pHyperlink->aTarget, INetProtocol::File );
-                                        pHyperlink->aTarget = aUrl.GetMainURL( INetURLObject::NO_DECODE );
+                                        pHyperlink->aTarget = aUrl.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
                                         if ( !aPropItem.Read( pHyperlink->aSubAdress ) )
                                             break;
@@ -1950,7 +1950,7 @@ OUString ImplSdPPTImport::ReadSound(sal_uInt32 nSoundRef) const
                             std::unique_ptr<sal_uInt8[]> pBuf( new sal_uInt8[ nSoundDataLen ] );
 
                             rStCtrl.ReadBytes(pBuf.get(), nSoundDataLen);
-                            SvStream* pOStm = ::utl::UcbStreamHelper::CreateStream( aGalleryUserSound.GetMainURL( INetURLObject::NO_DECODE ), StreamMode::WRITE | StreamMode::TRUNC );
+                            SvStream* pOStm = ::utl::UcbStreamHelper::CreateStream( aGalleryUserSound.GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::WRITE | StreamMode::TRUNC );
 
                             if( pOStm )
                             {
@@ -1958,8 +1958,8 @@ OUString ImplSdPPTImport::ReadSound(sal_uInt32 nSoundRef) const
 
                                 if( pOStm->GetError() == ERRCODE_NONE )
                                 {
-                                    GalleryExplorer::InsertURL( GALLERY_THEME_USERSOUNDS, aGalleryUserSound.GetMainURL( INetURLObject::NO_DECODE ) );
-                                    aRetval = aGalleryUserSound.GetMainURL( INetURLObject::NO_DECODE );
+                                    GalleryExplorer::InsertURL( GALLERY_THEME_USERSOUNDS, aGalleryUserSound.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
+                                    aRetval = aGalleryUserSound.GetMainURL( INetURLObject::DecodeMechanism::NONE );
                                 }
 
                                 delete pOStm;
@@ -2024,7 +2024,7 @@ OUString ImplSdPPTImport::ReadMedia( sal_uInt32 nMediaRef ) const
                                                 if( osl::FileBase::getFileURLFromSystemPath( aStr, aRetVal )
                                                     == osl::FileBase::E_None )
                                                 {
-                                                    aRetVal = INetURLObject( aRetVal ).GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS );
+                                                    aRetVal = INetURLObject( aRetVal ).GetMainURL( INetURLObject::DecodeMechanism::Unambiguous );
                                                 }else{
                                                     aRetVal = aStr;
                                                 }

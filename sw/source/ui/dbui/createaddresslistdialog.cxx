@@ -636,7 +636,7 @@ IMPL_LINK_NOARG(SwCreateAddressListDialog, OkHdl_Impl, Button*, void)
             m_sURL = xFP->getSelectedFiles().getConstArray()[0];
             INetURLObject aResult( m_sURL );
             aResult.setExtension("csv");
-            m_sURL = aResult.GetMainURL(INetURLObject::NO_DECODE);
+            m_sURL = aResult.GetMainURL(INetURLObject::DecodeMechanism::NONE);
         }
     }
     if(!m_sURL.isEmpty())

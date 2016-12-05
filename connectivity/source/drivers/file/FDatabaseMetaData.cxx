@@ -89,7 +89,7 @@ namespace
                 {
                     aContentURL = INetURLObject( _rFolderOrDoc, INetURLObject::EncodeMechanism::WasEncoded );
                     aContentURL.Append( _rDocName );
-                    aContent1 = ::ucbhelper::Content( aContentURL.GetMainURL( INetURLObject::NO_DECODE ), Reference< XCommandEnvironment >(), comphelper::getProcessComponentContext() );
+                    aContent1 = ::ucbhelper::Content( aContentURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), Reference< XCommandEnvironment >(), comphelper::getProcessComponentContext() );
                 }
             }
 
@@ -106,7 +106,7 @@ namespace
             INetURLObject aURL2( aContentURL );
             if (!sExtension2.isEmpty())
                 aURL2.SetExtension( sExtension2 );
-            if ( aURL2.GetMainURL(INetURLObject::NO_DECODE) == aContentURL.GetMainURL(INetURLObject::NO_DECODE) )
+            if ( aURL2.GetMainURL(INetURLObject::DecodeMechanism::NONE) == aContentURL.GetMainURL(INetURLObject::DecodeMechanism::NONE) )
                 return -1;
 
             // the second context
@@ -114,7 +114,7 @@ namespace
             ::ucbhelper::Content aContent2;
             try
             {
-                aContent2 = ::ucbhelper::Content( aURL2.GetMainURL( INetURLObject::NO_DECODE ), Reference< XCommandEnvironment >(), comphelper::getProcessComponentContext() );
+                aContent2 = ::ucbhelper::Content( aURL2.GetMainURL( INetURLObject::DecodeMechanism::NONE ), Reference< XCommandEnvironment >(), comphelper::getProcessComponentContext() );
                 bCanAccess = aContent2.isDocument();
             }
             catch( const Exception& )

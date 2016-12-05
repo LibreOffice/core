@@ -763,7 +763,7 @@ bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
             INetURLObject aDBPathURL(m_sWorkPath);
             aDBPathURL.Append(m_aDocURL.getBase());
             createUniqueFolderName(&aDBPathURL);
-            sUrl = aDBPathURL.GetMainURL( INetURLObject::NO_DECODE);
+            sUrl = aDBPathURL.GetMainURL( INetURLObject::DecodeMechanism::NONE);
             xSimpleFileAccess->createFolder(sUrl);
             sUrl = eType.concat(sUrl);
         }
@@ -776,7 +776,7 @@ bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
         Reference< XPropertySet > xDatasource = m_pImpl->getCurrentDataSource();
         Reference< XDatabaseContext > xDatabaseContext( DatabaseContext::create(getORB()) );
         INetURLObject aURL( _sPath );
-        OUString sFilename = aURL.getBase( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
+        OUString sFilename = aURL.getBase( INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset );
         OUString sDatabaseName = ::dbtools::createUniqueName(xDatabaseContext, sFilename, false);
         xDatabaseContext->registerObject(sDatabaseName, xDatasource);
     }
@@ -791,7 +791,7 @@ bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
         if ( pFilter )
         {
             INetURLObject aWorkURL( m_sWorkPath );
-            aFileDlg.SetDisplayFolder( aWorkURL.GetMainURL( INetURLObject::NO_DECODE ));
+            aFileDlg.SetDisplayFolder( aWorkURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ));
 
             OUString sDefaultName = ModuleRes( STR_DATABASEDEFAULTNAME );
             OUString sExtension = pFilter->GetDefaultExtension();
@@ -809,7 +809,7 @@ bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
 
             if( m_aDocURL.GetProtocol() != INetProtocol::NotValid )
             {
-                OUString sFileName = m_aDocURL.GetMainURL( INetURLObject::NO_DECODE );
+                OUString sFileName = m_aDocURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
                 if ( ::utl::UCBContentHelper::IsDocument(sFileName) )
                     ::utl::UCBContentHelper::Kill(sFileName);
                 m_pOutSet->Put(SfxStringItem(DSID_DOCUMENT_URL, sFileName));
@@ -827,7 +827,7 @@ bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
         sal_Int32 i = 1;
         while (bFolderExists)
         {
-            bFolderExists = xSimpleFileAccess->isFolder(pURL->GetMainURL( INetURLObject::NO_DECODE ));
+            bFolderExists = xSimpleFileAccess->isFolder(pURL->GetMainURL( INetURLObject::DecodeMechanism::NONE ));
             if (bFolderExists)
             {
                 i++;
@@ -846,14 +846,14 @@ bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
         INetURLObject aExistenceCheck( _rURL );
         for ( sal_Int32 i = 1; bElementExists; )
         {
-            bElementExists = xSimpleFileAccess->exists( aExistenceCheck.GetMainURL( INetURLObject::NO_DECODE ) );
+            bElementExists = xSimpleFileAccess->exists( aExistenceCheck.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
             if ( bElementExists )
             {
                 aExistenceCheck.setBase( BaseName.concat( OUString::number( i ) ) );
                 ++i;
             }
         }
-        return aExistenceCheck.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
+        return aExistenceCheck.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset );
     }
     IWizardPageController* ODbTypeWizDialogSetup::getPageController( TabPage* _pCurrentPage ) const
     {

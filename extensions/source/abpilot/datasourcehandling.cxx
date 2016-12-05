@@ -63,7 +63,7 @@ OUString lcl_getOwnURL(SfxObjectShell* pObjectShell)
         return aRet;
 
     const INetURLObject& rURLObject = pObjectShell->GetMedium()->GetURLObject();
-    aRet = rURLObject.GetMainURL(INetURLObject::DECODE_WITH_CHARSET);
+    aRet = rURLObject.GetMainURL(INetURLObject::DecodeMechanism::WithCharset);
     return aRet;
 }
 

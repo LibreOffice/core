@@ -175,7 +175,7 @@ void psp::getPrinterPathList( std::list< OUString >& rPathList, const char* pSub
         {
             INetURLObject aDir( aExe );
             aDir.removeSegment();
-            aExe = aDir.GetMainURL( INetURLObject::NO_DECODE );
+            aExe = aDir.GetMainURL( INetURLObject::DecodeMechanism::NONE );
             OUString aSysPath;
             if( osl_getSystemPathFromFileURL( aExe.pData, &aSysPath.pData ) == osl_File_E_None )
             {

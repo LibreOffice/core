@@ -91,7 +91,7 @@ bool UCB_CopyFile( const OUString& rURL, const OUString& rNewURL, bool bCopyIsMo
         INetURLObject aURL( rNewURL );
         const OUString sName( aURL.GetName() );
         aURL.removeSegment();
-        const OUString sMainURL( aURL.GetMainURL(INetURLObject::NO_DECODE) );
+        const OUString sMainURL( aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE) );
 
         ucbhelper::Content aTempContent( sMainURL,
                                 css::uno::Reference< css::ucb::XCommandEnvironment >(),
@@ -120,11 +120,11 @@ bool UCB_IsCaseSensitiveFileName( const OUString& rURL )
         INetURLObject aTempObj( rURL );
         aTempObj.SetBase( aTempObj.GetBase().toAsciiLowerCase() );
         css::uno::Reference< css::ucb::XContentIdentifier > xRef1 = new
-                ucbhelper::ContentIdentifier( aTempObj.GetMainURL( INetURLObject::NO_DECODE ));
+                ucbhelper::ContentIdentifier( aTempObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ));
 
         aTempObj.SetBase(aTempObj.GetBase().toAsciiUpperCase());
         css::uno::Reference< css::ucb::XContentIdentifier > xRef2 = new
-                ucbhelper::ContentIdentifier( aTempObj.GetMainURL( INetURLObject::NO_DECODE ));
+                ucbhelper::ContentIdentifier( aTempObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ));
 
         css::uno::Reference< css::ucb::XUniversalContentBroker > xUcb =
               css::ucb::UniversalContentBroker::create(comphelper::getProcessComponentContext());

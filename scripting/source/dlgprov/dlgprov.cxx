@@ -91,7 +91,7 @@ namespace dlgprov
         INetURLObject aInetObj( i_sURL );
         OUString aDlgName = aInetObj.GetBase();
         aInetObj.removeSegment();
-        OUString aDlgLocation = aInetObj.GetMainURL( INetURLObject::NO_DECODE );
+        OUString aDlgLocation = aInetObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
         bool bReadOnly = true;
         css::lang::Locale aLocale = Application::GetSettings().GetUILanguageTag().getLocale();
         OUString aComment;

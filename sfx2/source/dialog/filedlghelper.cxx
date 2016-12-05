@@ -602,12 +602,12 @@ void FileDialogHelper_Impl::updateVersions()
         INetURLObject aObj( aPathSeq[0] );
 
         if ( ( aObj.GetProtocol() == INetProtocol::File ) &&
-            ( utl::UCBContentHelper::IsDocument( aObj.GetMainURL( INetURLObject::NO_DECODE ) ) ) )
+            ( utl::UCBContentHelper::IsDocument( aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ) ) ) )
         {
             try
             {
                 uno::Reference< embed::XStorage > xStorage = ::comphelper::OStorageHelper::GetStorageFromURL(
-                                                                aObj.GetMainURL( INetURLObject::NO_DECODE ),
+                                                                aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ),
                                                                 embed::ElementModes::READ );
 
                 DBG_ASSERT( xStorage.is(), "The method must return the storage or throw an exception!" );
@@ -1236,7 +1236,7 @@ void FileDialogHelper_Impl::implInitializeFileName( )
                     if ( bAutoExtChecked )
                     {   // cut the extension
                         aObj.removeExtension( );
-                        mxFileDlg->setDefaultName( aObj.GetName( INetURLObject::DECODE_WITH_CHARSET ) );
+                        mxFileDlg->setDefaultName( aObj.GetName( INetURLObject::DecodeMechanism::WithCharset ) );
                     }
                 }
             }
@@ -1357,7 +1357,7 @@ void FileDialogHelper_Impl::implGetAndCacheFiles(const uno::Reference< XInterfac
                 else
                     aPath.setName( lFiles[i] );
 
-                rpURLList.push_back(aPath.GetMainURL(INetURLObject::NO_DECODE));
+                rpURLList.push_back(aPath.GetMainURL(INetURLObject::DecodeMechanism::NONE));
             }
         }
     }
@@ -1578,7 +1578,7 @@ void FileDialogHelper_Impl::verifyPath()
     }
     INetURLObject url(maPath);
     if (url.GetProtocol() != INetProtocol::File
-        || url.getName(0, true, INetURLObject::DECODE_WITH_CHARSET) != "tmp")
+        || url.getName(0, true, INetURLObject::DecodeMechanism::WithCharset) != "tmp")
     {
         return;
     }
@@ -1591,12 +1591,12 @@ void FileDialogHelper_Impl::verifyPath()
         INetURLObject::EncodeMechanism::All);
     OUString sysPathU;
     osl::FileBase::RC e = osl::FileBase::getSystemPathFromFileURL(
-        url.GetMainURL(INetURLObject::NO_DECODE), sysPathU);
+        url.GetMainURL(INetURLObject::DecodeMechanism::NONE), sysPathU);
     if (e != osl::FileBase::E_None) {
         SAL_WARN(
             "sfx.dialog",
             "getSystemPathFromFileURL("
-                << url.GetMainURL(INetURLObject::NO_DECODE) << ") failed with "
+                << url.GetMainURL(INetURLObject::DecodeMechanism::NONE) << ") failed with "
                 << +e);
         return;
     }
@@ -1936,7 +1936,7 @@ void FileDialogHelper_Impl::saveConfig()
             INetURLObject aObj( getPath() );
 
             if ( aObj.GetProtocol() == INetProtocol::File )
-                SetToken( aUserData, 2, ' ', aObj.GetMainURL( INetURLObject::NO_DECODE ) );
+                SetToken( aUserData, 2, ' ', aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
 
             OUString aFilter = getFilter();
             aFilter = EncodeSpaces_Impl( aFilter );
@@ -2440,7 +2440,7 @@ Sequence< OUString > FileDialogHelper::GetSelectedFiles() const
                 else
                     aPath.setName( lFiles[i] );
 
-                aResultSeq[i-1] = aPath.GetMainURL( INetURLObject::NO_DECODE );
+                aResultSeq[i-1] = aPath.GetMainURL( INetURLObject::DecodeMechanism::NONE );
             }
         }
         else
@@ -2495,9 +2495,9 @@ void FileDialogHelper::SetDisplayDirectory( const OUString& _rPath )
 
     INetURLObject aObj( _rPath );
 
-    OUString sFileName = aObj.GetName( INetURLObject::DECODE_WITH_CHARSET );
+    OUString sFileName = aObj.GetName( INetURLObject::DecodeMechanism::WithCharset );
     aObj.removeSegment();
-    OUString sPath = aObj.GetMainURL( INetURLObject::NO_DECODE );
+    OUString sPath = aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
     int nIsFolder = impl_isFolder( _rPath );
     if ( nIsFolder == 0 ||
@@ -2509,7 +2509,7 @@ void FileDialogHelper::SetDisplayDirectory( const OUString& _rPath )
     else
     {
         INetURLObject aObjPathName( _rPath );
-        OUString sFolder( aObjPathName.GetMainURL( INetURLObject::NO_DECODE ) );
+        OUString sFolder( aObjPathName.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
         if ( sFolder.isEmpty() )
         {
             // _rPath is not a valid path -> fallback to home directory

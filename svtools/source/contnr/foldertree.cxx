@@ -116,7 +116,7 @@ void FolderTree::SetTreePath( OUString const & sUrl )
     INetURLObject aUrl( sUrl );
     aUrl.setFinalSlash();
 
-    OUString sPath = aUrl.GetURLPath( INetURLObject::DECODE_WITH_CHARSET );
+    OUString sPath = aUrl.GetURLPath( INetURLObject::DecodeMechanism::WithCharset );
 
     SvTreeListEntry* pEntry = First();
     bool end = false;
@@ -130,7 +130,7 @@ void FolderTree::SetTreePath( OUString const & sUrl )
             INetURLObject aUrlObj( sNodeUrl );
             aUrlObj.setFinalSlash();
 
-            sNodeUrl = aUrlObj.GetURLPath( INetURLObject::DECODE_WITH_CHARSET );
+            sNodeUrl = aUrlObj.GetURLPath( INetURLObject::DecodeMechanism::WithCharset );
 
             if( sPath == sNodeUrl )
             {

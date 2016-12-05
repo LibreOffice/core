@@ -48,7 +48,7 @@ RecentDocsViewItem::RecentDocsViewItem(ThumbnailView &rView, const OUString &rUR
         m_sHelpText = aURLObj.GetURLNoPass();
 
     if (aTitle.isEmpty())
-        aTitle = aURLObj.GetName(INetURLObject::DECODE_WITH_CHARSET);
+        aTitle = aURLObj.GetName(INetURLObject::DecodeMechanism::WithCharset);
 
     BitmapEx aThumbnail(rThumbnail);
     //fdo#74834: only load thumbnail if the corresponding option is not disabled in the configuration

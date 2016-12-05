@@ -161,7 +161,7 @@ OUString SvxHyperlinkMailTp::CreateAbsoluteURL() const
     }
 
     if ( aURL.GetProtocol() != INetProtocol::NotValid )
-        return aURL.GetMainURL( INetURLObject::DECODE_WITH_CHARSET );
+        return aURL.GetMainURL( INetURLObject::DecodeMechanism::WithCharset );
     else //#105788# always create a URL even if it is not valid
         return aStrURL;
 }

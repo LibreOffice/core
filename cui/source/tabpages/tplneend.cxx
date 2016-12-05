@@ -555,7 +555,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickLoadHdl_Impl, Button*, void)
         while (nIndex >= 0);
 
         INetURLObject aFile(aLastDir);
-        aDlg.SetDisplayDirectory( aFile.GetMainURL( INetURLObject::NO_DECODE ) );
+        aDlg.SetDisplayDirectory( aFile.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
 
         if( aDlg.Execute() == ERRCODE_NONE )
         {
@@ -568,7 +568,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickLoadHdl_Impl, Button*, void)
             XLineEndListRef pLeList = XPropertyList::AsLineEndList(
                 XPropertyList::CreatePropertyList(
                     XPropertyListType::LineEnd,
-                    aPathURL.GetMainURL(INetURLObject::NO_DECODE), ""));
+                    aPathURL.GetMainURL(INetURLObject::DecodeMechanism::NONE), ""));
             pLeList->SetName( aURL.getName() );
             if( pLeList->Load() )
             {
@@ -632,7 +632,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickSaveHdl_Impl, Button*, void)
             aFile.SetExtension( "soe" );
     }
 
-    aDlg.SetDisplayDirectory( aFile.GetMainURL( INetURLObject::NO_DECODE ) );
+    aDlg.SetDisplayDirectory( aFile.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
     if ( aDlg.Execute() == ERRCODE_NONE )
     {
         INetURLObject   aURL( aDlg.GetPath() );
@@ -642,7 +642,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickSaveHdl_Impl, Button*, void)
         aPathURL.removeFinalSlash();
 
         pLineEndList->SetName( aURL.getName() );
-        pLineEndList->SetPath( aPathURL.GetMainURL( INetURLObject::NO_DECODE ) );
+        pLineEndList->SetPath( aPathURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
 
         if( pLineEndList->Save() )
         {

@@ -266,7 +266,7 @@ namespace frm
                             {
                                 INetURLObject aURL( sFileName );
                                 aURL.removeSegment();
-                                getEngine().Read( *pStream, aURL.GetMainURL( INetURLObject::NO_DECODE ), eFormat );
+                                getEngine().Read( *pStream, aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), eFormat );
                             }
                             else
                             {

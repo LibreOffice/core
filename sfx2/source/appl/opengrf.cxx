@@ -125,12 +125,12 @@ short SvxOpenGraphicDialog::Execute()
             // non-local?
             if ( INetProtocol::File != aObj.GetProtocol() )
             {
-                SfxMedium aMed( aObj.GetMainURL( INetURLObject::NO_DECODE ), StreamMode::READ );
+                SfxMedium aMed( aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::READ );
                 aMed.Download();
                 SvStream* pStream = aMed.GetInStream();
 
                 if( pStream )
-                    nImpRet = rFilter.CanImportGraphic( aObj.GetMainURL( INetURLObject::NO_DECODE ), *pStream, nFormatNum, &nRetFormat );
+                    nImpRet = rFilter.CanImportGraphic( aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), *pStream, nFormatNum, &nRetFormat );
                 else
                     nImpRet = rFilter.CanImportGraphic( aObj, nFormatNum, &nRetFormat );
 
@@ -139,7 +139,7 @@ short SvxOpenGraphicDialog::Execute()
                     if ( !pStream )
                         nImpRet = rFilter.CanImportGraphic( aObj, GRFILTER_FORMAT_DONTKNOW, &nRetFormat );
                     else
-                        nImpRet = rFilter.CanImportGraphic( aObj.GetMainURL( INetURLObject::NO_DECODE ), *pStream,
+                        nImpRet = rFilter.CanImportGraphic( aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), *pStream,
                                                              GRFILTER_FORMAT_DONTKNOW, &nRetFormat );
                 }
             }

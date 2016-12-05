@@ -188,7 +188,7 @@ namespace svx
             aParser.SetSmartProtocol(INetProtocol::File);
             aParser.SetSmartURL(aFileDlg.GetPath());
 
-            m_pName->SetText(aParser.getBase(INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET));
+            m_pName->SetText(aParser.getBase(INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset));
 
             m_pName->SetSelection(Selection(0,m_pName->GetText().getLength()));
             m_pName->GrabFocus();

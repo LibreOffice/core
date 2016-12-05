@@ -761,7 +761,7 @@ void DialogWindow::SaveDialog()
                 aURLObj.removeExtension();
                 OUString aDialogName( aURLObj.getName() );
                 aURLObj.removeSegment();
-                OUString aURL( aURLObj.GetMainURL( INetURLObject::NO_DECODE ) );
+                OUString aURL( aURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
                 bool bReadOnly = false;
                 OUString aComment = "# " + aDialogName + " strings" ;
                 Reference< task::XInteractionHandler > xDummyHandler;

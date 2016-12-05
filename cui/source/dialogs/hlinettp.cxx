@@ -118,7 +118,7 @@ void SvxHyperlinkInternetTp::FillDlgFields(const OUString& rStrURL)
     // set URL-field
     // Show the scheme, #72740
     if ( aURL.GetProtocol() != INetProtocol::NotValid )
-        m_pCbbTarget->SetText( aURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ) );
+        m_pCbbTarget->SetText( aURL.GetMainURL( INetURLObject::DecodeMechanism::Unambiguous ) );
     else
         m_pCbbTarget->SetText(rStrURL);
 
@@ -182,7 +182,7 @@ OUString SvxHyperlinkInternetTp::CreateAbsoluteURL() const
         aURL.SetUserAndPass ( m_pEdLogin->GetText(), m_pEdPassword->GetText() );
 
     if ( aURL.GetProtocol() != INetProtocol::NotValid )
-        return aURL.GetMainURL( INetURLObject::DECODE_TO_IURI );
+        return aURL.GetMainURL( INetURLObject::DecodeMechanism::ToIUri );
     else //#105788# always create a URL even if it is not valid
         return aStrURL;
 }

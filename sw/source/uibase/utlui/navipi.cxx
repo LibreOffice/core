@@ -1035,7 +1035,7 @@ OUString SwNavigationPI::CreateDropFileName( TransferableDataHelper& rData )
     }
     if( !sFileName.isEmpty() )
     {
-        sFileName = INetURLObject( sFileName ).GetMainURL( INetURLObject::NO_DECODE );
+        sFileName = INetURLObject( sFileName ).GetMainURL( INetURLObject::DecodeMechanism::NONE );
     }
     return sFileName;
 }

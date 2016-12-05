@@ -75,7 +75,7 @@ IMPL_LINK_NOARG(SvxMultiPathDialog, AddHdl_Impl, Button*, void)
     {
         INetURLObject aPath( xFolderPicker->getDirectory() );
         aPath.removeFinalSlash();
-        OUString aURL = aPath.GetMainURL( INetURLObject::NO_DECODE );
+        OUString aURL = aPath.GetMainURL( INetURLObject::DecodeMechanism::NONE );
         OUString sInsPath;
         osl::FileBase::getSystemPathFromFileURL(aURL, sInsPath);
 
@@ -108,7 +108,7 @@ IMPL_LINK_NOARG(SvxPathSelectDialog, AddHdl_Impl, Button*, void)
     {
         INetURLObject aPath( xFolderPicker->getDirectory() );
         aPath.removeFinalSlash();
-        OUString aURL = aPath.GetMainURL( INetURLObject::NO_DECODE );
+        OUString aURL = aPath.GetMainURL( INetURLObject::DecodeMechanism::NONE );
         OUString sInsPath;
         osl::FileBase::getSystemPathFromFileURL(aURL, sInsPath);
 

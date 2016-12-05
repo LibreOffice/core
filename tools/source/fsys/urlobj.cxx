@@ -583,7 +583,7 @@ std::unique_ptr<SvMemoryStream> INetURLObject::getData()
         return nullptr;
     }
 
-    OUString sURLPath = GetURLPath( DECODE_WITH_CHARSET, RTL_TEXTENCODING_ISO_8859_1 );
+    OUString sURLPath = GetURLPath( DecodeMechanism::WithCharset, RTL_TEXTENCODING_ISO_8859_1 );
     sal_Unicode const * pSkippedMediatype = INetMIME::scanContentType( sURLPath.getStr(), sURLPath.getStr() + sURLPath.getLength() );
     sal_Int32 nCharactersSkipped = pSkippedMediatype == nullptr
         ? 0 : pSkippedMediatype-sURLPath.getStr();
@@ -1730,7 +1730,7 @@ bool INetURLObject::convertRelToAbs(OUString const & rTheRelURIRef,
                 HasError(), "tools.urlobj",
                 "cannot make <" << rTheRelURIRef
                     << "> absolute against broken base <"
-                    << GetMainURL(NO_DECODE) << ">");
+                    << GetMainURL(DecodeMechanism::NONE) << ">");
             rWasAbsolute = false;
             return false;
         }
@@ -1858,7 +1858,7 @@ bool INetURLObject::convertRelToAbs(OUString const & rTheRelURIRef,
         SAL_WARN_IF(
             HasError(), "tools.urlobj",
             "cannot make <" << rTheRelURIRef
-                << "> absolute against broken base <" << GetMainURL(NO_DECODE)
+                << "> absolute against broken base <" << GetMainURL(DecodeMechanism::NONE)
                 << ">");
         rWasAbsolute = false;
         return false;
@@ -3388,10 +3388,10 @@ OUString INetURLObject::decode(sal_Unicode const * pBegin,
 {
     switch (eMechanism)
     {
-        case NO_DECODE:
+        case DecodeMechanism::NONE:
             return OUString(pBegin, pEnd - pBegin);
 
-        case DECODE_TO_IURI:
+        case DecodeMechanism::ToIUri:
             eCharset = RTL_TEXTENCODING_UTF8;
             break;
 
@@ -3418,9 +3418,9 @@ OUString INetURLObject::decode(sal_Unicode const * pBegin,
                 if (
                      rtl::isAscii(nUTF32) &&
                      (
-                       eMechanism == DECODE_TO_IURI ||
+                       eMechanism == DecodeMechanism::ToIUri ||
                        (
-                         eMechanism == DECODE_UNAMBIGUOUS &&
+                         eMechanism == DecodeMechanism::Unambiguous &&
                          mustEncode(nUTF32, PART_UNAMBIGUOUS)
                        )
                      )
@@ -3645,16 +3645,16 @@ bool INetURLObject::operator ==(INetURLObject const & rObject) const
     if ((m_aScheme.compare(
              rObject.m_aScheme, m_aAbsURIRef, rObject.m_aAbsURIRef)
          != 0)
-        || GetUser(NO_DECODE) != rObject.GetUser(NO_DECODE)
-        || GetPass(NO_DECODE) != rObject.GetPass(NO_DECODE)
-        || !GetHost(NO_DECODE).equalsIgnoreAsciiCase(
-            rObject.GetHost(NO_DECODE))
+        || GetUser(DecodeMechanism::NONE) != rObject.GetUser(DecodeMechanism::NONE)
+        || GetPass(DecodeMechanism::NONE) != rObject.GetPass(DecodeMechanism::NONE)
+        || !GetHost(DecodeMechanism::NONE).equalsIgnoreAsciiCase(
+            rObject.GetHost(DecodeMechanism::NONE))
         || GetPort() != rObject.GetPort()
         || HasParam() != rObject.HasParam()
         || GetParam() != rObject.GetParam())
         return false;
-    OUString aPath1(GetURLPath(NO_DECODE));
-    OUString aPath2(rObject.GetURLPath(NO_DECODE));
+    OUString aPath1(GetURLPath(DecodeMechanism::NONE));
+    OUString aPath2(rObject.GetURLPath(DecodeMechanism::NONE));
     switch (m_eScheme)
     {
         case INetProtocol::File:
@@ -3841,7 +3841,7 @@ OUString INetURLObject::GetAbsURL(OUString const & rTheBaseURIRef,
                             eCharset, bIgnoreFragment, false,
                             false, FSYS_DETECT)
            || eEncodeMechanism != EncodeMechanism::WasEncoded
-           || eDecodeMechanism != DECODE_TO_IURI
+           || eDecodeMechanism != DecodeMechanism::ToIUri
            || eCharset != RTL_TEXTENCODING_UTF8 ?
                aTheAbsURIRef.GetMainURL(eDecodeMechanism, eCharset) :
                rTheRelURIRef;
@@ -4462,11 +4462,11 @@ OUString INetURLObject::getFSysPath(FSysStyle eStyle,
             OUStringBuffer aSynFSysPath;
             aSynFSysPath.append("//");
             if (m_aHost.isPresent() && m_aHost.getLength() > 0)
-                aSynFSysPath.append(decode(m_aHost, DECODE_WITH_CHARSET,
+                aSynFSysPath.append(decode(m_aHost, DecodeMechanism::WithCharset,
                                        RTL_TEXTENCODING_UTF8));
             else
                 aSynFSysPath.append('.');
-            aSynFSysPath.append(decode(m_aPath, DECODE_WITH_CHARSET,
+            aSynFSysPath.append(decode(m_aPath, DecodeMechanism::WithCharset,
                                    RTL_TEXTENCODING_UTF8));
             return aSynFSysPath.makeStringAndClear();
         }
@@ -4479,7 +4479,7 @@ OUString INetURLObject::getFSysPath(FSysStyle eStyle,
             if (pDelimiter)
                 *pDelimiter = '/';
 
-            return decode(m_aPath, DECODE_WITH_CHARSET, RTL_TEXTENCODING_UTF8);
+            return decode(m_aPath, DecodeMechanism::WithCharset, RTL_TEXTENCODING_UTF8);
         }
 
         case FSYS_DOS:
@@ -4491,7 +4491,7 @@ OUString INetURLObject::getFSysPath(FSysStyle eStyle,
             if (m_aHost.isPresent() && m_aHost.getLength() > 0)
             {
                 aSynFSysPath.append("\\\\");
-                aSynFSysPath.append(decode(m_aHost, DECODE_WITH_CHARSET,
+                aSynFSysPath.append(decode(m_aHost, DecodeMechanism::WithCharset,
                                        RTL_TEXTENCODING_UTF8));
                 aSynFSysPath.append('\\');
             }
@@ -4855,7 +4855,7 @@ OUString INetURLObject::GetPartBeforeLastName()
     aTemp.clearQuery();
     aTemp.removeSegment(LAST_SEGMENT, false);
     aTemp.setFinalSlash();
-    return aTemp.GetMainURL(DECODE_TO_IURI);
+    return aTemp.GetMainURL(DecodeMechanism::ToIUri);
 }
 
 OUString INetURLObject::GetLastName(DecodeMechanism eMechanism,
@@ -4887,7 +4887,7 @@ OUString INetURLObject::PathToFileName() const
     if (osl::FileBase::getSystemPathFromFileURL(
                 decode(m_aAbsURIRef.getStr(),
                        m_aAbsURIRef.getStr() + m_aPath.getEnd(),
-                       NO_DECODE, RTL_TEXTENCODING_UTF8),
+                       DecodeMechanism::NONE, RTL_TEXTENCODING_UTF8),
                 aSystemPath)
             != osl::FileBase::E_None)
         return OUString();
@@ -4916,7 +4916,7 @@ void INetURLObject::SetBase(OUString const & rTheBase)
 
 OUString INetURLObject::GetBase() const
 {
-    return getBase(LAST_SEGMENT, true, DECODE_WITH_CHARSET);
+    return getBase(LAST_SEGMENT, true, DecodeMechanism::WithCharset);
 }
 
 void INetURLObject::SetName(OUString const & rTheName,

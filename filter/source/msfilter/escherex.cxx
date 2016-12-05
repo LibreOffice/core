@@ -1584,7 +1584,7 @@ bool EscherPropertyContainer::CreateGraphicProperties(
                       nFormat != GraphicFileFormat::EMF) )
                 {
                     std::unique_ptr<SvStream> pIn(::utl::UcbStreamHelper::CreateStream(
-                        aTmp.GetMainURL( INetURLObject::NO_DECODE ), StreamMode::READ ));
+                        aTmp.GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::READ ));
                     if ( pIn )
                     {
                         Graphic aGraphic;

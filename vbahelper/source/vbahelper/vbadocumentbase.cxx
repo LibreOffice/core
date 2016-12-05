@@ -79,7 +79,7 @@ OUString
 VbaDocumentBase::getPath() throw (uno::RuntimeException, std::exception)
 {
     INetURLObject aURL( getModel()->getURL() );
-    OUString sURL = aURL.GetMainURL( INetURLObject::DECODE_TO_IURI );
+    OUString sURL = aURL.GetMainURL( INetURLObject::DecodeMechanism::ToIUri );
     OUString sPath;
     if( !sURL.isEmpty() )
     {

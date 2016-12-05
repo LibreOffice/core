@@ -190,7 +190,7 @@ void SgaObject::WriteData( SvStream& rOut, const OUString& rDestDir ) const
     else
         WriteGDIMetaFile( rOut, aThumbMtf );
 
-    OUString aURLWithoutDestDir = aURL.GetMainURL( INetURLObject::NO_DECODE );
+    OUString aURLWithoutDestDir = aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
     aURLWithoutDestDir = aURLWithoutDestDir.replaceFirst(rDestDir, "");
     write_uInt16_lenPrefixed_uInt8s_FromOUString(rOut, aURLWithoutDestDir, RTL_TEXTENCODING_UTF8);
 }

@@ -1131,13 +1131,13 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
                             else if ( INetProtocol::Smb == aUrl.GetProtocol() )
                             {
                                 // Convert smb notation to '\\' and skip the 'smb:' part
-                                aFile = aUrl.GetMainURL(INetURLObject::NO_DECODE).copy(4);
+                                aFile = aUrl.GetMainURL(INetURLObject::DecodeMechanism::NONE).copy(4);
                                 aFile = aFile.replaceAll( "/", "\\" );
                                 aTarget = aFile;
                             }
                             else if ( pFieldEntry->aFieldUrl.startsWith("#") )
                             {
-                                OUString aPage( INetURLObject::decode( pFieldEntry->aFieldUrl, INetURLObject::DECODE_WITH_CHARSET ) );
+                                OUString aPage( INetURLObject::decode( pFieldEntry->aFieldUrl, INetURLObject::DecodeMechanism::WithCharset ) );
                                 aPage = aPage.copy( 1 );
 
                                 std::vector<OUString>::const_iterator pIter = std::find(

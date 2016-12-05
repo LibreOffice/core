@@ -2349,7 +2349,7 @@ void SvxAutoCorrectLanguageLists::MakeUserStorage_Impl()
     {
         try
         {
-            OUString sMain(aDest.GetMainURL( INetURLObject::DECODE_TO_IURI ));
+            OUString sMain(aDest.GetMainURL( INetURLObject::DecodeMechanism::ToIUri ));
             sal_Unicode cSlash = '/';
             sal_Int32 nSlashPos = sMain.lastIndexOf(cSlash);
             sMain = sMain.copy(0, nSlashPos);
@@ -2357,7 +2357,7 @@ void SvxAutoCorrectLanguageLists::MakeUserStorage_Impl()
             TransferInfo aInfo;
             aInfo.NameClash = NameClash::OVERWRITE;
             aInfo.NewTitle  = aDest.GetName();
-            aInfo.SourceURL = aSource.GetMainURL( INetURLObject::DECODE_TO_IURI );
+            aInfo.SourceURL = aSource.GetMainURL( INetURLObject::DecodeMechanism::ToIUri );
             aInfo.MoveData  = false;
             aNewContent.executeCommand( "transfer", Any(aInfo));
         }
@@ -2368,7 +2368,7 @@ void SvxAutoCorrectLanguageLists::MakeUserStorage_Impl()
     }
     if (bConvert && !bError)
     {
-        tools::SvRef<SotStorage> xSrcStg = new SotStorage( aDest.GetMainURL( INetURLObject::DECODE_TO_IURI ), StreamMode::READ );
+        tools::SvRef<SotStorage> xSrcStg = new SotStorage( aDest.GetMainURL( INetURLObject::DecodeMechanism::ToIUri ), StreamMode::READ );
         tools::SvRef<SotStorage> xDstStg = new SotStorage( sUserAutoCorrFile, StreamMode::WRITE );
 
         if( xSrcStg.Is() && xDstStg.Is() )
@@ -2403,7 +2403,7 @@ void SvxAutoCorrectLanguageLists::MakeUserStorage_Impl()
             xDstStg = nullptr;
             try
             {
-                ::ucbhelper::Content aContent ( aDest.GetMainURL( INetURLObject::DECODE_TO_IURI ), uno::Reference < XCommandEnvironment >(), comphelper::getProcessComponentContext() );
+                ::ucbhelper::Content aContent ( aDest.GetMainURL( INetURLObject::DecodeMechanism::ToIUri ), uno::Reference < XCommandEnvironment >(), comphelper::getProcessComponentContext() );
                 aContent.executeCommand ( "delete", makeAny ( true ) );
             }
             catch (...)

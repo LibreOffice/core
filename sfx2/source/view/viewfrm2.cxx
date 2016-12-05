@@ -129,7 +129,7 @@ void SfxViewFrame::UpdateTitle()
     if ( pObjSh->HasName() )
     {
         INetURLObject aTmp( pMedium->GetName() );
-        aURL = aTmp.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
+        aURL = aTmp.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset );
     }
 
     if ( aURL != m_pImpl->aActualURL )

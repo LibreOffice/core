@@ -190,7 +190,7 @@ throw( uno::RuntimeException, std::exception )
             mxFrame->setCreator( xFramesSupplier );
 
         util::URL aTargetURL;
-        aTargetURL.Complete = maFrmDescr.GetURL().GetMainURL( INetURLObject::NO_DECODE );
+        aTargetURL.Complete = maFrmDescr.GetURL().GetMainURL( INetURLObject::DecodeMechanism::NONE );
         uno::Reference < util::XURLTransformer > xTrans( util::URLTransformer::create( mxContext ) );
         xTrans->parseStrict( aTargetURL );
 
@@ -338,7 +338,7 @@ uno::Any SAL_CALL IFrameObject::getPropertyValue(const OUString& aPropertyName)
     {
     case WID_FRAME_URL:
     {
-        aAny <<= OUString( maFrmDescr.GetURL().GetMainURL( INetURLObject::NO_DECODE ) );
+        aAny <<= OUString( maFrmDescr.GetURL().GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
     }
     break;
     case WID_FRAME_NAME:

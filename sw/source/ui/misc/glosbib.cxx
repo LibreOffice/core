@@ -79,7 +79,7 @@ SwGlossaryGroupDlg::SwGlossaryGroupDlg(vcl::Window * pParent,
     for (size_t i = 0; i < rPathArr.size(); ++i)
     {
         INetURLObject aTempURL(rPathArr[i]);
-        const OUString sPath = aTempURL.GetMainURL(INetURLObject::DECODE_WITH_CHARSET );
+        const OUString sPath = aTempURL.GetMainURL(INetURLObject::DecodeMechanism::WithCharset );
         m_pPathLB->InsertEntry(sPath);
         sal_uLong nCaseReadonly = 0;
         utl::TempFile aTempFile(&sPath);

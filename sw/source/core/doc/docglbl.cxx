@@ -234,7 +234,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
     INetURLObject aEntry(rPath);
     OUString sLeading(aEntry.GetBase());
     aEntry.removeSegment();
-    OUString sPath = aEntry.GetMainURL( INetURLObject::NO_DECODE );
+    OUString sPath = aEntry.GetMainURL( INetURLObject::DecodeMechanism::NONE );
     utl::TempFile aTemp(sLeading, true, &sExt, &sPath);
     aTemp.EnableKillingFile();
 

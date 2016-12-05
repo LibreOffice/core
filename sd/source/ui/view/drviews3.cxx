@@ -416,7 +416,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
 
                 if (pBookmark)
                 {
-                    OUString sBookmark(INetURLObject::decode(pBookmark->GetValue(), INetURLObject::DECODE_WITH_CHARSET));
+                    OUString sBookmark(INetURLObject::decode(pBookmark->GetValue(), INetURLObject::DecodeMechanism::WithCharset));
 
                     rtl::Reference< sd::SlideShow > xSlideshow( SlideShow::GetSlideShow( GetViewShellBase() ) );
                     if(xSlideshow.is() && xSlideshow->isRunning())

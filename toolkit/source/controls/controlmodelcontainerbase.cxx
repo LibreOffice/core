@@ -1824,7 +1824,7 @@ OUString getPhysicalLocation( const css::uno::Any& rbase, const css::uno::Any& r
     {
         INetURLObject urlObj(baseLocation);
         urlObj.removeSegment();
-        baseLocation = urlObj.GetMainURL( INetURLObject::NO_DECODE );
+        baseLocation = urlObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
         const INetURLObject protocolCheck( url );
         const INetProtocol protocol = protocolCheck.GetProtocol();

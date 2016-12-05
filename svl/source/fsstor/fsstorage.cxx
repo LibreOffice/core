@@ -127,12 +127,12 @@ FSStorage::~FSStorage()
 bool FSStorage::MakeFolderNoUI( const OUString& rFolder )
 {
     INetURLObject aURL( rFolder );
-    OUString aTitle = aURL.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
+    OUString aTitle = aURL.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset );
     aURL.removeSegment();
     ::ucbhelper::Content aParent;
     ::ucbhelper::Content aResultContent;
 
-       if ( ::ucbhelper::Content::create( aURL.GetMainURL( INetURLObject::NO_DECODE ),
+       if ( ::ucbhelper::Content::create( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ),
                                  uno::Reference< ucb::XCommandEnvironment >(),
                                  comphelper::getProcessComponentContext(),
                                  aParent ) )
@@ -217,7 +217,7 @@ void FSStorage::CopyContentToStorage_Impl( ::ucbhelper::Content* pContent, const
                 // TODO/LATER: not sure whether the entry name must be encoded
                 OUString aNewEntryName( INetURLObject( aSourceURL ).getName( INetURLObject::LAST_SEGMENT,
                                                                                     true,
-                                                                                    INetURLObject::NO_DECODE ) );
+                                                                                    INetURLObject::DecodeMechanism::NONE ) );
                 if ( bIsFolder )
                 {
                     uno::Reference< embed::XStorage > xSubStorage = xDest->openStorageElement( aNewEntryName,
@@ -383,11 +383,11 @@ uno::Reference< io::XStream > SAL_CALL FSStorage::openStreamElement(
     INetURLObject aFileURL( m_pImpl->m_aURL );
     aFileURL.Append( aStreamName );
 
-    if ( ::utl::UCBContentHelper::IsFolder( aFileURL.GetMainURL( INetURLObject::NO_DECODE ) ) )
+    if ( ::utl::UCBContentHelper::IsFolder( aFileURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) ) )
         throw io::IOException();
 
     if ( ( nOpenMode & embed::ElementModes::NOCREATE )
-      && !::utl::UCBContentHelper::IsDocument( aFileURL.GetMainURL( INetURLObject::NO_DECODE ) ) )
+      && !::utl::UCBContentHelper::IsDocument( aFileURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) ) )
         throw io::IOException(); // TODO:
 
     uno::Reference< ucb::XCommandEnvironment > xDummyEnv; // TODO: provide InteractionHandler if any
@@ -400,12 +400,12 @@ uno::Reference< io::XStream > SAL_CALL FSStorage::openStreamElement(
             {
                 uno::Reference<ucb::XSimpleFileAccess3> xSimpleFileAccess(
                     ucb::SimpleFileAccess::create( m_pImpl->m_xContext ) );
-                xResult = xSimpleFileAccess->openFileReadWrite( aFileURL.GetMainURL( INetURLObject::NO_DECODE ) );
+                xResult = xSimpleFileAccess->openFileReadWrite( aFileURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
             }
             else
             {
                 // TODO: test whether it really works for http and fwp
-                SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( aFileURL.GetMainURL( INetURLObject::NO_DECODE ),
+                SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( aFileURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ),
                                                                           StreamMode::STD_WRITE );
                 if ( pStream )
                 {
@@ -428,10 +428,10 @@ uno::Reference< io::XStream > SAL_CALL FSStorage::openStreamElement(
         else
         {
             if ( ( nOpenMode & embed::ElementModes::TRUNCATE )
-              || !::utl::UCBContentHelper::IsDocument( aFileURL.GetMainURL( INetURLObject::NO_DECODE ) ) )
+              || !::utl::UCBContentHelper::IsDocument( aFileURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) ) )
                 throw io::IOException(); // TODO: access denied
 
-            ::ucbhelper::Content aResultContent( aFileURL.GetMainURL( INetURLObject::NO_DECODE ), xDummyEnv, comphelper::getProcessComponentContext() );
+            ::ucbhelper::Content aResultContent( aFileURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), xDummyEnv, comphelper::getProcessComponentContext() );
             uno::Reference< io::XInputStream > xInStream = aResultContent.openStream();
             xResult = static_cast< io::XStream* >( new OFSInputStreamContainer( xInStream ) );
         }
@@ -508,8 +508,8 @@ uno::Reference< embed::XStorage > SAL_CALL FSStorage::openStorageElement(
     INetURLObject aFolderURL( m_pImpl->m_aURL );
     aFolderURL.Append( aStorName );
 
-    bool bFolderExists = ::utl::UCBContentHelper::IsFolder( aFolderURL.GetMainURL( INetURLObject::NO_DECODE ) );
-    if ( !bFolderExists && ::utl::UCBContentHelper::IsDocument( aFolderURL.GetMainURL( INetURLObject::NO_DECODE ) ) )
+    bool bFolderExists = ::utl::UCBContentHelper::IsFolder( aFolderURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
+    if ( !bFolderExists && ::utl::UCBContentHelper::IsDocument( aFolderURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) ) )
         throw io::IOException(); // TODO:
 
     if ( ( nStorageMode & embed::ElementModes::NOCREATE ) && !bFolderExists )
@@ -523,14 +523,14 @@ uno::Reference< embed::XStorage > SAL_CALL FSStorage::openStorageElement(
         {
             if ( ( nStorageMode & embed::ElementModes::TRUNCATE ) && bFolderExists )
             {
-                ::utl::UCBContentHelper::Kill( aFolderURL.GetMainURL( INetURLObject::NO_DECODE ) );
+                ::utl::UCBContentHelper::Kill( aFolderURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
                 bFolderExists =
-                    MakeFolderNoUI( aFolderURL.GetMainURL( INetURLObject::NO_DECODE ) ); // TODO: not atomic :(
+                    MakeFolderNoUI( aFolderURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) ); // TODO: not atomic :(
             }
             else if ( !bFolderExists )
             {
                 bFolderExists =
-                    MakeFolderNoUI( aFolderURL.GetMainURL( INetURLObject::NO_DECODE ) ); // TODO: not atomic :(
+                    MakeFolderNoUI( aFolderURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) ); // TODO: not atomic :(
             }
         }
         else if ( ( nStorageMode & embed::ElementModes::TRUNCATE ) )
@@ -539,7 +539,7 @@ uno::Reference< embed::XStorage > SAL_CALL FSStorage::openStorageElement(
         if ( !bFolderExists )
             throw io::IOException(); // there is no such folder
 
-        ::ucbhelper::Content aResultContent( aFolderURL.GetMainURL( INetURLObject::NO_DECODE ), xDummyEnv, comphelper::getProcessComponentContext() );
+        ::ucbhelper::Content aResultContent( aFolderURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), xDummyEnv, comphelper::getProcessComponentContext() );
         xResult.set( static_cast< OWeakObject* >( new FSStorage( aResultContent,
                                                                  nStorageMode,
                                                                  m_pImpl->m_xContext ) ),
@@ -600,7 +600,7 @@ uno::Reference< io::XStream > SAL_CALL FSStorage::cloneStreamElement( const OUSt
     try
     {
         uno::Reference< ucb::XCommandEnvironment > xDummyEnv;
-        ::ucbhelper::Content aResultContent( aFileURL.GetMainURL( INetURLObject::NO_DECODE ), xDummyEnv, comphelper::getProcessComponentContext() );
+        ::ucbhelper::Content aResultContent( aFileURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), xDummyEnv, comphelper::getProcessComponentContext() );
         uno::Reference< io::XInputStream > xInStream = aResultContent.openStream();
 
         xTempResult = io::TempFile::create(m_pImpl->m_xContext);
@@ -709,7 +709,7 @@ sal_Bool SAL_CALL FSStorage::isStreamElement( const OUString& aElementName )
     INetURLObject aURL( m_pImpl->m_aURL );
     aURL.Append( aElementName );
 
-    return !::utl::UCBContentHelper::IsFolder( aURL.GetMainURL( INetURLObject::NO_DECODE ) );
+    return !::utl::UCBContentHelper::IsFolder( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
 }
 
 sal_Bool SAL_CALL FSStorage::isStorageElement( const OUString& aElementName )
@@ -729,7 +729,7 @@ sal_Bool SAL_CALL FSStorage::isStorageElement( const OUString& aElementName )
     INetURLObject aURL( m_pImpl->m_aURL );
     aURL.Append( aElementName );
 
-    return ::utl::UCBContentHelper::IsFolder( aURL.GetMainURL( INetURLObject::NO_DECODE ) );
+    return ::utl::UCBContentHelper::IsFolder( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
 }
 
 void SAL_CALL FSStorage::removeElement( const OUString& aElementName )
@@ -751,11 +751,11 @@ void SAL_CALL FSStorage::removeElement( const OUString& aElementName )
     INetURLObject aURL( m_pImpl->m_aURL );
     aURL.Append( aElementName );
 
-    if ( !::utl::UCBContentHelper::IsFolder( aURL.GetMainURL( INetURLObject::NO_DECODE ) )
-      && !::utl::UCBContentHelper::IsDocument( aURL.GetMainURL( INetURLObject::NO_DECODE ) ) )
+    if ( !::utl::UCBContentHelper::IsFolder( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) )
+      && !::utl::UCBContentHelper::IsDocument( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) ) )
         throw container::NoSuchElementException(); // TODO:
 
-    ::utl::UCBContentHelper::Kill( aURL.GetMainURL( INetURLObject::NO_DECODE ) );
+    ::utl::UCBContentHelper::Kill( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
 }
 
 void SAL_CALL FSStorage::renameElement( const OUString& aElementName, const OUString& aNewName )
@@ -781,18 +781,18 @@ void SAL_CALL FSStorage::renameElement( const OUString& aElementName, const OUSt
     INetURLObject aNewURL( m_pImpl->m_aURL );
     aNewURL.Append( aNewName );
 
-    if ( !::utl::UCBContentHelper::IsFolder( aOldURL.GetMainURL( INetURLObject::NO_DECODE ) )
-      && !::utl::UCBContentHelper::IsDocument( aOldURL.GetMainURL( INetURLObject::NO_DECODE ) ) )
+    if ( !::utl::UCBContentHelper::IsFolder( aOldURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) )
+      && !::utl::UCBContentHelper::IsDocument( aOldURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) ) )
         throw container::NoSuchElementException(); // TODO:
 
-    if ( ::utl::UCBContentHelper::IsFolder( aNewURL.GetMainURL( INetURLObject::NO_DECODE ) )
-      || ::utl::UCBContentHelper::IsDocument( aNewURL.GetMainURL( INetURLObject::NO_DECODE ) ) )
+    if ( ::utl::UCBContentHelper::IsFolder( aNewURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) )
+      || ::utl::UCBContentHelper::IsDocument( aNewURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) ) )
           throw container::ElementExistException(); // TODO:
 
     try
     {
         uno::Reference< ucb::XCommandEnvironment > xDummyEnv;
-        ::ucbhelper::Content aSourceContent( aOldURL.GetMainURL( INetURLObject::NO_DECODE ), xDummyEnv, comphelper::getProcessComponentContext() );
+        ::ucbhelper::Content aSourceContent( aOldURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), xDummyEnv, comphelper::getProcessComponentContext() );
 
         if ( !GetContent()->transferContent( aSourceContent,
                                             ::ucbhelper::InsertOperation_MOVE,
@@ -868,18 +868,18 @@ void SAL_CALL FSStorage::copyElementTo( const OUString& aElementName,
     try
     {
         uno::Reference< ucb::XCommandEnvironment > xDummyEnv;
-        if ( ::utl::UCBContentHelper::IsFolder( aOwnURL.GetMainURL( INetURLObject::NO_DECODE ) ) )
+        if ( ::utl::UCBContentHelper::IsFolder( aOwnURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) ) )
         {
-            ::ucbhelper::Content aSourceContent( aOwnURL.GetMainURL( INetURLObject::NO_DECODE ), xDummyEnv, comphelper::getProcessComponentContext() );
+            ::ucbhelper::Content aSourceContent( aOwnURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), xDummyEnv, comphelper::getProcessComponentContext() );
             uno::Reference< embed::XStorage > xDestSubStor(
                                     xDest->openStorageElement( aNewName, embed::ElementModes::READWRITE ),
                                     uno::UNO_QUERY_THROW );
 
             CopyContentToStorage_Impl( &aSourceContent, xDestSubStor );
         }
-        else if ( ::utl::UCBContentHelper::IsDocument( aOwnURL.GetMainURL( INetURLObject::NO_DECODE ) ) )
+        else if ( ::utl::UCBContentHelper::IsDocument( aOwnURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) ) )
         {
-            CopyStreamToSubStream( aOwnURL.GetMainURL( INetURLObject::NO_DECODE ), xDest, aNewName );
+            CopyStreamToSubStream( aOwnURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), xDest, aNewName );
         }
         else
             throw container::NoSuchElementException(); // TODO:
@@ -937,7 +937,7 @@ void SAL_CALL FSStorage::moveElementTo( const OUString& aElementName,
 
     INetURLObject aOwnURL( m_pImpl->m_aURL );
     aOwnURL.Append( aElementName );
-    if ( !::utl::UCBContentHelper::Kill( aOwnURL.GetMainURL( INetURLObject::NO_DECODE ) ) )
+    if ( !::utl::UCBContentHelper::Kill( aOwnURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) ) )
         throw io::IOException(); // TODO: error handling
 }
 
@@ -966,11 +966,11 @@ uno::Any SAL_CALL FSStorage::getByName( const OUString& aName )
         aURL.Append( aName );
 
 
-        if ( ::utl::UCBContentHelper::IsFolder( aURL.GetMainURL( INetURLObject::NO_DECODE ) ) )
+        if ( ::utl::UCBContentHelper::IsFolder( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) ) )
         {
             aResult <<= openStorageElement( aName, embed::ElementModes::READ );
         }
-        else if ( ::utl::UCBContentHelper::IsDocument( aURL.GetMainURL( INetURLObject::NO_DECODE ) ) )
+        else if ( ::utl::UCBContentHelper::IsDocument( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) ) )
         {
             aResult <<= openStreamElement( aName, embed::ElementModes::READ );
         }
@@ -1092,8 +1092,8 @@ sal_Bool SAL_CALL FSStorage::hasByName( const OUString& aName )
     INetURLObject aURL( m_pImpl->m_aURL );
     aURL.Append( aName );
 
-    return ( ::utl::UCBContentHelper::IsFolder( aURL.GetMainURL( INetURLObject::NO_DECODE ) )
-      || ::utl::UCBContentHelper::IsDocument( aURL.GetMainURL( INetURLObject::NO_DECODE ) ) );
+    return ( ::utl::UCBContentHelper::IsFolder( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) )
+      || ::utl::UCBContentHelper::IsDocument( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) ) );
 }
 
 uno::Type SAL_CALL FSStorage::getElementType()
@@ -1325,7 +1325,7 @@ uno::Reference< embed::XExtendedStorageStream > SAL_CALL FSStorage::openStreamEl
         throw uno::RuntimeException();
 
     OUString aFileURL = INetURLObject::GetAbsURL(
-                aBaseURL.GetMainURL( INetURLObject::NO_DECODE ),
+                aBaseURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ),
                 sStreamPath );
 
     if ( ::utl::UCBContentHelper::IsFolder( aFileURL ) )
@@ -1457,7 +1457,7 @@ void SAL_CALL FSStorage::removeStreamElementByHierarchicalName( const OUString& 
         throw uno::RuntimeException();
 
     OUString aFileURL = INetURLObject::GetAbsURL(
-                aBaseURL.GetMainURL( INetURLObject::NO_DECODE ),
+                aBaseURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ),
                 sStreamPath );
 
     if ( !::utl::UCBContentHelper::IsDocument( aFileURL ) )

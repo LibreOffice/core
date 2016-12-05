@@ -778,7 +778,7 @@ void EditHTMLParser::AnchorStart()
                 INetURLObject aTargetURL;
                 INetURLObject aRootURL( aBaseURL );
                 aRootURL.GetNewAbsURL( aRef, &aTargetURL );
-                aURL = aTargetURL.GetMainURL( INetURLObject::DECODE_TO_IURI );
+                aURL = aTargetURL.GetMainURL( INetURLObject::DecodeMechanism::ToIUri );
             }
             pCurAnchor = new AnchorInfo;
             pCurAnchor->aHRef = aURL;

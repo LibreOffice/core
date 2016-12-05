@@ -81,7 +81,7 @@ void OCalcConnection::construct(const OUString& url,const Sequence< PropertyValu
         //  don't pass invalid URL to loadComponentFromURL
         throw SQLException();
     }
-    m_aFileName = aURL.GetMainURL(INetURLObject::NO_DECODE);
+    m_aFileName = aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
 
     m_sPassword.clear();
     const char* pPwd        = "password";

@@ -75,7 +75,7 @@ bool SdCGMFilter::Import()
 #else
         ImportCGMPointer FncImportCGM = ImportCGM;
 #endif
-        OUString aFileURL( mrMedium.GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) );
+        OUString aFileURL( mrMedium.GetURLObject().GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
         sal_uInt32          nRetValue;
 
         if( mrDocument.GetPageCount() == 0 )

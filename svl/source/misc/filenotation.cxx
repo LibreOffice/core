@@ -59,7 +59,7 @@ namespace svt
                 aSmartParser.SetSmartProtocol( INetProtocol::File );
                 if ( aSmartParser.SetSmartURL( _rSystemPath ) )
                 {
-                    m_sFileURL = aSmartParser.GetMainURL( INetURLObject::NO_DECODE );
+                    m_sFileURL = aSmartParser.GetMainURL( INetURLObject::DecodeMechanism::NONE );
                     osl_getSystemPathFromFileURL( m_sFileURL.pData, &m_sSystem.pData );
                     bSuccess = true;
                 }

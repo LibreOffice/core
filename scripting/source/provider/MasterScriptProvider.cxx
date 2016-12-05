@@ -470,7 +470,7 @@ MasterScriptProvider::parseLocationName( const OUString& location )
     OUString temp = location;
     INetURLObject aURLObj( temp );
     if ( !aURLObj.HasError() )
-        temp = aURLObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
+        temp = aURLObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset );
     return temp;
 }
 

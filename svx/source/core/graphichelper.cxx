@@ -172,7 +172,7 @@ OUString GraphicHelper::ExportGraphic( const Graphic& rGraphic, const OUString& 
     // fish out the graphic's name
 
     aDialogHelper.SetTitle( SVX_RESSTR(RID_SVXSTR_EXPORT_GRAPHIC_TITLE));
-    aDialogHelper.SetDisplayDirectory( aPath.GetMainURL(INetURLObject::DECODE_TO_IURI) );
+    aDialogHelper.SetDisplayDirectory( aPath.GetMainURL(INetURLObject::DecodeMechanism::ToIUri) );
     INetURLObject aURL;
     aURL.SetSmartURL( rGraphicName );
     aDialogHelper.SetFileName( aURL.GetName() );
@@ -306,7 +306,7 @@ OUString GraphicHelper::ExportGraphic( const Graphic& rGraphic, const OUString& 
                                                 XOutFlags::DontExpandFilename |
                                                 XOutFlags::DontAddExtension |
                                                 XOutFlags::UseNativeIfPossible,
-                                                nullptr, &aFilterData );
+                                                nullptr );
                     return sPath;
                 }
             }
@@ -332,7 +332,7 @@ void GraphicHelper::SaveShapeAsGraphic( const Reference< drawing::XShape >& xSha
 
         INetURLObject aPath;
         aPath.SetSmartURL( sGraphicPath );
-        xFilePicker->setDisplayDirectory( aPath.GetMainURL(INetURLObject::DECODE_TO_IURI) );
+        xFilePicker->setDisplayDirectory( aPath.GetMainURL(INetURLObject::DecodeMechanism::ToIUri) );
 
         // populate filter dialog filter list and select default filter to match graphic mime type
 

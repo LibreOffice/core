@@ -236,7 +236,7 @@ SwTextBlocks::SwTextBlocks( const OUString& rFile )
     : pImp( nullptr ), nErr( 0 )
 {
     INetURLObject aObj(rFile);
-    const OUString sFileName = aObj.GetMainURL( INetURLObject::NO_DECODE );
+    const OUString sFileName = aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
     switch( SwImpBlocks::GetFileType( rFile ) )
     {
     case SwImpBlocks::FileType::XML:    pImp = new SwXMLTextBlocks( sFileName ); break;

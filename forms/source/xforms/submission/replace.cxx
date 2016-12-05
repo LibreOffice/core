@@ -69,7 +69,7 @@ CSubmission::SubmissionResult CSubmission::replace(const OUString& aReplace, con
             descriptor[1] = PropertyValue(OUString("ReadOnly"),
                 -1, makeAny(true), PropertyState_DIRECT_VALUE);
 
-            OUString aURL = m_aURLObj.GetMainURL(INetURLObject::NO_DECODE);
+            OUString aURL = m_aURLObj.GetMainURL(INetURLObject::DecodeMechanism::NONE);
             OUString aTarget = "_default";
             xLoader->loadComponentFromURL(aURL, aTarget, FrameSearchFlag::ALL, descriptor);
 

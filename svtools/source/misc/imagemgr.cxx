@@ -197,7 +197,7 @@ static SvtFactory2ExtensionMapping_Impl const Fac2ExtMap_Impl[] =
 static OUString GetImageExtensionByFactory_Impl( const OUString& rURL )
 {
     INetURLObject aObj( rURL );
-    OUString aPath = aObj.GetURLPath( INetURLObject::NO_DECODE );
+    OUString aPath = aObj.GetURLPath( INetURLObject::DecodeMechanism::NONE );
     OUString aExtension;
 
     if ( !aPath.isEmpty() )
@@ -352,7 +352,7 @@ static sal_uInt16 GetFolderImageId_Impl( const OUString& rURL )
 
 static sal_uInt16 GetImageId_Impl( const INetURLObject& rObject, bool bDetectFolder )
 {
-    OUString aExt, sURL = rObject.GetMainURL( INetURLObject::NO_DECODE );
+    OUString aExt, sURL = rObject.GetMainURL( INetURLObject::DecodeMechanism::NONE );
     sal_uInt16 nImage = IMG_FILE;
 
     if ( rObject.GetProtocol() == INetProtocol::PrivSoffice )
@@ -525,7 +525,7 @@ static Image GetImageFromList_Impl( sal_uInt16 nImageId, bool bBig )
 OUString SvFileInformationManager::GetDescription_Impl( const INetURLObject& rObject, bool bDetectFolder )
 {
     OUString sExtension(rObject.getExtension());
-    OUString sDescription, sURL( rObject.GetMainURL( INetURLObject::NO_DECODE ) );
+    OUString sDescription, sURL( rObject.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
     sal_uInt16 nResId = 0;
     bool bShowExt = false, bOnlyFile = false;
     bool bFolder = bDetectFolder && CONTENT_HELPER::IsFolder( sURL );

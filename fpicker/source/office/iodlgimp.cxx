@@ -157,7 +157,7 @@ void SvtUpButton_Impl::FillURLMenu( PopupMenu* _pMenu )
     while ( nCount >= 1 )
     {
         aObject.removeSegment();
-        OUString aParentURL(aObject.GetMainURL(INetURLObject::NO_DECODE));
+        OUString aParentURL(aObject.GetMainURL(INetURLObject::DecodeMechanism::NONE));
 
         OUString aTitle;
         if (!GetDialogParent()->ContentGetTitle(aParentURL, aTitle) || aTitle.isEmpty())

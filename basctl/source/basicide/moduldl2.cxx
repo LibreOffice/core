@@ -797,13 +797,13 @@ void LibPage::InsertLib()
 
         Reference< XSimpleFileAccess3 > xSFA( SimpleFileAccess::create(comphelper::getProcessComponentContext()) );
 
-        OUString aModURL( aModURLObj.GetMainURL( INetURLObject::NO_DECODE ) );
+        OUString aModURL( aModURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
         if ( xSFA->exists( aModURL ) )
         {
             xModLibContImport.set( script::DocumentScriptLibraryContainer::createWithURL(xContext, aModURL), UNO_QUERY );
         }
 
-        OUString aDlgURL( aDlgURLObj.GetMainURL( INetURLObject::NO_DECODE ) );
+        OUString aDlgURL( aDlgURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
         if ( xSFA->exists( aDlgURL ) )
         {
             xDlgLibContImport.set( script::DocumentDialogLibraryContainer::createWithURL(xContext, aDlgURL), UNO_QUERY );
@@ -959,7 +959,7 @@ void LibPage::InsertLib()
                                         aModStorageURLObj.setExtension( aLibExtension );
                                         aModStorageURLObj.setFinalSlash();
                                     }
-                                    OUString aModStorageURL( aModStorageURLObj.GetMainURL( INetURLObject::NO_DECODE ) );
+                                    OUString aModStorageURL( aModStorageURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
 
                                     // create library link
                                     xModLib.set( xModLibContainer->createLibraryLink( aLibName, aModStorageURL, true ), UNO_QUERY);
@@ -1027,7 +1027,7 @@ void LibPage::InsertLib()
                                         aDlgStorageURLObj.setExtension( aLibExtension );
                                         aDlgStorageURLObj.setFinalSlash();
                                     }
-                                    OUString aDlgStorageURL( aDlgStorageURLObj.GetMainURL( INetURLObject::NO_DECODE ) );
+                                    OUString aDlgStorageURL( aDlgStorageURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
 
                                     // create library link
                                     xDlgLib.set( xDlgLibContainer->createLibraryLink( aLibName, aDlgStorageURL, true ), UNO_QUERY);
@@ -1213,12 +1213,12 @@ void LibPage::ExportAsPackage( const OUString& aLibName )
         if( aURL.getExtension().isEmpty() )
             aURL.setExtension( "oxt" );
 
-        OUString aPackageURL( aURL.GetMainURL( INetURLObject::NO_DECODE ) );
+        OUString aPackageURL( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
 
         OUString aTmpPath = SvtPathOptions().GetTempPath();
         INetURLObject aInetObj( aTmpPath );
         aInetObj.insertName( aLibName, true, INetURLObject::LAST_SEGMENT, INetURLObject::EncodeMechanism::All );
-        OUString aSourcePath = aInetObj.GetMainURL( INetURLObject::NO_DECODE );
+        OUString aSourcePath = aInetObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
         if( xSFA->exists( aSourcePath ) )
             xSFA->kill( aSourcePath );
         Reference< task::XInteractionHandler > xDummyHandler( new DummyInteractionHandler( xHandler ) );
@@ -1250,7 +1250,7 @@ void LibPage::ExportAsPackage( const OUString& aLibName )
         INetURLObject aMetaInfInetObj( aTmpPath );
         aMetaInfInetObj.insertName( "META-INF",
             true, INetURLObject::LAST_SEGMENT, INetURLObject::EncodeMechanism::All );
-        OUString aMetaInfFolder = aMetaInfInetObj.GetMainURL( INetURLObject::NO_DECODE );
+        OUString aMetaInfFolder = aMetaInfInetObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
         if( xSFA->exists( aMetaInfFolder ) )
             xSFA->kill( aMetaInfFolder );
         xSFA->createFolder( aMetaInfFolder );
@@ -1279,7 +1279,7 @@ void LibPage::ExportAsPackage( const OUString& aLibName )
             true, INetURLObject::LAST_SEGMENT, INetURLObject::EncodeMechanism::All );
 
         // write buffered pipe data to content:
-        ::ucbhelper::Content manifestContent( aMetaInfInetObj.GetMainURL( INetURLObject::NO_DECODE ), xCmdEnv, comphelper::getProcessComponentContext() );
+        ::ucbhelper::Content manifestContent( aMetaInfInetObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), xCmdEnv, comphelper::getProcessComponentContext() );
         manifestContent.writeStream( Reference<io::XInputStream>( xPipe, UNO_QUERY_THROW ), true );
 
         ::ucbhelper::Content MetaInfContent( aMetaInfFolder, xCmdEnv, comphelper::getProcessComponentContext() );
