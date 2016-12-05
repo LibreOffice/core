@@ -31,6 +31,11 @@ $(eval $(call gb_GoogleTest_add_exception_objects,o3tl_test, \
 	o3tl/qa/test-range \
 ))
 
+$(eval $(call gb_GoogleTest_set_include,o3tl_test,\
+        $$(INCLUDE) \
+	-I$(SRCDIR)/o3tl/inc \
+))
+
 $(eval $(call gb_GoogleTest_add_linked_libs,o3tl_test, \
 	sal \
 	$(gb_STDLIBS) \
