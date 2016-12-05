@@ -66,10 +66,6 @@ public:
         m_Nodes[ 0 ] = node;
     }
 
-    virtual ~BrowseNodeAggregator() override
-    {
-    }
-
     void addBrowseNode( const Reference< browse::XBrowseNode>& node )
     {
         m_Nodes.push_back( node );
@@ -531,10 +527,6 @@ public:
         m_Name = "Root";
     }
 
-    virtual ~DefaultRootBrowseNode() override
-    {
-    }
-
     virtual Sequence< Reference< browse::XBrowseNode > > SAL_CALL
                 getChildNodes()
     throw ( RuntimeException, std::exception ) override
@@ -586,10 +578,6 @@ private:
 public:
     explicit SelectorBrowseNode( const Reference< XComponentContext >& xContext )
       : m_xComponentContext( xContext )
-    {
-    }
-
-    virtual ~SelectorBrowseNode() override
     {
     }
 
