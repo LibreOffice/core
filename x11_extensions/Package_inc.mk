@@ -21,55 +21,11 @@
 
 
 
-$(eval $(call gb_Module_Module,ooo))
+$(eval $(call gb_Package_Package,x11_extensions_inc,$(SRCDIR)/x11_extensions))
 
-$(eval $(call gb_Module_add_moduledirs,ooo,\
-    MathMLDTD \
-    basebmp \
-    basegfx \
-    canvas \
-    comphelper \
-    cppcanvas \
-    dbaccess \
-    drawinglayer \
-    editeng \
-    fileaccess \
-    formula \
-    framework \
-    idl \
-    io \
-    linguistic \
-    o3tl \
-    offapi \
-    oovbaapi \
-    oox \
-    padmin \
-    package \
-    reportdesign \
-    sax \
-    sd \
-    sfx2 \
-    sot \
-    starmath \
-    svgio \
-    svl \
-    svtools \
-    svx \
-    sw \
-    toolkit \
-    tools \
-    ucbhelper \
-    udkapi \
-    unotools \
-    unoxml \
-    vbahelper \
-    vcl \
-    wizards \
-    writerfilter \
-    x11_extensions \
-    xmloff \
-    xmlreader \
-    xmlscript \
-))
-
-# vim: set noet ts=4 sw=4:
+$(eval $(call gb_Package_add_file,x11_extensions_inc,inc/X11/extensions/Xrandr,inc/Xrandr.h))
+$(eval $(call gb_Package_add_file,x11_extensions_inc,inc/X11/extensions/Xrender,inc/Xrender.h))
+$(eval $(call gb_Package_add_file,x11_extensions_inc,inc/X11/extensions/randr.h,inc/randr.h))
+$(eval $(call gb_Package_add_file,x11_extensions_inc,inc/X11/extensions/randrproto.h,inc/randrproto.h))
+$(eval $(call gb_Package_add_file,x11_extensions_inc,inc/X11/extensions/render.h,inc/render.h))
+$(eval $(call gb_Package_add_file,x11_extensions_inc,inc/X11/extensions/renderproto.h,inc/renderproto.h))
