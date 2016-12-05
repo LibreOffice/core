@@ -261,13 +261,13 @@ namespace vclcanvas
 
             ::tools::Polygon aPoly(4);
             aPoly.SetPoint( rStartPoint, 0 );
-            aPoly.SetFlags( 0, POLY_NORMAL );
+            aPoly.SetFlags( 0, PolyFlags::Normal );
             aPoly.SetPoint( rCtrlPoint1, 1 );
-            aPoly.SetFlags( 1, POLY_CONTROL );
+            aPoly.SetFlags( 1, PolyFlags::Control );
             aPoly.SetPoint( rCtrlPoint2, 2 );
-            aPoly.SetFlags( 2, POLY_CONTROL );
+            aPoly.SetFlags( 2, PolyFlags::Control );
             aPoly.SetPoint( rEndPoint, 3 );
-            aPoly.SetFlags( 3, POLY_NORMAL );
+            aPoly.SetFlags( 3, PolyFlags::Normal );
 
             // TODO(F2): alpha
             mpOutDev->getOutDev().DrawPolygon( aPoly );

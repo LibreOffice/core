@@ -127,10 +127,10 @@ void Writer::Impl_addPolygon( BitStream& rBits, const tools::Polygon& rPoly, boo
             PolyFlags P1( rPoly.GetFlags( i ) );
             PolyFlags P4( rPoly.GetFlags( i + 3 ) );
 
-            if( ( POLY_NORMAL == P1 || POLY_SMOOTH == P1 || POLY_SYMMTR == P1 ) &&
-                ( POLY_CONTROL == rPoly.GetFlags( i + 1 ) ) &&
-                ( POLY_CONTROL == rPoly.GetFlags( i + 2 ) ) &&
-                ( POLY_NORMAL == P4 || POLY_SMOOTH == P4 || POLY_SYMMTR == P4 ) )
+            if( ( PolyFlags::Normal == P1 || PolyFlags::Smooth == P1 || PolyFlags::Symmetric == P1 ) &&
+                ( PolyFlags::Control == rPoly.GetFlags( i + 1 ) ) &&
+                ( PolyFlags::Control == rPoly.GetFlags( i + 2 ) ) &&
+                ( PolyFlags::Normal == P4 || PolyFlags::Smooth == P4 || PolyFlags::Symmetric == P4 ) )
             {
                 Impl_quadBezierApprox( rBits, aLastPoint, d*d,
                                       rPoly.GetPoint( i ).X(),   rPoly.GetPoint( i ).Y(),

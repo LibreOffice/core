@@ -199,8 +199,8 @@ ImpSdrPathDragData::ImpSdrPathDragData(const SdrPathObj& rPO, const SdrHdl& rHdl
             bIsPrevControl=aTmpXP.IsControl(nPrevPnt);
             bIsNextControl=!bIsPrevControl;
         } else {
-            bPrevIsControl=!bBegPnt && !bPrevIsBegPnt && aTmpXP.GetFlags(nPrevPnt)==XPolyFlags::Control;
-            bNextIsControl=!bEndPnt && !bNextIsEndPnt && aTmpXP.GetFlags(nNextPnt)==XPolyFlags::Control;
+            bPrevIsControl=!bBegPnt && !bPrevIsBegPnt && aTmpXP.GetFlags(nPrevPnt)==PolyFlags::Control;
+            bNextIsControl=!bEndPnt && !bNextIsEndPnt && aTmpXP.GetFlags(nNextPnt)==PolyFlags::Control;
         }
         nPrevPrevPnt0=nPrevPrevPnt;
         nPrevPnt0    =nPrevPnt;
@@ -303,9 +303,9 @@ void ImpPathCreateUser::CalcBezier(const Point& rP1, const Point& rP2, const Poi
 XPolygon ImpPathCreateUser::GetBezierPoly() const
 {
     XPolygon aXP(4);
-    aXP[0]=aBezStart; aXP.SetFlags(0,XPolyFlags::Smooth);
-    aXP[1]=aBezCtrl1; aXP.SetFlags(1,XPolyFlags::Control);
-    aXP[2]=aBezCtrl2; aXP.SetFlags(2,XPolyFlags::Control);
+    aXP[0]=aBezStart; aXP.SetFlags(0,PolyFlags::Smooth);
+    aXP[1]=aBezCtrl1; aXP.SetFlags(1,PolyFlags::Control);
+    aXP[2]=aBezCtrl2; aXP.SetFlags(2,PolyFlags::Control);
     aXP[3]=aBezEnd;
     return aXP;
 }
@@ -362,7 +362,7 @@ XPolygon ImpPathCreateUser::GetCirclePoly() const
     if (nCircRelAngle>=0) {
         XPolygon aXP(aCircCenter,nCircRadius,nCircRadius,
                      sal_uInt16((nCircStAngle+5)/10),sal_uInt16((nCircStAngle+nCircRelAngle+5)/10),false);
-        aXP[0]=aCircStart; aXP.SetFlags(0,XPolyFlags::Smooth);
+        aXP[0]=aCircStart; aXP.SetFlags(0,PolyFlags::Smooth);
         if (!bAngleSnap) aXP[aXP.GetPointCount()-1]=aCircEnd;
         return aXP;
     } else {
@@ -376,7 +376,7 @@ XPolygon ImpPathCreateUser::GetCirclePoly() const
             aXP[nNum]=aXP[n2];
             aXP[n2]=aPt;
         }
-        aXP[0]=aCircStart; aXP.SetFlags(0,XPolyFlags::Smooth);
+        aXP[0]=aCircStart; aXP.SetFlags(0,PolyFlags::Smooth);
         if (!bAngleSnap) aXP[aXP.GetPointCount()-1]=aCircEnd;
         return aXP;
     }
@@ -430,7 +430,7 @@ void ImpPathCreateUser::CalcLine(const Point& rP1, const Point& rP2, const Point
 XPolygon ImpPathCreateUser::GetLinePoly() const
 {
     XPolygon aXP(2);
-    aXP[0]=aLineStart; if (!bLine90) aXP.SetFlags(0,XPolyFlags::Smooth);
+    aXP[0]=aLineStart; if (!bLine90) aXP.SetFlags(0,PolyFlags::Smooth);
     aXP[1]=aLineEnd;
     return aXP;
 }
@@ -490,7 +490,7 @@ void ImpPathCreateUser::CalcRect(const Point& rP1, const Point& rP2, const Point
 XPolygon ImpPathCreateUser::GetRectPoly() const
 {
     XPolygon aXP(3);
-    aXP[0]=aRectP1; aXP.SetFlags(0,XPolyFlags::Smooth);
+    aXP[0]=aRectP1; aXP.SetFlags(0,PolyFlags::Smooth);
     aXP[1]=aRectP2;
     if (aRectP3!=aRectP2) aXP[2]=aRectP3;
     return aXP;
@@ -1196,8 +1196,8 @@ basegfx::B2DPolyPolygon ImpPathForDragAndCreate::getSpecialDragPoly(const SdrDra
                 aLine2[0]=mpSdrPathDragData->aXP[nNextNextPnt];
                 aLine2[1]=mpSdrPathDragData->aXP[nNextPnt];
                 if (mpSdrPathDragData->aXP.IsSmooth(nPrevPnt) && !bPrevIsBegPnt && mpSdrPathDragData->aXP.IsControl(nPrevPrevPnt)) {
-                    aXPoly.Insert(0,rXP[mpSdrPathDragData->nPrevPrevPnt0-1],XPolyFlags::Control);
-                    aXPoly.Insert(0,rXP[mpSdrPathDragData->nPrevPrevPnt0-2],XPolyFlags::Normal);
+                    aXPoly.Insert(0,rXP[mpSdrPathDragData->nPrevPrevPnt0-1],PolyFlags::Control);
+                    aXPoly.Insert(0,rXP[mpSdrPathDragData->nPrevPrevPnt0-2],PolyFlags::Normal);
                     // leverage lines for the opposing curve segment
                     aLine3[0]=mpSdrPathDragData->aXP[nPrevPnt];
                     aLine3[1]=mpSdrPathDragData->aXP[nPrevPrevPnt];
@@ -1211,8 +1211,8 @@ basegfx::B2DPolyPolygon ImpPathForDragAndCreate::getSpecialDragPoly(const SdrDra
                 aLine2[0]=mpSdrPathDragData->aXP[nPrevPrevPnt];
                 aLine2[1]=mpSdrPathDragData->aXP[nPrevPnt];
                 if (mpSdrPathDragData->aXP.IsSmooth(nNextPnt) && !bNextIsEndPnt && mpSdrPathDragData->aXP.IsControl(nNextNextPnt)) {
-                    aXPoly.Insert(XPOLY_APPEND,rXP[mpSdrPathDragData->nNextNextPnt0+1],XPolyFlags::Control);
-                    aXPoly.Insert(XPOLY_APPEND,rXP[mpSdrPathDragData->nNextNextPnt0+2],XPolyFlags::Normal);
+                    aXPoly.Insert(XPOLY_APPEND,rXP[mpSdrPathDragData->nNextNextPnt0+1],PolyFlags::Control);
+                    aXPoly.Insert(XPOLY_APPEND,rXP[mpSdrPathDragData->nNextNextPnt0+2],PolyFlags::Normal);
                     // leverage lines for the opposing curve segment
                     aLine3[0]=mpSdrPathDragData->aXP[nNextPnt];
                     aLine3[1]=mpSdrPathDragData->aXP[nNextNextPnt];
@@ -1226,18 +1226,18 @@ basegfx::B2DPolyPolygon ImpPathForDragAndCreate::getSpecialDragPoly(const SdrDra
             if (mpSdrPathDragData->bEliminate) {
                 aXPoly.Remove(2,1);
             }
-            if (bPrevIsControl) aXPoly.Insert(0,rXP[mpSdrPathDragData->nPrevPrevPnt0-1],XPolyFlags::Normal);
+            if (bPrevIsControl) aXPoly.Insert(0,rXP[mpSdrPathDragData->nPrevPrevPnt0-1],PolyFlags::Normal);
             else if (!bBegPnt && !bPrevIsBegPnt && mpSdrPathDragData->aXP.IsControl(nPrevPrevPnt)) {
-                aXPoly.Insert(0,rXP[mpSdrPathDragData->nPrevPrevPnt0-1],XPolyFlags::Control);
-                aXPoly.Insert(0,rXP[mpSdrPathDragData->nPrevPrevPnt0-2],XPolyFlags::Normal);
+                aXPoly.Insert(0,rXP[mpSdrPathDragData->nPrevPrevPnt0-1],PolyFlags::Control);
+                aXPoly.Insert(0,rXP[mpSdrPathDragData->nPrevPrevPnt0-2],PolyFlags::Normal);
             } else {
                 aXPoly.Remove(0,1);
                 if (bBegPnt) aXPoly.Remove(0,1);
             }
-            if (bNextIsControl) aXPoly.Insert(XPOLY_APPEND,rXP[mpSdrPathDragData->nNextNextPnt0+1],XPolyFlags::Normal);
+            if (bNextIsControl) aXPoly.Insert(XPOLY_APPEND,rXP[mpSdrPathDragData->nNextNextPnt0+1],PolyFlags::Normal);
             else if (!bEndPnt && !bNextIsEndPnt && mpSdrPathDragData->aXP.IsControl(nNextNextPnt)) {
-                aXPoly.Insert(XPOLY_APPEND,rXP[mpSdrPathDragData->nNextNextPnt0+1],XPolyFlags::Control);
-                aXPoly.Insert(XPOLY_APPEND,rXP[mpSdrPathDragData->nNextNextPnt0+2],XPolyFlags::Normal);
+                aXPoly.Insert(XPOLY_APPEND,rXP[mpSdrPathDragData->nNextNextPnt0+1],PolyFlags::Control);
+                aXPoly.Insert(XPOLY_APPEND,rXP[mpSdrPathDragData->nNextNextPnt0+2],PolyFlags::Normal);
             } else {
                 aXPoly.Remove(aXPoly.GetPointCount()-1,1);
                 if (bEndPnt) aXPoly.Remove(aXPoly.GetPointCount()-1,1);
@@ -1366,12 +1366,12 @@ bool ImpPathForDragAndCreate::MovCreate(SdrDragStat& rStat)
 
             if (nActPoint-pU->nBezierStartPoint>=3 && ((nActPoint-pU->nBezierStartPoint)%3)==0) {
                 rXPoly.PointsToBezier(nActPoint-3);
-                rXPoly.SetFlags(nActPoint-1,XPolyFlags::Control);
-                rXPoly.SetFlags(nActPoint-2,XPolyFlags::Control);
+                rXPoly.SetFlags(nActPoint-1,PolyFlags::Control);
+                rXPoly.SetFlags(nActPoint-2,PolyFlags::Control);
 
                 if (nActPoint>=6 && rXPoly.IsControl(nActPoint-4)) {
                     rXPoly.CalcTangent(nActPoint-3,nActPoint-4,nActPoint-2);
-                    rXPoly.SetFlags(nActPoint-3,XPolyFlags::Smooth);
+                    rXPoly.SetFlags(nActPoint-3,PolyFlags::Smooth);
                 }
             }
             rXPoly[nActPoint+1]=rStat.Now();
@@ -1439,12 +1439,12 @@ bool ImpPathForDragAndCreate::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
                 if (pU->nBezierStartPoint>nActPoint) pU->nBezierStartPoint=nActPoint;
                 if (IsBezier(pU->eAktKind) && nActPoint-pU->nBezierStartPoint>=3 && ((nActPoint-pU->nBezierStartPoint)%3)==0) {
                     rXPoly.PointsToBezier(nActPoint-3);
-                    rXPoly.SetFlags(nActPoint-1,XPolyFlags::Control);
-                    rXPoly.SetFlags(nActPoint-2,XPolyFlags::Control);
+                    rXPoly.SetFlags(nActPoint-1,PolyFlags::Control);
+                    rXPoly.SetFlags(nActPoint-2,PolyFlags::Control);
 
                     if (nActPoint>=6 && rXPoly.IsControl(nActPoint-4)) {
                         rXPoly.CalcTangent(nActPoint-3,nActPoint-4,nActPoint-2);
-                        rXPoly.SetFlags(nActPoint-3,XPolyFlags::Smooth);
+                        rXPoly.SetFlags(nActPoint-3,PolyFlags::Smooth);
                     }
                 }
             } else {
@@ -2061,7 +2061,7 @@ void SdrPathObj::AddToHdlList(SdrHdlList& rHdlList) const
         if (bClosed && nPntCnt>1) nPntCnt--;
 
         for (sal_uInt16 j=0; j<nPntCnt; j++) {
-            if (rXPoly.GetFlags(j)!=XPolyFlags::Control) {
+            if (rXPoly.GetFlags(j)!=PolyFlags::Control) {
                 const Point& rPnt=rXPoly[j];
                 SdrHdl* pHdl=new SdrHdl(rPnt,SdrHdlKind::Poly);
                 pHdl->SetPolyNum(i);
@@ -2092,12 +2092,12 @@ sal_uInt32 SdrPathObj::GetPlusHdlCount(const SdrHdl& rHdl) const
             nPntMax--;
             if (nPnt<=nPntMax)
             {
-                if (rXPoly.GetFlags(nPnt)!=XPolyFlags::Control)
+                if (rXPoly.GetFlags(nPnt)!=PolyFlags::Control)
                 {
                     if (nPnt==0 && IsClosed()) nPnt=nPntMax;
-                    if (nPnt>0 && rXPoly.GetFlags(nPnt-1)==XPolyFlags::Control) nCnt++;
+                    if (nPnt>0 && rXPoly.GetFlags(nPnt-1)==PolyFlags::Control) nCnt++;
                     if (nPnt==nPntMax && IsClosed()) nPnt=0;
-                    if (nPnt<nPntMax && rXPoly.GetFlags(nPnt+1)==XPolyFlags::Control) nCnt++;
+                    if (nPnt<nPntMax && rXPoly.GetFlags(nPnt+1)==PolyFlags::Control) nCnt++;
                 }
             }
         }
@@ -2128,7 +2128,7 @@ SdrHdl* SdrPathObj::GetPlusHdl(const SdrHdl& rHdl, sal_uInt32 nPlusNum) const
                 pHdl->SetPolyNum(rHdl.GetPolyNum());
 
                 if (nPnt==0 && IsClosed()) nPnt=nPntMax;
-                if (nPnt>0 && rXPoly.GetFlags(nPnt-1)==XPolyFlags::Control && nPlusNum==0)
+                if (nPnt>0 && rXPoly.GetFlags(nPnt-1)==PolyFlags::Control && nPlusNum==0)
                 {
                     pHdl->SetPos(rXPoly[nPnt-1]);
                     pHdl->SetPointNum(nPnt-1);
@@ -2136,7 +2136,7 @@ SdrHdl* SdrPathObj::GetPlusHdl(const SdrHdl& rHdl, sal_uInt32 nPlusNum) const
                 else
                 {
                     if (nPnt==nPntMax && IsClosed()) nPnt=0;
-                    if (nPnt<rXPoly.GetPointCount()-1 && rXPoly.GetFlags(nPnt+1)==XPolyFlags::Control)
+                    if (nPnt<rXPoly.GetPointCount()-1 && rXPoly.GetFlags(nPnt+1)==PolyFlags::Control)
                     {
                         pHdl->SetPos(rXPoly[nPnt+1]);
                         pHdl->SetPointNum(nPnt+1);

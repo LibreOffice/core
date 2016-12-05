@@ -1331,9 +1331,9 @@ void WinMtfOutput::DrawPolyBezier( tools::Polygon& rPolygon, bool bTo, bool bRec
         sal_uInt16 i;
         for ( i = 0; ( i + 2 ) < nPoints; )
         {
-            rPolygon.SetFlags( i++, POLY_NORMAL );
-            rPolygon.SetFlags( i++, POLY_CONTROL );
-            rPolygon.SetFlags( i++, POLY_CONTROL );
+            rPolygon.SetFlags( i++, PolyFlags::Normal );
+            rPolygon.SetFlags( i++, PolyFlags::Control );
+            rPolygon.SetFlags( i++, PolyFlags::Control );
         }
         if ( bRecordPath )
             aPathObj.AddPolyLine( rPolygon );

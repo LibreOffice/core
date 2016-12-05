@@ -61,7 +61,7 @@ CGMImpressOutAct::CGMImpressOutAct( CGM& rCGM, const uno::Reference< frame::XMod
     mnGroupActCount = mnGroupLevel = 0;
     mpGroupLevel = new sal_uInt32[CGM_OUTACT_MAX_GROUP_LEVEL] ();
     mpPoints = reinterpret_cast<Point*>(new sal_Int8[ 0x2000 * sizeof( Point ) ]);
-    mpFlags = new sal_uInt8[ 0x2000 ];
+    mpFlags = new PolyFlags[ 0x2000 ];
 
     mnIndex = 0;
     mpGradient = nullptr;
@@ -941,7 +941,7 @@ void CGMImpressOutAct::RegPolyLine( tools::Polygon& rPolygon, bool bReverse )
             for ( sal_uInt16 i = 0; i <  nPoints; i++ )
             {
                 mpPoints[ mnIndex + i ] = rPolygon.GetPoint( nPoints - i - 1 );
-                mpFlags[ mnIndex + i ] = (sal_Int8)rPolygon.GetFlags( nPoints - i - 1 );
+                mpFlags[ mnIndex + i ] = rPolygon.GetFlags( nPoints - i - 1 );
             }
         }
         else
@@ -949,7 +949,7 @@ void CGMImpressOutAct::RegPolyLine( tools::Polygon& rPolygon, bool bReverse )
             for ( sal_uInt16 i = 0; i <  nPoints; i++ )
             {
                 mpPoints[ mnIndex + i ] = rPolygon.GetPoint( i );
-                mpFlags[ mnIndex + i ] = (sal_Int8)rPolygon.GetFlags( i );
+                mpFlags[ mnIndex + i ] = rPolygon.GetFlags( i );
             }
         }
         mnIndex = mnIndex + nPoints;

@@ -20,6 +20,7 @@
 #define INCLUDED_TOOLS_INC_POLY_H
 
 #include <sal/types.h>
+#include <tools/poly.hxx>
 
 class Point;
 
@@ -27,8 +28,8 @@ class SAL_WARN_UNUSED ImplPolygonData
 {
 public:
     Point*          mpPointAry;
-    sal_uInt8*           mpFlagAry;
-    sal_uInt16          mnPoints;
+    PolyFlags*      mpFlagAry;
+    sal_uInt16      mnPoints;
     sal_uInt32      mnRefCount;
 };
 
@@ -36,7 +37,7 @@ class SAL_WARN_UNUSED ImplPolygon  : public ImplPolygonData
 {
 public:
                     ImplPolygon( sal_uInt16 nInitSize, bool bFlags = false );
-                    ImplPolygon( sal_uInt16 nPoints, const Point* pPtAry, const sal_uInt8* pInitFlags );
+                    ImplPolygon( sal_uInt16 nPoints, const Point* pPtAry, const PolyFlags* pInitFlags );
                     ImplPolygon( const ImplPolygon& rImplPoly );
                     ~ImplPolygon();
 

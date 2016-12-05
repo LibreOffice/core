@@ -814,7 +814,7 @@ bool SvpSalGraphics::drawPolyLine(
 
 bool SvpSalGraphics::drawPolyLineBezier( sal_uInt32,
                                          const SalPoint*,
-                                         const sal_uInt8* )
+                                         const PolyFlags* )
 {
     SAL_INFO("vcl.gdi", "unsupported SvpSalGraphics::drawPolyLineBezier case");
     return false;
@@ -822,7 +822,7 @@ bool SvpSalGraphics::drawPolyLineBezier( sal_uInt32,
 
 bool SvpSalGraphics::drawPolygonBezier( sal_uInt32,
                                         const SalPoint*,
-                                        const sal_uInt8* )
+                                        const PolyFlags* )
 {
     SAL_INFO("vcl.gdi", "unsupported SvpSalGraphics::drawPolygonBezier case");
     return false;
@@ -831,7 +831,7 @@ bool SvpSalGraphics::drawPolygonBezier( sal_uInt32,
 bool SvpSalGraphics::drawPolyPolygonBezier( sal_uInt32,
                                             const sal_uInt32*,
                                             const SalPoint* const*,
-                                            const sal_uInt8* const* )
+                                            const PolyFlags* const* )
 {
     SAL_INFO("vcl.gdi", "unsupported SvpSalGraphics::drawPolyPolygonBezier case");
     return false;

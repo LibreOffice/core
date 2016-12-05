@@ -91,7 +91,7 @@ void OutputDevice::DrawPolyLine( const tools::Polygon& rPoly )
     // #100127# Forward beziers to sal, if any
     if( aPoly.HasFlags() )
     {
-        const sal_uInt8* pFlgAry = aPoly.GetConstFlagAry();
+        const PolyFlags* pFlgAry = aPoly.GetConstFlagAry();
         if( !mpGraphics->DrawPolyLineBezier( nPoints, pPtAry, pFlgAry, this ) )
         {
             aPoly = tools::Polygon::SubdivideBezier(aPoly);

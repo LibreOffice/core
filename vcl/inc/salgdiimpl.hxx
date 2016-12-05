@@ -24,6 +24,7 @@
 
 #include <rtl/ustring.hxx>
 
+#include <tools/poly.hxx>
 #include <tools/solar.h>
 
 #include <vcl/salgtype.hxx>
@@ -111,18 +112,18 @@ public:
     virtual bool drawPolyLineBezier(
                 sal_uInt32 nPoints,
                 const SalPoint* pPtAry,
-                const sal_uInt8* pFlgAry ) = 0;
+                const PolyFlags* pFlgAry ) = 0;
 
     virtual bool drawPolygonBezier(
                 sal_uInt32 nPoints,
                 const SalPoint* pPtAry,
-                const sal_uInt8* pFlgAry ) = 0;
+                const PolyFlags* pFlgAry ) = 0;
 
     virtual bool drawPolyPolygonBezier(
                 sal_uInt32 nPoly,
                 const sal_uInt32* pPoints,
                 const SalPoint* const* pPtAry,
-                const sal_uInt8* const* pFlgAry ) = 0;
+                const PolyFlags* const* pFlgAry ) = 0;
 
     // CopyArea --> No RasterOp, but ClipRegion
     virtual void copyArea(

@@ -128,14 +128,14 @@ E3dCompoundObject* FuConstruct3dObject::ImpCreateBasic3DShape()
             XPolygon aXPoly(Point (0, 1250), 2500, 2500, 0, 900, false);
             aXPoly.Scale(5.0, 5.0);
 
-            aXPoly.Insert(0, Point (2400*5, 1250*5), XPolyFlags::Normal);
-            aXPoly.Insert(0, Point (2000*5, 1250*5), XPolyFlags::Normal);
-            aXPoly.Insert(0, Point (1500*5, 1250*5), XPolyFlags::Normal);
-            aXPoly.Insert(0, Point (1000*5, 1250*5), XPolyFlags::Normal);
-            aXPoly.Insert(0, Point (500*5, 1250*5), XPolyFlags::Normal);
-            aXPoly.Insert(0, Point (250*5, 1250*5), XPolyFlags::Normal);
-            aXPoly.Insert(0, Point (50*5, 1250*5), XPolyFlags::Normal);
-            aXPoly.Insert(0, Point (0*5, 1250*5), XPolyFlags::Normal);
+            aXPoly.Insert(0, Point (2400*5, 1250*5), PolyFlags::Normal);
+            aXPoly.Insert(0, Point (2000*5, 1250*5), PolyFlags::Normal);
+            aXPoly.Insert(0, Point (1500*5, 1250*5), PolyFlags::Normal);
+            aXPoly.Insert(0, Point (1000*5, 1250*5), PolyFlags::Normal);
+            aXPoly.Insert(0, Point (500*5, 1250*5), PolyFlags::Normal);
+            aXPoly.Insert(0, Point (250*5, 1250*5), PolyFlags::Normal);
+            aXPoly.Insert(0, Point (50*5, 1250*5), PolyFlags::Normal);
+            aXPoly.Insert(0, Point (0*5, 1250*5), PolyFlags::Normal);
 
             ::basegfx::B2DPolygon aB2DPolygon(aXPoly.getB2DPolygon());
             if(aB2DPolygon.areControlPointsUsed())
