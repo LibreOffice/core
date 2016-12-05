@@ -1552,8 +1552,8 @@ void WinMtfOutput::ImplDrawBitmap( const Point& rPos, const Size& rSize, const B
                 // need to blend in AlphaMask quality (8Bit)
                 AlphaMask fromVDev(aVDevMask);
                 AlphaMask fromBmpEx(aBmpEx.GetAlpha());
-                BitmapReadAccess* pR = fromVDev.AcquireReadAccess();
-                BitmapWriteAccess* pW = fromBmpEx.AcquireWriteAccess();
+                AlphaMask::ScopedReadAccess pR(fromVDev);
+                AlphaMask::ScopedWriteAccess pW(fromBmpEx);
 
                 if(pR && pW)
                 {
@@ -1574,8 +1574,8 @@ void WinMtfOutput::ImplDrawBitmap( const Point& rPos, const Size& rSize, const B
                     }
                 }
 
-                fromVDev.ReleaseAccess(pR);
-                fromBmpEx.ReleaseAccess(pW);
+                pR.reset();
+                pW.reset();
                 aBmpEx = BitmapEx(aBmpEx.GetBitmap(), fromBmpEx);
             }
             else

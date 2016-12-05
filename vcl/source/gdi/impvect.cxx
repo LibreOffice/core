@@ -639,7 +639,7 @@ bool ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rMtf,
     VECT_PROGRESS( pProgress, 0 );
 
     std::unique_ptr<Bitmap> xBmp(new Bitmap( rColorBmp ));
-    BitmapReadAccess*   pRAcc = xBmp->AcquireReadAccess();
+    Bitmap::ScopedReadAccess pRAcc(*xBmp);
 
     if( pRAcc )
     {
@@ -681,7 +681,7 @@ bool ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rMtf,
         {
             const BitmapColor   aBmpCol( pRAcc->GetPaletteColor( pColorSet[ i ].mnIndex ) );
             const Color         aFindColor( aBmpCol.GetRed(), aBmpCol.GetGreen(), aBmpCol.GetBlue() );
-            std::unique_ptr<ImplVectMap> xMap(ImplExpand( pRAcc, aFindColor ));
+            std::unique_ptr<ImplVectMap> xMap(ImplExpand( pRAcc.get(), aFindColor ));
 
             VECT_PROGRESS( pProgress, FRound( fPercent += fPercentStep_2 ) );
 
@@ -725,7 +725,7 @@ bool ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rMtf,
         }
     }
 
-    Bitmap::ReleaseAccess( pRAcc );
+    pRAcc.reset();
     xBmp.reset();
     VECT_PROGRESS( pProgress, 100 );
 
@@ -736,15 +736,14 @@ bool ImplVectorize( const Bitmap& rMonoBmp,
                                     tools::PolyPolygon& rPolyPoly )
 {
     std::unique_ptr<Bitmap> xBmp(new Bitmap( rMonoBmp ));
-    BitmapReadAccess*   pRAcc;
     bool                bRet = false;
 
     if( xBmp->GetBitCount() > 1 )
         xBmp->Convert( BMP_CONVERSION_1BIT_THRESHOLD );
 
-    pRAcc = xBmp->AcquireReadAccess();
-    std::unique_ptr <ImplVectMap> xMap(ImplExpand( pRAcc, COL_BLACK ));
-    Bitmap::ReleaseAccess( pRAcc );
+    Bitmap::ScopedReadAccess pRAcc(*xBmp);
+    std::unique_ptr <ImplVectMap> xMap(ImplExpand( pRAcc.get(), COL_BLACK ));
+    pRAcc.reset();
     xBmp.reset();
 
     if( xMap )

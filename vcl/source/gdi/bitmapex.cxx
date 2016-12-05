@@ -728,7 +728,7 @@ sal_uInt8 BitmapEx::GetTransparency(sal_Int32 nX, sal_Int32 nY) const
                 case TransparentType::Color:
                 {
                     Bitmap aTestBitmap(aBitmap);
-                    BitmapReadAccess* pRead = aTestBitmap.AcquireReadAccess();
+                    Bitmap::ScopedReadAccess pRead(aTestBitmap);
 
                     if(pRead)
                     {
@@ -740,7 +740,6 @@ sal_uInt8 BitmapEx::GetTransparency(sal_Int32 nX, sal_Int32 nY) const
                             nTransparency = 0x00;
                         }
 
-                        Bitmap::ReleaseAccess(pRead);
                     }
                     break;
                 }
@@ -749,7 +748,7 @@ sal_uInt8 BitmapEx::GetTransparency(sal_Int32 nX, sal_Int32 nY) const
                     if(!aMask.IsEmpty())
                     {
                         Bitmap aTestBitmap(aMask);
-                        BitmapReadAccess* pRead = aTestBitmap.AcquireReadAccess();
+                        Bitmap::ScopedReadAccess pRead(aTestBitmap);
 
                         if(pRead)
                         {
@@ -766,8 +765,6 @@ sal_uInt8 BitmapEx::GetTransparency(sal_Int32 nX, sal_Int32 nY) const
                                     nTransparency = 0x00;
                                 }
                             }
-
-                            Bitmap::ReleaseAccess(pRead);
                         }
                     }
                     break;
@@ -832,11 +829,11 @@ namespace
         bool bSmooth)
     {
         Bitmap aDestination(rDestinationSize, 24);
-        std::unique_ptr<BitmapWriteAccess> xWrite(aDestination.AcquireWriteAccess());
+        Bitmap::ScopedWriteAccess xWrite(aDestination);
 
         if(xWrite)
         {
-            std::unique_ptr<BitmapReadAccess> xRead((const_cast< Bitmap& >(rSource)).AcquireReadAccess());
+            Bitmap::ScopedReadAccess xRead(const_cast< Bitmap& >(rSource));
 
             if (xRead)
             {
@@ -1016,7 +1013,7 @@ BitmapEx BitmapEx::ModifyBitmapEx(const basegfx::BColorModifierStack& rBColorMod
                     // do NOT use erase; for e.g. 8bit Bitmaps, the nearest color to the given
                     // erase color is determined and used -> this may be different from what is
                     // wanted here. Better create a new bitmap with the needed color explicitely
-                    std::unique_ptr<BitmapReadAccess> xReadAccess(aChangedBitmap.AcquireReadAccess());
+                    Bitmap::ScopedReadAccess xReadAccess(aChangedBitmap);
                     OSL_ENSURE(xReadAccess, "Got no Bitmap ReadAccess ?!?");
 
                     if(xReadAccess)
@@ -1044,7 +1041,7 @@ BitmapEx BitmapEx::ModifyBitmapEx(const basegfx::BColorModifierStack& rBColorMod
         }
         else
         {
-            std::unique_ptr<BitmapWriteAccess> xContent(aChangedBitmap.AcquireWriteAccess());
+            Bitmap::ScopedWriteAccess xContent(aChangedBitmap);
 
             if(xContent)
             {
@@ -1211,8 +1208,8 @@ BitmapEx createBlendFrame(
 
         aContent.Erase(COL_BLACK);
 
-        BitmapWriteAccess* pContent = aContent.AcquireWriteAccess();
-        BitmapWriteAccess* pAlpha = aAlpha.AcquireWriteAccess();
+        Bitmap::ScopedWriteAccess pContent(aContent);
+        AlphaMask::ScopedWriteAccess pAlpha(aAlpha);
 
         if(pContent && pAlpha)
         {
@@ -1287,22 +1284,10 @@ BitmapEx createBlendFrame(
                 }
             }
 
-            Bitmap::ReleaseAccess(pContent);
-            Bitmap::ReleaseAccess(pAlpha);
+            pContent.reset();
+            pAlpha.reset();
 
             pBlendFrameCache->m_aLastResult = BitmapEx(aContent, aAlpha);
-        }
-        else
-        {
-            if(pContent)
-            {
-                Bitmap::ReleaseAccess(pContent);
-            }
-
-            if(pAlpha)
-            {
-                Bitmap::ReleaseAccess(pAlpha);
-            }
         }
     }
 
