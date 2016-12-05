@@ -887,16 +887,15 @@ bool ImplReadDIBBody( SvStream& rIStm, Bitmap& rBmp, AlphaMask* pBmpAlpha, sal_u
         const Size aSizePixel(aHeader.nWidth, aHeader.nHeight);
         BitmapPalette aDummyPal;
         Bitmap aNewBmp(aSizePixel, nBitCount, &aDummyPal);
-        BitmapWriteAccess* pAcc = aNewBmp.AcquireWriteAccess();
+        Bitmap::ScopedWriteAccess pAcc(aNewBmp);
         if (!pAcc)
             return false;
         if (pAcc->Width() != aHeader.nWidth || pAcc->Height() != aHeader.nHeight)
         {
-            Bitmap::ReleaseAccess(pAcc);
             return false;
         }
         AlphaMask aNewBmpAlpha;
-        BitmapWriteAccess* pAccAlpha = nullptr;
+        AlphaMask::ScopedWriteAccess pAccAlpha;
         bool bAlphaPossible(pBmpAlpha && aHeader.nBitCount == 32);
 
         if (bAlphaPossible)
@@ -918,7 +917,7 @@ bool ImplReadDIBBody( SvStream& rIStm, Bitmap& rBmp, AlphaMask* pBmpAlpha, sal_u
         if (bAlphaPossible)
         {
             aNewBmpAlpha = AlphaMask(aSizePixel);
-            pAccAlpha = aNewBmpAlpha.AcquireWriteAccess();
+            pAccAlpha = AlphaMask::ScopedWriteAccess(aNewBmpAlpha);
         }
 
         // read palette
@@ -938,7 +937,7 @@ bool ImplReadDIBBody( SvStream& rIStm, Bitmap& rBmp, AlphaMask* pBmpAlpha, sal_u
                 pIStm->SeekRel(nOffset - (pIStm->Tell() - nStmPos));
             }
 
-            bRet = ImplReadDIBBits(*pIStm, aHeader, *pAcc, pAccAlpha, bTopDown, bAlphaUsed, nAlignedWidth);
+            bRet = ImplReadDIBBits(*pIStm, aHeader, *pAcc, pAccAlpha.get(), bTopDown, bAlphaUsed, nAlignedWidth);
 
             if(bRet && aHeader.nXPelsPerMeter && aHeader.nYPelsPerMeter)
             {
@@ -953,11 +952,11 @@ bool ImplReadDIBBody( SvStream& rIStm, Bitmap& rBmp, AlphaMask* pBmpAlpha, sal_u
             }
         }
 
-        Bitmap::ReleaseAccess(pAcc);
+        pAcc.reset();
 
         if(bAlphaPossible)
         {
-            Bitmap::ReleaseAccess(pAccAlpha);
+            pAccAlpha.reset();
 
             if(!bAlphaUsed)
             {
@@ -1606,8 +1605,8 @@ bool ImplWriteDIB(
 
     if(aSizePix.Width() && aSizePix.Height())
     {
-        BitmapReadAccess* pAcc = const_cast< Bitmap& >(rSource).AcquireReadAccess();
-        BitmapReadAccess* pAccAlpha = nullptr;
+        Bitmap::ScopedReadAccess pAcc(const_cast< Bitmap& >(rSource));
+        Bitmap::ScopedReadAccess pAccAlpha;
         const SvStreamEndian nOldFormat(rOStm.GetEndian());
         const sal_uLong nOldPos(rOStm.Tell());
 
@@ -1617,7 +1616,7 @@ bool ImplWriteDIB(
 
             if(aSizePixAlpha == aSizePix)
             {
-                pAccAlpha = const_cast< Bitmap* >(pSourceAlpha)->AcquireReadAccess();
+                pAccAlpha = Bitmap::ScopedReadAccess(const_cast< Bitmap& >(*pSourceAlpha));
             }
             else
             {
@@ -1633,21 +1632,18 @@ bool ImplWriteDIB(
             {
                 if(ImplWriteDIBFileHeader(rOStm, *pAcc, nullptr != pSourceAlpha))
                 {
-                    bRet = ImplWriteDIBBody(rSource, rOStm, *pAcc, pAccAlpha, bCompressed);
+                    bRet = ImplWriteDIBBody(rSource, rOStm, *pAcc, pAccAlpha.get(), bCompressed);
                 }
             }
             else
             {
-                bRet = ImplWriteDIBBody(rSource, rOStm, *pAcc, pAccAlpha, bCompressed);
+                bRet = ImplWriteDIBBody(rSource, rOStm, *pAcc, pAccAlpha.get(), bCompressed);
             }
 
-            Bitmap::ReleaseAccess(pAcc);
+            pAcc.reset();
         }
 
-        if (pAccAlpha)
-        {
-            Bitmap::ReleaseAccess(pAccAlpha);
-        }
+        pAccAlpha.reset();
 
         if(!bRet)
         {
