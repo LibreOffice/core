@@ -740,8 +740,6 @@ namespace {
         {
         }
 
-        virtual ~RegularPrinterPage() override {}
-
         virtual void Print (
             Printer& rPrinter,
             SdDrawDocument& rDocument,
@@ -792,8 +790,6 @@ namespace {
               mnPageIndex(nPageIndex)
         {
         }
-
-        virtual ~TiledPrinterPage() override {}
 
         virtual void Print (
             Printer& rPrinter,
@@ -877,8 +873,6 @@ namespace {
               maSecondOffset(rSecondOffset)
         {
         }
-
-        virtual ~BookletPrinterPage() override {}
 
         virtual void Print (
             Printer& rPrinter,

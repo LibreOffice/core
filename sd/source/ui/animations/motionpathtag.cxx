@@ -245,7 +245,7 @@ class SdPathHdl : public SmartHdl
 {
 public:
     SdPathHdl( const SmartTagReference& xTag, SdrPathObj* mpPathObj );
-    virtual ~SdPathHdl() override;
+
     virtual void CreateB2dIAObject() override;
     virtual bool IsFocusHdl() const override;
     virtual bool isMarkable() const override;
@@ -257,10 +257,6 @@ private:
 SdPathHdl::SdPathHdl( const SmartTagReference& xTag, SdrPathObj* pPathObj )
 : SmartHdl( xTag, pPathObj->GetCurrentBoundRect().TopLeft() )
 , mpPathObj( pPathObj )
-{
-}
-
-SdPathHdl::~SdPathHdl()
 {
 }
 

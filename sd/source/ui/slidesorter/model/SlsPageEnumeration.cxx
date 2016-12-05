@@ -36,7 +36,6 @@ public:
     inline PageEnumerationImpl (
         const SlideSorterModel& rModel,
         const PageEnumeration::PagePredicate& rPredicate);
-    virtual ~PageEnumerationImpl() override;
     PageEnumerationImpl(const PageEnumerationImpl&) = delete;
     PageEnumerationImpl& operator=(const PageEnumerationImpl&) = delete;
     /** Create a copy of the called enumeration object.
@@ -144,10 +143,6 @@ PageEnumerationImpl::PageEnumerationImpl (
     : mrModel(rModel),
       maPredicate(rPredicate),
       mnIndex(nIndex)
-{
-}
-
-PageEnumerationImpl::~PageEnumerationImpl()
 {
 }
 

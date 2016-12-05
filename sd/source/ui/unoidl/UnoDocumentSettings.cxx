@@ -72,7 +72,6 @@ namespace sd
     {
     public:
         explicit DocumentSettings( SdXImpressDocument* pModel );
-        virtual ~DocumentSettings() throw() override;
 
         // XInterface
         virtual Any SAL_CALL queryInterface( const Type& aType ) throw (RuntimeException, std::exception) override;
@@ -218,10 +217,6 @@ using namespace ::sd;
 DocumentSettings::DocumentSettings( SdXImpressDocument* pModel )
 :   PropertySetHelper( createSettingsInfoImpl( !pModel->IsImpressDocument() ) ),
     mxModel( pModel )
-{
-}
-
-DocumentSettings::~DocumentSettings() throw()
 {
 }
 

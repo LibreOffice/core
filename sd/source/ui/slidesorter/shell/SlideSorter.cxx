@@ -51,7 +51,7 @@ class ContentWindow : public ::sd::Window
 {
 public:
     ContentWindow(vcl::Window& rParent, SlideSorter& rSlideSorter);
-    virtual ~ContentWindow() override;
+
     void SetCurrentFunction (const rtl::Reference<FuPoor>& rpFunction);
     virtual void Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect) override;
     virtual void KeyInput (const KeyEvent& rEvent) override;
@@ -437,10 +437,6 @@ ContentWindow::ContentWindow(
 {
     SetDialogControlFlags(GetDialogControlFlags() & ~DialogControlFlags::WantFocus);
     SetStyle(GetStyle() | WB_NOPOINTERFOCUS);
-}
-
-ContentWindow::~ContentWindow()
-{
 }
 
 void ContentWindow::SetCurrentFunction (const rtl::Reference<FuPoor>& rpFunction)

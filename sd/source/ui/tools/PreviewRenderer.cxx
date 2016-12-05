@@ -54,7 +54,7 @@ namespace {
     {
     public:
         ViewRedirector();
-        virtual ~ViewRedirector() override;
+
         virtual drawinglayer::primitive2d::Primitive2DContainer createRedirectedPrimitive2DSequence(
             const sdr::contact::ViewObjectContact& rOriginal,
             const sdr::contact::DisplayInfo& rDisplayInfo) override;
@@ -493,10 +493,6 @@ void PreviewRenderer::Notify(SfxBroadcaster&, const SfxHint& rHint)
 namespace {
 
 ViewRedirector::ViewRedirector()
-{
-}
-
-ViewRedirector::~ViewRedirector()
 {
 }
 

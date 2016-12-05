@@ -104,7 +104,6 @@ class ChangePlaceholderTag : public SmartTag
     friend class ImageButtonHdl;
 public:
     ChangePlaceholderTag( ::sd::View& rView, SdrObject& rPlaceholderObj );
-    virtual ~ChangePlaceholderTag() override;
 
     /** returns true if the SmartTag handled the event. */
     virtual bool MouseButtonDown( const MouseEvent&, SmartHdl& ) override;
@@ -267,10 +266,6 @@ Pointer ImageButtonHdl::GetPointer() const
 ChangePlaceholderTag::ChangePlaceholderTag( ::sd::View& rView, SdrObject& rPlaceholderObj )
 : SmartTag( rView )
 , mxPlaceholderObj( &rPlaceholderObj )
-{
-}
-
-ChangePlaceholderTag::~ChangePlaceholderTag()
 {
 }
 

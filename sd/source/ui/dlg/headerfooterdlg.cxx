@@ -75,7 +75,6 @@ private:
 
 public:
     explicit PresLayoutPreview(vcl::Window* pParent);
-    virtual ~PresLayoutPreview() override;
 
     virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
     virtual Size GetOptimalSize() const override;
@@ -696,10 +695,6 @@ PresLayoutPreview::PresLayoutPreview( vcl::Window* pParent )
 }
 
 VCL_BUILDER_FACTORY(PresLayoutPreview)
-
-PresLayoutPreview::~PresLayoutPreview()
-{
-}
 
 Size PresLayoutPreview::GetOptimalSize() const
 {

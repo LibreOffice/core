@@ -46,7 +46,6 @@ class SdUnoDrawPool : public SvxUnoDrawPool
 {
 public:
     explicit SdUnoDrawPool(SdDrawDocument* pModel) throw();
-    virtual ~SdUnoDrawPool() throw() override;
 
 protected:
     virtual void putAny( SfxItemPool* pPool, const PropertyMapEntry* pEntry, const uno::Any& rValue )
@@ -58,10 +57,6 @@ private:
 
 SdUnoDrawPool::SdUnoDrawPool( SdDrawDocument* pModel ) throw()
 : SvxUnoDrawPool( pModel ), mpDrawModel( pModel )
-{
-}
-
-SdUnoDrawPool::~SdUnoDrawPool() throw()
 {
 }
 

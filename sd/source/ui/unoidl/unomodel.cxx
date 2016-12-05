@@ -1546,7 +1546,6 @@ public:
     bool IsPrintable( const SdrObject* pObj ) const;
 
     ImplRenderPaintProc( const SdrLayerAdmin& rLA, SdrPageView* pView, vcl::PDFExtOutDevData* pData );
-    virtual ~ImplRenderPaintProc() override;
 
     // all default implementations just call the same methods at the original. To do something
     // different, override the method and at least do what the method does.
@@ -1560,10 +1559,6 @@ ImplRenderPaintProc::ImplRenderPaintProc( const SdrLayerAdmin& rLA, SdrPageView*
     rLayerAdmin         ( rLA ),
     pSdrPageView        ( pView ),
     pPDFExtOutDevData   ( pData )
-{
-}
-
-ImplRenderPaintProc::~ImplRenderPaintProc()
 {
 }
 

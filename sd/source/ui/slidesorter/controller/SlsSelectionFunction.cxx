@@ -195,7 +195,6 @@ public:
     NormalModeHandler (
         SlideSorter& rSlideSorter,
         SelectionFunction& rSelectionFunction);
-    virtual ~NormalModeHandler() override;
 
     virtual SelectionFunction::Mode GetMode() const override;
     virtual void Abort() override;
@@ -1022,10 +1021,6 @@ NormalModeHandler::NormalModeHandler (
     SelectionFunction& rSelectionFunction)
     : ModeHandler(rSlideSorter, rSelectionFunction, true),
       maButtonDownLocation()
-{
-}
-
-NormalModeHandler::~NormalModeHandler()
 {
 }
 

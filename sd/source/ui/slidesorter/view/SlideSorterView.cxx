@@ -88,7 +88,6 @@ namespace {
     {
     public:
         explicit Painter (SlideSorterView& rView) : mrView(rView) {}
-        virtual ~Painter() override {}
 
         virtual void Paint (OutputDevice& rDevice, const Rectangle& rRepaintArea) override
         {
@@ -107,7 +106,6 @@ class BackgroundPainter
 {
 public:
     explicit BackgroundPainter (const Color& rBackgroundColor) : maBackgroundColor(rBackgroundColor) {}
-    virtual ~BackgroundPainter() override {}
     BackgroundPainter(const BackgroundPainter&) = delete;
     BackgroundPainter& operator=(const BackgroundPainter&) = delete;
 

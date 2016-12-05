@@ -36,7 +36,6 @@ class PresenterPreviewCache::PresenterCacheContext : public CacheContext
 {
 public:
     PresenterCacheContext();
-    virtual ~PresenterCacheContext() override;
 
     void SetDocumentSlides (
         const Reference<container::XIndexAccess>& rxSlides,
@@ -205,10 +204,6 @@ PresenterPreviewCache::PresenterCacheContext::PresenterCacheContext()
       mnFirstVisibleSlideIndex(-1),
       mnLastVisibleSlideIndex(-1),
       maListeners()
-{
-}
-
-PresenterPreviewCache::PresenterCacheContext::~PresenterCacheContext()
 {
 }
 

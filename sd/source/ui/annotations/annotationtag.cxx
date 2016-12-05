@@ -155,7 +155,7 @@ class AnnotationHdl : public SmartHdl
 {
 public:
     AnnotationHdl( const SmartTagReference& xTag, const Reference< XAnnotation >& xAnnotation, const Point& rPnt );
-    virtual ~AnnotationHdl() override;
+
     virtual void CreateB2dIAObject() override;
     virtual bool IsFocusHdl() const override;
     virtual bool isMarkable() const override;
@@ -169,10 +169,6 @@ AnnotationHdl::AnnotationHdl( const SmartTagReference& xTag, const Reference< XA
 : SmartHdl( xTag, rPnt )
 , mxAnnotation( xAnnotation )
 , mxTag( dynamic_cast< AnnotationTag* >( xTag.get() ) )
-{
-}
-
-AnnotationHdl::~AnnotationHdl()
 {
 }
 

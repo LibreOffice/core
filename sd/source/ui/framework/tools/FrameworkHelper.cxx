@@ -92,7 +92,6 @@ public:
         const OUString& rsEventType,
         const ::sd::framework::FrameworkHelper::ConfigurationChangeEventFilter& rFilter,
         const ::sd::framework::FrameworkHelper::Callback& rCallback);
-    virtual ~CallbackCaller() override;
 
     virtual void SAL_CALL disposing() override;
     // XEventListener
@@ -297,7 +296,6 @@ class FrameworkHelper::DisposeListener
 {
 public:
     explicit DisposeListener (const ::std::shared_ptr<FrameworkHelper>& rpHelper);
-    virtual ~DisposeListener() override;
 
     virtual void SAL_CALL disposing() override;
 
@@ -811,10 +809,6 @@ FrameworkHelper::DisposeListener::DisposeListener (
         xComponent->addEventListener(this);
 }
 
-FrameworkHelper::DisposeListener::~DisposeListener()
-{
-}
-
 void SAL_CALL FrameworkHelper::DisposeListener::disposing()
 {
     Reference<XComponent> xComponent (mpHelper->mxConfigurationController, UNO_QUERY);
@@ -881,10 +875,6 @@ CallbackCaller::CallbackCaller (
     {
         DBG_UNHANDLED_EXCEPTION();
     }
-}
-
-CallbackCaller::~CallbackCaller()
-{
 }
 
 void CallbackCaller::disposing()

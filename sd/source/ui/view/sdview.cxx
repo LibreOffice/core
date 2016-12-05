@@ -180,7 +180,6 @@ class ViewRedirector : public sdr::contact::ViewObjectContactRedirector
 {
 public:
     ViewRedirector();
-    virtual ~ViewRedirector() override;
 
     // all default implementations just call the same methods at the original. To do something
     // different, override the method and at least do what the method does.
@@ -190,10 +189,6 @@ public:
 };
 
 ViewRedirector::ViewRedirector()
-{
-}
-
-ViewRedirector::~ViewRedirector()
 {
 }
 

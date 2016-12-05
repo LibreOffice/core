@@ -88,17 +88,12 @@ private:
 public:
 
                             explicit ScannerEventListener( DrawViewShell* pParent ) : mpParent( pParent )  {}
-                            virtual ~ScannerEventListener() override;
 
     // XEventListener
     virtual void SAL_CALL   disposing( const lang::EventObject& rEventObject ) throw (uno::RuntimeException, std::exception) override;
 
     void                    ParentDestroyed() { mpParent = nullptr; }
 };
-
-ScannerEventListener::~ScannerEventListener()
-{
-}
 
 void SAL_CALL ScannerEventListener::disposing( const lang::EventObject& rEventObject ) throw (uno::RuntimeException, std::exception)
 {

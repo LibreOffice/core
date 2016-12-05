@@ -203,7 +203,6 @@ class CustomAnimationListEntryItem : public SvLBoxString
 public:
     CustomAnimationListEntryItem(const OUString& aDescription,
                                  const CustomAnimationEffectPtr& pEffect, CustomAnimationList* pParent);
-    virtual ~CustomAnimationListEntryItem() override;
     void InitViewData(SvTreeListBox*,SvTreeListEntry*,SvViewDataItem* = nullptr) override;
     SvLBoxItem* Create() const override;
     void Clone(SvLBoxItem* pSource) override;
@@ -241,12 +240,6 @@ CustomAnimationListEntryItem::CustomAnimationListEntryItem( const OUString& aDes
     }
     msEffectName = msEffectName.replaceFirst( "%1" , mpCustomAnimationPresets->getUINameForPresetId(mpEffect->getPresetId()));
 }
-
-
-CustomAnimationListEntryItem::~CustomAnimationListEntryItem()
-{
-}
-
 
 void CustomAnimationListEntryItem::InitViewData( SvTreeListBox* pView, SvTreeListEntry* pEntry, SvViewDataItem* pViewData )
 {
@@ -350,7 +343,6 @@ class CustomAnimationListEntry : public SvTreeListEntry
 public:
     CustomAnimationListEntry();
     explicit CustomAnimationListEntry(const CustomAnimationEffectPtr& pEffect);
-    virtual ~CustomAnimationListEntry() override;
 
     const CustomAnimationEffectPtr& getEffect() const { return mpEffect; }
 
@@ -367,15 +359,11 @@ CustomAnimationListEntry::CustomAnimationListEntry(const CustomAnimationEffectPt
 {
 }
 
-CustomAnimationListEntry::~CustomAnimationListEntry()
-{
-}
-
 class CustomAnimationTriggerEntryItem : public SvLBoxString
 {
 public:
     explicit        CustomAnimationTriggerEntryItem( const OUString& aDescription );
-    virtual         ~CustomAnimationTriggerEntryItem() override;
+
     void            InitViewData( SvTreeListBox*,SvTreeListEntry*,SvViewDataItem* = nullptr ) override;
     SvLBoxItem*     Create() const override;
     void            Clone( SvLBoxItem* pSource ) override;
@@ -389,10 +377,6 @@ private:
 
 CustomAnimationTriggerEntryItem::CustomAnimationTriggerEntryItem( const OUString& aDescription )
 : SvLBoxString( aDescription ), msDescription( aDescription )
-{
-}
-
-CustomAnimationTriggerEntryItem::~CustomAnimationTriggerEntryItem()
 {
 }
 
