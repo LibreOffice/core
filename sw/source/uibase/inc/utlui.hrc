@@ -145,7 +145,6 @@
 
 #define RES_FRMEX_MENU                  (STR_AUTH_FIELD_END + 1)
 
-#define IMG_NAVI_ENTRYBMP           (RC_UTLUI_BEGIN + 4)
 #define ILIST_DB_DLG                (RC_UTLUI_BEGIN + 6)
 
 #define IMG_VIEWLAYOUT_AUTOMATIC                 (RC_UTLUI_BEGIN + 12)
@@ -155,9 +154,21 @@
 #define IMG_VIEWLAYOUT_SINGLECOLUMN              (RC_UTLUI_BEGIN + 16)
 #define IMG_VIEWLAYOUT_SINGLECOLUMN_ACTIVE       (RC_UTLUI_BEGIN + 17)
 #define IMG_PAGE_BREAK                           (RC_UTLUI_BEGIN + 18)
-#define RID_BMP_DROP_REGION                      (RC_UTLUI_BEGIN + 19)
-#define RID_BMP_DROP_LINK                        (RC_UTLUI_BEGIN + 20)
-#define RID_BMP_DROP_COPY                        (RC_UTLUI_BEGIN + 21)
+#define RID_BMP_NAVI_OUTLINE                     (RC_UTLUI_BEGIN + 19)
+#define RID_BMP_NAVI_TABLE                       (RC_UTLUI_BEGIN + 20)
+#define RID_BMP_NAVI_FRAME                       (RC_UTLUI_BEGIN + 21)
+#define RID_BMP_NAVI_GRAPHIC                     (RC_UTLUI_BEGIN + 22)
+#define RID_BMP_NAVI_OLE                         (RC_UTLUI_BEGIN + 23)
+#define RID_BMP_NAVI_BOOKMARK                    (RC_UTLUI_BEGIN + 24)
+#define RID_BMP_NAVI_REGION                      (RC_UTLUI_BEGIN + 25)
+#define RID_BMP_NAVI_URLFIELD                    (RC_UTLUI_BEGIN + 26)
+#define RID_BMP_NAVI_REFERENCE                   (RC_UTLUI_BEGIN + 27)
+#define RID_BMP_NAVI_INDEX                       (RC_UTLUI_BEGIN + 28)
+#define RID_BMP_NAVI_POSTIT                      (RC_UTLUI_BEGIN + 29)
+#define RID_BMP_NAVI_DRAWOBJECT                  (RC_UTLUI_BEGIN + 30)
+#define RID_BMP_DROP_REGION                      (RC_UTLUI_BEGIN + 31)
+#define RID_BMP_DROP_LINK                        (RC_UTLUI_BEGIN + 32)
+#define RID_BMP_DROP_COPY                        (RC_UTLUI_BEGIN + 33)
 
 //local ids of the Database ImageLists
 #define IMG_COLLAPSE        18002  /*RID_SVXIMG_COLLAPSEDNODE*/

@@ -797,7 +797,6 @@ SwContentTree::SwContentTree(vcl::Window* pParent, SwNavigationPI* pDialog)
     , m_bIsLastReadOnly(false)
     , m_bIsOutlineMoveable(true)
     , m_bViewHasChanged(false)
-    , m_bIsImageListInitialized(false)
     , m_bIsKeySpace(false)
 {
     SetHelpId(HID_NAVIGATOR_TREELIST);
@@ -1531,13 +1530,61 @@ IMPL_LINK_NOARG(SwContentTree, ContentDoubleClickHdl, SvTreeListBox*, bool)
     return false;
 }
 
+namespace
+{
+    BitmapEx GetBitmapForContentTypeId(ContentTypeId eType)
+    {
+        sal_uInt16 nResId(0);
+
+        switch (eType)
+        {
+            case ContentTypeId::OUTLINE:
+                nResId = RID_BMP_NAVI_OUTLINE;
+                break;
+            case ContentTypeId::TABLE:
+                nResId = RID_BMP_NAVI_TABLE;
+                break;
+            case ContentTypeId::FRAME:
+                nResId = RID_BMP_NAVI_FRAME;
+                break;
+            case ContentTypeId::GRAPHIC:
+                nResId = RID_BMP_NAVI_GRAPHIC;
+                break;
+            case ContentTypeId::OLE:
+                nResId = RID_BMP_NAVI_OLE;
+                break;
+            case ContentTypeId::BOOKMARK:
+                nResId = RID_BMP_NAVI_BOOKMARK;
+                break;
+            case ContentTypeId::REGION:
+                nResId = RID_BMP_NAVI_REGION;
+                break;
+            case ContentTypeId::URLFIELD:
+                nResId = RID_BMP_NAVI_URLFIELD;
+                break;
+            case ContentTypeId::REFERENCE:
+                nResId = RID_BMP_NAVI_REFERENCE;
+                break;
+            case ContentTypeId::INDEX:
+                nResId = RID_BMP_NAVI_INDEX;
+                break;
+            case ContentTypeId::POSTIT:
+                nResId = RID_BMP_NAVI_POSTIT;
+                break;
+            case ContentTypeId::DRAWOBJECT:
+                nResId = RID_BMP_NAVI_DRAWOBJECT;
+                break;
+            case ContentTypeId::UNKNOWN:
+                SAL_WARN("sw.ui", "ContentTypeId::UNKNOWN has no bitmap preview");
+                break;
+        }
+
+        return BitmapEx(SW_RES(nResId));
+    };
+}
+
 void SwContentTree::Display( bool bActive )
 {
-    if(!m_bIsImageListInitialized)
-    {
-        m_aEntryImages = ImageList(SW_RES(IMG_NAVI_ENTRYBMP));
-        m_bIsImageListInitialized = true;
-    }
     // First read the selected entry to select it later again if necessary
     // -> the user data here are no longer valid!
     SvTreeListEntry* pOldSelEntry = FirstSelected();
@@ -1596,9 +1643,9 @@ void SwContentTree::Display( bool bActive )
 
                 OUString sEntry = (*ppContentT)->GetName();
                 SvTreeListEntry* pEntry;
-                const Image& rImage = m_aEntryImages.GetImage(SID_SW_START + (int)nCntType);
+                Image aImage(GetBitmapForContentTypeId(nCntType));
                 bool bChOnDemand = 0 != (*ppContentT)->GetMemberCount();
-                pEntry = InsertEntry(sEntry, rImage, rImage,
+                pEntry = InsertEntry(sEntry, aImage, aImage,
                                 nullptr, bChOnDemand, TREELIST_APPEND, (*ppContentT));
                 if(nCntType == m_nLastSelType)
                     pSelEntry = pEntry;
@@ -1647,9 +1694,9 @@ void SwContentTree::Display( bool bActive )
                                     &m_aHiddenContentArr[m_nRootType];
             if(!(*ppRootContentT))
                 (*ppRootContentT) = new SwContentType(pShell, m_nRootType, m_nOutlineLevel );
-            const Image& rImage = m_aEntryImages.GetImage(20000 + (int)m_nRootType);
+            Image aImage(GetBitmapForContentTypeId(m_nRootType));
             SvTreeListEntry* pParent = InsertEntry(
-                    (*ppRootContentT)->GetName(), rImage, rImage,
+                    (*ppRootContentT)->GetName(), aImage, aImage,
                         nullptr, false, TREELIST_APPEND, *ppRootContentT);
 
             if(m_nRootType != ContentTypeId::OUTLINE)
@@ -3521,7 +3568,6 @@ void SwContentTree::DataChanged(const DataChangedEvent& rDCEvt)
     {
         FindActiveTypeAndRemoveUserData();
 
-        m_bIsImageListInitialized = false;
         Display(true);
     }
 

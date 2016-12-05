@@ -24,25 +24,64 @@
 #include "helpid.h"
 #include "access.hrc"
 
-ImageList IMG_NAVI_ENTRYBMP
+Bitmap RID_BMP_NAVI_OUTLINE
 {
-    Prefix = "nc";
-    IdList =
-    {
-        20000 ;
-        20001 ;
-        20002 ;
-        20003 ;
-        20004 ;
-        20005 ;
-        20006 ;
-        20007 ;
-        20008 ;
-        20009 ;
-        20010 ;
-        20011 ;
-    };
-    IdCount = { 12 ; };
+    File = "nc20000.png" ;
+};
+
+Bitmap RID_BMP_NAVI_TABLE
+{
+    File = "nc20001.png" ;
+};
+
+Bitmap RID_BMP_NAVI_FRAME
+{
+    File = "nc20002.png" ;
+};
+
+Bitmap RID_BMP_NAVI_GRAPHIC
+{
+    File = "nc20003.png" ;
+};
+
+Bitmap RID_BMP_NAVI_OLE
+{
+    File = "nc20004.png" ;
+};
+
+Bitmap RID_BMP_NAVI_BOOKMARK
+{
+    File = "nc20005.png" ;
+};
+
+Bitmap RID_BMP_NAVI_REGION
+{
+    File = "nc20006.png" ;
+};
+
+Bitmap RID_BMP_NAVI_URLFIELD
+{
+    File = "nc20007.png" ;
+};
+
+Bitmap RID_BMP_NAVI_REFERENCE
+{
+    File = "nc20008.png" ;
+};
+
+Bitmap RID_BMP_NAVI_INDEX
+{
+    File = "nc20009.png" ;
+};
+
+Bitmap RID_BMP_NAVI_POSTIT
+{
+    File = "nc20010.png" ;
+};
+
+Bitmap RID_BMP_NAVI_DRAWOBJECT
+{
+    File = "nc20011.png" ;
 };
 
 Bitmap RID_BMP_DROP_REGION

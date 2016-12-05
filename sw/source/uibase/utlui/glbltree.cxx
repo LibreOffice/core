@@ -145,7 +145,6 @@ SwGlobalTree::SwGlobalTree(vcl::Window* pParent, SwNavigationPI* pDialog)
     , pDocInserter(nullptr)
     , bIsInternalDrag(false)
     , bLastEntryEmphasis(false)
-    , bIsImageListInitialized(false)
 {
     SetDragDropMode(DragDropMode::APP_COPY  |
                     DragDropMode::CTRL_MOVE |
@@ -622,13 +621,8 @@ void SwGlobalTree::Clear()
     SvTreeListBox::Clear();
 }
 
-void    SwGlobalTree::Display(bool bOnlyUpdateUserData)
+void SwGlobalTree::Display(bool bOnlyUpdateUserData)
 {
-    if(!bIsImageListInitialized)
-    {
-        aEntryImages = ImageList(SW_RES(IMG_NAVI_ENTRYBMP));
-        bIsImageListInitialized = true;
-    }
     size_t nCount = pSwGlblDocContents->size();
     if(bOnlyUpdateUserData && GetEntryCount() == pSwGlblDocContents->size())
     {
@@ -673,14 +667,14 @@ void    SwGlobalTree::Display(bool bOnlyUpdateUserData)
                 {
                     const SwTOXBase* pBase = pCont->GetTOX();
                     sEntry = pBase->GetTitle();
-                    aImage = aEntryImages.GetImage(SID_SW_START + (int)ContentTypeId::INDEX);
+                    aImage = Image(Bitmap(SW_RES(RID_BMP_NAVI_INDEX)));
                 }
                 break;
                 case GLBLDOC_SECTION:
                 {
                     const SwSection* pSect = pCont->GetSection();
                     sEntry = pSect->GetSectionName();
-                    aImage = aEntryImages.GetImage(SID_SW_START + (int)ContentTypeId::REGION);
+                    aImage = Image(Bitmap(SW_RES(RID_BMP_DROP_REGION)));
                 }
                 break;
             }
@@ -1244,7 +1238,6 @@ void    SwGlobalTree::DataChanged( const DataChangedEvent& rDCEvt )
     if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
          (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
     {
-        aEntryImages = ImageList(SW_RES(IMG_NAVI_ENTRYBMP));
         Update(true);
     }
     SvTreeListBox::DataChanged( rDCEvt );

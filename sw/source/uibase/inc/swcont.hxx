@@ -25,7 +25,6 @@
 
 class SwContentType;
 
-// synchronize order and number with ResIds!!
 enum class ContentTypeId
 {
     OUTLINE        = 0,

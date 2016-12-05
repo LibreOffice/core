@@ -73,7 +73,6 @@ class SwContentTree
     , public SfxListener
 {
     VclPtr<SwNavigationPI> m_xDialog;
-    ImageList           m_aEntryImages;
     OUString            m_sSpace;
     AutoTimer           m_aUpdTimer;
 
@@ -111,7 +110,6 @@ class SwContentTree
     bool                m_bIsLastReadOnly     :1;
     bool                m_bIsOutlineMoveable  :1;
     bool                m_bViewHasChanged     :1;
-    bool                m_bIsImageListInitialized : 1;
 
     static bool         bIsInDrag;
 
@@ -265,8 +263,6 @@ private:
     AutoTimer               aUpdateTimer;
     OUString                aContextStrings[GLOBAL_CONTEXT_COUNT];
 
-    ImageList               aEntryImages;
-
     SwWrtShell*             pActiveShell;
     SvTreeListEntry*        pEmphasisEntry; // Drag'n Drop emphasis
     SvTreeListEntry*        pDDSource;      // source for Drag'n Drop
@@ -277,7 +273,6 @@ private:
 
     bool                bIsInternalDrag     :1;
     bool                bLastEntryEmphasis  :1; // Drag'n Drop
-    bool                bIsImageListInitialized : 1;
 
     static const SfxObjectShell* pShowShell;
 
