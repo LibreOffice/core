@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "3a71b18c_ef62faac",
+        "filename": "vcl/source/gdi/bitmap.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1001302
+      },
+      "writtenOn": "2016-12-05T15:06:33Z",
+      "side": 1,
+      "message": "Ah, good find. This is a mistake",
+      "parentUuid": "3a71b18c_af48025d",
+      "revId": "6017ae7ff678b96dd7aededd5fb425228646e6d3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a71b18c_0f6e56c9",
         "filename": "vcl/source/gdi/bitmap.cxx",
         "patchSetId": 1
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "3a71b18c_0f5816fa",
+        "filename": "vcl/source/gdi/bitmap.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 835,
+      "author": {
+        "id": 1001302
+      },
+      "writtenOn": "2016-12-05T15:06:33Z",
+      "side": 1,
+      "message": "Correct, they should be removed",
+      "parentUuid": "3a71b18c_0f6e56c9",
+      "revId": "6017ae7ff678b96dd7aededd5fb425228646e6d3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a71b18c_4f684ebb",
         "filename": "vcl/source/gdi/bitmap3.cxx",
         "patchSetId": 1
@@ -47,6 +83,24 @@
       "writtenOn": "2016-12-05T12:29:31Z",
       "side": 1,
       "message": "can delete this line",
+      "revId": "6017ae7ff678b96dd7aededd5fb425228646e6d3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a71b18c_2f5dd2e9",
+        "filename": "vcl/source/gdi/bitmap3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2311,
+      "author": {
+        "id": 1001302
+      },
+      "writtenOn": "2016-12-05T15:06:33Z",
+      "side": 1,
+      "message": "Correct",
+      "parentUuid": "3a71b18c_4f684ebb",
       "revId": "6017ae7ff678b96dd7aededd5fb425228646e6d3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
