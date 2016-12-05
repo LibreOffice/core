@@ -68,6 +68,7 @@ class SalFrame;
 class MenuFloatingWindow;
 class VCLXWindow;
 class VclWindowEvent;
+enum class ImplPaintFlags;
 
 namespace com { namespace sun { namespace star {
 namespace accessibility {
@@ -685,7 +686,7 @@ private:
         PaintHelper destructor; and on the other hand it creates PaintHelper
         that (when destructed) calls other ImplCallPaint()'s.
     */
-    SAL_DLLPRIVATE void                 ImplCallPaint(const vcl::Region* pRegion, sal_uInt16 nPaintFlags);
+    SAL_DLLPRIVATE void                 ImplCallPaint(const vcl::Region* pRegion, ImplPaintFlags nPaintFlags);
 
     SAL_DLLPRIVATE void                 ImplCallOverlapPaint();
 
