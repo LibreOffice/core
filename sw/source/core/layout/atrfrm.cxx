@@ -3344,9 +3344,7 @@ void SwDrawFrameFormat::MakeFrames()
 
 void SwDrawFrameFormat::DelFrames()
 {
-    SwDrawContact *pContact = static_cast<SwDrawContact *>(FindContactObj());
-    if ( pContact ) //for the reader and other unpredictable things.
-        pContact->DisconnectFromLayout();
+    CallSwClientNotify(sw::DrawFrameFormatHint(sw::DrawFrameFormatHintId::DELETE_FRAMES));
 }
 
 // #i31698#
