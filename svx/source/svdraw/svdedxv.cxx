@@ -2098,8 +2098,9 @@ static const sal_uInt16* GetFormatRangeImpl( bool bTextOnly )
         SDRATTR_TABLE_FIRST, SDRATTR_TABLE_LAST,
         XATTR_LINE_FIRST, XATTR_LINE_LAST,
         XATTR_FILL_FIRST, XATTRSET_FILL,
-        EE_PARA_START, EE_PARA_END,
+        EE_PARA_START, EE_PARA_END, // text-only from here on
         EE_CHAR_START, EE_CHAR_END,
+        SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST, // table cell formats
         0,0
     };
     return &gRanges[ bTextOnly ? 10 : 0];
@@ -2124,6 +2125,17 @@ void SdrObjEditView::TakeFormatPaintBrush( std::shared_ptr< SfxItemSet >& rForma
         {
             const bool bOnlyHardAttr = false;
             rFormatSet->Put( GetAttrFromMarked(bOnlyHardAttr) );
+        }
+
+        // check for cloning from table cell, in which case we need to copy cell-specific formatting attributes
+        const SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+        if( pObj && (pObj->GetObjInventor() == SdrInventor ) && (pObj->GetObjIdentifier() == OBJ_TABLE) )
+        {
+            auto pTable = static_cast<const sdr::table::SdrTableObj*>(pObj);
+            if (pTable->getActiveCell().is()) {
+                SfxItemSet const & rSet = pTable->GetActiveCellItemSet();
+                rFormatSet->Put(rSet);
+            }
         }
     }
 }
@@ -2189,71 +2201,88 @@ void SdrObjEditView::ApplyFormatPaintBrushToText( SfxItemSet& rFormatSet, SdrTex
 
 void SdrObjEditView::ApplyFormatPaintBrush( SfxItemSet& rFormatSet, bool bNoCharacterFormats, bool bNoParagraphFormats )
 {
-    if( !mxSelectionController.is() || !mxSelectionController->ApplyFormatPaintBrush( rFormatSet, bNoCharacterFormats, bNoParagraphFormats ) )
+    if( mxSelectionController.is() &&
+        mxSelectionController->ApplyFormatPaintBrush( rFormatSet, bNoCharacterFormats, bNoParagraphFormats ) )
     {
-        const SdrMarkList& rMarkList = GetMarkedObjectList();
-        SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-        OutlinerView* pOLV = GetTextEditOutlinerView();
+        return;
+    }
 
+    OutlinerView* pOLV = GetTextEditOutlinerView();
+    const SdrMarkList& rMarkList = GetMarkedObjectList();
+    if( !pOLV )
+    {
+        SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
         const SfxItemSet& rShapeSet = pObj->GetMergedItemSet();
 
-        if( !pOLV )
+        // if not in text edit mode (aka the user selected text or clicked on a word)
+        // apply formatting attributes to selected shape
+        // All formatting items (see ranges above) that are unequal in selected shape and
+        // the format paintbrush are hard set on the selected shape.
+
+        const sal_uInt16* pRanges = rFormatSet.GetRanges();
+        bool bTextOnly = true;
+
+        while( *pRanges )
         {
-            // if not in text edit mode (aka the user selected text or clicked on a word)
-            // apply formatting attributes to selected shape
-            // All formatting items (see ranges above) that are unequal in selected shape and
-            // the format paintbrush are hard set on the selected shape.
-
-            const sal_uInt16* pRanges = rFormatSet.GetRanges();
-            bool bTextOnly = true;
-
-            while( *pRanges )
+            if( (*pRanges != EE_PARA_START) && (*pRanges != EE_CHAR_START) )
             {
-                if( (*pRanges != EE_PARA_START) && (*pRanges != EE_CHAR_START) )
-                {
-                    bTextOnly = false;
-                    break;
-                }
-                pRanges += 2;
+                bTextOnly = false;
+                break;
             }
+            pRanges += 2;
+        }
 
-            if( !bTextOnly )
+        if( !bTextOnly )
+        {
+            SfxItemSet aPaintSet( CreatePaintSet(
+                                    GetFormatRangeImpl(false), *rShapeSet.GetPool(),
+                                    rFormatSet, rShapeSet,
+                                    bNoCharacterFormats, bNoParagraphFormats ) );
+            SetAttrToMarked(aPaintSet, false/*bReplaceAll*/);
+        }
+
+        // now apply character and paragraph formatting to text, if the shape has any
+        SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>(pObj);
+        if( pTextObj )
+        {
+            sal_Int32 nText = pTextObj->getTextCount();
+
+            while( --nText >= 0 )
             {
-                SfxItemSet aPaintSet( CreatePaintSet( GetFormatRangeImpl(false), *rShapeSet.GetPool(), rFormatSet, rShapeSet, bNoCharacterFormats, bNoParagraphFormats ) );
-                const bool bReplaceAll = false;
-                SetAttrToMarked(aPaintSet, bReplaceAll);
-            }
-
-            // now apply character and paragraph formatting to text, if the shape has any
-            SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>(pObj);
-            if( pTextObj )
-            {
-                sal_Int32 nText = pTextObj->getTextCount();
-
-                while( --nText >= 0 )
-                {
-                    SdrText* pText = pTextObj->getText( nText );
-                    ApplyFormatPaintBrushToText( rFormatSet, *pTextObj, pText, bNoCharacterFormats, bNoParagraphFormats );
-                }
+                SdrText* pText = pTextObj->getText( nText );
+                ApplyFormatPaintBrushToText( rFormatSet, *pTextObj, pText, bNoCharacterFormats, bNoParagraphFormats );
             }
         }
-        else
+    }
+    else
+    {
+        ::Outliner* pOutliner = pOLV->GetOutliner();
+        if( pOutliner )
         {
-            ::Outliner* pOutliner = pOLV->GetOutliner();
-            if( pOutliner )
-            {
-                const EditEngine& rEditEngine = pOutliner->GetEditEngine();
+            const EditEngine& rEditEngine = pOutliner->GetEditEngine();
 
-                ESelection aSel( pOLV->GetSelection() );
-                if( !aSel.HasRange() )
-                    pOLV->SetSelection( rEditEngine.GetWord( aSel, css::i18n::WordType::DICTIONARY_WORD ) );
+            ESelection aSel( pOLV->GetSelection() );
+            if( !aSel.HasRange() )
+                pOLV->SetSelection( rEditEngine.GetWord( aSel, css::i18n::WordType::DICTIONARY_WORD ) );
 
-                const bool bRemoveParaAttribs = !bNoParagraphFormats;
-                pOLV->RemoveAttribsKeepLanguages( bRemoveParaAttribs );
-                SfxItemSet aSet( pOLV->GetAttribs() );
-                SfxItemSet aPaintSet( CreatePaintSet(GetFormatRangeImpl(true), *aSet.GetPool(), rFormatSet, aSet, bNoCharacterFormats, bNoParagraphFormats ) );
-                pOLV->SetAttribs( aPaintSet );
-            }
+            const bool bRemoveParaAttribs = !bNoParagraphFormats;
+            pOLV->RemoveAttribsKeepLanguages( bRemoveParaAttribs );
+            SfxItemSet aSet( pOLV->GetAttribs() );
+            SfxItemSet aPaintSet( CreatePaintSet(
+                                    GetFormatRangeImpl(true), *aSet.GetPool(),
+                                    rFormatSet, aSet,
+                                    bNoCharacterFormats, bNoParagraphFormats ) );
+            pOLV->SetAttribs( aPaintSet );
+        }
+    }
+
+    // check for cloning to table cell, in which case we need to copy cell-specific formatting attributes
+    SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+    if( pObj && (pObj->GetObjInventor() == SdrInventor) && (pObj->GetObjIdentifier() == OBJ_TABLE) )
+    {
+        auto pTable = static_cast<sdr::table::SdrTableObj*>(pObj);
+        if (pTable->getActiveCell().is()) {
+            pTable->SetMergedItemSetAndBroadcastOnActiveCell(rFormatSet, false/*bClearAllItems*/);
         }
     }
 }
