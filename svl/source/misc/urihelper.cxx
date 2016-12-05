@@ -493,7 +493,7 @@ OUString URIHelper::FindFirstURLInText(OUString const & rText,
     // length match.
 
     // Productions 1--4 use the given eMechanism and eCharset.  Productions 5--9
-    // use ENCODE_ALL.
+    // use EncodeMechanism::All.
 
     // Productions 6--9 are only applicable if the FSYS_DOS bit is set in
     // eStyle.
@@ -630,7 +630,7 @@ OUString URIHelper::FindFirstURLInText(OUString const & rText,
                     {
                         INetURLObject aUri(rText.copy(nPos, nUriEnd - nPos),
                                            INetProtocol::File,
-                                           INetURLObject::ENCODE_ALL,
+                                           INetURLObject::EncodeMechanism::All,
                                            RTL_TEXTENCODING_UTF8,
                                            INetURLObject::FSYS_DOS);
                         if (!aUri.HasError())
@@ -659,7 +659,7 @@ OUString URIHelper::FindFirstURLInText(OUString const & rText,
                     {
                         INetURLObject aUri(rText.copy(nPos, nUriEnd - nPos),
                                            INetProtocol::File,
-                                           INetURLObject::ENCODE_ALL,
+                                           INetURLObject::EncodeMechanism::All,
                                            RTL_TEXTENCODING_UTF8,
                                            INetURLObject::FSYS_DOS);
                         if (!aUri.HasError())
@@ -696,7 +696,7 @@ OUString URIHelper::FindFirstURLInText(OUString const & rText,
                         {
                             INetURLObject aUri(rText.copy(nPos, i - nPos),
                                                INetProtocol::Mailto,
-                                               INetURLObject::ENCODE_ALL);
+                                               INetURLObject::EncodeMechanism::All);
                             if (!aUri.HasError())
                             {
                                 rBegin = nPos;

@@ -430,8 +430,8 @@ bool SwDocShell::SaveAs( SfxMedium& rMedium )
 
         const INetURLObject& rOldURLObject = GetMedium()->GetURLObject();
         OUString aURL = "vnd.sun.star.pkg://";
-        aURL += INetURLObject::encode(rOldURLObject.GetMainURL(INetURLObject::DECODE_WITH_CHARSET), INetURLObject::PART_AUTHORITY, INetURLObject::ENCODE_ALL);
-        aURL += "/" + INetURLObject::encode(m_pDoc->GetDBManager()->getEmbeddedName(), INetURLObject::PART_FPATH, INetURLObject::ENCODE_ALL);
+        aURL += INetURLObject::encode(rOldURLObject.GetMainURL(INetURLObject::DECODE_WITH_CHARSET), INetURLObject::PART_AUTHORITY, INetURLObject::EncodeMechanism::All);
+        aURL += "/" + INetURLObject::encode(m_pDoc->GetDBManager()->getEmbeddedName(), INetURLObject::PART_FPATH, INetURLObject::EncodeMechanism::All);
 
         uno::Reference<sdb::XDocumentDataSource> xDataSource(xDatabaseContext->getByName(aURL), uno::UNO_QUERY);
         uno::Reference<frame::XStorable> xStorable(xDataSource->getDatabaseDocument(), uno::UNO_QUERY);

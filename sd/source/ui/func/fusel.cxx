@@ -1365,7 +1365,7 @@ bool FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
                    OUString aBaseURL = GetDocSh()->GetMedium()->GetBaseURL();
                    INetURLObject aURL( ::URIHelper::SmartRel2Abs( INetURLObject(aBaseURL), pInfo->GetBookmark(),
                                                 URIHelper::GetMaybeFileHdl(), true, false,
-                                                INetURLObject::WAS_ENCODED, INetURLObject::DECODE_UNAMBIGUOUS ) );
+                                                INetURLObject::EncodeMechanism::WasEncoded, INetURLObject::DECODE_UNAMBIGUOUS ) );
 
                    if( INetProtocol::File == aURL.GetProtocol() )
                    {

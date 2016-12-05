@@ -865,7 +865,7 @@ void SdPublishingDlg::GetParameterSequence( Sequence< PropertyValue >& rParams )
     // try to guess protocol for user's homepage
     INetURLObject aHomeURL( pPage4_WWW->GetText(),
                             INetProtocol::Http,     // default proto is HTTP
-                            INetURLObject::ENCODE_ALL );
+                            INetURLObject::EncodeMechanism::All );
 
     aValue.Name = "HomepageURL";
     aValue.Value <<= OUString( aHomeURL.GetMainURL( INetURLObject::NO_DECODE ) );

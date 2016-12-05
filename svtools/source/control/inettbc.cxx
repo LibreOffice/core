@@ -481,7 +481,7 @@ OUString SvtURLBox::ParseSmart( const OUString& _aText, const OUString& _aBaseUR
 
             // file URL must be correctly encoded!
             OUString aTextURL = INetURLObject::encode( aText, INetURLObject::PART_FPATH,
-                                                     INetURLObject::ENCODE_ALL );
+                                                     INetURLObject::EncodeMechanism::All );
             aTemp += aTextURL;
 
             INetURLObject aTmp( aTemp );
@@ -516,7 +516,7 @@ OUString SvtURLBox::ParseSmart( const OUString& _aText, const OUString& _aBaseUR
             bool bWasAbsolute = false;
 #ifdef UNX
             // encode file URL correctly
-            aSmart = INetURLObject::encode( aSmart, INetURLObject::PART_FPATH, INetURLObject::ENCODE_ALL );
+            aSmart = INetURLObject::encode( aSmart, INetURLObject::PART_FPATH, INetURLObject::EncodeMechanism::All );
 #endif
             INetURLObject aTmp( aObj.smartRel2Abs( aSmart, bWasAbsolute ) );
 

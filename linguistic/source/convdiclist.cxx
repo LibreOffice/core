@@ -67,7 +67,7 @@ OUString GetConvDicMainURL( const OUString &rDicName, const OUString &rDirectory
     INetURLObject aURLObj;
     aURLObj.SetSmartProtocol( INetProtocol::File );
     aURLObj.SetSmartURL( rDirectoryURL );
-    aURLObj.Append( aFullDicName, INetURLObject::ENCODE_ALL );
+    aURLObj.Append( aFullDicName, INetURLObject::EncodeMechanism::All );
     DBG_ASSERT(!aURLObj.HasError(), "invalid URL");
     if (aURLObj.HasError())
         return OUString();

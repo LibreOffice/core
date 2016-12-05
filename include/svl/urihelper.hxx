@@ -54,7 +54,7 @@ SVL_DLLPUBLIC OUString SmartRel2Abs(INetURLObject const & rTheBaseURIRef,
                                     Link<OUString *, bool> const & rMaybeFileHdl = Link<OUString *, bool>(),
                                     bool bCheckFileExists = true,
                                     bool bIgnoreFragment = false,
-                                    INetURLObject::EncodeMechanism eEncodeMechanism = INetURLObject::WAS_ENCODED,
+                                    INetURLObject::EncodeMechanism eEncodeMechanism = INetURLObject::EncodeMechanism::WasEncoded,
                                     INetURLObject::DecodeMechanism eDecodeMechanism = INetURLObject::DECODE_TO_IURI,
                                     rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8,
                                     bool bRelativeNonURIs = false,
@@ -119,7 +119,7 @@ SVL_DLLPUBLIC OUString FindFirstURLInText(OUString const & rText,
                                           sal_Int32 & rBegin,
                                           sal_Int32 & rEnd,
                                           CharClass const & rCharClass,
-                                          INetURLObject::EncodeMechanism eMechanism = INetURLObject::WAS_ENCODED,
+                                          INetURLObject::EncodeMechanism eMechanism = INetURLObject::EncodeMechanism::WasEncoded,
                                           rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8);
 
 /** Remove any password component from both absolute and relative URLs.
@@ -148,7 +148,7 @@ SVL_DLLPUBLIC OUString FindFirstURLInText(OUString const & rText,
     @return  The input URI with any password component removed.
  */
 SVL_DLLPUBLIC OUString removePassword(OUString const & rURI,
-                                      INetURLObject::EncodeMechanism eEncodeMechanism = INetURLObject::WAS_ENCODED,
+                                      INetURLObject::EncodeMechanism eEncodeMechanism = INetURLObject::EncodeMechanism::WasEncoded,
                                       INetURLObject::DecodeMechanism eDecodeMechanism = INetURLObject::DECODE_TO_IURI,
                                       rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8);
 
