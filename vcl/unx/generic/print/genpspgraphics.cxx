@@ -439,13 +439,13 @@ bool GenPspGraphics::drawPolyLine(
     return false;
 }
 
-bool GenPspGraphics::drawPolyLineBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry )
+bool GenPspGraphics::drawPolyLineBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const PolyFlags* pFlgAry )
 {
     m_pPrinterGfx->DrawPolyLineBezier (nPoints, reinterpret_cast<Point const *>(pPtAry), pFlgAry);
     return true;
 }
 
-bool GenPspGraphics::drawPolygonBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry )
+bool GenPspGraphics::drawPolygonBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const PolyFlags* pFlgAry )
 {
     m_pPrinterGfx->DrawPolygonBezier (nPoints, reinterpret_cast<Point const *>(pPtAry), pFlgAry);
     return true;
@@ -454,7 +454,7 @@ bool GenPspGraphics::drawPolygonBezier( sal_uInt32 nPoints, const SalPoint* pPtA
 bool GenPspGraphics::drawPolyPolygonBezier( sal_uInt32 nPoly,
                                              const sal_uInt32* pPoints,
                                              const SalPoint* const* pPtAry,
-                                             const sal_uInt8* const* pFlgAry )
+                                             const PolyFlags* const* pFlgAry )
 {
     // Point must be equal to SalPoint! see include/vcl/salgtype.hxx
     m_pPrinterGfx->DrawPolyPolygonBezier (nPoly, pPoints, reinterpret_cast<Point const * const *>(pPtAry), pFlgAry);

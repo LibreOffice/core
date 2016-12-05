@@ -1053,7 +1053,7 @@ bool AquaSalGraphics::drawPolyLine( const basegfx::B2DPolygon& rPolyLine,
     return true;
 }
 
-bool AquaSalGraphics::drawPolyLineBezier( sal_uInt32, const SalPoint*, const sal_uInt8* )
+bool AquaSalGraphics::drawPolyLineBezier( sal_uInt32, const SalPoint*, const PolyFlags* )
 {
     return false;
 }
@@ -1349,13 +1349,13 @@ void AquaSalGraphics::drawPolygon( sal_uInt32 nPoints, const SalPoint *pPtAry )
     DBG_DRAW_OPERATION_EXIT("drawPolygon");
 }
 
-bool AquaSalGraphics::drawPolygonBezier( sal_uInt32, const SalPoint*, const sal_uInt8* )
+bool AquaSalGraphics::drawPolygonBezier( sal_uInt32, const SalPoint*, const PolyFlags* )
 {
     return false;
 }
 
 bool AquaSalGraphics::drawPolyPolygonBezier( sal_uInt32, const sal_uInt32*,
-                                             const SalPoint* const*, const sal_uInt8* const* )
+                                             const SalPoint* const*, const PolyFlags* const* )
 {
     return false;
 }
