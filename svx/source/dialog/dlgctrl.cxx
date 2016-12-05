@@ -1064,7 +1064,7 @@ void SvxPixelCtl::SetXBitmap( const BitmapEx& rBitmapEx )
     if(isHistorical8x8(rBitmapEx, aBack, aFront))
     {
         Bitmap aBitmap(rBitmapEx.GetBitmap());
-        BitmapReadAccess* pRead = aBitmap.AcquireReadAccess();
+        Bitmap::ScopedReadAccess pRead(aBitmap);
 
         aBackgroundColor = aBack;
         aPixelColor = aFront;
@@ -1082,8 +1082,6 @@ void SvxPixelCtl::SetXBitmap( const BitmapEx& rBitmapEx )
                 *( pPixel + i ) = 1;
             }
         }
-
-        Bitmap::ReleaseAccess(pRead);
     }
 }
 

@@ -60,9 +60,10 @@ namespace drawinglayer
         {
         protected:
             BitmapEx                                    maBitmapEx;
-            BitmapReadAccess*                           mpReadBitmap;
+            Bitmap                                      maBitmap;   // Bitmap held within maBitmapEx, to exist during mpReadBitmap scope
+            Bitmap::ScopedReadAccess                    mpReadBitmap;
             Bitmap                                      maTransparence;
-            BitmapReadAccess*                           mpReadTransparence;
+            Bitmap::ScopedReadAccess                    mpReadTransparence;
             basegfx::B2DPoint                           maTopLeft;
             basegfx::B2DVector                          maSize;
             double                                      mfMulX;

@@ -704,8 +704,8 @@ void getBitmapData( const BitmapEx& aBmpEx, sal_uInt8*& tgadata, sal_uInt8*& tga
 {
     if( !aBmpEx.IsEmpty() )
     {
-        Bitmap              aBmp( aBmpEx.GetBitmap() );
-        BitmapReadAccess*   pRAcc = aBmp.AcquireReadAccess();
+        Bitmap aBmp( aBmpEx.GetBitmap() );
+        Bitmap::ScopedReadAccess pRAcc(aBmp);
 
         if( pRAcc )
         {
@@ -727,7 +727,7 @@ void getBitmapData( const BitmapEx& aBmpEx, sal_uInt8*& tgadata, sal_uInt8*& tga
                 aAlpha = AlphaMask( aBmp.GetSizePixel(), &cAlphaVal );
             }
 
-            BitmapReadAccess* pAAcc = aAlpha.AcquireReadAccess();
+            AlphaMask::ScopedReadAccess pAAcc(aAlpha);
 
             if( pAAcc )
             {
@@ -755,11 +755,7 @@ void getBitmapData( const BitmapEx& aBmpEx, sal_uInt8*& tgadata, sal_uInt8*& tga
                         *pAlpha++ = 0xff - nAlpha;
                     }
                 }
-
-                aAlpha.ReleaseAccess( pAAcc );
             }
-
-            Bitmap::ReleaseAccess( pRAcc );
         }
     }
 }

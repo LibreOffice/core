@@ -402,7 +402,8 @@ void XclExpImgData::Save( XclExpStream& rStrm )
     if( aBmp.GetBitCount() != 24 )
         aBmp.Convert( BMP_CONVERSION_24BIT );
 
-    if( BitmapReadAccess* pAccess = aBmp.AcquireReadAccess() )
+    Bitmap::ScopedReadAccess pAccess(aBmp);
+    if( pAccess )
     {
         sal_Int32 nWidth = ::std::min< sal_Int32 >( pAccess->Width(), 0xFFFF );
         sal_Int32 nHeight = ::std::min< sal_Int32 >( pAccess->Height(), 0xFFFF );
@@ -434,7 +435,6 @@ void XclExpImgData::Save( XclExpStream& rStrm )
 
             rStrm.EndRecord();
         }
-        Bitmap::ReleaseAccess( pAccess );
     }
 }
 
