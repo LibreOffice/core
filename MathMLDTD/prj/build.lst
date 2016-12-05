@@ -1,3 +1,2 @@
 md	MathMLDTD	:	solenv NULL
-md	MathMLDTD							usr1	-	all	md_mkout NULL
-md	MathMLDTD\prj						get		-	all	md_prj NULL
+md	MathMLDTD\prj						nmake		-	all	md_prj NULL

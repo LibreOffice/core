@@ -21,54 +21,5 @@
 
 
 
-$(eval $(call gb_Module_Module,ooo))
-
-$(eval $(call gb_Module_add_moduledirs,ooo,\
-    MathMLDTD \
-    basebmp \
-    basegfx \
-    canvas \
-    comphelper \
-    cppcanvas \
-    dbaccess \
-    drawinglayer \
-    editeng \
-    fileaccess \
-    formula \
-    framework \
-    idl \
-    io \
-    linguistic \
-    o3tl \
-    offapi \
-    oovbaapi \
-    oox \
-    padmin \
-    package \
-    reportdesign \
-    sax \
-    sd \
-    sfx2 \
-    sot \
-    starmath \
-    svgio \
-    svl \
-    svtools \
-    svx \
-    sw \
-    toolkit \
-    tools \
-    ucbhelper \
-    udkapi \
-    unotools \
-    unoxml \
-    vbahelper \
-    vcl \
-    wizards \
-    writerfilter \
-    xmloff \
-    xmlreader \
-    xmlscript \
-))
-
-# vim: set noet ts=4 sw=4:
+$(eval $(call gb_Package_Package,MathMLDTD_dtd,$(SRCDIR)/MathMLDTD))
+$(eval $(call gb_Package_add_file,MathMLDTD_dtd,bin/math.dtd,math.dtd))
