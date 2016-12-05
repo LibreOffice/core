@@ -301,7 +301,7 @@ bool GetDraftFillColor(const SfxItemSet& rSet, Color& rCol)
             const Size aSize(aBitmap.GetSizePixel());
             const sal_uInt32 nWidth = aSize.Width();
             const sal_uInt32 nHeight = aSize.Height();
-            BitmapReadAccess* pAccess = aBitmap.AcquireReadAccess();
+            Bitmap::ScopedReadAccess pAccess(aBitmap);
 
             if(pAccess && nWidth > 0 && nHeight > 0)
             {
@@ -334,12 +334,6 @@ bool GetDraftFillColor(const SfxItemSet& rSet, Color& rCol)
 
                 bRetval = true;
             }
-
-            if(pAccess)
-            {
-                Bitmap::ReleaseAccess(pAccess);
-            }
-
             break;
         }
         default: break;

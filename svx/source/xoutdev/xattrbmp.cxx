@@ -198,7 +198,7 @@ Bitmap createHistorical8x8FromArray(const sal_uInt16* pArray, Color aColorPix, C
     aPalette[1] = BitmapColor(aColorPix);
 
     Bitmap aBitmap(Size(8, 8), 1, &aPalette);
-    BitmapWriteAccess* pContent = aBitmap.AcquireWriteAccess();
+    Bitmap::ScopedWriteAccess pContent(aBitmap);
 
     if(pContent)
     {
@@ -217,7 +217,7 @@ Bitmap createHistorical8x8FromArray(const sal_uInt16* pArray, Color aColorPix, C
             }
         }
 
-        Bitmap::ReleaseAccess(pContent);
+        pContent.reset();
     }
 
     return aBitmap;

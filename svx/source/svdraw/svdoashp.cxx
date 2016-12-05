@@ -349,12 +349,12 @@ SdrObject* ImpCreateShadowObjectClone(const SdrObject& rOriginal, const SfxItemS
 
             if(!aBitmap.IsEmpty())
             {
-                BitmapReadAccess* pReadAccess = aBitmap.AcquireReadAccess();
+                Bitmap::ScopedReadAccess pReadAccess(aBitmap);
 
                 if(pReadAccess)
                 {
                     Bitmap aDestBitmap(aBitmap.GetSizePixel(), 24L);
-                    BitmapWriteAccess* pWriteAccess = aDestBitmap.AcquireWriteAccess();
+                    Bitmap::ScopedWriteAccess pWriteAccess(aDestBitmap);
 
                     if(pWriteAccess)
                     {
@@ -371,10 +371,10 @@ SdrObject* ImpCreateShadowObjectClone(const SdrObject& rOriginal, const SfxItemS
                             }
                         }
 
-                        Bitmap::ReleaseAccess(pWriteAccess);
+                        pWriteAccess.reset();
                     }
 
-                    Bitmap::ReleaseAccess(pReadAccess);
+                    pReadAccess.reset();
 
                     if(aBitmapEx.IsTransparent())
                     {

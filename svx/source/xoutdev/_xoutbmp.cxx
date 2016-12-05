@@ -446,8 +446,8 @@ Bitmap XOutBitmap::DetectEdges( const Bitmap& rBmp, const sal_uInt8 cThreshold )
             bool bRet = false;
 
             Bitmap              aDstBmp( aSize, 1 );
-            BitmapReadAccess*   pReadAcc = aWorkBmp.AcquireReadAccess();
-            BitmapWriteAccess*  pWriteAcc = aDstBmp.AcquireWriteAccess();
+            Bitmap::ScopedReadAccess pReadAcc(aWorkBmp);
+            Bitmap::ScopedWriteAccess pWriteAcc(aDstBmp);
 
             if( pReadAcc && pWriteAcc )
             {
@@ -499,8 +499,8 @@ Bitmap XOutBitmap::DetectEdges( const Bitmap& rBmp, const sal_uInt8 cThreshold )
                 bRet = true;
             }
 
-            Bitmap::ReleaseAccess( pReadAcc );
-            Bitmap::ReleaseAccess( pWriteAcc );
+            pReadAcc.reset();
+            pWriteAcc.reset();
 
             if( bRet )
                 aRetBmp = aDstBmp;

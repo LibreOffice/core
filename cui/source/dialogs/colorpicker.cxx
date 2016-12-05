@@ -316,7 +316,7 @@ void ColorFieldControl::UpdateBitmap()
     sal_uInt8* pRGB_Vert = maRGB_Vert.data();
     sal_uInt16* pPercent_Vert = maPercent_Vert.data();
 
-    BitmapWriteAccess* pWriteAccess = mpBitmap->AcquireWriteAccess();
+    Bitmap::ScopedWriteAccess pWriteAccess(*mpBitmap);
     if (pWriteAccess)
     {
         BitmapColor aBitmapColor(maColor);
@@ -403,8 +403,6 @@ void ColorFieldControl::UpdateBitmap()
             }
             break;
         }
-
-        Bitmap::ReleaseAccess(pWriteAccess);
     }
 }
 

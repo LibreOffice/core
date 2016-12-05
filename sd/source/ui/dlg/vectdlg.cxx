@@ -163,8 +163,8 @@ void SdVectorizeDlg::Calculate( Bitmap& rBmp, GDIMetaFile& rMtf )
 
         if( m_pCbFillHoles->IsChecked() )
         {
-            GDIMetaFile         aNewMtf;
-            BitmapReadAccess*   pRAcc = aTmp.AcquireReadAccess();
+            GDIMetaFile                 aNewMtf;
+            Bitmap::ScopedReadAccess    pRAcc(aTmp);
 
             if( pRAcc )
             {
@@ -186,10 +186,10 @@ void SdVectorizeDlg::Calculate( Bitmap& rBmp, GDIMetaFile& rMtf )
                     const long nY = nTY * nTileY;
 
                     for( long nTX = 0; nTX < nCountX; nTX++ )
-                        AddTile( pRAcc, aNewMtf, nTX * nTileX, nTY * nTileY, nTileX, nTileY );
+                        AddTile( pRAcc.get(), aNewMtf, nTX * nTileX, nTY * nTileY, nTileX, nTileY );
 
                     if( nRestX )
-                        AddTile( pRAcc, aNewMtf, nCountX * nTileX, nY, nRestX, nTileY );
+                        AddTile( pRAcc.get(), aNewMtf, nCountX * nTileX, nY, nRestX, nTileY );
                 }
 
                 if( nRestY )
@@ -197,13 +197,13 @@ void SdVectorizeDlg::Calculate( Bitmap& rBmp, GDIMetaFile& rMtf )
                     const long nY = nCountY * nTileY;
 
                     for( long nTX = 0; nTX < nCountX; nTX++ )
-                        AddTile( pRAcc, aNewMtf, nTX * nTileX, nY, nTileX, nRestY );
+                        AddTile( pRAcc.get(), aNewMtf, nTX * nTileX, nY, nTileX, nRestY );
 
                     if( nRestX )
-                        AddTile( pRAcc, aNewMtf, nCountX * nTileX, nCountY * nTileY, nRestX, nRestY );
+                        AddTile( pRAcc.get(), aNewMtf, nCountX * nTileX, nCountY * nTileY, nRestX, nRestY );
                 }
 
-                Bitmap::ReleaseAccess( pRAcc );
+                pRAcc.reset();
 
                 for( size_t n = 0, nCount = rMtf.GetActionSize(); n < nCount; n++ )
                     aNewMtf.AddAction( rMtf.GetAction( n )->Clone() );

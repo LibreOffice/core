@@ -1595,7 +1595,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaFloatTransparentAction& rAct)
                         aOldMask = aBitmapEx.GetBitmap().CreateMask(aBitmapEx.GetTransparentColor());
                     }
 
-                    BitmapWriteAccess* pOld = aOldMask.AcquireWriteAccess();
+                    AlphaMask::ScopedWriteAccess pOld(aOldMask);
 
                     if(pOld)
                     {
@@ -1618,7 +1618,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaFloatTransparentAction& rAct)
                         }
                         else
                         {
-                            BitmapReadAccess* pNew = aNewMask.AcquireReadAccess();
+                            AlphaMask::ScopedReadAccess pNew(aNewMask);
 
                             if(pNew)
                             {
@@ -1641,7 +1641,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaFloatTransparentAction& rAct)
                                     OSL_ENSURE(false, "Alpha masks have different sizes (!)");
                                 }
 
-                                aNewMask.ReleaseAccess(pNew);
+                                pNew.reset();
                             }
                             else
                             {
@@ -1649,7 +1649,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaFloatTransparentAction& rAct)
                             }
                         }
 
-                        aOldMask.ReleaseAccess(pOld);
+                        pOld.reset();
                     }
                     else
                     {

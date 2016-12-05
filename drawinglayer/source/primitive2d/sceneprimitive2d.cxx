@@ -52,8 +52,8 @@ namespace
             sal_uInt8 nInitAlpha(255);
             Bitmap aContent(aDestSize, 24);
             AlphaMask aAlpha(aDestSize, &nInitAlpha);
-            BitmapWriteAccess* pContent = aContent.AcquireWriteAccess();
-            BitmapWriteAccess* pAlpha = aAlpha.AcquireWriteAccess();
+            Bitmap::ScopedWriteAccess pContent(aContent);
+            AlphaMask::ScopedWriteAccess pAlpha(aAlpha);
 
             if (pContent && pAlpha)
             {
@@ -118,8 +118,8 @@ namespace
                 }
             }
 
-            aAlpha.ReleaseAccess(pAlpha);
-            Bitmap::ReleaseAccess(pContent);
+            pAlpha.reset();
+            pContent.reset();
 
             aRetval = BitmapEx(aContent, aAlpha);
 
