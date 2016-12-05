@@ -3233,8 +3233,6 @@ bool SwTransferable::PrivatePaste( SwWrtShell& rShell )
 
     const int nSelection = rShell.GetSelectionType();
 
-    SwRewriter aRewriter;
-
     SwTrnsfrActionAndUndo aAction( &rShell, UNDO_PASTE_CLIPBOARD);
 
     bool bKillPaMs = false;
