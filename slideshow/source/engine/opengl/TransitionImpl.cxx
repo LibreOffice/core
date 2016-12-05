@@ -367,7 +367,7 @@ void Primitive::display(GLint primitiveTransformLocation, double nTime, double W
     CHECK_GL_ERROR();
     glBindBuffer(GL_ARRAY_BUFFER, nBuffer);
     CHECK_GL_ERROR();
-    glBufferData(GL_ARRAY_BUFFER, getVerticesSize(), Vertices.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, getVerticesByteSize(), Vertices.data(), GL_STATIC_DRAW);
 
     glEnableVertexAttribArray(0);
     CHECK_GL_ERROR();
