@@ -1107,16 +1107,16 @@ void SwNavigationPI::SetRegionDropMode(RegionMode nNewMode)
     switch (nNewMode)
     {
         case RegionMode::NONE:
-            nImageId = RID_IMG_DROP_REGION;
+            nImageId = RID_BMP_DROP_REGION;
             break;
         case RegionMode::LINK:
-            nImageId = RID_IMG_DROP_LINK;
+            nImageId = RID_BMP_DROP_LINK;
             break;
         case RegionMode::EMBEDDED:
-            nImageId = RID_IMG_DROP_COPY;
+            nImageId = RID_BMP_DROP_COPY;
             break;
     }
-    m_aContentToolBox->SetItemImage(m_aContentToolBox->GetItemId("dragmode"), Image(SW_RES(nImageId)));
+    m_aContentToolBox->SetItemImage(m_aContentToolBox->GetItemId("dragmode"), Image(BitmapEx(SW_RES(nImageId))));
 }
 
 void SwNavigationPI::ToggleTree()

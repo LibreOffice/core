@@ -155,9 +155,9 @@
 #define IMG_VIEWLAYOUT_SINGLECOLUMN              (RC_UTLUI_BEGIN + 16)
 #define IMG_VIEWLAYOUT_SINGLECOLUMN_ACTIVE       (RC_UTLUI_BEGIN + 17)
 #define IMG_PAGE_BREAK                           (RC_UTLUI_BEGIN + 18)
-#define RID_IMG_DROP_REGION                      (RC_UTLUI_BEGIN + 19)
-#define RID_IMG_DROP_LINK                        (RC_UTLUI_BEGIN + 20)
-#define RID_IMG_DROP_COPY                        (RC_UTLUI_BEGIN + 21)
+#define RID_BMP_DROP_REGION                      (RC_UTLUI_BEGIN + 19)
+#define RID_BMP_DROP_LINK                        (RC_UTLUI_BEGIN + 20)
+#define RID_BMP_DROP_COPY                        (RC_UTLUI_BEGIN + 21)
 
 //local ids of the Database ImageLists
 #define IMG_COLLAPSE        18002  /*RID_SVXIMG_COLLAPSEDNODE*/

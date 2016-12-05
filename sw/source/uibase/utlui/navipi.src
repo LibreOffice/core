@@ -45,28 +45,19 @@ ImageList IMG_NAVI_ENTRYBMP
     IdCount = { 12 ; };
 };
 
-Image RID_IMG_DROP_REGION
+Bitmap RID_BMP_DROP_REGION
 {
-    ImageBitmap = Bitmap
-    {
-        File = "sc20235.png" ;
-    };
+    File = "sc20235.png" ;
 };
 
-Image RID_IMG_DROP_LINK
+Bitmap RID_BMP_DROP_LINK
 {
-    ImageBitmap = Bitmap
-    {
-        File = "sc20238.png" ;
-    };
+    File = "sc20238.png" ;
 };
 
-Image RID_IMG_DROP_COPY
+Bitmap RID_BMP_DROP_COPY
 {
-    ImageBitmap = Bitmap
-    {
-        File = "sc20239.png" ;
-    };
+    File = "sc20239.png" ;
 };
 
 String STR_ACCESS_TL_GLOBAL
