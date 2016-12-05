@@ -150,6 +150,7 @@ $(eval $(call gb_Helper_register_libraries,STLLIBS, \
 
 $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
     acceptor \
+    binaryurp \
     cairocanvas \
     canvasfactory \
     connector \

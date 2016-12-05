@@ -35,7 +35,6 @@ GTK_TWO_FOUR=$(shell @+-$(PKG_CONFIG) --exists 'gtk+-2.0 >= 2.4.0' && echo YES)
 .END
 
 my_components = \
-    binaryurp \
     bootstrap \
     introspection \
     invocadapt \
@@ -61,6 +60,7 @@ my_components = \
     charttools \
     chartview \
     component/animations/source/animcore/animcore \
+    component/binaryurp/source/binaryurp \
     component/canvas/source/factory/canvasfactory \
     component/canvas/source/simplecanvas/simplecanvas \
     component/canvas/source/vcl/vclcanvas \

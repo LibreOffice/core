@@ -21,57 +21,40 @@
 
 
 
-$(eval $(call gb_Module_Module,ooo))
+$(eval $(call gb_Library_Library,binaryurp))
 
-$(eval $(call gb_Module_add_moduledirs,ooo,\
-    MathMLDTD \
-    animations \
-    basebmp \
-    basegfx \
-    binaryurp \
-    canvas \
-    comphelper \
-    cppcanvas \
-    dbaccess \
-    drawinglayer \
-    editeng \
-    fileaccess \
-    formula \
-    framework \
-    idl \
-    io \
-    linguistic \
-    o3tl \
-    offapi \
-    oovbaapi \
-    oox \
-    padmin \
-    package \
-    reportdesign \
-    sax \
-    sd \
-    sfx2 \
-    sot \
-    starmath \
-    svgio \
-    svl \
-    svtools \
-    svx \
-    sw \
-    toolkit \
-    tools \
-    ucbhelper \
-    udkapi \
-    unotools \
-    unoxml \
-    vbahelper \
-    vcl \
-    wizards \
-    writerfilter \
-    x11_extensions \
-    xmloff \
-    xmlreader \
-    xmlscript \
+$(eval $(call gb_Library_set_componentfile,binaryurp,binaryurp/source/binaryurp))
+
+$(eval $(call gb_Library_set_include,binaryurp,\
+        $$(INCLUDE) \
 ))
 
-# vim: set noet ts=4 sw=4:
+$(eval $(call gb_Library_add_api,binaryurp,\
+	udkapi \
+))
+
+$(eval $(call gb_Library_add_linked_libs,binaryurp,\
+	cppu \
+	cppuhelper \
+	sal \
+	salhelper \
+	$(gb_STDLIBS) \
+))
+
+
+$(eval $(call gb_Library_add_exception_objects,binaryurp,\
+	binaryurp/source/binaryany \
+	binaryurp/source/bridge \
+	binaryurp/source/bridgefactory \
+	binaryurp/source/currentcontext \
+	binaryurp/source/incomingrequest \
+	binaryurp/source/lessoperators \
+	binaryurp/source/marshal \
+	binaryurp/source/outgoingrequests \
+	binaryurp/source/proxy \
+	binaryurp/source/reader \
+	binaryurp/source/unmarshal \
+	binaryurp/source/writer \
+))
+
+# vim: set noet sw=4 ts=4:

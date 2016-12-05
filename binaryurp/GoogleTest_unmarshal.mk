@@ -20,58 +20,41 @@
 #**************************************************************
 
 
+$(eval $(call gb_GoogleTest_GoogleTest,binaryurp_unmarshal))
 
-$(eval $(call gb_Module_Module,ooo))
-
-$(eval $(call gb_Module_add_moduledirs,ooo,\
-    MathMLDTD \
-    animations \
-    basebmp \
-    basegfx \
-    binaryurp \
-    canvas \
-    comphelper \
-    cppcanvas \
-    dbaccess \
-    drawinglayer \
-    editeng \
-    fileaccess \
-    formula \
-    framework \
-    idl \
-    io \
-    linguistic \
-    o3tl \
-    offapi \
-    oovbaapi \
-    oox \
-    padmin \
-    package \
-    reportdesign \
-    sax \
-    sd \
-    sfx2 \
-    sot \
-    starmath \
-    svgio \
-    svl \
-    svtools \
-    svx \
-    sw \
-    toolkit \
-    tools \
-    ucbhelper \
-    udkapi \
-    unotools \
-    unoxml \
-    vbahelper \
-    vcl \
-    wizards \
-    writerfilter \
-    x11_extensions \
-    xmloff \
-    xmlreader \
-    xmlscript \
+$(eval $(call gb_GoogleTest_set_include,binaryurp_unmarshal,\
+	$$(INCLUDE) \
 ))
 
-# vim: set noet ts=4 sw=4:
+$(eval $(call gb_GoogleTest_add_api,binaryurp_unmarshal,\
+	udkapi \
+))
+ 
+$(eval $(call gb_GoogleTest_add_exception_objects,binaryurp_unmarshal, \
+	binaryurp/qa/main \
+	binaryurp/qa/test-unmarshal \
+	binaryurp/source/binaryany \
+	binaryurp/source/bridge \
+	binaryurp/source/bridgefactory \
+	binaryurp/source/currentcontext \
+	binaryurp/source/incomingrequest \
+	binaryurp/source/lessoperators \
+	binaryurp/source/marshal \
+	binaryurp/source/outgoingrequests \
+	binaryurp/source/proxy \
+	binaryurp/source/reader \
+	binaryurp/source/unmarshal \
+	binaryurp/source/writer \
+))
+ 
+$(eval $(call gb_GoogleTest_add_linked_libs,binaryurp_unmarshal, \
+    cppu \
+    cppuhelper \
+    sal \
+    salhelper \
+    $(gb_STDLIBS) \
+))
+
+
+ 
+# vim: set noet sw=4 ts=4:

@@ -21,57 +21,17 @@
 
 
 
-$(eval $(call gb_Module_Module,ooo))
+$(eval $(call gb_Module_Module,binaryurp))
 
-$(eval $(call gb_Module_add_moduledirs,ooo,\
-    MathMLDTD \
-    animations \
-    basebmp \
-    basegfx \
-    binaryurp \
-    canvas \
-    comphelper \
-    cppcanvas \
-    dbaccess \
-    drawinglayer \
-    editeng \
-    fileaccess \
-    formula \
-    framework \
-    idl \
-    io \
-    linguistic \
-    o3tl \
-    offapi \
-    oovbaapi \
-    oox \
-    padmin \
-    package \
-    reportdesign \
-    sax \
-    sd \
-    sfx2 \
-    sot \
-    starmath \
-    svgio \
-    svl \
-    svtools \
-    svx \
-    sw \
-    toolkit \
-    tools \
-    ucbhelper \
-    udkapi \
-    unotools \
-    unoxml \
-    vbahelper \
-    vcl \
-    wizards \
-    writerfilter \
-    x11_extensions \
-    xmloff \
-    xmlreader \
-    xmlscript \
+$(eval $(call gb_Module_add_targets,binaryurp,\
+	Library_binaryurp \
 ))
 
-# vim: set noet ts=4 sw=4:
+ifeq ($(ENABLE_UNIT_TESTS),YES)
+$(eval $(call gb_Module_add_check_targets,binaryurp,\
+	GoogleTest_cache \
+	GoogleTest_unmarshal \
+))
+endif
+
+# vim: set noet sw=4 ts=4:
