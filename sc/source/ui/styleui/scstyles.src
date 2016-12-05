@@ -41,12 +41,14 @@ StringArray RID_PAGESTYLEFAMILY
     };
 };
 
-//  style family images are now taken from an ImageList
-//  (for each family, there's one entry in the IdList)
-ImageList RID_STYLEFAMILY_IMAGELIST
+Bitmap BMP_STYLES_FAMILY_CELL
 {
-    Prefix = "sf";
-    IdList = { 1; 2; };
+    File = "sf01.png";
+};
+
+Bitmap BMP_STYLES_FAMILY_PAGE
+{
+    File = "sf02.png";
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

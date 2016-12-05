@@ -2274,16 +2274,14 @@ SfxStyleFamilies* ScModule::CreateStyleFamilies()
 {
     SfxStyleFamilies *pStyleFamilies = new SfxStyleFamilies;
 
-    ImageList aEntryImages(ScResId(RID_STYLEFAMILY_IMAGELIST));
-
     pStyleFamilies->emplace_back(SfxStyleFamilyItem(SfxStyleFamily::Para,
                                                     ScGlobal::GetRscString(STR_STYLE_FAMILY_CELL),
-                                                    aEntryImages.GetImage(1),
+                                                    Image(BitmapEx(ScResId(BMP_STYLES_FAMILY_CELL))),
                                                     ScResId(RID_CELLSTYLEFAMILY)));
 
     pStyleFamilies->emplace_back(SfxStyleFamilyItem(SfxStyleFamily::Page,
                                                     ScGlobal::GetRscString(STR_STYLE_FAMILY_PAGE),
-                                                    aEntryImages.GetImage(2),
+                                                    Image(BitmapEx(ScResId(BMP_STYLES_FAMILY_PAGE))),
                                                     ScResId(RID_PAGESTYLEFAMILY)));
 
     return pStyleFamilies;
