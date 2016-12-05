@@ -216,7 +216,6 @@ OUString OWizTypeSelectControl::getAutoIncrementValue() const
     return static_cast<OWizTypeSelect*>(m_pParentTabPage.get())->m_sAutoIncrementValue;
 }
 
-#define IMG_PRIMARY_KEY 1
 OWizTypeSelect::OWizTypeSelect( vcl::Window* pParent, SvStream* _pStream )
                :OWizardPage( pParent, "TypeSelect", "dbaccess/ui/typeselectpage.ui")
                ,m_pTypeControl(VclPtr<OWizTypeSelectControl>::Create(get<VclVBox>("control_container"), this) )
@@ -235,10 +234,7 @@ OWizTypeSelect::OWizTypeSelect( vcl::Window* pParent, SvStream* _pStream )
 
     m_pColumnNames->SetSelectHdl(LINK(this,OWizTypeSelect,ColumnSelectHdl));
 
-    ModuleRes aModuleRes(IMG_JOINS);
-    ImageList aImageList(aModuleRes);
-    m_imgPKey = aImageList.GetImage(IMG_PRIMARY_KEY);
-
+    m_imgPKey = Image(BitmapEx(ModuleRes(BMP_PRIMARY_KEY)));
 
     m_pTypeControl->Show();
     m_pTypeControl->Init();

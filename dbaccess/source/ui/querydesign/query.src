@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include "dbu_qry.hrc"
-#include "Query.hrc"
 #include <sfx2/cntids.hrc>
 #include "browserids.hxx"
 #include "dbaccess_helpid.hrc"
@@ -77,13 +76,9 @@ Menu RID_QUERYCOLPOPUPMENU
     };
 };
 
-ImageList IMG_JOINS
+Bitmap BMP_PRIMARY_KEY
 {
-    Prefix = "jo";
-    IdList = {
-        IMG_PRIMARY_KEY; IMG_FOREIGN_KEY;
-    };
-    IdCount = { 2; };
+    File = "jo01.png";
 };
 
 String STR_QUERY_UNDO_TABWINSHOW

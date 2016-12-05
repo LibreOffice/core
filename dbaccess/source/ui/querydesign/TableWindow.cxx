@@ -37,7 +37,6 @@
 #include "querycontroller.hxx"
 #include "dbu_qry.hrc"
 #include "dbustrings.hrc"
-#include "Query.hrc"
 #include <comphelper/extract.hxx>
 #include "UITools.hxx"
 #include "TableWindowAccess.hxx"
@@ -193,10 +192,9 @@ bool OTableWindow::FillListBox()
         if ( xContainer.is() )
             m_pContainerListener = new ::comphelper::OContainerListenerAdapter(this,xContainer);
     }
+
     // mark all primary keys with special image
-    ModuleRes TmpRes(IMG_JOINS);
-    ImageList aImageList(TmpRes);
-    Image aPrimKeyImage = aImageList.GetImage(IMG_PRIMARY_KEY);
+    Image aPrimKeyImage = Image(BitmapEx(ModuleRes(BMP_PRIMARY_KEY)));
 
     if (GetData()->IsShowAll())
     {

@@ -105,6 +105,7 @@
 #define QUERYFOLDER_TREE_ICON           RID_IMAGE_START +  6
 #define QUERY_TREE_ICON                 RID_IMAGE_START +  7
 #define DATABASE_TREE_ICON              RID_IMAGE_START +  8
+#define BMP_PRIMARY_KEY                 RID_IMAGE_START +  9
 // free
 #define IMG_PKEYICON                    RID_IMAGE_START + 12
 // free
@@ -121,7 +122,6 @@
 #define FORMFOLDER_TREE_ICON            RID_IMAGE_START + 55
 
 // image lists
-#define IMG_JOINS                       RID_IMAGELIST_START +  0
 #define IMG_INDEX_DLG_SC                RID_IMAGELIST_START +  1
 #define IMG_INDEX_DLG_LC                RID_IMAGELIST_START +  3
 

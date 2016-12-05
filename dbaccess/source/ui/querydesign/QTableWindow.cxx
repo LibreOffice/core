@@ -28,7 +28,6 @@
 #include <vcl/image.hxx>
 #include "TableWindowListBox.hxx"
 #include "dbu_qry.hrc"
-#include "Query.hrc"
 #include <com/sun/star/sdbcx/XKeysSupplier.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
