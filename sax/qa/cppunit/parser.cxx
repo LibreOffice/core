@@ -27,7 +27,6 @@ class DummyTokenHandler : public cppu::WeakImplHelper< xml::sax::XFastTokenHandl
 {
 public:
              DummyTokenHandler() {}
-    virtual ~DummyTokenHandler() override {}
 
     virtual sal_Int32 SAL_CALL getTokenFromUTF8( const uno::Sequence<sal_Int8>& )
         throw (uno::RuntimeException, std::exception) override
