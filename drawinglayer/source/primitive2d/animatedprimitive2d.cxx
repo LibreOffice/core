@@ -33,9 +33,6 @@ namespace drawinglayer
     {
         void AnimatedSwitchPrimitive2D::setAnimationEntry(const animation::AnimationEntry& rNew)
         {
-            // delete cloned animation description
-            delete mpAnimationEntry;
-
             // clone given animation description
             mpAnimationEntry = rNew.clone();
         }
@@ -45,7 +42,6 @@ namespace drawinglayer
             const Primitive2DContainer& rChildren,
             bool bIsTextAnimation)
         :   GroupPrimitive2D(rChildren),
-            mpAnimationEntry(nullptr),
             mbIsTextAnimation(bIsTextAnimation)
         {
             // clone given animation description
@@ -54,8 +50,6 @@ namespace drawinglayer
 
         AnimatedSwitchPrimitive2D::~AnimatedSwitchPrimitive2D()
         {
-            // delete cloned animation description
-            delete mpAnimationEntry;
         }
 
         bool AnimatedSwitchPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
