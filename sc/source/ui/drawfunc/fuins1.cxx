@@ -23,6 +23,7 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdview.hxx>
+#include <svx/svdundo.hxx>
 #include <svx/linkwarn.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <svl/stritem.hxx>
@@ -40,6 +41,10 @@
 #include "progress.hxx"
 #include "sc.hrc"
 #include "globstr.hrc"
+
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <comphelper/lok.hxx>
+#include <sfx2/lokhelper.hxx>
 
 using namespace ::com::sun::star;
 
@@ -251,6 +256,28 @@ FuInsertGraphic::FuInsertGraphic( ScTabViewShell*   pViewSh,
         if ( nError == GRFILTER_OK )
         {
             lcl_InsertGraphic( aGraphic, aFileName, aFilterName, bAsLink, true, pViewSh, pWindow, pView );
+
+            // FIXME HACK: The ViewObjectContact sdr thing is not set up well
+            // enough for the invalidate to work here automagically, because
+            // we set it up for each tile, and it does not survive for too
+            // long.  Luckily for inserting an image, we can live with a full
+            // invalidate, so let's just do it for now.
+            if (comphelper::LibreOfficeKit::isActive())
+            {
+                std::stringstream ss;
+                ss << "EMPTY";
+                if (comphelper::LibreOfficeKit::isPartInInvalidation())
+                    ss << ", " << pViewSh->getPart();
+                OString aPayload = ss.str().c_str();
+
+                SfxViewShell* pCurView = SfxViewShell::GetFirst();
+                while (pCurView)
+                {
+                    pCurView->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_TILES, aPayload.getStr());
+
+                    pCurView= SfxViewShell::GetNext(*pCurView);
+                }
+            }
         }
     }
     else

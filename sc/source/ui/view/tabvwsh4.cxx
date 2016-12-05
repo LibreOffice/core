@@ -572,7 +572,26 @@ void ScTabViewShell::UpdateDrawShell()
 
     SdrView* pDrView = GetSdrView();
     if ( pDrView && !pDrView->AreObjectsMarked() && !IsDrawSelMode() )
-        SetDrawShell( false );
+    {
+        SetDrawShell(false);
+
+        if (comphelper::LibreOfficeKit::isActive())
+        {
+            std::stringstream ss;
+            ss << "EMPTY";
+            if (comphelper::LibreOfficeKit::isPartInInvalidation())
+                ss << ", " << getPart();
+            OString aPayload = ss.str().c_str();
+
+            SfxViewShell* pCurView = SfxViewShell::GetFirst();
+            while (pCurView)
+            {
+                pCurView->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_TILES, aPayload.getStr());
+
+                pCurView = SfxViewShell::GetNext(*pCurView);
+            }
+        }
+    }
 }
 
 void ScTabViewShell::SetDrawShellOrSub()
