@@ -3339,9 +3339,7 @@ SwDrawFrameFormat::~SwDrawFrameFormat()
 
 void SwDrawFrameFormat::MakeFrames()
 {
-    SwDrawContact *pContact = static_cast<SwDrawContact*>(FindContactObj());
-    if ( pContact )
-         pContact->ConnectToLayout();
+    CallSwClientNotify(sw::DrawFrameFormatHint(sw::DrawFrameFormatHintId::MAKE_FRAMES));
 }
 
 void SwDrawFrameFormat::DelFrames()
