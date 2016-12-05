@@ -305,7 +305,7 @@ void SotStorage::CreateStorage( bool bForceUCBStorage, StreamMode nMode )
             OUString aURL;
             osl::FileBase::getFileURLFromSystemPath( m_aName, aURL );
             aObj.SetURL( aURL );
-            m_aName = aObj.GetMainURL( INetURLObject::NO_DECODE );
+            m_aName = aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
         }
 
         // check the stream
@@ -488,7 +488,7 @@ bool SotStorage::IsStorageFile( const OUString & rFileName )
         OUString aURL;
         osl::FileBase::getFileURLFromSystemPath( aName, aURL );
         aObj.SetURL( aURL );
-        aName = aObj.GetMainURL( INetURLObject::NO_DECODE );
+        aName = aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
     }
 
     std::unique_ptr<SvStream> pStm(::utl::UcbStreamHelper::CreateStream( aName, StreamMode::STD_READ ));

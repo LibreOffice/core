@@ -86,7 +86,7 @@ inline bool GetRealURL( const SwGrfNode& rNd, OUString& rText )
     bool bRet = rNd.GetFileFilterNms( &rText, nullptr );
     if( bRet )
         rText = URIHelper::removePassword( rText, INetURLObject::EncodeMechanism::WasEncoded,
-                                           INetURLObject::DECODE_UNAMBIGUOUS);
+                                           INetURLObject::DecodeMechanism::Unambiguous);
     if (rText.startsWith("data:image")) rText = "inline image";
 
     return bRet;

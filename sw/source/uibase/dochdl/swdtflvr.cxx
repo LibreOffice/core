@@ -227,9 +227,9 @@ SwTransferable::SwTransferable( SwWrtShell& rSh )
         {
             const INetURLObject& rURLObj = pDShell->GetMedium()->GetURLObject();
             m_aObjDesc.maDisplayName = URIHelper::removePassword(
-                                rURLObj.GetMainURL( INetURLObject::NO_DECODE ),
+                                rURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ),
                                 INetURLObject::EncodeMechanism::WasEncoded,
-                                INetURLObject::DECODE_UNAMBIGUOUS );
+                                INetURLObject::DecodeMechanism::Unambiguous );
         }
 
         PrepareOLE( m_aObjDesc );
@@ -2504,7 +2504,7 @@ bool SwTransferable::PasteAsHyperlink( TransferableDataHelper& rData,
         INetURLObject aURL;
         aURL.SetSmartProtocol( INetProtocol::File );
         aURL.SetSmartURL( sFile );
-        sFile = aURL.GetMainURL( INetURLObject::NO_DECODE );
+        sFile = aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
         switch( rSh.GetObjCntTypeOfSelection() )
         {
@@ -2554,7 +2554,7 @@ bool SwTransferable::PasteFileName( TransferableDataHelper& rData,
             INetURLObject aMediaURL;
 
             aMediaURL.SetSmartURL( sFile );
-            const OUString aMediaURLStr( aMediaURL.GetMainURL( INetURLObject::NO_DECODE ) );
+            const OUString aMediaURLStr( aMediaURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
 
             if( ::avmedia::MediaWindow::isMediaURL( aMediaURLStr, ""/*TODO?*/ ) )
             {
@@ -2598,7 +2598,7 @@ bool SwTransferable::PasteFileName( TransferableDataHelper& rData,
                     INetURLObject aURL;
                     aURL.SetSmartProtocol( INetProtocol::File );
                     aURL.SetSmartURL( sFile );
-                    sFile = aURL.GetMainURL( INetURLObject::NO_DECODE );
+                    sFile = aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
                     switch( rSh.GetObjCntTypeOfSelection() )
                     {

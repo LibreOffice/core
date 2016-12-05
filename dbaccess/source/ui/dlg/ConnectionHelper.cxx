@@ -201,7 +201,7 @@ namespace dbaui
                     INetURLObject aSelectedDirectory( sSelectedDirectory, INetURLObject::EncodeMechanism::WasEncoded, RTL_TEXTENCODING_UTF8 );
 
                     // for UI purpose, we don't want to have the path encoded
-                    sSelectedDirectory = aSelectedDirectory.GetMainURL( INetURLObject::DECODE_WITH_CHARSET );
+                    sSelectedDirectory = aSelectedDirectory.GetMainURL( INetURLObject::DecodeMechanism::WithCharset );
 
                     setURLNoPrefix( sSelectedDirectory );
                     SetRoadmapStateValue(true);
@@ -429,7 +429,7 @@ namespace dbaui
 
                 // encode the URL
                 INetURLObject aFileURL( sFileURLDecoded, INetURLObject::EncodeMechanism::All, RTL_TEXTENCODING_UTF8 );
-                sFileURLDecoded = aFileURL.GetMainURL( INetURLObject::NO_DECODE );
+                sFileURLDecoded = aFileURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
             }
         }
         return sURL;
@@ -583,7 +583,7 @@ namespace dbaui
         {
             aToBeCreated.push_back(aParser.getName());  // remember the local name for creation
             aParser.removeSegment();                    // cut the local name
-            eParentExists = pathExists(aParser.GetMainURL(INetURLObject::NO_DECODE), false);
+            eParentExists = pathExists(aParser.GetMainURL(INetURLObject::DecodeMechanism::NONE), false);
         }
 
         if (!aParser.getSegmentCount())
@@ -594,7 +594,7 @@ namespace dbaui
         {
             // the parent content
             Reference< XCommandEnvironment > xEmptyEnv;
-            ::ucbhelper::Content aParent(aParser.GetMainURL(INetURLObject::NO_DECODE), xEmptyEnv, comphelper::getProcessComponentContext());
+            ::ucbhelper::Content aParent(aParser.GetMainURL(INetURLObject::DecodeMechanism::NONE), xEmptyEnv, comphelper::getProcessComponentContext());
 
             OUString sContentType;
             if ( INetProtocol::File == eProtocol )

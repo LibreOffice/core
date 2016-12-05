@@ -59,7 +59,7 @@ bool GalleryPreview::SetGraphic( const INetURLObject& _aURL )
 {
     bool bRet = true;
     Graphic aGraphic;
-    if( ::avmedia::MediaWindow::isMediaURL( _aURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ), "" ) )
+    if( ::avmedia::MediaWindow::isMediaURL( _aURL.GetMainURL( INetURLObject::DecodeMechanism::Unambiguous ), "" ) )
     {
         aGraphic = BitmapEx( GAL_RES( RID_SVXBMP_GALLERY_MEDIA ) );
     }
@@ -244,7 +244,7 @@ void GalleryPreview::PreviewMedia( const INetURLObject& rURL )
         }
 
         if (pFloater)
-            pFloater->setURL( rURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ), "", true );
+            pFloater->setURL( rURL.GetMainURL( INetURLObject::DecodeMechanism::Unambiguous ), "", true );
     }
 }
 

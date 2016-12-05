@@ -417,7 +417,7 @@ void SAL_CALL RecoveryCore::statusChanged(const css::frame::FeatureStateEvent& a
         // If there is a file URL, parse out the filename part as the display name.
         INetURLObject aOrgURL(aNew.OrgURL);
         aNew.DisplayName = aOrgURL.getName(INetURLObject::LAST_SEGMENT, true,
-                                           INetURLObject::DECODE_WITH_CHARSET);
+                                           INetURLObject::DecodeMechanism::WithCharset);
     }
 
     // search for already existing items and update her nState value ...
@@ -1236,7 +1236,7 @@ BrokenRecoveryDialog::BrokenRecoveryDialog(vcl::Window*       pParent        ,
     m_sSavePath = SvtPathOptions().GetWorkPath();
     INetURLObject aObj( m_sSavePath );
     OUString sPath;
-    osl::FileBase::getSystemPathFromFileURL(aObj.GetMainURL( INetURLObject::NO_DECODE ), sPath);
+    osl::FileBase::getSystemPathFromFileURL(aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), sPath);
     m_pSaveDirED->SetText( sPath );
 
     impl_refresh();
@@ -1337,7 +1337,7 @@ void BrokenRecoveryDialog::impl_askForSavePath()
         css::ui::dialogs::FolderPicker::create( m_pCore->getComponentContext() );
 
     INetURLObject aURL(m_sSavePath, INetProtocol::File);
-    xFolderPicker->setDisplayDirectory(aURL.GetMainURL(INetURLObject::NO_DECODE));
+    xFolderPicker->setDisplayDirectory(aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE));
     short nRet = xFolderPicker->execute();
     if (nRet == css::ui::dialogs::ExecutableDialogResults::OK)
     {

@@ -396,7 +396,7 @@ util::DateTime SfxMedium::GetInitFileDate( bool bIgnoreOldValue )
         {
             // add a default css::ucb::XCommandEnvironment
             // in order to have the WebDAV UCP provider manage http/https authentication correctly
-            ::ucbhelper::Content aContent( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ),
+            ::ucbhelper::Content aContent( GetURLObject().GetMainURL( INetURLObject::DecodeMechanism::NONE ),
                                            utl::UCBContentHelper::getDefaultCommandEnvironment(),
                                            comphelper::getProcessComponentContext() );
 
@@ -449,7 +449,7 @@ Reference < XContent > SfxMedium::GetContent() const
             if ( !pImpl->m_aName.isEmpty() )
                 osl::FileBase::getFileURLFromSystemPath( pImpl->m_aName, aURL );
             else if ( !pImpl->m_aLogicName.isEmpty() )
-                aURL = GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
+                aURL = GetURLObject().GetMainURL( INetURLObject::DecodeMechanism::NONE );
             if (!aURL.isEmpty() )
                 (void)::ucbhelper::Content::create( aURL, xEnv, comphelper::getProcessComponentContext(), pImpl->aContent );
         }
@@ -476,7 +476,7 @@ OUString SfxMedium::GetBaseURL( bool bForSaving )
         }
 
         if ( aBaseURL.isEmpty() )
-            aBaseURL = GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
+            aBaseURL = GetURLObject().GetMainURL( INetURLObject::DecodeMechanism::NONE );
     }
 
     if ( bForSaving )
@@ -752,12 +752,12 @@ void SfxMedium::StorageBackup_Impl()
     Reference< css::ucb::XCommandEnvironment > xDummyEnv;
 
     bool bBasedOnOriginalFile = ( !pImpl->pTempFile && !( !pImpl->m_aLogicName.isEmpty() && pImpl->m_bSalvageMode )
-        && !GetURLObject().GetMainURL( INetURLObject::NO_DECODE ).isEmpty()
+        && !GetURLObject().GetMainURL( INetURLObject::DecodeMechanism::NONE ).isEmpty()
         && GetURLObject().GetProtocol() == INetProtocol::File
-        && ::utl::UCBContentHelper::IsDocument( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) ) );
+        && ::utl::UCBContentHelper::IsDocument( GetURLObject().GetMainURL( INetURLObject::DecodeMechanism::NONE ) ) );
 
     if ( bBasedOnOriginalFile && pImpl->m_aBackupURL.isEmpty()
-      && ::ucbhelper::Content::create( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ), xDummyEnv, comphelper::getProcessComponentContext(), aOriginalContent ) )
+      && ::ucbhelper::Content::create( GetURLObject().GetMainURL( INetURLObject::DecodeMechanism::NONE ), xDummyEnv, comphelper::getProcessComponentContext(), aOriginalContent ) )
     {
         DoInternalBackup_Impl( aOriginalContent );
         if( pImpl->m_aBackupURL.isEmpty() )
@@ -997,7 +997,7 @@ void SfxMedium::LockOrigFileOnDemand( bool bLoading, bool bNoUI )
                             xCHandler, Reference< css::ucb::XProgressHandler >() );
 
                         ucbhelper::Content aContentToLock(
-                            GetURLObject().GetMainURL( INetURLObject::NO_DECODE ),
+                            GetURLObject().GetMainURL( INetURLObject::DecodeMechanism::NONE ),
                             xComEnv, comphelper::getProcessComponentContext() );
 
                         try
@@ -1126,7 +1126,7 @@ void SfxMedium::LockOrigFileOnDemand( bool bLoading, bool bNoUI )
                 {
                     // MediaDescriptor does this check also, the duplication should be avoided in future
                     Reference< css::ucb::XCommandEnvironment > xDummyEnv;
-                    ::ucbhelper::Content aContent( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ), xDummyEnv, comphelper::getProcessComponentContext() );
+                    ::ucbhelper::Content aContent( GetURLObject().GetMainURL( INetURLObject::DecodeMechanism::NONE ), xDummyEnv, comphelper::getProcessComponentContext() );
                     aContent.getPropertyValue("IsReadOnly") >>= bContentReadonly;
                 }
                 catch( const uno::Exception& ) {}
@@ -1141,7 +1141,7 @@ void SfxMedium::LockOrigFileOnDemand( bool bLoading, bool bNoUI )
                     // the file is not readonly, check the ACL
 
                     OUString aPhysPath;
-                    if ( osl::FileBase::getSystemPathFromFileURL( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ), aPhysPath )
+                    if ( osl::FileBase::getSystemPathFromFileURL( GetURLObject().GetMainURL( INetURLObject::DecodeMechanism::NONE ), aPhysPath )
                          == osl::FileBase::E_None )
                         bContentReadonly = IsReadonlyAccordingACL( aPhysPath.getStr() );
                 }
@@ -1637,7 +1637,7 @@ bool SfxMedium::StorageCommit_Impl()
                     {
                         OSL_ENSURE( !pImpl->m_aBackupURL.isEmpty(), "No backup on storage commit!\n" );
                         if ( !pImpl->m_aBackupURL.isEmpty()
-                            && ::ucbhelper::Content::create( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ),
+                            && ::ucbhelper::Content::create( GetURLObject().GetMainURL( INetURLObject::DecodeMechanism::NONE ),
                                                         xDummyEnv, comphelper::getProcessComponentContext(),
                                                         aOriginalContent ) )
                         {
@@ -1681,7 +1681,7 @@ void SfxMedium::TransactedTransferForFS_Impl( const INetURLObject& aSource,
 
     try
     {
-        aOriginalContent = ::ucbhelper::Content( aDest.GetMainURL( INetURLObject::NO_DECODE ), xComEnv, comphelper::getProcessComponentContext() );
+        aOriginalContent = ::ucbhelper::Content( aDest.GetMainURL( INetURLObject::DecodeMechanism::NONE ), xComEnv, comphelper::getProcessComponentContext() );
     }
     catch ( const css::ucb::CommandAbortedException& )
     {
@@ -1715,7 +1715,7 @@ void SfxMedium::TransactedTransferForFS_Impl( const INetURLObject& aSource,
         CloseStreams_Impl();
 
         ::ucbhelper::Content aTempCont;
-        if( ::ucbhelper::Content::create( aSource.GetMainURL( INetURLObject::NO_DECODE ), xDummyEnv, comphelper::getProcessComponentContext(), aTempCont ) )
+        if( ::ucbhelper::Content::create( aSource.GetMainURL( INetURLObject::DecodeMechanism::NONE ), xDummyEnv, comphelper::getProcessComponentContext(), aTempCont ) )
         {
             bool bTransactStarted = false;
             const SfxBoolItem* pOverWrite = SfxItemSet::GetItem<SfxBoolItem>(GetItemSet(), SID_OVERWRITE, false);
@@ -1723,7 +1723,7 @@ void SfxMedium::TransactedTransferForFS_Impl( const INetURLObject& aSource,
 
             try
             {
-                if( bOverWrite && ::utl::UCBContentHelper::IsDocument( aDest.GetMainURL( INetURLObject::NO_DECODE ) ) )
+                if( bOverWrite && ::utl::UCBContentHelper::IsDocument( aDest.GetMainURL( INetURLObject::DecodeMechanism::NONE ) ) )
                 {
                     if( pImpl->m_aBackupURL.isEmpty() )
                         DoInternalBackup_Impl( aOriginalContent );
@@ -1894,7 +1894,7 @@ void SfxMedium::Transfer_Impl()
 
                 INetURLObject aSource( aNameURL );
                 ::ucbhelper::Content aTempCont;
-                if( ::ucbhelper::Content::create( aSource.GetMainURL( INetURLObject::NO_DECODE ), xEnv, comphelper::getProcessComponentContext(), aTempCont ) )
+                if( ::ucbhelper::Content::create( aSource.GetMainURL( INetURLObject::DecodeMechanism::NONE ), xEnv, comphelper::getProcessComponentContext(), aTempCont ) )
                 {
                     try
                     {
@@ -1961,7 +1961,7 @@ void SfxMedium::Transfer_Impl()
             xComEnv = new ::ucbhelper::CommandEnvironment( xInteractionHandler,
                                                       Reference< css::ucb::XProgressHandler >() );
 
-        OUString aDestURL( aDest.GetMainURL( INetURLObject::NO_DECODE ) );
+        OUString aDestURL( aDest.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
 
         if ( comphelper::isFileUrl( aDestURL ) || !aDest.removeSegment() )
         {
@@ -2002,7 +2002,7 @@ void SfxMedium::Transfer_Impl()
                 }
 
                 if ( sParentUrl.isEmpty() )
-                    aDestURL = aDest.GetMainURL( INetURLObject::NO_DECODE );
+                    aDestURL = aDest.GetMainURL( INetURLObject::DecodeMechanism::NONE );
                         // adjust to above aDest.removeSegment()
                 else
                     aDestURL = sParentUrl;
@@ -2017,7 +2017,7 @@ void SfxMedium::Transfer_Impl()
             OUString sObjectId;
             aAny >>= sObjectId;
             if ( aFileName.isEmpty() )
-                aFileName = GetURLObject().getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
+                aFileName = GetURLObject().getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset );
 
             try
             {
@@ -2047,7 +2047,7 @@ void SfxMedium::Transfer_Impl()
 
                 CloseStreams_Impl();
 
-                (void)::ucbhelper::Content::create( aSource.GetMainURL( INetURLObject::NO_DECODE ), xEnv, comphelper::getProcessComponentContext(), aSourceContent );
+                (void)::ucbhelper::Content::create( aSource.GetMainURL( INetURLObject::DecodeMechanism::NONE ), xEnv, comphelper::getProcessComponentContext(), aSourceContent );
 
                 // check for external parameters that may customize the handling of NameClash situations
                 const SfxBoolItem* pOverWrite = SfxItemSet::GetItem<SfxBoolItem>(GetItemSet(), SID_OVERWRITE, false);
@@ -2098,7 +2098,7 @@ void SfxMedium::Transfer_Impl()
                             // <http://tools.ietf.org/html/rfc4918#section-7.3>
                             // If the WebDAV resource is already locked by this LO instance, nothing will
                             // happen, e.g. the LOCK method will not be sent to the server.
-                            ::ucbhelper::Content aLockContent = ::ucbhelper::Content( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ), xComEnv, comphelper::getProcessComponentContext() );
+                            ::ucbhelper::Content aLockContent = ::ucbhelper::Content( GetURLObject().GetMainURL( INetURLObject::DecodeMechanism::NONE ), xComEnv, comphelper::getProcessComponentContext() );
                             aLockContent.lock();
                         }
                     }
@@ -2139,7 +2139,7 @@ void SfxMedium::Transfer_Impl()
         {
             // without a TempFile the physical and logical name should be the same after successful transfer
             if (osl::FileBase::getSystemPathFromFileURL(
-                  GetURLObject().GetMainURL( INetURLObject::NO_DECODE ), pImpl->m_aName )
+                  GetURLObject().GetMainURL( INetURLObject::DecodeMechanism::NONE ), pImpl->m_aName )
                 != osl::FileBase::E_None)
             {
                 pImpl->m_aName.clear();
@@ -2161,7 +2161,7 @@ void SfxMedium::DoInternalBackup_Impl( const ::ucbhelper::Content& aOriginalCont
     ::utl::TempFile aTransactTemp( aPrefix, true, &aExtension, &aDestDir );
 
     INetURLObject aBackObj( aTransactTemp.GetURL() );
-    OUString aBackupName = aBackObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
+    OUString aBackupName = aBackObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset );
 
     Reference < css::ucb::XCommandEnvironment > xDummyEnv;
     ::ucbhelper::Content aBackupCont;
@@ -2176,7 +2176,7 @@ void SfxMedium::DoInternalBackup_Impl( const ::ucbhelper::Content& aOriginalCont
                                             NameClash::OVERWRITE,
                                             sMimeType ) )
             {
-                pImpl->m_aBackupURL = aBackObj.GetMainURL( INetURLObject::NO_DECODE );
+                pImpl->m_aBackupURL = aBackObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
                 pImpl->m_bRemoveBackup = true;
             }
         }
@@ -2196,7 +2196,7 @@ void SfxMedium::DoInternalBackup_Impl( const ::ucbhelper::Content& aOriginalCont
 
     OUString aFileName =  GetURLObject().getName( INetURLObject::LAST_SEGMENT,
                                                         true,
-                                                        INetURLObject::NO_DECODE );
+                                                        INetURLObject::DecodeMechanism::NONE );
 
     sal_Int32 nPrefixLen = aFileName.lastIndexOf( '.' );
     OUString aPrefix = ( nPrefixLen == -1 ) ? aFileName : aFileName.copy( 0, nPrefixLen );
@@ -2220,7 +2220,7 @@ void SfxMedium::DoInternalBackup_Impl( const ::ucbhelper::Content& aOriginalCont
 
         INetURLObject aDest = GetURLObject();
         if ( aDest.removeSegment() )
-            DoInternalBackup_Impl( aOriginalContent, aPrefix, aExtension, aDest.GetMainURL( INetURLObject::NO_DECODE ) );
+            DoInternalBackup_Impl( aOriginalContent, aPrefix, aExtension, aDest.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
     }
 }
 
@@ -2231,7 +2231,7 @@ void SfxMedium::DoBackup_Impl()
     INetURLObject aSource( GetURLObject() );
 
     // there is nothing to backup in case source file does not exist
-    if ( !::utl::UCBContentHelper::IsDocument( aSource.GetMainURL( INetURLObject::NO_DECODE ) ) )
+    if ( !::utl::UCBContentHelper::IsDocument( aSource.GetMainURL( INetURLObject::DecodeMechanism::NONE ) ) )
         return;
 
     bool        bSuccess = false;
@@ -2249,11 +2249,11 @@ void SfxMedium::DoBackup_Impl()
             INetURLObject aDest( aBakDir );
             aDest.insertName( aSource.getName() );
             aDest.setExtension( "bak" );
-            OUString aFileName = aDest.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
+            OUString aFileName = aDest.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset );
 
             // create a content for the source file
             ::ucbhelper::Content aSourceContent;
-            if ( ::ucbhelper::Content::create( aSource.GetMainURL( INetURLObject::NO_DECODE ), xEnv, comphelper::getProcessComponentContext(), aSourceContent ) )
+            if ( ::ucbhelper::Content::create( aSource.GetMainURL( INetURLObject::DecodeMechanism::NONE ), xEnv, comphelper::getProcessComponentContext(), aSourceContent ) )
             {
                 try
                 {
@@ -2266,7 +2266,7 @@ void SfxMedium::DoBackup_Impl()
                                                         sMimeType );
                     if( bSuccess )
                     {
-                        pImpl->m_aBackupURL = aDest.GetMainURL( INetURLObject::NO_DECODE );
+                        pImpl->m_aBackupURL = aDest.GetMainURL( INetURLObject::DecodeMechanism::NONE );
                         pImpl->m_bRemoveBackup = false;
                     }
                 }
@@ -2556,14 +2556,14 @@ void SfxMedium::Init_Impl()
         {
             if ( aUrl.HasMark() )
             {
-                pImpl->m_aLogicName = aUrl.GetURLNoMark( INetURLObject::NO_DECODE );
+                pImpl->m_aLogicName = aUrl.GetURLNoMark( INetURLObject::DecodeMechanism::NONE );
                 GetItemSet()->Put( SfxStringItem( SID_JUMPMARK, aUrl.GetMark() ) );
             }
 
             // try to convert the URL into a physical name - but never change a physical name
             // physical name may be set if the logical name is changed after construction
             if ( pImpl->m_aName.isEmpty() )
-                osl::FileBase::getSystemPathFromFileURL( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ), pImpl->m_aName );
+                osl::FileBase::getSystemPathFromFileURL( GetURLObject().GetMainURL( INetURLObject::DecodeMechanism::NONE ), pImpl->m_aName );
             else
             {
                 DBG_ASSERT( pSalvageItem, "Suspicious change of logical name!" );
@@ -2598,7 +2598,7 @@ void SfxMedium::Init_Impl()
             // let the ItemSet be created if necessary
             GetItemSet()->Put(
                 SfxStringItem(
-                    SID_FILE_NAME, INetURLObject( pImpl->m_aLogicName ).GetMainURL( INetURLObject::NO_DECODE ) ) );
+                    SID_FILE_NAME, INetURLObject( pImpl->m_aLogicName ).GetMainURL( INetURLObject::DecodeMechanism::NONE ) ) );
         }
     }
 
@@ -2744,7 +2744,7 @@ void SfxMedium::UnlockFile( bool bReleaseLockStream )
                 uno::Reference< css::task::XInteractionHandler > xHandler = GetInteractionHandler( true );
                 uno::Reference< css::ucb::XCommandEnvironment > xComEnv = new ::ucbhelper::CommandEnvironment( xHandler,
                                                                Reference< css::ucb::XProgressHandler >() );
-                ucbhelper::Content aContentToUnlock( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ), xComEnv, comphelper::getProcessComponentContext());
+                ucbhelper::Content aContentToUnlock( GetURLObject().GetMainURL( INetURLObject::DecodeMechanism::NONE ), xComEnv, comphelper::getProcessComponentContext());
                 pImpl->m_bLocked = false;
                 //check if WebDAV unlock was explicitly disabled
                 if ( !pImpl->m_bDisableUnlockWebDAV )
@@ -3392,7 +3392,7 @@ void SfxMedium::CreateTempFile( bool bReplace )
 
         if ( GetContent().is()
           && GetURLObject().GetProtocol() == INetProtocol::File
-          && ::utl::UCBContentHelper::IsDocument( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) ) )
+          && ::utl::UCBContentHelper::IsDocument( GetURLObject().GetMainURL( INetURLObject::DecodeMechanism::NONE ) ) )
         {
             // if there is already such a document, we should copy it
             // if it is a file system use OS copy process
@@ -3402,10 +3402,10 @@ void SfxMedium::CreateTempFile( bool bReplace )
                 INetURLObject aTmpURLObj( aTmpURL );
                 OUString aFileName = aTmpURLObj.getName( INetURLObject::LAST_SEGMENT,
                                                                 true,
-                                                                INetURLObject::DECODE_WITH_CHARSET );
+                                                                INetURLObject::DecodeMechanism::WithCharset );
                 if ( !aFileName.isEmpty() && aTmpURLObj.removeSegment() )
                 {
-                    ::ucbhelper::Content aTargetContent( aTmpURLObj.GetMainURL( INetURLObject::NO_DECODE ), xComEnv, comphelper::getProcessComponentContext() );
+                    ::ucbhelper::Content aTargetContent( aTmpURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), xComEnv, comphelper::getProcessComponentContext() );
                     OUString sMimeType = pImpl->getFilterMimeType();
                     if ( aTargetContent.transferContent( pImpl->aContent, ::ucbhelper::InsertOperation_COPY, aFileName, NameClash::OVERWRITE, sMimeType ) )
                     {
@@ -3689,14 +3689,14 @@ OUString SfxMedium::CreateTempCopyWithExt( const OUString& aURL )
             INetURLObject aDest( aNewTempFileURL );
             OUString aFileName = aDest.getName( INetURLObject::LAST_SEGMENT,
                                                         true,
-                                                        INetURLObject::DECODE_WITH_CHARSET );
+                                                        INetURLObject::DecodeMechanism::WithCharset );
             if ( !aFileName.isEmpty() && aDest.removeSegment() )
             {
                 try
                 {
                     uno::Reference< css::ucb::XCommandEnvironment > xComEnv;
-                    ::ucbhelper::Content aTargetContent( aDest.GetMainURL( INetURLObject::NO_DECODE ), xComEnv, comphelper::getProcessComponentContext() );
-                    ::ucbhelper::Content aSourceContent( aSource.GetMainURL( INetURLObject::NO_DECODE ), xComEnv, comphelper::getProcessComponentContext() );
+                    ::ucbhelper::Content aTargetContent( aDest.GetMainURL( INetURLObject::DecodeMechanism::NONE ), xComEnv, comphelper::getProcessComponentContext() );
+                    ::ucbhelper::Content aSourceContent( aSource.GetMainURL( INetURLObject::DecodeMechanism::NONE ), xComEnv, comphelper::getProcessComponentContext() );
                     if ( aTargetContent.transferContent( aSourceContent,
                                                         ::ucbhelper::InsertOperation_COPY,
                                                         aFileName,

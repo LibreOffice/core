@@ -160,7 +160,7 @@ void impl_FillURLList( sfx2::FileDialogHelper* _pFileDlg, std::vector<OUString>&
         for ( sal_Int32 i = 0; i < aPathSeq.getLength(); ++i )
         {
             INetURLObject aPathObj( aPathSeq[i] );
-            _rpURLList.push_back(aPathObj.GetMainURL(INetURLObject::NO_DECODE));
+            _rpURLList.push_back(aPathObj.GetMainURL(INetURLObject::DecodeMechanism::NONE));
         }
     }
 }

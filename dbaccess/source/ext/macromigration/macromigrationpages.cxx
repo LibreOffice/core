@@ -132,7 +132,7 @@ namespace dbmm
             aBaseName.append( ".backup" );
             aURLParser.setBase( aBaseName.makeStringAndClear() );
 
-            m_pLocationController->setURL( aURLParser.GetMainURL( INetURLObject::NO_DECODE ) );
+            m_pLocationController->setURL( aURLParser.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
             impl_updateLocationDependentItems();
         }
         catch( const Exception& )

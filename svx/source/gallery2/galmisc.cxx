@@ -88,7 +88,7 @@ GalleryGraphicImportRet GalleryGraphicImport( const INetURLObject& rURL, Graphic
                              OUString& rFilterName, bool bShowProgress )
 {
     GalleryGraphicImportRet  nRet = GalleryGraphicImportRet::IMPORT_NONE;
-    SfxMedium   aMedium( rURL.GetMainURL( INetURLObject::NO_DECODE ), StreamMode::READ );
+    SfxMedium   aMedium( rURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::READ );
 
     aMedium.Download();
 
@@ -100,7 +100,7 @@ GalleryGraphicImportRet GalleryGraphicImport( const INetURLObject& rURL, Graphic
         std::unique_ptr<GalleryProgress> pProgress(bShowProgress ? new GalleryProgress( &rGraphicFilter ) : nullptr);
         sal_uInt16              nFormat;
 
-        if( !rGraphicFilter.ImportGraphic( rGraphic, rURL.GetMainURL( INetURLObject::NO_DECODE ), *pIStm, GRFILTER_FORMAT_DONTKNOW, &nFormat ) )
+        if( !rGraphicFilter.ImportGraphic( rGraphic, rURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), *pIStm, GRFILTER_FORMAT_DONTKNOW, &nFormat ) )
         {
             rFilterName = rGraphicFilter.GetImportFormatName( nFormat );
             nRet = GalleryGraphicImportRet::IMPORT_FILE;
@@ -188,7 +188,7 @@ bool CreateIMapGraphic( const FmFormModel& rModel, Graphic& rGraphic, ImageMap& 
 
 OUString GetReducedString( const INetURLObject& rURL, sal_Int32 nMaxLen )
 {
-    OUString aReduced( rURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ) );
+    OUString aReduced( rURL.GetMainURL( INetURLObject::DecodeMechanism::Unambiguous ) );
 
     aReduced = aReduced.getToken( comphelper::string::getTokenCount(aReduced, '/') - 1, '/' );
 
@@ -225,9 +225,9 @@ OUString GetSvDrawStreamNameFromURL( const INetURLObject& rSvDrawObjURL )
     OUString aRet;
 
     if( rSvDrawObjURL.GetProtocol() == INetProtocol::PrivSoffice &&
-        comphelper::string::getTokenCount(rSvDrawObjURL.GetMainURL( INetURLObject::NO_DECODE ), '/') == 3 )
+        comphelper::string::getTokenCount(rSvDrawObjURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), '/') == 3 )
     {
-        aRet = rSvDrawObjURL.GetMainURL( INetURLObject::NO_DECODE ).getToken( 2, '/' );
+        aRet = rSvDrawObjURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ).getToken( 2, '/' );
     }
 
     return aRet;
@@ -241,7 +241,7 @@ bool FileExists( const INetURLObject& rURL )
     {
         try
         {
-            ::ucbhelper::Content        aCnt( rURL.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
+            ::ucbhelper::Content        aCnt( rURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), uno::Reference< ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
             OUString    aTitle;
 
             aCnt.getPropertyValue("Title") >>= aTitle;
@@ -272,14 +272,14 @@ bool CreateDir( const INetURLObject& rURL )
             uno::Reference< ucb::XCommandEnvironment >  aCmdEnv;
             INetURLObject                           aParentURL( rURL );
             aParentURL.removeSegment();
-            ::ucbhelper::Content                    aParent( aParentURL.GetMainURL( INetURLObject::NO_DECODE ), aCmdEnv, comphelper::getProcessComponentContext() );
+            ::ucbhelper::Content                    aParent( aParentURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), aCmdEnv, comphelper::getProcessComponentContext() );
             uno::Sequence< OUString >               aProps( 1 );
             uno::Sequence< uno::Any >               aValues( 1 );
 
             aProps[0] = "Title";
             aValues[0] = uno::makeAny( OUString( rURL.GetName() ) );
 
-        ::ucbhelper::Content aContent( rURL.GetMainURL( INetURLObject::NO_DECODE ), aCmdEnv, comphelper::getProcessComponentContext() );
+        ::ucbhelper::Content aContent( rURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), aCmdEnv, comphelper::getProcessComponentContext() );
         bRet = aParent.insertNewContent( "application/vnd.sun.staroffice.fsys-folder", aProps, aValues, aContent );
         }
         catch( const ucb::ContentCreationException& )
@@ -302,10 +302,10 @@ bool CopyFile(  const INetURLObject& rSrcURL, const INetURLObject& rDstURL )
 
     try
     {
-        ::ucbhelper::Content aDestPath( rDstURL.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
+        ::ucbhelper::Content aDestPath( rDstURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), uno::Reference< ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
 
         aDestPath.executeCommand( "transfer",
-                                  uno::makeAny( ucb::TransferInfo( false, rSrcURL.GetMainURL( INetURLObject::NO_DECODE ),
+                                  uno::makeAny( ucb::TransferInfo( false, rSrcURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ),
                                                 rDstURL.GetName(), ucb::NameClash::OVERWRITE ) ) );
         bRet = true;
     }
@@ -330,7 +330,7 @@ bool KillFile( const INetURLObject& rURL )
     {
         try
         {
-            ::ucbhelper::Content aCnt( rURL.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
+            ::ucbhelper::Content aCnt( rURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), uno::Reference< ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
             aCnt.executeCommand( "delete", uno::makeAny( true ) );
         }
         catch( const ucb::ContentCreationException& )
@@ -523,7 +523,7 @@ bool GalleryTransferable::GetData( const datatransfer::DataFlavor& rFlavor, cons
     }
     else if( ( SotClipboardFormatId::SIMPLE_FILE == nFormat ) && mpURL )
     {
-        bRet = SetString( mpURL->GetMainURL( INetURLObject::NO_DECODE ), rFlavor );
+        bRet = SetString( mpURL->GetMainURL( INetURLObject::DecodeMechanism::NONE ), rFlavor );
     }
     else if( ( SotClipboardFormatId::SVXB == nFormat ) && mpGraphicObject )
     {

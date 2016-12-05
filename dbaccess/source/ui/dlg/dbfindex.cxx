@@ -280,7 +280,7 @@ void ODbaseIndexDialog::Init()
     aURL.SetSmartURL(m_aDSN);
 
     //  String aFileName = aURL.PathToFileName();
-    m_aDSN = aURL.GetMainURL(INetURLObject::NO_DECODE);
+    m_aDSN = aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
     ::ucbhelper::Content aFile;
     bool bFolder=true;
     try

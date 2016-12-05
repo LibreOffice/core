@@ -743,7 +743,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickLoadHdl_Impl, Button*, void)
         while (nIndex >= 0);
 
         INetURLObject aFile(aLastDir);
-        aDlg.SetDisplayDirectory( aFile.GetMainURL( INetURLObject::NO_DECODE ) );
+        aDlg.SetDisplayDirectory( aFile.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
 
         if( aDlg.Execute() == ERRCODE_NONE )
         {
@@ -753,7 +753,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickLoadHdl_Impl, Button*, void)
             aPathURL.removeSegment();
             aPathURL.removeFinalSlash();
 
-            XDashListRef pDshLst = XPropertyList::AsDashList(XPropertyList::CreatePropertyList( XPropertyListType::Dash, aPathURL.GetMainURL( INetURLObject::NO_DECODE ), "" ));
+            XDashListRef pDshLst = XPropertyList::AsDashList(XPropertyList::CreatePropertyList( XPropertyListType::Dash, aPathURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), "" ));
             pDshLst->SetName( aURL.getName() );
 
             if( pDshLst->Load() )
@@ -820,7 +820,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickSaveHdl_Impl, Button*, void)
             aFile.SetExtension( "sod" );
     }
 
-    aDlg.SetDisplayDirectory( aFile.GetMainURL( INetURLObject::NO_DECODE ) );
+    aDlg.SetDisplayDirectory( aFile.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
     if ( aDlg.Execute() == ERRCODE_NONE )
     {
         INetURLObject aURL( aDlg.GetPath() );
@@ -830,7 +830,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickSaveHdl_Impl, Button*, void)
         aPathURL.removeFinalSlash();
 
         pDashList->SetName( aURL.getName() );
-        pDashList->SetPath( aPathURL.GetMainURL( INetURLObject::NO_DECODE ) );
+        pDashList->SetPath( aPathURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
 
         if( pDashList->Save() )
         {

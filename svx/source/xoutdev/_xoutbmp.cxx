@@ -158,8 +158,8 @@ sal_uInt16 XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileNam
                 aURL.setExtension(rFilterName);
             }
 
-            rFileName = aURL.GetMainURL(INetURLObject::NO_DECODE);
-            SfxMedium aMedium(aURL.GetMainURL(INetURLObject::NO_DECODE), StreamMode::WRITE|StreamMode::SHARE_DENYNONE|StreamMode::TRUNC);
+            rFileName = aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
+            SfxMedium aMedium(aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE), StreamMode::WRITE|StreamMode::SHARE_DENYNONE|StreamMode::TRUNC);
             SvStream* pOStm = aMedium.GetOutStream();
 
             if(pOStm)
@@ -180,8 +180,8 @@ sal_uInt16 XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileNam
             if (!(nFlags & XOutFlags::DontAddExtension))
                 aURL.setExtension(rFilterName);
 
-            rFileName = aURL.GetMainURL(INetURLObject::NO_DECODE);
-            SfxMedium aMedium(aURL.GetMainURL(INetURLObject::NO_DECODE), StreamMode::WRITE|StreamMode::SHARE_DENYNONE|StreamMode::TRUNC);
+            rFileName = aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
+            SfxMedium aMedium(aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE), StreamMode::WRITE|StreamMode::SHARE_DENYNONE|StreamMode::TRUNC);
             if (SvStream* pOutStream = aMedium.GetOutStream())
             {
                 uno::Sequence<sal_Int8> aPdfData = rGraphic.getPdfData();
@@ -220,9 +220,9 @@ sal_uInt16 XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileNam
                 {
                     if( !(nFlags & XOutFlags::DontAddExtension) )
                         aURL.setExtension( aExt );
-                    rFileName = aURL.GetMainURL( INetURLObject::NO_DECODE );
+                    rFileName = aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
-                    SfxMedium   aMedium(aURL.GetMainURL(INetURLObject::NO_DECODE), StreamMode::WRITE | StreamMode::SHARE_DENYNONE | StreamMode::TRUNC);
+                    SfxMedium   aMedium(aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE), StreamMode::WRITE | StreamMode::SHARE_DENYNONE | StreamMode::TRUNC);
                     SvStream*   pOStm = aMedium.GetOutStream();
 
                     if( pOStm && aGfxLink.GetDataSize() && aGfxLink.GetData() )
@@ -334,7 +334,7 @@ sal_uInt16 XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileNam
                 {
                     if( !(nFlags & XOutFlags::DontAddExtension) )
                         aURL.setExtension( aExt );
-                    rFileName = aURL.GetMainURL( INetURLObject::NO_DECODE );
+                    rFileName = aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
                     nErr = ExportGraphic( aGraphic, aURL, rFilter, nFilter );
                 }
             }
@@ -412,7 +412,7 @@ sal_uInt16 XOutBitmap::ExportGraphic( const Graphic& rGraphic, const INetURLObje
 {
     DBG_ASSERT( rURL.GetProtocol() != INetProtocol::NotValid, "XOutBitmap::ExportGraphic(...): invalid URL" );
 
-    SfxMedium   aMedium( rURL.GetMainURL( INetURLObject::NO_DECODE ), StreamMode::WRITE | StreamMode::SHARE_DENYNONE | StreamMode::TRUNC );
+    SfxMedium   aMedium( rURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::WRITE | StreamMode::SHARE_DENYNONE | StreamMode::TRUNC );
     SvStream*   pOStm = aMedium.GetOutStream();
     sal_uInt16      nRet = GRFILTER_IOERROR;
 
@@ -420,7 +420,7 @@ sal_uInt16 XOutBitmap::ExportGraphic( const Graphic& rGraphic, const INetURLObje
     {
         pGrfFilter = &rFilter;
 
-        nRet = rFilter.ExportGraphic( rGraphic, rURL.GetMainURL( INetURLObject::NO_DECODE ), *pOStm, nFormat, pFilterData );
+        nRet = rFilter.ExportGraphic( rGraphic, rURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), *pOStm, nFormat, pFilterData );
 
         pGrfFilter = nullptr;
         aMedium.Commit();

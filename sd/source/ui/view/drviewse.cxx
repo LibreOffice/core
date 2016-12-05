@@ -1474,7 +1474,7 @@ void DrawViewShell::InsertURLButton(const OUString& rURL, const OUString& rText,
 
     const OUString sTargetURL( ::URIHelper::SmartRel2Abs( INetURLObject( GetDocSh()->GetMedium()->GetBaseURL() ), rURL, URIHelper::GetMaybeFileHdl(), true, false,
                                                                 INetURLObject::EncodeMechanism::WasEncoded,
-                                                                INetURLObject::DECODE_UNAMBIGUOUS ) );
+                                                                INetURLObject::DecodeMechanism::Unambiguous ) );
     if (mpDrawView->GetMarkedObjectList().GetMarkCount() > 0)
     {
         SdrObject* pMarkedObj = mpDrawView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();

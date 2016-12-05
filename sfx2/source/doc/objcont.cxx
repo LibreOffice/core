@@ -531,7 +531,7 @@ void SfxObjectShell::ResetFromTemplate( const OUString& rTemplateName, const OUS
             if( SfxGetpApp()->Get_Impl()->GetDocumentTemplates()->GetFull( OUString(), rTemplateName, aFoundName ) )
             {
                 INetURLObject aObj( rFileName );
-                xDocProps->setTemplateURL( aObj.GetMainURL(INetURLObject::DECODE_TO_IURI) );
+                xDocProps->setTemplateURL( aObj.GetMainURL(INetURLObject::DecodeMechanism::ToIUri) );
                 xDocProps->setTemplateName( rTemplateName );
 
                 ::DateTime now( ::DateTime::SYSTEM );

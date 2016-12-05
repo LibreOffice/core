@@ -121,29 +121,29 @@ public:
 
         @descr  Along with a DecodeMechanism parameter, the get-methods all
         take an rtl_TextEncoding parameter, which is ignored unless the
-        DecodeMechanism is DECODE_WITH_CHARSET or DECODE_UNAMBIGUOUS.
+        DecodeMechanism is DecodeMechanism::WithCharset or DecodeMechanism::Unambiguous.
      */
-    enum DecodeMechanism
+    enum class DecodeMechanism
     {
         /** The (part of the) URI is returned unchanged.  Since URIs are
             written using a subset of US-ASCII, the returned string is
             guaranteed to contain only US-ASCII characters.
          */
-        NO_DECODE,
+        NONE,
 
         /** All sequences of escape sequences that represent UTF-8 coded
             UTF-32 characters with a numerical value greater than 0x7F, are
             replaced by the respective UTF-16 characters.  All other escape
             sequences are not decoded.
          */
-        DECODE_TO_IURI,
+        ToIUri,
 
         /** All (sequences of) escape sequences that represent characters from
             the specified character set, and that can be converted to UTF-32,
             are replaced by the respective UTF-16 characters.  All other
             escape sequences are not decoded.
          */
-        DECODE_WITH_CHARSET,
+        WithCharset,
 
         /** All (sequences of) escape sequences that represent characters from
             the specified character set, that can be converted to UTF-32, and
@@ -152,7 +152,7 @@ public:
             replaced by the respective UTF-16 characters.  All other escape
             sequences are not decoded.
          */
-        DECODE_UNAMBIGUOUS
+        Unambiguous
     };
 
     // General Structure:
@@ -167,18 +167,18 @@ public:
                                     = RTL_TEXTENCODING_UTF8) const
     { return decode(m_aAbsURIRef, eMechanism, eCharset); }
 
-    OUString GetURLNoPass(DecodeMechanism eMechanism = DECODE_TO_IURI,
+    OUString GetURLNoPass(DecodeMechanism eMechanism = DecodeMechanism::ToIUri,
                            rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8)
         const;
 
-    OUString GetURLNoMark(DecodeMechanism eMechanism = DECODE_TO_IURI,
+    OUString GetURLNoMark(DecodeMechanism eMechanism = DecodeMechanism::ToIUri,
                            rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8)
         const;
 
     OUString
     getAbbreviated(css::uno::Reference< css::util::XStringWidth > const & rStringWidth,
                    sal_Int32 nWidth,
-                   DecodeMechanism eMechanism = DECODE_TO_IURI,
+                   DecodeMechanism eMechanism = DecodeMechanism::ToIUri,
                    rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8)
         const;
 
@@ -340,14 +340,14 @@ public:
               OUString const & rTheRelURIRef,
               bool bIgnoreFragment = false,
               EncodeMechanism eEncodeMechanism = EncodeMechanism::WasEncoded,
-              DecodeMechanism eDecodeMechanism = DECODE_TO_IURI,
+              DecodeMechanism eDecodeMechanism = DecodeMechanism::ToIUri,
               rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8);
 
     static inline OUString
     GetRelURL(OUString const & rTheBaseURIRef,
               OUString const & rTheAbsURIRef,
               EncodeMechanism eEncodeMechanism = EncodeMechanism::WasEncoded,
-              DecodeMechanism eDecodeMechanism = DECODE_TO_IURI,
+              DecodeMechanism eDecodeMechanism = DecodeMechanism::ToIUri,
               rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8,
               FSysStyle eStyle = FSYS_DETECT);
 
@@ -358,14 +358,14 @@ public:
     static inline bool translateToExternal(OUString const & rTheIntURIRef,
                                            OUString & rTheExtURIRef,
                                            DecodeMechanism eDecodeMechanism
-                                               = DECODE_TO_IURI,
+                                               = DecodeMechanism::ToIUri,
                                            rtl_TextEncoding eCharset
                                                = RTL_TEXTENCODING_UTF8);
 
     static inline bool translateToInternal(OUString const & rTheExtURIRef,
                                            OUString & rTheIntURIRef,
                                            DecodeMechanism eDecodeMechanism
-                                               = DECODE_TO_IURI,
+                                               = DecodeMechanism::ToIUri,
                                            rtl_TextEncoding eCharset
                                                = RTL_TEXTENCODING_UTF8);
 
@@ -409,12 +409,12 @@ public:
 
     inline bool HasUserData() const { return m_aUser.isPresent(); }
 
-    inline OUString GetUser(DecodeMechanism eMechanism = DECODE_TO_IURI,
+    inline OUString GetUser(DecodeMechanism eMechanism = DecodeMechanism::ToIUri,
                              rtl_TextEncoding eCharset
                                  = RTL_TEXTENCODING_UTF8) const
     { return decode(m_aUser, eMechanism, eCharset); }
 
-    inline OUString GetPass(DecodeMechanism eMechanism = DECODE_TO_IURI,
+    inline OUString GetPass(DecodeMechanism eMechanism = DecodeMechanism::ToIUri,
                              rtl_TextEncoding eCharset
                                  = RTL_TEXTENCODING_UTF8) const
     { return decode(m_aAuth, eMechanism, eCharset); }
@@ -431,12 +431,12 @@ public:
 
     inline bool HasPort() const { return m_aPort.isPresent(); }
 
-    inline OUString GetHost(DecodeMechanism eMechanism = DECODE_TO_IURI,
+    inline OUString GetHost(DecodeMechanism eMechanism = DecodeMechanism::ToIUri,
                              rtl_TextEncoding eCharset
                                  = RTL_TEXTENCODING_UTF8) const
     { return decode(m_aHost, eMechanism, eCharset); }
 
-    OUString GetHostPort(DecodeMechanism eMechanism = DECODE_TO_IURI,
+    OUString GetHostPort(DecodeMechanism eMechanism = DecodeMechanism::ToIUri,
                           rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8);
 
     sal_uInt32 GetPort() const;
@@ -450,7 +450,7 @@ public:
 
     inline bool HasURLPath() const { return !m_aPath.isEmpty(); }
 
-    inline OUString GetURLPath(DecodeMechanism eMechanism = DECODE_TO_IURI,
+    inline OUString GetURLPath(DecodeMechanism eMechanism = DecodeMechanism::ToIUri,
                                 rtl_TextEncoding eCharset
                                     = RTL_TEXTENCODING_UTF8) const
     { return decode(m_aPath, eMechanism, eCharset); }
@@ -561,7 +561,7 @@ public:
      */
     OUString getName(sal_Int32 nIndex = LAST_SEGMENT,
                       bool bIgnoreFinalSlash = true,
-                      DecodeMechanism eMechanism = DECODE_TO_IURI,
+                      DecodeMechanism eMechanism = DecodeMechanism::ToIUri,
                       rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8)
         const;
 
@@ -595,7 +595,7 @@ public:
      */
     OUString getBase(sal_Int32 nIndex = LAST_SEGMENT,
                       bool bIgnoreFinalSlash = true,
-                      DecodeMechanism eMechanism = DECODE_TO_IURI,
+                      DecodeMechanism eMechanism = DecodeMechanism::ToIUri,
                       rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8)
         const;
 
@@ -648,7 +648,7 @@ public:
      */
     OUString getExtension(sal_Int32 nIndex = LAST_SEGMENT,
                            bool bIgnoreFinalSlash = true,
-                           DecodeMechanism eMechanism = DECODE_TO_IURI,
+                           DecodeMechanism eMechanism = DecodeMechanism::ToIUri,
                            rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8)
         const;
 
@@ -724,7 +724,7 @@ public:
 
     inline OUString GetParam(rtl_TextEncoding eCharset
                                   = RTL_TEXTENCODING_UTF8) const
-    { return decode(m_aQuery, NO_DECODE, eCharset); }
+    { return decode(m_aQuery, DecodeMechanism::NONE, eCharset); }
 
     inline bool SetParam(OUString const & rTheQuery,
                          EncodeMechanism eMechanism = EncodeMechanism::WasEncoded,
@@ -734,7 +734,7 @@ public:
 
     inline bool HasMark() const { return m_aFragment.isPresent(); }
 
-    inline OUString GetMark(DecodeMechanism eMechanism = DECODE_TO_IURI,
+    inline OUString GetMark(DecodeMechanism eMechanism = DecodeMechanism::ToIUri,
                              rtl_TextEncoding eCharset
                                  = RTL_TEXTENCODING_UTF8) const
     { return decode(m_aFragment, eMechanism, eCharset); }
@@ -891,7 +891,7 @@ public:
         the last unencoded '/').  Not that this last segment may be empty.  If
         the URL is not hierarchical, an empty string is returned.
      */
-    OUString GetLastName(DecodeMechanism eMechanism = DECODE_TO_IURI,
+    OUString GetLastName(DecodeMechanism eMechanism = DecodeMechanism::ToIUri,
                           rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8)
         const;
 
@@ -926,7 +926,7 @@ public:
                  EncodeMechanism eMechanism = EncodeMechanism::WasEncoded,
                  rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8);
 
-    inline OUString GetName(DecodeMechanism eMechanism = DECODE_TO_IURI,
+    inline OUString GetName(DecodeMechanism eMechanism = DecodeMechanism::ToIUri,
                              rtl_TextEncoding eCharset
                                  = RTL_TEXTENCODING_UTF8) const
     { return GetLastName(eMechanism, eCharset); }

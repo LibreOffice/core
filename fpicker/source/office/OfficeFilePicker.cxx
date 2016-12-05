@@ -158,7 +158,7 @@ void SvtFilePicker::prepareExecute()
                 aPath.insertName( m_aDefaultName );
                 getDialog()->SetHasFilename( true );
             }
-            getDialog()->SetPath( aPath.GetMainURL( INetURLObject::NO_DECODE ) );
+            getDialog()->SetPath( aPath.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
             isFileSet = true;
         }
         if ( !isFileSet && !m_aDefaultName.isEmpty() )
@@ -171,7 +171,7 @@ void SvtFilePicker::prepareExecute()
     {
         // Default-Standard-Dir setzen
         INetURLObject aStdDirObj( SvtPathOptions().GetWorkPath() );
-        getDialog()->SetPath( aStdDirObj.GetMainURL( INetURLObject::NO_DECODE ) );
+        getDialog()->SetPath( aStdDirObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
     }
 
     // set the control values and set the control labels, too
@@ -570,7 +570,7 @@ OUString SAL_CALL SvtFilePicker::getDisplayDirectory() throw( RuntimeException, 
         {
             INetURLObject aFolder( aPath );
             aFolder.CutLastName();
-            aPath = aFolder.GetMainURL( INetURLObject::NO_DECODE );
+            aPath = aFolder.GetMainURL( INetURLObject::DecodeMechanism::NONE );
         }
         m_aOldDisplayDirectory = aPath;
         return aPath;

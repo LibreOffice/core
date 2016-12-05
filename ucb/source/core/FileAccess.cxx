@@ -225,15 +225,15 @@ void OFileAccess::transferImpl( const OUString& rSource,
     INetURLObject aSourceObj( rSource, INetProtocol::File );
     INetURLObject aDestObj( rDest, INetProtocol::File );
     OUString aName = aDestObj.getName(
-        INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
+        INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset );
     OUString aDestURL;
-    OUString aSourceURL = aSourceObj.GetMainURL( INetURLObject::NO_DECODE );
+    OUString aSourceURL = aSourceObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
     if ( aDestObj.removeSegment() )
     {
         // hierarchical URL.
 
         aDestObj.setFinalSlash();
-        aDestURL = aDestObj.GetMainURL( INetURLObject::NO_DECODE );
+        aDestURL = aDestObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
     }
     else
     {
@@ -252,7 +252,7 @@ void OFileAccess::transferImpl( const OUString& rSource,
                 Reference< XMacroExpander > xExpander = theMacroExpander::get(m_xContext);
 
                 aDestURL = xExpander->expandMacros(
-                    aDestObj.GetURLPath( INetURLObject::DECODE_WITH_CHARSET ) );
+                    aDestObj.GetURLPath( INetURLObject::DecodeMechanism::WithCharset ) );
             }
             catch ( Exception const & )
             {
@@ -306,7 +306,7 @@ void OFileAccess::kill( const OUString& FileURL )
 {
     // SfxContentHelper::Kill
     INetURLObject aDeleteObj( FileURL, INetProtocol::File );
-    ucbhelper::Content aCnt( aDeleteObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment, comphelper::getProcessComponentContext() );
+    ucbhelper::Content aCnt( aDeleteObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment, comphelper::getProcessComponentContext() );
     try
     {
         aCnt.executeCommand( "delete", makeAny( true ) );
@@ -324,7 +324,7 @@ sal_Bool OFileAccess::isFolder( const OUString& FileURL )
     try
     {
         INetURLObject aURLObj( FileURL, INetProtocol::File );
-        ucbhelper::Content aCnt( aURLObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment, comphelper::getProcessComponentContext() );
+        ucbhelper::Content aCnt( aURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment, comphelper::getProcessComponentContext() );
         bRet = aCnt.isFolder();
     }
     catch (const Exception &) {}
@@ -335,7 +335,7 @@ sal_Bool OFileAccess::isReadOnly( const OUString& FileURL )
     throw(CommandAbortedException, Exception, RuntimeException, std::exception)
 {
     INetURLObject aURLObj( FileURL, INetProtocol::File );
-    ucbhelper::Content aCnt( aURLObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment, comphelper::getProcessComponentContext() );
+    ucbhelper::Content aCnt( aURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment, comphelper::getProcessComponentContext() );
     Any aRetAny = aCnt.getPropertyValue("IsReadOnly");
     bool bRet = false;
     aRetAny >>= bRet;
@@ -346,7 +346,7 @@ void OFileAccess::setReadOnly( const OUString& FileURL, sal_Bool bReadOnly )
     throw(CommandAbortedException, Exception, RuntimeException, std::exception)
 {
     INetURLObject aURLObj( FileURL, INetProtocol::File );
-    ucbhelper::Content aCnt( aURLObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment, comphelper::getProcessComponentContext() );
+    ucbhelper::Content aCnt( aURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment, comphelper::getProcessComponentContext() );
     aCnt.setPropertyValue("IsReadOnly", Any(bReadOnly) );
 }
 
@@ -359,20 +359,20 @@ void OFileAccess::createFolder( const OUString& NewFolderURL )
 
     // SfxContentHelper::MakeFolder
     INetURLObject aURL( NewFolderURL, INetProtocol::File );
-    OUString aTitle = aURL.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
+    OUString aTitle = aURL.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset );
     if ( !aTitle.isEmpty() )
     {
         aURL.removeSegment();
 
         // Does the base folder exist? Otherwise create it first
-        OUString aBaseFolderURLStr = aURL.GetMainURL( INetURLObject::NO_DECODE );
+        OUString aBaseFolderURLStr = aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
         if( !isFolder( aBaseFolderURLStr ) )
         {
             createFolder( aBaseFolderURLStr );
         }
     }
 
-    ucbhelper::Content aCnt( aURL.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment, comphelper::getProcessComponentContext() );
+    ucbhelper::Content aCnt( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment, comphelper::getProcessComponentContext() );
 
     Sequence< ContentInfo > aInfo = aCnt.queryCreatableContentsInfo();
     sal_Int32 nCount = aInfo.getLength();
@@ -423,7 +423,7 @@ sal_Int32 OFileAccess::getSize( const OUString& FileURL )
     sal_Int32 nSize = 0;
     sal_Int64 nTemp = 0;
     INetURLObject aObj( FileURL, INetProtocol::File );
-    ucbhelper::Content aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment, comphelper::getProcessComponentContext() );
+    ucbhelper::Content aCnt( aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment, comphelper::getProcessComponentContext() );
     aCnt.getPropertyValue( "Size" ) >>= nTemp;
     nSize = (sal_Int32)nTemp;
     return nSize;
@@ -433,7 +433,7 @@ OUString OFileAccess::getContentType( const OUString& FileURL )
     throw(CommandAbortedException, Exception, RuntimeException, std::exception)
 {
     INetURLObject aObj( FileURL, INetProtocol::File );
-    ucbhelper::Content aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment, comphelper::getProcessComponentContext() );
+    ucbhelper::Content aCnt( aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment, comphelper::getProcessComponentContext() );
 
     Reference< XContent > xContent = aCnt.get();
     OUString aTypeStr = xContent->getContentType();
@@ -447,7 +447,7 @@ css::util::DateTime OFileAccess::getDateTimeModified( const OUString& FileURL )
     css::util::DateTime aDateTime;
 
     Reference< XCommandEnvironment > aCmdEnv;
-    ucbhelper::Content aYoung( aFileObj.GetMainURL( INetURLObject::NO_DECODE ), aCmdEnv, comphelper::getProcessComponentContext() );
+    ucbhelper::Content aYoung( aFileObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), aCmdEnv, comphelper::getProcessComponentContext() );
     aYoung.getPropertyValue("DateModified") >>= aDateTime;
     return aDateTime;
 }
@@ -462,7 +462,7 @@ Sequence< OUString > OFileAccess::getFolderContents( const OUString& FolderURL, 
     StringList_Impl* pFiles = nullptr;
     INetURLObject aFolderObj( FolderURL, INetProtocol::File );
 
-    ucbhelper::Content aCnt( aFolderObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment, comphelper::getProcessComponentContext() );
+    ucbhelper::Content aCnt( aFolderObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment, comphelper::getProcessComponentContext() );
     Reference< XResultSet > xResultSet;
     Sequence< OUString > aProps(0);
 
@@ -486,7 +486,7 @@ Sequence< OUString > OFileAccess::getFolderContents( const OUString& FolderURL, 
         {
             OUString aId = xContentAccess->queryContentIdentifierString();
             INetURLObject aURL( aId, INetProtocol::File );
-            OUString* pFile = new OUString( aURL.GetMainURL( INetURLObject::NO_DECODE ) );
+            OUString* pFile = new OUString( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
             pFiles->push_back( pFile );
         }
     }
@@ -534,7 +534,7 @@ Reference< XInputStream > OFileAccess::openFileRead( const OUString& FileURL )
 {
     Reference< XInputStream > xRet;
     INetURLObject aObj( FileURL, INetProtocol::File );
-    ucbhelper::Content aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment, comphelper::getProcessComponentContext() );
+    ucbhelper::Content aCnt( aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment, comphelper::getProcessComponentContext() );
 
     Reference< XActiveDataSink > xSink = static_cast<XActiveDataSink*>(new OActiveDataSink());
 
@@ -578,7 +578,7 @@ Reference< XStream > OFileAccess::openFileReadWrite( const OUString& FileURL )
     aCmdArg <<= aArg;
 
     INetURLObject aFileObj( FileURL, INetProtocol::File );
-    ucbhelper::Content aCnt( aFileObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment, comphelper::getProcessComponentContext() );
+    ucbhelper::Content aCnt( aFileObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment, comphelper::getProcessComponentContext() );
 
     // Be silent...
     Reference< XInteractionHandler > xIH;
@@ -698,7 +698,7 @@ void SAL_CALL OFileAccess::writeFile( const OUString& FileURL,
     try
     {
         ucbhelper::Content aCnt(
-            aURL.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment,
+            aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment,
             comphelper::getProcessComponentContext() );
 
         try
@@ -719,7 +719,7 @@ void SAL_CALL OFileAccess::writeFile( const OUString& FileURL,
             if ( aParentURLObj.removeSegment() )
             {
                 OUString aParentURL
-                    = aParentURLObj.GetMainURL( INetURLObject::NO_DECODE );
+                    = aParentURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
                 // ensure all parent folders exist.
                 createFolder( aParentURL );
@@ -728,7 +728,7 @@ void SAL_CALL OFileAccess::writeFile( const OUString& FileURL,
                 OUString aTitle
                     = aURL.getName( INetURLObject::LAST_SEGMENT,
                                     true,
-                                    INetURLObject::DECODE_WITH_CHARSET );
+                                    INetURLObject::DecodeMechanism::WithCharset );
                 if ( createNewFile( aParentURL, aTitle, data ) )
                 {
                     // success
@@ -745,7 +745,7 @@ sal_Bool OFileAccess::isHidden( const OUString& FileURL )
     throw(CommandAbortedException, Exception, RuntimeException, std::exception)
 {
     INetURLObject aURLObj( FileURL, INetProtocol::File );
-    ucbhelper::Content aCnt( aURLObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment, comphelper::getProcessComponentContext() );
+    ucbhelper::Content aCnt( aURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment, comphelper::getProcessComponentContext() );
     Any aRetAny = aCnt.getPropertyValue("IsHidden");
     bool bRet = false;
     aRetAny >>= bRet;
@@ -756,7 +756,7 @@ void OFileAccess::setHidden( const OUString& FileURL, sal_Bool bHidden )
     throw(CommandAbortedException, Exception, RuntimeException, std::exception)
 {
     INetURLObject aURLObj( FileURL, INetProtocol::File );
-    ucbhelper::Content aCnt( aURLObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment, comphelper::getProcessComponentContext() );
+    ucbhelper::Content aCnt( aURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment, comphelper::getProcessComponentContext() );
     aCnt.setPropertyValue("IsHidden", Any(bHidden) );
 }
 

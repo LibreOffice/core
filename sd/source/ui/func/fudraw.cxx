@@ -795,7 +795,7 @@ bool FuDraw::SetHelpText(SdrObject* pObj, const Point& rPosPixel, const SdrViewE
             if (aHelpText.isEmpty())
             {
                 // show url if no name is available
-                aHelpText = INetURLObject::decode( pIMapObj->GetURL(), INetURLObject::DECODE_WITH_CHARSET );
+                aHelpText = INetURLObject::decode( pIMapObj->GetURL(), INetURLObject::DecodeMechanism::WithCharset );
             }
         }
     }
@@ -838,7 +838,7 @@ bool FuDraw::SetHelpText(SdrObject* pObj, const Point& rPosPixel, const SdrViewE
                 // jump to object/page
                 aHelpText = SD_RESSTR(STR_CLICK_ACTION_BOOKMARK);
                 aHelpText += ": ";
-                aHelpText += INetURLObject::decode( pInfo->GetBookmark(), INetURLObject::DECODE_WITH_CHARSET );
+                aHelpText += INetURLObject::decode( pInfo->GetBookmark(), INetURLObject::DecodeMechanism::WithCharset );
             }
             break;
 
@@ -847,7 +847,7 @@ bool FuDraw::SetHelpText(SdrObject* pObj, const Point& rPosPixel, const SdrViewE
                 // jump to document (object/page)
                 aHelpText = SD_RESSTR(STR_CLICK_ACTION_DOCUMENT);
                 aHelpText += ": ";
-                aHelpText += INetURLObject::decode( pInfo->GetBookmark(), INetURLObject::DECODE_WITH_CHARSET );
+                aHelpText += INetURLObject::decode( pInfo->GetBookmark(), INetURLObject::DecodeMechanism::WithCharset );
             }
             break;
 
@@ -856,7 +856,7 @@ bool FuDraw::SetHelpText(SdrObject* pObj, const Point& rPosPixel, const SdrViewE
                 // execute program
                 aHelpText = SD_RESSTR(STR_CLICK_ACTION_PROGRAM);
                 aHelpText += ": ";
-                aHelpText += INetURLObject::decode( pInfo->GetBookmark(), INetURLObject::DECODE_WITH_CHARSET );
+                aHelpText += INetURLObject::decode( pInfo->GetBookmark(), INetURLObject::DecodeMechanism::WithCharset );
             }
             break;
 
@@ -911,7 +911,7 @@ bool FuDraw::SetHelpText(SdrObject* pObj, const Point& rPosPixel, const SdrViewE
         /**************************************************************
         * URL-Field
         **************************************************************/
-        aHelpText = INetURLObject::decode( rVEvt.pURLField->GetURL(), INetURLObject::DECODE_WITH_CHARSET );
+        aHelpText = INetURLObject::decode( rVEvt.pURLField->GetURL(), INetURLObject::DecodeMechanism::WithCharset );
     }
 
     if (!aHelpText.isEmpty())

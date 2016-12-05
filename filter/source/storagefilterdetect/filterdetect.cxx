@@ -121,7 +121,7 @@ OUString SAL_CALL StorageFilterDetect::detect(uno::Sequence<beans::PropertyValue
             if ( xInteraction.is() )
             {
                 INetURLObject aParser( aMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_URL(), OUString() ) );
-                OUString aDocumentTitle = aParser.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
+                OUString aDocumentTitle = aParser.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset );
                 bool bRepairPackage = aMediaDesc.getUnpackedValueOrDefault( "RepairPackage", false );
                 // fdo#46310 Don't try to repair if the user rejected it once.
                 bool bRepairAllowed = aMediaDesc.getUnpackedValueOrDefault( "RepairAllowed", true );

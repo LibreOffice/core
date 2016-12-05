@@ -479,7 +479,7 @@ bool SfxObjectShell::SwitchToShared( bool bShared, bool bSave )
 
     if ( bShared != IsDocShared() )
     {
-        OUString aOrigURL = GetMedium()->GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
+        OUString aOrigURL = GetMedium()->GetURLObject().GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
         if ( aOrigURL.isEmpty() && bSave )
         {
@@ -496,7 +496,7 @@ bool SfxObjectShell::SwitchToShared( bool bShared, bool bSave )
                 const SfxBoolItem* pResult = dynamic_cast<const SfxBoolItem*>( pItem  );
                 bResult = ( pResult && pResult->GetValue() );
                 if ( bResult )
-                    aOrigURL = GetMedium()->GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
+                    aOrigURL = GetMedium()->GetURLObject().GetMainURL( INetURLObject::DecodeMechanism::NONE );
             }
         }
 
@@ -542,7 +542,7 @@ bool SfxObjectShell::SwitchToShared( bool bShared, bool bSave )
             }
             else
             {
-                OUString aTempFileURL = pMedium->GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
+                OUString aTempFileURL = pMedium->GetURLObject().GetMainURL( INetURLObject::DecodeMechanism::NONE );
                 GetMedium()->SwitchDocumentToFile( GetSharedFileURL() );
                 (pImpl->m_aSharedFileURL).clear();
 
@@ -552,7 +552,7 @@ bool SfxObjectShell::SwitchToShared( bool bShared, bool bSave )
                 try
                 {
                     // aOrigURL can not be used since it contains an old value
-                    ::svt::ShareControlFile aControlFile( GetMedium()->GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) );
+                    ::svt::ShareControlFile aControlFile( GetMedium()->GetURLObject().GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
                     aControlFile.RemoveFile();
                 }
                 catch( uno::Exception& )
@@ -844,16 +844,16 @@ OUString SfxObjectShell::GetTitle
         if ( nMaxLength == SFX_TITLE_FULLNAME )
             return aName;
         else if ( nMaxLength == SFX_TITLE_FILENAME )
-            return aURL.getName(INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET);
+            return aURL.getName(INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset);
         else if ( pImpl->aTitle.isEmpty() )
             pImpl->aTitle = aURL.getBase( INetURLObject::LAST_SEGMENT,
-                                         true, INetURLObject::DECODE_WITH_CHARSET );
+                                         true, INetURLObject::DecodeMechanism::WithCharset );
     }
     else
     {
         if ( nMaxLength >= SFX_TITLE_MAXLEN )
         {
-            OUString aComplete( aURL.GetMainURL( INetURLObject::NO_DECODE ) );
+            OUString aComplete( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
             if( aComplete.getLength() > nMaxLength )
             {
                 OUString aRet( "..." );
@@ -866,13 +866,13 @@ OUString SfxObjectShell::GetTitle
         else if ( nMaxLength == SFX_TITLE_FILENAME )
         {
             OUString aName( aURL.GetBase() );
-            aName = INetURLObject::decode( aName, INetURLObject::DECODE_WITH_CHARSET );
+            aName = INetURLObject::decode( aName, INetURLObject::DecodeMechanism::WithCharset );
             if( aName.isEmpty() )
                 aName = aURL.GetURLNoPass();
             return aName;
         }
         else if ( nMaxLength == SFX_TITLE_FULLNAME )
-            return aURL.GetMainURL( INetURLObject::DECODE_TO_IURI );
+            return aURL.GetMainURL( INetURLObject::DecodeMechanism::ToIUri );
 
         // Generate Title from file name if possible
         if ( pImpl->aTitle.isEmpty() )
@@ -880,7 +880,7 @@ OUString SfxObjectShell::GetTitle
 
         // workaround for the case when the name can not be retrieved from URL by INetURLObject
         if ( pImpl->aTitle.isEmpty() )
-            pImpl->aTitle = aURL.GetMainURL( INetURLObject::DECODE_WITH_CHARSET );
+            pImpl->aTitle = aURL.GetMainURL( INetURLObject::DecodeMechanism::WithCharset );
     }
 
     // Complete Title
@@ -1079,7 +1079,7 @@ void SfxObjectShell::SetAutoLoad(
     if ( bReload )
     {
         pImpl->pReloadTimer = new AutoReloadTimer_Impl(
-                                rUrl.GetMainURL( INetURLObject::DECODE_TO_IURI ),
+                                rUrl.GetMainURL( INetURLObject::DecodeMechanism::ToIUri ),
                                 nTime, this );
         pImpl->pReloadTimer->Start();
     }
@@ -1239,7 +1239,7 @@ void SfxObjectShell::TemplateDisconnectionAfterLoad()
             {
                 INetURLObject aURL( aName );
                 aURL.CutExtension();
-                aTemplateName = aURL.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
+                aTemplateName = aURL.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset );
             }
         }
 
@@ -1535,7 +1535,7 @@ void SfxHeaderAttributes_Impl::SetAttribute( const SvKeyValue& rKV )
             INetURLObject aObj;
             INetURLObject( pDoc->GetMedium()->GetName() ).GetNewAbsURL( aURL.copy( 4 ), &aObj );
             xDocProps->setAutoloadURL(
-                aObj.GetMainURL( INetURLObject::NO_DECODE ) );
+                aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
         }
         try
         {

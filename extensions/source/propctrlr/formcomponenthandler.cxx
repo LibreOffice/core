@@ -2408,7 +2408,7 @@ namespace pcr
             // additional info about what happened
             INetURLObject aParser( sDataSourceName );
             if ( aParser.GetProtocol() != INetProtocol::NotValid )
-                sDataSourceName = aParser.getBase( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
+                sDataSourceName = aParser.getBase( INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset );
             OUString sInfo(PcrRes(RID_STR_UNABLETOCONNECT).toString().replaceAll("$name$", sDataSourceName));
             SQLContext aContext;
             aContext.Message = sInfo;

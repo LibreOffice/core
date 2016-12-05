@@ -285,7 +285,7 @@ void MediaWindowImpl::setURL( const OUString& rURL,
             INetURLObject aURL( rURL );
 
             if (aURL.GetProtocol() != INetProtocol::NotValid)
-                maFileURL = aURL.GetMainURL(INetURLObject::DECODE_UNAMBIGUOUS);
+                maFileURL = aURL.GetMainURL(INetURLObject::DecodeMechanism::Unambiguous);
             else
                 maFileURL = rURL;
         }

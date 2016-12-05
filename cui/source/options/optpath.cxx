@@ -625,7 +625,7 @@ IMPL_LINK_NOARG(SvxPathTabPage, PathHdl_Impl, Button*, void)
             xFolderPicker = FolderPicker::create(xContext);
 
             INetURLObject aURL( sWritable, INetProtocol::File );
-            xFolderPicker->setDisplayDirectory( aURL.GetMainURL( INetURLObject::NO_DECODE ) );
+            xFolderPicker->setDisplayDirectory( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
 
             Reference< XAsynchronousExecutableDialog > xAsyncDlg( xFolderPicker, UNO_QUERY );
             if ( xAsyncDlg.is() )

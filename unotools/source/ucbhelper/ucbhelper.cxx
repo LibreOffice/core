@@ -65,7 +65,7 @@ namespace {
 OUString canonic(OUString const & url) {
     INetURLObject o(url);
     SAL_WARN_IF(o.HasError(), "unotools.ucbhelper", "Invalid URL \"" << url << '"');
-    return o.GetMainURL(INetURLObject::NO_DECODE);
+    return o.GetMainURL(INetURLObject::DecodeMechanism::NONE);
 }
 
 ucbhelper::Content content(OUString const & url) {
@@ -77,7 +77,7 @@ ucbhelper::Content content(OUString const & url) {
 
 ucbhelper::Content content(INetURLObject const & url) {
     return ucbhelper::Content(
-        url.GetMainURL(INetURLObject::NO_DECODE),
+        url.GetMainURL(INetURLObject::DecodeMechanism::NONE),
         utl::UCBContentHelper::getDefaultCommandEnvironment(),
         comphelper::getProcessComponentContext());
 }
@@ -381,17 +381,17 @@ bool utl::UCBContentHelper::Exists(OUString const & url) {
         OUString name(
             o.getName(
                 INetURLObject::LAST_SEGMENT, true,
-                INetURLObject::DECODE_WITH_CHARSET));
+                INetURLObject::DecodeMechanism::WithCharset));
         o.removeSegment();
         o.removeFinalSlash();
         std::vector<OUString> cs(
-            getContents(o.GetMainURL(INetURLObject::NO_DECODE)));
+            getContents(o.GetMainURL(INetURLObject::DecodeMechanism::NONE)));
         for (std::vector<OUString>::iterator i(cs.begin()); i != cs.end();
              ++i)
         {
             if (INetURLObject(*i).getName(
                     INetURLObject::LAST_SEGMENT, true,
-                    INetURLObject::DECODE_WITH_CHARSET).
+                    INetURLObject::DecodeMechanism::WithCharset).
                 equalsIgnoreAsciiCase(name))
             {
                 return true;
@@ -474,11 +474,11 @@ bool utl::UCBContentHelper::ensureFolder(
     try
     {
         INetURLObject aURL( rFolder );
-        OUString aTitle = aURL.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
+        OUString aTitle = aURL.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset );
         aURL.removeSegment();
         ::ucbhelper::Content aParent;
 
-        if ( ::ucbhelper::Content::create( aURL.GetMainURL( INetURLObject::NO_DECODE ),
+        if ( ::ucbhelper::Content::create( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ),
                                   xEnv, xCtx, aParent ) )
         {
             return ::utl::UCBContentHelper::MakeFolder(aParent, aTitle, result);

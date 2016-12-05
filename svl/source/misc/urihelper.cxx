@@ -534,7 +534,7 @@ OUString URIHelper::FindFirstURLInText(OUString const & rText,
                             rBegin = nPos;
                             rEnd = nUriEnd;
                             return
-                                aUri.GetMainURL(INetURLObject::DECODE_TO_IURI);
+                                aUri.GetMainURL(INetURLObject::DecodeMechanism::ToIUri);
                         }
                     }
                 }
@@ -563,7 +563,7 @@ OUString URIHelper::FindFirstURLInText(OUString const & rText,
                             rBegin = nPos;
                             rEnd = nUriEnd;
                             return
-                                aUri.GetMainURL(INetURLObject::DECODE_TO_IURI);
+                                aUri.GetMainURL(INetURLObject::DecodeMechanism::ToIUri);
                         }
                     }
                 }
@@ -612,7 +612,7 @@ OUString URIHelper::FindFirstURLInText(OUString const & rText,
                             rBegin = nPos;
                             rEnd = nUriEnd;
                             return
-                                aUri.GetMainURL(INetURLObject::DECODE_TO_IURI);
+                                aUri.GetMainURL(INetURLObject::DecodeMechanism::ToIUri);
                         }
                     }
                 }
@@ -638,7 +638,7 @@ OUString URIHelper::FindFirstURLInText(OUString const & rText,
                             rBegin = nPos;
                             rEnd = nUriEnd;
                             return
-                                aUri.GetMainURL(INetURLObject::DECODE_TO_IURI);
+                                aUri.GetMainURL(INetURLObject::DecodeMechanism::ToIUri);
                         }
                     }
                 }
@@ -667,7 +667,7 @@ OUString URIHelper::FindFirstURLInText(OUString const & rText,
                             rBegin = nPos;
                             rEnd = nUriEnd;
                             return
-                                aUri.GetMainURL(INetURLObject::DECODE_TO_IURI);
+                                aUri.GetMainURL(INetURLObject::DecodeMechanism::ToIUri);
                         }
                     }
                 }
@@ -702,7 +702,7 @@ OUString URIHelper::FindFirstURLInText(OUString const & rText,
                                 rBegin = nPos;
                                 rEnd = i;
                                 return aUri.GetMainURL(
-                                           INetURLObject::DECODE_TO_IURI);
+                                           INetURLObject::DecodeMechanism::ToIUri);
                             }
                         }
                     }

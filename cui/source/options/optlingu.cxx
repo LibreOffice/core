@@ -1630,7 +1630,7 @@ IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, Button *, pBtn, void )
                                     "non-file URLs cannot be deleted" );
                             if ( aObj.GetProtocol() == INetProtocol::File )
                             {
-                                KillFile_Impl( aObj.GetMainURL( INetURLObject::NO_DECODE ) );
+                                KillFile_Impl( aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
                             }
                         }
 

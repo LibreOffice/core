@@ -688,7 +688,7 @@ void IMapWindow::DoPropertyDialog()
                 {
                     INetURLObject aObj( aURLText, INetProtocol::File );
                     DBG_ASSERT( aObj.GetProtocol() != INetProtocol::NotValid, "Invalid URL" );
-                    pIMapObj->SetURL( aObj.GetMainURL( INetURLObject::NO_DECODE ) );
+                    pIMapObj->SetURL( aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
                 }
                 else
                     pIMapObj->SetURL( aURLText );

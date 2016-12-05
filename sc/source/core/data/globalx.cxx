@@ -68,7 +68,7 @@ void ScGlobal::InitAddIns()
         aObj.setFinalSlash();
         try
         {
-            ::ucbhelper::Content aCnt( aObj.GetMainURL(INetURLObject::NO_DECODE),
+            ::ucbhelper::Content aCnt( aObj.GetMainURL(INetURLObject::DecodeMechanism::NONE),
                 Reference< XCommandEnvironment >(),
                 comphelper::getProcessComponentContext() );
             Reference< sdbc::XResultSet > xResultSet;

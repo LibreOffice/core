@@ -74,7 +74,7 @@ SwVbaTemplate::getPath() throw ( css::uno::RuntimeException, std::exception )
     if( !msFullUrl.isEmpty() )
     {
         INetURLObject aURL( msFullUrl );
-        OUString sURL( aURL.GetMainURL( INetURLObject::DECODE_TO_IURI ) );
+        OUString sURL( aURL.GetMainURL( INetURLObject::DecodeMechanism::ToIUri ) );
         sURL = sURL.copy( 0, sURL.getLength() - aURL.GetLastName().getLength() - 1 );
         ::osl::File::getSystemPathFromFileURL( sURL, sPath );
     }

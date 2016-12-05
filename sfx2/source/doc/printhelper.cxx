@@ -537,7 +537,7 @@ class ImplUCBPrintWatcher : public ::osl::Thread
                 OUString        sFileName = aSplitter.getName(
                                             INetURLObject::LAST_SEGMENT,
                                             true,
-                                            INetURLObject::DECODE_WITH_CHARSET);
+                                            INetURLObject::DecodeMechanism::WithCharset);
                 if (aSplitter.removeSegment() && !sFileName.isEmpty())
                 {
                     ::ucbhelper::Content aSource(
@@ -546,7 +546,7 @@ class ImplUCBPrintWatcher : public ::osl::Thread
                             comphelper::getProcessComponentContext());
 
                     ::ucbhelper::Content aTarget(
-                            OUString(aSplitter.GetMainURL(INetURLObject::NO_DECODE)),
+                            OUString(aSplitter.GetMainURL(INetURLObject::DecodeMechanism::NONE)),
                             css::uno::Reference< css::ucb::XCommandEnvironment >(),
                             comphelper::getProcessComponentContext());
 

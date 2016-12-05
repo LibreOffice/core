@@ -651,18 +651,18 @@ OUString TitleHelper::impl_convertURL2Title(const OUString& sURL)
         if (aURL.HasMark())
             aURL = INetURLObject(aURL.GetURLNoMark());
 
-        sTitle = aURL.getName(INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET);
+        sTitle = aURL.getName(INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset);
     }
     else
     {
         if (aURL.hasExtension())
-            sTitle = aURL.getName(INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET);
+            sTitle = aURL.getName(INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset);
 
         if ( sTitle.isEmpty() )
-            sTitle = aURL.GetHostPort(INetURLObject::DECODE_WITH_CHARSET);
+            sTitle = aURL.GetHostPort(INetURLObject::DecodeMechanism::WithCharset);
 
         if ( sTitle.isEmpty() )
-            sTitle = aURL.GetURLNoPass(INetURLObject::DECODE_WITH_CHARSET);
+            sTitle = aURL.GetURLNoPass(INetURLObject::DecodeMechanism::WithCharset);
     }
 
     return sTitle;

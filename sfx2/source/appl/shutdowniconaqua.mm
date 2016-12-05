@@ -230,7 +230,7 @@ class RecentFilesStringLength : public ::cppu::WeakImplHelper< css::util::XStrin
         {
             // Use INetURLObject to abbreviate all other URLs
             css::uno::Reference< css::util::XStringWidth > xStringLength( new RecentFilesStringLength() );
-            aMenuTitle = aURL.getAbbreviated( xStringLength, 46, INetURLObject::DECODE_UNAMBIGUOUS );
+            aMenuTitle = aURL.getAbbreviated( xStringLength, 46, INetURLObject::DecodeMechanism::Unambiguous );
         }
 
         NSMenuItem* pNewItem = [[NSMenuItem alloc] initWithTitle: getAutoreleasedString( aMenuTitle )

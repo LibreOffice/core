@@ -432,7 +432,7 @@ void SfxDispatchController_Impl::addParametersToArgs( const css::util::URL& aURL
             else if ( aParamType.equalsAsciiL( URLTypeNames[URLType_STRING], 6 ))
             {
                 // STRING support
-                rArgs[nLen].Value <<= OUString( INetURLObject::decode( aValue, INetURLObject::DECODE_WITH_CHARSET ));
+                rArgs[nLen].Value <<= OUString( INetURLObject::decode( aValue, INetURLObject::DecodeMechanism::WithCharset ));
             }
             else if ( aParamType.equalsAsciiL( URLTypeNames[URLType_DOUBLE], 6))
             {

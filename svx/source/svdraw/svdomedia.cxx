@@ -301,7 +301,7 @@ static bool lcl_HandleJsonPackageURL(
             const OUString& rFilename = aFilenames[nFileIndex];
             INetURLObject aUrlObj(o_rTempDirURL);
             aUrlObj.insertName(rFilename);
-            const OUString sFilepath = aUrlObj.GetMainURL( INetURLObject::NO_DECODE );
+            const OUString sFilepath = aUrlObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
             // Media URL will point at json file
             if( rFilename.endsWith(".json") )

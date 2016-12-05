@@ -2102,7 +2102,7 @@ void SfxObjectShell::AddToRecentlyUsedList()
     if ( aUrl.GetProtocol() == INetProtocol::File )
     {
         std::shared_ptr<const SfxFilter> pOrgFilter = pMedium->GetOrigFilter();
-        Application::AddToRecentDocumentList( aUrl.GetURLNoPass( INetURLObject::NO_DECODE ),
+        Application::AddToRecentDocumentList( aUrl.GetURLNoPass( INetURLObject::DecodeMechanism::NONE ),
                                               (pOrgFilter) ? pOrgFilter->GetMimeType() : OUString(),
                                               (pOrgFilter) ? pOrgFilter->GetServiceName() : OUString() );
     }
@@ -2654,7 +2654,7 @@ bool SfxObjectShell::CommonSaveAs_Impl(const INetURLObject& aURL, const OUString
     const SfxBoolItem* pCopyStreamItem = rItemSet.GetItem<SfxBoolItem>(SID_COPY_STREAM_IF_POSSIBLE, false);
     if ( bSaveTo && pCopyStreamItem && pCopyStreamItem->GetValue() && !IsModified() )
     {
-        if (pMedium->TryDirectTransfer(aURL.GetMainURL(INetURLObject::NO_DECODE), rItemSet))
+        if (pMedium->TryDirectTransfer(aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE), rItemSet))
             return true;
     }
     rItemSet.ClearItem( SID_COPY_STREAM_IF_POSSIBLE );
@@ -2678,9 +2678,9 @@ bool SfxObjectShell::CommonSaveAs_Impl(const INetURLObject& aURL, const OUString
 
     OUString aTempFileURL;
     if ( IsDocShared() )
-        aTempFileURL = pMedium->GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
+        aTempFileURL = pMedium->GetURLObject().GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
-    if (PreDoSaveAs_Impl(aURL.GetMainURL(INetURLObject::NO_DECODE), aFilterName, rItemSet))
+    if (PreDoSaveAs_Impl(aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE), aFilterName, rItemSet))
     {
         // Update Data on media
         SfxItemSet *pSet = GetMedium()->GetItemSet();

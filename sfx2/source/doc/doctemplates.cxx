@@ -544,7 +544,7 @@ void SfxDocTplService_Impl::getDirList()
     {
         aURL.SetSmartProtocol( INetProtocol::File );
         aURL.SetURL( aDirs.getToken( i, C_DELIM ) );
-        maTemplateDirs[i] = aURL.GetMainURL( INetURLObject::NO_DECODE );
+        maTemplateDirs[i] = aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
         sal_Int32 nIndex = maTemplateDirs[i].indexOf( aPrefix );
         if ( nIndex != -1 && xExpander.is() )
@@ -671,7 +671,7 @@ bool SfxDocTplService_Impl::getTitleFromURL( const OUString& rURL, OUString& aTi
         INetURLObject aURL( rURL );
         aURL.CutExtension();
         aTitle = aURL.getName( INetURLObject::LAST_SEGMENT, true,
-                               INetURLObject::DECODE_WITH_CHARSET );
+                               INetURLObject::DecodeMechanism::WithCharset );
     }
     else
         bDocHasTitle = true;
@@ -691,7 +691,7 @@ bool SfxDocTplService_Impl::addEntry( Content& rParentFolder,
     aLinkObj.insertName( rTitle, false,
                       INetURLObject::LAST_SEGMENT,
                       INetURLObject::EncodeMechanism::All );
-    OUString aLinkURL = aLinkObj.GetMainURL( INetURLObject::NO_DECODE );
+    OUString aLinkURL = aLinkObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
     Content aLink;
 
@@ -732,7 +732,7 @@ bool SfxDocTplService_Impl::createFolder( const OUString& rNewFolderURL,
     bool        bCreatedFolder = false;
     INetURLObject   aParentURL( rNewFolderURL );
     OUString        aFolderName = aParentURL.getName( INetURLObject::LAST_SEGMENT, true,
-                                                      INetURLObject::DECODE_WITH_CHARSET );
+                                                      INetURLObject::DecodeMechanism::WithCharset );
 
     // compute the parent folder url from the new folder url
     // and remove the final slash, because Content::create doesn't
@@ -744,7 +744,7 @@ bool SfxDocTplService_Impl::createFolder( const OUString& rNewFolderURL,
     // if the parent exists, we can continue with the creation of the
     // new folder, we have to create the parent otherwise ( as long as
     // bCreateParent is set to true )
-    if ( Content::create( aParentURL.GetMainURL( INetURLObject::NO_DECODE ), maCmdEnv, comphelper::getProcessComponentContext(), aParent ) )
+    if ( Content::create( aParentURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), maCmdEnv, comphelper::getProcessComponentContext(), aParent ) )
     {
         try
         {
@@ -782,7 +782,7 @@ bool SfxDocTplService_Impl::createFolder( const OUString& rNewFolderURL,
         // try to create the new folder again ( but this time, we set
         // bCreateParent to false to avoid endless recursions )
         if ( ( aParentURL.getSegmentCount() >= 1 ) &&
-               createFolder( aParentURL.GetMainURL( INetURLObject::NO_DECODE ), bCreateParent, bFsysFolder, aParent ) )
+               createFolder( aParentURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), bCreateParent, bFsysFolder, aParent ) )
         {
             bCreatedFolder = createFolder( rNewFolderURL, false, bFsysFolder, rNewFolder );
         }
@@ -803,7 +803,7 @@ bool SfxDocTplService_Impl::CreateNewUniqueFolderWithPrefix( const OUString& aPa
 
     Content aParent;
     uno::Reference< XCommandEnvironment > aQuietEnv;
-       if ( Content::create( aDirPath.GetMainURL( INetURLObject::NO_DECODE ), aQuietEnv, comphelper::getProcessComponentContext(), aParent ) )
+       if ( Content::create( aDirPath.GetMainURL( INetURLObject::DecodeMechanism::NONE ), aQuietEnv, comphelper::getProcessComponentContext(), aParent ) )
        {
         for ( sal_Int32 nInd = 0; nInd < 32000; nInd++ )
         {
@@ -837,7 +837,7 @@ bool SfxDocTplService_Impl::CreateNewUniqueFolderWithPrefix( const OUString& aPa
                       INetURLObject::EncodeMechanism::All );
                 // if there is already an element, retry
                 // if there was another error, do not try any more
-                if ( !::utl::UCBContentHelper::Exists( aObjPath.GetMainURL( INetURLObject::NO_DECODE ) ) )
+                if ( !::utl::UCBContentHelper::Exists( aObjPath.GetMainURL( INetURLObject::DecodeMechanism::NONE ) ) )
                     break;
             }
 
@@ -864,7 +864,7 @@ OUString SfxDocTplService_Impl::CreateNewUniqueFileWithPrefix( const OUString& a
        Content aParent;
 
     uno::Reference< XCommandEnvironment > aQuietEnv;
-    if ( Content::create( aDirPath.GetMainURL( INetURLObject::NO_DECODE ), aQuietEnv, comphelper::getProcessComponentContext(), aParent ) )
+    if ( Content::create( aDirPath.GetMainURL( INetURLObject::DecodeMechanism::NONE ), aQuietEnv, comphelper::getProcessComponentContext(), aParent ) )
        {
         for ( sal_Int32 nInd = 0; nInd < 32000; nInd++ )
         {
@@ -903,7 +903,7 @@ OUString SfxDocTplService_Impl::CreateNewUniqueFileWithPrefix( const OUString& a
                       INetURLObject::EncodeMechanism::All );
                 // if there is already an element, retry
                 // if there was another error, do not try any more
-                if ( !::utl::UCBContentHelper::Exists( aObjPath.GetMainURL( INetURLObject::NO_DECODE ) ) )
+                if ( !::utl::UCBContentHelper::Exists( aObjPath.GetMainURL( INetURLObject::DecodeMechanism::NONE ) ) )
                     break;
             }
 
@@ -1223,7 +1223,7 @@ std::vector< beans::StringPair > SfxDocTplService_Impl::ReadUINamesForTemplateDi
 
     // TODO/LATER: Use hashmap in future
     std::vector< beans::StringPair > aUINames;
-    if ( Content::create( aLocObj.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference < ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext(), aLocContent ) )
+    if ( Content::create( aLocObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), uno::Reference < ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext(), aLocContent ) )
     {
         try
         {
@@ -1414,7 +1414,7 @@ bool SfxDocTplService_Impl::addGroup( const OUString& rGroupName )
                       INetURLObject::LAST_SEGMENT,
                       INetURLObject::EncodeMechanism::All );
 
-    aNewGroupURL = aNewGroupObj.GetMainURL( INetURLObject::NO_DECODE );
+    aNewGroupURL = aNewGroupObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
     if ( Content::create( aNewGroupURL, maCmdEnv, comphelper::getProcessComponentContext(), aNewGroup ) ||
          ! createFolder( aNewGroupURL, false, false, aNewGroup ) )
@@ -1501,7 +1501,7 @@ bool SfxDocTplService_Impl::removeGroup( const OUString& rGroupName )
 
     // Get the target url
     Content  aGroup;
-    OUString    aGroupURL = aGroupObj.GetMainURL( INetURLObject::NO_DECODE );
+    OUString    aGroupURL = aGroupObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
     if ( Content::create( aGroupURL, maCmdEnv, comphelper::getProcessComponentContext(), aGroup ) )
     {
@@ -1524,7 +1524,7 @@ bool SfxDocTplService_Impl::removeGroup( const OUString& rGroupName )
             return false;
 
         OUString aGeneralTempPath = findParentTemplateDir(
-            aGroupParentFolder.GetMainURL(INetURLObject::NO_DECODE));
+            aGroupParentFolder.GetMainURL(INetURLObject::DecodeMechanism::NONE));
 
         if (aGeneralTempPath.isEmpty())
             return false;
@@ -1602,7 +1602,7 @@ bool SfxDocTplService_Impl::renameGroup( const OUString& rOldName,
                     aGroupObj.insertName( rNewName, false,
                                           INetURLObject::LAST_SEGMENT,
                                           INetURLObject::EncodeMechanism::All );
-    OUString        aGroupURL = aGroupObj.GetMainURL( INetURLObject::NO_DECODE );
+    OUString        aGroupURL = aGroupObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
     // Check, if there is a group with the new name, return false
     // if there is one.
@@ -1613,7 +1613,7 @@ bool SfxDocTplService_Impl::renameGroup( const OUString& rOldName,
     aGroupObj.insertName( rOldName, false,
                       INetURLObject::LAST_SEGMENT,
                       INetURLObject::EncodeMechanism::All );
-    aGroupURL = aGroupObj.GetMainURL( INetURLObject::NO_DECODE );
+    aGroupURL = aGroupObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
     // When there is no group with the old name, we can't rename it
     if ( ! Content::create( aGroupURL, maCmdEnv, comphelper::getProcessComponentContext(), aGroup ) )
@@ -1636,7 +1636,7 @@ bool SfxDocTplService_Impl::renameGroup( const OUString& rOldName,
     // check that the fs location is in writable folder and this is not a "My templates" folder
     INetURLObject aGroupParentFolder( aGroupTargetURL );
     if (!aGroupParentFolder.removeSegment() ||
-        isInternalTemplateDir(aGroupParentFolder.GetMainURL(INetURLObject::NO_DECODE)))
+        isInternalTemplateDir(aGroupParentFolder.GetMainURL(INetURLObject::DecodeMechanism::NONE)))
     {
         return false;
     }
@@ -1671,10 +1671,10 @@ bool SfxDocTplService_Impl::renameGroup( const OUString& rOldName,
     if ( bCanBeRenamed )
     {
         INetURLObject aGroupTargetObj( aGroupTargetURL );
-        OUString aFsysName = aGroupTargetObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
+        OUString aFsysName = aGroupTargetObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset );
 
         if ( aGroupTargetObj.removeSegment()
-          && ReplaceUINamesForTemplateDir_Impl( aGroupTargetObj.GetMainURL( INetURLObject::NO_DECODE ),
+          && ReplaceUINamesForTemplateDir_Impl( aGroupTargetObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ),
                                                   aFsysName,
                                                 rOldName,
                                                 rNewName ) )
@@ -1709,7 +1709,7 @@ bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
     aGroupObj.insertName( rGroupName, false,
                       INetURLObject::LAST_SEGMENT,
                       INetURLObject::EncodeMechanism::All );
-    aGroupURL = aGroupObj.GetMainURL( INetURLObject::NO_DECODE );
+    aGroupURL = aGroupObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
     if ( ! Content::create( aGroupURL, maCmdEnv, comphelper::getProcessComponentContext(), aGroup ) )
         return false;
@@ -1728,7 +1728,7 @@ bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
     aGroupObj.insertName( rTemplateName, false,
                       INetURLObject::LAST_SEGMENT,
                       INetURLObject::EncodeMechanism::All );
-    aTemplateURL = aGroupObj.GetMainURL( INetURLObject::NO_DECODE );
+    aTemplateURL = aGroupObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
     if ( Content::create( aTemplateURL, maCmdEnv, comphelper::getProcessComponentContext(), aTemplateToRemove ) )
     {
@@ -1893,7 +1893,7 @@ bool SfxDocTplService_Impl::addTemplate( const OUString& rGroupName,
     aGroupObj.insertName( rGroupName, false,
                       INetURLObject::LAST_SEGMENT,
                       INetURLObject::EncodeMechanism::All );
-    aGroupURL = aGroupObj.GetMainURL( INetURLObject::NO_DECODE );
+    aGroupURL = aGroupObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
     if ( ! Content::create( aGroupURL, maCmdEnv, comphelper::getProcessComponentContext(), aGroup ) )
         return false;
@@ -1903,7 +1903,7 @@ bool SfxDocTplService_Impl::addTemplate( const OUString& rGroupName,
     aGroupObj.insertName( rTemplateName, false,
                       INetURLObject::LAST_SEGMENT,
                       INetURLObject::EncodeMechanism::All );
-    aTemplateURL = aGroupObj.GetMainURL( INetURLObject::NO_DECODE );
+    aTemplateURL = aGroupObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
     if ( Content::create( aTemplateURL, maCmdEnv, comphelper::getProcessComponentContext(), aTemplate ) )
         return false;
@@ -1946,7 +1946,7 @@ bool SfxDocTplService_Impl::addTemplate( const OUString& rGroupName,
                       INetURLObject::EncodeMechanism::All );
         aTargetObj.setExtension( aSourceObj.getExtension() );
 
-        aTargetURL2 = aTargetObj.GetMainURL( INetURLObject::NO_DECODE );
+        aTargetURL2 = aTargetObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
         if ( aTargetURL2 == rSourceURL )
             return addEntry( aGroup, rTemplateName, aTargetURL2, aType );
@@ -1956,11 +1956,11 @@ bool SfxDocTplService_Impl::addTemplate( const OUString& rGroupName,
 
     INetURLObject aTmpURL( aSourceObj );
     aTmpURL.CutExtension();
-    OUString aPattern = aTmpURL.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
+    OUString aPattern = aTmpURL.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset );
 
     OUString aNewTemplateTargetURL = CreateNewUniqueFileWithPrefix( aTargetURL, aPattern, aSourceObj.getExtension() );
     INetURLObject aNewTemplateTargetObj( aNewTemplateTargetURL );
-    OUString aNewTemplateTargetName = aNewTemplateTargetObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
+    OUString aNewTemplateTargetName = aNewTemplateTargetObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset );
     if ( aNewTemplateTargetURL.isEmpty() || aNewTemplateTargetName.isEmpty() )
         return false;
 
@@ -1968,7 +1968,7 @@ bool SfxDocTplService_Impl::addTemplate( const OUString& rGroupName,
     Content aSourceContent;
     uno::Reference < ucb::XCommandEnvironment > xEnv;
     INetURLObject   aSourceURL( rSourceURL );
-    if( ! Content::create( aSourceURL.GetMainURL( INetURLObject::NO_DECODE ), xEnv, comphelper::getProcessComponentContext(), aSourceContent ) )
+    if( ! Content::create( aSourceURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), xEnv, comphelper::getProcessComponentContext(), aSourceContent ) )
         return false;
 
     if( ! Content::create( aTargetURL, xEnv, comphelper::getProcessComponentContext(), aTargetGroup ) )
@@ -2009,7 +2009,7 @@ bool SfxDocTplService_Impl::addTemplate( const OUString& rGroupName,
         {
             INetURLObject aNewTmpObj( aNewTemplateTargetObj );
             aNewTmpObj.CutExtension();
-            bCorrectTitle = ( aNewTmpObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET ).equals( rTemplateName ) );
+            bCorrectTitle = ( aNewTmpObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset ).equals( rTemplateName ) );
         }
 
         if ( !bCorrectTitle )
@@ -2066,7 +2066,7 @@ bool SfxDocTplService_Impl::removeTemplate( const OUString& rGroupName,
     aGroupObj.insertName( rGroupName, false,
                       INetURLObject::LAST_SEGMENT,
                       INetURLObject::EncodeMechanism::All );
-    aGroupURL = aGroupObj.GetMainURL( INetURLObject::NO_DECODE );
+    aGroupURL = aGroupObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
     if ( ! Content::create( aGroupURL, maCmdEnv, comphelper::getProcessComponentContext(), aGroup ) )
         return false;
@@ -2076,7 +2076,7 @@ bool SfxDocTplService_Impl::removeTemplate( const OUString& rGroupName,
     aGroupObj.insertName( rTemplateName, false,
                       INetURLObject::LAST_SEGMENT,
                       INetURLObject::EncodeMechanism::All );
-    aTemplateURL = aGroupObj.GetMainURL( INetURLObject::NO_DECODE );
+    aTemplateURL = aGroupObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
     if ( !Content::create( aTemplateURL, maCmdEnv, comphelper::getProcessComponentContext(), aTemplate ) )
         return false;
@@ -2118,7 +2118,7 @@ bool SfxDocTplService_Impl::renameTemplate( const OUString& rGroupName,
     aGroupObj.insertName( rGroupName, false,
                       INetURLObject::LAST_SEGMENT,
                       INetURLObject::EncodeMechanism::All );
-    aGroupURL = aGroupObj.GetMainURL( INetURLObject::NO_DECODE );
+    aGroupURL = aGroupObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
     if ( ! Content::create( aGroupURL, maCmdEnv, comphelper::getProcessComponentContext(), aGroup ) )
         return false;
@@ -2128,7 +2128,7 @@ bool SfxDocTplService_Impl::renameTemplate( const OUString& rGroupName,
     aGroupObj.insertName( rNewName, false,
                       INetURLObject::LAST_SEGMENT,
                       INetURLObject::EncodeMechanism::All );
-    aTemplateURL = aGroupObj.GetMainURL( INetURLObject::NO_DECODE );
+    aTemplateURL = aGroupObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
     if ( Content::create( aTemplateURL, maCmdEnv, comphelper::getProcessComponentContext(), aTemplate ) )
         return false;
@@ -2139,7 +2139,7 @@ bool SfxDocTplService_Impl::renameTemplate( const OUString& rGroupName,
     aGroupObj.insertName( rOldName, false,
                       INetURLObject::LAST_SEGMENT,
                       INetURLObject::EncodeMechanism::All );
-    aTemplateURL = aGroupObj.GetMainURL( INetURLObject::NO_DECODE );
+    aTemplateURL = aGroupObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
     if ( !Content::create( aTemplateURL, maCmdEnv, comphelper::getProcessComponentContext(), aTemplate ) )
         return false;
@@ -2563,7 +2563,7 @@ void SfxDocTplService_Impl::createFromContent( GroupList_Impl& rList,
     // TODO/LATER: Use hashmap in future
     std::vector< beans::StringPair > aUINames;
     if ( !bHierarchy )
-        aUINames = ReadUINamesForTemplateDir_Impl( aLayerObj.GetMainURL( INetURLObject::NO_DECODE ) );
+        aUINames = ReadUINamesForTemplateDir_Impl( aLayerObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
 
     uno::Reference< XResultSet > xResultSet;
     Sequence< OUString > aProps { TITLE };
@@ -2636,7 +2636,7 @@ void SfxDocTplService_Impl::addToHierarchy( GroupData_Impl *pGroup,
                       INetURLObject::LAST_SEGMENT,
                       INetURLObject::EncodeMechanism::All );
 
-    OUString aTemplateURL = aGroupObj.GetMainURL( INetURLObject::NO_DECODE );
+    OUString aTemplateURL = aGroupObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
     if ( Content::create( aTemplateURL, maCmdEnv, comphelper::getProcessComponentContext(), aTemplate ) )
         return;
@@ -2680,7 +2680,7 @@ void SfxDocTplService_Impl::addGroupToHierarchy( GroupData_Impl *pGroup )
           INetURLObject::LAST_SEGMENT,
           INetURLObject::EncodeMechanism::All );
 
-    OUString aNewGroupURL = aNewGroupObj.GetMainURL( INetURLObject::NO_DECODE );
+    OUString aNewGroupURL = aNewGroupObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
     if ( createFolder( aNewGroupURL, false, false, aGroup ) )
     {
@@ -2831,7 +2831,7 @@ void SfxURLRelocator_Impl::implExpandURL( OUString& io_url )
     if ( aParser.GetProtocol() != INetProtocol::VndSunStarExpand )
         return;
 
-    io_url = aParser.GetURLPath( INetURLObject::DECODE_WITH_CHARSET );
+    io_url = aParser.GetURLPath( INetURLObject::DecodeMechanism::WithCharset );
     try
     {
         if ( !mxMacroExpander.is() )

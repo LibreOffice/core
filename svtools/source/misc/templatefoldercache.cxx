@@ -124,7 +124,7 @@ namespace svt
         explicit TemplateContent( const INetURLObject& _rURL );
 
         // attribute access
-        inline OUString                 getURL( ) const                             { return m_aURL.GetMainURL( INetURLObject::DECODE_TO_IURI ); }
+        inline OUString                 getURL( ) const                             { return m_aURL.GetMainURL( INetURLObject::DecodeMechanism::ToIUri ); }
         inline void                     setModDate( const util::DateTime& _rDate )  { m_aLastModified = _rDate; }
         inline const util::DateTime&    getModDate( ) const                         { return m_aLastModified; }
 
@@ -527,7 +527,7 @@ namespace svt
             osl::FileBase::getFileURLFromSystemPath( _rPath, sURL );
             aParser.SetURL( sURL );
         }
-        return aParser.GetMainURL( INetURLObject::DECODE_TO_IURI );
+        return aParser.GetMainURL( INetURLObject::DecodeMechanism::ToIUri );
     }
 
 
@@ -719,7 +719,7 @@ namespace svt
         aStorageURL.Append( ".templdir.cache" );
 
         // open the stream
-        m_pCacheStream = UcbStreamHelper::CreateStream( aStorageURL.GetMainURL( INetURLObject::DECODE_TO_IURI ),
+        m_pCacheStream = UcbStreamHelper::CreateStream( aStorageURL.GetMainURL( INetURLObject::DecodeMechanism::ToIUri ),
             _bForRead ? StreamMode::READ | StreamMode::NOCREATE : StreamMode::WRITE | StreamMode::TRUNC );
         DBG_ASSERT( m_pCacheStream, "TemplateFolderCacheImpl::openCacheStream: could not open/create the cache stream!" );
         if ( m_pCacheStream && m_pCacheStream->GetErrorCode() )

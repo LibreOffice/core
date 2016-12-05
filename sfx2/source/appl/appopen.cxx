@@ -528,7 +528,7 @@ void SfxApplication::NewDocExec_Impl( SfxRequest& rReq )
         {
             DBG_ASSERT( aObj.GetProtocol() != INetProtocol::NotValid, "Illegal URL!" );
 
-            SfxStringItem aName( SID_FILE_NAME, aObj.GetMainURL( INetURLObject::NO_DECODE ) );
+            SfxStringItem aName( SID_FILE_NAME, aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
             SfxStringItem aTemplName( SID_TEMPLATE_NAME, aTemplateName );
             SfxStringItem aTemplRegionName( SID_TEMPLATE_REGIONNAME, aTemplateRegion );
             pRet = GetDispatcher_Impl()->ExecuteList(SID_OPENDOC, eMode,

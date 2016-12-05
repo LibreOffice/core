@@ -46,7 +46,7 @@ void SwURLStateChanged::Notify( SfxBroadcaster& , const SfxHint& rHint )
     {
         // This URL has been changed:
         const INetURLObject* pIURL = static_cast<const INetURLHistoryHint&>(rHint).GetObject();
-        OUString sURL( pIURL->GetMainURL( INetURLObject::NO_DECODE ) ), sBkmk;
+        OUString sURL( pIURL->GetMainURL( INetURLObject::DecodeMechanism::NONE ) ), sBkmk;
 
         SwEditShell* pESh = pDoc->GetEditShell();
 

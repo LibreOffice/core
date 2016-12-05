@@ -233,7 +233,7 @@ void SvxHyperlinkNewDocTp::GetCurentItemData ( OUString& rStrURL, OUString& aStr
     INetURLObject aURL;
     if ( ImplGetURLObject( rStrURL, m_pCbbPath->GetBaseURL(), aURL ) )
     {
-        rStrURL = aURL.GetMainURL( INetURLObject::NO_DECODE );
+        rStrURL = aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
     }
 
     GetDataFromCommonFields( aStrName, aStrIntName, aStrFrame, eMode );
@@ -305,7 +305,7 @@ void SvxHyperlinkNewDocTp::DoApply ()
 
         // create Document
 
-        aStrNewName = aURL.GetURLPath( INetURLObject::NO_DECODE );
+        aStrNewName = aURL.GetURLPath( INetURLObject::DecodeMechanism::NONE );
         SfxViewFrame *pViewFrame = nullptr;
         try
         {
@@ -313,7 +313,7 @@ void SvxHyperlinkNewDocTp::DoApply ()
 
             // check if file exists, warn before we overwrite it
             {
-                SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::NO_DECODE ), StreamMode::READ );
+                SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::READ );
 
                 bool bOk = pIStm && ( pIStm->GetError() == 0);
 
@@ -364,7 +364,7 @@ void SvxHyperlinkNewDocTp::DoApply ()
                         pViewFrame = pItem->GetFrame();
                         if (pViewFrame)
                         {
-                            SfxStringItem aNewName( SID_FILE_NAME, aURL.GetMainURL( INetURLObject::NO_DECODE ) );
+                            SfxStringItem aNewName( SID_FILE_NAME, aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
 
                             pViewFrame->GetDispatcher()->ExecuteList(
                                 SID_SAVEASDOC, SfxCallMode::SYNCHRON,
@@ -454,11 +454,11 @@ IMPL_LINK_NOARG(SvxHyperlinkNewDocTp, ClickNewHdl_Impl, Button*, void)
 
         if( aNewURL.GetProtocol() == INetProtocol::File )
         {
-            osl::FileBase::getSystemPathFromFileURL(aNewURL.GetMainURL( INetURLObject::NO_DECODE ), aStrTmp);
+            osl::FileBase::getSystemPathFromFileURL(aNewURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), aStrTmp);
         }
         else
         {
-            aStrTmp = aNewURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS );
+            aStrTmp = aNewURL.GetMainURL( INetURLObject::DecodeMechanism::Unambiguous );
         }
 
         m_pCbbPath->SetText ( aStrTmp );

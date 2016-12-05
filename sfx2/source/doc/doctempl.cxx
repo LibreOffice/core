@@ -465,7 +465,7 @@ OUString SfxDocumentTemplates::GetTemplateTargetURLFromComponent( const OUString
     OUString aResult;
     Content aTemplate;
     uno::Reference< XCommandEnvironment > aCmdEnv;
-    if ( Content::create( aTemplateObj.GetMainURL( INetURLObject::NO_DECODE ), aCmdEnv, comphelper::getProcessComponentContext(), aTemplate ) )
+    if ( Content::create( aTemplateObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), aCmdEnv, comphelper::getProcessComponentContext(), aTemplate ) )
     {
         OUString aPropName( TARGET_URL  );
         getTextProperty_Impl( aTemplate, aPropName, aResult );
@@ -703,10 +703,10 @@ bool SfxDocumentTemplates::CopyTo
     INetURLObject aTargetURL( rName );
 
     OUString aTitle( aTargetURL.getName( INetURLObject::LAST_SEGMENT, true,
-                                         INetURLObject::DECODE_WITH_CHARSET ) );
+                                         INetURLObject::DecodeMechanism::WithCharset ) );
     aTargetURL.removeSegment();
 
-    OUString aParentURL = aTargetURL.GetMainURL( INetURLObject::NO_DECODE );
+    OUString aParentURL = aTargetURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
     uno::Reference< XCommandEnvironment > aCmdEnv;
     Content aTarget;
@@ -796,7 +796,7 @@ bool SfxDocumentTemplates::CopyFrom
         try
         {
             xStorable.set(
-                xDesktop->loadComponentFromURL( aTemplURL.GetMainURL(INetURLObject::NO_DECODE),
+                xDesktop->loadComponentFromURL( aTemplURL.GetMainURL(INetURLObject::DecodeMechanism::NONE),
                                                 "_blank",
                                                 0,
                                                 aArgs ),
@@ -825,7 +825,7 @@ bool SfxDocumentTemplates::CopyFrom
                 INetURLObject aURL( aTemplURL );
                 aURL.CutExtension();
                 aTitle = aURL.getName( INetURLObject::LAST_SEGMENT, true,
-                                        INetURLObject::DECODE_WITH_CHARSET );
+                                        INetURLObject::DecodeMechanism::WithCharset );
             }
 
             // write a template using XStorable interface
@@ -840,7 +840,7 @@ bool SfxDocumentTemplates::CopyFrom
         aTemplObj.insertName( aTitle, false,
                               INetURLObject::LAST_SEGMENT,
                               INetURLObject::EncodeMechanism::All );
-        OUString aTemplURL = aTemplObj.GetMainURL( INetURLObject::NO_DECODE );
+        OUString aTemplURL = aTemplObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
         uno::Reference< XCommandEnvironment > aCmdEnv;
         Content aTemplCont;
@@ -1146,7 +1146,7 @@ bool SfxDocumentTemplates::GetLogicNames
 
     aFullPath.SetSmartProtocol( INetProtocol::File );
     aFullPath.SetURL( rPath );
-    OUString aPath( aFullPath.GetMainURL( INetURLObject::NO_DECODE ) );
+    OUString aPath( aFullPath.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
 
     RegionData_Impl *pData = nullptr;
     DocTempl_EntryData_Impl  *pEntry = nullptr;
@@ -1248,7 +1248,7 @@ const OUString& DocTempl_EntryData_Impl::GetHierarchyURL()
                      INetURLObject::LAST_SEGMENT,
                      INetURLObject::EncodeMechanism::All );
 
-        maOwnURL = aTemplateObj.GetMainURL( INetURLObject::NO_DECODE );
+        maOwnURL = aTemplateObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
         DBG_ASSERT( !maOwnURL.isEmpty(), "GetHierarchyURL(): Could not create URL!" );
     }
 
@@ -1364,7 +1364,7 @@ void RegionData_Impl::AddEntry( const OUString& rTitle,
     aLinkObj.insertName( rTitle, false,
                       INetURLObject::LAST_SEGMENT,
                       INetURLObject::EncodeMechanism::All );
-    OUString aLinkURL = aLinkObj.GetMainURL( INetURLObject::NO_DECODE );
+    OUString aLinkURL = aLinkObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
     bool        bFound = false;
     size_t          nPos = GetEntryPos( rTitle, bFound );
@@ -1405,7 +1405,7 @@ const OUString& RegionData_Impl::GetHierarchyURL()
                      INetURLObject::LAST_SEGMENT,
                      INetURLObject::EncodeMechanism::All );
 
-        maOwnURL = aRegionObj.GetMainURL( INetURLObject::NO_DECODE );
+        maOwnURL = aRegionObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
         DBG_ASSERT( !maOwnURL.isEmpty(), "GetHierarchyURL(): Could not create URL!" );
     }
 
@@ -1744,7 +1744,7 @@ bool SfxDocTemplate_Impl::GetTitleFromURL( const OUString& rURL,
         INetURLObject aURL( rURL );
         aURL.CutExtension();
         aTitle = aURL.getName( INetURLObject::LAST_SEGMENT, true,
-                               INetURLObject::DECODE_WITH_CHARSET );
+                               INetURLObject::DecodeMechanism::WithCharset );
     }
 
     return true;

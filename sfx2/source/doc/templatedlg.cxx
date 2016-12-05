@@ -988,7 +988,7 @@ void SfxTemplateManagerDlg::OnTemplateExport()
                 else
                     aPathObj.setName(aItemPath.getName());
 
-                OUString aPath = aPathObj.GetMainURL( INetURLObject::NO_DECODE );
+                OUString aPath = aPathObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
                 if (!mpLocalView->exportTo(pItem->mnAssocId,pItem->mnRegionId,aPath))
                 {
@@ -1019,7 +1019,7 @@ void SfxTemplateManagerDlg::OnTemplateExport()
                 else
                     aPathObj.setName(aItemPath.getName());
 
-                OUString aPath = aPathObj.GetMainURL( INetURLObject::NO_DECODE );
+                OUString aPath = aPathObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
                 if (!mpLocalView->exportTo(pItem->mnDocId + 1,   //mnId w.r.t. region = mDocId + 1
                     mpLocalView->getRegionId(pItem->mnRegionId), //pItem->mnRegionId does not store actual region Id

@@ -243,7 +243,7 @@ IMPL_LINK( SvBaseLinksDlg, LinksSelectHdl, SvTreeListBox *, pSvTabListBox, void 
 
         OUString aFileName;
         sfx2::LinkManager::GetDisplayNames( pLink, &sType, &aFileName, pLinkNm, pFilter );
-        aFileName = INetURLObject::decode(aFileName, INetURLObject::DECODE_UNAMBIGUOUS);
+        aFileName = INetURLObject::decode(aFileName, INetURLObject::DecodeMechanism::Unambiguous);
         m_pFtFullFileName->SetText( aFileName );
         m_pFtFullSourceName->SetText( sLink );
         m_pFtFullTypeName->SetText( sType );
@@ -389,7 +389,7 @@ IMPL_LINK_NOARG( SvBaseLinksDlg, ChangeSourceClickHdl, Button *, void )
                     aUrl2.insertName( aUrl_.getName() );
                     OUString sNewLinkName;
                     MakeLnkName( sNewLinkName, nullptr ,
-                            aUrl2.GetMainURL(INetURLObject::DECODE_TO_IURI), sLinkName, &sFilter);
+                            aUrl2.GetMainURL(INetURLObject::DecodeMechanism::ToIUri), sLinkName, &sFilter);
                     pLink->SetLinkSourceName( sNewLinkName );
                     pLink->Update();
                 }
@@ -631,7 +631,7 @@ void SvBaseLinksDlg::InsertEntry( const SvBaseLink& rLink, sal_uLong nPos, bool 
     OUString aTxt = m_pTbLinks->GetEllipsisString( sFileNm, nWidthPixel, DrawTextFlags::PathEllipsis );
     INetURLObject aPath( sFileNm, INetProtocol::File );
     OUString aFileName = aPath.getName();
-    aFileName = INetURLObject::decode(aFileName, INetURLObject::DECODE_UNAMBIGUOUS);
+    aFileName = INetURLObject::decode(aFileName, INetURLObject::DecodeMechanism::Unambiguous);
 
     if( aFileName.getLength() > aTxt.getLength() )
         aTxt = aFileName;

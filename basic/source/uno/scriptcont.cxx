@@ -533,7 +533,7 @@ void SAL_CALL SfxScriptLibraryContainer::changeLibraryPassword( const OUString& 
                 {
                     aElementInetObj.setExtension( "pba" );
                 }
-                OUString aElementPath( aElementInetObj.GetMainURL( INetURLObject::NO_DECODE ) );
+                OUString aElementPath( aElementInetObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
 
                 if( mxSFI->exists( aElementPath ) )
                 {
@@ -719,7 +719,7 @@ bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, cons
                 INetURLObject aInetObj( aTargetURL );
                 aInetObj.insertName( aName, true, INetURLObject::LAST_SEGMENT,
                                      INetURLObject::EncodeMechanism::All );
-                aLibDirPath = aInetObj.GetMainURL( INetURLObject::NO_DECODE );
+                aLibDirPath = aInetObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
                 if( !xSFI->isFolder( aLibDirPath ) )
                 {
@@ -740,7 +740,7 @@ bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, cons
                                             INetURLObject::LAST_SEGMENT,
                                             INetURLObject::EncodeMechanism::All );
                 aElementInetObj.setExtension( "pba" );
-                OUString aElementPath = aElementInetObj.GetMainURL( INetURLObject::NO_DECODE );
+                OUString aElementPath = aElementInetObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
                 if( !isLibraryElementValid( pLib->getByName( aElementName ) ) )
                 {
@@ -1034,7 +1034,7 @@ bool SfxScriptLibraryContainer::implLoadPasswordLibrary
                 aElementInetObj.insertName( aElementName, false,
                     INetURLObject::LAST_SEGMENT, INetURLObject::EncodeMechanism::All );
                 aElementInetObj.setExtension( "pba" );
-                OUString aElementPath = aElementInetObj.GetMainURL( INetURLObject::NO_DECODE );
+                OUString aElementPath = aElementInetObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
                 uno::Reference< embed::XStorage > xElementRootStorage;
                 try

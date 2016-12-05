@@ -145,7 +145,7 @@ void OConnection::construct(const OUString& url,const Sequence< PropertyValue >&
 
         aURL.SetSmartURL(aFileName);
 
-        setURL(aURL.GetMainURL(INetURLObject::NO_DECODE));
+        setURL(aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE));
     }
 
     if ( m_nTextEncoding == RTL_TEXTENCODING_DONTKNOW )

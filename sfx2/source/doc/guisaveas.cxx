@@ -1023,7 +1023,7 @@ bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
     // get the path from the dialog
     INetURLObject aURL( pFileDlg->GetPath() );
     // the path should be provided outside since it might be used for further calls to the dialog
-    aSuggestedName = aURL.GetName( INetURLObject::DECODE_WITH_CHARSET );
+    aSuggestedName = aURL.GetName( INetURLObject::DecodeMechanism::WithCharset );
        aSuggestedDir = pFileDlg->GetDisplayDirectory();
 
     // old filter options should be cleared in case different filter is used
@@ -1106,7 +1106,7 @@ bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
 
     // merge in results of the dialog execution
     GetMediaDescr()[OUString("URL")] <<=
-                                                OUString( aURL.GetMainURL( INetURLObject::NO_DECODE ));
+                                                OUString( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ));
     GetMediaDescr()[sFilterNameString] <<= aFilterName;
 
     return bUseFilterOptions;
@@ -1203,11 +1203,11 @@ OUString ModelData_Impl::GetRecommendedDir( const OUString& aSuggestedDir )
 
         aLocation.setFinalSlash();
         if ( !aLocation.HasError() )
-            aRecommendedDir = aLocation.GetMainURL( INetURLObject::NO_DECODE );
+            aRecommendedDir = aLocation.GetMainURL( INetURLObject::DecodeMechanism::NONE );
     }
     else
     {
-        aRecommendedDir = INetURLObject( SvtPathOptions().GetWorkPath() ).GetMainURL( INetURLObject::NO_DECODE );
+        aRecommendedDir = INetURLObject( SvtPathOptions().GetWorkPath() ).GetMainURL( INetURLObject::DecodeMechanism::NONE );
     }
 
     return aRecommendedDir;
@@ -1223,7 +1223,7 @@ OUString ModelData_Impl::GetRecommendedName( const OUString& aSuggestedName, con
         aRecommendedName = aSuggestedName;
     else
     {
-        aRecommendedName = INetURLObject( GetStorable()->getLocation() ).GetName( INetURLObject::DECODE_WITH_CHARSET );
+        aRecommendedName = INetURLObject( GetStorable()->getLocation() ).GetName( INetURLObject::DecodeMechanism::WithCharset );
         if ( aRecommendedName.isEmpty() )
         {
             try {
@@ -1247,7 +1247,7 @@ OUString ModelData_Impl::GetRecommendedName( const OUString& aSuggestedName, con
                 if ( !aExtension.isEmpty() )
                     aObj.SetExtension( aExtension );
 
-                aRecommendedName = aObj.GetName( INetURLObject::DECODE_WITH_CHARSET );
+                aRecommendedName = aObj.GetName( INetURLObject::DecodeMechanism::WithCharset );
             }
         }
     }
@@ -1653,9 +1653,9 @@ bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >& xMo
             // Document properties can contain streams that should be freed before storing
             aModelData.FreeDocumentProps();
             if ( nStoreMode & EXPORT_REQUESTED )
-                aModelData.GetStorable()->storeToURL( aURL.GetMainURL( INetURLObject::NO_DECODE ), aArgsSequence );
+                aModelData.GetStorable()->storeToURL( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), aArgsSequence );
             else
-                aModelData.GetStorable()->storeAsURL( aURL.GetMainURL( INetURLObject::NO_DECODE ), aArgsSequence );
+                aModelData.GetStorable()->storeAsURL( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), aArgsSequence );
         }
         catch( const uno::Exception& )
         {
@@ -1679,9 +1679,9 @@ bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >& xMo
         // this is actually a save operation with different parameters
         // so storeTo or storeAs without DocInfo operations are used
         if ( nStoreMode & EXPORT_REQUESTED )
-            aModelData.GetStorable()->storeToURL( aURL.GetMainURL( INetURLObject::NO_DECODE ), aArgsSequence );
+            aModelData.GetStorable()->storeToURL( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), aArgsSequence );
         else
-            aModelData.GetStorable()->storeAsURL( aURL.GetMainURL( INetURLObject::NO_DECODE ), aArgsSequence );
+            aModelData.GetStorable()->storeAsURL( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), aArgsSequence );
     }
 
     // Launch PDF viewer
@@ -1693,7 +1693,7 @@ bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >& xMo
         if ( aViewPDF )
         {
             uno::Reference<XSystemShellExecute> xSystemShellExecute(SystemShellExecute::create( ::comphelper::getProcessComponentContext() ) );
-            xSystemShellExecute->execute( aURL.GetMainURL( INetURLObject::NO_DECODE ), "", SystemShellExecuteFlags::URIS_ONLY );
+            xSystemShellExecute->execute( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), "", SystemShellExecuteFlags::URIS_ONLY );
         }
     }
 

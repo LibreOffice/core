@@ -64,7 +64,7 @@ SvxAutoCorrCfg::SvxAutoCorrCfg() :
     {
         INetURLObject aPath( *pS );
         aPath.insertName("acor");
-        *pS = aPath.GetMainURL(INetURLObject::DECODE_TO_IURI);
+        *pS = aPath.GetMainURL(INetURLObject::DecodeMechanism::ToIUri);
     }
     pAutoCorrect = new SvxAutoCorrect( sSharePath, sUserPath );
 

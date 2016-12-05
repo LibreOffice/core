@@ -1083,8 +1083,8 @@ namespace
         INetURLObject aURL( _rDS );
         if ( aURL.GetProtocol() != INetProtocol::NotValid )
         {
-            _rDisplayName = aURL.getBase(INetURLObject::LAST_SEGMENT,true,INetURLObject::DECODE_WITH_CHARSET);
-            _rUniqueId = aURL.GetMainURL( INetURLObject::NO_DECODE );
+            _rDisplayName = aURL.getBase(INetURLObject::LAST_SEGMENT,true,INetURLObject::DecodeMechanism::WithCharset);
+            _rUniqueId = aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
             return true;
         }
         _rDisplayName = _rDS;
@@ -3644,7 +3644,7 @@ OUString SbaTableQueryBrowser::getPrivateTitle() const
         sTitle = GetEntryText( pConnection );
         INetURLObject aURL(sTitle);
         if ( aURL.GetProtocol() != INetProtocol::NotValid )
-            sTitle = aURL.getBase(INetURLObject::LAST_SEGMENT,true,INetURLObject::DECODE_WITH_CHARSET);
+            sTitle = aURL.getBase(INetURLObject::LAST_SEGMENT,true,INetURLObject::DecodeMechanism::WithCharset);
         if ( !sName.isEmpty() )
         {
             sName += " - ";

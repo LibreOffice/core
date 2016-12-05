@@ -173,7 +173,7 @@ void NBOTypeMgrBase::ImplLoad(const OUString& filename)
     eCoreUnit = MapUnit::Map100thMM;
     INetURLObject aFile( SvtPathOptions().GetUserConfigPath() );
     aFile.Append( filename);
-    std::unique_ptr<SvStream> xIStm(::utl::UcbStreamHelper::CreateStream( aFile.GetMainURL( INetURLObject::NO_DECODE ), StreamMode::READ ));
+    std::unique_ptr<SvStream> xIStm(::utl::UcbStreamHelper::CreateStream( aFile.GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::READ ));
     if( xIStm ) {
         sal_uInt32                  nVersion = 0;
         sal_Int32                   nNumIndex = 0;
@@ -212,7 +212,7 @@ void NBOTypeMgrBase::ImplStore(const OUString& filename)
     eCoreUnit = MapUnit::Map100thMM;
     INetURLObject aFile( SvtPathOptions().GetUserConfigPath() );
     aFile.Append( filename);
-    std::unique_ptr<SvStream> xOStm(::utl::UcbStreamHelper::CreateStream( aFile.GetMainURL( INetURLObject::NO_DECODE ), StreamMode::WRITE ));
+    std::unique_ptr<SvStream> xOStm(::utl::UcbStreamHelper::CreateStream( aFile.GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::WRITE ));
     if( xOStm ) {
         sal_uInt32                      nVersion;
         sal_Int32                       nNumIndex;

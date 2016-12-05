@@ -115,7 +115,7 @@ void SwGlossaryHdl::SetCurGroup(const OUString &rGrp, bool bApi, bool bAlwaysCre
             INetURLObject aTemp( pCurGrp->GetFileName() );
             const OUString sCurBase = aTemp.getBase();
             aTemp.removeSegment();
-            const OUString sCurEntryPath = aTemp.GetMainURL(INetURLObject::NO_DECODE);
+            const OUString sCurEntryPath = aTemp.GetMainURL(INetURLObject::DecodeMechanism::NONE);
             const std::vector<OUString> & rPathArr = rStatGlossaries.GetPathArray();
             sal_uInt16 nCurrentPath = USHRT_MAX;
             for (size_t nPath = 0; nPath < rPathArr.size(); ++nPath)

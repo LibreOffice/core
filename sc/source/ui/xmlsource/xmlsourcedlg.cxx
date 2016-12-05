@@ -193,7 +193,7 @@ void ScXMLSourceDlg::SelectSourceFile()
         INetURLObject aURL(maSrcPath);
         aURL.removeSegment();
         aURL.removeFinalSlash();
-        OUString aPath = aURL.GetMainURL(INetURLObject::NO_DECODE);
+        OUString aPath = aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
         xFilePicker->setDisplayDirectory(aPath);
     }
 

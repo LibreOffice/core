@@ -834,7 +834,7 @@ void ScDocument::UpdateExternalRefLinks(vcl::Window* pWin)
         sfx2::LinkManager::GetDisplayNames(pRefLink, nullptr, &aFile);
         // Decode encoded URL for display friendliness.
         INetURLObject aUrl(aFile,INetURLObject::EncodeMechanism::WasEncoded);
-        aFile = aUrl.GetMainURL(INetURLObject::DECODE_UNAMBIGUOUS);
+        aFile = aUrl.GetMainURL(INetURLObject::DecodeMechanism::Unambiguous);
 
         OUStringBuffer aBuf;
         aBuf.append(OUString(ScResId(SCSTR_EXTDOC_NOT_LOADED)));

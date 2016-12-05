@@ -216,7 +216,7 @@ namespace
                     {
                         try
                         {
-                            bRealExtensions = !_pDialog->ContentIsFolder( aURL.GetMainURL( INetURLObject::NO_DECODE ) );
+                            bRealExtensions = !_pDialog->ContentIsFolder( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
                         }
                         catch( const css::uno::Exception& )
                         {
@@ -275,7 +275,7 @@ namespace
     {
         INetURLObject aWorkPathObj( _rDir, INetProtocol::File );
         aWorkPathObj.setFinalSlash();
-        return  aWorkPathObj.GetMainURL( INetURLObject::NO_DECODE );
+        return  aWorkPathObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
     }
 
 
@@ -582,7 +582,7 @@ void SvtFileDialog::Init_Impl
 
     // Set the directory for the "back to the default dir" button
     INetURLObject aStdDirObj( SvtPathOptions().GetWorkPath() );
-    SetStandardDir( aStdDirObj.GetMainURL( INetURLObject::NO_DECODE ) );
+    SetStandardDir( aStdDirObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
 
     // Create control element, the order defines the tab control.
     pImpl->_pEdFileName->SetSelectHdl( LINK( this, SvtFileDialog, EntrySelectHdl_Impl ) );
@@ -1079,12 +1079,12 @@ void SvtFileDialog::OpenHdl_Impl(void* pVoid)
     {
         case FILEDLG_MODE_SAVE:
         {
-            if ( ::utl::UCBContentHelper::Exists( aFileObj.GetMainURL( INetURLObject::NO_DECODE ) ) )
+            if ( ::utl::UCBContentHelper::Exists( aFileObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ) ) )
             {
                 OUString aMsg = SVT_RESSTR( STR_SVT_ALREADYEXISTOVERWRITE );
                 aMsg = aMsg.replaceFirst(
                     "$filename$",
-                    aFileObj.getName(INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET)
+                    aFileObj.getName(INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset)
                 );
                 ScopedVclPtrInstance< MessageDialog > aBox(this, aMsg, VclMessageType::Question, VCL_BUTTONS_YES_NO);
                 if ( aBox->Execute() != RET_YES )
@@ -1098,7 +1098,7 @@ void SvtFileDialog::OpenHdl_Impl(void* pVoid)
                     // if content does not exist: at least its path must exist
                     INetURLObject aPathObj = aFileObj;
                     aPathObj.removeSegment();
-                    bool bFolder = m_aContent.isFolder( aPathObj.GetMainURL( INetURLObject::NO_DECODE ) );
+                    bool bFolder = m_aContent.isFolder( aPathObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
                     if ( !bFolder )
                     {
                         ErrorHandler::HandleError( ERRCODE_IO_NOTEXISTSPATH );
@@ -1115,13 +1115,13 @@ void SvtFileDialog::OpenHdl_Impl(void* pVoid)
 
             if ( INetProtocol::File == aFileObj.GetProtocol( ) )
             {
-                bool bExists = m_aContent.is( aFileObj.GetMainURL( INetURLObject::NO_DECODE ) );
+                bool bExists = m_aContent.is( aFileObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
 
                 if ( !bExists )
                 {
                     OUString sError( SVT_RESSTR( RID_FILEOPEN_NOTEXISTENTFILE ) );
 
-                    OUString sInvalidFile( aFileObj.GetMainURL( INetURLObject::DECODE_TO_IURI ) );
+                    OUString sInvalidFile( aFileObj.GetMainURL( INetURLObject::DecodeMechanism::ToIUri ) );
                     if ( INetProtocol::File == aFileObj.GetProtocol() )
                     {   // if it's a file URL, transform the URL into system notation
                         OUString sURL( sInvalidFile );
@@ -1280,7 +1280,7 @@ IMPL_LINK_NOARG ( SvtFileDialog, AddPlacePressed_Hdl, Button*, void )
     // there is an ux choice to make we did not make...
     INetURLObject aURLObj( _pFileView->GetViewURL() );
     PlacePtr newPlace(
-        new Place( aURLObj.GetLastName(INetURLObject::DECODE_WITH_CHARSET),
+        new Place( aURLObj.GetLastName(INetURLObject::DecodeMechanism::WithCharset),
                 OUString(_pFileView->GetViewURL()), true));
     pImpl->_pPlaces->AppendPlace(newPlace);
 }
@@ -1411,7 +1411,7 @@ void SvtFileDialog::UpdateControls( const OUString& rURL )
         if ( aObj.hasFinalSlash() )
         {
             aObj.removeFinalSlash();
-            OUString sURL( aObj.GetMainURL( INetURLObject::NO_DECODE ) );
+            OUString sURL( aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
             if (osl::FileBase::getSystemPathFromFileURL(sURL, sText) != osl::FileBase::E_None)
                 sText = sURL;
         }
@@ -1616,7 +1616,7 @@ OUString SvtFileDialog::implGetInitialURL( const OUString& _rPath, const OUStrin
     aURLParser = aURLParser.smartRel2Abs( _rPath, bWasAbsolute );
 
     // is it a valid folder?
-    m_aContent.bindTo( aURLParser.GetMainURL( INetURLObject::NO_DECODE ) );
+    m_aContent.bindTo( aURLParser.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
     bool bIsFolder = m_aContent.isFolder( );    // do this _before_ asking isInvalid!
     bool bIsInvalid = m_aContent.isInvalid();
 
@@ -1625,13 +1625,13 @@ OUString SvtFileDialog::implGetInitialURL( const OUString& _rPath, const OUStrin
         INetURLObject aParent( aURLParser );
         aParent.removeSegment( );
         aParent.setFinalSlash( );
-        bIsInvalid = implIsInvalid( aParent.GetMainURL( INetURLObject::NO_DECODE ) );
+        bIsInvalid = implIsInvalid( aParent.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
     }
 
     if ( bIsInvalid )
     {
         INetURLObject aFallback( _rFallback );
-        bIsInvalid = implIsInvalid( aFallback.GetMainURL( INetURLObject::NO_DECODE ) );
+        bIsInvalid = implIsInvalid( aFallback.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
 
         if ( !bIsInvalid )
             aURLParser = aFallback;
@@ -1643,7 +1643,7 @@ OUString SvtFileDialog::implGetInitialURL( const OUString& _rPath, const OUStrin
         while ( bIsInvalid && aParent.removeSegment() )
         {
             aParent.setFinalSlash( );
-            bIsInvalid = implIsInvalid( aParent.GetMainURL( INetURLObject::NO_DECODE ) );
+            bIsInvalid = implIsInvalid( aParent.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
         }
 
         if ( !bIsInvalid )
@@ -1654,7 +1654,7 @@ OUString SvtFileDialog::implGetInitialURL( const OUString& _rPath, const OUStrin
     {
         aURLParser.setFinalSlash();
     }
-    return aURLParser.GetMainURL( INetURLObject::NO_DECODE );
+    return aURLParser.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 }
 
 
@@ -1680,7 +1680,7 @@ short SvtFileDialog::Execute()
         {
             // remember the selected directory only for file URLs not for virtual folders
             sal_Int32 nLevel = aURL.getSegmentCount();
-            bool bDir = m_aContent.isFolder( aURL.GetMainURL( INetURLObject::NO_DECODE ) );
+            bool bDir = m_aContent.isFolder( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
             if ( nLevel > 1 && ( FILEDLG_TYPE_FILEDLG == pImpl->_eDlgType || !bDir ) )
                 aURL.removeSegment();
         }
@@ -1814,7 +1814,7 @@ short SvtFileDialog::PrepareExecute()
         {
             INetURLObject aStdDir( GetStandardDir() );
             ::ucbhelper::Content aCnt( OUString( aStdDir.GetMainURL(
-                                                    INetURLObject::NO_DECODE ) ),
+                                                    INetURLObject::DecodeMechanism::NONE ) ),
                                  Reference< XCommandEnvironment >(),
                                  comphelper::getProcessComponentContext() );
             Sequence< OUString > aProps(2);
@@ -1959,7 +1959,7 @@ short SvtFileDialog::PrepareExecute()
     bool bFileToSelect = nFileNameLen != 0;
     if ( bFileToSelect && aFileName[ nFileNameLen - 1 ] != '/' )
     {
-         OUString aDecodedName = aFolderURL.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
+         OUString aDecodedName = aFolderURL.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset );
         pImpl->_pEdFileName->SetText( aDecodedName );
         aFolderURL.removeSegment();
     }
@@ -1971,12 +1971,12 @@ short SvtFileDialog::PrepareExecute()
         aObj.setFinalSlash();
     }
 
-    UpdateControls( aObj.GetMainURL( INetURLObject::NO_DECODE ) );
+    UpdateControls( aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
 
     // Somebody might want to enable some controls according to the current filter
     FilterSelect();
 
-    OpenURL_Impl( aObj.GetMainURL( INetURLObject::NO_DECODE ) );
+    OpenURL_Impl( aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
 
     _pFileView->Show();
     _pSplitter->Show();
@@ -2035,7 +2035,7 @@ void SvtFileDialog::SetStandardDir( const OUString& rStdDir )
     INetURLObject aObj( rStdDir );
     SAL_WARN_IF( aObj.GetProtocol() == INetProtocol::NotValid, "fpicker.office", "Invalid protocol!" );
     aObj.setFinalSlash();
-    pImpl->SetStandardDir( aObj.GetMainURL( INetURLObject::NO_DECODE ) );
+    pImpl->SetStandardDir( aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
 }
 
 void SvtFileDialog::SetBlackList( const css::uno::Sequence< OUString >& rBlackList )

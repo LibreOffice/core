@@ -53,7 +53,7 @@ sal_uInt16 SwEditShell::MakeGlossary( SwTextBlocks& rBlks, const OUString& rName
     if(bSaveRelFile)
     {
         INetURLObject aURL( rBlks.GetFileName() );
-        sBase = aURL.GetMainURL( INetURLObject::NO_DECODE );
+        sBase = aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
     }
     rBlks.SetBaseURL( sBase );
 
@@ -87,7 +87,7 @@ sal_uInt16 SwEditShell::SaveGlossaryDoc( SwTextBlocks& rBlock,
     if(bSaveRelFile)
     {
         INetURLObject aURL( rBlock.GetFileName() );
-        sBase = aURL.GetMainURL( INetURLObject::NO_DECODE );
+        sBase = aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
     }
     rBlock.SetBaseURL( sBase );
     sal_uInt16 nRet = USHRT_MAX;

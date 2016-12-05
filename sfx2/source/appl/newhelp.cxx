@@ -944,7 +944,7 @@ SearchTabPage_Impl::SearchTabPage_Impl(vcl::Window* pParent, SfxHelpIndexWindow_
             {
                 OUString aToken = aUserData.getToken(i, ';');
                 m_pSearchED->InsertEntry( INetURLObject::decode(
-                    aToken, INetURLObject::DECODE_WITH_CHARSET ) );
+                    aToken, INetURLObject::DecodeMechanism::WithCharset ) );
             }
         }
     }
