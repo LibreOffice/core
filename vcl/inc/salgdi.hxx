@@ -252,20 +252,20 @@ public:
     bool                        DrawPolyLineBezier(
                                     sal_uInt32 nPoints,
                                     const SalPoint* pPtAry,
-                                    const sal_uInt8* pFlgAry,
+                                    const PolyFlags* pFlgAry,
                                     const OutputDevice *pOutDev );
 
     bool                        DrawPolygonBezier(
                                     sal_uInt32 nPoints,
                                     const SalPoint* pPtAry,
-                                    const sal_uInt8* pFlgAry,
+                                    const PolyFlags* pFlgAry,
                                     const OutputDevice *pOutDev );
 
     bool                        DrawPolyPolygonBezier(
                                     sal_uInt32 nPoly,
                                     const sal_uInt32* pPoints,
                                     const SalPoint* const* pPtAry,
-                                    const sal_uInt8* const* pFlgAry,
+                                    const PolyFlags* const* pFlgAry,
                                     const OutputDevice *pOutDev );
 
     bool                        DrawGradient(
@@ -449,18 +449,18 @@ protected:
     virtual bool                drawPolyLineBezier(
                                     sal_uInt32 nPoints,
                                     const SalPoint* pPtAry,
-                                    const sal_uInt8* pFlgAry ) = 0;
+                                    const PolyFlags* pFlgAry ) = 0;
 
     virtual bool                drawPolygonBezier(
                                     sal_uInt32 nPoints,
                                     const SalPoint* pPtAry,
-                                    const sal_uInt8* pFlgAry ) = 0;
+                                    const PolyFlags* pFlgAry ) = 0;
 
     virtual bool                drawPolyPolygonBezier(
                                     sal_uInt32 nPoly,
                                     const sal_uInt32* pPoints,
                                     const SalPoint* const* pPtAry,
-                                    const sal_uInt8* const* pFlgAry ) = 0;
+                                    const PolyFlags* const* pFlgAry ) = 0;
 
 
     virtual bool                drawGradient(

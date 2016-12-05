@@ -1951,7 +1951,7 @@ bool EscherPropertyContainer::CreatePolygonProperties(
                 nTotalPoints += k;
                 for (sal_uInt16 j = 0; j < k; ++j)
                 {
-                    if ( aPolyPolygon[ i ].GetFlags( j ) != POLY_CONTROL )
+                    if ( aPolyPolygon[ i ].GetFlags( j ) != PolyFlags::Control )
                         nTotalBezPoints++;
                 }
             }
@@ -2013,7 +2013,7 @@ bool EscherPropertyContainer::CreatePolygonProperties(
                     if ( ( i + 1 ) != nPoints )
                     {
                         *pPtr++ = 1;
-                        if ( aPolygon.GetFlags( i + 1 ) == POLY_CONTROL )
+                        if ( aPolygon.GetFlags( i + 1 ) == PolyFlags::Control )
                         {
                             *pPtr++ = 0x20;
                             i += 2;
@@ -4669,7 +4669,7 @@ sal_uInt32 EscherConnectorListEntry::GetConnectorRule( bool bFirst )
                             const tools::Polygon& rPoly = aPolyPoly.GetObject( a );
                             for ( b = 0; b < rPoly.GetSize(); b++ )
                             {
-                                if ( rPoly.GetFlags( b ) != POLY_NORMAL )
+                                if ( rPoly.GetFlags( b ) != PolyFlags::Normal )
                                     continue;
                                 const Point& rPt = rPoly[ b ];
                                 sal_uInt32 nDist = (sal_uInt32)hypot( aRefPoint.X - rPt.X(), aRefPoint.Y - rPt.Y() );

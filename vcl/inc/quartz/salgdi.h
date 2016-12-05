@@ -232,9 +232,9 @@ public:
     virtual void            drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry ) override;
     virtual void            drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoints, PCONSTSALPOINT* pPtAry ) override;
     virtual bool            drawPolyPolygon( const basegfx::B2DPolyPolygon&, double fTransparency ) override;
-    virtual bool            drawPolyLineBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry ) override;
-    virtual bool            drawPolygonBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry ) override;
-    virtual bool            drawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt32* pPoints, const SalPoint* const* pPtAry, const sal_uInt8* const* pFlgAry ) override;
+    virtual bool            drawPolyLineBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const PolyFlags* pFlgAry ) override;
+    virtual bool            drawPolygonBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const PolyFlags* pFlgAry ) override;
+    virtual bool            drawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt32* pPoints, const SalPoint* const* pPtAry, const PolyFlags* const* pFlgAry ) override;
     virtual bool            drawPolyLine(
                                 const basegfx::B2DPolygon&,
                                 double fTransparency,

@@ -862,14 +862,14 @@ public:
 private:
     tools::PolyPolygon& mrPolyPoly;
 
-    Point*      mpPointAry;
-    sal_uInt8*       mpFlagAry;
+    Point*          mpPointAry;
+    PolyFlags*      mpFlagAry;
 
-    FT_Vector   maPosition;
+    FT_Vector       maPosition;
     sal_uInt16      mnMaxPoints;
     sal_uInt16      mnPoints;
     sal_uInt16      mnPoly;
-    bool        bHasOffline;
+    bool            bHasOffline;
 
     PolyArgs(const PolyArgs&) = delete;
     PolyArgs& operator=(const PolyArgs&) = delete;
@@ -883,7 +883,7 @@ PolyArgs::PolyArgs( tools::PolyPolygon& rPolyPoly, sal_uInt16 nMaxPoints )
     bHasOffline(false)
 {
     mpPointAry  = new Point[ mnMaxPoints ];
-    mpFlagAry   = new sal_uInt8 [ mnMaxPoints ];
+    mpFlagAry   = new PolyFlags [ mnMaxPoints ];
     maPosition.x = maPosition.y = 0;
 }
 
@@ -903,7 +903,7 @@ void PolyArgs::AddPoint( long nX, long nY, PolyFlags aFlag )
     maPosition.y = nY;
     mpPointAry[ mnPoints ] = Point( nX, nY );
     mpFlagAry[ mnPoints++ ]= aFlag;
-    bHasOffline |= (aFlag != POLY_NORMAL);
+    bHasOffline |= (aFlag != PolyFlags::Normal);
 }
 
 void PolyArgs::ClosePolygon()
@@ -916,8 +916,8 @@ void PolyArgs::ClosePolygon()
     SAL_WARN_IF( (mnPoints < 2), "vcl", "FTGlyphOutline: PolyFinishNum failed!" );
     --mnPoints;
     SAL_WARN_IF( (mpPointAry[0]!=mpPointAry[mnPoints]), "vcl", "FTGlyphOutline: PolyFinishEq failed!" );
-    SAL_WARN_IF( (mpFlagAry[0]!=POLY_NORMAL), "vcl", "FTGlyphOutline: PolyFinishFE failed!" );
-    SAL_WARN_IF( (mpFlagAry[mnPoints]!=POLY_NORMAL), "vcl", "FTGlyphOutline: PolyFinishFS failed!" );
+    SAL_WARN_IF( (mpFlagAry[0]!=PolyFlags::Normal), "vcl", "FTGlyphOutline: PolyFinishFE failed!" );
+    SAL_WARN_IF( (mpFlagAry[mnPoints]!=PolyFlags::Normal), "vcl", "FTGlyphOutline: PolyFinishFS failed!" );
 
     tools::Polygon aPoly( mnPoints, mpPointAry, (bHasOffline ? mpFlagAry : nullptr) );
 
@@ -928,11 +928,11 @@ void PolyArgs::ClosePolygon()
     // #i48298#
     // Now really duplicating the first point, to close or correct the
     // polygon. Also no longer duplicating the flags, but enforcing
-    // POLY_NORMAL for the newly added last point.
+    // PolyFlags::Normal for the newly added last point.
     const sal_uInt16 nPolySize(aPoly.GetSize());
     if(nPolySize)
     {
-        if((aPoly.HasFlags() && POLY_CONTROL == aPoly.GetFlags(nPolySize - 1))
+        if((aPoly.HasFlags() && PolyFlags::Control == aPoly.GetFlags(nPolySize - 1))
             || (aPoly.GetPoint(nPolySize - 1) != aPoly.GetPoint(0)))
         {
             aPoly.SetSize(nPolySize + 1);
@@ -940,7 +940,7 @@ void PolyArgs::ClosePolygon()
 
             if(aPoly.HasFlags())
             {
-                aPoly.SetFlags(nPolySize, POLY_NORMAL);
+                aPoly.SetFlags(nPolySize, PolyFlags::Normal);
             }
         }
     }
@@ -962,14 +962,14 @@ static int FT_move_to( const FT_Vector* p0, void* vpPolyArgs )
     // move_to implies a new polygon => finish old polygon first
     rA.ClosePolygon();
 
-    rA.AddPoint( p0->x, p0->y, POLY_NORMAL );
+    rA.AddPoint( p0->x, p0->y, PolyFlags::Normal );
     return 0;
 }
 
 static int FT_line_to( const FT_Vector* p1, void* vpPolyArgs )
 {
     PolyArgs& rA = *static_cast<PolyArgs*>(vpPolyArgs);
-    rA.AddPoint( p1->x, p1->y, POLY_NORMAL );
+    rA.AddPoint( p1->x, p1->y, PolyFlags::Normal );
     return 0;
 }
 
@@ -980,22 +980,22 @@ static int FT_conic_to( const FT_Vector* p1, const FT_Vector* p2, void* vpPolyAr
     // VCL's Polygon only knows cubic beziers
     const long nX1 = (2 * rA.GetPosX() + 4 * p1->x + 3) / 6;
     const long nY1 = (2 * rA.GetPosY() + 4 * p1->y + 3) / 6;
-    rA.AddPoint( nX1, nY1, POLY_CONTROL );
+    rA.AddPoint( nX1, nY1, PolyFlags::Control );
 
     const long nX2 = (2 * p2->x + 4 * p1->x + 3) / 6;
     const long nY2 = (2 * p2->y + 4 * p1->y + 3) / 6;
-    rA.AddPoint( nX2, nY2, POLY_CONTROL );
+    rA.AddPoint( nX2, nY2, PolyFlags::Control );
 
-    rA.AddPoint( p2->x, p2->y, POLY_NORMAL );
+    rA.AddPoint( p2->x, p2->y, PolyFlags::Normal );
     return 0;
 }
 
 static int FT_cubic_to( const FT_Vector* p1, const FT_Vector* p2, const FT_Vector* p3, void* vpPolyArgs )
 {
     PolyArgs& rA = *static_cast<PolyArgs*>(vpPolyArgs);
-    rA.AddPoint( p1->x, p1->y, POLY_CONTROL );
-    rA.AddPoint( p2->x, p2->y, POLY_CONTROL );
-    rA.AddPoint( p3->x, p3->y, POLY_NORMAL );
+    rA.AddPoint( p1->x, p1->y, PolyFlags::Control );
+    rA.AddPoint( p2->x, p2->y, PolyFlags::Control );
+    rA.AddPoint( p3->x, p3->y, PolyFlags::Normal );
     return 0;
 }
 

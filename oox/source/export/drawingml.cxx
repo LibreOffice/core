@@ -2586,11 +2586,11 @@ void DrawingML::WritePolyPolygon( const tools::PolyPolygon& rPolyPolygon )
 
         for( sal_uInt16 j = 1; j < rPoly.GetSize(); j ++ )
         {
-            enum PolyFlags flags = rPoly.GetFlags(j);
-            if( flags == POLY_CONTROL )
+            PolyFlags flags = rPoly.GetFlags(j);
+            if( flags == PolyFlags::Control )
             {
                 // a:cubicBezTo can only contain 3 a:pt elements, so we need to make sure of this
-                if( j+2 < rPoly.GetSize() && rPoly.GetFlags(j+1) == POLY_CONTROL && rPoly.GetFlags(j+2) != POLY_CONTROL )
+                if( j+2 < rPoly.GetSize() && rPoly.GetFlags(j+1) == PolyFlags::Control && rPoly.GetFlags(j+2) != PolyFlags::Control )
                 {
 
                     mpFS->startElementNS( XML_a, XML_cubicBezTo, FSEND );
@@ -2606,7 +2606,7 @@ void DrawingML::WritePolyPolygon( const tools::PolyPolygon& rPolyPolygon )
                     j += 2;
                 }
             }
-            else if( flags == POLY_NORMAL )
+            else if( flags == PolyFlags::Normal )
             {
                 mpFS->startElementNS( XML_a, XML_lnTo, FSEND );
                 mpFS->singleElementNS( XML_a, XML_pt,
