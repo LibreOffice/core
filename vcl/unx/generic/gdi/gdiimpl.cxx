@@ -1386,18 +1386,18 @@ void X11SalGraphicsImpl::drawPolyPolygon( sal_uInt32 nPoly,
            drawPolyLine( pPoints[i], pPtAry[i], true );
 }
 
-bool X11SalGraphicsImpl::drawPolyLineBezier( sal_uInt32, const SalPoint*, const sal_uInt8* )
+bool X11SalGraphicsImpl::drawPolyLineBezier( sal_uInt32, const SalPoint*, const PolyFlags* )
 {
     return false;
 }
 
-bool X11SalGraphicsImpl::drawPolygonBezier( sal_uInt32, const SalPoint*, const sal_uInt8* )
+bool X11SalGraphicsImpl::drawPolygonBezier( sal_uInt32, const SalPoint*, const PolyFlags* )
 {
     return false;
 }
 
 bool X11SalGraphicsImpl::drawPolyPolygonBezier( sal_uInt32, const sal_uInt32*,
-                                                const SalPoint* const*, const sal_uInt8* const* )
+                                                const SalPoint* const*, const PolyFlags* const* )
 {
     return false;
 }
