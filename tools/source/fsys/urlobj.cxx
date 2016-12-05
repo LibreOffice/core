@@ -614,22 +614,22 @@ std::unique_ptr<SvMemoryStream> INetURLObject::getData()
 
 namespace {
 
-INetURLObject::FSysStyle guessFSysStyleByCounting(sal_Unicode const * pBegin,
+FSysStyle guessFSysStyleByCounting(sal_Unicode const * pBegin,
                                                   sal_Unicode const * pEnd,
-                                                  INetURLObject::FSysStyle eStyle)
+                                                  FSysStyle eStyle)
 {
     DBG_ASSERT(eStyle
-                   & (INetURLObject::FSYS_UNX
-                          | INetURLObject::FSYS_DOS),
+                   & (FSysStyle::Unix
+                          | FSysStyle::Dos),
                "guessFSysStyleByCounting(): Bad style");
     DBG_ASSERT(std::numeric_limits< sal_Int32 >::min() < pBegin - pEnd
                && pEnd - pBegin <= std::numeric_limits< sal_Int32 >::max(),
                "guessFSysStyleByCounting(): Too big");
     sal_Int32 nSlashCount
-        = (eStyle & INetURLObject::FSYS_UNX) ?
+        = (eStyle & FSysStyle::Unix) ?
               0 : std::numeric_limits< sal_Int32 >::min();
     sal_Int32 nBackslashCount
-        = (eStyle & INetURLObject::FSYS_DOS) ?
+        = (eStyle & FSysStyle::Dos) ?
               0 : std::numeric_limits< sal_Int32 >::min();
     while (pBegin != pEnd)
         switch (*pBegin++)
@@ -643,7 +643,7 @@ INetURLObject::FSysStyle guessFSysStyleByCounting(sal_Unicode const * pBegin,
                 break;
         }
     return nSlashCount >= nBackslashCount ?
-                   INetURLObject::FSYS_UNX : INetURLObject::FSYS_DOS;
+                   FSysStyle::Unix : FSysStyle::Dos;
 }
 
 OUString parseScheme(
@@ -736,11 +736,11 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
             //    "//" (domain / IPv6reference) ["/" *UCS4]
             // 6th Production (Unix file):
             //    "/" *UCS4
-            // 7th Production (UNC file; FSYS_DOS only):
+            // 7th Production (UNC file; FSysStyle::Dos only):
             //    "\\" domain ["\" *UCS4]
-            // 8th Production (Unix-like DOS file; FSYS_DOS only):
+            // 8th Production (Unix-like DOS file; FSysStyle::Dos only):
             //    ALPHA ":" ["/" *UCS4]
-            // 9th Production (DOS file; FSYS_DOS only):
+            // 9th Production (DOS file; FSysStyle::Dos only):
             //    ALPHA ":" ["\" *UCS4]
 
             // For the 'non URL' file productions 6--9, the interpretation of
@@ -749,7 +749,7 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
             // taken as literal characters.
 
             sal_Unicode const * p1 = pPos;
-            if (eStyle & FSYS_DOS
+            if (eStyle & FSysStyle::Dos
                 && pEnd - p1 >= 2
                 && rtl::isAsciiAlpha(p1[0])
                 && p1[1] == ':'
@@ -772,7 +772,7 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
                 eMechanism = EncodeMechanism::All;
                 nFragmentDelimiter = 0x80000000;
             }
-            else if (eStyle & FSYS_DOS
+            else if (eStyle & FSysStyle::Dos
                      && pEnd - p1 >= 2
                      && p1[0] == '\\'
                      && p1[1] == '\\')
@@ -1037,12 +1037,12 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
                         }
                     }
 
-                    // 2nd Production (MS IE generated 1; FSYS_DOS only):
+                    // 2nd Production (MS IE generated 1; FSysStyle::Dos only):
                     //    "//" ALPHA ":" ["/" *path] ["#" *UCS4]
                     //  becomes
                     //    "file:///" ALPHA ":" ["/" *path] ["#" *UCS4]
                     //  replacing "\" by "/" within <*path>
-                    // 3rd Production (MS IE generated 2; FSYS_DOS only):
+                    // 3rd Production (MS IE generated 2; FSysStyle::Dos only):
                     //    "//" ALPHA ":" ["\" *path] ["#" *UCS4]
                     //  becomes
                     //    "file:///" ALPHA ":" ["/" *path] ["#" *UCS4]
@@ -1056,7 +1056,7 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
                         aSynAbsURIRef.append("//");
                         pPos += 2;
                         bSkippedInitialSlash = true;
-                        if ((eStyle & FSYS_DOS) != 0
+                        if ((eStyle & FSysStyle::Dos)
                             && pEnd - pPos >= 2
                             && rtl::isAsciiAlpha(pPos[0])
                             && pPos[1] == ':'
@@ -1076,12 +1076,12 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
                         break;
                     }
 
-                    // 6th Production (UNC; FSYS_DOS only):
+                    // 6th Production (UNC; FSysStyle::Dos only):
                     //    "\\" domain ["\" *path] ["#" *UCS4]
                     //  becomes
                     //    "file://" domain "/" *path ["#" *UCS4]
                     //  replacing "\" by "/" within <*path>
-                    if (eStyle & FSYS_DOS
+                    if (eStyle & FSysStyle::Dos
                         && pEnd - pPos >= 2
                         && pPos[0] == '\\'
                         && pPos[1] == '\\')
@@ -1109,17 +1109,17 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
                         }
                     }
 
-                    // 7th Production (Unix-like DOS; FSYS_DOS only):
+                    // 7th Production (Unix-like DOS; FSysStyle::Dos only):
                     //    ALPHA ":" ["/" *path] ["#" *UCS4]
                     //  becomes
                     //    "file:///" ALPHA ":" ["/" *path] ["#" *UCS4]
                     //  replacing "\" by "/" within <*path>
-                    // 8th Production (DOS; FSYS_DOS only):
+                    // 8th Production (DOS; FSysStyle::Dos only):
                     //    ALPHA ":" ["\" *path] ["#" *UCS4]
                     //  becomes
                     //    "file:///" ALPHA ":" ["/" *path] ["#" *UCS4]
                     //  replacing "\" by "/" within <*path>
-                    if (eStyle & FSYS_DOS
+                    if (eStyle & FSysStyle::Dos
                         && pEnd - pPos >= 2
                         && rtl::isAsciiAlpha(pPos[0])
                         && pPos[1] == ':'
@@ -1139,24 +1139,24 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
                     //    "file:///" *path ["#" *UCS4]
                     //  replacing the delimiter by "/" within <*path>.  The
                     //  delimiter is that character from the set { "/", "\"}
-                    // which appears most often in <*path> (if FSYS_UNX
+                    // which appears most often in <*path> (if FSysStyle::Unix
                     //  is not among the style bits, "/" is removed from the
-                    //  set; if FSYS_DOS is not among the style bits, "\" is
+                    //  set; if FSysStyle::Dos is not among the style bits, "\" is
                     //  removed from the set).  If two or
                     //  more characters appear the same number of times, the
                     //  character mentioned first in that set is chosen.  If
                     //  the first character of <*path> is the delimiter, that
                     //  character is not copied
-                    if (eStyle & (FSYS_UNX | FSYS_DOS))
+                    if (eStyle & (FSysStyle::Unix | FSysStyle::Dos))
                     {
                         aSynAbsURIRef.append("//");
                         switch (guessFSysStyleByCounting(pPos, pEnd, eStyle))
                         {
-                            case FSYS_UNX:
+                            case FSysStyle::Unix:
                                 nSegmentDelimiter = '/';
                                 break;
 
-                            case FSYS_DOS:
+                            case FSysStyle::Dos:
                                 nSegmentDelimiter = '\\';
                                 break;
 
@@ -1511,13 +1511,13 @@ bool INetURLObject::convertRelToAbs(OUString const & rTheRelURIRef,
         //    alphanum = ALPHA / DIGIT
         //    UCS4 = <any UCS4 character>
 
-        // 1st Production (UNC file; FSYS_DOS only):
+        // 1st Production (UNC file; FSysStyle::Dos only):
         //    "\\" domain ["\" *UCS4]
-        // 2nd Production (Unix-like DOS file; FSYS_DOS only):
+        // 2nd Production (Unix-like DOS file; FSysStyle::Dos only):
         //    ALPHA ":" ["/" *UCS4]
-        // 3rd Production (DOS file; FSYS_DOS only):
+        // 3rd Production (DOS file; FSysStyle::Dos only):
         //    ALPHA ":" ["\" *UCS4]
-        if (eStyle & FSYS_DOS)
+        if (eStyle & FSysStyle::Dos)
         {
             bool bFSys = false;
             sal_Unicode const * q = p;
@@ -1559,11 +1559,11 @@ bool INetURLObject::convertRelToAbs(OUString const & rTheRelURIRef,
         if (m_eScheme == INetProtocol::File)
             switch (guessFSysStyleByCounting(p, pEnd, eStyle))
             {
-                case FSYS_UNX:
+                case FSysStyle::Unix:
                     nSegmentDelimiter = '/';
                     break;
 
-                case FSYS_DOS:
+                case FSysStyle::Dos:
                     nSegmentDelimiter = '\\';
                     bRelativeNonURIs = true;
                     break;
@@ -3353,7 +3353,7 @@ bool INetURLObject::setFragment(OUString const & rTheFragment,
 bool INetURLObject::hasDosVolume(FSysStyle eStyle) const
 {
     sal_Unicode const * p = m_aAbsURIRef.getStr() + m_aPath.getBegin();
-    return (eStyle & FSYS_DOS) != 0
+    return (eStyle & FSysStyle::Dos)
            && m_aPath.getLength() >= 3
            && p[0] == '/'
            && rtl::isAsciiAlpha(p[1])
@@ -3839,7 +3839,7 @@ OUString INetURLObject::GetAbsURL(OUString const & rTheBaseURIRef,
             convertRelToAbs(rTheRelURIRef, aTheAbsURIRef,
                             bWasAbsolute, eEncodeMechanism,
                             eCharset, bIgnoreFragment, false,
-                            false, FSYS_DETECT)
+                            false, FSysStyle::Detect)
            || eEncodeMechanism != EncodeMechanism::WasEncoded
            || eDecodeMechanism != DecodeMechanism::ToIUri
            || eCharset != RTL_TEXTENCODING_UTF8 ?
@@ -4261,9 +4261,9 @@ bool INetURLObject::setFSysPath(OUString const & rFSysPath,
     sal_Unicode const * pFSysBegin = rFSysPath.getStr();
     sal_Unicode const * pFSysEnd = pFSysBegin + rFSysPath.getLength();
 
-    switch (((eStyle & FSYS_VOS) ? 1 : 0)
-                + ((eStyle & FSYS_UNX) ? 1 : 0)
-                + ((eStyle & FSYS_DOS) ? 1 : 0))
+    switch (((eStyle & FSysStyle::Vos) ? 1 : 0)
+                + ((eStyle & FSysStyle::Unix) ? 1 : 0)
+                + ((eStyle & FSysStyle::Dos) ? 1 : 0))
     {
         case 0:
             return false;
@@ -4272,7 +4272,7 @@ bool INetURLObject::setFSysPath(OUString const & rFSysPath,
             break;
 
         default:
-            if (eStyle & FSYS_VOS
+            if (eStyle & FSysStyle::Vos
                 && pFSysEnd - pFSysBegin >= 2
                 && pFSysBegin[0] == '/'
                 && pFSysBegin[1] == '/')
@@ -4281,7 +4281,7 @@ bool INetURLObject::setFSysPath(OUString const & rFSysPath,
                     && pFSysBegin[2] == '.'
                     && (pFSysEnd - pFSysBegin == 3 || pFSysBegin[3] == '/'))
                 {
-                    eStyle = FSYS_VOS; // Production T1
+                    eStyle = FSysStyle::Vos; // Production T1
                     break;
                 }
 
@@ -4290,12 +4290,12 @@ bool INetURLObject::setFSysPath(OUString const & rFSysPath,
                 if (parseHost(p, pFSysEnd, aHost)
                     && (p == pFSysEnd || *p == '/'))
                 {
-                    eStyle = FSYS_VOS; // Production T2
+                    eStyle = FSysStyle::Vos; // Production T2
                     break;
                 }
             }
 
-            if (eStyle & FSYS_DOS
+            if (eStyle & FSysStyle::Dos
                 && pFSysEnd - pFSysBegin >= 2
                 && pFSysBegin[0] == '\\'
                 && pFSysBegin[1] == '\\')
@@ -4305,12 +4305,12 @@ bool INetURLObject::setFSysPath(OUString const & rFSysPath,
                 if (parseHost(p, pFSysEnd, aHost)
                     && (p == pFSysEnd || *p == '\\'))
                 {
-                    eStyle = FSYS_DOS; // Production T3
+                    eStyle = FSysStyle::Dos; // Production T3
                     break;
                 }
             }
 
-            if (eStyle & FSYS_DOS
+            if (eStyle & FSysStyle::Dos
                 && pFSysEnd - pFSysBegin >= 2
                 && rtl::isAsciiAlpha(pFSysBegin[0])
                 && pFSysBegin[1] == ':'
@@ -4318,11 +4318,11 @@ bool INetURLObject::setFSysPath(OUString const & rFSysPath,
                     || pFSysBegin[2] == '/'
                     || pFSysBegin[2] == '\\'))
             {
-                eStyle = FSYS_DOS; // Productions T4, T5
+                eStyle = FSysStyle::Dos; // Productions T4, T5
                 break;
             }
 
-            if (!(eStyle & (FSYS_UNX | FSYS_DOS)))
+            if (!(eStyle & (FSysStyle::Unix | FSysStyle::Dos)))
                 return false;
 
             eStyle = guessFSysStyleByCounting(pFSysBegin, pFSysEnd, eStyle);
@@ -4334,7 +4334,7 @@ bool INetURLObject::setFSysPath(OUString const & rFSysPath,
 
     switch (eStyle)
     {
-        case FSYS_VOS:
+        case FSysStyle::Vos:
         {
             sal_Unicode const * p = pFSysBegin;
             if (pFSysEnd - p < 2 || *p++ != '/' || *p++ != '/')
@@ -4357,7 +4357,7 @@ bool INetURLObject::setFSysPath(OUString const & rFSysPath,
             break;
         }
 
-        case FSYS_UNX:
+        case FSysStyle::Unix:
         {
             sal_Unicode const * p = pFSysBegin;
             if (p != pFSysEnd && *p != '/')
@@ -4378,7 +4378,7 @@ bool INetURLObject::setFSysPath(OUString const & rFSysPath,
             break;
         }
 
-        case FSYS_DOS:
+        case FSysStyle::Dos:
         {
             sal_uInt32 nAltDelimiter = 0x80000000;
             sal_Unicode const * p = pFSysBegin;
@@ -4432,29 +4432,29 @@ OUString INetURLObject::getFSysPath(FSysStyle eStyle,
     if (m_eScheme != INetProtocol::File)
         return OUString();
 
-    if (((eStyle & FSYS_VOS) ? 1 : 0)
-                + ((eStyle & FSYS_UNX) ? 1 : 0)
-                + ((eStyle & FSYS_DOS) ? 1 : 0)
+    if (((eStyle & FSysStyle::Vos) ? 1 : 0)
+                + ((eStyle & FSysStyle::Unix) ? 1 : 0)
+                + ((eStyle & FSysStyle::Dos) ? 1 : 0)
             > 1)
     {
-        eStyle = eStyle & FSYS_VOS
+        eStyle = eStyle & FSysStyle::Vos
                  && m_aHost.isPresent()
                  && m_aHost.getLength() > 0 ?
-                     FSYS_VOS :
+                     FSysStyle::Vos :
                  hasDosVolume(eStyle)
-                 || ((eStyle & FSYS_DOS) != 0
+                 || ((eStyle & FSysStyle::Dos)
                     && m_aHost.isPresent()
                     && m_aHost.getLength() > 0) ?
-                     FSYS_DOS :
-                 eStyle & FSYS_UNX
+                     FSysStyle::Dos :
+                 eStyle & FSysStyle::Unix
                  && (!m_aHost.isPresent() || m_aHost.getLength() == 0) ?
-                     FSYS_UNX :
+                     FSysStyle::Unix :
                      FSysStyle(0);
     }
 
     switch (eStyle)
     {
-        case FSYS_VOS:
+        case FSysStyle::Vos:
         {
             if (pDelimiter)
                 *pDelimiter = '/';
@@ -4471,7 +4471,7 @@ OUString INetURLObject::getFSysPath(FSysStyle eStyle,
             return aSynFSysPath.makeStringAndClear();
         }
 
-        case FSYS_UNX:
+        case FSysStyle::Unix:
         {
             if (m_aHost.isPresent() && m_aHost.getLength() > 0)
                 return OUString();
@@ -4482,7 +4482,7 @@ OUString INetURLObject::getFSysPath(FSysStyle eStyle,
             return decode(m_aPath, DecodeMechanism::WithCharset, RTL_TEXTENCODING_UTF8);
         }
 
-        case FSYS_DOS:
+        case FSysStyle::Dos:
         {
             if (pDelimiter)
                 *pDelimiter = '\\';

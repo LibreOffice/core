@@ -43,7 +43,7 @@ RecentDocsViewItem::RecentDocsViewItem(ThumbnailView &rView, const OUString &rUR
     INetURLObject aURLObj(rURL);
 
     if( aURLObj.GetProtocol() == INetProtocol::File )
-        m_sHelpText = aURLObj.getFSysPath(INetURLObject::FSYS_DETECT);
+        m_sHelpText = aURLObj.getFSysPath(FSysStyle::Detect);
     if( m_sHelpText.isEmpty() )
         m_sHelpText = aURLObj.GetURLNoPass();
 

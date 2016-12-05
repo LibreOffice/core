@@ -674,7 +674,7 @@ IMPL_LINK(SwMMResultSaveDialog, SaveOutputHdl_Impl, Button*, pButton, void)
         ScopedVclPtrInstance< PrintMonitor > aSaveMonitor(this, false, PrintMonitor::MONITOR_TYPE_SAVE);
         aSaveMonitor->m_pDocName->SetText(pSourceView->GetDocShell()->GetTitle(22));
         aSaveMonitor->SetCancelHdl(LINK(this, SwMMResultSaveDialog, SaveCancelHdl_Impl));
-        aSaveMonitor->m_pPrinter->SetText( INetURLObject( sPath ).getFSysPath( INetURLObject::FSYS_DETECT ) );
+        aSaveMonitor->m_pPrinter->SetText( INetURLObject( sPath ).getFSysPath( FSysStyle::Detect ) );
         m_bCancelSaving = false;
         aSaveMonitor->Show();
 

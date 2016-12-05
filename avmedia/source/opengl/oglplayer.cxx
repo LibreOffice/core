@@ -71,7 +71,7 @@ bool OGLPlayer::create( const OUString& rURL )
 
     // Convert URL to a system path
     const INetURLObject aURLObj(m_sURL);
-    const std::string sFilePath = OUStringToOString( aURLObj.getFSysPath(INetURLObject::FSYS_DETECT), RTL_TEXTENCODING_UTF8 ).getStr();
+    const std::string sFilePath = OUStringToOString( aURLObj.getFSysPath(FSysStyle::Detect), RTL_TEXTENCODING_UTF8 ).getStr();
 
     // Load *.json file and init renderer
     m_pHandle = gltf_renderer_init(sFilePath, m_vInputFiles);

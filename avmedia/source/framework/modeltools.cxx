@@ -164,7 +164,7 @@ static void lcl_EmbedExternals(const OUString& rSourceURL, const uno::Reference<
 
     // Convert URL to a file path for loading
     const INetURLObject aURLObj(sTempFileURL);
-    std::string sUrl = OUStringToOString( aURLObj.getFSysPath(INetURLObject::FSYS_DETECT), RTL_TEXTENCODING_UTF8 ).getStr();
+    std::string sUrl = OUStringToOString( aURLObj.getFSysPath(FSysStyle::Detect), RTL_TEXTENCODING_UTF8 ).getStr();
 
     // Parse json, read externals' URI and modify this relative URI's so they remain valid in the new context.
     std::vector<std::string> vExternals;

@@ -1234,12 +1234,12 @@ OUString GalleryBrowser2::GetItemText( const GalleryTheme& rTheme, const SgaObje
 
     if( nItemTextFlags & GalleryItemFlags::Path )
     {
-        const OUString aPath( aURL.getFSysPath( INetURLObject::FSYS_DETECT ) );
+        const OUString aPath( aURL.getFSysPath( FSysStyle::Detect ) );
 
         if( !aPath.isEmpty() && ( nItemTextFlags & GalleryItemFlags::Title ) )
             aRet += " (";
 
-        aRet += aURL.getFSysPath( INetURLObject::FSYS_DETECT );
+        aRet += aURL.getFSysPath( FSysStyle::Detect );
 
         if( !aPath.isEmpty() && ( nItemTextFlags & GalleryItemFlags::Title ) )
             aRet += ")";

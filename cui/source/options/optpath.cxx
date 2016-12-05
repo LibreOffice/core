@@ -497,7 +497,7 @@ void SvxPathTabPage::ChangeCurrentEntry( const OUString& _rFolder )
     aNewObj.removeFinalSlash();
 
     // then the new path also an URL else system path
-    OUString sNewPathStr = bURL ? _rFolder : aNewObj.getFSysPath( INetURLObject::FSYS_DETECT );
+    OUString sNewPathStr = bURL ? _rFolder : aNewObj.getFSysPath( FSysStyle::Detect );
 
     bool bChanged =
 #ifdef UNX

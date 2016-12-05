@@ -4173,7 +4173,7 @@ void AutoRecovery::impl_showFullDiscError()
     OUString sBackupURL(SvtPathOptions().GetBackupPath());
     INetURLObject aConverter(sBackupURL);
     sal_Unicode aDelimiter;
-    OUString sBackupPath = aConverter.getFSysPath(INetURLObject::FSYS_DETECT, &aDelimiter);
+    OUString sBackupPath = aConverter.getFSysPath(FSysStyle::Detect, &aDelimiter);
     if (sBackupPath.getLength() < 1)
         sBackupPath = sBackupURL;
 

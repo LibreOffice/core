@@ -73,7 +73,7 @@ namespace tools_urlobj
             INetURLObject aUrl;
             aUrl.
                 setFSysPath( "\\\\137.65.170.24\\c$\\Img0001.jpg",
-                             INetURLObject::FSYS_DETECT );
+                             FSysStyle::Detect );
 #ifdef LINUX
             CPPUNIT_ASSERT( aUrl.GetMainURL( INetURLObject::DecodeMechanism::NONE )
                             == "smb://137.65.170.24/c$/Img0001.jpg" );
@@ -99,7 +99,7 @@ namespace tools_urlobj
             INetURLObject aUrl;
             aUrl.
                 setFSysPath( "\\\\hive-winxp-x86\\pmladek\\test2.odt",
-                             INetURLObject::FSYS_DETECT );
+                             FSysStyle::Detect );
 #ifdef LINUX
             CPPUNIT_ASSERT( aUrl.GetMainURL( INetURLObject::DecodeMechanism::NONE )
                             == "smb://hive-winxp-x86/pmladek/test2.odt" );
@@ -142,7 +142,7 @@ namespace tools_urlobj
         {
             INetURLObject aUrl;
             aUrl.setFSysPath( "//137.65.170.24/c$/Img0001.jpg",
-                              INetURLObject::FSYS_DETECT );
+                              FSysStyle::Detect );
 #ifdef LINUX
             CPPUNIT_ASSERT( aUrl.GetMainURL( INetURLObject::DecodeMechanism::NONE )
                             == "smb://137.65.170.24/c$/Img0001.jpg" );
@@ -167,7 +167,7 @@ namespace tools_urlobj
         {
             INetURLObject aUrl;
             aUrl.setFSysPath( "//hive-winxp-x86/pmladek/test2.odt",
-                              INetURLObject::FSYS_DETECT );
+                              FSysStyle::Detect );
 #ifdef LINUX
             CPPUNIT_ASSERT( aUrl.GetMainURL( INetURLObject::DecodeMechanism::NONE )
                             == "smb://hive-winxp-x86/pmladek/test2.odt" );

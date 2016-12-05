@@ -1241,7 +1241,7 @@ OUString ModelData_Impl::GetRecommendedName( const OUString& aSuggestedName, con
             if ( xTypeDetection.is() )
             {
                 INetURLObject aObj( "c:/" + aRecommendedName, INetProtocol::File,
-                        INetURLObject::EncodeMechanism::All, RTL_TEXTENCODING_UTF8, INetURLObject::FSYS_DOS );
+                        INetURLObject::EncodeMechanism::All, RTL_TEXTENCODING_UTF8, FSysStyle::Dos );
 
                 OUString aExtension = GetRecommendedExtension( aTypeName );
                 if ( !aExtension.isEmpty() )

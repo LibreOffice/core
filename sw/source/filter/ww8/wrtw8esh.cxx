@@ -139,7 +139,7 @@ OUString SwBasicEscherEx::GetBasePath()
 
 OUString SwBasicEscherEx::BuildFileName(sal_uInt16& rnLevel, bool& rbRel, const OUString& rUrl)
 {
-    OUString aDosName( INetURLObject( rUrl ).getFSysPath( INetURLObject::FSYS_DOS ) );
+    OUString aDosName( INetURLObject( rUrl ).getFSysPath( FSysStyle::Dos ) );
     rnLevel = 0;
     rbRel = IsRelUrl();
 

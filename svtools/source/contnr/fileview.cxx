@@ -256,7 +256,7 @@ NameTranslationList::NameTranslationList( const INetURLObject& rBaseURL ):
         if( aTestContent.isDocument() )
         {
             // ... also tests the existence of maTransFile by throwing an Exception
-            OUString        aFsysName( maTransFile.getFSysPath( INetURLObject::FSYS_DETECT ) );
+            OUString        aFsysName( maTransFile.getFSysPath( FSysStyle::Detect ) );
             Config          aConfig( aFsysName );
 
             aConfig.SetGroup( OString("TRANSLATIONNAMES") );

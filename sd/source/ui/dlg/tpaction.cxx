@@ -732,7 +732,7 @@ void SdTPAction::SetEditText( OUString const & rStr )
                 INetURLObject aURL( aText );
 
                 // try to convert to system path
-                OUString aTmpStr(aURL.getFSysPath(INetURLObject::FSYS_DETECT));
+                OUString aTmpStr(aURL.getFSysPath(FSysStyle::Detect));
 
                 if( !aTmpStr.isEmpty() )
                     aText = aTmpStr;    // was a system path

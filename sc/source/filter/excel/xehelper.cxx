@@ -964,8 +964,8 @@ OUString lclEncodeDosUrl(
 
 OUString XclExpUrlHelper::EncodeUrl( const XclExpRoot& rRoot, const OUString& rAbsUrl, const OUString* pTableName )
 {
-    OUString aDosUrl = INetURLObject(rAbsUrl).getFSysPath(INetURLObject::FSYS_DOS);
-    OUString aDosBase = INetURLObject(rRoot.GetBasePath()).getFSysPath(INetURLObject::FSYS_DOS);
+    OUString aDosUrl = INetURLObject(rAbsUrl).getFSysPath(FSysStyle::Dos);
+    OUString aDosBase = INetURLObject(rRoot.GetBasePath()).getFSysPath(FSysStyle::Dos);
     return lclEncodeDosUrl(rRoot.GetBiff(), aDosUrl, aDosBase, pTableName);
 }
 

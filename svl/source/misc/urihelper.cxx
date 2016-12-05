@@ -60,7 +60,7 @@ OUString URIHelper::SmartRel2Abs(INetURLObject const & rTheBaseURIRef,
                                  INetURLObject::DecodeMechanism eDecodeMechanism,
                                  rtl_TextEncoding eCharset,
                                  bool bRelativeNonURIs,
-                                 INetURLObject::FSysStyle eStyle)
+                                 FSysStyle eStyle)
 {
     // Backwards compatibility:
     if( rTheRelURIRef.startsWith("#") )
@@ -495,7 +495,7 @@ OUString URIHelper::FindFirstURLInText(OUString const & rText,
     // Productions 1--4 use the given eMechanism and eCharset.  Productions 5--9
     // use EncodeMechanism::All.
 
-    // Productions 6--9 are only applicable if the FSYS_DOS bit is set in
+    // Productions 6--9 are only applicable if the FSysStyle::Dos bit is set in
     // eStyle.
 
     bool bBoundary1 = true;
@@ -528,7 +528,7 @@ OUString URIHelper::FindFirstURLInText(OUString const & rText,
                     {
                         INetURLObject aUri(rText.copy(nPos, nUriEnd - nPos),
                                            INetProtocol::File, eMechanism, eCharset,
-                                           INetURLObject::FSYS_DETECT);
+                                           FSysStyle::Detect);
                         if (!aUri.HasError())
                         {
                             rBegin = nPos;
@@ -632,7 +632,7 @@ OUString URIHelper::FindFirstURLInText(OUString const & rText,
                                            INetProtocol::File,
                                            INetURLObject::EncodeMechanism::All,
                                            RTL_TEXTENCODING_UTF8,
-                                           INetURLObject::FSYS_DOS);
+                                           FSysStyle::Dos);
                         if (!aUri.HasError())
                         {
                             rBegin = nPos;
@@ -661,7 +661,7 @@ OUString URIHelper::FindFirstURLInText(OUString const & rText,
                                            INetProtocol::File,
                                            INetURLObject::EncodeMechanism::All,
                                            RTL_TEXTENCODING_UTF8,
-                                           INetURLObject::FSYS_DOS);
+                                           FSysStyle::Dos);
                         if (!aUri.HasError())
                         {
                             rBegin = nPos;

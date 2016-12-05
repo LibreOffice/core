@@ -985,14 +985,14 @@ OUString SvxExtFileField::GetFormatted() const
         switch( eFormat )
         {
             case SVXFILEFORMAT_FULLPATH:
-                aString = aURLObj.getFSysPath(INetURLObject::FSYS_DETECT);
+                aString = aURLObj.getFSysPath(FSysStyle::Detect);
             break;
 
             case SVXFILEFORMAT_PATH:
                 aURLObj.removeSegment(INetURLObject::LAST_SEGMENT, false);
                 // #101742# Leave trailing slash at the pathname
                 aURLObj.setFinalSlash();
-                aString = aURLObj.getFSysPath(INetURLObject::FSYS_DETECT);
+                aString = aURLObj.getFSysPath(FSysStyle::Detect);
             break;
 
             case SVXFILEFORMAT_NAME:

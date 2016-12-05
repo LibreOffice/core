@@ -618,7 +618,7 @@ void XclImpUrlHelper::DecodeUrl(
     rbSameWb = false;
 
     sal_Unicode cCurrDrive = 0;
-    OUString aDosBase( INetURLObject( rRoot.GetBasePath() ).getFSysPath( INetURLObject::FSYS_DOS ) );
+    OUString aDosBase( INetURLObject( rRoot.GetBasePath() ).getFSysPath( FSysStyle::Dos ) );
     if (!aDosBase.isEmpty() && aDosBase.match(":\\", 1))
         cCurrDrive = aDosBase[0];
 

@@ -33,9 +33,9 @@
 #include <com/sun/star/task/XStatusIndicator.hpp>
 
 #ifdef _WIN32
-#define SYSTEM_PATH INetURLObject::FSYS_DOS
+#define SYSTEM_PATH FSysStyle::Dos
 #else
-#define SYSTEM_PATH INetURLObject::FSYS_UNX
+#define SYSTEM_PATH FSysStyle::Unix
 #endif
 
 using namespace com::sun::star;

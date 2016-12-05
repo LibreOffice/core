@@ -447,7 +447,7 @@ OUString XclExpHyperlink::BuildFileName(
         sal_uInt16& rnLevel, bool& rbRel, const OUString& rUrl, const XclExpRoot& rRoot, bool bEncoded )
 {
     INetURLObject aURLObject( rUrl );
-    OUString aDosName( bEncoded ? aURLObject.GetURLPath() : aURLObject.getFSysPath( INetURLObject::FSYS_DOS ) );
+    OUString aDosName( bEncoded ? aURLObject.GetURLPath() : aURLObject.getFSysPath( FSysStyle::Dos ) );
     rnLevel = 0;
     rbRel = rRoot.IsRelUrl();
 
@@ -2015,7 +2015,7 @@ XclExpWebQueryBuffer::XclExpWebQueryBuffer( const XclExpRoot& rRoot )
 
                     OUString aAbsDoc( ScGlobal::GetAbsDocName( aUrl, pShell ) );
                     INetURLObject aUrlObj( aAbsDoc );
-                    OUString aWebQueryUrl( aUrlObj.getFSysPath( INetURLObject::FSYS_DOS ) );
+                    OUString aWebQueryUrl( aUrlObj.getFSysPath( FSysStyle::Dos ) );
                     if( aWebQueryUrl.isEmpty() )
                         aWebQueryUrl = aAbsDoc;
 

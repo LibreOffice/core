@@ -408,7 +408,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
             bool bIsWebDAV = aMedObj.isAnyKnownWebDAVScheme();
 
             if ( ( !bNeedsReload && ( ( aMedObj.GetProtocol() == INetProtocol::File &&
-                                        aMedObj.getFSysPath( INetURLObject::FSYS_DETECT ) != aPhysObj.getFSysPath( INetURLObject::FSYS_DETECT ) &&
+                                        aMedObj.getFSysPath( FSysStyle::Detect ) != aPhysObj.getFSysPath( FSysStyle::Detect ) &&
                                         !bPhysObjIsYounger )
                                       || ( bIsWebDAV && !bPhysObjIsYounger )
                                       || ( pMed->IsRemote() && !bIsWebDAV ) ) )

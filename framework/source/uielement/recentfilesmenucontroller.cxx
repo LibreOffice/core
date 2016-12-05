@@ -184,7 +184,7 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
                 // Abbreviate URL
                 OUString   aMenuTitle;
                 INetURLObject   aURL( m_aRecentFilesItems[i] );
-                OUString aTipHelpText( aURL.getFSysPath( INetURLObject::FSYS_DETECT ) );
+                OUString aTipHelpText( aURL.getFSysPath( FSysStyle::Detect ) );
 
                 if ( aURL.GetProtocol() == INetProtocol::File )
                 {

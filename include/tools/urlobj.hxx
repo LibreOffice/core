@@ -25,6 +25,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/textenc.h>
 #include <sal/types.h>
+#include <o3tl/typed_flags_set.hxx>
 
 #include <memory>
 
@@ -78,6 +79,101 @@ enum class INetProtocol
     Cmis,
     LAST = Cmis
 };
+
+/** The supported notations for file system paths.
+ */
+enum class FSysStyle
+{
+    /** VOS notation (e.g., "//server/dir/file").
+     */
+    Vos = 0x1,
+
+    /** Unix notation (e.g., "/dir/file").
+     */
+    Unix = 0x2,
+
+    /** DOS notation (e.g., "a:\dir\file" and "\\server\dir\file").
+     */
+    Dos = 0x4,
+
+    /** Detect the used notation.
+
+        @descr  For the following descriptions, please note that
+        whereas FSYS_DEFAULT includes all style bits, combinations of only
+        a few style bits are also possible, and are also described.
+
+        @descr  When used to translate a file system path to a file URL,
+        the subset of the following productions for which the appropriate
+        style bit is set are checked in order (using the conventions of
+        RFC 2234, RFC 2396, and RFC 2732; UCS4 stands for any UCS4
+        character):
+
+         Production T1 (VOS local; FSysStyle::Vos only):
+            "//." ["/" *UCS4]
+          becomes
+            "file:///" *UCS4
+
+         Production T2 (VOS host; FSysStyle::Vos only):
+            "//" [host] ["/" *UCS4]
+          becomes
+            "file://" host "/" *UCS4
+
+         Production T3 (UNC; FSysStyle::Dos only):
+            "\\" [host] ["\" *UCS4]
+          becomes
+            "file://" host "/" *UCS4
+          replacing "\" by "/" within <*UCS4>
+
+         Production T4 (Unix-like DOS; FSysStyle::Dos only):
+            ALPHA ":" ["/" *UCS4]
+          becomes
+            "file:///" ALPHA ":/" *UCS4
+          replacing "\" by "/" within <*UCS4>
+
+         Production T5 (DOS; FSysStyle::Dos only):
+            ALPHA ":" ["\" *UCS4]
+          becomes
+            "file:///" ALPHA ":/" *UCS4
+          replacing "\" by "/" within <*UCS4>
+
+         Production T6 (any):
+            *UCS4
+          becomes
+            "file:///" *UCS4
+          replacing the delimiter by "/" within <*UCS4>.  The delimiter is
+          that character from the set { "/", "\" } which appears most
+          often in <*UCS4> (if FSysStyle::Unix is not among the style bits, "/"
+          is removed from the set; if FSysStyle::Dos is not among the style
+          bits, "\" is removed from the set).  If two or more
+          characters appear the same number of times, the character
+          mentioned first in that set is chosen.  If the first character
+          of <*UCS4> is the delimiter, that character is not copied.
+
+        @descr  When used to translate a file URL to a file system path,
+        the following productions are checked in order (using the
+        conventions of RFC 2234, RFC 2396, and RFC 2732):
+
+         Production F1 (VOS; FSysStyle::Vos):
+            "file://" host "/" fpath ["#" fragment]
+          becomes
+            "//" host "/" fpath
+
+         Production F2 (DOS; FSysStyle::Dos):
+            "file:///" ALPHA ":" ["/" fpath] ["#" fragment]
+          becomes
+            ALPHA ":" ["\" fpath]
+          replacing "/" by "\" in <fpath>
+
+         Production F3 (Unix; FSysStyle::Unix):
+            "file:///" fpath ["#" fragment]
+          becomes
+            "/" fpath
+     */
+    Detect = Vos | Unix | Dos
+};
+namespace o3tl {
+    template<> struct typed_flags<FSysStyle> : is_typed_flags<FSysStyle, 0x07> {};
+}
 
 class SAL_WARN_UNUSED TOOLS_DLLPUBLIC INetURLObject
 {
@@ -205,103 +301,11 @@ public:
 
     // Smart Parsing:
 
-    /** The supported notations for file system paths.
-     */
-    enum FSysStyle
-    {
-        /** VOS notation (e.g., "//server/dir/file").
-         */
-        FSYS_VOS = 0x1,
-
-        /** Unix notation (e.g., "/dir/file").
-         */
-        FSYS_UNX = 0x2,
-
-        /** DOS notation (e.g., "a:\dir\file" and "\\server\dir\file").
-         */
-        FSYS_DOS = 0x4,
-
-        /** Detect the used notation.
-
-            @descr  For the following descriptions, please note that
-            whereas FSYS_DEFAULT includes all style bits, combinations of only
-            a few style bits are also possible, and are also described.
-
-            @descr  When used to translate a file system path to a file URL,
-            the subset of the following productions for which the appropriate
-            style bit is set are checked in order (using the conventions of
-            RFC 2234, RFC 2396, and RFC 2732; UCS4 stands for any UCS4
-            character):
-
-             Production T1 (VOS local; FSYS_VOS only):
-                "//." ["/" *UCS4]
-              becomes
-                "file:///" *UCS4
-
-             Production T2 (VOS host; FSYS_VOS only):
-                "//" [host] ["/" *UCS4]
-              becomes
-                "file://" host "/" *UCS4
-
-             Production T3 (UNC; FSYS_DOS only):
-                "\\" [host] ["\" *UCS4]
-              becomes
-                "file://" host "/" *UCS4
-              replacing "\" by "/" within <*UCS4>
-
-             Production T4 (Unix-like DOS; FSYS_DOS only):
-                ALPHA ":" ["/" *UCS4]
-              becomes
-                "file:///" ALPHA ":/" *UCS4
-              replacing "\" by "/" within <*UCS4>
-
-             Production T5 (DOS; FSYS_DOS only):
-                ALPHA ":" ["\" *UCS4]
-              becomes
-                "file:///" ALPHA ":/" *UCS4
-              replacing "\" by "/" within <*UCS4>
-
-             Production T6 (any):
-                *UCS4
-              becomes
-                "file:///" *UCS4
-              replacing the delimiter by "/" within <*UCS4>.  The delimiter is
-              that character from the set { "/", "\" } which appears most
-              often in <*UCS4> (if FSYS_UNX is not among the style bits, "/"
-              is removed from the set; if FSYS_DOS is not among the style
-              bits, "\" is removed from the set).  If two or more
-              characters appear the same number of times, the character
-              mentioned first in that set is chosen.  If the first character
-              of <*UCS4> is the delimiter, that character is not copied.
-
-            @descr  When used to translate a file URL to a file system path,
-            the following productions are checked in order (using the
-            conventions of RFC 2234, RFC 2396, and RFC 2732):
-
-             Production F1 (VOS; FSYS_VOS):
-                "file://" host "/" fpath ["#" fragment]
-              becomes
-                "//" host "/" fpath
-
-             Production F2 (DOS; FSYS_DOS):
-                "file:///" ALPHA ":" ["/" fpath] ["#" fragment]
-              becomes
-                ALPHA ":" ["\" fpath]
-              replacing "/" by "\" in <fpath>
-
-             Production F3 (Unix; FSYS_UNX):
-                "file:///" fpath ["#" fragment]
-              becomes
-                "/" fpath
-         */
-        FSYS_DETECT = FSYS_VOS | FSYS_UNX | FSYS_DOS
-    };
-
     inline INetURLObject(OUString const & rTheAbsURIRef,
                          INetProtocol eTheSmartScheme,
                          EncodeMechanism eMechanism = EncodeMechanism::WasEncoded,
                          rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8,
-                         FSysStyle eStyle = FSYS_DETECT);
+                         FSysStyle eStyle = FSysStyle::Detect);
 
     inline void SetSmartProtocol(INetProtocol eTheSmartScheme)
     { m_eSmartScheme = eTheSmartScheme; }
@@ -310,7 +314,7 @@ public:
     SetSmartURL(OUString const & rTheAbsURIRef,
                 EncodeMechanism eMechanism = EncodeMechanism::WasEncoded,
                 rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8,
-                FSysStyle eStyle = FSYS_DETECT);
+                FSysStyle eStyle = FSysStyle::Detect);
 
     inline INetURLObject
     smartRel2Abs(OUString const & rTheRelURIRef,
@@ -319,7 +323,7 @@ public:
                  EncodeMechanism eMechanism = EncodeMechanism::WasEncoded,
                  rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8,
                  bool bRelativeNonURIs = false,
-                 FSysStyle eStyle = FSYS_DETECT) const;
+                 FSysStyle eStyle = FSysStyle::Detect) const;
 
     // Relative URLs:
 
@@ -349,7 +353,7 @@ public:
               EncodeMechanism eEncodeMechanism = EncodeMechanism::WasEncoded,
               DecodeMechanism eDecodeMechanism = DecodeMechanism::ToIUri,
               rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8,
-              FSysStyle eStyle = FSYS_DETECT);
+              FSysStyle eStyle = FSysStyle::Detect);
 
     // External URLs:
 
@@ -1230,7 +1234,7 @@ inline bool INetURLObject::GetNewAbsURL(OUString const & rTheRelURIRef,
     bool bWasAbsolute;
     if (!convertRelToAbs(rTheRelURIRef, aTheAbsURIRef, bWasAbsolute,
                          EncodeMechanism::WasEncoded, RTL_TEXTENCODING_UTF8, false/*bIgnoreFragment*/, false, false,
-                         FSYS_DETECT))
+                         FSysStyle::Detect))
         return false;
     if (pTheAbsURIRef)
         *pTheAbsURIRef = aTheAbsURIRef;

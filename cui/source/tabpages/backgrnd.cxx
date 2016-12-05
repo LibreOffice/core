@@ -1163,7 +1163,7 @@ IMPL_LINK( SvxBackgroundTabPage, FileClickHdl_Impl, Button*, pBox, void )
             INetURLObject aObj( aBgdGraphicPath );
             OUString aFilePath;
             if ( aObj.GetProtocol() == INetProtocol::File )
-                aFilePath = aObj.getFSysPath( INetURLObject::FSYS_DETECT );
+                aFilePath = aObj.getFSysPath( FSysStyle::Detect );
             else
                 aFilePath = aBgdGraphicPath;
             m_pFtFile->SetText( aFilePath );

@@ -685,7 +685,7 @@ void ODbaseTable::refreshIndexes()
         aURL.SetURL(getEntry(m_pConnection,m_Name));
 
         aURL.setExtension("inf");
-        Config aInfFile(aURL.getFSysPath(INetURLObject::FSYS_DETECT));
+        Config aInfFile(aURL.getFSysPath(FSysStyle::Detect));
         aInfFile.SetGroup(dBASE_III_GROUP);
         sal_uInt16 nKeyCnt = aInfFile.GetKeyCount();
         OString aKeyName;

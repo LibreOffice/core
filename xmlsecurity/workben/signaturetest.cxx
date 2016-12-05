@@ -236,7 +236,7 @@ MyWin::MyWin( vcl::Window* pParent, WinBits nWinStyle ) :
     ::osl::File::getTempDirURL( aTempDirURL );
     INetURLObject aURLObj( aTempDirURL );
     aURLObj.insertName( "nss", true );
-    OUString aNSSFolder = aURLObj.getFSysPath( INetURLObject::FSYS_DETECT );
+    OUString aNSSFolder = aURLObj.getFSysPath( FSysStyle::Detect );
     maEditXMLFileName.SetText( aNSSFolder + "demo-sample.xml" );
     maEditBINFileName.SetText( aNSSFolder + "demo-sample.gif" );
     maEditDOCFileName.SetText( aNSSFolder + "demo-sample.sxw" );

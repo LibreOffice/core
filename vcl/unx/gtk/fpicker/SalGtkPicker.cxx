@@ -62,7 +62,7 @@ OUString SalGtkPicker::uritounicode(const gchar* pIn)
             OUString sEncoded(pEncodedFileName, strlen(pEncodedFileName),
                 osl_getThreadTextEncoding());
             g_free (pEncodedFileName);
-            INetURLObject aCurrentURL(sEncoded, INetURLObject::FSYS_UNX);
+            INetURLObject aCurrentURL(sEncoded, FSysStyle::Unix);
             aCurrentURL.SetHost(aURL.GetHost());
             sURL = aCurrentURL.getExternalURL();
         }

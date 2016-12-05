@@ -217,7 +217,7 @@ class RecentFilesStringLength : public ::cppu::WeakImplHelper< css::util::XStrin
         {
             // Do handle file URL differently => convert it to a system
             // path and abbreviate it with a special function:
-            ::rtl::OUString aSystemPath( aURL.getFSysPath( INetURLObject::FSYS_DETECT ) );
+            ::rtl::OUString aSystemPath( aURL.getFSysPath( FSysStyle::Detect ) );
             ::rtl::OUString aCompactedSystemPath;
 
             oslFileError nError = osl_abbreviateSystemPath( aSystemPath.pData, &aCompactedSystemPath.pData, 46, nullptr );

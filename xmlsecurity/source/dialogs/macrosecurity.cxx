@@ -270,7 +270,7 @@ IMPL_LINK_NOARG(MacroSecurityTrustedSourcesTP, AddLocPBHdl, Button*, void)
 
         // then the new path also an URL else system path
         OUString aSystemFileURL = ( aNewObj.GetProtocol() != INetProtocol::NotValid ) ?
-            aPathStr : aNewObj.getFSysPath( INetURLObject::FSYS_DETECT );
+            aPathStr : aNewObj.getFSysPath( FSysStyle::Detect );
 
         OUString aNewPathStr(aSystemFileURL);
 

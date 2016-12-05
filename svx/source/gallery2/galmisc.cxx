@@ -195,7 +195,7 @@ OUString GetReducedString( const INetURLObject& rURL, sal_Int32 nMaxLen )
     if( INetProtocol::PrivSoffice != rURL.GetProtocol() )
     {
         sal_Unicode     aDelimiter;
-        const OUString  aPath( rURL.getFSysPath( INetURLObject::FSYS_DETECT, &aDelimiter ) );
+        const OUString  aPath( rURL.getFSysPath( FSysStyle::Detect, &aDelimiter ) );
         const OUString  aName( aReduced );
 
         if( aPath.getLength() > nMaxLen )
