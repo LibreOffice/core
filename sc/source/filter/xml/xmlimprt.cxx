@@ -232,7 +232,6 @@ public:
         sal_uInt16 nPrfx,
         const OUString& rLName,
         const uno::Reference<xml::sax::XAttributeList>& xAttrList );
-    virtual ~ScXMLDocContext_Impl() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
         const OUString& rLocalName,
@@ -247,10 +246,6 @@ SvXMLImportContext( rImport, nPrfx, rLName )
 
 }
 
-ScXMLDocContext_Impl::~ScXMLDocContext_Impl()
-{
-}
-
 // context for flat file xml format
 class ScXMLFlatDocContext_Impl
     : public ScXMLDocContext_Impl, public SvXMLMetaDocumentContext
@@ -260,8 +255,6 @@ public:
         sal_uInt16 i_nPrefix, const OUString & i_rLName,
         const uno::Reference<xml::sax::XAttributeList>& i_xAttrList,
         const uno::Reference<document::XDocumentProperties>& i_xDocProps);
-
-    virtual ~ScXMLFlatDocContext_Impl() override;
 
     virtual SvXMLImportContext *CreateChildContext(
         sal_uInt16 i_nPrefix, const OUString& i_rLocalName,
@@ -278,8 +271,6 @@ SvXMLMetaDocumentContext(i_rImport, i_nPrefix, i_rLName,
                          i_xDocProps)
 {
 }
-
-ScXMLFlatDocContext_Impl::~ScXMLFlatDocContext_Impl() { }
 
 SvXMLImportContext *ScXMLFlatDocContext_Impl::CreateChildContext(
     sal_uInt16 i_nPrefix, const OUString& i_rLocalName,
@@ -302,7 +293,6 @@ public:
     ScXMLBodyContext_Impl( ScXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLName,
         const uno::Reference< xml::sax::XAttributeList > & xAttrList );
-    virtual ~ScXMLBodyContext_Impl() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
         const OUString& rLocalName,
@@ -313,10 +303,6 @@ ScXMLBodyContext_Impl::ScXMLBodyContext_Impl( ScXMLImport& rImport,
                                              sal_uInt16 nPrfx, const OUString& rLName,
                                              const uno::Reference< xml::sax::XAttributeList > & /* xAttrList */ ) :
 ScXMLImportContext( rImport, nPrfx, rLName )
-{
-}
-
-ScXMLBodyContext_Impl::~ScXMLBodyContext_Impl()
 {
 }
 

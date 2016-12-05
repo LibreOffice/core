@@ -51,7 +51,6 @@ public:
     /** @param nFlags  The flags to export. */
     explicit            XclExpExtNameBase( const XclExpRoot& rRoot,
                             const OUString& rName, sal_uInt16 nFlags = 0 );
-    virtual             ~XclExpExtNameBase() override;
 
     /** Returns the name string of the external name. */
     inline const OUString& GetName() const { return maName; }
@@ -904,10 +903,6 @@ XclExpExtNameBase::XclExpExtNameBase(
 {
     OSL_ENSURE( maName.getLength() <= 255, "XclExpExtNameBase::XclExpExtNameBase - string too long" );
     SetRecSize( 6 + mxName->GetSize() );
-}
-
-XclExpExtNameBase::~XclExpExtNameBase()
-{
 }
 
 void XclExpExtNameBase::WriteBody( XclExpStream& rStrm )

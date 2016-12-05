@@ -21,7 +21,6 @@ class XclExpTablesImpl5 : public XclExpTables
 {
 public:
     explicit            XclExpTablesImpl5( const XclExpRoot& rRoot );
-    virtual             ~XclExpTablesImpl5() override;
 
     virtual void        Save( XclExpStream& rStrm ) override;
     virtual void        SaveXml( XclExpXmlStream& rStrm ) override;
@@ -32,7 +31,6 @@ class XclExpTablesImpl8 : public XclExpTables
 {
 public:
     explicit            XclExpTablesImpl8( const XclExpRoot& rRoot );
-    virtual             ~XclExpTablesImpl8() override;
 
     virtual void        Save( XclExpStream& rStrm ) override;
     virtual void        SaveXml( XclExpXmlStream& rStrm ) override;
@@ -41,10 +39,6 @@ public:
 
 XclExpTablesImpl5::XclExpTablesImpl5( const XclExpRoot& rRoot ) :
     XclExpTables( rRoot )
-{
-}
-
-XclExpTablesImpl5::~XclExpTablesImpl5()
 {
 }
 
@@ -61,10 +55,6 @@ void XclExpTablesImpl5::SaveXml( XclExpXmlStream& /*rStrm*/ )
 
 XclExpTablesImpl8::XclExpTablesImpl8( const XclExpRoot& rRoot ) :
     XclExpTables( rRoot )
-{
-}
-
-XclExpTablesImpl8::~XclExpTablesImpl8()
 {
 }
 

@@ -306,15 +306,10 @@ class ScXMLShapeExport : public XMLShapeExport
 {
 public:
     explicit ScXMLShapeExport(SvXMLExport& rExp) : XMLShapeExport(rExp) {}
-    virtual ~ScXMLShapeExport() override;
 
     /** is called before a shape element for the given XShape is exported */
     virtual void onExport( const uno::Reference < drawing::XShape >& xShape ) override;
 };
-
-ScXMLShapeExport::~ScXMLShapeExport()
-{
-}
 
 void ScXMLShapeExport::onExport( const uno::Reference < drawing::XShape >& xShape )
 {

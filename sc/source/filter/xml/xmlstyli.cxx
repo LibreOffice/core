@@ -355,7 +355,6 @@ public:
             SvXMLImport& rImport, sal_uInt16 nPrfx,
             const OUString& rLName,
             const uno::Reference< xml::sax::XAttributeList > & xAttrList );
-    virtual ~ScXMLMapContext() override;
 
     ScCondFormatEntry* CreateConditionEntry();
 };
@@ -414,10 +413,6 @@ ScCondFormatEntry* ScXMLMapContext::CreateConditionEntry()
 
     pEntry->SetSrcString(msBaseCell);
     return pEntry;
-}
-
-ScXMLMapContext::~ScXMLMapContext()
-{
 }
 
 void XMLTableStyleContext::SetAttribute( sal_uInt16 nPrefixKey,

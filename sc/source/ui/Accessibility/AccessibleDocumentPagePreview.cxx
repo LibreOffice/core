@@ -482,7 +482,6 @@ public:
     ScIAccessibleViewForwarder(ScPreviewShell* pViewShell,
                                 ScAccessibleDocumentPagePreview* pAccDoc,
                                 const MapMode& aMapMode);
-    virtual ~ScIAccessibleViewForwarder() override;
 
     ///=====  IAccessibleViewForwarder  ========================================
 
@@ -507,10 +506,6 @@ ScIAccessibleViewForwarder::ScIAccessibleViewForwarder(ScPreviewShell* pViewShel
     : mpViewShell(pViewShell),
     mpAccDoc(pAccDoc),
     maMapMode(aMapMode)
-{
-}
-
-ScIAccessibleViewForwarder::~ScIAccessibleViewForwarder()
 {
 }
 

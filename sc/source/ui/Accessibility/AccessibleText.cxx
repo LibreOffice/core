@@ -52,7 +52,6 @@ class ScViewForwarder : public SvxViewForwarder
     ScSplitPos          meSplitPos;
 public:
                         ScViewForwarder(ScTabViewShell* pViewShell, ScSplitPos eSplitPos, const ScAddress& rCell);
-    virtual             ~ScViewForwarder() override;
 
     virtual bool        IsValid() const override;
     virtual Rectangle   GetVisArea() const override;
@@ -67,10 +66,6 @@ ScViewForwarder::ScViewForwarder(ScTabViewShell* pViewShell, ScSplitPos eSplitPo
     mpViewShell(pViewShell),
     maCellPos(rCell),
     meSplitPos(eSplitPos)
-{
-}
-
-ScViewForwarder::~ScViewForwarder()
 {
 }
 
@@ -150,7 +145,6 @@ class ScEditObjectViewForwarder : public SvxViewForwarder
 public:
                         ScEditObjectViewForwarder( vcl::Window* pWindow,
                                                    const EditView* _pEditView);
-    virtual             ~ScEditObjectViewForwarder() override;
 
     virtual bool        IsValid() const override;
     virtual Rectangle   GetVisArea() const override;
@@ -165,10 +159,6 @@ ScEditObjectViewForwarder::ScEditObjectViewForwarder( vcl::Window* pWindow,
     :
     mpWindow(pWindow),
     mpEditView( _pEditView )
-{
-}
-
-ScEditObjectViewForwarder::~ScEditObjectViewForwarder()
 {
 }
 
@@ -248,7 +238,6 @@ protected:
     ScPreviewShell*     mpViewShell;
 public:
     explicit            ScPreviewViewForwarder(ScPreviewShell* pViewShell);
-    virtual             ~ScPreviewViewForwarder() override;
 
     virtual bool        IsValid() const override;
     virtual Rectangle   GetVisArea() const override;
@@ -265,10 +254,6 @@ public:
 
 ScPreviewViewForwarder::ScPreviewViewForwarder(ScPreviewShell* pViewShell)
     : mpViewShell(pViewShell)
-{
-}
-
-ScPreviewViewForwarder::~ScPreviewViewForwarder()
 {
 }
 
@@ -376,7 +361,6 @@ class ScPreviewHeaderFooterViewForwarder : public ScPreviewViewForwarder
     bool            mbHeader;
 public:
                         ScPreviewHeaderFooterViewForwarder(ScPreviewShell* pViewShell, bool bHeader);
-    virtual             ~ScPreviewHeaderFooterViewForwarder() override;
 
     virtual Rectangle   GetVisArea() const override;
 };
@@ -385,10 +369,6 @@ ScPreviewHeaderFooterViewForwarder::ScPreviewHeaderFooterViewForwarder(ScPreview
     :
     ScPreviewViewForwarder(pViewShell),
     mbHeader(bHeader)
-{
-}
-
-ScPreviewHeaderFooterViewForwarder::~ScPreviewHeaderFooterViewForwarder()
 {
 }
 
@@ -418,7 +398,6 @@ class ScPreviewCellViewForwarder : public ScPreviewViewForwarder
 public:
                         ScPreviewCellViewForwarder(ScPreviewShell* pViewShell,
                             ScAddress aCellPos);
-    virtual             ~ScPreviewCellViewForwarder() override;
 
     virtual Rectangle   GetVisArea() const override;
 };
@@ -428,10 +407,6 @@ ScPreviewCellViewForwarder::ScPreviewCellViewForwarder(ScPreviewShell* pViewShel
     :
     ScPreviewViewForwarder(pViewShell),
     maCellPos(aCellPos)
-{
-}
-
-ScPreviewCellViewForwarder::~ScPreviewCellViewForwarder()
 {
 }
 
@@ -460,7 +435,6 @@ public:
                         ScPreviewHeaderCellViewForwarder(ScPreviewShell* pViewShell,
                             ScAddress aCellPos,
                             bool bColHeader);
-    virtual             ~ScPreviewHeaderCellViewForwarder() override;
 
     virtual Rectangle   GetVisArea() const override;
 };
@@ -472,10 +446,6 @@ ScPreviewHeaderCellViewForwarder::ScPreviewHeaderCellViewForwarder(ScPreviewShel
     ScPreviewViewForwarder(pViewShell),
     maCellPos(aCellPos),
     mbColHeader(bColHeader)
-{
-}
-
-ScPreviewHeaderCellViewForwarder::~ScPreviewHeaderCellViewForwarder()
 {
 }
 
@@ -504,7 +474,6 @@ public:
                         ScPreviewNoteViewForwarder(ScPreviewShell* pViewShell,
                             ScAddress aCellPos,
                             bool bNoteMark);
-    virtual             ~ScPreviewNoteViewForwarder() override;
 
     virtual Rectangle   GetVisArea() const override;
 };
@@ -516,10 +485,6 @@ ScPreviewNoteViewForwarder::ScPreviewNoteViewForwarder(ScPreviewShell* pViewShel
     ScPreviewViewForwarder(pViewShell),
     maCellPos(aCellPos),
     mbNoteMark(bNoteMark)
-{
-}
-
-ScPreviewNoteViewForwarder::~ScPreviewNoteViewForwarder()
 {
 }
 
@@ -546,7 +511,6 @@ class ScEditViewForwarder : public SvxEditViewForwarder
     VclPtr<vcl::Window> mpWindow;
 public:
                         ScEditViewForwarder(EditView* pEditView, vcl::Window* pWin);
-    virtual             ~ScEditViewForwarder() override;
 
     virtual bool        IsValid() const override;
     virtual Rectangle   GetVisArea() const override;
@@ -564,10 +528,6 @@ public:
 ScEditViewForwarder::ScEditViewForwarder(EditView* pEditView, vcl::Window* pWin)
     : mpEditView(pEditView),
     mpWindow(pWin)
-{
-}
-
-ScEditViewForwarder::~ScEditViewForwarder()
 {
 }
 

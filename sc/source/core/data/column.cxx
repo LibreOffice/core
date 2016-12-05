@@ -2309,8 +2309,6 @@ public:
     UpdateRefGroupBoundChecker(const sc::RefUpdateContext& rCxt, std::vector<SCROW>& rBounds) :
         mrCxt(rCxt), mrBounds(rBounds) {}
 
-    virtual ~UpdateRefGroupBoundChecker() override {}
-
     virtual void processSharedTop( ScFormulaCell** ppCells, size_t /*nRow*/, size_t /*nLength*/ ) override
     {
         // Check its tokens and record its reference boundaries.
@@ -2330,8 +2328,6 @@ public:
     UpdateRefExpandGroupBoundChecker(const sc::RefUpdateContext& rCxt, std::vector<SCROW>& rBounds) :
         mrCxt(rCxt), mrBounds(rBounds) {}
 
-    virtual ~UpdateRefExpandGroupBoundChecker() override {}
-
     virtual void processSharedTop( ScFormulaCell** ppCells, size_t /*nRow*/, size_t /*nLength*/ ) override
     {
         // Check its tokens and record its reference boundaries.
@@ -2348,8 +2344,6 @@ class FormulaGroupPicker : public SharedTopFormulaCellPicker
 
 public:
     explicit FormulaGroupPicker( std::vector<sc::FormulaGroupEntry>& rGroups ) : mrGroups(rGroups) {}
-
-    virtual ~FormulaGroupPicker() override {}
 
     virtual void processNonShared( ScFormulaCell* pCell, size_t nRow ) override
     {

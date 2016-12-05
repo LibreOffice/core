@@ -52,7 +52,7 @@ class ScDPGroupNumFilter : public ScDPFilteredCache::FilterBase
 {
 public:
     ScDPGroupNumFilter(const std::vector<ScDPItemData>& rValues, const ScDPNumGroupInfo& rInfo);
-    virtual ~ScDPGroupNumFilter() override {}
+
     virtual bool match(const ScDPItemData &rCellData) const override;
     virtual std::vector<ScDPItemData> getMatchValues() const override;
 private:
@@ -108,7 +108,6 @@ std::vector<ScDPItemData> ScDPGroupNumFilter::getMatchValues() const
 class ScDPGroupDateFilter : public ScDPFilteredCache::FilterBase
 {
 public:
-    virtual ~ScDPGroupDateFilter() override {}
     ScDPGroupDateFilter(
         const std::vector<ScDPItemData>& rValues, const Date& rNullDate, const ScDPNumGroupInfo& rNumInfo);
 

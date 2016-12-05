@@ -270,7 +270,7 @@ class ProgressBarTimer : private Timer
             , mxWrapped(xRef)
         {
         }
-        virtual ~ProgressWrapper() override {}
+
         // IProgressBar
         virtual double getPosition() const override { return mfPosition; }
         virtual void   setPosition( double fPosition ) override { mfPosition = fPosition; }
