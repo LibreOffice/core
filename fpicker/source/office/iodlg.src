@@ -30,14 +30,13 @@ ImageList RID_FILEPICKER_IMAGES
     IdList =
     {
         IMG_FILEDLG_BTN_UP;
-        IMG_FILEDLG_BTN_STD;
         IMG_FILEDLG_CREATEFOLDER;
         IMG_FILEDLG_PLACE_LOCAL;
         IMG_FILEDLG_PLACE_REMOTE;
     };
     IdCount =
     {
-        5;
+        4;
     };
 };
 

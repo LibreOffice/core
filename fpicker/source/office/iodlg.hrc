@@ -24,7 +24,6 @@
 #include <vcl/fpicker.hrc>
 
 #define IMG_FILEDLG_BTN_UP                  10
-#define IMG_FILEDLG_BTN_STD                 11
 #define IMG_FILEDLG_CREATEFOLDER            14
 #define IMG_FILEDLG_PLACE_LOCAL             15
 #define IMG_FILEDLG_PLACE_REMOTE            16
