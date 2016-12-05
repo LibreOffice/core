@@ -1246,7 +1246,7 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
                 EscapeType eEscapeType;
                 sal_uInt32 nUTF32 = getUTF32(p1, pUserInfoEnd, bOctets,
                                              eMechanism, eCharset, eEscapeType);
-                if (eEscapeType == ESCAPE_NO)
+                if (eEscapeType == EscapeType::NONE)
                 {
                     if (nUTF32 == ':' && bSupportsPassword)
                     {
@@ -1651,7 +1651,7 @@ bool INetURLObject::convertRelToAbs(OUString const & rTheRelURIRef,
                 sal_uInt32 nUTF32
                     = getUTF32(p, pEnd, false/*bOctets*/, eMechanism,
                                eCharset, eEscapeType);
-                if (eEscapeType == ESCAPE_NO)
+                if (eEscapeType == EscapeType::NONE)
                 {
                     if (nUTF32 == nSegmentDelimiter)
                         break;
@@ -1705,7 +1705,7 @@ bool INetURLObject::convertRelToAbs(OUString const & rTheRelURIRef,
             EscapeType eEscapeType;
             sal_uInt32 nUTF32
                 = getUTF32(p, pEnd, false/*bOctets*/, eMechanism, eCharset, eEscapeType);
-            if (eEscapeType == ESCAPE_NO)
+            if (eEscapeType == EscapeType::NONE)
             {
                 if (nUTF32 == nFragmentDelimiter)
                 {
@@ -2935,7 +2935,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
                 EscapeType eEscapeType;
                 sal_uInt32 nUTF32 = getUTF32(pPos, pEnd, bOctets, eMechanism,
                                              eCharset, eEscapeType);
-                if (eEscapeType == ESCAPE_NO)
+                if (eEscapeType == EscapeType::NONE)
                 {
                     if (nUTF32 == nSegmentDelimiter
                         || nUTF32 == nAltSegmentDelimiter)
@@ -3043,7 +3043,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
                 EscapeType eEscapeType;
                 sal_uInt32 nUTF32 = getUTF32(pPos, pEnd, bOctets, eMechanism,
                                              eCharset, eEscapeType);
-                if (eEscapeType == ESCAPE_NO && nUTF32 == '/')
+                if (eEscapeType == EscapeType::NONE && nUTF32 == '/')
                     aTheSynPath.append('/');
                 else
                     appendUCS4(aTheSynPath, nUTF32, eEscapeType, bOctets,
@@ -3089,7 +3089,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
                 EscapeType eEscapeType;
                 sal_uInt32 nUTF32 = getUTF32(pPos, pEnd, bOctets, eMechanism,
                                              eCharset, eEscapeType);
-                if (eEscapeType == ESCAPE_NO && nUTF32 == '/')
+                if (eEscapeType == EscapeType::NONE && nUTF32 == '/')
                     aTheSynPath.append('/');
                 else
                     appendUCS4(aTheSynPath, nUTF32, eEscapeType, bOctets,
@@ -3406,15 +3406,15 @@ OUString INetURLObject::decode(sal_Unicode const * pBegin,
                                      EncodeMechanism::WasEncoded, eCharset, eEscapeType);
         switch (eEscapeType)
         {
-            case ESCAPE_NO:
+            case EscapeType::NONE:
                 aResult.appendUtf32(nUTF32);
                 break;
 
-            case ESCAPE_OCTET:
+            case EscapeType::Octet:
                 appendEscape(aResult, nUTF32);
                 break;
 
-            case ESCAPE_UTF32:
+            case EscapeType::Utf32:
                 if (
                      rtl::isAscii(nUTF32) &&
                      (
@@ -4507,7 +4507,7 @@ OUString INetURLObject::getFSysPath(FSysStyle eStyle,
                 sal_uInt32 nUTF32 = getUTF32(p, pEnd, false, EncodeMechanism::WasEncoded,
                                              RTL_TEXTENCODING_UTF8,
                                              eEscapeType);
-                if (eEscapeType == ESCAPE_NO && nUTF32 == '/')
+                if (eEscapeType == EscapeType::NONE && nUTF32 == '/')
                     aSynFSysPath.append('\\');
                 else
                     aSynFSysPath.appendUtf32(nUTF32);
@@ -4575,7 +4575,7 @@ void INetURLObject::appendUCS4(OUStringBuffer& rTheText, sal_uInt32 nUCS4,
     rtl_TextEncoding eTargetCharset = RTL_TEXTENCODING_DONTKNOW;
     switch (eEscapeType)
     {
-        case ESCAPE_NO:
+        case EscapeType::NONE:
             if (mustEncode(nUCS4, ePart))
             {
                 bEscape = true;
@@ -4586,12 +4586,12 @@ void INetURLObject::appendUCS4(OUStringBuffer& rTheText, sal_uInt32 nUCS4,
                 bEscape = false;
             break;
 
-        case ESCAPE_OCTET:
+        case EscapeType::Octet:
             bEscape = true;
             eTargetCharset = RTL_TEXTENCODING_ISO_8859_1;
             break;
 
-        case ESCAPE_UTF32:
+        case EscapeType::Utf32:
             if (mustEncode(nUCS4, ePart))
             {
                 bEscape = true;
@@ -4642,7 +4642,7 @@ sal_uInt32 INetURLObject::getUTF32(sal_Unicode const *& rBegin,
     switch (eMechanism)
     {
         case EncodeMechanism::All:
-            rEscapeType = ESCAPE_NO;
+            rEscapeType = EscapeType::NONE;
             break;
 
         case EncodeMechanism::WasEncoded:
@@ -4663,16 +4663,16 @@ sal_uInt32 INetURLObject::getUTF32(sal_Unicode const *& rBegin,
                         SAL_FALLTHROUGH;
                     case RTL_TEXTENCODING_ASCII_US:
                         rEscapeType = rtl::isAscii(nUTF32) ?
-                                          ESCAPE_UTF32 : ESCAPE_OCTET;
+                                          EscapeType::Utf32 : EscapeType::Octet;
                         break;
 
                     case RTL_TEXTENCODING_ISO_8859_1:
-                        rEscapeType = ESCAPE_UTF32;
+                        rEscapeType = EscapeType::Utf32;
                         break;
 
                     case RTL_TEXTENCODING_UTF8:
                         if (rtl::isAscii(nUTF32))
-                            rEscapeType = ESCAPE_UTF32;
+                            rEscapeType = EscapeType::Utf32;
                         else
                         {
                             if (nUTF32 >= 0xC0 && nUTF32 <= 0xF4)
@@ -4730,17 +4730,17 @@ sal_uInt32 INetURLObject::getUTF32(sal_Unicode const *& rBegin,
                                 {
                                     rBegin = p;
                                     nUTF32 = nEncoded;
-                                    rEscapeType = ESCAPE_UTF32;
+                                    rEscapeType = EscapeType::Utf32;
                                     break;
                                 }
                             }
-                            rEscapeType = ESCAPE_OCTET;
+                            rEscapeType = EscapeType::Octet;
                         }
                         break;
                 }
             }
             else
-                rEscapeType = ESCAPE_NO;
+                rEscapeType = EscapeType::NONE;
             break;
         }
 
@@ -4754,10 +4754,10 @@ sal_uInt32 INetURLObject::getUTF32(sal_Unicode const *& rBegin,
             {
                 rBegin += 2;
                 nUTF32 = nWeight1 << 4 | nWeight2;
-                rEscapeType = ESCAPE_OCTET;
+                rEscapeType = EscapeType::Octet;
             }
             else
-                rEscapeType = ESCAPE_NO;
+                rEscapeType = EscapeType::NONE;
             break;
         }
     }

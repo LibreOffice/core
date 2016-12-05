@@ -814,11 +814,11 @@ public:
         PART_HTTP_QUERY             = 0x20000, //TODO! unused?
     };
 
-    enum EscapeType
+    enum class EscapeType
     {
-        ESCAPE_NO,
-        ESCAPE_OCTET,
-        ESCAPE_UTF32
+        NONE,
+        Octet,
+        Utf32
     };
 
     /** Encode some text as part of a URI.
