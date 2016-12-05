@@ -1049,6 +1049,11 @@ AC_ARG_ENABLE(fetch-external,
         [Disables fetching external tarballs from web sources.])
 )
 
+AC_ARG_ENABLE(fuzzers,
+    AS_HELP_STRING([--enable-fuzzers],
+        [Enables building libfuzzer targets for fuzz testing.])
+)
+
 AC_ARG_ENABLE(pch,
     AS_HELP_STRING([--enable-pch],
         [Enables precompiled header support for C++. Forced default on Windows/VC build])
@@ -9205,6 +9210,20 @@ else
     AC_SUBST(BREAKPAD_SYMBOL_CONFIG)
 fi
 AC_SUBST(ENABLE_BREAKPAD)
+
+dnl ==================================================================
+dnl libfuzzer
+dnl ==================================================================
+AC_MSG_CHECKING([whether to enable fuzzers])
+if test "$enable_fuzzers" != yes; then
+    AC_MSG_RESULT([no])
+else
+    AC_MSG_RESULT([yes])
+    ENABLE_FUZZERS="TRUE"
+    AC_DEFINE(ENABLE_FUZZERS)
+    BUILD_TYPE="$BUILD_TYPE FUZZERS"
+fi
+AC_SUBST(ENABLE_FUZZERS)
 
 dnl ===================================================================
 dnl Orcus

@@ -95,6 +95,12 @@ $(eval $(call gb_Module_add_targets,vcl,\
 ))
 endif
 
+ifneq ($(ENABLE_FUZZERS),)
+$(eval $(call gb_Module_add_targets,vcl,\
+    Executable_wmftester \
+))
+endif
+
 $(eval $(call gb_Module_add_check_targets,vcl,\
 	CppunitTest_vcl_lifecycle \
 	CppunitTest_vcl_bitmap_test \
