@@ -25,7 +25,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace cppu;
 
-int LLVMFuzzerInitialize(int *argc, char ***argv)
+extern "C" int LLVMFuzzerInitialize(int *argc, char ***argv)
 {
     osl_setCommandArgs(*argc, *argv);
 
