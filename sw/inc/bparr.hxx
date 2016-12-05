@@ -31,10 +31,10 @@ class BigPtrArray;
 class BigPtrEntry
 {
     friend class BigPtrArray;
-    BlockInfo* pBlock;
-    sal_uInt16 nOffset;
+    BlockInfo* m_pBlock;
+    sal_uInt16 m_nOffset;
 public:
-    BigPtrEntry() : pBlock(nullptr), nOffset(0) {}
+    BigPtrEntry() : m_pBlock(nullptr), m_nOffset(0) {}
     virtual ~BigPtrEntry() {}
 
     inline sal_uLong GetPos() const;
@@ -92,13 +92,13 @@ public:
 
 inline sal_uLong BigPtrEntry::GetPos() const
 {
-    assert(this == pBlock->pData[ nOffset ]); // element not in the block
-    return pBlock->nStart + nOffset;
+    assert(this == m_pBlock->pData[ m_nOffset ]); // element not in the block
+    return m_pBlock->nStart + m_nOffset;
 }
 
 inline BigPtrArray& BigPtrEntry::GetArray() const
 {
-    return *pBlock->pBigArr;
+    return *m_pBlock->pBigArr;
 }
 
 #endif

@@ -243,7 +243,7 @@ void BigPtrArray::Insert( const ElementPtr& rElem, sal_uLong pos )
                 ElementPtr *pFrom = q->pData + nCount,
                                     *pTo = pFrom+1;
                 while( nCount-- )
-                    ++( *--pTo = *--pFrom )->nOffset;
+                    ++( *--pTo = *--pFrom )->m_nOffset;
             }
             q->nStart--;
             q->nEnd--;
@@ -267,8 +267,8 @@ void BigPtrArray::Insert( const ElementPtr& rElem, sal_uLong pos )
 
         // entry does not fit anymore - clear space
         ElementPtr pLast = p->pData[ MAXENTRY-1 ];
-        pLast->nOffset = 0;
-        pLast->pBlock = q;
+        pLast->m_nOffset = 0;
+        pLast->m_pBlock = q;
 
         q->pData[ 0 ] = pLast;
         q->nElem++;
@@ -286,11 +286,11 @@ void BigPtrArray::Insert( const ElementPtr& rElem, sal_uLong pos )
         ElementPtr *pFrom = p->pData + p->nElem;
         ElementPtr *pTo   = pFrom + 1;
         while( nCount-- )
-            ++( *--pTo = *--pFrom )->nOffset;
+            ++( *--pTo = *--pFrom )->m_nOffset;
     }
     // insert element and update indices
-    rElem->nOffset = sal_uInt16(pos);
-    rElem->pBlock = p;
+    rElem->m_nOffset = sal_uInt16(pos);
+    rElem->m_pBlock = p;
     p->pData[ pos ] = rElem;
     p->nEnd++;
     p->nElem++;
@@ -327,7 +327,7 @@ void BigPtrArray::Remove( sal_uLong pos, sal_uLong n )
             while( nCount-- )
             {
                 *pTo = *pFrom++;
-                (*pTo)->nOffset = (*pTo)->nOffset - nel;
+                (*pTo)->m_nOffset = (*pTo)->m_nOffset - nel;
                 ++pTo;
             }
         }
@@ -391,8 +391,8 @@ void BigPtrArray::Replace( sal_uLong idx, const ElementPtr& rElem)
     assert(idx < m_nSize); // Index out of bounds
     m_nCur = Index2Block( idx );
     BlockInfo* p = m_ppInf[ m_nCur ];
-    rElem->nOffset = sal_uInt16(idx - p->nStart);
-    rElem->pBlock = p;
+    rElem->m_nOffset = sal_uInt16(idx - p->nStart);
+    rElem->m_pBlock = p;
     p->pData[ idx - p->nStart ] = rElem;
 }
 
@@ -440,8 +440,8 @@ sal_uInt16 BigPtrArray::Compress()
                             nCount; --nCount, ++pElem )
             {
                 *pElem = *pFrom++;
-                (*pElem)->pBlock = pLast;
-                (*pElem)->nOffset = nOff++;
+                (*pElem)->m_pBlock = pLast;
+                (*pElem)->m_nOffset = nOff++;
             }
 
             // adjustment
@@ -466,7 +466,7 @@ sal_uInt16 BigPtrArray::Compress()
                 while( nCount-- )
                 {
                     *pElem = *pFrom++;
-                    (*pElem)->nOffset = (*pElem)->nOffset - n;
+                    (*pElem)->m_nOffset = (*pElem)->m_nOffset - n;
                     ++pElem;
                 }
             }
