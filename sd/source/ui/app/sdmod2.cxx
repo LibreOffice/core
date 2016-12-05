@@ -804,17 +804,14 @@ SfxStyleFamilies* SdModule::CreateStyleFamilies()
 {
     SfxStyleFamilies *pStyleFamilies = new SfxStyleFamilies;
 
-    ImageList aEntryImages(SdResId(RID_STYLEFAMILY_IMAGELIST));
-
-
     pStyleFamilies->emplace_back(SfxStyleFamilyItem(SfxStyleFamily::Para,
                                                     SD_RESSTR(STR_GRAPHICS_STYLE_FAMILY),
-                                                    aEntryImages.GetImage(1),
+                                                    Image(BitmapEx(SdResId(BMP_STYLES_FAMILY_GRAPHICS))),
                                                     SdResId(RID_GRAPHICSTYLEFAMILY)));
 
     pStyleFamilies->emplace_back(SfxStyleFamilyItem(SfxStyleFamily::Pseudo,
                                                     SD_RESSTR(STR_PRESENTATIONS_STYLE_FAMILY),
-                                                    aEntryImages.GetImage(2),
+                                                    Image(BitmapEx(SdResId(BMP_STYLES_FAMILY_PRESENTATIONS))),
                                                     SdResId(RID_PRESENTATIONSTYLEFAMILY)));
 
     return pStyleFamilies;

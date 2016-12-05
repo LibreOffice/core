@@ -300,14 +300,14 @@ StringArray RID_PRESENTATIONSTYLEFAMILY
     };
 };
 
-ImageList RID_STYLEFAMILY_IMAGELIST
+Bitmap BMP_STYLES_FAMILY_GRAPHICS
 {
-    Prefix = "sf";
-    IdList =
-    {
-        1; 2;
-    };
-    IdCount = 2;
+    File = "sf01.png" ;
+};
+
+Bitmap BMP_STYLES_FAMILY_PRESENTATIONS
+{
+    File = "sf02.png" ;
 };
 
 Bitmap BMP_PRESOBJ_GRAPHIC
