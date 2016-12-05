@@ -346,13 +346,13 @@ bool Bitmap::Convert( BmpConversion eConversion )
 
 bool Bitmap::ImplMakeMono( sal_uInt8 cThreshold )
 {
-    BitmapReadAccess* pReadAcc = AcquireReadAccess();
+    ScopedReadAccess pReadAcc(*this);
     bool bRet = false;
 
     if( pReadAcc )
     {
         Bitmap aNewBmp( GetSizePixel(), 1 );
-        BitmapWriteAccess* pWriteAcc = aNewBmp.AcquireWriteAccess();
+        ScopedWriteAccess pWriteAcc(aNewBmp);
 
         if( pWriteAcc )
         {
@@ -395,11 +395,11 @@ bool Bitmap::ImplMakeMono( sal_uInt8 cThreshold )
                 }
             }
 
-            ReleaseAccess( pWriteAcc );
+            pWriteAcc.reset();
             bRet = true;
         }
 
-        ReleaseAccess( pReadAcc );
+        pReadAcc.reset();
 
         if( bRet )
         {
@@ -418,13 +418,13 @@ bool Bitmap::ImplMakeMono( sal_uInt8 cThreshold )
 
 bool Bitmap::ImplMakeMonoDither()
 {
-    BitmapReadAccess* pReadAcc = AcquireReadAccess();
+    ScopedReadAccess pReadAcc(*this);
     bool bRet = false;
 
     if( pReadAcc )
     {
         Bitmap aNewBmp( GetSizePixel(), 1 );
-        BitmapWriteAccess* pWriteAcc = aNewBmp.AcquireWriteAccess();
+        ScopedWriteAccess pWriteAcc(aNewBmp);
 
         if( pWriteAcc )
         {
@@ -470,11 +470,11 @@ bool Bitmap::ImplMakeMonoDither()
                 }
             }
 
-            ReleaseAccess( pWriteAcc );
+            pWriteAcc.reset();
             bRet = true;
         }
 
-        ReleaseAccess( pReadAcc );
+        pReadAcc.reset();
 
         if( bRet )
         {
@@ -495,7 +495,7 @@ bool Bitmap::ImplMakeGreyscales( sal_uInt16 nGreys )
 {
     SAL_WARN_IF( nGreys != 16 && nGreys != 256, "vcl", "Only 16 or 256 greyscales are supported!" );
 
-    BitmapReadAccess* pReadAcc = AcquireReadAccess();
+    ScopedReadAccess pReadAcc(*this);
     bool bRet = false;
 
     if( pReadAcc )
@@ -510,7 +510,7 @@ bool Bitmap::ImplMakeGreyscales( sal_uInt16 nGreys )
         if( bPalDiffers )
         {
             Bitmap aNewBmp( GetSizePixel(), ( nGreys == 16 ) ? 4 : 8, &rPal );
-            BitmapWriteAccess* pWriteAcc = aNewBmp.AcquireWriteAccess();
+            ScopedWriteAccess pWriteAcc(aNewBmp);
 
             if( pWriteAcc )
             {
@@ -576,11 +576,11 @@ bool Bitmap::ImplMakeGreyscales( sal_uInt16 nGreys )
                             pWriteAcc->SetPixelIndex( nY, nX, (pReadAcc->GetPixel( nY, nX ) ).GetLuminance() >> nShift );
                 }
 
-                ReleaseAccess( pWriteAcc );
+                pWriteAcc.reset();
                 bRet = true;
             }
 
-            ReleaseAccess( pReadAcc );
+            pReadAcc.reset();
 
             if( bRet )
             {
@@ -595,7 +595,7 @@ bool Bitmap::ImplMakeGreyscales( sal_uInt16 nGreys )
         }
         else
         {
-            ReleaseAccess( pReadAcc );
+            pReadAcc.reset();
             bRet = true;
         }
     }
@@ -809,7 +809,7 @@ bool Bitmap::ImplConvertDown(sal_uInt16 nBitCount, Color* pExtColor)
 bool Bitmap::ImplConvertGhosted()
 {
     Bitmap aNewBmp;
-    BitmapReadAccess* pR = AcquireReadAccess();
+    ScopedReadAccess pR(*this);
     bool bRet = false;
 
     if( pR )
@@ -827,12 +827,11 @@ bool Bitmap::ImplConvertGhosted()
             }
 
             aNewBmp = Bitmap( GetSizePixel(), GetBitCount(), &aNewPal );
-            BitmapWriteAccess* pW = aNewBmp.AcquireWriteAccess();
+            ScopedWriteAccess pW(aNewBmp);
 
             if( pW )
             {
                 pW->CopyBuffer( *pR );
-                ReleaseAccess( pW );
                 bRet = true;
             }
         }
@@ -840,7 +839,7 @@ bool Bitmap::ImplConvertGhosted()
         {
             aNewBmp = Bitmap( GetSizePixel(), 24 );
 
-            BitmapWriteAccess* pW = aNewBmp.AcquireWriteAccess();
+            ScopedWriteAccess pW(aNewBmp);
 
             if( pW )
             {
@@ -858,12 +857,11 @@ bool Bitmap::ImplConvertGhosted()
                     }
                 }
 
-                ReleaseAccess( pW );
                 bRet = true;
             }
         }
 
-        ReleaseAccess( pR );
+        pR.reset();
     }
 
     if( bRet )
@@ -1081,12 +1079,12 @@ bool Bitmap::ImplScaleFast( const double& rScaleX, const double& rScaleY )
 
     if( nNewWidth && nNewHeight )
     {
-        BitmapReadAccess* pReadAcc = AcquireReadAccess();
+        ScopedReadAccess pReadAcc(*this);
 
         if(pReadAcc)
         {
             Bitmap aNewBmp( Size( nNewWidth, nNewHeight ), GetBitCount(), &pReadAcc->GetPalette() );
-            BitmapWriteAccess* pWriteAcc = aNewBmp.AcquireWriteAccess();
+            ScopedWriteAccess pWriteAcc(aNewBmp);
 
             if( pWriteAcc )
             {
@@ -1127,9 +1125,9 @@ bool Bitmap::ImplScaleFast( const double& rScaleX, const double& rScaleY )
                     bRet = true;
                 }
 
-                ReleaseAccess( pWriteAcc );
+                pWriteAcc.reset();
             }
-            ReleaseAccess( pReadAcc );
+            pReadAcc.reset();
 
             if( bRet )
                 ImplAssignWithSize( aNewBmp );
@@ -1148,13 +1146,13 @@ bool Bitmap::ImplScaleInterpolate( const double& rScaleX, const double& rScaleY 
 
     if( ( nNewWidth > 1 ) && ( nNewHeight > 1 ) )
     {
-        BitmapReadAccess* pReadAcc = AcquireReadAccess();
+        ScopedReadAccess pReadAcc(*this);
         if( pReadAcc )
         {
             long nWidth = pReadAcc->Width();
             long nHeight = pReadAcc->Height();
             Bitmap aNewBmp( Size( nNewWidth, nHeight ), 24 );
-            BitmapWriteAccess* pWriteAcc = aNewBmp.AcquireWriteAccess();
+            ScopedWriteAccess pWriteAcc(aNewBmp);
 
             if( pWriteAcc )
             {
@@ -1231,8 +1229,8 @@ bool Bitmap::ImplScaleInterpolate( const double& rScaleX, const double& rScaleY 
                 bRet = true;
             }
 
-            ReleaseAccess( pReadAcc );
-            ReleaseAccess( pWriteAcc );
+            pReadAcc.reset();
+            pWriteAcc.reset();
 
             if( bRet )
             {
@@ -1240,8 +1238,8 @@ bool Bitmap::ImplScaleInterpolate( const double& rScaleX, const double& rScaleY 
                 const Bitmap aOriginal(*this);
                 *this = aNewBmp;
                 aNewBmp = Bitmap( Size( nNewWidth, nNewHeight ), 24 );
-                pReadAcc = AcquireReadAccess();
-                pWriteAcc = aNewBmp.AcquireWriteAccess();
+                pReadAcc = ScopedReadAccess(*this);
+                pWriteAcc = ScopedWriteAccess(aNewBmp);
 
                 if( pReadAcc && pWriteAcc )
                 {
@@ -1304,8 +1302,8 @@ bool Bitmap::ImplScaleInterpolate( const double& rScaleX, const double& rScaleY 
                     bRet = true;
                 }
 
-                ReleaseAccess( pReadAcc );
-                ReleaseAccess( pWriteAcc );
+                pReadAcc.reset();
+                pWriteAcc.reset();
 
                 if( bRet )
                 {
@@ -1344,9 +1342,9 @@ bool Bitmap::Dither( BmpDitherFlags nDitherFlags )
 
 bool Bitmap::ImplDitherMatrix()
 {
-    BitmapReadAccess* pReadAcc = AcquireReadAccess();
+    ScopedReadAccess pReadAcc(*this);
     Bitmap aNewBmp( GetSizePixel(), 8 );
-    BitmapWriteAccess* pWriteAcc = aNewBmp.AcquireWriteAccess();
+    ScopedWriteAccess pWriteAcc(aNewBmp);
     bool bRet = false;
 
     if( pReadAcc && pWriteAcc )
@@ -1393,8 +1391,8 @@ bool Bitmap::ImplDitherMatrix()
         bRet = true;
     }
 
-    ReleaseAccess( pReadAcc );
-    ReleaseAccess( pWriteAcc );
+    pReadAcc.reset();
+    pWriteAcc.reset();
 
     if( bRet )
     {
@@ -1417,9 +1415,9 @@ bool Bitmap::ImplDitherFloyd()
 
     if( ( aSize.Width() > 3 ) && ( aSize.Height() > 2 ) )
     {
-        BitmapReadAccess* pReadAcc = AcquireReadAccess();
+        ScopedReadAccess pReadAcc(*this);
         Bitmap aNewBmp( GetSizePixel(), 8 );
-        BitmapWriteAccess* pWriteAcc = aNewBmp.AcquireWriteAccess();
+        ScopedWriteAccess pWriteAcc(aNewBmp);
 
         if( pReadAcc && pWriteAcc )
         {
@@ -1528,8 +1526,8 @@ bool Bitmap::ImplDitherFloyd()
             bRet = true;
         }
 
-        ReleaseAccess( pReadAcc );
-        ReleaseAccess( pWriteAcc );
+        pReadAcc.reset();
+        pWriteAcc.reset();
 
         if( bRet )
         {
@@ -1548,9 +1546,9 @@ bool Bitmap::ImplDitherFloyd()
 
 bool Bitmap::ImplDitherFloyd16()
 {
-    BitmapReadAccess* pReadAcc = AcquireReadAccess();
+    ScopedReadAccess pReadAcc(*this);
     Bitmap aNewBmp( GetSizePixel(), 24 );
-    BitmapWriteAccess* pWriteAcc = aNewBmp.AcquireWriteAccess();
+    ScopedWriteAccess pWriteAcc(aNewBmp);
     bool bRet = false;
 
     if( pReadAcc && pWriteAcc )
@@ -1618,8 +1616,8 @@ bool Bitmap::ImplDitherFloyd16()
         bRet = true;
     }
 
-    ReleaseAccess( pReadAcc );
-    ReleaseAccess( pWriteAcc );
+    pReadAcc.reset();
+    pWriteAcc.reset();
 
     if( bRet )
     {
@@ -1659,7 +1657,7 @@ bool Bitmap::ReduceColors( sal_uInt16 nColorCount, BmpReduce eReduce )
 bool Bitmap::ImplReduceSimple( sal_uInt16 nColorCount )
 {
     Bitmap aNewBmp;
-    BitmapReadAccess* pRAcc = AcquireReadAccess();
+    ScopedReadAccess pRAcc(*this);
     const sal_uInt16 nColCount = std::min( nColorCount, (sal_uInt16) 256 );
     sal_uInt16 nBitCount;
     bool bRet = false;
@@ -1675,10 +1673,9 @@ bool Bitmap::ImplReduceSimple( sal_uInt16 nColorCount )
     {
         Octree aOct( *pRAcc, nColCount );
         const BitmapPalette& rPal = aOct.GetPalette();
-        BitmapWriteAccess* pWAcc;
 
         aNewBmp = Bitmap( GetSizePixel(), nBitCount, &rPal );
-        pWAcc = aNewBmp.AcquireWriteAccess();
+        ScopedWriteAccess pWAcc(aNewBmp);
 
         if( pWAcc )
         {
@@ -1698,11 +1695,11 @@ bool Bitmap::ImplReduceSimple( sal_uInt16 nColorCount )
                         pWAcc->SetPixelIndex( nY, nX, static_cast<sal_uInt8>(aOct.GetBestPaletteIndex( pRAcc->GetPixel( nY, nX ) )) );
             }
 
-            ReleaseAccess( pWAcc );
+            pWAcc.reset();
             bRet = true;
         }
 
-        ReleaseAccess( pRAcc );
+        pRAcc.reset();
     }
 
     if( bRet )
@@ -1740,7 +1737,7 @@ extern "C" int SAL_CALL ImplPopularCmpFnc( const void* p1, const void* p2 )
 
 bool Bitmap::ImplReducePopular( sal_uInt16 nColCount )
 {
-    BitmapReadAccess* pRAcc = AcquireReadAccess();
+    ScopedReadAccess pRAcc(*this);
     sal_uInt16 nBitCount;
     bool bRet = false;
 
@@ -1819,7 +1816,7 @@ bool Bitmap::ImplReducePopular( sal_uInt16 nColCount )
         }
 
         Bitmap aNewBmp( GetSizePixel(), nBitCount, &aNewPal );
-        BitmapWriteAccess* pWAcc = aNewBmp.AcquireWriteAccess();
+        ScopedWriteAccess pWAcc(aNewBmp);
 
         if( pWAcc )
         {
@@ -1860,12 +1857,12 @@ bool Bitmap::ImplReducePopular( sal_uInt16 nColCount )
                 }
             }
 
-            ReleaseAccess( pWAcc );
+            pWAcc.reset();
             bRet = true;
         }
 
         pCountTable.reset();
-        ReleaseAccess( pRAcc );
+        pRAcc.reset();
 
         if( bRet )
         {
@@ -1883,7 +1880,7 @@ bool Bitmap::ImplReducePopular( sal_uInt16 nColCount )
 
 bool Bitmap::ImplReduceMedian( sal_uInt16 nColCount )
 {
-    BitmapReadAccess* pRAcc = AcquireReadAccess();
+    ScopedReadAccess pRAcc(*this);
     sal_uInt16 nBitCount;
     bool bRet = false;
 
@@ -1901,7 +1898,7 @@ bool Bitmap::ImplReduceMedian( sal_uInt16 nColCount )
     if( pRAcc )
     {
         Bitmap aNewBmp( GetSizePixel(), nBitCount );
-        BitmapWriteAccess* pWAcc = aNewBmp.AcquireWriteAccess();
+        ScopedWriteAccess pWAcc(aNewBmp);
 
         if( pWAcc )
         {
@@ -1950,11 +1947,11 @@ bool Bitmap::ImplReduceMedian( sal_uInt16 nColCount )
                     pWAcc->SetPixelIndex( nY, nX, static_cast<sal_uInt8>( aMap.GetBestPaletteIndex( pRAcc->GetColor( nY, nX ) )) );
 
             rtl_freeMemory( pColBuf );
-            ReleaseAccess( pWAcc );
+            pWAcc.reset();
             bRet = true;
         }
 
-        ReleaseAccess( pRAcc );
+        pRAcc.reset();
 
         if( bRet )
         {
@@ -2129,7 +2126,7 @@ bool Bitmap::Adjust( short nLuminancePercent, short nContrastPercent,
     }
     else
     {
-        BitmapWriteAccess* pAcc = AcquireWriteAccess();
+        ScopedWriteAccess pAcc(*this);
 
         if( pAcc )
         {
@@ -2252,7 +2249,7 @@ bool Bitmap::Adjust( short nLuminancePercent, short nContrastPercent,
                 }
             }
 
-            ReleaseAccess( pAcc );
+            pAcc.reset();
             bRet = true;
         }
     }
@@ -2265,7 +2262,7 @@ bool Bitmap::ImplConvolutionPass(Bitmap& aNewBitmap, BitmapReadAccess* pReadAcc,
     if (!pReadAcc)
         return false;
 
-    BitmapWriteAccess* pWriteAcc = aNewBitmap.AcquireWriteAccess();
+    ScopedWriteAccess pWriteAcc(aNewBitmap);
     if (!pWriteAcc)
         return false;
 
@@ -2309,7 +2306,6 @@ bool Bitmap::ImplConvolutionPass(Bitmap& aNewBitmap, BitmapReadAccess* pReadAcc,
             pWriteAcc->SetPixel(nDestY, nDestX, aResultColor);
         }
     }
-    ReleaseAccess( pWriteAcc );
     return true;
 }
 
