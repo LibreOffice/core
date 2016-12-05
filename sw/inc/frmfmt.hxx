@@ -242,7 +242,8 @@ namespace sw
         PREP_INSERT_FLY,
         PREP_DELETE_FLY,
         PAGE_OUT_OF_BOUNDS,
-        MAKE_FRAMES
+        MAKE_FRAMES,
+        DELETE_FRAMES
     };
     struct SW_DLLPUBLIC DrawFrameFormatHint final: SfxHint
     {

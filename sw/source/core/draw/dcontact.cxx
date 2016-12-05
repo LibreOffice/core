@@ -1549,6 +1549,7 @@ void SwDrawContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
                 RemoveMasterFromDrawPage();
                 break;
             case sw::DrawFrameFormatHintId::PAGE_OUT_OF_BOUNDS:
+            case sw::DrawFrameFormatHintId::DELETE_FRAMES:
                 DisconnectFromLayout();
                 break;
             case sw::DrawFrameFormatHintId::MAKE_FRAMES:
