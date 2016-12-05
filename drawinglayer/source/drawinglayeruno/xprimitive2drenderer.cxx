@@ -52,7 +52,6 @@ namespace drawinglayer
         {
         public:
             XPrimitive2DRenderer();
-            virtual ~XPrimitive2DRenderer() override;
 
             XPrimitive2DRenderer(const XPrimitive2DRenderer&) = delete;
             const XPrimitive2DRenderer& operator=(const XPrimitive2DRenderer&) = delete;
@@ -104,10 +103,6 @@ namespace drawinglayer
     namespace unorenderer
     {
         XPrimitive2DRenderer::XPrimitive2DRenderer()
-        {
-        }
-
-        XPrimitive2DRenderer::~XPrimitive2DRenderer()
         {
         }
 
