@@ -93,7 +93,7 @@ $(eval $(call gb_Helper_register_executables_for_install,SDK,sdk, \
 
 $(eval $(call gb_Helper_register_executables_for_install,OOO,brand, \
 	$(call gb_Helper_optional,BREAKPAD,minidump_upload) \
-	$(call gb_Helper_optional,FUZZERS,wmftester) \
+	$(call gb_Helper_optional,FUZZERS,wmffuzzer) \
 	$(if $(filter-out ANDROID IOS MACOSX WNT,$(OS)),oosplash) \
 	soffice_bin \
 	$(if $(filter DESKTOP,$(BUILD_TYPE)),unopkg_bin) \

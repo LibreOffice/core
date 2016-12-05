@@ -8,21 +8,21 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Executable_Executable,wmftester))
+$(eval $(call gb_Executable_Executable,wmffuzzer))
 
-$(eval $(call gb_Executable_use_api,wmftester,\
+$(eval $(call gb_Executable_use_api,wmffuzzer,\
     offapi \
     udkapi \
 ))
 
-$(eval $(call gb_Executable_use_external,wmftester,boost_headers))
+$(eval $(call gb_Executable_use_external,wmffuzzer,boost_headers))
 
-$(eval $(call gb_Executable_set_include,wmftester,\
+$(eval $(call gb_Executable_set_include,wmffuzzer,\
     $$(INCLUDE) \
     -I$(SRCDIR)/vcl/inc \
 ))
 
-$(eval $(call gb_Executable_use_libraries,wmftester,\
+$(eval $(call gb_Executable_use_libraries,wmffuzzer,\
     tl \
     sal \
     utl \
@@ -32,12 +32,12 @@ $(eval $(call gb_Executable_use_libraries,wmftester,\
     comphelper \
 ))
 
-$(eval $(call gb_Executable_add_exception_objects,wmftester,\
-    vcl/workben/wmftester \
+$(eval $(call gb_Executable_add_exception_objects,wmffuzzer,\
+    vcl/workben/wmffuzzer \
 ))
 
 
-$(eval $(call gb_Executable_add_libs,wmftester,\
+$(eval $(call gb_Executable_add_libs,wmffuzzer,\
 	-lfuzzer \
 ))
 

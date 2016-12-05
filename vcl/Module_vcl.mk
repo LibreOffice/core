@@ -97,7 +97,7 @@ endif
 
 ifneq ($(ENABLE_FUZZERS),)
 $(eval $(call gb_Module_add_targets,vcl,\
-    Executable_wmftester \
+    Executable_wmffuzzer \
 ))
 endif
 
