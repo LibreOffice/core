@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a71b18c_af48025d",
+        "filename": "vcl/source/gdi/bitmap.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-12-05T12:29:31Z",
+      "side": 1,
+      "message": "if you remove this line, should you convert the pIAcc variable above to a Scoped thingy?",
+      "revId": "6017ae7ff678b96dd7aededd5fb425228646e6d3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a71b18c_0f6e56c9",
+        "filename": "vcl/source/gdi/bitmap.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 835,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-12-05T12:29:31Z",
+      "side": 1,
+      "message": "these 4 lines look unnecessary, because when we leave the block, the Scoped things will do this for us",
+      "revId": "6017ae7ff678b96dd7aededd5fb425228646e6d3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a71b18c_4f684ebb",
+        "filename": "vcl/source/gdi/bitmap3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2311,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-12-05T12:29:31Z",
+      "side": 1,
+      "message": "can delete this line",
+      "revId": "6017ae7ff678b96dd7aededd5fb425228646e6d3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
