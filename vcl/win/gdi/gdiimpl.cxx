@@ -74,7 +74,7 @@
 namespace {
 
 // #100127# draw an array of points which might also contain bezier control points
-void ImplRenderPath( HDC hdc, sal_uLong nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry )
+void ImplRenderPath( HDC hdc, sal_uLong nPoints, const SalPoint* pPtAry, const PolyFlags* pFlgAry )
 {
     if( nPoints )
     {
@@ -88,7 +88,7 @@ void ImplRenderPath( HDC hdc, sal_uLong nPoints, const SalPoint* pPtAry, const B
 
         for( i=1; i<nPoints; ++i, ++pPtAry, ++pFlgAry )
         {
-            if( *pFlgAry != POLY_CONTROL )
+            if( *pFlgAry != PolyFlags::Control )
             {
                 LineTo( hdc, pPtAry->mnX, pPtAry->mnY );
             }
@@ -105,10 +105,10 @@ void ImplRenderPath( HDC hdc, sal_uLong nPoints, const SalPoint* pPtAry, const B
 // might also contain bezier control points for the PolyDraw() GDI method
 // Make sure pWinPointAry and pWinFlagAry are big enough
 void ImplPreparePolyDraw( bool                      bCloseFigures,
-                          sal_uLong                     nPoly,
+                          sal_uLong                 nPoly,
                           const sal_uInt32*         pPoints,
                           const SalPoint* const*    pPtAry,
-                          const BYTE* const*        pFlgAry,
+                          const PolyFlags* const*   pFlgAry,
                           POINT*                    pWinPointAry,
                           BYTE*                     pWinFlagAry     )
 {
@@ -116,7 +116,7 @@ void ImplPreparePolyDraw( bool                      bCloseFigures,
     for( nCurrPoly=0; nCurrPoly<nPoly; ++nCurrPoly )
     {
         const POINT* pCurrPoint = reinterpret_cast<const POINT*>( *pPtAry++ );
-        const BYTE* pCurrFlag = *pFlgAry++;
+        const PolyFlags* pCurrFlag = *pFlgAry++;
         const sal_uInt32 nCurrPoints = *pPoints++;
         const bool bHaveFlagArray( pCurrFlag );
         sal_uLong nCurrPoint;
@@ -136,9 +136,9 @@ void ImplPreparePolyDraw( bool                      bCloseFigures,
                 {
                     BYTE P4( pCurrFlag[ 2 ] );
 
-                    if( ( POLY_CONTROL == pCurrFlag[ 0 ] ) &&
-                        ( POLY_CONTROL == pCurrFlag[ 1 ] ) &&
-                        ( POLY_NORMAL == P4 || POLY_SMOOTH == P4 || POLY_SYMMTR == P4 ) )
+                    if( ( PolyFlags::Control == pCurrFlag[ 0 ] ) &&
+                        ( PolyFlags::Control == pCurrFlag[ 1 ] ) &&
+                        ( PolyFlags::Normal == P4 || PolyFlags::Smooth == P4 || PolyFlags::Symmetric == P4 ) )
                     {
                         // control point one
                         *pWinPointAry++ = *pCurrPoint++;
@@ -1792,7 +1792,7 @@ void WinSalGraphicsImpl::drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pP
         delete [] pWinPointAryAry;
 }
 
-bool WinSalGraphicsImpl::drawPolyLineBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry )
+bool WinSalGraphicsImpl::drawPolyLineBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const PolyFlags* pFlgAry )
 {
     static_assert( sizeof( POINT ) == sizeof( SalPoint ), "must be the same size" );
 
@@ -1801,7 +1801,7 @@ bool WinSalGraphicsImpl::drawPolyLineBezier( sal_uInt32 nPoints, const SalPoint*
     return true;
 }
 
-bool WinSalGraphicsImpl::drawPolygonBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry )
+bool WinSalGraphicsImpl::drawPolygonBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const PolyFlags* pFlgAry )
 {
     static_assert( sizeof( POINT ) == sizeof( SalPoint ), "must be the same size" );
 
@@ -1846,7 +1846,7 @@ bool WinSalGraphicsImpl::drawPolygonBezier( sal_uInt32 nPoints, const SalPoint* 
 }
 
 bool WinSalGraphicsImpl::drawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt32* pPoints,
-                                             const SalPoint* const* pPtAry, const BYTE* const* pFlgAry )
+                                             const SalPoint* const* pPtAry, const PolyFlags* const* pFlgAry )
 {
     static_assert( sizeof( POINT ) == sizeof( SalPoint ), "must be the same size" );
 
@@ -1855,10 +1855,10 @@ bool WinSalGraphicsImpl::drawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt
     for( nCurrPoly=0, nTotalPoints=0; nCurrPoly<nPoly; ++nCurrPoly )
         nTotalPoints += *pCurrPoints++;
 
-    POINT   aStackAry1[SAL_POLY_STACKBUF];
-    BYTE    aStackAry2[SAL_POLY_STACKBUF];
-    POINT*  pWinPointAry;
-    BYTE*   pWinFlagAry;
+    POINT      aStackAry1[SAL_POLY_STACKBUF];
+    PolyFlags  aStackAry2[SAL_POLY_STACKBUF];
+    POINT*     pWinPointAry;
+    PolyFlags* pWinFlagAry;
     if( nTotalPoints > SAL_POLY_STACKBUF )
     {
         pWinPointAry = new POINT[ nTotalPoints ];

@@ -22,6 +22,7 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <svx/svxdllapi.h>
 #include <o3tl/cow_wrapper.hxx>
+#include <tools/poly.hxx>
 
 class Point;
 class Rectangle;
@@ -36,15 +37,7 @@ class OutputDevice;
 #define XPOLY_APPEND         0xFFFF
 
 
-// point-styles in XPolygon:
-// Normal : start-/endpoint of a curve or a line
-// Smooth : smooth transition between curves
-// Control: control handles of a Bezier curve
-// Symmetric : smooth and symmetrical transition between curves
-
-enum class XPolyFlags { Normal, Smooth, Control, Symmetric };
-
-// Class XPolygon;has a point-array and a flag-array, which contains information about a particular point
+// Class XPolygon has a point-array and a flag-array, which contains information about a particular point
 
 class ImpXPolygon;
 
@@ -77,7 +70,7 @@ public:
     void        SetPointCount( sal_uInt16 nPoints );
     sal_uInt16      GetPointCount() const;
 
-    void        Insert( sal_uInt16 nPos, const Point& rPt, XPolyFlags eFlags );
+    void        Insert( sal_uInt16 nPos, const Point& rPt, PolyFlags eFlags );
     void        Insert( sal_uInt16 nPos, const XPolygon& rXPoly );
     void        Remove( sal_uInt16 nPos, sal_uInt16 nCount );
     void        Move( long nHorzMove, long nVertMove );
@@ -89,8 +82,8 @@ public:
     XPolygon&       operator=( XPolygon&& rXPoly );
     bool            operator==( const XPolygon& rXPoly ) const;
 
-    XPolyFlags  GetFlags( sal_uInt16 nPos ) const;
-    void        SetFlags( sal_uInt16 nPos, XPolyFlags eFlags );
+    PolyFlags  GetFlags( sal_uInt16 nPos ) const;
+    void        SetFlags( sal_uInt16 nPos, PolyFlags eFlags );
     bool        IsControl(sal_uInt16 nPos) const;
     bool        IsSmooth(sal_uInt16 nPos) const;
 

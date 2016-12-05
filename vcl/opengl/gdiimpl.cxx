@@ -1608,7 +1608,7 @@ bool OpenGLSalGraphicsImpl::drawPolyLine(const basegfx::B2DPolygon& rPolygon, do
 bool OpenGLSalGraphicsImpl::drawPolyLineBezier(
             sal_uInt32 /*nPoints*/,
             const SalPoint* /*pPtAry*/,
-            const sal_uInt8* /*pFlgAry*/ )
+            const PolyFlags* /*pFlgAry*/ )
 {
     return false;
 }
@@ -1616,7 +1616,7 @@ bool OpenGLSalGraphicsImpl::drawPolyLineBezier(
 bool OpenGLSalGraphicsImpl::drawPolygonBezier(
             sal_uInt32 /*nPoints*/,
             const SalPoint* /*pPtAry*/,
-            const sal_uInt8* /*pFlgAry*/ )
+            const PolyFlags* /*pFlgAry*/ )
 {
     return false;
 }
@@ -1625,7 +1625,7 @@ bool OpenGLSalGraphicsImpl::drawPolyPolygonBezier(
             sal_uInt32 /*nPoly*/,
             const sal_uInt32* /*pPoints*/,
             const SalPoint* const* /*pPtAry*/,
-            const sal_uInt8* const* /*pFlgAry*/ )
+            const PolyFlags* const* /*pFlgAry*/ )
 {
     return false;
 }
