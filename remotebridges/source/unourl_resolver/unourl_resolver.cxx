@@ -65,7 +65,6 @@ class ResolverImpl : public WeakImplHelper< XServiceInfo, XUnoUrlResolver >
 
 public:
     explicit ResolverImpl( const Reference< XComponentContext > & xSMgr );
-    virtual ~ResolverImpl() override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw(css::uno::RuntimeException, std::exception) override;
@@ -81,8 +80,6 @@ ResolverImpl::ResolverImpl( const Reference< XComponentContext > & xCtx )
     : _xSMgr( xCtx->getServiceManager() )
     , _xCtx( xCtx )
 {}
-
-ResolverImpl::~ResolverImpl() {}
 
 // XServiceInfo
 OUString ResolverImpl::getImplementationName()
