@@ -2506,10 +2506,10 @@ void SwGrfExtPage::ActivatePage(const SfxItemSet& rSet)
             m_pBmpWin->SetGraphic( *pGrf );
     }
 
+    m_pMirror->Enable(bEnable);
     m_pAllPagesRB->Enable(bEnableMirrorRB);
     m_pLeftPagesRB->Enable(bEnableMirrorRB);
     m_pRightPagesRB->Enable(bEnableMirrorRB);
-    m_pMirror->Enable(bEnable);
 
     m_pAllPagesRB->SaveValue();
     m_pLeftPagesRB->SaveValue();
