@@ -73,7 +73,7 @@ public:
     SwNumRulesWithName &operator=(const SwNumRulesWithName &);
 
     const OUString& GetName() const               { return maName; }
-    SwNumRule MakeNumRule(SwWrtShell& rSh) const;
+    SwNumRule* MakeNumRule(SwWrtShell& rSh) const;
 
     void GetNumFormat(size_t, SwNumFormat const*&, OUString const*&) const;
 };

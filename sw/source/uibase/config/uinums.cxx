@@ -159,19 +159,19 @@ SwNumRulesWithName& SwNumRulesWithName::operator=(const SwNumRulesWithName &rCop
     return *this;
 }
 
-SwNumRule SwNumRulesWithName::MakeNumRule(SwWrtShell& rSh) const
+SwNumRule* SwNumRulesWithName::MakeNumRule(SwWrtShell& rSh) const
 {
     // #i89178#
-    SwNumRule aChg(maName, numfunc::GetDefaultPositionAndSpaceMode());
-    aChg.SetAutoRule( false );
+    SwNumRule* pChg = new SwNumRule(maName, numfunc::GetDefaultPositionAndSpaceMode());
+    pChg->SetAutoRule( false );
     for (sal_uInt16 n = 0; n < MAXLEVEL; ++n)
     {
         SwNumFormatGlobal* pFormat = aFormats[ n ];
         if (!pFormat)
             continue;
-        aChg.Set(n, pFormat->MakeNumFormat(rSh));
+        pChg->Set(n, pFormat->MakeNumFormat(rSh));
     }
-    return aChg;
+    return pChg;
 }
 
 void SwNumRulesWithName::GetNumFormat(
