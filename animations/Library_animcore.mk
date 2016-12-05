@@ -21,56 +21,32 @@
 
 
 
-$(eval $(call gb_Module_Module,ooo))
+$(eval $(call gb_Library_Library,animcore))
 
-$(eval $(call gb_Module_add_moduledirs,ooo,\
-    MathMLDTD \
-    animations \
-    basebmp \
-    basegfx \
-    canvas \
-    comphelper \
-    cppcanvas \
-    dbaccess \
-    drawinglayer \
-    editeng \
-    fileaccess \
-    formula \
-    framework \
-    idl \
-    io \
-    linguistic \
-    o3tl \
-    offapi \
-    oovbaapi \
-    oox \
-    padmin \
-    package \
-    reportdesign \
-    sax \
-    sd \
-    sfx2 \
-    sot \
-    starmath \
-    svgio \
-    svl \
-    svtools \
-    svx \
-    sw \
-    toolkit \
-    tools \
-    ucbhelper \
-    udkapi \
-    unotools \
-    unoxml \
-    vbahelper \
-    vcl \
-    wizards \
-    writerfilter \
-    x11_extensions \
-    xmloff \
-    xmlreader \
-    xmlscript \
+$(eval $(call gb_Library_set_componentfile,animcore,animations/source/animcore/animcore))
+
+$(eval $(call gb_Library_set_include,animcore,\
+        $$(INCLUDE) \
+        -I$(SRCDIR)/animations/inc \
 ))
 
-# vim: set noet ts=4 sw=4:
+$(eval $(call gb_Library_add_api,animcore,\
+	offapi \
+	udkapi \
+))
+
+$(eval $(call gb_Library_add_linked_libs,animcore,\
+	cppuhelper \
+	cppu \
+	sal \
+	$(gb_STDLIBS) \
+))
+
+
+$(eval $(call gb_Library_add_exception_objects,animcore,\
+	animations/source/animcore/animcore \
+	animations/source/animcore/factreg \
+	animations/source/animcore/targetpropertiescreator \
+))
+
+# vim: set noet sw=4 ts=4:

@@ -50,7 +50,6 @@ my_components = \
     uuresolver \
     abp \
     analysis \
-    animcore \
     avmedia \
     basctl \
     basprov \
@@ -61,6 +60,7 @@ my_components = \
     chartmodel \
     charttools \
     chartview \
+    component/animations/source/animcore/animcore \
     component/canvas/source/factory/canvasfactory \
     component/canvas/source/simplecanvas/simplecanvas \
     component/canvas/source/vcl/vclcanvas \
