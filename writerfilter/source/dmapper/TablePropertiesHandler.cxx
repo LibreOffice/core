@@ -46,13 +46,6 @@ namespace dmapper {
     {
     }
 
-
-    TablePropertiesHandler::~TablePropertiesHandler( )
-    {
-        // Do not delete the table manager... this will be done somewhere else
-        m_pTableManager = nullptr;
-    }
-
     bool TablePropertiesHandler::sprm(Sprm & rSprm)
     {
 #ifdef DEBUG_WRITERFILTER
