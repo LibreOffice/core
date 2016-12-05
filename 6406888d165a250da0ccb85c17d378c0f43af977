@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a71b18c_b4b5b5d1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 17
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-12-05T07:26:14Z",
+      "side": 1,
+      "message": "Would be better if you used your real name",
+      "revId": "6406888d165a250da0ccb85c17d378c0f43af977",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a71b18c_94aa796f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 17
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-12-05T07:26:14Z",
+      "side": 1,
+      "message": "Somehow an \u0027o\u0027 slipped in here",
+      "revId": "6406888d165a250da0ccb85c17d378c0f43af977",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
