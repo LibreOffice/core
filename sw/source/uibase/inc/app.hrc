@@ -30,9 +30,6 @@
 #define STR_PRINT_MERGE_MACRO           (RC_APP_BEGIN + 15)
 #define STR_PAGE_COUNT_MACRO            (RC_APP_BEGIN + 16)
 
-// Bitmap for the numbering style in organizer
-#define BMP_STYLES_FAMILY_NUM           (RC_APP_BEGIN + 17)
-
 // Strings for regions in the configuration
 #define STR_PAGEOFFSET                  (RC_APP_BEGIN + 74)
 #define STR_PAGEBREAK                   (RC_APP_BEGIN + 75)

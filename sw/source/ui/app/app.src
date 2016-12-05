@@ -201,12 +201,6 @@ Bitmap BMP_STYLES_FAMILY_TABLE
     File = "sf06.png" ;
 };
 
-// Bitmap for the NumberingTemplates in the Organizer
-Bitmap BMP_STYLES_FAMILY_NUM
-{
-    File = "styfamnu.bmp" ;
-};
-
 String STR_ENV_TITLE
 {
     Text [ en-US ] = "Envelope" ;
