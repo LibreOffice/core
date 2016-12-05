@@ -43,7 +43,6 @@ private:
 
 public:
     TablePropertiesHandler();
-    ~TablePropertiesHandler( );
 
     bool sprm(Sprm & sprm);
 
