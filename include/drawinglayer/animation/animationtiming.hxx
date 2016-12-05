@@ -23,6 +23,7 @@
 #include <drawinglayer/drawinglayerdllapi.h>
 
 #include <vector>
+#include <memory>
 
 
 namespace drawinglayer
@@ -40,7 +41,7 @@ namespace drawinglayer
         public:
             AnimationEntry();
             virtual ~AnimationEntry();
-            virtual AnimationEntry* clone() const = 0;
+            virtual std::unique_ptr<AnimationEntry> clone() const = 0;
 
             virtual bool operator==(const AnimationEntry& rCandidate) const = 0;
             virtual double getDuration() const = 0;
@@ -58,7 +59,7 @@ namespace drawinglayer
         public:
             AnimationEntryFixed(double fDuration, double fState);
             virtual ~AnimationEntryFixed() override;
-            virtual AnimationEntry* clone() const override;
+            virtual std::unique_ptr<AnimationEntry> clone() const override;
 
             virtual bool operator==(const AnimationEntry& rCandidate) const override;
             virtual double getDuration() const override;
@@ -78,7 +79,7 @@ namespace drawinglayer
         public:
             AnimationEntryLinear(double fDuration, double fFrequency, double fStart, double fStop);
             virtual ~AnimationEntryLinear() override;
-            virtual AnimationEntry* clone() const override;
+            virtual std::unique_ptr<AnimationEntry> clone() const override;
 
             virtual bool operator==(const AnimationEntry& rCandidate) const override;
             virtual double getDuration() const override;
@@ -91,7 +92,7 @@ namespace drawinglayer
         {
         protected:
             double                                      mfDuration;
-            ::std::vector< AnimationEntry* >            maEntries;
+            ::std::vector< std::unique_ptr<AnimationEntry> >  maEntries;
 
             // helpers
             sal_uInt32 impGetIndexAtTime(double fTime, double &rfAddedTime) const;
@@ -99,7 +100,7 @@ namespace drawinglayer
         public:
             AnimationEntryList();
             virtual ~AnimationEntryList() override;
-            virtual AnimationEntry* clone() const override;
+            virtual std::unique_ptr<AnimationEntry> clone() const override;
 
             virtual bool operator==(const AnimationEntry& rCandidate) const override;
             void append(const AnimationEntry& rCandidate);
@@ -117,7 +118,7 @@ namespace drawinglayer
         public:
             AnimationEntryLoop(sal_uInt32 nRepeat);
             virtual ~AnimationEntryLoop() override;
-            virtual AnimationEntry* clone() const override;
+            virtual std::unique_ptr<AnimationEntry> clone() const override;
 
             virtual bool operator==(const AnimationEntry& rCandidate) const override;
             virtual double getDuration() const override;
