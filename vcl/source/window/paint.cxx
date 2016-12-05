@@ -36,13 +36,6 @@
 #include <vcl/opengl/OpenGLHelper.hxx>
 #endif
 
-#define IMPL_PAINT_PAINT            ((sal_uInt16)0x0001)
-#define IMPL_PAINT_PAINTALL         ((sal_uInt16)0x0002)
-#define IMPL_PAINT_PAINTALLCHILDREN   ((sal_uInt16)0x0004)
-#define IMPL_PAINT_PAINTCHILDREN      ((sal_uInt16)0x0008)
-#define IMPL_PAINT_ERASE            ((sal_uInt16)0x0010)
-#define IMPL_PAINT_CHECKRTL         ((sal_uInt16)0x0020)
-
 // PaintBufferGuard
 
 PaintBufferGuard::PaintBufferGuard(ImplFrameData* pFrameData, vcl::Window* pWindow)
@@ -170,12 +163,12 @@ private:
     Rectangle m_aSelectionRect;
     Rectangle m_aPaintRect;
     vcl::Region m_aPaintRegion;
-    sal_uInt16 m_nPaintFlags;
+    ImplPaintFlags m_nPaintFlags;
     bool m_bPop : 1;
     bool m_bRestoreCursor : 1;
     bool m_bStartedBufferedPaint : 1; ///< This PaintHelper started a buffered paint, and should paint it on the screen when being destructed.
 public:
-    PaintHelper(vcl::Window* pWindow, sal_uInt16 nPaintFlags);
+    PaintHelper(vcl::Window* pWindow, ImplPaintFlags nPaintFlags);
     void SetPop()
     {
         m_bPop = true;
@@ -196,7 +189,7 @@ public:
     {
         return m_bRestoreCursor;
     }
-    sal_uInt16 GetPaintFlags() const
+    ImplPaintFlags GetPaintFlags() const
     {
         return m_nPaintFlags;
     }
@@ -215,7 +208,7 @@ public:
     ~PaintHelper();
 };
 
-PaintHelper::PaintHelper(vcl::Window *pWindow, sal_uInt16 nPaintFlags)
+PaintHelper::PaintHelper(vcl::Window *pWindow, ImplPaintFlags nPaintFlags)
     : m_pWindow(pWindow)
     , m_pChildRegion(nullptr)
     , m_nPaintFlags(nPaintFlags)
@@ -251,7 +244,7 @@ void PaintHelper::DoPaint(const vcl::Region* pRegion)
 
     vcl::Region* pWinChildClipRegion = m_pWindow->ImplGetWinChildClipRegion();
     ImplFrameData* pFrameData = m_pWindow->mpWindowImpl->mpFrameData;
-    if (pWindowImpl->mnPaintFlags & IMPL_PAINT_PAINTALL || pFrameData->mbInBufferedPaint)
+    if (pWindowImpl->mnPaintFlags & ImplPaintFlags::PaintAll || pFrameData->mbInBufferedPaint)
     {
         pWindowImpl->maInvalidateRegion = *pWinChildClipRegion;
     }
@@ -268,11 +261,11 @@ void PaintHelper::DoPaint(const vcl::Region* pRegion)
            */
            pWindowImpl->maInvalidateRegion.Union(*pWindowImpl->mpWinData->mpTrackRect);
 
-        if (pWindowImpl->mnPaintFlags & IMPL_PAINT_PAINTALLCHILDREN)
+        if (pWindowImpl->mnPaintFlags & ImplPaintFlags::PaintAllChildren)
             m_pChildRegion = new vcl::Region(pWindowImpl->maInvalidateRegion);
         pWindowImpl->maInvalidateRegion.Intersect(*pWinChildClipRegion);
     }
-    pWindowImpl->mnPaintFlags = 0;
+    pWindowImpl->mnPaintFlags = ImplPaintFlags::NONE;
     if (!pWindowImpl->maInvalidateRegion.IsEmpty())
     {
 #if HAVE_FEATURE_OPENGL
@@ -493,7 +486,7 @@ void Window::PushPaintHelper(PaintHelper *pHelper, vcl::RenderContext& rRenderCo
     mpWindowImpl->mpPaintRegion = &rPaintRegion;
     mpWindowImpl->maInvalidateRegion.SetEmpty();
 
-    if ((pHelper->GetPaintFlags() & IMPL_PAINT_ERASE) && rRenderContext.IsBackground())
+    if ((pHelper->GetPaintFlags() & ImplPaintFlags::Erase) && rRenderContext.IsBackground())
     {
         if (rRenderContext.IsClipRegion())
         {
@@ -537,7 +530,7 @@ PaintHelper::~PaintHelper()
     }
 
     ImplFrameData* pFrameData = m_pWindow->mpWindowImpl->mpFrameData;
-    if ( m_nPaintFlags & (IMPL_PAINT_PAINTALLCHILDREN | IMPL_PAINT_PAINTCHILDREN) )
+    if ( m_nPaintFlags & (ImplPaintFlags::PaintAllChildren | ImplPaintFlags::PaintChildren) )
     {
         // Paint from the bottom child window and frontward.
         vcl::Window* pTempWindow = pWindowImpl->mpLastChild;
@@ -573,7 +566,7 @@ PaintHelper::~PaintHelper()
 
 namespace vcl {
 
-void Window::ImplCallPaint(const vcl::Region* pRegion, sal_uInt16 nPaintFlags)
+void Window::ImplCallPaint(const vcl::Region* pRegion, ImplPaintFlags nPaintFlags)
 {
     // call PrePaint. PrePaint may add to the invalidate region as well as
     // other parameters used below.
@@ -581,20 +574,20 @@ void Window::ImplCallPaint(const vcl::Region* pRegion, sal_uInt16 nPaintFlags)
 
     mpWindowImpl->mbPaintFrame = false;
 
-    if (nPaintFlags & IMPL_PAINT_PAINTALLCHILDREN)
-        mpWindowImpl->mnPaintFlags |= IMPL_PAINT_PAINT | IMPL_PAINT_PAINTALLCHILDREN | (nPaintFlags & IMPL_PAINT_PAINTALL);
-    if (nPaintFlags & IMPL_PAINT_PAINTCHILDREN)
-        mpWindowImpl->mnPaintFlags |= IMPL_PAINT_PAINTCHILDREN;
-    if (nPaintFlags & IMPL_PAINT_ERASE)
-        mpWindowImpl->mnPaintFlags |= IMPL_PAINT_ERASE;
-    if (nPaintFlags & IMPL_PAINT_CHECKRTL)
-        mpWindowImpl->mnPaintFlags |= IMPL_PAINT_CHECKRTL;
+    if (nPaintFlags & ImplPaintFlags::PaintAllChildren)
+        mpWindowImpl->mnPaintFlags |= ImplPaintFlags::Paint | ImplPaintFlags::PaintAllChildren | (nPaintFlags & ImplPaintFlags::PaintAll);
+    if (nPaintFlags & ImplPaintFlags::PaintChildren)
+        mpWindowImpl->mnPaintFlags |= ImplPaintFlags::PaintChildren;
+    if (nPaintFlags & ImplPaintFlags::Erase)
+        mpWindowImpl->mnPaintFlags |= ImplPaintFlags::Erase;
+    if (nPaintFlags & ImplPaintFlags::CheckRtl)
+        mpWindowImpl->mnPaintFlags |= ImplPaintFlags::CheckRtl;
     if (!mpWindowImpl->mpFirstChild)
-        mpWindowImpl->mnPaintFlags &= ~IMPL_PAINT_PAINTALLCHILDREN;
+        mpWindowImpl->mnPaintFlags &= ~ImplPaintFlags::PaintAllChildren;
 
     if (mpWindowImpl->mbPaintDisabled)
     {
-        if (mpWindowImpl->mnPaintFlags & IMPL_PAINT_PAINTALL)
+        if (mpWindowImpl->mnPaintFlags & ImplPaintFlags::PaintAll)
             Invalidate(InvalidateFlags::NoChildren | InvalidateFlags::NoErase | InvalidateFlags::NoTransparent | InvalidateFlags::NoClipChildren);
         else if ( pRegion )
             Invalidate(*pRegion, InvalidateFlags::NoChildren | InvalidateFlags::NoErase | InvalidateFlags::NoTransparent | InvalidateFlags::NoClipChildren);
@@ -605,14 +598,14 @@ void Window::ImplCallPaint(const vcl::Region* pRegion, sal_uInt16 nPaintFlags)
         return;
     }
 
-    nPaintFlags = mpWindowImpl->mnPaintFlags & ~(IMPL_PAINT_PAINT);
+    nPaintFlags = mpWindowImpl->mnPaintFlags & ~(ImplPaintFlags::Paint);
 
     PaintHelper aHelper(this, nPaintFlags);
 
-    if (mpWindowImpl->mnPaintFlags & IMPL_PAINT_PAINT)
+    if (mpWindowImpl->mnPaintFlags & ImplPaintFlags::Paint)
         aHelper.DoPaint(pRegion);
     else
-        mpWindowImpl->mnPaintFlags = 0;
+        mpWindowImpl->mnPaintFlags = ImplPaintFlags::NONE;
 
     // call PostPaint
     PostPaint(*this);
@@ -630,11 +623,11 @@ void Window::ImplCallOverlapPaint()
     }
 
     // only then ourself
-    if ( mpWindowImpl->mnPaintFlags & (IMPL_PAINT_PAINT | IMPL_PAINT_PAINTCHILDREN) )
+    if ( mpWindowImpl->mnPaintFlags & (ImplPaintFlags::Paint | ImplPaintFlags::PaintChildren) )
     {
         // - RTL - notify ImplCallPaint to check for re-mirroring (CHECKRTL)
         //         because we were called from the Sal layer
-        ImplCallPaint(nullptr, mpWindowImpl->mnPaintFlags /*| IMPL_PAINT_CHECKRTL */);
+        ImplCallPaint(nullptr, mpWindowImpl->mnPaintFlags /*| ImplPaintFlags::CheckRtl */);
     }
 }
 
@@ -678,30 +671,30 @@ void Window::ImplInvalidateFrameRegion( const vcl::Region* pRegion, InvalidateFl
     if ( !ImplIsOverlapWindow() )
     {
         vcl::Window* pTempWindow = this;
-        sal_uInt16 nTranspPaint = IsPaintTransparent() ? IMPL_PAINT_PAINT : 0;
+        ImplPaintFlags nTranspPaint = IsPaintTransparent() ? ImplPaintFlags::Paint : ImplPaintFlags::NONE;
         do
         {
             pTempWindow = pTempWindow->ImplGetParent();
-            if ( pTempWindow->mpWindowImpl->mnPaintFlags & IMPL_PAINT_PAINTCHILDREN )
+            if ( pTempWindow->mpWindowImpl->mnPaintFlags & ImplPaintFlags::PaintChildren )
                 break;
-            pTempWindow->mpWindowImpl->mnPaintFlags |= IMPL_PAINT_PAINTCHILDREN | nTranspPaint;
+            pTempWindow->mpWindowImpl->mnPaintFlags |= ImplPaintFlags::PaintChildren | nTranspPaint;
             if( ! pTempWindow->IsPaintTransparent() )
-                nTranspPaint = 0;
+                nTranspPaint = ImplPaintFlags::NONE;
         }
         while ( !pTempWindow->ImplIsOverlapWindow() );
     }
 
     // set Paint-Flags
-    mpWindowImpl->mnPaintFlags |= IMPL_PAINT_PAINT;
+    mpWindowImpl->mnPaintFlags |= ImplPaintFlags::Paint;
     if ( nFlags & InvalidateFlags::Children )
-        mpWindowImpl->mnPaintFlags |= IMPL_PAINT_PAINTALLCHILDREN;
+        mpWindowImpl->mnPaintFlags |= ImplPaintFlags::PaintAllChildren;
     if ( !(nFlags & InvalidateFlags::NoErase) )
-        mpWindowImpl->mnPaintFlags |= IMPL_PAINT_ERASE;
+        mpWindowImpl->mnPaintFlags |= ImplPaintFlags::Erase;
     if ( !pRegion )
-        mpWindowImpl->mnPaintFlags |= IMPL_PAINT_PAINTALL;
+        mpWindowImpl->mnPaintFlags |= ImplPaintFlags::PaintAll;
 
     // if not everything has to be redrawn, add the region to it
-    if ( !(mpWindowImpl->mnPaintFlags & IMPL_PAINT_PAINTALL) )
+    if ( !(mpWindowImpl->mnPaintFlags & ImplPaintFlags::PaintAll) )
         mpWindowImpl->maInvalidateRegion.Union( *pRegion );
 
     // Handle transparent windows correctly: invalidate must be done on the first opaque parent
@@ -714,7 +707,7 @@ void Window::ImplInvalidateFrameRegion( const vcl::Region* pRegion, InvalidateFl
         if( pParent )
         {
             vcl::Region *pChildRegion;
-            if ( mpWindowImpl->mnPaintFlags & IMPL_PAINT_PAINTALL )
+            if ( mpWindowImpl->mnPaintFlags & ImplPaintFlags::PaintAll )
                 // invalidate the whole child window region in the parent
                 pChildRegion = ImplGetWinChildClipRegion();
             else
@@ -845,7 +838,7 @@ void Window::ImplMoveInvalidateRegion( const Rectangle& rRect,
                                        long nHorzScroll, long nVertScroll,
                                        bool bChildren )
 {
-    if ( (mpWindowImpl->mnPaintFlags & (IMPL_PAINT_PAINT | IMPL_PAINT_PAINTALL)) == IMPL_PAINT_PAINT )
+    if ( (mpWindowImpl->mnPaintFlags & (ImplPaintFlags::Paint | ImplPaintFlags::PaintAll)) == ImplPaintFlags::Paint )
     {
         vcl::Region aTempRegion = mpWindowImpl->maInvalidateRegion;
         aTempRegion.Intersect( rRect );
@@ -853,7 +846,7 @@ void Window::ImplMoveInvalidateRegion( const Rectangle& rRect,
         mpWindowImpl->maInvalidateRegion.Union( aTempRegion );
     }
 
-    if ( bChildren && (mpWindowImpl->mnPaintFlags & IMPL_PAINT_PAINTCHILDREN) )
+    if ( bChildren && (mpWindowImpl->mnPaintFlags & ImplPaintFlags::PaintChildren) )
     {
         vcl::Window* pWindow = mpWindowImpl->mpFirstChild;
         while ( pWindow )
@@ -878,9 +871,9 @@ void Window::ImplMoveAllInvalidateRegions( const Rectangle& rRect,
         do
         {
             pPaintAllWindow = pPaintAllWindow->ImplGetParent();
-            if ( pPaintAllWindow->mpWindowImpl->mnPaintFlags & IMPL_PAINT_PAINTALLCHILDREN )
+            if ( pPaintAllWindow->mpWindowImpl->mnPaintFlags & ImplPaintFlags::PaintAllChildren )
             {
-                if ( pPaintAllWindow->mpWindowImpl->mnPaintFlags & IMPL_PAINT_PAINTALL )
+                if ( pPaintAllWindow->mpWindowImpl->mnPaintFlags & ImplPaintFlags::PaintAll )
                 {
                     aPaintAllRegion.SetEmpty();
                     break;
@@ -908,10 +901,10 @@ void Window::ImplValidateFrameRegion( const vcl::Region* pRegion, ValidateFlags 
     else
     {
         // when all child windows have to be drawn we need to invalidate them before doing so
-        if ( (mpWindowImpl->mnPaintFlags & IMPL_PAINT_PAINTALLCHILDREN) && mpWindowImpl->mpFirstChild )
+        if ( (mpWindowImpl->mnPaintFlags & ImplPaintFlags::PaintAllChildren) && mpWindowImpl->mpFirstChild )
         {
             vcl::Region aChildRegion = mpWindowImpl->maInvalidateRegion;
-            if ( mpWindowImpl->mnPaintFlags & IMPL_PAINT_PAINTALL )
+            if ( mpWindowImpl->mnPaintFlags & ImplPaintFlags::PaintAll )
             {
                 Rectangle aRect( Point( mnOutOffX, mnOutOffY ), Size( mnOutWidth, mnOutHeight ) );
                 aChildRegion = aRect;
@@ -923,14 +916,14 @@ void Window::ImplValidateFrameRegion( const vcl::Region* pRegion, ValidateFlags 
                 pChild = pChild->mpWindowImpl->mpNext;
             }
         }
-        if ( mpWindowImpl->mnPaintFlags & IMPL_PAINT_PAINTALL )
+        if ( mpWindowImpl->mnPaintFlags & ImplPaintFlags::PaintAll )
         {
             Rectangle aRect( Point( mnOutOffX, mnOutOffY ), Size( mnOutWidth, mnOutHeight ) );
             mpWindowImpl->maInvalidateRegion = aRect;
         }
         mpWindowImpl->maInvalidateRegion.Exclude( *pRegion );
     }
-    mpWindowImpl->mnPaintFlags &= ~IMPL_PAINT_PAINTALL;
+    mpWindowImpl->mnPaintFlags &= ~ImplPaintFlags::PaintAll;
 
     if ( nFlags & ValidateFlags::Children )
     {
@@ -1229,7 +1222,7 @@ bool Window::HasPaintEvent() const
     if ( mpWindowImpl->mpFrameWindow->mpWindowImpl->mbPaintFrame )
         return true;
 
-    if ( mpWindowImpl->mnPaintFlags & IMPL_PAINT_PAINT )
+    if ( mpWindowImpl->mnPaintFlags & ImplPaintFlags::Paint )
         return true;
 
     if ( !ImplIsOverlapWindow() )
@@ -1238,7 +1231,7 @@ bool Window::HasPaintEvent() const
         do
         {
             pTempWindow = pTempWindow->ImplGetParent();
-            if ( pTempWindow->mpWindowImpl->mnPaintFlags & (IMPL_PAINT_PAINTCHILDREN | IMPL_PAINT_PAINTALLCHILDREN) )
+            if ( pTempWindow->mpWindowImpl->mnPaintFlags & (ImplPaintFlags::PaintChildren | ImplPaintFlags::PaintAllChildren) )
                 return true;
         }
         while ( !pTempWindow->ImplIsOverlapWindow() );
@@ -1285,7 +1278,7 @@ void Window::Update()
     pWindow = pUpdateWindow;
     do
     {
-        if ( pWindow->mpWindowImpl->mnPaintFlags & IMPL_PAINT_PAINTALLCHILDREN )
+        if ( pWindow->mpWindowImpl->mnPaintFlags & ImplPaintFlags::PaintAllChildren )
             pUpdateWindow = pWindow;
         if ( pWindow->ImplIsOverlapWindow() )
             break;
@@ -1294,7 +1287,7 @@ void Window::Update()
     while ( pWindow );
 
     // if there is something to paint, trigger a Paint
-    if ( pUpdateWindow->mpWindowImpl->mnPaintFlags & (IMPL_PAINT_PAINT | IMPL_PAINT_PAINTCHILDREN) )
+    if ( pUpdateWindow->mpWindowImpl->mnPaintFlags & (ImplPaintFlags::Paint | ImplPaintFlags::PaintChildren) )
     {
         VclPtr<vcl::Window> xWindow(this);
 
@@ -1649,7 +1642,7 @@ void Window::ImplScroll( const Rectangle& rRect,
     {
         // --- RTL --- the invalidate region for this windows is already computed in frame coordinates
         // so it has to be re-mirrored before calling the Paint-handler
-        mpWindowImpl->mnPaintFlags |= IMPL_PAINT_CHECKRTL;
+        mpWindowImpl->mnPaintFlags |= ImplPaintFlags::CheckRtl;
 
         InvalidateFlags nPaintFlags = InvalidateFlags::Children;
         if ( !bScrollChildren )

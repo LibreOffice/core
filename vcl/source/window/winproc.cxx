@@ -1574,12 +1574,10 @@ static bool ImplHandleLongPress(vcl::Window *pWindow, const SalLongPressEvent& r
     return aHandler.HandleEvent();
 }
 
-#define IMPL_PAINT_CHECKRTL         ((sal_uInt16)0x0020)
-
 static void ImplHandlePaint( vcl::Window* pWindow, const Rectangle& rBoundRect, bool bImmediateUpdate )
 {
     // system paint events must be checked for re-mirroring
-    pWindow->ImplGetWindowImpl()->mnPaintFlags |= IMPL_PAINT_CHECKRTL;
+    pWindow->ImplGetWindowImpl()->mnPaintFlags |= ImplPaintFlags::CheckRtl;
 
     // trigger paint for all windows that live in the new paint region
     vcl::Region aRegion( rBoundRect );
