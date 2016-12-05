@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a71b18c_74587d57",
+        "filename": "svx/source/svdraw/svdsnpv.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-12-05T11:09:22Z",
+      "side": 1,
+      "message": "it looks like this number is used to count from 200 down to 0 - are you sure it needs 64 bit size?",
+      "revId": "cb36a0e79cb6152ad54e1d320e8b1b2ccb9cb8bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a71b18c_545b8154",
+        "filename": "vcl/inc/win/salgdi.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-12-05T11:09:22Z",
+      "side": 1,
+      "message": "you are changing the declaration of drawEPS but not the definition in gdiimpl.cxx - this will break the 64-bit windows build, please adapt definition too.\n\nactually - wait a second - this is an override and there is a super-class that uses the \"sal_uLong\" type for this parameter, which is *also* deprecated and the same as sal_uIntPtr - you need to replace this type in about a dozen different platform specific drawEPS declarations at the same time.",
+      "revId": "cb36a0e79cb6152ad54e1d320e8b1b2ccb9cb8bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
