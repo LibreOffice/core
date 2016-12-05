@@ -56,7 +56,6 @@ class SvxXMLTextImportContext : public SvXMLImportContext
 {
 public:
     SvxXMLTextImportContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName, const uno::Reference< XAttributeList >& xAttrList, const uno::Reference< XText >& xText );
-    virtual ~SvxXMLTextImportContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList ) override;
 
@@ -69,10 +68,6 @@ private:
 
 SvxXMLTextImportContext::SvxXMLTextImportContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName, const uno::Reference< XAttributeList >&, const uno::Reference< XText >& xText )
 : SvXMLImportContext( rImport, nPrfx, rLName ), mxText( xText )
-{
-}
-
-SvxXMLTextImportContext::~SvxXMLTextImportContext()
 {
 }
 
@@ -108,8 +103,6 @@ public:
         const css::uno::Reference< css::uno::XComponentContext >& rContext,
         const uno::Reference< XText > & rText );
 
-    virtual ~SvxXMLXTextImportComponent() throw () override;
-
 private:
     const uno::Reference< XText > mxText;
 };
@@ -122,10 +115,6 @@ SvxXMLXTextImportComponent::SvxXMLXTextImportComponent(
     mxText( xText )
 {
     GetTextImport()->SetCursor( mxText->createTextCursor() );
-}
-
-SvxXMLXTextImportComponent::~SvxXMLXTextImportComponent() throw ()
-{
 }
 
 void SvxReadXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& rSel )

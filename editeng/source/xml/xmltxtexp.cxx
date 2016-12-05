@@ -130,8 +130,6 @@ class SvxSimpleUnoModel : public cppu::WeakAggImplHelper4<
 {
 public:
     SvxSimpleUnoModel();
-    virtual ~SvxSimpleUnoModel() override;
-
 
     // XMultiServiceFactory
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance( const OUString& aServiceSpecifier ) throw(css::uno::Exception, css::uno::RuntimeException, std::exception) override;
@@ -165,10 +163,6 @@ public:
 };
 
 SvxSimpleUnoModel::SvxSimpleUnoModel()
-{
-}
-
-SvxSimpleUnoModel::~SvxSimpleUnoModel()
 {
 }
 
@@ -301,8 +295,6 @@ public:
         const OUString& rFileName,
         const css::uno::Reference< css::xml::sax::XDocumentHandler >& rHandler );
 
-    virtual ~SvxXMLTextExportComponent() override;
-
     // methods without content:
     virtual void ExportAutoStyles_() override;
     virtual void ExportMasterStyles_() override;
@@ -340,10 +332,6 @@ SvxXMLTextExportComponent::SvxXMLTextExportComponent(
     mxText = pUnoText;
 
     setExportFlags( SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::CONTENT );
-}
-
-SvxXMLTextExportComponent::~SvxXMLTextExportComponent()
-{
 }
 
 void SvxWriteXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& rSel )

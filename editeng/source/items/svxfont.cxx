@@ -588,8 +588,6 @@ public:
               nKern( _nKrn )
             { }
 
-    virtual ~SvxDoGetCapitalSize() override {}
-
     virtual void Do( const OUString &rTxt, const sal_Int32 nIdx,
                      const sal_Int32 nLen, const bool bUpper ) override;
 
