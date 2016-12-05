@@ -2202,8 +2202,9 @@ static const sal_uInt16* GetFormatRangeImpl( bool bTextOnly )
         SDRATTR_TABLE_FIRST, SDRATTR_TABLE_LAST,
         XATTR_LINE_FIRST, XATTR_LINE_LAST,
         XATTR_FILL_FIRST, XATTRSET_FILL,
-        EE_PARA_START, EE_PARA_END,
+        EE_PARA_START, EE_PARA_END, // text-only from here on
         EE_CHAR_START, EE_CHAR_END,
+        SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST, // table cell formats
         0,0
     };
     return &gRanges[ bTextOnly ? 10 : 0];
@@ -2228,6 +2229,17 @@ void SdrObjEditView::TakeFormatPaintBrush( std::shared_ptr< SfxItemSet >& rForma
         {
             const bool bOnlyHardAttr = false;
             rFormatSet->Put( GetAttrFromMarked(bOnlyHardAttr) );
+        }
+
+        // check for cloning from table cell, in which case we need to copy cell-specific formatting attributes
+        const SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+        if( pObj && (pObj->GetObjInventor() == SdrInventor::Default ) && (pObj->GetObjIdentifier() == OBJ_TABLE) )
+        {
+            auto pTable = static_cast<const sdr::table::SdrTableObj*>(pObj);
+            if (pTable->getActiveCell().is()) {
+                SfxItemSet const & rSet = pTable->GetActiveCellItemSet();
+                rFormatSet->Put(rSet);
+            }
         }
     }
 }
@@ -2300,9 +2312,9 @@ void SdrObjEditView::ApplyFormatPaintBrush( SfxItemSet& rFormatSet, bool bNoChar
     }
 
     OutlinerView* pOLV = GetTextEditOutlinerView();
+    const SdrMarkList& rMarkList = GetMarkedObjectList();
     if( !pOLV )
     {
-        const SdrMarkList& rMarkList = GetMarkedObjectList();
         SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
         const SfxItemSet& rShapeSet = pObj->GetMergedItemSet();
 
@@ -2365,6 +2377,17 @@ void SdrObjEditView::ApplyFormatPaintBrush( SfxItemSet& rFormatSet, bool bNoChar
                                     rFormatSet, aSet,
                                     bNoCharacterFormats, bNoParagraphFormats ) );
             pOLV->SetAttribs( aPaintSet );
+        }
+    }
+
+
+    // check for cloning to table cell, in which case we need to copy cell-specific formatting attributes
+    SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+    if( pObj && (pObj->GetObjInventor() == SdrInventor::Default) && (pObj->GetObjIdentifier() == OBJ_TABLE) )
+    {
+        auto pTable = static_cast<sdr::table::SdrTableObj*>(pObj);
+        if (pTable->getActiveCell().is()) {
+            pTable->SetMergedItemSetAndBroadcastOnActiveCell(rFormatSet, false/*bClearAllItems*/);
         }
     }
 }
