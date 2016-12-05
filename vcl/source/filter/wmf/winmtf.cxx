@@ -32,6 +32,7 @@
 #include <o3tl/make_unique.hxx>
 #include "officecfg/Setup.hxx"
 #include "officecfg/Office/Linguistic.hxx"
+#include "unotools/configmgr.hxx"
 #include "unotools/wincodepage.hxx"
 
 #if OSL_DEBUG_LEVEL > 1
@@ -149,6 +150,8 @@ namespace {
 
 OUString getLODefaultLanguage()
 {
+    if (utl::ConfigManager::IsAvoidConfig())
+        return "en-US";
     OUString result(officecfg::Office::Linguistic::General::DefaultLocale::get());
     if (result.isEmpty())
         result = officecfg::Setup::L10N::ooSetupSystemLocale::get();
