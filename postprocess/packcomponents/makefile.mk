@@ -65,6 +65,7 @@ my_components = \
     component/canvas/source/simplecanvas/simplecanvas \
     component/canvas/source/vcl/vclcanvas \
     component/comphelper/util/comphelp \
+    component/configmgr/source/configmgr \
     component/cui/util/cui \
     component/drawinglayer/drawinglayer \
     component/dbaccess/source/ext/adabas/adabasui \
@@ -120,7 +121,6 @@ my_components = \
     component/xmloff/source/transform/xof \
     component/xmloff/util/xo \
     component/xmlscript/util/xcr \
-    configmgr \
     ctl \
     date \
     dbase \

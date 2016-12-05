@@ -153,6 +153,7 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
     binaryurp \
     cairocanvas \
     canvasfactory \
+    configmgr \
     connector \
     directx5canvas \
     directx9canvas \

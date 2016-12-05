@@ -1,4 +1,0 @@
-..\%__SRC%\bin\configmg*.dll %_DEST%\bin%_EXT%\configmg*.dll
-..\%__SRC%\lib\configmgr.uno.dylib %_DEST%\lib%_EXT%\configmgr.uno.dylib
-..\%__SRC%\lib\configmgr.uno.so %_DEST%\lib%_EXT%\configmgr.uno.so
-..\%__SRC%\misc\configmgr.component %_DEST%\xml%_EXT%\configmgr.component
