@@ -80,6 +80,7 @@ public:
     void testTdf102223();
     void testPostKeyEventInvalidation();
     void testTdf103083();
+    void testTdf104405();
 
     CPPUNIT_TEST_SUITE(SdTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -110,6 +111,7 @@ public:
     CPPUNIT_TEST(testTdf102223);
     CPPUNIT_TEST(testPostKeyEventInvalidation);
     CPPUNIT_TEST(testTdf103083);
+    CPPUNIT_TEST(testTdf104405);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1403,6 +1405,63 @@ void SdTiledRenderingTest::testTdf103083()
 
     const SfxItemSet& rParagraphItemSet2 = pTextObject->GetOutlinerParaObject()->GetTextObject().GetParaAttribs(2);
     CPPUNIT_ASSERT_EQUAL((sal_uInt16)3, rParagraphItemSet2.Count());
+
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+/**
+ * tests a clone-formatting bug around table cell attributes
+ */
+void SdTiledRenderingTest::testTdf104405()
+{
+    // Load the document.
+    comphelper::LibreOfficeKit::setActive();
+    SdXImpressDocument* pXImpressDocument = createDoc("tdf104405.fodp");
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdPage* pActualPage = pViewShell->GetActualPage();
+    SdrObject* pObject = pActualPage->GetObj(2);
+    auto pTableObject = dynamic_cast<sdr::table::SdrTableObj*>(pObject);
+    CPPUNIT_ASSERT(pTableObject);
+
+    // select the middle cell
+    SdrView* pView = pViewShell->GetView();
+    pView->MarkObj(pTableObject, pView->GetSdrPageView());
+    pTableObject->setActiveCell(sdr::table::CellPos(2,1));
+    pView->SdrBeginTextEdit(pTableObject);
+    EditView& rEditView = pView->GetTextEditOutlinerView()->GetEditView();
+    rEditView.SetSelection(ESelection(0, 0, 0, 3)); // start para, start char, end para, end char.
+
+    // trigger the clone-formatting/paintbrush command to copy formatting contents of cell
+    uno::Sequence< beans::PropertyValue > aArgs( 1 );
+    aArgs[0].Name  = "PersistentCopy";
+    aArgs[0].Value = uno::makeAny( true );
+    comphelper::dispatchCommand(".uno:FormatPaintbrush", aArgs);
+
+    Scheduler::ProcessEventsToIdle();
+
+    // now click on the table
+    pView->MarkObj(pTableObject, pView->GetSdrPageView());
+    pTableObject->setActiveCell(sdr::table::CellPos(0,0));
+    pView->SdrBeginTextEdit(pTableObject);
+    EditView& rEditView2 = pView->GetTextEditOutlinerView()->GetEditView();
+    rEditView2.SetSelection(ESelection(0, 0, 0, 3)); // start para, start char, end para, end char.
+    Rectangle aRect = pTableObject->GetCurrentBoundRect();
+    pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
+                                      convertMm100ToTwip(aRect.getX() ), convertMm100ToTwip(aRect.getY() ),
+                                      1, MOUSE_LEFT, 0);
+    pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP,
+                                      convertMm100ToTwip(aRect.getX() ), convertMm100ToTwip(aRect.getY() ),
+                                      1, MOUSE_LEFT, 0);
+
+    Scheduler::ProcessEventsToIdle();
+
+    // check that the first cell has acquired the resulting vertical style
+    xmlDocPtr pXmlDoc = parseXmlDump();
+    OString aPrefix = "/SdDrawDocument/SdrModel/SdPage/SdrObjList/SdrTableObj/SdrTableObjImpl"
+                      "/TableModel/Cell[1]/DefaultProperties/SfxItemSet/SdrTextVertAdjustItem";
+    // the following name has a compiler-dependant part
+    CPPUNIT_ASSERT_EQUAL( getXPath(pXmlDoc, aPrefix, "value"), OUString("2") );
+    xmlFreeDoc(pXmlDoc);
 
     comphelper::LibreOfficeKit::setActive(false);
 }
