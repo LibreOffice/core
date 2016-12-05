@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "3a71b18c_af9c826a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 17
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1001086
+      },
+      "writtenOn": "2016-12-05T16:15:52Z",
+      "side": 1,
+      "message": "All my patches in Gerrit went under this nickname (tagezi). In addition, I use this nickname in community wherever necessary short name (wiki, freenode...).\nThis sign is used in many commits, so it is better not to change.\nhttps://gerrit.libreoffice.org/gitweb?p\u003dcore.git;a\u003dsearch;h\u003d6a5710462bd16e716358ec5952d38feb732bf031;s\u003dlera.goncharuk@gmail.com;st\u003dauthor",
+      "parentUuid": "3a71b18c_b4b5b5d1",
+      "revId": "6406888d165a250da0ccb85c17d378c0f43af977",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a71b18c_94aa796f",
         "filename": "/COMMIT_MSG",
         "patchSetId": 17
