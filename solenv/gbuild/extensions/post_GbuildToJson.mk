@@ -100,6 +100,9 @@ gb_Library_add_cxxobjects = $(call gb_Library_get_target,$(1)): CXXOBJECTS += $(
 gb_Library_add_exception_object = $(call gb_Library_get_target,$(1)): CXXOBJECTS += $(2)
 gb_Library_add_exception_objects = $(call gb_Library_get_target,$(1)): CXXOBJECTS += $(2)
 
+# Objective C++ macros
+gb_Library_add_objcxxobjects =
+gb_Library_add_objcobjects = 
 
 #$(call gb_Library_get_exports_target,%):
 $(WORKDIR)/LinkTarget/Library/%.exports:
