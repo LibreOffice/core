@@ -2397,7 +2397,7 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
 
                 // tdf#40713: don't lose dbt file
                 // if aDbtFile corresponds exactly to aTmpFile, we just have to return
-                if (aDbtFile.GetMainURL( INetURLObject::DecodeMechanism::DECODE_UNAMBIGUOUS ) == aTmpFile.GetMainURL( INetURLObject::DecodeMechanism::DECODE_UNAMBIGUOUS ))
+                if (aDbtFile.GetMainURL( INetURLObject::DecodeMechanism::Unambiguous ) == aTmpFile.GetMainURL( INetURLObject::DecodeMechanism::Unambiguous ))
                     return bRet;
 
                 if ( IsDocument( aDbtFile ) && !KillFile( aDbtFile ) )

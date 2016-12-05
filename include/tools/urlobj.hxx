@@ -92,14 +92,14 @@ public:
 
         @descr  Along with an EncodeMechanism parameter, the set-methods all
         take an rtl_TextEncoding parameter, which is ignored unless the
-        EncodeMechanism is WAS_ENCODED.
+        EncodeMechanism is EncodeMechanism::WasEncoded.
      */
-    enum EncodeMechanism
+    enum class EncodeMechanism
     {
         /** All escape sequences that are already present are ignored, and are
             interpreted as literal sequences of three characters.
          */
-        ENCODE_ALL,
+        All,
 
         /** Sequences of escape sequences, that represent characters from the
             specified character set and that can be converted to UTF-32
@@ -108,12 +108,12 @@ public:
             (sequences of) escape sequences.  Other escape sequences are
             copied verbatim (but using upper case hex digits).
          */
-        WAS_ENCODED,
+        WasEncoded,
 
         /** All escape sequences that are already present are copied verbatim
             (but using upper case hex digits).
          */
-        NOT_CANONIC
+        NotCanonical
     };
 
     /** The way strings that represent (parts of) URIs are returned from get-
@@ -191,11 +191,11 @@ public:
 
     inline explicit INetURLObject(
         OUString const & rTheAbsURIRef,
-        EncodeMechanism eMechanism = WAS_ENCODED,
+        EncodeMechanism eMechanism = EncodeMechanism::WasEncoded,
         rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8);
 
     inline bool SetURL(OUString const & rTheAbsURIRef,
-                       EncodeMechanism eMechanism = WAS_ENCODED,
+                       EncodeMechanism eMechanism = EncodeMechanism::WasEncoded,
                        rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8);
 
     bool ConcatData(INetProtocol eTheScheme, OUString const & rTheUser,
@@ -299,7 +299,7 @@ public:
 
     inline INetURLObject(OUString const & rTheAbsURIRef,
                          INetProtocol eTheSmartScheme,
-                         EncodeMechanism eMechanism = WAS_ENCODED,
+                         EncodeMechanism eMechanism = EncodeMechanism::WasEncoded,
                          rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8,
                          FSysStyle eStyle = FSYS_DETECT);
 
@@ -308,7 +308,7 @@ public:
 
     inline bool
     SetSmartURL(OUString const & rTheAbsURIRef,
-                EncodeMechanism eMechanism = WAS_ENCODED,
+                EncodeMechanism eMechanism = EncodeMechanism::WasEncoded,
                 rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8,
                 FSysStyle eStyle = FSYS_DETECT);
 
@@ -316,7 +316,7 @@ public:
     smartRel2Abs(OUString const & rTheRelURIRef,
                  bool & rWasAbsolute,
                  bool bIgnoreFragment = false,
-                 EncodeMechanism eMechanism = WAS_ENCODED,
+                 EncodeMechanism eMechanism = EncodeMechanism::WasEncoded,
                  rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8,
                  bool bRelativeNonURIs = false,
                  FSysStyle eStyle = FSYS_DETECT) const;
@@ -339,14 +339,14 @@ public:
     GetAbsURL(OUString const & rTheBaseURIRef,
               OUString const & rTheRelURIRef,
               bool bIgnoreFragment = false,
-              EncodeMechanism eEncodeMechanism = WAS_ENCODED,
+              EncodeMechanism eEncodeMechanism = EncodeMechanism::WasEncoded,
               DecodeMechanism eDecodeMechanism = DECODE_TO_IURI,
               rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8);
 
     static inline OUString
     GetRelURL(OUString const & rTheBaseURIRef,
               OUString const & rTheAbsURIRef,
-              EncodeMechanism eEncodeMechanism = WAS_ENCODED,
+              EncodeMechanism eEncodeMechanism = EncodeMechanism::WasEncoded,
               DecodeMechanism eDecodeMechanism = DECODE_TO_IURI,
               rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8,
               FSysStyle eStyle = FSYS_DETECT);
@@ -456,7 +456,7 @@ public:
     { return decode(m_aPath, eMechanism, eCharset); }
 
     inline bool SetURLPath(OUString const & rThePath,
-                           EncodeMechanism eMechanism = WAS_ENCODED,
+                           EncodeMechanism eMechanism = EncodeMechanism::WasEncoded,
                            rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8)
     { return setPath(rThePath, eMechanism, eCharset); }
 
@@ -540,7 +540,7 @@ public:
     bool insertName(OUString const & rTheName,
                            bool bAppendFinalSlash = false,
                            sal_Int32 nIndex = LAST_SEGMENT,
-                           EncodeMechanism eMechanism = WAS_ENCODED,
+                           EncodeMechanism eMechanism = EncodeMechanism::WasEncoded,
                            rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8);
 
     /** Get the name of a segment of the hierarchical path.
@@ -619,7 +619,7 @@ public:
      */
     bool setBase(OUString const & rTheBase,
                  sal_Int32 nIndex = LAST_SEGMENT,
-                 EncodeMechanism eMechanism = WAS_ENCODED,
+                 EncodeMechanism eMechanism = EncodeMechanism::WasEncoded,
                  rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8);
 
     /** Determine whether the name of the last segment has an extension.
@@ -727,7 +727,7 @@ public:
     { return decode(m_aQuery, NO_DECODE, eCharset); }
 
     inline bool SetParam(OUString const & rTheQuery,
-                         EncodeMechanism eMechanism = WAS_ENCODED,
+                         EncodeMechanism eMechanism = EncodeMechanism::WasEncoded,
                          rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8);
 
     // Fragment:
@@ -740,7 +740,7 @@ public:
     { return decode(m_aFragment, eMechanism, eCharset); }
 
     inline bool SetMark(OUString const & rTheFragment,
-                        EncodeMechanism eMechanism = WAS_ENCODED,
+                        EncodeMechanism eMechanism = EncodeMechanism::WasEncoded,
                         rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8);
 
     // File URLs:
@@ -905,7 +905,7 @@ public:
     OUString GetFileExtension() const;
 
     bool Append(OUString const & rTheSegment,
-                       EncodeMechanism eMechanism = WAS_ENCODED,
+                       EncodeMechanism eMechanism = EncodeMechanism::WasEncoded,
                        rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8);
 
     void CutLastName();
@@ -923,7 +923,7 @@ public:
     OUString GetBase() const;
 
     void SetName(OUString const & rTheName,
-                 EncodeMechanism eMechanism = WAS_ENCODED,
+                 EncodeMechanism eMechanism = EncodeMechanism::WasEncoded,
                  rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8);
 
     inline OUString GetName(DecodeMechanism eMechanism = DECODE_TO_IURI,
@@ -1229,7 +1229,7 @@ inline bool INetURLObject::GetNewAbsURL(OUString const & rTheRelURIRef,
     INetURLObject aTheAbsURIRef;
     bool bWasAbsolute;
     if (!convertRelToAbs(rTheRelURIRef, aTheAbsURIRef, bWasAbsolute,
-                         WAS_ENCODED, RTL_TEXTENCODING_UTF8, false/*bIgnoreFragment*/, false, false,
+                         EncodeMechanism::WasEncoded, RTL_TEXTENCODING_UTF8, false/*bIgnoreFragment*/, false, false,
                          FSYS_DETECT))
         return false;
     if (pTheAbsURIRef)

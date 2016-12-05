@@ -73,7 +73,7 @@ void OWriterConnection::construct(const OUString& url,const uno::Sequence< beans
         //  don't pass invalid URL to loadComponentFromURL
         throw sdbc::SQLException();
     }
-    m_aFileName = aURL.GetMainURL(INetURLObject::NO_DECODE);
+    m_aFileName = aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
 
     m_sPassword.clear();
     const char pPwd[] = "password";

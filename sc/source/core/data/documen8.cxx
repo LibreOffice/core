@@ -833,7 +833,7 @@ void ScDocument::UpdateExternalRefLinks(vcl::Window* pWin)
         OUString aFile;
         sfx2::LinkManager::GetDisplayNames(pRefLink, nullptr, &aFile);
         // Decode encoded URL for display friendliness.
-        INetURLObject aUrl(aFile,INetURLObject::WAS_ENCODED);
+        INetURLObject aUrl(aFile,INetURLObject::EncodeMechanism::WasEncoded);
         aFile = aUrl.GetMainURL(INetURLObject::DECODE_UNAMBIGUOUS);
 
         OUStringBuffer aBuf;

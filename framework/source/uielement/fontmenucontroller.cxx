@@ -104,7 +104,7 @@ void FontMenuController::fillPopupMenu( const Sequence< OUString >& rFontNameSeq
                 m_xPopupMenu->checkItem( i+1, true );
             // use VCL popup menu pointer to set vital information that are not part of the awt implementation
             OUStringBuffer aCommandBuffer( aFontNameCommandPrefix );
-            aCommandBuffer.append( INetURLObject::encode( rName, INetURLObject::PART_HTTP_QUERY, INetURLObject::ENCODE_ALL ));
+            aCommandBuffer.append( INetURLObject::encode( rName, INetURLObject::PART_HTTP_QUERY, INetURLObject::EncodeMechanism::All ));
             OUString aFontNameCommand = aCommandBuffer.makeStringAndClear();
             pVCLPopupMenu->SetItemCommand( i+1, aFontNameCommand ); // Store font name into item command.
         }

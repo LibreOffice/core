@@ -7164,7 +7164,7 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
                     {
                         // remember file name to use in the title bar
                         INetURLObject aURL(rBaseURL);
-                        xObj->setContainerName(aURL.GetLastName(INetURLObject::DecodeMechanism::DECODE_WITH_CHARSET));
+                        xObj->setContainerName(aURL.GetLastName(INetURLObject::DecodeMechanism::WithCharset));
 
                         svt::EmbeddedObjectRef aObj( xObj, nAspect );
 
@@ -7230,7 +7230,7 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
             {
                 // remember file name to use in the title bar
                 INetURLObject aURL( rBaseURL );
-                xObj->setContainerName( aURL.GetLastName( INetURLObject::DecodeMechanism::DECODE_WITH_CHARSET ) );
+                xObj->setContainerName( aURL.GetLastName( INetURLObject::DecodeMechanism::WithCharset) );
 
                 // the visual area must be retrieved from the metafile (object doesn't know it so far)
 

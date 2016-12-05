@@ -518,7 +518,7 @@ void ActionListener::actionPerformed( const ActionEvent& rEvent )
                         // tdf#105382 uri-decode file name
                         auto aName( aURLObj.getName( INetURLObject::LAST_SEGMENT,
                                                      false,
-                                                     INetURLObject::DECODE_WITH_CHARSET ) );
+                                                     INetURLObject::DecodeMechanism::WithCharset ) );
                         aFileOpenDialog.setDefaultName( aName );
                     }
                 }

@@ -379,7 +379,7 @@ namespace abp
                     // Embed.
                     OUString aStreamRelPath = "EmbeddedDatabase";
                     OUString sTmpName = "vnd.sun.star.pkg://";
-                    sTmpName += INetURLObject::encode(aOwnURL, INetURLObject::PART_AUTHORITY, INetURLObject::ENCODE_ALL);
+                    sTmpName += INetURLObject::encode(aOwnURL, INetURLObject::PART_AUTHORITY, INetURLObject::EncodeMechanism::All);
                     sTmpName += "/" + aStreamRelPath;
                     uno::Reference<embed::XStorage> xStorage = pObjectShell->GetStorage();
                     uno::Sequence<beans::PropertyValue> aSequence = comphelper::InitPropertySequence(

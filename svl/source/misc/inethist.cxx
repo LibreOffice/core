@@ -330,7 +330,7 @@ void INetURLHistory::NormalizeUrl_Impl (INetURLObject &rUrl)
             if (!INetURLObject::IsCaseSensitive())
             {
                 OUString aPath (rUrl.GetURLPath(INetURLObject::NO_DECODE).toAsciiLowerCase());
-                rUrl.SetURLPath (aPath, INetURLObject::NOT_CANONIC);
+                rUrl.SetURLPath (aPath, INetURLObject::EncodeMechanism::NotCanonical);
             }
             break;
 
@@ -372,7 +372,7 @@ void INetURLHistory::PutUrl_Impl (const INetURLObject &rUrl)
         if (aHistUrl.HasMark())
         {
             aHistUrl.SetURL (aHistUrl.GetURLNoMark(INetURLObject::NO_DECODE),
-                             INetURLObject::NOT_CANONIC);
+                             INetURLObject::EncodeMechanism::NotCanonical);
 
             m_pImpl->putUrl (aHistUrl.GetMainURL(INetURLObject::NO_DECODE));
             Broadcast (INetURLHistoryHint (&aHistUrl));

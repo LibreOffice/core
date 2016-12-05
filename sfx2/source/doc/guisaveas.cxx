@@ -1210,7 +1210,7 @@ OUString ModelData_Impl::GetRecommendedDir( const OUString& aSuggestedDir )
                 aLocation = INetURLObject( SvtPathOptions().GetWorkPath() );
         }
 
-        OUString sLocationURL( aLocation.GetMainURL( INetURLObject::NO_DECODE ) );
+        OUString sLocationURL( aLocation.GetMainURL( INetURLObject::DecodeMechanism::NONE) );
         bool bIsInTempPath( false );
         OUString sSysTempPath;
         if( osl::FileBase::getTempDirURL( sSysTempPath ) == osl::FileBase::E_None )
@@ -1272,7 +1272,7 @@ OUString ModelData_Impl::GetRecommendedName( const OUString& aSuggestedName, con
             if ( xTypeDetection.is() )
             {
                 INetURLObject aObj( "c:/" + aRecommendedName, INetProtocol::File,
-                        INetURLObject::ENCODE_ALL, RTL_TEXTENCODING_UTF8, INetURLObject::FSYS_DOS );
+                        INetURLObject::EncodeMechanism::All, RTL_TEXTENCODING_UTF8, INetURLObject::FSYS_DOS );
 
                 OUString aExtension = GetRecommendedExtension( aTypeName );
                 if ( !aExtension.isEmpty() )

@@ -455,11 +455,11 @@ OUString SfxDocumentTemplates::GetTemplateTargetURLFromComponent( const OUString
 
     aTemplateObj.insertName( aGroupName, false,
                         INetURLObject::LAST_SEGMENT,
-                        INetURLObject::ENCODE_ALL );
+                        INetURLObject::EncodeMechanism::All );
 
     aTemplateObj.insertName( aTitle, false,
                         INetURLObject::LAST_SEGMENT,
-                        INetURLObject::ENCODE_ALL );
+                        INetURLObject::EncodeMechanism::All );
 
 
     OUString aResult;
@@ -839,7 +839,7 @@ bool SfxDocumentTemplates::CopyFrom
         INetURLObject aTemplObj( pTargetRgn->GetHierarchyURL() );
         aTemplObj.insertName( aTitle, false,
                               INetURLObject::LAST_SEGMENT,
-                              INetURLObject::ENCODE_ALL );
+                              INetURLObject::EncodeMechanism::All );
         OUString aTemplURL = aTemplObj.GetMainURL( INetURLObject::NO_DECODE );
 
         uno::Reference< XCommandEnvironment > aCmdEnv;
@@ -1246,7 +1246,7 @@ const OUString& DocTempl_EntryData_Impl::GetHierarchyURL()
 
         aTemplateObj.insertName( GetTitle(), false,
                      INetURLObject::LAST_SEGMENT,
-                     INetURLObject::ENCODE_ALL );
+                     INetURLObject::EncodeMechanism::All );
 
         maOwnURL = aTemplateObj.GetMainURL( INetURLObject::NO_DECODE );
         DBG_ASSERT( !maOwnURL.isEmpty(), "GetHierarchyURL(): Could not create URL!" );
@@ -1363,7 +1363,7 @@ void RegionData_Impl::AddEntry( const OUString& rTitle,
     INetURLObject aLinkObj( GetHierarchyURL() );
     aLinkObj.insertName( rTitle, false,
                       INetURLObject::LAST_SEGMENT,
-                      INetURLObject::ENCODE_ALL );
+                      INetURLObject::EncodeMechanism::All );
     OUString aLinkURL = aLinkObj.GetMainURL( INetURLObject::NO_DECODE );
 
     bool        bFound = false;
@@ -1403,7 +1403,7 @@ const OUString& RegionData_Impl::GetHierarchyURL()
 
         aRegionObj.insertName( GetTitle(), false,
                      INetURLObject::LAST_SEGMENT,
-                     INetURLObject::ENCODE_ALL );
+                     INetURLObject::EncodeMechanism::All );
 
         maOwnURL = aRegionObj.GetMainURL( INetURLObject::NO_DECODE );
         DBG_ASSERT( !maOwnURL.isEmpty(), "GetHierarchyURL(): Could not create URL!" );

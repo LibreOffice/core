@@ -2189,8 +2189,8 @@ void ODatabaseForm::submit_impl(const Reference<XControl>& Control, const css::a
         // FormMethod GET
         if( eSubmitMethod == FormSubmitMethod_GET )
         {
-            INetURLObject aUrlObj( aURLStr, INetURLObject::WAS_ENCODED );
-            aUrlObj.SetParam( aData, INetURLObject::ENCODE_ALL );
+            INetURLObject aUrlObj( aURLStr, INetURLObject::EncodeMechanism::WasEncoded );
+            aUrlObj.SetParam( aData, INetURLObject::EncodeMechanism::All );
             aURL.Complete = aUrlObj.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS );
             if (xTransformer.is())
                 xTransformer->parseStrict(aURL);

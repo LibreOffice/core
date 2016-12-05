@@ -698,7 +698,7 @@ IMPL_LINK_NOARG(SvxIMapDlg, URLLoseFocusHdl, Control&, void)
     {
         OUString aBase = GetBindings().GetDispatcher()->GetFrame()->GetObjectShell()->GetMedium()->GetBaseURL();
         aNewInfo.aMarkURL = ::URIHelper::SmartRel2Abs( INetURLObject(aBase), aURLText, URIHelper::GetMaybeFileHdl(), true, false,
-                                                        INetURLObject::WAS_ENCODED,
+                                                        INetURLObject::EncodeMechanism::WasEncoded,
                                                         INetURLObject::DECODE_UNAMBIGUOUS );
     }
     else

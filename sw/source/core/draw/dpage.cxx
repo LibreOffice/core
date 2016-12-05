@@ -198,14 +198,14 @@ bool SwDPage::RequestHelp( vcl::Window* pWindow, SdrView* pView,
                     sText = pTmpObj->GetAltText();
                     if ( sText.isEmpty() )
                         sText = URIHelper::removePassword( pTmpObj->GetURL(),
-                                        INetURLObject::WAS_ENCODED,
+                                        INetURLObject::EncodeMechanism::WasEncoded,
                                            INetURLObject::DECODE_UNAMBIGUOUS);
                 }
             }
             else if ( !rURL.GetURL().isEmpty() )
             {
                 sText = URIHelper::removePassword( rURL.GetURL(),
-                                        INetURLObject::WAS_ENCODED,
+                                        INetURLObject::EncodeMechanism::WasEncoded,
                                            INetURLObject::DECODE_UNAMBIGUOUS);
 
                 if( rURL.IsServerMap() )
