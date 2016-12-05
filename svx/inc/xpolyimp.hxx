@@ -29,7 +29,7 @@ class ImpXPolygon
 {
 public:
     Point*              pPointAry;
-    sal_uInt8*          pFlagAry;
+    PolyFlags*          pFlagAry;
     Point*              pOldPointAry;
     bool                bDeleteOldPoints;
     sal_uInt16          nSize;

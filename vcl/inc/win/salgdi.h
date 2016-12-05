@@ -237,9 +237,9 @@ protected:
         basegfx::B2DLineJoin,
         css::drawing::LineCap,
         double fMiterMinimumAngle) override;
-    virtual bool        drawPolyLineBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry ) override;
-    virtual bool        drawPolygonBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry ) override;
-    virtual bool        drawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt32* pPoints, const SalPoint* const* pPtAry, const BYTE* const* pFlgAry ) override;
+    virtual bool        drawPolyLineBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const PolyFlags* pFlgAry ) override;
+    virtual bool        drawPolygonBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const PolyFlags* pFlgAry ) override;
+    virtual bool        drawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt32* pPoints, const SalPoint* const* pPtAry, const PolyFlags* const* pFlgAry ) override;
     virtual bool        drawGradient( const tools::PolyPolygon&, const Gradient& ) override { return false; };
 
     // CopyArea --> No RasterOp, but ClipRegion

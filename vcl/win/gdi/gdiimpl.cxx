@@ -88,7 +88,7 @@ void ImplRenderPath( HDC hdc, sal_uLong nPoints, const SalPoint* pPtAry, const B
 
         for( i=1; i<nPoints; ++i, ++pPtAry, ++pFlgAry )
         {
-            if( *pFlgAry != POLY_CONTROL )
+            if( *pFlgAry != PolyFlags::Control )
             {
                 LineTo( hdc, pPtAry->mnX, pPtAry->mnY );
             }
@@ -136,9 +136,9 @@ void ImplPreparePolyDraw( bool                      bCloseFigures,
                 {
                     BYTE P4( pCurrFlag[ 2 ] );
 
-                    if( ( POLY_CONTROL == pCurrFlag[ 0 ] ) &&
-                        ( POLY_CONTROL == pCurrFlag[ 1 ] ) &&
-                        ( POLY_NORMAL == P4 || POLY_SMOOTH == P4 || POLY_SYMMTR == P4 ) )
+                    if( ( PolyFlags::Control == pCurrFlag[ 0 ] ) &&
+                        ( PolyFlags::Control == pCurrFlag[ 1 ] ) &&
+                        ( PolyFlags::Normal == P4 || PolyFlags::Smooth == P4 || PolyFlags::Symmetric == P4 ) )
                     {
                         // control point one
                         *pWinPointAry++ = *pCurrPoint++;
@@ -1792,7 +1792,7 @@ void WinSalGraphicsImpl::drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pP
         delete [] pWinPointAryAry;
 }
 
-bool WinSalGraphicsImpl::drawPolyLineBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry )
+bool WinSalGraphicsImpl::drawPolyLineBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const PolyFlags* pFlgAry )
 {
     static_assert( sizeof( POINT ) == sizeof( SalPoint ), "must be the same size" );
 
@@ -1801,7 +1801,7 @@ bool WinSalGraphicsImpl::drawPolyLineBezier( sal_uInt32 nPoints, const SalPoint*
     return true;
 }
 
-bool WinSalGraphicsImpl::drawPolygonBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry )
+bool WinSalGraphicsImpl::drawPolygonBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const PolyFlags* pFlgAry )
 {
     static_assert( sizeof( POINT ) == sizeof( SalPoint ), "must be the same size" );
 
@@ -1846,7 +1846,7 @@ bool WinSalGraphicsImpl::drawPolygonBezier( sal_uInt32 nPoints, const SalPoint* 
 }
 
 bool WinSalGraphicsImpl::drawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt32* pPoints,
-                                             const SalPoint* const* pPtAry, const BYTE* const* pFlgAry )
+                                             const SalPoint* const* pPtAry, const PolyFlags* const* pFlgAry )
 {
     static_assert( sizeof( POINT ) == sizeof( SalPoint ), "must be the same size" );
 

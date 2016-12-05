@@ -799,18 +799,18 @@ void WinSalGraphics::drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoint
     mpImpl->drawPolyPolygon( nPoly, pPoints, pPtAry );
 }
 
-bool WinSalGraphics::drawPolyLineBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry )
+bool WinSalGraphics::drawPolyLineBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const PolyFlags* pFlgAry )
 {
     return mpImpl->drawPolyLineBezier( nPoints, pPtAry, pFlgAry );
 }
 
-bool WinSalGraphics::drawPolygonBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry )
+bool WinSalGraphics::drawPolygonBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const PolyFlags* pFlgAry )
 {
     return mpImpl->drawPolygonBezier( nPoints, pPtAry, pFlgAry );
 }
 
 bool WinSalGraphics::drawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt32* pPoints,
-                                             const SalPoint* const* pPtAry, const BYTE* const* pFlgAry )
+                                             const SalPoint* const* pPtAry, const PolyFlags* const* pFlgAry )
 {
     return mpImpl->drawPolyPolygonBezier( nPoly, pPoints, pPtAry, pFlgAry );
 }
