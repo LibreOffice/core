@@ -546,7 +546,7 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                                                     for ( j = 0; bNotFound && ( j < rPolygon.GetSize() ); j++ )
                                                     {
                                                         PolyFlags eFlags = rPolygon.GetFlags( j );
-                                                        if ( eFlags == POLY_NORMAL )
+                                                        if ( eFlags == PolyFlags::Normal )
                                                         {
                                                             if ( nC == nPointCount )
                                                             {
