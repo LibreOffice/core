@@ -69,9 +69,6 @@ public:
         :m_aErrors( _rxContext )
     {
     }
-    virtual ~LocalNameApproval() override
-    {
-    }
 
     void SAL_CALL   approveElement( const OUString& _rName, const Reference< XInterface >& _rxElement ) override;
 };

@@ -233,7 +233,6 @@ private:
     DECL_LINK( OnStartTableWizard, void*, void );
 public:
     explicit DBContentLoader(const Reference< XComponentContext >&);
-    virtual ~DBContentLoader() override;
 
     // XServiceInfo
     OUString                        SAL_CALL getImplementationName() throw(std::exception  ) override;
@@ -263,11 +262,6 @@ private:
 DBContentLoader::DBContentLoader(const Reference< XComponentContext >& _rxFactory)
     :m_aContext( _rxFactory )
     ,m_nStartWizard(nullptr)
-{
-
-}
-
-DBContentLoader::~DBContentLoader()
 {
 
 }

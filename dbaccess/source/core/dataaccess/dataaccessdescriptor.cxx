@@ -211,14 +211,9 @@ namespace
         virtual Reference< XPropertySet > SAL_CALL createDataAccessDescriptor(  ) throw (RuntimeException, std::exception) override;
 
         DataAccessDescriptorFactory();
-        virtual ~DataAccessDescriptorFactory() override;
     };
 
     DataAccessDescriptorFactory::DataAccessDescriptorFactory()
-    {
-    }
-
-    DataAccessDescriptorFactory::~DataAccessDescriptorFactory()
     {
     }
 

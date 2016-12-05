@@ -71,7 +71,6 @@ private:
     Reference< XComponentContext >      m_xContext;
 public:
     explicit DBContentLoader(const Reference< XComponentContext >&);
-    virtual ~DBContentLoader() override;
 
     // XServiceInfo
     OUString                 SAL_CALL getImplementationName() throw(std::exception  ) override;
@@ -97,11 +96,6 @@ public:
 
 DBContentLoader::DBContentLoader(const Reference< XComponentContext >& _rxContext)
     :m_xContext(_rxContext)
-{
-
-}
-
-DBContentLoader::~DBContentLoader()
 {
 
 }
