@@ -1440,15 +1440,15 @@ void PDFWriterImpl::PDFPage::appendPolygon( const tools::Polygon& rPoly, OString
     sal_uInt32 nBufLen = rBuffer.getLength();
     if( nPoints > 0 )
     {
-        const sal_uInt8* pFlagArray = rPoly.GetConstFlagAry();
+        const PolyFlags* pFlagArray = rPoly.GetConstFlagAry();
         appendPoint( rPoly[0], rBuffer );
         rBuffer.append( " m\n" );
         for( sal_uInt16 i = 1; i < nPoints; i++ )
         {
-            if( pFlagArray && pFlagArray[i] == POLY_CONTROL && nPoints-i > 2 )
+            if( pFlagArray && pFlagArray[i] == PolyFlags::Control && nPoints-i > 2 )
             {
                 // bezier
-                SAL_WARN_IF( pFlagArray[i+1] != POLY_CONTROL || pFlagArray[i+2] == POLY_CONTROL, "vcl", "unexpected sequence of control points" );
+                SAL_WARN_IF( pFlagArray[i+1] != PolyFlags::Control || pFlagArray[i+2] == PolyFlags::Control, "vcl", "unexpected sequence of control points" );
                 appendPoint( rPoly[i], rBuffer );
                 rBuffer.append( " " );
                 appendPoint( rPoly[i+1], rBuffer );

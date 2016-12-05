@@ -718,9 +718,9 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                     for(sal_uInt16 a(0); a + 1 < nPoints; a++)
                     {
                         if(bCurve
-                            && POLY_NORMAL != aPoly.GetFlags(a + 1)
+                            && PolyFlags::Normal != aPoly.GetFlags(a + 1)
                             && a + 2 < nPoints
-                            && POLY_NORMAL != aPoly.GetFlags(a + 2)
+                            && PolyFlags::Normal != aPoly.GetFlags(a + 2)
                             && a + 3 < nPoints)
                         {
                             const tools::Polygon aSnippet(4,
@@ -1503,10 +1503,10 @@ void PSWriter::ImplAddPath( const tools::Polygon & rPolygon )
         ImplMoveTo( rPolygon.GetPoint( 0 ) );
         while ( i < nPointCount )
         {
-            if ( ( rPolygon.GetFlags( i ) == POLY_CONTROL )
+            if ( ( rPolygon.GetFlags( i ) == PolyFlags::Control )
                     && ( ( i + 2 ) < nPointCount )
-                        && ( rPolygon.GetFlags( i + 1 ) == POLY_CONTROL )
-                            && ( rPolygon.GetFlags( i + 2 ) != POLY_CONTROL ) )
+                        && ( rPolygon.GetFlags( i + 1 ) == PolyFlags::Control )
+                            && ( rPolygon.GetFlags( i + 2 ) != PolyFlags::Control ) )
             {
                 ImplCurveTo( rPolygon[ i ], rPolygon[ i + 1 ], rPolygon[ i + 2 ], PS_WRAP );
                 i += 3;
@@ -1591,10 +1591,10 @@ void PSWriter::ImplPolyLine( const tools::Polygon & rPoly )
                 i = 1;
                 while ( i < nPointCount )
                 {
-                    if ( ( rPoly.GetFlags( i ) == POLY_CONTROL )
+                    if ( ( rPoly.GetFlags( i ) == PolyFlags::Control )
                             && ( ( i + 2 ) < nPointCount )
-                                && ( rPoly.GetFlags( i + 1 ) == POLY_CONTROL )
-                                    && ( rPoly.GetFlags( i + 2 ) != POLY_CONTROL ) )
+                                && ( rPoly.GetFlags( i + 1 ) == PolyFlags::Control )
+                                    && ( rPoly.GetFlags( i + 2 ) != PolyFlags::Control ) )
                     {
                         ImplCurveTo( rPoly[ i ], rPoly[ i + 1 ], rPoly[ i + 2 ], PS_WRAP );
                         i += 3;

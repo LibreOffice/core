@@ -715,7 +715,7 @@ void EMFWriter::ImplWritePath( const tools::PolyPolygon& rPolyPoly, bool bClosed
 
             sal_uInt16 nBezPoints = 0;
 
-            while ( ( ( nBezPoints + n + 2 ) < rPoly.GetSize() ) && ( rPoly.GetFlags( nBezPoints + n ) == POLY_CONTROL ) )
+            while ( ( ( nBezPoints + n + 2 ) < rPoly.GetSize() ) && ( rPoly.GetFlags( nBezPoints + n ) == PolyFlags::Control ) )
                 nBezPoints += 3;
 
             if ( nBezPoints )
@@ -735,7 +735,7 @@ void EMFWriter::ImplWritePath( const tools::PolyPolygon& rPolyPoly, bool bClosed
             else
             {
                 sal_uInt16 nPoints = 1;
-                while( ( nPoints + n ) < rPoly.GetSize() && ( rPoly.GetFlags( nPoints + n ) != POLY_CONTROL ) )
+                while( ( nPoints + n ) < rPoly.GetSize() && ( rPoly.GetFlags( nPoints + n ) != PolyFlags::Control ) )
                     nPoints++;
 
                 if ( nPoints > 1 )

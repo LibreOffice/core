@@ -376,7 +376,7 @@ bool ImplWriteExtendedPolyPolygonAction(SvStream& rOStm, const tools::PolyPolygo
 
                         for(sal_uInt16 c(0); c < nPointCount; c++)
                         {
-                            rOStm.WriteUChar( rCandidate.GetFlags(c) );
+                            rOStm.WriteUChar( (sal_uInt8)rCandidate.GetFlags(c) );
                         }
                     }
                     else
