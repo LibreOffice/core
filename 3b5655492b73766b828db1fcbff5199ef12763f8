@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a71b18c_0f7c9671",
+        "filename": "vcl/source/src/app.src",
+        "patchSetId": 6
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-12-05T13:09:16Z",
+      "side": 1,
+      "message": "Uhm, why did you comment this out?",
+      "revId": "3b5655492b73766b828db1fcbff5199ef12763f8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
