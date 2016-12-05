@@ -628,9 +628,9 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                                         for(sal_uInt16 a(0); a + 1 < nPoints; a++)
                                         {
                                             if(bCurve
-                                                && POLY_NORMAL != aPath.GetFlags(a + 1)
+                                                && PolyFlags::Normal != aPath.GetFlags(a + 1)
                                                 && a + 2 < nPoints
-                                                && POLY_NORMAL != aPath.GetFlags(a + 2)
+                                                && PolyFlags::Normal != aPath.GetFlags(a + 2)
                                                 && a + 3 < nPoints)
                                             {
                                                 const tools::Polygon aSnippet(4,

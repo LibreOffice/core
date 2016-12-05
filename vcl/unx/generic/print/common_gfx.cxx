@@ -477,7 +477,7 @@ PrinterGfx::DrawPolyPolygon (sal_uInt32 nPoly, const sal_uInt32* pSizes, const P
  */
 
 void
-PrinterGfx::DrawPolyLineBezier (sal_uInt32 nPoints, const Point* pPath, const sal_uInt8* pFlgAry)
+PrinterGfx::DrawPolyLineBezier (sal_uInt32 nPoints, const Point* pPath, const PolyFlags* pFlgAry)
 {
     const sal_uInt32 nBezString= 1024;
     sal_Char pString[nBezString];
@@ -496,7 +496,7 @@ PrinterGfx::DrawPolyLineBezier (sal_uInt32 nPoints, const Point* pPath, const sa
         // - a normal point followed by 2 control points and a normal point is a curve
         for (unsigned int i=1; i<nPoints;)
         {
-            if (pFlgAry[i] != POLY_CONTROL) //If the next point is a POLY_NORMAL, we're drawing a line
+            if (pFlgAry[i] != PolyFlags::Control) //If the next point is a PolyFlags::Normal, we're drawing a line
             {
                 snprintf(pString, nBezString, "%li %li lineto\n", pPath[i].X(), pPath[i].Y());
                 i++;
@@ -505,8 +505,8 @@ PrinterGfx::DrawPolyLineBezier (sal_uInt32 nPoints, const Point* pPath, const sa
             {
                 if (i+2 >= nPoints)
                     return; //Error: wrong sequence of contol/normal points somehow
-                if ((pFlgAry[i] == POLY_CONTROL) && (pFlgAry[i+1] == POLY_CONTROL) &&
-                    (pFlgAry[i+2] != POLY_CONTROL))
+                if ((pFlgAry[i] == PolyFlags::Control) && (pFlgAry[i+1] == PolyFlags::Control) &&
+                    (pFlgAry[i+2] != PolyFlags::Control))
                 {
                     snprintf(pString, nBezString, "%li %li %li %li %li %li curveto\n",
                              pPath[i].X(), pPath[i].Y(),
@@ -528,7 +528,7 @@ PrinterGfx::DrawPolyLineBezier (sal_uInt32 nPoints, const Point* pPath, const sa
 }
 
 void
-PrinterGfx::DrawPolygonBezier (sal_uInt32 nPoints, const Point* pPath, const sal_uInt8* pFlgAry)
+PrinterGfx::DrawPolygonBezier (sal_uInt32 nPoints, const Point* pPath, const PolyFlags* pFlgAry)
 {
     const sal_uInt32 nBezString = 1024;
     sal_Char pString[nBezString];
@@ -540,7 +540,7 @@ PrinterGfx::DrawPolygonBezier (sal_uInt32 nPoints, const Point* pPath, const sal
     WritePS(mpPageBody, pString); //Move to the starting point for the PolyPoygon
     for (unsigned int i=1; i < nPoints;)
     {
-        if (pFlgAry[i] != POLY_CONTROL)
+        if (pFlgAry[i] != PolyFlags::Control)
         {
             snprintf(pString, nBezString, "%li %li lineto\n", pPath[i].X(), pPath[i].Y());
             WritePS(mpPageBody, pString);
@@ -550,8 +550,8 @@ PrinterGfx::DrawPolygonBezier (sal_uInt32 nPoints, const Point* pPath, const sal
         {
             if (i+2 >= nPoints)
                 return; //Error: wrong sequence of contol/normal points somehow
-            if ((pFlgAry[i] == POLY_CONTROL) && (pFlgAry[i+1] == POLY_CONTROL) &&
-                    (pFlgAry[i+2] != POLY_CONTROL))
+            if ((pFlgAry[i] == PolyFlags::Control) && (pFlgAry[i+1] == PolyFlags::Control) &&
+                    (pFlgAry[i+2] != PolyFlags::Control))
             {
                 snprintf(pString, nBezString, "%li %li %li %li %li %li curveto\n",
                         pPath[i].X(), pPath[i].Y(),
@@ -584,7 +584,7 @@ PrinterGfx::DrawPolygonBezier (sal_uInt32 nPoints, const Point* pPath, const sal
 }
 
 void
-PrinterGfx::DrawPolyPolygonBezier (sal_uInt32 nPoly, const sal_uInt32 * pPoints, const Point* const * pPtAry, const sal_uInt8* const* pFlgAry)
+PrinterGfx::DrawPolyPolygonBezier (sal_uInt32 nPoly, const sal_uInt32 * pPoints, const Point* const * pPtAry, const PolyFlags* const* pFlgAry)
 {
     const sal_uInt32 nBezString = 1024;
     sal_Char pString[nBezString];
@@ -604,7 +604,7 @@ PrinterGfx::DrawPolyPolygonBezier (sal_uInt32 nPoly, const sal_uInt32 * pPoints,
         {
             // if no flag array exists for this polygon, then it must be a regular
             // polygon without beziers
-            if ( ! pFlgAry[i] || pFlgAry[i][j] != POLY_CONTROL)
+            if ( ! pFlgAry[i] || pFlgAry[i][j] != PolyFlags::Control)
             {
                 snprintf(pString, nBezString, "%li %li lineto\n", pPtAry[i][j].X(), pPtAry[i][j].Y());
                 WritePS(mpPageBody, pString);
@@ -614,7 +614,7 @@ PrinterGfx::DrawPolyPolygonBezier (sal_uInt32 nPoly, const sal_uInt32 * pPoints,
             {
                 if (j+2 >= nPoints)
                     break; //Error: wrong sequence of contol/normal points somehow
-                if ((pFlgAry[i][j] == POLY_CONTROL) && (pFlgAry[i][j+1] == POLY_CONTROL) && (pFlgAry[i][j+2] != POLY_CONTROL))
+                if ((pFlgAry[i][j] == PolyFlags::Control) && (pFlgAry[i][j+1] == PolyFlags::Control) && (pFlgAry[i][j+2] != PolyFlags::Control))
                 {
                     snprintf(pString, nBezString, "%li %li %li %li %li %li curveto\n",
                             pPtAry[i][j].X(), pPtAry[i][j].Y(),

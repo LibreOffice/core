@@ -715,9 +715,9 @@ void CGM::ImplDoClass4()
                     for ( sal_uInt16 i = 0; i < nNumberOfPoints; i++ )
                     {
                         if ( ( i % 3 ) == 0 )
-                            aPolygon.SetFlags( i, POLY_NORMAL );
+                            aPolygon.SetFlags( i, PolyFlags::Normal );
                         else
-                            aPolygon.SetFlags( i, POLY_CONTROL );
+                            aPolygon.SetFlags( i, PolyFlags::Control );
                     }
                 }
                 else
@@ -727,8 +727,8 @@ void CGM::ImplDoClass4()
                         switch ( i & 3 )
                         {
                             case 0 :
-                            case 3 : aPolygon.SetFlags( i, POLY_NORMAL ); break;
-                            default : aPolygon.SetFlags( i, POLY_CONTROL ); break;
+                            case 3 : aPolygon.SetFlags( i, PolyFlags::Normal ); break;
+                            default : aPolygon.SetFlags( i, PolyFlags::Control ); break;
                         }
                     }
                 }
