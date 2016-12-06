@@ -76,7 +76,7 @@ namespace dbaui
     }
     IMPL_LINK(OToolBoxHelper, SettingsChanged, VclSimpleEvent&, _rEvt, void)
     {
-        if ( m_pToolBox && _rEvt.GetId() == VCLEVENT_APPLICATION_DATACHANGED )
+        if ( m_pToolBox && _rEvt.GetId() == VclEventId::ApplicationDataChanged )
         {
             DataChangedEvent* pData = static_cast<DataChangedEvent*>(static_cast<VclWindowEvent&>(_rEvt).GetData());
             if ( pData && ((( pData->GetType() == DataChangedEventType::SETTINGS  )   ||

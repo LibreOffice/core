@@ -165,7 +165,7 @@ struct ImplEventHook
 
 struct ImplPostEventData
 {
-    sal_uLong           mnEvent;
+    VclEventId      mnEvent;
     VclPtr<vcl::Window> mpWin;
     ImplSVEvent *   mnEventId;
     KeyEvent        maKeyEvent;
@@ -173,14 +173,14 @@ struct ImplPostEventData
     ZoomEvent       maZoomEvent;
     ScrollEvent     maScrollEvent;
 
-       ImplPostEventData( sal_uLong nEvent, vcl::Window* pWin, const KeyEvent& rKeyEvent ) :
+       ImplPostEventData( VclEventId nEvent, vcl::Window* pWin, const KeyEvent& rKeyEvent ) :
         mnEvent( nEvent ), mpWin( pWin ), mnEventId( nullptr ), maKeyEvent( rKeyEvent ) {}
-       ImplPostEventData( sal_uLong nEvent, vcl::Window* pWin, const MouseEvent& rMouseEvent ) :
+       ImplPostEventData( VclEventId nEvent, vcl::Window* pWin, const MouseEvent& rMouseEvent ) :
         mnEvent( nEvent ), mpWin( pWin ), mnEventId( nullptr ), maMouseEvent( rMouseEvent ) {}
 #if !HAVE_FEATURE_DESKTOP
-       ImplPostEventData( sal_uLong nEvent, vcl::Window* pWin, const ZoomEvent& rZoomEvent ) :
+       ImplPostEventData( VclEventId nEvent, vcl::Window* pWin, const ZoomEvent& rZoomEvent ) :
         mnEvent( nEvent ), mpWin( pWin ), mnEventId( 0 ), maZoomEvent( rZoomEvent ) {}
-       ImplPostEventData( sal_uLong nEvent, vcl::Window* pWin, const ScrollEvent& rScrollEvent ) :
+       ImplPostEventData( VclEventId nEvent, vcl::Window* pWin, const ScrollEvent& rScrollEvent ) :
         mnEvent( nEvent ), mpWin( pWin ), mnEventId( 0 ), maScrollEvent( rScrollEvent ) {}
 #endif
 
@@ -394,8 +394,8 @@ namespace
             return false;
 
         KeyEvent aVCLKeyEvt(nCharCode, nCode);
-        Application::PostKeyEvent(VCLEVENT_WINDOW_KEYINPUT, xWin.get(), &aVCLKeyEvt);
-        Application::PostKeyEvent(VCLEVENT_WINDOW_KEYUP, xWin.get(), &aVCLKeyEvt);
+        Application::PostKeyEvent(VclEventId::WindowKeyInput, xWin.get(), &aVCLKeyEvt);
+        Application::PostKeyEvent(VclEventId::WindowKeyUp, xWin.get(), &aVCLKeyEvt);
         return true;
     }
 
@@ -702,7 +702,7 @@ void Application::SetSettings( const AllSettings& rSettings )
             DataChangedEvent aDCEvt( DataChangedEventType::SETTINGS, &aOldSettings, nChangeFlags );
 
             // notify data change handler
-            ImplCallEventListeners( VCLEVENT_APPLICATION_DATACHANGED, nullptr, &aDCEvt);
+            ImplCallEventListeners( VclEventId::ApplicationDataChanged, nullptr, &aDCEvt);
 
             // Update all windows
             vcl::Window* pFirstFrame = pSVData->maWinData.mpFirstFrame;
@@ -820,7 +820,7 @@ void Application::NotifyAllWindows( DataChangedEvent& rDCEvt )
     }
 }
 
-void Application::ImplCallEventListeners( sal_uLong nEvent, vcl::Window *pWin, void* pData )
+void Application::ImplCallEventListeners( VclEventId nEvent, vcl::Window *pWin, void* pData )
 {
     ImplSVData* pSVData = ImplGetSVData();
     VclWindowEvent aEvent( pWin, nEvent, pData );
@@ -870,7 +870,7 @@ void Application::RemoveKeyListener( const Link<VclWindowEvent&,bool>& rKeyListe
     }
 }
 
-bool Application::HandleKey( sal_uLong nEvent, vcl::Window *pWin, KeyEvent* pKeyEvent )
+bool Application::HandleKey( VclEventId nEvent, vcl::Window *pWin, KeyEvent* pKeyEvent )
 {
     // let listeners process the key event
     VclWindowEvent aEvent( pWin, nEvent, static_cast<void *>(pKeyEvent) );
@@ -897,7 +897,7 @@ bool Application::HandleKey( sal_uLong nEvent, vcl::Window *pWin, KeyEvent* pKey
     return bProcessed;
 }
 
-ImplSVEvent * Application::PostKeyEvent( sal_uLong nEvent, vcl::Window *pWin, KeyEvent* pKeyEvent )
+ImplSVEvent * Application::PostKeyEvent( VclEventId nEvent, vcl::Window *pWin, KeyEvent* pKeyEvent )
 {
     const SolarMutexGuard aGuard;
     ImplSVEvent * nEventId = nullptr;
@@ -922,7 +922,7 @@ ImplSVEvent * Application::PostKeyEvent( sal_uLong nEvent, vcl::Window *pWin, Ke
     return nEventId;
 }
 
-ImplSVEvent * Application::PostMouseEvent( sal_uLong nEvent, vcl::Window *pWin, MouseEvent* pMouseEvent )
+ImplSVEvent * Application::PostMouseEvent( VclEventId nEvent, vcl::Window *pWin, MouseEvent* pMouseEvent )
 {
     const SolarMutexGuard aGuard;
     ImplSVEvent * nEventId = nullptr;
@@ -966,37 +966,37 @@ IMPL_STATIC_LINK( Application, PostEventHandler, void*, pCallData, void )
 
     switch( pData->mnEvent )
     {
-        case VCLEVENT_WINDOW_MOUSEMOVE:
+        case VclEventId::WindowMouseMove:
             nEvent = SalEvent::ExternalMouseMove;
             pEventData = &pData->maMouseEvent;
         break;
 
-        case VCLEVENT_WINDOW_MOUSEBUTTONDOWN:
+        case VclEventId::WindowMouseButtonDown:
             nEvent = SalEvent::ExternalMouseButtonDown;
             pEventData = &pData->maMouseEvent;
         break;
 
-        case VCLEVENT_WINDOW_MOUSEBUTTONUP:
+        case VclEventId::WindowMouseButtonUp:
             nEvent = SalEvent::ExternalMouseButtonUp;
             pEventData = &pData->maMouseEvent;
         break;
 
-        case VCLEVENT_WINDOW_KEYINPUT:
+        case VclEventId::WindowKeyInput:
             nEvent = SalEvent::ExternalKeyInput;
             pEventData = &pData->maKeyEvent;
         break;
 
-        case VCLEVENT_WINDOW_KEYUP:
+        case VclEventId::WindowKeyUp:
             nEvent = SalEvent::ExternalKeyUp;
             pEventData = &pData->maKeyEvent;
         break;
 
-        case VCLEVENT_WINDOW_ZOOM:
+        case VclEventId::WindowZoom:
             nEvent = SalEvent::ExternalZoom;
             pEventData = &pData->maZoomEvent;
         break;
 
-        case VCLEVENT_WINDOW_SCROLL:
+        case VclEventId::WindowScroll:
             nEvent = SalEvent::ExternalScroll;
             pEventData = &pData->maScrollEvent;
         break;

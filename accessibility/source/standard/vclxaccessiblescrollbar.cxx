@@ -58,7 +58,7 @@ void VCLXAccessibleScrollBar::ProcessWindowEvent( const VclWindowEvent& rVclWind
 {
     switch ( rVclWindowEvent.GetId() )
     {
-        case VCLEVENT_SCROLLBAR_SCROLL:
+        case VclEventId::ScrollbarScroll:
         {
             NotifyAccessibleEvent( AccessibleEventId::VALUE_CHANGED, Any(), Any() );
         }

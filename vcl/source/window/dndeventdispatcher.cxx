@@ -70,7 +70,7 @@ vcl::Window* DNDEventDispatcher::findTopLevelWindow(Point location)
 
 IMPL_LINK(DNDEventDispatcher, WindowEventListener, VclWindowEvent&, rEvent, void)
 {
-    if (rEvent.GetId() == VCLEVENT_OBJECT_DYING)
+    if (rEvent.GetId() == VclEventId::ObjectDying)
     {
         designate_currentwindow(nullptr);
     }

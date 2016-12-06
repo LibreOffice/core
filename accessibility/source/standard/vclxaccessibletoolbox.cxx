@@ -507,13 +507,13 @@ void VCLXAccessibleToolBox::FillAccessibleStateSet( utl::AccessibleStateSetHelpe
 
 void VCLXAccessibleToolBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
-    // to prevent an early release of the toolbox (VCLEVENT_OBJECT_DYING)
+    // to prevent an early release of the toolbox (VclEventId::ObjectDying)
     Reference< XAccessibleContext > xTemp = this;
 
     switch ( rVclWindowEvent.GetId() )
     {
-        case VCLEVENT_TOOLBOX_CLICK:
-        case VCLEVENT_TOOLBOX_SELECT:
+        case VclEventId::ToolboxClick:
+        case VclEventId::ToolboxSelect:
         {
             VclPtr< ToolBox > pToolBox = GetAs< ToolBox >();
             if ( rVclWindowEvent.GetData() )
@@ -528,13 +528,13 @@ void VCLXAccessibleToolBox::ProcessWindowEvent( const VclWindowEvent& rVclWindow
             }
             break;
         }
-        case VCLEVENT_TOOLBOX_DOUBLECLICK:
-        case VCLEVENT_TOOLBOX_ACTIVATE:
-        case VCLEVENT_TOOLBOX_DEACTIVATE:
-        //case VCLEVENT_TOOLBOX_SELECT:
+        case VclEventId::ToolboxDoubleClick:
+        case VclEventId::ToolboxActivate:
+        case VclEventId::ToolboxDeactivate:
+        //case VclEventId::ToolboxSelect:
             break;
 
-        case VCLEVENT_TOOLBOX_ITEMUPDATED:
+        case VclEventId::ToolboxItemUpdated:
         {
             if ( rVclWindowEvent.GetData() )
             {
@@ -544,26 +544,26 @@ void VCLXAccessibleToolBox::ProcessWindowEvent( const VclWindowEvent& rVclWindow
         break;
         }
 
-        case VCLEVENT_TOOLBOX_HIGHLIGHT:
+        case VclEventId::ToolboxHighlight:
             UpdateFocus_Impl();
             break;
 
-        case VCLEVENT_TOOLBOX_HIGHLIGHTOFF:
+        case VclEventId::ToolboxHighlightOff:
             ReleaseFocus_Impl( (sal_Int32)reinterpret_cast<sal_IntPtr>(rVclWindowEvent.GetData()) );
             break;
 
-        case VCLEVENT_TOOLBOX_ITEMADDED :
+        case VclEventId::ToolboxItemAdded :
             UpdateItem_Impl( (sal_Int32)reinterpret_cast<sal_IntPtr>(rVclWindowEvent.GetData()) );
             break;
 
-        case VCLEVENT_TOOLBOX_ITEMREMOVED :
-        case VCLEVENT_TOOLBOX_ALLITEMSCHANGED :
+        case VclEventId::ToolboxItemRemoved :
+        case VclEventId::ToolboxAllItemsChanged :
         {
             UpdateAllItems_Impl();
             break;
         }
 
-        case VCLEVENT_TOOLBOX_ITEMWINDOWCHANGED:
+        case VclEventId::ToolboxItemWindowChanged:
         {
             sal_Int32 nPos = (sal_Int32)reinterpret_cast<sal_IntPtr>(rVclWindowEvent.GetData());
             ToolBoxItemsMap::iterator aAccessiblePos( m_aAccessibleChildren.find( nPos ) );
@@ -578,25 +578,25 @@ void VCLXAccessibleToolBox::ProcessWindowEvent( const VclWindowEvent& rVclWindow
             NotifyAccessibleEvent( AccessibleEventId::CHILD, Any(), aNewValue );
             break;
         }
-        case VCLEVENT_TOOLBOX_ITEMTEXTCHANGED :
+        case VclEventId::ToolboxItemTextChanged :
             UpdateItemName_Impl( (sal_Int32)reinterpret_cast<sal_IntPtr>(rVclWindowEvent.GetData()) );
             break;
 
-        case VCLEVENT_TOOLBOX_ITEMENABLED :
-        case VCLEVENT_TOOLBOX_ITEMDISABLED :
+        case VclEventId::ToolboxItemEnabled :
+        case VclEventId::ToolboxItemDisabled :
         {
             UpdateItemEnabled_Impl( (sal_Int32)reinterpret_cast<sal_IntPtr>(rVclWindowEvent.GetData()) );
             break;
         }
 
-        case VCLEVENT_DROPDOWN_OPEN:
-        case VCLEVENT_DROPDOWN_CLOSE:
+        case VclEventId::DropdownOpen:
+        case VclEventId::DropdownClose:
         {
-            UpdateCustomPopupItemp_Impl( static_cast< vcl::Window* >( rVclWindowEvent.GetData() ), rVclWindowEvent.GetId() == VCLEVENT_DROPDOWN_OPEN );
+            UpdateCustomPopupItemp_Impl( static_cast< vcl::Window* >( rVclWindowEvent.GetData() ), rVclWindowEvent.GetId() == VclEventId::DropdownOpen );
             break;
         }
 
-        case VCLEVENT_OBJECT_DYING :
+        case VclEventId::ObjectDying :
         {
             // if this toolbox is a subtoolbox, we have to release it from its parent
             VclPtr< vcl::Window > pWin = GetAs< vcl::Window >();
@@ -629,7 +629,7 @@ void VCLXAccessibleToolBox::ProcessWindowChildEvent( const VclWindowEvent& rVclW
 {
     switch ( rVclWindowEvent.GetId() )
     {
-        case VCLEVENT_WINDOW_SHOW:  // send create on show for direct accessible children
+        case VclEventId::WindowShow:  // send create on show for direct accessible children
         {
             Reference< XAccessible > xReturn = GetItemWindowAccessible(rVclWindowEvent);
             if ( xReturn.is() )

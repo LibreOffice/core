@@ -40,9 +40,9 @@ namespace dbaui
         // IWindowEventFilter
         virtual bool payAttentionTo( const VclWindowEvent& _rEvent ) const override
         {
-            return  ( _rEvent.GetId() == VCLEVENT_WINDOW_ENABLED )
-                ||  ( _rEvent.GetId() == VCLEVENT_WINDOW_DISABLED )
-                ||  ( _rEvent.GetId() == VCLEVENT_EDIT_MODIFY );
+            return  ( _rEvent.GetId() == VclEventId::WindowEnabled )
+                ||  ( _rEvent.GetId() == VclEventId::WindowDisabled )
+                ||  ( _rEvent.GetId() == VclEventId::EditModify );
         }
     };
 
@@ -69,21 +69,21 @@ namespace dbaui
 
         switch ( _rTrigger.GetId() )
         {
-        case 0:
+        case VclEventId::NONE:
             // initial call
             const_cast< TextResetOperator* >( this )->m_sUserText = _rTrigger.GetWindow()->GetText();
             break;
 
-        case VCLEVENT_EDIT_MODIFY:
+        case VclEventId::EditModify:
             if ( _rTrigger.GetWindow()->IsEnabled() )
                 const_cast< TextResetOperator* >( this )->m_sUserText = _rTrigger.GetWindow()->GetText();
             break;
 
-        case VCLEVENT_WINDOW_ENABLED:
+        case VclEventId::WindowEnabled:
             _rOperateOn.SetText( m_sUserText );
             break;
 
-        case VCLEVENT_WINDOW_DISABLED:
+        case VclEventId::WindowDisabled:
             _rOperateOn.SetText( m_sDisabledText );
             break;
 

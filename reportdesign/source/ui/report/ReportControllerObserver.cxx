@@ -82,9 +82,9 @@ public:
 
     IMPL_LINK(OXReportControllerObserver, SettingsChanged, VclSimpleEvent&, _rEvt, void)
     {
-            sal_Int32 nEvent = _rEvt.GetId();
+            VclEventId nEvent = _rEvt.GetId();
 
-            if (nEvent == VCLEVENT_APPLICATION_DATACHANGED )
+            if (nEvent == VclEventId::ApplicationDataChanged )
             {
                 DataChangedEvent* pData = static_cast<DataChangedEvent*>(static_cast<VclWindowEvent&>(_rEvt).GetData());
                 if ( pData && ((( pData->GetType() == DataChangedEventType::SETTINGS  )   ||

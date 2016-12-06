@@ -1070,7 +1070,7 @@ void VclMultiLineEdit::Modify()
 {
     aModifyHdlLink.Call( *this );
 
-    CallEventListeners( VCLEVENT_EDIT_MODIFY );
+    CallEventListeners( VclEventId::EditModify );
 
     if ( pUpdateDataTimer )
         pUpdateDataTimer->Start();
@@ -1078,12 +1078,12 @@ void VclMultiLineEdit::Modify()
 
 void VclMultiLineEdit::SelectionChanged()
 {
-    CallEventListeners(VCLEVENT_EDIT_SELECTIONCHANGED);
+    CallEventListeners(VclEventId::EditSelectionChanged);
 }
 
 void VclMultiLineEdit::CaretChanged()
 {
-    CallEventListeners(VCLEVENT_EDIT_CARETCHANGED);
+    CallEventListeners(VclEventId::EditCaretChanged);
 }
 
 IMPL_LINK_NOARG(VclMultiLineEdit, ImpUpdateDataHdl, Timer *, void)

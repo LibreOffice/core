@@ -51,7 +51,7 @@ namespace dbaui
     }
     void OTableWindowAccess::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
     {
-        if ( rVclWindowEvent.GetId() == VCLEVENT_OBJECT_DYING )
+        if ( rVclWindowEvent.GetId() == VclEventId::ObjectDying )
         {
             ::osl::MutexGuard aGuard( m_aMutex );
             m_pTable = nullptr;

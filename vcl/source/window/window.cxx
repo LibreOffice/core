@@ -164,12 +164,12 @@ void Window::dispose()
 
     mpWindowImpl->mbInDispose = true;
 
-    CallEventListeners( VCLEVENT_OBJECT_DYING );
+    CallEventListeners( VclEventId::ObjectDying );
 
     // do not send child events for frames that were registered as native frames
     if( !ImplIsAccessibleNativeFrame() && mpWindowImpl->mbReallyVisible )
         if ( ImplIsAccessibleCandidate() && GetAccessibleParentWindow() )
-            GetAccessibleParentWindow()->CallEventListeners( VCLEVENT_WINDOW_CHILDDESTROYED, this );
+            GetAccessibleParentWindow()->CallEventListeners( VclEventId::WindowChildDestroyed, this );
 
     // remove associated data structures from dockingmanager
     ImplGetDockingManager()->RemoveWindow( this );
@@ -1178,7 +1178,7 @@ void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* p
         ImplInitAppFontData( this );
 
     if ( GetAccessibleParentWindow()  && GetParent() != Application::GetDefDialogParent() )
-        GetAccessibleParentWindow()->CallEventListeners( VCLEVENT_WINDOW_CHILDCREATED, this );
+        GetAccessibleParentWindow()->CallEventListeners( VclEventId::WindowChildCreated, this );
 }
 
 void Window::ImplInitAppFontData( vcl::Window* pWindow )
@@ -1300,8 +1300,8 @@ void Window::ImplSetReallyVisible()
     // Previously, we did this in Window::Show, but there some events got lost in certain situations. Now
     // we're doing it when the visibility really changes
     if( bBecameReallyVisible && ImplIsAccessibleCandidate() )
-        CallEventListeners( VCLEVENT_WINDOW_SHOW, this );
-        // TODO. It's kind of a hack that we're re-using the VCLEVENT_WINDOW_SHOW. Normally, we should
+        CallEventListeners( VclEventId::WindowShow, this );
+        // TODO. It's kind of a hack that we're re-using the VclEventId::WindowShow. Normally, we should
         // introduce another event which explicitly triggers the Accessibility implementations.
 
     vcl::Window* pWindow = mpWindowImpl->mpFirstOverlap;
@@ -1914,7 +1914,7 @@ void Window::RequestHelp( const HelpEvent& rHEvt )
 
 void Window::Command( const CommandEvent& rCEvt )
 {
-    CallEventListeners( VCLEVENT_WINDOW_COMMAND, const_cast<CommandEvent *>(&rCEvt) );
+    CallEventListeners( VclEventId::WindowCommand, const_cast<CommandEvent *>(&rCEvt) );
 
     NotifyEvent aNEvt( MouseNotifyEvent::COMMAND, this, &rCEvt );
     if ( !CompatNotify( aNEvt ) )
@@ -2383,7 +2383,7 @@ void Window::Show(bool bVisible, ShowFlags nFlags)
     // Since #104887#, the notifications for the access bridge are done in Impl(Set|Reset)ReallyVisible. Here, we
     // now only notify with a NULL data pointer, for all other clients except the access bridge.
     if ( !bRealVisibilityChanged )
-        CallEventListeners( mpWindowImpl->mbVisible ? VCLEVENT_WINDOW_SHOW : VCLEVENT_WINDOW_HIDE );
+        CallEventListeners( mpWindowImpl->mbVisible ? VclEventId::WindowShow : VclEventId::WindowHide );
     if( xWindow->IsDisposed() )
         return;
 
@@ -2465,7 +2465,7 @@ void Window::Enable( bool bEnable, bool bChild )
             mpWindowImpl->mpSysObj->Enable( bEnable && !mpWindowImpl->mbInputDisabled );
         CompatStateChanged( StateChangedType::Enable );
 
-        CallEventListeners( bEnable ? VCLEVENT_WINDOW_ENABLED : VCLEVENT_WINDOW_DISABLED );
+        CallEventListeners( bEnable ? VclEventId::WindowEnabled : VclEventId::WindowDisabled );
     }
 
     if ( bChild )
@@ -3060,17 +3060,17 @@ void Window::SetText( const OUString& rStr )
     else if ( mpWindowImpl->mbFrame )
         mpWindowImpl->mpFrame->SetTitle( rStr );
 
-    CallEventListeners( VCLEVENT_WINDOW_FRAMETITLECHANGED, &oldTitle );
+    CallEventListeners( VclEventId::WindowFrameTitleChanged, &oldTitle );
 
     // #107247# needed for accessibility
-    // The VCLEVENT_WINDOW_FRAMETITLECHANGED is (mis)used to notify accessible name changes.
+    // The VclEventId::WindowFrameTitleChanged is (mis)used to notify accessible name changes.
     // Therefore a window, which is labeled by this window, must also notify an accessible
     // name change.
     if ( IsReallyVisible() )
     {
         vcl::Window* pWindow = GetAccessibleRelationLabelFor();
         if ( pWindow && pWindow != this )
-            pWindow->CallEventListeners( VCLEVENT_WINDOW_FRAMETITLECHANGED, &oldTitle );
+            pWindow->CallEventListeners( VclEventId::WindowFrameTitleChanged, &oldTitle );
     }
 
     CompatStateChanged( StateChangedType::Text );
@@ -3184,7 +3184,7 @@ void Window::ImplCallDeactivateListeners( vcl::Window *pNew )
     if ( !pNew || !ImplIsChild( pNew ) )
     {
         VclPtr<vcl::Window> xWindow(this);
-        CallEventListeners( VCLEVENT_WINDOW_DEACTIVATE );
+        CallEventListeners( VclEventId::WindowDeactivate );
         if( xWindow->IsDisposed() )
             return;
 
@@ -3201,7 +3201,7 @@ void Window::ImplCallActivateListeners( vcl::Window *pOld )
     if ( !pOld || !ImplIsChild( pOld ) )
     {
         VclPtr<vcl::Window> xWindow(this);
-        CallEventListeners( VCLEVENT_WINDOW_ACTIVATE, pOld );
+        CallEventListeners( VclEventId::WindowActivate, pOld );
         if( xWindow->IsDisposed() )
             return;
 
@@ -3473,10 +3473,10 @@ void Window::ImplIsInTaskPaneList( bool mbIsInTaskList )
 
 void Window::ImplNotifyIconifiedState( bool bIconified )
 {
-    mpWindowImpl->mpFrameWindow->CallEventListeners( bIconified ? VCLEVENT_WINDOW_MINIMIZE : VCLEVENT_WINDOW_NORMALIZE );
+    mpWindowImpl->mpFrameWindow->CallEventListeners( bIconified ? VclEventId::WindowMinimize : VclEventId::WindowNormalize );
     // #109206# notify client window as well to have toolkit topwindow listeners notified
     if( mpWindowImpl->mpFrameWindow->mpWindowImpl->mpClientWindow && mpWindowImpl->mpFrameWindow != mpWindowImpl->mpFrameWindow->mpWindowImpl->mpClientWindow )
-        mpWindowImpl->mpFrameWindow->mpWindowImpl->mpClientWindow->CallEventListeners( bIconified ? VCLEVENT_WINDOW_MINIMIZE : VCLEVENT_WINDOW_NORMALIZE );
+        mpWindowImpl->mpFrameWindow->mpWindowImpl->mpClientWindow->CallEventListeners( bIconified ? VclEventId::WindowMinimize : VclEventId::WindowNormalize );
 }
 
 bool Window::HasActiveChildFrame()

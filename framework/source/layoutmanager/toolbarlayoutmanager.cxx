@@ -908,7 +908,7 @@ long ToolbarLayoutManager::childWindowEvent( VclSimpleEvent* pEvent )
     // anymore!
     if ( dynamic_cast< const VclWindowEvent* >(pEvent) != nullptr )
     {
-        if ( pEvent->GetId() == VCLEVENT_TOOLBOX_SELECT )
+        if ( pEvent->GetId() == VclEventId::ToolboxSelect )
         {
             OUString aToolbarName;
             OUString aCommand;
@@ -956,7 +956,7 @@ long ToolbarLayoutManager::childWindowEvent( VclSimpleEvent* pEvent )
                 }
             }
         }
-        else if ( pEvent->GetId() == VCLEVENT_TOOLBOX_FORMATCHANGED )
+        else if ( pEvent->GetId() == VclEventId::ToolboxFormatChanged )
         {
             if ( !implts_isToolbarCreationActive() )
             {

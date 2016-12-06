@@ -53,7 +53,7 @@ namespace accessibility
     protected:
         virtual ~ListBoxAccessibleBase( );
 
-        /** will be called when our window broadcasts the VCLEVENT_OBJECT_DYING event
+        /** will be called when our window broadcasts the VclEventId::ObjectDying event
 
             <p>Usually, you derive your class from both ListBoxAccessibleBase and XComponent,
             and call XComponent::dispose here.</p>

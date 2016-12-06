@@ -239,23 +239,24 @@ void SidebarTextControlAccessibleContext::ProcessWindowEvent( const VclWindowEve
     {
         switch ( rVclWindowEvent.GetId() )
         {
-            case VCLEVENT_OBJECT_DYING:
+            case VclEventId::ObjectDying:
             {
                 defunc();
             }
             break;
-            case VCLEVENT_WINDOW_GETFOCUS:
-            case VCLEVENT_CONTROL_GETFOCUS:
+            case VclEventId::WindowGetFocus:
+            case VclEventId::ControlGetFocus:
             {
                 mpAccessibleTextHelper->SetFocus();
             }
             break;
-            case VCLEVENT_WINDOW_LOSEFOCUS:
-            case VCLEVENT_CONTROL_LOSEFOCUS:
+            case VclEventId::WindowLoseFocus:
+            case VclEventId::ControlLoseFocus:
             {
                 mpAccessibleTextHelper->SetFocus( false );
             }
             break;
+            default: break;
         }
     }
 

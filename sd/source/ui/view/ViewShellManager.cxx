@@ -988,7 +988,7 @@ IMPL_LINK(ViewShellManager::Implementation, WindowEventHandler, VclWindowEvent&,
 
         switch (rEvent.GetId())
         {
-            case VCLEVENT_WINDOW_GETFOCUS:
+            case VclEventId::WindowGetFocus:
             {
                 for (ActiveShellList::iterator aI(maActiveViewShells.begin());
                      aI!=maActiveViewShells.end();
@@ -1003,10 +1003,10 @@ IMPL_LINK(ViewShellManager::Implementation, WindowEventHandler, VclWindowEvent&,
             }
             break;
 
-            case VCLEVENT_WINDOW_LOSEFOCUS:
+            case VclEventId::WindowLoseFocus:
                 break;
 
-            case VCLEVENT_OBJECT_DYING:
+            case VclEventId::ObjectDying:
                 // Remember that we do not have to remove the window
                 // listener for this window.
                 for (ActiveShellList::iterator
@@ -1022,6 +1022,8 @@ IMPL_LINK(ViewShellManager::Implementation, WindowEventHandler, VclWindowEvent&,
                     }
                 }
                 break;
+
+            default: break;
         }
 }
 

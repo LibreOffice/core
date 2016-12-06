@@ -205,8 +205,8 @@ namespace toolkit
 
         switch ( _rVclWindowEvent.GetId() )
         {
-            case VCLEVENT_SPINBUTTON_UP:
-            case VCLEVENT_SPINBUTTON_DOWN:
+            case VclEventId::SpinbuttonUp:
+            case VclEventId::SpinbuttonDown:
                 if ( maAdjustmentListeners.getLength() )
                 {
                     AdjustmentEvent aEvent;

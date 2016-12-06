@@ -1359,7 +1359,7 @@ void SwSidebarWin::SwitchToPostIt(sal_uInt16 aDirection)
 
 IMPL_LINK( SwSidebarWin, WindowEventListener, VclWindowEvent&, rEvent, void )
 {
-    if ( rEvent.GetId() == VCLEVENT_WINDOW_MOUSEMOVE )
+    if ( rEvent.GetId() == VclEventId::WindowMouseMove )
     {
         MouseEvent* pMouseEvt = static_cast<MouseEvent*>(rEvent.GetData());
         if ( pMouseEvt->IsEnterWindow() )
@@ -1384,7 +1384,7 @@ IMPL_LINK( SwSidebarWin, WindowEventListener, VclWindowEvent&, rEvent, void )
             }
         }
     }
-    else if ( rEvent.GetId() == VCLEVENT_WINDOW_ACTIVATE &&
+    else if ( rEvent.GetId() == VclEventId::WindowActivate &&
               rEvent.GetWindow() == mpSidebarTextControl )
     {
         const bool bLockView = mrView.GetWrtShell().IsViewLocked();

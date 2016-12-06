@@ -413,11 +413,9 @@ namespace toolkit
 
     void AnimatedImagesPeer::ProcessWindowEvent( const VclWindowEvent& i_windowEvent )
     {
-        switch ( i_windowEvent.GetId() )
+        if ( i_windowEvent.GetId() == VclEventId::WindowResize )
         {
-        case VCLEVENT_WINDOW_RESIZE:
             lcl_updateImageList_nothrow( *m_xData );
-            break;
         }
 
         AnimatedImagesPeer_Base::ProcessWindowEvent( i_windowEvent );

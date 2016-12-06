@@ -48,20 +48,20 @@ IMPL_LINK( AccessibleTabBarBase, WindowEventListener, VclWindowEvent&, rEvent, v
     vcl::Window* pEventWindow = rEvent.GetWindow();
     OSL_ENSURE( pEventWindow, "AccessibleTabBarBase::WindowEventListener: no window!" );
 
-    if( ( rEvent.GetId() == VCLEVENT_TABBAR_PAGEREMOVED ) &&
+    if( ( rEvent.GetId() == VclEventId::TabbarPageRemoved ) &&
         ( (sal_uInt16)reinterpret_cast<sal_IntPtr>(rEvent.GetData()) == TabBar::PAGE_NOT_FOUND ) &&
         ( dynamic_cast< AccessibleTabBarPageList *> (this) != nullptr ) )
     {
         return;
     }
 
-    if ( !pEventWindow->IsAccessibilityEventsSuppressed() || (rEvent.GetId() == VCLEVENT_OBJECT_DYING) )
+    if ( !pEventWindow->IsAccessibilityEventsSuppressed() || (rEvent.GetId() == VclEventId::ObjectDying) )
         ProcessWindowEvent( rEvent );
 }
 
 void AccessibleTabBarBase::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
-    if( rVclWindowEvent.GetId() == VCLEVENT_OBJECT_DYING )
+    if( rVclWindowEvent.GetId() == VclEventId::ObjectDying )
         ClearTabBarPointer();
 }
 

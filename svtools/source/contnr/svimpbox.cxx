@@ -291,7 +291,7 @@ void SvImpLBox::Clear()
 
     aContextBmpWidthVector.clear();
 
-    CallEventListeners( VCLEVENT_LISTBOX_ITEMREMOVED );
+    CallEventListeners( VclEventId::ListboxItemRemoved );
 }
 
 // *********************************************************************
@@ -638,7 +638,7 @@ void SvImpLBox::SetCursor( SvTreeListEntry* pEntry, bool bForceNoSelect )
         if(!bForceNoSelect && bSimpleTravel && !(nFlags & LBoxFlags::DeselectAll) && GetUpdateMode())
         {
             pView->Select( pCursor );
-            CallEventListeners( VCLEVENT_LISTBOX_TREEFOCUS, pCursor );
+            CallEventListeners( VclEventId::ListboxTreeFocus, pCursor );
         }
         // multiple selection: select in cursor move if we're not in
         // Add mode (Ctrl-F8)
@@ -648,14 +648,14 @@ void SvImpLBox::SetCursor( SvTreeListEntry* pEntry, bool bForceNoSelect )
                  !bForceNoSelect )
         {
             pView->Select( pCursor );
-            CallEventListeners( VCLEVENT_LISTBOX_TREEFOCUS, pCursor );
+            CallEventListeners( VclEventId::ListboxTreeFocus, pCursor );
         }
         else
         {
             ShowCursor( true );
             if (bForceNoSelect && GetUpdateMode())
             {
-                CallEventListeners( VCLEVENT_LISTBOX_TREEFOCUS, pCursor);
+                CallEventListeners( VclEventId::ListboxTreeFocus, pCursor);
             }
         }
 
@@ -1622,7 +1622,7 @@ void SvImpLBox::EntrySelected( SvTreeListEntry* pEntry, bool bSelect )
 
 void SvImpLBox::RemovingEntry( SvTreeListEntry* pEntry )
 {
-    CallEventListeners( VCLEVENT_LISTBOX_ITEMREMOVED , pEntry );
+    CallEventListeners( VclEventId::ListboxItemRemoved , pEntry );
 
     DestroyAnchor();
 
@@ -2203,7 +2203,7 @@ bool SvImpLBox::KeyInput( const KeyEvent& rKEvt)
                 {
                     ++nCurTabPos;
                     ShowCursor( true );
-                    CallEventListeners( VCLEVENT_LISTBOX_SELECT, pCursor );
+                    CallEventListeners( VclEventId::ListboxSelect, pCursor );
                 }
             }
             else if( nWindowStyle & WB_HSCROLL )
@@ -2234,7 +2234,7 @@ bool SvImpLBox::KeyInput( const KeyEvent& rKEvt)
                 {
                     --nCurTabPos;
                     ShowCursor( true );
-                    CallEventListeners( VCLEVENT_LISTBOX_SELECT, pCursor );
+                    CallEventListeners( VclEventId::ListboxSelect, pCursor );
                 }
             }
             else if ( nWindowStyle & WB_HSCROLL )
@@ -3362,7 +3362,7 @@ const Image& SvImpLBox::GetDefaultCollapsedNodeImage( )
 }
 
 
-void SvImpLBox::CallEventListeners( sal_uLong nEvent, void* pData )
+void SvImpLBox::CallEventListeners( VclEventId nEvent, void* pData )
 {
     if ( pView )
         pView->CallImplEventListeners( nEvent, pData);

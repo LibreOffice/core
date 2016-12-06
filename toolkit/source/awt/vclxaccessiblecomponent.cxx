@@ -113,14 +113,14 @@ uno::Sequence< OUString > VCLXAccessibleComponent::getSupportedServiceNames() th
 
 IMPL_LINK( VCLXAccessibleComponent, WindowEventListener, VclWindowEvent&, rEvent, void )
 {
-    /* Ignore VCLEVENT_WINDOW_ENDPOPUPMODE, because the UNO accessibility wrapper
+    /* Ignore VclEventId::WindowEndPopupMode, because the UNO accessibility wrapper
      * might have been destroyed by the previous VCLEventListener (if no AT tool
      * is running), e.g. sub-toolbars in impress.
      */
-    if ( m_xVCLXWindow.is() /* #122218# */ && (rEvent.GetId() != VCLEVENT_WINDOW_ENDPOPUPMODE) )
+    if ( m_xVCLXWindow.is() /* #122218# */ && (rEvent.GetId() != VclEventId::WindowEndPopupMode) )
     {
         DBG_ASSERT( rEvent.GetWindow(), "Window???" );
-        if( !rEvent.GetWindow()->IsAccessibilityEventsSuppressed() || ( rEvent.GetId() == VCLEVENT_OBJECT_DYING ) )
+        if( !rEvent.GetWindow()->IsAccessibilityEventsSuppressed() || ( rEvent.GetId() == VclEventId::ObjectDying ) )
         {
             ProcessWindowEvent( rEvent );
         }
@@ -150,7 +150,7 @@ uno::Reference< accessibility::XAccessible > VCLXAccessibleComponent::GetChildAc
     // MT: Change this later, normally a show/hide event shouldn't have the vcl::Window* in pData.
     vcl::Window* pChildWindow = static_cast<vcl::Window *>(rVclWindowEvent.GetData());
     if( pChildWindow && GetWindow() == pChildWindow->GetAccessibleParentWindow() )
-        return pChildWindow->GetAccessible( rVclWindowEvent.GetId() == VCLEVENT_WINDOW_SHOW );
+        return pChildWindow->GetAccessible( rVclWindowEvent.GetId() == VclEventId::WindowShow );
     else
         return uno::Reference< accessibility::XAccessible > ();
 }
@@ -162,7 +162,7 @@ void VCLXAccessibleComponent::ProcessWindowChildEvent( const VclWindowEvent& rVc
 
     switch ( rVclWindowEvent.GetId() )
     {
-        case VCLEVENT_WINDOW_SHOW:  // send create on show for direct accessible children
+        case VclEventId::WindowShow:  // send create on show for direct accessible children
         {
             xAcc = GetChildAccessible( rVclWindowEvent );
             if( xAcc.is() )
@@ -172,7 +172,7 @@ void VCLXAccessibleComponent::ProcessWindowChildEvent( const VclWindowEvent& rVc
             }
         }
         break;
-        case VCLEVENT_WINDOW_HIDE:  // send destroy on hide for direct accessible children
+        case VclEventId::WindowHide:  // send destroy on hide for direct accessible children
         {
             xAcc = GetChildAccessible( rVclWindowEvent );
             if( xAcc.is() )
@@ -182,6 +182,7 @@ void VCLXAccessibleComponent::ProcessWindowChildEvent( const VclWindowEvent& rVc
             }
         }
         break;
+        default: break;
     }
 }
 
@@ -194,16 +195,16 @@ void VCLXAccessibleComponent::ProcessWindowEvent( const VclWindowEvent& rVclWind
 
     switch ( rVclWindowEvent.GetId() )
     {
-        case VCLEVENT_OBJECT_DYING:
+        case VclEventId::ObjectDying:
         {
             DisconnectEvents();
             m_xVCLXWindow.clear();
         }
         break;
-        case VCLEVENT_WINDOW_CHILDDESTROYED:
+        case VclEventId::WindowChildDestroyed:
         {
             vcl::Window* pWindow = static_cast<vcl::Window*>(rVclWindowEvent.GetData());
-            DBG_ASSERT( pWindow, "VCLEVENT_WINDOW_CHILDDESTROYED - Window=?" );
+            DBG_ASSERT( pWindow, "VclEventId::WindowChildDestroyed - Window=?" );
             if ( pWindow->GetAccessible( false ).is() )
             {
                 aOldValue <<= pWindow->GetAccessible( false );
@@ -211,7 +212,7 @@ void VCLXAccessibleComponent::ProcessWindowEvent( const VclWindowEvent& rVclWind
             }
         }
         break;
-        case VCLEVENT_WINDOW_ACTIVATE:
+        case VclEventId::WindowActivate:
         {
             // avoid notification if a child frame is already active
             // only one frame may be active at a given time
@@ -225,7 +226,7 @@ void VCLXAccessibleComponent::ProcessWindowEvent( const VclWindowEvent& rVclWind
             }
         }
         break;
-        case VCLEVENT_WINDOW_DEACTIVATE:
+        case VclEventId::WindowDeactivate:
         {
             if ( getAccessibleRole() == accessibility::AccessibleRole::FRAME ||
                  getAccessibleRole() == accessibility::AccessibleRole::ALERT ||
@@ -236,11 +237,11 @@ void VCLXAccessibleComponent::ProcessWindowEvent( const VclWindowEvent& rVclWind
             }
         }
         break;
-        case VCLEVENT_WINDOW_GETFOCUS:
-        case VCLEVENT_CONTROL_GETFOCUS:
+        case VclEventId::WindowGetFocus:
+        case VclEventId::ControlGetFocus:
         {
-            if( (pAccWindow->IsCompoundControl() && rVclWindowEvent.GetId() == VCLEVENT_CONTROL_GETFOCUS) ||
-                (!pAccWindow->IsCompoundControl() && rVclWindowEvent.GetId() == VCLEVENT_WINDOW_GETFOCUS) )
+            if( (pAccWindow->IsCompoundControl() && rVclWindowEvent.GetId() == VclEventId::ControlGetFocus) ||
+                (!pAccWindow->IsCompoundControl() && rVclWindowEvent.GetId() == VclEventId::WindowGetFocus) )
             {
                 // if multiple listeners were registered it is possible that the
                 // focus was changed during event processing (eg SfxTopWindow )
@@ -254,18 +255,18 @@ void VCLXAccessibleComponent::ProcessWindowEvent( const VclWindowEvent& rVclWind
             }
         }
         break;
-        case VCLEVENT_WINDOW_LOSEFOCUS:
-        case VCLEVENT_CONTROL_LOSEFOCUS:
+        case VclEventId::WindowLoseFocus:
+        case VclEventId::ControlLoseFocus:
         {
-            if( (pAccWindow->IsCompoundControl() && rVclWindowEvent.GetId() == VCLEVENT_CONTROL_LOSEFOCUS) ||
-                (!pAccWindow->IsCompoundControl() && rVclWindowEvent.GetId() == VCLEVENT_WINDOW_LOSEFOCUS) )
+            if( (pAccWindow->IsCompoundControl() && rVclWindowEvent.GetId() == VclEventId::ControlLoseFocus) ||
+                (!pAccWindow->IsCompoundControl() && rVclWindowEvent.GetId() == VclEventId::WindowLoseFocus) )
             {
                 aOldValue <<= accessibility::AccessibleStateType::FOCUSED;
                 NotifyAccessibleEvent( accessibility::AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
             }
         }
         break;
-        case VCLEVENT_WINDOW_FRAMETITLECHANGED:
+        case VclEventId::WindowFrameTitleChanged:
         {
             OUString aOldName( *static_cast<OUString*>(rVclWindowEvent.GetData()) );
             OUString aNewName( getAccessibleName() );
@@ -274,7 +275,7 @@ void VCLXAccessibleComponent::ProcessWindowEvent( const VclWindowEvent& rVclWind
             NotifyAccessibleEvent( accessibility::AccessibleEventId::NAME_CHANGED, aOldValue, aNewValue );
         }
         break;
-        case VCLEVENT_WINDOW_ENABLED:
+        case VclEventId::WindowEnabled:
         {
             aNewValue <<= accessibility::AccessibleStateType::ENABLED;
             NotifyAccessibleEvent( accessibility::AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
@@ -282,7 +283,7 @@ void VCLXAccessibleComponent::ProcessWindowEvent( const VclWindowEvent& rVclWind
             NotifyAccessibleEvent( accessibility::AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
         }
         break;
-        case VCLEVENT_WINDOW_DISABLED:
+        case VclEventId::WindowDisabled:
         {
             aOldValue <<= accessibility::AccessibleStateType::SENSITIVE;
             NotifyAccessibleEvent( accessibility::AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
@@ -291,13 +292,13 @@ void VCLXAccessibleComponent::ProcessWindowEvent( const VclWindowEvent& rVclWind
             NotifyAccessibleEvent( accessibility::AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
         }
         break;
-        case VCLEVENT_WINDOW_MOVE:
-        case VCLEVENT_WINDOW_RESIZE:
+        case VclEventId::WindowMove:
+        case VclEventId::WindowResize:
         {
             NotifyAccessibleEvent( accessibility::AccessibleEventId::BOUNDRECT_CHANGED, aOldValue, aNewValue );
         }
         break;
-        case VCLEVENT_WINDOW_MENUBARADDED:
+        case VclEventId::WindowMenubarAdded:
         {
             MenuBar* pMenuBar = static_cast<MenuBar*>(rVclWindowEvent.GetData());
             if ( pMenuBar )
@@ -311,7 +312,7 @@ void VCLXAccessibleComponent::ProcessWindowEvent( const VclWindowEvent& rVclWind
             }
         }
         break;
-        case VCLEVENT_WINDOW_MENUBARREMOVED:
+        case VclEventId::WindowMenubarRemoved:
         {
             MenuBar* pMenuBar = static_cast<MenuBar*>(rVclWindowEvent.GetData());
             if ( pMenuBar )
@@ -325,13 +326,13 @@ void VCLXAccessibleComponent::ProcessWindowEvent( const VclWindowEvent& rVclWind
             }
         }
         break;
-        case VCLEVENT_WINDOW_MINIMIZE:
+        case VclEventId::WindowMinimize:
         {
             aNewValue <<= accessibility::AccessibleStateType::ICONIFIED;
             NotifyAccessibleEvent( accessibility::AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
         }
         break;
-        case VCLEVENT_WINDOW_NORMALIZE:
+        case VclEventId::WindowNormalize:
         {
             aOldValue <<= accessibility::AccessibleStateType::ICONIFIED;
             NotifyAccessibleEvent( accessibility::AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );

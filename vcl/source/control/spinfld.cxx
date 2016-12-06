@@ -359,22 +359,22 @@ void SpinField::dispose()
 
 void SpinField::Up()
 {
-    ImplCallEventListenersAndHandler( VCLEVENT_SPINFIELD_UP, [this] () { maUpHdlLink.Call(*this); } );
+    ImplCallEventListenersAndHandler( VclEventId::SpinfieldUp, [this] () { maUpHdlLink.Call(*this); } );
 }
 
 void SpinField::Down()
 {
-    ImplCallEventListenersAndHandler( VCLEVENT_SPINFIELD_DOWN, [this] () { maDownHdlLink.Call(*this); } );
+    ImplCallEventListenersAndHandler( VclEventId::SpinfieldDown, [this] () { maDownHdlLink.Call(*this); } );
 }
 
 void SpinField::First()
 {
-    ImplCallEventListenersAndHandler( VCLEVENT_SPINFIELD_FIRST, [this] () { maFirstHdlLink.Call(*this); } );
+    ImplCallEventListenersAndHandler( VclEventId::SpinfieldFirst, [this] () { maFirstHdlLink.Call(*this); } );
 }
 
 void SpinField::Last()
 {
-    ImplCallEventListenersAndHandler( VCLEVENT_SPINFIELD_LAST, [this] () { maLastHdlLink.Call(*this); } );
+    ImplCallEventListenersAndHandler( VclEventId::SpinfieldLast, [this] () { maLastHdlLink.Call(*this); } );
 }
 
 void SpinField::MouseButtonDown( const MouseEvent& rMEvt )

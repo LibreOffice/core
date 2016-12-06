@@ -614,7 +614,7 @@ IMPL_LINK(AnnotationTag, WindowEventHandler, VclWindowEvent&, rEvent, void)
         {
             if( pWindow == mpAnnotationWindow.get() )
             {
-                if( rEvent.GetId() == VCLEVENT_WINDOW_DEACTIVATE )
+                if( rEvent.GetId() == VclEventId::WindowDeactivate )
                 {
                     // tdf#99388 and tdf#99712 if PopupMenu is active, suppress
                     // deletion of the AnnotationWindow which is triggered by
@@ -632,7 +632,7 @@ IMPL_LINK(AnnotationTag, WindowEventHandler, VclWindowEvent&, rEvent, void)
             {
                 switch( rEvent.GetId() )
                 {
-                case VCLEVENT_WINDOW_MOUSEBUTTONUP:
+                case VclEventId::WindowMouseButtonUp:
                     {
                         // if we stop pressing the button without a mouse move we open the popup
                         mpListenWindow->RemoveEventListener( LINK(this, AnnotationTag, WindowEventHandler));
@@ -641,7 +641,7 @@ IMPL_LINK(AnnotationTag, WindowEventHandler, VclWindowEvent&, rEvent, void)
                             OpenPopup(false);
                     }
                     break;
-                case VCLEVENT_WINDOW_MOUSEMOVE:
+                case VclEventId::WindowMouseMove:
                     {
                         // if we move the mouse after a button down we wan't to start draging
                         mpListenWindow->RemoveEventListener( LINK(this, AnnotationTag, WindowEventHandler));
@@ -660,9 +660,10 @@ IMPL_LINK(AnnotationTag, WindowEventHandler, VclWindowEvent&, rEvent, void)
                         }
                     }
                     break;
-                case VCLEVENT_OBJECT_DYING:
+                case VclEventId::ObjectDying:
                     mpListenWindow = nullptr;
                     break;
+                default: break;
                 }
             }
         }

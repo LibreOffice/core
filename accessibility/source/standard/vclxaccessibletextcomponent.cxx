@@ -74,7 +74,7 @@ void VCLXAccessibleTextComponent::ProcessWindowEvent( const VclWindowEvent& rVcl
 {
     switch ( rVclWindowEvent.GetId() )
     {
-        case VCLEVENT_WINDOW_FRAMETITLECHANGED:
+        case VclEventId::WindowFrameTitleChanged:
         {
             VCLXAccessibleComponent::ProcessWindowEvent( rVclWindowEvent );
             SetText( implGetText() );

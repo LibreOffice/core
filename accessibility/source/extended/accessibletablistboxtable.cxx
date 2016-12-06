@@ -65,21 +65,21 @@ namespace accessibility
     {
         if ( isAlive() )
         {
-            sal_uLong nEventId = rVclWindowEvent.GetId();
+            VclEventId nEventId = rVclWindowEvent.GetId();
             switch ( nEventId )
             {
-                case  VCLEVENT_OBJECT_DYING :
+                case  VclEventId::ObjectDying :
                 {
                     m_pTabListBox->RemoveEventListener( LINK( this, AccessibleTabListBoxTable, WindowEventListener ) );
                     m_pTabListBox = nullptr;
                     break;
                 }
 
-                case VCLEVENT_CONTROL_GETFOCUS :
-                case VCLEVENT_CONTROL_LOSEFOCUS :
+                case VclEventId::ControlGetFocus :
+                case VclEventId::ControlLoseFocus :
                 {
                     uno::Any aOldValue, aNewValue;
-                    if ( VCLEVENT_CONTROL_GETFOCUS == nEventId )
+                    if ( VclEventId::ControlGetFocus == nEventId )
                         aNewValue <<= AccessibleStateType::FOCUSED;
                     else
                         aOldValue <<= AccessibleStateType::FOCUSED;
@@ -87,7 +87,7 @@ namespace accessibility
                     break;
                 }
 
-                case VCLEVENT_LISTBOX_SELECT :
+                case VclEventId::ListboxSelect :
                 {
                     // First send an event that tells the listeners of a
                     // modified selection.  The active descendant event is
@@ -131,7 +131,7 @@ namespace accessibility
                     }
                     break;
                 }
-                case VCLEVENT_WINDOW_GETFOCUS :
+                case VclEventId::WindowGetFocus :
                 {
                     uno::Any aOldValue, aNewValue;
                     aNewValue <<= AccessibleStateType::FOCUSED;
@@ -139,14 +139,14 @@ namespace accessibility
                     break;
 
                 }
-                case VCLEVENT_WINDOW_LOSEFOCUS :
+                case VclEventId::WindowLoseFocus :
                 {
                     uno::Any aOldValue, aNewValue;
                     aOldValue <<= AccessibleStateType::FOCUSED;
                     commitEvent( AccessibleEventId::STATE_CHANGED, aNewValue, aOldValue );
                     break;
                 }
-                case VCLEVENT_LISTBOX_TREESELECT:
+                case VclEventId::ListboxTreeSelect:
                     {
                         SvTreeListEntry* pEntry = static_cast< SvTreeListEntry* >( rVclWindowEvent.GetData() );
                         if (pEntry)
@@ -167,7 +167,7 @@ namespace accessibility
                         }
                     }
                     break;
-                case VCLEVENT_LISTBOX_TREEFOCUS:
+                case VclEventId::ListboxTreeFocus:
                     {
                         if ( m_pTabListBox && m_pTabListBox->HasFocus() )
                         {
@@ -189,7 +189,7 @@ namespace accessibility
                     }
                     break;
 
-                case VCLEVENT_CHECKBOX_TOGGLE :
+                case VclEventId::CheckboxToggle :
                 {
                     if ( m_pTabListBox && m_pTabListBox->HasFocus() )
                     {
@@ -212,7 +212,7 @@ namespace accessibility
                     break;
                 }
 
-                case VCLEVENT_TABLECELL_NAMECHANGED :
+                case VclEventId::TableCellNameChanged :
                 {
                     if ( m_pTabListBox->IsTransientChildrenDisabled() )
                     {
@@ -247,6 +247,7 @@ namespace accessibility
                     }
                     break;
                 }
+                default: break;
             }
         }
     }

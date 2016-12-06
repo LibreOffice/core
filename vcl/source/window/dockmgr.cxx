@@ -918,7 +918,7 @@ void ImplDockingWindowWrapper::StartDocking( const Point& rPoint, Rectangle& rRe
 {
     DockingData data( rPoint, rRect, IsFloatingMode() );
 
-    GetWindow()->CallEventListeners( VCLEVENT_WINDOW_STARTDOCKING, &data );
+    GetWindow()->CallEventListeners( VclEventId::WindowStartDocking, &data );
     mbDocking = true;
 }
 
@@ -926,7 +926,7 @@ bool ImplDockingWindowWrapper::Docking( const Point& rPoint, Rectangle& rRect )
 {
     DockingData data( rPoint, rRect, IsFloatingMode() );
 
-    GetWindow()->CallEventListeners( VCLEVENT_WINDOW_DOCKING, &data );
+    GetWindow()->CallEventListeners( VclEventId::WindowDocking, &data );
     rRect = data.maTrackRect;
     return data.mbFloating;
 }
@@ -966,7 +966,7 @@ void ImplDockingWindowWrapper::EndDocking( const Rectangle& rRect, bool bFloatMo
     }
 
     EndDockingData data( aRect, IsFloatingMode(), IsDockingCanceled() );
-    GetWindow()->CallEventListeners( VCLEVENT_WINDOW_ENDDOCKING, &data );
+    GetWindow()->CallEventListeners( VclEventId::WindowEndDocking, &data );
 
     mbDocking = false;
 
@@ -979,7 +979,7 @@ void ImplDockingWindowWrapper::EndDocking( const Rectangle& rRect, bool bFloatMo
 bool ImplDockingWindowWrapper::PrepareToggleFloatingMode()
 {
     bool bFloating = true;
-    GetWindow()->CallEventListeners( VCLEVENT_WINDOW_PREPARETOGGLEFLOATING, &bFloating );
+    GetWindow()->CallEventListeners( VclEventId::WindowPrepareToggleFloating, &bFloating );
     return bFloating;
 }
 
@@ -992,7 +992,7 @@ void ImplDockingWindowWrapper::ToggleFloatingMode()
         static_cast<DockingWindow*>(GetWindow())->ToggleFloatingMode();
 
     // now notify listeners
-    GetWindow()->CallEventListeners( VCLEVENT_WINDOW_TOGGLEFLOATING );
+    GetWindow()->CallEventListeners( VclEventId::WindowToggleFloating );
 
     // must be enabled in Window::Notify to prevent permanent docking during mouse move
     mbStartDockingEnabled = false;
@@ -1128,7 +1128,7 @@ IMPL_LINK_NOARG(ImplDockingWindowWrapper, PopupModeEnd, FloatingWindow*, void)
     mpFloatWin.disposeAndClear();
 
     // call handler - which will destroy the window and thus the wrapper as well !
-    GetWindow()->CallEventListeners( VCLEVENT_WINDOW_ENDPOPUPMODE, &aData );
+    GetWindow()->CallEventListeners( VclEventId::WindowEndPopupMode, &aData );
 }
 
 bool ImplDockingWindowWrapper::IsInPopupMode() const
