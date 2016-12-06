@@ -2031,9 +2031,9 @@ namespace comphelper
         deleteDirRecursively(maUserConfigWorkURL + "/uno_packages");
     }
 
-    bool BackupFileHelper::isTryDeinstallAllExtensionsPossible()
+    bool BackupFileHelper::isTryResetSharedExtensionsPossible()
     {
-        // check if there are other Extensions installed (shared|bundled).
+        // check if there are shared Extensions installed
         class ExtensionInfo aExtensionInfo;
 
         aExtensionInfo.createUsingExtensionRegistryEntriesFromXML(maUserConfigWorkURL, false);
@@ -2041,10 +2041,10 @@ namespace comphelper
         return !aExtensionInfo.getExtensionInfoEntryVector().empty();
     }
 
-    void BackupFileHelper::tryDeinstallAllExtensions()
+    void BackupFileHelper::tryResetSharedExtensions()
     {
-        // delete other Extension installs (shared|bundled)
-        deleteDirRecursively(maUserConfigWorkURL + "/extensions");
+        // reset shared extension info
+        deleteDirRecursively(maUserConfigWorkURL + "/extensions/shared");
     }
 
     const std::vector< OUString >& BackupFileHelper::getCustomizationDirNames()
