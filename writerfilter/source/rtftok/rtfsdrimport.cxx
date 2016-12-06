@@ -941,13 +941,17 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
 
         if (obFlipH == true || obFlipV == true)
         {
-            // This has to be set after position and size is set, otherwise flip will affect the position.
-            comphelper::SequenceAsHashMap aCustomShapeGeometry(xPropertySet->getPropertyValue("CustomShapeGeometry"));
-            if (obFlipH == true)
-                aCustomShapeGeometry["MirroredX"] <<= true;
-            if (obFlipV == true)
-                aCustomShapeGeometry["MirroredY"] <<= true;
-            xPropertySet->setPropertyValue("CustomShapeGeometry", uno::makeAny(aCustomShapeGeometry.getAsConstPropertyValueList()));
+            // Line shapes have no CustomShapeGeometry.
+            if (nType != ESCHER_ShpInst_Line)
+            {
+                // This has to be set after position and size is set, otherwise flip will affect the position.
+                comphelper::SequenceAsHashMap aCustomShapeGeometry(xPropertySet->getPropertyValue("CustomShapeGeometry"));
+                if (obFlipH == true)
+                    aCustomShapeGeometry["MirroredX"] <<= true;
+                if (obFlipV == true)
+                    aCustomShapeGeometry["MirroredY"] <<= true;
+                xPropertySet->setPropertyValue("CustomShapeGeometry", uno::makeAny(aCustomShapeGeometry.getAsConstPropertyValueList()));
+            }
         }
 
         if (rShape.nHoriOrientRelation != 0)
