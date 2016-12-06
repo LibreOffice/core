@@ -164,8 +164,6 @@ private:
     VclPtr< AutocompleteEdit > m_pName_ed;
     VclPtr<PopupMenu> m_pAddMenu;
 
-    ImageList m_aImages;
-
     std::vector< ServicePtr > m_aServices;
     std::vector< std::pair< OUString, OUString > > m_aFilters;
 

@@ -186,9 +186,9 @@ bool PlacesListBox::EventNotify( NotifyEvent& rNEvt )
 
 Image PlacesListBox::getEntryIcon( const PlacePtr& pPlace )
 {
-    Image theImage = mpDlg->GetButtonImage( IMG_FILEDLG_PLACE_LOCAL );
+    Image theImage = mpDlg->GetButtonImage( BMP_FILEDLG_PLACE_LOCAL );
     if ( !pPlace->IsLocal( ) )
-        theImage = mpDlg->GetButtonImage( IMG_FILEDLG_PLACE_REMOTE );
+        theImage = mpDlg->GetButtonImage( BMP_FILEDLG_PLACE_REMOTE );
     return theImage;
 }
 

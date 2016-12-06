@@ -566,7 +566,6 @@ void SvtFileDialog::Init_Impl
     pImpl->_pLbImageTemplates->setMaxWidthChars(40);
     pImpl->_pLbFilter->setMaxWidthChars(40);
 
-    m_aImages = ImageList( SvtResId( RID_FILEPICKER_IMAGES ) );
     vcl::Window *pUpContainer = get<vcl::Window>("up");
     pImpl->_pBtnUp = VclPtr<SvtUpButton_Impl>::Create(pUpContainer, this, 0);
     pImpl->_pBtnUp->SetHelpId( HID_FILEOPEN_LEVELUP );
@@ -622,7 +621,7 @@ void SvtFileDialog::Init_Impl
     _pSplitter->SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetFaceColor() ));
     _pSplitter->SetSplitHdl( LINK( this, SvtFileDialog, Split_Hdl ) );
 
-    Image aNewFolderImg( GetButtonImage( IMG_FILEDLG_CREATEFOLDER ) );
+    Image aNewFolderImg( GetButtonImage( BMP_FILEDLG_CREATEFOLDER ) );
     pImpl->_pBtnNewFolder->SetModeImage( aNewFolderImg );
 
     if ( nStyle & PickerFlags::ReadOnly )
@@ -2266,14 +2265,12 @@ bool SvtFileDialog::IsolateFilterFromPath_Impl( OUString& rPath, OUString& rFilt
 
 void SvtFileDialog::implUpdateImages( )
 {
-    m_aImages = ImageList( SvtResId( RID_FILEPICKER_IMAGES ) );
-
     // set the appropriate images on the buttons
     if ( pImpl->_pBtnUp )
-        pImpl->_pBtnUp->SetModeImage( GetButtonImage( IMG_FILEDLG_BTN_UP ) );
+        pImpl->_pBtnUp->SetModeImage( GetButtonImage( BMP_FILEDLG_BTN_UP ) );
 
     if ( pImpl->_pBtnNewFolder )
-        pImpl->_pBtnNewFolder->SetModeImage( GetButtonImage( IMG_FILEDLG_CREATEFOLDER ) );
+        pImpl->_pBtnNewFolder->SetModeImage( GetButtonImage( BMP_FILEDLG_CREATEFOLDER ) );
 }
 
 
@@ -2733,6 +2730,11 @@ IMPL_LINK_NOARG( SvtFileDialog, Split_Hdl, Splitter*, void )
     _pFileView->SetPosSizePixel( fileViewPos, fileViewSize );
 
     _pSplitter->SetPosPixel( Point( placeSize.Width(), _pSplitter->GetPosPixel().Y() ) );
+}
+
+Image SvtFileDialog::GetButtonImage( sal_uInt16 _nButtonId ) const
+{
+    return Image(BitmapEx(SvtResId(_nButtonId)));
 }
 
 QueryFolderNameDialog::QueryFolderNameDialog(vcl::Window* _pParent,

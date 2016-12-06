@@ -127,7 +127,7 @@ void SvtFileDialogURLSelector::Activate()
 
 
 SvtUpButton_Impl::SvtUpButton_Impl( vcl::Window *pParent, SvtFileDialog* pDlg, WinBits nBits )
-    :SvtFileDialogURLSelector( pParent, pDlg, nBits, IMG_FILEDLG_BTN_UP )
+    :SvtFileDialogURLSelector( pParent, pDlg, nBits, BMP_FILEDLG_BTN_UP )
 {
 }
 

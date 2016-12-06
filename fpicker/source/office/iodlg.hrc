@@ -23,11 +23,6 @@
 #include "svtools/helpid.hrc"
 #include <vcl/fpicker.hrc>
 
-#define IMG_FILEDLG_BTN_UP                  10
-#define IMG_FILEDLG_CREATEFOLDER            14
-#define IMG_FILEDLG_PLACE_LOCAL             15
-#define IMG_FILEDLG_PLACE_REMOTE            16
-
 #define STR_EXPLORERFILE_OPEN               (RID_FPICKER_START+31)
 #define STR_EXPLORERFILE_SAVE               (RID_FPICKER_START+32)
 #define STR_EXPLORERFILE_BUTTONSAVE         (RID_FPICKER_START+33)
@@ -38,6 +33,10 @@
 #define STR_PREVIEW                         (RID_FPICKER_START+38)
 #define STR_DEFAULT_DIRECTORY               (RID_FPICKER_START+39)
 #define STR_PLACES_TITLE                    (RID_FPICKER_START+40)
+#define BMP_FILEDLG_BTN_UP                  (RID_FPICKER_START+41)
+#define BMP_FILEDLG_CREATEFOLDER            (RID_FPICKER_START+42)
+#define BMP_FILEDLG_PLACE_LOCAL             (RID_FPICKER_START+43)
+#define BMP_FILEDLG_PLACE_REMOTE            (RID_FPICKER_START+44)
 
 #endif
 

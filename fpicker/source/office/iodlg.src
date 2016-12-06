@@ -22,22 +22,24 @@
 #include "iodlg.hrc"
 #include "OfficeFilePicker.hrc"
 
-// image lists ***************************************************************
-
-ImageList RID_FILEPICKER_IMAGES
+Bitmap BMP_FILEDLG_BTN_UP
 {
-    Prefix = "fp";
-    IdList =
-    {
-        IMG_FILEDLG_BTN_UP;
-        IMG_FILEDLG_CREATEFOLDER;
-        IMG_FILEDLG_PLACE_LOCAL;
-        IMG_FILEDLG_PLACE_REMOTE;
-    };
-    IdCount =
-    {
-        4;
-    };
+    File = "fp010.png";
+};
+
+Bitmap BMP_FILEDLG_CREATEFOLDER
+{
+    File = "fp014.png";
+};
+
+Bitmap BMP_FILEDLG_PLACE_LOCAL
+{
+    File = "fp015.png";
+};
+
+Bitmap BMP_FILEDLG_PLACE_REMOTE
+{
+    File = "fp016.png";
 };
 
 // strings *******************************************************************

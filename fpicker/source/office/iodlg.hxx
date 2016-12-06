@@ -81,7 +81,6 @@ private:
     PickerFlags                 _nPickerFlags;
     bool                        _bIsInExecute   :   1;
 
-    ImageList                   m_aImages;
     ::svt::SmartContent         m_aContent;
 
     ::std::set< VclPtr<Control> >
@@ -238,7 +237,7 @@ public:
     inline void                 EraseDefaultExt( sal_Int32 _nIndex = 0 );
     inline const OUString&      GetDefaultExt() const;
 
-    inline Image                GetButtonImage( sal_uInt16 _nButtonId ) const { return m_aImages.GetImage( _nButtonId ); }
+    Image                       GetButtonImage( sal_uInt16 _nButtonId ) const;
 
     bool                        ContentIsFolder( const OUString& rURL ) override { return m_aContent.isFolder( rURL ) && m_aContent.isValid(); }
     bool                        ContentHasParentFolder( const OUString& rURL );

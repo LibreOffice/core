@@ -214,8 +214,7 @@ RemoteFilesDialog::RemoteFilesDialog( vcl::Window* pParent, PickerFlags nBits )
     {
         get( m_pOk_btn, "save" );
 
-        m_aImages = ImageList( fpicker::SvtResId( RID_FILEPICKER_IMAGES ) );
-        m_pNewFolder->SetModeImage( m_aImages.GetImage( IMG_FILEDLG_CREATEFOLDER ) );
+        m_pNewFolder->SetModeImage(Image(BitmapEx(fpicker::SvtResId(BMP_FILEDLG_CREATEFOLDER))));
         m_pNewFolder->SetClickHdl( LINK( this, RemoteFilesDialog, NewFolderHdl ) );
     }
 
