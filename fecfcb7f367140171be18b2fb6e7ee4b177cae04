@@ -54,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "3a71b18c_0af3a40b",
+        "filename": "sd/qa/unit/tiledrendering/tiledrendering.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1461,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-12-06T10:48:59Z",
+      "side": 1,
+      "message": "OK, so maybe just comment here where that 1072 comes from? I guess there is a define for it in sd or svx. :-)",
+      "parentUuid": "3a71b18c_2aaa20d5",
+      "revId": "fecfcb7f367140171be18b2fb6e7ee4b177cae04",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a71b18c_0a572403",
         "filename": "sd/qa/unit/tiledrendering/tiledrendering.cxx",
         "patchSetId": 2
