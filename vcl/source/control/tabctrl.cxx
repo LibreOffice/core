@@ -178,7 +178,7 @@ TabControl::TabControl( vcl::Window* pParent, WinBits nStyle ) :
     Control( WINDOW_TABCONTROL )
 {
     ImplInit( pParent, nStyle );
-    OSL_TRACE("*** TABCONTROL no notabs? %s", ( GetStyle() & WB_NOBORDER ) ? "true" : "false" );
+    SAL_INFO( "vcl", "*** TABCONTROL no notabs? " << (( GetStyle() & WB_NOBORDER ) ? "true" : "false") );
 }
 
 TabControl::~TabControl()

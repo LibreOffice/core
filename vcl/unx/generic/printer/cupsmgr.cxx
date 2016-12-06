@@ -540,13 +540,11 @@ void CUPSManager::setupJobContextData( JobData& rData )
 
 FILE* CUPSManager::startSpool( const OUString& rPrintername, bool bQuickCommand )
 {
-    OSL_TRACE( "startSpool: %s, %s",
-               OUStringToOString( rPrintername, RTL_TEXTENCODING_UTF8 ).getStr(),
-              bQuickCommand ? "true" : "false" );
+    SAL_INFO( "vcl", "startSpool: " << rPrintername << " " << (bQuickCommand ? "true" : "false") );
 
     if( m_aCUPSDestMap.find( rPrintername ) == m_aCUPSDestMap.end() )
     {
-        OSL_TRACE( "defer to PrinterInfoManager::startSpool" );
+        SAL_INFO( "vcl", "defer to PrinterInfoManager::startSpool" );
         return PrinterInfoManager::startSpool( rPrintername, bQuickCommand );
     }
 
@@ -619,11 +617,7 @@ void CUPSManager::getOptionsFromDocumentSetup( const JobData& rJob, bool bBanner
 
 bool CUPSManager::endSpool( const OUString& rPrintername, const OUString& rJobTitle, FILE* pFile, const JobData& rDocumentJobData, bool bBanner, const OUString& rFaxNumber )
 {
-    OSL_TRACE( "endSpool: %s, %s, copy count = %d",
-               OUStringToOString( rPrintername, RTL_TEXTENCODING_UTF8 ).getStr(),
-               OUStringToOString( rJobTitle, RTL_TEXTENCODING_UTF8 ).getStr(),
-               rDocumentJobData.m_nCopies
-               );
+    SAL_INFO( "vcl", "endSpool: " << rPrintername << "," << rJobTitle << " copy count = " << rDocumentJobData.m_nCopies );
 
     int nJobID = 0;
 
@@ -633,7 +627,7 @@ bool CUPSManager::endSpool( const OUString& rPrintername, const OUString& rJobTi
         m_aCUPSDestMap.find( rPrintername );
     if( dest_it == m_aCUPSDestMap.end() )
     {
-        OSL_TRACE( "defer to PrinterInfoManager::endSpool" );
+        SAL_INFO( "vcl", "defer to PrinterInfoManager::endSpool" );
         return PrinterInfoManager::endSpool( rPrintername, rJobTitle, pFile, rDocumentJobData, bBanner, rFaxNumber );
     }
 

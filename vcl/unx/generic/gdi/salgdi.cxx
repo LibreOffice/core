@@ -311,7 +311,7 @@ void X11SalGraphics::GetResolution( sal_Int32 &rDPIX, sal_Int32 &rDPIY ) // cons
     const SalDisplay *pDisplay = GetDisplay();
     if (!pDisplay)
     {
-        OSL_TRACE("Null display");
+        SAL_WARN( "vcl", "Null display");
         rDPIX = rDPIY = 96;
         return;
     }

@@ -446,7 +446,7 @@ void SAL_CALL KDE4FilePicker::setValue( sal_Int16 controlId, sal_Int16 nControlA
             cb->setChecked(value.get<bool>());
     }
     else
-        OSL_TRACE( "set label on unknown control %d", controlId );
+        SAL_WARN( "vcl", "set label on unknown control " << controlId );
 }
 
 uno::Any SAL_CALL KDE4FilePicker::getValue( sal_Int16 controlId, sal_Int16 nControlAction )
@@ -472,7 +472,7 @@ uno::Any SAL_CALL KDE4FilePicker::getValue( sal_Int16 controlId, sal_Int16 nCont
             res = uno::Any(cb->isChecked());
     }
     else
-        OSL_TRACE( "get value on unknown control %d", controlId );
+        SAL_WARN( "vcl", "get value on unknown control " << controlId );
 
     return res;
 }
@@ -488,7 +488,7 @@ void SAL_CALL KDE4FilePicker::enableControl( sal_Int16 controlId, sal_Bool enabl
     if (_customWidgets.contains( controlId ))
         _customWidgets.value( controlId )->setEnabled( enable );
     else
-        OSL_TRACE("enable unknown control %d", controlId );
+        SAL_WARN( "vcl", "enable unknown control " << controlId );
 }
 
 void SAL_CALL KDE4FilePicker::setLabel( sal_Int16 controlId, const OUString &label )
@@ -505,7 +505,7 @@ void SAL_CALL KDE4FilePicker::setLabel( sal_Int16 controlId, const OUString &lab
             cb->setText( toQString(label) );
     }
     else
-        OSL_TRACE( "set label on unknown control %d", controlId );
+        SAL_WARN( "vcl", "set label on unknown control " << controlId );
 }
 
 OUString SAL_CALL KDE4FilePicker::getLabel(sal_Int16 controlId)
@@ -523,7 +523,7 @@ OUString SAL_CALL KDE4FilePicker::getLabel(sal_Int16 controlId)
             label = cb->text();
     }
     else
-        OSL_TRACE( "get label on unknown control %d", controlId );
+        SAL_WARN( "vcl", "get label on unknown control " << controlId );
 
     return toOUString(label);
 }
@@ -818,7 +818,7 @@ void KDE4FilePicker::filterChanged(const QString &)
 {
     FilePickerEvent aEvent;
     aEvent.ElementId = LISTBOX_FILTER;
-    OSL_TRACE( "filter changed" );
+    SAL_INFO( "vcl", "filter changed" );
     if (m_xListener.is())
         m_xListener->controlStateChanged( aEvent );
 }
@@ -826,7 +826,7 @@ void KDE4FilePicker::filterChanged(const QString &)
 void KDE4FilePicker::selectionChanged()
 {
     FilePickerEvent aEvent;
-    OSL_TRACE( "file selection changed" );
+    SAL_INFO( "vcl", "file selection changed" );
     if (m_xListener.is())
         m_xListener->fileSelectionChanged( aEvent );
 }

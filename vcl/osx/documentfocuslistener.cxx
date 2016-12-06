@@ -78,7 +78,7 @@ DocumentFocusListener::notifyEvent( const AccessibleEventObject& aEvent )
                 detachRecursive(xAccessible);
                 attachRecursive(xAccessible);
             }
-            OSL_TRACE( "Invalidate all children called\n" );
+            SAL_WARN("vcl", "Invalidate all children called" );
             break;
 
             default:
@@ -87,7 +87,7 @@ DocumentFocusListener::notifyEvent( const AccessibleEventObject& aEvent )
     }
     catch (const IndexOutOfBoundsException&)
     {
-        OSL_TRACE("Focused object has invalid index in parent");
+        SAL_WARN("vcl", "Focused object has invalid index in parent");
     }
 }
 

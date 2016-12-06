@@ -184,7 +184,7 @@ namespace vcl
                     aTrace.append( ", " );
             }
             aTrace.append( ")" );
-            OSL_TRACE( "%s", aTrace.makeStringAndClear().getStr() );
+            SAL_INFO( "vcl", aTrace.makeStringAndClear() );
         }
 #endif
         return nTextWidth;

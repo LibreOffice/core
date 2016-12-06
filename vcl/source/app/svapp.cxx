@@ -1662,7 +1662,7 @@ void Application::ShowNativeErrorBox(const OUString& sTitle  ,
             sTitle,
             sMessage);
     if (btn != SALSYSTEM_SHOWNATIVEMSGBOX_BTN_OK) {
-        OSL_TRACE("ShowNativeMessageBox returned %d", btn);
+        SAL_WARN( "vcl", "ShowNativeMessageBox returned " << btn);
     }
 }
 

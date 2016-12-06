@@ -146,7 +146,7 @@ BitmapEx::BitmapEx( const Bitmap& rBmp, const Bitmap& rMask ) :
     // Ensure a mask is exactly one bit deep
     if( !!aMask && aMask.GetBitCount() != 1 )
     {
-        OSL_TRACE("BitmapEx: forced mask to monochrome");
+        SAL_WARN( "vcl", "BitmapEx: forced mask to monochrome");
         aMask.ImplMakeMono( 255 );
     }
 }

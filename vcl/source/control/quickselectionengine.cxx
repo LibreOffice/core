@@ -118,7 +118,7 @@ namespace vcl
             if ( ( c >= 32 ) && ( c != 127 ) && !_keyEvent.GetKeyCode().IsMod2() )
             {
                 m_pData->sCurrentSearchString += OUStringLiteral1(c);
-                OSL_TRACE( "QuickSelectionEngine::HandleKeyEvent: searching for %s", OUStringToOString(m_pData->sCurrentSearchString, RTL_TEXTENCODING_UTF8).getStr() );
+                SAL_INFO( "vcl", "QuickSelectionEngine::HandleKeyEvent: searching for " << m_pData->sCurrentSearchString );
 
                 if ( m_pData->sCurrentSearchString.getLength() == 1 )
                 {   // first character in the search -> remember
@@ -134,7 +134,7 @@ namespace vcl
                 OUString aSearchTemp( m_pData->sCurrentSearchString );
 
                 StringEntryIdentifier pMatchingEntry = findMatchingEntry( aSearchTemp, *m_pData );
-                OSL_TRACE( "QuickSelectionEngine::HandleKeyEvent: found %p", pMatchingEntry );
+                SAL_INFO( "vcl", "QuickSelectionEngine::HandleKeyEvent: found " << pMatchingEntry );
                 if ( !pMatchingEntry && (aSearchTemp.getLength() > 1) && !!m_pData->aSingleSearchChar )
                 {
                     // if there's only one letter in the search string, use a different search mode

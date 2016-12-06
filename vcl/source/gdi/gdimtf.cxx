@@ -347,7 +347,7 @@ void GDIMetaFile::Play( OutputDevice* pOut, size_t nPos )
         pOut->SetLayoutMode( ComplexTextLayoutFlags::Default );
         pOut->SetDigitLanguage( 0 );
 
-        OSL_TRACE("GDIMetaFile::Play on device of size: %ld x %ld", pOut->GetOutputSizePixel().Width(), pOut->GetOutputSizePixel().Height());
+        SAL_INFO( "vcl", "GDIMetaFile::Play on device of size: " << pOut->GetOutputSizePixel().Width() << " " << pOut->GetOutputSizePixel().Height());
 
         if( !ImplPlayWithRenderer( pOut, Point(0,0), pOut->GetOutputSize() ) ) {
             size_t  i  = 0;
@@ -2756,10 +2756,9 @@ SvStream& WriteGDIMetaFile( SvStream& rOStm, const GDIMetaFile& rGDIMetaFile )
 #ifdef DEBUG
         if( !bNoSVM1 && rOStm.GetVersion() < SOFFICE_FILEFORMAT_50 )
         {
-OSL_TRACE( \
-"GDIMetaFile would normally be written in old SVM1 format by this call. \
-The current implementation always writes in VCLMTF format. \
-Please set environment variable SAL_ENABLE_SVM1 to '1' to reenable old behavior" );
+            SAL_WARN( "vcl", "GDIMetaFile would normally be written in old SVM1 format by this call. "
+                "The current implementation always writes in VCLMTF format. "
+                "Please set environment variable SAL_ENABLE_SVM1 to '1' to reenable old behavior" );
         }
 #endif // DEBUG
     }
