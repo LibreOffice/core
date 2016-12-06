@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.20.0 -->
 <interface>
   <requires lib="gtk+" version="3.12"/>
   <object class="GtkDialog" id="SafeModeDialog">
@@ -231,7 +231,7 @@ The proposed changes get more radical from top down so it is recommended to try 
             </child>
             <child>
               <object class="GtkRadioButton" id="radio_deinstall">
-                <property name="label" translatable="yes">Uninstall extensions</property>
+                <property name="label" translatable="yes">Extensions</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
@@ -268,8 +268,8 @@ The proposed changes get more radical from top down so it is recommended to try 
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="check_deinstall_all_extensions">
-                    <property name="label" translatable="yes">Uninstall all extensions (including shared and bundled)</property>
+                  <object class="GtkCheckButton" id="check_reset_shared_extensions">
+                    <property name="label" translatable="yes">Reset state of shared extensions</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
