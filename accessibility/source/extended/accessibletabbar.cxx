@@ -67,7 +67,7 @@ namespace accessibility
 
         switch ( rVclWindowEvent.GetId() )
         {
-            case VCLEVENT_WINDOW_ENABLED:
+            case VclEventId::WindowEnabled:
             {
                 aNewValue <<= AccessibleStateType::SENSITIVE;
                 NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
@@ -75,7 +75,7 @@ namespace accessibility
                 NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
             }
             break;
-            case VCLEVENT_WINDOW_DISABLED:
+            case VclEventId::WindowDisabled:
             {
                 aOldValue <<= AccessibleStateType::ENABLED;
                 NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
@@ -83,25 +83,25 @@ namespace accessibility
                 NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
             }
             break;
-            case VCLEVENT_WINDOW_GETFOCUS:
+            case VclEventId::WindowGetFocus:
             {
                 aNewValue <<= AccessibleStateType::FOCUSED;
                 NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
             }
             break;
-            case VCLEVENT_WINDOW_LOSEFOCUS:
+            case VclEventId::WindowLoseFocus:
             {
                 aOldValue <<= AccessibleStateType::FOCUSED;
                 NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
             }
             break;
-            case VCLEVENT_WINDOW_SHOW:
+            case VclEventId::WindowShow:
             {
                 aNewValue <<= AccessibleStateType::SHOWING;
                 NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
             }
             break;
-            case VCLEVENT_WINDOW_HIDE:
+            case VclEventId::WindowHide:
             {
                 aOldValue <<= AccessibleStateType::SHOWING;
                 NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );

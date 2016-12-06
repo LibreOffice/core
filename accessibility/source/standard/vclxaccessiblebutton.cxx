@@ -57,7 +57,7 @@ void VCLXAccessibleButton::ProcessWindowEvent( const VclWindowEvent& rVclWindowE
 {
     switch ( rVclWindowEvent.GetId() )
     {
-        case VCLEVENT_PUSHBUTTON_TOGGLE:
+        case VclEventId::PushbuttonToggle:
         {
             Any aOldValue;
             Any aNewValue;

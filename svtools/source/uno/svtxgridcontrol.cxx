@@ -783,7 +783,7 @@ void SVTXGridControl::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent 
     bool handled = false;
     switch ( rVclWindowEvent.GetId() )
     {
-        case VCLEVENT_TABLEROW_SELECT:
+        case VclEventId::TableRowSelect:
         {
             if ( m_aSelectionListeners.getLength() )
                 ImplCallItemListeners();
@@ -791,7 +791,7 @@ void SVTXGridControl::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent 
         }
         break;
 
-        case VCLEVENT_CONTROL_GETFOCUS:
+        case VclEventId::ControlGetFocus:
         {
             // TODO: this doesn't belong here. It belongs into the TableControl/_Impl, so A11Y also
             // works when the control is used outside the UNO context
@@ -819,7 +819,7 @@ void SVTXGridControl::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent 
         }
         break;
 
-        case VCLEVENT_CONTROL_LOSEFOCUS:
+        case VclEventId::ControlLoseFocus:
         {
             // TODO: this doesn't belong here. It belongs into the TableControl/_Impl, so A11Y also
             // works when the control is used outside the UNO context
@@ -841,6 +841,8 @@ void SVTXGridControl::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent 
             }
         }
         break;
+
+        default: break;
     }
 
     if ( !handled )

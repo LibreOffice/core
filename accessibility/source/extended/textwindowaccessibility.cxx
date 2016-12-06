@@ -1629,7 +1629,7 @@ IMPL_LINK(Document, WindowEventHandler, ::VclWindowEvent&, rEvent, void)
 {
     switch (rEvent.GetId())
     {
-    case VCLEVENT_WINDOW_RESIZE:
+    case VclEventId::WindowResize:
         {
             ::osl::MutexGuard aInternalGuard(GetMutex());
             if (!isAlive())
@@ -1652,7 +1652,7 @@ IMPL_LINK(Document, WindowEventHandler, ::VclWindowEvent&, rEvent, void)
             }
             break;
         }
-    case VCLEVENT_WINDOW_GETFOCUS:
+    case VclEventId::WindowGetFocus:
         {
             ::osl::MutexGuard aInternalGuard(GetMutex());
             if (!isAlive())
@@ -1689,7 +1689,7 @@ IMPL_LINK(Document, WindowEventHandler, ::VclWindowEvent&, rEvent, void)
             */
             break;
         }
-    case VCLEVENT_WINDOW_LOSEFOCUS:
+    case VclEventId::WindowLoseFocus:
         {
             ::osl::MutexGuard aInternalGuard(GetMutex());
             if (!isAlive())
@@ -1728,6 +1728,7 @@ IMPL_LINK(Document, WindowEventHandler, ::VclWindowEvent&, rEvent, void)
             */
             break;
         }
+    default: break;
     }
 }
 

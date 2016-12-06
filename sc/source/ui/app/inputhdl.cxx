@@ -857,13 +857,13 @@ void ScInputHandler::GetFormulaData()
 
 IMPL_LINK( ScInputHandler, ShowHideTipVisibleParentListener, VclWindowEvent&, rEvent, void )
 {
-    if( rEvent.GetId() == VCLEVENT_OBJECT_DYING || rEvent.GetId() == VCLEVENT_WINDOW_HIDE )
+    if( rEvent.GetId() == VclEventId::ObjectDying || rEvent.GetId() == VclEventId::WindowHide )
         HideTip();
 }
 
 IMPL_LINK( ScInputHandler, ShowHideTipVisibleSecParentListener, VclWindowEvent&, rEvent, void )
 {
-    if( rEvent.GetId() == VCLEVENT_OBJECT_DYING || rEvent.GetId() == VCLEVENT_WINDOW_HIDE )
+    if( rEvent.GetId() == VclEventId::ObjectDying || rEvent.GetId() == VclEventId::WindowHide )
         HideTipBelow();
 }
 

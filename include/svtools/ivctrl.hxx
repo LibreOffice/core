@@ -219,7 +219,7 @@ protected:
 
     virtual void        FillLayoutData() const override;
 
-    void                CallImplEventListeners(sal_uLong nEvent, void* pData);
+    void                CallImplEventListeners(VclEventId nEvent, void* pData);
 
 public:
 

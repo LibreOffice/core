@@ -894,13 +894,13 @@ IMPL_LINK(AccessibleSlideSorterView::Implementation, WindowEventListener, VclWin
 {
     switch (rEvent.GetId())
     {
-        case VCLEVENT_WINDOW_MOVE:
-        case VCLEVENT_WINDOW_RESIZE:
+        case VclEventId::WindowMove:
+        case VclEventId::WindowResize:
             RequestUpdateChildren();
             break;
 
-        case VCLEVENT_WINDOW_GETFOCUS:
-        case VCLEVENT_WINDOW_LOSEFOCUS:
+        case VclEventId::WindowGetFocus:
+        case VclEventId::WindowLoseFocus:
             mrAccessibleSlideSorter.FireAccessibleEvent(
                 AccessibleEventId::SELECTION_CHANGED,
                 Any(),

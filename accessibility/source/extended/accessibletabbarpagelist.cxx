@@ -178,7 +178,7 @@ namespace accessibility
     {
          switch ( rVclWindowEvent.GetId() )
          {
-            case VCLEVENT_WINDOW_ENABLED:
+            case VclEventId::WindowEnabled:
             {
                Any aNewValue;
                 aNewValue <<= AccessibleStateType::SENSITIVE;
@@ -187,7 +187,7 @@ namespace accessibility
                 NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, Any(), aNewValue );
             }
             break;
-            case VCLEVENT_WINDOW_DISABLED:
+            case VclEventId::WindowDisabled:
             {
                Any aOldValue;
                 aOldValue <<= AccessibleStateType::ENABLED;
@@ -196,7 +196,7 @@ namespace accessibility
                 NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aOldValue, Any() );
             }
             break;
-            case VCLEVENT_WINDOW_SHOW:
+            case VclEventId::WindowShow:
             {
                 Any aOldValue, aNewValue;
                 aNewValue <<= AccessibleStateType::SHOWING;
@@ -204,7 +204,7 @@ namespace accessibility
                 UpdateShowing( true );
             }
             break;
-            case VCLEVENT_WINDOW_HIDE:
+            case VclEventId::WindowHide:
             {
                 Any aOldValue, aNewValue;
                 aOldValue <<= AccessibleStateType::SHOWING;
@@ -212,12 +212,12 @@ namespace accessibility
                 UpdateShowing( false );
             }
             break;
-            case VCLEVENT_TABBAR_PAGESELECTED:
+            case VclEventId::TabbarPageSelected:
             {
                 // do nothing
             }
             break;
-            case VCLEVENT_TABBAR_PAGEACTIVATED:
+            case VclEventId::TabbarPageActivated:
             {
                 if ( m_pTabBar )
                 {
@@ -227,7 +227,7 @@ namespace accessibility
                 }
             }
             break;
-            case VCLEVENT_TABBAR_PAGEDEACTIVATED:
+            case VclEventId::TabbarPageDeactivated:
             {
                 if ( m_pTabBar )
                 {
@@ -237,7 +237,7 @@ namespace accessibility
                 }
             }
             break;
-            case VCLEVENT_TABBAR_PAGEINSERTED:
+            case VclEventId::TabbarPageInserted:
             {
                 if ( m_pTabBar )
                 {
@@ -247,7 +247,7 @@ namespace accessibility
                 }
             }
             break;
-            case VCLEVENT_TABBAR_PAGEREMOVED:
+            case VclEventId::TabbarPageRemoved:
             {
                 if ( m_pTabBar )
                 {
@@ -277,14 +277,14 @@ namespace accessibility
                 }
             }
             break;
-            case VCLEVENT_TABBAR_PAGEMOVED:
+            case VclEventId::TabbarPageMoved:
             {
                 Pair* pPair = static_cast<Pair*>(rVclWindowEvent.GetData());
                 if ( pPair )
                     MoveChild( pPair->A(), pPair->B() );
             }
             break;
-            case VCLEVENT_TABBAR_PAGETEXTCHANGED:
+            case VclEventId::TabbarPageTextChanged:
             {
                 sal_uInt16 nPageId = (sal_uInt16)reinterpret_cast<sal_IntPtr>(rVclWindowEvent.GetData());
                 sal_uInt16 nPagePos = m_pTabBar->GetPagePos( nPageId );

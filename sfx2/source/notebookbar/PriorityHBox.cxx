@@ -141,7 +141,7 @@ private:
 
 IMPL_LINK( PriorityHBox, WindowEventListener, VclWindowEvent&, rEvent, void )
 {
-    if (rEvent.GetId() == VCLEVENT_WINDOW_RESIZE)
+    if (rEvent.GetId() == VclEventId::WindowResize)
     {
         vcl::Window* pEventWindow = rEvent.GetWindow();
 

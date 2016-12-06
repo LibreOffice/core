@@ -63,7 +63,7 @@ namespace accessibility
         {
             switch ( rVclWindowEvent.GetId() )
             {
-                case VCLEVENT_LISTBOX_SELECT :
+                case VclEventId::ListboxSelect :
                 {
                     // First send an event that tells the listeners of a
                     // modified selection.  The active descendant event is
@@ -88,7 +88,7 @@ namespace accessibility
                     }
                     break;
                 }
-                case VCLEVENT_WINDOW_GETFOCUS :
+                case VclEventId::WindowGetFocus :
                 {
                     VclPtr<SvtIconChoiceCtrl> pCtrl = getCtrl();
                     if ( pCtrl && pCtrl->HasFocus() )

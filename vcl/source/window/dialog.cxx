@@ -719,7 +719,7 @@ void Dialog::DataChanged( const DataChangedEvent& rDCEvt )
 bool Dialog::Close()
 {
     VclPtr<vcl::Window> xWindow = this;
-    CallEventListeners( VCLEVENT_WINDOW_CLOSE );
+    CallEventListeners( VclEventId::WindowClose );
     if ( xWindow->IsDisposed() )
         return false;
 

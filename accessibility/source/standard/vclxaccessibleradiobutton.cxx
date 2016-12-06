@@ -62,7 +62,7 @@ void VCLXAccessibleRadioButton::ProcessWindowEvent( const VclWindowEvent& rVclWi
 {
     switch ( rVclWindowEvent.GetId() )
     {
-        case VCLEVENT_RADIOBUTTON_TOGGLE:
+        case VclEventId::RadiobuttonToggle:
         {
             Any aOldValue;
             Any aNewValue;

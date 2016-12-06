@@ -62,7 +62,7 @@ namespace toolkit
 
     IMPL_LINK( WindowStyleSettings_Data, OnWindowEvent, VclWindowEvent&, rEvent, void )
     {
-        if ( rEvent.GetId() != VCLEVENT_WINDOW_DATACHANGED )
+        if ( rEvent.GetId() != VclEventId::WindowDataChanged )
             return;
         const DataChangedEvent* pDataChangedEvent = static_cast< const DataChangedEvent* >( rEvent.GetData() );
         if ( !pDataChangedEvent || ( pDataChangedEvent->GetType() != DataChangedEventType::SETTINGS ) )

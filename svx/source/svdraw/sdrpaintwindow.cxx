@@ -45,7 +45,7 @@ public:
 IMPL_LINK(CandidateMgr, WindowEventListener, VclWindowEvent&, rEvent, void)
 {
     vcl::Window* pWindow = rEvent.GetWindow();
-    if (rEvent.GetId() == VCLEVENT_OBJECT_DYING)
+    if (rEvent.GetId() == VclEventId::ObjectDying)
     {
         m_aDeletedCandidates.insert(pWindow);
     }

@@ -1342,7 +1342,7 @@ IMPL_LINK( SwEditRegionDlg, DlgClosedHdl, sfx2::FileDialogHelper *, _pFileDlg, v
 
 IMPL_LINK( SwEditRegionDlg, SubRegionEventHdl, VclWindowEvent&, rEvent, void )
 {
-    if( !m_bSubRegionsFilled && rEvent.GetId() == VCLEVENT_DROPDOWN_PRE_OPEN )
+    if( !m_bSubRegionsFilled && rEvent.GetId() == VclEventId::DropdownPreOpen )
     {
         //if necessary fill the names bookmarks/sections/tables now
 

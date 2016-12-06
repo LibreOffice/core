@@ -94,12 +94,12 @@ void WindowCommandDispatch::impl_stopListening()
 
 IMPL_LINK(WindowCommandDispatch, impl_notifyCommand, VclWindowEvent&, rEvent, void)
 {
-    if (rEvent.GetId() == VCLEVENT_OBJECT_DYING)
+    if (rEvent.GetId() == VclEventId::ObjectDying)
     {
         impl_stopListening();
         return;
     }
-    if (rEvent.GetId() != VCLEVENT_WINDOW_COMMAND)
+    if (rEvent.GetId() != VclEventId::WindowCommand)
         return;
 
     const CommandEvent* pCommand = static_cast<CommandEvent*>(rEvent.GetData());

@@ -255,11 +255,11 @@ IMPL_LINK( MenuBarWindow, ToolboxEventHdl, VclWindowEvent&, rEvent, void )
 
     MenuBar::MenuBarButtonCallbackArg aArg;
     aArg.nId = 0xffff;
-    aArg.bHighlight = (rEvent.GetId() == VCLEVENT_TOOLBOX_HIGHLIGHT);
+    aArg.bHighlight = (rEvent.GetId() == VclEventId::ToolboxHighlight);
     aArg.pMenuBar = dynamic_cast<MenuBar*>(pMenu.get());
-    if( rEvent.GetId() == VCLEVENT_TOOLBOX_HIGHLIGHT )
+    if( rEvent.GetId() == VclEventId::ToolboxHighlight )
         aArg.nId = aCloseBtn->GetHighlightItemId();
-    else if( rEvent.GetId() == VCLEVENT_TOOLBOX_HIGHLIGHTOFF )
+    else if( rEvent.GetId() == VclEventId::ToolboxHighlightOff )
     {
         sal_uInt16 nPos = static_cast< sal_uInt16 >(reinterpret_cast<sal_IntPtr>(rEvent.GetData()));
         aArg.nId = aCloseBtn->GetItemId(nPos);
@@ -276,10 +276,10 @@ IMPL_LINK( MenuBarWindow, ShowHideListener, VclWindowEvent&, rEvent, void )
     if( ! pMenu )
         return;
 
-    if( rEvent.GetId() == VCLEVENT_WINDOW_SHOW )
-        pMenu->ImplCallEventListeners( VCLEVENT_MENU_SHOW, ITEMPOS_INVALID );
-    else if( rEvent.GetId() == VCLEVENT_WINDOW_HIDE )
-        pMenu->ImplCallEventListeners( VCLEVENT_MENU_HIDE, ITEMPOS_INVALID );
+    if( rEvent.GetId() == VclEventId::WindowShow )
+        pMenu->ImplCallEventListeners( VclEventId::MenuShow, ITEMPOS_INVALID );
+    else if( rEvent.GetId() == VclEventId::WindowHide )
+        pMenu->ImplCallEventListeners( VclEventId::MenuHide, ITEMPOS_INVALID );
 }
 
 void MenuBarWindow::ImplCreatePopup( bool bPreSelectFirst )
@@ -502,7 +502,7 @@ void MenuBarWindow::ChangeHighlightItem( sal_uInt16 n, bool bSelectEntry, bool b
         if ( nHighlightedItem != nRolloveredItem )
             Invalidate(); //HighlightItem( nHighlightedItem, false );
 
-        pMenu->ImplCallEventListeners( VCLEVENT_MENU_DEHIGHLIGHT, nHighlightedItem );
+        pMenu->ImplCallEventListeners( VclEventId::MenuDehighlight, nHighlightedItem );
     }
 
     nHighlightedItem = (sal_uInt16)n;

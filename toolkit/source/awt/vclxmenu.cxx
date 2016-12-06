@@ -87,7 +87,7 @@ IMPL_LINK( VCLXMenu, MenuEventListener, VclMenuEvent&, rMenuEvent, void )
     {
         switch ( rMenuEvent.GetId() )
         {
-            case VCLEVENT_MENU_SELECT:
+            case VclEventId::MenuSelect:
             {
                 if ( maMenuListeners.getLength() )
                 {
@@ -98,12 +98,12 @@ IMPL_LINK( VCLXMenu, MenuEventListener, VclMenuEvent&, rMenuEvent, void )
                 }
             }
             break;
-            case VCLEVENT_OBJECT_DYING:
+            case VclEventId::ObjectDying:
             {
                 mpMenu = nullptr;
             }
             break;
-            case VCLEVENT_MENU_HIGHLIGHT:
+            case VclEventId::MenuHighlight:
             {
                 if ( maMenuListeners.getLength() )
                 {
@@ -114,7 +114,7 @@ IMPL_LINK( VCLXMenu, MenuEventListener, VclMenuEvent&, rMenuEvent, void )
                 }
             }
             break;
-            case VCLEVENT_MENU_ACTIVATE:
+            case VclEventId::MenuActivate:
             {
                 if ( maMenuListeners.getLength() )
                 {
@@ -125,7 +125,7 @@ IMPL_LINK( VCLXMenu, MenuEventListener, VclMenuEvent&, rMenuEvent, void )
                 }
             }
             break;
-            case VCLEVENT_MENU_DEACTIVATE:
+            case VclEventId::MenuDeactivate:
             {
                 if ( maMenuListeners.getLength() )
                 {
@@ -138,19 +138,19 @@ IMPL_LINK( VCLXMenu, MenuEventListener, VclMenuEvent&, rMenuEvent, void )
             break;
 
             // ignore accessibility events
-            case VCLEVENT_MENU_ENABLE:
-            case VCLEVENT_MENU_INSERTITEM:
-            case VCLEVENT_MENU_REMOVEITEM:
-            case VCLEVENT_MENU_SUBMENUACTIVATE:
-            case VCLEVENT_MENU_SUBMENUDEACTIVATE:
-            case VCLEVENT_MENU_SUBMENUCHANGED:
-            case VCLEVENT_MENU_DEHIGHLIGHT:
-            case VCLEVENT_MENU_DISABLE:
-            case VCLEVENT_MENU_ITEMTEXTCHANGED:
-            case VCLEVENT_MENU_ITEMCHECKED:
-            case VCLEVENT_MENU_ITEMUNCHECKED:
-            case VCLEVENT_MENU_SHOW:
-            case VCLEVENT_MENU_HIDE:
+            case VclEventId::MenuEnable:
+            case VclEventId::MenuInsertItem:
+            case VclEventId::MenuRemoveItem:
+            case VclEventId::MenuSubmenuActivate:
+            case VclEventId::MenuSubmenuDeactivate:
+            case VclEventId::MenuSubmenuChanged:
+            case VclEventId::MenuDehighlight:
+            case VclEventId::MenuDisable:
+            case VclEventId::MenuItemTextChanged:
+            case VclEventId::MenuItemChecked:
+            case VclEventId::MenuItemUnchecked:
+            case VclEventId::MenuShow:
+            case VclEventId::MenuHide:
             break;
 
             default:    OSL_FAIL( "MenuEventListener - Unknown event!" );

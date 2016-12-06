@@ -737,8 +737,8 @@ IMPL_LINK(LayoutMenu, WindowEventHandler, VclWindowEvent&, rEvent, void)
 {
     switch (rEvent.GetId())
     {
-        case VCLEVENT_WINDOW_SHOW:
-        case VCLEVENT_WINDOW_RESIZE:
+        case VclEventId::WindowShow:
+        case VclEventId::WindowResize:
             SetSizePixel(GetParent()->GetSizePixel());
             break;
 

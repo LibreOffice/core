@@ -530,24 +530,24 @@ IMPL_LINK(SlideSorterController, WindowEventHandler, VclWindowEvent&, rEvent, vo
         sd::Window *pActiveWindow (mrSlideSorter.GetContentWindow().get());
         switch (rEvent.GetId())
         {
-            case VCLEVENT_WINDOW_ACTIVATE:
-            case VCLEVENT_WINDOW_SHOW:
+            case VclEventId::WindowActivate:
+            case VclEventId::WindowShow:
                 if (pActiveWindow && pWindow == pActiveWindow->GetParent())
                     mrView.RequestRepaint();
                 break;
 
-            case VCLEVENT_WINDOW_HIDE:
+            case VclEventId::WindowHide:
                 if (pActiveWindow && pWindow == pActiveWindow->GetParent())
                     mrView.SetPageUnderMouse(SharedPageDescriptor());
                 break;
 
-            case VCLEVENT_WINDOW_GETFOCUS:
+            case VclEventId::WindowGetFocus:
                 if (pActiveWindow)
                     if (pWindow == pActiveWindow)
                         GetFocusManager().ShowFocus(false);
                 break;
 
-            case VCLEVENT_WINDOW_LOSEFOCUS:
+            case VclEventId::WindowLoseFocus:
                 if (pActiveWindow && pWindow == pActiveWindow)
                 {
                     GetFocusManager().HideFocus();
@@ -559,7 +559,7 @@ IMPL_LINK(SlideSorterController, WindowEventHandler, VclWindowEvent&, rEvent, vo
                 }
                 break;
 
-            case VCLEVENT_APPLICATION_DATACHANGED:
+            case VclEventId::ApplicationDataChanged:
             {
                 // Invalidate the preview cache.
                 cache::PageCacheManager::Instance()->InvalidateAllCaches();

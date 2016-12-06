@@ -414,7 +414,7 @@ void SvxIconChoiceCtrl_Impl::EntrySelected(SvxIconChoiceCtrlEntry* pEntry, bool 
     // #i101012# emit vcl event LISTBOX_SELECT only in case that the given entry is selected.
     if (bSelect)
     {
-        CallEventListeners(VCLEVENT_LISTBOX_SELECT, pEntry);
+        CallEventListeners(VclEventId::ListboxSelect, pEntry);
     }
 }
 
@@ -974,7 +974,7 @@ void SvxIconChoiceCtrl_Impl::SetCursor_Impl( SvxIconChoiceCtrlEntry* pOldCursor,
         {
             SelectEntry( pCursor, true, false, bPaintSync );
             aCurSelectionRect = GetEntryBoundRect( pCursor );
-            CallEventListeners( VCLEVENT_LISTBOX_SELECT, pCursor );
+            CallEventListeners( VclEventId::ListboxSelect, pCursor );
         }
     }
 }
@@ -3508,7 +3508,7 @@ void SvxIconChoiceCtrl_Impl::SetOrigin( const Point& rPos )
     pView->SetMapMode( aMapMode );
 }
 
-void SvxIconChoiceCtrl_Impl::CallEventListeners( sal_uLong nEvent, void* pData )
+void SvxIconChoiceCtrl_Impl::CallEventListeners( VclEventId nEvent, void* pData )
 {
     pView->CallImplEventListeners( nEvent, pData );
 }

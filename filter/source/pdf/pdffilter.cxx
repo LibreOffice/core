@@ -165,7 +165,7 @@ public:
 
 IMPL_LINK( FocusWindowWaitCursor, DestroyedLink, VclWindowEvent&, rEvent, void )
 {
-    if( rEvent.GetId() == VCLEVENT_OBJECT_DYING )
+    if( rEvent.GetId() == VclEventId::ObjectDying )
         m_pFocusWindow = nullptr;
 }
 

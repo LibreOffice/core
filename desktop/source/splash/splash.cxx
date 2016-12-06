@@ -370,7 +370,7 @@ IMPL_LINK( SplashScreen, AppEventListenerHdl, VclSimpleEvent&, inEvent, void )
     {
         switch ( inEvent.GetId() )
         {
-            case VCLEVENT_WINDOW_SHOW:
+            case VclEventId::WindowShow:
                 pWindow->Redraw();
                 break;
             default:

@@ -392,7 +392,7 @@ void SdModule::GetState(SfxItemSet& rItemSet)
 
 IMPL_STATIC_LINK( SdModule, EventListenerHdl, VclSimpleEvent&, rSimpleEvent, void )
 {
-    if( (rSimpleEvent.GetId() == VCLEVENT_WINDOW_COMMAND) && static_cast<VclWindowEvent*>(&rSimpleEvent)->GetData() )
+    if( (rSimpleEvent.GetId() == VclEventId::WindowCommand) && static_cast<VclWindowEvent*>(&rSimpleEvent)->GetData() )
     {
         const CommandEvent& rEvent = *static_cast<const CommandEvent*>(static_cast<VclWindowEvent*>(&rSimpleEvent)->GetData());
 

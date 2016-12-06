@@ -389,7 +389,7 @@ IMPL_LINK( SwAccessibleDocument, WindowChildEventListener, VclWindowEvent&, rEve
     OSL_ENSURE( rEvent.GetWindow(), "Window???" );
     switch ( rEvent.GetId() )
     {
-    case VCLEVENT_WINDOW_SHOW:  // send create on show for direct accessible children
+    case VclEventId::WindowShow:  // send create on show for direct accessible children
         {
             vcl::Window* pChildWin = static_cast< vcl::Window* >( rEvent.GetData() );
             if( pChildWin && AccessibleRole::EMBEDDED_OBJECT == pChildWin->GetAccessibleRole() )
@@ -398,7 +398,7 @@ IMPL_LINK( SwAccessibleDocument, WindowChildEventListener, VclWindowEvent&, rEve
             }
         }
         break;
-    case VCLEVENT_WINDOW_HIDE:  // send destroy on hide for direct accessible children
+    case VclEventId::WindowHide:  // send destroy on hide for direct accessible children
         {
             vcl::Window* pChildWin = static_cast< vcl::Window* >( rEvent.GetData() );
             if( pChildWin && AccessibleRole::EMBEDDED_OBJECT == pChildWin->GetAccessibleRole() )
@@ -407,7 +407,7 @@ IMPL_LINK( SwAccessibleDocument, WindowChildEventListener, VclWindowEvent&, rEve
             }
         }
         break;
-    case VCLEVENT_OBJECT_DYING:  // send destroy on hide for direct accessible children
+    case VclEventId::ObjectDying:  // send destroy on hide for direct accessible children
         {
             vcl::Window* pChildWin = rEvent.GetWindow();
             if( pChildWin && AccessibleRole::EMBEDDED_OBJECT == pChildWin->GetAccessibleRole() )
@@ -416,6 +416,7 @@ IMPL_LINK( SwAccessibleDocument, WindowChildEventListener, VclWindowEvent&, rEve
             }
         }
         break;
+    default: break;
     }
 }
 

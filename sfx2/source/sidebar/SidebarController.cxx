@@ -864,12 +864,12 @@ IMPL_LINK(SidebarController, WindowEventHandler, VclWindowEvent&, rEvent, void)
     {
         switch (rEvent.GetId())
         {
-            case VCLEVENT_WINDOW_SHOW:
-            case VCLEVENT_WINDOW_RESIZE:
+            case VclEventId::WindowShow:
+            case VclEventId::WindowResize:
                 NotifyResize();
                 break;
 
-            case VCLEVENT_WINDOW_DATACHANGED:
+            case VclEventId::WindowDataChanged:
                 // Force an update of deck and tab bar to reflect
                 // changes in theme (high contrast mode).
                 Theme::HandleDataChange();
@@ -880,11 +880,11 @@ IMPL_LINK(SidebarController, WindowEventHandler, VclWindowEvent&, rEvent, void)
                 maContextChangeUpdate.RequestCall();
                 break;
 
-            case SFX_HINT_DYING:
+            case VclEventId::ObjectDying:
                 dispose();
                 break;
 
-            case VCLEVENT_WINDOW_PAINT:
+            case VclEventId::WindowPaint:
                 OSL_TRACE("Paint");
                 break;
 
@@ -896,20 +896,22 @@ IMPL_LINK(SidebarController, WindowEventHandler, VclWindowEvent&, rEvent, void)
     {
         switch (rEvent.GetId())
         {
-            case VCLEVENT_WINDOW_MOUSEBUTTONDOWN:
+            case VclEventId::WindowMouseButtonDown:
                 mnWidthOnSplitterButtonDown = mpParentWindow->GetSizePixel().Width();
                 break;
 
-            case VCLEVENT_WINDOW_MOUSEBUTTONUP:
+            case VclEventId::WindowMouseButtonUp:
             {
                 ProcessNewWidth(mpParentWindow->GetSizePixel().Width());
                 mnWidthOnSplitterButtonDown = 0;
                 break;
             }
 
-            case SFX_HINT_DYING:
+            case VclEventId::ObjectDying:
                 dispose();
                 break;
+
+            default: break;
          }
     }
 }

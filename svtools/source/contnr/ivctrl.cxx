@@ -87,7 +87,7 @@ void SvtIconChoiceCtrl::dispose()
 {
     if (_pImpl)
     {
-        _pImpl->CallEventListeners( VCLEVENT_OBJECT_DYING, nullptr );
+        _pImpl->CallEventListeners( VclEventId::ObjectDying, nullptr );
         _pImpl.reset();
     }
     Control::dispose();
@@ -191,7 +191,7 @@ void SvtIconChoiceCtrl::GetFocus()
     Control::GetFocus();
     SvxIconChoiceCtrlEntry* pSelectedEntry = GetSelectedEntry();
     if ( pSelectedEntry )
-        _pImpl->CallEventListeners( VCLEVENT_LISTBOX_SELECT, pSelectedEntry );
+        _pImpl->CallEventListeners( VclEventId::ListboxSelect, pSelectedEntry );
 }
 
 void SvtIconChoiceCtrl::LoseFocus()
@@ -422,7 +422,7 @@ void SvtIconChoiceCtrl::SetNoSelection()
     _pImpl->SetNoSelection();
 }
 
-void SvtIconChoiceCtrl::CallImplEventListeners(sal_uLong nEvent, void* pData)
+void SvtIconChoiceCtrl::CallImplEventListeners(VclEventId nEvent, void* pData)
 {
     CallEventListeners(nEvent, pData);
 }

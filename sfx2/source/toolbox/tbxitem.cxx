@@ -194,8 +194,8 @@ struct SfxToolBoxControl_Impl
 
 IMPL_LINK( SfxToolBoxControl_Impl, WindowEventListener, VclWindowEvent&, rEvent, void )
 {
-    if ( ( rEvent.GetId() == VCLEVENT_WINDOW_MOVE ) ||
-         ( rEvent.GetId() == VCLEVENT_WINDOW_ACTIVATE ))
+    if ( ( rEvent.GetId() == VclEventId::WindowMove ) ||
+         ( rEvent.GetId() == VclEventId::WindowActivate ))
     {
         vcl::Window* pWindow( rEvent.GetWindow() );
         if (( pWindow == mpFloatingWindow ) &&

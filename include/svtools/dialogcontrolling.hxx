@@ -221,8 +221,8 @@ namespace svt
     /** a helper class implementing the ->IWindowEventFilter interface,
         which filters for radio buttons or check boxes being toggled.
 
-        Technically, the class simply filters for the ->VCLEVENT_RADIOBUTTON_TOGGLE
-        and the ->VCLEVENT_CHECKBOX_TOGGLE event.
+        Technically, the class simply filters for the ->VclEventId::RadiobuttonToggle
+        and the ->VclEventId::CheckboxToggle event.
     */
     class SVT_DLLPUBLIC FilterForRadioOrCheckToggle : public IWindowEventFilter
     {
@@ -236,8 +236,8 @@ namespace svt
         bool payAttentionTo( const VclWindowEvent& _rEvent ) const override
         {
             if  (   ( _rEvent.GetWindow() == &m_rWindow )
-                &&  (   ( _rEvent.GetId() == VCLEVENT_RADIOBUTTON_TOGGLE )
-                    ||  ( _rEvent.GetId() == VCLEVENT_CHECKBOX_TOGGLE )
+                &&  (   ( _rEvent.GetId() == VclEventId::RadiobuttonToggle )
+                    ||  ( _rEvent.GetId() == VclEventId::CheckboxToggle )
                     )
                 )
                 return true;

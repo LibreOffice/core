@@ -996,7 +996,7 @@ bool ExtMgrDialog::EventNotify( NotifyEvent& rNEvt )
         if ( aKeyCode.GetGroup() == KEYGROUP_CURSOR )
             bHandled = m_pExtensionBox->EventNotify(rNEvt);
     }
-// VCLEVENT_WINDOW_CLOSE
+// VclEventId::WindowClose
     if ( !bHandled )
         return ModelessDialog::EventNotify(rNEvt);
     else

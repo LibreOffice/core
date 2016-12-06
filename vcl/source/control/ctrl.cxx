@@ -236,7 +236,7 @@ bool Control::EventNotify( NotifyEvent& rNEvt )
             {
                 mbHasControlFocus = true;
                 CompatStateChanged( StateChangedType::ControlFocus );
-                if ( ImplCallEventListenersAndHandler( VCLEVENT_CONTROL_GETFOCUS, [this] () { maGetFocusHdl.Call(*this); } ) )
+                if ( ImplCallEventListenersAndHandler( VclEventId::ControlGetFocus, [this] () { maGetFocusHdl.Call(*this); } ) )
                     // been destroyed within the handler
                     return true;
             }
@@ -250,7 +250,7 @@ bool Control::EventNotify( NotifyEvent& rNEvt )
                 {
                     mbHasControlFocus = false;
                     CompatStateChanged( StateChangedType::ControlFocus );
-                    if ( ImplCallEventListenersAndHandler( VCLEVENT_CONTROL_LOSEFOCUS, [this] () { maLoseFocusHdl.Call(*this); } ) )
+                    if ( ImplCallEventListenersAndHandler( VclEventId::ControlLoseFocus, [this] () { maLoseFocusHdl.Call(*this); } ) )
                         // been destroyed within the handler
                         return true;
                 }
@@ -298,7 +298,7 @@ void Control::AppendLayoutData( const Control& rSubControl ) const
     }
 }
 
-bool Control::ImplCallEventListenersAndHandler( sal_uLong nEvent, std::function<void()> const & callHandler )
+bool Control::ImplCallEventListenersAndHandler( VclEventId nEvent, std::function<void()> const & callHandler )
 {
     VclPtr<Control> xThis(this);
 

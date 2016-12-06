@@ -508,11 +508,11 @@ static void handle_get_focus(::VclWindowEvent const * pEvent)
 
     vcl::Window *pWindow = pEvent->GetWindow();
 
-    // The menu bar is handled through VCLEVENT_MENU_HIGHLIGHTED
+    // The menu bar is handled through VclEventId::MenuHighlightED
     if( ! pWindow || !pWindow->IsReallyVisible() || pWindow->GetType() == WINDOW_MENUBARWINDOW )
         return;
 
-    // ToolBoxes are handled through VCLEVENT_TOOLBOX_HIGHLIGHT
+    // ToolBoxes are handled through VclEventId::ToolboxHighlight
     if( pWindow->GetType() == WINDOW_TOOLBOX )
         return;
 
@@ -601,28 +601,28 @@ void WindowEventHandler(void *, VclSimpleEvent& rEvent)
     {
         switch (rEvent.GetId())
         {
-        case VCLEVENT_WINDOW_SHOW:
+        case VclEventId::WindowShow:
             break;
-        case VCLEVENT_WINDOW_HIDE:
+        case VclEventId::WindowHide:
             break;
-        case VCLEVENT_WINDOW_CLOSE:
+        case VclEventId::WindowClose:
             break;
-        case VCLEVENT_WINDOW_GETFOCUS:
+        case VclEventId::WindowGetFocus:
             handle_get_focus(static_cast< ::VclWindowEvent const * >(&rEvent));
             break;
-        case VCLEVENT_WINDOW_LOSEFOCUS:
+        case VclEventId::WindowLoseFocus:
             break;
-        case VCLEVENT_WINDOW_MINIMIZE:
+        case VclEventId::WindowMinimize:
             break;
-        case VCLEVENT_WINDOW_NORMALIZE:
+        case VclEventId::WindowNormalize:
             break;
-        case VCLEVENT_WINDOW_KEYINPUT:
-        case VCLEVENT_WINDOW_KEYUP:
-        case VCLEVENT_WINDOW_COMMAND:
-        case VCLEVENT_WINDOW_MOUSEMOVE:
+        case VclEventId::WindowKeyInput:
+        case VclEventId::WindowKeyUp:
+        case VclEventId::WindowCommand:
+        case VclEventId::WindowMouseMove:
             break;
 
-        case VCLEVENT_MENU_HIGHLIGHT:
+        case VclEventId::MenuHighlight:
             if (const VclMenuEvent* pMenuEvent = dynamic_cast<const VclMenuEvent*>(&rEvent))
             {
                 handle_menu_highlighted(pMenuEvent);
@@ -635,26 +635,26 @@ void WindowEventHandler(void *, VclSimpleEvent& rEvent)
             }
             break;
 
-        case VCLEVENT_TOOLBOX_HIGHLIGHT:
+        case VclEventId::ToolboxHighlight:
             handle_toolbox_highlight(static_cast< ::VclWindowEvent const * >(&rEvent)->GetWindow());
             break;
 
-        case VCLEVENT_TOOLBOX_BUTTONSTATECHANGED:
+        case VclEventId::ToolboxButtonStateChanged:
             handle_toolbox_buttonchange(static_cast< ::VclWindowEvent const * >(&rEvent));
             break;
 
-        case VCLEVENT_OBJECT_DYING:
+        case VclEventId::ObjectDying:
             g_aWindowList.list.erase( static_cast< ::VclWindowEvent const * >(&rEvent)->GetWindow() );
             SAL_FALLTHROUGH;
-        case VCLEVENT_TOOLBOX_HIGHLIGHTOFF:
+        case VclEventId::ToolboxHighlightOff:
             handle_toolbox_highlightoff(static_cast< ::VclWindowEvent const * >(&rEvent)->GetWindow());
             break;
 
-        case VCLEVENT_TABPAGE_ACTIVATE:
+        case VclEventId::TabpageActivate:
             handle_tabpage_activated(static_cast< ::VclWindowEvent const * >(&rEvent)->GetWindow());
             break;
 
-        case VCLEVENT_COMBOBOX_SETTEXT:
+        case VclEventId::ComboboxSetText:
             // This looks quite strange to me. Stumbled over this when fixing #i104290#.
             // This kicked in when leaving the combobox in the toolbar, after that the events worked.
             // I guess this was a try to work around missing combobox events, which didn't do the full job, and shouldn't be necessary anymore.

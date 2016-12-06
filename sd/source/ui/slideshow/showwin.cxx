@@ -568,7 +568,7 @@ IMPL_LINK( ShowWindow, EventHdl, VclWindowEvent&, rEvent, void )
 {
     if( mbMouseAutoHide )
     {
-        if (rEvent.GetId() == VCLEVENT_WINDOW_SHOW)
+        if (rEvent.GetId() == VclEventId::WindowShow)
         {
             maMouseTimer.SetTimeout( HIDE_MOUSE_TIMEOUT );
             maMouseTimer.Start();

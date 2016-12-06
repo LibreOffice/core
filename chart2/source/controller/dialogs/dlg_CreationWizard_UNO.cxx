@@ -199,7 +199,7 @@ void CreationWizardUnoDlg::createDialogOnDemand()
 }
 IMPL_LINK( CreationWizardUnoDlg, DialogEventHdl, VclWindowEvent&, rEvent, void )
 {
-    if(rEvent.GetId() == VCLEVENT_OBJECT_DYING)
+    if(rEvent.GetId() == VclEventId::ObjectDying)
         m_pDialog = nullptr;//avoid duplicate destruction of m_pDialog
 }
 

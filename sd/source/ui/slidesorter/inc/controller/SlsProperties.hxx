@@ -32,7 +32,7 @@ public:
     Properties();
     ~Properties();
 
-    /** Call this method after receiving a VCLEVENT_APPLICATION_DATACHANGED
+    /** Call this method after receiving a VclEventId::ApplicationDataChanged
         event.
     */
     void HandleDataChangeEvent();

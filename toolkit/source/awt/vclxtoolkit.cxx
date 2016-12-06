@@ -1745,40 +1745,41 @@ IMPL_LINK(VCLXToolkit, eventListenerHandler, ::VclSimpleEvent&, rEvent, void)
 {
     switch (rEvent.GetId())
     {
-    case VCLEVENT_WINDOW_SHOW:
+    case VclEventId::WindowShow:
         callTopWindowListeners(
             &rEvent, &css::awt::XTopWindowListener::windowOpened);
         break;
-    case VCLEVENT_WINDOW_HIDE:
+    case VclEventId::WindowHide:
         callTopWindowListeners(
             &rEvent, &css::awt::XTopWindowListener::windowClosed);
         break;
-    case VCLEVENT_WINDOW_ACTIVATE:
+    case VclEventId::WindowActivate:
         callTopWindowListeners(
             &rEvent, &css::awt::XTopWindowListener::windowActivated);
         break;
-    case VCLEVENT_WINDOW_DEACTIVATE:
+    case VclEventId::WindowDeactivate:
         callTopWindowListeners(
             &rEvent, &css::awt::XTopWindowListener::windowDeactivated);
         break;
-    case VCLEVENT_WINDOW_CLOSE:
+    case VclEventId::WindowClose:
         callTopWindowListeners(
             &rEvent, &css::awt::XTopWindowListener::windowClosing);
         break;
-    case VCLEVENT_WINDOW_GETFOCUS:
+    case VclEventId::WindowGetFocus:
         callFocusListeners(&rEvent, true);
         break;
-    case VCLEVENT_WINDOW_LOSEFOCUS:
+    case VclEventId::WindowLoseFocus:
         callFocusListeners(&rEvent, false);
         break;
-    case VCLEVENT_WINDOW_MINIMIZE:
+    case VclEventId::WindowMinimize:
         callTopWindowListeners(
             &rEvent, &css::awt::XTopWindowListener::windowMinimized);
         break;
-    case VCLEVENT_WINDOW_NORMALIZE:
+    case VclEventId::WindowNormalize:
         callTopWindowListeners(
             &rEvent, &css::awt::XTopWindowListener::windowNormalized);
         break;
+    default: break;
     }
 }
 
@@ -1786,10 +1787,11 @@ IMPL_LINK(VCLXToolkit, keyListenerHandler, ::VclWindowEvent&, rEvent, bool)
 {
     switch (rEvent.GetId())
     {
-    case VCLEVENT_WINDOW_KEYINPUT:
+    case VclEventId::WindowKeyInput:
         return callKeyHandlers(&rEvent, true);
-    case VCLEVENT_WINDOW_KEYUP:
+    case VclEventId::WindowKeyUp:
         return callKeyHandlers(&rEvent, false);
+    default: break;
     }
     return false;
 }
@@ -1981,7 +1983,7 @@ void SAL_CALL VCLXToolkit::keyPress( const css::awt::KeyEvent & aKeyEvent )
         throw css::uno::RuntimeException( "invalid event source" );
 
     ::KeyEvent aVCLKeyEvent = VCLUnoHelper::createVCLKeyEvent( aKeyEvent );
-    ::Application::PostKeyEvent( VCLEVENT_WINDOW_KEYINPUT, pWindow, &aVCLKeyEvent );
+    ::Application::PostKeyEvent( VclEventId::WindowKeyInput, pWindow, &aVCLKeyEvent );
 }
 
 void SAL_CALL VCLXToolkit::keyRelease( const css::awt::KeyEvent & aKeyEvent )
@@ -1996,7 +1998,7 @@ void SAL_CALL VCLXToolkit::keyRelease( const css::awt::KeyEvent & aKeyEvent )
         throw css::uno::RuntimeException( "invalid event source" );
 
     ::KeyEvent aVCLKeyEvent = VCLUnoHelper::createVCLKeyEvent( aKeyEvent );
-    ::Application::PostKeyEvent( VCLEVENT_WINDOW_KEYUP, pWindow, &aVCLKeyEvent );
+    ::Application::PostKeyEvent( VclEventId::WindowKeyUp, pWindow, &aVCLKeyEvent );
 }
 
 
@@ -2012,7 +2014,7 @@ void SAL_CALL VCLXToolkit::mousePress( const css::awt::MouseEvent & aMouseEvent 
         throw css::uno::RuntimeException( "invalid event source" );
 
     ::MouseEvent aVCLMouseEvent = VCLUnoHelper::createVCLMouseEvent( aMouseEvent );
-    ::Application::PostMouseEvent( VCLEVENT_WINDOW_MOUSEBUTTONDOWN, pWindow, &aVCLMouseEvent );
+    ::Application::PostMouseEvent( VclEventId::WindowMouseButtonDown, pWindow, &aVCLMouseEvent );
 }
 
 void SAL_CALL VCLXToolkit::mouseRelease( const css::awt::MouseEvent & aMouseEvent )
@@ -2027,7 +2029,7 @@ void SAL_CALL VCLXToolkit::mouseRelease( const css::awt::MouseEvent & aMouseEven
         throw css::uno::RuntimeException( "invalid event source" );
 
     ::MouseEvent aVCLMouseEvent = VCLUnoHelper::createVCLMouseEvent( aMouseEvent );
-    ::Application::PostMouseEvent( VCLEVENT_WINDOW_MOUSEBUTTONUP, pWindow, &aVCLMouseEvent );
+    ::Application::PostMouseEvent( VclEventId::WindowMouseButtonUp, pWindow, &aVCLMouseEvent );
 }
 
 void SAL_CALL VCLXToolkit::mouseMove( const css::awt::MouseEvent & aMouseEvent )
@@ -2042,7 +2044,7 @@ void SAL_CALL VCLXToolkit::mouseMove( const css::awt::MouseEvent & aMouseEvent )
         throw css::uno::RuntimeException( "invalid event source" );
 
     ::MouseEvent aVCLMouseEvent = VCLUnoHelper::createVCLMouseEvent( aMouseEvent );
-    ::Application::PostMouseEvent( VCLEVENT_WINDOW_MOUSEMOVE, pWindow, &aVCLMouseEvent );
+    ::Application::PostMouseEvent( VclEventId::WindowMouseMove, pWindow, &aVCLMouseEvent );
 }
 
 
