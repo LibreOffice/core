@@ -2713,6 +2713,14 @@ DECLARE_RTFIMPORT_TEST(testTdf90697, "tdf90697.rtf")
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
+DECLARE_RTFIMPORT_TEST(testTdf104317, "tdf104317.rtf")
+{
+    // This failed to load, we tried to set CustomShapeGeometry on a line shape.
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xDrawPage->getCount());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
