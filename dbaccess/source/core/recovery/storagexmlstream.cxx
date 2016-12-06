@@ -24,7 +24,6 @@
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
 
-#include <cppuhelper/implbase1.hxx>
 #include <rtl/ref.hxx>
 #include <tools/diagnose_ex.h>
 #include <xmloff/attrlist.hxx>

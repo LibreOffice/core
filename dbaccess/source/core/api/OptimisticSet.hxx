@@ -21,7 +21,6 @@
 #define INCLUDED_DBACCESS_SOURCE_CORE_API_OPTIMISTICSET_HXX
 
 #include "KeySet.hxx"
-#include <cppuhelper/implbase1.hxx>
 
 #include <connectivity/sqlparse.hxx>
 #include <connectivity/sqliterator.hxx>

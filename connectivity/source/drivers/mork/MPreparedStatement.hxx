@@ -23,7 +23,7 @@
 #include "MResultSet.hxx"
 #include <com/sun/star/sdbc/XParameters.hpp>
 #include <com/sun/star/sdbc/XMultipleResults.hpp>
-#include <cppuhelper/compbase5.hxx>
+#include <cppuhelper/implbase5.hxx>
 
 namespace connectivity
 {
