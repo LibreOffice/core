@@ -28,6 +28,7 @@
 #include <tools/gen.hxx>
 #include <vcl/svapp.hxx>
 #include <cppuhelper/compbase5.hxx>
+#include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <toolkit/helper/convert.hxx>
