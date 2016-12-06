@@ -47,7 +47,7 @@ SafeModeDialog::SafeModeDialog(vcl::Window* pParent)
 
     mpRadioRestore(),
     mpRadioConfigure(),
-    mpRadioDeinstall(),
+    mpRadioExtensions(),
     mpRadioReset(),
 
     mpCBCheckProfilesafeConfig(),
@@ -73,7 +73,7 @@ SafeModeDialog::SafeModeDialog(vcl::Window* pParent)
 
     get(mpRadioRestore, "radio_restore");
     get(mpRadioConfigure, "radio_configure");
-    get(mpRadioDeinstall, "radio_deinstall");
+    get(mpRadioExtensions, "radio_extensions");
     get(mpRadioReset, "radio_reset");
 
     get(mpCBCheckProfilesafeConfig, "check_profilesafe_config");
@@ -92,7 +92,7 @@ SafeModeDialog::SafeModeDialog(vcl::Window* pParent)
 
     mpRadioRestore->SetClickHdl(LINK(this, SafeModeDialog, RadioBtnHdl));
     mpRadioConfigure->SetClickHdl(LINK(this, SafeModeDialog, RadioBtnHdl));
-    mpRadioDeinstall->SetClickHdl(LINK(this, SafeModeDialog, RadioBtnHdl));
+    mpRadioExtensions->SetClickHdl(LINK(this, SafeModeDialog, RadioBtnHdl));
     mpRadioReset->SetClickHdl(LINK(this, SafeModeDialog, RadioBtnHdl));
 
     mpBtnContinue->SetClickHdl(LINK(this, SafeModeDialog, DialogBtnHdl));
@@ -137,7 +137,7 @@ void SafeModeDialog::dispose()
 {
     mpRadioRestore.clear();
     mpRadioConfigure.clear();
-    mpRadioDeinstall.clear();
+    mpRadioExtensions.clear();
     mpRadioReset.clear();
 
     mpBoxRestore.clear();
@@ -223,7 +223,7 @@ void SafeModeDialog::applyChanges()
     }
 
     // Deinstall
-    if (mpRadioDeinstall->IsChecked())
+    if (mpRadioExtensions->IsChecked())
     {
         if (mpCBDeinstallUserExtensions->IsChecked())
         {
@@ -289,7 +289,7 @@ IMPL_LINK(SafeModeDialog, RadioBtnHdl, Button*, pBtn, void)
         mpBoxDeinstall->Disable();
 
     }
-    else if (pBtn == mpRadioDeinstall.get())
+    else if (pBtn == mpRadioExtensions.get())
     {
         // Enable the currently selected box
         mpBoxDeinstall->Enable();
