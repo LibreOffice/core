@@ -55,6 +55,12 @@ DECLARE_OOXMLEXPORT_TEST(testTdf89377, "tdf89377_tableWithBreakBeforeParaStyle.d
     CPPUNIT_ASSERT_EQUAL( 3, getPages() );
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf104420, "tdf104420_lostParagraph.docx")
+{
+    // the add/remove dummy paragraph was losing an entire header and paragraph
+    CPPUNIT_ASSERT_EQUAL( 2, getPages() );
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf41542_borderlessPadding, "tdf41542_borderlessPadding.odt")
 {
     // the page style's borderless padding should force this to 3 pages, not 1
