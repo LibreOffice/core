@@ -57,6 +57,7 @@
 #include <osl/mutex.hxx>
 
 #include <algorithm>
+#include <o3tl/make_unique.hxx>
 
 class TETextDataObject :    public css::datatransfer::XTransferable,
                         public ::cppu::OWeakObject
@@ -147,14 +148,14 @@ struct ImpTextView
     Point               maStartDocPos;
 //    TextPaM             maMBDownPaM;
 
-    vcl::Cursor*        mpCursor;
+    std::unique_ptr<vcl::Cursor> mpCursor;
 
-    TextDDInfo*         mpDDInfo;
+    std::unique_ptr<TextDDInfo> mpDDInfo;
 
     VclPtr<VirtualDevice>  mpVirtDev;
 
-    SelectionEngine*    mpSelEngine;
-    TextSelFunctionSet* mpSelFuncSet;
+    std::unique_ptr<SelectionEngine> mpSelEngine;
+    std::unique_ptr<TextSelFunctionSet> mpSelFuncSet;
 
     css::uno::Reference< css::datatransfer::dnd::XDragSourceListener > mxDnDListener;
 
@@ -195,22 +196,20 @@ TextView::TextView( ExtTextEngine* pEng, vcl::Window* pWindow ) :
 
     mpImpl->mnTravelXPos = TRAVEL_X_DONTKNOW;
 
-    mpImpl->mpSelFuncSet = new TextSelFunctionSet( this );
-    mpImpl->mpSelEngine = new SelectionEngine( mpImpl->mpWindow, mpImpl->mpSelFuncSet );
+    mpImpl->mpSelFuncSet = o3tl::make_unique<TextSelFunctionSet>( this );
+    mpImpl->mpSelEngine = o3tl::make_unique<SelectionEngine>( mpImpl->mpWindow, mpImpl->mpSelFuncSet.get() );
     mpImpl->mpSelEngine->SetSelectionMode( SelectionMode::Range );
     mpImpl->mpSelEngine->EnableDrag( true );
 
-    mpImpl->mpCursor = new vcl::Cursor;
+    mpImpl->mpCursor = o3tl::make_unique<vcl::Cursor>();
     mpImpl->mpCursor->Show();
-    pWindow->SetCursor( mpImpl->mpCursor );
+    pWindow->SetCursor( mpImpl->mpCursor.get() );
     pWindow->SetInputContext( InputContext( pEng->GetFont(), InputContextFlags::Text|InputContextFlags::ExtText ) );
 
     if ( pWindow->GetSettings().GetStyleSettings().GetSelectionOptions() & SelectionOptions::Invert )
         mpImpl->mbHighlightSelection = true;
 
     pWindow->SetLineColor();
-
-    mpImpl->mpDDInfo = nullptr;
 
     if ( pWindow->GetDragGestureRecognizer().is() )
     {
@@ -228,14 +227,16 @@ TextView::TextView( ExtTextEngine* pEng, vcl::Window* pWindow ) :
 
 TextView::~TextView()
 {
-    delete mpImpl->mpSelEngine;
-    delete mpImpl->mpSelFuncSet;
+    mpImpl->mpSelEngine.reset();
+    mpImpl->mpSelFuncSet.reset();
+
     mpImpl->mpVirtDev.disposeAndClear();
 
-    if ( mpImpl->mpWindow->GetCursor() == mpImpl->mpCursor )
+    if ( mpImpl->mpWindow->GetCursor() == mpImpl->mpCursor.get() )
         mpImpl->mpWindow->SetCursor( nullptr );
-    delete mpImpl->mpCursor;
-    delete mpImpl->mpDDInfo;
+
+    mpImpl->mpCursor.reset();
+    mpImpl->mpDDInfo.reset();
 }
 
 void TextView::Invalidate()
@@ -847,9 +848,8 @@ void TextView::Command( const CommandEvent& rCEvt )
     if ( rCEvt.GetCommand() == CommandEventId::StartExtTextInput )
     {
         DeleteSelected();
-        delete mpImpl->mpTextEngine->mpIMEInfos;
         TextNode* pNode = mpImpl->mpTextEngine->mpDoc->GetNodes()[ GetSelection().GetEnd().GetPara() ];
-        mpImpl->mpTextEngine->mpIMEInfos = new TEIMEInfos( GetSelection().GetEnd(), pNode->GetText().copy( GetSelection().GetEnd().GetIndex() ) );
+        mpImpl->mpTextEngine->mpIMEInfos = o3tl::make_unique<TEIMEInfos>( GetSelection().GetEnd(), pNode->GetText().copy( GetSelection().GetEnd().GetIndex() ) );
         mpImpl->mpTextEngine->mpIMEInfos->bWasCursorOverwrite = !IsInsertMode();
     }
     else if ( rCEvt.GetCommand() == CommandEventId::EndExtTextInput )
@@ -862,8 +862,7 @@ void TextView::Command( const CommandEvent& rCEvt )
 
             bool bInsertMode = !mpImpl->mpTextEngine->mpIMEInfos->bWasCursorOverwrite;
 
-            delete mpImpl->mpTextEngine->mpIMEInfos;
-            mpImpl->mpTextEngine->mpIMEInfos = nullptr;
+            mpImpl->mpTextEngine->mpIMEInfos.reset();
 
             mpImpl->mpTextEngine->TextModified();
             mpImpl->mpTextEngine->FormatAndUpdate( this );
@@ -1760,7 +1759,7 @@ bool TextView::SetCursorAtPoint( const Point& rPosPixel )
         ShowSelection( aTmpNewSel );
     }
 
-    bool bForceCursor =  mpImpl->mpDDInfo == nullptr; // && !mbInSelection
+    bool bForceCursor = !mpImpl->mpDDInfo; // && !mbInSelection
     ImpShowCursor( mpImpl->mbAutoScroll, bForceCursor, false );
     return true;
 }
@@ -1898,8 +1897,7 @@ void TextView::dragGestureRecognized( const css::datatransfer::dnd::DragGestureE
 
         SAL_WARN_IF( !mpImpl->maSelection.HasRange(), "vcl", "TextView::dragGestureRecognized: mpImpl->mbClickedInSelection, but no selection?" );
 
-        delete mpImpl->mpDDInfo;
-        mpImpl->mpDDInfo = new TextDDInfo;
+        mpImpl->mpDDInfo = o3tl::make_unique<TextDDInfo>();
         mpImpl->mpDDInfo->mbStarterOfDD = true;
 
         TETextDataObject* pDataObj = new TETextDataObject( GetSelected() );
@@ -1940,8 +1938,7 @@ void TextView::dragGestureRecognized( const css::datatransfer::dnd::DragGestureE
 void TextView::dragDropEnd( const css::datatransfer::dnd::DragSourceDropEvent& ) throw (css::uno::RuntimeException, std::exception)
 {
     ImpHideDDCursor();
-    delete mpImpl->mpDDInfo;
-    mpImpl->mpDDInfo = nullptr;
+    mpImpl->mpDDInfo.reset();
 }
 
 void TextView::drop( const css::datatransfer::dnd::DropTargetDropEvent& rDTDE ) throw (css::uno::RuntimeException, std::exception)
@@ -2041,8 +2038,7 @@ void TextView::drop( const css::datatransfer::dnd::DropTargetDropEvent& rDTDE ) 
 
         mpImpl->mpTextEngine->UndoActionEnd();
 
-        delete mpImpl->mpDDInfo;
-        mpImpl->mpDDInfo = nullptr;
+        mpImpl->mpDDInfo.reset();
 
         mpImpl->mpTextEngine->FormatAndUpdate( this );
 
@@ -2066,7 +2062,7 @@ void TextView::dragOver( const css::datatransfer::dnd::DropTargetDragEvent& rDTD
     SolarMutexGuard aVclGuard;
 
     if ( !mpImpl->mpDDInfo )
-        mpImpl->mpDDInfo = new TextDDInfo;
+        mpImpl->mpDDInfo = o3tl::make_unique<TextDDInfo>();
 
     TextPaM aPrevDropPos = mpImpl->mpDDInfo->maDropPos;
     Point aMousePos( rDTDE.LocationX, rDTDE.LocationY );

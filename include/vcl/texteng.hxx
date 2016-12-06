@@ -100,7 +100,7 @@ private:
 
     IdleFormatter*      mpIdleFormatter;
 
-    TEIMEInfos*         mpIMEInfos;
+    std::unique_ptr<TEIMEInfos> mpIMEInfos;
 
     css::lang::Locale   maLocale;
     css::uno::Reference< css::i18n::XBreakIterator > mxBreakIterator;
