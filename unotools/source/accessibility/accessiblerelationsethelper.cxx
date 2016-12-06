@@ -128,7 +128,7 @@ AccessibleRelationSetHelper::AccessibleRelationSetHelper ()
 }
 
 AccessibleRelationSetHelper::AccessibleRelationSetHelper (const AccessibleRelationSetHelper& rHelper)
-    : cppu::WeakImplHelper1<XAccessibleRelationSet>()
+    : cppu::WeakImplHelper<XAccessibleRelationSet>()
 {
     if (rHelper.mpHelperImpl)
         mpHelperImpl.reset(new AccessibleRelationSetHelperImpl(*rHelper.mpHelperImpl));
