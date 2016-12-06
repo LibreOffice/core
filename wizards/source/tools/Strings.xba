@@ -345,7 +345,7 @@ Dim SepList() as String
 		FileName = FileNameoutofPath(FileName, Separator)
 	End If
 	SepList() = ArrayoutofString(FileName,&quot;.&quot;, MaxIndex)
-	GetFileNameWithoutExtension = RTrimStr(FileName, &quot;.&quot; &amp; SepList(MaxIndex)
+	GetFileNameWithoutExtension = RTrimStr(FileName, &quot;.&quot; &amp; SepList(MaxIndex))
 End Function
 
 
