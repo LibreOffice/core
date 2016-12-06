@@ -2547,7 +2547,8 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
          * and remove it again when lcl_endSectionGroup is called
          */
         if(m_pImpl->m_nTableDepth == 0 && m_pImpl->GetIsFirstParagraphInSection()
-                && !m_pImpl->GetIsDummyParaAddedForTableInSection() && !m_pImpl->GetIsTextFrameInserted())
+                && !m_pImpl->GetIsDummyParaAddedForTableInSection() && !m_pImpl->GetIsTextFrameInserted()
+                && !IsInHeaderFooter())
         {
             m_pImpl->AddDummyParaForTableInSection();
         }
