@@ -95,19 +95,6 @@ public:
         : m_rInnerRef(pBody, SAL_NO_ACQUIRE)
     {}
 
-    /** Copy constructor...
-     */
-    inline VclPtr (const VclPtr<reference_type> & handle)
-        : m_rInnerRef (handle.m_rInnerRef)
-    {}
-
-    /** Move constructor...
-     */
-    inline VclPtr (VclPtr<reference_type> && handle)
-        : m_rInnerRef ( std::move(handle.m_rInnerRef) )
-    {
-    }
-
     /** Up-casting conversion constructor: Copies interface reference.
 
         Does not work for up-casts to ambiguous bases.  For the special case of
@@ -177,22 +164,6 @@ public:
     operator =(VclPtr<derived_type> const & rRef)
     {
         m_rInnerRef.set(rRef.get());
-        return *this;
-    }
-
-    /** move assignment operator.
-    */
-    VclPtr & operator =(VclPtr<reference_type> && rRef)
-    {
-        m_rInnerRef = std::move(rRef);
-        return *this;
-    }
-
-    /** copy assignment operator.
-    */
-    VclPtr & operator =(const VclPtr<reference_type> & rRef)
-    {
-        m_rInnerRef = rRef;
         return *this;
     }
 
