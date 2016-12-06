@@ -343,7 +343,7 @@ struct RectangleAndPart
     int m_nPart;
 
     RectangleAndPart()
-        : m_nPart(-1)
+        : m_nPart(INT_MIN)  // -1 is reserved to mean "all parts".
     {
     }
 
@@ -351,17 +351,23 @@ struct RectangleAndPart
     {
         std::stringstream ss;
         ss << m_aRectangle.toString().getStr();
-        if (m_nPart != -1)
+        if (m_nPart >= -1)
             ss << ", " << m_nPart;
         return ss.str().c_str();
     }
 
-    /// Infinite Rectangle is when both dimensions are >= 2e7.
-    // ~2 billion twips is INT_MAX, which is full-area.
+    /// Infinite Rectangle is both sides are
+    /// equal or longer than SfxLokHelper::MaxTwips.
     bool isInfinite() const
     {
-        return m_aRectangle.GetWidth() >= 2e7 &&
-               m_aRectangle.GetHeight() >= 2e7;
+        return m_aRectangle.GetWidth() >= SfxLokHelper::MaxTwips &&
+               m_aRectangle.GetHeight() >= SfxLokHelper::MaxTwips;
+    }
+
+    /// Empty Rectangle is when it has zero dimensions.
+    bool isEmpty() const
+    {
+        return m_aRectangle.IsEmpty();
     }
 
     static RectangleAndPart Create(const std::string& rPayload)
@@ -369,7 +375,7 @@ struct RectangleAndPart
         RectangleAndPart aRet;
         if (rPayload.find("EMPTY") == 0) // payload starts with "EMPTY"
         {
-            aRet.m_aRectangle = Rectangle(0, 0, INT_MAX, INT_MAX);
+            aRet.m_aRectangle = Rectangle(0, 0, SfxLokHelper::MaxTwips, SfxLokHelper::MaxTwips);
             if (comphelper::LibreOfficeKit::isPartInInvalidation())
                 aRet.m_nPart = std::stol(rPayload.substr(6));
 
@@ -377,15 +383,41 @@ struct RectangleAndPart
         }
 
         std::istringstream aStream(rPayload);
-        long nLeft, nTop, nRight, nBottom;
-        long nPart = -1;
+        long nLeft, nTop, nWidth, nHeight;
+        long nPart = INT_MIN;
         char nComma;
         if (comphelper::LibreOfficeKit::isPartInInvalidation())
-            aStream >> nLeft >> nComma >> nTop >> nComma >> nRight >> nComma >> nBottom >> nComma >> nPart;
+        {
+            aStream >> nLeft >> nComma >> nTop >> nComma >> nWidth >> nComma >> nHeight >> nComma >> nPart;
+        }
         else
-            aStream >> nLeft >> nComma >> nTop >> nComma >> nRight >> nComma >> nBottom;
+        {
+            aStream >> nLeft >> nComma >> nTop >> nComma >> nWidth >> nComma >> nHeight;
+        }
 
-        aRet.m_aRectangle = Rectangle(nLeft, nTop, nLeft + nRight, nTop + nBottom);
+        if (nWidth > 0 && nHeight > 0)
+        {
+            // The top-left corner starts at (0, 0).
+            // Anything negative is invalid.
+            if (nLeft < 0)
+            {
+                nWidth += nLeft;
+                nLeft = 0;
+            }
+
+            if (nTop < 0)
+            {
+                nHeight += nTop;
+                nTop = 0;
+            }
+
+            if (nWidth > 0 && nHeight > 0)
+            {
+                aRet.m_aRectangle = Rectangle(nLeft, nTop, nLeft + nWidth, nTop + nHeight);
+            }
+        }
+        // else leave empty rect.
+
         aRet.m_nPart = nPart;
         return aRet;
     }
@@ -602,6 +634,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
 {
     std::string payload(data ? data : "(nil)");
     //SAL_WARN("lok", "Queue: " << type << " : " << payload);
+
     if (m_bPartTilePainting)
     {
         // We drop notifications when this is set, except for important ones.
@@ -671,24 +704,6 @@ void CallbackFlushHandler::queue(const int type, const char* data)
             }
         }
         break;
-    }
-
-    // if we have to invalidate all tiles, we can skip any new tile invalidation
-    if (type == LOK_CALLBACK_INVALIDATE_TILES)
-    {
-        const auto& pos = std::find_if(m_queue.rbegin(), m_queue.rend(),
-                [] (const queue_type::value_type& elem) { return (elem.first == LOK_CALLBACK_INVALIDATE_TILES); });
-
-        if (pos != m_queue.rend())
-        {
-            RectangleAndPart rcOld = RectangleAndPart::Create(pos->second);
-            RectangleAndPart rcNew = RectangleAndPart::Create(payload);
-            if (rcOld.isInfinite() && rcOld.m_nPart == rcNew.m_nPart)
-            {
-                SAL_WARN("lok", "Skipping queue [" << type << "]: [" << payload << "] since all tiles need to be invalidated.");
-                return;
-            }
-        }
     }
 
     if (type == LOK_CALLBACK_TEXT_SELECTION && payload.empty())
@@ -773,20 +788,50 @@ void CallbackFlushHandler::queue(const int type, const char* data)
             {
                 RectangleAndPart rcNew = RectangleAndPart::Create(payload);
                 //SAL_WARN("lok", "New: " << rcNew.toString());
+                if (rcNew.isEmpty())
+                {
+                    SAL_WARN("lok", "Skipping invalid event [" << type << "]: [" << payload << "].");
+                    return;
+                }
+
+                // If we have to invalidate all tiles, we can skip any new tile invalidation.
+                // Find the last INVALIDATE_TILES entry, if any to see if it's invalidate-all.
+                const auto& pos = std::find_if(m_queue.rbegin(), m_queue.rend(),
+                        [] (const queue_type::value_type& elem) { return (elem.first == LOK_CALLBACK_INVALIDATE_TILES); });
+                if (pos != m_queue.rend())
+                {
+                    RectangleAndPart rcOld = RectangleAndPart::Create(pos->second);
+                    if (rcOld.isInfinite() && (rcOld.m_nPart == -1 || rcOld.m_nPart == rcNew.m_nPart))
+                    {
+                        SAL_WARN("lok", "Skipping queue [" << type << "]: [" << payload << "] since all tiles need to be invalidated.");
+                        return;
+                    }
+
+                    if (rcOld.m_nPart == -1 || rcOld.m_nPart == rcNew.m_nPart)
+                    {
+                        // If fully overlapping.
+                        if (rcOld.m_aRectangle.IsInside(rcNew.m_aRectangle))
+                        {
+                            SAL_WARN("lok", "Skipping queue [" << type << "]: [" << payload << "] since overlaps existing all-parts.");
+                            return;
+                        }
+                    }
+                }
+
                 if (rcNew.isInfinite())
                 {
                     SAL_WARN("lok", "Have Empty [" << type << "]: [" << payload << "] so removing all with part " << rcNew.m_nPart << ".");
                     removeAll(
-                        [type, &rcNew] (const queue_type::value_type& elem) {
-                            if (elem.first == type)
+                        [&rcNew] (const queue_type::value_type& elem) {
+                            if (elem.first == LOK_CALLBACK_INVALIDATE_TILES)
                             {
+                                // Remove exiting if new is all-encompasing, or if of the same part.
                                 const RectangleAndPart rcOld = RectangleAndPart::Create(elem.second);
-                                return (rcOld.m_nPart == rcNew.m_nPart);
+                                return (rcNew.m_nPart == -1 || rcOld.m_nPart == rcNew.m_nPart);
                             }
-                            else
-                            {
-                                return false;
-                            }
+
+                            // Keep others.
+                            return false;
                         }
                     );
                 }
@@ -794,30 +839,55 @@ void CallbackFlushHandler::queue(const int type, const char* data)
                 {
                     const auto rcOrig = rcNew;
 
-                    //SAL_WARN("lok", "Have [" << type << "]: [" << payload << "] so merging overlapping.");
+                    SAL_WARN("lok", "Have [" << type << "]: [" << payload << "] so merging overlapping.");
                     removeAll(
-                        [type, &rcNew] (const queue_type::value_type& elem) {
-                            if (elem.first == type)
+                        [&rcNew] (const queue_type::value_type& elem) {
+                            if (elem.first == LOK_CALLBACK_INVALIDATE_TILES)
                             {
                                 const RectangleAndPart rcOld = RectangleAndPart::Create(elem.second);
-                                if (rcOld.m_nPart != rcNew.m_nPart)
-                                    return false;
-
-                                const Rectangle rcOverlap = rcNew.m_aRectangle.GetIntersection(rcOld.m_aRectangle);
-                                bool bOverlap = (rcOverlap.GetWidth() > 0 && rcOverlap.GetHeight() > 0);
-                                SAL_WARN("lok", "Merging " << rcNew.toString() << " & " << rcOld.toString() << " => " <<
-                                         rcOverlap.toString() << " Overlap: " << bOverlap);
-                                if (bOverlap)
+                                if (rcNew.m_nPart != -1 && rcOld.m_nPart != -1 && rcOld.m_nPart != rcNew.m_nPart)
                                 {
-                                    rcNew.m_aRectangle.Union(rcOld.m_aRectangle);
-                                    SAL_WARN("lok", "Merged: " << rcNew.toString());
+                                    SAL_WARN("lok", "Nothing to merge between new: " << rcNew.toString() << ", and old: " << rcOld.toString());
+                                    return false;
                                 }
-                                return bOverlap;
+
+                                if (rcNew.m_nPart == -1)
+                                {
+                                    // Don't merge unless fully overlaped.
+                                    SAL_WARN("lok", "New " << rcNew.toString() << " has " << rcOld.toString() << "?");
+                                    if (rcNew.m_aRectangle.IsInside(rcOld.m_aRectangle))
+                                    {
+                                        SAL_WARN("lok", "New " << rcNew.toString() << " engulfs old " << rcOld.toString() << ".");
+                                        return true;
+                                    }
+                                }
+                                else if (rcOld.m_nPart == -1)
+                                {
+                                    // Don't merge unless fully overlaped.
+                                    SAL_WARN("lok", "Old " << rcOld.toString() << " has " << rcNew.toString() << "?");
+                                    if (rcOld.m_aRectangle.IsInside(rcNew.m_aRectangle))
+                                    {
+                                        SAL_WARN("lok", "New " << rcNew.toString() << " engulfs old " << rcOld.toString() << ".");
+                                        return true;
+                                    }
+                                }
+                                else
+                                {
+                                    const Rectangle rcOverlap = rcNew.m_aRectangle.GetIntersection(rcOld.m_aRectangle);
+                                    const bool bOverlap = !rcOverlap.IsEmpty();
+                                    SAL_WARN("lok", "Merging " << rcNew.toString() << " & " << rcOld.toString() << " => " <<
+                                            rcOverlap.toString() << " Overlap: " << bOverlap);
+                                    if (bOverlap)
+                                    {
+                                        rcNew.m_aRectangle.Union(rcOld.m_aRectangle);
+                                        SAL_WARN("lok", "Merged: " << rcNew.toString());
+                                        return true;
+                                    }
+                                }
                             }
-                            else
-                            {
-                                return false;
-                            }
+
+                            // Keep others.
+                            return false;
                         }
                     );
 
@@ -829,10 +899,10 @@ void CallbackFlushHandler::queue(const int type, const char* data)
                         {
                             SAL_WARN("lok", "Error: merged rect smaller.");
                         }
-
-                        payload = rcNew.toString().getStr();
                     }
                 }
+
+                payload = rcNew.toString().getStr();
             }
             break;
 
@@ -857,7 +927,8 @@ void CallbackFlushHandler::queue(const int type, const char* data)
     }
 
     m_queue.emplace_back(type, payload);
-    SAL_WARN("lok", "Queued [" << type << "]: [" << payload << "] to have " << m_queue.size() << " entries.");
+    SAL_WARN("lok", "Queued #" << (m_queue.size() - 1) <<
+             " [" << type << "]: [" << payload << "] to have " << m_queue.size() << " entries.");
 
     lock.unlock();
     if (!IsActive())
