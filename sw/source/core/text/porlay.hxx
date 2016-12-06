@@ -103,10 +103,10 @@ public:
     // From SwLinePortion
     virtual SwLinePortion *Insert( SwLinePortion *pPortion ) override;
     virtual SwLinePortion *Append( SwLinePortion *pPortion ) override;
-    inline SwLinePortion *GetFirstPortion() const;
+    SwLinePortion *GetFirstPortion() const;
 
     // Flags
-    inline void ResetFlags();
+    void ResetFlags();
     inline void SetFormatAdj( const bool bNew ) { m_bFormatAdj = bNew; }
     inline bool IsFormatAdj() const { return m_bFormatAdj; }
     inline void SetEndHyph( const bool bNew ) { m_bEndHyph = bNew; }
@@ -136,7 +136,7 @@ public:
     inline void SetClipping( const bool bNew ) { m_bClipping = bNew; }
     inline bool IsClipping() const { return m_bClipping; }
 
-    inline SwLineLayout();
+    SwLineLayout();
     virtual ~SwLineLayout() override;
 
     inline SwLineLayout *GetNext() { return m_pNext; }
@@ -308,21 +308,6 @@ public:
     DECL_FIXEDMEMPOOL_NEWDEL(SwParaPortion)
 };
 
-inline void SwLineLayout::ResetFlags()
-{
-    m_bFormatAdj = m_bDummy = m_bFntChg = m_bTab = m_bEndHyph = m_bMidHyph = m_bFly
-    = m_bRest = m_bBlinking = m_bClipping = m_bContent = m_bRedline
-    = m_bForcedLeftMargin = m_bHanging = false;
-}
-
-inline SwLineLayout::SwLineLayout()
-    : m_pNext( nullptr ), m_pLLSpaceAdd( nullptr ), m_pKanaComp( nullptr ), m_nRealHeight( 0 ),
-      m_bUnderscore( false )
-{
-    ResetFlags();
-    SetWhichPor( POR_LAY );
-}
-
 inline void SwParaPortion::ResetPreps()
 {
     m_bPrep = m_bPrepWidows = m_bPrepAdjust = m_bPrepMustFit = false;
@@ -339,13 +324,6 @@ inline void SwParaPortion::FormatReset()
     ResetPreps();
     m_bFollowField = m_bFixLineHeight = m_bMargin = false;
 }
-
-inline SwLinePortion *SwLineLayout::GetFirstPortion() const
-{
-    const SwLinePortion *pRet = pPortion ? pPortion : this;
-    return const_cast<SwLinePortion*>(pRet);
-}
-
 
 #endif
 
