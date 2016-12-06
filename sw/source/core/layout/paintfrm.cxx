@@ -3303,9 +3303,9 @@ void SwRootFrame::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect,
                     // current paint area and invalidate the resulting region.
                     SwRectFnSet aRectFnSet(pPage);
                     SwRect aPageRectTemp( aPaintRect );
-                    (aPageRectTemp.*aRectFnSet->fnSetLeftAndWidth)(
-                         (pPage->Frame().*aRectFnSet->fnGetLeft)(),
-                         (pPage->Frame().*aRectFnSet->fnGetWidth)() );
+                    aRectFnSet.SetLeftAndWidth( aPageRectTemp,
+                         aRectFnSet.GetLeft(pPage->Frame()),
+                         aRectFnSet.GetWidth(pPage->Frame()) );
                     aPageRectTemp.Intersection_( pSh->VisArea() );
                     vcl::Region aPageRectRegion( aPageRectTemp.SVRect() );
                     aPageRectRegion.Exclude( aPaintRect.SVRect() );
@@ -4654,7 +4654,7 @@ void SwFrame::PaintShadow( const SwRect& rRect, SwRect& rOutRect,
             );
 
     SwRectFnSet aRectFnSet(this);
-    ::lcl_ExtendLeftAndRight( rOutRect, *(this), rAttrs, aRectFnSet.fnRect );
+    ::lcl_ExtendLeftAndRight( rOutRect, *(this), rAttrs, aRectFnSet.FnRect() );
 
     lcl_PaintShadow(rRect, rOutRect, rShadow, bDrawFullShadowRectangle, bTop, bBottom, true, true, gProp);
 }
@@ -5507,8 +5507,8 @@ void SwFrame::PaintBorder( const SwRect& rRect, const SwPageFrame *pPage,
         {
             const SwFrame* pDirRefFrame = IsCellFrame() ? FindTabFrame() : this;
             SwRectFnSet aRectFnSet(pDirRefFrame);
-            ::lcl_PaintLeftRightLine ( true, *(this), *(pPage), aRect, rRect, rAttrs, aRectFnSet.fnRect, gProp);
-            ::lcl_PaintLeftRightLine ( false, *(this), *(pPage), aRect, rRect, rAttrs, aRectFnSet.fnRect, gProp);
+            ::lcl_PaintLeftRightLine ( true, *(this), *(pPage), aRect, rRect, rAttrs, aRectFnSet.FnRect(), gProp);
+            ::lcl_PaintLeftRightLine ( false, *(this), *(pPage), aRect, rRect, rAttrs, aRectFnSet.FnRect(), gProp);
             if ( !IsContentFrame() || rAttrs.GetTopLine( *(this) ) )
             {
                 // -
@@ -5519,11 +5519,11 @@ void SwFrame::PaintBorder( const SwRect& rRect, const SwPageFrame *pPage,
                     SwBorderAttrAccess aAccess( SwFrame::GetCache(),
                                                 pCellFrameForTopBorderAttrs );
                     const SwBorderAttrs &rTopAttrs = *aAccess.Get();
-                    ::lcl_PaintTopBottomLine( true, *(this), *(pPage), aRect, rRect, rTopAttrs, aRectFnSet.fnRect, gProp);
+                    ::lcl_PaintTopBottomLine( true, *(this), *(pPage), aRect, rRect, rTopAttrs, aRectFnSet.FnRect(), gProp);
                 }
                 else
                 {
-                    ::lcl_PaintTopBottomLine( true, *(this), *(pPage), aRect, rRect, rAttrs, aRectFnSet.fnRect, gProp );
+                    ::lcl_PaintTopBottomLine( true, *(this), *(pPage), aRect, rRect, rAttrs, aRectFnSet.FnRect(), gProp );
                 }
             }
             if ( !IsContentFrame() || rAttrs.GetBottomLine( *(this) ) )
@@ -5536,11 +5536,11 @@ void SwFrame::PaintBorder( const SwRect& rRect, const SwPageFrame *pPage,
                     SwBorderAttrAccess aAccess( SwFrame::GetCache(),
                                                 pCellFrameForBottomBorderAttrs );
                     const SwBorderAttrs &rBottomAttrs = *aAccess.Get();
-                    ::lcl_PaintTopBottomLine(false, *(this), *(pPage), aRect, rRect, rBottomAttrs, aRectFnSet.fnRect, gProp);
+                    ::lcl_PaintTopBottomLine(false, *(this), *(pPage), aRect, rRect, rBottomAttrs, aRectFnSet.FnRect(), gProp);
                 }
                 else
                 {
-                    ::lcl_PaintTopBottomLine(false, *(this), *(pPage), aRect, rRect, rAttrs, aRectFnSet.fnRect, gProp);
+                    ::lcl_PaintTopBottomLine(false, *(this), *(pPage), aRect, rRect, rAttrs, aRectFnSet.FnRect(), gProp);
                 }
             }
         }
@@ -5578,11 +5578,11 @@ void SwFootnoteContFrame::PaintLine( const SwRect& rRect,
     const SwPageFootnoteInfo &rInf = pPage->GetPageDesc()->GetFootnoteInfo();
 
     SwRectFnSet aRectFnSet(this);
-    SwTwips nPrtWidth = (Prt().*aRectFnSet->fnGetWidth)();
+    SwTwips nPrtWidth = aRectFnSet.GetWidth(Prt());
     Fraction aFract( nPrtWidth, 1 );
     const SwTwips nWidth = (long)(aFract *= rInf.GetWidth());
 
-    SwTwips nX = (this->*aRectFnSet->fnGetPrtLeft)();
+    SwTwips nX = aRectFnSet.GetPrtLeft(*this);
     switch ( rInf.GetAdj() )
     {
         case FTNADJ_CENTER:
@@ -5595,7 +5595,7 @@ void SwFootnoteContFrame::PaintLine( const SwRect& rRect,
             OSL_ENSURE( false, "New adjustment for footnote lines?" );
     }
     SwTwips nLineWidth = rInf.GetLineWidth();
-    const SwRect aLineRect = aRectFnSet.bVert ?
+    const SwRect aLineRect = aRectFnSet.IsVert() ?
         SwRect( Point(Frame().Left()+Frame().Width()-rInf.GetTopDist()-nLineWidth,
                       nX), Size( nLineWidth, nWidth ) )
             : SwRect( Point( nX, Frame().Pos().Y() + rInf.GetTopDist() ),

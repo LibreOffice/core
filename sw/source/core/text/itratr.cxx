@@ -1021,8 +1021,8 @@ SwTwips SwTextNode::GetWidthOfLeadingTabs() const
                 SwRect aRect;
                 pFrame->GetCharRect( aRect, aPos );
                 nRet = pFrame->IsRightToLeft() ?
-                            (pFrame->*aRectFnSet->fnGetPrtRight)() - (aRect.*aRectFnSet->fnGetRight)() :
-                            (aRect.*aRectFnSet->fnGetLeft)() - (pFrame->*aRectFnSet->fnGetPrtLeft)();
+                            aRectFnSet.GetPrtRight(*pFrame) - aRectFnSet.GetRight(aRect) :
+                            aRectFnSet.GetLeft(aRect) - aRectFnSet.GetPrtLeft(*pFrame);
                 break;
             }
         }

@@ -589,28 +589,28 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
 
         if ( bSpaceBefore )
         {
-            nVal = (pFrame->*aRectFnSet->fnGetTopMargin)();
+            nVal = aRectFnSet.GetTopMargin(*pFrame);
             if ( 0 != nVal )
                 mpPDFExtOutDevData->SetStructureAttributeNumerical( vcl::PDFWriter::SpaceBefore, nVal );
         }
 
         if ( bSpaceAfter )
         {
-            nVal = (pFrame->*aRectFnSet->fnGetBottomMargin)();
+            nVal = aRectFnSet.GetBottomMargin(*pFrame);
             if ( 0 != nVal )
                 mpPDFExtOutDevData->SetStructureAttributeNumerical( vcl::PDFWriter::SpaceAfter, nVal );
         }
 
         if ( bStartIndent )
         {
-            nVal = (pFrame->*aRectFnSet->fnGetLeftMargin)();
+            nVal = aRectFnSet.GetLeftMargin(*pFrame);
             if ( 0 != nVal )
                 mpPDFExtOutDevData->SetStructureAttributeNumerical( vcl::PDFWriter::StartIndent, nVal );
         }
 
         if ( bEndIndent )
         {
-            nVal = (pFrame->*aRectFnSet->fnGetRightMargin)();
+            nVal = aRectFnSet.GetRightMargin(*pFrame);
             if ( 0 != nVal )
                 mpPDFExtOutDevData->SetStructureAttributeNumerical( vcl::PDFWriter::EndIndent, nVal );
         }
@@ -660,13 +660,13 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
 
         if ( bWidth )
         {
-            nVal = (pFrame->Frame().*aRectFnSet->fnGetWidth)();
+            nVal = aRectFnSet.GetWidth(pFrame->Frame());
             mpPDFExtOutDevData->SetStructureAttributeNumerical( vcl::PDFWriter::Width, nVal );
         }
 
         if ( bHeight )
         {
-            nVal = (pFrame->Frame().*aRectFnSet->fnGetHeight)();
+            nVal = aRectFnSet.GetHeight(pFrame->Frame());
             mpPDFExtOutDevData->SetStructureAttributeNumerical( vcl::PDFWriter::Height, nVal );
         }
 
@@ -699,8 +699,8 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
 
                 const TableColumnsMapEntry& rCols = SwEnhancedPDFExportHelper::GetTableColumnsMap()[ pTable ];
 
-                const long nLeft  = (pThisCell->Frame().*fnRectX->fnGetLeft)();
-                const long nRight = (pThisCell->Frame().*fnRectX->fnGetRight)();
+                const long nLeft  = fnRectX.GetLeft(pThisCell->Frame());
+                const long nRight = fnRectX.GetRight(pThisCell->Frame());
                 const TableColumnsMapEntry::const_iterator aLeftIter =  rCols.find( nLeft );
                 const TableColumnsMapEntry::const_iterator aRightIter = rCols.find( nRight );
 
@@ -1190,12 +1190,12 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                         {
                             const SwFrame* pCellFrame = pRowFrame->GetLower();
 
-                            const long nLeft  = (pCellFrame->Frame().*aRectFnSet->fnGetLeft)();
+                            const long nLeft  = aRectFnSet.GetLeft(pCellFrame->Frame());
                             rCols.insert( nLeft );
 
                             while ( pCellFrame )
                             {
-                                const long nRight = (pCellFrame->Frame().*aRectFnSet->fnGetRight)();
+                                const long nRight = aRectFnSet.GetRight(pCellFrame->Frame());
                                 rCols.insert( nRight );
                                 pCellFrame = pCellFrame->GetNext();
                             }

@@ -117,28 +117,28 @@ SwTwips SwTextFrameInfo::GetCharPos( sal_Int32 nChar, bool bCenter ) const
     SwRect aRect;
     if( static_cast<SwTextCursor&>(aLine).GetCharRect( &aRect, nChar ) )
     {
-        if ( aRectFnSet.bVert )
+        if ( aRectFnSet.IsVert() )
             pFrame->SwitchHorizontalToVertical( aRect );
 
-        nStt = (aRect.*aRectFnSet->fnGetLeft)();
+        nStt = aRectFnSet.GetLeft(aRect);
     }
     else
         nStt = aLine.GetLineStart();
 
     if( !bCenter )
-        return nStt - (pFrame->Frame().*aRectFnSet->fnGetLeft)();
+        return nStt - aRectFnSet.GetLeft(pFrame->Frame());
 
     if( static_cast<SwTextCursor&>(aLine).GetCharRect( &aRect, nChar+1 ) )
     {
-        if ( aRectFnSet.bVert )
+        if ( aRectFnSet.IsVert() )
             pFrame->SwitchHorizontalToVertical( aRect );
 
-        nNext = (aRect.*aRectFnSet->fnGetLeft)();
+        nNext = aRectFnSet.GetLeft(aRect);
     }
     else
         nNext = aLine.GetLineStart();
 
-    return (( nNext + nStt ) / 2 ) - (pFrame->Frame().*aRectFnSet->fnGetLeft)();
+    return (( nNext + nStt ) / 2 ) - aRectFnSet.GetLeft(pFrame->Frame());
 }
 
 SwPaM *AddPam( SwPaM *pPam, const SwTextFrame* pTextFrame,

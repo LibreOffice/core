@@ -493,7 +493,7 @@ void SwAnchoredDrawObject::MakeObjPosAnchoredAtLayout()
     SetCurrRelPos( aObjPositioning.GetRelPos() );
     const SwFrame* pAnchorFrame = GetAnchorFrame();
     SwRectFnSet aRectFnSet(pAnchorFrame);
-    const Point aAnchPos( (pAnchorFrame->Frame().*aRectFnSet->fnGetPos)() );
+    const Point aAnchPos( aRectFnSet.GetPos(pAnchorFrame->Frame()) );
     SetObjLeft( aAnchPos.X() + GetCurrRelPos().X() );
     SetObjTop( aAnchPos.Y() + GetCurrRelPos().Y() );
 }

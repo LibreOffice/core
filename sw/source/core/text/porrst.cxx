@@ -319,7 +319,7 @@ bool SwTextFrame::FormatEmpty()
     }
 
     SwRectFnSet aRectFnSet(this);
-    const SwTwips nChg = nHeight - (Prt().*aRectFnSet->fnGetHeight)();
+    const SwTwips nChg = nHeight - aRectFnSet.GetHeight(Prt());
 
     if( !nChg )
         SetUndersized( false );
@@ -357,7 +357,7 @@ bool SwTextFrame::FillRegister( SwTwips& rRegStart, sal_uInt16& rRegDiff )
     if( ( SwFrameType::Body| SwFrameType::Fly ) & pFrame->GetType() )
     {
         SwRectFnSet aRectFnSet(pFrame);
-        rRegStart = (pFrame->*aRectFnSet->fnGetPrtTop)();
+        rRegStart = aRectFnSet.GetPrtTop(*pFrame);
         pFrame = pFrame->FindPageFrame();
         if( pFrame->IsPageFrame() )
         {
@@ -447,7 +447,7 @@ bool SwTextFrame::FillRegister( SwTwips& rRegStart, sal_uInt16& rRegDiff )
                     }
                 }
                 const long nTmpDiff = pDesc->GetRegAscent() - rRegDiff;
-                if ( aRectFnSet.bVert )
+                if ( aRectFnSet.IsVert() )
                     rRegStart -= nTmpDiff;
                 else
                     rRegStart += nTmpDiff;

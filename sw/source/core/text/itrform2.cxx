@@ -484,11 +484,11 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
             SwRectFnSet aRectFnSet(pPageFrame);
 
             const long nGridOrigin = pBody ?
-                                    (pBody->*aRectFnSet->fnGetPrtLeft)() :
-                                    (pPageFrame->*aRectFnSet->fnGetPrtLeft)();
+                                    aRectFnSet.GetPrtLeft(*pBody) :
+                                    aRectFnSet.GetPrtLeft(*pPageFrame);
 
             SwTwips nStartX = rInf.X() + GetLeftMargin();
-            if ( aRectFnSet.bVert )
+            if ( aRectFnSet.IsVert() )
             {
                 Point aPoint( nStartX, 0 );
                 m_pFrame->SwitchHorizontalToVertical( aPoint );
@@ -1833,9 +1833,9 @@ void SwTextFormatter::CalcRealHeight( bool bNewLine )
         {
             SwTwips nTmpY = Y() + m_pCurr->GetAscent() + nLineHeight - m_pCurr->Height();
             SwRectFnSet aRectFnSet(m_pFrame);
-            if ( aRectFnSet.bVert )
+            if ( aRectFnSet.IsVert() )
                 nTmpY = m_pFrame->SwitchHorizontalToVertical( nTmpY );
-            nTmpY = (*aRectFnSet->fnYDiff)( nTmpY, RegStart() );
+            nTmpY = aRectFnSet.YDiff( nTmpY, RegStart() );
             const sal_uInt16 nDiff = sal_uInt16( nTmpY % RegDiff() );
             if( nDiff )
                 nLineHeight += RegDiff() - nDiff;
@@ -1867,8 +1867,8 @@ void SwTextFormatter::FeedInf( SwTextFormatInfo &rInf ) const
          nTmpFirst > USHRT_MAX )
     {
         SwRectFnSet aRectFnSet(rInf.GetTextFrame());
-        nTmpLeft = (rInf.GetTextFrame()->Frame().*aRectFnSet->fnGetLeft)();
-        nTmpRight = (rInf.GetTextFrame()->Frame().*aRectFnSet->fnGetRight)();
+        nTmpLeft = aRectFnSet.GetLeft(rInf.GetTextFrame()->Frame());
+        nTmpRight = aRectFnSet.GetRight(rInf.GetTextFrame()->Frame());
         nTmpFirst = nTmpLeft;
     }
 
@@ -2445,14 +2445,14 @@ void SwTextFormatter::CalcFlyWidth( SwTextFormatInfo &rInf )
             SwRectFnSet aRectFnSet(pPageFrame);
 
             const long nGridOrigin = pBody ?
-                                    (pBody->*aRectFnSet->fnGetPrtLeft)() :
-                                    (pPageFrame->*aRectFnSet->fnGetPrtLeft)();
+                                    aRectFnSet.GetPrtLeft(*pBody) :
+                                    aRectFnSet.GetPrtLeft(*pPageFrame);
 
             const SwDoc *pDoc = rInf.GetTextFrame()->GetNode()->GetDoc();
             const sal_uInt16 nGridWidth = GetGridWidth(*pGrid, *pDoc);
 
             SwTwips nStartX = GetLeftMargin();
-            if ( aRectFnSet.bVert )
+            if ( aRectFnSet.IsVert() )
             {
                 Point aPoint( nStartX, 0 );
                 m_pFrame->SwitchHorizontalToVertical( aPoint );

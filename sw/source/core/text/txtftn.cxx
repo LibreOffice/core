@@ -133,10 +133,10 @@ bool SwTextFrame::CalcPrepFootnoteAdjust()
         bool bReArrange = true;
 
         SwRectFnSet aRectFnSet(this);
-        if ( pCont && (*aRectFnSet->fnYDiff)( (pCont->Frame().*aRectFnSet->fnGetTop)(),
-                                          (Frame().*aRectFnSet->fnGetBottom)() ) > 0 )
+        if ( pCont && aRectFnSet.YDiff( aRectFnSet.GetTop(pCont->Frame()),
+                                          aRectFnSet.GetBottom(Frame()) ) > 0 )
         {
-            pBoss->RearrangeFootnotes( (Frame().*aRectFnSet->fnGetBottom)(), false,
+            pBoss->RearrangeFootnotes( aRectFnSet.GetBottom(Frame()), false,
                                   pFootnote->GetAttr() );
             ValidateBodyFrame();
             ValidateFrame();
@@ -197,21 +197,21 @@ static SwTwips lcl_GetFootnoteLower( const SwTextFrame* pFrame, SwTwips nLower )
 
         SwTwips nMin = 0;
         if ( bDontSplit )
-            nMin = (pTabFrame->Frame().*aRectFnSet->fnGetBottom)();
+            nMin = aRectFnSet.GetBottom(pTabFrame->Frame());
         else if ( !static_cast<const SwRowFrame*>(pRow)->IsRowSplitAllowed() )
-            nMin = (pRow->Frame().*aRectFnSet->fnGetBottom)();
+            nMin = aRectFnSet.GetBottom(pRow->Frame());
 
-        if ( nMin && (*aRectFnSet->fnYDiff)( nMin, nLower ) > 0 )
+        if ( nMin && aRectFnSet.YDiff( nMin, nLower ) > 0 )
             nRet = nMin;
 
-        nAdd = (pRow->GetUpper()->*aRectFnSet->fnGetBottomMargin)();
+        nAdd = aRectFnSet.GetBottomMargin(*pRow->GetUpper());
     }
     else
-        nAdd = (pFrame->*aRectFnSet->fnGetBottomMargin)();
+        nAdd = aRectFnSet.GetBottomMargin(*pFrame);
 
     if( nAdd > 0 )
     {
-        if ( aRectFnSet.bVert )
+        if ( aRectFnSet.IsVert() )
             nRet -= nAdd;
         else
             nRet += nAdd;
@@ -221,7 +221,7 @@ static SwTwips lcl_GetFootnoteLower( const SwTextFrame* pFrame, SwTwips nLower )
     // the deadline should consider their lower borders.
     const SwFrame* pStartFrame = pFrame->GetUpper()->GetLower();
     OSL_ENSURE( pStartFrame, "Upper has no lower" );
-    SwTwips nFlyLower = aRectFnSet.bVert ? LONG_MAX : 0;
+    SwTwips nFlyLower = aRectFnSet.IsVert() ? LONG_MAX : 0;
     while ( pStartFrame != pFrame )
     {
         OSL_ENSURE( pStartFrame, "Frame chain is broken" );
@@ -235,8 +235,8 @@ static SwTwips lcl_GetFootnoteLower( const SwTextFrame* pFrame, SwTwips nLower )
                 if ( dynamic_cast< const SwFlyFrame *>( pAnchoredObj ) ==  nullptr ||
                      static_cast<SwFlyFrame*>(pAnchoredObj)->IsValid() )
                 {
-                    const SwTwips nBottom = (aRect.*aRectFnSet->fnGetBottom)();
-                    if ( (*aRectFnSet->fnYDiff)( nBottom, nFlyLower ) > 0 )
+                    const SwTwips nBottom = aRectFnSet.GetBottom(aRect);
+                    if ( aRectFnSet.YDiff( nBottom, nFlyLower ) > 0 )
                         nFlyLower = nBottom;
                 }
             }
@@ -245,7 +245,7 @@ static SwTwips lcl_GetFootnoteLower( const SwTextFrame* pFrame, SwTwips nLower )
         pStartFrame = pStartFrame->GetNext();
     }
 
-    if ( aRectFnSet.bVert )
+    if ( aRectFnSet.IsVert() )
         nRet = std::min( nRet, nFlyLower );
     else
         nRet = std::max( nRet, nFlyLower );
@@ -316,8 +316,8 @@ SwTwips SwTextFrame::GetFootnoteFrameHeight_() const
 
         // Height within the Container which we're allowed to consume anyways
         SwRectFnSet aRectFnSet(pCont);
-        SwTwips nTmp = (*aRectFnSet->fnYDiff)( (pCont->*aRectFnSet->fnGetPrtBottom)(),
-                                           (Frame().*aRectFnSet->fnGetTop)() );
+        SwTwips nTmp = aRectFnSet.YDiff( aRectFnSet.GetPrtBottom(*pCont),
+                                           aRectFnSet.GetTop(Frame()) );
 
 #if OSL_DEBUG_LEVEL > 0
         if( nTmp < 0 )
@@ -336,7 +336,7 @@ SwTwips SwTextFrame::GetFootnoteFrameHeight_() const
         }
 #endif
 
-        if ( (*aRectFnSet->fnYDiff)( (pCont->Frame().*aRectFnSet->fnGetTop)(), nHeight) > 0 )
+        if ( aRectFnSet.YDiff( aRectFnSet.GetTop(pCont->Frame()), nHeight) > 0 )
         {
             // Growth potential of the container
             if ( !pRef->IsInFootnoteConnect() )
@@ -353,7 +353,7 @@ SwTwips SwTextFrame::GetFootnoteFrameHeight_() const
         }
         else
         {   // The container has to shrink
-            nTmp += (*aRectFnSet->fnYDiff)( (pCont->Frame().*aRectFnSet->fnGetTop)(), nHeight);
+            nTmp += aRectFnSet.YDiff( aRectFnSet.GetTop(pCont->Frame()), nHeight);
             if( nTmp > 0 )
                 nHeight = nTmp;
             else
@@ -689,7 +689,7 @@ void SwTextFrame::ConnectFootnote( SwTextFootnote *pFootnote, const SwTwips nDea
             SwFrame *pCont = pFootnoteFrame->GetUpper();
 
             SwRectFnSet aRectFnSet(pCont);
-            long nDiff = (*aRectFnSet->fnYDiff)( (pCont->Frame().*aRectFnSet->fnGetTop)(),
+            long nDiff = aRectFnSet.YDiff( aRectFnSet.GetTop(pCont->Frame()),
                                              nDeadLine );
 
             if( nDiff >= 0 )
@@ -702,12 +702,12 @@ void SwTextFrame::ConnectFootnote( SwTextFootnote *pFootnote, const SwTwips nDea
                 // We have some room left, so the Footnote can grow
                 if ( pFootnoteFrame->GetFollow() && nDiff > 0 )
                 {
-                    SwTwips nHeight = (pCont->Frame().*aRectFnSet->fnGetHeight)();
+                    SwTwips nHeight = aRectFnSet.GetHeight(pCont->Frame());
                     pBoss->RearrangeFootnotes( nDeadLine, false, pFootnote );
                     ValidateBodyFrame();
                     ValidateFrame();
                     SwViewShell *pSh = getRootFrame()->GetCurrShell();
-                    if ( pSh && nHeight == (pCont->Frame().*aRectFnSet->fnGetHeight)() )
+                    if ( pSh && nHeight == aRectFnSet.GetHeight(pCont->Frame()) )
                         // So that we don't miss anything
                         pSh->InvalidateWindows( pCont->Frame() );
                 }
@@ -894,8 +894,8 @@ SwFootnotePortion *SwTextFormatter::NewFootnotePortion( SwTextFormatInfo &rInf,
 
                     SwRectFnSet aRectFnSet(pFootnoteCont);
 
-                    const long nDiff = (*aRectFnSet->fnYDiff)(
-                                            (pFootnoteCont->Frame().*aRectFnSet->fnGetTop)(),
+                    const long nDiff = aRectFnSet.YDiff(
+                                            aRectFnSet.GetTop(pFootnoteCont->Frame()),
                                              nTmpBot );
 
                     if( pScrFrame && nDiff < 0 )
