@@ -330,6 +330,15 @@ inline std::basic_ostream<charT, traits> & operator <<(
 #define RECT_MAX    LONG_MAX
 #define RECT_MIN    LONG_MIN
 
+/// Note: this class is a true marvel of engineering: because the author
+/// could not decide whether it's better to have a closed or half-open
+/// interval, they just implemented *both* in the same class!
+///
+/// If you have the misfortune of having to use this class, don't immediately
+/// despair but first take note that the uppercase GetWidth() / GetHeight()
+/// etc. methods interpret the interval as closed, while the lowercase
+/// getWidth() / getHeight() etc. methods interpret the interval as half-open.
+/// Ok, now is the time for despair.
 class SAL_WARN_UNUSED TOOLS_DLLPUBLIC Rectangle
 {
 public:
