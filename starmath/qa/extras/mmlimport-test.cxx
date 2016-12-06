@@ -29,6 +29,7 @@ public:
     virtual void setUp() override;
     virtual void tearDown() override;
 
+    void testColor();
     void testSimple();
     void testNsPrefixMath();
     void testMaction();
@@ -38,6 +39,7 @@ public:
     void testTdf103500();
 
     CPPUNIT_TEST_SUITE(Test);
+    CPPUNIT_TEST(testColor);
     CPPUNIT_TEST(testSimple);
     CPPUNIT_TEST(testNsPrefixMath);
     CPPUNIT_TEST(testMaction);
@@ -88,6 +90,28 @@ void Test::tearDown()
 {
     if (mxDocShell.Is()) mxDocShell->DoClose();
     BootstrapFixture::tearDown();
+}
+
+void Test::testColor()
+{
+    loadURL(m_directories.getURLFromSrc("starmath/qa/extras/data/color.mml"));
+    CPPUNIT_ASSERT_EQUAL(OUString("{{color black b}"
+                                  " {color white w}"
+                                  " {color red r}"
+                                  " {color green g}"
+                                  " {color blue b}"
+                                  " {color yellow y}"
+                                  " {color silver s}"
+                                  " {color gray g}"
+                                  " {color maroon m}"
+                                  " {color purple p}"
+                                  " {color lime l}"
+                                  " {color olive o}"
+                                  " {color navy n}"
+                                  " {color teal t}"
+                                  " {color aqua a}"
+                                  " {color fuchsia f}}"),
+                         mxDocShell->GetText());
 }
 
 void Test::testSimple()
