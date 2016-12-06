@@ -213,7 +213,7 @@ void SAL_CALL SalGtkPicker::implsetDisplayDirectory( const OUString& aDirectory 
     if( aTxt.endsWith("/") )
         aTxt = aTxt.copy( 0, aTxt.getLength() - 1 );
 
-    OSL_TRACE( "setting path to %s", aTxt.getStr() );
+    SAL_INFO( "vcl", "setting path to " << aTxt );
 
     gtk_file_chooser_set_current_folder_uri( GTK_FILE_CHOOSER( m_pDialog ),
         aTxt.getStr() );

@@ -112,7 +112,7 @@ void SAL_CALL DNDEventDispatcher::drop( const DropTargetDropEvent& dtde )
 
     // reject drop if no listeners found
     if( nListeners == 0 ) {
-        OSL_TRACE( "rejecting drop due to missing listeners." );
+        SAL_WARN( "vcl", "rejecting drop due to missing listeners." );
         dtde.Context->rejectDrop();
     }
 
@@ -139,7 +139,7 @@ void SAL_CALL DNDEventDispatcher::dragEnter( const DropTargetDragEnterEvent& dtd
 
     // reject drag if no listener found
     if( nListeners == 0 ) {
-        OSL_TRACE( "rejecting drag enter due to missing listeners." );
+        SAL_WARN( "vcl", "rejecting drag enter due to missing listeners." );
         dtdee.Context->rejectDrag();
     }
 
@@ -189,7 +189,7 @@ void SAL_CALL DNDEventDispatcher::dragOver( const DropTargetDragEvent& dtde )
     // reject drag if no listener found
     if( nListeners == 0 )
     {
-        OSL_TRACE( "rejecting drag over due to missing listeners." );
+        SAL_WARN( "vcl", "rejecting drag over due to missing listeners." );
         dtde.Context->rejectDrag();
     }
 }
@@ -226,7 +226,7 @@ void SAL_CALL DNDEventDispatcher::dropActionChanged( const DropTargetDragEvent& 
     // reject drag if no listener found
     if( nListeners == 0 )
     {
-        OSL_TRACE( "rejecting dropActionChanged due to missing listeners." );
+        SAL_WARN( "vcl", "rejecting dropActionChanged due to missing listeners." );
         dtde.Context->rejectDrag();
     }
 }

@@ -851,7 +851,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                 case( MetaActionType::MASKSCALE ):
                 case( MetaActionType::MASKSCALEPART ):
                 {
-                    OSL_TRACE( "MetaMask...Action not supported yet" );
+                    SAL_WARN( "vcl", "MetaMask...Action not supported yet" );
                 }
                 break;
 
@@ -1071,7 +1071,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                     if( !bAssertionFired )
                     {
                         bAssertionFired = true;
-                        OSL_TRACE( "PDFExport::ImplWriteActions: deprecated and unsupported MetaAction encountered" );
+                        SAL_WARN( "vcl", "PDFExport::ImplWriteActions: deprecated and unsupported MetaAction encountered " << (int)nType );
                     }
                 break;
             }
@@ -1111,7 +1111,7 @@ public:
         sTransporters.erase( maID );
         if( maUDigest )
             rtl_digest_destroyMD5( maUDigest );
-        OSL_TRACE( "EncHashTransporter freed" );
+        SAL_INFO( "vcl", "EncHashTransporter freed" );
     }
 
     rtlDigest getUDigest() const { return maUDigest; };

@@ -994,7 +994,7 @@ bool QuartzSalBitmap::GetSystemData( BitmapSystemData& rData )
             /**
              * We need to hack things because VCL does not use kCGBitmapByteOrder32Host, while Cairo requires it.
              */
-            OSL_TRACE("QuartzSalBitmap::%s(): kCGBitmapByteOrder32Host not found => inserting it.",__func__);
+            SAL_INFO("vcl.cg", "QuartzSalBitmap::" << __func__ << "(): kCGBitmapByteOrder32Host not found => inserting it.");
 
             CGImageRef xImage = CGBitmapContextCreateImage (mxGraphicContext);
             SAL_INFO("vcl.cg", "CGBitmapContextCreateImage(" << mxGraphicContext << ") = " << xImage );

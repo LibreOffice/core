@@ -82,8 +82,8 @@ void checkCanvasBitmap( const rtl::Reference<VclCanvasBitmap>& xBmp,
                         const char*                            msg,
                         int                                    nOriginalDepth )
 {
-    OSL_TRACE("-------------------------");
-    OSL_TRACE("Testing %s, with depth %d", msg, nOriginalDepth);
+    SAL_INFO("vcl", "-------------------------");
+    SAL_INFO("vcl", "Testing " << msg << ", with depth " << nOriginalDepth);
 
     BitmapEx aContainedBmpEx( xBmp->getBitmapEx() );
     Bitmap   aContainedBmp( aContainedBmpEx.GetBitmap() );

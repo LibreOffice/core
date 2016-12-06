@@ -95,9 +95,7 @@ void SettingsConfigItem::getValues()
     for( int j = 0; j < aNames.getLength(); j++ )
     {
 #if OSL_DEBUG_LEVEL > 2
-        OSL_TRACE( "found settings data for \"%s\"\n",
-                 OUStringToOString( aNames.getConstArray()[j], RTL_TEXTENCODING_ASCII_US ).getStr()
-                 );
+        SAL_INFO( "vcl", "found settings data for " << aNames.getConstArray()[j] );
 #endif
         OUString aKeyName( aNames.getConstArray()[j] );
         Sequence< OUString > aKeys( GetNodeNames( aKeyName ) );
@@ -117,10 +115,7 @@ void SettingsConfigItem::getValues()
                 if( !pLine->isEmpty() )
                     m_aSettings[ aKeyName ][ pFrom[i] ] = *pLine;
 #if OSL_DEBUG_LEVEL > 2
-                OSL_TRACE( "   \"%s\"=\"%.30s\"\n",
-                         OUStringToOString( aKeys.getConstArray()[i], RTL_TEXTENCODING_ASCII_US ).getStr(),
-                         OUStringToOString( *pLine, RTL_TEXTENCODING_ASCII_US ).getStr()
-                         );
+                SAL_INFO( "vcl", "   \"" << aKeys.getConstArray()[i] << "\"=\"" << *pLine << "\"\n" );
 #endif
             }
         }
