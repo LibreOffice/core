@@ -162,10 +162,15 @@ namespace comphelper
         static bool isTryDeinstallUserExtensionsPossible();
         static void tryDeinstallUserExtensions();
 
-        /** Deinstall all Extensions (user|shared|bundled)
+        /** Reset shared Extensions
         */
         static bool isTryResetSharedExtensionsPossible();
         static void tryResetSharedExtensions();
+
+        /** Reset bundled Extensions
+        */
+        static bool isTryResetBundledExtensionsPossible();
+        static void tryResetBundledExtensions();
 
         /// Disables OpenGL and OpenCL
         static void tryDisableHWAcceleration();
