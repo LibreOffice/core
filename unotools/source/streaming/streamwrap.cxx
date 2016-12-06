@@ -149,6 +149,8 @@ OSeekableInputStreamWrapper::OSeekableInputStreamWrapper(SvStream* _pStream, boo
     SetStream( _pStream, _bOwner );
 }
 
+OSeekableInputStreamWrapper::~OSeekableInputStreamWrapper() {}
+
 void SAL_CALL OSeekableInputStreamWrapper::seek( sal_Int64 _nLocation ) throw (IllegalArgumentException, IOException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -280,6 +282,8 @@ OStreamWrapper::OStreamWrapper(SvStream& _rStream)
 {
     SetStream( &_rStream, false );
 }
+
+OStreamWrapper::~OStreamWrapper() {}
 
 css::uno::Reference< css::io::XInputStream > SAL_CALL OStreamWrapper::getInputStream(  ) throw (css::uno::RuntimeException, std::exception)
 {
