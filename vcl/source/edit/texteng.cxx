@@ -69,7 +69,6 @@ TextEngine::TextEngine()
     , mpActiveView {nullptr}
     , mpUndoManager {nullptr}
     , mpIdleFormatter {nullptr}
-    , mpIMEInfos {nullptr}
     , mpLocaleDataWrapper {nullptr}
     , maTextColor {COL_BLACK}
     , mnMaxTextLen {0}
@@ -118,7 +117,7 @@ TextEngine::~TextEngine()
     delete mpViews; // only the list, not the Views
     mpRefDev.disposeAndClear();
     delete mpUndoManager;
-    delete mpIMEInfos;
+    mpIMEInfos.reset();
     delete mpLocaleDataWrapper;
 }
 

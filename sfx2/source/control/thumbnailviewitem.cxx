@@ -37,6 +37,7 @@
 #include <vcl/graph.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/texteng.hxx>
+#include <vcl/textdata.hxx>
 
 using namespace basegfx;
 using namespace basegfx::tools;
