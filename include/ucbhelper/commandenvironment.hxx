@@ -22,7 +22,7 @@
 
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <ucbhelper/ucbhelperdllapi.h>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <memory>
 
 namespace ucbhelper
@@ -35,7 +35,7 @@ struct CommandEnvironment_Impl;
   * be used to supply environments to commands executed by UCB contents.
   */
 class UCBHELPER_DLLPUBLIC CommandEnvironment :
-            public cppu::WeakImplHelper1< css::ucb::XCommandEnvironment >
+            public cppu::WeakImplHelper< css::ucb::XCommandEnvironment >
 {
     std::unique_ptr<CommandEnvironment_Impl> m_pImpl;
 

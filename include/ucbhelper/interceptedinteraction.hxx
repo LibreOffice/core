@@ -25,7 +25,7 @@
 #include <com/sun/star/task/XInteractionHandler.hpp>
 
 #include <com/sun/star/task/XInteractionRequest.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <ucbhelper/ucbhelperdllapi.h>
 
 
@@ -40,7 +40,7 @@ namespace ucbhelper{
               only
             - or as base class if interactions must be modified.
  */
-class UCBHELPER_DLLPUBLIC InterceptedInteraction : public ::cppu::WeakImplHelper1< css::task::XInteractionHandler >
+class UCBHELPER_DLLPUBLIC InterceptedInteraction : public ::cppu::WeakImplHelper< css::task::XInteractionHandler >
 {
 
     // types
