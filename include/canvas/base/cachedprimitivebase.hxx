@@ -25,7 +25,7 @@
 #include <com/sun/star/rendering/XCanvas.hpp>
 #include <com/sun/star/rendering/XCachedPrimitive.hpp>
 #include <com/sun/star/rendering/ViewState.hpp>
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 
 #include <canvas/canvastoolsdllapi.h>
@@ -34,8 +34,8 @@
 
 namespace canvas
 {
-    typedef ::cppu::WeakComponentImplHelper2< css::rendering::XCachedPrimitive,
-                                              css::lang::XServiceInfo > CachedPrimitiveBase_Base;
+    typedef cppu::WeakComponentImplHelper< css::rendering::XCachedPrimitive,
+                                           css::lang::XServiceInfo > CachedPrimitiveBase_Base;
 
     /** Base class, providing common functionality for implementers of
         the XCachedPrimitive interface.

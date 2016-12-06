@@ -29,7 +29,7 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/sheet/XFormulaOpCodeMapper.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <formula/formuladllapi.h>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
@@ -46,7 +46,7 @@ namespace formula
 
 class FormulaCompiler;
 
-class FORMULA_DLLPUBLIC FormulaOpCodeMapperObj : public ::cppu::WeakImplHelper2<
+class FORMULA_DLLPUBLIC FormulaOpCodeMapperObj : public cppu::WeakImplHelper<
                             css::sheet::XFormulaOpCodeMapper,
                             css::lang::XServiceInfo >
 {

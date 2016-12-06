@@ -21,7 +21,7 @@
 #define INCLUDED_BASEGFX_TOOLS_UNOPOLYPOLYGON_HXX
 
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase3.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/rendering/FillRule.hpp>
 #include <com/sun/star/rendering/XLinePolyPolygon2D.hpp>
@@ -33,7 +33,7 @@ namespace basegfx
 {
 namespace unotools
 {
-    typedef ::cppu::WeakComponentImplHelper3<
+    typedef cppu::WeakComponentImplHelper<
             css::rendering::XLinePolyPolygon2D,
             css::rendering::XBezierPolyPolygon2D,
             css::lang::XServiceInfo > UnoPolyPolygonBase;
