@@ -1570,6 +1570,20 @@ void SwDrawContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
         auto pObject = *pContactChangedHint->m_ppObject;
         Changed(*pObject, SdrUserCallType::Delete, pObject->GetLastBoundRect());
     }
+    else if (auto pDrawFormatLayoutCopyHint = dynamic_cast<const sw::DrawFormatLayoutCopyHint*>(&rHint))
+    {
+        const SwDrawFrameFormat& rFormat = static_cast<const SwDrawFrameFormat&>(rMod);
+        new SwDrawContact(
+                &pDrawFormatLayoutCopyHint->m_rDestFormat,
+                pDrawFormatLayoutCopyHint->m_rDestDoc.CloneSdrObj(
+                        *GetMaster(),
+                        pDrawFormatLayoutCopyHint->m_rDestDoc.IsCopyIsMove() && &pDrawFormatLayoutCopyHint->m_rDestDoc == rFormat.GetDoc()));
+        // #i49730# - notify draw frame format that position attributes are
+        // already set, if the position attributes are already set at the
+        // source draw frame format.
+        if(rFormat.IsPosAttrSet())
+            pDrawFormatLayoutCopyHint->m_rDestFormat.PosAttrSet();
+    }
 }
 
 // #i26791#

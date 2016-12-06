@@ -234,6 +234,8 @@ public:
 
 //The DrawFrame-Format
 
+
+class SwDrawFrameFormat;
 namespace sw
 {
     enum class DrawFrameFormatHintId {
@@ -263,6 +265,13 @@ namespace sw
         ContactChangedHint() : m_ppObject(nullptr) {};
         ContactChangedHint(SdrObject** ppObject) : m_ppObject(ppObject) {};
         virtual ~ContactChangedHint() override;
+    };
+    struct SW_DLLPUBLIC DrawFormatLayoutCopyHint final : SfxHint
+    {
+        SwDrawFrameFormat& m_rDestFormat;
+        SwDoc& m_rDestDoc;
+        DrawFormatLayoutCopyHint(SwDrawFrameFormat& rDestFormat, SwDoc& rDestDoc) : m_rDestFormat(rDestFormat), m_rDestDoc(rDestDoc) {};
+        virtual ~DrawFormatLayoutCopyHint() override;
     };
 }
 
