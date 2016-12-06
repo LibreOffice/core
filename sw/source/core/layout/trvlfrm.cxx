@@ -298,20 +298,20 @@ bool SwPageFrame::GetCursorOfst( SwPosition *pPos, Point &rPoint,
                     SwRect nextTextRect;
                     pTextFrame->GetCharRect(nextTextRect, nextTextPos);
                     SwRectFnSet aRectFnSet(pTextFrame);
-                    if ((aTextRect.*aRectFnSet->fnGetTop)() ==
-                        (nextTextRect.*aRectFnSet->fnGetTop)()) // same line?
+                    if (aRectFnSet.GetTop(aTextRect) ==
+                        aRectFnSet.GetTop(nextTextRect)) // same line?
                     {
                         // need to handle mixed RTL/LTR portions somehow
-                        if ((aTextRect.*aRectFnSet->fnGetLeft)() <
-                            (nextTextRect.*aRectFnSet->fnGetLeft)())
+                        if (aRectFnSet.GetLeft(aTextRect) <
+                            aRectFnSet.GetLeft(nextTextRect))
                         {
-                            (aTextRect.*aRectFnSet->fnSetRight)(
-                                    (nextTextRect.*aRectFnSet->fnGetLeft)());
+                            aRectFnSet.SetRight( aTextRect,
+                                aRectFnSet.GetLeft(nextTextRect));
                         }
                         else // RTL
                         {
-                            (aTextRect.*aRectFnSet->fnSetLeft)(
-                                    (nextTextRect.*aRectFnSet->fnGetLeft)());
+                            aRectFnSet.SetLeft( aTextRect,
+                                aRectFnSet.GetLeft(nextTextRect));
                         }
                     }
                 }
@@ -745,7 +745,7 @@ static bool lcl_UpDown( SwPaM *pPam, const SwContentFrame *pStart,
         SwRect aRect( pStart->Frame() );
         pStart->GetCharRect( aRect, *pPam->GetPoint() );
         Point aCenter = aRect.Center();
-        nX = aRectFnSet.bVert ? aCenter.Y() : aCenter.X();
+        nX = aRectFnSet.IsVert() ? aCenter.Y() : aCenter.X();
 
         pTable = pCnt ? pCnt->FindTabFrame() : nullptr;
         if ( !pTable )
@@ -759,16 +759,16 @@ static bool lcl_UpDown( SwPaM *pPam, const SwContentFrame *pStart,
             while ( pCell && !pCell->IsCellFrame() )
                 pCell = pCell->GetUpper();
             OSL_ENSURE( pCell, "could not find the cell" );
-            nX =  (pCell->Frame().*aRectFnSet->fnGetLeft)() +
-                  (pCell->Frame().*aRectFnSet->fnGetWidth)() / 2;
+            nX =  aRectFnSet.GetLeft(pCell->Frame()) +
+                  aRectFnSet.GetWidth(pCell->Frame()) / 2;
 
             //The flow leads from one table to the next. The X-value needs to be
             //corrected based on the middle of the starting cell by the amount
             //of the offset of the tables.
             if ( pStTab != pTable )
             {
-                nX += (pTable->Frame().*aRectFnSet->fnGetLeft)() -
-                      (pStTab->Frame().*aRectFnSet->fnGetLeft)();
+                nX += aRectFnSet.GetLeft(pTable->Frame()) -
+                      aRectFnSet.GetLeft(pStTab->Frame());
             }
         }
 
@@ -778,15 +778,15 @@ static bool lcl_UpDown( SwPaM *pPam, const SwContentFrame *pStart,
         {
             const bool bRTL = pTable->IsRightToLeft();
             const long nPrtLeft = bRTL ?
-                                (pTable->*aRectFnSet->fnGetPrtRight)() :
-                                (pTable->*aRectFnSet->fnGetPrtLeft)();
+                                aRectFnSet.GetPrtRight(*pTable) :
+                                aRectFnSet.GetPrtLeft(*pTable);
             if ( bRTL != (nX < nPrtLeft) )
                 nX = nPrtLeft;
             else
             {
                    const long nPrtRight = bRTL ?
-                                    (pTable->*aRectFnSet->fnGetPrtLeft)() :
-                                    (pTable->*aRectFnSet->fnGetPrtRight)();
+                                    aRectFnSet.GetPrtLeft(*pTable) :
+                                    aRectFnSet.GetPrtRight(*pTable);
                 if ( bRTL != (nX > nPrtRight) )
                     nX = nPrtRight;
             }
@@ -882,8 +882,8 @@ static bool lcl_UpDown( SwPaM *pPam, const SwContentFrame *pStart,
                     Point aInsideCnt;
                     if ( pCell )
                     {
-                        long nTmpTop = (pCell->Frame().*aRectFnSet->fnGetTop)();
-                        if ( aRectFnSet.bVert )
+                        long nTmpTop = aRectFnSet.GetTop(pCell->Frame());
+                        if ( aRectFnSet.IsVert() )
                         {
                             if ( nTmpTop )
                                 --nTmpTop;
@@ -894,8 +894,8 @@ static bool lcl_UpDown( SwPaM *pPam, const SwContentFrame *pStart,
                             aInsideCell = Point( nX, nTmpTop );
                     }
 
-                    long nTmpTop = (pCnt->Frame().*aRectFnSet->fnGetTop)();
-                    if ( aRectFnSet.bVert )
+                    long nTmpTop = aRectFnSet.GetTop(pCnt->Frame());
+                    if ( aRectFnSet.IsVert() )
                     {
                         if ( nTmpTop )
                             --nTmpTop;
@@ -1326,22 +1326,22 @@ const SwContentFrame *SwLayoutFrame::GetContentPos( Point& rPoint,
 
     SwRectFnSet aRectFnSet(pActual);
     if ( !pActual->GetPrev() &&
-         (*aRectFnSet->fnYDiff)( (pActual->*aRectFnSet->fnGetPrtTop)(),
-                              aRectFnSet.bVert ? rPoint.X() : rPoint.Y() ) > 0 )
+         aRectFnSet.YDiff( aRectFnSet.GetPrtTop(*pActual),
+                              aRectFnSet.IsVert() ? rPoint.X() : rPoint.Y() ) > 0 )
     {
         aPoint.Y() = pActual->Frame().Top() + pActual->Prt().Top();
         aPoint.X() = pActual->Frame().Left() +
-                        ( pActual->IsRightToLeft() || aRectFnSet.bVert ?
+                        ( pActual->IsRightToLeft() || aRectFnSet.IsVert() ?
                           pActual->Prt().Right() :
                           pActual->Prt().Left() );
     }
     else if ( !pActual->GetNext() &&
-              (*aRectFnSet->fnYDiff)( (pActual->*aRectFnSet->fnGetPrtBottom)(),
-                                   aRectFnSet.bVert ? rPoint.X() : rPoint.Y() ) < 0 )
+              aRectFnSet.YDiff( aRectFnSet.GetPrtBottom(*pActual),
+                                   aRectFnSet.IsVert() ? rPoint.X() : rPoint.Y() ) < 0 )
     {
         aPoint.Y() = pActual->Frame().Top() + pActual->Prt().Bottom();
         aPoint.X() = pActual->Frame().Left() +
-                        ( pActual->IsRightToLeft() || aRectFnSet.bVert ?
+                        ( pActual->IsRightToLeft() || aRectFnSet.IsVert() ?
                           pActual->Prt().Left() :
                           pActual->Prt().Right() );
     }
@@ -2146,19 +2146,19 @@ void SwRootFrame::CalcFrameRects(SwShellCursor &rCursor)
             bR2L;
 
             if( MultiPortionType::BIDI == pSt2Pos->nMultiType &&
-                (pSt2Pos->aPortion2.*aRectFnSet->fnGetWidth)() )
+                aRectFnSet.GetWidth(pSt2Pos->aPortion2) )
             {
                 // nested bidi portion
-                long nRightAbs = (pSt2Pos->aPortion.*aRectFnSet->fnGetRight)();
-                nRightAbs -= (pSt2Pos->aPortion2.*aRectFnSet->fnGetLeft)();
-                long nLeftAbs = nRightAbs - (pSt2Pos->aPortion2.*aRectFnSet->fnGetWidth)();
+                long nRightAbs = aRectFnSet.GetRight(pSt2Pos->aPortion);
+                nRightAbs -= aRectFnSet.GetLeft(pSt2Pos->aPortion2);
+                long nLeftAbs = nRightAbs - aRectFnSet.GetWidth(pSt2Pos->aPortion2);
 
-                (aTmp.*aRectFnSet->fnSetRight)( nRightAbs );
+                aRectFnSet.SetRight( aTmp, nRightAbs );
 
                 if ( ! pEnd2Pos || pEnd2Pos->aPortion != pSt2Pos->aPortion )
                 {
                     SwRect aTmp2( pSt2Pos->aPortion );
-                    (aTmp2.*aRectFnSet->fnSetRight)( nLeftAbs );
+                    aRectFnSet.SetRight( aTmp2, nLeftAbs );
                     aTmp2.Intersection( aEndFrame );
                     Sub( aRegion, aTmp2 );
                 }
@@ -2166,49 +2166,43 @@ void SwRootFrame::CalcFrameRects(SwShellCursor &rCursor)
             else
             {
                 if( bPorR2L )
-                    (aTmp.*aRectFnSet->fnSetLeft)(
-                        (pSt2Pos->aPortion.*aRectFnSet->fnGetLeft)() );
+                    aRectFnSet.SetLeft( aTmp, aRectFnSet.GetLeft(pSt2Pos->aPortion) );
                 else
-                    (aTmp.*aRectFnSet->fnSetRight)(
-                        (pSt2Pos->aPortion.*aRectFnSet->fnGetRight)() );
+                    aRectFnSet.SetRight( aTmp, aRectFnSet.GetRight(pSt2Pos->aPortion) );
             }
 
             if( MultiPortionType::ROT_90 == pSt2Pos->nMultiType ||
-                (pSt2Pos->aPortion.*aRectFnSet->fnGetTop)() ==
-                (aTmp.*aRectFnSet->fnGetTop)() )
+                aRectFnSet.GetTop(pSt2Pos->aPortion) ==
+                aRectFnSet.GetTop(aTmp) )
             {
-                (aTmp.*aRectFnSet->fnSetTop)(
-                    (pSt2Pos->aLine.*aRectFnSet->fnGetTop)() );
+                aRectFnSet.SetTop( aTmp, aRectFnSet.GetTop(pSt2Pos->aLine) );
             }
 
             aTmp.Intersection( aStFrame );
             Sub( aRegion, aTmp );
 
-            SwTwips nTmp = (pSt2Pos->aLine.*aRectFnSet->fnGetBottom)();
+            SwTwips nTmp = aRectFnSet.GetBottom(pSt2Pos->aLine);
             if( MultiPortionType::ROT_90 != pSt2Pos->nMultiType &&
-                (aStRect.*aRectFnSet->fnBottomDist)( nTmp ) > 0 )
+                aRectFnSet.BottomDist( aStRect, nTmp ) > 0 )
             {
-                (aTmp.*aRectFnSet->fnSetTop)( (aTmp.*aRectFnSet->fnGetBottom)() );
-                (aTmp.*aRectFnSet->fnSetBottom)( nTmp );
-                if( (aStRect.*aRectFnSet->fnBottomDist)(
-                    (pSt2Pos->aPortion.*aRectFnSet->fnGetBottom)() ) > 0 )
+                aRectFnSet.SetTop( aTmp, aRectFnSet.GetBottom(aTmp) );
+                aRectFnSet.SetBottom( aTmp, nTmp );
+                if( aRectFnSet.BottomDist( aStRect, aRectFnSet.GetBottom(pSt2Pos->aPortion) ) > 0 )
                 {
                     if( bPorR2L )
-                        (aTmp.*aRectFnSet->fnSetRight)(
-                            (pSt2Pos->aPortion.*aRectFnSet->fnGetRight)() );
+                        aRectFnSet.SetRight( aTmp, aRectFnSet.GetRight(pSt2Pos->aPortion) );
                     else
-                        (aTmp.*aRectFnSet->fnSetLeft)(
-                            (pSt2Pos->aPortion.*aRectFnSet->fnGetLeft)() );
+                        aRectFnSet.SetLeft( aTmp, aRectFnSet.GetLeft(pSt2Pos->aPortion) );
                 }
                 aTmp.Intersection( aStFrame );
                 Sub( aRegion, aTmp );
             }
 
             aStRect = pSt2Pos->aLine;
-            (aStRect.*aRectFnSet->fnSetLeft)( bR2L ?
-                    (pSt2Pos->aPortion.*aRectFnSet->fnGetLeft)() :
-                    (pSt2Pos->aPortion.*aRectFnSet->fnGetRight)() );
-            (aStRect.*aRectFnSet->fnSetWidth)( 1 );
+            aRectFnSet.SetLeft( aStRect, bR2L ?
+                    aRectFnSet.GetLeft(pSt2Pos->aPortion) :
+                    aRectFnSet.GetRight(pSt2Pos->aPortion) );
+            aRectFnSet.SetWidth( aStRect, 1 );
         }
 
         if( pEnd2Pos )
@@ -2222,19 +2216,19 @@ void SwRootFrame::CalcFrameRects(SwShellCursor &rCursor)
                                          bEndR2L;
 
             if( MultiPortionType::BIDI == pEnd2Pos->nMultiType &&
-                (pEnd2Pos->aPortion2.*fnRectX->fnGetWidth)() )
+                fnRectX.GetWidth(pEnd2Pos->aPortion2) )
             {
                 // nested bidi portion
-                long nRightAbs = (pEnd2Pos->aPortion.*fnRectX->fnGetRight)();
-                nRightAbs = nRightAbs - (pEnd2Pos->aPortion2.*fnRectX->fnGetLeft)();
-                long nLeftAbs = nRightAbs - (pEnd2Pos->aPortion2.*fnRectX->fnGetWidth)();
+                long nRightAbs = fnRectX.GetRight(pEnd2Pos->aPortion);
+                nRightAbs = nRightAbs - fnRectX.GetLeft(pEnd2Pos->aPortion2);
+                long nLeftAbs = nRightAbs - fnRectX.GetWidth(pEnd2Pos->aPortion2);
 
-                (aTmp.*fnRectX->fnSetLeft)( nLeftAbs );
+                fnRectX.SetLeft( aTmp, nLeftAbs );
 
                 if ( ! pSt2Pos || pSt2Pos->aPortion != pEnd2Pos->aPortion )
                 {
                     SwRect aTmp2( pEnd2Pos->aPortion );
-                    (aTmp2.*fnRectX->fnSetLeft)( nRightAbs );
+                    fnRectX.SetLeft( aTmp2, nRightAbs );
                     aTmp2.Intersection( aEndFrame );
                     Sub( aRegion, aTmp2 );
                 }
@@ -2242,19 +2236,16 @@ void SwRootFrame::CalcFrameRects(SwShellCursor &rCursor)
             else
             {
                 if ( bPorR2L )
-                    (aTmp.*fnRectX->fnSetRight)(
-                        (pEnd2Pos->aPortion.*fnRectX->fnGetRight)() );
+                    fnRectX.SetRight( aTmp, fnRectX.GetRight(pEnd2Pos->aPortion) );
                 else
-                    (aTmp.*fnRectX->fnSetLeft)(
-                        (pEnd2Pos->aPortion.*fnRectX->fnGetLeft)() );
+                    fnRectX.SetLeft( aTmp, fnRectX.GetLeft(pEnd2Pos->aPortion) );
             }
 
             if( MultiPortionType::ROT_90 == pEnd2Pos->nMultiType ||
-                (pEnd2Pos->aPortion.*fnRectX->fnGetBottom)() ==
-                (aEndRect.*fnRectX->fnGetBottom)() )
+                fnRectX.GetBottom(pEnd2Pos->aPortion) ==
+                fnRectX.GetBottom(aEndRect) )
             {
-                (aTmp.*fnRectX->fnSetBottom)(
-                    (pEnd2Pos->aLine.*fnRectX->fnGetBottom)() );
+                fnRectX.SetBottom( aTmp, fnRectX.GetBottom(pEnd2Pos->aLine) );
             }
 
             aTmp.Intersection( aEndFrame );
@@ -2263,21 +2254,18 @@ void SwRootFrame::CalcFrameRects(SwShellCursor &rCursor)
             // The next statement means neither ruby nor rotate(90):
             if( !( MultiPortionType::RUBY == pEnd2Pos->nMultiType ) )
             {
-                SwTwips nTmp = (pEnd2Pos->aLine.*fnRectX->fnGetTop)();
-                if( (aEndRect.*fnRectX->fnGetTop)() != nTmp )
+                SwTwips nTmp = fnRectX.GetTop(pEnd2Pos->aLine);
+                if( fnRectX.GetTop(aEndRect) != nTmp )
                 {
-                    (aTmp.*fnRectX->fnSetBottom)(
-                        (aTmp.*fnRectX->fnGetTop)() );
-                    (aTmp.*fnRectX->fnSetTop)( nTmp );
-                    if( (aEndRect.*fnRectX->fnGetTop)() !=
-                        (pEnd2Pos->aPortion.*fnRectX->fnGetTop)() )
+                    fnRectX.SetBottom( aTmp, fnRectX.GetTop(aTmp) );
+                    fnRectX.SetTop( aTmp, nTmp );
+                    if( fnRectX.GetTop(aEndRect) !=
+                        fnRectX.GetTop(pEnd2Pos->aPortion) )
                     {
                         if( bPorR2L )
-                            (aTmp.*fnRectX->fnSetLeft)(
-                                (pEnd2Pos->aPortion.*fnRectX->fnGetLeft)() );
+                            fnRectX.SetLeft( aTmp, fnRectX.GetLeft(pEnd2Pos->aPortion) );
                         else
-                            (aTmp.*fnRectX->fnSetRight)(
-                                (pEnd2Pos->aPortion.*fnRectX->fnGetRight)() );
+                            fnRectX.SetRight( aTmp, fnRectX.GetRight(pEnd2Pos->aPortion) );
                     }
                     aTmp.Intersection( aEndFrame );
                     Sub( aRegion, aTmp );
@@ -2285,10 +2273,10 @@ void SwRootFrame::CalcFrameRects(SwShellCursor &rCursor)
             }
 
             aEndRect = pEnd2Pos->aLine;
-            (aEndRect.*fnRectX->fnSetLeft)( bEndR2L ?
-                    (pEnd2Pos->aPortion.*fnRectX->fnGetRight)() :
-                    (pEnd2Pos->aPortion.*fnRectX->fnGetLeft)() );
-            (aEndRect.*fnRectX->fnSetWidth)( 1 );
+            fnRectX.SetLeft( aEndRect, bEndR2L ?
+                    fnRectX.GetRight(pEnd2Pos->aPortion) :
+                    fnRectX.GetLeft(pEnd2Pos->aPortion) );
+            fnRectX.SetWidth( aEndRect, 1 );
         }
     }
     else if( pSt2Pos && pEnd2Pos &&
@@ -2301,37 +2289,37 @@ void SwRootFrame::CalcFrameRects(SwShellCursor &rCursor)
         // ends in the same bidi portion but one start or end is inside a
         // nested bidi portion.
 
-        if ( (pSt2Pos->aPortion2.*aRectFnSet->fnGetWidth)() )
+        if ( aRectFnSet.GetWidth(pSt2Pos->aPortion2) )
         {
             SwRect aTmp( aStRect );
-            long nRightAbs = (pSt2Pos->aPortion.*aRectFnSet->fnGetRight)();
-            nRightAbs -= (pSt2Pos->aPortion2.*aRectFnSet->fnGetLeft)();
-            long nLeftAbs = nRightAbs - (pSt2Pos->aPortion2.*aRectFnSet->fnGetWidth)();
+            long nRightAbs = aRectFnSet.GetRight(pSt2Pos->aPortion);
+            nRightAbs -= aRectFnSet.GetLeft(pSt2Pos->aPortion2);
+            long nLeftAbs = nRightAbs - aRectFnSet.GetWidth(pSt2Pos->aPortion2);
 
-            (aTmp.*aRectFnSet->fnSetRight)( nRightAbs );
+            aRectFnSet.SetRight( aTmp, nRightAbs );
             aTmp.Intersection( aStFrame );
             Sub( aRegion, aTmp );
 
             aStRect = pSt2Pos->aLine;
-            (aStRect.*aRectFnSet->fnSetLeft)( bR2L ? nRightAbs : nLeftAbs );
-            (aStRect.*aRectFnSet->fnSetWidth)( 1 );
+            aRectFnSet.SetLeft( aStRect, bR2L ? nRightAbs : nLeftAbs );
+            aRectFnSet.SetWidth( aStRect, 1 );
         }
 
         SwRectFnSet fnRectX(pEndFrame);
-        if ( (pEnd2Pos->aPortion2.*fnRectX->fnGetWidth)() )
+        if ( fnRectX.GetWidth(pEnd2Pos->aPortion2) )
         {
             SwRect aTmp( aEndRect );
-            long nRightAbs = (pEnd2Pos->aPortion.*fnRectX->fnGetRight)();
-            nRightAbs -= (pEnd2Pos->aPortion2.*fnRectX->fnGetLeft)();
-            long nLeftAbs = nRightAbs - (pEnd2Pos->aPortion2.*fnRectX->fnGetWidth)();
+            long nRightAbs = fnRectX.GetRight(pEnd2Pos->aPortion);
+            nRightAbs -= fnRectX.GetLeft(pEnd2Pos->aPortion2);
+            long nLeftAbs = nRightAbs - fnRectX.GetWidth(pEnd2Pos->aPortion2);
 
-            (aTmp.*fnRectX->fnSetLeft)( nLeftAbs );
+            fnRectX.SetLeft( aTmp, nLeftAbs );
             aTmp.Intersection( aEndFrame );
             Sub( aRegion, aTmp );
 
             aEndRect = pEnd2Pos->aLine;
-            (aEndRect.*fnRectX->fnSetLeft)( bEndR2L ? nLeftAbs : nRightAbs );
-            (aEndRect.*fnRectX->fnSetWidth)( 1 );
+            fnRectX.SetLeft( aEndRect, bEndR2L ? nLeftAbs : nRightAbs );
+            fnRectX.SetWidth( aEndRect, 1 );
         }
     }
 
@@ -2363,7 +2351,7 @@ void SwRootFrame::CalcFrameRects(SwShellCursor &rCursor)
             pSt2Pos->aPortion == pEnd2Pos->aPortion;
         //case 1: (Same frame and same row)
         if( bSameRotatedOrBidi ||
-            (aStRect.*aRectFnSet->fnGetTop)() == (aEndRect.*aRectFnSet->fnGetTop)() )
+            aRectFnSet.GetTop(aStRect) == aRectFnSet.GetTop(aEndRect) )
         {
             Point aTmpSt( aStRect.Pos() );
             Point aTmpEnd( aEndRect.Right(), aEndRect.Bottom() );
@@ -2387,14 +2375,14 @@ void SwRootFrame::CalcFrameRects(SwShellCursor &rCursor)
             // Bug 34888: If content is selected which doesn't take space
             //            away (i.e. PostIts, RefMarks, TOXMarks), then at
             //            least set the width of the Cursor.
-            if( 1 == (aTmp.*aRectFnSet->fnGetWidth)() &&
+            if( 1 == aRectFnSet.GetWidth(aTmp) &&
                 pStartPos->nContent.GetIndex() !=
                 pEndPos->nContent.GetIndex() )
             {
                 OutputDevice* pOut = pSh->GetOut();
                 long nCursorWidth = pOut->GetSettings().GetStyleSettings().
                     GetCursorSize();
-                (aTmp.*aRectFnSet->fnSetWidth)( pOut->PixelToLogic(
+                aRectFnSet.SetWidth( aTmp, pOut->PixelToLogic(
                     Size( nCursorWidth, 0 ) ).Width() );
             }
             aTmp.Intersection( aStFrame );
@@ -2406,45 +2394,45 @@ void SwRootFrame::CalcFrameRects(SwShellCursor &rCursor)
             SwTwips lLeft, lRight;
             if( pSt2Pos && pEnd2Pos && pSt2Pos->aPortion == pEnd2Pos->aPortion )
             {
-                lLeft = (pSt2Pos->aPortion.*aRectFnSet->fnGetLeft)();
-                lRight = (pSt2Pos->aPortion.*aRectFnSet->fnGetRight)();
+                lLeft = aRectFnSet.GetLeft(pSt2Pos->aPortion);
+                lRight = aRectFnSet.GetRight(pSt2Pos->aPortion);
             }
             else
             {
-                lLeft = (pStartFrame->Frame().*aRectFnSet->fnGetLeft)() +
-                    (pStartFrame->Prt().*aRectFnSet->fnGetLeft)();
-                lRight = (aEndFrame.*aRectFnSet->fnGetRight)();
+                lLeft = aRectFnSet.GetLeft(pStartFrame->Frame()) +
+                    aRectFnSet.GetLeft(pStartFrame->Prt());
+                lRight = aRectFnSet.GetRight(aEndFrame);
             }
-            if( lLeft < (aStFrame.*aRectFnSet->fnGetLeft)() )
-                lLeft = (aStFrame.*aRectFnSet->fnGetLeft)();
-            if( lRight > (aStFrame.*aRectFnSet->fnGetRight)() )
-                lRight = (aStFrame.*aRectFnSet->fnGetRight)();
+            if( lLeft < aRectFnSet.GetLeft(aStFrame) )
+                lLeft = aRectFnSet.GetLeft(aStFrame);
+            if( lRight > aRectFnSet.GetRight(aStFrame) )
+                lRight = aRectFnSet.GetRight(aStFrame);
             SwRect aSubRect( aStRect );
             //First line
             if( bR2L )
-                (aSubRect.*aRectFnSet->fnSetLeft)( lLeft );
+                aRectFnSet.SetLeft( aSubRect, lLeft );
             else
-                (aSubRect.*aRectFnSet->fnSetRight)( lRight );
+                aRectFnSet.SetRight( aSubRect, lRight );
             Sub( aRegion, aSubRect );
 
             //If there's at least a twips between start- and endline,
             //so the whole area between will be added.
-            SwTwips aTmpBottom = (aStRect.*aRectFnSet->fnGetBottom)();
-            SwTwips aTmpTop = (aEndRect.*aRectFnSet->fnGetTop)();
+            SwTwips aTmpBottom = aRectFnSet.GetBottom(aStRect);
+            SwTwips aTmpTop = aRectFnSet.GetTop(aEndRect);
             if( aTmpBottom != aTmpTop )
             {
-                (aSubRect.*aRectFnSet->fnSetLeft)( lLeft );
-                (aSubRect.*aRectFnSet->fnSetRight)( lRight );
-                (aSubRect.*aRectFnSet->fnSetTop)( aTmpBottom );
-                (aSubRect.*aRectFnSet->fnSetBottom)( aTmpTop );
+                aRectFnSet.SetLeft( aSubRect, lLeft );
+                aRectFnSet.SetRight( aSubRect, lRight );
+                aRectFnSet.SetTop( aSubRect, aTmpBottom );
+                aRectFnSet.SetBottom( aSubRect, aTmpTop );
                 Sub( aRegion, aSubRect );
             }
             //and the last line
             aSubRect = aEndRect;
             if( bR2L )
-                (aSubRect.*aRectFnSet->fnSetRight)( lRight );
+                aRectFnSet.SetRight( aSubRect, lRight );
             else
-                (aSubRect.*aRectFnSet->fnSetLeft)( lLeft );
+                aRectFnSet.SetLeft( aSubRect, lLeft );
             Sub( aRegion, aSubRect );
         }
     }
@@ -2454,15 +2442,15 @@ void SwRootFrame::CalcFrameRects(SwShellCursor &rCursor)
         //The startframe first...
         SwRect aSubRect( aStRect );
         if( bR2L )
-            (aSubRect.*aRectFnSet->fnSetLeft)( (aStFrame.*aRectFnSet->fnGetLeft)());
+            aRectFnSet.SetLeft( aSubRect, aRectFnSet.GetLeft(aStFrame));
         else
-            (aSubRect.*aRectFnSet->fnSetRight)( (aStFrame.*aRectFnSet->fnGetRight)());
+            aRectFnSet.SetRight( aSubRect, aRectFnSet.GetRight(aStFrame));
         Sub( aRegion, aSubRect );
-        SwTwips nTmpTwips = (aStRect.*aRectFnSet->fnGetBottom)();
-        if( (aStFrame.*aRectFnSet->fnGetBottom)() != nTmpTwips )
+        SwTwips nTmpTwips = aRectFnSet.GetBottom(aStRect);
+        if( aRectFnSet.GetBottom(aStFrame) != nTmpTwips )
         {
             aSubRect = aStFrame;
-            (aSubRect.*aRectFnSet->fnSetTop)( nTmpTwips );
+            aRectFnSet.SetTop( aSubRect, nTmpTwips );
             Sub( aRegion, aSubRect );
         }
 
@@ -2525,18 +2513,18 @@ void SwRootFrame::CalcFrameRects(SwShellCursor &rCursor)
 
         //At least the endframe...
         aRectFnSet.Refresh(pEndFrame);
-        nTmpTwips = (aEndRect.*aRectFnSet->fnGetTop)();
-        if( (aEndFrame.*aRectFnSet->fnGetTop)() != nTmpTwips )
+        nTmpTwips = aRectFnSet.GetTop(aEndRect);
+        if( aRectFnSet.GetTop(aEndFrame) != nTmpTwips )
         {
             aSubRect = aEndFrame;
-            (aSubRect.*aRectFnSet->fnSetBottom)( nTmpTwips );
+            aRectFnSet.SetBottom( aSubRect, nTmpTwips );
             Sub( aRegion, aSubRect );
         }
         aSubRect = aEndRect;
         if( bEndR2L )
-            (aSubRect.*aRectFnSet->fnSetRight)((aEndFrame.*aRectFnSet->fnGetRight)());
+            aRectFnSet.SetRight(aSubRect, aRectFnSet.GetRight(aEndFrame));
         else
-            (aSubRect.*aRectFnSet->fnSetLeft)( (aEndFrame.*aRectFnSet->fnGetLeft)() );
+            aRectFnSet.SetLeft( aSubRect, aRectFnSet.GetLeft(aEndFrame) );
         Sub( aRegion, aSubRect );
     }
 

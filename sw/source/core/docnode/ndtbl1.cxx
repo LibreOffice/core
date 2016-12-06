@@ -1275,20 +1275,20 @@ static sal_uInt16 lcl_CalcCellFit( const SwLayoutFrame *pCell )
     SwRectFnSet aRectFnSet(pCell);
     while ( pFrame )
     {
-        const SwTwips nAdd = (pFrame->Frame().*aRectFnSet->fnGetWidth)() -
-                             (pFrame->Prt().*aRectFnSet->fnGetWidth)();
+        const SwTwips nAdd = aRectFnSet.GetWidth(pFrame->Frame()) -
+                             aRectFnSet.GetWidth(pFrame->Prt());
 
         // pFrame does not necessarily have to be a SwTextFrame!
         const SwTwips nCalcFitToContent = pFrame->IsTextFrame() ?
                                           const_cast<SwTextFrame*>(static_cast<const SwTextFrame*>(pFrame))->CalcFitToContent() :
-                                          (pFrame->Prt().*aRectFnSet->fnGetWidth)();
+                                          aRectFnSet.GetWidth(pFrame->Prt());
 
         nRet = std::max( nRet, nCalcFitToContent + nAdd );
         pFrame = pFrame->GetNext();
     }
     // Surrounding border as well as left and Right Border also need to be respected
-    nRet += (pCell->Frame().*aRectFnSet->fnGetWidth)() -
-            (pCell->Prt().*aRectFnSet->fnGetWidth)();
+    nRet += aRectFnSet.GetWidth(pCell->Frame()) -
+            aRectFnSet.GetWidth(pCell->Prt());
 
     // To compensate for the accuracy of calculation later on in SwTable::SetTabCols
     // we keep adding up a little.
@@ -1327,14 +1327,14 @@ static void lcl_CalcSubColValues( std::vector<sal_uInt16> &rToFill, const SwTabC
         nColRight += rCols.GetLeftMin();
 
         // Adapt values to the proportions of the Table (Follows)
-        if ( rCols.GetLeftMin() != (pTab->Frame().*aRectFnSet->fnGetLeft)() )
+        if ( rCols.GetLeftMin() != aRectFnSet.GetLeft(pTab->Frame()) )
         {
-            const long nDiff = (pTab->Frame().*aRectFnSet->fnGetLeft)() - rCols.GetLeftMin();
+            const long nDiff = aRectFnSet.GetLeft(pTab->Frame()) - rCols.GetLeftMin();
             nColLeft  += nDiff;
             nColRight += nDiff;
         }
-        const long nCellLeft  = (pCell->Frame().*aRectFnSet->fnGetLeft)();
-        const long nCellRight = (pCell->Frame().*aRectFnSet->fnGetRight)();
+        const long nCellLeft  = aRectFnSet.GetLeft(pCell->Frame());
+        const long nCellRight = aRectFnSet.GetRight(pCell->Frame());
 
         // Calculate overlapping value
         long nWidth = 0;
@@ -1394,8 +1394,8 @@ static void lcl_CalcColValues( std::vector<sal_uInt16> &rToFill, const SwTabCols
         {
             if ( pCell->IsCellFrame() && pCell->FindTabFrame() == pTab && ::IsFrameInTableSel( rUnion, pCell ) )
             {
-                const long nCLeft  = (pCell->Frame().*aRectFnSet->fnGetLeft)();
-                const long nCRight = (pCell->Frame().*aRectFnSet->fnGetRight)();
+                const long nCLeft  = aRectFnSet.GetLeft(pCell->Frame());
+                const long nCRight = aRectFnSet.GetRight(pCell->Frame());
 
                 bool bNotInCols = true;
 
@@ -1418,9 +1418,9 @@ static void lcl_CalcColValues( std::vector<sal_uInt16> &rToFill, const SwTabCols
                     // Adapt values to the proportions of the Table (Follows)
                     long nLeftA  = nColLeft;
                     long nRightA = nColRight;
-                    if ( rCols.GetLeftMin() !=  sal_uInt16((pTab->Frame().*aRectFnSet->fnGetLeft)()) )
+                    if ( rCols.GetLeftMin() !=  sal_uInt16(aRectFnSet.GetLeft(pTab->Frame())) )
                     {
-                        const long nDiff = (pTab->Frame().*aRectFnSet->fnGetLeft)() - rCols.GetLeftMin();
+                        const long nDiff = aRectFnSet.GetLeft(pTab->Frame()) - rCols.GetLeftMin();
                         nLeftA  += nDiff;
                         nRightA += nDiff;
                     }

@@ -229,13 +229,13 @@ static SwRect lcl_CalculateRepaintRect( SwTextFrame& rTextFrame, sal_Int32 nChgS
     {
         // we are inside a special portion, take left border
         SwRectFnSet aRectFnSet(pEndFrame);
-        (aRect.*aRectFnSet->fnSetTop)( (pEnd2Pos->aLine.*aRectFnSet->fnGetTop)() );
+        aRectFnSet.SetTop( aRect, aRectFnSet.GetTop(pEnd2Pos->aLine) );
         if ( pEndFrame->IsRightToLeft() )
-            (aRect.*aRectFnSet->fnSetLeft)( (pEnd2Pos->aPortion.*aRectFnSet->fnGetLeft)() );
+            aRectFnSet.SetLeft( aRect, aRectFnSet.GetLeft(pEnd2Pos->aPortion) );
         else
-            (aRect.*aRectFnSet->fnSetLeft)( (pEnd2Pos->aPortion.*aRectFnSet->fnGetRight)() );
-        (aRect.*aRectFnSet->fnSetWidth)( 1 );
-        (aRect.*aRectFnSet->fnSetHeight)( (pEnd2Pos->aLine.*aRectFnSet->fnGetHeight)() );
+            aRectFnSet.SetLeft( aRect, aRectFnSet.GetRight(pEnd2Pos->aPortion) );
+        aRectFnSet.SetWidth( aRect, 1 );
+        aRectFnSet.SetHeight( aRect, aRectFnSet.GetHeight(pEnd2Pos->aLine) );
         delete pEnd2Pos;
     }
 
@@ -262,13 +262,13 @@ static SwRect lcl_CalculateRepaintRect( SwTextFrame& rTextFrame, sal_Int32 nChgS
     {
         // we are inside a special portion, take right border
         SwRectFnSet aRectFnSet(pStartFrame);
-        (aTmp.*aRectFnSet->fnSetTop)( (pSt2Pos->aLine.*aRectFnSet->fnGetTop)() );
+        aRectFnSet.SetTop( aTmp, aRectFnSet.GetTop(pSt2Pos->aLine) );
         if ( pStartFrame->IsRightToLeft() )
-            (aTmp.*aRectFnSet->fnSetLeft)( (pSt2Pos->aPortion.*aRectFnSet->fnGetRight)() );
+            aRectFnSet.SetLeft( aTmp, aRectFnSet.GetRight(pSt2Pos->aPortion) );
         else
-            (aTmp.*aRectFnSet->fnSetLeft)( (pSt2Pos->aPortion.*aRectFnSet->fnGetLeft)() );
-        (aTmp.*aRectFnSet->fnSetWidth)( 1 );
-        (aTmp.*aRectFnSet->fnSetHeight)( (pSt2Pos->aLine.*aRectFnSet->fnGetHeight)() );
+            aRectFnSet.SetLeft( aTmp, aRectFnSet.GetLeft(pSt2Pos->aPortion) );
+        aRectFnSet.SetWidth( aTmp, 1 );
+        aRectFnSet.SetHeight( aTmp, aRectFnSet.GetHeight(pSt2Pos->aLine) );
         delete pSt2Pos;
     }
 
@@ -282,16 +282,16 @@ static SwRect lcl_CalculateRepaintRect( SwTextFrame& rTextFrame, sal_Int32 nChgS
             SwRect aStFrame( pStartFrame->PaintArea() );
             {
                 SwRectFnSet aRectFnSet(pStartFrame);
-                (aTmp.*aRectFnSet->fnSetLeft)( (aStFrame.*aRectFnSet->fnGetLeft)() );
-                (aTmp.*aRectFnSet->fnSetRight)( (aStFrame.*aRectFnSet->fnGetRight)() );
-                (aTmp.*aRectFnSet->fnSetBottom)( (aStFrame.*aRectFnSet->fnGetBottom)() );
+                aRectFnSet.SetLeft( aTmp, aRectFnSet.GetLeft(aStFrame) );
+                aRectFnSet.SetRight( aTmp, aRectFnSet.GetRight(aStFrame) );
+                aRectFnSet.SetBottom( aTmp, aRectFnSet.GetBottom(aStFrame) );
             }
             aStFrame = pEndFrame->PaintArea();
             {
                 SwRectFnSet aRectFnSet(pEndFrame);
-                (aRect.*aRectFnSet->fnSetTop)( (aStFrame.*aRectFnSet->fnGetTop)() );
-                (aRect.*aRectFnSet->fnSetLeft)( (aStFrame.*aRectFnSet->fnGetLeft)() );
-                (aRect.*aRectFnSet->fnSetRight)( (aStFrame.*aRectFnSet->fnGetRight)() );
+                aRectFnSet.SetTop( aRect, aRectFnSet.GetTop(aStFrame) );
+                aRectFnSet.SetLeft( aRect, aRectFnSet.GetLeft(aStFrame) );
+                aRectFnSet.SetRight( aRect, aRectFnSet.GetRight(aStFrame) );
             }
             aRect.Union( aTmp );
             while( true )
@@ -306,14 +306,14 @@ static SwRect lcl_CalculateRepaintRect( SwTextFrame& rTextFrame, sal_Int32 nChgS
     if( bSameFrame )
     {
         SwRectFnSet aRectFnSet(pStartFrame);
-        if( (aTmp.*aRectFnSet->fnGetTop)() == (aRect.*aRectFnSet->fnGetTop)() )
-            (aRect.*aRectFnSet->fnSetLeft)( (aTmp.*aRectFnSet->fnGetLeft)() );
+        if( aRectFnSet.GetTop(aTmp) == aRectFnSet.GetTop(aRect) )
+            aRectFnSet.SetLeft( aRect, aRectFnSet.GetLeft(aTmp) );
         else
         {
             SwRect aStFrame( pStartFrame->PaintArea() );
-            (aRect.*aRectFnSet->fnSetLeft)( (aStFrame.*aRectFnSet->fnGetLeft)() );
-            (aRect.*aRectFnSet->fnSetRight)( (aStFrame.*aRectFnSet->fnGetRight)() );
-            (aRect.*aRectFnSet->fnSetTop)( (aTmp.*aRectFnSet->fnGetTop)() );
+            aRectFnSet.SetLeft( aRect, aRectFnSet.GetLeft(aStFrame) );
+            aRectFnSet.SetRight( aRect, aRectFnSet.GetRight(aStFrame) );
+            aRectFnSet.SetTop( aRect, aRectFnSet.GetTop(aTmp) );
         }
 
         if( aTmp.Height() > aRect.Height() )

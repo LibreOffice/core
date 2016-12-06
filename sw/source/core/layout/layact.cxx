@@ -223,16 +223,16 @@ void SwLayAction::PaintContent( const SwContentFrame *pCnt,
     {
         // paint the area between printing bottom and frame bottom and
         // the area left and right beside the frame, if its height changed.
-        long nOldHeight = (rOldRect.*aRectFnSet->fnGetHeight)();
-        long nNewHeight = (pCnt->Frame().*aRectFnSet->fnGetHeight)();
+        long nOldHeight = aRectFnSet.GetHeight(rOldRect);
+        long nNewHeight = aRectFnSet.GetHeight(pCnt->Frame());
         const bool bHeightDiff = nOldHeight != nNewHeight;
         if( bHeightDiff )
         {
             // consider whole potential paint area.
             SwRect aDrawRect( pCnt->PaintArea() );
             if( nOldHeight > nNewHeight )
-                nOldBottom = (pCnt->*aRectFnSet->fnGetPrtBottom)();
-            (aDrawRect.*aRectFnSet->fnSetTop)( nOldBottom );
+                nOldBottom = aRectFnSet.GetPrtBottom(*pCnt);
+            aRectFnSet.SetTop( aDrawRect, nOldBottom );
             PaintContent_( pCnt, pPage, aDrawRect );
         }
         // paint content area
@@ -250,7 +250,7 @@ void SwLayAction::PaintContent( const SwContentFrame *pCnt,
                 pTmp = pSct;
         }
         SwRect aRect( pTmp->GetUpper()->PaintArea() );
-        (aRect.*aRectFnSet->fnSetTop)( (pTmp->*aRectFnSet->fnGetPrtBottom)() );
+        aRectFnSet.SetTop( aRect, aRectFnSet.GetPrtBottom(*pTmp) );
         if ( !PaintContent_( pCnt, pPage, aRect ) )
             pCnt->ResetRetouche();
     }
@@ -1349,7 +1349,7 @@ bool SwLayAction::FormatLayout( OutputDevice *pRenderContext, SwLayoutFrame *pLa
         // vertical layout support
         SwRectFnSet aRectFnSet(pLay);
         SwRect aRect( pLay->GetUpper()->PaintArea() );
-        (aRect.*aRectFnSet->fnSetTop)( (pLay->*aRectFnSet->fnGetPrtBottom)() );
+        aRectFnSet.SetTop( aRect, aRectFnSet.GetPrtBottom(*pLay) );
         if ( !m_pImp->GetShell()->AddPaintRect( aRect ) )
             pLay->ResetRetouche();
     }
@@ -1495,40 +1495,40 @@ bool SwLayAction::FormatLayoutTab( SwTabFrame *pTab, bool bAddRect )
                  pTab->IsComplete() &&
                  ( pTab->Frame().SSize() != pTab->Prt().SSize() ||
                    // vertical layout support
-                   (pTab->*aRectFnSet->fnGetLeftMargin)() ) &&
+                   aRectFnSet.GetLeftMargin(*pTab) ) &&
                  pTab->Frame().HasArea()
                )
             {
                 // re-implement calculation of margin rectangles.
                 SwRect aMarginRect;
 
-                SwTwips nLeftMargin = (pTab->*aRectFnSet->fnGetLeftMargin)();
+                SwTwips nLeftMargin = aRectFnSet.GetLeftMargin(*pTab);
                 if ( nLeftMargin > 0)
                 {
                     aMarginRect = pTab->Frame();
-                    (aMarginRect.*aRectFnSet->fnSetWidth)( nLeftMargin );
+                    aRectFnSet.SetWidth( aMarginRect, nLeftMargin );
                     m_pImp->GetShell()->AddPaintRect( aMarginRect );
                 }
 
-                if ( (pTab->*aRectFnSet->fnGetRightMargin)() > 0)
+                if ( aRectFnSet.GetRightMargin(*pTab) > 0)
                 {
                     aMarginRect = pTab->Frame();
-                    (aMarginRect.*aRectFnSet->fnSetLeft)( (pTab->*aRectFnSet->fnGetPrtRight)() );
+                    aRectFnSet.SetLeft( aMarginRect, aRectFnSet.GetPrtRight(*pTab) );
                     m_pImp->GetShell()->AddPaintRect( aMarginRect );
                 }
 
-                SwTwips nTopMargin = (pTab->*aRectFnSet->fnGetTopMargin)();
+                SwTwips nTopMargin = aRectFnSet.GetTopMargin(*pTab);
                 if ( nTopMargin > 0)
                 {
                     aMarginRect = pTab->Frame();
-                    (aMarginRect.*aRectFnSet->fnSetHeight)( nTopMargin );
+                    aRectFnSet.SetHeight( aMarginRect, nTopMargin );
                     m_pImp->GetShell()->AddPaintRect( aMarginRect );
                 }
 
-                if ( (pTab->*aRectFnSet->fnGetBottomMargin)() > 0)
+                if ( aRectFnSet.GetBottomMargin(*pTab) > 0)
                 {
                     aMarginRect = pTab->Frame();
-                    (aMarginRect.*aRectFnSet->fnSetTop)( (pTab->*aRectFnSet->fnGetPrtBottom)() );
+                    aRectFnSet.SetTop( aMarginRect, aRectFnSet.GetPrtBottom(*pTab) );
                     m_pImp->GetShell()->AddPaintRect( aMarginRect );
                 }
             }
@@ -1543,7 +1543,7 @@ bool SwLayAction::FormatLayoutTab( SwTabFrame *pTab, bool bAddRect )
             {
                 SwRect aRect( pTab->GetUpper()->PaintArea() );
                 // vertical layout support
-                (aRect.*aRectFnSet->fnSetTop)( (pTab->*aRectFnSet->fnGetPrtBottom)() );
+                aRectFnSet.SetTop( aRect, aRectFnSet.GetPrtBottom(*pTab) );
                 if ( !m_pImp->GetShell()->AddPaintRect( aRect ) )
                     pTab->ResetRetouche();
             }
@@ -1561,7 +1561,7 @@ bool SwLayAction::FormatLayoutTab( SwTabFrame *pTab, bool bAddRect )
         // and bottom of paint area of the upper frame.
         SwRect aRect( pTab->GetUpper()->PaintArea() );
         // vertical layout support
-        (aRect.*aRectFnSet->fnSetTop)( (pTab->*aRectFnSet->fnGetPrtBottom)() );
+        aRectFnSet.SetTop( aRect, aRectFnSet.GetPrtBottom(*pTab) );
         if ( !m_pImp->GetShell()->AddPaintRect( aRect ) )
             pTab->ResetRetouche();
     }
@@ -1791,12 +1791,12 @@ void SwLayAction::FormatContent_( const SwContentFrame *pContent,
     if ( !bDrawObjsOnly && IsPaint() )
     {
         const SwRect aOldRect( pContent->UnionFrame() );
-        const long nOldBottom = (pContent->*aRectFnSet->fnGetPrtBottom)();
+        const long nOldBottom = aRectFnSet.GetPrtBottom(*pContent);
         pContent->OptCalc();
         if( IsAgain() )
             return;
-        if( (*aRectFnSet->fnYDiff)( (pContent->Frame().*aRectFnSet->fnGetBottom)(),
-                                (aOldRect.*aRectFnSet->fnGetBottom)() ) < 0 )
+        if( aRectFnSet.YDiff( aRectFnSet.GetBottom(pContent->Frame()),
+                                aRectFnSet.GetBottom(aOldRect) ) < 0 )
         {
             pContent->SetRetouche();
         }
@@ -1806,7 +1806,7 @@ void SwLayAction::FormatContent_( const SwContentFrame *pContent,
     {
         if ( IsPaint() && pContent->IsTextFrame() && static_cast<const SwTextFrame*>(pContent)->HasRepaint() )
             PaintContent( pContent, pPage, pContent->Frame(),
-                        (pContent->Frame().*aRectFnSet->fnGetBottom)() );
+                        aRectFnSet.GetBottom(pContent->Frame()) );
         pContent->OptCalc();
     }
 }

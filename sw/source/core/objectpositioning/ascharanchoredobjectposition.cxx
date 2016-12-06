@@ -88,7 +88,7 @@ void SwAsCharAnchoredObjectPosition::CalcPosition()
     const SwFrameFormat& rFrameFormat = GetFrameFormat();
 
     SwRect aObjBoundRect( GetAnchoredObj().GetObjRect() );
-    SwTwips nObjWidth = (aObjBoundRect.*aRectFnSet->fnGetWidth)();
+    SwTwips nObjWidth = aRectFnSet.GetWidth(aObjBoundRect);
 
     // determine spacing values considering layout-/text-direction
     const SvxLRSpaceItem& rLRSpace = rFrameFormat.GetLRSpace();
@@ -303,7 +303,7 @@ void SwAsCharAnchoredObjectPosition::CalcPosition()
             // set new anchor position and relative position
             SwFlyInContentFrame* pFlyInContentFrame = &(const_cast<SwFlyInContentFrame&>(rFlyInContentFrame));
             pFlyInContentFrame->SetRefPoint( aAnchorPos, aRelAttr, aRelPos );
-            if( nObjWidth != (pFlyInContentFrame->Frame().*aRectFnSet->fnGetWidth)() )
+            if( nObjWidth != aRectFnSet.GetWidth(pFlyInContentFrame->Frame()) )
             {
                 // recalculate object bound rectangle, if object width has changed.
                 aObjBoundRect = GetAnchoredObj().GetObjRect();
@@ -313,7 +313,7 @@ void SwAsCharAnchoredObjectPosition::CalcPosition()
                 aObjBoundRect.Height( aObjBoundRect.Height() + rULSpace.GetLower() );
             }
         }
-        OSL_ENSURE( (rFlyInContentFrame.Frame().*aRectFnSet->fnGetHeight)(),
+        OSL_ENSURE( aRectFnSet.GetHeight(rFlyInContentFrame.Frame()),
             "SwAnchoredObjectPosition::CalcPosition(..) - fly frame has an invalid height" );
     }
 
