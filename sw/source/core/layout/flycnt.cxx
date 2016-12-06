@@ -385,10 +385,10 @@ void SwFlyAtContentFrame::MakeAll(vcl::RenderContext* pRenderContext)
             bool bConsiderWrapInfluenceDueToMovedFwdAnchor( false );
             do {
                 SwRectFnSet aRectFnSet(this);
-                Point aOldPos( (Frame().*aRectFnSet->fnGetPos)() );
+                Point aOldPos( aRectFnSet.GetPos(Frame()) );
                 SwFlyFreeFrame::MakeAll(pRenderContext);
                 const bool bPosChgDueToOwnFormat =
-                                        aOldPos != (Frame().*aRectFnSet->fnGetPos)();
+                                        aOldPos != aRectFnSet.GetPos(Frame());
                 // #i3317#
                 if ( !ConsiderObjWrapInfluenceOnObjPos() &&
                      OverlapsPrevColumn() )
@@ -446,7 +446,7 @@ void SwFlyAtContentFrame::MakeAll(vcl::RenderContext* pRenderContext)
                     }
                 }
 
-                if ( aOldPos != (Frame().*aRectFnSet->fnGetPos)() ||
+                if ( aOldPos != aRectFnSet.GetPos(Frame()) ||
                      ( !GetValidPosFlag() &&
                        ( pFooter || bPosChgDueToOwnFormat ) ) )
                 {
@@ -507,8 +507,8 @@ void SwFlyAtContentFrame::MakeAll(vcl::RenderContext* pRenderContext)
                 if ( pCellFrame )
                 {
                     SwRectFnSet aRectFnSet(pCellFrame);
-                    if ( (pCellFrame->Frame().*aRectFnSet->fnGetTop)() == 0 &&
-                         (pCellFrame->Frame().*aRectFnSet->fnGetHeight)() == 0 )
+                    if ( aRectFnSet.GetTop(pCellFrame->Frame()) == 0 &&
+                         aRectFnSet.GetHeight(pCellFrame->Frame()) == 0 )
                     {
                         bConsiderWrapInfluenceDueToMovedFwdAnchor = false;
                     }

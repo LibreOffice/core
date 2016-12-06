@@ -273,19 +273,15 @@ void SwAnchoredObject::CheckCharRect( const SwFormatAnchor& _rAnch,
             // of anchor character has changed.
             const sal_Int16 eVertRelOrient = aVert.GetRelationOrient();
             if ( ( aHori.GetRelationOrient() == text::RelOrientation::CHAR &&
-                   (aCharRect.*aRectFnSet->fnGetLeft)() !=
-                        (maLastCharRect.*aRectFnSet->fnGetLeft)() ) ||
+                   aRectFnSet.GetLeft(aCharRect) != aRectFnSet.GetLeft(maLastCharRect) ) ||
                  ( eVertRelOrient == text::RelOrientation::CHAR &&
-                   ( (aCharRect.*aRectFnSet->fnGetTop)() !=
-                        (maLastCharRect.*aRectFnSet->fnGetTop)() ||
-                     (aCharRect.*aRectFnSet->fnGetHeight)() !=
-                        (maLastCharRect.*aRectFnSet->fnGetHeight)() ) ) ||
+                   ( aRectFnSet.GetTop(aCharRect) != aRectFnSet.GetTop(maLastCharRect) ||
+                     aRectFnSet.GetHeight(aCharRect) != aRectFnSet.GetHeight(maLastCharRect) ) ) ||
                  ( ( ( eVertRelOrient == text::RelOrientation::FRAME ) ||
                      ( eVertRelOrient == text::RelOrientation::PRINT_AREA ) ||
                      ( eVertRelOrient == text::RelOrientation::PAGE_FRAME ) ||
                      ( eVertRelOrient == text::RelOrientation::PAGE_PRINT_AREA ) ) &&
-                   ( (aCharRect.*aRectFnSet->fnGetTop)() !=
-                        (maLastCharRect.*aRectFnSet->fnGetTop)() ) ) )
+                   ( aRectFnSet.GetTop(aCharRect) != aRectFnSet.GetTop(maLastCharRect) ) ) )
             {
                 // #i26945#, #i35911# - unlock position of
                 // anchored object, if it isn't registered at the page,
