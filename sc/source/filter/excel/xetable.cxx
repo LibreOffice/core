@@ -1696,7 +1696,7 @@ void XclExpColinfo::SaveXml( XclExpXmlStream& rStrm )
     // something optimized away or into.. yes that was significant in a
     // Linux-rpm_deb-x86_71-TDF tinderbox build that oddly produced 24.23
     // instead of 24 in a test case but only for 5-2 ...
-    const sal_Int32 nTruncatedInt = static_cast<sal_Int32>(std::trunc( nExcelColumnWidth * 100.0 + 0.5 ));
+    volatile sal_Int32 nTruncatedInt = static_cast<sal_Int32>(std::trunc( nExcelColumnWidth * 100.0 + 0.5 ));
     const double nTruncatedExcelColumnWidth = static_cast<double>(nTruncatedInt) / 100.0;
 
     rStrm.GetCurrentStream()->singleElement( XML_col,
