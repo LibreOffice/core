@@ -44,7 +44,7 @@ private:
 
     VclPtr<RadioButton> mpRadioRestore;
     VclPtr<RadioButton> mpRadioConfigure;
-    VclPtr<RadioButton> mpRadioDeinstall;
+    VclPtr<RadioButton> mpRadioExtensions;
     VclPtr<RadioButton> mpRadioReset;
 
     VclPtr<CheckBox> mpCBCheckProfilesafeConfig;
