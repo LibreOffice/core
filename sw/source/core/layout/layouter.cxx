@@ -459,8 +459,8 @@ bool SwLayouter::MoveBwdSuppressed( const SwDoc& p_rDoc,
     }
     aMoveBwdLayoutInfo.mnFreeSpaceInNewUpper =
             pLastLower
-            ? (pLastLower->Frame().*aRectFnSet->fnBottomDist)( (p_rNewUpperFrame.*aRectFnSet->fnGetPrtBottom)() )
-            : (p_rNewUpperFrame.Frame().*aRectFnSet->fnGetHeight)();
+            ? aRectFnSet.BottomDist( pLastLower->Frame(), aRectFnSet.GetPrtBottom(p_rNewUpperFrame) )
+            : aRectFnSet.GetHeight(p_rNewUpperFrame.Frame());
 
     // check for moving backward suppress threshold
     const sal_uInt16 cMoveBwdCountSuppressThreshold = 20;

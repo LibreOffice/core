@@ -73,7 +73,7 @@ void SwFlyInContentFrame::SetRefPoint( const Point& rPoint,
     aRef = rPoint;
     SetCurrRelPos( rRelAttr );
     SwRectFnSet aRectFnSet(GetAnchorFrame());
-    (Frame().*aRectFnSet->fnSetPos)( rPoint + rRelPos );
+    aRectFnSet.SetPos( Frame(), rPoint + rRelPos );
     // #i68520#
     InvalidateObjRectWithSpaces();
     if( pNotify )
