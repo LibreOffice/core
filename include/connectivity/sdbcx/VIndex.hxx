@@ -24,7 +24,6 @@
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <comphelper/IdPropArrayHelper.hxx>
-#include <cppuhelper/compbase2.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <connectivity/CommonTools.hxx>
 #include <connectivity/sdbcx/VTypeDef.hxx>

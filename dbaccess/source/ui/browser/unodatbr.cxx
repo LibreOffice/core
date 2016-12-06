@@ -100,7 +100,6 @@
 #include <comphelper/types.hxx>
 #include <connectivity/dbexception.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>

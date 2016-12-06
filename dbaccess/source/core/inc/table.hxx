@@ -30,7 +30,6 @@
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 
-#include <cppuhelper/compbase7.hxx>
 #include "apitools.hxx"
 #include "datasettings.hxx"
 #include <column.hxx>

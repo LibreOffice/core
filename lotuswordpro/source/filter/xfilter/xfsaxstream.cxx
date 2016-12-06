@@ -60,8 +60,6 @@
 #include "xfsaxstream.hxx"
 #include "xfsaxattrlist.hxx"
 
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/factory.hxx>
 
 #include <com/sun/star/document/XFilter.hpp>

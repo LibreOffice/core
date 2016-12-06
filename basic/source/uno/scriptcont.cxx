@@ -57,7 +57,6 @@
 #include <cppuhelper/factory.hxx>
 #include <com/sun/star/util/VetoException.hpp>
 #include <com/sun/star/script/XLibraryQueryExecutable.hpp>
-#include <cppuhelper/implbase1.hxx>
 #include <memory>
 
 namespace basic
