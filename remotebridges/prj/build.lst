@@ -1,2 +1,2 @@
 rb	remotebridges	: LIBXSLT:libxslt cppu cppuhelper offapi rdbmaker sal NULL
-rb	remotebridges\source\unourl_resolver	nmake	-	all	rb_urlresolv NULL
+rb	remotebridges\prj	nmake	-	all	rb_prj NULL
