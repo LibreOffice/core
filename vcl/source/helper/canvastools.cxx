@@ -362,12 +362,23 @@ namespace vcl
                             rPoint.getY() );
         }
 
+        basegfx::B2IPoint b2IPointFromPoint(Point const& rPoint)
+        {
+            return basegfx::B2IPoint(rPoint.X(), rPoint.Y());
+        }
+
         Rectangle rectangleFromB2IRectangle( const basegfx::B2IRange& rRect )
         {
             return ::Rectangle( rRect.getMinX(),
                                 rRect.getMinY(),
                                 rRect.getMaxX(),
                                 rRect.getMaxY() );
+        }
+
+        basegfx::B2IRectangle b2IRectangleFromRectangle(Rectangle const& rRect)
+        {
+            return basegfx::B2IRectangle(rRect.Left(), rRect.Top(),
+                                         rRect.Right(), rRect.Bottom());
         }
 
         basegfx::B2DVector b2DSizeFromSize( const ::Size& rSize )

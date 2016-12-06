@@ -24,6 +24,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/rendering/XColorSpace.hpp>
 #include <basegfx/numeric/ftools.hxx>
+#include <basegfx/range/b2irectangle.hxx>
 
 #include <vcl/dllapi.h>
 
@@ -165,6 +166,8 @@ namespace vcl
         // basegfx::B2I
         Point                       VCL_DLLPUBLIC pointFromB2IPoint( const basegfx::B2IPoint& );
         Rectangle                   VCL_DLLPUBLIC rectangleFromB2IRectangle( const basegfx::B2IRange& );
+        basegfx::B2IPoint           VCL_DLLPUBLIC b2IPointFromPoint(const Point&);
+        basegfx::B2IRectangle       VCL_DLLPUBLIC b2IRectangleFromRectangle(const Rectangle&);
     }
 }
 
