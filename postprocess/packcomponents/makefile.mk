@@ -74,6 +74,7 @@ my_components = \
     component/dbaccess/util/dba \
     component/dbaccess/util/dbu \
     component/dbaccess/util/sdbt \
+    component/eventattacher/source/evtatt \
     component/fileaccess/util/fileacc \
     component/formula/util/for \
     component/framework/util/fwk \
@@ -131,7 +132,6 @@ my_components = \
     deploymentgui \
     dlgprov \
     embobj \
-    evtatt \
     filterconfig1 \
     flash \
     flat \

@@ -61,6 +61,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     drawinglayer \
     svgio \
     editeng \
+    evtatt \
     file \
     fileacc \
     for \
