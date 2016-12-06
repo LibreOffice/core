@@ -59,6 +59,9 @@ CPPUNIT_TEST_SUITE_END();
 template<typename T> bool VALID_CONVERSION( T && expression )
 {
     rtl_string_unittest_invalid_conversion = false;
+    // OK to std::forward expression twice; what is relevant in both ctor calls
+    // is not the content of the passed argument (which is ignored anyway by the
+    // special RTL_STRING_UNITTEST ctors) but only its type:
     ( void ) rtl::OUString( std::forward<T>(expression) );
     ( void ) rtl::OUStringBuffer( std::forward<T>(expression) );
     return !rtl_string_unittest_invalid_conversion;
