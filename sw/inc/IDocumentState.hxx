@@ -49,6 +49,9 @@ public:
 
     virtual void SetLoaded() = 0;
 
+    virtual bool IsEnableSetModified() const = 0;
+    virtual void SetEnableSetModified(bool bEnableSetModified) = 0;
+
 protected:
     virtual ~IDocumentState() {};
 };
