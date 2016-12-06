@@ -1795,7 +1795,7 @@ void LocaleDataWrapper::outputCheckMessage( const char* pStr )
 {
     fprintf( stderr, "\n%s\n", pStr);
     fflush( stderr);
-    OSL_TRACE("%s", pStr);
+    SAL_WARN("unotools", pStr);
 }
 
 // static

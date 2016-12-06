@@ -393,6 +393,7 @@ certain functionality.
 
 @section unotools
 
+@li @c unotools
 @li @c unotools.config
 @li @c unotools.i18n
 @li @c unotools.misc

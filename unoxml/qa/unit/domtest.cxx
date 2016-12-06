@@ -173,7 +173,7 @@ struct TokenHandler
 {
     virtual ::sal_Int32 SAL_CALL getTokenFromUTF8( const uno::Sequence< ::sal_Int8 >& Identifier ) throw (uno::RuntimeException) override
     {
-        OSL_TRACE("getTokenFromUTF8() %s", reinterpret_cast<const char*>(Identifier.getConstArray()));
+        SAL_INFO("unoxml", "getTokenFromUTF8() " << reinterpret_cast<const char*>(Identifier.getConstArray()));
         return Identifier.getLength() ? Identifier[0] : 0;
     }
 

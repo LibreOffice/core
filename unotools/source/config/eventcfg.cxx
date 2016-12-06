@@ -161,7 +161,7 @@ void GlobalEventConfig_Impl::Notify( const Sequence< OUString >& )
 void GlobalEventConfig_Impl::ImplCommit()
 {
     //DF need to check it this is correct??
-    OSL_TRACE("In GlobalEventConfig_Impl::ImplCommit");
+    SAL_INFO("unotools", "In GlobalEventConfig_Impl::ImplCommit");
     EventBindingHash::const_iterator it = m_eventBindingHash.begin();
     EventBindingHash::const_iterator it_end = m_eventBindingHash.end();
     // clear the existing nodes
@@ -177,7 +177,7 @@ void GlobalEventConfig_Impl::ImplCommit()
         sNode = SETNODE_BINDINGS PATHDELIMITER "BindingType['" +
                 it->first +
                 "']" PATHDELIMITER PROPERTYNAME_BINDINGURL;
-        OSL_TRACE("writing binding for: %s",OUStringToOString(sNode , RTL_TEXTENCODING_ASCII_US ).pData->buffer);
+        SAL_INFO("unotools", "writing binding for: " << sNode);
         seqValues[ 0 ].Name = sNode;
         seqValues[ 0 ].Value <<= it->second;
         //write the data to the registry
@@ -207,7 +207,7 @@ void GlobalEventConfig_Impl::initBindingInfo()
         aBuffer.append( lEventNames[i] );
         aBuffer.append( aCommandKey );
         lMacros[0] = aBuffer.makeStringAndClear();
-        OSL_TRACE("reading binding for: %s",OUStringToOString(lMacros[0] , RTL_TEXTENCODING_ASCII_US ).pData->buffer);
+        SAL_INFO("unotools", "reading binding for: " << lMacros[0]);
         Sequence< Any > lValues = GetProperties( lMacros );
         OUString sMacroURL;
         if( lValues.getLength() > 0 )

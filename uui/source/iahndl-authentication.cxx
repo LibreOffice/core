@@ -160,7 +160,7 @@ void getRememberModes(
                 bHasRememberModePersistent = true;
                 break;
             default:
-                OSL_TRACE( "Unsupported RememberAuthentication value" );
+                SAL_WARN( "uui", "Unsupported RememberAuthentication value" << rRememberModes[i] );
                 break;
             }
         }

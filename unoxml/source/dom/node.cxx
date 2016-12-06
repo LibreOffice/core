@@ -82,8 +82,8 @@ namespace DOM
                 strlen(reinterpret_cast<const char*>(pHref)),
                 RTL_TEXTENCODING_UTF8);
 
-            OSL_TRACE("Trying to add namespace %s (prefix %s)",
-                      reinterpret_cast<const char*>(pHref), reinterpret_cast<const char*>(pPrefix));
+            SAL_INFO("unoxml", "Trying to add namespace " << reinterpret_cast<const char*>(pHref) <<
+                               "(prefix " << reinterpret_cast<const char*>(pPrefix) << ")" );
 
             Context::NamespaceMapType::iterator aIter=
                 io_rContext.maNamespaceMap.find(val);
@@ -113,8 +113,7 @@ namespace DOM
         OString prefix(pPrefix,
                        strlen(reinterpret_cast<const char*>(pPrefix)));
 
-        OSL_TRACE("getTokenWithPrefix(): prefix %s, name %s",
-                  pPrefix, pName);
+        SAL_INFO("unoxml", "getTokenWithPrefix(): prefix " << pPrefix << ", name " << pName);
 
         Context::NamespaceVectorType::value_type::const_iterator aIter;
         if( (aIter=std::find_if(rContext.maNamespaces.back().begin(),
