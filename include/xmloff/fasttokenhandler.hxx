@@ -11,7 +11,7 @@
 #define INCLUDED_XMLOFF_FASTTOKENHANDLER_HXX
 
 #include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <sax/fastattribs.hxx>
 #include <xmloff/token/tokens.hxx>
 #include <rtl/instance.hxx>
@@ -59,7 +59,7 @@ private:
 
 struct StaticTokenMap : public rtl::Static< TokenMap, StaticTokenMap > {};
 
-class XMLOFF_DLLPUBLIC FastTokenHandler : public cppu::WeakImplHelper1<
+class XMLOFF_DLLPUBLIC FastTokenHandler : public cppu::WeakImplHelper<
     css::xml::sax::XFastTokenHandler >,
     public sax_fastparser::FastTokenHandlerBase
 {

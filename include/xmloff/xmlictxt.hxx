@@ -27,14 +27,14 @@
 #include <com/sun/star/xml/sax/XFastContextHandler.hpp>
 #include <tools/ref.hxx>
 #include <rtl/ustring.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <memory>
 
 class SvXMLNamespaceMap;
 class SvXMLImport;
 
-class XMLOFF_DLLPUBLIC SvXMLImportContext : public ::cppu::WeakImplHelper1< ::css::xml::sax::XFastContextHandler >
+class XMLOFF_DLLPUBLIC SvXMLImportContext : public cppu::WeakImplHelper< css::xml::sax::XFastContextHandler >
 {
     friend class SvXMLImport;
 

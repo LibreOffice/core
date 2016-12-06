@@ -21,7 +21,7 @@
 
 #include <vector>
 #include <rtl/byteseq.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
@@ -39,7 +39,7 @@ namespace xmlscript
 
 
 class XMLSCRIPT_DLLPUBLIC XMLElement
-    : public ::cppu::WeakImplHelper1< css::xml::sax::XAttributeList >
+    : public cppu::WeakImplHelper< css::xml::sax::XAttributeList >
 {
 public:
     inline XMLElement( OUString const & name )
