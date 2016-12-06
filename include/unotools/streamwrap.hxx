@@ -27,7 +27,7 @@
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/io/XTruncate.hpp>
 #include <com/sun/star/io/XStream.hpp>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implbase1.hxx>
 
 class SvStream;
@@ -37,11 +37,13 @@ namespace utl
 
 //= OInputStreamWrapper
 
-typedef ::cppu::WeakImplHelper1 <   css::io::XInputStream
-                                > InputStreamWrapper_Base;
-// needed for some compilers
+// don't export to avoid duplicate WeakImplHelper definitions with MSVC
+class SAL_DLLPUBLIC_TEMPLATE OInputStreamWrapper_BASE
+    : public cppu::WeakImplHelper<css::io::XInputStream>
+{};
+
 /// helper class for wrapping an SvStream into an com.sun.star.io::XInputStream
-class UNOTOOLS_DLLPUBLIC OInputStreamWrapper : public InputStreamWrapper_Base
+class UNOTOOLS_DLLPUBLIC OInputStreamWrapper : public OInputStreamWrapper_BASE
 {
 protected:
     ::osl::Mutex    m_aMutex;
@@ -73,12 +75,11 @@ protected:
 
 //= OSeekableInputStreamWrapper
 
-typedef ::cppu::ImplHelper1 <   css::io::XSeekable
-                            >   OSeekableInputStreamWrapper_Base;
 /** helper class for wrapping an SvStream into an com.sun.star.io::XInputStream
     which is seekable (i.e. supports the com.sun.star.io::XSeekable interface).
 */
-class UNOTOOLS_DLLPUBLIC OSeekableInputStreamWrapper : public ::cppu::ImplInheritanceHelper1 < OInputStreamWrapper, css::io::XSeekable >
+class UNOTOOLS_DLLPUBLIC OSeekableInputStreamWrapper
+        : public cppu::ImplInheritanceHelper< OInputStreamWrapper, css::io::XSeekable >
 {
 protected:
     OSeekableInputStreamWrapper() {}
@@ -94,9 +95,7 @@ public:
 
 //= OOutputStreamWrapper
 
-typedef ::cppu::WeakImplHelper1<css::io::XOutputStream> OutputStreamWrapper_Base;
-    // needed for some compilers
-class OOutputStreamWrapper : public OutputStreamWrapper_Base
+class OOutputStreamWrapper : public cppu::WeakImplHelper<css::io::XOutputStream>
 {
 public:
     UNOTOOLS_DLLPUBLIC OOutputStreamWrapper(SvStream& _rStream);
@@ -144,7 +143,11 @@ private:
     virtual sal_Int64 SAL_CALL getLength(  ) throw (css::io::IOException, css::uno::RuntimeException, std::exception) override;
 };
 
-class UNOTOOLS_DLLPUBLIC OStreamWrapper : public ::cppu::ImplInheritanceHelper3 < OSeekableInputStreamWrapper, css::io::XStream, css::io::XOutputStream, css::io::XTruncate >
+class UNOTOOLS_DLLPUBLIC OStreamWrapper
+        : public cppu::ImplInheritanceHelper<OSeekableInputStreamWrapper,
+                                             css::io::XStream,
+                                             css::io::XOutputStream,
+                                             css::io::XTruncate>
 {
 public:
     OStreamWrapper(SvStream& _rStream);
