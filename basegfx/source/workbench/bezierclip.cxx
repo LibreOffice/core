@@ -1903,7 +1903,6 @@ int main(int argc, const char *argv[])
 
     // test full bezier clipping
     const double bezierClip_xOffset( curr_Offset );
-    curr_Offset += 20;
     cout << endl << endl << "# bezier clip testing" << endl
          << "plot [t=0:1] ";
     for( i=0; i<sizeof(someCurves)/sizeof(Bezier); ++i )
