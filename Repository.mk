@@ -172,6 +172,7 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
     vbaswobj \
     msforms \
     vclcanvas \
+    uuresolver \
     writerfilter_debug \
 ))
 

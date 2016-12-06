@@ -47,7 +47,7 @@ my_components = \
     component/io/source/stm/streams \
     component/io/source/TextInputStream/textinstream \
     component/io/source/TextOutputStream/textoutstream \
-    uuresolver
+    component/remotebridges/unourl_resolver/uuresolver
 
 .INCLUDE: settings.mk
 .INCLUDE: target.mk

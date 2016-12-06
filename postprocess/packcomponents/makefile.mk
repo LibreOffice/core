@@ -46,7 +46,6 @@ my_components = \
     proxyfac \
     reflection \
     stocservices \
-    uuresolver \
     abp \
     analysis \
     avmedia \
@@ -93,6 +92,7 @@ my_components = \
     component/reportdesign/util/rpt \
     component/reportdesign/util/rptui \
     component/vbahelper/util/msforms \
+    component/remotebridges/source/unourl_resolver/uuresolver \
     component/sax/source/expatwrap/expwrap \
     component/sax/source/fastparser/fastsax \
     component/sd/util/sd \
