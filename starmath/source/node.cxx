@@ -903,7 +903,7 @@ double Det(const Point &rHeading1, const Point &rHeading2)
 bool IsPointInLine(const Point &rPoint1,
                    const Point &rPoint2, const Point &rHeading2)
 {
-    OSL_ENSURE(rHeading2 != Point(), "Sm : 0 vector");
+    assert(rHeading2 != Point());
 
     bool bRes = false;
     static const double eps = 5.0 * DBL_EPSILON;
@@ -928,8 +928,8 @@ sal_uInt16 GetLineIntersectionPoint(Point &rResult,
                                 const Point& rPoint1, const Point &rHeading1,
                                 const Point& rPoint2, const Point &rHeading2)
 {
-    OSL_ENSURE(rHeading1 != Point(), "Sm : 0 vector");
-    OSL_ENSURE(rHeading2 != Point(), "Sm : 0 vector");
+    assert(rHeading1 != Point());
+    assert(rHeading2 != Point());
 
     sal_uInt16 nRes = 1;
     static const double eps = 5.0 * DBL_EPSILON;
