@@ -28,7 +28,7 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <osl/mutex.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <memory>
 
@@ -45,7 +45,7 @@ namespace utl
         <code>AccessibleRelationSet</code> service.
 */
 class UNOTOOLS_DLLPUBLIC AccessibleRelationSetHelper
-    :   public cppu::WeakImplHelper1< css::accessibility::XAccessibleRelationSet >
+    :   public cppu::WeakImplHelper< css::accessibility::XAccessibleRelationSet >
 {
 public:
     //=====  internal  ========================================================
