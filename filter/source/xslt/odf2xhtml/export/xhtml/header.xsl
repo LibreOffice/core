@@ -52,7 +52,6 @@
 	<!-- ************** -->
 	<!-- *** header *** -->
 	<!-- ************** -->
-
 	<xsl:template name="create-header">
 		<xsl:param name="globalData" />
 
@@ -85,7 +84,7 @@
 	<xsl:call-template name='create-page-layout'>
 		<xsl:with-param name="globalData" select="$globalData" />
 	</xsl:call-template>
-<xsl:text>table { border-collapse:collapse; border-spacing:0; empty-cells:show }
+<xsl:text>table { border-collapse:collapse; border-spacing:0; empty-cells:show; }
 	</xsl:text>
 	<xsl:choose>
 		<xsl:when test="/*/office:body/office:spreadsheet"><xsl:text>td, th { vertical-align:top; font-size:10pt;}
@@ -93,13 +92,13 @@
 		<xsl:otherwise><xsl:text>td, th { vertical-align:top; font-size:12pt;}
 	</xsl:text></xsl:otherwise>
 	</xsl:choose>
-<xsl:text>h1, h2, h3, h4, h5, h6 { clear:both }
+<xsl:text>h1, h2, h3, h4, h5, h6 { clear:both; }
 	</xsl:text>
 <xsl:text>ol, ul { margin:0; padding:0;}
 	</xsl:text>
 <xsl:text>li { list-style: none; margin:0; padding:0;}
 	</xsl:text>
-<xsl:comment> "li span.odfLiEnd" - IE 7 issue</xsl:comment>
+  /* "li span.odfLiEnd" - IE 7 issue */
 <xsl:text>
 	</xsl:text>
 <xsl:text>li span. { clear: both; line-height:0; width:0; height:0; margin:0; padding:0; }
@@ -129,8 +128,8 @@
 					
 			</xsl:for-each>
 			<!-- Otherwise all styles have been processed and the empty styles have to be given out -->
-				<xsl:comment> ODF styles with no properties representable as CSS </xsl:comment><xsl:text>
-	</xsl:text><xsl:for-each select="$globalData/all-styles/style[final-properties = '']"><xsl:value-of select="concat('.', @style:name, ' ')"/></xsl:for-each> { }
+				/* ODF styles with no properties representable as CSS  */<xsl:text>
+	</xsl:text><xsl:for-each select="$globalData/all-styles/style[final-properties = '']"><xsl:value-of select="concat('.', @style:name, ' ')"/></xsl:for-each>
 	</xsl:template>
 
 	<!-- Creating CSS page layout based on first office master style -->
@@ -141,7 +140,7 @@
 		<xsl:variable name="masterPageNames">
             <!-- set context to styles.xml -->
             <xsl:for-each select="$globalData/all-doc-styles/style">
-                <!-- Loop over every style:style containing a @style:master-page-name attribute -->            
+                <!-- Loop over every style:style containing a @style:master-page-name attribute -->
                 <xsl:for-each select="key('masterPage','count')">
                         <!-- set context to styles.xml -->
                         <xsl:for-each select="/*/office:body">
@@ -408,7 +407,7 @@
 		<link rel="transformation" href="http://xml.openoffice.org/odf2xhtml/rdf-extract.xsl" />
 		-->
 
-		<!-- base URL of document for resolving relative links  
+		<!-- base URL of document for resolving relative links
 		NOTE: CHROME has a problem, with relative references as from content table, referencing to root directory instead of document
 		<xsl:element name="base">
 			<xsl:attribute name="href">-->
