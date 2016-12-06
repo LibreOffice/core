@@ -81,8 +81,7 @@
 
 				</all-styles>
 	-->
-
-
+	
 	<xsl:template name="collect-global-odf-properties">
 		<!-- to access the variable as a node-set by XPATH expressions, it is necessary to convert it
 			 from a result-tree-fragment (RTF) to a node set by a in a XSLT 1.0 non standarized function -->
