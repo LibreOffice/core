@@ -750,6 +750,7 @@ bool GtkSalMenu::TakeFocus()
 
 static void MenuBarReturnFocus(GtkMenuShell*, gpointer menu)
 {
+    GtkSalFrame::UpdateLastInputEventTime(gtk_get_current_event_time());
     GtkSalMenu* pMenu = static_cast<GtkSalMenu*>(menu);
     pMenu->ReturnFocus();
 }

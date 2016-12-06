@@ -2039,8 +2039,13 @@ guint32 GtkSalFrame::GetLastInputEventTime()
     return nLastUserInputTime;
 }
 
-static void UpdateLastInputEventTime(guint32 nUserInputTime)
+void GtkSalFrame::UpdateLastInputEventTime(guint32 nUserInputTime)
 {
+    //gtk3 can generate a synthetic crossing event with a useless 0
+    //(GDK_CURRENT_TIME) timestamp on showing a menu from the main
+    //menubar, which is unhelpful, so ignore the 0 timestamps
+    if (nUserInputTime == GDK_CURRENT_TIME)
+        return;
     nLastUserInputTime = nUserInputTime;
 }
 

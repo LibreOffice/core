@@ -546,6 +546,7 @@ public:
         guint* pGdkKeyCode, GdkModifierType *pGdkModifiers);
 
     static guint32              GetLastInputEventTime();
+    static void                 UpdateLastInputEventTime(guint32 nUserInputTime);
 };
 
 #define OOO_TYPE_FIXED ooo_fixed_get_type()
