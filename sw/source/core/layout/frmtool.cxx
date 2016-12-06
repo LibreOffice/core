@@ -105,9 +105,9 @@ SwFrameNotify::~SwFrameNotify()
     SwRectFnSet aRectFnSet(mpFrame);
     const bool bAbsP = aRectFnSet.PosDiff(maFrame, mpFrame->Frame());
     const bool bChgWidth =
-            (maFrame.*aRectFnSet->fnGetWidth)() != (mpFrame->Frame().*aRectFnSet->fnGetWidth)();
+            aRectFnSet.GetWidth(maFrame) != aRectFnSet.GetWidth(mpFrame->Frame());
     const bool bChgHeight =
-            (maFrame.*aRectFnSet->fnGetHeight)()!=(mpFrame->Frame().*aRectFnSet->fnGetHeight)();
+            aRectFnSet.GetHeight(maFrame)!=aRectFnSet.GetHeight(mpFrame->Frame());
     const bool bChgFlyBasePos = mpFrame->IsTextFrame() &&
        ( ( mnFlyAnchorOfst != static_cast<SwTextFrame*>(mpFrame)->GetBaseOfstForFly( true ) ) ||
          ( mnFlyAnchorOfstNoWrap != static_cast<SwTextFrame*>(mpFrame)->GetBaseOfstForFly( false ) ) );
@@ -147,8 +147,8 @@ SwFrameNotify::~SwFrameNotify()
             }
             else if ( !pFlow->HasFollow() )
             {
-                long nOldHeight = (maFrame.*aRectFnSet->fnGetHeight)();
-                long nNewHeight = (mpFrame->Frame().*aRectFnSet->fnGetHeight)();
+                long nOldHeight = aRectFnSet.GetHeight(maFrame);
+                long nNewHeight = aRectFnSet.GetHeight(mpFrame->Frame());
                 if( (nOldHeight > nNewHeight) || (!nOldHeight && nNewHeight) )
                     pFlow->CheckKeep();
             }
@@ -174,7 +174,7 @@ SwFrameNotify::~SwFrameNotify()
             // #104100# - correct condition for setting retouche
             // flag for vertical layout.
             if( mpFrame->IsRetoucheFrame() &&
-                (maFrame.*aRectFnSet->fnTopDist)( (mpFrame->Frame().*aRectFnSet->fnGetTop)() ) > 0 )
+                aRectFnSet.TopDist( maFrame, aRectFnSet.GetTop(mpFrame->Frame()) ) > 0 )
             {
                 mpFrame->SetRetouche();
             }
@@ -191,9 +191,9 @@ SwFrameNotify::~SwFrameNotify()
 
     //For each resize of the background graphics is a repaint necessary.
     const bool bPrtWidth =
-            (maPrt.*aRectFnSet->fnGetWidth)() != (mpFrame->Prt().*aRectFnSet->fnGetWidth)();
+            aRectFnSet.GetWidth(maPrt) != aRectFnSet.GetWidth(mpFrame->Prt());
     const bool bPrtHeight =
-            (maPrt.*aRectFnSet->fnGetHeight)()!=(mpFrame->Prt().*aRectFnSet->fnGetHeight)();
+            aRectFnSet.GetHeight(maPrt)!=aRectFnSet.GetHeight(mpFrame->Prt());
     if ( bPrtWidth || bPrtHeight )
     {
         //UUUU
@@ -456,11 +456,11 @@ SwLayNotify::~SwLayNotify()
             if ( pLay->IsRowFrame() )
             {
                 bInvaPercent = true;
-                long nNew = (pLay->Prt().*aRectFnSet->fnGetHeight)();
-                if( nNew != (maPrt.*aRectFnSet->fnGetHeight)() )
+                long nNew = aRectFnSet.GetHeight(pLay->Prt());
+                if( nNew != aRectFnSet.GetHeight(maPrt) )
                      static_cast<SwRowFrame*>(pLay)->AdjustCells( nNew, true);
-                if( (pLay->Prt().*aRectFnSet->fnGetWidth)()
-                    != (maPrt.*aRectFnSet->fnGetWidth)() )
+                if( aRectFnSet.GetWidth(pLay->Prt())
+                    != aRectFnSet.GetWidth(maPrt) )
                      static_cast<SwRowFrame*>(pLay)->AdjustCells( 0, false );
             }
             else
@@ -478,8 +478,8 @@ SwLayNotify::~SwLayNotify()
                     if ( pLay->Lower() )
                     {
                         bLow = !pLay->Lower()->IsColumnFrame() ||
-                            (pLay->Lower()->Frame().*aRectFnSet->fnGetHeight)()
-                             != (pLay->Prt().*aRectFnSet->fnGetHeight)();
+                            aRectFnSet.GetHeight(pLay->Lower()->Frame())
+                             != aRectFnSet.GetHeight(pLay->Prt());
                     }
                     else
                         bLow = false;
@@ -808,7 +808,7 @@ SwContentNotify::~SwContentNotify()
         }
     }
 
-    const bool bFirst = (maFrame.*aRectFnSet->fnGetWidth)() == 0;
+    const bool bFirst = aRectFnSet.GetWidth(maFrame) == 0;
 
     if ( pCnt->IsNoTextFrame() )
     {
@@ -1178,10 +1178,10 @@ static void lcl_SetPos( SwFrame&             _rNewFrame,
                  const SwLayoutFrame& _rLayFrame )
 {
     SwRectFnSet aRectFnSet(&_rLayFrame);
-    (_rNewFrame.Frame().*aRectFnSet->fnSetPos)( (_rLayFrame.Frame().*aRectFnSet->fnGetPos)() );
+    aRectFnSet.SetPos( _rNewFrame.Frame(), aRectFnSet.GetPos(_rLayFrame.Frame()) );
     // move position by one SwTwip in text flow direction in order to get
     // notifications for a new calculated position after its formatting.
-    if ( aRectFnSet.bVert )
+    if ( aRectFnSet.IsVert() )
         _rNewFrame.Frame().Pos().X() -= 1;
     else
         _rNewFrame.Frame().Pos().Y() += 1;
@@ -2568,7 +2568,7 @@ void RestoreContent( SwFrame *pSav, SwLayoutFrame *pParent, SwFrame *pSibling )
     SwFrame* pLast;
     do
     {   pSav->mpUpper = pParent;
-        nGrowVal += (pSav->Frame().*aRectFnSet->fnGetHeight)();
+        nGrowVal += aRectFnSet.GetHeight(pSav->Frame());
         pSav->InvalidateAll_();
 
         // register Flys, if TextFrames than also invalidate appropriately
