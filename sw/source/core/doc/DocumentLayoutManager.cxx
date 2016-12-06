@@ -445,28 +445,14 @@ SwFrameFormat *DocumentLayoutManager::CopyLayoutFormat(
     {
         OSL_ENSURE( RES_DRAWFRMFMT == rSource.Which(), "Neither Fly nor Draw." );
         // #i52780# - Note: moving object to visible layer not needed.
-        const SwDrawContact* pSourceContact = static_cast<const SwDrawContact *>(rSource.FindContactObj());
+        rSource.CallSwClientNotify(sw::DrawFormatLayoutCopyHint(static_cast<SwDrawFrameFormat&>(*pDest), m_rDoc));
 
-        SwDrawContact* pContact = new SwDrawContact( static_cast<SwDrawFrameFormat*>(pDest),
-                                m_rDoc.CloneSdrObj( *pSourceContact->GetMaster(),
-                                        m_rDoc.IsCopyIsMove() && &m_rDoc == pSrcDoc ) );
-        // #i49730# - notify draw frame format that position attributes are
-        // already set, if the position attributes are already set at the
-        // source draw frame format.
-        if ( dynamic_cast<const SwDrawFrameFormat*>( pDest) !=  nullptr &&
-             dynamic_cast<const SwDrawFrameFormat*>( &rSource) !=  nullptr &&
-             static_cast<const SwDrawFrameFormat&>(rSource).IsPosAttrSet() )
-        {
-            static_cast<SwDrawFrameFormat*>(pDest)->PosAttrSet();
-        }
-
-        if( pDest->GetAnchor() == rNewAnchor )
+        if(pDest->GetAnchor() == rNewAnchor)
         {
             // Do *not* connect to layout, if a <MakeFrames> will not be called.
-            if ( bMakeFrames )
-            {
-                pContact->ConnectToLayout( &rNewAnchor );
-            }
+            if(bMakeFrames)
+                pDest->CallSwClientNotify(sw::DrawFrameFormatHint(sw::DrawFrameFormatHintId::MAKE_FRAMES));
+
         }
         else
             pDest->SetFormatAttr( rNewAnchor );
