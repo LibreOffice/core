@@ -43,7 +43,7 @@ using namespace com::sun::star::registry;
 //
 //============================================================================
 
-extern "C" void SAL_CALL
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL
 component_getImplementationEnvironment(sal_Char const ** pEnvTypeName,
                        uno_Environment **)
 {
@@ -56,7 +56,8 @@ component_getImplementationEnvironment(sal_Char const ** pEnvTypeName,
 //
 //============================================================================
 
-extern "C" void * SAL_CALL component_getFactory(sal_Char const * pImplName,
+extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL
+component_getFactory(sal_Char const * pImplName,
                         void * pServiceManager,
                         void *)
 {

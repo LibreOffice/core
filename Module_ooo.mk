@@ -67,6 +67,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     udkapi \
     unotools \
     unoxml \
+    uui \
     vbahelper \
     vcl \
     wizards \

@@ -115,6 +115,7 @@ my_components = \
     component/sw/util/swd \
     component/sw/util/vbaswobj \
     component/unotools/util/utl \
+    component/uui/util/uui \
     component/toolkit/util/ootk \
     component/unoxml/source/rdf/unordf \
     component/unoxml/source/service/unoxml \
@@ -186,7 +187,6 @@ my_components = \
     ucptdoc1 \
     updatefeed \
     updchk \
-    uui \
     vbaevents \
     vbaobj \
     xmlfa \
