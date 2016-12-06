@@ -25,7 +25,7 @@
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <cppuhelper/weakref.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <unordered_map>
 #include <vector>
 
@@ -63,7 +63,7 @@ enum class GlobalEventId
 class GlobalEventConfig_Impl;
 
 class UNOTOOLS_DLLPUBLIC GlobalEventConfig:
-        public ::cppu::WeakImplHelper2 < css::document::XEventsSupplier, css::container::XNameReplace >
+        public cppu::WeakImplHelper< css::document::XEventsSupplier, css::container::XNameReplace >
 {
     public:
         GlobalEventConfig( );
