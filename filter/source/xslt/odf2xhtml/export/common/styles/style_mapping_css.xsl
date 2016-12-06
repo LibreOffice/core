@@ -344,12 +344,12 @@
 		</xsl:variable>
 		<xsl:variable name="minimalBorderWidth" select="0.0133 * $multiplier"/>
 		<xsl:choose>
-			<xsl:when test="number($borderWidthByCentimeter) &lt; $minimalBorderWidth">
-				<xsl:value-of select="$minimalBorderWidth"/>
+			<xsl:when test="$borderWidthByCentimeter &lt; $minimalBorderWidth">
+				<xsl:value-of select="translate($minimalBorderWidth,',','.')"/>
 				<xsl:text>cm</xsl:text>
 			</xsl:when>
 			<xsl:otherwise>
-				<xsl:value-of select="$borderWidthByCentimeter"/>
+				<xsl:value-of select="translate($borderWidthByCentimeter,',','.')"/>
 				<xsl:text>cm</xsl:text>
 			</xsl:otherwise>
 		</xsl:choose>
