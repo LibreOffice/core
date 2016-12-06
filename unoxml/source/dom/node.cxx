@@ -82,9 +82,6 @@ namespace DOM
                 strlen(reinterpret_cast<const char*>(pHref)),
                 RTL_TEXTENCODING_UTF8);
 
-            SAL_INFO("unoxml", "Trying to add namespace " << reinterpret_cast<const char*>(pHref) <<
-                               "(prefix " << reinterpret_cast<const char*>(pPrefix) << ")" );
-
             Context::NamespaceMapType::iterator aIter=
                 io_rContext.maNamespaceMap.find(val);
             if( aIter != io_rContext.maNamespaceMap.end() )
