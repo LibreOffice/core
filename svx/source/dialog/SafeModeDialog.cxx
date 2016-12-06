@@ -90,6 +90,7 @@ SafeModeDialog::SafeModeDialog(vcl::Window* pParent)
 
     mpRadioRestore->SetClickHdl(LINK(this, SafeModeDialog, RadioBtnHdl));
     mpRadioConfigure->SetClickHdl(LINK(this, SafeModeDialog, RadioBtnHdl));
+    mpRadioDeinstall->SetClickHdl(LINK(this, SafeModeDialog, RadioBtnHdl));
     mpRadioReset->SetClickHdl(LINK(this, SafeModeDialog, RadioBtnHdl));
 
     mpBtnContinue->SetClickHdl(LINK(this, SafeModeDialog, DialogBtnHdl));
