@@ -93,6 +93,7 @@ public:
 
     Wallpaper&      operator=( const Wallpaper& rWallpaper );
     Wallpaper&      operator=( Wallpaper&& rWallpaper );
+
     bool            operator==( const Wallpaper& rWallpaper ) const;
     bool            operator!=( const Wallpaper& rWallpaper ) const
                         { return !(Wallpaper::operator==( rWallpaper )); }
