@@ -686,9 +686,9 @@ ScRange WorksheetGlobals::getCellRangeFromRectangle( const awt::Rectangle& rRect
             the rectangle ends exactly between two columns or rows. */
         awt::Point aEndPos = getCellPosition( aEndAddr.Col(), aEndAddr.Row() );
         if( bMultiCols && (aBotRight.X <= aEndPos.X) )
-            aEndAddr.SetCol( aEndAddr.Col() - 1 );
+            aEndAddr.IncCol(-1);
         if( bMultiRows && (aBotRight.Y <= aEndPos.Y) )
-            aEndAddr.SetRow( aEndAddr.Row() - 1 );
+            aEndAddr.IncRow(-1);
     }
     return ScRange( aStartAddr.Col(), aStartAddr.Row(), getSheetIndex(),
                     aEndAddr.Col(), aEndAddr.Row(), getSheetIndex() );
