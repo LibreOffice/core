@@ -163,35 +163,13 @@ void SafeModeDialog::dispose()
 
 void SafeModeDialog::enableDisableWidgets()
 {
-    if (!maBackupFileHelper.isPopPossible())
-    {
-        mpCBCheckProfilesafeConfig->Disable();
-    }
+    mpCBCheckProfilesafeConfig->Enable(maBackupFileHelper.isPopPossible());
+    mpCBCheckProfilesafeExtensions->Enable(maBackupFileHelper.isPopPossibleExtensionInfo());
+    mpCBDisableAllExtensions->Enable(comphelper::BackupFileHelper::isTryDisableAllExtensionsPossible());
+    mpCBDeinstallUserExtensions->Enable(comphelper::BackupFileHelper::isTryDeinstallUserExtensionsPossible());
+    mpCBDeinstallAllExtensions->Enable(comphelper::BackupFileHelper::isTryDeinstallAllExtensionsPossible());
+    mpCBResetCustomizations->Enable(comphelper::BackupFileHelper::isTryResetCustomizationsPossible());
 
-    if (!maBackupFileHelper.isPopPossibleExtensionInfo())
-    {
-        mpCBCheckProfilesafeExtensions->Disable();
-    }
-
-    if (!comphelper::BackupFileHelper::isTryDisableAllExtensionsPossible())
-    {
-        mpCBDisableAllExtensions->Disable();
-    }
-
-    if (!comphelper::BackupFileHelper::isTryDeinstallUserExtensionsPossible())
-    {
-        mpCBDeinstallUserExtensions->Disable();
-    }
-
-    if (!comphelper::BackupFileHelper::isTryDeinstallAllExtensionsPossible())
-    {
-        mpCBDeinstallAllExtensions->Disable();
-    }
-
-    if (!comphelper::BackupFileHelper::isTryResetCustomizationsPossible())
-    {
-        mpCBResetCustomizations->Disable();
-    }
     // no disable of mpCBResetWholeUserProfile, always possible (as last choice)
 }
 
