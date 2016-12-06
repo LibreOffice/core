@@ -77,8 +77,8 @@ DocumentFocusListener::notifyEvent( const AccessibleEventObject& aEvent )
                 Reference< XAccessible > xAccessible( getAccessible(aEvent) );
                 detachRecursive(xAccessible);
                 attachRecursive(xAccessible);
+                SAL_INFO("vcl", "Invalidate all children called" );
             }
-            SAL_WARN("vcl", "Invalidate all children called" );
             break;
 
             default:
