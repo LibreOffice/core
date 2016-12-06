@@ -238,15 +238,15 @@ sal_uInt64 Scheduler::CalculateMinimumTimeout( bool &bHasActiveIdles )
                     sal_uInt64 nOldMinPeriod = nMinPeriod;
                     nMinPeriod = pSchedulerData->mpScheduler->UpdateMinPeriod(
                                                                 nOldMinPeriod, nTime );
-                    SAL_INFO("vcl.schedule", "Have active timer " <<
+                    SAL_INFO("vcl.schedule", "Have active timer '" <<
                              pSchedulerData->GetDebugName() <<
-                             "update min period from " << nOldMinPeriod <<
+                             "' update min period from " << nOldMinPeriod <<
                              " to " << nMinPeriod);
                 }
                 else
                 {
-                    SAL_INFO("vcl.schedule", "Have active idle " <<
-                             pSchedulerData->GetDebugName());
+                    SAL_INFO("vcl.schedule", "Have active idle '" <<
+                             pSchedulerData->GetDebugName() << "'");
                     bHasActiveIdles = true;
                 }
             }
