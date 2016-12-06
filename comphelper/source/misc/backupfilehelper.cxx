@@ -557,10 +557,12 @@ namespace
     {
     private:
         ExtensionInfoEntryVector    maEntries;
+        OUString maRegPath;
 
     public:
         ExtensionInfo()
-            : maEntries()
+            : maEntries(),
+              maRegPath("/registry/com.sun.star.comp.deployment.bundle.PackageRegistryBackend/backenddb.xml")
         {
         }
 
@@ -680,21 +682,27 @@ namespace
         }
 
     public:
-        void createUsingExtensionRegistryEntriesFromXML(
-            const OUString& rUserConfigWorkURL,
-            bool bUser)
+        void createUserExtensionRegistryEntriesFromXML(const OUString& rUserConfigWorkURL)
         {
-            // This is looked up for 'user' in the user|shared|bundled deployed Extensions,
-            // only the user ones seem to be able to be de/activated. The ones for user are in
-            // uno_packages/cache while the others are in /extensions/shared.
-            // This also means that all user-deployed Extensions can probably be uninstalled
-            // in safe mode by deleting the uno_packages directory and the shared|bundled
-            // ones by deleting the extensions directory.
-            const OUString aRegPath("/registry/com.sun.star.comp.deployment.bundle.PackageRegistryBackend/backenddb.xml");
-            const OUString aExtensionsReg(rUserConfigWorkURL + "/extensions/shared" + aRegPath);
-            const OUString aUnoPackageReg(rUserConfigWorkURL + "/uno_packages/cache" + aRegPath);
-            const OUString aPath(bUser ? aUnoPackageReg : aExtensionsReg);
+            const OUString aPath(rUserConfigWorkURL + "/uno_packages/cache" + maRegPath);
+            createExtensionRegistryEntriesFromXML(aPath);
+        }
 
+        void createSharedExtensionRegistryEntriesFromXML(const OUString& rUserConfigWorkURL)
+        {
+            const OUString aPath(rUserConfigWorkURL + "/extensions/shared" + maRegPath);
+            createExtensionRegistryEntriesFromXML(aPath);
+        }
+
+        void createBundledExtensionRegistryEntriesFromXML(const OUString& rUserConfigWorkURL)
+        {
+            const OUString aPath(rUserConfigWorkURL + "/extensions/bundled" + maRegPath);
+            createExtensionRegistryEntriesFromXML(aPath);
+        }
+
+
+        void createExtensionRegistryEntriesFromXML(const OUString& aPath)
+        {
             if (fileExists(aPath))
             {
                 uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
@@ -1986,7 +1994,7 @@ namespace comphelper
         // extensions are not loaded from XExtensionManager
         class ExtensionInfo aExtensionInfo;
 
-        aExtensionInfo.createUsingExtensionRegistryEntriesFromXML(maUserConfigWorkURL, true);
+        aExtensionInfo.createUserExtensionRegistryEntriesFromXML(maUserConfigWorkURL);
 
         return aExtensionInfo.areThereEnabledExtensions();
     }
@@ -2000,7 +2008,7 @@ namespace comphelper
         const ExtensionInfoEntryVector aToBeEnabled{};
         ExtensionInfoEntryVector aToBeDisabled;
 
-        aCurrentExtensionInfo.createUsingExtensionRegistryEntriesFromXML(maUserConfigWorkURL, true);
+        aCurrentExtensionInfo.createUserExtensionRegistryEntriesFromXML(maUserConfigWorkURL);
 
         const ExtensionInfoEntryVector& rCurrentVector = aCurrentExtensionInfo.getExtensionInfoEntryVector();
 
@@ -2020,7 +2028,7 @@ namespace comphelper
         // check if there are User Extensions installed.
         class ExtensionInfo aExtensionInfo;
 
-        aExtensionInfo.createUsingExtensionRegistryEntriesFromXML(maUserConfigWorkURL, true);
+        aExtensionInfo.createUserExtensionRegistryEntriesFromXML(maUserConfigWorkURL);
 
         return !aExtensionInfo.getExtensionInfoEntryVector().empty();
     }
@@ -2036,7 +2044,7 @@ namespace comphelper
         // check if there are shared Extensions installed
         class ExtensionInfo aExtensionInfo;
 
-        aExtensionInfo.createUsingExtensionRegistryEntriesFromXML(maUserConfigWorkURL, false);
+        aExtensionInfo.createSharedExtensionRegistryEntriesFromXML(maUserConfigWorkURL);
 
         return !aExtensionInfo.getExtensionInfoEntryVector().empty();
     }
@@ -2045,6 +2053,22 @@ namespace comphelper
     {
         // reset shared extension info
         deleteDirRecursively(maUserConfigWorkURL + "/extensions/shared");
+    }
+
+    bool BackupFileHelper::isTryResetBundledExtensionsPossible()
+    {
+        // check if there are shared Extensions installed
+        class ExtensionInfo aExtensionInfo;
+
+        aExtensionInfo.createBundledExtensionRegistryEntriesFromXML(maUserConfigWorkURL);
+
+        return !aExtensionInfo.getExtensionInfoEntryVector().empty();
+    }
+
+    void BackupFileHelper::tryResetBundledExtensions()
+    {
+        // reset shared extension info
+        deleteDirRecursively(maUserConfigWorkURL + "/extensions/bundled");
     }
 
     const std::vector< OUString >& BackupFileHelper::getCustomizationDirNames()
@@ -2548,7 +2572,7 @@ namespace comphelper
                             // get current extension info, but from XML config files
                             ExtensionInfo aCurrentExtensionInfo;
 
-                            aCurrentExtensionInfo.createUsingExtensionRegistryEntriesFromXML(maUserConfigWorkURL, true);
+                            aCurrentExtensionInfo.createUserExtensionRegistryEntriesFromXML(maUserConfigWorkURL);
 
                             // now we have loaded last_working (aLoadedExtensionInfo) and
                             // current (aCurrentExtensionInfo) ExtensionInfo and may react on
