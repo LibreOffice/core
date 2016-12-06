@@ -2732,7 +2732,7 @@ IMPL_LINK_NOARG( SvtFileDialog, Split_Hdl, Splitter*, void )
     _pSplitter->SetPosPixel( Point( placeSize.Width(), _pSplitter->GetPosPixel().Y() ) );
 }
 
-Image SvtFileDialog::GetButtonImage( sal_uInt16 _nButtonId ) const
+Image SvtFileDialog::GetButtonImage( sal_uInt16 _nButtonId )
 {
     return Image(BitmapEx(SvtResId(_nButtonId)));
 }
