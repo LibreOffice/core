@@ -19,7 +19,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/wmf.hxx>
 #include <unistd.h>
-#include <signal.h>
+#include <stdlib.h>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -27,6 +27,8 @@ using namespace cppu;
 
 extern "C" int LLVMFuzzerInitialize(int *argc, char ***argv)
 {
+    setenv("SAL_USE_VCLPLUGIN", "svp", 1);
+
     osl_setCommandArgs(*argc, *argv);
 
     tools::extendApplicationEnvironment();
