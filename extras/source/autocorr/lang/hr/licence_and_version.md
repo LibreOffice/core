@@ -14,4 +14,4 @@ https://github.com/Kruno-S/acor_hr-HR-LibreOffice
 
 ---
 
-Inačica: 2016-10-16
+Inačica: 2016-12-06

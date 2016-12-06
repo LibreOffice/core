@@ -1,6 +1,6 @@
 <!-- dodano u DOCUMENTLIST.XML datoteku -->
 
-<!-- dodano u inačici 2016-10-15
+<!-- dodano u inačici 2016-10-15  -->
   <block-list:block block-list:abbreviated-name="%o" block-list:name="‰"/>
   <block-list:block block-list:abbreviated-name="%oo" block-list:name="‱"/>
 

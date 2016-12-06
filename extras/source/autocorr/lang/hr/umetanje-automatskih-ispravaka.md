@@ -1,14 +1,14 @@
 # Umetanje automatskih ispravaka na računalo
-Vrlo je jednostavno dodati noviju inačicu pravila za automatsko ispravljanje u starije inačice LibreOfficea. Sve što treba napraviti jest preuzeti i preimenovati običnu zip-datoteku i prenijeti je na odgovarajuće mjesto na računalo ovisno o tome koji se operacijski sustav koristi.
+Vrlo je jednostavno dodati noviju inačicu pravila za automatsko ispravljanje u starije inačice LibreOfficea. Sve što treba napraviti jest preuzeti i preimenovati zip-datoteku i prenijeti je na odgovarajuće mjesto na računalo ovisno o tome koji se operacijski sustav koristi.
 
 * preuzmite zip-datoteku iz repozitorija: [acor_hr-HR-LibreOffice](https://github.com/Kruno-S/acor_hr-HR-LibreOffice/) ([izravna poveznica](https://github.com/Kruno-S/acor_hr-HR-LibreOffice/archive/master.zip))
 * raspakirajte datoteku
 * otvorite mapu koja je nastala raspakiravanjem datoteke
 * arhivirajte sve datoteke iz te mape u zip-datoteku imena **acor_hr-HR.zip**
-* preimenujte **zip** u **dat**. U konačnici datoteka mora biti imenovana acor_hr-HR.dat
+* preimenujte **zip** u **dat**. U konačnici ime datoteke mora biti **acor_hr-HR.dat**
 * tako preimenovanu datoteku kopirajte
 	* na **GNU/Linuxu** u datoteku **/home/&lt;user name&gt;/.config/libreOffice/4/user/autocorr**. Zamijenite &lt;user name&gt; vašim korisničkim imenom. Ako vam je korisničko ime za prijavu u sustav 'marko', onda datoteku treba kopirati u direktorij /home/marko/.config/libreOffice/4/user/autocorr. Staru acor_hr-HR.dat datoteku nemojte brisati, preimenujte je u 'backup-acor_hr-HR.dat za svaki slučaj
-	* na **Windows** operacijskom sustavu u datoteku **%APPDATA%\libreoffice\4\user\autocorr** gdje %APPDATA% treba zamijeniti putanjom gdje se na vašem sustavu i inače instaliraju aplikacije. Najvjerojatnije **C:\Users\&lt;user name&gt;\AppData\Roaming\libreoffice\4\user\autocorr**. Isto tako &lt;user name&gt; trebate zamijeniti vašim korisnički imenom. Ako vam je korisničko ime za prijavu u sustav 'marko' onda datoteku acor_hr-HR.dat treba kopirati u C:\Users\marko\AppData\Roaming\libreoffice\4\user\autocorr.
+	* na **Windows** operacijskom sustavu u datoteku **%APPDATA%\libreoffice\4\user\autocorr** gdje %APPDATA% treba zamijeniti putanjom gdje se na vašem sustavu i inače instaliraju aplikacije. Najvjerojatnije **C:\Users&#92;&lt;user name&gt;\AppData\Roaming\libreoffice\4\user\autocorr**. Isto tako &lt;user name&gt; trebate zamijeniti vašim korisnički imenom. Ako vam je korisničko ime za prijavu u sustav 'marko' onda datoteku acor_hr-HR.dat treba kopirati u C:\Users\marko\AppData\Roaming\libreoffice\4\user\autocorr.
 	* na **Mac OS X** operacijskom sustavu datoteku acor_hr-HR.dat treba kopirati u mapu **/Users/&lt;user name&gt;/Library/Application Support/LibreOffice/4/user/autocorr**. Zamijenite &lt;user name&gt; vašim korisnički imenom. Ako vam je korisničko ime za prijavu u sustav 'marko', datoteku treba kopirati u mapu /Users/marko/Library/Application Support/LibreOffice/4/user/autocorr.
 * zatvorite LibreOffice i ponovno ga pokrenite (ili ponovno pokrenite računalo).
 
