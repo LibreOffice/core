@@ -224,6 +224,8 @@ SdPageObjsTLB::SdPageObjsTLB( vcl::Window* pParentWin, const SdResId& rSdResId )
     SetDragDropMode(
          DragDropMode::CTRL_MOVE | DragDropMode::CTRL_COPY |
             DragDropMode::APP_MOVE  | DragDropMode::APP_COPY  | DragDropMode::APP_DROP );
+
+    m_pAccel = ::svt::AcceleratorExecute::createAcceleratorHelper();
 }
 
 SdPageObjsTLB::SdPageObjsTLB( vcl::Window* pParentWin, WinBits nStyle )
@@ -262,12 +264,9 @@ SdPageObjsTLB::SdPageObjsTLB( vcl::Window* pParentWin, WinBits nStyle )
 void SdPageObjsTLB::SetViewFrame( SfxViewFrame* pViewFrame )
 {
     mpFrame = pViewFrame;
-    if (m_pAccel)
-    {
-        sd::ViewShellBase* pBase = sd::ViewShellBase::GetViewShellBase(pViewFrame);
-        const css::uno::Reference< css::frame::XFrame > xFrame = pBase->GetMainViewShell()->GetViewFrame()->GetFrame().GetFrameInterface();
-        m_pAccel->init(::comphelper::getProcessComponentContext(), xFrame);
-    }
+    sd::ViewShellBase* pBase = sd::ViewShellBase::GetViewShellBase(pViewFrame);
+    const css::uno::Reference< css::frame::XFrame > xFrame = pBase->GetMainViewShell()->GetViewFrame()->GetFrame().GetFrameInterface();
+    m_pAccel->init(::comphelper::getProcessComponentContext(), xFrame);
 }
 
 
