@@ -617,6 +617,27 @@ void SwLineLayout::MaxAscentDescent( SwTwips& _orAscent,
     }
 }
 
+void SwLineLayout::ResetFlags()
+{
+    m_bFormatAdj = m_bDummy = m_bFntChg = m_bTab = m_bEndHyph = m_bMidHyph = m_bFly
+    = m_bRest = m_bBlinking = m_bClipping = m_bContent = m_bRedline
+    = m_bForcedLeftMargin = m_bHanging = false;
+}
+
+SwLineLayout::SwLineLayout()
+    : m_pNext( nullptr ), m_pLLSpaceAdd( nullptr ), m_pKanaComp( nullptr ), m_nRealHeight( 0 ),
+      m_bUnderscore( false )
+{
+    ResetFlags();
+    SetWhichPor( POR_LAY );
+}
+
+SwLinePortion *SwLineLayout::GetFirstPortion() const
+{
+    const SwLinePortion *pRet = pPortion ? pPortion : this;
+    return const_cast<SwLinePortion*>(pRet);
+}
+
 SwCharRange &SwCharRange::operator+=(const SwCharRange &rRange)
 {
     if(0 != rRange.nLen ) {
