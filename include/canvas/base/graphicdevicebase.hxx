@@ -57,7 +57,7 @@ namespace canvas
 
         <pre>
         Example:
-        typedef ::cppu::WeakComponentImplHelper5< css::rendering::XGraphicDevice,
+        typedef ::cppu::WeakComponentImplHelper < css::rendering::XGraphicDevice,
                                                   css::rendering::XColorSpace,
                                                   css::rendering::XPropertySet,
                                                   css::lang::XServiceInfo,
@@ -70,12 +70,12 @@ namespace canvas
         </pre>
 
         @tpl Base
-        Base class to use, most probably one of the
-        WeakComponentImplHelperN templates with the appropriate
+        Base class to use, most probably the
+        WeakComponentImplHelper template with the appropriate
         interfaces. At least XGraphicDevice should be among them (why else
         would you use this template, then?). Base class must have an
         Base( const Mutex& ) constructor (like the
-        WeakComponentImplHelperN templates have). As the very least,
+        WeakComponentImplHelper template has). As the very least,
         the base class must be derived from uno::XInterface, as some
         error reporting mechanisms rely on that.
 

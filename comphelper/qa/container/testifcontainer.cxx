@@ -23,7 +23,7 @@
 #include "cppunit/plugin/TestPlugIn.h"
 #include <osl/mutex.hxx>
 #include <comphelper/interfacecontainer2.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/beans/XVetoableChangeListener.hpp>
 
 using namespace ::osl;
@@ -44,7 +44,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-class TestListener : public cppu::WeakImplHelper1< XVetoableChangeListener >
+class TestListener : public cppu::WeakImplHelper< XVetoableChangeListener >
 {
 public:
     // Methods
