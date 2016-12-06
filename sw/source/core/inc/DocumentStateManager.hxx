@@ -36,6 +36,8 @@ public:
     void SetModified() override;
     void ResetModified() override;
     bool IsModified() const override;
+    bool IsEnableSetModified() const override;
+    void SetEnableSetModified(bool bEnableSetModified) override;
     bool IsInCallModified() const override;
     bool IsUpdateExpField() const override;
     bool IsNewDoc() const override;
@@ -50,9 +52,10 @@ private:
 
     SwDoc& m_rDoc;
 
+    bool mbEnableSetModified; //< FALSE: changing document modification status (temporarily) locked
     bool mbModified      ;    //< TRUE: document has changed.
     bool mbLoaded        ;    //< TRUE: Doc loaded.
-    bool mbUpdateExpField  ;    //< TRUE: Update expression fields.
+    bool mbUpdateExpField;    //< TRUE: Update expression fields.
     bool mbNewDoc        ;    //< TRUE: new Doc.
     bool mbInCallModified;    //< TRUE: in Set/Reset-Modified link.
 };
