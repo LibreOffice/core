@@ -29,6 +29,7 @@ namespace sw
 
 DocumentStateManager::DocumentStateManager( SwDoc& i_rSwdoc ) :
     m_rDoc( i_rSwdoc ),
+    mbEnableSetModified(true),
     mbModified(false),
     mbLoaded(false),
     mbUpdateExpField(false),
@@ -39,6 +40,9 @@ DocumentStateManager::DocumentStateManager( SwDoc& i_rSwdoc ) :
 
 void DocumentStateManager::SetModified()
 {
+    if (!IsEnableSetModified())
+        return;
+
     m_rDoc.GetDocumentLayoutManager().ClearSwLayouterEntries();
     mbModified = true;
     m_rDoc.GetDocumentStatisticsManager().SetDocStatModified( true );
@@ -73,6 +77,16 @@ void DocumentStateManager::ResetModified()
 bool DocumentStateManager::IsModified() const
 {
     return mbModified;
+}
+
+bool DocumentStateManager::IsEnableSetModified() const
+{
+    return mbEnableSetModified;
+}
+
+void DocumentStateManager::SetEnableSetModified(bool bEnableSetModified)
+{
+    mbEnableSetModified = bEnableSetModified;
 }
 
 bool DocumentStateManager::IsInCallModified() const
