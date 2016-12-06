@@ -286,7 +286,7 @@ bool OCreationList::setCurrentEntryInvalidate( SvTreeListEntry* _pEntry )
         if ( GetCurEntry() )
         {
             InvalidateEntry( GetCurEntry() );
-            CallEventListeners( VCLEVENT_LISTBOX_TREESELECT, GetCurEntry() );
+            CallEventListeners( VclEventId::ListboxTreeSelect, GetCurEntry() );
         }
         updateHelpText();
         return true;
@@ -334,7 +334,7 @@ void OCreationList::KeyInput( const KeyEvent& rKEvt )
         if ( pNewCurrent )
         {
             InvalidateEntry( pNewCurrent );
-            CallEventListeners( VCLEVENT_LISTBOX_SELECT, pNewCurrent );
+            CallEventListeners( VclEventId::ListboxSelect, pNewCurrent );
         }
         updateHelpText();
     }

@@ -65,7 +65,7 @@ void MenuFloatingWindow::doShutdown()
         // #105373# notify toolkit that highlight was removed
         // otherwise the entry will not be read when the menu is opened again
         if( nHighlightedItem != ITEMPOS_INVALID )
-            pMenu->ImplCallEventListeners( VCLEVENT_MENU_DEHIGHLIGHT, nHighlightedItem );
+            pMenu->ImplCallEventListeners( VclEventId::MenuDehighlight, nHighlightedItem );
         if (!bKeyInput && pMenu && pMenu->pStartedFrom && !pMenu->pStartedFrom->IsMenuBar())
         {
             // #102461# remove highlight in parent
@@ -374,10 +374,10 @@ IMPL_LINK( MenuFloatingWindow, ShowHideListener, VclWindowEvent&, rEvent, void )
     if( ! pMenu )
         return;
 
-    if( rEvent.GetId() == VCLEVENT_WINDOW_SHOW )
-        pMenu->ImplCallEventListeners( VCLEVENT_MENU_SHOW, ITEMPOS_INVALID );
-    else if( rEvent.GetId() == VCLEVENT_WINDOW_HIDE )
-        pMenu->ImplCallEventListeners( VCLEVENT_MENU_HIDE, ITEMPOS_INVALID );
+    if( rEvent.GetId() == VclEventId::WindowShow )
+        pMenu->ImplCallEventListeners( VclEventId::MenuShow, ITEMPOS_INVALID );
+    else if( rEvent.GetId() == VclEventId::WindowHide )
+        pMenu->ImplCallEventListeners( VclEventId::MenuHide, ITEMPOS_INVALID );
 }
 
 void MenuFloatingWindow::EnableScrollMenu( bool b )
@@ -444,7 +444,7 @@ void MenuFloatingWindow::StopExecute()
     }
     // notify parent, needed for accessibility
     if( pMenu && pMenu->pStartedFrom )
-        pMenu->pStartedFrom->ImplCallEventListeners( VCLEVENT_MENU_SUBMENUDEACTIVATE, nPosInParent );
+        pMenu->pStartedFrom->ImplCallEventListeners( VclEventId::MenuSubmenuDeactivate, nPosInParent );
 }
 
 void MenuFloatingWindow::KillActivePopup( PopupMenu* pThisOnly )
@@ -703,7 +703,7 @@ void MenuFloatingWindow::ChangeHighlightItem( sal_uInt16 n, bool bStartPopupTime
     if ( nHighlightedItem != ITEMPOS_INVALID )
     {
         InvalidateItem(nHighlightedItem);
-        pMenu->ImplCallEventListeners( VCLEVENT_MENU_DEHIGHLIGHT, nHighlightedItem );
+        pMenu->ImplCallEventListeners( VclEventId::MenuDehighlight, nHighlightedItem );
     }
 
     nHighlightedItem = (sal_uInt16)n;

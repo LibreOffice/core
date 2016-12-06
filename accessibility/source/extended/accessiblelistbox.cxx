@@ -73,7 +73,7 @@ namespace accessibility
         {
             switch ( rVclWindowEvent.GetId() )
             {
-            case  VCLEVENT_CHECKBOX_TOGGLE :
+            case  VclEventId::CheckboxToggle :
                 {
                     if ( !getListBox() || !getListBox()->HasFocus() )
                     {
@@ -98,13 +98,13 @@ namespace accessibility
                     break;
                 }
 
-            case VCLEVENT_LISTBOX_SELECT :
+            case VclEventId::ListboxSelect :
                 {
-                    OSL_FAIL("Debug: Treelist shouldn't use VCLEVENT_LISTBOX_SELECT");
+                    OSL_FAIL("Debug: Treelist shouldn't use VclEventId::ListboxSelect");
                     break;
                 }
 
-            case VCLEVENT_LISTBOX_TREESELECT:
+            case VclEventId::ListboxTreeSelect:
                 {
                     if ( getListBox() && getListBox()->HasFocus() )
                     {
@@ -116,7 +116,7 @@ namespace accessibility
                     }
                 }
                 break;
-            case VCLEVENT_LISTBOX_TREEFOCUS:
+            case VclEventId::ListboxTreeFocus:
                 {
                     VclPtr<SvTreeListBox> pBox = getListBox();
                     bool bNeedFocus = false;
@@ -176,7 +176,7 @@ namespace accessibility
                     }
                 }
                 break;
-            case VCLEVENT_LISTBOX_ITEMREMOVED:
+            case VclEventId::ListboxItemRemoved:
                 {
                     SvTreeListEntry* pEntry = static_cast< SvTreeListEntry* >( rVclWindowEvent.GetData() );
                     if ( pEntry )
@@ -200,8 +200,8 @@ namespace accessibility
                 break;
 
                 // #i92103#
-            case VCLEVENT_ITEM_EXPANDED :
-            case VCLEVENT_ITEM_COLLAPSED :
+            case VclEventId::ItemExpanded :
+            case VclEventId::ItemCollapsed :
                 {
                     SvTreeListEntry* pEntry = static_cast< SvTreeListEntry* >( rVclWindowEvent.GetData() );
                     if ( pEntry )
@@ -210,7 +210,7 @@ namespace accessibility
                             new AccessibleListBoxEntry( *getListBox(), pEntry, this );
                         Reference< XAccessible > xChild = pAccListBoxEntry;
                         const short nAccEvent =
-                                ( rVclWindowEvent.GetId() == VCLEVENT_ITEM_EXPANDED )
+                                ( rVclWindowEvent.GetId() == VclEventId::ItemExpanded )
                                 ? AccessibleEventId::LISTBOX_ENTRY_EXPANDED
                                 : AccessibleEventId::LISTBOX_ENTRY_COLLAPSED;
                         uno::Any aListBoxEntry;
@@ -290,8 +290,8 @@ namespace accessibility
     {
         switch ( rVclWindowEvent.GetId() )
         {
-            case VCLEVENT_WINDOW_SHOW:
-            case VCLEVENT_WINDOW_HIDE:
+            case VclEventId::WindowShow:
+            case VclEventId::WindowHide:
             {
             }
             break;

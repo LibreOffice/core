@@ -391,7 +391,7 @@ void VCLXMultiLineEdit::ProcessWindowEvent( const VclWindowEvent& rVclWindowEven
 {
     switch ( rVclWindowEvent.GetId() )
     {
-        case VCLEVENT_EDIT_MODIFY:
+        case VclEventId::EditModify:
         {
             if ( maTextListeners.getLength() )
             {
@@ -1399,7 +1399,7 @@ void SVTXRoadmap::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
     switch ( rVclWindowEvent.GetId() )
     {
-        case VCLEVENT_ROADMAP_ITEMSELECTED:
+        case VclEventId::RoadmapItemSelected:
         {
             SolarMutexGuard aGuard;
             VclPtr<::svt::ORoadmap> pField = GetAs< svt::ORoadmap >();

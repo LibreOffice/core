@@ -656,9 +656,9 @@ IMPL_LINK_NOARG(UpdateCheckUI, UserEventHdl, void*, void)
 
 IMPL_LINK( UpdateCheckUI, WindowEventHdl, VclWindowEvent&, rEvent, void )
 {
-    sal_uLong nEventID = rEvent.GetId();
+    VclEventId nEventID = rEvent.GetId();
 
-    if ( VCLEVENT_OBJECT_DYING == nEventID )
+    if ( VclEventId::ObjectDying == nEventID )
     {
         SolarMutexGuard aGuard;
         if ( mpIconSysWin == rEvent.GetWindow() )
@@ -667,7 +667,7 @@ IMPL_LINK( UpdateCheckUI, WindowEventHdl, VclWindowEvent&, rEvent, void )
             RemoveBubbleWindow( true );
         }
     }
-    else if ( VCLEVENT_WINDOW_MENUBARADDED == nEventID )
+    else if ( VclEventId::WindowMenubarAdded == nEventID )
     {
         SolarMutexGuard aGuard;
         vcl::Window *pWindow = rEvent.GetWindow();
@@ -680,15 +680,15 @@ IMPL_LINK( UpdateCheckUI, WindowEventHdl, VclWindowEvent&, rEvent, void )
             }
         }
     }
-    else if ( VCLEVENT_WINDOW_MENUBARREMOVED == nEventID )
+    else if ( VclEventId::WindowMenubarRemoved == nEventID )
     {
         SolarMutexGuard aGuard;
         MenuBar *pMBar = static_cast<MenuBar*>(rEvent.GetData());
         if ( pMBar && ( pMBar == mpIconMBar ) )
             RemoveBubbleWindow( true );
     }
-    else if ( ( nEventID == VCLEVENT_WINDOW_MOVE ) ||
-              ( nEventID == VCLEVENT_WINDOW_RESIZE ) )
+    else if ( ( nEventID == VclEventId::WindowMove ) ||
+              ( nEventID == VclEventId::WindowResize ) )
     {
         SolarMutexGuard aGuard;
         if ( ( mpIconSysWin == rEvent.GetWindow() ) &&
@@ -708,9 +708,9 @@ IMPL_LINK( UpdateCheckUI, ApplicationEventHdl, VclSimpleEvent&, rEvent, void)
 {
     switch (rEvent.GetId())
     {
-        case VCLEVENT_WINDOW_SHOW:
-        case VCLEVENT_WINDOW_ACTIVATE:
-        case VCLEVENT_WINDOW_GETFOCUS: {
+        case VclEventId::WindowShow:
+        case VclEventId::WindowActivate:
+        case VclEventId::WindowGetFocus: {
             SolarMutexGuard aGuard;
 
             vcl::Window *pWindow = static_cast< VclWindowEvent * >(&rEvent)->GetWindow();
@@ -725,6 +725,7 @@ IMPL_LINK( UpdateCheckUI, ApplicationEventHdl, VclSimpleEvent&, rEvent, void)
             }
             break;
         }
+        default: break;
     }
 }
 

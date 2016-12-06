@@ -329,7 +329,7 @@ public:
     Rectangle           GetClipRegionRect() const;
     bool HasHorScrollBar() const { return aHorSBar->IsVisible(); }
     void                ShowFocusRect( const SvTreeListEntry* pEntry );
-    void                CallEventListeners( sal_uLong nEvent, void* pData = nullptr );
+    void                CallEventListeners( VclEventId nEvent, void* pData = nullptr );
 
     /** Enables, that one cell of a tablistbox entry can be focused */
     bool IsCellFocusEnabled() const { return bIsCellFocusEnabled; }

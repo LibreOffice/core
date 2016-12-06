@@ -997,7 +997,7 @@ IMPL_LINK_NOARG(TabControl, ImplListBoxSelectHdl, ListBox&, void)
 
 IMPL_LINK( TabControl, ImplWindowEventListener, VclWindowEvent&, rEvent, void )
 {
-    if ( rEvent.GetId() == VCLEVENT_WINDOW_KEYINPUT )
+    if ( rEvent.GetId() == VclEventId::WindowKeyInput )
     {
         // Do not handle events from TabControl or its children, which is done in Notify(), where the events can be consumed.
         if ( !IsWindowOrChild( rEvent.GetWindow() ) )
@@ -1674,7 +1674,7 @@ void TabControl::InsertPage( sal_uInt16 nPageId, const OUString& rText,
     if( mpTabCtrlData->mpListBox ) // reposition/resize listbox
         Resize();
 
-    CallEventListeners( VCLEVENT_TABPAGE_INSERTED, reinterpret_cast<void*>(nPageId) );
+    CallEventListeners( VclEventId::TabpageInserted, reinterpret_cast<void*>(nPageId) );
 }
 
 void TabControl::RemovePage( sal_uInt16 nPageId )
@@ -1719,7 +1719,7 @@ void TabControl::RemovePage( sal_uInt16 nPageId )
 
         ImplFreeLayoutData();
 
-        CallEventListeners( VCLEVENT_TABPAGE_REMOVED, reinterpret_cast<void*>(nPageId) );
+        CallEventListeners( VclEventId::TabpageRemoved, reinterpret_cast<void*>(nPageId) );
     }
 }
 
@@ -1737,7 +1737,7 @@ void TabControl::Clear()
     if ( IsUpdateMode() )
         Invalidate();
 
-    CallEventListeners( VCLEVENT_TABPAGE_REMOVEDALL );
+    CallEventListeners( VclEventId::TabpageRemovedAll );
 }
 
 void TabControl::EnablePage( sal_uInt16 i_nPageId, bool i_bEnable )
@@ -1869,7 +1869,7 @@ void TabControl::SelectTabPage( sal_uInt16 nPageId )
     {
         ImplFreeLayoutData();
 
-        CallEventListeners( VCLEVENT_TABPAGE_DEACTIVATE, reinterpret_cast<void*>(mnCurPageId) );
+        CallEventListeners( VclEventId::TabpageDeactivate, reinterpret_cast<void*>(mnCurPageId) );
         if ( DeactivatePage() )
         {
             mnActPageId = nPageId;
@@ -1880,7 +1880,7 @@ void TabControl::SelectTabPage( sal_uInt16 nPageId )
             SetCurPageId( nPageId );
             if( mpTabCtrlData->mpListBox )
                 mpTabCtrlData->mpListBox->SelectEntryPos( GetPagePos( nPageId ) );
-            CallEventListeners( VCLEVENT_TABPAGE_ACTIVATE, reinterpret_cast<void*>(nPageId) );
+            CallEventListeners( VclEventId::TabpageActivate, reinterpret_cast<void*>(nPageId) );
         }
     }
 }
@@ -1940,7 +1940,7 @@ void TabControl::SetPageText( sal_uInt16 nPageId, const OUString& rText )
         if ( IsUpdateMode() )
             Invalidate();
         ImplFreeLayoutData();
-        CallEventListeners( VCLEVENT_TABPAGE_PAGETEXTCHANGED, reinterpret_cast<void*>(nPageId) );
+        CallEventListeners( VclEventId::TabpagePageTextChanged, reinterpret_cast<void*>(nPageId) );
     }
 }
 

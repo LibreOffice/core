@@ -826,7 +826,7 @@ void SvxStyleBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
 IMPL_LINK(SvxStyleBox_Impl, CalcOptimalExtraUserWidth, VclWindowEvent&, event, void)
 {
     // perform the calculation only when we are opening the dropdown
-    if (event.GetId() != VCLEVENT_DROPDOWN_PRE_OPEN)
+    if (event.GetId() != VclEventId::DropdownPreOpen)
         return;
 
     long nMaxNormalFontWidth = 0;
@@ -999,7 +999,7 @@ void SvxFontNameBox_Impl::FillList()
 
 IMPL_LINK( SvxFontNameBox_Impl, CheckAndMarkUnknownFont, VclWindowEvent&, event, void )
 {
-    if( event.GetId() != VCLEVENT_EDIT_MODIFY )
+    if( event.GetId() != VclEventId::EditModify )
         return;
     OUString fontname = GetSubEdit()->GetText();
     lcl_GetDocFontList( &pFontList, this );

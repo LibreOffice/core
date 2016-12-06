@@ -66,8 +66,8 @@ void VCLXAccessibleBox::ProcessWindowChildEvent( const VclWindowEvent& rVclWindo
 
     switch ( rVclWindowEvent.GetId() )
     {
-        case VCLEVENT_WINDOW_SHOW:
-        case VCLEVENT_WINDOW_HIDE:
+        case VclEventId::WindowShow:
+        case VclEventId::WindowHide:
         {
             vcl::Window* pChildWindow = static_cast<vcl::Window *>(rVclWindowEvent.GetData());
             // Just compare to the combo box text field.  All other children
@@ -79,7 +79,7 @@ void VCLXAccessibleBox::ProcessWindowChildEvent( const VclWindowEvent& rVclWindo
                 if ( ( pComboBox != nullptr ) && ( pChildWindow != nullptr ) )
                     if (pChildWindow == pComboBox->GetSubEdit())
                     {
-                        if (rVclWindowEvent.GetId() == VCLEVENT_WINDOW_SHOW)
+                        if (rVclWindowEvent.GetId() == VclEventId::WindowShow)
                         {
                             // Instantiate text field.
                             getAccessibleChild (0);
@@ -110,9 +110,9 @@ void VCLXAccessibleBox::ProcessWindowEvent (const VclWindowEvent& rVclWindowEven
 {
     switch ( rVclWindowEvent.GetId() )
     {
-        case VCLEVENT_DROPDOWN_SELECT:
-        case VCLEVENT_LISTBOX_SELECT:
-        case VCLEVENT_LISTBOX_FOCUSITEMCHANGED:
+        case VclEventId::DropdownSelect:
+        case VclEventId::ListboxSelect:
+        case VclEventId::ListboxFocusItemChanged:
         {
             // Forward the call to the list child.
             VCLXAccessibleList* pList = static_cast<VCLXAccessibleList*>(m_xList.get());
@@ -133,7 +133,7 @@ void VCLXAccessibleBox::ProcessWindowEvent (const VclWindowEvent& rVclWindowEven
             }
             break;
         }
-        case VCLEVENT_DROPDOWN_OPEN:
+        case VclEventId::DropdownOpen:
         {
             VCLXAccessibleList* pList = static_cast<VCLXAccessibleList*>(m_xList.get());
             if ( pList == nullptr )
@@ -148,7 +148,7 @@ void VCLXAccessibleBox::ProcessWindowEvent (const VclWindowEvent& rVclWindowEven
             }
             break;
         }
-        case VCLEVENT_DROPDOWN_CLOSE:
+        case VclEventId::DropdownClose:
         {
             VCLXAccessibleList* pList = static_cast<VCLXAccessibleList*>(m_xList.get());
             if ( pList == nullptr )
@@ -169,7 +169,7 @@ void VCLXAccessibleBox::ProcessWindowEvent (const VclWindowEvent& rVclWindowEven
             }
             break;
         }
-        case VCLEVENT_COMBOBOX_SELECT:
+        case VclEventId::ComboboxSelect:
         {
             VCLXAccessibleList* pList = static_cast<VCLXAccessibleList*>(m_xList.get());
             if (pList != nullptr && m_xText.is())
@@ -189,16 +189,16 @@ void VCLXAccessibleBox::ProcessWindowEvent (const VclWindowEvent& rVclWindowEven
             }
             break;
         }
-        //case VCLEVENT_DROPDOWN_OPEN:
-        //case VCLEVENT_DROPDOWN_CLOSE:
-        case VCLEVENT_LISTBOX_DOUBLECLICK:
-        case VCLEVENT_LISTBOX_SCROLLED:
-        //case VCLEVENT_LISTBOX_SELECT:
-        case VCLEVENT_LISTBOX_ITEMADDED:
-        case VCLEVENT_LISTBOX_ITEMREMOVED:
-        case VCLEVENT_COMBOBOX_ITEMADDED:
-        case VCLEVENT_COMBOBOX_ITEMREMOVED:
-        case VCLEVENT_COMBOBOX_SCROLLED:
+        //case VclEventId::DropdownOpen:
+        //case VclEventId::DropdownClose:
+        case VclEventId::ListboxDoubleClick:
+        case VclEventId::ListboxScrolled:
+        //case VclEventId::ListboxSelect:
+        case VclEventId::ListboxItemAdded:
+        case VclEventId::ListboxItemRemoved:
+        case VclEventId::ComboboxItemAdded:
+        case VclEventId::ComboboxItemRemoved:
+        case VclEventId::ComboboxScrolled:
         {
             // Forward the call to the list child.
             VCLXAccessibleList* pList = static_cast<VCLXAccessibleList*>(m_xList.get());
@@ -212,8 +212,8 @@ void VCLXAccessibleBox::ProcessWindowEvent (const VclWindowEvent& rVclWindowEven
             break;
         }
 
-        //case VCLEVENT_COMBOBOX_SELECT:
-        case VCLEVENT_COMBOBOX_DESELECT:
+        //case VclEventId::ComboboxSelect:
+        case VclEventId::ComboboxDeselect:
         {
             // Selection is handled by VCLXAccessibleList which operates on
             // the same VCL object as this box does.  In case of the
@@ -234,9 +234,9 @@ void VCLXAccessibleBox::ProcessWindowEvent (const VclWindowEvent& rVclWindowEven
             break;
         }
 
-        case VCLEVENT_EDIT_MODIFY:
-        case VCLEVENT_EDIT_SELECTIONCHANGED:
-        case VCLEVENT_EDIT_CARETCHANGED:
+        case VclEventId::EditModify:
+        case VclEventId::EditSelectionChanged:
+        case VclEventId::EditCaretChanged:
             // Modify/Selection events are handled by the combo box instead of
             // directly by the edit field (Why?).  Therefore, delegate this
             // call to the edit field.

@@ -514,19 +514,19 @@ IMPL_LINK(FocusManager, WindowEventListener, VclWindowEvent&, rWindowEvent, void
 
     switch (rWindowEvent.GetId())
     {
-        case VCLEVENT_WINDOW_KEYINPUT:
+        case VclEventId::WindowKeyInput:
         {
             KeyEvent* pKeyEvent = static_cast<KeyEvent*>(rWindowEvent.GetData());
             HandleKeyEvent(pKeyEvent->GetKeyCode(), *pSource);
             break;
         }
 
-        case VCLEVENT_OBJECT_DYING:
+        case VclEventId::ObjectDying:
             RemoveWindow(*pSource);
             break;
 
-        case VCLEVENT_WINDOW_GETFOCUS:
-        case VCLEVENT_WINDOW_LOSEFOCUS:
+        case VclEventId::WindowGetFocus:
+        case VclEventId::WindowLoseFocus:
             pSource->Invalidate();
             break;
 
@@ -543,7 +543,7 @@ IMPL_LINK(FocusManager, ChildEventListener, VclWindowEvent&, rEvent, void)
 
     switch (rEvent.GetId())
     {
-        case VCLEVENT_WINDOW_KEYINPUT:
+        case VclEventId::WindowKeyInput:
         {
             KeyEvent* pKeyEvent = static_cast<KeyEvent*>(rEvent.GetData());
 
@@ -587,7 +587,7 @@ IMPL_LINK(FocusManager, ChildEventListener, VclWindowEvent&, rEvent, void)
             return;
         }
 
-        case VCLEVENT_WINDOW_GETFOCUS:
+        case VclEventId::WindowGetFocus:
             // Keep track of focused controls in panel content.
             // Remember the first focused control.  When it is later
             // focused again due to pressing the TAB key then the

@@ -72,7 +72,7 @@ protected:
             if the Control instance has been destroyed in any of the call
     */
     bool        ImplCallEventListenersAndHandler(
-                    sal_uLong nEvent, std::function<void()> const & callHandler
+                    VclEventId nEvent, std::function<void()> const & callHandler
                 );
 
     /** draws the given text onto the given device

@@ -68,7 +68,7 @@ bool Window::PreNotify( NotifyEvent& rNEvt )
             }
 
             if ( bCompoundFocusChanged || ( rNEvt.GetWindow() == this ) )
-                CallEventListeners( VCLEVENT_WINDOW_GETFOCUS );
+                CallEventListeners( VclEventId::WindowGetFocus );
         }
         else if( rNEvt.GetType() == MouseNotifyEvent::LOSEFOCUS )
         {
@@ -80,7 +80,7 @@ bool Window::PreNotify( NotifyEvent& rNEvt )
             }
 
             if ( bCompoundFocusChanged || ( rNEvt.GetWindow() == this ) )
-                CallEventListeners( VCLEVENT_WINDOW_LOSEFOCUS );
+                CallEventListeners( VclEventId::WindowLoseFocus );
         }
 
         // #82968# mouse and key events will be notified after processing ( in ImplNotifyKeyMouseCommandEventListeners() )!
@@ -203,7 +203,7 @@ bool Window::EventNotify( NotifyEvent& rNEvt )
     return bRet;
 }
 
-void Window::CallEventListeners( sal_uLong nEvent, void* pData )
+void Window::CallEventListeners( VclEventId nEvent, void* pData )
 {
     VclWindowEvent aEvent( this, nEvent, pData );
 
@@ -400,7 +400,7 @@ void Window::ImplNotifyKeyMouseCommandEventListeners( NotifyEvent& rNEvt )
                     aCommandEvent = CommandEvent( ScreenToOutputPixel( aPos ), pCEvt->GetCommand(), pCEvt->IsMouseEvent(), pCEvt->GetEventData() );
                 }
 
-                CallEventListeners( VCLEVENT_WINDOW_COMMAND, &aCommandEvent );
+                CallEventListeners( VclEventId::WindowCommand, &aCommandEvent );
             }
         }
     }
@@ -417,11 +417,11 @@ void Window::ImplNotifyKeyMouseCommandEventListeners( NotifyEvent& rNEvt )
         if ( mpWindowImpl->mbCompoundControl || ( rNEvt.GetWindow() == this ) )
         {
             if ( rNEvt.GetWindow() == this )
-                CallEventListeners( VCLEVENT_WINDOW_MOUSEMOVE, const_cast<MouseEvent *>(rNEvt.GetMouseEvent()) );
+                CallEventListeners( VclEventId::WindowMouseMove, const_cast<MouseEvent *>(rNEvt.GetMouseEvent()) );
             else
             {
                 MouseEvent aMouseEvent = ImplTranslateMouseEvent( *rNEvt.GetMouseEvent(), rNEvt.GetWindow(), this );
-                CallEventListeners( VCLEVENT_WINDOW_MOUSEMOVE, &aMouseEvent );
+                CallEventListeners( VclEventId::WindowMouseMove, &aMouseEvent );
             }
         }
     }
@@ -430,11 +430,11 @@ void Window::ImplNotifyKeyMouseCommandEventListeners( NotifyEvent& rNEvt )
         if ( mpWindowImpl->mbCompoundControl || ( rNEvt.GetWindow() == this ) )
         {
             if ( rNEvt.GetWindow() == this )
-                CallEventListeners( VCLEVENT_WINDOW_MOUSEBUTTONUP, const_cast<MouseEvent *>(rNEvt.GetMouseEvent()) );
+                CallEventListeners( VclEventId::WindowMouseButtonUp, const_cast<MouseEvent *>(rNEvt.GetMouseEvent()) );
             else
             {
                 MouseEvent aMouseEvent = ImplTranslateMouseEvent( *rNEvt.GetMouseEvent(), rNEvt.GetWindow(), this );
-                CallEventListeners( VCLEVENT_WINDOW_MOUSEBUTTONUP, &aMouseEvent );
+                CallEventListeners( VclEventId::WindowMouseButtonUp, &aMouseEvent );
             }
         }
     }
@@ -443,23 +443,23 @@ void Window::ImplNotifyKeyMouseCommandEventListeners( NotifyEvent& rNEvt )
         if ( mpWindowImpl->mbCompoundControl || ( rNEvt.GetWindow() == this ) )
         {
             if ( rNEvt.GetWindow() == this )
-                CallEventListeners( VCLEVENT_WINDOW_MOUSEBUTTONDOWN, const_cast<MouseEvent *>(rNEvt.GetMouseEvent()) );
+                CallEventListeners( VclEventId::WindowMouseButtonDown, const_cast<MouseEvent *>(rNEvt.GetMouseEvent()) );
             else
             {
                 MouseEvent aMouseEvent = ImplTranslateMouseEvent( *rNEvt.GetMouseEvent(), rNEvt.GetWindow(), this );
-                CallEventListeners( VCLEVENT_WINDOW_MOUSEBUTTONDOWN, &aMouseEvent );
+                CallEventListeners( VclEventId::WindowMouseButtonDown, &aMouseEvent );
             }
         }
     }
     else if( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
         if ( mpWindowImpl->mbCompoundControl || ( rNEvt.GetWindow() == this ) )
-            CallEventListeners( VCLEVENT_WINDOW_KEYINPUT, const_cast<KeyEvent *>(rNEvt.GetKeyEvent()) );
+            CallEventListeners( VclEventId::WindowKeyInput, const_cast<KeyEvent *>(rNEvt.GetKeyEvent()) );
     }
     else if( rNEvt.GetType() == MouseNotifyEvent::KEYUP )
     {
         if ( mpWindowImpl->mbCompoundControl || ( rNEvt.GetWindow() == this ) )
-            CallEventListeners( VCLEVENT_WINDOW_KEYUP, const_cast<KeyEvent *>(rNEvt.GetKeyEvent()) );
+            CallEventListeners( VclEventId::WindowKeyUp, const_cast<KeyEvent *>(rNEvt.GetKeyEvent()) );
     }
 
     if ( xWindow->IsDisposed() )
@@ -524,7 +524,7 @@ void Window::ImplCallResize()
 
     // #88419# Most classes don't call the base class in Resize() and Move(),
     // => Call ImpleResize/Move instead of Resize/Move directly...
-    CallEventListeners( VCLEVENT_WINDOW_RESIZE );
+    CallEventListeners( VclEventId::WindowResize );
 }
 
 void Window::ImplCallMove()
@@ -566,7 +566,7 @@ void Window::ImplCallMove()
 
     Move();
 
-    CallEventListeners( VCLEVENT_WINDOW_MOVE );
+    CallEventListeners( VclEventId::WindowMove );
 }
 
 void Window::ImplCallFocusChangeActivate( vcl::Window* pNewOverlapWindow,

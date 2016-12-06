@@ -3397,23 +3397,23 @@ void FmXGridCell::onFocusLost( const awt::FocusEvent& _rEvent )
 }
 
 
-void FmXGridCell::onWindowEvent( const sal_uIntPtr _nEventId, const vcl::Window& _rWindow, const void* _pEventData )
+void FmXGridCell::onWindowEvent( const VclEventId _nEventId, const vcl::Window& _rWindow, const void* _pEventData )
 {
     switch ( _nEventId )
     {
-    case VCLEVENT_CONTROL_GETFOCUS:
-    case VCLEVENT_WINDOW_GETFOCUS:
-    case VCLEVENT_CONTROL_LOSEFOCUS:
-    case VCLEVENT_WINDOW_LOSEFOCUS:
+    case VclEventId::ControlGetFocus:
+    case VclEventId::WindowGetFocus:
+    case VclEventId::ControlLoseFocus:
+    case VclEventId::WindowLoseFocus:
     {
         if  (   (   _rWindow.IsCompoundControl()
-                &&  (   _nEventId == VCLEVENT_CONTROL_GETFOCUS
-                    ||  _nEventId == VCLEVENT_CONTROL_LOSEFOCUS
+                &&  (   _nEventId == VclEventId::ControlGetFocus
+                    ||  _nEventId == VclEventId::ControlLoseFocus
                     )
                 )
             ||  (   !_rWindow.IsCompoundControl()
-                &&  (   _nEventId == VCLEVENT_WINDOW_GETFOCUS
-                    ||  _nEventId == VCLEVENT_WINDOW_LOSEFOCUS
+                &&  (   _nEventId == VclEventId::WindowGetFocus
+                    ||  _nEventId == VclEventId::WindowLoseFocus
                     )
                 )
             )
@@ -3421,7 +3421,7 @@ void FmXGridCell::onWindowEvent( const sal_uIntPtr _nEventId, const vcl::Window&
             if ( !m_aFocusListeners.getLength() )
                 break;
 
-            bool bFocusGained = ( _nEventId == VCLEVENT_CONTROL_GETFOCUS ) || ( _nEventId == VCLEVENT_WINDOW_GETFOCUS );
+            bool bFocusGained = ( _nEventId == VclEventId::ControlGetFocus ) || ( _nEventId == VclEventId::WindowGetFocus );
 
             awt::FocusEvent aEvent;
             aEvent.Source = *this;
@@ -3435,19 +3435,19 @@ void FmXGridCell::onWindowEvent( const sal_uIntPtr _nEventId, const vcl::Window&
         }
     }
     break;
-    case VCLEVENT_WINDOW_MOUSEBUTTONDOWN:
-    case VCLEVENT_WINDOW_MOUSEBUTTONUP:
+    case VclEventId::WindowMouseButtonDown:
+    case VclEventId::WindowMouseButtonUp:
     {
         if ( !m_aMouseListeners.getLength() )
             break;
 
-        const bool bButtonDown = ( _nEventId == VCLEVENT_WINDOW_MOUSEBUTTONDOWN );
+        const bool bButtonDown = ( _nEventId == VclEventId::WindowMouseButtonDown );
 
         awt::MouseEvent aEvent( VCLUnoHelper::createMouseEvent( *static_cast< const ::MouseEvent* >( _pEventData ), *this ) );
         m_aMouseListeners.notifyEach( bButtonDown ? &awt::XMouseListener::mousePressed : &awt::XMouseListener::mouseReleased, aEvent );
     }
     break;
-    case VCLEVENT_WINDOW_MOUSEMOVE:
+    case VclEventId::WindowMouseMove:
     {
         const MouseEvent& rMouseEvent = *static_cast< const ::MouseEvent* >( _pEventData );
         if ( rMouseEvent.IsEnterWindow() || rMouseEvent.IsLeaveWindow() )
@@ -3470,17 +3470,18 @@ void FmXGridCell::onWindowEvent( const sal_uIntPtr _nEventId, const vcl::Window&
         }
     }
     break;
-    case VCLEVENT_WINDOW_KEYINPUT:
-    case VCLEVENT_WINDOW_KEYUP:
+    case VclEventId::WindowKeyInput:
+    case VclEventId::WindowKeyUp:
     {
         if ( !m_aKeyListeners.getLength() )
             break;
 
-        const bool bKeyPressed = ( _nEventId == VCLEVENT_WINDOW_KEYINPUT );
+        const bool bKeyPressed = ( _nEventId == VclEventId::WindowKeyInput );
         awt::KeyEvent aEvent( VCLUnoHelper::createKeyEvent( *static_cast< const ::KeyEvent* >( _pEventData ), *this ) );
         m_aKeyListeners.notifyEach( bKeyPressed ? &awt::XKeyListener::keyPressed: &awt::XKeyListener::keyReleased, aEvent );
     }
     break;
+    default: break;
     }
 }
 
@@ -3802,16 +3803,17 @@ void FmXEditCell::onFocusLost( const awt::FocusEvent& _rEvent )
 }
 
 
-void FmXEditCell::onWindowEvent( const sal_uIntPtr _nEventId, const vcl::Window& _rWindow, const void* _pEventData )
+void FmXEditCell::onWindowEvent( const VclEventId _nEventId, const vcl::Window& _rWindow, const void* _pEventData )
 {
     switch ( _nEventId )
     {
-    case VCLEVENT_EDIT_MODIFY:
+    case VclEventId::EditModify:
     {
         if ( m_pEditImplementation && m_aTextListeners.getLength() )
             onTextChanged();
         return;
     }
+    default: break;
     }
 
     FmXTextCell::onWindowEvent( _nEventId, _rWindow, _pEventData );
@@ -3955,11 +3957,11 @@ vcl::Window* FmXCheckBoxCell::getEventWindow() const
 }
 
 
-void FmXCheckBoxCell::onWindowEvent( const sal_uIntPtr _nEventId, const vcl::Window& _rWindow, const void* _pEventData )
+void FmXCheckBoxCell::onWindowEvent( const VclEventId _nEventId, const vcl::Window& _rWindow, const void* _pEventData )
 {
     switch ( _nEventId )
     {
-    case VCLEVENT_CHECKBOX_TOGGLE:
+    case VclEventId::CheckboxToggle:
     {
         // check boxes are to be committed immediately (this holds for ordinary check box controls in
         // documents, and this must hold for check boxes in grid columns, too
@@ -4287,10 +4289,10 @@ void SAL_CALL FmXListBoxCell::makeVisible(sal_Int16 nEntry) throw( RuntimeExcept
 }
 
 
-void FmXListBoxCell::onWindowEvent( const sal_uIntPtr _nEventId, const vcl::Window& _rWindow, const void* _pEventData )
+void FmXListBoxCell::onWindowEvent( const VclEventId _nEventId, const vcl::Window& _rWindow, const void* _pEventData )
 {
     if  (   ( &_rWindow == m_pBox )
-        &&  ( _nEventId == VCLEVENT_LISTBOX_SELECT )
+        &&  ( _nEventId == VclEventId::ListboxSelect )
         )
     {
         OnDoubleClick( *m_pBox );
@@ -4488,12 +4490,12 @@ void SAL_CALL FmXComboBoxCell::setDropDownLineCount(sal_Int16 nLines) throw( Run
 }
 
 
-void FmXComboBoxCell::onWindowEvent( const sal_uIntPtr _nEventId, const vcl::Window& _rWindow, const void* _pEventData )
+void FmXComboBoxCell::onWindowEvent( const VclEventId _nEventId, const vcl::Window& _rWindow, const void* _pEventData )
 {
 
     switch ( _nEventId )
     {
-    case VCLEVENT_COMBOBOX_SELECT:
+    case VclEventId::ComboboxSelect:
     {
         awt::ItemEvent aEvent;
         aEvent.Source = *this;

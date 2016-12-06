@@ -331,7 +331,7 @@ void AccessibleDialogWindow::SortChildren()
 IMPL_LINK( AccessibleDialogWindow, WindowEventListener, VclWindowEvent&, rEvent, void )
 {
     DBG_ASSERT(rEvent.GetWindow(), "AccessibleDialogWindow::WindowEventListener: no window!");
-    if (!rEvent.GetWindow()->IsAccessibilityEventsSuppressed() || rEvent.GetId() == VCLEVENT_OBJECT_DYING)
+    if (!rEvent.GetWindow()->IsAccessibilityEventsSuppressed() || rEvent.GetId() == VclEventId::ObjectDying)
         ProcessWindowEvent(rEvent);
 }
 
@@ -342,62 +342,62 @@ void AccessibleDialogWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindo
 
     switch ( rVclWindowEvent.GetId() )
     {
-        case VCLEVENT_WINDOW_ENABLED:
+        case VclEventId::WindowEnabled:
         {
             aNewValue <<= AccessibleStateType::ENABLED;
             NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
         }
         break;
-        case VCLEVENT_WINDOW_DISABLED:
+        case VclEventId::WindowDisabled:
         {
             aOldValue <<= AccessibleStateType::ENABLED;
             NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
         }
         break;
-        case VCLEVENT_WINDOW_ACTIVATE:
+        case VclEventId::WindowActivate:
         {
             aNewValue <<= AccessibleStateType::ACTIVE;
             NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
         }
         break;
-        case VCLEVENT_WINDOW_DEACTIVATE:
+        case VclEventId::WindowDeactivate:
         {
             aOldValue <<= AccessibleStateType::ACTIVE;
             NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
         }
         break;
-        case VCLEVENT_WINDOW_GETFOCUS:
+        case VclEventId::WindowGetFocus:
         {
             aNewValue <<= AccessibleStateType::FOCUSED;
             NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
         }
         break;
-        case VCLEVENT_WINDOW_LOSEFOCUS:
+        case VclEventId::WindowLoseFocus:
         {
             aOldValue <<= AccessibleStateType::FOCUSED;
             NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
         }
         break;
-        case VCLEVENT_WINDOW_SHOW:
+        case VclEventId::WindowShow:
         {
             aNewValue <<= AccessibleStateType::SHOWING;
             NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
         }
         break;
-        case VCLEVENT_WINDOW_HIDE:
+        case VclEventId::WindowHide:
         {
             aOldValue <<= AccessibleStateType::SHOWING;
             NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
         }
         break;
-        case VCLEVENT_WINDOW_RESIZE:
+        case VclEventId::WindowResize:
         {
             NotifyAccessibleEvent( AccessibleEventId::BOUNDRECT_CHANGED, aOldValue, aNewValue );
             UpdateChildren();
             UpdateBounds();
         }
         break;
-        case VCLEVENT_OBJECT_DYING:
+        case VclEventId::ObjectDying:
         {
             if ( m_pDialogWindow )
             {

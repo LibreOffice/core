@@ -30,7 +30,7 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::accessibility::XAccessible;
 
 
-VclAccessibleEvent::VclAccessibleEvent( sal_uLong n, const Reference<XAccessible>& rxAccessible ) :
+VclAccessibleEvent::VclAccessibleEvent( VclEventId n, const Reference<XAccessible>& rxAccessible ) :
     VclSimpleEvent(n),
     mxAccessible(rxAccessible)
 {
@@ -84,14 +84,14 @@ void VclEventListeners::removeListener( const Link<VclSimpleEvent&,void>& rListe
     m_aListeners.erase( std::remove(m_aListeners.begin(), m_aListeners.end(), rListener ), m_aListeners.end() );
 }
 
-VclWindowEvent::VclWindowEvent( vcl::Window* pWin, sal_uLong n, void* pDat ) : VclSimpleEvent(n)
+VclWindowEvent::VclWindowEvent( vcl::Window* pWin, VclEventId n, void* pDat ) : VclSimpleEvent(n)
 {
     pWindow = pWin; pData = pDat;
 }
 
 VclWindowEvent::~VclWindowEvent() {}
 
-VclMenuEvent::VclMenuEvent( Menu* pM, sal_uLong n, sal_uInt16 nPos )
+VclMenuEvent::VclMenuEvent( Menu* pM, VclEventId n, sal_uInt16 nPos )
     : VclSimpleEvent(n), pMenu(pM), mnPos(nPos)
 {}
 

@@ -672,7 +672,7 @@ void DBTreeListBox::ExecuteContextMenuAction( sal_uInt16 _nSelectedPopupEntry )
 
 IMPL_LINK( DBTreeListBox, MenuEventListener, VclMenuEvent&, rMenuEvent, void )
 {
-    if ( rMenuEvent.GetId() == VCLEVENT_OBJECT_DYING )
+    if ( rMenuEvent.GetId() == VclEventId::ObjectDying )
     {
         css::uno::Reference< css::lang::XComponent > xComponent( m_xMenuController, css::uno::UNO_QUERY );
         if ( xComponent.is() )

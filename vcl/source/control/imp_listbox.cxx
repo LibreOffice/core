@@ -921,7 +921,7 @@ void ImplListBoxWindow::MouseMove( const MouseEvent& rMEvt )
                             mbTravelSelect = false;
                         }
                         // When list box selection change by mouse move, notify
-                        // VCLEVENT_LISTBOX_SELECT vcl event.
+                        // VclEventId::ListboxSelect vcl event.
                         else
                         {
                             maListItemSelectHdl.Call(nullptr);

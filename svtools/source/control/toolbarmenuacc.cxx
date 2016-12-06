@@ -58,26 +58,26 @@ ToolbarMenuAcc::~ToolbarMenuAcc()
 
 IMPL_LINK( ToolbarMenuAcc, WindowEventListener, VclWindowEvent&, rEvent, void )
 {
-    /* Ignore VCLEVENT_WINDOW_ENDPOPUPMODE, because the UNO accessibility wrapper
+    /* Ignore VclEventId::WindowEndPopupMode, because the UNO accessibility wrapper
      * might have been destroyed by the previous VCLEventListener (if no AT tool
      * is running), e.g. sub-toolbars in impress.
      */
-    if ( !mpParent || (rEvent.GetId() == VCLEVENT_WINDOW_ENDPOPUPMODE) )
+    if ( !mpParent || (rEvent.GetId() == VclEventId::WindowEndPopupMode) )
         return;
     DBG_ASSERT( rEvent.GetWindow(), "Window???" );
-    if( rEvent.GetWindow()->IsAccessibilityEventsSuppressed() && ( rEvent.GetId() != VCLEVENT_OBJECT_DYING ) )
+    if( rEvent.GetWindow()->IsAccessibilityEventsSuppressed() && ( rEvent.GetId() != VclEventId::ObjectDying ) )
         return;
 
     switch ( rEvent.GetId() )
     {
-        case VCLEVENT_OBJECT_DYING:
+        case VclEventId::ObjectDying:
         {
             mpParent->mrMenu.RemoveEventListener( LINK( this, ToolbarMenuAcc, WindowEventListener ) );
             mpParent = nullptr;
         }
         break;
 
-        case VCLEVENT_WINDOW_GETFOCUS:
+        case VclEventId::WindowGetFocus:
         {
             if( !mbIsFocused )
             {
@@ -86,7 +86,7 @@ IMPL_LINK( ToolbarMenuAcc, WindowEventListener, VclWindowEvent&, rEvent, void )
             }
         }
         break;
-        case VCLEVENT_WINDOW_LOSEFOCUS:
+        case VclEventId::WindowLoseFocus:
         {
             if( mbIsFocused )
             {

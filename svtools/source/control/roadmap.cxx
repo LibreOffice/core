@@ -515,7 +515,7 @@ Link<LinkParamNone*,void> ORoadmap::GetItemSelectHdl() const
 void ORoadmap::Select()
 {
     GetItemSelectHdl().Call( nullptr );
-    CallEventListeners( VCLEVENT_ROADMAP_ITEMSELECTED );
+    CallEventListeners( VclEventId::RoadmapItemSelected );
 }
 
 void ORoadmap::GetFocus()

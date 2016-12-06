@@ -933,7 +933,7 @@ void Edit::ImplSetText( const OUString& rText, const Selection* pNewSelection )
         else
             ImplInsertText( rText, pNewSelection );
 
-        CallEventListeners( VCLEVENT_EDIT_MODIFY );
+        CallEventListeners( VclEventId::EditModify );
     }
 }
 
@@ -1865,9 +1865,9 @@ void Edit::GetFocus()
                 maSelection.Max() = maText.getLength();
             }
             if ( mbIsSubEdit )
-                static_cast<Edit*>(GetParent())->CallEventListeners( VCLEVENT_EDIT_SELECTIONCHANGED );
+                static_cast<Edit*>(GetParent())->CallEventListeners( VclEventId::EditSelectionChanged );
             else
-                CallEventListeners( VCLEVENT_EDIT_SELECTIONCHANGED );
+                CallEventListeners( VclEventId::EditSelectionChanged );
         }
 
         ImplShowCursor();
@@ -2345,12 +2345,12 @@ void Edit::Modify()
         if ( mpUpdateDataTimer )
             mpUpdateDataTimer->Start();
 
-        if ( ImplCallEventListenersAndHandler( VCLEVENT_EDIT_MODIFY, [this] () { maModifyHdl.Call(*this); } ) )
+        if ( ImplCallEventListenersAndHandler( VclEventId::EditModify, [this] () { maModifyHdl.Call(*this); } ) )
             // have been destroyed while calling into the handlers
             return;
 
         // #i13677# notify edit listeners about caret position change
-        CallEventListeners( VCLEVENT_EDIT_CARETCHANGED );
+        CallEventListeners( VclEventId::EditCaretChanged );
         // FIXME: this is currently only on OS X
         // check for other platforms that need similar handling
         if( ImplGetSVData()->maNWFData.mbNoFocusRects &&
@@ -2499,22 +2499,22 @@ void Edit::ImplSetSelection( const Selection& rSelection, bool bPaint )
                 if (bSelection)
                 {
                     if ( mbIsSubEdit )
-                        static_cast<Edit*>(GetParent())->CallEventListeners( VCLEVENT_EDIT_SELECTIONCHANGED );
+                        static_cast<Edit*>(GetParent())->CallEventListeners( VclEventId::EditSelectionChanged );
                     else
-                        CallEventListeners( VCLEVENT_EDIT_SELECTIONCHANGED );
+                        CallEventListeners( VclEventId::EditSelectionChanged );
                 }
 
                 if (bCaret)
                 {
                     if ( mbIsSubEdit )
-                        static_cast<Edit*>(GetParent())->CallEventListeners( VCLEVENT_EDIT_CARETCHANGED );
+                        static_cast<Edit*>(GetParent())->CallEventListeners( VclEventId::EditCaretChanged );
                     else
-                        CallEventListeners( VCLEVENT_EDIT_CARETCHANGED );
+                        CallEventListeners( VclEventId::EditCaretChanged );
                 }
 
                 // #103511# notify combobox listeners of deselection
                 if( !maSelection && GetParent() && GetParent()->GetType() == WINDOW_COMBOBOX )
-                    static_cast<Edit*>(GetParent())->CallEventListeners( VCLEVENT_COMBOBOX_DESELECT );
+                    static_cast<Edit*>(GetParent())->CallEventListeners( VclEventId::ComboboxDeselect );
             }
         }
     }

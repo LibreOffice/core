@@ -572,7 +572,7 @@ void VCLXButton::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
     switch ( rVclWindowEvent.GetId() )
     {
-        case VCLEVENT_BUTTON_CLICK:
+        case VclEventId::ButtonClick:
         {
             css::uno::Reference< css::awt::XWindow > xKeepAlive( this );
                 // since we call listeners below, there is a potential that we will be destroyed
@@ -593,7 +593,7 @@ void VCLXButton::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         }
         break;
 
-        case VCLEVENT_PUSHBUTTON_TOGGLE:
+        case VclEventId::PushbuttonToggle:
         {
             PushButton& rButton = dynamic_cast< PushButton& >( *rVclWindowEvent.GetWindow() );
 
@@ -1011,7 +1011,7 @@ void VCLXCheckBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
     switch ( rVclWindowEvent.GetId() )
     {
-        case VCLEVENT_CHECKBOX_TOGGLE:
+        case VclEventId::CheckboxToggle:
         {
             css::uno::Reference< css::awt::XWindow > xKeepAlive( this );
                 // since we call listeners below, there is a potential that we will be destroyed
@@ -1293,7 +1293,7 @@ void VCLXRadioButton::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent 
 
     switch ( rVclWindowEvent.GetId() )
     {
-        case VCLEVENT_BUTTON_CLICK:
+        case VclEventId::ButtonClick:
             if ( !IsSynthesizingVCLEvent() && maActionListeners.getLength() )
             {
                 css::awt::ActionEvent aEvent;
@@ -1304,7 +1304,7 @@ void VCLXRadioButton::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent 
             ImplClickedOrToggled( false );
             break;
 
-        case VCLEVENT_RADIOBUTTON_TOGGLE:
+        case VclEventId::RadiobuttonToggle:
             ImplClickedOrToggled( true );
             break;
 
@@ -1426,10 +1426,10 @@ void VCLXSpinField::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
     switch ( rVclWindowEvent.GetId() )
     {
-        case VCLEVENT_SPINFIELD_UP:
-        case VCLEVENT_SPINFIELD_DOWN:
-        case VCLEVENT_SPINFIELD_FIRST:
-        case VCLEVENT_SPINFIELD_LAST:
+        case VclEventId::SpinfieldUp:
+        case VclEventId::SpinfieldDown:
+        case VclEventId::SpinfieldFirst:
+        case VclEventId::SpinfieldLast:
         {
             css::uno::Reference< css::awt::XWindow > xKeepAlive( this );
                 // since we call listeners below, there is a potential that we will be destroyed
@@ -1442,14 +1442,15 @@ void VCLXSpinField::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                 aEvent.Source = static_cast<cppu::OWeakObject*>(this);
                 switch ( rVclWindowEvent.GetId() )
                 {
-                    case VCLEVENT_SPINFIELD_UP:     maSpinListeners.up( aEvent );
+                    case VclEventId::SpinfieldUp:     maSpinListeners.up( aEvent );
                                                     break;
-                    case VCLEVENT_SPINFIELD_DOWN:   maSpinListeners.down( aEvent );
+                    case VclEventId::SpinfieldDown:   maSpinListeners.down( aEvent );
                                                     break;
-                    case VCLEVENT_SPINFIELD_FIRST:  maSpinListeners.first( aEvent );
+                    case VclEventId::SpinfieldFirst:  maSpinListeners.first( aEvent );
                                                     break;
-                    case VCLEVENT_SPINFIELD_LAST:   maSpinListeners.last( aEvent );
+                    case VclEventId::SpinfieldLast:   maSpinListeners.last( aEvent );
                                                     break;
+                    default: break;
                 }
 
             }
@@ -1783,7 +1784,7 @@ void VCLXListBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 
     switch ( rVclWindowEvent.GetId() )
     {
-        case VCLEVENT_LISTBOX_SELECT:
+        case VclEventId::ListboxSelect:
         {
             VclPtr< ListBox > pListBox = GetAs< ListBox >();
             if( pListBox )
@@ -1806,7 +1807,7 @@ void VCLXListBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         }
         break;
 
-        case VCLEVENT_LISTBOX_DOUBLECLICK:
+        case VclEventId::ListboxDoubleClick:
             if ( GetWindow() && maActionListeners.getLength() )
             {
                 css::awt::ActionEvent aEvent;
@@ -2676,14 +2677,14 @@ void VCLXMultiPage::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
     css::uno::Reference< css::awt::XWindow > xKeepAlive( this );
     switch ( rVclWindowEvent.GetId() )
     {
-        case VCLEVENT_TABPAGE_DEACTIVATE:
+        case VclEventId::TabpageDeactivate:
         {
             sal_uLong nPageID = reinterpret_cast<sal_uLong>( rVclWindowEvent.GetData() );
             maTabListeners.deactivated( nPageID );
             break;
 
         }
-        case VCLEVENT_TABPAGE_ACTIVATE:
+        case VclEventId::TabpageActivate:
         {
             sal_uLong nPageID = reinterpret_cast<sal_uLong>( rVclWindowEvent.GetData() );
             maTabListeners.activated( nPageID );
@@ -2865,7 +2866,7 @@ void VCLXFixedHyperlink::ProcessWindowEvent( const VclWindowEvent& rVclWindowEve
 {
     switch ( rVclWindowEvent.GetId() )
     {
-        case VCLEVENT_BUTTON_CLICK:
+        case VclEventId::ButtonClick:
         {
             if ( maActionListeners.getLength() )
             {
@@ -3674,7 +3675,7 @@ void VCLXScrollBar::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
     switch ( rVclWindowEvent.GetId() )
     {
-        case VCLEVENT_SCROLLBAR_SCROLL:
+        case VclEventId::ScrollbarScroll:
         {
             css::uno::Reference< css::awt::XWindow > xKeepAlive( this );
                 // since we call listeners below, there is a potential that we will be destroyed
@@ -4085,7 +4086,7 @@ void VCLXEdit::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
     switch ( rVclWindowEvent.GetId() )
     {
-        case VCLEVENT_EDIT_MODIFY:
+        case VclEventId::EditModify:
         {
             css::uno::Reference< css::awt::XWindow > xKeepAlive( this );
                 // since we call listeners below, there is a potential that we will be destroyed
@@ -4404,7 +4405,7 @@ void VCLXComboBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 
     switch ( rVclWindowEvent.GetId() )
     {
-        case VCLEVENT_COMBOBOX_SELECT:
+        case VclEventId::ComboboxSelect:
             if ( maItemListeners.getLength() )
             {
                 VclPtr< ComboBox > pComboBox = GetAs< ComboBox >();
@@ -4425,7 +4426,7 @@ void VCLXComboBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             }
             break;
 
-        case VCLEVENT_COMBOBOX_DOUBLECLICK:
+        case VclEventId::ComboboxDoubleClick:
             if ( maActionListeners.getLength() )
             {
                 css::awt::ActionEvent aEvent;

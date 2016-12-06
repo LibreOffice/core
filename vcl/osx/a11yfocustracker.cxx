@@ -49,25 +49,25 @@ void AquaA11yFocusTracker::WindowEventHandler(void * pThis, VclSimpleEvent& rEve
         pThis);
     switch (rEvent.GetId())
     {
-    case VCLEVENT_WINDOW_PAINT:
+    case VclEventId::WindowPaint:
         pFocusTracker-> toolbox_open_floater( getWindow(&rEvent) );
         break;
-    case VCLEVENT_WINDOW_GETFOCUS:
+    case VclEventId::WindowGetFocus:
         pFocusTracker->window_got_focus( getWindow(&rEvent) );
         break;
-    case VCLEVENT_OBJECT_DYING:
+    case VclEventId::ObjectDying:
         pFocusTracker->m_aDocumentWindowList.erase( getWindow(&rEvent) );
         SAL_FALLTHROUGH;
-    case VCLEVENT_TOOLBOX_HIGHLIGHTOFF:
+    case VclEventId::ToolboxHighlightOff:
         pFocusTracker->toolbox_highlight_off( getWindow(&rEvent) );
         break;
-    case VCLEVENT_TOOLBOX_HIGHLIGHT:
+    case VclEventId::ToolboxHighlight:
         pFocusTracker->toolbox_highlight_on( getWindow(&rEvent) );
         break;
-    case VCLEVENT_TABPAGE_ACTIVATE:
+    case VclEventId::TabpageActivate:
         pFocusTracker->tabpage_activated( getWindow(&rEvent) );
         break;
-    case VCLEVENT_MENU_HIGHLIGHT:
+    case VclEventId::MenuHighlight:
         // Inspired by code in WindowEventHandler in
         // vcl/unx/gtk/a11y/atkutil.cxx, find out what kind of event
         // it is to avoid blindly using a static_cast and crash,
@@ -209,11 +209,11 @@ void AquaA11yFocusTracker::menu_highlighted(const VclMenuEvent *pEvent)
 
 void AquaA11yFocusTracker::window_got_focus(vcl::Window *pWindow)
 {
-    // The menu bar is handled through VCLEVENT_MENU_HIGHLIGHTED
+    // The menu bar is handled through VclEventId::MenuHighlightED
     if( ! pWindow || !pWindow->IsReallyVisible() || pWindow->GetType() == WINDOW_MENUBARWINDOW )
         return;
 
-    // ToolBoxes are handled through VCLEVENT_TOOLBOX_HIGHLIGHT
+    // ToolBoxes are handled through VclEventId::ToolboxHighlight
     if( pWindow->GetType() == WINDOW_TOOLBOX )
         return;
 

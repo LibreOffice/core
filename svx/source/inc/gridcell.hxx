@@ -793,7 +793,7 @@ public:
 
 protected:
     virtual vcl::Window* getEventWindow() const;
-    virtual void onWindowEvent( const sal_uLong _nEventId, const vcl::Window& _rWindow, const void* _pEventData );
+    virtual void onWindowEvent( const VclEventId _nEventId, const vcl::Window& _rWindow, const void* _pEventData );
 
     // default implementations call our focus listeners, don't forget to call them if you override this
     virtual void onFocusGained( const css::awt::FocusEvent& _rEvent );
@@ -907,7 +907,7 @@ public:
     virtual void SAL_CALL removeChangeListener( const css::uno::Reference< css::form::XChangeListener >& aListener ) throw (css::uno::RuntimeException, std::exception) override;
 
 protected:
-    virtual void onWindowEvent( const sal_uLong _nEventId, const vcl::Window& _rWindow, const void* _pEventData ) override;
+    virtual void onWindowEvent( const VclEventId _nEventId, const vcl::Window& _rWindow, const void* _pEventData ) override;
 
     virtual void onFocusGained( const css::awt::FocusEvent& _rEvent ) override;
     virtual void onFocusLost( const css::awt::FocusEvent& _rEvent ) override;
@@ -959,7 +959,7 @@ public:
 
 protected:
     virtual vcl::Window* getEventWindow() const override;
-    virtual void onWindowEvent( const sal_uLong _nEventId, const vcl::Window& _rWindow, const void* _pEventData ) override;
+    virtual void onWindowEvent( const VclEventId _nEventId, const vcl::Window& _rWindow, const void* _pEventData ) override;
 };
 
 
@@ -1011,7 +1011,7 @@ public:
     virtual void SAL_CALL SAL_CALL makeVisible(sal_Int16 nEntry) throw(css::uno::RuntimeException, std::exception) override;
 
 protected:
-    virtual void onWindowEvent( const sal_uLong _nEventId, const vcl::Window& _rWindow, const void* _pEventData ) override;
+    virtual void onWindowEvent( const VclEventId _nEventId, const vcl::Window& _rWindow, const void* _pEventData ) override;
 
     DECL_LINK( OnDoubleClick, ListBox&, void );
 };
@@ -1056,7 +1056,7 @@ public:
     virtual void SAL_CALL setDropDownLineCount( ::sal_Int16 Lines ) throw (css::uno::RuntimeException, std::exception) override;
 
 protected:
-    virtual void onWindowEvent( const sal_uLong _nEventId, const vcl::Window& _rWindow, const void* _pEventData ) override;
+    virtual void onWindowEvent( const VclEventId _nEventId, const vcl::Window& _rWindow, const void* _pEventData ) override;
 };
 
 

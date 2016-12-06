@@ -732,8 +732,8 @@ void Window::ImplResetReallyVisible()
     // For this, the data member of the event must not be NULL.
     // Previously, we did this in Window::Show, but there some events got lost in certain situations.
     if( bBecameReallyInvisible && ImplIsAccessibleCandidate() )
-        CallEventListeners( VCLEVENT_WINDOW_HIDE, this );
-        // TODO. It's kind of a hack that we're re-using the VCLEVENT_WINDOW_HIDE. Normally, we should
+        CallEventListeners( VclEventId::WindowHide, this );
+        // TODO. It's kind of a hack that we're re-using the VclEventId::WindowHide. Normally, we should
         // introduce another event which explicitly triggers the Accessibility implementations.
 
     vcl::Window* pWindow = mpWindowImpl->mpFirstOverlap;

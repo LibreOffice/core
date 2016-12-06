@@ -148,7 +148,7 @@ void VCLXAccessibleStatusBar::ProcessWindowEvent( const VclWindowEvent& rVclWind
 {
     switch ( rVclWindowEvent.GetId() )
     {
-        case VCLEVENT_STATUSBAR_ITEMADDED:
+        case VclEventId::StatusbarItemAdded:
         {
             if ( m_pStatusBar )
             {
@@ -158,7 +158,7 @@ void VCLXAccessibleStatusBar::ProcessWindowEvent( const VclWindowEvent& rVclWind
             }
         }
         break;
-        case VCLEVENT_STATUSBAR_ITEMREMOVED:
+        case VclEventId::StatusbarItemRemoved:
         {
             if ( m_pStatusBar )
             {
@@ -179,30 +179,30 @@ void VCLXAccessibleStatusBar::ProcessWindowEvent( const VclWindowEvent& rVclWind
             }
         }
         break;
-        case VCLEVENT_STATUSBAR_ALLITEMSREMOVED:
+        case VclEventId::StatusbarAllItemsRemoved:
         {
             for ( sal_Int32 i = m_aAccessibleChildren.size() - 1; i >= 0; --i )
                 RemoveChild( i );
         }
         break;
-        case VCLEVENT_STATUSBAR_SHOWITEM:
-        case VCLEVENT_STATUSBAR_HIDEITEM:
+        case VclEventId::StatusbarShowItem:
+        case VclEventId::StatusbarHideItem:
         {
             if ( m_pStatusBar )
             {
                 sal_uInt16 nItemId = (sal_uInt16)reinterpret_cast<sal_IntPtr>(rVclWindowEvent.GetData());
                 sal_uInt16 nItemPos = m_pStatusBar->GetItemPos( nItemId );
-                UpdateShowing( nItemPos, rVclWindowEvent.GetId() == VCLEVENT_STATUSBAR_SHOWITEM );
+                UpdateShowing( nItemPos, rVclWindowEvent.GetId() == VclEventId::StatusbarShowItem );
             }
         }
         break;
-        case VCLEVENT_STATUSBAR_SHOWALLITEMS:
+        case VclEventId::StatusbarShowAllItems:
         {
             for ( size_t i = 0; i < m_aAccessibleChildren.size(); ++i )
-                UpdateShowing( i, rVclWindowEvent.GetId() == VCLEVENT_STATUSBAR_SHOWALLITEMS );
+                UpdateShowing( i, rVclWindowEvent.GetId() == VclEventId::StatusbarShowAllItems );
         }
         break;
-        case VCLEVENT_STATUSBAR_NAMECHANGED:
+        case VclEventId::StatusbarNameChanged:
         {
             if ( m_pStatusBar )
             {
@@ -212,7 +212,7 @@ void VCLXAccessibleStatusBar::ProcessWindowEvent( const VclWindowEvent& rVclWind
             }
         }
         break;
-        case VCLEVENT_STATUSBAR_DRAWITEM:
+        case VclEventId::StatusbarDrawItem:
         {
             if ( m_pStatusBar )
             {
@@ -222,7 +222,7 @@ void VCLXAccessibleStatusBar::ProcessWindowEvent( const VclWindowEvent& rVclWind
             }
         }
         break;
-        case VCLEVENT_OBJECT_DYING:
+        case VclEventId::ObjectDying:
         {
             if ( m_pStatusBar )
             {

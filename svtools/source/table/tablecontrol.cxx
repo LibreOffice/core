@@ -69,7 +69,7 @@ namespace svt { namespace table
 
     void TableControl::dispose()
     {
-        CallEventListeners( VCLEVENT_OBJECT_DYING );
+        CallEventListeners( VclEventId::ObjectDying );
 
         m_pImpl->setModel( PTableModel() );
         m_pImpl->disposeAccessible();
@@ -648,7 +648,7 @@ namespace svt { namespace table
 
     void TableControl::Select()
     {
-        ImplCallEventListenersAndHandler( VCLEVENT_TABLEROW_SELECT, nullptr );
+        ImplCallEventListenersAndHandler( VclEventId::TableRowSelect, nullptr );
 
         if ( m_pImpl->isAccessibleAlive() )
         {

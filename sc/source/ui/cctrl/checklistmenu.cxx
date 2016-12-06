@@ -777,7 +777,7 @@ void ScMenuFloatingWindow::fireMenuHighlightedEvent()
     if (!xAccMenu.is())
         return;
 
-    VclAccessibleEvent aEvent(VCLEVENT_MENU_HIGHLIGHT, xAccMenu);
+    VclAccessibleEvent aEvent(VclEventId::MenuHighlight, xAccMenu);
     FireVclEvent(aEvent);
 }
 

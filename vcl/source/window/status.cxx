@@ -449,7 +449,7 @@ void StatusBar::ImplDrawItem(vcl::RenderContext& rRenderContext, bool bOffScreen
     }
 
     if (!rRenderContext.ImplIsRecordLayout())
-        CallEventListeners(VCLEVENT_STATUSBAR_DRAWITEM, reinterpret_cast<void*>(pItem->mnId));
+        CallEventListeners(VclEventId::StatusbarDrawItem, reinterpret_cast<void*>(pItem->mnId));
 }
 
 void DrawProgress(vcl::Window* pWindow, vcl::RenderContext& rRenderContext, const Point& rPos,
@@ -876,13 +876,13 @@ void StatusBar::DataChanged( const DataChangedEvent& rDCEvt )
 
 void StatusBar::Click()
 {
-    CallEventListeners( VCLEVENT_STATUSBAR_CLICK );
+    CallEventListeners( VclEventId::StatusbarClick );
     maClickHdl.Call( this );
 }
 
 void StatusBar::DoubleClick()
 {
-    CallEventListeners( VCLEVENT_STATUSBAR_DOUBLECLICK );
+    CallEventListeners( VclEventId::StatusbarDoubleClick );
     maDoubleClickHdl.Call( this );
 }
 
@@ -929,7 +929,7 @@ void StatusBar::InsertItem( sal_uInt16 nItemId, sal_uLong nWidth,
     if ( ImplIsItemUpdate() )
         Invalidate();
 
-    CallEventListeners( VCLEVENT_STATUSBAR_ITEMADDED, reinterpret_cast<void*>(nItemId) );
+    CallEventListeners( VclEventId::StatusbarItemAdded, reinterpret_cast<void*>(nItemId) );
 }
 
 void StatusBar::RemoveItem( sal_uInt16 nItemId )
@@ -944,7 +944,7 @@ void StatusBar::RemoveItem( sal_uInt16 nItemId )
         if ( ImplIsItemUpdate() )
             Invalidate();
 
-        CallEventListeners( VCLEVENT_STATUSBAR_ITEMREMOVED, reinterpret_cast<void*>(nItemId) );
+        CallEventListeners( VclEventId::StatusbarItemRemoved, reinterpret_cast<void*>(nItemId) );
     }
 }
 
@@ -963,7 +963,7 @@ void StatusBar::ShowItem( sal_uInt16 nItemId )
             if ( ImplIsItemUpdate() )
                 Invalidate();
 
-            CallEventListeners( VCLEVENT_STATUSBAR_SHOWITEM, reinterpret_cast<void*>(nItemId) );
+            CallEventListeners( VclEventId::StatusbarShowItem, reinterpret_cast<void*>(nItemId) );
         }
     }
 }
@@ -983,7 +983,7 @@ void StatusBar::HideItem( sal_uInt16 nItemId )
             if ( ImplIsItemUpdate() )
                 Invalidate();
 
-            CallEventListeners( VCLEVENT_STATUSBAR_HIDEITEM, reinterpret_cast<void*>(nItemId) );
+            CallEventListeners( VclEventId::StatusbarHideItem, reinterpret_cast<void*>(nItemId) );
         }
     }
 }
@@ -1010,7 +1010,7 @@ void StatusBar::Clear()
     if ( ImplIsItemUpdate() )
         Invalidate();
 
-    CallEventListeners( VCLEVENT_STATUSBAR_ALLITEMSREMOVED );
+    CallEventListeners( VclEventId::StatusbarAllItemsRemoved );
 }
 
 sal_uInt16 StatusBar::GetItemCount() const
@@ -1468,7 +1468,7 @@ void StatusBar::SetAccessibleName( sal_uInt16 nItemId, const OUString& rName )
         if ( pItem->maAccessibleName != rName )
         {
             pItem->maAccessibleName = rName;
-            CallEventListeners( VCLEVENT_STATUSBAR_NAMECHANGED, reinterpret_cast<void*>(pItem->mnId) );
+            CallEventListeners( VclEventId::StatusbarNameChanged, reinterpret_cast<void*>(pItem->mnId) );
         }
     }
 }

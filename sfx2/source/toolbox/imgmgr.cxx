@@ -204,14 +204,14 @@ IMPL_LINK( SfxImageManager_Impl, SettingsChanged_Impl, VclSimpleEvent&, rEvent, 
 {
     switch (rEvent.GetId())
     {
-    case VCLEVENT_OBJECT_DYING:
+    case VclEventId::ObjectDying:
         if (m_bAppEventListener)
         {
             Application::RemoveEventListener( LINK( this, SfxImageManager_Impl, SettingsChanged_Impl ) );
             m_bAppEventListener = false;
         }
         break;
-    case VCLEVENT_APPLICATION_DATACHANGED:
+    case VclEventId::ApplicationDataChanged:
         // Check if toolbar button size have changed and we have to use system settings
         {
             sal_Int16 nSymbolsSize = m_aOpt.GetCurrentSymbolsSize();

@@ -862,20 +862,20 @@ static bool ImplHandleKey( vcl::Window* pWindow, MouseNotifyEvent nSVEvent,
     KeyEvent aKeyEvent( (sal_Unicode)nCharCode, aKeyCode, nRepeat );
     if( bForward )
     {
-        sal_uInt16 nVCLEvent;
+        VclEventId nVCLEvent;
         switch( nSVEvent )
         {
             case MouseNotifyEvent::KEYINPUT:
-                nVCLEvent = VCLEVENT_WINDOW_KEYINPUT;
+                nVCLEvent = VclEventId::WindowKeyInput;
                 break;
             case MouseNotifyEvent::KEYUP:
-                nVCLEvent = VCLEVENT_WINDOW_KEYUP;
+                nVCLEvent = VclEventId::WindowKeyUp;
                 break;
             default:
-                nVCLEvent = 0;
+                nVCLEvent = VclEventId::NONE;
                 break;
         }
-        if( nVCLEvent && Application::HandleKey( nVCLEvent, pWindow, &aKeyEvent ) )
+        if( nVCLEvent != VclEventId::NONE && Application::HandleKey( nVCLEvent, pWindow, &aKeyEvent ) )
             return true;
     }
 

@@ -227,7 +227,7 @@ IMPL_LINK(FormShellManager, WindowEventHandler, VclWindowEvent&, rEvent, void)
 {
     switch (rEvent.GetId())
     {
-        case VCLEVENT_WINDOW_GETFOCUS:
+        case VclEventId::WindowGetFocus:
         {
             // The window of the center pane got the focus.  Therefore
             // the form shell is moved to the bottom of the object bar
@@ -245,7 +245,7 @@ IMPL_LINK(FormShellManager, WindowEventHandler, VclWindowEvent&, rEvent, void)
         }
         break;
 
-        case VCLEVENT_WINDOW_LOSEFOCUS:
+        case VclEventId::WindowLoseFocus:
             // We follow the sloppy focus policy.  Losing the focus is
             // ignored.  We wait for the focus to be placed either in
             // the window or the form shell.  The later, however, is
@@ -253,9 +253,11 @@ IMPL_LINK(FormShellManager, WindowEventHandler, VclWindowEvent&, rEvent, void)
             // one.
             break;
 
-        case VCLEVENT_OBJECT_DYING:
+        case VclEventId::ObjectDying:
             mpMainViewShellWindow = nullptr;
            break;
+
+        default: break;
     }
 }
 

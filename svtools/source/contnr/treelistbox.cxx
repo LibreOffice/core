@@ -1398,7 +1398,7 @@ void SvTreeListBox::dispose()
 {
     if( pImpl )
     {
-        pImpl->CallEventListeners( VCLEVENT_OBJECT_DYING );
+        pImpl->CallEventListeners( VclEventId::ObjectDying );
         pImpl.reset();
     }
     if( mpImpl )
@@ -1871,7 +1871,7 @@ void SvTreeListBox::CheckButtonHdl()
 {
     aCheckButtonHdl.Call( this );
     if ( pCheckButtonData )
-        pImpl->CallEventListeners( VCLEVENT_CHECKBOX_TOGGLE, static_cast<void*>(pCheckButtonData->GetActEntry()) );
+        pImpl->CallEventListeners( VclEventId::CheckboxToggle, static_cast<void*>(pCheckButtonData->GetActEntry()) );
 }
 
 
@@ -2050,7 +2050,7 @@ void SvTreeListBox::GetFocus()
             pEntry = pImpl->pCursor;
     }
     if ( pEntry )
-        pImpl->CallEventListeners( VCLEVENT_LISTBOX_TREEFOCUS, pEntry );
+        pImpl->CallEventListeners( VclEventId::ListboxTreeFocus, pEntry );
 
 }
 
@@ -2237,7 +2237,7 @@ bool SvTreeListBox::Expand( SvTreeListEntry* pParent )
     // #i92103#
     if ( bExpanded )
     {
-        pImpl->CallEventListeners( VCLEVENT_ITEM_EXPANDED, pParent );
+        pImpl->CallEventListeners( VclEventId::ItemExpanded, pParent );
     }
 
     return bExpanded;
@@ -2263,7 +2263,7 @@ bool SvTreeListBox::Collapse( SvTreeListEntry* pParent )
     // #i92103#
     if ( bCollapsed )
     {
-        pImpl->CallEventListeners( VCLEVENT_ITEM_COLLAPSED, pParent );
+        pImpl->CallEventListeners( VclEventId::ItemCollapsed, pParent );
     }
 
     return bCollapsed;
@@ -2281,7 +2281,7 @@ bool SvTreeListBox::Select( SvTreeListEntry* pEntry, bool bSelect )
         if( bSelect )
         {
             SelectHdl();
-            CallEventListeners( VCLEVENT_LISTBOX_TREESELECT, pEntry);
+            CallEventListeners( VclEventId::ListboxTreeSelect, pEntry);
         }
         else
             DeselectHdl();
@@ -3730,7 +3730,7 @@ void SvTreeListBox::EnableCellFocus()
     pImpl->EnableCellFocus();
 }
 
-void SvTreeListBox::CallImplEventListeners(sal_uLong nEvent, void* pData)
+void SvTreeListBox::CallImplEventListeners(VclEventId nEvent, void* pData)
 {
     CallEventListeners(nEvent, pData);
 }

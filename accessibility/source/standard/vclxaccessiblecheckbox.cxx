@@ -115,7 +115,7 @@ void VCLXAccessibleCheckBox::ProcessWindowEvent( const VclWindowEvent& rVclWindo
 {
     switch ( rVclWindowEvent.GetId() )
     {
-        case VCLEVENT_CHECKBOX_TOGGLE:
+        case VclEventId::CheckboxToggle:
         {
             SetChecked( IsChecked() );
             SetIndeterminate( IsIndeterminate() );

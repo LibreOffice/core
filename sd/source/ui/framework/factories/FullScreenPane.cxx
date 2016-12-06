@@ -177,16 +177,18 @@ IMPL_LINK(FullScreenPane, WindowEventHandler, VclWindowEvent&, rEvent, void)
 {
     switch (rEvent.GetId())
     {
-        case VCLEVENT_WINDOW_RESIZE:
+        case VclEventId::WindowResize:
             GetWindow()->SetPosPixel(Point(0,0));
             GetWindow()->SetSizePixel(Size(
                 mpWorkWindow->GetSizePixel().Width(),
                 mpWorkWindow->GetSizePixel().Height()));
             break;
 
-        case VCLEVENT_OBJECT_DYING:
+        case VclEventId::ObjectDying:
             mpWorkWindow.disposeAndClear();
             break;
+
+        default: break;
     }
 }
 

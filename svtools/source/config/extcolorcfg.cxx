@@ -522,7 +522,7 @@ void ExtendedColorConfig_Impl::UnlockBroadcast()
 
 IMPL_LINK( ExtendedColorConfig_Impl, DataChangedEventListener, VclSimpleEvent&, rEvent, void )
 {
-    if ( rEvent.GetId() == VCLEVENT_APPLICATION_DATACHANGED )
+    if ( rEvent.GetId() == VclEventId::ApplicationDataChanged )
     {
         DataChangedEvent* pData = static_cast<DataChangedEvent*>(static_cast<VclWindowEvent&>(rEvent).GetData());
         if ( (pData->GetType() == DataChangedEventType::SETTINGS) &&

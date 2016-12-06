@@ -198,14 +198,14 @@ namespace svx
     IMPL_LINK( DatabaseLocationInputController_Impl, OnControlAction, VclWindowEvent&, _rEvent, void )
     {
         if  (   ( _rEvent.GetWindow() == &m_rBrowseButton )
-            &&  ( _rEvent.GetId() == VCLEVENT_BUTTON_CLICK )
+            &&  ( _rEvent.GetId() == VclEventId::ButtonClick )
             )
         {
             impl_onBrowseButtonClicked();
         }
 
         if  (   ( _rEvent.GetWindow() == &m_rLocationInput )
-            &&  ( _rEvent.GetId() == VCLEVENT_EDIT_MODIFY )
+            &&  ( _rEvent.GetId() == VclEventId::EditModify )
             )
         {
             m_bNeedExistenceCheck = true;
