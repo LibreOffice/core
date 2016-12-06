@@ -54,7 +54,7 @@ SafeModeDialog::SafeModeDialog(vcl::Window* pParent)
     mpCBCheckProfilesafeExtensions(),
     mpCBDisableAllExtensions(),
     mpCBDeinstallUserExtensions(),
-    mpCBDeinstallAllExtensions(),
+    mpCBResetSharedExtensions(),
     mpCBDisableHWAcceleration(),
     mpCBResetCustomizations(),
     mpCBResetWholeUserProfile(),
@@ -79,7 +79,7 @@ SafeModeDialog::SafeModeDialog(vcl::Window* pParent)
     get(mpCBCheckProfilesafeExtensions, "check_profilesafe_extensions");
     get(mpCBDisableAllExtensions, "check_disable_all_extensions");
     get(mpCBDeinstallUserExtensions, "check_deinstall_user_extensions");
-    get(mpCBDeinstallAllExtensions, "check_deinstall_all_extensions");
+    get(mpCBResetSharedExtensions, "check_reset_shared_extensions");
     get(mpCBDisableHWAcceleration, "check_disable_hw_acceleration");
     get(mpCBResetCustomizations, "check_reset_customizations");
     get(mpCBResetWholeUserProfile, "check_reset_whole_userprofile");
@@ -101,7 +101,7 @@ SafeModeDialog::SafeModeDialog(vcl::Window* pParent)
     mpCBCheckProfilesafeExtensions->SetToggleHdl(LINK(this, SafeModeDialog, CheckBoxHdl));
     mpCBDisableAllExtensions->SetToggleHdl(LINK(this, SafeModeDialog, CheckBoxHdl));
     mpCBDeinstallUserExtensions->SetToggleHdl(LINK(this, SafeModeDialog, CheckBoxHdl));
-    mpCBDeinstallAllExtensions->SetToggleHdl(LINK(this, SafeModeDialog, CheckBoxHdl));
+    mpCBResetSharedExtensions->SetToggleHdl(LINK(this, SafeModeDialog, CheckBoxHdl));
     mpCBDisableHWAcceleration->SetToggleHdl(LINK(this, SafeModeDialog, CheckBoxHdl));
     mpCBResetCustomizations->SetToggleHdl(LINK(this, SafeModeDialog, CheckBoxHdl));
     mpCBResetWholeUserProfile->SetToggleHdl(LINK(this, SafeModeDialog, CheckBoxHdl));
@@ -150,7 +150,7 @@ void SafeModeDialog::dispose()
     mpCBCheckProfilesafeExtensions.clear();
     mpCBDisableAllExtensions.clear();
     mpCBDeinstallUserExtensions.clear();
-    mpCBDeinstallAllExtensions.clear();
+    mpCBResetSharedExtensions.clear();
     mpCBDisableHWAcceleration.clear();
     mpCBResetCustomizations.clear();
     mpCBResetWholeUserProfile.clear();
@@ -168,7 +168,7 @@ void SafeModeDialog::enableDisableWidgets()
     mpCBCheckProfilesafeExtensions->Enable(maBackupFileHelper.isPopPossibleExtensionInfo());
     mpCBDisableAllExtensions->Enable(comphelper::BackupFileHelper::isTryDisableAllExtensionsPossible());
     mpCBDeinstallUserExtensions->Enable(comphelper::BackupFileHelper::isTryDeinstallUserExtensionsPossible());
-    mpCBDeinstallAllExtensions->Enable(comphelper::BackupFileHelper::isTryDeinstallAllExtensionsPossible());
+    mpCBResetSharedExtensions->Enable(comphelper::BackupFileHelper::isTryResetSharedExtensionsPossible());
     mpCBResetCustomizations->Enable(comphelper::BackupFileHelper::isTryResetCustomizationsPossible());
 
     // no disable of mpCBResetWholeUserProfile, always possible (as last choice)
@@ -226,10 +226,10 @@ void SafeModeDialog::applyChanges()
             comphelper::BackupFileHelper::tryDeinstallUserExtensions();
         }
 
-        if (mpCBDeinstallAllExtensions->IsChecked())
+        if (mpCBResetSharedExtensions->IsChecked())
         {
-            // Deinstall all Extensions (user|shared|bundled)
-            comphelper::BackupFileHelper::tryDeinstallAllExtensions();
+            // Reset shared Extensions
+            comphelper::BackupFileHelper::tryResetSharedExtensions();
         }
     }
 
@@ -378,7 +378,7 @@ IMPL_LINK(SafeModeDialog, CheckBoxHdl, CheckBox&, /*pCheckBox*/, void)
         mpCBCheckProfilesafeExtensions->IsChecked() ||
         mpCBDisableAllExtensions->IsChecked() ||
         mpCBDeinstallUserExtensions->IsChecked() ||
-        mpCBDeinstallAllExtensions->IsChecked() ||
+        mpCBResetSharedExtensions->IsChecked() ||
         mpCBDisableHWAcceleration->IsChecked() ||
         mpCBResetCustomizations->IsChecked() ||
         mpCBResetWholeUserProfile->IsChecked());
