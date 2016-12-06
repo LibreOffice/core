@@ -30,7 +30,6 @@ private:
 
 public:
     FilterDialogsTest();
-    virtual ~FilterDialogsTest() override;
 
     // try to open a dialog
     void openAnyDialog();
@@ -41,10 +40,6 @@ public:
 };
 
 FilterDialogsTest::FilterDialogsTest()
-{
-}
-
-FilterDialogsTest::~FilterDialogsTest()
 {
 }
 

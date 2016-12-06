@@ -30,7 +30,6 @@ private:
 
 public:
     UuiDialogsTest();
-    virtual ~UuiDialogsTest() override;
 
     // try to open a dialog
     void openAnyDialog();
@@ -41,10 +40,6 @@ public:
 };
 
 UuiDialogsTest::UuiDialogsTest()
-{
-}
-
-UuiDialogsTest::~UuiDialogsTest()
 {
 }
 

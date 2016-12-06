@@ -30,7 +30,6 @@ private:
 
 public:
     SvtoolsDialogsTest();
-    virtual ~SvtoolsDialogsTest() override;
 
     // try to open a dialog
     void openAnyDialog();
@@ -41,10 +40,6 @@ public:
 };
 
 SvtoolsDialogsTest::SvtoolsDialogsTest()
-{
-}
-
-SvtoolsDialogsTest::~SvtoolsDialogsTest()
 {
 }
 

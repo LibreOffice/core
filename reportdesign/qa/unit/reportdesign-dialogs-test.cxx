@@ -30,7 +30,6 @@ private:
 
 public:
     ReportdesignDialogsTest();
-    virtual ~ReportdesignDialogsTest() override;
 
     // try to open a dialog
     void openAnyDialog();
@@ -41,10 +40,6 @@ public:
 };
 
 ReportdesignDialogsTest::ReportdesignDialogsTest()
-{
-}
-
-ReportdesignDialogsTest::~ReportdesignDialogsTest()
 {
 }
 

@@ -30,7 +30,6 @@ private:
 
 public:
     Chart2DialogsTest();
-    virtual ~Chart2DialogsTest() override;
 
     // try to open a dialog
     void openAnyDialog();
@@ -41,10 +40,6 @@ public:
 };
 
 Chart2DialogsTest::Chart2DialogsTest()
-{
-}
-
-Chart2DialogsTest::~Chart2DialogsTest()
 {
 }
 

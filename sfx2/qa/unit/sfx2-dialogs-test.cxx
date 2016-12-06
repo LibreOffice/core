@@ -30,7 +30,6 @@ private:
 
 public:
     Sfx2DialogsTest();
-    virtual ~Sfx2DialogsTest() override;
 
     // try to open a dialog
     void openAnyDialog();
@@ -41,10 +40,6 @@ public:
 };
 
 Sfx2DialogsTest::Sfx2DialogsTest()
-{
-}
-
-Sfx2DialogsTest::~Sfx2DialogsTest()
 {
 }
 

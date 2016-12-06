@@ -30,7 +30,6 @@ private:
 
 public:
     StarmathDialogsTest();
-    virtual ~StarmathDialogsTest() override;
 
     // try to open a dialog
     void openAnyDialog();
@@ -41,10 +40,6 @@ public:
 };
 
 StarmathDialogsTest::StarmathDialogsTest()
-{
-}
-
-StarmathDialogsTest::~StarmathDialogsTest()
 {
 }
 

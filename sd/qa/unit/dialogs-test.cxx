@@ -97,7 +97,6 @@ private:
 
 public:
     SdDialogsTest();
-    virtual ~SdDialogsTest() override;
 
     virtual void setUp() override;
 
@@ -121,10 +120,6 @@ SdDialogsTest::SdDialogsTest()
     mpSfxItemSetFromSdrObject(nullptr),
     mpEmptySfxItemSet(nullptr),
     mpEmptyFillStyleSfxItemSet(nullptr)
-{
-}
-
-SdDialogsTest::~SdDialogsTest()
 {
 }
 

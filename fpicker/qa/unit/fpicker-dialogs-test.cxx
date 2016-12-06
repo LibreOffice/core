@@ -30,7 +30,6 @@ private:
 
 public:
     FpickerDialogsTest();
-    virtual ~FpickerDialogsTest() override;
 
     // try to open a dialog
     void openAnyDialog();
@@ -41,10 +40,6 @@ public:
 };
 
 FpickerDialogsTest::FpickerDialogsTest()
-{
-}
-
-FpickerDialogsTest::~FpickerDialogsTest()
 {
 }
 

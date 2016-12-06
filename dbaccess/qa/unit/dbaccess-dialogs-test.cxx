@@ -30,7 +30,6 @@ private:
 
 public:
     DbaccessDialogsTest();
-    virtual ~DbaccessDialogsTest() override;
 
     // try to open a dialog
     void openAnyDialog();
@@ -41,10 +40,6 @@ public:
 };
 
 DbaccessDialogsTest::DbaccessDialogsTest()
-{
-}
-
-DbaccessDialogsTest::~DbaccessDialogsTest()
 {
 }
 

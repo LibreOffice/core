@@ -30,7 +30,6 @@ private:
 
 public:
     FormulaDialogsTest();
-    virtual ~FormulaDialogsTest() override;
 
     // try to open a dialog
     void openAnyDialog();
@@ -41,10 +40,6 @@ public:
 };
 
 FormulaDialogsTest::FormulaDialogsTest()
-{
-}
-
-FormulaDialogsTest::~FormulaDialogsTest()
 {
 }
 

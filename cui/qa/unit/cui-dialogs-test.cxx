@@ -30,7 +30,6 @@ private:
 
 public:
     CuiDialogsTest();
-    virtual ~CuiDialogsTest() override;
 
     // try to open a dialog
     void openAnyDialog();
@@ -41,10 +40,6 @@ public:
 };
 
 CuiDialogsTest::CuiDialogsTest()
-{
-}
-
-CuiDialogsTest::~CuiDialogsTest()
 {
 }
 

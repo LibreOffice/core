@@ -30,7 +30,6 @@ private:
 
 public:
     DesktopDialogsTest();
-    virtual ~DesktopDialogsTest() override;
 
     // try to open a dialog
     void openAnyDialog();
@@ -41,10 +40,6 @@ public:
 };
 
 DesktopDialogsTest::DesktopDialogsTest()
-{
-}
-
-DesktopDialogsTest::~DesktopDialogsTest()
 {
 }
 

@@ -30,7 +30,6 @@ private:
 
 public:
     BasctlDialogsTest();
-    virtual ~BasctlDialogsTest() override;
 
     // try to open a dialog
     void openAnyDialog();
@@ -41,10 +40,6 @@ public:
 };
 
 BasctlDialogsTest::BasctlDialogsTest()
-{
-}
-
-BasctlDialogsTest::~BasctlDialogsTest()
 {
 }
 

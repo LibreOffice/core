@@ -38,7 +38,6 @@ private:
 
 public:
     SwDialogsTest2();
-    virtual ~SwDialogsTest2() override;
 
     void setUp() override;
 
@@ -51,10 +50,6 @@ public:
 };
 
 SwDialogsTest2::SwDialogsTest2()
-{
-}
-
-SwDialogsTest2::~SwDialogsTest2()
 {
 }
 

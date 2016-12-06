@@ -70,7 +70,6 @@ private:
 
 public:
     ScScreenshotTest();
-    virtual ~ScScreenshotTest() override;
 
     void testOpeningModalDialogs();
 
@@ -88,10 +87,6 @@ ScScreenshotTest::ScScreenshotTest()
     mCsv("some, strings, here, separated, by, commas"),
     mpStream(),
     mpItemSet()
-{
-}
-
-ScScreenshotTest::~ScScreenshotTest()
 {
 }
 

@@ -30,7 +30,6 @@ private:
 
 public:
     VclDialogsTest();
-    virtual ~VclDialogsTest() override;
 
     // try to open a dialog
     void openAnyDialog();
@@ -41,10 +40,6 @@ public:
 };
 
 VclDialogsTest::VclDialogsTest()
-{
-}
-
-VclDialogsTest::~VclDialogsTest()
 {
 }
 

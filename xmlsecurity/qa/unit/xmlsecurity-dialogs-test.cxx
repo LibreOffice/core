@@ -30,7 +30,6 @@ private:
 
 public:
     XmlsecurityDialogsTest();
-    virtual ~XmlsecurityDialogsTest() override;
 
     // try to open a dialog
     void openAnyDialog();
@@ -41,10 +40,6 @@ public:
 };
 
 XmlsecurityDialogsTest::XmlsecurityDialogsTest()
-{
-}
-
-XmlsecurityDialogsTest::~XmlsecurityDialogsTest()
 {
 }
 
