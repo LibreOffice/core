@@ -25,12 +25,12 @@ class ImplWallpaper
     friend class Wallpaper;
 
 private:
-    Color           maColor;
-    BitmapEx*       mpBitmap;
-    Gradient*       mpGradient;
-    Rectangle*      mpRect;
+    Color                       maColor;
+    std::unique_ptr<BitmapEx>   mpBitmap;
+    std::unique_ptr<Gradient>   mpGradient;
+    std::unique_ptr<Rectangle>  mpRect;
     WallpaperStyle  meStyle;
-    BitmapEx*       mpCache;
+    std::unique_ptr<BitmapEx>   mpCache;
 
 public:
     ImplWallpaper();
