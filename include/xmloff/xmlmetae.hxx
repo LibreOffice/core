@@ -24,7 +24,7 @@
 #include <xmloff/dllapi.h>
 #include <sal/types.h>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <xmloff/xmltoken.hxx>
 
 #include <vector>
@@ -46,7 +46,7 @@ class SvXMLExport;
     office:meta must <em>not</em> be written.
     </p>
  */
-class XMLOFF_DLLPUBLIC SvXMLMetaExport : public ::cppu::WeakImplHelper1<
+class XMLOFF_DLLPUBLIC SvXMLMetaExport : public cppu::WeakImplHelper<
                 css::xml::sax::XDocumentHandler >
 {
 private:

@@ -50,7 +50,7 @@
 #include <xmloff/shapeimport.hxx>
 #include <xmloff/SchXMLImportHelper.hxx>
 #include <xmloff/ProgressBarHelper.hxx>
-#include <cppuhelper/implbase8.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <xmloff/formlayerimport.hxx>
 #include <comphelper/attributelist.hxx>
 
@@ -136,7 +136,7 @@ public:
 };
 
 
-class XMLOFF_DLLPUBLIC SvXMLImport : public ::cppu::WeakImplHelper8<
+class XMLOFF_DLLPUBLIC SvXMLImport : public cppu::WeakImplHelper<
              css::xml::sax::XExtendedDocumentHandler,
              css::xml::sax::XFastDocumentHandler,
              css::lang::XServiceInfo,

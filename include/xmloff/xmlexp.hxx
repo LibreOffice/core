@@ -57,7 +57,7 @@
 
 #include <xmloff/XMLPageExport.hxx>
 #include <xmloff/ProgressBarHelper.hxx>
-#include <cppuhelper/implbase6.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <tools/fldunit.hxx>
 
 #include <list>
@@ -108,7 +108,7 @@ namespace o3tl
     template<> struct typed_flags<SvXMLExportFlags> : is_typed_flags<SvXMLExportFlags, 0x8fff> {};
 }
 
-class XMLOFF_DLLPUBLIC SvXMLExport : public ::cppu::WeakImplHelper6<
+class XMLOFF_DLLPUBLIC SvXMLExport : public cppu::WeakImplHelper<
              css::document::XFilter,
              css::lang::XServiceInfo,
              css::document::XExporter,

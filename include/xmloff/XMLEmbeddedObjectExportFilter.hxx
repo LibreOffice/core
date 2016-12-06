@@ -23,9 +23,9 @@
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 
-class XMLEmbeddedObjectExportFilter : public ::cppu::WeakImplHelper3<
+class XMLEmbeddedObjectExportFilter : public cppu::WeakImplHelper<
              css::xml::sax::XExtendedDocumentHandler,
              css::lang::XServiceInfo,
              css::lang::XInitialization>
