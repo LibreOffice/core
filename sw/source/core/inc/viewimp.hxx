@@ -169,6 +169,7 @@ public:
      */
     void   PaintLayer( const SdrLayerID _nLayerID,
                        SwPrintData const*const pPrintData,
+                       SwPageFrame const& rPageFrame,
                        const SwRect& _rRect,
                        const Color* _pPageBackgrdColor,
                        const bool _bIsPageRightToLeft = false,

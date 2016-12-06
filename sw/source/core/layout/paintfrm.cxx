@@ -3357,7 +3357,7 @@ void SwRootFrame::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect,
                     const IDocumentDrawModelAccess& rIDDMA = pSh->getIDocumentDrawModelAccess();
                     pSh->Imp()->PaintLayer( rIDDMA.GetHellId(),
                                             pPrintData,
-                                            pPage->Frame(),
+                                            *pPage, pPage->Frame(),
                                             &aPageBackgrdColor,
                                             pPage->IsRightToLeft(),
                                             &aSwRedirector );
@@ -3404,7 +3404,7 @@ void SwRootFrame::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect,
                     // OD 09.12.2002 #103045# - add 4th parameter for horizontal text direction.
                     pSh->Imp()->PaintLayer( pSh->GetDoc()->getIDocumentDrawModelAccess().GetHeavenId(),
                                             pPrintData,
-                                            pPage->Frame(),
+                                            *pPage, pPage->Frame(),
                                             &aPageBackgrdColor,
                                             pPage->IsRightToLeft(),
                                             &aSwRedirector );
@@ -7414,11 +7414,11 @@ void SwFrame::Retouch( const SwPageFrame * pPage, const SwRect &rRect ) const
                 // <--
 
                 pSh->Imp()->PaintLayer( rIDDMA.GetHellId(), nullptr,
-                                        rRetouche, &aPageBackgrdColor,
+                                        *pPage, rRetouche, &aPageBackgrdColor,
                                         pPage->IsRightToLeft(),
                                         &aSwRedirector );
                 pSh->Imp()->PaintLayer( rIDDMA.GetHeavenId(), nullptr,
-                                        rRetouche, &aPageBackgrdColor,
+                                        *pPage, rRetouche, &aPageBackgrdColor,
                                         pPage->IsRightToLeft(),
                                         &aSwRedirector );
             }
@@ -7702,7 +7702,8 @@ Graphic SwFlyFrameFormat::MakeGraphic( ImageMap* pMap )
         // --> OD #i76669#
         SwViewObjectContactRedirector aSwRedirector( *pSh );
         // <--
-        pImp->PaintLayer( rIDDMA.GetHellId(), nullptr, aOut, &aPageBackgrdColor,
+        pImp->PaintLayer( rIDDMA.GetHellId(), nullptr,
+                          *pFlyPage, aOut, &aPageBackgrdColor,
                           pFlyPage->IsRightToLeft(),
                           &aSwRedirector );
         gProp.pSLines->PaintLines( pDev, gProp );
@@ -7710,7 +7711,8 @@ Graphic SwFlyFrameFormat::MakeGraphic( ImageMap* pMap )
             pFly->Paint( *pDev, aOut );
         gProp.pSLines->PaintLines( pDev, gProp );
         // OD 30.08.2002 #102450# - add 3rd parameter
-        pImp->PaintLayer( rIDDMA.GetHeavenId(), nullptr, aOut, &aPageBackgrdColor,
+        pImp->PaintLayer( rIDDMA.GetHeavenId(), nullptr,
+                          *pFlyPage, aOut, &aPageBackgrdColor,
                           pFlyPage->IsRightToLeft(),
                           &aSwRedirector );
         gProp.pSLines->PaintLines( pDev, gProp );

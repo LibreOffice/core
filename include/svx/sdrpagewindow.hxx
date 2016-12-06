@@ -39,7 +39,7 @@ namespace sdr
     }
 }
 
-namespace basegfx { class B2DRange; }
+namespace basegfx { class B2DRange; class B2IRange; }
 
 class SdrPaintWindow;
 class SdrPageView;
@@ -74,7 +74,7 @@ public:
     void PrePaint();
     void PrepareRedraw(const vcl::Region& rReg);
     void RedrawAll( sdr::contact::ViewObjectContactRedirector* pRedirector );
-    void RedrawLayer( const SdrLayerID* pId, sdr::contact::ViewObjectContactRedirector* pRedirector );
+    void RedrawLayer( const SdrLayerID* pId, sdr::contact::ViewObjectContactRedirector* pRedirector, basegfx::B2IRange const*);
 
     // Invalidate call, used from ObjectContact(OfPageView) in InvalidatePartOfView(...)
     void InvalidatePageWindow(const basegfx::B2DRange& rRange);

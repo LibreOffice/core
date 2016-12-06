@@ -162,7 +162,8 @@ public:
     void setPreparedPageWindow(SdrPageWindow* pKnownTarget);
 
     void DrawLayer(SdrLayerID nID, OutputDevice* pGivenTarget, sdr::contact::ViewObjectContactRedirector* pRedirector = nullptr,
-                   const Rectangle& rRect =  Rectangle());
+                   const Rectangle& rRect = Rectangle(),
+                   basegfx::B2IRange const* pPageFrame = nullptr);
     void DrawPageViewGrid(OutputDevice& rOut, const Rectangle& rRect, Color aColor = Color( COL_BLACK ) );
 
     Rectangle GetPageRect() const;

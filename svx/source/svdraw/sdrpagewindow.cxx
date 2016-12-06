@@ -352,7 +352,9 @@ void SdrPageWindow::RedrawAll( sdr::contact::ViewObjectContactRedirector* pRedir
 #endif // CLIPPER_TEST
 }
 
-void SdrPageWindow::RedrawLayer( const SdrLayerID* pId, sdr::contact::ViewObjectContactRedirector* pRedirector )
+void SdrPageWindow::RedrawLayer(const SdrLayerID* pId,
+        sdr::contact::ViewObjectContactRedirector* pRedirector,
+        basegfx::B2IRectangle const*const pPageFrame)
 {
     // set redirector
     GetObjectContact().SetViewObjectContactRedirector(pRedirector);
@@ -394,6 +396,11 @@ void SdrPageWindow::RedrawLayer( const SdrLayerID* pId, sdr::contact::ViewObject
         // Writer or calc, coming from original RedrawOneLayer.
         // #i72889# no page painting for layer painting
         aDisplayInfo.SetPageProcessingActive(false);
+
+        if (pPageFrame) // Writer page frame for anchor based clipping
+        {
+            aDisplayInfo.SetWriterPageFrame(*pPageFrame);
+        }
 
         // paint page
         GetObjectContact().ProcessDisplay(aDisplayInfo);

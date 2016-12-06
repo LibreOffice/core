@@ -45,6 +45,7 @@
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdrpaintwindow.hxx>
 #include <comphelper/lok.hxx>
+#include <basegfx/range/b2irectangle.hxx>
 
 using namespace ::com::sun::star;
 
@@ -305,7 +306,9 @@ void SdrPageView::setPreparedPageWindow(SdrPageWindow* pKnownTarget)
     mpPreparedPageWindow = pKnownTarget;
 }
 
-void SdrPageView::DrawLayer( SdrLayerID nID, OutputDevice* pGivenTarget, sdr::contact::ViewObjectContactRedirector* pRedirector, const Rectangle& rRect )
+void SdrPageView::DrawLayer(SdrLayerID nID, OutputDevice* pGivenTarget,
+        sdr::contact::ViewObjectContactRedirector* pRedirector,
+        const Rectangle& rRect, basegfx::B2IRectangle const*const pPageFrame)
 {
     if(GetPage())
     {
@@ -316,7 +319,7 @@ void SdrPageView::DrawLayer( SdrLayerID nID, OutputDevice* pGivenTarget, sdr::co
             if(pKnownTarget)
             {
                 // paint known target
-                pKnownTarget->RedrawLayer(&nID, pRedirector);
+                pKnownTarget->RedrawLayer(&nID, pRedirector, nullptr);
             }
             else
             {
@@ -346,12 +349,11 @@ void SdrPageView::DrawLayer( SdrLayerID nID, OutputDevice* pGivenTarget, sdr::co
                         aTemporaryPaintWindow.SetRedrawRegion(rExistingRegion);
                     else
                         aTemporaryPaintWindow.SetRedrawRegion(vcl::Region(rRect));
-
                     // patch the ExistingPageWindow
                     pPreparedTarget->patchPaintWindow(aTemporaryPaintWindow);
 
                     // redraw the layer
-                    pPreparedTarget->RedrawLayer(&nID, pRedirector);
+                    pPreparedTarget->RedrawLayer(&nID, pRedirector, pPageFrame);
 
                     // restore the ExistingPageWindow
                     pPreparedTarget->unpatchPaintWindow();
@@ -377,7 +379,7 @@ void SdrPageView::DrawLayer( SdrLayerID nID, OutputDevice* pGivenTarget, sdr::co
                         aTemporaryPaintWindow.SetRedrawRegion(rExistingRegion);
                     }
 
-                    aTemporaryPageWindow.RedrawLayer(&nID, pRedirector);
+                    aTemporaryPageWindow.RedrawLayer(&nID, pRedirector, nullptr);
                 }
             }
         }
@@ -387,7 +389,7 @@ void SdrPageView::DrawLayer( SdrLayerID nID, OutputDevice* pGivenTarget, sdr::co
             for(sal_uInt32 a(0L); a < PageWindowCount(); a++)
             {
                 SdrPageWindow* pTarget = GetPageWindow(a);
-                pTarget->RedrawLayer(&nID, pRedirector);
+                pTarget->RedrawLayer(&nID, pRedirector, nullptr);
             }
         }
     }
