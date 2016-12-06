@@ -25,19 +25,19 @@ class ImplWallpaper
     friend class Wallpaper;
 
 private:
-    Color           maColor;
-    BitmapEx*       mpBitmap;
-    Gradient*       mpGradient;
-    Rectangle*      mpRect;
+    Color                       maColor;
+    std::unique_ptr<BitmapEx>   mpBitmap;
+    std::unique_ptr<Gradient>   mpGradient;
+    std::unique_ptr<Rectangle>  mpRect;
     WallpaperStyle  meStyle;
-    BitmapEx*       mpCache;
+    std::unique_ptr<BitmapEx>   mpCache;
 
 public:
     ImplWallpaper();
     ImplWallpaper( const ImplWallpaper& rImplWallpaper );
     ~ImplWallpaper();
 
-    bool operator==( const ImplWallpaper& rImplWallpaper ) const;
+    bool operator==( const ImplWallpaper& rImplWallpaper ) const = delete;
 
     friend SvStream& ReadImplWallpaper( SvStream& rIStm, ImplWallpaper& rImplWallpaper );
     friend SvStream& WriteImplWallpaper( SvStream& rOStm, const ImplWallpaper& rImplWallpaper );

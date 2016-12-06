@@ -338,8 +338,8 @@ void SvtIconChoiceCtrl::SetBackground( const Wallpaper& rPaper )
     if( rPaper != GetBackground() )
     {
         const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-        Wallpaper aEmpty;
-        if( rPaper == aEmpty )
+
+        if( rPaper.GetStyle() == WallpaperStyle::NONE && rPaper.GetColor() == COL_TRANSPARENT && !rPaper.IsBitmap() && !rPaper.IsGradient() && !rPaper.IsRect())
             Control::SetBackground( rStyleSettings.GetFieldColor() );
         else
         {
