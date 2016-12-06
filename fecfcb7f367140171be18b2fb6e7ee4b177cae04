@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a71b18c_ca4c4c79",
+        "filename": "include/svx/svdotable.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-12-06T08:30:03Z",
+      "side": 1,
+      "message": "Ideally I would do the cosmetic part of this hunk in a separate commit.",
+      "revId": "fecfcb7f367140171be18b2fb6e7ee4b177cae04",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a71b18c_ea510810",
+        "filename": "sd/qa/unit/tiledrendering/tiledrendering.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1461,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-12-06T08:30:03Z",
+      "side": 1,
+      "message": "This hardcoded 1072 will be hard to maintain, wouldn\u0027t it be better to override dumpAsXml() in the SfxPoolItem subclass instead?",
+      "revId": "fecfcb7f367140171be18b2fb6e7ee4b177cae04",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a71b18c_0a572403",
+        "filename": "sd/qa/unit/tiledrendering/tiledrendering.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1463,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-12-06T08:30:03Z",
+      "side": 1,
+      "message": "Such an override would fix this problem properly as well.",
+      "revId": "fecfcb7f367140171be18b2fb6e7ee4b177cae04",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
