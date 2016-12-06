@@ -33,6 +33,7 @@
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <tools/poly.hxx>
+#include <o3tl/make_unique.hxx>
 
 namespace
 {
@@ -84,12 +85,12 @@ namespace
             A new RegionBand object is returned that contains the bands that
             represent the given poly-polygon.
     */
-    RegionBand* ImplRectilinearPolygonToBands(const tools::PolyPolygon& rPolyPoly)
+    std::unique_ptr<RegionBand> ImplRectilinearPolygonToBands(const tools::PolyPolygon& rPolyPoly)
     {
         OSL_ASSERT(ImplIsPolygonRectilinear (rPolyPoly));
 
         // Create a new RegionBand object as container of the bands.
-        RegionBand* pRegionBand = new RegionBand();
+        std::unique_ptr<RegionBand> pRegionBand( o3tl::make_unique<RegionBand>() );
         long nLineId = 0;
 
         // Iterate over all polygons.
@@ -176,18 +177,18 @@ namespace
             }
         }
 
-        return pRegionBand;
+        return std::move(pRegionBand);
     }
 
     /** Convert a general polygon (one for which ImplIsPolygonRectilinear()
         returns <FALSE/>) to bands.
     */
-    RegionBand* ImplGeneralPolygonToBands(const tools::PolyPolygon& rPolyPoly, const Rectangle& rPolygonBoundingBox)
+    std::unique_ptr<RegionBand> ImplGeneralPolygonToBands(const tools::PolyPolygon& rPolyPoly, const Rectangle& rPolygonBoundingBox)
     {
         long nLineID = 0;
 
         // initialisation and creation of Bands
-        RegionBand* pRegionBand = new RegionBand();
+        std::unique_ptr<RegionBand> pRegionBand( o3tl::make_unique<RegionBand>() );
         pRegionBand->CreateBandRange(rPolygonBoundingBox.Top(), rPolygonBoundingBox.Bottom());
 
         // insert polygons
@@ -219,7 +220,7 @@ namespace
             }
         }
 
-        return pRegionBand;
+        return std::move(pRegionBand);
     }
 } // end of anonymous namespace
 
@@ -231,9 +232,9 @@ bool vcl::Region::IsEmpty() const
 }
 
 
-RegionBand* ImplCreateRegionBandFromPolyPolygon(const tools::PolyPolygon& rPolyPolygon)
+std::unique_ptr<RegionBand> ImplCreateRegionBandFromPolyPolygon(const tools::PolyPolygon& rPolyPolygon)
 {
-    RegionBand* pRetval = nullptr;
+    std::unique_ptr<RegionBand> pRetval;
 
     if(rPolyPolygon.Count())
     {
@@ -268,15 +269,14 @@ RegionBand* ImplCreateRegionBandFromPolyPolygon(const tools::PolyPolygon& rPolyP
                     // of seps are joined.
                     if(!pRetval->OptimizeBandList())
                     {
-                        delete pRetval;
-                        pRetval = nullptr;
+                        pRetval.reset();
                     }
                 }
             }
         }
     }
 
-    return pRetval;
+    return std::move(pRetval);
 }
 
 tools::PolyPolygon vcl::Region::ImplCreatePolyPolygonFromRegionBand() const
@@ -571,7 +571,7 @@ bool vcl::Region::Union( const Rectangle& rRect )
         return true;
     }
 
-    RegionBand* pNew = new RegionBand(*pCurrent);
+    std::unique_ptr<RegionBand> pNew( o3tl::make_unique<RegionBand>(*pCurrent));
 
     // get justified rectangle
     const long nLeft(std::min(rRect.Left(), rRect.Right()));
@@ -588,11 +588,10 @@ bool vcl::Region::Union( const Rectangle& rRect )
     // cleanup
     if(!pNew->OptimizeBandList())
     {
-        delete pNew;
-        pNew = nullptr;
+        pNew.reset();
     }
 
-    mpRegionBand.reset(pNew);
+    mpRegionBand = std::move(pNew);
     return true;
 }
 
@@ -664,7 +663,7 @@ bool vcl::Region::Intersect( const Rectangle& rRect )
         return true;
     }
 
-    RegionBand* pNew = new RegionBand(*pCurrent);
+    std::unique_ptr<RegionBand> pNew( o3tl::make_unique<RegionBand>(*pCurrent));
 
     // get justified rectangle
     const long nLeft(std::min(rRect.Left(), rRect.Right()));
@@ -681,11 +680,10 @@ bool vcl::Region::Intersect( const Rectangle& rRect )
     // cleanup
     if(!pNew->OptimizeBandList())
     {
-        delete pNew;
-        pNew = nullptr;
+        pNew.reset();
     }
 
-    mpRegionBand.reset(pNew);
+    mpRegionBand = std::move(pNew);
     return true;
 }
 
@@ -745,7 +743,7 @@ bool vcl::Region::Exclude( const Rectangle& rRect )
         return true;
     }
 
-    RegionBand* pNew = new RegionBand(*pCurrent);
+    std::unique_ptr<RegionBand> pNew( o3tl::make_unique<RegionBand>(*pCurrent));
 
     // get justified rectangle
     const long nLeft(std::min(rRect.Left(), rRect.Right()));
@@ -762,11 +760,10 @@ bool vcl::Region::Exclude( const Rectangle& rRect )
     // cleanup
     if(!pNew->OptimizeBandList())
     {
-        delete pNew;
-        pNew = nullptr;
+        pNew.reset();
     }
 
-    mpRegionBand.reset(pNew);
+    mpRegionBand = std::move(pNew);
     return true;
 }
 
@@ -830,7 +827,7 @@ bool vcl::Region::XOr( const Rectangle& rRect )
     }
 
     // only region band mode possibility left here or null/empty
-    RegionBand* pNew = new RegionBand(*getRegionBand());
+    std::unique_ptr<RegionBand> pNew( o3tl::make_unique<RegionBand>(*getRegionBand()));
 
     // get justified rectangle
     const long nLeft(std::min(rRect.Left(), rRect.Right()));
@@ -847,11 +844,10 @@ bool vcl::Region::XOr( const Rectangle& rRect )
     // cleanup
     if(!pNew->OptimizeBandList())
     {
-        delete pNew;
-        pNew = nullptr;
+        pNew.reset();
     }
 
-    mpRegionBand.reset(pNew);
+    mpRegionBand = std::move(pNew);
     return true;
 }
 
@@ -927,7 +923,7 @@ bool vcl::Region::Union( const vcl::Region& rRegion )
     }
 
     // prepare source and target
-    RegionBand* pNew = new RegionBand(*pCurrent);
+    std::unique_ptr<RegionBand> pNew( o3tl::make_unique<RegionBand>(*pCurrent));
 
     // union with source
     pNew->Union(*pSource);
@@ -935,11 +931,10 @@ bool vcl::Region::Union( const vcl::Region& rRegion )
     // cleanup
     if(!pNew->OptimizeBandList())
     {
-        delete pNew;
-        pNew = nullptr;
+        pNew.reset();
     }
 
-    mpRegionBand.reset(pNew);
+    mpRegionBand = std::move(pNew);
     return true;
 }
 
@@ -1047,7 +1042,7 @@ bool vcl::Region::Intersect( const vcl::Region& rRegion )
     else
     {
         // prepare new regionBand
-        RegionBand* pNew = new RegionBand(*pCurrent);
+        std::unique_ptr<RegionBand> pNew( o3tl::make_unique<RegionBand>(*pCurrent));
 
         // intersect with source
         pNew->Intersect(*pSource);
@@ -1055,11 +1050,10 @@ bool vcl::Region::Intersect( const vcl::Region& rRegion )
         // cleanup
         if(!pNew->OptimizeBandList())
         {
-            delete pNew;
-            pNew = nullptr;
+            pNew.reset();
         }
 
-        mpRegionBand.reset(pNew);
+        mpRegionBand = std::move(pNew);
     }
 
     return true;
@@ -1134,7 +1128,7 @@ bool vcl::Region::Exclude( const vcl::Region& rRegion )
     }
 
     // prepare source and target
-    RegionBand* pNew = new RegionBand(*pCurrent);
+    std::unique_ptr<RegionBand> pNew( o3tl::make_unique<RegionBand>(*pCurrent));
 
     // union with source
     const bool bSuccess(pNew->Exclude(*pSource));
@@ -1142,11 +1136,10 @@ bool vcl::Region::Exclude( const vcl::Region& rRegion )
     // cleanup
     if(!bSuccess)
     {
-        delete pNew;
-        pNew = nullptr;
+        pNew.reset();
     }
 
-    mpRegionBand.reset(pNew);
+    mpRegionBand = std::move(pNew);
     return true;
 }
 
@@ -1223,7 +1216,7 @@ bool vcl::Region::XOr( const vcl::Region& rRegion )
     }
 
     // prepare source and target
-    RegionBand* pNew = new RegionBand(*pCurrent);
+    std::unique_ptr<RegionBand> pNew( o3tl::make_unique<RegionBand>(*pCurrent));
 
     // union with source
     pNew->XOr(*pSource);
@@ -1231,11 +1224,10 @@ bool vcl::Region::XOr( const vcl::Region& rRegion )
     // cleanup
     if(!pNew->OptimizeBandList())
     {
-        delete pNew;
-        pNew = nullptr;
+        pNew.reset();
     }
 
-    mpRegionBand.reset(pNew);
+    mpRegionBand = std::move(pNew);
 
     return true;
 }
@@ -1350,12 +1342,12 @@ const RegionBand* vcl::Region::GetAsRegionBand() const
         if(getB2DPolyPolygon())
         {
             // convert B2DPolyPolygon to RegionBand, buffer it and return it
-            const_cast< vcl::Region* >(this)->mpRegionBand.reset(ImplCreateRegionBandFromPolyPolygon(tools::PolyPolygon(*getB2DPolyPolygon())));
+            const_cast< vcl::Region* >(this)->mpRegionBand = ImplCreateRegionBandFromPolyPolygon(tools::PolyPolygon(*getB2DPolyPolygon()));
         }
         else if(getPolyPolygon())
         {
             // convert B2DPolyPolygon to RegionBand, buffer it and return it
-            const_cast< vcl::Region* >(this)->mpRegionBand.reset(ImplCreateRegionBandFromPolyPolygon(*getPolyPolygon()));
+            const_cast< vcl::Region* >(this)->mpRegionBand = ImplCreateRegionBandFromPolyPolygon(*getPolyPolygon());
         }
     }
 
