@@ -29,7 +29,13 @@ gb_CppunitTest_PYTHONDEPS ?= $(call gb_Library_get_target,pyuno_wrapper) $(if $(
 
 ifeq ($(strip $(gb_CppunitTest_GDBTRACE)),)
 ifneq ($(strip $(CPPUNITTRACE)),)
+ifneq ($(filter gdb,$(CPPUNITTRACE)),)
 gb_CppunitTest_GDBTRACE := $(subst gdb,gdb -ex "set environment $(subst =, ,$(gb_CppunitTest_CPPTESTPRECOMMAND))",$(CPPUNITTRACE))
+else ifneq ($(filter lldb,$(CPPUNITTRACE)),)
+dyldpathfile=$(call var2file,$(shell $(gb_MKTEMP)),500,settings set target.env-vars $(gb_CppunitTest_CPPTESTPRECOMMAND))
+gb_CppunitTest_GDBTRACE := $(subst lldb,lldb -s $(dyldpathfile),$(CPPUNITTRACE))
+gb_CppunitTest_POSTGDBTRACE := ; rm -f $(dyldpathfile)
+endif
 gb_CppunitTest__interactive := $(true)
 endif
 endif
