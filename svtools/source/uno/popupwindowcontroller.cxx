@@ -89,7 +89,7 @@ IMPL_LINK( PopupWindowControllerImpl, WindowEventListener, VclWindowEvent&, rWin
 {
     switch( rWindowEvent.GetId() )
     {
-    case VCLEVENT_WINDOW_ENDPOPUPMODE:
+    case VclEventId::WindowEndPopupMode:
     {
         EndPopupModeData* pData = static_cast< EndPopupModeData* >( rWindowEvent.GetData() );
         if( pData && pData->mbTearoff )
@@ -106,7 +106,7 @@ IMPL_LINK( PopupWindowControllerImpl, WindowEventListener, VclWindowEvent&, rWin
         SetPopupWindow(nullptr,nullptr);
         break;
     }
-    case VCLEVENT_WINDOW_PREPARETOGGLEFLOATING:
+    case VclEventId::WindowPrepareToggleFloating:
     {
         if ( mpFloatingWindow && rWindowEvent.GetWindow() == mpFloatingWindow.get() )
         {
@@ -115,33 +115,34 @@ IMPL_LINK( PopupWindowControllerImpl, WindowEventListener, VclWindowEvent&, rWin
         }
         break;
     }
-    case VCLEVENT_WINDOW_CLOSE:
+    case VclEventId::WindowClose:
     {
         SetPopupWindow(nullptr,nullptr);
         SetFloatingWindow();
         break;
     }
-    case VCLEVENT_WINDOW_SHOW:
+    case VclEventId::WindowShow:
     {
         if( mpPopupWindow )
         {
             if( mpToolBox )
-                mpToolBox->CallEventListeners( VCLEVENT_DROPDOWN_OPEN, static_cast<void*>(mpPopupWindow) );
-            mpPopupWindow->CallEventListeners( VCLEVENT_WINDOW_GETFOCUS );
+                mpToolBox->CallEventListeners( VclEventId::DropdownOpen, static_cast<void*>(mpPopupWindow) );
+            mpPopupWindow->CallEventListeners( VclEventId::WindowGetFocus );
             break;
         }
         break;
     }
-    case VCLEVENT_WINDOW_HIDE:
+    case VclEventId::WindowHide:
     {
         if( mpPopupWindow )
         {
-            mpPopupWindow->CallEventListeners( VCLEVENT_WINDOW_LOSEFOCUS );
+            mpPopupWindow->CallEventListeners( VclEventId::WindowLoseFocus );
             if( mpToolBox )
-                mpToolBox->CallEventListeners( VCLEVENT_DROPDOWN_CLOSE, static_cast<void*>(mpPopupWindow) );
+                mpToolBox->CallEventListeners( VclEventId::DropdownClose, static_cast<void*>(mpPopupWindow) );
         }
         break;
     }
+    default: break;
     }
 }
 

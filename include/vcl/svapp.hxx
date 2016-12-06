@@ -725,7 +725,7 @@ public:
 
      @see ImplCallEventListeners(VclSimpleEvent* pEvent)
     */
-    static void                 ImplCallEventListeners( sal_uLong nEvent, vcl::Window* pWin, void* pData );
+    static void                 ImplCallEventListeners( VclEventId nEvent, vcl::Window* pWin, void* pData );
 
     /** Send event to all VCL application event listeners
 
@@ -743,7 +743,7 @@ public:
 
      @see PostKeyEvent
     */
-    static bool                 HandleKey( sal_uLong nEvent, vcl::Window *pWin, KeyEvent* pKeyEvent );
+    static bool                 HandleKey( VclEventId nEvent, vcl::Window *pWin, KeyEvent* pKeyEvent );
 
     /** Send keypress event
 
@@ -753,7 +753,7 @@ public:
 
      @see HandleKey
     */
-    static ImplSVEvent *        PostKeyEvent( sal_uLong nEvent, vcl::Window *pWin, KeyEvent* pKeyEvent );
+    static ImplSVEvent *        PostKeyEvent( VclEventId nEvent, vcl::Window *pWin, KeyEvent* pKeyEvent );
 
     /** Send mouse event
 
@@ -761,7 +761,7 @@ public:
      @param     pWin            Pointer to window to which the event is sent
      @param     pMouseEvent     Mouse event to send
     */
-    static ImplSVEvent *        PostMouseEvent( sal_uLong nEvent, vcl::Window *pWin, MouseEvent* pMouseEvent );
+    static ImplSVEvent *        PostMouseEvent( VclEventId nEvent, vcl::Window *pWin, MouseEvent* pMouseEvent );
 
     /** Remove mouse and keypress events from a window... any also zoom and scroll events
      if the platform supports it.

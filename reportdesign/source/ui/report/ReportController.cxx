@@ -2566,7 +2566,7 @@ sal_Int32 OReportController::getGroupPosition(const uno::Reference< report::XGro
 
 IMPL_LINK( OReportController, EventLstHdl, VclWindowEvent&, _rEvent, void )
 {
-    if ( _rEvent.GetId() == VCLEVENT_WINDOW_CLOSE )
+    if ( _rEvent.GetId() == VclEventId::WindowClose )
     {
         InvalidateFeature(SID_SORTINGANDGROUPING);
         InvalidateFeature(SID_FM_ADD_FIELD);

@@ -181,7 +181,7 @@ protected:
     SAL_DLLPRIVATE void ImplPaintMenuTitle(vcl::RenderContext&, const Rectangle& rRect) const;
     SAL_DLLPRIVATE void ImplSelect();
     SAL_DLLPRIVATE void ImplCallHighlight( sal_uInt16 nHighlightItem );
-    SAL_DLLPRIVATE void ImplCallEventListeners( sal_uLong nEvent, sal_uInt16 nPos );
+    SAL_DLLPRIVATE void ImplCallEventListeners( VclEventId nEvent, sal_uInt16 nPos );
     DECL_DLLPRIVATE_LINK(ImplCallSelect, void*, void );
 
     SAL_DLLPRIVATE void ImplFillLayoutData() const;

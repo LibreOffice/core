@@ -560,8 +560,8 @@ IMPL_LINK(ScreenshotAnnotationDlg_Impl, pictureFrameListener, VclWindowEvent&, r
 
     switch (rEvent.GetId())
     {
-    case VCLEVENT_WINDOW_MOUSEMOVE:
-    case VCLEVENT_WINDOW_MOUSEBUTTONUP:
+    case VclEventId::WindowMouseMove:
+    case VclEventId::WindowMouseButtonUp:
     {
         MouseEvent* pMouseEvent = static_cast< MouseEvent* >(rEvent.GetData());
 
@@ -569,7 +569,7 @@ IMPL_LINK(ScreenshotAnnotationDlg_Impl, pictureFrameListener, VclWindowEvent&, r
         {
             switch (rEvent.GetId())
             {
-            case VCLEVENT_WINDOW_MOUSEMOVE:
+            case VclEventId::WindowMouseMove:
             {
                 if (mpPicture->IsMouseOver())
                 {
@@ -593,7 +593,7 @@ IMPL_LINK(ScreenshotAnnotationDlg_Impl, pictureFrameListener, VclWindowEvent&, r
                 }
                 break;
             }
-            case VCLEVENT_WINDOW_MOUSEBUTTONUP:
+            case VclEventId::WindowMouseButtonUp:
             {
                 if (mpPicture->IsMouseOver() && mpHilighted)
                 {

@@ -483,7 +483,7 @@ public:
                         );
     void                DrawHighlightFrame(vcl::RenderContext& rRenderContext, const Rectangle& rBmpRect);
 
-    void                CallEventListeners( sal_uLong nEvent, void* pData );
+    void                CallEventListeners( VclEventId nEvent, void* pData );
 
     ::svt::IAccessibleFactory& GetAccessibleFactory()
     {

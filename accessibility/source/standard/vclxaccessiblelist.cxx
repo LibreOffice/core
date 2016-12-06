@@ -337,18 +337,18 @@ void VCLXAccessibleList::ProcessWindowEvent (const VclWindowEvent& rVclWindowEve
 {
     switch ( rVclWindowEvent.GetId() )
       {
-        case VCLEVENT_DROPDOWN_SELECT:
-        case VCLEVENT_LISTBOX_SELECT:
+        case VclEventId::DropdownSelect:
+        case VclEventId::ListboxSelect:
             if ( !m_bDisableProcessEvent )
                 UpdateSelection_Impl_Acc(b_IsDropDownList);
             break;
-        case VCLEVENT_LISTBOX_FOCUSITEMCHANGED:
+        case VclEventId::ListboxFocusItemChanged:
             if ( !m_bDisableProcessEvent )
                 UpdateFocus_Impl_Acc((sal_uInt16)reinterpret_cast<sal_uIntPtr>(rVclWindowEvent.GetData()),b_IsDropDownList);
             break;
-        case VCLEVENT_WINDOW_GETFOCUS:
+        case VclEventId::WindowGetFocus:
             break;
-        case VCLEVENT_CONTROL_GETFOCUS:
+        case VclEventId::ControlGetFocus:
             {
                 VCLXAccessibleComponent::ProcessWindowEvent (rVclWindowEvent);
                 if (m_aBoxType == COMBOBOX && b_IsDropDownList)
@@ -386,28 +386,28 @@ void VCLXAccessibleList::ProcessWindowEvent (const VclWindowEvent& rVclWindowEve
 void VCLXAccessibleList::ProcessWindowEvent (const VclWindowEvent& rVclWindowEvent)
 {
     // Create a reference to this object to prevent an early release of the
-    // listbox (VCLEVENT_OBJECT_DYING).
+    // listbox (VclEventId::ObjectDying).
     Reference< XAccessible > xTemp = this;
 
     switch ( rVclWindowEvent.GetId() )
     {
-        case VCLEVENT_DROPDOWN_OPEN:
+        case VclEventId::DropdownOpen:
             notifyVisibleStates(true);
             break;
-        case VCLEVENT_DROPDOWN_CLOSE:
+        case VclEventId::DropdownClose:
             notifyVisibleStates(false);
             break;
-        case VCLEVENT_LISTBOX_SCROLLED:
-        case VCLEVENT_COMBOBOX_SCROLLED:
+        case VclEventId::ListboxScrolled:
+        case VclEventId::ComboboxScrolled:
             UpdateEntryRange_Impl();
             break;
 
-        // The selection events VCLEVENT_COMBOBOX_SELECT and
-        // VCLEVENT_COMBOBOX_DESELECT are not handled here because here we
+        // The selection events VclEventId::ComboboxSelect and
+        // VclEventId::ComboboxDeselect are not handled here because here we
         // have no access to the edit field.  Its text is necessary to
         // identify the currently selected item.
 
-        case VCLEVENT_OBJECT_DYING:
+        case VclEventId::ObjectDying:
         {
             dispose();
 
@@ -415,18 +415,18 @@ void VCLXAccessibleList::ProcessWindowEvent (const VclWindowEvent& rVclWindowEve
             break;
         }
 
-        case VCLEVENT_LISTBOX_ITEMREMOVED:
-        case VCLEVENT_COMBOBOX_ITEMREMOVED:
+        case VclEventId::ListboxItemRemoved:
+        case VclEventId::ComboboxItemRemoved:
             HandleChangedItemList (false, reinterpret_cast<sal_IntPtr>(
                 rVclWindowEvent.GetData()));
             break;
 
-        case VCLEVENT_LISTBOX_ITEMADDED:
-        case VCLEVENT_COMBOBOX_ITEMADDED:
+        case VclEventId::ListboxItemAdded:
+        case VclEventId::ComboboxItemAdded:
             HandleChangedItemList (true, reinterpret_cast<sal_IntPtr>(
                 rVclWindowEvent.GetData()));
             break;
-        case VCLEVENT_CONTROL_GETFOCUS:
+        case VclEventId::ControlGetFocus:
             {
                 VCLXAccessibleComponent::ProcessWindowEvent (rVclWindowEvent);
                 // Added by IBM Symphony Acc team to handle the list item focus when List control get focus

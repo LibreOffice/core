@@ -69,6 +69,7 @@ class MenuFloatingWindow;
 class VCLXWindow;
 class VclWindowEvent;
 enum class ImplPaintFlags;
+enum class VclEventId;
 
 namespace com { namespace sun { namespace star {
 namespace accessibility {
@@ -749,7 +750,7 @@ protected:
 
             void                        SetCompoundControl( bool bCompound );
 
-            void                        CallEventListeners( sal_uLong nEvent, void* pData = nullptr );
+            void                        CallEventListeners( VclEventId nEvent, void* pData = nullptr );
     static  void                        FireVclEvent( VclSimpleEvent& rEvent );
 
     virtual bool                        AcquireGraphics() const override;

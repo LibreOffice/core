@@ -82,7 +82,7 @@ void SpinButton::Up()
         ImplMoveFocus(true);
     }
 
-    ImplCallEventListenersAndHandler(VCLEVENT_SPINBUTTON_UP, nullptr );
+    ImplCallEventListenersAndHandler(VclEventId::SpinbuttonUp, nullptr );
 }
 
 void SpinButton::Down()
@@ -95,7 +95,7 @@ void SpinButton::Down()
         ImplMoveFocus(false);
     }
 
-    ImplCallEventListenersAndHandler(VCLEVENT_SPINBUTTON_DOWN, nullptr );
+    ImplCallEventListenersAndHandler(VclEventId::SpinbuttonDown, nullptr );
 }
 
 void SpinButton::Resize()

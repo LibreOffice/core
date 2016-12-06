@@ -272,7 +272,7 @@ TaskPaneList* SystemWindow::GetTaskPaneList()
 bool SystemWindow::Close()
 {
     VclPtr<vcl::Window> xWindow = this;
-    CallEventListeners( VCLEVENT_WINDOW_CLOSE );
+    CallEventListeners( VclEventId::WindowClose );
     if ( xWindow->IsDisposed() )
         return false;
 
@@ -936,7 +936,7 @@ void SystemWindow::SetMenuBar(MenuBar* pMenuBar)
                 pOldWindow = nullptr;
             if ( pOldWindow )
             {
-                CallEventListeners( VCLEVENT_WINDOW_MENUBARREMOVED, static_cast<void*>(pOldMenuBar) );
+                CallEventListeners( VclEventId::WindowMenubarRemoved, static_cast<void*>(pOldMenuBar) );
                 pOldWindow->SetAccessible( css::uno::Reference< css::accessibility::XAccessible >() );
             }
             if ( pMenuBar )
@@ -946,7 +946,7 @@ void SystemWindow::SetMenuBar(MenuBar* pMenuBar)
                 pNewWindow = MenuBar::ImplCreate(mpWindowImpl->mpBorderWindow, pOldWindow, pMenuBar);
                 static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->SetMenuBarWindow(pNewWindow);
 
-                CallEventListeners( VCLEVENT_WINDOW_MENUBARADDED, static_cast<void*>(pMenuBar) );
+                CallEventListeners( VclEventId::WindowMenubarAdded, static_cast<void*>(pMenuBar) );
             }
             else
                 static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->SetMenuBarWindow( nullptr );

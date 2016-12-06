@@ -439,7 +439,7 @@ void Window::SetAccessibleName( const OUString& rName )
     delete mpWindowImpl->mpAccessibleInfos->pAccessibleName;
     mpWindowImpl->mpAccessibleInfos->pAccessibleName = new OUString( rName );
 
-    CallEventListeners( VCLEVENT_WINDOW_FRAMETITLECHANGED, &oldName );
+    CallEventListeners( VclEventId::WindowFrameTitleChanged, &oldName );
 }
 
 OUString Window::GetAccessibleName() const

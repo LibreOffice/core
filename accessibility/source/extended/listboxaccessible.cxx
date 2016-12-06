@@ -50,7 +50,7 @@ namespace accessibility
         {
             switch ( rEvent.GetId() )
             {
-                case  VCLEVENT_OBJECT_DYING :
+                case  VclEventId::ObjectDying :
                 {
                     if ( m_pWindow )
                         m_pWindow->RemoveEventListener( LINK( this, ListBoxAccessibleBase, WindowEventListener ) );
@@ -58,6 +58,7 @@ namespace accessibility
                     dispose();
                     break;
                 }
+                default: break;
             }
         }
     }

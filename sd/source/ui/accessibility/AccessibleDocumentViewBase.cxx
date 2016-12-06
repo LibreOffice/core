@@ -165,7 +165,7 @@ IMPL_LINK(AccessibleDocumentViewBase, WindowChildEventListener,
         //      DBG_ASSERT( pVclEvent->GetWindow(), "Window???" );
         switch (rEvent.GetId())
         {
-            case VCLEVENT_OBJECT_DYING:
+            case VclEventId::ObjectDying:
             {
                 // Window is dying.  Unregister from VCL Window.
                 // This is also attempted in the disposing() method.
@@ -179,7 +179,7 @@ IMPL_LINK(AccessibleDocumentViewBase, WindowChildEventListener,
             }
             break;
 
-            case VCLEVENT_WINDOW_SHOW:
+            case VclEventId::WindowShow:
             {
                 // A new window has been created.  Is it an OLE object?
                 vcl::Window* pChildWindow = static_cast<vcl::Window*>(
@@ -193,7 +193,7 @@ IMPL_LINK(AccessibleDocumentViewBase, WindowChildEventListener,
             }
             break;
 
-            case VCLEVENT_WINDOW_HIDE:
+            case VclEventId::WindowHide:
             {
                 // A window has been destroyed.  Has that been an OLE
                 // object?
@@ -207,6 +207,8 @@ IMPL_LINK(AccessibleDocumentViewBase, WindowChildEventListener,
                 }
             }
             break;
+
+            default: break;
         }
 }
 

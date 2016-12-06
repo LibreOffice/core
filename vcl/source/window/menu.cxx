@@ -141,7 +141,7 @@ Menu::~Menu()
 
 void Menu::dispose()
 {
-    ImplCallEventListeners( VCLEVENT_OBJECT_DYING, ITEMPOS_INVALID );
+    ImplCallEventListeners( VclEventId::ObjectDying, ITEMPOS_INVALID );
 
     // at the window free the reference to the accessible component
     // and make sure the MenuFloatingWindow knows about our destruction
@@ -210,7 +210,7 @@ void Menu::Activate()
 
     ImplMenuDelData aDelData( this );
 
-    ImplCallEventListeners( VCLEVENT_MENU_ACTIVATE, ITEMPOS_INVALID );
+    ImplCallEventListeners( VclEventId::MenuActivate, ITEMPOS_INVALID );
 
     if( !aDelData.isDeleted() )
     {
@@ -251,7 +251,7 @@ void Menu::Deactivate()
     ImplMenuDelData aDelData( this );
 
     Menu* pStartMenu = ImplGetStartMenu();
-    ImplCallEventListeners( VCLEVENT_MENU_DEACTIVATE, ITEMPOS_INVALID );
+    ImplCallEventListeners( VclEventId::MenuDeactivate, ITEMPOS_INVALID );
 
     if( !aDelData.isDeleted() )
     {
@@ -300,7 +300,7 @@ void Menu::Select()
 {
     ImplMenuDelData aDelData( this );
 
-    ImplCallEventListeners( VCLEVENT_MENU_SELECT, GetItemPos( GetCurItemId() ) );
+    ImplCallEventListeners( VclEventId::MenuSelect, GetItemPos( GetCurItemId() ) );
     if ( !aDelData.isDeleted() && !aSelectHdl.Call( this ) )
     {
         if( !aDelData.isDeleted() )
@@ -328,14 +328,14 @@ void Menu::ImplSelectWithStart( Menu* pSMenu )
 }
 #endif
 
-void Menu::ImplCallEventListeners( sal_uLong nEvent, sal_uInt16 nPos )
+void Menu::ImplCallEventListeners( VclEventId nEvent, sal_uInt16 nPos )
 {
     ImplMenuDelData aDelData( this );
 
     VclMenuEvent aEvent( this, nEvent, nPos );
 
     // This is needed by atk accessibility bridge
-    if ( nEvent == VCLEVENT_MENU_HIGHLIGHT )
+    if ( nEvent == VclEventId::MenuHighlight )
     {
         Application::ImplCallEventListeners( aEvent );
     }
@@ -404,7 +404,7 @@ void Menu::InsertItem(sal_uInt16 nItemId, const OUString& rStr, MenuItemBits nIt
         if ( pWin->IsVisible() )
             pWin->Invalidate();
     }
-    ImplCallEventListeners( VCLEVENT_MENU_INSERTITEM, nPos );
+    ImplCallEventListeners( VclEventId::MenuInsertItem, nPos );
 }
 
 void Menu::InsertItem(sal_uInt16 nItemId, const Image& rImage,
@@ -546,7 +546,7 @@ void Menu::InsertSeparator(const OString &rIdent, sal_uInt16 nPos)
     delete mpLayoutData;
     mpLayoutData = nullptr;
 
-    ImplCallEventListeners( VCLEVENT_MENU_INSERTITEM, nPos );
+    ImplCallEventListeners( VclEventId::MenuInsertItem, nPos );
 }
 
 void Menu::RemoveItem( sal_uInt16 nPos )
@@ -574,7 +574,7 @@ void Menu::RemoveItem( sal_uInt16 nPos )
     mpLayoutData = nullptr;
 
     if ( bRemove )
-        ImplCallEventListeners( VCLEVENT_MENU_REMOVEITEM, nPos );
+        ImplCallEventListeners( VclEventId::MenuRemoveItem, nPos );
 }
 
 void ImplCopyItem( Menu* pThis, const Menu& rMenu, sal_uInt16 nPos, sal_uInt16 nNewPos )
@@ -804,7 +804,7 @@ void Menu::SetPopupMenu( sal_uInt16 nItemId, PopupMenu* pMenu )
 
     oldSubMenu.disposeAndClear();
 
-    ImplCallEventListeners( VCLEVENT_MENU_SUBMENUCHANGED, nPos );
+    ImplCallEventListeners( VclEventId::MenuSubmenuChanged, nPos );
 }
 
 PopupMenu* Menu::GetPopupMenu( sal_uInt16 nItemId ) const
@@ -932,7 +932,7 @@ void Menu::CheckItem( sal_uInt16 nItemId, bool bCheck )
     if( ImplGetSalMenu() )
         ImplGetSalMenu()->CheckItem( nPos, bCheck );
 
-    ImplCallEventListeners( bCheck ? VCLEVENT_MENU_ITEMCHECKED : VCLEVENT_MENU_ITEMUNCHECKED, nPos );
+    ImplCallEventListeners( bCheck ? VclEventId::MenuItemChecked : VclEventId::MenuItemUnchecked, nPos );
 }
 
 bool Menu::IsItemChecked( sal_uInt16 nItemId ) const
@@ -976,7 +976,7 @@ void Menu::EnableItem( sal_uInt16 nItemId, bool bEnable )
         if( ImplGetSalMenu() )
             ImplGetSalMenu()->EnableItem( nPos, bEnable );
 
-        ImplCallEventListeners( bEnable ? VCLEVENT_MENU_ENABLE : VCLEVENT_MENU_DISABLE, nPos );
+        ImplCallEventListeners( bEnable ? VclEventId::MenuEnable : VclEventId::MenuDisable, nPos );
     }
 }
 
@@ -1039,7 +1039,7 @@ void Menu::SetItemText( sal_uInt16 nItemId, const OUString& rStr )
                 pWin->Invalidate();
         }
 
-        ImplCallEventListeners( VCLEVENT_MENU_ITEMTEXTCHANGED, nPos );
+        ImplCallEventListeners( VclEventId::MenuItemTextChanged, nPos );
     }
 }
 
@@ -2137,7 +2137,7 @@ void Menu::ImplCallHighlight(sal_uInt16 nItem)
     MenuItemData* pData = pItemList->GetDataFromPos(nItem);
     if ( pData )
         nSelectedId = pData->nId;
-    ImplCallEventListeners( VCLEVENT_MENU_HIGHLIGHT, GetItemPos( GetCurItemId() ) );
+    ImplCallEventListeners( VclEventId::MenuHighlight, GetItemPos( GetCurItemId() ) );
 
     if( !aDelData.isDeleted() )
         nSelectedId = 0;
@@ -2635,7 +2635,7 @@ bool MenuBar::HandleMenuHighlightEvent( Menu *pMenu, sal_uInt16 nHighlightEventI
         ImplMenuDelData aDelData( pMenu );
 
         if( mnHighlightedItemPos != ITEMPOS_INVALID )
-            pMenu->ImplCallEventListeners( VCLEVENT_MENU_DEHIGHLIGHT, mnHighlightedItemPos );
+            pMenu->ImplCallEventListeners( VclEventId::MenuDehighlight, mnHighlightedItemPos );
 
         if( !aDelData.isDeleted() )
         {
@@ -2949,7 +2949,7 @@ sal_uInt16 PopupMenu::ImplExecute( const VclPtr<vcl::Window>& pW, const Rectangl
             {
                 pData->bIsTemporary = true;
             }
-            ImplCallEventListeners(VCLEVENT_MENU_SUBMENUCHANGED, nPos);
+            ImplCallEventListeners(VclEventId::MenuSubmenuChanged, nPos);
         }
     }
     else if (!(nMenuFlags & MenuFlags::NoAutoMnemonics))
@@ -3037,7 +3037,7 @@ sal_uInt16 PopupMenu::ImplExecute( const VclPtr<vcl::Window>& pW, const Rectangl
                 aPos = static_cast<MenuFloatingWindow *>(pSFrom->pWindow.get())->GetHighlightedItem();
 
             pWin->SetPosInParent( aPos );  // store position to be sent in SUBMENUDEACTIVATE
-            pSFrom->ImplCallEventListeners( VCLEVENT_MENU_SUBMENUACTIVATE, aPos );
+            pSFrom->ImplCallEventListeners( VclEventId::MenuSubmenuActivate, aPos );
         }
     }
     if ( bPreSelectFirst )

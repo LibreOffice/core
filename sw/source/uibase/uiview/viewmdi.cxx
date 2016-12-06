@@ -265,18 +265,19 @@ IMPL_LINK( SwView, WindowChildEventListener, VclWindowEvent&, rEvent, void )
 
     switch ( rEvent.GetId() )
     {
-        case VCLEVENT_WINDOW_HIDE:
+        case VclEventId::WindowHide:
             if( pChildWin == m_pHScrollbar )
                 ShowHScrollbar( false );
             else if( pChildWin == m_pVScrollbar )
                 ShowVScrollbar( false );
             break;
-        case VCLEVENT_WINDOW_SHOW:
+        case VclEventId::WindowShow:
             if( pChildWin == m_pHScrollbar )
                 ShowHScrollbar( true );
             else if( pChildWin == m_pVScrollbar )
                 ShowVScrollbar( true );
             break;
+        default: break;
     }
 }
 

@@ -69,12 +69,12 @@ void VCLXAccessibleEdit::ProcessWindowEvent( const VclWindowEvent& rVclWindowEve
 {
     switch ( rVclWindowEvent.GetId() )
     {
-        case VCLEVENT_EDIT_MODIFY:
+        case VclEventId::EditModify:
         {
             SetText( implGetText() );
         }
         break;
-        case VCLEVENT_EDIT_CARETCHANGED:
+        case VclEventId::EditCaretChanged:
         {
             sal_Int32 nOldCaretPosition = m_nCaretPosition;
             m_nCaretPosition = getCaretPosition();
@@ -92,7 +92,7 @@ void VCLXAccessibleEdit::ProcessWindowEvent( const VclWindowEvent& rVclWindowEve
             }
         }
         break;
-        case VCLEVENT_EDIT_SELECTIONCHANGED:
+        case VclEventId::EditSelectionChanged:
         {
             VclPtr<vcl::Window> pWindow = GetWindow();
             if (pWindow && pWindow->HasChildPathFocus())

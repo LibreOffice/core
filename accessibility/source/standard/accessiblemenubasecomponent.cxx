@@ -542,82 +542,82 @@ void OAccessibleMenuBaseComponent::ProcessMenuEvent( const VclMenuEvent& rVclMen
 
     switch ( rVclMenuEvent.GetId() )
     {
-        case VCLEVENT_MENU_SHOW:
-        case VCLEVENT_MENU_HIDE:
+        case VclEventId::MenuShow:
+        case VclEventId::MenuHide:
         {
             UpdateVisible();
         }
         break;
-        case VCLEVENT_MENU_HIGHLIGHT:
+        case VclEventId::MenuHighlight:
         {
             SetFocused( false );
             UpdateFocused( nItemPos, true );
             UpdateSelected( nItemPos, true );
         }
         break;
-        case VCLEVENT_MENU_DEHIGHLIGHT:
+        case VclEventId::MenuDehighlight:
         {
             UpdateFocused( nItemPos, false );
             UpdateSelected( nItemPos, false );
         }
         break;
-        case VCLEVENT_MENU_SUBMENUACTIVATE:
+        case VclEventId::MenuSubmenuActivate:
         {
         }
         break;
-        case VCLEVENT_MENU_SUBMENUDEACTIVATE:
+        case VclEventId::MenuSubmenuDeactivate:
         {
             UpdateFocused( nItemPos, true );
         }
         break;
-        case VCLEVENT_MENU_ENABLE:
+        case VclEventId::MenuEnable:
         {
             UpdateEnabled( nItemPos, true );
         }
         break;
-        case VCLEVENT_MENU_DISABLE:
+        case VclEventId::MenuDisable:
         {
             UpdateEnabled( nItemPos, false );
         }
         break;
-        case VCLEVENT_MENU_SUBMENUCHANGED:
+        case VclEventId::MenuSubmenuChanged:
         {
             RemoveChild( nItemPos );
             InsertChild( nItemPos );
         }
         break;
-        case VCLEVENT_MENU_INSERTITEM:
+        case VclEventId::MenuInsertItem:
         {
             InsertChild( nItemPos );
         }
         break;
-        case VCLEVENT_MENU_REMOVEITEM:
+        case VclEventId::MenuRemoveItem:
         {
             RemoveChild( nItemPos );
         }
         break;
-        case VCLEVENT_MENU_ACCESSIBLENAMECHANGED:
+        case VclEventId::MenuAccessibleNameChanged:
         {
             UpdateAccessibleName( nItemPos );
         }
         break;
-        case VCLEVENT_MENU_ITEMTEXTCHANGED:
+        case VclEventId::MenuItemTextChanged:
         {
             UpdateAccessibleName( nItemPos );
             UpdateItemText( nItemPos );
         }
         break;
-        case VCLEVENT_MENU_ITEMCHECKED:
+        case VclEventId::MenuItemChecked:
         {
             UpdateChecked( nItemPos, true );
         }
         break;
-        case VCLEVENT_MENU_ITEMUNCHECKED:
+        case VclEventId::MenuItemUnchecked:
         {
             UpdateChecked( nItemPos, false );
         }
         break;
-        case VCLEVENT_OBJECT_DYING:
+        case VclEventId::ObjectDying:
         {
             if ( m_pMenu )
             {

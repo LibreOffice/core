@@ -64,8 +64,8 @@ void VCLXAccessibleDropDownComboBox::ProcessWindowEvent (const VclWindowEvent& r
 {
     switch ( rVclWindowEvent.GetId() )
     {
-        case VCLEVENT_DROPDOWN_OPEN:
-        case VCLEVENT_DROPDOWN_CLOSE:
+        case VclEventId::DropdownOpen:
+        case VclEventId::DropdownClose:
         {
             break;
         }

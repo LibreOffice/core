@@ -312,7 +312,7 @@ void OGenericUnoDialog::destroyDialog()
 IMPL_LINK( OGenericUnoDialog, OnDialogDying, VclWindowEvent&, _rEvent, void )
 {
     OSL_ENSURE( _rEvent.GetWindow() == m_pDialog, "OGenericUnoDialog::OnDialogDying: where does this come from?" );
-    if ( _rEvent.GetId() == VCLEVENT_OBJECT_DYING )
+    if ( _rEvent.GetId() == VclEventId::ObjectDying )
         m_pDialog = nullptr;
 }
 

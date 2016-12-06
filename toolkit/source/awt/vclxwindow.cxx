@@ -438,19 +438,19 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 
     switch ( rVclWindowEvent.GetId() )
     {
-        case VCLEVENT_WINDOW_ENABLED:
-        case VCLEVENT_WINDOW_DISABLED:
+        case VclEventId::WindowEnabled:
+        case VclEventId::WindowDisabled:
         {
             Callback aCallback = CallWindow2Listener(
                 mpImpl->getWindow2Listeners(),
-                ( VCLEVENT_WINDOW_ENABLED == rVclWindowEvent.GetId() ),
+                ( VclEventId::WindowEnabled == rVclWindowEvent.GetId() ),
                 EventObject( *this )
             );
             ImplExecuteAsyncWithoutSolarLock( aCallback );
         }
         break;
 
-        case VCLEVENT_WINDOW_PAINT:
+        case VclEventId::WindowPaint:
         {
             if ( mpImpl->getPaintListeners().getLength() )
             {
@@ -462,7 +462,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             }
         }
         break;
-        case VCLEVENT_WINDOW_MOVE:
+        case VclEventId::WindowMove:
         {
             if ( mpImpl->getWindowListeners().getLength() )
             {
@@ -473,7 +473,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             }
         }
         break;
-        case VCLEVENT_WINDOW_RESIZE:
+        case VclEventId::WindowResize:
         {
             if ( mpImpl->getWindowListeners().getLength() )
             {
@@ -484,7 +484,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             }
         }
         break;
-        case VCLEVENT_WINDOW_SHOW:
+        case VclEventId::WindowShow:
         {
             if ( mpImpl->getWindowListeners().getLength() )
             {
@@ -503,7 +503,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             }
         }
         break;
-        case VCLEVENT_WINDOW_HIDE:
+        case VclEventId::WindowHide:
         {
             if ( mpImpl->getWindowListeners().getLength() )
             {
@@ -522,7 +522,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             }
         }
         break;
-        case VCLEVENT_WINDOW_ACTIVATE:
+        case VclEventId::WindowActivate:
         {
             if ( mpImpl->getTopWindowListeners().getLength() )
             {
@@ -532,7 +532,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             }
         }
         break;
-        case VCLEVENT_WINDOW_DEACTIVATE:
+        case VclEventId::WindowDeactivate:
         {
             if ( mpImpl->getTopWindowListeners().getLength() )
             {
@@ -542,7 +542,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             }
         }
         break;
-        case VCLEVENT_WINDOW_CLOSE:
+        case VclEventId::WindowClose:
         {
             if ( mpImpl->getDockableWindowListeners().getLength() )
             {
@@ -558,14 +558,14 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             }
         }
         break;
-        case VCLEVENT_CONTROL_GETFOCUS:
-        case VCLEVENT_WINDOW_GETFOCUS:
+        case VclEventId::ControlGetFocus:
+        case VclEventId::WindowGetFocus:
         {
             if  (   (   rVclWindowEvent.GetWindow()->IsCompoundControl()
-                    &&  rVclWindowEvent.GetId() == VCLEVENT_CONTROL_GETFOCUS
+                    &&  rVclWindowEvent.GetId() == VclEventId::ControlGetFocus
                     )
                 ||  (   !rVclWindowEvent.GetWindow()->IsCompoundControl()
-                    &&  rVclWindowEvent.GetId() == VCLEVENT_WINDOW_GETFOCUS
+                    &&  rVclWindowEvent.GetId() == VclEventId::WindowGetFocus
                     )
                 )
             {
@@ -580,14 +580,14 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             }
         }
         break;
-        case VCLEVENT_CONTROL_LOSEFOCUS:
-        case VCLEVENT_WINDOW_LOSEFOCUS:
+        case VclEventId::ControlLoseFocus:
+        case VclEventId::WindowLoseFocus:
         {
             if  (   (   rVclWindowEvent.GetWindow()->IsCompoundControl()
-                    &&  rVclWindowEvent.GetId() == VCLEVENT_CONTROL_LOSEFOCUS
+                    &&  rVclWindowEvent.GetId() == VclEventId::ControlLoseFocus
                     )
                 ||  (   !rVclWindowEvent.GetWindow()->IsCompoundControl()
-                    &&  rVclWindowEvent.GetId() == VCLEVENT_WINDOW_LOSEFOCUS
+                    &&  rVclWindowEvent.GetId() == VclEventId::WindowLoseFocus
                     )
                 )
             {
@@ -616,7 +616,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             }
         }
         break;
-        case VCLEVENT_WINDOW_MINIMIZE:
+        case VclEventId::WindowMinimize:
         {
             if ( mpImpl->getTopWindowListeners().getLength() )
             {
@@ -626,7 +626,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             }
         }
         break;
-        case VCLEVENT_WINDOW_NORMALIZE:
+        case VclEventId::WindowNormalize:
         {
             if ( mpImpl->getTopWindowListeners().getLength() )
             {
@@ -636,7 +636,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             }
         }
         break;
-        case VCLEVENT_WINDOW_KEYINPUT:
+        case VclEventId::WindowKeyInput:
         {
             if ( mpImpl->getKeyListeners().getLength() )
             {
@@ -647,7 +647,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             }
         }
         break;
-        case VCLEVENT_WINDOW_KEYUP:
+        case VclEventId::WindowKeyUp:
         {
             if ( mpImpl->getKeyListeners().getLength() )
             {
@@ -658,7 +658,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             }
         }
         break;
-        case VCLEVENT_WINDOW_COMMAND:
+        case VclEventId::WindowCommand:
         {
             CommandEvent* pCmdEvt = static_cast<CommandEvent*>(rVclWindowEvent.GetData());
             if ( mpImpl->getMouseListeners().getLength() && ( pCmdEvt->GetCommand() == CommandEventId::ContextMenu ) )
@@ -684,7 +684,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             }
         }
         break;
-        case VCLEVENT_WINDOW_MOUSEMOVE:
+        case VclEventId::WindowMouseMove:
         {
             MouseEvent* pMouseEvt = static_cast<MouseEvent*>(rVclWindowEvent.GetData());
             if ( mpImpl->getMouseListeners().getLength() && ( pMouseEvt->IsEnterWindow() || pMouseEvt->IsLeaveWindow() ) )
@@ -711,7 +711,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             }
         }
         break;
-        case VCLEVENT_WINDOW_MOUSEBUTTONDOWN:
+        case VclEventId::WindowMouseButtonDown:
         {
             if ( mpImpl->getMouseListeners().getLength() )
             {
@@ -722,7 +722,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             }
         }
         break;
-        case VCLEVENT_WINDOW_MOUSEBUTTONUP:
+        case VclEventId::WindowMouseButtonUp:
         {
             if ( mpImpl->getMouseListeners().getLength() )
             {
@@ -734,7 +734,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             }
         }
         break;
-        case VCLEVENT_WINDOW_STARTDOCKING:
+        case VclEventId::WindowStartDocking:
         {
             if ( mpImpl->getDockableWindowListeners().getLength() )
             {
@@ -755,7 +755,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             }
         }
         break;
-        case VCLEVENT_WINDOW_DOCKING:
+        case VclEventId::WindowDocking:
         {
             if ( mpImpl->getDockableWindowListeners().getLength() )
             {
@@ -786,7 +786,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             }
         }
         break;
-        case VCLEVENT_WINDOW_ENDDOCKING:
+        case VclEventId::WindowEndDocking:
         {
             if ( mpImpl->getDockableWindowListeners().getLength() )
             {
@@ -804,7 +804,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             }
         }
         break;
-        case VCLEVENT_WINDOW_PREPARETOGGLEFLOATING:
+        case VclEventId::WindowPrepareToggleFloating:
         {
             if ( mpImpl->getDockableWindowListeners().getLength() )
             {
@@ -824,7 +824,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             }
         }
         break;
-        case VCLEVENT_WINDOW_TOGGLEFLOATING:
+        case VclEventId::WindowToggleFloating:
         {
             if ( mpImpl->getDockableWindowListeners().getLength() )
             {
@@ -834,7 +834,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             }
        }
         break;
-        case VCLEVENT_WINDOW_ENDPOPUPMODE:
+        case VclEventId::WindowEndPopupMode:
         {
             if ( mpImpl->getDockableWindowListeners().getLength() )
             {
@@ -852,7 +852,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             }
         }
         break;
-
+        default: break;
     }
 }
 
@@ -935,7 +935,7 @@ void VCLXWindow::dispose(  ) throw(css::uno::RuntimeException, std::exception)
 
         // #i14103# dispose the accessible context after the window has been destroyed,
         // otherwise the old value in the child event fired in VCLXAccessibleComponent::ProcessWindowEvent()
-        // for VCLEVENT_WINDOW_CHILDDESTROYED contains a reference to an already disposed accessible object
+        // for VclEventId::WindowChildDestroyed contains a reference to an already disposed accessible object
         try
         {
             css::uno::Reference< css::lang::XComponent > xComponent( mpImpl->mxAccessibleContext, css::uno::UNO_QUERY );

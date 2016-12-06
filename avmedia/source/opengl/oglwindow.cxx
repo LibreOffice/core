@@ -201,7 +201,7 @@ void SAL_CALL OGLWindow::removePaintListener( const uno::Reference< awt::XPaintL
 
 IMPL_LINK(OGLWindow, FocusGrabber, VclWindowEvent&, rEvent, void)
 {
-    if( rEvent.GetId() == VCLEVENT_WINDOW_MOUSEMOVE )
+    if( rEvent.GetId() == VclEventId::WindowMouseMove )
     {
         MouseEvent* pMouseEvt = static_cast<MouseEvent*>(rEvent.GetData());
         if(pMouseEvt)
@@ -227,7 +227,7 @@ IMPL_LINK(OGLWindow, FocusGrabber, VclWindowEvent&, rEvent, void)
 
 IMPL_LINK(OGLWindow, CameraHandler, VclWindowEvent&, rEvent, void)
 {
-    if( rEvent.GetId() == VCLEVENT_WINDOW_KEYINPUT )
+    if( rEvent.GetId() == VclEventId::WindowKeyInput )
     {
         KeyEvent* pKeyEvt = static_cast<KeyEvent*>(rEvent.GetData());
         if(pKeyEvt)
@@ -332,7 +332,7 @@ IMPL_LINK(OGLWindow, CameraHandler, VclWindowEvent&, rEvent, void)
             }
         }
     }
-    else if( rEvent.GetId() == VCLEVENT_WINDOW_MOUSEBUTTONDOWN )
+    else if( rEvent.GetId() == VclEventId::WindowMouseButtonDown )
     {
         MouseEvent* pMouseEvt = static_cast<MouseEvent*>(rEvent.GetData());
         if(pMouseEvt && pMouseEvt->IsLeft() && pMouseEvt->GetClicks() == 1)
@@ -340,7 +340,7 @@ IMPL_LINK(OGLWindow, CameraHandler, VclWindowEvent&, rEvent, void)
             m_aLastMousePos = pMouseEvt->GetPosPixel();
         }
     }
-    else if( rEvent.GetId() == VCLEVENT_WINDOW_MOUSEMOVE )
+    else if( rEvent.GetId() == VclEventId::WindowMouseMove )
     {
         if ( !m_rEventHandler.HasFocus() )
         {
@@ -374,7 +374,7 @@ IMPL_LINK(OGLWindow, CameraHandler, VclWindowEvent&, rEvent, void)
             m_aLastMousePos = aCurPos;
         }
     }
-    else if( rEvent.GetId() == VCLEVENT_WINDOW_MOUSEBUTTONUP )
+    else if( rEvent.GetId() == VclEventId::WindowMouseButtonUp )
     {
         MouseEvent* pMouseEvt = static_cast<MouseEvent*>(rEvent.GetData());
         if(pMouseEvt && pMouseEvt->IsLeft() && pMouseEvt->GetClicks() == 1)
