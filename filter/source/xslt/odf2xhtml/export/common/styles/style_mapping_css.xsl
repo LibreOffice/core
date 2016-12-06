@@ -87,7 +87,7 @@
 	</xsl:template>
 
 	<!-- workaround AOOO#119401 suspicious property fo:margin="100%" in paragraph style -->
-	<xsl:template match="@fo:margin[string(.) = '100%']"/> 
+	<xsl:template match="@fo:margin[string(.) = '100%']"/>
 
 	<!-- Maps fo:margin as well fo:margin-top, fo:margin-bottom, fo:padding-left, fo:margin-right -->
 	<!-- Maps fo:padding as well fo:padding-top, fo:padding-bottom, fo:padding-left, fo:padding-right -->
@@ -123,7 +123,7 @@
 			<xsl:when test="contains(., 'end')">
                 <xsl:choose>
                     <xsl:when test="parent::*/@style:writing-mode and contains(parent::*/@style:writing-mode, 'rl')">
-                        <xsl:text>text-align:left ! important;</xsl:text> 
+                        <xsl:text>text-align:left ! important;</xsl:text>
                     </xsl:when>
                     <xsl:otherwise>
                         <xsl:text>text-align:right ! important; </xsl:text>
@@ -292,7 +292,7 @@
         <xsl:text>writing-mode:</xsl:text>
         <xsl:value-of select="."/>
         <xsl:text>; </xsl:text>
-	</xsl:template>    
+	</xsl:template>
     <!-- *** Properties with a no 'fo:' or 'style:' prefix *** -->
 	<xsl:template match="@table:align">
 		<xsl:choose>
@@ -344,12 +344,12 @@
 		</xsl:variable>
 		<xsl:variable name="minimalBorderWidth" select="0.0133 * $multiplier"/>
 		<xsl:choose>
-			<xsl:when test="number($borderWidthByCentimeter) &lt; $minimalBorderWidth">
-				<xsl:value-of select="$minimalBorderWidth"/>
+			<xsl:when test="$borderWidthByCentimeter &lt; $minimalBorderWidth">
+				<xsl:value-of select="format-number($minimalBorderWidth,'0.######')"/>
 				<xsl:text>cm</xsl:text>
 			</xsl:when>
 			<xsl:otherwise>
-				<xsl:value-of select="$borderWidthByCentimeter"/>
+				<xsl:value-of select="format-number($minimalBorderWidth,'0.######')"/>
 				<xsl:text>cm</xsl:text>
 			</xsl:otherwise>
 		</xsl:choose>
