@@ -36,8 +36,8 @@
 #include <com/sun/star/awt/XDockableWindow.hpp>
 #include <com/sun/star/awt/XStyleSettingsSupplier.hpp>
 
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weak.hxx>
-#include <cppuhelper/implbase9.hxx>
 #include <osl/mutex.hxx>
 
 #include <tools/gen.hxx>
@@ -61,17 +61,17 @@ namespace toolkit
 
 class UnoPropertyArrayHelper;
 class VCLXWindowImpl;
-typedef ::cppu::ImplInheritanceHelper9  <   VCLXDevice
-                                        ,   css::awt::XWindow2
-                                        ,   css::awt::XVclWindowPeer
-                                        ,   css::awt::XLayoutConstrains
-                                        ,   css::awt::XView
-                                        ,   css::awt::XDockableWindow
-                                        ,   css::accessibility::XAccessible
-                                        ,   css::lang::XEventListener
-                                        ,   css::beans::XPropertySetInfo
-                                        ,   css::awt::XStyleSettingsSupplier
-                                        >   VCLXWindow_Base;
+typedef cppu::ImplInheritanceHelper< VCLXDevice,
+                                     css::awt::XWindow2,
+                                     css::awt::XVclWindowPeer,
+                                     css::awt::XLayoutConstrains,
+                                     css::awt::XView,
+                                     css::awt::XDockableWindow,
+                                     css::accessibility::XAccessible,
+                                     css::lang::XEventListener,
+                                     css::beans::XPropertySetInfo,
+                                     css::awt::XStyleSettingsSupplier
+                                   > VCLXWindow_Base;
 
 class TOOLKIT_DLLPUBLIC VCLXWindow : public VCLXWindow_Base
 {
