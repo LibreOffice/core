@@ -52,6 +52,7 @@ private:
     VclPtr<CheckBox> mpCBDisableAllExtensions;
     VclPtr<CheckBox> mpCBDeinstallUserExtensions;
     VclPtr<CheckBox> mpCBResetSharedExtensions;
+    VclPtr<CheckBox> mpCBResetBundledExtensions;
     VclPtr<CheckBox> mpCBDisableHWAcceleration;
     VclPtr<CheckBox> mpCBResetCustomizations;
     VclPtr<CheckBox> mpCBResetWholeUserProfile;
