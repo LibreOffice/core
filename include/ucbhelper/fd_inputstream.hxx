@@ -25,14 +25,14 @@
 #include <osl/file.h>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 
 #include <ucbhelper/ucbhelperdllapi.h>
 
 namespace ucbhelper
 {
-    typedef ::cppu::WeakImplHelper2<
+    typedef cppu::WeakImplHelper<
         css::io::XInputStream,
         css::io::XSeekable > FdInputStream_Base;
 
