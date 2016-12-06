@@ -29,15 +29,15 @@
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <com/sun/star/awt/tab/XTabPageContainer.hpp>
+#include <cppuhelper/implbase.hxx>
 #include <toolkit/helper/listenermultiplexer.hxx>
-#include <cppuhelper/implbase2.hxx>
 #include <toolkit/awt/vclxcontainer.hxx>
 
 
-typedef ::cppu::ImplInheritanceHelper2 <    VCLXContainer
-                                            ,   css::awt::tab::XTabPageContainer
-                                            ,   css::container::XContainerListener
-                                             > VCLXTabPageContainer_Base;
+typedef cppu::ImplInheritanceHelper< VCLXContainer,
+                                     css::awt::tab::XTabPageContainer,
+                                     css::container::XContainerListener
+                                   > VCLXTabPageContainer_Base;
 class VCLXTabPageContainer : public VCLXTabPageContainer_Base
 {
 public:
