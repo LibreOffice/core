@@ -48,9 +48,10 @@ namespace
 extern "C" int LLVMFuzzerInitialize(int *argc, char ***argv)
 {
     setenv("SAL_USE_VCLPLUGIN", "svp", 1);
-    setFontConfigConf();
 
     osl_setCommandArgs(*argc, *argv);
+
+    setFontConfigConf();
 
     tools::extendApplicationEnvironment();
 
