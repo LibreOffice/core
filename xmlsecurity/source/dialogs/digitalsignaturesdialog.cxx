@@ -132,7 +132,7 @@ DigitalSignaturesDialog::DigitalSignaturesDialog(
 
     m_bAdESCompliant = !DocumentSignatureHelper::isODFPre_1_2(m_sODFVersion);
 
-    Size aControlSize(275, 109);
+    Size aControlSize(375, 109);
     const long nControlWidth = aControlSize.Width();
     aControlSize = LogicToPixel(aControlSize, MapUnit::MapAppFont);
     SvSimpleTableContainer *pSignatures = get<SvSimpleTableContainer>("signatures");
@@ -141,12 +141,12 @@ DigitalSignaturesDialog::DigitalSignaturesDialog(
 
     m_pSignaturesLB = VclPtr<SvSimpleTable>::Create(*pSignatures);
     // Give the first column 6 percent, try to distribute the rest equally.
-    static long aTabs[] = { 5, 0, 6*nControlWidth/100, 30*nControlWidth/100, 54*nControlWidth/100, 78*nControlWidth/100 };
+    static long aTabs[] = { 6, 0, 6*nControlWidth/100, 25*nControlWidth/100, 44*nControlWidth/100, 62*nControlWidth/100, 81*nControlWidth/100 };
     m_pSignaturesLB->SetTabs(aTabs);
 
     m_pSignaturesLB->InsertHeaderEntry("\t" + get<FixedText>("signed")->GetText() + "\t"
                + get<FixedText>("issued")->GetText() + "\t" + get<FixedText>("date")->GetText() + "\t"
-               + get<FixedText>("description")->GetText());
+               + get<FixedText>("description")->GetText() + "\t" + get<FixedText>("type")->GetText());
 
     mbVerifySignatures = true;
     mbSignaturesChanged = false;
@@ -503,6 +503,7 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
             OUString aIssuer;
             OUString aDateTimeStr;
             OUString aDescription;
+            OUString aType;
 
             bool bSigValid = false;
             bool bCertValid = false;
@@ -527,6 +528,24 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
                 // String with date and time information (#i20172#)
                 aDateTimeStr = XmlSec::GetDateTimeString( rInfo.stDateTime );
                 aDescription = rInfo.ouDescription;
+
+                // Decide type string.
+                if (maSignatureManager.mxStore.is())
+                {
+                    // XML based: XAdES or not.
+                    if (!rInfo.ouCertDigest.isEmpty())
+                        aType = "XAdES";
+                    else
+                        aType = "XML-DSig";
+                }
+                else
+                {
+                    // Assume PDF: PAdES or not.
+                    if (rInfo.bHasSigningCertificate)
+                        aType = "PAdES";
+                    else
+                        aType = "PDF";
+                }
             }
             bSigValid = ( rInfo.nStatus == css::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED );
 
@@ -576,6 +595,7 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
             m_pSignaturesLB->SetEntryText( aIssuer, pEntry, 2 );
             m_pSignaturesLB->SetEntryText( aDateTimeStr, pEntry, 3 );
             m_pSignaturesLB->SetEntryText(aDescription, pEntry, 4);
+            m_pSignaturesLB->SetEntryText(aType, pEntry, 5);
             pEntry->SetUserData( reinterpret_cast<void*>(n) );     // missuse user data as index
         }
     }
