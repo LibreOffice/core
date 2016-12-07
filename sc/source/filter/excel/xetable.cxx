@@ -1844,7 +1844,7 @@ void XclExpDefrowheight::WriteBody( XclExpStream& rStrm )
 }
 
 XclExpRow::XclExpRow( const XclExpRoot& rRoot, sal_uInt32 nXclRow,
-        XclExpRowOutlineBuffer& rOutlineBfr, bool bAlwaysEmpty ) :
+        XclExpRowOutlineBuffer& rOutlineBfr, bool bAlwaysEmpty, bool bHidden ) :
     XclExpRecord( EXC_ID3_ROW, 16 ),
     XclExpRoot( rRoot ),
     mnXclRow( nXclRow ),
@@ -1864,7 +1864,6 @@ XclExpRow::XclExpRow( const XclExpRoot& rRoot, sal_uInt32 nXclRow,
 
     CRFlags nRowFlags = GetDoc().GetRowFlags( nScRow, nScTab );
     bool bUserHeight( nRowFlags & CRFlags::ManualSize );
-    bool bHidden = GetDoc().RowHidden(nScRow, nScTab);
     ::set_flag( mnFlags, EXC_ROW_UNSYNCED, bUserHeight );
     ::set_flag( mnFlags, EXC_ROW_HIDDEN, bHidden );
 
@@ -2394,17 +2393,17 @@ XclExpRow& XclExpRowBuffer::GetOrCreateRow( sal_uInt32 nXclRow, bool bRowAlwaysE
             // only create RowMap entries if it is first row in spreadsheet,
             // if it is the desired row, for rows that height differ from previous,
             // if row is collapsed, has outline level (tdf#100347), or row is hidden (tdf#98106).
-            if ( !nFrom || ( nFrom == nXclRow ) ||
+            bool bHidden = rDoc.RowHidden(nFrom, nScTab);
+            if ( !nFrom || ( nFrom == nXclRow ) || bHidden ||
                  ( rDoc.GetRowHeight(nFrom, nScTab, false) != rDoc.GetRowHeight(nFrom - 1, nScTab, false) ) ||
                  ( maOutlineBfr.IsCollapsed() ) ||
-                 ( maOutlineBfr.GetLevel() != 0 ) ||
-                 ( rDoc.RowHidden(nFrom, nScTab) ) )
+                 ( maOutlineBfr.GetLevel() != 0 ) )
             {
                 if( maOutlineBfr.GetLevel() > mnHighestOutlineLevel )
                 {
                     mnHighestOutlineLevel = maOutlineBfr.GetLevel();
                 }
-                RowRef p(new XclExpRow(GetRoot(), nFrom, maOutlineBfr, bRowAlwaysEmpty));
+                RowRef p(new XclExpRow(GetRoot(), nFrom, maOutlineBfr, bRowAlwaysEmpty, bHidden));
                 maRowMap.insert(RowMap::value_type(nFrom, p));
             }
         }
