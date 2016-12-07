@@ -49,6 +49,7 @@ public:
     virtual ~SfxTemplateManagerDlg() override;
     virtual void dispose() override;
     virtual short Execute() override;
+    virtual bool EventNotify( NotifyEvent& rNEvt ) override;
 
     void setDocumentModel (const css::uno::Reference<css::frame::XModel> &rModel);
 

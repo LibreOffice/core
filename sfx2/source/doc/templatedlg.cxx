@@ -299,6 +299,26 @@ short SfxTemplateManagerDlg::Execute()
     return ModalDialog::Execute();
 }
 
+bool SfxTemplateManagerDlg::EventNotify( NotifyEvent& rNEvt )
+{
+    if (mpSearchFilter != nullptr &&
+        !mpSearchFilter->GetText().isEmpty() &&
+        rNEvt.GetType() == MouseNotifyEvent::KEYINPUT)
+    {
+        const KeyEvent* pKEvt    = rNEvt.GetKeyEvent();
+        vcl::KeyCode    aKeyCode = pKEvt->GetKeyCode();
+        sal_uInt16      nKeyCode = aKeyCode.GetCode();
+
+        if ( nKeyCode == KEY_ESCAPE )
+        {
+            mpSearchFilter->SetText("");
+            mpSearchFilter->UpdateData();
+            return true;
+        }
+    }
+    return ModalDialog::EventNotify(rNEvt);
+}
+
 void SfxTemplateManagerDlg::setDocumentModel(const uno::Reference<frame::XModel> &rModel)
 {
     m_xModel = rModel;
