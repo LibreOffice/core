@@ -133,9 +133,10 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
      */
     void addToConfigmgrIni( bool isSchema, bool isURL, OUString const & url,
                      Reference<XCommandEnvironment> const & xCmdEnv );
+#if HAVE_FEATURE_EXTENSIONS
     bool removeFromConfigmgrIni( bool isSchema, OUString const & url,
                           Reference<XCommandEnvironment> const & xCmdEnv );
-
+#endif
     void addDataToDb(OUString const & url, ConfigurationBackendDb::Data const & data);
     ::boost::optional<ConfigurationBackendDb::Data> readDataFromDb(OUString const & url);
     void revokeEntryFromDb(OUString const & url);
@@ -483,7 +484,7 @@ void BackendImpl::addToConfigmgrIni( bool isSchema, bool isURL, OUString const &
     }
 }
 
-
+#if HAVE_FEATURE_EXTENSIONS
 bool BackendImpl::removeFromConfigmgrIni(
     bool isSchema, OUString const & url_,
     Reference<XCommandEnvironment> const & xCmdEnv )
@@ -512,7 +513,7 @@ bool BackendImpl::removeFromConfigmgrIni(
     configmgrini_flush( xCmdEnv );
     return true;
 }
-
+#endif
 
 // Package
 
