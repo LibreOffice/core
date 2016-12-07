@@ -24,7 +24,6 @@ $(eval $(call gb_Module_add_targets,canvas,\
 	Library_canvastools \
 	Library_simplecanvas \
 	Library_vclcanvas \
-	Package_opengl \
 ))
 
 ifeq ($(ENABLE_CAIRO_CANVAS),TRUE)
@@ -36,6 +35,7 @@ endif
 ifeq ($(ENABLE_OPENGL_CANVAS),TRUE)
 $(eval $(call gb_Module_add_targets,canvas,\
 	Library_oglcanvas \
+	Package_opengl \
 ))
 endif
 
