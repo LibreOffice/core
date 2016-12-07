@@ -216,6 +216,7 @@ public:
     void testLandscape();
     void testTdf95699();
     void testTdf104032();
+    void testTdf104440();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -328,6 +329,7 @@ public:
     CPPUNIT_TEST(testLandscape);
     CPPUNIT_TEST(testTdf95699);
     CPPUNIT_TEST(testTdf104032);
+    CPPUNIT_TEST(testTdf104440);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -4084,6 +4086,19 @@ void SwUiWriterTest::testTdf104032()
     pWrtShell->EndDoc();
     pWrtShell->Paste(&aClipboard);
     rUndoManager.Undo();
+}
+
+void SwUiWriterTest::testTdf104440()
+{
+    createDoc("tdf104440.odt");
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, "//page[2]/body/txt/anchored");
+    xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
+    // This was 0: both Text Frames in the document were anchored to a
+    // paragraph on page 1, while we expect that the second Text Frame is
+    // anchored to a paragraph on page 2.
+    CPPUNIT_ASSERT_EQUAL(1, xmlXPathNodeSetGetLength(pXmlNodes));
+    xmlXPathFreeObject(pXmlObj);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);

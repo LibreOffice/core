@@ -1370,6 +1370,13 @@ SwSurround SwTextFly::GetSurroundForTextWrap( const SwAnchoredObject* pAnchoredO
             const int textMin = GetMaster()->GetNode()
                 ->getIDocumentSettingAccess()->get(DocumentSettingId::SURROUND_TEXT_WRAP_SMALL )
                 ? TEXT_MIN_SMALL : TEXT_MIN;
+
+            // In case there is no space on either side, then SURROUND_PARALLEL
+            // gives the same result when doing the initial layout or a layout
+            // update after editing, so prefer that over SURROUND_NONE.
+            if (nLeft == 0 && nRight == 0)
+                return SURROUND_PARALLEL;
+
             if( nLeft < textMin )
                 nLeft = 0;
             if( nRight < textMin )
