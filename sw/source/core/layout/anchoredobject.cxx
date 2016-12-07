@@ -807,8 +807,7 @@ Point SwAnchoredObject::GetRelPosToAnchorFrame() const
 {
     Point aRelPos;
 
-    OSL_ENSURE( GetAnchorFrame(),
-            "<SwAnchoredObject::GetRelPosToAnchorFrame()> - missing anchor frame." );
+    assert(GetAnchorFrame());
     aRelPos = GetObjRect().Pos();
     aRelPos -= GetAnchorFrame()->Frame().Pos();
 
@@ -832,10 +831,8 @@ Point SwAnchoredObject::GetRelPosToPageFrame( const bool _bFollowTextFlow,
     Point aRelPos;
     _obRelToTableCell = false;
 
-    OSL_ENSURE( GetAnchorFrame(),
-            "<SwAnchoredObject::GetRelPosToPageFrame()> - missing anchor frame." );
-    OSL_ENSURE( GetAnchorFrame()->FindPageFrame(),
-            "<SwAnchoredObject::GetRelPosToPageFrame()> - missing page frame." );
+    assert(GetAnchorFrame());
+    assert(GetAnchorFrame()->FindPageFrame());
 
     aRelPos = GetObjRect().Pos();
     // --> #i33818# - search for cell frame, if object has to
