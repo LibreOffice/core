@@ -18,7 +18,7 @@
 -->
 <!--
 	For further documentation and updates visit http://xml.openoffice.org/odf2xhtml
--->
+--> 
 <xsl:stylesheet version="1.0"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0"

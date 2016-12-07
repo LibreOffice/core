@@ -336,7 +336,7 @@
 	<xsl:template name="round-up-border-width">
 		<xsl:param name="borderWidth"/>
 		<xsl:param name="multiplier"/>
-
+ 
 		<xsl:variable name="borderWidthByCentimeter">
 			<xsl:call-template name="convert2cm">
 				<xsl:with-param name="value" select="$borderWidth"/>

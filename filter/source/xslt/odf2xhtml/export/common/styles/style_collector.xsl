@@ -55,7 +55,7 @@
 	<!-- ***************************************** -->
 	<!-- *** Gathering office style properties *** -->
 	<!-- ***************************************** -->
-
+ 
 	<!-- REASON FOR STYLESHEET:
 			In the OpenOffice documents styles are represented by a hierarchy.
 			(e.g. most styles are inherited from a default style).
