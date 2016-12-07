@@ -1960,6 +1960,7 @@ void XclExpRow::Finalize( const ScfUInt16Vec& rColXFIndexes, bool bProgress )
     XclExpXFIndexMap aIndexMap;
     sal_uInt16 nRowXFIndex = EXC_XF_DEFAULTCELL;
     size_t nMaxXFCount = 0;
+    const size_t nHalfIndexes = aXFIndexes.size() / 2;
     for( aCellIt = aCellBeg; aCellIt != aCellEnd; ++aCellIt )
     {
         if( *aCellIt != EXC_XF_NOTFOUND )
@@ -1970,6 +1971,14 @@ void XclExpRow::Finalize( const ScfUInt16Vec& rColXFIndexes, bool bProgress )
             {
                 nRowXFIndex = *aCellIt;
                 nMaxXFCount = rnCount;
+                if (nMaxXFCount > nHalfIndexes)
+                {
+                    // No other XF index can have a greater usage count, we
+                    // don't need to loop through the remaining cells.
+                    // Specifically for the tail of unused default
+                    // cells/columns this makes a difference.
+                    break;  // for
+                }
             }
         }
     }
