@@ -38,7 +38,7 @@ $(eval $(call gb_Executable_add_exception_objects,wmffuzzer,\
 
 
 $(eval $(call gb_Executable_add_libs,wmffuzzer,\
-	-lfuzzer \
+	-lFuzzingEngine \
 ))
 
 # vim: set noet sw=4 ts=4:
