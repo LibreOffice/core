@@ -76,7 +76,7 @@ void TickerThread::run()
 
 
 SerfLockStore::SerfLockStore()
-    : m_pTickerThread( 0 )
+    : m_pTickerThread( nullptr )
     , m_bFinishing( false )
 {
 }
@@ -126,7 +126,7 @@ void SerfLockStore::stopTicker()
         m_pTickerThread->finish();
         m_pTickerThread->join();
         delete m_pTickerThread;
-        m_pTickerThread = 0;
+        m_pTickerThread = nullptr;
     }
 }
 

@@ -30,8 +30,8 @@ SerfGetReqProcImpl::SerfGetReqProcImpl( const char* inPath,
     : SerfRequestProcessorImpl( inPath, inRequestHeaders )
     , xInputStream( xioInStrm )
     , xOutputStream()
-    , mpHeaderNames( 0 )
-    , mpResource( 0 )
+    , mpHeaderNames( nullptr )
+    , mpResource( nullptr )
 {
 }
 
@@ -54,8 +54,8 @@ SerfGetReqProcImpl::SerfGetReqProcImpl( const char* inPath,
     : SerfRequestProcessorImpl( inPath, inRequestHeaders )
     , xInputStream()
     , xOutputStream( xioOutStrm )
-    , mpHeaderNames( 0 )
-    , mpResource( 0 )
+    , mpHeaderNames( nullptr )
+    , mpResource( nullptr )
 {
 }
 
@@ -82,7 +82,7 @@ serf_bucket_t * SerfGetReqProcImpl::createSerfRequestBucket( serf_request_t * in
     serf_bucket_t *req_bkt = serf_request_bucket_request_create( inSerfRequest,
                                                                  "GET",
                                                                  getPathStr(),
-                                                                 0,
+                                                                 nullptr,
                                                                  serf_request_get_alloc( inSerfRequest ) );
 
     // set request header fields
@@ -124,10 +124,10 @@ namespace
 void SerfGetReqProcImpl::handleEndOfResponseData( serf_bucket_t * inSerfResponseBucket )
 {
     // read response header, if requested
-    if ( mpHeaderNames != 0 && mpResource != 0 )
+    if ( mpHeaderNames != nullptr && mpResource != nullptr )
     {
         serf_bucket_t* SerfHeaderBucket = serf_bucket_response_get_headers( inSerfResponseBucket );
-        if ( SerfHeaderBucket != 0 )
+        if ( SerfHeaderBucket != nullptr )
         {
             serf_bucket_headers_do( SerfHeaderBucket,
                                     Serf_ProcessResponseHeader,

@@ -189,7 +189,7 @@ const PropertyValue * ContentProperties::get(
 
             ++it;
         }
-        return 0;
+        return nullptr;
     }
     else
         return &(*it).second;

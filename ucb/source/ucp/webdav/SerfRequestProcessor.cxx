@@ -44,12 +44,12 @@ SerfRequestProcessor::SerfRequestProcessor( SerfSession& rSerfSession,
                                             const OUString & inPath,
                                             const bool bUseChunkedEncoding )
     : mrSerfSession( rSerfSession )
-    , mPathStr( 0 )
+    , mPathStr( nullptr )
     , mbUseChunkedEncoding( bUseChunkedEncoding )
-    , mDestPathStr( 0 )
-    , mContentType( 0 )
-    , mReferer( 0 )
-    , mpProcImpl( 0 )
+    , mDestPathStr( nullptr )
+    , mContentType( nullptr )
+    , mReferer( nullptr )
+    , mpProcImpl( nullptr )
     , mbProcessingDone( false )
     , mpDAVException()
     , mnHTTPStatusCode( SC_NONE )
@@ -74,7 +74,7 @@ SerfRequestProcessor::~SerfRequestProcessor()
 void SerfRequestProcessor::prepareProcessor()
 {
     delete mpDAVException;
-    mpDAVException = 0;
+    mpDAVException = nullptr;
     mnHTTPStatusCode = SC_NONE;
     mHTTPStatusCodeText.clear();
     mRedirectLocation.clear();

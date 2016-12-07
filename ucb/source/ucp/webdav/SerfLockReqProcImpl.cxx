@@ -78,7 +78,7 @@ serf_bucket_t * SerfLockReqProcImpl::createSerfRequestBucket( serf_request_t * i
     aBody.append("</lockinfo>\n");
 
     const OString aBodyText(aBody.makeStringAndClear());
-    serf_bucket_t* body_bkt = 0;
+    serf_bucket_t* body_bkt = nullptr;
 
     if (!m_plastChanceToSendRefreshRequest)
         body_bkt = serf_bucket_simple_copy_create( aBodyText.getStr(),
@@ -101,7 +101,7 @@ serf_bucket_t * SerfLockReqProcImpl::createSerfRequestBucket( serf_request_t * i
     setRequestHeaders( hdrs_bkt );
 
     // request specific header fields
-    const char * depth = 0;
+    const char * depth = nullptr;
     switch( m_aLock.Depth )
     {
         case css::ucb::LockDepth_ZERO:

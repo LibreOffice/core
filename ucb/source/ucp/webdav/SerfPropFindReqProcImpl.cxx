@@ -36,10 +36,10 @@ SerfPropFindReqProcImpl::SerfPropFindReqProcImpl( const char* inPath,
                                                   const std::vector< OUString > & inPropNames,
                                                   std::vector< DAVResource > & ioResources )
     : SerfRequestProcessorImpl( inPath, inRequestHeaders )
-    , mDepthStr( 0 )
+    , mDepthStr( nullptr )
     , mpPropNames( &inPropNames )
     , mpResources( &ioResources )
-    , mpResInfo( 0 )
+    , mpResInfo( nullptr )
     , mbOnlyPropertyNames( false )
     , xInputStream( new SerfInputStream() )
 {
@@ -51,9 +51,9 @@ SerfPropFindReqProcImpl::SerfPropFindReqProcImpl( const char* inPath,
                                                   const Depth inDepth,
                                                   std::vector< DAVResourceInfo > & ioResInfo )
     : SerfRequestProcessorImpl( inPath, inRequestHeaders )
-    , mDepthStr( 0 )
-    , mpPropNames( 0 )
-    , mpResources( 0 )
+    , mDepthStr( nullptr )
+    , mpPropNames( nullptr )
+    , mpResources( nullptr )
     , mpResInfo( &ioResInfo )
     , mbOnlyPropertyNames( true )
     , xInputStream( new SerfInputStream() )
@@ -89,7 +89,7 @@ serf_bucket_t * SerfPropFindReqProcImpl::createSerfRequestBucket( serf_request_t
     serf_bucket_alloc_t* pSerfBucketAlloc = serf_request_get_alloc( inSerfRequest );
 
     // body bucket - certain properties OR all properties OR only property names
-    serf_bucket_t* body_bkt = 0;
+    serf_bucket_t* body_bkt = nullptr;
     OString aBodyText;
     {
         OStringBuffer aBuffer;
@@ -148,14 +148,14 @@ serf_bucket_t * SerfPropFindReqProcImpl::createSerfRequestBucket( serf_request_t
 
     // set request header fields
     serf_bucket_t* hdrs_bkt = serf_bucket_request_get_headers( req_bkt );
-    if (hdrs_bkt != NULL)
+    if (hdrs_bkt != nullptr)
     {
         // general header fields provided by caller
         setRequestHeaders( hdrs_bkt );
 
         // request specific header fields
         serf_bucket_headers_set( hdrs_bkt, "Depth", mDepthStr );
-        if (hdrs_bkt!=NULL && body_bkt != 0 && aBodyText.getLength() > 0 )
+        if (hdrs_bkt!=nullptr && body_bkt != nullptr && aBodyText.getLength() > 0 )
         {
             serf_bucket_headers_set( hdrs_bkt, "Content-Type", "application/xml" );
         }

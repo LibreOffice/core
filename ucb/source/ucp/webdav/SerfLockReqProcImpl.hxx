@@ -38,7 +38,7 @@ public:
                          const DAVRequestHeaders& inRequestHeaders,
                          SerfSession& rSession,
                          const css::ucb::Lock& rLock,
-                         sal_Int32* plastChanceToSendRefreshRequest = 0 );
+                         sal_Int32* plastChanceToSendRefreshRequest = nullptr );
 
     virtual ~SerfLockReqProcImpl() override;
 

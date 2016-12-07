@@ -47,8 +47,8 @@ serf_bucket_t * SerfPutReqProcImpl::createSerfRequestBucket( serf_request_t * in
     serf_bucket_alloc_t* pSerfBucketAlloc = serf_request_get_alloc( inSerfRequest );
 
     // create body bucket
-    serf_bucket_t* body_bkt = 0;
-    if ( mpData != 0 && mnDataLen > 0 )
+    serf_bucket_t* body_bkt = nullptr;
+    if ( mpData != nullptr && mnDataLen > 0 )
     {
         body_bkt = SERF_BUCKET_SIMPLE_STRING_LEN( mpData, mnDataLen, pSerfBucketAlloc );
     }

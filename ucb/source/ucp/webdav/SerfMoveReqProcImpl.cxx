@@ -44,7 +44,7 @@ serf_bucket_t * SerfMoveReqProcImpl::createSerfRequestBucket( serf_request_t * i
     serf_bucket_t *req_bkt = serf_request_bucket_request_create( inSerfRequest,
                                                                  "MOVE",
                                                                  getPathStr(),
-                                                                 0,
+                                                                 nullptr,
                                                                  serf_request_get_alloc( inSerfRequest ) );
 
     // set request header fields

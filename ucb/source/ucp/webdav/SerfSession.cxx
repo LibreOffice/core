@@ -64,8 +64,8 @@ SerfSession::SerfSession(
     , m_aUri( inUri )
     , m_aProxyName()
     , m_nProxyPort( 0 )
-    , m_pSerfConnection( 0 )
-    , m_pSerfContext( 0 )
+    , m_pSerfConnection( nullptr )
+    , m_pSerfContext( nullptr )
     , m_bIsHeadRequestInProgress( false )
     , m_bUseChunkedEncoding( false )
     , m_bNoOfTransferEncodingSwitches( 0 )
@@ -74,7 +74,7 @@ SerfSession::SerfSession(
 {
     m_pSerfContext = serf_context_create( getAprPool() );
 
-    m_pSerfBucket_Alloc = serf_bucket_allocator_create( getAprPool(), NULL, NULL );
+    m_pSerfBucket_Alloc = serf_bucket_allocator_create( getAprPool(), nullptr, nullptr );
 }
 
 
@@ -85,7 +85,7 @@ SerfSession::~SerfSession( )
     if ( m_pSerfConnection )
     {
         serf_connection_close( m_pSerfConnection );
-        m_pSerfConnection = 0;
+        m_pSerfConnection = nullptr;
     }
 }
 
@@ -106,7 +106,7 @@ void SerfSession::Init()
 
     bool bCreateNewSession = false;
 
-    if ( m_pSerfConnection == 0 )
+    if ( m_pSerfConnection == nullptr )
     {
         const ucbhelper::InternetProxyServer & rProxyCfg = getProxySettings();
 
@@ -128,7 +128,7 @@ void SerfSession::Init()
 
             // new session needed, destroy old first
             serf_connection_close( m_pSerfConnection );
-            m_pSerfConnection = 0;
+            m_pSerfConnection = nullptr;
             bCreateNewSession = true;
         }
     }
@@ -140,10 +140,10 @@ void SerfSession::Init()
                                                        m_pSerfContext,
                                                        m_aUri.getAprUri(),
                                                        Serf_ConnectSetup, this,
-                                                       0 /* close connection callback */, 0 /* close connection baton */,
+                                                       nullptr /* close connection callback */, nullptr /* close connection baton */,
                                                        getAprPool() );
 
-        if ( m_pSerfConnection == 0 ||status != APR_SUCCESS )
+        if ( m_pSerfConnection == nullptr ||status != APR_SUCCESS )
         {
             throw DAVException( DAVException::DAV_SESSION_CREATE,
                                 SerfUri::makeConnectionEndPointString( m_aUri.GetHost(), m_aUri.GetPort() ) );
@@ -154,7 +154,7 @@ void SerfSession::Init()
 
         if ( m_aProxyName.getLength() )
         {
-            apr_sockaddr_t *proxy_address = NULL;
+            apr_sockaddr_t *proxy_address = nullptr;
             status = apr_sockaddr_info_get( &proxy_address,
                                             OUStringToOString( m_aProxyName, RTL_TEXTENCODING_UTF8 ).getStr(),
                                             APR_UNSPEC,
@@ -254,14 +254,14 @@ apr_status_t SerfSession::setupSerfConnection( apr_socket_t * inAprSocket,
     if ( isSSLNeeded() )
     {
         tmpInputBkt = serf_bucket_ssl_decrypt_create( tmpInputBkt,
-                                                      0,
+                                                      nullptr,
                                                       getSerfBktAlloc() );
         /** Set the callback that is called to authenticate the
             certificate (chain).
         */
         serf_ssl_server_cert_chain_callback_set(
             serf_bucket_ssl_decrypt_context_get(tmpInputBkt),
-            NULL,
+            nullptr,
             Serf_CertificateChainValidation,
             this);
         serf_ssl_set_hostname( serf_bucket_ssl_decrypt_context_get( tmpInputBkt ),
@@ -344,9 +344,9 @@ apr_status_t SerfSession::verifySerfCertificateChain (
     int nCertificateChainLength)
 {
     // Check arguments.
-    if (pCertificateChainBase64Encoded == NULL || nCertificateChainLength<=0)
+    if (pCertificateChainBase64Encoded == nullptr || nCertificateChainLength<=0)
     {
-        assert(pCertificateChainBase64Encoded != NULL);
+        assert(pCertificateChainBase64Encoded != nullptr);
         assert(nCertificateChainLength>0);
         return SERF_SSL_CERT_UNKNOWN_FAILURE;
     }
@@ -611,7 +611,7 @@ void SerfSession::PROPFIND( const OUString & inPath,
                                status );
 
     if ( status == APR_SUCCESS &&
-         aReqProc->mpDAVException == 0 &&
+         aReqProc->mpDAVException == nullptr &&
          ioResources.empty() )
     {
         m_aEnv = DAVRequestEnvironment();
@@ -640,7 +640,7 @@ void SerfSession::PROPFIND( const OUString & inPath,
                                status );
 
     if ( status == APR_SUCCESS &&
-         aReqProc->mpDAVException == 0 &&
+         aReqProc->mpDAVException == nullptr &&
          ioResInfo.empty() )
     {
         m_aEnv = DAVRequestEnvironment();

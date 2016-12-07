@@ -69,8 +69,8 @@ serf_bucket_t * SerfPostReqProcImpl::createSerfRequestBucket( serf_request_t * i
     serf_bucket_alloc_t* pSerfBucketAlloc = serf_request_get_alloc( inSerfRequest );
 
     // create body bucket
-    serf_bucket_t* body_bkt = 0;
-    if ( mpPostData != 0 && mnPostDataLen > 0 )
+    serf_bucket_t* body_bkt = nullptr;
+    if ( mpPostData != nullptr && mnPostDataLen > 0 )
     {
         body_bkt = SERF_BUCKET_SIMPLE_STRING_LEN( mpPostData, mnPostDataLen, pSerfBucketAlloc );
     }
@@ -90,11 +90,11 @@ serf_bucket_t * SerfPostReqProcImpl::createSerfRequestBucket( serf_request_t * i
     handleChunkedEncoding(req_bkt, mnPostDataLen);
 
     // request specific header fields
-    if ( mpContentType != 0 )
+    if ( mpContentType != nullptr )
     {
         serf_bucket_headers_set( hdrs_bkt, "Content-Type", mpContentType );
     }
-    if ( mpReferer != 0 )
+    if ( mpReferer != nullptr )
     {
         serf_bucket_headers_set( hdrs_bkt, "Referer", mpReferer );
     }

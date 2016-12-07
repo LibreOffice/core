@@ -40,7 +40,7 @@ serf_bucket_t * SerfDeleteReqProcImpl::createSerfRequestBucket( serf_request_t *
     serf_bucket_t *req_bkt = serf_request_bucket_request_create( inSerfRequest,
                                                                  "DELETE",
                                                                  getPathStr(),
-                                                                 0,
+                                                                 nullptr,
                                                                  serf_request_get_alloc( inSerfRequest ) );
 
     // set request header fields

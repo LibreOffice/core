@@ -47,7 +47,7 @@ serf_bucket_t * SerfPropPatchReqProcImpl::createSerfRequestBucket( serf_request_
     serf_bucket_alloc_t* pSerfBucketAlloc = serf_request_get_alloc( inSerfRequest );
 
     // body bucket
-    serf_bucket_t* body_bkt = 0;
+    serf_bucket_t* body_bkt = nullptr;
     OString aBodyText;
     {
         // create and fill body bucket with properties to be set or removed
@@ -60,7 +60,7 @@ serf_bucket_t * SerfPropPatchReqProcImpl::createSerfRequestBucket( serf_request_
             { RTL_CONSTASCII_STRINGPARAM( "set" ) },
             { RTL_CONSTASCII_STRINGPARAM( "remove" ) }
         };
-        const int nPropCount = ( mpProperties != 0 )
+        const int nPropCount = ( mpProperties != nullptr )
                                ? mpProperties->size()
                                : 0;
         if ( nPropCount > 0 )
@@ -154,13 +154,13 @@ serf_bucket_t * SerfPropPatchReqProcImpl::createSerfRequestBucket( serf_request_
 
     // set request header fields
     serf_bucket_t* hdrs_bkt = serf_bucket_request_get_headers( req_bkt );
-    if (hdrs_bkt != NULL)
+    if (hdrs_bkt != nullptr)
     {
         // general header fields provided by caller
         setRequestHeaders( hdrs_bkt );
 
         // request specific header fields
-        if ( body_bkt != 0 && aBodyText.getLength() > 0 )
+        if ( body_bkt != nullptr && aBodyText.getLength() > 0 )
         {
             serf_bucket_headers_set( hdrs_bkt, "Content-Type", "application/xml" );
         }

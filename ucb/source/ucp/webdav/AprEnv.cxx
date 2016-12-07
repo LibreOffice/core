@@ -23,11 +23,11 @@ namespace apr_environment
 {
 
 AprEnv::AprEnv()
-    : mpAprPool( 0 )
+    : mpAprPool( nullptr )
 {
     apr_initialize();
 
-    apr_pool_create(&mpAprPool, NULL);
+    apr_pool_create(&mpAprPool, nullptr);
 
     mpSerfLockStore = new http_dav_ucp::SerfLockStore();
 }
