@@ -29,12 +29,7 @@ $(eval $(call gb_Library_set_componentfile,connector,io/source/connector/connect
 
 $(eval $(call gb_Library_set_include,connector,\
         $$(INCLUDE) \
-	-I$(SRCDIR)/io/inc \
 	-I$(SRCDIR)/io/inc/pch \
-))
-
-$(eval $(call gb_Library_add_defs,connector,\
-	-DIO_DLLIMPLEMENTATION \
 ))
 
 $(eval $(call gb_Library_add_api,connector,\

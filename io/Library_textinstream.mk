@@ -29,12 +29,7 @@ $(eval $(call gb_Library_set_componentfile,textinstream,io/source/TextInputStrea
 
 $(eval $(call gb_Library_set_include,textinstream,\
         $$(INCLUDE) \
-	-I$(SRCDIR)/io/inc \
 	-I$(SRCDIR)/io/inc/pch \
-))
-
-$(eval $(call gb_Library_add_defs,textinstream,\
-	-DIO_DLLIMPLEMENTATION \
 ))
 
 $(eval $(call gb_Library_add_api,textinstream,\

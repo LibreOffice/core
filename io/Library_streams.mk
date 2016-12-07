@@ -29,12 +29,7 @@ $(eval $(call gb_Library_set_componentfile,streams,io/source/stm/streams))
 
 $(eval $(call gb_Library_set_include,streams,\
         $$(INCLUDE) \
-	-I$(SRCDIR)/io/inc \
 	-I$(SRCDIR)/io/inc/pch \
-))
-
-$(eval $(call gb_Library_add_defs,streams,\
-	-DIO_DLLIMPLEMENTATION \
 ))
 
 $(eval $(call gb_Library_add_api,streams,\

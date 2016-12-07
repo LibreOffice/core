@@ -38,8 +38,6 @@
 #include <rtl/tencinfo.h>
 #include <rtl/unload.h>
 
-#include "io/dllapi.h"
-
 #include <com/sun/star/io/XTextOutputStream.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -320,19 +318,19 @@ static struct ImplementationEntry g_entries[] =
 
 extern "C"
 {
-IO_DLLPUBLIC sal_Bool SAL_CALL component_canUnload( TimeValue *pTime )
+SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_canUnload( TimeValue *pTime )
 {
     return g_moduleCount.canUnload( &g_moduleCount , pTime );
 }
 
 //==================================================================================================
-IO_DLLPUBLIC void SAL_CALL component_getImplementationEnvironment(
+SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 //==================================================================================================
-IO_DLLPUBLIC void * SAL_CALL component_getFactory(
+SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
 {
     return component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey , g_entries );
