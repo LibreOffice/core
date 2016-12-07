@@ -173,16 +173,17 @@ void CairoTextRender::DrawTextLayout(const CommonSalLayout& rLayout)
     cairo_glyphs.reserve( 256 );
 
     Point aPos;
-    sal_GlyphId aGlyphId;
-    for( int nStart = 0; rLayout.GetNextGlyphs( 1, &aGlyphId, aPos, nStart ); )
+    const GlyphItem* pGlyph;
+    int nStart = 0;
+    while (rLayout.GetNextGlyphs(1, &pGlyph, aPos, nStart))
     {
         cairo_glyph_t aGlyph;
-        aGlyph.index = aGlyphId & GF_IDXMASK;
+        aGlyph.index = pGlyph->maGlyphId & GF_IDXMASK;
         aGlyph.x = aPos.X();
         aGlyph.y = aPos.Y();
         cairo_glyphs.push_back(aGlyph);
 
-        switch (aGlyphId & GF_ROTMASK)
+        switch (pGlyph->maGlyphId & GF_ROTMASK)
         {
             case GF_ROTL:    // left
                 glyph_extrarotation.push_back(1);

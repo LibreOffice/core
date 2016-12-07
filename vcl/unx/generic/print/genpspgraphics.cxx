@@ -591,31 +591,14 @@ void PspCommonSalLayout::InitFont() const
 
 void GenPspGraphics::DrawTextLayout(const CommonSalLayout& rLayout)
 {
-    const int nMaxGlyphs = 1;
-    sal_GlyphId aGlyphAry[ nMaxGlyphs ];
-    DeviceCoordinate aWidthAry[ nMaxGlyphs ];
-    sal_Int32   aIdxAry  [ nMaxGlyphs ];
-    sal_Unicode aUnicodes[ nMaxGlyphs ];
-
+    const GlyphItem* pGlyph;
     Point aPos;
-    long nUnitsPerPixel = rLayout.GetUnitsPerPixel();
-    for( int nStart = 0;; )
+    int nStart = 0;
+    while (rLayout.GetNextGlyphs(1, &pGlyph, aPos, nStart))
     {
-        int nGlyphCount = rLayout.GetNextGlyphs( nMaxGlyphs, aGlyphAry, aPos, nStart, aWidthAry, nullptr );
-        if( !nGlyphCount )
-            break;
-
-        DeviceCoordinate nXOffset = 0;
-        for( int i = 0; i < nGlyphCount; ++i )
-        {
-            nXOffset += aWidthAry[ i ];
-            aIdxAry[ i ] = nXOffset / nUnitsPerPixel;
-            sal_GlyphId aGlyphId = aGlyphAry[i] & (GF_IDXMASK | GF_ROTMASK);
-            aUnicodes[i] = 0;
-            aGlyphAry[i] = aGlyphId;
-        }
-
-        m_pPrinterGfx->DrawGlyphs( aPos, aGlyphAry, aUnicodes, nGlyphCount, aIdxAry );
+        sal_GlyphId aGlyphId = pGlyph->maGlyphId & (GF_IDXMASK | GF_ROTMASK);
+        sal_Int32 aIdx = pGlyph->mnNewWidth / rLayout.GetUnitsPerPixel();
+        m_pPrinterGfx->DrawGlyphs(aPos, &aGlyphId, { 0 }, 1, &aIdx);
     }
 }
 
