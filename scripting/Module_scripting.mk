@@ -28,11 +28,11 @@ $(eval $(call gb_Module_add_targets,scripting,\
 		) \
 		Package_java \
 		Package_java_jars \
+		$(if $(ENABLE_SCRIPTING_BEANSHELL),Package_ScriptsBeanShell) \
+		$(if $(ENABLE_SCRIPTING_JAVASCRIPT),Package_ScriptsJavaScript) \
 	) \
 	Package_scriptbindinglib \
 	Package_scriptproviderforpython \
-	Package_ScriptsBeanShell \
-	Package_ScriptsJavaScript \
 	Package_ScriptsPython \
 	Library_basprov \
 	Library_dlgprov \
