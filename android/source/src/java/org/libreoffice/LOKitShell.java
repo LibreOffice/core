@@ -138,6 +138,10 @@ public class LOKitShell {
         LOKitShell.sendEvent(new LOEvent(LOEvent.LOAD, inputFile));
     }
 
+    public static void sendResumeEvent(String inputFile, int partIndex) {
+        LOKitShell.sendEvent(new LOEvent(LOEvent.RESUME, inputFile, partIndex));
+    }
+
     public static void sendCloseEvent() {
         LOKitShell.sendEvent(new LOEvent(LOEvent.CLOSE));
     }
