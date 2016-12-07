@@ -204,14 +204,14 @@ public:
     COPY( const OUString & inSourceURL,
           const OUString & inDestinationURL,
           const DAVRequestEnvironment & rEnv,
-          bool inOverWrite )
+          bool inOverWrite = false )
         throw ( DAVException ) override;
 
     virtual void
     MOVE( const OUString & inSourceURL,
           const OUString & inDestinationURL,
           const DAVRequestEnvironment & rEnv,
-          bool inOverWrite )
+          bool inOverWrite = false )
         throw ( DAVException ) override;
 
     virtual void DESTROY( const OUString & inPath,
