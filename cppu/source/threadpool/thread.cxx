@@ -86,7 +86,11 @@ namespace cppu_threadpool {
                 pCurrent = m_lst.front();
                 m_lst.pop_front();
             }
-            pCurrent->join();
+            if (pCurrent->getIdentifier()
+                != osl::Thread::getCurrentIdentifier())
+            {
+                pCurrent->join();
+            }
         }
     }
 
