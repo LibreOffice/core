@@ -35,6 +35,9 @@
 #include <com/sun/star/ucb/InteractiveNetworkResolveNameException.hpp>
 #include <com/sun/star/ucb/InteractiveNetworkWriteException.hpp>
 
+#include <com/sun/star/task/DocumentPasswordRequest2.hpp>
+#include <com/sun/star/task/DocumentMSPasswordRequest2.hpp>
+
 #include <../../inc/lib/init.hxx>
 
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
@@ -242,20 +245,37 @@ bool LOKInteractionHandler::handleNetworkException(const uno::Sequence<uno::Refe
 
 bool LOKInteractionHandler::handlePasswordRequest(const uno::Sequence<uno::Reference<task::XInteractionContinuation>> &rContinuations, const uno::Any &rRequest)
 {
+    bool bPasswordRequestFound = false;
+    bool bIsRequestPasswordToModify = false;
+
+    OString sUrl;
+
     task::DocumentPasswordRequest2 passwordRequest;
-    if (!(rRequest >>= passwordRequest))
+    if (rRequest >>= passwordRequest)
+    {
+        bIsRequestPasswordToModify = passwordRequest.IsRequestPasswordToModify;
+        sUrl = passwordRequest.Name.toUtf8();
+        bPasswordRequestFound = true;
+    }
+
+    task::DocumentMSPasswordRequest2 passwordMSRequest;
+    if (rRequest >>= passwordMSRequest)
+    {
+        bIsRequestPasswordToModify = passwordMSRequest.IsRequestPasswordToModify;
+        sUrl = passwordMSRequest.Name.toUtf8();
+        bPasswordRequestFound = true;
+    }
+
+    if (!bPasswordRequestFound)
         return false;
 
     if (m_pLOKit->mpCallback &&
-        m_pLOKit->hasOptionalFeature((passwordRequest.IsRequestPasswordToModify)
-                ? LOK_FEATURE_DOCUMENT_PASSWORD_TO_MODIFY
-                : LOK_FEATURE_DOCUMENT_PASSWORD))
+        m_pLOKit->hasOptionalFeature(bIsRequestPasswordToModify ? LOK_FEATURE_DOCUMENT_PASSWORD_TO_MODIFY
+                                                                : LOK_FEATURE_DOCUMENT_PASSWORD))
     {
-        OString const url(passwordRequest.Name.toUtf8());
-        m_pLOKit->mpCallback(passwordRequest.IsRequestPasswordToModify
-                ? LOK_CALLBACK_DOCUMENT_PASSWORD_TO_MODIFY
-                : LOK_CALLBACK_DOCUMENT_PASSWORD,
-                url.getStr(),
+        m_pLOKit->mpCallback(bIsRequestPasswordToModify ? LOK_CALLBACK_DOCUMENT_PASSWORD_TO_MODIFY
+                                                        : LOK_CALLBACK_DOCUMENT_PASSWORD,
+                sUrl.getStr(),
                 m_pLOKit->mpCallbackData);
 
         // block until SetPassword is called
@@ -267,7 +287,7 @@ bool LOKInteractionHandler::handlePasswordRequest(const uno::Sequence<uno::Refer
     {
         if (m_usePassword)
         {
-            if (passwordRequest.IsRequestPasswordToModify)
+            if (bIsRequestPasswordToModify)
             {
                 uno::Reference<task::XInteractionPassword2> const xIPW2(rContinuations[i], uno::UNO_QUERY);
                 xIPW2->setPasswordToModify(m_Password);
@@ -285,7 +305,7 @@ bool LOKInteractionHandler::handlePasswordRequest(const uno::Sequence<uno::Refer
         }
         else
         {
-            if (passwordRequest.IsRequestPasswordToModify)
+            if (bIsRequestPasswordToModify)
             {
                 uno::Reference<task::XInteractionPassword2> const xIPW2(rContinuations[i], uno::UNO_QUERY);
                 xIPW2->setRecommendReadOnly(true);
