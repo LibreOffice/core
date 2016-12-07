@@ -26,7 +26,7 @@ typedef void* lt_pointer_t;
 
 struct lt_error_t {
     void *something;
-    lt_error_t() : something(NULL) {}
+    lt_error_t() : something(nullptr) {}
 };
 
 static void* g_malloc(size_t s)
@@ -61,12 +61,12 @@ struct my_ref
 struct my_t_impl : public my_ref
 {
     char* mpStr;
-    explicit my_t_impl() : my_ref(), mpStr(NULL) {}
+    explicit my_t_impl() : my_ref(), mpStr(nullptr) {}
     virtual ~my_t_impl() { g_free( mpStr); }
     explicit my_t_impl( const my_t_impl& r )
         :
             my_ref(),
-            mpStr(r.mpStr ? strdup( r.mpStr) : NULL)
+            mpStr(r.mpStr ? strdup( r.mpStr) : nullptr)
     {
     }
     my_t_impl& operator=( const my_t_impl& r )
@@ -74,13 +74,13 @@ struct my_t_impl : public my_ref
         if (this == &r)
             return *this;
         g_free( mpStr);
-        mpStr = (r.mpStr ? strdup( r.mpStr) : NULL);
+        mpStr = (r.mpStr ? strdup( r.mpStr) : nullptr);
         return *this;
     }
     void assign( const char* str )
     {
         g_free( mpStr);
-        mpStr = (str ? strdup( str) : NULL);
+        mpStr = (str ? strdup( str) : nullptr);
     }
     void assign( const char* str, const char* stop )
     {
@@ -92,7 +92,7 @@ struct my_t_impl : public my_ref
             mpStr[stop - str] = 0;
         }
         else
-            mpStr = NULL;
+            mpStr = nullptr;
     }
     virtual void append( const char* str, const char* stop )
     {
@@ -112,7 +112,7 @@ struct my_t_impl : public my_ref
     virtual void zero()
     {
         g_free( mpStr);
-        mpStr = NULL;
+        mpStr = nullptr;
     }
 };
 
@@ -150,10 +150,10 @@ struct lt_list_t : public my_t_impl
 {
     lt_list_t* mpPrev;
     lt_list_t* mpNext;
-    explicit lt_list_t() : my_t_impl(), mpPrev(NULL), mpNext(NULL) {}
+    explicit lt_list_t() : my_t_impl(), mpPrev(nullptr), mpNext(nullptr) {}
     explicit lt_list_t( const lt_list_t& r )
         :
-            my_t_impl( r), mpPrev(NULL), mpNext(NULL)
+            my_t_impl( r), mpPrev(nullptr), mpNext(nullptr)
     {
     }
     virtual ~lt_list_t()
@@ -174,13 +174,13 @@ static lt_pointer_t lt_list_value( const lt_list_t* p )
 
 static const lt_list_t* lt_list_next( const lt_list_t* p )
 {
-    return p ? p->mpNext : NULL;
+    return p ? p->mpNext : nullptr;
 }
 
 static lt_list_t* my_copyList( const lt_list_t * pList )
 {
-    lt_list_t* pNewList = NULL;
-    lt_list_t* pLast = NULL;
+    lt_list_t* pNewList = nullptr;
+    lt_list_t* pLast = nullptr;
     while (pList)
     {
         lt_list_t* p = new lt_list_t( *pList);
@@ -229,7 +229,7 @@ static void my_appendToList( lt_list_t** ppList, lt_list_t* pEntry )
 struct my_t_list : public my_t_impl
 {
     lt_list_t* mpList;
-    explicit my_t_list() : my_t_impl(), mpList(NULL) {}
+    explicit my_t_list() : my_t_impl(), mpList(nullptr) {}
     explicit my_t_list( const my_t_list& r ) : my_t_impl( r), mpList( my_copyList( r.mpList)) {}
     virtual ~my_t_list()
     {
@@ -255,7 +255,7 @@ struct my_t_list : public my_t_impl
     {
         my_t_impl::zero();
         my_unrefList( mpList);
-        mpList = NULL;
+        mpList = nullptr;
     }
 };
 
@@ -309,7 +309,7 @@ static lt_tag_t* lt_tag_new()
 
 static lt_tag_t* lt_tag_copy(lt_tag_t *tag)
 {
-    return (tag ? new lt_tag_t( *tag) : NULL);
+    return (tag ? new lt_tag_t( *tag) : nullptr);
 }
 
 static void lt_tag_unref(lt_tag_t *tag)
@@ -336,7 +336,7 @@ static int lt_tag_parse(lt_tag_t *tag,
     if (!tag_string)
         return 0;
     // In case we supported other subtags this would get more complicated.
-    my_t_impl* aSubtags[] = { &tag->maLanguage, &tag->maScript, &tag->maRegion, &tag->maVariants, NULL };
+    my_t_impl* aSubtags[] = { &tag->maLanguage, &tag->maScript, &tag->maRegion, &tag->maVariants, nullptr };
     my_t_impl** ppSub = &aSubtags[0];
     const char* pStart = tag_string;
     const char* p = pStart;
@@ -461,7 +461,7 @@ static int lt_tag_parse(lt_tag_t *tag,
                     case 1:
                         // script omitted, region omitted, extension subtag
                         // with singleton, stop parsing
-                        ppSub = NULL;
+                        ppSub = nullptr;
                         break;
                     case 5:
                     case 6:
@@ -521,52 +521,52 @@ static char* lt_tag_canonicalize(lt_tag_t *tag,
                                  lt_error_t **error)
 {
     (void) error;
-    return tag && tag->mpStr ? strdup( tag->mpStr) : NULL;
+    return tag && tag->mpStr ? strdup( tag->mpStr) : nullptr;
 }
 
 static const lt_lang_t* lt_tag_get_language(const lt_tag_t  *tag)
 {
-    return tag && tag->maLanguage.mpStr ? &tag->maLanguage : NULL;
+    return tag && tag->maLanguage.mpStr ? &tag->maLanguage : nullptr;
 }
 
 static const lt_script_t *lt_tag_get_script(const lt_tag_t  *tag)
 {
-    return tag && tag->maScript.mpStr ? &tag->maScript : NULL;
+    return tag && tag->maScript.mpStr ? &tag->maScript : nullptr;
 }
 
 static const lt_region_t *lt_tag_get_region(const lt_tag_t  *tag)
 {
-    return tag && tag->maRegion.mpStr ? &tag->maRegion : NULL;
+    return tag && tag->maRegion.mpStr ? &tag->maRegion : nullptr;
 }
 
 static const lt_list_t *lt_tag_get_variants(const lt_tag_t  *tag)
 {
-    return tag ? tag->maVariants.mpList : NULL;
+    return tag ? tag->maVariants.mpList : nullptr;
 }
 
 static const lt_string_t *lt_tag_get_privateuse(const lt_tag_t  *tag)
 {
-    return tag && tag->maPrivateUse.mpStr ? &tag->maPrivateUse : NULL;
+    return tag && tag->maPrivateUse.mpStr ? &tag->maPrivateUse : nullptr;
 }
 
 static const char *lt_lang_get_tag(const lt_lang_t *lang)
 {
-    return lang ? lang->mpStr : NULL;
+    return lang ? lang->mpStr : nullptr;
 }
 
 static const char *lt_script_get_tag(const lt_script_t *script)
 {
-    return script ? script->mpStr : NULL;
+    return script ? script->mpStr : nullptr;
 }
 
 static const char *lt_region_get_tag(const lt_region_t *region)
 {
-    return region ? region->mpStr : NULL;
+    return region ? region->mpStr : nullptr;
 }
 
 static const char *lt_variant_get_tag(const lt_variant_t *variant)
 {
-    return variant ? variant->mpStr : NULL;
+    return variant ? variant->mpStr : nullptr;
 }
 
 static size_t lt_string_length(const lt_string_t *string)
