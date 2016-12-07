@@ -153,10 +153,40 @@ public class LOKitThread extends Thread {
         redraw();
     }
 
+
+    /**
+     * Resume the document with the current part
+     */
+
+    private void resumeDocument(String filename, int partIndex){
+        if (mApplication == null) {
+            mApplication = LibreOfficeMainActivity.mAppContext;
+        }
+
+        mLayerClient = LibreOfficeMainActivity.getLayerClient();
+
+        mInvalidationHandler = new InvalidationHandler(LibreOfficeMainActivity.mAppContext);
+        mTileProvider = TileProviderFactory.create(mLayerClient, mInvalidationHandler, filename);
+
+        if (mTileProvider.isReady()) {
+            LOKitShell.showProgressSpinner();
+            mTileProvider.changePart(partIndex);
+            mViewportMetrics = mLayerClient.getViewportMetrics();
+            mLayerClient.setViewportMetrics(mViewportMetrics.scaleTo(0.9f, new PointF()));
+            refresh();
+            LOKitShell.hideProgressSpinner();
+        } else {
+            closeDocument();
+        }
+
+
+    }
+
     /**
      * Change part of the document.
      */
     private void changePart(int partIndex) {
+
         LOKitShell.showProgressSpinner();
         mTileProvider.changePart(partIndex);
         mViewportMetrics = mLayerClient.getViewportMetrics();
@@ -205,6 +235,9 @@ public class LOKitThread extends Thread {
         switch (event.mType) {
             case LOEvent.LOAD:
                 loadDocument(event.mString);
+                break;
+            case LOEvent.RESUME:
+                resumeDocument(event.mString, event.mPartIndex);
                 break;
             case LOEvent.CLOSE:
                 closeDocument();

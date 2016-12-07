@@ -71,6 +71,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
     private ListView mDrawerList;
     private List<DocumentPartView> mDocumentPartView = new ArrayList<DocumentPartView>();
     private DocumentPartViewListAdapter mDocumentPartViewListAdapter;
+    private int partIndex=-1;
     private File mInputFile;
     private DocumentOverlay mDocumentOverlay;
     private File mTempFile = null;
@@ -320,7 +321,10 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
     protected void onStart() {
         Log.i(LOGTAG, "onStart..");
         super.onStart();
-        LOKitShell.sendLoadEvent(mInputFile.getPath());
+        if(partIndex == -1)
+            LOKitShell.sendLoadEvent(mInputFile.getPath());
+        else
+            LOKitShell.sendResumeEvent(mInputFile.getPath(), partIndex);
     }
 
     @Override
@@ -574,6 +578,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             DocumentPartView partView = mDocumentPartViewListAdapter.getItem(position);
+            partIndex = partView.partIndex;
             LOKitShell.sendChangePartEvent(partView.partIndex);
             mDrawerLayout.closeDrawer(mDrawerList);
         }
