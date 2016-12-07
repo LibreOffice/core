@@ -543,7 +543,7 @@ public:
                                      // ( is reset e.g. for Flys in a table )
     bool m_bOutGrf : 1;           // graphics are being written
     bool m_bInWriteEscher : 1;    // in write textboxes
-    bool m_bStartTOX : 1;         // true: a TOX is startet
+    bool m_bStartTOX : 1;         // true: a TOX is started
     bool m_bInWriteTOX : 1;       // true: all content are in a TOX
     bool m_bFootnoteAtTextEnd : 1;      // true: all FTN at Textend
     bool m_bEndAtTextEnd : 1;      // true: all END at Textend

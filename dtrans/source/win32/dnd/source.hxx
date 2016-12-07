@@ -43,7 +43,7 @@ using namespace ::com::sun::star::datatransfer;
 using namespace ::com::sun::star::datatransfer::dnd;
 
 class SourceContext;
-// RIGHT MOUSE BUTTON drag and drop not supportet currently.
+// RIGHT MOUSE BUTTON drag and drop not supported currently.
 // ALT modifier is considered to effect a user selection of effects
 class DragSource:
       public MutexDummy,

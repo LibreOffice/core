@@ -172,7 +172,7 @@ public:
     SwNumberTree::tNumberVector GetNumberVector() const;
 
     /**
-       Return if numbering is restartet at this node.
+       Return if numbering is restarted at this node.
      */
     virtual bool IsRestart() const = 0;
 

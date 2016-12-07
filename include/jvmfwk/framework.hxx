@@ -521,7 +521,7 @@ JVMFWK_DLLPUBLIC javaFrameworkError jfw_startVM(
 
 /** determines the JRE that is to be used.
 
-    <p>When calling <code>jfw_startVM</code> then a VM is startet from
+    <p>When calling <code>jfw_startVM</code> then a VM is started from
     the JRE that is determined by this function.<br/>
     It is not verified if the JRE represented by the <code>JavaInfo</code>
     argument meets the requirements as specified by the javavendors.xml file.

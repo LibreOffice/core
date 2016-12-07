@@ -191,7 +191,7 @@ public:
             found, that is assigned. In any case, the SvtListener is added to
             the broadcaster.
 
-            If not NULL then no listeners are startet, only the area is
+            If not NULL then no listeners are started, only the area is
             inserted and the reference count incremented. Effectively the same
             as InsertListeningArea(), so use that instead.
 

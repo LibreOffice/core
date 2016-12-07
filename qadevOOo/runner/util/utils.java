@@ -376,10 +376,10 @@ public class utils {
 
     /**
      * This method deletes via office the given file URL. It checks the existence
-     * of <CODE>fileURL</CODE>. If exists it will be deletet.
+     * of <CODE>fileURL</CODE>. If exists it will be deleted.
      * @param xMsf the multiservice factory
      * @param fileURL the file to delete
-     * @return true if the file could be deletet or the file does not exist
+     * @return true if the file could be deleted or the file does not exist
      */
     public static boolean deleteFile(XMultiServiceFactory xMsf, String fileURL) {
         boolean delete = true;

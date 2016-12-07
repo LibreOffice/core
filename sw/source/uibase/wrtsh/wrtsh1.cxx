@@ -451,7 +451,7 @@ bool SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef& xRef, SwFlyFrame
     //1. Selections should be deleted. For StarMath the Text should be
     //   passed to the Object
     //2. If the cursor is at the end of an non empty paragraph a paragraph
-    //   break should be insertet. StarMath objects are character bound and
+    //   break should be inserted. StarMath objects are character bound and
     //   no break should be inserted.
     //3. If an selection is passed to a StarMath object, this object should
     //   not be activated. false should be returned then.

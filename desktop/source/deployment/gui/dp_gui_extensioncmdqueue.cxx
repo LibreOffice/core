@@ -770,7 +770,7 @@ void ExtensionCmdQueue::Thread::execute()
             catch ( const ucb::CommandFailedException & )
             {
                 //This exception is thrown when a user clicked cancel in the messagebox which was
-                //startet by the interaction handler. For example the user will be asked if he/she
+                //started by the interaction handler. For example the user will be asked if he/she
                 //really wants to install the extension.
                 //These interaction are run for exactly one extension at a time. Therefore we continue
                 //with installing the remaining extensions.

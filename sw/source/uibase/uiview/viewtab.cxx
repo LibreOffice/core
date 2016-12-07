@@ -1164,7 +1164,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
 
 // Here the status of the tab bar will be determined.
 // This means that all relevant attributes at the CursorPos
-// will be submittet to the tab bar.
+// will be submitted to the tab bar.
 void SwView::StateTabWin(SfxItemSet& rSet)
 {
     SwWrtShell &rSh         = GetWrtShell();

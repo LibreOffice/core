@@ -237,7 +237,7 @@ sal_uInt8 ImpDetectJPG_GetNextMarker( SvStream& rStm )
         while( nByte == 0xff );
     }
     while( nByte == 0 );        // 0xff00 represents 0xff and not a marker,
-                                // the marker detection has to be restartet.
+                                // the marker detection has to be restarted.
     return nByte;
 }
 

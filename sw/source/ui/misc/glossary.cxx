@@ -764,8 +764,8 @@ void SwGlossaryDlg::Init()
         GrpSelect(m_pCategoryBox);
     }
     //JP 16.11.99: the SvxTreeListBox has a Bug. The Box don't recalc the
-    //      outputsize, when all entries are insertet. The result is, that
-    //      the Focus/Highlight rectangle is to large and paintet over the
+    //      outputsize, when all entries are inserted. The result is, that
+    //      the Focus/Highlight rectangle is to large and painted over the
     //      HScrollbar. -> Fix: call the resize
     m_pCategoryBox->Resize();
 
