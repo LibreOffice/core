@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "3a71b18c_a555811e",
+        "filename": "svtools/source/contnr/ivctrl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 1001302
+      },
+      "writtenOn": "2016-12-07T15:51:40Z",
+      "side": 1,
+      "message": "Short answer: NO\nIt appears that is should be sufficient, however I cannot be certain.\nHowever there may have been a reason the original programmer did it the way they did...\nThere is no harm to be cautious here",
+      "parentUuid": "3a71b18c_4a6d9c31",
+      "revId": "55c19aa759ac3d631c72210fb9da4e241377ba28",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a71b18c_0a83a4cd",
         "filename": "vcl/source/gdi/wall.cxx",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2016-12-06T18:32:35Z",
       "side": 1,
       "message": "dont need the if",
+      "revId": "55c19aa759ac3d631c72210fb9da4e241377ba28",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a71b18c_2549718c",
+        "filename": "vcl/source/gdi/wall.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1001302
+      },
+      "writtenOn": "2016-12-07T15:51:40Z",
+      "side": 1,
+      "message": "Ah yes",
+      "parentUuid": "3a71b18c_0a83a4cd",
       "revId": "55c19aa759ac3d631c72210fb9da4e241377ba28",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
