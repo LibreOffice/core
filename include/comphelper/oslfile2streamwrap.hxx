@@ -32,13 +32,12 @@ namespace comphelper
 // FmUnoIOStream,
 // Stream to read and write data, based on File
 
-class COMPHELPER_DLLPUBLIC OSLInputStreamWrapper : public ::cppu::WeakImplHelper<css::io::XInputStream>
+class OSLInputStreamWrapper : public ::cppu::WeakImplHelper<css::io::XInputStream>
 {
-    ::osl::Mutex    m_aMutex;
-    ::osl::File*    m_pFile;
-
 public:
-    OSLInputStreamWrapper(::osl::File& _rStream);
+    COMPHELPER_DLLPUBLIC OSLInputStreamWrapper(::osl::File& _rStream);
+
+private:
     virtual ~OSLInputStreamWrapper() override;
 
 // css::io::XInputStream
@@ -47,6 +46,9 @@ public:
     virtual void        SAL_CALL    skipBytes(sal_Int32 nBytesToSkip) throw(css::io::NotConnectedException, css::io::BufferSizeExceededException, css::uno::RuntimeException, std::exception) override;
     virtual sal_Int32   SAL_CALL    available() throw(css::io::NotConnectedException, css::uno::RuntimeException, std::exception) override;
     virtual void        SAL_CALL    closeInput() throw(css::io::NotConnectedException, css::uno::RuntimeException, std::exception) override;
+
+    ::osl::Mutex    m_aMutex;
+    ::osl::File*    m_pFile;
 };
 
 
