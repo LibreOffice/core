@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "3a71b18c_45a3cd9e",
+        "filename": "vcl/win/gdi/salnativewidgets-luna.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-12-07T10:03:34Z",
+      "side": 1,
+      "message": "I don\u0027t think you need this ifdef here, the whole plugin is only built on windows afaik.\nAlso the comment looks like it\u0027s copy-pasted.",
+      "revId": "d6b2c0a55ff109358a0aed6fa5e4fc7ec12f5843",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a71b18c_85f165d0",
         "filename": "vcl/win/gdi/salnativewidgets-luna.cxx",
         "patchSetId": 2
