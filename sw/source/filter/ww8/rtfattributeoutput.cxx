@@ -78,6 +78,7 @@
 #include <vcl/cvtgrf.hxx>
 #include <oox/mathml/export.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
+#include <o3tl/make_unique.hxx>
 
 using namespace ::com::sun::star;
 using namespace sw::util;
@@ -526,9 +527,7 @@ void RtfAttributeOutput::StartRuby(const SwTextNode& rNode, sal_Int32 /*nPos*/, 
         nRubyScript = i18n::ScriptType::ASIAN;
 
     const SwAttrSet& rSet = rNode.GetSwAttrSet();
-    const SvxFontHeightItem& rHeightItem  =
-        static_cast< const SvxFontHeightItem& >(rSet.Get(
-                    GetWhichOfScript(RES_CHRATR_FONTSIZE, nRubyScript)));
+    auto& rHeightItem = static_cast<const SvxFontHeightItem&>(rSet.Get(GetWhichOfScript(RES_CHRATR_FONTSIZE, nRubyScript)));
     nHeight = (rHeightItem.GetHeight() + 10)/20-1;
     aStr += OUString::number(nHeight);
     aStr += "(";
@@ -762,7 +761,7 @@ void RtfAttributeOutput::TableDefaultBorders(ww8::WW8TableNodeInfoInner::Pointer
     const SfxPoolItem* pItem;
     if (pCellFormat->GetAttrSet().HasItem(RES_BOX, &pItem))
     {
-        const SvxBoxItem& rBox = static_cast<const SvxBoxItem&>(*pItem);
+        auto& rBox = static_cast<const SvxBoxItem&>(*pItem);
         static const SvxBoxItemLine aBorders[] =
         {
             SvxBoxItemLine::TOP, SvxBoxItemLine::LEFT, SvxBoxItemLine::BOTTOM, SvxBoxItemLine::RIGHT
@@ -805,7 +804,7 @@ void RtfAttributeOutput::TableBackgrounds(ww8::WW8TableNodeInfoInner::Pointer_t 
     const SfxPoolItem* pItem;
     if (pCellFormat->GetAttrSet().HasItem(RES_BACKGROUND, &pItem))
     {
-        const SvxBrushItem& rBack = static_cast<const SvxBrushItem&>(*pItem);
+        auto& rBack = static_cast<const SvxBrushItem&>(*pItem);
         if (!rBack.GetColor().GetTransparency())
         {
             m_aRowDefs.append(OOO_STRING_SVTOOLS_RTF_CLCBPAT);
@@ -970,13 +969,13 @@ void RtfAttributeOutput::InitTableHelper(const ww8::WW8TableNodeInfoInner::Point
     GetTablePageSize(pTableTextNodeInfoInner.get(), nPageSize, bRelBoxSize);
 
     const SwFrameFormat* pFormat = pTable->GetFrameFormat();
-    const sal_uInt32 nTableSz = static_cast<sal_uInt32>(pFormat->GetFrameSize().GetWidth());
+    const sal_uInt32 nTableSz = pFormat->GetFrameSize().GetWidth();
 
     const SwHTMLTableLayout* pLayout = pTable->GetHTMLTableLayout();
     if (pLayout && pLayout->IsExportable())
-        m_pTableWrt.reset(new SwWriteTable(pTable, pLayout));
+        m_pTableWrt = o3tl::make_unique<SwWriteTable>(pTable, pLayout);
     else
-        m_pTableWrt.reset(new SwWriteTable(pTable, pTable->GetTabLines(), nPageSize, nTableSz, false));
+        m_pTableWrt = o3tl::make_unique<SwWriteTable>(pTable, pTable->GetTabLines(), nPageSize, nTableSz, false);
 }
 
 void RtfAttributeOutput::StartTable(const ww8::WW8TableNodeInfoInner::Pointer_t& /*pTableTextNodeInfoInner*/)
@@ -1958,7 +1957,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
 
         if (pObject && pObject->GetObjInventor() == SdrInventor::FmForm)
         {
-            if (const SdrUnoObj* pFormObj = dynamic_cast< const SdrUnoObj*>(pObject))
+            if (auto pFormObj = dynamic_cast<const SdrUnoObj*>(pObject))
             {
                 const uno::Reference<awt::XControlModel>& xControlModel = pFormObj->GetUnoControlModel();
                 uno::Reference< lang::XServiceInfo > xInfo(xControlModel, uno::UNO_QUERY);
@@ -3177,18 +3176,20 @@ void RtfAttributeOutput::FormatAnchor(const SwFormatAnchor& rAnchor)
 {
     if (!m_rExport.m_bRTFFlySyntax)
     {
-        sal_uInt16 nId = static_cast< sal_uInt16 >(rAnchor.GetAnchorId());
+        RndStdIds eId = rAnchor.GetAnchorId();
         m_aRunText->append(OOO_STRING_SVTOOLS_RTF_FLYANCHOR);
-        m_aRunText->append((sal_Int32)nId);
-        switch (nId)
+        m_aRunText->append(static_cast<sal_Int32>(eId));
+        switch (eId)
         {
         case FLY_AT_PAGE:
             m_aRunText->append(OOO_STRING_SVTOOLS_RTF_FLYPAGE);
-            m_aRunText->append((sal_Int32)rAnchor.GetPageNum());
+            m_aRunText->append(static_cast<sal_Int32>(rAnchor.GetPageNum()));
             break;
         case FLY_AT_PARA:
         case FLY_AS_CHAR:
             m_aRunText->append(OOO_STRING_SVTOOLS_RTF_FLYCNTNT);
+            break;
+        default:
             break;
         }
     }
@@ -3282,7 +3283,7 @@ void RtfAttributeOutput::FormatBox(const SvxBoxItem& rBox)
             if (pTop->GetBorderLineStyle() != table::BorderLineStyle::NONE)
             {
                 double const fConverted(editeng::ConvertBorderWidthToWord(pTop->GetBorderLineStyle(), pTop->GetWidth()));
-                sal_Int32 nWidth = sal_Int32(fConverted * 635); // Twips -> EMUs
+                sal_Int32 nWidth = fConverted * 635; // Twips -> EMUs
                 m_aFlyProperties.push_back(std::make_pair<OString, OString>("lineWidth", OString::number(nWidth)));
             }
             else
@@ -3762,7 +3763,7 @@ void RtfAttributeOutput::FlyFrameOLEReplacement(const SwFlyFrameFormat* pFlyFram
     aRendered.Height() = rSize.Height();
     const Graphic* pGraphic = rOLENode.GetGraphic();
     Size aMapped(pGraphic->GetPrefSize());
-    const SwCropGrf& rCr = static_cast<const SwCropGrf&>(rOLENode.GetAttr(RES_GRFATR_CROPGRF));
+    auto& rCr = static_cast<const SwCropGrf&>(rOLENode.GetAttr(RES_GRFATR_CROPGRF));
     const sal_Char* pBLIPType = OOO_STRING_SVTOOLS_RTF_PNGBLIP;
     const sal_uInt8* pGraphicAry = nullptr;
     SvMemoryStream aStream;
@@ -3802,7 +3803,7 @@ bool RtfAttributeOutput::FlyFrameOLEMath(const SwFlyFrameFormat* pFlyFrameFormat
 // gcc4.4 (and 4.3 and possibly older) have a problem with dynamic_cast directly to the target class,
 // so help it with an intermediate cast. I'm not sure what exactly the problem is, seems to be unrelated
 // to RTLD_GLOBAL, so most probably a gcc bug.
-    oox::FormulaExportBase* pBase = dynamic_cast<oox::FormulaExportBase*>(dynamic_cast<SfxBaseModel*>(xClosable.get()));
+    auto pBase = dynamic_cast<oox::FormulaExportBase*>(dynamic_cast<SfxBaseModel*>(xClosable.get()));
     assert(pBase != nullptr);
     OStringBuffer aBuf;
     if (pBase)
@@ -3898,7 +3899,7 @@ void RtfAttributeOutput::FlyFrameGraphic(const SwFlyFrameFormat* pFlyFrameFormat
 
     Size aMapped(eGraphicType == GraphicType::Bitmap ? rGraphic.GetSizePixel() : rGraphic.GetPrefSize());
 
-    const SwCropGrf& rCr = static_cast<const SwCropGrf&>(pGrfNode->GetAttr(RES_GRFATR_CROPGRF));
+    auto& rCr = static_cast<const SwCropGrf&>(pGrfNode->GetAttr(RES_GRFATR_CROPGRF));
 
     //Get original size in twips
     Size aSize(pGrfNode->GetTwipSize());
