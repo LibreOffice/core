@@ -189,6 +189,33 @@ struct AnnotatingVisitor
         writeStyle(xElem,nTagId);
     }
 
+    bool IsAncestorId(const uno::Reference<xml::dom::XNode>& xParentNode, const OUString& rValue)
+    {
+        bool bSelfCycle = false;
+        if (xParentNode.is())
+        {
+            if (xParentNode->hasAttributes())
+            {
+                const uno::Reference<xml::dom::XNamedNodeMap> xParentAttributes = xParentNode->getAttributes();
+                const sal_Int32 nFooNumAttrs(xParentAttributes->getLength());
+                for (sal_Int32 i=0; i < nFooNumAttrs; ++i)
+                {
+                    const sal_Int32 nTokenId(getTokenId(xParentAttributes->item(i)->getNodeName()));
+                    if (XML_ID == nTokenId)
+                    {
+                        OUString sParentID = xParentAttributes->item(i)->getNodeValue();
+                        bSelfCycle = sParentID == rValue;
+                        break;
+                    }
+                }
+            }
+
+            if (!bSelfCycle)
+                bSelfCycle = IsAncestorId(xParentNode->getParentNode(), rValue);
+        }
+        return bSelfCycle;
+    }
+
     void operator()( const uno::Reference<xml::dom::XElement>&      xElem,
                      const uno::Reference<xml::dom::XNamedNodeMap>& xAttributes )
     {
@@ -294,27 +321,10 @@ struct AnnotatingVisitor
                     bool bFound = aFound != maElementIdMap.end();
                     if (bFound)
                     {
-                        bool bSelfCycle = false;
-
-                        uno::Reference<xml::dom::XNode> xParentNode(xElem->getParentNode());
-                        if (xParentNode.is() && xParentNode->hasAttributes())
-                        {
-                            const uno::Reference<xml::dom::XNamedNodeMap> xParentAttributes = xParentNode->getAttributes();
-                            const sal_Int32 nFooNumAttrs(xParentAttributes->getLength());
-                            for (sal_Int32 i=0; i < nFooNumAttrs; ++i)
-                            {
-                                const sal_Int32 nTokenId(getTokenId(xParentAttributes->item(i)->getNodeName()));
-                                if (XML_ID == nTokenId)
-                                {
-                                    OUString sParentID = xParentAttributes->item(i)->getNodeValue();
-                                    bSelfCycle = sParentID == sValue;
-                                    break;
-                                }
-                            }
-                        }
-
+                        const bool bSelfCycle = IsAncestorId(xElem->getParentNode(), sValue);
                         if (bSelfCycle)
                         {
+                            SAL_WARN("filter.svg", "\"use\" declaration with target of ancestor node, causing use cycle");
                             //drop this invalid self-referencing "use" node
                             maElementIdMap.erase(aFound);
                             bFound = false;
