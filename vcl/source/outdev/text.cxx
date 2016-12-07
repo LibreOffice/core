@@ -2389,19 +2389,17 @@ SystemTextLayoutData OutputDevice::GetSysTextLayoutData(const Point& rStartPt, c
 
     // setup glyphs
     Point aPos;
-    sal_GlyphId aGlyphId;
-    for( int nStart = 0; pLayout->GetNextGlyphs( 1, &aGlyphId, aPos, nStart ); )
+    const GlyphItem* pGlyph;
+    int nStart = 0;
+    while (pLayout->GetNextGlyphs(1, &pGlyph, aPos, nStart))
     {
-        // NOTE: Windows backend is producing unicode chars (ucs4), so on windows,
-        //       ETO_GLYPH_INDEX is unusable, unless extra glyph conversion is made.
-
-        SystemGlyphData aGlyph;
-        aGlyph.index = static_cast<unsigned long> (aGlyphId & GF_IDXMASK);
-        aGlyph.x = aPos.X();
-        aGlyph.y = aPos.Y();
-        int nLevel = (aGlyphId & GF_FONTMASK) >> GF_FONTSHIFT;
-        aGlyph.fallbacklevel = nLevel < MAX_FALLBACK ? nLevel : 0;
-        aSysLayoutData.rGlyphData.push_back(aGlyph);
+        SystemGlyphData aSystemGlyph;
+        aSystemGlyph.index = static_cast<unsigned long> (pGlyph->maGlyphId & GF_IDXMASK);
+        aSystemGlyph.x = aPos.X();
+        aSystemGlyph.y = aPos.Y();
+        int nLevel = (pGlyph->maGlyphId & GF_FONTMASK) >> GF_FONTSHIFT;
+        aSystemGlyph.fallbacklevel = nLevel < MAX_FALLBACK ? nLevel : 0;
+        aSysLayoutData.rGlyphData.push_back(aSystemGlyph);
     }
 
     // Get font data
