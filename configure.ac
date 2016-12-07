@@ -4905,7 +4905,7 @@ dnl ===================================================================
 dnl enable pch by default on windows
 dnl enable it explicitly otherwise
 ENABLE_PCH=""
-if test "$enable_pch" != no; then
+if test "$enable_pch" = yes -a "$enable_compiler_plugins" = yes; then
     if test -z "$libo_fuzzed_enable_pch"; then
         AC_MSG_ERROR([--enable-pch cannot be used with --enable-compiler-plugins])
     else
