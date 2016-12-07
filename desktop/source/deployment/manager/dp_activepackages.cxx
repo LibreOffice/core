@@ -155,6 +155,7 @@ bool ActivePackages::get(
     (void) data;
     (void) id;
     (void) fileName;
+    (void) this;
     return false;
 #endif
 }
@@ -182,6 +183,8 @@ ActivePackages::Entries ActivePackages::getEntries() const {
                     decodeOldData(fn, i->second)));
         }
     }
+#else
+    (void) this;
 #endif
     return es;
 }
@@ -203,6 +206,7 @@ void ActivePackages::put(OUString const & id, Data const & data) {
 #else
     (void) id;
     (void) data;
+    (void) this;
 #endif
 }
 
@@ -214,6 +218,7 @@ void ActivePackages::erase(
 #else
     (void) id;
     (void) fileName;
+    (void) this;
 #endif
 }
 
