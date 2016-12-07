@@ -697,37 +697,9 @@ const SwAnchoredObject* SwDrawContact::GetAnchoredObj( const SdrObject* _pSdrObj
     return pRetAnchoredObj;
 }
 
-SwAnchoredObject* SwDrawContact::GetAnchoredObj( SdrObject* _pSdrObj )
+SwAnchoredObject* SwDrawContact::GetAnchoredObj(SdrObject *const pSdrObj)
 {
-    // handle default parameter value
-    if ( !_pSdrObj )
-    {
-        _pSdrObj = GetMaster();
-    }
-
-    OSL_ENSURE( _pSdrObj,
-            "<SwDrawContact::GetAnchoredObj(..)> - no object provided" );
-    OSL_ENSURE( dynamic_cast<const SwDrawVirtObj*>( _pSdrObj) !=  nullptr ||
-            ( dynamic_cast<const SdrVirtObj*>( _pSdrObj) == nullptr && dynamic_cast<const SwDrawVirtObj*>( _pSdrObj) == nullptr),
-            "<SwDrawContact::GetAnchoredObj(..)> - wrong object type object provided" );
-    OSL_ENSURE( GetUserCall( _pSdrObj ) == this || _pSdrObj == GetMaster(),
-            "<SwDrawContact::GetAnchoredObj(..)> - provided object doesn't belongs to this contact" );
-
-    SwAnchoredObject* pRetAnchoredObj = nullptr;
-
-    if ( _pSdrObj )
-    {
-        if ( dynamic_cast<const SwDrawVirtObj*>( _pSdrObj) !=  nullptr )
-        {
-            pRetAnchoredObj = &(static_cast<SwDrawVirtObj*>(_pSdrObj)->AnchoredObj());
-        }
-        else if ( dynamic_cast<const SdrVirtObj*>( _pSdrObj) == nullptr && dynamic_cast<const SwDrawVirtObj*>( _pSdrObj) == nullptr)
-        {
-            pRetAnchoredObj = &maAnchoredDrawObj;
-        }
-    }
-
-    return pRetAnchoredObj;
+    return const_cast<SwAnchoredObject*>(const_cast<SwDrawContact const*>(this)->GetAnchoredObj(pSdrObj));
 }
 
 const SdrObject* SwDrawContact::GetMaster() const
@@ -769,39 +741,22 @@ const SwFrame* SwDrawContact::GetAnchorFrame( const SdrObject* _pDrawObj ) const
     if ( !_pDrawObj ||
          _pDrawObj == GetMaster() ||
          ( !_pDrawObj->GetUserCall() &&
-           GetUserCall( _pDrawObj ) == static_cast<const SwContact* const>(this) ) )
+           GetUserCall( _pDrawObj ) == this ) )
     {
         pAnchorFrame = maAnchoredDrawObj.GetAnchorFrame();
     }
-    else if ( dynamic_cast<const SwDrawVirtObj*>( _pDrawObj) !=  nullptr )
-    {
-        pAnchorFrame = static_cast<const SwDrawVirtObj*>(_pDrawObj)->GetAnchorFrame();
-    }
     else
     {
-        OSL_FAIL( "<SwDrawContact::GetAnchorFrame(..)> - unknown drawing object." );
+        assert(dynamic_cast<SwDrawVirtObj const*>(_pDrawObj) !=  nullptr);
+        pAnchorFrame = static_cast<const SwDrawVirtObj*>(_pDrawObj)->GetAnchorFrame();
     }
 
     return pAnchorFrame;
 }
-SwFrame* SwDrawContact::GetAnchorFrame( SdrObject* _pDrawObj )
-{
-    SwFrame* pAnchorFrame = nullptr;
-    if ( !_pDrawObj ||
-         _pDrawObj == GetMaster() ||
-         ( !_pDrawObj->GetUserCall() &&
-           GetUserCall( _pDrawObj ) == this ) )
-    {
-        pAnchorFrame = maAnchoredDrawObj.AnchorFrame();
-    }
-    else
-    {
-        OSL_ENSURE( dynamic_cast<const SwDrawVirtObj*>( _pDrawObj) !=  nullptr,
-                "<SwDrawContact::GetAnchorFrame(..)> - unknown drawing object." );
-        pAnchorFrame = static_cast<SwDrawVirtObj*>(_pDrawObj)->AnchorFrame();
-    }
 
-    return pAnchorFrame;
+SwFrame* SwDrawContact::GetAnchorFrame(SdrObject *const pDrawObj)
+{
+    return const_cast<SwFrame *>(const_cast<SwDrawContact const*>(this)->GetAnchorFrame(pDrawObj));
 }
 
 /// create a new 'virtual' drawing object.
