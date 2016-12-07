@@ -330,7 +330,7 @@ void SwAnchoredDrawObject::MakeObjPos()
             break;
             default:
             {
-                OSL_FAIL( "<SwAnchoredDrawObject::MakeObjPos()> - unknown anchor type." );
+                assert(!"<SwAnchoredDrawObject::MakeObjPos()> - unknown anchor type.");
             }
         }
 
@@ -608,14 +608,12 @@ void SwAnchoredDrawObject::InvalidateObjPos()
 
 SwFrameFormat& SwAnchoredDrawObject::GetFrameFormat()
 {
-    OSL_ENSURE( static_cast<SwDrawContact*>(GetUserCall(GetDrawObj()))->GetFormat(),
-            "<SwAnchoredDrawObject::GetFrameFormat()> - missing frame format -> crash." );
+    assert(static_cast<SwDrawContact*>(GetUserCall(GetDrawObj()))->GetFormat());
     return *(static_cast<SwDrawContact*>(GetUserCall(GetDrawObj()))->GetFormat());
 }
 const SwFrameFormat& SwAnchoredDrawObject::GetFrameFormat() const
 {
-    OSL_ENSURE( static_cast<SwDrawContact*>(GetUserCall(GetDrawObj()))->GetFormat(),
-            "<SwAnchoredDrawObject::GetFrameFormat()> - missing frame format -> crash." );
+    assert(static_cast<SwDrawContact*>(GetUserCall(GetDrawObj()))->GetFormat());
     return *(static_cast<SwDrawContact*>(GetUserCall(GetDrawObj()))->GetFormat());
 }
 
@@ -791,7 +789,7 @@ void SwAnchoredDrawObject::SetPositioningAttr()
                 break;
                 default:
                 {
-                    OSL_FAIL( "<SwAnchoredDrawObject::SetPositioningAttr()> - unsupported layout direction" );
+                    assert(!"<SwAnchoredDrawObject::SetPositioningAttr()> - unsupported layout direction");
                 }
             }
         }
