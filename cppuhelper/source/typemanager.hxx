@@ -26,7 +26,7 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase4.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <rtl/ref.hxx>
 #include <sal/types.h>
 
@@ -44,7 +44,7 @@ namespace unoidl {
 
 namespace cppuhelper {
 
-typedef cppu::WeakComponentImplHelper4<
+typedef cppu::WeakComponentImplHelper<
     css::lang::XServiceInfo, css::container::XHierarchicalNameAccess,
     css::container::XSet, css::reflection::XTypeDescriptionEnumerationAccess >
 TypeManager_Base;
