@@ -46,7 +46,7 @@
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/bootstrap.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include "cppunit/TestAssert.h"
 #include "cppunit/TestFixture.h"
 #include "cppunit/extensions/HelperMacros.h"
@@ -82,7 +82,7 @@ std::ostream & operator <<(std::ostream & out, css::uno::Any const & value) {
 }
 
 class BoundListener:
-    public cppu::WeakImplHelper1< css::beans::XPropertyChangeListener >
+    public cppu::WeakImplHelper< css::beans::XPropertyChangeListener >
 {
 public:
     BoundListener(): m_count(0) {}
@@ -116,7 +116,7 @@ private:
 };
 
 class VetoListener:
-    public cppu::WeakImplHelper1< css::beans::XVetoableChangeListener >
+    public cppu::WeakImplHelper< css::beans::XVetoableChangeListener >
 {
 public:
     VetoListener(): m_count(0) {}
