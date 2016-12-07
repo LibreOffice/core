@@ -114,7 +114,6 @@ public:
     void testColumnWidthExportFromODStoXLSX();
     void testOutlineExportXLSX();
     void testHiddenEmptyRowsXLSX();
-    void testEmptyRowsWithBackgroundColorXLSX();
     void testLandscapeOrientationXLSX();
 
     void testInlineArrayXLS();
@@ -215,7 +214,6 @@ public:
     CPPUNIT_TEST(testColumnWidthExportFromODStoXLSX);
     CPPUNIT_TEST(testOutlineExportXLSX);
     CPPUNIT_TEST(testHiddenEmptyRowsXLSX);
-    CPPUNIT_TEST(testEmptyRowsWithBackgroundColorXLSX);
     CPPUNIT_TEST(testLandscapeOrientationXLSX);
     CPPUNIT_TEST(testInlineArrayXLS);
     CPPUNIT_TEST(testEmbeddedChartXLS);
@@ -872,32 +870,6 @@ void ScExportTest::testOutlineExportXLSX()
     assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row", 30);
 }
 
-void ScExportTest::testEmptyRowsWithBackgroundColorXLSX()
-{
-    // tdf#46738 FILESAVE:  Cell background and border color formatting information of empty cells
-    // lost in particular document after FILESAVE as xls and xlsx
-    ScDocShellRef xShell = loadDoc("empty_cells_with_background.", FORMAT_ODS);
-    CPPUNIT_ASSERT(xShell.Is());
-
-    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
-    xmlDocPtr pSheet = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
-    CPPUNIT_ASSERT(pSheet);
-
-    // Check if all 100 rows are saved into .xlsx file,
-    // as it contains information about background color information (style)
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[1]", "r", "1");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[2]", "r", "2");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[3]", "r", "3");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[100]", "r", "100");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row", 100);
-
-    // Check if all 4 column were created
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[100]/x:c[1]", "r", "A100");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[100]/x:c[2]", "r", "B100");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[100]/x:c[3]", "r", "C100");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[100]/x:c[4]", "r", "D100");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[100]/x:c", 4);
-}
 
 void ScExportTest::testHiddenEmptyRowsXLSX()
 {
