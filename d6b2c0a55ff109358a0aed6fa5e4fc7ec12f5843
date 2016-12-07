@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a71b18c_85f165d0",
+        "filename": "vcl/win/gdi/salnativewidgets-luna.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2016-12-07T09:03:16Z",
+      "side": 1,
+      "message": "you can get rid of \"static\" here and probably just move this line down to where its used i.e. bool bValue \u003d ((0 \u003d\u003d ...",
+      "revId": "d6b2c0a55ff109358a0aed6fa5e4fc7ec12f5843",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
