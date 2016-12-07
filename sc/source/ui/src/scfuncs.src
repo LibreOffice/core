@@ -3158,7 +3158,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1 // Description
         {
-            Text [ en-US ] = "Totals the arguments that meet the conditions." ;
+            Text [ en-US ] = "Totals the arguments that meet the condition." ;
         };
         ExtraData =
         {
