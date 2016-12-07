@@ -207,6 +207,7 @@ public:
     void testTdf99004();
     void testTdf84695();
     void testTdf84695NormalChar();
+    void testTdf84695Tab();
     void testTableStyleUndo();
     void testRedlineParam();
     void testRedlineViewAuthor();
@@ -320,6 +321,7 @@ public:
     CPPUNIT_TEST(testTdf99004);
     CPPUNIT_TEST(testTdf84695);
     CPPUNIT_TEST(testTdf84695NormalChar);
+    CPPUNIT_TEST(testTdf84695Tab);
     CPPUNIT_TEST(testTableStyleUndo);
     CPPUNIT_TEST(testRedlineParam);
     CPPUNIT_TEST(testRedlineViewAuthor);
@@ -3816,6 +3818,31 @@ void SwUiWriterTest::testTdf84695NormalChar()
     uno::Reference<text::XTextRange> xShape(getShape(1), uno::UNO_QUERY);
     // This was empty, pressing a normal character did not start the fly frame edit mode.
     CPPUNIT_ASSERT_EQUAL(OUString("a"), xShape->getString());
+}
+
+void SwUiWriterTest::testTdf84695Tab()
+{
+    SwDoc* pDoc = createDoc("tdf84695-tab.odt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    SdrObject* pObject = pPage->GetObj(0);
+    SwContact* pShape = static_cast<SwContact*>(pObject->GetUserCall());
+    // First, make sure that pShape is a draw shape.
+    CPPUNIT_ASSERT_EQUAL(RES_DRAWFRMFMT, static_cast<RES_FMT>(pShape->GetFormat()->Which()));
+
+    // Then select it.
+    pWrtShell->SelectObj(Point(), 0, pObject);
+
+    // Now pressing 'tab' should jump to the other shape.
+    SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_TAB);
+
+    // And finally make sure the selection has changed.
+    const SdrMarkList& rMarkList = pWrtShell->GetDrawView()->GetMarkedObjectList();
+    SwContact* pOtherShape = static_cast<SwContact*>(rMarkList.GetMark(0)->GetMarkedSdrObj()->GetUserCall());
+    // This failed, 'tab' didn't do anything -> the selected shape was the same.
+    CPPUNIT_ASSERT(pOtherShape != pShape);
 }
 
 void SwUiWriterTest::testTableStyleUndo()
