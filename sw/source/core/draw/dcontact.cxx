@@ -151,7 +151,7 @@ SwContact* GetUserCall( const SdrObject* pObj )
     SdrObject *pTmp;
     while ( !pObj->GetUserCall() && nullptr != (pTmp = pObj->GetUpGroup()) )
         pObj = pTmp;
-    OSL_ENSURE( !pObj->GetUserCall() || nullptr != dynamic_cast< const SwContact*> (pObj->GetUserCall()),
+    assert((!pObj->GetUserCall() || nullptr != dynamic_cast<const SwContact*>(pObj->GetUserCall())) &&
             "<::GetUserCall(..)> - wrong type of found object user call." );
     return static_cast<SwContact*>(pObj->GetUserCall());
 }
@@ -410,8 +410,8 @@ const SwAnchoredObject* SwFlyDrawContact::GetAnchoredObj( const SdrObject* _pSdr
             "<SwFlyDrawContact::GetAnchoredObj(..)> - no object provided" );
     OSL_ENSURE( dynamic_cast<const SwVirtFlyDrawObj*>( _pSdrObj) !=  nullptr,
             "<SwFlyDrawContact::GetAnchoredObj(..)> - wrong object type object provided" );
-    OSL_ENSURE( GetUserCall( _pSdrObj ) == this,
-            "<SwFlyDrawContact::GetAnchoredObj(..)> - provided object doesn't belongs to this contact" );
+    assert(GetUserCall(_pSdrObj) == this &&
+        "<SwFlyDrawContact::GetAnchoredObj(..)> - provided object doesn't belong to this contact");
 
     const SwAnchoredObject* pRetAnchoredObj = nullptr;
 
@@ -429,8 +429,8 @@ SwAnchoredObject* SwFlyDrawContact::GetAnchoredObj( SdrObject* _pSdrObj )
             "<SwFlyDrawContact::GetAnchoredObj(..)> - no object provided" );
     OSL_ENSURE( dynamic_cast<const SwVirtFlyDrawObj*>( _pSdrObj) !=  nullptr,
             "<SwFlyDrawContact::GetAnchoredObj(..)> - wrong object type provided" );
-    OSL_ENSURE( GetUserCall( _pSdrObj ) == this,
-            "<SwFlyDrawContact::GetAnchoredObj(..)> - provided object doesn't belongs to this contact" );
+    assert(GetUserCall(_pSdrObj) == this &&
+        "<SwFlyDrawContact::GetAnchoredObj(..)> - provided object doesn't belong to this contact");
 
     SwAnchoredObject* pRetAnchoredObj = nullptr;
 
@@ -454,8 +454,7 @@ SdrObject* SwFlyDrawContact::GetMaster()
 
 void SwFlyDrawContact::SetMaster( SdrObject* _pNewMaster )
 {
-    OSL_ENSURE( dynamic_cast<const SwFlyDrawObj*>( _pNewMaster) !=  nullptr,
-            "<SwFlyDrawContact::SetMaster(..)> - wrong type of new master object" );
+    assert(dynamic_cast<const SwFlyDrawObj*>(_pNewMaster) != nullptr);
     mpMasterObj = static_cast<SwFlyDrawObj *>(_pNewMaster);
 }
 
@@ -470,8 +469,7 @@ void SwFlyDrawContact::SwClientNotify(const SwModify&, const SfxHint&)
  */
 void SwFlyDrawContact::MoveObjToVisibleLayer( SdrObject* _pDrawObj )
 {
-    OSL_ENSURE( dynamic_cast<const SwVirtFlyDrawObj*>( _pDrawObj) !=  nullptr,
-            "<SwFlyDrawContact::MoveObjToVisibleLayer(..)> - wrong SdrObject type -> crash" );
+    assert(dynamic_cast<const SwVirtFlyDrawObj*>(_pDrawObj) != nullptr);
 
     if ( GetFormat()->getIDocumentDrawModelAccess().IsVisibleLayerId( _pDrawObj->GetLayer() ) )
     {
@@ -511,8 +509,7 @@ void SwFlyDrawContact::MoveObjToVisibleLayer( SdrObject* _pDrawObj )
  */
 void SwFlyDrawContact::MoveObjToInvisibleLayer( SdrObject* _pDrawObj )
 {
-    OSL_ENSURE( dynamic_cast<const SwVirtFlyDrawObj*>( _pDrawObj) !=  nullptr,
-            "<SwFlyDrawContact::MoveObjToInvisibleLayer(..)> - wrong SdrObject type -> crash" );
+    assert(dynamic_cast<const SwVirtFlyDrawObj*>(_pDrawObj) != nullptr);
 
     if ( !GetFormat()->getIDocumentDrawModelAccess().IsVisibleLayerId( _pDrawObj->GetLayer() ) )
     {
@@ -1296,7 +1293,7 @@ void SwDrawContact::Changed_( const SdrObject& rObj,
                     break;
                     default:
                     {
-                        OSL_FAIL( "<SwDrawContact::Changed_(..)> - unsupported layout direction" );
+                        assert(!"<SwDrawContact::Changed_(..)> - unsupported layout direction");
                     }
                 }
                 SfxItemSet aSet( GetFormat()->GetDoc()->GetAttrPool(),
@@ -1474,7 +1471,7 @@ void SwDrawContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
                 }
                 break;
                 default:
-                    OSL_FAIL("<SwDraw Contact::Modify(..)> - unhandled attribute? - please inform od@openoffice.org");
+                    assert(!"<SwDraw Contact::Modify(..)> - unhandled attribute?");
             }
             lcl_NotifyBackgroundOfObj(*this, *GetMaster(), nullptr);
             NotifyBackgrdOfAllVirtObjs(nullptr);
@@ -1828,8 +1825,7 @@ void SwDrawContact::ConnectToLayout( const SwFormatAnchor* pAnch )
                         if ( FLY_AT_FLY == pAnch->GetAnchorId() && !pFrame->IsFlyFrame() )
                         {
                             pFrame = pFrame->FindFlyFrame();
-                            OSL_ENSURE( pFrame,
-                                    "<SwDrawContact::ConnectToLayout(..)> - missing fly frame -> crash." );
+                            assert(pFrame);
                         }
 
                         // find correct follow for as character anchored objects
@@ -1869,7 +1865,7 @@ void SwDrawContact::ConnectToLayout( const SwFormatAnchor* pAnch )
             }
             break;
         default:
-            OSL_FAIL( "Unknown Anchor." );
+            assert(!"Unknown Anchor.");
             break;
     }
     if ( GetAnchorFrame() )
