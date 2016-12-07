@@ -51,11 +51,6 @@ private:
     bool mbCheckingMemcpy = false;
 };
 
-static bool startsWith(const std::string& s, const char* other)
-{
-    return s.compare(0, strlen(other), other) == 0;
-}
-
 #define BASE_REF_COUNTED_CLASS "VclReferenceBase"
 
 bool BaseCheckNotWindowSubclass(
@@ -65,17 +60,18 @@ bool BaseCheckNotWindowSubclass(
 #endif
     )
 {
-    if (BaseDefinition && BaseDefinition->getQualifiedNameAsString() == BASE_REF_COUNTED_CLASS) {
-        return false;
-    }
-    return true;
+    return !loplugin::DeclCheck(BaseDefinition).Class(BASE_REF_COUNTED_CLASS)
+        .GlobalNamespace();
 }
 
 bool isDerivedFromVclReferenceBase(const CXXRecordDecl *decl) {
     if (!decl)
         return false;
-    if (decl->getQualifiedNameAsString() == BASE_REF_COUNTED_CLASS)
+    if (loplugin::DeclCheck(decl).Class(BASE_REF_COUNTED_CLASS)
+        .GlobalNamespace())
+    {
         return true;
+    }
     if (!decl->hasDefinition()) {
         return false;
     }
@@ -91,17 +87,13 @@ bool isDerivedFromVclReferenceBase(const CXXRecordDecl *decl) {
 bool containsVclReferenceBaseSubclass(const Type* pType0);
 
 bool containsVclReferenceBaseSubclass(const QualType& qType) {
-    auto t = qType->getAs<RecordType>();
-    if (t != nullptr) {
-        auto d = dyn_cast<ClassTemplateSpecializationDecl>(t->getDecl());
-        if (d != nullptr) {
-            std::string name(d->getQualifiedNameAsString());
-            if (name == "ScopedVclPtr" || name == "ScopedVclPtrInstance"
-                || name == "VclPtr" || name == "VclPtrInstance")
-            {
-                return false;
-            }
-        }
+    auto check = loplugin::TypeCheck(qType);
+    if (check.Class("ScopedVclPtr").GlobalNamespace()
+        || check.Class("ScopedVclPtrInstance").GlobalNamespace()
+        || check.Class("VclPtr").GlobalNamespace()
+        || check.Class("VclPtrInstance").GlobalNamespace())
+    {
+        return false;
     }
     return containsVclReferenceBaseSubclass(qType.getTypePtr());
 }
@@ -116,11 +108,11 @@ bool containsVclReferenceBaseSubclass(const Type* pType0) {
     if (pRecordDecl) {
         const ClassTemplateSpecializationDecl* pTemplate = dyn_cast<ClassTemplateSpecializationDecl>(pRecordDecl);
         if (pTemplate) {
-            auto name = pTemplate->getQualifiedNameAsString();
-            if (name == "VclStatusListener") {
+            auto check = loplugin::DeclCheck(pTemplate);
+            if (check.Class("VclStatusListener").GlobalNamespace()) {
                 return false;
             }
-            bool link = name == "Link";
+            bool link = bool(check.Class("Link").GlobalNamespace());
             for(unsigned i=0; i<pTemplate->getTemplateArgs().size(); ++i) {
                 const TemplateArgument& rArg = pTemplate->getTemplateArgs()[i];
                 if (rArg.getKind() == TemplateArgument::ArgKind::Type &&
@@ -157,7 +149,9 @@ bool VCLWidgets::VisitCXXDestructorDecl(const CXXDestructorDecl* pCXXDestructorD
     }
     const CXXRecordDecl * pRecordDecl = pCXXDestructorDecl->getParent();
     // ignore
-    if (pRecordDecl->getQualifiedNameAsString() == BASE_REF_COUNTED_CLASS) {
+    if (loplugin::DeclCheck(pRecordDecl).Class(BASE_REF_COUNTED_CLASS)
+        .GlobalNamespace())
+    {
         return true;
     }
     // check if this class is derived from VclReferenceBase
@@ -171,8 +165,9 @@ bool VCLWidgets::VisitCXXDestructorDecl(const CXXDestructorDecl* pCXXDestructorD
     {
         const RecordType *pFieldRecordType = fieldDecl->getType()->getAs<RecordType>();
         if (pFieldRecordType) {
-            const CXXRecordDecl *pFieldRecordTypeDecl = dyn_cast<CXXRecordDecl>(pFieldRecordType->getDecl());
-            if (startsWith(pFieldRecordTypeDecl->getQualifiedNameAsString(), "VclPtr")) {
+            if (loplugin::DeclCheck(pFieldRecordType->getDecl())
+                .Class("VclPtr").GlobalNamespace())
+            {
                bFoundVclPtrField = true;
                break;
             }
@@ -183,7 +178,9 @@ bool VCLWidgets::VisitCXXDestructorDecl(const CXXDestructorDecl* pCXXDestructorD
     for(auto methodDecl = pRecordDecl->method_begin();
         methodDecl != pRecordDecl->method_end(); ++methodDecl)
     {
-        if (methodDecl->isInstance() && methodDecl->param_size()==0 && methodDecl->getNameAsString() == "dispose") {
+        if (methodDecl->isInstance() && methodDecl->param_size()==0
+            && loplugin::DeclCheck(*methodDecl).Function("dispose"))
+        {
            bFoundDispose = true;
            break;
         }
@@ -414,14 +411,17 @@ bool VCLWidgets::VisitFieldDecl(const FieldDecl * fieldDecl) {
         return true;
     }
     const CXXRecordDecl *pParentRecordDecl = isa<RecordDecl>(fieldDecl->getDeclContext()) ? dyn_cast<CXXRecordDecl>(fieldDecl->getParent()) : nullptr;
-    if (pParentRecordDecl && loplugin::DeclCheck(pParentRecordDecl).Class("VclPtr").GlobalNamespace()) {
+    if (loplugin::DeclCheck(pParentRecordDecl).Class("VclPtr")
+        .GlobalNamespace())
+    {
         return true;
     }
     if (containsVclReferenceBaseSubclass(fieldDecl->getType())) {
         // have to ignore this for now, nasty reverse dependency from tools->vcl
-        if (!(pParentRecordDecl != nullptr &&
-                (pParentRecordDecl->getQualifiedNameAsString() == "ErrorContextImpl" ||
-                 pParentRecordDecl->getQualifiedNameAsString() == "ScHFEditPage"))) {
+        auto check = loplugin::DeclCheck(pParentRecordDecl);
+        if (!(check.Struct("ErrorContextImpl").GlobalNamespace()
+              || check.Class("ScHFEditPage").GlobalNamespace()))
+        {
             report(
                 DiagnosticsEngine::Warning,
                 BASE_REF_COUNTED_CLASS " subclass %0 declared as a pointer member, should be wrapped in VclPtr",
@@ -434,7 +434,7 @@ bool VCLWidgets::VisitFieldDecl(const FieldDecl * fieldDecl) {
                     parent->getPointOfInstantiation());
             }
             return true;
-       }
+        }
     }
     const RecordType *recordType = fieldDecl->getType()->getAs<RecordType>();
     if (recordType == nullptr) {
@@ -456,13 +456,15 @@ bool VCLWidgets::VisitFieldDecl(const FieldDecl * fieldDecl) {
 
     // If this field is a VclPtr field, then the class MUST have a dispose method
     if (pParentRecordDecl && isDerivedFromVclReferenceBase(pParentRecordDecl)
-        && startsWith(recordDecl->getQualifiedNameAsString(), "VclPtr"))
+        && loplugin::DeclCheck(recordDecl).Class("VclPtr").GlobalNamespace())
     {
         bool bFoundDispose = false;
         for(auto methodDecl = pParentRecordDecl->method_begin();
             methodDecl != pParentRecordDecl->method_end(); ++methodDecl)
         {
-            if (methodDecl->isInstance() && methodDecl->param_size()==0 && methodDecl->getNameAsString() == "dispose") {
+            if (methodDecl->isInstance() && methodDecl->param_size()==0
+                && loplugin::DeclCheck(*methodDecl).Function("dispose"))
+            {
                bFoundDispose = true;
                break;
             }
@@ -493,15 +495,15 @@ bool VCLWidgets::VisitParmVarDecl(ParmVarDecl const * pvDecl)
     }
     // ignore the stuff in the VclPtr template class
     const CXXMethodDecl *pMethodDecl = dyn_cast<CXXMethodDecl>(pvDecl->getDeclContext());
-    if (pMethodDecl
-        && pMethodDecl->getParent()->getQualifiedNameAsString().find("VclPtr") != std::string::npos) {
+    if (loplugin::DeclCheck(pMethodDecl).MemberFunction().Class("VclPtr")
+        .GlobalNamespace())
+    {
         return true;
     }
     // we exclude this method in VclBuilder because it's so useful to have it like this
-    if (pMethodDecl
-        && pMethodDecl->getNameAsString() == "get"
-        && (pMethodDecl->getParent()->getQualifiedNameAsString() == "VclBuilder"
-            || pMethodDecl->getParent()->getQualifiedNameAsString() == "VclBuilderContainer"))
+    auto check = loplugin::DeclCheck(pMethodDecl).Function("get");
+    if (check.Class("VclBuilder").GlobalNamespace()
+        || check.Class("VclBuilderContainer").GlobalNamespace())
     {
         return true;
     }
@@ -536,9 +538,9 @@ static void findDisposeAndClearStatements(std::set<const FieldDecl*>& aVclPtrFie
 
     if (!pCallExpr->getDirectCallee()) return;
     if (!isa<CXXMethodDecl>(pCallExpr->getDirectCallee())) return;
-    const CXXMethodDecl *pCalleeMethodDecl = dyn_cast<CXXMethodDecl>(pCallExpr->getDirectCallee());
-    if (pCalleeMethodDecl->getNameAsString() != "disposeAndClear"
-        && pCalleeMethodDecl->getNameAsString() != "clear")
+    auto check = loplugin::DeclCheck(
+        dyn_cast<CXXMethodDecl>(pCallExpr->getDirectCallee()));
+    if (!(check.Function("disposeAndClear") || check.Function("clear")))
             return;
 
     if (!pCallExpr->getCallee()) return;
@@ -562,19 +564,21 @@ bool VCLWidgets::VisitFunctionDecl( const FunctionDecl* functionDecl )
         return true;
     }
     // ignore the stuff in the VclPtr template class
-    const CXXMethodDecl *pMethodDecl = dyn_cast<CXXMethodDecl>(functionDecl);
-    if (pMethodDecl
-        && pMethodDecl->getParent()->getQualifiedNameAsString() == "VclPtr") {
+    if (loplugin::DeclCheck(functionDecl).MemberFunction().Class("VclPtr")
+        .GlobalNamespace())
+    {
         return true;
     }
     // ignore the BASE_REF_COUNTED_CLASS::dispose() method
-    if (pMethodDecl
-        && pMethodDecl->getParent()->getQualifiedNameAsString() == BASE_REF_COUNTED_CLASS) {
+    if (loplugin::DeclCheck(functionDecl).Function("dispose")
+        .Class(BASE_REF_COUNTED_CLASS).GlobalNamespace())
+    {
         return true;
     }
+    const CXXMethodDecl *pMethodDecl = dyn_cast<CXXMethodDecl>(functionDecl);
     if (functionDecl->hasBody() && pMethodDecl && isDerivedFromVclReferenceBase(pMethodDecl->getParent())) {
         // check the last thing that the dispose() method does, is to call into the superclass dispose method
-        if (pMethodDecl->getNameAsString() == "dispose") {
+        if (loplugin::DeclCheck(functionDecl).Function("dispose")) {
             if (!isDisposeCallingSuperclassDispose(pMethodDecl)) {
                 report(
                     DiagnosticsEngine::Warning,
@@ -589,12 +593,15 @@ bool VCLWidgets::VisitFunctionDecl( const FunctionDecl* functionDecl )
     // FIXME this is not exhaustive. We should enable shouldVisitTemplateInstantiations and look deeper inside type declarations
     if (pMethodDecl && pMethodDecl->isInstance() && pMethodDecl->getBody()
         && pMethodDecl->param_size()==0
-        && pMethodDecl->getNameAsString() == "dispose"
+        && loplugin::DeclCheck(functionDecl).Function("dispose")
         && isDerivedFromVclReferenceBase(pMethodDecl->getParent()) )
     {
-        std::string methodParent = pMethodDecl->getParent()->getNameAsString();
-        if (methodParent == "VirtualDevice" || methodParent == "Breadcrumb")
+        auto check = loplugin::DeclCheck(functionDecl).MemberFunction();
+        if (check.Class("VirtualDevice").GlobalNamespace()
+            || check.Class("Breadcrumb").GlobalNamespace())
+        {
             return true;
+        }
 
         std::set<const FieldDecl*> aVclPtrFields;
         for (auto i = pMethodDecl->getParent()->field_begin();
@@ -692,7 +699,7 @@ bool VCLWidgets::isDisposeCallingSuperclassDispose(const CXXMethodDecl* pMethodD
     if (!pCallExpr) return false;
     const MemberExpr *pMemberExpr = dyn_cast<MemberExpr>(pCallExpr->getCallee());
     if (!pMemberExpr) return false;
-    if (pMemberExpr->getMemberDecl()->getNameAsString() != "dispose") return false;
+    if (!loplugin::DeclCheck(pMemberExpr->getMemberDecl()).Function("dispose")) return false;
     const CXXMethodDecl *pDirectCallee = dyn_cast<CXXMethodDecl>(pCallExpr->getDirectCallee());
     if (!pDirectCallee) return false;
 /* Not working yet. Partially because sometimes the superclass does not a dispose() method, so it gets passed up the chain.
@@ -712,17 +719,13 @@ bool VCLWidgets::isDisposeCallingSuperclassDispose(const CXXMethodDecl* pMethodD
 bool containsVclPtr(const Type* pType0);
 
 bool containsVclPtr(const QualType& qType) {
-    auto t = qType->getAs<RecordType>();
-    if (t != nullptr) {
-        auto d = dyn_cast<ClassTemplateSpecializationDecl>(t->getDecl());
-        if (d != nullptr) {
-            std::string name(d->getQualifiedNameAsString());
-            if (name == "ScopedVclPtr" || name == "ScopedVclPtrInstance"
-                || name == "VclPtr" || name == "VclPtrInstance")
-            {
-                return true;
-            }
-        }
+    auto check = loplugin::TypeCheck(qType);
+    if (check.Class("ScopedVclPtr").GlobalNamespace()
+        || check.Class("ScopedVclPtrInstance").GlobalNamespace()
+        || check.Class("VclPtr").GlobalNamespace()
+        || check.Class("VclPtrInstance").GlobalNamespace())
+    {
+        return true;
     }
     return containsVclPtr(qType.getTypePtr());
 }
@@ -743,9 +746,11 @@ bool containsVclPtr(const Type* pType0) {
         const CXXRecordDecl* pRecordDecl = pType->getAsCXXRecordDecl();
         if (pRecordDecl)
         {
-            std::string name(pRecordDecl->getQualifiedNameAsString());
-            if (name == "ScopedVclPtr" || name == "ScopedVclPtrInstance"
-                || name == "VclPtr" || name == "VclPtrInstance")
+            auto check = loplugin::DeclCheck(pRecordDecl);
+            if (check.Class("ScopedVclPtr").GlobalNamespace()
+                || check.Class("ScopedVclPtrInstance").GlobalNamespace()
+                || check.Class("VclPtr").GlobalNamespace()
+                || check.Class("VclPtrInstance").GlobalNamespace())
             {
                 return true;
             }
