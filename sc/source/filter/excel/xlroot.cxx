@@ -205,7 +205,11 @@ void XclRoot::SetCharWidth( const XclFontData& rFontData )
         aFont.SetCharSet( rFontData.GetFontEncoding() );
         aFont.SetWeight( rFontData.GetScWeight() );
         pPrinter->SetFont( aFont );
-        mrData.mnCharWidth = pPrinter->GetTextWidth( OUString('0') );
+        // Usually digits have the same width, but in some fonts they don't ...
+        // Match the import in sc/source/filter/oox/unitconverter.cxx
+        // UnitConverter::finalizeImport()
+        for (sal_Unicode cChar = '0'; cChar <= '9'; ++cChar)
+            mrData.mnCharWidth = std::max( pPrinter->GetTextWidth( OUString(cChar)), mrData.mnCharWidth);
     }
     if( mrData.mnCharWidth <= 0 )
     {
