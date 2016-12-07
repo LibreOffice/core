@@ -2803,8 +2803,12 @@ bool SwFrameFormat::IsLowerOf( const SwFrameFormat& rFormat ) const
                         return false;
                     }
 
-                    pFlyNd = pAnchor->GetContentAnchor()->nNode.GetNode().
+                    const SwNode* pNewFlyNd = pAnchor->GetContentAnchor()->nNode.GetNode().
                                 FindFlyStartNode();
+                    // prevent infinite loop
+                    if (pNewFlyNd == pFlyNd)
+                        return false;
+                    pFlyNd = pNewFlyNd;
                     break;
                 }
             }
