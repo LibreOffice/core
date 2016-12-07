@@ -1296,16 +1296,14 @@ void OutputDevice::ImplDrawEmphasisMarks( SalLayout& rSalLayout )
 
     Point aOutPoint;
     Rectangle aRectangle;
-    for( int nStart = 0;;)
+    const GlyphItem* pGlyph;
+    int nStart = 0;
+    while (rSalLayout.GetNextGlyphs(1, &pGlyph, aOutPoint, nStart))
     {
-        sal_GlyphId aGlyphId;
-        if( !rSalLayout.GetNextGlyphs( 1, &aGlyphId, aOutPoint, nStart ) )
-            break;
-
-        if( !mpGraphics->GetGlyphBoundRect( aGlyphId, aRectangle ) )
+        if (!mpGraphics->GetGlyphBoundRect(pGlyph->maGlyphId, aRectangle ) )
             continue;
 
-        if( !SalLayout::IsSpacingGlyph( aGlyphId ) )
+        if (!SalLayout::IsSpacingGlyph(pGlyph->maGlyphId))
         {
             Point aAdjPoint = aOffset;
             aAdjPoint.X() += aRectangle.Left() + (aRectangle.GetWidth() - nEmphasisWidth) / 2;

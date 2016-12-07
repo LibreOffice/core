@@ -415,12 +415,12 @@ void AquaSalGraphics::DrawTextLayout(const CommonSalLayout& rLayout)
     CGAffineTransform aRotMatrix = CGAffineTransformMakeRotation(-rStyle.mfFontRotation);
 
     Point aPos;
-    sal_GlyphId aGlyphId;
+    const GlyphItem pGlyph;
     std::vector<CGGlyph> aGlyphIds;
     std::vector<CGPoint> aGlyphPos;
     std::vector<bool> aGlyphOrientation;
     int nStart = 0;
-    while (rLayout.GetNextGlyphs(1, &aGlyphId, aPos, nStart))
+    while (rLayout.GetNextGlyphs(1, &pGlyph, aPos, nStart))
     {
         CGPoint aGCPos = CGPointMake(aPos.X(), -aPos.Y());
 
@@ -429,7 +429,7 @@ void AquaSalGraphics::DrawTextLayout(const CommonSalLayout& rLayout)
 
         if (rStyle.mfFontRotation)
         {
-            if ((aGlyphId & GF_ROTMASK) == GF_ROTL)
+            if ((pGlyph->maGlyphId & GF_ROTMASK) == GF_ROTL)
             {
                 bUprightGlyph = true;
                 // Adjust the position of upright (vertical) glyphs.
@@ -442,7 +442,7 @@ void AquaSalGraphics::DrawTextLayout(const CommonSalLayout& rLayout)
             }
         }
 
-        aGlyphIds.push_back(aGlyphId & GF_IDXMASK);
+        aGlyphIds.push_back(pGlyph->maGlyphId & GF_IDXMASK);
         aGlyphPos.push_back(aGCPos);
         aGlyphOrientation.push_back(bUprightGlyph);
     }
