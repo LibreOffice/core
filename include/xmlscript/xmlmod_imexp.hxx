@@ -29,7 +29,7 @@ namespace xmlscript
 
 // Script module import/export
 // HACK C++ struct to transport info. Later the container
-// itself should do the export/import and use exportet XML
+// itself should do the export/import and use exported XML
 // functionality from xmlscript
 struct XMLSCRIPT_DLLPUBLIC ModuleDescriptor
 {

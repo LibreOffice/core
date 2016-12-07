@@ -112,7 +112,7 @@ struct UNOTOOLS_DLLPUBLIC SvtLinguOptions
     bool    bROIsTranslateCommonTerms;
     bool    bROIsReverseMapping;
 
-    // check value need to determine if the configuration needs to updatet
+    // check value need to determine if the configuration needs to be updated
     // or not (used for a quick check if data files have been changed/added
     // or deleted
     sal_Int32   nDataFilesChangedCheckValue;

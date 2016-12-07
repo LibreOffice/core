@@ -31,7 +31,7 @@ import lib.TestParameters;
 * <ul>
 *  <li> <code>'XInitialization.args'</code> (of type <code>Object[]</code>):
 *   (<b>Optional</b>) : argument for <code>initialize</code>
-*   method. If ommitet zero length array is used. </li>
+*   method. If ommitted, zero length array is used. </li>
 * <ul> <p>
 * Test is multithread compliant. <p>
 * Till the present time there was no need to recreate environment

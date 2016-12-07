@@ -97,7 +97,7 @@ public:
 
     // Printer
     // pSetupData->mpDriverData can be 0
-    // pSetupData must be updatet with the current
+    // pSetupData must be updated with the current
     // JobSetup
     virtual SalInfoPrinter* CreateInfoPrinter( SalPrinterQueueInfo* pQueueInfo,
                                                ImplJobSetup* pSetupData ) = 0;
