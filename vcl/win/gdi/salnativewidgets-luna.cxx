@@ -188,6 +188,37 @@ BOOL VisualStylesAPI::IsThemeActive()
 void SalData::initNWF()
 {
     ImplSVData* pSVData = ImplGetSVData();
+    pSVData->maNWFData.mbEnableAccel = false; // Don't show accelerators all the time
+    pSVData->maNWFData.mbAutoAccel = true;    // Show accelerators only when alt is pressed
+
+#ifdef _WIN32        // Check in the Windows registry if an AT tool wants no flat toolboxes
+    static bool bValue = false;
+    HKEY hkey;
+
+    if (ERROR_SUCCESS == RegOpenKey(HKEY_CURRENT_USER, "Control Panel\\Accessibility\\Keyboard Preference", &hkey))
+    {
+        DWORD dwType = 0;
+        sal_uInt8 Data[2]; // possible values: "1", "0"
+        DWORD cbData = sizeof(Data);
+
+        if (ERROR_SUCCESS == RegQueryValueEx(hkey, "On", nullptr, &dwType, Data, &cbData)) // Check whether "make keyboard easier to use" is turned on
+        {
+            if (dwType == REG_SZ)
+            {
+                bValue = ((0 == stricmp(reinterpret_cast<const char *>(Data), "1")));
+                if(bValue)
+                {
+                    pSVData->maNWFData.mbEnableAccel = true; // Always show accelerators
+                    pSVData->maNWFData.mbAutoAccel = false;
+                }
+            }
+        }
+        RegCloseKey(hkey);
+    }
+
+#else
+    (void) this;
+#endif
 
     // the menu bar and the top docking area should have a common background (gradient)
     pSVData->maNWFData.mbMenuBarDockingAreaCommonBG = true;
