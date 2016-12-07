@@ -33,7 +33,7 @@ public:
                          const char* inDestinationPath,
                          const bool inOverwrite );
 
-    virtual ~SerfMoveReqProcImpl();
+    virtual ~SerfMoveReqProcImpl() override;
 
     virtual
     serf_bucket_t * createSerfRequestBucket( serf_request_t * inSerfRequest ) override;

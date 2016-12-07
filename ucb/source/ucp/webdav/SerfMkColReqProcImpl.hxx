@@ -31,7 +31,7 @@ public:
     SerfMkColReqProcImpl( const char* inPath,
                           const DAVRequestHeaders& inRequestHeaders );
 
-    virtual ~SerfMkColReqProcImpl();
+    virtual ~SerfMkColReqProcImpl() override;
 
     virtual
     serf_bucket_t * createSerfRequestBucket( serf_request_t * inSerfRequest ) override;

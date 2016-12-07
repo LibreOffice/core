@@ -47,7 +47,7 @@ class DAVSession;
 class DAVSessionFactory : public salhelper::SimpleReferenceObject
 {
 public:
-    virtual ~DAVSessionFactory();
+    virtual ~DAVSessionFactory() override;
 
     rtl::Reference< DAVSession >
         createDAVSession( const OUString & inUri,

@@ -31,7 +31,7 @@ public:
     SerfDeleteReqProcImpl( const char* inPath,
                            const DAVRequestHeaders& inRequestHeaders );
 
-    virtual ~SerfDeleteReqProcImpl();
+    virtual ~SerfDeleteReqProcImpl() override;
 
     virtual
     serf_bucket_t * createSerfRequestBucket( serf_request_t * inSerfRequest ) override;

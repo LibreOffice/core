@@ -68,7 +68,7 @@ private:
     SerfRequestProcessor* createReqProc( const OUString & inPath );
 
 protected:
-    virtual ~SerfSession();
+    virtual ~SerfSession() override;
 
 public:
     SerfSession( const rtl::Reference< DAVSessionFactory > & rSessionFactory,

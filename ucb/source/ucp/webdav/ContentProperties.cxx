@@ -539,7 +539,7 @@ namespace
     bool isCachable( OUString const & rName,
                      bool isCaseSensitive )
     {
-        static const OUString aNonCachableProps [] =
+        const OUString aNonCachableProps [] =
         {
             DAVProperties::LOCKDISCOVERY,
 
