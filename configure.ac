@@ -322,6 +322,13 @@ else
 fi
 AC_SUBST(ENABLE_LTO)
 
+AC_ARG_ENABLE(fuzz-options,
+    AS_HELP_STRING([--enable-fuzz-options],
+        [Randomly enable or disable each of those configury options
+         that are supposed to be freely selectable without interdependencies,
+         or where bad interaction from interdependencies is automatically avoided.])
+)
+
 dnl ===================================================================
 dnl When building for Android, --with-android-ndk,
 dnl --with-android-ndk-toolchain-version and --with-android-sdk are
@@ -954,13 +961,13 @@ AC_SUBST(DLOPEN_LIBS)
 # if you use --disable-extension-integration. Is that really the
 # case?
 
-AC_ARG_ENABLE(extension-integration,
+libo_FUZZ_ARG_ENABLE(extension-integration,
     AS_HELP_STRING([--disable-extension-integration],
         [Disable integration of the built extensions in the installer of the
          product. Use this switch to disable the integration.])
 )
 
-AC_ARG_ENABLE(export,
+libo_FUZZ_ARG_ENABLE(export,
     AS_HELP_STRING([--disable-export],
         [Disable (some) code for document export. Useful when building viewer-only apps that lack
          save/export functionality, to avoid having an excessive amount of code and data used
@@ -981,7 +988,7 @@ AC_ARG_ENABLE(database-connectivity,
 # (although it probably should; i.e. it should imply
 # --disable-extension-integration I guess), it means not supporting
 # any extension mechanism at all
-AC_ARG_ENABLE(extensions,
+libo_FUZZ_ARG_ENABLE(extensions,
     AS_HELP_STRING([--disable-extensions],
         [Disable all add-on extension functionality. Work in progress, use only if you are hacking on it.])
 )
@@ -999,31 +1006,31 @@ AC_ARG_ENABLE(dynamic-loading,
         [Disable any use of dynamic loading of code. Work in progress, use only if you are hacking on it.])
 )
 
-AC_ARG_ENABLE(ext-mariadb-connector,
+libo_FUZZ_ARG_ENABLE(ext-mariadb-connector,
     AS_HELP_STRING([--enable-ext-mariadb-connector],
         [Enable the build of the MariaDB/MySQL Connector extension.])
 )
 
-AC_ARG_ENABLE(report-builder,
+libo_FUZZ_ARG_ENABLE(report-builder,
     AS_HELP_STRING([--disable-report-builder],
         [Disable the Report Builder.])
 )
 
-AC_ARG_ENABLE(ext-wiki-publisher,
+libo_FUZZ_ARG_ENABLE(ext-wiki-publisher,
     AS_HELP_STRING([--enable-ext-wiki-publisher],
         [Enable the Wiki Publisher extension.])
 )
 
-AC_ARG_ENABLE(lpsolve,
+libo_FUZZ_ARG_ENABLE(lpsolve,
     AS_HELP_STRING([--disable-lpsolve],
         [Disable compilation of the lp solve solver ])
 )
-AC_ARG_ENABLE(coinmp,
+libo_FUZZ_ARG_ENABLE(coinmp,
     AS_HELP_STRING([--disable-coinmp],
         [Disable compilation of the CoinMP solver ])
 )
 
-AC_ARG_ENABLE(pdfimport,
+libo_FUZZ_ARG_ENABLE(pdfimport,
     AS_HELP_STRING([--disable-pdfimport],
         [Disable building the PDF import feature.])
 )
@@ -1032,14 +1039,14 @@ AC_ARG_ENABLE(pdfimport,
 
 dnl ---------- *** ----------
 
-AC_ARG_ENABLE(mergelibs,
+libo_FUZZ_ARG_ENABLE(mergelibs,
     AS_HELP_STRING([--enable-mergelibs],
         [Enables linking of big, merged, library. Experimental feature, tested
         only for Linux at some stage in history, but possibly does not work even
         for Linux any more. This will link a core set of libraries into libmerged.])
 )
 
-AC_ARG_ENABLE(breakpad,
+libo_FUZZ_ARG_ENABLE(breakpad,
     AS_HELP_STRING([--enable-breakpad],
         [Enables breakpad for crash reporting.])
 )
@@ -1054,18 +1061,18 @@ AC_ARG_ENABLE(fuzzers,
         [Enables building libfuzzer targets for fuzz testing.])
 )
 
-AC_ARG_ENABLE(pch,
+libo_FUZZ_ARG_ENABLE(pch,
     AS_HELP_STRING([--enable-pch],
         [Enables precompiled header support for C++. Forced default on Windows/VC build])
 )
 
-AC_ARG_ENABLE(epm,
+libo_FUZZ_ARG_ENABLE(epm,
     AS_HELP_STRING([--enable-epm],
         [LibreOffice includes self-packaging code, that requires epm, however epm is
          useless for large scale package building.])
 )
 
-AC_ARG_ENABLE(odk,
+libo_FUZZ_ARG_ENABLE(odk,
     AS_HELP_STRING([--disable-odk],
         [LibreOffice includes an ODK, office development kit which some packagers may
          wish to build without.])
@@ -1076,26 +1083,26 @@ AC_ARG_ENABLE(mpl-subset,
         [Don't compile any pieces which are not MPL or more liberally licensed])
 )
 
-AC_ARG_ENABLE(evolution2,
+libo_FUZZ_ARG_ENABLE(evolution2,
     AS_HELP_STRING([--enable-evolution2],
         [Allows the built-in evolution 2 addressbook connectivity build to be
          enabled.])
 )
 
-AC_ARG_ENABLE(directx,
+libo_FUZZ_ARG_ENABLE(directx,
     AS_HELP_STRING([--disable-directx],
         [Remove DirectX implementation for the new XCanvas interface.
          The DirectX support requires more stuff installed on Windows to
          compile. (DirectX SDK, GDI+ libs)])
 )
 
-AC_ARG_ENABLE(activex,
+libo_FUZZ_ARG_ENABLE(activex,
     AS_HELP_STRING([--disable-activex],
         [Disable the use of ActiveX for a Windows build.
         This switch is mandatory when using an Express edition of Visual Studio.])
 )
 
-AC_ARG_ENABLE(atl,
+libo_FUZZ_ARG_ENABLE(atl,
     AS_HELP_STRING([--disable-atl],
         [Disable the use of ATL for a Windows build.])
     [
@@ -1103,23 +1110,23 @@ AC_ARG_ENABLE(atl,
     ],
 ,)
 
-AC_ARG_ENABLE(avahi,
+libo_FUZZ_ARG_ENABLE(avahi,
     AS_HELP_STRING([--enable-avahi],
         [Determines whether to use Avahi to advertise Impress to remote controls.]),
 ,)
 
-AC_ARG_ENABLE(werror,
+libo_FUZZ_ARG_ENABLE(werror,
     AS_HELP_STRING([--enable-werror],
         [Turn warnings to errors. (Has no effect in modules where the treating
          of warnings as errors is disabled explicitly.)]),
 ,)
 
-AC_ARG_ENABLE(assert-always-abort,
+libo_FUZZ_ARG_ENABLE(assert-always-abort,
     AS_HELP_STRING([--enable-assert-always-abort],
         [make assert() abort even in release code.]),
 ,)
 
-AC_ARG_ENABLE(dbgutil,
+libo_FUZZ_ARG_ENABLE(dbgutil,
     AS_HELP_STRING([--enable-dbgutil],
         [Provide debugging support from --enable-debug and include additional debugging
          utilities such as object counting or more expensive checks.
@@ -1127,12 +1134,12 @@ AC_ARG_ENABLE(dbgutil,
          Note that this makes the build ABI incompatible, it is not possible to mix object
          files or libraries from a --enable-dbgutil and a --disable-dbgutil build.]))
 
-AC_ARG_ENABLE(debug,
+libo_FUZZ_ARG_ENABLE(debug,
     AS_HELP_STRING([--enable-debug],
         [Include debugging information, disable compiler optimization and inlining plus
          extra debugging code like assertions. Extra large build! (enables -g compiler flag).]))
 
-AC_ARG_ENABLE(sal-log,
+libo_FUZZ_ARG_ENABLE(sal-log,
     AS_HELP_STRING([--enable-sal-log],
         [Make SAL_INFO and SAL_WARN calls do something even in a non-debug build.]))
 
@@ -1145,13 +1152,13 @@ AC_ARG_ENABLE(selective-debuginfo,
          more general, and disabling takes precedence).
          Example: --enable-selective-debuginfo="all -sw/ -Library_sc".]))
 
-AC_ARG_ENABLE(symbols,
+libo_FUZZ_ARG_ENABLE(symbols,
     AS_HELP_STRING([--enable-symbols],
         [Generate debug information.
          By default, enabled for --enable-debug and --enable-dbgutil, disabled
          otherwise.]))
 
-AC_ARG_ENABLE(runtime-optimizations,
+libo_FUZZ_ARG_ENABLE(runtime-optimizations,
     AS_HELP_STRING([--disable-runtime-optimizations],
         [Statically disable certain runtime optimizations (like rtl/alloc.h or
          JVM JIT) that are known to interact badly with certain dynamic analysis
@@ -1159,12 +1166,12 @@ AC_ARG_ENABLE(runtime-optimizations,
          CC contains "-fsanitize=*".  (For Valgrind, those runtime optimizations
          are typically disabled dynamically via RUNNING_ON_VALGRIND.)]))
 
-AC_ARG_ENABLE(compiler-plugins,
+libo_FUZZ_ARG_ENABLE(compiler-plugins,
     AS_HELP_STRING([--enable-compiler-plugins],
         [Enable compiler plugins that will perform additional checks during
          building. Enabled automatically by --enable-dbgutil.]))
 
-AC_ARG_ENABLE(ooenv,
+libo_FUZZ_ARG_ENABLE(ooenv,
     AS_HELP_STRING([--disable-ooenv],
         [Disable ooenv for the instdir installation.]))
 
@@ -1182,21 +1189,21 @@ AC_ARG_ENABLE(python,
          'fully-internal' even forces the internal version for uses of Python
          during the build.]))
 
-AC_ARG_ENABLE(gtk,
+libo_FUZZ_ARG_ENABLE(gtk,
     AS_HELP_STRING([--disable-gtk],
         [Determines whether to use Gtk+ vclplug on platforms where Gtk+ is available.]),
-,enable_gtk=yes)
+,test "${enable_gtk+set}" = set || enable_gtk=yes)
 
-AC_ARG_ENABLE(gtk3,
+libo_FUZZ_ARG_ENABLE(gtk3,
     AS_HELP_STRING([--disable-gtk3],
         [Determines whether to use Gtk+ 3.0 vclplug on platforms where Gtk+ 3.0 is available.
          This is experimental and may not work.]),
-,enable_gtk3=yes)
+,test "${enable_gtk3+set}" = set || enable_gtk3=yes)
 
-AC_ARG_ENABLE(systray,
+libo_FUZZ_ARG_ENABLE(systray,
     AS_HELP_STRING([--disable-systray],
         [Determines whether to build the systray quickstarter.]),
-,enable_systray=yes)
+,test "${enable_systray+set}" = set || enable_systray=yes)
 
 AC_ARG_ENABLE(split-app-modules,
     AS_HELP_STRING([--enable-split-app-modules],
@@ -1210,36 +1217,36 @@ AC_ARG_ENABLE(split-opt-features,
          Has effect only with make distro-pack-install]),
 ,)
 
-AC_ARG_ENABLE(cairo-canvas,
+libo_FUZZ_ARG_ENABLE(cairo-canvas,
     AS_HELP_STRING([--disable-cairo-canvas],
         [Determines whether to build the Cairo canvas on platforms where Cairo is available.]),
 ,)
 
-AC_ARG_ENABLE(dbus,
+libo_FUZZ_ARG_ENABLE(dbus,
     AS_HELP_STRING([--disable-dbus],
         [Determines whether to enable features that depend on dbus.
          e.g. Presentation mode screensaver control, bluetooth presentation control, automatic font install]),
-,enable_dbus=yes)
+,test "${enable_dbus+set}" = set || enable_dbus=yes)
 
-AC_ARG_ENABLE(sdremote,
+libo_FUZZ_ARG_ENABLE(sdremote,
     AS_HELP_STRING([--disable-sdremote],
         [Determines whether to enable Impress remote control (i.e. the server component).]),
-,enable_sdremote=yes)
+,test "${enable_sdremote+set}" = set || enable_sdremote=yes)
 
-AC_ARG_ENABLE(sdremote-bluetooth,
+libo_FUZZ_ARG_ENABLE(sdremote-bluetooth,
     AS_HELP_STRING([--disable-sdremote-bluetooth],
         [Determines whether to build sdremote with bluetooth support.
          Requires dbus on Linux.]))
 
-AC_ARG_ENABLE(gio,
+libo_FUZZ_ARG_ENABLE(gio,
     AS_HELP_STRING([--disable-gio],
         [Determines whether to use the GIO support.]),
-,enable_gio=yes)
+,test "${enable_gio+set}" = set || enable_gio=yes)
 
-AC_ARG_ENABLE(telepathy,
+libo_FUZZ_ARG_ENABLE(telepathy,
     AS_HELP_STRING([--enable-telepathy],
         [Determines whether to enable Telepathy for collaboration.]),
-,enable_telepathy=no)
+,test "${enable_telepathy+set}" = set || enable_telepathy=no)
 
 AC_ARG_ENABLE(tde,
     AS_HELP_STRING([--enable-tde],
@@ -1262,49 +1269,49 @@ AC_ARG_ENABLE(kde4,
          KDE4 are available.]),
 ,)
 
-AC_ARG_ENABLE(gui,
+libo_FUZZ_ARG_ENABLE(gui,
     AS_HELP_STRING([--disable-gui],
         [Disable X11/Wayland support to reduce dependencies. Maybe useful for
          headless servers, but soffice --headless works just fine without it.
          Work in progress, use only if you are hacking on it.]),
-,enable_gui=yes)
+,test "${enable_gui+set}" = set || enable_gui=yes)
 
-AC_ARG_ENABLE(randr,
+libo_FUZZ_ARG_ENABLE(randr,
     AS_HELP_STRING([--disable-randr],
         [Disable RandR support in the vcl project.]),
-,enable_randr=yes)
+,test "${enable_randr+set}" = set || enable_randr=yes)
 
-AC_ARG_ENABLE(gstreamer-1-0,
+libo_FUZZ_ARG_ENABLE(gstreamer-1-0,
     AS_HELP_STRING([--disable-gstreamer-1-0],
         [Disable building with the new gstreamer 1.0 avmedia backend.]),
-,enable_gstreamer_1_0=yes)
+,test "${enable_gstreamer_1_0+set}" = set || enable_gstreamer_1_0=yes)
 
 AC_ARG_ENABLE(gstreamer-0-10,
     AS_HELP_STRING([--enable-gstreamer-0-10],
         [Enable building with the gstreamer 0.10 avmedia backend.]),
 ,enable_gstreamer_0_10=no)
 
-AC_ARG_ENABLE(vlc,
+libo_FUZZ_ARG_ENABLE(vlc,
     AS_HELP_STRING([--enable-vlc],
         [Enable building with the (experimental) VLC avmedia backend.]),
-,enable_vlc=no)
+,test "${enable_vlc+set}" = set || enable_vlc=no)
 
-AC_ARG_ENABLE(neon,
+libo_FUZZ_ARG_ENABLE(neon,
     AS_HELP_STRING([--disable-neon],
         [Disable neon and the compilation of webdav binding.]),
 ,)
 
-AC_ARG_ENABLE([eot],
+libo_FUZZ_ARG_ENABLE([eot],
     [AS_HELP_STRING([--enable-eot],
         [Enable support for Embedded OpenType fonts.])],
-, [enable_eot=no])
+,test "${enable_eot+set}" = set || enable_eot=no)
 
-AC_ARG_ENABLE(cve-tests,
+libo_FUZZ_ARG_ENABLE(cve-tests,
     AS_HELP_STRING([--disable-cve-tests],
         [Prevent CVE tests to be executed]),
 ,)
 
-AC_ARG_ENABLE(chart-tests,
+libo_FUZZ_ARG_ENABLE(chart-tests,
     AS_HELP_STRING([--enable-chart-tests],
         [Executes chart XShape tests. In a perfect world these tests would be
          stable and everyone could run them, in reality it is best to run them
@@ -1333,7 +1340,7 @@ AC_ARG_ENABLE(icecream,
          wrappers, you can override that using --with-gcc-home=/the/path switch.]),
 ,)
 
-AC_ARG_ENABLE(cups,
+libo_FUZZ_ARG_ENABLE(cups,
     AS_HELP_STRING([--disable-cups],
         [Do not build cups support.])
 )
@@ -1352,7 +1359,7 @@ AC_ARG_ENABLE(64-bit,
         [Build a 64-bit LibreOffice on platforms where the normal build is 32-bit.
          At the moment meaningful only for iOS and Windows.]), ,)
 
-AC_ARG_ENABLE(online-update,
+libo_FUZZ_ARG_ENABLE(online-update,
     AS_HELP_STRING([--enable-online-update],
         [Enable the online update service that will check for new versions of
          LibreOffice. By default, it is enabled on Windows and Mac, disabled on Linux.
@@ -1360,12 +1367,12 @@ AC_ARG_ENABLE(online-update,
          enabled instead of the traditional update mechanism.]),
 ,)
 
-AC_ARG_ENABLE(extension-update,
+libo_FUZZ_ARG_ENABLE(extension-update,
     AS_HELP_STRING([--disable-extension-update],
         [Disable possibility to update installed extensions.]),
 ,)
 
-AC_ARG_ENABLE(release-build,
+libo_FUZZ_ARG_ENABLE(release-build,
     AS_HELP_STRING([--enable-release-build],
         [Enable release build.
          See http://wiki.documentfoundation.org/Development/DevBuild]),
@@ -1418,27 +1425,27 @@ AC_ARG_ENABLE(ios-simulator,
         [Build for the iOS Simulator, not iOS device.]),
 ,)
 
-AC_ARG_ENABLE(readonly-installset,
+libo_FUZZ_ARG_ENABLE(readonly-installset,
     AS_HELP_STRING([--enable-readonly-installset],
         [Prevents any attempts by LibreOffice to write into its installation. That means
          at least that no "system-wide" extensions can be added. Experimental work in
          progress.]),
 ,)
 
-AC_ARG_ENABLE(postgresql-sdbc,
+libo_FUZZ_ARG_ENABLE(postgresql-sdbc,
     AS_HELP_STRING([--disable-postgresql-sdbc],
         [Disable the build of the PostgreSQL-SDBC driver.])
 )
 
-AC_ARG_ENABLE(lotuswordpro,
+libo_FUZZ_ARG_ENABLE(lotuswordpro,
     AS_HELP_STRING([--disable-lotuswordpro],
         [Disable the build of the Lotus Word Pro filter.]),
-,enable_lotuswordpro=yes)
+,test "${enable_lotuswordpro+set}" = set || enable_lotuswordpro=yes)
 
-AC_ARG_ENABLE(firebird-sdbc,
+libo_FUZZ_ARG_ENABLE(firebird-sdbc,
     AS_HELP_STRING([--disable-firebird-sdbc],
         [Disable the build of the Firebird-SDBC driver if it doesn't compile for you.]),
-,enable_firebird_sdbc=yes)
+,test "${enable_firebird_sdbc+set}" = set || enable_firebird_sdbc=yes)
 
 AC_ARG_ENABLE(winegcc,
     AS_HELP_STRING([--enable-winegcc],
@@ -1446,7 +1453,7 @@ AC_ARG_ENABLE(winegcc,
          needed for MinGW cross-compilation.]),
 )
 
-AC_ARG_ENABLE(liblangtag,
+libo_FUZZ_ARG_ENABLE(liblangtag,
     AS_HELP_STRING([--disable-liblangtag],
         [Disable use of liblangtag, and instead use an own simple
          implementation.]),
@@ -1480,11 +1487,11 @@ AC_ARG_ENABLE(library-bin-tar,
         for the next time.]),
 )
 
-AC_ARG_ENABLE(gltf,
+libo_FUZZ_ARG_ENABLE(gltf,
     AS_HELP_STRING([--disable-gltf],
         [Determines whether to build libraries related to glTF 3D model rendering.]))
 
-AC_ARG_ENABLE(collada,
+libo_FUZZ_ARG_ENABLE(collada,
     AS_HELP_STRING([--disable-collada],
         [Disable collada support (Rendering 3D models stored in *.dae and *.kmz format).]))
 
@@ -1493,7 +1500,7 @@ AC_ARG_ENABLE(dconf,
         [Disable the dconf configuration backend (enabled by default where
          available).]))
 
-AC_ARG_ENABLE(formula-logger,
+libo_FUZZ_ARG_ENABLE(formula-logger,
     AS_HELP_STRING(
         [--enable-formula-logger],
         [Enable formula logger for logging formula calculation flow in Calc.]
@@ -1560,14 +1567,14 @@ AC_ARG_WITH(theme,
          Possible choices: *breeze, *breeze_dark, crystal, *galaxy, *hicontrast, *oxygen, *sifr, *tango, *tango_testing.]),
 ,)
 
-AC_ARG_WITH(helppack-integration,
+libo_FUZZ_ARG_WITH(helppack-integration,
     AS_HELP_STRING([--without-helppack-integration],
         [It will not integrate the helppacks to the installer
          of the product. Please use this switch to use the online help
          or separate help packages.]),
 ,)
 
-AC_ARG_WITH(fonts,
+libo_FUZZ_ARG_WITH(fonts,
     AS_HELP_STRING([--without-fonts],
         [LibreOffice includes some third-party fonts to provide a reliable basis for
          help content, templates, samples, etc. When these fonts are already
@@ -1767,7 +1774,7 @@ AC_ARG_WITH(hsqldb-jar,
         [Specify path to jarfile manually.]),
     HSQLDB_JAR=$withval)
 
-AC_ARG_ENABLE(scripting-beanshell,
+libo_FUZZ_ARG_ENABLE(scripting-beanshell,
     AS_HELP_STRING([--disable-scripting-beanshell],
         [Disable support for scripts in BeanShell.]),
 ,
@@ -1783,7 +1790,7 @@ AC_ARG_WITH(beanshell-jar,
         [Specify path to jarfile manually.]),
     BSH_JAR=$withval)
 
-AC_ARG_ENABLE(scripting-javascript,
+libo_FUZZ_ARG_ENABLE(scripting-javascript,
     AS_HELP_STRING([--disable-scripting-javascript],
         [Disable support for scripts in JavaScript.]),
 ,
@@ -1981,7 +1988,7 @@ AC_ARG_WITH(help,
     ],
 ,)
 
-AC_ARG_WITH(java,
+libo_FUZZ_ARG_WITH(java,
     AS_HELP_STRING([--with-java=<java command>],
         [Specify the name of the Java interpreter command. Typically "java"
          which is the default.
@@ -1989,7 +1996,7 @@ AC_ARG_WITH(java,
          To build without support for Java components, applets, accessibility
          or the XML filters written in Java, use --without-java or --with-java=no.]),
     [ test -z "$with_java" -o "$with_java" = "yes" && with_java=java ],
-    [ with_java=java ]
+    [ test -z "$with_java" -o "$with_java" = "yes" && with_java=java ]
 )
 
 AC_ARG_WITH(jvm-path,
@@ -2025,7 +2032,7 @@ AC_ARG_WITH(bffvalidator,
          See https://www.microsoft.com/en-us/download/details.aspx?id=26794]),
 ,with_bffvalidator=no)
 
-AC_ARG_WITH(junit,
+libo_FUZZ_ARG_WITH(junit,
     AS_HELP_STRING([--with-junit=<absolute path to JUnit 4 jar>],
         [Specifies the JUnit 4 jar file to use for JUnit-based tests.
          --without-junit disables those tests. Not relevant in the --without-java case.]),
@@ -2044,7 +2051,7 @@ AC_ARG_WITH(perl-home,
          binary but the location of the entire distribution.]),
 ,)
 
-AC_ARG_WITH(doxygen,
+libo_FUZZ_ARG_WITH(doxygen,
     AS_HELP_STRING(
         [--with-doxygen=<absolute path to doxygen executable>],
         [Specifies the doxygen executable to use when generating ODK C/C++
@@ -2100,14 +2107,14 @@ AC_ARG_WITH(locales,
 ,)
 
 # Kerberos and GSSAPI used only by PostgreSQL as of LibO 3.5
-AC_ARG_WITH(krb5,
+libo_FUZZ_ARG_WITH(krb5,
     AS_HELP_STRING([--with-krb5],
         [Enable MIT Kerberos 5 support in modules that support it.
          By default automatically enabled on platforms
          where a good system Kerberos 5 is available.]),
 ,)
 
-AC_ARG_WITH(gssapi,
+libo_FUZZ_ARG_WITH(gssapi,
     AS_HELP_STRING([--with-gssapi],
         [Enable GSSAPI support in modules that support it.
          By default automatically enabled on platforms
@@ -3880,14 +3887,19 @@ AC_SUBST(MSVC_USE_DEBUG_RUNTIME)
 
 dnl Set the ENABLE_DEBUG variable.
 dnl ===================================================================
-AC_MSG_CHECKING([whether to do a debug build])
 if test -n "$enable_debug" && test "$enable_debug" != "yes" && test "$enable_debug" != "no"; then
     AC_MSG_ERROR([--enable-debug now accepts only yes or no, use --enable-selective-debuginfo])
 fi
 if test -n "$ENABLE_DBGUTIL" -a "$enable_debug" = "no"; then
-    AC_MSG_ERROR([--disable-debug cannot be used with --enable-dbgutil])
+    if test -z "$libo_fuzzed_enable_debug"; then
+        AC_MSG_ERROR([--disable-debug cannot be used with --enable-dbgutil])
+    else
+        AC_MSG_NOTICE([Resetting --enable-debug=yes])
+        enable_debug=yes
+    fi
 fi
 
+AC_MSG_CHECKING([whether to do a debug build])
 if test -n "$ENABLE_DBGUTIL" -o \( -n "$enable_debug" -a "$enable_debug" != "no" \) ; then
     ENABLE_DEBUG="TRUE"
     if test -n "$ENABLE_DBGUTIL" ; then
@@ -4894,8 +4906,17 @@ AC_SUBST(THES_SYSTEM_DIR)
 dnl ===================================================================
 dnl enable pch by default on windows
 dnl enable it explicitly otherwise
-AC_MSG_CHECKING([whether to enable pch feature])
 ENABLE_PCH=""
+if test "$enable_pch" != no; then
+    if test -z "$libo_fuzzed_enable_pch"; then
+        AC_MSG_ERROR([--enable-pch cannot be used with --enable-compiler-plugins])
+    else
+        AC_MSG_NOTICE([Resetting --enable-pch=no])
+        enable_pch=no
+    fi
+fi
+
+AC_MSG_CHECKING([whether to enable pch feature])
 if test "$enable_pch" != "no"; then
     if test "$_os" = "WINNT" -a "$WITH_MINGW" != "yes"; then
         ENABLE_PCH="TRUE"
