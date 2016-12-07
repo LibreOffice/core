@@ -62,7 +62,7 @@ struct my_t_impl : public my_ref
 {
     char* mpStr;
     explicit my_t_impl() : my_ref(), mpStr(nullptr) {}
-    virtual ~my_t_impl() { g_free( mpStr); }
+    virtual ~my_t_impl() override { g_free( mpStr); }
     explicit my_t_impl( const my_t_impl& r )
         :
             my_ref(),
@@ -119,31 +119,31 @@ struct my_t_impl : public my_ref
 struct lt_lang_t : public my_t_impl
 {
     explicit lt_lang_t() : my_t_impl() {}
-    virtual ~lt_lang_t() {}
+    virtual ~lt_lang_t() override {}
 };
 
 struct lt_script_t : public my_t_impl
 {
     explicit lt_script_t() : my_t_impl() {}
-    virtual ~lt_script_t() {}
+    virtual ~lt_script_t() override {}
 };
 
 struct lt_region_t : public my_t_impl
 {
     explicit lt_region_t() : my_t_impl() {}
-    virtual ~lt_region_t() {}
+    virtual ~lt_region_t() override {}
 };
 
 struct lt_variant_t : public my_t_impl
 {
     explicit lt_variant_t() : my_t_impl() {}
-    virtual ~lt_variant_t() {}
+    virtual ~lt_variant_t() override {}
 };
 
 struct lt_string_t : public my_t_impl
 {
     explicit lt_string_t() : my_t_impl() {}
-    virtual ~lt_string_t() {}
+    virtual ~lt_string_t() override {}
 };
 
 struct lt_list_t : public my_t_impl
@@ -156,7 +156,7 @@ struct lt_list_t : public my_t_impl
             my_t_impl( r), mpPrev(nullptr), mpNext(nullptr)
     {
     }
-    virtual ~lt_list_t()
+    virtual ~lt_list_t() override
     {
         if (mpPrev)
             mpPrev->mpNext = mpNext;
@@ -231,7 +231,7 @@ struct my_t_list : public my_t_impl
     lt_list_t* mpList;
     explicit my_t_list() : my_t_impl(), mpList(nullptr) {}
     explicit my_t_list( const my_t_list& r ) : my_t_impl( r), mpList( my_copyList( r.mpList)) {}
-    virtual ~my_t_list()
+    virtual ~my_t_list() override
     {
         my_unrefList( mpList);
     }
@@ -267,7 +267,7 @@ struct lt_tag_t : public my_t_impl
     my_t_list   maVariants;
     lt_string_t maPrivateUse;
     explicit lt_tag_t() : my_t_impl(), maLanguage(), maScript(), maRegion(), maVariants() {}
-    virtual ~lt_tag_t() {}
+    virtual ~lt_tag_t() override {}
     explicit lt_tag_t( const lt_tag_t& r )
         :
             my_t_impl( r),
