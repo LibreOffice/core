@@ -1844,11 +1844,11 @@ void XclExpDefrowheight::WriteBody( XclExpStream& rStrm )
 }
 
 XclExpRow::XclExpRow( const XclExpRoot& rRoot, sal_uInt32 nXclRow,
-        XclExpRowOutlineBuffer& rOutlineBfr, bool bAlwaysEmpty, bool bHidden ) :
+        XclExpRowOutlineBuffer& rOutlineBfr, bool bAlwaysEmpty, bool bHidden, sal_uInt16 nHeight ) :
     XclExpRecord( EXC_ID3_ROW, 16 ),
     XclExpRoot( rRoot ),
     mnXclRow( nXclRow ),
-    mnHeight( 0 ),
+    mnHeight( nHeight ),
     mnFlags( EXC_ROW_DEFAULTFLAGS ),
     mnXFIndex( EXC_XF_DEFAULTCELL ),
     mnOutlineLevel( 0 ),
@@ -1866,13 +1866,6 @@ XclExpRow::XclExpRow( const XclExpRoot& rRoot, sal_uInt32 nXclRow,
     bool bUserHeight( nRowFlags & CRFlags::ManualSize );
     ::set_flag( mnFlags, EXC_ROW_UNSYNCED, bUserHeight );
     ::set_flag( mnFlags, EXC_ROW_HIDDEN, bHidden );
-
-    // *** Row height *** -----------------------------------------------------
-
-    // Always get the actual row height even if the manual size flag is not set,
-    // to correctly export the heights of rows with wrapped texts.
-
-    mnHeight = GetDoc().GetRowHeight(nScRow, nScTab, false);
 
     // *** Outline data *** ---------------------------------------------------
 
@@ -2394,16 +2387,20 @@ XclExpRow& XclExpRowBuffer::GetOrCreateRow( sal_uInt32 nXclRow, bool bRowAlwaysE
             // if it is the desired row, for rows that height differ from previous,
             // if row is collapsed, has outline level (tdf#100347), or row is hidden (tdf#98106).
             bool bHidden = rDoc.RowHidden(nFrom, nScTab);
+            // Always get the actual row height even if the manual size flag is
+            // not set, to correctly export the heights of rows with wrapped
+            // texts.
+            const sal_uInt16 nHeight = rDoc.GetRowHeight(nFrom, nScTab, false);
             if ( !nFrom || ( nFrom == nXclRow ) || bHidden ||
-                 ( rDoc.GetRowHeight(nFrom, nScTab, false) != rDoc.GetRowHeight(nFrom - 1, nScTab, false) ) ||
                  ( maOutlineBfr.IsCollapsed() ) ||
-                 ( maOutlineBfr.GetLevel() != 0 ) )
+                 ( maOutlineBfr.GetLevel() != 0 ) ||
+                 ( nHeight != rDoc.GetRowHeight(nFrom - 1, nScTab, false) ) )
             {
                 if( maOutlineBfr.GetLevel() > mnHighestOutlineLevel )
                 {
                     mnHighestOutlineLevel = maOutlineBfr.GetLevel();
                 }
-                RowRef p(new XclExpRow(GetRoot(), nFrom, maOutlineBfr, bRowAlwaysEmpty, bHidden));
+                RowRef p(new XclExpRow(GetRoot(), nFrom, maOutlineBfr, bRowAlwaysEmpty, bHidden, nHeight));
                 maRowMap.insert(RowMap::value_type(nFrom, p));
             }
         }

@@ -836,7 +836,7 @@ public:
         @param bAlwaysEmpty  true = This row will not be filled with blank cells
             in the Finalize() function. */
     explicit            XclExpRow( const XclExpRoot& rRoot, sal_uInt32 nXclRow,
-                            XclExpRowOutlineBuffer& rOutlineBfr, bool bAlwaysEmpty, bool bHidden );
+                            XclExpRowOutlineBuffer& rOutlineBfr, bool bAlwaysEmpty, bool bHidden, sal_uInt16 nHeight );
 
     /** Returns the excel row index of this ROW record. */
     inline sal_uInt32   GetXclRow() const { return mnXclRow; }
