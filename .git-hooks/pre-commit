@@ -88,6 +88,10 @@ sub check_whitespaces($)
             {
                 bad_line("use font attributes instead of use-markup", $_, $src_limited);
             }
+            if (/<property name="tooltip_markup"/ )
+            {
+                bad_line("use tooltip_text instead of tooltip_markup", $_, $src_limited);
+            }
         }
     }
     if ( $found_bad)
