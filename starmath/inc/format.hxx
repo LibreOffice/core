@@ -82,7 +82,7 @@
 #define DIS_END                 23
 
 
-// to be broadcastet on format changes:
+// to be broadcasted on format changes:
 #define HINT_FORMATCHANGED  10003
 
 enum SmHorAlign { AlignLeft, AlignCenter, AlignRight };

@@ -60,7 +60,7 @@ AccessibleContextBase::AccessibleContextBase (
     mxStateSet = pStateSet;
 
     // Set some states.  Don't use the SetState method because no events
-    // shall be broadcastet (that is not yet initialized anyway).
+    // shall be broadcasted (that is not yet initialized anyway).
     pStateSet->AddState (AccessibleStateType::ENABLED);
     pStateSet->AddState (AccessibleStateType::SENSITIVE);
     pStateSet->AddState (AccessibleStateType::SHOWING);
