@@ -8127,7 +8127,7 @@ sal_Int32 PDFWriterImpl::getSystemFont( const vcl::Font& i_rFont )
 }
 
 void PDFWriterImpl::registerGlyphs( int nGlyphs,
-                                    sal_GlyphId* pGlyphs,
+                                    const GlyphItem** pGlyphs,
                                     sal_Int32* pGlyphWidths,
                                     sal_Ucs* pUnicodes,
                                     sal_Int32* pUnicodesPerGlyph,
@@ -8144,7 +8144,7 @@ void PDFWriterImpl::registerGlyphs( int nGlyphs,
     sal_Ucs* pCurUnicode = pUnicodes;
     for( int i = 0; i < nGlyphs; pCurUnicode += pUnicodesPerGlyph[i] , i++ )
     {
-        const int nFontGlyphId = pGlyphs[i] & GF_IDXMASK;
+        const int nFontGlyphId = pGlyphs[i]->maGlyphId & GF_IDXMASK;
         const PhysicalFontFace* pCurrentFont = pFallbackFonts[i] ? pFallbackFonts[i] : pDevFont;
 
         FontSubset& rSubset = m_aSubsets[ pCurrentFont ];
@@ -8183,7 +8183,7 @@ void PDFWriterImpl::registerGlyphs( int nGlyphs,
         }
         if (!getReferenceDevice()->AcquireGraphics())
             return;
-        const bool bVertical = ((pGlyphs[i] & GF_ROTMASK) != 0);
+        const bool bVertical = ((pGlyphs[i]->maGlyphId & GF_ROTMASK) != 0);
         pGlyphWidths[i] = m_aFontCache.getGlyphWidth( pCurrentFont,
                                                       nFontGlyphId,
                                                       bVertical,
@@ -8466,16 +8466,14 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
 
     const int nMaxGlyphs = 256;
 
-    sal_GlyphId pGlyphs[nMaxGlyphs];
+    const GlyphItem* pGlyphs[nMaxGlyphs] = { nullptr };
+    const PhysicalFontFace* pFallbackFonts[nMaxGlyphs] = { nullptr };
     sal_Int32 pGlyphWidths[nMaxGlyphs];
     sal_uInt8 pMappedGlyphs[nMaxGlyphs];
     sal_Int32 pMappedFontObjects[nMaxGlyphs];
     std::vector<sal_Ucs> aUnicodes;
     aUnicodes.reserve( nMaxGlyphs );
     sal_Int32 pUnicodesPerGlyph[nMaxGlyphs];
-    int pCharPosAry[nMaxGlyphs];
-    DeviceCoordinate nAdvanceWidths[nMaxGlyphs];
-    const PhysicalFontFace* pFallbackFonts[nMaxGlyphs] = { nullptr };
     bool bVertical = m_aCurrentPDFState.m_aFont.IsVertical();
     int nGlyphs;
     int nIndex = 0;
@@ -8603,28 +8601,28 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
     aGlyphs.reserve( nTmpMaxGlyphs );
     // first get all the glyphs and register them; coordinates still in Pixel
     Point aGNGlyphPos;
-    while( (nGlyphs = rLayout.GetNextGlyphs( nTmpMaxGlyphs, pGlyphs, aGNGlyphPos, nIndex, nAdvanceWidths, pCharPosAry, pFallbackFonts )) != 0 )
+    while ((nGlyphs = rLayout.GetNextGlyphs(nTmpMaxGlyphs, pGlyphs, aGNGlyphPos, nIndex, pFallbackFonts)) != 0)
     {
         aUnicodes.clear();
         for( int i = 0; i < nGlyphs; i++ )
         {
             // default case: 1 glyph is one unicode
             pUnicodesPerGlyph[i] = 1;
-            if( pCharPosAry[i] >= nMinCharPos && pCharPosAry[i] <= nMaxCharPos )
+            if (pGlyphs[i]->mnCharPos >= nMinCharPos && pGlyphs[i]->mnCharPos <= nMaxCharPos)
             {
                 int nChars = 1;
                 pUnicodesPerGlyph[i] = 1;
                 // try to handle ligatures and such
                 if( i < nGlyphs-1 )
                 {
-                    nChars = pCharPosAry[i+1] - pCharPosAry[i];
-                    int start = pCharPosAry[i];
+                    nChars = pGlyphs[i+1]->mnCharPos - pGlyphs[i]->mnCharPos;
+                    int start = pGlyphs[i]->mnCharPos;
                     // #i115618# fix for simple RTL+CTL cases
                     // supports RTL ligatures. TODO: more complex CTL, etc.
                     if( nChars < 0 )
                     {
                         nChars = -nChars;
-                        start = pCharPosAry[i+1] + 1;
+                        start = pGlyphs[i+1]->mnCharPos + 1;
                     }
                     else if (nChars == 0)
                         nChars = 1;
@@ -8633,7 +8631,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
                         aUnicodes.push_back( rText[ start + n ] );
                 }
                 else
-                    aUnicodes.push_back( rText[ pCharPosAry[i] ] );
+                    aUnicodes.push_back(rText[pGlyphs[i]->mnCharPos]);
                 // #i36691# hack that is needed because currently the pGlyphs[]
                 // argument is ignored for embeddable fonts and so the layout
                 // engine's glyph work is ignored (i.e. char mirroring)
@@ -8661,13 +8659,13 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
         {
             aGlyphs.push_back( PDFGlyph( aGNGlyphPos,
                                          pGlyphWidths[i],
-                                         pGlyphs[i],
+                                         pGlyphs[i]->maGlyphId,
                                          pMappedFontObjects[i],
                                          pMappedGlyphs[i] ) );
             if( bVertical )
-                aGNGlyphPos.Y() += nAdvanceWidths[i]/rLayout.GetUnitsPerPixel();
+                aGNGlyphPos.Y() += pGlyphs[i]->mnNewWidth/rLayout.GetUnitsPerPixel();
             else
-                aGNGlyphPos.X() += nAdvanceWidths[i]/rLayout.GetUnitsPerPixel();
+                aGNGlyphPos.X() += pGlyphs[i]->mnNewWidth/rLayout.GetUnitsPerPixel();
         }
     }
 
@@ -8714,19 +8712,16 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
         {
             Point aPos, aStartPt;
             sal_Int32 nWidth = 0;
-            DeviceCoordinate nAdvance = 0;
-            for( int nStart = 0;;)
+            const GlyphItem* pGlyph;
+            int nStart = 0;
+            while (rLayout.GetNextGlyphs(1, &pGlyph, aPos, nStart))
             {
-                sal_GlyphId aGlyphId;
-                if( !rLayout.GetNextGlyphs( 1, &aGlyphId, aPos, nStart, &nAdvance ) )
-                    break;
-
-                if( !SalLayout::IsSpacingGlyph( aGlyphId ) )
+                if (!SalLayout::IsSpacingGlyph(pGlyph->maGlyphId))
                 {
                     if( !nWidth )
                         aStartPt = aPos;
 
-                    nWidth += nAdvance;
+                    nWidth += pGlyph->mnNewWidth;
                 }
                 else if( nWidth > 0 )
                 {
@@ -8813,18 +8808,15 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
         else if ( eAlign == ALIGN_TOP )
             aOffset.Y() += m_pReferenceDevice->mpFontInstance->mxFontMetric->GetAscent();
 
-        for( int nStart = 0;;)
+        Point aPos;
+        const GlyphItem* pGlyph;
+        int nStart = 0;
+        while (rLayout.GetNextGlyphs(1, &pGlyph, aPos, nStart))
         {
-            Point aPos;
-            sal_GlyphId aGlyphId;
-            DeviceCoordinate nAdvance;
-            if( !rLayout.GetNextGlyphs( 1, &aGlyphId, aPos, nStart, &nAdvance ) )
-                break;
-
-            if( !SalLayout::IsSpacingGlyph( aGlyphId ) )
+            if (!SalLayout::IsSpacingGlyph(pGlyph->maGlyphId))
             {
                 Point aAdjOffset = aOffset;
-                aAdjOffset.X() += (nAdvance - nEmphWidth) / 2;
+                aAdjOffset.X() += (pGlyph->mnNewWidth - nEmphWidth) / 2;
                 aAdjOffset = aRotScale.transform( aAdjOffset );
 
                 aAdjOffset -= Point( nEmphWidth2, nEmphHeight2 );
