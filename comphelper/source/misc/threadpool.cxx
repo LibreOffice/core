@@ -27,7 +27,7 @@ static thread_local bool gbIsWorkerThread;
 #endif
 
 // used to group thread-tasks for waiting in waitTillDone()
-class COMPHELPER_DLLPUBLIC ThreadTaskTag
+class ThreadTaskTag
 {
     std::mutex maMutex;
     sal_Int32 mnTasksWorking;
