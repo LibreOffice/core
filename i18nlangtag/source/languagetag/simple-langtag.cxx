@@ -29,18 +29,18 @@ struct lt_error_t {
     lt_error_t() : something(nullptr) {}
 };
 
-static void* g_malloc(size_t s)
+void* g_malloc(size_t s)
 {
     return malloc(s);
 }
 
-static void g_free(void* p)
+void g_free(void* p)
 {
     if (p)
         free(p);
 }
 
-static void lt_error_unref(lt_error_t *error)
+void lt_error_unref(lt_error_t *error)
 {
     if (error)
     {
@@ -165,19 +165,19 @@ struct lt_list_t : public my_t_impl
     }
 };
 
-static lt_pointer_t lt_list_value( const lt_list_t* p )
+lt_pointer_t lt_list_value( const lt_list_t* p )
 {
     // This may look odd, but in this implementation the list element itself
     // holds the char* mpStr to be obtained with lt_variant_get_tag()
     return static_cast<lt_pointer_t>(const_cast<lt_list_t*>(p));
 }
 
-static const lt_list_t* lt_list_next( const lt_list_t* p )
+const lt_list_t* lt_list_next( const lt_list_t* p )
 {
     return p ? p->mpNext : nullptr;
 }
 
-static lt_list_t* my_copyList( const lt_list_t * pList )
+lt_list_t* my_copyList( const lt_list_t * pList )
 {
     lt_list_t* pNewList = nullptr;
     lt_list_t* pLast = nullptr;
@@ -197,7 +197,7 @@ static lt_list_t* my_copyList( const lt_list_t * pList )
     return pNewList;
 }
 
-static void my_unrefList( lt_list_t* pList )
+void my_unrefList( lt_list_t* pList )
 {
     while (pList)
     {
@@ -207,7 +207,7 @@ static void my_unrefList( lt_list_t* pList )
     }
 }
 
-static void my_appendToList( lt_list_t** ppList, lt_list_t* pEntry )
+void my_appendToList( lt_list_t** ppList, lt_list_t* pEntry )
 {
     if (ppList)
     {
@@ -298,21 +298,21 @@ struct lt_tag_t : public my_t_impl
     }
 };
 
-static void lt_db_initialize() { }
-static void lt_db_finalize() { }
-static void lt_db_set_datadir( const char* /* dir */ ) { }
+void lt_db_initialize() { }
+void lt_db_finalize() { }
+void lt_db_set_datadir( const char* /* dir */ ) { }
 
-static lt_tag_t* lt_tag_new()
+lt_tag_t* lt_tag_new()
 {
     return new lt_tag_t;
 }
 
-static lt_tag_t* lt_tag_copy(lt_tag_t *tag)
+lt_tag_t* lt_tag_copy(lt_tag_t *tag)
 {
     return (tag ? new lt_tag_t( *tag) : nullptr);
 }
 
-static void lt_tag_unref(lt_tag_t *tag)
+void lt_tag_unref(lt_tag_t *tag)
 {
     if (tag)
         tag->decRef();
@@ -325,9 +325,9 @@ static void lt_tag_unref(lt_tag_t *tag)
     any i-* irregular and x-* privateuse. Subtags are not checked for validity
     (alpha, digit, registered, ...).
  */
-static int lt_tag_parse(lt_tag_t *tag,
-                              const char *tag_string,
-                              lt_error_t **error)
+int lt_tag_parse(lt_tag_t *tag,
+                 const char *tag_string,
+                 lt_error_t **error)
 {
     (void) error;
     if (!tag)
@@ -517,65 +517,65 @@ static int lt_tag_parse(lt_tag_t *tag,
     return 1;
 }
 
-static char* lt_tag_canonicalize(lt_tag_t *tag,
-                                 lt_error_t **error)
+char* lt_tag_canonicalize(lt_tag_t *tag,
+                          lt_error_t **error)
 {
     (void) error;
     return tag && tag->mpStr ? strdup( tag->mpStr) : nullptr;
 }
 
-static const lt_lang_t* lt_tag_get_language(const lt_tag_t  *tag)
+const lt_lang_t* lt_tag_get_language(const lt_tag_t  *tag)
 {
     return tag && tag->maLanguage.mpStr ? &tag->maLanguage : nullptr;
 }
 
-static const lt_script_t *lt_tag_get_script(const lt_tag_t  *tag)
+const lt_script_t *lt_tag_get_script(const lt_tag_t  *tag)
 {
     return tag && tag->maScript.mpStr ? &tag->maScript : nullptr;
 }
 
-static const lt_region_t *lt_tag_get_region(const lt_tag_t  *tag)
+const lt_region_t *lt_tag_get_region(const lt_tag_t  *tag)
 {
     return tag && tag->maRegion.mpStr ? &tag->maRegion : nullptr;
 }
 
-static const lt_list_t *lt_tag_get_variants(const lt_tag_t  *tag)
+const lt_list_t *lt_tag_get_variants(const lt_tag_t  *tag)
 {
     return tag ? tag->maVariants.mpList : nullptr;
 }
 
-static const lt_string_t *lt_tag_get_privateuse(const lt_tag_t  *tag)
+const lt_string_t *lt_tag_get_privateuse(const lt_tag_t  *tag)
 {
     return tag && tag->maPrivateUse.mpStr ? &tag->maPrivateUse : nullptr;
 }
 
-static const char *lt_lang_get_tag(const lt_lang_t *lang)
+const char *lt_lang_get_tag(const lt_lang_t *lang)
 {
     return lang ? lang->mpStr : nullptr;
 }
 
-static const char *lt_script_get_tag(const lt_script_t *script)
+const char *lt_script_get_tag(const lt_script_t *script)
 {
     return script ? script->mpStr : nullptr;
 }
 
-static const char *lt_region_get_tag(const lt_region_t *region)
+const char *lt_region_get_tag(const lt_region_t *region)
 {
     return region ? region->mpStr : nullptr;
 }
 
-static const char *lt_variant_get_tag(const lt_variant_t *variant)
+const char *lt_variant_get_tag(const lt_variant_t *variant)
 {
     return variant ? variant->mpStr : nullptr;
 }
 
-static size_t lt_string_length(const lt_string_t *string)
+size_t lt_string_length(const lt_string_t *string)
 {
     return string ? strlen(string->mpStr) : 0;
 }
 
 #ifdef erDEBUG
-static void lt_tag_dump(const lt_tag_t *tag)
+void lt_tag_dump(const lt_tag_t *tag)
 {
     fprintf( stderr, "\n");
     fprintf( stderr, "SimpleLangtag  langtag: %s\n", tag->mpStr);
