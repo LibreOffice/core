@@ -38,6 +38,7 @@ $(eval $(call gb_Library_add_linked_libs,binaryurp,\
 	cppuhelper \
 	sal \
 	salhelper \
+	stl \
 	$(gb_STDLIBS) \
 ))
 

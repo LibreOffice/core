@@ -38,6 +38,7 @@ $(eval $(call gb_GoogleTest_set_include,o3tl_test,\
 
 $(eval $(call gb_GoogleTest_add_linked_libs,o3tl_test, \
 	sal \
+	stl \
 	$(gb_STDLIBS) \
 ))
 

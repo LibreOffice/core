@@ -38,6 +38,7 @@ $(eval $(call gb_GoogleTest_add_exception_objects,binaryurp_cache, \
  
 $(eval $(call gb_GoogleTest_add_linked_libs,binaryurp_cache, \
     sal \
+    stl \
     $(gb_STDLIBS) \
 ))
 

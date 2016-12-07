@@ -47,6 +47,7 @@ $(eval $(call gb_Library_add_linked_libs,xstor,\
 	cppuhelper \
 	cppu \
 	sal \
+	stl \
 	$(gb_STDLIBS) \
 ))
 

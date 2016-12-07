@@ -43,6 +43,7 @@ $(eval $(call gb_Library_add_linked_libs,configmgr,\
 	cppuhelper \
 	sal \
 	salhelper \
+	stl \
 	xmlreader \
 	$(gb_STDLIBS) \
 ))

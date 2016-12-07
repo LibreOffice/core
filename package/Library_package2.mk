@@ -48,6 +48,7 @@ $(eval $(call gb_Library_add_linked_libs,package2,\
 	cppu \
 	sal \
 	sax \
+	stl \
 	ucbhelper \
 	$(gb_STDLIBS) \
 ))

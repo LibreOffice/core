@@ -52,6 +52,7 @@ $(eval $(call gb_GoogleTest_add_linked_libs,binaryurp_unmarshal, \
     cppuhelper \
     sal \
     salhelper \
+    stl \
     $(gb_STDLIBS) \
 ))
 
