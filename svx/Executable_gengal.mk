@@ -74,9 +74,11 @@ $(eval $(call gb_Executable_add_libs,gengal,\
     -lX11 \
 ))
 
+ifeq ($(USING_X11),TRUE)
 $(eval $(call gb_Executable_use_static_libraries,gengal,\
 	glxtest \
 ))
+endif
 endif
 endif
 
