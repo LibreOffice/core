@@ -31,16 +31,18 @@ $(eval $(call gb_Module_add_targets,scripting,\
 		$(if $(ENABLE_SCRIPTING_BEANSHELL),Package_ScriptsBeanShell) \
 		$(if $(ENABLE_SCRIPTING_JAVASCRIPT),Package_ScriptsJavaScript) \
 	) \
-	Package_scriptbindinglib \
-	$(if $(DISABLE_PYTHON),,Package_scriptproviderforpython) \
-	Package_ScriptsPython \
+	$(if $(DISABLE_SCRIPTING),,Package_scriptbindinglib) \
+	$(if $(DISABLE_PYTHON),,\
+		Package_scriptproviderforpython \
+		Package_ScriptsPython \
+		Pyuno_mailmerge \
+	) \
 	Library_basprov \
 	Library_dlgprov \
 	Library_protocolhandler \
 	Library_scriptframe \
 	Library_stringresource \
 	Library_vbaevents \
-	Pyuno_mailmerge \
 ))
 
 endif
