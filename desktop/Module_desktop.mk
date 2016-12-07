@@ -52,6 +52,10 @@ $(eval $(call gb_Module_add_targets,desktop,\
     Pagein_impress \
     Pagein_writer \
     CustomTarget_soffice \
+))
+
+ifeq ($(USING_X11), TRUE)
+$(eval $(call gb_Module_add_targets,desktop,\
     Package_sbase_sh \
     Package_scalc_sh \
     Package_sdraw_sh \
@@ -60,6 +64,7 @@ $(eval $(call gb_Module_add_targets,desktop,\
     Package_swriter_sh \
     Package_soffice_sh \
 ))
+endif
 endif
 endif
 endif
