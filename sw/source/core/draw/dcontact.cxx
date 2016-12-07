@@ -195,21 +195,17 @@ void SwContact::MoveObjToVisibleLayer( SdrObject* _pDrawObj )
     if ( bNotify )
     {
         SwAnchoredObject* pAnchoredObj = GetAnchoredObj( _pDrawObj );
-        OSL_ENSURE( pAnchoredObj,
-                "<SwContact::MoveObjToInvisibleLayer(..)> - missing anchored object" );
-        if ( pAnchoredObj )
+        assert(pAnchoredObj);
+        ::setContextWritingMode( _pDrawObj, pAnchoredObj->GetAnchorFrameContainingAnchPos() );
+        // Note: as-character anchored objects aren't registered at a page frame and
+        //       a notification of its background isn't needed.
+        if ( pAnchoredObj->GetPageFrame() )
         {
-            ::setContextWritingMode( _pDrawObj, pAnchoredObj->GetAnchorFrameContainingAnchPos() );
-            // Note: as-character anchored objects aren't registered at a page frame and
-            //       a notification of its background isn't needed.
-            if ( pAnchoredObj->GetPageFrame() )
-            {
-                ::Notify_Background( _pDrawObj, pAnchoredObj->GetPageFrame(),
-                                     pAnchoredObj->GetObjRect(), PREP_FLY_ARRIVE, true );
-            }
-
-            pAnchoredObj->InvalidateObjPos();
+            ::Notify_Background( _pDrawObj, pAnchoredObj->GetPageFrame(),
+                                 pAnchoredObj->GetObjRect(), PREP_FLY_ARRIVE, true );
         }
+
+        pAnchoredObj->InvalidateObjPos();
     }
 }
 
@@ -225,11 +221,10 @@ void SwContact::MoveObjToInvisibleLayer( SdrObject* _pDrawObj )
     if ( bNotify )
     {
         SwAnchoredObject* pAnchoredObj = GetAnchoredObj( _pDrawObj );
-        OSL_ENSURE( pAnchoredObj,
-                "<SwContact::MoveObjToInvisibleLayer(..)> - missing anchored object" );
+        assert(pAnchoredObj);
         // Note: as-character anchored objects aren't registered at a page frame and
         //       a notification of its background isn't needed.
-        if ( pAnchoredObj && pAnchoredObj->GetPageFrame() )
+        if (pAnchoredObj->GetPageFrame())
         {
             ::Notify_Background( _pDrawObj, pAnchoredObj->GetPageFrame(),
                                  pAnchoredObj->GetObjRect(), PREP_FLY_LEAVE, true );
