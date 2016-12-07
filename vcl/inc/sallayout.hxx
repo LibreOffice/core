@@ -39,6 +39,7 @@ typedef unsigned short LanguageType;
 
 class SalGraphics;
 class PhysicalFontFace;
+struct GlyphItem;
 enum class SalLayoutFlags;
 namespace vcl {
     class TextLayoutCache;
@@ -176,9 +177,8 @@ public:
     virtual bool    IsKashidaPosValid ( int /*nCharPos*/ ) const { return true; } // i60594
 
     // methods using glyph indexing
-    virtual int     GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIdAry, Point& rPos, int&,
-                                   DeviceCoordinate* pGlyphAdvAry = nullptr, int* pCharPosAry = nullptr,
-                                   const PhysicalFontFace** pFallbackFonts = nullptr ) const = 0;
+    virtual int     GetNextGlyphs(int nLen, const GlyphItem** pGlyphs, Point& rPos, int&,
+                                  const PhysicalFontFace** pFallbackFonts = nullptr) const = 0;
     virtual bool    GetOutline( SalGraphics&, basegfx::B2DPolyPolygonVector& ) const;
     virtual bool    GetBoundRect( SalGraphics&, Rectangle& ) const;
 
@@ -234,9 +234,8 @@ public:
     virtual sal_Int32 GetTextBreak(DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra, int nFactor) const override;
     virtual DeviceCoordinate FillDXArray( DeviceCoordinate* pDXArray ) const override;
     virtual void    GetCaretPositions( int nArraySize, long* pCaretXArray ) const override;
-    virtual int     GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIdxAry, Point& rPos,
-                                   int&, DeviceCoordinate* pGlyphAdvAry = nullptr, int* pCharPosAry = nullptr,
-                                   const PhysicalFontFace** pFallbackFonts = nullptr ) const override;
+    virtual int     GetNextGlyphs(int nLen, const GlyphItem** pGlyphs, Point& rPos, int&,
+                                  const PhysicalFontFace** pFallbackFonts = nullptr) const override;
     virtual bool    GetOutline( SalGraphics&, basegfx::B2DPolyPolygonVector& ) const override;
     virtual bool    IsKashidaPosValid(int nCharPos) const override;
 
@@ -338,9 +337,8 @@ public:
     virtual void    GetCaretPositions( int nArraySize, long* pCaretXArray ) const override;
 
     // used by display layers
-    virtual int     GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIdxAry, Point& rPos, int&,
-                                   DeviceCoordinate* pGlyphAdvAry = nullptr, int* pCharPosAry = nullptr,
-                                   const PhysicalFontFace** pFallbackFonts = nullptr ) const override;
+    virtual int     GetNextGlyphs(int nLen, const GlyphItem** pGlyphs, Point& rPos, int&,
+                                  const PhysicalFontFace** pFallbackFonts = nullptr) const override;
 
 protected:
                     GenericSalLayout();
