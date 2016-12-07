@@ -1292,6 +1292,8 @@ void SfxLibraryContainer::implScanExtensions()
         const bool bReadOnly = false;
         Reference< XNameAccess > xLib = createLibraryLink( aLibName, aIndexFileURL, bReadOnly );
     }
+#else
+    (void) this;
 #endif
 }
 
