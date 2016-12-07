@@ -289,30 +289,18 @@ bool ExTextOutRenderer::operator ()(SalLayout const &rLayout, HDC hDC,
     const Rectangle* pRectToErase,
     Point* pPos, int* pGetNextGlypInfo)
 {
-    const int MAX_GLYPHS = 2;
-    sal_GlyphId glyphIntStr[MAX_GLYPHS];
-    int nGlyphs = 0;
-    WORD glyphWStr[MAX_GLYPHS];
-    do
+    bool bGlyphs = false;
+    const GlyphItem* pGlyph;
+    while (rLayout.GetNextGlyphs(1, &pGlyph, *pPos, *pGetNextGlypInfo))
     {
-        nGlyphs = rLayout.GetNextGlyphs(1, glyphIntStr, *pPos, *pGetNextGlypInfo);
-        if (nGlyphs < 1)
-            break;
+        bGlyphs = true;
+        WORD glyphWStr[] = { pGlyph->maGlyphId & GF_IDXMASK };
+        if ((pGlyph->maGlyphId & GF_ROTMASK) == GF_ROTL)
+            glyphWStr[0] |= GF_VERT;
+        ExtTextOutW(hDC, pPos->X(), pPos->Y(), ETO_GLYPH_INDEX, nullptr, LPCWSTR(&glyphWStr), 1, nullptr);
+    }
 
-        if (SalLayout::UseCommonLayout())
-        {
-            for (int i = 0; i < nGlyphs; i++)
-            {
-                if ((glyphIntStr[i] & GF_ROTMASK) == GF_ROTL)
-                    glyphIntStr[i] |= GF_VERT;
-            }
-        }
-
-        std::copy_n(glyphIntStr, nGlyphs, glyphWStr);
-        ExtTextOutW(hDC, pPos->X(), pPos->Y(), ETO_GLYPH_INDEX, nullptr, LPCWSTR(&glyphWStr), nGlyphs, nullptr);
-    } while (!pRectToErase);
-
-    return (pRectToErase && nGlyphs >= 1);
+    return (pRectToErase && bGlyphs);
 }
 
 D2DWriteTextOutRenderer::D2DWriteTextOutRenderer()
@@ -373,16 +361,9 @@ bool D2DWriteTextOutRenderer::operator ()(SalLayout const &rLayout, HDC hDC,
     succeeded &= SUCCEEDED(mpRT->CreateSolidColorBrush(D2D1::ColorF(GetRValue(bgrTextColor) / 255.0f, GetGValue(bgrTextColor) / 255.0f, GetBValue(bgrTextColor) / 255.0f), &pBrush));
 
     HRESULT hr = S_OK;
-    int nGlyphs = 0;
+    bool bGlyphs = false;
     if (succeeded)
     {
-        const int MAX_GLYPHS = 2;
-        sal_GlyphId glyphIntStr[MAX_GLYPHS];
-        UINT16 glyphIndices[MAX_GLYPHS];
-        long   glyphIntAdv[MAX_GLYPHS];
-        FLOAT  glyphAdvances[MAX_GLYPHS];
-        DWRITE_GLYPH_OFFSET glyphOffsets[MAX_GLYPHS] = { { 0.0f, 0.0f }, };
-
         bool bVertical = false;
         float nYDiff = 0.0f;
         const CommonSalLayout* pCSL = dynamic_cast<const CommonSalLayout*>(&rLayout);
@@ -401,28 +382,23 @@ bool D2DWriteTextOutRenderer::operator ()(SalLayout const &rLayout, HDC hDC,
         D2D1_MATRIX_3X2_F aOrigTrans, aRotTrans;
         mpRT->GetTransform(&aOrigTrans);
 
-        do
+        const GlyphItem* pGlyph;
+        while (rLayout.GetNextGlyphs(1, &pGlyph, *pPos, *pGetNextGlypInfo))
         {
-            nGlyphs = rLayout.GetNextGlyphs(1, glyphIntStr, *pPos, *pGetNextGlypInfo, glyphIntAdv);
-            if (nGlyphs < 1)
-                break;
-
-            std::copy_n(glyphIntStr, nGlyphs, glyphIndices);
-            std::copy_n(glyphIntAdv, nGlyphs, glyphAdvances);
-
+            bGlyphs = true;
             D2D1_POINT_2F baseline = { pPos->X() - bounds.Left(), pPos->Y() - bounds.Top() };
             DWRITE_GLYPH_RUN glyphs = {
                 mpFontFace,
                 mlfEmHeight,
-                nGlyphs,
-                glyphIndices,
-                glyphAdvances,
-                glyphOffsets,
+                1,
+                { static_cast<UINT16>(pGlyph->maGlyphId & GF_IDXMASK) },
+                { static_cast<FLOAT>(pGlyph->mnNewWidth) },
+                { { 0.0f, 0.0f } },
                 false,
                 0
             };
 
-            if (bVertical && (glyphIntStr[0] & GF_ROTMASK) != GF_ROTL)
+            if (bVertical && (pGlyph->maGlyphId & GF_ROTMASK) != GF_ROTL)
             {
                 D2D1MakeRotateMatrix(90.0f, baseline, &aRotTrans);
                 mpRT->SetTransform(aOrigTrans * aRotTrans);
@@ -433,7 +409,7 @@ bool D2DWriteTextOutRenderer::operator ()(SalLayout const &rLayout, HDC hDC,
             {
                 mpRT->DrawGlyphRun({ baseline.x, baseline.y + nYDiff }, &glyphs, pBrush);
             }
-        } while (!pRectToErase);
+        }
 
         hr = mpRT->EndDraw();
     }
@@ -446,7 +422,7 @@ bool D2DWriteTextOutRenderer::operator ()(SalLayout const &rLayout, HDC hDC,
     if (hr == D2DERR_RECREATE_TARGET)
         CreateRenderTarget();
 
-    return (succeeded && nGlyphs >= 1 && pRectToErase);
+    return (succeeded && bGlyphs && pRectToErase);
 }
 
 bool D2DWriteTextOutRenderer::BindFont(HDC hDC)
@@ -558,16 +534,16 @@ bool D2DWriteTextOutRenderer::GetDWriteInkBox(SalLayout const &rLayout, Rectangl
     mpFontFace->GetMetrics(&aFontMetrics);
 
     Point aPos;
-    sal_GlyphId nLGlyph;
+    const GlyphItem* pGlyph;
     std::vector<uint16_t> indices;
-    std::vector<sal_GlyphId> gids;
+    std::vector<bool> vertical;
     std::vector<Point>  positions;
     int nStart = 0;
-    while (rLayout.GetNextGlyphs(1, &nLGlyph, aPos, nStart) == 1)
+    while (rLayout.GetNextGlyphs(1, &pGlyph, aPos, nStart))
     {
         positions.push_back(aPos);
-        indices.push_back(nLGlyph);
-        gids.push_back(nLGlyph);
+        indices.push_back(pGlyph->maGlyphId & GF_IDXMASK);
+        vertical.push_back((pGlyph->maGlyphId & GF_ROTMASK) == GF_ROTL);
     }
 
     auto aBoxes = GetGlyphInkBoxes(indices.data(), indices.data() + indices.size());
@@ -588,18 +564,20 @@ bool D2DWriteTextOutRenderer::GetDWriteInkBox(SalLayout const &rLayout, Rectangl
     }
 
     auto p = positions.begin();
-    auto gid = gids.begin();
+    auto v = vertical.begin();
     for (auto &b:aBoxes)
     {
         if (bVertical)
         {
-            if ((*gid++ & GF_ROTMASK) != GF_ROTL)
+            if (!*v)
                 // FIXME: Hack, should rotate the box here instead.
                 b.expand(std::max(b.getHeight(), b.getWidth()));
             else
                 b += Point(0, nYDiff);
         }
-        b += *p++;
+        b += *p;
+        p++;
+        v++;
         rOut.Union(b);
     }
 
