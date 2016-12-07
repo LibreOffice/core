@@ -1041,9 +1041,7 @@ dnl ---------- *** ----------
 
 libo_FUZZ_ARG_ENABLE(mergelibs,
     AS_HELP_STRING([--enable-mergelibs],
-        [Enables linking of big, merged, library. Experimental feature, tested
-        only for Linux at some stage in history, but possibly does not work even
-        for Linux any more. This will link a core set of libraries into libmerged.])
+        [Merge several of the smaller libraries into one big, "merged", one.])
 )
 
 libo_FUZZ_ARG_ENABLE(breakpad,
