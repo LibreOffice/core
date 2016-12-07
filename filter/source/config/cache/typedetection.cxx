@@ -426,14 +426,12 @@ OUString SAL_CALL TypeDetection::queryTypeByDescriptor(css::uno::Sequence< css::
         if (lFlatTypes.size()>0)
             sType = impl_detectTypeFlatAndDeep(stlDescriptor, lFlatTypes, bAllowDeep, lUsedDetectors, sLastChance);
 
-
         // flat detection failed
         // pure deep detection failed
         // => ask might existing InteractionHandler
         // means: ask user for its decision
         if (sType.isEmpty())
             sType = impl_askUserForTypeAndFilterIfAllowed(stlDescriptor);
-
 
         // no real detected type - but a might valid one.
         // update descriptor and set last chance for return.
@@ -455,6 +453,11 @@ OUString SAL_CALL TypeDetection::queryTypeByDescriptor(css::uno::Sequence< css::
                 << "\" while querying type of <" << sURL << ">");
         sType.clear();
     }
+
+    // Don't choose a type if type detection was aborted
+    bool bAbort = stlDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_ABORTED(), false);
+    if (bAbort)
+        sType.clear();
 
     // adapt media descriptor, so it contains the right values
     // for type/filter name/document service/ etcpp.
