@@ -32,7 +32,7 @@ $(eval $(call gb_Module_add_targets,scripting,\
 		$(if $(ENABLE_SCRIPTING_JAVASCRIPT),Package_ScriptsJavaScript) \
 	) \
 	Package_scriptbindinglib \
-	Package_scriptproviderforpython \
+	$(if $(DISABLE_PYTHON),,Package_scriptproviderforpython) \
 	Package_ScriptsPython \
 	Library_basprov \
 	Library_dlgprov \
