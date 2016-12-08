@@ -23,6 +23,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include "drawingml/textparagraph.hxx"
 #include "oox/helper/propertyset.hxx"
+#include <oox/token/properties.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
@@ -110,10 +111,11 @@ void TextBody::ApplyStyleEmpty(
     {
         Reference< XPropertySet > xProps(xText, UNO_QUERY);
         PropertyMap aioBulletList;
+        aioBulletList.setProperty< sal_Int32 >(PROP_LeftMargin, 0); // Init bullets left margin to 0 (no bullets).
         float nCharHeight = xProps->getPropertyValue("CharHeight").get<float>();
         TextParagraphProperties aParaProp;
         aParaProp.apply(*pTextParagraphStyle);
-        aParaProp.pushToPropSet(&rFilterBase, xProps, aioBulletList, &pTextParagraphStyle->getBulletList(), false, nCharHeight, true);
+        aParaProp.pushToPropSet(&rFilterBase, xProps, aioBulletList, &pTextParagraphStyle->getBulletList(), true, nCharHeight, true);
     }
 }
 
