@@ -21,6 +21,7 @@
 
 #include <vcl/dllapi.h>
 #include <vcl/vclptr.hxx>
+#include <tools/debug.hxx>
 #include <cassert>
 
 class VclReferenceBase;
@@ -35,12 +36,14 @@ class VCL_DLLPUBLIC VclReferenceBase
 public:
     inline void acquire() const
     {
+        DBG_TESTSOLARMUTEX();
         assert(mnRefCnt>0);
         mnRefCnt++;
     }
 
     inline void release() const
     {
+        DBG_TESTSOLARMUTEX();
         assert(mnRefCnt>0);
         if (!--mnRefCnt)
             delete this;

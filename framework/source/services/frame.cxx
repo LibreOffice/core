@@ -876,6 +876,8 @@ void SAL_CALL Frame::initialize( const css::uno::Reference< css::awt::XWindow >&
     VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow(xWindow);
     if (pWindow && pWindow->IsVisible())
         m_bIsHidden = false;
+    // must be cleared while under the SolarMutex
+    pWindow.clear();
 
     css::uno::Reference< css::frame::XLayoutManager2 >  xLayoutManager = m_xLayoutManager;
 
@@ -1542,6 +1544,7 @@ sal_Bool SAL_CALL Frame::setComponent(const css::uno::Reference< css::awt::XWind
     css::uno::Reference< css::frame::XController > xOldController = m_xController;
     VclPtr<vcl::Window> pOwnWindow = VCLUnoHelper::GetWindow( xContainerWindow );
     bool bHadFocus = pOwnWindow->HasChildPathFocus();
+    pOwnWindow.clear(); // must be cleared under SolarMutex
     bool bWasConnected = m_bConnected;
     aReadLock.clear();
     /* } SAFE */
