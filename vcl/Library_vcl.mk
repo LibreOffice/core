@@ -617,15 +617,14 @@ else
     vcl/source/opengl/OpenGLHelper \
     vcl/source/window/openglwin \
  ))
-ifeq ($(OS),LINUX)
+ifeq ($(OS), $(filter LINUX %BSD SOLARIS, $(OS)))
 $(eval $(call gb_Library_add_libs,vcl,\
-	-lm \
-	-ldl \
-	-lpthread \
+    -lm $(DLOPEN_LIBS) \
+    -lpthread \
     -lGL \
     -lX11 \
+    -lXext \
 ))
-endif
 endif
 
 ifeq ($(OS),ANDROID)
@@ -721,14 +720,6 @@ $(eval $(call gb_Library_use_system_win32_libs,vcl,\
 $(eval $(call gb_Library_add_nativeres,vcl,vcl/salsrc))
 endif
 
-ifeq ($(OS), $(filter LINUX %BSD SOLARIS, $(OS)))
-$(eval $(call gb_Library_add_libs,vcl,\
-	-lm $(DLOPEN_LIBS) \
-	-lpthread \
-    -lGL \
-    -lX11 \
-	-lXext \
-))
 ifneq ($(ENABLE_HEADLESS),TRUE)
 $(eval $(call gb_Library_add_exception_objects,vcl,\
 	vcl/opengl/x11/X11DeviceInfo \
