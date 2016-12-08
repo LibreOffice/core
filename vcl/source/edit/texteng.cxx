@@ -2960,7 +2960,7 @@ void TextEngine::ImpInitLayoutMode( OutputDevice* pOutDev )
 {
     ComplexTextLayoutFlags nLayoutMode = pOutDev->GetLayoutMode();
 
-    nLayoutMode &= ~ComplexTextLayoutFlags(ComplexTextLayoutFlags::BiDiRtl | ComplexTextLayoutFlags::ComplexDisabled | ComplexTextLayoutFlags::BiDiStrong );
+    nLayoutMode &= ~ComplexTextLayoutFlags(ComplexTextLayoutFlags::BiDiRtl | ComplexTextLayoutFlags::BiDiStrong );
 
     pOutDev->SetLayoutMode( nLayoutMode );
 }

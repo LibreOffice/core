@@ -137,7 +137,6 @@ enum class SalLayoutFlags
     KerningPairs            = 0x0010,
     KerningAsian            = 0x0020,
     Vertical                = 0x0040,
-    ComplexDisabled         = 0x0100,
     EnableLigatures         = 0x0200,
     SubstituteDigits        = 0x0400,
     KashidaJustification    = 0x0800,
@@ -145,7 +144,7 @@ enum class SalLayoutFlags
 };
 namespace o3tl
 {
-    template<> struct typed_flags<SalLayoutFlags> : is_typed_flags<SalLayoutFlags, 0x2f77> {};
+    template<> struct typed_flags<SalLayoutFlags> : is_typed_flags<SalLayoutFlags, 0x2e77> {};
 }
 
 typedef std::vector< Rectangle > MetricVector;

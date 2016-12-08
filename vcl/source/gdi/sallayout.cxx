@@ -73,7 +73,6 @@ std::ostream &operator <<(std::ostream& s, ImplLayoutArgs &rArgs)
         TEST(KerningPairs);
         TEST(KerningAsian);
         TEST(Vertical);
-        TEST(ComplexDisabled);
         TEST(EnableLigatures);
         TEST(SubstituteDigits);
         TEST(KashidaJustification);

@@ -262,7 +262,7 @@ namespace drawinglayer
 
                     if(rTextCandidate.getFontAttribute().getRTL())
                     {
-                        ComplexTextLayoutFlags nRTLLayoutMode(nOldLayoutMode & ~ComplexTextLayoutFlags(ComplexTextLayoutFlags::ComplexDisabled|ComplexTextLayoutFlags::BiDiStrong));
+                        ComplexTextLayoutFlags nRTLLayoutMode(nOldLayoutMode & ~ComplexTextLayoutFlags(ComplexTextLayoutFlags::BiDiStrong));
                         nRTLLayoutMode |= ComplexTextLayoutFlags::BiDiRtl|ComplexTextLayoutFlags::TextOriginLeft;
                         mpOutputDevice->SetLayoutMode(nRTLLayoutMode);
                     }
