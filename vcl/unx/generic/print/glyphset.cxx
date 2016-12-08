@@ -62,13 +62,12 @@ GlyphSet::~GlyphSet ()
 bool
 GlyphSet::GetGlyphID (
                       sal_GlyphId nGlyph,
-                      sal_Unicode nUnicode,
                       unsigned char* nOutGlyphID,
                       sal_Int32* nOutGlyphSetID
                      )
 {
     return    LookupGlyphID (nGlyph, nOutGlyphID, nOutGlyphSetID)
-           || AddGlyphID    (nGlyph, nUnicode, nOutGlyphID, nOutGlyphSetID);
+           || AddGlyphID    (nGlyph, nOutGlyphID, nOutGlyphSetID);
 }
 
 bool
@@ -102,17 +101,6 @@ GlyphSet::LookupGlyphID (
     return false;
 }
 
-unsigned char
-GlyphSet::GetSymbolMapping (sal_Unicode nUnicodeChar)
-{
-    if (0x0000 < nUnicodeChar && nUnicodeChar < 0x0100)
-        return (unsigned char)nUnicodeChar;
-    if (0xf000 < nUnicodeChar && nUnicodeChar < 0xf100)
-        return (unsigned char)nUnicodeChar;
-
-    return 0;
-}
-
 void
 GlyphSet::AddNotdef (glyph_map_t &rGlyphMap)
 {
@@ -123,17 +111,10 @@ GlyphSet::AddNotdef (glyph_map_t &rGlyphMap)
 bool
 GlyphSet::AddGlyphID (
                      sal_GlyphId nGlyph,
-                     sal_Unicode nUnicode,
                      unsigned char* nOutGlyphID,
                      sal_Int32* nOutGlyphSetID
                      )
 {
-    unsigned char nMappedChar = 0;
-
-    // XXX important: avoid to reencode type1 symbol fonts
-    if (mnBaseEncoding == RTL_TEXTENCODING_SYMBOL)
-        nMappedChar = GetSymbolMapping (nUnicode);
-
     // create an empty glyphmap that is reserved for unencoded symbol glyphs,
     // and a second map that takes any other
     if (maGlyphList.empty())
@@ -144,35 +125,20 @@ GlyphSet::AddGlyphID (
         maGlyphList.push_back (aMapp);
     }
     // if the last map is full, create a new one
-    if ((!nMappedChar) && (maGlyphList.back().size() == 255))
+    if (maGlyphList.back().size() == 255)
     {
         glyph_map_t aMap;
         maGlyphList.push_back (aMap);
     }
 
-    // insert a new glyph in the font subset
-    if (nMappedChar)
-    {
-        // always put symbol glyphs into the first map, map them on itself
-        glyph_map_t& aGlyphSet = maGlyphList.front();
-        AddNotdef (aGlyphSet);
+    glyph_map_t& aGlyphSet = maGlyphList.back();
+    AddNotdef (aGlyphSet);
 
-        aGlyphSet [nGlyph] = nMappedChar;
-        *nOutGlyphSetID    = 1;
-        *nOutGlyphID       = nMappedChar;
-    }
-    else
-    {
-        // other glyphs are just appended to the list
-        glyph_map_t& aGlyphSet = maGlyphList.back();
-        AddNotdef (aGlyphSet);
+    int nSize         = aGlyphSet.size();
 
-        int nSize         = aGlyphSet.size();
-
-        aGlyphSet [nGlyph] = nSize;
-        *nOutGlyphSetID   = maGlyphList.size();
-        *nOutGlyphID      = aGlyphSet [nGlyph];
-    }
+    aGlyphSet [nGlyph] = nSize;
+    *nOutGlyphSetID   = maGlyphList.size();
+    *nOutGlyphID      = aGlyphSet [nGlyph];
 
     return true;
 }
@@ -211,76 +177,26 @@ GlyphSet::GetReencodedFontName (rtl_TextEncoding nEnc, const OString &rFontName)
     }
 }
 
-void GlyphSet::DrawGlyphs(
-                          PrinterGfx& rGfx,
-                          const Point& rPoint,
-                          const sal_GlyphId* pGlyphIds,
-                          const sal_Unicode* pUnicodes,
-                          sal_Int16 nLen,
-                          const sal_Int32* pDeltaArray)
+void GlyphSet::DrawGlyph(PrinterGfx& rGfx,
+                         const Point& rPoint,
+                         const sal_GlyphId nGlyphId,
+                         const sal_Int32 nDelta)
 {
-    unsigned char *pGlyphID    = static_cast<unsigned char*>(alloca (nLen * sizeof(unsigned char)));
-    sal_Int32 *pGlyphSetID = static_cast<sal_Int32*>(alloca (nLen * sizeof(sal_Int32)));
-    std::set< sal_Int32 > aGlyphSet;
+    unsigned char nGlyphID;
+    sal_Int32 nGlyphSetID;
 
-    // convert unicode to font glyph id and font subset
-    for (int nChar = 0; nChar < nLen; nChar++)
-    {
-        GetGlyphID (pGlyphIds[nChar], pUnicodes[nChar], pGlyphID + nChar, pGlyphSetID + nChar);
-        aGlyphSet.insert (pGlyphSetID[nChar]);
-    }
+    // convert to font glyph id and font subset
+    GetGlyphID (nGlyphId, &nGlyphID, &nGlyphSetID);
 
-    // loop over all glyph sets to detect substrings that can be shown together
-    // without changing the postscript font
-    sal_Int32 *pDeltaSubset = static_cast<sal_Int32*>(alloca (nLen * sizeof(sal_Int32)));
-    unsigned char *pGlyphSubset = static_cast<unsigned char*>(alloca (nLen * sizeof(unsigned char)));
+    // show the text using the PrinterGfx text api
+    Point aPoint = rPoint;
+    aPoint.Move (nDelta, 0);
 
-    std::set< sal_Int32 >::iterator aSet;
-    for (aSet = aGlyphSet.begin(); aSet != aGlyphSet.end(); ++aSet)
-    {
-        Point     aPoint  = rPoint;
-        sal_Int32 nOffset = 0;
-        sal_Int32 nGlyphs = 0;
-        sal_Int32 nChar;
+    OString aGlyphSetName = GetGlyphSetName(nGlyphSetID);
 
-        // get offset to first glyph
-        for (nChar = 0; (nChar < nLen) && (pGlyphSetID[nChar] != *aSet); nChar++)
-        {
-            nOffset = pDeltaArray [nChar];
-        }
-
-        // loop over all chars to extract those that share the current glyph set
-        for (nChar = 0; nChar < nLen; nChar++)
-        {
-            if (pGlyphSetID[nChar] == *aSet)
-            {
-                pGlyphSubset [nGlyphs] = pGlyphID [nChar];
-                // the offset to the next glyph is determined by the glyph in
-                // front of the next glyph with the same glyphset id
-                // most often, this will be the current glyph
-                while ((nChar + 1) < nLen)
-                {
-                    if (pGlyphSetID[nChar + 1] == *aSet)
-                        break;
-                    else
-                        nChar += 1;
-                }
-                pDeltaSubset [nGlyphs] = pDeltaArray[nChar] - nOffset;
-
-                nGlyphs += 1;
-            }
-        }
-
-        // show the text using the PrinterGfx text api
-        aPoint.Move (nOffset, 0);
-
-        OString aGlyphSetName;
-        aGlyphSetName = GetGlyphSetName(*aSet);
-
-        rGfx.PSSetFont  (aGlyphSetName, RTL_TEXTENCODING_DONTKNOW);
-        rGfx.PSMoveTo   (aPoint);
-        rGfx.PSShowText (pGlyphSubset, nGlyphs, nGlyphs, nGlyphs > 1 ? pDeltaSubset : nullptr);
-    }
+    rGfx.PSSetFont  (aGlyphSetName, RTL_TEXTENCODING_DONTKNOW);
+    rGfx.PSMoveTo   (rPoint);
+    rGfx.PSShowGlyph(nGlyphID);
 }
 
 struct EncEntry

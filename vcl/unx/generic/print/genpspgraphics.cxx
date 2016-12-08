@@ -596,10 +596,8 @@ void GenPspGraphics::DrawTextLayout(const CommonSalLayout& rLayout)
     int nStart = 0;
     while (rLayout.GetNextGlyphs(1, &pGlyph, aPos, nStart))
     {
-        sal_GlyphId aGlyphId = pGlyph->maGlyphId & (GF_IDXMASK | GF_ROTMASK);
         sal_Int32 nAdvance = pGlyph->mnNewWidth / rLayout.GetUnitsPerPixel();
-        sal_Unicode nUnicode = 0;
-        m_pPrinterGfx->DrawGlyphs(aPos, &aGlyphId, &nUnicode, 1, &nAdvance);
+        m_pPrinterGfx->DrawGlyph(aPos, *pGlyph, nAdvance);
     }
 }
 
