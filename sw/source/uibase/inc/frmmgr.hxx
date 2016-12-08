@@ -56,7 +56,7 @@ class SW_DLLPUBLIC SwFlyFrameAttrMgr
     bool    m_bAbsPos,
                 m_bNewFrame;
     bool    m_bIsInVertical;
-    // --> OD 2009-09-01 #mongolianlayout#
+    // #mongolianlayout#
     bool    m_bIsInVerticalL2R;
 
     // internal calculation for borders

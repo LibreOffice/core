@@ -47,7 +47,7 @@ class SwParagraphNumTabPage : public SfxTabPage
     VclPtr<VclHBox>                 m_pRestartBX;
     VclPtr<NumericField>            m_pRestartNF;
 
-    // --> OD 2008-04-14 #outlinelevel#
+    // #outlinelevel#
     const OUString msOutlineNumbering;
 
     bool                    bModified : 1;

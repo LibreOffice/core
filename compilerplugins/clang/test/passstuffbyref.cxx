@@ -12,7 +12,7 @@
 struct S {
     OUString mv;
 
-    // request from vmiklos: make sure we ignore cases where the passed in parameter is std::move'd
+    // make sure we ignore cases where the passed in parameter is std::move'd
     S(OUString v)
       : mv(std::move(v)) {}
 };

@@ -260,7 +260,7 @@ void SwFlyFrameAttrMgr::ValidateMetrics( SvxSwFrameValidation& rVal,
     if (bOnlyPercentRefValue)
         return;
 
-    // --> OD 2009-09-01 #mongolianlayout#
+    // #mongolianlayout#
     if ( m_bIsInVertical || m_bIsInVerticalL2R )
     {
         Point aPos(aBoundRect.Pos());
@@ -458,7 +458,7 @@ void SwFlyFrameAttrMgr::ValidateMetrics( SvxSwFrameValidation& rVal,
             rVal.nMaxVPos = -aBoundRect.Height();
         }
     }
-    // --> OD 2009-09-01 #mongolianlayout#
+    // #mongolianlayout#
     if ( m_bIsInVertical || m_bIsInVerticalL2R )
     {
         //restore width/height exchange
