@@ -2718,10 +2718,11 @@ void ChartView::impl_updateView( bool bCheckLockedCtrler )
 
             //create chart view
             {
+#if HAVE_FEATURE_OPENGL
                 OpenGLWindow* pWindow = mrChartModel.getOpenGLWindow();
                 if (pWindow && ChartHelper::isGL3DDiagram(mrChartModel.getFirstDiagram()))
                     pWindow->Initialize();
-
+#endif
                 m_bViewDirty = false;
                 m_bViewUpdatePending = false;
                 createShapes();
