@@ -384,7 +384,7 @@ bool AquaSalGraphics::AddTempDevFont( PhysicalFontCollection*,
 
 bool AquaSalGraphics::GetGlyphOutline(const GlyphItem& rGlyph, basegfx::B2DPolyPolygon& rPolyPoly)
 {
-    const int nFallbackLevel = rGlyph.maGlyphId >> GF_FONTSHIFT;
+    const int nFallbackLevel = rGlyph.mnFallbackLevel;
     if (nFallbackLevel < MAX_FALLBACK && mpTextStyle[nFallbackLevel])
     {
         const bool bRC = mpTextStyle[nFallbackLevel]->GetGlyphOutline(rGlyph, rPolyPoly);
@@ -395,7 +395,7 @@ bool AquaSalGraphics::GetGlyphOutline(const GlyphItem& rGlyph, basegfx::B2DPolyP
 
 bool AquaSalGraphics::GetGlyphBoundRect(const GlyphItem& rGlyph, Rectangle& rRect )
 {
-    const int nFallbackLevel = rGlyph.maGlyphId >> GF_FONTSHIFT;
+    const int nFallbackLevel = rGlyph.mnFallbackLevel;
     if (nFallbackLevel < MAX_FALLBACK && mpTextStyle[nFallbackLevel])
     {
         const bool bRC = mpTextStyle[nFallbackLevel]->GetGlyphBoundRect(rGlyph, rRect);
