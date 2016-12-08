@@ -204,6 +204,8 @@ private:
     void WriteFootnoteSettings();
     void WriteMainText();
     void WriteInfo();
+    /// Writes a single user property value.
+    void WriteUserPropValue(const OUString& rValue);
     /// Writes the userprops group: user defined document properties.
     void WriteUserProps();
     /// Writes the writer-specific \pgdsctbl group.
