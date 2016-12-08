@@ -449,6 +449,20 @@ void SvpSalInstance::AddToRecentDocumentList(const OUString&, const OUString&, c
 }
 
 //obviously doesn't actually do anything, its just a nonfunctional stub
+
+#ifdef LIBO_HEADLESS
+
+class SvpOpenGLContext
+{
+};
+
+OpenGLContext* SvpSalInstance::CreateOpenGLContext()
+{
+    return nullptr;
+}
+
+#else
+
 class SvpOpenGLContext : public OpenGLContext
 {
     GLWindow m_aGLWin;
@@ -461,6 +475,8 @@ OpenGLContext* SvpSalInstance::CreateOpenGLContext()
 {
     return new SvpOpenGLContext;
 }
+
+#endif
 
 SvpSalTimer::~SvpSalTimer()
 {
