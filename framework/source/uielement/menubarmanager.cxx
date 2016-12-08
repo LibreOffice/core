@@ -222,6 +222,9 @@ MenuBarManager::~MenuBarManager()
     m_aAsyncSettingsTimer.Stop();
 
     SAL_WARN_IF( OWeakObject::m_refCount != 0, "fwk.uielement", "Who wants to delete an object with refcount > 0!" );
+
+    SolarMutexGuard aGuard;
+    m_pVCLMenu.clear();
 }
 
 void MenuBarManager::Destroy()

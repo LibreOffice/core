@@ -30,6 +30,7 @@ $(eval $(call gb_Executable_use_libraries,pdf2xml,\
     unotest \
     cppuhelper \
     sal \
+    tl \
 ))
 
 $(eval $(call gb_Executable_use_library_objects,pdf2xml,pdfimport))

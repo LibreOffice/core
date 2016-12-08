@@ -1672,6 +1672,7 @@ void LoadEnv::impl_applyPersistentWindowState(const css::uno::Reference< css::aw
     WorkWindow* pWorkWindow = static_cast<WorkWindow*>(pWindow.get());
     if (pWorkWindow->IsMinimized())
         return;
+    pWindow.clear(); // must be cleared under SolarMutex
 
     aSolarGuard1.clear();
     // <- SOLAR SAFE

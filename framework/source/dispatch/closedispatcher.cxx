@@ -71,6 +71,7 @@ CloseDispatcher::CloseDispatcher(const css::uno::Reference< css::uno::XComponent
     uno::Reference<awt::XWindow> xWindow = xTarget->getContainerWindow();
     if (xWindow.is())
     {
+        SolarMutexGuard g;
         VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow(xWindow);
         if (pWindow->IsSystemWindow())
             m_pSysWindow = dynamic_cast<SystemWindow*>(pWindow.get());

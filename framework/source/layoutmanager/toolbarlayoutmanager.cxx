@@ -2554,6 +2554,7 @@ void ToolbarLayoutManager::implts_calcWindowPosSizeOnSingleRowColumn(
             nCurrPos += ( aWinRect.Y - nCurrPos ) + aWinRect.Height;
         }
     }
+    pDockAreaWindow.clear(); // must be cleared under SolarMutex
 }
 
 void ToolbarLayoutManager::implts_setLayoutDirty()

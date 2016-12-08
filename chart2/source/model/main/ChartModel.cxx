@@ -35,6 +35,7 @@
 #include <svx/charthelper.hxx>
 
 #include <vcl/openglwin.hxx>
+#include <vcl/svapp.hxx>
 
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 
@@ -1425,6 +1426,7 @@ void ChartModel::setWindow( const sal_uInt64 nWindowPtr )
     throw (uno::RuntimeException, std::exception)
 {
     OpenGLWindow* pWindow = reinterpret_cast<OpenGLWindow*>(nWindowPtr);
+    SolarMutexGuard aGuard;
     mpOpenGLWindow = pWindow;
 }
 
