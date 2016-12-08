@@ -5518,12 +5518,12 @@ bool ScGridWindow::ContinueOnlineSpelling()
     SCROW nRow;
     ScRefCellValue* pCell = aIter.GetNext(nCol, nRow);
     SCROW nEndRow = 0;
-    bool bHidden = pDoc->RowHidden(nRow, nTab, nullptr, &nEndRow);
+    bool bHidden = pCell && pDoc->RowHidden(nRow, nTab, nullptr, &nEndRow);
     bool bSkip = pCell && (nRow < mpSpellCheckCxt->maPos.mnRow || bHidden);
     while (bSkip)
     {
         pCell = aIter.GetNext(nCol, nRow);
-        if (nRow > nEndRow)
+        if (pCell && nRow > nEndRow)
         {
             bHidden = pDoc->RowHidden(nRow, nTab, nullptr, &nEndRow);
         }
@@ -5531,12 +5531,12 @@ bool ScGridWindow::ContinueOnlineSpelling()
     }
 
     SCCOL nEndCol = 0;
-    bHidden = pDoc->ColHidden(nCol, nTab, nullptr, &nEndCol);
+    bHidden = pCell && pDoc->ColHidden(nCol, nTab, nullptr, &nEndCol);
     bSkip = pCell && (nCol < mpSpellCheckCxt->maPos.mnCol || bHidden);
     while (bSkip)
     {
         pCell = aIter.GetNext(nCol, nRow);
-        if (nCol > nEndCol)
+        if (pCell && nCol > nEndCol)
         {
             bHidden = pDoc->ColHidden(nCol, nTab, nullptr, &nEndCol);
         }
