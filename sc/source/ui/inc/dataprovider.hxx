@@ -13,9 +13,12 @@
 #include <salhelper/thread.hxx>
 #include <tools/stream.hxx>
 #include <rtl/ustring.hxx>
+#include <rtl/ref.hxx>
 #include <address.hxx>
 #include <osl/mutex.hxx>
 #include <osl/conditn.hxx>
+#include <vcl/timer.hxx>
+
 #include <queue>
 
 #include "officecfg/Office/Calc.hxx"
@@ -68,7 +71,7 @@ class CSVFetchThread : public salhelper::Thread
     virtual void execute() override;
 
 public:
-    CSVFetchThread(SvStream*);
+    CSVFetchThread(SvStream*, size_t);
     virtual ~CSVFetchThread() override;
 
     void RequestTerminate();
@@ -80,43 +83,40 @@ public:
 
 class DataProvider
 {
+public:
     virtual ~DataProvider() = 0;
 
+private:
     virtual void StartImport() = 0;
     virtual void StopImport() = 0;
     virtual void Refresh() = 0;
-    virtual void SetUrl(OUString) = 0;
-    virtual void SetRefreshRate(double) = 0;
 
     virtual ScRange GetRange() const = 0;
     virtual const OUString& GetURL() const = 0;
-
-protected:
-    virtual void DecodeURL() = 0;
 };
 
 class CSVDataProvider : public DataProvider
 {
     OUString maURL;
-    double mnRefreshRate;
+    ScRange mrRange;
+    Timer maImportTimer;
+    rtl::Reference<CSVFetchThread> mxCSVFetchThread;
 
     bool mbImportUnderway;
 
 public:
-    CSVDataProvider (OUString& rUrl);
+    CSVDataProvider (const OUString& rUrl, const ScRange& rRange);
     virtual ~CSVDataProvider() override;
 
     virtual void StartImport() override;
     virtual void StopImport() override;
     virtual void Refresh() override;
-    virtual void SetUrl(OUString) override;
-    virtual void SetRefreshRate(double mnRefreshRate) override;
 
-    ScRange GetRange() const override;
+    ScRange GetRange() const override
+    {
+        return mrRange;
+    }
     const OUString& GetURL() const override { return maURL; }
-
-private:
-    virtual void DecodeURL() override;
 };
 
 }
