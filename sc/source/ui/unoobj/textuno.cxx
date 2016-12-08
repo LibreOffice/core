@@ -674,7 +674,7 @@ ScHeaderFooterTextCursor::ScHeaderFooterTextCursor(rtl::Reference<ScHeaderFooter
     rTextObj( rText )
 {}
 
-ScHeaderFooterTextCursor::~ScHeaderFooterTextCursor() throw() = default;
+ScHeaderFooterTextCursor::~ScHeaderFooterTextCursor() throw() {};
 
 // SvxUnoTextCursor methods reimplemented here to return the right objects:
 
