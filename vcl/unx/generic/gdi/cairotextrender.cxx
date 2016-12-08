@@ -178,7 +178,7 @@ void CairoTextRender::DrawTextLayout(const CommonSalLayout& rLayout)
     while (rLayout.GetNextGlyphs(1, &pGlyph, aPos, nStart))
     {
         cairo_glyph_t aGlyph;
-        aGlyph.index = pGlyph->maGlyphId & GF_IDXMASK;
+        aGlyph.index = pGlyph->maGlyphId;
         aGlyph.x = aPos.X();
         aGlyph.y = aPos.Y();
         cairo_glyphs.push_back(aGlyph);
