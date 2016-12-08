@@ -103,8 +103,6 @@ public:
     explicit ImpFilterOutputStream( SvStream& rStm ) : mrStm( rStm ) {}
 };
 
-#ifndef DISABLE_EXPORT
-
 static bool DirEntryExists( const INetURLObject& rObj )
 {
     bool bExists = false;
@@ -152,8 +150,6 @@ static void KillDirEntry( const OUString& rMainUrl )
         SAL_WARN( "vcl.filter", "Any other exception" );
     }
 }
-
-#endif // !DISABLE_EXPORT
 
 // Helper functions
 
@@ -821,8 +817,6 @@ sal_uInt16 GraphicFilter::ImpTestOrFindFormat( const OUString& rPath, SvStream& 
     return GRFILTER_OK;
 }
 
-#ifndef DISABLE_EXPORT
-
 static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, FilterConfigItem& rConfigItem )
 {
     Graphic     aGraphic;
@@ -918,8 +912,6 @@ static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, FilterConfigItem& r
 
     return aGraphic;
 }
-
-#endif
 
 static OUString ImpCreateFullFilterPath( const OUString& rPath, const OUString& rFilterName )
 {
@@ -1797,14 +1789,6 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
 sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const INetURLObject& rPath,
     sal_uInt16 nFormat, const css::uno::Sequence< css::beans::PropertyValue >* pFilterData )
 {
-#ifdef DISABLE_EXPORT
-    (void) rGraphic;
-    (void) rPath;
-    (void) nFormat;
-    (void) pFilterData;
-
-    return GRFILTER_FORMATERROR;
-#else
     SAL_INFO( "vcl.filter", "GraphicFilter::ExportGraphic() (thb)" );
     sal_uInt16  nRetValue = GRFILTER_FORMATERROR;
     SAL_WARN_IF( rPath.GetProtocol() == INetProtocol::NotValid, "vcl", "GraphicFilter::ExportGraphic() : ProtType == INetProtocol::NotValid" );
@@ -1821,12 +1805,9 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const INetURLO
             KillDirEntry( aMainUrl );
     }
     return nRetValue;
-#endif
 }
 
 #ifdef DISABLE_DYNLOADING
-
-#ifndef DISABLE_EXPORT
 
 extern "C" bool egiGraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem );
 extern "C" bool epsGraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem );
@@ -1834,22 +1815,9 @@ extern "C" bool etiGraphicExport( SvStream& rStream, Graphic& rGraphic, FilterCo
 
 #endif
 
-#endif
-
 sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString& rPath,
     SvStream& rOStm, sal_uInt16 nFormat, const css::uno::Sequence< css::beans::PropertyValue >* pFilterData )
 {
-#ifdef DISABLE_EXPORT
-    (void) rGraphic;
-    (void) rPath;
-    (void) rOStm;
-    (void) nFormat;
-    (void) pFilterData;
-
-    (void) nExpGraphHint;
-
-    return GRFILTER_FORMATERROR;
-#else
     SAL_INFO( "vcl.filter", "GraphicFilter::ExportGraphic() (thb)" );
     sal_uInt16 nFormatCount = GetExportFormatCount();
 
@@ -2150,7 +2118,6 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString
         ImplSetError( nStatus, &rOStm );
     }
     return nStatus;
-#endif
 }
 
 
@@ -2194,14 +2161,13 @@ IMPL_LINK( GraphicFilter, FilterCallback, ConvertData&, rData, bool )
         nFormat = GetImportFormatNumberForShortName( OStringToOUString( aShortName, RTL_TEXTENCODING_UTF8) );
         bRet = ImportGraphic( rData.maGraphic, OUString(), rData.mrStm, nFormat ) == 0;
     }
-#ifndef DISABLE_EXPORT
     else if( !aShortName.isEmpty() )
     {
         // Export
         nFormat = GetExportFormatNumberForShortName( OStringToOUString(aShortName, RTL_TEXTENCODING_UTF8) );
         bRet = ExportGraphic( rData.maGraphic, OUString(), rData.mrStm, nFormat ) == 0;
     }
-#endif
+
     return bRet;
 }
 

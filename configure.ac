@@ -967,13 +967,6 @@ libo_FUZZ_ARG_ENABLE(extension-integration,
          product. Use this switch to disable the integration.])
 )
 
-libo_FUZZ_ARG_ENABLE(export,
-    AS_HELP_STRING([--disable-export],
-        [Disable (some) code for document export. Useful when building viewer-only apps that lack
-         save/export functionality, to avoid having an excessive amount of code and data used
-         only for exporrt linked in. Work in progress, use only if you are hacking on it.])
-)
-
 AC_ARG_ENABLE(avmedia,
     AS_HELP_STRING([--disable-avmedia],
         [Disable displaying and inserting AV media in documents. Work in progress, use only if you are hacking on it.])
@@ -2463,15 +2456,6 @@ if test $_os != iOS -a $_os != Android; then
     AC_DEFINE(HAVE_FEATURE_DESKTOP)
     AC_DEFINE(HAVE_FEATURE_MULTIUSER_ENVIRONMENT)
 fi
-
-DISABLE_EXPORT=''
-if test "$enable_export" != no; then
-    BUILD_TYPE="$BUILD_TYPE EXPORT"
-else
-    DISABLE_EXPORT='TRUE'
-    SCPDEFS="$SCPDES -DDISABLE_EXPORT"
-fi
-AC_SUBST(DISABLE_EXPORT)
 
 # Whether to build "avmedia" functionality or not.
 

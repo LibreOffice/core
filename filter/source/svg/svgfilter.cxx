@@ -103,7 +103,6 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
 
     if( mxDstDoc.is() )
         bRet = implImport( rDescriptor );
-#ifndef DISABLE_EXPORT
     else if( mxSrcDoc.is() )
     {
         // #i124608# detect selection
@@ -274,7 +273,6 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
             bRet = implExport( rDescriptor );
         }
     }
-#endif
     else
         bRet = false;
 

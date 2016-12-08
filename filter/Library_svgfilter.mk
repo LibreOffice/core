@@ -70,10 +70,9 @@ $(eval $(call gb_Library_add_exception_objects,svgfilter,\
 	filter/source/svg/svgreader \
 	filter/source/svg/tokenmap \
 	filter/source/svg/units \
-	$(if $(filter EXPORT,$(BUILD_TYPE)), \
-		filter/source/svg/svgexport \
-		filter/source/svg/svgfontexport \
-		filter/source/svg/svgwriter) \
+	filter/source/svg/svgexport \
+	filter/source/svg/svgfontexport \
+	filter/source/svg/svgwriter \
 ))
 
 # vim: set noet sw=4 ts=4:
