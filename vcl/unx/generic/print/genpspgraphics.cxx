@@ -760,9 +760,9 @@ void GenPspGraphics::GetFontMetric(ImplFontMetricDataRef& rxFontMetric, int nFal
         m_pFreetypeFont[nFallbackLevel]->GetFontMetric(rxFontMetric);
 }
 
-bool GenPspGraphics::GetGlyphBoundRect( sal_GlyphId aGlyphId, Rectangle& rRect )
+bool GenPspGraphics::GetGlyphBoundRect(const GlyphItem& rGlyph, Rectangle& rRect)
 {
-    const int nLevel = aGlyphId >> GF_FONTSHIFT;
+    const int nLevel = rGlyph.maGlyphId >> GF_FONTSHIFT;
     if( nLevel >= MAX_FALLBACK )
         return false;
 
@@ -770,16 +770,15 @@ bool GenPspGraphics::GetGlyphBoundRect( sal_GlyphId aGlyphId, Rectangle& rRect )
     if( !pSF )
         return false;
 
-    aGlyphId &= GF_IDXMASK;
-    const GlyphMetric& rGM = pSF->GetGlyphMetric( aGlyphId );
+    const GlyphMetric& rGM = pSF->GetGlyphMetric(rGlyph);
     rRect = Rectangle( rGM.GetOffset(), rGM.GetSize() );
     return true;
 }
 
-bool GenPspGraphics::GetGlyphOutline( sal_GlyphId aGlyphId,
+bool GenPspGraphics::GetGlyphOutline(const GlyphItem& rGlyph,
     basegfx::B2DPolyPolygon& rB2DPolyPoly )
 {
-    const int nLevel = aGlyphId >> GF_FONTSHIFT;
+    const int nLevel = rGlyph.maGlyphId >> GF_FONTSHIFT;
     if( nLevel >= MAX_FALLBACK )
         return false;
 
@@ -787,8 +786,7 @@ bool GenPspGraphics::GetGlyphOutline( sal_GlyphId aGlyphId,
     if( !pSF )
         return false;
 
-    aGlyphId &= GF_IDXMASK;
-    if( pSF->GetGlyphOutline( aGlyphId, rB2DPolyPoly ) )
+    if (pSF->GetGlyphOutline(rGlyph, rB2DPolyPoly))
         return true;
 
     return false;

@@ -91,14 +91,14 @@ void SvpSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFont,
     m_aTextRenderImpl.GetGlyphWidths(pFont, bVertical, rWidths, rUnicodeEnc);
 }
 
-bool SvpSalGraphics::GetGlyphBoundRect( sal_GlyphId aGlyphId, Rectangle& rRect )
+bool SvpSalGraphics::GetGlyphBoundRect(const GlyphItem& rGlyph, Rectangle& rRect)
 {
-    return m_aTextRenderImpl.GetGlyphBoundRect(aGlyphId, rRect);
+    return m_aTextRenderImpl.GetGlyphBoundRect(rGlyph, rRect);
 }
 
-bool SvpSalGraphics::GetGlyphOutline( sal_GlyphId aGlyphId, basegfx::B2DPolyPolygon& rPolyPoly )
+bool SvpSalGraphics::GetGlyphOutline(const GlyphItem& rGlyph, basegfx::B2DPolyPolygon& rPolyPoly)
 {
-    return m_aTextRenderImpl.GetGlyphOutline(aGlyphId, rPolyPoly);
+    return m_aTextRenderImpl.GetGlyphOutline(rGlyph, rPolyPoly);
 }
 
 SalLayout* SvpSalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLevel )
