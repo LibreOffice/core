@@ -135,6 +135,7 @@ certain functionality.
 @li @c fwk.desktop
 @li @c fwk.dispatch
 @li @c fwk.session
+@li @c fwk.session.debug
 
 @section i18nlangtag
 
@@ -277,8 +278,11 @@ certain functionality.
 @li @c vcl.kde4 - KDE4
 @li @c vcl.layout - Widget layout
 @li @c vcl.scrollbar - Scroll Bars
-@li @c vcl.sm - Session Manager
 @li @c vcl.window
+@li @c vcl.se - VCL Session Manager
+@li @c vcl.se.debug
+@li @c vcl.sm - Session Manager Client
+@li @c vcl.sm.debug
 @li @c vcl.unity
 @li @c vcl.virdev
 
