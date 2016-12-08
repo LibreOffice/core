@@ -63,6 +63,7 @@
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/table/XTableRows.hpp>
+#include <com/sun/star/style/NumberingType.hpp>
 
 #include <stlpool.hxx>
 #include <comphelper/processfactory.hxx>
@@ -132,6 +133,7 @@ public:
     void testTdf104015();
     void testTdf104201();
     void testTdf103477();
+    void testTdf104445();
 
     CPPUNIT_TEST_SUITE(SdImportTest);
 
@@ -189,6 +191,7 @@ public:
     CPPUNIT_TEST(testTdf104015);
     CPPUNIT_TEST(testTdf104201);
     CPPUNIT_TEST(testTdf103477);
+    CPPUNIT_TEST(testTdf104445);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -1635,6 +1638,56 @@ void SdImportTest::testTdf103477()
     CPPUNIT_ASSERT(pNumFmt);
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Bullet's color is wrong!", sal_uInt32(0x000000), pNumFmt->GetNumRule()->GetLevel(1).GetBulletColor().GetColor());
 
+    xDocShRef->DoClose();
+}
+
+void SdImportTest::testTdf104445()
+{
+    // Extra bullets were added to the first shape
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf104445.pptx"), PPTX);
+
+    // First shape should not have bullet
+   {
+        uno::Reference< beans::XPropertySet > xShape(getShapeFromPage(0, 0, xDocShRef));
+        uno::Reference< text::XText > xText = uno::Reference< text::XTextRange>(xShape, uno::UNO_QUERY)->getText();
+        CPPUNIT_ASSERT_MESSAGE("Not a text shape", xText.is());
+        uno::Reference< beans::XPropertySet > xPropSet(xText, uno::UNO_QUERY_THROW);
+
+        uno::Reference< container::XIndexAccess > xNumRule;
+        xPropSet->getPropertyValue("NumberingRules") >>= xNumRule;
+        uno::Sequence<beans::PropertyValue> aBulletProps;
+        xNumRule->getByIndex(0) >>= aBulletProps;
+
+        for (int i = 0; i < aBulletProps.getLength(); ++i)
+        {
+            const beans::PropertyValue& rProp = aBulletProps[i];
+            if(rProp.Name == "NumberingType")
+                CPPUNIT_ASSERT_EQUAL(sal_Int16(style::NumberingType::NUMBER_NONE), rProp.Value.get<sal_Int16>());
+            if(rProp.Name == "LeftMargin")
+                CPPUNIT_ASSERT_EQUAL(sal_Int32(0), rProp.Value.get<sal_Int32>());
+        }
+    }
+    // Second shape should have bullet set
+    {
+        uno::Reference< beans::XPropertySet > xShape(getShapeFromPage(1, 0, xDocShRef));
+        uno::Reference< text::XText > xText = uno::Reference< text::XTextRange>(xShape, uno::UNO_QUERY)->getText();
+        CPPUNIT_ASSERT_MESSAGE("Not a text shape", xText.is());
+        uno::Reference< beans::XPropertySet > xPropSet(xText, uno::UNO_QUERY_THROW);
+
+        uno::Reference< container::XIndexAccess > xNumRule;
+        xPropSet->getPropertyValue("NumberingRules") >>= xNumRule;
+        uno::Sequence<beans::PropertyValue> aBulletProps;
+        xNumRule->getByIndex(0) >>= aBulletProps;
+
+        for(int i = 0; i < aBulletProps.getLength(); ++i)
+        {
+            const beans::PropertyValue& rProp = aBulletProps[i];
+            if(rProp.Name == "NumberingType")
+                CPPUNIT_ASSERT_EQUAL(sal_Int16(style::NumberingType::CHAR_SPECIAL), rProp.Value.get<sal_Int16>());
+            if(rProp.Name == "LeftMargin")
+                CPPUNIT_ASSERT_EQUAL(sal_Int32(635), rProp.Value.get<sal_Int32>());
+        }
+    }
     xDocShRef->DoClose();
 }
 
