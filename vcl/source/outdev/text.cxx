@@ -2397,7 +2397,7 @@ SystemTextLayoutData OutputDevice::GetSysTextLayoutData(const Point& rStartPt, c
         aSystemGlyph.index = static_cast<unsigned long> (pGlyph->maGlyphId & GF_IDXMASK);
         aSystemGlyph.x = aPos.X();
         aSystemGlyph.y = aPos.Y();
-        int nLevel = (pGlyph->maGlyphId & GF_FONTMASK) >> GF_FONTSHIFT;
+        int nLevel = pGlyph->mnFallbackLevel;
         aSystemGlyph.fallbacklevel = nLevel < MAX_FALLBACK ? nLevel : 0;
         aSysLayoutData.rGlyphData.push_back(aSystemGlyph);
     }
