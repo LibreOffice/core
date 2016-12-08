@@ -94,15 +94,15 @@ class CachedContentResultSet
             throw( css::sdbc::SQLException,
             css::uno::RuntimeException );
 
-        const OUString& SAL_CALL
+        OUString SAL_CALL
         getContentIdentifierString( sal_Int32 nRow )
             throw( css::uno::RuntimeException );
 
-        const css::uno::Reference< css::ucb::XContentIdentifier >& SAL_CALL
+        css::uno::Reference< css::ucb::XContentIdentifier > SAL_CALL
         getContentIdentifier( sal_Int32 nRow )
             throw( css::uno::RuntimeException );
 
-        const css::uno::Reference< css::ucb::XContent >& SAL_CALL
+        css::uno::Reference< css::ucb::XContent > SAL_CALL
         getContent( sal_Int32 nRow )
             throw( css::uno::RuntimeException );
     };
