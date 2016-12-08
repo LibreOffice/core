@@ -627,10 +627,10 @@ void FreetypeFont::GetFontMetric(ImplFontMetricDataRef& rxTo) const
 
 }
 
-void FreetypeFont::ApplyGlyphTransform( int nGlyphFlags, FT_Glyph pGlyphFT ) const
+void FreetypeFont::ApplyGlyphTransform(bool bVertical, FT_Glyph pGlyphFT ) const
 {
     // shortcut most common case
-    if (!GetFontSelData().mnOrientation && !nGlyphFlags)
+    if (!GetFontSelData().mnOrientation && !bVertical)
         return;
 
     const FT_Size_Metrics& rMetrics = maFaceFT->size->metrics;
@@ -639,17 +639,19 @@ void FreetypeFont::ApplyGlyphTransform( int nGlyphFlags, FT_Glyph pGlyphFT ) con
 
     bool bStretched = false;
 
-    switch( nGlyphFlags & GF_ROTMASK )
+    if (!bVertical)
     {
-    default:    // straight
+        // straight
         aVector.x = 0;
         aVector.y = 0;
         aMatrix.xx = +mnCos;
         aMatrix.yy = +mnCos;
         aMatrix.xy = -mnSin;
         aMatrix.yx = +mnSin;
-        break;
-    case GF_ROTL:    // left
+    }
+    else
+    {
+        // left
         bStretched = (mfStretch != 1.0);
         aVector.x  = (FT_Pos)(+rMetrics.descender * mfStretch);
         aVector.y  = -rMetrics.ascender;
@@ -657,17 +659,6 @@ void FreetypeFont::ApplyGlyphTransform( int nGlyphFlags, FT_Glyph pGlyphFT ) con
         aMatrix.yy = (FT_Pos)(-mnSin * mfStretch);
         aMatrix.xy = (FT_Pos)(-mnCos * mfStretch);
         aMatrix.yx = (FT_Pos)(+mnCos / mfStretch);
-        break;
-    case GF_ROTR:    // right
-        bStretched = (mfStretch != 1.0);
-        aVector.x = -maFaceFT->glyph->metrics.horiAdvance;
-        aVector.x += (FT_Pos)(rMetrics.descender * mnSin/65536.0);
-        aVector.y  = (FT_Pos)(-rMetrics.descender * mfStretch * mnCos/65536.0);
-        aMatrix.xx = (FT_Pos)(+mnSin / mfStretch);
-        aMatrix.yy = (FT_Pos)(+mnSin * mfStretch);
-        aMatrix.xy = (FT_Pos)(+mnCos * mfStretch);
-        aMatrix.yx = (FT_Pos)(-mnCos / mfStretch);
-        break;
     }
 
     if( pGlyphFT->format != FT_GLYPH_FORMAT_BITMAP )
@@ -694,8 +685,6 @@ void FreetypeFont::InitGlyphData(const GlyphItem& rGlyph, GlyphData& rGD ) const
 {
     FT_Activate_Size( maSizeFT );
 
-    int nGlyphFlags = rGlyph.maGlyphId & GF_FLAGMASK;;
-
     FT_Error rc = FT_Load_Glyph(maFaceFT, rGlyph.maGlyphId & GF_IDXMASK, mnLoadFlags);
 
     if( rc != FT_Err_Ok )
@@ -712,7 +701,7 @@ void FreetypeFont::InitGlyphData(const GlyphItem& rGlyph, GlyphData& rGD ) const
     FT_Glyph pGlyphFT;
     FT_Get_Glyph( maFaceFT->glyph, &pGlyphFT );
 
-    ApplyGlyphTransform( nGlyphFlags, pGlyphFT );
+    ApplyGlyphTransform(rGlyph.IsVertical(), pGlyphFT);
 
     FT_BBox aBbox;
     FT_Glyph_Get_CBox( pGlyphFT, FT_GLYPH_BBOX_PIXELS, &aBbox );
@@ -1002,8 +991,6 @@ bool FreetypeFont::GetGlyphOutline(const GlyphItem& rGlyph,
 
     rB2DPolyPoly.clear();
 
-    int nGlyphFlags = rGlyph.maGlyphId & GF_FLAGMASK;;
-
     FT_Int nLoadFlags = FT_LOAD_DEFAULT | FT_LOAD_IGNORE_TRANSFORM;
 
 #ifdef FT_LOAD_TARGET_LIGHT
@@ -1049,7 +1036,7 @@ bool FreetypeFont::GetGlyphOutline(const GlyphItem& rGlyph,
     tools::PolyPolygon aToolPolyPolygon;
     PolyArgs aPolyArg( aToolPolyPolygon, nMaxPoints );
 
-    /*int nAngle =*/ ApplyGlyphTransform( nGlyphFlags, pGlyphFT );
+    ApplyGlyphTransform(rGlyph.IsVertical(), pGlyphFT);
 
     FT_Outline_Funcs aFuncs;
     aFuncs.move_to  = &FT_move_to;
