@@ -151,4 +151,10 @@ $(eval $(call gb_Module_add_screenshot_targets,desktop,\
     CppunitTest_desktop_dialogs_test \
 ))
 
+# profile safe-mode
+$(eval $(call gb_Module_add_subsequentcheck_targets,desktop,\
+	CppunitTest_desktop_shutdown_test \
+	CppunitTest_desktop_damaged_config_test \
+))
+
 # vim: set ts=4 sw=4 et:
