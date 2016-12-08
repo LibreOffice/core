@@ -679,8 +679,6 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
         }
     }
 
-    // SW disables ComplexTextLayoutFlags::ComplexDisabled, so maybe I have to enable it...
-
     // Saving both layout mode and language (since I'm potentially changing both)
     GetRefDevice()->Push( PushFlags::TEXTLAYOUTMODE|PushFlags::TEXTLANGUAGE );
 
@@ -4255,14 +4253,14 @@ void ImpEditEngine::ImplInitLayoutMode( OutputDevice* pOutDev, sal_Int32 nPara, 
 
     if ( !bCTL && !bR2L)
     {
-        // No CTL/Bidi checking necessary
-        nLayoutMode |= ( ComplexTextLayoutFlags::ComplexDisabled | ComplexTextLayoutFlags::BiDiStrong );
+        // No Bidi checking necessary
+        nLayoutMode |= ComplexTextLayoutFlags::BiDiStrong;
     }
     else
     {
-        // CTL/Bidi checking necessary
+        // Bidi checking necessary
         // Don't use BIDI_STRONG, VCL must do some checks.
-        nLayoutMode &= ~ComplexTextLayoutFlags( ComplexTextLayoutFlags::ComplexDisabled | ComplexTextLayoutFlags::BiDiStrong );
+        nLayoutMode &= ~ComplexTextLayoutFlags( ComplexTextLayoutFlags::BiDiStrong );
 
         if ( bR2L )
             nLayoutMode |= ComplexTextLayoutFlags::BiDiRtl|ComplexTextLayoutFlags::TextOriginLeft;

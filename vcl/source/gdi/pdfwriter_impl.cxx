@@ -9416,7 +9416,7 @@ void PDFWriterImpl::drawStrikeoutChar( const Point& rPos, long nWidth, FontStrik
 
     // strikeout string is left aligned non-CTL text
     ComplexTextLayoutFlags nOrigTLM = m_pReferenceDevice->GetLayoutMode();
-    m_pReferenceDevice->SetLayoutMode( ComplexTextLayoutFlags::BiDiStrong|ComplexTextLayoutFlags::ComplexDisabled );
+    m_pReferenceDevice->SetLayoutMode(ComplexTextLayoutFlags::BiDiStrong);
 
     push( PushFlags::CLIPREGION );
     FontMetric aRefDevFontMetric = m_pReferenceDevice->GetFontMetric();
