@@ -20,6 +20,10 @@
 
 namespace sc {
 
+DataProvider::~DataProvider()
+{
+}
+
 Cell::Cell() : mfValue(0.0), mbValue(true) {}
 
 Cell::Cell(const Cell& r) : mbValue(r.mbValue)
@@ -75,9 +79,10 @@ public:
 
 #endif
 
-CSVFetchThread::CSVFetchThread(SvStream *pData):
+CSVFetchThread::CSVFetchThread(SvStream *pData, size_t nColCount):
         Thread("ReaderThread"),
         mpStream(pData),
+        mnColCount(nColCount),
         mbTerminate(false)
     {
 #if ENABLE_ORCUS
@@ -135,6 +140,52 @@ void CSVFetchThread::EmptyLineQueue( std::queue<LinesType*>& rQueue)
         delete rQueue.front();
         rQueue.pop();
     }
+}
+
+CSVDataProvider::CSVDataProvider(const OUString& rURL, const ScRange& rRange):
+    maURL(rURL),
+    mnRefreshRate(100),
+    mrRange(rRange),
+    mbImportUnderway(false)
+{
+}
+
+CSVDataProvider::~CSVDataProvider()
+{
+    if(mbImportUnderway)
+        StopImport();
+}
+
+void CSVDataProvider::StartImport()
+{
+    if (mbImportUnderway)
+    return;
+
+    if (!mxCSVFetchThread.is())
+    {
+        SvStream *pStream = nullptr;
+        pStream = new SvFileStream(maURL, StreamMode::READ);
+        mxCSVFetchThread = new CSVFetchThread(pStream, mrRange.aEnd.Col() - mrRange.aStart.Col() + 1);
+        mxCSVFetchThread->launch();
+    }
+    mbImportUnderway = true;
+
+    maImportTimer.Start();
+}
+
+void CSVDataProvider::StopImport()
+{
+    if (!mbImportUnderway)
+        return;
+
+    mbImportUnderway = false;
+    Refresh();
+    maImportTimer.Stop();
+}
+
+void CSVDataProvider::Refresh()
+{
+
 }
 
 }
