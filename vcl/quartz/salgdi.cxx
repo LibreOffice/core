@@ -429,7 +429,7 @@ void AquaSalGraphics::DrawTextLayout(const CommonSalLayout& rLayout)
 
         if (rStyle.mfFontRotation)
         {
-            if ((pGlyph->maGlyphId & GF_ROTMASK) == GF_ROTL)
+            if (pGlyph->IsVertical())
             {
                 bUprightGlyph = true;
                 // Adjust the position of upright (vertical) glyphs.

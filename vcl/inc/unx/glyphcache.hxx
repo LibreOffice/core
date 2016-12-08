@@ -179,7 +179,7 @@ private:
     void                    GarbageCollect( long );
     void                    ReleaseFromGarbageCollect();
 
-    void                    ApplyGlyphTransform( int nGlyphFlags, FT_GlyphRec_* ) const;
+    void                    ApplyGlyphTransform(bool bVertical, FT_Glyph) const;
 
     typedef std::unordered_map<int,GlyphData> GlyphList;
     mutable GlyphList       maGlyphList;

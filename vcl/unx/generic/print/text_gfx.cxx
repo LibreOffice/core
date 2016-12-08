@@ -102,7 +102,7 @@ void PrinterGfx::DrawGlyph(const Point& rPoint,
         aPoint = Point( 0, 0 );
     }
 
-    if (mbTextVertical && (rGlyph.maGlyphId & GF_ROTMASK) != GF_NONE)
+    if (mbTextVertical && rGlyph.IsVertical())
     {
         sal_Int32 nTextHeight = maVirtualStatus.mnTextHeight;
         sal_Int32 nTextWidth  = maVirtualStatus.mnTextWidth ? maVirtualStatus.mnTextWidth : maVirtualStatus.mnTextHeight;
