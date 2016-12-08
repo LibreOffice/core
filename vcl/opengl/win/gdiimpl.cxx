@@ -10,7 +10,6 @@
 #include "opengl/win/gdiimpl.hxx"
 
 #include <comphelper/windowserrorstring.hxx>
-#include <desktop/exithelper.h>
 #include <opengl/zone.hxx>
 #include <o3tl/lru_map.hxx>
 #include <win/wincomp.hxx>
@@ -373,12 +372,6 @@ bool InitMultisample(const PIXELFORMATDESCRIPTOR& pfd, int& rPixelFormat,
 namespace
 {
 
-void disableOpenGLAndTerminateForRestart()
-{
-    OpenGLZone::hardDisable();
-    TerminateProcess(GetCurrentProcess(), EXITHELPER_NORMAL_RESTART);
-}
-
 bool tryShaders(const OUString& rVertexShader, const OUString& rFragmentShader, const OUString& rGeometryShader = "", const OString& rPreamble = "")
 {
     GLint nId;
@@ -473,13 +466,6 @@ bool compiledShaderBinariesWork()
 
 bool WinOpenGLContext::ImplInit()
 {
-    // Failures here typically means that OpenGL can't be used.
-    // If we notice that OpenGL is broken the first time being called, it is not too late to call
-    // disableOpenGLAndTerminateForRestart(). The first time this will be called is from displaying
-    // the splash screen, so if OpenGL is broken, it is "early enough" for us to be able to disable
-    // OpenGL and terminate bluntly with EXITHELPER_NORMAL_RESTART, thus causing the wrapper process
-    // to restart us, then without using OpenGL.
-
     static bool bFirstCall = true;
 
     OpenGLZone aZone;
@@ -538,18 +524,12 @@ bool WinOpenGLContext::ImplInit()
     if (WindowPix == 0)
     {
         SAL_WARN("vcl.opengl", "Invalid pixelformat");
-        if (bFirstCall)
-            disableOpenGLAndTerminateForRestart();
-        bFirstCall = false;
         return false;
     }
 
     if (!SetPixelFormat(m_aGLWin.hDC, WindowPix, &PixelFormatFront))
     {
         SAL_WARN("vcl.opengl", "SetPixelFormat failed: " << WindowsErrorString(GetLastError()));
-        if (bFirstCall)
-            disableOpenGLAndTerminateForRestart();
-        bFirstCall = false;
         return false;
     }
 
@@ -557,26 +537,19 @@ bool WinOpenGLContext::ImplInit()
     if (hTempRC == nullptr)
     {
         SAL_WARN("vcl.opengl", "wglCreateContext failed: "<< WindowsErrorString(GetLastError()));
-        if (bFirstCall)
-            disableOpenGLAndTerminateForRestart();
-        bFirstCall = false;
         return false;
     }
 
     if (!wglMakeCurrent(m_aGLWin.hDC, hTempRC))
     {
         SAL_WARN("vcl.opengl", "wglMakeCurrent failed: "<< WindowsErrorString(GetLastError()));
-        if (bFirstCall)
-            disableOpenGLAndTerminateForRestart();
-        bFirstCall = false;
         return false;
     }
 
     if (!InitGLEW())
     {
-        if (bFirstCall)
-            disableOpenGLAndTerminateForRestart();
-        bFirstCall = false;
+        wglMakeCurrent(NULL, NULL);
+        wglDeleteContext(hTempRC);
         return false;
     }
 
@@ -588,9 +561,6 @@ bool WinOpenGLContext::ImplInit()
     {
         wglMakeCurrent(nullptr, nullptr);
         wglDeleteContext(hTempRC);
-        if (bFirstCall)
-            disableOpenGLAndTerminateForRestart();
-        bFirstCall = false;
         return false;
     }
 
@@ -609,9 +579,6 @@ bool WinOpenGLContext::ImplInit()
         SAL_WARN("vcl.opengl", "wglCreateContextAttribsARB failed: "<< WindowsErrorString(GetLastError()));
         wglMakeCurrent(nullptr, nullptr);
         wglDeleteContext(hTempRC);
-        if (bFirstCall)
-            disableOpenGLAndTerminateForRestart();
-        bFirstCall = false;
         return false;
     }
 
@@ -619,9 +586,6 @@ bool WinOpenGLContext::ImplInit()
     {
         wglMakeCurrent(nullptr, nullptr);
         wglDeleteContext(hTempRC);
-        if (bFirstCall)
-            disableOpenGLAndTerminateForRestart();
-        bFirstCall = false;
         return false;
     }
 
@@ -631,9 +595,6 @@ bool WinOpenGLContext::ImplInit()
     if (!wglMakeCurrent(m_aGLWin.hDC, m_aGLWin.hRC))
     {
         SAL_WARN("vcl.opengl", "wglMakeCurrent failed: " << WindowsErrorString(GetLastError()));
-        if (bFirstCall)
-            disableOpenGLAndTerminateForRestart();
-        bFirstCall = false;
         return false;
     }
 
