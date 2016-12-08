@@ -204,6 +204,8 @@ private:
     void WriteFootnoteSettings();
     void WriteMainText();
     void WriteInfo();
+    /// Writes a single user property type.
+    void WriteUserPropType(int nType);
     /// Writes a single user property value.
     void WriteUserPropValue(const OUString& rValue);
     /// Writes the userprops group: user defined document properties.
