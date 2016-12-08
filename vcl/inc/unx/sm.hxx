@@ -38,6 +38,7 @@ class SessionManagerClient
     static std::unique_ptr< ICEConnectionObserver > m_xICEConnectionObserver;
     static SmcConn m_pSmcConnection;
     static OString m_aClientID;
+    static OString m_aTimeID;
     static bool m_bDocSaveDone;
 
     static void SaveYourselfProc(       SmcConn connection,
