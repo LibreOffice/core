@@ -1172,7 +1172,6 @@ void SvTreeListBox::StartDrag( sal_Int8, const Point& rPosPixel )
     }
 
     TransferDataContainer* pContainer = new TransferDataContainer;
-    css::uno::Reference< css::datatransfer::XTransferable > xRef( pContainer );
     nDragDropMode = NotifyStartDrag( *pContainer, pEntry );
     if( nDragDropMode == DragDropMode::NONE || 0 == GetSelectionCount() )
     {
