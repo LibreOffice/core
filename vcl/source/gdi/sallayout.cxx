@@ -133,12 +133,6 @@ std::ostream &operator <<(std::ostream& s, ImplLayoutArgs &rArgs)
     return s;
 }
 
-sal_UCS4 GetMirroredChar( sal_UCS4 nChar )
-{
-    nChar = u_charMirror( nChar );
-    return nChar;
-}
-
 sal_UCS4 GetLocalizedChar( sal_UCS4 nChar, LanguageType eLang )
 {
     // currently only conversion from ASCII digits is interesting
