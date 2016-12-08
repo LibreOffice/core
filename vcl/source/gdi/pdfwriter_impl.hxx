@@ -552,14 +552,17 @@ public:
         sal_Int32   m_nGlyphId;
         sal_Int32   m_nMappedFontId;
         sal_uInt8   m_nMappedGlyphId;
+        bool        m_bVertical;
 
         PDFGlyph( const Point& rPos,
                   sal_Int32 nNativeWidth,
                   sal_Int32 nGlyphId,
                   sal_Int32 nFontId,
-                  sal_uInt8 nMappedGlyphId )
+                  sal_uInt8 nMappedGlyphId,
+                  bool bVertical )
         : m_aPos( rPos ), m_nNativeWidth( nNativeWidth ), m_nGlyphId( nGlyphId ),
-          m_nMappedFontId( nFontId ), m_nMappedGlyphId( nMappedGlyphId )
+          m_nMappedFontId( nFontId ), m_nMappedGlyphId( nMappedGlyphId ),
+          m_bVertical(bVertical)
         {}
     };
 
