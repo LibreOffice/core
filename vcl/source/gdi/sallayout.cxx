@@ -732,11 +732,6 @@ bool SalLayout::IsSpacingGlyph( sal_GlyphId nGlyph )
     return bRet;
 }
 
-bool SalLayout::UseCommonLayout()
-{
-    return true;
-}
-
 GenericSalLayout::GenericSalLayout()
 {}
 
