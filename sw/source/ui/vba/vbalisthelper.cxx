@@ -81,7 +81,7 @@ void SwVbaListHelper::Init() throw( css::uno::RuntimeException )
     // get the numbering style
     uno::Reference< style::XStyleFamiliesSupplier > xStyleSupplier( mxTextDocument, uno::UNO_QUERY_THROW );
     mxStyleFamily.set( xStyleSupplier->getStyleFamilies()->getByName("NumberingStyles"), uno::UNO_QUERY_THROW );
-    OSL_TRACE("SwVbaListHelper::Init: numbering style name: %s", OUStringToOString( msStyleName, RTL_TEXTENCODING_UTF8 ).getStr() );
+    SAL_INFO("sw", "numbering style name: " << msStyleName );
     if( mxStyleFamily->hasByName( msStyleName ) )
     {
         mxStyleProps.set( mxStyleFamily->getByName( msStyleName ), uno::UNO_QUERY_THROW );

@@ -299,7 +299,7 @@ public:
         }
         catch (const uno::Exception&)
         {
-            OSL_TRACE("Got exception");
+            SAL_WARN("sw", "Got exception");
         }
         uno::Any aReturn;
         if ( rPropName == "LineCount" ) // special processing needed
@@ -836,7 +836,7 @@ public:
 
     virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (uno::RuntimeException, std::exception) override
     {
-        OSL_TRACE("hasByName(%s) returns %d", OUStringToOString( aName, RTL_TEXTENCODING_UTF8 ).getStr(), mxUserDefinedProp->getPropertySetInfo()->hasPropertyByName( aName ) );
+        SAL_INFO("sw", "hasByName(" << aName << ") returns " << mxUserDefinedProp->getPropertySetInfo()->hasPropertyByName( aName ) );
         return mxUserDefinedProp->getPropertySetInfo()->hasPropertyByName( aName );
     }
 
@@ -854,13 +854,13 @@ public:
     virtual uno::Reference< container::XEnumeration > SAL_CALL createEnumeration(  ) throw (uno::RuntimeException, std::exception) override
     {
         // create a map of properties ( the key doesn't matter )
-        OSL_TRACE("Creating an enumeration");
+        SAL_INFO("sw", "Creating an enumeration");
         sal_Int32 key = 0;
         sal_Int32 nElem =  getCount();
         DocProps simpleDocPropSnapShot;
         for ( ; key < nElem; ++key )
              simpleDocPropSnapShot[ key ].set( getByIndex( key ), uno::UNO_QUERY_THROW );
-        OSL_TRACE("After creating the enumeration");
+        SAL_INFO("sw", "After creating the enumeration");
         return  new DocPropEnumeration( simpleDocPropSnapShot );
     }
 

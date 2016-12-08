@@ -348,7 +348,7 @@ void DocxExport::DoComboBox(const OUString& rName,
 
 void DocxExport::DoFormText(const SwInputField* /*pField*/)
 {
-    OSL_TRACE( "TODO DocxExport::ForFormText()" );
+    SAL_INFO("sw", "TODO DocxExport::ForFormText()" );
 }
 
 OString DocxExport::OutputChart( uno::Reference< frame::XModel >& xModel, sal_Int32 nCount, ::sax_fastparser::FSHelperPtr const & m_pSerializer )
@@ -521,12 +521,12 @@ void DocxExport::OutputEndNode( const SwEndNode& rEndNode )
 
 void DocxExport::OutputGrfNode( const SwGrfNode& )
 {
-    OSL_TRACE( "TODO DocxExport::OutputGrfNode( const SwGrfNode& )" );
+    SAL_INFO("sw", "TODO DocxExport::OutputGrfNode( const SwGrfNode& )" );
 }
 
 void DocxExport::OutputOLENode( const SwOLENode& )
 {
-    OSL_TRACE( "TODO DocxExport::OutputOLENode( const SwOLENode& )" );
+    SAL_INFO("sw", "TODO DocxExport::OutputOLENode( const SwOLENode& )" );
 }
 
 void DocxExport::OutputLinkedOLE( const OUString& )

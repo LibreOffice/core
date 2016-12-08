@@ -322,7 +322,7 @@ SwVbaFields::Add( const css::uno::Reference< ::ooo::vba::word::XRange >& Range, 
     {
         SwVbaReadFieldParams aReadParam(sText);
         sFieldName = aReadParam.GetFieldName();
-        OSL_TRACE("SwVbaFields::Add, the field name is %s ",OUStringToOString( sFieldName, RTL_TEXTENCODING_UTF8 ).getStr() );
+        SAL_INFO("sw", "the field name is " << sFieldName );
     }
 
     uno::Reference< text::XTextContent > xTextField;
@@ -436,7 +436,7 @@ uno::Reference< text::XTextField > SwVbaFields::Create_Field_DocProperty( const 
         }
     }
     aDocProperty = aDocProperty.replaceAll("\"", "");
-    OSL_TRACE("SwVbaFields::Create_Field_DocProperty, the document property name is %s ",OUStringToOString( aDocProperty, RTL_TEXTENCODING_UTF8 ).getStr() );
+    SAL_INFO("sw", "SwVbaFields::Create_Field_DocProperty, the document property name is " << aDocProperty );
     if( aDocProperty.isEmpty() )
     {
         throw uno::RuntimeException();

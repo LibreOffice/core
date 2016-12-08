@@ -389,7 +389,7 @@ PropertySetRegistry::openPropertySet( const OUString& key, sal_Bool create )
                 }
             }
 
-            OSL_TRACE( "PropertySetRegistry::openPropertySet no root access" );
+            SAL_WARN( "ucb", "no root access" );
         }
     }
 
@@ -450,7 +450,7 @@ void SAL_CALL PropertySetRegistry::removePropertySet( const OUString& key )
         return;
     }
 
-    OSL_TRACE( "PropertySetRegistry::removePropertySet - no root access" );
+    SAL_WARN( "ucb", "no root access" );
 }
 
 
@@ -913,8 +913,7 @@ Reference< XMultiServiceFactory > PropertySetRegistry::getConfigProvider()
                 }
                 catch (const Exception&)
                 {
-                    OSL_TRACE( "PropertySetRegistry::getConfigProvider - "
-                                "caught exception!" );
+                    SAL_WARN( "ucb", "caught exception!" );
                 }
             }
         }
@@ -976,7 +975,7 @@ Reference< XInterface > PropertySetRegistry::getRootConfigReadAccess()
         return Reference< XInterface >();
     }
 
-    OSL_TRACE( "PropertySetRegistry::getRootConfigReadAccess - Error!" );
+    SAL_WARN( "ucb", "Error!" );
     return Reference< XInterface >();
 }
 

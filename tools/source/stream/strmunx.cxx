@@ -308,8 +308,7 @@ SvFileStream::~SvFileStream()
 std::size_t SvFileStream::GetData( void* pData, std::size_t nSize )
 {
 #ifdef DBG_UTIL
-    OString aTraceStr("SvFileStream::GetData(): " + OString::number(static_cast<sal_Int64>(nSize)) + " Bytes from " + OUStringToOString(aFilename, osl_getThreadTextEncoding()));
-    OSL_TRACE("%s", aTraceStr.getStr());
+    SAL_INFO("tools", OString::number(static_cast<sal_Int64>(nSize)) << " Bytes from " << aFilename);
 #endif
 
     sal_uInt64 nRead = 0;
@@ -328,8 +327,7 @@ std::size_t SvFileStream::GetData( void* pData, std::size_t nSize )
 std::size_t SvFileStream::PutData( const void* pData, std::size_t nSize )
 {
 #ifdef DBG_UTIL
-    OString aTraceStr("SvFileStream::PutData(): " + OString::number(static_cast<sal_Int64>(nSize)) + " Bytes to " + OUStringToOString(aFilename, osl_getThreadTextEncoding()));
-    OSL_TRACE("%s", aTraceStr.getStr());
+    SAL_INFO("tools", OString::number(static_cast<sal_Int64>(nSize)) << " Bytes to " << aFilename);
 #endif
 
     sal_uInt64 nWrite = 0;
@@ -461,9 +459,7 @@ void SvFileStream::Open( const OUString& rFilename, StreamMode nOpenMode )
     aFilename = rFilename;
 
 #ifdef DBG_UTIL
-    OString aLocalFilename(OUStringToOString(aFilename, osl_getThreadTextEncoding()));
-    OString aTraceStr("SvFileStream::Open(): " + aLocalFilename);
-    OSL_TRACE( "%s", aTraceStr.getStr() );
+    SAL_INFO("tools", aFilename);
 #endif
 
     OUString aFileURL;
@@ -559,8 +555,7 @@ void SvFileStream::Close()
     if ( IsOpen() )
     {
 #ifdef DBG_UTIL
-        OString aTraceStr("SvFileStream::Close(): " + OUStringToOString(aFilename, osl_getThreadTextEncoding()));
-        OSL_TRACE("%s", aTraceStr.getStr());
+        SAL_INFO("tools", aFilename);
 #endif
 
         Flush();

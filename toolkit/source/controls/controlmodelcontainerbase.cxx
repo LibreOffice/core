@@ -113,7 +113,7 @@ struct DisposeControlModel : public ::std::unary_function< Reference< XControlMo
         }
         catch (const Exception&)
         {
-            OSL_TRACE( "DisposeControlModel::(): caught an exception while disposing a component!" );
+            SAL_WARN("toolkit", "caught an exception while disposing a component!" );
         }
     }
 };
@@ -667,7 +667,7 @@ sal_Bool SAL_CALL ControlModelContainerBase::getGroupControl(  ) throw (RuntimeE
 
 void SAL_CALL ControlModelContainerBase::setGroupControl( sal_Bool ) throw (RuntimeException, std::exception)
 {
-    OSL_TRACE( "ControlModelContainerBase::setGroupControl: explicit grouping not supported" );
+    SAL_WARN("toolkit", "explicit grouping not supported" );
 }
 
 
@@ -763,7 +763,7 @@ void SAL_CALL ControlModelContainerBase::setGroup( const Sequence< Reference< XC
     // We only have a sequence of control models, and we _know_ (yes, that's a HACK relying on
     // implementation details) that VCL does grouping according to the order of controls automatically
     // At least VCL does this for all we're interested in: Radio buttons.
-    OSL_TRACE( "ControlModelContainerBase::setGroup: grouping not supported" );
+    SAL_WARN("toolkit", "grouping not supported" );
 }
 
 ////----- XInitialization -------------------------------------------------------------------
@@ -842,7 +842,7 @@ namespace
         }
         catch (const Exception&)
         {
-            OSL_TRACE( "lcl_getDialogStep: caught an exception while determining the dialog page!" );
+            SAL_WARN("toolkit", "caught an exception while determining the dialog page!" );
         }
         return nStep;
     }
@@ -867,7 +867,7 @@ void SAL_CALL ControlModelContainerBase::getGroup( sal_Int32 _nGroup, Sequence< 
 
     if ( ( _nGroup < 0 ) || ( _nGroup >= (sal_Int32)maGroups.size() ) )
     {
-        OSL_TRACE( "ControlModelContainerBase::getGroup: invalid argument and I am not allowed to throw an exception!" );
+        SAL_WARN("toolkit", "invalid argument and I am not allowed to throw an exception!" );
         _rGroup.realloc( 0 );
         _rName.clear();
     }

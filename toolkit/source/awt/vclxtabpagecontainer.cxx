@@ -51,7 +51,7 @@ VCLXTabPageContainer::VCLXTabPageContainer() :
 
 VCLXTabPageContainer::~VCLXTabPageContainer()
 {
-    OSL_TRACE ("%s", __FUNCTION__);
+    SAL_INFO("toolkit", __FUNCTION__);
 }
 
 void SAL_CALL VCLXTabPageContainer::draw( sal_Int32 nX, sal_Int32 nY ) throw(RuntimeException, std::exception)

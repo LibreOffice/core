@@ -159,13 +159,10 @@ ResMgrContainer& ResMgrContainer::get()
 
 ResMgrContainer::~ResMgrContainer()
 {
-    for( std::unordered_map< OUString, ContainerElement, OUStringHash >::iterator it =
-            m_aResFiles.begin(); it != m_aResFiles.end(); ++it )
+    for( std::pair< OUString, ContainerElement > const & rPair : m_aResFiles )
     {
-        OSL_TRACE( "Resource file %s loaded %d times",
-                         OUStringToOString( it->second.aFileURL, osl_getThreadTextEncoding() ).getStr(),
-                         it->second.nLoadCount );
-        delete it->second.pResMgr;
+        SAL_INFO("tools", "Resource file " << rPair.second.aFileURL << " loaded " << rPair.second.nLoadCount << " times");
+        delete rPair.second.pResMgr;
     }
 }
 
@@ -877,8 +874,7 @@ void ResMgr::decStack()
         if( (rTop.Flags & RCFlags::FALLBACK_DOWN) )
         {
             #if OSL_DEBUG_LEVEL > 1
-            OSL_TRACE( "returning from fallback %s",
-                     OUStringToOString(pFallbackResMgr->GetFileName(), osl_getThreadTextEncoding() ).getStr() );
+            SAL_INFO("tools", "returning from fallback " << pFallbackResMgr->GetFileName() );
             #endif
             delete pFallbackResMgr;
             pFallbackResMgr = nullptr;
@@ -1241,7 +1237,7 @@ ResMgr* ResMgr::CreateFallbackResMgr( const ResId& rId, const Resource* pResourc
                 ResMgrContainer::get().freeResMgr( pRes );
                 return nullptr;
             }
-            OSL_TRACE( "trying fallback: %s", OUStringToOString( pRes->aFileName, osl_getThreadTextEncoding() ).getStr() );
+            SAL_INFO("tools", "trying fallback: " << pRes->aFileName );
             pFallback = new ResMgr( pRes );
             pFallback->pOriginalResMgr = this;
             // try to recreate the resource stack
