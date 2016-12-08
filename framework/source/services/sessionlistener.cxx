@@ -261,6 +261,8 @@ void SAL_CALL SessionListener::initialize(const Sequence< Any  >& args)
             }
         }
     }
+
+    SAL_INFO("fwk.session.debug", "  m_bAllowUserInteractionOnQuit = " << (m_bAllowUserInteractionOnQuit ? "true" : "false"));
     if (!m_rSessionManager.is())
         m_rSessionManager = css::uno::Reference< frame::XSessionManagerClient >
             (m_xContext->getServiceManager()->createInstanceWithContext(aSMgr, m_xContext), UNO_QUERY);
@@ -275,6 +277,9 @@ void SAL_CALL SessionListener::statusChanged(const frame::FeatureStateEvent& eve
     throw (css::uno::RuntimeException, std::exception)
 {
    SAL_INFO("fwk.session", "SessionListener::statusChanged");
+
+   SAL_INFO("fwk.session.debug", "  ev.Feature = " << event.FeatureURL.Complete <<
+                                 ", ev.Descript = " << event.FeatureDescriptor);
    if ( event.FeatureURL.Complete == "vnd.sun.star.autorecovery:/doSessionRestore" )
     {
         if (event.FeatureDescriptor == "update")
@@ -320,6 +325,9 @@ void SAL_CALL SessionListener::doSave( sal_Bool bShutdown, sal_Bool /*bCancelabl
     throw (RuntimeException, std::exception)
 {
     SAL_INFO("fwk.session", "SessionListener::doSave");
+
+    SAL_INFO("fwk.session.debug", "  m_bAllowUserInteractionOnQuit = " << (m_bAllowUserInteractionOnQuit ? "true" : "false") <<
+                                  ", bShutdown = " << (bShutdown ? "true" : "false"));
     if (bShutdown)
     {
         m_bSessionStoreRequested = true; // there is no need to protect it with mutex
@@ -354,12 +362,12 @@ void SAL_CALL SessionListener::approveInteraction( sal_Bool bInteractionGranted 
             Desktop* pDesktop(dynamic_cast<Desktop*>(xDesktop.get()));
             if(pDesktop)
             {
-                SAL_INFO("fwk.session", "XDesktop is a framework::Desktop -- good.");
+                SAL_INFO("fwk.session", " XDesktop is a framework::Desktop -- good.");
                 m_bTerminated = pDesktop->terminateQuickstarterToo();
             }
             else
             {
-                SAL_WARN("fwk.session", "XDesktop is not a framework::Desktop -- this should never happen.");
+                SAL_WARN("fwk.session", " XDesktop is not a framework::Desktop -- this should never happen.");
                 m_bTerminated = xDesktop->terminate();
             }
 
@@ -413,6 +421,8 @@ com_sun_star_comp_frame_SessionListener_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
 {
+    SAL_INFO("fwk.session", "com_sun_star_comp_frame_SessionListener_get_implementation");
+
     return cppu::acquire(new SessionListener(context));
 }
 
