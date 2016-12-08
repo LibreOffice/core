@@ -295,7 +295,7 @@ bool ExTextOutRenderer::operator ()(SalLayout const &rLayout, HDC hDC,
     {
         bGlyphs = true;
         WORD glyphWStr[] = { pGlyph->maGlyphId & GF_IDXMASK };
-        if ((pGlyph->maGlyphId & GF_ROTMASK) == GF_ROTL)
+        if (pGlyph->IsVertical())
             glyphWStr[0] |= GF_VERT;
         ExtTextOutW(hDC, pPos->X(), pPos->Y(), ETO_GLYPH_INDEX, nullptr, LPCWSTR(&glyphWStr), 1, nullptr);
     }
@@ -401,7 +401,7 @@ bool D2DWriteTextOutRenderer::operator ()(SalLayout const &rLayout, HDC hDC,
                 0
             };
 
-            if (bVertical && (pGlyph->maGlyphId & GF_ROTMASK) != GF_ROTL)
+            if (bVertical && !pGlyph->IsVertical())
             {
                 D2D1MakeRotateMatrix(90.0f, baseline, &aRotTrans);
                 mpRT->SetTransform(aOrigTrans * aRotTrans);
@@ -546,7 +546,7 @@ bool D2DWriteTextOutRenderer::GetDWriteInkBox(SalLayout const &rLayout, Rectangl
     {
         positions.push_back(aPos);
         indices.push_back(pGlyph->maGlyphId & GF_IDXMASK);
-        vertical.push_back((pGlyph->maGlyphId & GF_ROTMASK) == GF_ROTL);
+        vertical.push_back(pGlyph->IsVertical());
     }
 
     auto aBoxes = GetGlyphInkBoxes(indices.data(), indices.data() + indices.size());
