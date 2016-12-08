@@ -427,7 +427,7 @@ void CairoTextRender::GetFontMetric( ImplFontMetricDataRef& rxFontMetric, int nF
 
 bool CairoTextRender::GetGlyphBoundRect(const GlyphItem& rGlyph, Rectangle& rRect)
 {
-    const int nLevel = rGlyph.maGlyphId >> GF_FONTSHIFT;
+    const int nLevel = rGlyph.mnFallbackLevel;
     if( nLevel >= MAX_FALLBACK )
         return false;
 
@@ -457,7 +457,7 @@ bool CairoTextRender::GetGlyphBoundRect(const GlyphItem& rGlyph, Rectangle& rRec
 bool CairoTextRender::GetGlyphOutline(const GlyphItem& rGlyph,
     basegfx::B2DPolyPolygon& rPolyPoly )
 {
-    const int nLevel = rGlyph.maGlyphId >> GF_FONTSHIFT;
+    const int nLevel = rGlyph.mnFallbackLevel;
     if( nLevel >= MAX_FALLBACK )
         return false;
 
