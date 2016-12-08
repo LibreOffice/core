@@ -955,7 +955,7 @@ void Outliner::PaintBullet( sal_Int32 nPara, const Point& rStartPos,
 
                 // VCL will take care of brackets and so on...
                 ComplexTextLayoutFlags nLayoutMode = pOutDev->GetLayoutMode();
-                nLayoutMode &= ~ComplexTextLayoutFlags(ComplexTextLayoutFlags::BiDiRtl|ComplexTextLayoutFlags::ComplexDisabled|ComplexTextLayoutFlags::BiDiStrong);
+                nLayoutMode &= ~ComplexTextLayoutFlags(ComplexTextLayoutFlags::BiDiRtl|ComplexTextLayoutFlags::BiDiStrong);
                 if ( bRightToLeftPara )
                     nLayoutMode |= ComplexTextLayoutFlags::BiDiRtl | ComplexTextLayoutFlags::TextOriginLeft | ComplexTextLayoutFlags::BiDiStrong;
                 pOutDev->SetLayoutMode( nLayoutMode );
