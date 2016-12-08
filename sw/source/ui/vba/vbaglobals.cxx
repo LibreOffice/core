@@ -35,19 +35,19 @@ using namespace ::ooo::vba;
 
 SwVbaGlobals::SwVbaGlobals(  uno::Sequence< uno::Any > const& aArgs, uno::Reference< uno::XComponentContext >const& rxContext ) : SwVbaGlobals_BASE( uno::Reference< XHelperInterface >(), rxContext, "WordDocumentContext" )
 {
-    OSL_TRACE("SwVbaGlobals::SwVbaGlobals()");
-        uno::Sequence< beans::PropertyValue > aInitArgs( 2 );
-        aInitArgs[ 0 ].Name = "Application";
-        aInitArgs[ 0 ].Value = uno::makeAny( getApplication() );
-        aInitArgs[ 1 ].Name = "WordDocumentContext";
-        aInitArgs[ 1 ].Value = uno::makeAny( getXSomethingFromArgs< frame::XModel >( aArgs, 0 ) );
+    SAL_INFO("sw", "SwVbaGlobals::SwVbaGlobals()");
+    uno::Sequence< beans::PropertyValue > aInitArgs( 2 );
+    aInitArgs[ 0 ].Name = "Application";
+    aInitArgs[ 0 ].Value = uno::makeAny( getApplication() );
+    aInitArgs[ 1 ].Name = "WordDocumentContext";
+    aInitArgs[ 1 ].Value = uno::makeAny( getXSomethingFromArgs< frame::XModel >( aArgs, 0 ) );
 
-        init( aInitArgs );
+    init( aInitArgs );
 }
 
 SwVbaGlobals::~SwVbaGlobals()
 {
-    OSL_TRACE("SwVbaGlobals::~SwVbaGlobals");
+    SAL_INFO("sw", "SwVbaGlobals::~SwVbaGlobals");
 }
 
 // XGlobals
@@ -55,7 +55,7 @@ SwVbaGlobals::~SwVbaGlobals()
 uno::Reference<word::XApplication > const &
 SwVbaGlobals::getApplication() throw (uno::RuntimeException)
 {
-    OSL_TRACE("In SwVbaGlobals::getApplication");
+    SAL_INFO("sw", "In SwVbaGlobals::getApplication");
     if ( !mxApplication.is() )
          mxApplication.set( new SwVbaApplication( mxContext) );
 

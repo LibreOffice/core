@@ -284,7 +284,7 @@ SfxPrinter& DocumentDeviceManager::CreatePrinter_() const
     OSL_ENSURE( ! mpPrt, "Do not call CreatePrinter_(), call getPrinter() instead" );
 
 #if OSL_DEBUG_LEVEL > 1
-    OSL_TRACE( "Printer will be created!" );
+    SAL_INFO("sw", "Printer will be created!" );
 #endif
 
     // We create a default SfxPrinter.

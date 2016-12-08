@@ -804,7 +804,7 @@ void UniversalContentBroker::configureUcb()
     ContentProviderDataList aData;
     if (!getContentProviderData(aKey1, aKey2, aData))
     {
-        OSL_TRACE("UniversalContentBroker::configureUcb(): No configuration");
+        SAL_WARN( "ucb", "No configuration");
         return;
     }
 
@@ -923,14 +923,14 @@ bool UniversalContentBroker::getContentProviderData(
     }
     catch (const uno::RuntimeException&)
     {
-        OSL_TRACE( "UniversalContentBroker::getContentProviderData - caught RuntimeException!" );
+        SAL_WARN( "ucb", "caught RuntimeException!" );
         return false;
     }
     catch (const uno::Exception&)
     {
         // createInstance, createInstanceWithArguments
 
-        OSL_TRACE( "UniversalContentBroker::getContentProviderData - caught Exception!" );
+        SAL_WARN( "ucb", "caught Exception!" );
         return false;
     }
 

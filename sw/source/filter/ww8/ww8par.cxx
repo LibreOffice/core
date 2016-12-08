@@ -4755,7 +4755,7 @@ void SwWW8ImplReader::ReadDocInfo()
                 Sttb aSttb;
                 m_pTableStream->Seek( m_pWwFib->m_fcSttbfAssoc ); // point at tgc record
                 if (!aSttb.Read( *m_pTableStream ) )
-                    OSL_TRACE("** Read of SttbAssoc data failed!!!! ");
+                    SAL_WARN("sw", "** Read of SttbAssoc data failed!!!! ");
                 m_pTableStream->Seek( nCur ); // return to previous position, is that necessary?
 #if OSL_DEBUG_LEVEL > 1
                 aSttb.Print( stderr );

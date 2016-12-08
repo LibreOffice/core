@@ -134,7 +134,7 @@ void XTextRangeOrNodeIndexPosition::SetAsNodeIndex(
 
     if (!pDoc)
     {
-        OSL_TRACE("SetAsNodeIndex: no SwDoc");
+        SAL_WARN("sw", "no SwDoc");
         return;
     }
 
@@ -454,8 +454,7 @@ Reference<XTextCursor> XMLRedlineImportHelper::CreateRedlineTextSection(
 
         if (!pDoc)
         {
-            OSL_TRACE("XMLRedlineImportHelper::CreateRedlineTextSection: "
-                "no SwDoc => cannot create section.");
+            SAL_WARN("sw", "no SwDoc => cannot create section.");
             return nullptr;
         }
 
@@ -592,8 +591,7 @@ void XMLRedlineImportHelper::InsertIntoDocument(RedlineInfo* pRedlineInfo)
 
     if (!pDoc)
     {
-        OSL_TRACE("XMLRedlineImportHelper::InsertIntoDocument: "
-                "no SwDoc => cannot insert redline.");
+        SAL_WARN("sw", "no SwDoc => cannot insert redline.");
         return;
     }
 

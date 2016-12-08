@@ -1143,10 +1143,10 @@ void SwTextPaintInfo::DrawBackBrush( const SwLinePortion &rPor ) const
             }
             bool bIsStartMark=(1==GetLen() && CH_TXT_ATR_FIELDSTART==GetText()[GetIdx()]);
             if(pFieldmark) {
-                OSL_TRACE("Found Fieldmark");
-                SAL_INFO("sw.core", pFieldmark->ToString() << "\n");
+                SAL_INFO("sw.core", "Found Fieldmark " << pFieldmark->ToString());
             }
-            if(bIsStartMark) OSL_TRACE("Found StartMark");
+            if(bIsStartMark)
+                SAL_INFO("sw.core", "Found StartMark");
             if (OnWin() && (pFieldmark!=nullptr || bIsStartMark) &&
                     SwViewOption::IsFieldShadings() &&
                     !GetOpt().IsPagePreview())

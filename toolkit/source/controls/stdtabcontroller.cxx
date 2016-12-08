@@ -125,7 +125,7 @@ bool StdTabController::ImplCreateComponentSequence(
         }
         else
         {
-            OSL_TRACE( "ImplCreateComponentSequence: Control not found" );
+            SAL_WARN("toolkit", "Control not found" );
             bOK = false;
         }
     }

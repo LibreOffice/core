@@ -342,7 +342,7 @@ SwVbaStyles::Item( const uno::Any& Index1, const uno::Any& Index2 )
                 }
                 else
                 {
-                    OSL_TRACE("SwVbaStyles::Item: the builtin style type is not implemented");
+                    SAL_WARN("sw", "the builtin style type is not implemented");
                     throw uno::RuntimeException("Not implemented" );
                 }
             }

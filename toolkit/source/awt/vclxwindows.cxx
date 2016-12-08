@@ -2243,12 +2243,12 @@ void VCLXDialog::GetPropertyIds( std::vector< sal_uInt16 > &rIds )
 
 VCLXDialog::VCLXDialog()
 {
-    OSL_TRACE("XDialog created");
+    SAL_INFO("toolkit", "XDialog created");
 }
 
 VCLXDialog::~VCLXDialog()
 {
-    OSL_TRACE ("%s", __FUNCTION__);
+    SAL_INFO("toolkit", __FUNCTION__);
 }
 
 // css::uno::XInterface
@@ -2418,7 +2418,7 @@ throw(css::uno::RuntimeException, std::exception)
 
 VCLXMultiPage::VCLXMultiPage() : maTabListeners( *this ), mTabId( 1 )
 {
-    OSL_TRACE("VCLXMultiPage::VCLXMultiPage()" );
+    SAL_INFO("toolkit", "VCLXMultiPage::VCLXMultiPage()" );
 }
 
 void VCLXMultiPage::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
@@ -2498,10 +2498,8 @@ throw(css::uno::RuntimeException, std::exception)
 
 uno::Any SAL_CALL VCLXMultiPage::getProperty( const OUString& PropertyName ) throw(css::uno::RuntimeException, std::exception)
 {
+    SAL_INFO("toolkit", " **** VCLXMultiPage::getProperty " << PropertyName );
     SolarMutexGuard aGuard;
-    OSL_TRACE(" **** VCLXMultiPage::getProperty( %s )",
-        OUStringToOString( PropertyName,
-        RTL_TEXTENCODING_UTF8 ).getStr() );
     css::uno::Any aProp;
     sal_uInt16 nPropType = GetPropertyId( PropertyName );
     switch ( nPropType )
@@ -2523,8 +2521,8 @@ void SAL_CALL VCLXMultiPage::setProperty(
     const css::uno::Any& Value )
 throw(css::uno::RuntimeException, std::exception)
 {
+    SAL_INFO("toolkit", " **** VCLXMultiPage::setProperty " << PropertyName );
     SolarMutexGuard aGuard;
-    OSL_TRACE(" **** VCLXMultiPage::setProperty( %s )", OUStringToOString( PropertyName, RTL_TEXTENCODING_UTF8 ).getStr() );
 
     VclPtr< TabControl > pTabControl = GetAs< TabControl >();
     if ( pTabControl )
@@ -2536,7 +2534,7 @@ throw(css::uno::RuntimeException, std::exception)
         {
             case BASEPROPERTY_MULTIPAGEVALUE:
             {
-                OSL_TRACE("***MULTIPAGE VALUE");
+                SAL_INFO("toolkit", "***MULTIPAGE VALUE");
                 sal_Int32 nId(0);
                 Value >>= nId;
                 // when the multipage is created we attempt to set the activepage
@@ -4153,7 +4151,7 @@ VCLXComboBox::VCLXComboBox()
 
 VCLXComboBox::~VCLXComboBox()
 {
-    OSL_TRACE ("%s", __FUNCTION__);
+    SAL_INFO("toolkit", __FUNCTION__);
 }
 
 css::uno::Reference< css::accessibility::XAccessibleContext > VCLXComboBox::CreateAccessibleContext()

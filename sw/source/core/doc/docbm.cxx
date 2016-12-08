@@ -220,8 +220,6 @@ namespace
         {
             if(ppCurrentMark->get() == rpMarkToFind.get())
             {
-                //OSL_TRACE("found mark named '%s'",
-                //    OUStringToOString(ppCurrentMark->get()->GetName(), RTL_TEXTENCODING_UTF8).getStr());
                 return ppCurrentMark;
             }
             ++ppCurrentMark;
@@ -249,8 +247,6 @@ namespace
                 break;
             if(IDocumentMarkAccess::GetType(**ppCurrentMark) == eType)
             {
-                //OSL_TRACE("found mark named '%s'",
-                //    OUStringToOString(ppCurrentMark->get()->GetName(), RTL_TEXTENCODING_UTF8).getStr());
                 return ppCurrentMark;
             }
         }

@@ -153,7 +153,7 @@ public:
         {}
     virtual ~Test_Impl() override
         {
-            OSL_TRACE( "> scalar Test_Impl dtor <" );
+            SAL_INFO("testtools", "> scalar Test_Impl dtor <" );
         }
 
     void SAL_CALL acquire() throw () override
@@ -683,9 +683,7 @@ void dothrow(const RuntimeException& e)
             Any a( getCaughtException() );
             RuntimeException exc;
             OSL_VERIFY( a >>= exc );
-            OSL_TRACE(
-                OUStringToOString(
-                    exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
+            SAL_INFO("testtools", exc.Message );
         }
         catch (...) // never throws anything
         {

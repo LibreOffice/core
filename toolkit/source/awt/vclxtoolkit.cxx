@@ -1413,10 +1413,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::createSystemChild( con
             catch ( const css::uno::RuntimeException & rEx )
             {
                 // system child window could not be created
-                OSL_TRACE(
-                    "VCLXToolkit::createSystemChild: caught %s\n",
-                    OUStringToOString(
-                        rEx.Message, RTL_TEXTENCODING_UTF8).getStr());
+                SAL_WARN("toolkit", "caught " << rEx.Message);
                 pChildWindow.clear();
             }
         }
@@ -1821,10 +1818,7 @@ void VCLXToolkit::callTopWindowListeners(
                 }
                 catch (const css::uno::RuntimeException & rEx)
                 {
-                    OSL_TRACE(
-                        "VCLXToolkit::callTopWindowListeners: caught %s\n",
-                        OUStringToOString(
-                            rEx.Message, RTL_TEXTENCODING_UTF8).getStr());
+                    SAL_WARN("toolkit", "caught " << rEx.Message);
                 }
             }
         }
@@ -1869,10 +1863,7 @@ bool VCLXToolkit::callKeyHandlers(::VclSimpleEvent const * pEvent,
             }
             catch (const css::uno::RuntimeException & rEx)
             {
-                OSL_TRACE(
-                    "VCLXToolkit::callKeyHandlers: caught %s\n",
-                    OUStringToOString(
-                       rEx.Message, RTL_TEXTENCODING_UTF8).getStr());
+                SAL_WARN("toolkit", "caught " << rEx.Message);
             }
         }
     }
@@ -1918,10 +1909,7 @@ void VCLXToolkit::callFocusListeners(::VclSimpleEvent const * pEvent,
                 }
                 catch (const css::uno::RuntimeException & rEx)
                 {
-                    OSL_TRACE(
-                        "VCLXToolkit::callFocusListeners: caught %s\n",
-                        OUStringToOString(
-                            rEx.Message, RTL_TEXTENCODING_UTF8).getStr());
+                    SAL_WARN("toolkit", "caught " << rEx.Message);
                 }
             }
         }

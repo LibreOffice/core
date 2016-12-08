@@ -3108,7 +3108,7 @@ void MSWordExportBase::OutputContentNode( const SwContentNode& rNode )
             OutputOLENode( *rNode.GetOLENode() );
             break;
         default:
-            OSL_TRACE("Unhandled node, type == %d", (int)rNode.GetNodeType() );
+            SAL_WARN("sw", "Unhandled node, type == " << (int)rNode.GetNodeType() );
             break;
     }
 }

@@ -117,8 +117,7 @@ bool SwDoc::ExecMacro( const SvxMacro& rMacro, OUString* pRet, SbxArray* pArgs )
             Sequence< sal_Int16 > aOutArgsIndex;
             Sequence< Any > aOutArgs;
 
-            OSL_TRACE( "SwDoc::ExecMacro URL is %s", OUStringToOString( rMacro.GetMacName(),
-                RTL_TEXTENCODING_UTF8).getStr() );
+            SAL_INFO("sw", "SwDoc::ExecMacro URL is " << rMacro.GetMacName() );
 
             eErr = mpDocShell->CallXScript(
                 rMacro.GetMacName(), *pUnoArgs, aRet, aOutArgsIndex, aOutArgs);
@@ -218,8 +217,7 @@ sal_uInt16 SwDoc::CallEvent( sal_uInt16 nEvent, const SwCallMouseEvent& rCallEve
                 Sequence< sal_Int16 > aOutArgsIndex;
                 Sequence< Any > aOutArgs;
 
-                OSL_TRACE( "SwDoc::CallEvent URL is %s", OUStringToOString(
-                    rMacro.GetMacName(), RTL_TEXTENCODING_UTF8).getStr() );
+                SAL_INFO("sw", "SwDoc::CallEvent URL is " << rMacro.GetMacName() );
 
                 nRet += 0 == mpDocShell->CallXScript(
                     rMacro.GetMacName(), *pUnoArgs,aRet, aOutArgsIndex, aOutArgs) ? 1 : 0;

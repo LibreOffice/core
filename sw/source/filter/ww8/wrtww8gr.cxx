@@ -79,7 +79,7 @@ using namespace ::com::sun::star;
 
 void WW8Export::OutputGrfNode( const SwGrfNode& /*rNode*/ )
 {
-    OSL_TRACE("WW8Export::OutputGrfNode( const SwGrfNode& )" );
+    SAL_INFO("sw", "WW8Export::OutputGrfNode( const SwGrfNode& )" );
     OSL_ENSURE( m_pParentFrame, "frame not set!" );
     if ( m_pParentFrame )
     {
@@ -194,7 +194,7 @@ bool WW8Export::TestOleNeedsGraphic(const SwAttrSet& rSet,
 
 void WW8Export::OutputOLENode( const SwOLENode& rOLENode )
 {
-    OSL_TRACE("WW8Export::OutputOLENode( const SwOLENode& rOLENode )" );
+    SAL_INFO("sw", "WW8Export::OutputOLENode( const SwOLENode& rOLENode )" );
     sal_uInt8 *pSpecOLE;
     sal_uInt8 *pDataAdr;
     short nSize;

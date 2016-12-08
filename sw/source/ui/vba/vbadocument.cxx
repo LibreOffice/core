@@ -443,9 +443,7 @@ SwVbaDocument::getIntrospection(  ) throw (uno::RuntimeException, std::exception
 uno::Any SAL_CALL
 SwVbaDocument::invoke( const OUString& aFunctionName, const uno::Sequence< uno::Any >& /*aParams*/, uno::Sequence< ::sal_Int16 >& /*aOutParamIndex*/, uno::Sequence< uno::Any >& /*aOutParam*/ ) throw (lang::IllegalArgumentException, script::CannotConvertException, reflection::InvocationTargetException, uno::RuntimeException, std::exception)
 {
-    OSL_TRACE("** SwVbaDocument::invoke( %s ), will barf",
-        OUStringToOString( aFunctionName, RTL_TEXTENCODING_UTF8 ).getStr() );
-
+    SAL_INFO("sw", "** will barf " << aFunctionName );
     throw uno::RuntimeException(); // unsupported operation
 }
 

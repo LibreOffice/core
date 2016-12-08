@@ -39,8 +39,6 @@ DocxExportFilter::DocxExportFilter( const uno::Reference< uno::XComponentContext
 
 bool DocxExportFilter::exportDocument()
 {
-    OSL_TRACE( "DocxExportFilter::exportDocument()\n" ); // DEBUG remove me
-
     // get SwDoc*
     uno::Reference< uno::XInterface > xIfc( getModel(), uno::UNO_QUERY );
     SwXTextDocument *pTextDoc = dynamic_cast< SwXTextDocument * >( xIfc.get() );
