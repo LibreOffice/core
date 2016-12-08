@@ -757,7 +757,7 @@ void OutputDevice::ImplDrawTextLines( SalLayout& rSalLayout, FontStrikeout eStri
         while (!rSalLayout.GetNextGlyphs(1, &pGlyph, aPos, nStart))
         {
             // calculate the boundaries of each word
-            if (!SalLayout::IsSpacingGlyph(pGlyph->maGlyphId))
+            if (!pGlyph->IsSpacing())
             {
                 if( !nWidth )
                 {
