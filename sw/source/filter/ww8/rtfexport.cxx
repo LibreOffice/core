@@ -469,6 +469,12 @@ void RtfExport::WriteInfo()
     Strm().WriteChar('}');
 }
 
+void RtfExport::WriteUserPropType(int nType)
+{
+    Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_PROPTYPE);
+    OutULong(nType);
+}
+
 void RtfExport::WriteUserPropValue(const OUString& rValue)
 {
     Strm().WriteCharPtr("{" OOO_STRING_SVTOOLS_RTF_STATICVAL " ");
@@ -517,17 +523,21 @@ void RtfExport::WriteUserProps()
                 // Property value.
                 OUString aValue;
                 double fValue;
+                bool bValue;
                 uno::Any aAny = xPropertySet->getPropertyValue(rProperty.Name);
-                if (aAny >>= aValue)
+                if (aAny >>= bValue)
                 {
-                    Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_PROPTYPE);
-                    OutULong(30);
+                    WriteUserPropType(11);
+                    WriteUserPropValue(OUString::number(static_cast<int>(bValue)));
+                }
+                else if (aAny >>= aValue)
+                {
+                    WriteUserPropType(30);
                     WriteUserPropValue(aValue);
                 }
                 else if (aAny >>= fValue)
                 {
-                    Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_PROPTYPE);
-                    OutULong(3);
+                    WriteUserPropType(3);
                     WriteUserPropValue(OUString::number(fValue));
                 }
             }

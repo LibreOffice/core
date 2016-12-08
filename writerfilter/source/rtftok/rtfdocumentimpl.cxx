@@ -2685,6 +2685,8 @@ RTFError RTFDocumentImpl::popState()
                 aAny = uno::makeAny(aStaticVal);
             else if (m_aStates.top().aPropType == cppu::UnoType<sal_Int32>::get())
                 aAny = uno::makeAny(aStaticVal.toInt32());
+            else if (m_aStates.top().aPropType == cppu::UnoType<bool>::get())
+                aAny = uno::makeAny(aStaticVal.toBoolean());
 
             xPropertyContainer->addProperty(rKey, beans::PropertyAttribute::REMOVABLE, aAny);
         }
