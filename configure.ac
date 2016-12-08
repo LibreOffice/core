@@ -12858,6 +12858,8 @@ fi
 
 AC_SUBST(LO_PATH)
 
+libo_FUZZ_SUMMARY
+
 # Generate a configuration md5 we can use for deps
 if test -f config_host.mk; then
     config_md5=`$MD5SUM config_host.mk | sed "s/ .*//"`
