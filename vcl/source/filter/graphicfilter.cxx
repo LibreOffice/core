@@ -1847,6 +1847,8 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString
     (void) nFormat;
     (void) pFilterData;
 
+    (void) nExpGraphHint;
+
     return GRFILTER_FORMATERROR;
 #else
     SAL_INFO( "vcl.filter", "GraphicFilter::ExportGraphic() (thb)" );
