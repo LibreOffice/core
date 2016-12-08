@@ -118,9 +118,11 @@ $(eval $(call gb_Library_add_libs,sofficeapp,\
 ))
 else
 ifeq ($(OS), $(filter LINUX %BSD SOLARIS, $(OS)))
+ifeq ($(USING_X11),TRUE)
 $(eval $(call gb_Library_use_static_libraries,sofficeapp,\
     glxtest \
 ))
+endif
 
 $(eval $(call gb_Library_add_libs,sofficeapp,\
 	-lm $(DLOPEN_LIBS) \

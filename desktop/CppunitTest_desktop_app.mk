@@ -46,9 +46,11 @@ $(eval $(call gb_CppunitTest_use_libraries,desktop_app, \
 ))
 
 ifeq ($(OS), $(filter LINUX %BSD SOLARIS, $(OS)))
+ifeq ($(USING_X11),TRUE)
 $(eval $(call gb_CppunitTest_use_static_libraries,desktop_app,\
     glxtest \
 ))
+endif
 
 $(eval $(call gb_CppunitTest_add_libs,desktop_app,\
 	-lm $(DLOPEN_LIBS) \
