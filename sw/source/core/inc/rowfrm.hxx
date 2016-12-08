@@ -44,6 +44,7 @@ class SwRowFrame: public SwLayoutFrame
     bool m_bIsFollowFlowRow;
     bool m_bIsRepeatedHeadline;
     bool m_bIsRowSpanLine;
+    bool m_bIsInSplit;
 
     virtual void DestroyImpl() override;
     virtual ~SwRowFrame() override;
@@ -100,6 +101,9 @@ public:
     // #i4032# NEW TABLES
     bool IsRowSpanLine() const { return m_bIsRowSpanLine; }
     void SetRowSpanLine( bool bNew ) { m_bIsRowSpanLine = bNew; }
+
+    void SetInSplit(bool bNew = true) { m_bIsInSplit = bNew; }
+    bool IsInSplit() const { return m_bIsInSplit; }
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwRowFrame)
 };
