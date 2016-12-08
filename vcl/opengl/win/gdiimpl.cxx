@@ -473,9 +473,8 @@ bool compiledShaderBinariesWork()
 
 bool WinOpenGLContext::ImplInit()
 {
-    // Failures here typically means that OpenGL can't be used. Returning false is fairly pointless
-    // as the calling code doesn't even check, but oh well. If we notice that OpenGL is broken the
-    // first time being called, it is not too late to call
+    // Failures here typically means that OpenGL can't be used.
+    // If we notice that OpenGL is broken the first time being called, it is not too late to call
     // disableOpenGLAndTerminateForRestart(). The first time this will be called is from displaying
     // the splash screen, so if OpenGL is broken, it is "early enough" for us to be able to disable
     // OpenGL and terminate bluntly with EXITHELPER_NORMAL_RESTART, thus causing the wrapper process
