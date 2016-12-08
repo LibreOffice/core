@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a71b18c_00354345",
+        "filename": "filter/source/xslt/odf2xhtml/export/common/styles/style_mapping_css.xsl",
+        "patchSetId": 3
+      },
+      "lineNbr": 348,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2016-12-08T12:07:22Z",
+      "side": 1,
+      "message": "The formatted number is still locale-specific, so it\u0027s not guaranteed it will be in a suitable format in every locale. IMO the right fix is to use format-number() with a suitable decimal format.",
+      "range": {
+        "startLine": 348,
+        "startChar": 26,
+        "endLine": 348,
+        "endChar": 35
+      },
+      "revId": "023169d5f8c3698a3feecdd12a22f4e4aa86e1ec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a71b18c_603c3730",
+        "filename": "filter/source/xslt/odf2xhtml/export/xhtml/header.xsl",
+        "patchSetId": 3
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2016-12-08T12:07:22Z",
+      "side": 1,
+      "message": "This is a workaround, not a fix... A better way is to save results of page-size and page-margin calls into variables and only emit the @page directive if at least one of them is not empty.",
+      "range": {
+        "startLine": 162,
+        "startChar": 20,
+        "endLine": 162,
+        "endChar": 26
+      },
+      "revId": "023169d5f8c3698a3feecdd12a22f4e4aa86e1ec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
