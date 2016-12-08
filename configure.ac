@@ -6666,6 +6666,14 @@ dnl ===================================================================
 
 COMPILER_PLUGINS=
 # currently only Clang
+
+if test "$COM_IS_CLANG" != "TRUE"; then
+    if test "$libo_fuzzed_enable_compiler_plugins" = yes -a "$enable_compiler_plugins" = yes; then
+        AC_MSG_NOTICE([Resetting --enable-compiler-plugins=no])
+        enable_compiler_plugins=no
+    fi
+fi
+
 if test "$COM_IS_CLANG" = "TRUE"; then
     if test -n "$enable_compiler_plugins"; then
         compiler_plugins="$enable_compiler_plugins"
