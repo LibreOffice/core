@@ -8144,7 +8144,7 @@ void PDFWriterImpl::registerGlyphs( int nGlyphs,
     sal_Ucs* pCurUnicode = pUnicodes;
     for( int i = 0; i < nGlyphs; pCurUnicode += pUnicodesPerGlyph[i] , i++ )
     {
-        const int nFontGlyphId = pGlyphs[i]->maGlyphId & GF_IDXMASK;
+        const int nFontGlyphId = pGlyphs[i]->maGlyphId;
         const PhysicalFontFace* pCurrentFont = pFallbackFonts[i] ? pFallbackFonts[i] : pDevFont;
 
         FontSubset& rSubset = m_aSubsets[ pCurrentFont ];

@@ -58,10 +58,8 @@ sal_Int32 PDFFontCache::getGlyphWidth( const PhysicalFontFace* pFont, sal_GlyphI
     }
     if( ! rFontData.m_nWidths.empty() )
     {
-        sal_GlyphId nIndex = nGlyph;
-        nIndex &= GF_IDXMASK;
-        if( nIndex < rFontData.m_nWidths.size() )
-            nWidth = rFontData.m_nWidths[ nIndex ];
+        if (nGlyph < rFontData.m_nWidths.size())
+            nWidth = rFontData.m_nWidths[nGlyph];
     }
     return nWidth;
 }
