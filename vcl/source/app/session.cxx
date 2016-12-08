@@ -358,8 +358,9 @@ void SAL_CALL VCLSession::saveDone( const css::uno::Reference< XSessionManagerLi
             bSaveDone = false;
     }
 
-    SAL_INFO("vcl.se.debug", "  bSaveDone = " << (bSaveDone ? "true" : "false"));
-    if( bSaveDone )
+    SAL_INFO("vcl.se", "  bSaveDone = " << (bSaveDone ? "true" : "false"));
+
+    if( bSaveDone && !m_bSaveDone )
     {
         m_bSaveDone = true;
         if (m_xSession)
