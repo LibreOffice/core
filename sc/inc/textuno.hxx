@@ -263,11 +263,10 @@ public:
 class ScHeaderFooterTextCursor : public SvxUnoTextCursor
 {
 private:
-    ScHeaderFooterTextObj&  rTextObj;
+    rtl::Reference<ScHeaderFooterTextObj> rTextObj;
 
 public:
-                            ScHeaderFooterTextCursor(const ScHeaderFooterTextCursor& rOther);
-                            ScHeaderFooterTextCursor(ScHeaderFooterTextObj& rText);
+                            ScHeaderFooterTextCursor(rtl::Reference<ScHeaderFooterTextObj> const & rText);
         virtual                                 ~ScHeaderFooterTextCursor() throw() override;
 
                             // SvxUnoTextCursor methods reimplemented here:

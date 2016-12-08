@@ -299,7 +299,7 @@ uno::Reference<text::XTextCursor> SAL_CALL ScHeaderFooterTextObj::createTextCurs
                                                     throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    return new ScHeaderFooterTextCursor( *this );
+    return new ScHeaderFooterTextCursor( this );
 }
 
 uno::Reference<text::XTextCursor> SAL_CALL ScHeaderFooterTextObj::createTextCursorByRange(
@@ -669,31 +669,19 @@ ScCellTextCursor* ScCellTextCursor::getImplementation(const uno::Reference<uno::
     return pRet;
 }
 
-ScHeaderFooterTextCursor::ScHeaderFooterTextCursor(const ScHeaderFooterTextCursor& rOther) :
-    SvxUnoTextCursor( rOther ),
-    rTextObj( rOther.rTextObj )
-{
-    rTextObj.acquire();
-}
-
-ScHeaderFooterTextCursor::ScHeaderFooterTextCursor(ScHeaderFooterTextObj& rText) :
-    SvxUnoTextCursor( rText.GetUnoText() ),
+ScHeaderFooterTextCursor::ScHeaderFooterTextCursor(rtl::Reference<ScHeaderFooterTextObj> const & rText) :
+    SvxUnoTextCursor( rText->GetUnoText() ),
     rTextObj( rText )
-{
-    rTextObj.acquire();
-}
+{}
 
-ScHeaderFooterTextCursor::~ScHeaderFooterTextCursor() throw()
-{
-    rTextObj.release();
-}
+ScHeaderFooterTextCursor::~ScHeaderFooterTextCursor() throw() = default;
 
 // SvxUnoTextCursor methods reimplemented here to return the right objects:
 
 uno::Reference<text::XText> SAL_CALL ScHeaderFooterTextCursor::getText() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    return &rTextObj;
+    return rTextObj.get();
 }
 
 uno::Reference<text::XTextRange> SAL_CALL ScHeaderFooterTextCursor::getStart() throw(uno::RuntimeException, std::exception)
