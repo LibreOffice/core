@@ -1008,6 +1008,8 @@ DECLARE_RTFEXPORT_TEST(testCustomDocProps, "custom-doc-props.rtf")
     uno::Reference<beans::XPropertyContainer> xUserDefinedProperties = xDocumentProperties->getUserDefinedProperties();
     CPPUNIT_ASSERT_EQUAL(OUString("2016-03-08T10:55:18,531376147"), getProperty<OUString>(xUserDefinedProperties, "urn:bails:IntellectualProperty:Authorization:StartValidity"));
     CPPUNIT_ASSERT_EQUAL(OUString("None"), getProperty<OUString>(xUserDefinedProperties, "urn:bails:IntellectualProperty:Authorization:StopValidity"));
+    // Test roundtrip of numbers. This failed as getProperty() did not find "n".
+    CPPUNIT_ASSERT_EQUAL(42.0, getProperty<double>(xUserDefinedProperties, "n"));
 }
 
 DECLARE_RTFEXPORT_TEST(testTdf65642, "tdf65642.rtf")
