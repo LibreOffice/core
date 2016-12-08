@@ -134,6 +134,12 @@ namespace rptui
 
     void ConditionalFormattingDialog::dispose()
     {
+
+        for (auto i = m_aConditions.begin(); i != m_aConditions.end(); ++i)
+        {
+            i->disposeAndClear();
+        }
+
         m_aConditions.clear();
         m_pConditionPlayground.clear();
         m_pScrollWindow.clear();
@@ -190,7 +196,6 @@ namespace rptui
             Reference< XFormatCondition > xCond = m_xCopy->createFormatCondition();
             ::comphelper::copyProperties(m_xCopy.get(),xCond.get());
             m_xCopy->insertByIndex( _nNewCondIndex, makeAny( xCond ) );
-
             VclPtrInstance<Condition> pCon( m_pConditionPlayground, *this, m_rController );
             pCon->setCondition( xCond );
             pCon->reorderWithinParent(_nNewCondIndex);
