@@ -251,6 +251,7 @@ certain functionality.
 @li @c fwk.joburl
 @li @c fwk.loadenv
 @li @c fwk.session
+@li @c fwk.session.debug
 @li @c fwk.uiconfiguration
 @li @c fwk.uielement
 
@@ -445,7 +446,10 @@ certain functionality.
 @li @c vcl.schedule - scheduler / main-loop information
 @li @c vcl.screensaverinhibitor
 @li @c vcl.scrollbar - Scroll Bars
-@li @c vcl.sm - Session Manager
+@li @c vcl.se - VCL Session Manager
+@li @c vcl.se.debug
+@li @c vcl.sm - Session Manager Client
+@li @c vcl.sm.debug
 @li @c vcl.unity
 @li @c vcl.unx.print
 @li @c vcl.unx.dtrans
