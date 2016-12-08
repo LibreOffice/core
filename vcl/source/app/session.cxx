@@ -101,12 +101,16 @@ VCLSession::VCLSession()
           m_bInteractionDone( false ),
           m_bSaveDone( false )
 {
+    SAL_INFO("vcl.se", "VCLSession::VCLSession" );
+
     if (m_xSession)
         m_xSession->SetCallback( SalSessionEventProc, this );
 }
 
 void VCLSession::callSaveRequested( bool bShutdown )
 {
+    SAL_INFO("vcl.se", "VCLSession::callSaveRequested" );
+
     std::list< Listener > aListeners;
     {
         osl::MutexGuard aGuard( m_aMutex );
@@ -127,7 +131,10 @@ void VCLSession::callSaveRequested( bool bShutdown )
         m_bInteractionRequested = m_bInteractionGranted = !m_xSession;
 
         // answer the session manager even if no listeners available anymore
-        SAL_WARN_IF(  aListeners.empty(), "vcl.app", "saveRequested but no listeners !" );
+        SAL_WARN_IF(  aListeners.empty(), "vcl.se", "saveRequested but no listeners !" );
+
+        SAL_INFO("vcl.se.debug", "  aListeners.empty() = " << (aListeners.empty() ? "true" : "false") <<
+                                 ", bShutdown = " << (bShutdown ? "true" : "false"));
         if( aListeners.empty() )
         {
             if (m_xSession)
@@ -143,6 +150,8 @@ void VCLSession::callSaveRequested( bool bShutdown )
 
 void VCLSession::callInteractionGranted( bool bInteractionGranted )
 {
+    SAL_INFO("vcl.se", "VCLSession::callInteractionGranted" );
+
     std::list< Listener > aListeners;
     {
         osl::MutexGuard aGuard( m_aMutex );
@@ -154,7 +163,10 @@ void VCLSession::callInteractionGranted( bool bInteractionGranted )
         m_bInteractionGranted = bInteractionGranted;
 
         // answer the session manager even if no listeners available anymore
-        SAL_WARN_IF( aListeners.empty(), "vcl.app", "interactionGranted but no listeners !" );
+        SAL_WARN_IF(  aListeners.empty(), "vcl.se", "interactionGranted but no listeners !" );
+
+        SAL_INFO("vcl.se.debug", "  aListeners.empty() = " << (aListeners.empty() ? "true" : "false") <<
+                                 ", bInteractionGranted = " << (bInteractionGranted ? "true" : "false"));
         if( aListeners.empty() )
         {
             if (m_xSession)
@@ -170,6 +182,8 @@ void VCLSession::callInteractionGranted( bool bInteractionGranted )
 
 void VCLSession::callShutdownCancelled()
 {
+    SAL_INFO("vcl.se", "VCLSession::callShutdownCancelled");
+
     std::list< Listener > aListeners;
     {
         osl::MutexGuard aGuard( m_aMutex );
@@ -186,6 +200,8 @@ void VCLSession::callShutdownCancelled()
 
 void VCLSession::callQuit()
 {
+    SAL_INFO("vcl.se", "VCLSession::callQuit");
+
     std::list< Listener > aListeners;
     {
         osl::MutexGuard aGuard( m_aMutex );
@@ -206,25 +222,31 @@ void VCLSession::callQuit()
 
 void VCLSession::SalSessionEventProc( void* pData, SalSessionEvent* pEvent )
 {
+    SAL_INFO("vcl.se", "VCLSession::SalSessionEventProc");
+
     VCLSession * pThis = static_cast< VCLSession * >( pData );
     switch( pEvent->m_eType )
     {
         case Interaction:
         {
+            SAL_INFO("vcl.se.debug", "  EventProcType = Interaction");
             SalSessionInteractionEvent* pIEv = static_cast<SalSessionInteractionEvent*>(pEvent);
             pThis->callInteractionGranted( pIEv->m_bInteractionGranted );
         }
         break;
         case SaveRequest:
         {
+            SAL_INFO("vcl.se.debug", "  EventProcType = SaveRequest");
             SalSessionSaveRequestEvent* pSEv = static_cast<SalSessionSaveRequestEvent*>(pEvent);
             pThis->callSaveRequested( pSEv->m_bShutdown );
         }
         break;
         case ShutdownCancel:
+            SAL_INFO("vcl.se.debug", "  EventProcType = ShutdownCancel");
             pThis->callShutdownCancelled();
             break;
         case Quit:
+            SAL_INFO("vcl.se.debug", "  EventProcType = Quit");
             pThis->callQuit();
             break;
     }
@@ -232,16 +254,23 @@ void VCLSession::SalSessionEventProc( void* pData, SalSessionEvent* pEvent )
 
 void SAL_CALL VCLSession::addSessionManagerListener( const css::uno::Reference<XSessionManagerListener>& xListener ) throw( RuntimeException, std::exception )
 {
+    SAL_INFO("vcl.se", "VCLSession::addSessionManagerListener" );
+
     osl::MutexGuard aGuard( m_aMutex );
 
+    SAL_INFO("vcl.se.debug", "  m_aListeners.size() = " << m_aListeners.size() );
     m_aListeners.push_back( Listener( xListener ) );
 }
 
 void SAL_CALL VCLSession::removeSessionManagerListener( const css::uno::Reference<XSessionManagerListener>& xListener ) throw( RuntimeException, std::exception )
 {
+    SAL_INFO("vcl.se", "VCLSession::removeSessionManagerListener" );
+
     osl::MutexGuard aGuard( m_aMutex );
 
     std::list< Listener >::iterator it = m_aListeners.begin();
+
+    SAL_INFO("vcl.se.debug", "  m_aListeners.size() = " << m_aListeners.size() );
     while( it != m_aListeners.end() )
     {
         if( it->m_xListener == xListener )
@@ -255,6 +284,10 @@ void SAL_CALL VCLSession::removeSessionManagerListener( const css::uno::Referenc
 
 void SAL_CALL VCLSession::queryInteraction( const css::uno::Reference<XSessionManagerListener>& xListener ) throw( RuntimeException, std::exception )
 {
+    SAL_INFO("vcl.se", "VCLSession::queryInteraction");
+
+    SAL_INFO("vcl.se.debug", "  m_bInteractionGranted = " << (m_bInteractionGranted ? "true" : "false") <<
+                             ", m_bInteractionRequested = "<< (m_bInteractionRequested ? "true" : "false"));
     if( m_bInteractionGranted )
     {
         if( m_bInteractionDone )
@@ -274,6 +307,7 @@ void SAL_CALL VCLSession::queryInteraction( const css::uno::Reference<XSessionMa
     {
         if( it->m_xListener == xListener )
         {
+            SAL_INFO("vcl.se.debug", "  it->m_xListener == xListener");
             it->m_bInteractionRequested = true;
             it->m_bInteractionDone      = false;
         }
@@ -282,6 +316,8 @@ void SAL_CALL VCLSession::queryInteraction( const css::uno::Reference<XSessionMa
 
 void SAL_CALL VCLSession::interactionDone( const css::uno::Reference< XSessionManagerListener >& xListener ) throw( RuntimeException, std::exception )
 {
+    SAL_INFO("vcl.se", "VCLSession::interactionDone");
+
     osl::MutexGuard aGuard( m_aMutex );
     int nRequested = 0, nDone = 0;
     for( std::list< Listener >::iterator it = m_aListeners.begin(); it != m_aListeners.end(); ++it )
@@ -295,6 +331,9 @@ void SAL_CALL VCLSession::interactionDone( const css::uno::Reference< XSessionMa
         if( it->m_bInteractionDone )
             nDone++;
     }
+
+    SAL_INFO("vcl.se.debug", "  nDone = " << nDone <<
+                             ", nRequested =" << nRequested);
     if( nDone == nRequested && nDone > 0 )
     {
         m_bInteractionDone = true;
@@ -305,6 +344,8 @@ void SAL_CALL VCLSession::interactionDone( const css::uno::Reference< XSessionMa
 
 void SAL_CALL VCLSession::saveDone( const css::uno::Reference< XSessionManagerListener >& xListener ) throw( RuntimeException, std::exception )
 {
+    SAL_INFO("vcl.se", "VCLSession::saveDone");
+
     osl::MutexGuard aGuard( m_aMutex );
 
     bool bSaveDone = true;
@@ -316,6 +357,8 @@ void SAL_CALL VCLSession::saveDone( const css::uno::Reference< XSessionManagerLi
         if( ! it->m_bSaveDone )
             bSaveDone = false;
     }
+
+    SAL_INFO("vcl.se.debug", "  bSaveDone = " << (bSaveDone ? "true" : "false"));
     if( bSaveDone )
     {
         m_bSaveDone = true;
@@ -326,10 +369,14 @@ void SAL_CALL VCLSession::saveDone( const css::uno::Reference< XSessionManagerLi
 
 sal_Bool SAL_CALL VCLSession::cancelShutdown() throw( RuntimeException, std::exception )
 {
+    SAL_INFO("vcl.se", "VCLSession::cancelShutdown");
+
     return m_xSession && m_xSession->cancelShutdown();
 }
 
 void VCLSession::disposing() {
+    SAL_INFO("vcl.se", "VCLSession::disposing");
+
     std::list<Listener> list;
     {
         osl::MutexGuard g(m_aMutex);
@@ -339,8 +386,9 @@ void VCLSession::disposing() {
     for (auto const & i: list) {
         try {
             i.m_xListener->disposing(src);
+            SAL_INFO("vcl.se.debug", "  call Listener disposing");
         } catch (css::uno::RuntimeException & e) {
-            SAL_WARN("vcl.app", "ignoring RuntimeException " << e.Message);
+            SAL_WARN("vcl.se", "ignoring RuntimeException " << e.Message);
         }
     }
 }
@@ -349,17 +397,23 @@ void VCLSession::disposing() {
 
 OUString SAL_CALL vcl_session_getImplementationName()
 {
+    SAL_INFO("vcl.se", "vcl_session_getImplementationName");
+
     return OUString( "com.sun.star.frame.VCLSessionManagerClient" );
 }
 
 Sequence< OUString > SAL_CALL vcl_session_getSupportedServiceNames()
 {
+    SAL_INFO("vcl.se", "vcl_session_getSupportedServiceNames");
+
     Sequence< OUString > aRet { "com.sun.star.frame.SessionManagerClient" };
     return aRet;
 }
 
 css::uno::Reference< XInterface > SAL_CALL vcl_session_createInstance( SAL_UNUSED_PARAMETER const css::uno::Reference< XMultiServiceFactory > & )
 {
+    SAL_INFO("vcl.se", "vcl_session_createInstance");
+
     return static_cast< cppu::OWeakObject * >(new VCLSession);
 }
 
