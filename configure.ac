@@ -2369,6 +2369,17 @@ AC_ARG_WITH(system-icu-for-build,
 
 
 dnl ===================================================================
+dnl Check for incompatible options set by fuzzing, and reset those
+dnl automatically to working combinations
+dnl ===================================================================
+
+if test "$libo_fuzzed_enable_dbus" = yes -a "$libo_fuzzed_enable_avahi" -a \
+        "$enable_dbus" != "$enable_avahi"; then
+    AC_MSG_NOTICE([Resetting --enable-avahi=$enable_dbus])
+    enable_avahi=$enable_dbus
+fi
+
+dnl ===================================================================
 dnl check for required programs (grep, awk, sed, bash)
 dnl ===================================================================
 
