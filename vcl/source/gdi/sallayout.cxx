@@ -1610,8 +1610,8 @@ int MultiSalLayout::GetNextGlyphs(int nLen, const GlyphItem** pGlyphs,
             nStart |= nFontTag;
             for( int i = 0; i < nRetVal; ++i )
             {
-                // FIXME: This is ugly!
-                const_cast<GlyphItem*>(pGlyphs[i])->maGlyphId |= nFontTag;
+                // FIXME: This cast is ugly!
+                const_cast<GlyphItem*>(pGlyphs[i])->mnFallbackLevel = nLevel;
                 if( pFallbackFonts )
                 {
                     pFallbackFonts[ i ] =  mpFallbackFonts[ nLevel ];

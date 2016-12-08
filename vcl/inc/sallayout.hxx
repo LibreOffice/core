@@ -279,6 +279,8 @@ struct GlyphItem
     sal_GlyphId maGlyphId;
     Point   maLinearPos;    // absolute position of non rotated string
 
+    int     mnFallbackLevel;
+
 public:
             GlyphItem()
             :   mnFlags(0)
@@ -287,6 +289,7 @@ public:
             ,   mnNewWidth(0)
             ,   mnXOffset(0)
             ,   maGlyphId(0)
+            ,   mnFallbackLevel(0)
             { }
 
             GlyphItem( int nCharPos, sal_GlyphId aGlyphId, const Point& rLinearPos,
@@ -298,6 +301,7 @@ public:
             ,   mnXOffset(0)
             ,   maGlyphId(aGlyphId)
             ,   maLinearPos(rLinearPos)
+            ,   mnFallbackLevel(0)
             { }
 
             GlyphItem( int nCharPos, sal_GlyphId aGlyphId, const Point& rLinearPos,
@@ -309,6 +313,7 @@ public:
             ,   mnXOffset(nXOffset)
             ,   maGlyphId(aGlyphId)
             ,   maLinearPos(rLinearPos)
+            ,   mnFallbackLevel(0)
             { }
 
     enum {
