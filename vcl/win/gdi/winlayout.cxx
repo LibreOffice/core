@@ -294,7 +294,7 @@ bool ExTextOutRenderer::operator ()(SalLayout const &rLayout, HDC hDC,
     while (rLayout.GetNextGlyphs(1, &pGlyph, *pPos, *pGetNextGlypInfo))
     {
         bGlyphs = true;
-        WORD glyphWStr[] = { pGlyph->maGlyphId & GF_IDXMASK };
+        WORD glyphWStr[] = { pGlyph->maGlyphId };
         if (pGlyph->IsVertical())
             glyphWStr[0] |= GF_VERT;
         ExtTextOutW(hDC, pPos->X(), pPos->Y(), ETO_GLYPH_INDEX, nullptr, LPCWSTR(&glyphWStr), 1, nullptr);
@@ -391,7 +391,7 @@ bool D2DWriteTextOutRenderer::operator ()(SalLayout const &rLayout, HDC hDC,
                 mpFontFace,
                 mlfEmHeight,
                 1,
-                { pGlyph->maGlyphId & GF_IDXMASK },
+                { pGlyph->maGlyphId },
                 { pGlyph->mnNewWidth },
                 { { 0.0f, 0.0f } },
                 false,
@@ -542,7 +542,7 @@ bool D2DWriteTextOutRenderer::GetDWriteInkBox(SalLayout const &rLayout, Rectangl
     while (rLayout.GetNextGlyphs(1, &pGlyph, aPos, nStart))
     {
         positions.push_back(aPos);
-        indices.push_back(pGlyph->maGlyphId & GF_IDXMASK);
+        indices.push_back(pGlyph->maGlyphId);
         vertical.push_back(pGlyph->IsVertical());
     }
 

@@ -685,7 +685,7 @@ void FreetypeFont::InitGlyphData(const GlyphItem& rGlyph, GlyphData& rGD ) const
 {
     FT_Activate_Size( maSizeFT );
 
-    FT_Error rc = FT_Load_Glyph(maFaceFT, rGlyph.maGlyphId & GF_IDXMASK, mnLoadFlags);
+    FT_Error rc = FT_Load_Glyph(maFaceFT, rGlyph.maGlyphId, mnLoadFlags);
 
     if( rc != FT_Err_Ok )
     {
@@ -998,7 +998,7 @@ bool FreetypeFont::GetGlyphOutline(const GlyphItem& rGlyph,
     nLoadFlags |= FT_LOAD_TARGET_LIGHT;
 #endif
 
-    FT_Error rc = FT_Load_Glyph(maFaceFT, rGlyph.maGlyphId & GF_IDXMASK, nLoadFlags);
+    FT_Error rc = FT_Load_Glyph(maFaceFT, rGlyph.maGlyphId, nLoadFlags);
     if( rc != FT_Err_Ok )
         return false;
 

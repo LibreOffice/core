@@ -442,7 +442,7 @@ void AquaSalGraphics::DrawTextLayout(const CommonSalLayout& rLayout)
             }
         }
 
-        aGlyphIds.push_back(pGlyph->maGlyphId & GF_IDXMASK);
+        aGlyphIds.push_back(pGlyph->maGlyphId);
         aGlyphPos.push_back(aGCPos);
         aGlyphOrientation.push_back(bUprightGlyph);
     }
