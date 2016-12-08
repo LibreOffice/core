@@ -1012,39 +1012,8 @@ PrinterGfx::PSHexString (const unsigned char* pString, sal_Int16 nLen)
     WritePS (mpPageBody, pHexString, nChar);
 }
 
-/* psshowtext helper routines: draw an array for xshow ps operator */
 void
-PrinterGfx::PSDeltaArray (const sal_Int32 *pArray, sal_Int16 nEntries)
-{
-    sal_Char pPSArray [128];
-    sal_Int32 nChar = 0;
-
-    nChar  = psp::appendStr  ("[", pPSArray + nChar);
-    nChar += psp::getValueOf (pArray[0], pPSArray + nChar);
-
-    for (int i = 1; i < nEntries; i++)
-    {
-        if (nChar >= (nMaxTextColumn - 1))
-        {
-            nChar += psp::appendStr ("\n", pPSArray + nChar);
-            WritePS (mpPageBody, pPSArray, nChar);
-            nChar = 0;
-        }
-
-        nChar += psp::appendStr  (" ", pPSArray + nChar);
-        nChar += psp::getValueOf (pArray[i] - pArray[i-1], pPSArray + nChar);
-    }
-
-    nChar  += psp::appendStr (" 0]\n", pPSArray + nChar);
-    WritePS (mpPageBody, pPSArray, nChar);
-}
-
-/* the DrawText equivalent, pDeltaArray may be NULL. For Type1 fonts or single byte
- * fonts in general nBytes and nGlyphs is the same. For printer resident Composite
- * fonts it may be different (these fonts may be SJIS encoded for example) */
-void
-PrinterGfx::PSShowText (const unsigned char* pStr, sal_Int16 nGlyphs, sal_Int16 nBytes,
-                        const sal_Int32* pDeltaArray)
+PrinterGfx::PSShowGlyph (const unsigned char nGlyphId)
 {
     PSSetColor (maTextColor);
     PSSetColor ();
@@ -1066,31 +1035,17 @@ PrinterGfx::PSShowText (const unsigned char* pStr, sal_Int16 nGlyphs, sal_Int16 
             nLW = nLW < maVirtualStatus.mnTextHeight ? nLW : maVirtualStatus.mnTextHeight;
         psp::getValueOfDouble( pBuffer, (double)nLW / 30.0 );
     }
-    // dispatch to the drawing method
-    if (pDeltaArray == nullptr)
-    {
-        PSHexString (pStr, nBytes);
 
-        if( maVirtualStatus.mbArtBold )
-        {
-            WritePS( mpPageBody, pBuffer );
-            WritePS( mpPageBody, " bshow\n" );
-        }
-        else
-            WritePS (mpPageBody, "show\n");
+    // dispatch to the drawing method
+    PSHexString (&nGlyphId, 1);
+
+    if( maVirtualStatus.mbArtBold )
+    {
+        WritePS( mpPageBody, pBuffer );
+        WritePS( mpPageBody, " bshow\n" );
     }
     else
-    {
-        PSHexString (pStr, nBytes);
-        PSDeltaArray (pDeltaArray, nGlyphs - 1);
-        if( maVirtualStatus.mbArtBold )
-        {
-            WritePS( mpPageBody, pBuffer );
-            WritePS( mpPageBody, " bxshow\n" );
-        }
-        else
-            WritePS (mpPageBody, "xshow\n");
-    }
+        WritePS (mpPageBody, "show\n");
 
     // restore the user coordinate system
     if (mnTextAngle != 0)
