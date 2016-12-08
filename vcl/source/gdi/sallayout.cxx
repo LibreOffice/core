@@ -722,16 +722,6 @@ bool SalLayout::GetBoundRect( SalGraphics& rSalGraphics, Rectangle& rRect ) cons
     return bRet;
 }
 
-// FIXME: This function is just broken, it assumes any glyph at index 3 in the
-// font is space, which though common is not a hard requirement and not the
-// only glyph for space characters. Fix the call sites and fix them.
-bool SalLayout::IsSpacingGlyph( sal_GlyphId nGlyph )
-{
-    bool bRet = false;
-    bRet = (nGlyph == 3);
-    return bRet;
-}
-
 GenericSalLayout::GenericSalLayout()
 {}
 
