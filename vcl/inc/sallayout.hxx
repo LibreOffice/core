@@ -283,29 +283,35 @@ struct GlyphItem
 
 public:
             GlyphItem()
-                : mnFlags(0)
-                , mnCharPos(0)
-                , mnOrigWidth(0)
-                , mnNewWidth(0)
-                , mnXOffset(0)
-                , maGlyphId(0)
-            {}
+            :   mnFlags(0)
+            ,   mnCharPos(0)
+            ,   mnOrigWidth(0)
+            ,   mnNewWidth(0)
+            ,   mnXOffset(0)
+            ,   maGlyphId(0)
+            { }
 
             GlyphItem( int nCharPos, sal_GlyphId aGlyphId, const Point& rLinearPos,
                 long nFlags, int nOrigWidth )
-            :   mnFlags(nFlags), mnCharPos(nCharPos),
-                mnOrigWidth(nOrigWidth), mnNewWidth(nOrigWidth),
-                mnXOffset(0),
-                maGlyphId(aGlyphId), maLinearPos(rLinearPos)
-            {}
+            :   mnFlags(nFlags)
+            ,   mnCharPos(nCharPos)
+            ,   mnOrigWidth(nOrigWidth)
+            ,   mnNewWidth(nOrigWidth)
+            ,   mnXOffset(0)
+            ,   maGlyphId(aGlyphId)
+            ,   maLinearPos(rLinearPos)
+            { }
 
             GlyphItem( int nCharPos, sal_GlyphId aGlyphId, const Point& rLinearPos,
                 long nFlags, int nOrigWidth, int nXOffset )
-            :   mnFlags(nFlags), mnCharPos(nCharPos),
-                mnOrigWidth(nOrigWidth), mnNewWidth(nOrigWidth),
-                mnXOffset(nXOffset),
-                maGlyphId(aGlyphId), maLinearPos(rLinearPos)
-            {}
+            :   mnFlags(nFlags)
+            ,   mnCharPos(nCharPos)
+            ,   mnOrigWidth(nOrigWidth)
+            ,   mnNewWidth(nOrigWidth)
+            ,   mnXOffset(nXOffset)
+            ,   maGlyphId(aGlyphId)
+            ,   maLinearPos(rLinearPos)
+            { }
 
     enum {
         IS_IN_CLUSTER = 0x001,
