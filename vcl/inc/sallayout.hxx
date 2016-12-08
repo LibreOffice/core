@@ -315,12 +315,14 @@ public:
         IS_IN_CLUSTER = 0x001,
         IS_RTL_GLYPH  = 0x002,
         IS_DIACRITIC  = 0x004,
+        IS_VERTICAL   = 0x008,
         ALLOW_KASHIDA = 0X010
     };
 
     bool    IsClusterStart() const  { return ((mnFlags & IS_IN_CLUSTER) == 0); }
     bool    IsRTLGlyph() const      { return ((mnFlags & IS_RTL_GLYPH) != 0); }
     bool    IsDiacritic() const     { return ((mnFlags & IS_DIACRITIC) != 0); }
+    bool    IsVertical() const      { return ((mnFlags & IS_VERTICAL) != 0); }
     bool    AllowKashida() const    { return ((mnFlags & ALLOW_KASHIDA) != 0); }
 };
 
