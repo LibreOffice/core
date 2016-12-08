@@ -1062,10 +1062,9 @@ int CALLBACK SalEnumFontsProcExW( const LOGFONTW* lpelfe,
         if (nFontType & RASTER_FONTTYPE)
             return 1;
 
-        // Ignore font formats not supported by CommonSalLayout.
-        if (SalLayout::UseCommonLayout())
-            if ((pMetric->ntmTm.ntmFlags & NTM_TYPE1) || (pMetric->ntmTm.ntmFlags & NTM_MULTIPLEMASTER))
-                return 1;
+        // Ignore font formats we don’t support.
+        if ((pMetric->ntmTm.ntmFlags & NTM_TYPE1) || (pMetric->ntmTm.ntmFlags & NTM_MULTIPLEMASTER))
+            return 1;
 
         WinFontFace* pData = ImplLogMetricToDevFontDataW( pLogFont, &(pMetric->ntmTm), nFontType );
         pData->SetFontId( sal_IntPtr( pInfo->mnFontCount++ ) );
