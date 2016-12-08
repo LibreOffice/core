@@ -38,6 +38,8 @@ class SessionManagerClient
     static boost::scoped_ptr< ICEConnectionObserver > m_pICEConnectionObserver;
     static SmcConn m_pSmcConnection;
     static OString m_aClientID;
+    static OString m_aTimeID;
+    static OString m_aClientTimeID;
     static bool m_bDocSaveDone;
 
     static void SaveYourselfProc(       SmcConn connection,

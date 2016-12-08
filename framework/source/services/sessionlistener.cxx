@@ -233,9 +233,10 @@ void SAL_CALL SessionListener::statusChanged(const FeatureStateEvent& event)
             m_bRestored = sal_True; // a document was restored
 
     }
-    else if ( event.FeatureURL.Complete == "vnd.sun.star.autorecovery:/doSessionSave" )
-    {
-        if (event.FeatureDescriptor.compareToAscii("stop")==0)
+    else if ( event.FeatureURL.Complete == "vnd.sun.star.autorecovery:/doAutoSave" )
+    {   // the "doSessionSave" was never set, look to framework/source/services/autorecovery.cxx
+        //   it always testing but never setting (enum AutoRecovery::E_SESSION_SAVE)
+        if (event.FeatureDescriptor == "update")
         {
             if (m_rSessionManager.is())
                 m_rSessionManager->saveDone(this); // done with save
@@ -335,7 +336,7 @@ void SAL_CALL SessionListener::approveInteraction( sal_Bool bInteractionGranted 
             m_rSessionManager->interactionDone( this );
         }
 
-        if ( m_rSessionManager.is() )
+        if ( m_rSessionManager.is() && m_bTerminated )
             m_rSessionManager->saveDone(this);
     }
     else
@@ -350,6 +351,9 @@ void SessionListener::shutdownCanceled()
     SAL_INFO("fwk.session", "SessionListener::shutdownCanceled");
     // set the state back
     m_bSessionStoreRequested = sal_False; // there is no need to protect it with mutex
+
+    if ( m_rSessionManager.is() )
+        m_rSessionManager->saveDone(this);
 }
 
 void SessionListener::doQuit()
