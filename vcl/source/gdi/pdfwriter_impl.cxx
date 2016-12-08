@@ -8621,18 +8621,6 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
                 }
                 else
                     aUnicodes.push_back(rText[pGlyphs[i]->mnCharPos]);
-                // #i36691# hack that is needed because currently the pGlyphs[]
-                // argument is ignored for embeddable fonts and so the layout
-                // engine's glyph work is ignored (i.e. char mirroring)
-                // TODO: a real solution would be to map the layout engine's
-                // glyphid (i.e. FreeType's synthetic glyphid for a Type1 font)
-                // back to unicode and then to embeddable font's encoding
-                if( (getReferenceDevice()->GetLayoutMode() & ComplexTextLayoutFlags::BiDiRtl) != ComplexTextLayoutFlags::Default )
-                {
-                    size_t nI = aUnicodes.size()-1;
-                    for( int n = 0; n < nChars; n++, nI-- )
-                        aUnicodes[nI] = static_cast<sal_Ucs>(GetMirroredChar(aUnicodes[nI]));
-                }
             }
             else
                 aUnicodes.push_back( 0 );

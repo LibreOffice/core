@@ -83,7 +83,6 @@ namespace awt {
 } } }
 
 // helper needed by SalLayout implementations as well as svx/source/dialog/svxbmpnumbalueset.cxx
-VCL_DLLPUBLIC sal_UCS4 GetMirroredChar( sal_UCS4 );
 VCL_DLLPUBLIC sal_UCS4 GetLocalizedChar( sal_UCS4, LanguageType );
 
 enum class SystemWindowFlags {

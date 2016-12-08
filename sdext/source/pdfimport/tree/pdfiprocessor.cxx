@@ -736,7 +736,7 @@ OUString PDFIProcessor::mirrorString( const OUString& i_rString )
         const sal_uInt32 nCodePoint = i_rString.iterateCodePoints( &i );
 
         // and append it mirrored
-        aMirror.appendUtf32( GetMirroredChar(nCodePoint) );
+        aMirror.appendUtf32(u_charMirror(nCodePoint);
     }
     return aMirror.makeStringAndClear();
 }
