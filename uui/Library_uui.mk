@@ -42,6 +42,7 @@ $(eval $(call gb_Library_add_linked_libs,uui,\
 	sal \
 	svl \
 	svt \
+	stl \
 	tl \
 	utl \
 	vcl \
