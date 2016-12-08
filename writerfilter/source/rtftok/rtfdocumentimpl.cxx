@@ -51,6 +51,29 @@
 
 using namespace com::sun::star;
 
+namespace
+{
+/// Returns an util::DateTime from a 'YYYY. MM. DD.' string.
+util::DateTime getDateTimeFromUserProp(const OUString& rString)
+{
+    util::DateTime aRet;
+    sal_Int32 nLen = rString.getLength();
+    if (nLen >= 4)
+    {
+        aRet.Year = rString.copy(0, 4).toInt32();
+
+        if (nLen >= 8 && rString.copy(4, 2) == ". ")
+        {
+            aRet.Month = rString.copy(6, 2).toInt32();
+
+            if (nLen >= 12 && rString.copy(8, 2) == ". ")
+                aRet.Day = rString.copy(10, 2).toInt32();
+        }
+    }
+    return aRet;
+}
+} // anonymous namespace
+
 namespace writerfilter
 {
 namespace rtftok
@@ -2687,6 +2710,8 @@ RTFError RTFDocumentImpl::popState()
                 aAny = uno::makeAny(aStaticVal.toInt32());
             else if (m_aStates.top().aPropType == cppu::UnoType<bool>::get())
                 aAny = uno::makeAny(aStaticVal.toBoolean());
+            else if (m_aStates.top().aPropType == cppu::UnoType<util::DateTime>::get())
+                aAny = uno::makeAny(getDateTimeFromUserProp(aStaticVal));
 
             xPropertyContainer->addProperty(rKey, beans::PropertyAttribute::REMOVABLE, aAny);
         }

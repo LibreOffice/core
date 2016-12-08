@@ -524,6 +524,7 @@ void RtfExport::WriteUserProps()
                 OUString aValue;
                 double fValue;
                 bool bValue;
+                util::DateTime aDate;
                 uno::Any aAny = xPropertySet->getPropertyValue(rProperty.Name);
                 if (aAny >>= bValue)
                 {
@@ -539,6 +540,22 @@ void RtfExport::WriteUserProps()
                 {
                     WriteUserPropType(3);
                     WriteUserPropValue(OUString::number(fValue));
+                }
+                else if (aAny >>= aDate)
+                {
+                    WriteUserPropType(64);
+                    // Format is 'YYYY. MM. DD.'.
+                    aValue += OUString::number(aDate.Year);
+                    aValue += ". ";
+                    if (aDate.Month < 10)
+                        aValue += "0";
+                    aValue += OUString::number(aDate.Month);
+                    aValue += ". ";
+                    if (aDate.Day < 10)
+                        aValue += "0";
+                    aValue += OUString::number(aDate.Day);
+                    aValue += ".";
+                    WriteUserPropValue(aValue);
                 }
             }
         }

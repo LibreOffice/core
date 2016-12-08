@@ -1014,6 +1014,12 @@ DECLARE_RTFEXPORT_TEST(testCustomDocProps, "custom-doc-props.rtf")
     CPPUNIT_ASSERT(getProperty<bool>(xUserDefinedProperties, "by"));
     // Test boolean "no".
     CPPUNIT_ASSERT(!getProperty<bool>(xUserDefinedProperties, "bn"));
+
+    // Test roundtrip of date in general, and year/month/day in particular.
+    util::DateTime aDate = getProperty<util::DateTime>(xUserDefinedProperties, "d");
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(2016), aDate.Year);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(1), aDate.Month);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(30), aDate.Day);
 }
 
 DECLARE_RTFEXPORT_TEST(testTdf65642, "tdf65642.rtf")
