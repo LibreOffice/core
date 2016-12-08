@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a71b18c_40a3bb9e",
+        "filename": "include/sal/log.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-12-08T10:01:01Z",
+      "side": 1,
+      "message": "Given this is all INTERNAL and sal_detail_log is in section PRIVATE_1.2 in sal/util/sal.map, I wonder whether we should add that maxNoStackFramesToDisplay param to it and move it to a new PRIVATE_1.3 section (and maybe leave an an aborting sal_detail_log@PRIVATE_1.2 stub in on Linux, for the sake of distros with hard SONAME requirements), and add that param to SAL_DETAIL_LOG_STREAM too.\n\n(If we don\u0027t, we\u0027d still need to add sal_detail_log_backtrace to sal/util/sal.map.)",
+      "revId": "54a6a2bf90952b99eb5f29fee7faae736c5371d4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
