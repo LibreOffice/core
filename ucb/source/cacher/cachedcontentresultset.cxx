@@ -295,7 +295,7 @@ const Any& SAL_CALL CachedContentResultSet::CCRS_Cache
     return (*rRow)[nColumnIndex-1];
 }
 
-const OUString& SAL_CALL CachedContentResultSet::CCRS_Cache
+OUString SAL_CALL CachedContentResultSet::CCRS_Cache
     ::getContentIdentifierString( sal_Int32 nRow )
     throw( css::uno::RuntimeException )
 {
@@ -317,7 +317,7 @@ const OUString& SAL_CALL CachedContentResultSet::CCRS_Cache
     }
 }
 
-const Reference< XContentIdentifier >& SAL_CALL CachedContentResultSet::CCRS_Cache
+Reference< XContentIdentifier > SAL_CALL CachedContentResultSet::CCRS_Cache
     ::getContentIdentifier( sal_Int32 nRow )
     throw( css::uno::RuntimeException )
 {
@@ -339,7 +339,7 @@ const Reference< XContentIdentifier >& SAL_CALL CachedContentResultSet::CCRS_Cac
     }
 }
 
-const Reference< XContent >& SAL_CALL CachedContentResultSet::CCRS_Cache
+Reference< XContent > SAL_CALL CachedContentResultSet::CCRS_Cache
     ::getContent( sal_Int32 nRow )
     throw( css::uno::RuntimeException )
 {
