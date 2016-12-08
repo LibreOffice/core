@@ -307,7 +307,7 @@ long FreetypeFont::Release() const
 const GlyphMetric& FreetypeFont::GetGlyphMetric(const GlyphItem& rGlyph)
 {
     // usually the GlyphData is cached
-    GlyphList::iterator it = maGlyphList.find(rGlyph.maGlyphId & GF_IDXMASK);
+    GlyphList::iterator it = maGlyphList.find(rGlyph.maGlyphId);
     if( it != maGlyphList.end() ) {
         GlyphData& rGlyphData = it->second;
         GlyphCache::GetInstance().UsingGlyph( *this, rGlyphData );
@@ -315,7 +315,7 @@ const GlyphMetric& FreetypeFont::GetGlyphMetric(const GlyphItem& rGlyph)
     }
 
     // sometimes not => we need to create and initialize it ourselves
-    GlyphData& rGlyphData = maGlyphList[rGlyph.maGlyphId & GF_IDXMASK];
+    GlyphData& rGlyphData = maGlyphList[rGlyph.maGlyphId];
     mnBytesUsed += sizeof( GlyphData );
     InitGlyphData(rGlyph, rGlyphData);
     GlyphCache::GetInstance().AddedGlyph( *this, rGlyphData );

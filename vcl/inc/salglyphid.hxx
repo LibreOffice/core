@@ -19,13 +19,9 @@
 #ifndef INCLUDED_VCL_INC_SALGLYPHID_HXX
 #define INCLUDED_VCL_INC_SALGLYPHID_HXX
 
-// TODO: sal_GlyphId should become a class...
 typedef sal_uInt32 sal_GlyphId;
 
 // Glyph Flags
-#define GF_FLAGMASK 0xFF800000
-#define GF_IDXMASK  ~GF_FLAGMASK
-
 #ifdef _WIN32
 // caution !!!
 #define GF_VERT     0x02000000
