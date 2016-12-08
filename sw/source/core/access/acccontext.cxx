@@ -730,7 +730,7 @@ void SAL_CALL SwAccessibleContext::removeAccessibleEventListener(
             const uno::Reference< XAccessibleEventListener >& xListener )
         throw (uno::RuntimeException, std::exception)
 {
-    if (xListener.is())
+    if (xListener.is() && m_nClientId)
     {
         SolarMutexGuard aGuard;
         sal_Int32 nListenerCount = comphelper::AccessibleEventNotifier::removeEventListener( m_nClientId, xListener );

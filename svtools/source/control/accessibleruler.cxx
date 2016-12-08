@@ -260,7 +260,7 @@ void SAL_CALL SvtRulerAccessible::addAccessibleEventListener( const uno::Referen
 void SAL_CALL SvtRulerAccessible::removeAccessibleEventListener( const uno::Reference< XAccessibleEventListener >& xListener )
     throw( RuntimeException, std::exception )
 {
-    if (xListener.is())
+    if (xListener.is() && mnClientId)
     {
         ::osl::MutexGuard   aGuard( m_aMutex );
 
@@ -332,23 +332,16 @@ void SAL_CALL SvtRulerAccessible::disposing()
 {
     if( !rBHelper.bDisposed )
     {
+        ::osl::MutexGuard   aGuard( m_aMutex );
+        mpRepr = nullptr;      // object dies with representation
+
+        // Send a disposing to all listeners.
+        if ( mnClientId )
         {
-            ::osl::MutexGuard   aGuard( m_aMutex );
-            mpRepr = nullptr;      // object dies with representation
-
+            comphelper::AccessibleEventNotifier::revokeClientNotifyDisposing( mnClientId, *this );
+            mnClientId =  0;
         }
-
-        {
-            ::osl::MutexGuard   aGuard( m_aMutex );
-
-            // Send a disposing to all listeners.
-            if ( mnClientId )
-            {
-                comphelper::AccessibleEventNotifier::revokeClientNotifyDisposing( mnClientId, *this );
-                mnClientId =  0;
-            }
-            mxParent.clear();
-        }
+        mxParent.clear();
     }
 }
 

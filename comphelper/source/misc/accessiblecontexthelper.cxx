@@ -151,7 +151,7 @@ namespace comphelper
         if ( !isAlive() )
             return;
 
-        if ( _rxListener.is() )
+        if ( _rxListener.is() && m_pImpl->getClientId() )
         {
             sal_Int32 nListenerCount = AccessibleEventNotifier::removeEventListener( m_pImpl->getClientId( ), _rxListener );
             if ( !nListenerCount )

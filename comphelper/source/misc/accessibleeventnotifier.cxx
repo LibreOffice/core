@@ -130,7 +130,7 @@ namespace
         // look up this client
         ClientMap &rClients = Clients::get();
         rPos = rClients.find( nClient );
-        OSL_ENSURE( rClients.end() != rPos,
+        assert( rClients.end() != rPos &&
             "AccessibleEventNotifier::implLookupClient: invalid client id "
             "(did you register your client?)!" );
 
