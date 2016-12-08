@@ -326,6 +326,8 @@ void RenderList::addDrawPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon,
                 aPolygon = rPolygon.getDefaultAdaptiveSubdivision();
 
             sal_uInt32 nPoints = aPolygon.count();
+            if (nPoints <= 1)
+                continue;
 
             GLfloat x1, y1, x2, y2;
             sal_uInt32 index1, index2;
