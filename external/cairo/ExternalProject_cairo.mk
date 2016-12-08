@@ -53,7 +53,7 @@ $(call gb_ExternalProject_get_state_target,cairo,build) :
 		$(if $(SYSTEM_FREETYPE),,FREETYPE_CFLAGS="-I$(call gb_UnpackedTarball_get_dir,freetype)/include") \
 		$(if $(SYSTEM_FONTCONFIG),,FONTCONFIG_CFLAGS="-I$(call gb_UnpackedTarball_get_dir,fontconfig)") \
 		$(if $(filter ANDROID IOS,$(OS)),--disable-shared,--disable-static) \
-		$(if $(filter ANDROID IOS,$(OS)),--disable-xlib --disable-xcb,--enable-xlib --enable-xcb) \
+		$(if $(filter ANDROID IOS,$(OS)),--disable-xlib --disable-xcb,$(if $(filter TRUE,$(ENABLE_HEADLESS)),--disable-xlib --disable-xcb,--enable-xlib --enable-xcb)) \
 		$(if $(filter IOS,$(OS)),--enable-quartz --enable-quartz-font) \
 		--disable-valgrind \
 		$(if $(filter IOS,$(OS)),--disable-ft,--enable-ft --enable-fc) \
