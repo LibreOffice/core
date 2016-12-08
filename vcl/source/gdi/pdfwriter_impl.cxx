@@ -8183,10 +8183,9 @@ void PDFWriterImpl::registerGlyphs( int nGlyphs,
         }
         if (!getReferenceDevice()->AcquireGraphics())
             return;
-        const bool bVertical = ((pGlyphs[i]->maGlyphId & GF_ROTMASK) != 0);
         pGlyphWidths[i] = m_aFontCache.getGlyphWidth( pCurrentFont,
                                                       nFontGlyphId,
-                                                      bVertical,
+                                                      pGlyphs[i]->IsVertical(),
                                                       pGraphics );
     }
 }
@@ -8293,7 +8292,7 @@ void PDFWriterImpl::drawVerticalGlyphs(
         double fSkewA = 0.0;
 
         Point aDeltaPos;
-        if( ( rGlyphs[i].m_nGlyphId & GF_ROTMASK ) == GF_ROTL )
+        if (rGlyphs[i].m_bVertical)
         {
             fDeltaAngle = M_PI/2.0;
             aDeltaPos.X() = m_pReferenceDevice->GetFontMetric().GetAscent();
@@ -8301,16 +8300,6 @@ void PDFWriterImpl::drawVerticalGlyphs(
             fYScale = fXScale;
             fTempXScale = 1.0;
             fSkewA = -fSkewB;
-            fSkewB = 0.0;
-        }
-        else if( ( rGlyphs[i].m_nGlyphId & GF_ROTMASK ) == GF_ROTR )
-        {
-            fDeltaAngle = -M_PI/2.0;
-            aDeltaPos.X() = (int)((double)m_pReferenceDevice->GetFontMetric().GetDescent()*fXScale);
-            aDeltaPos.Y() = -m_pReferenceDevice->GetFontMetric().GetAscent();
-            fYScale = fXScale;
-            fTempXScale = 1.0;
-            fSkewA = fSkewB;
             fSkewB = 0.0;
         }
         aDeltaPos += (m_pReferenceDevice->PixelToLogic( Point( (int)((double)nXOffset/fXScale), 0 ) ) - m_pReferenceDevice->PixelToLogic( Point() ) );
@@ -8661,7 +8650,8 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
                                          pGlyphWidths[i],
                                          pGlyphs[i]->maGlyphId,
                                          pMappedFontObjects[i],
-                                         pMappedGlyphs[i] ) );
+                                         pMappedGlyphs[i],
+                                         pGlyphs[i]->IsVertical() ) );
             if( bVertical )
                 aGNGlyphPos.Y() += pGlyphs[i]->mnNewWidth/rLayout.GetUnitsPerPixel();
             else
