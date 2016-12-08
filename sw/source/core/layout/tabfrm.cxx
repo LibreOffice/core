@@ -194,6 +194,8 @@ static SwTwips lcl_CalcMinRowHeight( const SwRowFrame *pRow,
                                      const bool _bConsiderObjs );
 static SwTwips lcl_CalcTopAndBottomMargin( const SwLayoutFrame&, const SwBorderAttrs& );
 
+static SwTwips lcl_calcHeightOfRowBeforeThisFrame(const SwRowFrame& rRow);
+
 static SwTwips lcl_GetHeightOfRows( const SwFrame* pStart, long nCount )
 {
     if ( !nCount || !pStart)
@@ -516,7 +518,6 @@ static void lcl_PreprocessRowsInCells( SwTabFrame& rTab, SwRowFrame& rLastLine,
             // pTmpLastLineRow does not fit to the line or it is the last line
             // Check if we can move pTmpLastLineRow to the follow table,
             // or if we have to split the line:
-            SwFrame* pCell = pTmpLastLineRow->Lower();
             bool bTableLayoutTooComplex = false;
             long nMinHeight = 0;
 
@@ -528,6 +529,13 @@ static void lcl_PreprocessRowsInCells( SwTabFrame& rTab, SwRowFrame& rLastLine,
                 nMinHeight = aRectFnSet.GetHeight(pTmpLastLineRow->Frame());
             else
             {
+                {
+                    const SwFormatFrameSize &rSz = pTmpLastLineRow->GetFormat()->GetFrameSize();
+                    if ( rSz.GetHeightSizeType() == ATT_MIN_SIZE )
+                        nMinHeight = rSz.GetHeight() - lcl_calcHeightOfRowBeforeThisFrame(*pTmpLastLineRow);
+                }
+
+                SwFrame* pCell = pTmpLastLineRow->Lower();
                 while ( pCell )
                 {
                     if ( static_cast<SwCellFrame*>(pCell)->Lower() &&
@@ -542,10 +550,6 @@ static void lcl_PreprocessRowsInCells( SwTabFrame& rTab, SwRowFrame& rLastLine,
                     nMinHeight = std::max( nMinHeight, lcl_CalcTopAndBottomMargin( *static_cast<SwLayoutFrame*>(pCell), rAttrs ) );
                     pCell = pCell->GetNext();
                 }
-
-                const SwFormatFrameSize &rSz = pTmpLastLineRow->GetFormat()->GetFrameSize();
-                if ( rSz.GetHeightSizeType() == ATT_MIN_SIZE )
-                    nMinHeight = std::max( nMinHeight, rSz.GetHeight() );
             }
 
             // 1. Case:
@@ -624,12 +628,14 @@ inline void TableSplitRecalcLock( SwFlowFrame *pTab ) { pTab->LockJoin(); }
 inline void TableSplitRecalcUnlock( SwFlowFrame *pTab ) { pTab->UnlockJoin(); }
 
 static bool lcl_RecalcSplitLine( SwRowFrame& rLastLine, SwRowFrame& rFollowLine,
-                          SwTwips nRemainingSpaceForLastRow )
+                          SwTwips nRemainingSpaceForLastRow, SwTwips nAlreadyFree )
 {
     bool bRet = true;
 
     vcl::RenderContext* pRenderContext = rLastLine.getRootFrame()->GetCurrShell()->GetOut();
     SwTabFrame& rTab = static_cast<SwTabFrame&>(*rLastLine.GetUpper());
+    SwRectFnSet aRectFnSet(rTab.GetUpper());
+    SwTwips nCurLastLineHeight = aRectFnSet.GetHeight(rLastLine.Frame());
 
     // If there are nested cells in rLastLine, the recalculation of the last
     // line needs some preprocessing.
@@ -639,7 +645,6 @@ static bool lcl_RecalcSplitLine( SwRowFrame& rLastLine, SwRowFrame& rFollowLine,
     rTab.SetRebuildLastLine( true );
     // #i26945#
     rTab.SetDoesObjsFit( true );
-    SwRectFnSet aRectFnSet(rTab.GetUpper());
 
     // #i26945# - invalidate and move floating screen
     // objects 'out of range'
@@ -656,6 +661,11 @@ static bool lcl_RecalcSplitLine( SwRowFrame& rLastLine, SwRowFrame& rFollowLine,
     // invalidate last line
     ::SwInvalidateAll( &rLastLine, LONG_MAX );
 
+    // Shrink the table to account for the shrunk last row, as well as lower rows
+    // that had been moved to follow table in SwTabFrame::Split.
+    // It will grow later when last line will recalc its height.
+    rTab.Shrink(nAlreadyFree + nCurLastLineHeight - nRemainingSpaceForLastRow + 1);
+
     // Lock this tab frame and its follow
     bool bUnlockMaster = false;
     bool bUnlockFollow = false;
@@ -671,12 +681,17 @@ static bool lcl_RecalcSplitLine( SwRowFrame& rLastLine, SwRowFrame& rFollowLine,
         ::TableSplitRecalcLock( rTab.GetFollow() );
     }
 
+    bool bInSplit = rLastLine.IsInSplit();
+    rLastLine.SetInSplit();
+
     // Do the recalculation
     lcl_RecalcRow( rLastLine, LONG_MAX );
     // #115759# - force a format of the last line in order to
     // get the correct height.
     rLastLine.InvalidateSize();
     rLastLine.Calc(pRenderContext);
+
+    rLastLine.SetInSplit(bInSplit);
 
     // Unlock this tab frame and its follow
     if ( bUnlockFollow )
@@ -933,7 +948,7 @@ bool SwTabFrame::Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowK
         lcl_InnerCalcLayout( this->Lower(), LONG_MAX, true );
     }
 
-    //In order to be able to compare the positions of the cells whit CutPos,
+    //In order to be able to compare the positions of the cells whith CutPos,
     //they have to be calculated consecutively starting from the table.
     //They can definitely be invalid because of position changes of the table.
     SwRowFrame *pRow = static_cast<SwRowFrame*>(Lower());
@@ -965,7 +980,7 @@ bool SwTabFrame::Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowK
     // bTryToSplit:      Row will never be split if bTryToSplit = false.
     //                   This can either be passed as a parameter, indicating
     //                   that we are currently doing the second try to split the
-    //                   table, or it will be set to falseunder certain
+    //                   table, or it will be set to false under certain
     //                   conditions that are not suitable for splitting
     //                   the row.
     bool bSplitRowAllowed = pRow->IsRowSplitAllowed();
@@ -1139,9 +1154,9 @@ bool SwTabFrame::Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowK
         }
     }
 
-    SwRowFrame* pLastRow = nullptr;     // will point to the last remaining line in master
-    SwRowFrame* pFollowRow = nullptr;   // points to either the follow flow line of the
-                                // first regular line in the follow
+    SwRowFrame* pLastRow = nullptr;     // points to the last remaining line in master
+    SwRowFrame* pFollowRow = nullptr;   // points to either the follow flow line or the
+                                        // first regular line in the follow
 
     if ( bSplitRowAllowed )
     {
@@ -1177,7 +1192,7 @@ bool SwTabFrame::Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowK
             pFollowRow = lcl_InsertNewFollowFlowLine( *this, *pLastRow, true );
     }
 
-    SwTwips nRet = 0;
+    SwTwips nShrink = 0;
 
     //Optimization: There is no paste needed for the new Follow and the
     //optimized insert can be used (big amounts of rows luckily only occurs in
@@ -1189,7 +1204,7 @@ bool SwTabFrame::Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowK
         while ( pRow )
         {
             SwFrame* pNxt = pRow->GetNext();
-            nRet += aRectFnSet.GetHeight(pRow->Frame());
+            nShrink += aRectFnSet.GetHeight(pRow->Frame());
             // The footnotes do not have to be moved, this is done in the
             // MoveFwd of the follow table!!!
             pRow->RemoveFromLayout();
@@ -1208,7 +1223,7 @@ bool SwTabFrame::Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowK
         while ( pRow )
         {
             SwFrame* pNxt = pRow->GetNext();
-            nRet += aRectFnSet.GetHeight(pRow->Frame());
+            nShrink += aRectFnSet.GetHeight(pRow->Frame());
 
             // The footnotes have to be moved:
             lcl_MoveFootnotes( *this, *GetFollow(), *pRow );
@@ -1221,13 +1236,15 @@ bool SwTabFrame::Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowK
         }
     }
 
-    Shrink( nRet );
-
-    // we rebuild the last line to assure that it will be fully formatted
-    if ( pLastRow )
+    if ( !pLastRow )
+        Shrink( nShrink );
+    else
     {
+        // we rebuild the last line to assure that it will be fully formatted
+        // we also don't shrink here, because we will be doing that in lcl_RecalcSplitLine
+
         // recalculate the split line
-        bRet = lcl_RecalcSplitLine( *pLastRow, *pFollowRow, nRemainingSpaceForLastRow );
+        bRet = lcl_RecalcSplitLine( *pLastRow, *pFollowRow, nRemainingSpaceForLastRow, nShrink );
 
         // NEW TABLES
         // check if each cell in the row span line has a good height
@@ -3538,6 +3555,7 @@ SwRowFrame::SwRowFrame(const SwTableLine &rLine, SwFrame* pSib, bool bInsertCont
     // <-- split table rows
     , m_bIsRepeatedHeadline( false )
     , m_bIsRowSpanLine( false )
+    , m_bIsInSplit( false )
 {
     mnFrameType = SwFrameType::Row;
 
@@ -3810,17 +3828,24 @@ static SwTwips lcl_CalcMinCellHeight( const SwLayoutFrame *_pCell,
 static SwTwips lcl_CalcMinRowHeight( const SwRowFrame* _pRow,
                                      const bool _bConsiderObjs )
 {
-    SwRectFnSet aRectFnSet(_pRow);
-
-    const SwFormatFrameSize &rSz = _pRow->GetFormat()->GetFrameSize();
-
-    if ( _pRow->HasFixSize() && !_pRow->IsRowSpanLine() )
+    SwTwips nHeight = 0;
+    if ( !_pRow->IsRowSpanLine() )
     {
-        OSL_ENSURE( ATT_FIX_SIZE == rSz.GetHeightSizeType(), "pRow claims to have fixed size" );
-        return rSz.GetHeight();
+        const SwFormatFrameSize &rSz = _pRow->GetFormat()->GetFrameSize();
+        if ( _pRow->HasFixSize() )
+        {
+            OSL_ENSURE(ATT_FIX_SIZE == rSz.GetHeightSizeType(), "pRow claims to have fixed size");
+            return rSz.GetHeight();
+        }
+        // If this row frame is being split, then row's minimal height shouldn't restrict
+        // this frame's minimal height, because the rest will go to follow frame.
+        else if ( !_pRow->IsInSplit() && rSz.GetHeightSizeType() == ATT_MIN_SIZE )
+        {
+            nHeight = rSz.GetHeight() - lcl_calcHeightOfRowBeforeThisFrame(*_pRow);
+        }
     }
 
-    SwTwips nHeight = 0;
+    SwRectFnSet aRectFnSet(_pRow);
     const SwCellFrame* pLow = static_cast<const SwCellFrame*>(_pRow->Lower());
     while ( pLow )
     {
@@ -3857,8 +3882,7 @@ static SwTwips lcl_CalcMinRowHeight( const SwRowFrame* _pRow,
 
         pLow = static_cast<const SwCellFrame*>(pLow->GetNext());
     }
-    if ( rSz.GetHeightSizeType() == ATT_MIN_SIZE && !_pRow->IsRowSpanLine() )
-        nHeight = std::max( nHeight, rSz.GetHeight() );
+
     return nHeight;
 }
 
@@ -3953,6 +3977,41 @@ static sal_uInt16 lcl_GetBottomLineDist( const SwRowFrame& rRow )
         nBottomLineDist = std::max( nBottomLineDist, nTmpBottomLineDist );
     }
     return nBottomLineDist;
+}
+
+// tdf#104425: calculate the height of all row frames,
+// for which this frame is a follow.
+// When a row has fixed/minimum height, it may span over
+// several pages. The minimal height on this page should
+// take into account the sum of all the heights of previous
+// frames that constitute the table row on previous pages.
+// Otherwise, trying to split a too high row frame will
+// result in loop trying to create that too high row
+// on each following page
+static SwTwips lcl_calcHeightOfRowBeforeThisFrame(const SwRowFrame& rRow)
+{
+    SwRectFnSet aRectFnSet(&rRow);
+    const SwTableLine* pLine = rRow.GetTabLine();
+    const SwTabFrame* pTab = rRow.FindTabFrame();
+    if (!pLine || !pTab || !pTab->IsFollow())
+        return 0;
+    SwTwips nResult = 0;
+    SwIterator<SwRowFrame, SwFormat> aIter(*pLine->GetFrameFormat());
+    for (const SwRowFrame* pCurRow = aIter.First(); pCurRow; pCurRow = aIter.Next())
+    {
+        if (pCurRow != &rRow && pCurRow->GetTabLine() == pLine)
+        {
+            // We've found another row frame that is part of the same table row
+            const SwTabFrame* pCurTab = pCurRow->FindTabFrame();
+            if (pCurTab->IsAnFollow(pTab))
+            {
+                // The found row frame belongs to a table frame that preceedes
+                // (above) this one in chain. So, include it in the sum
+                nResult += aRectFnSet.GetHeight(pCurRow->Frame());
+            }
+        }
+    }
+    return nResult;
 }
 
 void SwRowFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderAttrs *pAttrs )
@@ -4300,7 +4359,7 @@ SwTwips SwRowFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
         return 0L;
     }
 
-    // bInfo may be set to true by SwRowFrame::Format; we need to hangle this
+    // bInfo may be set to true by SwRowFrame::Format; we need to handle this
     // here accordingly
     const bool bShrinkAnyway = bInfo;
 
@@ -4310,9 +4369,10 @@ SwTwips SwRowFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
     if (pMod)
     {
         const SwFormatFrameSize &rSz = pMod->GetFrameSize();
-        SwTwips nMinHeight = rSz.GetHeightSizeType() == ATT_MIN_SIZE ?
-                             rSz.GetHeight() :
-                             0;
+        SwTwips nMinHeight = 0;
+        if (rSz.GetHeightSizeType() == ATT_MIN_SIZE)
+            nMinHeight = std::max(rSz.GetHeight() - lcl_calcHeightOfRowBeforeThisFrame(*this),
+                                  0L);
 
         // Only necessary to calculate minimal row height if height
         // of pRow is at least nMinHeight. Otherwise nMinHeight is the
@@ -5166,7 +5226,7 @@ static SwTwips lcl_CalcHeightOfFirstContentLine( const SwRowFrame& rSourceLine )
                 const SwRowFrame* pTmpSourceRow = static_cast<const SwRowFrame*>(pCurrSourceCell->Lower());
                 nTmpHeight = lcl_CalcHeightOfFirstContentLine( *pTmpSourceRow );
             }
-            if ( pTmp->IsTabFrame() )
+            else if ( pTmp->IsTabFrame() )
             {
                 nTmpHeight = static_cast<const SwTabFrame*>(pTmp)->CalcHeightOfFirstContentLine();
             }
@@ -5281,12 +5341,12 @@ SwTwips SwTabFrame::CalcHeightOfFirstContentLine() const
 
     SwTwips nTmpHeight = 0;
 
-    SwRowFrame* pFirstRow = GetFirstNonHeadlineRow();
+    const SwRowFrame* pFirstRow = GetFirstNonHeadlineRow();
     OSL_ENSURE( !IsFollow() || pFirstRow, "FollowTable without Lower" );
 
     // NEW TABLES
     if ( pFirstRow && pFirstRow->IsRowSpanLine() && pFirstRow->GetNext() )
-        pFirstRow = static_cast<SwRowFrame*>(pFirstRow->GetNext());
+        pFirstRow = static_cast<const SwRowFrame*>(pFirstRow->GetNext());
 
     // Calculate the height of the headlines:
     const sal_uInt16 nRepeat = GetTable()->GetRowsToRepeat();
@@ -5303,7 +5363,7 @@ SwTwips SwTabFrame::CalcHeightOfFirstContentLine() const
         while ( pFirstRow && pFirstRow->ShouldRowKeepWithNext() )
         {
             ++nKeepRows;
-            pFirstRow = static_cast<SwRowFrame*>(pFirstRow->GetNext());
+            pFirstRow = static_cast<const SwRowFrame*>(pFirstRow->GetNext());
         }
 
         if ( nKeepRows > nRepeat )
@@ -5337,7 +5397,7 @@ SwTwips SwTabFrame::CalcHeightOfFirstContentLine() const
             // line as it would be on the last page. Since this is quite complicated to calculate,
             // we only calculate the height of the first line.
             if ( pFirstRow->GetPrev() &&
-                 static_cast<SwRowFrame*>(pFirstRow->GetPrev())->IsRowSpanLine() )
+                 static_cast<const SwRowFrame*>(pFirstRow->GetPrev())->IsRowSpanLine() )
             {
                 // Calculate maximum height of all cells with rowspan = 1:
                 SwTwips nMaxHeight = 0;
@@ -5369,9 +5429,14 @@ SwTwips SwTabFrame::CalcHeightOfFirstContentLine() const
             const SwTwips nHeightOfFirstContentLine = lcl_CalcHeightOfFirstContentLine( *pFirstRow );
 
             // Consider minimum row height:
-            const SwFormatFrameSize &rSz = static_cast<const SwRowFrame*>(pFirstRow)->GetFormat()->GetFrameSize();
-            const SwTwips nMinRowHeight = rSz.GetHeightSizeType() == ATT_MIN_SIZE ?
-                                          rSz.GetHeight() : 0;
+            const SwFormatFrameSize &rSz = pFirstRow->GetFormat()->GetFrameSize();
+
+            SwTwips nMinRowHeight = 0;
+            if (rSz.GetHeightSizeType() == ATT_MIN_SIZE)
+            {
+                nMinRowHeight = std::max(rSz.GetHeight() - lcl_calcHeightOfRowBeforeThisFrame(*pFirstRow),
+                                         0L);
+            }
 
             nTmpHeight += std::max( nHeightOfFirstContentLine, nMinRowHeight );
 
