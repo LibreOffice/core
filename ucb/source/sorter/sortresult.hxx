@@ -85,28 +85,6 @@ public:
 };
 
 
-class SimpleList
-{
-    std::deque < void* > maData;
-
-public:
-                     SimpleList(){}
-                    ~SimpleList(){ Clear(); }
-
-    sal_uInt32      Count() { return (sal_uInt32) maData.size(); }
-    void            Clear() { maData.clear(); }
-
-    void            Remove( sal_uInt32 nPos );
-    void            Remove( void* pData );
-
-    void            Append( void* pData )
-                        { maData.push_back( pData ); }
-    void            Insert( void* pData, sal_uInt32 nPos );
-    void*           GetObject( sal_uInt32 nPos ) const;
-    void            Replace( void* pData, sal_uInt32 nPos );
-};
-
-
 #define RESULTSET_SERVICE_NAME  "com.sun.star.ucb.SortedResultSet"
 
 
@@ -131,8 +109,8 @@ class SortedResultSet: public cppu::WeakImplHelper <
     SortInfo*           mpSortInfo;
     osl::Mutex          maMutex;
     SortedEntryList     maS2O;          // maps the sorted entries to the original ones
-    SimpleList          maO2S;          // maps the original Entries to the sorted ones
-    SimpleList          maModList;      // keeps track of modified entries
+    std::deque<sal_IntPtr> m_O2S;       /// maps the original Entries to the sorted ones
+    std::deque<SortListData*> m_ModList; /// keeps track of modified entries
     sal_IntPtr          mnLastSort;     // index of the last sorted entry;
     sal_IntPtr          mnCurEntry;     // index of the current entry
     sal_IntPtr          mnCount;        // total count of the elements
