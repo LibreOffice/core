@@ -154,7 +154,9 @@ SalSession * SessionManagerClient::m_pSession = nullptr;
 std::unique_ptr< ICEConnectionObserver >
 SessionManagerClient::m_xICEConnectionObserver;
 SmcConn SessionManagerClient::m_pSmcConnection = nullptr;
-OString SessionManagerClient::m_aClientID;
+OString SessionManagerClient::m_aClientID = "";
+OString SessionManagerClient::m_aTimeID = "";
+OString SessionManagerClient::m_aClientTimeID = "";
 bool SessionManagerClient::m_bDocSaveDone = false; // HACK
 
 extern "C" {
@@ -172,8 +174,16 @@ static void IgnoreIceIOErrors(SAL_UNUSED_PARAMETER IceConn) {}
 
 static SmProp*  pSmProps = nullptr;
 static SmProp** ppSmProps = nullptr;
+static char  ** ppSmDel  = nullptr;
+
 static int      nSmProps = 0;
+static int      nSmDel   = 0;
 static unsigned char   *pSmRestartHint = nullptr;
+
+
+enum { eCloneCommand, eProgram, eRestartCommand, eUserId, eRestartStyleHint };
+enum { eDiscardCommand };
+
 
 static void BuildSmPropertyList()
 {
@@ -181,70 +191,74 @@ static void BuildSmPropertyList()
 
     if( ! pSmProps )
     {
-        OString aExec(OUStringToOString(SessionManagerClient::getExecName(), osl_getThreadTextEncoding()));
-
-        nSmProps = 5;
-        pSmProps = new SmProp[ nSmProps ];
-
-        pSmProps[ 0 ].name      = const_cast<char*>(SmCloneCommand);
-        pSmProps[ 0 ].type      = const_cast<char*>(SmLISTofARRAY8);
-        pSmProps[ 0 ].num_vals  = 1;
-        pSmProps[ 0 ].vals      = new SmPropValue;
-        pSmProps[ 0 ].vals->length  = aExec.getLength()+1;
-        pSmProps[ 0 ].vals->value   = strdup( aExec.getStr() );
-
-        pSmProps[ 1 ].name      = const_cast<char*>(SmProgram);
-        pSmProps[ 1 ].type      = const_cast<char*>(SmARRAY8);
-        pSmProps[ 1 ].num_vals  = 1;
-        pSmProps[ 1 ].vals      = new SmPropValue;
-        pSmProps[ 1 ].vals->length  = aExec.getLength()+1;
-        pSmProps[ 1 ].vals->value   = strdup( aExec.getStr() );
-
-        pSmProps[ 2 ].name      = const_cast<char*>(SmRestartCommand);
-        pSmProps[ 2 ].type      = const_cast<char*>(SmLISTofARRAY8);
-        pSmProps[ 2 ].num_vals  = 3;
-        pSmProps[ 2 ].vals      = new SmPropValue[3];
-        pSmProps[ 2 ].vals[0].length    = aExec.getLength()+1;
-        pSmProps[ 2 ].vals[0].value = strdup( aExec.getStr() );
-        OStringBuffer aRestartOption;
-        aRestartOption.append("--session=");
-        aRestartOption.append(SessionManagerClient::getSessionID());
-        pSmProps[ 2 ].vals[1].length    = aRestartOption.getLength()+1;
-        pSmProps[ 2 ].vals[1].value = strdup(aRestartOption.getStr());
-        OString aRestartOptionNoLogo("--nologo");
-        pSmProps[ 2 ].vals[2].length    = aRestartOptionNoLogo.getLength()+1;
-        pSmProps[ 2 ].vals[2].value = strdup(aRestartOptionNoLogo.getStr());
-
-        OUString aUserName;
-        OString aUser;
-        oslSecurity aSec = osl_getCurrentSecurity();
-        if( aSec )
-        {
-            osl_getUserName( aSec, &aUserName.pData );
-            aUser = OUStringToOString( aUserName, osl_getThreadTextEncoding() );
-            osl_freeSecurityHandle( aSec );
-        }
-
-        pSmProps[ 3 ].name      = const_cast<char*>(SmUserID);
-        pSmProps[ 3 ].type      = const_cast<char*>(SmARRAY8);
-        pSmProps[ 3 ].num_vals  = 1;
-        pSmProps[ 3 ].vals      = new SmPropValue;
-        pSmProps[ 3 ].vals->value   = strdup( aUser.getStr() );
-        pSmProps[ 3 ].vals->length  = rtl_str_getLength( static_cast<char *>(pSmProps[ 3 ].vals->value) )+1;
-
-        pSmProps[ 4 ].name      = const_cast<char*>(SmRestartStyleHint);
-        pSmProps[ 4 ].type      = const_cast<char*>(SmCARD8);
-        pSmProps[ 4 ].num_vals  = 1;
-        pSmProps[ 4 ].vals      = new SmPropValue;
-        pSmProps[ 4 ].vals->value   = malloc(1);
-        pSmRestartHint = static_cast<unsigned char *>(pSmProps[ 4 ].vals->value);
-        *pSmRestartHint = SmRestartIfRunning;
-        pSmProps[ 4 ].vals->length  = 1;
-
+        nSmProps  = 5;
+        nSmDel    = 1;
+        pSmProps  = new SmProp[ nSmProps ];
         ppSmProps = new SmProp*[ nSmProps ];
-        for( int i = 0; i < nSmProps; i++ )
-            ppSmProps[ i ] = &pSmProps[i];
+        ppSmDel   = new char*[ nSmDel ];
     }
+
+    OString aExec(OUStringToOString(SessionManagerClient::getExecName(), osl_getThreadTextEncoding()));
+
+    pSmProps[ eCloneCommand ].name      = const_cast<char*>(SmCloneCommand);
+    pSmProps[ eCloneCommand ].type      = const_cast<char*>(SmLISTofARRAY8);
+    pSmProps[ eCloneCommand ].num_vals  = 1;
+    pSmProps[ eCloneCommand ].vals      = new SmPropValue;
+    pSmProps[ eCloneCommand ].vals->length  = aExec.getLength()+1;
+    pSmProps[ eCloneCommand ].vals->value   = strdup( aExec.getStr() );
+
+    pSmProps[ eProgram ].name      = const_cast<char*>(SmProgram);
+    pSmProps[ eProgram ].type      = const_cast<char*>(SmARRAY8);
+    pSmProps[ eProgram ].num_vals  = 1;
+    pSmProps[ eProgram ].vals      = new SmPropValue;
+    pSmProps[ eProgram ].vals->length  = aExec.getLength()+1;
+    pSmProps[ eProgram ].vals->value   = strdup( aExec.getStr() );
+
+    pSmProps[ eRestartCommand ].name      = const_cast<char*>(SmRestartCommand);
+    pSmProps[ eRestartCommand ].type      = const_cast<char*>(SmLISTofARRAY8);
+    pSmProps[ eRestartCommand ].num_vals  = 3;
+    pSmProps[ eRestartCommand ].vals      = new SmPropValue[3];
+    pSmProps[ eRestartCommand ].vals[0].length    = aExec.getLength()+1;
+    pSmProps[ eRestartCommand ].vals[0].value = strdup( aExec.getStr() );
+    OStringBuffer aRestartOption;
+    aRestartOption.append("--session=");
+    aRestartOption.append(SessionManagerClient::getSessionID());
+    pSmProps[ eRestartCommand ].vals[1].length    = aRestartOption.getLength()+1;
+    pSmProps[ eRestartCommand ].vals[1].value = strdup(aRestartOption.getStr());
+    OString aRestartOptionNoLogo("--nologo");
+    pSmProps[ eRestartCommand ].vals[2].length    = aRestartOptionNoLogo.getLength()+1;
+    pSmProps[ eRestartCommand ].vals[2].value = strdup(aRestartOptionNoLogo.getStr());
+
+    OUString aUserName;
+    OString aUser;
+    oslSecurity aSec = osl_getCurrentSecurity();
+    if( aSec )
+    {
+        osl_getUserName( aSec, &aUserName.pData );
+        aUser = OUStringToOString( aUserName, osl_getThreadTextEncoding() );
+        osl_freeSecurityHandle( aSec );
+    }
+
+    pSmProps[ eUserId ].name      = const_cast<char*>(SmUserID);
+    pSmProps[ eUserId ].type      = const_cast<char*>(SmARRAY8);
+    pSmProps[ eUserId ].num_vals  = 1;
+    pSmProps[ eUserId ].vals      = new SmPropValue;
+    pSmProps[ eUserId ].vals->value   = strdup( aUser.getStr() );
+    pSmProps[ eUserId ].vals->length  = rtl_str_getLength( static_cast<char *>(pSmProps[ 3 ].vals->value) )+1;
+
+    pSmProps[ eRestartStyleHint ].name      = const_cast<char*>(SmRestartStyleHint);
+    pSmProps[ eRestartStyleHint ].type      = const_cast<char*>(SmCARD8);
+    pSmProps[ eRestartStyleHint ].num_vals  = 1;
+    pSmProps[ eRestartStyleHint ].vals      = new SmPropValue;
+    pSmProps[ eRestartStyleHint ].vals->value   = malloc(1);
+    pSmRestartHint = static_cast<unsigned char *>(pSmProps[ 4 ].vals->value);
+    *pSmRestartHint = SmRestartIfRunning;
+    pSmProps[ eRestartStyleHint ].vals->length  = 1;
+
+    for( int i = 0; i < nSmProps; i++ )
+        ppSmProps[ i ] = &pSmProps[i];
+
+    ppSmDel[eDiscardCommand] = const_cast<char*>(SmDiscardCommand);
 }
 
 bool SessionManagerClient::checkDocumentsSaved()
@@ -333,13 +347,25 @@ void SessionManagerClient::SaveYourselfProc(
 {
     SAL_INFO("vcl.sm", "SessionManagerClient::SaveYourselfProc");
 
-    SAL_INFO("vcl.sm.debug", "  save_type = "   << ((save_type == SmSaveLocal ) ? "local"  :
-                                                    (save_type == SmSaveGlobal) ? "global" : "both") <<
-                          ", shutdown = " <<        (shutdown ? "true" : "false" ) <<
-                          ", interact_style = " << ((interact_style == SmInteractStyleNone)   ? "SmInteractStyleNone"   :
-                                                    (interact_style == SmInteractStyleErrors) ? "SmInteractStyleErrors" :
-                                                                                                "SmInteractStyleAny"));
+    TimeValue now;
+    osl_getSystemTime(&now);
+
+    SAL_INFO("vcl.sm", "  save_type = "   <<    ((save_type == SmSaveLocal ) ? "local"  :
+                                                 (save_type == SmSaveGlobal) ? "global" : "both") <<
+                       ", shutdown = " <<        (shutdown ? "true" : "false" ) <<
+                       ", interact_style = " << ((interact_style == SmInteractStyleNone)   ? "SmInteractStyleNone"   :
+                                                 (interact_style == SmInteractStyleErrors) ? "SmInteractStyleErrors" :
+                                                                                             "SmInteractStyleAny"));
+    char num[100];
+    snprintf(num, sizeof(num), "_%d_%d", now.Seconds, (now.Nanosec / 1000));
+    m_aTimeID = OString(num);
+
     BuildSmPropertyList();
+
+    SmcSetProperties( m_pSmcConnection, 1, &ppSmProps[ eProgram ] );
+    SmcSetProperties( m_pSmcConnection, 1, &ppSmProps[ eUserId ] );
+
+
     m_bDocSaveDone = false;
     /* #i49875# some session managers send a "die" message if the
      * saveDone does not come early enough for their convenience
@@ -426,7 +452,12 @@ void SessionManagerClient::saveDone()
     {
         assert(m_xICEConnectionObserver);
         osl::MutexGuard g(m_xICEConnectionObserver->m_ICEMutex);
-        SmcSetProperties( m_pSmcConnection, nSmProps, ppSmProps );
+        //SmcSetProperties( m_pSmcConnection, 1, &ppSmProps[ eCloneCommand ] );
+        // this message-handling is now equal to kate and plasma desktop
+        SmcSetProperties( m_pSmcConnection, 1, &ppSmProps[ eRestartCommand ] );
+        SmcDeleteProperties( m_pSmcConnection, 1, &ppSmDel[ eDiscardCommand ] );
+        SmcSetProperties( m_pSmcConnection, 1, &ppSmProps[ eRestartStyleHint ] );
+
         SmcSaveYourselfDone( m_pSmcConnection, True );
         SAL_INFO("vcl.sm.debug", "  sent SmRestartHint = " << (*pSmRestartHint) );
         m_bDocSaveDone = true;
@@ -509,8 +540,11 @@ const OString& SessionManagerClient::getSessionID()
 {
     SAL_INFO("vcl.sm", "SessionManagerClient::getSessionID");
 
-    SAL_INFO("vcl.sm.debug", "  SessionID = " << m_aClientID);
-    return m_aClientID;
+    m_aClientTimeID = m_aClientID + m_aTimeID;
+
+    SAL_INFO("vcl.sm", "  SessionID = " << str);
+
+    return m_aClientTimeID;
 }
 
 void SessionManagerClient::close()
