@@ -215,6 +215,7 @@ public:
     void testCursorWindows();
     void testLandscape();
     void testTdf95699();
+    void testTdf104425();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -326,6 +327,7 @@ public:
     CPPUNIT_TEST(testCursorWindows);
     CPPUNIT_TEST(testLandscape);
     CPPUNIT_TEST(testTdf95699);
+    CPPUNIT_TEST(testTdf104425);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -4065,6 +4067,21 @@ void SwUiWriterTest::testTdf95699()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
     ::sw::mark::IFieldmark* pFieldMark = pMarkAccess->getFieldmarkAfter(SwPosition(pDoc->GetNodes().GetEndOfExtras()));
     CPPUNIT_ASSERT_EQUAL(OUString("vnd.oasis.opendocument.field.FORMCHECKBOX"), pFieldMark->GetFieldname());
+}
+
+void SwUiWriterTest::testTdf104425()
+{
+    createDoc("tdf104425.odt");
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    // The document contains one top-level 1-cell table with minimum row height set to 70 cm,
+    // and the cell contents does not exceed the minimum row height.
+    // It should span over 3 pages.
+    assertXPath(pXmlDoc, "//page", 3);
+    sal_Int32 nHeight1 = getXPath(pXmlDoc, "//page[1]/body/tab/row/infos/bounds", "height").toInt32();
+    sal_Int32 nHeight2 = getXPath(pXmlDoc, "//page[2]/body/tab/row/infos/bounds", "height").toInt32();
+    sal_Int32 nHeight3 = getXPath(pXmlDoc, "//page[3]/body/tab/row/infos/bounds", "height").toInt32();
+    double fSumHeight_mm = (nHeight1 + nHeight2 + nHeight3) * 25.4 / 1440.0;
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(700.0, fSumHeight_mm, 0.05);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
