@@ -89,8 +89,8 @@ public:
     ~CoreTextStyle( void );
 
     void       GetFontMetric( ImplFontMetricDataRef& ) const;
-    bool       GetGlyphBoundRect( sal_GlyphId, Rectangle& ) const;
-    bool       GetGlyphOutline( sal_GlyphId, basegfx::B2DPolyPolygon& ) const;
+    bool       GetGlyphBoundRect(const GlyphItem&, Rectangle&) const;
+    bool       GetGlyphOutline(const GlyphItem&, basegfx::B2DPolyPolygon&) const;
     hb_font_t* GetHbFont() const { return mpHbFont; }
     void       SetHbFont(hb_font_t* pHbFont) const { mpHbFont = pHbFont; }
 
@@ -375,8 +375,8 @@ public:
                                             std::vector< sal_Int32 >& rWidths,
                                             Ucs2UIntMap& rUnicodeEnc ) override;
 
-    virtual bool            GetGlyphBoundRect( sal_GlyphId, Rectangle& ) override;
-    virtual bool            GetGlyphOutline( sal_GlyphId, basegfx::B2DPolyPolygon& ) override;
+    virtual bool            GetGlyphBoundRect(const GlyphItem&, Rectangle&) override;
+    virtual bool            GetGlyphOutline(const GlyphItem&, basegfx::B2DPolyPolygon&) override;
 
     virtual SalLayout*      GetTextLayout( ImplLayoutArgs&, int nFallbackLevel ) override;
     virtual void            DrawTextLayout( const CommonSalLayout& ) override;
