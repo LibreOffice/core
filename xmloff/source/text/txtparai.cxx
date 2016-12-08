@@ -1683,8 +1683,11 @@ SvXMLImportContext *XMLImpSpanContext_Impl::CreateChildContext(
     case XML_TOK_TEXTP_CHANGE:
         pContext = new XMLChangeImportContext(
             rImport, nPrefix, rLocalName,
-            (nToken != XML_TOK_TEXTP_CHANGE_END),
-            (nToken != XML_TOK_TEXTP_CHANGE_START),
+            ((nToken == XML_TOK_TEXTP_CHANGE_END)
+                ? XMLChangeImportContext::Element::END
+                : (nToken == XML_TOK_TEXTP_CHANGE_START)
+                    ? XMLChangeImportContext::Element::START
+                    : XMLChangeImportContext::Element::POINT),
             false);
         break;
 
