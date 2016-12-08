@@ -157,9 +157,9 @@ public:
     const FontCharMapRef    GetFontCharMap() const;
     bool                    GetFontCapabilities(vcl::FontCapabilities &) const;
 
-    const GlyphMetric&      GetGlyphMetric(sal_GlyphId aGlyphId);
+    const GlyphMetric&      GetGlyphMetric(const GlyphItem& rGlyph);
 
-    bool                    GetGlyphOutline( sal_GlyphId aGlyphId, basegfx::B2DPolyPolygon& ) const;
+    bool                    GetGlyphOutline(const GlyphItem& rGlyph, basegfx::B2DPolyPolygon&) const;
     bool                    GetAntialiasAdvice() const;
     hb_font_t*              GetHbFont() { return mpHbFont; }
     void                    SetHbFont( hb_font_t* pHbFont ) { mpHbFont = pHbFont; }
@@ -175,7 +175,7 @@ private:
     long                    Release() const;
     sal_uLong               GetByteCount() const { return mnBytesUsed; }
 
-    void                    InitGlyphData( sal_GlyphId, GlyphData& ) const;
+    void                    InitGlyphData(const GlyphItem&, GlyphData&) const;
     void                    GarbageCollect( long );
     void                    ReleaseFromGarbageCollect();
 

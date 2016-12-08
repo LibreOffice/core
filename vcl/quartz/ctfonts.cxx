@@ -152,9 +152,9 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
     }
 }
 
-bool CoreTextStyle::GetGlyphBoundRect( sal_GlyphId aGlyphId, Rectangle& rRect ) const
+bool CoreTextStyle::GetGlyphBoundRect(const GlyphItem& rGlyph, Rectangle& rRect ) const
 {
-    CGGlyph nCGGlyph = aGlyphId & GF_IDXMASK;
+    CGGlyph nCGGlyph = rGlyph.maGlyphId & GF_IDXMASK;
     CTFontRef aCTFontRef = static_cast<CTFontRef>(CFDictionaryGetValue( mpStyleDict, kCTFontAttributeName ));
 
     SAL_WNODEPRECATED_DECLARATIONS_PUSH //TODO: 10.11 kCTFontDefaultOrientation
@@ -163,7 +163,7 @@ bool CoreTextStyle::GetGlyphBoundRect( sal_GlyphId aGlyphId, Rectangle& rRect ) 
     CGRect aCGRect = CTFontGetBoundingRectsForGlyphs(aCTFontRef, aFontOrientation, &nCGGlyph, nullptr, 1);
 
     // Apply font rotation to non-upright glyphs.
-    if (mfFontRotation && !(aGlyphId & GF_ROTMASK))
+    if (mfFontRotation && !(rGlyph.maGlyphId & GF_ROTMASK))
         aCGRect = CGRectApplyAffineTransform(aCGRect, CGAffineTransformMakeRotation(mfFontRotation));
 
     rRect.Left()   = lrint( aCGRect.origin.x );
@@ -225,11 +225,11 @@ static void MyCGPathApplierFunc( void* pData, const CGPathElement* pElement )
     }
 }
 
-bool CoreTextStyle::GetGlyphOutline( sal_GlyphId aGlyphId, basegfx::B2DPolyPolygon& rResult ) const
+bool CoreTextStyle::GetGlyphOutline(const GlyphItem& rGlyph, basegfx::B2DPolyPolygon& rResult) const
 {
     rResult.clear();
 
-    CGGlyph nCGGlyph = aGlyphId & GF_IDXMASK;
+    CGGlyph nCGGlyph = rGlyph.maGlyphId & GF_IDXMASK;
     CTFontRef pCTFont = static_cast<CTFontRef>(CFDictionaryGetValue( mpStyleDict, kCTFontAttributeName ));
     CGPathRef xPath = CTFontCreatePathForGlyph( pCTFont, nCGGlyph, nullptr );
     if (!xPath)
