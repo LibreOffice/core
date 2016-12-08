@@ -625,6 +625,10 @@ $(eval $(call gb_Library_add_libs,vcl,\
     -lX11 \
     -lXext \
 ))
+$(eval $(call gb_Library_add_exception_objects,vcl,\
+	vcl/opengl/x11/X11DeviceInfo \
+))
+endif
 endif
 
 ifeq ($(OS),ANDROID)
@@ -718,13 +722,6 @@ $(eval $(call gb_Library_use_system_win32_libs,vcl,\
 ))
 
 $(eval $(call gb_Library_add_nativeres,vcl,vcl/salsrc))
-endif
-
-ifneq ($(ENABLE_HEADLESS),TRUE)
-$(eval $(call gb_Library_add_exception_objects,vcl,\
-	vcl/opengl/x11/X11DeviceInfo \
-))
-endif
 endif
 
 # Runtime dependency for unit-tests
