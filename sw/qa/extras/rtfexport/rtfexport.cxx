@@ -1010,6 +1010,10 @@ DECLARE_RTFEXPORT_TEST(testCustomDocProps, "custom-doc-props.rtf")
     CPPUNIT_ASSERT_EQUAL(OUString("None"), getProperty<OUString>(xUserDefinedProperties, "urn:bails:IntellectualProperty:Authorization:StopValidity"));
     // Test roundtrip of numbers. This failed as getProperty() did not find "n".
     CPPUNIT_ASSERT_EQUAL(42.0, getProperty<double>(xUserDefinedProperties, "n"));
+    // Test boolean "yes".
+    CPPUNIT_ASSERT(getProperty<bool>(xUserDefinedProperties, "by"));
+    // Test boolean "no".
+    CPPUNIT_ASSERT(!getProperty<bool>(xUserDefinedProperties, "bn"));
 }
 
 DECLARE_RTFEXPORT_TEST(testTdf65642, "tdf65642.rtf")
