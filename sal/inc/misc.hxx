@@ -12,7 +12,7 @@
 #include <rtl/ustring.hxx>
 
 /// Build a debugging backtrace from current PC location.
-rtl_uString *osl_backtraceAsString(void);
+rtl_uString *osl_backtraceAsString(int maxNoStackFramesToDisplay);
 
 #endif // INCLUDED_SAL_INC_INTERNAL_MISC_H
 

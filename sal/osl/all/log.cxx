@@ -68,7 +68,6 @@ char const * toString(sal_detail_LogLevel level) {
     case SAL_DETAIL_LOG_LEVEL_WARN:
         return "warn";
     case SAL_DETAIL_LOG_LEVEL_DEBUG:
-    case SAL_DETAIL_LOG_LEVEL_DEBUG_TRACE:
         return "debug";
     default:
         assert(false); // this cannot happen
@@ -188,8 +187,7 @@ void maybeOutputTimestamp(std::ostringstream &s) {
 #endif
 
 bool isDebug(sal_detail_LogLevel level) {
-    return level == SAL_DETAIL_LOG_LEVEL_DEBUG ||
-        level == SAL_DETAIL_LOG_LEVEL_DEBUG_TRACE;
+    return level == SAL_DETAIL_LOG_LEVEL_DEBUG;
 }
 
 bool report(sal_detail_LogLevel level, char const * area) {
@@ -298,10 +296,6 @@ void log(
     }
 
     s << message;
-    if (level == SAL_DETAIL_LOG_LEVEL_DEBUG_TRACE) {
-        s << " at:\n";
-        s << OUString(osl_backtraceAsString(), SAL_NO_ACQUIRE);
-    }
     s << '\n';
 
 #if defined ANDROID
@@ -314,7 +308,6 @@ void log(
         android_log_level = ANDROID_LOG_WARN;
         break;
     case SAL_DETAIL_LOG_LEVEL_DEBUG:
-    case SAL_DETAIL_LOG_LEVEL_DEBUG_TRACE:
         android_log_level = ANDROID_LOG_DEBUG;
         break;
     default:
@@ -336,7 +329,6 @@ void log(
             prio = LOG_WARNING;
             break;
         case SAL_DETAIL_LOG_LEVEL_DEBUG:
-        case SAL_DETAIL_LOG_LEVEL_DEBUG_TRACE:
             prio = LOG_DEBUG;
             break;
         default:
@@ -359,6 +351,16 @@ void log(
 #endif
 }
 
+void log_backtrace(
+    sal_detail_LogLevel level, char const * area, char const * where,
+    char const * message, int maxNoStackFramesToDisplay)
+{
+    OUString buff = OUString::createFromAscii(message) +
+                    " at:\n" +
+                    OUString(osl_backtraceAsString(maxNoStackFramesToDisplay), SAL_NO_ACQUIRE);
+    log(level, area, where, buff.toUtf8().getStr());
+}
+
 }
 
 void sal_detail_log(
@@ -367,6 +369,15 @@ void sal_detail_log(
 {
     if (report(level, area)) {
         log(level, area, where, message);
+    }
+}
+
+void sal_detail_log_backtrace(
+    sal_detail_LogLevel level, char const * area, char const * where,
+    char const * message, int maxNoStackFramesToDisplay)
+{
+    if (report(level, area)) {
+        log_backtrace(level, area, where, message, maxNoStackFramesToDisplay);
     }
 }
 
