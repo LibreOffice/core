@@ -1101,18 +1101,19 @@ void SdrPageProperties::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
 {
     switch(rHint.GetId())
     {
-        case SFX_HINT_DATACHANGED :
+        case SfxHintId::DataChanged :
             {
                 // notify change, broadcast
                 ImpPageChange(*mpSdrPage);
                 break;
             }
-        case SFX_HINT_DYING :
+        case SfxHintId::Dying :
             {
                 // Style needs to be forgotten
                 ImpRemoveStyleSheet();
                 break;
             }
+        default: break;
     }
 }
 

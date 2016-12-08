@@ -1110,8 +1110,8 @@ void ScModelObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
     //  Not interested in reference update hints here
 
-    const sal_uInt32 nId = rHint.GetId();
-    if ( nId == SFX_HINT_DYING )
+    const SfxHintId nId = rHint.GetId();
+    if ( nId == SfxHintId::Dying )
     {
         pDocShell = nullptr;       // has become invalid
         if (xNumberAgg.is())
@@ -1125,7 +1125,7 @@ void ScModelObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
         DELETEZ( pPrintFuncCache );     // must be deleted because it has a pointer to the DocShell
     }
-    else if ( nId == SFX_HINT_DATACHANGED )
+    else if ( nId == SfxHintId::DataChanged )
     {
         //  cached data for rendering become invalid when contents change
         //  (if a broadcast is added to SetDrawModified, is has to be tested here, too)
@@ -3021,7 +3021,7 @@ void ScDrawPagesObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     //  Referenz-Update interessiert hier nicht
 
-    if ( rHint.GetId() == SFX_HINT_DYING )
+    if ( rHint.GetId() == SfxHintId::Dying )
     {
         pDocShell = nullptr;       // ungueltig geworden
     }
@@ -3132,7 +3132,7 @@ void ScTableSheetsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     //  Referenz-Update interessiert hier nicht
 
-    if ( rHint.GetId() == SFX_HINT_DYING )
+    if ( rHint.GetId() == SfxHintId::Dying )
     {
         pDocShell = nullptr;       // ungueltig geworden
     }
@@ -3539,7 +3539,7 @@ void ScTableColumnsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     {
         //! Referenz-Update fuer Tab und Start/Ende
     }
-    else if ( rHint.GetId() == SFX_HINT_DYING )
+    else if ( rHint.GetId() == SfxHintId::Dying )
     {
         pDocShell = nullptr;       // ungueltig geworden
     }
@@ -3802,7 +3802,7 @@ void ScTableRowsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     {
         //! Referenz-Update fuer Tab und Start/Ende
     }
-    else if ( rHint.GetId() == SFX_HINT_DYING )
+    else if ( rHint.GetId() == SfxHintId::Dying )
     {
         pDocShell = nullptr;       // ungueltig geworden
     }
@@ -4113,7 +4113,7 @@ void ScAnnotationsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     //! nTab bei Referenz-Update anpassen!!!
 
-    if ( rHint.GetId() == SFX_HINT_DYING )
+    if ( rHint.GetId() == SfxHintId::Dying )
     {
         pDocShell = nullptr;       // ungueltig geworden
     }
@@ -4246,7 +4246,7 @@ void ScScenariosObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     {
         //! Referenz-Update fuer Tab und Start/Ende
     }
-    else if ( rHint.GetId() == SFX_HINT_DYING )
+    else if ( rHint.GetId() == SfxHintId::Dying )
     {
         pDocShell = nullptr;       // ungueltig geworden
     }

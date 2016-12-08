@@ -498,7 +498,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 else
                 {
                     pSh->DoSaveCompleted( pMed );
-                    pSh->Broadcast( SfxHint(SFX_HINT_MODECHANGED) );
+                    pSh->Broadcast( SfxHint(SfxHintId::ModeChanged) );
                     rReq.SetReturnValue( SfxBoolItem( rReq.GetSlot(), true ) );
                     rReq.Done( true );
                     return;
@@ -1031,8 +1031,8 @@ void SfxViewFrame::ReleaseObjectShell_Impl()
         m_pDispatcher->Flush();
         EndListening( *m_xObjSh );
 
-        Notify( *m_xObjSh, SfxHint(SFX_HINT_TITLECHANGED) );
-        Notify( *m_xObjSh, SfxHint(SFX_HINT_DOCCHANGED) );
+        Notify( *m_xObjSh, SfxHint(SfxHintId::TitleChanged) );
+        Notify( *m_xObjSh, SfxHint(SfxHintId::DocChanged) );
 
         if ( 1 == m_xObjSh->GetOwnerLockCount() && m_pImpl->bObjLocked && m_xObjSh->GetCreateMode() == SfxObjectCreateMode::EMBEDDED )
             m_xObjSh->DoClose();
@@ -1059,7 +1059,7 @@ bool SfxViewFrame::Close()
     // not be saved automatically anymore.
     if ( GetViewShell() )
         GetViewShell()->DiscardClients_Impl();
-    Broadcast( SfxHint( SFX_HINT_DYING ) );
+    Broadcast( SfxHint( SfxHintId::Dying ) );
 
     if (SfxViewFrame::Current() == this)
         SfxViewFrame::SetViewFrame( nullptr );
@@ -1245,7 +1245,7 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
     {
         switch( rHint.GetId() )
         {
-            case SFX_HINT_MODECHANGED:
+            case SfxHintId::ModeChanged:
             {
                 UpdateTitle();
 
@@ -1283,7 +1283,7 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 break;
             }
 
-            case SFX_HINT_TITLECHANGED:
+            case SfxHintId::TitleChanged:
             {
                 UpdateTitle();
                 SfxBindings& rBind = GetBindings();
@@ -1294,17 +1294,17 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 break;
             }
 
-            case SFX_HINT_DEINITIALIZING:
+            case SfxHintId::Deinitializing:
                 GetFrame().DoClose();
                 break;
-            case SFX_HINT_DYING:
+            case SfxHintId::Dying:
                 // when the Object is being deleted, destroy the view too
                 if ( m_xObjSh.Is() )
                     ReleaseObjectShell_Impl();
                 else
                     GetFrame().DoClose();
                 break;
-
+            default: break;
         }
     }
 }
@@ -1359,8 +1359,8 @@ void SfxViewFrame::Construct_Impl( SfxObjectShell *pObjSh )
         m_pDispatcher->Push( *pObjSh );
         m_pDispatcher->Flush();
         StartListening( *pObjSh );
-        Notify( *pObjSh, SfxHint(SFX_HINT_TITLECHANGED) );
-        Notify( *pObjSh, SfxHint(SFX_HINT_DOCCHANGED) );
+        Notify( *pObjSh, SfxHint(SfxHintId::TitleChanged) );
+        Notify( *pObjSh, SfxHint(SfxHintId::DocChanged) );
         m_pDispatcher->SetReadOnly_Impl( pObjSh->IsReadOnly() );
     }
     else

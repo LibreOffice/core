@@ -539,7 +539,7 @@ void ScTabView::SelectionChanged()
     rBindings.Invalidate( SID_SORT_DESCENDING );
 
     if (aViewData.GetViewShell()->HasAccessibilityObjects())
-        aViewData.GetViewShell()->BroadcastAccessibility(SfxHint(SC_HINT_ACC_CURSORCHANGED));
+        aViewData.GetViewShell()->BroadcastAccessibility(SfxHint(SfxHintId::ScAccCursorChanged));
 
     CellContentChanged();
 }
@@ -548,7 +548,7 @@ void ScTabView::CursorPosChanged()
 {
     bool bRefMode = SC_MOD()->IsFormulaMode();
     if ( !bRefMode ) // check that RefMode works when switching sheets
-        aViewData.GetDocShell()->Broadcast( SfxHint( FID_KILLEDITVIEW ) );
+        aViewData.GetDocShell()->Broadcast( SfxHint( SfxHintId::ScKillEditView ) );
 
     //  Broadcast, so that other Views of the document also switch
 
@@ -2044,7 +2044,7 @@ void ScTabView::MakeEditView( ScEditEngineDefaulter* pEngine, SCCOL nCol, SCROW 
             }
 
     if (aViewData.GetViewShell()->HasAccessibilityObjects())
-        aViewData.GetViewShell()->BroadcastAccessibility(SfxHint(SC_HINT_ACC_ENTEREDITMODE));
+        aViewData.GetViewShell()->BroadcastAccessibility(SfxHint(SfxHintId::ScAccEnterEditMode));
 }
 
 void ScTabView::UpdateEditView()
@@ -2092,7 +2092,7 @@ void ScTabView::KillEditView( bool bNoPaint )
 
     // #108931#; notify accessibility before all things happen
     if (bNotifyAcc && aViewData.GetViewShell()->HasAccessibilityObjects())
-        aViewData.GetViewShell()->BroadcastAccessibility(SfxHint(SC_HINT_ACC_LEAVEEDITMODE));
+        aViewData.GetViewShell()->BroadcastAccessibility(SfxHint(SfxHintId::ScAccLeaveEditMode));
 
     aViewData.ResetEditView();
     for (i=0; i<4; i++)

@@ -324,7 +324,7 @@ ScCondFormatsObj::~ScCondFormatsObj()
 
 void ScCondFormatsObj::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
 {
-    if ( rHint.GetId() == SFX_HINT_DYING )
+    if ( rHint.GetId() == SfxHintId::Dying )
     {
         mpDocShell = nullptr;       // ungueltig geworden
     }

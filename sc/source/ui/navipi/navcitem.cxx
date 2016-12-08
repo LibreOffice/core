@@ -81,7 +81,7 @@ void ScNavigatorControllerItem::StateChanged( sal_uInt16 /* nSID */, SfxItemStat
 
         case SID_CURRENTDOC:
 
-            //  gar nix mehr, wird ueber SFX_HINT_DOCCHANGED erledigt
+            //  gar nix mehr, wird ueber SfxHintId::DocChanged erledigt
 
             break;
 

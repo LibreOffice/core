@@ -29,7 +29,7 @@
 #include <wrtsh.hxx>
 #include <swtypes.hxx>
 #include <ndtxt.hxx>
-#include <swhints.hxx>
+#include <svl/hint.hxx>
 #include <viewsh.hxx>
 #include <view.hxx>
 #include <drawdoc.hxx>
@@ -226,7 +226,7 @@ SwDrawModel* DocumentDrawModelManager::MakeDrawModel_()
         // Broadcast, so that the FormShell can be connected to the DrawView
         if( m_rDoc.GetDocShell() )
         {
-            SfxHint aHint( SW_BROADCAST_DRAWVIEWS_CREATED );
+            SfxHint aHint( SfxHintId::SwDrawViewsCreated );
             m_rDoc.GetDocShell()->Broadcast( aHint );
         }
     }

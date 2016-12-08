@@ -111,30 +111,14 @@ inline bool TextSelection::operator != ( const TextSelection& rSel ) const
     return !( *this == rSel );
 }
 
-#define TEXT_HINT_PARAINSERTED              1
-#define TEXT_HINT_PARAREMOVED               2
-#define TEXT_HINT_PARACONTENTCHANGED        3
-#define TEXT_HINT_TEXTHEIGHTCHANGED         4
-#define TEXT_HINT_FORMATPARA                5
-#define TEXT_HINT_TEXTFORMATTED             6
-#define TEXT_HINT_MODIFIED                  7
-#define TEXT_HINT_BLOCKNOTIFICATION_START   8
-#define TEXT_HINT_BLOCKNOTIFICATION_END     9
-#define TEXT_HINT_INPUT_START               10
-#define TEXT_HINT_INPUT_END                 11
-
-#define TEXT_HINT_VIEWSCROLLED          100
-#define TEXT_HINT_VIEWSELECTIONCHANGED  101
-#define TEXT_HINT_VIEWCARETCHANGED      102
-
 class VCL_DLLPUBLIC TextHint : public SfxHint
 {
 private:
     sal_uLong   mnValue;
 
 public:
-    TextHint( sal_uInt32 nId );
-    TextHint( sal_uInt32 nId, sal_uLong nValue );
+    TextHint( SfxHintId nId );
+    TextHint( SfxHintId nId, sal_uLong nValue );
 
     sal_uLong   GetValue() const        { return mnValue; }
 };

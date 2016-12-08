@@ -260,7 +260,7 @@ ScBroadcastAreas::iterator ScBroadcastAreaSlot::FindBroadcastArea(
 
 namespace {
 
-void broadcastRangeByCell( SvtBroadcaster& rBC, const ScRange& rRange, sal_uInt32 nHint )
+void broadcastRangeByCell( SvtBroadcaster& rBC, const ScRange& rRange, SfxHintId nHint )
 {
     ScHint aHint(nHint, ScAddress());
     ScAddress& rPos = aHint.GetAddress();
@@ -281,7 +281,7 @@ void broadcastRangeByCell( SvtBroadcaster& rBC, const ScRange& rRange, sal_uInt3
 
 }
 
-bool ScBroadcastAreaSlot::AreaBroadcast( const ScRange& rRange, sal_uInt32 nHint )
+bool ScBroadcastAreaSlot::AreaBroadcast( const ScRange& rRange, SfxHintId nHint )
 {
     if (aBroadcastAreaTbl.empty())
         return false;
@@ -828,7 +828,7 @@ void ScBroadcastAreaSlotMachine::EndListeningArea(
     }
 }
 
-bool ScBroadcastAreaSlotMachine::AreaBroadcast( const ScRange& rRange, sal_uInt32 nHint )
+bool ScBroadcastAreaSlotMachine::AreaBroadcast( const ScRange& rRange, SfxHintId nHint )
 {
     bool bBroadcasted = false;
     SCTAB nEndTab = rRange.aEnd.Tab();
@@ -1095,7 +1095,7 @@ void ScBroadcastAreaSlotMachine::EnterBulkBroadcast()
     ++nInBulkBroadcast;
 }
 
-void ScBroadcastAreaSlotMachine::LeaveBulkBroadcast( sal_uInt32 nHintId )
+void ScBroadcastAreaSlotMachine::LeaveBulkBroadcast( SfxHintId nHintId )
 {
     if (nInBulkBroadcast > 0)
     {
@@ -1131,7 +1131,7 @@ void ScBroadcastAreaSlotMachine::InsertBulkGroupArea( ScBroadcastArea* pArea, co
     pSet->set(rRange, true);
 }
 
-bool ScBroadcastAreaSlotMachine::BulkBroadcastGroupAreas( sal_uInt32 nHintId )
+bool ScBroadcastAreaSlotMachine::BulkBroadcastGroupAreas( SfxHintId nHintId )
 {
     if (m_BulkGroupAreas.empty())
         return false;

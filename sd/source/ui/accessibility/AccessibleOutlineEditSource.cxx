@@ -49,7 +49,7 @@ namespace accessibility
     {
         if( mpOutliner )
             mpOutliner->SetNotifyHdl( Link<EENotify&,void>() );
-        Broadcast( TextHint( SFX_HINT_DYING ) );
+        Broadcast( TextHint( SfxHintId::Dying ) );
     }
 
     SvxEditSource* AccessibleOutlineEditSource::Clone() const
@@ -175,7 +175,7 @@ namespace accessibility
 
         if( &rBroadcaster == mpOutliner )
         {
-            if( rHint.GetId() == SFX_HINT_DYING )
+            if( rHint.GetId() == SfxHintId::Dying )
             {
                 bDispose = true;
                 mpOutliner = nullptr;
@@ -198,7 +198,7 @@ namespace accessibility
                 mpOutliner->SetNotifyHdl( Link<EENotify&,void>() );
             mpOutliner = nullptr;
             mpOutlinerView = nullptr;
-            Broadcast( TextHint( SFX_HINT_DYING ) );
+            Broadcast( TextHint( SfxHintId::Dying ) );
         }
     }
 

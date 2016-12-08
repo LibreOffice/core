@@ -936,7 +936,7 @@ void ScDocument::BroadcastUno( const SfxHint &rHint )
         // because they can add or remove objects from pUnoBroadcaster.
 
         if ( pUnoListenerCalls &&
-                rHint.GetId() == SFX_HINT_DATACHANGED &&
+                rHint.GetId() == SfxHintId::DataChanged &&
                 !bInUnoListenerCall )
         {
             // Listener calls may lead to BroadcastUno calls again. The listener calls

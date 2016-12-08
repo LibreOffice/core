@@ -1241,7 +1241,7 @@ struct BroadcastRecalcOnRefMoveHandler : std::unary_function<ScTable*, void>
 
     explicit BroadcastRecalcOnRefMoveHandler( ScDocument* pDoc ) :
         aSwitch( *pDoc, false),
-        aBulk( pDoc->GetBASM(), SC_HINT_DATACHANGED)
+        aBulk( pDoc->GetBASM(), SfxHintId::ScDataChanged)
     {
     }
 
@@ -2734,7 +2734,7 @@ public:
         assert(mpCol);
         ScRange aRange(mpCol->GetCol(), nRow1, mpCol->GetTab());
         aRange.aEnd.SetRow(nRow2);
-        mrDoc.BroadcastCells(aRange, SC_HINT_DATACHANGED);
+        mrDoc.BroadcastCells(aRange, SfxHintId::ScDataChanged);
     };
 };
 
@@ -2943,7 +2943,7 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
     StartListeningFromClip( nAllCol1, nAllRow1, nAllCol2, nAllRow2, rMark, nInsFlag );
 
     {
-        ScBulkBroadcast aBulkBroadcast( GetBASM(), SC_HINT_DATACHANGED);
+        ScBulkBroadcast aBulkBroadcast( GetBASM(), SfxHintId::ScDataChanged);
 
         // Set all formula cells dirty, and collect non-empty non-formula cell
         // positions so that we can broadcast on them below.
@@ -3031,7 +3031,7 @@ void ScDocument::CopyMultiRangeFromClip(
                            aDestRange.aEnd.Col(), aDestRange.aEnd.Row(), rMark, nInsFlag );
 
     {
-        ScBulkBroadcast aBulkBroadcast( GetBASM(), SC_HINT_DATACHANGED);
+        ScBulkBroadcast aBulkBroadcast( GetBASM(), SfxHintId::ScDataChanged);
 
         // Set formula cells dirty and collect non-formula cells.
         SetDirtyFromClip(
@@ -3325,7 +3325,7 @@ bool ScDocument::SetString( SCCOL nCol, SCROW nRow, SCTAB nTab, const OUString& 
         // Listeners may just have been setup that are affected by the current
         // position thus were not notified by a ScColumn::BroadcastNewCell()
         // during ScTable::SetString(), so do it here.
-        Broadcast( ScHint( SC_HINT_DATACHANGED, aPos));
+        Broadcast( ScHint( SfxHintId::ScDataChanged, aPos));
     }
     else
     {
@@ -3436,7 +3436,7 @@ void ScDocument::SetValue( const ScAddress& rPos, double fVal )
         // Listeners may just have been setup that are affected by the current
         // position thus were not notified by a ScColumn::BroadcastNewCell()
         // during ScTable::SetValue(), so do it here.
-        Broadcast( ScHint( SC_HINT_DATACHANGED, rPos));
+        Broadcast( ScHint( SfxHintId::ScDataChanged, rPos));
     }
     else
     {
@@ -3774,7 +3774,7 @@ void ScDocument::SetAllFormulasDirty( const sc::SetFormulaDirtyContext& rCxt )
     bool bOldAutoCalc = GetAutoCalc();
     bAutoCalc = false;      // no mulitple calculations
     {   // scope for bulk broadcast
-        ScBulkBroadcast aBulkBroadcast( GetBASM(), SC_HINT_DATACHANGED);
+        ScBulkBroadcast aBulkBroadcast( GetBASM(), SfxHintId::ScDataChanged);
         TableContainer::iterator it = maTabs.begin();
         for (;it != maTabs.end(); ++it)
             if (*it)
@@ -3795,7 +3795,7 @@ void ScDocument::SetDirty( const ScRange& rRange, bool bIncludeEmptyCells )
     bool bOldAutoCalc = GetAutoCalc();
     bAutoCalc = false;      // no mulitple calculations
     {   // scope for bulk broadcast
-        ScBulkBroadcast aBulkBroadcast( GetBASM(), SC_HINT_DATACHANGED);
+        ScBulkBroadcast aBulkBroadcast( GetBASM(), SfxHintId::ScDataChanged);
         SCTAB nTab2 = rRange.aEnd.Tab();
         for (SCTAB i=rRange.aStart.Tab(); i<=nTab2 && i < static_cast<SCTAB>(maTabs.size()); i++)
             if (maTabs[i]) maTabs[i]->SetDirty( rRange,
@@ -3806,7 +3806,7 @@ void ScDocument::SetDirty( const ScRange& rRange, bool bIncludeEmptyCells )
          * desired side effect, or should we come up with a method that
          * doesn't? */
         if (bIncludeEmptyCells)
-            BroadcastCells( rRange, SC_HINT_DATACHANGED, false);
+            BroadcastCells( rRange, SfxHintId::ScDataChanged, false);
     }
     SetAutoCalc( bOldAutoCalc );
 }

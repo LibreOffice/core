@@ -95,8 +95,8 @@ ScTablesHint::~ScTablesHint()
 {
 }
 
-ScIndexHint::ScIndexHint(sal_uInt16 nNewId, sal_uInt16 nIdx) :
-    nId( nNewId ),
+ScIndexHint::ScIndexHint(SfxHintId nNewId, sal_uInt16 nIdx) :
+    SfxHint( nNewId ),
     nIndex( nIdx )
 {
 }

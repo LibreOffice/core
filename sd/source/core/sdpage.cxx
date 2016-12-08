@@ -1941,7 +1941,7 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
                                     rSet.Put(SvxFontHeightItem(nFontHeight, 100, EE_CHAR_FONTHEIGHT_CTL));
                                 }
 
-                                pTitleSheet->Broadcast(SfxHint(SFX_HINT_DATACHANGED));
+                                pTitleSheet->Broadcast(SfxHint(SfxHintId::DataChanged));
                             }
                         }
                         else if (pObj == GetPresObj(PRESOBJ_OUTLINE, nIndexOutline))
@@ -2001,7 +2001,7 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
                                     }
 
                                     pOutlineSheet->GetItemSet().Put(aTempSet);
-                                    pOutlineSheet->Broadcast(SfxHint(SFX_HINT_DATACHANGED));
+                                    pOutlineSheet->Broadcast(SfxHint(SfxHintId::DataChanged));
                                 }
                             }
                         }
@@ -2017,7 +2017,7 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
                                 rSet.Put( SvxFontHeightItem(nFontHeight, 100, EE_CHAR_FONTHEIGHT ));
                                 rSet.Put( SvxFontHeightItem(nFontHeight, 100, EE_CHAR_FONTHEIGHT_CJK ));
                                 rSet.Put( SvxFontHeightItem(nFontHeight, 100, EE_CHAR_FONTHEIGHT_CTL ));
-                                pNotesSheet->Broadcast(SfxHint(SFX_HINT_DATACHANGED));
+                                pNotesSheet->Broadcast(SfxHint(SfxHintId::DataChanged));
                             }
                         }
                     }

@@ -1533,22 +1533,22 @@ void Document::Notify(::SfxBroadcaster &, ::SfxHint const & rHint)
         ::TextHint const & rTextHint = *pTextHint;
         switch (rTextHint.GetId())
         {
-        case TEXT_HINT_PARAINSERTED:
-        case TEXT_HINT_PARAREMOVED:
-            // TEXT_HINT_PARAINSERTED and TEXT_HINT_PARAREMOVED are sent at
+        case SfxHintId::TextParaInserted:
+        case SfxHintId::TextParaRemoved:
+            // SfxHintId::TextParaInserted and SfxHintId::TextParaRemoved are sent at
             // "unsafe" times (when the text engine has not yet re-formatted its
             // content), so that for example calling ::TextEngine::GetTextHeight
-            // from within the code that handles TEXT_HINT_PARAINSERTED causes
+            // from within the code that handles SfxHintId::TextParaInserted causes
             // trouble within the text engine.  Therefore, these hints are just
             // buffered until a following ::TextEngine::FormatDoc causes a
-            // TEXT_HINT_TEXTFORMATTED to come in:
-        case TEXT_HINT_FORMATPARA:
+            // SfxHintId::TextFormatted to come in:
+        case SfxHintId::TextFormatPara:
             // ::TextEngine::FormatDoc sends a sequence of
-            // TEXT_HINT_FORMATPARAs, followed by an optional
-            // TEXT_HINT_TEXTHEIGHTCHANGED, followed in all cases by one
-            // TEXT_HINT_TEXTFORMATTED.  Only the TEXT_HINT_FORMATPARAs contain
+            // SfxHintId::TextFormatParas, followed by an optional
+            // SfxHintId::TextHeightChanged, followed in all cases by one
+            // SfxHintId::TextFormatted.  Only the SfxHintId::TextFormatParas contain
             // the numbers of the affected paragraphs, but they are sent
-            // before the changes are applied.  Therefore, TEXT_HINT_FORMATPARAs
+            // before the changes are applied.  Therefore, SfxHintId::TextFormatParas
             // are just buffered until another hint comes in:
             {
                 ::osl::MutexGuard aInternalGuard(GetMutex());
@@ -1558,9 +1558,9 @@ void Document::Notify(::SfxBroadcaster &, ::SfxHint const & rHint)
                 m_aParagraphNotifications.push(rTextHint);
                 break;
             }
-        case TEXT_HINT_TEXTFORMATTED:
-        case TEXT_HINT_TEXTHEIGHTCHANGED:
-        case TEXT_HINT_MODIFIED:
+        case SfxHintId::TextFormatted:
+        case SfxHintId::TextHeightChanged:
+        case SfxHintId::TextModified:
             {
                 ::osl::MutexGuard aInternalGuard(GetMutex());
                 if (!isAlive())
@@ -1568,7 +1568,7 @@ void Document::Notify(::SfxBroadcaster &, ::SfxHint const & rHint)
                 handleParagraphNotifications();
                 break;
             }
-        case TEXT_HINT_VIEWSCROLLED:
+        case SfxHintId::TextViewScrolled:
             {
                 ::osl::MutexGuard aInternalGuard(GetMutex());
                 if (!isAlive())
@@ -1594,8 +1594,8 @@ void Document::Notify(::SfxBroadcaster &, ::SfxHint const & rHint)
                 }
                 break;
             }
-        case TEXT_HINT_VIEWSELECTIONCHANGED:
-        case TEXT_HINT_VIEWCARETCHANGED:
+        case SfxHintId::TextViewSelectionChanged:
+        case SfxHintId::TextViewCaretChanged:
             {
                 ::osl::MutexGuard aInternalGuard(GetMutex());
                 if (!isAlive())
@@ -1607,20 +1607,21 @@ void Document::Notify(::SfxBroadcaster &, ::SfxHint const & rHint)
                 }
                 else
                 {
-                    // TEXT_HINT_VIEWSELECTIONCHANGED is sometimes sent at
+                    // SfxHintId::TextViewSelectionChanged is sometimes sent at
                     // "unsafe" times (when the text engine has not yet re-
                     // formatted its content), so that for example calling
                     // ::TextEngine::GetTextHeight from within the code that
-                    // handles a previous TEXT_HINT_PARAINSERTED causes
+                    // handles a previous SfxHintId::TextParaInserted causes
                     // trouble within the text engine.  Therefore, these
                     // hints are just buffered (along with
-                    // TEXT_HINT_PARAINSERTED/REMOVED/FORMATPARA) until a
+                    // SfxHintId::TextParaInserted/REMOVED/FORMATPARA) until a
                     // following ::TextEngine::FormatDoc causes a
-                    // TEXT_HINT_TEXTFORMATTED to come in:
+                    // SfxHintId::TextFormatted to come in:
                     m_bSelectionChangedNotification = true;
                 }
                 break;
             }
+        default: break;
         }
     }
 }
@@ -1875,10 +1876,10 @@ void Document::handleParagraphNotifications()
         m_aParagraphNotifications.pop();
         switch (aHint.GetId())
         {
-        case TEXT_HINT_PARAINSERTED:
+        case SfxHintId::TextParaInserted:
             {
                 ::sal_uLong n = aHint.GetValue();
-                assert(n <= m_xParagraphs->size() && "bad TEXT_HINT_PARAINSERTED event");
+                assert(n <= m_xParagraphs->size() && "bad SfxHintId::TextParaInserted event");
 
                 // Save the values of old iterators (the iterators themselves
                 // will get invalidated), and adjust the old values so that they
@@ -1926,7 +1927,7 @@ void Document::handleParagraphNotifications()
                     m_xParagraphs->begin() + nOldVisibleEnd, aIns);
                 break;
             }
-        case TEXT_HINT_PARAREMOVED:
+        case SfxHintId::TextParaRemoved:
             {
                 ::sal_uLong n = aHint.GetValue();
                 if (n == TEXT_PARA_ALL)
@@ -1951,7 +1952,7 @@ void Document::handleParagraphNotifications()
                 }
                 else
                 {
-                    assert(n < m_xParagraphs->size() && "Bad TEXT_HINT_PARAREMOVED event");
+                    assert(n < m_xParagraphs->size() && "Bad SfxHintId::TextParaRemoved event");
 
                     Paragraphs::iterator aIt(m_xParagraphs->begin() + n);
                         // numeric overflow cannot occur
@@ -2040,10 +2041,10 @@ void Document::handleParagraphNotifications()
                 }
                 break;
             }
-        case TEXT_HINT_FORMATPARA:
+        case SfxHintId::TextFormatPara:
             {
                 ::sal_uLong n = aHint.GetValue();
-                assert(n < m_xParagraphs->size() && "Bad TEXT_HINT_FORMATPARA event");
+                assert(n < m_xParagraphs->size() && "Bad SfxHintId::TextFormatPara event");
 
                 (*m_xParagraphs)[static_cast< Paragraphs::size_type >(n)].
                     changeHeight(static_cast< ::sal_Int32 >(
@@ -2208,7 +2209,7 @@ void Document::handleSelectionChangeNotification()
     ::TextSelection const & rSelection = m_rView.GetSelection();
     assert(rSelection.GetStart().GetPara() < m_xParagraphs->size() &&
            rSelection.GetEnd().GetPara() < m_xParagraphs->size() &&
-           "bad TEXT_HINT_VIEWSELECTIONCHANGED event");
+           "bad SfxHintId::TextViewSelectionChanged event");
     ::sal_Int32 nNewFirstPara
           = static_cast< ::sal_Int32 >(rSelection.GetStart().GetPara());
     ::sal_Int32 nNewFirstPos = rSelection.GetStart().GetIndex();

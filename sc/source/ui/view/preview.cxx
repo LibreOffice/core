@@ -707,7 +707,7 @@ void ScPreview::DataChanged(bool bNewTime)
     }
 
     bValid = false;
-    InvalidateLocationData( SC_HINT_DATACHANGED );
+    InvalidateLocationData( SfxHintId::ScDataChanged );
     Invalidate();
 }
 
@@ -750,7 +750,7 @@ void ScPreview::SetZoom(sal_uInt16 nNewZoom)
         bInSetZoom = false;
 
         bStateValid = false;
-        InvalidateLocationData( SC_HINT_ACC_VISAREACHANGED );
+        InvalidateLocationData( SfxHintId::ScAccVisAreaChanged );
         DoInvalidate();
         Invalidate();
     }
@@ -761,7 +761,7 @@ void ScPreview::SetPageNo( long nPage )
     nPageNo = nPage;
     RecalcPages();
     UpdateDrawView();       // The table eventually changes
-    InvalidateLocationData( SC_HINT_DATACHANGED );
+    InvalidateLocationData( SfxHintId::ScDataChanged );
     Invalidate();
 }
 
@@ -864,7 +864,7 @@ void ScPreview::SetXOffset( long nX )
         if (!bInSetZoom)
             Invalidate();
     }
-    InvalidateLocationData( SC_HINT_ACC_VISAREACHANGED );
+    InvalidateLocationData( SfxHintId::ScAccVisAreaChanged );
     Invalidate();
 }
 
@@ -890,7 +890,7 @@ void ScPreview::SetYOffset( long nY )
         if (!bInSetZoom)
             Invalidate();
     }
-    InvalidateLocationData( SC_HINT_ACC_VISAREACHANGED );
+    InvalidateLocationData( SfxHintId::ScAccVisAreaChanged );
     Invalidate();
 }
 
@@ -959,7 +959,7 @@ void ScPreview::DataChanged( const DataChangedEvent& rDCEvt )
                 pViewShell->InvalidateBorder();     // calls OuterResizePixel
             }
             Invalidate();
-            InvalidateLocationData( SC_HINT_DATACHANGED );
+            InvalidateLocationData( SfxHintId::ScDataChanged );
         }
     }
 }
@@ -1496,7 +1496,7 @@ void ScPreview::MouseMove( const MouseEvent& rMEvt )
     }
 }
 
-void ScPreview::InvalidateLocationData(sal_uLong nId)
+void ScPreview::InvalidateLocationData(SfxHintId nId)
 {
     bLocationValid = false;
     if (pViewShell->HasAccessibilityObjects())

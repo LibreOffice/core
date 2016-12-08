@@ -1236,7 +1236,7 @@ void ScAccessibleDocumentPagePreview::Notify( SfxBroadcaster& rBC, const SfxHint
     else
     {
         // only notify if child exist, otherwise it is not necessary
-        if (rHint.GetId() == SC_HINT_DATACHANGED)
+        if (rHint.GetId() == SfxHintId::ScDataChanged)
         {
             if (mpTable.is()) // if there is no table there is nothing to notify, because no one recongnizes the change
             {
@@ -1284,11 +1284,11 @@ void ScAccessibleDocumentPagePreview::Notify( SfxBroadcaster& rBC, const SfxHint
                 }
             }
         }
-        else if (rHint.GetId() == SC_HINT_ACC_MAKEDRAWLAYER)
+        else if (rHint.GetId() == SfxHintId::ScAccMakeDrawLayer)
         {
             GetShapeChildren()->SetDrawBroadcaster();
         }
-        else if (rHint.GetId() == SC_HINT_ACC_VISAREACHANGED)
+        else if (rHint.GetId() == SfxHintId::ScAccVisAreaChanged)
         {
             Size aOutputSize;
             vcl::Window* pSizeWindow = mpViewShell->GetWindow();

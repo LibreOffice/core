@@ -413,7 +413,7 @@ void ScStyleFamiliesObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     //  Referenz-Update interessiert hier nicht
 
-    if ( rHint.GetId() == SFX_HINT_DYING )
+    if ( rHint.GetId() == SfxHintId::Dying )
     {
         pDocShell = nullptr;       // ungueltig geworden
     }
@@ -621,7 +621,7 @@ void ScStyleFamilyObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     //  Referenz-Update interessiert hier nicht
 
-    if ( rHint.GetId() == SFX_HINT_DYING )
+    if ( rHint.GetId() == SfxHintId::Dying )
     {
         pDocShell = nullptr;       // has become invalid
     }
@@ -1011,7 +1011,7 @@ void ScStyleObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     //  Referenz-Update interessiert hier nicht
 
-    if ( rHint.GetId() == SFX_HINT_DYING )
+    if ( rHint.GetId() == SfxHintId::Dying )
     {
         pDocShell = nullptr;       // has become invalid
     }

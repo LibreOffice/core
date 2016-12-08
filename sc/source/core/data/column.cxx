@@ -1963,7 +1963,7 @@ void ScColumn::MoveTo(SCROW nStartRow, SCROW nEndRow, ScColumn& rCol)
     rCol.CellStorageModified();
 
     // Broadcast on moved ranges. Area-broadcast only.
-    ScHint aHint(SC_HINT_DATACHANGED, ScAddress(nCol, 0, nTab));
+    ScHint aHint(SfxHintId::ScDataChanged, ScAddress(nCol, 0, nTab));
     ScAddress& rPos = aHint.GetAddress();
     sc::SingleColumnSpanSet::SpansType::const_iterator itRange = aRanges.begin(), itRangeEnd = aRanges.end();
     for (; itRange != itRangeEnd; ++itRange)
@@ -2749,7 +2749,7 @@ public:
     {
         std::vector<SCROW> aRows;
         maValueRanges.getRows(aRows);
-        mrColumn.BroadcastCells(aRows, SC_HINT_DATACHANGED);
+        mrColumn.BroadcastCells(aRows, SfxHintId::ScDataChanged);
     }
 
     void fillBroadcastSpans( sc::ColumnSpanSet& rBroadcastSpans ) const
@@ -2793,7 +2793,7 @@ public:
     {
         std::vector<SCROW> aRows;
         maValueRanges.getRows(aRows);
-        mrColumn.BroadcastCells(aRows, SC_HINT_TABLEOPDIRTY);
+        mrColumn.BroadcastCells(aRows, SfxHintId::ScTableOpDirty);
     }
 };
 
@@ -3222,7 +3222,7 @@ void ScColumn::SetDirty( SCROW nRow1, SCROW nRow2, BroadcastMode eMode )
                 SetDirtyOnRangeHandler aHdl(*this);
                 sc::ProcessFormula(maCells.begin(), maCells, nRow1, nRow2, aHdl);
                 // Broadcast all broadcasters in range.
-                ScHint aHint( SC_HINT_DATACHANGED, ScAddress( nCol, nRow1, nTab));
+                ScHint aHint( SfxHintId::ScDataChanged, ScAddress( nCol, nRow1, nTab));
                 if (BroadcastBroadcasters( nRow1, nRow2, aHint))
                 {
                     // SetDirtyOnRangeHandler implicitly tracks notified
@@ -3285,7 +3285,7 @@ void ScColumn::BroadcastRecalcOnRefMove()
     sc::AutoCalcSwitch aSwitch(*pDocument, false);
     RecalcOnRefMoveCollector aFunc;
     sc::ProcessFormula(maCells, aFunc);
-    BroadcastCells(aFunc.getDirtyRows(), SC_HINT_DATACHANGED);
+    BroadcastCells(aFunc.getDirtyRows(), SfxHintId::ScDataChanged);
 }
 
 namespace {

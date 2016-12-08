@@ -242,7 +242,7 @@ void ScTable::DeleteRow(
     }
 
     {   // scope for bulk broadcast
-        ScBulkBroadcast aBulkBroadcast( pDocument->GetBASM(), SC_HINT_DATACHANGED);
+        ScBulkBroadcast aBulkBroadcast( pDocument->GetBASM(), SfxHintId::ScDataChanged);
         for (SCCOL j=nStartCol; j<=nEndCol; j++)
             aCol[j].DeleteRow(nStartRow, nSize, pGroupPos);
     }
@@ -430,7 +430,7 @@ void ScTable::DeleteArea(
     if (ValidColRow(nCol1, nRow1) && ValidColRow(nCol2, nRow2))
     {
         {   // scope for bulk broadcast
-            ScBulkBroadcast aBulkBroadcast( pDocument->GetBASM(), SC_HINT_DATACHANGED);
+            ScBulkBroadcast aBulkBroadcast( pDocument->GetBASM(), SfxHintId::ScDataChanged);
             for (SCCOL i = nCol1; i <= nCol2; i++)
                 aCol[i].DeleteArea(nRow1, nRow2, nDelFlag, bBroadcast, pBroadcastSpans);
         }
@@ -457,7 +457,7 @@ void ScTable::DeleteArea(
 void ScTable::DeleteSelection( InsertDeleteFlags nDelFlag, const ScMarkData& rMark, bool bBroadcast )
 {
     {   // scope for bulk broadcast
-        ScBulkBroadcast aBulkBroadcast( pDocument->GetBASM(), SC_HINT_DATACHANGED);
+        ScBulkBroadcast aBulkBroadcast( pDocument->GetBASM(), SfxHintId::ScDataChanged);
         for (SCCOL i=0; i<=MAXCOL; i++)
             aCol[i].DeleteSelection(nDelFlag, rMark, bBroadcast);
     }

@@ -157,7 +157,7 @@ SwPostItMgr::SwPostItMgr(SwView* pView)
     /*  this code can be used once we want redline comments in the Sidebar
     AddRedlineComments(false,false);
     */
-    // we want to receive stuff like SFX_HINT_DOCCHANGED
+    // we want to receive stuff like SfxHintId::DocChanged
     StartListening(*mpView->GetDocShell());
     if (!mvPostItFields.empty())
     {
@@ -363,10 +363,10 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     }
     else
     {
-        sal_uInt32 nId = rHint.GetId();
+        SfxHintId nId = rHint.GetId();
         switch ( nId )
         {
-            case SFX_HINT_MODECHANGED:
+            case SfxHintId::ModeChanged:
             {
                 if ( mbReadOnly != !!(mpView->GetDocShell()->IsReadOnly()) )
                 {
@@ -376,7 +376,7 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 }
                 break;
             }
-            case SFX_HINT_DOCCHANGED:
+            case SfxHintId::DocChanged:
             {
                 if ( mpView->GetDocShell() == &rBC )
                 {
@@ -388,13 +388,13 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 }
                 break;
             }
-            case SFX_HINT_USER04:
+            case SfxHintId::SwSplitNodeOperation:
             {
                 // if we are in a SplitNode/Cut operation, do not delete note and then add again, as this will flicker
                 mbDeleteNote = !mbDeleteNote;
                 break;
             }
-            case SFX_HINT_DYING:
+            case SfxHintId::Dying:
             {
                 if ( mpView->GetDocShell() != &rBC )
                 {
@@ -404,6 +404,7 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 }
                 break;
             }
+            default: break;
         }
     }
 }

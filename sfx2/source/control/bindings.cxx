@@ -1198,7 +1198,7 @@ void SfxBindings::UpdateSlotServer_Impl()
     }
     pImpl->bMsgDirty = pImpl->bAllMsgDirty = false;
 
-    Broadcast( SfxHint(SFX_HINT_DOCCHANGED) );
+    Broadcast( SfxHint(SfxHintId::DocChanged) );
 }
 
 
@@ -1529,7 +1529,7 @@ bool SfxBindings::NextJob_Impl(Timer * pTimer)
 
     // Update round is finished
     pImpl->bInNextJob = false;
-    Broadcast(SfxHint(SFX_HINT_UPDATEDONE));
+    Broadcast(SfxHint(SfxHintId::UpdateDone));
     return true;
 }
 
@@ -1686,7 +1686,7 @@ void SfxBindings::SetDispatcher( SfxDispatcher *pDisp )
             }
         }
 
-        Broadcast( SfxHint( SFX_HINT_DATACHANGED ) );
+        Broadcast( SfxHint( SfxHintId::DataChanged ) );
 
         if ( pDisp )
         {

@@ -199,28 +199,28 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         bool bForce = !bStayOnActiveTab;
         SetTabNo( nNewTab, bForce, false, bStayOnActiveTab );
     }
-    else if (dynamic_cast<const ScIndexHint*>(&rHint))
+    else if (const ScIndexHint* pIndexHint = dynamic_cast<const ScIndexHint*>(&rHint))
     {
-        const ScIndexHint& rIndexHint = static_cast<const ScIndexHint&>(rHint);
-        sal_uInt16 nId = rIndexHint.GetIndexHintId();
-        sal_uInt16 nIndex = rIndexHint.GetIndex();
+        SfxHintId nId = pIndexHint->GetId();
+        sal_uInt16 nIndex = pIndexHint->GetIndex();
         switch (nId)
         {
-            case SC_HINT_SHOWRANGEFINDER:
+            case SfxHintId::ScShowRangeFinder:
                 PaintRangeFinder( nIndex );
                 break;
+            default: break;
         }
     }
     else                       // ohne Parameter
     {
-        const sal_uInt32 nSlot = rHint.GetId();
+        const SfxHintId nSlot = rHint.GetId();
         switch ( nSlot )
         {
-            case FID_DATACHANGED:
+            case SfxHintId::ScDataChanged:
                 UpdateFormulas();
                 break;
 
-            case FID_REFMODECHANGED:
+            case SfxHintId::ScRefModeChanged:
                 {
                     bool bRefMode = SC_MOD()->IsFormulaMode();
                     if (!bRefMode)
@@ -234,19 +234,19 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 }
                 break;
 
-            case FID_KILLEDITVIEW:
-            case FID_KILLEDITVIEW_NOPAINT:
+            case SfxHintId::ScKillEditView:
+            case SfxHintId::ScKillEditViewNoPaint:
                 if (!comphelper::LibreOfficeKit::isActive()
                     || this == SfxViewShell::Current()
                     || bInPrepareClose
                     || bInDispose)
                 {
                     StopEditShell();
-                    KillEditView( nSlot == FID_KILLEDITVIEW_NOPAINT );
+                    KillEditView( nSlot == SfxHintId::ScKillEditViewNoPaint );
                 }
                 break;
 
-            case SFX_HINT_DOCCHANGED:
+            case SfxHintId::DocChanged:
                 {
                     ScDocument* pDoc = GetViewData().GetDocument();
                     if (!pDoc->HasTable( GetViewData().GetTabNo() ))
@@ -256,28 +256,28 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 }
                 break;
 
-            case SC_HINT_DRWLAYER_NEW:
+            case SfxHintId::ScDrawLayerNew:
                 MakeDrawView(TRISTATE_INDET);
                 break;
 
-            case SC_HINT_DOC_SAVED:
+            case SfxHintId::ScDocSaved:
                 {
                     //  beim "Save as" kann ein vorher schreibgeschuetztes Dokument
                     //  bearbeitbar werden, deshalb die Layer-Locks neu (#39884#)
                     //  (Invalidate etc. passiert schon vom Sfx her)
-                    //  bei SID_EDITDOC kommt kein SFX_HINT_TITLECHANGED, darum
+                    //  bei SID_EDITDOC kommt kein SfxHintId::TitleChanged, darum
                     //  der eigene Hint aus DoSaveCompleted
-                    //! was ist mit SFX_HINT_SAVECOMPLETED ?
+                    //! was ist mit SfxHintId::SAVECOMPLETED ?
 
                     UpdateLayerLocks();
 
                     //  Design-Modus bei jedem Speichern anzupassen, waere zuviel
                     //  (beim Speichern unter gleichem Namen soll er unveraendert bleiben)
-                    //  Darum nur bei SFX_HINT_MODECHANGED (vom ViewFrame)
+                    //  Darum nur bei SfxHintId::ModeChanged (vom ViewFrame)
                 }
                 break;
 
-            case SFX_HINT_MODECHANGED:
+            case SfxHintId::ModeChanged:
                 //  Da man sich nicht mehr darauf verlassen kann, woher
                 //  dieser Hint kommt, den Design-Modus immer dann umschalten, wenn der
                 //  ReadOnly-Status sich wirklich geaendert hat:
@@ -294,11 +294,11 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 }
                 break;
 
-            case SC_HINT_SHOWRANGEFINDER:
+            case SfxHintId::ScShowRangeFinder:
                 PaintRangeFinder(-1);
                 break;
 
-            case SC_HINT_FORCESETTAB:
+            case SfxHintId::ScForceSetTab:
                 SetTabNo( GetViewData().GetTabNo(), true );
                 break;
 

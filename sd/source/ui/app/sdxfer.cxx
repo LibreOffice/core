@@ -809,7 +809,7 @@ void SdTransferable::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     }
     else
     {
-        if( rHint.GetId() == SFX_HINT_DYING )
+        if( rHint.GetId() == SfxHintId::Dying )
         {
             if( &rBC == mpSourceDoc )
                 mpSourceDoc = nullptr;

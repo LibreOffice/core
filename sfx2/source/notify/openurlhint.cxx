@@ -21,7 +21,6 @@
 #include <sfx2/sfxsids.hrc>
 
 SfxOpenUrlHint::SfxOpenUrlHint( const OUString& sDocumentURL ) :
-    SfxHint( SID_OPENURL ),
     msDocumentURL(sDocumentURL) { }
 
 const OUString& SfxOpenUrlHint::GetDocumentURL() const

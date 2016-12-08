@@ -420,7 +420,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                                     {
                                         pFirstStyleSheet->GetItemSet().Put( SvxNumBulletItem( aRule, EE_PARA_NUMBULLET ));
                                         SdStyleSheet* pRealSheet = static_cast<SdStyleSheet*>(pFirstStyleSheet)->GetRealStyleSheet();
-                                        pRealSheet->Broadcast(SfxHint(SFX_HINT_DATACHANGED));
+                                        pRealSheet->Broadcast(SfxHint(SfxHintId::DataChanged));
                                     }
 
                                     aTempSet.ClearItem( EE_PARA_NUMBULLET );
@@ -507,7 +507,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                             }
                         }
 
-                        static_cast<SfxStyleSheet*>( pStyleSheet )->Broadcast( SfxHint( SFX_HINT_DATACHANGED ) );
+                        static_cast<SfxStyleSheet*>( pStyleSheet )->Broadcast( SfxHint( SfxHintId::DataChanged ) );
 
                         DrawViewShell* pDrawViewShell = dynamic_cast< DrawViewShell* >( mpViewShell );
                         if( pDrawViewShell )
@@ -596,7 +596,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                         mpView->SetStyleSheet( static_cast<SfxStyleSheet*>(pStyleSheet));
                     }
 
-                    static_cast<SfxStyleSheet*>( pStyleSheet )->Broadcast( SfxHint( SFX_HINT_DATACHANGED ) );
+                    static_cast<SfxStyleSheet*>( pStyleSheet )->Broadcast( SfxHint( SfxHintId::DataChanged ) );
                     mpDoc->SetChanged();
 
                     mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_STYLE_FAMILY2 );
@@ -623,7 +623,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
 
                     mpView->SetStyleSheet( static_cast<SfxStyleSheet*>(pStyleSheet));
 
-                    static_cast<SfxStyleSheet*>( pStyleSheet )->Broadcast( SfxHint( SFX_HINT_DATACHANGED ) );
+                    static_cast<SfxStyleSheet*>( pStyleSheet )->Broadcast( SfxHint( SfxHintId::DataChanged ) );
                     mpDoc->SetChanged();
                     mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_STYLE_FAMILY2 );
                 }

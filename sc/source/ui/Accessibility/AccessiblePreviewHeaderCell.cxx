@@ -116,13 +116,13 @@ void SAL_CALL ScAccessiblePreviewHeaderCell::disposing()
 
 void ScAccessiblePreviewHeaderCell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    const sal_uInt32 nId = rHint.GetId();
-    if (nId == SC_HINT_ACC_VISAREACHANGED)
+    const SfxHintId nId = rHint.GetId();
+    if (nId == SfxHintId::ScAccVisAreaChanged)
     {
         if (mpTextHelper)
             mpTextHelper->UpdateChildren();
     }
-    else if ( nId == SFX_HINT_DATACHANGED )
+    else if ( nId == SfxHintId::DataChanged )
     {
         //  column / row layout may change with any document change,
         //  so it must be invalidated

@@ -554,9 +554,9 @@ namespace sdr
                 const svx::ITextProvider& rTextProvider(getTextProvider());
                 if(dynamic_cast<const SfxStyleSheet *>(&rBC) != nullptr)
                 {
-                    sal_uInt32 nId(rHint.GetId());
+                    SfxHintId nId(rHint.GetId());
 
-                    if(SFX_HINT_DATACHANGED == nId)
+                    if(SfxHintId::DataChanged == nId)
                     {
                         rObj.SetPortionInfoChecked(false);
 
@@ -580,7 +580,7 @@ namespace sdr
                         maVersion++;
                     }
 
-                    if(SFX_HINT_DYING == nId)
+                    if(SfxHintId::Dying == nId)
                     {
                         rObj.SetPortionInfoChecked(false);
                         sal_Int32 nText = rTextProvider.getTextCount();
@@ -597,7 +597,7 @@ namespace sdr
                     const SfxStyleSheetHintExtended* pExtendedHint = dynamic_cast<const SfxStyleSheetHintExtended*>(&rHint);
 
                     if(pExtendedHint
-                        && SfxStyleSheetHintId::MODIFIED == pExtendedHint->GetHint())
+                        && SfxHintId::StyleSheetModified == pExtendedHint->GetId())
                     {
                         OUString aOldName(pExtendedHint->GetOldName());
                         OUString aNewName(pExtendedHint->GetStyleSheet()->GetName());

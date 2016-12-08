@@ -170,7 +170,7 @@ ScDrawLayer* ScDocShell::MakeDrawLayer()
         aDocument.InitDrawLayer(this);
         pDrawLayer = aDocument.GetDrawLayer();
         InitItems(); // including Undo and Basic
-        Broadcast( SfxHint( SC_HINT_DRWLAYER_NEW ) );
+        Broadcast( SfxHint( SfxHintId::ScDrawLayerNew ) );
         if (nDocumentLock)
             pDrawLayer->setLock(true);
     }

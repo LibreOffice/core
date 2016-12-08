@@ -49,24 +49,24 @@ must broadcast this using <SfxStyleSheetBasePool::GetBroadcaster()> broadcasts.
 The class <SfxStyleSheetHint> is used for this, it contains an Action-Id and a
 pointer to the <SfxStyleSheetBase>. The actions are:
 
-#define SfxStyleSheetHintId::CREATED      // style is created
-#define SfxStyleSheetHintId::MODIFIED     // style is modified
-#define SfxStyleSheetHintId::CHANGED      // style is replaced
-#define SfxStyleSheetHintId::ERASED       // style is deleted
+#define SfxHintId::StyleSheetCreated      // style is created
+#define SfxHintId::StyleSheetModified     // style is modified
+#define SfxHintId::StyleSheetChanged      // style is replaced
+#define SfxHintId::StyleSheetErased       // style is deleted
 
 The following methods already broadcast themself
 
-SfxSimpleHint(SFX_HINT_DYING) from:
+SfxSimpleHint(SfxHintId::Dying) from:
    SfxStyleSheetBasePool::~SfxStyleSheetBasePool()
 
-SfxStyleSheetHint( SfxStyleSheetHintId::CREATED, *p ) from:
+SfxStyleSheetHint( SfxHintId::StyleSheetCreated, *p ) from:
    SfxStyleSheetBasePool::Make( const String& rName,
    SfxStyleFamily eFam, sal_uInt16 mask)
 
-SfxStyleSheetHint( SfxStyleSheetHintId::CHANGED, *pNew ) from:
+SfxStyleSheetHint( SfxHintId::StyleSheetChanged, *pNew ) from:
    SfxStyleSheetBasePool::Add( SfxStyleSheetBase& rSheet )
 
-SfxStyleSheetHint( SfxStyleSheetHintId::ERASED, *p ) from:
+SfxStyleSheetHint( SfxHintId::StyleSheetErased, *p ) from:
    SfxStyleSheetBasePool::Erase( SfxStyleSheetBase* p )
    SfxStyleSheetBasePool::Clear()
 */
@@ -292,15 +292,6 @@ public:
 };
 
 
-enum SfxStyleSheetHintId
-{
-    CREATED       = 1,  // new
-    MODIFIED      = 2,  // changed
-    CHANGED       = 3,  // erased and re-created (replaced)
-    ERASED        = 4,  // erased
-    INDESTRUCTION = 5,  // in the process of being destructed
-};
-
 class SVL_DLLPUBLIC SfxStyleSheetPoolHint : public SfxHint
 {
 public:
@@ -311,14 +302,10 @@ public:
 class SVL_DLLPUBLIC SfxStyleSheetHint: public SfxHint
 {
     SfxStyleSheetBase*  pStyleSh;
-    sal_uInt16          nHint;
-
 public:
-                        SfxStyleSheetHint( sal_uInt16, SfxStyleSheetBase& );
+                        SfxStyleSheetHint( SfxHintId, SfxStyleSheetBase& );
     SfxStyleSheetBase*  GetStyleSheet() const
                         { return pStyleSh; }
-    sal_uInt16          GetHint() const
-                        { return nHint; }
 };
 
 class SVL_DLLPUBLIC SfxStyleSheetHintExtended: public SfxStyleSheetHint
@@ -326,7 +313,7 @@ class SVL_DLLPUBLIC SfxStyleSheetHintExtended: public SfxStyleSheetHint
     OUString            aName;
 
 public:
-                        SfxStyleSheetHintExtended( sal_uInt16, const OUString& rOld,
+                        SfxStyleSheetHintExtended( SfxHintId, const OUString& rOld,
                                                    SfxStyleSheetBase& );
     const OUString&     GetOldName() const { return aName; }
 };

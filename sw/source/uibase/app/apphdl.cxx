@@ -874,7 +874,7 @@ void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
     }
     else
     {
-        if (rHint.GetId() == SFX_HINT_DEINITIALIZING)
+        if (rHint.GetId() == SfxHintId::Deinitializing)
         {
             DELETEZ(m_pWebUsrPref);
             DELETEZ(m_pUsrPref);

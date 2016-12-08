@@ -1018,7 +1018,7 @@ ScChart2DataProvider::~ScChart2DataProvider()
 
 void ScChart2DataProvider::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
 {
-    if ( rHint.GetId() == SFX_HINT_DYING )
+    if ( rHint.GetId() == SfxHintId::Dying )
     {
         m_pDocument = nullptr;
     }
@@ -2404,7 +2404,7 @@ ScChart2DataSource::~ScChart2DataSource()
 
 void ScChart2DataSource::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
 {
-    if ( rHint.GetId() == SFX_HINT_DYING )
+    if ( rHint.GetId() == SfxHintId::Dying )
     {
         m_pDocument = nullptr;
     }
@@ -2635,7 +2635,7 @@ void ScChart2DataSequence::RebuildDataCache()
     if (!m_bExtDataRebuildQueued)
     {
         m_aDataArray.clear();
-        m_pDocument->BroadcastUno(ScHint(SC_HINT_DATACHANGED, ScAddress()));
+        m_pDocument->BroadcastUno(ScHint(SfxHintId::ScDataChanged, ScAddress()));
         m_bExtDataRebuildQueued = true;
         m_bGotDataChangedHint = true;
     }
@@ -2881,12 +2881,12 @@ void ScChart2DataSequence::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
     }
     else
     {
-        const sal_uInt32 nId = rHint.GetId();
-        if ( nId ==SFX_HINT_DYING )
+        const SfxHintId nId = rHint.GetId();
+        if ( nId ==SfxHintId::Dying )
         {
             m_pDocument = nullptr;
         }
-        else if ( nId == SFX_HINT_DATACHANGED )
+        else if ( nId == SfxHintId::DataChanged )
         {
             // delayed broadcast as in ScCellRangesBase
 
@@ -2905,10 +2905,10 @@ void ScChart2DataSequence::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
                 m_bGotDataChangedHint = false;
             }
         }
-        else if ( nId == SC_HINT_CALCALL )
+        else if ( nId == SfxHintId::ScCalcAll )
         {
             // broadcast from DoHardRecalc - set m_bGotDataChangedHint
-            // (SFX_HINT_DATACHANGED follows separately)
+            // (SfxHintId::DataChanged follows separately)
 
             if ( !m_aValueListeners.empty() )
                 m_bGotDataChangedHint = true;
@@ -2918,11 +2918,11 @@ void ScChart2DataSequence::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
 
 IMPL_LINK( ScChart2DataSequence, ValueListenerHdl, const SfxHint&, rHint, void )
 {
-    if ( m_pDocument && (rHint.GetId() & SC_HINT_DATACHANGED) )
+    if ( m_pDocument && (rHint.GetId() == SfxHintId::ScDataChanged) )
     {
         //  This may be called several times for a single change, if several formulas
         //  in the range are notified. So only a flag is set that is checked when
-        //  SFX_HINT_DATACHANGED is received.
+        //  SfxHintId::DataChanged is received.
 
         setDataChangedHint(true);
     }

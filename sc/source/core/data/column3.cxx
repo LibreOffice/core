@@ -71,11 +71,11 @@ using namespace formula;
 
 void ScColumn::Broadcast( SCROW nRow )
 {
-    ScHint aHint(SC_HINT_DATACHANGED, ScAddress(nCol, nRow, nTab));
+    ScHint aHint(SfxHintId::ScDataChanged, ScAddress(nCol, nRow, nTab));
     pDocument->Broadcast(aHint);
 }
 
-void ScColumn::BroadcastCells( const std::vector<SCROW>& rRows, sal_uInt32 nHint )
+void ScColumn::BroadcastCells( const std::vector<SCROW>& rRows, SfxHintId nHint )
 {
     if (rRows.empty())
         return;
@@ -707,7 +707,7 @@ void ScColumn::DeleteArea(
         // cells that were already empty before the deletion.
         std::vector<SCROW> aRows;
         aDeletedRows.getRows(aRows);
-        BroadcastCells(aRows, SC_HINT_DATACHANGED);
+        BroadcastCells(aRows, SfxHintId::ScDataChanged);
     }
 }
 

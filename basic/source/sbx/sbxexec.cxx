@@ -261,7 +261,7 @@ static SbxVariableRef Assign( SbxObject* pObj, SbxObject* pGbl, const sal_Unicod
         }
         else
             // Simple call: once activating
-            refVar->Broadcast( SBX_HINT_DATAWANTED );
+            refVar->Broadcast( SfxHintId::BasicDataWanted );
     }
     *ppBuf = p;
     return refVar;

@@ -102,7 +102,7 @@ void ScDocShell::DBAreaDeleted( SCTAB nTab, SCCOL nX1, SCROW nY1, SCCOL nX2, SCR
     PostPaint( nX1, nY1, nTab, nX2, nY1, nTab, PaintPartFlags::Grid );
     // No SetDocumentModified, as the unnamed database range might have to be restored later.
     // The UNO hint is broadcast directly instead, to keep UNO objects in valid state.
-    aDocument.BroadcastUno( SfxHint( SFX_HINT_DATACHANGED ) );
+    aDocument.BroadcastUno( SfxHint( SfxHintId::DataChanged ) );
 }
 
 ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGetDBSelection eSel )
@@ -314,7 +314,7 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGe
 
             //  "Import1" etc am Navigator bekanntmachen
             if (eMode==SC_DB_IMPORT)
-                SfxGetpApp()->Broadcast( SfxHint( SC_HINT_DBAREAS_CHANGED ) );
+                SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScDbAreasChanged ) );
         }
         pData = pNoNameData;
     }
@@ -758,7 +758,7 @@ void ScDocShell::ModifyScenario( SCTAB nTab, const OUString& rName, const OUStri
     aModificator.SetDocumentModified();
 
     if (!aOldName.equals(rName))
-        SfxGetpApp()->Broadcast( SfxHint( SC_HINT_TABLES_CHANGED ) );
+        SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScTablesChanged ) );
 
     SfxBindings* pBindings = GetViewBindings();
     if (pBindings)
@@ -824,7 +824,7 @@ SCTAB ScDocShell::MakeScenario( SCTAB nTab, const OUString& rName, const OUStrin
             PostPaintExtras();                                          // Tabellenreiter
             aModificator.SetDocumentModified();
 
-            SfxGetpApp()->Broadcast( SfxHint( SC_HINT_TABLES_CHANGED ) );
+            SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScTablesChanged ) );
 
             return nNewTab;
         }
@@ -991,7 +991,7 @@ bool ScDocShell::MoveTable( SCTAB nSrcTab, SCTAB nDestTab, bool bCopy, bool bRec
     PostPaintGridAll();
     PostPaintExtras();
     aModificator.SetDocumentModified();
-    SfxGetpApp()->Broadcast( SfxHint( SC_HINT_TABLES_CHANGED ) );
+    SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScTablesChanged ) );
 
     return true;
 }

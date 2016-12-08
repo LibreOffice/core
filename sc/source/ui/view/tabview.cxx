@@ -738,7 +738,7 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, bool bInner )
     UpdateVarZoom();    //  update variable zoom types (after resizing GridWindows)
 
     if (aViewData.GetViewShell()->HasAccessibilityObjects())
-        aViewData.GetViewShell()->BroadcastAccessibility(SfxHint(SC_HINT_ACC_WINDOWRESIZED));
+        aViewData.GetViewShell()->BroadcastAccessibility(SfxHint(SfxHintId::ScAccWindowResized));
 }
 
 void ScTabView::UpdateVarZoom()
@@ -2176,7 +2176,7 @@ void ScTabView::SetNewVisArea()
         }
     }
     if (aViewData.GetViewShell()->HasAccessibilityObjects())
-        aViewData.GetViewShell()->BroadcastAccessibility(SfxHint(SC_HINT_ACC_VISAREACHANGED));
+        aViewData.GetViewShell()->BroadcastAccessibility(SfxHint(SfxHintId::ScAccVisAreaChanged));
 }
 
 bool ScTabView::HasPageFieldDataAtCursor() const

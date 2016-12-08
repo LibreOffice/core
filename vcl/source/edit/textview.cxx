@@ -421,10 +421,10 @@ void TextView::ImpSetSelection( const TextSelection& rSelection )
         mpImpl->maSelection = rSelection;
 
         if (bSelection)
-            mpImpl->mpTextEngine->Broadcast(TextHint(TEXT_HINT_VIEWSELECTIONCHANGED));
+            mpImpl->mpTextEngine->Broadcast(TextHint(SfxHintId::TextViewSelectionChanged));
 
         if (bCaret)
-            mpImpl->mpTextEngine->Broadcast(TextHint(TEXT_HINT_VIEWCARETCHANGED));
+            mpImpl->mpTextEngine->Broadcast(TextHint(SfxHintId::TextViewCaretChanged));
     }
 }
 
@@ -729,7 +729,7 @@ bool TextView::KeyInput( const KeyEvent& rKeyEvent )
     }
 
     if ( mpImpl->mpTextEngine->IsModified() )
-        mpImpl->mpTextEngine->Broadcast( TextHint( TEXT_HINT_MODIFIED ) );
+        mpImpl->mpTextEngine->Broadcast( TextHint( SfxHintId::TextModified ) );
     else if ( bWasModified )
         mpImpl->mpTextEngine->SetModified( true );
 
@@ -747,7 +747,7 @@ void TextView::MouseButtonUp( const MouseEvent& rMouseEvent )
         css::uno::Reference<css::datatransfer::clipboard::XClipboard> aSelection(GetWindow()->GetPrimarySelection());
         Paste( aSelection );
         if ( mpImpl->mpTextEngine->IsModified() )
-            mpImpl->mpTextEngine->Broadcast( TextHint( TEXT_HINT_MODIFIED ) );
+            mpImpl->mpTextEngine->Broadcast( TextHint( SfxHintId::TextModified ) );
     }
     else if ( rMouseEvent.IsLeft() && GetSelection().HasRange() )
     {
@@ -870,7 +870,7 @@ void TextView::Command( const CommandEvent& rCEvt )
             SetInsertMode( bInsertMode );
 
             if ( mpImpl->mpTextEngine->IsModified() )
-                mpImpl->mpTextEngine->Broadcast( TextHint( TEXT_HINT_MODIFIED ) );
+                mpImpl->mpTextEngine->Broadcast( TextHint( SfxHintId::TextModified ) );
         }
     }
     else if ( rCEvt.GetCommand() == CommandEventId::ExtTextInput )
@@ -1025,7 +1025,7 @@ void TextView::Scroll( long ndX, long ndY )
             mpImpl->mpCursor->Show();
     }
 
-    mpImpl->mpTextEngine->Broadcast( TextHint( TEXT_HINT_VIEWSCROLLED ) );
+    mpImpl->mpTextEngine->Broadcast( TextHint( SfxHintId::TextViewScrolled ) );
 }
 
 void TextView::Undo()
@@ -1109,7 +1109,7 @@ void TextView::Paste( css::uno::Reference< css::datatransfer::clipboard::XClipbo
                     if( mpImpl->mpTextEngine->GetMaxTextLen() != 0 )
                         bWasTruncated = ImplTruncateNewText( aText );
                     InsertText( aText );
-                    mpImpl->mpTextEngine->Broadcast( TextHint( TEXT_HINT_MODIFIED ) );
+                    mpImpl->mpTextEngine->Broadcast( TextHint( SfxHintId::TextModified ) );
 
                     if( bWasTruncated )
                         Edit::ShowTruncationWarning( mpImpl->mpWindow );
@@ -2042,7 +2042,7 @@ void TextView::drop( const css::datatransfer::dnd::DropTargetDropEvent& rDTDE ) 
 
         mpImpl->mpTextEngine->FormatAndUpdate( this );
 
-        mpImpl->mpTextEngine->Broadcast( TextHint( TEXT_HINT_MODIFIED ) );
+        mpImpl->mpTextEngine->Broadcast( TextHint( SfxHintId::TextModified ) );
     }
     rDTDE.Context->dropComplete( bChanges );
 }

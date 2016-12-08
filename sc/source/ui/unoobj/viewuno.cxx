@@ -136,7 +136,7 @@ ScViewPaneBase::~ScViewPaneBase()
 
 void ScViewPaneBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    if ( rHint.GetId() == SFX_HINT_DYING )
+    if ( rHint.GetId() == SfxHintId::Dying )
         pViewShell = nullptr;
 }
 
@@ -2330,7 +2330,7 @@ void ScPreviewObj::release() throw()
 
 void ScPreviewObj::Notify(SfxBroadcaster&, const SfxHint& rHint)
 {
-    if (rHint.GetId() == SFX_HINT_DYING)
+    if (rHint.GetId() == SfxHintId::Dying)
         mpViewShell = nullptr;
 }
 

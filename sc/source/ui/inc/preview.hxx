@@ -98,7 +98,7 @@ private:
     void    UpdateDrawView();
     void    DoPrint( ScPreviewLocationData* pFillLocation );
 
-    void    InvalidateLocationData( sal_uLong nId );
+    void    InvalidateLocationData( SfxHintId nId );
 
     using Window::SetZoom;
 

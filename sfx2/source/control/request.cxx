@@ -95,7 +95,7 @@ struct SfxRequest_Impl: public SfxListener
 
 void SfxRequest_Impl::Notify( SfxBroadcaster&, const SfxHint &rHint )
 {
-    if ( rHint.GetId() == SFX_HINT_DYING )
+    if ( rHint.GetId() == SfxHintId::Dying )
         pAnti->Cancel();
 }
 

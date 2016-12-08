@@ -211,7 +211,7 @@ public:
     void EndListeningArea(
         const ScRange& rRange, bool bGroupListening, SvtListener* pListener, ScBroadcastArea*& rpArea );
 
-    bool AreaBroadcast( const ScRange& rRange, sal_uInt32 nHint );
+    bool AreaBroadcast( const ScRange& rRange, SfxHintId nHint );
     bool                AreaBroadcast( const ScHint& rHint );
     void                DelBroadcastAreasInRange( const ScRange& rRange );
     void                UpdateRemove( UpdateRefMode eUpdateRefMode,
@@ -310,7 +310,7 @@ public:
     void EndListeningArea(
         const ScRange& rRange, bool bGroupListening, SvtListener* pListener );
 
-    bool AreaBroadcast( const ScRange& rRange, sal_uInt32 nHint );
+    bool AreaBroadcast( const ScRange& rRange, SfxHintId nHint );
     bool                AreaBroadcast( const ScHint& rHint ) const;
         // return: at least one broadcast occurred
     void                DelBroadcastAreasInRange( const ScRange& rRange );
@@ -318,12 +318,12 @@ public:
                                             const ScRange& rRange,
                                             SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
     void                EnterBulkBroadcast();
-    void                LeaveBulkBroadcast( sal_uInt32 nHintId );
+    void                LeaveBulkBroadcast( SfxHintId nHintId );
     bool                InsertBulkArea( const ScBroadcastArea* p );
 
     void InsertBulkGroupArea( ScBroadcastArea* pArea, const ScRange& rRange );
     void RemoveBulkGroupArea( ScBroadcastArea* pArea );
-    bool BulkBroadcastGroupAreas( sal_uInt32 nHintId );
+    bool BulkBroadcastGroupAreas( SfxHintId nHintId );
 
     /// @return: how many removed
     size_t              RemoveBulkArea( const ScBroadcastArea* p );
@@ -350,9 +350,9 @@ public:
 class ScBulkBroadcast
 {
     ScBroadcastAreaSlotMachine* pBASM;
-    sal_uInt32                  mnHintId;
+    SfxHintId                  mnHintId;
 public:
-    explicit ScBulkBroadcast( ScBroadcastAreaSlotMachine* p, sal_uInt32 nHintId ) :
+    explicit ScBulkBroadcast( ScBroadcastAreaSlotMachine* p, SfxHintId nHintId ) :
         pBASM(p),
         mnHintId(nHintId)
     {

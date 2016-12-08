@@ -425,7 +425,7 @@ void ImpEditEngine::FormatDoc()
         sal_uInt32 nNewHeight = CalcTextHeight( &nNewHeightNTP );
         long nDiff = nNewHeight - nCurTextHeight;
         if ( nDiff )
-            aStatus.GetStatusWord() |= !IsVertical() ? EditStatusFlags::TEXTHEIGHTCHANGED : EditStatusFlags::TEXTWIDTHCHANGED;
+            aStatus.GetStatusWord() |= !IsVertical() ? EditStatusFlags::TextHeightChanged : EditStatusFlags::TEXTWIDTHCHANGED;
         if ( nNewHeight < nCurTextHeight )
         {
             aInvalidRect.Bottom() = (long)std::max( nNewHeight, nCurTextHeight );
@@ -516,7 +516,7 @@ void ImpEditEngine::CheckAutoPageSize()
              || ( IsVertical() && ( aPaperSize.Height() != aPrevPaperSize.Height() ) ) )
         {
             // If ahead is centered / right or tabs ...
-            aStatus.GetStatusWord() |= !IsVertical() ? EditStatusFlags::TEXTWIDTHCHANGED : EditStatusFlags::TEXTHEIGHTCHANGED;
+            aStatus.GetStatusWord() |= !IsVertical() ? EditStatusFlags::TEXTWIDTHCHANGED : EditStatusFlags::TextHeightChanged;
             for ( sal_Int32 nPara = 0; nPara < GetParaPortions().Count(); nPara++ )
             {
                 // Only paragraphs which are not aligned to the left need to be

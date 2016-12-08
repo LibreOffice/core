@@ -311,11 +311,11 @@ void IdleFormatter::ForceTimeout()
     }
 }
 
-TextHint::TextHint( sal_uInt32 Id ) : SfxHint( Id ), mnValue(0)
+TextHint::TextHint( SfxHintId Id ) : SfxHint( Id ), mnValue(0)
 {
 }
 
-TextHint::TextHint( sal_uInt32 Id, sal_uLong nValue ) : SfxHint( Id ), mnValue(nValue)
+TextHint::TextHint( SfxHintId Id, sal_uLong nValue ) : SfxHint( Id ), mnValue(nValue)
 {
 }
 

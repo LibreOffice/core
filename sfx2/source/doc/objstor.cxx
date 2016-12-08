@@ -838,7 +838,7 @@ bool SfxObjectShell::DoLoad( SfxMedium *pMed )
         if( IsOwnStorageFormat(*pMed) && pMed->GetFilter() )
         {
         }
-        Broadcast( SfxHint(SFX_HINT_NAMECHANGED) );
+        Broadcast( SfxHint(SfxHintId::NameChanged) );
 
         if ( SfxObjectCreateMode::EMBEDDED != eCreateMode )
         {
@@ -1961,7 +1961,7 @@ bool SfxObjectShell::DoSaveCompleted( SfxMedium* pNewMed, bool bRegisterRecent )
         {
             if (!pNewMed->GetName().isEmpty())
                 bHasName = true;
-            Broadcast( SfxHint(SFX_HINT_NAMECHANGED) );
+            Broadcast( SfxHint(SfxHintId::NameChanged) );
             EnableSetModified(false);
             getDocProperties()->setGenerator(
                ::utl::DocInfoHelper::GetGeneratorString() );
@@ -2075,7 +2075,7 @@ bool SfxObjectShell::DoSaveCompleted( SfxMedium* pNewMed, bool bRegisterRecent )
             if (!pNewMed->GetName().isEmpty() && SfxObjectCreateMode::EMBEDDED != eCreateMode)
                 InvalidateName();
             SetModified(false); // reset only by set medium
-            Broadcast( SfxHint(SFX_HINT_MODECHANGED) );
+            Broadcast( SfxHint(SfxHintId::ModeChanged) );
 
             // this is the end of the saving process, it is possible that
             // the file was changed
@@ -2736,7 +2736,7 @@ bool SfxObjectShell::CommonSaveAs_Impl(const INetURLObject& aURL, const OUString
         }
 
         if ( bWasReadonly && !bSaveTo )
-            Broadcast( SfxHint(SFX_HINT_MODECHANGED) );
+            Broadcast( SfxHint(SfxHintId::ModeChanged) );
 
         return true;
     }

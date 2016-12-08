@@ -36,7 +36,7 @@
 #include "typedstrdata.hxx"
 #include "calcmacros.hxx"
 #include "calcconfig.hxx"
-#include <simplehintids.hxx>
+#include <svl/hint.hxx>
 #include <tools/gen.hxx>
 #include <svl/zforlist.hxx>
 
@@ -2041,7 +2041,7 @@ public:
                          */
     void                Broadcast( const ScHint& rHint );
 
-    void BroadcastCells( const ScRange& rRange, sal_uInt32 nHint, bool bBroadcastSingleBroadcasters = true );
+    void BroadcastCells( const ScRange& rRange, SfxHintId nHint, bool bBroadcastSingleBroadcasters = true );
     void BroadcastRefMoved( const sc::RefMovedHint& rHint );
 
                         /// only area, no cell broadcast
@@ -2084,10 +2084,10 @@ public:
     void                ClearFormulaTree();
     void                AppendToFormulaTrack( ScFormulaCell* pCell );
     void                RemoveFromFormulaTrack( ScFormulaCell* pCell );
-    void                TrackFormulas( sal_uInt32 nHintId = SC_HINT_DATACHANGED );
+    void                TrackFormulas( SfxHintId nHintId = SfxHintId::ScDataChanged );
     void                SetTrackFormulasPending() { mbTrackFormulasPending = true; }
     bool                IsTrackFormulasPending() const { return mbTrackFormulasPending; }
-    void                FinalTrackFormulas( sal_uInt32 nHintId );
+    void                FinalTrackFormulas( SfxHintId nHintId );
     bool                IsFinalTrackFormulas() const { return mbFinalTrackFormulas; }
     bool                IsInFormulaTree( ScFormulaCell* pCell ) const;
     bool                IsInFormulaTrack( ScFormulaCell* pCell ) const;

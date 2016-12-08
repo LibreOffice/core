@@ -475,21 +475,17 @@ void Shell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
     if (GetShell())
     {
-        switch (rHint.GetId())
+        if (rHint.GetId() == SfxHintId::Dying)
         {
-            case SFX_HINT_DYING:
-                {
-                    EndListening( rBC, true /* log off all */ );
-                    aObjectCatalog->UpdateEntries();
-                }
-            break;
+            EndListening( rBC, true /* log off all */ );
+            aObjectCatalog->UpdateEntries();
         }
 
         if (SbxHint const* pSbxHint = dynamic_cast<SbxHint const*>(&rHint))
         {
-            const sal_uInt32 nHintId = pSbxHint->GetId();
-            if (    ( nHintId == SBX_HINT_BASICSTART ) ||
-                    ( nHintId == SBX_HINT_BASICSTOP ) )
+            const SfxHintId nHintId = pSbxHint->GetId();
+            if (    ( nHintId == SfxHintId::BasicStart ) ||
+                    ( nHintId == SfxHintId::BasicStop ) )
             {
                 if (SfxBindings* pBindings = GetBindingsPtr())
                 {
@@ -515,7 +511,7 @@ void Shell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     pBindings->Update( SID_BASICLOAD );
                 }
 
-                if ( nHintId == SBX_HINT_BASICSTOP )
+                if ( nHintId == SfxHintId::BasicStop )
                 {
                     // not only at error/break or explicit stoppage,
                     // if the update is turned off due to a programming bug
@@ -533,7 +529,7 @@ void Shell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 for (WindowTableIt it = aWindowTable.begin(); it != aWindowTable.end(); ++it)
                 {
                     BaseWindow* pWin = it->second;
-                    if ( nHintId == SBX_HINT_BASICSTART )
+                    if ( nHintId == SfxHintId::BasicStart )
                         pWin->BasicStarted();
                     else
                         pWin->BasicStopped();

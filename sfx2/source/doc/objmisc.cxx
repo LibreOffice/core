@@ -339,7 +339,7 @@ void SfxObjectShell::ModifyChanged()
 
     Invalidate( SID_SIGNATURE );
     Invalidate( SID_MACRO_SIGNATURE );
-    Broadcast( SfxHint( SFX_HINT_TITLECHANGED ) );    // xmlsec05, signed state might change in title...
+    Broadcast( SfxHint( SfxHintId::TitleChanged ) );    // xmlsec05, signed state might change in title...
 
     SfxGetpApp()->NotifyEvent( SfxEventHint( SFX_EVENT_MODIFYCHANGED, GlobalEventConfig::GetEventName(GlobalEventId::MODIFYCHANGED), this ) );
 }
@@ -394,7 +394,7 @@ void SfxObjectShell::SetReadOnlyUI( bool bReadOnly )
     if ( bReadOnly != pImpl->bReadOnlyUI )
     {
         pImpl->bReadOnlyUI = bReadOnly;
-        Broadcast( SfxHint(SFX_HINT_MODECHANGED) );
+        Broadcast( SfxHint(SfxHintId::ModeChanged) );
     }
 }
 
@@ -420,7 +420,7 @@ void SfxObjectShell::SetReadOnly()
         pMedium->GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, true ) );
 
         if ( !bWasROUI )
-            Broadcast( SfxHint(SFX_HINT_MODECHANGED) );
+            Broadcast( SfxHint(SfxHintId::ModeChanged) );
     }
 }
 
@@ -447,7 +447,7 @@ void SfxObjectShell::SetMacroMode_Impl( bool bModal )
     if ( !pImpl->bRunningMacro != !bModal )
     {
         pImpl->bRunningMacro = bModal;
-        Broadcast( SfxHint( SFX_HINT_MODECHANGED ) );
+        Broadcast( SfxHint( SfxHintId::ModeChanged ) );
     }
 }
 
@@ -467,7 +467,7 @@ void SfxObjectShell::SetModalMode_Impl( bool bModal )
 
         // Switch
         pImpl->bModalMode = bModal;
-        Broadcast( SfxHint( SFX_HINT_MODECHANGED ) );
+        Broadcast( SfxHint( SfxHintId::ModeChanged ) );
     }
 }
 
@@ -706,7 +706,7 @@ void SfxObjectShell::SetTitle
     if ( GetMedium() )
     {
         SfxShell::SetName( GetTitle(SFX_TITLE_APINAME) );
-        Broadcast( SfxHint(SFX_HINT_TITLECHANGED) );
+        Broadcast( SfxHint(SfxHintId::TitleChanged) );
     }
 }
 
@@ -900,7 +900,7 @@ void SfxObjectShell::InvalidateName()
     pImpl->aTitle.clear();
     SetName( GetTitle( SFX_TITLE_APINAME ) );
 
-    Broadcast( SfxHint(SFX_HINT_TITLECHANGED) );
+    Broadcast( SfxHint(SfxHintId::TitleChanged) );
 }
 
 
@@ -912,7 +912,7 @@ void SfxObjectShell::SetNamedVisibility_Impl()
         if ( !HasName() && USHRT_MAX == pImpl->nVisualDocumentNumber && pImpl->aTitle.isEmpty() )
         {
             pImpl->nVisualDocumentNumber = SfxGetpApp()->GetFreeIndex();
-            Broadcast( SfxHint(SFX_HINT_TITLECHANGED) );
+            Broadcast( SfxHint(SfxHintId::TitleChanged) );
         }
     }
 
@@ -1210,7 +1210,7 @@ void SfxObjectShell::FinishedLoading( SfxLoadedFlags nFlags )
         SetInitialized_Impl( false );
 
         // Title is not available until loading has finished
-        Broadcast( SfxHint( SFX_HINT_TITLECHANGED ) );
+        Broadcast( SfxHint( SfxHintId::TitleChanged ) );
         if ( pImpl->nEventId )
             PostActivateEvent_Impl(SfxViewFrame::GetFirst(this));
     }
@@ -1301,7 +1301,7 @@ void SfxObjectShell::TemplateDisconnectionAfterLoad()
         pTmpMedium->SetOpenMode( SFX_STREAM_READWRITE, true );
 
         // notifications about possible changes in readonly state and document info
-        Broadcast( SfxHint(SFX_HINT_MODECHANGED) );
+        Broadcast( SfxHint(SfxHintId::ModeChanged) );
 
         // created untitled document can't be modified
         SetModified( false );

@@ -59,9 +59,6 @@ namespace o3tl {
 #define SBXID_JSCRIPTMOD    0x6a62          // jm: JavaScript Module
 #define SBXID_JSCRIPTMETH   0x6a64          // jm: JavaScript Module
 
-#define SBX_HINT_BASICSTART SFX_HINT_USER04
-#define SBX_HINT_BASICSTOP  SFX_HINT_USER05
-
 enum class PropertyMode
 {
     NONE,

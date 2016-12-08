@@ -172,7 +172,7 @@ public:
     virtual ~SwRedlineAcceptPanel() override;
     virtual void dispose() override;
 
-    /// We need to be a SfxListener to be able to update the list of changes when we get SFX_HINT_DOCCHANGED.
+    /// We need to be a SfxListener to be able to update the list of changes when we get SfxHintId::DocChanged.
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
 };
 

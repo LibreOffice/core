@@ -143,32 +143,31 @@ void ImpEditEngine::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     if ( !bDowning )
     {
 
-        SfxStyleSheet* pStyle = nullptr;
-        sal_uInt32 nId = 0;
-
         const SfxStyleSheetHint* pStyleSheetHint = dynamic_cast<const SfxStyleSheetHint*>(&rHint);
         if ( pStyleSheetHint )
         {
             DBG_ASSERT( dynamic_cast< const SfxStyleSheet* >(pStyleSheetHint->GetStyleSheet()) != nullptr, "No SfxStyleSheet!" );
-            pStyle = static_cast<SfxStyleSheet*>( pStyleSheetHint->GetStyleSheet() );
-            nId = pStyleSheetHint->GetHint();
-        }
-        else if ( dynamic_cast< const SfxStyleSheet* >(&rBC) !=  nullptr )
-        {
-            pStyle = static_cast<SfxStyleSheet*>(&rBC);
-            nId = rHint.GetId();
-        }
-
-        if ( pStyle )
-        {
-            if ( ( nId == SFX_HINT_DYING ) ||
-                 ( nId == SfxStyleSheetHintId::INDESTRUCTION ) ||
-                 ( nId == SfxStyleSheetHintId::ERASED ) )
+            SfxStyleSheet* pStyle = static_cast<SfxStyleSheet*>( pStyleSheetHint->GetStyleSheet() );
+            SfxHintId nId = pStyleSheetHint->GetId();
+            if ( ( nId == SfxHintId::StyleSheetInDestruction ) ||
+                 ( nId == SfxHintId::StyleSheetErased ) )
             {
                 RemoveStyleFromParagraphs( pStyle );
             }
-            else if ( ( nId == SFX_HINT_DATACHANGED ) ||
-                      ( nId == SfxStyleSheetHintId::MODIFIED ) )
+            else if ( nId == SfxHintId::StyleSheetModified )
+            {
+                UpdateParagraphsWithStyleSheet( pStyle );
+            }
+        }
+        else if ( dynamic_cast< const SfxStyleSheet* >(&rBC) !=  nullptr )
+        {
+            SfxStyleSheet* pStyle = static_cast<SfxStyleSheet*>(&rBC);
+            SfxHintId nId = rHint.GetId();
+            if ( nId == SfxHintId::Dying )
+            {
+                RemoveStyleFromParagraphs( pStyle );
+            }
+            else if ( nId == SfxHintId::DataChanged )
             {
                 UpdateParagraphsWithStyleSheet( pStyle );
             }

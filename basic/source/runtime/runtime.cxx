@@ -1019,13 +1019,13 @@ void SbiRuntime::TOSMakeTemp()
     SbxVariable* p = refExprStk->Get( nExprLvl - 1 );
     if ( p->GetType() == SbxEMPTY )
     {
-        p->Broadcast( SBX_HINT_DATAWANTED );
+        p->Broadcast( SfxHintId::BasicDataWanted );
     }
 
     SbxVariable* pDflt = nullptr;
     if ( bVBAEnabled &&  ( p->GetType() == SbxOBJECT || p->GetType() == SbxVARIANT  ) && ((pDflt = getDefaultProp(p)) != nullptr) )
     {
-        pDflt->Broadcast( SBX_HINT_DATAWANTED );
+        pDflt->Broadcast( SfxHintId::BasicDataWanted );
         // replacing new p on stack causes object pointed by
         // pDft->pParent to be deleted, when p2->Compute() is
         // called below pParent is accessed (but it's deleted)
@@ -1301,12 +1301,12 @@ void SbiRuntime::StepCompare( SbxOperator eOp )
     SbxDataType p2Type = p2->GetType();
     if ( p1Type == SbxEMPTY )
     {
-        p1->Broadcast( SBX_HINT_DATAWANTED );
+        p1->Broadcast( SfxHintId::BasicDataWanted );
         p1Type = p1->GetType();
     }
     if ( p2Type == SbxEMPTY )
     {
-        p2->Broadcast( SBX_HINT_DATAWANTED );
+        p2->Broadcast( SfxHintId::BasicDataWanted );
         p2Type = p2->GetType();
     }
     if ( p1Type == p2Type )
@@ -1322,13 +1322,13 @@ void SbiRuntime::StepCompare( SbxOperator eOp )
             if ( pDflt )
             {
                 p1 = pDflt;
-                p1->Broadcast( SBX_HINT_DATAWANTED );
+                p1->Broadcast( SfxHintId::BasicDataWanted );
             }
             pDflt = getDefaultProp( p2.get() );
             if ( pDflt )
             {
                 p2 = pDflt;
-                p2->Broadcast( SBX_HINT_DATAWANTED );
+                p2->Broadcast( SfxHintId::BasicDataWanted );
             }
         }
 
@@ -1543,12 +1543,12 @@ void SbiRuntime::StepIS()
     SbxDataType eType2 = refVar2->GetType();
     if ( eType1 == SbxEMPTY )
     {
-        refVar1->Broadcast( SBX_HINT_DATAWANTED );
+        refVar1->Broadcast( SfxHintId::BasicDataWanted );
         eType1 = refVar1->GetType();
     }
     if ( eType2 == SbxEMPTY )
     {
-        refVar2->Broadcast( SBX_HINT_DATAWANTED );
+        refVar2->Broadcast( SfxHintId::BasicDataWanted );
         eType2 = refVar2->GetType();
     }
 
@@ -1568,7 +1568,7 @@ void SbiRuntime::StepIS()
 void SbiRuntime::StepGET()
 {
     SbxVariable* p = GetTOS();
-    p->Broadcast( SBX_HINT_DATAWANTED );
+    p->Broadcast( SfxHintId::BasicDataWanted );
 }
 
 // #67607 copy Uno-Structs
@@ -1672,7 +1672,7 @@ void SbiRuntime::StepPUT()
         // aren't dealt with if the object is a member of some parent object
         bool bObjAssign = false;
         if ( refVar->GetType() == SbxEMPTY )
-            refVar->Broadcast( SBX_HINT_DATAWANTED );
+            refVar->Broadcast( SfxHintId::BasicDataWanted );
         if ( refVar->GetType() == SbxOBJECT )
         {
             if  ( dynamic_cast<const SbxMethod *>(refVar.get()) != nullptr || ! refVar->GetParent() )
@@ -2806,7 +2806,7 @@ void SbiRuntime::StepARGN( sal_uInt32 nOp1 )
         {
             // named variables ( that are Any especially properties ) can be empty at this point and need a broadcast
             if ( pVal->GetType() == SbxEMPTY )
-                pVal->Broadcast( SBX_HINT_DATAWANTED );
+                pVal->Broadcast( SfxHintId::BasicDataWanted );
             // evaluate methods and properties!
             SbxVariable* pRes = new SbxVariable( *pVal );
             pVal = pRes;
@@ -3862,7 +3862,7 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
                             SbxVariable* pDflt = getDefaultProp( pElem );
                             if ( pDflt )
                             {
-                                pDflt->Broadcast( SBX_HINT_DATAWANTED );
+                                pDflt->Broadcast( SfxHintId::BasicDataWanted );
                                 SbxBaseRef pDfltObj = pDflt->GetObject();
                                 if( pDfltObj.Is() )
                                 {

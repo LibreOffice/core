@@ -83,7 +83,7 @@ void SAL_CALL ScAccessiblePreviewCell::disposing()
 
 void ScAccessiblePreviewCell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    if (rHint.GetId() == SC_HINT_ACC_VISAREACHANGED)
+    if (rHint.GetId() == SfxHintId::ScAccVisAreaChanged)
     {
         if (mpTextHelper)
             mpTextHelper->UpdateChildren();

@@ -394,7 +394,7 @@ handle_r1c1:
     {
         mpEditEngine->SetUpdateMode( true );
 
-        pDocSh->Broadcast( SfxHint( SC_HINT_SHOWRANGEFINDER ) );
+        pDocSh->Broadcast( SfxHint( SfxHintId::ScShowRangeFinder ) );
     }
 }
 
@@ -484,7 +484,7 @@ void ScInputHandler::DeleteRangeFinder()
     {
         ScDocShell* pDocSh = pActiveViewSh->GetViewData().GetDocShell();
         pRangeFindList->SetHidden(true);
-        pDocSh->Broadcast( SfxHint( SC_HINT_SHOWRANGEFINDER ) );  // Steal
+        pDocSh->Broadcast( SfxHint( SfxHintId::ScShowRangeFinder ) );  // Steal
         DELETEZ(pRangeFindList);
     }
 }
@@ -1838,7 +1838,7 @@ void ScInputHandler::ViewShellGone(ScTabViewShell* pViewSh) // Executed synchron
         EnterHandler();
         bFormulaMode = false;
         pRefViewSh = nullptr;
-        SfxGetpApp()->Broadcast( SfxHint( FID_REFMODECHANGED ) );
+        SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScRefModeChanged ) );
         SC_MOD()->SetRefInputHdl(nullptr);
         if (pInputWin)
             pInputWin->SetFormulaMode(false);
@@ -2368,7 +2368,7 @@ void ScInputHandler::UpdateFormulaMode()
         {
             bFormulaMode = true;
             pRefViewSh = pActiveViewSh;
-            pSfxApp->Broadcast( SfxHint( FID_REFMODECHANGED ) );
+            pSfxApp->Broadcast( SfxHint( SfxHintId::ScRefModeChanged ) );
             SC_MOD()->SetRefInputHdl(this);
             if (pInputWin)
                 pInputWin->SetFormulaMode(true);
@@ -2387,7 +2387,7 @@ void ScInputHandler::UpdateFormulaMode()
             ShowRefFrame();
             bFormulaMode = false;
             pRefViewSh = nullptr;
-            pSfxApp->Broadcast( SfxHint( FID_REFMODECHANGED ) );
+            pSfxApp->Broadcast( SfxHint( SfxHintId::ScRefModeChanged ) );
             SC_MOD()->SetRefInputHdl(nullptr);
             if (pInputWin)
                 pInputWin->SetFormulaMode(false);
@@ -2819,7 +2819,7 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode )
         }
 
         bFormulaMode = false;
-        pSfxApp->Broadcast( SfxHint( FID_REFMODECHANGED ) );
+        pSfxApp->Broadcast( SfxHint( SfxHintId::ScRefModeChanged ) );
         SC_MOD()->SetRefInputHdl(nullptr);
         if (pInputWin)
             pInputWin->SetFormulaMode(false);
@@ -2874,7 +2874,7 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode )
             }
         }
 
-        pSfxApp->Broadcast( SfxHint( FID_KILLEDITVIEW_NOPAINT ) );
+        pSfxApp->Broadcast( SfxHint( SfxHintId::ScKillEditViewNoPaint ) );
 
         if ( pExecuteSh )
         {
@@ -2903,7 +2903,7 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode )
         pLastState = nullptr;
     }
     else
-        pSfxApp->Broadcast( SfxHint( FID_KILLEDITVIEW ) );
+        pSfxApp->Broadcast( SfxHint( SfxHintId::ScKillEditView ) );
 
     if ( bOldMod && pExecuteSh && pCellAttrs && !bForget )
     {
@@ -2947,7 +2947,7 @@ void ScInputHandler::CancelHandler()
             pExecuteSh->ActiveGrabFocus();
         }
         bFormulaMode = false;
-        SfxGetpApp()->Broadcast( SfxHint( FID_REFMODECHANGED ) );
+        SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScRefModeChanged ) );
         SC_MOD()->SetRefInputHdl(nullptr);
         if (pInputWin)
             pInputWin->SetFormulaMode(false);
@@ -3697,7 +3697,7 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
                     }
 
                     if (bStopEditing)
-                        SfxGetpApp()->Broadcast( SfxHint( FID_KILLEDITVIEW ) );
+                        SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScKillEditView ) );
 
                     //  As long as the content is not edited, turn off online spelling.
                     //  Online spelling is turned back on in StartTable, after setting

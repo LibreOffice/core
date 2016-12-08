@@ -121,7 +121,7 @@ void SdrAttrObj::SetModel(SdrModel* pNewModel)
 
 void SdrAttrObj::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
 {
-    bool bDataChg(SFX_HINT_DATACHANGED == rHint.GetId());
+    bool bDataChg(SfxHintId::DataChanged == rHint.GetId());
 
     if(bDataChg)
     {

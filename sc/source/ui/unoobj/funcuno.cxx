@@ -179,7 +179,7 @@ ScFunctionAccess::ScFunctionAccess() :
     mbArray( true ),    // default according to behaviour of older Office versions
     mbValid( true )
 {
-    StartListening( *SfxGetpApp() );       // for SFX_HINT_DEINITIALIZING
+    StartListening( *SfxGetpApp() );       // for SfxHintId::Deinitializing
 }
 
 ScFunctionAccess::~ScFunctionAccess()
@@ -194,7 +194,7 @@ ScFunctionAccess::~ScFunctionAccess()
 
 void ScFunctionAccess::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    if ( rHint.GetId() == SFX_HINT_DEINITIALIZING )
+    if ( rHint.GetId() == SfxHintId::Deinitializing )
     {
         //  document must not be used anymore
         aDocCache.Clear();

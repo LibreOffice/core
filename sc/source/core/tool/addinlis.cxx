@@ -114,13 +114,13 @@ void SAL_CALL ScAddInListener::modified( const css::sheet::ResultEvent& aEvent )
 
     // notify document of changes
 
-    Broadcast( ScHint(SC_HINT_DATACHANGED, ScAddress()) );
+    Broadcast( ScHint(SfxHintId::ScDataChanged, ScAddress()) );
 
     for ( ScAddInDocs::iterator it = pDocs->begin(); it != pDocs->end(); ++it )
     {
         ScDocument* pDoc = *it;
         pDoc->TrackFormulas();
-        pDoc->GetDocumentShell()->Broadcast( SfxHint( FID_DATACHANGED ) );
+        pDoc->GetDocumentShell()->Broadcast( SfxHint( SfxHintId::ScDataChanged ) );
     }
 }
 

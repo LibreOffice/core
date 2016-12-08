@@ -2610,7 +2610,7 @@ RTLFUNC(IsEmpty)
         }
         if ( pVar )
         {
-            pVar->Broadcast( SBX_HINT_DATAWANTED );
+            pVar->Broadcast( SfxHintId::BasicDataWanted );
             rPar.Get( 0 )->PutBool( pVar->IsEmpty() );
         }
         else

@@ -488,7 +488,7 @@ void SfxItemPool::Delete()
         return;
 
     // Inform e.g. running Requests
-    pImpl->aBC.Broadcast( SfxHint( SFX_HINT_DYING ) );
+    pImpl->aBC.Broadcast( SfxHint( SfxHintId::Dying ) );
 
     // Iterate through twice: first for the SetItems.
     if (pImpl->ppStaticDefaults != nullptr) {

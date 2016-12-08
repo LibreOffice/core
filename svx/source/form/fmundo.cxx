@@ -305,17 +305,18 @@ void FmXUndoEnvironment::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 break;
         }
     }
-    else if (rHint.GetId())
+    else if (rHint.GetId() != SfxHintId::NONE)
     {
         switch (rHint.GetId())
         {
-            case SFX_HINT_DYING:
+            case SfxHintId::Dying:
                 dispose();
                 rModel.SetObjectShell( nullptr );
                 break;
-            case SFX_HINT_MODECHANGED:
+            case SfxHintId::ModeChanged:
                 ModeChanged();
                 break;
+            default: break;
         }
     }
     else if (const SfxEventHint* pEventHint = dynamic_cast<const SfxEventHint*>(&rHint))

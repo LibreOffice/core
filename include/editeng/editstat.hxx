@@ -86,7 +86,7 @@ enum class EditStatusFlags
     CRSRMOVEFAIL        = 0x0008,
     CRSRLEFTPARA        = 0x0010,
     TEXTWIDTHCHANGED    = 0x0020,
-    TEXTHEIGHTCHANGED   = 0x0040,
+    TextHeightChanged   = 0x0040,
     WRONGWORDCHANGED    = 0x0080
 };
 namespace o3tl

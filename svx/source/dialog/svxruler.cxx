@@ -3336,7 +3336,7 @@ void SvxRuler::Notify(SfxBroadcaster&, const SfxHint& rHint)
     */
 
     // start update
-    if (bActive && rHint.GetId() == SFX_HINT_UPDATEDONE)
+    if (bActive && rHint.GetId() == SfxHintId::UpdateDone)
     {
         Update();
         EndListening(*pBindings);

@@ -3241,7 +3241,7 @@ void SwFrameHolder::Reset()
 
 void SwFrameHolder::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    if ( rHint.GetId() == SFX_HINT_DYING && &rBC == pFrame )
+    if ( rHint.GetId() == SfxHintId::Dying && &rBC == pFrame )
     {
         pFrame = nullptr;
     }

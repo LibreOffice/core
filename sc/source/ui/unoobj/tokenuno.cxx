@@ -80,7 +80,7 @@ ScFormulaParserObj::~ScFormulaParserObj()
 
 void ScFormulaParserObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    if ( rHint.GetId() == SFX_HINT_DYING )
+    if ( rHint.GetId() == SfxHintId::Dying )
         mpDocShell = nullptr;
 }
 

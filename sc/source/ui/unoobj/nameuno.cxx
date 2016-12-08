@@ -102,7 +102,7 @@ void ScNamedRangeObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     // reference update is of no interest
 
-    if ( rHint.GetId() == SFX_HINT_DYING )
+    if ( rHint.GetId() == SfxHintId::Dying )
         pDocShell = nullptr;       // became invalid
 }
 
@@ -480,7 +480,7 @@ void ScNamedRangesObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     // reference update is of no interest
 
-    if ( rHint.GetId() == SFX_HINT_DYING )
+    if ( rHint.GetId() == SfxHintId::Dying )
     {
         pDocShell = nullptr;       // became invalid
     }
@@ -944,7 +944,7 @@ void ScLabelRangeObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     //! Ref-Update !!!
 
-    if ( rHint.GetId() == SFX_HINT_DYING )
+    if ( rHint.GetId() == SfxHintId::Dying )
         pDocShell = nullptr;       // became invalid
 }
 
@@ -1064,7 +1064,7 @@ void ScLabelRangesObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     //  reference update is of no interest
 
-    if ( rHint.GetId() == SFX_HINT_DYING )
+    if ( rHint.GetId() == SfxHintId::Dying )
     {
         pDocShell = nullptr;       // became invalid
     }

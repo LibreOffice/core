@@ -28,6 +28,7 @@
 
 
 class SbxDecimal;
+enum class SfxHintId;
 
 struct SbxValues
 {
@@ -82,7 +83,7 @@ protected:
     OUString aPic;  // Picture-String
     OUString aToolString;  // tool string copy
 
-    virtual void Broadcast( sal_uInt32 );      // Broadcast-Call
+    virtual void Broadcast( SfxHintId );      // Broadcast-Call
     virtual ~SbxValue() override;
     virtual bool LoadData( SvStream&, sal_uInt16 ) override;
     virtual bool StoreData( SvStream& ) const override;
@@ -269,7 +270,7 @@ public:
     // Due to data reduction and better DLL-hierarchy currently via casting
     SfxBroadcaster& GetBroadcaster();
     bool IsBroadcaster() const { return pCst != nullptr; }
-    virtual void Broadcast( sal_uInt32 nHintId ) override;
+    virtual void Broadcast( SfxHintId nHintId ) override;
 
     inline const SbxObject* GetParent() const { return pParent; }
     SbxObject* GetParent() { return pParent;}

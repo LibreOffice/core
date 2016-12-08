@@ -181,7 +181,7 @@ void ScSimpleUndo::EndRedo()
 void ScSimpleUndo::BroadcastChanges( const ScRange& rRange )
 {
     ScDocument& rDoc = pDocShell->GetDocument();
-    rDoc.BroadcastCells(rRange, SC_HINT_DATACHANGED);
+    rDoc.BroadcastCells(rRange, SfxHintId::ScDataChanged);
 }
 
 namespace {
@@ -207,7 +207,7 @@ public:
             return;
 
         ScRange aRange(mnCurCol, nRow1, mnCurTab, mnCurCol, nRow2, mnCurTab);
-        mrDoc.BroadcastCells(aRange, SC_HINT_DATACHANGED);
+        mrDoc.BroadcastCells(aRange, SfxHintId::ScDataChanged);
     };
 };
 

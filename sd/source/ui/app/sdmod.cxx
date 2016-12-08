@@ -119,7 +119,7 @@ SdModule::~SdModule()
 /// get notifications
 void SdModule::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    if( rHint.GetId() == SFX_HINT_DEINITIALIZING )
+    if( rHint.GetId() == SfxHintId::Deinitializing )
     {
         delete pImpressOptions;
         pImpressOptions = nullptr;

@@ -155,20 +155,20 @@ SbxArray* SbxVariable::GetParameters() const
 // Perhaps some day one could cut the parameter 0.
 // Then the copying will be dropped...
 
-void SbxVariable::Broadcast( sal_uInt32 nHintId )
+void SbxVariable::Broadcast( SfxHintId nHintId )
 {
     if( pCst && !IsSet( SbxFlagBits::NoBroadcast ) )
     {
         // Because the method could be called from outside, check the
         // rights here again
-        if( nHintId & SBX_HINT_DATAWANTED )
+        if( nHintId == SfxHintId::BasicDataWanted )
         {
             if( !CanRead() )
             {
                 return;
             }
         }
-        if( nHintId & SBX_HINT_DATACHANGED )
+        if( nHintId == SfxHintId::BasicDataChanged )
         {
             if( !CanWrite() )
             {
@@ -201,7 +201,7 @@ SbxInfo* SbxVariable::GetInfo()
 {
     if( !pInfo.Is() )
     {
-        Broadcast( SBX_HINT_INFOWANTED );
+        Broadcast( SfxHintId::BasicInfoWanted );
         if( pInfo.Is() )
         {
             SetModified( true );
@@ -582,7 +582,7 @@ bool SbxVariable::LoadData( SvStream& rStrm, sal_uInt16 nVer )
         pInfo = new SbxInfo;
         pInfo->LoadData( rStrm, (sal_uInt16) cMark );
     }
-    Broadcast( SBX_HINT_DATACHANGED );
+    Broadcast( SfxHintId::BasicDataChanged );
     nHash =  MakeHashCode( maName );
     SetModified( true );
     return true;
@@ -662,20 +662,20 @@ SbxAlias::~SbxAlias()
     }
 }
 
-void SbxAlias::Broadcast( sal_uInt32 nHt )
+void SbxAlias::Broadcast( SfxHintId nHt )
 {
     if( xAlias.Is() )
     {
         xAlias->SetParameters( GetParameters() );
-        if( nHt == SBX_HINT_DATAWANTED )
+        if( nHt == SfxHintId::BasicDataWanted )
         {
             SbxVariable::operator=( *xAlias );
         }
-        else if( nHt == SBX_HINT_DATACHANGED || nHt == SBX_HINT_CONVERTED )
+        else if( nHt == SfxHintId::BasicDataChanged || nHt == SfxHintId::BasicConverted )
         {
             *xAlias = *this;
         }
-        else if( nHt == SBX_HINT_INFOWANTED )
+        else if( nHt == SfxHintId::BasicInfoWanted )
         {
             xAlias->Broadcast( nHt );
             pInfo = xAlias->GetInfo();
@@ -686,7 +686,7 @@ void SbxAlias::Broadcast( sal_uInt32 nHt )
 void SbxAlias::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     const SbxHint* p = dynamic_cast<const SbxHint*>(&rHint);
-    if( p && p->GetId() == SBX_HINT_DYING )
+    if( p && p->GetId() == SfxHintId::BasicDying )
     {
         xAlias.Clear();
         // delete the alias?

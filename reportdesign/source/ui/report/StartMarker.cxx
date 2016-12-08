@@ -253,7 +253,7 @@ void OStartMarker::setTitle(const OUString& _sTitle)
 void OStartMarker::Notify(SfxBroadcaster & rBc, SfxHint const & rHint)
 {
     OColorListener::Notify(rBc, rHint);
-    if (rHint.GetId() == SFX_HINT_COLORS_CHANGED)
+    if (rHint.GetId() == SfxHintId::ColorsChanged)
     {
         setColor();
         Invalidate(InvalidateFlags::Children);

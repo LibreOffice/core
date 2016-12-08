@@ -515,14 +515,14 @@ void ImpVclMEdit::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
     switch (pTextHint->GetId())
     {
-        case TEXT_HINT_VIEWSCROLLED:
+        case SfxHintId::TextViewScrolled:
             if ( mpHScrollBar )
                 ImpSetHScrollBarThumbPos();
             if ( mpVScrollBar )
                 mpVScrollBar->SetThumbPos( mpTextWindow->GetTextView()->GetStartDocPos().Y() );
             break;
 
-        case TEXT_HINT_TEXTHEIGHTCHANGED:
+        case SfxHintId::TextHeightChanged:
             if ( mpTextWindow->GetTextView()->GetStartDocPos().Y() )
             {
                 long nOutHeight = mpTextWindow->GetOutputSizePixel().Height();
@@ -533,7 +533,7 @@ void ImpVclMEdit::Notify( SfxBroadcaster&, const SfxHint& rHint )
             ImpSetScrollBarRanges();
             break;
 
-        case TEXT_HINT_TEXTFORMATTED:
+        case SfxHintId::TextFormatted:
             if ( mpHScrollBar )
             {
                 const long nWidth = mpTextWindow->GetTextEngine()->CalcTextWidth();
@@ -546,18 +546,20 @@ void ImpVclMEdit::Notify( SfxBroadcaster&, const SfxHint& rHint )
             }
             break;
 
-        case TEXT_HINT_MODIFIED:
+        case SfxHintId::TextModified:
             ImpUpdateSrollBarVis(pVclMultiLineEdit->GetStyle());
             pVclMultiLineEdit->Modify();
             break;
 
-        case TEXT_HINT_VIEWSELECTIONCHANGED:
+        case SfxHintId::TextViewSelectionChanged:
             pVclMultiLineEdit->SelectionChanged();
             break;
 
-        case TEXT_HINT_VIEWCARETCHANGED:
+        case SfxHintId::TextViewCaretChanged:
             pVclMultiLineEdit->CaretChanged();
             break;
+
+        default: break;
     }
 }
 
@@ -856,21 +858,21 @@ void TextWindow::Command( const CommandEvent& rCEvt )
         {
             case SV_MENU_EDIT_UNDO:     mpExtTextView->Undo();
                                         mpExtTextEngine->SetModified( true );
-                                        mpExtTextEngine->Broadcast( TextHint( TEXT_HINT_MODIFIED ) );
+                                        mpExtTextEngine->Broadcast( TextHint( SfxHintId::TextModified ) );
                                         break;
             case SV_MENU_EDIT_CUT:      mpExtTextView->Cut();
                                         mpExtTextEngine->SetModified( true );
-                                        mpExtTextEngine->Broadcast( TextHint( TEXT_HINT_MODIFIED ) );
+                                        mpExtTextEngine->Broadcast( TextHint( SfxHintId::TextModified ) );
                                         break;
             case SV_MENU_EDIT_COPY:     mpExtTextView->Copy();
                                         break;
             case SV_MENU_EDIT_PASTE:    mpExtTextView->Paste();
                                         mpExtTextEngine->SetModified( true );
-                                        mpExtTextEngine->Broadcast( TextHint( TEXT_HINT_MODIFIED ) );
+                                        mpExtTextEngine->Broadcast( TextHint( SfxHintId::TextModified ) );
                                         break;
             case SV_MENU_EDIT_DELETE:   mpExtTextView->DeleteSelected();
                                         mpExtTextEngine->SetModified( true );
-                                        mpExtTextEngine->Broadcast( TextHint( TEXT_HINT_MODIFIED ) );
+                                        mpExtTextEngine->Broadcast( TextHint( SfxHintId::TextModified ) );
                                         break;
             case SV_MENU_EDIT_SELECTALL:    mpExtTextView->SetSelection( TextSelection( TextPaM( 0, 0 ), TextPaM( TEXT_PARA_ALL, TEXT_INDEX_ALL ) ) );
                                             break;
@@ -881,7 +883,7 @@ void TextWindow::Command( const CommandEvent& rCEvt )
                     {
                         mpExtTextView->InsertText( aChars );
                         mpExtTextEngine->SetModified( true );
-                        mpExtTextEngine->Broadcast( TextHint( TEXT_HINT_MODIFIED ) );
+                        mpExtTextEngine->Broadcast( TextHint( SfxHintId::TextModified ) );
                     }
                 }
                 break;

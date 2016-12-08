@@ -243,7 +243,7 @@ namespace sw
         //SfxListener
         virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override
         {
-            if(rHint.GetId() & SFX_HINT_DYING)
+            if(rHint.GetId() == SfxHintId::Dying)
             {
                 m_pBasePool = nullptr;
                 m_pDocShell = nullptr;
@@ -2761,12 +2761,12 @@ uno::Any SwXStyle::getPropertyDefault(const OUString& rPropertyName)
 
 void SwXStyle::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 {
-    if((rHint.GetId() & SFX_HINT_DYING) || (rHint.GetId() & SfxStyleSheetHintId::ERASED))
+    if((rHint.GetId() == SfxHintId::Dying) || (rHint.GetId() == SfxHintId::StyleSheetErased))
     {
         m_pBasePool = nullptr;
         EndListening(rBC);
     }
-    else if(rHint.GetId() & (SfxStyleSheetHintId::CHANGED))
+    else if(rHint.GetId() == SfxHintId::StyleSheetChanged)
     {
         static_cast<SfxStyleSheetBasePool&>(rBC).SetSearchMask(m_rEntry.m_eFamily);
         SfxStyleSheetBase* pOwnBase = static_cast<SfxStyleSheetBasePool&>(rBC).Find(m_sStyleName);

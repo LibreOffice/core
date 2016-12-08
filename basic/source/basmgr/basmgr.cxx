@@ -849,7 +849,7 @@ void BasicManager::LoadOldBasicManager( SotStorage& rStorage )
 BasicManager::~BasicManager()
 {
     // Notify listener if something needs to be saved
-    Broadcast( SfxHint( SFX_HINT_DYING) );
+    Broadcast( SfxHint( SfxHintId::Dying) );
 }
 
 void BasicManager::LegacyDeleteBasicManager( BasicManager*& _rpManager )

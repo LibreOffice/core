@@ -297,7 +297,7 @@ enum EENotifyType
     EE_NOTIFY_PARAGRAPHSMOVED,
 
     /// The height of at least one paragraph has changed
-    EE_NOTIFY_TEXTHEIGHTCHANGED,
+    EE_NOTIFY_TextHeightChanged,
 
     /// The view area of the EditEngine scrolled
     EE_NOTIFY_TEXTVIEWSCROLLED,

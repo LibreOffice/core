@@ -84,8 +84,8 @@ void ScDocShell::PostEditView( ScEditEngineDefaulter* pEditEngine, const ScAddre
 
 void ScDocShell::PostDataChanged()
 {
-    Broadcast( SfxHint( FID_DATACHANGED ) );
-    SfxGetpApp()->Broadcast(SfxHint( FID_ANYDATACHANGED ));      // Navigator
+    Broadcast( SfxHint( SfxHintId::ScDataChanged ) );
+    SfxGetpApp()->Broadcast(SfxHint( SfxHintId::ScAnyDataChanged ));      // Navigator
     aDocument.PrepareFormulaCalc();
     //! Navigator direkt benachrichtigen!
 }

@@ -202,15 +202,15 @@ void ScAnnotationEditSource::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
     else
     {
-        const sal_uInt32 nId = rHint.GetId();
-        if ( nId == SFX_HINT_DYING )
+        const SfxHintId nId = rHint.GetId();
+        if ( nId == SfxHintId::Dying )
         {
             pDocShell = nullptr;                       // ungueltig geworden
 
             DELETEZ( pForwarder );
             DELETEZ( pEditEngine );     // EditEngine uses document's pool
         }
-        else if ( nId == SFX_HINT_DATACHANGED )
+        else if ( nId == SfxHintId::DataChanged )
             bDataValid = false;                     // Text muss neu geholt werden
     }
 }

@@ -824,15 +824,15 @@ void SbiStdObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         const sal_uInt16 nCallId = static_cast<sal_uInt16>(pVar->GetUserData());
         if( nCallId )
         {
-            const sal_uInt32 t = pHint->GetId();
-            if( t == SBX_HINT_INFOWANTED )
+            const SfxHintId t = pHint->GetId();
+            if( t == SfxHintId::BasicInfoWanted )
                 pVar->SetInfo( GetInfo( static_cast<short>(pVar->GetUserData()) ) );
             else
             {
                 bool bWrite = false;
-                if( t == SBX_HINT_DATACHANGED )
+                if( t == SfxHintId::BasicDataChanged )
                     bWrite = true;
-                if( t == SBX_HINT_DATAWANTED || bWrite )
+                if( t == SfxHintId::BasicDataWanted || bWrite )
                 {
                     RtlCall p = aMethods[ nCallId-1 ].pFunc;
                     SbxArrayRef rPar( pPar_ );

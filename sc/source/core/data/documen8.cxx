@@ -849,7 +849,7 @@ void ScDocument::UpdateExternalRefLinks(vcl::Window* pWin)
     if (bAny)
     {
         TrackFormulas();
-        pShell->Broadcast( SfxHint(FID_DATACHANGED) );
+        pShell->Broadcast( SfxHint(SfxHintId::ScDataChanged) );
 
         // #i101960# set document modified, as in TrackTimeHdl for DDE links
         if (!pShell->IsModified())

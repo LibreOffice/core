@@ -136,9 +136,9 @@ void SbxObject::Notify( SfxBroadcaster&, const SfxHint& rHint )
     const SbxHint* p = dynamic_cast<const SbxHint*>(&rHint);
     if( p )
     {
-        const sal_uInt32 nId = p->GetId();
-        bool bRead  = ( nId == SBX_HINT_DATAWANTED );
-        bool bWrite = ( nId == SBX_HINT_DATACHANGED );
+        const SfxHintId nId = p->GetId();
+        bool bRead  = ( nId == SfxHintId::BasicDataWanted );
+        bool bWrite = ( nId == SfxHintId::BasicDataChanged );
         SbxVariable* pVar = p->GetVar();
         if( bRead || bWrite )
         {
@@ -295,7 +295,7 @@ bool SbxObject::Call( const OUString& rName, SbxArray* pParam )
         {
             pMeth->SetParameters( pParam );
         }
-        pMeth->Broadcast( SBX_HINT_DATAWANTED );
+        pMeth->Broadcast( SfxHintId::BasicDataWanted );
         pMeth->SetParameters( nullptr );
         return true;
     }
@@ -413,7 +413,7 @@ SbxVariable* SbxObject::Make( const OUString& rName, SbxClassType ct, SbxDataTyp
     SetModified( true );
     // The object listen always
     StartListening( pVar->GetBroadcaster(), true );
-    Broadcast( SBX_HINT_OBJECTCHANGED );
+    Broadcast( SfxHintId::BasicObjectChanged );
     return pVar;
 }
 
@@ -457,7 +457,7 @@ void SbxObject::Insert( SbxVariable* pVar )
             pVar->SetParent( this );
         }
         SetModified( true );
-        Broadcast( SBX_HINT_OBJECTCHANGED );
+        Broadcast( SfxHintId::BasicObjectChanged );
 #ifdef DBG_UTIL
         static const char* pCls[] =
             { "DontCare","Array","Value","Variable","Method","Property","Object" };
@@ -557,7 +557,7 @@ void SbxObject::Remove( SbxVariable* pVar )
             pVar_->SetParent( nullptr );
         }
         SetModified( true );
-        Broadcast( SBX_HINT_OBJECTCHANGED );
+        Broadcast( SfxHintId::BasicObjectChanged );
     }
 }
 

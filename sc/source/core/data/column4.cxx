@@ -277,7 +277,7 @@ void ScColumn::SetValues( SCROW nRow, const std::vector<double>& rVals )
     for (SCROW i = nRow; i <= nLastRow; ++i)
         aRows.push_back(i);
 
-    BroadcastCells(aRows, SC_HINT_DATACHANGED);
+    BroadcastCells(aRows, SfxHintId::ScDataChanged);
 }
 
 void ScColumn::TransferCellValuesTo( SCROW nRow, size_t nLen, sc::CellValues& rDest )
@@ -302,7 +302,7 @@ void ScColumn::TransferCellValuesTo( SCROW nRow, size_t nLen, sc::CellValues& rD
     for (SCROW i = nRow; i <= nLastRow; ++i)
         aRows.push_back(i);
 
-    BroadcastCells(aRows, SC_HINT_DATACHANGED);
+    BroadcastCells(aRows, SfxHintId::ScDataChanged);
 }
 
 void ScColumn::CopyCellValuesFrom( SCROW nRow, const sc::CellValues& rSrc )
@@ -327,7 +327,7 @@ void ScColumn::CopyCellValuesFrom( SCROW nRow, const sc::CellValues& rSrc )
     for (SCROW i = nRow; i <= nLastRow; ++i)
         aRows.push_back(i);
 
-    BroadcastCells(aRows, SC_HINT_DATACHANGED);
+    BroadcastCells(aRows, SfxHintId::ScDataChanged);
 }
 
 namespace {

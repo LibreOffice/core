@@ -332,15 +332,10 @@ void Listener::Notify (
                 break;
         }
     }
-    else
+    else if (rHint.GetId() == SfxHintId::DocChanged)
     {
-        switch (rHint.GetId())
-        {
-            case SFX_HINT_DOCCHANGED:
-                mrController.CheckForMasterPageAssignment();
-                mrController.CheckForSlideTransitionAssignment();
-                break;
-        }
+        mrController.CheckForMasterPageAssignment();
+        mrController.CheckForSlideTransitionAssignment();
     }
 }
 

@@ -564,7 +564,7 @@ void SwDocStyleSheet::SetGrabBagItem(const uno::Any& rVal)
     if (bChg)
     {
         dynamic_cast<SwDocStyleSheetPool&>(*pPool).InvalidateIterator();
-        pPool->Broadcast(SfxStyleSheetHint(SfxStyleSheetHintId::MODIFIED, *this));
+        pPool->Broadcast(SfxStyleSheetHint(SfxHintId::StyleSheetModified, *this));
         SwEditShell* pSh = rDoc.GetEditShell();
         if (pSh)
             pSh->CallChgLnk();
@@ -675,7 +675,7 @@ void SwDocStyleSheet::SetHidden( bool bValue )
     {
         // calling pPool->First() here would be quite slow...
         dynamic_cast<SwDocStyleSheetPool&>(*pPool).InvalidateIterator(); // internal list has to be updated
-        pPool->Broadcast( SfxStyleSheetHint( SfxStyleSheetHintId::MODIFIED, *this ) );
+        pPool->Broadcast( SfxStyleSheetHint( SfxHintId::StyleSheetModified, *this ) );
         SwEditShell* pSh = rDoc.GetEditShell();
         if( pSh )
             pSh->CallChgLnk();
@@ -1153,7 +1153,7 @@ bool  SwDocStyleSheet::SetName(const OUString& rStr, bool bReindexNow)
     if( bChg )
     {
         pPool->First();  // internal list has to be updated
-        pPool->Broadcast( SfxStyleSheetHint( SfxStyleSheetHintId::MODIFIED, *this ) );
+        pPool->Broadcast( SfxStyleSheetHint( SfxHintId::StyleSheetModified, *this ) );
         SwEditShell* pSh = rDoc.GetEditShell();
         if( pSh )
             pSh->CallChgLnk();
@@ -1204,7 +1204,7 @@ bool   SwDocStyleSheet::SetParent( const OUString& rStr)
         if( bRet )
         {
             aParent = rStr;
-            pPool->Broadcast( SfxStyleSheetHint( SfxStyleSheetHintId::MODIFIED,
+            pPool->Broadcast( SfxStyleSheetHint( SfxHintId::StyleSheetModified,
                             *this ) );
         }
     }
@@ -2508,7 +2508,7 @@ void SwDocStyleSheetPool::Remove( SfxStyleSheetBase* pStyle)
     }
 
     if( bBroadcast )
-        Broadcast( SfxStyleSheetHint( SfxStyleSheetHintId::ERASED, *pStyle ) );
+        Broadcast( SfxStyleSheetHint( SfxHintId::StyleSheetErased, *pStyle ) );
 }
 
 bool  SwDocStyleSheetPool::SetParent( SfxStyleFamily eFam,
@@ -2560,7 +2560,7 @@ bool  SwDocStyleSheetPool::SetParent( SfxStyleFamily eFam,
             else
                 mxStyleSheet->PresetFollow( OUString() );
 
-            Broadcast( SfxStyleSheetHint( SfxStyleSheetHintId::MODIFIED,
+            Broadcast( SfxStyleSheetHint( SfxHintId::StyleSheetModified,
                                             *(mxStyleSheet.get()) ) );
         }
     }
@@ -3204,7 +3204,7 @@ void SwStyleSheetIterator::Notify( SfxBroadcaster&, const SfxHint& rHint )
     // search and remove from View-List!!
     const SfxStyleSheetHint* pStyleSheetHint = dynamic_cast<const SfxStyleSheetHint*>(&rHint);
     if( pStyleSheetHint &&
-        SfxStyleSheetHintId::ERASED == pStyleSheetHint->GetHint() )
+        SfxHintId::StyleSheetErased == pStyleSheetHint->GetId() )
     {
         SfxStyleSheetBase* pStyle = pStyleSheetHint->GetStyleSheet();
 

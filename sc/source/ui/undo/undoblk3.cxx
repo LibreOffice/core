@@ -728,7 +728,7 @@ void ScUndoMerge::DoChange( bool bUndo ) const
         if (!bDidPaint)
             ScUndoUtil::PaintMore(pDocShell, aRange);
 
-        rDoc.BroadcastCells(aRange, SC_HINT_DATACHANGED);
+        rDoc.BroadcastCells(aRange, SfxHintId::ScDataChanged);
     }
 
     ShowTable(aCurRange);
@@ -1518,7 +1518,7 @@ void ScUndoInsertAreaLink::Undo()
     if (pLink)
         pLinkManager->Remove( pLink );
 
-    SfxGetpApp()->Broadcast( SfxHint( SC_HINT_AREALINKS_CHANGED ) );     // Navigator
+    SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScAreaLinksChanged ) );     // Navigator
 }
 
 void ScUndoInsertAreaLink::Redo()
@@ -1534,7 +1534,7 @@ void ScUndoInsertAreaLink::Redo()
     pLink->Update();
     pLink->SetInCreate( false );
 
-    SfxGetpApp()->Broadcast( SfxHint( SC_HINT_AREALINKS_CHANGED ) );     // Navigator
+    SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScAreaLinksChanged ) );     // Navigator
 }
 
 void ScUndoInsertAreaLink::Repeat(SfxRepeatTarget& /* rTarget */)
@@ -1583,7 +1583,7 @@ void ScUndoRemoveAreaLink::Undo()
     pLink->Update();
     pLink->SetInCreate( false );
 
-    SfxGetpApp()->Broadcast( SfxHint( SC_HINT_AREALINKS_CHANGED ) );     // Navigator
+    SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScAreaLinksChanged ) );     // Navigator
 }
 
 void ScUndoRemoveAreaLink::Redo()
@@ -1596,7 +1596,7 @@ void ScUndoRemoveAreaLink::Redo()
     if (pLink)
         pLinkManager->Remove( pLink );
 
-    SfxGetpApp()->Broadcast( SfxHint( SC_HINT_AREALINKS_CHANGED ) );     // Navigator
+    SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScAreaLinksChanged ) );     // Navigator
 }
 
 void ScUndoRemoveAreaLink::Repeat(SfxRepeatTarget& /* rTarget */)

@@ -470,12 +470,7 @@ void UpdateStyleList(ListBox& rLbStyle, ScDocument* pDoc)
 
 void ScConditionFrmtEntry::Notify(SfxBroadcaster&, const SfxHint& rHint)
 {
-    const SfxStyleSheetHint* pHint = dynamic_cast<const SfxStyleSheetHint*>(&rHint);
-    if(!pHint)
-        return;
-
-    sal_uInt16 nHint = pHint->GetHint();
-    if(nHint == SfxStyleSheetHintId::MODIFIED)
+    if(rHint.GetId() == SfxHintId::StyleSheetModified)
     {
         if(!mbIsInStyleCreate)
             UpdateStyleList(*maLbStyle.get(), mpDoc);
@@ -1301,12 +1296,7 @@ void ScDateFrmtEntry::SetInactive()
 
 void ScDateFrmtEntry::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    const SfxStyleSheetHint* pHint = dynamic_cast<const SfxStyleSheetHint*>(&rHint);
-    if(!pHint)
-        return;
-
-    sal_uInt16 nHint = pHint->GetHint();
-    if(nHint == SfxStyleSheetHintId::MODIFIED)
+    if(rHint.GetId() == SfxHintId::StyleSheetModified)
     {
         if(!mbIsInStyleCreate)
             UpdateStyleList(*maLbStyle.get(), mpDoc);

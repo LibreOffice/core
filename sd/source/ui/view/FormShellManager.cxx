@@ -263,7 +263,7 @@ IMPL_LINK(FormShellManager, WindowEventHandler, VclWindowEvent&, rEvent, void)
 
 void FormShellManager::Notify(SfxBroadcaster&, const SfxHint& rHint)
 {
-    if (rHint.GetId()==SFX_HINT_DYING)
+    if (rHint.GetId()==SfxHintId::Dying)
     {
         // If all goes well this listener is called after the
         // FormShellManager was notified about the dying form shell by the

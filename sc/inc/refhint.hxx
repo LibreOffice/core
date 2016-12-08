@@ -11,7 +11,7 @@
 #define INCLUDED_SC_INC_REFHINT_HXX
 
 #include "address.hxx"
-#include "simplehintids.hxx"
+#include <svl/hint.hxx>
 
 namespace sc {
 

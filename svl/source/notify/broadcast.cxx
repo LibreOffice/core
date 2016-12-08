@@ -101,7 +101,7 @@ SvtBroadcaster::SvtBroadcaster( const SvtBroadcaster &rBC ) :
 SvtBroadcaster::~SvtBroadcaster()
 {
     mbDisposing = true;
-    Broadcast( SfxHint(SFX_HINT_DYING) );
+    Broadcast( SfxHint(SfxHintId::Dying) );
 
     Normalize();
 

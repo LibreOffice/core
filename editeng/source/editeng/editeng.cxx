@@ -2475,7 +2475,7 @@ void EditEngine::ParagraphHeightChanged( sal_Int32 nPara )
 
     if ( GetNotifyHdl().IsSet() )
     {
-        EENotify aNotify( EE_NOTIFY_TEXTHEIGHTCHANGED );
+        EENotify aNotify( EE_NOTIFY_TextHeightChanged );
         aNotify.pEditEngine = this;
         aNotify.nParagraph = nPara;
         pImpEditEngine->CallNotify( aNotify );

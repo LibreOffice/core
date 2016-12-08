@@ -117,15 +117,15 @@ namespace accessibility
             only be called from the main office thread.
 
             The EditSource set here is required to broadcast out the
-            following hints: EDITSOURCE_HINT_PARASMOVED,
-            EDITSOURCE_HINT_SELECTIONCHANGED, TEXT_HINT_MODIFIED,
-            TEXT_HINT_PARAINSERTED, TEXT_HINT_PARAREMOVED,
-            TEXT_HINT_TEXTHEIGHTCHANGED,
-            TEXT_HINT_VIEWSCROLLED. Otherwise, not all state changes
+            following hints: SfxHintId::EditSourceParasMoved,
+            SfxHintId::EditSourceSelectionChanged, SfxHintId::TextModified,
+            SfxHintId::TextParaInserted, SfxHintId::TextParaRemoved,
+            SfxHintId::TextHeightChanged,
+            SfxHintId::TextViewScrolled. Otherwise, not all state changes
             will get noticed by the accessibility object. Further
             more, when the corresponding core object or the model is
             dying, either the edit source must be set to NULL or it
-            has to broadcast a SFX_HINT_DYING hint.
+            has to broadcast a SfxHintId::Dying hint.
 
             This class does not have a dispose method, since it is not
             a UNO component. Nevertheless, it holds C++ references to

@@ -834,7 +834,7 @@ TextPaM TextEngine::ImpInsertParaBreak( const TextPaM& rPaM )
     TextModified();
 
     if ( bFirstParaContentChanged )
-        Broadcast( TextHint( TEXT_HINT_PARACONTENTCHANGED, rPaM.GetPara() ) );
+        Broadcast( TextHint( SfxHintId::TextParaContentChanged, rPaM.GetPara() ) );
 
     return aPaM;
 }
@@ -1518,7 +1518,7 @@ void TextEngine::FormatDoc()
         {
             const long nOldParaWidth = mnCurTextWidth >= 0 ? CalcTextWidth( nPara ) : -1;
 
-            Broadcast( TextHint( TEXT_HINT_FORMATPARA, nPara ) );
+            Broadcast( TextHint( SfxHintId::TextFormatPara, nPara ) );
 
             if ( CreateLines( nPara ) )
                 bGrow = true;
@@ -1577,14 +1577,14 @@ void TextEngine::FormatDoc()
         if ( nDiff )
         {
             mbFormatted = true;
-            Broadcast( TextHint( TEXT_HINT_TEXTHEIGHTCHANGED ) );
+            Broadcast( TextHint( SfxHintId::TextHeightChanged ) );
         }
     }
 
     mbIsFormatting = false;
     mbFormatted = true;
 
-    Broadcast( TextHint( TEXT_HINT_TEXTFORMATTED ) );
+    Broadcast( TextHint( SfxHintId::TextFormatted ) );
 }
 
 void TextEngine::CreateAndInsertEmptyLine( sal_uInt32 nPara )
@@ -2663,7 +2663,7 @@ void TextEngine::ImpParagraphInserted( sal_uInt32 nPara )
             }
         }
     }
-    Broadcast( TextHint( TEXT_HINT_PARAINSERTED, nPara ) );
+    Broadcast( TextHint( SfxHintId::TextParaInserted, nPara ) );
 }
 
 void TextEngine::ImpParagraphRemoved( sal_uInt32 nPara )
@@ -2691,7 +2691,7 @@ void TextEngine::ImpParagraphRemoved( sal_uInt32 nPara )
             }
         }
     }
-    Broadcast( TextHint( TEXT_HINT_PARAREMOVED, nPara ) );
+    Broadcast( TextHint( SfxHintId::TextParaRemoved, nPara ) );
 }
 
 void TextEngine::ImpCharsRemoved( sal_uInt32 nPara, sal_Int32 nPos, sal_Int32 nChars )
@@ -2718,7 +2718,7 @@ void TextEngine::ImpCharsRemoved( sal_uInt32 nPara, sal_Int32 nPos, sal_Int32 nC
             }
         }
     }
-    Broadcast( TextHint( TEXT_HINT_PARACONTENTCHANGED, nPara ) );
+    Broadcast( TextHint( SfxHintId::TextParaContentChanged, nPara ) );
 }
 
 void TextEngine::ImpCharsInserted( sal_uInt32 nPara, sal_Int32 nPos, sal_Int32 nChars )
@@ -2742,7 +2742,7 @@ void TextEngine::ImpCharsInserted( sal_uInt32 nPara, sal_Int32 nPos, sal_Int32 n
             }
         }
     }
-    Broadcast( TextHint( TEXT_HINT_PARACONTENTCHANGED, nPara ) );
+    Broadcast( TextHint( SfxHintId::TextParaContentChanged, nPara ) );
 }
 
 void TextEngine::Draw( OutputDevice* pDev, const Point& rPos )

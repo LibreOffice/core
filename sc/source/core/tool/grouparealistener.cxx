@@ -107,14 +107,13 @@ ScRange FormulaGroupAreaListener::getListeningRange() const
 
 void FormulaGroupAreaListener::Notify( const SfxHint& rHint )
 {
-    // SC_HINT_BULK_DATACHANGED may include (SC_HINT_DATACHANGED |
-    // SC_HINT_TABLEOPDIRTY) so has to be checked first.
-    if (rHint.GetId() & SC_HINT_BULK_DATACHANGED)
+    // BulkDataHint may include (SfxHintId::ScDataChanged |
+    // SfxHintId::ScTableOpDirty) so has to be checked first.
+    if ( const BulkDataHint* pBulkHint = dynamic_cast<const BulkDataHint*>(&rHint) )
     {
-        const BulkDataHint& rBulkHint = static_cast<const BulkDataHint&>(rHint);
-        notifyBulkChange(rBulkHint);
+        notifyBulkChange(*pBulkHint);
     }
-    else if (rHint.GetId() & (SC_HINT_DATACHANGED | SC_HINT_TABLEOPDIRTY))
+    else if (rHint.GetId() == SfxHintId::ScDataChanged || rHint.GetId() == SfxHintId::ScTableOpDirty)
     {
         notifyCellChange(rHint, static_cast<const ScHint*>(&rHint)->GetAddress());
     }
@@ -151,7 +150,7 @@ void FormulaGroupAreaListener::notifyBulkChange( const BulkDataHint& rHint )
 
     std::vector<ScFormulaCell*> aCells;
     aAction.swapCells(aCells);
-    ScHint aHint(SC_HINT_DATACHANGED, ScAddress());
+    ScHint aHint(SfxHintId::ScDataChanged, ScAddress());
     std::for_each(aCells.begin(), aCells.end(), Notifier(aHint));
 }
 

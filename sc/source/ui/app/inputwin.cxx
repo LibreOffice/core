@@ -1518,7 +1518,7 @@ IMPL_LINK(ScTextWnd, NotifyHdl, EENotify&, rNotify, void)
     // down to generate a scroll event
 
     if ( rNotify.eNotificationType == EE_NOTIFY_TEXTVIEWSCROLLED
-         || rNotify.eNotificationType == EE_NOTIFY_TEXTHEIGHTCHANGED )
+         || rNotify.eNotificationType == EE_NOTIFY_TextHeightChanged )
         SetScrollBarRange();
 }
 
@@ -1954,8 +1954,8 @@ void ScPosWnd::Notify( SfxBroadcaster&, const SfxHint& rHint )
         }
         else
         {
-            const sal_uInt32 nHintId = rHint.GetId();
-            if ( nHintId == SC_HINT_AREAS_CHANGED || nHintId == SC_HINT_NAVIGATOR_UPDATEALL)
+            const SfxHintId nHintId = rHint.GetId();
+            if ( nHintId == SfxHintId::ScAreasChanged || nHintId == SfxHintId::ScNavigatorUpdateAll)
                 FillRangeNames();
         }
     }
