@@ -2394,7 +2394,7 @@ SystemTextLayoutData OutputDevice::GetSysTextLayoutData(const Point& rStartPt, c
     while (pLayout->GetNextGlyphs(1, &pGlyph, aPos, nStart))
     {
         SystemGlyphData aSystemGlyph;
-        aSystemGlyph.index = static_cast<unsigned long> (pGlyph->maGlyphId & GF_IDXMASK);
+        aSystemGlyph.index = static_cast<unsigned long> (pGlyph->maGlyphId);
         aSystemGlyph.x = aPos.X();
         aSystemGlyph.y = aPos.Y();
         int nLevel = pGlyph->mnFallbackLevel;
