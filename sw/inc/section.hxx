@@ -286,7 +286,7 @@ class SW_DLLPUBLIC SwSectionFormat
 
 protected:
     SwSectionFormat( SwFrameFormat* pDrvdFrame, SwDoc *pDoc );
-   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew ) override;
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew ) override;
 
 public:
     virtual ~SwSectionFormat() override;

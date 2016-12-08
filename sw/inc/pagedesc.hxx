@@ -184,7 +184,7 @@ class SW_DLLPUBLIC SwPageDesc : public SwModify
     };
 
 protected:
-   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNewValue ) override;
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNewValue ) override;
 
 public:
     const OUString& GetName() const { return m_StyleName; }
