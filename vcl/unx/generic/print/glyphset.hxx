@@ -52,15 +52,14 @@ private:
 
     OString     GetGlyphSetName (sal_Int32 nGlyphSetID);
 
-    bool        GetGlyphID (sal_GlyphId nGlyphId, sal_Unicode nUnicode,
+    bool        GetGlyphID (sal_GlyphId nGlyphId,
                                 unsigned char* nOutGlyphID, sal_Int32* nOutGlyphSetID);
     bool        LookupGlyphID (sal_GlyphId nGlyphId,
                                    unsigned char* nOutGlyphID, sal_Int32* nOutGlyphSetID);
-    bool        AddGlyphID (sal_GlyphId nGlyphId, sal_Unicode nUnicode,
+    bool        AddGlyphID (sal_GlyphId nGlyphId,
                                 unsigned char* nOutGlyphID,
                                 sal_Int32* nOutGlyphSetID);
     static void     AddNotdef (glyph_map_t &rGlyphMap);
-    static unsigned char  GetSymbolMapping (sal_Unicode nUnicodeChar);
 
 public:
 
@@ -76,12 +75,10 @@ public:
                              const OString &rFontName);
     bool            IsVertical () { return mbVertical;}
 
-    void            DrawGlyphs (PrinterGfx& rGfx,
-                                const Point& rPoint,
-                                const sal_GlyphId* pGlyphIds,
-                                const sal_Unicode* pUnicodes,
-                                sal_Int16 nLen,
-                                const sal_Int32* pDeltaArray);
+    void            DrawGlyph (PrinterGfx& rGfx,
+                               const Point& rPoint,
+                               const sal_GlyphId nGlyphId,
+                               const sal_Int32 nDelta);
     void        PSUploadFont (osl::File& rOutFile, PrinterGfx &rGfx, bool bAsType42, std::list< OString >& rSuppliedFonts );
 };
 
