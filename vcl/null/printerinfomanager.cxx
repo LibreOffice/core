@@ -36,11 +36,11 @@ void PrinterInfoManager::release()
 {
     SalData* pSalData = GetSalData();
     delete pSalData->m_pPIManager;
-    pSalData->m_pPIManager = NULL;
+    pSalData->m_pPIManager = nullptr;
 }
 
 PrinterInfoManager::PrinterInfoManager( Type eType ) :
-    m_pQueueInfo( NULL ),
+    m_pQueueInfo( nullptr ),
     m_eType( eType ),
     m_bUseIncludeFeature( false ),
     m_bUseJobPatch( true ),
@@ -109,7 +109,7 @@ bool PrinterInfoManager::checkFeatureToken( const OUString& /* rPrinterName */, 
 
 FILE* PrinterInfoManager::startSpool( const OUString& /* rPrintername */, bool /* bQuickCommand */ )
 {
-    return NULL;
+    return nullptr;
 }
 
 bool PrinterInfoManager::endSpool( const OUString& /*rPrintername*/, const OUString& /*rJobTitle*/, FILE* /* pFile */, const JobData& /*rDocumentJobData*/, bool /*bBanner*/, const OUString& /*rFaxNumber*/ )
