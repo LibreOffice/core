@@ -162,8 +162,8 @@ bool CoreTextStyle::GetGlyphBoundRect(const GlyphItem& rGlyph, Rectangle& rRect 
     SAL_WNODEPRECATED_DECLARATIONS_POP
     CGRect aCGRect = CTFontGetBoundingRectsForGlyphs(aCTFontRef, aFontOrientation, &nCGGlyph, nullptr, 1);
 
-    // Apply font rotation to non-upright glyphs.
-    if (mfFontRotation && !(rGlyph.maGlyphId & GF_ROTMASK))
+    // Apply font rotation to non-vertical glyphs.
+    if (mfFontRotation && !rGlyph.IsVertical())
         aCGRect = CGRectApplyAffineTransform(aCGRect, CGAffineTransformMakeRotation(mfFontRotation));
 
     rRect.Left()   = lrint( aCGRect.origin.x );

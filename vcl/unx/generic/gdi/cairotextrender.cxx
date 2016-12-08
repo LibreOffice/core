@@ -183,15 +183,10 @@ void CairoTextRender::DrawTextLayout(const CommonSalLayout& rLayout)
         aGlyph.y = aPos.Y();
         cairo_glyphs.push_back(aGlyph);
 
-        switch (pGlyph->maGlyphId & GF_ROTMASK)
-        {
-            case GF_ROTL:    // left
-                glyph_extrarotation.push_back(1);
-                break;
-            default:
-                glyph_extrarotation.push_back(0);
-                break;
-        }
+        if (pGlyph->IsVertical())
+            glyph_extrarotation.push_back(1);
+        else
+            glyph_extrarotation.push_back(0);
     }
 
     if (cairo_glyphs.empty())
