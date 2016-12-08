@@ -600,10 +600,13 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
                 if (u_getIntPropertyValue(aChar, UCHAR_GENERAL_CATEGORY) == U_NON_SPACING_MARK)
                     nGlyphFlags |= GlyphItem::IS_DIACRITIC;
 
+                if (u_isUWhiteSpace(aChar))
+                     nGlyphFlags |= GlyphItem::IS_SPACING;
+
                 if ((aSubRun.maScript == HB_SCRIPT_ARABIC ||
                      aSubRun.maScript == HB_SCRIPT_SYRIAC) &&
                     HB_DIRECTION_IS_BACKWARD(aSubRun.maDirection) &&
-                    !u_isUWhiteSpace(aChar))
+                    (nGlyphFlags & GlyphItem::IS_SPACING) == 0)
                 {
                     nGlyphFlags |= GlyphItem::ALLOW_KASHIDA;
                     rArgs.mnFlags |= SalLayoutFlags::KashidaJustification;
