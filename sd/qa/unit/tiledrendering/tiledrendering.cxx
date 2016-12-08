@@ -1432,9 +1432,9 @@ void SdTiledRenderingTest::testTdf104405()
     rEditView.SetSelection(ESelection(0, 0, 0, 3)); // start para, start char, end para, end char.
 
     // trigger the clone-formatting/paintbrush command to copy formatting contents of cell
-    uno::Sequence< beans::PropertyValue > aArgs( 1 );
+    uno::Sequence< beans::PropertyValue > aArgs(1);
     aArgs[0].Name  = "PersistentCopy";
-    aArgs[0].Value = uno::makeAny( true );
+    aArgs[0].Value = uno::makeAny(true);
     comphelper::dispatchCommand(".uno:FormatPaintbrush", aArgs);
 
     Scheduler::ProcessEventsToIdle();
@@ -1447,10 +1447,10 @@ void SdTiledRenderingTest::testTdf104405()
     rEditView2.SetSelection(ESelection(0, 0, 0, 3)); // start para, start char, end para, end char.
     Rectangle aRect = pTableObject->GetCurrentBoundRect();
     pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
-                                      convertMm100ToTwip(aRect.getX() ), convertMm100ToTwip(aRect.getY() ),
+                                      convertMm100ToTwip(aRect.getX()), convertMm100ToTwip(aRect.getY()),
                                       1, MOUSE_LEFT, 0);
     pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP,
-                                      convertMm100ToTwip(aRect.getX() ), convertMm100ToTwip(aRect.getY() ),
+                                      convertMm100ToTwip(aRect.getX()), convertMm100ToTwip(aRect.getY()),
                                       1, MOUSE_LEFT, 0);
 
     Scheduler::ProcessEventsToIdle();
@@ -1460,7 +1460,7 @@ void SdTiledRenderingTest::testTdf104405()
     OString aPrefix = "/SdDrawDocument/SdrModel/SdPage/SdrObjList/SdrTableObj/SdrTableObjImpl"
                       "/TableModel/Cell[1]/DefaultProperties/SfxItemSet/SdrTextVertAdjustItem";
     // the following name has a compiler-dependant part
-    CPPUNIT_ASSERT_EQUAL( getXPath(pXmlDoc, aPrefix, "value"), OUString("2") );
+    CPPUNIT_ASSERT_EQUAL(getXPath(pXmlDoc, aPrefix, "value"), OUString("2"));
     xmlFreeDoc(pXmlDoc);
 
     comphelper::LibreOfficeKit::setActive(false);
