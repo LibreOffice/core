@@ -249,21 +249,16 @@ public:
     void            PSLineTo(const Point& rPoint );
     void            PSPointOp (const Point& rPoint, const sal_Char* pOperator);
     void            PSHexString (const unsigned char* pString, sal_Int16 nLen);
-    void            PSDeltaArray (const sal_Int32 *pArray, sal_Int16 nEntries);
-    void            PSShowText (const unsigned char* pString,
-                                sal_Int16 nGlyphs, sal_Int16 nBytes,
-                                const sal_Int32* pDeltaArray = nullptr);
+    void            PSShowGlyph (const unsigned char nGlyphId);
     void            PSComment (const sal_Char* pComment );
 
     void            OnEndJob ();
     void            writeResources( osl::File* pFile, std::list< OString >& rSuppliedFonts );
     PrintFontManager& GetFontMgr () { return mrFontMgr; }
 
-    void            drawGlyphs( const Point& rPoint,
-                                sal_GlyphId* pGlyphIds,
-                                sal_Unicode* pUnicodes,
-                                sal_Int16 nLen,
-                                sal_Int32* pDeltaArray );
+    void            drawGlyph(const Point& rPoint,
+                              sal_GlyphId aGlyphId,
+                              sal_Int32 nDelta);
 public:
     PrinterGfx();
     ~PrinterGfx();
@@ -343,12 +338,9 @@ public:
     void            SetTextColor (PrinterColor& rTextColor)
     { maTextColor = rTextColor; }
 
-    // for CTL
-    void            DrawGlyphs( const Point& rPoint,
-                                sal_GlyphId* pGlyphIds,
-                                sal_Unicode* pUnicodes,
-                                sal_Int16 nLen,
-                                sal_Int32* pDeltaArray );
+    void            DrawGlyph(const Point& rPoint,
+                              const GlyphItem& rGlyph,
+                              sal_Int32 nDelta);
 
 };
 

@@ -59,13 +59,9 @@ void PrinterGfx::SetFont(
     mbTextVertical                    = bVertical;
 }
 
-void PrinterGfx::drawGlyphs(
-                            const Point& rPoint,
-                            sal_GlyphId* pGlyphIds,
-                            sal_Unicode* pUnicodes,
-                            sal_Int16 nLen,
-                            sal_Int32* pDeltaArray
-                            )
+void PrinterGfx::drawGlyph(const Point& rPoint,
+                           sal_GlyphId aGlyphId,
+                           sal_Int32 nDelta)
 {
 
     // draw the string
@@ -75,7 +71,7 @@ void PrinterGfx::drawGlyphs(
         if ( ((*aIter).GetFontID()  == mnFontID)
              && ((*aIter).IsVertical() == mbTextVertical))
         {
-            (*aIter).DrawGlyphs (*this, rPoint, pGlyphIds, pUnicodes, nLen, pDeltaArray);
+            (*aIter).DrawGlyph (*this, rPoint, aGlyphId, nDelta);
             break;
         }
 
@@ -83,21 +79,14 @@ void PrinterGfx::drawGlyphs(
     if (aIter == maPS3Font.end())
     {
         maPS3Font.push_back (GlyphSet(mnFontID, mbTextVertical));
-        maPS3Font.back().DrawGlyphs (*this, rPoint, pGlyphIds, pUnicodes, nLen, pDeltaArray);
+        maPS3Font.back().DrawGlyph (*this, rPoint, aGlyphId, nDelta);
     }
 }
 
-void PrinterGfx::DrawGlyphs(
-                            const Point& rPoint,
-                            sal_GlyphId* pGlyphIds,
-                            sal_Unicode* pUnicodes,
-                            sal_Int16 nLen,
-                            sal_Int32* pDeltaArray
-                            )
+void PrinterGfx::DrawGlyph(const Point& rPoint,
+                           const GlyphItem& rGlyph,
+                           sal_Int32 nDelta)
 {
-    if( nLen <= 0 )
-        return;
-
     // move and rotate the user coordinate system
     // avoid the gsave/grestore for the simple cases since it allows
     // reuse of the current font if it hasn't changed
@@ -113,17 +102,8 @@ void PrinterGfx::DrawGlyphs(
         aPoint = Point( 0, 0 );
     }
 
-    if( mbTextVertical )
+    if (mbTextVertical && (rGlyph.maGlyphId & GF_ROTMASK) != GF_NONE)
     {
-        // vertical glyphs can have an additional rotation ... sigh.
-        // so break up text in chunks of normal glyphs and print out
-        // specially rotated glyphs extra
-        sal_GlyphId* pTempGlyphIds = static_cast<sal_GlyphId*>(alloca(sizeof(sal_Int32)*nLen));
-        sal_Int32* pTempDelta = static_cast<sal_Int32*>(alloca(sizeof(sal_Int32)*nLen));
-        sal_Unicode* pTempUnicodes = static_cast<sal_Unicode*>(alloca(sizeof(sal_Unicode)*nLen));
-        sal_Int16 nTempLen = 0;
-        sal_Int32 nTempFirstDelta = 0;
-        Point aRotPoint;
         sal_Int32 nTextHeight = maVirtualStatus.mnTextHeight;
         sal_Int32 nTextWidth  = maVirtualStatus.mnTextWidth ? maVirtualStatus.mnTextWidth : maVirtualStatus.mnTextHeight;
         sal_Int32 nAscend = mrFontMgr.getFontAscend( mnFontID );
@@ -132,77 +112,26 @@ void PrinterGfx::DrawGlyphs(
         nDescend = nDescend * nTextHeight / 1000;
         nAscend = nAscend * nTextHeight / 1000;
 
-        for( sal_Int16 i = 0; i < nLen; i++ )
-        {
-            const sal_GlyphId nRot = pGlyphIds[i] & GF_ROTMASK;
-            if( nRot == GF_NONE )
-            {
-                pTempUnicodes[nTempLen] = pUnicodes[i];
-                pTempGlyphIds[nTempLen] = pGlyphIds[i];
-                if( nTempLen > 0 )
-                    pTempDelta[nTempLen-1]  = pDeltaArray[i-1]-nTempFirstDelta;
-                else
-                {
-                    // the first element in pDeltaArray shows
-                    // the offset of the second character
-                    // so if the first glyph is normal
-                    // then we do not need to move the delta indices
-                    // else we have to move them down by one and
-                    // recalculate aPoint and all deltas
-                    if( i != 0 )
-                        nTempFirstDelta = pDeltaArray[ i-1 ];
-                }
-                nTempLen++;
-            }
-            else
-            {
-                sal_Int32 nOffset = i > 0 ? pDeltaArray[i-1] : 0;
-                sal_Int32 nRotAngle = 0;
-                switch( nRot )
-                {
-                    case GF_ROTR:
-                        nRotAngle = 2700;
-                        aRotPoint = Point( -nAscend*nTextWidth/nTextHeight, -nDescend*nTextWidth/nTextHeight - nOffset );
-                        break;
-                    case GF_ROTL:
-                        nRotAngle = 900;
-                        aRotPoint = Point( -nDescend*nTextWidth/nTextHeight, nOffset + nAscend*nTextWidth/nTextHeight );
-                        break;
-                }
-                sal_GlyphId nRotGlyphId     = pGlyphIds[i];
-                sal_Unicode nRotUnicode     = pUnicodes[i];
-                sal_Int32 nRotDelta         = 0;
+        Point aRotPoint = Point( -nDescend*nTextWidth/nTextHeight, nAscend*nTextWidth/nTextHeight );
 
-                // transform matrix to new individual direction
-                PSGSave ();
-                GraphicsStatus aSaveStatus = maVirtualStatus;
-                if( nRot != 2 ) // switch font aspect
-                {
-                    maVirtualStatus.mnTextWidth = nTextHeight;
-                    maVirtualStatus.mnTextHeight = nTextWidth;
-                }
-                if( aPoint.X() || aPoint.Y() )
-                    PSTranslate( aPoint );
-                PSRotate (nRotAngle);
-                // draw the rotated glyph
-                drawGlyphs( aRotPoint, &nRotGlyphId, &nRotUnicode, 1, &nRotDelta );
+        // transform matrix to new individual direction
+        PSGSave ();
+        GraphicsStatus aSaveStatus = maVirtualStatus;
+        // switch font aspect
+        maVirtualStatus.mnTextWidth = nTextHeight;
+        maVirtualStatus.mnTextHeight = nTextWidth;
+        if( aPoint.X() || aPoint.Y() )
+            PSTranslate( aPoint );
+        PSRotate (900);
+        // draw the rotated glyph
+        drawGlyph(aRotPoint, rGlyph.maGlyphId, 0);
 
-                // restore previous state
-                maVirtualStatus = aSaveStatus;
-                PSGRestore();
-            }
-        }
-
-        pGlyphIds = pTempGlyphIds;
-        pUnicodes = pTempUnicodes;
-        pDeltaArray = pTempDelta;
-        nLen = nTempLen;
-
-        aPoint.X() += nTempFirstDelta;
+        // restore previous state
+        maVirtualStatus = aSaveStatus;
+        PSGRestore();
     }
-
-    if( nLen > 0 )
-        drawGlyphs( aPoint, pGlyphIds, pUnicodes, nLen, pDeltaArray );
+    else
+        drawGlyph(aPoint, rGlyph.maGlyphId, nDelta);
 
     // restore the user coordinate system
     if (nCurrentTextAngle != 0)
