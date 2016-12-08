@@ -728,7 +728,7 @@ bool SalLayout::GetBoundRect( SalGraphics& rSalGraphics, Rectangle& rRect ) cons
 bool SalLayout::IsSpacingGlyph( sal_GlyphId nGlyph )
 {
     bool bRet = false;
-    bRet = ((nGlyph & GF_IDXMASK) == 3);
+    bRet = (nGlyph == 3);
     return bRet;
 }
 
@@ -973,7 +973,6 @@ int GenericSalLayout::GetNextGlyphs(int nLen, const GlyphItem** pGlyphs,
     // find more glyphs which can be merged into one drawing instruction
     int nCount = 0;
     long nYPos = pGlyphIter->maLinearPos.Y();
-    long nOldFlags = pGlyphIter->maGlyphId;
     for(;;)
     {
         // update return data with glyph info
@@ -1003,12 +1002,6 @@ int GenericSalLayout::GetNextGlyphs(int nLen, const GlyphItem** pGlyphs,
         int n = pGlyphIter->mnCharPos;
         if( (n < mnMinCharPos) || (mnEndCharPos <= n) )
             break;
-
-        // stop when glyph flags change
-        if( (nOldFlags ^ pGlyphIter->maGlyphId) & GF_FLAGMASK )
-            break;
-
-        nOldFlags = pGlyphIter->maGlyphId; // &GF_FLAGMASK not needed for test above
     }
 
     aRelativePos.X() /= mnUnitsPerPixel;

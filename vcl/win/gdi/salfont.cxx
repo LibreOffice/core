@@ -1368,7 +1368,7 @@ bool WinSalGraphics::GetGlyphBoundRect(const GlyphItem& rGlyph, Rectangle& rRect
     GLYPHMETRICS aGM;
     aGM.gmptGlyphOrigin.x = aGM.gmptGlyphOrigin.y = 0;
     aGM.gmBlackBoxX = aGM.gmBlackBoxY = 0;
-    DWORD nSize = ::GetGlyphOutlineW(hDC, rGlyph.maGlyphId & GF_IDXMASK, nGGOFlags, &aGM, 0, nullptr, &aMat);
+    DWORD nSize = ::GetGlyphOutlineW(hDC, rGlyph.maGlyphId, nGGOFlags, &aGM, 0, nullptr, &aMat);
     if( nSize == GDI_ERROR )
         return false;
 
@@ -1397,14 +1397,14 @@ bool WinSalGraphics::GetGlyphOutline(const GlyphItem& rGlyph,
     nGGOFlags |= GGO_GLYPH_INDEX;
 
     GLYPHMETRICS aGlyphMetrics;
-    const DWORD nSize1 = ::GetGlyphOutlineW(hDC, rGlyph.maGlyphId & GF_IDXMASK, nGGOFlags, &aGlyphMetrics, 0, nullptr, &aMat);
+    const DWORD nSize1 = ::GetGlyphOutlineW(hDC, rGlyph.maGlyphId, nGGOFlags, &aGlyphMetrics, 0, nullptr, &aMat);
     if( !nSize1 )       // blank glyphs are ok
         return true;
     else if( nSize1 == GDI_ERROR )
         return false;
 
     BYTE* pData = new BYTE[ nSize1 ];
-    const DWORD nSize2 = ::GetGlyphOutlineW(hDC, rGlyph.maGlyphId & GF_IDXMASK, nGGOFlags,
+    const DWORD nSize2 = ::GetGlyphOutlineW(hDC, rGlyph.maGlyphId, nGGOFlags,
               &aGlyphMetrics, nSize1, pData, &aMat );
 
     if( nSize1 != nSize2 )
@@ -1661,23 +1661,13 @@ bool WinSalGraphics::CreateFontSubset( const OUString& rToFile,
     {
         pWinFontData->UpdateFromHDC( getHDC() );
         FontCharMapRef xFontCharMap = pWinFontData->GetFontCharMap();
-
-        sal_GlyphId aRealGlyphIds[ 256 ];
-        for( int i = 0; i < nGlyphCount; ++i )
-        {
-            // TODO: remap notdef glyph if needed
-            // TODO: use GDI's GetGlyphIndices instead? Does it handle GSUB properly?
-            sal_GlyphId aGlyphId = pGlyphIds[i] & GF_IDXMASK;
-            aRealGlyphIds[i] = aGlyphId;
-        }
-
         xFontCharMap = nullptr;
 
         // provide a font subset from the CFF-table
         FILE* pOutFile = fopen( aToFile.getStr(), "wb" );
         rInfo.LoadFont( FontSubsetInfo::CFF_FONT, aRawCffData.get(), aRawCffData.size() );
         bool bRC = rInfo.CreateFontSubset( FontSubsetInfo::TYPE1_PFB, pOutFile, nullptr,
-                aRealGlyphIds, pEncoding, nGlyphCount, pGlyphWidths );
+                pGlyphIds, pEncoding, nGlyphCount, pGlyphWidths );
         fclose( pOutFile );
         return bRC;
     }
@@ -1717,9 +1707,8 @@ bool WinSalGraphics::CreateFontSubset( const OUString& rToFile,
     for( i = 0; i < nGlyphCount; ++i )
     {
         aTempEncs[i] = pEncoding[i];
-        sal_GlyphId aGlyphId = pGlyphIds[i] & GF_IDXMASK;
-        aShortIDs[i] = static_cast<sal_uInt16>( aGlyphId );
-        if( !aGlyphId )
+        aShortIDs[i] = static_cast<sal_uInt16>(pGlyphIds[i]);
+        if (!aShortIDs[i])
             if( nNotDef < 0 )
                 nNotDef = i; // first NotDef glyph found
     }
