@@ -13,7 +13,7 @@
 #include "misc.hxx"
 
 // FIXME: no-op for now; it needs implementing, cf. above.
-rtl_uString *osl_backtraceAsString()
+rtl_uString *osl_backtraceAsString(int /*maxNoStackFramesToDisplay*/)
 {
     OUStringBuffer aBuf;
     OUString aStr = aBuf.makeStringAndClear();

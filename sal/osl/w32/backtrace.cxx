@@ -17,15 +17,15 @@
 
 #include <rtl/ustrbuf.hxx>
 
-rtl_uString *osl_backtraceAsString()
+rtl_uString *osl_backtraceAsString(int maxNoStackFramesToDisplay)
 {
     OUStringBuffer aBuf;
 
     HANDLE hProcess = GetCurrentProcess();
     SymInitialize( hProcess, nullptr, true );
 
-    void * aStack[ 512 ];
-    sal_uInt32 nFrames = CaptureStackBackTrace( 0, 512, aStack, nullptr );
+    void * aStack[ maxNoStackFramesToDisplay ];
+    sal_uInt32 nFrames = CaptureStackBackTrace( 0, maxNoStackFramesToDisplay, aStack, nullptr );
 
     SYMBOL_INFO  * pSymbol;
     pSymbol = static_cast<SYMBOL_INFO *>(calloc( sizeof( SYMBOL_INFO ) + 1024 * sizeof( char ), 1 ));

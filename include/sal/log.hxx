@@ -30,6 +30,10 @@ extern "C" SAL_DLLPUBLIC void SAL_CALL sal_detail_log(
     enum sal_detail_LogLevel level, char const * area, char const * where,
     char const * message);
 
+extern "C" SAL_DLLPUBLIC void SAL_CALL sal_detail_log_backtrace(
+    enum sal_detail_LogLevel level, char const * area, char const * where,
+    char const * message, int maxNoStackFramesToDisplay);
+
 namespace sal { namespace detail {
 
 inline void SAL_CALL log(
@@ -343,9 +347,23 @@ inline char const * unwrapStream(SAL_UNUSED_PARAMETER StreamIgnore const &) {
 
   See @ref sal_log "basic logging functionality" for details.
 */
-#define SAL_DEBUG_TRACE(stream) \
-    SAL_DETAIL_LOG_STREAM( \
-        SAL_LOG_TRUE, ::SAL_DETAIL_LOG_LEVEL_DEBUG_TRACE, NULL, NULL, stream)
+#define SAL_DEBUG_BACKTRACE(stream, maxNoStackFramesToDisplay) \
+    do { \
+        if (sizeof ::sal::detail::getResult(::sal::detail::StreamStart() << stream) == 1) \
+        { \
+            ::sal_detail_log_backtrace( \
+                ::SAL_DETAIL_LOG_LEVEL_DEBUG, NULL, NULL, \
+                ::sal::detail::unwrapStream( \
+                    ::sal::detail::StreamStart() << stream)); \
+        } else { \
+            ::std::ostringstream sal_detail_stream; \
+            sal_detail_stream << stream; \
+            ::sal::detail::log( \
+                ::SAL_DETAIL_LOG_LEVEL_DEBUG, NULL, NULL, sal_detail_stream); \
+        } \
+    } while (false)
+
+
 
 #endif
 
