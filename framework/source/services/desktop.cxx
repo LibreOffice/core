@@ -159,6 +159,7 @@ Desktop::Desktop( const css::uno::Reference< css::uno::XComponentContext >& xCon
         ,   cppu::OPropertySetHelper( cppu::WeakComponentImplHelperBase::rBHelper   )
         // Init member
         ,   m_bIsTerminated         ( false                                     )   // see dispose() for further information!
+        ,   m_bSession              ( false                                         )
         ,   m_xContext              ( xContext                                      )
         ,   m_aChildTaskContainer   (                                               )
         ,   m_aListenerContainer    ( m_aMutex )
@@ -380,6 +381,7 @@ bool SAL_CALL Desktop::terminateQuickstarterToo()
     throw( css::uno::RuntimeException )
 {
     QuickstartSuppressor aQuickstartSuppressor(this, m_xQuickLauncher);
+    m_bSession = true;
     return terminate();
 }
 
@@ -1695,7 +1697,10 @@ bool Desktop::impl_closeFrames(bool bAllowUI)
                 if ( ! bSuspended )
                 {
                     ++nNonClosedFrames;
-                    continue;
+                    if(m_bSession)
+                        break;
+                    else
+                        continue;
                 }
             }
 
@@ -1746,6 +1751,9 @@ bool Desktop::impl_closeFrames(bool bAllowUI)
             // So we can count it here .-)
         }
     }
+
+    // reset the session
+    m_bSession = false;
 
     return (nNonClosedFrames < 1);
 }
