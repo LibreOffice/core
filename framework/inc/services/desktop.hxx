@@ -376,6 +376,9 @@ class Desktop : private cppu::BaseMutex,
         bool m_bIsTerminated;  /// check flag to protect us against dispose before terminate!
                                     /// see dispose() for further information!
 
+        bool m_bSession;       /// when true the call came form session manager, in this case,
+                               /// when one frame break not make question for other
+
         css::uno::Reference< css::uno::XComponentContext >              m_xContext;               /// reference to factory, which has create this instance
         FrameContainer                                                  m_aChildTaskContainer;    /// array of child tasks (children of desktop are tasks; and tasks are also frames - But pure frames are not accepted!)
         ::cppu::OMultiTypeInterfaceContainerHelper                      m_aListenerContainer;     /// container for ALL Listener
