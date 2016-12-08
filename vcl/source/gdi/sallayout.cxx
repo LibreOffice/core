@@ -675,7 +675,7 @@ bool SalLayout::GetOutline( SalGraphics& rSalGraphics,
     while (GetNextGlyphs(1, &pGlyph, aPos, nStart))
     {
         // get outline of individual glyph, ignoring "empty" glyphs
-        bool bSuccess = rSalGraphics.GetGlyphOutline(pGlyph->maGlyphId, aGlyphOutline);
+        bool bSuccess = rSalGraphics.GetGlyphOutline(*pGlyph, aGlyphOutline);
         bAllOk &= bSuccess;
         bOneOk |= bSuccess;
         // only add non-empty outlines
@@ -707,7 +707,7 @@ bool SalLayout::GetBoundRect( SalGraphics& rSalGraphics, Rectangle& rRect ) cons
     while (GetNextGlyphs(1, &pGlyph, aPos, nStart))
     {
         // get bounding rectangle of individual glyph
-        if (rSalGraphics.GetGlyphBoundRect(pGlyph->maGlyphId, aRectangle))
+        if (rSalGraphics.GetGlyphBoundRect(*pGlyph, aRectangle))
         {
             // merge rectangle
             aRectangle += aPos;

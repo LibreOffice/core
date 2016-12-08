@@ -382,23 +382,23 @@ bool AquaSalGraphics::AddTempDevFont( PhysicalFontCollection*,
     return ::AddTempDevFont(rFontFileURL);
 }
 
-bool AquaSalGraphics::GetGlyphOutline( sal_GlyphId aGlyphId, basegfx::B2DPolyPolygon& rPolyPoly )
+bool AquaSalGraphics::GetGlyphOutline(const GlyphItem& rGlyph, basegfx::B2DPolyPolygon& rPolyPoly)
 {
-    const int nFallbackLevel = aGlyphId >> GF_FONTSHIFT;
+    const int nFallbackLevel = rGlyph.maGlyphId >> GF_FONTSHIFT;
     if (nFallbackLevel < MAX_FALLBACK && mpTextStyle[nFallbackLevel])
     {
-        const bool bRC = mpTextStyle[nFallbackLevel]->GetGlyphOutline(aGlyphId, rPolyPoly);
+        const bool bRC = mpTextStyle[nFallbackLevel]->GetGlyphOutline(rGlyph, rPolyPoly);
         return bRC;
     }
     return false;
 }
 
-bool AquaSalGraphics::GetGlyphBoundRect( sal_GlyphId aGlyphId, Rectangle& rRect )
+bool AquaSalGraphics::GetGlyphBoundRect(const GlyphItem& rGlyph, Rectangle& rRect )
 {
-    const int nFallbackLevel = aGlyphId >> GF_FONTSHIFT;
+    const int nFallbackLevel = rGlyph.maGlyphId >> GF_FONTSHIFT;
     if (nFallbackLevel < MAX_FALLBACK && mpTextStyle[nFallbackLevel])
     {
-        const bool bRC = mpTextStyle[nFallbackLevel]->GetGlyphBoundRect(aGlyphId, rRect);
+        const bool bRC = mpTextStyle[nFallbackLevel]->GetGlyphBoundRect(rGlyph, rRect);
         return bRC;
     }
     return false;
