@@ -430,9 +430,9 @@ void CairoTextRender::GetFontMetric( ImplFontMetricDataRef& rxFontMetric, int nF
         mpFreetypeFont[nFallbackLevel]->GetFontMetric(rxFontMetric);
 }
 
-bool CairoTextRender::GetGlyphBoundRect( sal_GlyphId aGlyphId, Rectangle& rRect )
+bool CairoTextRender::GetGlyphBoundRect(const GlyphItem& rGlyph, Rectangle& rRect)
 {
-    const int nLevel = aGlyphId >> GF_FONTSHIFT;
+    const int nLevel = rGlyph.maGlyphId >> GF_FONTSHIFT;
     if( nLevel >= MAX_FALLBACK )
         return false;
 
@@ -440,8 +440,7 @@ bool CairoTextRender::GetGlyphBoundRect( sal_GlyphId aGlyphId, Rectangle& rRect 
     if( !pSF )
         return false;
 
-    aGlyphId &= GF_IDXMASK;
-    const GlyphMetric& rGM = pSF->GetGlyphMetric(aGlyphId);
+    const GlyphMetric& rGM = pSF->GetGlyphMetric(rGlyph);
     Rectangle aRect( rGM.GetOffset(), rGM.GetSize() );
 
     if ( pSF->mnCos != 0x10000 && pSF->mnSin != 0 )
@@ -460,10 +459,10 @@ bool CairoTextRender::GetGlyphBoundRect( sal_GlyphId aGlyphId, Rectangle& rRect 
     return true;
 }
 
-bool CairoTextRender::GetGlyphOutline( sal_GlyphId aGlyphId,
+bool CairoTextRender::GetGlyphOutline(const GlyphItem& rGlyph,
     basegfx::B2DPolyPolygon& rPolyPoly )
 {
-    const int nLevel = aGlyphId >> GF_FONTSHIFT;
+    const int nLevel = rGlyph.maGlyphId >> GF_FONTSHIFT;
     if( nLevel >= MAX_FALLBACK )
         return false;
 
@@ -471,8 +470,7 @@ bool CairoTextRender::GetGlyphOutline( sal_GlyphId aGlyphId,
     if( !pSF )
         return false;
 
-    aGlyphId &= GF_IDXMASK;
-    if( pSF->GetGlyphOutline( aGlyphId, rPolyPoly ) )
+    if( pSF->GetGlyphOutline(rGlyph, rPolyPoly))
         return true;
 
     return false;
