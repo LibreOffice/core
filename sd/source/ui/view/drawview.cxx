@@ -167,7 +167,7 @@ bool DrawView::SetAttributes(const SfxItemSet& rSet,
                     mpDocSh->GetUndoManager()->AddUndoAction(pAction);
 
                     pSheet->GetItemSet().Put(aTempSet);
-                    pSheet->Broadcast(SfxHint(SFX_HINT_DATACHANGED));
+                    pSheet->Broadcast(SfxHint(SfxHintId::DataChanged));
                     bOk = true;
                 }
                 else if (eObjKind == OBJ_OUTLINETEXT)
@@ -218,7 +218,7 @@ bool DrawView::SetAttributes(const SfxItemSet& rSet,
                             mpDocSh->GetUndoManager()->AddUndoAction(pAction);
 
                             pSheet->GetItemSet().Put(aTempSet);
-                            pSheet->Broadcast(SfxHint(SFX_HINT_DATACHANGED));
+                            pSheet->Broadcast(SfxHint(SfxHintId::DataChanged));
 
                             // now also broadcast any child sheets
                             sal_Int16 nChild;
@@ -229,7 +229,7 @@ bool DrawView::SetAttributes(const SfxItemSet& rSet,
                                 SfxStyleSheet* pOutlSheet = static_cast< SfxStyleSheet* >(pStShPool->Find(aSheetName, SD_STYLE_FAMILY_MASTERPAGE));
 
                                 if( pOutlSheet )
-                                    pOutlSheet->Broadcast(SfxHint(SFX_HINT_DATACHANGED));
+                                    pOutlSheet->Broadcast(SfxHint(SfxHintId::DataChanged));
                             }
                         }
 
@@ -294,7 +294,7 @@ bool DrawView::SetAttributes(const SfxItemSet& rSet,
                         mpDocSh->GetUndoManager()->AddUndoAction(pAction);
 
                         pSheet->GetItemSet().Put(aTempSet,false);
-                        pSheet->Broadcast(SfxHint(SFX_HINT_DATACHANGED));
+                        pSheet->Broadcast(SfxHint(SfxHintId::DataChanged));
                         bOk = true;
                     }
                     else if (eObjKind == OBJ_OUTLINETEXT)
@@ -337,7 +337,7 @@ bool DrawView::SetAttributes(const SfxItemSet& rSet,
                             mpDocSh->GetUndoManager()->AddUndoAction(pAction);
 
                             pSheet->GetItemSet().Set(aTempSet,false);
-                            pSheet->Broadcast(SfxHint(SFX_HINT_DATACHANGED));
+                            pSheet->Broadcast(SfxHint(SfxHintId::DataChanged));
                         }
 
                         // remove all hard set items from shape that are now set in style

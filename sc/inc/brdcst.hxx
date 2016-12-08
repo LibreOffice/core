@@ -20,7 +20,6 @@
 #define INCLUDED_SC_INC_BRDCST_HXX
 
 #include "address.hxx"
-#include "simplehintids.hxx"
 #include <svl/hint.hxx>
 
 class SvtBroadcaster;
@@ -30,7 +29,7 @@ class ScHint : public SfxHint
     ScAddress   aAddress;
 
 public:
-    ScHint( sal_uInt32 n, const ScAddress& a );
+    ScHint( SfxHintId n, const ScAddress& a );
     const ScAddress&    GetAddress() const { return aAddress; }
           ScAddress&    GetAddress()       { return aAddress; }
 };

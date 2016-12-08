@@ -269,7 +269,7 @@ bool ScStyleSheet::IsUsed() const
 
 void ScStyleSheet::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    if ( rHint.GetId() == SFX_HINT_DYING )
+    if ( rHint.GetId() == SfxHintId::Dying )
         GetItemSet().SetParent( nullptr );
 }
 

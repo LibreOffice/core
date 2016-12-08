@@ -2231,7 +2231,7 @@ void SwRootFrame::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* p
             if (bOldCallbackActionEnabled)
             {
                 pSh->InvalidateWindows( SwRect( 0, 0, SAL_MAX_INT32, SAL_MAX_INT32 ) );
-                pSh->GetDoc()->GetDocShell()->Broadcast(SfxHint(SFX_HINT_DOCCHANGED));
+                pSh->GetDoc()->GetDocShell()->Broadcast(SfxHint(SfxHintId::DocChanged));
             }
         }
     }

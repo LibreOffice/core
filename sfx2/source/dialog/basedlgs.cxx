@@ -64,11 +64,8 @@ public:
 
 void SfxModelessDialog_Impl::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    switch( rHint.GetId() )
-    {
-        case SFX_HINT_DYING:
-            pMgr->Destroy();
-        break;
+    if( rHint.GetId() == SfxHintId::Dying) {
+        pMgr->Destroy();
     }
 }
 
@@ -85,11 +82,8 @@ public:
 
 void SfxFloatingWindow_Impl::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    switch( rHint.GetId() )
-    {
-        case SFX_HINT_DYING:
-            pMgr->Destroy();
-        break;
+    if( rHint.GetId() == SfxHintId::Dying) {
+        pMgr->Destroy();
     }
 }
 

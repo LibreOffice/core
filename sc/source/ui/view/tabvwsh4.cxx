@@ -161,7 +161,7 @@ void ScTabViewShell::Activate(bool bMDI)
 
         if ( bFirstActivate )
         {
-            SfxGetpApp()->Broadcast( SfxHint( SC_HINT_NAVIGATOR_UPDATEALL ) );
+            SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScNavigatorUpdateAll ) );
             bFirstActivate = false;
 
             // ReadExtOptions (view settings from Excel import) must also be done

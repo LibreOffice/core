@@ -1174,7 +1174,7 @@ public:
         if (&rBroadcaster != &static_cast<SfxBroadcaster&>(mrBase))
             return;
 
-        if (rHint.GetId() == SFX_HINT_DYING)
+        if (rHint.GetId() == SfxHintId::Dying)
         {
             mbIsDisposed = true;
         }

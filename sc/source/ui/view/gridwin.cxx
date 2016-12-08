@@ -5141,7 +5141,7 @@ void ScGridWindow::RFMouseMove( const MouseEvent& rMEvt, bool bUp )
         lcl_PaintRefChanged( pDocSh, aOld, aNew );
 
         // only redraw new frame (synchronously)
-        pDocSh->Broadcast( ScIndexHint( SC_HINT_SHOWRANGEFINDER, nRFIndex ) );
+        pDocSh->Broadcast( ScIndexHint( SfxHintId::ScShowRangeFinder, nRFIndex ) );
 
         Update();   // what you move, will be seen immediately
     }

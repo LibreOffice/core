@@ -59,7 +59,7 @@ SbxValue::SbxValue( const SbxValue& r )
     }
     else
     {
-        const_cast<SbxValue*>(&r)->Broadcast( SBX_HINT_DATAWANTED );
+        const_cast<SbxValue*>(&r)->Broadcast( SfxHintId::BasicDataWanted );
         aData = r.aData;
         // Copy pointer, increment references
         switch( aData.eType )
@@ -133,7 +133,7 @@ SbxValue& SbxValue::operator=( const SbxValue& r )
 
 SbxValue::~SbxValue()
 {
-    Broadcast( SBX_HINT_DYING );
+    Broadcast( SfxHintId::BasicDying );
     SetFlag( SbxFlagBits::Write );
     SbxValue::Clear();
 }
@@ -182,7 +182,7 @@ void SbxValue::Clear()
 
 // Dummy
 
-void SbxValue::Broadcast( sal_uInt32 )
+void SbxValue::Broadcast( SfxHintId )
 {}
 
 //////////////////////////// Readout data
@@ -284,7 +284,7 @@ bool SbxValue::Get( SbxValues& rRes ) const
             p = TheRealValue( true );
         if( p )
         {
-            p->Broadcast( SBX_HINT_DATAWANTED );
+            p->Broadcast( SfxHintId::BasicDataWanted );
             switch( rRes.eType )
             {
                 case SbxEMPTY:
@@ -519,7 +519,7 @@ bool SbxValue::Put( const SbxValues& rVal )
             if( !IsError() )
             {
                 p->SetModified( true );
-                p->Broadcast( SBX_HINT_DATACHANGED );
+                p->Broadcast( SfxHintId::BasicDataChanged );
                 if( eOld != ERRCODE_SBX_OK )
                     SetError( eOld );
                 bRes = true;
@@ -689,7 +689,7 @@ bool SbxValue::ImpIsNumeric( bool bOnlyIntntl ) const
     }
     // Test downcast!!!
     if( nullptr != dynamic_cast<const SbxVariable*>( this) )
-        const_cast<SbxVariable*>(static_cast<const SbxVariable*>(this))->Broadcast( SBX_HINT_DATAWANTED );
+        const_cast<SbxVariable*>(static_cast<const SbxVariable*>(this))->Broadcast( SfxHintId::BasicDataWanted );
     SbxDataType t = GetType();
     if( t == SbxSTRING )
     {
@@ -817,7 +817,7 @@ bool SbxValue::Convert( SbxDataType eTo )
             Put( aNew );
             SetModified( true );
         }
-        Broadcast( SBX_HINT_CONVERTED );
+        Broadcast( SfxHintId::BasicConverted );
         return true;
     }
     else

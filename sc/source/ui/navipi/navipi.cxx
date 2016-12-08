@@ -591,9 +591,9 @@ void ScNavigatorDlg::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
     else
     {
-        const sal_uInt32 nHintId = rHint.GetId();
+        const SfxHintId nHintId = rHint.GetId();
 
-        if (nHintId == SC_HINT_DOCNAME_CHANGED)
+        if (nHintId == SfxHintId::ScDocNameChanged)
         {
             aLbEntries->ActiveDocChanged();
         }
@@ -605,39 +605,39 @@ void ScNavigatorDlg::Notify( SfxBroadcaster&, const SfxHint& rHint )
         {
             switch ( nHintId )
             {
-                case SC_HINT_TABLES_CHANGED:
+                case SfxHintId::ScTablesChanged:
                     aLbEntries->Refresh( ScContentId::TABLE );
                     break;
 
-                case SC_HINT_DBAREAS_CHANGED:
+                case SfxHintId::ScDbAreasChanged:
                     aLbEntries->Refresh( ScContentId::DBAREA );
                     break;
 
-                case SC_HINT_AREAS_CHANGED:
+                case SfxHintId::ScAreasChanged:
                     aLbEntries->Refresh( ScContentId::RANGENAME );
                     break;
 
-                case SC_HINT_DRAW_CHANGED:
+                case SfxHintId::ScDrawChanged:
                     aLbEntries->Refresh( ScContentId::GRAPHIC );
                     aLbEntries->Refresh( ScContentId::OLEOBJECT );
                     aLbEntries->Refresh( ScContentId::DRAWING );
                     break;
 
-                case SC_HINT_AREALINKS_CHANGED:
+                case SfxHintId::ScAreaLinksChanged:
                     aLbEntries->Refresh( ScContentId::AREALINK );
                     break;
 
-                //  SFX_HINT_DOCCHANGED not only at document change
+                //  SfxHintId::DocChanged not only at document change
 
-                case SC_HINT_NAVIGATOR_UPDATEALL:
+                case SfxHintId::ScNavigatorUpdateAll:
                     UpdateAll();
                     break;
 
-                case FID_DATACHANGED:
-                case FID_ANYDATACHANGED:
+                case SfxHintId::ScDataChanged:
+                case SfxHintId::ScAnyDataChanged:
                     aContentIdle.Start();      // Do not search notes immediately
                     break;
-                case FID_KILLEDITVIEW:
+                case SfxHintId::ScKillEditView:
                     aLbEntries->ObjectFresh( ScContentId::OLEOBJECT );
                     aLbEntries->ObjectFresh( ScContentId::DRAWING );
                     aLbEntries->ObjectFresh( ScContentId::GRAPHIC );

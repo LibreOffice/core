@@ -130,7 +130,7 @@ public:
 
 void SwGlobalFrameListener_Impl::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
-    if( rHint.GetId() == SFX_HINT_DYING)
+    if( rHint.GetId() == SfxHintId::Dying)
         bValid = false;
 }
 

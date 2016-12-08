@@ -134,7 +134,7 @@ void SbStdPicture::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
     if( pHint )
     {
-        if( pHint->GetId() == SBX_HINT_INFOWANTED )
+        if( pHint->GetId() == SfxHintId::BasicInfoWanted )
         {
             SbxObject::Notify( rBC, rHint );
             return;
@@ -143,7 +143,7 @@ void SbStdPicture::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         SbxVariable* pVar   = pHint->GetVar();
         SbxArray*    pPar_  = pVar->GetParameters();
         const sal_uInt32 nWhich = pVar->GetUserData();
-        bool         bWrite = pHint->GetId() == SBX_HINT_DATACHANGED;
+        bool         bWrite = pHint->GetId() == SfxHintId::BasicDataChanged;
 
         // Propteries
         switch( nWhich )
@@ -252,7 +252,7 @@ void SbStdFont::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
     if( pHint )
     {
-        if( pHint->GetId() == SBX_HINT_INFOWANTED )
+        if( pHint->GetId() == SfxHintId::BasicInfoWanted )
         {
             SbxObject::Notify( rBC, rHint );
             return;
@@ -261,7 +261,7 @@ void SbStdFont::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         SbxVariable* pVar   = pHint->GetVar();
         SbxArray*    pPar_  = pVar->GetParameters();
         const sal_uInt32 nWhich = pVar->GetUserData();
-        bool         bWrite = pHint->GetId() == SBX_HINT_DATACHANGED;
+        bool         bWrite = pHint->GetId() == SfxHintId::BasicDataChanged;
 
         // Propteries
         switch( nWhich )
@@ -407,7 +407,7 @@ void SbStdClipboard::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
     if( pHint )
     {
-        if( pHint->GetId() == SBX_HINT_INFOWANTED )
+        if( pHint->GetId() == SfxHintId::BasicInfoWanted )
         {
             SbxObject::Notify( rBC, rHint );
             return;
@@ -416,7 +416,7 @@ void SbStdClipboard::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         SbxVariable* pVar   = pHint->GetVar();
         SbxArray*    pPar_  = pVar->GetParameters();
         const sal_uInt32 nWhich = pVar->GetUserData();
-        bool         bWrite = pHint->GetId() == SBX_HINT_DATACHANGED;
+        bool         bWrite = pHint->GetId() == SfxHintId::BasicDataChanged;
 
         // Methods
         switch( nWhich )

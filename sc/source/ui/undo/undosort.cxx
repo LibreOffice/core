@@ -66,7 +66,7 @@ void UndoSort::Execute( bool bUndo )
 
     rDoc.SetDirty(maParam.maSortRange, true);
     if (!aParam.mbUpdateRefs)
-        rDoc.BroadcastCells(aParam.maSortRange, SC_HINT_DATACHANGED);
+        rDoc.BroadcastCells(aParam.maSortRange, SfxHintId::ScDataChanged);
 
     pDocShell->PostPaint(maParam.maSortRange, PaintPartFlags::Grid);
     pDocShell->PostDataChanged();

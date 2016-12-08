@@ -35,7 +35,7 @@
 #include <frmfmt.hxx>
 #include <charfmt.hxx>
 #include <viewimp.hxx>
-#include <swhints.hxx>
+#include <svl/hint.hxx>
 #include <doc.hxx>
 #include <docfunc.hxx>
 #include <IDocumentUndoRedo.hxx>

@@ -276,10 +276,10 @@ namespace frm
     {
         EditStatusFlags nStatusWord( _rStatus.GetStatusWord() );
         if  (   ( nStatusWord & EditStatusFlags::TEXTWIDTHCHANGED )
-            ||  ( nStatusWord & EditStatusFlags::TEXTHEIGHTCHANGED )
+            ||  ( nStatusWord & EditStatusFlags::TextHeightChanged )
             )
         {
-            if ( ( nStatusWord & EditStatusFlags::TEXTHEIGHTCHANGED ) && windowHasAutomaticLineBreak() )
+            if ( ( nStatusWord & EditStatusFlags::TextHeightChanged ) && windowHasAutomaticLineBreak() )
                 m_pEngine->SetPaperSize( Size( m_pEngine->GetPaperSize().Width(), m_pEngine->GetTextHeight() ) );
 
             updateScrollbars();

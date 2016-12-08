@@ -330,7 +330,7 @@ IMPL_LINK_NOARG(ScDocument, TrackTimeHdl, Idle *, void)
     else if (pShell)                    // execute
     {
         TrackFormulas();
-        pShell->Broadcast( SfxHint( FID_DATACHANGED ) );
+        pShell->Broadcast( SfxHint( SfxHintId::ScDataChanged ) );
 
             //  modified...
 
@@ -386,7 +386,7 @@ ScDocument::~ScDocument()
     delete pBASM;       // BroadcastAreaSlotMachine
     pBASM = nullptr;
 
-    delete pUnoBroadcaster;     // broadcasted nochmal SFX_HINT_DYING
+    delete pUnoBroadcaster;     // broadcasted nochmal SfxHintId::Dying
     pUnoBroadcaster = nullptr;
 
     delete pUnoRefUndoList;
@@ -1009,7 +1009,7 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
             sc::CopyToDocContext aCxt(*this);
             nDestPos = std::min(nDestPos, (SCTAB)(GetTableCount() - 1));
             {   // scope for bulk broadcast
-                ScBulkBroadcast aBulkBroadcast( pBASM, SC_HINT_DATACHANGED);
+                ScBulkBroadcast aBulkBroadcast( pBASM, SfxHintId::ScDataChanged);
                 if (!bResultsOnly)
                 {
                     const bool bGlobalNamesToLocal = false;

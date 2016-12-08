@@ -192,14 +192,14 @@ bool SdStyleSheet::SetParent(const OUString& rParentName)
                     bResult = true;
                     SfxItemSet& rParentSet = pStyle->GetItemSet();
                     GetItemSet().SetParent(&rParentSet);
-                    Broadcast( SfxHint( SFX_HINT_DATACHANGED ) );
+                    Broadcast( SfxHint( SfxHintId::DataChanged ) );
                 }
             }
             else
             {
                 bResult = true;
                 GetItemSet().SetParent(nullptr);
-                Broadcast( SfxHint( SFX_HINT_DATACHANGED ) );
+                Broadcast( SfxHint( SfxHintId::DataChanged ) );
             }
         }
         else
@@ -526,7 +526,7 @@ void SdStyleSheet::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 
     /* if the dummy gets a notify about a changed attribute, he takes care that
        the actual ment style sheet sends broadcasts. */
-    if (rHint.GetId() == SFX_HINT_DATACHANGED)
+    if (rHint.GetId() == SfxHintId::DataChanged)
     {
         SdStyleSheet* pRealStyle = GetRealStyleSheet();
         if (pRealStyle)
@@ -883,7 +883,7 @@ void SAL_CALL SdStyleSheet::setName( const OUString& rName  ) throw(RuntimeExcep
     if( SetName( rName ) )
     {
         msApiName = rName;
-        Broadcast(SfxHint(SFX_HINT_DATACHANGED));
+        Broadcast(SfxHint(SfxHintId::DataChanged));
     }
 }
 
@@ -1048,7 +1048,7 @@ void SAL_CALL SdStyleSheet::setPropertyValue( const OUString& aPropertyName, con
         }
 
         rStyleSet.Put( aSet );
-        Broadcast(SfxHint(SFX_HINT_DATACHANGED));
+        Broadcast(SfxHint(SfxHintId::DataChanged));
     }
 }
 
@@ -1281,7 +1281,7 @@ void SAL_CALL SdStyleSheet::setPropertyToDefault( const OUString& PropertyName )
     {
         rStyleSet.ClearItem( pEntry->nWID );
     }
-    Broadcast(SfxHint(SFX_HINT_DATACHANGED));
+    Broadcast(SfxHint(SfxHintId::DataChanged));
 }
 
 Any SAL_CALL SdStyleSheet::getPropertyDefault( const OUString& aPropertyName ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
@@ -1329,7 +1329,7 @@ void SdStyleSheet::BroadcastSdStyleSheetChange(SfxStyleSheetBase* pStyleSheet,
     PresentationObjects ePO, SfxStyleSheetBasePool* pSSPool)
 {
     SdStyleSheet* pRealSheet = static_cast<SdStyleSheet*>(pStyleSheet)->GetRealStyleSheet();
-    pRealSheet->Broadcast(SfxHint(SFX_HINT_DATACHANGED));
+    pRealSheet->Broadcast(SfxHint(SfxHintId::DataChanged));
 
     if( (ePO >= PO_OUTLINE_1) && (ePO <= PO_OUTLINE_8) )
     {
@@ -1344,7 +1344,7 @@ void SdStyleSheet::BroadcastSdStyleSheetChange(SfxStyleSheetBase* pStyleSheet,
             if(pSheet)
             {
                 SdStyleSheet* pRealStyleSheet = static_cast<SdStyleSheet*>(pSheet)->GetRealStyleSheet();
-                pRealStyleSheet->Broadcast(SfxHint(SFX_HINT_DATACHANGED));
+                pRealStyleSheet->Broadcast(SfxHint(SfxHintId::DataChanged));
             }
         }
     }

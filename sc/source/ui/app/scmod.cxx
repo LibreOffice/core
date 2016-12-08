@@ -190,7 +190,7 @@ ScModule::ScModule( SfxObjectFactory* pFact ) :
     SetPool( pMessagePool );
     ScGlobal::InitTextHeight( pMessagePool );
 
-    StartListening( *SfxGetpApp() );       // for SFX_HINT_DEINITIALIZING
+    StartListening( *SfxGetpApp() );       // for SfxHintId::Deinitializing
 }
 
 ScModule::~ScModule()
@@ -322,7 +322,7 @@ void ScModule::ConfigurationChanged( utl::ConfigurationBroadcaster* p, Configura
 
 void ScModule::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    if ( rHint.GetId() == SFX_HINT_DEINITIALIZING )
+    if ( rHint.GetId() == SfxHintId::Deinitializing )
     {
         // ConfigItems must be removed before ConfigManager
         DeleteCfg();
@@ -1253,7 +1253,7 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
         SetPrintOptions( rNewOpt );
 
         // broadcast causes all previews to recalc page numbers
-        SfxGetpApp()->Broadcast( SfxHint( SID_SCPRINTOPTIONS ) );
+        SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScPrintOptions ) );
     }
 
     if ( bSaveAppOptions )
@@ -1555,7 +1555,7 @@ void ScModule::SetRefDialog( sal_uInt16 nId, bool bVis, SfxViewFrame* pViewFrm )
         }
 
         SfxApplication* pSfxApp = SfxGetpApp();
-        pSfxApp->Broadcast( SfxHint( FID_REFMODECHANGED ) );
+        pSfxApp->Broadcast( SfxHint( SfxHintId::ScRefModeChanged ) );
     }
 }
 

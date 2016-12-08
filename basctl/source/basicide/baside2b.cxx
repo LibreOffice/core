@@ -1038,7 +1038,7 @@ void EditorWindow::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
     if (TextHint const* pTextHint = dynamic_cast<TextHint const*>(&rHint))
     {
         TextHint const& rTextHint = *pTextHint;
-        if( rTextHint.GetId() == TEXT_HINT_VIEWSCROLLED )
+        if( rTextHint.GetId() == SfxHintId::TextViewScrolled )
         {
             if ( rModulWindow.GetHScrollBar() )
                 rModulWindow.GetHScrollBar()->SetThumbPos( pEditView->GetStartDocPos().X() );
@@ -1048,7 +1048,7 @@ void EditorWindow::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
             rModulWindow.GetLineNumberWindow().DoScroll
                 ( rModulWindow.GetLineNumberWindow().GetCurYOffset() - pEditView->GetStartDocPos().Y() );
         }
-        else if( rTextHint.GetId() == TEXT_HINT_TEXTHEIGHTCHANGED )
+        else if( rTextHint.GetId() == SfxHintId::TextHeightChanged )
         {
             if ( pEditView->GetStartDocPos().Y() )
             {
@@ -1062,7 +1062,7 @@ void EditorWindow::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 
             SetScrollBarRanges();
         }
-        else if( rTextHint.GetId() == TEXT_HINT_TEXTFORMATTED )
+        else if( rTextHint.GetId() == SfxHintId::TextFormatted )
         {
             if ( rModulWindow.GetHScrollBar() )
             {
@@ -1079,20 +1079,20 @@ void EditorWindow::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
             if ( nCurTextWidth != nPrevTextWidth )
                 SetScrollBarRanges();
         }
-        else if( rTextHint.GetId() == TEXT_HINT_PARAINSERTED )
+        else if( rTextHint.GetId() == SfxHintId::TextParaInserted )
         {
             ParagraphInsertedDeleted( rTextHint.GetValue(), true );
             DoDelayedSyntaxHighlight( rTextHint.GetValue() );
         }
-        else if( rTextHint.GetId() == TEXT_HINT_PARAREMOVED )
+        else if( rTextHint.GetId() == SfxHintId::TextParaRemoved )
         {
             ParagraphInsertedDeleted( rTextHint.GetValue(), false );
         }
-        else if( rTextHint.GetId() == TEXT_HINT_PARACONTENTCHANGED )
+        else if( rTextHint.GetId() == SfxHintId::TextParaContentChanged )
         {
             DoDelayedSyntaxHighlight( rTextHint.GetValue() );
         }
-        else if( rTextHint.GetId() == TEXT_HINT_VIEWSELECTIONCHANGED )
+        else if( rTextHint.GetId() == SfxHintId::TextViewSelectionChanged )
         {
             if (SfxBindings* pBindings = GetBindingsPtr())
             {

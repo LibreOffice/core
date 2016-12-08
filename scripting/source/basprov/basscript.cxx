@@ -100,7 +100,7 @@ namespace basprov
             // not interested in
             return;
         }
-        if ( rHint.GetId() == SFX_HINT_DYING )
+        if ( rHint.GetId() == SfxHintId::Dying )
         {
             m_documentBasicManager = nullptr;
             EndListening( rBC );    // prevent multiple notifications

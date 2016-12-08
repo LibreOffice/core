@@ -1342,8 +1342,8 @@ void AddressMultiLineEdit::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
     if (m_aSelectionLink.IsSet() && dynamic_cast<const TextHint*>(&rHint))
     {
         const TextHint& rTextHint = static_cast<const TextHint&>(rHint);
-        if (rTextHint.GetId() == TEXT_HINT_VIEWSELECTIONCHANGED ||
-            rTextHint.GetId() == TEXT_HINT_VIEWCARETCHANGED)
+        if (rTextHint.GetId() == SfxHintId::TextViewSelectionChanged ||
+            rTextHint.GetId() == SfxHintId::TextViewCaretChanged)
         {
             m_aSelectionLink.Call(*this);
         }

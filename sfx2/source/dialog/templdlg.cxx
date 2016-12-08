@@ -1409,12 +1409,12 @@ IMPL_LINK_NOARG( SfxCommonTemplateDialog_Impl, TimeOut, Idle *, void )
 
 void SfxCommonTemplateDialog_Impl::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
 {
-    const sal_uInt32 nId = rHint.GetId();
+    const SfxHintId nId = rHint.GetId();
 
     // tap update
     switch(nId)
     {
-        case SFX_HINT_UPDATEDONE:
+        case SfxHintId::UpdateDone:
             {
                 SfxViewFrame *pViewFrame = pBindings->GetDispatcher_Impl()->GetFrame();
                 SfxObjectShell *pDocShell = pViewFrame->GetObjectShell();
@@ -1464,22 +1464,23 @@ void SfxCommonTemplateDialog_Impl::Notify(SfxBroadcaster& /*rBC*/, const SfxHint
             // Necessary if switching between documents and in both documents
             // the same template is used. Do not immediately call Update_Impl,
             // for the case that one of the documents is an internal InPlaceObjekt!
-        case SFX_HINT_DOCCHANGED:
+        case SfxHintId::DocChanged:
             bUpdate = true;
         break;
-        case SFX_HINT_DYING:
+        case SfxHintId::Dying:
             {
                 EndListening(*pStyleSheetPool);
                 pStyleSheetPool=nullptr;
                 break;
             }
+        default: break;
     }
 
     // Do not set timer when the stylesheet pool is in the box, because it is
     // possible that a new one is registered after the timer is up -
     // works bad in UpdateStyles_Impl ()!
 
-    if(!bDontUpdate && nId != SFX_HINT_DYING &&
+    if(!bDontUpdate && nId != SfxHintId::Dying &&
        (dynamic_cast<const SfxStyleSheetPoolHint*>(&rHint) ||
         dynamic_cast<const SfxStyleSheetHint*>(&rHint) ||
         dynamic_cast<const SfxStyleSheetHintExtended*>(&rHint)))

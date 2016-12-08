@@ -83,7 +83,7 @@ ScLinkTargetTypesObj::~ScLinkTargetTypesObj()
 
 void ScLinkTargetTypesObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    if ( rHint.GetId() == SFX_HINT_DYING )
+    if ( rHint.GetId() == SfxHintId::Dying )
         pDocShell = nullptr;       // document gone
 }
 
@@ -149,7 +149,7 @@ ScLinkTargetTypeObj::~ScLinkTargetTypeObj()
 
 void ScLinkTargetTypeObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    if ( rHint.GetId() == SFX_HINT_DYING )
+    if ( rHint.GetId() == SfxHintId::Dying )
         pDocShell = nullptr;       // document gone
 }
 

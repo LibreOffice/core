@@ -187,7 +187,7 @@ ScPreviewShell::~ScPreviewShell()
         mpFrameWindow->SetCloseHdl(Link<SystemWindow&,void>()); // Remove close handler.
 
     // #108333#; notify Accessibility that Shell is dying and before destroy all
-    BroadcastAccessibility( SfxHint( SFX_HINT_DYING ) );
+    BroadcastAccessibility( SfxHint( SfxHintId::Dying ) );
     DELETEZ(pAccessibilityBroadcaster);
 
     SfxBroadcaster* pDrawBC = pDocShell->GetDocument().GetDrawBroadcaster();

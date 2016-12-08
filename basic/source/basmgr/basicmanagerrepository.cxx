@@ -577,7 +577,7 @@ namespace basic
 
     void ImplRepository::Notify( SfxBroadcaster& _rBC, const SfxHint& _rHint )
     {
-        if ( _rHint.GetId() != SFX_HINT_DYING )
+        if ( _rHint.GetId() != SfxHintId::Dying )
             // not interested in
             return;
 

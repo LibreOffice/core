@@ -1022,15 +1022,15 @@ void ScCellTextData::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
     else
     {
-        const sal_uInt32 nId = rHint.GetId();
-        if ( nId == SFX_HINT_DYING )
+        const SfxHintId nId = rHint.GetId();
+        if ( nId == SfxHintId::Dying )
         {
             pDocShell = nullptr;                       // invalid now
 
             DELETEZ( pForwarder );
             DELETEZ( pEditEngine );     // EditEngine uses document's pool
         }
-        else if ( nId == SFX_HINT_DATACHANGED )
+        else if ( nId == SfxHintId::DataChanged )
         {
             if (!bInUpdate)                         // not for own UpdateData calls
                 bDataValid = false;                 // text has to be read from the cell again

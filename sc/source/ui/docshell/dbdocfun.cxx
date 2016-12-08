@@ -106,7 +106,7 @@ bool ScDBDocFunc::AddDBRange( const OUString& rName, const ScRange& rRange, bool
     }
 
     aModificator.SetDocumentModified();
-    SfxGetpApp()->Broadcast( SfxHint( SC_HINT_DBAREAS_CHANGED ) );
+    SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScDbAreasChanged ) );
     return true;
 }
 
@@ -139,7 +139,7 @@ bool ScDBDocFunc::DeleteDBRange(const OUString& rName)
         }
 
         aModificator.SetDocumentModified();
-        SfxGetpApp()->Broadcast( SfxHint( SC_HINT_DBAREAS_CHANGED ) );
+        SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScDbAreasChanged ) );
         bDone = true;
     }
 
@@ -186,7 +186,7 @@ bool ScDBDocFunc::RenameDBRange( const OUString& rOld, const OUString& rNew )
                 delete pUndoColl;
 
             aModificator.SetDocumentModified();
-            SfxGetpApp()->Broadcast( SfxHint( SC_HINT_DBAREAS_CHANGED ) );
+            SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScDbAreasChanged ) );
             bDone = true;
         }
     }
@@ -267,7 +267,7 @@ void ScDBDocFunc::ModifyAllDBData( const ScDBCollection& rNewColl, const std::ve
     pOldColl = nullptr;
     rDocShell.PostPaint(ScRange(0, 0, 0, MAXCOL, MAXROW, MAXTAB), PaintPartFlags::Grid);
     aModificator.SetDocumentModified();
-    SfxGetpApp()->Broadcast( SfxHint( SC_HINT_DBAREAS_CHANGED ) );
+    SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScDbAreasChanged ) );
 
     if (bRecord)
     {

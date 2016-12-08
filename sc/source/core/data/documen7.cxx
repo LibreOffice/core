@@ -82,7 +82,7 @@ void ScDocument::Broadcast( const ScHint& rHint )
     }
 }
 
-void ScDocument::BroadcastCells( const ScRange& rRange, sal_uInt32 nHint, bool bBroadcastSingleBroadcasters )
+void ScDocument::BroadcastCells( const ScRange& rRange, SfxHintId nHint, bool bBroadcastSingleBroadcasters )
 {
     PrepareFormulaCalc();
 
@@ -126,7 +126,7 @@ void ScDocument::BroadcastCells( const ScRange& rRange, sal_uInt32 nHint, bool b
             pTab->SetStreamValid(false);
     }
 
-    BroadcastUno(SfxHint(SC_HINT_DATACHANGED));
+    BroadcastUno(SfxHint(SfxHintId::ScDataChanged));
 }
 
 namespace {
@@ -535,7 +535,7 @@ bool ScDocument::IsInFormulaTrack( ScFormulaCell* pCell ) const
     return pCell->GetPreviousTrack() || pFormulaTrack == pCell;
 }
 
-void ScDocument::FinalTrackFormulas( sal_uInt32 nHintId )
+void ScDocument::FinalTrackFormulas( SfxHintId nHintId )
 {
     mbTrackFormulasPending = false;
     mbFinalTrackFormulas = true;
@@ -556,9 +556,9 @@ void ScDocument::FinalTrackFormulas( sal_uInt32 nHintId )
     The next is broadcasted again, and so on.
     View initiates Interpret.
  */
-void ScDocument::TrackFormulas( sal_uInt32 nHintId )
+void ScDocument::TrackFormulas( SfxHintId nHintId )
 {
-    if (pBASM->IsInBulkBroadcast() && !IsFinalTrackFormulas() && nHintId == SC_HINT_DATACHANGED)
+    if (pBASM->IsInBulkBroadcast() && !IsFinalTrackFormulas() && nHintId == SfxHintId::ScDataChanged)
     {
         SetTrackFormulasPending();
         return;

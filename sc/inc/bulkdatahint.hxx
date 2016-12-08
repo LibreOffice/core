@@ -10,7 +10,7 @@
 #ifndef INCLUDED_SC_BULKDATAHINT_HXX
 #define INCLUDED_SC_BULKDATAHINT_HXX
 
-#include <simplehintids.hxx>
+#include <svl/hint.hxx>
 #include <memory>
 
 class ScDocument;
@@ -28,7 +28,7 @@ class BulkDataHint : public SfxHint
     BulkDataHint& operator= ( const BulkDataHint& ) = delete;
 
 public:
-    BulkDataHint( ScDocument& rDoc, sal_uInt32 nHintId );
+    BulkDataHint( ScDocument& rDoc, SfxHintId nHintId );
     virtual ~BulkDataHint() override;
 
     void setSpans( const ColumnSpanSet* pSpans );

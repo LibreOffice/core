@@ -99,7 +99,7 @@ void ScSheetLinkObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
     else
     {
-        if ( rHint.GetId() == SFX_HINT_DYING )
+        if ( rHint.GetId() == SfxHintId::Dying )
             pDocShell = nullptr;       // pointer is invalid
     }
 }
@@ -383,7 +383,7 @@ void ScSheetLinksObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     //  Referenz-Update interessiert hier nicht
 
-    if ( rHint.GetId() == SFX_HINT_DYING )
+    if ( rHint.GetId() == SfxHintId::Dying )
     {
         pDocShell = nullptr;       // ungueltig geworden
     }
@@ -619,7 +619,7 @@ void ScAreaLinkObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
     else
     {
-        if ( rHint.GetId() == SFX_HINT_DYING )
+        if ( rHint.GetId() == SfxHintId::Dying )
             pDocShell = nullptr;       // pointer is invalid
     }
 }
@@ -918,7 +918,7 @@ void ScAreaLinksObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     //  Referenz-Update interessiert hier nicht
 
-    if ( rHint.GetId() == SFX_HINT_DYING )
+    if ( rHint.GetId() == SfxHintId::Dying )
     {
         pDocShell = nullptr;       // ungueltig geworden
     }
@@ -1054,7 +1054,7 @@ void ScDDELinkObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
     else
     {
-        if ( rHint.GetId() == SFX_HINT_DYING )
+        if ( rHint.GetId() == SfxHintId::Dying )
             pDocShell = nullptr;       // pointer is invalid
     }
 }
@@ -1236,7 +1236,7 @@ void ScDDELinksObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     //  Referenz-Update interessiert hier nicht
 
-    if ( rHint.GetId() == SFX_HINT_DYING )
+    if ( rHint.GetId() == SfxHintId::Dying )
     {
         pDocShell = nullptr;       // ungueltig geworden
     }

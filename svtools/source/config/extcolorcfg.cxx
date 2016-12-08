@@ -396,7 +396,7 @@ void    ExtendedColorConfig_Impl::Notify( const uno::Sequence<OUString>& /*rProp
         m_bBroadcastWhenUnlocked = true;
     }
     else
-        Broadcast(SfxHint(SFX_HINT_COLORS_CHANGED));
+        Broadcast(SfxHint(SfxHintId::ColorsChanged));
 }
 
 void ExtendedColorConfig_Impl::ImplCommit()
@@ -495,7 +495,7 @@ void ExtendedColorConfig_Impl::SettingsChanged()
 {
     SolarMutexGuard aVclGuard;
 
-    Broadcast( SfxHint( SFX_HINT_COLORS_CHANGED ) );
+    Broadcast( SfxHint( SfxHintId::ColorsChanged ) );
 }
 
 void ExtendedColorConfig_Impl::LockBroadcast()
@@ -513,7 +513,7 @@ void ExtendedColorConfig_Impl::UnlockBroadcast()
             if ( ExtendedColorConfig::m_pImpl && ExtendedColorConfig::m_pImpl->m_bIsBroadcastEnabled )
             {
                 m_bBroadcastWhenUnlocked = false;
-                ExtendedColorConfig::m_pImpl->Broadcast(SfxHint(SFX_HINT_COLORS_CHANGED));
+                ExtendedColorConfig::m_pImpl->Broadcast(SfxHint(SfxHintId::ColorsChanged));
             }
         }
     }

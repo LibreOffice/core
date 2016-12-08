@@ -2204,8 +2204,8 @@ void ScFormulaCell::Notify( const SfxHint& rHint )
     if (pDocument->IsInDtorClear())
         return;
 
-    const sal_uInt32 nHint = rHint.GetId();
-    if (nHint == SC_HINT_REFERENCE)
+    const SfxHintId nHint = rHint.GetId();
+    if (nHint == SfxHintId::ScReference)
     {
         const sc::RefHint& rRefHint = static_cast<const sc::RefHint&>(rHint);
 
@@ -2272,10 +2272,10 @@ void ScFormulaCell::Notify( const SfxHint& rHint )
 
     if ( pDocument->GetHardRecalcState() == ScDocument::HARDRECALCSTATE_OFF )
     {
-        if (nHint & (SC_HINT_DATACHANGED | SC_HINT_TABLEOPDIRTY))
+        if (nHint == SfxHintId::ScDataChanged || nHint == SfxHintId::ScTableOpDirty)
         {
             bool bForceTrack = false;
-            if ( nHint & SC_HINT_TABLEOPDIRTY )
+            if ( nHint == SfxHintId::ScTableOpDirty )
             {
                 bForceTrack = !bTableOpDirty;
                 if ( !bTableOpDirty )
@@ -2395,7 +2395,7 @@ void ScFormulaCell::SetTableOpDirty()
                     bTableOpDirty = true;
                 }
                 pDocument->AppendToFormulaTrack( this );
-                pDocument->TrackFormulas( SC_HINT_TABLEOPDIRTY );
+                pDocument->TrackFormulas( SfxHintId::ScTableOpDirty );
             }
         }
     }

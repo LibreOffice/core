@@ -101,9 +101,9 @@ void StyleSheetUndoAction::Undo()
 
     mpStyleSheet->GetItemSet().Set(aNewSet);
     if( mpStyleSheet->GetFamily() == SD_STYLE_FAMILY_PSEUDO )
-        static_cast<SdStyleSheet*>(mpStyleSheet)->GetRealStyleSheet()->Broadcast(SfxHint(SFX_HINT_DATACHANGED));
+        static_cast<SdStyleSheet*>(mpStyleSheet)->GetRealStyleSheet()->Broadcast(SfxHint(SfxHintId::DataChanged));
     else
-        mpStyleSheet->Broadcast(SfxHint(SFX_HINT_DATACHANGED));
+        mpStyleSheet->Broadcast(SfxHint(SfxHintId::DataChanged));
 }
 
 void StyleSheetUndoAction::Redo()
@@ -113,9 +113,9 @@ void StyleSheetUndoAction::Redo()
 
     mpStyleSheet->GetItemSet().Set(aNewSet);
     if( mpStyleSheet->GetFamily() == SD_STYLE_FAMILY_PSEUDO )
-        static_cast<SdStyleSheet*>(mpStyleSheet)->GetRealStyleSheet()->Broadcast(SfxHint(SFX_HINT_DATACHANGED));
+        static_cast<SdStyleSheet*>(mpStyleSheet)->GetRealStyleSheet()->Broadcast(SfxHint(SfxHintId::DataChanged));
     else
-        mpStyleSheet->Broadcast(SfxHint(SFX_HINT_DATACHANGED));
+        mpStyleSheet->Broadcast(SfxHint(SfxHintId::DataChanged));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

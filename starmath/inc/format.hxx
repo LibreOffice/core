@@ -82,9 +82,6 @@
 #define DIS_END                 23
 
 
-// to be broadcasted on format changes:
-#define HINT_FORMATCHANGED  10003
-
 enum SmHorAlign { AlignLeft, AlignCenter, AlignRight };
 
 OUString GetDefaultFontName( LanguageType nLang, sal_uInt16 nIdent );
@@ -140,7 +137,7 @@ public:
 
     void RequestApplyChanges()
     {
-        Broadcast(SfxHint(HINT_FORMATCHANGED));
+        Broadcast(SfxHint(SfxHintId::MathFormatChanged));
     }
 
 };

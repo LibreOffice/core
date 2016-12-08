@@ -747,7 +747,7 @@ void SvxGraphCtrlAccessibleContext::Notify( SfxBroadcaster& /*rBC*/, const SfxHi
     else
     {
         // Has our SdDrawDocument just died?
-        if(rHint.GetId() == SFX_HINT_DYING)
+        if(rHint.GetId() == SfxHintId::Dying)
         {
             dispose();
         }

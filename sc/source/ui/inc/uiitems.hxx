@@ -115,14 +115,12 @@ public:
 
 class ScIndexHint : public SfxHint
 {
-    sal_uInt16 nId;
     sal_uInt16 nIndex;
 
 public:
-                    ScIndexHint(sal_uInt16 nNewId, sal_uInt16 nIdx);
+                    ScIndexHint(SfxHintId nNewId, sal_uInt16 nIdx);
                     virtual ~ScIndexHint() override;
 
-    sal_uInt16      GetIndexHintId() const  { return nId; }
     sal_uInt16      GetIndex() const        { return nIndex; }
 };
 

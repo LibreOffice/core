@@ -655,7 +655,7 @@ void EventMultiplexer::Implementation::Notify (
     }
     else
     {
-        if (rHint.GetId() == SFX_HINT_DYING)
+        if (rHint.GetId() == SfxHintId::Dying)
             mpDocument = nullptr;
     }
 }

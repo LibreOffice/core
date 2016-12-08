@@ -1585,7 +1585,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
                             pUndoMgr->AddUndoAction(pUndoChStyle);
                         }
                         pMySheet->GetItemSet().Put(pHisSheet->GetItemSet());
-                        pMySheet->Broadcast(SfxHint(SFX_HINT_DATACHANGED));
+                        pMySheet->Broadcast(SfxHint(SfxHintId::DataChanged));
                     }
                     else
                     {

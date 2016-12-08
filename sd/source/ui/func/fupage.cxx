@@ -412,7 +412,7 @@ const SfxItemSet* FuPage::ExecuteDialog( vcl::Window* pParent )
                 mpDocSh->GetUndoManager()->AddUndoAction(pAction);
                 pStyleSheet->GetItemSet().Put( *(pTempSet.get()) );
                 sdr::properties::CleanupFillProperties( pStyleSheet->GetItemSet() );
-                pStyleSheet->Broadcast(SfxHint(SFX_HINT_DATACHANGED));
+                pStyleSheet->Broadcast(SfxHint(SfxHintId::DataChanged));
             }
             else if( bSetToAllPages )
             {
@@ -434,7 +434,7 @@ const SfxItemSet* FuPage::ExecuteDialog( vcl::Window* pParent )
                     pUndoGroup->AddAction(pAction);
                     pStyle->GetItemSet().Put( *(pTempSet.get()) );
                     sdr::properties::CleanupFillProperties( pStyleSheet->GetItemSet() );
-                    pStyle->Broadcast(SfxHint(SFX_HINT_DATACHANGED));
+                    pStyle->Broadcast(SfxHint(SfxHintId::DataChanged));
                 }
 
                 //Remove background from all pages to reset to the master bg

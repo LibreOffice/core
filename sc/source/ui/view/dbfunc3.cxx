@@ -625,7 +625,7 @@ bool ScDBFunc::MakePivotTable(
     if ( bNewTable )
     {
         pDocSh->PostPaintExtras();
-        SfxGetpApp()->Broadcast( SfxHint( SC_HINT_TABLES_CHANGED ) );
+        SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScTablesChanged ) );
     }
 
     return bSuccess;

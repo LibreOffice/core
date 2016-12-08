@@ -2043,8 +2043,8 @@ void SmViewShell::Notify( SfxBroadcaster& , const SfxHint& rHint )
 {
     switch( rHint.GetId() )
     {
-        case SFX_HINT_MODECHANGED:
-        case SFX_HINT_DOCCHANGED:
+        case SfxHintId::ModeChanged:
+        case SfxHintId::DocChanged:
             GetViewFrame()->GetBindings().InvalidateAll(false);
         break;
         default:

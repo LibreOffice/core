@@ -360,7 +360,7 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
                 {
                     pDlg->Execute();
                     rBindings.Invalidate( nSlot );
-                    SfxGetpApp()->Broadcast( SfxHint( SC_HINT_AREALINKS_CHANGED ) );     // Navigator
+                    SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScAreaLinksChanged ) );     // Navigator
                     rReq.Done();
                 }
             }

@@ -680,7 +680,7 @@ ScAccessibleCellTextData::~ScAccessibleCellTextData()
 
 void ScAccessibleCellTextData::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    if ( rHint.GetId() == SFX_HINT_DYING )
+    if ( rHint.GetId() == SfxHintId::Dying )
     {
         mpViewShell = nullptr;                     // invalid now
         if (mpViewForwarder)
@@ -907,7 +907,7 @@ ScAccessibleEditObjectTextData::~ScAccessibleEditObjectTextData()
 
 void ScAccessibleEditObjectTextData::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    if ( rHint.GetId() == SFX_HINT_DYING )
+    if ( rHint.GetId() == SfxHintId::Dying )
     {
         mpWindow = nullptr;
         mpEditView = nullptr;
@@ -1165,7 +1165,7 @@ ScAccessiblePreviewCellTextData::~ScAccessiblePreviewCellTextData()
 
 void ScAccessiblePreviewCellTextData::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    if ( rHint.GetId() == SFX_HINT_DYING )
+    if ( rHint.GetId() == SfxHintId::Dying )
     {
         mpViewShell = nullptr;                     // invalid now
         if (mpViewForwarder)
@@ -1238,7 +1238,7 @@ ScAccessiblePreviewHeaderCellTextData::~ScAccessiblePreviewHeaderCellTextData()
 
 void ScAccessiblePreviewHeaderCellTextData::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    if ( rHint.GetId() == SFX_HINT_DYING )
+    if ( rHint.GetId() == SfxHintId::Dying )
     {
         mpViewShell = nullptr;                     // invalid now
         if (mpViewForwarder)
@@ -1356,7 +1356,7 @@ ScAccessibleTextData* ScAccessibleHeaderTextData::Clone() const
 
 void ScAccessibleHeaderTextData::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    if ( rHint.GetId() == SFX_HINT_DYING )
+    if ( rHint.GetId() == SfxHintId::Dying )
     {
         mpViewShell = nullptr;// invalid now
         mpDocSh = nullptr;
@@ -1469,7 +1469,7 @@ ScAccessibleTextData* ScAccessibleNoteTextData::Clone() const
 
 void ScAccessibleNoteTextData::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    if ( rHint.GetId() == SFX_HINT_DYING )
+    if ( rHint.GetId() == SfxHintId::Dying )
     {
         mpViewShell = nullptr;// invalid now
         mpDocSh = nullptr;
@@ -1605,7 +1605,7 @@ ScAccessibleCsvTextData::~ScAccessibleCsvTextData()
 
 void ScAccessibleCsvTextData::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    if ( rHint.GetId() == SFX_HINT_DYING )
+    if ( rHint.GetId() == SfxHintId::Dying )
     {
         mpWindow = nullptr;
         mpEditEngine = nullptr;

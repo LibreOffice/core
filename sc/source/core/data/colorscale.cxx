@@ -135,7 +135,7 @@ void ScFormulaListener::Notify(const SfxHint& rHint)
 {
     mbDirty = true;
 
-    if (rHint.GetId() == SFX_HINT_DYING)
+    if (rHint.GetId() == SfxHintId::Dying)
         return;
 
     if (maCallbackFunction)

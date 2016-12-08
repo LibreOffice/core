@@ -85,7 +85,7 @@ void SfxViewFrame::UpdateTitle()
     [Note]
 
     This is for example necessary if one listens to the SfxObjectShell as
-    SfxListener and then react on the <SfxSimpleHint> SFX_HINT_TITLECHANGED,
+    SfxListener and then react on the <SfxSimpleHint> SfxHintId::TitleChanged,
     then query the title of his views. However these views (SfxTopViewFrames)
     are  also SfxListener and because the order of notifications might not be
     fixed, the title update will be enforced in advance.
@@ -98,7 +98,7 @@ void SfxViewFrame::UpdateTitle()
         {
             switch( ( (SfxSimpleHint&) rHint ).GetId() )
             {
-                case SFX_HINT_TITLECHANGED:
+                case SfxHintId::TitleChanged:
                     for ( SfxViewFrame *pTop = SfxViewFrame::GetFirst( this );
                           pTop;
                           pTop = SfxViewFrame::GetNext( this );

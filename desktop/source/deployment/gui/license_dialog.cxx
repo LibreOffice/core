@@ -173,14 +173,14 @@ void LicenseView::Notify( SfxBroadcaster&, const SfxHint& rHint )
     if ( pTextHint )
     {
         bool    bLastVal = EndReached();
-        const sal_uInt32 nId = pTextHint->GetId();
+        const SfxHintId nId = pTextHint->GetId();
 
-        if ( nId == TEXT_HINT_PARAINSERTED )
+        if ( nId == SfxHintId::TextParaInserted )
         {
             if ( bLastVal )
                 mbEndReached = IsEndReached();
         }
-        else if ( nId == TEXT_HINT_VIEWSCROLLED )
+        else if ( nId == SfxHintId::TextViewScrolled )
         {
             if ( ! mbEndReached )
                 mbEndReached = IsEndReached();

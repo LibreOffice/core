@@ -391,7 +391,7 @@ SvtAccessibilityOptions::~SvtAccessibilityOptions()
 void SvtAccessibilityOptions::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     NotifyListeners(ConfigurationHints::NONE);
-    if ( rHint.GetId()  == SFX_HINT_ACCESSIBILITY_CHANGED )
+    if ( rHint.GetId()  == SfxHintId::AccessibilityChanged )
         SetVCLSettings();
 }
 

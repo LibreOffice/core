@@ -85,7 +85,7 @@ namespace accessibility
         AccessibleTextHelper will call the SvxEditSource and their
         forwarder to update it's state. Avoid being inconsistent in
         the facts you tell in the events, e.g. when sending a
-        TEXT_HINT_PARAINSERTED event, the
+        SfxHintId::TextParaInserted event, the
         SvxEditSource::GetTextForwarder().GetParagraphCount() should
         already include the newly inserted paragraph.
 
@@ -147,15 +147,15 @@ namespace accessibility
             from the main office thread.
 
             The EditSource set here is required to broadcast out the
-            following hints: EDITSOURCE_HINT_PARASMOVED,
-            EDITSOURCE_HINT_SELECTIONCHANGED, TEXT_HINT_MODIFIED,
-            TEXT_HINT_PARAINSERTED, TEXT_HINT_PARAREMOVED,
-            TEXT_HINT_TEXTHEIGHTCHANGED,
-            TEXT_HINT_VIEWSCROLLED. Otherwise, not all state changes
+            following hints: SfxHintId::EditSourceParasMoved,
+            SfxHintId::EditSourceSelectionChanged, SfxHintId::TextModified,
+            SfxHintId::TextParaInserted, SfxHintId::TextParaRemoved,
+            SfxHintId::TextHeightChanged,
+            SfxHintId::TextViewScrolled. Otherwise, not all state changes
             will get noticed by the accessibility object. Further
             more, when the corresponding core object or the model is
             dying, either the edit source must be set to NULL or it
-            has to broadcast a SFX_HINT_DYING hint.
+            has to broadcast a SfxHintId::Dying hint.
 
             If the SvxEditSource's managed text can change between
             edit/non-edit mode (i.e. there are times when
@@ -262,7 +262,7 @@ namespace accessibility
             children. Call this method if your visibility state has
             changed somehow, e.g. if the visible area has changed and
             the AccessibleTextHelper isn't notified internally
-            (e.g. via TEXT_HINT_VIEWSCROLLED). Normally, there should
+            (e.g. via SfxHintId::TextViewScrolled). Normally, there should
             not be a need to call this method.
         */
         void UpdateChildren();

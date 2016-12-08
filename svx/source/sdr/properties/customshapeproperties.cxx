@@ -215,15 +215,16 @@ namespace sdr
 
             if ( pStyleHint && pStyleHint->GetStyleSheet() == GetStyleSheet() )
             {
-                switch( pStyleHint->GetHint() )
+                switch( pStyleHint->GetId() )
                 {
-                    case SfxStyleSheetHintId::MODIFIED :
-                    case SfxStyleSheetHintId::CHANGED  :
+                    case SfxHintId::StyleSheetModified :
+                    case SfxHintId::StyleSheetChanged  :
                         bRemoveRenderGeometry = true;
                     break;
+                    default: break;
                 };
             }
-            else if ( rHint.GetId() == SFX_HINT_DATACHANGED )
+            else if ( rHint.GetId() == SfxHintId::DataChanged )
             {
                 bRemoveRenderGeometry = true;
             }

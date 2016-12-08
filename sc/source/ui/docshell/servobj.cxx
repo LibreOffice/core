@@ -103,7 +103,7 @@ ScServerObject::ScServerObject( ScDocShell* pShell, const OUString& rItem ) :
     pDocSh->GetDocument().StartListeningArea( aRange, false, &aForwarder );
 
     StartListening(*pDocSh);        // um mitzubekommen, wenn die DocShell geloescht wird
-    StartListening(*SfxGetpApp());     // for SC_HINT_AREAS_CHANGED
+    StartListening(*SfxGetpApp());     // for SfxHintId::ScAreasChanged
 }
 
 ScServerObject::~ScServerObject()
@@ -197,11 +197,11 @@ void ScServerObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
     bool bDataChanged = false;
 
-    //  DocShell can't be tested via type info, because SFX_HINT_DYING comes from the dtor
+    //  DocShell can't be tested via type info, because SfxHintId::Dying comes from the dtor
     if ( &rBC == pDocSh )
     {
-        //  from DocShell, only SFX_HINT_DYING is interesting
-        if ( rHint.GetId() == SFX_HINT_DYING )
+        //  from DocShell, only SfxHintId::Dying is interesting
+        if ( rHint.GetId() == SfxHintId::Dying )
         {
             pDocSh = nullptr;
             EndListening(*SfxGetpApp());
@@ -210,7 +210,7 @@ void ScServerObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     }
     else if (dynamic_cast<const SfxApplication*>( &rBC) !=  nullptr)
     {
-        if ( !aItemStr.isEmpty() && rHint.GetId() == SC_HINT_AREAS_CHANGED )
+        if ( !aItemStr.isEmpty() && rHint.GetId() == SfxHintId::ScAreasChanged )
         {
             //  check if named range was modified
             ScRange aNew;
@@ -223,7 +223,7 @@ void ScServerObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         //  must be from Area broadcasters
 
         const ScHint* pScHint = dynamic_cast<const ScHint*>( &rHint );
-        if (pScHint && (pScHint->GetId() & SC_HINT_DATACHANGED))
+        if (pScHint && (pScHint->GetId() == SfxHintId::ScDataChanged))
             bDataChanged = true;
         else if (const ScAreaChangedHint *pChgHint = dynamic_cast<const ScAreaChangedHint*>(&rHint))      // position of broadcaster changed
         {
@@ -236,7 +236,7 @@ void ScServerObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         }
         else
         {
-            if (rHint.GetId() == SFX_HINT_DYING)
+            if (rHint.GetId() == SfxHintId::Dying)
             {
                 //  If the range is being deleted, listening must be restarted
                 //  after the deletion is complete (done in GetData)

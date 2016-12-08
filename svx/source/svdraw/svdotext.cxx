@@ -1929,7 +1929,7 @@ void SdrTextObj::onEditOutlinerStatusEvent( EditStatus* pEditStatus )
 {
     const EditStatusFlags nStat = pEditStatus->GetStatusWord();
     const bool bGrowX = bool(nStat & EditStatusFlags::TEXTWIDTHCHANGED);
-    const bool bGrowY = bool(nStat & EditStatusFlags::TEXTHEIGHTCHANGED);
+    const bool bGrowY = bool(nStat & EditStatusFlags::TextHeightChanged);
     if(bTextFrame && (bGrowX || bGrowY))
     {
         if ((bGrowX && IsAutoGrowWidth()) || (bGrowY && IsAutoGrowHeight()))

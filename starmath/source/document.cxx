@@ -115,15 +115,13 @@ SFX_IMPL_OBJECTFACTORY(SmDocShell, SvGlobalName(SO3_SM_CLASSID), SfxObjectShellF
 
 void SmDocShell::Notify(SfxBroadcaster&, const SfxHint& rHint)
 {
-    switch (rHint.GetId())
+    if (rHint.GetId() == SfxHintId::MathFormatChanged)
     {
-        case HINT_FORMATCHANGED:
-            SetFormulaArranged(false);
+        SetFormulaArranged(false);
 
-            mnModifyCount++;     //! see comment for SID_GAPHIC_SM in SmDocShell::GetState
+        mnModifyCount++;     //! see comment for SID_GAPHIC_SM in SmDocShell::GetState
 
-            Repaint();
-            break;
+        Repaint();
     }
 }
 
@@ -1312,7 +1310,7 @@ void SmDocShell::SetModified(bool bModified)
     if( IsEnableSetModified() )
     {
         SfxObjectShell::SetModified( bModified );
-        Broadcast(SfxHint(SFX_HINT_DOCCHANGED));
+        Broadcast(SfxHint(SfxHintId::DocChanged));
     }
 }
 

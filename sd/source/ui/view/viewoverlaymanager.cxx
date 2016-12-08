@@ -419,7 +419,7 @@ ViewOverlayManager::~ViewOverlayManager()
 
 void ViewOverlayManager::Notify(SfxBroadcaster&, const SfxHint& rHint)
 {
-    if (rHint.GetId() == SFX_HINT_DOCCHANGED)
+    if (rHint.GetId() == SfxHintId::DocChanged)
     {
         UpdateTags();
     }

@@ -1561,9 +1561,9 @@ line (CL). The number of object margins per object varies between 0 and 3:
 
 void SdrEdgeObj::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 {
-    const sal_uInt32 nId = rHint.GetId();
-    bool bDataChg=nId==SFX_HINT_DATACHANGED;
-    bool bDying=nId==SFX_HINT_DYING;
+    const SfxHintId nId = rHint.GetId();
+    bool bDataChg=nId==SfxHintId::DataChanged;
+    bool bDying=nId==SfxHintId::Dying;
     bool bObj1=aCon1.pObj!=nullptr && aCon1.pObj->GetBroadcaster()==&rBC;
     bool bObj2=aCon2.pObj!=nullptr && aCon2.pObj->GetBroadcaster()==&rBC;
     if (bDying && (bObj1 || bObj2)) {
@@ -1609,13 +1609,13 @@ void SdrEdgeObj::Reformat()
 {
     if( nullptr != aCon1.pObj )
     {
-        SfxHint aHint( SFX_HINT_DATACHANGED );
+        SfxHint aHint( SfxHintId::DataChanged );
         Notify( *const_cast<SfxBroadcaster*>(aCon1.pObj->GetBroadcaster()), aHint );
     }
 
     if( nullptr != aCon2.pObj )
     {
-        SfxHint aHint( SFX_HINT_DATACHANGED );
+        SfxHint aHint( SfxHintId::DataChanged );
         Notify( *const_cast<SfxBroadcaster*>(aCon2.pObj->GetBroadcaster()), aHint );
     }
 }

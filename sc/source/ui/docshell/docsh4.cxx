@@ -456,7 +456,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     {
                         //  Formeln berechnen und painten wie im TrackTimeHdl
                         aDocument.TrackFormulas();
-                        Broadcast(SfxHint(FID_DATACHANGED));
+                        Broadcast(SfxHint(SfxHintId::ScDataChanged));
 
                         //  wenn FID_DATACHANGED irgendwann mal asynchron werden sollte
                         //  (z.B. mit Invalidate am Window), muss hier ein Update erzwungen werden.
@@ -1235,7 +1235,7 @@ void ScDocShell::DoRecalc( bool bApi )
         if ( pSh )
             pSh->UpdateCharts(true);
 
-        aDocument.BroadcastUno( SfxHint( SFX_HINT_DATACHANGED ) );
+        aDocument.BroadcastUno( SfxHint( SfxHintId::DataChanged ) );
 
         //  Wenn es Charts gibt, dann alles painten, damit nicht
         //  PostDataChanged und die Charts nacheinander kommen und Teile
@@ -1263,17 +1263,17 @@ void ScDocShell::DoHardRecalc( bool /* bApi */ )
     if ( pSh )
         pSh->UpdateCharts(true);
 
-    // set notification flags for "calculate" event (used in SFX_HINT_DATACHANGED broadcast)
+    // set notification flags for "calculate" event (used in SfxHintId::DataChanged broadcast)
     // (might check for the presence of any formulas on each sheet)
     SCTAB nTabCount = aDocument.GetTableCount();
     if (aDocument.HasAnySheetEventScript( ScSheetEventId::CALCULATE, true )) // search also for VBA handler
         for (SCTAB nTab=0; nTab<nTabCount; nTab++)
             aDocument.SetCalcNotification(nTab);
 
-    // CalcAll doesn't broadcast value changes, so SC_HINT_CALCALL is broadcasted globally
-    // in addition to SFX_HINT_DATACHANGED.
-    aDocument.BroadcastUno( SfxHint( SC_HINT_CALCALL ) );
-    aDocument.BroadcastUno( SfxHint( SFX_HINT_DATACHANGED ) );
+    // CalcAll doesn't broadcast value changes, so SfxHintId::ScCalcAll is broadcasted globally
+    // in addition to SfxHintId::DataChanged.
+    aDocument.BroadcastUno( SfxHint( SfxHintId::ScCalcAll ) );
+    aDocument.BroadcastUno( SfxHint( SfxHintId::DataChanged ) );
 
     // use hard recalc also to disable stream-copying of all sheets
     // (somewhat consistent with charts)
@@ -1309,14 +1309,14 @@ void ScDocShell::DoAutoStyle( const ScRange& rRange, const OUString& rStyle )
 
 void ScDocShell::NotifyStyle( const SfxStyleSheetHint& rHint )
 {
-    sal_uInt16 nId = rHint.GetHint();
+    SfxHintId nId = rHint.GetId();
     const SfxStyleSheetBase* pStyle = rHint.GetStyleSheet();
     if (!pStyle)
         return;
 
     if ( pStyle->GetFamily() == SfxStyleFamily::Page )
     {
-        if ( nId == SfxStyleSheetHintId::MODIFIED )
+        if ( nId == SfxHintId::StyleSheetModified )
         {
             ScDocShellModificator aModificator( *this );
 
@@ -1356,7 +1356,7 @@ void ScDocShell::NotifyStyle( const SfxStyleSheetHint& rHint )
     }
     else if ( pStyle->GetFamily() == SfxStyleFamily::Para )
     {
-        if ( nId == SfxStyleSheetHintId::MODIFIED)
+        if ( nId == SfxHintId::StyleSheetModified)
         {
             OUString aNewName = pStyle->GetName();
             OUString aOldName = aNewName;

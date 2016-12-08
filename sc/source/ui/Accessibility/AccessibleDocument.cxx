@@ -1551,7 +1551,7 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     else
     {
         // only notify if child exist, otherwise it is not necessary
-        if ((rHint.GetId() == SC_HINT_ACC_TABLECHANGED) &&
+        if ((rHint.GetId() == SfxHintId::ScAccTableChanged) &&
             mpAccessibleSpreadsheet.is())
         {
             FreeAccessibleSpreadsheet();
@@ -1575,12 +1575,12 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             if (mpAccessibleSpreadsheet.is())
                 mpAccessibleSpreadsheet->FireFirstCellFocus();
         }
-        else if (rHint.GetId() == SC_HINT_ACC_MAKEDRAWLAYER)
+        else if (rHint.GetId() == SfxHintId::ScAccMakeDrawLayer)
         {
             if (mpChildrenShapes)
                 mpChildrenShapes->SetDrawBroadcaster();
         }
-        else if ((rHint.GetId() == SC_HINT_ACC_ENTEREDITMODE)) // this event comes only on creating edit field of a cell
+        else if ((rHint.GetId() == SfxHintId::ScAccEnterEditMode)) // this event comes only on creating edit field of a cell
         {
             if (mpViewShell->GetViewData().HasEditView(meSplitPos))
             {
@@ -1604,7 +1604,7 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 }
             }
         }
-        else if (rHint.GetId() == SC_HINT_ACC_LEAVEEDITMODE)
+        else if (rHint.GetId() == SfxHintId::ScAccLeaveEditMode)
         {
             if (mxTempAcc.is())
             {
@@ -1619,7 +1619,7 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     CommitFocusGained();
             }
         }
-        else if ((rHint.GetId() == SC_HINT_ACC_VISAREACHANGED) || (rHint.GetId() == SC_HINT_ACC_WINDOWRESIZED))
+        else if ((rHint.GetId() == SfxHintId::ScAccVisAreaChanged) || (rHint.GetId() == SfxHintId::ScAccWindowResized))
         {
             Rectangle aOldVisArea(maVisArea);
             maVisArea = GetVisibleArea_Impl();

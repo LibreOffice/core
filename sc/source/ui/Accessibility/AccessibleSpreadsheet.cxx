@@ -427,7 +427,7 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                 ((rRef.GetRange().aStart.Row() == maRange.aStart.Row()) &&
                 (rRef.GetRange().aEnd.Row() == maRange.aEnd.Row())))
             {
-                // ignore next SC_HINT_DATACHANGED notification
+                // ignore next SfxHintId::ScDataChanged notification
                 mbDelIns = true;
 
                 sal_Int16 nId(0);
@@ -479,7 +479,7 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
     }
     else
     {
-        if (rHint.GetId() == SC_HINT_ACC_CURSORCHANGED)
+        if (rHint.GetId() == SfxHintId::ScAccCursorChanged)
         {
             if (mpViewShell)
             {
@@ -657,7 +657,7 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                 m_LastMarkedRanges = *mpMarkedRanges;
             }
         }
-        else if (rHint.GetId() == SC_HINT_DATACHANGED)
+        else if (rHint.GetId() == SfxHintId::ScDataChanged)
         {
             if (!mbDelIns)
                 CommitTableModelChange(maRange.aStart.Row(), maRange.aStart.Col(), maRange.aEnd.Row(), maRange.aEnd.Col(), AccessibleTableModelChangeType::UPDATE);

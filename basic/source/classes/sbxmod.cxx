@@ -318,7 +318,7 @@ DocObjectWrapper::getValue( const OUString& aPropertyName ) throw (UnknownProper
 
     SbxVariable* pProp = pProperty.get();
     if ( pProp->GetType() == SbxEMPTY )
-        pProperty->Broadcast( SBX_HINT_DATAWANTED );
+        pProperty->Broadcast( SfxHintId::BasicDataWanted );
 
     Any aRet = sbxToUnoValue( pProp );
     return aRet;
@@ -718,7 +718,7 @@ void SbModule::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         if( pProcProperty )
         {
 
-            if( pHint->GetId() == SBX_HINT_DATAWANTED )
+            if( pHint->GetId() == SfxHintId::BasicDataWanted )
             {
                 OUString aProcName = "Property Get "
                                    + pProcProperty->GetName();
@@ -753,7 +753,7 @@ void SbModule::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     pVar->Put( aVals );
                 }
             }
-            else if( pHint->GetId() == SBX_HINT_DATACHANGED )
+            else if( pHint->GetId() == SfxHintId::BasicDataChanged )
             {
                 SbxVariable* pMethVar = nullptr;
 
@@ -794,7 +794,7 @@ void SbModule::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         }
         else if( pMeth )
         {
-            if( pHint->GetId() == SBX_HINT_DATAWANTED )
+            if( pHint->GetId() == SfxHintId::BasicDataWanted )
             {
                 if( pMeth->bInvalid && !Compile() )
                 {
@@ -817,8 +817,8 @@ void SbModule::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             // side effects when using name as variable implicitly
             bool bForwardToSbxObject = true;
 
-            const sal_uInt32 nId = pHint->GetId();
-            if( (nId == SBX_HINT_DATAWANTED || nId == SBX_HINT_DATACHANGED) &&
+            const SfxHintId nId = pHint->GetId();
+            if( (nId == SfxHintId::BasicDataWanted || nId == SfxHintId::BasicDataChanged) &&
                 pVar->GetName().equalsIgnoreAsciiCase( "name" ) )
             {
                     bForwardToSbxObject = false;
@@ -929,7 +929,7 @@ void SbModule::SetSource32( const OUString& r )
 
 // Broadcast of a hint to all Basics
 
-static void SendHint_( SbxObject* pObj, sal_uInt32 nId, SbMethod* p )
+static void SendHint_( SbxObject* pObj, SfxHintId nId, SbMethod* p )
 {
     // Self a BASIC?
     if( dynamic_cast<const StarBASIC *>(pObj) != nullptr && pObj->IsBroadcaster() )
@@ -944,7 +944,7 @@ static void SendHint_( SbxObject* pObj, sal_uInt32 nId, SbMethod* p )
     }
 }
 
-static void SendHint( SbxObject* pObj, sal_uInt32 nId, SbMethod* p )
+static void SendHint( SbxObject* pObj, SfxHintId nId, SbMethod* p )
 {
     while( pObj->GetParent() )
         pObj = pObj->GetParent();
@@ -1120,7 +1120,7 @@ void SbModule::Run( SbMethod* pMeth )
         {
             if( bDelInst )
             {
-                SendHint( GetParent(), SBX_HINT_BASICSTART, pMeth );
+                SendHint( GetParent(), SfxHintId::BasicStart, pMeth );
 
                 // 1996-10-16: #31460 New concept for StepInto/Over/Out
                 // For an explanation see runtime.cxx at SbiInstance::CalcBreakCallLevel()
@@ -1186,7 +1186,7 @@ void SbModule::Run( SbMethod* pMeth )
 
                 // #i30690
                 SolarMutexGuard aSolarGuard;
-                SendHint( GetParent(), SBX_HINT_BASICSTOP, pMeth );
+                SendHint( GetParent(), SfxHintId::BasicStop, pMeth );
 
                 GlobalRunDeInit();
 
@@ -1847,7 +1847,7 @@ void SbModule::handleProcedureProperties( SfxBroadcaster& rBC, const SfxHint& rH
         {
             bDone = true;
 
-            if( pHint->GetId() == SBX_HINT_DATAWANTED )
+            if( pHint->GetId() == SfxHintId::BasicDataWanted )
             {
                 OUString aProcName = "Property Get "
                                    + pProcProperty->GetName();
@@ -1882,7 +1882,7 @@ void SbModule::handleProcedureProperties( SfxBroadcaster& rBC, const SfxHint& rH
                     pVar->Put( aVals );
                 }
             }
-            else if( pHint->GetId() == SBX_HINT_DATACHANGED )
+            else if( pHint->GetId() == SfxHintId::BasicDataChanged )
             {
                 SbxVariable* pMeth = nullptr;
 
@@ -2101,16 +2101,16 @@ ErrCode SbMethod::Call( SbxValue* pRet, SbxVariable* pCaller )
 
 
 // #100883 Own Broadcast for SbMethod
-void SbMethod::Broadcast( sal_uInt32 nHintId )
+void SbMethod::Broadcast( SfxHintId nHintId )
 {
     if( pCst && !IsSet( SbxFlagBits::NoBroadcast ) )
     {
         // Because the method could be called from outside, test here once again
         // the authorisation
-        if( nHintId & SBX_HINT_DATAWANTED )
+        if( nHintId == SfxHintId::BasicDataWanted )
             if( !CanRead() )
                 return;
-        if( nHintId & SBX_HINT_DATACHANGED )
+        if( nHintId == SfxHintId::BasicDataChanged )
             if( !CanWrite() )
                 return;
 

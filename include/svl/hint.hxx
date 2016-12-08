@@ -22,37 +22,105 @@
 #include <sal/types.h>
 #include <svl/svldllapi.h>
 
-#define SFX_HINT_DYING              0x00000001
-#define SFX_HINT_NAMECHANGED        0x00000002
-#define SFX_HINT_TITLECHANGED       0x00000004
-#define SFX_HINT_DATACHANGED        0x00000008
-#define SFX_HINT_DOCCHANGED         0x00000010
-#define SFX_HINT_UPDATEDONE         0x00000020
-#define SFX_HINT_DEINITIALIZING     0x00000040
-#define SFX_HINT_MODECHANGED        0x00000080
-    // unused, formerly SFX_HINT_CANCELLABLE
-    // unused, formerly SFX_HINT_DATAAVAILABLE
-    // unused, formerly SFX_HINT_SAVECOMPLETED
-    // unused, formerly SFX_HINT_RELEASEREF
-#define SFX_HINT_COLORS_CHANGED     0x00001000
-#define SFX_HINT_ACCESSIBILITY_CHANGED  0x00004000
-    // unused, formerly SFX_HINT_VIEWCREATED
-#define SFX_HINT_USER00             0x00010000
-#define SFX_HINT_USER01             0x00020000
-#define SFX_HINT_USER02             0x00040000
-#define SFX_HINT_USER03             0x00080000
-#define SFX_HINT_USER04             0x00100000
-#define SFX_HINT_USER05             0x00200000
+enum class SfxHintId {
+    NONE,
+    Dying,
+    NameChanged,
+    TitleChanged,
+    DataChanged,
+    DocChanged,
+    UpdateDone,
+    Deinitializing,
+    ModeChanged,
+    ColorsChanged,
+    AccessibilityChanged,
+
+// VCL text hints
+    TextParaInserted,
+    TextParaRemoved,
+    TextParaContentChanged,
+    TextHeightChanged,
+    TextFormatPara,
+    TextFormatted,
+    TextModified,
+    TextBlockNotificationStart,
+    TextBlockNotificationEnd,
+    TextInputStart,
+    TextInputEnd,
+    TextViewScrolled,
+    TextViewSelectionChanged,
+    TextViewCaretChanged,
+
+// BASIC hints
+    BasicDying,
+    BasicDataWanted,
+    BasicDataChanged,
+    BasicConverted,
+    BasicInfoWanted,
+    BasicObjectChanged,
+    BasicStart,
+    BasicStop,
+
+// SVX edit source
+    EditSourceParasMoved,
+    EditSourceSelectionChanged,
+
+// SC hints
+    ScDataChanged,
+    ScTableOpDirty,
+    ScCalcAll,
+    ScReference,
+    ScDrawLayerNew,
+    ScDbAreasChanged,
+    ScAreasChanged,
+    ScTablesChanged,
+    ScDrawChanged,
+    ScDocNameChanged,
+    ScAreaLinksChanged,
+    ScShowRangeFinder,
+    ScDocSaved,
+    ScForceSetTab,
+    ScNavigatorUpdateAll,
+    ScAnyDataChanged,
+    ScPrintOptions,
+    ScRefModeChanged,
+    ScKillEditView,
+    ScKillEditViewNoPaint,
+
+// SC accessibility hints
+    ScAccTableChanged,
+    ScAccCursorChanged,
+    ScAccVisAreaChanged,
+    ScAccEnterEditMode,
+    ScAccLeaveEditMode,
+    ScAccMakeDrawLayer,
+    ScAccWindowResized,
+
+
+// SFX stylesheet
+    StyleSheetCreated,  // new
+    StyleSheetModified,  // changed
+    StyleSheetChanged,  // erased and re-created (replaced)
+    StyleSheetErased,  // erased
+    StyleSheetInDestruction,  // in the process of being destructed
+
+// STARMATH
+    MathFormatChanged,
+
+// SW
+    SwDrawViewsCreated,
+    SwSplitNodeOperation,
+};
 
 class SVL_DLLPUBLIC SfxHint
 {
 private:
-    sal_uInt32 mnId;
+    SfxHintId mnId;
 public:
-    SfxHint() : mnId(0) {}
-    explicit SfxHint( sal_uInt32 nId ) : mnId(nId) {}
+    SfxHint() : mnId(SfxHintId::NONE) {}
+    explicit SfxHint( SfxHintId nId ) : mnId(nId) {}
     virtual ~SfxHint();
-    sal_uInt32 GetId() const { return mnId; }
+    SfxHintId GetId() const { return mnId; }
 };
 
 #endif

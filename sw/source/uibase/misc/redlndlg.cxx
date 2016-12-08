@@ -1235,7 +1235,7 @@ SwRedlineAcceptPanel::SwRedlineAcceptPanel(vcl::Window* pParent, const css::uno:
 
     mpImplDlg->Init();
 
-    // we want to receive SFX_HINT_DOCCHANGED
+    // we want to receive SfxHintId::DocChanged
     StartListening(*(SW_MOD()->GetView()->GetDocShell()));
 }
 
@@ -1253,7 +1253,7 @@ void SwRedlineAcceptPanel::dispose()
 
 void SwRedlineAcceptPanel::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
 {
-    if (mpImplDlg && rHint.GetId() == SFX_HINT_DOCCHANGED)
+    if (mpImplDlg && rHint.GetId() == SfxHintId::DocChanged)
         mpImplDlg->Activate();
 }
 

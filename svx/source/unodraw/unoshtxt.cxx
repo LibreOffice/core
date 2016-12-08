@@ -317,7 +317,7 @@ void SvxTextEditSourceImpl::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
     // #i105988 keep reference to this object
     rtl::Reference< SvxTextEditSourceImpl > xThis( this );
 
-    if (SFX_HINT_DYING == rHint.GetId())
+    if (SfxHintId::Dying == rHint.GetId())
     {
         if (&rBC == mpView)
         {
@@ -445,7 +445,7 @@ void SvxTextEditSourceImpl::ObjectInDestruction(const SdrObject&)
 {
     mpObject = nullptr;
     dispose();
-    Broadcast( SfxHint( SFX_HINT_DYING ) );
+    Broadcast( SfxHint( SfxHintId::Dying ) );
 }
 
 /* unregister at all objects and set all references to 0 */

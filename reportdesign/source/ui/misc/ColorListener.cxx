@@ -51,7 +51,7 @@ void OColorListener::dispose()
 
 void OColorListener::Notify(SfxBroadcaster & /*rBc*/, SfxHint const & rHint)
 {
-    if (rHint.GetId() == SFX_HINT_COLORS_CHANGED)
+    if (rHint.GetId() == SfxHintId::ColorsChanged)
     {
         m_nColor = m_aExtendedColorConfig.GetColorValue(CFG_REPORTDESIGNER,m_sColorEntry).getColor();
         m_nTextBoundaries = m_aColorConfig.GetColorValue(::svtools::DOCBOUNDARIES).nColor;

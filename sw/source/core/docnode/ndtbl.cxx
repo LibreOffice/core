@@ -4617,7 +4617,7 @@ SwTableAutoFormat* SwDoc::MakeTableStyle(const OUString& rName, bool bBroadcast)
     }
 
     if (bBroadcast)
-        BroadcastStyleOperation(rName, SfxStyleFamily::Table, SfxStyleSheetHintId::CREATED);
+        BroadcastStyleOperation(rName, SfxStyleFamily::Table, SfxHintId::StyleSheetCreated);
 
     return pTableFormat;
 }
@@ -4625,7 +4625,7 @@ SwTableAutoFormat* SwDoc::MakeTableStyle(const OUString& rName, bool bBroadcast)
 std::unique_ptr<SwTableAutoFormat> SwDoc::DelTableStyle(const OUString& rName, bool bBroadcast)
 {
     if (bBroadcast)
-        BroadcastStyleOperation(rName, SfxStyleFamily::Table, SfxStyleSheetHintId::ERASED);
+        BroadcastStyleOperation(rName, SfxStyleFamily::Table, SfxHintId::StyleSheetErased);
 
     std::unique_ptr<SwTableAutoFormat> pReleasedFormat = GetTableStyles().ReleaseAutoFormat(rName);
 

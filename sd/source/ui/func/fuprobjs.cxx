@@ -149,7 +149,7 @@ void FuPresentationObjects::DoExecute( SfxRequest& )
                 mpDocSh->GetUndoManager()->AddUndoAction(pAction);
 
                 pStyleSheet->GetItemSet().Put( *pOutSet );
-                static_cast<SfxStyleSheet*>( pStyleSheet )->Broadcast( SfxHint( SFX_HINT_DATACHANGED ) );
+                static_cast<SfxStyleSheet*>( pStyleSheet )->Broadcast( SfxHint( SfxHintId::DataChanged ) );
             }
         }
     }

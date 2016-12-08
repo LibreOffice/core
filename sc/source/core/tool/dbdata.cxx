@@ -893,7 +893,7 @@ void ScDBData::Notify( const SfxHint& rHint )
     if (!pScHint)
         return;
 
-    if (pScHint->GetId() & SC_HINT_DATACHANGED)
+    if (pScHint->GetId() == SfxHintId::ScDataChanged)
     {
         mbTableColumnNamesDirty = true;
         if (!mpContainer)

@@ -751,9 +751,9 @@ sal_Int32 SwSrcView::PrintSource(
 
 void SwSrcView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    if ( rHint.GetId() == SFX_HINT_MODECHANGED ||
+    if ( rHint.GetId() == SfxHintId::ModeChanged ||
             (
-             rHint.GetId() == SFX_HINT_TITLECHANGED &&
+             rHint.GetId() == SfxHintId::TitleChanged &&
              !GetDocShell()->IsReadOnly() && aEditWin->IsReadonly()
             )
        )

@@ -507,7 +507,7 @@ bool ScDocShell::LoadXML( SfxMedium* pLoadMedium, const css::uno::Reference< css
     else
     {
         // still need to recalc volatile formula cells.
-        aDocument.Broadcast(ScHint(SC_HINT_DATACHANGED, BCA_BRDCST_ALWAYS));
+        aDocument.Broadcast(ScHint(SfxHintId::ScDataChanged, BCA_BRDCST_ALWAYS));
     }
 
     AfterXMLLoading(bRet);
@@ -987,16 +987,11 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 break;
         }
     }
-    else    // Without parameter
+    else if (rHint.GetId() == SfxHintId::TitleChanged) // Without parameter
     {
-        switch ( rHint.GetId() )
-        {
-            case SFX_HINT_TITLECHANGED:
-                aDocument.SetName( SfxShell::GetName() );
-                //  RegisterNewTargetNames gibts nicht mehr
-                SfxGetpApp()->Broadcast(SfxHint( SC_HINT_DOCNAME_CHANGED )); // Navigator
-                break;
-        }
+        aDocument.SetName( SfxShell::GetName() );
+        //  RegisterNewTargetNames gibts nicht mehr
+        SfxGetpApp()->Broadcast(SfxHint( SfxHintId::ScDocNameChanged )); // Navigator
     }
 }
 
@@ -2488,8 +2483,8 @@ bool ScDocShell::DoSaveCompleted( SfxMedium * pNewStor, bool bRegisterRecent )
 {
     bool bRet = SfxObjectShell::DoSaveCompleted( pNewStor, bRegisterRecent );
 
-    //  SC_HINT_DOC_SAVED for change ReadOnly -> Read/Write
-    Broadcast( SfxHint( SC_HINT_DOC_SAVED ) );
+    //  SfxHintId::ScDocSaved for change ReadOnly -> Read/Write
+    Broadcast( SfxHint( SfxHintId::ScDocSaved ) );
     return bRet;
 }
 
@@ -2804,7 +2799,7 @@ void ScDocShell::SetModified( bool bModified )
     if ( SfxObjectShell::IsEnableSetModified() )
     {
         SfxObjectShell::SetModified( bModified );
-        Broadcast( SfxHint( SFX_HINT_DOCCHANGED ) );
+        Broadcast( SfxHint( SfxHintId::DocChanged ) );
     }
 }
 
@@ -2818,9 +2813,9 @@ void ScDocShell::SetDocumentModified()
     {
         // #i115009# broadcast BCA_BRDCST_ALWAYS, so a component can read recalculated results
         // of RecalcModeAlways formulas (like OFFSET) after modifying cells
-        aDocument.Broadcast(ScHint(SC_HINT_DATACHANGED, BCA_BRDCST_ALWAYS));
+        aDocument.Broadcast(ScHint(SfxHintId::ScDataChanged, BCA_BRDCST_ALWAYS));
         aDocument.InvalidateTableArea();    // #i105279# needed here
-        aDocument.BroadcastUno( SfxHint( SFX_HINT_DATACHANGED ) );
+        aDocument.BroadcastUno( SfxHint( SfxHintId::DataChanged ) );
 
         pPaintLockData->SetModified(); // Later on ...
         return;
@@ -2836,7 +2831,7 @@ void ScDocShell::SetDocumentModified()
         aDocument.InvalidateStyleSheetUsage();
         aDocument.InvalidateTableArea();
         aDocument.InvalidateLastTableOpParams();
-        aDocument.Broadcast(ScHint(SC_HINT_DATACHANGED, BCA_BRDCST_ALWAYS));
+        aDocument.Broadcast(ScHint(SfxHintId::ScDataChanged, BCA_BRDCST_ALWAYS));
         if ( aDocument.IsForcedFormulaPending() && aDocument.GetAutoCalc() )
             aDocument.CalcFormulaTree( true );
         aDocument.RefreshDirtyTableColumnNames();
@@ -2857,7 +2852,7 @@ void ScDocShell::SetDocumentModified()
     }
 
     // notify UNO objects after BCA_BRDCST_ALWAYS etc.
-    aDocument.BroadcastUno( SfxHint( SFX_HINT_DATACHANGED ) );
+    aDocument.BroadcastUno( SfxHint( SfxHintId::DataChanged ) );
 }
 
 /**
@@ -2895,7 +2890,7 @@ void ScDocShell::SetDrawModified()
     if ( aDocument.IsChartListenerCollectionNeedsUpdate() )
     {
         aDocument.UpdateChartListenerCollection();
-        SfxGetpApp()->Broadcast(SfxHint( SC_HINT_DRAW_CHANGED ));    // Navigator
+        SfxGetpApp()->Broadcast(SfxHint( SfxHintId::ScDrawChanged ));    // Navigator
     }
     SC_MOD()->AnythingChanged();
 }
@@ -3169,7 +3164,7 @@ void ScDocShellModificator::SetDocumentModified()
     {
         // uno broadcast is necessary for api to work
         // -> must also be done during xml import
-        rDoc.BroadcastUno( SfxHint( SFX_HINT_DATACHANGED ) );
+        rDoc.BroadcastUno( SfxHint( SfxHintId::DataChanged ) );
     }
 }
 

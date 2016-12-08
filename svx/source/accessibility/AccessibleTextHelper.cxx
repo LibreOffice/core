@@ -991,7 +991,7 @@ namespace accessibility
 
     /** functor processing queue events
 
-        Reacts on TEXT_HINT_PARAINSERTED/REMOVED events and stores
+        Reacts on SfxHintId::TextParaInserted/REMOVED events and stores
         their content
      */
     class AccessibleTextHelper_QueueFunctor : public ::std::unary_function< const SfxHint*, void >
@@ -1000,7 +1000,7 @@ namespace accessibility
         AccessibleTextHelper_QueueFunctor() :
             mnParasChanged( 0 ),
             mnParaIndex(-1),
-            mnHintId(-1)
+            mnHintId(SfxHintId::NONE)
         {}
         void operator()( const SfxHint* pEvent )
         {
@@ -1012,8 +1012,8 @@ namespace accessibility
                 const SvxEditSourceHint* pEditSourceHint = dynamic_cast<const SvxEditSourceHint*>( pEvent );
 
                 if( !pEditSourceHint && pTextHint &&
-                    (pTextHint->GetId() == TEXT_HINT_PARAINSERTED ||
-                     pTextHint->GetId() == TEXT_HINT_PARAREMOVED ) )
+                    (pTextHint->GetId() == SfxHintId::TextParaInserted ||
+                     pTextHint->GetId() == SfxHintId::TextParaRemoved ) )
                 {
                     if( pTextHint->GetValue() == EE_PARA_ALL )
                     {
@@ -1045,7 +1045,7 @@ namespace accessibility
 
             @return hint id of last interesting event (REMOVED/INSERTED).
         */
-        int GetHintId() { return mnHintId; }
+        SfxHintId GetHintId() { return mnHintId; }
 
     private:
         /** number of paragraphs changed during queue processing. -1 for
@@ -1055,7 +1055,7 @@ namespace accessibility
         /// index of paragraph added/removed last
         sal_Int32 mnParaIndex;
         /// TextHint ID (removed/inserted) of last interesting event
-        int mnHintId;
+        SfxHintId mnHintId;
     };
 
     void AccessibleTextHelper_Impl::ProcessQueue()
@@ -1083,7 +1083,7 @@ namespace accessibility
             // #103483# Exactly one paragraph added/removed. This is
             // the normal case, optimize event handling here.
 
-            if( aFunctor.GetHintId() == TEXT_HINT_PARAINSERTED )
+            if( aFunctor.GetHintId() == SfxHintId::TextParaInserted )
             {
                 // update num of paras
                 maParaManager.SetNum( nNewParas );
@@ -1110,7 +1110,7 @@ namespace accessibility
                     OSL_FAIL("AccessibleTextHelper_Impl::ProcessQueue: could not create new paragraph");
                 }
             }
-            else if( aFunctor.GetHintId() == TEXT_HINT_PARAREMOVED )
+            else if( aFunctor.GetHintId() == SfxHintId::TextParaRemoved )
             {
                 ::accessibility::AccessibleParaManager::VectorOfChildren::const_iterator begin = maParaManager.begin();
                 ::std::advance( begin, aFunctor.GetParaIndex() );
@@ -1185,7 +1185,7 @@ namespace accessibility
                     {
                         switch( pEditSourceHint->GetId() )
                         {
-                            case EDITSOURCE_HINT_PARASMOVED:
+                            case SfxHintId::EditSourceParasMoved:
                             {
                                 DBG_ASSERT( pEditSourceHint->GetStartValue() < GetTextForwarder().GetParagraphCount() &&
                                             pEditSourceHint->GetEndValue() < GetTextForwarder().GetParagraphCount(),
@@ -1203,7 +1203,7 @@ namespace accessibility
                                 break;
                             }
 
-                            case EDITSOURCE_HINT_SELECTIONCHANGED:
+                            case SfxHintId::EditSourceSelectionChanged:
                                 // notify listeners
                                 try
                                 {
@@ -1212,13 +1212,14 @@ namespace accessibility
                                 // maybe we're not in edit mode (this is not an error)
                                 catch( const uno::Exception& ) {}
                                 break;
+                            default: break;
                         }
                     }
                     else if( pTextHint )
                     {
                         switch( pTextHint->GetId() )
                         {
-                            case TEXT_HINT_MODIFIED:
+                            case SfxHintId::TextModified:
                             {
                                 // notify listeners
                                 sal_Int32 nPara( pTextHint->GetValue() );
@@ -1242,21 +1243,22 @@ namespace accessibility
                                 break;
                             }
 
-                            case TEXT_HINT_PARAINSERTED:
+                            case SfxHintId::TextParaInserted:
                                 // already happened above
                                 break;
 
-                            case TEXT_HINT_PARAREMOVED:
+                            case SfxHintId::TextParaRemoved:
                                 // already happened above
                                 break;
 
-                            case TEXT_HINT_TEXTHEIGHTCHANGED:
+                            case SfxHintId::TextHeightChanged:
                                 // visibility changed, done below
                                 break;
 
-                            case TEXT_HINT_VIEWSCROLLED:
+                            case SfxHintId::TextViewScrolled:
                                 // visibility changed, done below
                                 break;
+                            default: break;
                         }
 
                         // in all cases, check visibility afterwards.
@@ -1306,22 +1308,16 @@ namespace accessibility
                         }
                     }
                     // it's VITAL to keep the SfxSimpleHint last! It's the base of some classes above!
-                    else if( rHint.GetId() )
+                    else if( rHint.GetId() == SfxHintId::Dying)
                     {
-                        switch( rHint.GetId() )
+                        // edit source is dying under us, become defunc then
+                        try
                         {
-                            case SFX_HINT_DYING:
-                                // edit source is dying under us, become defunc then
-                                try
-                                {
-                                    // make edit source inaccessible
-                                    // Note: cannot destroy it here, since we're called from there!
-                                    ShutdownEditSource();
-                                }
-                                catch( const uno::Exception& ) {}
-
-                                break;
+                            // make edit source inaccessible
+                            // Note: cannot destroy it here, since we're called from there!
+                            ShutdownEditSource();
                         }
+                        catch( const uno::Exception& ) {}
                     }
                 }
                 catch( const uno::Exception& )
@@ -1384,8 +1380,8 @@ namespace accessibility
             {
                 switch( pTextHint->GetId() )
                 {
-                    case TEXT_HINT_BLOCKNOTIFICATION_END:
-                    case TEXT_HINT_INPUT_END:
+                    case SfxHintId::TextBlockNotificationEnd:
+                    case SfxHintId::TextInputEnd:
                         --maEventOpenFrames;
 
                         if( maEventOpenFrames == 0 )
@@ -1411,8 +1407,8 @@ namespace accessibility
                         }
                         break;
 
-                    case TEXT_HINT_BLOCKNOTIFICATION_START:
-                    case TEXT_HINT_INPUT_START:
+                    case SfxHintId::TextBlockNotificationStart:
+                    case SfxHintId::TextInputStart:
                         ++maEventOpenFrames;
                         // no FALLTHROUGH reason: event will not be processed,
                         // thus appending the event isn't necessary. (#i27299#)
@@ -1426,24 +1422,18 @@ namespace accessibility
                 }
             }
             // it's VITAL to keep the SfxHint last! It's the base of the classes above!
-            else if( rHint.GetId() )
+            else if( rHint.GetId() == SfxHintId::Dying )
             {
                 // handle this event _at once_, because after that, objects are invalid
-                switch( rHint.GetId() )
+                // edit source is dying under us, become defunc then
+                maEventQueue.Clear();
+                try
                 {
-                    case SFX_HINT_DYING:
-                        // edit source is dying under us, become defunc then
-                        maEventQueue.Clear();
-                        try
-                        {
-                            // make edit source inaccessible
-                            // Note: cannot destroy it here, since we're called from there!
-                            ShutdownEditSource();
-                        }
-                        catch( const uno::Exception& ) {}
-
-                        break;
+                    // make edit source inaccessible
+                    // Note: cannot destroy it here, since we're called from there!
+                    ShutdownEditSource();
                 }
+                catch( const uno::Exception& ) {}
             }
         }
         catch( const uno::Exception& )

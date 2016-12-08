@@ -870,7 +870,7 @@ void SwNavigationPI::Notify( SfxBroadcaster& rBrdc, const SfxHint& rHint )
 {
     if(&rBrdc == m_pCreateView)
     {
-        if (rHint.GetId() == SFX_HINT_DYING)
+        if (rHint.GetId() == SfxHintId::Dying)
         {
             m_pCreateView = nullptr;
         }

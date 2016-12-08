@@ -217,7 +217,7 @@ SfxApplication::~SfxApplication()
 {
     SAL_WARN_IF(GetObjectShells_Impl().size() != 0, "sfx.appl", "Memory leak: some object shells were not removed!");
 
-    Broadcast( SfxHint(SFX_HINT_DYING) );
+    Broadcast( SfxHint(SfxHintId::Dying) );
 
     for (auto &module : pImpl->aModules)    // Clear modules
         module.reset();

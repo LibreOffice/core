@@ -168,7 +168,7 @@ void SAL_CALL SfxModelListener_Impl::queryClosing( const css::lang::EventObject&
 void SAL_CALL SfxModelListener_Impl::notifyClosing( const css::lang::EventObject& ) throw ( css::uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aSolarGuard;
-    mpDoc->Broadcast( SfxHint(SFX_HINT_DEINITIALIZING) );
+    mpDoc->Broadcast( SfxHint(SfxHintId::Deinitializing) );
 }
 
 void SAL_CALL SfxModelListener_Impl::disposing( const css::lang::EventObject& _rEvent ) throw ( css::uno::RuntimeException, std::exception )

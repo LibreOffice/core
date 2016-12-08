@@ -200,14 +200,6 @@ namespace o3tl
     template<> struct typed_flags<SbxFlagBits> : is_typed_flags<SbxFlagBits, 0xffff> {};
 }
 
-// Broadcaster-IDs:
-#define SBX_HINT_DYING          SFX_HINT_DYING
-#define SBX_HINT_DATAWANTED     SFX_HINT_USER00
-#define SBX_HINT_DATACHANGED    SFX_HINT_DATACHANGED
-#define SBX_HINT_CONVERTED      SFX_HINT_USER01
-#define SBX_HINT_INFOWANTED     SFX_HINT_USER02
-#define SBX_HINT_OBJECTCHANGED  SFX_HINT_USER03
-
 // List of all creators for Load/Store
 
 #define SBXCR_SBX            0x20584253        // SBX(blank)

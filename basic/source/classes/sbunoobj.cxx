@@ -1999,7 +1999,7 @@ void SbUnoObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         if( pProp )
         {
             bool bInvocation = pProp->isInvocationBased();
-            if( pHint->GetId() == SBX_HINT_DATAWANTED )
+            if( pHint->GetId() == SfxHintId::BasicDataWanted )
             {
                 // Test-Properties
                 sal_Int32 nId = pProp->nId;
@@ -2102,7 +2102,7 @@ void SbUnoObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     }
                 }
             }
-            else if( pHint->GetId() == SBX_HINT_DATACHANGED )
+            else if( pHint->GetId() == SfxHintId::BasicDataChanged )
             {
                 if( !bInvocation && mxUnoAccess.is() )
                 {
@@ -2160,7 +2160,7 @@ void SbUnoObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         else if( pMeth )
         {
             bool bInvocation = pMeth->isInvocationBased();
-            if( pHint->GetId() == SBX_HINT_DATAWANTED )
+            if( pHint->GetId() == SfxHintId::BasicDataWanted )
             {
                 // number of Parameter -1 because of Param0 == this
                 sal_uInt32 nParamCount = pParams ? ((sal_uInt32)pParams->Count() - 1) : 0;
@@ -3560,7 +3560,7 @@ void SbUnoService::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         SbxVariable* pVar = pHint->GetVar();
         SbxArray* pParams = pVar->GetParameters();
         SbUnoServiceCtor* pUnoCtor = dynamic_cast<SbUnoServiceCtor*>( pVar );
-        if( pUnoCtor && pHint->GetId() == SBX_HINT_DATAWANTED )
+        if( pUnoCtor && pHint->GetId() == SfxHintId::BasicDataWanted )
         {
             // Parameter count -1 because of Param0 == this
             sal_uInt32 nParamCount = pParams ? ((sal_uInt32)pParams->Count() - 1) : 0;
@@ -4912,7 +4912,7 @@ void SbUnoStructRefObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         {
              StructFieldInfo::iterator it =  maFields.find(  pProp->GetName() );
             // handle get/set of members of struct
-            if( pHint->GetId() == SBX_HINT_DATAWANTED )
+            if( pHint->GetId() == SfxHintId::BasicDataWanted )
             {
                 // Test-Properties
                 sal_Int32 nId = pProp->nId;
@@ -4957,7 +4957,7 @@ void SbUnoStructRefObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 else
                     StarBASIC::Error( ERRCODE_BASIC_PROPERTY_NOT_FOUND );
             }
-            else if( pHint->GetId() == SBX_HINT_DATACHANGED )
+            else if( pHint->GetId() == SfxHintId::BasicDataChanged )
             {
                 if ( it != maFields.end() )
                 {

@@ -198,7 +198,7 @@ sfx2::SvBaseLink::UpdateResult ScDdeLink::DataChanged(
 
     if (HasListeners())
     {
-        Broadcast(ScHint(SC_HINT_DATACHANGED, ScAddress()));
+        Broadcast(ScHint(SfxHintId::ScDataChanged, ScAddress()));
         pDoc->TrackFormulas();      // muss sofort passieren
         pDoc->StartTrackTimer();
 

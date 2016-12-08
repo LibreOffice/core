@@ -259,7 +259,7 @@ void ScTabView::MakeDrawView( TriState nForceDesignMode )
             pFormSh->SetView(pDrawView);
 
         if (aViewData.GetViewShell()->HasAccessibilityObjects())
-            aViewData.GetViewShell()->BroadcastAccessibility(SfxHint(SC_HINT_ACC_MAKEDRAWLAYER));
+            aViewData.GetViewShell()->BroadcastAccessibility(SfxHint(SfxHintId::ScAccMakeDrawLayer));
 
     }
 }
@@ -298,7 +298,7 @@ void ScTabView::TabChanged( bool bSameTabButMoved )
 
     if (aViewData.GetViewShell()->HasAccessibilityObjects())
     {
-        SfxHint aAccHint(SC_HINT_ACC_TABLECHANGED);
+        SfxHint aAccHint(SfxHintId::ScAccTableChanged);
         aViewData.GetViewShell()->BroadcastAccessibility(aAccHint);
     }
 

@@ -168,7 +168,7 @@ SfxPrinterController::SfxPrinterController( const VclPtr<Printer>& i_rPrinter,
 
 void SfxPrinterController::Notify( SfxBroadcaster& , const SfxHint& rHint )
 {
-    if ( rHint.GetId() == SFX_HINT_DYING )
+    if ( rHint.GetId() == SfxHintId::Dying )
     {
         EndListening(*mpViewShell);
         EndListening(*mpObjectShell);

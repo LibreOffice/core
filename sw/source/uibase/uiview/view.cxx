@@ -44,7 +44,7 @@
 #include <svx/fontworkbar.hxx>
 #include <unotxvw.hxx>
 #include <cmdid.h>
-#include <swhints.hxx>
+#include <svl/hint.hxx>
 #include <swmodule.hxx>
 #include <inputwin.hxx>
 #include <chartins.hxx>
@@ -1574,12 +1574,12 @@ void SwView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     }
     else
     {
-        sal_uInt32 nId = rHint.GetId();
+        SfxHintId nId = rHint.GetId();
         switch ( nId )
         {
             // sub shells will be destroyed by the
             // dispatcher, if the view frame is dying. Thus, reset member <pShell>.
-            case SFX_HINT_DYING:
+            case SfxHintId::Dying:
                 {
                     if ( &rBC == GetViewFrame() )
                     {
@@ -1587,7 +1587,7 @@ void SwView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     }
                 }
                 break;
-            case SFX_HINT_MODECHANGED:
+            case SfxHintId::ModeChanged:
                 {
                     // Modal mode change-over?
                     bool bModal = GetDocShell()->IsInModalMode();
@@ -1597,7 +1597,7 @@ void SwView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
                 SAL_FALLTHROUGH;
 
-            case SFX_HINT_TITLECHANGED:
+            case SfxHintId::TitleChanged:
                 if ( GetDocShell()->IsReadOnly() != GetWrtShell().GetViewOptions()->IsReadonly() )
                 {
                     SwWrtShell &rSh = GetWrtShell();
@@ -1629,7 +1629,7 @@ void SwView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 }
                 break;
 
-            case SW_BROADCAST_DRAWVIEWS_CREATED:
+            case SfxHintId::SwDrawViewsCreated:
                 {
                     bCallBase = false;
                     if ( GetFormShell() )
@@ -1641,6 +1641,8 @@ void SwView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     }
                 }
                 break;
+
+            default: break;
         }
     }
 

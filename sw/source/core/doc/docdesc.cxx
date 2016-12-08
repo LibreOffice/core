@@ -594,7 +594,7 @@ void SwDoc::PreDelPageDesc(SwPageDesc * pDel)
 }
 
 void SwDoc::BroadcastStyleOperation(const OUString& rName, SfxStyleFamily eFamily,
-                                    sal_uInt16 nOp)
+                                    SfxHintId nOp)
 {
     if (mpDocShell)
     {
@@ -622,7 +622,7 @@ void SwDoc::DelPageDesc( size_t i, bool bBroadcast )
 
     if (bBroadcast)
         BroadcastStyleOperation(rDel.GetName(), SfxStyleFamily::Page,
-                                SfxStyleSheetHintId::ERASED);
+                                SfxHintId::StyleSheetErased);
 
     if (GetIDocumentUndoRedo().DoesUndo())
     {
@@ -672,7 +672,7 @@ SwPageDesc* SwDoc::MakePageDesc(const OUString &rName, const SwPageDesc *pCpy,
 
     if (bBroadcast)
         BroadcastStyleOperation(rName, SfxStyleFamily::Page,
-                                SfxStyleSheetHintId::CREATED);
+                                SfxHintId::StyleSheetCreated);
 
     if (GetIDocumentUndoRedo().DoesUndo())
     {

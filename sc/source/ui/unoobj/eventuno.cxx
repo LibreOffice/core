@@ -46,7 +46,7 @@ ScSheetEventsObj::~ScSheetEventsObj()
 void ScSheetEventsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     //! reference update
-    if ( rHint.GetId() == SFX_HINT_DYING )
+    if ( rHint.GetId() == SfxHintId::Dying )
     {
         mpDocShell = nullptr;
     }

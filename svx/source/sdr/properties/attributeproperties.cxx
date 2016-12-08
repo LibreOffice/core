@@ -525,21 +525,21 @@ namespace sdr
                 SdrObject& rObj = GetSdrObject();
                 //SdrPage* pPage = rObj.GetPage();
 
-                switch(pStyleHint->GetHint())
+                switch(pStyleHint->GetId())
                 {
-                    case SfxStyleSheetHintId::CREATED         :
+                    case SfxHintId::StyleSheetCreated         :
                     {
                         // cannot happen, nothing to do
                         break;
                     }
-                    case SfxStyleSheetHintId::MODIFIED        :
-                    case SfxStyleSheetHintId::CHANGED         :
+                    case SfxHintId::StyleSheetModified        :
+                    case SfxHintId::StyleSheetChanged         :
                     {
                         // notify change
                         break;
                     }
-                    case SfxStyleSheetHintId::ERASED          :
-                    case SfxStyleSheetHintId::INDESTRUCTION   :
+                    case SfxHintId::StyleSheetErased          :
+                    case SfxHintId::StyleSheetInDestruction   :
                     {
                         // Style needs to be exchanged
                         SfxStyleSheet* pNewStSh = nullptr;
@@ -572,6 +572,7 @@ namespace sdr
 
                         break;
                     }
+                    default: break;
                 }
 
                 // Get old BoundRect. Do this after the style change is handled

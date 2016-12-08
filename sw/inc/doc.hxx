@@ -931,7 +931,7 @@ public:
                              bool bRegardLanguage = true,
                              bool bBroadcast = false);
     void BroadcastStyleOperation(const OUString& rName, SfxStyleFamily eFamily,
-                                 sal_uInt16 nOp);
+                                 SfxHintId nOp);
 
     /** The html import sometimes overwrites the
      page sizes set in the page descriptions. This function is used to

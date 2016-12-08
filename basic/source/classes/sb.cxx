@@ -2061,10 +2061,10 @@ void BasicCollection::Notify( SfxBroadcaster& rCst, const SfxHint& rHint )
     const SbxHint* p = dynamic_cast<const SbxHint*>(&rHint);
     if( p )
     {
-        const sal_uInt32 nId = p->GetId();
-        bool bRead  = nId == SBX_HINT_DATAWANTED;
-        bool bWrite = nId == SBX_HINT_DATACHANGED;
-        bool bRequestInfo = nId == SBX_HINT_INFOWANTED;
+        const SfxHintId nId = p->GetId();
+        bool bRead  = nId == SfxHintId::BasicDataWanted;
+        bool bWrite = nId == SfxHintId::BasicDataChanged;
+        bool bRequestInfo = nId == SfxHintId::BasicInfoWanted;
         SbxVariable* pVar = p->GetVar();
         SbxArray* pArg = pVar->GetParameters();
         OUString aVarName( pVar->GetName() );

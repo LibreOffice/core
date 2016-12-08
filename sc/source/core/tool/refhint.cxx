@@ -11,7 +11,7 @@
 
 namespace sc {
 
-RefHint::RefHint( Type eType ) : SfxHint(SC_HINT_REFERENCE), meType(eType) {}
+RefHint::RefHint( Type eType ) : SfxHint(SfxHintId::ScReference), meType(eType) {}
 RefHint::~RefHint() {}
 
 RefHint::Type RefHint::getType() const

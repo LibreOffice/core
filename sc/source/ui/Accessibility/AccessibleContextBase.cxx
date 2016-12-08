@@ -126,7 +126,7 @@ void SAL_CALL ScAccessibleContextBase::release()
 
 void ScAccessibleContextBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    if (rHint.GetId() == SFX_HINT_DYING)
+    if (rHint.GetId() == SfxHintId::Dying)
     {
         // it seems the Broadcaster is dying, since the view is dying
         dispose();

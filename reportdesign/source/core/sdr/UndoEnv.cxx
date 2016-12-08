@@ -191,7 +191,7 @@ void OXUndoEnvironment::ModeChanged()
 
 void OXUndoEnvironment::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
-    if (rHint.GetId() == SFX_HINT_MODECHANGED )
+    if (rHint.GetId() == SfxHintId::ModeChanged )
         ModeChanged();
 }
 

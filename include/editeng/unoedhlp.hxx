@@ -30,11 +30,8 @@
 struct EENotify;
 class EditEngine;
 
-#define EDITSOURCE_HINT_PARASMOVED          20
-#define EDITSOURCE_HINT_SELECTIONCHANGED    21
-
 /** Extends TextHint by two additional parameters which are necessary
-    for the EDITSOURCE_HINT_PARASMOVED hint. TextHint's value in this
+    for the SfxHintId::EditSourceParasMoved hint. TextHint's value in this
     case denotes the destination position, the two parameters the
     start and the end of the moved paragraph range.
  */
@@ -45,8 +42,8 @@ private:
     sal_Int32   mnEnd;
 
 public:
-            SvxEditSourceHint( sal_uInt32 nId );
-            SvxEditSourceHint( sal_uInt32 nId, sal_uLong nValue, sal_Int32 nStart, sal_Int32 nEnd );
+            SvxEditSourceHint( SfxHintId nId );
+            SvxEditSourceHint( SfxHintId nId, sal_uLong nValue, sal_Int32 nStart, sal_Int32 nEnd );
 
     using TextHint::GetValue;
     sal_Int32   GetStartValue() const { return mnStart;}
@@ -55,7 +52,7 @@ public:
 class SvxEditSourceHintEndPara :public SvxEditSourceHint
 {
 public:
-    SvxEditSourceHintEndPara() : SvxEditSourceHint(EDITSOURCE_HINT_SELECTIONCHANGED) {}
+    SvxEditSourceHintEndPara() : SvxEditSourceHint(SfxHintId::EditSourceSelectionChanged) {}
 };
 /** Helper class for common functionality in edit sources
  */

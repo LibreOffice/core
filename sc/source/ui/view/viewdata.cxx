@@ -1188,7 +1188,7 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
 IMPL_LINK( ScViewData, EditEngineHdl, EditStatus&, rStatus, void )
 {
     EditStatusFlags nStatus = rStatus.GetStatusWord();
-    if (nStatus & (EditStatusFlags::HSCROLL | EditStatusFlags::TEXTHEIGHTCHANGED | EditStatusFlags::TEXTWIDTHCHANGED | EditStatusFlags::CURSOROUT))
+    if (nStatus & (EditStatusFlags::HSCROLL | EditStatusFlags::TextHeightChanged | EditStatusFlags::TEXTWIDTHCHANGED | EditStatusFlags::CURSOROUT))
     {
         EditGrowY();
         EditGrowX();

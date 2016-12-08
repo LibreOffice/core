@@ -106,13 +106,13 @@ void ScAddInAsync::CallBack( sal_uLong nHandleP, void* pData )
             return;
     }
     p->bValid = true;
-    p->Broadcast( ScHint(SC_HINT_DATACHANGED, ScAddress()) );
+    p->Broadcast( ScHint(SfxHintId::ScDataChanged, ScAddress()) );
 
     for ( ScAddInDocs::iterator it = p->pDocs->begin(); it != p->pDocs->end(); ++it )
     {
         ScDocument* pDoc = *it;
         pDoc->TrackFormulas();
-        pDoc->GetDocumentShell()->Broadcast( SfxHint( FID_DATACHANGED ) );
+        pDoc->GetDocumentShell()->Broadcast( SfxHint( SfxHintId::ScDataChanged ) );
     }
 }
 

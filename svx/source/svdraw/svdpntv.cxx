@@ -231,7 +231,7 @@ void SdrPaintView::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
     //If the stylesheet has been destroyed
     if (&rBC == mpDefaultStyleSheet)
     {
-        if (rHint.GetId() == SFX_HINT_DYING)
+        if (rHint.GetId() == SfxHintId::Dying)
             mpDefaultStyleSheet = nullptr;
         return;
     }

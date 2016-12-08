@@ -739,26 +739,27 @@ void SwSrcEditWindow::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 
     switch (pTextHint->GetId())
     {
-        case TEXT_HINT_VIEWSCROLLED:
+        case SfxHintId::TextViewScrolled:
             m_pHScrollbar->SetThumbPos( m_pTextView->GetStartDocPos().X() );
             m_pVScrollbar->SetThumbPos( m_pTextView->GetStartDocPos().Y() );
             break;
 
-        case TEXT_HINT_TEXTHEIGHTCHANGED:
+        case SfxHintId::TextHeightChanged:
             if ( m_pTextEngine->GetTextHeight() < m_pOutWin->GetOutputSizePixel().Height() )
                 m_pTextView->Scroll( 0, m_pTextView->GetStartDocPos().Y() );
             m_pVScrollbar->SetThumbPos( m_pTextView->GetStartDocPos().Y() );
             SetScrollBarRanges();
             break;
 
-        case TEXT_HINT_PARAINSERTED:
-        case TEXT_HINT_PARACONTENTCHANGED:
+        case SfxHintId::TextParaInserted:
+        case SfxHintId::TextParaContentChanged:
             if ( !m_bHighlighting )
             {
                 m_aSyntaxLineTable.insert( static_cast<sal_uInt16>(pTextHint->GetValue()) );
                 m_aSyntaxIdle.Start();
             }
             break;
+        default: break;
     }
 }
 

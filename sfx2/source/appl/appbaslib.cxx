@@ -45,7 +45,7 @@ void SfxBasicManagerHolder::Notify(SfxBroadcaster& rBC, SfxHint const& rHint)
 {
     if (!mpBasicManager || &rBC != mpBasicManager)
         return;
-    if (SFX_HINT_DYING == rHint.GetId())
+    if (SfxHintId::Dying == rHint.GetId())
     {
         mpBasicManager = nullptr;
         mxBasicContainer.clear();

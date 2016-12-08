@@ -62,7 +62,7 @@ aDbgStyleSheetReferences;
 
 SfxStyleSheetHintExtended::SfxStyleSheetHintExtended
 (
-    sal_uInt16          nAction,        // SfxStyleSheetHintId::... (see above)
+    SfxHintId           nAction,
     const OUString&     rOldName,
     SfxStyleSheetBase&  rStyleSheet     // Remains with the caller
 )
@@ -73,11 +73,10 @@ SfxStyleSheetHintExtended::SfxStyleSheetHintExtended
 
 SfxStyleSheetHint::SfxStyleSheetHint
 (
-    sal_uInt16              nAction,    // SfxStyleSheetHintId::... (see above)
+    SfxHintId           nAction,
     SfxStyleSheetBase&  rStyleSheet     // Remains with the caller
 )
-:   pStyleSh( &rStyleSheet ),
-    nHint( nAction )
+:   SfxHint(nAction), pStyleSh( &rStyleSheet )
 {}
 
 
@@ -187,7 +186,7 @@ bool SfxStyleSheetBase::SetName(const OUString& rName, bool bReIndexNow)
             pPool->Reindex();
         pPool->SetSearchMask(eTmpFam, nTmpMask);
         pPool->Broadcast( SfxStyleSheetHintExtended(
-            SfxStyleSheetHintId::MODIFIED, aOldName, *this ) );
+            SfxHintId::StyleSheetModified, aOldName, *this ) );
     }
     return true;
 }
@@ -235,14 +234,14 @@ bool SfxStyleSheetBase::SetParent( const OUString& rName )
         }
         aParent = rName;
     }
-    pPool->Broadcast( SfxStyleSheetHint( SfxStyleSheetHintId::MODIFIED, *this ) );
+    pPool->Broadcast( SfxStyleSheetHint( SfxHintId::StyleSheetModified, *this ) );
     return true;
 }
 
 void SfxStyleSheetBase::SetHidden( bool hidden )
 {
     bHidden = hidden;
-    pPool->Broadcast( SfxStyleSheetHint( SfxStyleSheetHintId::MODIFIED, *this ) );
+    pPool->Broadcast( SfxStyleSheetHint( SfxHintId::StyleSheetModified, *this ) );
 }
 
 /**
@@ -264,7 +263,7 @@ bool SfxStyleSheetBase::SetFollow( const OUString& rName )
         }
         aFollow = rName;
     }
-    pPool->Broadcast( SfxStyleSheetHint( SfxStyleSheetHintId::MODIFIED, *this ) );
+    pPool->Broadcast( SfxStyleSheetHint( SfxHintId::StyleSheetModified, *this ) );
     return true;
 }
 
@@ -606,7 +605,7 @@ SfxStyleSheetBasePool::~SfxStyleSheetBasePool()
     aDbgStyleSheetReferences.mnPools--;
 #endif
 
-    Broadcast( SfxHint(SFX_HINT_DYING) );
+    Broadcast( SfxHint(SfxHintId::Dying) );
     Clear();
 }
 
@@ -664,7 +663,7 @@ SfxStyleSheetBase& SfxStyleSheetBasePool::Make( const OUString& rName, SfxStyleF
     {
         xStyle = Create( rName, eFam, mask );
         StoreStyleSheet(xStyle);
-        Broadcast( SfxStyleSheetHint( SfxStyleSheetHintId::CREATED, *xStyle.get() ) );
+        Broadcast( SfxStyleSheetHint( SfxHintId::StyleSheetCreated, *xStyle.get() ) );
     }
     return *xStyle.get();
 }
@@ -682,7 +681,7 @@ void SfxStyleSheetBasePool::Add( const SfxStyleSheetBase& rSheet )
     }
     rtl::Reference< SfxStyleSheetBase > xNew( Create( rSheet ) );
     pImpl->mxIndexedStyleSheets->AddStyleSheet(xNew);
-    Broadcast( SfxStyleSheetHint( SfxStyleSheetHintId::CHANGED, *xNew.get() ) );
+    Broadcast( SfxStyleSheetHint( SfxHintId::StyleSheetChanged, *xNew.get() ) );
 }
 
 SfxStyleSheetBasePool& SfxStyleSheetBasePool::operator=( const SfxStyleSheetBasePool& r )
@@ -773,7 +772,7 @@ void SfxStyleSheetBasePool::Remove( SfxStyleSheetBase* p )
             // catch( css::uno::Exception& )
             // {
             // }
-            Broadcast( SfxStyleSheetHint( SfxStyleSheetHintId::ERASED, *p ) );
+            Broadcast( SfxStyleSheetHint( SfxHintId::StyleSheetErased, *p ) );
         }
     }
 }
@@ -793,7 +792,7 @@ void SfxStyleSheetBasePool::Insert( SfxStyleSheetBase* p )
     }
 #endif
     StoreStyleSheet(rtl::Reference< SfxStyleSheetBase >( p ) );
-    Broadcast( SfxStyleSheetHint( SfxStyleSheetHintId::CREATED, *p ) );
+    Broadcast( SfxStyleSheetHint( SfxHintId::StyleSheetCreated, *p ) );
 }
 
 namespace
@@ -816,7 +815,7 @@ struct StyleSheetDisposerFunctor final : public svl::StyleSheetDisposer
         catch( css::uno::Exception& )
         {
         }
-        mPool->Broadcast( SfxStyleSheetHint( SfxStyleSheetHintId::ERASED, *styleSheet.get() ) );
+        mPool->Broadcast( SfxStyleSheetHint( SfxHintId::StyleSheetErased, *styleSheet.get() ) );
     }
 
     SfxStyleSheetBasePool* mPool;
@@ -871,7 +870,7 @@ SfxStyleSheet::SfxStyleSheet(const SfxStyleSheet& rStyle)
 
 SfxStyleSheet::~SfxStyleSheet()
 {
-    Broadcast( SfxStyleSheetHint( SfxStyleSheetHintId::INDESTRUCTION, *this ) );
+    Broadcast( SfxStyleSheetHint( SfxHintId::StyleSheetInDestruction, *this ) );
 }
 
 
