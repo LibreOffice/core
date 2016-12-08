@@ -22,14 +22,6 @@
 typedef sal_uInt32 sal_GlyphId;
 
 // Glyph Flags
-#ifdef _WIN32
-// caution !!!
-#define GF_VERT     0x02000000
-// GF_VERT is only for windows implementation
-// (win/gdi/salgdi3.cxx, win/gdi/winlayout.cxx)
-// don't use this elsewhere !!!
-#endif
-
 #define GF_FONTMASK 0xF0000000
 #define GF_FONTSHIFT 28
 

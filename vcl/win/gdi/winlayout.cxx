@@ -296,7 +296,7 @@ bool ExTextOutRenderer::operator ()(SalLayout const &rLayout, HDC hDC,
         bGlyphs = true;
         WORD glyphWStr[] = { pGlyph->maGlyphId };
         if (pGlyph->IsVertical())
-            glyphWStr[0] |= GF_VERT;
+            glyphWStr[0] |= 0x02000000; // A (undocumented?) GDI flag for vertical glyphs
         ExtTextOutW(hDC, pPos->X(), pPos->Y(), ETO_GLYPH_INDEX, nullptr, LPCWSTR(&glyphWStr), 1, nullptr);
     }
 
