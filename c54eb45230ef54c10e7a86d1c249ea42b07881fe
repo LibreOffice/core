@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a71b18c_2620989b",
+        "filename": "svtools/source/contnr/treelistbox.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1175,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2016-12-08T22:03:00Z",
+      "side": 0,
+      "message": "Won\u0027t this make pContainer leak?",
+      "revId": "c54eb45230ef54c10e7a86d1c249ea42b07881fe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a71b18c_462594a9",
+        "filename": "svtools/source/contnr/treelistbox.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1181,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2016-12-08T22:03:00Z",
+      "side": 0,
+      "message": "This looks suspicious. It leaves a dangling pointer inside xRef.",
+      "revId": "c54eb45230ef54c10e7a86d1c249ea42b07881fe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
