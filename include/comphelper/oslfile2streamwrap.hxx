@@ -29,7 +29,6 @@
 namespace comphelper
 {
 
-// FmUnoIOStream,
 // Stream to read and write data, based on File
 
 class OSLInputStreamWrapper : public ::cppu::WeakImplHelper<css::io::XInputStream>
@@ -52,7 +51,6 @@ private:
 };
 
 
-// FmUnoOutStream,
 // data sink for the files
 
 class OSLOutputStreamWrapper : public ::cppu::WeakImplHelper<css::io::XOutputStream>
