@@ -20,6 +20,11 @@
 #include <config_features.h>
 #if HAVE_FEATURE_OPENGL
 #include "openglgdiimpl.hxx"
+#include <opengl/zone.hxx>
+#include <desktop/exithelper.h>
+#ifdef _WIN32
+#include <svsys.h>
+#endif
 #endif
 #include "salgdi.hxx"
 #include "salframe.hxx"
@@ -54,13 +59,37 @@ SalGraphics::SalGraphics()
 SalGraphics::~SalGraphics()
 {
 }
+
 #if HAVE_FEATURE_OPENGL
+
+namespace
+{
+    void disableOpenGLAndTerminateForRestart()
+    {
+        OpenGLZone::hardDisable();
+#ifdef _WIN32
+        TerminateProcess(GetCurrentProcess(), EXITHELPER_NORMAL_RESTART);
+#endif
+    }
+}
+
 rtl::Reference<OpenGLContext> SalGraphics::GetOpenGLContext() const
 {
     OpenGLSalGraphicsImpl *pImpl = dynamic_cast<OpenGLSalGraphicsImpl*>(GetImpl());
     if (pImpl)
-        return pImpl->GetOpenGLContext();
-
+    {
+        // If we notice that OpenGL is broken the first time being called, it is not too late to call
+        // disableOpenGLAndTerminateForRestart(). The first time this will be called is from displaying
+        // the splash screen, so if OpenGL is broken, it is "early enough" for us to be able to disable
+        // OpenGL and terminate bluntly with EXITHELPER_NORMAL_RESTART, thus causing the wrapper process
+        // to restart us, then without using OpenGL.
+        static bool bFirstCall = true;
+        rtl::Reference<OpenGLContext> xRet(pImpl->GetOpenGLContext());
+        if (!xRet.is() && bFirstCall)
+            disableOpenGLAndTerminateForRestart();
+        bFirstCall = false;
+        return xRet;
+    }
     return nullptr;
 }
 #endif
