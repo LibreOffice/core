@@ -1397,6 +1397,9 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case 3:
             m_aStates.top().aPropType = cppu::UnoType<sal_Int32>::get();
             break;
+        case 5:
+            m_aStates.top().aPropType = cppu::UnoType<double>::get();
+            break;
         case 11:
             m_aStates.top().aPropType = cppu::UnoType<bool>::get();
             break;

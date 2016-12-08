@@ -538,8 +538,19 @@ void RtfExport::WriteUserProps()
                 }
                 else if (aAny >>= fValue)
                 {
-                    WriteUserPropType(3);
-                    WriteUserPropValue(OUString::number(fValue));
+                    aValue = OUString::number(fValue);
+                    if (aValue.indexOf('.') == -1)
+                    {
+                        // Integer.
+                        WriteUserPropType(3);
+                        WriteUserPropValue(aValue);
+                    }
+                    else
+                    {
+                        // Real number.
+                        WriteUserPropType(5);
+                        WriteUserPropValue(aValue);
+                    }
                 }
                 else if (aAny >>= aDate)
                 {

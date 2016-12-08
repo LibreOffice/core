@@ -2712,6 +2712,8 @@ RTFError RTFDocumentImpl::popState()
                 aAny = uno::makeAny(aStaticVal.toBoolean());
             else if (m_aStates.top().aPropType == cppu::UnoType<util::DateTime>::get())
                 aAny = uno::makeAny(getDateTimeFromUserProp(aStaticVal));
+            else if (m_aStates.top().aPropType == cppu::UnoType<double>::get())
+                aAny = uno::makeAny(aStaticVal.toDouble());
 
             xPropertyContainer->addProperty(rKey, beans::PropertyAttribute::REMOVABLE, aAny);
         }
