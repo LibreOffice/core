@@ -1402,6 +1402,9 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case 30:
             m_aStates.top().aPropType = cppu::UnoType<OUString>::get();
             break;
+        case 64:
+            m_aStates.top().aPropType = cppu::UnoType<util::DateTime>::get();
+            break;
         }
     }
     break;
