@@ -760,7 +760,7 @@ void GenPspGraphics::GetFontMetric(ImplFontMetricDataRef& rxFontMetric, int nFal
 
 bool GenPspGraphics::GetGlyphBoundRect(const GlyphItem& rGlyph, Rectangle& rRect)
 {
-    const int nLevel = rGlyph.maGlyphId >> GF_FONTSHIFT;
+    const int nLevel = rGlyph.mnFallbackLevel;
     if( nLevel >= MAX_FALLBACK )
         return false;
 
@@ -776,7 +776,7 @@ bool GenPspGraphics::GetGlyphBoundRect(const GlyphItem& rGlyph, Rectangle& rRect
 bool GenPspGraphics::GetGlyphOutline(const GlyphItem& rGlyph,
     basegfx::B2DPolyPolygon& rB2DPolyPoly )
 {
-    const int nLevel = rGlyph.maGlyphId >> GF_FONTSHIFT;
+    const int nLevel = rGlyph.mnFallbackLevel;
     if( nLevel >= MAX_FALLBACK )
         return false;
 
