@@ -1279,7 +1279,6 @@ void SvTreeListBox::StartDrag( sal_Int8, const Point& rPosPixel )
     {
         nDragDropMode = nOldDragMode;
         DragFinished( DND_ACTION_NONE );
-        delete pContainer;
         return;
     }
 
