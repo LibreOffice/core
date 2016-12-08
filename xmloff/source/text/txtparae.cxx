@@ -2525,9 +2525,8 @@ void XMLTextParagraphExport::exportTextMark(
         }
 
         // export element
-        DBG_ASSERT(pElements != nullptr, "illegal element array");
-        DBG_ASSERT(nElement >= 0, "illegal element number");
-        DBG_ASSERT(nElement <= 2, "illegal element number");
+        assert(pElements != nullptr);
+        assert(0 <= nElement && nElement <= 2);
         SvXMLElementExport aElem(GetExport(),
                                  XML_NAMESPACE_TEXT, pElements[nElement],
                                  false, false);
@@ -3647,7 +3646,7 @@ void XMLTextParagraphExport::exportRuby(
             // ruby start
 
             // we can only start a ruby if none is open
-            DBG_ASSERT(! bOpenRuby, "Can't open a ruby inside of ruby!");
+            assert(!bOpenRuby && "Can't open a ruby inside of ruby!");
             if( bOpenRuby )
                 return;
 
@@ -3657,9 +3656,8 @@ void XMLTextParagraphExport::exportRuby(
 
             // ruby style
             GetExport().CheckAttrList();
-            OUString sStyleName(Find( XML_STYLE_FAMILY_TEXT_RUBY, rPropSet,
-                                        "" ));
-            DBG_ASSERT(!sStyleName.isEmpty(), "I can't find the style!");
+            OUString sStyleName(Find(XML_STYLE_FAMILY_TEXT_RUBY, rPropSet, ""));
+            SAL_WARN_IF(sStyleName.isEmpty(), "xmloff", "Can't find ruby style!");
             GetExport().AddAttribute(XML_NAMESPACE_TEXT,
                                      XML_STYLE_NAME, sStyleName);
 
@@ -3675,7 +3673,7 @@ void XMLTextParagraphExport::exportRuby(
             // ruby end
 
             // check for an open ruby
-            DBG_ASSERT(bOpenRuby, "Can't close a ruby if none is open!");
+            assert(bOpenRuby && "Can't close a ruby if none is open!");
             if( !bOpenRuby )
                 return;
 
