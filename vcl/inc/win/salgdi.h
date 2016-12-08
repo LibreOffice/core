@@ -377,8 +377,8 @@ public:
                                             Ucs2UIntMap& rUnicodeEnc ) override;
             int             GetMinKashidaWidth();
 
-    virtual bool            GetGlyphBoundRect( sal_GlyphId, Rectangle& ) override;
-    virtual bool            GetGlyphOutline( sal_GlyphId, basegfx::B2DPolyPolygon& ) override;
+    virtual bool            GetGlyphBoundRect(const GlyphItem&, Rectangle&) override;
+    virtual bool            GetGlyphOutline(const GlyphItem&, basegfx::B2DPolyPolygon&) override;
 
     virtual SalLayout*      GetTextLayout( ImplLayoutArgs&, int nFallbackLevel ) override;
     virtual void            DrawTextLayout( const CommonSalLayout& ) override;

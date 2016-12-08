@@ -106,15 +106,15 @@ X11SalGraphics::GetFontMetric( ImplFontMetricDataRef &rxFontMetric, int nFallbac
     mxTextRenderImpl->GetFontMetric(rxFontMetric, nFallbackLevel);
 }
 
-bool X11SalGraphics::GetGlyphBoundRect( sal_GlyphId aGlyphId, Rectangle& rRect )
+bool X11SalGraphics::GetGlyphBoundRect(const GlyphItem& rGlyph, Rectangle& rRect)
 {
-    return mxTextRenderImpl->GetGlyphBoundRect(aGlyphId, rRect);
+    return mxTextRenderImpl->GetGlyphBoundRect(rGlyph, rRect);
 }
 
-bool X11SalGraphics::GetGlyphOutline( sal_GlyphId aGlyphId,
+bool X11SalGraphics::GetGlyphOutline(const GlyphItem& rGlyph,
     basegfx::B2DPolyPolygon& rPolyPoly )
 {
-    return mxTextRenderImpl->GetGlyphOutline(aGlyphId, rPolyPoly);
+    return mxTextRenderImpl->GetGlyphOutline(rGlyph, rPolyPoly);
 }
 
 SalLayout* X11SalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLevel )

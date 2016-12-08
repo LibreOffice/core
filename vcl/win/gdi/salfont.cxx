@@ -1354,7 +1354,7 @@ void WinSalGraphics::ClearDevFontCache()
     //anything to do here ?
 }
 
-bool WinSalGraphics::GetGlyphBoundRect( sal_GlyphId aGlyphId, Rectangle& rRect )
+bool WinSalGraphics::GetGlyphBoundRect(const GlyphItem& rGlyph, Rectangle& rRect)
 {
     HDC hDC = getHDC();
 
@@ -1365,12 +1365,11 @@ bool WinSalGraphics::GetGlyphBoundRect( sal_GlyphId aGlyphId, Rectangle& rRect )
 
     UINT nGGOFlags = GGO_METRICS;
     nGGOFlags |= GGO_GLYPH_INDEX;
-    aGlyphId &= GF_IDXMASK;
 
     GLYPHMETRICS aGM;
     aGM.gmptGlyphOrigin.x = aGM.gmptGlyphOrigin.y = 0;
     aGM.gmBlackBoxX = aGM.gmBlackBoxY = 0;
-    DWORD nSize = ::GetGlyphOutlineW( hDC, aGlyphId, nGGOFlags, &aGM, 0, nullptr, &aMat );
+    DWORD nSize = ::GetGlyphOutlineW(hDC, rGlyph.maGlyphId & GF_IDXMASK, nGGOFlags, &aGM, 0, nullptr, &aMat);
     if( nSize == GDI_ERROR )
         return false;
 
@@ -1383,7 +1382,7 @@ bool WinSalGraphics::GetGlyphBoundRect( sal_GlyphId aGlyphId, Rectangle& rRect )
     return true;
 }
 
-bool WinSalGraphics::GetGlyphOutline( sal_GlyphId aGlyphId,
+bool WinSalGraphics::GetGlyphOutline(const GlyphItem& rGlyph,
     basegfx::B2DPolyPolygon& rB2DPolyPoly )
 {
     rB2DPolyPoly.clear();
@@ -1397,17 +1396,16 @@ bool WinSalGraphics::GetGlyphOutline( sal_GlyphId aGlyphId,
 
     UINT nGGOFlags = GGO_NATIVE;
     nGGOFlags |= GGO_GLYPH_INDEX;
-    aGlyphId &= GF_IDXMASK;
 
     GLYPHMETRICS aGlyphMetrics;
-    const DWORD nSize1 = ::GetGlyphOutlineW( hDC, aGlyphId, nGGOFlags, &aGlyphMetrics, 0, nullptr, &aMat );
+    const DWORD nSize1 = ::GetGlyphOutlineW(hDC, rGlyph.maGlyphId & GF_IDXMASK, nGGOFlags, &aGlyphMetrics, 0, nullptr, &aMat);
     if( !nSize1 )       // blank glyphs are ok
         return true;
     else if( nSize1 == GDI_ERROR )
         return false;
 
     BYTE* pData = new BYTE[ nSize1 ];
-    const DWORD nSize2 = ::GetGlyphOutlineW( hDC, aGlyphId, nGGOFlags,
+    const DWORD nSize2 = ::GetGlyphOutlineW(hDC, rGlyph.maGlyphId & GF_IDXMASK, nGGOFlags,
               &aGlyphMetrics, nSize1, pData, &aMat );
 
     if( nSize1 != nSize2 )

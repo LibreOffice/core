@@ -627,12 +627,6 @@ void FreetypeFont::GetFontMetric(ImplFontMetricDataRef& rxTo) const
 
 }
 
-static inline void SplitGlyphFlags(sal_GlyphId& rGlyphId, int& nGlyphFlags)
-{
-    nGlyphFlags = rGlyphId & GF_FLAGMASK;
-    rGlyphId &= GF_IDXMASK;
-}
-
 void FreetypeFont::ApplyGlyphTransform( int nGlyphFlags, FT_Glyph pGlyphFT ) const
 {
     // shortcut most common case
@@ -696,14 +690,13 @@ void FreetypeFont::ApplyGlyphTransform( int nGlyphFlags, FT_Glyph pGlyphFT ) con
     }
 }
 
-void FreetypeFont::InitGlyphData( sal_GlyphId aGlyphId, GlyphData& rGD ) const
+void FreetypeFont::InitGlyphData(const GlyphItem& rGlyph, GlyphData& rGD ) const
 {
     FT_Activate_Size( maSizeFT );
 
-    int nGlyphFlags;
-    SplitGlyphFlags(aGlyphId, nGlyphFlags );
+    int nGlyphFlags = rGlyph.maGlyphId & GF_FLAGMASK;;
 
-    FT_Error rc = FT_Load_Glyph(maFaceFT, aGlyphId, mnLoadFlags);
+    FT_Error rc = FT_Load_Glyph(maFaceFT, rGlyph.maGlyphId & GF_IDXMASK, mnLoadFlags);
 
     if( rc != FT_Err_Ok )
     {
@@ -1001,7 +994,7 @@ static int FT_cubic_to( const FT_Vector* p1, const FT_Vector* p2, const FT_Vecto
 
 } // extern "C"
 
-bool FreetypeFont::GetGlyphOutline( sal_GlyphId aGlyphId,
+bool FreetypeFont::GetGlyphOutline(const GlyphItem& rGlyph,
     basegfx::B2DPolyPolygon& rB2DPolyPoly ) const
 {
     if( maSizeFT )
@@ -1009,8 +1002,7 @@ bool FreetypeFont::GetGlyphOutline( sal_GlyphId aGlyphId,
 
     rB2DPolyPoly.clear();
 
-    int nGlyphFlags;
-    SplitGlyphFlags(aGlyphId, nGlyphFlags);
+    int nGlyphFlags = rGlyph.maGlyphId & GF_FLAGMASK;;
 
     FT_Int nLoadFlags = FT_LOAD_DEFAULT | FT_LOAD_IGNORE_TRANSFORM;
 
@@ -1019,7 +1011,7 @@ bool FreetypeFont::GetGlyphOutline( sal_GlyphId aGlyphId,
     nLoadFlags |= FT_LOAD_TARGET_LIGHT;
 #endif
 
-    FT_Error rc = FT_Load_Glyph( maFaceFT, aGlyphId, nLoadFlags );
+    FT_Error rc = FT_Load_Glyph(maFaceFT, rGlyph.maGlyphId & GF_IDXMASK, nLoadFlags);
     if( rc != FT_Err_Ok )
         return false;
 
