@@ -139,6 +139,8 @@ void OInputStreamWrapper::checkError() const
 
 //= OSeekableInputStreamWrapper
 
+OSeekableInputStreamWrapper::~OSeekableInputStreamWrapper() = default;
+
 OSeekableInputStreamWrapper::OSeekableInputStreamWrapper(SvStream& _rStream)
 {
     SetStream( &_rStream, false );
@@ -275,6 +277,8 @@ sal_Int64 SAL_CALL OSeekableOutputStreamWrapper::getLength(  ) throw (IOExceptio
 
     return (sal_Int64)nEndPos;
 }
+
+OStreamWrapper::~OStreamWrapper() = default;
 
 OStreamWrapper::OStreamWrapper(SvStream& _rStream)
 {

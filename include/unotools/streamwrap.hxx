@@ -82,6 +82,8 @@ class UNOTOOLS_DLLPUBLIC OSeekableInputStreamWrapper : public ::cppu::ImplInheri
 {
 protected:
     OSeekableInputStreamWrapper() {}
+    ~OSeekableInputStreamWrapper() override;
+
 public:
     OSeekableInputStreamWrapper(SvStream& _rStream);
     OSeekableInputStreamWrapper(SvStream* _pStream, bool _bOwner = false);
@@ -146,6 +148,9 @@ private:
 
 class UNOTOOLS_DLLPUBLIC OStreamWrapper : public ::cppu::ImplInheritanceHelper3 < OSeekableInputStreamWrapper, css::io::XStream, css::io::XOutputStream, css::io::XTruncate >
 {
+protected:
+    ~OStreamWrapper() override;
+
 public:
     OStreamWrapper(SvStream& _rStream);
 
