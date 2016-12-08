@@ -140,8 +140,8 @@ public:
                                         std::vector< sal_Int32 >& rWidths,
                                         Ucs2UIntMap& rUnicodeEnc ) override;
 
-    virtual bool                    GetGlyphBoundRect( sal_GlyphId nIndex, Rectangle& ) override;
-    virtual bool                    GetGlyphOutline( sal_GlyphId nIndex, basegfx::B2DPolyPolygon& ) override;
+    virtual bool                    GetGlyphBoundRect(const GlyphItem&, Rectangle&) override;
+    virtual bool                    GetGlyphOutline(const GlyphItem&, basegfx::B2DPolyPolygon&) override;
     virtual SalLayout*              GetTextLayout( ImplLayoutArgs&, int nFallbackLevel ) override;
     virtual void                    DrawTextLayout( const CommonSalLayout& ) override;
 
