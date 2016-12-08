@@ -211,6 +211,7 @@ Desktop::Desktop( const css::uno::Reference< css::lang::XMultiServiceFactory >& 
         ,   m_bIsTerminated         ( sal_False                                     )   // see dispose() for further information!
         #endif
         ,   m_xFactory              ( xFactory                                      )
+        ,   m_bSession              ( false                                         )
         ,   m_aChildTaskContainer   (                                               )
         ,   m_aListenerContainer    ( m_aLock.getShareableOslMutex()                )
         ,   m_xFramesHelper         (                                               )
@@ -419,6 +420,7 @@ bool SAL_CALL Desktop::terminateQuickstarterToo()
     throw( css::uno::RuntimeException )
 {
     QuickstartSuppressor aQuickstartSuppressor(this, m_xQuickLauncher);
+    m_bSession = true;
     return terminate();
 }
 
@@ -1915,7 +1917,10 @@ void Desktop::impl_sendNotifyTerminationEvent()
                 if ( ! bSuspended )
                 {
                     ++nNonClosedFrames;
-                    continue;
+                    if(m_bSession)
+                        break;
+                    else
+                        continue;
                 }
             }
 
@@ -1966,6 +1971,9 @@ void Desktop::impl_sendNotifyTerminationEvent()
             // So we can count it here .-)
         }
     }
+
+    // reset the session
+    m_bSession = false;
 
     return (nNonClosedFrames < 1);
 }

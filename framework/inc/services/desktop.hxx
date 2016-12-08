@@ -407,10 +407,23 @@ class Desktop   :   // interfaces
         static sal_Bool implcp_addEventListener         ( const css::uno::Reference< css::lang::XEventListener >&           xListener        );
         static sal_Bool implcp_removeEventListener      ( const css::uno::Reference< css::lang::XEventListener >&           xListener        );
 
-        sal_Bool m_bIsTerminated ;  /// check flag to protect us against dispose before terminate!
-                                    /// see dispose() for further information!
-
+        /** check flag to protect us against dispose before terminate!
+          *   see dispose() for further information!
+          */
+        sal_Bool m_bIsTerminated;
     #endif  // #ifdef ENABLE_ASSERTIONS
+
+        /** when true, the call came form session manager
+          *   the methode is Desktop::terminateQuickstarterToo()
+          *   this the only one place where set this to true
+          *   In this case,  when one frame break, not make
+          *   question for other, the break of shutdown or logout
+          *   can be only once.
+          *   In Desktop::impl_closeFrames would be test and break
+          *   the loop and reset to false
+          */
+        bool m_bSession;
+
 
     //-------------------------------------------------------------------------------------------------------------
     //  variables
