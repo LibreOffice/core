@@ -66,12 +66,16 @@ void PrinterInfoManager::initialize()
 
 void PrinterInfoManager::listPrinters( ::std::list< OUString >& rList ) const
 {
+    (void) this;
+
     rList.clear();
 }
 
 const PrinterInfo& PrinterInfoManager::getPrinterInfo( const OUString& /* rPrinter */ ) const
 {
     static PrinterInfo aEmptyInfo;
+
+    (void) this;
 
     return aEmptyInfo;
 }
@@ -98,6 +102,8 @@ bool PrinterInfoManager::setDefaultPrinter( const OUString& /* rPrinterName */ )
 
 bool PrinterInfoManager::checkFeatureToken( const OUString& /* rPrinterName */, const char* /* pToken */ ) const
 {
+    (void) this;
+
     return false;
 }
 
@@ -118,7 +124,7 @@ void PrinterInfoManager::setupJobContextData( JobData& /* rData */ )
 
 void PrinterInfoManager::setDefaultPaper( PPDContext& /* rContext */ ) const
 {
-
+    (void) this;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
