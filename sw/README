@@ -15,7 +15,7 @@ comments show that Writer core dates back until at least November
 == Source contents ==
  * core: Writer core (document model, layout, UNO API implementation)
  * filter: Writer internal filters
-   * ascii: plan text filter
+   * ascii: plain text filter
    * basflt
    * html: HTML filter
    * inc: include files for filters
