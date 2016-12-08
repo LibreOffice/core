@@ -469,6 +469,13 @@ void RtfExport::WriteInfo()
     Strm().WriteChar('}');
 }
 
+void RtfExport::WriteUserPropValue(const OUString& rValue)
+{
+    Strm().WriteCharPtr("{" OOO_STRING_SVTOOLS_RTF_STATICVAL " ");
+    Strm().WriteCharPtr(msfilter::rtfutil::OutString(rValue, m_eDefaultEncoding).getStr());
+    Strm().WriteChar('}');
+}
+
 void RtfExport::WriteUserProps()
 {
     Strm().WriteChar('{').WriteCharPtr(OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_USERPROPS);
@@ -507,18 +514,22 @@ void RtfExport::WriteUserProps()
                 Strm().WriteCharPtr(msfilter::rtfutil::OutString(rProperty.Name, m_eDefaultEncoding).getStr());
                 Strm().WriteChar('}');
 
-                // Property value type.
+                // Property value.
                 OUString aValue;
-                if (xPropertySet->getPropertyValue(rProperty.Name) >>= aValue)
+                double fValue;
+                uno::Any aAny = xPropertySet->getPropertyValue(rProperty.Name);
+                if (aAny >>= aValue)
                 {
                     Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_PROPTYPE);
                     OutULong(30);
+                    WriteUserPropValue(aValue);
                 }
-
-                // Property value.
-                Strm().WriteCharPtr("{" OOO_STRING_SVTOOLS_RTF_STATICVAL " ");
-                Strm().WriteCharPtr(msfilter::rtfutil::OutString(aValue, m_eDefaultEncoding).getStr());
-                Strm().WriteChar('}');
+                else if (aAny >>= fValue)
+                {
+                    Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_PROPTYPE);
+                    OutULong(3);
+                    WriteUserPropValue(OUString::number(fValue));
+                }
             }
         }
 
