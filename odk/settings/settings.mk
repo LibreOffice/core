@@ -507,12 +507,19 @@ UNOPKG_PLATFORM=FreeBSD_x86_64
 else
 UNOPKG_PLATFORM=FreeBSD_x86
 endif
+ifeq "$(PROCTYPE)" "powerpc"
+UNOPKG_PLATFORM=FreeBSD_ppc
+endif
 endif
 
 ifeq "$(PROCTYPE)" "x86_64"
 JAVA_PROC_TYPE=amd64
 else
 JAVA_PROC_TYPE=i386
+endif
+
+ifeq "$(PROCTYPE)" "powerpc64"
+JAVA_PROC_TYPE=ppc64
 endif
 
 ifeq (kfreebsd,$(findstring kfreebsd,$(PLATFORM)))

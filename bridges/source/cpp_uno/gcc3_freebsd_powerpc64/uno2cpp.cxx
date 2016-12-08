@@ -24,7 +24,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_bridges.hxx"
 
-#include <malloc.h>
+#include <stdlib.h>
 
 #include <com/sun/star/uno/genfunc.hxx>
 #include <uno/data.h>

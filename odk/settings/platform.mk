@@ -34,6 +34,9 @@ else
     ifeq "$(UNOPKG_PLATFORM)" "Linux_PowerPC"
         EXTENSION_PLATFORM=linux_powerpc
     else
+    ifeq "$(UNOPKG_PLATFORM)" "FreeBSD_PowerPC64"
+        EXTENSION_PLATFORM=freebsd_powerpc64
+    else
     ifeq "$(UNOPKG_PLATFORM)" "Linux_x86"
         EXTENSION_PLATFORM=linux_x86
     else

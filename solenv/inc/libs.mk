@@ -237,6 +237,9 @@ NEON3RDLIB=$(SOLARLIBDIR)/libneon.dylib
 .ELSE
 NEON3RDLIB=-lneon
 .ENDIF
+.IF "$(OS)" == "FREEBSD" && "$(CPUNAME)" == "POWERPC64"
+JPEG3RDLIB=/usr/local/lib/libjpeg.so
+.ENDIF
 CURLLIB=-lcurl
 SFX2LIB=-lsfx$(DLLPOSTFIX)
 SFXLIB=-lsfx$(DLLPOSTFIX)

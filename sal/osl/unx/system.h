@@ -126,6 +126,8 @@
 
 #endif
 
+#include <osl/endian.h>
+
 #ifdef NETBSD
 #   define  ETIME ETIMEDOUT
 #   define _POSIX_THREAD_SYSCALL_SOFT 1
@@ -176,15 +178,13 @@
 #   include <netinet/tcp.h>
 #   define  IORESOURCE_TRANSFER_BSD
 #   include <machine/endian.h>
-#if __FreeBSD_version < 500000
 #   if BYTE_ORDER == LITTLE_ENDIAN
-#       define _LITTLE_ENDIAN
+#       undef _BIG_ENDIAN
 #   elif BYTE_ORDER == BIG_ENDIAN
-#       define _BIG_ENDIAN
+#       undef _LITTLE_ENDIAN
 #   elif BYTE_ORDER == PDP_ENDIAN
 #       define _PDP_ENDIAN
 #   endif
-#endif
 #   define  NO_PTHREAD_RTL
 #endif
 

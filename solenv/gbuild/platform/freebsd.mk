@@ -36,6 +36,10 @@ ifeq ($(CPU),X)
 CPUNAME := X86_64
 endif
 
+ifeq ($(CPU),P)
+CPUNAME := POWERPC64
+endif
+
 # use CC/CXX if they are nondefaults
 ifneq ($(origin CC),default)
 gb_CC := $(CC)
@@ -66,6 +70,12 @@ ifeq ($(CPUNAME),X86_64)
 gb_CPUDEFS := -D$(CPUNAME)
 else
 gb_CPUDEFS := -DX86
+endif
+
+ifeq ($(CPUNAME),POWERPC64)
+gb_CPUDEFS := -D$(CPUNAME)
+else
+gb_CPUDEFS := -DPOWERPC64
 endif
 
 gb_CFLAGS := \
