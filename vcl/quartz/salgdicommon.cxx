@@ -274,7 +274,7 @@ bool AquaSalGraphics::CreateFontSubset( const OUString& rToFile,
     {
         aTempEncs[i] = pEncoding[i];
 
-        sal_GlyphId aGlyphId(pGlyphIds[i] & GF_IDXMASK);
+        sal_GlyphId aGlyphId(pGlyphIds[i]);
         aShortIDs[i] = static_cast<sal_uInt16>( aGlyphId );
         if( !aGlyphId && nNotDef < 0 )
         {
