@@ -618,7 +618,7 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
                     // See http://unicode.org/reports/tr50/#vo
                     if (vcl::GetVerticalOrientation(aChar) != VerticalOrientation::TransformedRotated
                     || IsVerticalAlternate(pHbGlyphInfos[i].codepoint))
-                        nGlyphIndex |= GF_ROTL;
+                        nGlyphFlags |= GlyphItem::IS_VERTICAL;
 
                     nAdvance = -pHbPositions[i].y_advance;
                     nXOffset =  pHbPositions[i].y_offset;
