@@ -182,8 +182,6 @@ public:
     virtual bool    GetOutline( SalGraphics&, basegfx::B2DPolyPolygonVector& ) const;
     virtual bool    GetBoundRect( SalGraphics&, Rectangle& ) const;
 
-    static bool     IsSpacingGlyph( sal_GlyphId );
-
     // reference counting
     void            Release() const;
 
@@ -321,13 +319,15 @@ public:
         IS_RTL_GLYPH  = 0x002,
         IS_DIACRITIC  = 0x004,
         IS_VERTICAL   = 0x008,
-        ALLOW_KASHIDA = 0X010
+        IS_SPACING    = 0x010,
+        ALLOW_KASHIDA = 0x020
     };
 
     bool    IsClusterStart() const  { return ((mnFlags & IS_IN_CLUSTER) == 0); }
     bool    IsRTLGlyph() const      { return ((mnFlags & IS_RTL_GLYPH) != 0); }
     bool    IsDiacritic() const     { return ((mnFlags & IS_DIACRITIC) != 0); }
     bool    IsVertical() const      { return ((mnFlags & IS_VERTICAL) != 0); }
+    bool    IsSpacing() const       { return ((mnFlags & IS_SPACING) != 0); }
     bool    AllowKashida() const    { return ((mnFlags & ALLOW_KASHIDA) != 0); }
 };
 
