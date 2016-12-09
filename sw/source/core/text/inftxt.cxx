@@ -1184,6 +1184,36 @@ void SwTextPaintInfo::DrawBackBrush( const SwLinePortion &rPor ) const
             aFillColor = *m_pFnt->GetBackColor();
         }
 
+		// tdf#104349 do not hightlight portions of space chars before end of line
+		bool           draw = false;
+		SwLinePortion *pPos = const_cast<SwLinePortion *>(&rPor);
+		sal_Int32      nIdx = GetIdx();
+		sal_Int32      nLen;
+
+		do
+		{
+			nLen = pPos->GetLen();
+			for ( int i = nIdx; i < (nIdx + nLen); ++i )
+			{
+				if ( GetText()[i] == CH_TXTATR_NEWLINE )
+				{
+					goto drawcontinue;
+				}
+				if ( GetText()[i] != ' ' )
+				{
+					draw = true;
+					goto drawcontinue;
+				}
+			}
+			nIdx += nLen;
+			pPos = pPos->GetPortion();
+		} while ( pPos );
+
+		drawcontinue:
+
+		if ( !draw )
+			return;
+
         pTmpOut->Push( PushFlags::LINECOLOR | PushFlags::FILLCOLOR );
 
         pTmpOut->SetFillColor(aFillColor);
