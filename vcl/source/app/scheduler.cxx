@@ -33,6 +33,7 @@ void ImplSchedulerData::Invoke()
 {
     DBG_TESTSOLARMUTEX();
 
+    assert(!mbInScheduler);
     if (mbDelete || mbInScheduler )
         return;
 
@@ -56,7 +57,7 @@ ImplSchedulerData *ImplSchedulerData::GetMostImportantTask( bool bTimerOnly )
     sal_uInt64 nTimeNow = tools::Time::GetSystemTicks();
     for ( ImplSchedulerData *pSchedulerData = pSVData->mpFirstSchedulerData; pSchedulerData; pSchedulerData = pSchedulerData->mpNext )
     {
-        if ( !pSchedulerData->mpScheduler || pSchedulerData->mbDelete ||
+        if ( !pSchedulerData->mpScheduler || pSchedulerData->mbDelete || pSchedulerData->mbInScheduler ||
              !pSchedulerData->mpScheduler->ReadyForSchedule( bTimerOnly, nTimeNow ) ||
              !pSchedulerData->mpScheduler->IsActive())
             continue;
