@@ -1111,6 +1111,12 @@ DECLARE_RTFEXPORT_TEST(testTdf61901, "tdf61901.rtf")
     }
 }
 
+DECLARE_RTFEXPORT_TEST(testTdf103925, "tdf103925.rtf")
+{
+    // This was true, \animtext0 resulted in setting the blinking font effect.
+    CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(getRun(getParagraph(1), 1), "CharFlash"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
