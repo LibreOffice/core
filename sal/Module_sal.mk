@@ -18,7 +18,6 @@ $(eval $(call gb_Module_add_targets,sal,\
 		Library_sal_textenc) \
 	$(if $(filter $(OS),WNT), \
 		Library_uwinapi) \
-	StaticLibrary_salcpprt \
 ))
 
 ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))

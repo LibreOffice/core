@@ -22,7 +22,6 @@ $(eval $(call gb_Module_add_targets,odk,\
 	Package_docs \
 	Package_html \
 	Package_examples \
-	Package_lib \
 	Package_odk_headers \
 	Package_odk_headers_generated \
 	Package_settings \

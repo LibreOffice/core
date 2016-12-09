@@ -84,11 +84,6 @@ local file="$1"
             # skip the majority of files, no ELF binaries here
             skip=1
         ;;
-        */libsalcpprt.a)
-            # strangely readelf -d "succeeds" on a static library so
-            # have to filter it manually
-            skip=1
-        ;;
         */libcairocanvaslo.so)
             whitelist="${whitelist} libcairo.so.2"
         ;;
