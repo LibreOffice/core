@@ -273,6 +273,13 @@ namespace sw
         DrawFormatLayoutCopyHint(SwDrawFrameFormat& rDestFormat, SwDoc& rDestDoc) : m_rDestFormat(rDestFormat), m_rDestDoc(rDestDoc) {};
         virtual ~DrawFormatLayoutCopyHint() override;
     };
+    enum class WW8AnchorConv
+    {
+        NO_CONV,
+        CONV2PG,
+        CONV2COL_OR_PARA,
+        CONV2CHAR_OR_LINE
+    };
 }
 
 class SW_DLLPUBLIC SwDrawFrameFormat: public SwFrameFormat
