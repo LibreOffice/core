@@ -154,9 +154,6 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         nSprm = (m_aStates.top().isRightToLeft || m_aStates.top().eRunType == RTFParserState::RunType::HICH)
                 ? NS_ooxml::LN_EG_RPrBase_szCs : NS_ooxml::LN_EG_RPrBase_sz;
         break;
-    case RTF_ANIMTEXT:
-        nSprm = NS_ooxml::LN_EG_RPrBase_effect;
-        break;
     case RTF_EXPNDTW:
         nSprm = NS_ooxml::LN_EG_RPrBase_spacing;
         break;
@@ -1418,6 +1415,22 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     case RTF_TRWWIDTHA:
         m_aStates.top().nTableRowWidthAfter = nParam;
         break;
+    case RTF_ANIMTEXT:
+    {
+        nId = 0;
+        switch (nParam)
+        {
+        case 0:
+            nId = NS_ooxml::LN_Value_ST_TextEffect_none;
+            break;
+        case 2:
+            nId = NS_ooxml::LN_Value_ST_TextEffect_blinkBackground;
+            break;
+        }
+
+        if (nId > 0)
+            m_aStates.top().aCharacterSprms.set(NS_ooxml::LN_EG_RPrBase_effect, std::make_shared<RTFValue>(nId));
+    }
     default:
     {
         SAL_INFO("writerfilter", "TODO handle value '" << keywordToString(nKeyword) << "'");
