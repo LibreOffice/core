@@ -20,8 +20,8 @@
 #define INCLUDED_VCL_Reference_HXX
 
 #include <vcl/dllapi.h>
-#include <vcl/vclptr.hxx>
 #include <tools/debug.hxx>
+
 #include <cassert>
 
 class VclReferenceBase;
@@ -30,8 +30,7 @@ class VCL_DLLPUBLIC VclReferenceBase
 {
     mutable int mnRefCnt;
 
-    template<typename T> friend class ::rtl::Reference;
-    template<typename T> friend class ::VclPtr;
+    template<typename T> friend class VclPtr;
 
 public:
     inline void acquire() const

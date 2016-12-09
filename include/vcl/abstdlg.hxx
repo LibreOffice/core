@@ -22,6 +22,7 @@
 #include <rtl/ustring.hxx>
 #include <tools/link.hxx>
 #include <vcl/dllapi.h>
+#include <vcl/vclptr.hxx>
 #include <vcl/vclreferencebase.hxx>
 #include <vector>
 

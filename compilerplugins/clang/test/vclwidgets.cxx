@@ -8,6 +8,8 @@
  */
 
 #include <sal/config.h>
+
+#include <vcl/vclptr.hxx>
 #include <vcl/vclreferencebase.hxx>
 
 struct Widget : public VclReferenceBase
