@@ -84,12 +84,12 @@ enum class SdrHdlKind
 
 enum class BitmapColorIndex
 {
-    LightGreen,
-    Cyan,
-    LightCyan,
-    Red,
-    LightRed,
-    Yellow
+    LightGreen  = 0,
+    Cyan        = 1,
+    LightCyan   = 2,
+    Red         = 3,
+    LightRed    = 4,
+    Yellow      = 5,
 };
 
 
@@ -132,8 +132,6 @@ class SVX_DLLPUBLIC SdrHdl
 {
     friend class                SdrMarkView; // for the access to nObjHdlNum
     friend class                SdrHdlList;
-
-    static BitmapEx ImpGetBitmapEx(BitmapMarkerKind eKindOfMarker, sal_uInt16 nInd);
 
 protected:
     SdrObject*                  pObj;      // does handle belong to an object?
@@ -233,7 +231,7 @@ public:
         visualisation during mouse over it must override this method and call Touch(). */
     virtual void onMouseLeave();
 
-    static BitmapEx createGluePointBitmap() { return ImpGetBitmapEx(BitmapMarkerKind::Glue_Deselected, 0); }
+    static BitmapEx createGluePointBitmap();
 };
 
 
