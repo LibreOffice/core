@@ -2678,6 +2678,101 @@ Bitmap SIP_SA_PAGESHADOW35X35
     File = "pageshadow35x35.png";
 };
 
+Bitmap BMP_MARKER_RECT7_1  { File = "marker-rect7-1.png"; };
+Bitmap BMP_MARKER_RECT7_2  { File = "marker-rect7-2.png"; };
+Bitmap BMP_MARKER_RECT7_3  { File = "marker-rect7-3.png"; };
+Bitmap BMP_MARKER_RECT7_4  { File = "marker-rect7-4.png"; };
+Bitmap BMP_MARKER_RECT7_5  { File = "marker-rect7-5.png"; };
+Bitmap BMP_MARKER_RECT7_6  { File = "marker-rect7-6.png"; };
+Bitmap BMP_MARKER_RECT9_1  { File = "marker-rect9-1.png"; };
+Bitmap BMP_MARKER_RECT9_2  { File = "marker-rect9-2.png"; };
+Bitmap BMP_MARKER_RECT9_3  { File = "marker-rect9-3.png"; };
+Bitmap BMP_MARKER_RECT9_4  { File = "marker-rect9-4.png"; };
+Bitmap BMP_MARKER_RECT9_5  { File = "marker-rect9-5.png"; };
+Bitmap BMP_MARKER_RECT9_6  { File = "marker-rect9-6.png"; };
+Bitmap BMP_MARKER_RECT11_1 { File = "marker-rect11-1.png"; };
+Bitmap BMP_MARKER_RECT11_2 { File = "marker-rect11-2.png"; };
+Bitmap BMP_MARKER_RECT11_3 { File = "marker-rect11-3.png"; };
+Bitmap BMP_MARKER_RECT11_4 { File = "marker-rect11-4.png"; };
+Bitmap BMP_MARKER_RECT11_5 { File = "marker-rect11-5.png"; };
+Bitmap BMP_MARKER_RECT11_6 { File = "marker-rect11-6.png"; };
+Bitmap BMP_MARKER_RECT13_1 { File = "marker-rect13-1.png"; };
+Bitmap BMP_MARKER_RECT13_2 { File = "marker-rect13-2.png"; };
+Bitmap BMP_MARKER_RECT13_3 { File = "marker-rect13-3.png"; };
+Bitmap BMP_MARKER_RECT13_4 { File = "marker-rect13-4.png"; };
+Bitmap BMP_MARKER_RECT13_5 { File = "marker-rect13-5.png"; };
+Bitmap BMP_MARKER_RECT13_6 { File = "marker-rect13-6.png"; };
+
+Bitmap BMP_MARKER_CIRC7_1  { File = "marker-circ7-1.png"; };
+Bitmap BMP_MARKER_CIRC7_2  { File = "marker-circ7-2.png"; };
+Bitmap BMP_MARKER_CIRC7_3  { File = "marker-circ7-3.png"; };
+Bitmap BMP_MARKER_CIRC7_4  { File = "marker-circ7-4.png"; };
+Bitmap BMP_MARKER_CIRC7_5  { File = "marker-circ7-5.png"; };
+Bitmap BMP_MARKER_CIRC7_6  { File = "marker-circ7-6.png"; };
+Bitmap BMP_MARKER_CIRC9_1  { File = "marker-circ9-1.png"; };
+Bitmap BMP_MARKER_CIRC9_2  { File = "marker-circ9-2.png"; };
+Bitmap BMP_MARKER_CIRC9_3  { File = "marker-circ9-3.png"; };
+Bitmap BMP_MARKER_CIRC9_4  { File = "marker-circ9-4.png"; };
+Bitmap BMP_MARKER_CIRC9_5  { File = "marker-circ9-5.png"; };
+Bitmap BMP_MARKER_CIRC9_6  { File = "marker-circ9-6.png"; };
+Bitmap BMP_MARKER_CIRC11_1 { File = "marker-circ11-1.png"; };
+Bitmap BMP_MARKER_CIRC11_2 { File = "marker-circ11-2.png"; };
+Bitmap BMP_MARKER_CIRC11_3 { File = "marker-circ11-3.png"; };
+Bitmap BMP_MARKER_CIRC11_4 { File = "marker-circ11-4.png"; };
+Bitmap BMP_MARKER_CIRC11_5 { File = "marker-circ11-5.png"; };
+Bitmap BMP_MARKER_CIRC11_6 { File = "marker-circ11-6.png"; };
+
+Bitmap BMP_MARKER_ELLI7x9_1  { File = "marker-elli7x9-1.png"; };
+Bitmap BMP_MARKER_ELLI7x9_2  { File = "marker-elli7x9-2.png"; };
+Bitmap BMP_MARKER_ELLI7x9_3  { File = "marker-elli7x9-3.png"; };
+Bitmap BMP_MARKER_ELLI7x9_4  { File = "marker-elli7x9-4.png"; };
+Bitmap BMP_MARKER_ELLI7x9_5  { File = "marker-elli7x9-5.png"; };
+Bitmap BMP_MARKER_ELLI7x9_6  { File = "marker-elli7x9-6.png"; };
+Bitmap BMP_MARKER_ELLI9x11_1 { File = "marker-elli9x11-1.png"; };
+Bitmap BMP_MARKER_ELLI9x11_2 { File = "marker-elli9x11-2.png"; };
+Bitmap BMP_MARKER_ELLI9x11_3 { File = "marker-elli9x11-3.png"; };
+Bitmap BMP_MARKER_ELLI9x11_4 { File = "marker-elli9x11-4.png"; };
+Bitmap BMP_MARKER_ELLI9x11_5 { File = "marker-elli9x11-5.png"; };
+Bitmap BMP_MARKER_ELLI9x11_6 { File = "marker-elli9x11-6.png"; };
+
+Bitmap BMP_MARKER_ELLI9x7_1  { File = "marker-elli9x7-1.png"; };
+Bitmap BMP_MARKER_ELLI9x7_2  { File = "marker-elli9x7-2.png"; };
+Bitmap BMP_MARKER_ELLI9x7_3  { File = "marker-elli9x7-3.png"; };
+Bitmap BMP_MARKER_ELLI9x7_4  { File = "marker-elli9x7-4.png"; };
+Bitmap BMP_MARKER_ELLI9x7_5  { File = "marker-elli9x7-5.png"; };
+Bitmap BMP_MARKER_ELLI9x7_6  { File = "marker-elli9x7-6.png"; };
+Bitmap BMP_MARKER_ELLI11x9_1 { File = "marker-elli11x9-1.png"; };
+Bitmap BMP_MARKER_ELLI11x9_2 { File = "marker-elli11x9-2.png"; };
+Bitmap BMP_MARKER_ELLI11x9_3 { File = "marker-elli11x9-3.png"; };
+Bitmap BMP_MARKER_ELLI11x9_4 { File = "marker-elli11x9-4.png"; };
+Bitmap BMP_MARKER_ELLI11x9_5 { File = "marker-elli11x9-5.png"; };
+Bitmap BMP_MARKER_ELLI11x9_6 { File = "marker-elli11x9-6.png"; };
+
+Bitmap BMP_MARKER_RECTPLUS7_1  { File = "marker-rectplus7-1.png"; };
+Bitmap BMP_MARKER_RECTPLUS7_2  { File = "marker-rectplus7-2.png"; };
+Bitmap BMP_MARKER_RECTPLUS7_3  { File = "marker-rectplus7-3.png"; };
+Bitmap BMP_MARKER_RECTPLUS7_4  { File = "marker-rectplus7-4.png"; };
+Bitmap BMP_MARKER_RECTPLUS7_5  { File = "marker-rectplus7-5.png"; };
+Bitmap BMP_MARKER_RECTPLUS7_6  { File = "marker-rectplus7-6.png"; };
+Bitmap BMP_MARKER_RECTPLUS9_1  { File = "marker-rectplus9-1.png"; };
+Bitmap BMP_MARKER_RECTPLUS9_2  { File = "marker-rectplus9-2.png"; };
+Bitmap BMP_MARKER_RECTPLUS9_3  { File = "marker-rectplus9-3.png"; };
+Bitmap BMP_MARKER_RECTPLUS9_4  { File = "marker-rectplus9-4.png"; };
+Bitmap BMP_MARKER_RECTPLUS9_5  { File = "marker-rectplus9-5.png"; };
+Bitmap BMP_MARKER_RECTPLUS9_6  { File = "marker-rectplus9-6.png"; };
+Bitmap BMP_MARKER_RECTPLUS11_1 { File = "marker-rectplus11-1.png"; };
+Bitmap BMP_MARKER_RECTPLUS11_2 { File = "marker-rectplus11-2.png"; };
+Bitmap BMP_MARKER_RECTPLUS11_3 { File = "marker-rectplus11-3.png"; };
+Bitmap BMP_MARKER_RECTPLUS11_4 { File = "marker-rectplus11-4.png"; };
+Bitmap BMP_MARKER_RECTPLUS11_5 { File = "marker-rectplus11-5.png"; };
+Bitmap BMP_MARKER_RECTPLUS11_6 { File = "marker-rectplus11-6.png"; };
+
+Bitmap BMP_MARKER_ANCHOR           { File = "marker-anchor.png"; };
+Bitmap BMP_MARKER_ANCHOR_PRESSED   { File = "marker-anchor-pressed.png"; };
+Bitmap BMP_MARKER_CROSS            { File = "marker-cross.png"; };
+Bitmap BMP_MARKER_GLUE_SELECTED    { File = "marker-glue-selected.png"; };
+Bitmap BMP_MARKER_GLUE_UNSELECTED  { File = "marker-glue-unselected.png"; };
+
 Bitmap SIP_SA_MARKERS
 {
     File = "markers.png";
