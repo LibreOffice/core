@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a71b18c_06363c03",
+        "filename": "sfx2/source/appl/appcfg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-12-09T19:54:09Z",
+      "side": 1,
+      "message": "turn this into SAL_INFO_IF and the #ifdef DBG_UTIL wrapper can go",
+      "revId": "4d52a74014e2cac4517f2868784f8841006d6e12",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
