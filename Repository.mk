@@ -829,7 +829,6 @@ $(eval $(call gb_Helper_register_packages_for_install,sdk,\
 	odk_examples \
 	odk_headers \
 	odk_html \
-	odk_lib \
 	odk_settings \
 	odk_settings_generated \
 	offapi_idl \
