@@ -1839,7 +1839,7 @@ const ScXMLEditAttributeMap& ScXMLExport::GetEditAttributeMap() const
     return *mpEditAttrMap;
 }
 
-void ScXMLExport::RegisterDefinedNames( uno::Reference< css::sheet::XSpreadsheetDocument > & xSpreadDoc )
+void ScXMLExport::RegisterDefinedStyleNames( uno::Reference< css::sheet::XSpreadsheetDocument > & xSpreadDoc )
 {
     ScFormatSaveData* pFormatData = ScModelObj::getImplementation(xSpreadDoc)->GetFormatSaveData();
     auto xAutoStylePool = GetAutoStylePool();
@@ -1946,7 +1946,7 @@ void ScXMLExport::ExportStyles_( bool bUsed )
 {
     Reference <sheet::XSpreadsheetDocument> xSpreadDoc( GetModel(), uno::UNO_QUERY );
     if (xSpreadDoc.is())
-        RegisterDefinedNames( xSpreadDoc);
+        RegisterDefinedStyleNames( xSpreadDoc);
 
     if (!pSharedData)
     {
@@ -2274,7 +2274,7 @@ void ScXMLExport::ExportAutoStyles_()
     if (getExportFlags() & SvXMLExportFlags::CONTENT)
     {
         // Reserve the loaded cell style names.
-        RegisterDefinedNames( xSpreadDoc);
+        RegisterDefinedStyleNames( xSpreadDoc);
 
         //  re-create automatic styles with old names from stored data
         ScSheetSaveData* pSheetData = ScModelObj::getImplementation(xSpreadDoc)->GetSheetSaveData();
