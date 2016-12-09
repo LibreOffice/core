@@ -346,7 +346,7 @@ void PPTShape::addShape(
                     }
                 }
                 // Apply text properties on placeholder text inside this placeholder shape
-                if (mpPlaceholder.get() != nullptr && getTextBody() && getTextBody()->isEmpty())
+                if (meShapeLocation == Slide && mpPlaceholder.get() != nullptr && getTextBody() && getTextBody()->isEmpty())
                 {
                     Reference < XText > xText(mxShape, UNO_QUERY);
                     if (xText.is())
