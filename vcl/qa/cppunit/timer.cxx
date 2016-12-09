@@ -66,6 +66,7 @@ public:
 #endif
     void testRecursiveTimer();
     void testSlowTimerCallback();
+    void testTriggerIdleFromIdle();
 
     CPPUNIT_TEST_SUITE(TimerTest);
     CPPUNIT_TEST(testIdle);
@@ -80,6 +81,7 @@ public:
 #endif
     CPPUNIT_TEST(testRecursiveTimer);
     CPPUNIT_TEST(testSlowTimerCallback);
+    CPPUNIT_TEST(testTriggerIdleFromIdle);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -351,6 +353,39 @@ void TimerTest::testSlowTimerCallback()
     // coverity[loop_top] - Application::Yield allows the timer to fire and increment nCount
     while (nCount < 200)
         Application::Yield();
+}
+
+
+class TriggerIdleFromIdle : public Idle
+{
+    bool* mpTriggered;
+    TriggerIdleFromIdle* mpOther;
+public:
+    explicit TriggerIdleFromIdle( bool* pTriggered, TriggerIdleFromIdle* pOther ) :
+        Idle(), mpTriggered(pTriggered), mpOther(pOther)
+    {
+    }
+    virtual void Invoke() override
+    {
+        Start();
+        if (mpOther)
+            mpOther->Start();
+        Application::Yield();
+        if (mpTriggered)
+            *mpTriggered = true;
+    }
+};
+
+void TimerTest::testTriggerIdleFromIdle()
+{
+    bool bTriggered1 = false;
+    bool bTriggered2 = false;
+    TriggerIdleFromIdle aTest2( &bTriggered2, nullptr );
+    TriggerIdleFromIdle aTest1( &bTriggered1, &aTest2 );
+    aTest1.Start();
+    Application::Yield();
+    CPPUNIT_ASSERT_MESSAGE("idle triggered", bTriggered1);
+    CPPUNIT_ASSERT_MESSAGE("idle triggered", bTriggered2);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TimerTest);
