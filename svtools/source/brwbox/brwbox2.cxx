@@ -1379,7 +1379,7 @@ void BrowseBox::MouseButtonDown( const MouseEvent& rEvt )
 
 void BrowseBox::MouseMove( const MouseEvent& rEvt )
 {
-    OSL_TRACE( "BrowseBox::MouseMove( MouseEvent )" );
+    SAL_INFO("svtools", "BrowseBox::MouseMove( MouseEvent )" );
 
     Pointer aNewPointer;
 

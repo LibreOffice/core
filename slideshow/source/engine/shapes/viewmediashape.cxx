@@ -424,7 +424,7 @@ namespace slideshow
                                                                  const uno::Sequence< uno::Any >& rVCLDeviceParams,
                                                                  const OUString& rMimeType )
         {
-            OSL_TRACE( "ViewMediaShape::implInitializePlayerWindow" );
+            SAL_INFO("slideshow", "ViewMediaShape::implInitializePlayerWindow" );
             if( !mpMediaWindow.get() && !rBounds.isEmpty() )
             {
                 try

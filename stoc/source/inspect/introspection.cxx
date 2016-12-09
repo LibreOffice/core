@@ -2070,7 +2070,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
                             if (aIt != rPropNameMap.end())
                             {
                                 /* TODO
-                                   OSL_TRACE(
+                                   SAL_INFO("stoc",(
                                    String( "Introspection: Property \"" ) +
                                    OOUStringToString( aPropName, CHARSET_SYSTEM ) +
                                    String( "\" found more than once" ) );
@@ -2259,7 +2259,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
                             if (aIt != rPropNameMap.end())
                             {
                                 /* TODO:
-                                   OSL_TRACE(
+                                   SAL_INFO("stoc",(
                                    String( "Introspection: Property \"" ) +
                                    OOUStringToString( aPropName, CHARSET_SYSTEM ) +
                                    String( "\" found more than once" ) );

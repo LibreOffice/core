@@ -256,7 +256,7 @@ namespace accessibility
         mnNotifierClientId(::comphelper::AccessibleEventNotifier::registerClient())
     {
 #ifdef DBG_UTIL
-        OSL_TRACE( "AccessibleTextHelper_Impl received ID: %d", mnNotifierClientId );
+        SAL_INFO("svx", "received ID: " << mnNotifierClientId );
 #endif
     }
 
@@ -426,7 +426,7 @@ namespace accessibility
                             pAccTable->SetStateDirectly(AccessibleStateType::FOCUSED);
                     }
                 }
-                OSL_TRACE("AccessibleTextHelper_Impl::SetShapeFocus(): Parent object received focus" );
+                SAL_INFO("svx", "Parent object received focus" );
             }
             else
             {
@@ -444,7 +444,7 @@ namespace accessibility
                             pAccTable->ResetStateDirectly(AccessibleStateType::FOCUSED);
                     }
                 }
-                OSL_TRACE("AccessibleTextHelper_Impl::SetShapeFocus(): Parent object lost focus" );
+                SAL_INFO("svx", "Parent object lost focus" );
             }
         }
     }
@@ -471,7 +471,7 @@ namespace accessibility
             SetShapeFocus( bHaveFocus );
         }
 
-        OSL_TRACE("AccessibleTextHelper_Impl::SetFocus: focus changed, Object %p, state: %s", this, bHaveFocus ? "focused" : "not focused");
+        SAL_INFO("svx", "focus changed, Object " << this << ", state: " << (bHaveFocus ? "focused" : "not focused") );
     }
 
     bool AccessibleTextHelper_Impl::IsActive() const
@@ -518,7 +518,7 @@ namespace accessibility
                     // #103998# Not that important, changed from assertion to trace
                     if( mbThisHasFocus )
                     {
-                        OSL_TRACE("AccessibleTextHelper_Impl::UpdateSelection(): Parent has focus!");
+                        SAL_INFO("svx", "Parent has focus!");
                     }
 
                     sal_Int32 nMaxValidParaIndex( GetTextForwarder().GetParagraphCount() - 1 );
@@ -1323,7 +1323,7 @@ namespace accessibility
                 catch( const uno::Exception& )
                 {
 #ifdef DBG_UTIL
-                    OSL_TRACE("AccessibleTextHelper_Impl::ProcessQueue: Unhandled exception.");
+                    SAL_WARN("svx", "Unhandled exception.");
 #endif
                 }
             }
@@ -1439,7 +1439,7 @@ namespace accessibility
         catch( const uno::Exception& )
         {
 #ifdef DBG_UTIL
-            OSL_TRACE("AccessibleTextHelper_Impl::Notify: Unhandled exception.");
+            SAL_WARN("svx", "Unhandled exception.");
 #endif
             mbInNotify = false;
         }
@@ -1456,7 +1456,7 @@ namespace accessibility
                 // #106234# Unregister from EventNotifier
                 ::comphelper::AccessibleEventNotifier::revokeClient( getNotifierClientId() );
 #ifdef DBG_UTIL
-                OSL_TRACE( "AccessibleTextHelper_Impl disposed ID: %d", mnNotifierClientId );
+                SAL_INFO("svx", "disposed ID: " << mnNotifierClientId );
 #endif
             }
             catch( const uno::Exception& ) {}

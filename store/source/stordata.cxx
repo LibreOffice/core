@@ -786,7 +786,7 @@ storeError OStoreDirectoryPageObject::read (
     else
     {
         // Unknown scope.
-        OSL_TRACE("OStoreDirectoryPageObject::get(): scope failed");
+        SAL_WARN("store", "OStoreDirectoryPageObject::get(): scope failed");
         eErrCode = store_E_Unknown;
     }
 
@@ -873,7 +873,7 @@ storeError OStoreDirectoryPageObject::write (
     else
     {
         // Unknown scope.
-        OSL_TRACE("OStoreDirectoryPageObject::put(): scope failed");
+        SAL_WARN("store", "OStoreDirectoryPageObject::put(): scope failed");
         eErrCode = store_E_Unknown;
     }
 
@@ -995,7 +995,7 @@ storeError OStoreDirectoryPageObject::truncate (
     else
     {
         // Unknown scope.
-        OSL_TRACE("OStoreDirectoryPageObject::put(): scope failed");
+        SAL_WARN("store", "OStoreDirectoryPageObject::put(): scope failed");
         eErrCode = store_E_Unknown;
     }
 

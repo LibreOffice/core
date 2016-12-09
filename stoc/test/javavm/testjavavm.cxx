@@ -89,7 +89,7 @@ sal_Bool testJavaVM(const Reference< XMultiServiceFactory > & xMgr )
 
     jclass cls = p_env->FindClass( "TestJavaVM");
     if (cls == 0) {
-        OSL_TRACE( "Can't find Prog class");
+        SAL_WARN("stoc", "Can't find Prog class");
         exit(1);
     }
 
@@ -139,10 +139,7 @@ SAL_IMPLEMENT_MAIN()
     catch (const Exception & rExc)
     {
         OSL_FAIL( "### exception occurred!" );
-        OString aMsg( OUStringToOString( rExc.Message, RTL_TEXTENCODING_ASCII_US ) );
-        OSL_TRACE( "### exception occurred: " );
-        OSL_TRACE( "%s", aMsg.getStr() );
-        OSL_TRACE( "\n" );
+        SAL_WARN("stoc", "### exception occurred: " << rExc.Message );
     }
 
     Reference< XComponent > xCompContext( context, UNO_QUERY );

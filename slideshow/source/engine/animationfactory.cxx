@@ -679,9 +679,7 @@ namespace slideshow
                 if( !rAny.hasValue() )
                 {
                     OSL_FAIL( "getDefault(): cannot get requested shape property" );
-                    OSL_TRACE( "getDefault(): cannot get '%s' shape property",
-                               OUStringToOString( rPropertyName,
-                                                         RTL_TEXTENCODING_ASCII_US ).getStr() );
+                    SAL_WARN("slideshow", "getDefault(): cannot get shape property " <<  rPropertyName );
                     return ValueType();
                 }
                 else
@@ -691,9 +689,7 @@ namespace slideshow
                     if( !(rAny >>= aValue) )
                     {
                         OSL_FAIL( "getDefault(): cannot extract requested shape property" );
-                        OSL_TRACE( "getDefault(): cannot extract '%s' shape property",
-                                   OUStringToOString( rPropertyName,
-                                                             RTL_TEXTENCODING_ASCII_US ).getStr() );
+                        SAL_WARN("slideshow", "getDefault(): cannot extract shape property " << rPropertyName);
                         return ValueType();
                     }
 
@@ -710,9 +706,7 @@ namespace slideshow
                 if( !rAny.hasValue() )
                 {
                     OSL_FAIL( "getDefault(): cannot get requested shape color property" );
-                    OSL_TRACE( "getDefault(): cannot get '%s' shape color property",
-                               OUStringToOString( rPropertyName,
-                                                         RTL_TEXTENCODING_ASCII_US ).getStr() );
+                    SAL_WARN("slideshow", "getDefault(): cannot get shape color property " << rPropertyName);
                     return RGBColor();
                 }
                 else
@@ -722,9 +716,7 @@ namespace slideshow
                     if( !(rAny >>= nValue) )
                     {
                         OSL_FAIL( "getDefault(): cannot extract requested shape color property" );
-                        OSL_TRACE( "getDefault(): cannot extract '%s' shape color property",
-                                   OUStringToOString( rPropertyName,
-                                                             RTL_TEXTENCODING_ASCII_US ).getStr() );
+                        SAL_INFO("slideshow", "getDefault(): cannot extract shape color property " << rPropertyName);
                         return RGBColor();
                     }
 

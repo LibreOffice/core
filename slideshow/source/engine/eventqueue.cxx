@@ -257,7 +257,7 @@ namespace slideshow
                         // since this will also capture segmentation
                         // violations and the like. In such a case, we
                         // still better let our clients now...
-                        OSL_TRACE( "::presentation::internal::EventQueue: Event threw a SlideShowException, action might not have been fully performed" );
+                        SAL_WARN("slideshow", "::presentation::internal::EventQueue: Event threw a SlideShowException, action might not have been fully performed" );
                     }
                 }
                 else

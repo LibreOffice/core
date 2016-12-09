@@ -759,8 +759,8 @@ ActivitySharedPtr SlideShowImpl::createSlideTransition(
 
     if( !xPropSet.is() )
     {
-        OSL_TRACE( "createSlideTransition(): "
-                   "Slide has no PropertySet - assuming no transition\n" );
+        SAL_INFO("slideshow", "createSlideTransition(): "
+                   "Slide has no PropertySet - assuming no transition" );
         return ActivitySharedPtr();
     }
 
@@ -769,8 +769,8 @@ ActivitySharedPtr SlideShowImpl::createSlideTransition(
                            xPropSet,
                            "TransitionType") )
     {
-        OSL_TRACE( "createSlideTransition(): "
-                   "Could not extract slide transition type from XDrawPage - assuming no transition\n" );
+        SAL_INFO("slideshow", "createSlideTransition(): "
+                   "Could not extract slide transition type from XDrawPage - assuming no transition" );
         return ActivitySharedPtr();
     }
 
@@ -779,8 +779,8 @@ ActivitySharedPtr SlideShowImpl::createSlideTransition(
                            xPropSet,
                            "TransitionSubtype") )
     {
-        OSL_TRACE( "createSlideTransition(): "
-                   "Could not extract slide transition subtype from XDrawPage - assuming no transition\n" );
+        SAL_INFO("slideshow", "createSlideTransition(): "
+                   "Could not extract slide transition subtype from XDrawPage - assuming no transition" );
         return ActivitySharedPtr();
     }
 
@@ -789,8 +789,8 @@ ActivitySharedPtr SlideShowImpl::createSlideTransition(
                            xPropSet,
                            "TransitionDirection") )
     {
-        OSL_TRACE( "createSlideTransition(): "
-                   "Could not extract slide transition direction from XDrawPage - assuming default direction\n" );
+        SAL_INFO("slideshow", "createSlideTransition(): "
+                   "Could not extract slide transition direction from XDrawPage - assuming default direction" );
     }
 
     sal_Int32 aUnoColor(0);
@@ -798,8 +798,8 @@ ActivitySharedPtr SlideShowImpl::createSlideTransition(
                            xPropSet,
                            "TransitionFadeColor") )
     {
-        OSL_TRACE( "createSlideTransition(): "
-                   "Could not extract slide transition fade color from XDrawPage - assuming black\n" );
+        SAL_INFO("slideshow", "createSlideTransition(): "
+                   "Could not extract slide transition fade color from XDrawPage - assuming black" );
     }
 
     const RGBColor aTransitionFadeColor( unoColor2RGBColor( aUnoColor ));
@@ -808,10 +808,10 @@ ActivitySharedPtr SlideShowImpl::createSlideTransition(
     bool bLoopSound = false;
 
     if( !getPropertyValue( aSound, xPropSet, "Sound") )
-        OSL_TRACE( "createSlideTransition(): Could not determine transition sound effect URL from XDrawPage - using no sound" );
+        SAL_INFO("slideshow", "createSlideTransition(): Could not determine transition sound effect URL from XDrawPage - using no sound" );
 
     if( !getPropertyValue( bLoopSound, xPropSet, "LoopSound" ) )
-        OSL_TRACE( "createSlideTransition(): Could not get slide property 'LoopSound' - using no sound" );
+        SAL_INFO("slideshow", "createSlideTransition(): Could not get slide property 'LoopSound' - using no sound" );
 
     NumberAnimationSharedPtr pTransition(
         TransitionFactory::createSlideTransition(
@@ -838,8 +838,8 @@ ActivitySharedPtr SlideShowImpl::createSlideTransition(
                            xPropSet,
                            "TransitionDuration") )
     {
-        OSL_TRACE( "createSlideTransition(): "
-                   "Could not extract slide transition duration from XDrawPage - assuming no transition\n" );
+        SAL_INFO("slideshow", "createSlideTransition(): "
+                   "Could not extract slide transition duration from XDrawPage - assuming no transition" );
         return ActivitySharedPtr();
     }
 
@@ -848,8 +848,8 @@ ActivitySharedPtr SlideShowImpl::createSlideTransition(
                            xPropSet,
                            "MinimalFrameNumber") )
     {
-        OSL_TRACE( "createSlideTransition(): "
-                   "No minimal number of frames given - assuming 5\n" );
+        SAL_INFO("slideshow", "createSlideTransition(): "
+                   "No minimal number of frames given - assuming 5" );
     }
 
     // prefetch slide transition bitmaps, but postpone it after
@@ -2163,9 +2163,9 @@ void queryAutomaticSlideTransition( uno::Reference<drawing::XDrawPage> const& xD
                            xPropSet,
                            "Change") )
     {
-        OSL_TRACE(
+        SAL_INFO("slideshow",
             "queryAutomaticSlideTransition(): "
-            "Could not extract slide change mode from XDrawPage - assuming <none>\n" );
+            "Could not extract slide change mode from XDrawPage - assuming <none>" );
     }
 
     bHasAutomaticNextSlide = nChange == 1;
@@ -2175,10 +2175,10 @@ void queryAutomaticSlideTransition( uno::Reference<drawing::XDrawPage> const& xD
                            xPropSet,
                            "HighResDuration") )
     {
-        OSL_TRACE(
+        SAL_INFO("slideshow",
             "queryAutomaticSlideTransition(): "
             "Could not extract slide transition timeout from "
-            "XDrawPage - assuming 1 sec\n" );
+            "XDrawPage - assuming 1 sec" );
     }
 }
 

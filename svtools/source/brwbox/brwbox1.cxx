@@ -59,7 +59,7 @@ namespace
 
 void BrowseBox::ConstructImpl( BrowserMode nMode )
 {
-    OSL_TRACE( "BrowseBox: %p->ConstructImpl", this );
+    SAL_INFO("svtools", "BrowseBox:ConstructImpl " << this );
     bMultiSelection = false;
     pColSel = nullptr;
     pDataWin = nullptr;
@@ -126,7 +126,7 @@ BrowseBox::~BrowseBox()
 
 void BrowseBox::dispose()
 {
-    OSL_TRACE( "BrowseBox: %p~", this );
+    SAL_INFO("svtools", "BrowseBox:dispose " << this );
 
     if ( m_pImpl->m_pAccessible )
     {
@@ -306,7 +306,7 @@ void BrowseBox::SetToggledSelectedColumn(sal_uInt16 _nSelectedColumnId)
     {
         pColSel->Select( GetColumnPos( _nSelectedColumnId ) );
         ToggleSelection();
-        OSL_TRACE( "BrowseBox: %p->SetToggledSelectedColumn", this );
+        SAL_INFO("svtools", "BrowseBox::SetToggledSelectedColumn " << this );
         DoShowCursor( "SetToggledSelectedColumn" );
     }
 }
@@ -1244,7 +1244,7 @@ void BrowseBox::RowRemoved( long nRow, long nNumRows, bool bDoPaint )
     if ( bDoPaint )
     {
         // hide cursor and selection
-        OSL_TRACE( "BrowseBox: %p->HideCursor", this );
+        SAL_INFO("svtools", "BrowseBox::HideCursor " << this );
         ToggleSelection();
         DoHideCursor( "RowRemoved" );
     }
@@ -1323,7 +1323,7 @@ void BrowseBox::RowRemoved( long nRow, long nNumRows, bool bDoPaint )
     {
         // reshow cursor and selection
         ToggleSelection();
-        OSL_TRACE( "BrowseBox: %p->ShowCursor", this );
+        SAL_INFO("svtools", "BrowseBox::ShowCursor " << this );
         DoShowCursor( "RowRemoved" );
 
         // adjust the vertical scrollbar
@@ -1595,7 +1595,7 @@ void BrowseBox::SetNoSelection()
         // nothing to do
         return;
 
-    OSL_TRACE( "BrowseBox: %p->HideCursor", this );
+    SAL_INFO("svtools", "BrowseBox::HideCursor " << this );
     ToggleSelection();
 
     // unselect all
@@ -1611,7 +1611,7 @@ void BrowseBox::SetNoSelection()
         bSelect = true;
 
     // restore screen
-    OSL_TRACE( "BrowseBox: %p->ShowCursor", this );
+    SAL_INFO("svtools", "BrowseBox::ShowCursor " << this );
 
     if ( isAccessibleAlive() )
     {
@@ -1630,7 +1630,7 @@ void BrowseBox::SelectAll()
     if ( !bMultiSelection )
         return;
 
-    OSL_TRACE( "BrowseBox: %p->HideCursor", this );
+    SAL_INFO("svtools", "BrowseBox::HideCursor " << this );
     ToggleSelection();
 
     // select all rows
@@ -1663,7 +1663,7 @@ void BrowseBox::SelectAll()
         bSelect = true;
 
     // restore screen
-    OSL_TRACE( "BrowseBox: %p->ShowCursor", this );
+    SAL_INFO("svtools", "BrowseBox::ShowCursor " << this );
 
     if ( isAccessibleAlive() )
     {
@@ -1700,7 +1700,7 @@ void BrowseBox::SelectRow( long nRow, bool _bSelect, bool bExpand )
         return;
     }
 
-    OSL_TRACE( "BrowseBox: %p->HideCursor", this );
+    SAL_INFO("svtools", "BrowseBox::HideCursor " << this );
 
     // remove old selection?
     if ( !bExpand || !bMultiSelection )
@@ -1742,7 +1742,7 @@ void BrowseBox::SelectRow( long nRow, bool _bSelect, bool bExpand )
         bSelect = true;
 
     // restore screen
-    OSL_TRACE( "BrowseBox: %p->ShowCursor", this );
+    SAL_INFO("svtools", "BrowseBox::ShowCursor " << this );
 
     if ( isAccessibleAlive() )
     {
@@ -1787,7 +1787,7 @@ void BrowseBox::SelectColumnPos( sal_uInt16 nNewColPos, bool _bSelect, bool bMak
             return;
     }
 
-    OSL_TRACE( "BrowseBox: %p->HideCursor", this );
+    SAL_INFO("svtools", "BrowseBox::HideCursor " << this );
     ToggleSelection();
     if ( bMultiSelection )
         uRow.pSel->SelectAll(false);
@@ -1829,7 +1829,7 @@ void BrowseBox::SelectColumnPos( sal_uInt16 nNewColPos, bool _bSelect, bool bMak
     }
 
     // restore screen
-    OSL_TRACE( "BrowseBox: %p->ShowCursor", this );
+    SAL_INFO("svtools", "BrowseBox::ShowCursor " << this );
 }
 
 
@@ -2338,11 +2338,11 @@ void BrowseBox::CursorMoved()
 
 void BrowseBox::LoseFocus()
 {
-    OSL_TRACE( "BrowseBox: %p->LoseFocus", this );
+    SAL_INFO("svtools", "BrowseBox::LoseFocus " << this );
 
     if ( bHasFocus )
     {
-        OSL_TRACE( "BrowseBox: %p->HideCursor", this );
+        SAL_INFO("svtools", "BrowseBox::HideCursor " << this );
         DoHideCursor( "LoseFocus" );
 
         if ( !bKeepHighlight )
@@ -2359,7 +2359,7 @@ void BrowseBox::LoseFocus()
 
 void BrowseBox::GetFocus()
 {
-    OSL_TRACE( "BrowseBox: %p->GetFocus", this );
+    SAL_INFO("svtools", "BrowseBox::GetFocus " << this );
 
     if ( !bHasFocus )
     {

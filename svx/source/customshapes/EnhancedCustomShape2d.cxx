@@ -723,8 +723,8 @@ EnhancedCustomShape2d::EnhancedCustomShape2d( SdrObject* pAObj ) :
     const Any* pAny = rGeometryItem.GetPropertyValueByName( "Type" );
     if ( pAny ) {
         *pAny >>= sShapeType;
-        bOOXMLShape = ( sShapeType.startsWith("ooxml-") );
-        OSL_TRACE("shape type: %s %d", OUStringToOString( sShapeType, RTL_TEXTENCODING_ASCII_US ).getStr(), bOOXMLShape);
+        bOOXMLShape = sShapeType.startsWith("ooxml-");
+        SAL_INFO("svx", "shape type: " << sShapeType << " " << bOOXMLShape);
     }
     eSpType = EnhancedCustomShapeTypeNames::Get( sShapeType );
 
@@ -885,7 +885,7 @@ double EnhancedCustomShape2d::GetEquationValueAsDouble( const sal_Int32 nIndex )
             }
             catch ( ... )
             {
-                OSL_TRACE("error: EnhancedCustomShape2d::GetEquationValueAsDouble failed");
+                SAL_WARN("svx", "EnhancedCustomShape2d::GetEquationValueAsDouble failed");
             }
 #if OSL_DEBUG_LEVEL > 0
         nLevel --;
@@ -1797,7 +1797,7 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                         fStartAngle *= F_PI180;
                         fSwingAngle *= F_PI180;
 
-                        OSL_TRACE("ARCANGLETO scale: %f x %f angles: %f, %f", fWR, fHR, fStartAngle, fSwingAngle);
+                        SAL_INFO("svx", "ARCANGLETO scale: " << fWR << "x" << fHR << " angles: " << fStartAngle << "," << fSwingAngle);
 
                         bool bClockwise = fSwingAngle >= 0.0;
 
@@ -1809,7 +1809,8 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                             double fT = atan2((fWR*sin(fStartAngle)), (fHR*cos(fStartAngle)));
                             double fTE = atan2((fWR*sin(fStartAngle + fSwingAngle)), fHR*cos(fStartAngle + fSwingAngle));
 
-                            OSL_TRACE("ARCANGLETO angles: %f, %f --> parameters: %f, %f", fStartAngle, fSwingAngle, fT, fTE );
+                            SAL_INFO("svx", "ARCANGLETO angles: " << fStartAngle << ", " << fSwingAngle
+                                             << " --> parameters: " << fT <<", " << fTE );
 
                             fWR *= fXScale;
                             fHR *= fYScale;

@@ -159,7 +159,7 @@ class Test_Impl : public WeakImplHelper< XLanguageBindingTest >
 
 public:
     virtual ~Test_Impl()
-        { OSL_TRACE( "> scalar Test_Impl dtor <\n" ); }
+        { SAL_INFO("stoc", "> scalar Test_Impl dtor <" ); }
 
     // XLBTestBase
     virtual void SAL_CALL setValues( sal_Bool bBool, sal_Unicode cChar, sal_Int8 nByte,

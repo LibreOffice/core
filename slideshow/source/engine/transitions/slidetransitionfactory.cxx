@@ -195,7 +195,7 @@ public:
     // ViewEventHandler
     virtual void viewAdded( const UnoViewSharedPtr& rView ) override
     {
-        OSL_TRACE("PluginSlideChange viewAdded");
+        SAL_INFO("slideshow", "PluginSlideChange viewAdded");
         SlideChangeBase::viewAdded( rView );
 
         for( const auto& pCurrView : maTransitions )
@@ -204,13 +204,13 @@ public:
                 return;
         }
 
-        OSL_TRACE( "need to be added" );
+        SAL_INFO("slideshow", "need to be added" );
         addTransition( rView );
     }
 
     virtual void viewRemoved( const UnoViewSharedPtr& rView ) override
     {
-        OSL_TRACE("PluginSlideChange viewRemoved");
+        SAL_INFO("slideshow", "PluginSlideChange viewRemoved");
         SlideChangeBase::viewRemoved( rView );
 
         ::std::vector< TransitionViewPair* >::const_iterator aEnd(maTransitions.end());
@@ -220,7 +220,7 @@ public:
         {
             if( ( *aIter )->mpView == rView )
             {
-                OSL_TRACE( "view removed" );
+                SAL_INFO("slideshow", "view removed" );
                 delete ( *aIter );
                 maTransitions.erase( aIter );
                 break;
@@ -230,31 +230,31 @@ public:
 
     virtual void viewChanged( const UnoViewSharedPtr& rView ) override
     {
-        OSL_TRACE("PluginSlideChange viewChanged");
+        SAL_INFO("slideshow", "PluginSlideChange viewChanged");
         SlideChangeBase::viewChanged( rView );
 
         for( const auto& pCurrView : maTransitions )
         {
             if( pCurrView->mpView == rView )
             {
-                OSL_TRACE( "view changed" );
+                SAL_INFO("slideshow", "view changed" );
                 pCurrView->mxTransition->viewChanged( rView->getUnoView(),
                                                       getLeavingBitmap(ViewEntry(rView))->getXBitmap(),
                                                       getEnteringBitmap(ViewEntry(rView))->getXBitmap() );
             }
             else
-                OSL_TRACE( "view did not changed" );
+                SAL_INFO("slideshow", "view did not change" );
         }
     }
 
     virtual void viewsChanged() override
     {
-        OSL_TRACE("PluginSlideChange viewsChanged");
+        SAL_INFO("slideshow", "PluginSlideChange viewsChanged");
         SlideChangeBase::viewsChanged();
 
         for( const auto& pCurrView : maTransitions )
         {
-            OSL_TRACE( "view changed" );
+            SAL_INFO("slideshow", "view changed" );
             UnoViewSharedPtr pView = pCurrView->mpView;
             pCurrView->mxTransition->viewChanged( pView->getUnoView(),
                                                   getLeavingBitmap(ViewEntry(pView))->getXBitmap(),
@@ -961,11 +961,10 @@ NumberAnimationSharedPtr TransitionFactory::createSlideTransition(
         {
             default:
             case TransitionInfo::TRANSITION_INVALID:
-                OSL_TRACE(
+                SAL_WARN("slideshow",
                     "TransitionFactory::createSlideTransition(): "
-                    "Invalid type/subtype (%d/%d) combination encountered.",
-                    nTransitionType,
-                    nTransitionSubType );
+                    "Invalid type/subtype combination encountered."
+                    << nTransitionType << " " << nTransitionSubType );
                 return NumberAnimationSharedPtr();
 
 
@@ -1124,11 +1123,10 @@ NumberAnimationSharedPtr TransitionFactory::createSlideTransition(
 
     // No animation generated, maybe no table entry for given
     // transition?
-    OSL_TRACE(
+    SAL_WARN("slideshow",
         "TransitionFactory::createSlideTransition(): "
-        "Unknown type/subtype (%d/%d) combination encountered",
-        nTransitionType,
-        nTransitionSubType );
+        "Unknown type/subtype combination encountered "
+        << nTransitionType << " " << nTransitionSubType );
     OSL_FAIL(
         "TransitionFactory::createSlideTransition(): "
         "Unknown type/subtype combination encountered" );

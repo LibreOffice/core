@@ -654,9 +654,7 @@ bool
 XmlIdRegistryDocument::TryRegisterMetadatable(Metadatable & i_rObject,
     OUString const& i_rStreamName, OUString const& i_rIdref)
 {
-    OSL_TRACE("TryRegisterMetadatable: %p (%s#%s)\n", &i_rObject,
-        OUStringToOString(i_rStreamName, RTL_TEXTENCODING_UTF8).getStr(),
-        OUStringToOString(i_rIdref, RTL_TEXTENCODING_UTF8).getStr());
+    SAL_INFO("sfx", "TryRegisterMetadatable: " << &i_rObject << " (" << i_rStreamName << "#" << i_rIdref << ")");
 
     OSL_ENSURE(!dynamic_cast<MetadatableUndo*>(&i_rObject),
         "TryRegisterMetadatable called for MetadatableUndo?");
@@ -705,7 +703,7 @@ XmlIdRegistryDocument::TryRegisterMetadatable(Metadatable & i_rObject,
 void
 XmlIdRegistryDocument::RegisterMetadatableAndCreateID(Metadatable & i_rObject)
 {
-    OSL_TRACE("RegisterMetadatableAndCreateID: %p", &i_rObject);
+    SAL_INFO("sfx", "RegisterMetadatableAndCreateID: " << &i_rObject);
 
     OSL_ENSURE(!dynamic_cast<MetadatableUndo*>(&i_rObject),
         "RegisterMetadatableAndCreateID called for MetadatableUndo?");
@@ -748,7 +746,7 @@ XmlIdRegistryDocument::RegisterMetadatableAndCreateID(Metadatable & i_rObject)
 
 void XmlIdRegistryDocument::UnregisterMetadatable(const Metadatable& i_rObject)
 {
-    OSL_TRACE("UnregisterMetadatable: %p", &i_rObject);
+    SAL_INFO("sfx", "UnregisterMetadatable: " << &i_rObject);
 
     OUString path;
     OUString idref;
@@ -766,7 +764,7 @@ void XmlIdRegistryDocument::UnregisterMetadatable(const Metadatable& i_rObject)
 
 void XmlIdRegistryDocument::RemoveXmlIdForElement(const Metadatable& i_rObject)
 {
-    OSL_TRACE("RemoveXmlIdForElement: %p", &i_rObject);
+    SAL_INFO("sfx", "RemoveXmlIdForElement: " << &i_rObject);
 
     const XmlIdReverseMap_t::iterator iter(
         m_pImpl->m_XmlIdReverseMap.find(&i_rObject) );
@@ -782,8 +780,7 @@ void XmlIdRegistryDocument::RemoveXmlIdForElement(const Metadatable& i_rObject)
 void XmlIdRegistryDocument::RegisterCopy(Metadatable const& i_rSource,
     Metadatable & i_rCopy, const bool i_bCopyPrecedesSource)
 {
-    OSL_TRACE("RegisterCopy: %p -> %p (%d)\n",
-        &i_rSource, &i_rCopy, i_bCopyPrecedesSource);
+    SAL_INFO("sfx", "RegisterCopy: " << &i_rSource << " -> " << &i_rCopy << " (" << i_bCopyPrecedesSource << ")");
 
     // potential sources: clipboard, undo array, splitNode
     // assumption: stream change can only happen via clipboard, and is handled
@@ -825,7 +822,7 @@ void XmlIdRegistryDocument::RegisterCopy(Metadatable const& i_rSource,
 std::shared_ptr<MetadatableUndo>
 XmlIdRegistryDocument::CreateUndo(Metadatable const& i_rObject)
 {
-    OSL_TRACE("CreateUndo: %p", &i_rObject);
+    SAL_INFO("sfx", "CreateUndo: " << &i_rObject);
 
     return std::make_shared<MetadatableUndo>(
                 i_rObject.IsInContent() );
@@ -852,7 +849,7 @@ void
 XmlIdRegistryDocument::JoinMetadatables(
     Metadatable & i_rMerged, Metadatable const & i_rOther)
 {
-    OSL_TRACE("JoinMetadatables: %p <- %p", &i_rMerged, &i_rOther);
+    SAL_INFO("sfx", "JoinMetadatables: " << &i_rMerged << " <- " << &i_rOther);
 
     bool mergedOwnsRef;
     OUString path;
@@ -1070,9 +1067,7 @@ bool
 XmlIdRegistryClipboard::TryRegisterMetadatable(Metadatable & i_rObject,
     OUString const& i_rStreamName, OUString const& i_rIdref)
 {
-    OSL_TRACE("TryRegisterMetadatable: %p (%s#%s)\n", &i_rObject,
-        OUStringToOString(i_rStreamName, RTL_TEXTENCODING_UTF8).getStr(),
-        OUStringToOString(i_rIdref, RTL_TEXTENCODING_UTF8).getStr());
+    SAL_INFO("sfx", "TryRegisterMetadatable: " << &i_rObject << " (" << i_rStreamName << "#" << i_rIdref <<")");
 
     OSL_ENSURE(!dynamic_cast<MetadatableUndo*>(&i_rObject),
         "TryRegisterMetadatable called for MetadatableUndo?");
@@ -1122,7 +1117,7 @@ XmlIdRegistryClipboard::TryRegisterMetadatable(Metadatable & i_rObject,
 void
 XmlIdRegistryClipboard::RegisterMetadatableAndCreateID(Metadatable & i_rObject)
 {
-    OSL_TRACE("RegisterMetadatableAndCreateID: %p", &i_rObject);
+    SAL_INFO("sfx", "RegisterMetadatableAndCreateID: " << &i_rObject);
 
     OSL_ENSURE(!dynamic_cast<MetadatableUndo*>(&i_rObject),
         "RegisterMetadatableAndCreateID called for MetadatableUndo?");
@@ -1156,7 +1151,7 @@ XmlIdRegistryClipboard::RegisterMetadatableAndCreateID(Metadatable & i_rObject)
 
 void XmlIdRegistryClipboard::UnregisterMetadatable(const Metadatable& i_rObject)
 {
-    OSL_TRACE("UnregisterMetadatable: %p", &i_rObject);
+    SAL_INFO("sfx", "UnregisterMetadatable: " << &i_rObject);
 
     OUString path;
     OUString idref;
@@ -1176,7 +1171,7 @@ void XmlIdRegistryClipboard::UnregisterMetadatable(const Metadatable& i_rObject)
 
 void XmlIdRegistryClipboard::RemoveXmlIdForElement(const Metadatable& i_rObject)
 {
-    OSL_TRACE("RemoveXmlIdForElement: %p", &i_rObject);
+    SAL_INFO("sfx", "RemoveXmlIdForElement: " << &i_rObject);
 
     ClipboardXmlIdReverseMap_t::iterator iter(
         m_pImpl->m_XmlIdReverseMap.find(&i_rObject) );
@@ -1192,7 +1187,7 @@ void XmlIdRegistryClipboard::RemoveXmlIdForElement(const Metadatable& i_rObject)
 std::shared_ptr<MetadatableClipboard>
 XmlIdRegistryClipboard::CreateClipboard(const bool i_isInContent)
 {
-    OSL_TRACE("CreateClipboard:");
+    SAL_INFO("sfx", "CreateClipboard:");
 
     return std::make_shared<MetadatableClipboard>(
         i_isInContent );
@@ -1203,13 +1198,8 @@ XmlIdRegistryClipboard::RegisterCopyClipboard(Metadatable & i_rCopy,
     beans::StringPair const & i_rReference,
     const bool i_isLatent)
 {
-    OSL_TRACE("RegisterCopyClipboard: %p -> "/*"%p"*/"(%s#%s) (%d)\n",
-        /*&i_rSource,*/ &i_rCopy,
-        OUStringToOString(i_rReference.First,
-            RTL_TEXTENCODING_UTF8).getStr(),
-        OUStringToOString(i_rReference.Second,
-            RTL_TEXTENCODING_UTF8).getStr(),
-        i_isLatent);
+    SAL_INFO("sfx", "RegisterCopyClipboard: " << &i_rCopy
+              << " -> (" << i_rReference.First << "#" << i_rReference.Second << ") (" << i_isLatent << ")");
 
     // N.B.: when copying to the clipboard, the selection is always inserted
     //       into the body, even if the source is a header/footer!

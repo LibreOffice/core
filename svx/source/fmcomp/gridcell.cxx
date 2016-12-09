@@ -2063,7 +2063,7 @@ double DbCurrencyField::GetCurrency(const Reference< css::sdb::XColumn >& _rxFie
     double fValue = GetValue(_rxField, xFormatter);
     if (m_nScale)
     {
-        // OSL_TRACE("double = %.64f ",fValue);
+        // SAL_INFO("svx",("double = %.64f ",fValue);
         fValue = ::rtl::math::pow10Exp(fValue, m_nScale);
         fValue = ::rtl::math::round(fValue);
     }

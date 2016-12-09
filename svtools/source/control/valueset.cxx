@@ -1436,7 +1436,7 @@ void ValueSet::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 
 void ValueSet::GetFocus()
 {
-    OSL_TRACE ("value set getting focus");
+    SAL_INFO("svtools", "value set getting focus");
     Invalidate();
     Control::GetFocus();
 
@@ -1448,7 +1448,7 @@ void ValueSet::GetFocus()
 
 void ValueSet::LoseFocus()
 {
-    OSL_TRACE ("value set losing focus");
+    SAL_INFO("svtools", "value set losing focus");
     if ( mbNoSelection && mnSelItemId )
         ImplHideSelect( mnSelItemId );
     else

@@ -351,11 +351,9 @@ AnimationActivitySharedPtr createShapeTransitionByType(
     {
         // No animation generated, maybe no table entry for given
         // transition?
-        OSL_TRACE(
-            "createShapeTransitionByType(): Unknown type/subtype (%d/%d) "
-            "combination encountered",
-            xTransition->getTransition(),
-            xTransition->getSubtype() );
+        SAL_WARN("slideshow",
+            "createShapeTransitionByType(): Unknown type/subtype combination encountered: "
+            << xTransition->getTransition() << " " << xTransition->getSubtype() );
         OSL_FAIL(
             "createShapeTransitionByType(): Unknown type/subtype "
             "combination encountered" );

@@ -496,7 +496,7 @@ collectFilesFromStorage(uno::Reference<embed::XStorage> const& i_xStorage,
             o_rFiles.insert(i_Path + styles);
         }
     } catch (const uno::Exception &) {
-        OSL_TRACE("collectFilesFromStorage: exception?");
+        SAL_WARN("sfx", "collectFilesFromStorage: exception?");
     }
 }
 
@@ -543,8 +543,7 @@ readStream(struct DocumentMetadataAccess_Impl & i_rImpl,
                             utl::MediaDescriptor::PROP_MEDIATYPE() )
                         >>= mimeType;
                     if (mimeType.startsWith(s_odfmime)) {
-                        OSL_TRACE("readStream: "
-                            "refusing to recurse into embedded document");
+                        SAL_WARN("sfx", "readStream: refusing to recurse into embedded document");
                         return;
                     }
                 } catch (const uno::Exception &) { }
@@ -645,8 +644,7 @@ writeStream(struct DocumentMetadataAccess_Impl & i_rImpl,
                         utl::MediaDescriptor::PROP_MEDIATYPE() )
                     >>= mimeType;
                 if (mimeType.startsWith(s_odfmime)) {
-                    OSL_TRACE("writeStream: "
-                        "refusing to recurse into embedded document");
+                    SAL_WARN("sfx", "writeStream: refusing to recurse into embedded document");
                     return;
                 }
             } catch (const uno::Exception &) { }
@@ -1104,15 +1102,12 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
                 it != parts.end(); ++it) {
             const OUString name((*it)->getStringValue());
             if (!name.match(baseURI)) {
-                OSL_TRACE("loadMetadataFromStorage: graph not in document: %s",
-                    OUStringToOString(name, RTL_TEXTENCODING_UTF8)
-                    .getStr());
+                SAL_WARN("sfx", "loadMetadataFromStorage: graph not in document: " << name);
                 continue;
             }
             const OUString relName( name.copy(len) );
             if (relName == s_manifest) {
-                OSL_TRACE("loadMetadataFromStorage: "
-                    "found ourselves a recursive manifest!");
+                SAL_WARN("sfx", "loadMetadataFromStorage: found ourselves a recursive manifest!");
                 continue;
             }
             // remove found items from StgFiles
@@ -1136,8 +1131,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
                         xStylesFile.get());
                 }
             } else if (isReservedFile(relName)) {
-                OSL_TRACE("loadMetadataFromStorage: "
-                    "reserved file name in manifest");
+                SAL_WARN("sfx", "loadMetadataFromStorage: reserved file name in manifest");
             } else {
                 if (isPartOfType(*m_pImpl, *it, xMetadataFile)) {
                     MfstMetadataFiles.push_back(relName);
@@ -1197,9 +1191,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
             const uno::Reference<rdf::XURI> xName(graphs[i]);
             const OUString name(xName->getStringValue());
             if (!name.match(baseURI)) {
-                OSL_TRACE("storeMetadataToStorage: graph not in document: %s",
-                    OUStringToOString(name, RTL_TEXTENCODING_UTF8)
-                    .getStr());
+                SAL_WARN("sfx", "storeMetadataToStorage: graph not in document: " << name);
                 continue;
             }
             const OUString relName( name.copy(len) );
@@ -1207,9 +1199,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
                 continue;
             }
             if (!isFileNameValid(relName) || isReservedFile(relName)) {
-                OSL_TRACE("storeMetadataToStorage: invalid file name: %s",
-                    OUStringToOString(relName, RTL_TEXTENCODING_UTF8)
-                    .getStr());
+                SAL_WARN("sfx", "storeMetadataToStorage: invalid file name: " << relName);
                 continue;
             }
             try {

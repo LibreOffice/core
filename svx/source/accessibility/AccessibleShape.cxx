@@ -117,7 +117,7 @@ AccessibleShape::~AccessibleShape()
 {
     delete mpChildrenManager;
     delete mpText;
-    OSL_TRACE ("~AccessibleShape");
+    SAL_INFO("svx", "~AccessibleShape");
 
     // Unregistering from the various broadcasters should be unnecessary
     // since this destructor would not have been called if one of the
@@ -575,7 +575,7 @@ awt::Rectangle SAL_CALL AccessibleShape::getBounds()
                     }
                 }
                 else
-                    OSL_TRACE (" no property BoundRect");
+                    SAL_WARN("svx", "no property BoundRect");
             }
         }
 
@@ -638,7 +638,7 @@ awt::Rectangle SAL_CALL AccessibleShape::getBounds()
         }
         else
         {
-            OSL_TRACE ("parent does not support component");
+            SAL_INFO("svx", "parent does not support component");
             aBoundingBox = awt::Rectangle (
                 aPixelPosition.getX(), aPixelPosition.getY(),
                 aPixelSize.getWidth(), aPixelSize.getHeight());
@@ -676,7 +676,7 @@ awt::Point SAL_CALL AccessibleShape::getLocationOnScreen()
         aLocation.Y += aParentLocation.Y;
     }
     else
-        OSL_TRACE ("getLocation: parent does not support XAccessibleComponent");
+        SAL_WARN("svx", "parent does not support XAccessibleComponent");
     return aLocation;
 }
 
@@ -1016,7 +1016,7 @@ void SAL_CALL
     }
     catch (uno::RuntimeException const&)
     {
-        OSL_TRACE ("caught exception while disposing");
+        SAL_WARN("svx", "caught exception while disposing");
     }
 }
 

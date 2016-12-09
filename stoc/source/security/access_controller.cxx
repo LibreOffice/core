@@ -488,16 +488,14 @@ static void dumpPermissions(
     {
         buf.append( "> dumping default permissions:" );
     }
-    OString str( OUStringToOString( buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
-    OSL_TRACE( "%s", str.getStr() );
+    SAL_INFO("stoc", buf.makeStringAndClear() );
     Sequence< OUString > permissions( collection.toStrings() );
     OUString const * p = permissions.getConstArray();
     for ( sal_Int32 nPos = 0; nPos < permissions.getLength(); ++nPos )
     {
-        OString str( OUStringToOString( p[ nPos ], RTL_TEXTENCODING_ASCII_US ) );
-        OSL_TRACE( "%s", str.getStr() );
+        SAL_INFO("stoc", p[ nPos ] );
     }
-    OSL_TRACE( "> permission dump done" );
+    SAL_INFO("stoc", "> permission dump done" );
 }
 #endif
 
@@ -632,7 +630,7 @@ PermissionCollection AccessController::getEffectivePermissions(
         buf.append( "\"" );
         OString str(
             OUStringToOString( buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
-        OSL_TRACE( "%s", str.getStr() );
+        SAL_INFO("stoc",( "%s", str.getStr() );
 #endif
         return PermissionCollection( new AllPermission() );
     }
