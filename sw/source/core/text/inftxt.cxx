@@ -690,8 +690,8 @@ void SwTextPaintInfo::DrawText_( const OUString &rText, const SwLinePortion &rPo
         }
         if( aFontPos.X() < 0 )
             aFontPos.X() = 0;
-        if( aFontPos.X() < 0 )
-            aFontPos.X() = 0;
+        if( aFontPos.Y() < 0 )
+            aFontPos.Y() = 0;
     }
 
     if( GetTextFly().IsOn() )
@@ -1182,6 +1182,75 @@ void SwTextPaintInfo::DrawBackBrush( const SwLinePortion &rPor ) const
             if( !m_pFnt->GetBackColor() )
                 return;
             aFillColor = *m_pFnt->GetBackColor();
+        }
+
+        // tdf#104349 do not hightlight portions of space chars before end of line
+        bool           draw = false;
+        bool           full = false;
+        SwLinePortion *pPos = const_cast<SwLinePortion *>(&rPor);
+        sal_Int32      nIdx = GetIdx();
+        sal_Int32      nLen;
+
+        do
+        {
+            nLen = pPos->GetLen();
+            for ( int i = nIdx; i < (nIdx + nLen); ++i )
+            {
+                if ( GetText()[i] == CH_TXTATR_NEWLINE )
+                {
+                    if ( i >= (GetIdx() + rPor.GetLen()) )
+                    {
+                        goto drawcontinue;
+                    }
+                }
+                if ( GetText()[i] != CH_BLANK )
+                {
+                    draw = true;
+                    if ( i >= (GetIdx() + rPor.GetLen()) )
+                    {
+                        full = true;
+                        goto drawcontinue;
+                    }
+                }
+            }
+            nIdx += nLen;
+            pPos = pPos->GetPortion();
+        } while ( pPos );
+
+        drawcontinue:
+
+        if ( !draw )
+            return;
+
+        if ( !full )
+        {
+            pPos = const_cast<SwLinePortion *>(&rPor);
+            nIdx = GetIdx();
+
+            nLen = pPos->GetLen();
+            for ( int i = (nIdx + nLen - 1); i >= nIdx; --i )
+            {
+                if ( GetText()[i] == CH_TXTATR_NEWLINE )
+                {
+                    continue;
+                }
+                if ( GetText()[i] != CH_BLANK )
+                {
+                    sal_uInt16 nOldWidth = rPor.Width();
+                    sal_uInt16 nNewWidth = GetTextSize( m_pOut, nullptr, GetText(), nIdx, (i + 1 - nIdx) ).Width();
+
+                    const_cast<SwLinePortion&>(rPor).Width( nNewWidth );
+                    CalcRect( rPor, nullptr, &aIntersect, true );
+                    const_cast<SwLinePortion&>(rPor).Width( nOldWidth );
+
+                    if ( ! aIntersect.HasArea() )
+                    {
+                        return;
+                    }
+
+                    break;
+                }
+            }
         }
 
         pTmpOut->Push( PushFlags::LINECOLOR | PushFlags::FILLCOLOR );
