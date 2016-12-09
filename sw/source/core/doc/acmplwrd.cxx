@@ -124,6 +124,8 @@ SwAutoCompleteClient::~SwAutoCompleteClient()
 {
 #if OSL_DEBUG_LEVEL > 0
     --nSwAutoCompleteClientCount;
+#else
+    (void) this;
 #endif
 }
 
@@ -188,6 +190,8 @@ SwAutoCompleteString::~SwAutoCompleteString()
 {
 #if OSL_DEBUG_LEVEL > 0
     --nSwAutoCompleteStringCount;
+#else
+    (void) this;
 #endif
 }
 
