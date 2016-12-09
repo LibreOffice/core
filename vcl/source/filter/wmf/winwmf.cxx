@@ -1091,7 +1091,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                             {   // first EMF comment
                                 nEMFRecCount    = nComRecCount;
                                 nEMFSize        = nEMFTotalSize;
-                                pEMFStream = o3tl::make_unique<SvMemoryStream>( nEMFSize );
+                                pEMFStream = o3tl::make_unique<SvMemoryStream>(nEMFSize, 0);
                             }
                             else if( ( nEMFRecCount != nComRecCount ) || ( nEMFSize != nEMFTotalSize ) ) // add additional checks here
                             {
