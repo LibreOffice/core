@@ -49,23 +49,23 @@ namespace tools_urlobj
         {
             INetURLObject aUrl( OUString( "file://10.10.1.1/sampledir/sample.file" ) );
 #ifdef LINUX
-            CPPUNIT_ASSERT( aUrl.GetMainURL( INetURLObject::DecodeMechanism::NONE )
-                            == "smb://10.10.1.1/sampledir/sample.file" );
-            CPPUNIT_ASSERT( aUrl.GetProtocol(  ) == INetProtocol::Smb );
+            CPPUNIT_ASSERT_EQUAL(OUString("smb://10.10.1.1/sampledir/sample.file"),
+                                 aUrl.GetMainURL(INetURLObject::DecodeMechanism::NONE));
+            CPPUNIT_ASSERT_EQUAL(INetProtocol::Smb, aUrl.GetProtocol());
 #endif
 #ifdef _WIN32
             CPPUNIT_ASSERT( aUrl.GetMainURL( INetURLObject::DecodeMechanism::NONE )
                             == "file://10.10.1.1/sampledir/sample.file" );
             CPPUNIT_ASSERT( aUrl.GetProtocol(  ) == INetProtocol::File );
 #endif
-            CPPUNIT_ASSERT( aUrl.GetHost( INetURLObject::DecodeMechanism::NONE )
-                            == "10.10.1.1" );
-            CPPUNIT_ASSERT( aUrl.GetURLPath( INetURLObject::DecodeMechanism::NONE )
-                            == "/sampledir/sample.file" );
-            CPPUNIT_ASSERT( aUrl.getName(  )
-                            == "sample.file" );
-            CPPUNIT_ASSERT( aUrl.getBase(  ) == "sample" );
-            CPPUNIT_ASSERT( aUrl.getExtension(  ) == "file" );
+            CPPUNIT_ASSERT_EQUAL(OUString("10.10.1.1"),
+                                 aUrl.GetHost(INetURLObject::DecodeMechanism::NONE));
+            CPPUNIT_ASSERT_EQUAL(OUString("/sampledir/sample.file"),
+                                 aUrl.GetURLPath(INetURLObject::DecodeMechanism::NONE));
+            CPPUNIT_ASSERT_EQUAL(OUString("sample.file"),
+                                 aUrl.getName());
+            CPPUNIT_ASSERT_EQUAL(OUString("sample"), aUrl.getBase());
+            CPPUNIT_ASSERT_EQUAL(OUString("file"), aUrl.getExtension());
         }
 
         void urlobjTest_002(  )
@@ -75,22 +75,22 @@ namespace tools_urlobj
                 setFSysPath( "\\\\137.65.170.24\\c$\\Img0001.jpg",
                              FSysStyle::Detect );
 #ifdef LINUX
-            CPPUNIT_ASSERT( aUrl.GetMainURL( INetURLObject::DecodeMechanism::NONE )
-                            == "smb://137.65.170.24/c$/Img0001.jpg" );
-            CPPUNIT_ASSERT( aUrl.GetProtocol(  ) == INetProtocol::Smb );
+            CPPUNIT_ASSERT_EQUAL(OUString("smb://137.65.170.24/c$/Img0001.jpg"),
+                                 aUrl.GetMainURL(INetURLObject::DecodeMechanism::NONE));
+            CPPUNIT_ASSERT_EQUAL(INetProtocol::Smb, aUrl.GetProtocol());
 #endif
 #ifdef _WIN32
             CPPUNIT_ASSERT( aUrl.GetMainURL( INetURLObject::DecodeMechanism::NONE )
                             == "file://137.65.170.24/c$/Img0001.jpg" );
             CPPUNIT_ASSERT( aUrl.GetProtocol(  ) == INetProtocol::File );
 #endif
-            CPPUNIT_ASSERT( aUrl.GetHost( INetURLObject::DecodeMechanism::NONE )
-                            == "137.65.170.24" );
-            CPPUNIT_ASSERT( aUrl.GetURLPath( INetURLObject::DecodeMechanism::NONE )
-                            == "/c$/Img0001.jpg" );
-            CPPUNIT_ASSERT( aUrl.getName(  ) == "Img0001.jpg" );
-            CPPUNIT_ASSERT( aUrl.getBase(  ) == "Img0001" );
-            CPPUNIT_ASSERT( aUrl.getExtension(  ) == "jpg" );
+            CPPUNIT_ASSERT_EQUAL(OUString("137.65.170.24"),
+                                 aUrl.GetHost(INetURLObject::DecodeMechanism::NONE));
+            CPPUNIT_ASSERT_EQUAL(OUString("/c$/Img0001.jpg"),
+                                 aUrl.GetURLPath(INetURLObject::DecodeMechanism::NONE));
+            CPPUNIT_ASSERT_EQUAL(OUString("Img0001.jpg"), aUrl.getName());
+            CPPUNIT_ASSERT_EQUAL(OUString("Img0001"), aUrl.getBase());
+            CPPUNIT_ASSERT_EQUAL(OUString("jpg"), aUrl.getExtension());
         }
 
 
@@ -101,41 +101,41 @@ namespace tools_urlobj
                 setFSysPath( "\\\\hive-winxp-x86\\pmladek\\test2.odt",
                              FSysStyle::Detect );
 #ifdef LINUX
-            CPPUNIT_ASSERT( aUrl.GetMainURL( INetURLObject::DecodeMechanism::NONE )
-                            == "smb://hive-winxp-x86/pmladek/test2.odt" );
-            CPPUNIT_ASSERT( aUrl.GetProtocol(  ) == INetProtocol::Smb );
+            CPPUNIT_ASSERT_EQUAL(OUString("smb://hive-winxp-x86/pmladek/test2.odt"),
+                                 aUrl.GetMainURL(INetURLObject::DecodeMechanism::NONE));
+            CPPUNIT_ASSERT_EQUAL(INetProtocol::Smb, aUrl.GetProtocol());
 #endif
 #ifdef _WIN32
             CPPUNIT_ASSERT( aUrl.GetMainURL( INetURLObject::DecodeMechanism::NONE )
                             == "file://hive-winxp-x86/pmladek/test2.odt" );
             CPPUNIT_ASSERT( aUrl.GetProtocol(  ) == INetProtocol::File );
 #endif
-            CPPUNIT_ASSERT( aUrl.GetHost( INetURLObject::DecodeMechanism::NONE )
-                            == "hive-winxp-x86" );
-            CPPUNIT_ASSERT( aUrl.GetURLPath( INetURLObject::DecodeMechanism::NONE )
-                            == "/pmladek/test2.odt" );
+            CPPUNIT_ASSERT_EQUAL(OUString("hive-winxp-x86"),
+                                 aUrl.GetHost(INetURLObject::DecodeMechanism::NONE));
+            CPPUNIT_ASSERT_EQUAL(OUString("/pmladek/test2.odt"),
+                                 aUrl.GetURLPath(INetURLObject::DecodeMechanism::NONE));
         }
 
         void urlobjTest_004(  )
         {
             INetURLObject aUrl( OUString( "smb://10.10.1.1/sampledir/sample.file" ) );
 #ifdef LINUX
-            CPPUNIT_ASSERT( aUrl.GetMainURL( INetURLObject::DecodeMechanism::NONE )
-                            == "smb://10.10.1.1/sampledir/sample.file" );
-            CPPUNIT_ASSERT( aUrl.GetProtocol(  ) == INetProtocol::Smb );
+            CPPUNIT_ASSERT_EQUAL(OUString("smb://10.10.1.1/sampledir/sample.file"),
+                                 aUrl.GetMainURL(INetURLObject::DecodeMechanism::NONE));
+            CPPUNIT_ASSERT_EQUAL( INetProtocol::Smb, aUrl.GetProtocol(  ) );
 #endif
 #ifdef _WIN32
             CPPUNIT_ASSERT( aUrl.GetMainURL( INetURLObject::DecodeMechanism::NONE )
                             == "file://10.10.1.1/sampledir/sample.file" );
             CPPUNIT_ASSERT( aUrl.GetProtocol(  ) == INetProtocol::File );
 #endif
-            CPPUNIT_ASSERT( aUrl.GetHost( INetURLObject::DecodeMechanism::NONE )
-                            == "10.10.1.1" );
-            CPPUNIT_ASSERT( aUrl.GetURLPath( INetURLObject::DecodeMechanism::NONE )
-                            == "/sampledir/sample.file" );
-            CPPUNIT_ASSERT( aUrl.getName(  ) == "sample.file" );
-            CPPUNIT_ASSERT( aUrl.getBase(  ) == "sample" );
-            CPPUNIT_ASSERT( aUrl.getExtension(  ) == "file" );
+            CPPUNIT_ASSERT_EQUAL(OUString("10.10.1.1"),
+                                 aUrl.GetHost(INetURLObject::DecodeMechanism::NONE));
+            CPPUNIT_ASSERT_EQUAL(OUString("/sampledir/sample.file"),
+                                 aUrl.GetURLPath(INetURLObject::DecodeMechanism::NONE));
+            CPPUNIT_ASSERT_EQUAL(OUString("sample.file"), aUrl.getName());
+            CPPUNIT_ASSERT_EQUAL(OUString("sample"), aUrl.getBase());
+            CPPUNIT_ASSERT_EQUAL(OUString("file"), aUrl.getExtension());
         }
 
         void urlobjTest_005(  )
@@ -144,22 +144,22 @@ namespace tools_urlobj
             aUrl.setFSysPath( "//137.65.170.24/c$/Img0001.jpg",
                               FSysStyle::Detect );
 #ifdef LINUX
-            CPPUNIT_ASSERT( aUrl.GetMainURL( INetURLObject::DecodeMechanism::NONE )
-                            == "smb://137.65.170.24/c$/Img0001.jpg" );
-            CPPUNIT_ASSERT( aUrl.GetProtocol(  ) == INetProtocol::Smb );
+            CPPUNIT_ASSERT_EQUAL(OUString("smb://137.65.170.24/c$/Img0001.jpg"),
+                                 aUrl.GetMainURL(INetURLObject::DecodeMechanism::NONE));
+            CPPUNIT_ASSERT_EQUAL(INetProtocol::Smb, aUrl.GetProtocol());
 #endif
 #ifdef _WIN32
             CPPUNIT_ASSERT( aUrl.GetMainURL( INetURLObject::DecodeMechanism::NONE )
                             == "file://137.65.170.24/c$/Img0001.jpg" );
             CPPUNIT_ASSERT( aUrl.GetProtocol(  ) == INetProtocol::File );
 #endif
-            CPPUNIT_ASSERT( aUrl.GetHost( INetURLObject::DecodeMechanism::NONE )
-                            == "137.65.170.24" );
-            CPPUNIT_ASSERT( aUrl.GetURLPath( INetURLObject::DecodeMechanism::NONE )
-                            == "/c$/Img0001.jpg" );
-            CPPUNIT_ASSERT( aUrl.getName(  ) == "Img0001.jpg" );
-            CPPUNIT_ASSERT( aUrl.getBase(  ) == "Img0001" );
-            CPPUNIT_ASSERT( aUrl.getExtension(  ) == "jpg" );
+            CPPUNIT_ASSERT_EQUAL(OUString("137.65.170.24"),
+                                 aUrl.GetHost(INetURLObject::DecodeMechanism::NONE));
+            CPPUNIT_ASSERT_EQUAL(OUString("/c$/Img0001.jpg"),
+                                 aUrl.GetURLPath(INetURLObject::DecodeMechanism::NONE));
+            CPPUNIT_ASSERT_EQUAL(OUString("Img0001.jpg"), aUrl.getName(  ));
+            CPPUNIT_ASSERT_EQUAL(OUString("Img0001"), aUrl.getBase(  ));
+            CPPUNIT_ASSERT_EQUAL(OUString("jpg"), aUrl.getExtension(  ));
         }
 
 
@@ -169,19 +169,19 @@ namespace tools_urlobj
             aUrl.setFSysPath( "//hive-winxp-x86/pmladek/test2.odt",
                               FSysStyle::Detect );
 #ifdef LINUX
-            CPPUNIT_ASSERT( aUrl.GetMainURL( INetURLObject::DecodeMechanism::NONE )
-                            == "smb://hive-winxp-x86/pmladek/test2.odt" );
-            CPPUNIT_ASSERT( aUrl.GetProtocol(  ) == INetProtocol::Smb );
+            CPPUNIT_ASSERT_EQUAL(OUString("smb://hive-winxp-x86/pmladek/test2.odt"),
+                                 aUrl.GetMainURL(INetURLObject::DecodeMechanism::NONE));
+            CPPUNIT_ASSERT_EQUAL(INetProtocol::Smb, aUrl.GetProtocol());
 #endif
 #ifdef _WIN32
             CPPUNIT_ASSERT( aUrl.GetMainURL( INetURLObject::DecodeMechanism::NONE )
                             == "file://hive-winxp-x86/pmladek/test2.odt" );
             CPPUNIT_ASSERT( aUrl.GetProtocol(  ) == INetProtocol::File );
 #endif
-            CPPUNIT_ASSERT( aUrl.GetHost( INetURLObject::DecodeMechanism::NONE )
-                            == "hive-winxp-x86" );
-            CPPUNIT_ASSERT( aUrl.GetURLPath( INetURLObject::DecodeMechanism::NONE )
-                            == "/pmladek/test2.odt" );
+            CPPUNIT_ASSERT_EQUAL(OUString("hive-winxp-x86"),
+                                 aUrl.GetHost(INetURLObject::DecodeMechanism::NONE));
+            CPPUNIT_ASSERT_EQUAL(OUString("/pmladek/test2.odt"),
+                                 aUrl.GetURLPath( INetURLObject::DecodeMechanism::NONE));
         }
 
         void urlobjCmisTest(  )
@@ -239,7 +239,7 @@ namespace tools_urlobj
             url = INetURLObject("data:");
             //TODO: CPPUNIT_ASSERT(url.HasError());
             strm = url.getData();
-            CPPUNIT_ASSERT(strm == nullptr);
+            CPPUNIT_ASSERT(!strm);
 
             url = INetURLObject("data:,");
             CPPUNIT_ASSERT(!url.HasError());
@@ -263,7 +263,7 @@ namespace tools_urlobj
             url = INetURLObject("data:base64,");
             //TODO: CPPUNIT_ASSERT(url.HasError());
             strm = url.getData();
-            CPPUNIT_ASSERT(strm == nullptr);
+            CPPUNIT_ASSERT(!strm);
 
             url = INetURLObject("data:;base64,");
             CPPUNIT_ASSERT(!url.HasError());
@@ -294,12 +294,12 @@ namespace tools_urlobj
             url = INetURLObject("data:;base64,YWJjCg=");
             CPPUNIT_ASSERT(!url.HasError());
             strm = url.getData();
-            CPPUNIT_ASSERT(strm == nullptr);
+            CPPUNIT_ASSERT(!strm);
 
             url = INetURLObject("data:;base64,YWJ$Cg==");
             CPPUNIT_ASSERT(!url.HasError());
             strm = url.getData();
-            CPPUNIT_ASSERT(strm == nullptr);
+            CPPUNIT_ASSERT(!strm);
 
             url = INetURLObject("data:text/plain;param=%22;base64,%22,YQ==");
             CPPUNIT_ASSERT(!url.HasError());
@@ -316,7 +316,7 @@ namespace tools_urlobj
             url = INetURLObject("http://example.com");
             CPPUNIT_ASSERT(!url.HasError());
             strm = url.getData();
-            CPPUNIT_ASSERT(strm == nullptr);
+            CPPUNIT_ASSERT(!strm);
         }
 
         void urlobjTest_isSchemeEqualTo() {
