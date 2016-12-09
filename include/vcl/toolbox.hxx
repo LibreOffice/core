@@ -502,7 +502,7 @@ public:
     // if an index is found the corresponding item id is filled in (else 0)
     long GetIndexForPoint( const Point& rPoint, sal_uInt16& rItemID ) const;
 
-    static Size         GetDefaultImageSize(bool bLarge);
+    static Size         GetDefaultImageSize(ToolBoxButtonSize eToolBoxButtonSize);
     Size                GetDefaultImageSize() const;
     void                ChangeHighlight( sal_uInt16 nPos );
 

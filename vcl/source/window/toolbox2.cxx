@@ -633,20 +633,28 @@ ToolBoxButtonSize ToolBox::GetToolboxButtonSize() const
     return mpData->meButtonSize;
 }
 
-/*static*/ Size ToolBox::GetDefaultImageSize(bool bLarge)
+/*static*/ Size ToolBox::GetDefaultImageSize(ToolBoxButtonSize eToolBoxButtonSize)
 {
-    const long TB_SMALLIMAGESIZE = 16;
-    if (!bLarge) {
-        return Size(TB_SMALLIMAGESIZE, TB_SMALLIMAGESIZE);
-    }
+    float fScaleFactor = Application::GetDefaultDevice()->GetDPIScaleFactor();
 
-    OUString iconTheme = Application::GetSettings().GetStyleSettings().DetermineIconTheme();
-    return vcl::IconThemeInfo::SizeByThemeName(iconTheme);
+    Size aUnscaledSize = Size(16, 16);
+
+    if (eToolBoxButtonSize == ToolBoxButtonSize::Large)
+    {
+        OUString iconTheme = Application::GetSettings().GetStyleSettings().DetermineIconTheme();
+        aUnscaledSize = vcl::IconThemeInfo::SizeByThemeName(iconTheme);
+    }
+    else if (eToolBoxButtonSize == ToolBoxButtonSize::Size32)
+    {
+        aUnscaledSize = Size(32, 32);
+    }
+    return Size(aUnscaledSize.Width()  * fScaleFactor,
+                aUnscaledSize.Height() * fScaleFactor);
 }
 
 Size ToolBox::GetDefaultImageSize() const
 {
-    return GetDefaultImageSize( GetToolboxButtonSize() == ToolBoxButtonSize::Large );
+    return GetDefaultImageSize(GetToolboxButtonSize());
 }
 
 void ToolBox::SetAlign( WindowAlign eNewAlign )

@@ -475,7 +475,7 @@ bool AddonsOptions_Impl::GetMergeToolbarInstructions(
 
 static Image ScaleImage( const Image &rImage, bool bBig )
 {
-    Size aSize = ToolBox::GetDefaultImageSize(bBig);
+    Size aSize = ToolBox::GetDefaultImageSize(bBig ? ToolBoxButtonSize::Large : ToolBoxButtonSize::Small);
     BitmapEx aScaleBmp(rImage.GetBitmapEx());
     SAL_INFO("fwk", "Addons: expensive scale image from "
              << aScaleBmp.GetSizePixel() << " to " << aSize);
