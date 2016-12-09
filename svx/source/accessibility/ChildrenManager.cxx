@@ -46,7 +46,7 @@ ChildrenManager::~ChildrenManager()
     mpImpl->dispose();
 
     // empty
-    OSL_TRACE ("~ChildrenManager");
+    SAL_INFO("svx", "~ChildrenManager");
 }
 
 long ChildrenManager::GetChildCount() const throw ()

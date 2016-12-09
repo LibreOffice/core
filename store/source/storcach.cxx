@@ -207,7 +207,7 @@ PageCache::~PageCache()
         s_x  += double(x);
     }
     double ave = s_x / double(n);
-    OSL_TRACE("ave hash chain length: %g", ave);
+    SAL_INFO("store", "avg hash chain length: " << ave);
     (void) ave;
 
     if (m_hash_table != m_hash_table_0)
@@ -217,7 +217,7 @@ PageCache::~PageCache()
         m_hash_size  = theTableSize;
         m_hash_shift = highbit(m_hash_size) - 1;
     }
-    OSL_TRACE("Hits: %zu, Misses: %zu", m_nHit, m_nMissed);
+    SAL_INFO("store", "Hits: " << m_nHit << ", Misses: " <<  m_nMissed);
 }
 
 void PageCache::rescale_Impl (std::size_t new_size)

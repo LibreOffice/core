@@ -1265,12 +1265,9 @@ BitmapEx ThumbnailView::readThumbnail(const OUString &msURL)
         }
         catch (const uno::Exception& rException)
         {
-            OSL_TRACE (
-                "caught exception while trying to access Thumbnail/thumbnail.png of %s: %s",
-                OUStringToOString(msURL,
-                    RTL_TEXTENCODING_UTF8).getStr(),
-                OUStringToOString(rException.Message,
-                    RTL_TEXTENCODING_UTF8).getStr());
+            SAL_WARN("sfx",
+                "caught exception while trying to access Thumbnail/thumbnail.png of "
+                 << msURL << ": " << rException.Message);
         }
 
         try
@@ -1295,22 +1292,16 @@ BitmapEx ThumbnailView::readThumbnail(const OUString &msURL)
         }
         catch (const uno::Exception& rException)
         {
-            OSL_TRACE (
-                "caught exception while trying to access Thumbnails/thumbnail.png of %s: %s",
-                OUStringToOString(msURL,
-                    RTL_TEXTENCODING_UTF8).getStr(),
-                OUStringToOString(rException.Message,
-                    RTL_TEXTENCODING_UTF8).getStr());
+            SAL_WARN("sfx",
+                "caught exception while trying to access Thumbnails/thumbnail.png of "
+                << msURL << ": " << rException.Message);
         }
     }
     catch (const uno::Exception& rException)
     {
-        OSL_TRACE (
-            "caught exception while trying to access tuhmbnail of %s: %s",
-            OUStringToOString(msURL,
-                RTL_TEXTENCODING_UTF8).getStr(),
-            OUStringToOString(rException.Message,
-                RTL_TEXTENCODING_UTF8).getStr());
+        SAL_WARN("sfx",
+            "caught exception while trying to access tuhmbnail of "
+            << msURL << ": " << rException.Message);
     }
 
     // Extract the image from the stream.

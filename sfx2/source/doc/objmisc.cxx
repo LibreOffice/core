@@ -1425,7 +1425,7 @@ namespace
 ErrCode SfxObjectShell::CallXScript( const Reference< XInterface >& _rxScriptContext, const OUString& _rScriptURL,
     const Sequence< Any >& aParams, Any& aRet, Sequence< sal_Int16 >& aOutParamIndex, Sequence< Any >& aOutParam, bool bRaiseError, const css::uno::Any* pCaller )
 {
-    OSL_TRACE( "in CallXScript" );
+    SAL_INFO("sfx", "in CallXScript" );
     ErrCode nErr = ERRCODE_NONE;
 
     bool bIsDocumentScript = ( _rScriptURL.indexOf( "location=document" ) >= 0 );
@@ -1488,7 +1488,7 @@ ErrCode SfxObjectShell::CallXScript( const Reference< XInterface >& _rxScriptCon
         }
     }
 
-    OSL_TRACE( "leaving CallXScript" );
+    SAL_INFO("sfx", "leaving CallXScript" );
     return nErr;
 }
 

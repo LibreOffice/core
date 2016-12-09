@@ -476,9 +476,7 @@ SfxDispatcher::SfxDispatcher(SfxViewFrame *pViewFrame)
 SfxDispatcher::~SfxDispatcher()
 {
 #ifdef DBG_UTIL
-    OStringBuffer sTemp("Delete Dispatcher ");
-    sTemp.append(reinterpret_cast<sal_Int64>(this));
-    OSL_TRACE("%s", sTemp.getStr());
+    SAL_WARN("sfx", "Delete Dispatcher " << reinterpret_cast<sal_Int64>(this));
     DBG_ASSERT( !xImp->bActive, "deleting active Dispatcher" );
 #endif
 
@@ -563,7 +561,7 @@ void SfxDispatcher::Pop(SfxShell& rShell, SfxDispatcherPopFlags nMode)
         xImp->aToDoStack.push_front( SfxToDo_Impl(bPush, bDelete, bUntil, rShell) );
         if (xImp->bFlushed)
         {
-            OSL_TRACE("Unflushed dispatcher!");
+            SAL_WARN("sfx", "Unflushed dispatcher!");
             xImp->bFlushed = false;
             xImp->bUpdated = false;
 
@@ -736,9 +734,7 @@ void SfxDispatcher::DoActivate_Impl(bool bMDI)
     if ( bMDI )
     {
 #ifdef DBG_UTIL
-        OStringBuffer sTemp("Activate Dispatcher ");
-        sTemp.append(reinterpret_cast<sal_Int64>(this));
-        OSL_TRACE("%s", sTemp.getStr());
+        SAL_WARN("sfx", "Activate Dispatcher " << reinterpret_cast<sal_Int64>(this));
         DBG_ASSERT( !xImp->bActive, "Activation error" );
 #endif
         xImp->bActive = true;
@@ -753,9 +749,7 @@ void SfxDispatcher::DoActivate_Impl(bool bMDI)
     else
     {
 #ifdef DBG_UTIL
-        OStringBuffer sTemp("Non-MDI-Activate Dispatcher");
-        sTemp.append(reinterpret_cast<sal_Int64>(this));
-        OSL_TRACE("%s", sTemp.getStr());
+        SAL_WARN("sfx", "Non-MDI-Activate Dispatcher " << reinterpret_cast<sal_Int64>(this));
 #endif
     }
 
@@ -1507,7 +1501,7 @@ void SfxDispatcher::FlushImpl()
 {
     SFX_STACK(SfxDispatcher::FlushImpl);
 
-    OSL_TRACE("Flushing dispatcher!");
+    SAL_INFO("sfx", "Flushing dispatcher!");
 
     xImp->aIdle.Stop();
 
@@ -1572,7 +1566,7 @@ void SfxDispatcher::FlushImpl()
     xImp->bFlushing = false;
     xImp->bUpdated = false; // not only when bModify, if Doc/Template-Config
     xImp->bFlushed = true;
-    OSL_TRACE("Successfully flushed dispatcher!");
+    SAL_INFO("sfx", "Successfully flushed dispatcher!");
 
     //fdo#70703 FlushImpl may call back into itself so use aToDoCopyStack to talk
     //to outer levels of ourself. If DoActivate_Impl/DoDeactivate_Impl deletes

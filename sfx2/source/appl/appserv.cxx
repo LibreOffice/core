@@ -374,7 +374,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                    if this dialog is closed by the user ...
                    So we ignore this request now and wait for a new user decision.
                 */
-                OSL_TRACE( "QueryExit => sal_False (DispatchLevel == %u)", Application::GetDispatchLevel() );
+                SAL_INFO("sfx", "QueryExit => sal_False, DispatchLevel == " << Application::GetDispatchLevel() );
                 return;
             }
 
@@ -1482,7 +1482,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
 
         case SID_MACROORGANIZER:
         {
-            OSL_TRACE("handling SID_MACROORGANIZER");
+            SAL_INFO("sfx", "handling SID_MACROORGANIZER");
             const SfxItemSet* pArgs = rReq.GetArgs();
             const SfxPoolItem* pItem;
             sal_Int16 nTabId = 0;
@@ -1499,7 +1499,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
         case SID_RUNMACRO:
         {
             SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-            OSL_TRACE("SfxApplication::OfaExec_Impl: case ScriptOrg");
+            SAL_INFO("sfx", "SfxApplication::OfaExec_Impl: case ScriptOrg");
 
             Reference< XFrame > xFrame;
             const SfxItemSet* pIntSet = rReq.GetInternalArgs_Impl();
@@ -1552,7 +1552,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
         case SID_SCRIPTORGANIZER:
         {
             SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-            OSL_TRACE("SfxApplication::OfaExec_Impl: case ScriptOrg");
+            SAL_INFO("sfx", "SfxApplication::OfaExec_Impl: case ScriptOrg");
             const SfxItemSet* pArgs = rReq.GetArgs();
             const SfxPoolItem* pItem;
             OUString aLanguage;
@@ -1562,7 +1562,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             }
 
             OUString aLang( aLanguage );
-            OSL_TRACE("SfxApplication::OfaExec_Impl: about to create dialog for: %s", OUStringToOString( aLang , RTL_TEXTENCODING_ASCII_US ).pData->buffer);
+            SAL_INFO("sfx", "SfxApplication::OfaExec_Impl: about to create dialog for: " << aLang);
             // not sure about the vcl::Window*
             VclPtr<VclAbstractDialog> pDlg = pFact->CreateSvxScriptOrgDialog( GetTopWindow(), aLanguage );
             if( pDlg )
@@ -1572,7 +1572,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             }
             else
             {
-                OSL_TRACE("no dialog!!!");
+                SAL_WARN("sfx", "no dialog!!!");
             }
             rReq.Done();
         }

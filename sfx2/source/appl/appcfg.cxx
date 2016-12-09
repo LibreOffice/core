@@ -128,9 +128,7 @@ IMPL_LINK(SfxEventAsyncer_Impl, IdleHdl, Idle*, pAsyncIdle, void)
 #ifdef DBG_UTIL
     if (!xRef.Is())
     {
-        OStringBuffer aTmp("SfxEvent: ");
-        aTmp.append(OUStringToOString(aHint.GetEventName(), RTL_TEXTENCODING_UTF8));
-        OSL_TRACE( "%s", aTmp.getStr() );
+        SAL_INFO("sfx", "SfxEvent: " << aHint.GetEventName());
     }
 #endif
     SfxGetpApp()->Broadcast( aHint );
@@ -860,9 +858,7 @@ void SfxApplication::NotifyEvent( const SfxEventHint& rEventHint, bool bSynchron
 #ifdef DBG_UTIL
         if (!pDoc)
         {
-            OStringBuffer aTmp("SfxEvent: ");
-            aTmp.append(OUStringToOString(rEventHint.GetEventName(), RTL_TEXTENCODING_UTF8));
-            OSL_TRACE( "%s", aTmp.getStr() );
+            SAL_INFO("sfx", "SfxEvent: " << rEventHint.GetEventName());
         }
 #endif
         Broadcast(rEventHint);

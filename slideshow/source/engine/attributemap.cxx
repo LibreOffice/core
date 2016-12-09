@@ -77,9 +77,7 @@ namespace slideshow
             if( !aMap.lookup( rAttrName,
                               eAttributeType ) )
             {
-                OSL_TRACE( "mapAttributeName(): attribute name %s not found in map.",
-                           OUStringToOString( rAttrName,
-                                                     RTL_TEXTENCODING_ASCII_US ).getStr() );
+                SAL_WARN("slideshow", "mapAttributeName(): attribute name not found in map: " << rAttrName);
                 return ATTRIBUTE_INVALID;
             }
 

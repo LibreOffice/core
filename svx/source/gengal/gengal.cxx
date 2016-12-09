@@ -186,7 +186,7 @@ void GalApp::Init()
             OUString envVar( "OOO_INSTALL_PREFIX");
             osl_setEnvironment(envVar.pData, installPrefix.pData);
         }
-        OSL_TRACE( "OOO_INSTALL_PREFIX=%s", getenv( "OOO_INSTALL_PREFIX" ) );
+        SAL_INFO("svx", "OOO_INSTALL_PREFIX=" << getenv( "OOO_INSTALL_PREFIX" ) );
 
         uno::Reference<uno::XComponentContext> xComponentContext
             = ::cppu::defaultBootstrap_InitialComponentContext();

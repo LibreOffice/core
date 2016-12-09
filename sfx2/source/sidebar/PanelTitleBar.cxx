@@ -150,8 +150,7 @@ void PanelTitleBar::HandleToolBoxItemClick (const sal_uInt16 nItemIndex)
             }
             catch(Exception& rException)
             {
-                OSL_TRACE("caught exception: %s",
-                    OUStringToOString(rException.Message, RTL_TEXTENCODING_ASCII_US).getStr());
+                SAL_WARN("sfx", "caught exception: " << rException.Message);
             }
         }
 }

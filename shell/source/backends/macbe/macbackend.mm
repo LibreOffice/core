@@ -228,12 +228,12 @@ css::uno::Any MacOSXBackend::getPropertyValue(
             }
             else
             {
-                OSL_TRACE( "user documents list contains empty file path or conversion failed" );
+                SAL_WARN("shell", "user documents list contains empty file path or conversion failed" );
             }
         }
         else
         {
-            OSL_TRACE( "Got nil or empty list of user document directories" );
+            SAL_WARN("shell", "Got nil or empty list of user document directories" );
         }
         return css::uno::makeAny(css::beans::Optional< css::uno::Any >());
     } else if ( PropertyName == "ooInetFTPProxyName" )

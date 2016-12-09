@@ -79,10 +79,10 @@ bool FileChangedChecker::hasFileChanged()
 IMPL_LINK_NOARG(FileChangedChecker, TimerHandler, Idle *, void)
 {
     // If the file has changed, then update the graphic in the doc
-    OSL_TRACE("Timeout Called");
+    SAL_INFO("svtools", "Timeout Called");
     if(hasFileChanged())
     {
-        OSL_TRACE("File modified");
+        SAL_INFO("svtools", "File modified");
         mpCallback();
     }
 

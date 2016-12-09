@@ -157,12 +157,10 @@ inline t_val const * lru_cache< t_key, t_val, t_hashKey, t_equalKey >::lookup(
             toFront( entry );
 #ifdef __CACHE_DIAGNOSE
             OUStringBuffer buf( 48 );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("> retrieved element \"") );
+            buf.appendAscii( "> retrieved element \"" );
             buf.append( entry->m_key );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\" from cache") );
-            OString str( OUStringToOString(
-                buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
-            OSL_TRACE( "%s", str.getStr() );
+            buf.appendAscii( "\" from cache" );
+            SAL_INFO("stoc", buf.makeStringAndClear() );
 #endif
             return &entry->m_val;
         }
@@ -186,12 +184,10 @@ inline void lru_cache< t_key, t_val, t_hashKey, t_equalKey >::set(
             if (entry->m_key.getLength())
             {
                 OUStringBuffer buf( 48 );
-                buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("> kicking element \"") );
+                buf.appendAscii( "> kicking element \"" );
                 buf.append( entry->m_key );
-                buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\" from cache") );
-                OString str( OUStringToOString(
-                    buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
-                OSL_TRACE( "%s", str.getStr() );
+                buf.appendAscii( "\" from cache" );
+                SAL_INFO("stoc", buf.makeStringAndClear() );
             }
 #endif
             m_key2element.erase( entry->m_key );
@@ -208,12 +204,10 @@ inline void lru_cache< t_key, t_val, t_hashKey, t_equalKey >::set(
             entry = iFind->second;
 #ifdef __CACHE_DIAGNOSE
             OUStringBuffer buf( 48 );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("> replacing element \"") );
+            buf.appendAscii( "> replacing element \"" );
             buf.append( entry->m_key );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\" in cache") );
-            OString str( OUStringToOString(
-                buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
-            OSL_TRACE( "%s", str.getStr() );
+            buf.appendAscii( "\" in cache" );
+            SAL_INFO("stoc", buf.makeStringAndClear() );
 #endif
         }
         entry->m_val = val;

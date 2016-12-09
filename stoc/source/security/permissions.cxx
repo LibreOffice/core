@@ -70,12 +70,7 @@ static inline sal_Int32 makeMask(
 #if OSL_DEBUG_LEVEL > 0
         if (! strings[ nPos ])
         {
-            OUStringBuffer buf( 48 );
-            buf.append( "### ignoring unknown socket action: " );
-            buf.append( item );
-            OString str( OUStringToOString(
-                buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
-            OSL_TRACE( "%s", str.getStr() );
+            SAL_WARN("stoc", "ignoring unknown socket action: " << item );
         }
 #endif
     }
@@ -542,7 +537,7 @@ static void demanded_diag(
     buf.append( " => ok." );
     OString str(
         OUStringToOString( buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
-    OSL_TRACE( "%s", str.getStr() );
+    SAL_INFO("stoc",( "%s", str.getStr() );
 }
 #endif
 

@@ -174,7 +174,7 @@ bool implCreateIteratedNodes(
     }
 
     if( ::basegfx::fTools::equalZero( nIntervalTimeout ) )
-        OSL_TRACE( "implCreateIteratedNodes(): "
+        SAL_INFO("slideshow", "implCreateIteratedNodes(): "
                    "iterate interval close to zero, there's "
                    "no point in defining such an effect "
                    "(visually equivalent to whole-shape effect)" );
