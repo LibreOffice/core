@@ -683,52 +683,52 @@ OUString appendMarkerName(BitmapMarkerKind eKindOfMarker)
     switch(eKindOfMarker)
     {
         case BitmapMarkerKind::Rect_7x7:
-            return "rect7";
+            return OUString("rect7");
         case BitmapMarkerKind::Rect_9x9:
-            return "rect9";
+            return OUString("rect9");
         case BitmapMarkerKind::Rect_11x11:
-            return "rect11";
+            return OUString("rect11");
         case BitmapMarkerKind::Rect_13x13:
-            return "rect13";
+            return OUString("rect13");
         case BitmapMarkerKind::Circ_7x7:
         case BitmapMarkerKind::Customshape_7x7:
-            return "circ7";
+            return OUString("circ7");
         case BitmapMarkerKind::Circ_9x9:
         case BitmapMarkerKind::Customshape_9x9:
-            return "circ9";
+            return OUString("circ9");
         case BitmapMarkerKind::Circ_11x11:
         case BitmapMarkerKind::Customshape_11x11:
-            return "circ11";
+            return OUString("circ11");
         case BitmapMarkerKind::Elli_7x9:
-            return "elli7x9";
+            return OUString("elli7x9");
         case BitmapMarkerKind::Elli_9x11:
-            return "elli9x11";
+            return OUString("elli9x11");
         case BitmapMarkerKind::Elli_9x7:
-            return "elli9x7";
+            return OUString("elli9x7");
         case BitmapMarkerKind::Elli_11x9:
-            return "elli11x9";
+            return OUString("elli11x9");
         case BitmapMarkerKind::RectPlus_7x7:
-            return "rectplus7";
+            return OUString("rectplus7");
         case BitmapMarkerKind::RectPlus_9x9:
-            return "rectplus9";
+            return OUString("rectplus9");
         case BitmapMarkerKind::RectPlus_11x11:
-            return "rectplus11";
+            return OUString("rectplus11");
         case BitmapMarkerKind::Crosshair:
-            return "cross";
+            return OUString("cross");
         case BitmapMarkerKind::Anchor:
         case BitmapMarkerKind::AnchorTR:
-            return "anchor";
+            return OUString("anchor");
         case BitmapMarkerKind::AnchorPressed:
         case BitmapMarkerKind::AnchorPressedTR:
-            return "anchor-pressed";
+            return OUString("anchor-pressed");
         case BitmapMarkerKind::Glue:
-            return "glue-selected";
+            return OUString("glue-selected");
         case BitmapMarkerKind::Glue_Deselected:
-            return "glue-unselected";
+            return OUString("glue-unselected");
         default:
             break;
     }
-    return "";
+    return OUString();
 }
 
 OUString appendMarkerColor(BitmapColorIndex eIndex)
@@ -736,21 +736,21 @@ OUString appendMarkerColor(BitmapColorIndex eIndex)
     switch(eIndex)
     {
         case BitmapColorIndex::LightGreen:
-            return "1";
+            return OUString("1");
         case BitmapColorIndex::Cyan:
-            return "2";
+            return OUString("2");
         case BitmapColorIndex::LightCyan:
-            return "3";
+            return OUString("3");
         case BitmapColorIndex::Red:
-            return "4";
+            return OUString("4");
         case BitmapColorIndex::LightRed:
-            return "5";
+            return OUString("5");
         case BitmapColorIndex::Yellow:
-            return "6";
+            return OUString("6");
         default:
             break;
     }
-    return "";
+    return OUString();
 }
 
 BitmapEx ImpGetBitmapEx(BitmapMarkerKind eKindOfMarker, BitmapColorIndex eIndex)
