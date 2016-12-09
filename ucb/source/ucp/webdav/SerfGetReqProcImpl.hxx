@@ -71,7 +71,7 @@ protected:
     void handleEndOfResponseData( serf_bucket_t * inSerfResponseBucket ) override;
 
 private:
-    css::uno::Reference< SerfInputStream > xInputStream;
+    rtl::Reference< SerfInputStream > xInputStream;
     css::uno::Reference< css::io::XOutputStream > xOutputStream;
     const std::vector< OUString > * mpHeaderNames;
     DAVResource* mpResource;
