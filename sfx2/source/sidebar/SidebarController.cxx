@@ -885,7 +885,7 @@ IMPL_LINK(SidebarController, WindowEventHandler, VclWindowEvent&, rEvent, void)
                 break;
 
             case VclEventId::WindowPaint:
-                OSL_TRACE("Paint");
+                SAL_INFO("sfx", "Paint");
                 break;
 
             default:

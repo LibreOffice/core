@@ -312,10 +312,7 @@ css::uno::Reference< css::uno::XInterface > createBackend(
         throw;
     } catch (const css::uno::Exception & e) {
         // Assuming these exceptions indicate that the service is not installed:
-        OSL_TRACE(
-            "createInstance(%s) failed with %s",
-            OUStringToOString(name, RTL_TEXTENCODING_UTF8).getStr(),
-            OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
+        SAL_WARN("shell", "createInstance(" << name << ") failed with " << e.Message);
         return css::uno::Reference< css::uno::XInterface >();
     }
 }

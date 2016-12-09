@@ -355,7 +355,7 @@ void ChildWindow::init()
     }
     catch (const uno::Exception &e)
     {
-        OSL_TRACE( "Exception '%s' thrown\n" ,
+        SAL_INFO("slideshow",( "Exception '%s' thrown\n" ,
                    OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
     }
 }
@@ -369,7 +369,7 @@ void ChildWindow::Paint( const Rectangle& /*rRect*/ )
     }
     catch (const uno::Exception &e)
     {
-        OSL_TRACE( "Exception '%s' thrown\n" ,
+        SAL_INFO("slideshow",( "Exception '%s' thrown\n" ,
                    OUStringToOString( e.Message,
                                              RTL_TEXTENCODING_UTF8 ).getStr() );
     }
@@ -457,7 +457,7 @@ void DemoWindow::init()
     }
     catch (const uno::Exception &e)
     {
-        OSL_TRACE( "Exception '%s' thrown\n" ,
+        SAL_INFO("slideshow",( "Exception '%s' thrown\n" ,
                    OUStringToOString( e.Message,
                                              RTL_TEXTENCODING_UTF8 ).getStr() );
     }
@@ -531,7 +531,7 @@ void DemoApp::Main()
 
     if( !xFactory.is() )
     {
-        OSL_TRACE( "Could not bootstrap UNO, installation must be in disorder. Exiting." );
+        SAL_INFO("slideshow",( "Could not bootstrap UNO, installation must be in disorder. Exiting." );
         exit( 1 );
     }
 

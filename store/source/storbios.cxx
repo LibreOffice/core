@@ -373,7 +373,7 @@ storeError SuperBlockPage::verify (OStorePageBIOS & rBIOS)
         else
         {
             // Double Failure.
-            OSL_TRACE("OStoreSuperBlockPage::verify(): double failure.");
+            SAL_WARN("store", "OStoreSuperBlockPage::verify(): double failure.");
         }
     }
 

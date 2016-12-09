@@ -337,10 +337,7 @@ void Theme::UpdateTheme()
     }
     catch(beans::UnknownPropertyException& rException)
     {
-        OSL_TRACE("unknown property: %s",
-            OUStringToOString(
-                rException.Message,
-                RTL_TEXTENCODING_ASCII_US).getStr());
+        SAL_WARN("sfx", "unknown property: " << rException.Message);
         OSL_ASSERT(false);
     }
 }

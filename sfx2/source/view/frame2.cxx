@@ -103,7 +103,7 @@ bool SfxFrameWindow_Impl::EventNotify( NotifyEvent& rNEvt )
     {
         if ( pView->GetViewShell() && !pView->GetViewShell()->GetUIActiveIPClient_Impl() && !pFrame->IsInPlace() )
         {
-            OSL_TRACE("SfxFrame: GotFocus");
+            SAL_INFO("sfx", "SfxFrame: GotFocus");
             pView->MakeActive_Impl( false );
         }
 

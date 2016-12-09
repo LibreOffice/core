@@ -1328,11 +1328,11 @@ void SdrTextObj::ImpAutoFitText( SdrOutliner& rOutliner, const Size& rTextSize, 
             nCurrStretchY = sal::static_int_cast<sal_uInt16>(nCurrStretchY*fFactor);
             rOutliner.SetGlobalCharStretching(std::min(sal_uInt16(100),nCurrStretchX),
                                               std::min(sal_uInt16(100),nCurrStretchY));
-            OSL_TRACE("SdrTextObj::onEditOutlinerStatusEvent(): zoom is %d", nCurrStretchX);
+            SAL_INFO("svx", "zoom is " << nCurrStretchX);
         }
     }
 
-    OSL_TRACE("---- SdrTextObj::onEditOutlinerStatusEvent(): final zoom is %d ----", nMinStretchX);
+    SAL_INFO("svx", "final zoom is " << nMinStretchX);
     rOutliner.SetGlobalCharStretching(std::min(sal_uInt16(100),nMinStretchX),
                                       std::min(sal_uInt16(100),nMinStretchY));
 }

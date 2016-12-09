@@ -336,7 +336,7 @@ css::awt::Rectangle SAL_CALL AccessibleCell::getBounds() throw(RuntimeException,
         }
         else
         {
-            OSL_TRACE ("parent does not support component");
+            SAL_INFO("svx", "parent does not support component");
             aBoundingBox = awt::Rectangle (aPixelPosition.getX(), aPixelPosition.getY(),aPixelSize.getWidth(), aPixelSize.getHeight());
         }
     }
@@ -370,7 +370,7 @@ css::awt::Point SAL_CALL AccessibleCell::getLocationOnScreen() throw(RuntimeExce
     }
     else
     {
-        OSL_TRACE ("getLocation: parent does not support XAccessibleComponent");
+        SAL_WARN("svx", "parent does not support XAccessibleComponent");
     }
 
     return aLocation;

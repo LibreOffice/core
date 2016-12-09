@@ -1750,7 +1750,7 @@ static OUString getModuleIdentifier( const Reference< XModuleManager2 >& i_xModM
     }
     catch ( css::frame::UnknownModuleException& )
     {
-        OSL_TRACE( "getModuleIdentifier(): unknown module" );
+        SAL_WARN("sfx", "getModuleIdentifier(): unknown module" );
     }
     catch ( Exception& )
     {

@@ -226,7 +226,7 @@ int SfxPrinterController::getPageCount() const
         }
         catch (lang::DisposedException &)
         {
-            OSL_TRACE("SfxPrinterController: document disposed while printing");
+            SAL_WARN("sfx", "SfxPrinterController: document disposed while printing");
             const_cast<SfxPrinterController*>(this)->setJobState(
                     view::PrintableState_JOB_ABORTED);
         }
@@ -251,7 +251,7 @@ Sequence< beans::PropertyValue > SfxPrinterController::getPageParameters( int i_
         }
         catch (lang::DisposedException &)
         {
-            OSL_TRACE("SfxPrinterController: document disposed while printing");
+            SAL_WARN("sfx", "SfxPrinterController: document disposed while printing");
             const_cast<SfxPrinterController*>(this)->setJobState(
                     view::PrintableState_JOB_ABORTED);
         }
@@ -276,7 +276,7 @@ void SfxPrinterController::printPage( int i_nPage ) const
         }
         catch (lang::DisposedException &)
         {
-            OSL_TRACE("SfxPrinterController: document disposed while printing");
+            SAL_WARN("sfx", "SfxPrinterController: document disposed while printing");
             const_cast<SfxPrinterController*>(this)->setJobState(
                     view::PrintableState_JOB_ABORTED);
         }

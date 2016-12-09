@@ -204,8 +204,7 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
     catch(const RuntimeException &e )
     {
         m_xConfigurationProvider.clear();
-        OSL_TRACE( "RuntimeException caught accessing configuration provider." );
-        OSL_TRACE( "%s", OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
+        SAL_WARN("shell", "RuntimeException caught accessing configuration provider. " << e.Message );
         throw;
     }
 

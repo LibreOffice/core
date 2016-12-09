@@ -319,12 +319,8 @@ namespace slideshow
                 bool const bRet = css::uno::fromAny(a, &rValue);
 #if OSL_DEBUG_LEVEL > 0
                 if( !bRet )
-                    OSL_TRACE( "%s: while retrieving property %s, cannot extract Any of type %s\n",
-                               OUStringToOString( propName,
-                                                         RTL_TEXTENCODING_ASCII_US ).getStr(),
-                               OSL_THIS_FUNC,
-                               OUStringToOString( a.getValueTypeRef()->pTypeName,
-                                                         RTL_TEXTENCODING_ASCII_US ).getStr() );
+                    SAL_INFO("slideshow", OSL_THIS_FUNC << ": while retrieving property " << propName << ", cannot extract Any of type "
+                               << a.getValueTypeRef()->pTypeName);
 #endif
                 return bRet;
             }
@@ -352,12 +348,8 @@ namespace slideshow
                 bool const bRet = rIfc.is();
 #if OSL_DEBUG_LEVEL > 0
                 if( !bRet )
-                    OSL_TRACE( "%s: while retrieving property %s, cannot extract Any of type %s to interface\n",
-                               OUStringToOString( propName,
-                                                         RTL_TEXTENCODING_ASCII_US ).getStr(),
-                               OSL_THIS_FUNC,
-                               OUStringToOString( a.getValueTypeRef()->pTypeName,
-                                                         RTL_TEXTENCODING_ASCII_US ).getStr() );
+                    SAL_INFO("slideshow", OSL_THIS_FUNC << ": while retrieving property " << propName << ", cannot extract Any of type "
+                               << a.getValueTypeRef()->pTypeName << " to interface");
 #endif
                 return bRet;
             }

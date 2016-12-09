@@ -141,7 +141,7 @@ namespace slideshow
                     // since this will also capture segmentation
                     // violations and the like. In such a case, we
                     // still better let our clients now...
-                    OSL_TRACE( "::presentation::internal::ActivitiesQueue: Activity threw a SlideShowException, removing from ring" );
+                    SAL_WARN("slideshow", "::presentation::internal::ActivitiesQueue: Activity threw a SlideShowException, removing from ring" );
                 }
 
                 if( bReinsert )
