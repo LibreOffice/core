@@ -311,7 +311,7 @@ Sequence< PropertyValue > VCLXAccessibleEdit::getCharacterAttributes( sal_Int32 
     Sequence< PropertyValue > aProperties = VCLXAccessibleTextComponent::getCharacterAttributes( nIndex, aRequestedAttributes );
 
     // Handle multiline edit character properties
-    VclPtr<VclMultiLineEdit> pMulitLineEdit = GetAs< VclMultiLineEdit >();
+    VclPtr<VclMultiLineEdit> pMulitLineEdit = GetAsDynamic< VclMultiLineEdit >();
     if ( pMulitLineEdit )
     {
         ExtTextEngine* pTextEngine = pMulitLineEdit->GetTextEngine();
