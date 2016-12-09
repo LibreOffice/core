@@ -115,14 +115,14 @@ void Panel::SetUIElement (const Reference<ui::XUIElement>& rxElement)
 
 void Panel::SetExpanded (const bool bIsExpanded)
 {
-    SidebarController* pSidebarController= SidebarController::GetSidebarControllerForFrame(mxFrame);
+    SidebarController* pSidebarController = SidebarController::GetSidebarControllerForFrame(mxFrame);
 
     if (mbIsExpanded != bIsExpanded)
     {
         mbIsExpanded = bIsExpanded;
         maDeckLayoutTrigger();
 
-        if (maContextAccess)
+        if (maContextAccess && pSidebarController)
         {
             pSidebarController->GetResourceManager()->StorePanelExpansionState(
                 msPanelId,
