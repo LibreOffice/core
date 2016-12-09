@@ -271,17 +271,6 @@ SvStream &SfxItemPool::Store(SvStream &rStream) const
                                 pItem->Store(rStream, nItemVersion);
                             else
                                 break;
-#ifdef DBG_UTIL_MI
-                            if ( dynamic_cast<const SfxSetItem*>( pItem ) ==  nullptr )
-                            {
-                                sal_uLong nMark = rStream.Tell();
-                                rStream.Seek( nItemStartPos + sizeof(sal_uInt16) );
-                                std::unique_ptr<SfxPoolItem> pClone(pItem->Create(rStream, nItemVersion ));
-                                sal_uInt16 nWh = pItem->Which();
-                                SFX_ASSERT( rStream.Tell() == nMark, nWh,"asymmetric store/create" );
-                                SFX_ASSERT( *pClone == *pItem, nWh, "unequal after store/create" );
-                            }
-#endif
                         }
                     }
                 }
