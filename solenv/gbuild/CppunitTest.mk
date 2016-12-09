@@ -32,9 +32,9 @@ ifneq ($(strip $(CPPUNITTRACE)),)
 ifneq ($(filter gdb,$(CPPUNITTRACE)),)
 gb_CppunitTest_GDBTRACE := $(subst gdb,gdb -ex "set environment $(subst =, ,$(gb_CppunitTest_CPPTESTPRECOMMAND))",$(CPPUNITTRACE))
 else ifneq ($(filter lldb,$(CPPUNITTRACE)),)
-dyldpathfile=$(call var2file,$(shell $(gb_MKTEMP)),500,settings set target.env-vars $(gb_CppunitTest_CPPTESTPRECOMMAND))
-gb_CppunitTest_GDBTRACE := $(subst lldb,lldb -s $(dyldpathfile),$(CPPUNITTRACE))
-gb_CppunitTest_POSTGDBTRACE := ; rm -f $(dyldpathfile)
+gb_CppunitTest_PREGDBTRACE := lo_dyldpathfile=$(call var2file,$(shell $(gb_MKTEMP)),500,settings set target.env-vars $(gb_CppunitTest_CPPTESTPRECOMMAND))
+gb_CppunitTest_GDBTRACE := $(subst lldb,lldb -s $$lo_dyldpathfile,$(CPPUNITTRACE))
+gb_CppunitTest_POSTGDBTRACE := rm $$lo_dyldpathfile
 endif
 gb_CppunitTest__interactive := $(true)
 endif
@@ -116,7 +116,8 @@ $(call gb_CppunitTest_get_target,%) :| $(gb_CppunitTest_RUNTIMEDEPS)
 			$(if $(value gb_CppunitTest_postprocess), \
 				rm -fr $@.core && mkdir $@.core && cd $@.core &&)) \
 		( \
-		$(if $(gb_CppunitTest_localized),$(OPEN_PAREN)for l in $(WITH_LANG_LIST) ; do LO_TEST_LOCALE="$$l" ) \
+		$(if $(gb_CppunitTest_localized),for l in $(WITH_LANG_LIST) ; do LO_TEST_LOCALE="$$l" ) \
+		$(if $(gb_CppunitTest_PREGDBTRACE),$(gb_CppunitTest_PREGDBTRACE) &&) \
 		$(if $(filter gdb,$(CPPUNITTRACE)),,$(gb_CppunitTest_CPPTESTPRECOMMAND)) \
 		$(if $(G_SLICE),G_SLICE=$(G_SLICE)) \
 		$(if $(GLIBCXX_FORCE_NEW),GLIBCXX_FORCE_NEW=$(GLIBCXX_FORCE_NEW)) \
@@ -127,13 +128,16 @@ $(call gb_CppunitTest_get_target,%) :| $(gb_CppunitTest_RUNTIMEDEPS)
 		$(ICECREAM_RUN) $(gb_CppunitTest_GDBTRACE) $(gb_CppunitTest_VALGRINDTOOL) $(gb_CppunitTest_CPPTESTCOMMAND) \
 		$(call gb_LinkTarget_get_target,$(call gb_CppunitTest_get_linktarget,$*)) \
 		$(call gb_CppunitTest__make_args) "-env:CPPUNITTESTTARGET=$@" \
-		$(if $(gb_CppunitTest_localized),|| exit $$?; done$(CLOSE_PAREN)) \
+		$(if $(gb_CppunitTest_POSTGDBTRACE), \
+			; RET=$$? && $(gb_CppunitTest_POSTGDBTRACE) && (exit $$RET)) \
+		$(if $(gb_CppunitTest_localized),|| exit $$?; done) \
+		) \
 		$(if $(gb_CppunitTest__interactive),, \
 			> $@.log 2>&1 \
 			|| ($(if $(value gb_CppunitTest_postprocess), \
 					RET=$$?; \
 					$(call gb_CppunitTest_postprocess,$(gb_CppunitTest_CPPTESTCOMMAND),$@.core,$$RET) >> $@.log 2>&1;) \
-				cat $@.log; $(gb_CppunitTest_UNITTESTFAILED) Cppunit $*))))
+				cat $@.log; $(gb_CppunitTest_UNITTESTFAILED) Cppunit $*)))
 
 define gb_CppunitTest_CppunitTest
 $(call gb_CppunitTest__CppunitTest_impl,$(1),$(call gb_CppunitTest_get_linktarget,$(1)))
