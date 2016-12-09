@@ -1899,6 +1899,8 @@ bool OpenGLSalGraphicsImpl::drawPolyPolygon( const basegfx::B2DPolyPolygon& rPol
         {
             for (const basegfx::B2DPolygon& rPolygon : rPolyPolygon)
             {
+                if (rPolygon.count() <= 1)
+                    continue;
                 basegfx::B2DPolygon aPolygon(rPolygon);
                 if (rPolygon.areControlPointsUsed())
                     aPolygon = rPolygon.getDefaultAdaptiveSubdivision();
@@ -1922,6 +1924,8 @@ bool OpenGLSalGraphicsImpl::drawPolyLine(
 {
     VCL_GL_INFO( "::drawPolyLine trans " << fTransparency );
     if( mnLineColor == SALCOLOR_NONE )
+        return true;
+    if (rPolygon.count() <= 1)
         return true;
 
     const bool bIsHairline = (rLineWidth.getX() == rLineWidth.getY()) && (rLineWidth.getX() <= 1.2);
