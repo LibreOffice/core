@@ -508,12 +508,14 @@ bool ToolbarLayoutManager::createToolbar( const OUString& rResourceURL )
             UIElement& rElement = impl_findToolbar( rResourceURL );
             if ( !rElement.m_aName.isEmpty() )
             {
-                // Reuse a local entry so we are able to use the latest
-                // UI changes for this document.
-                implts_setElementData( rElement, xDockWindow );
-                rElement.m_xUIElement = xUIElement;
-                bVisible = rElement.m_bVisible;
-                bFloating = rElement.m_bFloating;
+                // somebody else must have created it while we released
+                // the SolarMutex - just dispose our new instance and
+                // do nothing. (We have to dispose either the new or the
+                // existing m_xUIElement.)
+                aWriteLock.clear();
+                uno::Reference<lang::XComponent> const xC(xUIElement, uno::UNO_QUERY);
+                xC->dispose();
+                return false;
             }
             else
             {
