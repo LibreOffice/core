@@ -60,7 +60,7 @@ class GbuildTest(GbuildLinkTarget):
 
     def short_name(self):
         """Return the short name of target based n the CppunitTest_* makefile names"""
-        return 'Library %s' % self.name
+        return 'CppunitTest %s' % self.name
 
     def target_name(self):
         return 'CppunitTest_%s' % self.test
