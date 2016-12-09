@@ -1095,6 +1095,7 @@ struct SwRectFnCollection
     SwRectGet     fnGetWidth;
     SwRectGet     fnGetHeight;
     SwRectPoint   fnGetPos;
+    SwRectSize    fnGetSize;
 
     SwRectSet     fnSetTop;
     SwRectSet     fnSetBottom;
@@ -1125,6 +1126,8 @@ struct SwRectFnCollection
     SwFrameGet      fnGetPrtRight;
     SwRectDist      fnTopDist;
     SwRectDist      fnBottomDist;
+    SwRectDist      fnLeftDist;
+    SwRectDist      fnRightDist;
     SwFrameMax      fnSetLimit;
     SwRectMax       fnOverStep;
 
@@ -1132,6 +1135,7 @@ struct SwRectFnCollection
     SwFrameMakePos  fnMakePos;
     SwOperator      fnXDiff;
     SwOperator      fnYDiff;
+    SwOperator      fnXInc;
     SwOperator      fnYInc;
 
     SwRectSetTwice  fnSetLeftAndWidth;
@@ -1182,6 +1186,7 @@ public:
     long  GetWidth (const SwRect& rRect) const { return (rRect.*fnRect->fnGetWidth) (); }
     long  GetHeight(const SwRect& rRect) const { return (rRect.*fnRect->fnGetHeight)(); }
     Point GetPos   (const SwRect& rRect) const { return (rRect.*fnRect->fnGetPos)   (); }
+    Size  GetSize  (const SwRect& rRect) const { return (rRect.*fnRect->fnGetSize)  (); }
 
     void SetTop   (SwRect& rRect, long nNew) const { (rRect.*fnRect->fnSetTop)   (nNew); }
     void SetBottom(SwRect& rRect, long nNew) const { (rRect.*fnRect->fnSetBottom)(nNew); }
@@ -1212,6 +1217,8 @@ public:
     long  GetPrtRight    (const SwFrame& rFrame) const { return (rFrame.*fnRect->fnGetPrtRight)    (); }
     long  TopDist   (const SwRect& rRect, long nPos) const { return (rRect.*fnRect->fnTopDist)    (nPos); }
     long  BottomDist(const SwRect& rRect, long nPos) const { return (rRect.*fnRect->fnBottomDist) (nPos); }
+    long  LeftDist   (const SwRect& rRect, long nPos) const { return (rRect.*fnRect->fnLeftDist)    (nPos); }
+    long  RightDist   (const SwRect& rRect, long nPos) const { return (rRect.*fnRect->fnRightDist)    (nPos); }
     bool  SetLimit (SwFrame& rFrame, long nNew) const { return (rFrame.*fnRect->fnSetLimit) (nNew); }
     bool  OverStep  (const SwRect& rRect, long nPos) const { return (rRect.*fnRect->fnOverStep)   (nPos); }
 
@@ -1219,6 +1226,7 @@ public:
     void MakePos(SwFrame& rFrame, const SwFrame* pUp, const SwFrame* pPrv, bool bNotify) const { (rFrame.*fnRect->fnMakePos)(pUp, pPrv, bNotify); }
     long XDiff(long n1, long n2) const { return (fnRect->fnXDiff) (n1, n2); }
     long YDiff(long n1, long n2) const { return (fnRect->fnYDiff) (n1, n2); }
+    long XInc (long n1, long n2) const { return (fnRect->fnXInc)  (n1, n2); }
     long YInc (long n1, long n2) const { return (fnRect->fnYInc)  (n1, n2); }
 
     void SetLeftAndWidth(SwRect& rRect, long nLeft, long nWidth) const { (rRect.*fnRect->fnSetLeftAndWidth)(nLeft, nWidth); }
