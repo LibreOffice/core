@@ -335,7 +335,7 @@ Sequence< PropertyValue > VCLXAccessibleEdit::getCharacterAttributes( sal_Int32 
     {
         if (aValue.Name == "CharColor")
         {
-            if ( aValue.Value == -1 )
+            if ( aValue.Value == sal_Int32(-1) )
             {
                 OutputDevice* pDev = Application::GetDefaultDevice();
                 if ( pDev )
