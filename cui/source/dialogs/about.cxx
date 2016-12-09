@@ -77,6 +77,7 @@ AboutDialog::AboutDialog(vcl::Window* pParent)
     m_aLocaleStr = get<FixedText>("locale")->GetText();
 
     m_pVersion->SetText(GetVersionString());
+    m_pVersion->SetURL("https://gerrit.libreoffice.org/gitweb?p=core.git;a=log;h=" + GetBuildId());
 
     OUString aCopyrightString = GetCopyrightString();
     m_pCopyrightText->SetText( aCopyrightString );
