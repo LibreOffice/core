@@ -173,6 +173,9 @@ void SwRect::AddBottom( const long nAdd ){ m_Size.Height() += nAdd; }
 void SwRect::SetPosX( const long nNew ){ m_Point.setX(nNew); }
 void SwRect::SetPosY( const long nNew ){ m_Point.setY(nNew); }
 
+const Size  SwRect::_Size() const { return SSize(); }
+const Size  SwRect::SwappedSize() const { return Size( m_Size.getHeight(), m_Size.getWidth() ); }
+
 const Point SwRect::TopLeft() const { return Pos(); }
 const Point SwRect::TopRight() const { return Point( m_Point.getX() + m_Size.getWidth(), m_Point.getY() ); }
 const Point SwRect::BottomLeft() const { return Point( m_Point.getX(), m_Point.getY() + m_Size.getHeight() ); }

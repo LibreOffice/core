@@ -128,10 +128,12 @@ public:
     void SetUpperLeftCorner(  const Point& rNew );
     void SetUpperRightCorner(  const Point& rNew );
     void SetLowerLeftCorner(  const Point& rNew );
+    const Size  _Size() const;
     const Point TopLeft()  const;
     const Point TopRight()  const;
     const Point BottomLeft()  const;
     const Point BottomRight()  const;
+    const Size  SwappedSize() const;
     long GetLeftDistance( long ) const;
     long GetBottomDistance( long ) const;
     long GetRightDistance( long ) const;
