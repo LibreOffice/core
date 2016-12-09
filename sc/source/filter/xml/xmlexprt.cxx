@@ -1839,6 +1839,16 @@ const ScXMLEditAttributeMap& ScXMLExport::GetEditAttributeMap() const
     return *mpEditAttrMap;
 }
 
+void ScXMLExport::RegisterDefinedNames( uno::Reference< css::sheet::XSpreadsheetDocument > & xSpreadDoc )
+{
+    ScFormatSaveData* pFormatData = ScModelObj::getImplementation(xSpreadDoc)->GetFormatSaveData();
+    auto xAutoStylePool = GetAutoStylePool();
+    for (const auto& rFormatInfo : pFormatData->maIDToName)
+    {
+        xAutoStylePool->RegisterDefinedName(XML_STYLE_FAMILY_TABLE_CELL, rFormatInfo.second);
+    }
+}
+
 void ScXMLExport::ExportContent_()
 {
     nCurrentTable = 0;
@@ -1936,14 +1946,7 @@ void ScXMLExport::ExportStyles_( bool bUsed )
 {
     Reference <sheet::XSpreadsheetDocument> xSpreadDoc( GetModel(), uno::UNO_QUERY );
     if (xSpreadDoc.is())
-    {
-        ScFormatSaveData* pFormatData = ScModelObj::getImplementation(xSpreadDoc)->GetFormatSaveData();
-        auto aAutoStylePool = GetAutoStylePool();
-        for (const auto& rFormatInfo : pFormatData->maIDToName)
-        {
-            aAutoStylePool->RegisterDefinedName(XML_STYLE_FAMILY_TABLE_CELL, rFormatInfo.second);
-        }
-    }
+        RegisterDefinedNames( xSpreadDoc);
 
     if (!pSharedData)
     {
@@ -2099,6 +2102,8 @@ void ScXMLExport::AddStyleFromCells(const uno::Reference<beans::XPropertySet>& x
                     {
                         sName = itr->second;
                         bAdded = GetAutoStylePool()->AddNamed(sName, XML_STYLE_FAMILY_TABLE_CELL, sStyleName, aPropStates);
+                        if (bAdded)
+                            GetAutoStylePool()->RegisterName(XML_STYLE_FAMILY_TABLE_CELL, sName);
                     }
                 }
                 bool bIsAutoStyle(true);
@@ -2268,6 +2273,9 @@ void ScXMLExport::ExportAutoStyles_()
 
     if (getExportFlags() & SvXMLExportFlags::CONTENT)
     {
+        // Reserve the loaded cell style names.
+        RegisterDefinedNames( xSpreadDoc);
+
         //  re-create automatic styles with old names from stored data
         ScSheetSaveData* pSheetData = ScModelObj::getImplementation(xSpreadDoc)->GetSheetSaveData();
         if (pSheetData && pDoc)
