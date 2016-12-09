@@ -36,10 +36,19 @@ namespace vcl
 namespace bitmap
 {
 
-BitmapEx loadFromResource(const ResId& rResId, const ImageLoadFlags eFlags)
+BitmapEx loadFromName(const OUString& rFileName, const ImageLoadFlags eFlags)
 {
     BitmapEx aBitmapEx;
 
+    OUString aIconTheme = Application::GetSettings().GetStyleSettings().DetermineIconTheme();
+
+    ImplImageTree::get().loadImage(rFileName, aIconTheme, aBitmapEx, true, eFlags);
+
+    return aBitmapEx;
+}
+
+BitmapEx loadFromResource(const ResId& rResId, const ImageLoadFlags eFlags)
+{
     ResMgr* pResMgr = nullptr;
 
     ResMgr::GetResourceSkipHeader(rResId.SetRT( RSC_BITMAP ), &pResMgr);
@@ -47,11 +56,8 @@ BitmapEx loadFromResource(const ResId& rResId, const ImageLoadFlags eFlags)
     pResMgr->ReadLong();
 
     const OUString aFileName(pResMgr->ReadString());
-    OUString aIconTheme = Application::GetSettings().GetStyleSettings().DetermineIconTheme();
 
-    ImplImageTree::get().loadImage(aFileName, aIconTheme, aBitmapEx, true, eFlags);
-
-    return aBitmapEx;
+    return loadFromName(aFileName, eFlags);
 }
 
 void loadFromSvg(SvStream& rStream, const OUString& sPath, BitmapEx& rBitmapEx, double fScalingFactor)

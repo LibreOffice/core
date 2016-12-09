@@ -57,6 +57,7 @@
 #include <vcl/svapp.hxx>
 #include <svx/sdr/overlay/overlaypolypolygon.hxx>
 #include <vcl/lazydelete.hxx>
+#include <vcl/BitmapTools.hxx>
 
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
@@ -66,6 +67,7 @@
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <memory>
+
 
 
 // #i15222#
@@ -673,11 +675,123 @@ BitmapMarkerKind SdrHdl::GetNextBigger(BitmapMarkerKind eKnd)
     return eRetval;
 }
 
-BitmapEx SdrHdl::ImpGetBitmapEx( BitmapMarkerKind eKindOfMarker, sal_uInt16 nInd)
+namespace
 {
-    static vcl::DeleteOnDeinit< SdrHdlBitmapSet > aModernSet(new SdrHdlBitmapSet);
-    return aModernSet.get()->GetBitmapEx(eKindOfMarker, nInd);
+
+OUString appendMarkerName(BitmapMarkerKind eKindOfMarker)
+{
+    switch(eKindOfMarker)
+    {
+        case BitmapMarkerKind::Rect_7x7:
+            return "rect7";
+        case BitmapMarkerKind::Rect_9x9:
+            return "rect9";
+        case BitmapMarkerKind::Rect_11x11:
+            return "rect11";
+        case BitmapMarkerKind::Rect_13x13:
+            return "rect13";
+        case BitmapMarkerKind::Circ_7x7:
+        case BitmapMarkerKind::Customshape_7x7:
+            return "circ7";
+        case BitmapMarkerKind::Circ_9x9:
+        case BitmapMarkerKind::Customshape_9x9:
+            return "circ9";
+        case BitmapMarkerKind::Circ_11x11:
+        case BitmapMarkerKind::Customshape_11x11:
+            return "circ11";
+        case BitmapMarkerKind::Elli_7x9:
+            return "elli7x9";
+        case BitmapMarkerKind::Elli_9x11:
+            return "elli9x11";
+        case BitmapMarkerKind::Elli_9x7:
+            return "elli9x7";
+        case BitmapMarkerKind::Elli_11x9:
+            return "elli11x9";
+        case BitmapMarkerKind::RectPlus_7x7:
+            return "rectplus7";
+        case BitmapMarkerKind::RectPlus_9x9:
+            return "rectplus9";
+        case BitmapMarkerKind::RectPlus_11x11:
+            return "rectplus11";
+        case BitmapMarkerKind::Crosshair:
+            return "cross";
+        case BitmapMarkerKind::Anchor:
+        case BitmapMarkerKind::AnchorTR:
+            return "anchor";
+        case BitmapMarkerKind::AnchorPressed:
+        case BitmapMarkerKind::AnchorPressedTR:
+            return "anchor-pressed";
+        case BitmapMarkerKind::Glue:
+            return "glue-selected";
+        case BitmapMarkerKind::Glue_Deselected:
+            return "glue-unselected";
+        default:
+            break;
+    }
+    return "";
 }
+
+OUString appendMarkerColor(BitmapColorIndex eIndex)
+{
+    switch(eIndex)
+    {
+        case BitmapColorIndex::LightGreen:
+            return "1";
+        case BitmapColorIndex::Cyan:
+            return "2";
+        case BitmapColorIndex::LightCyan:
+            return "3";
+        case BitmapColorIndex::Red:
+            return "4";
+        case BitmapColorIndex::LightRed:
+            return "5";
+        case BitmapColorIndex::Yellow:
+            return "6";
+        default:
+            break;
+    }
+    return "";
+}
+
+BitmapEx ImpGetBitmapEx(BitmapMarkerKind eKindOfMarker, BitmapColorIndex eIndex)
+{
+    // use this code path only when we use HiDPI (for now)
+    if (Application::GetDefaultDevice()->GetDPIScalePercentage() > 100)
+    {
+        OUString sMarkerPrefix("svx/res/marker-");
+
+        OUString sMarkerName = appendMarkerName(eKindOfMarker);
+        if (!sMarkerName.isEmpty())
+        {
+            BitmapEx aBitmapEx;
+
+            if (eKindOfMarker == BitmapMarkerKind::Crosshair
+             || eKindOfMarker == BitmapMarkerKind::Anchor
+             || eKindOfMarker == BitmapMarkerKind::AnchorTR
+             || eKindOfMarker == BitmapMarkerKind::AnchorPressed
+             || eKindOfMarker == BitmapMarkerKind::AnchorPressedTR
+             || eKindOfMarker == BitmapMarkerKind::Glue
+             || eKindOfMarker == BitmapMarkerKind::Glue_Deselected)
+            {
+                aBitmapEx = vcl::bitmap::loadFromName(sMarkerPrefix + sMarkerName + ".png");
+            }
+            else
+            {
+                aBitmapEx = vcl::bitmap::loadFromName(sMarkerPrefix + sMarkerName + "-" + appendMarkerColor(eIndex) + ".png");
+            }
+
+            if (!aBitmapEx.IsEmpty())
+                return aBitmapEx;
+        }
+    }
+
+    // if we can't load the marker..
+
+    static vcl::DeleteOnDeinit< SdrHdlBitmapSet > aModernSet(new SdrHdlBitmapSet);
+    return aModernSet.get()->GetBitmapEx(eKindOfMarker, sal_uInt16(eIndex));
+}
+
+} // end anonymous namespace
 
 sdr::overlay::OverlayObject* SdrHdl::CreateOverlayObject(
     const basegfx::B2DPoint& rPos,
@@ -752,8 +866,8 @@ sdr::overlay::OverlayObject* SdrHdl::CreateOverlayObject(
         }
 
         // create animated handle
-        BitmapEx aBmpEx1 = ImpGetBitmapEx( eKindOfMarker, (sal_uInt16)eColIndex );
-        BitmapEx aBmpEx2 = ImpGetBitmapEx( eNextBigger,   (sal_uInt16)eColIndex );
+        BitmapEx aBmpEx1 = ImpGetBitmapEx(eKindOfMarker, eColIndex);
+        BitmapEx aBmpEx2 = ImpGetBitmapEx(eNextBigger,   eColIndex);
 
         // #i53216# Use system cursor blink time. Use the unsigned value.
         const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
@@ -784,7 +898,7 @@ sdr::overlay::OverlayObject* SdrHdl::CreateOverlayObject(
     else
     {
         // create normal handle: use ImpGetBitmapEx(...) now
-        BitmapEx aBmpEx = ImpGetBitmapEx(eKindOfMarker, (sal_uInt16)eColIndex);
+        BitmapEx aBmpEx = ImpGetBitmapEx(eKindOfMarker, eColIndex);
 
         // When the image with handles is not found, the bitmap returned is
         // empty. This is a problem when we use LibreOffice as a library
@@ -969,6 +1083,11 @@ void SdrHdl::onMouseEnter(const MouseEvent& /*rMEvt*/)
 
 void SdrHdl::onMouseLeave()
 {
+}
+
+BitmapEx SdrHdl::createGluePointBitmap()
+{
+    return ImpGetBitmapEx(BitmapMarkerKind::Glue_Deselected, BitmapColorIndex::LightGreen);
 }
 
 SdrHdlColor::SdrHdlColor(const Point& rRef, Color aCol, const Size& rSize, bool bLum)
