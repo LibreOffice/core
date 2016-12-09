@@ -200,7 +200,7 @@ ToolBarManager::ToolBarManager( const Reference< XComponentContext >& rxContext,
 ToolBarManager::~ToolBarManager()
 {
     assert(!m_aAsyncUpdateControllersTimer.IsActive());
-    OSL_ASSERT( !m_pToolBar );
+    assert(!m_pToolBar); // must be disposed by ToolbarLayoutManager
     OSL_ASSERT( !m_bAddedToTaskPaneList );
 }
 
