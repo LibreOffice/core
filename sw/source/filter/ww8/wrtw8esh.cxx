@@ -2538,8 +2538,7 @@ bool WinwordAnchoring::ConvertPosition( SwFormatHoriOrient& _iorHoriOri,
 
     // convert horizontal position, if needed
     {
-        enum HoriConv { NO_CONV, CONV2PG, CONV2COL, CONV2CHAR };
-        HoriConv eHoriConv( NO_CONV );
+        sw::WW8AnchorConv eHoriConv(sw::WW8AnchorConv::NO_CONV);
 
         // determine, if conversion has to be performed due to the position orientation
         bool bConvDueToOrientation( false );
@@ -2553,12 +2552,12 @@ bool WinwordAnchoring::ConvertPosition( SwFormatHoriOrient& _iorHoriOri,
         // determine conversion type due to the position relation
         if ( bConvDueToAnchoredAtColBreakPara )
         {
-            eHoriConv = CONV2PG;
+            eHoriConv = sw::WW8AnchorConv::CONV2PG;
         }
         else if ( _iorHoriOri.IsPosToggle()
                 && _iorHoriOri.GetHoriOrient() == text::HoriOrientation::RIGHT )
         {
-            eHoriConv = NO_CONV;
+            eHoriConv = sw::WW8AnchorConv::NO_CONV;
             _iorHoriOri.SetHoriOrient( text::HoriOrientation::OUTSIDE );
         }
         else
@@ -2569,20 +2568,20 @@ bool WinwordAnchoring::ConvertPosition( SwFormatHoriOrient& _iorHoriOri,
                 case text::RelOrientation::PAGE_PRINT_AREA:
                 {
                     if ( bConvDueToOrientation || bFollowTextFlow )
-                        eHoriConv = CONV2PG;
+                        eHoriConv = sw::WW8AnchorConv::CONV2PG;
                 }
                 break;
                 case text::RelOrientation::PAGE_LEFT:
                 case text::RelOrientation::PAGE_RIGHT:
                 {
                     // relation not supported by WW8. Thus, conversion always needed.
-                    eHoriConv = CONV2PG;
+                    eHoriConv = sw::WW8AnchorConv::CONV2PG;
                 }
                 break;
                 case text::RelOrientation::FRAME:
                 {
                     if ( bConvDueToOrientation )
-                        eHoriConv = CONV2COL;
+                        eHoriConv = sw::WW8AnchorConv::CONV2COL_OR_PARA;
                 }
                 break;
                 case text::RelOrientation::PRINT_AREA:
@@ -2590,26 +2589,26 @@ bool WinwordAnchoring::ConvertPosition( SwFormatHoriOrient& _iorHoriOri,
                 case text::RelOrientation::FRAME_RIGHT:
                 {
                     // relation not supported by WW8. Thus, conversion always needed.
-                    eHoriConv = CONV2COL;
+                    eHoriConv = sw::WW8AnchorConv::CONV2COL_OR_PARA;
                 }
                 break;
                 case text::RelOrientation::CHAR:
                 {
                     if ( bConvDueToOrientation )
-                        eHoriConv = CONV2CHAR;
+                        eHoriConv = sw::WW8AnchorConv::CONV2CHAR_OR_LINE;
                 }
                 break;
                 default:
                     OSL_FAIL( "<WinwordAnchoring::ConvertPosition(..)> - unknown horizontal relation" );
             }
         }
-        if ( eHoriConv != NO_CONV )
+        if ( eHoriConv != sw::WW8AnchorConv::NO_CONV )
         {
             _iorHoriOri.SetHoriOrient( text::HoriOrientation::NONE );
             SwTwips nPosX( 0L );
             {
                 Point aPos;
-                if ( eHoriConv == CONV2PG )
+                if ( eHoriConv == sw::WW8AnchorConv::CONV2PG )
                 {
                     _iorHoriOri.SetRelationOrient( text::RelOrientation::PAGE_FRAME );
                     // #i33818#
@@ -2621,12 +2620,12 @@ bool WinwordAnchoring::ConvertPosition( SwFormatHoriOrient& _iorHoriOri,
                         _iorHoriOri.SetRelationOrient( text::RelOrientation::PAGE_PRINT_AREA );
                     }
                 }
-                else if ( eHoriConv == CONV2COL )
+                else if ( eHoriConv == sw::WW8AnchorConv::CONV2COL_OR_PARA )
                 {
                     _iorHoriOri.SetRelationOrient( text::RelOrientation::FRAME );
                     aPos = pAnchoredObj->GetRelPosToAnchorFrame();
                 }
-                else if ( eHoriConv == CONV2CHAR )
+                else if ( eHoriConv == sw::WW8AnchorConv::CONV2CHAR_OR_LINE )
                 {
                     _iorHoriOri.SetRelationOrient( text::RelOrientation::CHAR );
                     aPos = pAnchoredObj->GetRelPosToChar();
@@ -2642,8 +2641,7 @@ bool WinwordAnchoring::ConvertPosition( SwFormatHoriOrient& _iorHoriOri,
 
     // convert vertical position, if needed
     {
-        enum VertConv { NO_CONV, CONV2PG, CONV2PARA, CONV2LINE };
-        VertConv eVertConv( NO_CONV );
+        sw::WW8AnchorConv eVertConv(sw::WW8AnchorConv::NO_CONV);
 
         // determine, if conversion has to be performed due to the position orientation
         bool bConvDueToOrientation( false );
@@ -2662,7 +2660,7 @@ bool WinwordAnchoring::ConvertPosition( SwFormatHoriOrient& _iorHoriOri,
         // determine conversion type due to the position relation
         if ( bConvDueToAnchoredAtColBreakPara )
         {
-            eVertConv = CONV2PG;
+            eVertConv = sw::WW8AnchorConv::CONV2PG;
         }
         else
         {
@@ -2672,7 +2670,7 @@ bool WinwordAnchoring::ConvertPosition( SwFormatHoriOrient& _iorHoriOri,
                 case text::RelOrientation::PAGE_PRINT_AREA:
                 {
                     if ( bConvDueToOrientation || bFollowTextFlow )
-                        eVertConv = CONV2PG;
+                        eVertConv = sw::WW8AnchorConv::CONV2PG;
                 }
                 break;
                 case text::RelOrientation::FRAME:
@@ -2680,20 +2678,20 @@ bool WinwordAnchoring::ConvertPosition( SwFormatHoriOrient& _iorHoriOri,
                     if ( bConvDueToOrientation ||
                          _iorVertOri.GetVertOrient() == text::VertOrientation::CENTER )
                     {
-                        eVertConv = CONV2PARA;
+                        eVertConv = sw::WW8AnchorConv::CONV2COL_OR_PARA;
                     }
                 }
                 break;
                 case text::RelOrientation::PRINT_AREA:
                 {
                     // relation not supported by WW8. Thus, conversion always needed.
-                    eVertConv = CONV2PARA;
+                    eVertConv = sw::WW8AnchorConv::CONV2COL_OR_PARA;
                 }
                 break;
                 case text::RelOrientation::CHAR:
                 {
                     // relation not supported by WW8. Thus, conversion always needed.
-                    eVertConv = CONV2PARA;
+                    eVertConv = sw::WW8AnchorConv::CONV2COL_OR_PARA;
                 }
                 break;
                 case text::RelOrientation::TEXT_LINE:
@@ -2701,7 +2699,7 @@ bool WinwordAnchoring::ConvertPosition( SwFormatHoriOrient& _iorHoriOri,
                     if ( bConvDueToOrientation ||
                          _iorVertOri.GetVertOrient() == text::VertOrientation::NONE )
                     {
-                        eVertConv = CONV2LINE;
+                        eVertConv = sw::WW8AnchorConv::CONV2CHAR_OR_LINE;
                     }
                 }
                 break;
@@ -2714,13 +2712,13 @@ bool WinwordAnchoring::ConvertPosition( SwFormatHoriOrient& _iorHoriOri,
             }
         }
 
-        if ( eVertConv != NO_CONV )
+        if ( eVertConv != sw::WW8AnchorConv::NO_CONV )
         {
             _iorVertOri.SetVertOrient( text::VertOrientation::NONE );
             SwTwips nPosY( 0L );
             {
                 Point aPos;
-                if ( eVertConv == CONV2PG )
+                if ( eVertConv == sw::WW8AnchorConv::CONV2PG )
                 {
                     _iorVertOri.SetRelationOrient( text::RelOrientation::PAGE_FRAME );
                     // #i33818#
@@ -2732,12 +2730,12 @@ bool WinwordAnchoring::ConvertPosition( SwFormatHoriOrient& _iorHoriOri,
                         _iorVertOri.SetRelationOrient( text::RelOrientation::PAGE_PRINT_AREA );
                     }
                 }
-                else if ( eVertConv == CONV2PARA )
+                else if ( eVertConv == sw::WW8AnchorConv::CONV2COL_OR_PARA )
                 {
                     _iorVertOri.SetRelationOrient( text::RelOrientation::FRAME );
                     aPos = pAnchoredObj->GetRelPosToAnchorFrame();
                 }
-                else if ( eVertConv == CONV2LINE )
+                else if ( eVertConv == sw::WW8AnchorConv::CONV2CHAR_OR_LINE )
                 {
                     _iorVertOri.SetRelationOrient( text::RelOrientation::TEXT_LINE );
                     aPos = pAnchoredObj->GetRelPosToLine();
