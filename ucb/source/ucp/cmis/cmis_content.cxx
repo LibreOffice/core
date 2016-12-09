@@ -1052,8 +1052,14 @@ namespace cmis
         {
             object = getObject( xEnv );
         }
-        catch ( const libcmis::Exception& )
+        catch ( const libcmis::Exception& e )
         {
+            SAL_INFO( "ucb.ucp.cmis", "Unexpected libcmis exception: " << e.what( ) );
+            ucbhelper::cancelCommandExecution(
+                                ucb::IOErrorCode_GENERAL,
+                                uno::Sequence< uno::Any >( 0 ),
+                                xEnv,
+                                OUString::createFromAscii( e.what() ) );
         }
 
         libcmis::Document* pPwc = dynamic_cast< libcmis::Document* >( object.get( ) );
@@ -1071,8 +1077,22 @@ namespace cmis
         copyData( xIn, xOutput );
 
         map< string, libcmis::PropertyPtr > newProperties;
-        libcmis::DocumentPtr pDoc = pPwc->checkIn( rArg.MajorVersion, OUSTR_TO_STDSTR( rArg.VersionComment ), newProperties,
-                           pOut, OUSTR_TO_STDSTR( rArg.MimeType ), OUSTR_TO_STDSTR( rArg.NewTitle ) );
+        libcmis::DocumentPtr pDoc;
+
+        try
+        {
+            pDoc = pPwc->checkIn( rArg.MajorVersion, OUSTR_TO_STDSTR( rArg.VersionComment ), newProperties,
+                                  pOut, OUSTR_TO_STDSTR( rArg.MimeType ), OUSTR_TO_STDSTR( rArg.NewTitle ) );
+        }
+        catch ( const libcmis::Exception& e )
+        {
+            SAL_INFO( "ucb.ucp.cmis", "Unexpected libcmis exception: " << e.what( ) );
+            ucbhelper::cancelCommandExecution(
+                                ucb::IOErrorCode_GENERAL,
+                                uno::Sequence< uno::Any >( 0 ),
+                                xEnv,
+                                OUString::createFromAscii( e.what() ) );
+        }
 
         // Get the URL and send it back as a result
         URL aCmisUrl( m_sURL );
