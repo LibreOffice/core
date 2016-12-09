@@ -21,34 +21,23 @@
 
 
 
-PRJ		= ..
-PRJNAME = juhelper
-TARGET  = juh
+$(eval $(call gb_Library_Library,juh))
 
-.INCLUDE : settings.mk
-.INCLUDE: settings.pmk
+$(eval $(call gb_Library_add_precompiled_header,juh,$(SRCDIR)/javaunohelper/inc/pch/precompiled_javaunohelper))
 
-JARCLASSDIRS = com
-JARTARGET		= $(TARGET).jar
-JARCOMPRESS		= TRUE
-JARCLASSPATH = $(JARFILES) ../../lib/ ../bin/
-CUSTOMMANIFESTFILE = manifest
+$(eval $(call gb_Library_set_include,juh,\
+        $$(INCLUDE) \
+	-I$(SRCDIR)/javaunohelper/inc/pch \
+))
 
-# Special work necessary for building java reference with javadoc.
-# The source of puplic APIs must be delivered and used later in the
-# odk module.
-ZIP1TARGET=$(TARGET)_src
-ZIP1FLAGS=-u -r
-ZIP1DIR=$(PRJ)
-ZIP1LIST=com -x "*makefile.mk"
+$(eval $(call gb_Library_add_linked_libs,juh,\
+	sal \
+	$(gb_STDLIBS) \
+))
 
-# --- Targets ------------------------------------------------------
 
-.INCLUDE : target.mk
+$(eval $(call gb_Library_add_exception_objects,juh,\
+	javaunohelper/source/preload \
+))
 
-ALLTAR : $(MISC)/juh.component
-
-$(MISC)/juh.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
-        juh.component
-    $(XSLTPROC) --nonet --stringparam uri '$(COMPONENTPREFIX_URE_JAVA)juh.jar' \
-        -o $@ $(SOLARENV)/bin/createcomponent.xslt juh.component
+# vim: set noet sw=4 ts=4:

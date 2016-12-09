@@ -39,7 +39,7 @@ my_components = \
     invocation \
     javaloader \
     javavm \
-    juh \
+    component/javaunohelper/util/juh \
     namingservice \
     proxyfac \
     reflection \

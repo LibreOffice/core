@@ -97,9 +97,9 @@ $(CPP_DOCU_INDEX_FILE) : $(CPP_DOCU_CLEANUP_FLAG)
     -rm $(@:d:d)$/cpp.css
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $(PRJ)$/docs$/cpp$/ref$/cpp.css $(MY_TEXTCOPY_TARGETPRE) $(@:d:d)$/cpp.css
 
-$(JAVA_SRC_FILES) : $(SOLARCOMMONBINDIR)$/$$(@:f)
+$(JAVA_SRC_FILES) : $(SOLARCOMMONBINDIR)$/jurt_src.zip $(SOLARCOMMONBINDIR)$/ridl_src.zip $(SOLARCOMMONBINDIR)$/unoloader_src.zip $(SOLARCOMMONPCKDIR)$/juh_src.zip
     -$(MKDIRHIER) $(@:d)        
-    $(MY_COPY) $< $@
+    $(MY_COPY) $^ $(JAVA_SRC_DIR)
     cd $(JAVA_SRC_DIR) && unzip -qu $(@:f)
 
 #$(JAVA_SRC_DIR)$/com$/sun$/star$/beans$/%.java : $(PRJ)$/source$/bean$/com$/sun$/star$/beans$/%.java 

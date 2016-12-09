@@ -21,4 +21,33 @@
 
 
 
-JARFILES = ridl.jar jurt.jar
+$(eval $(call gb_Library_Library,juhx))
+
+$(eval $(call gb_Library_add_precompiled_header,juhx,$(SRCDIR)/javaunohelper/inc/pch/precompiled_javaunohelper))
+
+$(eval $(call gb_Library_set_include,juhx,\
+        $$(INCLUDE) \
+	-I$(SRCDIR)/javaunohelper/inc/pch \
+))
+
+$(eval $(call gb_Library_add_api,juhx,\
+	udkapi \
+))
+
+$(eval $(call gb_Library_add_linked_libs,juhx,\
+	cppu \
+	cppuhelper \
+	jvmaccess \
+	sal \
+	salhelper \
+	$(gb_STDLIBS) \
+))
+
+
+$(eval $(call gb_Library_add_exception_objects,juhx,\
+	javaunohelper/source/javaunohelper \
+	javaunohelper/source/bootstrap \
+	javaunohelper/source/vm \
+))
+
+# vim: set noet sw=4 ts=4:

@@ -41,7 +41,6 @@ my_components = \
     invocation \
     javaloader \
     javavm \
-    juh \
     namingservice \
     proxyfac \
     reflection \
@@ -84,6 +83,7 @@ my_components = \
     component/io/source/stm/streams \
     component/io/source/TextInputStream/textinstream \
     component/io/source/TextOutputStream/textoutstream \
+    component/javaunohelper/util/juh \
     component/linguistic/source/lng \
     component/oox/util/oox \
     component/package/source/xstor/xstor \
