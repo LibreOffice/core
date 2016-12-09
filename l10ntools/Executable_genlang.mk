@@ -50,30 +50,3 @@ $(eval $(call gb_Executable_add_exception_objects,genlang,\
 ))
 
 # vim:set noet sw=4 ts=4:
-
-
-
-
-# localizer for new l10n framework
-APP1TARGET=   genLang 
-APP1OBJS=     $(OBJFILES)
-APP1RPATH=    NONE
-APP1LINKTYPE= STATIC
-
-APP1LIBS= 
-APP1STDLIBS= 
-APP1LIBSALCPPRT=
-
-
-# --- Targets ------------------------------------------------------
-.INCLUDE :  target.mk
-
-$(MISC)$/%_yy.c : %lex.l
-	flex -l -w -8 -o$@ $<
-
-# --- Files --------------------------------------------------------
-
-
-genPO: ALLTAR
-	+$(PERL) $(SOLARENV)/bin/deliver.pl
-
