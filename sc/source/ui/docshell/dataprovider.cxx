@@ -72,10 +72,10 @@ CSVFetchThread::CSVFetchThread(SvStream *pData):
         Thread("ReaderThread"),
         mpStream(pData),
         mbTerminate(false)
-    {
-        maConfig.delimiters.push_back(',');
-        maConfig.text_qualifier = '"';
-    }
+{
+    maConfig.delimiters.push_back(',');
+    maConfig.text_qualifier = '"';
+}
 
 CSVFetchThread::~CSVFetchThread()
 {
@@ -101,20 +101,20 @@ void CSVFetchThread::EndThread()
 
 void CSVFetchThread::execute()
 {
-        LinesType* pLines = new LinesType(10);
+    LinesType* pLines = new LinesType(10);
 
-        // Read & store new lines from stream.
-        for (Line & rLine : *pLines)
-        {
-            rLine.maCells.clear();
-            mpStream->ReadLine(rLine.maLine);
-            CSVHandler aHdl(rLine, mnColCount);
-            orcus::csv_parser<CSVHandler> parser(rLine.maLine.getStr(), rLine.maLine.getLength(), aHdl, maConfig);
-            parser.parse();
-        }
+    // Read & store new lines from stream.
+    for (Line & rLine : *pLines)
+    {
+        rLine.maCells.clear();
+        mpStream->ReadLine(rLine.maLine);
+        CSVHandler aHdl(rLine, mnColCount);
+        orcus::csv_parser<CSVHandler> parser(rLine.maLine.getStr(), rLine.maLine.getLength(), aHdl, maConfig);
+        parser.parse();
+    }
 
-        if (!mpStream->good())
-            RequestTerminate();
+    if (!mpStream->good())
+        RequestTerminate();
 }
 
 }
