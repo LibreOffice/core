@@ -6456,7 +6456,7 @@ if test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
 fi
 AC_SUBST(HAVE_GCC_PRAGMA_OPERATOR)
 
-HAVE_GCC_FNO_FNO_SIZED_DEALLOCATION=
+HAVE_GCC_FNO_SIZED_DEALLOCATION=
 if test "$GCC" = yes; then
     AC_MSG_CHECKING([whether $CXX supports -fno-sized-deallocation])
     AC_LANG_PUSH([C++])
