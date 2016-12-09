@@ -2377,7 +2377,7 @@ endef
 else # !SYSTEM_LPSOLVE
 
 define gb_LinkTarget__use_lpsolve
-$(call gb_LinkTarget_use_unpacked,$(1),lpsolve)
+$(call gb_LinkTarget_use_external_project,$(1),lpsolve)
 ifeq ($(COM),MSC)
 $(call gb_LinkTarget_add_libs,$(1),\
 	$(call gb_UnpackedTarball_get_dir,lpsolve)/lpsolve55/lpsolve55.lib \
