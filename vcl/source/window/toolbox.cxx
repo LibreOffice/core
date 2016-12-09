@@ -1671,9 +1671,8 @@ bool ToolBox::ImplCalcItem()
     long            nDropDownArrowWidth = TB_DROPDOWNARROWWIDTH;
 
     // set defaults if image or text is needed but empty
-    float fDPIScaleFactor = GetDPIScaleFactor();
-    nDefWidth  = GetDefaultImageSize().Width()  * fDPIScaleFactor;
-    nDefHeight = GetDefaultImageSize().Height() * fDPIScaleFactor;
+    nDefWidth  = GetDefaultImageSize().Width();
+    nDefHeight = GetDefaultImageSize().Height();
 
     mnWinHeight = 0;
     // determine minimum size necessary in NWF
