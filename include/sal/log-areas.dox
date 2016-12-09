@@ -412,10 +412,6 @@ certain functionality.
 
 @li @c stoc.corerefl - CoreReflection
 
-@section testtools
-
-@li @c testtools
-
 @section VCL
 
 @li @c vcl
