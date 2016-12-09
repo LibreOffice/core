@@ -1899,6 +1899,8 @@ bool OpenGLSalGraphicsImpl::drawPolyPolygon( const basegfx::B2DPolyPolygon& rPol
         {
             for (const basegfx::B2DPolygon& rPolygon : rPolyPolygon)
             {
+                if (rPolygon.size() <= 1)
+                    continue;
                 basegfx::B2DPolygon aPolygon(rPolygon);
                 if (rPolygon.areControlPointsUsed())
                     aPolygon = rPolygon.getDefaultAdaptiveSubdivision();
