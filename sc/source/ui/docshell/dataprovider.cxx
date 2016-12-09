@@ -7,16 +7,13 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 #include <dataprovider.hxx>
-#include <config_orcus.h>
 #include "officecfg/Office/Calc.hxx"
 #include <stringutil.hxx>
 
-#if ENABLE_ORCUS
 #if defined(_WIN32)
 #define __ORCUS_STATIC_LIB
 #endif
 #include <orcus/csv_parser.hpp>
-#endif
 
 namespace sc {
 
@@ -32,8 +29,6 @@ Cell::Cell(const Cell& r) : mbValue(r.mbValue)
         maStr.Size = r.maStr.Size;
     }
 }
-
-#if ENABLE_ORCUS
 
 class CSVHandler
 {
@@ -73,17 +68,13 @@ public:
     }
 };
 
-#endif
-
 CSVFetchThread::CSVFetchThread(SvStream *pData):
         Thread("ReaderThread"),
         mpStream(pData),
         mbTerminate(false)
     {
-#if ENABLE_ORCUS
         maConfig.delimiters.push_back(',');
         maConfig.text_qualifier = '"';
-#endif
     }
 
 CSVFetchThread::~CSVFetchThread()
@@ -117,11 +108,9 @@ void CSVFetchThread::execute()
         {
             rLine.maCells.clear();
             mpStream->ReadLine(rLine.maLine);
-#if ENABLE_ORCUS
             CSVHandler aHdl(rLine, mnColCount);
             orcus::csv_parser<CSVHandler> parser(rLine.maLine.getStr(), rLine.maLine.getLength(), aHdl, maConfig);
             parser.parse();
-#endif
         }
 
         if (!mpStream->good())

@@ -18,15 +18,12 @@
 #include <osl/conditn.hxx>
 #include <queue>
 
-#include <config_orcus.h>
 #include "officecfg/Office/Calc.hxx"
 
-#if ENABLE_ORCUS
 #if defined(_WIN32)
 #define __ORCUS_STATIC_LIB
 #endif
 #include <orcus/csv_parser.hpp>
-#endif
 
 namespace sc {
 
@@ -66,9 +63,7 @@ class CSVFetchThread : public salhelper::Thread
     bool mbTerminate;
     osl::Mutex maMtxTerminate;
 
-#if ENABLE_ORCUS
     orcus::csv::parser_config maConfig;
-#endif
 
     virtual void execute() override;
 
