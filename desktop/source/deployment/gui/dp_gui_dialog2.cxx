@@ -943,6 +943,8 @@ IMPL_LINK_NOARG(ExtMgrDialog, HandleUpdateBtn, Button*, void)
 {
 #if ENABLE_EXTENSION_UPDATE
     m_pManager->checkUpdates( false, true );
+#else
+    (void) this;
 #endif
 }
 
