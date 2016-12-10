@@ -89,7 +89,7 @@ public:
     ScDocShellRef saveAndReloadPassword( ScDocShell*, const OUString&, const OUString&, const OUString&, SfxFilterFlags );
 
     void test();
-    void testPasswordExport();
+    void testPasswordExportODS();
     void testConditionalFormatExportODS();
     void testConditionalFormatExportXLSX();
     void testColorScaleExportODS();
@@ -100,7 +100,7 @@ public:
     void testMiscRowHeightExport();
     void testNamedRangeBugfdo62729();
     void testRichTextExportODS();
-    void testRichTextCellFormat();
+    void testRichTextCellFormatXLSX();
     void testFormulaRefSheetNameODS();
 
     void testCellValuesExportODS();
@@ -144,53 +144,53 @@ public:
     void testCeilingFloorODS();
 
 #if !defined _WIN32
-    void testRelativePaths();
+    void testRelativePathsODS();
 #endif
-    void testSheetProtection();
+    void testSheetProtectionODS();
 
     void testPivotTableXLSX();
     void testPivotTableTwoDataFieldsXLSX();
-    void testPivotTableMedian();
+    void testPivotTableMedianODS();
 
     void testSwappedOutImageExport();
     void testLinkedGraphicRT();
     void testImageWithSpecialID();
 
 #if !defined _WIN32
-    void testSupBookVirtualPath();
+    void testSupBookVirtualPathXLS();
 #endif
     void testSheetLocalRangeNameXLS();
-    void testSheetTextBoxHyperlink();
-    void testFontSize();
-    void testSheetCharacterKerningSpace();
-    void testSheetCondensedCharacterSpace();
-    void testTextUnderlineColor();
-    void testSheetRunParagraphProperty();
-    void testHiddenShape();
+    void testSheetTextBoxHyperlinkXLSX();
+    void testFontSizeXLSX();
+    void testSheetCharacterKerningSpaceXLSX();
+    void testSheetCondensedCharacterSpaceXLSX();
+    void testTextUnderlineColorXLSX();
+    void testSheetRunParagraphPropertyXLSX();
+    void testHiddenShapeXLSX();
     void testHyperlinkXLSX();
-    void testMoveCellAnchoredShapes();
-    void testMatrixMultiplication();
+    void testMoveCellAnchoredShapesODS();
+    void testMatrixMultiplicationXLSX();
     void testPreserveTextWhitespaceXLSX();
     void testPreserveTextWhitespace2XLSX();
-    void testTextDirection();
+    void testTextDirectionXLSX();
 
     void testRefStringXLSX();
     void testRefStringConfigXLSX();
     void testRefStringUnspecified();
-    void testHeaderImage();
+    void testHeaderImageODS();
 
-    void testTdf88657();
+    void testTdf88657ODS();
     void testEscapeCharInNumberFormatXLSX();
     void testNatNumInNumberFormatXLSX();
     void testExponentWithoutSignFormatXLSX();
-    void testExtendedLCID();
+    void testExtendedLCIDXLSX();
 
     void testHiddenRepeatedRowsODS();
     void testHyperlinkTargetFrameODS();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
-    CPPUNIT_TEST(testPasswordExport);
+    CPPUNIT_TEST(testPasswordExportODS);
     CPPUNIT_TEST(testConditionalFormatExportODS);
     CPPUNIT_TEST(testConditionalFormatExportXLSX);
     CPPUNIT_TEST(testColorScaleExportODS);
@@ -201,7 +201,7 @@ public:
     CPPUNIT_TEST(testMiscRowHeightExport);
     CPPUNIT_TEST(testNamedRangeBugfdo62729);
     CPPUNIT_TEST(testRichTextExportODS);
-    CPPUNIT_TEST(testRichTextCellFormat);
+    CPPUNIT_TEST(testRichTextCellFormatXLSX);
     CPPUNIT_TEST(testFormulaRefSheetNameODS);
     CPPUNIT_TEST(testCellValuesExportODS);
     CPPUNIT_TEST(testCellNoteExportODS);
@@ -236,14 +236,14 @@ public:
     CPPUNIT_TEST(testCeilingFloorXLS);
     CPPUNIT_TEST(testCeilingFloorODS);
 #if !defined(_WIN32)
-    CPPUNIT_TEST(testRelativePaths);
+    CPPUNIT_TEST(testRelativePathsODS);
 #endif
-    CPPUNIT_TEST(testSheetProtection);
+    CPPUNIT_TEST(testSheetProtectionODS);
     CPPUNIT_TEST(testPivotTableXLSX);
     CPPUNIT_TEST(testPivotTableTwoDataFieldsXLSX);
-    CPPUNIT_TEST(testPivotTableMedian);
+    CPPUNIT_TEST(testPivotTableMedianODS);
 #if !defined(_WIN32)
-    CPPUNIT_TEST(testSupBookVirtualPath);
+    CPPUNIT_TEST(testSupBookVirtualPathXLS);
 #endif
     CPPUNIT_TEST(testSwappedOutImageExport);
     CPPUNIT_TEST(testLinkedGraphicRT);
@@ -251,28 +251,28 @@ public:
     CPPUNIT_TEST(testPreserveTextWhitespaceXLSX);
     CPPUNIT_TEST(testPreserveTextWhitespace2XLSX);
     CPPUNIT_TEST(testSheetLocalRangeNameXLS);
-    CPPUNIT_TEST(testSheetTextBoxHyperlink);
-    CPPUNIT_TEST(testFontSize);
-    CPPUNIT_TEST(testSheetCharacterKerningSpace);
-    CPPUNIT_TEST(testSheetCondensedCharacterSpace);
-    CPPUNIT_TEST(testTextUnderlineColor);
-    CPPUNIT_TEST(testSheetRunParagraphProperty);
-    CPPUNIT_TEST(testHiddenShape);
+    CPPUNIT_TEST(testSheetTextBoxHyperlinkXLSX);
+    CPPUNIT_TEST(testFontSizeXLSX);
+    CPPUNIT_TEST(testSheetCharacterKerningSpaceXLSX);
+    CPPUNIT_TEST(testSheetCondensedCharacterSpaceXLSX);
+    CPPUNIT_TEST(testTextUnderlineColorXLSX);
+    CPPUNIT_TEST(testSheetRunParagraphPropertyXLSX);
+    CPPUNIT_TEST(testHiddenShapeXLSX);
     CPPUNIT_TEST(testHyperlinkXLSX);
-    CPPUNIT_TEST(testMoveCellAnchoredShapes);
-    CPPUNIT_TEST(testMatrixMultiplication);
-    CPPUNIT_TEST(testTextDirection);
+    CPPUNIT_TEST(testMoveCellAnchoredShapesODS);
+    CPPUNIT_TEST(testMatrixMultiplicationXLSX);
+    CPPUNIT_TEST(testTextDirectionXLSX);
 
     CPPUNIT_TEST(testRefStringXLSX);
     CPPUNIT_TEST(testRefStringConfigXLSX);
     CPPUNIT_TEST(testRefStringUnspecified);
-    CPPUNIT_TEST(testHeaderImage);
+    CPPUNIT_TEST(testHeaderImageODS);
 
-    CPPUNIT_TEST(testTdf88657);
+    CPPUNIT_TEST(testTdf88657ODS);
     CPPUNIT_TEST(testEscapeCharInNumberFormatXLSX);
     CPPUNIT_TEST(testNatNumInNumberFormatXLSX);
     CPPUNIT_TEST(testExponentWithoutSignFormatXLSX);
-    CPPUNIT_TEST(testExtendedLCID);
+    CPPUNIT_TEST(testExtendedLCIDXLSX);
 
     CPPUNIT_TEST(testHiddenRepeatedRowsODS);
     CPPUNIT_TEST(testHyperlinkTargetFrameODS);
@@ -370,7 +370,7 @@ void ScExportTest::test()
     xDocSh->DoClose();
 }
 
-void ScExportTest::testPasswordExport()
+void ScExportTest::testPasswordExportODS()
 {
     ScDocShell* pShell = new ScDocShell(
         SfxModelFlags::EMBEDDED_OBJECT |
@@ -1539,7 +1539,7 @@ void ScExportTest::testRichTextExportODS()
     xNewDocSh3->DoClose();
 }
 
-void ScExportTest::testRichTextCellFormat()
+void ScExportTest::testRichTextCellFormatXLSX()
 {
     ScDocShellRef xDocSh = loadDoc("cellformat.", FORMAT_XLS);
     CPPUNIT_ASSERT(xDocSh.Is());
@@ -2712,7 +2712,7 @@ void ScExportTest::testCeilingFloorODS()
 }
 
 #if !defined _WIN32
-void ScExportTest::testRelativePaths()
+void ScExportTest::testRelativePathsODS()
 {
     ScDocShellRef xDocSh = loadDoc("fdo79305.", FORMAT_ODS);
     CPPUNIT_ASSERT(xDocSh.Is());
@@ -2739,7 +2739,7 @@ void testSheetProtection_Impl(ScDocument& rDoc)
 
 }
 
-void ScExportTest::testSheetProtection()
+void ScExportTest::testSheetProtectionODS()
 {
     ScDocShellRef xDocSh = loadDoc("sheet-protection.", FORMAT_ODS);
     CPPUNIT_ASSERT(xDocSh.Is());
@@ -3016,7 +3016,7 @@ void ScExportTest::testPivotTableTwoDataFieldsXLSX()
     xDocSh2->DoClose();
 }
 
-void ScExportTest::testPivotTableMedian()
+void ScExportTest::testPivotTableMedianODS()
 {
     ScDocShellRef xDocSh = loadDoc("pivot-table-median.", FORMAT_ODS);
     CPPUNIT_ASSERT_MESSAGE("Failed to load test document.", xDocSh.Is());
@@ -3154,7 +3154,7 @@ void ScExportTest::tearDown()
 }
 
 #if !defined _WIN32
-void ScExportTest::testSupBookVirtualPath()
+void ScExportTest::testSupBookVirtualPathXLS()
 {
     ScDocShellRef xShell = loadDoc("external-ref.", FORMAT_XLS);
     CPPUNIT_ASSERT(xShell.Is());
@@ -3307,7 +3307,7 @@ void ScExportTest::testSheetLocalRangeNameXLS()
     xDocSh2->DoClose();
 }
 
-void ScExportTest::testSheetTextBoxHyperlink()
+void ScExportTest::testSheetTextBoxHyperlinkXLSX()
 {
     ScDocShellRef xShell = loadDoc("textbox-hyperlink.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xShell.Is());
@@ -3323,7 +3323,7 @@ void ScExportTest::testSheetTextBoxHyperlink()
     xDocSh->DoClose();
 }
 
-void ScExportTest::testFontSize()
+void ScExportTest::testFontSizeXLSX()
 {
     ScDocShellRef xDocSh = loadDoc("fontSize.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.Is());
@@ -3336,7 +3336,7 @@ void ScExportTest::testFontSize()
     CPPUNIT_ASSERT_EQUAL(OUString("1800"), fontSize);
 }
 
-void ScExportTest::testSheetCharacterKerningSpace()
+void ScExportTest::testSheetCharacterKerningSpaceXLSX()
 {
     ScDocShellRef xShell = loadDoc("textbox-CharKerningSpace.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xShell.Is());
@@ -3356,7 +3356,7 @@ void ScExportTest::testSheetCharacterKerningSpace()
     xDocSh->DoClose();
 }
 
-void ScExportTest::testSheetCondensedCharacterSpace()
+void ScExportTest::testSheetCondensedCharacterSpaceXLSX()
 {
     ScDocShellRef xShell = loadDoc("textbox-CondensedCharacterSpace.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xShell.Is());
@@ -3376,7 +3376,7 @@ void ScExportTest::testSheetCondensedCharacterSpace()
     xDocSh->DoClose();
 }
 
-void ScExportTest::testTextUnderlineColor()
+void ScExportTest::testTextUnderlineColorXLSX()
 {
 
     ScDocShellRef xDocSh = loadDoc("underlineColor.", FORMAT_XLSX);
@@ -3390,7 +3390,7 @@ void ScExportTest::testTextUnderlineColor()
     CPPUNIT_ASSERT_EQUAL(OUString("ff0000"), color);
 }
 
-void ScExportTest::testSheetRunParagraphProperty()
+void ScExportTest::testSheetRunParagraphPropertyXLSX()
 {
     ScDocShellRef xShell = loadDoc("TextColor.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xShell.Is());
@@ -3433,7 +3433,7 @@ void ScExportTest::testPreserveTextWhitespace2XLSX()
     xDocSh->DoClose();
 }
 
-void ScExportTest::testHiddenShape()
+void ScExportTest::testHiddenShapeXLSX()
 {
     ScDocShellRef xDocSh = loadDoc("hiddenShape.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.Is());
@@ -3442,6 +3442,7 @@ void ScExportTest::testHiddenShape()
     CPPUNIT_ASSERT(pDoc);
     assertXPath(pDoc, "/xdr:wsDr/xdr:twoCellAnchor/xdr:sp[1]/xdr:nvSpPr/xdr:cNvPr", "hidden", "1");
 }
+
 void ScExportTest::testHyperlinkXLSX()
 {
     ScDocShellRef xDocSh = loadDoc("hyperlink.", FORMAT_XLSX);
@@ -3452,7 +3453,7 @@ void ScExportTest::testHyperlinkXLSX()
     assertXPath(pDoc, "/r:Relationships/r:Relationship", "Target", "#Sheet2!A1");
 }
 
-void ScExportTest::testMoveCellAnchoredShapes()
+void ScExportTest::testMoveCellAnchoredShapesODS()
 {
     ScDocShellRef xDocSh = loadDoc("move-cell-anchored-shapes.", FORMAT_ODS);
     CPPUNIT_ASSERT_MESSAGE("Failed to load move-cell-anchored-shapes.ods", xDocSh.Is());
@@ -3615,7 +3616,7 @@ void ScExportTest::testMoveCellAnchoredShapes()
     xDocSh2->DoClose();
 }
 
-void ScExportTest::testMatrixMultiplication()
+void ScExportTest::testMatrixMultiplicationXLSX()
 {
     ScDocShellRef xShell = loadDoc("matrix-multiplication.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xShell.Is());
@@ -3728,7 +3729,7 @@ void ScExportTest::testRefStringUnspecified()
     xDocSh->DoClose();
 }
 
-void ScExportTest::testHeaderImage()
+void ScExportTest::testHeaderImageODS()
 {
     // Graphic as header background was lost on export.
     ScDocShellRef xShell = loadDoc("header-image.", FORMAT_ODS);
@@ -3743,7 +3744,7 @@ void ScExportTest::testHeaderImage()
     xDocSh->DoClose();
 }
 
-void ScExportTest::testTextDirection()
+void ScExportTest::testTextDirectionXLSX()
 {
     ScDocShellRef xDocSh = loadDoc("writingMode.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.Is());
@@ -3755,7 +3756,7 @@ void ScExportTest::testTextDirection()
     assertXPath(pDoc, "/x:styleSheet/x:cellXfs/x:xf[3]/x:alignment", "readingOrder", "2");//RTL
 }
 
-void ScExportTest::testTdf88657()
+void ScExportTest::testTdf88657ODS()
 {
     ScDocShellRef xDocSh = loadDoc("tdf88657.", FORMAT_ODS);
     CPPUNIT_ASSERT(xDocSh.Is());
@@ -3841,7 +3842,7 @@ void ScExportTest::testExponentWithoutSignFormatXLSX()
     xDocSh->DoClose();
 }
 
-void ScExportTest::testExtendedLCID()
+void ScExportTest::testExtendedLCIDXLSX()
 {
     ScDocShellRef xDocSh = loadDoc("tdf36038_ExtendedLCID.", FORMAT_ODS);
     CPPUNIT_ASSERT( xDocSh.Is() );
