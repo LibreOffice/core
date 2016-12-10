@@ -27,11 +27,10 @@ Module gid_Module_Optional_Gnome
     PackageInfo = "packinfo_office.txt";
     MOD_NAME_DESC(MODULE_OPTIONAL_GNOME);
     Styles = ();
-    Files = (auto_gnome_ALL,
+    Files = (auto_gnome_ALL
 #if ENABLE_GIO
-      gid_File_Share_Registry_Gnome_Xcd,
+      ,gid_File_Share_Registry_Gnome_Xcd
 #endif
-      gid_File_Bin_Gnome_Open_Url
     );
 End
 
