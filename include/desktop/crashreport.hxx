@@ -57,6 +57,10 @@ private:
 
     static osl::Mutex maMutex;
 
+    static bool mbInit;
+
+    static std::map<OUString, OUString> maKeyValues; // used to temporarily save entries before the old info has been uploaded
+
     static google_breakpad::ExceptionHandler* mpExceptionHandler;
 };
 

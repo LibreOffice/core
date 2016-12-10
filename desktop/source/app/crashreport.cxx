@@ -35,27 +35,53 @@ osl::Mutex CrashReporter::maMutex;
 #endif
 
 google_breakpad::ExceptionHandler* CrashReporter::mpExceptionHandler = nullptr;
+bool CrashReporter::mbInit = false;
+std::map<OUString, OUString> CrashReporter::maKeyValues;
+
+namespace {
+
+void writeToStream(std::ofstream& strm, const OUString& rKey, const OUString& rValue)
+{
+    strm << rtl::OUStringToOString(rKey, RTL_TEXTENCODING_UTF8).getStr() << "=";
+    strm << rtl::OUStringToOString(rValue, RTL_TEXTENCODING_UTF8).getStr() << "\n";
+}
+
+}
 
 void CrashReporter::AddKeyValue(const OUString& rKey, const OUString& rValue)
 {
     osl::MutexGuard aGuard(maMutex);
-    std::string ini_path = getIniFileName();
-    std::ofstream ini_file(ini_path, std::ios_base::app);
-    ini_file << rtl::OUStringToOString(rKey, RTL_TEXTENCODING_UTF8).getStr() << "=";
-    ini_file << rtl::OUStringToOString(rValue, RTL_TEXTENCODING_UTF8).getStr() << "\n";
+    if (mbInit)
+    {
+        std::string ini_path = getIniFileName();
+        std::ofstream ini_file(ini_path, std::ios_base::app);
+        writeToStream(ini_file, rKey, rValue);
+    }
+    else
+    {
+        maKeyValues.insert(std::pair<OUString, OUString>(rKey, rValue));
+    }
 }
 
 #endif
 
 void CrashReporter::writeCommonInfo()
 {
+    osl::MutexGuard aGuard(maMutex);
     // limit the amount of code that needs to be executed before the crash reporting
     std::string ini_path = CrashReporter::getIniFileName();
     std::ofstream minidump_file(ini_path, std::ios_base::trunc);
     minidump_file << "ProductName=LibreOffice\n";
     minidump_file << "Version=" LIBO_VERSION_DOTTED "\n";
     minidump_file << "URL=http://crashreport.libreoffice.org/submit/\n";
+    for (auto& keyValue : maKeyValues)
+    {
+        writeToStream(minidump_file, keyValue.first, keyValue.second);
+    }
+    maKeyValues.clear();
     minidump_file.close();
+
+    mbInit = true;
 
     updateMinidumpLocation();
 }
