@@ -1212,6 +1212,26 @@ long TextEngine::CalcTextWidth( sal_uInt32 nPara, sal_Int32 nPortionStart, sal_I
     return nWidth;
 }
 
+void TextEngine::GetTextPortionRange(const TextPaM& rPaM, sal_Int32& nStart, sal_Int32& nEnd)
+{
+    nStart = 0;
+    nEnd = 0;
+    TEParaPortion* pParaPortion = mpTEParaPortions->GetObject( rPaM.GetPara() );
+    for ( size_t i = 0; i < pParaPortion->GetTextPortions().size(); ++i )
+    {
+        TETextPortion* pTextPortion = pParaPortion->GetTextPortions()[ i ];
+        if (nStart + pTextPortion->GetLen() > rPaM.GetIndex())
+        {
+            nEnd = nStart + pTextPortion->GetLen();
+            return;
+        }
+        else
+        {
+            nStart += pTextPortion->GetLen();
+        }
+    }
+}
+
 sal_uInt16 TextEngine::GetLineCount( sal_uInt32 nParagraph ) const
 {
     SAL_WARN_IF( nParagraph >= mpTEParaPortions->Count(), "vcl", "GetLineCount: Out of range" );
