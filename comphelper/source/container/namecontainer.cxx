@@ -25,55 +25,50 @@
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <osl/diagnose.h>
-#include <osl/mutex.hxx>
+#include <mutex>
 
 typedef std::map<OUString, css::uno::Any> SvGenericNameContainerMapImpl;
 
 namespace comphelper
 {
-    class NameContainerImpl
-    {
-    public:
-        osl::Mutex maMutex;
-    };
-
     /** this is the base helper class for NameContainer thats also declared in this header. */
-    class NameContainer : public ::cppu::WeakImplHelper< css::container::XNameContainer >, private NameContainerImpl
+    class NameContainer : public ::cppu::WeakImplHelper< css::container::XNameContainer >
     {
     public:
         explicit NameContainer( css::uno::Type aType );
 
         // XNameContainer
-        virtual void SAL_CALL insertByName( const OUString& aName, const css::uno::Any& aElement )
+        void SAL_CALL insertByName( const OUString& aName, const css::uno::Any& aElement )
             throw(css::lang::IllegalArgumentException, css::container::ElementExistException,
             css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL removeByName( const OUString& Name )
+        void SAL_CALL removeByName( const OUString& Name )
             throw(css::container::NoSuchElementException, css::lang::WrappedTargetException,
                 css::uno::RuntimeException, std::exception) override;
 
         // XNameReplace
-        virtual void SAL_CALL replaceByName( const OUString& aName, const css::uno::Any& aElement )
+        void SAL_CALL replaceByName( const OUString& aName, const css::uno::Any& aElement )
             throw(css::lang::IllegalArgumentException, css::container::NoSuchElementException,
                 css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
 
         // XNameAccess
-        virtual css::uno::Any SAL_CALL getByName( const OUString& aName )
+        css::uno::Any SAL_CALL getByName( const OUString& aName )
             throw(css::container::NoSuchElementException, css::lang::WrappedTargetException,
                 css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(  )
+        css::uno::Sequence< OUString > SAL_CALL getElementNames(  )
             throw(css::uno::RuntimeException, std::exception) override;
-        virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
+        sal_Bool SAL_CALL hasByName( const OUString& aName )
             throw(css::uno::RuntimeException, std::exception) override;
 
         // XElementAccess
-        virtual sal_Bool SAL_CALL hasElements(  )
+        sal_Bool SAL_CALL hasElements(  )
             throw(css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Type SAL_CALL getElementType(  )
+        css::uno::Type SAL_CALL getElementType(  )
             throw(css::uno::RuntimeException, std::exception) override;
 
     private:
         SvGenericNameContainerMapImpl maProperties;
         const css::uno::Type maType;
+        std::mutex maMutex;
     };
 }
 
@@ -94,7 +89,7 @@ void SAL_CALL NameContainer::insertByName( const OUString& aName, const Any& aEl
     throw(IllegalArgumentException, ElementExistException,
         WrappedTargetException, RuntimeException, std::exception)
 {
-    MutexGuard aGuard( maMutex );
+    std::lock_guard<std::mutex> aGuard( maMutex );
 
     if( maProperties.find( aName ) != maProperties.end() )
         throw ElementExistException();
@@ -109,7 +104,7 @@ void SAL_CALL NameContainer::removeByName( const OUString& Name )
     throw(NoSuchElementException, WrappedTargetException,
         RuntimeException, std::exception)
 {
-    MutexGuard aGuard( maMutex );
+    std::lock_guard<std::mutex> aGuard( maMutex );
 
     SvGenericNameContainerMapImpl::iterator aIter = maProperties.find( Name );
     if( aIter == maProperties.end() )
@@ -124,7 +119,7 @@ void SAL_CALL NameContainer::replaceByName( const OUString& aName, const Any& aE
     throw(IllegalArgumentException, NoSuchElementException,
         WrappedTargetException, RuntimeException, std::exception)
 {
-    MutexGuard aGuard( maMutex );
+    std::lock_guard<std::mutex> aGuard( maMutex );
 
     SvGenericNameContainerMapImpl::iterator aIter( maProperties.find( aName ) );
     if( aIter == maProperties.end() )
@@ -142,7 +137,7 @@ Any SAL_CALL NameContainer::getByName( const OUString& aName )
     throw(NoSuchElementException, WrappedTargetException,
         RuntimeException, std::exception)
 {
-    MutexGuard aGuard( maMutex );
+    std::lock_guard<std::mutex> aGuard( maMutex );
 
     SvGenericNameContainerMapImpl::iterator aIter = maProperties.find( aName );
     if( aIter == maProperties.end() )
@@ -154,7 +149,7 @@ Any SAL_CALL NameContainer::getByName( const OUString& aName )
 Sequence< OUString > SAL_CALL NameContainer::getElementNames(  )
     throw(RuntimeException, std::exception)
 {
-    MutexGuard aGuard( maMutex );
+    std::lock_guard<std::mutex> aGuard( maMutex );
 
     return comphelper::mapKeysToSequence(maProperties);
 }
@@ -162,7 +157,7 @@ Sequence< OUString > SAL_CALL NameContainer::getElementNames(  )
 sal_Bool SAL_CALL NameContainer::hasByName( const OUString& aName )
     throw(RuntimeException, std::exception)
 {
-    MutexGuard aGuard( maMutex );
+    std::lock_guard<std::mutex> aGuard( maMutex );
 
     SvGenericNameContainerMapImpl::iterator aIter = maProperties.find( aName );
     return aIter != maProperties.end();
@@ -171,7 +166,7 @@ sal_Bool SAL_CALL NameContainer::hasByName( const OUString& aName )
 sal_Bool SAL_CALL NameContainer::hasElements(  )
     throw(RuntimeException, std::exception)
 {
-    MutexGuard aGuard( maMutex );
+    std::lock_guard<std::mutex> aGuard( maMutex );
 
     return !maProperties.empty();
 }
