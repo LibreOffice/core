@@ -398,6 +398,7 @@ SectionPropertyMap::SectionPropertyMap(bool bIsFirstSection) :
     ,m_bTitlePage( false )
     ,m_nColumnCount( 0 )
     ,m_nColumnDistance( 1249 )
+    ,m_xColumnContainer( nullptr )
     ,m_bSeparatorLineIsOn( false )
     ,m_bEvenlySpaced( false )
     ,m_bIsLandscape( false )
@@ -698,6 +699,18 @@ void SectionPropertyMap::SetBorderDistance( uno::Reference< beans::XPropertySet 
         xStyle->setPropertyValue( sBorderDistanceName, uno::makeAny( nDist ));
 }
 
+void SectionPropertyMap::DontBalanceTextColumns()
+{
+    try
+    {
+        if( m_xColumnContainer.is() )
+            m_xColumnContainer->setPropertyValue("DontBalanceTextColumns", uno::makeAny(true));
+    }
+    catch( const uno::Exception& )
+    {
+        OSL_FAIL( "Exception in SectionPropertyMap::DontBalanceTextColumns");
+    }
+}
 
 uno::Reference< text::XTextColumns > SectionPropertyMap::ApplyColumnProperties(
                             uno::Reference< beans::XPropertySet > const& xColumnContainer, DomainMapper_Impl& rDM_Impl )
@@ -757,8 +770,9 @@ uno::Reference< text::XTextColumns > SectionPropertyMap::ApplyColumnProperties(
         }
         xColumnContainer->setPropertyValue( sTextColumns, uno::makeAny( xColumns ) );
         // Set the columns to be unbalanced if that compatibility option is set or this is the last section.
+        m_xColumnContainer = xColumnContainer;
         if (rDM_Impl.GetSettingsTable()->GetNoColumnBalance() || rDM_Impl.GetIsLastSectionGroup())
-            xColumnContainer->setPropertyValue("DontBalanceTextColumns", uno::makeAny(true));
+            DontBalanceTextColumns();
     }
     catch( const uno::Exception& )
     {
@@ -1235,6 +1249,11 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
         uno::Reference< text::XTextColumns > xColumns;
         if( m_nColumnCount > 0 )
             xColumns = ApplyColumnProperties( xFollowPageStyle, rDM_Impl );
+
+        // these BreakTypes are effectively page-breaks: don't evenly distribute text in columns before a page break;
+        SectionPropertyMap* pLastContext = rDM_Impl.GetLastSectionContext();
+        if( pLastContext && pLastContext->ColumnCount() )
+            pLastContext->DontBalanceTextColumns();
 
         //prepare text grid properties
         sal_Int32 nHeight = 1;
