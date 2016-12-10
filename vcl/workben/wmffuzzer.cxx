@@ -16,6 +16,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <unotools/configmgr.hxx>
+#include <rtl/strbuf.hxx>
 #include <osl/file.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wmf.hxx>
@@ -30,18 +31,29 @@ namespace
 {
     void setFontConfigConf()
     {
-        OUString uri;
-        if (osl_getExecutableFile(&uri.pData) != osl_Process_E_None) {
-            abort();
+        osl::File aFontConfig("file::///tmp/wmffuzzerfonts.conf");
+        if (aFontConfig.open(osl_File_OpenFlag_Create | osl_File_OpenFlag_Write) == osl::File::E_None)
+        {
+            OUString uri;
+            if (osl_getExecutableFile(&uri.pData) != osl_Process_E_None) {
+                abort();
+            }
+            sal_Int32 lastDirSeperatorPos = uri.lastIndexOf('/');
+            if (lastDirSeperatorPos >= 0) {
+                uri = uri.copy(0, lastDirSeperatorPos + 1);
+            }
+            OUString path;
+            osl::FileBase::getSystemPathFromFileURL(uri, path);
+            OString sFontDir = OUStringToOString(path, osl_getThreadTextEncoding()) + "../share/fonts/truetype";
+
+            rtl::OStringBuffer aBuffer("<?xml version=\"1.0\"?>\n<fontconfig><dir>");
+            aBuffer.append(sFontDir);
+            aBuffer.append("</dir><cachedir>/tmp/cache/fontconfig</cachedir></fontconfig>");
+            rtl::OString aConf = aBuffer.makeStringAndClear();
+            sal_uInt64 aBytesWritten;
+            aFontConfig.write(aConf.getStr(), aConf.getLength(), aBytesWritten);
         }
-        sal_Int32 lastDirSeperatorPos = uri.lastIndexOf('/');
-        if (lastDirSeperatorPos >= 0) {
-            uri = uri.copy(0, lastDirSeperatorPos + 1);
-        }
-        OUString path;
-        osl::FileBase::getSystemPathFromFileURL(uri, path);
-        OString sFontConf = OUStringToOString(path, osl_getThreadTextEncoding()) + "fonts.conf";
-        setenv("FONTCONFIG_FILE", sFontConf.getStr(), 0);
+        setenv("FONTCONFIG_FILE", "/tmp/wmffuzzerfonts.conf", 0);
     }
 }
 
