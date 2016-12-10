@@ -98,6 +98,13 @@ XBitmapListRef   ViewElementListProvider::GetBitmapList() const
     return XBitmapListRef();
 }
 
+XPatternListRef   ViewElementListProvider::GetPatternList() const
+{
+    if(m_pDrawModelWrapper)
+        return m_pDrawModelWrapper->GetPatternList();
+    return XPatternListRef();
+}
+
 //create chartspecific symbols for linecharts
 SdrObjList* ViewElementListProvider::GetSymbolList() const
 {
