@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <sfx2/sidebar/ControlFactory.hxx>
-#include <GraphicPropertyPanel.hxx>
+#include "GraphicPropertyPanel.hxx"
 #include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>
 #include <vcl/field.hxx>
@@ -59,6 +59,7 @@ GraphicPropertyPanel::GraphicPropertyPanel(
     get(mpMtrGreen, "setgreen");
     get(mpMtrBlue, "setblue");
     get(mpMtrGamma, "setgamma");
+    get(mpCustomEntry, "customlabel");
     Initialize();
 }
 
@@ -93,9 +94,10 @@ void GraphicPropertyPanel::dispose()
 
 void GraphicPropertyPanel::Initialize()
 {
-    mpMtrBrightness->SetModifyHdl( LINK( this, GraphicPropertyPanel, ModifyBrightnessHdl ) );
-    mpMtrContrast->SetModifyHdl( LINK( this, GraphicPropertyPanel, ModifyContrastHdl ) );
-    mpMtrTrans->SetModifyHdl( LINK( this, GraphicPropertyPanel, ModifyTransHdl ) );
+    aCustomEntry = mpCustomEntry->GetText();
+    mpMtrBrightness->SetSelectHdl( LINK( this, GraphicPropertyPanel, ModifyBrightnessHdl ) );
+    mpMtrContrast->SetSelectHdl( LINK( this, GraphicPropertyPanel, ModifyContrastHdl ) );
+    mpMtrTrans->SetSelectHdl( LINK( this, GraphicPropertyPanel, ModifyTransHdl ) );
 
     mpLBColorMode->InsertEntry(SVX_RESSTR(RID_SVXSTR_GRAFMODE_STANDARD));
     mpLBColorMode->InsertEntry(SVX_RESSTR(RID_SVXSTR_GRAFMODE_GREYS));
@@ -106,7 +108,7 @@ void GraphicPropertyPanel::Initialize()
     mpMtrRed->SetModifyHdl( LINK( this, GraphicPropertyPanel, RedHdl ) );
     mpMtrGreen->SetModifyHdl( LINK( this, GraphicPropertyPanel, GreenHdl ) );
     mpMtrBlue->SetModifyHdl( LINK( this, GraphicPropertyPanel, BlueHdl ) );
-    mpMtrGamma->SetModifyHdl( LINK( this, GraphicPropertyPanel, GammaHdl ) );
+    mpMtrGamma->SetSelectHdl( LINK( this, GraphicPropertyPanel, GammaHdl ) );
 
     // Fix left position of some controls that may be wrong due to
     // rounding errors.
@@ -127,27 +129,27 @@ void GraphicPropertyPanel::Initialize()
 }
 
 
-IMPL_LINK_NOARG( GraphicPropertyPanel, ModifyBrightnessHdl, Edit&, void )
+IMPL_LINK_NOARG( GraphicPropertyPanel, ModifyBrightnessHdl, ListBox&, void )
 {
-    const sal_Int16 nBright = mpMtrBrightness->GetValue();
+    const sal_Int16 nBright = (sal_Int16)reinterpret_cast<sal_Int64>(mpMtrBrightness->GetSelectEntryData());
     const SfxInt16Item aBrightItem( SID_ATTR_GRAF_LUMINANCE, nBright );
     GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_GRAF_LUMINANCE,
             SfxCallMode::RECORD, { &aBrightItem });
 }
 
 
-IMPL_LINK_NOARG( GraphicPropertyPanel, ModifyContrastHdl, Edit&, void )
+IMPL_LINK_NOARG( GraphicPropertyPanel, ModifyContrastHdl, ListBox&, void )
 {
-    const sal_Int16 nContrast = mpMtrContrast->GetValue();
+    const sal_Int16 nContrast = (sal_Int16)reinterpret_cast<sal_Int64>(mpMtrContrast->GetSelectEntryData());
     const SfxInt16Item aContrastItem( SID_ATTR_GRAF_CONTRAST, nContrast );
     GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_GRAF_CONTRAST,
             SfxCallMode::RECORD, { &aContrastItem });
 }
 
 
-IMPL_LINK_NOARG( GraphicPropertyPanel, ModifyTransHdl, Edit&, void )
+IMPL_LINK_NOARG( GraphicPropertyPanel, ModifyTransHdl, ListBox&, void )
 {
-    const sal_Int16 nTrans = mpMtrTrans->GetValue();
+    const sal_Int16 nTrans = (sal_Int16)reinterpret_cast<sal_Int64>(mpMtrTrans->GetSelectEntryData());
     const SfxInt16Item aTransItem( SID_ATTR_GRAF_TRANSPARENCE, nTrans );
     GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_GRAF_TRANSPARENCE,
             SfxCallMode::RECORD, { &aTransItem });
@@ -190,9 +192,9 @@ IMPL_LINK_NOARG(GraphicPropertyPanel, BlueHdl, Edit&, void)
 }
 
 
-IMPL_LINK_NOARG(GraphicPropertyPanel, GammaHdl, Edit&, void)
+IMPL_LINK_NOARG(GraphicPropertyPanel, GammaHdl, ListBox&, void)
 {
-    const sal_Int32 nGamma = mpMtrGamma->GetValue();
+    const sal_Int32 nGamma = (sal_Int32)reinterpret_cast<sal_Int64>(mpMtrGamma->GetSelectEntryData());
     const SfxInt32Item nGammaItem( SID_ATTR_GRAF_GAMMA, nGamma );
     GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_GRAF_GAMMA,
             SfxCallMode::RECORD, { &nGammaItem });
@@ -223,6 +225,65 @@ void GraphicPropertyPanel::DataChanged(
 {
 }
 
+void GraphicPropertyPanel::UpdateBrightnessControl(const sal_Int64 nBright)
+{
+    for(sal_uInt16 i = 0; i < mpMtrBrightness->GetEntryCount(); i++)
+    {
+        if(reinterpret_cast<sal_Int64>(mpMtrBrightness->GetEntryData(i)) == nBright)
+        {
+            mpMtrBrightness->SelectEntryPos(i);
+            mpMtrBrightness->RemoveEntry(aCustomEntry);
+            return;
+        }
+    }
+    mpMtrBrightness->InsertEntry(aCustomEntry);
+    mpMtrBrightness->SelectEntry(aCustomEntry);
+}
+
+void GraphicPropertyPanel::UpdateContrastControl(const sal_Int64 nContrast)
+{
+    for(sal_uInt16 i = 0; i < mpMtrContrast->GetEntryCount(); i++)
+    {
+        if(reinterpret_cast<sal_Int64>(mpMtrContrast->GetEntryData(i)) == nContrast)
+        {
+            mpMtrContrast->SelectEntryPos(i);
+            mpMtrContrast->RemoveEntry(aCustomEntry);
+            return;
+        }
+    }
+    mpMtrContrast->InsertEntry(aCustomEntry);
+    mpMtrContrast->SelectEntry(aCustomEntry);
+}
+
+void GraphicPropertyPanel::UpdateTransparencyControl(const sal_Int64 nTrans)
+{
+    for(sal_uInt16 i = 0; i < mpMtrTrans->GetEntryCount(); i++)
+    {
+        if(reinterpret_cast<sal_Int64>(mpMtrTrans->GetEntryData(i)) == nTrans)
+        {
+            mpMtrTrans->SelectEntryPos(i);
+            mpMtrTrans->RemoveEntry(aCustomEntry);
+            return;
+        }
+    }
+    mpMtrTrans->InsertEntry(aCustomEntry);
+    mpMtrTrans->SelectEntry(aCustomEntry);
+}
+
+void GraphicPropertyPanel::UpdateGammaControl(const sal_Int64 nGamma)
+{
+    for(sal_uInt16 i = 0; i < mpMtrGamma->GetEntryCount(); i++)
+    {
+        if(reinterpret_cast<sal_Int64>(mpMtrGamma->GetEntryData(i)) == nGamma)
+        {
+            mpMtrGamma->SelectEntryPos(i);
+            mpMtrGamma->RemoveEntry(aCustomEntry);
+            return;
+        }
+    }
+    mpMtrGamma->InsertEntry(aCustomEntry);
+    mpMtrGamma->SelectEntry(aCustomEntry);
+}
 
 void GraphicPropertyPanel::NotifyItemUpdate(
     sal_uInt16 nSID,
@@ -244,7 +305,7 @@ void GraphicPropertyPanel::NotifyItemUpdate(
                 if(pItem)
                 {
                     const sal_Int64 nBright = pItem->GetValue();
-                    mpMtrBrightness->SetValue(nBright);
+                    UpdateBrightnessControl(nBright);
                 }
             }
             else if(SfxItemState::DISABLED == eState)
@@ -252,10 +313,7 @@ void GraphicPropertyPanel::NotifyItemUpdate(
                 mpMtrBrightness->Disable();
             }
             else
-            {
-                mpMtrBrightness->Enable();
-                mpMtrBrightness->SetText(OUString());
-            }
+                break;
             break;
         }
         case SID_ATTR_GRAF_CONTRAST:
@@ -268,7 +326,7 @@ void GraphicPropertyPanel::NotifyItemUpdate(
                 if(pItem)
                 {
                     const sal_Int64 nContrast = pItem->GetValue();
-                    mpMtrContrast->SetValue(nContrast);
+                    UpdateContrastControl(nContrast);
                 }
             }
             else if(SfxItemState::DISABLED == eState)
@@ -276,10 +334,7 @@ void GraphicPropertyPanel::NotifyItemUpdate(
                 mpMtrContrast->Disable();
             }
             else
-            {
-                mpMtrContrast->Enable();
-                mpMtrContrast->SetText(OUString());
-            }
+                break;
             break;
         }
         case SID_ATTR_GRAF_TRANSPARENCE:
@@ -292,7 +347,7 @@ void GraphicPropertyPanel::NotifyItemUpdate(
                 if(pItem)
                 {
                     const sal_Int64 nTrans = pItem->GetValue();
-                    mpMtrTrans->SetValue(nTrans);
+                    UpdateTransparencyControl(nTrans);
                 }
             }
             else if(SfxItemState::DISABLED == eState)
@@ -300,10 +355,7 @@ void GraphicPropertyPanel::NotifyItemUpdate(
                 mpMtrTrans->Disable();
             }
             else
-            {
-                mpMtrTrans->Enable();
-                mpMtrTrans->SetText(OUString());
-            }
+                break;
             break;
         }
         case SID_ATTR_GRAF_MODE:
@@ -412,7 +464,7 @@ void GraphicPropertyPanel::NotifyItemUpdate(
                 if(pItem)
                 {
                     const sal_Int64 nGamma = pItem->GetValue();
-                    mpMtrGamma->SetValue( nGamma );
+                    UpdateGammaControl(nGamma);
                 }
             }
             else if(SfxItemState::DISABLED == eState)
@@ -420,10 +472,7 @@ void GraphicPropertyPanel::NotifyItemUpdate(
                 mpMtrGamma->Disable();
             }
             else
-            {
-                mpMtrGamma->Enable();
-                mpMtrGamma->SetText(OUString());
-            }
+                break;
             break;
         }
     }

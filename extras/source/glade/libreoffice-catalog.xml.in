@@ -716,6 +716,18 @@
                         generic-name="Same Content Preset ListBox" parent="GtkComboBox"
                         icon-name="widget-gtk-combobox"/>
 
+    <glade-widget-class title="Image Intensity ListBox" name="svxcorelo-IntensityListBox"
+                        generic-name="Image Intensity ListBox" parent="GtkComboBox"
+                        icon-name="widget-gtk-combobox"/>
+
+    <glade-widget-class title="Image Transparency ListBox" name="svxcorelo-TransparencyListBox"
+                        generic-name="Image Transparency ListBox" parent="GtkComboBox"
+                        icon-name="widget-gtk-combobox"/>
+
+    <glade-widget-class title="Image Gamma ListBox" name="svxcorelo-GammaListBox"
+                        generic-name="Image Gamma ListBox" parent="GtkComboBox"
+                        icon-name="widget-gtk-combobox"/>
+
     <glade-widget-class title="Open Document Button" name="dbulo-OpenDocumentButton"
                         generic-name="Open Document Button" parent="GtkButton"
                         icon-name="widget-gtk-button"/>

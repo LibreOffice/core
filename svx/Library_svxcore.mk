@@ -115,8 +115,10 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/dialog/checklbx \
     svx/source/dialog/dialmgr \
     svx/source/dialog/dlgutil \
+    svx/source/dialog/gammalistbox \
     svx/source/dialog/hexcolorcontrol \
     svx/source/dialog/framelink \
+    svx/source/dialog/intensitylistbox \
     svx/source/dialog/langbox \
     svx/source/dialog/pagenumberlistbox \
     svx/source/dialog/papersizelistbox \
@@ -125,6 +127,7 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/dialog/stddlg \
     svx/source/dialog/svxdlg \
     svx/source/dialog/SvxNumOptionsTabPageHelper \
+    svx/source/dialog/transparencylistbox \
     svx/source/engine3d/camera3d \
     svx/source/engine3d/cube3d \
     svx/source/engine3d/deflt3d \
