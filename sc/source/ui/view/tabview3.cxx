@@ -1709,6 +1709,7 @@ void ScTabView::SetTabNo( SCTAB nTab, bool bNew, bool bExtendSelection, bool bSa
         // window  (is called from SetCursor)
         UpdateShow();
         aViewData.ResetOldCursor();
+        SetCursor( aViewData.GetCurX(), aViewData.GetCurY(), true );
 
         SfxBindings& rBindings = aViewData.GetBindings();
         ScMarkData& rMark = aViewData.GetMarkData();
@@ -1745,7 +1746,6 @@ void ScTabView::SetTabNo( SCTAB nTab, bool bNew, bool bExtendSelection, bool bSa
             rBindings.Invalidate( FID_TAB_DESELECTALL );
         }
 
-        SetCursor( aViewData.GetCurX(), aViewData.GetCurY(), true );
         bool bUnoRefDialog = pScMod->IsRefDialogOpen() && pScMod->GetCurRefDlgId() == WID_SIMPLE_REF;
 
         // recalc zoom-dependent values (before TabChanged, before UpdateEditViewPos)
