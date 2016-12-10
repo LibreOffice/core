@@ -240,9 +240,9 @@ my_components +=     wpft
 .END
 
 .IF "$(OS)" == "WNT"
-my_components += emboleobj.windows
+my_components += component/embeddedobj/source/msole/emboleobj.windows
 .ELSE
-my_components += emboleobj
+my_components += component/embeddedobj/source/msole/emboleobj
 .END
 
 .IF "$(ENABLE_CAIRO_CANVAS)" == "TRUE"
