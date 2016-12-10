@@ -269,7 +269,7 @@ void SAL_CALL AccessibleSlideSorterObject::removeAccessibleEventListener(
     throw (uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed();
-    if (rxListener.is())
+    if (rxListener.is() && mnClientId)
     {
         const osl::MutexGuard aGuard(maMutex);
 
