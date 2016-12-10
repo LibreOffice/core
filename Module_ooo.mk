@@ -36,6 +36,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     dbaccess \
     drawinglayer \
     editeng \
+    embeddedobj \
     eventattacher \
     fileaccess \
     formula \

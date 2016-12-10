@@ -21,32 +21,24 @@
 
 
 
-PRJ=..$/..
+PRJ=..
+TARGET=prj
 
-PRJNAME=embeddedobj
-TARGET=commonembed
-ENABLE_EXCEPTIONS=true
+.INCLUDE : settings.mk
 
-# --- Settings -----------------------------------------------------
+.IF "$(VERBOSE)"!=""
+VERBOSEFLAG :=
+.ELSE
+VERBOSEFLAG := -s
+.ENDIF
 
-.INCLUDE :  settings.mk
+.IF "$(DEBUG)"!=""
+DEBUG_ARGUMENT=DEBUG=$(DEBUG)
+.ELIF "$(debug)"!=""
+DEBUG_ARGUMENT=debug=$(debug)
+.ELSE
+DEBUG_ARGUMENT=
+.ENDIF
 
-LIBTARGET=NO
-USE_DEFFILE=NO
-
-# --- Files --------------------------------------------------------
-
-SLOFILES =  \
-        $(SLO)$/register.obj\
-        $(SLO)$/xfactory.obj\
-        $(SLO)$/miscobj.obj\
-        $(SLO)$/embedobj.obj\
-                $(SLO)$/specialobject.obj\
-                $(SLO)$/persistence.obj\
-        $(SLO)$/inplaceobj.obj\
-        $(SLO)$/visobj.obj
-
-# --- Targets -------------------------------------------------------
-
-.INCLUDE :  target.mk
-
+all:
+    cd $(PRJ) && $(GNUMAKE) $(VERBOSEFLAG) -r -j$(MAXPROCESS) $(gb_MAKETARGET) $(DEBUG_ARGUMENT) && $(GNUMAKE) $(VERBOSEFLAG) -r deliverlog

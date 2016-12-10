@@ -72,6 +72,7 @@ my_components = \
     component/dbaccess/util/dba \
     component/dbaccess/util/dbu \
     component/dbaccess/util/sdbt \
+    component/embeddedobj/util/embobj \
     component/eventattacher/source/evtatt \
     component/fileaccess/util/fileacc \
     component/formula/util/for \
@@ -132,7 +133,6 @@ my_components = \
     deployment \
     deploymentgui \
     dlgprov \
-    embobj \
     filterconfig1 \
     flash \
     flat \
@@ -239,7 +239,9 @@ my_components += spell
 my_components +=     wpft
 .END
 
-.IF "$(DISABLE_ATL)" == ""
+.IF "$(OS)" == "WNT"
+my_components += emboleobj.windows
+.ELSE
 my_components += emboleobj
 .END
 

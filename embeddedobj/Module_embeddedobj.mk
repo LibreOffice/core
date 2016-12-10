@@ -21,36 +21,11 @@
 
 
 
-PRJ=..$/..
+$(eval $(call gb_Module_Module,embeddedobj))
 
-PRJNAME=embeddedobj
-TARGET=embedobj
+$(eval $(call gb_Module_add_targets,embeddedobj,\
+	Library_embobj \
+	Library_emboleobj \
+))
 
-
-# --- Settings -----------------------------------------------------
-
-.INCLUDE :  settings.mk
-
-LIBTARGET=NO
-USE_DEFFILE=NO
-
-# --- Files --------------------------------------------------------
-
-SLOFILES =  \
-        $(SLO)$/xcreator.obj\
-        $(SLO)$/docholder.obj\
-        $(SLO)$/dummyobject.obj\
-        $(SLO)$/intercept.obj
-
-
-EXCEPTIONSFILES= \
-        $(SLO)$/xcreator.obj\
-        $(SLO)$/docholder.obj\
-        $(SLO)$/dummyobject.obj\
-        $(SLO)$/intercept.obj
-
-
-# --- Targets -------------------------------------------------------
-
-.INCLUDE :  target.mk
-
+# vim: set noet sw=4 ts=4:
