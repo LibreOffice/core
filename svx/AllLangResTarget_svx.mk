@@ -42,7 +42,9 @@ $(eval $(call gb_SrsTarget_add_files,svx/res,\
     svx/source/dialog/dlgctrl.src \
     svx/source/dialog/docrecovery.src \
     svx/source/dialog/frmsel.src \
+    svx/source/dialog/gamma.src \
     svx/source/dialog/imapdlg.src \
+    svx/source/dialog/intensity.src \
     svx/source/dialog/language.src \
     svx/source/dialog/page.src \
     svx/source/dialog/pagenumbering.src \
@@ -56,6 +58,7 @@ $(eval $(call gb_SrsTarget_add_files,svx/res,\
     svx/source/dialog/srchdlg.src \
     svx/source/dialog/svxbmpnumvalueset.src \
     svx/source/dialog/swframeposstrings.src \
+    svx/source/dialog/transparency.src \
     svx/source/dialog/txenctab.src \
     svx/source/dialog/ucsubset.src \
     svx/source/engine3d/float3d.src \
