@@ -62,7 +62,9 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace cppu;
 
+#ifndef DISABLE_DYNLOADING
 extern "C" { static void SAL_CALL thisModule() {} }
+#endif
 
 typedef bool (*WFilterCall)(const OUString &rUrl, const OUString &rFlt);
 typedef bool (*HFilterCall)(const OUString &rUrl);
@@ -162,6 +164,7 @@ try_again:
                 SvFileStream aFileStream(out, StreamMode::READ);
                 ReadGDIMetaFile(aFileStream, aGDIMetaFile);
             }
+#ifndef DISABLE_DYNLOADING
             else if (strcmp(argv[2], "pcd") == 0)
             {
                 static PFilterCall pfnImport(nullptr);
@@ -449,6 +452,7 @@ try_again:
                 }
                 ret = (int) (*pfnImport)(out);
             }
+#endif
         }
 
         /* To signal successful completion of a run, we need to deliver
