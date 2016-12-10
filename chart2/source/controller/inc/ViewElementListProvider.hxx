@@ -41,6 +41,7 @@ public:
     XGradientListRef  GetGradientList() const;
     XHatchListRef     GetHatchList() const;
     XBitmapListRef    GetBitmapList() const;
+    XPatternListRef   GetPatternList() const;
 
     //create chartspecific symbols for linecharts
     SdrObjList*     GetSymbolList() const;
