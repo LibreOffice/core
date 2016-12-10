@@ -885,7 +885,8 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
         case W_META_CREATEFONTINDIRECT:
         {
             Size aFontSize;
-            char lfFaceName[LF_FACESIZE];
+            char lfFaceName[LF_FACESIZE+1];
+            lfFaceName[LF_FACESIZE] = 0;
             sal_Int16 lfEscapement = 0;
             sal_Int16 lfOrientation = 0;
             sal_Int16 lfWeight = 0;
