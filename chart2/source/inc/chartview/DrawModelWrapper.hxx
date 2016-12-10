@@ -79,6 +79,7 @@ public:
     XGradientListRef  GetGradientList() const;
     XHatchListRef     GetHatchList() const;
     XBitmapListRef    GetBitmapList() const;
+    XPatternListRef   GetPatternList() const;
 
     SdrObject* getNamedSdrObject( const OUString& rName );
     static SdrObject* getNamedSdrObject( const OUString& rName, SdrObjList* pObjList );
