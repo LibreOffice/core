@@ -30,6 +30,7 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
+#include <com/sun/star/accessibility/AccessibleTextType.hpp>
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/string.hxx>
@@ -474,6 +475,20 @@ OUString VCLXAccessibleEdit::getTextRange( sal_Int32 nStartIndex, sal_Int32 nEnd
 css::accessibility::TextSegment VCLXAccessibleEdit::getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (css::lang::IndexOutOfBoundsException, css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
+
+    // Override general text component behavior: MultiLineEdit can have more text portions
+    if ( aTextType == AccessibleTextType::ATTRIBUTE_RUN )
+    {
+        VclPtr<VclMultiLineEdit> pMulitLineEdit = GetAsDynamic< VclMultiLineEdit >();
+        if ( pMulitLineEdit )
+        {
+            ExtTextEngine* pTextEngine = pMulitLineEdit->GetTextEngine();
+            TextPaM aCursor( 0, nIndex );
+            TextSegment aResult;
+            pTextEngine->GetTextPortionRange( aCursor, aResult.SegmentStart, aResult.SegmentEnd );
+            return aResult;
+        }
+    }
 
     return VCLXAccessibleTextComponent::getTextAtIndex( nIndex, aTextType );
 }
