@@ -23,6 +23,9 @@
 #include <sfx2/sidebar/SidebarPanelBase.hxx>
 #include <sfx2/sidebar/ControllerItem.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
+#include <svx/intensitylistbox.hxx>
+#include <svx/gammalistbox.hxx>
+#include <svx/transparencylistbox.hxx>
 #include <vcl/fixed.hxx>
 
 class FixedText;
@@ -65,14 +68,16 @@ public:
 
 private:
     //ui controls
-    VclPtr<MetricField>                                        mpMtrBrightness;
-    VclPtr<MetricField>                                        mpMtrContrast;
+    VclPtr<IntensityListBox>                                   mpMtrBrightness;
+    VclPtr<IntensityListBox>                                   mpMtrContrast;
     VclPtr<ListBox>                                            mpLBColorMode;
-    VclPtr<MetricField>                                        mpMtrTrans;
+    VclPtr<TransparencyListBox>                                mpMtrTrans;
     VclPtr<MetricField>                                        mpMtrRed;
     VclPtr<MetricField>                                        mpMtrGreen;
     VclPtr<MetricField>                                        mpMtrBlue;
-    VclPtr<MetricField>                                        mpMtrGamma;
+    VclPtr<GammaListBox>                                       mpMtrGamma;
+    VclPtr<FixedText>                                          mpCustomEntry;
+    OUString aCustomEntry;
 
     ::sfx2::sidebar::ControllerItem                     maBrightControl;
     ::sfx2::sidebar::ControllerItem                     maContrastControl;
@@ -85,16 +90,20 @@ private:
 
     SfxBindings*                                        mpBindings;
 
-    DECL_LINK( ModifyBrightnessHdl, Edit&, void );
-    DECL_LINK( ModifyContrastHdl, Edit&, void );
-    DECL_LINK( ModifyTransHdl, Edit&, void );
+    DECL_LINK( ModifyBrightnessHdl, ListBox&, void );
+    DECL_LINK( ModifyContrastHdl, ListBox&, void );
+    DECL_LINK( ModifyTransHdl, ListBox&, void );
     DECL_LINK( ClickColorModeHdl, ListBox&, void );
     DECL_LINK( RedHdl, Edit&, void );
     DECL_LINK( GreenHdl, Edit&, void );
     DECL_LINK( BlueHdl, Edit&, void );
-    DECL_LINK( GammaHdl, Edit&, void );
+    DECL_LINK( GammaHdl, ListBox&, void );
 
     void Initialize();
+    void UpdateBrightnessControl(const sal_Int64);
+    void UpdateContrastControl(const sal_Int64);
+    void UpdateTransparencyControl(const sal_Int64);
+    void UpdateGammaControl(const sal_Int64);
 };
 
 
