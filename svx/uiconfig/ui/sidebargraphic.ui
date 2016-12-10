@@ -1,19 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.16.1 -->
 <interface>
   <requires lib="gtk+" version="3.0"/>
-  <object class="GtkAdjustment" id="0to100adjustment">
-    <property name="upper">100</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
-  </object>
-  <object class="GtkAdjustment" id="gammaadjustment">
-    <property name="lower">0.01</property>
-    <property name="upper">10</property>
-    <property name="value">1</property>
-    <property name="step_increment">0.10000000000000001</property>
-    <property name="page_increment">1</property>
-  </object>
   <object class="GtkAdjustment" id="plusminus100adjustment">
     <property name="lower">-100</property>
     <property name="upper">100</property>
@@ -43,88 +31,76 @@
               <object class="GtkLabel" id="brightnesslabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="xalign">0</property>
                 <property name="label" translatable="yes">_Brightness:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">setbrightness:%</property>
-                <property name="xalign">0</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
                 <property name="top_attach">0</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
               </packing>
             </child>
             <child>
-              <object class="GtkSpinButton" id="setbrightness:%">
+              <object class="svxcorelo-IntensityListBox" id="setbrightness:%">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes">Specify the luminance of the graphic.</property>
-                <property name="invisible_char">•</property>
-                <property name="adjustment">plusminus100adjustment</property>
-                <property name="climb_rate">1</property>
-                <accessibility>
-                  <relation type="labelled-by" target="brightnesslabel"/>
-                </accessibility>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="setbrightness:%-atkobject">
-                    <property name="AtkObject::accessible-name" translatable="yes">Brightness</property>
-                  </object>
-                </child>
               </object>
               <packing>
                 <property name="left_attach">0</property>
                 <property name="top_attach">1</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
               </packing>
             </child>
             <child>
               <object class="GtkLabel" id="contrastlabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="xalign">0</property>
                 <property name="label" translatable="yes">_Contrast:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">setcontrast:%</property>
-                <property name="xalign">0</property>
               </object>
               <packing>
                 <property name="left_attach">1</property>
                 <property name="top_attach">0</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
               </packing>
             </child>
             <child>
-              <object class="GtkSpinButton" id="setcontrast:%">
+              <object class="svxcorelo-IntensityListBox" id="setcontrast:%">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes">Specify the degree of difference between the lightest and darkest parts of the graphic.</property>
-                <property name="invisible_char">•</property>
-                <property name="adjustment">plusminus100adjustment</property>
-                <property name="climb_rate">1</property>
-                <accessibility>
-                  <relation type="labelled-by" target="contrastlabel"/>
-                </accessibility>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="setcontrast:%-atkobject">
-                    <property name="AtkObject::accessible-name" translatable="yes">Contrast</property>
-                  </object>
-                </child>
               </object>
               <packing>
                 <property name="left_attach">1</property>
                 <property name="top_attach">1</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
               </packing>
             </child>
             <child>
               <object class="GtkLabel" id="colorlmodelabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="xalign">0</property>
                 <property name="label" translatable="yes">Color _mode:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">setcolormode</property>
-                <property name="xalign">0</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
                 <property name="top_attach">2</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
               </packing>
             </child>
             <child>
@@ -143,43 +119,38 @@
               <packing>
                 <property name="left_attach">0</property>
                 <property name="top_attach">3</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
               </packing>
             </child>
             <child>
               <object class="GtkLabel" id="transparencylabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="xalign">0</property>
                 <property name="label" translatable="yes">_Transparency:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">settransparency:%</property>
-                <property name="xalign">0</property>
               </object>
               <packing>
                 <property name="left_attach">1</property>
                 <property name="top_attach">2</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
               </packing>
             </child>
             <child>
-              <object class="GtkSpinButton" id="settransparency:%">
+              <object class="svxcorelo-TransparencyListBox" id="settransparency:%">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes">Specify the percentage of transparency; 0% is fully opaque and 100% is fully transparent.</property>
-                <property name="invisible_char">•</property>
-                <property name="adjustment">0to100adjustment</property>
-                <property name="climb_rate">1</property>
-                <accessibility>
-                  <relation type="labelled-by" target="transparencylabel"/>
-                </accessibility>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="settransparency:%-atkobject">
-                    <property name="AtkObject::accessible-name" translatable="yes">Transparency</property>
-                  </object>
-                </child>
               </object>
               <packing>
                 <property name="left_attach">1</property>
                 <property name="top_attach">3</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
               </packing>
             </child>
             <child>
@@ -226,6 +197,8 @@
               <packing>
                 <property name="left_attach">0</property>
                 <property name="top_attach">4</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
               </packing>
             </child>
             <child>
@@ -273,6 +246,8 @@
               <packing>
                 <property name="left_attach">1</property>
                 <property name="top_attach">4</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
               </packing>
             </child>
             <child>
@@ -319,6 +294,8 @@
               <packing>
                 <property name="left_attach">0</property>
                 <property name="top_attach">5</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
               </packing>
             </child>
             <child>
@@ -341,23 +318,11 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkSpinButton" id="setgamma:0">
+                  <object class="svxcorelo-GammaListBox" id="setgamma:0">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_text" translatable="yes">Specify the gamma value that affects the brightness of the midtone values.</property>
-                    <property name="invisible_char">•</property>
-                    <property name="adjustment">gammaadjustment</property>
-                    <property name="climb_rate">0.10000000000000001</property>
-                    <property name="digits">2</property>
-                    <accessibility>
-                        <relation target="image4"/>
-                    </accessibility>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="setgamma:0-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes">Gamma value</property>
-                      </object>
-                    </child>
                   </object>
                   <packing>
                     <property name="expand">True</property>
@@ -370,7 +335,25 @@
               <packing>
                 <property name="left_attach">1</property>
                 <property name="top_attach">5</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
               </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="customlabel">
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Custom</property>
+                <property name="ellipsize">middle</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">6</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+            <child>
+              <placeholder/>
             </child>
           </object>
           <packing>
@@ -383,6 +366,8 @@
       <packing>
         <property name="left_attach">0</property>
         <property name="top_attach">0</property>
+        <property name="width">1</property>
+        <property name="height">1</property>
       </packing>
     </child>
   </object>

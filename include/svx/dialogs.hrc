@@ -1078,13 +1078,16 @@
 #define RID_SVXSTRARY_PAGE_NUMBERING     (RID_SVX_START + 1397)
 #define RID_SVXSTRARY_SPACING            (RID_SVX_START + 1398)
 #define RID_SVXSTRARY_SAMECONTENT        (RID_SVX_START + 1399)
+#define RID_SVXSTRARY_IMGINTENSITY       (RID_SVX_START + 1401)  // 1400 is below
+#define RID_SVXSTRARY_IMGTRANSPARENCY    (RID_SVX_START + 1402)
+#define RID_SVXSTRARY_IMGGAMMA           (RID_SVX_START + 1403)
 
 // Strings for SafeModeDialog
 #define RID_SVXSTR_SAFEMODE_ZIP_FAILURE  (RID_SVX_START + 1400)
 
 
 // !!! IMPORTANT: consider and update RID_SVXSTR_NEXTFREE when introducing new RIDs for Strings !!!
-#define RID_SVXSTR_NEXTFREE              (RID_SVX_START + 1401)
+#define RID_SVXSTR_NEXTFREE              (RID_SVX_START + 1404)
 
 // if we have _a_lot_ time, we should group the resource ids by type, instead
 // of grouping them by semantics. The reason is that resource ids have to be
