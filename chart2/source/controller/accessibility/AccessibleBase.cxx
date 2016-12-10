@@ -911,7 +911,7 @@ void SAL_CALL AccessibleBase::removeAccessibleEventListener( const Reference< XA
 {
     MutexGuard aGuard( GetMutex() );
 
-    if ( xListener.is() )
+    if ( xListener.is() && m_nEventNotifierId)
     {
         sal_Int32 nListenerCount = ::comphelper::AccessibleEventNotifier::removeEventListener( m_nEventNotifierId, xListener );
         if ( !nListenerCount )
