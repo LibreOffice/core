@@ -151,7 +151,10 @@ static_assert( static_cast<sal_Bool>(true) == sal_True,
                "must be binary compatible" );
 static_assert( static_cast<sal_Bool>(false) == sal_False,
                "must be binary compatible" );
-#if SAL_TYPES_ALIGNMENT8 == 4
+#if SAL_TYPES_ALIGNMENT8 == 2
+static_assert(offsetof(AlignSize_Impl, dDouble) == 2, "offsetof(AlignSize_Impl, dDouble) != 2");
+static_assert(sizeof(AlignSize_Impl) == 10, "sizeof(AlignSize_Impl) != 10");
+#elif SAL_TYPES_ALIGNMENT8 == 4
 static_assert(offsetof(AlignSize_Impl, dDouble) == 4, "offsetof(AlignSize_Impl, dDouble) != 4");
 static_assert(sizeof(AlignSize_Impl) == 12, "sizeof(AlignSize_Impl) != 12");
 #elif SAL_TYPES_ALIGNMENT8 == 8
@@ -174,29 +177,52 @@ static_assert(offsetof(uno_Any, pReserved) == 2 * sizeof(void *), "offsetof(uno_
 // string
 static_assert(sizeof(OUString) == sizeof(rtl_uString *), "binary compatibility test failed: sizeof(OUString) != sizeof(rtl_uString *)");
 // struct
+#if SAL_TYPES_ALIGNMENT8 == 2
+static_assert(sizeof(M) == 6, "sizeof(M) != 6");
+static_assert(sizeof(N) == 8, "sizeof(N) != 8");
+static_assert(sizeof(N2) == 8, "sizeof(N2) != 8");
+static_assert(offsetof(N2, p) == 6, "offsetof(N2, p) != 6");
+#else
 static_assert(sizeof(M) == 8, "sizeof(M) != 8");
-static_assert(offsetof(M, o) == 4, "offsetof(M, o) != 4");
 static_assert(sizeof(N) == 12, "sizeof(N) != 12");
-
 static_assert(sizeof(N2) == 12, "sizeof(N2) != 12");
-
 static_assert(offsetof(N2, p) == 8, "offsetof(N2, p) != 8");
-#if SAL_TYPES_ALIGNMENT8 == 4
+#endif
+static_assert(offsetof(M, o) == 4, "offsetof(M, o) != 4");
+
+#if SAL_TYPES_ALIGNMENT8 == 2
+static_assert(sizeof(O) == 16, "sizeof(O) != 16");
+#elif SAL_TYPES_ALIGNMENT8 == 4
 static_assert(sizeof(O) == 20, "sizeof(O) != 20");
 #elif SAL_TYPES_ALIGNMENT8 == 8
 static_assert(sizeof(O) == 24, "sizeof(O) != 24");
 #else
 # error unexpected alignment of 8 byte types
 #endif
+
+#if SAL_TYPES_ALIGNMENT8 == 2
+static_assert(sizeof(C2) == 6, "sizeof(C2) != 6");
+static_assert(sizeof(D) == 6, "sizeof(D) != 6");
+static_assert(offsetof(D, e) == 2, "offsetof(D, e) != 2");
+static_assert(offsetof(E, e) == 6, "offsetof(E, e) != 6");
+#else
+static_assert(sizeof(C2) == 8, "sizeof(C2) != 8");
 static_assert(sizeof(D) == 8, "sizeof(D) != 8");
 static_assert(offsetof(D, e) == 4, "offsetof(D, e) != 4");
-static_assert(offsetof(E, d) == 4, "offsetof(E, d) != 4");
 static_assert(offsetof(E, e) == 8, "offsetof(E, e) != 8");
+#endif
 
 static_assert(sizeof(C1) == 2, "sizeof(C1) != 2");
-static_assert(sizeof(C2) == 8, "sizeof(C2) != 8");
+static_assert(offsetof(E, d) == 4, "offsetof(E, d) != 4");
 
-#if SAL_TYPES_ALIGNMENT8 == 4
+#if SAL_TYPES_ALIGNMENT8 == 2
+static_assert(sizeof(C3) == 18, "sizeof(C3) != 18");
+static_assert(sizeof(C4) == 30, "sizeof(C4) != 30");
+static_assert(sizeof(C5) == 40, "sizeof(C5) != 40");
+static_assert(sizeof(C6) == 44, "sizeof(C6) != 44");
+
+static_assert(sizeof(O2) == 18, "sizeof(O2) != 18");
+#elif SAL_TYPES_ALIGNMENT8 == 4
 static_assert(sizeof(C3) == 20, "sizeof(C3) != 20");
 static_assert(sizeof(C4) == 32, "sizeof(C4) != 32");
 static_assert(sizeof(C5) == 44, "sizeof(C5) != 44");
@@ -216,7 +242,10 @@ static_assert(sizeof(O2) == 32, "sizeof(O2) != 32");
 
 static_assert(sizeof(Char3) == 3, "sizeof(Char3) != 3");
 
-#if SAL_TYPES_ALIGNMENT8 == 4
+#if SAL_TYPES_ALIGNMENT8 == 2
+// max alignment is 2
+static_assert(sizeof(P) == 16, "sizeof(P) != 16");
+#elif SAL_TYPES_ALIGNMENT8 == 4
 // max alignment is 4
 static_assert(sizeof(P) == 20, "sizeof(P) != 20");
 #elif SAL_TYPES_ALIGNMENT8 == 8
@@ -242,7 +271,18 @@ BinaryCompatible_Impl::BinaryCompatible_Impl()
 
     assert(OFFSET_OF(C2, n2) == 4);
 
-#if SAL_TYPES_ALIGNMENT8 == 4
+#if SAL_TYPES_ALIGNMENT8 == 2
+    assert(OFFSET_OF(C3, d3) == 6);
+    assert(OFFSET_OF(C3, n3) == 14);
+    assert(OFFSET_OF(C4, n4) == 18);
+    assert(OFFSET_OF(C4, d4) == 22);
+    assert(OFFSET_OF(C5, n5) == 30);
+    assert(OFFSET_OF(C5, b5) == 38);
+    assert(OFFSET_OF(C6, c6) == 2);
+    assert(OFFSET_OF(C6, b6) == 42);
+
+    assert(OFFSET_OF(O2, p2) == 16);
+#elif SAL_TYPES_ALIGNMENT8 == 4
     assert(OFFSET_OF(C3, d3) == 8);
     assert(OFFSET_OF(C3, n3) == 16);
     assert(OFFSET_OF(C4, n4) == 20);
