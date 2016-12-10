@@ -68,7 +68,7 @@ $(call gb_Output_announce,$(2),$(true),SPP,2)
 $(call gb_Helper_abbreviate_dirs,\
 	$(gb_ScpPreprocessTarget_COMMAND) \
 		-+ -P \
-		$(SCPDEFS) $(SCP_DEFS) -DDLLPOSTFIX=$(gb_Library_DLLPOSTFIX) \
+		$(SCPDEFS) $(SCP_DEFS) \
 		$(SCP_INCLUDE) $(SCP_TEMPLATE_INCLUDE) \
 	    $(if $(ENABLE_JAVA),-DENABLE_JAVA) \
 		$(SCP_SOURCE) > $(1) \

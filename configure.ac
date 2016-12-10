@@ -2505,8 +2505,6 @@ fi
 if test "$enable_avmedia" = yes; then
     BUILD_TYPE="$BUILD_TYPE AVMEDIA"
     AC_DEFINE(HAVE_FEATURE_AVMEDIA)
-else
-    SCPDEFS="$SCPDEFS -DDISABLE_AVMEDIA"
 fi
 
 # Decide whether to build database connectivity stuff (including
@@ -2567,7 +2565,6 @@ if test "$enable_dynamic_loading" = yes; then
     BUILD_TYPE="$BUILD_TYPE DYNLOADING"
 else
     DISABLE_DYNLOADING='TRUE'
-    SCPDEFS="$SCPDEFS -DDISABLE_DYNLOADING"
 fi
 AC_SUBST(DISABLE_DYNLOADING)
 
@@ -3210,7 +3207,6 @@ fi
 
 if test "$cross_compiling" = "yes"; then
     export CROSS_COMPILING=TRUE
-    SCPDEFS="$SCPDEFS -DCROSS_COMPILING"
 else
     CROSS_COMPILING=
     BUILD_TYPE="$BUILD_TYPE NATIVE"
@@ -7592,7 +7588,6 @@ fi
 ENABLE_LWP=
 if test "$enable_lotuswordpro" = "yes"; then
     ENABLE_LWP="TRUE"
-    SCPDEFS="$SCPDEFS -DDISABLE_LWP"
 fi
 AC_SUBST(ENABLE_LWP)
 
