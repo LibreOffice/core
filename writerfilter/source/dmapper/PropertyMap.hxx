@@ -194,6 +194,7 @@ class SectionPropertyMap : public PropertyMap
     bool                                    m_bTitlePage;
     sal_Int16                               m_nColumnCount;
     sal_Int32                               m_nColumnDistance;
+    css::uno::Reference< css::beans::XPropertySet > m_xColumnContainer;
     ::std::vector< sal_Int32 >              m_aColWidth;
     ::std::vector< sal_Int32 >              m_aColDistance;
 
@@ -239,6 +240,7 @@ class SectionPropertyMap : public PropertyMap
     bool                                    m_bFirstPageFooterLinkToPrevious;
 
     void ApplyProperties_(css::uno::Reference<css::beans::XPropertySet> const& xStyle);
+    void DontBalanceTextColumns();
     css::uno::Reference<css::text::XTextColumns> ApplyColumnProperties(css::uno::Reference<css::beans::XPropertySet> const& xFollowPageStyle,
                                                                        DomainMapper_Impl& rDM_Impl);
     void CopyLastHeaderFooter( bool bFirstPage, DomainMapper_Impl& rDM_Impl );
