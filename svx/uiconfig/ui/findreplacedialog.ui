@@ -732,7 +732,7 @@
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="ignorediacritics">
-                                    <property name="label" translatable="yes">Ignore diac_ritics CTL</property>
+                                    <property name="label" translatable="yes">Ignore diac_ritics</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -747,7 +747,7 @@
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="ignorekashida">
-                                    <property name="label" translatable="yes">Ignore _kashida CTL</property>
+                                    <property name="label" translatable="yes">Ignore _kashida</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
