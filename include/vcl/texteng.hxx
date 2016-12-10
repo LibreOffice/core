@@ -257,6 +257,8 @@ public:
     sal_Int32           GetTextLen( sal_uInt32 nParagraph ) const;
     long                GetTextHeight( sal_uInt32 nParagraph ) const;
 
+    void                GetTextPortionRange(const TextPaM& rPaM, sal_Int32& nStart, sal_Int32& nEnd);
+
     sal_uInt16          GetLineCount( sal_uInt32 nParagraph ) const;
     sal_Int32           GetLineLen( sal_uInt32 nParagraph, sal_uInt16 nLine ) const;
 
