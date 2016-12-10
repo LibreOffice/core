@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a71b18c_09bf2fd1",
+        "filename": "writerfilter/source/dmapper/PropertyMap.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 773,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2016-12-10T10:58:49Z",
+      "side": 1,
+      "message": "Just asking for a sanity check here. I don\u0027t really know any of the rules or understand what is going on with these references, or const\u0026, so unsure if I\u0027m doing anything wrong:\ncss::uno::Reference\u003c css::beans::XPropertySet \u003e m_xColumnContainer  \u003d  uno::Reference\u003c beans::XPropertySet \u003e const\u0026 xColumnContainer",
+      "revId": "095202896986556b89f1ef8a4bbd1d360efd512b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
