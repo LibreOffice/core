@@ -761,5 +761,14 @@ DECLARE_ODFIMPORT_TEST(testTdf75221, "tdf75221.odt")
     CPPUNIT_ASSERT(top.toInt32() > 0);
 }
 
+DECLARE_ODFIMPORT_TEST(testTdf101729, "tdf101729.odt")
+{
+    sal_Int32 l = parseDump("/root/page/body/tab/row/cell[1]/infos/bounds", "left").toInt32();
+    sal_Int32 w = parseDump("/root/page/body/tab/row/cell[1]/infos/bounds", "width").toInt32();
+    sal_Int32 t = parseDump("/root/page/body/tab/row/cell[1]/txt/infos/bounds", "left").toInt32();
+    // Make sure the text does not go outside and verify it is centered roughly
+    CPPUNIT_ASSERT( l + w / 4 < t  &&  t < l + 3 * w / 4);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
