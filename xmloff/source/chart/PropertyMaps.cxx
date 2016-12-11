@@ -34,7 +34,7 @@
 #include "XMLTextOrientationHdl.hxx"
 #include "XMLSymbolTypePropertyHdl.hxx"
 #include "XMLAxisPositionPropertyHdl.hxx"
-#include "../draw/propimp0.hxx"
+#include "propimp0.hxx"
 
 #include <xmloff/EnumPropertyHdl.hxx>
 #include <xmloff/XMLConstantsPropertyHandler.hxx>
