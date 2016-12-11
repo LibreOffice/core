@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a71b18c_ccc1c530",
+        "filename": "chart2/source/inc/MutexContainer.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-12-11T17:43:45Z",
+      "side": 1,
+      "message": "The symbol still needs to be exported.",
+      "revId": "6d5e1f038ca0d67e190ac1cef87b277016f626b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a71b18c_acc48940",
+        "filename": "chart2/source/inc/MutexContainer.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-12-11T17:43:45Z",
+      "side": 1,
+      "message": "This is going to leak memory. This destructor needs to be virtual",
+      "revId": "6d5e1f038ca0d67e190ac1cef87b277016f626b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a71b18c_8cc7cd44",
+        "filename": "chart2/source/inc/MutexContainer.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-12-11T17:43:45Z",
+      "side": 1,
+      "message": "What is the value of making this an inline method? Unless there is a specific need inline methods are a horrible solution to an non-existent problem.",
+      "revId": "6d5e1f038ca0d67e190ac1cef87b277016f626b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
