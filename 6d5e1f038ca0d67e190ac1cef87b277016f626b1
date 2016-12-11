@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "3a71b18c_ccd8e520",
+        "filename": "chart2/source/inc/MutexContainer.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000026
+      },
+      "writtenOn": "2016-12-11T19:53:22Z",
+      "side": 1,
+      "message": "Wich symbols ?",
+      "parentUuid": "3a71b18c_ccc1c530",
+      "revId": "6d5e1f038ca0d67e190ac1cef87b277016f626b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a71b18c_acc48940",
         "filename": "chart2/source/inc/MutexContainer.hxx",
         "patchSetId": 1
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "3a71b18c_8cceed58",
+        "filename": "chart2/source/inc/MutexContainer.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000026
+      },
+      "writtenOn": "2016-12-11T19:53:22Z",
+      "side": 1,
+      "message": "It\u0027s protected, not called directly, why is there any leaks ?",
+      "parentUuid": "3a71b18c_acc48940",
+      "revId": "6d5e1f038ca0d67e190ac1cef87b277016f626b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a71b18c_8cc7cd44",
         "filename": "chart2/source/inc/MutexContainer.hxx",
         "patchSetId": 1
@@ -47,6 +83,24 @@
       "writtenOn": "2016-12-11T17:43:45Z",
       "side": 1,
       "message": "What is the value of making this an inline method? Unless there is a specific need inline methods are a horrible solution to an non-existent problem.",
+      "revId": "6d5e1f038ca0d67e190ac1cef87b277016f626b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a71b18c_acdba91a",
+        "filename": "chart2/source/inc/MutexContainer.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000026
+      },
+      "writtenOn": "2016-12-11T19:53:22Z",
+      "side": 1,
+      "message": "I\u0027ll remove it",
+      "parentUuid": "3a71b18c_8cc7cd44",
       "revId": "6d5e1f038ca0d67e190ac1cef87b277016f626b1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
