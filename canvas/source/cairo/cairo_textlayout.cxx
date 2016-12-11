@@ -109,32 +109,24 @@ namespace cairocanvas
     // XTextLayout
     uno::Sequence< uno::Reference< rendering::XPolyPolygon2D > > SAL_CALL TextLayout::queryTextShapes(  ) throw (uno::RuntimeException, std::exception)
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
-
         // TODO
         return uno::Sequence< uno::Reference< rendering::XPolyPolygon2D > >();
     }
 
     uno::Sequence< geometry::RealRectangle2D > SAL_CALL TextLayout::queryInkMeasures(  ) throw (uno::RuntimeException, std::exception)
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
-
         // TODO
         return uno::Sequence< geometry::RealRectangle2D >();
     }
 
     uno::Sequence< geometry::RealRectangle2D > SAL_CALL TextLayout::queryMeasures(  ) throw (uno::RuntimeException, std::exception)
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
-
         // TODO
         return uno::Sequence< geometry::RealRectangle2D >();
     }
 
     uno::Sequence< double > SAL_CALL TextLayout::queryLogicalAdvancements(  ) throw (uno::RuntimeException, std::exception)
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
-
         return maLogicalAdvancements;
     }
 
@@ -190,8 +182,6 @@ namespace cairocanvas
 
     double SAL_CALL TextLayout::justify( double /*nSize*/ ) throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
-
         // TODO
         return 0.0;
     }
@@ -199,16 +189,12 @@ namespace cairocanvas
     double SAL_CALL TextLayout::combinedJustify( const uno::Sequence< uno::Reference< rendering::XTextLayout > >& /*aNextLayouts*/,
                                                  double /*nSize*/ ) throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
-
         // TODO
         return 0.0;
     }
 
     rendering::TextHit SAL_CALL TextLayout::getTextHit( const geometry::RealPoint2D& /*aHitPoint*/ ) throw (uno::RuntimeException, std::exception)
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
-
         // TODO
         return rendering::TextHit();
     }
@@ -216,8 +202,6 @@ namespace cairocanvas
     rendering::Caret SAL_CALL TextLayout::getCaret( sal_Int32 /*nInsertionIndex*/,
                                                     sal_Bool /*bExcludeLigatures*/ ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception)
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
-
         // TODO
         return rendering::Caret();
     }
@@ -226,8 +210,6 @@ namespace cairocanvas
                                                           sal_Int32 /*nCaretAdvancement*/,
                                                           sal_Bool /*bExcludeLigatures*/ ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception)
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
-
         // TODO
         return 0;
     }
@@ -235,8 +217,6 @@ namespace cairocanvas
     uno::Reference< rendering::XPolyPolygon2D > SAL_CALL TextLayout::queryVisualHighlighting( sal_Int32 /*nStartIndex*/,
                                                                                               sal_Int32 /*nEndIndex*/ ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception)
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
-
         // TODO
         return uno::Reference< rendering::XPolyPolygon2D >();
     }
@@ -244,16 +224,12 @@ namespace cairocanvas
     uno::Reference< rendering::XPolyPolygon2D > SAL_CALL TextLayout::queryLogicalHighlighting( sal_Int32 /*nStartIndex*/,
                                                                                                sal_Int32 /*nEndIndex*/ ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception)
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
-
         // TODO
         return uno::Reference< rendering::XPolyPolygon2D >();
     }
 
     double SAL_CALL TextLayout::getBaselineOffset(  ) throw (uno::RuntimeException, std::exception)
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
-
         // TODO
         return 0.0;
     }
