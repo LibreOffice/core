@@ -2109,6 +2109,10 @@ Resource RID_GLOBSTR
     {
         Text [ en-US ] = "Text";
     };
+    String STR_QUERY_PIVOTTABLE_DELTAB
+    {
+        Text [ en-US ] = "If you delete the selected sheet(s), you will lose data from related Pivot Table. Are you sure you want to delete the selected sheet(s)?";
+    };
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
