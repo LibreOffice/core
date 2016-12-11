@@ -1366,6 +1366,21 @@ namespace
         }
         return pAnchorFormat;
     }
+    Point lcl_GetWW8Pos(SwAnchoredObject* pAnchoredObj, const sw::WW8AnchorConv eConv, const bool bFollowTextFlow, const bool bHori, bool& bRelToTableCell)
+    {
+        switch(eConv)
+        {
+            case sw::WW8AnchorConv::CONV2PG:
+                return pAnchoredObj->GetRelPosToPageFrame(bFollowTextFlow, bRelToTableCell);
+            case sw::WW8AnchorConv::CONV2COL_OR_PARA:
+                return pAnchoredObj->GetRelPosToAnchorFrame();
+            case sw::WW8AnchorConv::CONV2CHAR_OR_LINE:
+                return bHori ? pAnchoredObj->GetRelPosToChar() : pAnchoredObj->GetRelPosToLine();
+            default: ;
+        }
+        assert(false);
+        return Point();
+    }
 }
 
 void SwDrawContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
@@ -1520,7 +1535,6 @@ void SwDrawContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
     }
     else if (auto pWW8AnchorConvHint = dynamic_cast<const sw::WW8AnchorConvHint*>(&rHint))
     {
-        const SwDrawFrameFormat& rFormat = static_cast<const SwDrawFrameFormat&>(rMod);
         // determine anchored object
         SwAnchoredObject* pAnchoredObj(nullptr);
         {
@@ -1539,44 +1553,21 @@ void SwDrawContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
         // header/footer of an *unused* page style.
         if(dynamic_cast<SwAnchoredDrawObject*>(pAnchoredObj) && !pAnchoredObj->GetAnchorFrame())
             return;
-        const bool bFollowTextFlow = rFormat.GetFollowTextFlow().GetValue();
-        Point aPos;
-        switch(pWW8AnchorConvHint->m_eHoriConv)
-        {
-            case sw::WW8AnchorConv::CONV2PG:
-                // #i33818#
-                aPos = pAnchoredObj->GetRelPosToPageFrame(bFollowTextFlow, pWW8AnchorConvHint->m_rResult.m_bHoriRelToTableCell);
-                break;
-            case sw::WW8AnchorConv::CONV2COL_OR_PARA:
-                aPos = pAnchoredObj->GetRelPosToAnchorFrame();
-                break;
-            case sw::WW8AnchorConv::CONV2CHAR_OR_LINE:
-                aPos = pAnchoredObj->GetRelPosToChar();
-                break;
-            default:
-                ;
-        }
+        const bool bFollowTextFlow = static_cast<const SwDrawFrameFormat&>(rMod).GetFollowTextFlow().GetValue();
         // No distinction between layout directions, because of missing
         // information about WW8 in vertical layout.
-        pWW8AnchorConvHint->m_rResult.m_aPos.setX(aPos.getX());
-        switch(pWW8AnchorConvHint->m_eVertConv)
-        {
-            case sw::WW8AnchorConv::CONV2PG:
-                // #i33818#
-                aPos = pAnchoredObj->GetRelPosToPageFrame(bFollowTextFlow, pWW8AnchorConvHint->m_rResult.m_bVertRelToTableCell);
-                break;
-            case sw::WW8AnchorConv::CONV2COL_OR_PARA:
-                aPos = pAnchoredObj->GetRelPosToAnchorFrame();
-                break;
-            case sw::WW8AnchorConv::CONV2CHAR_OR_LINE:
-                aPos = pAnchoredObj->GetRelPosToLine();
-                break;
-            default:
-                ;
-        }
-        // No distinction between layout directions, because of missing
-        // information about WW8 in vertical layout.
-        pWW8AnchorConvHint->m_rResult.m_aPos.setY(aPos.getY());
+        pWW8AnchorConvHint->m_rResult.m_aPos.setX(lcl_GetWW8Pos(
+                pAnchoredObj,
+                pWW8AnchorConvHint->m_eHoriConv,
+                bFollowTextFlow,
+                true,
+                pWW8AnchorConvHint->m_rResult.m_bHoriRelToTableCell).getX());
+        pWW8AnchorConvHint->m_rResult.m_aPos.setY(lcl_GetWW8Pos(
+                pAnchoredObj,
+                pWW8AnchorConvHint->m_eHoriConv,
+                bFollowTextFlow,
+                false,
+                pWW8AnchorConvHint->m_rResult.m_bVertRelToTableCell).getY());
         pWW8AnchorConvHint->m_rResult.m_bConverted = true;
     }
 }
