@@ -713,8 +713,7 @@ Any SAL_CALL SvXMLEmbeddedObjectHelper::getByName(
 Sequence< OUString > SAL_CALL SvXMLEmbeddedObjectHelper::getElementNames()
     throw (RuntimeException, std::exception)
 {
-    MutexGuard          aGuard( maMutex );
-    return Sequence< OUString >(0);
+   return Sequence< OUString >(0);
 }
 
 sal_Bool SAL_CALL SvXMLEmbeddedObjectHelper::hasByName( const OUString& rURLStr )

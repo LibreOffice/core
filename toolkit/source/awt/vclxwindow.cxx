@@ -2463,14 +2463,11 @@ void SAL_CALL VCLXWindow::unlock(  ) throw (css::uno::RuntimeException, std::exc
 void SAL_CALL VCLXWindow::startPopupMode( const css::awt::Rectangle& ) throw (css::uno::RuntimeException, std::exception)
 {
     // TODO: remove interface in the next incompatible build
-    SolarMutexGuard aGuard;
-
 }
 
 sal_Bool SAL_CALL VCLXWindow::isInPopupMode(  ) throw (css::uno::RuntimeException, std::exception)
 {
     // TODO: remove interface in the next incompatible build
-    SolarMutexGuard aGuard;
     return false;
 }
 

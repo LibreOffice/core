@@ -93,16 +93,12 @@ namespace dxcanvas
 
     uno::Sequence< double > SAL_CALL CanvasFont::getAvailableSizes(  ) throw (uno::RuntimeException)
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
-
         // TODO
         return uno::Sequence< double >();
     }
 
     uno::Sequence< beans::PropertyValue > SAL_CALL CanvasFont::getExtraFontProperties(  ) throw (uno::RuntimeException)
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
-
         // TODO
         return uno::Sequence< beans::PropertyValue >();
     }
@@ -116,8 +112,6 @@ namespace dxcanvas
 
     rendering::FontMetrics SAL_CALL CanvasFont::getFontMetrics(  ) throw (uno::RuntimeException)
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
-
         // TODO
         return rendering::FontMetrics();
     }

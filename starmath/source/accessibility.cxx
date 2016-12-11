@@ -166,7 +166,6 @@ void SmGraphicAccessible::LaunchEvent(
 uno::Reference< XAccessibleContext > SAL_CALL SmGraphicAccessible::getAccessibleContext()
     throw (RuntimeException, std::exception)
 {
-    SolarMutexGuard aGuard;
     return this;
 }
 
@@ -287,7 +286,6 @@ sal_Int32 SAL_CALL SmGraphicAccessible::getBackground()
 sal_Int32 SAL_CALL SmGraphicAccessible::getAccessibleChildCount()
     throw (RuntimeException, std::exception)
 {
-    SolarMutexGuard aGuard;
     return 0;
 }
 
@@ -295,7 +293,6 @@ Reference< XAccessible > SAL_CALL SmGraphicAccessible::getAccessibleChild(
         sal_Int32 /*i*/ )
     throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
-    SolarMutexGuard aGuard;
     throw IndexOutOfBoundsException();  // there is no child...
 }
 
@@ -330,7 +327,6 @@ sal_Int32 SAL_CALL SmGraphicAccessible::getAccessibleIndexInParent()
 sal_Int16 SAL_CALL SmGraphicAccessible::getAccessibleRole()
     throw (RuntimeException, std::exception)
 {
-    SolarMutexGuard aGuard;
     return AccessibleRole::DOCUMENT;
 }
 
@@ -436,7 +432,6 @@ void SAL_CALL SmGraphicAccessible::removeAccessibleEventListener(
 sal_Int32 SAL_CALL SmGraphicAccessible::getCaretPosition()
     throw (RuntimeException, std::exception)
 {
-    SolarMutexGuard aGuard;
     return 0;
 }
 
@@ -616,21 +611,18 @@ sal_Int32 SAL_CALL SmGraphicAccessible::getIndexAtPoint( const awt::Point& aPoin
 OUString SAL_CALL SmGraphicAccessible::getSelectedText()
     throw (RuntimeException, std::exception)
 {
-    SolarMutexGuard aGuard;
     return OUString();
 }
 
 sal_Int32 SAL_CALL SmGraphicAccessible::getSelectionStart()
     throw (RuntimeException, std::exception)
 {
-    SolarMutexGuard aGuard;
     return -1;
 }
 
 sal_Int32 SAL_CALL SmGraphicAccessible::getSelectionEnd()
     throw (RuntimeException, std::exception)
 {
-    SolarMutexGuard aGuard;
     return -1;
 }
 
@@ -1812,14 +1804,12 @@ sal_Int32 SAL_CALL SmEditAccessible::getAccessibleIndexInParent(  )
 sal_Int16 SAL_CALL SmEditAccessible::getAccessibleRole(  )
     throw (RuntimeException, std::exception)
 {
-    SolarMutexGuard aGuard;
     return AccessibleRole::PANEL /*TEXT ?*/;
 }
 
 OUString SAL_CALL SmEditAccessible::getAccessibleDescription(  )
     throw (RuntimeException, std::exception)
 {
-    SolarMutexGuard aGuard;
     return OUString();  // empty as agreed with product-management
 }
 
@@ -1834,7 +1824,6 @@ OUString SAL_CALL SmEditAccessible::getAccessibleName(  )
 uno::Reference< XAccessibleRelationSet > SAL_CALL SmEditAccessible::getAccessibleRelationSet(  )
     throw (RuntimeException, std::exception)
 {
-    SolarMutexGuard aGuard;
     Reference< XAccessibleRelationSet > xRelSet = new utl::AccessibleRelationSetHelper();
     return xRelSet;   // empty relation set
 }

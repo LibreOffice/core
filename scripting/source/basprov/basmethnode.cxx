@@ -128,24 +128,18 @@ namespace basprov
 
     Sequence< Reference< browse::XBrowseNode > > BasicMethodNodeImpl::getChildNodes(  ) throw (RuntimeException, std::exception)
     {
-        SolarMutexGuard aGuard;
-
         return Sequence< Reference< browse::XBrowseNode > >();
     }
 
 
     sal_Bool BasicMethodNodeImpl::hasChildNodes(  ) throw (RuntimeException, std::exception)
     {
-        SolarMutexGuard aGuard;
-
         return false;
     }
 
 
     sal_Int16 BasicMethodNodeImpl::getType(  ) throw (RuntimeException, std::exception)
     {
-        SolarMutexGuard aGuard;
-
         return browse::BrowseNodeTypes::SCRIPT;
     }
 

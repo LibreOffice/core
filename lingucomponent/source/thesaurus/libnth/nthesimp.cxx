@@ -522,7 +522,6 @@ Reference< XInterface > SAL_CALL Thesaurus_CreateInstance(
 OUString SAL_CALL Thesaurus::getServiceDisplayName( const Locale& /*rLocale*/ )
         throw(RuntimeException, std::exception)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
     return OUString( "Mythes Thesaurus" );
 }
 

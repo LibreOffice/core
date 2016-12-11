@@ -945,8 +945,6 @@ Any SAL_CALL SvxRectCtlChildAccessibleContext::getMinimumValue() throw( RuntimeE
 
 sal_Int32 SvxRectCtlChildAccessibleContext::getAccessibleActionCount( ) throw (RuntimeException, std::exception)
 {
-    ::osl::MutexGuard   aGuard( maMutex );
-
     return 1;
 }
 
