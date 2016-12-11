@@ -31,7 +31,7 @@ namespace
 {
     void setFontConfigConf()
     {
-        osl::File aFontConfig("file::///tmp/wmffuzzerfonts.conf");
+        osl::File aFontConfig("file:///tmp/wmffuzzerfonts.conf");
         if (aFontConfig.open(osl_File_OpenFlag_Create | osl_File_OpenFlag_Write) == osl::File::E_None)
         {
             OUString uri;
@@ -52,6 +52,7 @@ namespace
             rtl::OString aConf = aBuffer.makeStringAndClear();
             sal_uInt64 aBytesWritten;
             aFontConfig.write(aConf.getStr(), aConf.getLength(), aBytesWritten);
+            assert(aBytesWritten == aConf.getLength());
         }
         setenv("FONTCONFIG_FILE", "/tmp/wmffuzzerfonts.conf", 0);
     }
