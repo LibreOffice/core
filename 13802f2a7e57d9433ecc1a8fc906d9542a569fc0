@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a71b18c_0c873d62",
+        "filename": "sc/source/ui/view/tabvwshf.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 597,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-12-11T07:14:14Z",
+      "side": 1,
+      "message": "Please use bTabWithPivotTable.",
+      "revId": "13802f2a7e57d9433ecc1a8fc906d9542a569fc0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a71b18c_2c7cf971",
+        "filename": "sc/source/ui/view/tabvwshf.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 600,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-12-11T07:14:14Z",
+      "side": 1,
+      "message": "Please use a space between the for and the (",
+      "revId": "13802f2a7e57d9433ecc1a8fc906d9542a569fc0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
