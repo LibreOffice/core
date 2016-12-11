@@ -2109,6 +2109,10 @@ Resource RID_GLOBSTR
     {
         Text [ en-US ] = "Text";
     };
+    String STR_QUERY_PIVOTTABLE_DELTAB
+    {
+        Text [ en-US ] = "Hard Warning!!";
+    };
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

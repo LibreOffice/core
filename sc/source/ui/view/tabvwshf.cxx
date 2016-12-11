@@ -43,6 +43,7 @@
 #include "globstr.hrc"
 #include "docfunc.hxx"
 #include "eventuno.hxx"
+#include "dpobject.hxx"
 
 #include "scabstdlg.hxx"
 
@@ -590,6 +591,20 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     }
                 }
 
+                ScDPCollection* pDPs = nullptr;
+                if(pDoc->HasPivotTable())
+                    pDPs = pDoc->GetDPCollection();
+
+                bool bTabWithPivotTable = false;
+
+                size_t nCount = pDPs->GetCount();
+                for (size_t i=0; i<nCount; ++i)
+                {
+                    ScDPObject& rDPObj = (*pDPs)[i];
+                    if ( rDPObj.GetOutRange().aStart.Tab() == nTabNr )
+                        bTabWithPivotTable = true; // Current tab is associated with a pivot table
+                }
+
                 bool bDoIt = bHasIndex;
                 if (!bDoIt)
                 {
@@ -597,7 +612,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     bDoIt = ( RET_YES ==
                               ScopedVclPtrInstance<QueryBox>( GetDialogParent(),
                                         WinBits( WB_YES_NO | WB_DEF_YES ),
-                                        ScGlobal::GetRscString(STR_QUERY_DELTAB)
+                                        bTabWithPivotTable ? ScGlobal::GetRscString(STR_QUERY_PIVOTTABLE_DELTAB) : ScGlobal::GetRscString(STR_QUERY_DELTAB)
                                   )->Execute() );
                 }
 
