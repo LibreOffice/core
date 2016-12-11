@@ -278,7 +278,8 @@ namespace sw
         NO_CONV,
         CONV2PG,
         CONV2COL_OR_PARA,
-        CONV2CHAR_OR_LINE,
+        CONV2CHAR,
+        CONV2LINE,
         RELTOTABLECELL
     };
     struct WW8AnchorConvResult final

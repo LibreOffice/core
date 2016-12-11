@@ -2449,7 +2449,7 @@ void SwEscherEx::FinishEscher()
 namespace
 {
     template<typename OrientType>
-    void lcl_SetRelationOrient(OrientType& rOrient, const sw::WW8AnchorConv eConv, const bool bHori, std::function<void()> fDefault)
+    void lcl_SetRelationOrient(OrientType& rOrient, const sw::WW8AnchorConv eConv, std::function<void()> fDefault)
     {
         switch(eConv)
         {
@@ -2463,11 +2463,14 @@ namespace
             case sw::WW8AnchorConv::CONV2COL_OR_PARA:
                 rOrient.SetRelationOrient(text::RelOrientation::FRAME);
                 break;
-            case sw::WW8AnchorConv::CONV2CHAR_OR_LINE:
-                rOrient.SetRelationOrient(bHori ? text::RelOrientation::CHAR : text::RelOrientation::TEXT_LINE);
+            case sw::WW8AnchorConv::CONV2CHAR:
+                rOrient.SetRelationOrient(text::RelOrientation::CHAR);
+                break;
+            case sw::WW8AnchorConv::CONV2LINE:
+                rOrient.SetRelationOrient(text::RelOrientation::TEXT_LINE);
                 break;
             default:
-                fDefault();//rOrient.SetHoriOrient(text::HoriOrientation::NONE);
+                fDefault();
         }
     }
 }
@@ -2590,7 +2593,7 @@ bool WinwordAnchoring::ConvertPosition( SwFormatHoriOrient& _iorHoriOri,
                 case text::RelOrientation::CHAR:
                 {
                     if ( bConvDueToOrientation )
-                        eHoriConv = sw::WW8AnchorConv::CONV2CHAR_OR_LINE;
+                        eHoriConv = sw::WW8AnchorConv::CONV2CHAR;
                 }
                 break;
                 default:
@@ -2658,7 +2661,7 @@ bool WinwordAnchoring::ConvertPosition( SwFormatHoriOrient& _iorHoriOri,
                     if ( bConvDueToOrientation ||
                          _iorVertOri.GetVertOrient() == text::VertOrientation::NONE )
                     {
-                        eVertConv = sw::WW8AnchorConv::CONV2CHAR_OR_LINE;
+                        eVertConv = sw::WW8AnchorConv::CONV2LINE;
                     }
                 }
                 break;
@@ -2678,9 +2681,9 @@ bool WinwordAnchoring::ConvertPosition( SwFormatHoriOrient& _iorHoriOri,
         _rFrameFormat.CallSwClientNotify(sw::WW8AnchorConvHint(aResult));
         if(!aResult.m_bConverted)
             return false;
-        lcl_SetRelationOrient(_iorHoriOri, eHoriConv, true, [&_iorHoriOri]() {_iorHoriOri.SetHoriOrient(text::HoriOrientation::NONE);} );
+        lcl_SetRelationOrient(_iorHoriOri, eHoriConv, [&_iorHoriOri]() {_iorHoriOri.SetHoriOrient(text::HoriOrientation::NONE);} );
         _iorHoriOri.SetPos(aResult.m_aPos.X());
-        lcl_SetRelationOrient(_iorVertOri, eVertConv, false, [&_iorVertOri]() {_iorVertOri.SetVertOrient(text::VertOrientation::NONE);} );
+        lcl_SetRelationOrient(_iorVertOri, eVertConv, [&_iorVertOri]() {_iorVertOri.SetVertOrient(text::VertOrientation::NONE);} );
         _iorVertOri.SetPos(aResult.m_aPos.Y());
         return true;
     }
