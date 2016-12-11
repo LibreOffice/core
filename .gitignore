@@ -70,7 +70,8 @@
 
 # make tags
 
-/tags
+**/tags
+**/.tags*
 
 # make etags
 /TAGS
@@ -160,3 +161,15 @@ DerivedData
 *.workspace
 *.workspace.session
 *.tags
+
+*.tags
+
+# JetBrains Clion Specific
+.idea
+
+# Cscope
+*.out
+
+# Sublime Specific
+*.sublime-project
+*.sublime-workspace
