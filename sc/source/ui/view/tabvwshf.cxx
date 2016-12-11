@@ -43,6 +43,8 @@
 #include "globstr.hrc"
 #include "docfunc.hxx"
 #include "eventuno.hxx"
+#include "dpobject.hxx"
+#include "dpshttab.hxx"
 
 #include "scabstdlg.hxx"
 
@@ -590,15 +592,51 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     }
                 }
 
+                bool bTabWithPivotTable = false;
+                ScMarkData::MarkedTabsType selectedTabs = rViewData.GetMarkData().GetSelectedTabs();
+                ScMarkData::MarkedTabsType::const_iterator iterator;
+
+                if( pDoc->HasPivotTable() )
+                {
+                    for( iterator = selectedTabs.begin(); iterator != selectedTabs.end(); ++iterator )
+                    {
+                        ScDPCollection* pDPs = pDoc->GetDPCollection();
+
+                        if( pDPs != nullptr )
+                        {
+                            size_t nCount = pDPs->GetCount();
+
+                            for ( size_t i = 0; i < nCount; ++i )
+                            {
+                                ScDPObject& rDPObj = (*pDPs)[i];
+                                const ScSheetSourceDesc* pSheetSourceDesc = rDPObj.GetSheetDesc();
+                                ScRange aSourceRange = pSheetSourceDesc->GetSourceRange();
+                                if( aSourceRange.aStart.Tab() == *iterator )
+                                    bTabWithPivotTable = true;
+                            }
+                        }
+                    }
+                }
+
                 bool bDoIt = bHasIndex;
                 if (!bDoIt)
                 {
-                    // no parameter given, ask for confirmation
-                    bDoIt = ( RET_YES ==
-                              ScopedVclPtrInstance<QueryBox>( GetDialogParent(),
-                                        WinBits( WB_YES_NO | WB_DEF_YES ),
-                                        ScGlobal::GetRscString(STR_QUERY_DELTAB)
-                                  )->Execute() );
+                    if(bTabWithPivotTable)
+                    {
+                        // Hard warning as there is potential of data loss on deletion
+                        bDoIt = ( RET_YES ==
+                                ScopedVclPtrInstance<QueryBox>( GetDialogParent(),
+                                            WinBits( WB_YES_NO | WB_DEF_NO ),
+                                            ScGlobal::GetRscString(STR_QUERY_PIVOTTABLE_DELTAB))->Execute() );
+                    }
+                    else
+                    {
+                        // no parameter given, ask for confirmation
+                        bDoIt = ( RET_YES ==
+                                ScopedVclPtrInstance<QueryBox>( GetDialogParent(),
+                                            WinBits( WB_YES_NO | WB_DEF_YES ),
+                                            ScGlobal::GetRscString(STR_QUERY_DELTAB))->Execute() );
+                    }
                 }
 
                 if (bDoIt)
