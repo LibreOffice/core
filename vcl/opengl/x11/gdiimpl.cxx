@@ -32,6 +32,7 @@
 #include <o3tl/lru_map.hxx>
 
 static std::vector<GLXContext> g_vShareList;
+static bool g_bAnyCurrent;
 
 class X11OpenGLContext : public OpenGLContext
 {
@@ -222,7 +223,10 @@ void X11OpenGLContext::resetCurrent()
     OpenGLZone aZone;
 
     if (m_aGLWin.dpy)
+    {
         glXMakeCurrent(m_aGLWin.dpy, None, nullptr);
+        g_bAnyCurrent = false;
+    }
 }
 
 bool X11OpenGLContext::isCurrent()
@@ -234,7 +238,7 @@ bool X11OpenGLContext::isCurrent()
 
 bool X11OpenGLContext::isAnyCurrent()
 {
-    return glXGetCurrentContext() != None;
+    return g_bAnyCurrent && glXGetCurrentContext() != None;
 }
 
 SystemWindowData X11OpenGLContext::generateWinData(vcl::Window* pParent, bool /*bRequestLegacyContext*/)
@@ -340,9 +344,12 @@ bool X11OpenGLContext::ImplInit()
 
     if( !glXMakeCurrent( m_aGLWin.dpy, m_aGLWin.win, m_aGLWin.ctx ) )
     {
+        g_bAnyCurrent = false;
         SAL_WARN("vcl.opengl", "unable to select current GLX context");
         return false;
     }
+
+    g_bAnyCurrent = true;
 
     int glxMinor, glxMajor;
     double nGLXVersion = 0;
@@ -412,10 +419,12 @@ void X11OpenGLContext::makeCurrent()
     {
         if (!glXMakeCurrent( m_aGLWin.dpy, m_aGLWin.win, m_aGLWin.ctx ))
         {
+            g_bAnyCurrent = false;
             SAL_WARN("vcl.opengl", "OpenGLContext::makeCurrent failed "
                      "on drawable " << m_aGLWin.win);
             return;
         }
+        g_bAnyCurrent = true;
     }
 
     registerAsCurrent();
@@ -430,6 +439,7 @@ void X11OpenGLContext::destroyCurrentContext()
             g_vShareList.erase(itr);
 
         glXMakeCurrent(m_aGLWin.dpy, None, nullptr);
+        g_bAnyCurrent = false;
         if( glGetError() != GL_NO_ERROR )
         {
             SAL_WARN("vcl.opengl", "glError: " << glGetError());
