@@ -4269,6 +4269,8 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
         CharGrabBag(*pGrabBag);
     }
 
+    //  tdf#99227: to be sure that we write to the right stream
+    m_rExport.SdrExporter().setSerializer(m_pSerializer);
     m_rExport.SdrExporter().startDMLAnchorInline(pFrameFormat, rSize);
 
     // picture description (used for pic:cNvPr later too)
