@@ -1366,12 +1366,18 @@ namespace
         }
         return pAnchorFormat;
     }
-    Point lcl_GetWW8Pos(SwAnchoredObject* pAnchoredObj, const sw::WW8AnchorConv eConv, const bool bFollowTextFlow, const bool bHori, bool& bRelToTableCell)
+    Point lcl_GetWW8Pos(SwAnchoredObject* pAnchoredObj, const bool bFollowTextFlow, const bool bHori, sw::WW8AnchorConv& reConv)
     {
-        switch(eConv)
+        switch(reConv)
         {
             case sw::WW8AnchorConv::CONV2PG:
-                return pAnchoredObj->GetRelPosToPageFrame(bFollowTextFlow, bRelToTableCell);
+            {
+                bool bRelToTableCell(false);
+                Point aPos(pAnchoredObj->GetRelPosToPageFrame(bFollowTextFlow, bRelToTableCell));
+                if(bRelToTableCell)
+                    reConv = sw::WW8AnchorConv::RELTOTABLECELL;
+                return aPos;
+            }
             case sw::WW8AnchorConv::CONV2COL_OR_PARA:
                 return pAnchoredObj->GetRelPosToAnchorFrame();
             case sw::WW8AnchorConv::CONV2CHAR_OR_LINE:
@@ -1554,21 +1560,20 @@ void SwDrawContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
         if(dynamic_cast<SwAnchoredDrawObject*>(pAnchoredObj) && !pAnchoredObj->GetAnchorFrame())
             return;
         const bool bFollowTextFlow = static_cast<const SwDrawFrameFormat&>(rMod).GetFollowTextFlow().GetValue();
+        sw::WW8AnchorConvResult& rResult(pWW8AnchorConvHint->m_rResult);
         // No distinction between layout directions, because of missing
         // information about WW8 in vertical layout.
-        pWW8AnchorConvHint->m_rResult.m_aPos.setX(lcl_GetWW8Pos(
+        rResult.m_aPos.setX(lcl_GetWW8Pos(
                 pAnchoredObj,
-                pWW8AnchorConvHint->m_eHoriConv,
                 bFollowTextFlow,
                 true,
-                pWW8AnchorConvHint->m_rResult.m_bHoriRelToTableCell).getX());
-        pWW8AnchorConvHint->m_rResult.m_aPos.setY(lcl_GetWW8Pos(
+                rResult.m_eHoriConv).getX());
+        rResult.m_aPos.setY(lcl_GetWW8Pos(
                 pAnchoredObj,
-                pWW8AnchorConvHint->m_eHoriConv,
                 bFollowTextFlow,
                 false,
-                pWW8AnchorConvHint->m_rResult.m_bVertRelToTableCell).getY());
-        pWW8AnchorConvHint->m_rResult.m_bConverted = true;
+                rResult.m_eHoriConv).getY());
+        rResult.m_bConverted = true;
     }
 }
 

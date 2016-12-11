@@ -278,22 +278,21 @@ namespace sw
         NO_CONV,
         CONV2PG,
         CONV2COL_OR_PARA,
-        CONV2CHAR_OR_LINE
+        CONV2CHAR_OR_LINE,
+        RELTOTABLECELL
     };
     struct WW8AnchorConvResult final
     {
-        bool m_bHoriRelToTableCell;
-        bool m_bVertRelToTableCell;
+        WW8AnchorConv m_eHoriConv;
+        WW8AnchorConv m_eVertConv;
         bool m_bConverted;
         Point m_aPos;
-        WW8AnchorConvResult() : m_bHoriRelToTableCell(false), m_bVertRelToTableCell(false), m_bConverted(false) {};
+        WW8AnchorConvResult(WW8AnchorConv eHoriConv, WW8AnchorConv eVertConv) : m_eHoriConv(eHoriConv), m_eVertConv(eVertConv) {};
     };
     struct SW_DLLPUBLIC WW8AnchorConvHint final : SfxHint
     {
         WW8AnchorConvResult& m_rResult;
-        const WW8AnchorConv m_eHoriConv;
-        const WW8AnchorConv m_eVertConv;
-        WW8AnchorConvHint(WW8AnchorConvResult& rResult, WW8AnchorConv eHoriConv, WW8AnchorConv eVertConv) : m_rResult(rResult), m_eHoriConv(eHoriConv), m_eVertConv(eVertConv) {};
+        WW8AnchorConvHint(WW8AnchorConvResult& rResult) : m_rResult(rResult) {};
         virtual ~WW8AnchorConvHint() override;
     };
 }

@@ -2648,17 +2648,18 @@ bool WinwordAnchoring::ConvertPosition( SwFormatHoriOrient& _iorHoriOri,
     }
     if(eVertConv != sw::WW8AnchorConv::NO_CONV || eHoriConv != sw::WW8AnchorConv::NO_CONV)
     {
-        sw::WW8AnchorConvResult aResult;
-        _rFrameFormat.CallSwClientNotify(sw::WW8AnchorConvHint(aResult, eHoriConv, eVertConv));
+        sw::WW8AnchorConvResult aResult(eHoriConv, eVertConv);
+        _rFrameFormat.CallSwClientNotify(sw::WW8AnchorConvHint(aResult));
         if(!aResult.m_bConverted)
             return false;
         switch(eHoriConv)
         {
+            case sw::WW8AnchorConv::RELTOTABLECELL:
+                // #i33818#
+                _iorHoriOri.SetRelationOrient(text::RelOrientation::PAGE_PRINT_AREA);
+                break;
             case sw::WW8AnchorConv::CONV2PG:
                 _iorHoriOri.SetRelationOrient(text::RelOrientation::PAGE_FRAME);
-                // #i33818#
-                if(aResult.m_bHoriRelToTableCell)
-                    _iorHoriOri.SetRelationOrient(text::RelOrientation::PAGE_PRINT_AREA);
                 break;
             case sw::WW8AnchorConv::CONV2COL_OR_PARA:
                 _iorHoriOri.SetRelationOrient(text::RelOrientation::FRAME);
@@ -2672,11 +2673,12 @@ bool WinwordAnchoring::ConvertPosition( SwFormatHoriOrient& _iorHoriOri,
         _iorHoriOri.SetPos(aResult.m_aPos.X());
         switch(eVertConv)
         {
+            case sw::WW8AnchorConv::RELTOTABLECELL:
+                // #i33818#
+                _iorVertOri.SetRelationOrient(text::RelOrientation::PAGE_PRINT_AREA);
+                break;
             case sw::WW8AnchorConv::CONV2PG:
                 _iorVertOri.SetRelationOrient(text::RelOrientation::PAGE_FRAME);
-                // #i33818#
-                if(aResult.m_bVertRelToTableCell)
-                    _iorVertOri.SetRelationOrient(text::RelOrientation::PAGE_PRINT_AREA);
                 break;
             case sw::WW8AnchorConv::CONV2COL_OR_PARA:
                 _iorVertOri.SetRelationOrient(text::RelOrientation::FRAME);
