@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "3a71b18c_2cddd942",
+        "filename": "sc/source/ui/src/globstr.src",
+        "patchSetId": 2
+      },
+      "lineNbr": 2114,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-12-11T13:55:12Z",
+      "side": 1,
+      "message": "umm.. surely we don\u0027t want exactly this string in but rather something more descriptive to the user?",
+      "revId": "4cecd9b857f1c6b7d339a85e6e1b45fd800b3b37",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a71b18c_6cc43192",
         "filename": "sc/source/ui/view/tabvwshf.cxx",
         "patchSetId": 2
