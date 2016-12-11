@@ -309,8 +309,9 @@ VclPtr<SfxTabPage> SvxAreaTabPage::Create( vcl::Window* pWindow,
     return VclPtr<SvxAreaTabPage>::Create( pWindow, *rAttrs );
 }
 
+namespace {
 
-VclPtr<SfxTabPage> CreateFillStyleTabPage( sal_uInt16 nId, vcl::Window* pParent, const SfxItemSet& rSet )
+VclPtr<SfxTabPage> lcl_CreateFillStyleTabPage( sal_uInt16 nId, vcl::Window* pParent, const SfxItemSet& rSet )
 {
     CreateTabPage fnCreate = nullptr;
     switch(nId)
@@ -326,6 +327,8 @@ VclPtr<SfxTabPage> CreateFillStyleTabPage( sal_uInt16 nId, vcl::Window* pParent,
     return pRet;
 }
 
+}
+
 IMPL_LINK(SvxAreaTabPage, SelectFillTypeHdl_Impl, Button*, pButton, void)
 {
     sal_Int32 nPos = maBox.GetButtonPos( static_cast<PushButton*>(pButton) );
@@ -333,7 +336,7 @@ IMPL_LINK(SvxAreaTabPage, SelectFillTypeHdl_Impl, Button*, pButton, void)
     {
         maBox.SelectButton(static_cast<PushButton*>(pButton));
         FillType eFillType = static_cast<FillType>(maBox.GetCurrentButtonPos());
-        m_pFillTabPage.disposeAndReset( CreateFillStyleTabPage(eFillType, m_pFillTab, m_rXFSet) );
+        m_pFillTabPage.disposeAndReset( lcl_CreateFillStyleTabPage(eFillType, m_pFillTab, m_rXFSet) );
         CreatePage( eFillType , m_pFillTabPage);
     }
 }
