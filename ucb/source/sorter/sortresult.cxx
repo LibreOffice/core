@@ -1492,7 +1492,7 @@ void SortedResultSet::Remove( sal_IntPtr nPos, sal_IntPtr nCount, EventList *pEv
         sal_IntPtr nSortPos = m_O2S[nPos];
         m_O2S.erase(m_O2S.begin() + nPos);
 
-        for (size_t j=1; j <= m_O2S.size(); ++j)
+        for (size_t j=1; j < m_O2S.size(); ++j)
         {
             sal_IntPtr nVal = m_O2S[j];
             if ( nVal > nSortPos )
