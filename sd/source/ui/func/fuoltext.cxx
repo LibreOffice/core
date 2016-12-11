@@ -41,7 +41,7 @@
 
 namespace sd {
 
-static sal_uInt16 SidArray[] = {
+static const sal_uInt16 SidArray[] = {
                 SID_STYLE_FAMILY2,
                 SID_STYLE_FAMILY3,
                 SID_STYLE_FAMILY5,
