@@ -701,6 +701,7 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
 
         bool bProtect = rSh.IsSelObjProtected(FlyProtectFlags::Pos) != FlyProtectFlags::NONE;
         bool bParentCntProt = rSh.IsSelObjProtected( FlyProtectFlags::Content|FlyProtectFlags::Parent ) != FlyProtectFlags::NONE;
+        vcl::CommandInfoProvider aObj;
 
         bProtect |= bParentCntProt;
 
@@ -814,15 +815,15 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
                             {
                                 case SID_OBJECT_ALIGN_UP :
                                 case FN_FRAME_ALIGN_VERT_TOP:
-                                    sNewLabel = vcl::CommandInfoProvider::Instance().GetLabelForCommand(".uno:AlignTop", GetFrame()->GetFrame().GetFrameInterface());
+                                    sNewLabel = aObj.GetLabelForCommand(".uno:AlignTop", GetFrame()->GetFrame().GetFrameInterface());
                                     break;
                                 case SID_OBJECT_ALIGN_MIDDLE:
                                 case FN_FRAME_ALIGN_VERT_CENTER:
-                                    sNewLabel = vcl::CommandInfoProvider::Instance().GetLabelForCommand(".uno:AlignVerticalCenter", GetFrame()->GetFrame().GetFrameInterface());
+                                    sNewLabel = aObj.GetLabelForCommand(".uno:AlignVerticalCenter", GetFrame()->GetFrame().GetFrameInterface());
                                     break;
                                 case SID_OBJECT_ALIGN_DOWN:
                                 case FN_FRAME_ALIGN_VERT_BOTTOM:
-                                    sNewLabel = vcl::CommandInfoProvider::Instance().GetLabelForCommand(".uno:AlignBottom", GetFrame()->GetFrame().GetFrameInterface());
+                                    sNewLabel = aObj.GetLabelForCommand(".uno:AlignBottom", GetFrame()->GetFrame().GetFrameInterface());
                                     break;
                             }
                         }

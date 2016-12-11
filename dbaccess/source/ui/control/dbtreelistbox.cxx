@@ -500,7 +500,7 @@ namespace
             }
 
             if ( xFrame.is() )
-                _rMenu.SetItemImage(nId, vcl::CommandInfoProvider::Instance().GetImageForCommand(aCommand, xFrame));
+                _rMenu.SetItemImage(nId, vcl::CommandInfoProvider::GetImageForCommand(aCommand, xFrame));
         }
     }
     // SelectionSupplier

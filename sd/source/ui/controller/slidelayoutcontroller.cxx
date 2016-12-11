@@ -185,6 +185,7 @@ LayoutToolbarMenu::LayoutToolbarMenu( SlideLayoutController& rController, vcl::W
     mpLayoutSet1->SetSelectHdl( LINK( this, LayoutToolbarMenu, SelectValueSetHdl ) );
 
     const snewfoil_value_info_layout* pInfo = nullptr;
+    vcl::CommandInfoProvider aObj;
     sal_Int16 nColCount = 4;
     switch( eMode )
     {
@@ -239,11 +240,11 @@ LayoutToolbarMenu::LayoutToolbarMenu( SlideLayoutController& rController, vcl::W
                 sSlotStr = ".uno:DuplicatePage";
             else
                 sSlotStr = ".uno:Undo";
-            aSlotImage = vcl::CommandInfoProvider::Instance().GetImageForCommand(sSlotStr, xFrame);
+            aSlotImage = aObj.GetImageForCommand(sSlotStr, xFrame);
 
             OUString sSlotTitle;
             if( bInsertPage )
-                sSlotTitle = vcl::CommandInfoProvider::Instance().GetLabelForCommand( sSlotStr, xFrame );
+                sSlotTitle = aObj.GetLabelForCommand( sSlotStr, xFrame );
             else
                 sSlotTitle = SD_RESSTR( STR_RESET_LAYOUT );
             appendEntry( 2, sSlotTitle, aSlotImage);

@@ -89,20 +89,15 @@ namespace
 
 namespace vcl {
 
-CommandInfoProvider& CommandInfoProvider::Instance()
-{
-    static CommandInfoProvider aProvider;
-    return aProvider;
-}
+css::uno::Reference<css::uno::XComponentContext> CommandInfoProvider::mxContext(comphelper::getProcessComponentContext());
+css::uno::Reference<css::lang::XComponent> CommandInfoProvider::mxFrameListener;
+css::uno::Reference<css::ui::XAcceleratorConfiguration> CommandInfoProvider::mxCachedDocumentAcceleratorConfiguration;
+css::uno::Reference<css::ui::XAcceleratorConfiguration> CommandInfoProvider::mxCachedModuleAcceleratorConfiguration;
+css::uno::Reference<css::ui::XAcceleratorConfiguration> CommandInfoProvider::mxCachedGlobalAcceleratorConfiguration;
+css::uno::Reference<css::frame::XFrame> CommandInfoProvider::mxCachedDataFrame;
+OUString CommandInfoProvider::msCachedModuleIdentifier;
 
 CommandInfoProvider::CommandInfoProvider()
-    : mxContext(comphelper::getProcessComponentContext()),
-      mxCachedDataFrame(),
-      mxCachedDocumentAcceleratorConfiguration(),
-      mxCachedModuleAcceleratorConfiguration(),
-      mxCachedGlobalAcceleratorConfiguration(),
-      msCachedModuleIdentifier(),
-      mxFrameListener()
 {
     ImplGetSVData()->mpCommandInfoProvider = this;
 }
@@ -352,7 +347,10 @@ void CommandInfoProvider::SetFrame (const Reference<frame::XFrame>& rxFrame)
 
         // Connect to the new frame.
         if (rxFrame.is())
-            mxFrameListener = new FrameListener(*this, rxFrame);
+        {
+            CommandInfoProvider aObj;
+            mxFrameListener = new FrameListener(aObj, rxFrame);
+        }
     }
 }
 

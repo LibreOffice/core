@@ -726,10 +726,11 @@ void SfxViewShell::GetState_Impl( SfxItemSet &rSet )
                             aPrinterName = Printer::GetDefaultPrinterName();
                         if ( !aPrinterName.isEmpty() )
                         {
+                            vcl::CommandInfoProvider aObj;
                             uno::Reference < frame::XFrame > xFrame( pFrame->GetFrame().GetFrameInterface() );
 
                             OUStringBuffer aBuffer( 60 );
-                            aBuffer.append( vcl::CommandInfoProvider::Instance().GetLabelForCommand(
+                            aBuffer.append( aObj.GetLabelForCommand(
                                 ".uno:PrintDefault",
                                 xFrame ));
                             aBuffer.append( " (" );

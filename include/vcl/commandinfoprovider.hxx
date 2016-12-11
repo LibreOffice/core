@@ -37,16 +37,8 @@ namespace vcl {
 class VCL_DLLPUBLIC CommandInfoProvider
 {
 public:
-    /** Return the singleton instance.
-
-        It caches some objects for the last XFrame object given to
-        GetLabelForCommand.  These objects are release and created new
-        when that method is called with a different XFrame from the
-        last call.
-
-        Lifetime control should work but could be more elegant.
-    */
-    static CommandInfoProvider& Instance();
+    CommandInfoProvider();
+    ~CommandInfoProvider();
 
     /** Return a label for the given command.
         @param rsCommandName
@@ -60,11 +52,11 @@ public:
         const OUString& rsCommandName,
         const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
-    OUString GetMenuLabelForCommand (
+    static OUString GetMenuLabelForCommand (
         const OUString& rsCommandName,
         const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
-    OUString GetPopupLabelForCommand (
+    static OUString GetPopupLabelForCommand (
         const OUString& rsCommandName,
         const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
@@ -77,62 +69,60 @@ public:
             The returned label contains the keyboard accelerator, if
             one is defined and bIncludeShortcut is true.
     */
-    OUString GetTooltipForCommand (
+    static OUString GetTooltipForCommand (
         const OUString& rsCommandName,
         const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
     /** Returns the shortcut for a command in human-readable form */
-    OUString GetCommandShortcut (const OUString& rCommandName,
+    static OUString GetCommandShortcut (const OUString& rCommandName,
                                  const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
-    OUString GetRealCommandForCommand( const OUString& rCommandName,
+    static OUString GetRealCommandForCommand( const OUString& rCommandName,
                                        const css::uno::Reference<css::frame::XFrame>& rxFrame );
 
-    OUString GetCommandPropertyFromModule( const OUString& rCommandName, const OUString& rModuleName );
+    static OUString GetCommandPropertyFromModule( const OUString& rCommandName, const OUString& rModuleName );
 
-    Image GetImageForCommand(
+    static Image GetImageForCommand(
         const OUString& rsCommandName,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         vcl::ImageType eImageType = vcl::ImageType::Small);
 
-    sal_Int32 GetPropertiesForCommand(
+    static sal_Int32 GetPropertiesForCommand(
         const OUString& rsCommandName,
         const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
-    bool IsRotated(const OUString& rsCommandName);
-    bool IsMirrored(const OUString& rsCommandName);
+    static bool IsRotated(const OUString& rsCommandName);
+    static bool IsMirrored(const OUString& rsCommandName);
 
     /** Returns whether the command is experimental. */
-    bool IsExperimental(
+    static bool IsExperimental(
         const OUString& rsCommandName,
         const OUString& rModuleName);
 
     /** Do not call.  Should be part of a local and hidden interface.
     */
-    void SetFrame (const css::uno::Reference<css::frame::XFrame>& rxFrame);
+    static void SetFrame (const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
     void dispose();
 
   private:
-    css::uno::Reference<css::uno::XComponentContext> mxContext;
-    css::uno::Reference<css::frame::XFrame> mxCachedDataFrame;
-    css::uno::Reference<css::ui::XAcceleratorConfiguration> mxCachedDocumentAcceleratorConfiguration;
-    css::uno::Reference<css::ui::XAcceleratorConfiguration> mxCachedModuleAcceleratorConfiguration;
-    css::uno::Reference<css::ui::XAcceleratorConfiguration> mxCachedGlobalAcceleratorConfiguration;
-    OUString msCachedModuleIdentifier;
-    css::uno::Reference<css::lang::XComponent> mxFrameListener;
+    static css::uno::Reference<css::uno::XComponentContext> mxContext;
+    static css::uno::Reference<css::frame::XFrame> mxCachedDataFrame;
+    static css::uno::Reference<css::ui::XAcceleratorConfiguration> mxCachedDocumentAcceleratorConfiguration;
+    static css::uno::Reference<css::ui::XAcceleratorConfiguration> mxCachedModuleAcceleratorConfiguration;
+    static css::uno::Reference<css::ui::XAcceleratorConfiguration> mxCachedGlobalAcceleratorConfiguration;
+    static OUString msCachedModuleIdentifier;
+    static css::uno::Reference<css::lang::XComponent> mxFrameListener;
 
-    CommandInfoProvider();
-    ~CommandInfoProvider();
 
-    css::uno::Reference<css::ui::XAcceleratorConfiguration> const & GetDocumentAcceleratorConfiguration();
-    css::uno::Reference<css::ui::XAcceleratorConfiguration> const & GetModuleAcceleratorConfiguration();
-    css::uno::Reference<css::ui::XAcceleratorConfiguration> const & GetGlobalAcceleratorConfiguration();
-    OUString const & GetModuleIdentifier();
-    css::uno::Sequence<css::beans::PropertyValue> GetCommandProperties (
+    static css::uno::Reference<css::ui::XAcceleratorConfiguration> const & GetDocumentAcceleratorConfiguration();
+    static css::uno::Reference<css::ui::XAcceleratorConfiguration> const & GetModuleAcceleratorConfiguration();
+    static css::uno::Reference<css::ui::XAcceleratorConfiguration> const & GetGlobalAcceleratorConfiguration();
+    static OUString const & GetModuleIdentifier();
+    static css::uno::Sequence<css::beans::PropertyValue> GetCommandProperties (
         const OUString& rsCommandName);
-    OUString GetCommandProperty(const OUString& rsProperty, const OUString& rsCommandName);
-    bool ResourceHasKey(const OUString& rsResourceName, const OUString& rsCommandName);
+    static OUString GetCommandProperty(const OUString& rsProperty, const OUString& rsCommandName);
+    static bool ResourceHasKey(const OUString& rsResourceName, const OUString& rsCommandName);
     static OUString RetrieveShortcutsFromConfiguration(
         const css::uno::Reference<css::ui::XAcceleratorConfiguration>& rxConfiguration,
         const OUString& rsCommandName);

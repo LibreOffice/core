@@ -878,19 +878,20 @@ namespace
         if (!rFrame.is())
             return;
 
+        vcl::CommandInfoProvider aObj;
         OUString aCommand(OStringToOUString(extractActionName(rMap), RTL_TEXTENCODING_UTF8));
         if (aCommand.isEmpty())
             return;
 
-        OUString aLabel(vcl::CommandInfoProvider::Instance().GetLabelForCommand(aCommand, rFrame));
+        OUString aLabel(aObj.GetLabelForCommand(aCommand, rFrame));
         if (!aLabel.isEmpty())
             pButton->SetText(aLabel);
 
-        OUString aTooltip(vcl::CommandInfoProvider::Instance().GetTooltipForCommand(aCommand, rFrame));
+        OUString aTooltip(vcl::CommandInfoProvider::GetTooltipForCommand(aCommand, rFrame));
         if (!aTooltip.isEmpty())
             pButton->SetQuickHelpText(aTooltip);
 
-        Image aImage(vcl::CommandInfoProvider::Instance().GetImageForCommand(aCommand, rFrame));
+        Image aImage(vcl::CommandInfoProvider::GetImageForCommand(aCommand, rFrame));
         pButton->SetModeImage(aImage);
 
         pButton->SetCommandHandler(aCommand);

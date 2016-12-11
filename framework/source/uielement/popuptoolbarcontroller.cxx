@@ -379,7 +379,7 @@ void GenericPopupToolbarController::functionExecuted( const OUString& rCommand )
     {
         removeStatusListener( m_aCommandURL );
 
-        OUString aRealCommand( vcl::CommandInfoProvider::Instance().GetRealCommandForCommand( rCommand, m_xFrame ) );
+        OUString aRealCommand( vcl::CommandInfoProvider::GetRealCommandForCommand( rCommand, m_xFrame ) );
         m_aCommandURL = aRealCommand.isEmpty() ? rCommand : aRealCommand;
         addStatusListener( m_aCommandURL );
 
@@ -387,14 +387,15 @@ void GenericPopupToolbarController::functionExecuted( const OUString& rCommand )
         sal_uInt16 nId = 0;
         if ( getToolboxId( nId, &pToolBox ) )
         {
+            vcl::CommandInfoProvider aObj;
             pToolBox->SetItemCommand( nId, rCommand );
             pToolBox->SetHelpText( nId, OUString() ); // Will retrieve the new one from help.
-            pToolBox->SetItemText( nId, vcl::CommandInfoProvider::Instance().GetLabelForCommand( rCommand, m_xFrame ) );
-            pToolBox->SetQuickHelpText( nId, vcl::CommandInfoProvider::Instance().GetTooltipForCommand( rCommand, m_xFrame ) );
+            pToolBox->SetItemText( nId, aObj.GetLabelForCommand( rCommand, m_xFrame ) );
+            pToolBox->SetQuickHelpText( nId, vcl::CommandInfoProvider::GetTooltipForCommand( rCommand, m_xFrame ) );
 
             vcl::ImageType eImageType = getImageType(pToolBox->GetToolboxButtonSize());
 
-            Image aImage = vcl::CommandInfoProvider::Instance().GetImageForCommand(rCommand, m_xFrame, eImageType);
+            Image aImage = vcl::CommandInfoProvider::GetImageForCommand(rCommand, m_xFrame, eImageType);
             if ( !!aImage )
                 pToolBox->SetItemImage( nId, aImage );
         }
@@ -517,7 +518,7 @@ void SaveToolbarController::updateImage()
 
     if ( m_bReadOnly )
     {
-        aImage = vcl::CommandInfoProvider::Instance().GetImageForCommand(".uno:SaveAs", m_xFrame, eImageType);
+        aImage = vcl::CommandInfoProvider::GetImageForCommand(".uno:SaveAs", m_xFrame, eImageType);
     }
     else if ( m_bModified )
     {
@@ -526,7 +527,7 @@ void SaveToolbarController::updateImage()
     }
 
     if ( !aImage )
-        aImage = vcl::CommandInfoProvider::Instance().GetImageForCommand(m_aCommandURL, m_xFrame, eImageType);
+        aImage = vcl::CommandInfoProvider::GetImageForCommand(m_aCommandURL, m_xFrame, eImageType);
 
     if ( !!aImage )
         pToolBox->SetItemImage( nId, aImage );
@@ -545,7 +546,7 @@ void SaveToolbarController::statusChanged( const css::frame::FeatureStateEvent& 
     if ( bLastReadOnly != m_bReadOnly )
     {
         pToolBox->SetQuickHelpText( nId,
-            vcl::CommandInfoProvider::Instance().GetTooltipForCommand( m_bReadOnly ? OUString( ".uno:SaveAs" ) : m_aCommandURL, m_xFrame ) );
+            vcl::CommandInfoProvider::GetTooltipForCommand( m_bReadOnly ? OUString( ".uno:SaveAs" ) : m_aCommandURL, m_xFrame ) );
         pToolBox->SetItemBits( nId, pToolBox->GetItemBits( nId ) & ~( m_bReadOnly ? ToolBoxItemBits::DROPDOWN : ToolBoxItemBits::DROPDOWNONLY ) );
         pToolBox->SetItemBits( nId, pToolBox->GetItemBits( nId ) |  ( m_bReadOnly ? ToolBoxItemBits::DROPDOWNONLY : ToolBoxItemBits::DROPDOWN ) );
         updateImage();

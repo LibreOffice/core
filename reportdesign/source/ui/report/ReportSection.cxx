@@ -447,7 +447,7 @@ void lcl_insertMenuItemImages(
             else
             {
                 const OUString sCommand = rContextMenu.GetItemCommand(nId);
-                rContextMenu.SetItemImage(nId, vcl::CommandInfoProvider::Instance().GetImageForCommand(sCommand, _rFrame));
+                rContextMenu.SetItemImage(nId, vcl::CommandInfoProvider::GetImageForCommand(sCommand, _rFrame));
                 if ( nId == SID_PAGEHEADERFOOTER )
                 {
                     OUString sText = ModuleRes((_xReportDefinition.is() && _xReportDefinition->getPageHeaderOn()) ? RID_STR_PAGEHEADERFOOTER_DELETE : RID_STR_PAGEHEADERFOOTER_INSERT);
