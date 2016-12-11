@@ -48,6 +48,7 @@
 #include <flyfrm.hxx>
 #include <textboxhelper.hxx>
 #include <frmfmt.hxx>
+#include <fmtfollowtextflow.hxx>
 #include <dflyobj.hxx>
 #include <dcontact.hxx>
 #include <unodraw.hxx>
@@ -1516,6 +1517,67 @@ void SwDrawContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
         // source draw frame format.
         if(rFormat.IsPosAttrSet())
             pDrawFormatLayoutCopyHint->m_rDestFormat.PosAttrSet();
+    }
+    else if (auto pWW8AnchorConvHint = dynamic_cast<const sw::WW8AnchorConvHint*>(&rHint))
+    {
+        const SwDrawFrameFormat& rFormat = static_cast<const SwDrawFrameFormat&>(rMod);
+        // determine anchored object
+        SwAnchoredObject* pAnchoredObj(nullptr);
+        {
+            std::list<SwAnchoredObject*> aAnchoredObjs;
+            GetAnchoredObjs(aAnchoredObjs);
+            if(!aAnchoredObjs.empty())
+                pAnchoredObj = aAnchoredObjs.front();
+        }
+        // no anchored object found. Thus, the needed layout information can't
+        // be determined. --> no conversion
+        if(!pAnchoredObj)
+            return;
+        // no conversion for anchored drawing object, which aren't attached to an
+        // anchor frame.
+        // This is the case for drawing objects, which are anchored inside a page
+        // header/footer of an *unused* page style.
+        if(dynamic_cast<SwAnchoredDrawObject*>(pAnchoredObj) && !pAnchoredObj->GetAnchorFrame())
+            return;
+        const bool bFollowTextFlow = rFormat.GetFollowTextFlow().GetValue();
+        Point aPos;
+        switch(pWW8AnchorConvHint->m_eHoriConv)
+        {
+            case sw::WW8AnchorConv::CONV2PG:
+                // #i33818#
+                aPos = pAnchoredObj->GetRelPosToPageFrame(bFollowTextFlow, pWW8AnchorConvHint->m_rResult.m_bHoriRelToTableCell);
+                break;
+            case sw::WW8AnchorConv::CONV2COL_OR_PARA:
+                aPos = pAnchoredObj->GetRelPosToAnchorFrame();
+                break;
+            case sw::WW8AnchorConv::CONV2CHAR_OR_LINE:
+                aPos = pAnchoredObj->GetRelPosToChar();
+                break;
+            default:
+                ;
+        }
+        // No distinction between layout directions, because of missing
+        // information about WW8 in vertical layout.
+        pWW8AnchorConvHint->m_rResult.m_aPos.setX(aPos.getX());
+        switch(pWW8AnchorConvHint->m_eVertConv)
+        {
+            case sw::WW8AnchorConv::CONV2PG:
+                // #i33818#
+                aPos = pAnchoredObj->GetRelPosToPageFrame(bFollowTextFlow, pWW8AnchorConvHint->m_rResult.m_bVertRelToTableCell);
+                break;
+            case sw::WW8AnchorConv::CONV2COL_OR_PARA:
+                aPos = pAnchoredObj->GetRelPosToAnchorFrame();
+                break;
+            case sw::WW8AnchorConv::CONV2CHAR_OR_LINE:
+                aPos = pAnchoredObj->GetRelPosToLine();
+                break;
+            default:
+                ;
+        }
+        // No distinction between layout directions, because of missing
+        // information about WW8 in vertical layout.
+        pWW8AnchorConvHint->m_rResult.m_aPos.setY(aPos.getY());
+        pWW8AnchorConvHint->m_rResult.m_bConverted = true;
     }
 }
 

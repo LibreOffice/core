@@ -3332,6 +3332,7 @@ namespace sw
     CheckDrawFrameFormatLayerHint::~CheckDrawFrameFormatLayerHint() {}
     ContactChangedHint::~ContactChangedHint() {}
     DrawFormatLayoutCopyHint::~DrawFormatLayoutCopyHint() {}
+    WW8AnchorConvHint::~WW8AnchorConvHint() {}
 }
 
 SwDrawFrameFormat::~SwDrawFrameFormat()

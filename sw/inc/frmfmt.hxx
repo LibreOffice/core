@@ -280,6 +280,22 @@ namespace sw
         CONV2COL_OR_PARA,
         CONV2CHAR_OR_LINE
     };
+    struct WW8AnchorConvResult final
+    {
+        bool m_bHoriRelToTableCell;
+        bool m_bVertRelToTableCell;
+        bool m_bConverted;
+        Point m_aPos;
+        WW8AnchorConvResult() : m_bHoriRelToTableCell(false), m_bVertRelToTableCell(false), m_bConverted(false) {};
+    };
+    struct SW_DLLPUBLIC WW8AnchorConvHint final : SfxHint
+    {
+        WW8AnchorConvResult& m_rResult;
+        const WW8AnchorConv m_eHoriConv;
+        const WW8AnchorConv m_eVertConv;
+        WW8AnchorConvHint(WW8AnchorConvResult& rResult, WW8AnchorConv eHoriConv, WW8AnchorConv eVertConv) : m_rResult(rResult), m_eHoriConv(eHoriConv), m_eVertConv(eVertConv) {};
+        virtual ~WW8AnchorConvHint() override;
+    };
 }
 
 class SW_DLLPUBLIC SwDrawFrameFormat: public SwFrameFormat
