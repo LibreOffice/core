@@ -216,7 +216,6 @@ $(eval $(call gb_Library_add_exception_objects,chartcore,\
     chart2/source/tools/MediaDescriptorHelper \
     chart2/source/tools/ModifyListenerHelper \
     chart2/source/tools/MovingAverageRegressionCurveCalculator \
-    chart2/source/tools/MutexContainer \
     chart2/source/tools/NameContainer \
     chart2/source/tools/NumberFormatterWrapper \
     chart2/source/tools/ObjectIdentifier \
