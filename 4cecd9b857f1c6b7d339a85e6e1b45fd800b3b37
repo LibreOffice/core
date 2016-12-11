@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a71b18c_6cc43192",
+        "filename": "sc/source/ui/view/tabvwshf.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 601,
+      "author": {
+        "id": 1001210
+      },
+      "writtenOn": "2016-12-11T10:16:54Z",
+      "side": 1,
+      "message": "Please add space on either sides of \u0027\u003d\u0027 and \u0027\u003c\u0027",
+      "range": {
+        "startLine": 601,
+        "startChar": 28,
+        "endLine": 601,
+        "endChar": 41
+      },
+      "revId": "4cecd9b857f1c6b7d339a85e6e1b45fd800b3b37",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
