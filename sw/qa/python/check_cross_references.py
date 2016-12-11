@@ -27,11 +27,8 @@ from com.sun.star.container import XEnumerationAccess
 from com.sun.star.beans import XPropertySet
 from com.sun.star.text import XTextFieldsSupplier
 from com.sun.star.container import XNamed
-from com.sun.star.text.ReferenceFieldPart import NUMBER
-from com.sun.star.text.ReferenceFieldPart import NUMBER_NO_CONTEXT
-from com.sun.star.text.ReferenceFieldPart import NUMBER_FULL_CONTEXT
+from com.sun.star.text.ReferenceFieldPart import (NUMBER, NUMBER_NO_CONTEXT, NUMBER_FULL_CONTEXT, TEXT)
 from com.sun.star.text.ReferenceFieldSource import BOOKMARK
-from com.sun.star.text.ReferenceFieldPart import TEXT
 from org.libreoffice.unotest import UnoInProcess
 
 
@@ -67,7 +64,7 @@ class CheckCrossReferences(unittest.TestCase):
                 sPortionType = str(xPortionProps.getPropertyValue("TextPortionType"))
                 if (sPortionType == "TextField"):
                     xField = xPortionProps.getPropertyValue("TextField")
-                    self.assertTrue(xField)  # Cannot retrieve next field
+                    self.assertTrue(xField, "Cannot retrieve next field")
                     return xField
 
             self.xPortionEnum = None
@@ -85,7 +82,7 @@ class CheckCrossReferences(unittest.TestCase):
         # refresh fields in order to get new format applied
         self.xFieldsRefresh.refresh()
         aFieldResult = xField.getPresentation(False)
-        self.assertEqual(aExpectedFieldResult, aFieldResult)  # set reference field format doesn't result in correct field result
+        self.assertEqual(aExpectedFieldResult, aFieldResult, "set reference field format doesn't result in correct field result")
 
     def test_checkCrossReferences(self):
         xParaEnumAccess = self.document.getText()
@@ -196,7 +193,7 @@ class CheckCrossReferences(unittest.TestCase):
             else:
                 xParaTextRange = None
 
-        self.assertTrue(xParaTextRange)  # Cannot find paragraph to insert cross-reference bookmark
+        self.assertTrue(xParaTextRange, "Cannot find paragraph to insert cross-reference bookmark")
 
         # insert bookmark
         xFac = self.__class__.document
@@ -222,11 +219,11 @@ class CheckCrossReferences(unittest.TestCase):
 
         # check inserted reference field
         xField = xNewField
-        self.assertEqual("J", xField.getPresentation(False))  # inserted reference field doesn't has correct field result
+        self.assertEqual("J", xField.getPresentation(False), "inserted reference field doesn't has correct field result")
 
         xParaTextRange.getStart().setString("Hallo new bookmark: ")
         self.xFieldsRefresh.refresh()
-        self.assertEqual("Hallo new bookmark: J", xField.getPresentation(False))  # inserted reference field doesn't has correct field result
+        self.assertEqual("Hallo new bookmark: J", xField.getPresentation(False), "inserted reference field doesn't has correct field result")
 
 
 if __name__ == "__main__":
