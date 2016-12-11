@@ -205,8 +205,6 @@ namespace vclcanvas
 
     uno::Sequence< geometry::RealRectangle2D > SAL_CALL TextLayout::queryMeasures(  ) throw (uno::RuntimeException, std::exception)
     {
-        SolarMutexGuard aGuard;
-
         // TODO(F1)
         return uno::Sequence< geometry::RealRectangle2D >();
     }
@@ -268,8 +266,6 @@ namespace vclcanvas
 
     double SAL_CALL TextLayout::justify( double nSize ) throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
     {
-        SolarMutexGuard aGuard;
-
         (void)nSize;
 
         // TODO(F1)
@@ -279,8 +275,6 @@ namespace vclcanvas
     double SAL_CALL TextLayout::combinedJustify( const uno::Sequence< uno::Reference< rendering::XTextLayout > >& aNextLayouts,
                                                  double                                                           nSize ) throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
     {
-        SolarMutexGuard aGuard;
-
         (void)aNextLayouts;
         (void)nSize;
 
@@ -290,8 +284,6 @@ namespace vclcanvas
 
     rendering::TextHit SAL_CALL TextLayout::getTextHit( const geometry::RealPoint2D& aHitPoint ) throw (uno::RuntimeException, std::exception)
     {
-        SolarMutexGuard aGuard;
-
         (void)aHitPoint;
 
         // TODO(F1)
@@ -300,8 +292,6 @@ namespace vclcanvas
 
     rendering::Caret SAL_CALL TextLayout::getCaret( sal_Int32 nInsertionIndex, sal_Bool bExcludeLigatures ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception)
     {
-        SolarMutexGuard aGuard;
-
         (void)nInsertionIndex;
         (void)bExcludeLigatures;
 
@@ -311,8 +301,6 @@ namespace vclcanvas
 
     sal_Int32 SAL_CALL TextLayout::getNextInsertionIndex( sal_Int32 nStartIndex, sal_Int32 nCaretAdvancement, sal_Bool bExcludeLigatures ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception)
     {
-        SolarMutexGuard aGuard;
-
         (void)nStartIndex;
         (void)nCaretAdvancement;
         (void)bExcludeLigatures;
@@ -323,8 +311,6 @@ namespace vclcanvas
 
     uno::Reference< rendering::XPolyPolygon2D > SAL_CALL TextLayout::queryVisualHighlighting( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception)
     {
-        SolarMutexGuard aGuard;
-
         (void)nStartIndex;
         (void)nEndIndex;
 
@@ -334,8 +320,6 @@ namespace vclcanvas
 
     uno::Reference< rendering::XPolyPolygon2D > SAL_CALL TextLayout::queryLogicalHighlighting( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception)
     {
-        SolarMutexGuard aGuard;
-
         (void)nStartIndex;
         (void)nEndIndex;
 
@@ -345,8 +329,6 @@ namespace vclcanvas
 
     double SAL_CALL TextLayout::getBaselineOffset(  ) throw (uno::RuntimeException, std::exception)
     {
-        SolarMutexGuard aGuard;
-
         // TODO(F1)
         return 0.0;
     }
