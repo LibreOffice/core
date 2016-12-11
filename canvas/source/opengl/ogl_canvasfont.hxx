@@ -41,9 +41,6 @@ namespace oglcanvas
                     const css::uno::Sequence< css::beans::PropertyValue >&    extraFontProperties,
                     const css::geometry::Matrix2D&                                         fontMatrix );
 
-        /// Dispose all internal references
-        virtual void SAL_CALL disposing() override;
-
         // XCanvasFont
         virtual css::uno::Reference< css::rendering::XTextLayout > SAL_CALL createTextLayout( const css::rendering::StringContext& aText, sal_Int8 nDirection, sal_Int64 nRandomSeed ) throw (css::uno::RuntimeException, std::exception) override;
         virtual css::rendering::FontRequest SAL_CALL getFontRequest(  ) throw (css::uno::RuntimeException, std::exception) override;
