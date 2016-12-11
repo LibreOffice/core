@@ -710,7 +710,9 @@
 #define STR_BOOLEAN_VALUE               542
 #define STR_TEXT                        543
 
-#define SC_GLOBSTR_STR_COUNT            545     /**< the count of permanently resident strings */
+#define SC_GLOBSTR_STR_COUNT            545
+
+#define SC_QUERY_PIVOTTABLE_DELTAB      546     /**< the count of permanently resident strings */
 
 #endif
 
