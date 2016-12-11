@@ -558,7 +558,6 @@ sal_Bool SAL_CALL SpellChecker::removeLinguServiceEventListener(
 OUString SAL_CALL SpellChecker::getServiceDisplayName( const Locale& /*rLocale*/ )
         throw(RuntimeException, std::exception)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
     return OUString( "Hunspell SpellChecker" );
 }
 

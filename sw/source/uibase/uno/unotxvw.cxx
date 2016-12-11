@@ -889,14 +889,12 @@ bool SwXTextViewCursor::IsTextSelection( bool bAllowTables ) const
 
 sal_Bool SwXTextViewCursor::isVisible() throw( uno::RuntimeException, std::exception )
 {
-    SolarMutexGuard aGuard;
     OSL_FAIL("not implemented");
     return true;
 }
 
 void SwXTextViewCursor::setVisible(sal_Bool /*bVisible*/) throw( uno::RuntimeException, std::exception )
 {
-    SolarMutexGuard aGuard;
     OSL_FAIL("not implemented");
 }
 

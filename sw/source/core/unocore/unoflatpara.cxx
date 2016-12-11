@@ -316,7 +316,6 @@ void SAL_CALL SwXFlatParagraph::changeAttributes(::sal_Int32 nPos, ::sal_Int32 n
 // text::XFlatParagraph:
 css::uno::Sequence< ::sal_Int32 > SAL_CALL SwXFlatParagraph::getLanguagePortions() throw (css::uno::RuntimeException, std::exception)
 {
-    SolarMutexGuard aGuard;
     return css::uno::Sequence< ::sal_Int32>();
 }
 
