@@ -13,26 +13,21 @@ Function doUnitTest as Integer
     If (aVector(2) <> "Hello") Then
         doUnitTest = 0
     ' LBOUND
-    Else If ( LBound( aVector() ) <> 0 ) Then
+    ElseIf ( LBound( aVector() ) <> 0 ) Then
         doUnitTest = 0
     ' TYPELEN
-    Else If ( TypeLen(aVector(2)) <> 5 ) Then
+    ElseIf ( TypeLen(aVector(2)) <> 5 ) Then
         doUnitTest = 0
     ' TYPENAME
-    Else If ( TypeName(aVector(2)) <> "String" ) Then
+    ElseIf ( TypeName(aVector(2)) <> "String" ) Then
         doUnitTest = 0
-    ' UBOUND
-    Else If ( UBound( aVector() ) <> 3 ) Then
-        doUnitTest = 0
+    ' UBOUND already tested
+    'ElseIf ( UBound( aVector() ) <> 3 ) Then
+    '    doUnitTest = 0
     ' VARTYPE
-    Else If ( VarType(aVector(2)) <> 8 ) Then
+    ElseIf ( VarType(aVector(2)) <> 8 ) Then
         doUnitTest = 0
     Else
         doUnitTest = 1
-    End If
-    End If
-    End If
-    End If
-    End If
     End If
 End Function

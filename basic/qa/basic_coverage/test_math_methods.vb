@@ -7,8 +7,6 @@
 
 Function doUnitTest as Integer
     Randomize 42
-    dim aVector as Variant
-    aVector = Array( Date(), Time(), "Hello", -3.14)
     ' ABS
     If (Abs(-3.5) <> 3.5) Then
         doUnitTest = 0
@@ -39,13 +37,13 @@ Function doUnitTest as Integer
     ElseIf ( Oct(100) <> "144" ) Then
         doUnitTest = 0
     ' ROUND
-    ' Else If ( Round( PI, 2 ) <> 3.14 ) Then
+    ' ElseIf ( Round( PI, 2 ) <> 3.14 ) Then
     '    doUnitTest = 0
     ' RND
     ElseIf ( Rnd >= 1 ) Then
         doUnitTest = 0
     ' SGN
-    ElseIf ( Sgn(aVector(3)) <> -1 ) Then
+    ElseIf ( Sgn(-3.14) <> -1 ) Then
         doUnitTest = 0
     ' SQR
     ElseIf ( Sqr( 4 ) <> 2 ) Then
