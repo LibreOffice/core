@@ -205,7 +205,6 @@ OUString SAL_CALL ThumbnailViewAcc::getAccessibleDescription()
     throw (uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed();
-    const SolarMutexGuard aSolarGuard;
     return OUString("ThumbnailView");
 }
 

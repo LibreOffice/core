@@ -342,16 +342,12 @@ uno::Reference< XAccessibleHyperlink > SAL_CALL
 sal_Int32 SAL_CALL SwAccessibleNoTextFrame::getHyperLinkIndex( sal_Int32 )
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception)
 {
-    SolarMutexGuard aGuard;
-
     return 0;
 }
 
 uno::Reference<XAccessibleRelationSet> SAL_CALL SwAccessibleNoTextFrame::getAccessibleRelationSet( )
     throw ( uno::RuntimeException, std::exception )
 {
-    SolarMutexGuard aGuard;
-
     return new AccessibleRelationSetHelper();
 }
 

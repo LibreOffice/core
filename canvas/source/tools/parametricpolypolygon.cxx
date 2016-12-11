@@ -166,24 +166,18 @@ namespace canvas
 
     uno::Reference< rendering::XPolyPolygon2D > SAL_CALL ParametricPolyPolygon::getOutline( double /*t*/ ) throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
-
         // TODO(F1): outline NYI
         return uno::Reference< rendering::XPolyPolygon2D >();
     }
 
     uno::Sequence< double > SAL_CALL ParametricPolyPolygon::getColor( double /*t*/ ) throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
-
         // TODO(F1): color NYI
         return uno::Sequence< double >();
     }
 
     uno::Sequence< double > SAL_CALL ParametricPolyPolygon::getPointColor( const geometry::RealPoint2D& /*point*/ ) throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
-
         // TODO(F1): point color NYI
         return uno::Sequence< double >();
     }

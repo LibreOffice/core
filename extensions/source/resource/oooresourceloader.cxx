@@ -277,7 +277,6 @@ namespace extensions { namespace resource
 
     Sequence< OUString > SAL_CALL OpenOfficeResourceBundle::getElementNames(  ) throw (RuntimeException, std::exception)
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
         OSL_FAIL( "OpenOfficeResourceBundle::getElementNames: not implemented!" );
             // the (Simple)ResManager does not provide an API to enumerate the resources
         return Sequence< OUString >( );
