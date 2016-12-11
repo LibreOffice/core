@@ -46,7 +46,6 @@ namespace
     {
     public:
         SmDLL();
-        ~SmDLL();
     };
 
     SmDLL::SmDLL()
@@ -77,10 +76,6 @@ namespace
 
         SmCmdBoxWrapper::RegisterChildWindow(true);
         SmElementsDockingWindowWrapper::RegisterChildWindow(true);
-    }
-
-    SmDLL::~SmDLL()
-    {
     }
 
     struct theSmDLLInstance : public rtl::Static<SmDLL, theSmDLLInstance> {};
