@@ -115,24 +115,18 @@ namespace cairocanvas
 
     rendering::FontMetrics SAL_CALL  CanvasFont::getFontMetrics(  ) throw (uno::RuntimeException, std::exception)
     {
-        SolarMutexGuard aGuard;
-
         // TODO(F1)
         return rendering::FontMetrics();
     }
 
     uno::Sequence< double > SAL_CALL  CanvasFont::getAvailableSizes(  ) throw (uno::RuntimeException, std::exception)
     {
-        SolarMutexGuard aGuard;
-
         // TODO(F1)
         return uno::Sequence< double >();
     }
 
     uno::Sequence< beans::PropertyValue > SAL_CALL  CanvasFont::getExtraFontProperties(  ) throw (uno::RuntimeException, std::exception)
     {
-        SolarMutexGuard aGuard;
-
         // TODO(F1)
         return uno::Sequence< beans::PropertyValue >();
     }
