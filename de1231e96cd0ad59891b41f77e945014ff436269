@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a71b18c_ccbb850d",
+        "filename": "connectivity/source/drivers/firebird/DatabaseMetaData.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1128,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2016-12-11T10:36:20Z",
+      "side": 1,
+      "message": "returning \"YES\" or \"NO\" is the right thing to do, but what is there any reason you cannot use getBoolean()?",
+      "range": {
+        "startLine": 1127,
+        "startChar": 0,
+        "endLine": 1128,
+        "endChar": 70
+      },
+      "revId": "de1231e96cd0ad59891b41f77e945014ff436269",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a71b18c_ec3681b3",
+        "filename": "connectivity/source/drivers/firebird/DatabaseMetaData.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1725,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2016-12-11T10:36:20Z",
+      "side": 1,
+      "message": "same as above, why getShort() instead of getBoolean()?",
+      "revId": "de1231e96cd0ad59891b41f77e945014ff436269",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
