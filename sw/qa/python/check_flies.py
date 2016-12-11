@@ -69,7 +69,7 @@ class CheckFlies(unittest.TestCase):
 
         xEmbeddedFramesIdx = xEmbeddedFrames
 
-        self.assertEqual(nEmbeddedFrames, xEmbeddedFramesIdx.getCount())  # Unexpected number of embedded frames reported
+        self.assertEqual(nEmbeddedFrames, xEmbeddedFramesIdx.getCount(), "Unexpected number of embedded frames reported")
 
         for nCurrentFrameIdx in range(xEmbeddedFramesIdx.getCount()):
             xEmbeddedFramesIdx.getByIndex(nCurrentFrameIdx)
@@ -91,7 +91,7 @@ class CheckFlies(unittest.TestCase):
             "Missing expected graphics frames.")
 
         xGraphicFramesIdx = xGraphicFrames
-        self.assertEqual(nGraphicFrames, xGraphicFramesIdx.getCount())  # Unexpected number of graphics frames reported
+        self.assertEqual(nGraphicFrames, xGraphicFramesIdx.getCount(), "Unexpected number of graphics frames reported")
 
         for nCurrentFrameIdx in range(xGraphicFramesIdx.getCount()):
             xGraphicFramesIdx.getByIndex(nCurrentFrameIdx)
@@ -115,7 +115,7 @@ class CheckFlies(unittest.TestCase):
 
         xTextFramesIdx = xTextFrames
 
-        self.assertEqual(nTextFrames, xTextFrames.getCount())  # Unexpected number of text frames reported
+        self.assertEqual(nTextFrames, xTextFrames.getCount(), "Unexpected number of text frames reported")
 
         for nCurrentFrameIdx in range(xTextFramesIdx.getCount()):
             xTextFramesIdx.getByIndex(nCurrentFrameIdx)
