@@ -43,6 +43,8 @@
 #include "globstr.hrc"
 #include "docfunc.hxx"
 #include "eventuno.hxx"
+#include "dpobject.hxx"
+#include "dpshttab.hxx"
 
 #include "scabstdlg.hxx"
 
@@ -593,12 +595,45 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 bool bDoIt = bHasIndex;
                 if (!bDoIt)
                 {
-                    // no parameter given, ask for confirmation
-                    bDoIt = ( RET_YES ==
-                              ScopedVclPtrInstance<QueryBox>( GetDialogParent(),
-                                        WinBits( WB_YES_NO | WB_DEF_YES ),
-                                        ScGlobal::GetRscString(STR_QUERY_DELTAB)
-                                  )->Execute() );
+                    bool bTabWithPivotTable = false;
+                    if (pDoc->HasPivotTable())
+                    {
+                        const ScDPCollection* pDPs = pDoc->GetDPCollection();
+                        if (pDPs)
+                        {
+                            const ScMarkData::MarkedTabsType& rSelectedTabs = rViewData.GetMarkData().GetSelectedTabs();
+                            for (ScMarkData::MarkedTabsType::const_iterator iterator = rSelectedTabs.begin();
+                                    iterator != rSelectedTabs.end() && !bTabWithPivotTable; ++iterator )
+                            {
+                                const SCTAB nSelTab = *iterator;
+                                const size_t nCount = pDPs->GetCount();
+                                for (size_t i = 0; i < nCount; ++i)
+                                {
+                                    const ScDPObject& rDPObj = (*pDPs)[i];
+                                    const ScSheetSourceDesc* pSheetSourceDesc = rDPObj.GetSheetDesc();
+                                    if (pSheetSourceDesc->GetSourceRange().aStart.Tab() == nSelTab)
+                                        bTabWithPivotTable = true;
+                                }
+                            }
+                        }
+                    }
+
+                    if (bTabWithPivotTable)
+                    {
+                        // Hard warning as there is potential of data loss on deletion
+                        bDoIt = ( RET_YES ==
+                                ScopedVclPtrInstance<QueryBox>( GetDialogParent(),
+                                            WinBits( WB_YES_NO | WB_DEF_NO ),
+                                            ScGlobal::GetRscString(STR_QUERY_PIVOTTABLE_DELTAB))->Execute() );
+                    }
+                    else
+                    {
+                        // no parameter given, ask for confirmation
+                        bDoIt = ( RET_YES ==
+                                ScopedVclPtrInstance<QueryBox>( GetDialogParent(),
+                                            WinBits( WB_YES_NO | WB_DEF_YES ),
+                                            ScGlobal::GetRscString(STR_QUERY_DELTAB))->Execute() );
+                    }
                 }
 
                 if (bDoIt)
