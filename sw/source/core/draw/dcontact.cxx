@@ -1366,7 +1366,7 @@ namespace
         }
         return pAnchorFormat;
     }
-    Point lcl_GetWW8Pos(SwAnchoredObject* pAnchoredObj, const bool bFollowTextFlow, const bool bHori, sw::WW8AnchorConv& reConv)
+    Point lcl_GetWW8Pos(SwAnchoredObject* pAnchoredObj, const bool bFollowTextFlow, sw::WW8AnchorConv& reConv)
     {
         switch(reConv)
         {
@@ -1380,8 +1380,10 @@ namespace
             }
             case sw::WW8AnchorConv::CONV2COL_OR_PARA:
                 return pAnchoredObj->GetRelPosToAnchorFrame();
-            case sw::WW8AnchorConv::CONV2CHAR_OR_LINE:
-                return bHori ? pAnchoredObj->GetRelPosToChar() : pAnchoredObj->GetRelPosToLine();
+            case sw::WW8AnchorConv::CONV2CHAR:
+                return pAnchoredObj->GetRelPosToChar();
+            case sw::WW8AnchorConv::CONV2LINE:
+                return pAnchoredObj->GetRelPosToLine();
             default: ;
         }
         assert(false);
@@ -1563,16 +1565,8 @@ void SwDrawContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
         sw::WW8AnchorConvResult& rResult(pWW8AnchorConvHint->m_rResult);
         // No distinction between layout directions, because of missing
         // information about WW8 in vertical layout.
-        rResult.m_aPos.setX(lcl_GetWW8Pos(
-                pAnchoredObj,
-                bFollowTextFlow,
-                true,
-                rResult.m_eHoriConv).getX());
-        rResult.m_aPos.setY(lcl_GetWW8Pos(
-                pAnchoredObj,
-                bFollowTextFlow,
-                false,
-                rResult.m_eHoriConv).getY());
+        rResult.m_aPos.setX(lcl_GetWW8Pos(pAnchoredObj, bFollowTextFlow, rResult.m_eHoriConv).getX());
+        rResult.m_aPos.setY(lcl_GetWW8Pos(pAnchoredObj, bFollowTextFlow, rResult.m_eHoriConv).getY());
         rResult.m_bConverted = true;
     }
 }
