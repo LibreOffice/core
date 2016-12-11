@@ -9,21 +9,19 @@
 Function doUnitTest as Integer
     Wait(0)
     Beep
-    'dim aVector as Variant
-    'aVector = Array( Date(), Time(), "Hello", -3.14)
-    'WaitUntil( aVector(0) )
+    'dim aDate as Variant
+    'aDate = Date()
+    'WaitUntil( aDate )
     ' CompatibilityMode
     If (CompatibilityMode(True) <> True) Then
         doUnitTest = 0
     ' ConvertFromUrl ConvertToUrl
-    Else If ( ConvertToUrl( ConvertFromUrl("") ) <> "") Then
+    ElseIf ( ConvertToUrl( ConvertFromUrl("") ) <> "") Then
         doUnitTest = 0
     ' GetSolarVersion
-    Else If ( GetSolarVersion() < 50000) Then
+    ElseIf ( GetSolarVersion() < 50000) Then
         doUnitTest = 0
     Else
         doUnitTest = 1
-    End If
-    End If
     End If
 End Function

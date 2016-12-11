@@ -7,101 +7,79 @@
 '
 
 Function doUnitTest as Integer
-    dim aVector as Variant
-    aVector = Array( Date(), Time(), "Hello", -3.14)
+    dim aString as Variant
+    aString = "Hello"
     ' ASC
     If (Asc("€") <> 8364) Then
         doUnitTest = 0
     ' ASCw
-    'Else If (AscW("€") <> 8364) Then
+    'ElseIf (AscW("€") <> 8364) Then
     '    doUnitTest = 0
-    ' FORMAT
-    Else If (Format(PI, "0") <> "3") Then
-        doUnitTest = 0
+    ' FORMAT already tested
+    ' ElseIf (Format(PI, "0") <> "3") Then
+    '    doUnitTest = 0
     ' InStr
-    Else If ( InStr( 1, aVector(2), "l", 1) <> 3 ) Then
+    ElseIf ( InStr( 1, aString, "l", 1) <> 3 ) Then
         doUnitTest = 0
     ' InStrRev
-    'Else If ( InStrRev( aVector(2), "l" ) <> 4 ) Then
+    'ElseIf ( InStrRev( aString, "l" ) <> 4 ) Then
     '    doUnitTest = 0
     ' LCASE
-    Else If ( LCase( aVector(2) ) <> "hello" ) Then
+    ElseIf ( LCase( aString ) <> "hello" ) Then
         doUnitTest = 0
-    ' LEFT
-    Else If ( Left( aVector(2), 2 ) <> "He" ) Then
-        doUnitTest = 0
+    ' LEFT already test
+    ' ElseIf ( Left( aString, 2 ) <> "He" ) Then
+    '    doUnitTest = 0
     ' LEN
-    Else If ( Len( aVector(2) ) <> 5 ) Then
+    ElseIf ( Len( aString ) <> 5 ) Then
         doUnitTest = 0
     ' LENB
-    Else If ( LenB( aVector(2) ) <> 5 ) Then
+    ElseIf ( LenB( aString ) <> 5 ) Then
         doUnitTest = 0
     ' LTRIM
-    Else If ( LTrim( "  Hello" ) <> aVector(2) ) Then
+    ElseIf ( LTrim( "  Hello" ) <> aString ) Then
         doUnitTest = 0
-    ' MID
-    Else If ( Mid( aVector(2), 2, 2 ) <> "el" ) Then
-        doUnitTest = 0
-    ' REPLACE
-    Else If ( Replace ( aVector(2), "l", "jo", 1, 2 ) <> "Hejojoo" ) Then
-        doUnitTest = 0
-    ' RIGHT
-    Else If ( Right( aVector(2), 2 ) <> "lo" ) Then
-        doUnitTest = 0
+    ' MID already tested
+    ' ElseIf ( Mid( aString, 2, 2 ) <> "el" ) Then
+    '    doUnitTest = 0
+    ' REPLACE already tested
+    ' ElseIf ( Replace ( aString, "l", "jo", 1, 2 ) <> "Hejojoo" ) Then
+    '    doUnitTest = 0
+    ' RIGHT already tested
+    ' ElseIf ( Right( aString, 2 ) <> "lo" ) Then
+    '    doUnitTest = 0
     ' RTRIM
-    Else If ( RTrim( "Hello  " ) <> aVector(2) ) Then
+    ElseIf ( RTrim( "Hello  " ) <> aString ) Then
         doUnitTest = 0
     ' SPACE
-    Else If ( Space(3) <> "   " ) Then
+    ElseIf ( Space(3) <> "   " ) Then
         doUnitTest = 0
     ' SPC
-    Else If ( Spc(3) <> "   " ) Then
+    ElseIf ( Spc(3) <> "   " ) Then
         doUnitTest = 0
     ' SPLIT
-    Else If ( Split( "Hello world" )(1) <> "world" ) Then
+    ElseIf ( Split( "Hello world" )(1) <> "world" ) Then
         doUnitTest = 0
     ' STR TRIM
-    Else If ( Trim( Str( 4 ) ) <> "4" ) Then
+    ElseIf ( Trim( Str( 4 ) ) <> "4" ) Then
         doUnitTest = 0
     ' STRCOMP
-    Else If ( StrComp( aVector(2), "Hello" ) <> 0 ) Then
+    ElseIf ( StrComp( aString, "Hello" ) <> 0 ) Then
         doUnitTest = 0
     ' StrConv
     ' STRING
-    Else If ( String( 3, "H" ) <> "HHH" ) Then
+    ElseIf ( String( 3, "H" ) <> "HHH" ) Then
         doUnitTest = 0
     ' STRREVERSE
-    'Else If ( StrReverse( aVector(2) ) <> "olleH" ) Then
+    'ElseIf ( StrReverse( aString ) <> "olleH" ) Then
     '    doUnitTest = 0
     ' TAB
-    Else If ( "Hello" & Tab(0) & "World" <> "HelloWorld" ) Then
+    ElseIf ( "Hello" & Tab(0) & "World" <> "HelloWorld" ) Then
         doUnitTest = 0
     ' UCASE
-    Else If ( UCase( aVector(2) ) <> "HELLO" ) Then
+    ElseIf ( UCase( aString ) <> "HELLO" ) Then
         doUnitTest = 0
     Else
         doUnitTest = 1
     End If
-    End If
-    End If
-    End If
-    End If
-    End If
-    End If
-    End If
-    End If
-    End If
-    End If
-    End If
-    End If
-    End If
-    End If
-    End If
-    End If
-    End If
-    End If
-    End If
-    'End If
-    'End If
-    'End If
 End Function

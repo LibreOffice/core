@@ -14,46 +14,36 @@ Function doUnitTest as Integer
     If (CBool(3) <> True) Then
         doUnitTest = 0
     ' CBYTE
-    Else If (CByte("3") <> 3) Then
+    ElseIf (CByte("3") <> 3) Then
         doUnitTest = 0
     ' CCUR
-    Else If (CCur("100") <> 100) Then
+    ElseIf (CCur("100") <> 100) Then
         doUnitTest = 0
     ' CDATE
-    Else If (CDate(100) <> 100) Then
+    ElseIf (CDate(100) <> 100) Then
         doUnitTest = 0
-    ' CDEC
-    'Else If (CDec("100") <> 100) Then
+    ' CDEC already tested
+    'ElseIf (CDec("100") <> 100) Then
     '    doUnitTest = 0
     ' CDBL
-    Else If (CDbl("100") <> 100) Then
+    ElseIf (CDbl("100") <> 100) Then
         doUnitTest = 0
     ' CINT
-    Else If (CInt("100") <> 100) Then
+    ElseIf (CInt("100") <> 100) Then
         doUnitTest = 0
-    ' CLNG
-    Else If (CLng("100") <> 100) Then
-        doUnitTest = 0
+    ' CLNG already tested
+    'ElseIf (CLng("100") <> 100) Then
+     '   doUnitTest = 0
     ' CSNG
-    Else If (CSng("100") <> 100) Then
+    ElseIf (CSng("100") <> 100) Then
         doUnitTest = 0
     ' CSTR
-    Else If (CStr(100) <> "100") Then
+    ElseIf (CStr(100) <> "100") Then
         doUnitTest = 0
     ' VAL
-    Else If ( Val("4") <> 4 ) Then
+    ElseIf ( Val("4") <> 4 ) Then
         doUnitTest = 0
     Else
         doUnitTest = 1
     End If
-    End If
-    End If
-    End If
-    End If
-    End If
-    End If
-    End If
-    End If
-    End If
-    'End If
 End Function
