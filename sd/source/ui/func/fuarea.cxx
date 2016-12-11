@@ -70,7 +70,7 @@ void FuArea::DoExecute( SfxRequest& rReq )
         }
 
         // attributes changed, update Listboxes in Objectbars
-        static sal_uInt16 SidArray[] = {
+        static const sal_uInt16 SidArray[] = {
                         SID_ATTR_FILL_STYLE,
                         SID_ATTR_FILL_COLOR,
                         SID_ATTR_FILL_GRADIENT,

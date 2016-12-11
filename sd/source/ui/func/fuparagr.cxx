@@ -132,7 +132,7 @@ void FuParagraph::DoExecute( SfxRequest& rReq )
     }
 
     // invalidate slots
-    static sal_uInt16 SidArray[] = {
+    static const sal_uInt16 SidArray[] = {
         SID_ATTR_TABSTOP,
         SID_ATTR_PARA_ADJUST_LEFT,
         SID_ATTR_PARA_ADJUST_RIGHT,

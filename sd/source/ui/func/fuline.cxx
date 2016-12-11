@@ -82,7 +82,7 @@ void FuLine::DoExecute( SfxRequest& rReq )
         }
 
         // some attributes are changed, we have to update the listboxes in the objectbars
-        static sal_uInt16 SidArray[] = {
+        static const sal_uInt16 SidArray[] = {
             SID_ATTR_LINE_STYLE,                // ( SID_SVX_START + 169 )
             SID_ATTR_LINE_DASH,                 // ( SID_SVX_START + 170 )
             SID_ATTR_LINE_WIDTH,                // ( SID_SVX_START + 171 )

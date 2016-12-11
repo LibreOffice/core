@@ -25,7 +25,7 @@
 
 namespace sd {
 
-extern sal_uInt16 SidArrayZoom[];
+extern const sal_uInt16 SidArrayZoom[];
 
 class FuZoom
     : public FuPoor

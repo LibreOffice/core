@@ -134,7 +134,7 @@ void FuChar::DoExecute( SfxRequest& rReq )
     mpView->SetAttributes(*pArgs);
 
     // invalidate the Slots which are in DrTxtObjBar
-    static sal_uInt16 SidArray[] = {
+    static const sal_uInt16 SidArray[] = {
                     SID_ATTR_CHAR_FONT,
                     SID_ATTR_CHAR_POSTURE,
                     SID_ATTR_CHAR_WEIGHT,

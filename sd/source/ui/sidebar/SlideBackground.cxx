@@ -383,7 +383,7 @@ IMPL_LINK(SlideBackground, EventMultiplexerListener,
         break;
         case EventMultiplexerEventId::CurrentPageChanged:
         {
-            static sal_uInt16 SidArray[] = {
+            static const sal_uInt16 SidArray[] = {
                 SID_ATTR_PAGE_COLOR,
                 SID_ATTR_PAGE_GRADIENT,
                 SID_ATTR_PAGE_HATCH,

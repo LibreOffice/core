@@ -34,7 +34,7 @@
 
 namespace sd {
 
-sal_uInt16 SidArrayZoom[] = {
+const sal_uInt16 SidArrayZoom[] = {
                     SID_ATTR_ZOOM,
                     SID_ZOOM_OUT,
                     SID_ZOOM_IN,
