@@ -2445,6 +2445,32 @@ void SwEscherEx::FinishEscher()
     pEscherStrm = nullptr;
 }
 
+
+namespace
+{
+    template<typename OrientType>
+    void lcl_SetRelationOrient(OrientType& rOrient, const sw::WW8AnchorConv eConv, const bool bHori, std::function<void()> fDefault)
+    {
+        switch(eConv)
+        {
+            case sw::WW8AnchorConv::RELTOTABLECELL:
+                // #i33818#
+                rOrient.SetRelationOrient(text::RelOrientation::PAGE_PRINT_AREA);
+                break;
+            case sw::WW8AnchorConv::CONV2PG:
+                rOrient.SetRelationOrient(text::RelOrientation::PAGE_FRAME);
+                break;
+            case sw::WW8AnchorConv::CONV2COL_OR_PARA:
+                rOrient.SetRelationOrient(text::RelOrientation::FRAME);
+                break;
+            case sw::WW8AnchorConv::CONV2CHAR_OR_LINE:
+                rOrient.SetRelationOrient(bHori ? text::RelOrientation::CHAR : text::RelOrientation::TEXT_LINE);
+                break;
+            default:
+                fDefault();//rOrient.SetHoriOrient(text::HoriOrientation::NONE);
+        }
+    }
+}
 /** method to perform conversion of positioning attributes with the help
     of corresponding layout information
 
@@ -2652,43 +2678,9 @@ bool WinwordAnchoring::ConvertPosition( SwFormatHoriOrient& _iorHoriOri,
         _rFrameFormat.CallSwClientNotify(sw::WW8AnchorConvHint(aResult));
         if(!aResult.m_bConverted)
             return false;
-        switch(eHoriConv)
-        {
-            case sw::WW8AnchorConv::RELTOTABLECELL:
-                // #i33818#
-                _iorHoriOri.SetRelationOrient(text::RelOrientation::PAGE_PRINT_AREA);
-                break;
-            case sw::WW8AnchorConv::CONV2PG:
-                _iorHoriOri.SetRelationOrient(text::RelOrientation::PAGE_FRAME);
-                break;
-            case sw::WW8AnchorConv::CONV2COL_OR_PARA:
-                _iorHoriOri.SetRelationOrient(text::RelOrientation::FRAME);
-                break;
-            case sw::WW8AnchorConv::CONV2CHAR_OR_LINE:
-                _iorHoriOri.SetRelationOrient(text::RelOrientation::CHAR);
-                break;
-            default:
-                _iorHoriOri.SetHoriOrient(text::HoriOrientation::NONE);
-        }
+        lcl_SetRelationOrient(_iorHoriOri, eHoriConv, true, [&_iorHoriOri]() {_iorHoriOri.SetHoriOrient(text::HoriOrientation::NONE);} );
         _iorHoriOri.SetPos(aResult.m_aPos.X());
-        switch(eVertConv)
-        {
-            case sw::WW8AnchorConv::RELTOTABLECELL:
-                // #i33818#
-                _iorVertOri.SetRelationOrient(text::RelOrientation::PAGE_PRINT_AREA);
-                break;
-            case sw::WW8AnchorConv::CONV2PG:
-                _iorVertOri.SetRelationOrient(text::RelOrientation::PAGE_FRAME);
-                break;
-            case sw::WW8AnchorConv::CONV2COL_OR_PARA:
-                _iorVertOri.SetRelationOrient(text::RelOrientation::FRAME);
-                break;
-            case sw::WW8AnchorConv::CONV2CHAR_OR_LINE:
-                _iorVertOri.SetRelationOrient(text::RelOrientation::TEXT_LINE);
-                break;
-            default:
-                _iorVertOri.SetVertOrient(text::VertOrientation::NONE);
-        }
+        lcl_SetRelationOrient(_iorVertOri, eVertConv, false, [&_iorVertOri]() {_iorVertOri.SetVertOrient(text::VertOrientation::NONE);} );
         _iorVertOri.SetPos(aResult.m_aPos.Y());
         return true;
     }
