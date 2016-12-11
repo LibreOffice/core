@@ -166,6 +166,19 @@ DECLARE_OOXMLEXPORT_TEST(testTdf103651, "tdf103651.docx")
     CPPUNIT_ASSERT_EQUAL( sal_Int32( -1 ) , sContent.indexOf( sal_Unicode( 0xf04a ) ));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf99227, "tdf99227.docx")
+{
+    // A drawing anchored as character to a footnote caused write past end of document.xml at export to docx.
+    // After that, importing after export failed with
+    // SAXParseException: '[word/document.xml line 2]: Extra content at the end of the document', Stream 'word / document.xml',
+    // and before commit ebf767eeb2a169ba533e1b2ffccf16f41d95df35, the drawing was silently lost.
+    xmlDocPtr pXmlDoc = parseExport("word/footnotes.xml");
+    if (!pXmlDoc)
+        return;
+
+    assertXPath(pXmlDoc, "//w:footnote[3]/w:p/w:r[5]/w:drawing", 1);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
