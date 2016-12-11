@@ -2482,38 +2482,6 @@ bool WinwordAnchoring::ConvertPosition( SwFormatHoriOrient& _iorHoriOri,
         return false;
     }
 
-    // determine anchored object
-    SwAnchoredObject* pAnchoredObj( nullptr );
-    {
-        const SwContact* pContact = _rFrameFormat.FindContactObj();
-        if ( pContact )
-        {
-            std::list<SwAnchoredObject*> aAnchoredObjs;
-            pContact->GetAnchoredObjs( aAnchoredObjs );
-            if ( !aAnchoredObjs.empty() )
-            {
-                pAnchoredObj = aAnchoredObjs.front();
-            }
-        }
-    }
-    if ( !pAnchoredObj )
-    {
-        // no anchored object found. Thus, the needed layout information can't
-        // be determined. --> no conversion
-        return false;
-    }
-    // no conversion for anchored drawing object, which aren't attached to an
-    // anchor frame.
-    // This is the case for drawing objects, which are anchored inside a page
-    // header/footer of an *unused* page style.
-    if ( dynamic_cast<SwAnchoredDrawObject*>(pAnchoredObj) &&
-         !pAnchoredObj->GetAnchorFrame() )
-    {
-        return false;
-    }
-
-    bool bConverted( false );
-
     // determine value of attribute 'Follow text flow', because positions aligned
     // at page areas have to be converted, if it's set.
     const bool bFollowTextFlow = _rFrameFormat.GetFollowTextFlow().GetValue();
@@ -2536,9 +2504,10 @@ bool WinwordAnchoring::ConvertPosition( SwFormatHoriOrient& _iorHoriOri,
         }
     }
 
+    sw::WW8AnchorConv eHoriConv(sw::WW8AnchorConv::NO_CONV);
+    sw::WW8AnchorConv eVertConv(sw::WW8AnchorConv::NO_CONV);
     // convert horizontal position, if needed
     {
-        sw::WW8AnchorConv eHoriConv(sw::WW8AnchorConv::NO_CONV);
 
         // determine, if conversion has to be performed due to the position orientation
         bool bConvDueToOrientation( false );
@@ -2602,46 +2571,10 @@ bool WinwordAnchoring::ConvertPosition( SwFormatHoriOrient& _iorHoriOri,
                     OSL_FAIL( "<WinwordAnchoring::ConvertPosition(..)> - unknown horizontal relation" );
             }
         }
-        if ( eHoriConv != sw::WW8AnchorConv::NO_CONV )
-        {
-            _iorHoriOri.SetHoriOrient( text::HoriOrientation::NONE );
-            SwTwips nPosX( 0L );
-            {
-                Point aPos;
-                if ( eHoriConv == sw::WW8AnchorConv::CONV2PG )
-                {
-                    _iorHoriOri.SetRelationOrient( text::RelOrientation::PAGE_FRAME );
-                    // #i33818#
-                    bool bRelToTableCell( false );
-                    aPos = pAnchoredObj->GetRelPosToPageFrame( bFollowTextFlow,
-                                                             bRelToTableCell );
-                    if ( bRelToTableCell )
-                    {
-                        _iorHoriOri.SetRelationOrient( text::RelOrientation::PAGE_PRINT_AREA );
-                    }
-                }
-                else if ( eHoriConv == sw::WW8AnchorConv::CONV2COL_OR_PARA )
-                {
-                    _iorHoriOri.SetRelationOrient( text::RelOrientation::FRAME );
-                    aPos = pAnchoredObj->GetRelPosToAnchorFrame();
-                }
-                else if ( eHoriConv == sw::WW8AnchorConv::CONV2CHAR_OR_LINE )
-                {
-                    _iorHoriOri.SetRelationOrient( text::RelOrientation::CHAR );
-                    aPos = pAnchoredObj->GetRelPosToChar();
-                }
-                // No distinction between layout directions, because of missing
-                // information about WW8 in vertical layout.
-                nPosX = aPos.X();
-            }
-            _iorHoriOri.SetPos( nPosX );
-            bConverted = true;
-        }
     }
 
     // convert vertical position, if needed
     {
-        sw::WW8AnchorConv eVertConv(sw::WW8AnchorConv::NO_CONV);
 
         // determine, if conversion has to be performed due to the position orientation
         bool bConvDueToOrientation( false );
@@ -2712,44 +2645,52 @@ bool WinwordAnchoring::ConvertPosition( SwFormatHoriOrient& _iorHoriOri,
             }
         }
 
-        if ( eVertConv != sw::WW8AnchorConv::NO_CONV )
-        {
-            _iorVertOri.SetVertOrient( text::VertOrientation::NONE );
-            SwTwips nPosY( 0L );
-            {
-                Point aPos;
-                if ( eVertConv == sw::WW8AnchorConv::CONV2PG )
-                {
-                    _iorVertOri.SetRelationOrient( text::RelOrientation::PAGE_FRAME );
-                    // #i33818#
-                    bool bRelToTableCell( false );
-                    aPos = pAnchoredObj->GetRelPosToPageFrame( bFollowTextFlow,
-                                                             bRelToTableCell );
-                    if ( bRelToTableCell )
-                    {
-                        _iorVertOri.SetRelationOrient( text::RelOrientation::PAGE_PRINT_AREA );
-                    }
-                }
-                else if ( eVertConv == sw::WW8AnchorConv::CONV2COL_OR_PARA )
-                {
-                    _iorVertOri.SetRelationOrient( text::RelOrientation::FRAME );
-                    aPos = pAnchoredObj->GetRelPosToAnchorFrame();
-                }
-                else if ( eVertConv == sw::WW8AnchorConv::CONV2CHAR_OR_LINE )
-                {
-                    _iorVertOri.SetRelationOrient( text::RelOrientation::TEXT_LINE );
-                    aPos = pAnchoredObj->GetRelPosToLine();
-                }
-                // No distinction between layout directions, because of missing
-                // information about WW8 in vertical layout.
-                nPosY = aPos.Y();
-            }
-            _iorVertOri.SetPos( nPosY );
-            bConverted = true;
-        }
     }
-
-    return bConverted;
+    if(eVertConv != sw::WW8AnchorConv::NO_CONV || eHoriConv != sw::WW8AnchorConv::NO_CONV)
+    {
+        sw::WW8AnchorConvResult aResult;
+        _rFrameFormat.CallSwClientNotify(sw::WW8AnchorConvHint(aResult, eHoriConv, eVertConv));
+        if(!aResult.m_bConverted)
+            return false;
+        switch(eHoriConv)
+        {
+            case sw::WW8AnchorConv::CONV2PG:
+                _iorHoriOri.SetRelationOrient(text::RelOrientation::PAGE_FRAME);
+                // #i33818#
+                if(aResult.m_bHoriRelToTableCell)
+                    _iorHoriOri.SetRelationOrient(text::RelOrientation::PAGE_PRINT_AREA);
+                break;
+            case sw::WW8AnchorConv::CONV2COL_OR_PARA:
+                _iorHoriOri.SetRelationOrient(text::RelOrientation::FRAME);
+                break;
+            case sw::WW8AnchorConv::CONV2CHAR_OR_LINE:
+                _iorHoriOri.SetRelationOrient(text::RelOrientation::CHAR);
+                break;
+            default:
+                _iorHoriOri.SetHoriOrient(text::HoriOrientation::NONE);
+        }
+        _iorHoriOri.SetPos(aResult.m_aPos.X());
+        switch(eVertConv)
+        {
+            case sw::WW8AnchorConv::CONV2PG:
+                _iorVertOri.SetRelationOrient(text::RelOrientation::PAGE_FRAME);
+                // #i33818#
+                if(aResult.m_bVertRelToTableCell)
+                    _iorVertOri.SetRelationOrient(text::RelOrientation::PAGE_PRINT_AREA);
+                break;
+            case sw::WW8AnchorConv::CONV2COL_OR_PARA:
+                _iorVertOri.SetRelationOrient(text::RelOrientation::FRAME);
+                break;
+            case sw::WW8AnchorConv::CONV2CHAR_OR_LINE:
+                _iorVertOri.SetRelationOrient(text::RelOrientation::TEXT_LINE);
+                break;
+            default:
+                _iorVertOri.SetVertOrient(text::VertOrientation::NONE);
+        }
+        _iorVertOri.SetPos(aResult.m_aPos.Y());
+        return true;
+    }
+    return false;
 }
 
 void WinwordAnchoring::SetAnchoring(const SwFrameFormat& rFormat)
