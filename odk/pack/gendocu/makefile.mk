@@ -100,7 +100,7 @@ $(CPP_DOCU_INDEX_FILE) : $(CPP_DOCU_CLEANUP_FLAG)
 $(JAVA_SRC_FILES) : $(SOLARCOMMONBINDIR)$/jurt_src.zip $(SOLARCOMMONBINDIR)$/ridl_src.zip $(SOLARCOMMONBINDIR)$/unoloader_src.zip $(SOLARCOMMONPCKDIR)$/juh_src.zip
     -$(MKDIRHIER) $(@:d)        
     $(MY_COPY) $^ $(JAVA_SRC_DIR)
-    cd $(JAVA_SRC_DIR) && unzip -qu $(@:f)
+    cd $(JAVA_SRC_DIR) && unzip -qu jurt_src.zip && unzip -qu ridl_src.zip && unzip -qu unoloader_src.zip && unzip -qu juh_src.zip
 
 #$(JAVA_SRC_DIR)$/com$/sun$/star$/beans$/%.java : $(PRJ)$/source$/bean$/com$/sun$/star$/beans$/%.java 
 #	-$(MKDIRHIER) $(@:d)        
