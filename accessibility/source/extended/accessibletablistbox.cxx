@@ -92,7 +92,7 @@ namespace accessibility
         throw ( IndexOutOfBoundsException, RuntimeException, std::exception )
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( getOslMutex() );
+        ::osl::MutexGuard aGuard( getMutex() );
         ensureIsAlive();
 
         if ( nChildIndex < 0 || nChildIndex > 1 )
