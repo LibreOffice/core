@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a71b18c_4f9e8757",
+        "filename": "sc/source/ui/view/tabview5.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 656,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-12-12T13:44:05Z",
+      "side": 1,
+      "message": "Nitpick: I much prefer the statement on the next line after the condition, so\n\n if (!pCaption)\n     return;",
+      "range": {
+        "startLine": 656,
+        "startChar": 4,
+        "endLine": 656,
+        "endChar": 26
+      },
+      "revId": "8250ff8d738f4587149b5a6c2e9fefa9ca28ff44",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a71b18c_6fa3439f",
+        "filename": "sc/source/ui/view/tabview5.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 663,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-12-12T13:44:05Z",
+      "side": 1,
+      "message": "This doesn\u0027t need to be a static variable held constantly in memory.\n\nBtw, why enlarge the rectangle on each side? If there is a reason then please document it, and also the value chosen (i.e. why 200)",
+      "range": {
+        "startLine": 663,
+        "startChar": 4,
+        "endLine": 663,
+        "endChar": 10
+      },
+      "revId": "8250ff8d738f4587149b5a6c2e9fefa9ca28ff44",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
