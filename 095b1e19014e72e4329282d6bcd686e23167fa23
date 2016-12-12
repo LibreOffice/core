@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a71b18c_2f3b0bed",
+        "filename": "sw/qa/extras/odfimport/odfimport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 770,
+      "author": {
+        "id": 1001210
+      },
+      "writtenOn": "2016-12-12T19:39:27Z",
+      "side": 1,
+      "message": "Great patch. Could we split these conditions into two asserts so that it will be easy to debug?",
+      "range": {
+        "startLine": 770,
+        "startChar": 0,
+        "endLine": 770,
+        "endChar": 58
+      },
+      "revId": "095b1e19014e72e4329282d6bcd686e23167fa23",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
