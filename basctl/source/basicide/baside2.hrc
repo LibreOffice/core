@@ -33,12 +33,6 @@
 // RID_POPUP_TABBAR
 #define RID_INSERT              1
 
-// ModulWindowLayout
-#define IMGID_BRKENABLED        ( SID_BASICIDE_IMAGESTART + 20 )
-#define IMGID_BRKDISABLED       ( SID_BASICIDE_IMAGESTART + 21 )
-#define IMGID_STEPMARKER        ( SID_BASICIDE_IMAGESTART + 22 )
-#define IMGID_ERRORMARKER       ( SID_BASICIDE_IMAGESTART + 23 )
-
 #endif // BASCTL_BASIDE2_HRC
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

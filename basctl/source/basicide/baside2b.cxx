@@ -76,8 +76,7 @@ SbxVariable* IsSbxVariable (SbxBase* pBase)
 
 Image GetImage (unsigned nId)
 {
-    static ImageList const aImagesNormal(IDEResId(RID_IMGLST_LAYOUT));
-    return aImagesNormal.GetImage(nId);
+    return Image(BitmapEx(IDEResId(nId)));
 }
 
 int const nScrollLine = 12;
@@ -1352,8 +1351,8 @@ void BreakPointWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle
 
     Image const aBrk[2] =
     {
-        GetImage(IMGID_BRKDISABLED),
-        GetImage(IMGID_BRKENABLED)
+        GetImage(RID_BMP_BRKDISABLED),
+        GetImage(RID_BMP_BRKENABLED)
     };
 
     Size const aBmpSz = rRenderContext.PixelToLogic(aBrk[1].GetSizePixel());
@@ -1379,7 +1378,7 @@ void BreakPointWindow::ShowMarker(vcl::RenderContext& rRenderContext)
     Size const aOutSz = GetOutputSize();
     long const nLineHeight = GetTextHeight();
 
-    Image aMarker = GetImage(bErrorMarker ? IMGID_ERRORMARKER : IMGID_STEPMARKER);
+    Image aMarker = GetImage(bErrorMarker ? RID_BMP_ERRORMARKER : RID_BMP_STEPMARKER);
 
     Size aMarkerSz(aMarker.GetSizePixel());
     aMarkerSz = rRenderContext.PixelToLogic(aMarkerSz);

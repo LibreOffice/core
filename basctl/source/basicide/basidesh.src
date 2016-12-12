@@ -422,17 +422,26 @@ Menu RID_POPUP_TABBAR
     };
 };
 
-ImageList RID_IMGLST_LAYOUT
+Bitmap RID_BMP_BRKENABLED
 {
-    Prefix = "im";
-    IdList =
-    {
-        IMGID_BRKENABLED ;
-        IMGID_BRKDISABLED ;
-        IMGID_STEPMARKER ;
-        IMGID_ERRORMARKER ;
-    };
+    File = "im30820.png";
 };
+
+Bitmap RID_BMP_BRKDISABLED
+{
+    File = "im30821.png";
+};
+
+Bitmap RID_BMP_STEPMARKER
+{
+    File = "im30822.png";
+};
+
+Bitmap RID_BMP_ERRORMARKER
+{
+    File = "im30823.png";
+};
+
 Image RID_IMG_LOCKED
 {
     ImageBitmap = Bitmap { File = "lock.png" ; };
