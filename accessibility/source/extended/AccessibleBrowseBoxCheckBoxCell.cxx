@@ -68,7 +68,7 @@ namespace accessibility
 
     Any SAL_CALL AccessibleCheckBoxCell::getCurrentValue(  ) throw (RuntimeException, std::exception)
     {
-        ::osl::MutexGuard aGuard( getOslMutex() );
+        ::osl::MutexGuard aGuard( getMutex() );
 
         sal_Int32 nValue = 0;
         switch( m_eState )
@@ -93,7 +93,7 @@ namespace accessibility
 
     Any SAL_CALL AccessibleCheckBoxCell::getMaximumValue(  ) throw (RuntimeException, std::exception)
     {
-        ::osl::MutexGuard aGuard( getOslMutex() );
+        ::osl::MutexGuard aGuard( getMutex() );
 
         Any aValue;
 
@@ -132,7 +132,7 @@ namespace accessibility
     sal_Int32 SAL_CALL AccessibleCheckBoxCell::getAccessibleIndexInParent()
             throw ( css::uno::RuntimeException, std::exception )
     {
-        ::osl::MutexGuard aGuard( getOslMutex() );
+        ::osl::MutexGuard aGuard( getMutex() );
 
         return ( getRowPos() * mpBrowseBox->GetColumnCount() ) + getColumnPos();
     }

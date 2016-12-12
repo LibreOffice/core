@@ -50,7 +50,7 @@ AccessibleBrowseBoxHeaderCell::AccessibleBrowseBoxHeaderCell(sal_Int32 _nColumnR
 */
 ::utl::AccessibleStateSetHelper* AccessibleBrowseBoxHeaderCell::implCreateStateSetHelper()
 {
-    ::osl::MutexGuard aGuard( getOslMutex() );
+    ::osl::MutexGuard aGuard( getMutex() );
     ::utl::AccessibleStateSetHelper*
         pStateSetHelper = new ::utl::AccessibleStateSetHelper;
 
@@ -102,7 +102,7 @@ void SAL_CALL AccessibleBrowseBoxHeaderCell::grabFocus()
     throw ( css::uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard aGuard( getOslMutex() );
+    ::osl::MutexGuard aGuard( getMutex() );
     ensureIsAlive();
     if ( isRowBarCell() )
         mpBrowseBox->SelectRow(m_nColumnRowId);
@@ -150,7 +150,7 @@ Rectangle AccessibleBrowseBoxHeaderCell::implGetBoundingBoxOnScreen()
 sal_Int32 SAL_CALL AccessibleBrowseBoxHeaderCell::getAccessibleIndexInParent()
     throw ( RuntimeException, std::exception )
 {
-    ::osl::MutexGuard aGuard( getOslMutex() );
+    ::osl::MutexGuard aGuard( getMutex() );
     ensureIsAlive();
     sal_Int32 nIndex = m_nColumnRowId;
     if ( mpBrowseBox->HasRowHeader() )
