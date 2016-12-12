@@ -68,14 +68,12 @@ ScVbaOLEObject::setEnabled( sal_Bool _enabled ) throw (uno::RuntimeException, st
 sal_Bool SAL_CALL
 ScVbaOLEObject::getVisible() throw (uno::RuntimeException, std::exception)
 {
-    OSL_TRACE("OleObject %s returning visible %s", OUStringToOString( m_xControl->getName(), RTL_TEXTENCODING_UTF8 ).getStr(), m_xControl->getVisible() ? "true" : "false" );
     return m_xControl->getVisible();
 }
 
 void SAL_CALL
 ScVbaOLEObject::setVisible( sal_Bool _visible ) throw (uno::RuntimeException, std::exception)
 {
-    OSL_TRACE("OleObject %s set visible %s", OUStringToOString( m_xControl->getName(), RTL_TEXTENCODING_UTF8 ).getStr(), _visible ? "true" : "false" );
     m_xControl->setVisible( _visible );
 }
 

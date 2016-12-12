@@ -153,7 +153,7 @@ ColorData XclDefaultPalette::GetDefColorData( sal_uInt16 nXclIndex ) const
         case EXC_COLOR_NOTETEXT:        nColor = mnNoteText;    break;
         case EXC_COLOR_FONTAUTO:        nColor = COL_AUTO;      break;
         default:
-            OSL_TRACE( "XclDefaultPalette::GetDefColorData - unknown default color index: %d", nXclIndex );
+            SAL_WARN("sc",  "XclDefaultPalette::GetDefColorData - unknown default color index: " << nXclIndex );
             nColor = COL_AUTO;
     }
     return nColor;
@@ -1488,7 +1488,7 @@ void XclNumFmtBuffer::InsertBuiltinFormats()
     // language not supported
     if( aBuiltInVec.empty() )
     {
-        OSL_TRACE( "XclNumFmtBuffer::InsertBuiltinFormats - language 0x%04hX not supported (#i29949#)", meSysLang );
+        SAL_WARN("sc",  "XclNumFmtBuffer::InsertBuiltinFormats - language not supported (#i29949#) 0x" << std::hex << meSysLang );
         XclBuiltInMap::const_iterator aMIt = aBuiltInMap.find( LANGUAGE_DONTKNOW );
         OSL_ENSURE( aMIt != aBuiltInMap.end(), "XclNumFmtBuffer::InsertBuiltinFormats - default map not found" );
         if( aMIt != aBuiltInMap.end() )

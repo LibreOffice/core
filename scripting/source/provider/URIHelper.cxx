@@ -152,13 +152,13 @@ ScriptingFrameworkURIHelper::initBaseURI()
         OUString child = children[i];
         sal_Int32 idx = child.lastIndexOf(test);
 
-        // OSL_TRACE("Trying: %s", PRTSTR(child));
-        // OSL_TRACE("idx=%d, testlen=%d, children=%d",
+        // SAL_WARNx("scripting", "Trying: %s", PRTSTR(child));
+        // SAL_WARNx("scripting", "idx=%d, testlen=%d, children=%d",
         //     idx, test.getLength(), child.getLength());
 
         if ( idx != -1 && (idx + test.getLength()) == child.getLength() )
         {
-            // OSL_TRACE("FOUND PATH: %s", PRTSTR(child));
+            // SAL_WARNx("scripting", "FOUND PATH: %s", PRTSTR(child));
             if ( bAppendScriptsPart )
             {
                 m_sBaseURI = child.concat( SCRIPTS_PART );

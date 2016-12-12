@@ -777,12 +777,12 @@ OString ScModelObj::getTextSelection(const char* pMimeType, OString& rUsedMimeTy
     }
     catch (const datatransfer::UnsupportedFlavorException& e)
     {
-        OSL_TRACE("Caught UnsupportedFlavorException '%s'", OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
+        SAL_WARN("sc", "Caught UnsupportedFlavorException " << e.Message);
         return OString();
     }
     catch (const css::uno::Exception& e)
     {
-        OSL_TRACE("Caught UNO Exception '%s'", OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
+        SAL_WARN("sc", "Caught UNO Exception " << e.Message);
         return OString();
     }
 

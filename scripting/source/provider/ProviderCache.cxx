@@ -125,7 +125,7 @@ ProviderCache::getAllProviders() throw ( RuntimeException )
     }
     else
     {
-        OSL_TRACE("no available providers, something very wrong!!!");
+        SAL_WARN("scripting", "no available providers, something very wrong!!!");
     }
     return providers;
 }

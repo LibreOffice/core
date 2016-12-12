@@ -168,11 +168,10 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
                         }
                         catch(RuntimeException & e)
                         {
-                            OSL_TRACE(
+                            SAL_WARN("scripting",
                                 "ScriptProtocolHandler::dispatchWithNotification: caught RuntimeException"
-                                "while dispatchFinished with failture of the execution %s",
-                                ::rtl::OUStringToOString( e.Message,
-                                RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+                                "while dispatchFinished with failture of the execution "
+                                << e.Message );
                         }
                     }
                     return;
@@ -301,11 +300,9 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
         }
         catch(const RuntimeException & e)
         {
-            OSL_TRACE(
-            "ScriptProtocolHandler::dispatchWithNotification: caught RuntimeException"
-            "while dispatchFinished %s",
-            OUStringToOString( e.Message,
-            RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+            SAL_WARN("scripting",
+                "ScriptProtocolHandler::dispatchWithNotification: caught RuntimeException"
+                "while dispatchFinished " << e.Message );
         }
     }
 }

@@ -245,7 +245,7 @@ EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape
             }
             catch(const Exception&)
             {
-                OSL_TRACE("XclEscherEx::StartShape, this control can't get the property ControlTypeinMSO!");
+                SAL_WARN("sc", "XclEscherEx::StartShape, this control can't get the property ControlTypeinMSO!");
             }
             if( nMsCtlType == 2 )  //OCX Form Control
                 pCurrXclObj = CreateOCXCtrlObj( rxShape, pChildAnchor ).release();
@@ -326,7 +326,7 @@ EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape
             }
             catch(const Exception&)
             {
-                OSL_TRACE("XclEscherEx::StartShape, this control can't get the property ObjIDinMSO!");
+                SAL_WARN("sc", "XclEscherEx::StartShape, this control can't get the property ObjIDinMSO!");
             }
             sal_uInt16 nObjIDinMSO = 0xFFFF;
             aAny >>= nObjIDinMSO;
