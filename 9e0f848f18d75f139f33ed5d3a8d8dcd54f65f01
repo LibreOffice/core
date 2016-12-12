@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a71b18c_6f95033f",
+        "filename": "sc/source/ui/view/tabvwshf.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 600,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-12-12T12:43:48Z",
+      "side": 1,
+      "message": "pDPs can be nullptr here if pDoc-\u003eHasPivotTable() was false, so that needs to be checked before dereferenced. Best executed all related new code only if pDPs!\u003dnullptr.",
+      "range": {
+        "startLine": 600,
+        "startChar": 32,
+        "endLine": 600,
+        "endChar": 36
+      },
+      "revId": "9e0f848f18d75f139f33ed5d3a8d8dcd54f65f01",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a71b18c_2fab0b8b",
+        "filename": "sc/source/ui/view/tabvwshf.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 604,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-12-12T12:43:48Z",
+      "side": 1,
+      "message": "I think this should not only check the start tab but the entire range in case it is a 3D reference encompassing several sheets. So\n\n const ScRange\u0026 rRange \u003d (*pDPs)[i].GetOutRange();\n if (rRange.aStart.Tab() \u003c\u003d nTabNr \u0026\u0026 nTabNr \u003c\u003d rRange.aEnd.Tab())",
+      "range": {
+        "startLine": 603,
+        "startChar": 0,
+        "endLine": 604,
+        "endChar": 70
+      },
+      "revId": "9e0f848f18d75f139f33ed5d3a8d8dcd54f65f01",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a71b18c_4fb047f5",
+        "filename": "sc/source/ui/view/tabvwshf.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 614,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-12-12T12:43:48Z",
+      "side": 1,
+      "message": "Setting WB_DEF_NO here sets it for both dialogs, even the simple \"Do you really want to delete the selected sheet(s)\" if there is no pivot data involved. Is there agreement to do so? For me it would make the work flow of deleting a sheet more cumbersome; if I select a sheet tab and invoke Delete from the context menu I usually know what I do and just have to hit Enter instead of now having to select a different button first.\n\nI\u0027d rather prefer to have two different default cases.",
+      "range": {
+        "startLine": 614,
+        "startChar": 61,
+        "endLine": 614,
+        "endChar": 70
+      },
+      "revId": "9e0f848f18d75f139f33ed5d3a8d8dcd54f65f01",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
