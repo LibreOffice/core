@@ -2684,6 +2684,8 @@ void ChartView::render()
             pShapeFactory->postRender(pWindow);
         }
     }
+#else
+    (void) this;
 #endif
 }
 
