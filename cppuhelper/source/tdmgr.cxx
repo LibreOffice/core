@@ -592,18 +592,12 @@ static void SAL_CALL typelib_callback(
             catch (container::NoSuchElementException & exc)
             {
                 (void) exc; // avoid warning about unused variable
-                OSL_TRACE(
-                    "typelibrary type not available: %s",
-                    OUStringToOString(
-                        exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
+                SAL_WARN("cppuhelper", "typelibrary type not available: " << exc.Message );
             }
             catch (Exception & exc)
             {
                 (void) exc; // avoid warning about unused variable
-                OSL_TRACE(
-                    "%s",
-                    OUStringToOString(
-                        exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
+                SAL_WARN("cppuhelper", exc.Message );
             }
         }
     }

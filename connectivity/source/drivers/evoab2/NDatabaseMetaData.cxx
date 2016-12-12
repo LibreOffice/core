@@ -306,7 +306,6 @@ ODatabaseMetaDataResultSet::ORows& OEvoabDatabaseMetaData::getColumnRows( const 
             aRow[5] = new ORowSetValueDecorator( static_cast<sal_Int16>( getFieldType( i ) ) );
             aRow[6] = new ORowSetValueDecorator( getFieldTypeName( i ) );
 
-            OSL_TRACE( "ColumnName = '%s'", g_param_spec_get_name( pFields[i]->pField ) );
             // COLUMN_NAME
             aRow[4] = new ORowSetValueDecorator( getFieldName( i ) );
             // ORDINAL_POSITION

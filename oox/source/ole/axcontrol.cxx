@@ -2598,8 +2598,7 @@ HtmlTextBoxModel::importBinaryModel( BinaryInputStream& rInStrm )
     OUString sStringContents = rInStrm.readUnicodeArray( rInStrm.size() );
     // in msocximex ( where this is ported from, it appears *nothing* is read
     // from the control stream ), surely there is some useful info there ?
-    SAL_WARNx("oox", "HtmlTextBoxModel::importBinaryModel - string contents of stream :");
-    SAL_WARNx("oox", "%s", OUStringToOString( sStringContents, RTL_TEXTENCODING_UTF8 ).getStr() );
+    SAL_WARN("oox", "HtmlTextBoxModel::importBinaryModel - string contents of stream: " << sStringContents );
 #else
     (void) rInStrm;
 #endif

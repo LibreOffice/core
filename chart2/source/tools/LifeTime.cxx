@@ -118,7 +118,7 @@ bool LifeTimeManager::dispose()
 
         if( m_bDisposed || m_bInDispose )
         {
-            OSL_TRACE( "This component is already disposed " );
+            SAL_WARN("chart2",  "This component is already disposed " );
             return false; //behave passive if already disposed
         }
 

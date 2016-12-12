@@ -73,10 +73,6 @@ public:
             throw css::io::IOException();
 
 
-#if OSL_DEBUG_LEVEL > 1
-        OString sFile = OUStringToOString(iniUrl, RTL_TEXTENCODING_ASCII_US);
-        OSL_TRACE(__FILE__" -- parser() - %s\n", sFile.getStr());
-#endif
         oslFileHandle handle=NULL;
         if (iniUrl.getLength() &&
             osl_File_E_None == osl_openFile(iniUrl.pData, &handle, osl_File_OpenFlag_Read))
@@ -128,8 +124,7 @@ public:
 #if OSL_DEBUG_LEVEL > 1
         else
         {
-            OString file_tmp = OUStringToOString(iniUrl, RTL_TEXTENCODING_ASCII_US);
-            OSL_TRACE( __FILE__" -- couldn't open file: %s", file_tmp.getStr() );
+            SAL_WARN("connectivity", "couldn't open file: " << iniUrl );
             throw css::io::IOException();
         }
 #endif
@@ -142,19 +137,13 @@ public:
         for(;iBegin != iEnd;iBegin++)
         {
             ini_Section *aSection = &(*iBegin).second;
-            OString sec_name_tmp = OUStringToOString(aSection->sName, RTL_TEXTENCODING_ASCII_US);
             for(NameValueList::iterator itor=aSection->lList.begin();
                 itor != aSection->lList.end();
                 itor++)
             {
                     struct ini_NameValue * aValue = &(*itor);
-                    OString name_tmp = OUStringToOString(aValue->sName, RTL_TEXTENCODING_ASCII_US);
-                    OString value_tmp = OUStringToOString(aValue->sValue, RTL_TEXTENCODING_UTF8);
-                    OSL_TRACE(
-                        " section=%s name=%s value=%s\n",
-                                        sec_name_tmp.getStr(),
-                                        name_tmp.getStr(),
-                                        value_tmp.getStr() );
+                    SAL_WARN("connectivity",
+                        " section=" << aSection->sName << " name=" << aValue->sName << " value=" << aValue->sValue );
 
             }
         }

@@ -397,8 +397,6 @@ Reference< XResultSet > SAL_CALL KabCommonStatement::executeQuery(
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabCommonStatement_BASE::rBHelper.bDisposed);
 
-OSL_TRACE("KDE Address book - SQL Request: %s", OUtoCStr(sql));
-
     KabResultSet* pResult = new KabResultSet(this);
     Reference< XResultSet > xRS = pResult;
     OUString aErr;

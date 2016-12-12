@@ -140,21 +140,17 @@ bool LdapUserProfileBe::readLdapConfiguration(
     }
     catch (const uno::Exception & e)
     {
-        OSL_TRACE("LdapUserProfileBackend: access to configuration data failed: %s",
-                OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
+        SAL_WARN("extensions.config", "LdapUserProfileBackend: access to configuration data failed: " << e.Message);
         return false;
     }
 
     osl::Security aSecurityContext;
     if (!aSecurityContext.getUserName(*loggedOnUser))
-        OSL_TRACE("LdapUserProfileBackend - could not get Logged on user from system");
+        SAL_WARN("extensions.config", "LdapUserProfileBackend - could not get Logged on user from system");
 
     sal_Int32 nIndex = loggedOnUser->indexOf('/');
     if (nIndex > 0)
         *loggedOnUser = loggedOnUser->copy(nIndex+1);
-
-    //Remember to remove
-    OSL_TRACE("Logged on user is %s", OUStringToOString(*loggedOnUser,RTL_TEXTENCODING_ASCII_US).getStr());
 
     return true;
 }

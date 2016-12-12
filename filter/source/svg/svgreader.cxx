@@ -473,14 +473,6 @@ struct AnnotatingVisitor
 
                     maCurrState.maCTM = maCurrState.maCTM*maCurrState.maTransform*aLocalTransform;
 
-                    OSL_TRACE("annotateStyle - CTM is: %f %f %f %f %f %f",
-                              maCurrState.maCTM.get(0,0),
-                              maCurrState.maCTM.get(0,1),
-                              maCurrState.maCTM.get(0,2),
-                              maCurrState.maCTM.get(1,0),
-                              maCurrState.maCTM.get(1,1),
-                              maCurrState.maCTM.get(1,2));
-
                     // if necessary, serialize to automatic-style section
                     writeStyle(xElem,nTagId);
                 }
@@ -1869,14 +1861,6 @@ struct ShapeWritingVisitor
 
         xAttrs->Clear();
 
-        OSL_TRACE("writePath - the CTM is: %f %f %f %f %f %f",
-                  maCurrState.maCTM.get(0,0),
-                  maCurrState.maCTM.get(0,1),
-                  maCurrState.maCTM.get(0,2),
-                  maCurrState.maCTM.get(1,0),
-                  maCurrState.maCTM.get(1,1),
-                  maCurrState.maCTM.get(1,2));
-
         // TODO(F2): separate out shear, rotate etc.
         // apply transformation to polygon, to keep draw
         // import in 100th mm
@@ -2087,29 +2071,17 @@ struct DumpingVisitor
 {
     void operator()( const uno::Reference<xml::dom::XElement>& xElem )
     {
-        OSL_TRACE("name: %s",
-                  OUStringToOString(
-                      xElem->getTagName(),
-                      RTL_TEXTENCODING_UTF8 ).getStr());
+        SAL_WARN("filter", "name: " << xElem->getTagName());
     }
 
     void operator()( const uno::Reference<xml::dom::XElement>&      xElem,
                      const uno::Reference<xml::dom::XNamedNodeMap>& xAttributes )
     {
-        OSL_TRACE("name: %s",
-                  OUStringToOString(
-                      xElem->getTagName(),
-                      RTL_TEXTENCODING_UTF8 ).getStr());
+        SAL_WARN("filter", "name: " << xElem->getTagName());
         const sal_Int32 nNumAttrs( xAttributes->getLength() );
         for( sal_Int32 i=0; i<nNumAttrs; ++i )
         {
-            OSL_TRACE(" %s=%s",
-                      OUStringToOString(
-                          xAttributes->item(i)->getNodeName(),
-                          RTL_TEXTENCODING_UTF8 ).getStr(),
-                      OUStringToOString(
-                          xAttributes->item(i)->getNodeValue(),
-                          RTL_TEXTENCODING_UTF8 ).getStr());
+            SAL_WARN("filter", xAttributes->item(i)->getNodeName() << "=" << xAttributes->item(i)->getNodeValue());
         }
     }
 

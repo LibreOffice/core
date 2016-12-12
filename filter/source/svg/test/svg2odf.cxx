@@ -68,7 +68,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 {
     if( argc != 4 )
     {
-        OSL_TRACE( "Invocation: svg2odf <base_url> <dst_url> <ini_file>. Exiting" );
+        SAL_WARN("filter.svg", "Invocation: svg2odf <base_url> <dst_url> <ini_file>. Exiting" );
         return 1;
     }
 
@@ -98,7 +98,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         xFactory.set(xCtx->getServiceManager(), uno::UNO_QUERY);
         if (!xFactory.is())
         {
-            OSL_TRACE( "Could not bootstrap UNO, installation must be in disorder. Exiting." );
+            SAL_WARN("filter.svg", "Could not bootstrap UNO, installation must be in disorder. Exiting." );
             return 1;
         }
 
@@ -107,7 +107,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         osl::File aInputFile(aSrcURL);
         if( osl::FileBase::E_None!=aInputFile.open(osl_File_OpenFlag_Read) )
         {
-            OSL_TRACE( "Cannot open input file" );
+            SAL_WARN("filter.svg", "Cannot open input file" );
             return 1;
         }
 

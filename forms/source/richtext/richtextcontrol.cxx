@@ -541,31 +541,18 @@ namespace frm
 
                 if ( bNeedParametrizedDispatcher )
                 {
-                #if OSL_DEBUG_LEVEL > 0
-                    OString sTrace( "ORichTextPeer::implCreateDispatcher: creating *parametrized* dispatcher for " );
-                    sTrace += OString( _rURL.Complete.getStr(), _rURL.Complete.getLength(), RTL_TEXTENCODING_ASCII_US );
-                    OSL_TRACE( "%s", sTrace.getStr() );
-                #endif
                     pAttributeDispatcher = new OParametrizedAttributeDispatcher( pRichTextControl->getView(), _nSlotId, _rURL, pRichTextControl );
                 }
                 else
                 {
-                #if OSL_DEBUG_LEVEL > 0
-                    OString sTrace( "ORichTextPeer::implCreateDispatcher: creating *normal* dispatcher for " );
-                    sTrace += OString( _rURL.Complete.getStr(), _rURL.Complete.getLength(), RTL_TEXTENCODING_ASCII_US );
-                    OSL_TRACE( "%s", sTrace.getStr() );
-                #endif
                     pAttributeDispatcher = new OAttributeDispatcher( pRichTextControl->getView(), _nSlotId, _rURL, pRichTextControl );
                 }
             }
-        #if OSL_DEBUG_LEVEL > 0
             else
             {
-                OString sTrace( "ORichTextPeer::implCreateDispatcher: not creating dispatcher (unsupported slot) for " );
-                sTrace += OString( _rURL.Complete.getStr(), _rURL.Complete.getLength(), RTL_TEXTENCODING_ASCII_US );
-                OSL_TRACE( "%s", sTrace.getStr() );
+                SAL_WARN("forms.richtext", "ORichTextPeer::implCreateDispatcher: not creating dispatcher (unsupported slot) for "
+                    << _rURL.Complete);
             }
-        #endif
         }
         break;
         }

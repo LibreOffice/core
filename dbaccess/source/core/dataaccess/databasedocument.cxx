@@ -154,8 +154,6 @@ ODatabaseDocument::ODatabaseDocument(const ::rtl::Reference<ODatabaseModelImpl>&
             ,m_bHasBeenRecovered( false )
             ,m_bEmbedded(false)
 {
-    OSL_TRACE( "DD: ctor: %p: %p", this, m_pImpl.get() );
-
     osl_atomic_increment( &m_refCount );
     {
         impl_reparent_nothrow( m_xForms );
@@ -189,7 +187,6 @@ ODatabaseDocument::ODatabaseDocument(const ::rtl::Reference<ODatabaseModelImpl>&
 
 ODatabaseDocument::~ODatabaseDocument()
 {
-    OSL_TRACE( "DD: dtor: %p: %p", this, m_pImpl.get() );
     if ( !ODatabaseDocument_OfficeDocument::rBHelper.bInDispose && !ODatabaseDocument_OfficeDocument::rBHelper.bDisposed )
     {
         acquire();
@@ -1790,7 +1787,6 @@ void ODatabaseDocument::impl_notifyStorageChange_nolck_nothrow( const Reference<
 
 void ODatabaseDocument::disposing()
 {
-    OSL_TRACE( "DD: disp: %p: %p", this, m_pImpl.get() );
     if ( !m_pImpl.is() )
     {
         // this means that we're already disposed

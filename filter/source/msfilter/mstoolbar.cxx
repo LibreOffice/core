@@ -60,13 +60,12 @@ void CustomToolBarImportHelper::applyIcons()
         uno::Sequence< uno::Reference< graphic::XGraphic > > images(1);
         images[ 0 ] = it->image;
 
-        OSL_TRACE("About to applyIcons for command %s, have image ? %s", OUStringToOString( commands[ 0 ], RTL_TEXTENCODING_UTF8 ).getStr(), images[ 0 ].is() ? "yes" : "no" );
         uno::Reference< ui::XImageManager > xImageManager( getCfgManager()->getImageManager(), uno::UNO_QUERY_THROW );
         sal_uInt16 nColor = ui::ImageType::COLOR_NORMAL;
 
         vcl::Window* topwin = Application::GetActiveTopWindow();
-    if ( topwin != nullptr && topwin->GetDisplayBackground().GetColor().IsDark() )
-            nColor = css::ui::ImageType::COLOR_HIGHCONTRAST;
+        if ( topwin != nullptr && topwin->GetDisplayBackground().GetColor().IsDark() )
+                nColor = css::ui::ImageType::COLOR_HIGHCONTRAST;
 
         ScaleImage( images[ 0 ], 16 );
         xImageManager->replaceImages( ui::ImageType::SIZE_DEFAULT | nColor,  commands, images );

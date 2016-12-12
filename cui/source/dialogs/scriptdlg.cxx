@@ -182,9 +182,7 @@ void SFTreeListBox::Init( const OUString& language  )
     }
     catch( Exception& e )
     {
-        OSL_TRACE("Exception getting root browse node from factory: %s",
-            OUStringToOString(
-                e.Message , RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+        SAL_WARN("cui.dialogs", "Exception getting root browse node from factory: " << e.Message );
         // TODO exception handling
     }
 
@@ -762,8 +760,7 @@ IMPL_LINK( SvxScriptOrgDialog, ButtonHdl, Button *, pButton, void )
                         }
                         catch( Exception& e )
                         {
-                            OSL_TRACE("Caught exception trying to invoke %s", OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
-
+                            SAL_WARN("cui.dialogs", "Caught exception trying to invoke " << e.Message );
                         }
                     }
                 }
@@ -940,9 +937,7 @@ void SvxScriptOrgDialog::createEntry( SvTreeListEntry* pEntry )
         }
         catch( Exception& e )
         {
-            OSL_TRACE("Caught exception trying to Create %s",
-                OUStringToOString(
-                    e.Message, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+            SAL_WARN("cui.dialogs", "Caught exception trying to Create " << e.Message );
         }
     }
     if ( aChildNode.is() )
@@ -1044,9 +1039,7 @@ void SvxScriptOrgDialog::renameEntry( SvTreeListEntry* pEntry )
         }
         catch( Exception& e )
         {
-            OSL_TRACE("Caught exception trying to Rename %s",
-                OUStringToOString(
-                    e.Message, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+            SAL_WARN("cui.dialogs", "Caught exception trying to Rename " << e.Message );
         }
     }
     if ( aChildNode.is() )
@@ -1092,9 +1085,7 @@ void SvxScriptOrgDialog::deleteEntry( SvTreeListEntry* pEntry )
         }
         catch( Exception& e )
         {
-            OSL_TRACE("Caught exception trying to delete %s",
-                OUStringToOString(
-                    e.Message, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+            SAL_WARN("cui.dialogs", "Caught exception trying to delete " << e.Message );
         }
     }
 

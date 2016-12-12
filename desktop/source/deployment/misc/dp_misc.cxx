@@ -560,7 +560,6 @@ void syncRepositories(
         Reference<task::XRestartManager> restarter(task::OfficeRestartManager::get(comphelper::getProcessComponentContext()));
         if (restarter.is())
         {
-            OSL_TRACE( "Request restart for modified extensions manager" );
             restarter->requestRestart(xCmdEnv.is() ? xCmdEnv->getInteractionHandler() :
                                       Reference<task::XInteractionHandler>());
         }

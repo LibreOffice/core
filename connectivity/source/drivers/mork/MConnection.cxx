@@ -358,7 +358,6 @@ void OConnection::disposing()
 
 Reference< XTablesSupplier > SAL_CALL OConnection::createCatalog()
 {
-    OSL_TRACE("IN OConnection::createCatalog()" );
     ::osl::MutexGuard aGuard( m_aMutex );
     Reference< XTablesSupplier > xTab = m_xCatalog;
     if(!m_xCatalog.is())
@@ -367,7 +366,6 @@ Reference< XTablesSupplier > SAL_CALL OConnection::createCatalog()
         xTab = pCat;
         m_xCatalog = xTab;
     }
-    OSL_TRACE( "\tOUT OConnection::createCatalog()" );
     return xTab;
 }
 

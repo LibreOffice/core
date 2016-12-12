@@ -83,6 +83,7 @@ certain functionality.
 @li @c connectivity.kab
 @li @c connectivity.macab
 @li @c connectivity.mork
+@li @c connectivity.mozab
 @li @c connectivity.odbc
 @li @c connectivity.parse
 @li @c connectivity.postgresql
@@ -190,7 +191,9 @@ certain functionality.
 
 @li @c extensions.abpilot
 @li @c extensions.biblio
+@li @c extensions.config
 @li @c extensions.dbpilots
+@li @c extensions.evoab
 @li @c extensions.olebridge - OLE automation bridge
 @li @c extensions.plugin
 @li @c extensions.propctrlr

@@ -97,8 +97,6 @@
 
 #include "dlgname.hxx"
 
-#define PRTSTR(x) OUStringToOString(x, RTL_TEXTENCODING_ASCII_US).pData->buffer
-
 #define ENTRY_HEIGHT 16
 
 static const char ITEM_DESCRIPTOR_COMMANDURL[]  = "CommandURL";
@@ -136,7 +134,7 @@ void printPropertySet(
     uno::Sequence< beans::Property > aPropDetails =
         xPropSetInfo->getProperties();
 
-    OSL_TRACE("printPropertySet: %d properties", aPropDetails.getLength());
+    SAL_WARN("cui", "printPropertySet: " << aPropDetails.getLength() << " properties" );
 
     for ( sal_Int32 i = 0; i < aPropDetails.getLength(); ++i )
     {
@@ -147,18 +145,15 @@ void printPropertySet(
 
         if ( a >>= tmp )
         {
-            OSL_TRACE("%s: Got property: %s = %s",
-                PRTSTR(prefix), PRTSTR(aPropDetails[i].Name), PRTSTR(tmp));
+            SAL_WARN("cui", prefix << ": Got property: " << aPropDetails[i].Name << tmp);
         }
         else if ( ( a >>= ival ) )
         {
-            OSL_TRACE("%s: Got property: %s = %d",
-                PRTSTR(prefix), PRTSTR(aPropDetails[i].Name), ival);
+            SAL_WARN("cui", prefix << ": Got property: " << aPropDetails[i].Name << " = " << ival);
         }
         else
         {
-            OSL_TRACE("%s: Got property: %s of type %s",
-                PRTSTR(prefix), PRTSTR(aPropDetails[i].Name), PRTSTR(a.getValueTypeName()));
+            SAL_WARN("cui", prefix << ": Got property: " << aPropDetails[i].Name << " of type " << a.getValueTypeName());
         }
     }
 }
@@ -173,8 +168,7 @@ void printProperties(
 
         aProp[i].Value >>= tmp;
 
-        OSL_TRACE("%s: Got property: %s = %s",
-            PRTSTR(prefix), PRTSTR(aProp[i].Name), PRTSTR(tmp));
+        SAL_WARN("cui", prefix << ": Got property: " << aProp[i].Name << " = " << tmp);
     }
 }
 
@@ -186,7 +180,7 @@ void printEntries(SvxEntries* entries)
     {
         SvxConfigEntry* entry = *iter;
 
-        OSL_TRACE("printEntries: %s", PRTSTR(entry->GetName()));
+        SAL_WARN("cui", "printEntries: " << entry->GetName());
     }
 }
 
@@ -405,8 +399,6 @@ void RemoveEntry( SvxEntries* pEntries, SvxConfigEntry* pChildEntry )
 bool
 SvxConfigPage::CanConfig( const OUString& aModuleId )
 {
-    OSL_TRACE("SupportsDocumentConfig: %s", PRTSTR(aModuleId));
-
     if  ( aModuleId == "com.sun.star.script.BasicIDE" || aModuleId == "com.sun.star.frame.Bibliography" )
     {
         return false;
@@ -1197,15 +1189,15 @@ bool MenuSaveInData::Apply()
         }
         catch ( container::NoSuchElementException& )
         {
-            OSL_TRACE("caught container::NoSuchElementException saving settings");
+            SAL_WARN("cui.customize", "caught container::NoSuchElementException saving settings");
         }
         catch ( css::io::IOException& )
         {
-            OSL_TRACE("caught IOException saving settings");
+            SAL_WARN("cui.customize", "caught IOException saving settings");
         }
         catch ( css::uno::Exception& )
         {
-            OSL_TRACE("caught some other exception saving settings");
+            SAL_WARN("cui.customize", "caught some other exception saving settings");
         }
 
         SetModified( false );
@@ -3482,7 +3474,7 @@ IMPL_LINK( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton, void )
             }
             catch ( uno::Exception& )
             {
-                OSL_TRACE("Error restoring image");
+                SAL_WARN("cui.customize", "Error restoring image");
             }
             break;
         }
@@ -3557,7 +3549,7 @@ IMPL_LINK( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton, void )
                     }
                     catch ( uno::Exception& )
                     {
-                        OSL_TRACE("Error replacing image");
+                        SAL_WARN("cui.customize", "Error replacing image");
                     }
                 }
             }
@@ -3617,7 +3609,7 @@ IMPL_LINK( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton, void )
             }
             catch ( uno::Exception& )
             {
-                OSL_TRACE("Error resetting image");
+                SAL_WARN("cui.customize", "Error resetting image");
             }
             break;
         }
@@ -3784,7 +3776,7 @@ void ToolbarSaveInData::SetSystemStyle(
         catch ( uno::Exception& )
         {
             // do nothing, a default value is returned
-            OSL_TRACE("Exception setting toolbar style");
+            SAL_WARN("cui.customize", "Exception setting toolbar style");
         }
     }
 }
@@ -4140,7 +4132,7 @@ void ToolbarSaveInData::Reset()
     }
     catch ( uno::Exception& )
     {
-        OSL_TRACE("Error resetting all icons when resetting toolbars");
+        SAL_WARN("cui.customize", "Error resetting all icons when resetting toolbars");
     }
 }
 
@@ -4239,15 +4231,15 @@ void ToolbarSaveInData::ApplyToolbar( SvxConfigEntry* pToolbar )
     }
     catch ( container::NoSuchElementException& )
     {
-        OSL_TRACE("caught container::NoSuchElementException saving settings");
+        SAL_WARN("cui.customize", "caught container::NoSuchElementException saving settings");
     }
     catch ( css::io::IOException& )
     {
-        OSL_TRACE("caught IOException saving settings");
+        SAL_WARN("cui.customize", "caught IOException saving settings");
     }
     catch ( css::uno::Exception& )
     {
-        OSL_TRACE("caught some other exception saving settings");
+        SAL_WARN("cui.customize", "caught some other exception saving settings");
     }
 
     PersistChanges( GetConfigManager() );
@@ -4275,19 +4267,19 @@ void ToolbarSaveInData::CreateToolbar( SvxConfigEntry* pToolbar )
     }
     catch ( container::ElementExistException& )
     {
-        OSL_TRACE("caught ElementExistsException saving settings");
+        SAL_WARN("cui.customize", "caught ElementExistsException saving settings");
     }
     catch ( css::lang::IllegalArgumentException& )
     {
-        OSL_TRACE("caught IOException saving settings");
+        SAL_WARN("cui.customize", "caught IOException saving settings");
     }
     catch ( css::lang::IllegalAccessException& )
     {
-        OSL_TRACE("caught IOException saving settings");
+        SAL_WARN("cui.customize", "caught IOException saving settings");
     }
     catch ( css::uno::Exception& )
     {
-        OSL_TRACE("caught some other exception saving settings");
+        SAL_WARN("cui.customize", "caught some other exception saving settings");
     }
 
     GetEntries()->push_back( pToolbar );
@@ -4369,10 +4361,10 @@ void ToolbarSaveInData::RestoreToolbar( SvxConfigEntry* pToolbar )
             {
                 GetImageManager()->removeImages( GetImageType(), aURLSeq );
             }
-               catch ( uno::Exception& )
-               {
-                OSL_TRACE("Error restoring icon when resetting toolbar");
-               }
+            catch ( uno::Exception& )
+            {
+                SAL_WARN("cui.customize", "Error restoring icon when resetting toolbar");
+            }
         }
         PersistChanges( GetImageManager() );
     }
@@ -5574,17 +5566,17 @@ bool SvxIconSelectorDialog::ImportGraphic( const OUString& aURL )
                 }
                 else
                 {
-                    OSL_TRACE("could not create Image from XGraphic");
+                    SAL_WARN("cui.customize", "could not create Image from XGraphic");
                 }
             }
             else
             {
-                OSL_TRACE("could not get query XGraphic");
+                SAL_WARN("cui.customize", "could not get query XGraphic");
             }
     }
     catch( uno::Exception& e )
     {
-        OSL_TRACE("Caught exception importing XGraphic: %s", PRTSTR(e.Message));
+        SAL_WARN("cui.customize", "Caught exception importing XGraphic: " << e.Message);
     }
     return result;
 }

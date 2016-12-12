@@ -141,8 +141,7 @@ void SAL_CALL InitUpdateCheckJobThread::run()
             aController->showDialog( true );
     } catch (const uno::Exception &e) {
         // fdo#64962 - don't bring the app down on some unexpected exception.
-        OSL_TRACE( "Caught init update exception: %s\n thread terminated.\n",
-            OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr() );
+        SAL_WARN("extensions.update", "Caught init update exception, thread terminated. " << e.Message );
     }
 }
 
@@ -246,8 +245,7 @@ void UpdateCheckJob::handleExtensionUpdates( const uno::Sequence< beans::NamedVa
     }
     catch( const uno::Exception& e )
     {
-         OSL_TRACE( "Caught exception: %s\n thread terminated.\n",
-            OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
+         SAL_WARN("extensions.update", "Caught exception, thread terminated. " << e.Message);
     }
 }
 

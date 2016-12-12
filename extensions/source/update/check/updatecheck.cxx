@@ -537,8 +537,7 @@ UpdateCheckThread::run()
 
     catch(const uno::Exception& e) {
         // Silently catch all errors
-        OSL_TRACE( "Caught exception: %s\n thread terminated.\n",
-            OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr() );
+        SAL_WARN("extensions.update", "Caught exception, thread terminated. " << e.Message );
     }
 }
 
@@ -553,8 +552,7 @@ ManualUpdateCheckThread::run()
     }
     catch(const uno::Exception& e) {
         // Silently catch all errors
-        OSL_TRACE( "Caught exception: %s\n thread terminated.\n",
-            OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr() );
+        SAL_WARN("extensions.update", "Caught exception, thread terminated. " << e.Message );
     }
 }
 

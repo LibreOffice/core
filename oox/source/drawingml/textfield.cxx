@@ -69,7 +69,6 @@ void lclCreateTextFields( std::list< Reference< XTextField > > & aFields,
             bool bIsDate = true;
             int idx = p.toInt32();
             sal_uInt16 nNumFmt;
-//              SAL_WARNx("oox",  "OOX: p = %s, %d", p.pData->buffer, idx );
             xIface = xFactory->createInstance( "com.sun.star.text.TextField.DateTime" );
             aFields.push_back( Reference< XTextField > ( xIface, UNO_QUERY ) );
             Reference< XPropertySet > xProps( xIface, UNO_QUERY_THROW );

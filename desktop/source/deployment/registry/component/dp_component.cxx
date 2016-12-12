@@ -1202,9 +1202,7 @@ void BackendImpl::ComponentPackageImpl::componentLiveInsertion(
         try {
             set->insert(css::uno::Any(*factory++));
         } catch (const container::ElementExistException &) {
-            OSL_TRACE(
-                "implementation %s already registered",
-                OUStringToOString(*i, RTL_TEXTENCODING_UTF8).getStr());
+            SAL_WARN("desktop", "implementation already registered " << *i);
         }
     }
     if (!data.singletons.empty()) {
@@ -1226,10 +1224,7 @@ void BackendImpl::ComponentPackageImpl::componentLiveInsertion(
             try {
                 cont->insertByName(name, css::uno::Any());
             } catch (const container::ElementExistException &) {
-                OSL_TRACE(
-                    "singleton %s already registered",
-                    OUStringToOString(
-                        i->first, RTL_TEXTENCODING_UTF8).getStr());
+                SAL_WARN("desktop", "singleton already registered " << i->first);
                 cont->replaceByName(name, css::uno::Any());
             }
         }
