@@ -276,12 +276,12 @@ void OFileAccess::transferImpl( const OUString& rSource,
 
     try
     {
-        aDestPath.transferContent( aSrc,
-                                   bMoveData
-                                    ? ucbhelper::InsertOperation_MOVE
-                                    : ucbhelper::InsertOperation_COPY,
-                                   aName,
-                                   css::ucb::NameClash::OVERWRITE );
+        (void)aDestPath.transferContent(aSrc,
+                                        bMoveData
+                                         ? ucbhelper::InsertOperation_MOVE
+                                         : ucbhelper::InsertOperation_COPY,
+                                        aName,
+                                        css::ucb::NameClash::OVERWRITE);
     }
     catch ( css::ucb::CommandFailedException const & )
     {
