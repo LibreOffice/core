@@ -1836,7 +1836,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
         aRow[4] = new ORowSetValueDecorator(xRow->getString(2)); // 4. GRANTOR
         aRow[5] = new ORowSetValueDecorator(xRow->getString(3)); // 5. GRANTEE
         aRow[6] = new ORowSetValueDecorator(xRow->getString(4)); // 6. Privilege
-        aRow[7] = new ORowSetValueDecorator(xRow->getBoolean(5)); // 7. Is Grantable
+        aRow[7] = new ORowSetValueDecorator(bool(xRow->getBoolean(5))); // 7. Is Grantable
 
         aResults.push_back(aRow);
     }

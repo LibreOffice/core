@@ -647,7 +647,9 @@ bool SalBool::VisitFunctionDecl(FunctionDecl const * decl) {
     if (ignoreLocation(decl)) {
         return true;
     }
-    if (isSalBool(compat::getReturnType(*decl).getNonReferenceType())) {
+    if (isSalBool(compat::getReturnType(*decl).getNonReferenceType())
+        && !(decl->isDeletedAsWritten() && isa<CXXConversionDecl>(decl)))
+    {
         FunctionDecl const * f = decl->getCanonicalDecl();
         OverrideKind k = getOverrideKind(f);
         if (k != OverrideKind::YES

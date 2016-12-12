@@ -153,7 +153,7 @@ void OBookmarkSet::updateColumn(sal_Int32 nPos, const Reference< XRowUpdate >& _
                     break;
                 case DataType::BIT:
                 case DataType::BOOLEAN:
-                    _xParameter->updateBoolean(nPos,_rValue);
+                    _xParameter->updateBoolean(nPos,bool(_rValue));
                     break;
                 case DataType::TINYINT:
                     if ( _rValue.isSigned() )
