@@ -537,7 +537,7 @@ void SplashScreen::SetScreenBitmap(BitmapEx &rBitmap)
     if (Application::LoadBrandBitmap (aResBuf.makeStringAndClear().getStr(), rBitmap))
         return;
 
-    Application::LoadBrandBitmap ("intro", rBitmap);
+    (void)Application::LoadBrandBitmap ("intro", rBitmap);
 }
 
 void SplashScreen::determineProgressRatioValues(
