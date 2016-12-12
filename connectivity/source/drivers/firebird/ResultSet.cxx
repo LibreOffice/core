@@ -482,7 +482,7 @@ ORowSetValue OResultSet::retrieveValue(const sal_Int32 nColumnIndex, const ISC_S
                 return getString(nColumnIndex);
             return getLong(nColumnIndex);
         case SQL_BOOLEAN:
-            return getBoolean(nColumnIndex);
+            return ORowSetValue(getBoolean(nColumnIndex));
         case SQL_BLOB:
         case SQL_NULL:
         case SQL_QUAD:
