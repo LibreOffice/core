@@ -56,7 +56,7 @@ sal_Int32 SAL_CALL AccessibleBrowseBoxTableBase::getAccessibleChildCount()
     throw ( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard aGuard( getOslMutex() );
+    ::osl::MutexGuard aGuard( getMutex() );
     ensureIsAlive();
     return implGetChildCount();
 }
@@ -74,7 +74,7 @@ sal_Int32 SAL_CALL AccessibleBrowseBoxTableBase::getAccessibleRowCount()
     throw ( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard aGuard( getOslMutex() );
+    ::osl::MutexGuard aGuard( getMutex() );
     ensureIsAlive();
     return implGetRowCount();
 }
@@ -83,7 +83,7 @@ sal_Int32 SAL_CALL AccessibleBrowseBoxTableBase::getAccessibleColumnCount()
     throw ( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard aGuard( getOslMutex() );
+    ::osl::MutexGuard aGuard( getMutex() );
     ensureIsAlive();
     return implGetColumnCount();
 }
@@ -93,7 +93,7 @@ sal_Int32 SAL_CALL AccessibleBrowseBoxTableBase::getAccessibleRowExtentAt(
     throw ( lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard aGuard( getOslMutex() );
+    ::osl::MutexGuard aGuard( getMutex() );
     ensureIsAlive();
     ensureIsValidAddress( nRow, nColumn );
     return 1;   // merged cells not supported
@@ -104,7 +104,7 @@ sal_Int32 SAL_CALL AccessibleBrowseBoxTableBase::getAccessibleColumnExtentAt(
     throw ( lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard aGuard( getOslMutex() );
+    ::osl::MutexGuard aGuard( getMutex() );
     ensureIsAlive();
     ensureIsValidAddress( nRow, nColumn );
     return 1;   // merged cells not supported
@@ -129,7 +129,7 @@ sal_Int32 SAL_CALL AccessibleBrowseBoxTableBase::getAccessibleIndex(
     throw ( lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard aGuard( getOslMutex() );
+    ::osl::MutexGuard aGuard( getMutex() );
     ensureIsAlive();
     ensureIsValidAddress( nRow, nColumn );
     return nRow * implGetColumnCount() + nColumn;
@@ -139,7 +139,7 @@ sal_Int32 SAL_CALL AccessibleBrowseBoxTableBase::getAccessibleRow( sal_Int32 nCh
     throw ( lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard aGuard( getOslMutex() );
+    ::osl::MutexGuard aGuard( getMutex() );
     ensureIsAlive();
     ensureIsValidIndex( nChildIndex );
     return implGetRow( nChildIndex );
@@ -149,7 +149,7 @@ sal_Int32 SAL_CALL AccessibleBrowseBoxTableBase::getAccessibleColumn( sal_Int32 
     throw ( lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard aGuard( getOslMutex() );
+    ::osl::MutexGuard aGuard( getMutex() );
     ensureIsAlive();
     ensureIsValidIndex( nChildIndex );
     return implGetColumn( nChildIndex );

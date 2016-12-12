@@ -94,7 +94,7 @@ AccessibleBrowseBoxBase::~AccessibleBrowseBoxBase()
 
 void SAL_CALL AccessibleBrowseBoxBase::disposing()
 {
-    ::osl::MutexGuard aGuard( getOslMutex() );
+    ::osl::MutexGuard aGuard( getMutex() );
     if ( m_xFocusWindow.is() )
     {
         SolarMutexGuard aSolarGuard;
@@ -117,7 +117,7 @@ void SAL_CALL AccessibleBrowseBoxBase::disposing()
 Reference< css::accessibility::XAccessible > SAL_CALL AccessibleBrowseBoxBase::getAccessibleParent()
     throw ( uno::RuntimeException, std::exception )
 {
-    ::osl::MutexGuard aGuard( getOslMutex() );
+    ::osl::MutexGuard aGuard( getMutex() );
     ensureIsAlive();
     return mxParent;
 }
@@ -125,7 +125,7 @@ Reference< css::accessibility::XAccessible > SAL_CALL AccessibleBrowseBoxBase::g
 sal_Int32 SAL_CALL AccessibleBrowseBoxBase::getAccessibleIndexInParent()
     throw ( uno::RuntimeException, std::exception )
 {
-    ::osl::MutexGuard aGuard( getOslMutex() );
+    ::osl::MutexGuard aGuard( getMutex() );
     ensureIsAlive();
 
     // -1 for child not found/no parent (according to specification)
@@ -161,7 +161,7 @@ sal_Int32 SAL_CALL AccessibleBrowseBoxBase::getAccessibleIndexInParent()
 OUString SAL_CALL AccessibleBrowseBoxBase::getAccessibleDescription()
     throw ( uno::RuntimeException, std::exception )
 {
-    ::osl::MutexGuard aGuard( getOslMutex() );
+    ::osl::MutexGuard aGuard( getMutex() );
     ensureIsAlive();
     return maDescription;
 }
@@ -169,7 +169,7 @@ OUString SAL_CALL AccessibleBrowseBoxBase::getAccessibleDescription()
 OUString SAL_CALL AccessibleBrowseBoxBase::getAccessibleName()
     throw ( uno::RuntimeException, std::exception )
 {
-    ::osl::MutexGuard aGuard( getOslMutex() );
+    ::osl::MutexGuard aGuard( getMutex() );
     ensureIsAlive();
     return maName;
 }
@@ -188,7 +188,7 @@ AccessibleBrowseBoxBase::getAccessibleStateSet()
     throw ( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard aGuard( getOslMutex() );
+    ::osl::MutexGuard aGuard( getMutex() );
     // don't check whether alive -> StateSet may contain DEFUNC
     return implCreateStateSetHelper();
 }
@@ -196,7 +196,7 @@ AccessibleBrowseBoxBase::getAccessibleStateSet()
 lang::Locale SAL_CALL AccessibleBrowseBoxBase::getLocale()
     throw ( IllegalAccessibleComponentStateException, uno::RuntimeException, std::exception )
 {
-    ::osl::MutexGuard aGuard( getOslMutex() );
+    ::osl::MutexGuard aGuard( getMutex() );
     ensureIsAlive();
     if( mxParent.is() )
     {
@@ -266,7 +266,7 @@ void SAL_CALL AccessibleBrowseBoxBase::addAccessibleEventListener(
 {
     if ( _rxListener.is() )
     {
-        ::osl::MutexGuard aGuard( getOslMutex() );
+        ::osl::MutexGuard aGuard( getMutex() );
         if ( !getClientId( ) )
             setClientId( AccessibleEventNotifier::registerClient( ) );
 
@@ -280,7 +280,7 @@ void SAL_CALL AccessibleBrowseBoxBase::removeAccessibleEventListener(
 {
     if( _rxListener.is() && getClientId( ) )
     {
-        ::osl::MutexGuard aGuard( getOslMutex() );
+        ::osl::MutexGuard aGuard( getMutex() );
         sal_Int32 nListenerCount = AccessibleEventNotifier::removeEventListener( getClientId( ), _rxListener );
         if ( !nListenerCount )
         {
@@ -324,7 +324,7 @@ Sequence< OUString > SAL_CALL AccessibleBrowseBoxBase::getSupportedServiceNames(
 
 void AccessibleBrowseBoxBase::setAccessibleName( const OUString& rName )
 {
-    ::osl::ClearableMutexGuard aGuard( getOslMutex() );
+    ::osl::ClearableMutexGuard aGuard( getMutex() );
     Any aOld;
     aOld <<= maName;
     maName = rName;
@@ -339,7 +339,7 @@ void AccessibleBrowseBoxBase::setAccessibleName( const OUString& rName )
 
 void AccessibleBrowseBoxBase::setAccessibleDescription( const OUString& rDescription )
 {
-    ::osl::ClearableMutexGuard aGuard( getOslMutex() );
+    ::osl::ClearableMutexGuard aGuard( getMutex() );
     Any aOld;
     aOld <<= maDescription;
     maDescription = rDescription;
@@ -405,7 +405,7 @@ Rectangle AccessibleBrowseBoxBase::getBoundingBox()
     throw ( lang::DisposedException )
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard aGuard( getOslMutex() );
+    ::osl::MutexGuard aGuard( getMutex() );
     ensureIsAlive();
     Rectangle aRect = implGetBoundingBox();
     if ( 0 == aRect.Left() && 0 == aRect.Top() && 0 == aRect.Right() && 0 == aRect.Bottom() )
@@ -419,7 +419,7 @@ Rectangle AccessibleBrowseBoxBase::getBoundingBoxOnScreen()
     throw ( lang::DisposedException )
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard aGuard( getOslMutex() );
+    ::osl::MutexGuard aGuard( getMutex() );
     ensureIsAlive();
     Rectangle aRect = implGetBoundingBoxOnScreen();
     if ( 0 == aRect.Left() && 0 == aRect.Top() && 0 == aRect.Right() && 0 == aRect.Bottom() )
@@ -432,7 +432,7 @@ Rectangle AccessibleBrowseBoxBase::getBoundingBoxOnScreen()
 void AccessibleBrowseBoxBase::commitEvent(
         sal_Int16 _nEventId, const Any& _rNewValue, const Any& _rOldValue )
 {
-    ::osl::ClearableMutexGuard aGuard( getOslMutex() );
+    ::osl::ClearableMutexGuard aGuard( getMutex() );
     if ( !getClientId( ) )
             // if we don't have a client id for the notifier, then we don't have listeners, then
             // we don't need to notify anything
@@ -495,7 +495,7 @@ void SAL_CALL AccessibleBrowseBoxBase::disposing( const css::lang::EventObject& 
 sal_Int32 SAL_CALL AccessibleBrowseBoxBase::getForeground(  ) throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard aGuard( getOslMutex() );
+    ::osl::MutexGuard aGuard( getMutex() );
     ensureIsAlive();
 
     sal_Int32 nColor = 0;
@@ -521,7 +521,7 @@ sal_Int32 SAL_CALL AccessibleBrowseBoxBase::getForeground(  ) throw (css::uno::R
 sal_Int32 SAL_CALL AccessibleBrowseBoxBase::getBackground(  ) throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard aGuard( getOslMutex() );
+    ::osl::MutexGuard aGuard( getMutex() );
     ensureIsAlive();
     sal_Int32 nColor = 0;
     vcl::Window* pInst = mpBrowseBox->GetWindowInstance();

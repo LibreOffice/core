@@ -85,7 +85,7 @@ AccessibleBrowseBox::~AccessibleBrowseBox()
 
 void SAL_CALL AccessibleBrowseBox::disposing()
 {
-    ::osl::MutexGuard aGuard( getOslMutex() );
+    ::osl::MutexGuard aGuard( getMutex() );
 
     m_xImpl->m_pTable           = nullptr;
     m_xImpl->m_pColumnHeaderBar = nullptr;
@@ -113,7 +113,7 @@ sal_Int32 SAL_CALL AccessibleBrowseBox::getAccessibleChildCount()
     throw ( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard aGuard( getOslMutex() );
+    ::osl::MutexGuard aGuard( getMutex() );
     ensureIsAlive();
     return BBINDEX_FIRSTCONTROL + mpBrowseBox->GetAccessibleControlCount();
 }
@@ -124,7 +124,7 @@ AccessibleBrowseBox::getAccessibleChild( sal_Int32 nChildIndex )
     throw ( lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard aGuard( getOslMutex() );
+    ::osl::MutexGuard aGuard( getMutex() );
     ensureIsAlive();
 
     css::uno::Reference< css::accessibility::XAccessible > xRet;
@@ -153,7 +153,7 @@ AccessibleBrowseBox::getAccessibleAtPoint( const awt::Point& rPoint )
     throw ( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard aGuard( getOslMutex() );
+    ::osl::MutexGuard aGuard( getMutex() );
     ensureIsAlive();
 
     css::uno::Reference< css::accessibility::XAccessible > xChild;
@@ -184,7 +184,7 @@ void SAL_CALL AccessibleBrowseBox::grabFocus()
     throw ( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard aGuard( getOslMutex() );
+    ::osl::MutexGuard aGuard( getMutex() );
     ensureIsAlive();
     mpBrowseBox->GrabFocus();
 }

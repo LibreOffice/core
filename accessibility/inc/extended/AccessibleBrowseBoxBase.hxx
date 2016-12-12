@@ -283,10 +283,6 @@ protected:
 
     // internal helper methods
 
-    /** @throws <type>DisposedException</type>  If the object is not alive. */
-    void ensureIsAlive() const
-        throw ( css::lang::DisposedException );
-
     /** @return  The osl::Mutex member provided by the class BaseMutex. */
     inline ::osl::Mutex& getOslMutex();
 
@@ -309,11 +305,13 @@ protected:
     void setClientId(::comphelper::AccessibleEventNotifier::TClientId _aNewClientId) { m_aClientId = _aNewClientId; }
 
 public:
-    // public versions of internal helper methods, with access control
-    struct AccessControl { friend class SolarMethodGuard; private: AccessControl() { } };
+    /** @return  The osl::Mutex member provided by the class BaseMutex. */
+    inline ::osl::Mutex&    getMutex( ) { return m_aMutex; }
 
-    inline ::osl::Mutex&    getMutex( const AccessControl& ) { return getOslMutex(); }
-    inline void             ensureIsAlive( const AccessControl& ) { ensureIsAlive(); }
+    /** @throws <type>DisposedException</type>  If the object is not alive. */
+    void ensureIsAlive() const
+        throw ( css::lang::DisposedException );
+
 
 protected:
     // members
@@ -408,17 +406,15 @@ protected:
 
 // a helper class for protecting methods which need to lock the solar mutex in addition to the own mutex
 
-typedef ::osl::MutexGuard OslMutexGuard;
-
-class SolarMethodGuard : public SolarMutexGuard, public OslMutexGuard
+class SolarMethodGuard : public SolarMutexGuard, public osl::MutexGuard
 {
 public:
     inline SolarMethodGuard( AccessibleBrowseBoxBase& _rOwner, bool _bEnsureAlive = true )
         :SolarMutexGuard( )
-        ,OslMutexGuard( _rOwner.getMutex( AccessibleBrowseBoxBase::AccessControl() ) )
+        ,osl::MutexGuard( _rOwner.getMutex( ) )
     {
         if ( _bEnsureAlive )
-            _rOwner.ensureIsAlive( AccessibleBrowseBoxBase::AccessControl() );
+            _rOwner.ensureIsAlive( );
     }
 };
 
@@ -427,11 +423,6 @@ public:
 inline ::svt::AccessibleBrowseBoxObjType AccessibleBrowseBoxBase::getType() const
 {
     return meObjType;
-}
-
-inline ::osl::Mutex& AccessibleBrowseBoxBase::getOslMutex()
-{
-    return m_aMutex;
 }
 
 inline void AccessibleBrowseBoxBase::implSetName(
