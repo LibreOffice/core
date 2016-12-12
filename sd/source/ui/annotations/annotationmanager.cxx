@@ -866,12 +866,7 @@ void AnnotationManagerImpl::DisposeTags()
 void AnnotationManagerImpl::addListener()
 {
     Link<tools::EventMultiplexerEvent&,void> aLink( LINK(this,AnnotationManagerImpl,EventMultiplexerListener) );
-    mrBase.GetEventMultiplexer()->AddEventListener (
-        aLink,
-        EventMultiplexerEventId::EditViewSelection
-        | EventMultiplexerEventId::CurrentPageChanged
-        | EventMultiplexerEventId::MainViewRemoved
-        | EventMultiplexerEventId::MainViewAdded);
+    mrBase.GetEventMultiplexer()->AddEventListener(aLink);
 }
 
 void AnnotationManagerImpl::removeListener()

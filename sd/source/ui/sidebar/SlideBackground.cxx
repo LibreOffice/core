@@ -304,16 +304,7 @@ void SlideBackground::SetPanelTitle( const OUString& rTitle )
 void SlideBackground::addListener()
 {
     Link<tools::EventMultiplexerEvent&,void> aLink( LINK(this, SlideBackground, EventMultiplexerListener) );
-    mrBase.GetEventMultiplexer()->AddEventListener (
-        aLink,
-        EventMultiplexerEventId::CurrentPageChanged |
-        EventMultiplexerEventId::MainViewAdded |
-        EventMultiplexerEventId::ShapeChanged |
-        EventMultiplexerEventId::EditModeNormal |
-        EventMultiplexerEventId::EditModeMaster |
-        EventMultiplexerEventId::EditViewSelection |
-        EventMultiplexerEventId::EndTextEdit |
-        EventMultiplexerEventId::ViewAdded);
+    mrBase.GetEventMultiplexer()->AddEventListener( aLink );
 }
 
 void SlideBackground::removeListener()

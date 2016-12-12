@@ -415,13 +415,7 @@ void TableDesignWidget::updateControls()
 void TableDesignWidget::addListener()
 {
     Link<tools::EventMultiplexerEvent&,void> aLink( LINK(this,TableDesignWidget,EventMultiplexerListener) );
-    mrBase.GetEventMultiplexer()->AddEventListener (
-        aLink,
-        EventMultiplexerEventId::EditViewSelection
-        | EventMultiplexerEventId::CurrentPageChanged
-        | EventMultiplexerEventId::MainViewRemoved
-        | EventMultiplexerEventId::MainViewAdded
-        | EventMultiplexerEventId::Disposing);
+    mrBase.GetEventMultiplexer()->AddEventListener( aLink );
 }
 
 void TableDesignWidget::removeListener()
