@@ -75,7 +75,7 @@ namespace xmloff
         // get and convert the value
         OUString sAttributeValue = _rxAttributes->getValueByName(sCompleteAttributeName);
         bool bValue = _bDefault;
-        ::sax::Converter::convertBool(bValue, sAttributeValue);
+        (void)::sax::Converter::convertBool(bValue, sAttributeValue);
 
         // set the property
         if (_rxPropInfo->hasPropertyByName(_rPropName))

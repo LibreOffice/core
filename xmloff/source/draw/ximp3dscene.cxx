@@ -79,12 +79,12 @@ SdXML3DLightContext::SdXML3DLightContext(
             }
             case XML_TOK_3DLIGHT_ENABLED:
             {
-                ::sax::Converter::convertBool(mbEnabled, sValue);
+                (void)::sax::Converter::convertBool(mbEnabled, sValue);
                 break;
             }
             case XML_TOK_3DLIGHT_SPECULAR:
             {
-                ::sax::Converter::convertBool(mbSpecular, sValue);
+                (void)::sax::Converter::convertBool(mbSpecular, sValue);
                 break;
             }
         }
@@ -329,7 +329,7 @@ void SdXML3DSceneAttributesHelper::processSceneAttribute( sal_uInt16 nPrefix, co
         }
         else if( IsXMLToken( rLocalName, XML_LIGHTING_MODE ) )
         {
-            ::sax::Converter::convertBool(mbLightingMode, rValue);
+            (void)::sax::Converter::convertBool(mbLightingMode, rValue);
             return;
         }
     }

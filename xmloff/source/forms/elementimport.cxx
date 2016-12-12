@@ -1790,14 +1790,14 @@ namespace xmloff
 
         // propagate the selected flag
         bool bSelected(false);
-        ::sax::Converter::convertBool(bSelected,
+        (void)::sax::Converter::convertBool(bSelected,
             _rxAttrList->getValueByName(sSelectedAttribute));
         if (bSelected)
             m_xListBoxImport->implSelectCurrentItem();
 
         // same for the default selected
         bool bDefaultSelected(false);
-        ::sax::Converter::convertBool(bDefaultSelected,
+        (void)::sax::Converter::convertBool(bDefaultSelected,
             _rxAttrList->getValueByName(sDefaultSelectedAttribute));
         if (bDefaultSelected)
             m_xListBoxImport->implDefaultSelectCurrentItem();

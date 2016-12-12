@@ -37,7 +37,7 @@ bool XMLErrorIndicatorPropertyHdl::importXML( const OUString& rStrImpValue,
                                                   uno::Any& rValue, const SvXMLUnitConverter& /*rUnitConverter*/ ) const
 {
     bool bValue(false);
-    ::sax::Converter::convertBool( bValue, rStrImpValue );
+    (void)::sax::Converter::convertBool( bValue, rStrImpValue );
 
     // modify existing value
     chart::ChartErrorIndicatorType eType = chart::ChartErrorIndicatorType_NONE;
