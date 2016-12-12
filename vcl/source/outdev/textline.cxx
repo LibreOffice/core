@@ -751,7 +751,6 @@ void OutputDevice::ImplDrawTextLines( SalLayout& rSalLayout, FontStrikeout eStri
         Point aPos;
         DeviceCoordinate nDist = 0;
         DeviceCoordinate nWidth = 0;
-        DeviceCoordinate nAdvance = 0;
         const GlyphItem* pGlyph;
         int nStart = 0;
         while (rSalLayout.GetNextGlyphs(1, &pGlyph, aPos, nStart))
@@ -772,7 +771,7 @@ void OutputDevice::ImplDrawTextLines( SalLayout& rSalLayout, FontStrikeout eStri
                 }
 
                 // update the length of the textline
-                nWidth += nAdvance;
+                nWidth += pGlyph->mnNewWidth;
             }
             else if( nWidth > 0 )
             {
