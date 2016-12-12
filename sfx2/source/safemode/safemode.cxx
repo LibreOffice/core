@@ -20,7 +20,7 @@ namespace sfx2 {
 
 bool SafeMode::putFlag()
 {
-    File safeModeFile(getFileName());
+    File safeModeFile(getFilePath("safemode"));
     if (safeModeFile.open(osl_File_OpenFlag_Create) == FileBase::E_None)
     {
         safeModeFile.close();
@@ -30,7 +30,7 @@ bool SafeMode::putFlag()
 }
 bool SafeMode::hasFlag()
 {
-    File safeModeFile(getFileName());
+    File safeModeFile(getFilePath("safemode"));
     if (safeModeFile.open(osl_File_OpenFlag_Read) == FileBase::E_None)
     {
         safeModeFile.close();
@@ -40,17 +40,42 @@ bool SafeMode::hasFlag()
 }
 bool SafeMode::removeFlag()
 {
-    return File::remove(getFileName()) == FileBase::E_None;
+    return File::remove(getFilePath("safemode")) == FileBase::E_None;
 }
 
-OUString SafeMode::getFileName()
+bool SafeMode::putRestartFlag()
+{
+    File restartFile(getFilePath("safemode_restart"));
+    if (restartFile.open(osl_File_OpenFlag_Create) == FileBase::E_None)
+    {
+        restartFile.close();
+        return true;
+    }
+    return false;
+}
+bool SafeMode::hasRestartFlag()
+{
+    File restartFile(getFilePath("safemode_restart"));
+    if (restartFile.open(osl_File_OpenFlag_Read) == FileBase::E_None)
+    {
+        restartFile.close();
+        return true;
+    }
+    return false;
+}
+bool SafeMode::removeRestartFlag()
+{
+    return File::remove(getFilePath("safemode_restart")) == FileBase::E_None;
+}
+
+OUString SafeMode::getFilePath(const OUString& sFilename)
 {
     OUString url("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/");
     rtl::Bootstrap::expandMacros(url);
 
     OUString aProfilePath;
     FileBase::getSystemPathFromFileURL(url, aProfilePath);
-    FileBase::getAbsoluteFileURL(url, "safemode", aProfilePath);
+    FileBase::getAbsoluteFileURL(url, sFilename, aProfilePath);
     return aProfilePath;
 }
 
