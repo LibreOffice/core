@@ -1844,12 +1844,15 @@ void SvTreeListBox::SetCheckButtonState( SvTreeListEntry* pEntry, SvButtonState 
 
 void SvTreeListBox::SetCheckButtonInvisible( SvTreeListEntry* pEntry)
 {
-    if( nTreeFlags & SvTreeFlags::CHKBTN )
-    {
-        SvLBoxButton* pItem = static_cast<SvLBoxButton*>(pEntry->GetFirstItem(SvLBoxItemType::Button));
-        pItem->SetStateInvisible();
-        InvalidateEntry( pEntry );
-    }
+    SvLBoxButton* pItem = (nTreeFlags & SvTreeFlags::CHKBTN) ?
+        static_cast<SvLBoxButton*>(pEntry->GetFirstItem(SvLBoxItemType::Button)) :
+        nullptr;
+
+    if (!pItem)
+        return;
+
+    pItem->SetStateInvisible();
+    InvalidateEntry(pEntry);
 }
 
 SvButtonState SvTreeListBox::GetCheckButtonState( SvTreeListEntry* pEntry ) const
