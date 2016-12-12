@@ -100,18 +100,18 @@ class SW_DLLPUBLIC SwClient : public ::sw::WriterListener
     friend class sw::ClientIteratorBase;
     template<typename E, typename S> friend class SwIterator;
 
-    SwModify *pRegisteredIn;        ///< event source
+    SwModify *m_pRegisteredIn;        ///< event source
 
 protected:
     // single argument ctors shall be explicit.
     inline explicit SwClient( SwModify* pToRegisterIn );
 
     // write access to pRegisteredIn shall be granted only to the object itself (protected access)
-    SwModify* GetRegisteredInNonConst() const { return pRegisteredIn; }
+    SwModify* GetRegisteredInNonConst() const { return m_pRegisteredIn; }
 
 public:
 
-    SwClient() : pRegisteredIn(nullptr) {}
+    SwClient() : m_pRegisteredIn(nullptr) {}
     virtual ~SwClient() override;
     // callbacks received from SwModify (friend class - so these methods can be private)
     // should be called only from SwModify the client is registered in
@@ -130,8 +130,8 @@ public:
     void ModifyNotification( const SfxPoolItem *pOldValue, const SfxPoolItem *pNewValue ) { this->Modify ( pOldValue, pNewValue ); }
     void SwClientNotifyCall( const SwModify& rModify, const SfxHint& rHint ) { SwClientNotify( rModify, rHint ); }
 
-    const SwModify* GetRegisteredIn() const { return pRegisteredIn; }
-    SwModify* GetRegisteredIn() { return pRegisteredIn; }
+    const SwModify* GetRegisteredIn() const { return m_pRegisteredIn; }
+    SwModify* GetRegisteredIn() { return m_pRegisteredIn; }
 
 
     // get information about attribute
@@ -342,7 +342,7 @@ public:
 };
 
 SwClient::SwClient( SwModify* pToRegisterIn )
-    : pRegisteredIn( nullptr )
+    : m_pRegisteredIn( nullptr )
 {
     if(pToRegisterIn)
         pToRegisterIn->Add(this);
