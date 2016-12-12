@@ -98,8 +98,6 @@ class SwEditRegionDlg : public SfxModalDialog
     bool            bDontCheckPasswd :1;
     bool            bWeb            :1;
 
-    Image  BuildBitmap(bool bProtect, bool bHidden);
-
     void    RecurseList( const SwSectionFormat* pFormat, SvTreeListEntry* pEntry);
     size_t  FindArrPos(const SwSectionFormat* pFormat);
 

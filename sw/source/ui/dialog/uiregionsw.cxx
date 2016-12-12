@@ -67,6 +67,17 @@
 
 using namespace ::com::sun::star;
 
+namespace {
+
+Image BuildBitmap(bool bProtect, bool bHidden)
+{
+    if (bProtect)
+        return Image(BitmapEx(SW_RES(bHidden ? RID_BMP_PROT_HIDE : RID_BMP_PROT_NO_HIDE)));
+    return Image(BitmapEx(SW_RES(bHidden ? RID_BMP_HIDE : RID_BMP_NO_HIDE)));
+}
+
+}
+
 static void   lcl_ReadSections( SfxMedium& rMedium, ComboBox& rBox );
 
 static void lcl_FillList( SwWrtShell& rSh, ComboBox& rSubRegions, ComboBox* pAvailNames, const SwSectionFormat* pNewFormat )
@@ -1364,13 +1375,6 @@ IMPL_LINK( SwEditRegionDlg, SubRegionEventHdl, VclWindowEvent&, rEvent, void )
             lcl_FillSubRegionList(rSh, *m_pSubRegionED, nullptr);
         m_bSubRegionsFilled = true;
     }
-}
-
-Image SwEditRegionDlg::BuildBitmap(bool bProtect, bool bHidden)
-{
-    if (bProtect)
-        return Image(BitmapEx(SW_RES(bHidden ? RID_BMP_PROT_HIDE : RID_BMP_PROT_NO_HIDE)));
-    return Image(BitmapEx(SW_RES(bHidden ? RID_BMP_HIDE : RID_BMP_NO_HIDE)));
 }
 
 // helper function - read region names from medium
