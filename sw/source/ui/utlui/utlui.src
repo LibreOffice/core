@@ -324,19 +324,31 @@ String STR_HYPH_TITLE
     Text [ en-US ] = "Hyphenation";
 };
 
-ImageList ILIST_DB_DLG
+Bitmap RID_BMP_COLLAPSE
 {
-    Prefix = "sx";
-    IdList =
-    {
-        IMG_COLLAPSE;
-        IMG_EXPAND  ;
-        IMG_DB      ;
-        IMG_DBTABLE ;
-        IMG_DBQUERY ;
-    };
-    IdCount = 5;
+    File = "sx18002.png";
 };
+
+Bitmap RID_BMP_EXPAND
+{
+    File = "sx18003.png";
+};
+
+Bitmap RID_BMP_DB
+{
+    File = "sx01.png";
+};
+
+Bitmap RID_BMP_DBTABLE
+{
+    File = "sx02.png";
+};
+
+Bitmap RID_BMP_DBQUERY
+{
+    File = "sx03.png";
+};
+
 Image IMG_VIEWLAYOUT_AUTOMATIC
 {
     ImageBitmap = Bitmap

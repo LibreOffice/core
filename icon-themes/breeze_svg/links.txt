@@ -1282,7 +1282,7 @@ sw/imglst/sr20017.png cmd/sc_insertindexesentry.png
 sw/imglst/sr20018.png cmd/sc_inserttable.png
 sw/imglst/sr20019.png cmd/sc_remove.png
 
-sw/imglst/sx03.png cmd/sc_dbqueryedit.png
+sw/res/sx03.png cmd/sc_dbqueryedit.png
 
 # res
 sw/res/all_left.png cmd/sc_firstrecord.png

@@ -53,7 +53,6 @@ using namespace ::com::sun::star::uno;
 SwChangeDBDlg::SwChangeDBDlg(SwView& rVw)
     : SvxStandardDialog(&rVw.GetViewFrame()->GetWindow(), "ExchangeDatabasesDialog",
         "modules/swriter/ui/exchangedatabases.ui")
-    , aImageList(SW_RES(ILIST_DB_DLG))
     , pSh(rVw.GetWrtShellPtr())
 {
     get(m_pUsedDBTLB, "inuselb");
@@ -71,7 +70,8 @@ SwChangeDBDlg::SwChangeDBDlg(SwView& rVw)
     m_pUsedDBTLB->SetSelectionMode(SelectionMode::Multiple);
     m_pUsedDBTLB->SetStyle(m_pUsedDBTLB->GetStyle()|WB_HASLINES|WB_CLIPCHILDREN|WB_SORT|WB_HASBUTTONS|WB_HASBUTTONSATROOT|WB_HSCROLL);
     m_pUsedDBTLB->SetSpaceBetweenEntries(0);
-    m_pUsedDBTLB->SetNodeBitmaps( aImageList.GetImage(IMG_COLLAPSE), aImageList.GetImage(IMG_EXPAND));
+    m_pUsedDBTLB->SetNodeBitmaps(Image(BitmapEx(SW_RES(RID_BMP_COLLAPSE))),
+                                 Image(BitmapEx(SW_RES(RID_BMP_EXPAND))));
 
     Link<SvTreeListBox*,void> aLink = LINK(this, SwChangeDBDlg, TreeSelectHdl);
 
@@ -134,9 +134,9 @@ SvTreeListEntry* SwChangeDBDlg::Insert(const OUString& rDBName)
     sal_uLong nParent = 0;
     sal_uLong nChild = 0;
 
-    Image aTableImg = aImageList.GetImage(IMG_DBTABLE);
-    Image aDBImg = aImageList.GetImage(IMG_DB);
-    Image aQueryImg = aImageList.GetImage(IMG_DBQUERY);
+    Image aTableImg(BitmapEx(SW_RES(RID_BMP_DBTABLE)));
+    Image aDBImg(BitmapEx(SW_RES(RID_BMP_DB)));
+    Image aQueryImg(BitmapEx(SW_RES(RID_BMP_DBQUERY)));
     Image& rToInsert = nCommandType ? aQueryImg : aTableImg;
     while ((pParent = m_pUsedDBTLB->GetEntry(nParent++)) != nullptr)
     {

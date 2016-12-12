@@ -40,8 +40,6 @@ class SwChangeDBDlg: public SvxStandardDialog
     VclPtr<FixedText>      m_pDocDBNameFT;
     VclPtr<PushButton>     m_pDefineBT;
 
-    ImageList       aImageList;
-
     SwWrtShell      *pSh;
 
     DECL_LINK(TreeSelectHdl, SvTreeListBox*, void);

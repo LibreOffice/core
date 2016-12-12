@@ -145,8 +145,6 @@
 
 #define RES_FRMEX_MENU                  (STR_AUTH_FIELD_END + 1)
 
-#define ILIST_DB_DLG                (RC_UTLUI_BEGIN + 6)
-
 #define IMG_VIEWLAYOUT_AUTOMATIC                 (RC_UTLUI_BEGIN + 12)
 #define IMG_VIEWLAYOUT_AUTOMATIC_ACTIVE          (RC_UTLUI_BEGIN + 13)
 #define IMG_VIEWLAYOUT_BOOKMODE                  (RC_UTLUI_BEGIN + 14)
@@ -169,13 +167,11 @@
 #define RID_BMP_DROP_REGION                      (RC_UTLUI_BEGIN + 31)
 #define RID_BMP_DROP_LINK                        (RC_UTLUI_BEGIN + 32)
 #define RID_BMP_DROP_COPY                        (RC_UTLUI_BEGIN + 33)
-
-//local ids of the Database ImageLists
-#define IMG_COLLAPSE        18002  /*RID_SVXIMG_COLLAPSEDNODE*/
-#define IMG_EXPAND          18003  /*RID_SVXIMG_EXPANDEDNODE*/
-#define IMG_DB                  1
-#define IMG_DBTABLE             2
-#define IMG_DBQUERY             3
+#define RID_BMP_COLLAPSE                         (RC_UTLUI_BEGIN + 34)
+#define RID_BMP_EXPAND                           (RC_UTLUI_BEGIN + 35)
+#define RID_BMP_DB                               (RC_UTLUI_BEGIN + 36)
+#define RID_BMP_DBTABLE                          (RC_UTLUI_BEGIN + 37)
+#define RID_BMP_DBQUERY                          (RC_UTLUI_BEGIN + 38)
 
 #define UTLUI_ACT_END               RES_FRMEX_MENU
 

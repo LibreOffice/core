@@ -29,8 +29,6 @@ class SwWrtShell;
 
 class SW_DLLPUBLIC SwDBTreeList : public SvTreeListBox
 {
-    ImageList       aImageList;
-
     OUString        sDefDBName;
     bool            bInitialized;
     bool            bShowColumns;

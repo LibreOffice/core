@@ -139,7 +139,6 @@ Reference<XConnection>  SwDBTreeList_Impl::GetConnection(const OUString& rSource
 
 SwDBTreeList::SwDBTreeList(vcl::Window *pParent, WinBits nStyle)
     : SvTreeListBox(pParent, nStyle)
-    , aImageList(SW_RES(ILIST_DB_DLG))
     , bInitialized(false)
     , bShowColumns(false)
     , pImpl(new SwDBTreeList_Impl)
@@ -175,8 +174,8 @@ void SwDBTreeList::InitTreeList()
     SetStyle(GetStyle()|WB_HASLINES|WB_CLIPCHILDREN|WB_HASBUTTONS|WB_HASBUTTONSATROOT|WB_HSCROLL);
     // don't set font, so that the Control's font is being applied!
     SetSpaceBetweenEntries(0);
-    SetNodeBitmaps( aImageList.GetImage(IMG_COLLAPSE),
-                    aImageList.GetImage(IMG_EXPAND  ) );
+    SetNodeBitmaps(Image(BitmapEx(SW_RES(RID_BMP_COLLAPSE))),
+                   Image(BitmapEx(SW_RES(RID_BMP_EXPAND))));
 
     SetDragDropMode(DragDropMode::APP_COPY);
 
@@ -186,7 +185,7 @@ void SwDBTreeList::InitTreeList()
     const OUString* pDBNames = aDBNames.getConstArray();
     long nCount = aDBNames.getLength();
 
-    Image aImg = aImageList.GetImage(IMG_DB);
+    Image aImg(BitmapEx(SW_RES(RID_BMP_DB)));
     for(long i = 0; i < nCount; i++)
     {
         OUString sDBName(pDBNames[i]);
@@ -200,9 +199,9 @@ void SwDBTreeList::InitTreeList()
     bInitialized = true;
 }
 
-void    SwDBTreeList::AddDataSource(const OUString& rSource)
+void SwDBTreeList::AddDataSource(const OUString& rSource)
 {
-    Image aImg = aImageList.GetImage(IMG_DB);
+    Image aImg(BitmapEx(SW_RES(RID_BMP_DB)));
     SvTreeListEntry* pEntry = InsertEntry(rSource, aImg, aImg, nullptr, true);
     SvTreeListBox::Select(pEntry);
 }
@@ -331,7 +330,7 @@ void  SwDBTreeList::RequestingChildren(SvTreeListEntry* pParent)
                         OUString sTableName;
                         long nCount = aTableNames.getLength();
                         const OUString* pTableNames = aTableNames.getConstArray();
-                        Image aImg = aImageList.GetImage(IMG_DBTABLE);
+                        Image aImg(BitmapEx(SW_RES(RID_BMP_DBTABLE)));
                         for (long i = 0; i < nCount; i++)
                         {
                             sTableName = pTableNames[i];
@@ -349,7 +348,7 @@ void  SwDBTreeList::RequestingChildren(SvTreeListEntry* pParent)
                         OUString sQueryName;
                         long nCount = aQueryNames.getLength();
                         const OUString* pQueryNames = aQueryNames.getConstArray();
-                        Image aImg = aImageList.GetImage(IMG_DBQUERY);
+                        Image aImg(BitmapEx(SW_RES(RID_BMP_DBQUERY)));
                         for (long i = 0; i < nCount; i++)
                         {
                             sQueryName = pQueryNames[i];
