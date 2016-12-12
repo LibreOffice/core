@@ -711,7 +711,7 @@ Reference<deployment::XPackage> PackageManagerImpl::addPackage(
 
     try {
         ::ucbhelper::Content sourceContent;
-        create_ucb_content( &sourceContent, url, xCmdEnv ); // throws exc
+        (void)create_ucb_content( &sourceContent, url, xCmdEnv ); // throws exc
         const OUString title( StrTitle::getTitle( sourceContent ) );
         const OUString title_enc( ::rtl::Uri::encode(
                                       title, rtl_UriCharClassPchar,
