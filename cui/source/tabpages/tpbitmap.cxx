@@ -275,17 +275,22 @@ bool SvxBitmapTabPage::FillItemSet( SfxItemSet* rAttrs )
 
 void SvxBitmapTabPage::Reset( const SfxItemSet* rAttrs )
 {
-    SfxItemSet rGeoAttr(mpView->GetGeoAttrFromMarked());
     const SfxPoolItem* pItem = nullptr;
-    const double fUIScale(double(mpView->GetModel()->GetUIScale()));
+    m_fObjectWidth = 1.0;
+    double fUIScale  = 1.0;
+    if (mpView && mpView->AreObjectsMarked())
+    {
+        SfxItemSet rGeoAttr(mpView->GetGeoAttrFromMarked());
+        fUIScale  = ( mpView->GetModel() ? double(mpView->GetModel()->GetUIScale()) : 1.0);
+        pItem = GetItem( rGeoAttr, SID_ATTR_TRANSFORM_WIDTH );
+        m_fObjectWidth = std::max( pItem ? (double)static_cast<const SfxUInt32Item*>(pItem)->GetValue() : 0.0, 1.0 );
 
-    pItem = GetItem( rGeoAttr, SID_ATTR_TRANSFORM_WIDTH );
-    m_fObjectWidth = std::max( pItem ? (double)static_cast<const SfxUInt32Item*>(pItem)->GetValue() : 0.0, 1.0 );
+        pItem = GetItem( rGeoAttr, SID_ATTR_TRANSFORM_HEIGHT );
+        m_fObjectHeight = std::max( pItem ? (double)static_cast<const SfxUInt32Item*>(pItem)->GetValue() : 0.0, 1.0 );
+    }
     double fTmpWidth((OutputDevice::LogicToLogic(static_cast<sal_Int32>(m_fObjectWidth), mePoolUnit, MapUnit::Map100thMM )) / fUIScale);
     m_fObjectWidth = fTmpWidth;
 
-    pItem = GetItem( rGeoAttr, SID_ATTR_TRANSFORM_HEIGHT );
-    m_fObjectHeight = std::max( pItem ? (double)static_cast<const SfxUInt32Item*>(pItem)->GetValue() : 0.0, 1.0 );
     double fTmpHeight((OutputDevice::LogicToLogic(static_cast<sal_Int32>(m_fObjectHeight), mePoolUnit, MapUnit::Map100thMM )) / fUIScale);
     m_fObjectHeight = fTmpHeight;
 
@@ -518,7 +523,8 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ModifyBitmapHdl, ValueSet*, void)
 
     BitmapEx aBmpEx(pGraphicObject->GetGraphic().GetBitmapEx());
     Size aTempBitmapSize = aBmpEx.GetSizePixel();
-    const double fUIScale(double(mpView->GetModel()->GetUIScale()));
+    double fUIScale = 1.0;
+    fUIScale = ( (mpView && mpView->GetModel()) ? double(mpView->GetModel()->GetUIScale()) : 1.0);
 
     rBitmapSize.Width() = ((OutputDevice::LogicToLogic(static_cast<sal_Int32>(aTempBitmapSize.Width()),MapUnit::MapPixel, MapUnit::Map100thMM )) / fUIScale);
     rBitmapSize.Height() = ((OutputDevice::LogicToLogic(static_cast<sal_Int32>(aTempBitmapSize.Height()),MapUnit::MapPixel, MapUnit::Map100thMM )) / fUIScale);
