@@ -20,6 +20,8 @@
 #ifndef INCLUDED_VCL_INC_UNX_GTK_GTKGDI_HXX
 #define INCLUDED_VCL_INC_UNX_GTK_GTKGDI_HXX
 
+#include <config_cairo_canvas.h>
+
 #include <gtk/gtk.h>
 #include <gdk/gdkx.h>
 #include <gdk/gdkkeysyms.h>
@@ -112,9 +114,14 @@ public:
                                                     const OUString& rCaption,
                                                     Rectangle &rNativeBoundingRegion,
                                                     Rectangle &rNativeContentRegion ) override;
+#if ENABLE_CAIRO_CANVAS
+
     virtual bool        SupportsCairo() const override;
     virtual cairo::SurfaceSharedPtr CreateSurface(const cairo::CairoSurfaceSharedPtr& rSurface) const override;
     virtual cairo::SurfaceSharedPtr CreateSurface(const OutputDevice& rRefDevice, int x, int y, int width, int height) const override;
+
+#endif
+
     void WidgetQueueDraw() const;
 
     void updateSettings( AllSettings& rSettings );

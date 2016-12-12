@@ -122,10 +122,14 @@ SalLayout* X11SalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLe
     return mxTextRenderImpl->GetTextLayout(rArgs, nFallbackLevel);
 }
 
+#if ENABLE_CAIRO_CANVAS
+
 SystemFontData X11SalGraphics::GetSysFontData( int nFallbackLevel ) const
 {
     return mxTextRenderImpl->GetSysFontData(nFallbackLevel);
 }
+
+#endif
 
 bool X11SalGraphics::CreateFontSubset(
                                    const OUString& rToFile,

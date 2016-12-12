@@ -9,6 +9,8 @@
 
 #include <sal/config.h>
 
+#include <config_cairo_canvas.h>
+
 #include <basegfx/range/b2ibox.hxx>
 #include <unx/gtk/gtkframe.hxx>
 #include <unx/gtk/gtkdata.hxx>
@@ -2884,6 +2886,8 @@ bool GtkSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
     return false;
 }
 
+#if ENABLE_CAIRO_CANVAS
+
 bool GtkSalGraphics::SupportsCairo() const
 {
     return true;
@@ -2898,6 +2902,8 @@ cairo::SurfaceSharedPtr GtkSalGraphics::CreateSurface(const OutputDevice& /*rRef
 {
     return cairo::SurfaceSharedPtr(new cairo::Gtk3Surface(this, x, y, width, height));
 }
+
+#endif
 
 void GtkSalGraphics::WidgetQueueDraw() const
 {

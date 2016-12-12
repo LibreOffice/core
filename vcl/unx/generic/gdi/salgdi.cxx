@@ -356,7 +356,9 @@ void X11SalGraphics::ResetClipRegion()
 
 bool X11SalGraphics::setClipRegion( const vcl::Region& i_rClip )
 {
+#if ENABLE_CAIRO_CANVAS
     maClipRegion = i_rClip;
+#endif
     return mxImpl->setClipRegion( i_rClip );
 }
 
@@ -499,6 +501,8 @@ SystemGraphicsData X11SalGraphics::GetGraphicsData() const
     return aRes;
 }
 
+#if ENABLE_CAIRO_CANVAS
+
 bool X11SalGraphics::SupportsCairo() const
 {
     Display *pDisplay = GetXDisplay();
@@ -571,6 +575,8 @@ css::uno::Any X11SalGraphics::GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& rS
     return css::uno::Any(args);
 }
 
+#endif // ENABLE_CAIRO_CANVAS
+
 // draw a poly-polygon
 bool X11SalGraphics::drawPolyPolygon( const basegfx::B2DPolyPolygon& rOrigPolyPoly, double fTransparency )
 {
@@ -586,12 +592,12 @@ bool X11SalGraphics::drawPolyPolygon( const basegfx::B2DPolyPolygon& rOrigPolyPo
         return true;
     }
 
+#if ENABLE_CAIRO_CANVAS
     if(SALCOLOR_NONE == mnFillColor && SALCOLOR_NONE == mnPenColor)
     {
         return true;
     }
 
-#if ENABLE_CAIRO_CANVAS
     static bool bUseCairoForPolygons = false;
 
     if (!m_bOpenGL && bUseCairoForPolygons && SupportsCairo())
