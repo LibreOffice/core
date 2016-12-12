@@ -160,6 +160,14 @@
         <col id="0" translatable="yes">α, β, γ, ... (Greek Lower Letter)</col>
         <col id="1">53</col>
       </row>
+      <row>
+        <col id="0" translatable="yes">א...י, יא...כ ...</col>
+        <col id="1">56</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">א...ת, אא...תת ...</col>
+        <col id="1">33</col>
+      </row>
     </data>
   </object>
   <object class="GtkBox" id="NumberingOptionsPage">
