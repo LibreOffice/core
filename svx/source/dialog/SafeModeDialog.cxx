@@ -326,6 +326,7 @@ IMPL_LINK(SafeModeDialog, DialogBtnHdl, Button*, pBtn, void)
     }
     else if (pBtn == mpBtnRestart.get())
     {
+        sfx2::SafeMode::putRestartFlag();
         Close();
         applyChanges();
     }
