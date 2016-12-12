@@ -1082,7 +1082,7 @@ public:
 
     bool                        GetTextOutlines( basegfx::B2DPolyPolygonVector &rVector,
                                                  const OUString& rStr, sal_Int32 nBase, sal_Int32 nIndex = 0,
-                                                 sal_Int32 nLen = -1, bool bOptimize = true,
+                                                 sal_Int32 nLen = -1,
                                                  sal_uLong nLayoutWidth = 0, const long* pDXArray = nullptr ) const;
 
 

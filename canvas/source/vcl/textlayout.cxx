@@ -130,7 +130,6 @@ namespace vclcanvas
             maText.StartPosition,
             maText.StartPosition,
             maText.Length,
-            false,
             0,
             aOffsets.get()))
         {
