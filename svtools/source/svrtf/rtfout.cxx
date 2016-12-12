@@ -141,7 +141,7 @@ SvStream& Out_Char(SvStream& rStream, sal_Unicode c,
                                             || (RTL_TEXTENCODING_UTF8==eDestEnc); // #i43933# do not export UTF-8 chars in RTF;
                     if (bWriteAsUnicode)
                     {
-                        sBuf.convertToString(&sConverted,
+                        (void)sBuf.convertToString(&sConverted,
                             eDestEnc, OUSTRING_TO_OSTRING_CVTFLAGS);
                     }
                     const sal_Int32 nLen = sConverted.getLength();
