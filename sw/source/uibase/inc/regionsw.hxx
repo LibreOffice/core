@@ -89,7 +89,6 @@ class SwEditRegionDlg : public SfxModalDialog
     VclPtr<OKButton>       m_pOK;
     VclPtr<PushButton>     m_pOptionsPB;
     VclPtr<PushButton>     m_pDismiss;
-    ImageList       aImageIL;
 
     SwWrtShell&             rSh;
     SectReprs_t             m_SectReprs;

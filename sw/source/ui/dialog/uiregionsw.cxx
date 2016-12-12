@@ -305,7 +305,6 @@ SwEditRegionDlg::SwEditRegionDlg( vcl::Window* pParent, SwWrtShell& rWrtSh )
     : SfxModalDialog(pParent, "EditSectionDialog",
         "modules/swriter/ui/editsectiondialog.ui")
     , m_bSubRegionsFilled(false)
-    , aImageIL(SW_RES(IL_SECTION_BITMAPS))
     , rSh(rWrtSh)
     , m_pDocInserter(nullptr)
     , bDontCheckPasswd(true)
@@ -1367,10 +1366,11 @@ IMPL_LINK( SwEditRegionDlg, SubRegionEventHdl, VclWindowEvent&, rEvent, void )
     }
 }
 
-Image SwEditRegionDlg::BuildBitmap( bool bProtect, bool bHidden )
+Image SwEditRegionDlg::BuildBitmap(bool bProtect, bool bHidden)
 {
-    ImageList& rImgLst = aImageIL;
-    return rImgLst.GetImage((int(!bHidden)+((bProtect ? 1 : 0)<<1)) + 1);
+    if (bProtect)
+        return Image(BitmapEx(SW_RES(bHidden ? RID_BMP_PROT_HIDE : RID_BMP_PROT_NO_HIDE)));
+    return Image(BitmapEx(SW_RES(bHidden ? RID_BMP_HIDE : RID_BMP_NO_HIDE)));
 }
 
 // helper function - read region names from medium

@@ -31,11 +31,10 @@
 #define STR_WRONG_PASSWORD      (RC_REGIONSW_BEGIN+11)
 #define STR_WRONG_PASSWD_REPEAT (RC_REGIONSW_BEGIN+12)
 
-//ImageList elements
-#define BMP_HIDE            1
-#define BMP_NO_HIDE         2
-#define BMP_PROT_HIDE       3
-#define BMP_PROT_NO_HIDE    4
+#define RID_BMP_HIDE            (RC_REGIONSW_BEGIN+13)
+#define RID_BMP_NO_HIDE         (RC_REGIONSW_BEGIN+14)
+#define RID_BMP_PROT_HIDE       (RC_REGIONSW_BEGIN+15)
+#define RID_BMP_PROT_NO_HIDE    (RC_REGIONSW_BEGIN+16)
 
 #endif
 
