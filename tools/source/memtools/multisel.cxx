@@ -72,6 +72,14 @@ MultiSelection::MultiSelection():
 {
 }
 
+void MultiSelection::Reset()
+{
+    aTotRange = Range(0, -1);
+    bCurValid = false;
+    // clear the old sub selections
+    ImplClear();
+}
+
 MultiSelection::MultiSelection( const MultiSelection& rOrig ) :
     aTotRange(rOrig.aTotRange),
     nSelCount(rOrig.nSelCount),

@@ -66,6 +66,7 @@ public:
     void            SetTotalRange( const Range& rTotRange );
     void            Insert( long nIndex, long nCount = 1 );
     void            Remove( long nIndex );
+    void            Reset();
 
     const Range&    GetTotalRange() const { return aTotRange; }
     long            FirstSelected();

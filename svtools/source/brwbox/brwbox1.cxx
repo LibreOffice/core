@@ -1069,7 +1069,7 @@ void BrowseBox::Clear()
     if(bMultiSelection)
     {
         assert(uRow.pSel);
-        *uRow.pSel = MultiSelection();
+        uRow.pSel->Reset();
     }
     else
         uRow.nSel = BROWSER_ENDOFSELECTION;
