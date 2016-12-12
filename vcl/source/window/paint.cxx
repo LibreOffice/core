@@ -690,12 +690,14 @@ void Window::ImplInvalidateFrameRegion( const vcl::Region* pRegion, InvalidateFl
         mpWindowImpl->mnPaintFlags |= ImplPaintFlags::PaintAllChildren;
     if ( !(nFlags & InvalidateFlags::NoErase) )
         mpWindowImpl->mnPaintFlags |= ImplPaintFlags::Erase;
+
     if ( !pRegion )
         mpWindowImpl->mnPaintFlags |= ImplPaintFlags::PaintAll;
-
-    // if not everything has to be redrawn, add the region to it
-    if ( !(mpWindowImpl->mnPaintFlags & ImplPaintFlags::PaintAll) )
+    else if ( !(mpWindowImpl->mnPaintFlags & ImplPaintFlags::PaintAll) )
+    {
+        // if not everything has to be redrawn, add the region to it
         mpWindowImpl->maInvalidateRegion.Union( *pRegion );
+    }
 
     // Handle transparent windows correctly: invalidate must be done on the first opaque parent
     if( ((IsPaintTransparent() && !(nFlags & InvalidateFlags::NoTransparent)) || (nFlags & InvalidateFlags::Transparent) )
