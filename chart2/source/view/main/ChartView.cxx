@@ -1072,7 +1072,9 @@ public:
     virtual void scroll(long nDelta) override;
     virtual void contextDestroyed() override;
 
+#if HAVE_FEATURE_OPENGL
     const OpenGLWindow* getOpenGLWindow() const;
+#endif
     void updateOpenGLWindow();
 private:
     ChartView* mpView;
@@ -1120,10 +1122,14 @@ void GL2DRenderer::contextDestroyed()
     mbContextDestroyed = true;
 }
 
+#if HAVE_FEATURE_OPENGL
+
 const OpenGLWindow* GL2DRenderer::getOpenGLWindow() const
 {
     return mpWindow;
 }
+
+#endif
 
 void GL2DRenderer::updateOpenGLWindow()
 {
