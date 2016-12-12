@@ -40,9 +40,31 @@ public:
      */
     static bool removeFlag();
 
+    /**
+     * Write a flag to the user profile indicating that we are currently restarting from safe mode -
+     * that means we don't want to enter safe mode again.
+     *
+     * @return Whether the file could be written successfully
+     */
+    static bool putRestartFlag();
+
+    /**
+     * Check the existence of the restart flag file.
+     *
+     * @return Whether the restart flag file exists
+     */
+    static bool hasRestartFlag();
+
+    /**
+     * Remove the restart flag file.
+     *
+     * @return Whether the flag file could be removed successfully
+     */
+    static bool removeRestartFlag();
+
 private:
     /** Returns the path of the safe mode flag file.*/
-    static OUString getFileName();
+    static OUString getFilePath(const OUString& sFilename);
 };
 
 }
