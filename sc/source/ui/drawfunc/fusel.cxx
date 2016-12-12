@@ -187,7 +187,6 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                    // For interoperability favour links over macros if both are defined
                    if ( !pInfo->GetHlink().isEmpty() )
                    {
-                       OSL_TRACE("** Got URL");
                        sURL = pInfo->GetHlink();
                    }
                    else if ( !pInfo->GetMacro().isEmpty() )

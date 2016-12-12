@@ -221,11 +221,8 @@ void MasterScriptProvider::createPkgProvider()
     catch ( const Exception& e )
     {
         (void)e;
-        OSL_TRACE("Exception creating MasterScriptProvider for uno_packages in context %s: %s",
-                OUStringToOString( m_sCtxString,
-                    RTL_TEXTENCODING_ASCII_US ).pData->buffer,
-                OUStringToOString( e.Message,
-                    RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+        SAL_WARN("scripting", "Exception creating MasterScriptProvider for uno_packages in context "
+                << m_sCtxString << ": " << e.Message );
     }
 }
 

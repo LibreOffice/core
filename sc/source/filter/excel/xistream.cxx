@@ -408,7 +408,7 @@ XclBiff XclImpStream::DetectBiffVersion( SvStream& rStrm )
                 case EXC_BOF_BIFF4: eBiff = EXC_BIFF4;  break;
                 case EXC_BOF_BIFF5: eBiff = EXC_BIFF5;  break;
                 case EXC_BOF_BIFF8: eBiff = EXC_BIFF8;  break;
-                default:    OSL_TRACE( "XclImpStream::DetectBiffVersion - unknown BIFF version: 0x%04hX", nVersion );
+                default:    SAL_WARN("sc",  "XclImpStream::DetectBiffVersion - unknown BIFF version: " <<  nVersion );
             }
         }
         break;

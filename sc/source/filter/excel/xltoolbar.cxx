@@ -169,8 +169,6 @@ bool ScCTB::ImportCustomToolBar( ScCTBWrapper& rWrapper, CustomToolBarImportHelp
                 return false;
         }
 
-        OSL_TRACE("Name of toolbar :-/ %s", OUStringToOString( sToolBarName, RTL_TEXTENCODING_UTF8 ).getStr() );
-
         helper.getCfgManager()->insertSettings( sToolBarName, xIndexAccess );
         helper.applyIcons();
 
@@ -330,7 +328,6 @@ bool TBCCmd::Read( SvStream &rS )
     rS.ReadUInt16( cmdID );
     sal_uInt16 temp;
     rS.ReadUInt16( temp );
-    OSL_TRACE("TBCmd temp = 0x%x", temp );
     A = (temp & 0x8000 ) == 0x8000;
     B = (temp & 0x4000) == 0x4000;
     cmdType = ( temp & 0x3E00 ) >> 9;

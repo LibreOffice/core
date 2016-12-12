@@ -1496,7 +1496,7 @@ inline double evaluate( double fVal, ScQueryOp eOp )
             ;
     }
 
-    OSL_TRACE( "evaluate: unhandled comparison operator: %d", (int)eOp);
+    SAL_WARN("sc",  "evaluate: unhandled comparison operator: " << (int)eOp);
     return CreateDoubleError( FormulaError::UnknownState);
 }
 

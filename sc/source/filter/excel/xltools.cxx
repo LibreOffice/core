@@ -406,7 +406,7 @@ rtl_TextEncoding XclTools::GetTextEncoding( sal_uInt16 nCodePage )
     const XclCodePageEntry* pEntry = ::std::find_if( pCodePageTable, pCodePageTableEnd, XclCodePageEntry_CPPred( nCodePage ) );
     if( pEntry == pCodePageTableEnd )
     {
-        OSL_TRACE( "XclTools::GetTextEncoding - unknown code page: 0x%04hX (%d)", nCodePage, nCodePage );
+        SAL_WARN("sc",  "XclTools::GetTextEncoding - unknown code page: " << nCodePage );
         return RTL_TEXTENCODING_DONTKNOW;
     }
     return pEntry->meTextEnc;
@@ -420,7 +420,7 @@ sal_uInt16 XclTools::GetXclCodePage( rtl_TextEncoding eTextEnc )
     const XclCodePageEntry* pEntry = ::std::find_if( pCodePageTable, pCodePageTableEnd, XclCodePageEntry_TEPred( eTextEnc ) );
     if( pEntry == pCodePageTableEnd )
     {
-        OSL_TRACE( "XclTools::GetXclCodePage - unsupported text encoding: %d", eTextEnc );
+        SAL_WARN("sc",  "XclTools::GetXclCodePage - unsupported text encoding: " << eTextEnc );
         return 1252;
     }
     return pEntry->mnCodePage;

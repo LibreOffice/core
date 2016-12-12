@@ -139,7 +139,6 @@ ScVbaWSFunction::invoke(const OUString& FunctionName, const uno::Sequence< uno::
                 default:
                     break;
             }
-            OSL_TRACE("Param[%d] is %s", (int)(pArray - aParamTemp.getConstArray()), OUStringToOString( comphelper::anyToString( *pArray ), RTL_TEXTENCODING_UTF8 ).getStr() );
         }
     }
 

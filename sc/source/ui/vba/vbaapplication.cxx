@@ -228,7 +228,6 @@ ScVbaApplication::getAssistant() throw (uno::RuntimeException, std::exception)
 uno::Any SAL_CALL
 ScVbaApplication::getSelection() throw (uno::RuntimeException, std::exception)
 {
-    OSL_TRACE("** ScVbaApplication::getSelection() ** ");
     uno::Reference< frame::XModel > xModel( getCurrentDocument() );
 
     Reference< view::XSelectionSupplier > xSelSupp( xModel->getCurrentController(), UNO_QUERY_THROW );
@@ -1212,7 +1211,6 @@ ScVbaApplication::Volatile( const uno::Any& aVolatile )  throw ( uno::RuntimeExc
     SbMethod* pMeth = StarBASIC::GetActiveMethod();
     if ( pMeth )
     {
-        OSL_TRACE("ScVbaApplication::Volatile() In method ->%s<-", OUStringToOString( pMeth->GetName(), RTL_TEXTENCODING_UTF8 ).getStr() );
         uno::Reference< frame::XModel > xModel( getCurrentDocument() );
         ScDocument& rDoc = excel::getDocShell( xModel )->GetDocument();
         rDoc.GetMacroManager()->SetUserFuncVolatile( pMeth->GetName(), bVolatile);
@@ -1267,7 +1265,6 @@ ScVbaApplication::Caller( const uno::Any& /*aIndex*/ ) throw ( uno::RuntimeExcep
         SbxVariableRef refTemp = pMeth;
         // forces a broadcast
         SbxVariableRef pNew = new  SbxMethod( *static_cast<SbxMethod*>(pMeth));
-                OSL_TRACE("pNew has type %d and string value %s", pNew->GetType(), OUStringToOString( pNew->GetOUString(), RTL_TEXTENCODING_UTF8 ).getStr() );
         aRet = sbxToUnoValue( pNew.get() );
     }
     return aRet;

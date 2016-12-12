@@ -238,7 +238,7 @@ bool ScDocument::SetCodeName( SCTAB nTab, const OUString& rName )
             return true;
         }
     }
-    OSL_TRACE( "**** can't set code name %s", OUStringToOString( rName, RTL_TEXTENCODING_UTF8 ).getStr() );
+    SAL_WARN("sc",  "can't set code name " << rName );
     return false;
 }
 
@@ -2147,7 +2147,7 @@ void ScDocument::CopyToClip(const ScClipParam& rClipParam,
 
     if (!pClipDoc)
     {
-        OSL_TRACE("CopyToClip: no ClipDoc");
+        SAL_WARN("sc", "CopyToClip: no ClipDoc");
         pClipDoc = ScModule::GetClipDoc();
     }
 
@@ -2247,7 +2247,7 @@ void ScDocument::CopyTabToClip(SCCOL nCol1, SCROW nRow1,
     {
         if (!pClipDoc)
         {
-            OSL_TRACE("CopyTabToClip: no ClipDoc");
+            SAL_WARN("sc", "CopyTabToClip: no ClipDoc");
             pClipDoc = ScModule::GetClipDoc();
         }
 
@@ -2355,7 +2355,7 @@ void ScDocument::TransposeClip( ScDocument* pTransClip, InsertDeleteFlags nFlags
     }
     else
     {
-        OSL_TRACE("TransposeClip: Too big");
+        SAL_WARN("sc", "TransposeClip: Too big");
     }
 
     // This happens only when inserting...

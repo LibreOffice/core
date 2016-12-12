@@ -829,7 +829,7 @@ void XclImpPivotCache::ReadPivotCacheStream( XclImpStream& rStrm )
             break;
 
             default:
-                OSL_TRACE( "XclImpPivotCache::ReadPivotCacheStream - unknown record 0x%04hX", aPCStrm.GetRecId() );
+                SAL_WARN("sc",  "XclImpPivotCache::ReadPivotCacheStream - unknown record " << aPCStrm.GetRecId() );
         }
     }
 

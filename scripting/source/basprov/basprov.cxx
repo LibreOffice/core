@@ -326,9 +326,7 @@ namespace basprov
         OUString aLibrary;
         if ( !sProjectName.isEmpty() && aDescription.match( sProjectName ) )
         {
-            OSL_TRACE("LibraryName %s is part of the url %s",
-                OUStringToOString( sProjectName, RTL_TEXTENCODING_UTF8 ).getStr(),
-                OUStringToOString( aDescription, RTL_TEXTENCODING_UTF8 ).getStr() );
+            SAL_WARN("scripting", "LibraryName " << sProjectName << " is part of the url " << aDescription );
             aLibrary = sProjectName;
             nIndex = sProjectName.getLength() + 1;
         }
