@@ -144,19 +144,19 @@ void FormulaLogger::GroupScope::addRefMessage(
     aRefRange.aEnd.IncRow(nLen-1);
     OUString aRangeStr = aRefRange.Format(getRefFlags(rCellPos, rRefPos), &mpImpl->mrDoc);
     aBuf.append(aRangeStr);
-    aBuf.appendAscii(": ");
+    aBuf.append(": ");
 
     if (rArray.mpNumericArray)
     {
         if (rArray.mpStringArray)
         {
             // mixture of numeric and string cells.
-            aBuf.appendAscii("numeric and string");
+            aBuf.append("numeric and string");
         }
         else
         {
             // numeric cells only.
-            aBuf.appendAscii("numeric only");
+            aBuf.append("numeric only");
         }
     }
     else
@@ -164,12 +164,12 @@ void FormulaLogger::GroupScope::addRefMessage(
         if (rArray.mpStringArray)
         {
             // string cells only.
-            aBuf.appendAscii("string only");
+            aBuf.append("string only");
         }
         else
         {
             // empty cells.
-            aBuf.appendAscii("empty");
+            aBuf.append("empty");
         }
     }
 
@@ -195,18 +195,18 @@ void FormulaLogger::GroupScope::addRefMessage(
     OUStringBuffer aBuf;
     OUString aPosStr = rRefPos.Format(getRefFlags(rCellPos, rRefPos), &mpImpl->mrDoc);
     aBuf.append(aPosStr);
-    aBuf.appendAscii(": ");
+    aBuf.append(": ");
 
     switch (rToken.GetType())
     {
         case formula::svDouble:
-            aBuf.appendAscii("numeric value");
+            aBuf.append("numeric value");
             break;
         case formula::svString:
-            aBuf.appendAscii("string value");
+            aBuf.append("string value");
             break;
         default:
-            aBuf.appendAscii("unknown value");
+            aBuf.append("unknown value");
     }
 
     mpImpl->maMessages.push_back(aBuf.makeStringAndClear());
