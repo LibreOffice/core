@@ -560,7 +560,10 @@ void Desktop::Init()
 
     // Check whether safe mode is enabled
     CommandLineArgs& rCmdLine = GetCommandLineArgs();
-    if (rCmdLine.IsSafeMode() || sfx2::SafeMode::hasFlag())
+    // Check if we are restarting from safe mode - in that case we don't want to enter it again
+    if (sfx2::SafeMode::hasRestartFlag())
+        sfx2::SafeMode::removeRestartFlag();
+    else if (rCmdLine.IsSafeMode() || sfx2::SafeMode::hasFlag())
         Application::EnableSafeMode();
 
     // When we are in SafeMode we need to do changes before the configuration
