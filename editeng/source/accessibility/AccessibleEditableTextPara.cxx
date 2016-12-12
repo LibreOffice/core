@@ -117,9 +117,6 @@ namespace accessibility
           // #i27138#
           mpParaManager( _pParaManager )
     {
-#ifdef DBG_UTIL
-        OSL_TRACE( "AccessibleEditableTextPara received ID: %d", mnNotifierClientId );
-#endif
 
         try
         {
@@ -148,9 +145,6 @@ namespace accessibility
             try
             {
                 ::comphelper::AccessibleEventNotifier::revokeClient( getNotifierClientId() );
-#ifdef DBG_UTIL
-                OSL_TRACE( "AccessibleEditableTextPara revoked ID: %d", mnNotifierClientId );
-#endif
             }
             catch (const uno::Exception&)
             {
@@ -307,9 +301,6 @@ namespace accessibility
 
                 // #106234# Delegate to EventNotifier
                 ::comphelper::AccessibleEventNotifier::revokeClientNotifyDisposing( nClientId, xThis );
-#ifdef DBG_UTIL
-                OSL_TRACE( "Disposed ID: %d", nClientId );
-#endif
             }
             catch (const uno::Exception&)
             {
@@ -710,11 +701,7 @@ namespace accessibility
 
     uno::Reference< XAccessible > SAL_CALL AccessibleEditableTextPara::getAccessibleParent() throw (uno::RuntimeException, std::exception)
     {
-
-#ifdef DBG_UTIL
-        if( !mxParent.is() )
-            OSL_TRACE( "AccessibleEditableTextPara::getAccessibleParent: no frontend set, did somebody forgot to call AccessibleTextHelper::SetEventSource()?");
-#endif
+        SAL_WARN_IF(!mxParent.is(), "editeng", "AccessibleEditableTextPara::getAccessibleParent: no frontend set, did somebody forgot to call AccessibleTextHelper::SetEventSource()?");
 
         return mxParent;
     }

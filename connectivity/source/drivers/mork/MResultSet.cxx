@@ -398,7 +398,6 @@ sal_Bool SAL_CALL OResultSet::isBeforeFirst(  ) throw(SQLException, RuntimeExcep
 
     // here you have to implement your movements
     // return true means there is no data
-    OSL_TRACE("In/Out: OResultSet::isBeforeFirst" );
     return( m_nRowPos < 1 );
 }
 
@@ -407,7 +406,6 @@ sal_Bool SAL_CALL OResultSet::isAfterLast(  ) throw(SQLException, RuntimeExcepti
     SAL_WARN("connectivity.mork", "OResultSet::isAfterLast() NOT IMPLEMENTED!");
     ResultSetEntryGuard aGuard( *this );
 
-    OSL_TRACE("In/Out: OResultSet::isAfterLast" );
 //    return sal_True;
     return m_nRowPos > currentRowCount() && MQueryHelper::queryComplete();
 }
@@ -416,7 +414,6 @@ sal_Bool SAL_CALL OResultSet::isFirst(  ) throw(SQLException, RuntimeException, 
 {
     ResultSetEntryGuard aGuard( *this );
 
-    OSL_TRACE("In/Out: OResultSet::isFirst" );
     return m_nRowPos == 1;
 }
 
@@ -425,7 +422,6 @@ sal_Bool SAL_CALL OResultSet::isLast(  ) throw(SQLException, RuntimeException, s
     SAL_WARN("connectivity.mork", "OResultSet::isLast() NOT IMPLEMENTED!");
     ResultSetEntryGuard aGuard( *this );
 
-    OSL_TRACE("In/Out: OResultSet::isLast" );
 //    return sal_True;
     return m_nRowPos == currentRowCount() && MQueryHelper::queryComplete();
 }
@@ -435,7 +431,6 @@ void SAL_CALL OResultSet::beforeFirst(  ) throw(SQLException, RuntimeException, 
     ResultSetEntryGuard aGuard( *this );
 
     // move before the first row so that isBeforeFirst returns false
-    OSL_TRACE("In/Out: OResultSet::beforeFirst" );
     if ( first() )
         previous();
 }
@@ -443,7 +438,6 @@ void SAL_CALL OResultSet::beforeFirst(  ) throw(SQLException, RuntimeException, 
 void SAL_CALL OResultSet::afterLast(  ) throw(SQLException, RuntimeException, std::exception)
 {
     ResultSetEntryGuard aGuard( *this );
-    OSL_TRACE("In/Out: OResultSet::afterLast" );
 
     if(last())
         next();
@@ -452,48 +446,40 @@ void SAL_CALL OResultSet::afterLast(  ) throw(SQLException, RuntimeException, st
 
 void SAL_CALL OResultSet::close() throw(SQLException, RuntimeException, std::exception)
 {
-    OSL_TRACE("In/Out: OResultSet::close" );
     dispose();
 }
 
 
 sal_Bool SAL_CALL OResultSet::first(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    OSL_TRACE("In/Out: OResultSet::first" );
     return seekRow( FIRST_POS );
 }
 
 
 sal_Bool SAL_CALL OResultSet::last(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    OSL_TRACE("In/Out: OResultSet::last" );
     return seekRow( LAST_POS );
 }
 
 sal_Bool SAL_CALL OResultSet::absolute( sal_Int32 row ) throw(SQLException, RuntimeException, std::exception)
 {
-    OSL_TRACE("In/Out: OResultSet::absolute" );
     return seekRow( ABSOLUTE_POS, row );
 }
 
 sal_Bool SAL_CALL OResultSet::relative( sal_Int32 row ) throw(SQLException, RuntimeException, std::exception)
 {
-    OSL_TRACE("In/Out: OResultSet::relative" );
     return seekRow( RELATIVE_POS, row );
 }
 
 sal_Bool SAL_CALL OResultSet::previous(  ) throw(SQLException, RuntimeException, std::exception)
 {
     ResultSetEntryGuard aGuard( *this );
-    OSL_TRACE("In/Out: OResultSet::previous" );
     return seekRow( PRIOR_POS );
 }
 
 Reference< XInterface > SAL_CALL OResultSet::getStatement(  ) throw(SQLException, RuntimeException, std::exception)
 {
     ResultSetEntryGuard aGuard( *this );
-
-    OSL_TRACE("In/Out: OResultSet::getStatement" );
     return m_xStatement;
 }
 
@@ -536,25 +522,19 @@ sal_Bool SAL_CALL OResultSet::wasNull(  ) throw(SQLException, RuntimeException, 
 
 void SAL_CALL OResultSet::cancel(  ) throw(RuntimeException, std::exception)
 {
-    ResultSetEntryGuard aGuard( *this );
-    OSL_TRACE("In/Out: OResultSet::cancel" );
-
 }
 
 void SAL_CALL OResultSet::clearWarnings(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    OSL_TRACE("In/Out: OResultSet::clearWarnings" );
 }
 
 Any SAL_CALL OResultSet::getWarnings(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    OSL_TRACE("In/Out: OResultSet::getWarnings" );
     return Any();
 }
 
 void SAL_CALL OResultSet::refreshRow(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    OSL_TRACE("In/Out: OResultSet::refreshRow" );
     if (fetchRow(getCurrentCardNumber(),true)) {
         //force fetch current row will cause we lose all change to the current row
         m_pStatement->getOwnConnection()->throwSQLException( STR_ERROR_REFRESH_ROW, *this );
@@ -746,7 +726,6 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
 
     if ( SQL_ISRULE(parseTree,where_clause) )
     {
-        OSL_TRACE("analyseSQL : Got WHERE clause");
         // Reset Parameter Counter
         resetParameters();
         analyseWhereClause( parseTree->getChild( 1 ), queryExpression );
@@ -755,8 +734,6 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
         SQL_ISPUNCTUATION(parseTree->getChild(0),"(") &&
         SQL_ISPUNCTUATION(parseTree->getChild(2),")"))
     {
-
-        OSL_TRACE("analyseSQL : Got Punctuation ()");
         MQueryExpression *subExpression = new MQueryExpression();
         analyseWhereClause( parseTree->getChild( 1 ), *subExpression );
         queryExpression.addExpression( subExpression );
@@ -764,9 +741,6 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
     else if ((SQL_ISRULE(parseTree,search_condition) || (SQL_ISRULE(parseTree,boolean_term)))
              && parseTree->count() == 3)                   // Handle AND/OR
     {
-
-        OSL_TRACE("analyseSQL : Got AND/OR clause");
-
         // TODO - Need to take care or AND, for now match is always OR
         analyseWhereClause( parseTree->getChild( 0 ), queryExpression );
         analyseWhereClause( parseTree->getChild( 2 ), queryExpression );
@@ -817,7 +791,6 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
         }
 
         if ( columnName == "0" && op == MQueryOp::Is && matchString == "1" ) {
-            OSL_TRACE("Query always evaluates to FALSE");
             m_bIsAlwaysFalseQuery = true;
         }
         queryExpression.addExpression( new MQueryExpressionString( columnName, op, matchString ));
@@ -825,8 +798,6 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
     else if (SQL_ISRULE(parseTree,like_predicate))
     {
         OSL_ENSURE(parseTree->count() == 2, "Error parsing LIKE predicate");
-
-        OSL_TRACE("analyseSQL : Got LIKE rule");
 
         if ( !(SQL_ISRULE(parseTree->getChild(0), column_ref)) )
         {
@@ -851,8 +822,6 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
               ( pAtom->getChild(0) && pAtom->getChild(0)->getNodeType() == SQLNodeType::String )
               ) )
         {
-            OSL_TRACE("analyseSQL : pAtom->count() = %zu", pAtom->count() );
-
             m_pStatement->getOwnConnection()->throwSQLException( STR_QUERY_INVALID_LIKE_STRING, *this );
         }
 
@@ -985,8 +954,7 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
     }
     else
     {
-        OSL_TRACE( "Unexpected statement!!!" );
-
+        SAL_WARN("connectivity.mork",  "Unexpected statement!!!" );
         m_pStatement->getOwnConnection()->throwSQLException( STR_QUERY_TOO_COMPLEX, *this );
     }
 }
@@ -1024,8 +992,6 @@ void OResultSet::fillRowData()
     {
         // Extract required info
 
-        OSL_TRACE("\tHave a Where Clause");
-
         analyseWhereClause( pParseTree, queryExpression );
     }
     // If the query is a 0=1 then set Row count to 0 and return
@@ -1052,8 +1018,6 @@ void OResultSet::fillRowData()
     determineReadOnly();
 
     SAL_INFO("connectivity.mork", "executeQuery returned " << rv);
-
-    OSL_TRACE( "\tOUT OResultSet::fillRowData()" );
 }
 
 
@@ -1189,13 +1153,10 @@ void SAL_CALL OResultSet::executeQuery() throw(css::sdbc::SQLException,
                     // query to the mozilla addressbooks has returned all
                     // values.
 
-                    OSL_TRACE("Query is to be sorted");
-
                     OSL_ENSURE( MQueryHelper::queryComplete(), "Query not complete!!");
 
                     OSortIndex aSortIndex(eKeyType,m_aOrderbyAscending);
 
-                    OSL_TRACE("OrderbyColumnNumber->size() = %zu",m_aOrderbyColumnNumber.size());
 #if OSL_DEBUG_LEVEL > 0
                     for ( ::std::vector<sal_Int32>::size_type i = 0; i < m_aColMapping.size(); i++ )
                         SAL_INFO(
@@ -1374,9 +1335,6 @@ bool OResultSet::validRow( sal_uInt32 nRow)
     sal_Int32  nNumberOfRecords = m_aQueryHelper.getResultCount();
 
     while ( nRow > (sal_uInt32)nNumberOfRecords && !MQueryHelper::queryComplete() ) {
-#if OSL_DEBUG_LEVEL > 0
-            OSL_TRACE("validRow: waiting...");
-#endif
             if (!m_aQueryHelper.checkRowAvailable( nRow ))
             {
                 SAL_INFO(
@@ -1438,30 +1396,22 @@ bool OResultSet::seekRow( eRowPosition pos, sal_Int32 nOffset )
     SAL_INFO("connectivity.mork", "nCurPos = " << nCurPos);
     switch( pos ) {
         case NEXT_POS:
-            OSL_TRACE("seekRow: NEXT");
             nCurPos++;
             break;
         case PRIOR_POS:
-            OSL_TRACE("seekRow: PRIOR");
             if ( nCurPos > 0 )
                 nCurPos--;
             break;
-
         case FIRST_POS:
-            OSL_TRACE("seekRow: FIRST");
             nCurPos = 1;
             break;
-
         case LAST_POS:
-            OSL_TRACE("seekRow: LAST");
             nCurPos = nRetrievedRows;
             break;
         case ABSOLUTE_POS:
-            SAL_INFO("connectivity.mork", "ABSOLUTE : " << nOffset);
             nCurPos = nOffset;
             break;
         case RELATIVE_POS:
-            SAL_INFO("connectivity.mork", "RELATIVE : " << nOffset);
             nCurPos += sal_uInt32( nOffset );
             break;
     }
@@ -1584,7 +1534,6 @@ void OResultSet::checkPendingUpdate() throw(SQLException, RuntimeException)
 {
     OSL_FAIL( "OResultSet::checkPendingUpdate() not implemented" );
 /*
-    OSL_TRACE("checkPendingUpdate, m_nRowPos = %u", m_nRowPos );
     const sal_Int32 nCurrentRow = getCurrentCardNumber();
 
     if ((m_nNewRow && nCurrentRow != m_nNewRow)
@@ -1803,13 +1752,11 @@ bool OResultSet::determineReadOnly()
 
 void OResultSet::setTable(OTable* _rTable)
 {
-    OSL_TRACE("In : setTable");
     m_pTable = _rTable;
     m_pTable->acquire();
     m_xTableColumns = m_pTable->getColumns();
     if(m_xTableColumns.is())
         m_aColumnNames = m_xTableColumns->getElementNames();
-    OSL_TRACE("Out : setTable");
 }
 
 void OResultSet::setOrderByColumns(const ::std::vector<sal_Int32>& _aColumnOrderBy)

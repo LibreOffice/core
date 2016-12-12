@@ -3079,7 +3079,7 @@ bool SvxCharScaleWidthItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberI
         return true;
     }
 
-    OSL_TRACE( "SvxCharScaleWidthItem::PutValue - Wrong type!" );
+    SAL_WARN("editeng",  "SvxCharScaleWidthItem::PutValue - Wrong type!" );
     return false;
 }
 

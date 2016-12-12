@@ -82,7 +82,7 @@ double convLength( const OUString& value, SvgUnit unit, const State& rState, cha
             fRet *= fBoxLen/100.0;
         }
         break;
-        default: OSL_TRACE( "Unknown length type" ); break;
+        default: SAL_WARN("filter.svg", "Unknown length type" ); break;
     }
 
     return fRet;

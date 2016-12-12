@@ -554,22 +554,6 @@ sal_Int32 OConnection::getMysqlVersion()
     return version;
 }
 
-// TODO: Not used
-//sal_Int32 OConnection::sdbcColumnType(rtl::OUString typeName)
-//{
-//  SAL_WARNx("mysqlc", "OConnection::sdbcColumnType");
-//  int i = 0;
-//  while (mysqlc_types[i].typeName) {
-//      if (rtl::OUString::createFromAscii(mysqlc_types[i].typeName).equals(
-//          typeName.toAsciiUpperCase()))
-//      {
-//          return mysqlc_types[i].dataType;
-//      }
-//      i++;
-//  }
-//  return 0;
-//}
-
 rtl::OUString OConnection::transFormPreparedStatement(const rtl::OUString& _sSQL)
 {
     rtl::OUString sSqlStatement = _sSQL;

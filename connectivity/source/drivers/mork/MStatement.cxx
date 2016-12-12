@@ -33,12 +33,6 @@
 #include "resource/mork_res.hrc"
 #include "resource/common_res.hrc"
 
-#if OSL_DEBUG_LEVEL > 0
-# define OUtoCStr( x ) ( OUStringToOString ( (x), RTL_TEXTENCODING_ASCII_US).getStr())
-#else /* OSL_DEBUG_LEVEL */
-# define OUtoCStr( x ) ("dummy")
-#endif /* OSL_DEBUG_LEVEL */
-
 static ::osl::Mutex m_ThreadMutex;
 
 using namespace ::comphelper;
@@ -126,12 +120,6 @@ OCommonStatement::StatementType OCommonStatement::parseSql( const OUString& sql 
 
     m_pParseTree = m_aParser.parseTree(aErr,sql);
 
-#if OSL_DEBUG_LEVEL > 0
-    {
-        OSL_TRACE("ParseSQL: %s", OUtoCStr( sql ) );
-    }
-#endif // OSL_DEBUG_LEVEL
-
     if(m_pParseTree)
     {
         m_pSQLIterator->setParseTree(m_pParseTree);
@@ -142,13 +130,6 @@ OCommonStatement::StatementType OCommonStatement::parseSql( const OUString& sql 
         {
             getOwnConnection()->throwSQLException( STR_QUERY_AT_LEAST_ONE_TABLES, *this );
         }
-
-#if OSL_DEBUG_LEVEL > 0
-        OSQLTables::const_iterator citer;
-        for( citer = rTabs.begin(); citer != rTabs.end(); ++citer ) {
-            OSL_TRACE("SELECT Table : %s", OUtoCStr(citer->first) );
-        }
-#endif
 
         Reference<XIndexAccess> xNames;
         switch(m_pSQLIterator->getStatementType())
@@ -242,8 +223,6 @@ sal_Bool SAL_CALL OCommonStatement::execute( const OUString& sql ) throw(SQLExce
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OCommonStatement_IBASE::rBHelper.bDisposed);
 
-    OSL_TRACE("Statement::execute( %s )", OUtoCStr( sql ) );
-
     Reference< XResultSet > xRS = executeQuery( sql );
     // returns true when a resultset is available
     return xRS.is();
@@ -254,8 +233,6 @@ Reference< XResultSet > SAL_CALL OCommonStatement::executeQuery( const OUString&
 {
     ::osl::MutexGuard aGuard( m_ThreadMutex );
     checkDisposed(OCommonStatement_IBASE::rBHelper.bDisposed);
-
-    OSL_TRACE("Statement::executeQuery( %s )", OUtoCStr( sql ) );
 
     // parse the statement
     StatementType eStatementType = parseSql( sql );

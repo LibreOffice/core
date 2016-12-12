@@ -104,7 +104,6 @@ void DataEditor::dispose()
     SvtMiscOptions aMiscOptions;
     aMiscOptions.RemoveListenerLink( LINK( this, DataEditor, MiscHdl ) );
 
-    OSL_TRACE( "DataEditor: DTOR" );
     m_pTbxData.clear();
     m_xBrwData.disposeAndClear();
     ModalDialog::dispose();

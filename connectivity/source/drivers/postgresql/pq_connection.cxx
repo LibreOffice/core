@@ -478,7 +478,7 @@ static void properties2arrays( const Sequence< PropertyValue > & args,
         else
         {
             // ignore for now
-            OSL_TRACE("sdbc-postgresql: unknown argument '%s'", OUStringToOString( args[i].Name, RTL_TEXTENCODING_UTF8 ).getStr() );
+            SAL_WARN("connectivity.postgresql", "sdbc-postgresql: unknown argument " << args[i].Name );
         }
     }
 }

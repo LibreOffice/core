@@ -414,8 +414,7 @@ IMPL_LINK_NOARG(SvxOnlineUpdateTabPage, CheckNowHdl_Impl, Button*, void)
     }
     catch( const uno::Exception& e )
     {
-         OSL_TRACE( "Caught exception: %s\n thread terminated.\n",
-            OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
+         SAL_WARN("cui.options", "Caught exception, thread terminated. " << e.Message);
     }
 }
 

@@ -63,10 +63,6 @@ namespace accessibility
         // fetched. Nevertheless, normally should employ RAII here...
         mnNotifierClientId(::comphelper::AccessibleEventNotifier::registerClient())
     {
-#ifdef DBG_UTIL
-        OSL_TRACE( "Received ID: %d", mnNotifierClientId );
-#endif
-
         try
         {
             // Create the state set.
@@ -91,9 +87,6 @@ namespace accessibility
             try
             {
                 ::comphelper::AccessibleEventNotifier::revokeClient( getNotifierClientId() );
-#ifdef DBG_UTIL
-                OSL_TRACE( "AccessibleImageBullet revoked ID: %d", mnNotifierClientId );
-#endif
             }
             catch( const uno::Exception& ) {}
         }
@@ -401,9 +394,6 @@ namespace accessibility
 
                 // #106234# Delegate to EventNotifier
                 ::comphelper::AccessibleEventNotifier::revokeClientNotifyDisposing( nClientId, xThis );
-#ifdef DBG_UTIL
-                OSL_TRACE( "AccessibleImageBullet disposed ID: %d", nClientId );
-#endif
             }
             catch( const uno::Exception& ) {}
         }

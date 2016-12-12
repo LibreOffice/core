@@ -746,7 +746,7 @@ bool OApplicationController::paste( ElementType _eType, const svx::ODataAccessDe
                 }
             }
             else
-                OSL_TRACE("There should be a sequence in it!");
+                SAL_WARN("dbaccess", "There should be a sequence in it!");
             return true;
         }
         else if ( _rPasteData.has(DataAccessDescriptorProperty::Component) ) // forms or reports

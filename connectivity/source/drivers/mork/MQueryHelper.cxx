@@ -79,17 +79,13 @@ MQueryHelper::MQueryHelper(const OColumnAlias& _ca)
 MQueryHelper::~MQueryHelper()
 {
     clear_results();
-    OSL_TRACE("OUT MQueryHelper::~MQueryHelper()");
 }
 
 
 void MQueryHelper::setAddressbook(OUString &ab)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-
     m_aAddressbook = ab;
-
-    OSL_TRACE("\tOUT MQuery::setAddressbook()");
 }
 
 void MQueryHelper::append(MQueryHelperResultEntry* resEnt)

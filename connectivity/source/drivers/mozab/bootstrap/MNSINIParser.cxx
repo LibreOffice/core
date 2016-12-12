@@ -28,10 +28,6 @@ IniParser::IniParser(OUString const & rIniName) throw(css::io::IOException, std:
         return;
 
 
-#if OSL_DEBUG_LEVEL > 0
-    OString sFile = OUStringToOString(iniUrl, RTL_TEXTENCODING_ASCII_US);
-    OSL_TRACE(__FILE__" -- parser() - %s\n", sFile.getStr());
-#endif
     oslFileHandle handle=nullptr;
     oslFileError fileError = osl_File_E_INVAL;
     try{
@@ -40,10 +36,7 @@ IniParser::IniParser(OUString const & rIniName) throw(css::io::IOException, std:
     }
     catch(const css::io::IOException&)
     {
-#if OSL_DEBUG_LEVEL > 0
-        OString file_tmp = OUStringToOString(iniUrl, RTL_TEXTENCODING_ASCII_US);
-        OSL_TRACE( __FILE__" -- couldn't open file: %s", file_tmp.getStr() );
-#endif
+        SAL_WARN("connectivity.mozab", "couldn't open file: " << iniUrl );
     }
 
     if (osl_File_E_None == fileError)
@@ -92,13 +85,10 @@ IniParser::IniParser(OUString const & rIniName) throw(css::io::IOException, std:
         }
         osl_closeFile(handle);
     }
-#if OSL_DEBUG_LEVEL > 0
     else
     {
-        OString file_tmp = OUStringToOString(iniUrl, RTL_TEXTENCODING_ASCII_US);
-        OSL_TRACE( __FILE__" -- couldn't open file: %s", file_tmp.getStr() );
+        SAL_WARN("connectivity.mozab", "couldn't open file: " << iniUrl );
     }
-#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -290,19 +290,15 @@ void SvxProxyTabPage::ReadConfigData_Impl()
             m_pNoProxyForED->SetText( aStringValue );
         }
     }
-
     catch (const container::NoSuchElementException&) {
-        OSL_TRACE( "SvxProxyTabPage::ReadConfigData_Impl: NoSuchElementException caught" );
+        SAL_WARN("cui.options", "SvxProxyTabPage::ReadConfigData_Impl: NoSuchElementException caught" );
     }
-
     catch (const css::lang::WrappedTargetException &) {
-        OSL_TRACE( "SvxProxyTabPage::ReadConfigData_Impl: WrappedTargetException caught" );
+        SAL_WARN("cui.options", "SvxProxyTabPage::ReadConfigData_Impl: WrappedTargetException caught" );
     }
-
     catch (const RuntimeException &) {
-        OSL_TRACE( "SvxProxyTabPage::ReadConfigData_Impl: RuntimeException caught" );
+        SAL_WARN("cui.options", "SvxProxyTabPage::ReadConfigData_Impl: RuntimeException caught" );
     }
-
 }
 
 void SvxProxyTabPage::ReadConfigDefaults_Impl()
@@ -351,16 +347,14 @@ void SvxProxyTabPage::ReadConfigDefaults_Impl()
     }
     catch (const beans::UnknownPropertyException &)
     {
-        OSL_TRACE( "SvxProxyTabPage::RestoreConfigDefaults_Impl: UnknownPropertyException caught" );
+        SAL_WARN("cui.options", "SvxProxyTabPage::RestoreConfigDefaults_Impl: UnknownPropertyException caught" );
     }
-
     catch (const css::lang::WrappedTargetException &) {
-        OSL_TRACE( "SvxProxyTabPage::RestoreConfigDefaults_Impl: WrappedTargetException caught" );
+        SAL_WARN("cui.options", "SvxProxyTabPage::RestoreConfigDefaults_Impl: WrappedTargetException caught" );
     }
-
     catch (const RuntimeException &)
     {
-        OSL_TRACE( "SvxProxyTabPage::RestoreConfigDefaults_Impl: RuntimeException caught" );
+        SAL_WARN("cui.options", "SvxProxyTabPage::RestoreConfigDefaults_Impl: RuntimeException caught" );
     }
 }
 
@@ -382,19 +376,16 @@ void SvxProxyTabPage::RestoreConfigDefaults_Impl()
         Reference< util::XChangesBatch > xChangesBatch(m_xConfigurationUpdateAccess, UNO_QUERY_THROW);
         xChangesBatch->commitChanges();
     }
-
     catch (const beans::UnknownPropertyException &)
     {
-        OSL_TRACE( "SvxProxyTabPage::RestoreConfigDefaults_Impl: UnknownPropertyException caught" );
+        SAL_WARN("cui.options", "SvxProxyTabPage::RestoreConfigDefaults_Impl: UnknownPropertyException caught" );
     }
-
     catch (const css::lang::WrappedTargetException &) {
-        OSL_TRACE( "SvxProxyTabPage::RestoreConfigDefaults_Impl: WrappedTargetException caught" );
+        SAL_WARN("cui.options", "SvxProxyTabPage::RestoreConfigDefaults_Impl: WrappedTargetException caught" );
     }
-
     catch (const RuntimeException &)
     {
-        OSL_TRACE( "SvxProxyTabPage::RestoreConfigDefaults_Impl: RuntimeException caught" );
+        SAL_WARN("cui.options", "SvxProxyTabPage::RestoreConfigDefaults_Impl: RuntimeException caught" );
     }
 }
 
@@ -480,25 +471,20 @@ bool SvxProxyTabPage::FillItemSet(SfxItemSet* )
         Reference< util::XChangesBatch > xChangesBatch(m_xConfigurationUpdateAccess, UNO_QUERY_THROW);
         xChangesBatch->commitChanges();
     }
-
     catch (const css::lang::IllegalArgumentException &) {
-        OSL_TRACE( "SvxProxyTabPage::FillItemSet: IllegalArgumentException caught" );
+        SAL_WARN("cui.options", "SvxProxyTabPage::FillItemSet: IllegalArgumentException caught" );
     }
-
     catch (const beans::UnknownPropertyException &) {
-        OSL_TRACE( "SvxProxyTabPage::FillItemSet: UnknownPropertyException caught" );
+        SAL_WARN("cui.options", "SvxProxyTabPage::FillItemSet: UnknownPropertyException caught" );
     }
-
     catch (const beans::PropertyVetoException &) {
-        OSL_TRACE( "SvxProxyTabPage::FillItemSet: PropertyVetoException caught" );
+        SAL_WARN("cui.options", "SvxProxyTabPage::FillItemSet: PropertyVetoException caught" );
     }
-
     catch (const css::lang::WrappedTargetException &) {
-        OSL_TRACE( "SvxProxyTabPage::FillItemSet: WrappedTargetException caught" );
+        SAL_WARN("cui.options", "SvxProxyTabPage::FillItemSet: WrappedTargetException caught" );
     }
-
     catch (const RuntimeException &) {
-        OSL_TRACE( "SvxProxyTabPage::FillItemSet: RuntimeException caught" );
+        SAL_WARN("cui.options", "SvxProxyTabPage::FillItemSet: RuntimeException caught" );
     }
 
     return bModified;

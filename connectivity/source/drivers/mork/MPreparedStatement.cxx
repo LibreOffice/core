@@ -13,12 +13,6 @@
 #include <connectivity/dbtools.hxx>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 
-#if OSL_DEBUG_LEVEL > 0
-# define OUtoCStr( x ) ( OUStringToOString ( (x), RTL_TEXTENCODING_ASCII_US).getStr())
-#else /* OSL_DEBUG_LEVEL */
-# define OUtoCStr( x ) ("dummy")
-#endif /* OSL_DEBUG_LEVEL */
-
 using namespace ::comphelper;
 using namespace connectivity;
 using namespace connectivity::mork;
@@ -167,7 +161,6 @@ void SAL_CALL OPreparedStatement::setString( sal_Int32 parameterIndex, const OUS
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OCommonStatement_IBASE::rBHelper.bDisposed);
 
-    OSL_TRACE("prepStmt::setString( %s )", OUtoCStr( x ) );
     setParameter( parameterIndex, x );
 }
 
@@ -184,7 +177,6 @@ Reference< XConnection > SAL_CALL OPreparedStatement::getConnection(  ) throw(SQ
 Reference< XResultSet > SAL_CALL OPreparedStatement::executeQuery(  ) throw(SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    OSL_TRACE("In: OPreparedStatement::executeQuery" );
     checkDisposed(OCommonStatement_IBASE::rBHelper.bDisposed);
 
     // our statement has already been parsed in lateInit, no need to do all this (potentially expensive)

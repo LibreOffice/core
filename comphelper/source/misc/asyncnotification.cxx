@@ -124,7 +124,6 @@ namespace comphelper
     {
         ::osl::MutexGuard aGuard( m_xImpl->aMutex );
 
-        OSL_TRACE( "AsyncEventNotifier(%p): adding %p", this, _rEvent.get() );
         // remember this event
         m_xImpl->aEvents.push_back( ProcessableEvent( _rEvent, _xProcessor ) );
 
@@ -149,9 +148,6 @@ namespace comphelper
                 {
                     aEvent = m_xImpl->aEvents.front();
                     m_xImpl->aEvents.pop_front();
-                    OSL_TRACE(
-                        "AsyncEventNotifier(%p): popping %p", this,
-                        aEvent.aEvent.get());
                 }
                 if (m_xImpl->aEvents.empty())
                 {

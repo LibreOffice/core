@@ -112,8 +112,6 @@ ChartModel::ChartModel(uno::Reference<uno::XComponentContext > const & xContext)
     ,bSet(false)
     , mpOpenGLWindow(nullptr)
 {
-    OSL_TRACE( "ChartModel: CTOR called" );
-
     osl_atomic_increment(&m_refCount);
     {
         m_xOldModelAgg.set(
@@ -158,8 +156,6 @@ ChartModel::ChartModel( const ChartModel & rOther )
     , bSet(false)
     , mpOpenGLWindow(nullptr)
 {
-    OSL_TRACE( "ChartModel: Copy-CTOR called" );
-
     osl_atomic_increment(&m_refCount);
     {
         m_xOldModelAgg.set(
@@ -195,7 +191,6 @@ ChartModel::ChartModel( const ChartModel & rOther )
 
 ChartModel::~ChartModel()
 {
-    OSL_TRACE( "ChartModel: DTOR called" );
     if( m_xOldModelAgg.is())
         m_xOldModelAgg->setDelegator( nullptr );
 }
@@ -455,7 +450,7 @@ void SAL_CALL ChartModel::unlockControllers() throw(uno::RuntimeException, std::
         return; //behave passive if already disposed or closed or throw exception @todo?
     if( m_nControllerLockCount == 0 )
     {
-        OSL_TRACE( "ChartModel: unlockControllers called with m_nControllerLockCount == 0" );
+        SAL_WARN("chart2",  "ChartModel: unlockControllers called with m_nControllerLockCount == 0" );
         return;
     }
     --m_nControllerLockCount;
@@ -579,8 +574,6 @@ void SAL_CALL ChartModel::dispose() throw(uno::RuntimeException, std::exception)
 
     if( m_xOldModelAgg.is())
         m_xOldModelAgg->setDelegator( nullptr );
-
-    OSL_TRACE( "ChartModel: dispose() called" );
 }
 
 void SAL_CALL ChartModel::addEventListener( const uno::Reference< lang::XEventListener > & xListener )

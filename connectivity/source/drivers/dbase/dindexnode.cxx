@@ -697,7 +697,7 @@ void ONDXNode::Write(SvStream &rStream, const ONDXPage& rPage) const
     {
         if (sizeof(double) != rIndex.getHeader().db_keylen)
         {
-            OSL_TRACE("this key length cannot possibly be right?");
+            SAL_WARN("connectivity.dbase", "this key length cannot possibly be right?");
         }
         if (aKey.getValue().isNull())
         {
@@ -935,8 +935,8 @@ SvStream& connectivity::dbase::WriteONDXPage(SvStream &rStream, const ONDXPage& 
 
 void ONDXPage::PrintPage()
 {
-    OSL_TRACE("\nSDB: -----------Page: %d  Parent: %d  Count: %d  Child: %d-----",
-        nPagePos, HasParent() ? aParent->GetPagePos() : 0 ,nCount, aChild.GetPagePos());
+    SAL_WARN("connectivity.dbase", "SDB: -----------Page: " << nPagePos << "  Parent: " << (HasParent() ? aParent->GetPagePos() : 0)
+              << "  Count: " << nCount << "  Child: " << aChild.GetPagePos() << "-----");
 
     for (sal_uInt16 i = 0; i < nCount; i++)
     {
@@ -947,18 +947,20 @@ void ONDXPage::PrintPage()
 
         if (rKey.getValue().isNull())
         {
-            OSL_TRACE("SDB: [%d,NULL,%d]",rKey.GetRecord(), rNode.GetChild().GetPagePos());
+            SAL_WARN("connectivity.dbase", "SDB: [" << rKey.GetRecord() << ",NULL," << rNode.GetChild().GetPagePos() << "]");
         }
         else if (rIndex.getHeader().db_keytype)
         {
-            OSL_TRACE("SDB: [%d,%f,%d]",rKey.GetRecord(), rKey.getValue().getDouble(),rNode.GetChild().GetPagePos());
+            SAL_WARN("connectivity.dbase", "SDB: [" << rKey.GetRecord() << "," << rKey.getValue().getDouble()
+                                           << "," << rNode.GetChild().GetPagePos() << "]");
         }
         else
         {
-            OSL_TRACE("SDB: [%d,%s,%d]",rKey.GetRecord(), OUStringToOString(rKey.getValue().getString(), rIndex.m_pTable->getConnection()->getTextEncoding()).getStr(),rNode.GetChild().GetPagePos());
+            SAL_WARN("connectivity.dbase", "SDB: [" << rKey.GetRecord() << "," << rKey.getValue().getString()
+                                           << "," << rNode.GetChild().GetPagePos() << "]" );
         }
     }
-    OSL_TRACE("SDB: -----------------------------------------------");
+    SAL_WARN("connectivity.dbase", "SDB: -----------------------------------------------");
     if (!IsLeaf())
     {
 #if OSL_DEBUG_LEVEL > 1
@@ -970,7 +972,7 @@ void ONDXPage::PrintPage()
         }
 #endif
     }
-    OSL_TRACE("SDB: ===============================================");
+    SAL_WARN("connectivity.dbase", "SDB: ===============================================");
 }
 #endif
 

@@ -189,7 +189,7 @@ Reference< document::XFilter > ChartModel::impl_createFilter(
     // fall-back: create XML-Filter
     if( ! xFilter.is())
     {
-        OSL_TRACE( "No FilterName passed in MediaDescriptor" );
+        SAL_WARN("chart2", "No FilterName passed in MediaDescriptor" );
         xFilter.set(
             m_xContext->getServiceManager()->createInstanceWithContext(
                 "com.sun.star.comp.chart2.XMLFilter", m_xContext ),

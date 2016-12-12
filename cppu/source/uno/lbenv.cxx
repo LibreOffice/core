@@ -656,7 +656,7 @@ void writeLine(
                     }
                     else
                     {
-                        OSL_TRACE( "%s", pLine );
+                        SAL_WARN("cppu", pLine );
                     }
                 }
             }

@@ -404,8 +404,6 @@ Reference< XResultSet > SAL_CALL MacabCommonStatement::executeQuery(
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(rBHelper.bDisposed);
 
-OSL_TRACE("Mac OS Address book - SQL Request: %s", OUtoCStr(sql));
-
     MacabResultSet* pResult = new MacabResultSet(this);
     Reference< XResultSet > xRS = pResult;
     OUString aErr;

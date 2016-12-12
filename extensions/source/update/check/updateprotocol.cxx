@@ -80,8 +80,6 @@ checkForUpdates(
     uno::Reference< task::XInteractionHandler > const & rxInteractionHandler,
     const uno::Reference< deployment::XUpdateInformationProvider >& rUpdateInfoProvider)
 {
-    OSL_TRACE("checking for updates ..");
-
     OUString myArch;
     OUString myOS;
 

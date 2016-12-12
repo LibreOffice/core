@@ -263,10 +263,8 @@ getValue( EContact* pContact, sal_Int32 nColumnNum, GType nType, GValue* pStackV
 
     if ( G_PARAM_SPEC_VALUE_TYPE (pSpec) != nType )
     {
-
-        OSL_TRACE( "Wrong type (0x%x) (0x%x) '%s'",
-                   (int)G_PARAM_SPEC_VALUE_TYPE (pSpec), (int) nType,
-                   pSpec->name ? pSpec->name : "<noname>");
+        SAL_WARN("connectivity.evoab", "Wrong type (0x" << std::hex << (int)G_PARAM_SPEC_VALUE_TYPE(pSpec) << ") (0x"
+                  << std::hex << (int) nType << ") " <<  (pSpec->name ? pSpec->name : "<noname>"));
         return false;
     }
 
@@ -290,7 +288,7 @@ getValue( EContact* pContact, sal_Int32 nColumnNum, GType nType, GValue* pStackV
                                pStackValue );
         if ( G_VALUE_TYPE( pStackValue ) != nType )
         {
-            OSL_TRACE( "Fetched type mismatch" );
+            SAL_WARN("connectivity.evoab", "Fetched type mismatch" );
             g_value_unset( pStackValue );
             return false;
         }
@@ -1079,8 +1077,6 @@ void SAL_CALL OEvoabResultSet::cancel(  ) throw(RuntimeException, std::exception
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    OSL_TRACE("In/Out: OEvoabResultSet::cancel" );
-
 }
 
 //XCloseable
@@ -1090,7 +1086,6 @@ void SAL_CALL OEvoabResultSet::close(  ) throw(SQLException, RuntimeException, s
         ::osl::MutexGuard aGuard( m_aMutex );
         checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
     }
-    OSL_TRACE("In/Out: OEvoabResultSet::close" );
     dispose();
 }
 
@@ -1098,13 +1093,11 @@ void SAL_CALL OEvoabResultSet::close(  ) throw(SQLException, RuntimeException, s
 
 void SAL_CALL OEvoabResultSet::clearWarnings(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    OSL_TRACE("In/Out: OEvoabResultSet::clearWarnings" );
     m_aWarnings.clearWarnings();
 }
 
 Any SAL_CALL OEvoabResultSet::getWarnings(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    OSL_TRACE("In/Out: OEvoabResultSet::getWarnings" );
     return m_aWarnings.getWarnings();
 }
 

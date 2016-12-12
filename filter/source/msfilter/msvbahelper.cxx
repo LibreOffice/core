@@ -92,7 +92,6 @@ SfxObjectShell* findShellForUrl( const OUString& sMacroURLOrPath )
         osl::FileBase::getFileURLFromSystemPath( sMacroURLOrPath, aURL );
         aObj.SetURL( aURL );
     }
-    OSL_TRACE("Trying to find shell for url %s", OUStringToOString( aURL, RTL_TEXTENCODING_UTF8 ).getStr() );
     while ( pShell )
     {
 
@@ -185,10 +184,6 @@ bool hasMacro( SfxObjectShell* pShell, const OUString& sLibrary, OUString& sMod,
 #else
     if ( !sLibrary.isEmpty() && !sMacro.isEmpty() )
     {
-        OSL_TRACE("** Searching for %s.%s in library %s"
-            ,OUStringToOString( sMod, RTL_TEXTENCODING_UTF8 ).getStr()
-            ,OUStringToOString( sMacro, RTL_TEXTENCODING_UTF8 ).getStr()
-            ,OUStringToOString( sLibrary, RTL_TEXTENCODING_UTF8 ).getStr() );
         BasicManager* pBasicMgr = pShell-> GetBasicManager();
         if ( pBasicMgr )
         {

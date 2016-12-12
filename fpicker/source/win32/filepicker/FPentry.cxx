@@ -51,7 +51,6 @@ static Reference< XInterface > SAL_CALL createInstance(
 
     if (bVistaOrNewer)
     {
-        OSL_TRACE("use special (vista) system file picker ...");
         xDlg.set(
             static_cast< XFilePicker2* >(
                 new ::fpicker::win32::vista::VistaFilePicker( rServiceManager ) ) );
@@ -59,7 +58,6 @@ static Reference< XInterface > SAL_CALL createInstance(
     else
 #endif
     {
-        OSL_TRACE("use normal system file picker ...");
         xDlg.set(
             static_cast< XFilePicker2* >(
                 new CFilePicker( rServiceManager ) ) );

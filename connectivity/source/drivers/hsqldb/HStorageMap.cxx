@@ -358,8 +358,8 @@ namespace connectivity
         {
             if (env->ExceptionCheck())
                 env->ExceptionClear();
+            SAL_WARN("connectivity.hsqldb", "forwarding Exception: " << _aException.Message );
             OString cstr( OUStringToOString(_aException.Message, RTL_TEXTENCODING_JAVA_UTF8 ) );
-            OSL_TRACE( __FILE__": forwarding Exception: %s", cstr.getStr() );
             env->ThrowNew(env->FindClass("java/io/IOException"), cstr.getStr());
         }
 

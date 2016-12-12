@@ -79,8 +79,7 @@ extern "C" SAL_JNI_EXPORT jboolean JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_S
             OSL_FAIL("Exception caught! : Java_com_sun_star_sdbcx_comp_hsqldb_StorageFileAccess_isStreamElement");
             if (env->ExceptionCheck())
                 env->ExceptionClear();
-            OString cstr( OUStringToOString(e.Message, RTL_TEXTENCODING_JAVA_UTF8 ) );
-            OSL_TRACE( __FILE__": forwarding Exception: %s", cstr.getStr() );
+            SAL_WARN("connectivity.hsqldb", "forwarding Exception: " << e.Message);
         }
     }
     return JNI_FALSE;

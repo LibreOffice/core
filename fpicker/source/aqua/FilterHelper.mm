@@ -237,7 +237,6 @@ void FilterHelper::ensureFilterList( const ::rtl::OUString& _rInitialCurrentFilt
 
         // set the first filter to the current filter
         m_aCurrentFilter = _rInitialCurrentFilter;
-        OSL_TRACE("ensureFilterList filter:%s", OUStringToOString(m_aCurrentFilter, RTL_TEXTENCODING_UTF8).getStr());
     }
 }
 
@@ -250,23 +249,6 @@ void FilterHelper::SetCurFilter( const rtl::OUString& rFilter )
         m_aCurrentFilter = rFilter;
     }
 
-    //only for output purposes
-#if OSL_DEBUG_LEVEL > 0
-    FilterList::iterator aFilter = ::std::find_if(m_pFilterList->begin(), m_pFilterList->end(), FilterTitleMatch(m_aCurrentFilter));
-    if (aFilter != m_pFilterList->end()) {
-        OUStringList suffixes = aFilter->getFilterSuffixList();
-        if (!suffixes.empty()) {
-            SAL_INFO("fpicker.aqua", "Current active suffixes: ");
-            OUStringList::iterator suffIter = suffixes.begin();
-            while(suffIter != suffixes.end()) {
-                SAL_INFO("fpicker.aqua", *suffIter);
-                suffIter++;
-            }
-        }
-    } else {
-        SAL_INFO("fpicker.aqua", "No filter entry was found for that name!");
-    }
-#endif
 }
 
 void FilterHelper::SetFilters()
@@ -274,8 +256,6 @@ void FilterHelper::SetFilters()
     // set the default filter
     if( m_aCurrentFilter.getLength() > 0 )
     {
-        OSL_TRACE( "Setting current filter to %s", OUStringToOString(m_aCurrentFilter, RTL_TEXTENCODING_UTF8).getStr());
-
         SetCurFilter( m_aCurrentFilter );
     }
 }
@@ -343,7 +323,7 @@ throw (css::lang::IllegalArgumentException, css::uno::RuntimeException)
 bool FilterHelper::filenameMatchesFilter(NSString* sFilename)
 {
     if (m_aCurrentFilter.isEmpty()) {
-        OSL_TRACE("filter name is empty");
+        SAL_WARN("fpicker", "filter name is empty");
         return true;
     }
 
@@ -363,7 +343,7 @@ bool FilterHelper::filenameMatchesFilter(NSString* sFilename)
 
     FilterList::iterator filter = ::std::find_if(m_pFilterList->begin(), m_pFilterList->end(), FilterTitleMatch(m_aCurrentFilter));
     if (filter == m_pFilterList->end()) {
-        OSL_TRACE("filter not found in list");
+        SAL_WARN("fpicker", "filter not found in list");
         return true;
     }
 

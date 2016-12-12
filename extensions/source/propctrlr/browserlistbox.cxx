@@ -248,21 +248,18 @@ namespace pcr
 
     void SAL_CALL PropertyControlContext_Impl::focusGained( const Reference< XPropertyControl >& Control ) throw (RuntimeException, std::exception)
     {
-        OSL_TRACE( "PropertyControlContext_Impl: FOCUS_GAINED" );
         impl_notify_throw( Control, FOCUS_GAINED );
     }
 
 
     void SAL_CALL PropertyControlContext_Impl::valueChanged( const Reference< XPropertyControl >& Control ) throw (RuntimeException, std::exception)
     {
-        OSL_TRACE( "PropertyControlContext_Impl: VALUE_CHANGED" );
         impl_notify_throw( Control, VALUE_CHANGED );
     }
 
 
     void SAL_CALL PropertyControlContext_Impl::activateNextControl( const Reference< XPropertyControl >& CurrentControl ) throw (RuntimeException, std::exception)
     {
-        OSL_TRACE( "PropertyControlContext_Impl: ACTIVATE_NEXT" );
         impl_notify_throw( CurrentControl, ACTIVATE_NEXT );
     }
 
@@ -304,15 +301,12 @@ namespace pcr
         switch ( rControlEvent.eType )
         {
         case FOCUS_GAINED:
-            OSL_TRACE( "PropertyControlContext_Impl::processEvent: FOCUS_GAINED" );
             m_pContext->focusGained( rControlEvent.xControl );
             break;
         case VALUE_CHANGED:
-            OSL_TRACE( "PropertyControlContext_Impl::processEvent: VALUE_CHANGED" );
             m_pContext->valueChanged( rControlEvent.xControl );
             break;
         case ACTIVATE_NEXT:
-            OSL_TRACE( "PropertyControlContext_Impl::processEvent: ACTIVATE_NEXT" );
             m_pContext->activateNextControl( rControlEvent.xControl );
             break;
         }
