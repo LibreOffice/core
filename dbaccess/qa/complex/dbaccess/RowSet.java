@@ -528,7 +528,12 @@ public class RowSet extends TestCase
      */
     private int positionRandom() throws SQLException, UnknownPropertyException, WrappedTargetException
     {
-        final int position = (new Random()).nextInt(currentRowCount() - 2) + 2;
+        // note: obviously this should subtract 2 but actually subtract 3
+        // because if we have just deleted the current row then
+        // ORowSetBase::impl_getRowCount() will lie and currentRowCount()
+        // returns 1 more than the actual number of rows and then
+        // positionRandom() followed by deleteRow() deletes *last* row
+        final int position = (new Random()).nextInt(currentRowCount() - 3) + 2;
         assertTrue("sub task failed: could not position to row no. " + (Integer.valueOf(position)).toString(),
                 m_resultSet.absolute(position));
         return m_resultSet.getRow();
