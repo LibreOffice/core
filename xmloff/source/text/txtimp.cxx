@@ -2294,9 +2294,9 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
     case XML_TOK_TEXT_CHANGE_END:
         pContext = new XMLChangeImportContext(
             rImport, nPrefix, rLocalName,
-            ((nToken == XML_TOK_TEXTP_CHANGE_END)
+            ((nToken == XML_TOK_TEXT_CHANGE_END)
                 ? XMLChangeImportContext::Element::END
-                : (nToken == XML_TOK_TEXTP_CHANGE_START)
+                : (nToken == XML_TOK_TEXT_CHANGE_START)
                     ? XMLChangeImportContext::Element::START
                     : XMLChangeImportContext::Element::POINT),
             true);
