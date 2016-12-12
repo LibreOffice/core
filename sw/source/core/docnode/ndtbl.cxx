@@ -725,6 +725,8 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTableOpts,
             getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_STANDARD ), pUndo );
 
     SwTable& rNdTable = pTableNd->GetTable();
+    if( rNdTable.GetRegisteredIn() == pTableFormat )
+        pTableFormat->Remove( &rNdTable );
 
     const sal_uInt16 nRowsToRepeat =
             tabopts::HEADLINE == (rInsTableOpts.mnInsMode & tabopts::HEADLINE) ?
@@ -745,6 +747,7 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTableOpts,
 
     // Set Orientation in the Table's Format
     pTableFormat->SetFormatAttr( SwFormatHoriOrient( 0, eAdjust ) );
+    rNdTable.RegisterToFormat(*pTableFormat);
 
     if( pTAFormat || ( rInsTableOpts.mnInsMode & tabopts::DEFAULT_BORDER) )
     {
