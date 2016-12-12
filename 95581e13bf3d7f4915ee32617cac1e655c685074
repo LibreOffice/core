@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a71b18c_efb593d0",
+        "filename": "sc/source/ui/view/gridwin4.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 899,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-12-12T13:53:53Z",
+      "side": 1,
+      "message": "1) what is this twip factor?\n2) the constant doesn\u0027t need to be static",
+      "revId": "95581e13bf3d7f4915ee32617cac1e655c685074",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
