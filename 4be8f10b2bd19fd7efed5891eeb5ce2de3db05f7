@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a71b18c_0f680ff5",
+        "filename": "accessibility/inc/extended/AccessibleBrowseBoxBase.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-12-12T19:13:23Z",
+      "side": 1,
+      "message": "pretty please kill this typedef",
+      "revId": "4be8f10b2bd19fd7efed5891eeb5ce2de3db05f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
