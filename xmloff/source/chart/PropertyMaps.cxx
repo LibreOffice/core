@@ -564,7 +564,7 @@ bool XMLChartImportPropertyMapper::handleSpecialItem(
         {
             case XML_SCH_CONTEXT_SPECIAL_TICKS_MAJ_INNER:
             case XML_SCH_CONTEXT_SPECIAL_TICKS_MIN_INNER:
-                ::sax::Converter::convertBool( bValue, rValue );
+                (void)::sax::Converter::convertBool( bValue, rValue );
                 // modify old value
                 rProperty.maValue >>= nValue;
                 if( bValue )
@@ -575,7 +575,7 @@ bool XMLChartImportPropertyMapper::handleSpecialItem(
                 break;
             case XML_SCH_CONTEXT_SPECIAL_TICKS_MAJ_OUTER:
             case XML_SCH_CONTEXT_SPECIAL_TICKS_MIN_OUTER:
-                ::sax::Converter::convertBool( bValue, rValue );
+                (void)::sax::Converter::convertBool( bValue, rValue );
                 // modify old value
                 rProperty.maValue >>= nValue;
                 if( bValue )
@@ -610,7 +610,7 @@ bool XMLChartImportPropertyMapper::handleSpecialItem(
                 break;
             case XML_SCH_CONTEXT_SPECIAL_DATA_LABEL_TEXT:
                 rProperty.maValue >>= nValue;
-                ::sax::Converter::convertBool( bValue, rValue );
+                (void)::sax::Converter::convertBool( bValue, rValue );
                 if( bValue )
                     SCH_XML_SETFLAG( nValue, chart::ChartDataCaption::TEXT );
                 else
@@ -619,7 +619,7 @@ bool XMLChartImportPropertyMapper::handleSpecialItem(
                 break;
             case XML_SCH_CONTEXT_SPECIAL_DATA_LABEL_SYMBOL:
                 rProperty.maValue >>= nValue;
-                ::sax::Converter::convertBool( bValue, rValue );
+                (void)::sax::Converter::convertBool( bValue, rValue );
                 if( bValue )
                     SCH_XML_SETFLAG( nValue, chart::ChartDataCaption::SYMBOL );
                 else
