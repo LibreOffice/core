@@ -126,13 +126,7 @@ Listener::Listener (
         }
 
         Link<tools::EventMultiplexerEvent&,void> aLink (LINK(this, Listener, EventMultiplexerCallback));
-        mpBase->GetEventMultiplexer()->AddEventListener(
-            aLink,
-            EventMultiplexerEventId::MainViewRemoved
-            | EventMultiplexerEventId::MainViewAdded
-            | EventMultiplexerEventId::ControllerAttached
-            | EventMultiplexerEventId::ControllerDetached
-            | EventMultiplexerEventId::ConfigurationUpdated);
+        mpBase->GetEventMultiplexer()->AddEventListener(aLink);
     }
 }
 
@@ -186,13 +180,7 @@ void Listener::ReleaseListeners()
     if (mpBase != nullptr)
     {
         Link<sd::tools::EventMultiplexerEvent&,void> aLink (LINK(this, Listener, EventMultiplexerCallback));
-        mpBase->GetEventMultiplexer()->RemoveEventListener(
-            aLink,
-            EventMultiplexerEventId::MainViewRemoved
-            | EventMultiplexerEventId::MainViewAdded
-            | EventMultiplexerEventId::ControllerAttached
-            | EventMultiplexerEventId::ControllerDetached
-            | EventMultiplexerEventId::ConfigurationUpdated);
+        mpBase->GetEventMultiplexer()->RemoveEventListener(aLink);
     }
 }
 

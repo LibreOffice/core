@@ -394,11 +394,7 @@ ViewOverlayManager::ViewOverlayManager( ViewShellBase& rViewShellBase )
 , mnUpdateTagsEvent( nullptr )
 {
     Link<tools::EventMultiplexerEvent&,void> aLink( LINK(this,ViewOverlayManager,EventMultiplexerListener) );
-    mrBase.GetEventMultiplexer()->AddEventListener(aLink, EventMultiplexerEventId::CurrentPageChanged
-        | EventMultiplexerEventId::MainViewAdded
-        | EventMultiplexerEventId::ViewAdded
-        | EventMultiplexerEventId::BeginTextEdit
-        | EventMultiplexerEventId::EndTextEdit );
+    mrBase.GetEventMultiplexer()->AddEventListener(aLink);
 
     StartListening( *mrBase.GetDocShell() );
 }

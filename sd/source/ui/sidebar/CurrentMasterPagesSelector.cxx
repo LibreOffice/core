@@ -74,14 +74,7 @@ CurrentMasterPagesSelector::CurrentMasterPagesSelector (
     : MasterPagesSelector (pParent, rDocument, rBase, rpContainer, rxSidebar)
 {
     Link<sd::tools::EventMultiplexerEvent&,void> aLink (LINK(this,CurrentMasterPagesSelector,EventMultiplexerListener));
-    rBase.GetEventMultiplexer()->AddEventListener(aLink,
-        EventMultiplexerEventId::CurrentPageChanged
-        | EventMultiplexerEventId::EditModeNormal
-        | EventMultiplexerEventId::EditModeMaster
-        | EventMultiplexerEventId::PageOrder
-        | EventMultiplexerEventId::ShapeChanged
-        | EventMultiplexerEventId::ShapeInserted
-        | EventMultiplexerEventId::ShapeRemoved);
+    rBase.GetEventMultiplexer()->AddEventListener(aLink);
 }
 
 CurrentMasterPagesSelector::~CurrentMasterPagesSelector()
