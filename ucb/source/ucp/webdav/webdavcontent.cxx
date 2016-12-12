@@ -2822,6 +2822,7 @@ void Content::transfer(
                         Environment );
                     // Unreachable
                 }
+                SAL_FALLTHROUGH;
 
                 case ucb::NameClash::OVERWRITE:
                     break;
