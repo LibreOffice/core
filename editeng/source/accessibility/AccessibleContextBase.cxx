@@ -401,7 +401,7 @@ void SAL_CALL AccessibleContextBase::removeAccessibleEventListener (
     throw (uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
-    if (rxListener.is())
+    if (rxListener.is() && mnClientId)
     {
         sal_Int32 nListenerCount = comphelper::AccessibleEventNotifier::removeEventListener( mnClientId, rxListener );
         if ( !nListenerCount )
