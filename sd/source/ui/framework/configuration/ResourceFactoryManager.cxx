@@ -73,7 +73,7 @@ void ResourceFactoryManager::AddFactory (
         maFactoryPatternList.push_back(FactoryPatternList::value_type(rsURL, rxFactory));
 
 #if defined VERBOSE && VERBOSE>=1
-        OSL_TRACE("ResourceFactoryManager::AddFactory pattern %s %x\n",
+        SAL_INFO("sd",("ResourceFactoryManager::AddFactory pattern %s %x\n",
             OUStringToOString(rsURL, RTL_TEXTENCODING_UTF8).getStr(),
             rxFactory.get());
 #endif
@@ -83,7 +83,7 @@ void ResourceFactoryManager::AddFactory (
         maFactoryMap[rsURL] = rxFactory;
 
 #if defined VERBOSE && VERBOSE>=1
-        OSL_TRACE("ResourceFactoryManager::AddFactory fixed %s %x\n",
+        SAL_INFO("sd",("ResourceFactoryManager::AddFactory fixed %s %x\n",
             OUStringToOString(rsURL, RTL_TEXTENCODING_UTF8).getStr(),
             rxFactory.get());
 #endif

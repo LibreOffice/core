@@ -1790,7 +1790,7 @@ void DrawViewShell::GetState (SfxItemSet& rSet)
                 GetDocSh()->GetState (rSet);
                 break;
             default:
-                OSL_TRACE ("DrawViewShell::GetState(): can not handle which id %d", nWhich);
+                SAL_WARN("sd", "DrawViewShell::GetState(): can not handle which id " << nWhich);
                 break;
         }
         nWhich = aIter.NextWhich();
@@ -1829,7 +1829,7 @@ void DrawViewShell::Execute (SfxRequest& rReq)
         break;
 
         default:
-            OSL_TRACE ("DrawViewShell::Execute(): can not handle slot %d", rReq.GetSlot());
+            SAL_WARN("sd", "DrawViewShell::Execute(): can not handle slot " << rReq.GetSlot());
             break;
     }
 }

@@ -952,7 +952,6 @@ static bool checkEncryption( const OUString&                               i_rPa
                             } while( bEntered && ! bAuthenticated );
                         }
 
-                        OSL_TRACE( "password: %s", bAuthenticated ? "matches" : "does not match" );
                         bSuccess = bAuthenticated;
                     }
                 }

@@ -508,7 +508,7 @@ void ViewShellBase::Rearrange()
     }
     else
     {
-        OSL_TRACE("Rearrange: window missing");
+        SAL_WARN("sd", "Rearrange: window missing");
     }
 
     GetViewFrame()->Resize(true);

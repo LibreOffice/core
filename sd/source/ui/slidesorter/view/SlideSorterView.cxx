@@ -596,7 +596,7 @@ void SlideSorterView::CompleteRedraw (
     (void)pRedirector;
 #ifdef DEBUG_TIMING
     const double nStartTime (gaTimer.getElapsedTime());
-    OSL_TRACE("SlideSorterView::CompleteRedraw start at %f, %s",
+    SAL_INFO("sd",("SlideSorterView::CompleteRedraw start at %f, %s",
         nStartTime,
         mnLockRedrawSmph ? "locked" : "");
 #endif
@@ -625,7 +625,7 @@ void SlideSorterView::CompleteRedraw (
 
 #ifdef DEBUG_TIMING
     const double nEndTime (gaTimer.getElapsedTime());
-    OSL_TRACE("SlideSorterView::CompleteRedraw end at %f after %fms", nEndTime, (nEndTime-nStartTime)*1000);
+    SAL_INFO("sd",("SlideSorterView::CompleteRedraw end at %f after %fms", nEndTime, (nEndTime-nStartTime)*1000);
     gFrameTimeSum -= gFrameTimes[gFrameTimeIndex];
     gFrameTimes[gFrameTimeIndex] = nStartTime - gnLastFrameStart;
     gnLastFrameStart = nStartTime;

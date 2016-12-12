@@ -324,10 +324,6 @@ OUString SAL_CALL PDFDetector::detect( uno::Sequence< beans::PropertyValue >& rF
             }
             aOutTypeName = "pdf_Portable_Document_Format";
 
-            OSL_TRACE( "setting filter name %s, input stream %s\n",
-                       OUStringToOString( aOutFilterName, RTL_TEXTENCODING_UTF8 ).getStr(),
-                       xEmbedStream.is() ? "present" : "not present" );
-
             rFilterData[nFilterNamePos].Value <<= aOutFilterName;
             if( xEmbedStream.is() )
             {
@@ -407,7 +403,6 @@ bool checkDocChecksum( const OUString& rInPDFFileURL,
                        sal_uInt32           nBytes,
                        const OUString& rChkSum )
 {
-    bool bRet = false;
     if( rChkSum.getLength() != 2* RTL_DIGEST_LENGTH_MD5 )
     {
         SAL_INFO(
@@ -467,20 +462,7 @@ bool checkDocChecksum( const OUString& rInPDFFileURL,
     rtl_digest_destroyMD5( aActualDigest );
 
     // compare the contents
-    bRet = (0 == memcmp( nActualChecksum, nTestChecksum, sizeof( nActualChecksum ) ));
-#if OSL_DEBUG_LEVEL > 0
-    OSL_TRACE( "test checksum: " );
-    for(sal_uInt8 i : nTestChecksum) {
-        OSL_TRACE( "%.2X", int(i) );
-    }
-    OSL_TRACE( "\n" );
-    OSL_TRACE( "file checksum: " );
-    for(sal_uInt8 i : nActualChecksum) {
-        OSL_TRACE( "%.2X", int(i) );
-    }
-    OSL_TRACE( "\n" );
-#endif
-    return bRet;
+    return (0 == memcmp( nActualChecksum, nTestChecksum, sizeof( nActualChecksum ) ));
 }
 
 uno::Reference< io::XStream > getAdditionalStream( const OUString&                          rInPDFFileURL,
@@ -600,7 +582,6 @@ uno::Reference< io::XStream > getAdditionalStream( const OUString&              
                                     } while( bEntered && ! bAuthenticated );
                                 }
 
-                                OSL_TRACE( "password: %s", bAuthenticated ? "matches" : "does not match" );
                                 if( ! bAuthenticated )
                                     continue;
                             }
@@ -619,9 +600,6 @@ uno::Reference< io::XStream > getAdditionalStream( const OUString&              
         }
     }
 
-    OSL_TRACE( "extracted add stream: mimetype %s\n",
-               OUStringToOString( rOutMimetype,
-                                       RTL_TEXTENCODING_UTF8 ).getStr());
     return xEmbed;
 }
 

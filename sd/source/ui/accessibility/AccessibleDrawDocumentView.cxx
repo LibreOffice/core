@@ -88,13 +88,11 @@ AccessibleDrawDocumentView::AccessibleDrawDocumentView (
       mpSdViewSh( pViewShell ),
       mpChildrenManager (nullptr)
 {
-    OSL_TRACE ("AccessibleDrawDocumentView");
     UpdateAccessibleName();
 }
 
 AccessibleDrawDocumentView::~AccessibleDrawDocumentView()
 {
-    OSL_TRACE ("~AccessibleDrawDocumentView");
     DBG_ASSERT (rBHelper.bDisposed || rBHelper.bInDispose,
         "~AccessibleDrawDocumentView: object has not been disposed");
 }
@@ -298,13 +296,10 @@ void SAL_CALL
 
     AccessibleDocumentViewBase::propertyChange (rEventObject);
 
-    OSL_TRACE ("AccessibleDrawDocumentView::propertyChange");
     // add page switch event for slide show mode
     if (rEventObject.PropertyName == "CurrentPage" ||
         rEventObject.PropertyName == "PageChange")
     {
-        OSL_TRACE ("    current page changed");
-
         // Update the accessible name to reflect the current slide.
         UpdateAccessibleName();
 
@@ -327,12 +322,11 @@ void SAL_CALL
             }
         }
         else
-            OSL_TRACE ("View invalid");
+            SAL_WARN("sd", "View invalid");
         CommitChange(AccessibleEventId::PAGE_CHANGED,rEventObject.NewValue,rEventObject.OldValue);
     }
     else if ( rEventObject.PropertyName == "VisibleArea" )
     {
-        OSL_TRACE ("    visible area changed");
         if (mpChildrenManager != nullptr)
             mpChildrenManager->ViewForwarderChanged();
     }
@@ -342,8 +336,6 @@ void SAL_CALL
     }
     else if (rEventObject.PropertyName == "UpdateAcc")
     {
-        OSL_TRACE ("    acc on current page should be updated");
-
         // The current page changed.  Update the children manager accordingly.
         uno::Reference<drawing::XDrawView> xView (mxController, uno::UNO_QUERY);
         if (xView.is() && mpChildrenManager!=nullptr)
@@ -382,9 +374,8 @@ void SAL_CALL
     }
     else
     {
-        OSL_TRACE ("  unhandled");
+        SAL_INFO("sd", "unhandled");
     }
-    OSL_TRACE ("  done");
 }
 
 // XServiceInfo

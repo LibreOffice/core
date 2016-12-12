@@ -115,9 +115,7 @@ Any ConfigurationAccess::GetConfigurationNode (
     }
     catch (const Exception& rException)
     {
-        OSL_TRACE ("caught exception while getting configuration node %s: %s",
-            OUStringToOString(sPathToNode, RTL_TEXTENCODING_UTF8).getStr(),
-            OUStringToOString(rException.Message, RTL_TEXTENCODING_UTF8).getStr());
+        SAL_WARN("sd", "caught exception while getting configuration node" << sPathToNode << ": " << rException.Message);
     }
 
     return Any();

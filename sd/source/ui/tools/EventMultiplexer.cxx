@@ -352,7 +352,7 @@ void EventMultiplexer::Implementation::ConnectToController()
                 }
                 catch (const beans::UnknownPropertyException&)
                 {
-                    OSL_TRACE("EventMultiplexer::ConnectToController: CurrentPage unknown");
+                    SAL_WARN("sd", "EventMultiplexer::ConnectToController: CurrentPage unknown");
                 }
 
                 try
@@ -361,7 +361,7 @@ void EventMultiplexer::Implementation::ConnectToController()
                 }
                 catch (const beans::UnknownPropertyException&)
                 {
-                    OSL_TRACE("EventMultiplexer::ConnectToController: IsMasterPageMode unknown");
+                    SAL_WARN("sd", "EventMultiplexer::ConnectToController: IsMasterPageMode unknown");
                 }
         }
 
@@ -396,7 +396,7 @@ void EventMultiplexer::Implementation::DisconnectFromController()
             }
             catch (const beans::UnknownPropertyException&)
             {
-                OSL_TRACE ("DisconnectFromController: CurrentPage unknown");
+                SAL_WARN("sd", "DisconnectFromController: CurrentPage unknown");
             }
 
             try
@@ -405,7 +405,7 @@ void EventMultiplexer::Implementation::DisconnectFromController()
             }
             catch (const beans::UnknownPropertyException&)
             {
-                OSL_TRACE ("DisconnectFromController: IsMasterPageMode unknown");
+                SAL_WARN("sd", "DisconnectFromController: IsMasterPageMode unknown");
             }
         }
 

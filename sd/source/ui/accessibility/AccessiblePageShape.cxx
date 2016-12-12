@@ -51,7 +51,6 @@ AccessiblePageShape::AccessiblePageShape (
 
 AccessiblePageShape::~AccessiblePageShape()
 {
-    OSL_TRACE ("~AccessiblePageShape");
 }
 
 //=====  XAccessibleContext  ==================================================
@@ -199,12 +198,12 @@ sal_Int32 SAL_CALL AccessiblePageShape::getBackground()
                 aColor >>= nColor;
             }
             else
-                OSL_TRACE ("no Background property in page");
+                SAL_WARN("sd", "no Background property in page");
         }
     }
     catch (const css::beans::UnknownPropertyException&)
     {
-        OSL_TRACE ("caught exception due to unknown property");
+        SAL_WARN("sd", "caught exception due to unknown property");
         // Ignore exception and return default color.
     }
     return nColor;
@@ -243,8 +242,6 @@ void SAL_CALL
 void AccessiblePageShape::dispose()
     throw (css::uno::RuntimeException, std::exception)
 {
-    OSL_TRACE ("AccessiblePageShape::dispose");
-
     // Unregister listeners.
     Reference<lang::XComponent> xComponent (mxShape, uno::UNO_QUERY);
     if (xComponent.is())

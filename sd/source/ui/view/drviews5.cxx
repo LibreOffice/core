@@ -555,7 +555,7 @@ css::uno::Reference<css::accessibility::XAccessible>
                 css::uno::UNO_QUERY);
     }
 
-    OSL_TRACE ("DrawViewShell::CreateAccessibleDocumentView: no controller");
+    SAL_WARN("sd", "DrawViewShell::CreateAccessibleDocumentView: no controller");
     return css::uno::Reference< css::accessibility::XAccessible>();
 }
 

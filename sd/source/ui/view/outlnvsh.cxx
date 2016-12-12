@@ -1201,7 +1201,7 @@ void OutlineViewShell::Execute(SfxRequest& rReq)
         break;
 
         default:
-            OSL_TRACE ("OutlineViewShell::Execute(): can not handle slot %d", rReq.GetSlot());
+            SAL_WARN("sd", "OutlineViewShell::Execute(): can not handle slot " << rReq.GetSlot());
             break;
 
     }
@@ -1853,7 +1853,7 @@ css::uno::Reference<css::accessibility::XAccessible>
                 css::uno::UNO_QUERY);
     }
 
-    OSL_TRACE ("OutlineViewShell::CreateAccessibleDocumentView: no controller");
+    SAL_WARN("sd", "OutlineViewShell::CreateAccessibleDocumentView: no controller");
     return css::uno::Reference< css::accessibility::XAccessible >();
 }
 
@@ -1872,7 +1872,7 @@ void OutlineViewShell::GetState (SfxItemSet& rSet)
                 GetDocSh()->GetState (rSet);
                 break;
             default:
-                OSL_TRACE ("OutlineViewShell::GetState(): can not handle which id %d", nWhich);
+                SAL_WARN("sd", "OutlineViewShell::GetState(): can not handle which id " << nWhich);
                 break;
         }
         nWhich = aIter.NextWhich();

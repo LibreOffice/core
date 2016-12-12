@@ -338,11 +338,8 @@ Reference< XInterface > ConfigurationAccess::GetConfigurationNode(
     }
     catch (const Exception& rException)
     {
-        OSL_TRACE ("caught exception while getting configuration node %s: %s",
-            OUStringToOString(sPathToNode,
-                RTL_TEXTENCODING_UTF8).getStr(),
-            OUStringToOString(rException.Message,
-                RTL_TEXTENCODING_UTF8).getStr());
+        SAL_WARN("sdext.minimizer", "caught exception while getting configuration node "
+                  << sPathToNode << " : " << rException.Message);
         (void)rException;
     }
     return xNode;

@@ -235,12 +235,12 @@ SdPage* DocumentHelper::AddMasterPage (
         catch(const ::std::exception&)
         {
             pClonedMasterPage = nullptr;
-            OSL_TRACE ("caught general exception");
+            SAL_WARN("sd", "caught general exception");
         }
         catch(...)
         {
             pClonedMasterPage = nullptr;
-            OSL_TRACE ("caught general exception");
+            SAL_WARN("sd", "caught general exception");
         }
     }
 

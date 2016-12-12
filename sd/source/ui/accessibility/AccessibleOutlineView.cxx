@@ -92,7 +92,6 @@ AccessibleOutlineView::AccessibleOutlineView (
 
 AccessibleOutlineView::~AccessibleOutlineView()
 {
-    OSL_TRACE ("~AccessibleOutlineView");
 }
 
 void AccessibleOutlineView::Init()
@@ -224,29 +223,23 @@ void SAL_CALL
 
     AccessibleDocumentViewBase::propertyChange (rEventObject);
 
-    OSL_TRACE ("AccessibleOutlineView::propertyChange");
     //add page switch event for slide show mode
     if (rEventObject.PropertyName == "CurrentPage" ||
         rEventObject.PropertyName == "PageChange")
     {
-        OSL_TRACE ("    current page changed");
-
         // The current page changed. Update the children accordingly.
         UpdateChildren();
         CommitChange(AccessibleEventId::PAGE_CHANGED,rEventObject.NewValue, rEventObject.OldValue);
     }
     else if ( rEventObject.PropertyName == "VisibleArea" )
     {
-        OSL_TRACE ("    visible area changed");
-
         // The visible area changed. Update the children accordingly.
         UpdateChildren();
     }
     else
     {
-        OSL_TRACE ("  unhandled");
+        SAL_INFO("sd", "unhandled");
     }
-    OSL_TRACE ("  done");
 }
 
 /// Create a name for this view.

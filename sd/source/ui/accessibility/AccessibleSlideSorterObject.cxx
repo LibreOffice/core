@@ -433,7 +433,7 @@ void AccessibleSlideSorterObject::ThrowIfDisposed()
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
-        OSL_TRACE ("Calling disposed object. Throwing exception:");
+        SAL_WARN("sd", "Calling disposed object. Throwing exception:");
         throw lang::DisposedException ("object has been already disposed",
             static_cast<uno::XWeak*>(this));
     }

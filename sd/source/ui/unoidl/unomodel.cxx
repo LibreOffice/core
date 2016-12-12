@@ -1566,9 +1566,6 @@ sal_Int32 ImplPDFGetBookmarkPage( const OUString& rBookmark, SdDrawDocument& rDo
 {
     sal_Int32 nPage = -1;
 
-    OSL_TRACE("GotoBookmark %s",
-        OUStringToOString(rBookmark, RTL_TEXTENCODING_UTF8).getStr());
-
     OUString aBookmark( rBookmark );
 
     if( rBookmark.startsWith("#") )
