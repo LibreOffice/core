@@ -38,7 +38,7 @@ private:
     bool                        mbMirrorEntries;    /// true = mirror the order of entries (including header)
     bool                        mbMirrorLevels;     /// true = mirror the order of levels, including the border
 
-    ImageList*                  mpSymbols;          /// Symbols for buttons.
+    ImageList                   maSymbols;          /// Symbols for buttons.
     Color                       maLineColor;        /// Line color for expanded groups.
     long                        mnHeaderSize;       /// Size of the header area in entry direction.
     long                        mnHeaderPos;        /// Position of the header area in entry direction.

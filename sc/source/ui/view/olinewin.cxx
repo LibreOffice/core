@@ -26,6 +26,7 @@
 #include "document.hxx"
 #include "dbfunc.hxx"
 #include "sc.hrc"
+#include "scresid.hxx"
 
 const long SC_OL_BITMAPSIZE                 = 12;
 const long SC_OL_POSOFFSET                  = 2;
@@ -45,7 +46,7 @@ ScOutlineWindow::ScOutlineWindow( vcl::Window* pParent, ScOutlineMode eMode, ScV
     mbHoriz( eMode == SC_OUTLINE_HOR ),
     mbMirrorEntries( false ),           // updated in SetHeaderSize
     mbMirrorLevels( false ),            // updated in SetHeaderSize
-    mpSymbols( nullptr ),
+    maSymbols(ScResId(RID_OUTLINEBITMAPS)),
     maLineColor( COL_BLACK ),
     mnHeaderSize( 0 ),
     mnHeaderPos( 0 ),
@@ -155,7 +156,6 @@ void ScOutlineWindow::InitSettings()
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     SetBackground( rStyleSettings.GetFaceColor() );
     maLineColor = rStyleSettings.GetButtonTextColor();
-    mpSymbols = ScGlobal::GetOutlineSymbols();
     Invalidate();
 }
 
@@ -535,8 +535,7 @@ void ScOutlineWindow::DrawRectRel(
 
 void ScOutlineWindow::DrawImageRel( long nLevelPos, long nEntryPos, sal_uInt16 nId )
 {
-    OSL_ENSURE( mpSymbols, "ScOutlineWindow::DrawImageRel - no images" );
-    const Image& rImage = mpSymbols->GetImage( nId );
+    const Image& rImage = maSymbols.GetImage( nId );
     SetLineColor();
     SetFillColor( GetBackground().GetColor() );
     Point aPos( GetPoint( nLevelPos, nEntryPos ) );
@@ -549,12 +548,11 @@ void ScOutlineWindow::DrawBorderRel( size_t nLevel, size_t nEntry, bool bPressed
     Point aPos;
     if ( GetImagePos( nLevel, nEntry, aPos ) )
     {
-        OSL_ENSURE( mpSymbols, "ScOutlineWindow::DrawBorderRel - no images" );
         sal_uInt16 nId = bPressed ? SC_OL_IMAGE_PRESSED : SC_OL_IMAGE_NOTPRESSED;
         bool bClip = (nEntry != SC_OL_HEADERENTRY);
         if ( bClip )
             SetEntryAreaClipRegion();
-        DrawImage( aPos, mpSymbols->GetImage( nId ) );
+        DrawImage( aPos, maSymbols.GetImage( nId ) );
         if ( bClip )
             SetClipRegion();
     }

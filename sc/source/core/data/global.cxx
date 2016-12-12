@@ -111,8 +111,6 @@ SvxBrushItem*   ScGlobal::pButtonBrushItem = nullptr;
 SvxBrushItem*   ScGlobal::pEmbeddedBrushItem = nullptr;
 SvxBrushItem*   ScGlobal::pProtectedBrushItem = nullptr;
 
-ImageList*      ScGlobal::pOutlineBitmaps = nullptr;
-
 ScFunctionList* ScGlobal::pStarCalcFunctionList = nullptr;
 ScFunctionMgr*  ScGlobal::pStarCalcFunctionMgr  = nullptr;
 
@@ -480,14 +478,6 @@ const OUString& ScGlobal::GetEmptyOUString()
     return *pEmptyOUString;
 }
 
-ImageList* ScGlobal::GetOutlineSymbols()
-{
-    ImageList*& rpImageList = pOutlineBitmaps;
-    if( !rpImageList )
-        rpImageList = new ImageList( ScResId( RID_OUTLINEBITMAPS ) );
-    return rpImageList;
-}
-
 void ScGlobal::Init()
 {
     pEmptyOUString = new OUString;
@@ -610,7 +600,6 @@ void ScGlobal::Clear()
     DELETEZ(pButtonBrushItem);
     DELETEZ(pEmbeddedBrushItem);
     DELETEZ(pProtectedBrushItem);
-    DELETEZ(pOutlineBitmaps);
     DELETEZ(pEnglishFormatter);
     DELETEZ(pCaseTransliteration);
     DELETEZ(pTransliteration);

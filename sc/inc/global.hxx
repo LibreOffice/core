@@ -505,8 +505,6 @@ class ScGlobal
     static SvxBrushItem*    pEmbeddedBrushItem;
     static SvxBrushItem*    pProtectedBrushItem;
 
-    static ImageList*       pOutlineBitmaps;
-
     static ScFunctionList*  pStarCalcFunctionList;
     static ScFunctionMgr*   pStarCalcFunctionMgr;
 
@@ -588,9 +586,6 @@ public:
     static SvxBrushItem*    GetButtonBrushItem();
     static SvxBrushItem*    GetProtectedBrushItem() { return pProtectedBrushItem; }
     SC_DLLPUBLIC    static const OUString&    GetEmptyOUString();
-
-    /** Returns the specified image list with outline symbols. */
-    static ImageList*       GetOutlineSymbols();
 
     static bool             HasStarCalcFunctionList();
     static ScFunctionList*  GetStarCalcFunctionList();
