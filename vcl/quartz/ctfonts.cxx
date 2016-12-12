@@ -249,6 +249,19 @@ bool CoreTextStyle::GetGlyphOutline( sal_GlyphId aGlyphId, basegfx::B2DPolyPolyg
     CGGlyph nCGGlyph = aGlyphId & GF_IDXMASK;
     // XXX: this is broken if the glyph came from fallback font
     CTFontRef pCTFont = static_cast<CTFontRef>(CFDictionaryGetValue( mpStyleDict, kCTFontAttributeName ));
+
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
+    const CTFontOrientation aFontOrientation = kCTFontDefaultOrientation;
+    SAL_WNODEPRECATED_DECLARATIONS_POP
+    CGRect aCGRect = CTFontGetBoundingRectsForGlyphs(pCTFont, aFontOrientation, &nCGGlyph, nullptr, 1);
+
+    if (!CGRectIsNull(aCGRect) && CGRectIsEmpty(aCGRect))
+    {
+        // CTFontCreatePathForGlyph returns NULL for blank glyphs, but we want
+        // to return true for them.
+        return true;
+    }
+
     CGPathRef xPath = CTFontCreatePathForGlyph( pCTFont, nCGGlyph, nullptr );
     if (!xPath)
     {
