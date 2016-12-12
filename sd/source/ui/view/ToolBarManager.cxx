@@ -532,11 +532,7 @@ ToolBarManager::Implementation::Implementation (
       maToolBarRules(rpToolBarManager,rpViewShellManager)
 {
     Link<tools::EventMultiplexerEvent&,void> aLink (LINK(this,ToolBarManager::Implementation,EventMultiplexerCallback));
-    mpEventMultiplexer->AddEventListener(
-        aLink,
-        EventMultiplexerEventId::ControllerAttached
-        | EventMultiplexerEventId::ControllerDetached
-        | EventMultiplexerEventId::PaneManagerDying);
+    mpEventMultiplexer->AddEventListener( aLink );
 }
 
 /** The order of statements is important.

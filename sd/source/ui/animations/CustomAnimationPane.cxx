@@ -308,14 +308,7 @@ void CustomAnimationPane::KeyInput( const KeyEvent& rKEvt )
 void CustomAnimationPane::addListener()
 {
     Link<tools::EventMultiplexerEvent&,void> aLink( LINK(this,CustomAnimationPane,EventMultiplexerListener) );
-    mrBase.GetEventMultiplexer()->AddEventListener (
-        aLink,
-        EventMultiplexerEventId::EditViewSelection
-        | EventMultiplexerEventId::CurrentPageChanged
-        | EventMultiplexerEventId::MainViewRemoved
-        | EventMultiplexerEventId::MainViewAdded
-        | EventMultiplexerEventId::Disposing
-        | EventMultiplexerEventId::EndTextEdit);
+    mrBase.GetEventMultiplexer()->AddEventListener(aLink);
 }
 
 void CustomAnimationPane::removeListener()
