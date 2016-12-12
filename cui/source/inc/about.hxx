@@ -22,7 +22,6 @@
 #include <vcl/accel.hxx>
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
-#include <vcl/fixedhyper.hxx>
 #include <vcl/vclmedit.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <vector>
@@ -35,7 +34,7 @@ private:
     BitmapEx           aBackgroundBitmap;
     BitmapEx           aLogoBitmap;
 
-    VclPtr<FixedHyperlink>      m_pVersion;
+    VclPtr<VclMultiLineEdit>    m_pVersion;
     VclPtr<FixedText>           m_pDescriptionText;
     VclPtr<FixedText>           m_pCopyrightText;
     VclPtr<FixedImage>          m_pLogoImage;
