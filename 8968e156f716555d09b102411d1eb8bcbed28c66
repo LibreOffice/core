@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a71b18c_2fb6ab8a",
+        "filename": "sw/source/core/docnode/ndtbl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 729,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2016-12-12T18:54:05Z",
+      "side": 1,
+      "message": "I don\u0027t know what Registering means, or why things are not updated when it has been registered earlier, but this \"UnRegisterFromFormat\" routine does fix the regression.  Take it as a suggestion.",
+      "range": {
+        "startLine": 729,
+        "startChar": 7,
+        "endLine": 729,
+        "endChar": 42
+      },
+      "revId": "8968e156f716555d09b102411d1eb8bcbed28c66",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a71b18c_4fbbe772",
+        "filename": "sw/source/core/docnode/ndtbl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 750,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2016-12-12T18:54:05Z",
+      "side": 1,
+      "message": "revert the removal that caused the regression.  Instead of this unregister/reregister routine I first guessed at\n    getIDocumentState().SetModified()\ninstead, but that didn\u0027t fix anything.",
+      "range": {
+        "startLine": 750,
+        "startChar": 4,
+        "endLine": 750,
+        "endChar": 45
+      },
+      "revId": "8968e156f716555d09b102411d1eb8bcbed28c66",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a71b18c_6fb0a38c",
+        "filename": "sw/source/core/docnode/ndtbl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1253,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2016-12-12T18:54:05Z",
+      "side": 1,
+      "message": "perhaps the above routine ought to be included in this function as well.  Except that even before the regression the registration had already happened a few lines earlier.  Anyway, just saying that if my description is at all right, this section might need to be unregistered too.",
+      "range": {
+        "startLine": 1253,
+        "startChar": 8,
+        "endLine": 1253,
+        "endChar": 66
+      },
+      "revId": "8968e156f716555d09b102411d1eb8bcbed28c66",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
