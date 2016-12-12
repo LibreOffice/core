@@ -21,64 +21,7 @@
 
 
 
-$(eval $(call gb_Module_Module,ooo))
+$(eval $(call gb_Package_Package,udm_inc,$(SRCDIR)/udm/inc/udm))
 
-$(eval $(call gb_Module_add_moduledirs,ooo,\
-    MathMLDTD \
-    animations \
-    basebmp \
-    basegfx \
-    binaryurp \
-    canvas \
-    comphelper \
-    configmgr \
-    cppcanvas \
-    dbaccess \
-    drawinglayer \
-    editeng \
-    embeddedobj \
-    eventattacher \
-    fileaccess \
-    formula \
-    framework \
-    idl \
-    io \
-    javaunohelper \
-    linguistic \
-    o3tl \
-    offapi \
-    oovbaapi \
-    oox \
-    padmin \
-    package \
-    reportdesign \
-    remotebridges \
-    sax \
-    sd \
-    sfx2 \
-    sot \
-    starmath \
-    svgio \
-    svl \
-    svtools \
-    svx \
-    sw \
-    toolkit \
-    tools \
-    ucbhelper \
-    udkapi \
-    unotools \
-    unoxml \
-    uui \
-    vbahelper \
-    vcl \
-    udm \
-    wizards \
-    writerfilter \
-    x11_extensions \
-    xmloff \
-    xmlreader \
-    xmlscript \
-))
-
-# vim: set noet ts=4 sw=4:
+$(eval $(call gb_Package_add_file,udm_inc,inc/udm/html/htmlitem.hxx,html/htmlitem.hxx))
+$(eval $(call gb_Package_add_file,udm_inc,inc/udm/xml/xmlitem.hxx,xml/xmlitem.hxx))

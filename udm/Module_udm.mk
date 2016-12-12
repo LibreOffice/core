@@ -21,36 +21,11 @@
 
 
 
+$(eval $(call gb_Module_Module,udm))
 
+$(eval $(call gb_Module_add_targets,udm,\
+	Package_inc \
+	StaticLibrary_udm \
+))
 
-# --- Settings -----------------------------------------------------
-# Has to be included AFTER settings.mk !
-
-
-# Precompiled header:
-
-
-.IF "$(GUI)"=="WNT"
-
-# RTTI
-CFLAGS+= -GR
-
-.IF "$(NP_LOCALBUILD)"!=""
-
-
-# Precompiled Headers
-PCH_NAME=  udm
-.IF "$(DBG_LEVEL)"<"2"
-CFLAGS+= -YX"precomp.h" /Fp$(PRJ)$/$(INPATH)$/misc$/$(PCH_NAME).pch
-.ELSE
-CFLAGS+= -YX"precomp.h" /Fp$(PRJ)$/$(INPATH)$/misc$/$(PCH_NAME).pcd -DNP_LOCALBUILD
-.ENDIF
-
-.ENDIF
-
-.ENDIF
-
-.IF "$(OS)"=="LINUX" || "$(OS)"=="FREEBSD" || "$(OS)"=="NETBSD"
-CFLAGSCXX+= -frtti
-.ENDIF
-
+# vim: set noet sw=4 ts=4:

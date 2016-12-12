@@ -21,32 +21,27 @@
 
 
 
-PRJ=..$/..
+$(eval $(call gb_StaticLibrary_StaticLibrary,udm))
 
-PRJNAME=udm
-TARGET=csi_xml
+ifeq ($(OS),WNT)
+$(eval $(call gb_StaticLibrary_add_cflags,udm,-GR))
+else ifeq ($(OS),LINUX)
+$(eval $(call gb_StaticLibrary_add_cflags,udm,-frtti))
+else ifeq ($(OS),FREEBSD)
+$(eval $(call gb_StaticLibrary_add_cflags,udm,-frtti))
+else ifeq ($(OS),NETBSD)
+$(eval $(call gb_StaticLibrary_add_cflags,udm,-frtti))
+endif
 
+$(eval $(call gb_StaticLibrary_set_include,udm,\
+        $$(INCLUDE) \
+	-I$(SRCDIR)/udm/source/inc \
+	-I$(SRCDIR)/udm/inc \
+))
 
-# --- Settings -----------------------------------------------------
+$(eval $(call gb_StaticLibrary_add_exception_objects,udm,\
+	udm/source/html/htmlitem \
+	udm/source/xml/xmlitem \
+))
 
-ENABLE_EXCEPTIONS=true
-
-
-.INCLUDE :  settings.mk
-.INCLUDE : $(PRJ)$/source$/mkinc$/fullcpp.mk
-
-
-# --- Files --------------------------------------------------------
-
-OBJFILES= \
-    $(OBJ)$/xmlitem.obj
-
-
-
-
-# --- Targets ------------------------------------------------------
-
-.INCLUDE :  target.mk
-
-
-
+# vim: set noet sw=4 ts=4:
