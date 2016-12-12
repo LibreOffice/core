@@ -163,7 +163,7 @@ void ModuleController::InstantiateStartupServices()
     }
     catch (Exception&)
     {
-        OSL_TRACE("ERROR in ModuleController::InstantiateStartupServices");
+        SAL_WARN("sd", "ERROR in ModuleController::InstantiateStartupServices");
     }
 }
 
@@ -195,7 +195,7 @@ void ModuleController::ProcessStartupService (const ::std::vector<Any>& rValues)
     }
     catch (Exception&)
     {
-        OSL_TRACE("ERROR in ModuleController::ProcessStartupServices");
+        SAL_WARN("sd", "ERROR in ModuleController::ProcessStartupServices");
     }
 }
 
@@ -223,8 +223,6 @@ void SAL_CALL ModuleController::requestResource (const OUString& rsResourceURL)
             // Create the factory service.
             Sequence<Any> aArguments(1);
             aArguments[0] <<= mxController;
-            OSL_TRACE("creating resource %s",
-                OUStringToOString(iFactory->second, RTL_TEXTENCODING_ASCII_US).getStr());
             try
             {
                 xFactory = xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
@@ -234,7 +232,7 @@ void SAL_CALL ModuleController::requestResource (const OUString& rsResourceURL)
             }
             catch (const Exception&)
             {
-                OSL_TRACE("caught exception while creating factory.");
+                SAL_WARN("sd", "caught exception while creating factory.");
             }
 
             // Remember that this factory has been instanced.

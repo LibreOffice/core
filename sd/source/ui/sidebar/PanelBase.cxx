@@ -29,8 +29,6 @@ PanelBase::PanelBase (
       mxSidebar(),
       mrViewShellBase(rViewShellBase)
 {
-    OSL_TRACE("created PanelBase at %p for parent %p", this, pParentWindow);
-
 #ifdef DEBUG
     SetText(OUString("sd:PanelBase"));
 #endif
@@ -69,7 +67,6 @@ bool PanelBase::ProvideWrappedControl()
     if ( ! mpWrappedControl)
     {
         mpWrappedControl.reset(CreateWrappedControl(this, mrViewShellBase));
-        OSL_TRACE("created wrapped control at %p for parent PanelBase at %p", mpWrappedControl.get(), this);
         if (mpWrappedControl)
             mpWrappedControl->Show();
         if (mxSidebar.is())

@@ -441,8 +441,6 @@ void ViewOverlayManager::UpdateTags()
 
 IMPL_LINK_NOARG(ViewOverlayManager, UpdateTagsHdl, void*, void)
 {
-    OSL_TRACE("ViewOverlayManager::UpdateTagsHdl");
-
     mnUpdateTagsEvent  = nullptr;
     bool bChanges = DisposeTags();
     bChanges |= CreateTags();

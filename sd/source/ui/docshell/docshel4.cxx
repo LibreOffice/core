@@ -875,8 +875,6 @@ bool DrawDocShell::IsMarked( SdrObject* pObject )
 // If object is marked return true else return false. Optionally realize multi-selection of objects.
 bool DrawDocShell::GetObjectIsmarked(const OUString& rBookmark, bool bRealizeMultiSelectionOfObjects /* = false */)
 {
-    OSL_TRACE("GotoBookmark %s",
-        OUStringToOString(rBookmark, RTL_TEXTENCODING_UTF8).getStr());
     bool bUnMark = false;
     bool bFound = false;
 

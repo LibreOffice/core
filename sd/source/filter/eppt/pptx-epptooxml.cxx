@@ -507,8 +507,6 @@ void PowerPointExport::WriteTransition( const FSHelperPtr& pFS )
     FadeEffect eFadeEffect = FadeEffect_NONE;
     GET( eFadeEffect, Effect );
 
-    OSL_TRACE("fade effect %d", eFadeEffect);
-
     sal_Int16 nTransitionType = 0, nTransitionSubtype = 0;
     sal_Int8 nPPTTransitionType = 0;
     sal_uInt8 nDirection = 0;

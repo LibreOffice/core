@@ -618,7 +618,7 @@ css::uno::Reference<css::accessibility::XAccessible>
     }
     else
     {
-        OSL_TRACE ("::sd::Window::CreateAccessible: no view shell");
+        SAL_WARN("sd", "::sd::Window::CreateAccessible: no view shell");
         return vcl::Window::CreateAccessible ();
     }
 }

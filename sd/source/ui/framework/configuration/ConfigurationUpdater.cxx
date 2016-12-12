@@ -360,14 +360,12 @@ void ConfigurationUpdater::SetUpdateBeingProcessed (bool bValue)
 
 IMPL_LINK_NOARG(ConfigurationUpdater, TimeoutHandler, Timer *, void)
 {
-    OSL_TRACE("configuration update timer");
     if ( ! mbUpdateBeingProcessed
         && mxCurrentConfiguration.is()
         && mxRequestedConfiguration.is())
     {
         if ( ! AreConfigurationsEquivalent(mxCurrentConfiguration, mxRequestedConfiguration))
         {
-            OSL_TRACE("configurations differ, requesting update");
             RequestUpdate(mxRequestedConfiguration);
         }
     }

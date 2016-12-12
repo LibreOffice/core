@@ -141,7 +141,7 @@ void PDFIProcessor::setLineCap(sal_Int8 nCap)
 
 void PDFIProcessor::setMiterLimit(double)
 {
-    OSL_TRACE("PDFIProcessor::setMiterLimit(): not supported by ODF");
+    SAL_WARN("sdext.pdfimport", "PDFIProcessor::setMiterLimit(): not supported by ODF");
 }
 
 void PDFIProcessor::setLineWidth(double nWidth)

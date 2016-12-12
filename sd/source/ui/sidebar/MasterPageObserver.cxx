@@ -261,10 +261,6 @@ void MasterPageObserver::Implementation::AnalyzeUsedMasterPages (
         SdPage* pMasterPage = rDocument.GetMasterSdPage (nIndex, PageKind::Standard);
         if (pMasterPage != nullptr)
             aCurrentMasterPages.insert (pMasterPage->GetName());
-        OSL_TRACE("currently used master page %d is %s",
-            nIndex,
-            ::rtl::OUStringToOString(pMasterPage->GetName(),
-                RTL_TEXTENCODING_UTF8).getStr());
     }
 
     typedef ::std::vector<OUString> StringList;
@@ -277,14 +273,6 @@ void MasterPageObserver::Implementation::AnalyzeUsedMasterPages (
         StringList::iterator I;
 
         ::std::set<OUString>::iterator J;
-        int i=0;
-        for (J=aOldMasterPagesDescriptor->second.begin();
-             J!=aOldMasterPagesDescriptor->second.end();
-             ++J)
-            OSL_TRACE("old used master page %d is %s",
-            i++,
-            ::rtl::OUStringToOString(*J,
-                RTL_TEXTENCODING_UTF8).getStr());
 
         // Send events about the newly used master pages.
         ::std::set_difference (
@@ -295,10 +283,6 @@ void MasterPageObserver::Implementation::AnalyzeUsedMasterPages (
             ::std::back_insert_iterator<StringList>(aNewMasterPages));
         for (I=aNewMasterPages.begin(); I!=aNewMasterPages.end(); ++I)
         {
-            OSL_TRACE("    added master page %s",
-                ::rtl::OUStringToOString(*I,
-                    RTL_TEXTENCODING_UTF8).getStr());
-
             MasterPageObserverEvent aEvent (
                 MasterPageObserverEvent::ET_MASTER_PAGE_ADDED,
                 *I);
@@ -314,10 +298,6 @@ void MasterPageObserver::Implementation::AnalyzeUsedMasterPages (
             ::std::back_insert_iterator<StringList>(aRemovedMasterPages));
         for (I=aRemovedMasterPages.begin(); I!=aRemovedMasterPages.end(); ++I)
         {
-            OSL_TRACE("    removed master page %s",
-                ::rtl::OUStringToOString(*I,
-                    RTL_TEXTENCODING_UTF8).getStr());
-
             MasterPageObserverEvent aEvent (
                 MasterPageObserverEvent::ET_MASTER_PAGE_REMOVED,
                 *I);

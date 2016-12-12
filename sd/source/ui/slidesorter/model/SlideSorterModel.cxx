@@ -295,7 +295,6 @@ void SlideSorterModel::Resync()
     else
     {
         bIsUpToDate = false;
-        OSL_TRACE("models differ");
     }
 
     if ( ! bIsUpToDate)
