@@ -231,6 +231,19 @@ bool CoreTextStyle::GetGlyphOutline(const GlyphItem& rGlyph, basegfx::B2DPolyPol
 
     CGGlyph nCGGlyph = rGlyph.maGlyphId;
     CTFontRef pCTFont = static_cast<CTFontRef>(CFDictionaryGetValue( mpStyleDict, kCTFontAttributeName ));
+
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH //TODO: 10.11 kCTFontDefaultOrientation
+    const CTFontOrientation aFontOrientation = kCTFontDefaultOrientation; // TODO: horz/vert
+    SAL_WNODEPRECATED_DECLARATIONS_POP
+    CGRect aCGRect = CTFontGetBoundingRectsForGlyphs(pCTFont, aFontOrientation, &nCGGlyph, nullptr, 1);
+
+    if (!CGRectIsNull(aCGRect) && CGRectIsEmpty(aCGRect))
+    {
+        // CTFontCreatePathForGlyph returns NULL for blank glyphs, but we want
+        // to return true for them.
+        return true;
+    }
+
     CGPathRef xPath = CTFontCreatePathForGlyph( pCTFont, nCGGlyph, nullptr );
     if (!xPath)
     {
