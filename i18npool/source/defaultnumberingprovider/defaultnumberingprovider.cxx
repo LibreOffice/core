@@ -44,6 +44,11 @@
 #define S_GR_A "\xCE\xB1"
 #define S_GR_B "\xCE\xB2"
 
+//Hebrew
+#define S_HE_ALEPH "\xD7\x90"
+#define S_HE_YOD "\xD7\x99"
+#define S_HE_QOF "\xD7\xA7"
+
 #include <math.h>
 #include <sal/macros.h>
 #include <rtl/ustring.hxx>
@@ -750,6 +755,10 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
           case CHARS_HEBREW:
               lcl_formatChars(table_Alphabet_he, SAL_N_ELEMENTS(table_Alphabet_he), number - 1, result);
               break;
+          case NUMBER_HEBREW:
+              natNum = NativeNumberMode::NATNUM1;
+              locale.Language = "he";
+              break;
           case CHARS_NEPALI:
               lcl_formatChars(table_Alphabet_ne, SAL_N_ELEMENTS(table_Alphabet_ne), number - 1, result);
               break;
@@ -915,6 +924,7 @@ static const Supported_NumberingType aSupportedTypes[] =
         {style::NumberingType::CHARS_ARABIC_ABJAD,   nullptr, LANG_CTL},
         {style::NumberingType::CHARS_THAI,      nullptr, LANG_CTL},
         {style::NumberingType::CHARS_HEBREW,    nullptr, LANG_CTL},
+        {style::NumberingType::NUMBER_HEBREW,    S_HE_ALEPH ", " S_HEB_YOD ", " S_HEB_QOF ", ...", LANG_CTL},
         {style::NumberingType::CHARS_NEPALI,    nullptr, LANG_CTL},
         {style::NumberingType::CHARS_KHMER,     nullptr, LANG_CTL},
         {style::NumberingType::CHARS_LAO,       nullptr, LANG_CTL},

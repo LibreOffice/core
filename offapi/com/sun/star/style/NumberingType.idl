@@ -434,6 +434,12 @@ published constants NumberingType
      */
     const short CHARS_PERSIAN_WORD = 55;
 
+    /** Numbering in Hebrew numerals
+
+        @since LibreOffice 5.4 ?
+     */
+    const short NUMBER_HEBREW = 56;
+
 };
 
 
