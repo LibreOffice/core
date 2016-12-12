@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a71b18c_0fcc8f34",
+        "filename": "vcl/source/filter/igif/gifread.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2016-12-12T17:27:12Z",
+      "side": 1,
+      "message": "this change seems accidental?",
+      "revId": "966e1f761658aea121805326d5c0ef972d3af0f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
