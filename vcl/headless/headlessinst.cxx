@@ -14,7 +14,6 @@ class HeadlessSalInstance : public SvpSalInstance
 {
 public:
     explicit HeadlessSalInstance( SalYieldMutex *pMutex );
-    virtual ~HeadlessSalInstance();
 
     virtual SalSystem* CreateSalSystem();
 };
@@ -24,14 +23,9 @@ HeadlessSalInstance::HeadlessSalInstance( SalYieldMutex *pMutex ) :
 {
 }
 
-HeadlessSalInstance::~HeadlessSalInstance()
-{
-}
-
 class HeadlessSalSystem : public SvpSalSystem {
 public:
     HeadlessSalSystem() : SvpSalSystem() {}
-    virtual ~HeadlessSalSystem() {}
     virtual int ShowNativeDialog( const OUString& rTitle,
                                   const OUString& rMessage,
                                   const std::list< OUString >& rButtons,
