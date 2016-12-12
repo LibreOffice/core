@@ -61,7 +61,7 @@ public class MutableTreeNode extends TestCase {
         String sDisplayValue = "UnoTreeControl";
         String sExpandedGraphicURL = "private:graphicrepository/sd/res/triangle_down.png";
         String sCollapsedGraphicURL = "private:graphicrepository/sd/res/triangle_right.png";
-        String sNodeGraphicURL = "private:graphicrepository/sw/imglst/nc20010.png";
+        String sNodeGraphicURL = "private:graphicrepository/sw/res/nc20010.png";
 
         xNode.setDisplayValue( sDisplayValue);
         xNode.setDataValue(sDisplayValue);
@@ -136,7 +136,7 @@ public class MutableTreeNode extends TestCase {
                 }
             }
             else{
-                xChildNode.setNodeGraphicURL( "private:graphicrepository/sw/imglst/nc20010.png");
+                xChildNode.setNodeGraphicURL( "private:graphicrepository/sw/res/nc20010.png");
             }
         } catch (CommandAbortedException ex) {
             ex.printStackTrace();

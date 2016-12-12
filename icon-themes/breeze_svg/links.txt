@@ -1045,8 +1045,8 @@ sd/imglst/nv06.png cmd/sc_lastrecord.png
 sd/imglst/nv08.png cmd/sc_copy.png
 sd/imglst/nv09.png sc/res/droplink.png
 sd/imglst/nv010.png cmd/sc_inserthyperlink.png
-sd/imglst/sf01.png cmd/sc_showfmexplorer.png
-sd/imglst/sf02.png cmd/sc_dia.png
+sd/res/sf01.png cmd/sc_showfmexplorer.png
+sd/res/sf02.png cmd/sc_dia.png
 
 sd/res/breakplayingblue_16.png cmd/sc_mediapause.png
 sd/res/comments_indicator.png cmd/sc_showannotations.png
@@ -1218,16 +1218,16 @@ svx/res/symphony/spacing3.png cmd/sc_spacepara1.png
 sw/imglst/lc20556.png cmd/lc_dbviewfunctions.png
 sw/imglst/lc20557.png cmd/lc_cancel.png
 sw/imglst/lc20558.png cmd/lc_ok.png
-sw/imglst/nc20001.png cmd/sc_inserttable.png
-sw/imglst/nc20002.png cmd/sc_diagramarea.png
-sw/imglst/nc20003.png cmd/sc_gallery.png
-sw/imglst/nc20004.png cmd/sc_insertobject.png
-sw/imglst/nc20005.png cmd/sc_insertbookmark.png
-sw/imglst/nc20007.png cmd/sc_inserthyperlink.png
-sw/imglst/nc20008.png cmd/sc_insertreferencefield.png
-sw/imglst/nc20009.png cmd/sc_insertindexesentry.png
-sw/imglst/nc20010.png cmd/sc_showannotations.png
-sw/imglst/nc20011.png cmd/sc_toggleobjectbeziermode.png
+sw/res/nc20001.png cmd/sc_inserttable.png
+sw/res/nc20002.png cmd/sc_diagramarea.png
+sw/res/nc20003.png cmd/sc_gallery.png
+sw/res/nc20004.png cmd/sc_insertobject.png
+sw/res/nc20005.png cmd/sc_insertbookmark.png
+sw/res/nc20007.png cmd/sc_inserthyperlink.png
+sw/res/nc20008.png cmd/sc_insertreferencefield.png
+sw/res/nc20009.png cmd/sc_insertindexesentry.png
+sw/res/nc20010.png cmd/sc_showannotations.png
+sw/res/nc20011.png cmd/sc_toggleobjectbeziermode.png
 
 sw/imglst/re01.png cmd/lc_unsetcellsreadonly.png
 sw/imglst/re02.png cmd/lc_unsetcellsreadonly.png
@@ -1255,11 +1255,11 @@ sw/imglst/sc20558.png cmd/sc_ok.png
 
 sw/imglst/sc_datainrows.png cmd/sc_datainrows.png
 
-sw/imglst/sf01.png cmd/sc_controlcodes.png
-sw/imglst/sf02.png cmd/sc_charfontname.png
-sw/imglst/sf03.png cmd/sc_diagramarea.png
-sw/imglst/sf04.png cmd/sc_showsinglepage.png
-sw/imglst/sf05.png cmd/sc_defaultbullet.png
+sw/res/sf01.png cmd/sc_controlcodes.png
+sw/res/sf02.png cmd/sc_charfontname.png
+sw/res/sf03.png cmd/sc_diagramarea.png
+sw/res/sf04.png cmd/sc_showsinglepage.png
+sw/res/sf05.png cmd/sc_defaultbullet.png
 
 sw/imglst/sr20000.png cmd/sc_downsearch.png
 sw/imglst/sr20001.png cmd/sc_upsearch.png
@@ -1268,11 +1268,11 @@ sw/imglst/sr20003.png cmd/sc_insertframe.png
 sw/imglst/sr20004.png cmd/sc_showsinglepage.png
 sw/imglst/sr20005d.png cmd/sc_inserthyperlink.png
 sw/imglst/sr20005.png cmd/sc_editdoc.png
-sw/imglst/sr20007.png sw/imglst/nc20006.png
+sw/imglst/sr20007.png sw/res/nc20006.png
 sw/imglst/sr20008.png cmd/sc_insertbookmark.png
 sw/imglst/sr20009.png cmd/sc_toggleobjectbeziermode.png
 sw/imglst/sr20010.png cmd/sc_drawchart.png
-sw/imglst/sr20011.png sw/imglst/nc20000.png
+sw/imglst/sr20011.png sw/res/nc20000.png
 sw/imglst/sr20012.png cmd/sc_insertreferencefield.png
 sw/imglst/sr20013.png cmd/sc_insertfootnote.png
 sw/imglst/sr20014.png dbaccess/res/exwarning.png

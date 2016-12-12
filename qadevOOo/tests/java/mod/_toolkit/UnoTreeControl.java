@@ -233,7 +233,7 @@ public class UnoTreeControl extends TestCase {
                 }
             }
             else{
-                xChildNode.setNodeGraphicURL( "private:graphicrepository/sw/imglst/nc20010.png");
+                xChildNode.setNodeGraphicURL( "private:graphicrepository/sw/res/nc20010.png");
             }
         } catch (CommandAbortedException ex) {
             ex.printStackTrace();
