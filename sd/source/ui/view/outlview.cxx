@@ -127,10 +127,7 @@ OutlineView::OutlineView( DrawDocShell& rDocSh, vcl::Window* pWindow, OutlineVie
     }
 
     Link<tools::EventMultiplexerEvent&,void> aLink( LINK(this,OutlineView,EventMultiplexerListener) );
-    mrOutlineViewShell.GetViewShellBase().GetEventMultiplexer()->AddEventListener(
-        aLink,
-        EventMultiplexerEventId::CurrentPageChanged
-        | EventMultiplexerEventId::PageOrder);
+    mrOutlineViewShell.GetViewShellBase().GetEventMultiplexer()->AddEventListener(aLink);
 
     LanguageType eLang = mrOutliner.GetDefaultLanguage();
     maPageNumberFont = OutputDevice::GetDefaultFont( DefaultFontType::SANS_UNICODE, eLang, GetDefaultFontFlags::NONE );

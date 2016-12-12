@@ -58,11 +58,7 @@ FormShellManager::FormShellManager (ViewShellBase& rBase)
     // Register at the EventMultiplexer to be informed about changes in the
     // center pane.
     Link<sd::tools::EventMultiplexerEvent&,void> aLink (LINK(this, FormShellManager, ConfigurationUpdateHandler));
-    mrBase.GetEventMultiplexer()->AddEventListener(
-        aLink,
-        EventMultiplexerEventId::MainViewRemoved
-        | EventMultiplexerEventId::MainViewAdded
-        | EventMultiplexerEventId::ConfigurationUpdated);
+    mrBase.GetEventMultiplexer()->AddEventListener(aLink);
 
     RegisterAtCenterPane();
 }

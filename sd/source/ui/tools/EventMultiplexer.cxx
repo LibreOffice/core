@@ -68,12 +68,10 @@ public:
     virtual ~Implementation() override;
 
     void AddEventListener (
-        const Link<EventMultiplexerEvent&,void>& rCallback,
-        EventMultiplexerEventId aEventTypes);
+        const Link<EventMultiplexerEvent&,void>& rCallback);
 
     void RemoveEventListener (
-        const Link<EventMultiplexerEvent&,void>& rCallback,
-        EventMultiplexerEventId aEventTypes);
+        const Link<EventMultiplexerEvent&,void>& rCallback);
 
     void CallListeners (EventMultiplexerEvent& rEvent);
 
@@ -118,8 +116,7 @@ protected:
 
 private:
     ViewShellBase& mrBase;
-    typedef ::std::pair<Link<EventMultiplexerEvent&,void>,EventMultiplexerEventId> ListenerDescriptor;
-    typedef ::std::vector<ListenerDescriptor> ListenerList;
+    typedef ::std::vector<Link<EventMultiplexerEvent&,void>> ListenerList;
     ListenerList maListeners;
 
     /// Remember whether we are listening to the UNO controller.
@@ -170,17 +167,15 @@ EventMultiplexer::~EventMultiplexer()
 }
 
 void EventMultiplexer::AddEventListener (
-    const Link<EventMultiplexerEvent&,void>& rCallback,
-    EventMultiplexerEventId aEventTypes)
+    const Link<EventMultiplexerEvent&,void>& rCallback)
 {
-    mpImpl->AddEventListener (rCallback, aEventTypes);
+    mpImpl->AddEventListener(rCallback);
 }
 
 void EventMultiplexer::RemoveEventListener (
-    const Link<EventMultiplexerEvent&,void>& rCallback,
-    EventMultiplexerEventId aEventTypes)
+    const Link<EventMultiplexerEvent&,void>& rCallback)
 {
-    mpImpl->RemoveEventListener (rCallback, aEventTypes);
+    mpImpl->RemoveEventListener(rCallback);
 }
 
 void EventMultiplexer::MultiplexEvent(
@@ -300,42 +295,25 @@ void EventMultiplexer::Implementation::ReleaseListeners()
 }
 
 void EventMultiplexer::Implementation::AddEventListener (
-    const Link<EventMultiplexerEvent&,void>& rCallback,
-    EventMultiplexerEventId aEventTypes)
+    const Link<EventMultiplexerEvent&,void>& rCallback)
 {
-    ListenerList::iterator iListener (maListeners.begin());
-    ListenerList::const_iterator iEnd (maListeners.end());
-    for (;iListener!=iEnd; ++iListener)
-        if (iListener->first == rCallback)
-            break;
-    if (iListener != maListeners.end())
-    {
-        // Listener exists.  Update its event type set.
-        iListener->second |= aEventTypes;
-    }
-    else
-    {
-        maListeners.push_back (ListenerDescriptor(rCallback,aEventTypes));
-    }
+    for (auto const & i : maListeners)
+        if (i == rCallback)
+            return;
+    maListeners.push_back(rCallback);
 }
 
 void EventMultiplexer::Implementation::RemoveEventListener (
-    const Link<EventMultiplexerEvent&,void>& rCallback,
-    EventMultiplexerEventId aEventTypes)
+    const Link<EventMultiplexerEvent&,void>& rCallback)
 {
     ListenerList::iterator iListener (maListeners.begin());
     ListenerList::const_iterator iEnd (maListeners.end());
     for (;iListener!=iEnd; ++iListener)
-        if (iListener->first == rCallback)
+        if (*iListener == rCallback)
+        {
+            maListeners.erase(iListener);
             break;
-    if (iListener != maListeners.end())
-    {
-        // Update the event type set.
-        iListener->second &= ~aEventTypes;
-        // When no events remain in the set then remove the listener.
-        if (iListener->second == EventMultiplexerEventId::NONE)
-            maListeners.erase (iListener);
-    }
+        }
 }
 
 void EventMultiplexer::Implementation::ConnectToController()
@@ -675,8 +653,7 @@ void EventMultiplexer::Implementation::CallListeners (EventMultiplexerEvent& rEv
     ListenerList::const_iterator iListenerEnd (aCopyListeners.end());
     for (; iListener!=iListenerEnd; ++iListener)
     {
-        if (iListener->second & rEvent.meEventId)
-            iListener->first.Call(rEvent);
+        iListener->Call(rEvent);
     }
 }
 

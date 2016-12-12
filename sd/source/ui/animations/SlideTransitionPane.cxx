@@ -947,14 +947,7 @@ void SlideTransitionPane::playCurrentEffect()
 void SlideTransitionPane::addListener()
 {
     Link<tools::EventMultiplexerEvent&,void> aLink( LINK(this,SlideTransitionPane,EventMultiplexerListener) );
-    mrBase.GetEventMultiplexer()->AddEventListener (
-        aLink,
-        EventMultiplexerEventId::EditViewSelection
-        | EventMultiplexerEventId::SlideSortedSelection
-        | EventMultiplexerEventId::CurrentPageChanged
-        | EventMultiplexerEventId::MainViewRemoved
-        | EventMultiplexerEventId::MainViewAdded
-        | EventMultiplexerEventId::ConfigurationUpdated);
+    mrBase.GetEventMultiplexer()->AddEventListener( aLink );
 }
 
 void SlideTransitionPane::removeListener()
