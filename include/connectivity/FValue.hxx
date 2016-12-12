@@ -153,16 +153,6 @@ namespace connectivity
             operator=(_rRH);
         }
 
-        ORowSetValue(sal_uInt8 _rRH)
-            :m_eTypeKind(css::sdbc::DataType::TINYINT)
-            ,m_bNull(true)
-            ,m_bBound(true)
-            ,m_bModified(false)
-            ,m_bSigned(false)
-        {
-            m_aValue.m_pString = nullptr;
-            operator=(_rRH);
-        }
         ORowSetValue(sal_Int16 _rRH)
             :m_eTypeKind(css::sdbc::DataType::SMALLINT)
             ,m_bNull(true)
@@ -234,6 +224,7 @@ namespace connectivity
             m_aValue.m_pString = nullptr;
             operator=(_rRH);
         }
+        ORowSetValue(sal_Bool) = delete; // aka sal_uInt8
 
         ORowSetValue(const css::util::Date& _rRH)
             :m_eTypeKind(css::sdbc::DataType::DATE)
@@ -301,9 +292,9 @@ namespace connectivity
 
         // simple types
         ORowSetValue& operator=(bool _rRH);
+        void operator =(sal_Bool) = delete; // aka sal_uInt8
 
         ORowSetValue& operator=(sal_Int8 _rRH);
-        ORowSetValue& operator=(sal_uInt8 _rRH);
 
         ORowSetValue& operator=(sal_Int16 _rRH);
         ORowSetValue& operator=(sal_uInt16 _rRH);
@@ -329,8 +320,8 @@ namespace connectivity
         ORowSetValue& operator=(const css::uno::Any& _rAny);
 
         operator bool() const   {   return !isNull() && getBool();    }
+        operator sal_Bool() const = delete; // aka sal_uInt8
         operator sal_Int8() const   {   return isNull() ? static_cast<sal_Int8>(0) : getInt8();   }
-        operator sal_uInt8() const  {   return isNull() ? static_cast<sal_uInt8>(0) : getUInt8(); }
 
         operator sal_Int16() const  {   return isNull() ? static_cast<sal_Int16>(0) : getInt16();   }
         operator sal_uInt16() const {   return isNull() ? static_cast<sal_uInt16>(0) : getUInt16(); }

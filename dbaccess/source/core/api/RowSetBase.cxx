@@ -256,7 +256,7 @@ OUString SAL_CALL ORowSetBase::getString( sal_Int32 columnIndex ) throw(SQLExcep
 sal_Bool SAL_CALL ORowSetBase::getBoolean( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( *m_pMutex );
-    return getValue(columnIndex);
+    return bool(getValue(columnIndex));
 }
 
 sal_Int8 SAL_CALL ORowSetBase::getByte( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)

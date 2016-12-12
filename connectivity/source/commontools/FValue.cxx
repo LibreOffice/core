@@ -586,20 +586,6 @@ ORowSetValue& ORowSetValue::operator=(sal_Int8 _rRH)
     return *this;
 }
 
-
-ORowSetValue& ORowSetValue::operator=(sal_uInt8 _rRH)
-{
-    if(m_eTypeKind != DataType::TINYINT )
-        free();
-
-    m_aValue.m_uInt8 = _rRH;
-    m_eTypeKind = DataType::TINYINT;
-    m_bNull = false;
-    m_bSigned = false;
-    return *this;
-}
-
-
 ORowSetValue& ORowSetValue::operator=(sal_Int16 _rRH)
 {
     if(m_eTypeKind != DataType::SMALLINT )

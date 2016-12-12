@@ -42,7 +42,7 @@ sal_Bool SAL_CALL OPrivateRow::wasNull(  ) throw (SQLException, RuntimeException
     sal_Bool SAL_CALL OPrivateRow::getBoolean( ::sal_Int32 columnIndex ) throw (SQLException, RuntimeException, std::exception)
     {
         m_nPos = columnIndex;
-        return m_aRow[m_nPos];
+        return bool(m_aRow[m_nPos]);
     }
     ::sal_Int8 SAL_CALL OPrivateRow::getByte( ::sal_Int32 columnIndex ) throw (SQLException, RuntimeException, std::exception)
     {

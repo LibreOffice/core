@@ -458,7 +458,7 @@ template < typename T > T OResultSet::getValue( sal_Int32 columnIndex )
 }
 sal_Bool SAL_CALL OResultSet::getBoolean( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
-    return getValue<sal_Bool>( columnIndex );
+    return getValue<bool>( columnIndex );
 }
 
 sal_Int8 SAL_CALL OResultSet::getByte( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)

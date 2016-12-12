@@ -482,7 +482,7 @@ ORowSetValue OResultSet::retrieveValue(const sal_Int32 nColumnIndex, const ISC_S
                 return getString(nColumnIndex);
             return getLong(nColumnIndex);
         case SQL_BOOLEAN:
-            return ORowSetValue(getBoolean(nColumnIndex));
+            return ORowSetValue(bool(getBoolean(nColumnIndex)));
         case SQL_BLOB:
         case SQL_NULL:
         case SQL_QUAD:
@@ -645,7 +645,7 @@ sal_Bool SAL_CALL OResultSet::wasNull() throw(SQLException, RuntimeException, st
 sal_Bool SAL_CALL OResultSet::getBoolean(sal_Int32 nColumnIndex)
     throw(SQLException, RuntimeException, std::exception)
 {
-    return safelyRetrieveValue< sal_Bool >(nColumnIndex, SQL_BOOLEAN);
+    return safelyRetrieveValue< bool >(nColumnIndex, SQL_BOOLEAN);
 }
 
 sal_Int8 SAL_CALL OResultSet::getByte(sal_Int32 nColumnIndex)

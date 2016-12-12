@@ -232,7 +232,7 @@ Reference< css::io::XInputStream > SAL_CALL OResultSet::getCharacterStream( sal_
 
 sal_Bool SAL_CALL OResultSet::getBoolean( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
-    return getValue(columnIndex);
+    return bool(getValue(columnIndex));
 }
 
 

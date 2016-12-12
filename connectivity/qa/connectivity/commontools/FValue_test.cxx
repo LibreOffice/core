@@ -34,7 +34,6 @@ public:
     void test_Bool();
 
     void test_Int8();
-    void test_uInt8();
 
     void test_Int16();
     void test_uInt16();
@@ -58,7 +57,6 @@ public:
     CPPUNIT_TEST(test_Bool);
 
     CPPUNIT_TEST(test_Int8);
-    CPPUNIT_TEST(test_uInt8);
 
     CPPUNIT_TEST(test_Int16);
     CPPUNIT_TEST(test_uInt16);
@@ -118,27 +116,6 @@ void FValueTest::test_Int8()
     std::cerr << "trg_salInt8: " << static_cast<short>(trg_salInt8) << std::endl;
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("sal_Int8 conversion from Any didn't work", trg_salInt8, src_salInt8);
-}
-
-void FValueTest::test_uInt8()
-{
-    sal_uInt8 src_saluInt8 = 255;
-    ORowSetValue v(src_saluInt8);
-    sal_uInt8 trg_saluInt8 = v.getUInt8();
-
-    std::cerr << "src_saluInt8: " << static_cast<short>(src_saluInt8) << std::endl;
-    std::cerr << "trg_saluInt8: " << static_cast<short>(trg_saluInt8) << std::endl;
-
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("sal_uInt8 conversion to ORowSetValue didn't work", trg_saluInt8, src_saluInt8);
-
-    Any any_uInt8 = v.makeAny();
-    ORowSetValue t;
-    t.fill(any_uInt8);
-    trg_saluInt8 = t.getUInt8();
-
-    std::cerr << "trg_saluInt8: " << static_cast<short>(trg_saluInt8) << std::endl;
-
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("sal_uInt8 conversion from Any didn't work", trg_saluInt8, src_saluInt8);
 }
 
 void FValueTest::test_Int16()
