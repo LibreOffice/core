@@ -389,7 +389,7 @@ public:
     bool                    HasLink() const { return !maLink.isEmpty(); }
     void                    SetLink();
     void                    SetLink( const OUString& rLink );
-    const OUString&         GetLink() const { return maLink; }
+    OUString                GetLink() const { return maLink; }
 
     bool                    HasUserData() const { return !maUserData.isEmpty(); }
     void                    SetUserData();
