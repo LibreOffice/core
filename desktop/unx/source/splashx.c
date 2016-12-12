@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include "splashx.h"
+
 #ifdef ENABLE_QUICKSTART_LIBPNG
 
 #include <X11/Xlib.h>
@@ -31,8 +33,6 @@
 #include <osl/thread.h>
 #include <rtl/bootstrap.h>
 #include <rtl/ustrbuf.h>
-
-#include "splashx.h"
 
 typedef struct {
     unsigned char b, g, r;
@@ -722,8 +722,6 @@ struct splash* splash_create(rtl_uString* pAppPath, int argc, char** argv)
 }
 
 #else /* not ENABLE_QUICKSTART_LIBPNG */
-
-#include <rtl/ustrbuf.h>
 
 struct splash
 {
