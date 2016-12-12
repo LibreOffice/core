@@ -18,6 +18,8 @@
  */
 
 #include "documentdigitalsignatures.hxx"
+#include "resourcemanager.hxx"
+
 #include <digitalsignaturesdialog.hxx>
 #include <certificatechooser.hxx>
 #include <certificateviewer.hxx>
@@ -25,10 +27,8 @@
 #include <biginteger.hxx>
 #include <global.hrc>
 #include <pdfsignaturehelper.hxx>
-
 #include <sax/tools/converter.hxx>
 
-#include <../dialogs/resourcemanager.hxx>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/StorageFormats.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
