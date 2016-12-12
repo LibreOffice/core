@@ -34,11 +34,6 @@ const long SC_OL_POSOFFSET                  = 2;
 const size_t SC_OL_NOLEVEL                  = static_cast< size_t >( -1 );
 const size_t SC_OL_HEADERENTRY              = static_cast< size_t >( -1 );
 
-const sal_uInt16 SC_OL_IMAGE_PLUS               = 9;
-const sal_uInt16 SC_OL_IMAGE_MINUS              = SC_OL_IMAGE_PLUS + 1;
-const sal_uInt16 SC_OL_IMAGE_NOTPRESSED         = SC_OL_IMAGE_MINUS + 1;
-const sal_uInt16 SC_OL_IMAGE_PRESSED            = SC_OL_IMAGE_NOTPRESSED + 1;
-
 ScOutlineWindow::ScOutlineWindow( vcl::Window* pParent, ScOutlineMode eMode, ScViewData* pViewData, ScSplitPos eWhich ) :
     Window( pParent ),
     mrViewData( *pViewData ),
@@ -46,7 +41,6 @@ ScOutlineWindow::ScOutlineWindow( vcl::Window* pParent, ScOutlineMode eMode, ScV
     mbHoriz( eMode == SC_OUTLINE_HOR ),
     mbMirrorEntries( false ),           // updated in SetHeaderSize
     mbMirrorLevels( false ),            // updated in SetHeaderSize
-    maSymbols(ScResId(RID_OUTLINEBITMAPS)),
     maLineColor( COL_BLACK ),
     mnHeaderSize( 0 ),
     mnHeaderPos( 0 ),
@@ -533,9 +527,17 @@ void ScOutlineWindow::DrawRectRel(
     DrawRect( GetRectangle( nLevelStart, nEntryStart, nLevelEnd, nEntryEnd ) );
 }
 
-void ScOutlineWindow::DrawImageRel( long nLevelPos, long nEntryPos, sal_uInt16 nId )
+namespace
 {
-    const Image& rImage = maSymbols.GetImage( nId );
+    Image GetImage(sal_uInt16 nId)
+    {
+        return Image(BitmapEx(ScResId(nId)));
+    }
+}
+
+void ScOutlineWindow::DrawImageRel(long nLevelPos, long nEntryPos, sal_uInt16 nId)
+{
+    const Image& rImage = GetImage(nId);
     SetLineColor();
     SetFillColor( GetBackground().GetColor() );
     Point aPos( GetPoint( nLevelPos, nEntryPos ) );
@@ -548,11 +550,11 @@ void ScOutlineWindow::DrawBorderRel( size_t nLevel, size_t nEntry, bool bPressed
     Point aPos;
     if ( GetImagePos( nLevel, nEntry, aPos ) )
     {
-        sal_uInt16 nId = bPressed ? SC_OL_IMAGE_PRESSED : SC_OL_IMAGE_NOTPRESSED;
+        sal_uInt16 nId = bPressed ? RID_BMP_PRESSED : RID_BMP_NOTPRESSED;
         bool bClip = (nEntry != SC_OL_HEADERENTRY);
         if ( bClip )
             SetEntryAreaClipRegion();
-        DrawImage( aPos, maSymbols.GetImage( nId ) );
+        DrawImage(aPos, GetImage(nId));
         if ( bClip )
             SetClipRegion();
     }
@@ -622,7 +624,7 @@ void ScOutlineWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Recta
     {
         long nEntryPos = GetHeaderEntryPos();
         for ( size_t nLevel = 0; nLevel < nLevelCount; ++nLevel )
-            DrawImageRel( GetLevelPos( nLevel ), nEntryPos, static_cast< sal_uInt16 >( nLevel + 1 ) );
+            DrawImageRel(GetLevelPos(nLevel), nEntryPos, RID_BMP_LEVEL1 + nLevel);
 
         SetLineColor( maLineColor );
         long nLinePos = mnHeaderPos + (mbMirrorEntries ? 0 : (mnHeaderSize - 1));
@@ -694,7 +696,7 @@ void ScOutlineWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Recta
             // draw, if not hidden by higher levels
             if ( bDraw )
             {
-                sal_uInt16 nImageId = pEntry->IsHidden() ? SC_OL_IMAGE_PLUS : SC_OL_IMAGE_MINUS;
+                sal_uInt16 nImageId = pEntry->IsHidden() ? RID_BMP_PLUS : RID_BMP_MINUS;
                 DrawImageRel( nLevelPos, nImagePos, nImageId );
             }
         }

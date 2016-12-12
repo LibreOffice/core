@@ -22,11 +22,64 @@
 // Imageliste hier, damit sie nicht in ui.src beim Zusammenbauen der
 // "echten" Imagelisten stoert
 
-ImageList RID_OUTLINEBITMAPS
+Bitmap RID_BMP_LEVEL1
 {
-    Prefix = "ou";
-    IdList = { 1; 2; 3; 4; 5; 6; 7; 8; 9; 10; 11; 12; };
-    IdCount = { 12; };
+    File = "ou01.png";
+};
+
+Bitmap RID_BMP_LEVEL2
+{
+    File = "ou02.png";
+};
+
+Bitmap RID_BMP_LEVEL3
+{
+    File = "ou03.png";
+};
+
+Bitmap RID_BMP_LEVEL4
+{
+    File = "ou04.png";
+};
+
+Bitmap RID_BMP_LEVEL5
+{
+    File = "ou05.png";
+};
+
+Bitmap RID_BMP_LEVEL6
+{
+    File = "ou06.png";
+};
+
+Bitmap RID_BMP_LEVEL7
+{
+    File = "ou07.png";
+};
+
+Bitmap RID_BMP_LEVEL8
+{
+    File = "ou08.png";
+};
+
+Bitmap RID_BMP_PLUS
+{
+    File = "ou09.png";
+};
+
+Bitmap RID_BMP_MINUS
+{
+    File = "ou010.png";
+};
+
+Bitmap RID_BMP_NOTPRESSED
+{
+    File = "ou011.png";
+};
+
+Bitmap RID_BMP_PRESSED
+{
+    File = "ou012.png";
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
