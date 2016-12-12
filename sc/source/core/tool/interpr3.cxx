@@ -1493,17 +1493,17 @@ void ScInterpreter::ScNegBinomDist()
 {
     if ( MustHaveParamCount( GetByte(), 3 ) )
     {
-        double p      = GetDouble();                    // p
-        double r      = GetDouble();                    // r
-        double x      = GetDouble();                    // x
-        if (r < 0.0 || x < 0.0 || p < 0.0 || p > 1.0)
+        double p = GetDouble();                            // probability
+        double s = ::rtl::math::approxFloor(GetDouble());  // No of successes
+        double f = ::rtl::math::approxFloor(GetDouble());  // No of failures
+        if ((f + s) <= 1.0 || p < 0.0 || p > 1.0)
             PushIllegalArgument();
         else
         {
             double q = 1.0 - p;
-            double fFactor = pow(p,r);
-            for (double i = 0.0; i < x; i++)
-                fFactor *= (i+r)/(i+1.0)*q;
+            double fFactor = pow(p,s);
+            for (double i = 0.0; i < f; i++)
+                fFactor *= (i+s)/(i+1.0)*q;
             PushDouble(fFactor);
         }
     }
