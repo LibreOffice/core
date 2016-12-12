@@ -261,7 +261,6 @@ namespace drawinglayer
                     nIndex,
                     nIndex,
                     nLength,
-                    true,
                     0,
                     &(aIntegerDXArray[0]));
             }

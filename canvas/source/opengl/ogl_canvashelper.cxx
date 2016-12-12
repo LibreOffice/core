@@ -774,7 +774,6 @@ namespace oglcanvas
                                           0,
                                           rTxt.StartPosition,
                                           rTxt.Length,
-                                          true,
                                           0,
                                           pDXArray.get() );
                 }
