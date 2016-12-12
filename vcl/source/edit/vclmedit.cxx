@@ -696,7 +696,7 @@ bool ImpVclMEdit::HandleCommand( const CommandEvent& rCEvt )
          ( rCEvt.GetCommand() == CommandEventId::StartAutoScroll ) ||
          ( rCEvt.GetCommand() == CommandEventId::AutoScroll ) )
     {
-        mpTextWindow->HandleScrollCommand( rCEvt, mpHScrollBar, mpVScrollBar );
+        (void)mpTextWindow->HandleScrollCommand( rCEvt, mpHScrollBar, mpVScrollBar );
         bDone = true;
     }
     return bDone;
