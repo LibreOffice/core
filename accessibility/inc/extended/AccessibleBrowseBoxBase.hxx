@@ -312,7 +312,8 @@ public:
     // public versions of internal helper methods, with access control
     struct AccessControl { friend class SolarMethodGuard; private: AccessControl() { } };
 
-    inline ::osl::Mutex&    getMutex( const AccessControl& ) { return getOslMutex(); }
+    /** @return  The osl::Mutex member provided by the class BaseMutex. */
+    inline ::osl::Mutex&    getMutex( ) { return m_aMutex; }
     inline void             ensureIsAlive( const AccessControl& ) { ensureIsAlive(); }
 
 protected:
@@ -415,7 +416,7 @@ class SolarMethodGuard : public SolarMutexGuard, public OslMutexGuard
 public:
     inline SolarMethodGuard( AccessibleBrowseBoxBase& _rOwner, bool _bEnsureAlive = true )
         :SolarMutexGuard( )
-        ,OslMutexGuard( _rOwner.getMutex( AccessibleBrowseBoxBase::AccessControl() ) )
+        ,OslMutexGuard( _rOwner.getMutex( ) )
     {
         if ( _bEnsureAlive )
             _rOwner.ensureIsAlive( AccessibleBrowseBoxBase::AccessControl() );
@@ -427,11 +428,6 @@ public:
 inline ::svt::AccessibleBrowseBoxObjType AccessibleBrowseBoxBase::getType() const
 {
     return meObjType;
-}
-
-inline ::osl::Mutex& AccessibleBrowseBoxBase::getOslMutex()
-{
-    return m_aMutex;
 }
 
 inline void AccessibleBrowseBoxBase::implSetName(

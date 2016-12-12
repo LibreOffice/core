@@ -120,7 +120,7 @@ namespace accessibility
     css::awt::Rectangle SAL_CALL AccessibleBrowseBoxTableCell::getCharacterBounds( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( getOslMutex() );
+        ::osl::MutexGuard aGuard( getMutex() );
 
         ensureIsAlive();
         if ( !implIsValidIndex( nIndex, implGetText().getLength() ) )
@@ -141,7 +141,7 @@ namespace accessibility
         //! TODO CTL bidi
         // OSL_FAIL("Need to be done by base class!");
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( getOslMutex() );
+        ::osl::MutexGuard aGuard( getMutex() );
         ensureIsAlive();
 
         return mpBrowseBox->GetFieldIndexAtPoint( getRowPos(), getColumnPos(), VCLPoint( _aPoint ) );
@@ -180,7 +180,7 @@ namespace accessibility
     ::utl::AccessibleStateSetHelper* AccessibleBrowseBoxTableCell::implCreateStateSetHelper()
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( getOslMutex() );
+        ::osl::MutexGuard aGuard( getMutex() );
 
         ::utl::AccessibleStateSetHelper* pStateSetHelper = new ::utl::AccessibleStateSetHelper;
 
@@ -214,7 +214,7 @@ namespace accessibility
             throw ( css::uno::RuntimeException, std::exception )
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( getOslMutex() );
+        ::osl::MutexGuard aGuard( getMutex() );
         ensureIsAlive();
 
         return /*BBINDEX_FIRSTCONTROL*/ m_nOffset + ( getRowPos() * mpBrowseBox->GetColumnCount() ) + getColumnPos();
@@ -227,7 +227,7 @@ namespace accessibility
     sal_Bool SAL_CALL AccessibleBrowseBoxTableCell::setCaretPosition ( sal_Int32 nIndex ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception)
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( getOslMutex() );
+        ::osl::MutexGuard aGuard( getMutex() );
 
         if ( !implIsValidRange( nIndex, nIndex, implGetText().getLength() ) )
             throw IndexOutOfBoundsException();
@@ -237,13 +237,13 @@ namespace accessibility
     sal_Unicode SAL_CALL AccessibleBrowseBoxTableCell::getCharacter( sal_Int32 nIndex ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception)
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( getOslMutex() );
+        ::osl::MutexGuard aGuard( getMutex() );
         return OCommonAccessibleText::getCharacter( nIndex );
     }
     css::uno::Sequence< css::beans::PropertyValue > SAL_CALL AccessibleBrowseBoxTableCell::getCharacterAttributes( sal_Int32 nIndex, const css::uno::Sequence< OUString >& ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception)
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( getOslMutex() );
+        ::osl::MutexGuard aGuard( getMutex() );
 
         OUString sText( implGetText() );
 
@@ -255,32 +255,32 @@ namespace accessibility
     sal_Int32 SAL_CALL AccessibleBrowseBoxTableCell::getCharacterCount(  ) throw (css::uno::RuntimeException, std::exception)
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( getOslMutex() );
+        ::osl::MutexGuard aGuard( getMutex() );
         return OCommonAccessibleText::getCharacterCount(  );
     }
 
     OUString SAL_CALL AccessibleBrowseBoxTableCell::getSelectedText(  ) throw (css::uno::RuntimeException, std::exception)
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( getOslMutex() );
+        ::osl::MutexGuard aGuard( getMutex() );
         return OCommonAccessibleText::getSelectedText(  );
     }
     sal_Int32 SAL_CALL AccessibleBrowseBoxTableCell::getSelectionStart(  ) throw (css::uno::RuntimeException, std::exception)
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( getOslMutex() );
+        ::osl::MutexGuard aGuard( getMutex() );
         return OCommonAccessibleText::getSelectionStart(  );
     }
     sal_Int32 SAL_CALL AccessibleBrowseBoxTableCell::getSelectionEnd(  ) throw (css::uno::RuntimeException, std::exception)
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( getOslMutex() );
+        ::osl::MutexGuard aGuard( getMutex() );
         return OCommonAccessibleText::getSelectionEnd(  );
     }
     sal_Bool SAL_CALL AccessibleBrowseBoxTableCell::setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception)
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( getOslMutex() );
+        ::osl::MutexGuard aGuard( getMutex() );
         if ( !implIsValidRange( nStartIndex, nEndIndex, implGetText().getLength() ) )
             throw IndexOutOfBoundsException();
 
@@ -289,37 +289,37 @@ namespace accessibility
     OUString SAL_CALL AccessibleBrowseBoxTableCell::getText(  ) throw (css::uno::RuntimeException, std::exception)
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( getOslMutex() );
+        ::osl::MutexGuard aGuard( getMutex() );
         return OCommonAccessibleText::getText(  );
     }
     OUString SAL_CALL AccessibleBrowseBoxTableCell::getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception)
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( getOslMutex() );
+        ::osl::MutexGuard aGuard( getMutex() );
         return OCommonAccessibleText::getTextRange( nStartIndex, nEndIndex );
     }
     css::accessibility::TextSegment SAL_CALL AccessibleBrowseBoxTableCell::getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (css::lang::IndexOutOfBoundsException, css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( getOslMutex() );
+        ::osl::MutexGuard aGuard( getMutex() );
         return OCommonAccessibleText::getTextAtIndex( nIndex ,aTextType);
     }
     css::accessibility::TextSegment SAL_CALL AccessibleBrowseBoxTableCell::getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (css::lang::IndexOutOfBoundsException, css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( getOslMutex() );
+        ::osl::MutexGuard aGuard( getMutex() );
         return OCommonAccessibleText::getTextBeforeIndex( nIndex ,aTextType);
     }
     css::accessibility::TextSegment SAL_CALL AccessibleBrowseBoxTableCell::getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (css::lang::IndexOutOfBoundsException, css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( getOslMutex() );
+        ::osl::MutexGuard aGuard( getMutex() );
         return OCommonAccessibleText::getTextBehindIndex( nIndex ,aTextType);
     }
     sal_Bool SAL_CALL AccessibleBrowseBoxTableCell::copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception)
     {
         SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( getOslMutex() );
+        ::osl::MutexGuard aGuard( getMutex() );
         OUString sText = implGetText();
         checkIndex_Impl( nStartIndex, sText );
         checkIndex_Impl( nEndIndex, sText );
