@@ -120,7 +120,7 @@ public:
                 }
                 else
                 {
-                    OSL_TRACE( "ignoring second else clause" );
+                    SAL_WARN("oox",  "ignoring second else clause" );
                 }
                 break;
             default:
@@ -269,7 +269,7 @@ LayoutNodeContext::onCreateContext( ::sal_Int32 aElement,
         }
         else
         {
-            OSL_TRACE( "OOX: encountered a shape in a non layoutNode context" );
+            SAL_WARN("oox",  "OOX: encountered a shape in a non layoutNode context" );
         }
         break;
     }
@@ -324,7 +324,7 @@ LayoutNodeContext::onCreateContext( ::sal_Int32 aElement,
         }
         else
         {
-            OSL_TRACE( "OOX: encountered a varLst in a non layoutNode context" );
+            SAL_WARN("oox",  "OOX: encountered a varLst in a non layoutNode context" );
         }
         break;
     }

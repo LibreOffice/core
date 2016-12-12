@@ -256,7 +256,7 @@ bool onInitSignal()
     if (sigemptyset(&unset) < 0 ||
         pthread_sigmask(SIG_SETMASK, &unset, nullptr) < 0)
     {
-        OSL_TRACE("sigemptyset or pthread_sigmask failed");
+        SAL_WARN("sal", "sigemptyset or pthread_sigmask failed");
     }
 
     return true;

@@ -37,7 +37,6 @@ DiagramDefinitionContext::DiagramDefinitionContext( ContextHandler2Helper& rPare
     : ContextHandler2( rParent )
     , mpLayout( pLayout )
 {
-    OSL_TRACE( "OOX: DiagramDefinitionContext::DiagramDefinitionContext()" );
     mpLayout->setDefStyle( rAttributes.getString( XML_defStyle ).get() );
     OUString sValue = rAttributes.getString( XML_minVer ).get();
     if( sValue.isEmpty() )

@@ -43,7 +43,6 @@ bool Options::checkArgument(std::vector< std::string> & rArgs, char const * arg,
     OSL_PRECOND(result, "registry::tools::Options::checkArgument(): invalid arguments");
     if (result)
     {
-        OSL_TRACE("registry::tools:Options::checkArgument(): \"%s\"", arg);
         switch (arg[0])
         {
         case '@':

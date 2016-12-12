@@ -1507,7 +1507,6 @@ bool OReportDefinition::WriteThroughComponent(
         uno::Reference<io::XSeekable> xSeek(xStreamProp,uno::UNO_QUERY);
         if ( xSeek.is() )
         {
-            OSL_TRACE("Length of stream %i",(int)xSeek->getPosition());
             xSeek->seek(0);
         }
 

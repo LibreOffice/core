@@ -227,16 +227,13 @@ public:
             case DGM_TOKEN( extLst ):
                 return nullptr;
             case DGM_TOKEN( prSet ):
-                OSL_TRACE( "diagram property set for point");
                 return new PropertiesContext( *this, mrPoint, rAttribs );
             case DGM_TOKEN( spPr ):
-                OSL_TRACE( "shape props for point");
                 if( !mrPoint.mpShape )
                     mrPoint.mpShape.reset( new Shape() );
                 return new ShapePropertiesContext( *this, *(mrPoint.mpShape) );
             case DGM_TOKEN( t ):
             {
-                OSL_TRACE( "shape text body for point");
                 TextBodyPtr xTextBody( new TextBody );
                 if( !mrPoint.mpShape )
                     mrPoint.mpShape.reset( new Shape() );

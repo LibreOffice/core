@@ -188,10 +188,9 @@ namespace oox { namespace ppt {
                     OUString aString;
                     if( maTo >>= aString )
                     {
-                        OSL_TRACE( "Magic conversion %s", OUSTRING_TO_CSTR( aString ) );
                         maTo = makeAny( aString == "visible" );
                         if( !maTo.has<sal_Bool>() )
-                            OSL_TRACE( "conversion failed" );
+                            SAL_WARN("oox", "conversion failed" );
                     }
                     mpNode->setTo( maTo );
                 }
@@ -295,7 +294,7 @@ namespace oox { namespace ppt {
                         mpNode->getNodeProperties()[ NP_COMMAND ] = makeAny((sal_Int16)nCommand);
                         if( nCommand == EffectCommands::CUSTOM )
                         {
-                            OSL_TRACE("OOX: CmdTimeNodeContext::endFastElement(), unknown command!");
+                            SAL_WARN("oox", "OOX: CmdTimeNodeContext::endFastElement(), unknown command!");
                             aParamValue.Name = "UserDefined";
                             aParamValue.Value <<= msCommand;
                         }
@@ -307,7 +306,7 @@ namespace oox { namespace ppt {
                     }
                     catch( RuntimeException& )
                     {
-                        OSL_TRACE( "OOX: Exception in CmdTimeNodeContext::endFastElement()" );
+                        SAL_WARN("oox", "OOX: Exception in CmdTimeNodeContext::endFastElement()" );
                     }
                 }
             }
@@ -982,7 +981,7 @@ namespace oox { namespace ppt {
             break;
         case PPT_TOKEN( video ):
             nNodeType = AnimationNodeType::AUDIO;
-            OSL_TRACE( "OOX: video requested, gave Audio instead" );
+            SAL_WARN("oox",  "OOX: video requested, gave Audio instead" );
             break;
 
         default:

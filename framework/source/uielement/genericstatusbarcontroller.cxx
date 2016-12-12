@@ -126,7 +126,6 @@ void SAL_CALL GenericStatusbarController::paint(
     ::sal_Int32 /*nStyle*/ )
 throw ( RuntimeException, std::exception )
 {
-    OSL_TRACE("framework::GenericStatusbarController::paint");
     SolarMutexGuard aGuard;
 
     const Reference< awt::XGraphics2 > xGraphics2(xGraphics, UNO_QUERY);

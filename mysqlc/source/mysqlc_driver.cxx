@@ -49,13 +49,11 @@ MysqlCDriver::MysqlCDriver(const Reference< XMultiServiceFactory >& _rxFactory)
     ,m_bAttemptedLoadCppConn( false )
 #endif
 {
-    OSL_TRACE("MysqlCDriver::MysqlCDriver");
     cppDriver = nullptr;
 }
 
 void MysqlCDriver::disposing()
 {
-    OSL_TRACE("MysqlCDriver::disposing");
     ::osl::MutexGuard aGuard(m_aMutex);
 
     // when driver will be destroied so all our connections have to be destroied as well
@@ -75,14 +73,12 @@ void MysqlCDriver::disposing()
 rtl::OUString MysqlCDriver::getImplementationName_Static()
     throw(RuntimeException)
 {
-    OSL_TRACE("MysqlCDriver::getImplementationName_Static");
     return rtl::OUString( "com.sun.star.comp.sdbc.mysqlc.MysqlCDriver"  );
 }
 
 Sequence< rtl::OUString > MysqlCDriver::getSupportedServiceNames_Static()
     throw(RuntimeException)
 {
-    OSL_TRACE("MysqlCDriver::getSupportedServiceNames_Static");
     // which service is supported
     // for more information @see com.sun.star.sdbc.Driver
     Sequence< rtl::OUString > aSNS(1);
@@ -93,7 +89,6 @@ Sequence< rtl::OUString > MysqlCDriver::getSupportedServiceNames_Static()
 rtl::OUString SAL_CALL MysqlCDriver::getImplementationName()
     throw(RuntimeException, std::exception)
 {
-    OSL_TRACE("MysqlCDriver::getImplementationName");
     return getImplementationName_Static();
 }
 
@@ -106,7 +101,6 @@ sal_Bool SAL_CALL MysqlCDriver::supportsService(const rtl::OUString& _rServiceNa
 Sequence< rtl::OUString > SAL_CALL MysqlCDriver::getSupportedServiceNames()
     throw(RuntimeException, std::exception)
 {
-    OSL_TRACE("MysqlCDriver::getSupportedServiceNames");
     return getSupportedServiceNames_Static();
 }
 
@@ -196,7 +190,6 @@ Reference< XConnection > SAL_CALL MysqlCDriver::connect(const rtl::OUString& url
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    OSL_TRACE("MysqlCDriver::connect");
     if (!acceptsURL(url)) {
         return nullptr;
     }
@@ -227,14 +220,12 @@ Reference< XConnection > SAL_CALL MysqlCDriver::connect(const rtl::OUString& url
 sal_Bool SAL_CALL MysqlCDriver::acceptsURL(const rtl::OUString& url)
         throw(SQLException, RuntimeException, std::exception)
 {
-    OSL_TRACE("MysqlCDriver::acceptsURL");
     return url.startsWith("sdbc:mysqlc:");
 }
 
 Sequence< DriverPropertyInfo > SAL_CALL MysqlCDriver::getPropertyInfo(const rtl::OUString& url, const Sequence< PropertyValue >& /* info */)
     throw(SQLException, RuntimeException, std::exception)
 {
-    OSL_TRACE("MysqlCDriver::getPropertyInfo");
     if (acceptsURL(url)) {
         ::std::vector< DriverPropertyInfo > aDriverInfo;
 
@@ -261,14 +252,12 @@ Sequence< DriverPropertyInfo > SAL_CALL MysqlCDriver::getPropertyInfo(const rtl:
 sal_Int32 SAL_CALL MysqlCDriver::getMajorVersion()
     throw(RuntimeException, std::exception)
 {
-    OSL_TRACE("MysqlCDriver::getMajorVersion");
     return MARIADBC_VERSION_MAJOR;
 }
 
 sal_Int32 SAL_CALL MysqlCDriver::getMinorVersion()
     throw(RuntimeException, std::exception)
 {
-    OSL_TRACE("MysqlCDriver::getMinorVersion");
     return MARIADBC_VERSION_MINOR;
 }
 

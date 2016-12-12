@@ -220,7 +220,7 @@ ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aEl
             }
             catch(SAXException& /* e */ )
             {
-                OSL_TRACE("OOX: SAXException in XML_buAutoNum");
+                SAL_WARN("oox", "OOX: SAXException in XML_buAutoNum");
             }
             break;
         }
@@ -232,7 +232,7 @@ ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aEl
             }
             catch(SAXException& /* e */)
             {
-                OSL_TRACE("OOX: SAXException in XML_buChar");
+                SAL_WARN("oox", "OOX: SAXException in XML_buChar");
             }
             break;
         case A_TOKEN( buBlip ):         // CT_TextBlipBullet

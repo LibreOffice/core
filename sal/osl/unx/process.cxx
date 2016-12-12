@@ -181,7 +181,7 @@ static void ChildStatusProc(void *pData)
             OSL_ASSERT(geteuid() == 0);     /* must be root */
 
             if (! INIT_GROUPS(data.m_name, data.m_gid) || (setuid(data.m_uid) != 0))
-                OSL_TRACE("Failed to change uid and guid, errno=%d (%s)", errno, strerror(errno));
+                SAL_WARN("sal", "Failed to change uid and guid, errno=" << errno << " (" << strerror(errno) << ")" );
 
             const rtl::OUString envVar("HOME");
             osl_clearEnvironment(envVar.pData);
@@ -205,7 +205,7 @@ static void ChildStatusProc(void *pData)
                 }
             }
 
-            OSL_TRACE("ChildStatusProc : starting '%s'",data.m_pszArgs[0]);
+            SAL_INFO("sal", "ChildStatusProc : starting " << data.m_pszArgs[0]);
 
             /* Connect std IO to pipe ends */
 
@@ -243,14 +243,14 @@ static void ChildStatusProc(void *pData)
             execv(data.m_pszArgs[0], const_cast<char **>(data.m_pszArgs));
         }
 
-        OSL_TRACE("Failed to exec, errno=%d (%s)", errno, strerror(errno));
+        SAL_WARN("sal", "Failed to exec, errno=" << errno << " (" << strerror(errno) << ")");
 
-        OSL_TRACE("ChildStatusProc : starting '%s' failed",data.m_pszArgs[0]);
+        SAL_WARN("sal", "ChildStatusProc : starting '" << data.m_pszArgs[0] << "' failed");
 
         /* if we reach here, something went wrong */
         errno_copy = errno;
         if ( !safeWrite(channel[1], &errno_copy, sizeof(errno_copy)) )
-            OSL_TRACE("sendFdPipe : sending failed (%s)",strerror(errno));
+            SAL_WARN("sal", "sendFdPipe : sending failed (" << strerror(errno) << ")");
 
         if ( channel[1] != -1 )
             close(channel[1]);
@@ -309,7 +309,7 @@ static void ChildStatusProc(void *pData)
 
             if ( child_pid < 0)
             {
-                OSL_TRACE("Failed to wait for child process, errno=%d (%s)", errno, strerror(errno));
+                SAL_WARN("sal", "Failed to wait for child process, errno=" << errno << " (" << strerror(errno) << ")");
 
                 /*
                 We got an other error than EINTR. Anyway we have to wake up the
@@ -349,8 +349,8 @@ static void ChildStatusProc(void *pData)
         }
         else
         {
-            OSL_TRACE("ChildStatusProc : starting '%s' failed",data.m_pszArgs[0]);
-            OSL_TRACE("Failed to launch child process, child reports errno=%d (%s)", status, strerror(status));
+            SAL_WARN("sal", "ChildStatusProc : starting '" << data.m_pszArgs[0] << "' failed");
+            SAL_WARN("sal", "Failed to launch child process, child reports errno=" << status << " (" << strerror(status) << ")");
 
             /* Close pipe ends */
             if ( pdata->m_pInputWrite )

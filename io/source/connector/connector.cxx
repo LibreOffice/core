@@ -73,11 +73,6 @@ namespace stoc_connector
     Reference< XConnection > SAL_CALL OConnector::connect( const OUString& sConnectionDescription )
         throw( NoConnectException, ConnectionSetupException, RuntimeException, std::exception)
     {
-        OSL_TRACE(
-            "connector %s\n",
-            OUStringToOString(
-                sConnectionDescription, RTL_TEXTENCODING_ASCII_US).getStr());
-
         // split string into tokens
         try
         {
@@ -143,13 +138,8 @@ namespace stoc_connector
             }
             else
             {
-                OUString delegatee("com.sun.star.connection.Connector.");
-                delegatee += aDesc.getName();
+                OUString delegatee= "com.sun.star.connection.Connector." + aDesc.getName();
 
-                OSL_TRACE(
-                    "connector: trying to get service %s\n",
-                    OUStringToOString(
-                        delegatee, RTL_TEXTENCODING_ASCII_US).getStr());
                 Reference<XConnector> xConnector(
                     _xSMgr->createInstanceWithContext(delegatee, _xCtx), UNO_QUERY );
 

@@ -64,7 +64,6 @@ MacrosMenuController::MacrosMenuController( const css::uno::Reference< css::uno:
 
 MacrosMenuController::~MacrosMenuController()
 {
-    OSL_TRACE("calling dtor");
 }
 
 // private function
@@ -98,7 +97,6 @@ void SAL_CALL MacrosMenuController::disposing( const EventObject& ) throw ( Runt
     Reference< css::awt::XMenuListener > xHolder(static_cast<OWeakObject *>(this), UNO_QUERY );
 
     osl::MutexGuard aLock( m_aMutex );
-    OSL_TRACE("disposing");
     m_xFrame.clear();
     m_xDispatch.clear();
     m_xContext.clear();
@@ -106,7 +104,6 @@ void SAL_CALL MacrosMenuController::disposing( const EventObject& ) throw ( Runt
     if ( m_xPopupMenu.is() )
     {
         m_xPopupMenu->removeMenuListener( Reference< css::awt::XMenuListener >(static_cast<OWeakObject *>(this), UNO_QUERY ));
-        OSL_TRACE("removed listener");
     }
     m_xPopupMenu.clear();
 }

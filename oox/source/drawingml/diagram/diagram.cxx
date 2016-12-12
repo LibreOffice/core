@@ -73,10 +73,10 @@ DiagramData::DiagramData()
 
 void DiagramData::dump()
 {
-    OSL_TRACE("Dgm: DiagramData # of cnx: %zu", maConnections.size() );
+    SAL_INFO("oox", "Dgm: DiagramData # of cnx: " << maConnections.size() );
     std::for_each( maConnections.begin(), maConnections.end(),
             [] (dgm::Connection & rConnection) { rConnection.dump(); } );
-    OSL_TRACE("Dgm: DiagramData # of pt: %zu", maPoints.size() );
+    SAL_INFO("oox", "Dgm: DiagramData # of pt: " << maPoints.size() );
     std::for_each( maPoints.begin(), maPoints.end(),
             [] (dgm::Point & rPoint) { rPoint.dump(); } );
 }

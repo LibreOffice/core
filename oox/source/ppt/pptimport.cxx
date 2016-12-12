@@ -132,7 +132,7 @@ sal_Int32 PowerPointImport::getSchemeColor( sal_Int32 nToken ) const
             }
             else
             {
-                OSL_TRACE("OOX: PowerPointImport::mpThemePtr is NULL");
+                SAL_WARN("oox", "OOX: PowerPointImport::mpThemePtr is NULL");
             }
         }
     }

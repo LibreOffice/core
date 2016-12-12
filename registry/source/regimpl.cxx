@@ -760,7 +760,6 @@ RegError ORegistry::closeKey(RegKeyHandle hKey)
         else
         {
             // closing modified RootKey, flush registry file.
-            OSL_TRACE("registry::ORegistry::closeKey(): flushing modified RootKey");
             (void) m_file.flush();
         }
         pKey->setModified(false);
