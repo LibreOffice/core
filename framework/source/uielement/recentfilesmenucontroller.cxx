@@ -293,8 +293,6 @@ void SAL_CALL RecentFilesMenuController::itemSelected( const css::awt::MenuEvent
     if ( xPopupMenu.is() )
     {
         const OUString aCommand( xPopupMenu->getCommand( rEvent.MenuId ) );
-        OSL_TRACE( "RecentFilesMenuController::itemSelected() - Command : %s",
-                   OUStringToOString( aCommand, RTL_TEXTENCODING_UTF8 ).getStr() );
 
         if ( aCommand == CMD_CLEAR_LIST )
         {

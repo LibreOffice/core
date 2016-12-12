@@ -124,10 +124,6 @@ namespace io_acceptor
                IllegalArgumentException,
                RuntimeException, std::exception)
     {
-        OSL_TRACE(
-            "acceptor %s\n",
-            OUStringToOString(
-                sConnectionDescription, RTL_TEXTENCODING_ASCII_US).getStr());
         // if there is a thread alread accepting in this object, throw an exception.
         struct BeingInAccept guard( &m_bInAccept, sConnectionDescription );
 
@@ -205,11 +201,6 @@ namespace io_acceptor
                 else
                 {
                     OUString delegatee = "com.sun.star.connection.Acceptor." + aDesc.getName();
-
-                    OSL_TRACE(
-                        "trying to get service %s\n",
-                        OUStringToOString(
-                            delegatee, RTL_TEXTENCODING_ASCII_US).getStr());
                     _xAcceptor.set(_xSMgr->createInstanceWithContext(delegatee, _xCtx), UNO_QUERY);
 
                     if(!_xAcceptor.is())

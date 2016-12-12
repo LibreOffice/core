@@ -20,6 +20,7 @@ certain functionality.
 
 @section SAL
 
+@li @c sal
 @li @c sal.bootstrap - SAL bootstrap
 @li @c sal.debug - SAL debugging functionality
 @li @c sal.file
@@ -551,6 +552,7 @@ certain functionality.
 @li @c drawinglayer
 @li @c dtrans
 @li @c helpcompiler
+@li @c javaunohelper
 @li @c jvmaccess
 @li @c lingucomponent
 @li @c linguistic

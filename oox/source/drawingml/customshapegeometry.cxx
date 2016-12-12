@@ -409,7 +409,7 @@ static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCu
                     }
                     else
                     {
-                        OSL_TRACE("error: unhandled value '%s'", OUStringToOString( rValue, RTL_TEXTENCODING_ASCII_US ).getStr());
+                        SAL_WARN("oox", "error: unhandled value " << rValue);
                         aRet.Value = Any( rValue );
                     }
                 }

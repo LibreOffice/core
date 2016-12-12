@@ -1466,8 +1466,6 @@ ShapeExport& ShapeExport::WriteTextBox( const Reference< XInterface >& xIface, s
 
 void ShapeExport::WriteTable( const Reference< XShape >& rXShape  )
 {
-    OSL_TRACE("write table");
-
     Reference< XTable > xTable;
     Reference< XPropertySet > xPropSet( rXShape, UNO_QUERY );
 
@@ -1746,8 +1744,6 @@ void ShapeExport::WriteTableCellBorders(const Reference< XPropertySet>& xCellPro
 ShapeExport& ShapeExport::WriteTableShape( const Reference< XShape >& xShape )
 {
     FSHelperPtr pFS = GetFS();
-
-    OSL_TRACE("write table shape");
 
     pFS->startElementNS( mnXmlNamespace, XML_graphicFrame, FSEND );
 

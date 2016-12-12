@@ -594,7 +594,7 @@ static oslHostAddr __osl_hostentToHostAddr (const struct hostent *he)
         /* unknown address family */
         /* future extensions for new families might be implemented here */
 
-        OSL_TRACE("_osl_hostentToHostAddr(): unknown address family.");
+        SAL_WARN("sal", "_osl_hostentToHostAddr(): unknown address family.");
         OSL_ASSERT(sal_False);
 
         osl_destroySocketAddr_( pSocketAddr );

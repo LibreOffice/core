@@ -69,7 +69,7 @@ void lclCreateTextFields( std::list< Reference< XTextField > > & aFields,
             bool bIsDate = true;
             int idx = p.toInt32();
             sal_uInt16 nNumFmt;
-//              OSL_TRACE( "OOX: p = %s, %d", p.pData->buffer, idx );
+//              SAL_WARNx("oox",  "OOX: p = %s, %d", p.pData->buffer, idx );
             xIface = xFactory->createInstance( "com.sun.star.text.TextField.DateTime" );
             aFields.push_back( Reference< XTextField > ( xIface, UNO_QUERY ) );
             Reference< XPropertySet > xProps( xIface, UNO_QUERY_THROW );
@@ -132,7 +132,7 @@ void lclCreateTextFields( std::list< Reference< XTextField > > & aFields,
         }
         catch(Exception & e)
         {
-            OSL_TRACE( "Exception %s",  OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
+            SAL_WARN("oox",  "Exception " << e.Message );
         }
     }
     else if ( sType == "slidenum" )
@@ -236,7 +236,7 @@ sal_Int32 TextField::insertAt(
     }
     catch( const Exception&  )
     {
-        OSL_TRACE("OOX:  TextField::insertAt() exception");
+        SAL_WARN("oox", "OOX:  TextField::insertAt() exception");
     }
 
     return nCharHeight;

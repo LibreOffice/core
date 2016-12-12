@@ -294,7 +294,7 @@ namespace oox { namespace ppt {
                 mnTransitionType = TransitionType::BARWIPE;
                 mnTransitionSubType = TransitionSubType::FADEOVERCOLOR;
             }
-            OSL_TRACE( "OOX: cut transition fallback." );
+            SAL_WARN("oox", "OOX: cut transition fallback." );
             break;
         case PPT_TOKEN( fade ):
             mnTransitionType = TransitionType::FADE;

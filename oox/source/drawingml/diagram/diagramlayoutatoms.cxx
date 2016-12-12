@@ -80,9 +80,7 @@ void ConditionAttr::loadFromXAttr( const Reference< XFastAttributeList >& xAttr 
 
 void LayoutAtom::dump(int level)
 {
-    OSL_TRACE( "level = %d - %s of type %s", level,
-               OUSTRING_TO_CSTR( msName ),
-               typeid(*this).name() );
+    SAL_INFO("oox",  "level = " << level << " - " << msName << " of type " << typeid(*this).name() );
     const std::vector<LayoutAtomPtr>& rChildren=getChildren();
     std::for_each( rChildren.begin(), rChildren.end(),
         [level] (LayoutAtomPtr const& pAtom) { pAtom->dump(level + 1); } );
@@ -469,34 +467,14 @@ bool LayoutNode::setupShape( const ShapePtr& rShape, const Diagram& rDgm, sal_uI
         // now, but docs are a bit unclear on this
         if( !msStyleLabel.isEmpty() )
         {
-            SAL_INFO(
-                "oox.drawingml", "setting style with label " << msStyleLabel);
-
             const DiagramQStyleMap::const_iterator aStyle=rDgm.getStyles().find(msStyleLabel);
             if( aStyle != rDgm.getStyles().end() )
             {
                 rShape->getShapeStyleRefs()[XML_fillRef] = aStyle->second.maFillStyle;
-                SAL_INFO(
-                    "oox.drawingml",
-                    "added fill style with id "
-                        << aStyle->second.maFillStyle.mnThemedIdx);
                 rShape->getShapeStyleRefs()[XML_lnRef] = aStyle->second.maLineStyle;
-                SAL_INFO(
-                    "oox.drawingml",
-                    "added line style with id "
-                        << aStyle->second.maLineStyle.mnThemedIdx);
                 rShape->getShapeStyleRefs()[XML_effectRef] = aStyle->second.maEffectStyle;
-                SAL_INFO(
-                    "oox.drawingml",
-                    "added effect style with id "
-                        << aStyle->second.maEffectStyle.mnThemedIdx);
                 rShape->getShapeStyleRefs()[XML_fontRef] = aStyle->second.maTextStyle;
-                SAL_INFO(
-                    "oox.drawingml",
-                    "added fontref style with id "
-                        << aStyle->second.maTextStyle.mnThemedIdx);
                 Color aColor=aStyle->second.maTextStyle.maPhClr;
-                OSL_TRACE("added fontref color with alpha %d", aColor.getTransparency() );
             }
 
             const DiagramColorMap::const_iterator aColor=rDgm.getColors().find(msStyleLabel);
@@ -665,8 +643,7 @@ void ShapeCreationVisitor::visit(LayoutNode& rAtom)
     }
     else
     {
-        OSL_TRACE("ShapeCreationVisitor::visit: no shape set while processing layoutnode named %s",
-                  OUSTRING_TO_CSTR( rAtom.getName() ) );
+        SAL_WARN("oox", "ShapeCreationVisitor::visit: no shape set while processing layoutnode named " << rAtom.getName() );
     }
 
     // set new parent for children

@@ -441,7 +441,6 @@ OString MergeDataFile::CreateKey(const OString& rTYP, const OString& rGID,
     sKey += rLID;
     sKey += sStroke;
     sKey += lcl_NormalizeFilename(rFilename);
-    OSL_TRACE("created key: %s", sKey.getStr());
     if(bCaseSensitive)
         return sKey;         // officecfg case sensitive identifier
     return sKey.toAsciiUpperCase();

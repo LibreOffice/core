@@ -46,11 +46,9 @@ HyperLinkContext::HyperLinkContext( ContextHandler2Helper& rParent,
     OUString aRelId = rAttribs.getString( R_TOKEN( id ) ).get();
     if ( !aRelId.isEmpty() )
     {
-        OSL_TRACE("OOX: URI rId %s", OUStringToOString (aRelId, RTL_TEXTENCODING_UTF8).pData->buffer);
         sHref = getRelations().getExternalTargetFromRelId( aRelId );
         if( !sHref.isEmpty() )
         {
-            OSL_TRACE("OOX: URI href %s", OUStringToOString (sHref, RTL_TEXTENCODING_UTF8).pData->buffer);
             sURL = getFilter().getAbsoluteUrl( sHref );
         }
         else

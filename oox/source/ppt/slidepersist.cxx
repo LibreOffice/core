@@ -316,7 +316,6 @@ void SlidePersist::hideShapesAsMasterShapes()
                 PPTShape* pPPTShape = dynamic_cast< PPTShape* >( (*aChildIter++).get() );
                 if (!pPPTShape)
                     continue;
-                OSL_TRACE("hide shape with id: %s", OUStringToOString(pPPTShape->getId(), RTL_TEXTENCODING_UTF8 ).getStr());
                 pPPTShape->setHiddenMasterShape( true );
             }
         }

@@ -1060,7 +1060,6 @@ void OViewsWindow::BegDragObj(const Point& _aPnt, SdrHdl* _pHdl,const OSectionVi
     // and create temporary objects on all other views at the same position
     // relative to its occurrence.
 
-    OSL_TRACE("BegDragObj createInvisible Objects" );
     int nViewCount = 0;
     Point aNewObjPos(0,0);
     Point aLeftTop = Point(SAL_MAX_INT32, SAL_MAX_INT32);

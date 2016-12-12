@@ -82,7 +82,6 @@ ODatabaseMetaData::ODatabaseMetaData(OConnection& _rCon)
     ,meta(_rCon.getConnectionSettings().cppConnection->getMetaData())
     ,identifier_quote_string_set(false)
 {
-    OSL_TRACE("ODatabaseMetaData::ODatabaseMetaData");
     osl_atomic_increment(&m_refCount);
     m_bUseCatalog = !(usesLocalFiles() || usesLocalFilePerTable());
     osl_atomic_decrement(&m_refCount);
@@ -90,12 +89,10 @@ ODatabaseMetaData::ODatabaseMetaData(OConnection& _rCon)
 
 ODatabaseMetaData::~ODatabaseMetaData()
 {
-    OSL_TRACE("ODatabaseMetaData::~ODatabaseMetaData");
 }
 
 rtl::OUString ODatabaseMetaData::impl_getStringMetaData(const sal_Char* _methodName, const sql::SQLString& (sql::DatabaseMetaData::*Method)() )
 {
-    OSL_TRACE( "mysqlc::ODatabaseMetaData::%s", _methodName);
     rtl::OUString stringMetaData;
     try {
         stringMetaData = mysqlc_sdbc_driver::convert((meta->*Method)(), m_rConnection.getConnectionEncoding());
@@ -111,7 +108,6 @@ rtl::OUString ODatabaseMetaData::impl_getStringMetaData(const sal_Char* _methodN
 
 rtl::OUString ODatabaseMetaData::impl_getStringMetaData(const sal_Char* _methodName, sql::SQLString (sql::DatabaseMetaData::*Method)() )
 {
-    OSL_TRACE( "mysqlc::ODatabaseMetaData::%s", _methodName);
     rtl::OUString stringMetaData;
     try {
         stringMetaData = mysqlc_sdbc_driver::convert((meta->*Method)(), m_rConnection.getConnectionEncoding());
@@ -127,7 +123,6 @@ rtl::OUString ODatabaseMetaData::impl_getStringMetaData(const sal_Char* _methodN
 
 sal_Int32 ODatabaseMetaData::impl_getInt32MetaData(const sal_Char* _methodName, unsigned int (sql::DatabaseMetaData::*Method)() )
 {
-    OSL_TRACE( "mysqlc::ODatabaseMetaData::%s", _methodName);
     sal_Int32 int32MetaData(0);
     try {
         int32MetaData = (meta->*Method)();
@@ -143,7 +138,6 @@ sal_Int32 ODatabaseMetaData::impl_getInt32MetaData(const sal_Char* _methodName, 
 
 bool ODatabaseMetaData::impl_getBoolMetaData(const sal_Char* _methodName, bool (sql::DatabaseMetaData::*Method)() )
 {
-    OSL_TRACE( "mysqlc::ODatabaseMetaData::%s", _methodName);
     bool boolMetaData(false);
     try {
         boolMetaData = (meta->*Method)();
@@ -159,7 +153,6 @@ bool ODatabaseMetaData::impl_getBoolMetaData(const sal_Char* _methodName, bool (
 
 bool ODatabaseMetaData::impl_getBoolMetaData(const sal_Char* _methodName, bool (sql::DatabaseMetaData::*Method)(int), sal_Int32 _arg )
 {
-    OSL_TRACE( "mysqlc::ODatabaseMetaData::%s", _methodName);
     bool boolMetaData(false);
     try {
         boolMetaData = (meta->*Method)( _arg );
@@ -581,7 +574,6 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsTableCorrelationNames()
 sal_Bool SAL_CALL ODatabaseMetaData::supportsConvert(sal_Int32 /* fromType */, sal_Int32 /* toType */)
     throw(SQLException, RuntimeException, std::exception)
 {
-    OSL_TRACE("ODatabaseMetaData::supportsConvert");
     try {
         /* ToDo -> use supportsConvert( fromType, toType) */
         return meta->supportsConvert();
@@ -754,7 +746,6 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsANSI92IntermediateSQL()
 rtl::OUString SAL_CALL ODatabaseMetaData::getURL()
     throw(SQLException, RuntimeException, std::exception)
 {
-    OSL_TRACE("ODatabaseMetaData::getURL");
     return m_rConnection.getConnectionSettings().connectionURL;
 }
 
@@ -767,7 +758,6 @@ rtl::OUString SAL_CALL ODatabaseMetaData::getUserName()
 rtl::OUString SAL_CALL ODatabaseMetaData::getDriverName()
     throw(SQLException, RuntimeException, std::exception)
 {
-    OSL_TRACE("ODatabaseMetaData::getDriverName");
     rtl::OUString aValue( "MySQL Connector/OO.org" );
     return aValue;
 }
@@ -775,7 +765,6 @@ rtl::OUString SAL_CALL ODatabaseMetaData::getDriverName()
 rtl::OUString SAL_CALL ODatabaseMetaData::getDriverVersion()
     throw(SQLException, RuntimeException, std::exception)
 {
-    OSL_TRACE("ODatabaseMetaData::getDriverVersion");
     return rtl::OUString( "0.9.2" );
 }
 
@@ -806,14 +795,12 @@ rtl::OUString SAL_CALL ODatabaseMetaData::getSchemaTerm()
 sal_Int32 SAL_CALL ODatabaseMetaData::getDriverMajorVersion()
     throw(RuntimeException, std::exception)
 {
-    OSL_TRACE("ODatabaseMetaData::getDriverMajorVersion");
     return MARIADBC_VERSION_MAJOR;
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getDefaultTransactionIsolation()
     throw(SQLException, RuntimeException, std::exception)
 {
-    OSL_TRACE("ODatabaseMetaData::getDefaultTransactionIsolation");
     try {
         switch (meta->getDefaultTransactionIsolation()) {
             case sql::TRANSACTION_SERIALIZABLE:     return TransactionIsolation::SERIALIZABLE;
@@ -834,7 +821,6 @@ sal_Int32 SAL_CALL ODatabaseMetaData::getDefaultTransactionIsolation()
 sal_Int32 SAL_CALL ODatabaseMetaData::getDriverMinorVersion()
     throw(RuntimeException, std::exception)
 {
-    OSL_TRACE("ODatabaseMetaData::getDriverMinorVersion");
     return MARIADBC_VERSION_MINOR;
 }
 
@@ -937,7 +923,6 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsResultSetType(sal_Int32 setType)
 sal_Bool SAL_CALL ODatabaseMetaData::supportsResultSetConcurrency(sal_Int32 setType, sal_Int32 concurrency)
     throw(SQLException, RuntimeException, std::exception)
 {
-    OSL_TRACE("ODatabaseMetaData::supportsResultSetConcurrency");
     /* TODO: Check this out */
     try {
         return meta->supportsResultSetConcurrency(setType, concurrency==css::sdbc::TransactionIsolation::READ_COMMITTED?
@@ -1017,7 +1002,6 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsBatchUpdates()
 Reference< XConnection > SAL_CALL ODatabaseMetaData::getConnection()
     throw(SQLException, RuntimeException, std::exception)
 {
-    OSL_TRACE("ODatabaseMetaData::getConnection");
     return &m_rConnection;
 }
 
@@ -1031,7 +1015,6 @@ Reference< XConnection > SAL_CALL ODatabaseMetaData::getConnection()
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTableTypes()
     throw(SQLException, RuntimeException, std::exception)
 {
-    OSL_TRACE("ODatabaseMetaData::getTableTypes");
     const char * table_types[] = {"TABLE", "VIEW"};
     sal_Int32 requiredVersion[] = {0, 50000};
 
@@ -1053,7 +1036,6 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTableTypes()
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
     throw(SQLException, RuntimeException, std::exception)
 {
-    OSL_TRACE("ODatabaseMetaData::getTypeInfo");
     Reference< XResultSet > xResultSet(getOwnConnection().getDriver().getFactory()->createInstance("org.openoffice.comp.helper.DatabaseMetaDataResultSet"),UNO_QUERY);
 
     std::vector< std::vector< Any > > rRows;
@@ -1093,8 +1075,6 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getCatalogs()
     throw(SQLException, RuntimeException, std::exception)
 {
-    OSL_TRACE("ODatabaseMetaData::getCatalogs");
-
     Reference< XResultSet > xResultSet(getOwnConnection().getDriver().getFactory()->createInstance("org.openoffice.comp.helper.DatabaseMetaDataResultSet"),UNO_QUERY);
     std::vector< std::vector< Any > > rRows;
 
@@ -1125,8 +1105,6 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getCatalogs()
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getSchemas()
     throw(SQLException, RuntimeException, std::exception)
 {
-    OSL_TRACE("ODatabaseMetaData::getSchemas");
-
     Reference< XResultSet > xResultSet(getOwnConnection().getDriver().getFactory()->createInstance("org.openoffice.comp.helper.DatabaseMetaDataResultSet"),UNO_QUERY);
     std::vector< std::vector< Any > > rRows;
 
@@ -1168,7 +1146,6 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumnPrivileges(
         const rtl::OUString& columnNamePattern)
     throw(SQLException, RuntimeException, std::exception)
 {
-    OSL_TRACE("ODatabaseMetaData::getColumnPrivileges");
     Reference< XResultSet > xResultSet(getOwnConnection().getDriver().getFactory()->createInstance("org.openoffice.comp.helper.DatabaseMetaDataResultSet"),UNO_QUERY);
     std::vector< std::vector< Any > > rRows;
 
@@ -1208,7 +1185,6 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
         const rtl::OUString& columnNamePattern)
     throw(SQLException, RuntimeException, std::exception)
 {
-    OSL_TRACE("ODatabaseMetaData::getColumns");
     Reference< XResultSet > xResultSet(getOwnConnection().getDriver().getFactory()->createInstance("org.openoffice.comp.helper.DatabaseMetaDataResultSet"),UNO_QUERY);
     std::vector< std::vector< Any > > rRows;
     std::string cat(catalog.hasValue()? rtl::OUStringToOString(getStringFromAny(catalog), m_rConnection.getConnectionEncoding()).getStr():""),
@@ -1254,7 +1230,6 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
         const Sequence< rtl::OUString >& types )
     throw(SQLException, RuntimeException, std::exception)
 {
-    OSL_TRACE("ODatabaseMetaData::getTables");
     sal_Int32 nLength = types.getLength();
 
     Reference< XResultSet > xResultSet(getOwnConnection().
@@ -1313,7 +1288,6 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getProcedureColumns(
         const rtl::OUString& /* columnNamePattern */)
     throw(SQLException, RuntimeException, std::exception)
 {
-    OSL_TRACE("ODatabaseMetaData::getProcedureColumns");
     // Currently there is no information available
     return nullptr;
 }
@@ -1324,7 +1298,6 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getProcedures(
         const rtl::OUString& procedureNamePattern)
     throw(SQLException, RuntimeException, std::exception)
 {
-    OSL_TRACE("ODatabaseMetaData::getProcedures");
     Reference< XResultSet > xResultSet(getOwnConnection().getDriver().getFactory()->createInstance("org.openoffice.comp.helper.DatabaseMetaDataResultSet"),UNO_QUERY);
     std::vector< std::vector< Any > > rRows;
 
@@ -1366,7 +1339,6 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getVersionColumns(
         const rtl::OUString& /* table */)
     throw(SQLException, RuntimeException, std::exception)
 {
-    OSL_TRACE("ODatabaseMetaData::getVersionColumns");
     Reference< XResultSet > xResultSet(getOwnConnection().getDriver().getFactory()->createInstance("org.openoffice.comp.helper.DatabaseMetaDataResultSet"),UNO_QUERY);
     std::vector< std::vector< Any > > rRows;
     lcl_setRows_throw(xResultSet, 16,rRows);
@@ -1379,7 +1351,6 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getExportedKeys(
         const rtl::OUString&  table )
     throw(SQLException, RuntimeException, std::exception)
 {
-    OSL_TRACE("ODatabaseMetaData::getExportedKeys");
     Reference< XResultSet > xResultSet(getOwnConnection().getDriver().getFactory()->createInstance("org.openoffice.comp.helper.DatabaseMetaDataResultSet"),UNO_QUERY);
     std::vector< std::vector< Any > > rRows;
     std::string cat(catalog.hasValue()? rtl::OUStringToOString(getStringFromAny(catalog), m_rConnection.getConnectionEncoding()).getStr():""),
@@ -1416,8 +1387,6 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getImportedKeys(
         const rtl::OUString& table)
     throw(SQLException, RuntimeException, std::exception)
 {
-    OSL_TRACE("ODatabaseMetaData::getImportedKeys");
-
     Reference< XResultSet > xResultSet(getOwnConnection().getDriver().getFactory()->createInstance("org.openoffice.comp.helper.DatabaseMetaDataResultSet"),UNO_QUERY);
     std::vector< std::vector< Any > > rRows;
 
@@ -1455,7 +1424,6 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getPrimaryKeys(
         const rtl::OUString& table)
     throw(SQLException, RuntimeException, std::exception)
 {
-    OSL_TRACE("ODatabaseMetaData::getPrimaryKeys");
     Reference< XResultSet > xResultSet(getOwnConnection().getDriver().getFactory()->createInstance("org.openoffice.comp.helper.DatabaseMetaDataResultSet"),UNO_QUERY);
     std::vector< std::vector< Any > > rRows;
 
@@ -1495,7 +1463,6 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getIndexInfo(
         sal_Bool approximate)
     throw(SQLException, RuntimeException, std::exception)
 {
-    OSL_TRACE("ODatabaseMetaData::getIndexInfo");
     Reference< XResultSet > xResultSet(getOwnConnection().getDriver().getFactory()->createInstance("org.openoffice.comp.helper.DatabaseMetaDataResultSet"),UNO_QUERY);
     std::vector< std::vector< Any > > rRows;
 
@@ -1535,7 +1502,6 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getBestRowIdentifier(
         sal_Bool nullable)
     throw(SQLException, RuntimeException, std::exception)
 {
-    OSL_TRACE("ODatabaseMetaData::getBestRowIdentifier");
     Reference< XResultSet > xResultSet(getOwnConnection().getDriver().getFactory()->createInstance("org.openoffice.comp.helper.DatabaseMetaDataResultSet"),UNO_QUERY);
     std::vector< std::vector< Any > > rRows;
 
@@ -1573,7 +1539,6 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
         const rtl::OUString& tableNamePattern)
     throw(SQLException, RuntimeException, std::exception)
 {
-    OSL_TRACE("ODatabaseMetaData::getTablePrivileges");
     Reference< XResultSet > xResultSet(getOwnConnection().getDriver().getFactory()->createInstance("org.openoffice.comp.helper.DatabaseMetaDataResultSet"),UNO_QUERY);
     std::vector< std::vector< Any > > rRows;
 
@@ -1635,7 +1600,6 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getCrossReference(
         const rtl::OUString& foreignTable)
     throw(SQLException, RuntimeException, std::exception)
 {
-    OSL_TRACE("ODatabaseMetaData::getCrossReference");
     Reference< XResultSet > xResultSet(getOwnConnection().getDriver().getFactory()->createInstance("org.openoffice.comp.helper.DatabaseMetaDataResultSet"),UNO_QUERY);
     std::vector< std::vector< Any > > rRows;
 
@@ -1677,7 +1641,6 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getUDTs(
         const Sequence< sal_Int32 >& /* types */)
     throw(SQLException, RuntimeException, std::exception)
 {
-    OSL_TRACE("ODatabaseMetaData::getUDTs");
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("ODatabaseMetaData::getUDTs", *this);
     return nullptr;
 }

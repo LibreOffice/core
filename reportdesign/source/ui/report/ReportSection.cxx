@@ -719,8 +719,6 @@ void OReportSection::fillControlModelSelection(::std::vector< uno::Reference< un
 
 sal_Int8 OReportSection::AcceptDrop( const AcceptDropEvent& _rEvt )
 {
-    OSL_TRACE("AcceptDrop::DropEvent.Action %i", _rEvt.mnAction);
-
     ::Point aDropPos(_rEvt.maPosPixel);
     const MouseEvent aMouseEvt(aDropPos);
     if ( m_pFunc->isOverlapping(aMouseEvt) )
@@ -769,7 +767,6 @@ sal_Int8 OReportSection::AcceptDrop( const AcceptDropEvent& _rEvt )
 
 sal_Int8 OReportSection::ExecuteDrop( const ExecuteDropEvent& _rEvt )
 {
-    OSL_TRACE("ExecuteDrop::DropEvent.Action %i", _rEvt.mnAction);
     ::Point aDropPos(PixelToLogic(_rEvt.maPosPixel));
     const MouseEvent aMouseEvt(aDropPos);
     if ( m_pFunc->isOverlapping(aMouseEvt) )

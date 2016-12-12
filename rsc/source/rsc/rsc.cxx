@@ -537,7 +537,6 @@ namespace
         OUString sSys;
         if(FileBase::getSystemPathFromFileURL(i_sUrl, sSys) != FileBase::E_None)
             throw RscIoError();
-        OSL_TRACE("temporary file: %s", OUStringToOString(sSys, RTL_TEXTENCODING_UTF8).getStr());
         return OUStringToOString(sSys, RTL_TEXTENCODING_MS_1252);
     };
 
@@ -547,7 +546,6 @@ namespace
         OUString sTempUrl;
         if(FileBase::createTempFile(&sTempDirUrl, nullptr, &sTempUrl) != FileBase::E_None)
             throw RscIoError();
-        OSL_TRACE("temporary url: %s", OUStringToOString(sTempUrl, RTL_TEXTENCODING_UTF8).getStr());
         return lcl_getSystemPath(sTempUrl);
     };
 }
@@ -588,20 +586,16 @@ ERRTYPE RscCompiler::Link()
                 OUString sRcUrl = lcl_getAbsoluteUrl(sPwdUrl, it->aOutputRc);
                 // TempDir is either the directory where the rc file is located or pwd
                 OUString sTempDirUrl = sRcUrl.copy(0,sRcUrl.lastIndexOf('/'));
-                OSL_TRACE("rc directory URL: %s", OUStringToOString(sTempDirUrl, RTL_TEXTENCODING_UTF8).getStr());
 
                 aRcTmp = lcl_getTempFile(sTempDirUrl);
-                OSL_TRACE("temporary rc file: %s", aRcTmp.getStr());
 
                 OUString sOilDirUrl;
                 if(!pCL->aILDir.isEmpty())
                     sOilDirUrl = lcl_getAbsoluteUrl(sPwdUrl, pCL->aILDir);
                 else
                     sOilDirUrl = sTempDirUrl;
-                OSL_TRACE("ilst directory URL: %s", OUStringToOString(sOilDirUrl, RTL_TEXTENCODING_UTF8).getStr());
 
                 aSysListTmp = lcl_getTempFile(sOilDirUrl);
-                OSL_TRACE("temporary ilst file: %s", aSysListTmp.getStr());
 
                 OUString sIlstUrl;
                 sIlstUrl = sRcUrl.copy(sRcUrl.lastIndexOf('/')+1);
@@ -610,7 +604,6 @@ ERRTYPE RscCompiler::Link()
                 sIlstUrl = lcl_getAbsoluteUrl(sOilDirUrl, OUStringToOString(sIlstUrl, RTL_TEXTENCODING_UTF8));
 
                 aSysList = lcl_getSystemPath(sIlstUrl);
-                OSL_TRACE("ilst file: %s", aSysList.getStr());
             }
             catch (RscIoError&)
             {
@@ -644,7 +637,6 @@ ERRTYPE RscCompiler::Link()
                 aSysSearchPath.append(aToken);
             }
             while ( nIndex >= 0 );
-            OSL_TRACE( "setting search path for language %s: %s", it->aLangName.getStr(), aSysSearchPath.getStr() );
             pTC->SetSysSearchPath(aSysSearchPath.makeStringAndClear());
 
             WriteRcContext  aContext;
