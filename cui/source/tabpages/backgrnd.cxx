@@ -683,7 +683,7 @@ bool SvxBackgroundTabPage::FillItemSet( SfxItemSet* rCoreSet )
             {
                 // Brush-treatment:
                 if ( rOldItem.GetColor() != aBgdColor ||
-                     (SfxItemState::DEFAULT >= eOldItemState && m_pBackgroundColorSet->GetSavedValue() != m_pBackgroundColorSet->GetSelectItemId()))
+                     (SfxItemState::DEFAULT >= eOldItemState && !m_pBackgroundColorSet->IsNoSelection()))
                 {
                     bModified = true;
                     rCoreSet->Put( SvxBrushItem( aBgdColor, nWhich ) );
@@ -1422,9 +1422,13 @@ void SvxBackgroundTabPage::FillControls_Impl( const SvxBrushItem& rBgdAttr,
         }
         else
         {
+            bool bNoSelection = m_pBackgroundColorSet->IsNoSelection();
             m_pBackgroundColorSet->SelectItem( nCol );
+            m_pBackgroundColorSet->SaveValue();
+            // The actual selection is user set, not what we preset.
+            if (bNoSelection)
+                m_pBackgroundColorSet->SetNoSelection();
         }
-        m_pBackgroundColorSet->SaveValue();
 
         m_pPreviewWin1->NotifyChange( aBgdColor );
 
