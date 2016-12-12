@@ -811,25 +811,16 @@ bool DenyMouseDrag(const ScriptEvent& evt, void* )
 void
 EventListener::firing_Impl(const ScriptEvent& evt, Any* pRet ) throw(RuntimeException, std::exception)
 {
-    OSL_TRACE("EventListener::firing_Impl( FAKE VBA_EVENTS )");
-    static const OUString vbaInterOp =
-        OUString("VBAInterop");
-
     // let default handlers deal with non vba stuff
-    if ( !evt.ScriptType.equals( vbaInterOp ) )
+    if ( evt.ScriptType != "VBAInterop" )
         return;
     lang::EventObject aEvent;
     evt.Arguments[ 0 ] >>= aEvent;
-    OSL_TRACE("evt.MethodName is  %s", OUStringToOString( evt.MethodName, RTL_TEXTENCODING_UTF8 ).getStr() );
-    OSL_TRACE("Argument[0] is  %s", OUStringToOString( comphelper::anyToString( evt.Arguments[0] ), RTL_TEXTENCODING_UTF8 ).getStr() );
-    OSL_TRACE("Getting Control");
     OUString sName = "UserForm";
-    OSL_TRACE("Getting Name");
 
     uno::Reference< awt::XDialog > xDlg( aEvent.Source, uno::UNO_QUERY );
     if ( !xDlg.is() )
     {
-        OSL_TRACE("Getting Control");
         // evt.Source is
         // a) Dialog
         // b) xShapeControl ( from api (sheet control) )
@@ -844,16 +835,13 @@ EventListener::firing_Impl(const ScriptEvent& evt, Any* pRet ) throw(RuntimeExce
             // api code creates just a control instance that is transferred
             // via aEvent.Arguments[ 0 ] that control though has no
             // info like name etc.
-            OSL_TRACE("Got control shape");
             uno::Reference< container::XNamed > xName( xCntrlShape->getControl(), uno::UNO_QUERY_THROW );
-            OSL_TRACE("Got xnamed ");
             sName = xName->getName();
         }
         else
         {
             // Userform control ( fired from the api or from event manager )
             uno::Reference< beans::XPropertySet > xProps;
-            OSL_TRACE("Getting properties");
             xProps.set( xControl->getModel(), uno::UNO_QUERY_THROW );
             xProps->getPropertyValue("Name") >>= sName;
         }
@@ -864,8 +852,7 @@ EventListener::firing_Impl(const ScriptEvent& evt, Any* pRet ) throw(RuntimeExce
     EventInfoHash::const_iterator it_end = infos.end();
     if ( eventInfo_it == it_end )
     {
-        OSL_TRACE("Bogus event for %s",
-            OUStringToOString( evt.ScriptType, RTL_TEXTENCODING_UTF8 ).getStr() );
+        SAL_WARN("scripting", "Bogus event for " << evt.ScriptType );
         return;
     }
 
@@ -906,7 +893,6 @@ EventListener::firing_Impl(const ScriptEvent& evt, Any* pRet ) throw(RuntimeExce
         sMacroLoc = sMacroLoc.concat(  "." );
         sMacroLoc = sMacroLoc.concat( sScriptCode ).concat( "." );
 
-        OSL_TRACE("sMacroLoc is %s", OUStringToOString( sMacroLoc, RTL_TEXTENCODING_UTF8 ).getStr() );
         for ( ; txInfo != txInfo_end; ++txInfo )
         {
             // If the document is closed, we should not execute macro.
@@ -920,8 +906,6 @@ EventListener::firing_Impl(const ScriptEvent& evt, Any* pRet ) throw(RuntimeExce
             // where ScriptCode is methodname_handlerextension
             OUString sToResolve = sMacroLoc.concat( sTemp );
 
-            OSL_TRACE("*** trying to invoke %s ",
-                OUStringToOString( sToResolve, RTL_TEXTENCODING_UTF8 ).getStr() );
             ooo::vba::MacroResolvedInfo aMacroResolvedInfo = ooo::vba::resolveVBAMacro( mpShell, sToResolve );
             if ( aMacroResolvedInfo.mbFound )
             {
@@ -947,10 +931,6 @@ EventListener::firing_Impl(const ScriptEvent& evt, Any* pRet ) throw(RuntimeExce
 
                     // create script url
                     OUString url = aMacroResolvedInfo.msResolvedMacro;
-
-                    OSL_TRACE("resolved script = %s",
-                        OUStringToOString( url,
-                            RTL_TEXTENCODING_UTF8 ).getStr() );
                     try
                     {
                         uno::Any aDummyCaller = uno::makeAny( OUString("Error") );
@@ -966,7 +946,7 @@ EventListener::firing_Impl(const ScriptEvent& evt, Any* pRet ) throw(RuntimeExce
                     }
                     catch ( uno::Exception& e )
                     {
-                        OSL_TRACE("event script raised %s", OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
+                        SAL_WARN("scripting", "event script raised " << e.Message );
                     }
                }
            }

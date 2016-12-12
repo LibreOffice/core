@@ -1543,9 +1543,7 @@ ScVbaRange::setValue( const uno::Any& aValue, ValueSetter& valueSetter ) throw (
         }
         catch ( const uno::Exception& e )
         {
-            OSL_TRACE("Bahhh, caught exception %s",
-                OUStringToOString( e.Message,
-                    RTL_TEXTENCODING_UTF8 ).getStr() );
+            SAL_WARN("sc", "Bahhh, caught exception " << e.Message );
         }
     }
     else
@@ -4240,7 +4238,6 @@ static void lcl_SelectAll( ScDocShell* pDocShell, ScQueryParam& aParam )
         ScViewData* pViewData = ScDocShell::GetViewData();
         if ( pViewData )
         {
-            OSL_TRACE("Pushing out SelectAll query");
             pViewData->GetView()->Query( aParam, nullptr, true );
         }
     }
@@ -4411,7 +4408,6 @@ ScVbaRange::AutoFilter( const uno::Any& aField, const uno::Any& Criteria1, const
         uno::Reference< sheet::XUnnamedDatabaseRanges > xDBRanges = excel::GetUnnamedDataBaseRanges( pShell );
         if ( xDBRanges.is() )
         {
-            OSL_TRACE("Going to add new autofilter range.. sheet %i", nSheet );
             if ( !xDBRanges->hasByTable( nSheet ) )
                 xDBRanges->setByTable( autoFiltAddress );
             xDataBaseRange.set( xDBRanges->getByTable(nSheet ), uno::UNO_QUERY_THROW );

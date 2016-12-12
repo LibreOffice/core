@@ -68,7 +68,6 @@ getWorkbook( uno::Reference< uno::XComponentContext >& xContext, const uno::Refe
     uno::Reference< excel::XWorkbook > xWb( getVBADocument( xModel ), uno::UNO_QUERY );
     if ( xWb.is() )
     {
-        OSL_TRACE(" *** Returning Module uno Object *** ");
         return uno::Any( xWb );
     }
 

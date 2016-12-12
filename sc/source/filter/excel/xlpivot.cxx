@@ -227,7 +227,7 @@ sal_Int32 XclPCNumGroupInfo::GetScDateType() const
         case EXC_SXNUMGROUP_TYPE_MONTH: nScType = ScDPGroupBy::MONTHS;    break;
         case EXC_SXNUMGROUP_TYPE_QUART: nScType = ScDPGroupBy::QUARTERS;  break;
         case EXC_SXNUMGROUP_TYPE_YEAR:  nScType = ScDPGroupBy::YEARS;     break;
-        default:    OSL_TRACE( "XclPCNumGroupInfo::GetScDateType - unexpected date type %d", GetXclDataType() );
+        default:    SAL_WARN("sc",  "XclPCNumGroupInfo::GetScDateType - unexpected date type " << GetXclDataType() );
     }
     return nScType;
 }

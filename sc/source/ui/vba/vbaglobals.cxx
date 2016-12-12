@@ -40,20 +40,17 @@ using namespace ::ooo::vba;
 
 ScVbaGlobals::ScVbaGlobals( uno::Sequence< uno::Any > const& aArgs, uno::Reference< uno::XComponentContext >const& rxContext ) : ScVbaGlobals_BASE( uno::Reference< XHelperInterface >(), rxContext, "ExcelDocumentContext" )
 {
-    OSL_TRACE("ScVbaGlobals::ScVbaGlobals()");
+    uno::Sequence< beans::PropertyValue > aInitArgs( 2 );
+    aInitArgs[ 0 ].Name = "Application";
+    aInitArgs[ 0 ].Value = uno::makeAny( getApplication() );
+    aInitArgs[ 1 ].Name = "ExcelDocumentContext";
+    aInitArgs[ 1 ].Value = uno::makeAny( getXSomethingFromArgs< frame::XModel >( aArgs, 0 ) );
 
-        uno::Sequence< beans::PropertyValue > aInitArgs( 2 );
-        aInitArgs[ 0 ].Name = "Application";
-        aInitArgs[ 0 ].Value = uno::makeAny( getApplication() );
-        aInitArgs[ 1 ].Name = "ExcelDocumentContext";
-        aInitArgs[ 1 ].Value = uno::makeAny( getXSomethingFromArgs< frame::XModel >( aArgs, 0 ) );
-
-        init( aInitArgs );
+    init( aInitArgs );
 }
 
 ScVbaGlobals::~ScVbaGlobals()
 {
-    OSL_TRACE("ScVbaGlobals::~ScVbaGlobals");
 }
 
 // XGlobals
@@ -61,7 +58,7 @@ ScVbaGlobals::~ScVbaGlobals()
 uno::Reference<excel::XApplication > const &
 ScVbaGlobals::getApplication() throw (uno::RuntimeException)
 {
-//  OSL_TRACE("In ScVbaGlobals::getApplication");
+//  SAL_WARNx("sc", "In ScVbaGlobals::getApplication");
     if ( !mxApplication.is() )
         mxApplication.set( new ScVbaApplication( mxContext) );
     return mxApplication;
@@ -76,7 +73,7 @@ ScVbaGlobals::getExcel() throw (uno::RuntimeException, std::exception)
 uno::Reference< excel::XWorkbook > SAL_CALL
 ScVbaGlobals::getActiveWorkbook() throw (uno::RuntimeException, std::exception)
 {
-//  OSL_TRACE("In ScVbaGlobals::getActiveWorkbook");
+//  SAL_WARNx("sc", "In ScVbaGlobals::getActiveWorkbook");
     uno::Reference< excel::XWorkbook > xWorkbook( getApplication()->getActiveWorkbook(), uno::UNO_QUERY);
     if ( xWorkbook.is() )
     {

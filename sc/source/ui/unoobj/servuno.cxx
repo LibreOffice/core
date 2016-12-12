@@ -138,8 +138,6 @@ public:
     css::uno::Any SAL_CALL getByName( const OUString& aName ) throw (css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override
     {
         SolarMutexGuard aGuard;
-        OSL_TRACE("ScVbaObjectForCodeNameProvider::getByName( %s )",
-            OUStringToOString( aName, RTL_TEXTENCODING_UTF8 ).getStr() );
         if ( !hasByName( aName ) )
             throw css::container::NoSuchElementException();
         return maCachedObject;
@@ -545,14 +543,12 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
         case Type::VBAOBJECTPROVIDER:
             if (pDocShell && pDocShell->GetDocument().IsInVBAMode())
             {
-                OSL_TRACE("**** creating VBA Object mapper");
                 xRet.set(static_cast<container::XNameAccess*>(new ScVbaObjectForCodeNameProvider( pDocShell )));
             }
             break;
         case Type::VBACODENAMEPROVIDER:
             if ( pDocShell && isInVBAMode( *pDocShell ) )
             {
-                OSL_TRACE("**** creating VBA Object provider");
                 xRet.set(static_cast<document::XCodeNameQuery*>(new ScVbaCodeNameProvider(*pDocShell)));
             }
             break;

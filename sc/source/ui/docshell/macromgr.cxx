@@ -114,7 +114,6 @@ public:
     {
         OUString sModuleName;
         Event.Accessor >>= sModuleName;
-        OSL_TRACE("VBAProjectListener::elementReplaced(%s)", OUStringToOString( sModuleName, RTL_TEXTENCODING_UTF8 ).getStr() );
         mpMacroMgr->InitUserFuncData();
         mpMacroMgr->BroadcastModuleUpdate(sModuleName);
     }

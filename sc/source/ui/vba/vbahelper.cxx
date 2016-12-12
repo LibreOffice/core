@@ -236,7 +236,7 @@ getCurrentDocument() throw (uno::RuntimeException)
     SbxObject* basicChosen =  pBasic ;
     if ( basicChosen == NULL)
     {
-        OSL_TRACE("getModelFromBasic() StarBASIC* is NULL" );
+        SAL_WARNx("sc", "getModelFromBasic() StarBASIC* is NULL" );
         return xModel;
     }
     SbxObject* p = pBasic;
@@ -274,14 +274,14 @@ getCurrentDocument() throw (uno::RuntimeException)
         }
         else
         {
-            OSL_TRACE("Have model ThisComponent points to url %s",
+            SAL_WARNx("sc", "Have model ThisComponent points to url %s",
             OUStringToOString( xModel->getURL(),
                 RTL_TEXTENCODING_ASCII_US ).pData->buffer );
         }
     }
     else
     {
-        OSL_TRACE("Failed to get ThisComponent");
+        SAL_WARNx("sc", "Failed to get ThisComponent");
         throw uno::RuntimeException( "Can't determine the currently selected document" );
     }
     return xModel;

@@ -924,12 +924,9 @@ ScVbaWorksheet::getIntrospection(  ) throw (uno::RuntimeException, std::exceptio
 }
 
 uno::Any SAL_CALL
-ScVbaWorksheet::invoke( const OUString& aFunctionName, const uno::Sequence< uno::Any >& /*aParams*/, uno::Sequence< ::sal_Int16 >& /*aOutParamIndex*/, uno::Sequence< uno::Any >& /*aOutParam*/ ) throw (lang::IllegalArgumentException, script::CannotConvertException, reflection::InvocationTargetException, uno::RuntimeException, std::exception)
+ScVbaWorksheet::invoke( const OUString& /*aFunctionName*/, const uno::Sequence< uno::Any >& /*aParams*/, uno::Sequence< ::sal_Int16 >& /*aOutParamIndex*/, uno::Sequence< uno::Any >& /*aOutParam*/ ) throw (lang::IllegalArgumentException, script::CannotConvertException, reflection::InvocationTargetException, uno::RuntimeException, std::exception)
 {
-    OSL_TRACE("** ScVbaWorksheet::invoke( %s ), will barf",
-        OUStringToOString( aFunctionName, RTL_TEXTENCODING_UTF8 ).getStr() );
-
-    throw uno::RuntimeException(); // unsupported operation
+    throw uno::RuntimeException("Unsupported"); // unsupported operation
 }
 
 void SAL_CALL

@@ -146,7 +146,7 @@ ScVbaChartObjects::Add( double _nX, double _nY, double _nWidth, double _nHeight 
     }
     catch (const uno::Exception& ex)
     {
-        OSL_TRACE("AddItem caught exception ->%s", OUStringToOString( ex.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
+        SAL_WARN("sc", "AddItem caught exception " << ex.Message );
     }
     return aNULL();
 }

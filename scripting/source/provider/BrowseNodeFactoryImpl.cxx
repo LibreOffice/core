@@ -308,8 +308,7 @@ std::vector< Reference< browse::XBrowseNode > > getAllBrowseNodes( const Referen
     catch( const Exception& e )
     {
         (void)e;
-        OSL_TRACE("Caught Exception %s",
-            OUStringToOString( e.Message , RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+        SAL_WARN("scripting", "Caught Exception " << e.Message );
         locnBNs.resize( mspIndex );
         return locnBNs;
     }

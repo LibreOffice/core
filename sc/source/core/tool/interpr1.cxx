@@ -1030,7 +1030,7 @@ sc::RangeMatrix ScInterpreter::CompareMat( ScQueryOp eOp, sc::CompareOptions* pO
                 aRes.mpMat->CompareNotEqual();
                 break;
             default:
-                OSL_TRACE( "ScInterpreter::QueryMat: unhandled comparison operator: %d", (int)eOp);
+                SAL_WARN("sc",  "ScInterpreter::QueryMat: unhandled comparison operator: " << (int)eOp);
                 aRes.mpMat.reset();
                 return aRes;
         }

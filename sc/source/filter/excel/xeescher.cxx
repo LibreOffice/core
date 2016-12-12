@@ -1122,7 +1122,6 @@ void XclExpChartObj::Save( XclExpStream& rStrm )
 
 void XclExpChartObj::SaveXml( XclExpXmlStream& rStrm )
 {
-    OSL_TRACE("XclExpChartObj::SaveXml -- Entry point to export chart");
     sax_fastparser::FSHelperPtr pDrawing = rStrm.GetCurrentStream();
 
     // FIXME: two cell? it seems the two cell anchor is incorrect.
@@ -1359,7 +1358,6 @@ XclMacroHelper::SetMacroLink( const ScriptEventDescriptor& rEvent, const XclTbxE
 bool
 XclMacroHelper::SetMacroLink( const OUString& rMacroName )
 {
-    OSL_TRACE("SetMacroLink( macroname:=%s )", OUStringToOString( rMacroName, RTL_TEXTENCODING_UTF8 ).getStr() );
     if( !rMacroName.isEmpty() )
     {
         sal_uInt16 nExtSheet = GetLocalLinkManager().FindExtSheet( EXC_EXTSH_OWNDOC );
