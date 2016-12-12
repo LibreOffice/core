@@ -99,7 +99,7 @@ uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertySimpleEntry*
 
     const SfxPoolItem* pItem = nullptr;
     SfxItemPool* pPool = rSet.GetPool();
-    rSet.GetItemState( pMap->nWID, bSearchInParent, &pItem );
+    (void)rSet.GetItemState( pMap->nWID, bSearchInParent, &pItem );
     if( nullptr == pItem && pPool )
         pItem = &(pPool->GetDefaultItem( pMap->nWID ));
 
