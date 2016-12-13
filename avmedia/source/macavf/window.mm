@@ -37,7 +37,6 @@ Window::Window( const uno::Reference< lang::XMultiServiceFactory >& i_rxMgr, Pla
 ,   mpView( i_pParentView )
 ,   mpPlayerLayer( nullptr )
 {
-    OSL_TRACE ("Constructing an avmedia::macavf::Window");
     if( !mpView ) // sanity check
         return;
 
@@ -46,7 +45,6 @@ Window::Window( const uno::Reference< lang::XMultiServiceFactory >& i_rxMgr, Pla
     AVAsset* pMovie = [[pAVPlayer currentItem] asset];
     const int nVideoCount = [pMovie tracksWithMediaType:AVMediaTypeVideo].count;
     const int nAudioCount = [pMovie tracksWithMediaType:AVMediaTypeAudio].count;
-    OSL_TRACE( "Found %d video and %d audio tracks.", nVideoCount, nAudioCount );
     (void)nAudioCount;
     if( nVideoCount <= 0 )
         return;
@@ -77,7 +75,6 @@ Window::~Window()
 
 bool Window::handleObservation( NSString* pKeyPath )
 {
-    OSL_TRACE( "AVPlayer::handleObservation key=\"%s\"", [pKeyPath UTF8String]);
     const BOOL bReadyForDisplay = [mpPlayerLayer isReadyForDisplay];
     [mpPlayerLayer setHidden:!bReadyForDisplay];
     return true;
@@ -115,7 +112,6 @@ void SAL_CALL Window::setPointerType( sal_Int32 nPointerType )
 void SAL_CALL Window::setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height, sal_Int16 /* Flags */ )
     throw (uno::RuntimeException)
 {
-    OSL_TRACE( "AVWindow::setPosSize( %dx%d%+d%+d)", (int)Width,(int)Height,(int)X,(int)Y);//######
     if( !mpView )
         return;
     NSRect aRect = [mpView frame];
@@ -147,21 +143,18 @@ awt::Rectangle SAL_CALL Window::getPosSize()
 void SAL_CALL Window::setVisible( sal_Bool bVisible )
     throw (uno::RuntimeException)
 {
-    OSL_TRACE ("Window::setVisible(%d)", bVisible);
 }
 
 
 void SAL_CALL Window::setEnable( sal_Bool bEnable )
     throw (uno::RuntimeException)
 {
-    OSL_TRACE ("Window::setEnable(%d)", bEnable);
 }
 
 
 void SAL_CALL Window::setFocus()
     throw (uno::RuntimeException)
 {
-    OSL_TRACE ("Window::setFocus");
 }
 
 

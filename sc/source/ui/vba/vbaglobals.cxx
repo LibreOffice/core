@@ -58,7 +58,6 @@ ScVbaGlobals::~ScVbaGlobals()
 uno::Reference<excel::XApplication > const &
 ScVbaGlobals::getApplication() throw (uno::RuntimeException)
 {
-//  SAL_WARNx("sc", "In ScVbaGlobals::getApplication");
     if ( !mxApplication.is() )
         mxApplication.set( new ScVbaApplication( mxContext) );
     return mxApplication;
@@ -73,7 +72,6 @@ ScVbaGlobals::getExcel() throw (uno::RuntimeException, std::exception)
 uno::Reference< excel::XWorkbook > SAL_CALL
 ScVbaGlobals::getActiveWorkbook() throw (uno::RuntimeException, std::exception)
 {
-//  SAL_WARNx("sc", "In ScVbaGlobals::getActiveWorkbook");
     uno::Reference< excel::XWorkbook > xWorkbook( getApplication()->getActiveWorkbook(), uno::UNO_QUERY);
     if ( xWorkbook.is() )
     {

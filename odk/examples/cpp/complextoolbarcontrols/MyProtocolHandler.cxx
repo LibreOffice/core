@@ -327,8 +327,6 @@ void SAL_CALL BaseDispatch::dispatch( const URL& aURL, const Sequence < Property
                     break;
                 }
             }
-            OSL_TRACE( "Dropdownbox control - selected entry text : %s",
-                       rtl::OUStringToOString( aText, RTL_TEXTENCODING_UTF8 ).getStr() );
         }
     }
 }

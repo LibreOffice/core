@@ -147,8 +147,6 @@ void AccessibleContextBase::SetRelationSet (
     const uno::Reference<XAccessibleRelationSet>& rxNewRelationSet)
     throw (css::uno::RuntimeException)
 {
-    OSL_TRACE ("setting relation set");
-
     // Try to emit some meaningfull events indicating differing relations in
     // both sets.
     typedef std::pair<short int,short int> RD;
@@ -571,7 +569,6 @@ void AccessibleContextBase::ThrowIfDisposed()
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
-        OSL_TRACE ("Calling disposed object. Throwing exception:");
         throw lang::DisposedException ("object has been already disposed",
             static_cast<uno::XWeak*>(this));
     }

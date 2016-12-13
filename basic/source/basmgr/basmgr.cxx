@@ -207,7 +207,6 @@ void BasMgrContainerListenerImpl::addLibraryModulesImpl( BasicManager* pMgr,
             if ( xVBAModuleInfo.is() && xVBAModuleInfo->hasModuleInfo( aModuleName ) )
             {
                 ModuleInfo aInfo = xVBAModuleInfo->getModuleInfo( aModuleName );
-                OSL_TRACE("#addLibraryModulesImpl - aMod");
                 pLib->MakeModule( aModuleName, aInfo, aMod );
             }
             else

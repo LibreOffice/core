@@ -29,7 +29,6 @@ namespace avmedia { namespace macavf {
 Manager::Manager( const uno::Reference< lang::XMultiServiceFactory >& rxMgr ) :
     mxMgr( rxMgr )
 {
-    OSL_TRACE( "Constructing avmedia::macavf::Manager" );
 }
 
 
@@ -43,8 +42,6 @@ uno::Reference< media::XPlayer > SAL_CALL Manager::createPlayer( const ::rtl::OU
     Player*                             pPlayer( new Player( mxMgr ) );
     uno::Reference< media::XPlayer >    xRet( pPlayer );
     INetURLObject                       aURL( rURL );
-
-    OSL_TRACE( "avmediamacavf: Manager::createPlayer" );
 
     if( !pPlayer->create( aURL.GetMainURL( INetURLObject::DecodeMechanism::Unambiguous ) )  )
         xRet.clear();

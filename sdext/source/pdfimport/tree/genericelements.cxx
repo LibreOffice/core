@@ -90,12 +90,11 @@ void Element::updateGeometryWith( const Element* pMergeFrom )
 #include <typeinfo>
 void Element::emitStructure( int nLevel)
 {
-    OSL_TRACE( "%*s<%s %p> (%.1f,%.1f)+(%.1fx%.1f)\n",
-               nLevel, "", typeid( *this ).name(), this,
-               x, y, w, h );
+    SAL_INFO( "sdext", std::string(nLevel, ' ') << "<" << typeid( *this ).name() << " " << this << "> ("
+                << std::setprecision(1) << x << "," << y << ")+(" << w << "x" << h << ")" );
     for( std::list< Element* >::iterator it = Children.begin(); it != Children.end(); ++it )
         (*it)->emitStructure(nLevel+1 );
-    OSL_TRACE( "%*s</%s>", nLevel, "", typeid( *this ).name() );
+    SAL_INFO( "sdext", std::string(nLevel, ' ') << "</" << typeid( *this ).name() << ">"  );
 }
 #endif
 
@@ -165,23 +164,24 @@ void PolyPolyElement::visitedBy( ElementTreeVisitor&                          rV
 #if OSL_DEBUG_LEVEL > 0
 void PolyPolyElement::emitStructure( int nLevel)
 {
-    OSL_TRACE( "%*s<%s %p>", nLevel, "", typeid( *this ).name(), this  );
-    OSL_TRACE( "path=" );
+    SAL_WARN( "sdext", std::string(nLevel, ' ') << "<" << typeid( *this ).name() << " " << this << ">" );
+    SAL_WARN( "sdext", "path=" );
     int nPoly = PolyPoly.count();
     for( int i = 0; i < nPoly; i++ )
     {
+        OUStringBuffer buff;
         basegfx::B2DPolygon aPoly = PolyPoly.getB2DPolygon( i );
         int nPoints = aPoly.count();
         for( int n = 0; n < nPoints; n++ )
         {
             basegfx::B2DPoint aPoint = aPoly.getB2DPoint( n );
-            OSL_TRACE( " (%g,%g)", aPoint.getX(), aPoint.getY() );
+            buff.append( " (").append(aPoint.getX()).append(",").append(aPoint.getY()).append(")");
         }
-        OSL_TRACE( "\n" );
+        SAL_WARN( "sdext", "    " << buff.makeStringAndClear() );
     }
     for( std::list< Element* >::iterator it = Children.begin(); it != Children.end(); ++it )
         (*it)->emitStructure( nLevel+1 );
-    OSL_TRACE( "%*s</%s>", nLevel, "", typeid( *this ).name() );
+    SAL_WARN( "sdext", std::string(nLevel, ' ') << "</" << typeid( *this ).name() << ">");
 }
 #endif
 

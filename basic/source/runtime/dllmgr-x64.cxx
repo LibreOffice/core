@@ -690,7 +690,7 @@ public:
 
 Dll::~Dll() {
     if (handle != nullptr && !FreeLibrary(handle)) {
-        OSL_TRACE("FreeLibrary(%p) failed with %u", handle, GetLastError());
+        SAL_WARN("basic", "FreeLibrary(" << handle << ") failed with " << GetLastError());
     }
 }
 

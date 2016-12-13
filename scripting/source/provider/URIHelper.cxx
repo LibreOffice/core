@@ -152,13 +152,8 @@ ScriptingFrameworkURIHelper::initBaseURI()
         OUString child = children[i];
         sal_Int32 idx = child.lastIndexOf(test);
 
-        // SAL_WARNx("scripting", "Trying: %s", PRTSTR(child));
-        // SAL_WARNx("scripting", "idx=%d, testlen=%d, children=%d",
-        //     idx, test.getLength(), child.getLength());
-
         if ( idx != -1 && (idx + test.getLength()) == child.getLength() )
         {
-            // SAL_WARNx("scripting", "FOUND PATH: %s", PRTSTR(child));
             if ( bAppendScriptsPart )
             {
                 m_sBaseURI = child.concat( SCRIPTS_PART );

@@ -379,12 +379,6 @@ namespace canvas
             vertex.a = static_cast<float>(fAlpha);
             vertex.z = 0.0f;
 
-#if defined(TRIANGLE_LOG) && defined(DBG_UTIL)
-            OSL_TRACE( "Surface::draw(): numvertices %d numtriangles %d\n",
-                        nVertexCount,
-                        nVertexCount/3 );
-#endif
-
             pRenderModule->beginPrimitive( canvas::IRenderModule::PrimitiveType::Triangle );
 
             // issue an endPrimitive() when leaving the scope

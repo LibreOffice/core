@@ -257,7 +257,7 @@ SbxError ImpScan( const OUString& rWSrc, double& nVal, SbxDataType& rType,
 #if HAVE_FEATURE_SCRIPTING
     else if ( SbiRuntime::isVBAEnabled() )
     {
-        OSL_TRACE("Reporting error converting");
+        SAL_WARN("basic", "Reporting error converting");
         return ERRCODE_SBX_CONVERSION;
     }
 #endif

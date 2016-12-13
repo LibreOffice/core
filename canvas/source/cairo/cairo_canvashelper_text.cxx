@@ -300,9 +300,6 @@ namespace cairocanvas
 
             clip_cairo_from_dev(*mpVirtualDevice);
 
-            OSL_TRACE(":cairocanvas::CanvasHelper::drawText(O,t,f,v,r,d): %s", OUStringToOString( text.Text.copy( text.StartPosition, text.Length ),
-                                                                                                         RTL_TEXTENCODING_UTF8 ).getStr());
-
             rtl::Reference< TextLayout > pTextLayout( new TextLayout(text, textDirection, 0, CanvasFont::Reference(dynamic_cast< CanvasFont* >( xFont.get() )), mpSurfaceProvider) );
             pTextLayout->draw(mpCairo, *mpVirtualDevice, aOutpos, viewState, renderState);
         }

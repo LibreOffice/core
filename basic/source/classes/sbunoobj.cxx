@@ -152,7 +152,6 @@ void SetSbUnoObjectDfltPropName( SbxObject* pObj )
 
         if ( SbUnoObject::getDefaultPropName( pUnoObj, sDfltPropName ) )
         {
-            OSL_TRACE("SetSbUnoObjectDfltPropName setting default prop for %s", OUStringToOString( pObj->GetName(), RTL_TEXTENCODING_UTF8 ).getStr() );
             pUnoObj->SetDfltProperty( sDfltPropName );
         }
     }
@@ -1713,7 +1712,6 @@ bool checkUnoObjectType(SbUnoObject& rUnoObj, const OUString& rClass)
             }
 
             // match interface name with passed class name
-            OSL_TRACE("Checking if object implements %s", OUStringToOString( aClassName, RTL_TEXTENCODING_UTF8 ).getStr() );
             if ( (aClassName.getLength() <= aInterfaceName.getLength()) &&
                     aInterfaceName.endsWithIgnoreAsciiCase( aClassName ) )
             {

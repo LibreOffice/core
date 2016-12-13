@@ -51,7 +51,7 @@ bool FrameGrabber::create( const ::rtl::OUString& rURL )
     AVAsset* pMovie = [AVURLAsset URLAssetWithURL:pNSURL options:nil];
     if( !pMovie )
     {
-        OSL_TRACE( "AVGrabber::create() cannot load url=\"%s\"", [pNSStr UTF8String] );
+        SAL_WARN("avmedia", "AVGrabber::create() cannot load url=" << [pNSStr UTF8String] );
         return false;
     }
 
@@ -63,7 +63,7 @@ bool FrameGrabber::create( AVAsset* pMovie )
 {
     if( [[pMovie tracksWithMediaType:AVMediaTypeVideo] count] == 0)
     {
-        OSL_TRACE( "AVGrabber::create() found no video content!" );
+        SAL_WARN("avmedia", "AVGrabber::create() found no video content!" );
         return false;
     }
 
@@ -79,7 +79,6 @@ uno::Reference< graphic::XGraphic > SAL_CALL FrameGrabber::grabFrame( double fMe
     uno::Reference< graphic::XGraphic > xRet;
     if( !mpImageGen )
         return xRet;
-    OSL_TRACE( "AVPlayer::grabFrame( %.3fsec)", fMediaTime );
 
     // get the requested image from the movie
     CGImage* pCGImage = [mpImageGen copyCGImageAtTime:CMTimeMakeWithSeconds(fMediaTime,1000) actualTime:nullptr error:nullptr];
