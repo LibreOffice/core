@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a71b18c_954b4c59",
+        "filename": "cui/source/tabpages/tpbitmap.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-12-13T14:25:36Z",
+      "side": 1,
+      "message": "This is imho moot, m_fObjectWidth is initialized in ctor and it gets unconditionally overwritten below anyway",
+      "revId": "a7f5983409e0a40bf153ad590ae78aa54d0ad358",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a71b18c_7510704f",
+        "filename": "cui/source/tabpages/tpbitmap.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-12-13T14:25:36Z",
+      "side": 1,
+      "message": "I think you went 1 step too far :) fUIScale needs mpView but exists independently of AreObjectsMarked ...",
+      "revId": "a7f5983409e0a40bf153ad590ae78aa54d0ad358",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a71b18c_951d0c69",
+        "filename": "cui/source/tabpages/tpbitmap.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-12-13T14:25:36Z",
+      "side": 1,
+      "message": "... so perhaps put this assignment outside/before this \u0027if\u0027 branch",
+      "revId": "a7f5983409e0a40bf153ad590ae78aa54d0ad358",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a71b18c_3a17c752",
+        "filename": "cui/source/tabpages/tpbitmap.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 526,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-12-13T14:25:36Z",
+      "side": 1,
+      "message": "You can assign directly:\n\ndouble fUIScale \u003d ((mpView \u0026\u0026 ... : 1.0);",
+      "revId": "a7f5983409e0a40bf153ad590ae78aa54d0ad358",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
