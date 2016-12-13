@@ -144,6 +144,8 @@ static RTFValue::Pointer_t getDefaultSPRM(Id const id)
     case NS_ooxml::LN_CT_Spacing_before:
     case NS_ooxml::LN_CT_Spacing_after:
     case NS_ooxml::LN_EG_RPrBase_b:
+    case NS_ooxml::LN_CT_Ind_left:
+    case NS_ooxml::LN_CT_Ind_right:
         return std::make_shared<RTFValue>(0);
 
     default:
