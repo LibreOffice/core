@@ -32,12 +32,6 @@
 #include "resource/sharedresources.hxx"
 #include "resource/macab_res.hrc"
 
-#if OSL_DEBUG_LEVEL > 0
-# define OUtoCStr( x ) ( OUStringToOString ( (x), RTL_TEXTENCODING_ASCII_US).getStr())
-#else /* OSL_DEBUG_LEVEL */
-# define OUtoCStr( x ) ("dummy")
-#endif /* OSL_DEBUG_LEVEL */
-
 using namespace connectivity::macab;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
