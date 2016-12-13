@@ -40,24 +40,6 @@ $(eval $(call gb_Library_use_externals,OGLTrans,\
 
 $(eval $(call gb_Library_set_componentfile,OGLTrans,slideshow/source/engine/opengl/ogltrans))
 
-ifeq ($(strip $(OS)),MACOSX)
-
-$(eval $(call gb_Library_use_system_darwin_frameworks,OGLTrans,\
-    Cocoa \
-    GLUT \
-    OpenGL \
-))
-
-else ifeq ($(strip $(OS)),WNT)
-
-$(eval $(call gb_Library_use_system_win32_libs,OGLTrans,\
-    gdi32 \
-    glu32 \
-    opengl32 \
-))
-
-endif
-
 $(eval $(call gb_Library_add_exception_objects,OGLTrans,\
     slideshow/source/engine/opengl/TransitionerImpl \
     slideshow/source/engine/opengl/TransitionImpl \

@@ -43,14 +43,4 @@ $(eval $(call gb_Library_add_exception_objects,avmediaogl,\
     avmedia/source/opengl/oglwindow \
 ))
 
-ifeq ($(strip $(OS)),WNT)
-$(eval $(call gb_Library_use_system_win32_libs,avmediaogl,\
-    opengl32 \
-))
-else ifeq ($(OS),MACOSX)
-$(eval $(call gb_Library_use_system_darwin_frameworks,avmediaogl,\
-	OpenGL \
-))
-endif
-
 # vim: set noet sw=4 ts=4:
