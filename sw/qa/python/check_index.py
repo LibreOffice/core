@@ -5,6 +5,10 @@ from org.libreoffice.unotest import UnoInProcess
 from com.sun.star.text.ControlCharacter import PARAGRAPH_BREAK
 from com.sun.star.util import XRefreshListener
 
+# ContentIndex instance factory
+def getContentIndexInstance(xDoc):
+    return xDoc.createInstance("com.sun.star.text.ContentIndex")
+
 
 class RefreshListener(XRefreshListener, unohelper.Base):
 
@@ -37,7 +41,7 @@ class CheckIndex(unittest.TestCase):
 
     def test_check_index(self):
         xDoc = self.__class__._xDoc
-        xIndex = xDoc.createInstance("com.sun.star.text.ContentIndex")
+        xIndex = getContentIndexInstance(xDoc)
         xBodyText = xDoc.getText()
         xCursor = xBodyText.createTextCursor()
         xIndex.setPropertyValue("CreateFromOutline", True)
