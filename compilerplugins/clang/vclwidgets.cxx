@@ -838,25 +838,6 @@ bool VCLWidgets::VisitCXXConstructExpr( const CXXConstructExpr* constructExpr )
                 "Calling constructor of a VclReferenceBase-derived type directly; all such creation should go via VclPtr<>::Create",
                 constructExpr->getExprLoc());
         }
-    } else if (auto d = dyn_cast<ClassTemplateSpecializationDecl>(recordDecl)) {
-        if (d->getTemplateArgs().size() == 1) {
-            auto check = loplugin::DeclCheck(recordDecl);
-            if ((check.Class("ScopedVclPtr").GlobalNamespace()
-                 || check.Class("ScopedVclPtrInstance").GlobalNamespace()
-                 || check.Class("VclPtr").GlobalNamespace()
-                 || check.Class("VclPtrInstance").GlobalNamespace()))
-            {
-                auto t = d->getTemplateArgs()[0].getAsType();
-                if (!containsVclReferenceBaseSubclass(t)) {
-                    report(
-                        DiagnosticsEngine::Warning,
-                        ("constructing an instance of %0 where the argument"
-                         " type %1 is not derived from VclReferenceBase"),
-                        constructExpr->getExprLoc())
-                        << recordDecl << t << constructExpr->getSourceRange();
-                }
-            }
-        }
     }
     return true;
 }
