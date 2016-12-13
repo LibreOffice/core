@@ -259,7 +259,7 @@ public:
                                 SwTextFormatColl* pTextColl,
                                 SwUndoTextToTable* pUndo );
 
-    static SwNodeRange * ExpandRangeForTableBox(const SwNodeRange & rRange);
+    SwNodeRange * ExpandRangeForTableBox(const SwNodeRange & rRange);
 
     /// create a table from a vector of NodeRanges - API support
     SwTableNode* TextToTable( const TableRanges_t& rTableNodes,
