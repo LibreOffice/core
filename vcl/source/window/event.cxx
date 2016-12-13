@@ -652,16 +652,9 @@ void Window::ImplCallFocusChangeActivate( vcl::Window* pNewOverlapWindow,
 NotifyEvent::NotifyEvent( MouseNotifyEvent nEventType, vcl::Window* pWindow,
                           const void* pEvent )
 {
-    SolarMutexGuard aVclGuard;
     mpWindow    = pWindow;
     mpData      = const_cast<void*>(pEvent);
     mnEventType  = nEventType;
-}
-
-NotifyEvent::~NotifyEvent()
-{
-    SolarMutexGuard aVclGuard;
-    mpWindow.clear();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

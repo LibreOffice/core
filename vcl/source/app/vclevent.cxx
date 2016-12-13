@@ -92,17 +92,11 @@ VclWindowEvent::VclWindowEvent( vcl::Window* pWin, VclEventId n, void* pDat ) : 
 VclWindowEvent::~VclWindowEvent() {}
 
 VclMenuEvent::VclMenuEvent( Menu* pM, VclEventId n, sal_uInt16 nPos )
-    : VclSimpleEvent(n), mnPos(nPos)
-{
-    SolarMutexGuard aGuard;
-    pMenu = pM;
-}
+    : VclSimpleEvent(n), pMenu(pM), mnPos(nPos)
+{}
 
 VclMenuEvent::~VclMenuEvent()
-{
-    SolarMutexGuard aGuard;
-    pMenu.clear();
-}
+{}
 
 Menu* VclMenuEvent::GetMenu() const
 {
