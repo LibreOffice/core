@@ -20,7 +20,12 @@
 #ifndef INCLUDED_VCL_PTR_HXX
 #define INCLUDED_VCL_PTR_HXX
 
+#include <sal/config.h>
+
+#include <config_global.h>
 #include <rtl/ref.hxx>
+#include <vcl/vclreferencebase.hxx>
+
 #include <utility>
 #include <type_traits>
 
@@ -60,6 +65,17 @@ public:
     typedef typename C< value, void *, void >::t t;
 };
 
+#if HAVE_CXX11_CONSTEXPR
+
+template<typename>
+constexpr bool isIncompleteOrDerivedFromVclReferenceBase(...) { return true; }
+
+template<typename T> constexpr bool isIncompleteOrDerivedFromVclReferenceBase(
+    int (*)[sizeof(T)])
+{ return std::is_base_of<VclReferenceBase, T>::value; }
+
+#endif
+
 }; }; // namespace detail, namespace vcl
 
 /// @endcond
@@ -71,9 +87,18 @@ public:
  *
  * @param reference_type must be a subclass of vcl::Window
  */
+namespace detail {
+}
 template <class reference_type>
 class VclPtr
 {
+#if HAVE_CXX11_CONSTEXPR
+    static_assert(
+        vcl::detail::isIncompleteOrDerivedFromVclReferenceBase<reference_type>(
+            nullptr),
+        "template argument type must be derived from VclReferenceBase");
+#endif
+
     ::rtl::Reference<reference_type> m_rInnerRef;
 
 public:
