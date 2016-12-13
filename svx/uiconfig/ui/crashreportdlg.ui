@@ -113,7 +113,7 @@ Thank you for your help in improving %PRODUCTNAME.</property>
         </child>
         <child>
            <object class="GtkCheckButton" id="check_safemode">
-             <property name="label" translatable="yes">Restart LibreOffice to enter Safe Mode</property>
+             <property name="label" translatable="yes">Restart %PRODUCTNAME to enter safe mode</property>
              <property name="visible">True</property>
              <property name="can_focus">True</property>
              <property name="receives_default">False</property>
