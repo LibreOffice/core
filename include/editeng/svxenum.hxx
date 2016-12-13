@@ -19,6 +19,7 @@
 #ifndef INCLUDED_EDITENG_SVXENUM_HXX
 #define INCLUDED_EDITENG_SVXENUM_HXX
 
+#include <com/sun/star/style/NumberingType.hpp>
 
 enum SvxCaseMap
 {
@@ -150,31 +151,31 @@ enum class SvxSpellArea
  */
 enum SvxExtNumType
 {
-    SVX_NUM_CHARS_UPPER_LETTER, // Counts from a-z, aa - az, ba - bz, ...
-    SVX_NUM_CHARS_LOWER_LETTER,
-    SVX_NUM_ROMAN_UPPER,
-    SVX_NUM_ROMAN_LOWER,
-    SVX_NUM_ARABIC,
-    SVX_NUM_NUMBER_NONE,
-    SVX_NUM_CHAR_SPECIAL,   // Bullet
-    SVX_NUM_PAGEDESC,       // Numbering from the page template
-    SVX_NUM_BITMAP,
-    SVX_NUM_CHARS_UPPER_LETTER_N, // Counts from  a-z, aa-zz, aaa-zzz
-    SVX_NUM_CHARS_LOWER_LETTER_N,
-    SVX_NUM_TRANSLITERATION,
-    SVX_NUM_NATIVE_NUMBERING,
-    SVX_NUM_FULL_WIDTH_ARABIC,
-    SVX_NUM_CIRCLE_NUMBER,
-    SVX_NUM_NUMBER_LOWER_ZH,
-    SVX_NUM_NUMBER_UPPER_ZH,
-    SVX_NUM_NUMBER_UPPER_ZH_TW,
-    SVX_NUM_TIAN_GAN_ZH,
-    SVX_NUM_DI_ZI_ZH,
-    SVX_NUM_NUMBER_TRADITIONAL_JA,
-    SVX_NUM_AIU_FULLWIDTH_JA,
-    SVX_NUM_AIU_HALFWIDTH_JA,
-    SVX_NUM_IROHA_FULLWIDTH_JA,
-    SVX_NUM_IROHA_HALFWIDTH_JA
+    SVX_NUM_CHARS_UPPER_LETTER    = css::style::NumberingType::CHARS_UPPER_LETTER,    // Counts from a-z, aa - az, ba - bz, ...
+    SVX_NUM_CHARS_LOWER_LETTER    = css::style::NumberingType::CHARS_LOWER_LETTER,
+    SVX_NUM_ROMAN_UPPER           = css::style::NumberingType::ROMAN_UPPER,
+    SVX_NUM_ROMAN_LOWER           = css::style::NumberingType::ROMAN_LOWER,
+    SVX_NUM_ARABIC                = css::style::NumberingType::ARABIC,
+    SVX_NUM_NUMBER_NONE           = css::style::NumberingType::NUMBER_NONE,
+    SVX_NUM_CHAR_SPECIAL          = css::style::NumberingType::CHAR_SPECIAL,          // Bullet
+    SVX_NUM_PAGEDESC              = css::style::NumberingType::PAGE_DESCRIPTOR,       // Numbering from the page template
+    SVX_NUM_BITMAP                = css::style::NumberingType::BITMAP,
+    SVX_NUM_CHARS_UPPER_LETTER_N  = css::style::NumberingType::CHARS_UPPER_LETTER_N,  // Counts from  a-z, aa-zz, aaa-zzz
+    SVX_NUM_CHARS_LOWER_LETTER_N  = css::style::NumberingType::CHARS_LOWER_LETTER_N,
+    SVX_NUM_TRANSLITERATION       = css::style::NumberingType::TRANSLITERATION,
+    SVX_NUM_NATIVE_NUMBERING      = css::style::NumberingType::NATIVE_NUMBERING,
+    SVX_NUM_FULL_WIDTH_ARABIC     = css::style::NumberingType::FULLWIDTH_ARABIC,
+    SVX_NUM_CIRCLE_NUMBER         = css::style::NumberingType::CIRCLE_NUMBER,
+    SVX_NUM_NUMBER_LOWER_ZH       = css::style::NumberingType::NUMBER_LOWER_ZH,
+    SVX_NUM_NUMBER_UPPER_ZH       = css::style::NumberingType::NUMBER_UPPER_ZH,
+    SVX_NUM_NUMBER_UPPER_ZH_TW    = css::style::NumberingType::NUMBER_UPPER_ZH_TW,
+    SVX_NUM_TIAN_GAN_ZH           = css::style::NumberingType::TIAN_GAN_ZH,
+    SVX_NUM_DI_ZI_ZH              = css::style::NumberingType::DI_ZI_ZH,
+    SVX_NUM_NUMBER_TRADITIONAL_JA = css::style::NumberingType::NUMBER_TRADITIONAL_JA,
+    SVX_NUM_AIU_FULLWIDTH_JA      = css::style::NumberingType::AIU_FULLWIDTH_JA,
+    SVX_NUM_AIU_HALFWIDTH_JA      = css::style::NumberingType::AIU_HALFWIDTH_JA,
+    SVX_NUM_IROHA_FULLWIDTH_JA    = css::style::NumberingType::IROHA_FULLWIDTH_JA,
+    SVX_NUM_IROHA_HALFWIDTH_JA    = css::style::NumberingType::IROHA_HALFWIDTH_JA
 };
 
 #endif
