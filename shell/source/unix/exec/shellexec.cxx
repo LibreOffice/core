@@ -23,6 +23,7 @@
 #include <osl/thread.h>
 #include <osl/process.h>
 #include <osl/file.hxx>
+#include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 
 #include <rtl/uri.hxx>
@@ -57,19 +58,19 @@ namespace
         Sequence< OUString > aRet { "com.sun.star.system.SystemShellExecute" };
         return aRet;
     }
-}
 
-void escapeForShell( OStringBuffer & rBuffer, const OString & rURL)
-{
-    sal_Int32 nmax = rURL.getLength();
-    for(sal_Int32 n=0; n < nmax; ++n)
+    void escapeForShell( OStringBuffer & rBuffer, const OString & rURL)
     {
-        // escape every non alpha numeric characters (excluding a few "known good") by prepending a '\'
-        sal_Char c = rURL[n];
-        if( ( c < 'A' || c > 'Z' ) && ( c < 'a' || c > 'z' ) && ( c < '0' || c > '9' )  && c != '/' && c != '.' )
-            rBuffer.append( '\\' );
+        sal_Int32 nmax = rURL.getLength();
+        for(sal_Int32 n=0; n < nmax; ++n)
+        {
+            // escape every non alpha numeric characters (excluding a few "known good") by prepending a '\'
+            sal_Char c = rURL[n];
+            if( ( c < 'A' || c > 'Z' ) && ( c < 'a' || c > 'z' ) && ( c < '0' || c > '9' )  && c != '/' && c != '.' )
+                rBuffer.append( '\\' );
 
-        rBuffer.append( c );
+            rBuffer.append( c );
+        }
     }
 }
 

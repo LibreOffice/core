@@ -22,7 +22,6 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <osl/mutex.hxx>
-#include <rtl/strbuf.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
@@ -60,10 +59,6 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
         throw(css::uno::RuntimeException, std::exception) override;
 };
-
-
-// helper function - needed for urltest
-void escapeForShell( OStringBuffer & rBuffer, const OString & rURL);
 
 #endif
 
