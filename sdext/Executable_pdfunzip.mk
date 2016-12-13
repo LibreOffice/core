@@ -28,7 +28,6 @@ $(eval $(call gb_Executable_use_libraries,pdfunzip,\
     cppuhelper \
     sal \
     vcl \
-    tl \
 ))
 
 $(eval $(call gb_Executable_use_library_objects,pdfunzip,pdfimport))

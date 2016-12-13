@@ -27,7 +27,6 @@ $(eval $(call gb_Library_use_libraries,pdfimport,\
     cppu \
     cppuhelper \
     sal \
-    tl \
 ))
 
 $(eval $(call gb_Library_use_externals,pdfimport,\

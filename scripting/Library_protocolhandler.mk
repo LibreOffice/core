@@ -27,7 +27,6 @@ $(eval $(call gb_Library_use_libraries,protocolhandler,\
 	fwe \
 	sal \
 	sfx \
-	tl \
 	vcl \
 	$(gb_UWINAPI) \
 ))

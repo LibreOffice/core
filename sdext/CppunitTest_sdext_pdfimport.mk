@@ -29,7 +29,6 @@ $(eval $(call gb_CppunitTest_use_libraries,sdext_pdfimport,\
     cppuhelper \
     sal \
     test \
-    tl \
     unotest \
 	$(gb_UWINAPI) \
 ))
