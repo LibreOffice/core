@@ -40,7 +40,7 @@ serf_bucket_t * SerfUnlockReqProcImpl::createSerfRequestBucket( serf_request_t *
     serf_bucket_t *req_bkt = serf_request_bucket_request_create( inSerfRequest,
                                                                  "UNLOCK",
                                                                  getPathStr(),
-                                                                 0,
+                                                                 nullptr,
                                                                  serf_request_get_alloc( inSerfRequest ) );
     // set request header fields
     serf_bucket_t* hdrs_bkt = serf_bucket_request_get_headers( req_bkt );

@@ -372,7 +372,7 @@ namespace
     WebDAVResponseParser::WebDAVResponseParser(WebDAVResponseParserMode eWebDAVResponseParserMode)
     :   maResult_PropFind(),
         maResult_PropName(),
-        mpContext(0),
+        mpContext(nullptr),
         maHref(),
         maStatus(),
         maResponseProperties(),

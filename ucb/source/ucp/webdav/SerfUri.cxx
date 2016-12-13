@@ -40,12 +40,12 @@ SerfUri::SerfUri( const apr_uri_t * inUri )
     , mPort()
     , mPath()
 {
-    if ( inUri == 0 )
+    if ( inUri == nullptr )
         throw DAVException( DAVException::DAV_INVALID_ARG );
 
     char * uri = apr_uri_unparse( apr_environment::AprEnv::getAprEnv()->getAprPool(), &mAprUri, 0 );
 
-    if ( uri == 0 )
+    if ( uri == nullptr )
         throw DAVException( DAVException::DAV_INVALID_ARG );
 
     init( &mAprUri );

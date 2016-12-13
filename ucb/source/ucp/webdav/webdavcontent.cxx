@@ -352,11 +352,11 @@ uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
     {
     }
 
-    cppu::OTypeCollection * pCollection = 0;
+    cppu::OTypeCollection * pCollection = nullptr;
 
     if ( bFolder )
     {
-        static cppu::OTypeCollection* pFolderTypes = 0;
+        static cppu::OTypeCollection* pFolderTypes = nullptr;
 
         pCollection = pFolderTypes;
         if ( !pCollection )
@@ -389,7 +389,7 @@ uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
     }
     else
     {
-        static cppu::OTypeCollection* pDocumentTypes = 0;
+        static cppu::OTypeCollection* pDocumentTypes = nullptr;
 
         pCollection = pDocumentTypes;
         if ( !pCollection )
@@ -3365,7 +3365,7 @@ Content::ResourceType Content::getResourceType(
             // resource is NON_DAV
             eResourceType = NON_DAV;
         }
-        else if (networkAccessAllowed != 0)
+        else if (networkAccessAllowed != nullptr)
         {
             *networkAccessAllowed = *networkAccessAllowed
                 && shouldAccessNetworkAfterException(e);

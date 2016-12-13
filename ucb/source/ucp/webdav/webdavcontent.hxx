@@ -120,7 +120,7 @@ private:
     ResourceType
     getResourceType( const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv,
                      const std::unique_ptr< DAVResourceAccess > & rResAccess,
-                     bool * networkAccessAllowed = 0 )
+                     bool * networkAccessAllowed = nullptr )
         throw ( css::uno::Exception );
 
     // Command "open"
