@@ -319,6 +319,9 @@ public:
         bInsertIntoEditWindow = bEditWindowHadFocusLast;
     }
     bool IsInlineEditEnabled() const;
+
+private:
+    void ZoomByItemSet(const SfxItemSet *pSet);
 };
 
 #endif
