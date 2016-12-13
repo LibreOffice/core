@@ -12944,7 +12944,7 @@ _EOF
 
 if test $_os != WINNT -a "$CROSS_COMPILING" != TRUE; then
     cat << _EOF
-After the build has finished, you can immediately run it using:
+After the build of LibreOffice has finished successfully, you can immediately run LibreOffice using the command:
 _EOF
 
     if test $_os = Darwin; then
