@@ -492,7 +492,7 @@ apr_status_t SerfSession::verifySerfCertificateChain (
         if (nVerificationResult == 0)
         {
             // Certificate (chain) is valid.
-            xCertificateContainer->addCertificate(getHostName(), sServerCertificateSubject,  sal_True);
+            xCertificateContainer->addCertificate(getHostName(), sServerCertificateSubject,  true);
             return APR_SUCCESS;
         }
         else if ((nVerificationResult & security::CertificateValidity::CHAIN_INCOMPLETE) != 0)
@@ -506,7 +506,7 @@ apr_status_t SerfSession::verifySerfCertificateChain (
                 (security::CertificateValidity::INVALID | security::CertificateValidity::REVOKED)) != 0)
         {
             // Certificate (chain) is invalid.
-            xCertificateContainer->addCertificate(getHostName(), sServerCertificateSubject,  sal_False);
+            xCertificateContainer->addCertificate(getHostName(), sServerCertificateSubject,  false);
             return SERF_SSL_CERT_UNKNOWN_FAILURE;
         }
         else
@@ -536,13 +536,13 @@ apr_status_t SerfSession::verifySerfCertificateChain (
                 uno::Reference< task::XInteractionApprove > xApprove( xSelection.get(), uno::UNO_QUERY );
                 if ( xApprove.is() )
                 {
-                    xCertificateContainer->addCertificate( getHostName(), sServerCertificateSubject,  sal_True );
+                    xCertificateContainer->addCertificate( getHostName(), sServerCertificateSubject,  true );
                     return APR_SUCCESS;
                 }
                 else
                 {
                     // Don't trust cert
-                    xCertificateContainer->addCertificate( getHostName(), sServerCertificateSubject, sal_False );
+                    xCertificateContainer->addCertificate( getHostName(), sServerCertificateSubject, false );
                     return SERF_SSL_CERT_UNKNOWN_FAILURE;
                 }
             }
@@ -550,7 +550,7 @@ apr_status_t SerfSession::verifySerfCertificateChain (
         else
         {
             // Don't trust cert
-            xCertificateContainer->addCertificate( getHostName(), sServerCertificateSubject, sal_False );
+            xCertificateContainer->addCertificate( getHostName(), sServerCertificateSubject, false );
             return SERF_SSL_CERT_UNKNOWN_FAILURE;
         }
     }
