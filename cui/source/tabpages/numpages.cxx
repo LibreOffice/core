@@ -62,6 +62,7 @@
 #include <com/sun/star/text/XNumberingTypeInfo.hpp>
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
+#include <tools/resary.hxx>
 
 #include <algorithm>
 #include <vector>
@@ -1171,6 +1172,15 @@ SvxNumOptionsTabPage::SvxNumOptionsTabPage(vcl::Window* pParent,
     pBitmapMenu->SetPopupMenu(m_nGalleryId, pPopup);
 
     eCoreUnit = rSet.GetPool()->GetMetric(rSet.GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE));
+
+    // Fill ListBox with predefined / translated numbering types.
+    ResStringArray aNames( SVX_RES( RID_SVXSTRARY_NUMBERINGTYPE ));
+    sal_uInt32 nCount = aNames.Count();
+    for (sal_uInt32 i = 0; i < nCount; ++i)
+    {
+        sal_Int32 nPos = m_pFmtLB->InsertEntry( aNames.GetString(i));
+        m_pFmtLB->SetEntryData( nPos, reinterpret_cast<void*>(static_cast<sal_uIntPtr>(aNames.GetValue(i))));
+    }
 
     // Get advanced numbering types from the component.
     // Watch out for the ugly
