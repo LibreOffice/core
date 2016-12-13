@@ -67,20 +67,20 @@ void FuArea::DoExecute( SfxRequest& rReq )
         if( pDlg && (pDlg->Execute() == RET_OK) )
         {
             mpView->SetAttributes (*(pDlg->GetOutputItemSet ()));
+
+            // attributes changed, update Listboxes in Objectbars
+            static const sal_uInt16 SidArray[] = {
+                SID_ATTR_FILL_STYLE,
+                SID_ATTR_FILL_COLOR,
+                SID_ATTR_FILL_GRADIENT,
+                SID_ATTR_FILL_HATCH,
+                SID_ATTR_FILL_BITMAP,
+                SID_ATTR_FILL_TRANSPARENCE,
+                SID_ATTR_FILL_FLOATTRANSPARENCE,
+                0 };
+
+            mpViewShell->GetViewFrame()->GetBindings().Invalidate( SidArray );
         }
-
-        // attributes changed, update Listboxes in Objectbars
-        static const sal_uInt16 SidArray[] = {
-                        SID_ATTR_FILL_STYLE,
-                        SID_ATTR_FILL_COLOR,
-                        SID_ATTR_FILL_GRADIENT,
-                        SID_ATTR_FILL_HATCH,
-                        SID_ATTR_FILL_BITMAP,
-                        SID_ATTR_FILL_TRANSPARENCE,
-                        SID_ATTR_FILL_FLOATTRANSPARENCE,
-                        0 };
-
-        mpViewShell->GetViewFrame()->GetBindings().Invalidate( SidArray );
     }
 
     rReq.Ignore ();
