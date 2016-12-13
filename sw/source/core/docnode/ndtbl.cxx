@@ -1302,7 +1302,7 @@ SwNodeRange * SwNodes::ExpandRangeForTableBox(const SwNodeRange & rRange)
     }
 
     SwNode * pNode = &aIndex.GetNode();
-    while (pNode->IsEndNode())
+    while (pNode->IsEndNode() && aIndex < Count() - 1)
     {
         SwNode * pStartNode = pNode->StartOfSectionNode();
         SwNodeIndex aStartIndex(*pStartNode);
