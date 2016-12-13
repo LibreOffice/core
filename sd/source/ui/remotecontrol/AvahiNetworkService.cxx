@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -6,6 +6,9 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+
+#include <config_dbus.h>
+
 #include <time.h>
 #include <iostream>
 #include <limits>
@@ -22,7 +25,10 @@
 #include <avahi-common/timeval.h>
 #include <avahi-common/thread-watch.h>
 #include <comphelper/random.hxx>
+
+#if ENABLE_DBUS
 #include <dbus/dbus.h>
+#endif
 
 #include <sal/log.hxx>
 
@@ -161,12 +167,18 @@ static void client_callback(AvahiClient *c, AvahiClientState state, AVAHI_GCC_UN
 }
 
 void AvahiNetworkService::setup() {
+#if ENABLE_DBUS
+    // Sure, without ENABLE_DBUS it probably makes no sense to try to use this Avahi stuff either,
+    // but this is just a stop-gap measure to get this to even compile for now with the probably
+    // pointless combination of configury options --enable-avahi --enable-dbus --disable-gui.
+
     // Avahi internally uses D-Bus, which requires the following in order to be
     // thread-safe (and we potentially access D-Bus from different threads in
     // different places of the code base):
     if (!dbus_threads_init_default()) {
         throw std::bad_alloc();
     }
+#endif
 
    int error = 0;
    avahiService = this;
