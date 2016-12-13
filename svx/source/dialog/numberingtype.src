@@ -49,6 +49,8 @@ StringArray RID_SVXSTRARY_NUMBERINGTYPE
         < "а, б, .., аа, бб, ... (Serbian)" ;       51 /*CHARS_CYRILLIC_LOWER_LETTER_N_SR   */; > ;
         < "Α, Β, Γ, ... (Greek Upper Letter)";      52 /*CHARS_GREEK_UPPER_LETTER           */; > ;
         < "α, β, γ, ... (Greek Lower Letter)";      53 /*CHARS_GREEK_LOWER_LETTER           */; > ;
+        < "א...י, יא...כ, ..." ;                    56 /*NUMBER_HEBREW                      */; > ;
+        < "א...ת, אא...תת, ..." ;                   33 /*CHARS_HEBREW                       */; > ;
     };
 };
 
