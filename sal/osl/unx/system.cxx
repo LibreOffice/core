@@ -246,53 +246,6 @@ int macxp_resolveAlias(char *path, int buflen)
 
 #endif /* NO_PTHREAD_RTL */
 
-#if defined(FREEBSD)
-char *fcvt(double value, int ndigit, int *decpt, int *sign)
-{
-  static char ret[256];
-  char buf[256],zahl[256],format[256]="%";
-
-  if (value==0.0) value=1e-30;
-
-  if (value<0.0) *sign=1; else *sign=0;
-
-  if (value<1.0)
-  {
-    *decpt=(int)log10(value);
-    value*=pow(10.0,1-*decpt);
-    ndigit+=*decpt-1;
-    if (ndigit<0) ndigit=0;
-  }
-  else
-  {
-    *decpt=(int)log10(value)+1;
-  }
-
-  sprintf(zahl,"%d",ndigit);
-  strcat(format,zahl);
-  strcat(format,".");
-  strcat(format,zahl);
-  strcat(format,"f");
-
-  sprintf(buf,format,value);
-
-  if (ndigit!=0)
-  {
-    char *v1=strtok(buf,".");
-    char *v2=strtok(NULL,".");
-    strcpy(ret,v1);
-    strcat(ret,v2);
-  }
-  else
-  {
-    strcpy(ret,buf);
-  }
-
-  return ret;
-}
-
-#endif
-
 //might be useful on other platforms, but doesn't compiler under MACOSX anyway
 #if defined(__GNUC__) && defined(LINUX)
 //force the __data_start symbol to exist in any executables that link against
