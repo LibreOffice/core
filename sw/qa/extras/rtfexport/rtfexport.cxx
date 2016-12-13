@@ -1117,6 +1117,16 @@ DECLARE_RTFEXPORT_TEST(testTdf103925, "tdf103925.rtf")
     CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(getRun(getParagraph(1), 1), "CharFlash"));
 }
 
+DECLARE_RTFEXPORT_TEST(testTdf104228, "tdf104228.rtf")
+{
+    uno::Reference<text::XTextTable> xTable(getParagraphOrTable(2), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("C1"), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xParagraph = getParagraphOfText(1, xCell->getText());
+    // This was 2103, implicit 0 as direct formatting was ignored on the
+    // paragraph (and the style had this larger value).
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), getProperty<sal_Int32>(xParagraph, "ParaLeftMargin"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
