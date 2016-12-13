@@ -3333,6 +3333,7 @@ namespace sw
     ContactChangedHint::~ContactChangedHint() {}
     DrawFormatLayoutCopyHint::~DrawFormatLayoutCopyHint() {}
     WW8AnchorConvHint::~WW8AnchorConvHint() {}
+    RestoreFlyAnchorHint::~RestoreFlyAnchorHint() {}
 }
 
 SwDrawFrameFormat::~SwDrawFrameFormat()
