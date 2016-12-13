@@ -89,7 +89,7 @@ void Chart2XShapeTest::compareAgainstReference(const OUString& rReferenceFile, b
 {
     OUString aDump = getXShapeDumpString();
 
-    OUString aReference = getPathFromSrc("/chart2/qa/extras/xshape/data/reference/") + rReferenceFile;
+    OUString aReference = m_directories.getPathFromSrc("/chart2/qa/extras/xshape/data/reference/") + rReferenceFile;
     if(bCreateReference)
     {
         OString aOFile = OUStringToOString(aReference, RTL_TEXTENCODING_UTF8);
