@@ -46,7 +46,7 @@ public:
                              const Depth inDepth,
                              std::vector< DAVResourceInfo > & ioResInfo );
 
-    virtual ~SerfPropFindReqProcImpl();
+    virtual ~SerfPropFindReqProcImpl() override;
 
     virtual
     serf_bucket_t * createSerfRequestBucket( serf_request_t * inSerfRequest ) override;

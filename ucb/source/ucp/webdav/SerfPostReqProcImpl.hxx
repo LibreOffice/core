@@ -47,7 +47,7 @@ public:
                          const char* inReferer,
                          const css::uno::Reference< css::io::XOutputStream > & xioOutStrm );
 
-    virtual ~SerfPostReqProcImpl();
+    virtual ~SerfPostReqProcImpl() override;
 
     virtual
     serf_bucket_t * createSerfRequestBucket( serf_request_t * inSerfRequest ) override;

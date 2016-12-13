@@ -35,7 +35,7 @@ public:
                               const DAVRequestHeaders& inRequestHeaders,
                               const std::vector< ProppatchValue > & inProperties );
 
-    virtual ~SerfPropPatchReqProcImpl();
+    virtual ~SerfPropPatchReqProcImpl() override;
 
     virtual
     serf_bucket_t * createSerfRequestBucket( serf_request_t * inSerfRequest ) override;

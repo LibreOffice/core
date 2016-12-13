@@ -35,7 +35,7 @@ public:
                         const OUString& sToken );
 
 
-    virtual ~SerfPutReqProcImpl();
+    virtual ~SerfPutReqProcImpl() override;
 
     virtual
     serf_bucket_t * createSerfRequestBucket( serf_request_t * inSerfRequest ) override;

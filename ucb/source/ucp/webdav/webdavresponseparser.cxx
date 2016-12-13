@@ -352,7 +352,7 @@ namespace
 
     public:
         explicit WebDAVResponseParser(WebDAVResponseParserMode eWebDAVResponseParserMode);
-        virtual ~WebDAVResponseParser();
+        virtual ~WebDAVResponseParser() override;
 
         // Methods XDocumentHandler
         virtual void SAL_CALL startDocument(  ) throw (xml::sax::SAXException, uno::RuntimeException) override;
