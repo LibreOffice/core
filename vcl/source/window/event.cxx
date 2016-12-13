@@ -658,4 +658,10 @@ NotifyEvent::NotifyEvent( MouseNotifyEvent nEventType, vcl::Window* pWindow,
     mnEventType  = nEventType;
 }
 
+NotifyEvent::~NotifyEvent()
+{
+    SolarMutexGuard aVclGuard;
+    mpWindow.clear();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

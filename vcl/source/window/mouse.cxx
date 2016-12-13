@@ -161,7 +161,10 @@ void Window::ImplCallMouseMove( sal_uInt16 nMouseCode, bool bModChanged )
 void Window::ImplGenerateMouseMove()
 {
     if ( !mpWindowImpl->mpFrameData->mnMouseMoveId )
+    {
+        SolarMutexGuard aVclGuard;
         mpWindowImpl->mpFrameData->mnMouseMoveId = Application::PostUserEvent( LINK( mpWindowImpl->mpFrameWindow, Window, ImplGenerateMouseMoveHdl ), nullptr, true );
+    }
 }
 
 IMPL_LINK_NOARG(Window, ImplGenerateMouseMoveHdl, void*, void)
