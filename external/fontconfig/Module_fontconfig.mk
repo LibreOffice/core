@@ -9,13 +9,9 @@
 
 $(eval $(call gb_Module_Module,fontconfig))
 
-ifeq ($(OS),ANDROID)
-
 $(eval $(call gb_Module_add_targets,fontconfig,\
 	ExternalProject_fontconfig \
 	UnpackedTarball_fontconfig \
 ))
-
-endif
 
 # vim: set noet sw=4 ts=4:
