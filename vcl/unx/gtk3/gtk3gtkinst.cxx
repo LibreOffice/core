@@ -919,12 +919,16 @@ Reference< XInterface > GtkInstance::CreateDragSource()
 class GtkOpenGLContext : public OpenGLContext
 {
     GLWindow m_aGLWin;
+#if GTK_CHECK_VERSION(3,16,0)
     GtkWidget *m_pGLArea;
+#endif
 
 public:
     GtkOpenGLContext()
         : OpenGLContext()
+#if GTK_CHECK_VERSION(3,16,0)
         , m_pGLArea(nullptr)
+#endif
     {
     }
 
