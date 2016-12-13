@@ -1173,8 +1173,10 @@ SvxNumOptionsTabPage::SvxNumOptionsTabPage(vcl::Window* pParent,
     eCoreUnit = rSet.GetPool()->GetMetric(rSet.GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE));
 
     // Get advanced numbering types from the component.
-    // Watch out for the ugly 0x88/*SVX_NUM_BITMAP|0x80*/ to not remove that.
-    SvxNumOptionsTabPageHelper::GetI18nNumbering( *m_pFmtLB, (SVX_NUM_BITMAP | 0x80));
+    // Watch out for the ugly
+    // 136 == 0x88 == SVX_NUM_BITMAP|0x80 == SVX_NUM_BITMAP|LINK_TOKEN
+    // to not remove that.
+    SvxNumOptionsTabPageHelper::GetI18nNumbering( *m_pFmtLB, (SVX_NUM_BITMAP | LINK_TOKEN));
 }
 
 SvxNumOptionsTabPage::~SvxNumOptionsTabPage()
