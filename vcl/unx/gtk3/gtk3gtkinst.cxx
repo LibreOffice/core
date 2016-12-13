@@ -948,11 +948,13 @@ private:
     virtual const GLWindow& getOpenGLWindow() const override { return m_aGLWin; }
     virtual GLWindow& getModifiableOpenGLWindow() override { return m_aGLWin; }
 
+#if GTK_CHECK_VERSION(3,16,0)
     static void signalDestroy(GtkWidget*, gpointer context)
     {
         GtkOpenGLContext* pThis = static_cast<GtkOpenGLContext*>(context);
         pThis->m_pGLArea = nullptr;
     }
+#endif
 
     virtual bool ImplInit() override
     {
@@ -975,13 +977,13 @@ private:
         return bRet;
     }
 
+#if GTK_CHECK_VERSION(3,16,0)
     virtual void restoreDefaultFramebuffer() override
     {
         OpenGLContext::restoreDefaultFramebuffer();
-#if GTK_CHECK_VERSION(3,16,0)
         gtk_gl_area_attach_buffers(GTK_GL_AREA(m_pGLArea));
-#endif
     }
+#endif
 
     virtual void makeCurrent() override
     {
