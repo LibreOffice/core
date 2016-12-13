@@ -1038,8 +1038,9 @@ libo_FUZZ_ARG_ENABLE(mergelibs,
 )
 
 libo_FUZZ_ARG_ENABLE(breakpad,
-    AS_HELP_STRING([--enable-breakpad],
-        [Enables breakpad for crash reporting.])
+    AS_HELP_STRING([--disable-breakpad],
+        [Disables breakpad for crash reporting.]),
+,enable_breakpad=yes
 )
 
 AC_ARG_ENABLE(fetch-external,
