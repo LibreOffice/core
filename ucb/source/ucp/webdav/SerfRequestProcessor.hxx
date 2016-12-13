@@ -34,6 +34,8 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/ucb/Lock.hpp>
 
+#include <rtl/ref.hxx>
+
 namespace http_dav_ucp
 {
 
@@ -64,11 +66,11 @@ public:
                            apr_status_t& outSerfStatus );
 
     // GET
-    bool processGet( const css::uno::Reference< SerfInputStream >& xioInStrm,
+    bool processGet( const rtl::Reference< SerfInputStream >& xioInStrm,
                      apr_status_t& outSerfStatus );
 
     // GET inclusive header fields
-    bool processGet( const css::uno::Reference< SerfInputStream >& xioInStrm,
+    bool processGet( const rtl::Reference< SerfInputStream >& xioInStrm,
                      const std::vector< OUString > & inHeaderNames,
                      DAVResource & ioResource,
                      apr_status_t& outSerfStatus );
@@ -98,7 +100,7 @@ public:
                       apr_size_t inDataLen,
                       const OUString & inContentType,
                       const OUString & inReferer,
-                      const css::uno::Reference< SerfInputStream >& xioInStrm,
+                      const rtl::Reference< SerfInputStream >& xioInStrm,
                       apr_status_t& outSerfStatus );
 
     // POST

@@ -32,7 +32,7 @@ SerfPostReqProcImpl::SerfPostReqProcImpl( const char* inPath,
                                           apr_size_t inDataLen,
                                           const char* inContentType,
                                           const char* inReferer,
-                                          const css::uno::Reference< SerfInputStream > & xioInStrm )
+                                          const rtl::Reference< SerfInputStream > & xioInStrm )
     : SerfRequestProcessorImpl( inPath, inRequestHeaders )
     , mpPostData( inData )
     , mnPostDataLen( inDataLen )

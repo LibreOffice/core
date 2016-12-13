@@ -26,7 +26,7 @@ namespace http_dav_ucp
 
 SerfGetReqProcImpl::SerfGetReqProcImpl( const char* inPath,
                                         const DAVRequestHeaders& inRequestHeaders,
-                                        const css::uno::Reference< SerfInputStream > & xioInStrm )
+                                        const rtl::Reference< SerfInputStream > & xioInStrm )
     : SerfRequestProcessorImpl( inPath, inRequestHeaders )
     , xInputStream( xioInStrm )
     , xOutputStream()
@@ -37,7 +37,7 @@ SerfGetReqProcImpl::SerfGetReqProcImpl( const char* inPath,
 
 SerfGetReqProcImpl::SerfGetReqProcImpl( const char* inPath,
                                         const DAVRequestHeaders& inRequestHeaders,
-                                        const css::uno::Reference< SerfInputStream > & xioInStrm,
+                                        const rtl::Reference< SerfInputStream > & xioInStrm,
                                         const std::vector< OUString > & inHeaderNames,
                                         DAVResource & ioResource )
     : SerfRequestProcessorImpl( inPath, inRequestHeaders )

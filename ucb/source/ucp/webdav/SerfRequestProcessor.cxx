@@ -129,7 +129,7 @@ bool SerfRequestProcessor::processPropPatch( const std::vector< ProppatchValue >
 }
 
 // GET
-bool SerfRequestProcessor::processGet( const css::uno::Reference< SerfInputStream >& xioInStrm,
+bool SerfRequestProcessor::processGet( const rtl::Reference< SerfInputStream >& xioInStrm,
                                        apr_status_t& outSerfStatus )
 {
     mpProcImpl = new SerfGetReqProcImpl( mPathStr,
@@ -141,7 +141,7 @@ bool SerfRequestProcessor::processGet( const css::uno::Reference< SerfInputStrea
 }
 
 // GET inclusive header fields
-bool SerfRequestProcessor::processGet( const css::uno::Reference< SerfInputStream >& xioInStrm,
+bool SerfRequestProcessor::processGet( const rtl::Reference< SerfInputStream >& xioInStrm,
                                        const std::vector< OUString > & inHeaderNames,
                                        DAVResource & ioResource,
                                        apr_status_t& outSerfStatus )
@@ -223,7 +223,7 @@ bool SerfRequestProcessor::processPost( const char* inData,
                                         apr_size_t inDataLen,
                                         const OUString & inContentType,
                                         const OUString & inReferer,
-                                        const css::uno::Reference< SerfInputStream >& xioInStrm,
+                                        const rtl::Reference< SerfInputStream >& xioInStrm,
                                         apr_status_t& outSerfStatus )
 {
     mContentType = apr_pstrdup( SerfSession::getAprPool(),

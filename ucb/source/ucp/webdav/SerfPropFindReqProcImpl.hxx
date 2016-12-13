@@ -67,7 +67,7 @@ private:
     std::vector< DAVResourceInfo > * mpResInfo;
 
     const bool mbOnlyPropertyNames;
-    css::uno::Reference< SerfInputStream > xInputStream;
+    rtl::Reference< SerfInputStream > xInputStream;
 };
 
 } // namespace http_dav_ucp

@@ -37,7 +37,7 @@ public:
                          apr_size_t inDataLen,
                          const char* inContentType,
                          const char* inReferer,
-                         const css::uno::Reference< SerfInputStream > & xioInStrm );
+                         const rtl::Reference< SerfInputStream > & xioInStrm );
 
     SerfPostReqProcImpl( const char* inPath,
                          const DAVRequestHeaders& inRequestHeaders,
@@ -64,7 +64,7 @@ private:
     apr_size_t mnPostDataLen;
     const char* mpContentType;
     const char* mpReferer;
-    css::uno::Reference< SerfInputStream > xInputStream;
+    rtl::Reference< SerfInputStream > xInputStream;
     css::uno::Reference< css::io::XOutputStream > xOutputStream;
 
 };

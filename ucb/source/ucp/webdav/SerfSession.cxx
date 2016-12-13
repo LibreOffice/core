@@ -709,7 +709,7 @@ SerfSession::GET( const OUString & inPath,
 
     Init( rEnv );
 
-    uno::Reference< SerfInputStream > xInputStream( new SerfInputStream );
+    rtl::Reference< SerfInputStream > xInputStream( new SerfInputStream );
     apr_status_t status = APR_SUCCESS;
     std::shared_ptr<SerfRequestProcessor> aReqProc( createReqProc( inPath ) );
     aReqProc->processGet( xInputStream,
@@ -755,7 +755,7 @@ SerfSession::GET( const OUString & inPath,
     Init( rEnv );
 
     std::shared_ptr<SerfRequestProcessor> aReqProc( createReqProc( inPath ) );
-    uno::Reference< SerfInputStream > xInputStream( new SerfInputStream );
+    rtl::Reference< SerfInputStream > xInputStream( new SerfInputStream );
     ioResource.uri = inPath;
     ioResource.properties.clear();
     apr_status_t status = APR_SUCCESS;
@@ -841,7 +841,7 @@ SerfSession::POST( const OUString & inPath,
     Init( rEnv );
 
     std::shared_ptr<SerfRequestProcessor> aReqProc( createReqProc( inPath ) );
-    uno::Reference< SerfInputStream > xInputStream( new SerfInputStream );
+    rtl::Reference< SerfInputStream > xInputStream( new SerfInputStream );
     apr_status_t status = APR_SUCCESS;
     aReqProc->processPost( reinterpret_cast< const char * >( aDataToSend.getConstArray() ),
                            aDataToSend.getLength(),
