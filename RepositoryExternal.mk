@@ -1273,7 +1273,7 @@ endef
 
 gb_ExternalProject__use_freetype :=
 
-else ifeq ($(OS),ANDROID)
+else
 
 define gb_LinkTarget__use_freetype_headers
 $(call gb_LinkTarget_use_external_project,$(1),freetype)
@@ -1309,7 +1309,7 @@ $(call gb_LinkTarget_add_libs,$(1),$(FONTCONFIG_LIBS))
 
 endef
 
-else ifeq ($(OS),ANDROID)
+else
 
 define gb_LinkTarget__use_fontconfig
 $(call gb_LinkTarget_use_external_project,$(1),fontconfig)
