@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a71b18c_350ef834",
+        "filename": "cui/uiconfig/ui/numberingoptionspage.ui",
+        "patchSetId": 4
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-12-13T14:19:22Z",
+      "side": 1,
+      "message": "To be consistent with the other list entries these should have a comma before the trailing ...\n\nI\u0027ll add that in an amended commit.",
+      "revId": "5d1cc3ea89c034ed0e504ebd3bbe270dd9424d05",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a71b18c_95342cdf",
+        "filename": "offapi/com/sun/star/style/NumberingType.idl",
+        "patchSetId": 4
+      },
+      "lineNbr": 439,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-12-13T14:19:22Z",
+      "side": 1,
+      "message": "No question mark. This will all go into 5.4, I\u0027ll change in an amended commit.",
+      "range": {
+        "startLine": 439,
+        "startChar": 30,
+        "endLine": 439,
+        "endChar": 32
+      },
+      "revId": "5d1cc3ea89c034ed0e504ebd3bbe270dd9424d05",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
