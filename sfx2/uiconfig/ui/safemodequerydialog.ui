@@ -32,7 +32,6 @@
                 <property name="expand">False</property>
                 <property name="fill">True</property>
                 <property name="position">0</property>
-                <property name="secondary">True</property>
               </packing>
             </child>
             <child>
@@ -61,7 +60,7 @@
           <object class="GtkLabel" id="label">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Are you sure you want to restart %PRODUCTNAME and enter the Safe Mode?</property>
+            <property name="label" translatable="yes">Are you sure you want to restart %PRODUCTNAME and enter safe mode?</property>
             <property name="wrap">True</property>
             <property name="max_width_chars">80</property>
             <property name="lines">2</property>
