@@ -603,11 +603,14 @@ void DocxExport::WriteFootnotesEndnotes()
 
         // switch the serializer to redirect the output to word/footnotes.xml
         m_pAttrOutput->SetSerializer( pFootnotesFS );
+        // tdf#99227
+        m_pSdrExport->setSerializer( pFootnotesFS );
 
         // do the work
         m_pAttrOutput->FootnotesEndnotes( true );
 
         // switch the serializer back
+        m_pSdrExport->setSerializer( m_pDocumentFS );
         m_pAttrOutput->SetSerializer( m_pDocumentFS );
     }
 
@@ -624,11 +627,14 @@ void DocxExport::WriteFootnotesEndnotes()
 
         // switch the serializer to redirect the output to word/endnotes.xml
         m_pAttrOutput->SetSerializer( pEndnotesFS );
+        // tdf#99227
+        m_pSdrExport->setSerializer( pEndnotesFS );
 
         // do the work
         m_pAttrOutput->FootnotesEndnotes( false );
 
         // switch the serializer back
+        m_pSdrExport->setSerializer( m_pDocumentFS );
         m_pAttrOutput->SetSerializer( m_pDocumentFS );
     }
 }
