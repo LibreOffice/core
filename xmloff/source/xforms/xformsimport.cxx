@@ -138,7 +138,7 @@ void bindXFormsSubmission(
 
 void applyXFormsSettings( const Reference< XNameAccess >& _rXForms, const Sequence< PropertyValue >& _rSettings )
 {
-    OSL_PRECOND( _rXForms.is(), "applyXFormsSettings: invalid XForms container!" );
+    SAL_WARN_IF(!_rXForms.is(), "xmloff", "applyXFormsSettings: invalid XForms container!" );
     if ( !_rXForms.is() )
         return;
 

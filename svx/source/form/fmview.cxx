@@ -256,7 +256,7 @@ void FmFormView::ChangeDesignMode(bool bDesign)
     SetDesignMode( bDesign );
 
     // --- 6. simulate a activation (the shell will handle some things there ...?)
-    OSL_PRECOND( pFormShell && pFormShell->GetImpl(), "FmFormView::ChangeDesignMode: is this really allowed? No shell?" );
+    SAL_WARN_IF(!pFormShell || !pFormShell->GetImpl(), "svx", "FmFormView::ChangeDesignMode: is this really allowed? No shell?" );
     if ( pFormShell && pFormShell->GetImpl() )
         pFormShell->GetImpl()->viewActivated( *this );
     else

@@ -286,7 +286,7 @@ namespace sdr { namespace contact {
     void adjustControlGeometry_throw( const ControlHolder& _rControl, const Rectangle& _rLogicBoundingRect,
         const basegfx::B2DHomMatrix& _rViewTransformation, const ::basegfx::B2DHomMatrix& _rZoomLevelNormalization )
     {
-        OSL_PRECOND( _rControl.is(), "UnoControlContactHelper::adjustControlGeometry_throw: illegal control!" );
+        SAL_WARN_IF(!_rControl.is(), "svx", "UnoControlContactHelper::adjustControlGeometry_throw: illegal control!" );
         if ( !_rControl.is() )
             return;
 
@@ -902,7 +902,7 @@ namespace sdr { namespace contact {
 
     bool ViewObjectContactOfUnoControl_Impl::getUnoObject( SdrUnoObj*& _out_rpObject ) const
     {
-        OSL_PRECOND( !impl_isDisposed_nofail(), "ViewObjectContactOfUnoControl_Impl::getUnoObject: already disposed()" );
+        SAL_WARN_IF(impl_isDisposed_nofail(), "svx", "ViewObjectContactOfUnoControl_Impl::getUnoObject: already disposed()" );
         if ( impl_isDisposed_nofail() )
             _out_rpObject = nullptr;
         else
@@ -917,7 +917,7 @@ namespace sdr { namespace contact {
 
     void ViewObjectContactOfUnoControl_Impl::positionAndZoomControl( const basegfx::B2DHomMatrix& _rViewTransformation ) const
     {
-        OSL_PRECOND( m_aControl.is(), "ViewObjectContactOfUnoControl_Impl::positionAndZoomControl: no output device or no control!" );
+        SAL_WARN_IF(! m_aControl.is(), "svx", "ViewObjectContactOfUnoControl_Impl::positionAndZoomControl: no output device or no control!" );
         if ( !m_aControl.is() )
             return;
 
@@ -946,7 +946,7 @@ namespace sdr { namespace contact {
 
     void ViewObjectContactOfUnoControl_Impl::ensureControl( const basegfx::B2DHomMatrix* _pInitialViewTransformationOrNULL )
     {
-        OSL_PRECOND( !impl_isDisposed_nofail(), "ViewObjectContactOfUnoControl_Impl::ensureControl: already disposed()" );
+        SAL_WARN_IF(impl_isDisposed_nofail(), "svx", "ViewObjectContactOfUnoControl_Impl::ensureControl: already disposed()" );
         if ( impl_isDisposed_nofail() )
             return;
 
@@ -1143,7 +1143,7 @@ namespace sdr { namespace contact {
 
     bool ViewObjectContactOfUnoControl_Impl::impl_getPageView_nothrow( SdrPageView*& _out_rpPageView )
     {
-        OSL_PRECOND( !impl_isDisposed_nofail(), "ViewObjectContactOfUnoControl_Impl::impl_getPageView_nothrow: already disposed!" );
+        SAL_WARN_IF(impl_isDisposed_nofail(), "svx", "ViewObjectContactOfUnoControl_Impl::impl_getPageView_nothrow: already disposed!" );
 
         _out_rpPageView = nullptr;
         if ( impl_isDisposed_nofail() )
@@ -1160,7 +1160,7 @@ namespace sdr { namespace contact {
 
     void ViewObjectContactOfUnoControl_Impl::impl_adjustControlVisibilityToLayerVisibility_throw()
     {
-        OSL_PRECOND( m_aControl.is(),
+        SAL_WARN_IF(!m_aControl.is(), "svx",
             "ViewObjectContactOfUnoControl_Impl::impl_adjustControlVisibilityToLayerVisibility_throw: only valid if we have a control!" );
 
         SdrPageView* pPageView( nullptr );
@@ -1199,7 +1199,7 @@ namespace sdr { namespace contact {
 
     void ViewObjectContactOfUnoControl_Impl::impl_switchContainerListening_nothrow( bool _bStart )
     {
-        OSL_PRECOND( m_xContainer.is(), "ViewObjectContactOfUnoControl_Impl::impl_switchContainerListening_nothrow: no control container!" );
+        SAL_WARN_IF(!m_xContainer.is(), "svx", "ViewObjectContactOfUnoControl_Impl::impl_switchContainerListening_nothrow: no control container!" );
         if ( !m_xContainer.is() )
             return;
 
@@ -1219,7 +1219,7 @@ namespace sdr { namespace contact {
 
     void ViewObjectContactOfUnoControl_Impl::impl_switchControlListening_nothrow( bool _bStart )
     {
-        OSL_PRECOND( m_aControl.is(), "ViewObjectContactOfUnoControl_Impl::impl_switchControlListening_nothrow: invalid control!" );
+        SAL_WARN_IF(!m_aControl.is(), "svx", "ViewObjectContactOfUnoControl_Impl::impl_switchControlListening_nothrow: invalid control!" );
         if ( !m_aControl.is() )
             return;
 
@@ -1260,7 +1260,7 @@ namespace sdr { namespace contact {
 
     void ViewObjectContactOfUnoControl_Impl::impl_switchPropertyListening_nothrow( bool _bStart )
     {
-        OSL_PRECOND( m_aControl.is(), "ViewObjectContactOfUnoControl_Impl::impl_switchPropertyListening_nothrow: no control!" );
+        SAL_WARN_IF(!m_aControl.is(), "svx", "ViewObjectContactOfUnoControl_Impl::impl_switchPropertyListening_nothrow: no control!" );
         if ( !m_aControl.is() )
             return;
 
@@ -1356,7 +1356,7 @@ namespace sdr { namespace contact {
         SolarMutexGuard aSolarGuard;
             // (re)painting might require VCL operations, which need the SolarMutex
 
-        OSL_PRECOND( !impl_isDisposed_nofail(), "ViewObjectContactOfUnoControl_Impl::propertyChange: already disposed()" );
+        SAL_WARN_IF(impl_isDisposed_nofail(), "svx", "ViewObjectContactOfUnoControl_Impl::propertyChange: already disposed()" );
         if ( impl_isDisposed_nofail() )
             return;
 

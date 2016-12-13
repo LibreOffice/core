@@ -55,7 +55,7 @@ namespace sw {
                 { return m_aName; }
             virtual SwPosition& GetOtherMarkPos() const override
             {
-                OSL_PRECOND(IsExpanded(), "<SwPosition::GetOtherMarkPos(..)> - I have no other Pos set." );
+                SAL_WARN_IF(!IsExpanded(), "sw", "SwPosition::GetOtherMarkPos() - I have no other Pos set." );
                 return *m_pPos2;
             }
             virtual SwPosition& GetMarkStart() const override

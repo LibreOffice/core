@@ -257,7 +257,7 @@ namespace
 
 OString Parser::readNextToken()
 {
-    OSL_PRECOND(m_nCharIndex!=-1,"insufficient input");
+    SAL_WARN_IF(m_nCharIndex == -1, "sdext", "insufficient input");
     return m_aLine.getToken(m_nNextToken,' ',m_nCharIndex);
 }
 
@@ -299,7 +299,7 @@ void Parser::readBinaryData( uno::Sequence<sal_Int8>& rBuf )
         nFileLen -= sal::static_int_cast<sal_Int32>(nBytesRead);
     }
 
-    OSL_PRECOND(nRes==osl_File_E_None, "inconsistent data");
+    SAL_WARN_IF(nRes!=osl_File_E_None, "sdext", "inconsistent data");
 }
 
 uno::Reference<rendering::XPolyPolygon2D> Parser::readPath()
@@ -307,7 +307,7 @@ uno::Reference<rendering::XPolyPolygon2D> Parser::readPath()
     const OString aSubPathMarker( "subpath" );
 
     if( readNextToken() != aSubPathMarker )
-        OSL_PRECOND(false, "broken path");
+        SAL_WARN("sdext", "broken path");
 
     basegfx::B2DPolyPolygon aResult;
     while( m_nCharIndex != -1 )
@@ -337,7 +337,7 @@ uno::Reference<rendering::XPolyPolygon2D> Parser::readPath()
             }
             else if( nContiguousControlPoints )
             {
-                OSL_PRECOND(nContiguousControlPoints==2,"broken bezier path");
+                SAL_WARN_IF(nContiguousControlPoints!=2, "sdext", "broken bezier path");
 
                 // have two control points before us. the current one
                 // is a normal point - thus, convert previous points
@@ -602,7 +602,7 @@ void Parser::readFont()
     FontMapType::const_iterator pFont( m_aFontMap.find(nFontID) );
     if( pFont != m_aFontMap.end() )
     {
-        OSL_PRECOND(nFileLen==0,"font data for known font");
+        SAL_WARN_IF(nFileLen != 0, "sdext", "font data for known font");
         FontAttributes aRes(pFont->second);
         aRes.size = nSize;
         m_pSink->setFont( aRes );
@@ -818,9 +818,9 @@ void Parser::readSoftMaskedImage()
 
 void Parser::parseLine( const OString& rLine )
 {
-    OSL_PRECOND( m_pSink,         "Invalid sink" );
-    OSL_PRECOND( m_pErr,          "Invalid filehandle" );
-    OSL_PRECOND( m_xContext.is(), "Invalid service factory" );
+    SAL_WARN_IF(!m_pSink, "sdext",         "Invalid sink" );
+    SAL_WARN_IF(!m_pErr, "sdext",          "Invalid filehandle" );
+    SAL_WARN_IF(!m_xContext.is(), "sdext", "Invalid service factory" );
 
     m_nNextToken = 0; m_nCharIndex = 0; m_aLine = rLine;
     uno::Reference<rendering::XPolyPolygon2D> xPoly;
@@ -896,7 +896,7 @@ void Parser::parseLine( const OString& rLine )
 
         case NONE:
         default:
-            OSL_PRECOND(false,"Unknown input");
+            SAL_WARN("sdext", "Unknown input");
             break;
     }
 

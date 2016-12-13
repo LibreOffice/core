@@ -41,7 +41,7 @@ namespace pdfi
 SaxEmitter::SaxEmitter( const uno::Reference< xml::sax::XDocumentHandler >& xDocHdl ) :
     m_xDocHdl( xDocHdl )
 {
-    OSL_PRECOND(m_xDocHdl.is(), "SaxEmitter(): invalid doc handler");
+    SAL_WARN_IF(!m_xDocHdl.is(), "sdext", "SaxEmitter(): invalid doc handler");
     try
     {
         m_xDocHdl->startDocument();

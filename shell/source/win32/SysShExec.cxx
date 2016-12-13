@@ -213,7 +213,7 @@ namespace
 
     void remove_jump_mark(OUString* p_command)
     {
-        OSL_PRECOND(p_command, "invalid parameter");
+        SAL_WARN_IF(!p_command, "shell", "invalid parameter");
 
         sal_Int32 pos;
         if (has_jump_mark(*p_command, &pos))

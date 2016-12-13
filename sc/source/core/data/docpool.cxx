@@ -385,12 +385,12 @@ ScDocumentPool::~ScDocumentPool()
 
 void ScDocumentPool::InitVersionMaps()
 {
-    OSL_PRECOND( !pVersionMap1 && !pVersionMap2 &&
-                !pVersionMap3 && !pVersionMap4 &&
-                !pVersionMap5 && !pVersionMap6 &&
-                !pVersionMap7 && !pVersionMap8 &&
-                !pVersionMap9 && !pVersionMap10 &&
-                !pVersionMap11 && !pVersionMap12 , "InitVersionMaps call multiple times" );
+    SAL_WARN_IF(pVersionMap1 || pVersionMap2 ||
+                pVersionMap3 || pVersionMap4 ||
+                pVersionMap5 || pVersionMap6 ||
+                pVersionMap7 || pVersionMap8 ||
+                pVersionMap9 || pVersionMap10 ||
+                pVersionMap11 || pVersionMap12, "sc", "InitVersionMaps call multiple times" );
 
     // Map old WhichId's
     // Do not count with ATTR_*, if they change again
@@ -555,12 +555,12 @@ void ScDocumentPool::InitVersionMaps()
 
 void ScDocumentPool::DeleteVersionMaps()
 {
-    OSL_PRECOND( pVersionMap1 && pVersionMap2 &&
-                pVersionMap3 && pVersionMap4 &&
-                pVersionMap5 && pVersionMap6 &&
-                pVersionMap7 && pVersionMap8 &&
-                pVersionMap9 && pVersionMap10 &&
-                pVersionMap11 && pVersionMap12 , "DeleteVersionMaps without maps" );
+    SAL_WARN_IF(!pVersionMap1 || !pVersionMap2 ||
+                !pVersionMap3 || !pVersionMap4 ||
+                !pVersionMap5 || !pVersionMap6 ||
+                !pVersionMap7 || !pVersionMap8 ||
+                !pVersionMap9 || !pVersionMap10 ||
+                !pVersionMap11 || !pVersionMap12, "sc", "DeleteVersionMaps without maps" );
 
     delete[] pVersionMap12;
     pVersionMap12 = nullptr;

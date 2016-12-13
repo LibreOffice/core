@@ -388,7 +388,7 @@ private:
 
     void SortableGridDataModel::impl_rebuildIndexesAndNotify( MethodGuard& i_instanceLock )
     {
-        OSL_PRECOND( impl_isSorted_nothrow(), "SortableGridDataModel::impl_rebuildIndexesAndNotify: illegal call!" );
+        SAL_WARN_IF(! impl_isSorted_nothrow(), "toolkit", "SortableGridDataModel::impl_rebuildIndexesAndNotify: illegal call!" );
 
         // clear the indexes
         lcl_clear( m_publicToPrivateRowIndex );

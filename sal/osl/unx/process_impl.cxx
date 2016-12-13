@@ -258,8 +258,8 @@ oslProcessError SAL_CALL osl_getEnvironment(rtl_uString* pustrEnvVar, rtl_uStrin
     rtl_TextEncoding encoding = osl_getThreadTextEncoding();
     rtl_String* pstr_env_var  = nullptr;
 
-    OSL_PRECOND(pustrEnvVar, "osl_getEnvironment(): Invalid parameter");
-    OSL_PRECOND(ppustrValue, "osl_getEnvironment(): Invalid parameter");
+    SAL_WARN_IF(!pustrEnvVar, "sal", "osl_getEnvironment(): Invalid parameter");
+    SAL_WARN_IF(!ppustrValue, "sal", "osl_getEnvironment(): Invalid parameter");
 
     rtl_uString2String(
         &pstr_env_var,
@@ -294,8 +294,8 @@ oslProcessError SAL_CALL osl_setEnvironment(rtl_uString* pustrEnvVar, rtl_uStrin
     rtl_String* pstr_env_var  = nullptr;
     rtl_String* pstr_val  = nullptr;
 
-    OSL_PRECOND(pustrEnvVar, "osl_setEnvironment(): Invalid parameter");
-    OSL_PRECOND(pustrValue, "osl_setEnvironment(): Invalid parameter");
+    SAL_WARN_IF(!pustrEnvVar, "sal", "osl_setEnvironment(): Invalid parameter");
+    SAL_WARN_IF(!pustrValue, "sal", "osl_setEnvironment(): Invalid parameter");
 
     rtl_uString2String(
         &pstr_env_var,
@@ -349,7 +349,7 @@ oslProcessError SAL_CALL osl_clearEnvironment(rtl_uString* pustrEnvVar)
     rtl_TextEncoding encoding = osl_getThreadTextEncoding();
     rtl_String* pstr_env_var  = nullptr;
 
-    OSL_PRECOND(pustrEnvVar, "osl_setEnvironment(): Invalid parameter");
+    SAL_WARN_IF(!pustrEnvVar, "sal", "osl_setEnvironment(): Invalid parameter");
 
     rtl_uString2String(
         &pstr_env_var,
@@ -395,7 +395,7 @@ oslProcessError SAL_CALL osl_getProcessWorkingDir(rtl_uString **ppustrWorkingDir
     oslProcessError result = osl_Process_E_Unknown;
     char buffer[PATH_MAX];
 
-    OSL_PRECOND(ppustrWorkingDir, "osl_getProcessWorkingDir(): Invalid parameter");
+    SAL_WARN_IF(!ppustrWorkingDir, "sal", "osl_getProcessWorkingDir(): Invalid parameter");
 
     if (getcwd (buffer, sizeof(buffer)) != nullptr)
     {
@@ -440,7 +440,7 @@ static struct ProcessLocale_Impl g_process_locale =
 oslProcessError SAL_CALL osl_getProcessLocale( rtl_Locale ** ppLocale )
 {
     oslProcessError result = osl_Process_E_Unknown;
-    OSL_PRECOND(ppLocale, "osl_getProcessLocale(): Invalid parameter.");
+    SAL_WARN_IF(!ppLocale, "sal", "osl_getProcessLocale(): Invalid parameter.");
     if (ppLocale)
     {
         pthread_mutex_lock(&(g_process_locale.m_mutex));
@@ -462,7 +462,7 @@ oslProcessError SAL_CALL osl_setProcessLocale( rtl_Locale * pLocale )
 {
     oslProcessError result = osl_Process_E_Unknown;
 
-    OSL_PRECOND(pLocale, "osl_setProcessLocale(): Invalid parameter.");
+    SAL_WARN_IF(!pLocale, "sal", "osl_setProcessLocale(): Invalid parameter.");
 
     pthread_mutex_lock(&(g_process_locale.m_mutex));
     if (imp_setProcessLocale (pLocale) == 0)

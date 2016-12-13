@@ -28,6 +28,7 @@
 #include <rtl/ustrbuf.h>
 #include <osl/diagnose.h>
 #include <sal/macros.h>
+#include <sal/log.hxx>
 
 #include "file_url.hxx"
 #include "file_impl.hxx"
@@ -148,7 +149,7 @@ static oslFileError osl_setup_base_directory_impl_(
  {
      oslFileError osl_error;
 
-    OSL_PRECOND(((nullptr != pHandle) || (nullptr != ppustrTempFileURL)), "Invalid parameter!");
+    SAL_WARN_IF((nullptr == pHandle) && (nullptr == ppustrTempFileURL), "sal", "Invalid parameter!");
 
     if ((nullptr == pHandle) && (nullptr == ppustrTempFileURL))
     {
@@ -184,9 +185,9 @@ static oslFileError osl_create_temp_file_impl_(
     sal_Int32           offset_file_name;
     const sal_Unicode*  puchr;
 
-    OSL_PRECOND(pustr_base_directory, "Invalid Parameter");
-    OSL_PRECOND(file_handle, "Invalid Parameter");
-    OSL_PRECOND(ppustr_temp_file_name, "Invalid Parameter");
+    SAL_WARN_IF(!pustr_base_directory, "sal", "Invalid Parameter");
+    SAL_WARN_IF(!file_handle, "sal", "Invalid Parameter");
+    SAL_WARN_IF(!ppustr_temp_file_name, "sal", "Invalid Parameter");
 
     len_base_dir = rtl_uString_getLength(pustr_base_directory);
 

@@ -357,7 +357,7 @@ void FormViewPageWindowAdapter::setController(const Reference< XForm > & xForm, 
 
 void FormViewPageWindowAdapter::updateTabOrder( const Reference< XForm >& _rxForm )
 {
-    OSL_PRECOND( _rxForm.is(), "FormViewPageWindowAdapter::updateTabOrder: illegal argument!" );
+    SAL_WARN_IF(!_rxForm.is(), "svx", "FormViewPageWindowAdapter::updateTabOrder: illegal argument!" );
     if ( !_rxForm.is() )
         return;
 
@@ -1064,7 +1064,7 @@ void FmXFormView::breakCreateFormObject()
 IMPL_LINK_NOARG( FmXFormView, OnStartControlWizard, void*, void )
 {
     m_nControlWizardEvent = nullptr;
-    OSL_PRECOND( m_xLastCreatedControlModel.is(), "FmXFormView::OnStartControlWizard: illegal call!" );
+    SAL_WARN_IF(!m_xLastCreatedControlModel.is(), "svx", "FmXFormView::OnStartControlWizard: illegal call!" );
     if ( !m_xLastCreatedControlModel.is() )
         return;
 

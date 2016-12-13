@@ -340,7 +340,7 @@ void SvxShape::impl_construct()
 void SvxShape::impl_initFromSdrObject()
 {
     DBG_TESTSOLARMUTEX();
-    OSL_PRECOND( mpObj.is(), "SvxShape::impl_initFromSdrObject: not to be called without SdrObject!" );
+    SAL_WARN_IF(!mpObj.is(), "svx", "SvxShape::impl_initFromSdrObject: not to be called without SdrObject!" );
     if ( !mpObj.is() )
         return;
 
@@ -396,7 +396,7 @@ void SvxShape::Create( SdrObject* pNewObj, SvxDrawPage* /*pNewPage*/ )
 {
     DBG_TESTSOLARMUTEX();
 
-    OSL_PRECOND( pNewObj, "SvxShape::Create: invalid new object!" );
+    SAL_WARN_IF(!pNewObj, "svx", "SvxShape::Create: invalid new object!" );
     if ( !pNewObj )
         return;
 

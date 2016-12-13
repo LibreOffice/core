@@ -277,7 +277,7 @@ storeError SuperBlockPage::unusedHead (OStorePageBIOS & rBIOS, PageData & rPageH
 storeError SuperBlockPage::unusedPop (OStorePageBIOS & rBIOS, PageData const & rPageHead)
 {
     sal_uInt32 const nAddr = rPageHead.m_aUnused.location();
-    OSL_PRECOND(nAddr != STORE_PAGE_NULL, "store::SuperBlock::unusedPop(): page not free");
+    SAL_WARN_IF(nAddr == STORE_PAGE_NULL, "store", "store::SuperBlock::unusedPop(): page not free");
     if (nAddr == STORE_PAGE_NULL)
         return store_E_CantSeek;
 

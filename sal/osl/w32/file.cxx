@@ -188,7 +188,7 @@ FileHandle_Impl::Allocator::~Allocator()
 
 void FileHandle_Impl::Allocator::allocate (sal_uInt8 ** ppBuffer, SIZE_T * pnSize)
 {
-    OSL_PRECOND((nullptr != ppBuffer) && (nullptr != pnSize), "FileHandle_Impl::Allocator::allocate(): contract violation");
+    SAL_WARN_IF((nullptr == ppBuffer) || (nullptr == pnSize), "sal", "FileHandle_Impl::Allocator::allocate(): contract violation");
     *ppBuffer = static_cast< sal_uInt8* >(rtl_cache_alloc(m_cache));
     *pnSize = m_bufsiz;
 }
@@ -292,11 +292,11 @@ oslFileError FileHandle_Impl::readAt (
     DWORD        nBytesRequested,
     sal_uInt64 * pBytesRead)
 {
-    OSL_PRECOND(m_state & STATE_SEEKABLE, "FileHandle_Impl::readAt(): not seekable");
+    SAL_WARN_IF(!(m_state & STATE_SEEKABLE), "sal", "FileHandle_Impl::readAt(): not seekable");
     if (!(m_state & STATE_SEEKABLE))
         return osl_File_E_SPIPE;
 
-    OSL_PRECOND(m_state & STATE_READABLE, "FileHandle_Impl::readAt(): not readable");
+    SAL_WARN_IF(!(m_state & STATE_READABLE), "sal", "FileHandle_Impl::readAt(): not readable");
     if (!(m_state & STATE_READABLE))
         return osl_File_E_BADF;
 
@@ -323,11 +323,11 @@ oslFileError FileHandle_Impl::writeAt (
     DWORD        nBytesToWrite,
     sal_uInt64 * pBytesWritten)
 {
-    OSL_PRECOND(m_state & STATE_SEEKABLE, "FileHandle_Impl::writeAt(): not seekable");
+    SAL_WARN_IF(!(m_state & STATE_SEEKABLE), "sal", "FileHandle_Impl::writeAt(): not seekable");
     if (!(m_state & STATE_SEEKABLE))
         return osl_File_E_SPIPE;
 
-    OSL_PRECOND(m_state & STATE_WRITEABLE, "FileHandle_Impl::writeAt(): not writeable");
+    SAL_WARN_IF(!(m_state & STATE_WRITEABLE), "sal", "FileHandle_Impl::writeAt(): not writeable");
     if (!(m_state & STATE_WRITEABLE))
         return osl_File_E_BADF;
 

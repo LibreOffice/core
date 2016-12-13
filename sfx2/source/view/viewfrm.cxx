@@ -1970,7 +1970,7 @@ bool SfxViewFrame::SwitchToViewShell_Impl
 
         // if we already have a view shell, remove it
         SfxViewShell* pOldSh = GetViewShell();
-        OSL_PRECOND( pOldSh, "SfxViewFrame::SwitchToViewShell_Impl: that's called *switch* (not for *initial-load*) for a reason" );
+        SAL_WARN_IF(!pOldSh, "sfx", "SfxViewFrame::SwitchToViewShell_Impl: that's called *switch* (not for *initial-load*) for a reason" );
         if ( pOldSh )
         {
             // ask whether it can be closed

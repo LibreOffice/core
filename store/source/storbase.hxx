@@ -21,6 +21,7 @@
 #define INCLUDED_STORE_SOURCE_STORBASE_HXX
 
 #include "sal/config.h"
+#include "sal/log.hxx"
 #include "salhelper/simplereferenceobject.hxx"
 
 #include "sal/types.h"
@@ -517,26 +518,26 @@ public:
     T * operator->()
     {
         T * pImpl = dynamic_page_cast<T>(m_xPage.get());
-        OSL_PRECOND(pImpl != nullptr, "store::PageHolder<T>::operator*(): Null pointer");
+        SAL_WARN_IF(!pImpl, "store", "store::PageHolder<T>::operator*(): Null pointer");
         return pImpl;
     }
     T const * operator->() const
     {
         T const * pImpl = dynamic_page_cast<T>(m_xPage.get());
-        OSL_PRECOND(pImpl != nullptr, "store::PageHolder<T>::operator*(): Null pointer");
+        SAL_WARN_IF(!pImpl, "store", "store::PageHolder<T>::operator*(): Null pointer");
         return pImpl;
     }
 
     T & operator*()
     {
         T * pImpl = dynamic_page_cast<T>(m_xPage.get());
-        OSL_PRECOND(pImpl != nullptr, "store::PageHolder<T>::operator*(): Null pointer");
+        SAL_WARN_IF(!pImpl, "store", "store::PageHolder<T>::operator*(): Null pointer");
         return (*pImpl);
     }
     T const & operator*() const
     {
         T const * pImpl = dynamic_page_cast<T>(m_xPage.get());
-        OSL_PRECOND(pImpl != nullptr, "store::PageHolder<T>::operator*(): Null pointer");
+        SAL_WARN_IF(!pImpl, "store", "store::PageHolder<T>::operator*(): Null pointer");
         return (*pImpl);
     }
 
@@ -548,7 +549,7 @@ public:
         pHead->guard(nAddr);
 
         T * pImpl = dynamic_page_cast<T>(pHead);
-        OSL_PRECOND(pImpl != nullptr, "store::PageHolder<T>::guard(): Null pointer");
+        SAL_WARN_IF(!pImpl, "store", "store::PageHolder<T>::guard(): Null pointer");
         pImpl->guard();
 
         return store_E_None;

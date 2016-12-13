@@ -100,7 +100,7 @@ namespace svxform
 
     bool ControlBorderManager::canColorBorder( const Reference< XVclWindowPeer >& _rxPeer )
     {
-        OSL_PRECOND( _rxPeer.is(), "ControlBorderManager::canColorBorder: invalid peer!" );
+        SAL_WARN_IF(!_rxPeer.is(), "svx", "ControlBorderManager::canColorBorder: invalid peer!" );
 
         PeerBag::const_iterator aPos = m_aColorableControls.find( _rxPeer );
         if ( aPos != m_aColorableControls.end() )
@@ -171,7 +171,7 @@ namespace svxform
 
     void ControlBorderManager::updateBorderStyle( const Reference< XControl >& _rxControl, const Reference< XVclWindowPeer >& _rxPeer, const BorderDescriptor& _rFallback )
     {
-        OSL_PRECOND( _rxControl.is() && _rxPeer.is(), "ControlBorderManager::updateBorderStyle: invalid parameters!" );
+        SAL_WARN_IF(!_rxControl.is() || !_rxPeer.is(), "svx", "ControlBorderManager::updateBorderStyle: invalid parameters!" );
 
         ControlStatus nStatus = getControlStatus( _rxControl );
         BorderDescriptor aBorder;
@@ -251,7 +251,7 @@ namespace svxform
             // nothing to do
             return;
 
-        OSL_PRECOND( _rControlData.xControl.is(), "ControlBorderManager::controlStatusLost: invalid control data - this will crash!" );
+        SAL_WARN_IF(!_rControlData.xControl.is(), "svx", "ControlBorderManager::controlStatusLost: invalid control data - this will crash!" );
         try
         {
             Reference< XVclWindowPeer > xPeer( _rControlData.xControl->getPeer(), UNO_QUERY );

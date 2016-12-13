@@ -53,7 +53,7 @@ OdfEmitter::OdfEmitter( const uno::Reference<io::XOutputStream>& xOutput ) :
     m_aLineFeed(1),
     m_aBuf()
 {
-    OSL_PRECOND(m_xOutput.is(), "OdfEmitter(): invalid output stream");
+    SAL_WARN_IF(!m_xOutput.is(), "sdext", "OdfEmitter(): invalid output stream");
     m_aLineFeed[0] = '\n';
 
     OUStringBuffer aElement;
@@ -63,7 +63,7 @@ OdfEmitter::OdfEmitter( const uno::Reference<io::XOutputStream>& xOutput ) :
 
 void OdfEmitter::beginTag( const char* pTag, const PropertyMap& rProperties )
 {
-    OSL_PRECOND(pTag,"Invalid tag string");
+    SAL_WARN_IF(!pTag, "sdext", "Invalid tag string");
 
     OUStringBuffer aElement;
     aElement.append("<");

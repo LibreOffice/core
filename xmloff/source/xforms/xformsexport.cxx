@@ -756,7 +756,7 @@ void getXFormsSettings( const Reference< XNameAccess >& _rXForms, Sequence< Prop
 {
     _out_rSettings = Sequence< PropertyValue >();
 
-    OSL_PRECOND( _rXForms.is(), "getXFormsSettings: invalid XForms container!" );
+    SAL_WARN_IF(!_rXForms.is(), "xmloff", "getXFormsSettings: invalid XForms container!" );
     if ( !_rXForms.is() )
         return;
 

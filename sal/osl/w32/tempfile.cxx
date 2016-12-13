@@ -80,7 +80,7 @@ static oslFileError osl_setup_createTempFile_impl_(
 {
     oslFileError osl_error;
 
-    OSL_PRECOND(((nullptr != pHandle) || (nullptr != ppustrTempFileURL)), "Invalid parameter!");
+    SAL_WARN_IF((nullptr == pHandle) && (nullptr == ppustrTempFileURL), "sal", "Invalid parameter!");
 
     if ((nullptr == pHandle) && (nullptr == ppustrTempFileURL))
     {

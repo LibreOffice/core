@@ -1051,7 +1051,7 @@ void SAL_CALL SfxBaseModel::connectController( const Reference< frame::XControll
     throw(RuntimeException, std::exception)
 {
     SfxModelGuard aGuard( *this );
-    OSL_PRECOND( xController.is(), "SfxBaseModel::connectController: invalid controller!" );
+    SAL_WARN_IF(!xController.is(), "sfx", "SfxBaseModel::connectController: invalid controller!" );
     if ( !xController.is() )
         return;
 
@@ -4123,8 +4123,8 @@ namespace sfx { namespace intern {
 
         void takeFrameOwnership( SfxFrame* i_pFrame )
         {
-            OSL_PRECOND( !m_aWeakFrame, "ViewCreationGuard::takeFrameOwnership: already have a frame!" );
-            OSL_PRECOND( i_pFrame != nullptr, "ViewCreationGuard::takeFrameOwnership: invalid frame!" );
+            SAL_WARN_IF(m_aWeakFrame, "sfx", "ViewCreationGuard::takeFrameOwnership: already have a frame!" );
+            SAL_WARN_IF(!i_pFrame, "sfx", "ViewCreationGuard::takeFrameOwnership: invalid frame!" );
             m_aWeakFrame = i_pFrame;
         }
 

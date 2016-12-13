@@ -104,7 +104,7 @@ void ScCsvGrid::dispose()
 void
 ScCsvGrid::Init()
 {
-    OSL_PRECOND(!mpColorConfig, "the object has already been initialized");
+    SAL_WARN_IF(mpColorConfig, "sc", "the object has already been initialized");
     mpColorConfig = &SC_MOD()->GetColorConfig();
     InitColors();
     mpColorConfig->AddListener(this);
@@ -207,7 +207,7 @@ sal_Int32 ScCsvGrid::GetNoScrollCol( sal_Int32 nPos ) const
 
 void ScCsvGrid::InitColors()
 {
-    OSL_PRECOND(mpColorConfig, "the object hasn't been initialized properly");
+    SAL_WARN_IF(!mpColorConfig, "sc", "the object hasn't been initialized properly");
     if ( !mpColorConfig )
         return;
     maBackColor.SetColor( static_cast< sal_uInt32 >( mpColorConfig->GetColorValue( ::svtools::DOCCOLOR ).nColor ) );

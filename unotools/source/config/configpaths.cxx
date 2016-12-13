@@ -233,8 +233,8 @@ OUString lcl_wrapName(const OUString& _sContent, const OUString& _sType)
     const sal_Unicode * const pBeginContent = _sContent.getStr();
     const sal_Unicode * const pEndContent   = pBeginContent + _sContent.getLength();
 
-    OSL_PRECOND(!_sType.isEmpty(), "Unexpected config type name: empty");
-    OSL_PRECOND(pBeginContent <= pEndContent, "Invalid config name: empty");
+    SAL_WARN_IF(_sType.isEmpty(), "unotools", "Unexpected config type name: empty");
+    SAL_WARN_IF(pBeginContent > pEndContent, "unotools", "Invalid config name: empty");
 
     if (pBeginContent == pEndContent)
         return _sType;

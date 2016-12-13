@@ -1069,8 +1069,8 @@ namespace xmloff
 
     void OControlImport::doRegisterCellValueBinding( const OUString& _rBoundCellAddress )
     {
-        OSL_PRECOND( m_xElement.is(), "OControlImport::doRegisterCellValueBinding: invalid element!" );
-        OSL_PRECOND( !_rBoundCellAddress.isEmpty(),
+        SAL_WARN_IF(!m_xElement.is(), "xmloff", "OControlImport::doRegisterCellValueBinding: invalid element!" );
+        SAL_WARN_IF(_rBoundCellAddress.isEmpty(), "xmloff",
             "OControlImport::doRegisterCellValueBinding: invalid address!" );
 
         m_rContext.registerCellValueBinding( m_xElement, _rBoundCellAddress );
@@ -1078,24 +1078,24 @@ namespace xmloff
 
     void OControlImport::doRegisterXFormsValueBinding( const OUString& _rBindingID )
     {
-        OSL_PRECOND( m_xElement.is(), "need element" );
-        OSL_PRECOND( !_rBindingID.isEmpty(), "binding ID is not valid" );
+        SAL_WARN_IF(!m_xElement.is(), "xmloff", "need element" );
+        SAL_WARN_IF(_rBindingID.isEmpty(), "xmloff", "binding ID is not valid" );
 
         m_rContext.registerXFormsValueBinding( m_xElement, _rBindingID );
     }
 
     void OControlImport::doRegisterXFormsListBinding( const OUString& _rBindingID )
     {
-        OSL_PRECOND( m_xElement.is(), "need element" );
-        OSL_PRECOND( !_rBindingID.isEmpty(), "binding ID is not valid" );
+        SAL_WARN_IF(! m_xElement.is(), "xmloff",  "need element" );
+        SAL_WARN_IF(_rBindingID.isEmpty(), "xmloff", "binding ID is not valid" );
 
         m_rContext.registerXFormsListBinding( m_xElement, _rBindingID );
     }
 
     void OControlImport::doRegisterXFormsSubmission( const OUString& _rSubmissionID )
     {
-        OSL_PRECOND( m_xElement.is(), "need element" );
-        OSL_PRECOND( !_rSubmissionID.isEmpty(), "binding ID is not valid" );
+        SAL_WARN_IF(!m_xElement.is(), "xmloff", "need element" );
+        SAL_WARN_IF(_rSubmissionID.isEmpty(), "xmloff", "binding ID is not valid" );
 
         m_rContext.registerXFormsSubmission( m_xElement, _rSubmissionID );
     }

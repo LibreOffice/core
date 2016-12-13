@@ -235,7 +235,7 @@ private:
 
     void DefaultGridDataModel::impl_insertRow( sal_Int32 const i_position, Any const & i_heading, Sequence< Any > const & i_rowData, sal_Int32 const i_assumedColCount )
     {
-        OSL_PRECOND( ( i_assumedColCount <= 0 ) || ( i_assumedColCount >= i_rowData.getLength() ),
+        SAL_WARN_IF( i_assumedColCount < 0 || i_assumedColCount > i_rowData.getLength(), "toolkit",
             "DefaultGridDataModel::impl_insertRow: invalid column count!" );
 
         // insert heading

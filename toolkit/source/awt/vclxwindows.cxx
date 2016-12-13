@@ -211,7 +211,7 @@ void VCLXGraphicControl::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
 
 void VCLXGraphicControl::ImplSetNewImage()
 {
-    OSL_PRECOND( GetWindow(), "VCLXGraphicControl::ImplSetNewImage: window is required to be not-NULL!" );
+    SAL_WARN_IF(!GetWindow(), "toolkit", "VCLXGraphicControl::ImplSetNewImage: window is required to be not-NULL!" );
     VclPtr< Button > pButton = GetAsDynamic< Button >();
     pButton->SetModeImage( GetImage() );
 }
@@ -651,7 +651,7 @@ VCLXImageControl::~VCLXImageControl()
 
 void VCLXImageControl::ImplSetNewImage()
 {
-    OSL_PRECOND( GetWindow(), "VCLXImageControl::ImplSetNewImage: window is required to be not-NULL!" );
+    SAL_WARN_IF(!GetWindow(), "toolkit", "VCLXImageControl::ImplSetNewImage: window is required to be not-NULL!" );
     VclPtr<ImageControl> pControl = GetAs< ImageControl >();
     pControl->SetImage( GetImage() );
 }

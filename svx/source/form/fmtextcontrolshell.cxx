@@ -1077,11 +1077,11 @@ namespace svx
 
     void FmTextControlShell::startControllerListening( const Reference< runtime::XFormController >& _rxController )
     {
-        OSL_PRECOND( _rxController.is(), "FmTextControlShell::startControllerListening: invalid controller!" );
+        SAL_WARN_IF(!_rxController.is(), "svx", "FmTextControlShell::startControllerListening: invalid controller!" );
         if ( !_rxController.is() )
             return;
 
-        OSL_PRECOND( !isControllerListening(), "FmTextControlShell::startControllerListening: already listening!" );
+        SAL_WARN_IF(isControllerListening(), "svx", "FmTextControlShell::startControllerListening: already listening!" );
         if ( isControllerListening() )
             stopControllerListening( );
         DBG_ASSERT( !isControllerListening(), "FmTextControlShell::startControllerListening: inconsistence!" );
@@ -1110,7 +1110,7 @@ namespace svx
 
     void FmTextControlShell::stopControllerListening( )
     {
-        OSL_PRECOND( isControllerListening(), "FmTextControlShell::stopControllerListening: inconsistence!" );
+        SAL_WARN_IF(!isControllerListening(), "svx", "FmTextControlShell::stopControllerListening: inconsistence!" );
 
         // dispose all listeners associated with the controls of the active controller
         FocusListenerAdapters::const_iterator aEnd = m_aControlObservers.end();
@@ -1273,7 +1273,7 @@ namespace svx
 
     FmTextControlFeature* FmTextControlShell::implGetFeatureDispatcher( const Reference< XDispatchProvider >& _rxProvider, SfxApplication* _pApplication, SfxSlotId _nSlot )
     {
-        OSL_PRECOND( _rxProvider.is() && _pApplication, "FmTextControlShell::implGetFeatureDispatcher: invalid arg(s)!" );
+        SAL_WARN_IF(!_rxProvider.is() || !_pApplication, "svx", "FmTextControlShell::implGetFeatureDispatcher: invalid arg(s)!" );
         URL aFeatureURL;
         aFeatureURL.Complete = lcl_getUnoSlotName( *_pApplication, _nSlot );
         try

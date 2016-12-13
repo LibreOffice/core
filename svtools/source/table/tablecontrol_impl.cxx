@@ -314,7 +314,7 @@ namespace svt { namespace table
 
     void TableControl_Impl::rowsInserted( RowPos i_first, RowPos i_last )
     {
-        OSL_PRECOND( i_last >= i_first, "TableControl_Impl::rowsInserted: invalid row indexes!" );
+        SAL_WARN_IF( i_last < i_first, "svtools", "TableControl_Impl::rowsInserted: invalid row indexes!" );
 
         TableSize const insertedRows = i_last - i_first + 1;
 

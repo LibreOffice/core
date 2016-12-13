@@ -364,7 +364,7 @@ namespace sw { namespace mark
         }
 #endif
         // see for example _SaveContentIdx, Shells
-        OSL_PRECOND(m_vAllMarks.size() < USHRT_MAX,
+        SAL_WARN_IF(m_vAllMarks.size() >= USHRT_MAX, "sw",
             "MarkManager::makeMark(..)"
             " - more than USHRT_MAX marks are not supported correctly");
         // There should only be one CrossRefBookmark per Textnode per Type

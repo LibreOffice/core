@@ -228,7 +228,7 @@ void FmXUndoEnvironment::dispose()
 
     UnLock();
 
-    OSL_PRECOND( rModel.GetObjectShell(), "FmXUndoEnvironment::dispose: no object shell anymore!" );
+    SAL_WARN_IF(!rModel.GetObjectShell(), "svx", "FmXUndoEnvironment::dispose: no object shell anymore!" );
     if ( rModel.GetObjectShell() )
         EndListening( *rModel.GetObjectShell() );
 
@@ -243,7 +243,7 @@ void FmXUndoEnvironment::dispose()
 
 void FmXUndoEnvironment::ModeChanged()
 {
-    OSL_PRECOND( rModel.GetObjectShell(), "FmXUndoEnvironment::ModeChanged: no object shell anymore!" );
+    SAL_WARN_IF(!rModel.GetObjectShell(), "svx", "FmXUndoEnvironment::ModeChanged: no object shell anymore!" );
     if ( !rModel.GetObjectShell() )
         return;
 
@@ -824,7 +824,7 @@ void FmXUndoEnvironment::TogglePropertyListening(const Reference< XInterface > &
 
 void FmXUndoEnvironment::switchListening( const Reference< XIndexContainer >& _rxContainer, bool _bStartListening )
 {
-    OSL_PRECOND( _rxContainer.is(), "FmXUndoEnvironment::switchListening: invalid container!" );
+    SAL_WARN_IF(!_rxContainer.is(), "svx", "FmXUndoEnvironment::switchListening: invalid container!" );
     if ( !_rxContainer.is() )
         return;
 
@@ -881,7 +881,7 @@ void FmXUndoEnvironment::switchListening( const Reference< XIndexContainer >& _r
 
 void FmXUndoEnvironment::switchListening( const Reference< XInterface >& _rxObject, bool _bStartListening )
 {
-    OSL_PRECOND( _rxObject.is(), "FmXUndoEnvironment::switchListening: how should I listen at a NULL object?" );
+    SAL_WARN_IF(!_rxObject.is(), "svx", "FmXUndoEnvironment::switchListening: how should I listen at a NULL object?" );
 
     try
     {

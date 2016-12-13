@@ -1767,7 +1767,7 @@ sal_Int16 SfxObjectShell_Impl::getCurrentMacroExecMode() const
     sal_Int16 nImposedExecMode( MacroExecMode::NEVER_EXECUTE );
 
     const SfxMedium* pMedium( rDocShell.GetMedium() );
-    OSL_PRECOND( pMedium, "SfxObjectShell_Impl::getCurrentMacroExecMode: no medium!" );
+    SAL_WARN_IF(!pMedium, "sfx", "SfxObjectShell_Impl::getCurrentMacroExecMode: no medium!" );
     if ( pMedium )
     {
         const SfxUInt16Item* pMacroModeItem = SfxItemSet::GetItem<SfxUInt16Item>(pMedium->GetItemSet(), SID_MACROEXECMODE, false);
@@ -1780,7 +1780,7 @@ sal_Int16 SfxObjectShell_Impl::getCurrentMacroExecMode() const
 void SfxObjectShell_Impl::setCurrentMacroExecMode( sal_uInt16 nMacroMode )
 {
     const SfxMedium* pMedium( rDocShell.GetMedium() );
-    OSL_PRECOND( pMedium, "SfxObjectShell_Impl::getCurrentMacroExecMode: no medium!" );
+    SAL_WARN_IF(!pMedium, "sfx", "SfxObjectShell_Impl::getCurrentMacroExecMode: no medium!" );
     if ( pMedium )
     {
         pMedium->GetItemSet()->Put( SfxUInt16Item( SID_MACROEXECMODE, nMacroMode ) );
@@ -1792,7 +1792,7 @@ OUString SfxObjectShell_Impl::getDocumentLocation() const
     OUString sLocation;
 
     const SfxMedium* pMedium( rDocShell.GetMedium() );
-    OSL_PRECOND( pMedium, "SfxObjectShell_Impl::getDocumentLocation: no medium!" );
+    SAL_WARN_IF(!pMedium, "sfx", "SfxObjectShell_Impl::getDocumentLocation: no medium!" );
     if ( pMedium )
     {
         sLocation = pMedium->GetName();

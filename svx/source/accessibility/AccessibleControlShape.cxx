@@ -101,7 +101,7 @@ namespace
     /// determines whether the given control is in alive mode
     inline  bool    isAliveMode( const Reference< XControl >& _rxControl )
     {
-        OSL_PRECOND( _rxControl.is(), "AccessibleControlShape::isAliveMode: invalid control" );
+        SAL_WARN_IF(!_rxControl.is(), "svx", "AccessibleControlShape::isAliveMode: invalid control" );
         return _rxControl.is() && !_rxControl->isDesignMode();
     }
 }
@@ -702,13 +702,11 @@ bool AccessibleControlShape::ensureControlModelAccess()
 
 void AccessibleControlShape::startStateMultiplexing()
 {
-    OSL_PRECOND( !m_bMultiplexingStates, "AccessibleControlShape::startStateMultiplexing: already multiplexing!" );
-
-#if OSL_DEBUG_LEVEL > 0
+    SAL_WARN_IF(m_bMultiplexingStates, "svx", "AccessibleControlShape::startStateMultiplexing: already multiplexing!" );
     // we should have a control, and it should be in alive mode
-    OSL_PRECOND( isAliveMode( m_xUnoControl ),
+    SAL_WARN_IF(!isAliveMode( m_xUnoControl ), "svx",
         "AccessibleControlShape::startStateMultiplexing: should be done in alive mode only!" );
-#endif
+
     // we should have the native context of the control
     Reference< XAccessibleEventBroadcaster > xBroadcaster( m_aControlContext.get(), UNO_QUERY );
     OSL_ENSURE( xBroadcaster.is(), "AccessibleControlShape::startStateMultiplexing: no AccessibleEventBroadcaster on the native context!" );
@@ -722,7 +720,7 @@ void AccessibleControlShape::startStateMultiplexing()
 
 void AccessibleControlShape::stopStateMultiplexing()
 {
-    OSL_PRECOND( m_bMultiplexingStates, "AccessibleControlShape::stopStateMultiplexing: not multiplexing!" );
+    SAL_WARN_IF(!m_bMultiplexingStates, "svx", "AccessibleControlShape::stopStateMultiplexing: not multiplexing!" );
 
     // we should have the native context of the control
     Reference< XAccessibleEventBroadcaster > xBroadcaster( m_aControlContext.get(), UNO_QUERY );
@@ -763,7 +761,7 @@ void AccessibleControlShape::adjustAccessibleRole( )
 
     // we're in alive mode -> determine the role of the inner context
     Reference< XAccessibleContext > xNativeContext( m_aControlContext );
-    OSL_PRECOND( xNativeContext.is(), "AccessibleControlShape::adjustAccessibleRole: no inner context!" );
+    SAL_WARN_IF(!xNativeContext.is(), "svx", "AccessibleControlShape::adjustAccessibleRole: no inner context!" );
     if ( xNativeContext.is() )
         SetAccessibleRole( xNativeContext->getAccessibleRole( ) );
 }
@@ -787,7 +785,7 @@ void AccessibleControlShape::initializeComposedState()
     // get our own state set implementation
     ::utl::AccessibleStateSetHelper* pComposedStates =
         static_cast< ::utl::AccessibleStateSetHelper* >( mxStateSet.get() );
-    OSL_PRECOND( pComposedStates,
+    SAL_WARN_IF(!pComposedStates, "svx",
         "AccessibleControlShape::initializeComposedState: no composed set!" );
 
     // we need to reset some states of the composed set, because they either do not apply
@@ -808,7 +806,7 @@ void AccessibleControlShape::initializeComposedState()
 
     // get my inner context
     Reference< XAccessibleContext > xInnerContext( m_aControlContext );
-    OSL_PRECOND( xInnerContext.is(), "AccessibleControlShape::initializeComposedState: no inner context!" );
+    SAL_WARN_IF(!xInnerContext.is(), "svx", "AccessibleControlShape::initializeComposedState: no inner context!" );
     if ( xInnerContext.is() )
     {
         // get all states of the inner context

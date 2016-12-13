@@ -690,7 +690,7 @@ namespace
 
 oslFileError osl_searchFileURL(rtl_uString* ustrFilePath, rtl_uString* ustrSearchPath, rtl_uString** pustrURL)
 {
-    OSL_PRECOND(ustrFilePath && pustrURL, "osl_searchFileURL: invalid parameter");
+    SAL_WARN_IF(!ustrFilePath || !pustrURL, "sal", "osl_searchFileURL: invalid parameter");
 
     FileBase::RC  rc;
     rtl::OUString file_path;

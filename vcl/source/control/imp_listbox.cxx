@@ -1631,7 +1631,7 @@ namespace
 {
     vcl::StringEntryIdentifier lcl_getEntry( const ImplEntryList& _rList, sal_Int32 _nPos, OUString& _out_entryText )
     {
-        OSL_PRECOND( ( _nPos != LISTBOX_ENTRY_NOTFOUND ), "lcl_getEntry: invalid position!" );
+        SAL_WARN_IF( _nPos == LISTBOX_ENTRY_NOTFOUND, "vcl", "lcl_getEntry: invalid position!" );
         sal_Int32 nEntryCount( _rList.GetEntryCount() );
         if ( _nPos >= nEntryCount )
             _nPos = 0;

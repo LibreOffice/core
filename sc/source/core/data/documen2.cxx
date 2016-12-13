@@ -276,10 +276,10 @@ const sc::DocumentLinkManager& ScDocument::GetDocLinkManager() const
 
 void ScDocument::SetStorageGrammar( formula::FormulaGrammar::Grammar eGram )
 {
-    OSL_PRECOND(
-        eGram == formula::FormulaGrammar::GRAM_ODFF ||
-            eGram == formula::FormulaGrammar::GRAM_PODF,
-            "ScDocument::SetStorageGrammar: wrong storage grammar");
+    SAL_WARN_IF(
+        eGram != formula::FormulaGrammar::GRAM_ODFF &&
+        eGram != formula::FormulaGrammar::GRAM_PODF,
+        "sc", "ScDocument::SetStorageGrammar: wrong storage grammar");
 
     eStorageGrammar = eGram;
 }
@@ -360,7 +360,7 @@ void ScDocument::StartTrackTimer()
 
 ScDocument::~ScDocument()
 {
-    OSL_PRECOND( !bInLinkUpdate, "bInLinkUpdate in dtor" );
+    SAL_WARN_IF(bInLinkUpdate, "sc", "bInLinkUpdate in dtor" );
 
     bInDtorClear = true;
 

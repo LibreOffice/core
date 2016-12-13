@@ -183,7 +183,7 @@ bool implNormalizeURL(OUString & _sURL, osl::DirectoryItem& aDirItem)
 {
     using namespace osl;
 
-    OSL_PRECOND(aDirItem.is(), "Opened DirItem required");
+    SAL_WARN_IF(!aDirItem.is(), "unotools", "Opened DirItem required");
 
     static const sal_uInt32 cosl_FileStatus_Mask = osl_FileStatus_Mask_FileURL;
 
@@ -301,15 +301,15 @@ PathStatus getDerivedPath(
           )
 {
     OUString sDerivedURL;
-    OSL_PRECOND(!_rData.getFrom(_sBootstrapParameter,sDerivedURL),"Setting for derived path is already defined");
-    OSL_PRECOND(!_sRelativeURL.isEmpty() && _sRelativeURL[0] != cURLSeparator,"Invalid Relative URL");
+    SAL_WARN_IF(_rData.getFrom(_sBootstrapParameter,sDerivedURL), "unotools", "Setting for derived path is already defined");
+    SAL_WARN_IF(_sRelativeURL.isEmpty() || _sRelativeURL[0] == cURLSeparator, "unotools", "Invalid Relative URL");
 
     PathStatus aStatus = _aBaseStatus;
 
     // do we have a base path ?
     if (!_aBaseURL.isEmpty())
     {
-        OSL_PRECOND(!_aBaseURL.endsWith(OUStringLiteral1(cURLSeparator)), "Unexpected: base URL ends in slash");
+        SAL_WARN_IF(_aBaseURL.endsWith(OUStringLiteral1(cURLSeparator)), "unotools", "Unexpected: base URL ends in slash");
 
         sDerivedURL = OUStringBuffer(_aBaseURL).append(cURLSeparator).append(_sRelativeURL).makeStringAndClear();
 

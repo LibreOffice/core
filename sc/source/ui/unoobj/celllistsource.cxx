@@ -49,7 +49,7 @@ namespace calc
         ,m_aListEntryListeners( m_aMutex )
         ,m_bInitialized( false )
     {
-        OSL_PRECOND( m_xDocument.is(), "OCellListSource::OCellListSource: invalid document!" );
+        SAL_WARN_IF(!m_xDocument.is(), "sc", "OCellListSource::OCellListSource: invalid document!" );
 
         // register our property at the base class
         registerPropertyNoMember(
@@ -150,7 +150,7 @@ namespace calc
 
     CellRangeAddress OCellListSource::getRangeAddress( ) const
     {
-        OSL_PRECOND( m_xRange.is(), "OCellListSource::getRangeAddress: invalid range!" );
+        SAL_WARN_IF(!m_xRange.is(), "sc", "OCellListSource::getRangeAddress: invalid range!" );
 
         CellRangeAddress aAddress;
         Reference< XCellRangeAddressable > xRangeAddress( m_xRange, UNO_QUERY );
@@ -161,7 +161,7 @@ namespace calc
 
     OUString OCellListSource::getCellTextContent_noCheck( sal_Int32 _nRangeRelativeRow )
     {
-        OSL_PRECOND( m_xRange.is(), "OCellListSource::getRangeAddress: invalid range!" );
+        SAL_WARN_IF(!m_xRange.is(), "sc", "OCellListSource::getRangeAddress: invalid range!" );
         Reference< XTextRange > xCellText;
         if ( m_xRange.is() )
             xCellText.set(m_xRange->getCellByPosition( 0, _nRangeRelativeRow ), css::uno::UNO_QUERY);

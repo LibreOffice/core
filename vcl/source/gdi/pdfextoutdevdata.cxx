@@ -647,7 +647,7 @@ sal_Int32 PDFExtOutDevData::RegisterDest()
 }
 void PDFExtOutDevData::DescribeRegisteredDest( sal_Int32 nDestId, const Rectangle& rRect, sal_Int32 nPageNr, PDFWriter::DestAreaType eType )
 {
-    OSL_PRECOND( nDestId != -1, "PDFExtOutDevData::DescribeRegisteredDest: invalid destination Id!" );
+    SAL_WARN_IF( nDestId == -1, "vcl", "PDFExtOutDevData::DescribeRegisteredDest: invalid destination Id!" );
     PDFLinkDestination aLinkDestination;
     aLinkDestination.mRect = rRect;
     aLinkDestination.mMapMode = mrOutDev.GetMapMode();

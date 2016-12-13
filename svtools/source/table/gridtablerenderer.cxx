@@ -214,7 +214,7 @@ namespace svt { namespace table
     void GridTableRenderer::PaintHeaderArea(vcl::RenderContext& rRenderContext, const Rectangle& _rArea,
                                             bool _bIsColHeaderArea, bool _bIsRowHeaderArea, const StyleSettings& _rStyle)
     {
-        OSL_PRECOND(_bIsColHeaderArea || _bIsRowHeaderArea, "GridTableRenderer::PaintHeaderArea: invalid area flags!");
+        SAL_WARN_IF(!_bIsColHeaderArea && !_bIsRowHeaderArea, "svtools", "GridTableRenderer::PaintHeaderArea: invalid area flags!");
 
         rRenderContext.Push(PushFlags::FILLCOLOR | PushFlags::LINECOLOR);
 

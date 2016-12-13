@@ -183,7 +183,7 @@ namespace svxform
         Sequence< PropertyValue > lcl_getDataSourceIndirectProperties( const Reference< XPropertySet >& _rxControlModel,
             const Reference<XComponentContext>& _rContext )
         {
-            OSL_PRECOND( _rxControlModel.is(), "lcl_getDataSourceIndirectProperties: invalid model!" );
+            SAL_WARN_IF(!_rxControlModel.is(), "svx", "lcl_getDataSourceIndirectProperties: invalid model!" );
 
             Sequence< PropertyValue > aInfo;
             try
@@ -509,7 +509,7 @@ namespace svxform
 
     void FormControlFactory::initializeTextFieldLineEnds( const Reference< XPropertySet >& _rxModel )
     {
-        OSL_PRECOND( _rxModel.is(), "initializeTextFieldLineEnds: invalid model!" );
+        SAL_WARN_IF(!_rxModel.is(), "svx", "initializeTextFieldLineEnds: invalid model!" );
         if ( !_rxModel.is() )
             return;
 
@@ -547,7 +547,7 @@ namespace svxform
     void FormControlFactory::initializeFieldDependentProperties( const Reference< XPropertySet >& _rxDatabaseField,
         const Reference< XPropertySet >& _rxControlModel, const Reference< XNumberFormats >& _rxNumberFormats )
     {
-        OSL_PRECOND( _rxDatabaseField.is() && _rxControlModel.is(),
+        SAL_WARN_IF(!_rxDatabaseField.is() || !_rxControlModel.is(), "svx",
             "FormControlFactory::initializeFieldDependentProperties: illegal params!" );
         if ( !_rxDatabaseField.is() || !_rxControlModel.is() )
             return;

@@ -715,7 +715,7 @@ namespace svxform
 
     void FormScriptListener::impl_doFireScriptEvent_nothrow( ::osl::ClearableMutexGuard& _rGuard, const ScriptEvent& _rEvent, Any* _pSynchronousResult )
     {
-        OSL_PRECOND( m_pScriptExecutor, "FormScriptListener::impl_doFireScriptEvent_nothrow: this will crash!" );
+        SAL_WARN_IF(!m_pScriptExecutor, "svx", "FormScriptListener::impl_doFireScriptEvent_nothrow: this will crash!" );
 
         _rGuard.clear();
         m_pScriptExecutor->doFireScriptEvent( _rEvent, _pSynchronousResult );
@@ -878,7 +878,7 @@ namespace svxform
     IMPL_LINK( FormScriptListener, OnAsyncScriptEvent, void*, p, void )
     {
         ScriptEvent* _pEvent = static_cast<ScriptEvent*>(p);
-        OSL_PRECOND( _pEvent != nullptr, "FormScriptListener::OnAsyncScriptEvent: invalid event!" );
+        SAL_WARN_IF( !_pEvent, "svx", "FormScriptListener::OnAsyncScriptEvent: invalid event!" );
         if ( !_pEvent )
             return;
 

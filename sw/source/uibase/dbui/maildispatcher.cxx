@@ -119,7 +119,7 @@ void MailDispatcher::enqueueMailMessage(uno::Reference<mail::XMailMessage> const
     ::osl::MutexGuard thread_status_guard(thread_status_mutex_);
     ::osl::MutexGuard message_container_guard(message_container_mutex_);
 
-    OSL_PRECOND(!shutdown_requested_, "MailDispatcher thread is shuting down already");
+    SAL_WARN_IF(shutdown_requested_, "sw", "MailDispatcher thread is shutting down already");
 
     messages_.push_back(message);
     if (run_)
@@ -140,11 +140,11 @@ uno::Reference<mail::XMailMessage> MailDispatcher::dequeueMailMessage()
 
 void MailDispatcher::start()
 {
-    OSL_PRECOND(!isStarted(), "MailDispatcher is already started!");
+    SAL_WARN_IF(isStarted(), "sw", "MailDispatcher is already started!");
 
     ::osl::ClearableMutexGuard thread_status_guard(thread_status_mutex_);
 
-    OSL_PRECOND(!shutdown_requested_, "MailDispatcher thread is shuting down already");
+    SAL_WARN_IF(shutdown_requested_, "sw", "MailDispatcher thread is shuting down already");
 
     if (!shutdown_requested_)
     {
@@ -159,11 +159,11 @@ void MailDispatcher::start()
 
 void MailDispatcher::stop()
 {
-    OSL_PRECOND(isStarted(), "MailDispatcher not started!");
+    SAL_WARN_IF(!isStarted(), "sw", "MailDispatcher not started!");
 
     ::osl::ClearableMutexGuard thread_status_guard(thread_status_mutex_);
 
-    OSL_PRECOND(!shutdown_requested_, "MailDispatcher thread is shuting down already");
+    SAL_WARN_IF(shutdown_requested_, "sw", "MailDispatcher thread is shuting down already");
 
     if (!shutdown_requested_)
     {
@@ -180,7 +180,7 @@ void MailDispatcher::shutdown()
 {
     ::osl::MutexGuard thread_status_guard(thread_status_mutex_);
 
-    OSL_PRECOND(!shutdown_requested_, "MailDispatcher thread is shuting down already");
+    SAL_WARN_IF(shutdown_requested_, "sw", "MailDispatcher thread is shuting down already");
 
     shutdown_requested_ = true;
     wakening_call_.set();
@@ -189,7 +189,7 @@ void MailDispatcher::shutdown()
 
 void MailDispatcher::addListener(::rtl::Reference<IMailDispatcherListener> const & listener)
 {
-    OSL_PRECOND(!shutdown_requested_, "MailDispatcher thread is shuting down already");
+    SAL_WARN_IF(shutdown_requested_, "sw", "MailDispatcher thread is shuting down already");
 
     ::osl::MutexGuard guard(listener_container_mutex_);
     listeners_.push_back(listener);

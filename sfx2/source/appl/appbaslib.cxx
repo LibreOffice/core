@@ -86,7 +86,7 @@ void SfxBasicManagerHolder::reset( BasicManager* _pBasicManager )
 void SfxBasicManagerHolder::storeAllLibraries()
 {
 #if HAVE_FEATURE_SCRIPTING
-    OSL_PRECOND( isValid(), "SfxBasicManagerHolder::storeAllLibraries: not initialized!" );
+    SAL_WARN_IF(!isValid(), "sfx", "SfxBasicManagerHolder::storeAllLibraries: not initialized!" );
     try
     {
         if ( mxBasicContainer.is() )
@@ -125,7 +125,7 @@ void SfxBasicManagerHolder::storeLibrariesToStorage( const Reference< XStorage >
 #if !HAVE_FEATURE_SCRIPTING
     (void) _rxStorage;
 #else
-    OSL_PRECOND( isValid(), "SfxBasicManagerHolder::storeLibrariesToStorage: not initialized!" );
+    SAL_WARN_IF(!isValid(), "sfx", "SfxBasicManagerHolder::storeLibrariesToStorage: not initialized!" );
 
     if ( mxBasicContainer.is() )
         mxBasicContainer->storeLibrariesToStorage( _rxStorage );
@@ -136,7 +136,7 @@ void SfxBasicManagerHolder::storeLibrariesToStorage( const Reference< XStorage >
 
 XLibraryContainer * SfxBasicManagerHolder::getLibraryContainer( ContainerType _eType )
 {
-    OSL_PRECOND( isValid(), "SfxBasicManagerHolder::getLibraryContainer: not initialized!" );
+    SAL_WARN_IF(!isValid(), "sfx", "SfxBasicManagerHolder::getLibraryContainer: not initialized!" );
 
     switch ( _eType )
     {

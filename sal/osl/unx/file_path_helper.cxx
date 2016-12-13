@@ -39,7 +39,7 @@ inline const rtl::OUString FPH_PARENT_DIR_ENTRY()
 
 void SAL_CALL osl_systemPathRemoveSeparator(rtl_uString* pustrPath)
 {
-    OSL_PRECOND(nullptr != pustrPath, "osl_systemPathRemoveSeparator: Invalid parameter");
+    SAL_WARN_IF(!pustrPath, "sal", "osl_systemPathRemoveSeparator: Invalid parameter");
     if (nullptr != pustrPath)
     {
         // maybe there are more than one separator at end
@@ -59,7 +59,7 @@ void SAL_CALL osl_systemPathRemoveSeparator(rtl_uString* pustrPath)
 
 void SAL_CALL osl_systemPathEnsureSeparator(rtl_uString** ppustrPath)
 {
-    OSL_PRECOND((nullptr != ppustrPath) && (nullptr != *ppustrPath), "osl_systemPathEnsureSeparator: Invalid parameter");
+    SAL_WARN_IF((nullptr == ppustrPath) || (nullptr == *ppustrPath), "sal", "osl_systemPathEnsureSeparator: Invalid parameter");
     if ((nullptr != ppustrPath) && (nullptr != *ppustrPath))
     {
         rtl::OUString path(*ppustrPath);
@@ -80,7 +80,7 @@ void SAL_CALL osl_systemPathEnsureSeparator(rtl_uString** ppustrPath)
 
 bool SAL_CALL osl_systemPathIsRelativePath(const rtl_uString* pustrPath)
 {
-    OSL_PRECOND(nullptr != pustrPath, "osl_systemPathIsRelativePath: Invalid parameter");
+    SAL_WARN_IF(!pustrPath, "sal", "osl_systemPathIsRelativePath: Invalid parameter");
     return ((nullptr == pustrPath) || (pustrPath->length == 0) || (pustrPath->buffer[0] != FPH_CHAR_PATH_SEPARATOR));
 }
 
@@ -105,7 +105,7 @@ void SAL_CALL osl_systemPathGetFileNameOrLastDirectoryPart(
     const rtl_uString*     pustrPath,
     rtl_uString**       ppustrFileNameOrLastDirPart)
 {
-    OSL_PRECOND(pustrPath && ppustrFileNameOrLastDirPart, \
+    SAL_WARN_IF(!pustrPath || !ppustrFileNameOrLastDirPart, "sal",
                 "osl_systemPathGetFileNameOrLastDirectoryPart: Invalid parameter");
 
     rtl::OUString path(const_cast<rtl_uString*>(pustrPath));
@@ -126,7 +126,7 @@ void SAL_CALL osl_systemPathGetFileNameOrLastDirectoryPart(
 bool SAL_CALL osl_systemPathIsHiddenFileOrDirectoryEntry(
     const rtl_uString* pustrPath)
 {
-    OSL_PRECOND(nullptr != pustrPath, "osl_systemPathIsHiddenFileOrDirectoryEntry: Invalid parameter");
+    SAL_WARN_IF(!pustrPath, "sal", "osl_systemPathIsHiddenFileOrDirectoryEntry: Invalid parameter");
     if ((nullptr == pustrPath) || (pustrPath->length == 0))
         return false;
 
@@ -141,7 +141,7 @@ bool SAL_CALL osl_systemPathIsHiddenFileOrDirectoryEntry(
 bool SAL_CALL osl_systemPathIsLocalOrParentDirectoryEntry(
     const rtl_uString* pustrPath)
 {
-    OSL_PRECOND(pustrPath, "osl_systemPathIsLocalOrParentDirectoryEntry: Invalid parameter");
+    SAL_WARN_IF(!pustrPath, "sal", "osl_systemPathIsLocalOrParentDirectoryEntry: Invalid parameter");
 
     rtl::OUString dirent;
 
@@ -183,7 +183,7 @@ public:
 
     void next()
     {
-        OSL_PRECOND(!done(), "path_list_iterator: Already done!");
+        SAL_WARN_IF(done(), "sal", "path_list_iterator: Already done!");
 
         m_path_segment_begin = ++m_path_segment_end;
         advance();
@@ -226,7 +226,7 @@ bool SAL_CALL osl_searchPath(
     const rtl_uString* pustrSearchPathList,
     rtl_uString**      ppustrPathFound)
 {
-    OSL_PRECOND(pustrFilePath && pustrSearchPathList && ppustrPathFound, "osl_searchPath: Invalid parameter");
+    SAL_WARN_IF(!pustrFilePath || !pustrSearchPathList || !ppustrPathFound, "sal", "osl_searchPath: Invalid parameter");
 
     bool               bfound = false;
     rtl::OUString      fp(const_cast<rtl_uString*>(pustrFilePath));

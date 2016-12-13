@@ -1617,7 +1617,7 @@ css::uno::Any SVTXRoadmap::getProperty( const OUString& PropertyName ) throw(css
 
 void SVTXRoadmap::ImplSetNewImage()
 {
-    OSL_PRECOND( GetWindow(), "SVTXRoadmap::ImplSetNewImage: window is required to be not-NULL!" );
+    SAL_WARN_IF(!GetWindow(), "svtools", "SVTXRoadmap::ImplSetNewImage: window is required to be not-NULL!" );
     VclPtr< ::svt::ORoadmap > pButton = GetAs< ::svt::ORoadmap >();
     pButton->SetRoadmapBitmap( GetImage().GetBitmapEx() );
 }

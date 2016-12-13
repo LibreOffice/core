@@ -614,7 +614,7 @@ void UnoControlContainer::addingControl( const uno::Reference< awt::XControl >& 
 
 void UnoControlContainer::impl_createControlPeerIfNecessary( const uno::Reference< awt::XControl >& _rxControl )
 {
-    OSL_PRECOND( _rxControl.is(), "UnoControlContainer::impl_createControlPeerIfNecessary: invalid control, this will crash!" );
+    SAL_WARN_IF(! _rxControl.is(), "toolkit", "UnoControlContainer::impl_createControlPeerIfNecessary: invalid control, this will crash!" );
 
     // if the container already has a peer, then also create a peer for the control
     uno::Reference< awt::XWindowPeer > xMyPeer( getPeer() );

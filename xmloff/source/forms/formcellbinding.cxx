@@ -181,7 +181,7 @@ Reference< XListEntrySource > FormCellBindingHelper::createCellListSourceFromStr
 
 OUString FormCellBindingHelper::getStringAddressFromCellBinding( const Reference< XValueBinding >& _rxBinding ) const
 {
-    OSL_PRECOND( !_rxBinding.is() || isCellBinding( _rxBinding ), "FormCellBindingHelper::getStringAddressFromCellBinding: this is no cell binding!" );
+    SAL_WARN_IF(_rxBinding.is() && !isCellBinding( _rxBinding ), "xmloff", "FormCellBindingHelper::getStringAddressFromCellBinding: this is no cell binding!" );
 
     OUString sAddress;
     try
@@ -210,7 +210,7 @@ OUString FormCellBindingHelper::getStringAddressFromCellBinding( const Reference
 
 OUString FormCellBindingHelper::getStringAddressFromCellListSource( const Reference< XListEntrySource >& _rxSource ) const
 {
-    OSL_PRECOND( !_rxSource.is() || isCellRangeListSource( _rxSource ), "FormCellBindingHelper::getStringAddressFromCellListSource: this is no cell list source!" );
+    SAL_WARN_IF(_rxSource.is() && !isCellRangeListSource( _rxSource ), "xmloff", "FormCellBindingHelper::getStringAddressFromCellListSource: this is no cell list source!" );
 
     OUString sAddress;
     try
@@ -363,7 +363,7 @@ Reference< XListEntrySource > FormCellBindingHelper::getCurrentListSource( ) con
 void FormCellBindingHelper::setBinding( const Reference< XValueBinding >& _rxBinding )
 {
     Reference< XBindableValue > xBindable( m_xControlModel, UNO_QUERY );
-    OSL_PRECOND( xBindable.is(), "FormCellBindingHelper::setBinding: the object is not bindable!" );
+    SAL_WARN_IF(!xBindable.is(), "xmloff", "FormCellBindingHelper::setBinding: the object is not bindable!" );
     if ( xBindable.is() )
         xBindable->setValueBinding( _rxBinding );
 }
@@ -371,7 +371,7 @@ void FormCellBindingHelper::setBinding( const Reference< XValueBinding >& _rxBin
 void FormCellBindingHelper::setListSource( const Reference< XListEntrySource >& _rxSource )
 {
     Reference< XListEntrySink > xSink( m_xControlModel, UNO_QUERY );
-    OSL_PRECOND( xSink.is(), "FormCellBindingHelper::setListSource: the object is no list entry sink!" );
+    SAL_WARN_IF(!xSink.is(), "xmloff", "FormCellBindingHelper::setListSource: the object is no list entry sink!" );
     if ( xSink.is() )
         xSink->setListEntrySource( _rxSource );
 }

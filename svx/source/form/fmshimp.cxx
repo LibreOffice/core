@@ -1056,7 +1056,7 @@ bool FmXFormShell::isControlConversionSlot( sal_uInt16 nSlotId )
 
 void FmXFormShell::executeControlConversionSlot( sal_uInt16 _nSlotId )
 {
-    OSL_PRECOND( canConvertCurrentSelectionToControl( _nSlotId ), "FmXFormShell::executeControlConversionSlot: illegal call!" );
+    SAL_WARN_IF(!canConvertCurrentSelectionToControl( _nSlotId ), "svx", "FmXFormShell::executeControlConversionSlot: illegal call!" );
     InterfaceBag::const_iterator aSelectedElement = m_aCurrentSelection.begin();
     if ( aSelectedElement == m_aCurrentSelection.end() )
         return;
@@ -1399,7 +1399,7 @@ void FmXFormShell::ExecuteTabOrderDialog( const Reference< XTabControllerModel >
     if ( impl_checkDisposed() )
         return;
 
-    OSL_PRECOND( _rxForForm.is(), "FmXFormShell::ExecuteTabOrderDialog: invalid tabbing model!" );
+    SAL_WARN_IF(!_rxForForm.is(), "svx", "FmXFormShell::ExecuteTabOrderDialog: invalid tabbing model!" );
     if ( !_rxForForm.is() )
         return;
 
