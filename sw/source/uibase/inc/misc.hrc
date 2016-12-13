@@ -40,7 +40,6 @@
 #define STR_SAVE_GLOSSARY           (RC_MISC_BEGIN + 46)
 
 #define MN_REDLINE_POPUP            (RC_MISC_BEGIN + 61)
-#define STRRES_NUMTYPES             (RC_MISC_BEGIN + 63)
 #define STR_MY_AUTOTEXT             (RC_MISC_BEGIN + 64)
 
 #define STR_COMMENTS_LABEL          (RC_MISC_BEGIN + 65)

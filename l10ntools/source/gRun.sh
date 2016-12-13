@@ -462,7 +462,7 @@ ${MYCMD} --files sw/source/ui/globdoc/globdoc.src
 
 ${MYCMD} --base sw/source/ui/index --files cnttab.src idxmrk.src
 
-${MYCMD} --base sw/source/ui/misc --files glossary.src numberingtypelistbox.src swruler.src
+${MYCMD} --base sw/source/ui/misc --files glossary.src swruler.src
 
 ${MYCMD} --files sw/source/ui/shells/shells.src
 

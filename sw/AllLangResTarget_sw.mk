@@ -100,7 +100,6 @@ $(eval $(call gb_SrsTarget_add_files,sw/res,\
     sw/source/ui/index/cnttab.src \
     sw/source/ui/index/idxmrk.src \
     sw/source/ui/misc/glossary.src \
-    sw/source/ui/misc/numberingtypelistbox.src \
     sw/source/ui/misc/swruler.src \
     sw/source/ui/shells/shells.src \
     sw/source/ui/sidebar/PagePropertyPanel.src \
