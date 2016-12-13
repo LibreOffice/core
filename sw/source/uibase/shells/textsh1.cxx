@@ -940,7 +940,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                             0);
 
             // get also the list level indent values merged as LR-SPACE item, if needed.
-            rWrtSh.GetCurAttr( aCoreSet, true );
+            rWrtSh.GetPaMAttr( pPaM, aCoreSet, true );
 
             //UUUU create needed items for XPropertyList entries from the DrawModel so that
             // the Area TabPage can access them
