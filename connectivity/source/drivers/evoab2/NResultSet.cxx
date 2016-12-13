@@ -263,7 +263,7 @@ getValue( EContact* pContact, sal_Int32 nColumnNum, GType nType, GValue* pStackV
 
     if ( G_PARAM_SPEC_VALUE_TYPE (pSpec) != nType )
     {
-        SAL_WARN("connectivity.evoab", "Wrong type (0x" << std::hex << (int)G_PARAM_SPEC_VALUE_TYPE(pSpec) << ") (0x"
+        SAL_WARN("connectivity.evoab2", "Wrong type (0x" << std::hex << (int)G_PARAM_SPEC_VALUE_TYPE(pSpec) << ") (0x"
                   << std::hex << (int) nType << ") " <<  (pSpec->name ? pSpec->name : "<noname>"));
         return false;
     }
@@ -288,7 +288,7 @@ getValue( EContact* pContact, sal_Int32 nColumnNum, GType nType, GValue* pStackV
                                pStackValue );
         if ( G_VALUE_TYPE( pStackValue ) != nType )
         {
-            SAL_WARN("connectivity.evoab", "Fetched type mismatch" );
+            SAL_WARN("connectivity.evoab2", "Fetched type mismatch" );
             g_value_unset( pStackValue );
             return false;
         }
