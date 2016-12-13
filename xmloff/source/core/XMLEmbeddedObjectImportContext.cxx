@@ -47,26 +47,22 @@ struct XMLServiceMapEntry_Impl
 {
     enum XMLTokenEnum eClass;
     const sal_Char *sFilterService;
-    sal_Int32      nFilterServiceLen;
 };
-
-}
-
-#define SERVICE_MAP_ENTRY( cls, app ) \
-    { XML_##cls, \
-      XML_IMPORT_FILTER_##app, sizeof(XML_IMPORT_FILTER_##app)-1}
 
 const XMLServiceMapEntry_Impl aServiceMap[] =
 {
-    SERVICE_MAP_ENTRY( TEXT, WRITER ),
-    SERVICE_MAP_ENTRY( ONLINE_TEXT, WRITER ),
-    SERVICE_MAP_ENTRY( SPREADSHEET, CALC ),
-    SERVICE_MAP_ENTRY( DRAWING, DRAW ),
-    SERVICE_MAP_ENTRY( GRAPHICS, DRAW ),
-    SERVICE_MAP_ENTRY( PRESENTATION, IMPRESS ),
-    SERVICE_MAP_ENTRY( CHART, CHART ),
-    { XML_TOKEN_INVALID, nullptr, 0 }
+    { XML_TEXT,          XML_IMPORT_FILTER_WRITER },
+    { XML_ONLINE_TEXT,   XML_IMPORT_FILTER_WRITER },
+    { XML_SPREADSHEET,   XML_IMPORT_FILTER_CALC },
+    { XML_DRAWING,       XML_IMPORT_FILTER_DRAW },
+    { XML_GRAPHICS,      XML_IMPORT_FILTER_DRAW },
+    { XML_PRESENTATION,  XML_IMPORT_FILTER_IMPRESS },
+    { XML_CHART,         XML_IMPORT_FILTER_CHART },
+    { XML_TOKEN_INVALID, nullptr }
+
 };
+
+}
 
 class XMLEmbeddedObjectImportContext_Impl : public SvXMLImportContext
 {
@@ -219,9 +215,7 @@ XMLEmbeddedObjectImportContext::XMLEmbeddedObjectImportContext(
             {
                 if( IsXMLToken( sClass, pEntry->eClass ) )
                 {
-                    sFilterService = OUString( pEntry->sFilterService,
-                                               pEntry->nFilterServiceLen,
-                                               RTL_TEXTENCODING_ASCII_US );
+                    sFilterService = OUString::createFromAscii( pEntry->sFilterService );
 
                     switch( pEntry->eClass )
                     {
