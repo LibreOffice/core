@@ -14,7 +14,7 @@
 #include <tools/urlobj.hxx>
 #include <vcl/layout.hxx>
 
-#include "../doc/doc.hrc"
+#include <doc.hrc>
 
 #include <vcl/builderfactory.hxx>
 
