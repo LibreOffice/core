@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a71b18c_ba7e77ac",
+        "filename": "sfx2/source/appl/sfxhelp.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 627,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-12-13T12:27:50Z",
+      "side": 1,
+      "message": "No \u0027else\u0027 here. You want to execute this code also when \u0027impl_showOnlineHelp\u0027 has failed",
+      "revId": "2ff9a851a2ed40dec9b25bb812f4656e32b896a0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
