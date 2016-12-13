@@ -14,7 +14,7 @@
 #include <vcl/builderfactory.hxx>
 #include <sfx2/app.hxx>
 
-#include "../doc/doc.hrc"
+#include <doc.hrc>
 
 #define MNI_OPEN               1
 #define MNI_EDIT               2

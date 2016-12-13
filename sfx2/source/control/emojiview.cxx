@@ -25,7 +25,7 @@
 #include <fstream>
 #include <streambuf>
 
-#include "../doc/doc.hrc"
+#include <doc.hrc>
 
 #include <vcl/builderfactory.hxx>
 using namespace ::com::sun::star;

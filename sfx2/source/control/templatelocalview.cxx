@@ -34,7 +34,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
-#include "../doc/doc.hrc"
+#include <doc.hrc>
 #include "templateview.hrc"
 
 #define MNI_OPEN               1
