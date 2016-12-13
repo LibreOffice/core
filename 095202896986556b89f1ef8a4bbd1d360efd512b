@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "3a71b18c_3ae26704",
+        "filename": "writerfilter/source/dmapper/PropertyMap.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 711,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-12-13T07:41:54Z",
+      "side": 1,
+      "message": "Nitpick: please use SAL_WARN() in new code.",
+      "revId": "095202896986556b89f1ef8a4bbd1d360efd512b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a71b18c_09bf2fd1",
         "filename": "writerfilter/source/dmapper/PropertyMap.cxx",
         "patchSetId": 1
@@ -13,6 +30,24 @@
       "writtenOn": "2016-12-10T10:58:49Z",
       "side": 1,
       "message": "Just asking for a sanity check here. I don\u0027t really know any of the rules or understand what is going on with these references, or const\u0026, so unsure if I\u0027m doing anything wrong:\ncss::uno::Reference\u003c css::beans::XPropertySet \u003e m_xColumnContainer  \u003d  uno::Reference\u003c beans::XPropertySet \u003e const\u0026 xColumnContainer",
+      "revId": "095202896986556b89f1ef8a4bbd1d360efd512b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a71b18c_dad25334",
+        "filename": "writerfilter/source/dmapper/PropertyMap.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 773,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-12-13T07:41:54Z",
+      "side": 1,
+      "message": "Looks good; uno::Reference\u003c\u003e is similar to any other smart pointer that does reference counting automatically for you. The only special part of it is that it can do a safe cast between random UNO interfaces as well, using the xFoo(xBar, uno::UNO_QUERY) ctor and the xFoo.set(xBar, uno::UNO_QUERY) member function, where xFoo and xBar are both uno::Reference\u003cT\u003e, but T can be different. In case the cast (queryInterface() to be precise) succeeds, you get a non-empty reference, otherwise you get an empty one. Hope that helps. :-)",
+      "parentUuid": "3a71b18c_09bf2fd1",
       "revId": "095202896986556b89f1ef8a4bbd1d360efd512b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
