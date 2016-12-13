@@ -481,24 +481,14 @@ bool SwUndoFormatAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
         }
     }
 
-    SwDrawContact *pCont = nullptr;
-    if ( RES_DRAWFRMFMT == pFrameFormat->Which() ) {
-        pCont = static_cast<SwDrawContact*>(pFrameFormat->FindContactObj());
+    if ( RES_DRAWFRMFMT == pFrameFormat->Which() )
+    {
         // The Draw model also prepared an Undo object for its right positioning
         // which unfortunately is relative. Therefore block here a position
         // change of the Contact object by setting the anchor.
-        SdrObject* pObj = pCont->GetMaster();
-
-        if( pCont->GetAnchorFrame() && !pObj->IsInserted() ) {
-            OSL_ENSURE( pDoc->getIDocumentDrawModelAccess().GetDrawModel(),
-                        "RestoreFlyAnchor without DrawModel" );
-            pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage( 0 )->InsertObject( pObj );
-        }
-        pObj->SetRelativePos( aDrawSavePt );
-
+        pFrameFormat->CallSwClientNotify(sw::RestoreFlyAnchorHint(aDrawSavePt));
         // cache the old value again
-        m_pOldSet->Put(
-            SwFormatFrameSize( ATT_VAR_SIZE, aDrawOldPt.X(), aDrawOldPt.Y() ) );
+        m_pOldSet->Put(SwFormatFrameSize(ATT_VAR_SIZE, aDrawOldPt.X(), aDrawOldPt.Y()));
     }
 
     if (FLY_AS_CHAR == aNewAnchor.GetAnchorId()) {
@@ -513,8 +503,7 @@ bool SwUndoFormatAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
         pFrameFormat->MakeFrames();
     else
     {
-        SdrObject* pSdrObj = pFrameFormat->FindSdrObject();
-        pCont->GetAnchoredObj(pSdrObj)->MakeObjPos();
+        pFrameFormat->CallSwClientNotify(sw::DrawFrameFormatHint(sw::DrawFrameFormatHintId::POST_RESTORE_FLY_ANCHOR));
     }
 
     rContext.SetSelections(pFrameFormat, nullptr);

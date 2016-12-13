@@ -1512,6 +1512,9 @@ void SwDrawContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
             case sw::DrawFrameFormatHintId::MAKE_FRAMES:
                  ConnectToLayout();
                  break;
+            case sw::DrawFrameFormatHintId::POST_RESTORE_FLY_ANCHOR:
+                GetAnchoredObj(GetMaster())->MakeObjPos();
+                break;
             default:
                 SAL_WARN("sw.core", "unhandled DrawFrameFormatHintId");
         }
@@ -1568,6 +1571,17 @@ void SwDrawContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
         rResult.m_aPos.setX(lcl_GetWW8Pos(pAnchoredObj, bFollowTextFlow, rResult.m_eHoriConv).getX());
         rResult.m_aPos.setY(lcl_GetWW8Pos(pAnchoredObj, bFollowTextFlow, rResult.m_eHoriConv).getY());
         rResult.m_bConverted = true;
+    }
+    else if (auto pRestoreFlyAnchorHint = dynamic_cast<const sw::RestoreFlyAnchorHint*>(&rHint))
+    {
+        SdrObject* pObj = GetMaster();
+        if(GetAnchorFrame() && !pObj->IsInserted())
+        {
+            auto pDrawModel = const_cast<SwDrawFrameFormat&>(static_cast<const SwDrawFrameFormat&>(rMod)).GetDoc()->getIDocumentDrawModelAccess().GetDrawModel();
+            assert(pDrawModel);
+            pDrawModel->GetPage(0)->InsertObject(pObj);
+        }
+        pObj->SetRelativePos(pRestoreFlyAnchorHint->m_aPos);
     }
 }
 

@@ -245,7 +245,8 @@ namespace sw
         PREP_DELETE_FLY,
         PAGE_OUT_OF_BOUNDS,
         MAKE_FRAMES,
-        DELETE_FRAMES
+        DELETE_FRAMES,
+        POST_RESTORE_FLY_ANCHOR,
     };
     struct SW_DLLPUBLIC DrawFrameFormatHint final: SfxHint
     {
@@ -295,6 +296,12 @@ namespace sw
         WW8AnchorConvResult& m_rResult;
         WW8AnchorConvHint(WW8AnchorConvResult& rResult) : m_rResult(rResult) {};
         virtual ~WW8AnchorConvHint() override;
+    };
+    struct SW_DLLPUBLIC RestoreFlyAnchorHint final : SfxHint
+    {
+        const Point m_aPos;
+        RestoreFlyAnchorHint(Point aPos) : m_aPos(aPos) {};
+        virtual ~RestoreFlyAnchorHint() override;
     };
 }
 
