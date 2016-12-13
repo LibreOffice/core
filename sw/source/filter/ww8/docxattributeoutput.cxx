@@ -8570,7 +8570,6 @@ void DocxAttributeOutput::BulletDefinition(int nId, const Graphic& rGraphic, Siz
             FSNS(XML_o, XML_bullet), "t",
             FSEND);
 
-    m_rDrawingML.SetFS(m_pSerializer);
     OUString aRelId = m_rDrawingML.WriteImage(rGraphic);
     m_pSerializer->singleElementNS( XML_v, XML_imagedata,
             FSNS(XML_r, XML_id), OUStringToOString(aRelId, RTL_TEXTENCODING_UTF8),

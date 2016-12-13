@@ -673,6 +673,7 @@ void DocxExport::WriteNumbering()
 
     // switch the serializer to redirect the output to word/numbering.xml
     m_pAttrOutput->SetSerializer( pNumberingFS );
+    m_pDrawingML->SetFS( pNumberingFS );
 
     pNumberingFS->startElementNS( XML_w, XML_numbering,
             FSNS( XML_xmlns, XML_w ), "http://schemas.openxmlformats.org/wordprocessingml/2006/main",
@@ -690,6 +691,7 @@ void DocxExport::WriteNumbering()
     pNumberingFS->endElementNS( XML_w, XML_numbering );
 
     // switch the serializer back
+    m_pDrawingML->SetFS( m_pDocumentFS );
     m_pAttrOutput->SetSerializer( m_pDocumentFS );
 }
 
