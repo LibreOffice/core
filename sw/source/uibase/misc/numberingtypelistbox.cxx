@@ -26,6 +26,8 @@
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/text/XNumberingTypeInfo.hpp>
 #include <vcl/builderfactory.hxx>
+#include <svx/dialmgr.hxx>
+#include <svx/dialogs.hrc>
 
 #include <unomid.h>
 
@@ -87,11 +89,10 @@ void SwNumberingTypeListBox::Reload(SwInsertNumTypes nTypeFlags)
             pTypes = aTypes.getConstArray();
         }
     }
-    SwOLENames aNames(SW_RES(STRRES_NUMTYPES));
-    ResStringArray& rNames = aNames.GetNames();
-    for(size_t i = 0; i < rNames.Count(); i++)
+    ResStringArray aNames( SVX_RES( RID_SVXSTRARY_PAGE_NUMBERING ));
+    for(size_t i = 0; i < aNames.Count(); i++)
     {
-        sal_IntPtr nValue = rNames.GetValue(i);
+        sal_IntPtr nValue = aNames.GetValue(i);
         bool bInsert = true;
         sal_Int32 nPos = LISTBOX_APPEND;
         switch(nValue)
@@ -133,7 +134,7 @@ void SwNumberingTypeListBox::Reload(SwInsertNumTypes nTypeFlags)
         }
         if(bInsert)
         {
-            sal_Int32 nEntry = InsertEntry(rNames.GetString(i), nPos);
+            sal_Int32 nEntry = InsertEntry(aNames.GetString(i), nPos);
             SetEntryData( nEntry, reinterpret_cast<void*>(nValue) );
         }
     }

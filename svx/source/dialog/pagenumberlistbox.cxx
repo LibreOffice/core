@@ -21,6 +21,7 @@
 #include <svx/pagenumberlistbox.hxx>
 #include <tools/resary.hxx>
 #include <vcl/builderfactory.hxx>
+#include <com/sun/star/style/NumberingType.hpp>
 
 PageNumberListBox::PageNumberListBox(vcl::Window* pParent)
     : ListBox( pParent, WB_BORDER | WB_DROPDOWN)
@@ -30,10 +31,21 @@ PageNumberListBox::PageNumberListBox(vcl::Window* pParent)
 
     for ( sal_uInt32 i = 0; i < nCnt; ++i )
     {
-        OUString aStr = aPaperAry.GetString(i);
         sal_uInt16 nData = aPaperAry.GetValue(i);
-        sal_Int32 nPos = InsertEntry( aStr );
-        SetEntryData( nPos, reinterpret_cast<void*>((sal_uLong)nData) );
+        switch (nData)
+        {
+            // String list array is also used in Writer and contains strings
+            // for Bullet and Graphics, ignore those here.
+            case css::style::NumberingType::CHAR_SPECIAL:
+            case css::style::NumberingType::BITMAP:
+            break;
+            default:
+                {
+                    OUString aStr = aPaperAry.GetString(i);
+                    sal_Int32 nPos = InsertEntry( aStr );
+                    SetEntryData( nPos, reinterpret_cast<void*>((sal_uLong)nData) );
+                }
+        }
     }
     SetDropDownLineCount(6);
 }

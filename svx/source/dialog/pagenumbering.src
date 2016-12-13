@@ -23,12 +23,14 @@ StringArray RID_SVXSTRARY_PAGE_NUMBERING
 {
     ItemList [ en-US ] =
     {
+        < "None" ;                                  5/*SVX_NUM_NUMBER_NONE         */; > ;
+        < "Bullet" ;                                6/*SVX_NUM_CHAR_SPECIAL        */; > ;
+        < "Graphics" ;                              8/*SVX_NUM_BITMAP              */; > ;
         < "1, 2, 3, ..." ;                          4/*SVX_NUM_ARABIC              */; > ;
         < "A, B, C, ..." ;                          0/*SVX_NUM_CHARS_UPPER_LETTER  */; > ;
         < "a, b, c, ..." ;                          1/*SVX_NUM_CHARS_LOWER_LETTER  */; > ;
         < "I, II, III, ..." ;                       2/*SVX_NUM_ROMAN_UPPER         */; > ;
         < "i, ii, iii, ..." ;                       3/*SVX_NUM_ROMAN_LOWER         */; > ;
-        < "None" ;                                  5/*SVX_NUM_NUMBER_NONE         */; > ;
         < "A, .., AA, .., AAA, ..." ;               9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
         < "a, .., aa, .., aaa, ..." ;               10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
         < "Native Numbering" ;                      12 /*NATIVE_NUMBERING                   */; > ;

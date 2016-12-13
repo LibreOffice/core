@@ -39,6 +39,8 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/app.hxx>
+#include <svx/dialmgr.hxx>
+#include <svx/dialogs.hrc>
 #include <basic/basmgr.hxx>
 #include <editeng/langitem.hxx>
 #include <svl/macitem.hxx>
@@ -592,8 +594,7 @@ OUString SwFieldMgr::GetFormatStr(sal_uInt16 nTypeId, sal_uLong nFormatId) const
     {
         if(xNumberingInfo.is())
         {
-            SwOLENames aNames(SW_RES(STRRES_NUMTYPES));
-            ResStringArray& rNames = aNames.GetNames();
+            ResStringArray aNames( SVX_RES( RID_SVXSTRARY_PAGE_NUMBERING ));
 
             Sequence<sal_Int16> aTypes = xNumberingInfo->getSupportedNumberingTypes();
             const sal_Int16* pTypes = aTypes.getConstArray();
@@ -606,10 +607,10 @@ OUString SwFieldMgr::GetFormatStr(sal_uInt16 nTypeId, sal_uLong nFormatId) const
                 {
                     if(nValidEntry == ((sal_Int32)nFormatId) - nOffset)
                     {
-                        sal_uInt32 n = rNames.FindIndex(pTypes[nType]);
+                        sal_uInt32 n = aNames.FindIndex(pTypes[nType]);
                         if (n != RESARRAY_INDEX_NOTFOUND)
                         {
-                            aRet = rNames.GetString(n);
+                            aRet = aNames.GetString(n);
                         }
                         else
                         {
