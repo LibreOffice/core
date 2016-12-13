@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a71b18c_1ae76be5",
+        "filename": "sw/source/core/text/inftxt.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1202,
+      "author": {
+        "id": 1000381
+      },
+      "writtenOn": "2016-12-13T10:11:11Z",
+      "side": 1,
+      "message": "I’m not very familiar with Writer code, but there are many space charters in Unicode other than the ASCII space.",
+      "revId": "3dacf956c4dce98de676d6c7808d75471dc4b5fe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
