@@ -545,7 +545,8 @@ IMPL_LINK(BackingWindow, ExtLinkClickHdl, Button*, pButton, void)
                 Any value(xNameAccess->getByName(aNode));
 
                 sURL = value.get<OUString>();
-                localizeWebserviceURI(sURL);
+                //TODO: Uncomment this line when the extensions site is localized
+                //localizeWebserviceURI(sURL);
 
                 Reference<css::system::XSystemShellExecute> const
                     xSystemShellExecute(

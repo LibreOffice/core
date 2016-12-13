@@ -1069,7 +1069,8 @@ void SfxTemplateManagerDlg::OnTemplateLink ()
             //throws css::container::NoSuchElementException, css::lang::WrappedTargetException
             Any value( xNameAccess->getByName(sNode) );
             sURL = value.get<OUString> ();
-            localizeWebserviceURI(sURL);
+            //TODO: Uncomment this line when the extensions site is localized
+            //localizeWebserviceURI(sURL);
 
             Reference< css::system::XSystemShellExecute > xSystemShellExecute(
                 css::system::SystemShellExecute::create(comphelper::getProcessComponentContext()));
