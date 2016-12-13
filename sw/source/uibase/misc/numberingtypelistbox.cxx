@@ -89,7 +89,7 @@ void SwNumberingTypeListBox::Reload(SwInsertNumTypes nTypeFlags)
             pTypes = aTypes.getConstArray();
         }
     }
-    ResStringArray aNames( SVX_RES( RID_SVXSTRARY_PAGE_NUMBERING ));
+    ResStringArray aNames( SVX_RES( RID_SVXSTRARY_NUMBERINGTYPE ));
     for(size_t i = 0; i < aNames.Count(); i++)
     {
         sal_IntPtr nValue = aNames.GetValue(i);

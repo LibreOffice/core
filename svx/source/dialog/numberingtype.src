@@ -19,7 +19,7 @@
 
 #include <svx/dialogs.hrc>
 
-StringArray RID_SVXSTRARY_PAGE_NUMBERING
+StringArray RID_SVXSTRARY_NUMBERINGTYPE
 {
     ItemList [ en-US ] =
     {

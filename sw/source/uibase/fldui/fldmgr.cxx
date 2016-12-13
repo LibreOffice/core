@@ -594,7 +594,7 @@ OUString SwFieldMgr::GetFormatStr(sal_uInt16 nTypeId, sal_uLong nFormatId) const
     {
         if(xNumberingInfo.is())
         {
-            ResStringArray aNames( SVX_RES( RID_SVXSTRARY_PAGE_NUMBERING ));
+            ResStringArray aNames( SVX_RES( RID_SVXSTRARY_NUMBERINGTYPE ));
 
             Sequence<sal_Int16> aTypes = xNumberingInfo->getSupportedNumberingTypes();
             const sal_Int16* pTypes = aTypes.getConstArray();
