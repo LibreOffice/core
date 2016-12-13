@@ -1407,6 +1407,7 @@ void Menu::ImplAddDel( ImplMenuDelData& rDel )
     SAL_WARN_IF( rDel.mpMenu, "vcl", "Menu::ImplAddDel(): cannot add ImplMenuDelData twice !" );
     if( !rDel.mpMenu )
     {
+        SolarMutexGuard aGuard;
         rDel.mpMenu = this;
         rDel.mpNext = mpFirstDel;
         mpFirstDel = &rDel;
@@ -1415,7 +1416,10 @@ void Menu::ImplAddDel( ImplMenuDelData& rDel )
 
 void Menu::ImplRemoveDel( ImplMenuDelData& rDel )
 {
-    rDel.mpMenu = nullptr;
+    {
+        SolarMutexGuard aGuard;
+        rDel.mpMenu = nullptr;
+    }
     if ( mpFirstDel == &rDel )
     {
         mpFirstDel = rDel.mpNext;
@@ -2601,7 +2605,10 @@ bool Menu::HandleMenuActivateEvent( Menu *pMenu ) const
     {
         ImplMenuDelData aDelData( this );
 
-        pMenu->pStartedFrom = const_cast<Menu*>(this);
+        {
+            SolarMutexGuard aGuard;
+            pMenu->pStartedFrom = const_cast<Menu*>(this);
+        }
         pMenu->bInCallback = true;
         pMenu->Activate();
 
@@ -2617,7 +2624,10 @@ bool Menu::HandleMenuDeActivateEvent( Menu *pMenu ) const
     {
         ImplMenuDelData aDelData( this );
 
-        pMenu->pStartedFrom = const_cast<Menu*>(this);
+        {
+            SolarMutexGuard aGuard;
+            pMenu->pStartedFrom = const_cast<Menu*>(this);
+        }
         pMenu->bInCallback = true;
         pMenu->Deactivate();
         if( !aDelData.isDeleted() )
