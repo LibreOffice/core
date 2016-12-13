@@ -28,7 +28,7 @@ use Getopt::Long;
 use File::Find;
 use File::Basename;
 use File::Copy qw(copy);
-use File::Path qw(make_path);
+use File::Path qw(make_path rmtree);
 require File::Temp;
 use File::Temp qw(tempdir);
 
@@ -99,6 +99,9 @@ if ( $do_rebuild == 1 ) {
     create_zip_archive($zip_hash_ref, \%links, $tmpdir);
     replace_file($tmp_out_file, $out_file);
     print_message("packing  $out_file finished.") if $verbose;
+
+    rmtree($tmpdir);
+    print_error("failed to delete $tmpdir") if -e $tmpdir;
 } else {
     print_message("$out_file up to date. nothing to do.") if $verbose;
 }
