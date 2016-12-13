@@ -307,7 +307,6 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
 	sd/source/ui/func/futxtatt \
 	sd/source/ui/func/fuvect \
 	sd/source/ui/func/fuzoom \
-	sd/source/ui/func/sdundo \
 	sd/source/ui/func/sdundogr \
 	sd/source/ui/func/smarttag \
 	sd/source/ui/func/undoback \
