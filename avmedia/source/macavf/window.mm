@@ -73,7 +73,7 @@ Window::~Window()
 }
 
 
-bool Window::handleObservation( NSString* pKeyPath )
+bool Window::handleObservation( NSString* /*pKeyPath*/ )
 {
     const BOOL bReadyForDisplay = [mpPlayerLayer isReadyForDisplay];
     [mpPlayerLayer setHidden:!bReadyForDisplay];
@@ -109,7 +109,7 @@ void SAL_CALL Window::setPointerType( sal_Int32 nPointerType )
 
 // XWindow
 
-void SAL_CALL Window::setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height, sal_Int16 /* Flags */ )
+void SAL_CALL Window::setPosSize( sal_Int32 /*X*/, sal_Int32 /*Y*/, sal_Int32 Width, sal_Int32 Height, sal_Int16 /* Flags */ )
     throw (uno::RuntimeException)
 {
     if( !mpView )
@@ -140,13 +140,13 @@ awt::Rectangle SAL_CALL Window::getPosSize()
 }
 
 
-void SAL_CALL Window::setVisible( sal_Bool bVisible )
+void SAL_CALL Window::setVisible( sal_Bool /*bVisible*/ )
     throw (uno::RuntimeException)
 {
 }
 
 
-void SAL_CALL Window::setEnable( sal_Bool bEnable )
+void SAL_CALL Window::setEnable( sal_Bool /*bEnable*/ )
     throw (uno::RuntimeException)
 {
 }
