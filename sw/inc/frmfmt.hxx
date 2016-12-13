@@ -288,7 +288,7 @@ namespace sw
         WW8AnchorConv m_eVertConv;
         bool m_bConverted;
         Point m_aPos;
-        WW8AnchorConvResult(WW8AnchorConv eHoriConv, WW8AnchorConv eVertConv) : m_eHoriConv(eHoriConv), m_eVertConv(eVertConv) {};
+        WW8AnchorConvResult(WW8AnchorConv eHoriConv, WW8AnchorConv eVertConv) : m_eHoriConv(eHoriConv), m_eVertConv(eVertConv), m_bConverted(false) {};
     };
     struct SW_DLLPUBLIC WW8AnchorConvHint final : SfxHint
     {
