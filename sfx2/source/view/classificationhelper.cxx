@@ -336,7 +336,7 @@ public:
     std::map<SfxClassificationPolicyType, SfxClassificationCategory> m_aCategory;
     /// Possible categories of a policy to choose from.
     std::vector<SfxClassificationCategory> m_aCategories;
-    const uno::Reference<document::XDocumentProperties>& m_xDocumentProperties;
+    uno::Reference<document::XDocumentProperties> m_xDocumentProperties;
 
     explicit Impl(const uno::Reference<document::XDocumentProperties>& xDocumentProperties);
     void parsePolicy();
