@@ -100,7 +100,6 @@ $(eval $(call gb_CppunitTest_use_system_darwin_frameworks,vcl_wmf_test,\
     Cocoa \
     Carbon \
     CoreFoundation \
-    OpenGL \
 ))
 ifneq ($(ENABLE_MACOSX_SANDBOX),TRUE)
 $(eval $(call gb_CppunitTest_use_libraries,vcl_wmf_test,\
@@ -172,7 +171,6 @@ $(eval $(call gb_CppunitTest_use_system_win32_libs,vcl_wmf_test,\
     imm32 \
     mpr \
     msimg32 \
-    opengl32 \
     ole32 \
     shell32 \
     usp10 \

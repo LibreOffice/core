@@ -45,19 +45,6 @@ $(eval $(call gb_Library_use_externals,oglcanvas,\
 	epoxy \
 ))
 
-ifeq ($(strip $(OS)),MACOSX)
-$(eval $(call gb_Library_use_system_darwin_frameworks,oglcanvas,\
-    Cocoa \
-    OpenGL \
-))
-
-else ifeq ($(strip $(OS)),WNT)
-$(eval $(call gb_Library_use_system_win32_libs,oglcanvas,\
-    gdi32 \
-    glu32 \
-    opengl32 \
-))
-
 endif
 
 # vim: set noet sw=4 ts=4:
