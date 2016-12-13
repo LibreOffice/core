@@ -1729,7 +1729,11 @@ void SmViewShell::Execute(SfxRequest& rReq)
             if ( !GetViewFrame()->GetFrame().IsInPlace() )
             {
                 const SfxItemSet *pSet = rReq.GetArgs();
-                if ( !pSet )
+                if ( pSet )
+                {
+                    ZoomByItemSet(pSet);
+                }
+                else
                 {
                     SfxItemSet aSet( SmDocShell::GetPool(), SID_ATTR_ZOOM, SID_ATTR_ZOOM);
                     aSet.Put( SvxZoomItem( SvxZoomType::PERCENT, aGraphic->GetZoom()));
@@ -1740,39 +1744,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
                         assert(xDlg);
                         xDlg->SetLimits( MINZOOM, MAXZOOM );
                         if (xDlg->Execute() != RET_CANCEL)
-                            pSet = xDlg->GetOutputItemSet();
-                    }
-                }
-                if ( pSet )
-                {
-                    const SvxZoomItem &rZoom = static_cast<const SvxZoomItem &>(pSet->Get(SID_ATTR_ZOOM));
-                    switch( rZoom.GetType() )
-                    {
-                        case SvxZoomType::PERCENT:
-                            aGraphic->SetZoom(sal::static_int_cast<sal_uInt16>(rZoom.GetValue ()));
-                            break;
-
-                        case SvxZoomType::OPTIMAL:
-                            aGraphic->ZoomToFitInWindow();
-                            break;
-
-                        case SvxZoomType::PAGEWIDTH:
-                        case SvxZoomType::WHOLEPAGE:
-                        {
-                            const MapMode aMap( MapUnit::Map100thMM );
-                            SfxPrinter *pPrinter = GetPrinter( true );
-                            Point aPoint;
-                            Rectangle  OutputRect(aPoint, pPrinter->GetOutputSize());
-                            Size       OutputSize(pPrinter->LogicToPixel(Size(OutputRect.GetWidth(),
-                                                                              OutputRect.GetHeight()), aMap));
-                            Size       GraphicSize(pPrinter->LogicToPixel(GetDoc()->GetSize(), aMap));
-                            sal_uInt16 nZ = sal::static_int_cast<sal_uInt16>(std::min(long(Fraction(OutputSize.Width()  * 100L, GraphicSize.Width())),
-                                                                                      long(Fraction(OutputSize.Height() * 100L, GraphicSize.Height()))));
-                            aGraphic->SetZoom (nZ);
-                            break;
-                        }
-                        default:
-                            break;
+                            ZoomByItemSet(xDlg->GetOutputItemSet());
                     }
                 }
             }
@@ -2054,6 +2026,40 @@ void SmViewShell::Notify( SfxBroadcaster& , const SfxHint& rHint )
 bool SmViewShell::IsInlineEditEnabled() const
 {
     return pImpl->aOpts.IsExperimentalMode();
+}
+
+void SmViewShell::ZoomByItemSet(const SfxItemSet *pSet)
+{
+    assert(pSet);
+    const SvxZoomItem &rZoom = static_cast<const SvxZoomItem &>(pSet->Get(SID_ATTR_ZOOM));
+    switch( rZoom.GetType() )
+    {
+        case SvxZoomType::PERCENT:
+            aGraphic->SetZoom(sal::static_int_cast<sal_uInt16>(rZoom.GetValue ()));
+            break;
+
+        case SvxZoomType::OPTIMAL:
+            aGraphic->ZoomToFitInWindow();
+            break;
+
+        case SvxZoomType::PAGEWIDTH:
+        case SvxZoomType::WHOLEPAGE:
+        {
+            const MapMode aMap( MapUnit::Map100thMM );
+            SfxPrinter *pPrinter = GetPrinter( true );
+            Point aPoint;
+            Rectangle  OutputRect(aPoint, pPrinter->GetOutputSize());
+            Size       OutputSize(pPrinter->LogicToPixel(Size(OutputRect.GetWidth(),
+                                                              OutputRect.GetHeight()), aMap));
+            Size       GraphicSize(pPrinter->LogicToPixel(GetDoc()->GetSize(), aMap));
+            sal_uInt16 nZ = sal::static_int_cast<sal_uInt16>(std::min(long(Fraction(OutputSize.Width()  * 100L, GraphicSize.Width())),
+                                                                      long(Fraction(OutputSize.Height() * 100L, GraphicSize.Height()))));
+            aGraphic->SetZoom (nZ);
+            break;
+        }
+        default:
+            break;
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
