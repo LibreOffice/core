@@ -72,8 +72,9 @@ void ScreenshotTest::implSaveScreenshot(const Bitmap& rScreenshot, const OString
                ( (maCurrentLanguage == "en-US") ? OUString() : "/" + maCurrentLanguage );
 
     osl::FileBase::RC err = osl::Directory::createPath(m_directories.getURLFromWorkdir(OUStringToOString(aDirname,RTL_TEXTENCODING_UTF8).getStr()));
-    CPPUNIT_ASSERT_MESSAGE(OUStringToOString("Failed to create " + aDirname, RTL_TEXTENCODING_UTF8).getStr(),
-        (err == osl::FileBase::E_None || err == osl::FileBase::E_EXIST));
+    CPPUNIT_ASSERT_MESSAGE(OUStringToOString("Failed to create screenshot directory - " + m_directories.getURLFromWorkdir(
+        OUStringToOString(aDirname, RTL_TEXTENCODING_UTF8).getStr()), RTL_TEXTENCODING_UTF8).getStr(),
+                           (err == osl::FileBase::E_None || err == osl::FileBase::E_EXIST) );
 
     OUString aFullPath = m_directories.getPathFromWorkdir(OUStringToOString(aDirname + "/" + aBasename + ".png",RTL_TEXTENCODING_UTF8).getStr());
     SvFileStream aNew(aFullPath, StreamMode::WRITE | StreamMode::TRUNC);
