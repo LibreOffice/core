@@ -1,0 +1,11 @@
+--- src/dispatch_common.h
++++ src/dispatch_common.h
+@@ -39,7 +39,7 @@
+ #define PLATFORM_HAS_WGL 0
+ #define EPOXY_IMPORTEXPORT
+ #else
+-#define PLATFORM_HAS_EGL 1
++
+ #define PLATFORM_HAS_GLX 1
+ #define PLATFORM_HAS_WGL 0
+ #define EPOXY_IMPORTEXPORT

@@ -10431,7 +10431,6 @@ elif test $_os = WINNT; then
 else
     if test "$USING_X11" = TRUE; then
         AC_CHECK_LIB(GL, glBegin, [:], AC_MSG_ERROR([libGL required.]))
-        AC_CHECK_LIB(EGL, eglMakeCurrent, [:], AC_MSG_ERROR([libEGL required.]))
         ENABLE_OPENGL_TRANSITIONS=TRUE
         AC_DEFINE(HAVE_FEATURE_OPENGL,1)
         ENABLE_OPENGL_CANVAS=TRUE

@@ -55,9 +55,20 @@ else
 $(eval $(call gb_Library_add_generated_cobjects,epoxy,\
 	UnpackedTarball/epoxy/src/dispatch_glx \
 	UnpackedTarball/epoxy/src/glx_generated_dispatch \
+))
+ifeq ($(ENABLE_GTK3),TRUE)
+$(eval $(call gb_Library_add_cflags,epoxy,\
+	-DPLATFORM_HAS_EGL=1 \
+))
+$(eval $(call gb_Library_add_generated_cobjects,epoxy,\
 	UnpackedTarball/epoxy/src/dispatch_egl \
 	UnpackedTarball/epoxy/src/egl_generated_dispatch \
 ))
+else
+$(eval $(call gb_Library_add_cflags,epoxy,\
+	-DPLATFORM_HAS_EGL=0 \
+))
+endif
 endif
 
 # vim: set noet sw=4 ts=4:
