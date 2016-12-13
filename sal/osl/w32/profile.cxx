@@ -354,7 +354,7 @@ static bool writeProfileImpl(osl_TFile* pFile)
     if ( bRet == 0 || BytesWritten == 0 )
     {
         OSL_ENSURE(bRet,"WriteFile failed!!!");
-        SAL_INFO("sal", "write failed '%s'",strerror(errno));
+        SAL_WARN("sal", "write failed " << strerror(errno));
 
         return false;
     }
@@ -1031,7 +1031,7 @@ static osl_TFile* openFileImpl(rtl_uString * strFileName, oslProfileOption Profi
     else
     {
 #ifdef DEBUG_OSL_PROFILE
-        SAL_INFO("sal", "opening '%s' read/write",pszFilename);
+        SAL_INFO("sal", "opening read/write " << pszFilename);
 #endif
 
         if ((pFile->m_Handle = CreateFileW( reinterpret_cast<LPCWSTR>(rtl_uString_getStr( strFileName )), GENERIC_READ | GENERIC_WRITE,
@@ -1051,7 +1051,7 @@ static osl_TFile* openFileImpl(rtl_uString * strFileName, oslProfileOption Profi
     if ( ProfileFlags & (osl_Profile_WRITELOCK | osl_Profile_READLOCK ) )
     {
 #ifdef DEBUG_OSL_PROFILE
-        SAL_INFO("sal", "locking '%s' file",pszFilename);
+        SAL_INFO("sal", "locking file " << pszFilename);
 #endif
 
         lockFile(pFile, bWriteable ? write_lock : read_lock);
