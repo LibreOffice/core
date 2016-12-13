@@ -36,13 +36,11 @@ use File::Temp qw(tempdir);
 
 my $img_global = '%GLOBALRES%';  # 'global' image prefix
 my $img_module = '%MODULE%';  # 'module' image prefix
-my $img_help = '%HELPCONTENT%';  # 'help' image prefix
 
 my $out_file;                # path to output archive
 my $tmp_out_file;            # path to temporary output file
 my $global_path;             # path to global images directory
 my $module_path;             # path to module images directory
-my $helpimg_path;            # path to help images directory
 my $sort_file;               # path to file containing sorting data
 my @custom_path;             # path to custom images directory
 my $imagelist_file;          # file containing list of image list files
@@ -66,7 +64,7 @@ foreach ( @{$image_lists_ref} ) {
     $image_lists_hash{$_}="";
 }
 $do_rebuild = is_file_newer(\%image_lists_hash) if $do_rebuild == 0;
-my ($global_hash_ref, $module_hash_ref, $custom_hash_ref, $help_hash_ref) = iterate_image_lists($image_lists_ref);
+my ($global_hash_ref, $module_hash_ref, $custom_hash_ref) = iterate_image_lists($image_lists_ref);
 # custom_hash filled from filesystem lookup
 find_custom($custom_hash_ref);
 
@@ -89,7 +87,7 @@ for my $path (@custom_path) {
     }
 }
 
-my $zip_hash_ref = create_zip_list($global_hash_ref, $module_hash_ref, $custom_hash_ref, $help_hash_ref);
+my $zip_hash_ref = create_zip_list($global_hash_ref, $module_hash_ref, $custom_hash_ref);
 
 remove_links_from_zip_list($zip_hash_ref, \%links);
 
@@ -121,7 +119,6 @@ sub parse_options
                              '-g=s' => \$global_path,
                  '-s=s' => \$sort_file,
                              '-m=s' => \$module_path,
-                             '-e=s' => \$helpimg_path,
                              '-c=s' => \@custom_path_list,
                              '-l=s' => \$imagelist_file,
                              '-v'   => \$verbose,
@@ -144,7 +141,6 @@ sub parse_options
     print_error("no such file '$_'", 2) if ! -f $imagelist_file;
 
     my @check_directories = ($out_dir, $global_path, $module_path);
-    push @check_directories, $helpimg_path if ($helpimg_path ne '');
 
     foreach (@check_directories) {
         print_error("no such directory: '$_'", 2) if ! -d $_;
@@ -205,7 +201,6 @@ sub parse_image_list
     my $global_hash_ref = shift;
     my $module_hash_ref = shift;
     my $custom_hash_ref = shift;
-    my $help_hash_ref = shift;
 
     print_message("parsing '$image_list' ...") if $verbose;
     my $linecount = 0;
@@ -229,17 +224,13 @@ sub parse_image_list
             $module_hash_ref->{$1}++;
             next;
         }
-        if ( /^\Q$img_help\E\/(.*)$/o ) {
-            $help_hash_ref->{$1}++;
-            next;
-        }
         # parse failed if we reach this point, bail out
         close(IMAGE_LIST);
         print_error("can't parse line $linecount from file '$image_list'", 4);
     }
     close(IMAGE_LIST);
 
-    return ($global_hash_ref, $module_hash_ref, $custom_hash_ref, $help_hash_ref);
+    return ($global_hash_ref, $module_hash_ref, $custom_hash_ref);
 }
 
 sub find_custom
@@ -273,7 +264,6 @@ sub create_zip_list
     my $global_hash_ref = shift;
     my $module_hash_ref = shift;
     my $custom_hash_ref = shift;
-    my $help_hash_ref = shift;
 
     my %zip_hash;
     my @warn_list;
@@ -299,9 +289,6 @@ sub create_zip_list
         }
         # it's not in 'custom', record it in zip hash
         $zip_hash{$_} = $module_path;
-    }
-    foreach ( keys %{$help_hash_ref} ) {
-        $zip_hash{$_} = $helpimg_path;
     }
 
     if ( @warn_list ) {
