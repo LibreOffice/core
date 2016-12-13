@@ -296,8 +296,7 @@ uno::Any SAL_CALL Content::queryInterface( const uno::Type & rType )
             uno::Reference< beans::XPropertySet > const xProps(
                 m_xContext, uno::UNO_QUERY_THROW );
             uno::Reference< uno::XComponentContext > xCtx;
-            xCtx.set( xProps->getPropertyValue(
-                OUString( "DefaultContext" ) ),
+            xCtx.set( xProps->getPropertyValue( "DefaultContext" ),
                 uno::UNO_QUERY_THROW );
 
             uno::Reference< task::XInteractionHandler > xIH(
@@ -1120,8 +1119,7 @@ Content::queryCreatableContentsInfo()
           | ucb::ContentInfoAttribute::KIND_DOCUMENT;
 
     beans::Property aProp;
-    m_pProvider->getProperty(
-        OUString( "Title" ), aProp );
+    m_pProvider->getProperty( "Title", aProp );
 
     uno::Sequence< beans::Property > aDocProps( 1 );
     aDocProps.getArray()[ 0 ] = aProp;
@@ -1563,7 +1561,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
             //xProps.reset(
             //    new ContentProperties( aUnescapedTitle ) );
             xProps->addProperty(
-                OUString( "Title" ),
+                "Title",
                 uno::makeAny( aUnescapedTitle ),
                 true );
         }
@@ -1573,20 +1571,20 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                 xProps.reset( new ContentProperties( aUnescapedTitle, false ) );
             else
                 xProps->addProperty(
-                    OUString( "Title" ),
+                    "Title",
                     uno::makeAny( aUnescapedTitle ),
                     true );
 
             xProps->addProperty(
-                OUString( "IsFolder" ),
+                "IsFolder",
                 uno::makeAny( false ),
                 true );
             xProps->addProperty(
-                OUString( "IsDocument" ),
+                "IsDocument",
                 uno::makeAny( true ),
                 true );
             xProps->addProperty(
-                OUString( "ContentType" ),
+                "ContentType",
                 uno::makeAny( OUString(WEBDAV_CONTENT_TYPE) ),
                 true );
         }
@@ -1608,7 +1606,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
         {
             // Add BaseURI property, if requested.
             xProps->addProperty(
-                 OUString( "BaseURI" ),
+                 "BaseURI",
                  uno::makeAny( getBaseURI( xResAccess ) ),
                  true );
         }
@@ -1616,11 +1614,10 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
         {
             // Add CreatableContentsInfo property, if requested.
             bool bFolder = false;
-            xProps->getValue(
-                OUString( "IsFolder" ) )
+            xProps->getValue( "IsFolder" )
                     >>= bFolder;
             xProps->addProperty(
-                OUString( "CreatableContentsInfo" ),
+                "CreatableContentsInfo",
                 uno::makeAny( bFolder
                                   ? queryCreatableContentsInfo()
                                   : uno::Sequence< ucb::ContentInfo >() ),
@@ -2086,8 +2083,7 @@ uno::Any Content::open(
             // Error: Not a folder!
 
             OUStringBuffer aMsg;
-            aMsg.appendAscii( "Non-folder resource cannot be "
-                              "opened as folder! Wrong Open Mode!" );
+            aMsg.append( "Non-folder resource cannot be opened as folder! Wrong Open Mode!" );
 
             ucbhelper::cancelCommandExecution(
                 uno::makeAny(
@@ -2637,23 +2633,19 @@ void Content::transfer(
         OUString aScheme = sourceURI.GetScheme().toAsciiLowerCase();
         if ( aScheme == WEBDAV_URL_SCHEME )
         {
-            sourceURI.SetScheme(
-                OUString( HTTP_URL_SCHEME ) );
+            sourceURI.SetScheme( HTTP_URL_SCHEME );
         }
         else if ( aScheme == WEBDAVS_URL_SCHEME )
         {
-            sourceURI.SetScheme(
-                OUString( HTTPS_URL_SCHEME ) );
+            sourceURI.SetScheme( HTTPS_URL_SCHEME );
         }
         else if ( aScheme == DAV_URL_SCHEME )
         {
-            sourceURI.SetScheme(
-                OUString( HTTP_URL_SCHEME ) );
+            sourceURI.SetScheme( HTTP_URL_SCHEME );
         }
         else if ( aScheme == DAVS_URL_SCHEME )
         {
-            sourceURI.SetScheme(
-                OUString( HTTPS_URL_SCHEME ) );
+            sourceURI.SetScheme( HTTPS_URL_SCHEME );
         }
         else
         {
@@ -2671,17 +2663,13 @@ void Content::transfer(
 
         aScheme = targetURI.GetScheme().toAsciiLowerCase();
         if ( aScheme == WEBDAV_URL_SCHEME )
-            targetURI.SetScheme(
-                OUString( HTTP_URL_SCHEME ) );
+            targetURI.SetScheme( HTTP_URL_SCHEME );
         else if ( aScheme == WEBDAVS_URL_SCHEME )
-            targetURI.SetScheme(
-                OUString( HTTPS_URL_SCHEME ) );
+            targetURI.SetScheme( HTTPS_URL_SCHEME );
         else if ( aScheme == DAV_URL_SCHEME )
-            targetURI.SetScheme(
-                OUString( HTTP_URL_SCHEME ) );
+            targetURI.SetScheme( HTTP_URL_SCHEME );
         else if ( aScheme == DAVS_URL_SCHEME )
-            targetURI.SetScheme(
-                OUString( HTTPS_URL_SCHEME ) );
+            targetURI.SetScheme( HTTPS_URL_SCHEME );
 
         // @@@ This implementation of 'transfer' only works
         //     if the source and target are located at same host.
@@ -3286,8 +3274,7 @@ Content::getBaseURI( const std::unique_ptr< DAVResourceAccess > & rResAccess )
     if ( m_xCachedProps.get() )
     {
         OUString aLocation;
-        m_xCachedProps->getValue( OUString(
-                                        "Content-Location" ) ) >>= aLocation;
+        m_xCachedProps->getValue( "Content-Location" ) >>= aLocation;
         if ( aLocation.getLength() )
         {
             try
