@@ -603,7 +603,8 @@ OUString SwFieldMgr::GetFormatStr(sal_uInt16 nTypeId, sal_uLong nFormatId) const
             for(sal_Int32 nType = 0; nType < aTypes.getLength(); nType++)
             {
                 sal_Int16 nCurrent = pTypes[nType];
-                if(nCurrent > NumberingType::CHARS_LOWER_LETTER_N)
+                if(nCurrent > NumberingType::CHARS_LOWER_LETTER_N &&
+                        (nCurrent != (NumberingType::BITMAP | LINK_TOKEN)))
                 {
                     if(nValidEntry == ((sal_Int32)nFormatId) - nOffset)
                     {

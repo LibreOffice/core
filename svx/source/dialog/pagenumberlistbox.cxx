@@ -19,6 +19,7 @@
 #include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>
 #include <svx/pagenumberlistbox.hxx>
+#include <editeng/numitem.hxx>
 #include <tools/resary.hxx>
 #include <vcl/builderfactory.hxx>
 #include <com/sun/star/style/NumberingType.hpp>
@@ -38,6 +39,7 @@ PageNumberListBox::PageNumberListBox(vcl::Window* pParent)
             // for Bullet and Graphics, ignore those here.
             case css::style::NumberingType::CHAR_SPECIAL:
             case css::style::NumberingType::BITMAP:
+            case css::style::NumberingType::BITMAP | LINK_TOKEN:
             break;
             default:
                 {

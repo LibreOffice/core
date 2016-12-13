@@ -26,6 +26,7 @@
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/text/XNumberingTypeInfo.hpp>
 #include <vcl/builderfactory.hxx>
+#include <editeng/numitem.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
 
@@ -112,6 +113,10 @@ void SwNumberingTypeListBox::Reload(SwInsertNumTypes nTypeFlags)
                 break;
             case  style::NumberingType::BITMAP:
                 bInsert = bool(nTypeFlags & SwInsertNumTypes::Bitmap );
+
+                break;
+            case  style::NumberingType::BITMAP | LINK_TOKEN:
+                bInsert = false;
 
                 break;
             default:

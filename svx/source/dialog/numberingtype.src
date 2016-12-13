@@ -26,6 +26,7 @@ StringArray RID_SVXSTRARY_NUMBERINGTYPE
         < "None" ;                                  5/*SVX_NUM_NUMBER_NONE         */; > ;
         < "Bullet" ;                                6/*SVX_NUM_CHAR_SPECIAL        */; > ;
         < "Graphics" ;                              8/*SVX_NUM_BITMAP              */; > ;
+        < "Linked graphics" ;                     136/*SVX_NUM_BITMAP|0x80         */; > ;
         < "1, 2, 3, ..." ;                          4/*SVX_NUM_ARABIC              */; > ;
         < "A, B, C, ..." ;                          0/*SVX_NUM_CHARS_UPPER_LETTER  */; > ;
         < "a, b, c, ..." ;                          1/*SVX_NUM_CHARS_LOWER_LETTER  */; > ;
