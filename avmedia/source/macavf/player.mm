@@ -30,6 +30,7 @@ using namespace ::com::sun::star;
 - (void)observeValueForKeyPath:(NSString*)pKeyPath ofObject:(id)pObject change:(NSDictionary*)pChangeDict context:(void*)pContext
 {
     (void) pObject;
+    (void) pChangeDict;
     avmedia::macavf::MacAVObserverHandler* pHandler = static_cast<avmedia::macavf::MacAVObserverHandler*>(pContext);
     pHandler->handleObservation( pKeyPath );
 }
