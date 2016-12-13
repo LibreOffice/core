@@ -77,13 +77,13 @@ using namespace http_dav_ucp;
 
 namespace
 {
-static void lcl_sendPartialGETRequest( bool &bError,
-                                       DAVException &aLastException,
-                                       const std::vector< rtl::OUString >& rProps,
-                                       std::vector< rtl::OUString > &aHeaderNames,
-                                       const std::unique_ptr< DAVResourceAccess > &xResAccess,
-                                       std::unique_ptr< ContentProperties > &xProps,
-                                       const uno::Reference< ucb::XCommandEnvironment >& xEnv )
+void lcl_sendPartialGETRequest( bool &bError,
+                                DAVException &aLastException,
+                                const std::vector< rtl::OUString >& rProps,
+                                std::vector< rtl::OUString > &aHeaderNames,
+                                const std::unique_ptr< DAVResourceAccess > &xResAccess,
+                                std::unique_ptr< ContentProperties > &xProps,
+                                const uno::Reference< ucb::XCommandEnvironment >& xEnv )
 {
     bool bIsRequestSize = false;
     DAVResource aResource;
