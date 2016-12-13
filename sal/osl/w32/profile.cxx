@@ -191,23 +191,23 @@ oslProfile SAL_CALL osl_openProfile(rtl_uString *strProfileName, sal_uInt32 Flag
 
     if ( Flags == osl_Profile_DEFAULT )
     {
-        SAL_INFO("sal", "with osl_Profile_DEFAULT");
+        SAL_INFO("sal.osl", "with osl_Profile_DEFAULT");
     }
     if ( Flags & osl_Profile_SYSTEM )
     {
-        SAL_INFO("sal", "with osl_Profile_SYSTEM");
+        SAL_INFO("sal.osl", "with osl_Profile_SYSTEM");
     }
     if ( Flags & osl_Profile_READLOCK )
     {
-        SAL_INFO("sal", "with osl_Profile_READLOCK");
+        SAL_INFO("sal.osl", "with osl_Profile_READLOCK");
     }
     if ( Flags & osl_Profile_WRITELOCK )
     {
-        SAL_INFO("sal", "with osl_Profile_WRITELOCK");
+        SAL_INFO("sal.osl", "with osl_Profile_WRITELOCK");
     }
     if ( Flags & osl_Profile_FLUSHWRITE )
     {
-        SAL_INFO("sal", "with osl_Profile_FLUSHWRITE");
+        SAL_INFO("sal.osl", "with osl_Profile_FLUSHWRITE");
     }
 #endif
 
@@ -331,7 +331,7 @@ sal_Bool SAL_CALL osl_flushProfile(oslProfile Profile)
     if ( pProfile->m_Flags & FLG_MODIFIED )
     {
 #ifdef DEBUG_OSL_PROFILE
-        SAL_INFO("sal", "swapping to storeprofile");
+        SAL_INFO("sal.osl", "swapping to storeprofile");
 #endif
         bRet = storeProfile(pProfile,false);
     }
@@ -354,7 +354,7 @@ static bool writeProfileImpl(osl_TFile* pFile)
     if ( bRet == 0 || BytesWritten == 0 )
     {
         OSL_ENSURE(bRet,"WriteFile failed!!!");
-        SAL_WARN("sal", "write failed " << strerror(errno));
+        SAL_WARN("sal.osl", "write failed " << strerror(errno));
 
         return false;
     }
@@ -1014,7 +1014,7 @@ static osl_TFile* openFileImpl(rtl_uString * strFileName, oslProfileOption Profi
     if ( ProfileFlags & ( osl_Profile_WRITELOCK | osl_Profile_FLUSHWRITE ) )
     {
 #ifdef DEBUG_OSL_PROFILE
-        SAL_INFO("sal", "setting bWriteable to TRUE");
+        SAL_INFO("sal.osl", "setting bWriteable to TRUE");
 #endif
         bWriteable=true;
     }
@@ -1031,7 +1031,7 @@ static osl_TFile* openFileImpl(rtl_uString * strFileName, oslProfileOption Profi
     else
     {
 #ifdef DEBUG_OSL_PROFILE
-        SAL_INFO("sal", "opening read/write " << pszFilename);
+        SAL_INFO("sal.osl", "opening read/write " << pszFilename);
 #endif
 
         if ((pFile->m_Handle = CreateFileW( reinterpret_cast<LPCWSTR>(rtl_uString_getStr( strFileName )), GENERIC_READ | GENERIC_WRITE,
@@ -1051,7 +1051,7 @@ static osl_TFile* openFileImpl(rtl_uString * strFileName, oslProfileOption Profi
     if ( ProfileFlags & (osl_Profile_WRITELOCK | osl_Profile_READLOCK ) )
     {
 #ifdef DEBUG_OSL_PROFILE
-        SAL_INFO("sal", "locking file " << pszFilename);
+        SAL_INFO("sal.osl", "locking file " << pszFilename);
 #endif
 
         lockFile(pFile, bWriteable ? write_lock : read_lock);
@@ -1820,7 +1820,7 @@ static osl_TProfileImpl* acquireProfile(oslProfile Profile, bool bWriteable)
     if (pProfile == nullptr)
     {
 #ifdef DEBUG_OSL_PROFILE
-        SAL_INFO("sal", "AUTOOPEN MODE");
+        SAL_INFO("sal.osl", "AUTOOPEN MODE");
 #endif
 
         if ( ( pProfile = static_cast<osl_TProfileImpl*>(osl_openProfile( nullptr, PFlags )) ) != nullptr )
@@ -1831,7 +1831,7 @@ static osl_TProfileImpl* acquireProfile(oslProfile Profile, bool bWriteable)
     else
     {
 #ifdef DEBUG_OSL_PROFILE
-        SAL_INFO("sal", "try to acquire");
+        SAL_INFO("sal.osl", "try to acquire");
 #endif
 
         if (! (pProfile->m_Flags & osl_Profile_SYSTEM))
@@ -1841,7 +1841,7 @@ static osl_TProfileImpl* acquireProfile(oslProfile Profile, bool bWriteable)
             {
                 osl_TStamp Stamp;
 #ifdef DEBUG_OSL_PROFILE
-                SAL_INFO("sal", "DEFAULT MODE");
+                SAL_INFO("sal.osl", "DEFAULT MODE");
 #endif
                 pProfile->m_pFile = openFileImpl(
                     pProfile->m_strFileName, pProfile->m_Flags | PFlags);
@@ -1860,7 +1860,7 @@ static osl_TProfileImpl* acquireProfile(oslProfile Profile, bool bWriteable)
             else
             {
 #ifdef DEBUG_OSL_PROFILE
-                SAL_INFO("sal", "READ/WRITELOCK MODE");
+                SAL_INFO("sal.osl", "READ/WRITELOCK MODE");
 #endif
 
                 /* A readlock file could not be written */
@@ -1891,7 +1891,7 @@ static bool releaseProfile(osl_TProfileImpl* pProfile)
         else
         {
 #ifdef DEBUG_OSL_PROFILE
-        SAL_INFO("sal", "DEFAULT MODE");
+        SAL_INFO("sal.osl", "DEFAULT MODE");
 #endif
         if (! (pProfile->m_Flags & (osl_Profile_READLOCK |
                                     osl_Profile_WRITELOCK | osl_Profile_FLUSHWRITE)))

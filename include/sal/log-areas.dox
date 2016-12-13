@@ -20,7 +20,6 @@ certain functionality.
 
 @section SAL
 
-@li @c sal
 @li @c sal.bootstrap - SAL bootstrap
 @li @c sal.debug - SAL debugging functionality
 @li @c sal.file
