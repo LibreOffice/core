@@ -251,19 +251,4 @@ $(eval $(call gb_Library_add_exception_objects,chartcore,\
     chart2/source/tools/XMLRangeHelper \
 ))
  
-ifeq ($(strip $(OS)),WNT)
-$(eval $(call gb_Library_use_system_win32_libs,chartcore,\
-	opengl32 \
-	gdi32 \
-))
-else ifeq ($(OS),MACOSX)
-$(eval $(call gb_Library_use_system_darwin_frameworks,chartcore,\
-	OpenGL \
-))
-else ifeq ($(OS), $(filter LINUX %BSD SOLARIS, $(OS)))
-$(eval $(call gb_Library_add_libs,chartcore,\
-	$(DLOPEN_LIBS) \
-))
-endif
-
 # vim: set noet sw=4 ts=4:

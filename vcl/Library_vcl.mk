@@ -508,7 +508,6 @@ $(eval $(call gb_Library_use_system_darwin_frameworks,vcl,\
     Cocoa \
     Carbon \
     CoreFoundation \
-	OpenGL \
 ))
 
 ifneq ($(ENABLE_MACOSX_SANDBOX),TRUE)
@@ -705,11 +704,9 @@ $(eval $(call gb_Library_use_system_win32_libs,vcl,\
 	crypt32 \
 	gdi32 \
 	gdiplus \
-    glu32 \
 	imm32 \
 	mpr \
 	msimg32 \
-    opengl32 \
 	ole32 \
 	shell32 \
 	usp10 \
