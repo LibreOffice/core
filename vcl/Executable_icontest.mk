@@ -38,17 +38,6 @@ $(eval $(call gb_Executable_add_libs,icontest,\
 $(eval $(call gb_Executable_use_static_libraries,icontest,\
 	glxtest \
 ))
-else ifeq ($(OS),WNT)
-
-$(eval $(call gb_Executable_use_system_win32_libs,icontest,\
-    opengl32 \
-))
-
-else ifeq ($(OS),MACOSX)
-
-$(eval $(call gb_Executable_add_libs,icontest,\
-    -framework OpenGL \
-))
 
 endif
 
