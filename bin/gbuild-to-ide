@@ -39,47 +39,40 @@ class GbuildLinkTarget:
 
 
 class GbuildLib(GbuildLinkTarget):
-    def __init__(self, name, library, location, include, include_sys, defs, cxxobjects, cxxflags, linked_libs):
+    def __init__(self, name, location, include, include_sys, defs, cxxobjects, cxxflags, linked_libs):
         GbuildLinkTarget.__init__(self, name, location, include, include_sys, defs, cxxobjects, cxxflags, linked_libs)
-        self.library = library
 
     def short_name(self):
         """Return the short name of target based on the Library_* makefile name"""
         return 'Library %s' % self.name
 
     def target_name(self):
-        return 'Library_%s' % self.library
+        return 'Library_%s' % self.name
 
     def library_name(self):
-        return self.library
+        return self.name
 
 class GbuildTest(GbuildLinkTarget):
-    def __init__(self, name, test, location, include, include_sys, defs, cxxobjects, cxxflags, linked_libs):
+    def __init__(self, name, location, include, include_sys, defs, cxxobjects, cxxflags, linked_libs):
         GbuildLinkTarget.__init__(self, name, location, include, include_sys, defs, cxxobjects, cxxflags, linked_libs)
-        self.test = test
 
     def short_name(self):
         """Return the short name of target based n the CppunitTest_* makefile names"""
         return 'CppunitTest %s' % self.name
 
     def target_name(self):
-        return 'CppunitTest_%s' % self.test
-
-    def test_name(self):
-        return self.test
-
+        return 'CppunitTest_%s' % self.name
 
 class GbuildExe(GbuildLinkTarget):
-    def __init__(self, name, executable, location, include, include_sys, defs, cxxobjects, cxxflags, linked_libs):
+    def __init__(self, name, location, include, include_sys, defs, cxxobjects, cxxflags, linked_libs):
         GbuildLinkTarget.__init__(self, name, location, include, include_sys, defs, cxxobjects, cxxflags, linked_libs)
-        self.executable = executable
 
     def short_name(self):
         """Return the short name of target based on the Executable_* makefile name"""
         return 'Executable %s' % self.name
 
     def target_name(self):
-        return 'Executable_%s' % self.executable
+        return 'Executable_%s' % self.name
 
 
 class GbuildParser:
@@ -88,7 +81,7 @@ class GbuildParser:
         self.binpath = os.path.dirname(os.environ['GPERF']) # woha, this is quite a hack
         (self.srcdir, self.builddir, self.instdir, self.workdir) = (os.environ['SRCDIR'], os.environ['BUILDDIR'], os.environ['INSTDIR'], os.environ['WORKDIR'])
         (self.libs, self.exes, self.tests, self.modulenamelist) = ([], [], [], [])
-        (self.libnames, self.exenames, self.testnames, self.target_by_path, self.target_by_location) = ({}, {}, {}, {}, {})
+        (self.target_by_path, self.target_by_location) = ({}, {})
 
     includepattern = re.compile('-I(\S+)')
     isystempattern = re.compile('-isystem\s*(\S+)')
@@ -129,7 +122,6 @@ class GbuildParser:
         (foundincludes, foundisystem) = GbuildParser.__split_includes(json['INCLUDE'])
         return GbuildLib(
             GbuildParser.libpattern.match(os.path.basename(json['MAKEFILE'])).group(1),
-            json['LINKTARGET'],
             os.path.dirname(json['MAKEFILE']),
             foundincludes,
             foundisystem,
@@ -151,7 +143,6 @@ class GbuildParser:
 
         return GbuildTest(
             testname,
-            json['LINKTARGET'],
             os.path.dirname(json['MAKEFILE']),
             foundincludes,
             foundisystem,
@@ -165,7 +156,6 @@ class GbuildParser:
         (foundincludes, foundisystem) = GbuildParser.__split_includes(json['INCLUDE'])
         return GbuildExe(
             GbuildParser.exepattern.match(os.path.basename(json['MAKEFILE'])).group(1),
-            json['LINKTARGET'],
             os.path.dirname(json['MAKEFILE']),
             foundincludes,
             foundisystem,
@@ -178,17 +168,14 @@ class GbuildParser:
         for jsonfilename in os.listdir(os.path.join(self.workdir, 'GbuildToJson', 'Library')):
             with open(os.path.join(self.workdir, 'GbuildToJson', 'Library', jsonfilename), 'r') as f:
                 lib = self.__lib_from_json(json.load(f))
-                self.libnames[lib.library] = lib.name
                 self.libs.append(lib)
         for jsonfilename in os.listdir(os.path.join(self.workdir, 'GbuildToJson', 'Executable')):
             with open(os.path.join(self.workdir, 'GbuildToJson', 'Executable', jsonfilename), 'r') as f:
                 exe = self.__exe_from_json(json.load(f))
-                self.exenames[exe.executable] = exe.name
                 self.exes.append(exe)
         for jsonfilename in os.listdir(os.path.join(self.workdir, 'GbuildToJson', 'CppunitTest')):
             with open(os.path.join(self.workdir, 'GbuildToJson', 'CppunitTest', jsonfilename), 'r') as f:
                 test = self.__test_from_json(json.load(f))
-                self.testnames[test.test] = test.name
                 self.tests.append(test)
         for target in set(self.libs) | set(self.exes) | set(self.tests):
             if target.location not in self.target_by_location:
