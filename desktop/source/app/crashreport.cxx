@@ -103,12 +103,13 @@ OUString getCrashUserProfileDirectory()
 
 void CrashReporter::updateMinidumpLocation()
 {
-    OUString aURL = getCrashUserProfileDirectory();
 #if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
+    OUString aURL = getCrashUserProfileDirectory();
     OString aOStringUrl = OUStringToOString(aURL, RTL_TEXTENCODING_UTF8);
     google_breakpad::MinidumpDescriptor descriptor(aOStringUrl.getStr());
     mpExceptionHandler->set_minidump_descriptor(descriptor);
 #elif defined WNT
+    OUString aURL = getCrashUserProfileDirectory();
     mpExceptionHandler->set_dump_path(aURL.getStr());
 #endif
 }
