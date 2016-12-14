@@ -45,7 +45,7 @@ namespace fileaccess {
     // Forward declaration
 
     class BaseContent;
-    class shell;
+    class TaskManager;
 
     class FileProvider: public cppu::WeakImplHelper <
         css::lang::XServiceInfo,
@@ -196,7 +196,7 @@ namespace fileaccess {
 
         css::uno::Reference< css::beans::XPropertySetInfo >     m_xPropertySetInfo;
 
-        shell*                                                  m_pMyShell;
+        TaskManager*                                                  m_pMyShell;
     };
 
 }       // end namespace fileaccess

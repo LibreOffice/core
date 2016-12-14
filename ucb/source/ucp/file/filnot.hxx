@@ -29,12 +29,12 @@
 
 namespace fileaccess {
 
-    class shell;
+    class TaskManager;
 
     class ContentEventNotifier
     {
     private:
-        shell* m_pMyShell;
+        TaskManager* m_pMyShell;
         css::uno::Reference< css::ucb::XContent > m_xCreatorContent;
         css::uno::Reference< css::ucb::XContentIdentifier > m_xCreatorId;
         css::uno::Reference< css::ucb::XContentIdentifier > m_xOldId;
@@ -42,13 +42,13 @@ namespace fileaccess {
     public:
 
         ContentEventNotifier(
-            shell* pMyShell,
+            TaskManager* pMyShell,
             const css::uno::Reference< css::ucb::XContent >& xCreatorContent,
             const css::uno::Reference< css::ucb::XContentIdentifier >& xCreatorId,
             const std::vector< css::uno::Reference< css::uno::XInterface > >& sListeners );
 
         ContentEventNotifier(
-            shell* pMyShell,
+            TaskManager* pMyShell,
             const css::uno::Reference< css::ucb::XContent >& xCreatorContent,
             const css::uno::Reference< css::ucb::XContentIdentifier >& xCreatorId,
             const css::uno::Reference< css::ucb::XContentIdentifier >& xOldId,

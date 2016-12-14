@@ -234,7 +234,6 @@ merge detail::ScVbaHlinkContainerMember with ScVbaHyperlinks
 merge drawinglayer::primitive2d::ObjectAndViewTransformationDependentPrimitive2D with drawinglayer::primitive2d::DiscreteBitmapPrimitive2D
 merge drawinglayer::primitive2d::ViewTransformationDependentPrimitive2D with drawinglayer::primitive2d::WallpaperBitmapPrimitive2D
 merge drawinglayer::processor3d::DefaultProcessor3D with drawinglayer::processor3d::ZBufferProcessor3D
-merge fileaccess::TaskManager with fileaccess::shell
 merge frm::ICommandImageProvider with frm::DocumentCommandImageProvider
 merge frm::IEngineStatusListener with frm::RichTextControlImpl
 merge frm::IEngineTextChangeListener with frm::ORichTextModel

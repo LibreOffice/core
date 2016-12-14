@@ -30,7 +30,7 @@ namespace fileaccess {
 
 
     // forward
-    class shell;
+    class TaskManager;
 
 
     class XCommandInfo_impl
@@ -39,7 +39,7 @@ namespace fileaccess {
     {
     public:
 
-        explicit XCommandInfo_impl( shell* pMyShell );
+        explicit XCommandInfo_impl( TaskManager* pMyShell );
 
         virtual ~XCommandInfo_impl() override;
 
@@ -83,7 +83,7 @@ namespace fileaccess {
 
     private:
 
-        shell*                                            m_pMyShell;
+        TaskManager*                                            m_pMyShell;
     };
 
 }

@@ -26,7 +26,7 @@
 
 namespace fileaccess {
 
-    class shell;
+    class TaskManager;
 
     class FileContentIdentifier :
         public cppu::OWeakObject,

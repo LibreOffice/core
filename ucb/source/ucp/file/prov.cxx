@@ -28,7 +28,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include "filglob.hxx"
 #include "filid.hxx"
-#include "shell.hxx"
+#include "filtask.hxx"
 #include "bc.hxx"
 #include "prov.hxx"
 
@@ -60,7 +60,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL ucpfile_component_getFactory(
     // File Content Provider.
 
 
-    if ( fileaccess::shell::getImplementationName_static().
+    if ( fileaccess::TaskManager::getImplementationName_static().
             equalsAscii( pImplName ) )
     {
         xFactory = FileProvider::createServiceFactory( xSMgr );
@@ -99,7 +99,7 @@ FileProvider::~FileProvider()
 void SAL_CALL FileProvider::init()
 {
     if( ! m_pMyShell )
-        m_pMyShell = new shell( m_xContext, this, true );
+        m_pMyShell = new TaskManager( m_xContext, this, true );
 }
 
 
@@ -113,9 +113,9 @@ FileProvider::initialize(
         if( aArguments.getLength() > 0 &&
             (aArguments[0] >>= config) &&
             config == "NoConfig" )
-            m_pMyShell = new shell( m_xContext, this, false );
+            m_pMyShell = new TaskManager( m_xContext, this, false );
         else
-            m_pMyShell = new shell( m_xContext, this, true );
+            m_pMyShell = new TaskManager( m_xContext, this, true );
     }
 }
 
@@ -124,7 +124,7 @@ OUString SAL_CALL
 FileProvider::getImplementationName()
     throw( RuntimeException, std::exception )
 {
-    return fileaccess::shell::getImplementationName_static();
+    return fileaccess::TaskManager::getImplementationName_static();
 }
 
 sal_Bool SAL_CALL FileProvider::supportsService(const OUString& ServiceName )
@@ -137,7 +137,7 @@ Sequence< OUString > SAL_CALL
 FileProvider::getSupportedServiceNames()
   throw( RuntimeException, std::exception )
 {
-    return fileaccess::shell::getSupportedServiceNames_static();
+    return fileaccess::TaskManager::getSupportedServiceNames_static();
 }
 
 Reference< XSingleServiceFactory > SAL_CALL
@@ -146,9 +146,9 @@ FileProvider::createServiceFactory(
 {
     return Reference< XSingleServiceFactory > ( cppu::createSingleFactory(
         rxServiceMgr,
-        fileaccess::shell::getImplementationName_static(),
+        fileaccess::TaskManager::getImplementationName_static(),
         FileProvider::CreateInstance,
-        fileaccess::shell::getSupportedServiceNames_static() ) );
+        fileaccess::TaskManager::getSupportedServiceNames_static() ) );
 }
 
 Reference< XInterface > SAL_CALL
@@ -171,7 +171,7 @@ FileProvider::queryContent(
 {
     init();
     OUString aUnc;
-    bool err = fileaccess::shell::getUnqFromUrl( xIdentifier->getContentIdentifier(),
+    bool err = fileaccess::TaskManager::getUnqFromUrl( xIdentifier->getContentIdentifier(),
                                               aUnc );
 
     if(  err )
@@ -197,8 +197,8 @@ FileProvider::compareContentIds(
     {
         OUString aPath1, aPath2;
 
-        fileaccess::shell::getUnqFromUrl( aUrl1, aPath1 );
-        fileaccess::shell::getUnqFromUrl( aUrl2, aPath2 );
+        fileaccess::TaskManager::getUnqFromUrl( aUrl1, aPath1 );
+        fileaccess::TaskManager::getUnqFromUrl( aUrl2, aPath2 );
 
         osl::FileBase::RC   error;
         osl::DirectoryItem  aItem1, aItem2;

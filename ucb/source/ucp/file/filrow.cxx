@@ -18,7 +18,7 @@
  */
 
 #include "filrow.hxx"
-#include "shell.hxx"
+#include "filtask.hxx"
 #include "prov.hxx"
 #include <com/sun/star/script/Converter.hpp>
 #include <comphelper/processfactory.hxx>
@@ -36,7 +36,7 @@ using namespace css::uno;
 // Function for TypeConverting
 
 template< class _type_ >
-bool convert( shell* pShell,
+bool convert( TaskManager* pShell,
                   uno::Reference< script::XTypeConverter >& xConverter,
                   uno::Any& rValue,
                   _type_& aReturn  )
@@ -75,7 +75,7 @@ bool convert( shell* pShell,
 }
 
 
-XRow_impl::XRow_impl( shell* pMyShell,const uno::Sequence< uno::Any >& seq )
+XRow_impl::XRow_impl( TaskManager* pMyShell,const uno::Sequence< uno::Any >& seq )
     : m_aValueMap( seq ),
       m_nWasNull(false),
       m_pMyShell( pMyShell ),

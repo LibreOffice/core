@@ -18,7 +18,7 @@
  */
 
 #include "filcmd.hxx"
-#include "shell.hxx"
+#include "filtask.hxx"
 #include "prov.hxx"
 
 using namespace fileaccess;
@@ -31,7 +31,7 @@ using namespace com::sun::star::ucb;
 #define THROW_WHERE ""
 #endif
 
-XCommandInfo_impl::XCommandInfo_impl( shell* pMyShell )
+XCommandInfo_impl::XCommandInfo_impl( TaskManager* pMyShell )
     : m_pMyShell( pMyShell )
 {
 }

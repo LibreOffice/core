@@ -49,13 +49,13 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/ucb/OpenCommandArgument2.hpp>
 #include <com/sun/star/ucb/InteractiveBadTransferURLException.hpp>
-#include "shell.hxx"
+#include "filtask.hxx"
 
 
 namespace fileaccess {
 
     class PropertyListeners;
-    class shell;
+    class TaskManager;
 
     class BaseContent:
         public cppu::OWeakObject,
@@ -74,13 +74,13 @@ namespace fileaccess {
     private:
 
         // A special creator for inserted contents; Creates an ugly object
-        BaseContent( shell* pMyShell,
+        BaseContent( TaskManager* pMyShell,
                      const OUString& parentName,
                      bool bFolder );
 
     public:
         BaseContent(
-            shell* pMyShell,
+            TaskManager* pMyShell,
             const css::uno::Reference< css::ucb::XContentIdentifier >& xContentIdentifier,
             const OUString& aUnqPath );
 
@@ -251,7 +251,7 @@ namespace fileaccess {
 
     private:
         // Data members
-        shell*                                                m_pMyShell;
+        TaskManager*                                                m_pMyShell;
         css::uno::Reference< css::ucb::XContentIdentifier >   m_xContentIdentifier;
         OUString                                              m_aUncPath;
 

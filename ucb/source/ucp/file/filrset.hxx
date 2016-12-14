@@ -53,7 +53,7 @@ class XResultSet_impl : public Notifier,
     {
     public:
 
-        XResultSet_impl( shell* pMyShell,
+        XResultSet_impl( TaskManager* pMyShell,
                          const OUString& aUnqPath,
                          sal_Int32 OpenMode,
                          const css::uno::Sequence< css::beans::Property >& seq,
@@ -536,7 +536,7 @@ class XResultSet_impl : public Notifier,
 
     private:
 
-        shell*                              m_pMyShell;
+        TaskManager*                              m_pMyShell;
         bool                                m_nIsOpen;
         sal_Int32                           m_nRow;
         bool                                m_nWasNull;
