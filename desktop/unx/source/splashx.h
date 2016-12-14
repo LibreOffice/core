@@ -9,7 +9,6 @@
 #ifndef INCLUDED_DESKTOP_UNX_SOURCE_SPLASHX_H
 #define INCLUDED_DESKTOP_UNX_SOURCE_SPLASHX_H
 
-
 #ifdef __cplusplus
 extern "C" {
 #endif
