@@ -37,7 +37,7 @@ Expr const * stripCtor(Expr const * expr) {
 }
 
 bool isStringLiteral(Expr const * expr) {
-    return isa<StringLiteral>(stripCtor(expr));
+    return isa<clang::StringLiteral>(stripCtor(expr));
 }
 
 class StringConcat:

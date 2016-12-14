@@ -170,7 +170,7 @@ bool GetImplementationName::isStringConstant(
             }
         }
     }
-    StringLiteral const * lit = dyn_cast<StringLiteral>(expr);
+    clang::StringLiteral const * lit = dyn_cast<clang::StringLiteral>(expr);
     if (lit != nullptr) {
         if (!lit->isAscii()) {
             return false;

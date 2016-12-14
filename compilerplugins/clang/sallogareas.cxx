@@ -64,9 +64,9 @@ bool SalLogAreas::VisitCallExpr( const CallExpr* call )
                 if( expansionLocation == lastSalDetailLogStreamMacro )
                     return true;
                 lastSalDetailLogStreamMacro = expansionLocation;
-                if( const StringLiteral* area = dyn_cast< StringLiteral >( call->getArg( 1 )->IgnoreParenImpCasts()))
+                if( const clang::StringLiteral* area = dyn_cast< clang::StringLiteral >( call->getArg( 1 )->IgnoreParenImpCasts()))
                     {
-                    if( area->getKind() == StringLiteral::Ascii )
+                    if( area->getKind() == clang::StringLiteral::Ascii )
                         checkArea( area->getBytes(), area->getExprLoc());
                     else
                         report( DiagnosticsEngine::Warning, "unsupported string literal kind (plugin needs fixing?)",

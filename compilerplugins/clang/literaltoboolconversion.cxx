@@ -133,7 +133,7 @@ void LiteralToBoolConversion::handleImplicitCastSubExpr(
             }
         }
     }
-    if (isa<StringLiteral>(subExpr)) {
+    if (isa<clang::StringLiteral>(subExpr)) {
         SourceLocation loc { subExpr->getLocStart() };
         if (compiler.getSourceManager().isMacroArgExpansion(loc)
             && (Lexer::getImmediateMacroName(
@@ -145,7 +145,7 @@ void LiteralToBoolConversion::handleImplicitCastSubExpr(
     }
     if (isa<IntegerLiteral>(subExpr) || isa<CharacterLiteral>(subExpr)
         || isa<FloatingLiteral>(subExpr) || isa<ImaginaryLiteral>(subExpr)
-        || isa<StringLiteral>(subExpr))
+        || isa<clang::StringLiteral>(subExpr))
     {
         bool bRewritten = false;
         if (rewriter != nullptr) {
