@@ -20,6 +20,7 @@ void splash_destroy(struct splash* splash);
 
 void splash_draw_progress(struct splash* splash, int progess);
 
+
 #ifdef __cplusplus
 } // extern "C"
 #endif
