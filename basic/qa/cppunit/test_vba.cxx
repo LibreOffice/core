@@ -86,10 +86,10 @@ void VBATest::testMiscVBAFunctions()
 
 void VBATest::testMiscOLEStuff()
 {
-// Not much point even trying to run except on Windows. Does not work
-// on 64-bit Windows with Excel installed. (Without Excel doesn't
-// really do anything anyway, see "so skip test" below.)
-#if defined(_WIN32) && !defined(_WIN64)
+// Not much point even trying to run except on Windows.
+// (Without Excel doesn't really do anything anyway,
+// see "so skip test" below.)
+#if defined(_WIN32)
     // test if we have the necessary runtime environment
     // to run the OLE tests.
     uno::Reference< lang::XMultiServiceFactory > xOLEFactory;
@@ -116,7 +116,8 @@ void VBATest::testMiscOLEStuff()
     const sal_Unicode *pODBCDriverName = sBuf;
     bool bFound = false;
     for (; wcslen( pODBCDriverName ) != 0; pODBCDriverName += wcslen( pODBCDriverName ) + 1 ) {
-        if ( wcsstr( pODBCDriverName, L"Microsoft Excel Driver" ) != nullptr ) {
+        if( wcscmp( pODBCDriverName, L"Microsoft Excel Driver (*.xls)" ) == 0 ||
+            wcscmp( pODBCDriverName, L"Microsoft Excel Driver (*.xls, *.xlsx, *.xlsm, *.xlsb)" ) == 0 ) {
             bFound = true;
             break;
         }
@@ -132,13 +133,13 @@ void VBATest::testMiscOLEStuff()
 
     OUString sMacroPathURL = m_directories.getURLFromSrc("/basic/qa/vba_tests/");
 
-    uno::Sequence< uno::Any > aArgs(1);
+    uno::Sequence< uno::Any > aArgs(2);
     // path to test document
-    OUString sPath = m_directories.getPathFromSrc("/basic/qa/vba_tests/data/")
-                   + "ADODBdata.xls";
+    OUString sPath = m_directories.getPathFromSrc("/basic/qa/vba_tests/data/ADODBdata.xls");
     sPath = sPath.replaceAll( "/", "\\" );
 
     aArgs[ 0 ] = uno::makeAny( sPath );
+    aArgs[ 1 ] = uno::makeAny( OUString(pODBCDriverName) );
 
     for ( sal_uInt32  i=0; i<SAL_N_ELEMENTS( macroSource ); ++i )
     {
