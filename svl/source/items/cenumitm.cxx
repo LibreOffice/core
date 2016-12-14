@@ -22,7 +22,6 @@
 #include <tools/stream.hxx>
 #include <svl/cenumitm.hxx>
 #include <svl/eitem.hxx>
-#include "whassert.hxx"
 
 #include <comphelper/extract.hxx>
 #include <libxml/xmlwriter.h>
@@ -31,7 +30,7 @@
 // virtual
 bool SfxEnumItemInterface::operator ==(const SfxPoolItem & rItem) const
 {
-    SFX_ASSERT(SfxPoolItem::operator ==(rItem), Which(), "unequal type");
+    SAL_WARN_IF(!SfxPoolItem::operator ==(rItem), "svl.items", "unequal type, with ID/pos " << Which() );
     return GetEnumValue()
                == static_cast< const SfxEnumItemInterface * >(&rItem)->
                       GetEnumValue();
@@ -71,7 +70,7 @@ bool SfxEnumItemInterface::PutValue(const css::uno::Any& rVal,
 
 OUString SfxEnumItemInterface::GetValueTextByPos(sal_uInt16) const
 {
-    SAL_INFO("svl", "SfxEnumItemInterface::GetValueTextByPos(): Pure virtual");
+    SAL_INFO("svl.items", "SfxEnumItemInterface::GetValueTextByPos(): Pure virtual");
     return OUString();
 }
 

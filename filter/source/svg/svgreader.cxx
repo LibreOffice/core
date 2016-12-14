@@ -64,7 +64,7 @@ template<typename Func> void visitChildren(const Func& rFunc,
     const sal_Int32 nNumNodes( xChildren->getLength() );
     for( sal_Int32 i=0; i<nNumNodes; ++i )
     {
-        SAL_INFO("svg", "node type: " << sal::static_int_cast<sal_uInt32>(xChildren->item(i)->getNodeType()) << " tag name " << xChildren->item(i)->getNodeName() << " value |" << xChildren->item(i)->getNodeValue() << "|");
+        SAL_INFO("filter.svg", "node type: " << sal::static_int_cast<sal_uInt32>(xChildren->item(i)->getNodeType()) << " tag name " << xChildren->item(i)->getNodeName() << " value |" << xChildren->item(i)->getNodeValue() << "|");
         if( xChildren->item(i)->getNodeType() == eChildType )
             rFunc( *xChildren->item(i).get() );
     }
@@ -631,7 +631,7 @@ struct AnnotatingVisitor
 
         std::pair<StatePool::iterator,
                   bool> aRes = mrStates.insert(rState);
-        SAL_INFO ("svg", "size " << mrStates.size() << "   id " <<  const_cast<State&>(*aRes.first).mnStyleId);
+        SAL_INFO ("filter.svg", "size " << mrStates.size() << "   id " <<  const_cast<State&>(*aRes.first).mnStyleId);
 
         if( !aRes.second )
             return false; // not written
@@ -640,7 +640,7 @@ struct AnnotatingVisitor
 
         // mnStyleId does not take part in hashing/comparison
         const_cast<State&>(*aRes.first).mnStyleId = mnCurrStateId;
-        SAL_INFO ("svg", " --> " <<  const_cast<State&>(*aRes.first).mnStyleId);
+        SAL_INFO ("filter.svg", " --> " <<  const_cast<State&>(*aRes.first).mnStyleId);
 
         mrStateMap.insert(std::make_pair(
                               mnCurrStateId,
@@ -870,7 +870,7 @@ struct AnnotatingVisitor
 
     void writeStyle(const uno::Reference<xml::dom::XElement>& xElem, const sal_Int32 nTagId)
     {
-        SAL_INFO ("svg", "writeStyle xElem " << xElem->getTagName());
+        SAL_INFO ("filter.svg", "writeStyle xElem " << xElem->getTagName());
 
         sal_Int32 nStyleId=0;
         if( writeStyle(maCurrState, nTagId) )
@@ -1230,10 +1230,10 @@ struct AnnotatingVisitor
                                    nTokenId, sValue );
                 break;
             case XML_TOKEN_INVALID:
-                SAL_INFO("svg", "unhandled token");
+                SAL_INFO("filter.svg", "unhandled token");
                 break;
             default:
-                SAL_INFO("svg", "unhandled token " << getTokenName(nTokenId));
+                SAL_INFO("filter.svg", "unhandled token " << getTokenName(nTokenId));
                 break;
         }
     }
@@ -2044,7 +2044,7 @@ struct OfficeStylesWritingVisitor
             }
         }
 
-        SAL_INFO("svg", "SvgDashArray2Odf " << *dash_distance << " " << *dots1 << " " << *dots1_length << " " << *dots2 << " " << *dots2_length );
+        SAL_INFO("filter.svg", "SvgDashArray2Odf " << *dash_distance << " " << *dots1 << " " << *dots1_length << " " << *dots2 << " " << *dots2_length );
 
         return;
     }

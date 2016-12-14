@@ -1230,7 +1230,7 @@ void ScDPSaveData::WriteToSource( const uno::Reference<sheet::XDimensionsSupplie
                     if ((*iter)->GetDupFlag())
                     {
                         uno::Reference<util::XCloneable> xCloneable(xIntDim, uno::UNO_QUERY);
-                        SAL_WARN_IF(!xCloneable.is(), "sc", "cannot clone dimension");
+                        SAL_WARN_IF(!xCloneable.is(), "sc.core", "cannot clone dimension");
                         if (xCloneable.is())
                         {
                             uno::Reference<util::XCloneable> xNew = xCloneable->createClone();

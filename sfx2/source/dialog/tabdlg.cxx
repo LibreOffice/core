@@ -287,7 +287,7 @@ const SfxPoolItem* SfxTabPage::GetOldItem( const SfxItemSet& rSet,
 
 void SfxTabPage::PageCreated( const SfxAllItemSet& /*aSet*/ )
 {
-    SAL_WARN( "sfx", "SfxTabPage::PageCreated should not be called");
+    SAL_WARN( "sfx.dialog", "SfxTabPage::PageCreated should not be called");
 }
 
 void SfxTabPage::ChangesApplied()
@@ -357,7 +357,7 @@ void SfxTabDialog::dispose()
                     RTL_TEXTENCODING_UTF8);
                 if (sConfigId.isEmpty())
                 {
-                    SAL_WARN("sfx.config", "Tabpage needs to be converted to .ui format");
+                    SAL_WARN("sfx.dialog", "Tabpage needs to be converted to .ui format");
                     sConfigId = OUString::number(pDataObject->nId);
                 }
 
@@ -661,7 +661,7 @@ void SfxTabDialog::RemoveTabPage( sal_uInt16 nId )
                     RTL_TEXTENCODING_UTF8);
                 if (sConfigId.isEmpty())
                 {
-                    SAL_WARN("sfx.config", "Tabpage needs to be converted to .ui format");
+                    SAL_WARN("sfx.dialog", "Tabpage needs to be converted to .ui format");
                     sConfigId = OUString::number(pDataObject->nId);
                 }
 
@@ -1064,7 +1064,7 @@ IMPL_LINK( SfxTabDialog, ActivatePageHdl, TabControl *, pTabCtrl, void )
 
     if (!pDataObject)
     {
-        SAL_WARN("sfx.config", "Tab Page ID not known, this is pretty serious and needs investigation");
+        SAL_WARN("sfx.dialog", "Tab Page ID not known, this is pretty serious and needs investigation");
         return;
     }
 
@@ -1092,7 +1092,7 @@ IMPL_LINK( SfxTabDialog, ActivatePageHdl, TabControl *, pTabCtrl, void )
         OUString sConfigId = OStringToOUString(pTabPage->GetConfigId(), RTL_TEXTENCODING_UTF8);
         if (sConfigId.isEmpty())
         {
-            SAL_WARN("sfx.config", "Tabpage needs to be converted to .ui format");
+            SAL_WARN("sfx.dialog", "Tabpage needs to be converted to .ui format");
             sConfigId = OUString::number(pDataObject->nId);
         }
         SvtViewOptions aPageOpt(E_TABPAGE, sConfigId);

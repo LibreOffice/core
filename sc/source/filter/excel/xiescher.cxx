@@ -189,7 +189,7 @@ XclImpDrawObjRef XclImpDrawObjBase::ReadObj3( const XclImpRoot& rRoot, XclImpStr
             case EXC_OBJTYPE_BUTTON:        xDrawObj.reset( new XclImpButtonObj( rRoot ) );         break;
             case EXC_OBJTYPE_PICTURE:       xDrawObj.reset( new XclImpPictureObj( rRoot ) );        break;
             default:
-                SAL_WARN("sc",  "XclImpDrawObjBase::ReadObj3 - unknown object type 0x" << std::hex << nObjType );
+                SAL_WARN("sc.filter",  "XclImpDrawObjBase::ReadObj3 - unknown object type 0x" << std::hex << nObjType );
                 rRoot.GetTracer().TraceUnsupportedObjects();
         }
     }
@@ -226,7 +226,7 @@ XclImpDrawObjRef XclImpDrawObjBase::ReadObj4( const XclImpRoot& rRoot, XclImpStr
             case EXC_OBJTYPE_PICTURE:       xDrawObj.reset( new XclImpPictureObj( rRoot ) );        break;
             case EXC_OBJTYPE_POLYGON:       xDrawObj.reset( new XclImpPolygonObj( rRoot ) );        break;
             default:
-                SAL_WARN("sc",  "XclImpDrawObjBase::ReadObj4 - unknown object type 0x" << std::hex << nObjType );
+                SAL_WARN("sc.filter",  "XclImpDrawObjBase::ReadObj4 - unknown object type 0x" << std::hex << nObjType );
                 rRoot.GetTracer().TraceUnsupportedObjects();
         }
     }
@@ -273,7 +273,7 @@ XclImpDrawObjRef XclImpDrawObjBase::ReadObj5( const XclImpRoot& rRoot, XclImpStr
             case EXC_OBJTYPE_GROUPBOX:      xDrawObj.reset( new XclImpGroupBoxObj( rRoot ) );       break;
             case EXC_OBJTYPE_DROPDOWN:      xDrawObj.reset( new XclImpDropDownObj( rRoot ) );       break;
             default:
-                SAL_WARN("sc",  "XclImpDrawObjBase::ReadObj5 - unknown object type 0x" << std::hex << nObjType );
+                SAL_WARN("sc.filter",  "XclImpDrawObjBase::ReadObj5 - unknown object type 0x" << std::hex << nObjType );
                 rRoot.GetTracer().TraceUnsupportedObjects();
                 xDrawObj.reset( new XclImpPhObj( rRoot ) );
         }
@@ -338,7 +338,7 @@ XclImpDrawObjRef XclImpDrawObjBase::ReadObj8( const XclImpRoot& rRoot, XclImpStr
                 case EXC_OBJTYPE_NOTE:          xDrawObj.reset( new XclImpNoteObj( rRoot ) );           break;
 
                 default:
-                    SAL_WARN("sc",  "XclImpDrawObjBase::ReadObj8 - unknown object type 0x" << std::hex << nObjType );
+                    SAL_WARN("sc.filter",  "XclImpDrawObjBase::ReadObj8 - unknown object type 0x" << std::hex << nObjType );
                     rRoot.GetTracer().TraceUnsupportedObjects();
             }
         }
@@ -346,7 +346,7 @@ XclImpDrawObjRef XclImpDrawObjBase::ReadObj8( const XclImpRoot& rRoot, XclImpStr
 
     if (!xDrawObj) //ensure placeholder for unknown or broken records
     {
-        SAL_WARN( "sc", "XclImpDrawObjBase::ReadObj8 import failed, substituting placeholder");
+        SAL_WARN( "sc.filter", "XclImpDrawObjBase::ReadObj8 import failed, substituting placeholder");
         xDrawObj.reset( new XclImpPhObj( rRoot ) );
     }
 
@@ -467,7 +467,7 @@ SdrObjectPtr XclImpDrawObjBase::CreateSdrObject( XclImpDffConverter& rDffConv, c
                     }
                     catch(const Exception&)
                     {
-                        SAL_WARN("sc", "XclImpDrawObjBase::CreateSdrObject, this control can't be set the property ControlTypeinMSO!");
+                        SAL_WARN("sc.filter", "XclImpDrawObjBase::CreateSdrObject, this control can't be set the property ControlTypeinMSO!");
                     }
                 }
                 if( mnObjType == 8 )//OCX
@@ -486,7 +486,7 @@ SdrObjectPtr XclImpDrawObjBase::CreateSdrObject( XclImpDffConverter& rDffConv, c
                         }
                         catch(const Exception&)
                         {
-                            SAL_WARN("sc", "XclImpDrawObjBase::CreateSdrObject, this control can't be set the property ObjIDinMSO!");
+                            SAL_WARN("sc.filter", "XclImpDrawObjBase::CreateSdrObject, this control can't be set the property ObjIDinMSO!");
                         }
                     }
                 }
@@ -2054,7 +2054,7 @@ void XclImpTbxObjBase::ConvertLabel( ScfPropertySet& rPropSet ) const
             xPropset->setPropertyValue( "Description", makeAny(::rtl::OUString(aLabel)) );
         }catch( ... )
         {
-            SAL_WARN("sc", "Can't set a default text for TBX Control ");
+            SAL_WARN("sc.filter", "Can't set a default text for TBX Control ");
         }
     }
     ConvertFont( rPropSet );

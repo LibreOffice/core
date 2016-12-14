@@ -108,6 +108,63 @@ void SalLogAreas::checkArea( StringRef area, SourceLocation location )
         report( DiagnosticsEngine::Warning, "unknown log area '%0' (check or extend include/sal/log-areas.dox)",
             location ) << area;
         checkAreaSyntax(area, location);
+        return;
+        }
+    if (compiler.getSourceManager().isInMainFile(location))
+        {
+        auto matchpair = [this,area](StringRef p1, StringRef p2) {
+            return (area == p1 && firstSeenLogArea == p2) || (area == p2 && firstSeenLogArea == p1);
+        };
+        // these are "cross-module" log areas
+        if (area == "i18n" || area == "lok" || area == "lok.tiledrendering")
+            ;
+        // these appear to be cross-file log areas
+        else if (  area == "chart2"
+                || area == "oox.cscode" || area == "oox.csdata"
+                || area == "slideshow.verbose"
+                || area == "sc.opencl"
+                || area == "sc.core.formulagroup"
+                || area == "sw.pageframe" || area == "sw.idle" || area == "sw.level2"
+                || area == "sw.docappend" || area == "sw.mailmerge"
+                || area == "sw.uno"
+                || area == "vcl.layout" || area == "vcl.a11y"
+                || area == "vcl.gdi.fontmetric" || area == "vcl.opengl"
+                || area == "vcl.harfbuzz" || area == "vcl.eventtesting"
+                || area == "vcl.schedule" || area == "vcl.unity"
+                || area == "xmlsecurity.comp"
+                )
+            ;
+        else if (firstSeenLogArea == "")
+            {
+                firstSeenLogArea = area;
+                firstSeenLocation = location;
+            }
+        // some modules do this deliberately
+        else if (firstSeenLogArea.compare(0, 3, "jfw") == 0
+                || firstSeenLogArea.compare(0, 6, "opencl") == 0)
+            ;
+        // mixing these in the same file seems legitimate
+        else if (
+                   matchpair("chart2.pie.label.bestfit", "chart2.pie.label.bestfit.inside")
+                || matchpair("editeng", "editeng.chaining")
+                || matchpair("oox.drawingml", "oox.cscode")
+                || matchpair("oox.drawingml", "oox.drawingml.gradient")
+                || matchpair("sc.core", "sc.core.grouparealistener")
+                || matchpair("sc.orcus", "sc.orcus.condformat")
+                || matchpair("sc.orcus", "sc.orcus.style")
+                || matchpair("sc.orcus", "sc.orcus.autofilter")
+                || matchpair("svx", "svx.chaining")
+                || matchpair("sw.ww8", "sw.ww8.level2")
+                || matchpair("writerfilter", "writerfilter.profile")
+                )
+            ;
+        else if (firstSeenLogArea != area)
+            {
+            report( DiagnosticsEngine::Warning, "two different log areas '%0' and '%1' in the same file?",
+                location ) << firstSeenLogArea << area;
+            report( DiagnosticsEngine::Note, "first area was seen here",
+                firstSeenLocation );
+            }
         }
     }
 

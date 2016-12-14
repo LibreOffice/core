@@ -2078,7 +2078,7 @@ void SwFrameFormats::DeleteAndDestroyAll( bool keepDefault )
 
 std::pair<SwFrameFormats::const_iterator,bool> SwFrameFormats::push_back( const value_type& x )
 {
-    SAL_WARN_IF(x->m_ffList != nullptr, "sw", "Inserting already assigned item");
+    SAL_WARN_IF(x->m_ffList != nullptr, "sw.core", "Inserting already assigned item");
     assert(x->m_ffList == nullptr);
     x->m_ffList = this;
     return m_PosIndex.push_back( x );
@@ -2087,7 +2087,7 @@ std::pair<SwFrameFormats::const_iterator,bool> SwFrameFormats::push_back( const 
 bool SwFrameFormats::erase( const value_type& x )
 {
     const_iterator const ret = find( x );
-    SAL_WARN_IF(x->m_ffList != this, "sw", "Removing invalid / unassigned item");
+    SAL_WARN_IF(x->m_ffList != this, "sw.core", "Removing invalid / unassigned item");
     if (ret != end()) {
         assert( x == *ret );
         m_PosIndex.erase( ret );

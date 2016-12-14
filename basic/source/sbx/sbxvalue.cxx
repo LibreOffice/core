@@ -1509,7 +1509,7 @@ bool SbxValue::LoadData( SvStream& r, sal_uInt16 )
                 memset (&aData,0,sizeof(aData));
                 ResetFlag(SbxFlagBits::Fixed);
                 aData.eType = SbxNULL;
-                SAL_WARN( "basic", "Loaded a non-supported data type" );
+                SAL_WARN( "basic.sbx", "Loaded a non-supported data type" );
 
                 return false;
         }
@@ -1611,7 +1611,7 @@ bool SbxValue::LoadData( SvStream& r, sal_uInt16 )
         case SbxWCHAR:
             break;
         default:
-            SAL_WARN( "basic", "Saving a non-supported data type" );
+            SAL_WARN( "basic.sbx", "Saving a non-supported data type" );
             return false;
     }
     return true;

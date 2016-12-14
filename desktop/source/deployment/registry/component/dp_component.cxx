@@ -1202,7 +1202,7 @@ void BackendImpl::ComponentPackageImpl::componentLiveInsertion(
         try {
             set->insert(css::uno::Any(*factory++));
         } catch (const container::ElementExistException &) {
-            SAL_WARN("desktop", "implementation already registered " << *i);
+            SAL_WARN("desktop.deployment", "implementation already registered " << *i);
         }
     }
     if (!data.singletons.empty()) {
@@ -1224,7 +1224,7 @@ void BackendImpl::ComponentPackageImpl::componentLiveInsertion(
             try {
                 cont->insertByName(name, css::uno::Any());
             } catch (const container::ElementExistException &) {
-                SAL_WARN("desktop", "singleton already registered " << i->first);
+                SAL_WARN("desktop.deployment", "singleton already registered " << i->first);
                 cont->replaceByName(name, css::uno::Any());
             }
         }

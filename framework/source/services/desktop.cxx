@@ -124,8 +124,8 @@ void Desktop::constructorInit()
 
     // Safe impossible cases
     // We can't work without this helper!
-    SAL_WARN_IF( !m_xFramesHelper.is(), "fwk", "Desktop::Desktop(): Frames helper is not valid. XFrames, XIndexAccess and XElementAcces are not supported!");
-    SAL_WARN_IF( !m_xDispatchHelper.is(), "fwk", "Desktop::Desktop(): Dispatch helper is not valid. XDispatch will not work correctly!" );
+    SAL_WARN_IF( !m_xFramesHelper.is(), "fwk.desktop", "Desktop::Desktop(): Frames helper is not valid. XFrames, XIndexAccess and XElementAcces are not supported!");
+    SAL_WARN_IF( !m_xDispatchHelper.is(), "fwk.desktop", "Desktop::Desktop(): Dispatch helper is not valid. XDispatch will not work correctly!" );
 
     // Enable object for real working!
     // Otherwise all calls will be rejected ...
@@ -186,8 +186,8 @@ Desktop::Desktop( const css::uno::Reference< css::uno::XComponentContext >& xCon
 *//*-*************************************************************************************************************/
 Desktop::~Desktop()
 {
-    SAL_WARN_IF( !m_bIsTerminated, "fwk", "Desktop not terminated before being destructed" );
-    SAL_WARN_IF( m_aTransactionManager.getWorkingMode()!=E_CLOSE, "fwk", "Desktop::~Desktop(): Who forgot to dispose this service?" );
+    SAL_WARN_IF( !m_bIsTerminated, "fwk.desktop", "Desktop not terminated before being destructed" );
+    SAL_WARN_IF( m_aTransactionManager.getWorkingMode()!=E_CLOSE, "fwk.desktop", "Desktop::~Desktop(): Who forgot to dispose this service?" );
 }
 
 css::uno::Any SAL_CALL Desktop::queryInterface( const css::uno::Type& _rType ) throw(css::uno::RuntimeException, std::exception)
@@ -618,7 +618,7 @@ But; Don't forget - you will be the owner of returned object and must release it
 *//*-*************************************************************************************************************/
 css::uno::Reference< css::container::XEnumerationAccess > SAL_CALL Desktop::getTasks() throw( css::uno::RuntimeException, std::exception )
 {
-    SAL_INFO("fwk", "Desktop::getTasks(): Use of obsolete interface XTaskSupplier");
+    SAL_INFO("fwk.desktop", "Desktop::getTasks(): Use of obsolete interface XTaskSupplier");
     return nullptr;
 }
 
@@ -640,7 +640,7 @@ css::uno::Reference< css::container::XEnumerationAccess > SAL_CALL Desktop::getT
 *//*-*************************************************************************************************************/
 css::uno::Reference< css::frame::XTask > SAL_CALL Desktop::getActiveTask() throw( css::uno::RuntimeException, std::exception )
 {
-    SAL_INFO("fwk", "Desktop::getActiveTask(): Use of obsolete interface XTaskSupplier");
+    SAL_INFO("fwk.desktop", "Desktop::getActiveTask(): Use of obsolete interface XTaskSupplier");
     return nullptr;
 }
 
@@ -1047,7 +1047,7 @@ void SAL_CALL Desktop::disposing()
 
     // But if you just ignore the assertion (which happens in unit
     // tests for instance in sc/qa/unit) nothing bad happens.
-    SAL_WARN_IF( !m_bIsTerminated, "fwk", "Desktop disposed before terminating it" );
+    SAL_WARN_IF( !m_bIsTerminated, "fwk.desktop", "Desktop disposed before terminating it" );
 
     SolarMutexClearableGuard aWriteLock;
 
@@ -1117,7 +1117,7 @@ void SAL_CALL Desktop::addEventListener( const css::uno::Reference< css::lang::X
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     // Safe impossible cases
     // Method not defined for all incoming parameter.
-    SAL_WARN_IF( !xListener.is(), "fwk", "Desktop::addEventListener(): Invalid parameter detected!" );
+    SAL_WARN_IF( !xListener.is(), "fwk.desktop", "Desktop::addEventListener(): Invalid parameter detected!" );
     // Register transaction and reject wrong calls.
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
@@ -1129,7 +1129,7 @@ void SAL_CALL Desktop::removeEventListener( const css::uno::Reference< css::lang
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     // Safe impossible cases
     // Method not defined for all incoming parameter.
-    SAL_WARN_IF( !xListener.is(), "fwk", "Desktop::removeEventListener(): Invalid parameter detected!" );
+    SAL_WARN_IF( !xListener.is(), "fwk.desktop", "Desktop::removeEventListener(): Invalid parameter detected!" );
     // Register transaction and reject wrong calls.
     TransactionGuard aTransaction( m_aTransactionManager, E_SOFTEXCEPTIONS );
 
@@ -1179,7 +1179,7 @@ void SAL_CALL Desktop::dispatchFinished( const css::frame::DispatchResultEvent& 
 *//*-*************************************************************************************************************/
 void SAL_CALL Desktop::disposing( const css::lang::EventObject& ) throw( css::uno::RuntimeException, std::exception )
 {
-    SAL_WARN( "fwk", "Desktop::disposing(): Algorithm error! Normally desktop is temp. listener ... not all the time. So this method shouldn't be called." );
+    SAL_WARN( "fwk.desktop", "Desktop::disposing(): Algorithm error! Normally desktop is temp. listener ... not all the time. So this method shouldn't be called." );
 }
 
 /*-************************************************************************************************************

@@ -716,7 +716,7 @@ void newTypeDescription(
         && (pStructMembers == nullptr || eTypeClass == typelib_TypeClass_STRUCT));
     if (typelib_TypeClass_TYPEDEF == eTypeClass)
     {
-        SAL_WARN("cppu", "unexpected typedef!" );
+        SAL_WARN("cppu.typelib", "unexpected typedef!" );
         typelib_typedescriptionreference_getDescription( ppRet, pType );
         return;
     }

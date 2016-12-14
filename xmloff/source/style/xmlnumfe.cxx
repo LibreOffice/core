@@ -1111,7 +1111,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
             eType = XML_BOOLEAN_STYLE;
             break;
     }
-    SAL_WARN_IF( eType == XML_TOKEN_INVALID, "xmloff", "unknown format type" );
+    SAL_WARN_IF( eType == XML_TOKEN_INVALID, "xmloff.style", "unknown format type" );
 
     OUString sAttrValue;
     bool bUserDef = ( rFormat.GetType() & css::util::NumberFormat::DEFINED );
@@ -1883,7 +1883,7 @@ OUString SvXMLNumFmtExport::GetStyleName( sal_uInt32 nKey )
 
 void SvXMLNumFmtExport::SetUsed( sal_uInt32 nKey )
 {
-    SAL_WARN_IF( pFormatter == nullptr, "xmloff", "missing formatter" );
+    SAL_WARN_IF( pFormatter == nullptr, "xmloff.style", "missing formatter" );
     if( !pFormatter )
         return;
 
@@ -1919,7 +1919,7 @@ sal_uInt32 SvXMLNumFmtExport::ForceSystemLanguage( sal_uInt32 nKey )
     const SvNumberformat* pFormat = lcl_GetFormat( pFormatter, nKey );
     if( pFormat != nullptr )
     {
-        SAL_WARN_IF( pFormatter == nullptr, "xmloff", "format without formatter?" );
+        SAL_WARN_IF( pFormatter == nullptr, "xmloff.style", "format without formatter?" );
 
         sal_Int32 nErrorPos;
         short nType = pFormat->GetType();

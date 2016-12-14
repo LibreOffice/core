@@ -325,7 +325,7 @@ bool OGLTransitionerImpl::initWindowFromSlideShowView( const Reference< presenta
         if( !mpContext->init( reinterpret_cast< vcl::Window* >( aVal ) ) )
             return false;
     }
-    SAL_INFO("slideshow", "created the context");
+    SAL_INFO("slideshow.opengl", "created the context");
 
     mpContext->makeCurrent();
     CHECK_GL_ERROR();

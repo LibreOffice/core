@@ -450,7 +450,7 @@ FormulaToken* ScRawToken::CreateToken() const
             return new FormulaUnknownToken( eOp );
         default:
             {
-                SAL_WARN("sc",  "unknown ScRawToken::CreateToken() type " << int(GetType()));
+                SAL_WARN("sc.core",  "unknown ScRawToken::CreateToken() type " << int(GetType()));
                 return new FormulaUnknownToken( ocBad );
             }
     }

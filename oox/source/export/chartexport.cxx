@@ -1016,7 +1016,7 @@ void ChartExport::exportLegend( const Reference< css::chart::XChartDocument >& x
             pFS->singleElement(FSNS(XML_c, XML_y),
                     XML_val, IS(y),
                     FSEND);
-            SAL_WARN_IF(aPos.Anchor != 0, "oox.chart", "unsupported anchor position");
+            SAL_WARN_IF(aPos.Anchor != 0, "oox", "unsupported anchor position");
 
             pFS->endElement(FSNS(XML_c, XML_manualLayout));
             pFS->endElement(FSNS(XML_c, XML_layout));
@@ -1357,7 +1357,7 @@ void ChartExport::exportManualLayout(const css::chart2::RelativePosition& rPos, 
             x -= w;
         break;
         default:
-            SAL_WARN("oox.chart", "unhandled alignment case for manual layout export");
+            SAL_WARN("oox", "unhandled alignment case for manual layout export");
     }
 
     pFS->singleElement(FSNS(XML_c, XML_x),

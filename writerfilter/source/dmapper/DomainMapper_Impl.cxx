@@ -571,7 +571,7 @@ void    DomainMapper_Impl::PopProperties(ContextType eId)
 PropertyMapPtr DomainMapper_Impl::GetTopContextOfType(ContextType eId)
 {
     PropertyMapPtr pRet;
-    SAL_WARN_IF( m_aPropertyStacks[eId].empty(), "writerfilter",
+    SAL_WARN_IF( m_aPropertyStacks[eId].empty(), "writerfilter.dmapper",
         "no context of type " << static_cast<int>(eId) << " available");
     if(!m_aPropertyStacks[eId].empty())
         pRet = m_aPropertyStacks[eId].top();
@@ -587,7 +587,7 @@ uno::Reference< text::XTextAppend >  DomainMapper_Impl::GetTopTextAppend()
 
 FieldContextPtr  DomainMapper_Impl::GetTopFieldContext()
 {
-    SAL_WARN_IF(m_aFieldStack.empty(), "writerfilter", "Field stack is empty");
+    SAL_WARN_IF(m_aFieldStack.empty(), "writerfilter.dmapper", "Field stack is empty");
     return m_aFieldStack.top();
 }
 
@@ -662,7 +662,7 @@ uno::Any DomainMapper_Impl::GetPropertyFromStyleSheet(PropertyIds eId)
         //search until the property is set or no parent is available
         StyleSheetEntryPtr pNewEntry = GetStyleSheetTable()->FindParentStyleSheet(pEntry->sBaseStyleIdentifier);
 
-        SAL_WARN_IF( pEntry == pNewEntry, "writerfilter", "circular loop in style hierarchy?");
+        SAL_WARN_IF( pEntry == pNewEntry, "writerfilter.dmapper", "circular loop in style hierarchy?");
 
         if (pEntry == pNewEntry) //fdo#49587
             break;
@@ -1199,7 +1199,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap )
         }
         catch(const uno::Exception& e)
         {
-            SAL_WARN( "writerfilter", "finishParagraph() exception: " << e.Message );
+            SAL_WARN( "writerfilter.dmapper", "finishParagraph() exception: " << e.Message );
         }
     }
 
@@ -1630,7 +1630,7 @@ void DomainMapper_Impl::PushFootOrEndnote( bool bIsFootnote )
     }
     catch( const uno::Exception& e )
     {
-        SAL_WARN("writerfilter", "exception in PushFootOrEndnote: " << e.Message);
+        SAL_WARN("writerfilter.dmapper", "exception in PushFootOrEndnote: " << e.Message);
     }
 }
 
@@ -1748,7 +1748,7 @@ void DomainMapper_Impl::PushAnnotation()
     }
     catch( const uno::Exception& rException)
     {
-        SAL_WARN("writerfilter", "exception in PushAnnotation: " << rException.Message);
+        SAL_WARN("writerfilter.dmapper", "exception in PushAnnotation: " << rException.Message);
     }
 }
 
@@ -1766,7 +1766,7 @@ void DomainMapper_Impl::PopFootOrEndnote()
 
     if (m_aRedlines.size() == 1)
     {
-        SAL_WARN("writerfilter", "PopFootOrEndnote() is called without PushFootOrEndnote()?");
+        SAL_WARN("writerfilter.dmapper", "PopFootOrEndnote() is called without PushFootOrEndnote()?");
         return;
     }
     m_aRedlines.pop();
@@ -1815,7 +1815,7 @@ void DomainMapper_Impl::PopAnnotation()
     }
     catch (uno::Exception const& e)
     {
-        SAL_WARN("writerfilter",
+        SAL_WARN("writerfilter.dmapper",
                 "Cannot insert annotation field: exception: " << e.Message);
     }
 
@@ -2007,7 +2007,7 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
     }
     catch ( const uno::Exception& e )
     {
-        SAL_WARN("writerfilter", "Exception when adding shape: " << e.Message);
+        SAL_WARN("writerfilter.dmapper", "Exception when adding shape: " << e.Message);
     }
 }
 /*
@@ -2614,7 +2614,7 @@ void DomainMapper_Impl::ChainTextFrames()
     }
     catch (const uno::Exception& rException)
     {
-        SAL_WARN("writerfilter", "failed. message: " << rException.Message);
+        SAL_WARN("writerfilter.dmapper", "failed. message: " << rException.Message);
     }
 }
 
@@ -4250,7 +4250,7 @@ void DomainMapper_Impl::CloseFieldCommand()
         }
         catch( const uno::Exception& e )
         {
-            SAL_WARN( "writerfilter", "Exception in CloseFieldCommand(): " << e.Message );
+            SAL_WARN( "writerfilter.dmapper", "Exception in CloseFieldCommand(): " << e.Message );
         }
         pContext->SetCommandCompleted();
     }
@@ -4903,7 +4903,7 @@ void DomainMapper_Impl::ExecuteFrameConversion()
         }
         catch( const uno::Exception& rEx)
         {
-            SAL_WARN( "writerfilter", "Exception caught when converting to frame: " + rEx.Message );
+            SAL_WARN( "writerfilter.dmapper", "Exception caught when converting to frame: " + rEx.Message );
         }
     }
     m_xFrameStartRange = nullptr;

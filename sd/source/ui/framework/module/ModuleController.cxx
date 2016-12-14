@@ -163,7 +163,7 @@ void ModuleController::InstantiateStartupServices()
     }
     catch (Exception&)
     {
-        SAL_WARN("sd", "ERROR in ModuleController::InstantiateStartupServices");
+        SAL_WARN("sd.fwk", "ERROR in ModuleController::InstantiateStartupServices");
     }
 }
 
@@ -195,7 +195,7 @@ void ModuleController::ProcessStartupService (const ::std::vector<Any>& rValues)
     }
     catch (Exception&)
     {
-        SAL_WARN("sd", "ERROR in ModuleController::ProcessStartupServices");
+        SAL_WARN("sd.fwk", "ERROR in ModuleController::ProcessStartupServices");
     }
 }
 
@@ -232,7 +232,7 @@ void SAL_CALL ModuleController::requestResource (const OUString& rsResourceURL)
             }
             catch (const Exception&)
             {
-                SAL_WARN("sd", "caught exception while creating factory.");
+                SAL_WARN("sd.fwk", "caught exception while creating factory.");
             }
 
             // Remember that this factory has been instanced.

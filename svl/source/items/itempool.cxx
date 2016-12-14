@@ -24,7 +24,6 @@
 
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
-#include "whassert.hxx"
 #include <svl/SfxBroadcaster.hxx>
 #include <svl/hint.hxx>
 #include "poolio.hxx"

@@ -1539,7 +1539,7 @@ lcl_getPrefixOrSuffix(
             uno::UNO_QUERY);
         if (!xObject.is()) continue;
         if (xEnum->hasMoreElements()) {
-            SAL_INFO("sw", "ignoring other odf:Prefix/odf:Suffix statements");
+            SAL_INFO("sw.uno", "ignoring other odf:Prefix/odf:Suffix statements");
         }
         return xObject->getValue();
     }

@@ -1336,7 +1336,7 @@ void ScFormulaCell::CompileXML( sc::CompileFormulaContext& rCxt, ScProgress& rPr
                 if (pPreviousCell->mbIsExtRef)
                     pDocument->GetExternalRefManager()->insertRefCellFromTemplate( pPreviousCell, this );
 
-                SAL_INFO( "sc", "merged '" << aFormula << "' == '" << aShouldBe
+                SAL_INFO( "sc.core.formulacell", "merged '" << aFormula << "' == '" << aShouldBe
                           << "'extend group to " << xGroup->mnLength );
             }
         }
@@ -4247,7 +4247,7 @@ bool ScFormulaCell::InterpretInvariantFormulaGroup()
         ScFormulaCell* pCell = pDocument->GetFormulaCell(aTmpPos);
         if (!pCell)
         {
-            SAL_WARN("sc", "GetFormulaCell not found");
+            SAL_WARN("sc.core.formulacell", "GetFormulaCell not found");
             continue;
         }
 

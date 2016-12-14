@@ -244,7 +244,7 @@ SfxDocumentInfoItem::SfxDocumentInfoItem( const OUString& rFile,
                 // "fix" property? => not a custom property => ignore it!
                 if (!(pProps[i].Attributes & css::beans::PropertyAttribute::REMOVABLE))
                 {
-                    SAL_WARN( "sfx", "non-removable user-defined property?");
+                    SAL_WARN( "sfx.dialog", "non-removable user-defined property?");
                     continue;
                 }
 

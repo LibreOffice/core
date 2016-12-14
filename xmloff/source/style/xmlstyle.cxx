@@ -297,7 +297,7 @@ const SvXMLStyleContext *SvXMLStylesContext_Impl::FindStyleChildContext( sal_uIn
     if( !pIndices && bCreateIndex && !aStyles.empty() )
     {
         pIndices = o3tl::make_unique<IndicesType>(aStyles.begin(), aStyles.end());
-        SAL_WARN_IF(pIndices->size() != aStyles.size(), "xmloff", "Here is a duplicate Style");
+        SAL_WARN_IF(pIndices->size() != aStyles.size(), "xmloff.style", "Here is a duplicate Style");
 #if OSL_DEBUG_LEVEL > 0
         SAL_WARN_IF(0 != m_nIndexCreated, "xmloff.style",
                     "Performance warning: sdbcx::Index created multiple times");

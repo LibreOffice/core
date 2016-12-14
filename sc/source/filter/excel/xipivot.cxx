@@ -829,7 +829,7 @@ void XclImpPivotCache::ReadPivotCacheStream( XclImpStream& rStrm )
             break;
 
             default:
-                SAL_WARN("sc",  "XclImpPivotCache::ReadPivotCacheStream - unknown record 0x" << std::hex << aPCStrm.GetRecId() );
+                SAL_WARN("sc.filter",  "XclImpPivotCache::ReadPivotCacheStream - unknown record 0x" << std::hex << aPCStrm.GetRecId() );
         }
     }
 

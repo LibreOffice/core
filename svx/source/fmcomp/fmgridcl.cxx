@@ -1877,7 +1877,7 @@ namespace
                     try {
                         xProp->getPropertyValue( _sPropName ) >>= sRetText;
                     } catch (UnknownPropertyException const& e) {
-                        SAL_WARN("svx.form",
+                        SAL_WARN("svx.fmcomp",
                                 "exception caught: " << e.Message);
                     }
                 }

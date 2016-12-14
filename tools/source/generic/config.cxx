@@ -661,14 +661,14 @@ Config::Config( const OUString& rFileName )
     mnLockCount     = 1;
 
 #ifdef DBG_UTIL
-    SAL_INFO("tools", "Config::Config( " << maFileName << " )");
+    SAL_INFO("tools.generic", "Config::Config( " << maFileName << " )");
 #endif
 }
 
 Config::~Config()
 {
 #ifdef DBG_UTIL
-    SAL_INFO("tools", "Config::~Config()" );
+    SAL_INFO("tools.generic", "Config::~Config()" );
 #endif
 
     Flush();
@@ -809,7 +809,7 @@ OString Config::ReadKey(const OString& rKey) const
 OString Config::ReadKey(const OString& rKey, const OString& rDefault) const
 {
 #ifdef DBG_UTIL
-    SAL_INFO("tools", "Config::ReadKey( " << rKey << " ) from " << GetGroup()
+    SAL_INFO("tools.generic", "Config::ReadKey( " << rKey << " ) from " << GetGroup()
                       << " in " << maFileName);
 #endif
 
@@ -837,7 +837,7 @@ OString Config::ReadKey(const OString& rKey, const OString& rDefault) const
 void Config::WriteKey(const OString& rKey, const OString& rStr)
 {
 #ifdef DBG_UTIL
-    SAL_INFO("tools", "Config::WriteKey( " << rKey << ", " << rStr << " ) to "
+    SAL_INFO("tools.generic", "Config::WriteKey( " << rKey << ", " << rStr << " ) to "
                        << GetGroup() << " in " << maFileName);
 #endif
 
@@ -940,7 +940,7 @@ void Config::DeleteKey(const OString& rKey)
 sal_uInt16 Config::GetKeyCount() const
 {
 #ifdef DBG_UTIL
-    SAL_INFO("tools", "Config::GetKeyCount() from " << GetGroup() << " in " << maFileName);
+    SAL_INFO("tools.generic", "Config::GetKeyCount() from " << GetGroup() << " in " << maFileName);
 #endif
 
     // Update config data if necessary
@@ -968,7 +968,7 @@ sal_uInt16 Config::GetKeyCount() const
 OString Config::GetKeyName(sal_uInt16 nKey) const
 {
 #ifdef DBG_UTIL
-    SAL_INFO("tools", "Config::GetKeyName( " << OString::number(static_cast<sal_Int32>(nKey))
+    SAL_INFO("tools.generic", "Config::GetKeyName( " << OString::number(static_cast<sal_Int32>(nKey))
                       << " ) from " << GetGroup() << " in " << maFileName);
 #endif
 
@@ -996,7 +996,7 @@ OString Config::GetKeyName(sal_uInt16 nKey) const
 OString Config::ReadKey(sal_uInt16 nKey) const
 {
 #ifdef DBG_UTIL
-    SAL_INFO("tools", "Config::ReadKey( " << OString::number(static_cast<sal_Int32>(nKey))
+    SAL_INFO("tools.generic", "Config::ReadKey( " << OString::number(static_cast<sal_Int32>(nKey))
                        << " ) from " << GetGroup() << " in " << maFileName);
 #endif
 

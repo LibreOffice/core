@@ -717,40 +717,40 @@ PPDParser::PPDParser( const OUString& rFile ) :
     if( m_pImageableAreas )
         m_pDefaultImageableArea = m_pImageableAreas->getDefaultValue();
     if (m_pImageableAreas == nullptr) {
-        SAL_WARN( "vcl", "no ImageableArea in " << m_aFile);
+        SAL_WARN( "vcl.unx.print", "no ImageableArea in " << m_aFile);
     }
     if (m_pDefaultImageableArea == nullptr) {
-        SAL_WARN( "vcl", "no DefaultImageableArea in " << m_aFile);
+        SAL_WARN( "vcl.unx.print", "no DefaultImageableArea in " << m_aFile);
     }
 
     m_pPaperDimensions = getKey( OUString( "PaperDimension" ) );
     if( m_pPaperDimensions )
         m_pDefaultPaperDimension = m_pPaperDimensions->getDefaultValue();
     if (m_pPaperDimensions == nullptr) {
-        SAL_WARN( "vcl", "no PaperDimensions in " << m_aFile);
+        SAL_WARN( "vcl.unx.print", "no PaperDimensions in " << m_aFile);
     }
     if (m_pDefaultPaperDimension == nullptr) {
-        SAL_WARN( "vcl", "no DefaultPaperDimensions in " << m_aFile);
+        SAL_WARN( "vcl.unx.print", "no DefaultPaperDimensions in " << m_aFile);
     }
 
     m_pResolutions = getKey( OUString( "Resolution" ) );
     if( m_pResolutions )
         m_pDefaultResolution = m_pResolutions->getDefaultValue();
     if (m_pResolutions == nullptr) {
-        SAL_WARN( "vcl", "no Resolution in " << m_aFile);
+        SAL_WARN( "vcl.unx.print", "no Resolution in " << m_aFile);
     }
     if (m_pDefaultResolution == nullptr) {
-        SAL_WARN( "vcl", "no DefaultResolution in " + m_aFile);
+        SAL_WARN( "vcl.unx.print", "no DefaultResolution in " + m_aFile);
     }
 
     m_pInputSlots = getKey( OUString( "InputSlot" ) );
     if( m_pInputSlots )
         m_pDefaultInputSlot = m_pInputSlots->getDefaultValue();
     if (m_pInputSlots == nullptr) {
-        SAL_WARN( "vcl", "no InputSlot in " << m_aFile);
+        SAL_WARN( "vcl.unx.print", "no InputSlot in " << m_aFile);
     }
     if (m_pDefaultInputSlot == nullptr) {
-        SAL_WARN( "vcl", "no DefaultInputSlot in " << m_aFile);
+        SAL_WARN( "vcl.unx.print", "no DefaultInputSlot in " << m_aFile);
     }
 
     m_pDuplexTypes = getKey( OUString( "Duplex" ) );
@@ -759,7 +759,7 @@ PPDParser::PPDParser( const OUString& rFile ) :
 
     m_pFontList = getKey( OUString( "Font" ) );
     if (m_pFontList == nullptr) {
-        SAL_WARN( "vcl", "no Font in " << m_aFile);
+        SAL_WARN( "vcl.unx.print", "no Font in " << m_aFile);
     }
 
     // fill in direct values

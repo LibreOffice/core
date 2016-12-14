@@ -157,7 +157,7 @@ ContextHandlerRef GraphicalObjectFrameContext::onCreateContext( sal_Int32 aEleme
                 return new table::TableContext( *this, mpShapePtr );
             else
             {
-                SAL_WARN("oox", "OOX: Ignore graphicsData of :" << sUri );
+                SAL_WARN("oox.drawingml", "OOX: Ignore graphicsData of :" << sUri );
                 return nullptr;
             }
         }

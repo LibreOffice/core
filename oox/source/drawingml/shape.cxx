@@ -296,7 +296,7 @@ void Shape::setTextBox(bool bTextBox)
 
 void Shape::applyShapeReference( const Shape& rReferencedShape, bool bUseText )
 {
-    SAL_INFO("oox", OSL_THIS_FUNC << "apply shape reference: " << rReferencedShape.msId << " to shape id: " << msId);
+    SAL_INFO("oox.drawingml", OSL_THIS_FUNC << "apply shape reference: " << rReferencedShape.msId << " to shape id: " << msId);
 
     if ( rReferencedShape.mpTextBody.get() && bUseText )
         mpTextBody = std::make_shared<TextBody>( *rReferencedShape.mpTextBody.get() );

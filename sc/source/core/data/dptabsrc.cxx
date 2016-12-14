@@ -2725,7 +2725,7 @@ const ScDPCache* ScDPSource::GetCache()
 const ScDPItemData* ScDPMember::GetItemData() const
 {
     const ScDPItemData* pData = pSource->GetItemDataById(nDim, mnDataId);
-    SAL_WARN_IF( !pData, "sc", "ScDPMember::GetItemData: what data? nDim " << nDim << ", mnDataId " << mnDataId);
+    SAL_WARN_IF( !pData, "sc.core", "ScDPMember::GetItemData: what data? nDim " << nDim << ", mnDataId " << mnDataId);
     return pData;
 }
 

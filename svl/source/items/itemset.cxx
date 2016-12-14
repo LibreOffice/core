@@ -29,7 +29,6 @@
 #include <svl/itempool.hxx>
 #include <svl/itemiter.hxx>
 #include <svl/whiter.hxx>
-#include "whassert.hxx"
 
 #include <tools/stream.hxx>
 #include <tools/solar.h>
@@ -537,9 +536,10 @@ const SfxPoolItem* SfxItemSet::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich 
                     }
                 }
             }
-            SFX_ASSERT( !m_pPool->IsItemPoolable(nWhich) ||
-                        dynamic_cast<const SfxSetItem*>( &rItem ) !=  nullptr || **ppFnd == rItem,
-                        nWhich, "putted Item unequal" );
+            SAL_WARN_IF(m_pPool->IsItemPoolable(nWhich) &&
+                        dynamic_cast<const SfxSetItem*>( &rItem ) == nullptr &&
+                        **ppFnd != rItem,
+                        "svl.items", "putted Item unequal, with ID/pos " << nWhich );
             return *ppFnd;
         }
         ppFnd += *(pPtr+1) - *pPtr + 1;
@@ -910,7 +910,7 @@ const SfxPoolItem& SfxItemSet::Get( sal_uInt16 nWhich, bool bSrchInParent) const
                     {
                         if( reinterpret_cast<SfxPoolItem*>(-1) == *ppFnd ) {
                             //FIXME: The following code is duplicated further down
-                            SFX_ASSERT(m_pPool, nWhich, "no Pool, but status is ambiguous");
+                            SAL_WARN_IF(!m_pPool, "svl.items", "no Pool, but status is ambiguous, with ID/pos " << nWhich);
                             //!((SfxAllItemSet *)this)->aDefault.SetWhich(nWhich);
                             //!return aDefault;
                             return m_pPool->GetDefaultItem( nWhich );
@@ -934,7 +934,7 @@ const SfxPoolItem& SfxItemSet::Get( sal_uInt16 nWhich, bool bSrchInParent) const
     } while (bSrchInParent && nullptr != (pAktSet = pAktSet->m_pParent));
 
     // Get the Default from the Pool and return
-    SFX_ASSERT(m_pPool, nWhich, "no Pool, but status is ambiguous");
+    SAL_WARN_IF(!m_pPool, "svl.items", "no Pool, but status is ambiguous, with ID/pos " << nWhich);
     const SfxPoolItem *pItem = &m_pPool->GetDefaultItem( nWhich );
     return *pItem;
 }
@@ -1446,7 +1446,7 @@ void SfxItemSet::Load
     const size_t nMaxRecords = rStream.remainingSize() / nMinRecordSize;
     if (nCount > nMaxRecords)
     {
-        SAL_WARN("svl", "Parsing error: " << nMaxRecords <<
+        SAL_WARN("svl.items", "Parsing error: " << nMaxRecords <<
                  " max possible entries, but " << nCount << " claimed, truncating");
         nCount = nMaxRecords;
     }
@@ -1471,7 +1471,7 @@ void SfxItemSet::Load
                 {
                     // Remember Item pointer in the set
                     ppFnd += nWhich - *pPtr;
-                    SFX_ASSERT( !*ppFnd, nWhich, "Item is present twice");
+                    SAL_WARN_IF( *ppFnd, "svl.items", "Item is present twice, with ID/pos " << nWhich);
                     *ppFnd = pItem;
                     ++m_nCount;
                     break;

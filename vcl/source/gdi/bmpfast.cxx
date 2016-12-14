@@ -348,7 +348,7 @@ bool ImplConvertToBitmap( TrueColorPixelPtr<SRCFMT>& rSrcLine,
     BitmapBuffer& rDstBuffer, const BitmapBuffer& rSrcBuffer )
 {
     // help the compiler to avoid instantiations of unneeded conversions
-    SAL_WARN_IF( SRCFMT == DSTFMT, "vcl", "ImplConvertToBitmap into same format");
+    SAL_WARN_IF( SRCFMT == DSTFMT, "vcl.gdi", "ImplConvertToBitmap into same format");
     if( SRCFMT == DSTFMT )
         return false;
 
@@ -543,7 +543,7 @@ bool ImplBlendToBitmap( TrueColorPixelPtr<SRCFMT>& rSrcLine,
     BitmapBuffer& rDstBuffer, const BitmapBuffer& rSrcBuffer,
     const BitmapBuffer& rMskBuffer )
 {
-    SAL_WARN_IF( rMskBuffer.mnFormat != ScanlineFormat::N8BitPal, "vcl", "FastBmp BlendImage: unusual MSKFMT" );
+    SAL_WARN_IF( rMskBuffer.mnFormat != ScanlineFormat::N8BitPal, "vcl.gdi", "FastBmp BlendImage: unusual MSKFMT" );
 
     const int nSrcLinestep = rSrcBuffer.mnScanlineSize;
     int nMskLinestep = rMskBuffer.mnScanlineSize;
