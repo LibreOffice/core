@@ -549,11 +549,9 @@ cairo::SurfaceSharedPtr X11SalGraphics::CreateBitmapSurface( const OutputDevice&
                                       const BitmapSystemData& rData,
                                       const Size&             rSize ) const
 {
-    SAL_INFO(
-        "canvas.cairo",
-        "requested size: " << rSize.Width() << " x " << rSize.Height()
-            << " available size: " << rData.mnWidth << " x "
-            << rData.mnHeight);
+    SAL_INFO("vcl", "requested size: " << rSize.Width() << " x " << rSize.Height()
+              << " available size: " << rData.mnWidth << " x "
+              << rData.mnHeight);
     if ( rData.mnWidth == rSize.Width() && rData.mnHeight == rSize.Height() )
     {
         if( rRefDevice.GetOutDevType() == OUTDEV_WINDOW )

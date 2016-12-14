@@ -885,14 +885,14 @@ bool lcl_emptyRow(std::vector<RowSequence_t>& rTableRanges, sal_Int32 nRow)
 {
     if (nRow >= static_cast<sal_Int32>(rTableRanges.size()))
     {
-        SAL_WARN("writerfilter", "m_aCellProperties not in sync with rTableRanges?");
+        SAL_WARN("writerfilter.dmapper", "m_aCellProperties not in sync with rTableRanges?");
         return false;
     }
 
     RowSequence_t rRowSeq = rTableRanges[nRow];
     if (rRowSeq.getLength() == 0)
     {
-        SAL_WARN("writerfilter", "m_aCellProperties not in sync with rTableRanges?");
+        SAL_WARN("writerfilter.dmapper", "m_aCellProperties not in sync with rTableRanges?");
         return false;
     }
 
@@ -908,7 +908,7 @@ bool lcl_emptyRow(std::vector<RowSequence_t>& rTableRanges, sal_Int32 nRow)
     }
     catch (const lang::IllegalArgumentException& e)
     {
-        SAL_WARN("writerfilter", "compareRegionStarts() failed: " << e.Message);
+        SAL_WARN( "writerfilter.dmapper", "compareRegionStarts() failed: " << e.Message);
         return false;
     }
     return true;

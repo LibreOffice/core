@@ -2789,7 +2789,7 @@ const SwContentFrame* SwFootnoteFrame::GetRef() const
     const SwContentFrame* pRefAttr = GetRefFromAttr();
     SAL_WARN_IF( pRef != pRefAttr && !pRef->IsAnFollow( pRefAttr )
             && !pRefAttr->IsAnFollow( pRef ),
-            "sw", "access to deleted Frame? pRef != pAttr->GetRef()" );
+            "sw.core", "access to deleted Frame? pRef != pAttr->GetRef()" );
     return pRef;
 }
 
@@ -2798,7 +2798,7 @@ SwContentFrame* SwFootnoteFrame::GetRef()
     const SwContentFrame* pRefAttr = GetRefFromAttr();
     SAL_WARN_IF( pRef != pRefAttr && !pRef->IsAnFollow( pRefAttr )
             && !pRefAttr->IsAnFollow( pRef ),
-            "sw", "access to deleted Frame? pRef != pAttr->GetRef()" );
+            "sw.core", "access to deleted Frame? pRef != pAttr->GetRef()" );
     return pRef;
 }
 #endif

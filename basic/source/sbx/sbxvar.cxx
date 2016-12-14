@@ -560,7 +560,7 @@ bool SbxVariable::LoadData( SvStream& rStrm, sal_uInt16 nVer )
             break;
         default:
             aData.eType = SbxNULL;
-            SAL_WARN( "basic", "Loaded a non-supported data type" );
+            SAL_WARN( "basic.sbx", "Loaded a non-supported data type" );
             return false;
         }
         // putt value

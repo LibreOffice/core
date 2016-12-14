@@ -314,21 +314,21 @@ void Printer::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
 void Printer::DrawOutDev( const Point& /*rDestPt*/, const Size& /*rDestSize*/,
                                const Point& /*rSrcPt*/,  const Size& /*rSrcSize*/ )
 {
-    SAL_WARN( "vcl", "Don't use OutputDevice::DrawOutDev(...) with printer devices!" );
+    SAL_WARN( "vcl.gdi", "Don't use OutputDevice::DrawOutDev(...) with printer devices!" );
 }
 
 void Printer::DrawOutDev( const Point& /*rDestPt*/, const Size& /*rDestSize*/,
                                const Point& /*rSrcPt*/,  const Size& /*rSrcSize*/,
                                const OutputDevice& /*rOutDev*/ )
 {
-    SAL_WARN( "vcl", "Don't use OutputDevice::DrawOutDev(...) with printer devices!" );
+    SAL_WARN( "vcl.gdi", "Don't use OutputDevice::DrawOutDev(...) with printer devices!" );
 }
 
 void Printer::CopyArea( const Point& /*rDestPt*/,
                         const Point& /*rSrcPt*/,  const Size& /*rSrcSize*/,
                         bool /*bWindowInvalidate*/ )
 {
-    SAL_WARN( "vcl", "Don't use OutputDevice::CopyArea(...) with printer devices!" );
+    SAL_WARN( "vcl.gdi", "Don't use OutputDevice::CopyArea(...) with printer devices!" );
 }
 
 void Printer::SetPrinterOptions( const PrinterOptions& i_rOptions )
@@ -965,8 +965,8 @@ Printer::~Printer()
 
 void Printer::dispose()
 {
-    SAL_WARN_IF( IsPrinting(), "vcl", "Printer::~Printer() - Job is printing" );
-    SAL_WARN_IF( IsJobActive(), "vcl", "Printer::~Printer() - Job is active" );
+    SAL_WARN_IF( IsPrinting(), "vcl.gdi", "Printer::~Printer() - Job is printing" );
+    SAL_WARN_IF( IsJobActive(), "vcl.gdi", "Printer::~Printer() - Job is active" );
 
     delete mpPrinterOptions;
     mpPrinterOptions = nullptr;
@@ -1654,7 +1654,7 @@ bool Printer::EndJob()
     if ( !IsJobActive() )
         return bRet;
 
-    SAL_WARN_IF( mbInPrintPage, "vcl", "Printer::EndJob() - StartPage() without EndPage() called" );
+    SAL_WARN_IF( mbInPrintPage, "vcl.gdi", "Printer::EndJob() - StartPage() without EndPage() called" );
 
     mbJobActive = false;
 

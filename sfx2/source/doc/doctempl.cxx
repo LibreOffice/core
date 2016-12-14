@@ -865,12 +865,12 @@ bool SfxDocumentTemplates::CopyFrom
             }
             else
             {
-                SAL_WARN( "sfx", "CopyFrom(): The content should contain target URL!" );
+                SAL_WARN( "sfx.doc", "CopyFrom(): The content should contain target URL!" );
             }
         }
         else
         {
-            SAL_WARN( "sfx", "CopyFrom(): The content just was created!" );
+            SAL_WARN( "sfx.doc", "CopyFrom(): The content just was created!" );
         }
     }
 

@@ -1448,7 +1448,7 @@ void PDFWriterImpl::PDFPage::appendPolygon( const tools::Polygon& rPoly, OString
             if( pFlagArray && pFlagArray[i] == PolyFlags::Control && nPoints-i > 2 )
             {
                 // bezier
-                SAL_WARN_IF( pFlagArray[i+1] != PolyFlags::Control || pFlagArray[i+2] == PolyFlags::Control, "vcl", "unexpected sequence of control points" );
+                SAL_WARN_IF( pFlagArray[i+1] != PolyFlags::Control || pFlagArray[i+2] == PolyFlags::Control, "vcl.pdfwriter", "unexpected sequence of control points" );
                 appendPoint( rPoly[i], rBuffer );
                 rBuffer.append( " " );
                 appendPoint( rPoly[i+1], rBuffer );
@@ -2351,7 +2351,7 @@ bool PDFWriterImpl::updateObject( sal_Int32 n )
 
     sal_uInt64 nOffset = ~0U;
     osl::File::RC aError = m_aFile.getPos(nOffset);
-    SAL_WARN_IF( aError != osl::File::E_None, "vcl", "could not register object" );
+    SAL_WARN_IF( aError != osl::File::E_None, "vcl.pdfwriter", "could not register object" );
     if (aError != osl::File::E_None)
     {
         m_aFile.close();
@@ -2811,7 +2811,7 @@ bool PDFWriterImpl::emitTilings()
 
     for( std::vector<TilingEmit>::iterator it = m_aTilings.begin(); it != m_aTilings.end(); ++it )
     {
-        SAL_WARN_IF( !it->m_pTilingStream, "vcl", "tiling without stream" );
+        SAL_WARN_IF( !it->m_pTilingStream, "vcl.pdfwriter", "tiling without stream" );
         if( ! it->m_pTilingStream )
             continue;
 
@@ -3296,8 +3296,8 @@ bool PDFWriterImpl::emitFonts()
             {
                 sal_uInt8 nEnc = fit->second.getGlyphId();
 
-                SAL_WARN_IF( aGlyphIds[nEnc] != 0 || pEncoding[nEnc] != 0, "vcl", "duplicate glyph" );
-                SAL_WARN_IF( nEnc > lit->m_aMapping.size(), "vcl", "invalid glyph encoding" );
+                SAL_WARN_IF( aGlyphIds[nEnc] != 0 || pEncoding[nEnc] != 0, "vcl.pdfwriter", "duplicate glyph" );
+                SAL_WARN_IF( nEnc > lit->m_aMapping.size(), "vcl.pdfwriter", "invalid glyph encoding" );
 
                 aGlyphIds[ nEnc ] = fit->first;
                 pEncoding[ nEnc ] = nEnc;
@@ -3379,7 +3379,7 @@ bool PDFWriterImpl::emitFonts()
 
                     sal_uInt64 nBytesRead = 0;
                     if ( osl::File::E_None != aFontFile.read(xBuffer.get(), nLength1, nBytesRead) ) return false;
-                    SAL_WARN_IF( nBytesRead!=nLength1, "vcl", "PDF-FontSubset read incomplete!" );
+                    SAL_WARN_IF( nBytesRead!=nLength1, "vcl.pdfwriter", "PDF-FontSubset read incomplete!" );
                     if ( osl::File::E_None != aFontFile.setPos(osl_Pos_Absolut, 0) ) return false;
                     // get the PFB-segment lengths
                     ThreeInts aSegmentLengths = {0,0,0};
@@ -7759,7 +7759,7 @@ bool PDFWriterImpl::emitTrailer()
             aLine.append( '0' );
         aLine.append( aOffset );
         aLine.append( " 00000 n \n" );
-        SAL_WARN_IF( aLine.getLength() != 20, "vcl", "invalid xref entry" );
+        SAL_WARN_IF( aLine.getLength() != 20, "vcl.pdfwriter", "invalid xref entry" );
         CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
     }
 
@@ -7933,7 +7933,7 @@ void PDFWriterImpl::sortWidgets()
         }
         else
         {
-            SAL_WARN( "vcl", "wrong number of sorted annotations" );
+            SAL_WARN( "vcl.pdfwriter", "wrong number of sorted annotations" );
             #if OSL_DEBUG_LEVEL > 0
             SAL_INFO("vcl.pdfwriter", "PDFWriterImpl::sortWidgets(): wrong number of sorted assertions "
                      "on page nr " << (long int)it->first << ", " <<
@@ -9585,7 +9585,7 @@ void PDFWriterImpl::drawPolyPolygon( const tools::PolyPolygon& rPolyPoly )
 
 void PDFWriterImpl::drawTransparent( const tools::PolyPolygon& rPolyPoly, sal_uInt32 nTransparentPercent )
 {
-    SAL_WARN_IF( nTransparentPercent > 100, "vcl", "invalid alpha value" );
+    SAL_WARN_IF( nTransparentPercent > 100, "vcl.pdfwriter", "invalid alpha value" );
     nTransparentPercent = nTransparentPercent % 100;
 
     MARK( "drawTransparent" );
@@ -9745,7 +9745,7 @@ void PDFWriterImpl::beginTransparencyGroup()
 
 void PDFWriterImpl::endTransparencyGroup( const Rectangle& rBoundingBox, sal_uInt32 nTransparentPercent )
 {
-    SAL_WARN_IF( nTransparentPercent > 100, "vcl", "invalid alpha value" );
+    SAL_WARN_IF( nTransparentPercent > 100, "vcl.pdfwriter", "invalid alpha value" );
     nTransparentPercent = nTransparentPercent % 100;
 
     if( m_aContext.Version >= PDFWriter::PDF_1_4 )
@@ -10110,7 +10110,7 @@ void PDFWriterImpl::drawPolyLine( const tools::Polygon& rPoly, const LineInfo& r
 
 void PDFWriterImpl::convertLineInfoToExtLineInfo( const LineInfo& rIn, PDFWriter::ExtLineInfo& rOut )
 {
-    SAL_WARN_IF( rIn.GetStyle() != LineStyle::Dash, "vcl", "invalid conversion" );
+    SAL_WARN_IF( rIn.GetStyle() != LineStyle::Dash, "vcl.pdfwriter", "invalid conversion" );
     rOut.m_fLineWidth           = rIn.GetWidth();
     rOut.m_fTransparency        = 0.0;
     rOut.m_eCap                 = PDFWriter::capButt;
@@ -10826,13 +10826,13 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
         {
             aBitmap = getExportBitmap(rObject.m_aBitmap.GetMask());
             aBitmap.Convert( BMP_CONVERSION_1BIT_THRESHOLD );
-            SAL_WARN_IF( aBitmap.GetBitCount() != 1, "vcl", "mask conversion failed" );
+            SAL_WARN_IF( aBitmap.GetBitCount() != 1, "vcl.pdfwriter", "mask conversion failed" );
         }
         else if( aBitmap.GetBitCount() != 8 )
         {
             aBitmap = getExportBitmap(rObject.m_aBitmap.GetAlpha().GetBitmap());
             aBitmap.Convert( BMP_CONVERSION_8BIT_GREYS );
-            SAL_WARN_IF( aBitmap.GetBitCount() != 8, "vcl", "alpha mask conversion failed" );
+            SAL_WARN_IF( aBitmap.GetBitCount() != 8, "vcl.pdfwriter", "alpha mask conversion failed" );
         }
     }
 
@@ -10898,7 +10898,7 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
             {
                 // #i47395# 1 bit bitmaps occasionally have an inverted grey palette
                 sal_Int32 nBlackIndex = pAccess->GetBestPaletteIndex( BitmapColor( Color( COL_BLACK ) ) );
-                SAL_WARN_IF( nBlackIndex != 0 && nBlackIndex != 1, "vcl", "wrong black index" );
+                SAL_WARN_IF( nBlackIndex != 0 && nBlackIndex != 1, "vcl.pdfwriter", "wrong black index" );
                 if( nBlackIndex == 1 )
                     aLine.append( "/Decode[1 0]\n" );
             }
@@ -10954,7 +10954,7 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
         {
             aLine.append( "/ImageMask true\n" );
             sal_Int32 nBlackIndex = pAccess->GetBestPaletteIndex( BitmapColor( Color( COL_BLACK ) ) );
-            SAL_WARN_IF( nBlackIndex != 0 && nBlackIndex != 1, "vcl", "wrong black index" );
+            SAL_WARN_IF( nBlackIndex != 0 && nBlackIndex != 1, "vcl.pdfwriter", "wrong black index" );
             if( nBlackIndex )
                 aLine.append( "/Decode[ 1 0 ]\n" );
             else
@@ -12102,7 +12102,7 @@ sal_Int32 PDFWriterImpl::beginStructureElement( PDFWriter::StructElement eType, 
             if( childType == PDFWriter::Document )
             {
                 m_nCurrentStructElement = nNewCurElement;
-                SAL_WARN( "vcl", "Structure element inserted to StructTreeRoot that is not a document" );
+                SAL_WARN( "vcl.pdfwriter", "Structure element inserted to StructTreeRoot that is not a document" );
             }
             else {
                 OSL_FAIL( "document structure in disorder !" );
@@ -12898,7 +12898,7 @@ sal_Int32 PDFWriterImpl::createControl( const PDFWriter::AnyWidget& rControl, sa
         rNewWidget.m_eType          = PDFWriter::CheckBox;
         rNewWidget.m_nRadioGroup    = rBtn.RadioGroup;
 
-        SAL_WARN_IF( nRadioGroupWidget < 0 || nRadioGroupWidget >= (sal_Int32)m_aWidgets.size(), "vcl", "no radio group parent" );
+        SAL_WARN_IF( nRadioGroupWidget < 0 || nRadioGroupWidget >= (sal_Int32)m_aWidgets.size(), "vcl.pdfwriter", "no radio group parent" );
 
         PDFWidget& rRadioButton = m_aWidgets[nRadioGroupWidget];
         rRadioButton.m_aKids.push_back( rNewWidget.m_nObject );

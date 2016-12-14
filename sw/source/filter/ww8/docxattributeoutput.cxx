@@ -2195,7 +2195,7 @@ void DocxAttributeOutput::RunText( const OUString& rText, rtl_TextEncoding /*eCh
                 if ( *pIt < 0x0020 ) // filter out the control codes
                 {
                     impl_WriteRunText( m_pSerializer, nTextToken, pBegin, pIt );
-                    SAL_INFO("sw", "Ignored control code in a text run: " << *pIt );
+                    SAL_INFO("sw.ww8", "Ignored control code in a text run: " << *pIt );
                 }
                 prevUnicode = *pIt;
                 break;
@@ -2207,12 +2207,12 @@ void DocxAttributeOutput::RunText( const OUString& rText, rtl_TextEncoding /*eCh
 
 void DocxAttributeOutput::RawText(const OUString& /*rText*/, rtl_TextEncoding /*eCharSet*/)
 {
-    SAL_INFO("sw", "TODO DocxAttributeOutput::RawText( const String& rText, bool bForceUnicode, rtl_TextEncoding eCharSet )" );
+    SAL_INFO("sw.ww8", "TODO DocxAttributeOutput::RawText( const String& rText, bool bForceUnicode, rtl_TextEncoding eCharSet )" );
 }
 
 void DocxAttributeOutput::StartRuby( const SwTextNode& rNode, sal_Int32 nPos, const SwFormatRuby& rRuby )
 {
-    SAL_INFO("sw", "TODO DocxAttributeOutput::StartRuby( const SwTextNode& rNode, const SwFormatRuby& rRuby )" );
+    SAL_INFO("sw.ww8", "TODO DocxAttributeOutput::StartRuby( const SwTextNode& rNode, const SwFormatRuby& rRuby )" );
     EndRun(); // end run before starting ruby to avoid nested runs, and overlap
     assert(!m_closeHyperlinkInThisRun); // check that no hyperlink overlaps ruby
     assert(!m_closeHyperlinkInPreviousRun);
@@ -2276,7 +2276,7 @@ void DocxAttributeOutput::StartRuby( const SwTextNode& rNode, sal_Int32 nPos, co
 
 void DocxAttributeOutput::EndRuby()
 {
-    SAL_INFO("sw", "TODO DocxAttributeOutput::EndRuby()" );
+    SAL_INFO("sw.ww8", "TODO DocxAttributeOutput::EndRuby()" );
     EndRun( );
     m_pSerializer->endElementNS( XML_w, XML_rubyBase );
     m_pSerializer->endElementNS( XML_w, XML_ruby );
@@ -2558,7 +2558,7 @@ void DocxAttributeOutput::StartRedline( const SwRedlineData * pRedlineData )
             break;
 
         case nsRedlineType_t::REDLINE_FORMAT:
-            SAL_INFO("sw", "TODO DocxAttributeOutput::StartRedline()" );
+            SAL_INFO("sw.ww8", "TODO DocxAttributeOutput::StartRedline()" );
             break;
         default:
             break;
@@ -2581,7 +2581,7 @@ void DocxAttributeOutput::EndRedline( const SwRedlineData * pRedlineData )
             break;
 
         case nsRedlineType_t::REDLINE_FORMAT:
-            SAL_INFO("sw", "TODO DocxAttributeOutput::EndRedline()" );
+            SAL_INFO("sw.ww8", "TODO DocxAttributeOutput::EndRedline()" );
             break;
         default:
             break;
@@ -2590,7 +2590,7 @@ void DocxAttributeOutput::EndRedline( const SwRedlineData * pRedlineData )
 
 void DocxAttributeOutput::FormatDrop( const SwTextNode& /*rNode*/, const SwFormatDrop& /*rSwFormatDrop*/, sal_uInt16 /*nStyle*/, ww8::WW8TableNodeInfo::Pointer_t /*pTextNodeInfo*/, ww8::WW8TableNodeInfoInner::Pointer_t )
 {
-    SAL_INFO("sw", "TODO DocxAttributeOutput::FormatDrop( const SwTextNode& rNode, const SwFormatDrop& rSwFormatDrop, sal_uInt16 nStyle )" );
+    SAL_INFO("sw.ww8", "TODO DocxAttributeOutput::FormatDrop( const SwTextNode& rNode, const SwFormatDrop& rSwFormatDrop, sal_uInt16 nStyle )" );
 }
 
 void DocxAttributeOutput::ParagraphStyle( sal_uInt16 nStyle )
@@ -3758,17 +3758,17 @@ void DocxAttributeOutput::TableNodeInfoInner( ww8::WW8TableNodeInfoInner::Pointe
 
 void DocxAttributeOutput::TableOrientation( ww8::WW8TableNodeInfoInner::Pointer_t /*pTableTextNodeInfoInner*/ )
 {
-    SAL_INFO("sw", "TODO: DocxAttributeOutput::TableOrientation( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )" );
+    SAL_INFO("sw.ww8", "TODO: DocxAttributeOutput::TableOrientation( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )" );
 }
 
 void DocxAttributeOutput::TableSpacing( ww8::WW8TableNodeInfoInner::Pointer_t /*pTableTextNodeInfoInner*/ )
 {
-    SAL_INFO("sw", "TODO: DocxAttributeOutput::TableSpacing( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )\n" );
+    SAL_INFO("sw.ww8", "TODO: DocxAttributeOutput::TableSpacing( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )\n" );
 }
 
 void DocxAttributeOutput::TableRowEnd( sal_uInt32 /*nDepth*/ )
 {
-    SAL_INFO("sw", "TODO: DocxAttributeOutput::TableRowEnd( sal_uInt32 nDepth = 1 )" );
+    SAL_INFO("sw.ww8", "TODO: DocxAttributeOutput::TableRowEnd( sal_uInt32 nDepth = 1 )" );
 }
 
 void DocxAttributeOutput::StartStyles()
@@ -4116,7 +4116,7 @@ void DocxAttributeOutput::EndStyles( sal_uInt16 nNumberOfStyles )
 void DocxAttributeOutput::DefaultStyle()
 {
     // are these the values of enum ww::sti (see ../inc/wwstyles.hxx)?
-    SAL_INFO("sw", "TODO DocxAttributeOutput::DefaultStyle()");
+    SAL_INFO("sw.ww8", "TODO DocxAttributeOutput::DefaultStyle()");
 }
 
 /* Writes <a:srcRect> tag back to document.xml if a file conatins a cropped image.
@@ -4209,7 +4209,7 @@ void DocxAttributeOutput::CacheRelId(BitmapChecksum nChecksum, const OUString& r
 
 void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size& rSize, const SwFlyFrameFormat* pOLEFrameFormat, SwOLENode* pOLENode, const SdrObject* pSdrObj )
 {
-    SAL_INFO("sw", "TODO DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size& rSize, const SwFlyFrameFormat* pOLEFrameFormat, SwOLENode* pOLENode, const SdrObject* pSdrObj  ) - some stuff still missing" );
+    SAL_INFO("sw.ww8", "TODO DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size& rSize, const SwFlyFrameFormat* pOLEFrameFormat, SwOLENode* pOLENode, const SdrObject* pSdrObj  ) - some stuff still missing" );
 
     GetSdtEndBefore(pSdrObj);
 
@@ -4474,7 +4474,7 @@ void DocxAttributeOutput::WritePostponedChart()
 
     if( xChartDoc.is() )
     {
-        SAL_INFO("sw", "DocxAttributeOutput::WriteOLE2Obj: export chart ");
+        SAL_INFO("sw.ww8", "DocxAttributeOutput::WriteOLE2Obj: export chart ");
         m_pSerializer->startElementNS( XML_w, XML_drawing,
             FSEND );
         m_pSerializer->startElementNS( XML_wp, XML_inline,
@@ -5046,7 +5046,7 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const ww8::Frame &rFrame, const P
             }
             break;
         default:
-            SAL_INFO("sw", "TODO DocxAttributeOutput::OutputFlyFrame_Impl( const ww8::Frame& rFrame, const Point& rNdTopLeft ) - frame type " <<
+            SAL_INFO("sw.ww8", "TODO DocxAttributeOutput::OutputFlyFrame_Impl( const ww8::Frame& rFrame, const Point& rNdTopLeft ) - frame type " <<
                     ( rFrame.GetWriterType() == ww8::Frame::eTextBox ? "eTextBox":
                       ( rFrame.GetWriterType() == ww8::Frame::eOle ? "eOle": "???" ) ) );
             break;
@@ -5462,7 +5462,7 @@ void DocxAttributeOutput::SectionBreak( sal_uInt8 nC, const WW8_SepInfo* pSectio
 
             break;
         default:
-            SAL_INFO("sw", "Unknown section break to write: " << nC );
+            SAL_INFO("sw.ww8", "Unknown section break to write: " << nC );
             break;
     }
 }
@@ -5757,7 +5757,7 @@ void DocxAttributeOutput::SectionPageNumbering( sal_uInt16 nNumType, const ::boo
     m_pSerializer->singleElementNS( XML_w, XML_pgNumType, xAttrs );
 
     // see 2.6.12 pgNumType (Page Numbering Settings)
-    SAL_INFO("sw", "TODO DocxAttributeOutput::SectionPageNumbering()" );
+    SAL_INFO("sw.ww8", "TODO DocxAttributeOutput::SectionPageNumbering()" );
 }
 
 void DocxAttributeOutput::SectionType( sal_uInt8 nBreakCode )
@@ -6420,7 +6420,7 @@ void DocxAttributeOutput::CharWeight( const SvxWeightItem& rWeight )
 
 void DocxAttributeOutput::CharAutoKern( const SvxAutoKernItem& )
 {
-    SAL_INFO("sw", "TODO DocxAttributeOutput::CharAutoKern()" );
+    SAL_INFO("sw.ww8", "TODO DocxAttributeOutput::CharAutoKern()" );
 }
 
 void DocxAttributeOutput::CharAnimatedText( const SvxBlinkItem& rBlink )
@@ -6645,7 +6645,7 @@ void DocxAttributeOutput::RefField( const SwField&  rField, const OUString& rRef
 
 void DocxAttributeOutput::HiddenField( const SwField& /*rField*/ )
 {
-    SAL_INFO("sw", "TODO DocxAttributeOutput::HiddenField()" );
+    SAL_INFO("sw.ww8", "TODO DocxAttributeOutput::HiddenField()" );
 }
 
 void DocxAttributeOutput::PostitField( const SwField* pField )
@@ -7294,7 +7294,7 @@ void DocxAttributeOutput::FormatFrameSize( const SwFormatFrameSize& rSize )
 
 void DocxAttributeOutput::FormatPaperBin( const SvxPaperBinItem& )
 {
-    SAL_INFO("sw", "TODO DocxAttributeOutput::FormatPaperBin()" );
+    SAL_INFO("sw.ww8", "TODO DocxAttributeOutput::FormatPaperBin()" );
 }
 
 void DocxAttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLRSpace )

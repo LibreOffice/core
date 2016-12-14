@@ -505,7 +505,7 @@ template <class T>
 tools::Polygon EnhWMFReader::ReadPolygon(sal_uInt32 nStartIndex, sal_uInt32 nPoints)
 {
     bool bRecordOk = nPoints <= SAL_MAX_UINT16;
-    SAL_WARN_IF(!bRecordOk, "vcl.filter", "polygon record has more polygons than we can handle");
+    SAL_WARN_IF(!bRecordOk, "vcl.emf", "polygon record has more polygons than we can handle");
     if (!bRecordOk)
         return tools::Polygon();
 
@@ -1552,7 +1552,7 @@ bool EnhWMFReader::ReadEnhWMF()
                     if ( nOptions & ETO_RTLREADING )
                         nTextLayoutMode = ComplexTextLayoutFlags::BiDiRtl | ComplexTextLayoutFlags::TextOriginLeft;
                     pOut->SetTextLayoutMode( nTextLayoutMode );
-                    SAL_WARN_IF( ( nOptions & ( ETO_PDY | ETO_GLYPH_INDEX ) ) != 0, "vcl", "SJ: ETO_PDY || ETO_GLYPH_INDEX in EMF" );
+                    SAL_WARN_IF( ( nOptions & ( ETO_PDY | ETO_GLYPH_INDEX ) ) != 0, "vcl.emf", "SJ: ETO_PDY || ETO_GLYPH_INDEX in EMF" );
 
                     Point aPos( ptlReferenceX, ptlReferenceY );
                     bool bLenSane = nLen > 0 && nLen < static_cast<sal_Int32>( SAL_MAX_UINT32 / sizeof(sal_Int32) );

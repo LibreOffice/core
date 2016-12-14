@@ -2447,7 +2447,7 @@ void XMLTextFieldExport::ProcessDisplay(bool bIsVisible,
 void XMLTextFieldExport::ProcessBoolean(enum XMLTokenEnum eName,
                                         bool bBool, bool bDefault)
 {
-    SAL_WARN_IF( eName == XML_TOKEN_INVALID, "xmloff", "invalid element token");
+    SAL_WARN_IF( eName == XML_TOKEN_INVALID, "xmloff.text", "invalid element token");
     if ( XML_TOKEN_INVALID == eName )
         return;
 
@@ -2466,7 +2466,7 @@ void XMLTextFieldExport::ProcessString(enum XMLTokenEnum eName,
                                        bool bOmitEmpty,
                                        sal_uInt16 nPrefix)
 {
-    SAL_WARN_IF( eName == XML_TOKEN_INVALID, "xmloff", "invalid element token");
+    SAL_WARN_IF( eName == XML_TOKEN_INVALID, "xmloff.text", "invalid element token");
     if ( XML_TOKEN_INVALID == eName )
         return;
 
@@ -2517,8 +2517,8 @@ void XMLTextFieldExport::ProcessString(
     enum XMLTokenEnum eValue,
     sal_uInt16 nPrefix)
 {
-    SAL_WARN_IF( eName == XML_TOKEN_INVALID, "xmloff", "invalid element token" );
-    SAL_WARN_IF( eValue == XML_TOKEN_INVALID, "xmloff", "invalid value token" );
+    SAL_WARN_IF( eName == XML_TOKEN_INVALID, "xmloff.text", "invalid element token" );
+    SAL_WARN_IF( eValue == XML_TOKEN_INVALID, "xmloff.text", "invalid value token" );
     if ( XML_TOKEN_INVALID == eName )
         return;
 
@@ -2556,7 +2556,7 @@ void XMLTextFieldExport::ProcessParagraphSequence(
 void XMLTextFieldExport::ProcessInteger(enum XMLTokenEnum eName,
                                         sal_Int32 nNum)
 {
-    SAL_WARN_IF( eName == XML_TOKEN_INVALID, "xmloff", "invalid element token");
+    SAL_WARN_IF( eName == XML_TOKEN_INVALID, "xmloff.text", "invalid element token");
     if ( XML_TOKEN_INVALID == eName )
         return;
 
@@ -2802,9 +2802,9 @@ void XMLTextFieldExport::ExportDataBaseElement(
     const Reference<XPropertySet>& rPropertySet,
     const Reference<XPropertySetInfo>& rPropertySetInfo )
 {
-    SAL_WARN_IF( eElementName == XML_TOKEN_INVALID, "xmloff", "need token" );
-    SAL_WARN_IF( !rPropertySet.is(), "xmloff", "need property set" );
-    SAL_WARN_IF( !rPropertySetInfo.is(), "xmloff", "need property set info" );
+    SAL_WARN_IF( eElementName == XML_TOKEN_INVALID, "xmloff.text", "need token" );
+    SAL_WARN_IF( !rPropertySet.is(), "xmloff.text", "need property set" );
+    SAL_WARN_IF( !rPropertySetInfo.is(), "xmloff.text", "need property set info" );
 
     // get database properties
     OUString sDataBaseName;

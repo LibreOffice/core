@@ -593,13 +593,13 @@ ApiTokenSequence FormulaParserImpl::importOoxFormulaSc( const ScAddress&, const 
 
 ApiTokenSequence FormulaParserImpl::importBiff12Formula( const CellAddress&, FormulaType, SequenceInputStream& )
 {
-    SAL_WARN("sc", "FormulaParserImpl::importBiff12Formula - not implemented" );
+    SAL_WARN("sc.filter", "FormulaParserImpl::importBiff12Formula - not implemented" );
     return ApiTokenSequence();
 }
 
 ApiTokenSequence FormulaParserImpl::importBiff12FormulaSc( const ScAddress&, FormulaType, SequenceInputStream& )
 {
-    SAL_WARN("sc", "FormulaParserImpl::importBiff12Formula - not implemented" );
+    SAL_WARN("sc.filter", "FormulaParserImpl::importBiff12Formula - not implemented" );
     return ApiTokenSequence();
 }
 

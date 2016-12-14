@@ -708,7 +708,7 @@ bool OFlatTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, bool 
 
 void OFlatTable::refreshHeader()
 {
-    SAL_INFO( "connectivity.drivers", "flat lionel@mamane.lu OFlatTable::refreshHeader" );
+    SAL_INFO( "connectivity.flat", "flat lionel@mamane.lu OFlatTable::refreshHeader" );
 }
 
 

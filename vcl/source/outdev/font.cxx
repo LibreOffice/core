@@ -1476,22 +1476,7 @@ sal_Int32 OutputDevice::ValidateKashidas ( const OUString& rTxt,
 bool OutputDevice::GetGlyphBoundRects( const Point& rOrigin, const OUString& rStr,
                                            int nIndex, int nLen, int nBase, MetricVector& rVector )
 {
-
     rVector.clear();
-
-    if(nLen == 0x0FFFF)
-    {
-        SAL_INFO("sal.rtl.xub",
-                 "GetGlyphBoundRects Suspicious arguments nLen:" << nLen);
-    }
-
-    if( nIndex >= rStr.getLength() )
-        return false;
-
-    if( nLen < 0 || nIndex + nLen >= rStr.getLength() )
-    {
-        nLen = rStr.getLength() - nIndex;
-    }
 
     Rectangle aRect;
     for( int i = 0; i < nLen; i++ )
@@ -1516,8 +1501,8 @@ sal_Int32 OutputDevice::HasGlyphs( const vcl::Font& rTempFont, const OUString& r
     else
         nEnd = std::min( rStr.getLength(), nIndex + nLen );
 
-    SAL_WARN_IF( nIndex >= nEnd, "vcl", "StartPos >= EndPos?" );
-    SAL_WARN_IF( nEnd > rStr.getLength(), "vcl", "String too short" );
+    SAL_WARN_IF( nIndex >= nEnd, "vcl.gdi", "StartPos >= EndPos?" );
+    SAL_WARN_IF( nEnd > rStr.getLength(), "vcl.gdi", "String too short" );
 
     // to get the map temporarily set font
     const vcl::Font aOrigFont = GetFont();

@@ -552,7 +552,7 @@ namespace svx
     {
         if ( m_bNeedClipboardInvalidation )
         {
-            SAL_INFO("svx", "invalidating clipboard slots" );
+            SAL_INFO("svx.form", "invalidating clipboard slots" );
             m_rBindings.Invalidate( SID_CUT );
             m_rBindings.Invalidate( SID_COPY );
             m_rBindings.Invalidate( SID_PASTE );
@@ -614,7 +614,7 @@ namespace svx
                     OString sMessage =  "found a feature state for "  + sUnoSlotNameAscii;
                     if ( !bFeatureIsEnabled )
                         sMessage += " (disabled)";
-                    SAL_INFO("svx", sMessage );
+                    SAL_INFO("svx.form", sMessage );
                 #endif
 
                 lcl_translateUnoStateToItem( nSlotId, aFeature->second->getFeatureState(), _rSet );
@@ -622,7 +622,7 @@ namespace svx
             #if OSL_DEBUG_LEVEL > 0
             else
             {
-                SAL_WARN("svx", "found a feature state for " << sUnoSlotNameAscii << ", but could not translate it into an item!" );
+                SAL_WARN("svx.form", "found a feature state for " << sUnoSlotNameAscii << ", but could not translate it into an item!" );
             }
             #endif
         }
@@ -954,7 +954,7 @@ namespace svx
                     bNeedSelection = true;
                     bNeedTextComponent = true;
                     bNeedWriteableControl = true;
-                    SAL_INFO("svx", "need to invalidate again" );
+                    SAL_INFO("svx.form", "need to invalidate again" );
                     m_bNeedClipboardInvalidation = true;
                     break;
 
@@ -1038,7 +1038,7 @@ namespace svx
     void FmTextControlShell::formActivated( const Reference< runtime::XFormController >& _rxController )
     {
 #if OSL_DEBUG_LEVEL > 0
-        SAL_INFO("svx", "0x" << OUString::number( reinterpret_cast<sal_IntPtr>(_rxController.get()), 16 ));
+        SAL_INFO("svx.form", "0x" << OUString::number( reinterpret_cast<sal_IntPtr>(_rxController.get()), 16 ));
 #endif
 
         DBG_ASSERT( _rxController.is(), "FmTextControlShell::formActivated: invalid controller!" );
@@ -1064,7 +1064,7 @@ namespace svx
     void FmTextControlShell::formDeactivated( const Reference< runtime::XFormController >& _rxController )
     {
 #if OSL_DEBUG_LEVEL > 0
-        SAL_INFO("svx", "0x" << OUString::number( reinterpret_cast<sal_IntPtr>(_rxController.get()), 16 ));
+        SAL_INFO("svx.form", "0x" << OUString::number( reinterpret_cast<sal_IntPtr>(_rxController.get()), 16 ));
 #endif
         (void)_rxController;
 
@@ -1152,7 +1152,7 @@ namespace svx
 
         if ( m_xActiveTextComponent.is() )
         {
-            SAL_INFO("svx", "stopping timer for clipboard invalidation" );
+            SAL_INFO("svx.form", "stopping timer for clipboard invalidation" );
             m_aClipboardInvalidation.Stop();
         }
         // no more active control
@@ -1217,7 +1217,7 @@ namespace svx
 
         if ( m_xActiveTextComponent.is() )
         {
-            SAL_INFO("svx", "starting timer for clipboard invalidation" );
+            SAL_INFO("svx.form", "starting timer for clipboard invalidation" );
             m_aClipboardInvalidation.Start();
         }
 
@@ -1310,7 +1310,7 @@ namespace svx
         Reference< css::awt::XControl > xControl( _rEvent.Source, UNO_QUERY );
 
 #if OSL_DEBUG_LEVEL > 0
-        SAL_INFO("svx", "0x" << OUString::number( reinterpret_cast<sal_IntPtr>(xControl.get()), 16 ));
+        SAL_INFO("svx.form", "0x" << OUString::number( reinterpret_cast<sal_IntPtr>(xControl.get()), 16 ));
 #endif
 
         DBG_ASSERT( xControl.is(), "FmTextControlShell::focusGained: suspicious focus event!" );
@@ -1324,7 +1324,7 @@ namespace svx
         Reference< css::awt::XControl > xControl( _rEvent.Source, UNO_QUERY );
 
 #if OSL_DEBUG_LEVEL > 0
-        SAL_INFO("svx", "0x" << OUString::number( reinterpret_cast<sal_IntPtr>(xControl.get()), 16 ));
+        SAL_INFO("svx.form", "0x" << OUString::number( reinterpret_cast<sal_IntPtr>(xControl.get()), 16 ));
 #endif
 
         m_bActiveControl = false;

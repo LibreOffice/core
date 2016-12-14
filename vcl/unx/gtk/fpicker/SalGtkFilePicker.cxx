@@ -161,7 +161,7 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference< uno::XComponentContext
         LABEL_TOGGLE( PREVIEW );
         LABEL_TOGGLE( SELECTION );
         default:
-            SAL_WARN( "vcl", "Handle unknown control " << i);
+            SAL_WARN( "vcl.gtk", "Handle unknown control " << i);
             break;
         }
 
@@ -197,7 +197,7 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference< uno::XComponentContext
             LABEL_LIST( TEMPLATE );
             LABEL_LIST( IMAGE_TEMPLATE );
             default:
-                SAL_WARN( "vcl", "Handle unknown control " << i);
+                SAL_WARN( "vcl.gtk", "Handle unknown control " << i);
                 break;
         }
 
@@ -1078,7 +1078,7 @@ GtkWidget *SalGtkFilePicker::getWidget( sal_Int16 nControlId, GType *pType )
         MAP_LIST_LABEL( TEMPLATE );
         MAP_LIST_LABEL( IMAGE_TEMPLATE );
     default:
-        SAL_WARN( "vcl", "Handle unknown control " << nControlId);
+        SAL_WARN( "vcl.gtk", "Handle unknown control " << nControlId);
         break;
     }
 #undef MAP
@@ -1166,7 +1166,7 @@ void SalGtkFilePicker::HandleSetListValue(GtkComboBox *pWidget, sal_Int16 nContr
             }
             break;
         default:
-            SAL_WARN( "vcl", "undocumented/unimplemented ControlAction for a list " << nControlAction);
+            SAL_WARN( "vcl.gtk", "undocumented/unimplemented ControlAction for a list " << nControlAction);
             break;
     }
 
@@ -1228,7 +1228,7 @@ uno::Any SalGtkFilePicker::HandleGetListValue(GtkComboBox *pWidget, sal_Int16 nC
             }
             break;
         default:
-            SAL_WARN( "vcl", "undocumented/unimplemented ControlAction for a list " << nControlAction);
+            SAL_WARN( "vcl.gtk", "undocumented/unimplemented ControlAction for a list " << nControlAction);
             break;
     }
     return aAny;
@@ -1245,7 +1245,7 @@ void SAL_CALL SalGtkFilePicker::setValue( sal_Int16 nControlId, sal_Int16 nContr
     GtkWidget *pWidget;
 
     if( !( pWidget = getWidget( nControlId, &tType ) ) )
-        SAL_WARN( "vcl", "enable unknown control " << nControlId);
+        SAL_WARN( "vcl.gtk", "enable unknown control " << nControlId);
     else if( tType == GTK_TYPE_TOGGLE_BUTTON )
     {
         bool bChecked = false;
@@ -1256,7 +1256,7 @@ void SAL_CALL SalGtkFilePicker::setValue( sal_Int16 nControlId, sal_Int16 nContr
         HandleSetListValue(GTK_COMBO_BOX(pWidget), nControlAction, rValue);
     else
     {
-        SAL_WARN( "vcl", "Can't set value on button / list " << nControlId << " " << nControlAction );
+        SAL_WARN( "vcl.gtk", "Can't set value on button / list " << nControlId << " " << nControlAction );
     }
 }
 
@@ -1273,13 +1273,13 @@ uno::Any SAL_CALL SalGtkFilePicker::getValue( sal_Int16 nControlId, sal_Int16 nC
     GtkWidget *pWidget;
 
     if( !( pWidget = getWidget( nControlId, &tType ) ) )
-        SAL_WARN( "vcl", "enable unknown control " << nControlId);
+        SAL_WARN( "vcl.gtk", "enable unknown control " << nControlId);
     else if( tType == GTK_TYPE_TOGGLE_BUTTON )
         aRetval <<= bool( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON( pWidget ) ) );
     else if( tType == GTK_TYPE_COMBO_BOX )
         aRetval = HandleGetListValue(GTK_COMBO_BOX(pWidget), nControlAction);
     else
-        SAL_WARN( "vcl", "Can't get value on button / list " << nControlId << " " << nControlAction );
+        SAL_WARN( "vcl.gtk", "Can't get value on button / list " << nControlId << " " << nControlAction );
 
     return aRetval;
 }
@@ -1305,7 +1305,7 @@ throw( uno::RuntimeException, std::exception )
         }
     }
     else
-        SAL_WARN( "vcl", "enable unknown control " << nControlId );
+        SAL_WARN( "vcl.gtk", "enable unknown control " << nControlId );
 }
 
 void SAL_CALL SalGtkFilePicker::setLabel( sal_Int16 nControlId, const OUString& rLabel )
@@ -1320,7 +1320,7 @@ void SAL_CALL SalGtkFilePicker::setLabel( sal_Int16 nControlId, const OUString& 
 
     if( !( pWidget = getWidget( nControlId, &tType ) ) )
     {
-        SAL_WARN( "vcl", "Set label on unknown control " << nControlId);
+        SAL_WARN( "vcl.gtk", "Set label on unknown control " << nControlId);
         return;
     }
 
@@ -1342,7 +1342,7 @@ void SAL_CALL SalGtkFilePicker::setLabel( sal_Int16 nControlId, const OUString& 
         g_object_set( pWidget, "label", aTxt.getStr(),
                       "use_underline", true, nullptr );
     else
-        SAL_WARN( "vcl", "Can't set label on list");
+        SAL_WARN( "vcl.gtk", "Can't set label on list");
 }
 
 OUString SAL_CALL SalGtkFilePicker::getLabel( sal_Int16 nControlId )
@@ -1357,11 +1357,11 @@ OUString SAL_CALL SalGtkFilePicker::getLabel( sal_Int16 nControlId )
     GtkWidget *pWidget;
 
     if( !( pWidget = getWidget( nControlId, &tType ) ) )
-        SAL_WARN( "vcl", "Get label on unknown control " << nControlId);
+        SAL_WARN( "vcl.gtk", "Get label on unknown control " << nControlId);
     else if( tType == GTK_TYPE_TOGGLE_BUTTON || tType == GTK_TYPE_BUTTON || tType == GTK_TYPE_LABEL )
         aTxt = gtk_button_get_label( GTK_BUTTON( pWidget ) );
     else
-        SAL_WARN( "vcl", "Can't get label on list");
+        SAL_WARN( "vcl.gtk", "Can't get label on list");
 
     return OStringToOUString( aTxt, RTL_TEXTENCODING_UTF8 );
 }
@@ -1458,21 +1458,21 @@ void SalGtkFilePicker::filter_changed_cb( GtkFileChooser *, GParamSpec *,
 {
     FilePickerEvent evt;
     evt.ElementId = LISTBOX_FILTER;
-    SAL_INFO( "vcl", "filter_changed, isn't it great " << pobjFP );
+    SAL_INFO( "vcl.gtk", "filter_changed, isn't it great " << pobjFP );
     pobjFP->impl_controlStateChanged( evt );
 }
 
 void SalGtkFilePicker::folder_changed_cb( GtkFileChooser *, SalGtkFilePicker *pobjFP )
 {
     FilePickerEvent evt;
-    SAL_INFO( "vcl", "folder_changed, isn't it great " << pobjFP );
+    SAL_INFO( "vcl.gtk", "folder_changed, isn't it great " << pobjFP );
     pobjFP->impl_directoryChanged( evt );
 }
 
 void SalGtkFilePicker::selection_changed_cb( GtkFileChooser *, SalGtkFilePicker *pobjFP )
 {
     FilePickerEvent evt;
-    SAL_INFO( "vcl", "selection_changed, isn't it great " << pobjFP );
+    SAL_INFO( "vcl.gtk", "selection_changed, isn't it great " << pobjFP );
     pobjFP->impl_fileSelectionChanged( evt );
 }
 
@@ -1747,7 +1747,7 @@ void SalGtkFilePicker::SetCurFilter( const OUString& rFilter )
         OUString aShrunkName = shrinkFilterName( rFilter );
         if( aShrunkName.equals( sFilterName) )
         {
-            SAL_INFO( "vcl", "actually setting " << filtername );
+            SAL_INFO( "vcl.gtk", "actually setting " << filtername );
             gtk_file_chooser_set_filter( GTK_FILE_CHOOSER( m_pDialog ), pFilter );
             bFound = true;
         }
@@ -1818,7 +1818,7 @@ GtkFileFilter* SalGtkFilePicker::implAddFilter( const OUString& rFilter, const O
                     g_strdup( OUStringToOString(aToken, RTL_TEXTENCODING_UTF8).getStr() ),
                     g_free );
 
-                SAL_INFO( "vcl", "fustering with " << aToken );
+                SAL_INFO( "vcl.gtk", "fustering with " << aToken );
             }
 #if OSL_DEBUG_LEVEL > 0
             else
@@ -1936,7 +1936,7 @@ void SalGtkFilePicker::SetFilters()
     else if(!m_aCurrentFilter.isEmpty())
         SetCurFilter( m_aCurrentFilter );
 
-    SAL_INFO( "vcl", "end setting filters");
+    SAL_INFO( "vcl.gtk", "end setting filters");
 }
 
 SalGtkFilePicker::~SalGtkFilePicker()

@@ -2348,7 +2348,7 @@ void GtkSalFrame::UpdateSettings( AllSettings& rSettings )
         pGraphics = static_cast<GtkSalGraphics*>(AcquireGraphics());
         if ( !pGraphics )
         {
-            SAL_WARN("vcl", "Could not get graphics - unable to update settings");
+            SAL_WARN("vcl.gtk3", "Could not get graphics - unable to update settings");
             return;
         }
         bFreeGraphics = true;
@@ -3708,7 +3708,7 @@ bool GtkSalFrame::IMHandler::handleKeyEvent( GdkEventKey* pEvent )
             return true;
         else
         {
-            SAL_WARN_IF( m_nPrevKeyPresses <= 0, "vcl", "key press has vanished !" );
+            SAL_WARN_IF( m_nPrevKeyPresses <= 0, "vcl.gtk3", "key press has vanished !" );
             if( ! m_aPrevKeyPresses.empty() ) // sanity check
             {
                 // event was not swallowed, do not filter a following
@@ -3927,7 +3927,7 @@ void GtkSalFrame::IMHandler::signalIMPreeditChanged( GtkIMContext*, gpointer im_
         for (int i = start; i < end; ++i)
         {
             SAL_WARN_IF(i >= static_cast<int>(pThis->m_aInputFlags.size()),
-                "vcl.gtk", "pango attrib out of range. Broken range: "
+                "vcl.gtk3", "pango attrib out of range. Broken range: "
                 << start << "," << end << " Legal range: 0,"
                 << pThis->m_aInputFlags.size());
             if (i >= static_cast<int>(pThis->m_aInputFlags.size()))
@@ -4015,7 +4015,7 @@ static uno::Reference<accessibility::XAccessibleEditableText> lcl_GetxText(vcl::
     }
     catch(const uno::Exception& e)
     {
-        SAL_WARN( "vcl.gtk", "Exception in getting input method surrounding text: " << e.Message);
+        SAL_WARN( "vcl.gtk3", "Exception in getting input method surrounding text: " << e.Message);
     }
     return xText;
 }

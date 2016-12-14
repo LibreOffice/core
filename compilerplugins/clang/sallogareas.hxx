@@ -35,6 +35,8 @@ class SalLogAreas
         const FunctionDecl* inFunction;
         SourceLocation lastSalDetailLogStreamMacro;
         set< string > logAreas;
+        string firstSeenLogArea;
+        SourceLocation firstSeenLocation;
     };
 
 } // namespace

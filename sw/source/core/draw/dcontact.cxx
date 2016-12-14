@@ -1396,7 +1396,7 @@ void SwDrawContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
     SwClient::SwClientNotify(rMod, rHint);
     if (auto pLegacyHint = dynamic_cast<const sw::LegacyModifyHint*>(&rHint))
     {
-        SAL_WARN_IF(mbDisconnectInProgress, "sw", "<SwDrawContact::Modify(..)> called during disconnection.");
+        SAL_WARN_IF(mbDisconnectInProgress, "sw.core", "<SwDrawContact::Modify(..)> called during disconnection.");
 
         const SfxPoolItem* pNew = pLegacyHint->m_pNew;
         sal_uInt16 nWhich = pNew ? pNew->Which() : 0;
@@ -1435,7 +1435,7 @@ void SwDrawContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
                             maAnchoredDrawObj.DrawObj()->notifyShapePropertyChange(svx::ShapeProperty::TextDocAnchor);
                         }
                         else
-                            SAL_WARN("sw", "SwDrawContact::Modify: no draw object here?");
+                            SAL_WARN("sw.core", "SwDrawContact::Modify: no draw object here?");
                     }
                 }
             }

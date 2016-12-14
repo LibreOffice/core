@@ -163,7 +163,7 @@ ViewShell::~ViewShell()
     if (mpContentWindow)
     {
         SAL_INFO(
-            "sd.ui",
+            "sd.view",
             "destroying mpContentWindow at " << mpContentWindow.get()
                 << " with parent " << mpContentWindow->GetParent());
         mpContentWindow.disposeAndClear();

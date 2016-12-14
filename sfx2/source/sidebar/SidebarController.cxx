@@ -885,7 +885,7 @@ IMPL_LINK(SidebarController, WindowEventHandler, VclWindowEvent&, rEvent, void)
                 break;
 
             case VclEventId::WindowPaint:
-                SAL_INFO("sfx", "Paint");
+                SAL_INFO("sfx.sidebar", "Paint");
                 break;
 
             default:

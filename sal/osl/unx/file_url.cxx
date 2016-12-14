@@ -182,7 +182,7 @@ oslFileError getSystemPathFromFileUrl(
         if (j == 2) {
             OUString home;
             if (!osl::Security().getHomeDir(home)) {
-                SAL_WARN("sal.osl", "osl::Security::getHomeDir failed");
+                SAL_WARN("sal.file", "osl::Security::getHomeDir failed");
                 return osl_File_E_INVAL;
             }
             i = url.indexOf('/', i + 1);
@@ -198,8 +198,7 @@ oslFileError getSystemPathFromFileUrl(
             try {
                 home = rtl::Uri::convertRelToAbs(home, url.copy(i));
             } catch (rtl::MalformedUriException & e) {
-                SAL_WARN(
-                    "sal.osl", "rtl::MalformedUriException " << e.getMessage());
+                SAL_WARN("sal.file", "rtl::MalformedUriException " << e.getMessage());
                 return osl_File_E_INVAL;
             }
             return getSystemPathFromFileUrl(home, path, false);

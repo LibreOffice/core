@@ -1935,7 +1935,7 @@ void cppuhelper::ServiceManager::preloadImplementations() {
         {
             // load component library
             osl::Module aModule(aUri, SAL_LOADMODULE_NOW | SAL_LOADMODULE_GLOBAL);
-            SAL_INFO("lok", "loaded component library " << aUri << ( aModule.is() ? " ok" : " no"));
+            SAL_INFO("cppuhelper", "loaded component library " << aUri << ( aModule.is() ? " ok" : " no"));
 
             if (aModule.is() &&
                 !iterator->second->info->environment.isEmpty())

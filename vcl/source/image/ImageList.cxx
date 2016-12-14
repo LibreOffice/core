@@ -39,7 +39,7 @@ ImageList::ImageList()
 
 ImageList::ImageList(const ResId& rResId)
 {
-    SAL_INFO( "vcl.gdi", "vcl: ImageList::ImageList( const ResId& rResId )" );
+    SAL_INFO( "vcl", "vcl: ImageList::ImageList( const ResId& rResId )" );
 
     rResId.SetRT( RSC_IMAGELIST );
 
@@ -77,7 +77,7 @@ ImageList::ImageList(const ResId& rResId)
 ImageList::ImageList(const std::vector< OUString >& rNameVector,
                      const OUString& rPrefix)
 {
-    SAL_INFO( "vcl.gdi", "vcl: ImageList::ImageList(const vector< OUString >& ..." );
+    SAL_INFO( "vcl", "vcl: ImageList::ImageList(const vector< OUString >& ..." );
 
     ImplInit( sal::static_int_cast< sal_uInt16 >( rNameVector.size() ), Size() );
 
@@ -324,7 +324,7 @@ OUString ImageList::GetImageName( sal_uInt16 nPos ) const
 
 void ImageList::GetImageNames( std::vector< OUString >& rNames ) const
 {
-    SAL_INFO( "vcl.gdi", "vcl: ImageList::GetImageNames" );
+    SAL_INFO( "vcl", "vcl: ImageList::GetImageNames" );
 
     rNames = std::vector< OUString >();
 

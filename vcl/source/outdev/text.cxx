@@ -806,16 +806,6 @@ void OutputDevice::DrawText( const Point& rStartPt, const OUString& rStr,
 {
     assert(!is_double_buffered_window());
 
-    if(nLen == 0x0FFFF)
-    {
-        SAL_INFO("sal.rtl.xub",
-                 "DrawText Suspicious arguments nLen:" << nLen);
-    }
-    if( (nLen < 0) || (nIndex + nLen >= rStr.getLength()))
-    {
-        nLen = rStr.getLength() - nIndex;
-    }
-
     if (mpOutDevData->mpRecordLayout)
     {
         pVector = &mpOutDevData->mpRecordLayout->m_aUnicodeBoundRects;
@@ -929,15 +919,6 @@ void OutputDevice::DrawTextArray( const Point& rStartPt, const OUString& rStr,
 {
     assert(!is_double_buffered_window());
 
-    if(nLen == 0x0FFFF)
-    {
-        SAL_INFO("sal.rtl.xub",
-                 "DrawTextArray Suspicious arguments nLen:" << nLen);
-    }
-    if( nLen < 0 || nIndex + nLen >= rStr.getLength() )
-    {
-        nLen = rStr.getLength() - nIndex;
-    }
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaTextArrayAction( rStartPt, rStr, pDXAry, nIndex, nLen ) );
 
@@ -965,19 +946,6 @@ long OutputDevice::GetTextArray( const OUString& rStr, long* pDXAry,
                                  sal_Int32 nIndex, sal_Int32 nLen,
                                  vcl::TextLayoutCache const*const pLayoutCache) const
 {
-    if(nLen == 0x0FFFF)
-    {
-        SAL_INFO("sal.rtl.xub",
-                 "GetTextArray Suspicious arguments nLen:" << nLen);
-    }
-
-    if( nIndex >= rStr.getLength() )
-        return 0; // TODO: this looks like a buggy caller?
-
-    if( nLen < 0 || nIndex + nLen >= rStr.getLength() )
-    {
-        nLen = rStr.getLength() - nIndex;
-    }
     // do layout
     SalLayout *const pSalLayout = ImplLayout(rStr, nIndex, nLen,
             Point(0,0), 0, nullptr, SalLayoutFlags::NONE, pLayoutCache);
@@ -1136,16 +1104,6 @@ void OutputDevice::DrawStretchText( const Point& rStartPt, sal_uLong nWidth,
                                     sal_Int32 nIndex, sal_Int32 nLen)
 {
     assert(!is_double_buffered_window());
-
-    if(nIndex < 0 || nIndex == 0x0FFFF || nLen == 0x0FFFF)
-    {
-        SAL_INFO("sal.rtl.xub",
-                 "DrawStretchText Suspicious arguments nIndex:" << nIndex << " nLen:" << nLen);
-    }
-    if( (nLen < 0) || (nIndex + nLen >= rStr.getLength()))
-    {
-        nLen = rStr.getLength() - nIndex;
-    }
 
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaStretchTextAction( rStartPt, nWidth, rStr, nIndex, nLen ) );
@@ -2100,16 +2058,7 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const OUString& rStr,
                                  DrawTextFlags nStyle, MetricVector* pVector, OUString* pDisplayText )
 {
     assert(!is_double_buffered_window());
-
-    if(nLen == 0x0FFFF)
-    {
-        SAL_INFO("sal.rtl.xub",
-                 "DrawCtrlText Suspicious arguments nLen:" << nLen);
-    }
-    if( (nLen < 0) || (nIndex + nLen >= rStr.getLength()))
-    {
-        nLen = rStr.getLength() - nIndex;
-    }
+    assert( nIndex < rStr.getLength() );
 
     if ( !IsDeviceOutputNecessary() || (nIndex >= rStr.getLength()) )
         return;
@@ -2314,16 +2263,6 @@ OUString OutputDevice::GetNonMnemonicString( const OUString& rStr, sal_Int32& rM
 SystemTextLayoutData OutputDevice::GetSysTextLayoutData(const Point& rStartPt, const OUString& rStr, sal_Int32 nIndex, sal_Int32 nLen,
                                                         const long* pDXAry) const
 {
-    if(nLen == 0x0FFFF)
-    {
-        SAL_INFO("sal.rtl.xub",
-                 "GetSysTextLayoutData Suspicious arguments nLen:" << nLen);
-    }
-    if( (nLen < 0) || (nIndex + nLen >= rStr.getLength()))
-    {
-        nLen = rStr.getLength() - nIndex;
-    }
-
     SystemTextLayoutData aSysLayoutData;
     aSysLayoutData.nSize = sizeof(aSysLayoutData);
     aSysLayoutData.rGlyphData.reserve( 256 );
@@ -2371,12 +2310,6 @@ bool OutputDevice::GetTextBoundRect( Rectangle& rRect,
                                          sal_Int32 nIndex, sal_Int32 nLen,
                                          sal_uLong nLayoutWidth, const long* pDXAry ) const
 {
-    if(nLen == 0x0FFFF)
-    {
-        SAL_INFO("sal.rtl.xub",
-                 "GetTextBoundRect Suspicious arguments nLen:" << nLen);
-    }
-
     bool bRet = false;
     rRect.SetEmpty();
 
@@ -2442,11 +2375,6 @@ bool OutputDevice::GetTextOutlines( basegfx::B2DPolyPolygonVector& rVector,
                                         sal_Int32 nIndex, sal_Int32 nLen,
                                         sal_uLong nLayoutWidth, const long* pDXArray ) const
 {
-    if(nLen == 0x0FFFF)
-    {
-        SAL_INFO("sal.rtl.xub",
-                 "GetTextOutlines Suspicious arguments nLen:" << nLen);
-    }
     // the fonts need to be initialized
     if( mbNewFont )
         ImplNewFont();
@@ -2457,10 +2385,6 @@ bool OutputDevice::GetTextOutlines( basegfx::B2DPolyPolygonVector& rVector,
 
     bool bRet = false;
     rVector.clear();
-    if( nLen < 0 )
-    {
-        nLen = rStr.getLength() - nIndex;
-    }
     rVector.reserve( nLen );
 
     // we want to get the Rectangle in logical units, so to
@@ -2540,12 +2464,6 @@ bool OutputDevice::GetTextOutlines( PolyPolyVector& rResultVector,
                                         sal_Int32 nIndex, sal_Int32 nLen,
                                         sal_uLong nTWidth, const long* pDXArray ) const
 {
-    if(nLen == 0x0FFFF)
-    {
-        SAL_INFO("sal.rtl.xub",
-                 "GetTextOutlines Suspicious arguments  nLen:" << nLen);
-    }
-
     rResultVector.clear();
 
     // get the basegfx polypolygon vector
@@ -2567,11 +2485,6 @@ bool OutputDevice::GetTextOutline( tools::PolyPolygon& rPolyPoly, const OUString
                                        sal_Int32 nLen,
                                        sal_uLong nTWidth, const long* pDXArray ) const
 {
-    if(nLen == 0x0FFFF)
-    {
-        SAL_INFO("sal.rtl.xub",
-                 "GetTextOutline Suspicious arguments nLen:" << nLen);
-    }
     rPolyPoly.Clear();
 
     // get the basegfx polypolygon vector

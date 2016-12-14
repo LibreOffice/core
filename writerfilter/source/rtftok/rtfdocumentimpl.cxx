@@ -140,7 +140,7 @@ RTFSprms& getLastAttributes(RTFSprms& rSprms, Id nId)
         return p->getSprms().back().second->getAttributes();
     else
     {
-        SAL_WARN("writerfilter", "trying to set property when no type is defined");
+        SAL_WARN("writerfilter.rtf", "trying to set property when no type is defined");
         return rSprms;
     }
 }
@@ -366,9 +366,9 @@ void RTFDocumentImpl::resolveSubstream(std::size_t nPos, Id nId, OUString& rIgno
     }
     pImpl->m_nDefaultFontIndex = m_nDefaultFontIndex;
     pImpl->Strm().Seek(nPos);
-    SAL_INFO("writerfilter", "substream start");
+    SAL_INFO("writerfilter.rtf", "substream start");
     Mapper().substream(nId, pImpl);
-    SAL_INFO("writerfilter", "substream end");
+    SAL_INFO("writerfilter.rtf", "substream end");
     Strm().Seek(nCurrent);
 }
 
@@ -585,7 +585,7 @@ void RTFDocumentImpl::parBreak()
 
 void RTFDocumentImpl::sectBreak(bool bFinal)
 {
-    SAL_INFO("writerfilter", OSL_THIS_FUNC << ": final? " << bFinal << ", needed? " << m_bNeedSect);
+    SAL_INFO("writerfilter.rtf", OSL_THIS_FUNC << ": final? " << bFinal << ", needed? " << m_bNeedSect);
     bool bNeedSect = m_bNeedSect;
     RTFValue::Pointer_t pBreak = m_aStates.top().aSectionSprms.find(NS_ooxml::LN_EG_SectPrContents_type);
     bool bContinuous = pBreak.get() && pBreak->getInt() == static_cast<sal_Int32>(NS_ooxml::LN_Value_ST_SectionMark_continuous);
@@ -738,28 +738,28 @@ void RTFDocumentImpl::resolve(Stream& rMapper)
     switch (m_pTokenizer->resolveParse())
     {
     case RTFError::OK:
-        SAL_INFO("writerfilter", "RTFDocumentImpl::resolve: finished without errors");
+        SAL_INFO("writerfilter.rtf", "RTFDocumentImpl::resolve: finished without errors");
         break;
     case RTFError::GROUP_UNDER:
-        SAL_INFO("writerfilter", "RTFDocumentImpl::resolve: unmatched '}'");
+        SAL_INFO("writerfilter.rtf", "RTFDocumentImpl::resolve: unmatched '}'");
         break;
     case RTFError::GROUP_OVER:
-        SAL_INFO("writerfilter", "RTFDocumentImpl::resolve: unmatched '{'");
+        SAL_INFO("writerfilter.rtf", "RTFDocumentImpl::resolve: unmatched '{'");
         throw io::WrongFormatException(m_pTokenizer->getPosition());
         break;
     case RTFError::UNEXPECTED_EOF:
-        SAL_INFO("writerfilter", "RTFDocumentImpl::resolve: unexpected end of file");
+        SAL_INFO("writerfilter.rtf", "RTFDocumentImpl::resolve: unexpected end of file");
         throw io::WrongFormatException(m_pTokenizer->getPosition());
         break;
     case RTFError::HEX_INVALID:
-        SAL_INFO("writerfilter", "RTFDocumentImpl::resolve: invalid hex char");
+        SAL_INFO("writerfilter.rtf", "RTFDocumentImpl::resolve: invalid hex char");
         throw io::WrongFormatException(m_pTokenizer->getPosition());
         break;
     case RTFError::CHAR_OVER:
-        SAL_INFO("writerfilter", "RTFDocumentImpl::resolve: characters after last '}'");
+        SAL_INFO("writerfilter.rtf", "RTFDocumentImpl::resolve: characters after last '}'");
         break;
     case RTFError::CLASSIFICATION:
-        SAL_INFO("writerfilter", "RTFDocumentImpl::resolve: classification prevented paste");
+        SAL_INFO("writerfilter.rtf", "RTFDocumentImpl::resolve: classification prevented paste");
         break;
     }
 }
@@ -1148,7 +1148,7 @@ RTFError RTFDocumentImpl::resolveChars(char ch)
     }
 
     OUString aOUStr(OStringToOUString(aStr, m_aStates.top().nCurrentEncoding));
-    SAL_INFO("writerfilter", "RTFDocumentImpl::resolveChars: collected '" << aOUStr << "'");
+    SAL_INFO("writerfilter.rtf", "RTFDocumentImpl::resolveChars: collected '" << aOUStr << "'");
 
     if (m_aStates.top().eDestination == Destination::COLORTABLE)
     {
@@ -1273,7 +1273,7 @@ void RTFDocumentImpl::text(OUString& rString)
                     m_aStyleTableEntries.insert(std::make_pair(m_nCurrentStyleIndex, pProp));
                 }
                 else
-                    SAL_INFO("writerfilter", "no RTF style type defined, ignoring");
+                    SAL_INFO("writerfilter.rtf", "no RTF style type defined, ignoring");
                 break;
             }
             case Destination::LISTNAME:
@@ -1761,7 +1761,7 @@ RTFError RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int n
         break;
     default:
     {
-        SAL_INFO("writerfilter", "TODO handle toggle '" << keywordToString(nKeyword) << "'");
+        SAL_INFO("writerfilter.rtf", "TODO handle toggle '" << keywordToString(nKeyword) << "'");
         aSkip.setParsed(false);
     }
     break;
@@ -1771,7 +1771,7 @@ RTFError RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int n
 
 RTFError RTFDocumentImpl::pushState()
 {
-    //SAL_INFO("writerfilter", OSL_THIS_FUNC << " before push: " << m_pTokenizer->getGroup());
+    //SAL_INFO("writerfilter.rtf", OSL_THIS_FUNC << " before push: " << m_pTokenizer->getGroup());
 
     checkUnicode(/*bUnicode =*/ true, /*bHex =*/ true);
     m_nGroupStartPos = Strm().Tell();
@@ -1979,7 +1979,7 @@ RTFError RTFDocumentImpl::popState()
             }
             catch (const rtl::MalformedUriException& rException)
             {
-                SAL_WARN("writerfilter", "rtl::Uri::convertRelToAbs() failed: " << rException.getMessage());
+                SAL_WARN("writerfilter.rtf", "rtl::Uri::convertRelToAbs() failed: " << rException.getMessage());
             }
 
             if (!aPictureURL.isEmpty())
@@ -2762,7 +2762,7 @@ RTFError RTFDocumentImpl::popState()
                 }
                 catch (const uno::Exception& rException)
                 {
-                    SAL_WARN("writerfilter", "failed to set property " << rKey << ": " << rException.Message);
+                    SAL_WARN("writerfilter.rtf", "failed to set property " << rKey << ": " << rException.Message);
                 }
             }
         }

@@ -565,7 +565,7 @@ LoadEnv::EContentType LoadEnv::classifyContent(const OUString&                  
             pIt->second >>= xStream;
         if (xStream.is())
             return E_CAN_BE_LOADED;
-        SAL_INFO("fwk", "LoadEnv::classifyContent(): loading from stream with right URL but invalid stream detected");
+        SAL_INFO("fwk.loadenv", "LoadEnv::classifyContent(): loading from stream with right URL but invalid stream detected");
         return E_UNSUPPORTED_CONTENT;
     }
 
@@ -578,7 +578,7 @@ LoadEnv::EContentType LoadEnv::classifyContent(const OUString&                  
             pIt->second >>= xModel;
         if (xModel.is())
             return E_CAN_BE_SET;
-        SAL_INFO("fwk", "LoadEnv::classifyContent(): loading with object with right URL but invalid object detected");
+        SAL_INFO("fwk.loadenv", "LoadEnv::classifyContent(): loading with object with right URL but invalid object detected");
         return E_UNSUPPORTED_CONTENT;
     }
 

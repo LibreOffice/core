@@ -154,7 +154,7 @@ sal_Int32 ReadThroughComponent(
     uno::Reference< xml::sax::XDocumentHandler > xFilter(
         rxContext->getServiceManager()->createInstanceWithArgumentsAndContext(aFilterName, rFilterArguments, rxContext),
         UNO_QUERY);
-    SAL_WARN_IF(!xFilter.is(), "sw", "Can't instantiate filter component: " << aFilterName);
+    SAL_WARN_IF(!xFilter.is(), "sw.filter", "Can't instantiate filter component: " << aFilterName);
     if( !xFilter.is() )
         return ERR_SWG_READ_ERROR;
     SAL_INFO( "sw.filter", "" << pFilterName << " created" );

@@ -2539,7 +2539,7 @@ void SwFrameFormat::SetName( const OUString& rNewName, bool bBroadcast )
     if (m_ffList != nullptr) {
         SwFrameFormats::iterator it = m_ffList->find( this );
         assert( m_ffList->end() != it );
-        SAL_INFO_IF(m_aFormatName == rNewName, "sw", "SwFrmFmt not really renamed, as both names are equal");
+        SAL_INFO_IF(m_aFormatName == rNewName, "sw.core", "SwFrmFmt not really renamed, as both names are equal");
 
         SwStringMsgPoolItem aOld( RES_NAME_CHANGED, m_aFormatName );
         // As it's a non-unique list, rename should never fail!

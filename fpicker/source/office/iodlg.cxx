@@ -220,7 +220,7 @@ namespace
                         }
                         catch( const css::uno::Exception& )
                         {
-                            SAL_INFO( "fpicker", "Exception in lcl_autoUpdateFileExtension" );
+                            SAL_INFO( "fpicker.office", "Exception in lcl_autoUpdateFileExtension" );
                         }
                     }
                 }

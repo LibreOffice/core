@@ -120,12 +120,12 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     }
     catch (const uno::Exception& e)
     {
-        SAL_WARN("vcl.app", "Fatal exception: " << e.Message);
+        SAL_WARN("filter.svg", "Fatal exception: " << e.Message);
         return 1;
     }
     catch (const std::exception &e)
     {
-        SAL_WARN("vcl.app", "Fatal exception: " << e.what());
+        SAL_WARN("filter.svg", "Fatal exception: " << e.what());
         return 1;
     }
     return nRet;

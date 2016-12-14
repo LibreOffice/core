@@ -656,7 +656,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbedde
     }
     catch (uno::Exception const& e)
     {
-        SAL_WARN("comphelper", "EmbeddedObjectContainer::InsertEmbeddedLink: "
+        SAL_WARN("comphelper.container", "EmbeddedObjectContainer::InsertEmbeddedLink: "
                 "exception caught: " << e.Message);
     }
 

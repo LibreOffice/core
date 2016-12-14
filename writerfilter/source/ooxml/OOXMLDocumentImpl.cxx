@@ -81,7 +81,7 @@ void OOXMLDocumentImpl::resolveFastSubStream(Stream & rStreamHandler,
     }
     catch (uno::Exception const& e)
     {
-        SAL_INFO("writerfilter", "resolveFastSubStream: exception while "
+        SAL_INFO("writerfilter.ooxml", "resolveFastSubStream: exception while "
                 "resolving stream " << nType << " : " << e.Message);
         return;
     }
@@ -139,7 +139,7 @@ uno::Reference<xml::dom::XDocument> OOXMLDocumentImpl::importSubStream(OOXMLStre
     }
     catch (uno::Exception const& e)
     {
-        SAL_INFO("writerfilter", "importSubStream: exception while "
+        SAL_INFO("writerfilter.ooxml", "importSubStream: exception while "
                 "importing stream " << nType << " : " << e.Message);
         return xRet;
     }
@@ -157,7 +157,7 @@ uno::Reference<xml::dom::XDocument> OOXMLDocumentImpl::importSubStream(OOXMLStre
         }
         catch (uno::Exception const& e)
         {
-            SAL_INFO("writerfilter", "importSubStream: exception while "
+            SAL_INFO("writerfilter.ooxml", "importSubStream: exception while "
                      "parsing stream " << nType << " : " << e.Message);
             return xRet;
         }
@@ -190,7 +190,7 @@ void OOXMLDocumentImpl::importSubStreamRelations(const OOXMLStream::Pointer_t& p
     }
     catch (uno::Exception const& e)
     {
-        SAL_WARN("writerfilter", "importSubStreamRelations: exception while "
+        SAL_WARN("writerfilter.ooxml", "importSubStreamRelations: exception while "
             "importing stream " << nType << " : " << e.Message);
         return;
     }
@@ -211,7 +211,7 @@ void OOXMLDocumentImpl::importSubStreamRelations(const OOXMLStream::Pointer_t& p
             }
             catch (uno::Exception const& e)
             {
-                SAL_WARN("writerfilter", "importSubStream: exception while "
+                SAL_WARN("writerfilter.ooxml", "importSubStream: exception while "
                          "parsing stream " << nType << " : " << e.Message);
                 mxCustomXmlProsDom = xRelation;
             }
@@ -617,7 +617,7 @@ void OOXMLDocumentImpl::resolveGlossaryStream(Stream & /*rStream*/)
     }
     catch (uno::Exception const& e)
     {
-        SAL_INFO("writerfilter", "resolveGlossaryStream: exception while "
+        SAL_INFO("writerfilter.ooxml", "resolveGlossaryStream: exception while "
                  "createStream for glossary" << OOXMLStream::GLOSSARY << " : " << e.Message);
         return;
     }
@@ -684,7 +684,7 @@ void OOXMLDocumentImpl::resolveGlossaryStream(Stream & /*rStream*/)
                   }
                   catch (uno::Exception const& e)
                   {
-                      SAL_INFO("writerfilter", "importSubStream: exception while "
+                      SAL_INFO("writerfilter.ooxml", "importSubStream: exception while "
                       "parsing stream of Type" << nType << " : " << e.Message);
                       return;
                   }
@@ -771,7 +771,7 @@ void OOXMLDocumentImpl::resolveEmbeddingsStream(const OOXMLStream::Pointer_t& pS
                     }
                     catch (uno::Exception const& e)
                     {
-                        SAL_INFO("writerfilter", "resolveEmbeddingsStream: can't find header/footer whilst "
+                        SAL_INFO("writerfilter.ooxml", "resolveEmbeddingsStream: can't find header/footer whilst "
                                "resolving stream " << streamType << " : " << e.Message);
                         return;
                     }

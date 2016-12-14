@@ -23,7 +23,6 @@
 #include <sal/log.hxx>
 #include <tools/solar.h>
 #include <svl/itempool.hxx>
-#include "whassert.hxx"
 #include <svl/SfxBroadcaster.hxx>
 #include <svl/filerec.hxx>
 #include "poolio.hxx"
@@ -432,7 +431,7 @@ void SfxItemPool_Impl::readTheItems (
     if ( nullptr != pOldArr )
         for ( n = 0; bEmpty && n < pOldArr->size(); ++n )
             bEmpty = pOldArr->operator[](n) == nullptr;
-    SAL_WARN_IF( !bEmpty, "svl", "loading non-empty pool" );
+    SAL_WARN_IF( !bEmpty, "svl.items", "loading non-empty pool" );
     if ( !bEmpty )
     {
         // See if there's a new one for all old ones
@@ -499,7 +498,7 @@ SvStream &SfxItemPool::Load(SvStream &rStream)
                 for (auto const& rItemPtr : *rArrayPtr)
                     if (rItemPtr)
                     {
-                        SAL_INFO( "svl", "loading non-empty ItemPool" );
+                        SAL_INFO( "svl.items", "loading non-empty ItemPool" );
                         AddRef(*rItemPtr);
                     }
             }
@@ -618,7 +617,7 @@ SvStream &SfxItemPool::Load(SvStream &rStream)
                 const size_t nMaxRecords = rStream.remainingSize() / sizeof(sal_uInt16);
                 if (nCount > nMaxRecords)
                 {
-                    SAL_WARN("svl", "Parsing error: " << nMaxRecords <<
+                    SAL_WARN("svl.items", "Parsing error: " << nMaxRecords <<
                              " max possible entries, but " << nCount << " claimed, truncating");
                     nCount = nMaxRecords;
                 }
@@ -864,7 +863,7 @@ const SfxPoolItem* SfxItemPool::LoadSurrogate
             }
         }
 
-        SFX_ASSERT( false, rWhich, "can't resolve Which-Id in LoadSurrogate" );
+        SAL_WARN("svl.items", "can't resolve Which-Id in LoadSurrogate, with ID/pos " << rWhich );
     }
 
     return nullptr;
@@ -908,7 +907,7 @@ sal_uInt32 SfxItemPool::GetSurrogate(const SfxPoolItem *pItem) const
     {
         if ( pImpl->mpSecondary )
             return pImpl->mpSecondary->GetSurrogate( pItem );
-        SFX_ASSERT( false, pItem->Which(), "unknown Which-Id - don't ask me for surrogates" );
+        SAL_WARN( "svl.items", "unknown Which-Id - don't ask me for surrogates, with ID/pos " << pItem->Which());
     }
 
     // Pointer on static or pool-default attribute?
@@ -924,7 +923,7 @@ sal_uInt32 SfxItemPool::GetSurrogate(const SfxPoolItem *pItem) const
         if ( p == pItem )
             return i;
     }
-    SFX_ASSERT( false, pItem->Which(), "Item not in the pool");
+    SAL_WARN( "svl.items", "Item not in the pool, with ID/pos " << pItem->Which());
     return SFX_ITEMS_NULL;
 }
 
@@ -1059,7 +1058,7 @@ sal_uInt16 SfxItemPool::GetNewWhich
     {
         if ( pImpl->mpSecondary )
             return pImpl->mpSecondary->GetNewWhich( nFileWhich );
-        SFX_ASSERT( false, nFileWhich, "unknown which in GetNewWhich()" );
+        SAL_WARN( "svl.items", "unknown which in GetNewWhich(), with ID/pos " << nFileWhich);
     }
 
     // Newer/the same/older version?

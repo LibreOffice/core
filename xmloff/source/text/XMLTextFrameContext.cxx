@@ -508,7 +508,7 @@ void XMLTextFrameContext_Impl::Create( bool /*bHRefOrBase64*/ )
                     case XML_TEXT_FRAME_GRAPHIC: sServiceName = "com.sun.star.text.GraphicObject"; break;
                 }
                 Reference<XInterface> xIfc = xFactory->createInstance( sServiceName );
-                SAL_WARN_IF( !xIfc.is(), "xmloff", "couldn't create frame" );
+                SAL_WARN_IF( !xIfc.is(), "xmloff.text", "couldn't create frame" );
                 if( xIfc.is() )
                     xPropSet.set( xIfc, UNO_QUERY );
             }
