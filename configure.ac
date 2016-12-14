@@ -10106,7 +10106,6 @@ if test "x$enable_gtk3" = "xyes"; then
     GTK3_CFLAGS=$(printf '%s' "$GTK3_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
     FilterLibs "${GTK3_LIBS}"
     GTK3_LIBS="${filteredlibs}"
-    AC_CHECK_LIB(EGL, eglMakeCurrent, [:], AC_MSG_ERROR([libEGL required.]))
 fi
 AC_SUBST(GTK3_LIBS)
 AC_SUBST(GTK3_CFLAGS)
@@ -11700,6 +11699,9 @@ dnl ===================================================================
 dnl Check for system epoxy
 dnl ===================================================================
 libo_CHECK_SYSTEM_MODULE([epoxy], [EPOXY], [epoxy >= 1.3.1], ["-I${WORKDIR}/UnpackedTarball/epoxy/include"])
+if test "$with_system_epoxy" = "no"; then
+    AC_CHECK_LIB(EGL, eglMakeCurrent, [:], AC_MSG_ERROR([libEGL required.]))
+fi
 
 dnl ===================================================================
 dnl Test whether to use avahi
