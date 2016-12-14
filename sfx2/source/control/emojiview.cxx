@@ -68,7 +68,7 @@ bool ViewFilter_Category::operator () (const ThumbnailViewItem *pItem)
 EmojiView::EmojiView (vcl::Window *pParent)
     : ThumbnailView(pParent, WB_TABSTOP | WB_VSCROLL)
 {
-    //locate json data file
+    // locate json data file
     OUString sPath("$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/emojiconfig/emoji.json");
     rtl::Bootstrap::expandMacros(sPath);
     std::string strPath = OUStringToOString(sPath.copy(strlen("file://")), RTL_TEXTENCODING_UTF8).getStr();
@@ -103,10 +103,10 @@ void EmojiView::Populate()
         return;
     }
 
-    //TODO::populate view using the orcus json parser
+    // TODO::populate view using the orcus json parser
     using node = orcus::json_document_tree::node;
 
-    //default json config
+    // default json config
     orcus::json_config config;
 
     orcus::json_document_tree aEmojiInfo;
@@ -124,16 +124,17 @@ void EmojiView::Populate()
 
         if(value.type() == orcus::json_node_t::object)
         {
-            //iterate each element to get the keys
+            // iterate each element to get the keys
             std::vector<orcus::pstring> aEmojiParams = value.keys();
-            OUString sTitle, sCategory;
+            OUString sTitle, sCategory, sDuplicate;
+            bool bDuplicate = false;
 
             for (auto paramIter = aEmojiParams.begin(); paramIter != aEmojiParams.end(); ++paramIter)
             {
                 orcus::pstring paramVal = *paramIter;
                 node prop = value.child(paramVal);
 
-                //get values of parameters in AppendItem() function
+                // get values of parameters in AppendItem() function
                 if(paramVal == "unicode")
                 {
                     sTitle = rtl::OStringToOUString(OString( prop.string_value().get(), prop.string_value().size() ), RTL_TEXTENCODING_UTF8);
@@ -142,11 +143,19 @@ void EmojiView::Populate()
                 {
                     sCategory = rtl::OStringToOUString(OString( prop.string_value().get(), prop.string_value().size() ), RTL_TEXTENCODING_UTF8);
                 }
+                else if(paramVal == "duplicate")
+                {
+                    bDuplicate = true;
+                }
             }
 
-            //TODO: Check whether the glyph is present in the font file
-            //If the glyph is present, Call EmojiView::AppendItem() to populate each template as it is parsed
-            AppendItem(sTitle, sCategory);
+            // TODO: Check whether the glyph is present in the font file
+            // If the glyph is present, Call EmojiView::AppendItem() to populate each template as it is parsed
+            // Don't append if a duplicate emoji
+            if(!bDuplicate)
+            {
+                AppendItem(sTitle, sCategory);
+            }
         }
     }
 }
