@@ -345,6 +345,7 @@ namespace sw
 
         public:
             explicit RedlineStack(SwDoc &rDoc) : mrDoc(rDoc) {}
+            void MoveAttrs(const SwPosition& rPos);
             void open(const SwPosition& rPos, const SfxPoolItem& rAttr);
             bool close(const SwPosition& rPos, RedlineType_t eType);
             void close(const SwPosition& rPos, RedlineType_t eType,
