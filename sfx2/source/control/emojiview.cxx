@@ -126,7 +126,7 @@ void EmojiView::Populate()
         {
             //iterate each element to get the keys
             std::vector<orcus::pstring> aEmojiParams = value.keys();
-            OUString sTitle, sCategory;
+            OUString sTitle, sCategory, sDuplicate;
 
             for (auto paramIter = aEmojiParams.begin(); paramIter != aEmojiParams.end(); ++paramIter)
             {
@@ -141,6 +141,10 @@ void EmojiView::Populate()
                 else if(paramVal == "category")
                 {
                     sCategory = rtl::OStringToOUString(OString( prop.string_value().get(), prop.string_value().size() ), RTL_TEXTENCODING_UTF8);
+                }
+                else if(paramVal == "duplicate")
+                {
+                    sDuplicate = rtl::OStringToOUString(OString( prop.string_value().get(), prop.string_value().size() ), RTL_TEXTENCODING_UTF8);
                 }
             }
 
