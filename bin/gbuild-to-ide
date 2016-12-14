@@ -1607,14 +1607,18 @@ SUBDIRS = %(subdirs)s
 """
 
 
-if __name__ == '__main__':
+def get_options():
     parser = argparse.ArgumentParser(
         description='LibreOffice gbuild IDE project generator')
     parser.add_argument('--ide', dest='ide', required=True,
                         help='the IDE to generate project files for')
     parser.add_argument('--make', dest='makecmd', required=True,
                         help='the command to execute make')
-    args = parser.parse_args()
+    return parser.parse_args()
+
+
+if __name__ == '__main__':
+    args = get_options()
     # FIXME: Hack
     if args.makecmd == 'make':
         args.makecmd = '/usr/bin/make'
