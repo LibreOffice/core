@@ -3280,8 +3280,9 @@ void SwXTextDocument::initializeForTiledRendering(const css::uno::Sequence<css::
     // format
     SvtSaveOptions().SetWarnAlienFormat(false);
 
-    // show word auto completion suggestions in selection instead of tooltip
-    SvxAutoCorrCfg::Get().GetAutoCorrect()->GetSwFlags().bAutoCmpltShowAsTip = false;
+    // disable word auto-completion suggestions, the tooltips are not visible,
+    // and the editeng-like auto-completion is annoying
+    SvxAutoCorrCfg::Get().GetAutoCorrect()->GetSwFlags().bAutoCompleteWords = false;
 }
 
 void SwXTextDocument::postKeyEvent(int nType, int nCharCode, int nKeyCode)
