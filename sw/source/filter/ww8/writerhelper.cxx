@@ -52,6 +52,8 @@
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentStylePoolAccess.hxx>
+#include <IDocumentMarkAccess.hxx>
+#include <IMark.hxx>
 
 using namespace com::sun::star;
 
@@ -740,6 +742,26 @@ namespace sw
                 SameOpenRedlineType(eType));
             if (aResult != maStack.rend())
             {
+                SwTextNode *const pNode(rPos.nNode.GetNode().GetTextNode());
+                sal_Int32 const nIndex(rPos.nContent.GetIndex());
+                // HACK to prevent overlap of field-mark and redline,
+                // which would destroy field-mark invariants when the redline
+                // is hidden: move the redline end one to the left
+                if (pNode && nIndex > 0
+                    && pNode->GetText()[nIndex - 1] == CH_TXT_ATR_FIELDEND)
+                {
+                    SwPosition const end(*rPos.nNode.GetNode().GetTextNode(),
+                                         nIndex - 1);
+                    sw::mark::IFieldmark *const pFieldMark(
+                        rPos.GetDoc()->getIDocumentMarkAccess()->getFieldmarkFor(end));
+                    assert(pFieldMark);
+                    if (pFieldMark->GetMarkPos().nNode.GetIndex() == (*aResult)->m_aMkPos.m_nNode.GetIndex()+1
+                        && pFieldMark->GetMarkPos().nContent.GetIndex() < (*aResult)->m_aMkPos.m_nContent)
+                    {
+                        (*aResult)->SetEndPos(end);
+                        return true;
+                    }
+                }
                 (*aResult)->SetEndPos(rPos);
                 return true;
             }
@@ -749,6 +771,40 @@ namespace sw
         void RedlineStack::closeall(const SwPosition& rPos)
         {
             std::for_each(maStack.begin(), maStack.end(), SetEndIfOpen(rPos));
+        }
+
+        void RedlineStack::MoveAttrs( const SwPosition& rPos )
+        {
+            size_t nCnt = maStack.size();
+            sal_uLong nPosNd = rPos.nNode.GetIndex();
+            sal_Int32 nPosCt = rPos.nContent.GetIndex() - 1;
+
+            for (size_t i=0; i < nCnt; ++i)
+            {
+                SwFltStackEntry& rEntry = *maStack[i];
+                bool const isPoint(rEntry.m_aMkPos == rEntry.m_aPtPos);
+                if ((rEntry.m_aMkPos.m_nNode.GetIndex()+1 == nPosNd) &&
+                    (nPosCt <= rEntry.m_aMkPos.m_nContent))
+                {
+                    rEntry.m_aMkPos.m_nContent++;
+                    SAL_WARN_IF(rEntry.m_aMkPos.m_nContent > rPos.nNode.GetNodes()[nPosNd]->GetContentNode()->Len(),
+                            "sw.ww8", "redline ends after end of line");
+                    if (isPoint) // sigh ... important special case...
+                    {
+                        rEntry.m_aPtPos.m_nContent++;
+                        continue;
+                    }
+                }
+                // for the end position, leave it alone if it's *on* the dummy
+                // char position, that should remain *before*
+                if ((rEntry.m_aPtPos.m_nNode.GetIndex()+1 == nPosNd) &&
+                    (nPosCt < rEntry.m_aPtPos.m_nContent))
+                {
+                    rEntry.m_aPtPos.m_nContent++;
+                    SAL_WARN_IF(rEntry.m_aPtPos.m_nContent > rPos.nNode.GetNodes()[nPosNd]->GetContentNode()->Len(),
+                            "sw.ww8", "redline ends after end of line");
+                }
+            }
         }
 
         void SetInDocAndDelete::operator()(SwFltStackEntry *pEntry)
