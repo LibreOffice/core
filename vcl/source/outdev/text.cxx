@@ -809,7 +809,7 @@ void OutputDevice::DrawText( const Point& rStartPt, const OUString& rStr,
     if(nLen == 0x0FFFF)
     {
         SAL_INFO("sal.rtl.xub",
-                 "GetTextOutlines Suspicious arguments nLen:" << nLen);
+                 "DrawText Suspicious arguments nLen:" << nLen);
     }
     if( (nLen < 0) || (nIndex + nLen >= rStr.getLength()))
     {
