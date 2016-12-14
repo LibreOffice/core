@@ -43,21 +43,18 @@
 
 class SvStream;
 
-//--Line below which the code has meaningful comments
-
 //Commonly used string literals for stream and storage names in word docs
 namespace SL
 {
-#   define DEFCONSTSTRINGARRAY(X) extern const char a##X[sizeof(#X)]
-    DEFCONSTSTRINGARRAY(ObjectPool);
-    DEFCONSTSTRINGARRAY(1Table);
-    DEFCONSTSTRINGARRAY(0Table);
-    DEFCONSTSTRINGARRAY(Data);
-    DEFCONSTSTRINGARRAY(CheckBox);
-    DEFCONSTSTRINGARRAY(ListBox);
-    DEFCONSTSTRINGARRAY(TextBox);
-    DEFCONSTSTRINGARRAY(TextField);
-    DEFCONSTSTRINGARRAY(MSMacroCmds);
+    const char aObjectPool[]    = "ObjectPool";
+    const char a1Table[]        = "1Table";
+    const char a0Table[]        = "0Table";
+    const char aData[]          = "Data";
+    const char aCheckBox[]      = "CheckBox";
+    const char aListBox[]       = "ListBox";
+    const char aTextBox[]       = "TextBox";
+    const char aTextField[]     = "TextField";
+    const char aMSMacroCmds[]   = "MSMacroCmds";
 }
 
 struct SprmInfo
