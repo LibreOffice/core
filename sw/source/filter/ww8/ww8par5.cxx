@@ -609,6 +609,9 @@ sal_uInt16 SwWW8ImplReader::End_Field()
                                 ODF_UNHANDLED );
                     if ( pFieldmark )
                     {
+                        // adapt redline positions to inserted field mark start
+                        // dummy char (assume not necessary for end dummy char)
+                        m_pRedlineStack->MoveAttrs(*aFieldPam.Start());
                         const IFieldmark::parameter_map_t& rParametersToAdd = m_aFieldStack.back().getParameters();
                         pFieldmark->GetParameters()->insert(rParametersToAdd.begin(), rParametersToAdd.end());
                         OUString sFieldId = OUString::number( m_aFieldStack.back().mnFieldId );
