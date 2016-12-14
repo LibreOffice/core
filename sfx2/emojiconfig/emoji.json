@@ -20696,7 +20696,8 @@
         "emoji_order": "1296",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "raised_hands_tone3": {
         "unicode": "1f64c-1f3fd",
@@ -20707,7 +20708,8 @@
         "emoji_order": "1297",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "raised_hands_tone4": {
         "unicode": "1f64c-1f3fe",
@@ -20718,7 +20720,8 @@
         "emoji_order": "1298",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "raised_hands_tone5": {
         "unicode": "1f64c-1f3ff",
@@ -20729,7 +20732,8 @@
         "emoji_order": "1299",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "clap_tone1": {
         "unicode": "1f44f-1f3fb",
@@ -20751,7 +20755,8 @@
         "emoji_order": "1301",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "clap_tone3": {
         "unicode": "1f44f-1f3fd",
@@ -20762,7 +20767,8 @@
         "emoji_order": "1302",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "clap_tone4": {
         "unicode": "1f44f-1f3fe",
@@ -20773,7 +20779,8 @@
         "emoji_order": "1303",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "clap_tone5": {
         "unicode": "1f44f-1f3ff",
@@ -20784,7 +20791,8 @@
         "emoji_order": "1304",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "wave_tone1": {
         "unicode": "1f44b-1f3fb",
@@ -20806,7 +20814,8 @@
         "emoji_order": "1306",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "wave_tone3": {
         "unicode": "1f44b-1f3fd",
@@ -20817,7 +20826,8 @@
         "emoji_order": "1307",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "wave_tone4": {
         "unicode": "1f44b-1f3fe",
@@ -20828,7 +20838,8 @@
         "emoji_order": "1308",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "wave_tone5": {
         "unicode": "1f44b-1f3ff",
@@ -20839,7 +20850,8 @@
         "emoji_order": "1309",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "thumbsup_tone1": {
         "unicode": "1f44d-1f3fb",
@@ -20867,7 +20879,8 @@
             ":thumbup_tone2:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "thumbsup_tone3": {
         "unicode": "1f44d-1f3fd",
@@ -20881,7 +20894,8 @@
             ":thumbup_tone3:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "thumbsup_tone4": {
         "unicode": "1f44d-1f3fe",
@@ -20895,7 +20909,8 @@
             ":thumbup_tone4:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "thumbsup_tone5": {
         "unicode": "1f44d-1f3ff",
@@ -20909,7 +20924,8 @@
             ":thumbup_tone5:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "thumbsdown_tone1": {
         "unicode": "1f44e-1f3fb",
@@ -20937,7 +20953,8 @@
             ":thumbdown_tone2:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "thumbsdown_tone3": {
         "unicode": "1f44e-1f3fd",
@@ -20951,7 +20968,8 @@
             ":thumbdown_tone3:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "thumbsdown_tone4": {
         "unicode": "1f44e-1f3fe",
@@ -20965,7 +20983,8 @@
             ":thumbdown_tone4:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "thumbsdown_tone5": {
         "unicode": "1f44e-1f3ff",
@@ -20979,7 +20998,8 @@
             ":thumbdown_tone5:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "punch_tone1": {
         "unicode": "1f44a-1f3fb",
@@ -21001,7 +21021,8 @@
         "emoji_order": "1321",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "punch_tone3": {
         "unicode": "1f44a-1f3fd",
@@ -21012,7 +21033,8 @@
         "emoji_order": "1322",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "punch_tone4": {
         "unicode": "1f44a-1f3fe",
@@ -21023,7 +21045,8 @@
         "emoji_order": "1323",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "punch_tone5": {
         "unicode": "1f44a-1f3ff",
@@ -21034,7 +21057,8 @@
         "emoji_order": "1324",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "fist_tone1": {
         "unicode": "270a-1f3fb",
@@ -21056,7 +21080,8 @@
         "emoji_order": "1326",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "fist_tone3": {
         "unicode": "270a-1f3fd",
@@ -21067,7 +21092,8 @@
         "emoji_order": "1327",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "fist_tone4": {
         "unicode": "270a-1f3fe",
@@ -21078,7 +21104,8 @@
         "emoji_order": "1328",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "fist_tone5": {
         "unicode": "270a-1f3ff",
@@ -21089,7 +21116,8 @@
         "emoji_order": "1329",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "v_tone1": {
         "unicode": "270c-1f3fb",
@@ -21111,7 +21139,8 @@
         "emoji_order": "1331",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "v_tone3": {
         "unicode": "270c-1f3fd",
@@ -21122,7 +21151,8 @@
         "emoji_order": "1332",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "v_tone4": {
         "unicode": "270c-1f3fe",
@@ -21133,7 +21163,8 @@
         "emoji_order": "1333",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "v_tone5": {
         "unicode": "270c-1f3ff",
@@ -21144,7 +21175,8 @@
         "emoji_order": "1334",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "ok_hand_tone1": {
         "unicode": "1f44c-1f3fb",
@@ -21166,7 +21198,8 @@
         "emoji_order": "1336",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "ok_hand_tone3": {
         "unicode": "1f44c-1f3fd",
@@ -21177,7 +21210,8 @@
         "emoji_order": "1337",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "ok_hand_tone4": {
         "unicode": "1f44c-1f3fe",
@@ -21188,7 +21222,8 @@
         "emoji_order": "1338",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "ok_hand_tone5": {
         "unicode": "1f44c-1f3ff",
@@ -21199,7 +21234,8 @@
         "emoji_order": "1339",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "raised_hand_tone1": {
         "unicode": "270b-1f3fb",
@@ -21221,7 +21257,8 @@
         "emoji_order": "1341",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "raised_hand_tone3": {
         "unicode": "270b-1f3fd",
@@ -21232,7 +21269,8 @@
         "emoji_order": "1342",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "raised_hand_tone4": {
         "unicode": "270b-1f3fe",
@@ -21243,7 +21281,8 @@
         "emoji_order": "1343",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "raised_hand_tone5": {
         "unicode": "270b-1f3ff",
@@ -21254,7 +21293,8 @@
         "emoji_order": "1344",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "open_hands_tone1": {
         "unicode": "1f450-1f3fb",
@@ -21276,7 +21316,8 @@
         "emoji_order": "1346",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "open_hands_tone3": {
         "unicode": "1f450-1f3fd",
@@ -21287,7 +21328,8 @@
         "emoji_order": "1347",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "open_hands_tone4": {
         "unicode": "1f450-1f3fe",
@@ -21298,7 +21340,8 @@
         "emoji_order": "1348",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "open_hands_tone5": {
         "unicode": "1f450-1f3ff",
@@ -21309,7 +21352,8 @@
         "emoji_order": "1349",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "muscle_tone1": {
         "unicode": "1f4aa-1f3fb",
@@ -21331,7 +21375,8 @@
         "emoji_order": "1351",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "muscle_tone3": {
         "unicode": "1f4aa-1f3fd",
@@ -21342,7 +21387,8 @@
         "emoji_order": "1352",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "muscle_tone4": {
         "unicode": "1f4aa-1f3fe",
@@ -21353,7 +21399,8 @@
         "emoji_order": "1353",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "muscle_tone5": {
         "unicode": "1f4aa-1f3ff",
@@ -21364,7 +21411,8 @@
         "emoji_order": "1354",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "pray_tone1": {
         "unicode": "1f64f-1f3fb",
@@ -21386,7 +21434,8 @@
         "emoji_order": "1356",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "pray_tone3": {
         "unicode": "1f64f-1f3fd",
@@ -21397,7 +21446,8 @@
         "emoji_order": "1357",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "pray_tone4": {
         "unicode": "1f64f-1f3fe",
@@ -21408,7 +21458,8 @@
         "emoji_order": "1358",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "pray_tone5": {
         "unicode": "1f64f-1f3ff",
@@ -21419,7 +21470,8 @@
         "emoji_order": "1359",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "point_up_tone1": {
         "unicode": "261d-1f3fb",
@@ -21441,7 +21493,8 @@
         "emoji_order": "1361",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "point_up_tone3": {
         "unicode": "261d-1f3fd",
@@ -21452,7 +21505,8 @@
         "emoji_order": "1362",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "point_up_tone4": {
         "unicode": "261d-1f3fe",
@@ -21463,7 +21517,8 @@
         "emoji_order": "1363",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "point_up_tone5": {
         "unicode": "261d-1f3ff",
@@ -21474,7 +21529,8 @@
         "emoji_order": "1364",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "point_up_2_tone1": {
         "unicode": "1f446-1f3fb",
@@ -21496,7 +21552,8 @@
         "emoji_order": "1366",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "point_up_2_tone3": {
         "unicode": "1f446-1f3fd",
@@ -21507,7 +21564,8 @@
         "emoji_order": "1367",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "point_up_2_tone4": {
         "unicode": "1f446-1f3fe",
@@ -21518,7 +21576,8 @@
         "emoji_order": "1368",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "point_up_2_tone5": {
         "unicode": "1f446-1f3ff",
@@ -21529,7 +21588,8 @@
         "emoji_order": "1369",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "point_down_tone1": {
         "unicode": "1f447-1f3fb",
@@ -21551,7 +21611,8 @@
         "emoji_order": "1371",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "point_down_tone3": {
         "unicode": "1f447-1f3fd",
@@ -21562,7 +21623,8 @@
         "emoji_order": "1372",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "point_down_tone4": {
         "unicode": "1f447-1f3fe",
@@ -21573,7 +21635,8 @@
         "emoji_order": "1373",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "point_down_tone5": {
         "unicode": "1f447-1f3ff",
@@ -21584,7 +21647,8 @@
         "emoji_order": "1374",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "point_left_tone1": {
         "unicode": "1f448-1f3fb",
@@ -21606,7 +21670,8 @@
         "emoji_order": "1376",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "point_left_tone3": {
         "unicode": "1f448-1f3fd",
@@ -21617,7 +21682,8 @@
         "emoji_order": "1377",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "point_left_tone4": {
         "unicode": "1f448-1f3fe",
@@ -21628,7 +21694,8 @@
         "emoji_order": "1378",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "point_left_tone5": {
         "unicode": "1f448-1f3ff",
@@ -21639,7 +21706,8 @@
         "emoji_order": "1379",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "point_right_tone1": {
         "unicode": "1f449-1f3fb",
@@ -21661,7 +21729,8 @@
         "emoji_order": "1381",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "point_right_tone3": {
         "unicode": "1f449-1f3fd",
@@ -21672,7 +21741,8 @@
         "emoji_order": "1382",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "point_right_tone4": {
         "unicode": "1f449-1f3fe",
@@ -21683,7 +21753,8 @@
         "emoji_order": "1383",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "point_right_tone5": {
         "unicode": "1f449-1f3ff",
@@ -21694,7 +21765,8 @@
         "emoji_order": "1384",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "middle_finger_tone1": {
         "unicode": "1f595-1f3fb",
@@ -21720,7 +21792,8 @@
             ":reversed_hand_with_middle_finger_extended_tone2:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "middle_finger_tone3": {
         "unicode": "1f595-1f3fd",
@@ -21733,7 +21806,8 @@
             ":reversed_hand_with_middle_finger_extended_tone3:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "middle_finger_tone4": {
         "unicode": "1f595-1f3fe",
@@ -21746,7 +21820,8 @@
             ":reversed_hand_with_middle_finger_extended_tone4:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "middle_finger_tone5": {
         "unicode": "1f595-1f3ff",
@@ -21759,7 +21834,8 @@
             ":reversed_hand_with_middle_finger_extended_tone5:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "hand_splayed_tone1": {
         "unicode": "1f590-1f3fb",
@@ -21785,7 +21861,8 @@
             ":raised_hand_with_fingers_splayed_tone2:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "hand_splayed_tone3": {
         "unicode": "1f590-1f3fd",
@@ -21798,7 +21875,8 @@
             ":raised_hand_with_fingers_splayed_tone3:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "hand_splayed_tone4": {
         "unicode": "1f590-1f3fe",
@@ -21811,7 +21889,8 @@
             ":raised_hand_with_fingers_splayed_tone4:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "hand_splayed_tone5": {
         "unicode": "1f590-1f3ff",
@@ -21824,7 +21903,8 @@
             ":raised_hand_with_fingers_splayed_tone5:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "metal_tone1": {
         "unicode": "1f918-1f3fb",
@@ -21850,7 +21930,8 @@
             ":sign_of_the_horns_tone2:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "metal_tone3": {
         "unicode": "1f918-1f3fd",
@@ -21863,7 +21944,8 @@
             ":sign_of_the_horns_tone3:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "metal_tone4": {
         "unicode": "1f918-1f3fe",
@@ -21876,7 +21958,8 @@
             ":sign_of_the_horns_tone4:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "metal_tone5": {
         "unicode": "1f918-1f3ff",
@@ -21889,7 +21972,8 @@
             ":sign_of_the_horns_tone5:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "vulcan_tone1": {
         "unicode": "1f596-1f3fb",
@@ -21915,7 +21999,8 @@
             ":raised_hand_with_part_between_middle_and_ring_fingers_tone2:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "vulcan_tone3": {
         "unicode": "1f596-1f3fd",
@@ -21928,7 +22013,8 @@
             ":raised_hand_with_part_between_middle_and_ring_fingers_tone3:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "vulcan_tone4": {
         "unicode": "1f596-1f3fe",
@@ -21941,7 +22027,8 @@
             ":raised_hand_with_part_between_middle_and_ring_fingers_tone4:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "vulcan_tone5": {
         "unicode": "1f596-1f3ff",
@@ -21954,7 +22041,8 @@
             ":raised_hand_with_part_between_middle_and_ring_fingers_tone5:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "writing_hand_tone1": {
         "unicode": "270d-1f3fb",
@@ -21976,7 +22064,8 @@
         "emoji_order": "1406",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "writing_hand_tone3": {
         "unicode": "270d-1f3fd",
@@ -21987,7 +22076,8 @@
         "emoji_order": "1407",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "writing_hand_tone4": {
         "unicode": "270d-1f3fe",
@@ -21998,7 +22088,8 @@
         "emoji_order": "1408",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "writing_hand_tone5": {
         "unicode": "270d-1f3ff",
@@ -22009,7 +22100,8 @@
         "emoji_order": "1409",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "nail_care_tone1": {
         "unicode": "1f485-1f3fb",
@@ -22031,7 +22123,8 @@
         "emoji_order": "1411",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "nail_care_tone3": {
         "unicode": "1f485-1f3fd",
@@ -22042,7 +22135,8 @@
         "emoji_order": "1412",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "nail_care_tone4": {
         "unicode": "1f485-1f3fe",
@@ -22053,7 +22147,8 @@
         "emoji_order": "1413",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "nail_care_tone5": {
         "unicode": "1f485-1f3ff",
@@ -22064,7 +22159,8 @@
         "emoji_order": "1414",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "ear_tone1": {
         "unicode": "1f442-1f3fb",
@@ -22086,7 +22182,8 @@
         "emoji_order": "1416",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "ear_tone3": {
         "unicode": "1f442-1f3fd",
@@ -22097,7 +22194,8 @@
         "emoji_order": "1417",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "ear_tone4": {
         "unicode": "1f442-1f3fe",
@@ -22108,7 +22206,8 @@
         "emoji_order": "1418",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "ear_tone5": {
         "unicode": "1f442-1f3ff",
@@ -22119,7 +22218,8 @@
         "emoji_order": "1419",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "nose_tone1": {
         "unicode": "1f443-1f3fb",
@@ -22141,7 +22241,8 @@
         "emoji_order": "1421",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "nose_tone3": {
         "unicode": "1f443-1f3fd",
@@ -22152,7 +22253,8 @@
         "emoji_order": "1422",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "nose_tone4": {
         "unicode": "1f443-1f3fe",
@@ -22163,7 +22265,8 @@
         "emoji_order": "1423",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "nose_tone5": {
         "unicode": "1f443-1f3ff",
@@ -22174,7 +22277,8 @@
         "emoji_order": "1424",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "baby_tone1": {
         "unicode": "1f476-1f3fb",
@@ -22196,7 +22300,8 @@
         "emoji_order": "1426",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "baby_tone3": {
         "unicode": "1f476-1f3fd",
@@ -22207,7 +22312,8 @@
         "emoji_order": "1427",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "baby_tone4": {
         "unicode": "1f476-1f3fe",
@@ -22218,7 +22324,8 @@
         "emoji_order": "1428",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "baby_tone5": {
         "unicode": "1f476-1f3ff",
@@ -22229,7 +22336,8 @@
         "emoji_order": "1429",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "boy_tone1": {
         "unicode": "1f466-1f3fb",
@@ -22251,7 +22359,8 @@
         "emoji_order": "1431",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "boy_tone3": {
         "unicode": "1f466-1f3fd",
@@ -22262,7 +22371,8 @@
         "emoji_order": "1432",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "boy_tone4": {
         "unicode": "1f466-1f3fe",
@@ -22273,7 +22383,8 @@
         "emoji_order": "1433",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "boy_tone5": {
         "unicode": "1f466-1f3ff",
@@ -22284,7 +22395,8 @@
         "emoji_order": "1434",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "girl_tone1": {
         "unicode": "1f467-1f3fb",
@@ -22306,7 +22418,8 @@
         "emoji_order": "1436",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "girl_tone3": {
         "unicode": "1f467-1f3fd",
@@ -22317,7 +22430,8 @@
         "emoji_order": "1437",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "girl_tone4": {
         "unicode": "1f467-1f3fe",
@@ -22328,7 +22442,8 @@
         "emoji_order": "1438",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "girl_tone5": {
         "unicode": "1f467-1f3ff",
@@ -22339,7 +22454,8 @@
         "emoji_order": "1439",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "man_tone1": {
         "unicode": "1f468-1f3fb",
@@ -22361,7 +22477,8 @@
         "emoji_order": "1441",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "man_tone3": {
         "unicode": "1f468-1f3fd",
@@ -22372,7 +22489,8 @@
         "emoji_order": "1442",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "man_tone4": {
         "unicode": "1f468-1f3fe",
@@ -22383,7 +22501,8 @@
         "emoji_order": "1443",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "man_tone5": {
         "unicode": "1f468-1f3ff",
@@ -22394,7 +22513,8 @@
         "emoji_order": "1444",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "woman_tone1": {
         "unicode": "1f469-1f3fb",
@@ -22416,7 +22536,8 @@
         "emoji_order": "1446",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "woman_tone3": {
         "unicode": "1f469-1f3fd",
@@ -22427,7 +22548,8 @@
         "emoji_order": "1447",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "woman_tone4": {
         "unicode": "1f469-1f3fe",
@@ -22438,7 +22560,8 @@
         "emoji_order": "1448",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "woman_tone5": {
         "unicode": "1f469-1f3ff",
@@ -22449,7 +22572,8 @@
         "emoji_order": "1449",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "person_with_blond_hair_tone1": {
         "unicode": "1f471-1f3fb",
@@ -22471,7 +22595,8 @@
         "emoji_order": "1451",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "person_with_blond_hair_tone3": {
         "unicode": "1f471-1f3fd",
@@ -22482,7 +22607,8 @@
         "emoji_order": "1452",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "person_with_blond_hair_tone4": {
         "unicode": "1f471-1f3fe",
@@ -22493,7 +22619,8 @@
         "emoji_order": "1453",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "person_with_blond_hair_tone5": {
         "unicode": "1f471-1f3ff",
@@ -22504,7 +22631,8 @@
         "emoji_order": "1454",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "older_man_tone1": {
         "unicode": "1f474-1f3fb",
@@ -22526,7 +22654,8 @@
         "emoji_order": "1456",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "older_man_tone3": {
         "unicode": "1f474-1f3fd",
@@ -22537,7 +22666,8 @@
         "emoji_order": "1457",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "older_man_tone4": {
         "unicode": "1f474-1f3fe",
@@ -22548,7 +22678,8 @@
         "emoji_order": "1458",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "older_man_tone5": {
         "unicode": "1f474-1f3ff",
@@ -22559,7 +22690,8 @@
         "emoji_order": "1459",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "older_woman_tone1": {
         "unicode": "1f475-1f3fb",
@@ -22585,7 +22717,8 @@
             ":grandma_tone2:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "older_woman_tone3": {
         "unicode": "1f475-1f3fd",
@@ -22598,7 +22731,8 @@
             ":grandma_tone3:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "older_woman_tone4": {
         "unicode": "1f475-1f3fe",
@@ -22611,7 +22745,8 @@
             ":grandma_tone4:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "older_woman_tone5": {
         "unicode": "1f475-1f3ff",
@@ -22624,7 +22759,8 @@
             ":grandma_tone5:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "man_with_gua_pi_mao_tone1": {
         "unicode": "1f472-1f3fb",
@@ -22646,7 +22782,8 @@
         "emoji_order": "1466",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "man_with_gua_pi_mao_tone3": {
         "unicode": "1f472-1f3fd",
@@ -22657,7 +22794,8 @@
         "emoji_order": "1467",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "man_with_gua_pi_mao_tone4": {
         "unicode": "1f472-1f3fe",
@@ -22668,7 +22806,8 @@
         "emoji_order": "1468",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "man_with_gua_pi_mao_tone5": {
         "unicode": "1f472-1f3ff",
@@ -22679,7 +22818,8 @@
         "emoji_order": "1469",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "man_with_turban_tone1": {
         "unicode": "1f473-1f3fb",
@@ -22701,7 +22841,8 @@
         "emoji_order": "1471",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "man_with_turban_tone3": {
         "unicode": "1f473-1f3fd",
@@ -22712,7 +22853,8 @@
         "emoji_order": "1472",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "man_with_turban_tone4": {
         "unicode": "1f473-1f3fe",
@@ -22723,7 +22865,8 @@
         "emoji_order": "1473",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "man_with_turban_tone5": {
         "unicode": "1f473-1f3ff",
@@ -22734,7 +22877,8 @@
         "emoji_order": "1474",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "cop_tone1": {
         "unicode": "1f46e-1f3fb",
@@ -22756,7 +22900,8 @@
         "emoji_order": "1476",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "cop_tone3": {
         "unicode": "1f46e-1f3fd",
@@ -22767,7 +22912,8 @@
         "emoji_order": "1477",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "cop_tone4": {
         "unicode": "1f46e-1f3fe",
@@ -22778,7 +22924,8 @@
         "emoji_order": "1478",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "cop_tone5": {
         "unicode": "1f46e-1f3ff",
@@ -22789,7 +22936,8 @@
         "emoji_order": "1479",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "construction_worker_tone1": {
         "unicode": "1f477-1f3fb",
@@ -22811,7 +22959,8 @@
         "emoji_order": "1481",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "construction_worker_tone3": {
         "unicode": "1f477-1f3fd",
@@ -22822,7 +22971,8 @@
         "emoji_order": "1482",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "construction_worker_tone4": {
         "unicode": "1f477-1f3fe",
@@ -22833,7 +22983,8 @@
         "emoji_order": "1483",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "construction_worker_tone5": {
         "unicode": "1f477-1f3ff",
@@ -22844,7 +22995,8 @@
         "emoji_order": "1484",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "guardsman_tone1": {
         "unicode": "1f482-1f3fb",
@@ -22866,7 +23018,8 @@
         "emoji_order": "1486",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "guardsman_tone3": {
         "unicode": "1f482-1f3fd",
@@ -22877,7 +23030,8 @@
         "emoji_order": "1487",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "guardsman_tone4": {
         "unicode": "1f482-1f3fe",
@@ -22888,7 +23042,8 @@
         "emoji_order": "1488",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "guardsman_tone5": {
         "unicode": "1f482-1f3ff",
@@ -22899,7 +23054,8 @@
         "emoji_order": "1489",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "santa_tone1": {
         "unicode": "1f385-1f3fb",
@@ -22921,7 +23077,8 @@
         "emoji_order": "1491",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "santa_tone3": {
         "unicode": "1f385-1f3fd",
@@ -22932,7 +23089,8 @@
         "emoji_order": "1492",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "santa_tone4": {
         "unicode": "1f385-1f3fe",
@@ -22943,7 +23101,8 @@
         "emoji_order": "1493",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "santa_tone5": {
         "unicode": "1f385-1f3ff",
@@ -22954,7 +23113,8 @@
         "emoji_order": "1494",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "angel_tone1": {
         "unicode": "1f47c-1f3fb",
@@ -22976,7 +23136,8 @@
         "emoji_order": "1496",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "angel_tone3": {
         "unicode": "1f47c-1f3fd",
@@ -22987,7 +23148,8 @@
         "emoji_order": "1497",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "angel_tone4": {
         "unicode": "1f47c-1f3fe",
@@ -22998,7 +23160,8 @@
         "emoji_order": "1498",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "angel_tone5": {
         "unicode": "1f47c-1f3ff",
@@ -23009,7 +23172,8 @@
         "emoji_order": "1499",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "princess_tone1": {
         "unicode": "1f478-1f3fb",
@@ -23031,7 +23195,8 @@
         "emoji_order": "1501",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "princess_tone3": {
         "unicode": "1f478-1f3fd",
@@ -23042,7 +23207,8 @@
         "emoji_order": "1502",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "princess_tone4": {
         "unicode": "1f478-1f3fe",
@@ -23053,7 +23219,8 @@
         "emoji_order": "1503",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "princess_tone5": {
         "unicode": "1f478-1f3ff",
@@ -23064,7 +23231,8 @@
         "emoji_order": "1504",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "bride_with_veil_tone1": {
         "unicode": "1f470-1f3fb",
@@ -23086,7 +23254,8 @@
         "emoji_order": "1506",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "bride_with_veil_tone3": {
         "unicode": "1f470-1f3fd",
@@ -23097,7 +23266,8 @@
         "emoji_order": "1507",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "bride_with_veil_tone4": {
         "unicode": "1f470-1f3fe",
@@ -23108,7 +23278,8 @@
         "emoji_order": "1508",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "bride_with_veil_tone5": {
         "unicode": "1f470-1f3ff",
@@ -23119,7 +23290,8 @@
         "emoji_order": "1509",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "walking_tone1": {
         "unicode": "1f6b6-1f3fb",
@@ -23141,7 +23313,8 @@
         "emoji_order": "1511",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "walking_tone3": {
         "unicode": "1f6b6-1f3fd",
@@ -23152,7 +23325,8 @@
         "emoji_order": "1512",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "walking_tone4": {
         "unicode": "1f6b6-1f3fe",
@@ -23163,7 +23337,8 @@
         "emoji_order": "1513",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "walking_tone5": {
         "unicode": "1f6b6-1f3ff",
@@ -23174,7 +23349,8 @@
         "emoji_order": "1514",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "runner_tone1": {
         "unicode": "1f3c3-1f3fb",
@@ -23196,7 +23372,8 @@
         "emoji_order": "1516",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "runner_tone3": {
         "unicode": "1f3c3-1f3fd",
@@ -23207,7 +23384,8 @@
         "emoji_order": "1517",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "runner_tone4": {
         "unicode": "1f3c3-1f3fe",
@@ -23218,7 +23396,8 @@
         "emoji_order": "1518",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "runner_tone5": {
         "unicode": "1f3c3-1f3ff",
@@ -23229,7 +23408,8 @@
         "emoji_order": "1519",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "dancer_tone1": {
         "unicode": "1f483-1f3fb",
@@ -23251,7 +23431,8 @@
         "emoji_order": "1521",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "dancer_tone3": {
         "unicode": "1f483-1f3fd",
@@ -23262,7 +23443,8 @@
         "emoji_order": "1522",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "dancer_tone4": {
         "unicode": "1f483-1f3fe",
@@ -23273,7 +23455,8 @@
         "emoji_order": "1523",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "dancer_tone5": {
         "unicode": "1f483-1f3ff",
@@ -23284,7 +23467,8 @@
         "emoji_order": "1524",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "bow_tone1": {
         "unicode": "1f647-1f3fb",
@@ -23306,7 +23490,8 @@
         "emoji_order": "1526",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "bow_tone3": {
         "unicode": "1f647-1f3fd",
@@ -23317,7 +23502,8 @@
         "emoji_order": "1527",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "bow_tone4": {
         "unicode": "1f647-1f3fe",
@@ -23328,7 +23514,8 @@
         "emoji_order": "1528",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "bow_tone5": {
         "unicode": "1f647-1f3ff",
@@ -23339,7 +23526,8 @@
         "emoji_order": "1529",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "information_desk_person_tone1": {
         "unicode": "1f481-1f3fb",
@@ -23361,7 +23549,8 @@
         "emoji_order": "1531",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "information_desk_person_tone3": {
         "unicode": "1f481-1f3fd",
@@ -23372,7 +23561,8 @@
         "emoji_order": "1532",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "information_desk_person_tone4": {
         "unicode": "1f481-1f3fe",
@@ -23383,7 +23573,8 @@
         "emoji_order": "1533",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "information_desk_person_tone5": {
         "unicode": "1f481-1f3ff",
@@ -23394,7 +23585,8 @@
         "emoji_order": "1534",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "no_good_tone1": {
         "unicode": "1f645-1f3fb",
@@ -23416,7 +23608,8 @@
         "emoji_order": "1536",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "no_good_tone3": {
         "unicode": "1f645-1f3fd",
@@ -23427,7 +23620,8 @@
         "emoji_order": "1537",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "no_good_tone4": {
         "unicode": "1f645-1f3fe",
@@ -23438,7 +23632,8 @@
         "emoji_order": "1538",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "no_good_tone5": {
         "unicode": "1f645-1f3ff",
@@ -23449,7 +23644,8 @@
         "emoji_order": "1539",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "ok_woman_tone1": {
         "unicode": "1f646-1f3fb",
@@ -23471,7 +23667,8 @@
         "emoji_order": "1541",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "ok_woman_tone3": {
         "unicode": "1f646-1f3fd",
@@ -23482,7 +23679,8 @@
         "emoji_order": "1542",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "ok_woman_tone4": {
         "unicode": "1f646-1f3fe",
@@ -23493,7 +23691,8 @@
         "emoji_order": "1543",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "ok_woman_tone5": {
         "unicode": "1f646-1f3ff",
@@ -23504,7 +23703,8 @@
         "emoji_order": "1544",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "raising_hand_tone1": {
         "unicode": "1f64b-1f3fb",
@@ -23526,7 +23726,8 @@
         "emoji_order": "1546",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "raising_hand_tone3": {
         "unicode": "1f64b-1f3fd",
@@ -23537,7 +23738,8 @@
         "emoji_order": "1547",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "raising_hand_tone4": {
         "unicode": "1f64b-1f3fe",
@@ -23548,7 +23750,8 @@
         "emoji_order": "1548",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "raising_hand_tone5": {
         "unicode": "1f64b-1f3ff",
@@ -23559,7 +23762,8 @@
         "emoji_order": "1549",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "person_with_pouting_face_tone1": {
         "unicode": "1f64e-1f3fb",
@@ -23581,7 +23785,8 @@
         "emoji_order": "1551",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "person_with_pouting_face_tone3": {
         "unicode": "1f64e-1f3fd",
@@ -23592,7 +23797,8 @@
         "emoji_order": "1552",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "person_with_pouting_face_tone4": {
         "unicode": "1f64e-1f3fe",
@@ -23603,7 +23809,8 @@
         "emoji_order": "1553",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "person_with_pouting_face_tone5": {
         "unicode": "1f64e-1f3ff",
@@ -23614,7 +23821,8 @@
         "emoji_order": "1554",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "person_frowning_tone1": {
         "unicode": "1f64d-1f3fb",
@@ -23636,7 +23844,8 @@
         "emoji_order": "1556",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "person_frowning_tone3": {
         "unicode": "1f64d-1f3fd",
@@ -23647,7 +23856,8 @@
         "emoji_order": "1557",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "person_frowning_tone4": {
         "unicode": "1f64d-1f3fe",
@@ -23658,7 +23868,8 @@
         "emoji_order": "1558",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "person_frowning_tone5": {
         "unicode": "1f64d-1f3ff",
@@ -23669,7 +23880,8 @@
         "emoji_order": "1559",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "haircut_tone1": {
         "unicode": "1f487-1f3fb",
@@ -23691,7 +23903,8 @@
         "emoji_order": "1561",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "haircut_tone3": {
         "unicode": "1f487-1f3fd",
@@ -23702,7 +23915,8 @@
         "emoji_order": "1562",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "haircut_tone4": {
         "unicode": "1f487-1f3fe",
@@ -23713,7 +23927,8 @@
         "emoji_order": "1563",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "haircut_tone5": {
         "unicode": "1f487-1f3ff",
@@ -23724,7 +23939,8 @@
         "emoji_order": "1564",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "massage_tone1": {
         "unicode": "1f486-1f3fb",
@@ -23746,7 +23962,8 @@
         "emoji_order": "1566",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "massage_tone3": {
         "unicode": "1f486-1f3fd",
@@ -23757,7 +23974,8 @@
         "emoji_order": "1567",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "massage_tone4": {
         "unicode": "1f486-1f3fe",
@@ -23768,7 +23986,8 @@
         "emoji_order": "1568",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "massage_tone5": {
         "unicode": "1f486-1f3ff",
@@ -23779,7 +23998,8 @@
         "emoji_order": "1569",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "rowboat_tone1": {
         "unicode": "1f6a3-1f3fb",
@@ -23801,7 +24021,8 @@
         "emoji_order": "1571",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "rowboat_tone3": {
         "unicode": "1f6a3-1f3fd",
@@ -23812,7 +24033,8 @@
         "emoji_order": "1572",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "rowboat_tone4": {
         "unicode": "1f6a3-1f3fe",
@@ -23823,7 +24045,8 @@
         "emoji_order": "1573",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "rowboat_tone5": {
         "unicode": "1f6a3-1f3ff",
@@ -23834,7 +24057,8 @@
         "emoji_order": "1574",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "swimmer_tone1": {
         "unicode": "1f3ca-1f3fb",
@@ -23856,7 +24080,8 @@
         "emoji_order": "1576",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "swimmer_tone3": {
         "unicode": "1f3ca-1f3fd",
@@ -23867,7 +24092,8 @@
         "emoji_order": "1577",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "swimmer_tone4": {
         "unicode": "1f3ca-1f3fe",
@@ -23878,7 +24104,8 @@
         "emoji_order": "1578",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "swimmer_tone5": {
         "unicode": "1f3ca-1f3ff",
@@ -23889,7 +24116,8 @@
         "emoji_order": "1579",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "surfer_tone1": {
         "unicode": "1f3c4-1f3fb",
@@ -23911,7 +24139,8 @@
         "emoji_order": "1581",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "surfer_tone3": {
         "unicode": "1f3c4-1f3fd",
@@ -23922,7 +24151,8 @@
         "emoji_order": "1582",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "surfer_tone4": {
         "unicode": "1f3c4-1f3fe",
@@ -23933,7 +24163,8 @@
         "emoji_order": "1583",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "surfer_tone5": {
         "unicode": "1f3c4-1f3ff",
@@ -23944,7 +24175,8 @@
         "emoji_order": "1584",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "bath_tone1": {
         "unicode": "1f6c0-1f3fb",
@@ -23966,7 +24198,8 @@
         "emoji_order": "1586",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "bath_tone3": {
         "unicode": "1f6c0-1f3fd",
@@ -23977,7 +24210,8 @@
         "emoji_order": "1587",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "bath_tone4": {
         "unicode": "1f6c0-1f3fe",
@@ -23988,7 +24222,8 @@
         "emoji_order": "1588",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "bath_tone5": {
         "unicode": "1f6c0-1f3ff",
@@ -23999,7 +24234,8 @@
         "emoji_order": "1589",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "basketball_player_tone1": {
         "unicode": "26f9-1f3fb",
@@ -24025,7 +24261,8 @@
             ":person_with_ball_tone2:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "basketball_player_tone3": {
         "unicode": "26f9-1f3fd",
@@ -24038,7 +24275,8 @@
             ":person_with_ball_tone3:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "basketball_player_tone4": {
         "unicode": "26f9-1f3fe",
@@ -24051,7 +24289,8 @@
             ":person_with_ball_tone4:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "basketball_player_tone5": {
         "unicode": "26f9-1f3ff",
@@ -24064,7 +24303,8 @@
             ":person_with_ball_tone5:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "lifter_tone1": {
         "unicode": "1f3cb-1f3fb",
@@ -24090,7 +24330,8 @@
             ":weight_lifter_tone2:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "lifter_tone3": {
         "unicode": "1f3cb-1f3fd",
@@ -24103,7 +24344,8 @@
             ":weight_lifter_tone3:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "lifter_tone4": {
         "unicode": "1f3cb-1f3fe",
@@ -24116,7 +24358,8 @@
             ":weight_lifter_tone4:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "lifter_tone5": {
         "unicode": "1f3cb-1f3ff",
@@ -24129,7 +24372,8 @@
             ":weight_lifter_tone5:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "bicyclist_tone1": {
         "unicode": "1f6b4-1f3fb",
@@ -24151,7 +24395,8 @@
         "emoji_order": "1601",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "bicyclist_tone3": {
         "unicode": "1f6b4-1f3fd",
@@ -24162,7 +24407,8 @@
         "emoji_order": "1602",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "bicyclist_tone4": {
         "unicode": "1f6b4-1f3fe",
@@ -24173,7 +24419,8 @@
         "emoji_order": "1603",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "bicyclist_tone5": {
         "unicode": "1f6b4-1f3ff",
@@ -24184,7 +24431,8 @@
         "emoji_order": "1604",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "mountain_bicyclist_tone1": {
         "unicode": "1f6b5-1f3fb",
@@ -24206,7 +24454,8 @@
         "emoji_order": "1606",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "mountain_bicyclist_tone3": {
         "unicode": "1f6b5-1f3fd",
@@ -24217,7 +24466,8 @@
         "emoji_order": "1607",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "mountain_bicyclist_tone4": {
         "unicode": "1f6b5-1f3fe",
@@ -24228,7 +24478,8 @@
         "emoji_order": "1608",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "mountain_bicyclist_tone5": {
         "unicode": "1f6b5-1f3ff",
@@ -24239,7 +24490,8 @@
         "emoji_order": "1609",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "horse_racing_tone1": {
         "unicode": "1f3c7-1f3fb",
@@ -24261,7 +24513,8 @@
         "emoji_order": "1611",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "horse_racing_tone3": {
         "unicode": "1f3c7-1f3fd",
@@ -24272,7 +24525,8 @@
         "emoji_order": "1612",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "horse_racing_tone4": {
         "unicode": "1f3c7-1f3fe",
@@ -24283,7 +24537,8 @@
         "emoji_order": "1613",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "horse_racing_tone5": {
         "unicode": "1f3c7-1f3ff",
@@ -24294,7 +24549,8 @@
         "emoji_order": "1614",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "spy_tone1": {
         "unicode": "1f575-1f3fb",
@@ -24320,7 +24576,8 @@
             ":sleuth_or_spy_tone2:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "spy_tone3": {
         "unicode": "1f575-1f3fd",
@@ -24333,7 +24590,8 @@
             ":sleuth_or_spy_tone3:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "spy_tone4": {
         "unicode": "1f575-1f3fe",
@@ -24346,7 +24604,8 @@
             ":sleuth_or_spy_tone4:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "spy_tone5": {
         "unicode": "1f575-1f3ff",
@@ -24359,7 +24618,8 @@
             ":sleuth_or_spy_tone5:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "tone1": {
         "unicode": "1f3fb",
@@ -24381,7 +24641,8 @@
         "emoji_order": "1621",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "tone3": {
         "unicode": "1f3fd",
@@ -24392,7 +24653,8 @@
         "emoji_order": "1622",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "tone4": {
         "unicode": "1f3fe",
@@ -24403,7 +24665,8 @@
         "emoji_order": "1623",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "tone5": {
         "unicode": "1f3ff",
@@ -24414,7 +24677,8 @@
         "emoji_order": "1624",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "cowboy": {
         "unicode": "1f920",
@@ -25324,7 +25588,8 @@
         "emoji_order": "10001",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "prince_tone3": {
         "unicode": "1f934-1f3fd",
@@ -25335,7 +25600,8 @@
         "emoji_order": "10002",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "prince_tone4": {
         "unicode": "1f934-1f3fe",
@@ -25346,7 +25612,8 @@
         "emoji_order": "10003",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "prince_tone5": {
         "unicode": "1f934-1f3ff",
@@ -25357,7 +25624,8 @@
         "emoji_order": "10004",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "mrs_clause_tone1": {
         "unicode": "1f936-1f3fb",
@@ -25383,7 +25651,8 @@
             ":mother_christmas_tone2:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "mrs_clause_tone3": {
         "unicode": "1f936-1f3fd",
@@ -25396,7 +25665,8 @@
             ":mother_christmas_tone3:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "mrs_clause_tone4": {
         "unicode": "1f936-1f3fe",
@@ -25409,7 +25679,8 @@
             ":mother_christmas_tone4:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "mrs_clause_tone5": {
         "unicode": "1f936-1f3ff",
@@ -25422,7 +25693,8 @@
             ":mother_christmas_tone5:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "man_in_tuxedo_tone1": {
         "unicode": "1f935-1f3fb",
@@ -25448,7 +25720,8 @@
             ":tuxedo_tone2:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "man_in_tuxedo_tone3": {
         "unicode": "1f935-1f3fd",
@@ -25461,7 +25734,8 @@
             ":tuxedo_tone3:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "man_in_tuxedo_tone4": {
         "unicode": "1f935-1f3fe",
@@ -25474,7 +25748,8 @@
             ":tuxedo_tone4:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "man_in_tuxedo_tone5": {
         "unicode": "1f935-1f3ff",
@@ -25487,7 +25762,8 @@
             ":tuxedo_tone5:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "shrug_tone1": {
         "unicode": "1f937-1f3fb",
@@ -25509,7 +25785,8 @@
         "emoji_order": "10016",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "shrug_tone3": {
         "unicode": "1f937-1f3fd",
@@ -25520,7 +25797,8 @@
         "emoji_order": "10017",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "shrug_tone4": {
         "unicode": "1f937-1f3fe",
@@ -25531,7 +25809,8 @@
         "emoji_order": "10018",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "shrug_tone5": {
         "unicode": "1f937-1f3ff",
@@ -25542,7 +25821,8 @@
         "emoji_order": "10019",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "face_palm_tone1": {
         "unicode": "1f926-1f3fb",
@@ -25564,7 +25844,8 @@
         "emoji_order": "10021",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "face_palm_tone3": {
         "unicode": "1f926-1f3fd",
@@ -25575,7 +25856,8 @@
         "emoji_order": "10022",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "face_palm_tone4": {
         "unicode": "1f926-1f3fe",
@@ -25586,7 +25868,8 @@
         "emoji_order": "10023",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "face_palm_tone5": {
         "unicode": "1f926-1f3ff",
@@ -25597,7 +25880,8 @@
         "emoji_order": "10024",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "pregnant_woman_tone1": {
         "unicode": "1f930-1f3fb",
@@ -25623,7 +25907,8 @@
             ":expecting_woman_tone2:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "pregnant_woman_tone3": {
         "unicode": "1f930-1f3fd",
@@ -25636,7 +25921,8 @@
             ":expecting_woman_tone3:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "pregnant_woman_tone4": {
         "unicode": "1f930-1f3fe",
@@ -25649,7 +25935,8 @@
             ":expecting_woman_tone4:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "pregnant_woman_tone5": {
         "unicode": "1f930-1f3ff",
@@ -25662,7 +25949,8 @@
             ":expecting_woman_tone5:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "man_dancing_tone1": {
         "unicode": "1f57a-1f3fb",
@@ -25688,7 +25976,8 @@
             ":male_dancer_tone2:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "man_dancing_tone3": {
         "unicode": "1f57a-1f3fd",
@@ -25701,7 +25990,8 @@
             ":male_dancer_tone3:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "man_dancing_tone4": {
         "unicode": "1f57a-1f3fe",
@@ -25714,7 +26004,8 @@
             ":male_dancer_tone4:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "man_dancing_tone5": {
         "unicode": "1f57a-1f3ff",
@@ -25727,7 +26018,8 @@
             ":male_dancer_tone5:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "selfie_tone1": {
         "unicode": "1f933-1f3fb",
@@ -25749,7 +26041,8 @@
         "emoji_order": "10036",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "selfie_tone3": {
         "unicode": "1f933-1f3fd",
@@ -25760,7 +26053,8 @@
         "emoji_order": "10037",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "selfie_tone4": {
         "unicode": "1f933-1f3fe",
@@ -25771,7 +26065,8 @@
         "emoji_order": "10038",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "selfie_tone5": {
         "unicode": "1f933-1f3ff",
@@ -25782,7 +26077,8 @@
         "emoji_order": "10039",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "fingers_crossed_tone1": {
         "unicode": "1f91e-1f3fb",
@@ -25808,7 +26104,8 @@
             ":hand_with_index_and_middle_fingers_crossed_tone2:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "fingers_crossed_tone3": {
         "unicode": "1f91e-1f3fd",
@@ -25821,7 +26118,8 @@
             ":hand_with_index_and_middle_fingers_crossed_tone3:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "fingers_crossed_tone4": {
         "unicode": "1f91e-1f3fe",
@@ -25834,7 +26132,8 @@
             ":hand_with_index_and_middle_fingers_crossed_tone4:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "fingers_crossed_tone5": {
         "unicode": "1f91e-1f3ff",
@@ -25847,7 +26146,8 @@
             ":hand_with_index_and_middle_fingers_crossed_tone5:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "call_me_tone1": {
         "unicode": "1f919-1f3fb",
@@ -25873,7 +26173,8 @@
             ":call_me_hand_tone2:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "call_me_tone3": {
         "unicode": "1f919-1f3fd",
@@ -25886,7 +26187,8 @@
             ":call_me_hand_tone3:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "call_me_tone4": {
         "unicode": "1f919-1f3fe",
@@ -25899,7 +26201,8 @@
             ":call_me_hand_tone4:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "call_me_tone5": {
         "unicode": "1f919-1f3ff",
@@ -25912,7 +26215,8 @@
             ":call_me_hand_tone5:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "left_facing_fist_tone1": {
         "unicode": "1f91b-1f3fb",
@@ -25938,7 +26242,8 @@
             ":left_fist_tone2:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "left_facing_fist_tone3": {
         "unicode": "1f91b-1f3fd",
@@ -25951,7 +26256,8 @@
             ":left_fist_tone3:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "left_facing_fist_tone4": {
         "unicode": "1f91b-1f3fe",
@@ -25964,7 +26270,8 @@
             ":left_fist_tone4:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "left_facing_fist_tone5": {
         "unicode": "1f91b-1f3ff",
@@ -25977,7 +26284,8 @@
             ":left_fist_tone5:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "right_facing_fist_tone1": {
         "unicode": "1f91c-1f3fb",
@@ -26003,7 +26311,8 @@
             ":right_fist_tone2:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "right_facing_fist_tone3": {
         "unicode": "1f91c-1f3fd",
@@ -26016,7 +26325,8 @@
             ":right_fist_tone3:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "right_facing_fist_tone4": {
         "unicode": "1f91c-1f3fe",
@@ -26029,7 +26339,8 @@
             ":right_fist_tone4:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "right_facing_fist_tone5": {
         "unicode": "1f91c-1f3ff",
@@ -26042,7 +26353,8 @@
             ":right_fist_tone5:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "raised_back_of_hand_tone1": {
         "unicode": "1f91a-1f3fb",
@@ -26068,7 +26380,8 @@
             ":back_of_hand_tone2:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "raised_back_of_hand_tone3": {
         "unicode": "1f91a-1f3fd",
@@ -26081,7 +26394,8 @@
             ":back_of_hand_tone3:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "raised_back_of_hand_tone4": {
         "unicode": "1f91a-1f3fe",
@@ -26094,7 +26408,8 @@
             ":back_of_hand_tone4:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "raised_back_of_hand_tone5": {
         "unicode": "1f91a-1f3ff",
@@ -26107,7 +26422,8 @@
             ":back_of_hand_tone5:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "handshake_tone1": {
         "unicode": "1f91d-1f3fb",
@@ -26133,7 +26449,8 @@
             ":shaking_hands_tone2:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "handshake_tone3": {
         "unicode": "1f91d-1f3fd",
@@ -26146,7 +26463,8 @@
             ":shaking_hands_tone3:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "handshake_tone4": {
         "unicode": "1f91d-1f3fe",
@@ -26159,7 +26477,8 @@
             ":shaking_hands_tone4:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "handshake_tone5": {
         "unicode": "1f91d-1f3ff",
@@ -26172,7 +26491,8 @@
             ":shaking_hands_tone5:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "cartwheel_tone1": {
         "unicode": "1f938-1f3fb",
@@ -26198,7 +26518,8 @@
             ":person_doing_cartwheel_tone2:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "cartwheel_tone3": {
         "unicode": "1f938-1f3fd",
@@ -26211,7 +26532,8 @@
             ":person_doing_cartwheel_tone3:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "cartwheel_tone4": {
         "unicode": "1f938-1f3fe",
@@ -26224,7 +26546,8 @@
             ":person_doing_cartwheel_tone4:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "cartwheel_tone5": {
         "unicode": "1f938-1f3ff",
@@ -26237,7 +26560,8 @@
             ":person_doing_cartwheel_tone5:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "wrestlers_tone1": {
         "unicode": "1f93c-1f3fb",
@@ -26263,7 +26587,8 @@
             ":wrestling_tone2:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "wrestlers_tone3": {
         "unicode": "1f93c-1f3fd",
@@ -26276,7 +26601,8 @@
             ":wrestling_tone3:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "wrestlers_tone4": {
         "unicode": "1f93c-1f3fe",
@@ -26289,7 +26615,8 @@
             ":wrestling_tone4:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "wrestlers_tone5": {
         "unicode": "1f93c-1f3ff",
@@ -26302,7 +26629,8 @@
             ":wrestling_tone5:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "water_polo_tone1": {
         "unicode": "1f93d-1f3fb",
@@ -26324,7 +26652,8 @@
         "emoji_order": "10086",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "water_polo_tone3": {
         "unicode": "1f93d-1f3fd",
@@ -26335,7 +26664,8 @@
         "emoji_order": "10087",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "water_polo_tone4": {
         "unicode": "1f93d-1f3fe",
@@ -26346,7 +26676,8 @@
         "emoji_order": "10088",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "water_polo_tone5": {
         "unicode": "1f93d-1f3ff",
@@ -26357,7 +26688,8 @@
         "emoji_order": "10089",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "handball_tone1": {
         "unicode": "1f93e-1f3fb",
@@ -26379,7 +26711,8 @@
         "emoji_order": "10091",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "handball_tone3": {
         "unicode": "1f93e-1f3fd",
@@ -26390,7 +26723,8 @@
         "emoji_order": "10092",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "handball_tone4": {
         "unicode": "1f93e-1f3fe",
@@ -26401,7 +26735,8 @@
         "emoji_order": "10093",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "handball_tone5": {
         "unicode": "1f93e-1f3ff",
@@ -26412,7 +26747,8 @@
         "emoji_order": "10094",
         "aliases": [],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "juggling_tone1": {
         "unicode": "1f939-1f3fb",
@@ -26438,7 +26774,8 @@
             ":juggler_tone2:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "juggling_tone3": {
         "unicode": "1f939-1f3fd",
@@ -26451,7 +26788,8 @@
             ":juggler_tone3:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "juggling_tone4": {
         "unicode": "1f939-1f3fe",
@@ -26464,7 +26802,8 @@
             ":juggler_tone4:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     },
     "juggling_tone5": {
         "unicode": "1f939-1f3ff",
@@ -26477,6 +26816,7 @@
             ":juggler_tone5:"
         ],
         "aliases_ascii": [],
-        "keywords": []
+        "keywords": [],
+        "duplicate": true
     }
 }
