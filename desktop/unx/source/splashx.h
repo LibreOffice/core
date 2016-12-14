@@ -20,6 +20,8 @@ void splash_destroy(struct splash* splash);
 
 void splash_draw_progress(struct splash* splash, int progess);
 
+int getScreenSize(int*, int*);
+
 #ifdef __cplusplus
 } // extern "C"
 #endif
