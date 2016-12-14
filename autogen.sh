@@ -176,10 +176,10 @@ die "Failed to generate the configure script" if (! -f "configure");
 # Handle help arguments first, so we don't clobber autogen.lastrun
 for my $arg (@ARGV) {
     if ($arg =~ /^(--help|-h|-\?)$/) {
-        print STDERR "autogen.sh - libreoffice configuration helper\n";
-        print STDERR "   --clean        forcibly re-generate configuration\n";
-        print STDERR "   --best-effort  don't fail on un-known configure with/enable options\n";
-        print STDERR "\nOther arguments passed directly to configure:\n\n";
+        print STDOUT "autogen.sh - libreoffice configuration helper\n";
+        print STDOUT "   --clean        forcibly re-generate configuration\n";
+        print STDOUT "   --best-effort  don't fail on un-known configure with/enable options\n";
+        print STDOUT "\nOther arguments passed directly to configure:\n\n";
         system ("./configure --help");
         exit;
     }
