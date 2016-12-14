@@ -10106,6 +10106,7 @@ if test "x$enable_gtk3" = "xyes"; then
     GTK3_CFLAGS=$(printf '%s' "$GTK3_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
     FilterLibs "${GTK3_LIBS}"
     GTK3_LIBS="${filteredlibs}"
+    AC_CHECK_LIB(EGL, eglMakeCurrent, [:], AC_MSG_ERROR([libEGL required.]))
 fi
 AC_SUBST(GTK3_LIBS)
 AC_SUBST(GTK3_CFLAGS)
