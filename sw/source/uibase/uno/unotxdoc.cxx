@@ -33,6 +33,8 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <editeng/svxacorr.hxx>
+#include <editeng/acorrcfg.hxx>
 #include <cmdid.h>
 #include <swtypes.hxx>
 #include <wdocsh.hxx>
@@ -3294,6 +3296,10 @@ void SwXTextDocument::initializeForTiledRendering(const css::uno::Sequence<css::
     // causing 'Save' being disabled; so let's always save to the original
     // format
     SvtSaveOptions().SetWarnAlienFormat(false);
+
+    // disable word auto-completion suggestions, the tooltips are not visible,
+    // and the editeng-like auto-completion is annoying
+    SvxAutoCorrCfg::Get().GetAutoCorrect()->GetSwFlags().bAutoCompleteWords = false;
 }
 
 void SwXTextDocument::postKeyEvent(int nType, int nCharCode, int nKeyCode)
