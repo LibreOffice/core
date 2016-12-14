@@ -21,7 +21,7 @@
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "osl/diagnose.h"
 #include "filstr.hxx"
-#include "shell.hxx"
+#include "filtask.hxx"
 #include "prov.hxx"
 #include <memory>
 

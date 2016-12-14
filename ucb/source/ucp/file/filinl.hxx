@@ -19,35 +19,35 @@
 #ifndef INCLUDED_UCB_SOURCE_UCP_FILE_FILINL_HXX
 #define INCLUDED_UCB_SOURCE_UCP_FILE_FILINL_HXX
 
-inline const bool& SAL_CALL shell::MyProperty::IsNative() const
+inline const bool& SAL_CALL TaskManager::MyProperty::IsNative() const
 {
     return isNative;
 }
-inline const sal_Int32& SAL_CALL shell::MyProperty::getHandle() const
+inline const sal_Int32& SAL_CALL TaskManager::MyProperty::getHandle() const
 {
     return Handle;
 }
-inline const css::uno::Type& SAL_CALL shell::MyProperty::getType() const
+inline const css::uno::Type& SAL_CALL TaskManager::MyProperty::getType() const
 {
     return Typ;
 }
-inline const css::uno::Any& SAL_CALL shell::MyProperty::getValue() const
+inline const css::uno::Any& SAL_CALL TaskManager::MyProperty::getValue() const
 {
     return Value;
 }
-inline const css::beans::PropertyState& SAL_CALL shell::MyProperty::getState() const
+inline const css::beans::PropertyState& SAL_CALL TaskManager::MyProperty::getState() const
 {
     return State;
 }
-inline const sal_Int16& SAL_CALL shell::MyProperty::getAttributes() const
+inline const sal_Int16& SAL_CALL TaskManager::MyProperty::getAttributes() const
 {
     return Attributes;
 }
-inline void SAL_CALL shell::MyProperty::setValue( const css::uno::Any& theValue ) const
+inline void SAL_CALL TaskManager::MyProperty::setValue( const css::uno::Any& theValue ) const
 {
     const_cast<MyProperty*>(this)->Value = theValue;
 }
-inline void SAL_CALL shell::MyProperty::setState( const css::beans::PropertyState& theState ) const
+inline void SAL_CALL TaskManager::MyProperty::setState( const css::beans::PropertyState& theState ) const
 {
     const_cast<MyProperty*>(this)->State = theState;
 }

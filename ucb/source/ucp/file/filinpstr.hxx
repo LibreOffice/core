@@ -32,7 +32,7 @@
 
 namespace fileaccess {
 
-    class shell;
+    class TaskManager;
 
     class XInputStream_impl
         : public cppu::OWeakObject,

@@ -78,7 +78,7 @@ public:
 
 // Private Constructor for just inserted Contents
 
-BaseContent::BaseContent( shell* pMyShell,
+BaseContent::BaseContent( TaskManager* pMyShell,
                           const OUString& parentName,
                           bool bFolder )
     : m_pMyShell( pMyShell ),
@@ -98,7 +98,7 @@ BaseContent::BaseContent( shell* pMyShell,
 
 // Constructor for full featured Contents
 
-BaseContent::BaseContent( shell* pMyShell,
+BaseContent::BaseContent( TaskManager* pMyShell,
                           const Reference< XContentIdentifier >& xContentIdentifier,
                           const OUString& aUncPath )
     : m_pMyShell( pMyShell ),
@@ -699,7 +699,7 @@ BaseContent::getParent()
     OUString ParentUrl;
 
 
-    bool err = fileaccess::shell::getUrlFromUnq( ParentUnq, ParentUrl );
+    bool err = fileaccess::TaskManager::getUrlFromUnq( ParentUnq, ParentUrl );
     if( err )
         return Reference< XInterface >( nullptr );
 
@@ -1045,7 +1045,7 @@ BaseContent::transfer( sal_Int32 nMyCommandIdentifier,
     }
 
     OUString srcUnc;
-    if( fileaccess::shell::getUnqFromUrl( aTransferInfo.SourceURL,srcUnc ) )
+    if( fileaccess::TaskManager::getUnqFromUrl( aTransferInfo.SourceURL,srcUnc ) )
     {
         m_pMyShell->installError( nMyCommandIdentifier,
                                   TASKHANDLING_TRANSFER_INVALIDURL );

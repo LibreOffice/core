@@ -40,7 +40,6 @@ $(eval $(call gb_Library_add_exception_objects,ucpfile1,\
 	ucb/source/ucp/file/filstr \
 	ucb/source/ucp/file/filtask \
 	ucb/source/ucp/file/prov \
-	ucb/source/ucp/file/shell \
 ))
 
 # vim: set noet sw=4 ts=4:

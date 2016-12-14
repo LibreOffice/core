@@ -26,13 +26,13 @@
 
 namespace fileaccess {
 
-    class shell;
+    class TaskManager;
 
     class XRow_impl: public cppu::WeakImplHelper<
         css::sdbc::XRow >
     {
     public:
-        XRow_impl( shell* pShell,const css::uno::Sequence< css::uno::Any >& aValueMap );
+        XRow_impl( TaskManager* pShell,const css::uno::Sequence< css::uno::Any >& aValueMap );
         virtual ~XRow_impl() override;
 
         virtual sal_Bool SAL_CALL
@@ -143,7 +143,7 @@ namespace fileaccess {
         osl::Mutex                                         m_aMutex;
         css::uno::Sequence< css::uno::Any >                m_aValueMap;
         bool                                               m_nWasNull;
-        shell*                                             m_pMyShell;
+        TaskManager*                                             m_pMyShell;
         css::uno::Reference< css::script::XTypeConverter > m_xTypeConverter;
     };
 

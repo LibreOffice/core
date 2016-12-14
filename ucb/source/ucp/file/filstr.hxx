@@ -36,7 +36,7 @@
 namespace fileaccess {
 
     // forward:
-    class shell;
+    class TaskManager;
 
 class XStream_impl :  public cppu::WeakImplHelper<
     css::io::XStream,

@@ -26,14 +26,14 @@
 
 namespace fileaccess {
 
-    class shell;
+    class TaskManager;
 
 class XPropertySetInfo_impl : public cppu::WeakImplHelper<
     css::beans::XPropertySetInfo >
     {
     public:
-        XPropertySetInfo_impl( shell* pMyShell,const OUString& aUnqPath );
-        XPropertySetInfo_impl( shell* pMyShell,const css::uno::Sequence< css::beans::Property >& seq );
+        XPropertySetInfo_impl( TaskManager* pMyShell,const OUString& aUnqPath );
+        XPropertySetInfo_impl( TaskManager* pMyShell,const css::uno::Sequence< css::beans::Property >& seq );
 
         virtual ~XPropertySetInfo_impl() override;
 
@@ -51,7 +51,7 @@ class XPropertySetInfo_impl : public cppu::WeakImplHelper<
             throw( css::uno::RuntimeException, std::exception ) override;
 
     private:
-        shell*                                               m_pMyShell;
+        TaskManager*                                               m_pMyShell;
         sal_Int32                                            m_count;
         css::uno::Sequence< css::beans::Property >           m_seq;
     };
