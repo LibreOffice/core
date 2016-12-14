@@ -3797,7 +3797,8 @@ if test "$GCC" = "yes"; then
     CFLAGS="$CFLAGS -Werror -Og"
     AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[ return 0; ]])],[ HAVE_GCC_OG=TRUE ],[])
     CFLAGS=$save_CFLAGS
-    if test "$HAVE_GCC_OG" = "TRUE"; then
+    # clang as of version 4.0.0 (trunk 289424) doesn't do this very well (missing locals, bad param info in stack frame)
+    if test "$HAVE_GCC_OG" = "TRUE" -a "$COM_IS_CLANG" != "TRUE"; then
         AC_MSG_RESULT([yes])
     else
         AC_MSG_RESULT([no])
