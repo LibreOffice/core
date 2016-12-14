@@ -627,7 +627,7 @@ sal_uInt16 SwWW8ImplReader::End_Field()
                             OUString sOleId('_');
                             sOleId += OUString::number( m_aFieldStack.back().mnObjLocFc );
 
-                            tools::SvRef<SotStorage> xSrc0 = m_pStg->OpenSotStorage(OUString(SL::aObjectPool));
+                            tools::SvRef<SotStorage> xSrc0 = m_pStg->OpenSotStorage(SL::aObjectPool);
                             tools::SvRef<SotStorage> xSrc1 = xSrc0->OpenSotStorage( sOleId, StreamMode::READ );
 
                             // Store it now!

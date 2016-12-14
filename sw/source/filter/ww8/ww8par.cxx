@@ -4887,7 +4887,8 @@ void SwWW8ImplReader::ReadGlobalTemplateSettings( const OUString& sCreatedFrom, 
         tools::SvRef<SotStorageStream> refMainStream = rRoot->OpenSotStream( "WordDocument");
         refMainStream->SetEndian(SvStreamEndian::LITTLE);
         WW8Fib aWwFib( *refMainStream, 8 );
-        tools::SvRef<SotStorageStream> xTableStream = rRoot->OpenSotStream(OUString::createFromAscii( aWwFib.m_fWhichTableStm ? SL::a1Table : SL::a0Table), StreamMode::STD_READ);
+        tools::SvRef<SotStorageStream> xTableStream =
+                rRoot->OpenSotStream(aWwFib.m_fWhichTableStm ? SL::a1Table : SL::a0Table, StreamMode::STD_READ);
 
         if (xTableStream.Is() && SVSTREAM_OK == xTableStream->GetError())
         {
@@ -5426,15 +5427,14 @@ sal_uLong SwWW8ImplReader::SetSubStreams(tools::SvRef<SotStorageStream> &rTableS
                 break;
             }
 
-            rTableStream = m_pStg->OpenSotStream( OUString::createFromAscii(
-                m_pWwFib->m_fWhichTableStm ? SL::a1Table : SL::a0Table),
+            rTableStream = m_pStg->OpenSotStream(
+                m_pWwFib->m_fWhichTableStm ? SL::a1Table : SL::a0Table,
                 StreamMode::STD_READ);
 
             m_pTableStream = rTableStream.get();
             m_pTableStream->SetEndian( SvStreamEndian::LITTLE );
 
-            rDataStream = m_pStg->OpenSotStream(OUString(SL::aData),
-                StreamMode::STD_READ );
+            rDataStream = m_pStg->OpenSotStream(SL::aData, StreamMode::STD_READ);
 
             if (rDataStream.Is() && SVSTREAM_OK == rDataStream->GetError())
             {
@@ -6426,8 +6426,7 @@ bool SwMSDffManager::GetOLEStorageName(long nOLEId, OUString& rStorageName,
     {
         rStorageName = "_";
         rStorageName += OUString::number(nPictureId);
-        rSrcStorage = rReader.m_pStg->OpenSotStorage(OUString(
-            SL::aObjectPool));
+        rSrcStorage = rReader.m_pStg->OpenSotStorage(SL::aObjectPool);
         if (!rReader.m_pDocShell)
             bRet=false;
         else
