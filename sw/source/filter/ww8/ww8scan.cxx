@@ -51,21 +51,6 @@
 
 using namespace ::com::sun::star::lang;
 
-//-begin
-namespace SL
-{
-#   define IMPLCONSTSTRINGARRAY(X) const char a##X[] = #X
-    IMPLCONSTSTRINGARRAY(ObjectPool);
-    IMPLCONSTSTRINGARRAY(1Table);
-    IMPLCONSTSTRINGARRAY(0Table);
-    IMPLCONSTSTRINGARRAY(Data);
-    IMPLCONSTSTRINGARRAY(CheckBox);
-    IMPLCONSTSTRINGARRAY(ListBox);
-    IMPLCONSTSTRINGARRAY(TextBox);
-    IMPLCONSTSTRINGARRAY(TextField);
-    IMPLCONSTSTRINGARRAY(MSMacroCmds);
-}
-
 namespace
 {
     /**

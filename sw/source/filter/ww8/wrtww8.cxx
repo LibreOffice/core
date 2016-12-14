@@ -2874,7 +2874,7 @@ void WW8Export::WriteFkpPlcUsw()
          some magic.
         */
         // avoid memory leak #i120098#, the unnamed obj will be released in destructor.
-        xEscherStg = GetWriter().GetStorage().OpenSotStorage(OUString(SL::aObjectPool));
+        xEscherStg = GetWriter().GetStorage().OpenSotStorage(SL::aObjectPool);
     }
 
     // dggInfo - escher stream
@@ -3214,10 +3214,8 @@ void WW8Export::ExportDocument_Impl()
     xWwStrm->SetBufferSize( 32768 );
 
     pFib->m_fWhichTableStm = true;
-    xTableStrm = GetWriter().GetStorage().OpenSotStream(OUString(SL::a1Table),
-        StreamMode::STD_WRITE );
-    xDataStrm = GetWriter().GetStorage().OpenSotStream(OUString(SL::aData),
-        StreamMode::STD_WRITE );
+    xTableStrm = GetWriter().GetStorage().OpenSotStream(SL::a1Table, StreamMode::STD_WRITE);
+    xDataStrm = GetWriter().GetStorage().OpenSotStream(SL::aData, StreamMode::STD_WRITE);
 
     xDataStrm->SetBufferSize( 32768 );  // for graphics
     xTableStrm->SetBufferSize( 16384 ); // for the Font-/Style-Table, etc.
@@ -3380,7 +3378,7 @@ void WW8Export::ExportDocument_Impl()
     {
         xDataStrm.Clear();
         pDataStrm = nullptr;
-        GetWriter().GetStorage().Remove(OUString(SL::aData));
+        GetWriter().GetStorage().Remove(SL::aData);
     }
 }
 

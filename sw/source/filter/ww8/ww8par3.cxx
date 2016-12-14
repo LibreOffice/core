@@ -2258,7 +2258,7 @@ void WW8FormulaControl::FormulaRead(SwWw8ControlType nWhich,
 }
 
 WW8FormulaListBox::WW8FormulaListBox(SwWW8ImplReader &rR)
-    : WW8FormulaControl(OUString(SL::aListBox), rR)
+    : WW8FormulaControl(SL::aListBox, rR)
 {
 }
 
@@ -2466,7 +2466,7 @@ bool WW8FormulaListBox::Import(const uno::Reference <
 }
 
 WW8FormulaCheckBox::WW8FormulaCheckBox(SwWW8ImplReader &rR)
-    : WW8FormulaControl(OUString(SL::aCheckBox), rR)
+    : WW8FormulaControl(SL::aCheckBox, rR)
 {
 }
 
@@ -2531,7 +2531,7 @@ bool WW8FormulaCheckBox::Import(const uno::Reference <
 }
 
 WW8FormulaEditBox::WW8FormulaEditBox(SwWW8ImplReader &rR)
-    : WW8FormulaControl(OUString(SL::aTextField) ,rR)
+    : WW8FormulaControl(SL::aTextField ,rR)
 {
 }
 
