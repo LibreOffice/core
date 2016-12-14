@@ -30,6 +30,7 @@ class   SalXLib;
 #include <X11/extensions/Xrender.h>
 #include <epoxy/glx.h>
 
+#include <rtl/string.hxx>
 #include <unx/salunx.h>
 #include <unx/saltype.h>
 #include <vcl/opengl/OpenGLContext.hxx>
@@ -200,7 +201,7 @@ public:
     Window             win;
     XVisualInfo*       vi;
     GLXContext         ctx;
-    const char*        GLXExtensions;
+    OString            GLXExtensions;
 
     bool HasGLXExtension(const char* name) const;
 
