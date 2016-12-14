@@ -55,27 +55,27 @@ class CheckIndexedPropertyValues(unittest.TestCase):
         prop3 = uno.Any("[]com.sun.star.beans.PropertyValue", (p3,))
 
         t = xCont.getElementType()
-        self.assertEqual(0, xCont.getCount(), "Initial container is not empty")
+        self.assertEqual(0, len(xCont), "Initial container is not empty")
         uno.invoke(xCont, "insertByIndex", (0, prop1))
 
-        ret = xCont.getByIndex(0)
+        ret = xCont[0]
         self.assertEqual(p1.Name, ret[0].Name)
         self.assertEqual(p1.Value, ret[0].Value)
 
         uno.invoke(xCont, "replaceByIndex", (0, prop2))
-        ret = xCont.getByIndex(0)
+        ret = xCont[0]
         self.assertEqual(p2.Name, ret[0].Name)
         self.assertEqual(p2.Value, ret[0].Value)
 
-        xCont.removeByIndex(0)
-        self.assertTrue(not(xCont.hasElements()) and xCont.getCount() == 0, "Could not remove PropertyValue")
+        del xCont[0]
+        self.assertTrue(not(xCont.hasElements()) and len(xCont) == 0, "Could not remove PropertyValue")
         uno.invoke(xCont, "insertByIndex", (0, prop1))
         uno.invoke(xCont, "insertByIndex", (1, prop2))
-        self.assertTrue(xCont.hasElements() and xCont.getCount() == 2, "Did not insert PropertyValue")
+        self.assertTrue(xCont.hasElements() and len(xCont) == 2, "Did not insert PropertyValue")
 
         uno.invoke(xCont, "insertByIndex", (1, prop2))
         uno.invoke(xCont, "insertByIndex", (1, prop3))
-        ret = xCont.getByIndex(1)
+        ret = xCont[1]
         self.assertEqual(p3.Name, ret[0].Name)
         self.assertEqual(p3.Value, ret[0].Value)
 
@@ -83,7 +83,7 @@ class CheckIndexedPropertyValues(unittest.TestCase):
             uno.invoke(xCont, "insertByIndex", (25, prop2))
 
         with self.assertRaises(IndexOutOfBoundsException):
-            xCont.removeByIndex(25)
+            del xCont[25]
 
         with self.assertRaises(IllegalArgumentException):
             uno.invoke(xCont, "insertByIndex", (3, "Example String"))
