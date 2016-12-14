@@ -118,7 +118,7 @@ namespace dbaui
         m_sModule = OUString::createFromAscii( _pAsciiModuleName );
 
         // our label should equal the UI text of the "Open" command
-        OUString sLabel(vcl::CommandInfoProvider::Instance().GetCommandPropertyFromModule(".uno:Open", m_sModule));
+        OUString sLabel(vcl::CommandInfoProvider::GetCommandPropertyFromModule(".uno:Open", m_sModule));
         SetText(" " + sLabel.replaceAll("~", ""));
 
         // Place icon left of text and both centered in the button.
