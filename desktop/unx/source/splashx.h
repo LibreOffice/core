@@ -9,7 +9,6 @@
 #ifndef INCLUDED_DESKTOP_UNX_SOURCE_SPLASHX_H
 #define INCLUDED_DESKTOP_UNX_SOURCE_SPLASHX_H
 
-
 #include <rtl/ustring.h>
 
 #ifdef __cplusplus

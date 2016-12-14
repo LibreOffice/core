@@ -531,6 +531,32 @@ static rtl_String* ustr_to_str( rtl_uString* pStr )
     return pOut;
 }
 
+static sal_Bool getScreenSize(int* display_width, int* display_height)
+{
+    Display* bDisplay = NULL;
+    Screen* bScreen = NULL;
+
+    bDisplay = XOpenDisplay( NULL );
+    if ( !bDisplay )
+    {
+        fprintf( stderr, "Failed to open default display.\n" );
+        return sal_False;
+    }
+
+    bScreen = DefaultScreenOfDisplay( bDisplay );
+    if ( !bScreen )
+    {
+        fprintf( stderr, "Failed to obtain the default screen of given display.\n" );
+        return sal_False;
+    }
+
+    *display_width = bScreen->width;
+    *display_height = bScreen->height;
+
+    XCloseDisplay( bDisplay );
+    return sal_True;
+}
+
 #define IMG_SUFFIX           ".png"
 
 static void splash_load_image( struct splash* splash, rtl_uString* pUAppPath )
@@ -540,7 +566,7 @@ static void splash_load_image( struct splash* splash, rtl_uString* pUAppPath )
      * now the splash screen will have to get along with language-territory. */
 
     char *pBuffer, *pSuffix, *pLocale;
-    int nLocSize;
+    int nLocSize, display_width, display_height;
     rtl_Locale *pLoc = NULL;
     rtl_String *pLang, *pCountry, *pAppPath;
 
@@ -570,9 +596,24 @@ static void splash_load_image( struct splash* splash, rtl_uString* pUAppPath )
     if ( splash_load_bmp( splash, pBuffer ) )
         goto cleanup;
 
-    strcpy (pSuffix, "intro" IMG_SUFFIX);
-    if ( splash_load_bmp( splash, pBuffer ) )
-        goto cleanup;
+    if ( getScreenSize( &display_width, &display_height ) == sal_True )
+    {
+        //load high resolution splash image
+        if ( display_width > 1920 && display_height > 1024 ) // suggest better display size limits?
+        {
+            //TODO- change progress bar parameters after getting size of intro-highres.png
+            strcpy (pSuffix, "intro-highres" IMG_SUFFIX);
+            if ( splash_load_bmp( splash, pBuffer ) )
+                goto cleanup;
+        }
+        //load low resolution splash image
+        else
+        {
+            strcpy (pSuffix, "intro" IMG_SUFFIX);
+            if ( splash_load_bmp( splash, pBuffer ) )
+                goto cleanup;
+        }
+    }
 
     fprintf (stderr, "Failed to find intro image\n");
 
