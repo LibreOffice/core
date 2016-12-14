@@ -28,7 +28,6 @@ certain functionality.
 @li @c sal.osl.mutex
 @li @c sal.osl.pipe
 @li @c sal.rtl - SAL RTL library
-@li @c sal.rtl.xub - SAL RTL warnings related to possible String->OUString conversion issues.
 @li @c sal.textenc - the textencoding SAL library
 
 @section basctl

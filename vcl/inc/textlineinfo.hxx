@@ -30,11 +30,6 @@ private:
 public:
    ImplTextLineInfo( long nWidth, sal_Int32 nIndex, sal_Int32 nLen )
    {
-       if(nIndex == -1 || nIndex == 0x0FFFF || nLen == -1 || nLen == 0x0FFFF)
-       {
-            SAL_INFO("sal.rtl.xub",
-                     "ImplTextLine Info Suspicious arguments nIndex:" << nIndex << " nLen:" << nLen);
-       }
        mnWidth = nWidth;
        mnIndex = nIndex;
        mnLen   = nLen;

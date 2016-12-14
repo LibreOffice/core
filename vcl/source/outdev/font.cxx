@@ -1479,12 +1479,6 @@ bool OutputDevice::GetGlyphBoundRects( const Point& rOrigin, const OUString& rSt
 
     rVector.clear();
 
-    if(nLen == 0x0FFFF)
-    {
-        SAL_INFO("sal.rtl.xub",
-                 "GetGlyphBoundRects Suspicious arguments nLen:" << nLen);
-    }
-
     if( nIndex >= rStr.getLength() )
         return false;
 
