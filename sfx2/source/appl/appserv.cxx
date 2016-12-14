@@ -374,7 +374,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                    if this dialog is closed by the user ...
                    So we ignore this request now and wait for a new user decision.
                 */
-                SAL_INFO("sfx", "QueryExit => sal_False, DispatchLevel == " << Application::GetDispatchLevel() );
+                SAL_INFO("sfx.appl", "QueryExit => sal_False, DispatchLevel == " << Application::GetDispatchLevel() );
                 return;
             }
 
@@ -1210,7 +1210,7 @@ OUString ChooseMacro( const Reference< XModel >& rxLimitToDocument, const Refere
 
     // get symbol
     basicide_choose_macro pSymbol = reinterpret_cast<basicide_choose_macro>(aMod.getFunctionSymbol("basicide_choose_macro"));
-    SAL_WARN_IF(!pSymbol, "sfx.doc", "SfxApplication::MacroOrganizer, no symbol!");
+    SAL_WARN_IF(!pSymbol, "sfx.appl", "SfxApplication::MacroOrganizer, no symbol!");
     if (!pSymbol)
         return OUString();
     aMod.release();
@@ -1482,7 +1482,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
 
         case SID_MACROORGANIZER:
         {
-            SAL_INFO("sfx", "handling SID_MACROORGANIZER");
+            SAL_INFO("sfx.appl", "handling SID_MACROORGANIZER");
             const SfxItemSet* pArgs = rReq.GetArgs();
             const SfxPoolItem* pItem;
             sal_Int16 nTabId = 0;
@@ -1499,7 +1499,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
         case SID_RUNMACRO:
         {
             SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-            SAL_INFO("sfx", "SfxApplication::OfaExec_Impl: case ScriptOrg");
+            SAL_INFO("sfx.appl", "SfxApplication::OfaExec_Impl: case ScriptOrg");
 
             Reference< XFrame > xFrame;
             const SfxItemSet* pIntSet = rReq.GetInternalArgs_Impl();
@@ -1552,7 +1552,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
         case SID_SCRIPTORGANIZER:
         {
             SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-            SAL_INFO("sfx", "SfxApplication::OfaExec_Impl: case ScriptOrg");
+            SAL_INFO("sfx.appl", "SfxApplication::OfaExec_Impl: case ScriptOrg");
             const SfxItemSet* pArgs = rReq.GetArgs();
             const SfxPoolItem* pItem;
             OUString aLanguage;
@@ -1562,7 +1562,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             }
 
             OUString aLang( aLanguage );
-            SAL_INFO("sfx", "SfxApplication::OfaExec_Impl: about to create dialog for: " << aLang);
+            SAL_INFO("sfx.appl", "SfxApplication::OfaExec_Impl: about to create dialog for: " << aLang);
             // not sure about the vcl::Window*
             VclPtr<VclAbstractDialog> pDlg = pFact->CreateSvxScriptOrgDialog( GetTopWindow(), aLanguage );
             if( pDlg )
@@ -1572,7 +1572,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             }
             else
             {
-                SAL_WARN("sfx", "no dialog!!!");
+                SAL_WARN("sfx.appl", "no dialog!!!");
             }
             rReq.Done();
         }

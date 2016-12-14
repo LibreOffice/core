@@ -357,7 +357,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                 pOut->DrawPolygon(aPoly);
             }
 
-            SAL_WARN_IF(!bRecordOk, "vcl.filter", "polygon record has more points than we can handle");
+            SAL_WARN_IF(!bRecordOk, "vcl.wmf", "polygon record has more points than we can handle");
 
             bRecordOk &= pWMF->good();
 
@@ -400,7 +400,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                     nPoints += pnPoints[a];
                 }
 
-                SAL_WARN_IF(!bRecordOk, "vcl.filter", "polypolygon record has more polygons than we can handle");
+                SAL_WARN_IF(!bRecordOk, "vcl.wmf", "polypolygon record has more polygons than we can handle");
 
                 bRecordOk &= pWMF->good();
 
@@ -464,7 +464,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                 pOut->DrawPolyLine( aPoly );
             }
 
-            SAL_WARN_IF(!bRecordOk, "vcl.filter", "polyline record has more points than we can handle");
+            SAL_WARN_IF(!bRecordOk, "vcl.wmf", "polyline record has more points than we can handle");
 
             bRecordOk &= pWMF->good();
 
@@ -537,7 +537,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
             if ( nOptions & ETO_RTLREADING )
                 nTextLayoutMode = ComplexTextLayoutFlags::BiDiRtl | ComplexTextLayoutFlags::TextOriginLeft;
             pOut->SetTextLayoutMode( nTextLayoutMode );
-            SAL_WARN_IF( ( nOptions & ( ETO_PDY | ETO_GLYPH_INDEX ) ) != 0, "vcl", "SJ: ETO_PDY || ETO_GLYPH_INDEX in WMF" );
+            SAL_WARN_IF( ( nOptions & ( ETO_PDY | ETO_GLYPH_INDEX ) ) != 0, "vcl.wmf", "SJ: ETO_PDY || ETO_GLYPH_INDEX in WMF" );
 
             // output only makes sense if the text contains characters
             if( nLen )

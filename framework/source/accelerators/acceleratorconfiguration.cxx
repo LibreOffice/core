@@ -83,7 +83,7 @@ XMLBasedAcceleratorConfiguration::XMLBasedAcceleratorConfiguration(const css::un
 
 XMLBasedAcceleratorConfiguration::~XMLBasedAcceleratorConfiguration()
 {
-    SAL_WARN_IF(m_pWriteCache, "fwk", "XMLBasedAcceleratorConfiguration::~XMLBasedAcceleratorConfiguration(): Changes not flushed. Ignore it ...");
+    SAL_WARN_IF(m_pWriteCache, "fwk.accelerators", "XMLBasedAcceleratorConfiguration::~XMLBasedAcceleratorConfiguration(): Changes not flushed. Ignore it ...");
 }
 
 css::uno::Sequence< css::awt::KeyEvent > SAL_CALL XMLBasedAcceleratorConfiguration::getAllKeyEvents()
@@ -344,26 +344,26 @@ sal_Bool SAL_CALL XMLBasedAcceleratorConfiguration::isReadOnly()
 void SAL_CALL XMLBasedAcceleratorConfiguration::setStorage(const css::uno::Reference< css::embed::XStorage >& /*xStorage*/)
     throw(css::uno::RuntimeException, std::exception)
 {
-    SAL_INFO("fwk", "XMLBasedAcceleratorConfiguration::setStorage(): implement this HACK .-)");
+    SAL_INFO("fwk.accelerators", "XMLBasedAcceleratorConfiguration::setStorage(): implement this HACK .-)");
 }
 
 sal_Bool SAL_CALL XMLBasedAcceleratorConfiguration::hasStorage()
     throw(css::uno::RuntimeException, std::exception)
 {
-    SAL_INFO("fwk", "XMLBasedAcceleratorConfiguration::hasStorage(): implement this HACK .-)");
+    SAL_INFO("fwk.accelerators", "XMLBasedAcceleratorConfiguration::hasStorage(): implement this HACK .-)");
     return false;
 }
 
 void SAL_CALL XMLBasedAcceleratorConfiguration::addConfigurationListener(const css::uno::Reference< css::ui::XUIConfigurationListener >& /*xListener*/)
     throw(css::uno::RuntimeException, std::exception)
 {
-    SAL_INFO("fwk", "XMLBasedAcceleratorConfiguration::addConfigurationListener(): implement me");
+    SAL_INFO("fwk.accelerators", "XMLBasedAcceleratorConfiguration::addConfigurationListener(): implement me");
 }
 
 void SAL_CALL XMLBasedAcceleratorConfiguration::removeConfigurationListener(const css::uno::Reference< css::ui::XUIConfigurationListener >& /*xListener*/)
     throw(css::uno::RuntimeException, std::exception)
 {
-    SAL_INFO("fwk", "XMLBasedAcceleratorConfiguration::removeConfigurationListener(): implement me");
+    SAL_INFO("fwk.accelerators", "XMLBasedAcceleratorConfiguration::removeConfigurationListener(): implement me");
 }
 
 void SAL_CALL XMLBasedAcceleratorConfiguration::reset()
@@ -380,13 +380,13 @@ throw(css::uno::RuntimeException, std::exception)
 void SAL_CALL XMLBasedAcceleratorConfiguration::addResetListener(const css::uno::Reference< css::form::XResetListener >& /*xListener*/)
     throw(css::uno::RuntimeException, std::exception)
 {
-    SAL_INFO("fwk", "XMLBasedAcceleratorConfiguration::addResetListener(): implement me");
+    SAL_INFO("fwk.accelerators", "XMLBasedAcceleratorConfiguration::addResetListener(): implement me");
 }
 
 void SAL_CALL XMLBasedAcceleratorConfiguration::removeResetListener(const css::uno::Reference< css::form::XResetListener >& /*xListener*/)
     throw(css::uno::RuntimeException, std::exception)
 {
-    SAL_INFO("fwk", "XMLBasedAcceleratorConfiguration::removeResetListener(): implement me");
+    SAL_INFO("fwk.accelerators", "XMLBasedAcceleratorConfiguration::removeResetListener(): implement me");
 }
 
 // IStorageListener
@@ -945,26 +945,26 @@ sal_Bool SAL_CALL XCUBasedAcceleratorConfiguration::isReadOnly()
 void SAL_CALL XCUBasedAcceleratorConfiguration::setStorage(const css::uno::Reference< css::embed::XStorage >& /*xStorage*/)
     throw(css::uno::RuntimeException, std::exception)
 {
-    SAL_INFO("fwk", "XCUBasedAcceleratorConfiguration::setStorage(): implement this HACK .-)");
+    SAL_INFO("fwk.accelerators", "XCUBasedAcceleratorConfiguration::setStorage(): implement this HACK .-)");
 }
 
 sal_Bool SAL_CALL XCUBasedAcceleratorConfiguration::hasStorage()
     throw(css::uno::RuntimeException, std::exception)
 {
-    SAL_INFO("fwk", "XCUBasedAcceleratorConfiguration::hasStorage(): implement this HACK .-)");
+    SAL_INFO("fwk.accelerators", "XCUBasedAcceleratorConfiguration::hasStorage(): implement this HACK .-)");
         return false;
 }
 
 void SAL_CALL XCUBasedAcceleratorConfiguration::addConfigurationListener(const css::uno::Reference< css::ui::XUIConfigurationListener >& /*xListener*/)
     throw(css::uno::RuntimeException, std::exception)
 {
-    SAL_INFO("fwk", "XCUBasedAcceleratorConfiguration::addConfigurationListener(): implement me");
+    SAL_INFO("fwk.accelerators", "XCUBasedAcceleratorConfiguration::addConfigurationListener(): implement me");
 }
 
 void SAL_CALL XCUBasedAcceleratorConfiguration::removeConfigurationListener(const css::uno::Reference< css::ui::XUIConfigurationListener >& /*xListener*/)
     throw(css::uno::RuntimeException, std::exception)
 {
-    SAL_INFO("fwk", "XCUBasedAcceleratorConfiguration::removeConfigurationListener(): implement me");
+    SAL_INFO("fwk.accelerators", "XCUBasedAcceleratorConfiguration::removeConfigurationListener(): implement me");
 }
 
 void SAL_CALL XCUBasedAcceleratorConfiguration::reset()
@@ -991,13 +991,13 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::reset()
 void SAL_CALL XCUBasedAcceleratorConfiguration::addResetListener(const css::uno::Reference< css::form::XResetListener >& /*xListener*/)
     throw(css::uno::RuntimeException, std::exception)
 {
-    SAL_INFO("fwk", "XCUBasedAcceleratorConfiguration::addResetListener(): implement me");
+    SAL_INFO("fwk.accelerators", "XCUBasedAcceleratorConfiguration::addResetListener(): implement me");
 }
 
 void SAL_CALL XCUBasedAcceleratorConfiguration::removeResetListener(const css::uno::Reference< css::form::XResetListener >& /*xListener*/)
     throw(css::uno::RuntimeException, std::exception)
 {
-    SAL_INFO("fwk", "XCUBasedAcceleratorConfiguration::removeResetListener(): implement me");
+    SAL_INFO("fwk.accelerators", "XCUBasedAcceleratorConfiguration::removeResetListener(): implement me");
 }
 
 void SAL_CALL XCUBasedAcceleratorConfiguration::changesOccurred(const css::util::ChangesEvent& aEvent)

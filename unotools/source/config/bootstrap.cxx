@@ -372,7 +372,7 @@ OUString getExecutableBaseName()
            sExecutable  = sExecutable.copy(0,nExtIndex);
     }
     else
-        SAL_WARN("unotools", "Cannot get executable name: osl_getExecutableFile failed");
+        SAL_WARN("unotools.config", "Cannot get executable name: osl_getExecutableFile failed");
 
     return sExecutable;
 }

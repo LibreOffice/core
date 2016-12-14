@@ -339,7 +339,7 @@ bool SvxFontItem::operator==( const SfxPoolItem& rAttr ) const
         if ( ePitch != rItem.ePitch || eTextEncoding != rItem.eTextEncoding )
         {
             bRet = false;
-            SAL_INFO( "editeng", "FontItem::operator==(): only pitch or rtl_TextEncoding different ");
+            SAL_INFO( "editeng.items", "FontItem::operator==(): only pitch or rtl_TextEncoding different ");
         }
     }
     return bRet;
@@ -3079,7 +3079,7 @@ bool SvxCharScaleWidthItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberI
         return true;
     }
 
-    SAL_WARN("editeng",  "SvxCharScaleWidthItem::PutValue - Wrong type!" );
+    SAL_WARN("editeng.items", "SvxCharScaleWidthItem::PutValue - Wrong type!" );
     return false;
 }
 
@@ -3336,7 +3336,7 @@ void SvxScriptSetItem::GetSlotIds( sal_uInt16 nSlotId, sal_uInt16& rLatin,
     switch( nSlotId )
     {
     default:
-        SAL_WARN( "editeng", "wrong SlotId for class SvxScriptSetItem" );
+        SAL_WARN( "editeng.items", "wrong SlotId for class SvxScriptSetItem" );
         SAL_FALLTHROUGH; // default to font - Id Range !!
 
     case SID_ATTR_CHAR_FONT:

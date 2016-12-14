@@ -347,7 +347,7 @@ void GDIMetaFile::Play( OutputDevice* pOut, size_t nPos )
         pOut->SetLayoutMode( ComplexTextLayoutFlags::Default );
         pOut->SetDigitLanguage( 0 );
 
-        SAL_INFO( "vcl", "GDIMetaFile::Play on device of size: " << pOut->GetOutputSizePixel().Width() << " " << pOut->GetOutputSizePixel().Height());
+        SAL_INFO( "vcl.gdi", "GDIMetaFile::Play on device of size: " << pOut->GetOutputSizePixel().Width() << " " << pOut->GetOutputSizePixel().Height());
 
         if( !ImplPlayWithRenderer( pOut, Point(0,0), pOut->GetOutputSize() ) ) {
             size_t  i  = 0;
@@ -435,7 +435,7 @@ bool GDIMetaFile::ImplPlayWithRenderer( OutputDevice* pOut, const Point& rPos, S
     catch (const uno::Exception& e)
     {
         // ignore errors, no way of reporting them here
-        SAL_WARN("vcl",
+        SAL_WARN("vcl.gdi",
             "GDIMetaFile::ImplPlayWithRenderer: exception: " << e.Message);
     }
 

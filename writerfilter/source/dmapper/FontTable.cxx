@@ -68,7 +68,7 @@ void FontTable::lcl_attribute(Id Name, Value & val)
             else if (static_cast<Id>(nIntValue) == NS_ooxml::LN_Value_ST_Pitch_default)
                 m_pImpl->pCurrentEntry->nPitchRequest = awt::FontPitch::DONTKNOW;
             else
-                SAL_WARN("writerfilter", "FontTable::lcl_attribute: unhandled NS_ooxml::CT_Pitch_val: " << nIntValue);
+                SAL_WARN("writerfilter.dmapper", "FontTable::lcl_attribute: unhandled NS_ooxml::CT_Pitch_val: " << nIntValue);
             break;
         case NS_ooxml::LN_CT_Font_name:
             m_pImpl->pCurrentEntry->sFontName = sValue;
@@ -143,7 +143,7 @@ void FontTable::lcl_sprm(Sprm& rSprm)
         case NS_ooxml::LN_CT_Font_notTrueType:
             break;
         default:
-            SAL_WARN("writerfilter", "FontTable::lcl_sprm: unhandled token: " << nSprmId);
+            SAL_WARN("writerfilter.dmapper", "FontTable::lcl_sprm: unhandled token: " << nSprmId);
             break;
     }
 }

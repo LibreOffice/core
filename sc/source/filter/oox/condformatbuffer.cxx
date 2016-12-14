@@ -947,7 +947,7 @@ void CondFormatRule::finalizeImport()
                 eDateType = condformat::NEXTMONTH;
                 break;
             default:
-                SAL_WARN("sc", "CondFormatRule::finalizeImport - unknown time period type" );
+                SAL_WARN("sc.filter", "CondFormatRule::finalizeImport - unknown time period type" );
         }
 
         ScDocument& rDoc = getScDocument();

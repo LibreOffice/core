@@ -508,7 +508,7 @@ void ViewShellBase::Rearrange()
     }
     else
     {
-        SAL_WARN("sd", "Rearrange: window missing");
+        SAL_WARN("sd.view", "Rearrange: window missing");
     }
 
     GetViewFrame()->Resize(true);
@@ -910,7 +910,7 @@ OUString ViewShellBase::GetInitialViewShellType()
                         // The page kind is invalid.  This is probably an
                         // error by the caller.  We use the standard type to
                         // keep things going.
-                        SAL_WARN( "sd", "ViewShellBase::GetInitialViewShellType: invalid page kind");
+                        SAL_WARN( "sd.view", "ViewShellBase::GetInitialViewShellType: invalid page kind");
                         sRequestedView = FrameworkHelper::msImpressViewURL;
                         break;
                 }
@@ -1410,7 +1410,7 @@ void CurrentPageSetter::operator() (bool)
         }
         catch (const beans::UnknownPropertyException&)
         {
-            SAL_WARN("sd", "CurrentPage property unknown");
+            SAL_WARN("sd.view", "CurrentPage property unknown");
         }
     }
 }

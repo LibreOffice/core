@@ -161,7 +161,7 @@ ResMgrContainer::~ResMgrContainer()
 {
     for( std::pair< OUString, ContainerElement > const & rPair : m_aResFiles )
     {
-        SAL_INFO("tools", "Resource file " << rPair.second.aFileURL << " loaded " << rPair.second.nLoadCount << " times");
+        SAL_INFO("tools.rc", "Resource file " << rPair.second.aFileURL << " loaded " << rPair.second.nLoadCount << " times");
         delete rPair.second.pResMgr;
     }
 }
@@ -1237,7 +1237,7 @@ ResMgr* ResMgr::CreateFallbackResMgr( const ResId& rId, const Resource* pResourc
                 ResMgrContainer::get().freeResMgr( pRes );
                 return nullptr;
             }
-            SAL_INFO("tools", "trying fallback: " << pRes->aFileName );
+            SAL_INFO("tools.rc", "trying fallback: " << pRes->aFileName );
             pFallback = new ResMgr( pRes );
             pFallback->pOriginalResMgr = this;
             // try to recreate the resource stack

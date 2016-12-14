@@ -67,7 +67,7 @@ namespace dbaui
         const DbuTypeCollectionItem* pCollectionItem = dynamic_cast<const DbuTypeCollectionItem*>( _rItems.GetItem(DSID_TYPECOLLECTION) );
         if (pCollectionItem)
             m_pCollection = pCollectionItem->getCollection();
-        SAL_WARN_IF(!m_pCollection, "dbaccess", "OGeneralPage::OGeneralPage : really need a DSN type collection !");
+        SAL_WARN_IF(!m_pCollection, "dbaccess.ui.generalpage", "OGeneralPage::OGeneralPage : really need a DSN type collection !");
 
         // do some knittings
         m_pDatasourceType->SetSelectHdl(LINK(this, OGeneralPage, OnDatasourceTypeSelected));

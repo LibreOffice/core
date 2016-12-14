@@ -258,7 +258,7 @@ static uno::Reference<io::XInputStream> lcl_StoreOwnAsOOXML(
 
     if (!pFilterName)
     {
-        SAL_WARN("oox", "oox::GetOLEObjectStream: unknown ClassId " << classId.GetHexName());
+        SAL_WARN("oox.shape", "oox::GetOLEObjectStream: unknown ClassId " << classId.GetHexName());
         return nullptr;
     }
 
@@ -284,7 +284,7 @@ static uno::Reference<io::XInputStream> lcl_StoreOwnAsOOXML(
     }
     catch (uno::Exception const& e)
     {
-        SAL_WARN("oox", "oox::GetOLEObjectStream: exception: \"" << e.Message << "\"");
+        SAL_WARN("oox.shape", "oox::GetOLEObjectStream: exception: \"" << e.Message << "\"");
         return nullptr;
     }
     xTempStream->getOutputStream()->closeOutput();
@@ -324,7 +324,7 @@ uno::Reference<io::XInputStream> GetOLEObjectStream(
     }
     catch (uno::Exception const& e)
     {
-        SAL_WARN("oox", "oox::GetOLEObjectStream: exception: " << e.Message);
+        SAL_WARN("oox.shape", "oox::GetOLEObjectStream: exception: " << e.Message);
     }
     return xInStream;
 }
@@ -1813,7 +1813,7 @@ void ShapeExport::WriteMathShape(Reference<XShape> const& xShape)
     xPropSet->getPropertyValue("Model") >>= xMathModel;
     assert(xMathModel.is());
     assert(GetDocumentType() != DOCUMENT_DOCX); // should be written in DocxAttributeOutput
-    SAL_WARN_IF(GetDocumentType() == DOCUMENT_XLSX, "oox", "Math export to XLSX isn't tested, should it happen here?");
+    SAL_WARN_IF(GetDocumentType() == DOCUMENT_XLSX, "oox.shape", "Math export to XLSX isn't tested, should it happen here?");
 
     // ECMA standard does not actually allow oMath outside of
     // WordProcessingML so write a MCE like PPT 2010 does
@@ -1900,7 +1900,7 @@ ShapeExport& ShapeExport::WriteOLE2Shape( const Reference< XShape >& xShape )
 
     if (!xObj.is())
     {
-        SAL_WARN("oox", "ShapeExport::WriteOLE2Shape: no object");
+        SAL_WARN("oox.shape", "ShapeExport::WriteOLE2Shape: no object");
         return *this;
     }
 
@@ -1918,7 +1918,7 @@ ShapeExport& ShapeExport::WriteOLE2Shape( const Reference< XShape >& xShape )
     }
     catch (uno::Exception const& e)
     {
-        SAL_WARN("oox", "ShapeExport::WriteOLE2Shape: exception: " << e.Message);
+        SAL_WARN("oox.shape", "ShapeExport::WriteOLE2Shape: exception: " << e.Message);
         return *this;
     }
 
@@ -1987,7 +1987,7 @@ ShapeExport& ShapeExport::WriteOLE2Shape( const Reference< XShape >& xShape )
     try {
         ::comphelper::OStorageHelper::CopyInputToOutput(xInStream, xOutStream);
     } catch (uno::Exception const& e) {
-        SAL_WARN("oox", "ShapeExport::WriteOLEObject: exception: " << e.Message);
+        SAL_WARN("oox.shape", "ShapeExport::WriteOLEObject: exception: " << e.Message);
     }
 
     OUString const sRelId = mpFB->addRelation(

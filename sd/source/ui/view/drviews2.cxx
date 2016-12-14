@@ -2897,7 +2897,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
         default:
         {
-            SAL_WARN( "sd", "Slot without function" );
+            SAL_WARN( "sd.ui", "Slot without function" );
             Cancel();
             rReq.Ignore ();
         }

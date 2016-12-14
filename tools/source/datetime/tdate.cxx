@@ -103,7 +103,7 @@ inline sal_uInt16 ImplDaysInMonth( sal_uInt16 nMonth, sal_Int16 nYear )
 
 void Date::setDateFromDMY( sal_uInt16 nDay, sal_uInt16 nMonth, sal_Int16 nYear )
 {
-    SAL_WARN_IF( nYear == 0, "tools","Date::setDateFromDMY - sure about 0 year? It's not in the calendar.");
+    SAL_WARN_IF( nYear == 0, "tools.datetime", "Date::setDateFromDMY - sure about 0 year? It's not in the calendar.");
     if (nYear < 0)
         mnDate =
             (static_cast<sal_Int32>( nYear        ) * 10000) -
@@ -125,7 +125,7 @@ void Date::SetDate( sal_Int32 nNewDate )
 // static
 sal_uInt16 Date::GetDaysInMonth( sal_uInt16 nMonth, sal_Int16 nYear )
 {
-    SAL_WARN_IF( nMonth < 1 || 12 < nMonth, "tools", "Date::GetDaysInMonth - nMonth out of bounds " << nMonth);
+    SAL_WARN_IF( nMonth < 1 || 12 < nMonth, "tools.datetime", "Date::GetDaysInMonth - nMonth out of bounds " << nMonth);
     if (nMonth < 1)
         nMonth = 1;
     else if (12 < nMonth)

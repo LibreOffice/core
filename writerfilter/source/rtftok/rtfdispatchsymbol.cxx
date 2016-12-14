@@ -408,7 +408,7 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
     break;
     default:
     {
-        SAL_INFO("writerfilter", "TODO handle symbol '" << keywordToString(nKeyword) << "'");
+        SAL_INFO("writerfilter.rtf", "TODO handle symbol '" << keywordToString(nKeyword) << "'");
         aSkip.setParsed(false);
     }
     break;

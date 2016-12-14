@@ -46,7 +46,7 @@ static Fraction ImplMakeFraction( long nN1, long nN2, long nD1, long nD2 )
 {
     if( nD1 == 0 || nD2 == 0 ) //under these bad circumstances the following while loop will be endless
     {
-        SAL_WARN("vcl", "Invalid parameter for ImplMakeFraction");
+        SAL_WARN("vcl.gdi", "Invalid parameter for ImplMakeFraction");
         return Fraction( 1, 1 );
     }
 
@@ -703,7 +703,7 @@ void OutputDevice::SetMapMode( const MapMode& rNewMapMode )
         mpMetaFile->AddAction( new MetaMapModeAction( rNewMapMode ) );
 #ifdef DBG_UTIL
         if ( GetOutDevType() != OUTDEV_PRINTER )
-            SAL_WARN_IF( !bRelMap, "vcl", "Please record only relative MapModes!" );
+            SAL_WARN_IF( !bRelMap, "vcl.gdi", "Please record only relative MapModes!" );
 #endif
     }
 
@@ -1511,17 +1511,17 @@ static void verifyUnitSourceDest( MapUnit eUnitSource, MapUnit eUnitDest )
                 && eUnitDest != MapUnit::MapAppFont
                 && eUnitDest != MapUnit::MapRelative,
                 "Destination MapUnit is not permitted" );
-    SAL_WARN_IF( eUnitSource == MapUnit::MapPixel, "vcl",
+    SAL_WARN_IF( eUnitSource == MapUnit::MapPixel, "vcl.gdi",
                        "MapUnit::MapPixel approximated with 72dpi" );
-    SAL_WARN_IF( eUnitDest == MapUnit::MapPixel, "vcl",
+    SAL_WARN_IF( eUnitDest == MapUnit::MapPixel, "vcl.gdi",
                        "MapUnit::MapPixel approximated with 72dpi" );
 }
 
 #define ENTER3( eUnitSource, eUnitDest )                                \
     long nNumerator      = 1;       \
     long nDenominator    = 1;       \
-    SAL_WARN_IF( eUnitSource > s_MaxValidUnit, "vcl", "Invalid source map unit");    \
-    SAL_WARN_IF( eUnitDest > s_MaxValidUnit, "vcl", "Invalid destination map unit"); \
+    SAL_WARN_IF( eUnitSource > s_MaxValidUnit, "vcl.gdi", "Invalid source map unit");    \
+    SAL_WARN_IF( eUnitDest > s_MaxValidUnit, "vcl.gdi", "Invalid destination map unit"); \
     if( (eUnitSource <= s_MaxValidUnit) && (eUnitDest <= s_MaxValidUnit) )  \
     {   \
         nNumerator   = aImplNumeratorAry[eUnitSource] *             \

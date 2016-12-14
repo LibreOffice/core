@@ -222,7 +222,7 @@ SalGraphics* OutputDevice::GetGraphics()
     {
         if ( !AcquireGraphics() )
         {
-            SAL_WARN("vcl", "No mpGraphics set");
+            SAL_WARN("vcl.gdi", "No mpGraphics set");
         }
     }
 
@@ -237,7 +237,7 @@ SalGraphics const *OutputDevice::GetGraphics() const
     {
         if ( !AcquireGraphics() )
         {
-            SAL_WARN("vcl", "No mpGraphics set");
+            SAL_WARN("vcl.gdi", "No mpGraphics set");
         }
     }
 
@@ -635,7 +635,7 @@ void OutputDevice::drawOutDevDirect( const OutputDevice* pSrcDev, SalTwoRect& rP
                     if ( !AcquireGraphics() )
                         return;
                 }
-                SAL_WARN_IF( !mpGraphics || !pSrcDev->mpGraphics, "vcl",
+                SAL_WARN_IF( !mpGraphics || !pSrcDev->mpGraphics, "vcl.gdi",
                             "OutputDevice::DrawOutDev(): We need more than one Graphics" );
             }
         }

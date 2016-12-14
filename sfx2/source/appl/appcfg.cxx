@@ -125,7 +125,7 @@ IMPL_LINK(SfxEventAsyncer_Impl, IdleHdl, Idle*, pAsyncIdle, void)
 {
     SfxObjectShellRef xRef( aHint.GetObjShell() );
     pAsyncIdle->Stop();
-    SAL_INFO_IF(!xRef.Is(), "sfx", "SfxEvent: " << aHint.GetEventName());
+    SAL_INFO_IF(!xRef.Is(), "sfx.appl", "SfxEvent: " << aHint.GetEventName());
     SfxGetpApp()->Broadcast( aHint );
     if ( xRef.Is() )
         xRef->Broadcast( aHint );
@@ -464,7 +464,7 @@ void SfxApplication::GetOptions( SfxItemSet& rSet )
                 break;
 
                 default:
-                    SAL_INFO( "sfx", "W1:Wrong ID while getting Options!" );
+                    SAL_INFO( "sfx.appl", "W1:Wrong ID while getting Options!" );
                     break;
             }
             SAL_WARN_IF(!bRet, "sfx.appl", "Putting options failed!");
@@ -853,7 +853,7 @@ void SfxApplication::NotifyEvent( const SfxEventHint& rEventHint, bool bSynchron
 #ifdef DBG_UTIL
         if (!pDoc)
         {
-            SAL_INFO("sfx", "SfxEvent: " << rEventHint.GetEventName());
+            SAL_INFO("sfx.appl", "SfxEvent: " << rEventHint.GetEventName());
         }
 #endif
         Broadcast(rEventHint);

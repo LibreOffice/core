@@ -1382,7 +1382,7 @@ static bool lcl_CheckHiddenSection( SwNodeIndex& rIdx )
         const SwNode* pFrameNd =
             rIdx.GetNodes().FindPrvNxtFrameNode( aTmp, pSectNd->EndOfSectionNode() );
         bOk = pFrameNd != nullptr;
-        SAL_WARN_IF(!bOk, "sw", "found no Node with Frames");
+        SAL_WARN_IF(!bOk, "sw.core", "found no Node with Frames");
         rIdx = aTmp;
     }
     return bOk;
@@ -1549,7 +1549,7 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd )
                 CheckTableBoxContent();
                 if(!m_pTableCursor)
                 {
-                    SAL_WARN("sw", "fdo#74854: "
+                    SAL_WARN("sw.core", "fdo#74854: "
                         "this should not happen, but better lose the selection "
                         "rather than crashing");
                     return;

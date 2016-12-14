@@ -241,9 +241,9 @@ void Window::dispose()
     if ( pSVData->maHelpData.mpHelpWin && (pSVData->maHelpData.mpHelpWin->GetParent() == this) )
         ImplDestroyHelpWindow( true );
 
-    SAL_WARN_IF( pSVData->maWinData.mpTrackWin.get() == this, "vcl",
+    SAL_WARN_IF( pSVData->maWinData.mpTrackWin.get() == this, "vcl.window",
                 "Window::~Window(): Window is in TrackingMode" );
-    SAL_WARN_IF(IsMouseCaptured(), "vcl",
+    SAL_WARN_IF(IsMouseCaptured(), "vcl.window",
                 "Window::~Window(): Window has the mouse captured");
 
     // due to old compatibility
@@ -519,7 +519,7 @@ void Window::dispose()
 
             auto myPos = ::std::find( pParentWinData->maTopWindowChildren.begin(),
                 pParentWinData->maTopWindowChildren.end(), VclPtr<vcl::Window>(this) );
-            SAL_WARN_IF( myPos == pParentWinData->maTopWindowChildren.end(), "vcl", "Window::~Window: inconsistency in top window chain!" );
+            SAL_WARN_IF( myPos == pParentWinData->maTopWindowChildren.end(), "vcl.window", "Window::~Window: inconsistency in top window chain!" );
             if ( myPos != pParentWinData->maTopWindowChildren.end() )
                 pParentWinData->maTopWindowChildren.erase( myPos );
         }
@@ -549,7 +549,7 @@ void Window::dispose()
                 pSysWin->mpWindowImpl->mpFrameData->mpNextFrame = mpWindowImpl->mpFrameData->mpNextFrame;
             }
             else // if it is not in the list, we can't remove it.
-                SAL_WARN("vcl", "Window " << this << " marked as frame window, "
+                SAL_WARN("vcl.window", "Window " << this << " marked as frame window, "
                          "is missing from list of " << nWindows << " frames");
         }
         mpWindowImpl->mpFrame->SetCallback( nullptr, nullptr );
@@ -902,7 +902,7 @@ static sal_Int32 CountDPIScaleFactor(sal_Int32 nDPI)
 
 void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* pSystemParentData )
 {
-    SAL_WARN_IF( !mpWindowImpl->mbFrame && !pParent && GetType() != WINDOW_FIXEDIMAGE, "vcl",
+    SAL_WARN_IF( !mpWindowImpl->mbFrame && !pParent && GetType() != WINDOW_FIXEDIMAGE, "vcl.window",
         "Window::Window(): pParent == NULL" );
 
     ImplSVData* pSVData = ImplGetSVData();
@@ -3173,7 +3173,7 @@ Reference< css::awt::XWindowPeer > Window::GetComponentInterface( bool bCreate )
 void Window::SetComponentInterface( Reference< css::awt::XWindowPeer > const & xIFace )
 {
     UnoWrapperBase* pWrapper = Application::GetUnoWrapper();
-    SAL_WARN_IF( !pWrapper, "vcl", "SetComponentInterface: No Wrapper!" );
+    SAL_WARN_IF( !pWrapper, "vcl.window", "SetComponentInterface: No Wrapper!" );
     if ( pWrapper )
         pWrapper->SetWindowInterface( this, xIFace );
 }
