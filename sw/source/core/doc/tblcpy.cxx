@@ -336,7 +336,6 @@ namespace
         if( rpCol == maCols.end() || *rpCol > rnBorder )
         {
             rpCol = maCols.insert( rpCol, rnBorder );
-            --rpCol;
             incColSpan( nLine, rnCol );
         }
         aInfo.mnColSpan = rnCol - nLeftCol;
