@@ -100,6 +100,10 @@ gb_Library_add_cxxobjects = $(call gb_Library_get_target,$(1)): CXXOBJECTS += $(
 gb_Library_add_exception_object = $(call gb_Library_get_target,$(1)): CXXOBJECTS += $(2)
 gb_Library_add_exception_objects = $(call gb_Library_get_target,$(1)): CXXOBJECTS += $(2)
 
+# Objective C++ macros
+gb_Library_add_objcxxobjects = $(call gb_Library_get_target,$(1)): CXXOBJECTS += $(2)
+gb_Library_add_objcobjects = $(call gb_Library_get_target,$(1)): CXXOBJECTS += $(2)
+
 
 #$(call gb_Library_get_exports_target,%):
 $(WORKDIR)/LinkTarget/Library/%.exports:
@@ -135,7 +139,7 @@ endef
 
 gb_Module_add_l10n_target =
 
-gb_GbuildToJson_BLACKLISTEDMODULES := connectivity compilerplugins cli_ure dictionaries bridges helpcompiler helpcontent2 icon-themes jurt sal shell cppu cppuhelper cpputools extensions external i18npool javaunohelper jurt lingucomponent odk scaddins solenv stoc tools translations udkapi unoidl
+gb_GbuildToJson_BLACKLISTEDMODULES := connectivity compilerplugins cli_ure dictionaries bridges helpcompiler helpcontent2 icon-themes jurt sal shell cppu cppuhelper cpputools extensions external i18npool javaunohelper lingucomponent odk scaddins solenv stoc tools translations udkapi unoidl
 
 define gb_Module__add_moduledir_impl
 include $(patsubst $(1):%,%,$(filter $(1):%,$(gb_Module_MODULELOCATIONS)))/$(2)/Module_$(2).mk
