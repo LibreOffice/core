@@ -625,7 +625,7 @@ bool PNGReaderImpl::ImplReadHeader( const Size& rPreviewSizeHint )
         }
 
         if( aPreviewSize.Width() < maOrigSize.Width() && aPreviewSize.Height() < maOrigSize.Height() ) {
-            SAL_INFO( "vcl", "preview size " << aPreviewSize.Width() << " " << aPreviewSize.Height() );
+            SAL_INFO( "vcl.gdi", "preview size " << aPreviewSize.Width() << " " << aPreviewSize.Height() );
 
             for( int i = 1; i < 5; ++i )
                 {

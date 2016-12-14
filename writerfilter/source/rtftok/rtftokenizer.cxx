@@ -54,7 +54,7 @@ RTFTokenizer::~RTFTokenizer() = default;
 
 RTFError RTFTokenizer::resolveParse()
 {
-    SAL_INFO("writerfilter", OSL_THIS_FUNC);
+    SAL_INFO("writerfilter.rtf", OSL_THIS_FUNC);
     char ch;
     RTFError ret;
     // for hex chars
@@ -134,7 +134,7 @@ RTFError RTFTokenizer::resolveParse()
                 }
                 else
                 {
-                    SAL_INFO("writerfilter", OSL_THIS_FUNC << ": hex internal state");
+                    SAL_INFO("writerfilter.rtf", OSL_THIS_FUNC << ": hex internal state");
                     b = b << 4;
                     sal_Int8 parsed = asHex(ch);
                     if (parsed == -1)
@@ -288,7 +288,7 @@ RTFError RTFTokenizer::dispatchKeyword(OString& rKeyword, bool bParam, int nPara
     int i = low - s_aRTFControlWords.begin();
     if (low == s_aRTFControlWords.end() || aSymbol < *low)
     {
-        SAL_INFO("writerfilter", OSL_THIS_FUNC << ": unknown keyword '\\" << rKeyword.getStr() << "'");
+        SAL_INFO("writerfilter.rtf", OSL_THIS_FUNC << ": unknown keyword '\\" << rKeyword.getStr() << "'");
         RTFSkipDestination aSkip(m_rImport);
         aSkip.setParsed(false);
         return RTFError::OK;

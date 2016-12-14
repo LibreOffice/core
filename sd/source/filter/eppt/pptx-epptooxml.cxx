@@ -279,7 +279,7 @@ ShapeExport& PowerPointShapeExport::WriteTextShape( const Reference< XShape >& x
             ShapeExport::WriteTextShape( xShape );
     }
     else
-        SAL_WARN("sd.filter", "PowerPointShapeExport::WriteTextShape: shape of type '" << sShapeType << "' is ignored");
+        SAL_WARN("sd.eppt", "PowerPointShapeExport::WriteTextShape: shape of type '" << sShapeType << "' is ignored");
 
     return *this;
 }

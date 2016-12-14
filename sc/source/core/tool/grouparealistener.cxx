@@ -326,7 +326,7 @@ const ScFormulaCell* FormulaGroupAreaListener::getTopCell() const
 {
     size_t nBlockSize = 0;
     const ScFormulaCell* const * pp = mpColumn->GetFormulaCellBlockAddress( mnTopCellRow, nBlockSize);
-    SAL_WARN_IF(!pp, "sc", "GetFormulaCellBlockAddress not found");
+    SAL_WARN_IF(!pp, "sc.core.grouparealistener", "GetFormulaCellBlockAddress not found");
     return pp ? *pp : nullptr;
 }
 

@@ -671,7 +671,7 @@ ScBroadcastAreaSlotMachine::~ScBroadcastAreaSlotMachine()
     delete pBCAlways;
     // Areas to-be-erased still present is a serious error in handling, but at
     // this stage there's nothing we can do anymore.
-    SAL_WARN_IF( !maAreasToBeErased.empty(), "sc", "ScBroadcastAreaSlotMachine::dtor: maAreasToBeErased not empty");
+    SAL_WARN_IF( !maAreasToBeErased.empty(), "sc.core", "ScBroadcastAreaSlotMachine::dtor: maAreasToBeErased not empty");
 }
 
 inline SCSIZE ScBroadcastAreaSlotMachine::ComputeSlotOffset(
@@ -1184,7 +1184,7 @@ void ScBroadcastAreaSlotMachine::PushAreaToBeErased( ScBroadcastAreaSlot* pSlot,
 
 void ScBroadcastAreaSlotMachine::FinallyEraseAreas( ScBroadcastAreaSlot* pSlot )
 {
-    SAL_WARN_IF( pSlot->IsInBroadcastIteration(), "sc",
+    SAL_WARN_IF( pSlot->IsInBroadcastIteration(), "sc.core",
             "ScBroadcastAreaSlotMachine::FinallyEraseAreas: during iteration? NO!");
     if (pSlot->IsInBroadcastIteration())
         return;

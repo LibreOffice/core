@@ -148,7 +148,7 @@ void Receiver::executeCommand( const std::vector<OString> &aCommand )
         }
         catch ( Exception& )
         {
-            SAL_WARN( "sd.slideshow", "sd::SlideShowImpl::setPointerPosition(), "
+            SAL_WARN( "sdremote", "sd::SlideShowImpl::setPointerPosition(), "
                 "exception caught: " << comphelper::anyToString( cppu::getCaughtException() ));
         }
 
@@ -162,7 +162,7 @@ void Receiver::executeCommand( const std::vector<OString> &aCommand )
         }
         catch ( Exception& )
         {
-            SAL_WARN( "sd.slideshow", "sd::SlideShowImpl::setPointerMode(), "
+            SAL_WARN( "sdremote", "sd::SlideShowImpl::setPointerMode(), "
                 "exception caught: " << comphelper::anyToString( cppu::getCaughtException() ));
         }
 
@@ -181,7 +181,7 @@ void Receiver::executeCommand( const std::vector<OString> &aCommand )
         }
         catch ( Exception& )
         {
-            SAL_WARN( "sd.slideshow", "sd::SlideShowImpl::setPointerMode(), "
+            SAL_WARN( "sdremote", "sd::SlideShowImpl::setPointerMode(), "
                 "exception caught: " << comphelper::anyToString( cppu::getCaughtException() ));
         }
 
@@ -206,7 +206,7 @@ void Receiver::executeCommand( const std::vector<OString> &aCommand )
         }
         catch ( Exception& )
         {
-            SAL_WARN( "sd.slideshow", "sd::SlideShowImpl::setPointerPosition(), "
+            SAL_WARN( "sdremote", "sd::SlideShowImpl::setPointerPosition(), "
                 "exception caught: " << comphelper::anyToString( cppu::getCaughtException() ));
         }
     }

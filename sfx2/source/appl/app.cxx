@@ -570,7 +570,7 @@ void SfxApplication::MacroOrganizer( sal_Int16 nTabId )
 
     aMod.release();
 
-    SAL_WARN_IF(!pSymbol, "sfx.doc", "SfxApplication::MacroOrganizer, no symbol!");
+    SAL_WARN_IF(!pSymbol, "sfx.appl", "SfxApplication::MacroOrganizer, no symbol!");
     if (!pSymbol)
         return;
 

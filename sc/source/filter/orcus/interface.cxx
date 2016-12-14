@@ -599,7 +599,7 @@ void ScOrcusSheet::set_formula_result(os::row_t row, os::col_t col, const char* 
     ScFormulaCell* pCell = mrDoc.getDoc().GetFormulaCell(ScAddress(col, row, mnTab));
     if (!pCell)
     {
-        SAL_WARN("sc", "trying to set formula result for non formula \
+        SAL_WARN("sc.orcus", "trying to set formula result for non formula \
                 cell! Col: " << col << ";Row: " << row << ";Tab: " << mnTab);
         return;
     }
@@ -612,7 +612,7 @@ void ScOrcusSheet::set_formula_result(os::row_t row, os::col_t col, double /*val
     ScFormulaCell* pCell = mrDoc.getDoc().GetFormulaCell(ScAddress(col, row, mnTab));
     if (!pCell)
     {
-        SAL_WARN("sc", "trying to set formula result for non formula \
+        SAL_WARN("sc.orcus", "trying to set formula result for non formula \
                 cell! Col: " << col << ";Row: " << row << ";Tab: " << mnTab);
         return;
     }

@@ -454,7 +454,7 @@ uno_threadpool_putJob(
     if (!getThreadPool(hPool)->addJob( pThreadId, bIsOneway, pJob ,doRequest ))
     {
         SAL_WARN(
-            "cppu",
+            "cppu.threadpool",
             "uno_threadpool_putJob in parallel with uno_threadpool_destroy");
     }
 }

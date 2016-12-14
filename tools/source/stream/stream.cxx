@@ -106,7 +106,7 @@ inline static void SwapDouble( double& r )
     {
         if( sizeof(double) != 8 )
         {
-          SAL_WARN( "tools", "Can only swap 8-Byte-doubles\n" );
+          SAL_WARN( "tools.stream", "Can only swap 8-Byte-doubles\n" );
         }
         else
         {
@@ -1983,7 +1983,7 @@ OString read_uInt8s_ToOString(SvStream& rStrm, std::size_t nLen)
         //alloc a (ref-count 1) rtl_String of the desired length.
         //rtl_String's buffer is uninitialized, except for null termination
         pStr = rtl_string_alloc(sal::static_int_cast<sal_Int32>(nLen));
-        SAL_WARN_IF(!pStr, "tools", "allocation failed");
+        SAL_WARN_IF(!pStr, "tools.stream", "allocation failed");
         if (pStr)
         {
             std::size_t nWasRead = rStrm.ReadBytes(pStr->buffer, nLen);
@@ -2012,7 +2012,7 @@ OUString read_uInt16s_ToOUString(SvStream& rStrm, std::size_t nLen)
         //alloc a (ref-count 1) rtl_uString of the desired length.
         //rtl_String's buffer is uninitialized, except for null termination
         pStr = rtl_uString_alloc(sal::static_int_cast<sal_Int32>(nLen));
-        SAL_WARN_IF(!pStr, "tools", "allocation failed");
+        SAL_WARN_IF(!pStr, "tools.stream", "allocation failed");
         if (pStr)
         {
             std::size_t nWasRead = rStrm.ReadBytes(pStr->buffer, nLen*2)/2;

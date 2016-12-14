@@ -828,7 +828,7 @@ void SvxPathTabPage::SetPathList(
     }
     catch( const Exception& e )
     {
-        SAL_WARN("cui.tabpages", "caught: " << e.Message);
+        SAL_WARN("cui.options", "caught: " << e.Message);
     }
 }
 

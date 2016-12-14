@@ -317,14 +317,14 @@ SotClipboardFormatId GetChartVersion( sal_Int32 nVersion, bool bTemplate )
     {
         if (bTemplate)
         {
-            SAL_WARN("sfx", "no chart template support yet");
+            SAL_WARN("sfx.doc", "no chart template support yet");
             return SotClipboardFormatId::STARCHART_8;
         }
         else
             return SotClipboardFormatId::STARCHART_8;
     }
 
-    SAL_WARN("sfx", "unsupported version");
+    SAL_WARN("sfx.doc", "unsupported version");
     return SotClipboardFormatId::NONE;
 }
 

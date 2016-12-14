@@ -603,13 +603,13 @@ void Frame::initListeners()
 
     // Safe impossible cases
     // We can't work without these helpers!
-    SAL_WARN_IF( !xDispatchProvider.is(), "fwk", "Frame::Frame(): Slowest slave for dispatch- and interception helper "
+    SAL_WARN_IF( !xDispatchProvider.is(), "fwk.frame", "Frame::Frame(): Slowest slave for dispatch- and interception helper "
         "is not valid. XDispatchProvider, XDispatch, XDispatchProviderInterception are not full supported!" );
-    SAL_WARN_IF( !m_xDispatchHelper.is(), "fwk", "Frame::Frame(): Interception helper is not valid. XDispatchProvider, "
+    SAL_WARN_IF( !m_xDispatchHelper.is(), "fwk.frame", "Frame::Frame(): Interception helper is not valid. XDispatchProvider, "
         "XDispatch, XDispatchProviderInterception are not full supported!" );
-    SAL_WARN_IF( !m_xFramesHelper.is(), "fwk", "Frame::Frame(): Frames helper is not valid. XFrames, "
+    SAL_WARN_IF( !m_xFramesHelper.is(), "fwk.frame", "Frame::Frame(): Frames helper is not valid. XFrames, "
         "XIndexAccess and XElementAcces are not supported!" );
-    SAL_WARN_IF( !m_xDropTargetListener.is(), "fwk", "Frame::Frame(): DropTarget helper is not valid. "
+    SAL_WARN_IF( !m_xDropTargetListener.is(), "fwk.frame", "Frame::Frame(): DropTarget helper is not valid. "
         "Drag and drop without functionality!" );
 
     // establish notifies for changing of "disabled commands" configuration during runtime
@@ -869,7 +869,7 @@ void SAL_CALL Frame::initialize( const css::uno::Reference< css::awt::XWindow >&
     // This must be the first call of this method!
     // We should initialize our object and open it for working.
     // Set the new window.
-    SAL_WARN_IF( m_xContainerWindow.is(), "fwk", "Frame::initialize(): Leak detected! This state should never occur ..." );
+    SAL_WARN_IF( m_xContainerWindow.is(), "fwk.frame", "Frame::initialize(): Leak detected! This state should never occur ..." );
     m_xContainerWindow = xWindow;
 
     // if window is initially visible, we will never get a windowShowing event
@@ -2836,7 +2836,7 @@ void SAL_CALL Frame::removeActionLock()
 {
     {
         SolarMutexGuard g;
-        SAL_WARN_IF( m_nExternalLockCount<=0, "fwk", "Frame::removeActionLock(): Frame is not locked! "
+        SAL_WARN_IF( m_nExternalLockCount<=0, "fwk.frame", "Frame::removeActionLock(): Frame is not locked! "
             "Possible multithreading problem detected." );
         --m_nExternalLockCount;
     }
@@ -2927,7 +2927,7 @@ void SAL_CALL Frame::impl_setPropertyValue(const OUString& /*sProperty*/,
                 break;
 
         default :
-                SAL_INFO("fwk",  "Frame::setFastPropertyValue_NoBroadcast(): Invalid handle detected!" );
+                SAL_INFO("fwk.frame",  "Frame::setFastPropertyValue_NoBroadcast(): Invalid handle detected!" );
                 break;
     }
 }
@@ -2971,7 +2971,7 @@ css::uno::Any SAL_CALL Frame::impl_getPropertyValue(const OUString& /*sProperty*
                 break;
 
         default :
-                SAL_INFO("fwk",  "Frame::getFastPropertyValue(): Invalid handle detected!" );
+                SAL_INFO("fwk.frame", "Frame::getFastPropertyValue(): Invalid handle detected!" );
                 break;
     }
 

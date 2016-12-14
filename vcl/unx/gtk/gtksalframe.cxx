@@ -2452,7 +2452,7 @@ void GtkSalFrame::UpdateSettings( AllSettings& rSettings )
         pGraphics = static_cast<GtkSalGraphics*>(AcquireGraphics());
         if ( !pGraphics )
         {
-            SAL_WARN("vcl", "Could not get graphics - unable to update settings");
+            SAL_WARN("vcl.gtk", "Could not get graphics - unable to update settings");
             return;
         }
         bFreeGraphics = true;
@@ -3492,7 +3492,7 @@ bool GtkSalFrame::IMHandler::handleKeyEvent( GdkEventKey* pEvent )
             return true;
         else
         {
-            SAL_WARN_IF( m_nPrevKeyPresses <= 0, "vcl", "key press has vanished !" );
+            SAL_WARN_IF( m_nPrevKeyPresses <= 0, "vcl.gtk", "key press has vanished !" );
             if( ! m_aPrevKeyPresses.empty() ) // sanity check
             {
                 // event was not swallowed, do not filter a following

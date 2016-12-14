@@ -1882,12 +1882,12 @@ void AutoRecovery::implts_readConfig()
                 if (aInfo.ID > m_nIdPool)
                 {
                     m_nIdPool = aInfo.ID+1;
-                    SAL_WARN_IF(m_nIdPool<0, "fwk", "AutoRecovery::implts_readConfig(): Overflow of IDPool detected!");
+                    SAL_WARN_IF(m_nIdPool<0, "fwk.autorecovery", "AutoRecovery::implts_readConfig(): Overflow of IDPool detected!");
                 }
                 } /* SAFE */
             }
             else
-                SAL_INFO("fwk", "AutoRecovery::implts_readConfig(): Who changed numbering of recovery items? Cache will be inconsistent then! I do not know, what will happen next time .-)");
+                SAL_INFO("fwk.autorecovery", "AutoRecovery::implts_readConfig(): Who changed numbering of recovery items? Cache will be inconsistent then! I do not know, what will happen next time .-)");
 
             /* SAFE */ {
             osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
@@ -2508,7 +2508,7 @@ void AutoRecovery::implts_registerDocument(const css::uno::Reference< css::frame
     // create a new cache entry ... this document is not known.
     ++m_nIdPool;
     aNew.ID = m_nIdPool;
-    SAL_WARN_IF(m_nIdPool<0, "fwk", "AutoRecovery::implts_registerDocument(): Overflow of ID pool detected.");
+    SAL_WARN_IF(m_nIdPool<0, "fwk.autorecovery", "AutoRecovery::implts_registerDocument(): Overflow of ID pool detected.");
     m_lDocCache.push_back(aNew);
 
     AutoRecovery::TDocumentList::iterator pIt1  = AutoRecovery::impl_searchDocument(m_lDocCache, xDocument);
@@ -3586,7 +3586,7 @@ OUString AutoRecovery::implst_getJobDescription(sal_Int32 eJob)
     else if ((eJob & AutoRecovery::E_AUTO_SAVE) == AutoRecovery::E_AUTO_SAVE)
         sFeature.append(CMD_DO_AUTO_SAVE);
     else if ( eJob != AutoRecovery::E_NO_JOB )
-        SAL_INFO("fwk", "AutoRecovery::implst_getJobDescription(): Invalid job identifier detected.");
+        SAL_INFO("fwk.autorecovery", "AutoRecovery::implst_getJobDescription(): Invalid job identifier detected.");
 
     return sFeature.makeStringAndClear();
 }
@@ -3617,7 +3617,7 @@ sal_Int32 AutoRecovery::implst_classifyJob(const css::util::URL& aURL)
             return AutoRecovery::E_SET_AUTOSAVE_STATE;
     }
 
-    SAL_INFO("fwk", "AutoRecovery::implts_classifyJob(): Invalid URL (protocol).");
+    SAL_INFO("fwk.autorecovery", "AutoRecovery::implts_classifyJob(): Invalid URL (protocol).");
     return AutoRecovery::E_NO_JOB;
 }
 

@@ -212,7 +212,7 @@ VirtualDevice::VirtualDevice(DeviceFormat eFormat)
     meRefDevMode( RefDevMode::NONE ),
     mbForceZeroExtleadBug( false )
 {
-    SAL_INFO( "vcl.gdi", "VirtualDevice::VirtualDevice( " << static_cast<int>(eFormat) << " )" );
+    SAL_INFO( "vcl.virdev", "VirtualDevice::VirtualDevice( " << static_cast<int>(eFormat) << " )" );
 
     ImplInitVirDev(Application::GetDefaultDevice(), 0, 0, eFormat);
 }
@@ -222,7 +222,7 @@ VirtualDevice::VirtualDevice(const OutputDevice& rCompDev, DeviceFormat eFormat)
     meRefDevMode( RefDevMode::NONE ),
     mbForceZeroExtleadBug( false )
 {
-    SAL_INFO( "vcl.gdi", "VirtualDevice::VirtualDevice( " << static_cast<int>(eFormat) << " )" );
+    SAL_INFO( "vcl.virdev", "VirtualDevice::VirtualDevice( " << static_cast<int>(eFormat) << " )" );
 
     ImplInitVirDev(&rCompDev, 0, 0, eFormat);
 }
@@ -232,7 +232,7 @@ VirtualDevice::VirtualDevice(const OutputDevice& rCompDev, DeviceFormat eFormat,
     , meRefDevMode( RefDevMode::NONE )
     , mbForceZeroExtleadBug( false )
 {
-    SAL_INFO( "vcl.gdi",
+    SAL_INFO( "vcl.virdev",
             "VirtualDevice::VirtualDevice( " << static_cast<int>(eFormat) << ", " << static_cast<int>(eAlphaFormat) << " )" );
 
     ImplInitVirDev(&rCompDev, 0, 0, eFormat);
@@ -247,7 +247,7 @@ VirtualDevice::VirtualDevice(const SystemGraphicsData *pData, const Size &rSize,
     meRefDevMode( RefDevMode::NONE ),
     mbForceZeroExtleadBug( false )
 {
-    SAL_INFO( "vcl.gdi", "VirtualDevice::VirtualDevice( " << static_cast<int>(eFormat) << " )" );
+    SAL_INFO( "vcl.virdev", "VirtualDevice::VirtualDevice( " << static_cast<int>(eFormat) << " )" );
 
     ImplInitVirDev(Application::GetDefaultDevice(), rSize.Width(), rSize.Height(),
                    eFormat, pData);
@@ -255,13 +255,13 @@ VirtualDevice::VirtualDevice(const SystemGraphicsData *pData, const Size &rSize,
 
 VirtualDevice::~VirtualDevice()
 {
-    SAL_INFO( "vcl.gdi", "VirtualDevice::~VirtualDevice()" );
+    SAL_INFO( "vcl.virdev", "VirtualDevice::~VirtualDevice()" );
     disposeOnce();
 }
 
 void VirtualDevice::dispose()
 {
-    SAL_INFO( "vcl.gdi", "VirtualDevice::dispose()" );
+    SAL_INFO( "vcl.virdev", "VirtualDevice::dispose()" );
 
     ImplSVData* pSVData = ImplGetSVData();
 
@@ -286,7 +286,7 @@ void VirtualDevice::dispose()
 bool VirtualDevice::InnerImplSetOutputSizePixel( const Size& rNewSize, bool bErase,
                                                  sal_uInt8 *const pBuffer)
 {
-    SAL_INFO( "vcl.gdi",
+    SAL_INFO( "vcl.virdev",
               "VirtualDevice::InnerImplSetOutputSizePixel( " << rNewSize.Width() << ", "
               << rNewSize.Height() << ", " << int(bErase) << " )" );
 
@@ -462,7 +462,7 @@ void VirtualDevice::SetReferenceDevice( RefDevMode i_eRefDevMode )
     {
     case RefDevMode::NONE:
     default:
-        SAL_WARN( "vcl", "VDev::SetRefDev illegal argument!" );
+        SAL_WARN( "vcl.virdev", "VDev::SetRefDev illegal argument!" );
         break;
     case RefDevMode::Dpi600:
         nDPIX = nDPIY = 600;

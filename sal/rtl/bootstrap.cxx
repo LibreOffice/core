@@ -348,7 +348,7 @@ Bootstrap_Impl::Bootstrap_Impl( OUString const & rIniName )
                 rtl_bootstrap_args_open( base_ini.pData ) );
         }
     }
-    SAL_INFO("sal.rtl", "Bootstrap_Impl(): sFile=" << _iniName);
+    SAL_INFO("sal.bootstrap", "Bootstrap_Impl(): sFile=" << _iniName);
     oslFileHandle handle;
     if (!_iniName.isEmpty() &&
         osl_openFile(_iniName.pData, &handle, osl_File_OpenFlag_Read) == osl_File_E_None)
@@ -367,7 +367,7 @@ Bootstrap_Impl::Bootstrap_Impl( OUString const & rIniName )
                 nameValue.sValue = OStringToOUString(
                     line.copy(nIndex+1).trim(), RTL_TEXTENCODING_UTF8 );
 
-                SAL_INFO("sal.rtl", "pushing: name=" << nameValue.sName << " value=" << nameValue.sValue);
+                SAL_INFO("sal.bootstrap", "pushing: name=" << nameValue.sName << " value=" << nameValue.sValue);
 
                 _nameValueList.push_back(nameValue);
             }
@@ -376,7 +376,7 @@ Bootstrap_Impl::Bootstrap_Impl( OUString const & rIniName )
     }
     else
     {
-        SAL_WARN( "sal.rtl", "couldn't open file: " <<  _iniName );
+        SAL_WARN( "sal.bootstrap", "couldn't open file: " <<  _iniName );
     }
 }
 
@@ -776,7 +776,7 @@ void SAL_CALL rtl_bootstrap_set (
         }
     }
 
-    SAL_INFO("sal.rtl", "explicitly getting: name=" << name << " value=" <<value);
+    SAL_INFO("sal.bootstrap", "explicitly getting: name=" << name << " value=" <<value);
 
     r_rtl_bootstrap_set_list.push_back( rtl_bootstrap_NameValue( name, value ) );
 }

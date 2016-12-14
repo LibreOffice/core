@@ -1496,7 +1496,7 @@ inline double evaluate( double fVal, ScQueryOp eOp )
             ;
     }
 
-    SAL_WARN("sc",  "evaluate: unhandled comparison operator: " << (int)eOp);
+    SAL_WARN("sc.core",  "evaluate: unhandled comparison operator: " << (int)eOp);
     return CreateDoubleError( FormulaError::UnknownState);
 }
 
@@ -2425,7 +2425,7 @@ void ScMatrixImpl::Dump() const
 void ScMatrixImpl::CalcPosition(SCSIZE nIndex, SCSIZE& rC, SCSIZE& rR) const
 {
     SCSIZE nRowSize = maMat.size().row;
-    SAL_WARN_IF( !nRowSize, "sc", "ScMatrixImpl::CalcPosition: 0 rows!");
+    SAL_WARN_IF( !nRowSize, "sc.core", "ScMatrixImpl::CalcPosition: 0 rows!");
     rC = nRowSize > 1 ? nIndex / nRowSize : nIndex;
     rR = nIndex - rC*nRowSize;
 }
@@ -2631,17 +2631,17 @@ void ScMatrix::DecRef() const
 
 bool ScMatrix::IsSizeAllocatable( SCSIZE nC, SCSIZE nR )
 {
-    SAL_WARN_IF( !nC, "sc", "ScMatrix with 0 columns!");
-    SAL_WARN_IF( !nR, "sc", "ScMatrix with 0 rows!");
+    SAL_WARN_IF( !nC, "sc.core", "ScMatrix with 0 columns!");
+    SAL_WARN_IF( !nR, "sc.core", "ScMatrix with 0 rows!");
     // 0-size matrix is valid, it could be resized later.
     if ((nC && !nR) || (!nC && nR))
     {
-        SAL_WARN( "sc", "ScMatrix one-dimensional zero: " << nC << " columns * " << nR << " rows");
+        SAL_WARN( "sc.core", "ScMatrix one-dimensional zero: " << nC << " columns * " << nR << " rows");
         return false;
     }
     if (nC && nR && (nC > (ScMatrix::GetElementsMax() / nR)))
     {
-        SAL_WARN( "sc", "ScMatrix overflow: " << nC << " columns * " << nR << " rows");
+        SAL_WARN( "sc.core", "ScMatrix overflow: " << nC << " columns * " << nR << " rows");
         return false;
     }
     return true;

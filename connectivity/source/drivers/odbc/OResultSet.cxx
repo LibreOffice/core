@@ -313,7 +313,7 @@ TVoidPtr OResultSet::allocBindColumn(sal_Int32 _nType,sal_Int32 _nColumnIndex)
             aPair = TVoidPtr(reinterpret_cast< sal_Int64 >(new sal_Int8[m_aRow[_nColumnIndex].getSequence().getLength()]),_nType);
             break;
         default:
-            SAL_WARN( "connectivity.drivers", "Unknown type");
+            SAL_WARN( "connectivity.odbc", "Unknown type");
             aPair = TVoidPtr(0,_nType);
     }
     return aPair;
@@ -385,7 +385,7 @@ sal_Int32 SAL_CALL OResultSet::findColumn( const OUString& columnName ) throw(SQ
 
 void OResultSet::ensureCacheForColumn(sal_Int32 columnIndex)
 {
-    SAL_INFO( "connectivity.drivers", "odbc  lionel@mamane.lu OResultSet::ensureCacheForColumn" );
+    SAL_INFO( "connectivity.odbc", "odbc  lionel@mamane.lu OResultSet::ensureCacheForColumn" );
 
     assert(columnIndex >= 0);
 
@@ -1610,7 +1610,7 @@ void OResultSet::fillColumn(const sal_Int32 _nColumn)
             *pColumn = impl_getLong(curCol);
             break;
         default:
-            SAL_WARN( "connectivity.drivers","Unknown DataType");
+            SAL_WARN( "connectivity.odbc","Unknown DataType");
         }
 
         if ( m_bWasNull )
@@ -1670,7 +1670,7 @@ bool OResultSet::move(IResultSetHelper::Movement _eCursorPosition, sal_Int32 _nO
                 if ( aIter->second == _nOffset )
                     return moveToBookmark(makeAny(aIter->first));
             }
-            SAL_WARN( "connectivity.drivers","Bookmark not found!");
+            SAL_WARN( "connectivity.odbc", "Bookmark not found!");
         }
         return false;
     }
@@ -1810,7 +1810,7 @@ void OResultSet::fillNeededData(SQLRETURN _nRet)
                     break;
                 }
                 default:
-                    SAL_WARN( "connectivity.drivers","Not supported at the moment!");
+                    SAL_WARN( "connectivity.odbc", "Not supported at the moment!");
             }
             nRet = N3SQLParamData(m_aStatementHandle,&pColumnIndex);
         }

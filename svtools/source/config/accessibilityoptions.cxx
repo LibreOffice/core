@@ -242,7 +242,7 @@ sal_Int16 SvtAccessibilityOptions_Impl::GetEdgeBlending() const
     }
     catch(const css::uno::Exception& ex)
     {
-        SAL_WARN("svtools", "Caught unexpected: " << ex.Message);
+        SAL_WARN("svtools.config", "Caught unexpected: " << ex.Message);
     }
 
     return nRet;
@@ -260,7 +260,7 @@ sal_Int16 SvtAccessibilityOptions_Impl::GetListBoxMaximumLineCount() const
     }
     catch(const css::uno::Exception& ex)
     {
-        SAL_WARN("svtools", "Caught unexpected: " << ex.Message);
+        SAL_WARN("svtools.config", "Caught unexpected: " << ex.Message);
     }
 
     return nRet;
@@ -278,7 +278,7 @@ sal_Int16 SvtAccessibilityOptions_Impl::GetColorValueSetColumnCount() const
     }
     catch(const css::uno::Exception& ex)
     {
-        SAL_WARN("svtools", "Caught unexpected: " << ex.Message);
+        SAL_WARN("svtools.config", "Caught unexpected: " << ex.Message);
     }
 
     return nRet;
@@ -296,7 +296,7 @@ bool SvtAccessibilityOptions_Impl::GetPreviewUsesCheckeredBackground() const
     }
     catch(const css::uno::Exception& ex)
     {
-        SAL_WARN("svtools", "Caught unexpected: " << ex.Message);
+        SAL_WARN("svtools.config", "Caught unexpected: " << ex.Message);
     }
 
     return bRet;
