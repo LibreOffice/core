@@ -5,6 +5,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
+import signal
 import unittest
 import time
 
@@ -19,6 +20,7 @@ class UITestCase(unittest.TestCase):
         self.opts = opts
 
     def setUp(self):
+        self.setSignalHandler()
         self.connection = PersistentConnection(self.opts)
         self.connection.setUp()
         self.xContext = self.connection.getContext()
@@ -29,17 +31,37 @@ class UITestCase(unittest.TestCase):
         self.startTime = time.time()
 
     def tearDown(self):
-        t = time.time() - self.startTime
-        print("Execution time for %s: %.3f" % (self.id(), t))
-        if self.xContext is not None:
-            desktop = self.ui_test.get_desktop()
-            components = desktop.getComponents()
-            for component in components:
-                try:
-                    component.close(False)
-                except Exception as e:
-                    print(e)
+        try:
+            t = time.time() - self.startTime
+            print("Execution time for %s: %.3f" % (self.id(), t))
+            if self.xContext is not None:
+                desktop = self.ui_test.get_desktop()
+                components = desktop.getComponents()
+                for component in components:
+                    try:
+                        component.close(False)
+                    except Exception as e:
+                        print(e)
 
-        self.connection.tearDown()
+            self.connection.tearDown()
+        finally:
+            self.resetSignalHandler()
+            self.connection.kill()
+
+    def signalHandler(self, signum, frame):
+        if self.connection:
+            self.connection.kill()
+
+    def setSignalHandler(self):
+        signal.signal(signal.SIGABRT, self.signalHandler)
+        signal.signal(signal.SIGSEGV, self.signalHandler)
+        signal.signal(signal.SIGTERM, self.signalHandler)
+        signal.signal(signal.SIGILL, self.signalHandler)
+
+    def resetSignalHandler(self):
+        signal.signal(signal.SIGABRT, signal.SIG_IGN)
+        signal.signal(signal.SIGSEGV, signal.SIG_IGN)
+        signal.signal(signal.SIGTERM, signal.SIG_IGN)
+        signal.signal(signal.SIGILL, signal.SIG_IGN)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

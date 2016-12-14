@@ -161,5 +161,8 @@ class PersistentConnection:
                 self.connection.tearDown()
             finally:
                 self.connection = None
+    def kill(self):
+        if self.connection and self.connection.soffice:
+            self.connection.soffice.kill()
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
