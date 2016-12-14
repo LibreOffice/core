@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a71b18c_60cef084",
+        "filename": "vcl/source/helper/commandinfoprovider.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-12-14T12:40:04Z",
+      "side": 1,
+      "message": "this won\u0027t work, you can\u0027t call getProcessComponentContext in a static initialiser like this\n\nYou\u0027d probably need to initialise it \"on demand\", but in that case, maybe this Easy Hack doesn\u0027t make sense",
+      "revId": "327c79aae5cd384878969e0cdafb903c7ad66086",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
