@@ -19,7 +19,7 @@
 
 #include "filglob.hxx"
 #include "filerror.hxx"
-#include "shell.hxx"
+#include "filtask.hxx"
 #include "bc.hxx"
 #include <osl/file.hxx>
 #include <vector>

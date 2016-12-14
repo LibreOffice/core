@@ -32,7 +32,7 @@
 namespace fileaccess {
 
 
-    class shell;
+    class TaskManager;
 
 
 class XInteractionSupplyNameImpl : public cppu::WeakImplHelper<
@@ -109,7 +109,7 @@ class XInteractionSupplyNameImpl : public cppu::WeakImplHelper<
         XInteractionRequestImpl(
             const OUString& aClashingName,
             const css::uno::Reference< css::uno::XInterface>& xOrigin,
-            shell* pShell,
+            TaskManager* pShell,
             sal_Int32 CommandId);
 
         bool aborted() const

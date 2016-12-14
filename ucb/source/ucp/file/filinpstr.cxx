@@ -19,7 +19,7 @@
 
 #include "filinpstr.hxx"
 #include "filerror.hxx"
-#include "shell.hxx"
+#include "filtask.hxx"
 #include "prov.hxx"
 
 using namespace fileaccess;

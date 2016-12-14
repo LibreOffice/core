@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "shell.hxx"
+#include "filtask.hxx"
 #include "prov.hxx"
 #include "filprp.hxx"
 
@@ -34,17 +34,17 @@ using namespace com::sun::star::ucb;
 #define THROW_WHERE ""
 #endif
 
-XPropertySetInfo_impl::XPropertySetInfo_impl( shell* pMyShell,const OUString& aUnqPath )
+XPropertySetInfo_impl::XPropertySetInfo_impl( TaskManager* pMyShell,const OUString& aUnqPath )
     : m_pMyShell( pMyShell ),
       m_count( 0 ),
       m_seq( 0 )
 {
     m_pMyShell->m_pProvider->acquire();
 
-    shell::ContentMap::iterator it = m_pMyShell->m_aContent.find( aUnqPath );
+    TaskManager::ContentMap::iterator it = m_pMyShell->m_aContent.find( aUnqPath );
 
-    shell::PropertySet& properties = *(it->second.properties);
-    shell::PropertySet::iterator it1 = properties.begin();
+    TaskManager::PropertySet& properties = *(it->second.properties);
+    TaskManager::PropertySet::iterator it1 = properties.begin();
 
     m_seq.realloc( properties.size() );
 
@@ -59,7 +59,7 @@ XPropertySetInfo_impl::XPropertySetInfo_impl( shell* pMyShell,const OUString& aU
 }
 
 
-XPropertySetInfo_impl::XPropertySetInfo_impl( shell* pMyShell,const Sequence< beans::Property >& seq )
+XPropertySetInfo_impl::XPropertySetInfo_impl( TaskManager* pMyShell,const Sequence< beans::Property >& seq )
     : m_pMyShell( pMyShell ),
       m_count( seq.getLength() ),
       m_seq( seq )

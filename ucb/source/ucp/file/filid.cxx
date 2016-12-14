@@ -18,7 +18,7 @@
  */
 
 #include "filid.hxx"
-#include "shell.hxx"
+#include "filtask.hxx"
 
 #include <cppuhelper/queryinterface.hxx>
 
@@ -33,15 +33,15 @@ FileContentIdentifier::FileContentIdentifier(
 {
     if( IsNormalized )
     {
-        fileaccess::shell::getUrlFromUnq( aUnqPath,m_aContentId );
+        fileaccess::TaskManager::getUrlFromUnq( aUnqPath,m_aContentId );
         m_aNormalizedId = aUnqPath;
-        shell::getScheme( m_aProviderScheme );
+        TaskManager::getScheme( m_aProviderScheme );
     }
     else
     {
-        fileaccess::shell::getUnqFromUrl( aUnqPath,m_aNormalizedId );
+        fileaccess::TaskManager::getUnqFromUrl( aUnqPath,m_aNormalizedId );
         m_aContentId = aUnqPath;
-        shell::getScheme( m_aProviderScheme );
+        TaskManager::getScheme( m_aProviderScheme );
     }
 }
 

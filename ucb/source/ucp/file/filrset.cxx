@@ -19,7 +19,7 @@
 
 #include <com/sun/star/ucb/WelcomeDynamicResultSetStruct.hpp>
 #include "filid.hxx"
-#include "shell.hxx"
+#include "filtask.hxx"
 #include "filprp.hxx"
 #include "filrset.hxx"
 #include <com/sun/star/ucb/OpenMode.hpp>
@@ -41,7 +41,7 @@ using namespace com::sun::star;
 #define THROW_WHERE ""
 #endif
 
-XResultSet_impl::XResultSet_impl( shell* pMyShell,
+XResultSet_impl::XResultSet_impl( TaskManager* pMyShell,
                                   const OUString& aUnqPath,
                                   sal_Int32 OpenMode,
                                   const uno::Sequence< beans::Property >& seq,
