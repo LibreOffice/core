@@ -130,50 +130,29 @@ static hb_unicode_funcs_t* getUnicodeFuncs()
 }
 #endif
 
-void CommonSalLayout::ParseFeatures(const OUString& name)
+void CommonSalLayout::ParseFeatures(const OUString& aName)
 {
-    int nFeatures = 0;
-    int nStart = name.indexOf(FontSelectPatternAttributes::FEAT_PREFIX);
-    if (nStart < 0)
-        return;
-    OString oName = OUStringToOString(name, RTL_TEXTENCODING_ASCII_US);
-    for (int nNext = nStart; nNext > 0; nNext = name.indexOf(FontSelectPatternAttributes::FEAT_SEPARATOR, nNext + 1))
-    {
-        if (name.match("lang=", nNext + 1))
-        {
-            int endamp = name.indexOf(FontSelectPatternAttributes::FEAT_SEPARATOR, nNext+1);
-            int enddelim = name.indexOf(' ', nNext+1);
-            int end = name.getLength();
-            if (endamp < 0)
-            {
-                if (enddelim > 0)
-                    end = enddelim;
-            }
-            else if (enddelim < 0 || endamp < enddelim)
-                end = endamp;
-            else
-                end = enddelim;
-            msLanguage = oName.copy(nNext + 6, end - nNext - 6);
-        }
-        else
-            ++nFeatures;
-    }
-    if (nFeatures == 0)
+    if (aName.indexOf(FontSelectPatternAttributes::FEAT_PREFIX) < 0)
         return;
 
-    maFeatures.reserve(nFeatures);
-    for (int nThis = nStart, nNext = name.indexOf(FontSelectPatternAttributes::FEAT_SEPARATOR, nStart + 1);
-         nThis > 0;
-         nThis = nNext, nNext = name.indexOf(FontSelectPatternAttributes::FEAT_SEPARATOR, nNext + 1))
+    OString sName = OUStringToOString(aName, RTL_TEXTENCODING_ASCII_US);
+    sName = sName.getToken(1, FontSelectPatternAttributes::FEAT_PREFIX);
+    sal_Int32 nIndex = 0;
+    do
     {
-        if (!name.match("lang=", nThis + 1))
+        OString sToken = sName.getToken(0, FontSelectPatternAttributes::FEAT_SEPARATOR, nIndex);
+        if (sToken.startsWith("lang="))
         {
-            int end = nNext > 0 ? nNext : name.getLength();
+            msLanguage = sToken.getToken(1, '=');
+        }
+        else
+        {
             hb_feature_t aFeature;
-            if (hb_feature_from_string(oName.getStr() + nThis + 1, end - nThis - 1, &aFeature))
+            if (hb_feature_from_string(sToken.getStr(), sToken.getLength(), &aFeature))
                 maFeatures.push_back(aFeature);
         }
     }
+    while (nIndex >= 0);
 }
 
 #if defined(_WIN32)
