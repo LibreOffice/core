@@ -540,7 +540,7 @@ static void splash_load_image( struct splash* splash, rtl_uString* pUAppPath )
      * now the splash screen will have to get along with language-territory. */
 
     char *pBuffer, *pSuffix, *pLocale;
-    int nLocSize;
+    int nLocSize, display_width, display_height;
     rtl_Locale *pLoc = NULL;
     rtl_String *pLang, *pCountry, *pAppPath;
 
@@ -573,6 +573,18 @@ static void splash_load_image( struct splash* splash, rtl_uString* pUAppPath )
     strcpy (pSuffix, "intro" IMG_SUFFIX);
     if ( splash_load_bmp( splash, pBuffer ) )
         goto cleanup;
+
+    //load high resolution splash image
+    if ( getScreenSize(&display_width, &display_height) )
+    {
+        if ( display_width > 1920 && display_height > 1024 ) // suggest better display size limits?
+        {
+            //TODO- change progress bar parameters after getting size of intro-highres.png
+            strcpy (pSuffix, "intro-highres" IMG_SUFFIX);
+            if ( splash_load_bmp( splash, pBuffer) )
+                goto cleanup;
+        }
+    }
 
     fprintf (stderr, "Failed to find intro image\n");
 
@@ -748,5 +760,32 @@ struct splash* splash_create(rtl_uString* pAppPath, int argc, char** argv)
 
 
 #endif // ENABLE_QUICKSTART_LIBPNG
+
+int getScreenSize(int* display_width, int* display_height)
+{
+
+    Display* bDisplay = NULL;
+    Screen* bScreen = NULL;
+
+    bDisplay = XOpenDisplay( NULL );
+    if ( !bDisplay )
+    {
+        fprintf( stderr, "Failed to open default display.\n" );
+        return -1;
+    }
+
+    bScreen = DefaultScreenOfDisplay( bDisplay );
+    if ( !bScreen )
+    {
+        fprintf( stderr, "Failed to obtain the default screen of given display.\n" );
+        return -2;
+    }
+
+    *display_width = bScreen->width;
+    *display_height = bScreen->height;
+
+    XCloseDisplay( bDisplay );
+    return 0;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
