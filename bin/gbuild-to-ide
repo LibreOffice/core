@@ -740,7 +740,7 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
 
     def __init__(self, gbuildparser, ide):
         IdeIntegrationGenerator.__init__(self, gbuildparser, ide)
-        self.toolset = self.retrieve_toolset(ide)
+        self.toolset = self.retrieve_toolset()
         self.solution_directory = './'
         self.configurations = {
             'Build': {
@@ -760,9 +760,8 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
             }
         }
 
-    def retrieve_toolset(self, ide):
-        ide_toolset_map = {'vs2013': 'v120', 'vs2015': 'v140'}
-        return ide_toolset_map[ide]
+    def retrieve_toolset(self):
+        return {'vs2013': 'v120', 'vs2015': 'v140'}.get(self.ide, None)
 
     def module_make_command(self, targets):
         return '%(sh)s -c "PATH=\\"/bin:$PATH\\";BUILDDIR=\\"%(builddir)s\\" %(makecmd)s -rsC %(location)s ' + targets + '"'
