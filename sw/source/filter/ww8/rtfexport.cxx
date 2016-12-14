@@ -47,6 +47,7 @@
 #include <svx/xflclit.hxx>
 #include <editeng/hyphenzoneitem.hxx>
 #include <fmtmeta.hxx>
+#include <o3tl/make_unique.hxx>
 
 using namespace ::com::sun::star;
 
@@ -679,7 +680,7 @@ void RtfExport::ExportDocument_Impl()
         sal_uInt32 const nMaxItem = rPool.GetItemCount2(RES_PROTECT);
         for (sal_uInt32 n = 0; n < nMaxItem; ++n)
         {
-            const SvxProtectItem* pProtect = static_cast<const SvxProtectItem*>(rPool.GetItem2(RES_PROTECT, n));
+            auto pProtect = static_cast<const SvxProtectItem*>(rPool.GetItem2(RES_PROTECT, n));
             if (pProtect && pProtect->IsContentProtected())
             {
                 Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_FORMPROT);
@@ -959,13 +960,13 @@ RtfExport::RtfExport(RtfExportFilter* pFilter, SwDoc* pDocument, SwPaM* pCurrent
 {
     m_bExportModeRTF = true;
     // the attribute output for the document
-    m_pAttrOutput.reset(new RtfAttributeOutput(*this));
+    m_pAttrOutput = o3tl::make_unique<RtfAttributeOutput>(*this);
     // that just causes problems for RTF
     m_bSubstituteBullets = false;
     // needed to have a complete font table
     m_aFontHelper.bLoadAllFonts = true;
     // the related SdrExport
-    m_pSdrExport.reset(new RtfSdrExport(*this));
+    m_pSdrExport = o3tl::make_unique<RtfSdrExport>(*this);
 
     if (!m_pWriter)
         m_pWriter = &m_pFilter->m_aWriter;
@@ -983,7 +984,7 @@ SvStream& RtfExport::Strm()
 
 void RtfExport::setStream()
 {
-    m_pStream.reset(new SvMemoryStream());
+    m_pStream = o3tl::make_unique<SvMemoryStream>();
 }
 
 OString RtfExport::getStream()
@@ -1114,7 +1115,7 @@ void RtfExport::OutColorTable()
 
     // char color
     {
-        const SvxColorItem* pCol = static_cast<const SvxColorItem*>(GetDfltAttr(RES_CHRATR_COLOR));
+        auto pCol = static_cast<const SvxColorItem*>(GetDfltAttr(RES_CHRATR_COLOR));
         InsColor(pCol->GetValue());
         if (nullptr != (pCol = static_cast<const SvxColorItem*>(rPool.GetPoolDefaultItem(RES_CHRATR_COLOR))))
             InsColor(pCol->GetValue());
@@ -1125,7 +1126,7 @@ void RtfExport::OutColorTable()
                 InsColor(pCol->GetValue());
         }
 
-        const SvxUnderlineItem* pUnder = static_cast<const SvxUnderlineItem*>(GetDfltAttr(RES_CHRATR_UNDERLINE));
+        auto pUnder = static_cast<const SvxUnderlineItem*>(GetDfltAttr(RES_CHRATR_UNDERLINE));
         InsColor(pUnder->GetColor());
         nMaxItem = rPool.GetItemCount2(RES_CHRATR_UNDERLINE);
         for (sal_uInt32 n = 0; n < nMaxItem; ++n)
@@ -1135,7 +1136,7 @@ void RtfExport::OutColorTable()
 
         }
 
-        const SvxOverlineItem* pOver = static_cast<const SvxOverlineItem*>(GetDfltAttr(RES_CHRATR_OVERLINE));
+        auto pOver = static_cast<const SvxOverlineItem*>(GetDfltAttr(RES_CHRATR_OVERLINE));
         InsColor(pOver->GetColor());
         nMaxItem = rPool.GetItemCount2(RES_CHRATR_OVERLINE);
         for (sal_uInt32 n = 0; n < nMaxItem; ++n)
@@ -1155,25 +1156,25 @@ void RtfExport::OutColorTable()
 
     for (const sal_uInt16* pIds = aBrushIds; *pIds; ++pIds)
     {
-        const SvxBrushItem* pBkgrd = static_cast<const SvxBrushItem*>(GetDfltAttr(*pIds));
-        InsColor(pBkgrd->GetColor());
-        if (nullptr != (pBkgrd = static_cast<const SvxBrushItem*>(rPool.GetPoolDefaultItem(*pIds))))
+        auto pBackground = static_cast<const SvxBrushItem*>(GetDfltAttr(*pIds));
+        InsColor(pBackground->GetColor());
+        if ((pBackground = static_cast<const SvxBrushItem*>(rPool.GetPoolDefaultItem(*pIds))))
         {
-            InsColor(pBkgrd->GetColor());
+            InsColor(pBackground->GetColor());
         }
         nMaxItem = rPool.GetItemCount2(*pIds);
         for (sal_uInt32 n = 0; n < nMaxItem; ++n)
         {
-            if (nullptr != (pBkgrd = static_cast<const SvxBrushItem*>(rPool.GetItem2(*pIds , n))))
+            if ((pBackground = static_cast<const SvxBrushItem*>(rPool.GetItem2(*pIds , n))))
             {
-                InsColor(pBkgrd->GetColor());
+                InsColor(pBackground->GetColor());
             }
         }
     }
 
     // shadow color
     {
-        const SvxShadowItem* pShadow = static_cast<const SvxShadowItem*>(GetDfltAttr(RES_SHADOW));
+        auto pShadow = static_cast<const SvxShadowItem*>(GetDfltAttr(RES_SHADOW));
         InsColor(pShadow->GetColor());
         if (nullptr != (pShadow = static_cast<const SvxShadowItem*>(rPool.GetPoolDefaultItem(RES_SHADOW))))
         {
@@ -1218,7 +1219,7 @@ void RtfExport::OutColorTable()
     nMaxItem = rPool.GetItemCount2(XATTR_FILLCOLOR);
     for (sal_uInt32 i = 0; i < nMaxItem; ++i)
     {
-        if (const XFillColorItem* pItem = static_cast<const XFillColorItem*>(rPool.GetItem2(XATTR_FILLCOLOR, i)))
+        if (auto pItem = static_cast<const XFillColorItem*>(rPool.GetItem2(XATTR_FILLCOLOR, i)))
             InsColor(pItem->GetColorValue());
     }
 
@@ -1255,7 +1256,7 @@ sal_uInt16 RtfExport::GetRedline(const OUString& rAuthor)
     if (it != m_aRedlineTable.end())
         return it->second;
 
-    const sal_uInt16 nId = static_cast<sal_uInt16>(m_aRedlineTable.size());
+    const sal_uInt16 nId = m_aRedlineTable.size();
     m_aRedlineTable.insert(std::pair<OUString,sal_uInt16>(rAuthor,nId));
     return nId;
 }
@@ -1319,13 +1320,13 @@ void RtfExport::WriteHeaderFooter(const SfxPoolItem& rItem, bool bHeader)
 {
     if (bHeader)
     {
-        const SwFormatHeader& rHeader = static_cast<const SwFormatHeader&>(rItem);
+        const auto& rHeader = static_cast<const SwFormatHeader&>(rItem);
         if (!rHeader.IsActive())
             return;
     }
     else
     {
-        const SwFormatFooter& rFooter = static_cast<const SwFormatFooter&>(rItem);
+        const auto& rFooter = static_cast<const SwFormatFooter&>(rItem);
         if (!rFooter.IsActive())
             return;
     }
