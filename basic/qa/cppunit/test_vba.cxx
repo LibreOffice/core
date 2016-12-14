@@ -86,10 +86,10 @@ void VBATest::testMiscVBAFunctions()
 
 void VBATest::testMiscOLEStuff()
 {
-// Not much point even trying to run except on Windows. Does not work
-// on 64-bit Windows with Excel installed. (Without Excel doesn't
-// really do anything anyway, see "so skip test" below.)
-#if defined(_WIN32) && !defined(_WIN64)
+// Not much point even trying to run except on Windows.
+// (Without Excel doesn't really do anything anyway,
+// see "so skip test" below.)
+#if defined(_WIN32)
     // test if we have the necessary runtime environment
     // to run the OLE tests.
     uno::Reference< lang::XMultiServiceFactory > xOLEFactory;
@@ -110,13 +110,15 @@ void VBATest::testMiscOLEStuff()
     if ( !bOk )
         return; // can't do anything, skip test
 
-    sal_Unicode sBuf[1024*4];
-    SQLGetInstalledDriversW( sBuf, sizeof( sBuf ), nullptr );
+    const int nBufSize = 1024 * 4;
+    sal_Unicode sBuf[nBufSize];
+    SQLGetInstalledDriversW( sBuf, nBufSize, nullptr );
 
     const sal_Unicode *pODBCDriverName = sBuf;
     bool bFound = false;
     for (; wcslen( pODBCDriverName ) != 0; pODBCDriverName += wcslen( pODBCDriverName ) + 1 ) {
-        if ( wcsstr( pODBCDriverName, L"Microsoft Excel Driver" ) != nullptr ) {
+        if( wcscmp( pODBCDriverName, L"Microsoft Excel Driver (*.xls)" ) == 0 ||
+            wcscmp( pODBCDriverName, L"Microsoft Excel Driver (*.xls, *.xlsx, *.xlsm, *.xlsb)" ) == 0 ) {
             bFound = true;
             break;
         }
@@ -127,18 +129,21 @@ void VBATest::testMiscOLEStuff()
     const char* macroSource[] = {
         "ole_ObjAssignNoDflt.vb",
         "ole_ObjAssignToNothing.vb",
+#if !defined(_WIN64)
+        // This test uses Microsoft.Jet.OLEDB.4.0 Provider, that is unavailable on Win64
         "ole_dfltObjDflMethod.vb",
+#endif
     };
 
     OUString sMacroPathURL = m_directories.getURLFromSrc("/basic/qa/vba_tests/");
 
-    uno::Sequence< uno::Any > aArgs(1);
+    uno::Sequence< uno::Any > aArgs(2);
     // path to test document
-    OUString sPath = m_directories.getPathFromSrc("/basic/qa/vba_tests/data/")
-                   + "ADODBdata.xls";
+    OUString sPath = m_directories.getPathFromSrc("/basic/qa/vba_tests/data/ADODBdata.xls");
     sPath = sPath.replaceAll( "/", "\\" );
 
     aArgs[ 0 ] = uno::makeAny( sPath );
+    aArgs[ 1 ] = uno::makeAny( OUString(pODBCDriverName) );
 
     for ( sal_uInt32  i=0; i<SAL_N_ELEMENTS( macroSource ); ++i )
     {

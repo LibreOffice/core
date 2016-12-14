@@ -3,7 +3,7 @@ Option Explicit
 
 Rem Test accessing an object that has default object member
 Rem which in turn has a default member that is a method
-Function doUnitTest(TestData As String) As String
+Function doUnitTest(TestData As String, Driver as String) As String
 doUnitTest = "Begin"
 Dim modifiedTimout As Long
 Dim cnn1 As New ADODB.Connection
