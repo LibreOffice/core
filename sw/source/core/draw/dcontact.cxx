@@ -415,9 +415,9 @@ const SwAnchoredObject* SwFlyDrawContact::GetAnchoredObj( const SdrObject* _pSdr
 
     const SwAnchoredObject* pRetAnchoredObj = nullptr;
 
-    if ( _pSdrObj && dynamic_cast<const SwVirtFlyDrawObj*>( _pSdrObj) !=  nullptr )
+    if (const SwVirtFlyDrawObj* pFlyDrawObj = dynamic_cast<const SwVirtFlyDrawObj*>(_pSdrObj))
     {
-        pRetAnchoredObj = static_cast<const SwVirtFlyDrawObj*>(_pSdrObj)->GetFlyFrame();
+        pRetAnchoredObj = pFlyDrawObj->GetFlyFrame();
     }
 
     return pRetAnchoredObj;
