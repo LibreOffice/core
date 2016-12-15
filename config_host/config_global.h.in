@@ -22,7 +22,6 @@ Any change in this header will cause a rebuild of almost everything.
 #define HAVE_GCC_DEPRECATED_MESSAGE 0
 #define HAVE_THREADSAFE_STATICS 0
 #define HAVE_BROKEN_CONST_ITERATORS 0
-#define HAVE_BROKEN_STATIC_INITIALIZER_LIST 0
 #define HAVE_SYSLOG_H 0
 /* Compiler supports __attribute__((warn_unused)). */
 #define HAVE_GCC_ATTRIBUTE_WARN_UNUSED 0

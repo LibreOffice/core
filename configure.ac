@@ -12566,7 +12566,7 @@ LIBS=$save_LIBS
 CXXFLAGS=$save_CXXFLAGS
 AC_MSG_RESULT([$broken])
 if test "$broken" = yes; then
-    AC_DEFINE([HAVE_BROKEN_STATIC_INITIALIZER_LIST])
+    AC_MSG_ERROR([working support for static initializer_list needed])
 fi
 
 

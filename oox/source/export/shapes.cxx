@@ -532,10 +532,7 @@ ShapeExport& ShapeExport::WriteGroupShape(const uno::Reference<drawing::XShape>&
 
 static bool lcl_IsOnBlacklist(OUString& rShapeType)
 {
-#if !HAVE_BROKEN_STATIC_INITIALIZER_LIST
-    static
-#endif
-    const std::initializer_list<OUStringLiteral> vBlacklist = {
+    static const std::initializer_list<OUStringLiteral> vBlacklist = {
         OUStringLiteral("block-arc"),
         OUStringLiteral("rectangle"),
         OUStringLiteral("ellipse"),
@@ -601,10 +598,7 @@ static bool lcl_IsOnBlacklist(OUString& rShapeType)
 
 static bool lcl_IsOnWhitelist(OUString& rShapeType)
 {
-#if !HAVE_BROKEN_STATIC_INITIALIZER_LIST
-    static
-#endif
-    const std::initializer_list<OUStringLiteral> vWhitelist = {
+    static const std::initializer_list<OUStringLiteral> vWhitelist = {
         OUStringLiteral("forbidden"),
         OUStringLiteral("heart"),
         OUStringLiteral("puzzle")
