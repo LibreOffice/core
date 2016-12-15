@@ -12,9 +12,11 @@ $(eval $(call gb_Executable_Executable,cppumaker))
 $(eval $(call gb_Executable_use_external,cppumaker,boost_headers))
 
 $(eval $(call gb_Executable_use_libraries,cppumaker,\
-    sal \
-    salhelper \
     unoidl \
+    $(if $(filter TRUE,$(DISABLE_DYNLOADING)),reg) \
+    $(if $(filter TRUE,$(DISABLE_DYNLOADING)),store) \
+    salhelper \
+    sal \
 ))
 
 $(eval $(call gb_Executable_use_static_libraries,cppumaker,\

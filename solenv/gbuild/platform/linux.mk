@@ -17,4 +17,8 @@ gb_LinkTarget_LDFLAGS += $(gb__LinkTarget_LDFLAGS_zdefs)
 
 include $(GBUILDDIR)/platform/unxgcc.mk
 
+ifeq ($(DISABLE_DYNLOADING),TRUE)
+gb_STDLIBS := -lpthread -ldl
+endif
+
 # vim: set noet sw=4 ts=4:
