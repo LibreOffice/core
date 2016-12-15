@@ -1555,17 +1555,12 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             mpAccessibleSpreadsheet.is())
         {
             FreeAccessibleSpreadsheet();
+
+            // Shapes / form controls after reload not accessible, rebuild the
+            // mpChildrenShapes variable.
             if (mpChildrenShapes)
                 DELETEZ(mpChildrenShapes);
-
-            // Accessibility: Shapes / form controls after reload not accessible
-            if ( !mpChildrenShapes )
-            {
-                mpChildrenShapes = new ScChildrenShapes( this, mpViewShell, meSplitPos );
-            }
-
-            //Invoke Init() to rebuild the mpChildrenShapes variable
-            this->Init();
+            mpChildrenShapes = new ScChildrenShapes( this, mpViewShell, meSplitPos );
 
             AccessibleEventObject aEvent;
             aEvent.EventId = AccessibleEventId::INVALIDATE_ALL_CHILDREN;
