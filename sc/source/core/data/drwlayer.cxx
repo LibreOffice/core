@@ -587,6 +587,9 @@ void ScDrawLayer::SetPageSize( sal_uInt16 nPageNo, const Size& rSize, bool bUpda
 
         bool bNegativePage = pDoc && pDoc->IsNegativePage( static_cast<SCTAB>(nPageNo) );
 
+        // Disable mass broadcasts from drawing objects' position changes.
+        bool bWasLocked = isLocked();
+        setLock(true);
         const size_t nCount = pPage->GetObjCount();
         for ( size_t i = 0; i < nCount; ++i )
         {
@@ -595,6 +598,7 @@ void ScDrawLayer::SetPageSize( sal_uInt16 nPageNo, const Size& rSize, bool bUpda
             if( pData )
                 RecalcPos( pObj, *pData, bNegativePage, bUpdateNoteCaptionPos );
         }
+        setLock(bWasLocked);
     }
 }
 
