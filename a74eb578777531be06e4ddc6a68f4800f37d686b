@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a71b18c_7bc78145",
+        "filename": "filter/source/xslt/odf2xhtml/export/common/styles/style_collector.xsl",
+        "patchSetId": 5
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2016-12-15T15:00:28Z",
+      "side": 1,
+      "message": "Please run\n\ngit checkout HEAD^ path/to/the/file\n\nto drop these unwanted changes in whitespace.",
+      "revId": "a74eb578777531be06e4ddc6a68f4800f37d686b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a71b18c_9bc45d41",
+        "filename": "filter/source/xslt/odf2xhtml/export/common/styles/style_mapping_css.xsl",
+        "patchSetId": 5
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2016-12-15T15:00:28Z",
+      "side": 1,
+      "message": "Your editor still mangles whitespace (tabs to spaces or the other way around)...",
+      "revId": "a74eb578777531be06e4ddc6a68f4800f37d686b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a71b18c_dbdc151b",
+        "filename": "filter/source/xslt/odf2xhtml/export/common/styles/style_mapping_css.xsl",
+        "patchSetId": 5
+      },
+      "lineNbr": 348,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2016-12-15T15:00:28Z",
+      "side": 1,
+      "message": "This does not help: the number will still be localized. You have to define a decimal format suitable for CSS. Please see https://www.w3.org/TR/xslt#function-format-number and https://www.w3.org/TR/xslt#element-decimal-format .",
+      "revId": "a74eb578777531be06e4ddc6a68f4800f37d686b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
