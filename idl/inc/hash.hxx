@@ -23,34 +23,11 @@
 #include <rtl/ustring.hxx>
 #include <tools/ref.hxx>
 #include <tools/solar.h>
-#include <vector>
+#include <unordered_map>
+#include <memory>
 
-class SvHashTable
+class SvStringHashEntry
 {
-    sal_uInt32       nMax;                 // size of hash-tabel
-    sal_uInt32       nFill;                // elements in hash-tabel
-    sal_uInt32       lAsk;                 // number of requests
-    sal_uInt32       lTry;                 // number of tries
-protected:
-    bool                Test_Insert( const OString&, bool bInsert, sal_uInt32 * pInsertPos );
-
-                            // compare element with entry
-    virtual bool       equals( const OString& , sal_uInt32 ) const = 0;
-                            // get hash value from subclass
-    virtual sal_uInt32 HashFunc( const OString& ) const = 0;
-public:
-                SvHashTable( sal_uInt32 nMaxEntries );
-                virtual ~SvHashTable();
-
-    sal_uInt32         GetMax() const { return nMax; }
-
-    virtual bool       IsEntry( sal_uInt32 ) const = 0;
-};
-
-class SvStringHashTable;
-class SvStringHashEntry : public SvRefBase
-{
-friend class SvStringHashTable;
     OString     aName;
     sal_uLong   nValue;
     bool        bHasId;
@@ -75,22 +52,17 @@ public:
     sal_uLong       GetValue() const { return nValue; }
 };
 
-class SvStringHashTable : public SvHashTable
+class SvStringHashTable
 {
-    SvStringHashEntry*      pEntries;
-protected:
-    virtual sal_uInt32          HashFunc( const OString& rElement ) const override;
-    virtual bool equals( const OString &rElement, sal_uInt32 nIndex ) const override;
+    std::unordered_map<sal_uInt32, std::unique_ptr<SvStringHashEntry>> maInt2EntryMap;
+    std::unordered_map<OString, sal_uInt32, OStringHash> maString2IntMap;
+    sal_uInt32 mnNextId = 0;
+
 public:
-            SvStringHashTable( sal_uInt32 nMaxEntries );   // max size of hash-tabel
-            virtual ~SvStringHashTable() override;
-
+    SvStringHashEntry * Insert( OString const & rElement, sal_uInt32 * pInsertPos );
+    bool Test( OString const & rElement, sal_uInt32 * pInsertPos );
+    SvStringHashEntry * Get( sal_uInt32 nInsertPos ) const;
     OString GetNearString( const OString& rName ) const;
-    virtual bool    IsEntry( sal_uInt32 nIndex ) const override;
-
-    bool    Insert( const OString& rStr, sal_uInt32 * pHash ); // insert string
-    bool    Test( const OString& rStr, sal_uInt32 * pHash ) const; // test of insert string
-    SvStringHashEntry * Get ( sal_uInt32 nIndex ) const; // return pointer to string
 };
 
 #endif // INCLUDED_IDL_INC_HASH_HXX

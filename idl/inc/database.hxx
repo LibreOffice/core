@@ -122,7 +122,7 @@ public:
     void                    Push( SvMetaObject * pObj );
     sal_uInt32              GetUniqueId() { return ++nUniqueId; }
     bool                    FindId( const OString& rIdName, sal_uLong * pVal );
-    bool                    InsertId( const OString& rIdName, sal_uLong nVal );
+    void                    InsertId( const OString& rIdName, sal_uLong nVal );
     bool                    ReadIdFile( const OString& rFileName );
 
     SvMetaType *            FindType( const OString& rName );
