@@ -58,7 +58,9 @@ using namespace com::sun::star::linguistic2;
 using namespace linguistic;
 
 // XML-header of SPELLML queries
-#define SPELLML_HEADER "<?xml?>"
+#if defined SPELL_XML
+#define SPELL_XML "<?xml?>"
+#endif
 
 // only available in hunspell >= 1.5
 #if !defined MAXWORDLEN
@@ -422,7 +424,7 @@ sal_Bool SAL_CALL SpellChecker::isValid( const OUString& rWord, const Locale& rL
         return true;
 
     // return sal_False to process SPELLML requests (they are longer than the header)
-    if (rWord.match(SPELLML_HEADER, 0) && (rWord.getLength() > 10)) return false;
+    if (rWord.match(SPELL_XML, 0) && (rWord.getLength() > 10)) return false;
 
     // Get property values to be used.
     // These are be the default values set in the SN_LINGU_PROPERTIES
@@ -434,7 +436,7 @@ sal_Bool SAL_CALL SpellChecker::isValid( const OUString& rWord, const Locale& rL
     rHelper.SetTmpPropVals( rProperties );
 
     sal_Int16 nFailure = GetSpellFailure( rWord, rLocale );
-    if (nFailure != -1 && !rWord.match(SPELLML_HEADER, 0))
+    if (nFailure != -1 && !rWord.match(SPELL_XML, 0))
     {
         sal_Int16 nLang = LinguLocaleToLanguage( rLocale );
         // postprocess result for errors that should be ignored
