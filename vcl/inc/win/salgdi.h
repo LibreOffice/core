@@ -180,6 +180,9 @@ private:
 
     LogicalFontInstance* GetWinFontEntry(int nFallbackLevel);
 
+    bool CacheGlyphs(const CommonSalLayout& rLayout);
+    bool DrawCachedGlyphs(const CommonSalLayout& rLayout);
+
 public:
     HDC getHDC() const { return mhLocalDC; }
     void setHDC(HDC aNew) { mhLocalDC = aNew; }
