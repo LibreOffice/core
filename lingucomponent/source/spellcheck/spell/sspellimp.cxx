@@ -60,6 +60,11 @@ using namespace linguistic;
 // XML-header of SPELLML queries
 #define SPELLML_HEADER "<?xml?>"
 
+// only available in hunspell >= 1.5
+#if !defined MAXWORDLEN
+#define MAXWORDLEN 176
+#endif
+
 SpellChecker::SpellChecker() :
     aDicts(nullptr),
     aDEncs(nullptr),
