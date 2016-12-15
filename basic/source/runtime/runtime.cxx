@@ -975,10 +975,7 @@ SbxVariableRef SbiRuntime::PopVar()
     }
 #endif
     SbxVariableRef xVar = refExprStk->Get( --nExprLvl );
-#ifdef DBG_UTIL
-    if ( xVar->GetName() == "Cells" )
-        SAL_INFO("basic", "PopVar: Name equals 'Cells'" );
-#endif
+    SAL_INFO_IF( xVar->GetName() == "Cells", "basic", "PopVar: Name equals 'Cells'" );
     // methods hold themselves in parameter 0
     if( dynamic_cast<const SbxMethod *>(xVar.get()) != nullptr )
     {

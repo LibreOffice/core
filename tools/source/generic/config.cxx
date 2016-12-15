@@ -660,16 +660,12 @@ Config::Config( const OUString& rFileName )
     mnDataUpdateId  = 0;
     mnLockCount     = 1;
 
-#ifdef DBG_UTIL
     SAL_INFO("tools.generic", "Config::Config( " << maFileName << " )");
-#endif
 }
 
 Config::~Config()
 {
-#ifdef DBG_UTIL
     SAL_INFO("tools.generic", "Config::~Config()" );
-#endif
 
     Flush();
     ImplFreeConfigData( mpData );
@@ -808,10 +804,8 @@ OString Config::ReadKey(const OString& rKey) const
 
 OString Config::ReadKey(const OString& rKey, const OString& rDefault) const
 {
-#ifdef DBG_UTIL
     SAL_INFO("tools.generic", "Config::ReadKey( " << rKey << " ) from " << GetGroup()
                       << " in " << maFileName);
-#endif
 
     // Update config data if necessary
     if ( !mnLockCount )
@@ -836,10 +830,8 @@ OString Config::ReadKey(const OString& rKey, const OString& rDefault) const
 
 void Config::WriteKey(const OString& rKey, const OString& rStr)
 {
-#ifdef DBG_UTIL
     SAL_INFO("tools.generic", "Config::WriteKey( " << rKey << ", " << rStr << " ) to "
                        << GetGroup() << " in " << maFileName);
-#endif
 
     // Update config data if necessary
     if ( !mnLockCount || !mpData->mbRead )
@@ -939,9 +931,7 @@ void Config::DeleteKey(const OString& rKey)
 
 sal_uInt16 Config::GetKeyCount() const
 {
-#ifdef DBG_UTIL
     SAL_INFO("tools.generic", "Config::GetKeyCount() from " << GetGroup() << " in " << maFileName);
-#endif
 
     // Update config data if necessary
     if ( !mnLockCount )
@@ -967,10 +957,8 @@ sal_uInt16 Config::GetKeyCount() const
 
 OString Config::GetKeyName(sal_uInt16 nKey) const
 {
-#ifdef DBG_UTIL
     SAL_INFO("tools.generic", "Config::GetKeyName( " << OString::number(static_cast<sal_Int32>(nKey))
                       << " ) from " << GetGroup() << " in " << maFileName);
-#endif
 
     // search key and return name if found
     ImplGroupData* pGroup = ImplGetGroup();
@@ -995,10 +983,8 @@ OString Config::GetKeyName(sal_uInt16 nKey) const
 
 OString Config::ReadKey(sal_uInt16 nKey) const
 {
-#ifdef DBG_UTIL
     SAL_INFO("tools.generic", "Config::ReadKey( " << OString::number(static_cast<sal_Int32>(nKey))
                        << " ) from " << GetGroup() << " in " << maFileName);
-#endif
 
     // Search key and return value if found
     ImplGroupData* pGroup = ImplGetGroup();

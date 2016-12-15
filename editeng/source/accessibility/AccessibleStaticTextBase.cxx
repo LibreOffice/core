@@ -458,15 +458,10 @@ namespace accessibility
 
     void AccessibleStaticTextBase::SetEditSource( ::std::unique_ptr< SvxEditSource > && pEditSource )
     {
-#ifdef DBG_UTIL
         // precondition: solar mutex locked
         DBG_TESTSOLARMUTEX();
 
         mpImpl->SetEditSource( std::move(pEditSource) );
-
-#else
-        mpImpl->SetEditSource( std::move(pEditSource) );
-#endif
     }
 
     void AccessibleStaticTextBase::SetEventSource( const uno::Reference< XAccessible >& rInterface )
@@ -477,15 +472,10 @@ namespace accessibility
 
     void AccessibleStaticTextBase::SetOffset( const Point& rPoint )
     {
-#ifdef DBG_UTIL
         // precondition: solar mutex locked
         DBG_TESTSOLARMUTEX();
 
         mpImpl->SetOffset( rPoint );
-
-#else
-        mpImpl->SetOffset( rPoint );
-#endif
     }
 
     void AccessibleStaticTextBase::Dispose()

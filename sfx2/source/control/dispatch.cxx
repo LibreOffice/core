@@ -475,10 +475,8 @@ SfxDispatcher::SfxDispatcher(SfxViewFrame *pViewFrame)
 */
 SfxDispatcher::~SfxDispatcher()
 {
-#ifdef DBG_UTIL
     SAL_WARN("sfx.control", "Delete Dispatcher " << reinterpret_cast<sal_Int64>(this));
     DBG_ASSERT( !xImp->bActive, "deleting active Dispatcher" );
-#endif
 
     // So that no timer by Reschedule in PlugComm strikes the LeaveRegistrations
     xImp->aIdle.Stop();
@@ -733,10 +731,9 @@ void SfxDispatcher::DoActivate_Impl(bool bMDI)
     SFX_STACK(SfxDispatcher::DoActivate);
     if ( bMDI )
     {
-#ifdef DBG_UTIL
         SAL_WARN("sfx.control", "Activate Dispatcher " << reinterpret_cast<sal_Int64>(this));
         DBG_ASSERT( !xImp->bActive, "Activation error" );
-#endif
+
         xImp->bActive = true;
         xImp->bUpdated = false;
         SfxBindings* pBindings = GetBindings();
@@ -748,9 +745,7 @@ void SfxDispatcher::DoActivate_Impl(bool bMDI)
     }
     else
     {
-#ifdef DBG_UTIL
         SAL_WARN("sfx.control", "Non-MDI-Activate Dispatcher " << reinterpret_cast<sal_Int64>(this));
-#endif
     }
 
     if ( IsAppDispatcher() )

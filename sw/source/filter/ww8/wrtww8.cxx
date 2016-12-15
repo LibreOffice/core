@@ -4030,9 +4030,7 @@ void MSWordExportBase::OutputEndNode( const SwEndNode &rNode )
 
     if (pNodeInfo.get() != nullptr)
     {
-#ifdef DBG_UTIL
         SAL_INFO( "sw.ww8", pNodeInfo->toString());
-#endif
 
         const ww8::WW8TableNodeInfo::Inners_t aInners = pNodeInfo->getInners();
         ww8::WW8TableNodeInfo::Inners_t::const_iterator aIt(aInners.begin());
