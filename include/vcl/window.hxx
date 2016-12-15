@@ -101,7 +101,6 @@ namespace dnd {
 
 namespace vcl {
     struct ControlLayoutData;
-    class RenderSettings;
 }
 
 namespace svt { class PopupWindowControllerImpl; }
