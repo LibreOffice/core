@@ -678,7 +678,6 @@ namespace slideshow
 
                 if( !rAny.hasValue() )
                 {
-                    OSL_FAIL( "getDefault(): cannot get requested shape property" );
                     SAL_WARN("slideshow", "getDefault(): cannot get shape property " <<  rPropertyName );
                     return ValueType();
                 }
@@ -688,7 +687,6 @@ namespace slideshow
 
                     if( !(rAny >>= aValue) )
                     {
-                        OSL_FAIL( "getDefault(): cannot extract requested shape property" );
                         SAL_WARN("slideshow", "getDefault(): cannot extract shape property " << rPropertyName);
                         return ValueType();
                     }
@@ -705,7 +703,6 @@ namespace slideshow
 
                 if( !rAny.hasValue() )
                 {
-                    OSL_FAIL( "getDefault(): cannot get requested shape color property" );
                     SAL_WARN("slideshow", "getDefault(): cannot get shape color property " << rPropertyName);
                     return RGBColor();
                 }
@@ -715,7 +712,6 @@ namespace slideshow
 
                     if( !(rAny >>= nValue) )
                     {
-                        OSL_FAIL( "getDefault(): cannot extract requested shape color property" );
                         SAL_INFO("slideshow", "getDefault(): cannot extract shape color property " << rPropertyName);
                         return RGBColor();
                     }
