@@ -406,7 +406,9 @@ dump-deps-sort:
 
 define gb_Top_GbuildToIdeIntegration
 $(1)-ide-integration: gbuildtojson
-	cd $(SRCDIR) && $(SRCDIR)/bin/gbuild-to-ide --ide $(1) --make $(MAKE)
+	cd $(SRCDIR) && \
+		$(if $(filter MACOSX,$(OS_FOR_BUILD)),PATH="$(INSTROOT_FOR_BUILD)/Frameworks/LibreOfficePython.framework/Versions/Current/bin:$(PATH)") \
+		$(SRCDIR)/bin/gbuild-to-ide --ide $(1) --make $(MAKE)
 
 endef
 
