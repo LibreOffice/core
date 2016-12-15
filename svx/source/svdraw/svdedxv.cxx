@@ -216,21 +216,23 @@ void SdrObjEditView::TakeActionRect(Rectangle& rRect) const
 void SdrObjEditView::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 {
     SdrGlueEditView::Notify(rBC,rHint);
-    // change of printer while editing
-    const SdrHint* pSdrHint = dynamic_cast<const SdrHint*>(&rHint);
-    if (pSdrHint!=nullptr && pTextEditOutliner!=nullptr) {
-        SdrHintKind eKind=pSdrHint->GetKind();
-        if (eKind==SdrHintKind::RefDeviceChange) {
-            pTextEditOutliner->SetRefDevice(mpModel->GetRefDevice());
-        }
-        if (eKind==SdrHintKind::DefaultTabChange) {
-            pTextEditOutliner->SetDefTab(mpModel->GetDefaultTabulator());
-        }
-        if (eKind==SdrHintKind::DefaultFontHeightChange) {
+    if (pTextEditOutliner!=nullptr) {
+        // change of printer while editing
+        const SdrHint* pSdrHint = dynamic_cast<const SdrHint*>(&rHint);
+        if (pSdrHint!=nullptr) {
+            SdrHintKind eKind=pSdrHint->GetKind();
+            if (eKind==SdrHintKind::RefDeviceChange) {
+                pTextEditOutliner->SetRefDevice(mpModel->GetRefDevice());
+            }
+            if (eKind==SdrHintKind::DefaultTabChange) {
+                pTextEditOutliner->SetDefTab(mpModel->GetDefaultTabulator());
+            }
+            if (eKind==SdrHintKind::DefaultFontHeightChange) {
 
-        }
-        if (eKind==SdrHintKind::ModelSaved) {
-            pTextEditOutliner->ClearModifyFlag();
+            }
+            if (eKind==SdrHintKind::ModelSaved) {
+                pTextEditOutliner->ClearModifyFlag();
+            }
         }
     }
 }
