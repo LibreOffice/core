@@ -1378,9 +1378,9 @@ int CALLBACK SalEnumFontsProcExW( const LOGFONTW* lpelfe,
         if (nFontType & RASTER_FONTTYPE)
             return 1;
 
-        // Ignore font formats not supported by CommonSalLayout.
-        if (SalLayout::UseCommonLayout())
-            if ((pMetric->ntmTm.ntmFlags & NTM_TYPE1) || (pMetric->ntmTm.ntmFlags & NTM_MULTIPLEMASTER))
+        // Only SFNT fonts are supported, ignore anything else.
+        if (SalLayout::UseCommonLayout() || OpenGLWrapper::isVCLOpenGLEnabled())
+            if (!(nFontType & TRUETYPE_FONTTYPE))
                 return 1;
 
         WinFontFace* pData = ImplLogMetricToDevFontDataW( pLogFont, &(pMetric->ntmTm), nFontType );
