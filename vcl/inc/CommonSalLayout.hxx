@@ -45,6 +45,7 @@ class CommonSalLayout : public GenericSalLayout
 #ifdef _WIN32
     HDC                     mhDC;
     HFONT                   mhFont;
+    WinFontInstance&        mrWinFontInstance;
     double                  mnAveWidthFactor;
 #elif defined(MACOSX) || defined(IOS)
     const CoreTextStyle&    mrCoreTextStyle;
@@ -67,6 +68,8 @@ public:
 #if defined(_WIN32)
     explicit                CommonSalLayout(HDC, WinFontInstance&, const WinFontFace&);
     const FontSelectPattern& getFontSelData() const { return mrFontSelData; };
+    HFONT                   getHFONT() const { return mhFont; }
+    WinFontInstance&        getWinFontInstance() const { return mrWinFontInstance; }
 #elif defined(MACOSX) || defined(IOS)
     explicit                CommonSalLayout(const CoreTextStyle&);
     const CoreTextStyle&    getFontData() const { return mrCoreTextStyle; };

@@ -666,6 +666,70 @@ LogicalFontInstance* WinFontFace::CreateFontInstance( FontSelectPattern& rFSD ) 
     return pFontInstance;
 }
 
+bool WinSalGraphics::CacheGlyphs(const CommonSalLayout& rLayout)
+{
+    static bool bDoGlyphCaching = (std::getenv("SAL_DISABLE_GLYPH_CACHING") == nullptr);
+    if (!bDoGlyphCaching)
+        return false;
+
+    HDC hDC = getHDC();
+    HFONT hFONT = rLayout.getHFONT();
+    WinFontInstance& rFont = rLayout.getWinFontInstance();
+
+    int nStart = 0;
+    Point aPos(0, 0);
+    const GlyphItem* pGlyph;
+    while (rLayout.GetNextGlyphs(1, &pGlyph, aPos, nStart))
+    {
+        if (!rFont.GetGlyphCache().IsGlyphCached(pGlyph->maGlyphId))
+        {
+            if (!rFont.CacheGlyphToAtlas(hDC, hFONT, pGlyph->maGlyphId, *this))
+                return false;
+        }
+    }
+
+    return true;
+}
+
+bool WinSalGraphics::DrawCachedGlyphs(const CommonSalLayout& rLayout)
+{
+    HDC hDC = getHDC();
+
+    Rectangle aRect;
+    rLayout.GetBoundRect(*this, aRect);
+
+    COLORREF color = GetTextColor(hDC);
+    SalColor salColor = MAKE_SALCOLOR(GetRValue(color), GetGValue(color), GetBValue(color));
+
+    WinOpenGLSalGraphicsImpl *pImpl = dynamic_cast<WinOpenGLSalGraphicsImpl*>(mpImpl.get());
+    if (!pImpl)
+        return false;
+
+    WinFontInstance& rFont = rLayout.getWinFontInstance();
+
+    int nStart = 0;
+    Point aPos(0, 0);
+    const GlyphItem* pGlyph;
+    while (rLayout.GetNextGlyphs(1, &pGlyph, aPos, nStart))
+    {
+        OpenGLGlyphDrawElement& rElement(rFont.GetGlyphCache().GetDrawElement(pGlyph->maGlyphId));
+        OpenGLTexture& rTexture = rElement.maTexture;
+
+        if (!rTexture)
+            return false;
+
+        SalTwoRect a2Rects(0, 0,
+                           rTexture.GetWidth(), rTexture.GetHeight(),
+                           aPos.X() - rElement.getExtraOffset() + rElement.maLeftOverhangs,
+                           aPos.Y() - rElement.mnBaselineOffset - rElement.getExtraOffset(),
+                           rTexture.GetWidth(), rTexture.GetHeight());
+
+        pImpl->DeferredTextDraw(rTexture, salColor, a2Rects);
+    }
+
+    return true;
+}
+
 void WinSalGraphics::DrawTextLayout(const CommonSalLayout& rLayout, HDC hDC, bool bUseDWrite)
 {
     Point aPos(0, 0);
@@ -683,6 +747,11 @@ void WinSalGraphics::DrawTextLayout(const CommonSalLayout& rLayout)
     {
         // no OpenGL, just classic rendering
         DrawTextLayout(rLayout, hDC, false);
+    }
+    else if (CacheGlyphs(rLayout) &&
+             DrawCachedGlyphs(rLayout))
+    {
+        // Nothing
     }
     else
     {
