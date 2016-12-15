@@ -266,7 +266,7 @@ ScXMLDataBarFormatContext::ScXMLDataBarFormatContext( ScXMLImport& rImport, sal_
     if(!sShowValue.isEmpty())
     {
         bool bShowValue = true;
-        sax::Converter::convertBool( bShowValue, sShowValue );
+        (void)sax::Converter::convertBool( bShowValue, sShowValue );
         mpFormatData->mbOnlyBar = !bShowValue;
     }
 
@@ -366,7 +366,7 @@ ScXMLIconSetFormatContext::ScXMLIconSetFormatContext(ScXMLImport& rImport, sal_u
     if(!sShowValue.isEmpty())
     {
         bool bShowValue = true;
-        sax::Converter::convertBool( bShowValue, sShowValue );
+        (void)sax::Converter::convertBool( bShowValue, sShowValue );
         pIconSetFormatData->mbShowValue = !bShowValue;
     }
 

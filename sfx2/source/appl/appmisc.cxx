@@ -218,7 +218,7 @@ BitmapEx SfxApplication::GetApplicationLogo(long nWidth)
 {
     BitmapEx aBitmap;
     SfxApplication::loadBrandSvg("flat_logo", aBitmap, nWidth);
-    Application::LoadBrandBitmap ("about", aBitmap);
+    (void)Application::LoadBrandBitmap ("about", aBitmap);
     return aBitmap;
 }
 
