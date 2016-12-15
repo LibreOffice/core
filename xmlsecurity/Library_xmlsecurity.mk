@@ -42,6 +42,7 @@ $(eval $(call gb_Library_use_libraries,xmlsecurity,\
 	xo \
 	i18nlangtag \
 	xsec_fw \
+	xsec_xmlsec \
 	$(gb_UWINAPI) \
 ))
 
@@ -68,6 +69,9 @@ $(eval $(call gb_Library_add_exception_objects,xmlsecurity,\
 	xmlsecurity/source/pdfio/pdfdocument \
 ))
 
+$(eval $(call gb_Library_use_externals,xmlsecurity,\
+    libxml2 \
+))
 ifeq ($(OS)-$(COM),WNT-MSC)
 $(eval $(call gb_Library_add_defs,xmlsecurity,\
     -DXMLSEC_CRYPTO_MSCRYPTO \
