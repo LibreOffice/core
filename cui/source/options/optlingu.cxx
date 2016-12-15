@@ -222,7 +222,7 @@ static void lcl_SetCheckButton( SvTreeListEntry* pEntry, bool bCheck )
     SvLBoxButton* pItem = static_cast<SvLBoxButton*>(pEntry->GetFirstItem(SvLBoxItemType::Button));
 
     DBG_ASSERT(pItem,"SetCheckButton:Item not found");
-    if (pItem->GetType() == SvLBoxItemType::Button)
+    if (pItem && pItem->GetType() == SvLBoxItemType::Button)
     {
         if (bCheck)
             pItem->SetStateChecked();
