@@ -297,7 +297,17 @@ void SwViewShellImp::UpdateAccessible()
     OSL_ENSURE( pWin, "no window, no access" );
 
     if( IsAccessible() && rIDLA.GetCurrentViewShell() && pWin )
-        GetAccessibleMap().GetDocumentView();
+    {
+        try
+        {
+            GetAccessibleMap().GetDocumentView();
+        }
+        catch (uno::Exception const& e)
+        {
+            SAL_WARN("sw.a11y", "exception: " << e.Message);
+            assert(!"SwViewShellImp::UpdateAccessible: unhandled exception");
+        }
+    }
 }
 
 void SwViewShellImp::DisposeAccessible(const SwFrame *pFrame,
