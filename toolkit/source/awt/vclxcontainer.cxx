@@ -245,7 +245,7 @@ throw(css::uno::RuntimeException, std::exception)
             Size aSize( nVal, nVal );
             VclPtr<vcl::Window> pWindow = GetWindow();
             MapMode aMode( MapUnit::MapAppFont );
-            toolkit::ScrollableInterface* pScrollable = dynamic_cast< toolkit::ScrollableInterface* >( pWindow.get() );
+            toolkit::ScrollableDialog* pScrollable = dynamic_cast< toolkit::ScrollableDialog* >( pWindow.get() );
             if ( pWindow && pScrollable )
             {
                 OutputDevice* pDev = VCLUnoHelper::GetOutputDevice( getGraphics() );
