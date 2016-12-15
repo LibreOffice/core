@@ -821,6 +821,9 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
     }
     else
     {
+        // Prevent mutiple broadcasts during the series of changes.
+        SdrDelayBroadcastObjectChange aDelayBroadcastObjectChange(*pObj);
+
         bool bCanResize = bValid2 && !pObj->IsResizeProtect();
 
         //First time positioning, must be able to at least move it
