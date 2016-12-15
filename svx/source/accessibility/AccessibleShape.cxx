@@ -326,7 +326,11 @@ sal_Int32 SAL_CALL
        AccessibleShape::getAccessibleChildCount ()
     throw (css::uno::RuntimeException, std::exception)
 {
-    ThrowIfDisposed ();
+    if (IsDisposed())
+    {
+        return 0;
+    }
+
     sal_Int32 nChildCount = 0;
 
     // Add the number of shapes that are children of this shape.

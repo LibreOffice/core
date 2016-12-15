@@ -173,7 +173,6 @@ uno::Reference< XAccessibleContext> SAL_CALL
     AccessibleContextBase::getAccessibleContext()
     throw (uno::RuntimeException, std::exception)
 {
-    ThrowIfDisposed ();
     return this;
 }
 
@@ -186,7 +185,6 @@ sal_Int32 SAL_CALL
        AccessibleContextBase::getAccessibleChildCount()
     throw (uno::RuntimeException, std::exception)
 {
-    ThrowIfDisposed ();
     return 0;
 }
 
@@ -418,7 +416,6 @@ void SAL_CALL AccessibleContextBase::removeAccessibleEventListener (
 OUString SAL_CALL AccessibleContextBase::getImplementationName()
     throw (css::uno::RuntimeException, std::exception)
 {
-    ThrowIfDisposed ();
     return OUString("AccessibleContextBase");
 }
 
@@ -432,7 +429,6 @@ uno::Sequence< OUString > SAL_CALL
        AccessibleContextBase::getSupportedServiceNames()
     throw (css::uno::RuntimeException, std::exception)
 {
-    ThrowIfDisposed ();
     return {
         "com.sun.star.accessibility.Accessible",
         "com.sun.star.accessibility.AccessibleContext"};
@@ -445,8 +441,6 @@ uno::Sequence< css::uno::Type>
     AccessibleContextBase::getTypes()
     throw (css::uno::RuntimeException, std::exception)
 {
-    ThrowIfDisposed ();
-
     // This class supports no interfaces on its own.  Just return those
     // supported by the base class.
     return WeakComponentImplHelper::getTypes();
