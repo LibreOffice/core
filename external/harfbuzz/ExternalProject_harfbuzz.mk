@@ -37,7 +37,7 @@ $(call gb_ExternalProject_get_state_target,harfbuzz,build) :
 			--with-cairo=no \
 			--with-glib=no \
 			--with-graphite2=yes \
-			$(if $(filter MACOSX,$(OS)),--with-coretext=yes) \
+			$(if $(filter IOS MACOSX,$(OS)),--with-coretext=yes) \
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 			CXXFLAGS=' \

@@ -1,0 +1,11 @@
+--- configure
++++ configure
+@@ -19046,6 +19046,8 @@
+ 
+ 	else
+ 		# On iOS CoreText and CoreGraphics are stand-alone frameworks
++               # Forget the cache failure to find CTFontRef above
++               unset ac_cv_type_CTFontRef
+ 		if test "x$have_coretext" != "xtrue"; then
+ 			ac_fn_c_check_type "$LINENO" "CTFontRef" "ac_cv_type_CTFontRef" "#include <CoreText/CoreText.h>
+ "
