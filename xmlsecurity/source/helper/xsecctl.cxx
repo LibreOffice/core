@@ -21,8 +21,6 @@
 #include "xsecctl.hxx"
 #include "documentsignaturehelper.hxx"
 #include "framework/saxeventkeeperimpl.hxx"
-#include <algorithm>
-#include <initializer_list>
 
 #include <com/sun/star/xml/crypto/sax/ElementMarkPriority.hpp>
 #include <com/sun/star/xml/crypto/sax/XReferenceResolvedBroadcaster.hpp>
