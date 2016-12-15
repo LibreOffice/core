@@ -21,7 +21,7 @@
 #include <rtl/uuid.h>
 #include "xmlencryption_mscryptimpl.hxx"
 
-#include "xmldocumentwrapper_xmlsecimpl.hxx"
+#include "xmlsec/xmldocumentwrapper_xmlsecimpl.hxx"
 
 #include "xmlelementwrapper_xmlsecimpl.hxx"
 

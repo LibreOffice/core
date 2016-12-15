@@ -24,7 +24,7 @@
 
 #include "serialnumberadapter.hxx"
 #include "xmlelementwrapper_xmlsecimpl.hxx"
-#include "xmldocumentwrapper_xmlsecimpl.hxx"
+#include "xmlsec/xmldocumentwrapper_xmlsecimpl.hxx"
 #include "xsec_xmlsec.hxx"
 
 using namespace ::cppu;

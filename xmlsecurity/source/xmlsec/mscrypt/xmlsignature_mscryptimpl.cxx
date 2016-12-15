@@ -22,7 +22,7 @@
 
 #include <com/sun/star/xml/crypto/SecurityOperationStatus.hpp>
 #include "xmlsignature_mscryptimpl.hxx"
-#include "xmldocumentwrapper_xmlsecimpl.hxx"
+#include "xmlsec/xmldocumentwrapper_xmlsecimpl.hxx"
 #include "xmlelementwrapper_xmlsecimpl.hxx"
 #include "securityenvironment_mscryptimpl.hxx"
 #include "xmlstreamio.hxx"

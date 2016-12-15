@@ -41,6 +41,7 @@
 #include <com/sun/star/embed/XStorage.hpp>
 
 #include <rtl/ustrbuf.hxx>
+#include <rtl/ref.hxx>
 
 #include <cppuhelper/implbase.hxx>
 
@@ -59,6 +60,7 @@
 #define ALGO_RELATIONSHIP  "http://schemas.openxmlformats.org/package/2006/RelationshipTransform"
 
 class XSecParser;
+class XMLDocumentWrapper_XmlSecImpl;
 
 class InternalSignatureInformation
 {
@@ -111,7 +113,7 @@ private:
     /*
      * used to buffer SAX events
      */
-    css::uno::Reference< css::xml::wrapper::XXMLDocumentWrapper > m_xXMLDocumentWrapper;
+    rtl::Reference<XMLDocumentWrapper_XmlSecImpl> m_xXMLDocumentWrapper;
 
     /*
      * the SAX events keeper

@@ -21,6 +21,7 @@
 #include "xsecctl.hxx"
 #include "documentsignaturehelper.hxx"
 #include "framework/saxeventkeeperimpl.hxx"
+#include "xmlsec/xmldocumentwrapper_xmlsecimpl.hxx"
 
 #include <com/sun/star/xml/crypto/sax/ElementMarkPriority.hpp>
 #include <com/sun/star/xml/crypto/sax/XReferenceResolvedBroadcaster.hpp>
@@ -133,11 +134,7 @@ void XSecController::createXSecComponent( )
     /*
      * XMLSignature created successfully.
      */
-    {
-        m_xXMLDocumentWrapper.set(
-            xMCF->createInstanceWithContext("com.sun.star.xml.wrapper.XMLDocumentWrapper", mxCtx),
-            cssu::UNO_QUERY );
-    }
+        m_xXMLDocumentWrapper = new XMLDocumentWrapper_XmlSecImpl();
 
     bSuccess &= m_xXMLDocumentWrapper.is();
     if ( bSuccess )
@@ -153,7 +150,7 @@ void XSecController::createXSecComponent( )
         cssu::Reference< cssl::XInitialization > xInitialization(m_xSAXEventKeeper,  cssu::UNO_QUERY);
 
         cssu::Sequence <cssu::Any> arg(1);
-        arg[0] = cssu::makeAny(m_xXMLDocumentWrapper);
+        arg[0] = cssu::makeAny(uno::Reference<xml::wrapper::XXMLDocumentWrapper>(m_xXMLDocumentWrapper.get()));
         xInitialization->initialize(arg);
 
         cssu::Reference<cssxc::sax::XSAXEventKeeperStatusChangeBroadcaster>

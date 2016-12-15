@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLSECURITY_SOURCE_XMLSEC_XMLDOCUMENTWRAPPER_XMLSECIMPL_HXX
-#define INCLUDED_XMLSECURITY_SOURCE_XMLSEC_XMLDOCUMENTWRAPPER_XMLSECIMPL_HXX
+#ifndef INCLUDED_XMLSECURITY_INC_XMLSEC_XMLDOCUMENTWRAPPER_XMLSECIMPL_HXX
+#define INCLUDED_XMLSECURITY_INC_XMLSEC_XMLDOCUMENTWRAPPER_XMLSECIMPL_HXX
 
 #include <com/sun/star/xml/wrapper/XXMLDocumentWrapper.hpp>
 #include <com/sun/star/xml/csax/XCompressedDocumentHandler.hpp>
@@ -26,7 +26,8 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase.hxx>
 
-#include "saxhelper.hxx"
+#include "xmlsec/saxhelper.hxx"
+#include "xsecxmlsecdllapi.h"
 
 #define NODEPOSITION_NORMAL        1
 #define NODEPOSITION_STARTELEMENT  2
@@ -38,15 +39,14 @@ namespace com { namespace sun { namespace star { namespace uno {
     class XComponentContext;
 } } } }
 
-class XMLDocumentWrapper_XmlSecImpl : public cppu::WeakImplHelper
+class XSECXMLSEC_DLLPUBLIC XMLDocumentWrapper_XmlSecImpl : public cppu::WeakImplHelper
 <
     css::xml::wrapper::XXMLDocumentWrapper,
     css::xml::sax::XDocumentHandler,
     css::xml::csax::XCompressedDocumentHandler,
     css::lang::XServiceInfo
 >
-/****** XMLDocumentWrapper_XmlSecImpl.hxx/CLASS XMLDocumentWrapper_XmlSecImpl *
- *
+/**
  *   NAME
  *  XMLDocumentWrapper_XmlSecImpl -- Class to manipulate a libxml2
  *  document
