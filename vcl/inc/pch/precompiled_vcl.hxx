@@ -50,7 +50,6 @@
 #include <unordered_map>
 #include <utility>
 #include <vector>
-#include <window.h>
 #include <boost/functional/hash.hpp>
 #include <boost/math/special_functions/sinc.hpp>
 #include <boost/multi_array.hpp>
@@ -298,5 +297,6 @@
 #include <unotools/configmgr.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/unotoolsdllapi.h>
+#include <window.h>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
