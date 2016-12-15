@@ -850,12 +850,7 @@ void SfxApplication::NotifyEvent( const SfxEventHint& rEventHint, bool bSynchron
 
     if ( bSynchron )
     {
-#ifdef DBG_UTIL
-        if (!pDoc)
-        {
-            SAL_INFO("sfx.appl", "SfxEvent: " << rEventHint.GetEventName());
-        }
-#endif
+        SAL_INFO_IF(!pDoc, "sfx.appl", "SfxEvent: " << rEventHint.GetEventName());
         Broadcast(rEventHint);
         if ( pDoc )
             pDoc->Broadcast( rEventHint );

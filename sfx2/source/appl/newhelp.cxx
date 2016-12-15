@@ -2554,12 +2554,7 @@ void SfxHelpTextWindow_Impl::SetPageStyleHeaderOff() const
         SAL_WARN( "sfx.appl", "SfxHelpTextWindow_Impl::SetPageStyleHeaderOff(): unexpected exception" );
     }
 
-#ifdef DBG_UTIL
-    if ( !bSetOff )
-    {
-        SAL_WARN( "sfx.appl", "SfxHelpTextWindow_Impl::SetPageStyleHeaderOff(): set off failed" );
-    }
-#endif
+    SAL_WARN_IF( !bSetOff, "sfx.appl", "SfxHelpTextWindow_Impl::SetPageStyleHeaderOff(): set off failed" );
 }
 
 

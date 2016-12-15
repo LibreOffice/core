@@ -754,10 +754,8 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const css::util::URL& aURL,
                             bSuccess = aReq.IsDone() || pItem != nullptr;
                         }
                     }
-#ifdef DBG_UTIL
                     else
                         SAL_INFO("sfx.control", "MacroPlayer: Unknown slot dispatched!");
-#endif
                 }
             }
             else

@@ -255,9 +255,7 @@ namespace accessibility
         // normally should employ RAII here...
         mnNotifierClientId(::comphelper::AccessibleEventNotifier::registerClient())
     {
-#ifdef DBG_UTIL
         SAL_INFO("svx", "received ID: " << mnNotifierClientId );
-#endif
     }
 
     AccessibleTextHelper_Impl::~AccessibleTextHelper_Impl()
@@ -1322,9 +1320,7 @@ namespace accessibility
                 }
                 catch( const uno::Exception& )
                 {
-#ifdef DBG_UTIL
                     SAL_WARN("svx", "Unhandled exception.");
-#endif
                 }
             }
         }
@@ -1438,9 +1434,7 @@ namespace accessibility
         }
         catch( const uno::Exception& )
         {
-#ifdef DBG_UTIL
             SAL_WARN("svx", "Unhandled exception.");
-#endif
             mbInNotify = false;
         }
 
@@ -1455,9 +1449,7 @@ namespace accessibility
             {
                 // #106234# Unregister from EventNotifier
                 ::comphelper::AccessibleEventNotifier::revokeClient( getNotifierClientId() );
-#ifdef DBG_UTIL
                 SAL_INFO("svx", "disposed ID: " << mnNotifierClientId );
-#endif
             }
             catch( const uno::Exception& ) {}
 
