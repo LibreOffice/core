@@ -367,7 +367,6 @@ SAL_IMPLEMENT_MAIN()
     }
     catch (const Exception & rExc)
     {
-        OSL_FAIL( "### exception occurred!" );
         SAL_WARN("stoc", "### exception occurred: " << rExc.Message );
     }
 
