@@ -94,7 +94,7 @@
       </properties>
     </glade-widget-class>
 
-    <glade-widget-class title="Color ListBox" name="svxlo-ColorListBox"
+    <glade-widget-class title="Color ListBox" name="svxcorelo-SvxColorListBox"
                         generic-name="Color ListBox" parent="GtkComboBox"
                         icon-name="widget-gtk-combobox">
     </glade-widget-class>
