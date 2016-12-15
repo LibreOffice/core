@@ -266,12 +266,6 @@ public:
 
     //=====  XTypeProvider  ===================================================
 
-    /** Returns a sequence of all supported interfaces.
-    */
-    virtual css::uno::Sequence< css::uno::Type> SAL_CALL
-        getTypes()
-        throw (css::uno::RuntimeException, std::exception) override;
-
     /** Returns a implementation id.
     */
     virtual css::uno::Sequence<sal_Int8> SAL_CALL
