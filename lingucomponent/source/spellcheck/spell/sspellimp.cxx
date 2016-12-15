@@ -58,7 +58,7 @@ using namespace com::sun::star::linguistic2;
 using namespace linguistic;
 
 // XML-header of SPELLML queries
-#if defined SPELL_XML
+#if !defined SPELL_XML
 #define SPELL_XML "<?xml?>"
 #endif
 
@@ -276,10 +276,6 @@ sal_Bool SAL_CALL SpellChecker::hasLocale(const Locale& rLocale)
     }
     return bRes;
 }
-
-#ifndef MAXWORDLEN
-#   define MAXWORDLEN 176
-#endif
 
 sal_Int16 SpellChecker::GetSpellFailure(const OUString &rWord, const Locale &rLocale)
 {
