@@ -506,7 +506,7 @@ bool ToolbarLayoutManager::createToolbar( const OUString& rResourceURL )
             SolarMutexClearableGuard aWriteLock;
 
             UIElement& rElement = impl_findToolbar( rResourceURL );
-            if ( !rElement.m_aName.isEmpty() )
+            if (rElement.m_xUIElement.is())
             {
                 // somebody else must have created it while we released
                 // the SolarMutex - just dispose our new instance and
@@ -516,6 +516,15 @@ bool ToolbarLayoutManager::createToolbar( const OUString& rResourceURL )
                 uno::Reference<lang::XComponent> const xC(xUIElement, uno::UNO_QUERY);
                 xC->dispose();
                 return false;
+            }
+            if ( !rElement.m_aName.isEmpty() )
+            {
+                // Reuse a local entry so we are able to use the latest
+                // UI changes for this document.
+                implts_setElementData( rElement, xDockWindow );
+                rElement.m_xUIElement = xUIElement;
+                bVisible = rElement.m_bVisible;
+                bFloating = rElement.m_bFloating;
             }
             else
             {
