@@ -14,8 +14,7 @@ $(eval $(call gb_Module_add_targets,sal,\
 	$(if $(filter $(OS),ANDROID), \
 		Library_lo-bootstrap) \
 	Library_sal \
-	$(if $(filter $(OS),ANDROID),, \
-		Library_sal_textenc) \
+	$(if $(filter $(OS),ANDROID),,$(if $(filter TRUE,$(DISABLE_DYNLOADING)),,Library_sal_textenc)) \
 	$(if $(filter $(OS),WNT), \
 		Library_uwinapi) \
 ))
