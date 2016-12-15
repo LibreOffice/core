@@ -24,7 +24,6 @@
 
 #include <tools/fract.hxx>
 #include <vcl/idle.hxx>
-#include <vcl/rendersettings.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
 #include <list>
