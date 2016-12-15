@@ -29,11 +29,11 @@ $(eval $(call gb_Module_add_l10n_targets,basctl,\
 	AllLangResTarget_basctl \
 ))
 
-endif
-
 $(eval $(call gb_Module_add_l10n_targets,basctl,\
 	UIConfig_basicide \
 ))
+
+endif
 
 # screenshots
 $(eval $(call gb_Module_add_screenshot_targets,basctl,\
