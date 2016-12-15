@@ -2228,6 +2228,15 @@
       </object>
     </child>
     <child>
+      <object class="GtkMenuItem" id="wraptight">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:WrapTight</property>
+        <property name="label" translatable="yes">Tight</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+    <child>
       <object class="GtkSeparatorMenuItem" id="separator14">
         <property name="visible">True</property>
         <property name="can_focus">False</property>

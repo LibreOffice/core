@@ -1189,6 +1189,9 @@ namespace
             case SURROUND_THROUGHT:
                 eRet = css::text::WrapTextMode_THROUGHT;
                 break;
+            case SURROUND_TIGHT:
+                eRet = css::text::WrapTextMode_TIGHT;
+                break;
             case SURROUND_PARALLEL:
                 eRet = css::text::WrapTextMode_PARALLEL;
                 break;

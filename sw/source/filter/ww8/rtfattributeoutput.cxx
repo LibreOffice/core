@@ -3069,6 +3069,9 @@ void RtfAttributeOutput::FormatSurround(const SwFormatSurround& rSurround)
             nWr = 2; // around
             oWrk = 0; // both sides
             break;
+        case SURROUND_TIGHT:
+            nWr = 4; // tight
+            break;
         case SURROUND_IDEAL:
         default:
             nWr = 2; // around

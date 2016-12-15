@@ -1144,6 +1144,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
         break;
 
         case FN_FRAME_NOWRAP:
+        case FN_FRAME_WRAP_TIGHT:
         case FN_FRAME_WRAP:
         case FN_FRAME_WRAP_IDEAL:
         case FN_FRAME_WRAPTHRU:
@@ -1669,6 +1670,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
             }
             break;
             case FN_FRAME_NOWRAP:
+            case FN_FRAME_WRAP_TIGHT:
             case FN_FRAME_WRAP:
             case FN_FRAME_WRAP_IDEAL:
             case FN_FRAME_WRAPTHRU:
@@ -1716,13 +1718,17 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                                  && (nAnchorType != FLY_AT_PAGE));
                             bSet = nSurround == SURROUND_NONE;
                         break;
+                        case FN_FRAME_WRAP_TIGHT:
+                            bDisable |= bHtmlMode;
+                            bSet = nSurround == SURROUND_TIGHT && rWrap.IsContour();
+                        break;
                         case FN_FRAME_WRAP:
                             bDisable |= bHtmlMode;
-                            bSet = nSurround == SURROUND_PARALLEL;
+                            bSet = nSurround == SURROUND_PARALLEL && !rWrap.IsContour();
                         break;
                         case FN_FRAME_WRAP_IDEAL:
                             bDisable |= bHtmlMode;
-                            bSet = nSurround == SURROUND_IDEAL;
+                            bSet = nSurround == SURROUND_IDEAL && !rWrap.IsContour();
                         break;
                         case FN_FRAME_WRAPTHRU:
                             bDisable |= (bHtmlMode ||
@@ -1771,10 +1777,12 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                             bSet = rWrap.IsAnchorOnly();
                         break;
                         case FN_FRAME_WRAP_LEFT:
-                            bSet = nSurround == SURROUND_LEFT;
+                            bDisable |= bHtmlMode;
+                            bSet = nSurround == SURROUND_LEFT && !rWrap.IsContour();
                         break;
                         case FN_FRAME_WRAP_RIGHT:
-                            bSet = nSurround == SURROUND_RIGHT;
+                            bDisable |= bHtmlMode;
+                            bSet = nSurround == SURROUND_RIGHT && !rWrap.IsContour();
                         break;
                     }
 
@@ -1874,8 +1882,17 @@ void SwBaseShell::SetWrapMode( sal_uInt16 nSlot )
                 if (aWrap.IsContour())
                     aWrap.SetContour(false);
                 break;
+            case FN_FRAME_WRAP_TIGHT:
+                nSurround = SURROUND_TIGHT;
+                aWrap.SetContour(true);
+                break;
+            case FN_FRAME_WRAP:
+                nSurround = SURROUND_PARALLEL;
+                aWrap.SetContour(false);
+                break;
             case FN_FRAME_WRAP_IDEAL:
                 nSurround = SURROUND_IDEAL;
+                aWrap.SetContour(false);
                 break;
             case FN_WRAP_ANCHOR_ONLY:
                 aWrap.SetAnchorOnly(!aWrap.IsAnchorOnly());
@@ -1890,6 +1907,10 @@ void SwBaseShell::SetWrapMode( sal_uInt16 nSlot )
                 break;
             case FN_FRAME_WRAP_CONTOUR:
                 aWrap.SetContour(!aWrap.IsContour());
+                if ( nOldSurround == SURROUND_PARALLEL || nOldSurround == SURROUND_LEFT || nOldSurround == SURROUND_RIGHT || nOldSurround == SURROUND_IDEAL)
+                {
+                    nSurround = SURROUND_TIGHT;
+                }
                 break;
             case FN_FRAME_WRAPTHRU_TRANSP:
                 if (aWrap.IsContour())
@@ -1901,10 +1922,12 @@ void SwBaseShell::SetWrapMode( sal_uInt16 nSlot )
 
             case FN_FRAME_WRAP_LEFT:
                 nSurround = SURROUND_LEFT;
+                aWrap.SetContour(false);
                 break;
 
             case FN_FRAME_WRAP_RIGHT:
                 nSurround = SURROUND_RIGHT;
+                aWrap.SetContour(false);
                 break;
 
             default:

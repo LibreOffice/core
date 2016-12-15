@@ -36,6 +36,7 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 const char UNO_WRAPOFF[] = ".uno:WrapOff";
+const char UNO_WRAPTIGHT[] = ".uno:WrapTight";
 const char UNO_WRAPLEFT[] = ".uno:WrapLeft";
 const char UNO_WRAPRIGHT[] = ".uno:WrapRight";
 const char UNO_WRAPON[] = ".uno:WrapOn";
@@ -79,6 +80,7 @@ WrapPropertyPanel::WrapPropertyPanel(
     , aWrapIL()
     // controller items
     , maSwNoWrapControl(FN_FRAME_NOWRAP, *pBindings, *this)
+    , maSwWrapTightControl(FN_FRAME_WRAP_TIGHT, *pBindings, *this)
     , maSwWrapLeftControl(FN_FRAME_WRAP, *pBindings, *this)
     , maSwWrapRightControl(FN_FRAME_WRAP_RIGHT, *pBindings, *this)
     , maSwWrapParallelControl(FN_FRAME_WRAP_LEFT, *pBindings, *this)
@@ -89,6 +91,7 @@ WrapPropertyPanel::WrapPropertyPanel(
     , maSwULSpacingControl(SID_ATTR_ULSPACE, *pBindings, *this)
 {
     get(mpRBNoWrap, "buttonnone");
+    get(mpRBWrapTight, "buttontight");
     get(mpRBWrapLeft, "buttonbefore");
     get(mpRBWrapRight, "buttonafter");
     get(mpRBWrapParallel, "buttonparallel");
@@ -110,6 +113,7 @@ WrapPropertyPanel::~WrapPropertyPanel()
 void WrapPropertyPanel::dispose()
 {
     mpRBNoWrap.clear();
+    mpRBWrapTight.clear();
     mpRBWrapLeft.clear();
     mpRBWrapRight.clear();
     mpRBWrapParallel.clear();
@@ -121,6 +125,7 @@ void WrapPropertyPanel::dispose()
     mpCustomEntry.clear();
 
     maSwNoWrapControl.dispose();
+    maSwWrapTightControl.dispose();
     maSwWrapLeftControl.dispose();
     maSwWrapRightControl.dispose();
     maSwWrapParallelControl.dispose();
@@ -137,6 +142,7 @@ void WrapPropertyPanel::Initialize()
 {
     Link<Button*,void> aLink = LINK(this, WrapPropertyPanel, WrapTypeHdl);
     mpRBNoWrap->SetClickHdl(aLink);
+    mpRBWrapTight->SetClickHdl(aLink);
     mpRBWrapLeft->SetClickHdl(aLink);
     mpRBWrapRight->SetClickHdl(aLink);
     mpRBWrapParallel->SetClickHdl(aLink);
@@ -151,6 +157,8 @@ void WrapPropertyPanel::Initialize()
 
     aWrapIL.AddImage( UNO_WRAPOFF,
                       ::GetImage( mxFrame, UNO_WRAPOFF, false ) );
+    aWrapIL.AddImage( UNO_WRAPTIGHT,
+                      ::GetImage( mxFrame, UNO_WRAPON, false ) );  //TODO change icon
     aWrapIL.AddImage( UNO_WRAPLEFT,
                       ::GetImage( mxFrame, UNO_WRAPLEFT, false ) );
     aWrapIL.AddImage( UNO_WRAPRIGHT,
@@ -176,10 +184,12 @@ void WrapPropertyPanel::Initialize()
     mpRBWrapParallel->SetModeRadioImage( aWrapIL.GetImage(UNO_WRAPON) );
     mpRBWrapThrough->SetModeRadioImage( aWrapIL.GetImage(UNO_WRAPTHROUGH) );
     mpRBIdealWrap->SetModeRadioImage( aWrapIL.GetImage(UNO_WRAPIDEAL) );
+    mpRBWrapTight->SetModeRadioImage( aWrapIL.GetImage(UNO_WRAPON) ); //TODO change icon
 
     aCustomEntry = mpCustomEntry->GetText();
 
     mpBindings->Update( FN_FRAME_NOWRAP );
+    mpBindings->Update( FN_FRAME_WRAP_TIGHT );
     mpBindings->Update( FN_FRAME_WRAP );
     mpBindings->Update( FN_FRAME_WRAP_RIGHT );
     mpBindings->Update( FN_FRAME_WRAP_LEFT );
@@ -263,6 +273,10 @@ IMPL_LINK_NOARG(WrapPropertyPanel, WrapTypeHdl, Button*, void)
     {
         nSlot = FN_FRAME_WRAP_IDEAL;
     }
+    else if( mpRBWrapTight->IsChecked() )
+    {
+        nSlot = FN_FRAME_WRAP_TIGHT;
+    }
     else
     {
         nSlot = FN_FRAME_NOWRAP;
@@ -300,6 +314,7 @@ void WrapPropertyPanel::NotifyItemUpdate(
     {
         //Set Radio Button enable
         mpRBNoWrap->Enable();
+        mpRBWrapTight->Enable();
         mpRBWrapLeft->Enable();
         mpRBWrapRight->Enable();
         mpRBWrapParallel->Enable();
@@ -327,6 +342,9 @@ void WrapPropertyPanel::NotifyItemUpdate(
             break;
         case FN_FRAME_WRAP_CONTOUR:
             mpEnableContour->Check( pBoolItem->GetValue() );
+            break;
+        case FN_FRAME_WRAP_TIGHT:
+            mpRBWrapTight->Check( pBoolItem->GetValue() );
             break;
         case FN_FRAME_NOWRAP:
             mpRBNoWrap->Check( pBoolItem->GetValue() );

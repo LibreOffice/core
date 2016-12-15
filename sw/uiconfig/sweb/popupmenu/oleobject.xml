@@ -17,6 +17,7 @@
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:WrapOff"/>
       <menu:menuitem menu:id=".uno:WrapOn"/>
+      <menu:menuitem menu:id=".uno:WrapTight"/>
       <menu:menuitem menu:id=".uno:WrapIdeal"/>
       <menu:menuitem menu:id=".uno:WrapLeft"/>
       <menu:menuitem menu:id=".uno:WrapRight"/>

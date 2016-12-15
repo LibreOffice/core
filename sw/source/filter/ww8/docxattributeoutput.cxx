@@ -404,6 +404,9 @@ void DocxAttributeOutput::PopulateFrameProperties(const SwFrameFormat* pFrameFor
     case SURROUND_PARALLEL:
         attrList->add( FSNS( XML_w, XML_wrap), "notBeside");
         break;
+    case SURROUND_TIGHT:
+        attrList->add( FSNS( XML_w, XML_wrap), "notBeside");
+        break;
     case SURROUND_IDEAL:
     default:
         attrList->add( FSNS( XML_w, XML_wrap), "auto");
@@ -7463,6 +7466,9 @@ void DocxAttributeOutput::FormatSurround( const SwFormatSurround& rSurround )
             case SURROUND_PARALLEL:
                 sType = "square";
                 break;
+            case SURROUND_TIGHT:
+                sType = "square";
+                break;
             case SURROUND_IDEAL:
                 sType = "square";
                 sSide = "largest";
@@ -7505,6 +7511,7 @@ void DocxAttributeOutput::FormatSurround( const SwFormatSurround& rSurround )
                 break;
             case SURROUND_IDEAL:
             case SURROUND_PARALLEL:
+            case SURROUND_TIGHT:
             case SURROUND_LEFT:
             case SURROUND_RIGHT:
             default:

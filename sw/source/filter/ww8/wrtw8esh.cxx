@@ -857,6 +857,9 @@ void PlcDrawObj::WritePlc( WW8Export& rWrt ) const
                 case SURROUND_PARALLEL:
                     nFlags |= 0x0000 | nContour;
                     break;
+                case SURROUND_TIGHT:
+                    nFlags |= 0x0000 | nContour;
+                    break;
                 case SURROUND_IDEAL:
                     nFlags |= 0x0600 | nContour;
                     break;

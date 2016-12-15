@@ -728,6 +728,10 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
             m_pImpl->m_pSerializer->singleElementNS(XML_wp, XML_wrapSquare,
                                                     XML_wrapText, "bothSides", FSEND);
             break;
+        case SURROUND_TIGHT:
+            m_pImpl->m_pSerializer->singleElementNS(XML_wp, XML_wrapSquare,
+                                                    XML_wrapText, "bothSides", FSEND);
+            break;
         case SURROUND_IDEAL:
         default:
             m_pImpl->m_pSerializer->singleElementNS(XML_wp, XML_wrapSquare,

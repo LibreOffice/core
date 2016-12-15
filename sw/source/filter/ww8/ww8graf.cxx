@@ -2543,7 +2543,7 @@ SwFrameFormat* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
             break;
         case 4: // 4 wrap tightly around object
         case 5: // 5 wrap tightly, but allow holes
-            eSurround = SURROUND_PARALLEL;
+            eSurround = SURROUND_TIGHT;
             bContour = true;
             break;
     }

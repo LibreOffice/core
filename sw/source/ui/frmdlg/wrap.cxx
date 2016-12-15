@@ -82,6 +82,7 @@ SwWrapTabPage::SwWrapTabPage(vcl::Window *pParent, const SfxItemSet &rSet)
     get(m_pWrapLeftRB, "before");
     get(m_pWrapRightRB, "after");
     get(m_pWrapParallelRB, "parallel");
+    get(m_pWrapTightRB, "tight");
     get(m_pWrapThroughRB, "through");
     get(m_pIdealWrapRB, "optimal");
     get(m_pLeftMarginED, "left");
@@ -126,6 +127,7 @@ SwWrapTabPage::SwWrapTabPage(vcl::Window *pParent, const SfxItemSet &rSet)
     m_pWrapLeftRB->SetClickHdl(aLk2);
     m_pWrapRightRB->SetClickHdl(aLk2);
     m_pWrapParallelRB->SetClickHdl(aLk2);
+    m_pWrapTightRB->SetClickHdl(aLk2);
     m_pWrapThroughRB->SetClickHdl(aLk2);
     m_pIdealWrapRB->SetClickHdl(aLk2);
     ApplyImageList();
@@ -143,6 +145,7 @@ void SwWrapTabPage::dispose()
     m_pWrapLeftRB.clear();
     m_pWrapRightRB.clear();
     m_pWrapParallelRB.clear();
+    m_pWrapTightRB.clear();
     m_pWrapThroughRB.clear();
     m_pIdealWrapRB.clear();
     m_pLeftMarginED.clear();
@@ -251,6 +254,12 @@ void SwWrapTabPage::Reset(const SfxItemSet *rSet)
             break;
         }
 
+        case SURROUND_TIGHT:
+        {
+            pBtn = m_pWrapTightRB;
+            break;
+        }
+
         case SURROUND_IDEAL:
         {
             pBtn = m_pIdealWrapRB;
@@ -315,6 +324,8 @@ bool SwWrapTabPage::FillItemSet(SfxItemSet *rSet)
         aSur.SetSurround(SURROUND_RIGHT);
     else if (m_pWrapParallelRB->IsChecked())
         aSur.SetSurround(SURROUND_PARALLEL);
+    else if (m_pWrapTightRB->IsChecked())
+        aSur.SetSurround(SURROUND_TIGHT);
     else if (m_pWrapThroughRB->IsChecked())
     {
         aSur.SetSurround(SURROUND_THROUGHT);
@@ -515,6 +526,7 @@ void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
         m_pWrapTransparentCB->Enable( false );
         m_pNoWrapRB->Enable( FLY_AT_PARA == m_nAnchorId );
         m_pWrapParallelRB->Enable( false  );
+        m_pWrapTightRB->Enable( false  );
         m_pWrapLeftRB->Enable
                     (  (FLY_AT_PARA == m_nAnchorId)
                     || (   (FLY_AT_CHAR == m_nAnchorId)
@@ -562,10 +574,14 @@ void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
 
         if(m_pWrapParallelRB->IsChecked() && !m_pWrapParallelRB->IsEnabled())
             m_pWrapThroughRB->Check();
+
+        if(m_pWrapTightRB->IsChecked() && !m_pWrapTightRB->IsEnabled())
+            m_pWrapThroughRB->Check();
     }
     else
     {
         m_pNoWrapRB->Enable( bEnable );
+        m_pWrapTightRB->Enable( bEnable );
         m_pWrapLeftRB->Enable( bEnable );
         m_pWrapRightRB->Enable( bEnable );
         m_pIdealWrapRB->Enable( bEnable );
@@ -660,6 +676,7 @@ void SwWrapTabPage::ApplyImageList()
     if(bWrapOutline)
     {
         m_pNoWrapRB->SetModeRadioImage(get<FixedImage>("imgnone")->GetImage());
+        m_pWrapTightRB->SetModeRadioImage(get<FixedImage>("imgnone")->GetImage());  //cambia immagine
         m_pWrapLeftRB->SetModeRadioImage(get<FixedImage>("imgleft")->GetImage());
         m_pWrapRightRB->SetModeRadioImage(get<FixedImage>("imgright")->GetImage());
         m_pWrapParallelRB->SetModeRadioImage(get<FixedImage>("imgparallel")->GetImage());
@@ -668,6 +685,7 @@ void SwWrapTabPage::ApplyImageList()
     else
     {
         m_pNoWrapRB->SetModeRadioImage(get<FixedImage>("imgkonnone")->GetImage());
+        m_pWrapTightRB->SetModeRadioImage(get<FixedImage>("imgkonnone")->GetImage());  //cambia immagine
         m_pWrapLeftRB->SetModeRadioImage(get<FixedImage>("imgkonleft")->GetImage());
         m_pWrapRightRB->SetModeRadioImage(get<FixedImage>("imgkonright")->GetImage());
         m_pWrapParallelRB->SetModeRadioImage(get<FixedImage>("imgkonparallel")->GetImage());

@@ -42,6 +42,7 @@ class SwWrapTabPage: public SfxTabPage
 {
     // WRAPPING
     VclPtr<RadioButton>   m_pNoWrapRB;
+    VclPtr<RadioButton>   m_pWrapTightRB;
     VclPtr<RadioButton>   m_pWrapLeftRB;
     VclPtr<RadioButton>   m_pWrapRightRB;
     VclPtr<RadioButton>   m_pWrapParallelRB;

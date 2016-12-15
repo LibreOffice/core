@@ -59,6 +59,7 @@ namespace sw { namespace sidebar {
         SfxBindings* mpBindings;
 
         VclPtr<RadioButton> mpRBNoWrap;
+        VclPtr<RadioButton> mpRBWrapTight;
         VclPtr<RadioButton> mpRBWrapLeft;
         VclPtr<RadioButton> mpRBWrapRight;
         VclPtr<RadioButton> mpRBWrapParallel;
@@ -83,6 +84,7 @@ namespace sw { namespace sidebar {
 
         // Controller Items
         ::sfx2::sidebar::ControllerItem maSwNoWrapControl;
+        ::sfx2::sidebar::ControllerItem maSwWrapTightControl;
         ::sfx2::sidebar::ControllerItem maSwWrapLeftControl;
         ::sfx2::sidebar::ControllerItem maSwWrapRightControl;
         ::sfx2::sidebar::ControllerItem maSwWrapParallelControl;

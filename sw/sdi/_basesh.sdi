@@ -460,6 +460,14 @@ interface BaseTextSelection
         Export = FALSE;
     ]
 
+    FN_FRAME_WRAP_TIGHT  // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        Export = FALSE;
+    ]
+
     FN_FRAME_WRAPTHRU   // status()
     [
         ExecMethod = Execute ;

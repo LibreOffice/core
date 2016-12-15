@@ -393,6 +393,7 @@
 #define FN_TABLE_BALANCE_ROWS       (FN_FORMAT + 183)  /* evenly distribute rows */
 
 #define FN_FRAME_WRAP_CONTOUR       (FN_FORMAT + 184)  /* */
+#define FN_FRAME_WRAP_TIGHT          (FN_FORMAT + 185)
 
 // +185..+187 removed in favor of corresponding globally available slot
 
