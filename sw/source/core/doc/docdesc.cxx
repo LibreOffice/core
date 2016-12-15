@@ -882,10 +882,10 @@ void SwDoc::CheckDefaultPageFormat()
         const SwFormatFrameSize& rMasterSize  = rMaster.GetFrameSize();
         const SwFormatFrameSize& rLeftSize    = rLeft.GetFrameSize();
 
-        const bool bSetSize = LONG_MAX == rMasterSize.GetWidth() ||
-                              LONG_MAX == rMasterSize.GetHeight() ||
-                              LONG_MAX == rLeftSize.GetWidth() ||
-                              LONG_MAX == rLeftSize.GetHeight();
+        const bool bSetSize = INVALID_TWIPS == rMasterSize.GetWidth() ||
+                              INVALID_TWIPS == rMasterSize.GetHeight() ||
+                              INVALID_TWIPS == rLeftSize.GetWidth() ||
+                              INVALID_TWIPS == rLeftSize.GetHeight();
 
         if ( bSetSize )
             lcl_DefaultPageFormat( rDesc.GetPoolFormatId(), rDesc.GetMaster(), rDesc.GetLeft(), rDesc.GetFirstMaster(), rDesc.GetFirstLeft() );
