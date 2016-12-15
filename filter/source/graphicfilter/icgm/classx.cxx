@@ -22,19 +22,19 @@
 #include <outact.hxx>
 
 
-#define ImplSetUnderlineMode()                                  \
-                                                                \
-    sal_uInt32 nMode = ImplGetUI16();                               \
-    switch ( nMode )                                            \
-    {                                                           \
-        case 1 : pElement->eUnderlineMode = UM_LOW; break;      \
-        case 2 : pElement->eUnderlineMode = UM_HIGH; break;     \
-        case 4 : pElement->eUnderlineMode = UM_STRIKEOUT; break;\
-        case 8 : pElement->eUnderlineMode = UM_OVERSCORE; break;\
-        default: pElement->eUnderlineMode = UM_OFF; break;      \
-    }                                                           \
+void CGM::ImplSetUnderlineMode()
+{
+    sal_uInt32 nMode = ImplGetUI16();
+    switch ( nMode )
+    {
+        case 1 : pElement->eUnderlineMode = UM_LOW; break;
+        case 2 : pElement->eUnderlineMode = UM_HIGH; break;
+        case 4 : pElement->eUnderlineMode = UM_STRIKEOUT; break;
+        case 8 : pElement->eUnderlineMode = UM_OVERSCORE; break;
+        default: pElement->eUnderlineMode = UM_OFF; break;
+    }
     pElement->nUnderlineColor = ImplGetBitmapColor();
-
+}
 
 void CGM::ImplDoClass6()
 {
@@ -48,7 +48,7 @@ void CGM::ImplDoClass6()
                 case 0 : /*inquire function support */break;
                 case -1 : /*set underline mode*/
                 {
-                    ImplSetUnderlineMode()
+                    ImplSetUnderlineMode();
                 }
                 break;
                 case -2 : /*set script mode */break;

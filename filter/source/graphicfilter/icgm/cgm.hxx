@@ -101,6 +101,7 @@ class CGM
         double              ImplGetFloat( RealPrecision, sal_uInt32 nRealSize );
         sal_uInt32          ImplGetBitmapColor( bool bDirectColor = false );
         void                ImplSetMapMode();
+        void                ImplSetUnderlineMode();
         void                ImplMapDouble( double& );
         void                ImplMapX( double& );
         void                ImplMapY( double& );
