@@ -205,6 +205,14 @@ DeactivateRC SvxAreaTabPage::DeactivatePage( SfxItemSet* _pSet )
     FillType eFillType = static_cast<FillType>(maBox.GetCurrentButtonPos());
     switch( eFillType )
     {
+        case TRANSPARENT:
+        {
+            // Fill: None doesn't have its own tabpage and thus
+            // implementation of FillItemSet, so we supply it here
+            XFillStyleItem aStyleItem( drawing::FillStyle_NONE );
+            _pSet->Put( aStyleItem );
+            break;
+        }
         case SOLID:
             return DeactivatePage_Impl<SvxColorTabPage>(_pSet);
         case GRADIENT:
