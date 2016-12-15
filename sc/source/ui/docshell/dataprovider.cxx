@@ -106,10 +106,10 @@ void CSVFetchThread::EndThread()
 
 void CSVFetchThread::execute()
 {
-    LinesType* pLines = new LinesType(10);
+    LinesType aLines(10);
 
     // Read & store new lines from stream.
-    for (Line & rLine : *pLines)
+    for (Line & rLine : aLines)
     {
         rLine.maCells.clear();
         mpStream->ReadLine(rLine.maLine);
