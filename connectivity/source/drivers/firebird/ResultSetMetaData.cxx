@@ -128,8 +128,13 @@ OUString SAL_CALL OResultSetMetaData::getColumnTypeName(sal_Int32 column)
 OUString SAL_CALL OResultSetMetaData::getColumnLabel(sal_Int32 column)
     throw(SQLException, RuntimeException, std::exception)
 {
-    // TODO: clarify what this is -- probably not the alias
-    return getColumnName(column);
+    // aliasname
+    verifyValidColumn(column);
+    OUString sRet(m_pSqlda->sqlvar[column-1].aliasname,
+                    m_pSqlda->sqlvar[column-1].aliasname_length,
+                    RTL_TEXTENCODING_UTF8);
+    sanitizeIdentifier(sRet);
+    return sRet;
 }
 
 OUString SAL_CALL OResultSetMetaData::getColumnServiceName(sal_Int32 column)
