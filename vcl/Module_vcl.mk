@@ -36,12 +36,19 @@ $(eval $(call gb_Module_add_targets,vcl,\
 				Executable_icontest \
 				Executable_visualbackendtest \
 				Executable_mtfdemo ))) \
+))
+
+ifeq ($(CROSS_COMPILING)$(DISABLE_DYNLOADING),)
+
+$(eval $(call gb_Module_add_targets,vcl,\
     $(if $(filter-out ANDROID IOS WNT,$(OS)), \
         Executable_svdemo \
         Executable_fftester \
         Executable_svptest \
         Executable_svpclient) \
 ))
+
+endif
 
 $(eval $(call gb_Module_add_l10n_targets,vcl,\
     AllLangResTarget_vcl \
