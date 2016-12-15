@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a71b18c_3b46e923",
+        "filename": "sfx2/source/control/emojiview.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1001193
+      },
+      "writtenOn": "2016-12-15T11:01:53Z",
+      "side": 1,
+      "message": "Something like a boolean variable bDuplicate would suffice.",
+      "range": {
+        "startLine": 129,
+        "startChar": 40,
+        "endLine": 129,
+        "endChar": 50
+      },
+      "revId": "cfa45fbcb64a177f5d12831537b983f6cbcc32e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a71b18c_7b48612e",
+        "filename": "sfx2/source/control/emojiview.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1001193
+      },
+      "writtenOn": "2016-12-15T11:01:53Z",
+      "side": 1,
+      "message": "If paramVal equals duplicate, the bDuplicate should indicate that the parser is on a duplicate emoji, hence it should not append the emoji to the toolbar.",
+      "range": {
+        "startLine": 145,
+        "startChar": 16,
+        "endLine": 148,
+        "endChar": 17
+      },
+      "revId": "cfa45fbcb64a177f5d12831537b983f6cbcc32e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a71b18c_9b553dc8",
+        "filename": "sfx2/source/control/emojiview.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1001193
+      },
+      "writtenOn": "2016-12-15T11:01:53Z",
+      "side": 1,
+      "message": "here\u0027s the code which appends the emoji to the toolbar. You can just add an if(..condition..) to check for duplicates.",
+      "range": {
+        "startLine": 153,
+        "startChar": 12,
+        "endLine": 153,
+        "endChar": 42
+      },
+      "revId": "cfa45fbcb64a177f5d12831537b983f6cbcc32e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
