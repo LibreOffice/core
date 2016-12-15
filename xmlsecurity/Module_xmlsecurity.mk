@@ -9,10 +9,12 @@
 
 $(eval $(call gb_Module_Module,xmlsecurity))
 
+ifneq (,$(filter-out ANDROID IOS,$(OS)))
+
 $(eval $(call gb_Module_add_targets,xmlsecurity,\
 	Library_xmlsecurity \
 	Library_xsec_fw \
-	$(if $(filter-out ANDROID IOS,$(OS)),Library_xsec_xmlsec) \
+	Library_xsec_xmlsec \
 ))
 
 $(eval $(call gb_Module_add_slowcheck_targets,xmlsecurity,\
@@ -42,6 +44,8 @@ ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
 $(eval $(call gb_Module_add_targets,xmlsecurity,\
     Executable_pdfverify \
 ))
+
+endif
 
 endif
 

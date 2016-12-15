@@ -94,7 +94,7 @@ $(eval $(call gb_Library_use_libraries,sd,\
 	ucbhelper \
 	utl \
 	vcl \
-	xmlsecurity \
+	$(if $(filter-out ANDROID IOS,$(OS)),xmlsecurity) \
 	$(gb_UWINAPI) \
 ))
 
