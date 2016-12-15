@@ -193,7 +193,7 @@ public:
 private:
     GlyphCache maGlyphCache;
 public:
-    bool CacheGlyphToAtlas(bool bRealGlyphIndices, int nGlyphIndex, const WinLayout& rLayout, SalGraphics& rGraphics);
+    bool CacheGlyphToAtlas(bool bRealGlyphIndices, HDC hDC, HFONT hFont, int nGlyphIndex, SalGraphics& rGraphics);
 
     GlyphCache& GetGlyphCache()
     {

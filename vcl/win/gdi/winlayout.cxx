@@ -66,7 +66,7 @@ inline int WinFontInstance::GetCachedGlyphWidth( int nCharCode ) const
     return it->second;
 }
 
-bool WinFontInstance::CacheGlyphToAtlas(bool bRealGlyphIndices, int nGlyphIndex, const WinLayout& rLayout, SalGraphics& rGraphics)
+bool WinFontInstance::CacheGlyphToAtlas(bool bRealGlyphIndices, HDC hDC, HFONT hFont, int nGlyphIndex, SalGraphics& rGraphics)
 {
     if (nGlyphIndex == DROPPED_OUTGLYPH)
         return true;
@@ -77,17 +77,17 @@ bool WinFontInstance::CacheGlyphToAtlas(bool bRealGlyphIndices, int nGlyphIndex,
     std::vector<uint32_t> aCodePointsOrGlyphIndices(1);
     aCodePointsOrGlyphIndices[0] = nGlyphIndex;
 
-    HDC hDC = CreateCompatibleDC(rLayout.mhDC);
-    if (hDC == nullptr)
+    HDC hNewDC = CreateCompatibleDC(hDC);
+    if (hNewDC == nullptr)
     {
         SAL_WARN("vcl.gdi", "CreateCompatibleDC failed: " << WindowsErrorString(GetLastError()));
         return false;
     }
-    HFONT hOrigFont = static_cast<HFONT>(SelectObject(hDC, rLayout.mhFont));
+    HFONT hOrigFont = static_cast<HFONT>(SelectObject(hNewDC, hFont));
     if (hOrigFont == nullptr)
     {
         SAL_WARN("vcl.gdi", "SelectObject failed: " << WindowsErrorString(GetLastError()));
-        DeleteDC(hDC);
+        DeleteDC(hNewDC);
         return false;
     }
 
@@ -96,26 +96,26 @@ bool WinFontInstance::CacheGlyphToAtlas(bool bRealGlyphIndices, int nGlyphIndex,
     if (!pTxt)
         return false;
 
-    if (!pTxt->BindFont(hDC))
+    if (!pTxt->BindFont(hNewDC))
     {
         SAL_WARN("vcl.gdi", "Binding of font failed. The font might not be supported by Direct Write.");
-        DeleteDC(hDC);
+        DeleteDC(hNewDC);
         return false;
     }
 
     // Bail for non-horizontal text.
     {
         wchar_t sFaceName[200];
-        int nFaceNameLen = GetTextFaceW(hDC, SAL_N_ELEMENTS(sFaceName), sFaceName);
+        int nFaceNameLen = GetTextFaceW(hNewDC, SAL_N_ELEMENTS(sFaceName), sFaceName);
 
         if (!nFaceNameLen)
             SAL_WARN("vcl.gdi", "GetTextFace failed: " << WindowsErrorString(GetLastError()));
 
         LOGFONTW aLogFont;
-        GetObjectW(rLayout.mhFont, sizeof(LOGFONTW), &aLogFont);
+        GetObjectW(hFont, sizeof(LOGFONTW), &aLogFont);
 
-        SelectObject(hDC, hOrigFont);
-        DeleteDC(hDC);
+        SelectObject(hNewDC, hOrigFont);
+        DeleteDC(hNewDC);
 
         if (sFaceName[0] == '@' || aLogFont.lfOrientation != 0 || aLogFont.lfEscapement != 0)
         {
@@ -1160,7 +1160,7 @@ bool SimpleWinLayout::CacheGlyphs(SalGraphics& rGraphics) const
 
         if (!mrWinFontEntry.GetGlyphCache().IsGlyphCached(nCodePoint))
         {
-            if (!mrWinFontEntry.CacheGlyphToAtlas(false, nCodePoint, *this, rGraphics))
+            if (!mrWinFontEntry.CacheGlyphToAtlas(false, mhDC, mhFont, nCodePoint, rGraphics))
                 return false;
         }
     }
@@ -2409,7 +2409,7 @@ bool UniscribeLayout::CacheGlyphs(SalGraphics& rGraphics) const
         int nCodePoint = mpOutGlyphs[i];
         if (!mrWinFontEntry.GetGlyphCache().IsGlyphCached(nCodePoint))
         {
-            if (!mrWinFontEntry.CacheGlyphToAtlas(true, nCodePoint, *this, rGraphics))
+            if (!mrWinFontEntry.CacheGlyphToAtlas(true, mhDC, mhFont, nCodePoint, rGraphics))
                 return false;
         }
     }
@@ -3778,6 +3778,70 @@ LogicalFontInstance* WinFontFace::CreateFontInstance( FontSelectPattern& rFSD ) 
     return pFontInstance;
 }
 
+bool WinSalGraphics::CacheGlyphs(const CommonSalLayout& rLayout)
+{
+    static bool bDoGlyphCaching = (std::getenv("SAL_DISABLE_GLYPH_CACHING") == nullptr);
+    if (!bDoGlyphCaching)
+        return false;
+
+    HDC hDC = getHDC();
+    HFONT hFONT = rLayout.getHFONT();
+    WinFontInstance& rFont = rLayout.getWinFontInstance();
+
+    int nStart = 0;
+    Point aPos(0, 0);
+    sal_GlyphId nGlyph;
+    while (rLayout.GetNextGlyphs(1, &nGlyph, aPos, nStart))
+    {
+        if (!rFont.GetGlyphCache().IsGlyphCached(nGlyph))
+        {
+            if (!rFont.CacheGlyphToAtlas(true, hDC, hFONT, nGlyph, *this))
+                return false;
+        }
+    }
+
+    return true;
+}
+
+bool WinSalGraphics::DrawCachedGlyphs(const CommonSalLayout& rLayout)
+{
+    HDC hDC = getHDC();
+
+    Rectangle aRect;
+    rLayout.GetBoundRect(*this, aRect);
+
+    COLORREF color = GetTextColor(hDC);
+    SalColor salColor = MAKE_SALCOLOR(GetRValue(color), GetGValue(color), GetBValue(color));
+
+    WinOpenGLSalGraphicsImpl *pImpl = dynamic_cast<WinOpenGLSalGraphicsImpl*>(mpImpl.get());
+    if (!pImpl)
+        return false;
+
+    WinFontInstance& rFont = rLayout.getWinFontInstance();
+
+    int nStart = 0;
+    Point aPos(0, 0);
+    sal_GlyphId nGlyph;
+    while (rLayout.GetNextGlyphs(1, &nGlyph, aPos, nStart))
+    {
+        OpenGLGlyphDrawElement& rElement(rFont.GetGlyphCache().GetDrawElement(nGlyph));
+        OpenGLTexture& rTexture = rElement.maTexture;
+
+        if (!rTexture)
+            return false;
+
+        SalTwoRect a2Rects(0, 0,
+                           rTexture.GetWidth(), rTexture.GetHeight(),
+                           aPos.X() - rElement.getExtraOffset() + rElement.maLeftOverhangs,
+                           aPos.Y() - rElement.mnBaselineOffset - rElement.getExtraOffset(),
+                           rTexture.GetWidth(), rTexture.GetHeight());
+
+        pImpl->DeferredTextDraw(rTexture, salColor, a2Rects);
+    }
+
+    return true;
+}
+
 void WinSalGraphics::DrawTextLayout(const CommonSalLayout& rLayout, HDC hDC, bool bUseDWrite)
 {
     Point aPos(0, 0);
@@ -3795,6 +3859,11 @@ void WinSalGraphics::DrawSalLayout(const CommonSalLayout& rLayout)
     {
         // no OpenGL, just classic rendering
         DrawTextLayout(rLayout, hDC, false);
+    }
+    else if (CacheGlyphs(rLayout) &&
+             DrawCachedGlyphs(rLayout))
+    {
+        // Nothing
     }
     else
     {

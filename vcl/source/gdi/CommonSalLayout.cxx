@@ -181,6 +181,7 @@ CommonSalLayout::CommonSalLayout(HDC hDC, WinFontInstance& rWinFontInstance, con
 :   mrFontSelData(rWinFontInstance.maFontSelData)
 ,   mhDC(hDC)
 ,   mhFont(static_cast<HFONT>(GetCurrentObject(hDC, OBJ_FONT)))
+,   mrWinFontInstance(rWinFontInstance)
 ,   mnAveWidthFactor(1.0f)
 ,   mpVertGlyphs(nullptr)
 {
