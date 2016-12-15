@@ -1463,12 +1463,10 @@ void SvxAutoCorrect::SaveCplSttExceptList( LanguageType eLang )
     auto const iter = m_pLangTable->find(LanguageTag(eLang));
     if (iter != m_pLangTable->end() && iter->second)
         iter->second->SaveCplSttExceptList();
-#ifdef DBG_UTIL
     else
     {
         SAL_WARN("editeng", "Save an empty list? ");
     }
-#endif
 }
 
 void SvxAutoCorrect::SaveWrdSttExceptList(LanguageType eLang)
@@ -1476,12 +1474,10 @@ void SvxAutoCorrect::SaveWrdSttExceptList(LanguageType eLang)
     auto const iter = m_pLangTable->find(LanguageTag(eLang));
     if (iter != m_pLangTable->end() && iter->second)
         iter->second->SaveWrdSttExceptList();
-#ifdef DBG_UTIL
     else
     {
         SAL_WARN("editeng", "Save an empty list? ");
     }
-#endif
 }
 
 // Adds a single word. The list will immediately be written to the file!

@@ -2505,9 +2505,7 @@ void SfxHelpTextWindow_Impl::SelectSearchText( const OUString& rSearchText, bool
 
 void SfxHelpTextWindow_Impl::SetPageStyleHeaderOff() const
 {
-#ifdef DBG_UTIL
     bool bSetOff = false;
-#endif
     // set off the pagestyle header to prevent print output of the help URL
     try
     {
@@ -2539,9 +2537,7 @@ void SfxHelpTextWindow_Impl::SetPageStyleHeaderOff() const
 
                                 Reference< XModifiable > xReset(xStyles, UNO_QUERY);
                                 xReset->setModified(false);
-#ifdef DBG_UTIL
                                 bSetOff = true;
-#endif
                             }
                         }
                     }
@@ -2554,12 +2550,7 @@ void SfxHelpTextWindow_Impl::SetPageStyleHeaderOff() const
         SAL_WARN( "sfx.appl", "SfxHelpTextWindow_Impl::SetPageStyleHeaderOff(): unexpected exception" );
     }
 
-#ifdef DBG_UTIL
-    if ( !bSetOff )
-    {
-        SAL_WARN( "sfx.appl", "SfxHelpTextWindow_Impl::SetPageStyleHeaderOff(): set off failed" );
-    }
-#endif
+    SAL_WARN_IF( !bSetOff, "sfx.appl", "SfxHelpTextWindow_Impl::SetPageStyleHeaderOff(): set off failed" );
 }
 
 

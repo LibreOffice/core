@@ -339,11 +339,8 @@ void FormattedField::SetText( const OUString& rStr, const Selection& rNewSelecti
 
 void FormattedField::SetTextFormatted(const OUString& rStr)
 {
-
-#if defined DBG_UTIL
-    if (ImplGetFormatter()->IsTextFormat(m_nFormatKey))
-         SAL_INFO("svtools", "FormattedField::SetTextFormatted : valid only with text formats !");
-#endif
+    SAL_INFO_IF(ImplGetFormatter()->IsTextFormat(m_nFormatKey), "svtools",
+        "FormattedField::SetTextFormatted : valid only with text formats !");
 
     m_sCurrentTextValue = rStr;
 
