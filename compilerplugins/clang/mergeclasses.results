@@ -358,7 +358,6 @@ merge sw::mark::IBookmark with sw::mark::Bookmark
 merge sw::mark::ICheckboxFieldmark with sw::mark::CheckboxFieldmark
 merge sw::sidebarwindows::SwSidebarWin with sw::annotation::SwAnnotationWin
 merge sw::util::WrtRedlineAuthor with WW8_WrtRedlineAuthor
-merge toolkit::ScrollableInterface with toolkit::ScrollableWrapper
 merge unographic::GraphicTransformer with unographic::Graphic
 merge vcl::DeletionNotifier with SalFrame
 merge vcl::ExtOutDevData with vcl::PDFExtOutDevData

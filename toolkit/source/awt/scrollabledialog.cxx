@@ -30,16 +30,15 @@ namespace toolkit
 // as css::awt::WindowAttribute::NODECORATION and they are used
 // in the same bitmap :-( WB_VSCROLL & WB_HSCROLL apparently are only for
 // child classes ( whole thing is a mess if you ask me )
-template< class T>
-ScrollableWrapper<T>::ScrollableWrapper( vcl::Window* pParent, WinBits nStyle, Dialog::InitFlag eFlag )
-    : T( pParent, nStyle & ~( WB_AUTOHSCROLL | WB_AUTOVSCROLL ), eFlag ),
+ScrollableDialog::ScrollableDialog( vcl::Window* pParent, WinBits nStyle, Dialog::InitFlag eFlag )
+    : Dialog( pParent, nStyle & ~( WB_AUTOHSCROLL | WB_AUTOVSCROLL ), eFlag ),
       maHScrollBar( VclPtr<ScrollBar>::Create(this, WB_HSCROLL | WB_DRAG) ),
       maVScrollBar( VclPtr<ScrollBar>::Create(this, WB_VSCROLL | WB_DRAG) ),
       mbHasHoriBar( false ),
       mbHasVertBar( false ),
       maScrollVis( None )
 {
-    Link<ScrollBar*,void> aLink( LINK( this, ScrollableWrapper, ScrollBarHdl ) );
+    Link<ScrollBar*,void> aLink( LINK( this, ScrollableDialog, ScrollBarHdl ) );
     maVScrollBar->SetScrollHdl( aLink );
     maHScrollBar->SetScrollHdl( aLink );
 
@@ -58,11 +57,10 @@ ScrollableWrapper<T>::ScrollableWrapper( vcl::Window* pParent, WinBits nStyle, D
         }
     }
     setScrollVisibility( aVis );
-    mnScrWidth = T::GetSettings().GetStyleSettings().GetScrollBarSize();
+    mnScrWidth = Dialog::GetSettings().GetStyleSettings().GetScrollBarSize();
 }
 
-template< class T>
-void ScrollableWrapper<T>::setScrollVisibility( ScrollBarVisibility rVisState )
+void ScrollableDialog::setScrollVisibility( ScrollBarVisibility rVisState )
 {
     maScrollVis = rVisState;
     if (  maScrollVis == Hori || maScrollVis == Both )
@@ -76,36 +74,33 @@ void ScrollableWrapper<T>::setScrollVisibility( ScrollBarVisibility rVisState )
         maVScrollBar->Show();
     }
     if ( mbHasHoriBar || mbHasVertBar )
-        this->SetStyle( T::GetStyle() | WB_CLIPCHILDREN | WB_AUTOSIZE );
+        this->SetStyle( Dialog::GetStyle() | WB_CLIPCHILDREN | WB_AUTOSIZE );
 }
 
-template< class T>
-ScrollableWrapper<T>::~ScrollableWrapper()
+ScrollableDialog::~ScrollableDialog()
 {
-    T::disposeOnce();
+    disposeOnce();
 }
 
-template< class T>
-void ScrollableWrapper<T>::dispose()
+void ScrollableDialog::dispose()
 {
     maHScrollBar.disposeAndClear();
     maVScrollBar.disposeAndClear();
-    T::dispose();
+    Dialog::dispose();
 }
 
-template< class T>
-void ScrollableWrapper<T>::lcl_Scroll( long nX, long nY )
+void ScrollableDialog::lcl_Scroll( long nX, long nY )
 {
     long nXScroll = mnScrollPos.X() - nX;
     long nYScroll = mnScrollPos.Y() - nY;
     mnScrollPos = Point( nX, nY );
 
     Rectangle aScrollableArea( 0, 0, maScrollArea.Width(), maScrollArea.Height() );
-    T::Scroll(nXScroll, nYScroll, aScrollableArea );
+    Scroll(nXScroll, nYScroll, aScrollableArea );
     // Manually scroll all children ( except the scrollbars )
-    for ( int index = 0; index < T::GetChildCount(); ++index )
+    for ( int index = 0; index < GetChildCount(); ++index )
     {
-        vcl::Window* pChild = T::GetChild( index );
+        vcl::Window* pChild = GetChild( index );
         if ( pChild && pChild != maVScrollBar.get() && pChild != maHScrollBar.get() )
         {
             Point aPos = pChild->GetPosPixel();
@@ -115,17 +110,7 @@ void ScrollableWrapper<T>::lcl_Scroll( long nX, long nY )
     }
 }
 
-//Can't use IMPL_LINK with the template
-//IMPL_LINK( ScrollableWrapper, ScrollBarHdl, ScrollBar*, pSB, void )
-
-template< class T>
-void ScrollableWrapper<T>::LinkStubScrollBarHdl( void* pThis, ScrollBar* pCaller)
-{
-    static_cast<ScrollableWrapper<T>*>(pThis)->ScrollBarHdl( pCaller );
-}
-
-template< class T>
-void ScrollableWrapper<T>::ScrollBarHdl( ScrollBar* pSB )
+IMPL_LINK( ScrollableDialog, ScrollBarHdl, ScrollBar*, pSB, void )
 {
     sal_uInt16 nPos = (sal_uInt16) pSB->GetThumbPos();
     if( pSB == maVScrollBar.get() )
@@ -134,8 +119,7 @@ void ScrollableWrapper<T>::ScrollBarHdl( ScrollBar* pSB )
         lcl_Scroll(nPos, mnScrollPos.Y() );
 }
 
-template< class T>
-void ScrollableWrapper<T>::SetScrollTop( long nTop )
+void ScrollableDialog::SetScrollTop( long nTop )
 {
     Point aOld = mnScrollPos;
     lcl_Scroll( mnScrollPos.X() , mnScrollPos.Y() - nTop );
@@ -143,8 +127,7 @@ void ScrollableWrapper<T>::SetScrollTop( long nTop )
     // new pos is 0,0
     mnScrollPos = aOld;
 }
-template< class T>
-void ScrollableWrapper<T>::SetScrollLeft( long nLeft )
+void ScrollableDialog::SetScrollLeft( long nLeft )
 {
     Point aOld = mnScrollPos;
     lcl_Scroll( mnScrollPos.X() - nLeft , mnScrollPos.Y() );
@@ -152,45 +135,40 @@ void ScrollableWrapper<T>::SetScrollLeft( long nLeft )
     // new pos is 0,0
     mnScrollPos = aOld;
 }
-template< class T>
-void ScrollableWrapper<T>::SetScrollWidth( long nWidth )
+
+void ScrollableDialog::SetScrollWidth( long nWidth )
 {
     maScrollArea.Width() = nWidth;
     ResetScrollBars();
 }
 
-template< class T>
-void ScrollableWrapper<T>::SetScrollHeight( long nHeight )
+void ScrollableDialog::SetScrollHeight( long nHeight )
 {
     maScrollArea.Height() = nHeight;
     ResetScrollBars();
 }
 
-template< class T>
-void ScrollableWrapper<T>::Resize()
+void ScrollableDialog::Resize()
 {
     ResetScrollBars();
 }
 
-template< class T>
-void ScrollableWrapper<T>::ResetScrollBars()
+void ScrollableDialog::ResetScrollBars()
 {
-    Size aOutSz = T::GetOutputSizePixel();
+    Size aOutSz = GetOutputSizePixel();
 
     Point aVPos( aOutSz.Width() - mnScrWidth, 0 );
     Point aHPos( 0, aOutSz.Height() - mnScrWidth );
 
-    maVScrollBar->SetPosSizePixel( aVPos, Size( mnScrWidth,  T::GetSizePixel().Height() - mnScrWidth ) );
-    maHScrollBar->SetPosSizePixel( aHPos, Size(  T::GetSizePixel().Width() - mnScrWidth, mnScrWidth ) );
+    maVScrollBar->SetPosSizePixel( aVPos, Size( mnScrWidth,  GetSizePixel().Height() - mnScrWidth ) );
+    maHScrollBar->SetPosSizePixel( aHPos, Size(  GetSizePixel().Width() - mnScrWidth, mnScrWidth ) );
 
     maHScrollBar->SetRangeMax( maScrollArea.Width() + mnScrWidth  );
-    maHScrollBar->SetVisibleSize( T::GetSizePixel().Width() );
+    maHScrollBar->SetVisibleSize( GetSizePixel().Width() );
 
     maVScrollBar->SetRangeMax( maScrollArea.Height() + mnScrWidth );
-    maVScrollBar->SetVisibleSize( T::GetSizePixel().Height() );
+    maVScrollBar->SetVisibleSize( GetSizePixel().Height() );
 }
-
-template class ScrollableWrapper< Dialog >;
 
 } // toolkit
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

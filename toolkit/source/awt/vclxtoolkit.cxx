@@ -984,9 +984,9 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
             {
                 // Modal/Modeless nur durch Show/Execute
                 if ( (pParent == nullptr ) && ( rDescriptor.ParentIndex == -1 ) )
-                    pNewWindow = VclPtr<toolkit::ScrollableWrapper<Dialog>>::Create( nullptr, nWinBits, Dialog::InitFlag::NoParent );
+                    pNewWindow = VclPtr<toolkit::ScrollableDialog>::Create( nullptr, nWinBits, Dialog::InitFlag::NoParent );
                 else
-                    pNewWindow = VclPtr<toolkit::ScrollableWrapper<Dialog>>::Create( pParent, nWinBits );
+                    pNewWindow = VclPtr<toolkit::ScrollableDialog>::Create( pParent, nWinBits );
                 // #i70217# Don't always create a new component object. It's possible that VCL has called
                 // GetComponentInterface( sal_True ) in the Dialog ctor itself (see Window::IsTopWindow() )
                 // which creates a component object.
