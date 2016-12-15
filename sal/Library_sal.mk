@@ -126,8 +126,7 @@ $(eval $(call gb_Library_add_cxxflags,sal,\
 ))
 endif
 
-ifeq ($(OS),ANDROID)
-$(eval $(call gb_Library_add_exception_objects,sal,\
+sal_textenc_code= \
 	sal/textenc/context \
 	sal/textenc/convertbig5hkscs \
 	sal/textenc/converteuctw \
@@ -141,6 +140,15 @@ $(eval $(call gb_Library_add_exception_objects,sal,\
 	sal/textenc/tcvtbyte \
 	sal/textenc/tcvtmb \
 	sal/textenc/tcvtutf7 \
+
+ifeq ($(OS),ANDROID)
+$(eval $(call gb_Library_add_exception_objects,sal,\
+    $(sal_textenc_code) \
+))
+else ifeq ($(DISABLE_DYNLOADING),TRUE)
+
+$(eval $(call gb_Library_add_exception_objects,sal,\
+    $(sal_textenc_code) \
 ))
 endif
 
