@@ -851,19 +851,19 @@ inline sal_uInt16 Get_UShort( sal_uInt8 *& p )
     return n;
 }
 
-inline short Get_Short( sal_uInt8 *& p )
+inline sal_Int16 Get_Short( sal_uInt8 *& p )
 {
     return Get_UShort(p);
 }
 
-inline sal_uLong Get_ULong( sal_uInt8 *& p )
+inline sal_uInt32 Get_ULong( sal_uInt8 *& p )
 {
-    sal_uLong n = SVBT32ToUInt32( *reinterpret_cast<SVBT32*>(p) );
+    sal_uInt32 n = SVBT32ToUInt32( *reinterpret_cast<SVBT32*>(p) );
     p += 4;
     return n;
 }
 
-inline long Get_Long( sal_uInt8 *& p )
+inline sal_Int32 Get_Long( sal_uInt8 *& p )
 {
     return Get_ULong(p);
 }
