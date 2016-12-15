@@ -599,7 +599,7 @@ void wwSectionManager::SetPageULSpaceItems(SwFrameFormat &rFormat,
             else
             {
                 // #i48832# - set correct spacing between header and body.
-                const SwTwips nHdLowerSpace( std::abs(rSection.maSep.dyaTop) - rData.nSwUp - rData.nSwHLo );
+                const sal_Int32 nHdLowerSpace( std::abs(rSection.maSep.dyaTop) - rData.nSwUp - rData.nSwHLo );
                 pHdFormat->SetFormatAttr(SwFormatFrameSize(ATT_FIX_SIZE, 0, rData.nSwHLo + nHdLowerSpace));
                 aHdUL.SetLower( static_cast< sal_uInt16 >(nHdLowerSpace) );
                 pHdFormat->SetFormatAttr(SwHeaderAndFooterEatSpacingItem(
