@@ -110,7 +110,7 @@ char CommandLineSyntax[] =
 void Init()
 {
     if( !GetIdlApp().pHashTable )
-        GetIdlApp().pHashTable      = new SvStringHashTable( 2801 );
+        GetIdlApp().pHashTable      = new SvStringHashTable;
     if( !GetIdlApp().pGlobalNames )
         GetIdlApp().pGlobalNames    = new SvGlobalHashNames();
 }

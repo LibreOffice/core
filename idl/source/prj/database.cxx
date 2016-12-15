@@ -125,18 +125,13 @@ bool SvIdlDataBase::FindId( const OString& rIdName, sal_uLong * pVal )
     return false;
 }
 
-bool SvIdlDataBase::InsertId( const OString& rIdName, sal_uLong nVal )
+void SvIdlDataBase::InsertId( const OString& rIdName, sal_uLong nVal )
 {
     if( !pIdTable )
-        pIdTable = new SvStringHashTable( 20003 );
+        pIdTable = new SvStringHashTable;
 
     sal_uInt32 nHash;
-    if( pIdTable->Insert( rIdName, &nHash ) )
-    {
-        pIdTable->Get( nHash )->SetValue( nVal );
-        return true;
-    }
-    return false;
+    pIdTable->Insert( rIdName, &nHash )->SetValue( nVal );
 }
 
 bool SvIdlDataBase::ReadIdFile( const OString& rOFileName )
@@ -211,10 +206,7 @@ bool SvIdlDataBase::ReadIdFile( const OString& rOFileName )
                     }
                     if( bOk )
                     {
-                        if( !InsertId( aDefName, nVal ) )
-                        {
-                            throw SvParseException( "hash table overflow: ", rTok );
-                        }
+                        InsertId( aDefName, nVal );
                     }
                 }
                 else if( rTok.Is( SvHash_include() ) )

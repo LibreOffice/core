@@ -22,51 +22,49 @@
 
 #include <hash.hxx>
 
-typedef tools::SvRef<SvStringHashEntry> SvStringHashEntryRef;
-
 class SvClassManager;
 struct SvGlobalHashNames
 {
-    SvStringHashEntryRef MM_module;
-    SvStringHashEntryRef MM_interface;
-    SvStringHashEntryRef MM_shell;
-    SvStringHashEntryRef MM_Toggle;
-    SvStringHashEntryRef MM_AutoUpdate;
-    SvStringHashEntryRef MM_Asynchron;
-    SvStringHashEntryRef MM_RecordPerSet;
-    SvStringHashEntryRef MM_RecordPerItem;
-    SvStringHashEntryRef MM_NoRecord;
-    SvStringHashEntryRef MM_RecordAbsolute;
-    SvStringHashEntryRef MM_enum;
-    SvStringHashEntryRef MM_UINT16;
-    SvStringHashEntryRef MM_INT16;
-    SvStringHashEntryRef MM_UINT32;
-    SvStringHashEntryRef MM_INT32;
-    SvStringHashEntryRef MM_BOOL;
-    SvStringHashEntryRef MM_BYTE;
-    SvStringHashEntryRef MM_float;
-    SvStringHashEntryRef MM_double;
-    SvStringHashEntryRef MM_item;
-    SvStringHashEntryRef MM_PseudoSlots;
-    SvStringHashEntryRef MM_import;
-    SvStringHashEntryRef MM_SlotIdFile;
-    SvStringHashEntryRef MM_include;
-    SvStringHashEntryRef MM_ExecMethod;
-    SvStringHashEntryRef MM_StateMethod;
-    SvStringHashEntryRef MM_GroupId;
-    SvStringHashEntryRef MM_Export;
-    SvStringHashEntryRef MM_PseudoPrefix;
-    SvStringHashEntryRef MM_define;
-    SvStringHashEntryRef MM_MenuConfig;
-    SvStringHashEntryRef MM_ToolBoxConfig;
-    SvStringHashEntryRef MM_AccelConfig;
-    SvStringHashEntryRef MM_FastCall;
-    SvStringHashEntryRef MM_SbxObject;
-    SvStringHashEntryRef MM_Container;
-    SvStringHashEntryRef MM_ReadOnlyDoc;
-    SvStringHashEntryRef MM_struct;
-    SvStringHashEntryRef MM_SlotType;
-    SvStringHashEntryRef MM_DisableFlags;
+    SvStringHashEntry* MM_module;
+    SvStringHashEntry* MM_interface;
+    SvStringHashEntry* MM_shell;
+    SvStringHashEntry* MM_Toggle;
+    SvStringHashEntry* MM_AutoUpdate;
+    SvStringHashEntry* MM_Asynchron;
+    SvStringHashEntry* MM_RecordPerSet;
+    SvStringHashEntry* MM_RecordPerItem;
+    SvStringHashEntry* MM_NoRecord;
+    SvStringHashEntry* MM_RecordAbsolute;
+    SvStringHashEntry* MM_enum;
+    SvStringHashEntry* MM_UINT16;
+    SvStringHashEntry* MM_INT16;
+    SvStringHashEntry* MM_UINT32;
+    SvStringHashEntry* MM_INT32;
+    SvStringHashEntry* MM_BOOL;
+    SvStringHashEntry* MM_BYTE;
+    SvStringHashEntry* MM_float;
+    SvStringHashEntry* MM_double;
+    SvStringHashEntry* MM_item;
+    SvStringHashEntry* MM_PseudoSlots;
+    SvStringHashEntry* MM_import;
+    SvStringHashEntry* MM_SlotIdFile;
+    SvStringHashEntry* MM_include;
+    SvStringHashEntry* MM_ExecMethod;
+    SvStringHashEntry* MM_StateMethod;
+    SvStringHashEntry* MM_GroupId;
+    SvStringHashEntry* MM_Export;
+    SvStringHashEntry* MM_PseudoPrefix;
+    SvStringHashEntry* MM_define;
+    SvStringHashEntry* MM_MenuConfig;
+    SvStringHashEntry* MM_ToolBoxConfig;
+    SvStringHashEntry* MM_AccelConfig;
+    SvStringHashEntry* MM_FastCall;
+    SvStringHashEntry* MM_SbxObject;
+    SvStringHashEntry* MM_Container;
+    SvStringHashEntry* MM_ReadOnlyDoc;
+    SvStringHashEntry* MM_struct;
+    SvStringHashEntry* MM_SlotType;
+    SvStringHashEntry* MM_DisableFlags;
 
     SvGlobalHashNames();
 };
@@ -88,7 +86,7 @@ inline SvStringHashEntry * SvHash_##Name()                   \
 {                                                            \
     if( !GetIdlApp().pGlobalNames )                          \
         GetIdlApp().pGlobalNames = new SvGlobalHashNames();  \
-    return GetIdlApp().pGlobalNames->MM_##Name.get();      \
+    return GetIdlApp().pGlobalNames->MM_##Name;      \
 }
 
 HASH_INLINE(module)
