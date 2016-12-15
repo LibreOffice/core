@@ -167,7 +167,8 @@ endef
 
 define gb_LinkTarget__command
 $(call gb_Output_announce,$(2),$(true),LNK,4)
-$(if $(filter Library CppunitTest Executable,$(TARGETTYPE)),$(call gb_LinkTarget__command_dynamiclink,$(1),$(2)))
+$(if $(filter CppunitTest Executable,$(TARGETTYPE)),$(call gb_LinkTarget__command_dynamiclink,$(1),$(2)))
+$(if $(filter Library,$(TARGETTYPE)),$(if $(filter TRUE,$(DISABLE_DYNLOADING)),$(call gb_LinkTarget__command_staticlink,$(1)),$(call gb_LinkTarget__command_dynamiclink,$(1),$(2))))
 $(if $(filter StaticLibrary,$(TARGETTYPE)),$(call gb_LinkTarget__command_staticlink,$(1)))
 endef
 
