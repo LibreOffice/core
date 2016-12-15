@@ -410,38 +410,10 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
     ::osl::MutexGuard aGuard (maMutex);
     Reference<XAccessibleStateSet> xStateSet;
 
-    if (rBHelper.bDisposed || mpText == nullptr)
-        // Return a minimal state set that only contains the DEFUNC state.
+    if (IsDisposed())
     {
+        // Return a minimal state set that only contains the DEFUNC state.
         xStateSet = AccessibleContextBase::getAccessibleStateSet ();
-        ::utl::AccessibleStateSetHelper* pStateSet =
-              static_cast< ::utl::AccessibleStateSetHelper*>(mxStateSet.get());
-        css::uno::Reference<XAccessible> xTempAcc = getAccessibleParent();
-        if( xTempAcc.is() )
-        {
-            css::uno::Reference<XAccessibleContext>
-                                    xTempAccContext = xTempAcc->getAccessibleContext();
-            if( xTempAccContext.is() )
-            {
-                css::uno::Reference<XAccessibleStateSet> rState =
-                    xTempAccContext->getAccessibleStateSet();
-                if( rState.is() )           {
-                    css::uno::Sequence<short> aStates = rState->getStates();
-                    int count = aStates.getLength();
-                    for( int iIndex = 0;iIndex < count;iIndex++ )
-                    {
-                        if( aStates[iIndex] == AccessibleStateType::EDITABLE )
-                        {
-                            pStateSet->AddState (AccessibleStateType::EDITABLE);
-                            pStateSet->AddState (AccessibleStateType::RESIZABLE);
-                            pStateSet->AddState (AccessibleStateType::MOVEABLE);
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-        xStateSet.set( new ::utl::AccessibleStateSetHelper (*pStateSet));
     }
     else
     {
