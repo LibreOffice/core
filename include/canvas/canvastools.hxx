@@ -461,7 +461,6 @@ namespace canvas
                     aStr != aStr.toAsciiLowerCase() )
                 {
                     SAL_WARN("canvas", "ValueMap::ValueMap(): Key is not lowercase " << pMap->maKey);
-                    OSL_FAIL( "ValueMap::ValueMap(): Key is not lowercase" );
                 }
 
                 if( mnEntries > 1 )
@@ -481,7 +480,6 @@ namespace canvas
                             aStr2 != aStr2.toAsciiLowerCase() )
                         {
                             SAL_WARN("canvas", "ValueMap::ValueMap(): Key is not lowercase" << pMap[1].maKey);
-                            OSL_FAIL( "ValueMap::ValueMap(): Key is not lowercase" );
                         }
                     }
                 }
