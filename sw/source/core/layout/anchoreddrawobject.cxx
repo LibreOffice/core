@@ -115,7 +115,7 @@ SwPosNotify::~SwPosNotify()
         }
     }
     // tdf#101464 notify SwAccessibleMap about new drawing object position
-    if (mpOldPageFrame->getRootFrame()->IsAnyShellAccessible())
+    if (mpOldPageFrame && mpOldPageFrame->getRootFrame()->IsAnyShellAccessible())
     {
         mpOldPageFrame->getRootFrame()->GetCurrShell()->Imp()->MoveAccessible(
                 nullptr, mpAnchoredDrawObj->GetDrawObj(), maOldObjRect);
