@@ -73,10 +73,7 @@ struct OOXMLSecExporter::Impl
 
 bool OOXMLSecExporter::Impl::isOOXMLBlacklist(const OUString& rStreamName)
 {
-#if !HAVE_BROKEN_STATIC_INITIALIZER_LIST
-    static
-#endif
-    const std::initializer_list<OUStringLiteral> vBlacklist =
+    static const std::initializer_list<OUStringLiteral> vBlacklist =
     {
         OUStringLiteral("/%5BContent_Types%5D.xml"),
         OUStringLiteral("/docProps/app.xml"),
@@ -93,10 +90,7 @@ bool OOXMLSecExporter::Impl::isOOXMLBlacklist(const OUString& rStreamName)
 
 bool OOXMLSecExporter::Impl::isOOXMLRelationBlacklist(const OUString& rRelationName)
 {
-#if !HAVE_BROKEN_STATIC_INITIALIZER_LIST
-    static
-#endif
-    const std::initializer_list<OUStringLiteral> vBlacklist =
+    static const std::initializer_list<OUStringLiteral> vBlacklist =
     {
         OUStringLiteral("http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties"),
         OUStringLiteral("http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties"),
