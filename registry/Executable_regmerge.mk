@@ -10,8 +10,10 @@
 $(eval $(call gb_Executable_Executable,regmerge))
 
 $(eval $(call gb_Executable_use_libraries,regmerge,\
-    sal \
     reg \
+    $(if $(filter TRUE,$(DISABLE_DYNLOADING)),store) \
+    $(if $(filter TRUE,$(DISABLE_DYNLOADING)),salhelper) \
+    sal \
 ))
 
 $(eval $(call gb_Executable_use_static_libraries,regmerge,\
