@@ -270,6 +270,10 @@ sal_Bool SAL_CALL SpellChecker::hasLocale(const Locale& rLocale)
     return bRes;
 }
 
+#ifndef MAXWORDLEN
+#   define MAXWORDLEN 176
+#endif
+
 sal_Int16 SpellChecker::GetSpellFailure(const OUString &rWord, const Locale &rLocale)
 {
     if (rWord.getLength() > MAXWORDLEN)
