@@ -110,6 +110,8 @@ void SalLogAreas::checkArea( StringRef area, SourceLocation location )
         checkAreaSyntax(area, location);
         return;
         }
+// don't leave this alive by default, generates too many false+
+#if 0
     if (compiler.getSourceManager().isInMainFile(location))
         {
         auto matchpair = [this,area](StringRef p1, StringRef p2) {
@@ -166,6 +168,7 @@ void SalLogAreas::checkArea( StringRef area, SourceLocation location )
                 firstSeenLocation );
             }
         }
+#endif
     }
 
 void SalLogAreas::checkAreaSyntax(StringRef area, SourceLocation location) {
