@@ -103,7 +103,7 @@ void EmojiView::Populate()
         return;
     }
 
-    //TODO::populate view using the orcus json parser
+    // TODO::populate view using the orcus json parser
     using node = orcus::json_document_tree::node;
 
     //default json config
@@ -126,7 +126,8 @@ void EmojiView::Populate()
         {
             //iterate each element to get the keys
             std::vector<orcus::pstring> aEmojiParams = value.keys();
-            OUString sTitle, sCategory, sDuplicate;
+            OUString sTitle, sCategory;
+            bool bDuplicate = false;
 
             for (auto paramIter = aEmojiParams.begin(); paramIter != aEmojiParams.end(); ++paramIter)
             {
@@ -144,13 +145,17 @@ void EmojiView::Populate()
                 }
                 else if(paramVal == "duplicate")
                 {
-                    sDuplicate = rtl::OStringToOUString(OString( prop.string_value().get(), prop.string_value().size() ), RTL_TEXTENCODING_UTF8);
+                    bDuplicate = true;
                 }
             }
 
             //TODO: Check whether the glyph is present in the font file
             //If the glyph is present, Call EmojiView::AppendItem() to populate each template as it is parsed
-            AppendItem(sTitle, sCategory);
+            //Don't append if a duplicate emoji
+            if(!bDuplicate)
+            {
+                AppendItem(sTitle, sCategory);
+            }
         }
     }
 }
