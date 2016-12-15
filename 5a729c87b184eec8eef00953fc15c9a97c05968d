@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a71b18c_3b1189ad",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000381
+      },
+      "writtenOn": "2016-12-15T17:51:06Z",
+      "side": 1,
+      "message": "Should be “between”.",
+      "revId": "5a729c87b184eec8eef00953fc15c9a97c05968d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
