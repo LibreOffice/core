@@ -1227,10 +1227,8 @@ else
             SwFormatAnchor aAnchor( rCpyFormat.GetAnchor() );
             if (FLY_AT_PAGE != aAnchor.GetAnchorId())
                 continue;
-#ifdef DBG_UTIL
-    SAL_INFO( "sw.docappend", "PaAn: " << aAnchor.GetPageNum()
-                              << " => " << aAnchor.GetPageNum() + pageOffset );
-#endif
+            SAL_INFO( "sw.docappend", "PaAn: " << aAnchor.GetPageNum()
+                                      << " => " << aAnchor.GetPageNum() + pageOffset );
             if ( pageOffset != 0 )
                 aAnchor.SetPageNum( aAnchor.GetPageNum() + pageOffset );
             this->getIDocumentLayoutAccess().CopyLayoutFormat( rCpyFormat, aAnchor, true, true );

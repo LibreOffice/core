@@ -252,10 +252,7 @@ void SfxObjectShell::ResetError()
 
 void SfxObjectShell::EnableSetModified( bool bEnable )
 {
-#ifdef DBG_UTIL
-    if ( bEnable == pImpl->m_bEnableSetModified )
-        SAL_INFO( "sfx", "SFX_PERSIST: EnableSetModified 2x called with the same value" );
-#endif
+    SAL_INFO_IF( bEnable == pImpl->m_bEnableSetModified, "sfx", "SFX_PERSIST: EnableSetModified 2x called with the same value" );
     pImpl->m_bEnableSetModified = bEnable;
 }
 
@@ -310,10 +307,8 @@ bool SfxObjectShell::IsModified()
 
 void SfxObjectShell::SetModified( bool bModifiedP )
 {
-#ifdef DBG_UTIL
-    if ( !bModifiedP && !IsEnableSetModified() )
-        SAL_INFO( "sfx", "SFX_PERSIST: SetModified( sal_False ), although IsEnableSetModified() == sal_False" );
-#endif
+    SAL_INFO_IF( !bModifiedP && !IsEnableSetModified(), "sfx",
+        "SFX_PERSIST: SetModified( sal_False ), although IsEnableSetModified() == sal_False" );
 
     if( !IsEnableSetModified() )
         return;

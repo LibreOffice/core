@@ -2772,10 +2772,8 @@ bool SfxObjectShell::PreDoSaveAs_Impl(const OUString& rFileName, const OUString&
     // all values present in both itemsets will be overwritten by the new parameters
     pMergedParams->Put(rItemSet);
 
-#ifdef DBG_UTIL
-    if ( pMergedParams->GetItemState( SID_DOC_SALVAGE) >= SfxItemState::SET )
-        SAL_WARN( "sfx.doc","Salvage item present in Itemset, check the parameters!");
-#endif
+    SAL_WARN_IF( pMergedParams->GetItemState( SID_DOC_SALVAGE) >= SfxItemState::SET,
+        "sfx.doc","Salvage item present in Itemset, check the parameters!");
 
     // should be unnecessary - too hot to handle!
     pMergedParams->ClearItem( SID_DOC_SALVAGE );

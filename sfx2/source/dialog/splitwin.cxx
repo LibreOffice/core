@@ -733,7 +733,6 @@ void SfxSplitWindow::InsertWindow_Impl( SfxDock_Impl* pDock,
             bool bFadeIn = ( pEmptyWin->nState & 2 ) != 0;
             pEmptyWin->bFadeIn = false;
             pEmptyWin->Actualize();
-#ifdef DBG_UTIL
             if ( !bPinned || !pEmptyWin->bFadeIn )
             {
                 SAL_INFO("sfx", "SfxSplitWindow::InsertWindow_Impl - registering empty Splitwindow" );
@@ -742,7 +741,6 @@ void SfxSplitWindow::InsertWindow_Impl( SfxDock_Impl* pDock,
             {
                 SAL_INFO("sfx", "SfxSplitWindow::InsertWindow_Impl - registering real Splitwindow" );
             }
-#endif
             pWorkWin->RegisterChild_Impl( *GetSplitWindow(), eAlign, true )->nVisible = SfxChildVisibility::VISIBLE;
             pWorkWin->ArrangeChildren_Impl();
             if ( bFadeIn )
