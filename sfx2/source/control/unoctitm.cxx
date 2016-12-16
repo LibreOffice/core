@@ -1050,15 +1050,15 @@ static void InterceptLOKStateChangeEvent(const SfxViewFrame* pViewFrame, const c
              aEvent.FeatureURL.Path == "EntireRow" ||
              aEvent.FeatureURL.Path == "EntireColumn" ||
              aEvent.FeatureURL.Path == "EntireCell" ||
-             aEvent.FeatureURL.Path == "MergeCells")
+             aEvent.FeatureURL.Path == "MergeCells" ||
+             aEvent.FeatureURL.Path == "SortAscending" ||
+             aEvent.FeatureURL.Path == "SortDescending")
     {
         aBuffer.append(aEvent.IsEnabled ? OUString("enabled") : OUString("disabled"));
     }
     else if (aEvent.FeatureURL.Path == "InsertPage" ||
              aEvent.FeatureURL.Path == "DeletePage" ||
-             aEvent.FeatureURL.Path == "DuplicatePage" ||
-             aEvent.FeatureURL.Path == "SortAscending" ||
-             aEvent.FeatureURL.Path == "SortDescending")
+             aEvent.FeatureURL.Path == "DuplicatePage")
     {
         aBuffer.append(OUString::boolean(aEvent.IsEnabled));
     }
