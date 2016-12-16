@@ -110,7 +110,7 @@ TableDesignWidget::TableDesignWidget( VclBuilderContainer* pParent, ViewShellBas
 
     for (sal_uInt16 i = CB_HEADER_ROW; i <= CB_BANDED_COLUMNS; ++i)
     {
-        pParent->get(m_aCheckBoxes[i], OUStringToOString(gPropNames[i], RTL_TEXTENCODING_UTF8));
+        pParent->get(m_aCheckBoxes[i], OString(gPropNames[i].data, gPropNames[i].size));
         m_aCheckBoxes[i]->SetClickHdl( LINK( this, TableDesignWidget, implCheckBoxHdl ) );
     }
 
