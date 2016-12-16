@@ -75,11 +75,11 @@ bool OOXMLSecExporter::Impl::isOOXMLBlacklist(const OUString& rStreamName)
 {
     static const std::initializer_list<OUStringLiteral> vBlacklist =
     {
-        OUStringLiteral("/%5BContent_Types%5D.xml"),
-        OUStringLiteral("/docProps/app.xml"),
-        OUStringLiteral("/docProps/core.xml"),
+        "/%5BContent_Types%5D.xml",
+        "/docProps/app.xml",
+        "/docProps/core.xml",
         // Don't attempt to sign other signatures for now.
-        OUStringLiteral("/_xmlsignatures")
+        "/_xmlsignatures"
     };
     // Just check the prefix, as we don't care about the content type part of the stream name.
     return std::find_if(vBlacklist.begin(), vBlacklist.end(), [&](const OUStringLiteral& rLiteral)
@@ -92,9 +92,9 @@ bool OOXMLSecExporter::Impl::isOOXMLRelationBlacklist(const OUString& rRelationN
 {
     static const std::initializer_list<OUStringLiteral> vBlacklist =
     {
-        OUStringLiteral("http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties"),
-        OUStringLiteral("http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties"),
-        OUStringLiteral("http://schemas.openxmlformats.org/package/2006/relationships/digital-signature/origin")
+        "http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties",
+        "http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties",
+        "http://schemas.openxmlformats.org/package/2006/relationships/digital-signature/origin"
     };
     return std::find(vBlacklist.begin(), vBlacklist.end(), rRelationName) != vBlacklist.end();
 }

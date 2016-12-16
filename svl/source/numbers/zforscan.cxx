@@ -441,16 +441,16 @@ Color* ImpSvNumberformatScan::GetColor(OUString& sStr)
     if ( i >= NF_MAX_DEFAULT_COLORS )
     {
         static OUStringLiteral const pEnglishColors[NF_MAX_DEFAULT_COLORS] = {
-            OUStringLiteral( "BLACK" ),
-            OUStringLiteral( "BLUE" ),
-            OUStringLiteral( "GREEN" ),
-            OUStringLiteral( "CYAN" ),
-            OUStringLiteral( "RED" ),
-            OUStringLiteral( "MAGENTA" ),
-            OUStringLiteral( "BROWN" ),
-            OUStringLiteral( "GREY" ),
-            OUStringLiteral( "YELLOW" ),
-            OUStringLiteral( "WHITE" )
+            "BLACK",
+            "BLUE",
+            "GREEN",
+            "CYAN",
+            "RED",
+            "MAGENTA",
+            "BROWN",
+            "GREY",
+            "YELLOW",
+            "WHITE"
         };
         size_t j = 0;
         while ( j < NF_MAX_DEFAULT_COLORS && sString != pEnglishColors[j] )

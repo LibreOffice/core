@@ -998,8 +998,7 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTableTypes(  ) throw
     // there exists no possibility to get table types so we have to check
     static const OUStringLiteral sTableTypes[] =
     {
-        OUStringLiteral("TABLE"),
-        // Currently we only support a 'TABLE' nothing more complex
+        "TABLE" // Currently we only support a 'TABLE' nothing more complex
     };
     ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eTableTypes);
     Reference< XResultSet > xRef = pResult;
