@@ -2677,24 +2677,7 @@ namespace svgio
 
         OUString SvgStyleAttributes::getClipPathXLink() const
         {
-            if(mbIsClipPathContent)
-            {
-                return maClipPathXLink;
-            }
-
-            if(!maClipPathXLink.isEmpty())
-            {
-                return maClipPathXLink;
-            }
-
-            const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
-
-            if(pSvgStyleAttributes && !pSvgStyleAttributes->maClipPathXLink.isEmpty())
-            {
-                return pSvgStyleAttributes->getClipPathXLink();
-            }
-
-            return OUString();
+            return maClipPathXLink;
         }
 
         const SvgClipPathNode* SvgStyleAttributes::accessClipPathXLink() const
