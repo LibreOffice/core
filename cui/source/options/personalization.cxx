@@ -130,10 +130,7 @@ IMPL_LINK( SelectPersonaDialog, SearchPersonas, Button*, pButton, void )
      * RID_SVXSTR_PERSONA_CATEGORIES in personalization.src
      */
     static const OUStringLiteral vSuggestionCategories[] =
-    {
-        OUStringLiteral("LibreOffice"), OUStringLiteral("Abstract"), OUStringLiteral("Color"),
-        OUStringLiteral("Music"), OUStringLiteral("Nature"), OUStringLiteral("Solid")
-    };
+        {"LibreOffice", "Abstract", "Color", "Music", "Nature", "Solid"};
 
     OUString searchTerm;
     if( m_pSearchThread.is() )

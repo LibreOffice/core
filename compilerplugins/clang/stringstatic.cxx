@@ -14,9 +14,7 @@
 
 /** Look for static OUString and OUString[], they can be more effeciently declared as:
 
-        static const OUStringLiteral our_aLBEntryMap[] = {
-            OUStringLiteral(" "),
-            OUStringLiteral(", ")};
+        static const OUStringLiteral our_aLBEntryMap[] = {" ", ", "};
         static const OUStringLiteral sName("name");
 
     which is more efficient at startup time.

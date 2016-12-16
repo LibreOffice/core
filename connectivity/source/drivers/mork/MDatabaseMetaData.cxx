@@ -839,8 +839,8 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTableTypes(  ) throw(SQLE
     // there exists no possibility to get table types so we have to check
     static const OUStringLiteral sTableTypes[] =
     {
-        OUStringLiteral("TABLE"),
-        OUStringLiteral("VIEW")
+        "TABLE",
+        "VIEW"
         // Currently we only support a 'TABLE' and 'VIEW' nothing more complex
 
         // OUString("SYSTEM TABLE"),
