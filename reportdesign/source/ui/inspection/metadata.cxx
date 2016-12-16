@@ -233,59 +233,59 @@ namespace rptui
         uno::Sequence< beans::Property > aProps = _xFormComponentHandler->getSupportedProperties();
         static const OUStringLiteral pExcludeProperties[] =
         {
-                OUStringLiteral("Enabled"),
-                OUStringLiteral("Printable"),
-                OUStringLiteral("WordBreak"),
-                OUStringLiteral("MultiLine"),
-                OUStringLiteral("Tag"),
-                OUStringLiteral("HelpText"),
-                OUStringLiteral("HelpURL"),
-                OUStringLiteral("MaxTextLen"),
-                OUStringLiteral("ReadOnly"),
-                OUStringLiteral("Tabstop"),
-                OUStringLiteral("TabIndex"),
-                OUStringLiteral("ValueMin"),
-                OUStringLiteral("ValueMax"),
-                OUStringLiteral("Spin"),
-                OUStringLiteral("SpinValue"),
-                OUStringLiteral("SpinValueMin"),
-                OUStringLiteral("SpinValueMax"),
-                OUStringLiteral("DefaultSpinValue"),
-                OUStringLiteral("SpinIncrement"),
-                OUStringLiteral("Repeat"),
-                OUStringLiteral("RepeatDelay"),
-                OUStringLiteral("ControlLabel"), /// TODO: has to be checked
-                OUStringLiteral("LabelControl"),
-                OUStringLiteral("Title"), // comment this out if you want to have title feature for charts
-                OUStringLiteral(PROPERTY_MAXTEXTLEN),
-                OUStringLiteral(PROPERTY_EFFECTIVEDEFAULT),
-                OUStringLiteral(PROPERTY_EFFECTIVEMAX),
-                OUStringLiteral(PROPERTY_EFFECTIVEMIN),
-                OUStringLiteral("HideInactiveSelection"),
-                OUStringLiteral("SubmitAction"),
-                OUStringLiteral("InputRequired"),
-                OUStringLiteral("VerticalAlign"),
-                OUStringLiteral(PROPERTY_ALIGN),
-                OUStringLiteral(PROPERTY_EMPTY_IS_NULL),
-                OUStringLiteral(PROPERTY_FILTERPROPOSAL)
-                ,OUStringLiteral(PROPERTY_POSITIONX)
-                ,OUStringLiteral(PROPERTY_POSITIONY)
-                ,OUStringLiteral(PROPERTY_WIDTH)
-                ,OUStringLiteral(PROPERTY_HEIGHT)
-                ,OUStringLiteral(PROPERTY_FONT)
-                ,OUStringLiteral(PROPERTY_LABEL)
-                ,OUStringLiteral(PROPERTY_LINECOLOR)
-                ,OUStringLiteral(PROPERTY_BORDER)
-                ,OUStringLiteral(PROPERTY_BORDERCOLOR)
-                ,OUStringLiteral(PROPERTY_BACKTRANSPARENT)
-                ,OUStringLiteral(PROPERTY_CONTROLBACKGROUND)
-                ,OUStringLiteral(PROPERTY_BACKGROUNDCOLOR)
-                ,OUStringLiteral(PROPERTY_CONTROLBACKGROUNDTRANSPARENT)
-                ,OUStringLiteral(PROPERTY_FORMULALIST)
-                ,OUStringLiteral(PROPERTY_SCOPE)
-                ,OUStringLiteral(PROPERTY_TYPE)
-                ,OUStringLiteral(PROPERTY_DATASOURCENAME)
-                ,OUStringLiteral(PROPERTY_VERTICALALIGN)
+                "Enabled",
+                "Printable",
+                "WordBreak",
+                "MultiLine",
+                "Tag",
+                "HelpText",
+                "HelpURL",
+                "MaxTextLen",
+                "ReadOnly",
+                "Tabstop",
+                "TabIndex",
+                "ValueMin",
+                "ValueMax",
+                "Spin",
+                "SpinValue",
+                "SpinValueMin",
+                "SpinValueMax",
+                "DefaultSpinValue",
+                "SpinIncrement",
+                "Repeat",
+                "RepeatDelay",
+                "ControlLabel", /// TODO: has to be checked
+                "LabelControl",
+                "Title", // comment this out if you want to have title feature for charts
+                PROPERTY_MAXTEXTLEN,
+                PROPERTY_EFFECTIVEDEFAULT,
+                PROPERTY_EFFECTIVEMAX,
+                PROPERTY_EFFECTIVEMIN,
+                "HideInactiveSelection",
+                "SubmitAction",
+                "InputRequired",
+                "VerticalAlign",
+                PROPERTY_ALIGN,
+                PROPERTY_EMPTY_IS_NULL,
+                PROPERTY_FILTERPROPOSAL
+                ,PROPERTY_POSITIONX
+                ,PROPERTY_POSITIONY
+                ,PROPERTY_WIDTH
+                ,PROPERTY_HEIGHT
+                ,PROPERTY_FONT
+                ,PROPERTY_LABEL
+                ,PROPERTY_LINECOLOR
+                ,PROPERTY_BORDER
+                ,PROPERTY_BORDERCOLOR
+                ,PROPERTY_BACKTRANSPARENT
+                ,PROPERTY_CONTROLBACKGROUND
+                ,PROPERTY_BACKGROUNDCOLOR
+                ,PROPERTY_CONTROLBACKGROUNDTRANSPARENT
+                ,PROPERTY_FORMULALIST
+                ,PROPERTY_SCOPE
+                ,PROPERTY_TYPE
+                ,PROPERTY_DATASOURCENAME
+                ,PROPERTY_VERTICALALIGN
         };
 
         beans::Property* pPropsIter = aProps.getArray();
