@@ -64,7 +64,6 @@ private:
 
 public:
     MSAAServiceImpl ();
-    virtual ~MSAAServiceImpl() override;
 
     // XComponent - as used by VCL to lifecycle manage this bridge.
     virtual void SAL_CALL dispose()
@@ -275,10 +274,6 @@ MSAAServiceImpl::MSAAServiceImpl()
     }
     else
         SAL_WARN( "iacc2", "No VCL toolkit interface to listen to for events");
-}
-
-MSAAServiceImpl::~MSAAServiceImpl()
-{
 }
 
 void MSAAServiceImpl::dispose()
