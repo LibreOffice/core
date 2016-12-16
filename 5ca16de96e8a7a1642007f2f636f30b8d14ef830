@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a71b18c_2d307056",
+        "filename": "sc/inc/globstr.hrc",
+        "patchSetId": 4
+      },
+      "lineNbr": 715,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-12-16T14:45:48Z",
+      "side": 1,
+      "message": "Well, this should had made you suspicious that 544 was already taken (in fact it is by STR_FUN_TEXT_MEDIAN) and building also spews a warning\n\nText [ en-US ] \u003d \"If you delete the selected sheet(s), you will lose data from related Pivot Table. Are you sure you want to delete the selected sheet(s)?\";\n^\nf4104: \"/build/libo/core/workdir/SrsPartMergeTarget/sc/source/ui/src/globstr.src\", line 3134: Warning in the object (Type: String, 544):\nTwo local resources have the same identifier.\n\nThe next free ID is 545.",
+      "revId": "5ca16de96e8a7a1642007f2f636f30b8d14ef830",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a71b18c_6d3a6838",
+        "filename": "sc/source/ui/view/tabvwshf.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 606,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-12-16T14:45:48Z",
+      "side": 1,
+      "message": "So, sorry it didn\u0027t occur to me earlier, but this checks where the actual pivot table is located, not where it obtains its data from. This is not what the bug is about. There should be an extra warning when deleting a sheet a pivot table obtains its data from.",
+      "revId": "5ca16de96e8a7a1642007f2f636f30b8d14ef830",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
