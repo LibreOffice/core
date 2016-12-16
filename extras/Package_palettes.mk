@@ -11,22 +11,22 @@ $(eval $(call gb_Package_Package,extras_palettes,$(SRCDIR)/extras/source/palette
 
 $(eval $(call gb_Package_add_files,extras_palettes,$(LIBO_SHARE_FOLDER)/palette,\
 	arrowhd.soe \
-	breeze.soc \
+	Breeze.soc \
 	classic.sog \
 	hatching.soh \
-	html.soc \
-	libreoffice.soc \
+	Html.soc \
+	LibreOffice.soc \
 	modern.sog \
 	standard.sob \
-	standard.soc \
+	Standard.soc \
 	standard.sod \
 	standard.soe \
 	standard.sog \
 	standard.soh \
 	standard.sop \
 	styles.sod \
-	tango.soc \
-	tonal.soc \
+	Tango.soc \
+	Tonal.soc \
 ))
 
 # vim: set noet sw=4 ts=4:
