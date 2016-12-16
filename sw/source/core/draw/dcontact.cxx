@@ -400,21 +400,15 @@ SwFlyDrawContact::~SwFlyDrawContact()
 }
 
 // #i26791#
-const SwAnchoredObject* SwFlyDrawContact::GetAnchoredObj( const SdrObject* _pSdrObj ) const
+const SwAnchoredObject* SwFlyDrawContact::GetAnchoredObj(const SdrObject* pSdrObj) const
 {
-    OSL_ENSURE( _pSdrObj,
-            "<SwFlyDrawContact::GetAnchoredObj(..)> - no object provided" );
-    OSL_ENSURE( dynamic_cast<const SwVirtFlyDrawObj*>( _pSdrObj) !=  nullptr,
-            "<SwFlyDrawContact::GetAnchoredObj(..)> - wrong object type object provided" );
-    assert(GetUserCall(_pSdrObj) == this &&
+    assert(pSdrObj);
+    assert(dynamic_cast<const SwVirtFlyDrawObj*>(pSdrObj) != nullptr);
+    assert(GetUserCall(pSdrObj) == this &&
         "<SwFlyDrawContact::GetAnchoredObj(..)> - provided object doesn't belong to this contact");
 
-    const SwAnchoredObject* pRetAnchoredObj = nullptr;
-
-    if (const SwVirtFlyDrawObj* pFlyDrawObj = dynamic_cast<const SwVirtFlyDrawObj*>(_pSdrObj))
-    {
-        pRetAnchoredObj = pFlyDrawObj->GetFlyFrame();
-    }
+    const SwAnchoredObject *const pRetAnchoredObj =
+        static_cast<const SwVirtFlyDrawObj*>(pSdrObj)->GetFlyFrame();
 
     return pRetAnchoredObj;
 }
@@ -642,35 +636,31 @@ void SwDrawContact::GetTextObjectsFromFormat( std::list<SdrTextObj*>& rTextObjec
 }
 
 // #i26791#
-const SwAnchoredObject* SwDrawContact::GetAnchoredObj( const SdrObject* _pSdrObj ) const
+const SwAnchoredObject* SwDrawContact::GetAnchoredObj(const SdrObject* pSdrObj ) const
 {
     // handle default parameter value
-    if ( !_pSdrObj )
+    if (!pSdrObj)
     {
-        _pSdrObj = GetMaster();
+        pSdrObj = GetMaster();
     }
 
-    OSL_ENSURE( _pSdrObj,
-            "<SwDrawContact::GetAnchoredObj(..)> - no object provided" );
-    OSL_ENSURE( dynamic_cast<const SwDrawVirtObj*>( _pSdrObj) !=  nullptr ||
-            ( dynamic_cast<const SdrVirtObj*>( _pSdrObj) == nullptr && dynamic_cast<const SwDrawVirtObj*>( _pSdrObj) == nullptr ),
-            "<SwDrawContact::GetAnchoredObj(..)> - wrong object type object provided" );
-    OSL_ENSURE( GetUserCall( _pSdrObj ) == this ||
-            _pSdrObj == GetMaster(),
+    assert(pSdrObj);
+    assert(dynamic_cast<const SwDrawVirtObj*>(pSdrObj) != nullptr ||
+           dynamic_cast<const SdrVirtObj*>(pSdrObj) == nullptr);
+    assert((GetUserCall(pSdrObj) == this ||
+            pSdrObj == GetMaster()) &&
             "<SwDrawContact::GetAnchoredObj(..)> - provided object doesn't belongs to this contact" );
 
     const SwAnchoredObject* pRetAnchoredObj = nullptr;
 
-    if ( _pSdrObj )
+    if (dynamic_cast<const SwDrawVirtObj*>(pSdrObj) != nullptr)
     {
-        if ( dynamic_cast<const SwDrawVirtObj*>( _pSdrObj) !=  nullptr )
-        {
-            pRetAnchoredObj = &(static_cast<const SwDrawVirtObj*>(_pSdrObj)->GetAnchoredObj());
-        }
-        else if ( dynamic_cast<const SdrVirtObj*>( _pSdrObj) == nullptr && dynamic_cast<const SwDrawVirtObj*>( _pSdrObj) == nullptr)
-        {
-            pRetAnchoredObj = &maAnchoredDrawObj;
-        }
+        pRetAnchoredObj = &(static_cast<const SwDrawVirtObj*>(pSdrObj)->GetAnchoredObj());
+    }
+    else
+    {
+        assert(dynamic_cast<const SdrVirtObj*>(pSdrObj) == nullptr);
+        pRetAnchoredObj = &maAnchoredDrawObj;
     }
 
     return pRetAnchoredObj;
