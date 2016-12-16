@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a71b18c_cdfc5c41",
+        "filename": "desktop/source/app/cmdlinehelp.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-12-16T16:07:36Z",
+      "side": 1,
+      "message": "What\u0027s this btw?",
+      "revId": "775f0442b6fc2894eb20b65232d31833e0530263",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
