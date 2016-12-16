@@ -177,10 +177,10 @@ define gb_UnoApiHeaderTarget__command
 $(call gb_Helper_abbreviate_dirs_native,\
 	mkdir -p $(dir $(1)) && \
 	mkdir -p  $(gb_Helper_MISC) && \
-	RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),200,\
-		" -Gc -L -BUCR -O$(call gb_UnoApiTarget_get_header_target,$*) $(7) \
+	RESPONSEFILE=`$(gb_MKTEMP)` && \
+	echo " -Gc -L -BUCR -O$(call gb_UnoApiTarget_get_header_target,$*) $(7) \
 		$(1) \
-		") && \
+		" > $${RESPONSEFILE} && \
 	$(gb_UnoApiTarget_CPPUMAKERCOMMAND) @$${RESPONSEFILE} && \
 	rm -f $${RESPONSEFILE})
 
