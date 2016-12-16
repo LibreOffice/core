@@ -1050,7 +1050,6 @@ static void InterceptLOKStateChangeEvent(const SfxViewFrame* pViewFrame, const c
              aEvent.FeatureURL.Path == "EntireRow" ||
              aEvent.FeatureURL.Path == "EntireColumn" ||
              aEvent.FeatureURL.Path == "EntireCell" ||
-             aEvent.FeatureURL.Path == "MergeCells" ||
              aEvent.FeatureURL.Path == "SortAscending" ||
              aEvent.FeatureURL.Path == "SortDescending")
     {
@@ -1095,7 +1094,6 @@ static void InterceptLOKStateChangeEvent(const SfxViewFrame* pViewFrame, const c
     }
     else if (aEvent.FeatureURL.Path == "InsertMode" ||
              aEvent.FeatureURL.Path == "WrapText" ||
-             aEvent.FeatureURL.Path == "ToggleMergeCells" ||
              aEvent.FeatureURL.Path == "NumberFormatCurrency" ||
              aEvent.FeatureURL.Path == "NumberFormatPercent" ||
              aEvent.FeatureURL.Path == "NumberFormatDate")
@@ -1105,6 +1103,19 @@ static void InterceptLOKStateChangeEvent(const SfxViewFrame* pViewFrame, const c
         if (aEvent.IsEnabled && (aEvent.State >>= aBool))
         {
             aBuffer.append(OUString::boolean(aBool));
+        }
+    }
+    else if (aEvent.FeatureURL.Path == "ToggleMergeCells")
+    {
+        if (aEvent.IsEnabled)
+        {
+            sal_Bool aBool;
+            aEvent.State >>= aBool;
+            aBuffer.append(OUString::boolean(aBool));
+        }
+        else
+        {
+            aBuffer.append(OUString("disabled"));
         }
     }
     else if (aEvent.FeatureURL.Path == "Position")
