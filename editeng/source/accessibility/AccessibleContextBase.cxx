@@ -437,15 +437,6 @@ uno::Sequence< OUString > SAL_CALL
 
 // XTypeProvider
 
-uno::Sequence< css::uno::Type>
-    AccessibleContextBase::getTypes()
-    throw (css::uno::RuntimeException, std::exception)
-{
-    // This class supports no interfaces on its own.  Just return those
-    // supported by the base class.
-    return WeakComponentImplHelper::getTypes();
-}
-
 uno::Sequence<sal_Int8> SAL_CALL
     AccessibleContextBase::getImplementationId()
     throw (css::uno::RuntimeException, std::exception)
