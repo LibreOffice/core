@@ -1107,10 +1107,10 @@ static void InterceptLOKStateChangeEvent(const SfxViewFrame* pViewFrame, const c
     }
     else if (aEvent.FeatureURL.Path == "ToggleMergeCells")
     {
-        if (aEvent.IsEnabled)
+        sal_Bool aBool;
+
+        if (aEvent.IsEnabled && (aEvent.State >>= aBool))
         {
-            sal_Bool aBool;
-            aEvent.State >>= aBool;
             aBuffer.append(OUString::boolean(aBool));
         }
         else
