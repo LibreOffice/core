@@ -177,7 +177,7 @@ class SecurityEnvironment_MSCryptImpl : public ::cppu::WeakImplHelper<
 
         xmlSecKeysMngrPtr createKeysManager() throw( css::uno::Exception , css::uno::RuntimeException ) ;
 
-        void destroyKeysManager(xmlSecKeysMngrPtr pKeysMngr) throw( css::uno::Exception , css::uno::RuntimeException ) ;
+        static void destroyKeysManager(xmlSecKeysMngrPtr pKeysMngr) throw( css::uno::Exception , css::uno::RuntimeException ) ;
 } ;
 
 #endif // INCLUDED_XMLSECURITY_SOURCE_XMLSEC_MSCRYPT_SECURITYENVIRONMENT_MSCRYPTIMPL_HXX

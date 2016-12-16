@@ -116,7 +116,7 @@ SAL_CALL XMLSignature_MSCryptImpl::generate(
     if( pDsigCtx == nullptr )
     {
         //throw XMLSignatureException() ;
-        pSecEnv->destroyKeysManager( pMngr );
+        SecurityEnvironment_MSCryptImpl::destroyKeysManager( pMngr );
         clearErrorRecorder();
         return aTemplate;
     }
@@ -136,7 +136,7 @@ SAL_CALL XMLSignature_MSCryptImpl::generate(
 
 
     xmlSecDSigCtxDestroy( pDsigCtx ) ;
-    pSecEnv->destroyKeysManager( pMngr );
+    SecurityEnvironment_MSCryptImpl::destroyKeysManager( pMngr );
 
     //Unregistered the stream/URI binding
     if( xUriBinding.is() )
@@ -212,7 +212,7 @@ SAL_CALL XMLSignature_MSCryptImpl::validate(
     pDsigCtx = xmlSecDSigCtxCreate( pMngr ) ;
     if( pDsigCtx == nullptr )
     {
-        pSecEnv->destroyKeysManager( pMngr );
+        SecurityEnvironment_MSCryptImpl::destroyKeysManager( pMngr );
         clearErrorRecorder();
         return aTemplate;
     }
@@ -253,7 +253,7 @@ SAL_CALL XMLSignature_MSCryptImpl::validate(
     }
 
     xmlSecDSigCtxDestroy( pDsigCtx ) ;
-    pSecEnv->destroyKeysManager( pMngr );
+    SecurityEnvironment_MSCryptImpl::destroyKeysManager( pMngr );
 
     //Unregistered the stream/URI binding
     if( xUriBinding.is() )
