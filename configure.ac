@@ -536,11 +536,7 @@ if test -n "$with_android_ndk"; then
     if test "$ENABLE_LTO" = TRUE; then
         # -flto comes from com_GCC_defs.mk, too, but we need to make sure it gets passed as part of
         # $CC and $CXX when building external libraries
-         if test "$COM_IS_CLANG" = TRUE; then
-            ANDROIDCFLAGS="$ANDROIDCFLAGS -flto"
-        else
-            ANDROIDCFLAGS="$ANDROIDCFLAGS -flto -fuse-linker-plugin -O2"
-        fi
+        ANDROIDCFLAGS="$ANDROIDCFLAGS -flto -fuse-linker-plugin -O2"
     fi
 
     # gdbserver can be in different locations
