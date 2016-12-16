@@ -57,7 +57,7 @@ bool WinFontInstance::CacheGlyphToAtlas(HDC hDC, HFONT hFont, int nGlyphIndex, S
         SAL_WARN("vcl.gdi", "CreateCompatibleDC failed: " << WindowsErrorString(GetLastError()));
         return false;
     }
-    HFONT hOrigFont = static_cast<HFONT>(SelectObject(hDC, hFont));
+    HFONT hOrigFont = static_cast<HFONT>(SelectObject(hNewDC, hFont));
     if (hOrigFont == nullptr)
     {
         SAL_WARN("vcl.gdi", "SelectObject failed: " << WindowsErrorString(GetLastError()));
