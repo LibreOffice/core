@@ -20,6 +20,7 @@
 #define INCLUDED_SW_INC_HINTS_HXX
 
 #include <swatrset.hxx>
+#include <swtypes.hxx>
 #include <vcl/vclptr.hxx>
 #include <vector>
 
@@ -147,8 +148,8 @@ public:
 class SwDocPosUpdate : public SwMsgPoolItem
 {
 public:
-    const long nDocPos;
-    SwDocPosUpdate( const long nDocPos );
+    const SwTwips nDocPos;
+    SwDocPosUpdate( const SwTwips nDocPos );
 };
 
 /// SwTableFormulaUpdate is sent when the table has to be newly calculated or when a table itself is merged or splitted
