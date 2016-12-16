@@ -44,7 +44,7 @@ namespace
             }
             OUString path;
             osl::FileBase::getSystemPathFromFileURL(uri, path);
-            OString sFontDir = OUStringToOString(path, osl_getThreadTextEncoding()) + "../share/fonts/truetype";
+            OString sFontDir = OUStringToOString(path, osl_getThreadTextEncoding());
 
             rtl::OStringBuffer aBuffer("<?xml version=\"1.0\"?>\n<fontconfig><dir>");
             aBuffer.append(sFontDir);

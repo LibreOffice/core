@@ -104,6 +104,7 @@ endif
 
 ifneq ($(ENABLE_FUZZERS),)
 $(eval $(call gb_Module_add_targets,vcl,\
+    CustomTarget_nativecode \
     Executable_wmffuzzer \
 ))
 endif
