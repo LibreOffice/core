@@ -204,7 +204,7 @@ void PassStuffByRef::checkParams(const FunctionDecl * functionDecl) {
                     auto cxxConstructExpr = dyn_cast<CXXConstructExpr>(cxxCtorInitializer->getInit());
                     if (cxxConstructExpr && cxxConstructExpr->getNumArgs() == 1)
                     {
-                        if (auto callExpr = dyn_cast<CallExpr>(cxxConstructExpr->getArg(0))) {
+                        if (auto callExpr = dyn_cast<CallExpr>(cxxConstructExpr->getArg(0)->IgnoreParenImpCasts())) {
                             if (loplugin::DeclCheck(callExpr->getCalleeDecl()).Function("move").StdNamespace()) {
                                 bFoundMove = true;
                                 break;
