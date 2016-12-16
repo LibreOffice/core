@@ -120,6 +120,8 @@ void CSVFetchThread::execute()
 
     if (!mpStream->good())
         RequestTerminate();
+
+    delete pLines;
 }
 
 CSVDataProvider::CSVDataProvider(const OUString& rURL, const ScRange& rRange):
