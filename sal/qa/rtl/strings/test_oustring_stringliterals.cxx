@@ -216,6 +216,103 @@ void test::oustring::StringLiterals::checkOUStringLiteral()
 {
     CPPUNIT_ASSERT(bool(conditional(true) == "a"));
     CPPUNIT_ASSERT(bool(conditional(false) == "bb"));
+
+    rtl::OUString s1(rtlunittest::OUStringLiteral("abc"));
+    CPPUNIT_ASSERT_EQUAL(rtl::OUString("abc"), s1);
+    s1 = rtlunittest::OUStringLiteral("de");
+    CPPUNIT_ASSERT_EQUAL(rtl::OUString("de"), s1);
+    s1 += rtlunittest::OUStringLiteral("fde");
+    CPPUNIT_ASSERT_EQUAL(rtl::OUString("defde"), s1);
+    CPPUNIT_ASSERT_EQUAL(
+        sal_Int32(0),
+        s1.reverseCompareTo(rtlunittest::OUStringLiteral("defde")));
+    CPPUNIT_ASSERT(
+        s1.equalsIgnoreAsciiCase(rtlunittest::OUStringLiteral("DEFDE")));
+    CPPUNIT_ASSERT(s1.match(rtlunittest::OUStringLiteral("fde"), 2));
+    CPPUNIT_ASSERT(
+        s1.matchIgnoreAsciiCase(rtlunittest::OUStringLiteral("FDE"), 2));
+    rtl::OUString s2;
+    CPPUNIT_ASSERT(s1.startsWith(rtlunittest::OUStringLiteral("de"), &s2));
+    CPPUNIT_ASSERT_EQUAL(rtl::OUString("fde"), s2);
+    CPPUNIT_ASSERT(
+        s1.startsWithIgnoreAsciiCase(
+            rtlunittest::OUStringLiteral("DEFD"), &s2));
+    CPPUNIT_ASSERT_EQUAL(rtl::OUString("e"), s2);
+    CPPUNIT_ASSERT(s1.endsWith(rtlunittest::OUStringLiteral("de"), &s2));
+    CPPUNIT_ASSERT_EQUAL(rtl::OUString("def"), s2);
+    CPPUNIT_ASSERT(
+        s1.endsWithIgnoreAsciiCase(rtlunittest::OUStringLiteral("EFDE"), &s2));
+    CPPUNIT_ASSERT_EQUAL(rtl::OUString("d"), s2);
+    CPPUNIT_ASSERT(bool(s1 == rtlunittest::OUStringLiteral("defde")));
+    CPPUNIT_ASSERT(bool(rtlunittest::OUStringLiteral("defde") == s1));
+    CPPUNIT_ASSERT(s1 != rtlunittest::OUStringLiteral("abc"));
+    CPPUNIT_ASSERT(rtlunittest::OUStringLiteral("abc") != s1);
+    CPPUNIT_ASSERT_EQUAL(
+        sal_Int32(3), s1.indexOf(rtlunittest::OUStringLiteral("de"), 1));
+    CPPUNIT_ASSERT_EQUAL(
+        sal_Int32(3), s1.lastIndexOf(rtlunittest::OUStringLiteral("de")));
+    sal_Int32 i = 0;
+    CPPUNIT_ASSERT_EQUAL(
+        rtl::OUString("abcfde"),
+        s1.replaceFirst(
+            rtlunittest::OUStringLiteral("de"), rtl::OUString("abc"), &i));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), i);
+    CPPUNIT_ASSERT_EQUAL(
+        rtl::OUString("abcfde"),
+        s1.replaceFirst(
+            rtl::OUString("de"), rtlunittest::OUStringLiteral("abc"), &i));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), i);
+    CPPUNIT_ASSERT_EQUAL(
+        rtl::OUString("abcfde"),
+        s1.replaceFirst(
+            rtlunittest::OUStringLiteral("de"),
+            rtlunittest::OUStringLiteral("abc"), &i));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), i);
+    CPPUNIT_ASSERT_EQUAL(
+        rtl::OUString("abcfde"),
+        s1.replaceFirst(rtlunittest::OUStringLiteral("de"), "abc", &i));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), i);
+    CPPUNIT_ASSERT_EQUAL(
+        rtl::OUString("abcfde"),
+        s1.replaceFirst("de", rtlunittest::OUStringLiteral("abc"), &i));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), i);
+    CPPUNIT_ASSERT_EQUAL(
+        rtl::OUString("abcfabc"),
+        s1.replaceAll(
+            rtlunittest::OUStringLiteral("de"), rtl::OUString("abc")));
+    CPPUNIT_ASSERT_EQUAL(
+        rtl::OUString("abcfabc"),
+        s1.replaceAll(
+            rtl::OUString("de"), rtlunittest::OUStringLiteral("abc")));
+    CPPUNIT_ASSERT_EQUAL(
+        rtl::OUString("abcfabc"),
+        s1.replaceAll(
+            rtlunittest::OUStringLiteral("de"),
+            rtlunittest::OUStringLiteral("abc")));
+    CPPUNIT_ASSERT_EQUAL(
+        rtl::OUString("abcfabc"),
+        s1.replaceAll(rtlunittest::OUStringLiteral("de"), "abc"));
+    CPPUNIT_ASSERT_EQUAL(
+        rtl::OUString("abcfabc"),
+        s1.replaceAll("de", rtlunittest::OUStringLiteral("abc")));
+    CPPUNIT_ASSERT_EQUAL(
+        rtl::OUString("abcdef"),
+        rtl::OUString(
+            rtl::OUString("abc") + rtlunittest::OUStringLiteral("def")));
+    CPPUNIT_ASSERT_EQUAL(
+        rtl::OUString("abcdef"),
+        rtl::OUString(
+            rtlunittest::OUStringLiteral("abc") + rtl::OUString("def")));
+    rtl::OUStringBuffer b(rtlunittest::OUStringLiteral("abc"));
+    CPPUNIT_ASSERT_EQUAL(rtl::OUString("abc"), b.toString());
+    b.append(rtlunittest::OUStringLiteral("def"));
+    CPPUNIT_ASSERT_EQUAL(rtl::OUString("abcdef"), b.toString());
+    b.insert(2, rtlunittest::OUStringLiteral("gabab"));
+    CPPUNIT_ASSERT_EQUAL(rtl::OUString("abgababcdef"), b.toString());
+    CPPUNIT_ASSERT_EQUAL(
+        sal_Int32(3), b.indexOf(rtlunittest::OUStringLiteral("ab"), 1));
+    CPPUNIT_ASSERT_EQUAL(
+        sal_Int32(5), b.lastIndexOf(rtlunittest::OUStringLiteral("ab")));
 }
 
 void test::oustring::StringLiterals::checkOUStringLiteral1()
