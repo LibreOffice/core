@@ -113,6 +113,7 @@ gbuild_TARGETS := AllLangHelp \
 	CliLibrary \
 	CliNativeLibrary \
 	CliUnoApi \
+	CompilerTest \
 	Configuration \
 	CppunitTest \
 	CustomTarget \
