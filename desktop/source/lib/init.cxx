@@ -1288,7 +1288,6 @@ static void doc_iniUnoCommands ()
         OUString(".uno:EntireRow"),
         OUString(".uno:EntireColumn"),
         OUString(".uno:EntireCell"),
-        OUString(".uno:MergeCells"),
         OUString(".uno:AssignLayout"),
         OUString(".uno:StatusDocPos"),
         OUString(".uno:RowColSelCount"),
