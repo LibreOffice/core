@@ -86,6 +86,7 @@
 		<xsl:text>; </xsl:text>
 	</xsl:template>
 
+<<<<<<< HEAD
 	<!-- workaround AOOO#119401 suspicious property fo:margin="100%" in paragraph style -->
 	<xsl:template match="@fo:margin[string(.) = '100%']"/> 
 
@@ -93,6 +94,15 @@
 	<!-- Maps fo:padding as well fo:padding-top, fo:padding-bottom, fo:padding-left, fo:padding-right -->
 	<xsl:template match="@fo:letter-spacing | @fo:line-height | @fo:width |@fo:margin | @fo:margin-top | @fo:margin-bottom | @fo:margin-left | @fo:margin-right | @fo:padding | @fo:padding-top | @fo:padding-bottom | @fo:padding-left | @fo:padding-right">		
 		<xsl:value-of select="local-name(.)"/>
+=======
+	<!-- workaround AOOO#119401 suspicious property fo:margin="100%" in paragraph style -->
+	<xsl:template match="@fo:margin[string(.) = '100%']"/> 
+
+	<!-- Maps fo:margin as well fo:margin-top, fo:margin-bottom, fo:padding-left, fo:margin-right -->
+	<!-- Maps fo:padding as well fo:padding-top, fo:padding-bottom, fo:padding-left, fo:padding-right -->
+	<xsl:template match="@fo:letter-spacing | @fo:line-height | @fo:width |@fo:margin | @fo:margin-top | @fo:margin-bottom | @fo:margin-left | @fo:margin-right | @fo:padding | @fo:padding-top | @fo:padding-bottom | @fo:padding-left | @fo:padding-right">
+		<xsl:value-of select="local-name(.)"/>
+>>>>>>> 8669ca3... tdf#64119 used decimal format suitable for CSS
 		<xsl:text>:</xsl:text>
 		<!-- Map once erroneusly used inch shortage 'inch' to CSS shortage 'in' -->
 		<xsl:choose>
@@ -291,8 +301,8 @@
 	<xsl:template match="@style:writing-mode">
         <xsl:text>writing-mode:</xsl:text>
         <xsl:value-of select="."/>
-        <xsl:text>; </xsl:text>
-	</xsl:template>    
+        <xsl:text>;</xsl:text>
+	</xsl:template>
     <!-- *** Properties with a no 'fo:' or 'style:' prefix *** -->
 	<xsl:template match="@table:align">
 		<xsl:choose>
@@ -333,6 +343,7 @@
 			- 0.0133cm for solid style
 			- 0.0399cm for double style
 		 as there are three border lines painted -->
+	<xsl:decimal-format name = "unifiedFormat" decimal-separator = "." />
 	<xsl:template name="round-up-border-width">
 		<xsl:param name="borderWidth"/>
 		<xsl:param name="multiplier"/>
@@ -344,12 +355,21 @@
 		</xsl:variable>
 		<xsl:variable name="minimalBorderWidth" select="0.0133 * $multiplier"/>
 		<xsl:choose>
+<<<<<<< HEAD
 			<xsl:when test="number($borderWidthByCentimeter) &lt; $minimalBorderWidth">
 				<xsl:value-of select="$minimalBorderWidth"/>
 				<xsl:text>cm</xsl:text>
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:value-of select="$borderWidthByCentimeter"/>
+=======
+			<xsl:when test="$borderWidthByCentimeter &lt; $minimalBorderWidth">
+				<xsl:value-of select="format-number($minimalBorderWidth,'0.######','unifiedFormat')"/>
+				<xsl:text>cm</xsl:text>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="format-number($minimalBorderWidth,'0.######','unifiedFormat')"/>
+>>>>>>> 8669ca3... tdf#64119 used decimal format suitable for CSS
 				<xsl:text>cm</xsl:text>
 			</xsl:otherwise>
 		</xsl:choose>
