@@ -945,7 +945,7 @@ sal_uInt32 WW8PLCFx_PCDAttrs::GetIdx() const
     return 0;
 }
 
-void WW8PLCFx_PCDAttrs::SetIdx( sal_uLong )
+void WW8PLCFx_PCDAttrs::SetIdx(sal_uInt32)
 {
 }
 
@@ -1133,7 +1133,7 @@ WW8PLCFx_PCD::~WW8PLCFx_PCD()
     delete pPcdI;
 }
 
-sal_uLong WW8PLCFx_PCD::GetIMax() const
+sal_uInt32 WW8PLCFx_PCD::GetIMax() const
 {
     return pPcdI ? pPcdI->GetIMax() : 0;
 }
@@ -1143,7 +1143,7 @@ sal_uInt32 WW8PLCFx_PCD::GetIdx() const
     return pPcdI ? pPcdI->GetIdx() : 0;
 }
 
-void WW8PLCFx_PCD::SetIdx( sal_uLong nIdx )
+void WW8PLCFx_PCD::SetIdx(sal_uInt32 nIdx)
 {
     if (pPcdI)
         pPcdI->SetIdx( nIdx );
@@ -1371,7 +1371,7 @@ WW8_CP WW8ScannerBase::WW8Fc2Cp( WW8_FC nFcPos ) const
 
     if( m_pPieceIter )    // Complex File ?
     {
-        sal_uLong nOldPos = m_pPieceIter->GetIdx();
+        sal_uInt32 nOldPos = m_pPieceIter->GetIdx();
 
         for (m_pPieceIter->SetIdx(0);
             m_pPieceIter->GetIdx() < m_pPieceIter->GetIMax(); m_pPieceIter->advance())
@@ -1789,7 +1789,7 @@ static bool WW8SkipField(WW8PLCFspecial& rPLCF)
 static bool WW8GetFieldPara(WW8PLCFspecial& rPLCF, WW8FieldDesc& rF)
 {
     void* pData;
-    sal_uLong nOldIdx = rPLCF.GetIdx();
+    sal_uInt32 nOldIdx = rPLCF.GetIdx();
 
     rF.nLen = rF.nId = rF.nOpt = 0;
     rF.bCodeNest = rF.bResNest = false;
@@ -2779,12 +2779,12 @@ long WW8PLCFx::GetNoSprms( WW8_CP& rStart, WW8_CP& rEnd, sal_Int32& rLen )
 }
 
 // ...Idx2: Default: ignore
-sal_uLong WW8PLCFx::GetIdx2() const
+sal_uInt32 WW8PLCFx::GetIdx2() const
 {
     return 0;
 }
 
-void WW8PLCFx::SetIdx2(sal_uLong )
+void WW8PLCFx::SetIdx2(sal_uInt32)
 {
 }
 
@@ -2912,7 +2912,7 @@ sal_uInt32 WW8PLCFx_Fc_FKP::GetIdx() const
     return u;
 }
 
-void WW8PLCFx_Fc_FKP::SetIdx( sal_uLong nIdx )
+void WW8PLCFx_Fc_FKP::SetIdx(sal_uInt32 nIdx)
 {
     if( !( nIdx & 0xffffff00L ) )
     {
@@ -3127,7 +3127,7 @@ void WW8PLCFx_Cp_FKP::ResetAttrStartEnd()
     bLineEnd   = false;
 }
 
-sal_uLong WW8PLCFx_Cp_FKP::GetPCDIdx() const
+sal_uInt32 WW8PLCFx_Cp_FKP::GetPCDIdx() const
 {
     return pPcd ? pPcd->GetIdx() : 0;
 }
@@ -3178,9 +3178,9 @@ void WW8PLCFx_Cp_FKP::GetSprms(WW8PLCFxDesc* p)
         */
         if( !pPieceIter )
             return;
-        sal_uLong nOldPos = pPieceIter->GetIdx();
+        const sal_uInt32 nOldPos = pPieceIter->GetIdx();
         bool bOk = pPieceIter->SeekPos(nOrigCp);
-        pPieceIter->SetIdx( nOldPos );
+        pPieceIter->SetIdx(nOldPos);
         if (!bOk)
             return;
     }
@@ -3205,7 +3205,7 @@ void WW8PLCFx_Cp_FKP::GetSprms(WW8PLCFxDesc* p)
 
                 //We set the piece iterator to the piece that contains the
                 //character, now we have the correct piece for this character
-                sal_uLong nOldPos = pPieceIter->GetIdx();
+                sal_uInt32 nOldPos = pPieceIter->GetIdx();
                 p->nStartPos = nOrigCp;
                 pPieceIter->SeekPos( p->nStartPos);
 
@@ -3389,7 +3389,7 @@ sal_uInt32 WW8PLCFx_SEPX::GetIdx() const
     return pPLCF ? pPLCF->GetIdx() : 0;
 }
 
-void WW8PLCFx_SEPX::SetIdx( sal_uLong nIdx )
+void WW8PLCFx_SEPX::SetIdx(sal_uInt32 nIdx)
 {
     if( pPLCF ) pPLCF->SetIdx( nIdx );
 }
@@ -3574,7 +3574,7 @@ sal_uInt32 WW8PLCFx_SubDoc::GetIdx() const
     return 0;
 }
 
-void WW8PLCFx_SubDoc::SetIdx( sal_uLong nIdx )
+void WW8PLCFx_SubDoc::SetIdx(sal_uInt32 nIdx)
 {
     if( pRef )
     {
@@ -3604,7 +3604,7 @@ void WW8PLCFx_SubDoc::GetSprms(WW8PLCFxDesc* p)
     if (!pRef)
         return;
 
-    sal_uLong nNr = pRef->GetIdx();
+    sal_uInt32 nNr = pRef->GetIdx();
 
     void *pData;
     WW8_CP nFoo;
@@ -3692,7 +3692,7 @@ sal_uInt32 WW8PLCFx_FLD::GetIdx() const
     return pPLCF ? pPLCF->GetIdx() : 0;
 }
 
-void WW8PLCFx_FLD::SetIdx( sal_uLong nIdx )
+void WW8PLCFx_FLD::SetIdx(sal_uInt32 nIdx)
 {
     if( pPLCF )
         pPLCF->SetIdx( nIdx );
@@ -3977,18 +3977,18 @@ sal_uInt32 WW8PLCFx_Book::GetIdx() const
     return nIMax ? pBook[0]->GetIdx() : 0;
 }
 
-void WW8PLCFx_Book::SetIdx( sal_uLong nI )
+void WW8PLCFx_Book::SetIdx(sal_uInt32 nI)
 {
     if( nIMax )
         pBook[0]->SetIdx( nI );
 }
 
-sal_uLong WW8PLCFx_Book::GetIdx2() const
+sal_uInt32 WW8PLCFx_Book::GetIdx2() const
 {
     return nIMax ? ( pBook[1]->GetIdx() | ( ( nIsEnd ) ? 0x80000000 : 0 ) ) : 0;
 }
 
-void WW8PLCFx_Book::SetIdx2( sal_uLong nI )
+void WW8PLCFx_Book::SetIdx2(sal_uInt32 nI)
 {
     if( nIMax )
     {
@@ -4230,13 +4230,13 @@ sal_uInt32 WW8PLCFx_AtnBook::GetIdx() const
     return nIMax ? m_pBook[0]->GetIdx() : 0;
 }
 
-void WW8PLCFx_AtnBook::SetIdx( sal_uLong nI )
+void WW8PLCFx_AtnBook::SetIdx(sal_uInt32 nI)
 {
     if( nIMax )
         m_pBook[0]->SetIdx( nI );
 }
 
-sal_uLong WW8PLCFx_AtnBook::GetIdx2() const
+sal_uInt32 WW8PLCFx_AtnBook::GetIdx2() const
 {
     if (nIMax)
         return m_pBook[1]->GetIdx() | ( m_bIsEnd ? 0x80000000 : 0 );
@@ -4244,7 +4244,7 @@ sal_uLong WW8PLCFx_AtnBook::GetIdx2() const
         return 0;
 }
 
-void WW8PLCFx_AtnBook::SetIdx2( sal_uLong nI )
+void WW8PLCFx_AtnBook::SetIdx2(sal_uInt32 nI)
 {
     if( nIMax )
     {
@@ -4362,13 +4362,13 @@ sal_uInt32 WW8PLCFx_FactoidBook::GetIdx() const
     return m_nIMax ? m_pBook[0]->GetIdx() : 0;
 }
 
-void WW8PLCFx_FactoidBook::SetIdx(sal_uLong nI)
+void WW8PLCFx_FactoidBook::SetIdx(sal_uInt32 nI)
 {
     if (m_nIMax)
         m_pBook[0]->SetIdx(nI);
 }
 
-sal_uLong WW8PLCFx_FactoidBook::GetIdx2() const
+sal_uInt32 WW8PLCFx_FactoidBook::GetIdx2() const
 {
     if (m_nIMax)
         return m_pBook[1]->GetIdx() | (m_bIsEnd ? 0x80000000 : 0);
@@ -4376,7 +4376,7 @@ sal_uLong WW8PLCFx_FactoidBook::GetIdx2() const
         return 0;
 }
 
-void WW8PLCFx_FactoidBook::SetIdx2(sal_uLong nI)
+void WW8PLCFx_FactoidBook::SetIdx2(sal_uInt32 nI)
 {
     if (m_nIMax)
     {
@@ -5248,12 +5248,12 @@ void WW8PLCFx::Restore( const WW8PLCFxSave1& rSave )
     SetStartFc( rSave.nStartFC   );
 }
 
-sal_uLong WW8PLCFx_Cp_FKP::GetIdx2() const
+sal_uInt32 WW8PLCFx_Cp_FKP::GetIdx2() const
 {
     return GetPCDIdx();
 }
 
-void WW8PLCFx_Cp_FKP::SetIdx2( sal_uLong nIdx )
+void WW8PLCFx_Cp_FKP::SetIdx2(sal_uInt32 nIdx)
 {
     if( pPcd )
         pPcd->SetIdx( nIdx );
