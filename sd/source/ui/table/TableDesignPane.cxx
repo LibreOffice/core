@@ -79,12 +79,12 @@ static const sal_Int32 nBitmapHeight = (nCellHeight * nPreviewRows) - (nPreviewR
 
 static const OUStringLiteral gPropNames[ CB_COUNT ] =
 {
-    OUStringLiteral("UseFirstRowStyle") ,
-    OUStringLiteral("UseLastRowStyle") ,
-    OUStringLiteral("UseBandingRowStyle") ,
-    OUStringLiteral("UseFirstColumnStyle") ,
-    OUStringLiteral("UseLastColumnStyle") ,
-    OUStringLiteral("UseBandingColumnStyle")
+    "UseFirstRowStyle",
+    "UseLastRowStyle",
+    "UseBandingRowStyle",
+    "UseFirstColumnStyle",
+    "UseLastColumnStyle",
+    "UseBandingColumnStyle"
 };
 
 TableDesignWidget::TableDesignWidget( VclBuilderContainer* pParent, ViewShellBase& rBase, bool bModal )

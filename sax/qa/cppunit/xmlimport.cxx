@@ -287,9 +287,9 @@ const OString DummyTokenHandler::tokens[] = { "Signature", "CanonicalizationMeth
                                               "DigestMethod", "Reference", "document",
                                               "spacing", "Player", "Height" };
 
-const OUStringLiteral DummyTokenHandler::namespaceURIs[] = { OUStringLiteral("http://www.w3.org/2000/09/xmldsig#"),
-                                                  OUStringLiteral("http://schemas.openxmlformats.org/wordprocessingml/2006/main/"),
-                                                  OUStringLiteral("xyzsports.com/players/football/") };
+const OUStringLiteral DummyTokenHandler::namespaceURIs[] = { "http://www.w3.org/2000/09/xmldsig#",
+                                                  "http://schemas.openxmlformats.org/wordprocessingml/2006/main/",
+                                                  "xyzsports.com/players/football/" };
 
 const OString DummyTokenHandler::namespacePrefixes[] = { "", "w", "Player" };
 
