@@ -93,14 +93,14 @@ void checkCanvasBitmap( const rtl::Reference<VclCanvasBitmap>& xBmp,
         nDepth = pAcc->GetBitCount();
     }
 
-    CPPUNIT_ASSERT_MESSAGE( "Original bitmap size not (200,200)",
-                            aContainedBmp.GetSizePixel() == Size(200,200));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Original bitmap size not (200,200)",
+                            Size(200,200), aContainedBmp.GetSizePixel());
 
     CPPUNIT_ASSERT_MESSAGE( "Original bitmap size via API not (200,200)",
                             xBmp->getSize().Width == 200 && xBmp->getSize().Height == 200);
 
-    CPPUNIT_ASSERT_MESSAGE( "alpha state mismatch",
-                            bool(xBmp->hasAlpha()) == aContainedBmpEx.IsTransparent());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "alpha state mismatch",
+                            aContainedBmpEx.IsTransparent(), bool(xBmp->hasAlpha()));
 
     CPPUNIT_ASSERT_MESSAGE( "getScaledBitmap() failed",
                             xBmp->getScaledBitmap( geometry::RealSize2D(500,500), false ).is());
@@ -110,32 +110,32 @@ void checkCanvasBitmap( const rtl::Reference<VclCanvasBitmap>& xBmp,
 
     const sal_Int32 nExpectedBitsPerPixel(
         aContainedBmpEx.IsTransparent() ? std::max(8,nDepth)+8 : nDepth);
-    CPPUNIT_ASSERT_MESSAGE( "# scanlines not 1",
-                            aLayout.ScanLines == 1);
-    CPPUNIT_ASSERT_MESSAGE( "# scanline bytes mismatch",
-                            aLayout.ScanLineBytes == (nExpectedBitsPerPixel+7)/8);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "# scanlines not 1",
+                            static_cast<sal_Int32>(1), aLayout.ScanLines);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "# scanline bytes mismatch",
+                            static_cast<sal_Int32>((nExpectedBitsPerPixel+7)/8), aLayout.ScanLineBytes);
     CPPUNIT_ASSERT_MESSAGE( "# scanline stride mismatch",
                             aLayout.ScanLineStride == (nExpectedBitsPerPixel+7)/8 ||
                             aLayout.ScanLineStride == -(nExpectedBitsPerPixel+7)/8);
-    CPPUNIT_ASSERT_MESSAGE( "# plane stride not 0",
-                            aLayout.PlaneStride == 0);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "# plane stride not 0",
+                            static_cast<sal_Int32>(0), aLayout.PlaneStride);
 
     CPPUNIT_ASSERT_MESSAGE( "Color space not there",
                             aLayout.ColorSpace.is());
 
-    CPPUNIT_ASSERT_MESSAGE( "Palette existence does not conform to bitmap",
-                            aLayout.Palette.is() == (nDepth <= 8));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Palette existence does not conform to bitmap",
+                            (nDepth <= 8), aLayout.Palette.is());
 
     uno::Sequence<sal_Int8> aPixelData2 = xBmp->getPixel( aLayout, geometry::IntegerPoint2D(0,0) );
 
-    CPPUNIT_ASSERT_MESSAGE( "getData and getPixel did not return same amount of data",
-                            aPixelData2.getLength() == aPixelData.getLength());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "getData and getPixel did not return same amount of data",
+                            aPixelData.getLength(), aPixelData2.getLength());
 
     aPixelData = xBmp->getData(aLayout, geometry::IntegerRectangle2D(0,0,200,1));
-    CPPUNIT_ASSERT_MESSAGE( "# scanlines not 1 for getPixel",
-                            aLayout.ScanLines == 1);
-    CPPUNIT_ASSERT_MESSAGE( "# scanline bytes mismatch for getPixel",
-                            aLayout.ScanLineBytes == (200*nExpectedBitsPerPixel+7)/8);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "# scanlines not 1 for getPixel",
+                            static_cast<sal_Int32>(1), aLayout.ScanLines);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "# scanline bytes mismatch for getPixel",
+                            static_cast<sal_Int32>((200*nExpectedBitsPerPixel+7)/8), aLayout.ScanLineBytes);
     CPPUNIT_ASSERT_MESSAGE( "# scanline stride mismatch for getPixel",
                             aLayout.ScanLineStride == (200*nExpectedBitsPerPixel+7)/8 ||
                             aLayout.ScanLineStride == -(200*nExpectedBitsPerPixel+7)/8);
@@ -148,8 +148,8 @@ void checkCanvasBitmap( const rtl::Reference<VclCanvasBitmap>& xBmp,
     const rendering::ARGBColor* pARGBStart( aARGBColors.getConstArray() );
     std::pair<const rendering::RGBColor*,
         const rendering::ARGBColor*> aRes = std::mismatch( pRGBStart, pRGBEnd, pARGBStart );
-    CPPUNIT_ASSERT_MESSAGE( "argb and rgb colors are not equal",
-                            aRes.first == pRGBEnd);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "argb and rgb colors are not equal",
+                            pRGBEnd, aRes.first);
 
     CPPUNIT_ASSERT_MESSAGE( "rgb colors are not within [0,1] range",
                             std::none_of(pRGBStart,pRGBEnd,&rangeCheck));
@@ -164,8 +164,8 @@ void checkCanvasBitmap( const rtl::Reference<VclCanvasBitmap>& xBmp,
         "Second pixel is not opaque", 1.0, pARGBStart[1].Alpha, 1E-12);
     if( aContainedBmpEx.IsTransparent() )
     {
-        CPPUNIT_ASSERT_MESSAGE( "First pixel is not fully transparent",
-                                pARGBStart[0].Alpha == 0.0);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "First pixel is not fully transparent",
+                                0.0, pARGBStart[0].Alpha);
     }
 
     CPPUNIT_ASSERT_MESSAGE( "Second pixel is not black",
@@ -189,8 +189,8 @@ void checkCanvasBitmap( const rtl::Reference<VclCanvasBitmap>& xBmp,
         uno::Reference<rendering::XBitmapPalette> xPal = xBmp->getPalette();
         CPPUNIT_ASSERT_MESSAGE( "8bit or less: missing palette",
                                 xPal.is());
-        CPPUNIT_ASSERT_MESSAGE( "Palette incorrect entry count",
-                                xPal->getNumberOfEntries() == 1L << nOriginalDepth);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "Palette incorrect entry count",
+                                static_cast<sal_Int32>(1L << nOriginalDepth), xPal->getNumberOfEntries());
         uno::Sequence<double> aIndex;
         CPPUNIT_ASSERT_MESSAGE( "Palette is not read-only",
                                 !xPal->setIndex(aIndex,true,0));
@@ -226,13 +226,13 @@ void checkCanvasBitmap( const rtl::Reference<VclCanvasBitmap>& xBmp,
         aPixel3 = xBmp->convertIntegerFromARGB( aARGBColor );
         aPixel4 = xBmp->getPixel( aLayout, geometry::IntegerPoint2D(5,0) );
         CPPUNIT_ASSERT_MESSAGE( "Green pixel from bitmap mismatch with manually converted green pixel",
-                                aPixel3 == aPixel4);
+                                bool(aPixel3 == aPixel4));
 
         if( !aContainedBmpEx.IsTransparent() )
         {
             aPixel3 = xBmp->convertIntegerFromRGB( aRGBColor );
             CPPUNIT_ASSERT_MESSAGE( "Green pixel from bitmap mismatch with manually RGB-converted green pixel",
-                                    aPixel3 == aPixel4);
+                                    bool(aPixel3 == aPixel4));
         }
     }
 }
@@ -539,8 +539,8 @@ private:
     {
         const std::size_t  nLen( deviceColor.getLength() );
         const sal_Int32 nBytesPerPixel(mnBitsPerPixel == 8 ? 1 : 4);
-        CPPUNIT_ASSERT_MESSAGE("number of channels no multiple of pixel element count",
-                               nLen%nBytesPerPixel==0);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("number of channels no multiple of pixel element count",
+                               0, static_cast<int>(nLen%nBytesPerPixel));
 
         uno::Sequence< rendering::ARGBColor > aRes( nLen / nBytesPerPixel );
         rendering::ARGBColor* pOut( aRes.getArray() );
@@ -579,8 +579,8 @@ private:
     {
         const std::size_t  nLen( deviceColor.getLength() );
         const sal_Int32 nBytesPerPixel(mnBitsPerPixel == 8 ? 1 : 4);
-        CPPUNIT_ASSERT_MESSAGE("number of channels no multiple of pixel element count",
-                               nLen%nBytesPerPixel==0);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("number of channels no multiple of pixel element count",
+                               0, static_cast<int>(nLen%nBytesPerPixel));
 
         uno::Sequence< rendering::ARGBColor > aRes( nLen / nBytesPerPixel );
         rendering::ARGBColor* pOut( aRes.getArray() );
@@ -767,22 +767,22 @@ void CanvasBitmapTest::runTest()
     BitmapEx aBmp = vcl::unotools::bitmapExFromXBitmap(xTestBmp);
     CPPUNIT_ASSERT_MESSAGE( "Palette bitmap is transparent",
                             !aBmp.IsTransparent());
-    CPPUNIT_ASSERT_MESSAGE( "Bitmap does not have size (10,10)",
-                            aBmp.GetSizePixel() == Size(10,10));
-    CPPUNIT_ASSERT_MESSAGE( "Bitmap does not have bitcount of 8",
-                            aBmp.GetBitCount() == 8);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Bitmap does not have size (10,10)",
+                            Size(10,10), aBmp.GetSizePixel());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Bitmap does not have bitcount of 8",
+                            static_cast<sal_uInt16>(8),  aBmp.GetBitCount());
     {
         BitmapReadAccess* pBmpAcc   = aBmp.GetBitmap().AcquireReadAccess();
 
         CPPUNIT_ASSERT_MESSAGE( "Bitmap has invalid BitmapReadAccess",
                                 pBmpAcc );
 
-        CPPUNIT_ASSERT_MESSAGE("(0,0) incorrect content",
-                               pBmpAcc->GetPixel(0,0) == BitmapColor(0));
-        CPPUNIT_ASSERT_MESSAGE("(2,2) incorrect content",
-                               pBmpAcc->GetPixel(2,2) == BitmapColor(2));
-        CPPUNIT_ASSERT_MESSAGE("(9,2) incorrect content",
-                               pBmpAcc->GetPixel(2,9) == BitmapColor(9));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("(0,0) incorrect content",
+                               BitmapColor(0), pBmpAcc->GetPixel(0,0));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("(2,2) incorrect content",
+                               BitmapColor(2), pBmpAcc->GetPixel(2,2));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("(9,2) incorrect content",
+                               BitmapColor(9), pBmpAcc->GetPixel(2,9));
 
         Bitmap::ReleaseAccess(pBmpAcc);
     }
@@ -794,10 +794,10 @@ void CanvasBitmapTest::runTest()
                             aBmp.IsTransparent());
     CPPUNIT_ASSERT_MESSAGE( "Palette bitmap has no alpha",
                             aBmp.IsAlpha());
-    CPPUNIT_ASSERT_MESSAGE( "Bitmap does not have size (10,10)",
-                            aBmp.GetSizePixel() == Size(10,10));
-    CPPUNIT_ASSERT_MESSAGE( "Bitmap has bitcount of 24",
-                            aBmp.GetBitCount() == 24);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Bitmap does not have size (10,10)",
+                            Size(10,10), aBmp.GetSizePixel());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Bitmap has bitcount of 24",
+                            static_cast<sal_uInt16>(24), aBmp.GetBitCount());
     {
         BitmapReadAccess* pBmpAcc   = aBmp.GetBitmap().AcquireReadAccess();
         BitmapReadAccess* pAlphaAcc = aBmp.GetAlpha().AcquireReadAccess();
@@ -807,18 +807,18 @@ void CanvasBitmapTest::runTest()
         CPPUNIT_ASSERT_MESSAGE( "Bitmap has invalid alpha BitmapReadAccess",
                                 pAlphaAcc);
 
-        CPPUNIT_ASSERT_MESSAGE("(0,0) incorrect content",
-                               pBmpAcc->GetPixel(0,0) == BitmapColor(0,1,0));
-        CPPUNIT_ASSERT_MESSAGE("(0,0) incorrect alpha content",
-                               pAlphaAcc->GetPixel(0,0) == BitmapColor(255));
-        CPPUNIT_ASSERT_MESSAGE("(2,2) incorrect content",
-                               pBmpAcc->GetPixel(2,2) == BitmapColor(0,3,2));
-        CPPUNIT_ASSERT_MESSAGE("(2,2) incorrect alpha content",
-                               pAlphaAcc->GetPixel(2,2) == BitmapColor(253));
-        CPPUNIT_ASSERT_MESSAGE("(9,2) incorrect content",
-                               pBmpAcc->GetPixel(2,9) == BitmapColor(0,3,9));
-        CPPUNIT_ASSERT_MESSAGE("(9,2) correct alpha content",
-                               pAlphaAcc->GetPixel(2,9) == BitmapColor(253));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("(0,0) incorrect content",
+                               BitmapColor(0,1,0), pBmpAcc->GetPixel(0,0));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("(0,0) incorrect alpha content",
+                               BitmapColor(255), pAlphaAcc->GetPixel(0,0));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("(2,2) incorrect content",
+                               BitmapColor(0,3,2), pBmpAcc->GetPixel(2,2));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("(2,2) incorrect alpha content",
+                               BitmapColor(253), pAlphaAcc->GetPixel(2,2));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("(9,2) incorrect content",
+                               BitmapColor(0,3,9), pBmpAcc->GetPixel(2,9));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("(9,2) correct alpha content",
+                               BitmapColor(253), pAlphaAcc->GetPixel(2,9));
 
         aBmp.GetAlpha().ReleaseAccess(pAlphaAcc);
         Bitmap::ReleaseAccess(pBmpAcc);
