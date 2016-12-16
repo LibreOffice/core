@@ -19,6 +19,9 @@
 
 #include "CommonSalLayout.hxx"
 
+#if defined(_WIN32)
+#include <vcl/opengl/OpenGLHelper.hxx>
+#endif
 #include <vcl/unohelp.hxx>
 #include <scrptrun.h>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
@@ -195,7 +198,7 @@ CommonSalLayout::CommonSalLayout(HDC hDC, WinFontInstance& rWinFontInstance, con
     }
 
     // Calculate the mnAveWidthFactor, see the comment where it is used.
-    if (mrFontSelData.mnWidth)
+    if (mrFontSelData.mnWidth && ! OpenGLHelper::isVCLOpenGLEnabled())
     {
         double nUPEM = hb_face_get_upem(hb_font_get_face(mpHbFont));
 
