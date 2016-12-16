@@ -22,7 +22,9 @@
 
 using namespace com::sun::star;
 
-SAL_IMPLEMENT_MAIN_WITH_ARGS(nArgc, pArgv)
+namespace
+{
+int pdfVerify(int nArgc, char** pArgv)
 {
     if (nArgc < 2)
     {
@@ -150,6 +152,20 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(nArgc, pArgv)
     }
 
     return 0;
+}
+}
+
+SAL_IMPLEMENT_MAIN_WITH_ARGS(nArgc, pArgv)
+{
+    try
+    {
+        return pdfVerify(nArgc, pArgv);
+    }
+    catch (...)
+    {
+        std::cerr << "pdfverify: uncaught exception while invoking pdfVerify()" << std::endl;
+        return 1;
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
