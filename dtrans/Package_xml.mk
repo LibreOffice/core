@@ -1,4 +1,4 @@
-#**************************************************************
+###############################################################
 #  
 #  Licensed to the Apache Software Foundation (ASF) under one
 #  or more contributor license agreements.  See the NOTICE file
@@ -17,27 +17,21 @@
 #  specific language governing permissions and limitations
 #  under the License.
 #  
-#**************************************************************
+###############################################################
 
 
-PRJ=..
 
-PRJNAME=dtrans
-TARGET=inc
+$(eval $(call gb_Package_Package,dtrans_xml,$(SRCDIR)/dtrans/source))
 
-# --- Settings -----------------------------------------------------
+$(eval $(call gb_Package_add_file,dtrans_xml,xml/dtrans.xml,generic/dtrans.xml))
+$(eval $(call gb_Package_add_file,dtrans_xml,xml/mcnttype.xml,cnttype/mcnttype.xml))
 
-.INCLUDE :  settings.mk
+ifeq ($(OS),OS2)
+$(eval $(call gb_Package_add_file,dtrans_xml,xml/sysdtrans.xml,os2/clipb/sysdtrans.xml))
+endif
 
-# --- Files --------------------------------------------------------
-# --- Targets -------------------------------------------------------
-
-.INCLUDE :  target.mk
-
-.IF "$(ENABLE_PCH)"!=""
-ALLTAR : \
-    $(SLO)$/precompiled.pch \
-    $(SLO)$/precompiled_ex.pch
-    
-.ENDIF			# "$(ENABLE_PCH)"!=""
-
+ifeq ($(OS),WNT)
+$(eval $(call gb_Package_add_file,dtrans_xml,xml/dnd.xml,win32/dnd/dnd.xml))
+$(eval $(call gb_Package_add_file,dtrans_xml,xml/ftransl.xml,win32/ftransl/ftransl.xml))
+$(eval $(call gb_Package_add_file,dtrans_xml,xml/sysdtrans.xml,win32/clipb/sysdtrans.xml))
+endif

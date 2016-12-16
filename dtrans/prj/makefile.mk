@@ -21,29 +21,24 @@
 
 
 
-PRJ=..$/..
+PRJ=..
+TARGET=prj
 
-PRJNAME= dtrans
-TARGET=	 test_dtrans
+.INCLUDE : settings.mk
 
-LIBTARGET=NO
-TARGETTYPE=CUI
-ENABLE_EXCEPTIONS=TRUE
+.IF "$(VERBOSE)"!=""
+VERBOSEFLAG :=
+.ELSE
+VERBOSEFLAG := -s
+.ENDIF
 
-# --- Settings -----------------------------------------------------
-.INCLUDE :  settings.mk
+.IF "$(DEBUG)"!=""
+DEBUG_ARGUMENT=DEBUG=$(DEBUG)
+.ELIF "$(debug)"!=""
+DEBUG_ARGUMENT=debug=$(debug)
+.ELSE
+DEBUG_ARGUMENT=
+.ENDIF
 
-# --- Files --------------------------------------------------------
-
-APP1TARGET=	$(TARGET)
-APP1OBJS= \
-    $(OBJ)$/test_dtrans.obj
-                
-APP1STDLIBS= \
-    $(SALLIB) \
-    $(CPPULIB) \
-    $(CPPUHELPERLIB)
-                
-# --- Targets ------------------------------------------------------
-.INCLUDE :		target.mk
-
+all:
+    cd $(PRJ) && $(GNUMAKE) $(VERBOSEFLAG) -r -j$(MAXPROCESS) $(gb_MAKETARGET) $(DEBUG_ARGUMENT) && $(GNUMAKE) $(VERBOSEFLAG) -r deliverlog

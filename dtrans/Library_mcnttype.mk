@@ -21,30 +21,40 @@
 
 
 
-PRJ=..$/..$/..
-PRJNAME=dtrans
-TARGET=mtaolecb
-LIBTARGET=NO
-ENABLE_EXCEPTIONS=YES
+$(eval $(call gb_Library_Library,mcnttype))
 
-# --- Settings ----------------------------------
+$(eval $(call gb_Library_add_precompiled_header,mcnttype,$(SRCDIR)/dtrans/inc/pch/precompiled_dtrans))
 
-.INCLUDE : settings.mk
+$(eval $(call gb_Library_set_componentfile,mcnttype,dtrans/util/mcnttype))
 
-# --- Targets ----------------------------------
+$(eval $(call gb_Library_set_include,mcnttype,\
+        $$(INCLUDE) \
+	-I$(SRCDIR)/dtrans/inc/pch \
+))
 
-.IF "$(GUI)"=="WNT"
+$(eval $(call gb_Library_add_api,mcnttype,\
+	offapi \
+	udkapi \
+))
 
-# --- static lib --------------------------
+$(eval $(call gb_Library_add_linked_libs,mcnttype,\
+	cppuhelper \
+	cppu \
+	sal \
+	stl \
+	$(gb_STDLIBS) \
+))
 
-# don't do this in the source file. breaks pch
-CDEFS+=-DUNICODE
+ifeq ($(OS),WNT)
+$(eval $(call gb_Library_add_linked_libs,mcnttype,\
+	uwinapi \
+))
+endif
 
-SLOFILES=$(SLO)$/MtaOleClipb.obj
+$(eval $(call gb_Library_add_exception_objects,mcnttype,\
+	dtrans/source/cnttype/mctfentry \
+	dtrans/source/cnttype/mcnttfactory \
+	dtrans/source/cnttype/mcnttype \
+))
 
-LIB1TARGET=$(SLB)$/$(TARGET).lib
-LIB1OBJFILES=$(SLOFILES)
-                 
-.ENDIF
-
-.INCLUDE : target.mk
+# vim: set noet sw=4 ts=4:

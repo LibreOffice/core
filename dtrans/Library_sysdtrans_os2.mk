@@ -21,27 +21,36 @@
 
 
 
-PRJ=..$/..$/..
-PRJNAME=dtrans
-TARGET=ftransl
-ENABLE_EXCEPTIONS=TRUE
-COMP1TYPELIST=$(TARGET)
-USE_BOUNDCHK=
+$(eval $(call gb_Library_Library,sysdtran))
 
-.IF "$(USE_BOUNDCHK)"=="TR"
-bndchk=tr
-stoponerror=tr
-.ENDIF
+$(eval $(call gb_Library_add_precompiled_header,sysdtran,$(SRCDIR)/dtrans/inc/pch/precompiled_dtrans))
 
-# --- Settings -----------------------------------------------------
+$(eval $(call gb_Library_set_componentfile,sysdtran,dtrans/util/sysdtrans))
 
-.INCLUDE :  settings.mk
+$(eval $(call gb_Library_set_include,sysdtran,\
+        $$(INCLUDE) \
+	-I$(SRCDIR)/dtrans/inc/pch \
+))
 
-# ------------------------------------------------------------------
+$(eval $(call gb_Library_add_api,sysdtran,\
+	offapi \
+	udkapi \
+))
 
-SLOFILES=$(SLO)$/ftranslentry.obj \
-         $(SLO)$/ftransl.obj
+$(eval $(call gb_Library_add_linked_libs,sysdtran,\
+	cppuhelper \
+	cppu \
+	sal \
+	stl \
+	UClip \
+	$(gb_STDLIBS) \
+))
 
-# --- Targets ------------------------------------------------------
+$(eval $(call gb_Library_add_exception_objects,sysdtran,\
+	dtrans/source/os2/clipb/Os2Clipboard \
+	dtrans/source/os2/clipb/Os2Bitmap \
+	dtrans/source/os2/clipb/Os2Service \
+	dtrans/source/os2/clipb/Os2Transferable \
+))
 
-.INCLUDE :	target.mk
+# vim: set noet sw=4 ts=4:

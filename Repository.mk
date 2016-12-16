@@ -58,7 +58,9 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     dbpool \
     dbtools \
     desktop_detector \
+    dnd \
     drawinglayer \
+    dtrans \
     svgio \
     editeng \
     embobj \
@@ -68,6 +70,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     fileacc \
     for \
     forui \
+    ftransl \
     fwe \
     fwi \
     fwk \
@@ -77,6 +80,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     juh \
     juhx \
     lng \
+    mcnttype \
     msfilter \
     msword \
     odbc \
@@ -107,6 +111,8 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     sdd \
     sdui \
     sdfilt \
+    sysdtran \
+    sysdtrans \
     textconversiondlgs \
     ootk \
     tl \

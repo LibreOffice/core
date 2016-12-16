@@ -19,38 +19,14 @@
 #  
 #**************************************************************
 
+ifeq ($(strip $(SOLARENV)),)
+$(error No environment set!)
+endif
 
+gb_PARTIALBUILD := T
+GBUILDDIR := $(SOLARENV)/gbuild
+include $(GBUILDDIR)/gbuild.mk
 
-PRJ=..$/..$/..
+$(eval $(call gb_Module_make_global_targets,$(shell ls $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/Module*.mk)))
 
-PRJNAME=dtrans
-TARGET=dtutils
-LIBTARGET=NO
-USE_BOUNDCHK=
-ENABLE_EXCEPTIONS=YES
-
-.IF "$(USE_BOUNDCHK)"=="TR"
-bndchk=tr
-stoponerror=tr
-.ENDIF
-
-# --- Settings -----------------------------
-
-.INCLUDE :  settings.mk
-
-#-------------------------------------------
-# files to compile to obj's
-
-SLOFILES= $(SLO)$/ImplHelper.obj
-
-#-------------------------------------------
-# build a static library
-
-LIB1TARGET= $(SLB)$/$(TARGET).lib
-LIB1OBJFILES=$(SLOFILES)
-
-
-# --- Targets ------------------------------
-
-.INCLUDE :	target.mk
-
+# vim: set noet sw=4 ts=4:

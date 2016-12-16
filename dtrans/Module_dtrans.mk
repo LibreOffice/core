@@ -21,29 +21,26 @@
 
 
 
-PRJ=..$/..
+$(eval $(call gb_Module_Module,dtrans))
 
-PRJNAME=dtrans
-TARGET=mcnttype
-ENABLE_EXCEPTIONS=TRUE
-COMP1TYPELIST=$(TARGET)
-USE_BOUNDCHK=
+$(eval $(call gb_Module_add_targets,dtrans,\
+	Library_dtrans \
+	Library_mcnttype \
+	Package_xml \
+))
 
-.IF "$(USE_BOUNDCHK)"=="TR"
-bndchk=tr
-stoponerror=tr
-.ENDIF
+ifeq ($(OS),WNT)
+$(eval $(call gb_Module_add_targets,dtrans,\
+	Library_dnd \
+	Library_ftransl \
+	Library_sysdtrans_win \
+))
+endif
 
-# --- Settings -----------------------------------------------------
+ifeq ($(OS),OS2)
+$(eval $(call gb_Module_add_targets,dtrans,\
+	Library_sysdtrans_os2 \
+))
+endif
 
-.INCLUDE :  settings.mk
-
-# ------------------------------------------------------------------
-
-SLOFILES=$(SLO)$/mctfentry.obj \
-         $(SLO)$/mcnttfactory.obj \
-         $(SLO)$/mcnttype.obj
-
-# --- Targets ------------------------------------------------------
-
-.INCLUDE :	target.mk
+# vim: set noet sw=4 ts=4:

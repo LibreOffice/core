@@ -21,29 +21,34 @@
 
 
 
-PRJ=..$/..$/..
+$(eval $(call gb_Library_Library,dtrans))
 
-PRJNAME=dtrans
-TARGET=testcnttype
-LIBTARGET=NO
-TARGETTYPE=CUI
+$(eval $(call gb_Library_add_precompiled_header,dtrans,$(SRCDIR)/dtrans/inc/pch/precompiled_dtrans))
 
-# --- Settings -----------------------------------------------------
+$(eval $(call gb_Library_set_componentfile,dtrans,dtrans/source/generic/dtrans))
 
-.INCLUDE :  settings.mk
+$(eval $(call gb_Library_set_include,dtrans,\
+        $$(INCLUDE) \
+	-I$(SRCDIR)/dtrans/inc/pch \
+))
 
-CFLAGS+=-GX
+$(eval $(call gb_Library_add_api,dtrans,\
+	offapi \
+	udkapi \
+))
 
-# --- Files --------------------------------------------------------
+$(eval $(call gb_Library_add_linked_libs,dtrans,\
+	cppuhelper \
+	cppu \
+	sal \
+	stl \
+	$(gb_STDLIBS) \
+))
 
-OBJFILES=   	$(OBJ)$/testcnttype.obj
-APP1TARGET=		$(TARGET)
-APP1OBJS=		$(OBJ)$/testcnttype.obj
-                
-APP1STDLIBS=	$(SALLIB) \
-                $(CPPULIB)			\
-                $(CPPUHELPERLIB)	\
-                
-# --- Targets ------------------------------------------------------
-.INCLUDE :		target.mk
+$(eval $(call gb_Library_add_exception_objects,dtrans,\
+	dtrans/source/generic/generic_clipboard \
+	dtrans/source/generic/clipboardmanager \
+	dtrans/source/generic/dtrans \
+))
 
+# vim: set noet sw=4 ts=4:

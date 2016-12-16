@@ -21,35 +21,38 @@
 
 
 
-PRJ=..$/..$/..
+$(eval $(call gb_Library_Library,ftransl))
 
-PRJNAME=dtrans
-TARGET=sysdtrans
-ENABLE_EXCEPTIONS=TRUE
-COMP1TYPELIST=$(TARGET)
-USE_BOUNDCHK=
+$(eval $(call gb_Library_add_precompiled_header,ftransl,$(SRCDIR)/dtrans/inc/pch/precompiled_dtrans))
 
-.IF "$(USE_BOUNDCHK)"=="TR"
-bndchk=tr
-stoponerror=tr
-.ENDIF
+$(eval $(call gb_Library_set_componentfile,ftransl,dtrans/util/ftransl))
 
-# --- Settings -----------------------------------------------------
+$(eval $(call gb_Library_set_include,ftransl,\
+        $$(INCLUDE) \
+	-I$(SRCDIR)/dtrans/inc/pch \
+))
 
-.INCLUDE :  settings.mk
+$(eval $(call gb_Library_add_api,ftransl,\
+	offapi \
+	udkapi \
+))
 
-# ------------------------------------------------------------------
+$(eval $(call gb_Library_add_linked_libs,ftransl,\
+	advapi32 \
+	cppuhelper \
+	cppu \
+	gdi32 \
+	ole32 \
+	sal \
+	stl \
+	uwinapi \
+	$(gb_STDLIBS) \
+))
 
-.IF "$(COM)" != "GCC"
-CFLAGS+=-GR
-.ENDIF
-CFLAGS+=-DUNICODE -D_UNICODE
+$(eval $(call gb_Library_add_exception_objects,ftransl,\
+	dtrans/source/win32/ftransl/ftransl \
+	dtrans/source/win32/ftransl/ftranslentry \
+	dtrans/source/win32/misc/ImplHelper \
+))
 
-SLOFILES=$(SLO)$/WinClipboard.obj \
-         $(SLO)$/WinClipbImpl.obj \
-         $(SLO)$/wcbentry.obj
-
-
-# --- Targets ------------------------------------------------------
-
-.INCLUDE :	target.mk
+# vim: set noet sw=4 ts=4:

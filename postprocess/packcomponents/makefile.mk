@@ -72,6 +72,7 @@ my_components = \
     component/dbaccess/util/dba \
     component/dbaccess/util/dbu \
     component/dbaccess/util/sdbt \
+    component/dtrans/util/mcnttype \
     component/embeddedobj/util/embobj \
     component/eventattacher/source/evtatt \
     component/fileaccess/util/fileacc \
@@ -146,7 +147,6 @@ my_components = \
     localebe1 \
     log \
     mailmerge \
-    mcnttype \
     migrationoo2 \
     msfilter \
     mysql \
@@ -326,22 +326,22 @@ my_components += \
 .IF "$(OS)" == "WNT"
 my_components += \
     ado \
-    dnd \
-    dtrans \
+    component/dtrans/source/generic/dtrans \
+    component/dtrans/util/dnd \
+    component/dtrans/util/ftransl \
+    component/dtrans/util/sysdtrans \
     fop \
     fps \
-    ftransl \
     java_uno_accessbridge \
     sysmail \
-    sysdtrans \
     winaccessibility \
     wininetbe1
 .END
 
 .IF "$(OS)" == "OS2"
 my_components += \
-    dtrans \
-    sysdtrans
+    component/dtrans/source/generic/dtrans \
+    component/dtrans/util/sysdtrans
 .END
 
 .IF "$(OS)" == "WNT" && "$(DISABLE_ATL)" == ""
