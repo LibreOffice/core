@@ -297,11 +297,11 @@ OUString ODsnTypeCollection::getEmbeddedDatabase() const
     {
         if ( aInstalled.hasByName("EmbeddedDatabases/DefaultEmbeddedDatabase/Value") )
         {
-            static const char s_sValue[] = "EmbeddedDatabases/DefaultEmbeddedDatabase/Value";
+            static const OUStringLiteral s_sValue = "EmbeddedDatabases/DefaultEmbeddedDatabase/Value";
 
             aInstalled.getNodeValue(s_sValue) >>= sEmbeddedDatabaseURL;
             if ( !sEmbeddedDatabaseURL.isEmpty() )
-                aInstalled.getNodeValue(OUStringLiteral(s_sValue) + "/" + sEmbeddedDatabaseURL + "/URL") >>= sEmbeddedDatabaseURL;
+                aInstalled.getNodeValue(s_sValue + "/" + sEmbeddedDatabaseURL + "/URL") >>= sEmbeddedDatabaseURL;
         }
     }
     if ( sEmbeddedDatabaseURL.isEmpty() )
