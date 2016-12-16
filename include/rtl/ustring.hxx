@@ -819,7 +819,7 @@ public:
     /** @overload @since LibreOffice 5.3 */
     template<typename T>
     typename libreoffice_internal::ConstCharArrayDetector<T, bool>::TypeUtf16
-    equalIgnoreAsciiCase(T & literal) const {
+    equalsIgnoreAsciiCase(T & literal) const {
         return
             rtl_ustr_compareIgnoreAsciiCase_WithLength(
                 pData->buffer, pData->length,
