@@ -1569,7 +1569,7 @@ void SwDrawContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
         // No distinction between layout directions, because of missing
         // information about WW8 in vertical layout.
         rResult.m_aPos.setX(lcl_GetWW8Pos(pAnchoredObj, bFollowTextFlow, rResult.m_eHoriConv).getX());
-        rResult.m_aPos.setY(lcl_GetWW8Pos(pAnchoredObj, bFollowTextFlow, rResult.m_eHoriConv).getY());
+        rResult.m_aPos.setY(lcl_GetWW8Pos(pAnchoredObj, bFollowTextFlow, rResult.m_eVertConv).getY());
         rResult.m_bConverted = true;
     }
     else if (auto pRestoreFlyAnchorHint = dynamic_cast<const sw::RestoreFlyAnchorHint*>(&rHint))
