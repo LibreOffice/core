@@ -12,21 +12,14 @@
 # build path
 export BUILD_PATH=$PWD
 
-# set package base name, eg. collaboraoffice5.1
-# based on the actual directory, eg. /opt/collaboraoffice5.1,
-# or checking the PACKAGENAME environmental variable
-
-if [ -z "$PACKAGENAME" ]
-then
-DEBUGSRC_PACKAGENAME=$(basename $BUILD_PATH)
-else
-DEBUGSRC_PACKAGENAME=$PACKAGENAME
-fi
-echo PACKAGE NAME: $DEBUGSRC_PACKAGENAME
-
 # set install dirname and product version
 eval $(grep ^INSTALLDIRNAME config.log)
 eval $(grep ^PRODUCTVERSION config.log)
+
+# set package base name, eg. collaboraoffice5.1
+DEBUGSRC_PACKAGENAME=$INSTALLDIRNAME$PRODUCTVERSION
+
+echo PACKAGENAME: $DEBUGSRC_PACKAGENAME
 
 #################################
 # Function for re-build RPM files
@@ -50,13 +43,6 @@ DEBUGSRC="$(find workdir -name ${DEBUGSRC_PACKAGENAME}.spec.log)"
 
 echo Base spec file: $DEBUGSRC
 
-if [ -z "$DEBUGSRC" ]
-then
- echo "Missing ${DEBUGSRC_PACKAGENAME}.spec.log in workdir/, specify spec.log file name in PACKAGENAME"
- echo "For example: PACKAGENAME=collaboraoffice5.1 dbg_pkg"
- exit 1
-fi
-
 # create spec file, based on the spec file of the brand package
 
 cat $DEBUGSRC | awk '
@@ -76,7 +62,7 @@ cat $DEBUGSRC | awk '
 
  # create source file list
 
- find $BUILD_PATH -name '*[.][hc]xx' -o -name '*[.][hc]' | grep -Ev '/(workdir|qa|DEBS)/' | grep -E '/(source|inc)/' |
+ find $BUILD_PATH -name '*[.][hc]xx' -o -name '*[.][hc]' | grep -Ev '/(instdir|workdir|qa|DEBS)/' |
 
  # list all directories for complete rpm remove
 
@@ -204,7 +190,7 @@ cat $DEBUGSRC | awk '
 
  # create source file list
 
- find $BUILD_PATH -name '*[.][hc]xx' -o -name '*[.][hc]' | grep -Ev '/(workdir|qa|DEBS)/' | grep -E '/(source|inc)/' |
+ find $BUILD_PATH -name '*[.][hc]xx' -o -name '*[.][hc]' | grep -Ev '/(instdir|workdir|qa|DEBS)/' |
 
  # list all directories
 
