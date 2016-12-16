@@ -54,8 +54,7 @@ void ScreenshotTest::setUp()
     mxDesktop = css::frame::Desktop::create( comphelper::getComponentContext(getMultiServiceFactory()) );
     CPPUNIT_ASSERT_MESSAGE("no desktop!", mxDesktop.is());
 
-    osl::FileBase::RC err = osl::Directory::create( m_directories.getURLFromWorkdir( OUStringToOString(m_aScreenshotDirectory, RTL_TEXTENCODING_UTF8).getStr())) ;
-    CPPUNIT_ASSERT_MESSAGE(OUStringToOString("Failed to create screenshot directory - " + m_directories.getURLFromWorkdir( OUStringToOString(m_aScreenshotDirectory, RTL_TEXTENCODING_UTF8).getStr()), RTL_TEXTENCODING_UTF8).getStr(), (err == osl::FileBase::E_None || err == osl::FileBase::E_EXIST) );
+    osl::Directory::create( m_directories.getURLFromWorkdir( OUStringToOString(m_aScreenshotDirectory, RTL_TEXTENCODING_UTF8).getStr())) ;
 
     // initialize maKnownDialogs
     if (maKnownDialogs.empty())
@@ -71,10 +70,7 @@ void ScreenshotTest::implSaveScreenshot(const Bitmap& rScreenshot, const OString
     aDirname = m_aScreenshotDirectory + "/" + aDirname +
                ( (maCurrentLanguage == "en-US") ? OUString() : "/" + maCurrentLanguage );
 
-    osl::FileBase::RC err = osl::Directory::createPath(m_directories.getURLFromWorkdir(OUStringToOString(aDirname,RTL_TEXTENCODING_UTF8).getStr()));
-    CPPUNIT_ASSERT_MESSAGE(OUStringToOString("Failed to create screenshot directory - " + m_directories.getURLFromWorkdir(
-        OUStringToOString(aDirname, RTL_TEXTENCODING_UTF8).getStr()), RTL_TEXTENCODING_UTF8).getStr(),
-                           (err == osl::FileBase::E_None || err == osl::FileBase::E_EXIST) );
+    osl::Directory::createPath(m_directories.getURLFromWorkdir(OUStringToOString(aDirname,RTL_TEXTENCODING_UTF8).getStr()));
 
     OUString aFullPath = m_directories.getPathFromWorkdir(OUStringToOString(aDirname + "/" + aBasename + ".png",RTL_TEXTENCODING_UTF8).getStr());
     SvFileStream aNew(aFullPath, StreamMode::WRITE | StreamMode::TRUNC);
