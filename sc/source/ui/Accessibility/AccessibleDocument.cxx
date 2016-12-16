@@ -1582,7 +1582,7 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         }
         else if ((rHint.GetId() == SfxHintId::ScAccEnterEditMode)) // this event comes only on creating edit field of a cell
         {
-            if (mpViewShell->GetViewData().HasEditView(meSplitPos))
+            if (mpViewShell->GetViewData().GetEditActivePart() == meSplitPos)
             {
                 ScViewData& rViewData = mpViewShell->GetViewData();
                 const EditEngine* pEditEng = rViewData.GetEditView(meSplitPos)->GetEditEngine();
