@@ -2189,25 +2189,25 @@ uno::Sequence< OUString > SAL_CALL OReportDefinition::getAvailableServiceNames()
 {
     static const OUStringLiteral aSvxComponentServiceNameList[] =
     {
-        OUStringLiteral("com.sun.star.form.component.FixedText"),
-        OUStringLiteral("com.sun.star.form.component.DatabaseImageControl"),
-        OUStringLiteral("com.sun.star.style.PageStyle"),
-        OUStringLiteral("com.sun.star.style.GraphicStyle"),
-        OUStringLiteral("com.sun.star.style.FrameStyle"),
-        OUStringLiteral("com.sun.star.drawing.Defaults"),
-        OUStringLiteral("com.sun.star.document.ImportEmbeddedObjectResolver"),
-        OUStringLiteral("com.sun.star.document.ExportEmbeddedObjectResolver"),
-        OUStringLiteral("com.sun.star.document.ImportGraphicObjectResolver"),
-        OUStringLiteral("com.sun.star.document.ExportGraphicObjectResolver"),
-        OUStringLiteral("com.sun.star.chart2.data.DataProvider"),
-        OUStringLiteral("com.sun.star.xml.NamespaceMap"),
-        OUStringLiteral("com.sun.star.document.Settings"),
-        OUStringLiteral("com.sun.star.drawing.GradientTable"),
-        OUStringLiteral("com.sun.star.drawing.HatchTable"),
-        OUStringLiteral("com.sun.star.drawing.BitmapTable"),
-        OUStringLiteral("com.sun.star.drawing.TransparencyGradientTable"),
-        OUStringLiteral("com.sun.star.drawing.DashTable"),
-        OUStringLiteral("com.sun.star.drawing.MarkerTable")
+        "com.sun.star.form.component.FixedText",
+        "com.sun.star.form.component.DatabaseImageControl",
+        "com.sun.star.style.PageStyle",
+        "com.sun.star.style.GraphicStyle",
+        "com.sun.star.style.FrameStyle",
+        "com.sun.star.drawing.Defaults",
+        "com.sun.star.document.ImportEmbeddedObjectResolver",
+        "com.sun.star.document.ExportEmbeddedObjectResolver",
+        "com.sun.star.document.ImportGraphicObjectResolver",
+        "com.sun.star.document.ExportGraphicObjectResolver",
+        "com.sun.star.chart2.data.DataProvider",
+        "com.sun.star.xml.NamespaceMap",
+        "com.sun.star.document.Settings",
+        "com.sun.star.drawing.GradientTable",
+        "com.sun.star.drawing.HatchTable",
+        "com.sun.star.drawing.BitmapTable",
+        "com.sun.star.drawing.TransparencyGradientTable",
+        "com.sun.star.drawing.DashTable",
+        "com.sun.star.drawing.MarkerTable"
     };
 
     static const sal_uInt16 nSvxComponentServiceNameListCount = SAL_N_ELEMENTS(aSvxComponentServiceNameList);

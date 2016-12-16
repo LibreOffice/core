@@ -369,9 +369,9 @@ void PDFSigningTest::testGood()
     const std::initializer_list<OUStringLiteral> aNames =
     {
         // We failed to determine if this is good or bad.
-        OUStringLiteral("good-non-detached.pdf"),
+        "good-non-detached.pdf",
         // Boolean value for dictionary key caused read error.
-        OUStringLiteral("dict-bool.pdf"),
+        "dict-bool.pdf",
     };
 
     for (const auto& rName : aNames)
@@ -388,13 +388,13 @@ void PDFSigningTest::testTokenize()
     const std::initializer_list<OUStringLiteral> aNames =
     {
         // We looped on this broken input.
-        OUStringLiteral("no-eof.pdf"),
+        "no-eof.pdf",
         // ']' in a name token was mishandled.
-        OUStringLiteral("name-bracket.pdf"),
+        "name-bracket.pdf",
         // %%EOF at the end wasn't followed by a newline.
-        OUStringLiteral("noeol.pdf"),
+        "noeol.pdf",
         // File that's intentionally smaller than 1024 bytes.
-        OUStringLiteral("small.pdf"),
+        "small.pdf",
     };
 
     for (const auto& rName : aNames)
