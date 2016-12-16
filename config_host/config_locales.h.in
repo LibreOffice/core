@@ -29,6 +29,7 @@
  * these are one.
  */
 #define WITH_LOCALE_ca 0
+#define WITH_LOCALE_cu 0
 #define WITH_LOCALE_dz 0
 #define WITH_LOCALE_el 0
 #define WITH_LOCALE_he 0
