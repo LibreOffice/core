@@ -178,19 +178,19 @@ namespace desktop
                 int fileHandle = _open_osfhandle(stdHandle, _O_TEXT);
                 FILE *fp = _fdopen(fileHandle, "r");
                 *stdin = *fp;
-                setvbuf(stdin, NULL, _IONBF, 0);
+                setvbuf(stdin, nullptr, _IONBF, 0);
                 // stdout
                 stdHandle = reinterpret_cast<intptr_t>(GetStdHandle(STD_OUTPUT_HANDLE));
                 fileHandle = _open_osfhandle(stdHandle, _O_TEXT);
                 fp = _fdopen(fileHandle, "w");
                 *stdout = *fp;
-                setvbuf(stdout, NULL, _IONBF, 0);
+                setvbuf(stdout, nullptr, _IONBF, 0);
                 // stderr
                 stdHandle = reinterpret_cast<intptr_t>(GetStdHandle(STD_ERROR_HANDLE));
                 fileHandle = _open_osfhandle(stdHandle, _O_TEXT);
                 fp = _fdopen(fileHandle, "w");
                 *stderr = *fp;
-                setvbuf(stderr, NULL, _IONBF, 0);
+                setvbuf(stderr, nullptr, _IONBF, 0);
             }
 
             ~lcl_Console()

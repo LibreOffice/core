@@ -566,7 +566,7 @@ bool WinOpenGLContext::ImplInit()
 
     if (!InitGL())
     {
-        wglMakeCurrent(NULL, NULL);
+        wglMakeCurrent(nullptr, nullptr);
         g_bAnyCurrent = false;
         wglDeleteContext(hTempRC);
         return false;
