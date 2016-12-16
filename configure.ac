@@ -322,6 +322,29 @@ else
 fi
 AC_SUBST(ENABLE_LTO)
 
+COM_IS_CLANG=
+AC_MSG_CHECKING([whether the compiler is actually Clang])
+AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
+    #ifndef __clang__
+    you lose
+    #endif
+    int foo=42;
+    ]])],
+    [AC_MSG_RESULT([yes])
+     COM_IS_CLANG=TRUE],
+    [AC_MSG_RESULT([no])])
+
+if test "$COM_IS_CLANG" = TRUE; then
+    AC_MSG_CHECKING([the Clang version])
+    clang_version=`echo __clang_major__.__clang_minor__.__clang_patchlevel__ | ${CC%-cl.exe*} -E -P -`
+    CLANG_FULL_VERSION=`echo __clang_version__ | ${CC%-cl.exe*} -E -P -`
+    CLANGVER=`echo $clang_version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
+    AC_MSG_RESULT([Clang $CLANG_FULL_VERSION, $CLANGVER])
+    AC_DEFINE_UNQUOTED(CLANG_VERSION,$CLANGVER)
+    AC_DEFINE_UNQUOTED(CLANG_FULL_VERSION,$CLANG_FULL_VERSION)
+fi
+AC_SUBST(COM_IS_CLANG)
+
 AC_ARG_ENABLE(fuzz-options,
     AS_HELP_STRING([--enable-fuzz-options],
         [Randomly enable or disable each of those configury options
@@ -3691,29 +3714,6 @@ fi
 #
 UNOWINREG_DLL="185d60944ea767075d27247c3162b3bc-unowinreg.dll"
 AC_SUBST(UNOWINREG_DLL)
-
-COM_IS_CLANG=
-AC_MSG_CHECKING([whether the compiler is actually Clang])
-AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
-    #ifndef __clang__
-    you lose
-    #endif
-    int foo=42;
-    ]])],
-    [AC_MSG_RESULT([yes])
-     COM_IS_CLANG=TRUE],
-    [AC_MSG_RESULT([no])])
-
-if test "$COM_IS_CLANG" = TRUE; then
-    AC_MSG_CHECKING([the Clang version])
-    clang_version=`echo __clang_major__.__clang_minor__.__clang_patchlevel__ | ${CC%-cl.exe*} -E -P -`
-    CLANG_FULL_VERSION=`echo __clang_version__ | ${CC%-cl.exe*} -E -P -`
-    CLANGVER=`echo $clang_version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
-    AC_MSG_RESULT([Clang $CLANG_FULL_VERSION, $CLANGVER])
-    AC_DEFINE_UNQUOTED(CLANG_VERSION,$CLANGVER)
-    AC_DEFINE_UNQUOTED(CLANG_FULL_VERSION,$CLANG_FULL_VERSION)
-fi
-AC_SUBST(COM_IS_CLANG)
 
 #
 # prefix C with ccache if needed
