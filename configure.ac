@@ -9018,8 +9018,9 @@ AC_SUBST(TLS)
 dnl ===================================================================
 dnl Check for system NSS
 dnl ===================================================================
-if test $_os != iOS; then
+if test $_os != iOS -a "$enable_fuzzers" != "yes"; then
     libo_CHECK_SYSTEM_MODULE([nss],[NSS],[nss >= 3.9.3 nspr >= 4.8])
+    AC_DEFINE(HAVE_FEATURE_NSS)
 fi
 if test "$with_system_nss" = "yes"; then
     libo_MINGW_CHECK_DLL([libnspr4])
