@@ -137,6 +137,13 @@ public:
     inline sal_uInt16   GetColorError( const BitmapColor& rBitmapColor ) const;
 };
 
+template<typename charT, typename traits>
+inline std::basic_ostream<charT, traits>& operator <<(std::basic_ostream<charT, traits>& rStream, const BitmapColor& rColor)
+{
+    return rStream << "mcBlueOrIndex: " << (int)rColor.GetBlueOrIndex() << ", mcGreen: "
+        << (int)rColor.GetGreen() << ", mcRed: " << (int)rColor.GetRed() << ", mbIndex: " << (int)rColor.IsIndex();
+}
+
 class Palette;
 
 class VCL_DLLPUBLIC BitmapPalette
