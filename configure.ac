@@ -661,14 +661,7 @@ linux-gnu*|k*bsd*-gnu*)
     build_gstreamer_0_10=yes
     test_tde=yes
     test_kde4=yes
-    if test "$enable_fuzzers" != yes; then
-        test_freetype=yes
-        test_fontconfig=yes
-    else
-        test_freetype=no
-        test_fontconfig=no
-        BUILD_TYPE="$BUILD_TYPE FONTCONFIG FREETYPE"
-    fi
+    test_freetype=yes
     _os=Linux
     ;;
 
