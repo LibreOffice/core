@@ -248,9 +248,6 @@ public:
     AsyncPickerEvents()
     {}
 
-    virtual ~AsyncPickerEvents() override
-    {}
-
     virtual void before() override
     {}
 
