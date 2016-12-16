@@ -201,7 +201,7 @@ void PassStuffByRef::checkParams(const FunctionDecl * functionDecl) {
             for (CXXCtorInitializer const * cxxCtorInitializer : cxxConstructorDecl->inits()) {
                 if (cxxCtorInitializer->isMemberInitializer())
                 {
-                    auto cxxConstructExpr = dyn_cast<CXXConstructExpr>(cxxCtorInitializer->getInit());
+                    auto cxxConstructExpr = dyn_cast<CXXConstructExpr>(cxxCtorInitializer->getInit()->IgnoreParenImpCasts());
                     if (cxxConstructExpr && cxxConstructExpr->getNumArgs() == 1)
                     {
                         if (auto callExpr = dyn_cast<CallExpr>(cxxConstructExpr->getArg(0)->IgnoreParenImpCasts())) {

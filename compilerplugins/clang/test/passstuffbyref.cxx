@@ -10,19 +10,20 @@
 #include <rtl/ustring.hxx>
 
 struct S {
-    OUString mv;
+    OUString mv1;
+    OUString mv2;
 
     // make sure we ignore cases where the passed in parameter is std::move'd
-    S(OUString v)
-      : mv(std::move(v)) {}
+    S(OUString v1, OUString v2)
+      : mv1(std::move(v1)), mv2((std::move(v2))) {}
 };
 
 
 void f() // expected-error {{Unreferenced externally visible function definition [loplugin:unreffun]}}
 {
     S* s;
-    OUString v;
-    s = new S(v);
+    OUString v1, v2;
+    s = new S(v1, v2);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
