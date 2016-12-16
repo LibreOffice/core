@@ -2117,6 +2117,13 @@ namespace sdr
 
         drawinglayer::primitive2d::Primitive2DContainer VOCOfDrawVirtObj::createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const
         {
+            // tdf#91260 have already checked top-level one is on the right page
+            assert(isPrimitiveVisible(rDisplayInfo));
+            // nasty corner case: override to clear page frame to disable the
+            // sub-objects' anchor check, because their anchor is always on
+            // the first page that the page style is applied to
+            DisplayInfo aDisplayInfo(rDisplayInfo);
+            aDisplayInfo.SetWriterPageFrame(basegfx::B2IRectangle());
             const VCOfDrawVirtObj& rVC = static_cast< const VCOfDrawVirtObj& >(GetViewContact());
             const SdrObject& rReferencedObject = rVC.GetSwDrawVirtObj().GetReferencedObj();
             drawinglayer::primitive2d::Primitive2DContainer xRetval;
@@ -2141,7 +2148,7 @@ namespace sdr
 
                 // Get the VOC of the referenced object (the Group) and fetch primitives from it
                 const ViewObjectContact& rVOCOfRefObj = rReferencedObject.GetViewContact().GetViewObjectContact(GetObjectContact());
-                impAddPrimitivesFromGroup(rVOCOfRefObj, aOffsetMatrix, rDisplayInfo, xRetval);
+                impAddPrimitivesFromGroup(rVOCOfRefObj, aOffsetMatrix, aDisplayInfo, xRetval);
             }
             else
             {
