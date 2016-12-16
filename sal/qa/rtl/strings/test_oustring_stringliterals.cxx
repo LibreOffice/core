@@ -264,7 +264,7 @@ void test::oustring::StringLiterals::checkUtf16() {
     s1 += u"fde";
     CPPUNIT_ASSERT_EQUAL(rtl::OUString("defde"), s1);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), s1.reverseCompareTo(u"defde"));
-    CPPUNIT_ASSERT(s1.equalIgnoreAsciiCase(u"DEFDE"));
+    CPPUNIT_ASSERT(s1.equalsIgnoreAsciiCase(u"DEFDE"));
     CPPUNIT_ASSERT(s1.match(u"fde", 2));
     CPPUNIT_ASSERT(s1.matchIgnoreAsciiCase(u"FDE", 2));
     rtl::OUString s2;
