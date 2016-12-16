@@ -662,7 +662,6 @@ sal_IntPtr WinFontFace::GetFontId() const
     return mnId;
 }
 
-static unsigned GetUInt( const unsigned char* p ) { return((p[0]<<24)+(p[1]<<16)+(p[2]<<8)+p[3]);}
 static inline DWORD CalcTag( const char p[5]) { return (p[0]+(p[1]<<8)+(p[2]<<16)+(p[3]<<24)); }
 
 void WinFontFace::UpdateFromHDC( HDC hDC ) const
