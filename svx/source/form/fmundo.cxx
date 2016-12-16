@@ -537,12 +537,12 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt)
 
         // if it's a "default value" property of a control model, set the according "value" property
         static const OUStringLiteral pDefaultValueProperties[] = {
-            OUStringLiteral(FM_PROP_DEFAULT_TEXT), OUStringLiteral(FM_PROP_DEFAULTCHECKED), OUStringLiteral(FM_PROP_DEFAULT_DATE), OUStringLiteral(FM_PROP_DEFAULT_TIME),
-            OUStringLiteral(FM_PROP_DEFAULT_VALUE), OUStringLiteral(FM_PROP_DEFAULT_SELECT_SEQ), OUStringLiteral(FM_PROP_EFFECTIVE_DEFAULT)
+            FM_PROP_DEFAULT_TEXT, FM_PROP_DEFAULTCHECKED, FM_PROP_DEFAULT_DATE, FM_PROP_DEFAULT_TIME,
+            FM_PROP_DEFAULT_VALUE, FM_PROP_DEFAULT_SELECT_SEQ, FM_PROP_EFFECTIVE_DEFAULT
         };
         static const OUStringLiteral aValueProperties[] = {
-            OUStringLiteral(FM_PROP_TEXT), OUStringLiteral(FM_PROP_STATE), OUStringLiteral(FM_PROP_DATE), OUStringLiteral(FM_PROP_TIME),
-            OUStringLiteral(FM_PROP_VALUE), OUStringLiteral(FM_PROP_SELECT_SEQ), OUStringLiteral(FM_PROP_EFFECTIVE_VALUE)
+            FM_PROP_TEXT, FM_PROP_STATE, FM_PROP_DATE, FM_PROP_TIME,
+            FM_PROP_VALUE, FM_PROP_SELECT_SEQ, FM_PROP_EFFECTIVE_VALUE
         };
         sal_Int32 nDefaultValueProps = SAL_N_ELEMENTS(pDefaultValueProperties);
         OSL_ENSURE(SAL_N_ELEMENTS(aValueProperties) == nDefaultValueProps,
