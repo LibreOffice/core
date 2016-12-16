@@ -515,10 +515,11 @@ void SvxShowCharSet::InitSettings(vcl::RenderContext& rRenderContext)
 
 }
 
-
+//TODO:analisi passo 2
 sal_UCS4 SvxShowCharSet::GetSelectCharacter() const
 {
     if( nSelectedIndex >= 0 )
+      //TODO:analisi passo 3 trovato sto mxFontCharMap
         getSelectedChar() = mxFontCharMap->GetCharFromIndex( nSelectedIndex );
     return getSelectedChar();
 }
@@ -545,6 +546,7 @@ void SvxShowCharSet::RecalculateFont(vcl::RenderContext& rRenderContext)
     aFont.SetFontSize(maFontSize);
     aFont.SetTransparent(true);
     rRenderContext.SetFont(aFont);
+
     rRenderContext.GetFontCharMap(mxFontCharMap);
 
     nX = aSize.Width() / COLUMN_COUNT;

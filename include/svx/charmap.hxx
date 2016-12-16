@@ -59,7 +59,7 @@ public:
     svx::SvxShowCharSetItem*    ImplGetItem( int _nPos );
     int                         FirstInView() const;
     int                         LastInView() const;
-    int                         PixelToMapIndex( const Point&) const;
+    virtual int                         PixelToMapIndex( const Point&) const;
     void                        SelectIndex( int index, bool bFocus = false );
     void                        OutputIndex( int index );
     void                        DeSelect();
@@ -89,6 +89,9 @@ protected:
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 
     virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
+
+
+
 
 private:
     typedef std::map<sal_Int32, std::shared_ptr<svx::SvxShowCharSetItem> > ItemsMap;
@@ -120,11 +123,12 @@ private:
     void            DrawChars_Impl(vcl::RenderContext& rRenderContext, int n1, int n2);
     void            InitSettings(vcl::RenderContext& rRenderContext);
     // abstraction layers are: Unicode<->MapIndex<->Pixel
-    Point           MapIndexToPixel( int) const;
+
     DECL_LINK_TYPED(VscrollHdl, ScrollBar*, void);
 
     void            init();
     Rectangle       getGridRectangle(const Point &rPointUL, const Size &rOutputSize);
+    Point           MapIndexToPixel( int) const;
 };
 
 #endif

@@ -109,6 +109,8 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/customshapes/EnhancedCustomShapeHandle \
     svx/source/dialog/_bmpmask \
     svx/source/dialog/charmap \
+    svx/source/dialog/recusedcharmap \
+    svx/source/dialog/recusedlist \
     svx/source/dialog/connctrl \
     svx/source/dialog/_contdlg \
     svx/source/dialog/contwnd \
