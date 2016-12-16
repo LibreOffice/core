@@ -1386,7 +1386,6 @@ namespace
                 return pAnchoredObj->GetRelPosToLine();
             default: ;
         }
-        assert(false);
         return Point();
     }
 }

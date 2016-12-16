@@ -2675,16 +2675,22 @@ bool WinwordAnchoring::ConvertPosition( SwFormatHoriOrient& _iorHoriOri,
         }
 
     }
-    if(eVertConv != sw::WW8AnchorConv::NO_CONV || eHoriConv != sw::WW8AnchorConv::NO_CONV)
+    if (eVertConv != sw::WW8AnchorConv::NO_CONV || eHoriConv != sw::WW8AnchorConv::NO_CONV)
     {
         sw::WW8AnchorConvResult aResult(eHoriConv, eVertConv);
         _rFrameFormat.CallSwClientNotify(sw::WW8AnchorConvHint(aResult));
         if(!aResult.m_bConverted)
             return false;
-        lcl_SetRelationOrient(_iorHoriOri, eHoriConv, [&_iorHoriOri]() {_iorHoriOri.SetHoriOrient(text::HoriOrientation::NONE);} );
-        _iorHoriOri.SetPos(aResult.m_aPos.X());
-        lcl_SetRelationOrient(_iorVertOri, eVertConv, [&_iorVertOri]() {_iorVertOri.SetVertOrient(text::VertOrientation::NONE);} );
-        _iorVertOri.SetPos(aResult.m_aPos.Y());
+        if (eHoriConv != sw::WW8AnchorConv::NO_CONV)
+        {
+            lcl_SetRelationOrient(_iorHoriOri, eHoriConv, [&_iorHoriOri]() {_iorHoriOri.SetHoriOrient(text::HoriOrientation::NONE);} );
+            _iorHoriOri.SetPos(aResult.m_aPos.X());
+        }
+        if (eVertConv != sw::WW8AnchorConv::NO_CONV)
+        {
+            lcl_SetRelationOrient(_iorVertOri, eVertConv, [&_iorVertOri]() {_iorVertOri.SetVertOrient(text::VertOrientation::NONE);} );
+            _iorVertOri.SetPos(aResult.m_aPos.Y());
+        }
         return true;
     }
     return false;
