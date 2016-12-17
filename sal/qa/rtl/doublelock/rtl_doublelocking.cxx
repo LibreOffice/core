@@ -215,8 +215,4 @@ namespace rtl_DoubleLocking
     CPPUNIT_TEST_SUITE_REGISTRATION(rtl_DoubleLocking::getValue);
 } // namespace rtl_DoubleLocking
 
-// this macro creates an empty function, which will called by the RegisterAllFunctions()
-// to let the user the possibility to also register some functions by hand.
-CPPUNIT_PLUGIN_IMPLEMENT();
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
