@@ -598,7 +598,6 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/view/dbfunc3 \
     sc/source/ui/view/dbfunc4 \
     sc/source/ui/view/drawutil \
-    sc/source/ui/view/drawvie2 \
     sc/source/ui/view/drawvie3 \
     sc/source/ui/view/drawvie4 \
     sc/source/ui/view/drawview \
