@@ -56,7 +56,6 @@ $(eval $(call gb_Library_add_exception_objects,oleautobridge,\
 	extensions/source/ole/servreg \
 	extensions/source/ole/unoobjw \
 	extensions/source/ole/unotypewrapper \
-	extensions/source/ole/windata \
 ))
 
 # vim:set noet sw=4 ts=4:
