@@ -44,6 +44,8 @@
 #include "OpenglShapeFactory.hxx"
 #include "ShapeFactory.hxx"
 
+#include <config_features.h>
+
 using namespace com::sun::star;
 
 namespace chart {
@@ -83,9 +85,10 @@ AbstractShapeFactory* AbstractShapeFactory::getOrCreateShapeFactory(const uno::R
 {
     static AbstractShapeFactory* pShapeFactory = nullptr;
 
-    if(pShapeFactory)
+    if (pShapeFactory)
         return pShapeFactory;
 
+#if HAVE_FEATURE_UI
     if(getenv("CHART_DUMMY_FACTORY") && !Application::IsHeadlessModeEnabled())
     {
 #ifndef DISABLE_DYNLOADING
@@ -107,8 +110,9 @@ AbstractShapeFactory* AbstractShapeFactory::getOrCreateShapeFactory(const uno::R
         pShapeFactory->m_xShapeFactory = xFactory;
 #endif
     }
+#endif
 
-    if(!pShapeFactory)
+    if (!pShapeFactory)
         pShapeFactory = new ShapeFactory(xFactory);
 
     return pShapeFactory;
