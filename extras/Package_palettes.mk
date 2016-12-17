@@ -13,6 +13,7 @@ $(eval $(call gb_Package_add_files,extras_palettes,$(LIBO_SHARE_FOLDER)/palette,
 	arrowhd.soe \
 	breeze.soc \
 	classic.sog \
+	freecolour-hlc.soc \
 	hatching.soh \
 	html.soc \
 	libreoffice.soc \
