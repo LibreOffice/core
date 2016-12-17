@@ -1686,6 +1686,14 @@ SwAccessibleMap::~SwAccessibleMap()
             ++aIter;
         }
     }
+    if( mpShapeMap )
+    {
+        SwAccessibleShapeMap_Impl::iterator aIter = mpShapeMap->begin();
+        while( aIter != mpShapeMap->end() )
+        {
+            aIter = mpShapeMap->erase(aIter);
+        }
+    }
     {
         osl::MutexGuard aGuard( maMutex );
 #if OSL_DEBUG_LEVEL > 0
