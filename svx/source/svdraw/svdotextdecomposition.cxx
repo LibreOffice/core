@@ -43,6 +43,7 @@
 #include <editeng/escapementitem.hxx>
 #include <editeng/svxenum.hxx>
 #include <editeng/flditem.hxx>
+#include <editeng/adjustitem.hxx>
 #include <drawinglayer/primitive2d/texthierarchyprimitive2d.hxx>
 #include <vcl/metaact.hxx>
 #include <drawinglayer/primitive2d/wrongspellprimitive2d.hxx>
@@ -1008,7 +1009,14 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
             // else the alignment is wanted.
             if(SDRTEXTHORZADJUST_BLOCK == eHAdj)
             {
-                eHAdj = SDRTEXTHORZADJUST_CENTER;
+                SvxAdjust eAdjust = static_cast<const SvxAdjustItem&>(GetObjectItemSet().Get(EE_PARA_JUST)).GetAdjust();
+                switch(eAdjust)
+                {
+                    case SVX_ADJUST_LEFT:   eHAdj = SDRTEXTHORZADJUST_LEFT; break;
+                    case SVX_ADJUST_RIGHT:  eHAdj = SDRTEXTHORZADJUST_RIGHT; break;
+                    case SVX_ADJUST_CENTER: eHAdj = SDRTEXTHORZADJUST_CENTER; break;
+                    default: break;
+                }
             }
         }
 
