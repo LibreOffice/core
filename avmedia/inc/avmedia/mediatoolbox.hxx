@@ -26,6 +26,7 @@
 
 #include <svl/lstner.hxx>
 #include <sfx2/tbxctrl.hxx>
+#include <avmedia/avmediadllapi.h>
 
 namespace avmedia
 {
@@ -36,7 +37,7 @@ namespace avmedia
 
 class MediaItem;
 
-class MediaToolBoxControl : public SfxToolBoxControl
+class AVMEDIA_DLLPUBLIC MediaToolBoxControl : public SfxToolBoxControl
 {
      friend class MediaToolBoxControl_Impl;
 

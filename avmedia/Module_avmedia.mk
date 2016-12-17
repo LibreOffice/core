@@ -21,66 +21,48 @@
 
 
 
-$(eval $(call gb_Module_Module,ooo))
+$(eval $(call gb_Module_Module,avmedia))
 
-$(eval $(call gb_Module_add_moduledirs,ooo,\
-    MathMLDTD \
-    animations \
-    avmedia \
-    basebmp \
-    basegfx \
-    binaryurp \
-    canvas \
-    comphelper \
-    configmgr \
-    cppcanvas \
-    dbaccess \
-    drawinglayer \
-    dtrans \
-    editeng \
-    embeddedobj \
-    eventattacher \
-    fileaccess \
-    formula \
-    framework \
-    idl \
-    io \
-    javaunohelper \
-    linguistic \
-    o3tl \
-    offapi \
-    oovbaapi \
-    oox \
-    padmin \
-    package \
-    reportdesign \
-    remotebridges \
-    sax \
-    sd \
-    sfx2 \
-    sot \
-    starmath \
-    svgio \
-    svl \
-    svtools \
-    svx \
-    sw \
-    toolkit \
-    tools \
-    ucbhelper \
-    udkapi \
-    unotools \
-    unoxml \
-    uui \
-    vbahelper \
-    vcl \
-    udm \
-    wizards \
-    writerfilter \
-    x11_extensions \
-    xmloff \
-    xmlreader \
-    xmlscript \
+$(eval $(call gb_Module_add_targets,avmedia,\
+	AllLangResTarget_avmedia \
+	Library_avmedia \
+	Package_inc \
+	Package_avmedia_jar \
 ))
 
-# vim: set noet ts=4 sw=4:
+ifeq ($(ENABLE_GSTREAMER),TRUE)
+ifeq ($(GUI),UNX)
+ifneq ($(GUIBASE),aqua)
+$(eval $(call gb_Module_add_targets,avmedia,\
+        Library_avmediagst \
+))
+endif
+endif
+endif
+
+# Seems obsolete, "javamedia" is not found anywhere else in the project,
+# and avmedia.jar is delivered from the pre-existing avmedia.jar in
+# main/avmedia/source/java. This is not tested:
+ifeq ($(GUIBASE),javamedia)
+$(eval $(call gb_Module_add_targets,avmedia,\
+	Jar_avmedia \
+))
+endif
+
+ifeq ($(GUI),WNT)
+ifneq ($(strip $(ENABLE_DIRECTX)),)
+$(eval $(call gb_Module_add_targets,avmedia,\
+	Library_avmediawin \
+))
+endif
+endif
+
+ifeq ($(GUIBASE),aqua)
+$(eval $(call gb_Module_add_targets,avmedia,\
+	Library_avmediaMacAVF \
+	Library_avmediaQuickTime \
+))
+endif
+
+
+# vim: set noet sw=4 ts=4:
