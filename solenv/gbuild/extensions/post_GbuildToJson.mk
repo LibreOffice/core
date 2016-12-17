@@ -134,7 +134,7 @@ $(if $(filter Library_% Executable_%,$(2)),$(call gb_Module__add_target_impl,$(1
 endef
 
 define gb_Module_add_check_target
-$(if $(filter CppunitTest_%,$(2)),$(call gb_Module__add_check_target_impl,$(1),$(2),$$(gb_Module_CURRENTTARGET)))
+$(if $(filter CppunitTest_% Library_%,$(2)),$(call gb_Module__add_check_target_impl,$(1),$(2),$$(gb_Module_CURRENTTARGET)))
 endef
 
 gb_Module_add_l10n_target =
