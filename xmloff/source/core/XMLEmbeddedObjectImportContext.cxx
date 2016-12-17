@@ -182,8 +182,9 @@ XMLEmbeddedObjectImportContext::XMLEmbeddedObjectImportContext(
 
         if( !sClass.isEmpty() )
         {
-            static struct { XMLTokenEnum eClass; OUStringLiteral sFilterService;
-            } const aServiceMap[] = {
+            struct Entry {
+                XMLTokenEnum eClass; OUStringLiteral sFilterService; };
+            static Entry const aServiceMap[] = {
                 { XML_TEXT,         OUStringLiteral(XML_IMPORT_FILTER_WRITER) },
                 { XML_ONLINE_TEXT,  OUStringLiteral(XML_IMPORT_FILTER_WRITER) },
                 { XML_SPREADSHEET,  OUStringLiteral(XML_IMPORT_FILTER_CALC) },
