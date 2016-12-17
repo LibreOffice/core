@@ -183,7 +183,10 @@ XMLEmbeddedObjectImportContext::XMLEmbeddedObjectImportContext(
         if( !sClass.isEmpty() )
         {
             struct Entry {
-                XMLTokenEnum eClass; OUStringLiteral sFilterService; };
+                XMLTokenEnum eClass;
+                OUStringLiteral sFilterService;
+                Entry() = delete; // avoid MSVC warning C4510
+            };
             static Entry const aServiceMap[] = {
                 { XML_TEXT,         OUStringLiteral(XML_IMPORT_FILTER_WRITER) },
                 { XML_ONLINE_TEXT,  OUStringLiteral(XML_IMPORT_FILTER_WRITER) },
