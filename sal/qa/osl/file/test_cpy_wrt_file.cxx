@@ -27,10 +27,6 @@
 
 using namespace osl;
 
-using ::rtl::OUString;
-using ::rtl::OUStringToOString;
-using ::rtl::OString;
-
 class test_osl_writeFile : public CppUnit::TestFixture
 {
 public:
@@ -74,7 +70,5 @@ public:
 
 // register test suites
 CPPUNIT_TEST_SUITE_REGISTRATION(test_osl_writeFile);
-
-CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

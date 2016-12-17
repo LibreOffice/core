@@ -59,6 +59,4 @@ void oldtests::test_profile()
 
 CPPUNIT_TEST_SUITE_REGISTRATION( osl_Profile::oldtests );
 
-CPPUNIT_PLUGIN_IMPLEMENT();
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

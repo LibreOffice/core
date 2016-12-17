@@ -23,24 +23,14 @@ $(eval $(call gb_Module_add_targets,sal,\
 ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
 
 $(eval $(call gb_Module_add_targets,sal,\
-		Executable_osl_process_child \
+	Executable_osl_process_child \
 ))
 
 $(eval $(call gb_Module_add_check_targets,sal,\
-	$(if $(filter $(OS),WNT),,CppunitTest_sal_osl_file) \
 	$(if $(filter TRUE,$(DISABLE_DYNLOADING)),,CppunitTest_Module_DLL) \
-	$(if $(filter TRUE,$(DISABLE_DYNLOADING)),,CppunitTest_sal_osl_module) \
 	$(if $(filter-out MSC-120,$(COM)-$(VCVER)),CppunitTest_sal_osl_security) \
 	CppunitTest_sal_bytesequence \
-	CppunitTest_sal_osl_condition \
-	CppunitTest_sal_osl_getsystempathfromfileurl \
-	CppunitTest_sal_osl_mutex \
-	CppunitTest_sal_osl_old_test_file \
-	CppunitTest_sal_osl_pipe \
-	CppunitTest_sal_osl_process \
-	CppunitTest_sal_osl_profile \
-	CppunitTest_sal_osl_setthreadname \
-	CppunitTest_sal_osl_thread \
+	CppunitTest_sal_osl \
 	CppunitTest_sal_rtl_alloc \
 	CppunitTest_sal_rtl_bootstrap \
 	CppunitTest_sal_rtl_cipher \
@@ -59,7 +49,6 @@ $(eval $(call gb_Module_add_check_targets,sal,\
 	CppunitTest_sal_rtl_textenc \
 	CppunitTest_sal_rtl_uri \
 	CppunitTest_sal_rtl_uuid \
-	CppunitTest_sal_tcwf \
 	CppunitTest_sal_types \
 ))
 
