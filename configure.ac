@@ -11264,7 +11264,7 @@ int main(int argc, char *argv[])
                     add_warning "native KDE4 file pickers will be disabled at runtime, Qt4 fixes needed"
                 fi
                 qt4_fix_warning=1
-                add_warning "  https://bugreports.qt-project.org/browse/QTBUG-37380 (needed)"
+                add_warning "  https://bugreports.qt.io/browse/QTBUG-37380 (needed)"
                 ],[AC_MSG_ERROR([KDE4 file pickers not tested with cross-compilation])])
 
             # Remove meta object data
@@ -11297,14 +11297,14 @@ int main(int argc, char *argv[])
                     add_warning "native KDE4 file pickers will be disabled at runtime, Qt4 fixes needed"
                 fi
                 qt4_fix_warning=1
-                add_warning "  https://bugreports.qt-project.org/browse/QTBUG-34614 (needed)"
+                add_warning "  https://bugreports.qt.io/browse/QTBUG-34614 (needed)"
             ],[AC_MSG_ERROR([KDE4 file pickers not tested with cross-compilation])])
 
             # Remove meta object data
             rm -f "${TSTBASE}."*
 
             if test -n "$qt4_fix_warning"; then
-                add_warning "  https://bugreports.qt-project.org/browse/QTBUG-38585 (recommended)"
+                add_warning "  https://bugreports.qt.io/browse/QTBUG-38585 (recommended)"
             fi
 
             LIBS=$save_LIBS
