@@ -108,6 +108,8 @@ public:
     void testCellNoteExportXLS();
     void testFormatExportODS();
 
+
+    void testCommentExportXLSX();
     void testCustomColumnWidthExportXLSX();
     void testXfDefaultValuesXLSX();
     void testColumnWidthResaveXLSX();
@@ -189,6 +191,7 @@ public:
     CPPUNIT_TEST(testCellNoteExportXLS);
     CPPUNIT_TEST(testFormatExportODS);
 
+    CPPUNIT_TEST(testCommentExportXLSX);
     CPPUNIT_TEST(testCustomColumnWidthExportXLSX);
     CPPUNIT_TEST(testXfDefaultValuesXLSX);
     CPPUNIT_TEST(testColumnWidthResaveXLSX);
@@ -465,6 +468,24 @@ void ScExportTest::testFormatExportODS()
     testFormats(this, &rDoc, FORMAT_ODS);
 
     xDocSh->DoClose();
+}
+
+
+void ScExportTest::testCommentExportXLSX()
+{
+    //tdf#104729 FILESAVE OpenOffice do not save author of the comment during export to .xlsx
+    ScDocShellRef xShell = loadDoc("comment.", FORMAT_ODS);
+    CPPUNIT_ASSERT(xShell.Is());
+
+    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
+    xmlDocPtr pSheet = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/comments1.xml");
+    CPPUNIT_ASSERT(pSheet);
+
+    assertXPath(pSheet, "/x:comments/x:authors/x:author[1]", "BAKO");
+    assertXPath(pSheet, "/x:comments/x:authors/x:author", 1);
+
+    assertXPath(pSheet, "/x:comments/x:commentList/x:comment/x:text/x:r/x:t", "Komentarz");
+
 }
 
 void ScExportTest::testCustomColumnWidthExportXLSX()
