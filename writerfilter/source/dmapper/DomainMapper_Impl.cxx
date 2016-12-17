@@ -216,7 +216,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bIsFirstParaInSection( true ),
         m_bDummyParaAddedForTableInSection( false ),
         m_bTextFrameInserted(false),
-        m_bIsLastParagraphFramed( false ),
+        m_bIsPreviousParagraphFramed( false ),
         m_bIsLastParaInSection( false ),
         m_bIsLastSectionGroup( false ),
         m_bIsInComments( false ),
@@ -1203,15 +1203,11 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap )
         }
     }
 
-    if(    (pParaContext && pParaContext->IsFrameMode())
-        || (IsInHeaderFooter() && GetIsLastParagraphFramed()) )
-    {
-        SetIsLastParagraphFramed(true);
-    }
+    bool bIgnoreFrameState = IsInHeaderFooter();
+    if( (!bIgnoreFrameState && pParaContext && pParaContext->IsFrameMode()) || (bIgnoreFrameState && GetIsPreviousParagraphFramed()) )
+        SetIsPreviousParagraphFramed(true);
     else
-    {
-        SetIsLastParagraphFramed(false);
-    }
+        SetIsPreviousParagraphFramed(false);
 
     m_bParaChanged = false;
     if (!pParaContext || !pParaContext->IsFrameMode())
