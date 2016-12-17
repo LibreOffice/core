@@ -40,6 +40,13 @@ namespace desktop
     const char aCmdLineHelp[] =
         "Usage: %CMDNAME [argument...]\n"
         "       argument - switches, switch parameters and document URIs (filenames).\n\n"
+        "Using without special arguments:\n"
+        "Opens the start center, if it is used without any arguments.\n"
+        "   {file}              Tries to open the file (files) in the components\n"
+        "                       suitable for them.\n"
+        "   {file} {macro:///Library.Module.MacroName}\n"
+        "                       Opens the file and runs specified macros from\n"
+        "                       the file.\n\n"
         "Getting help and information:\n"
         "   --help | -h | -?    Shows this help and quits.\n"
         "   --helpwriter        Opens built-in or online Help on Writer.\n"
