@@ -615,7 +615,6 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/view/invmerge \
     sc/source/ui/view/notemark \
     sc/source/ui/view/olinewin \
-    sc/source/ui/view/olkact \
     sc/source/ui/view/output \
     sc/source/ui/view/output2 \
     sc/source/ui/view/output3 \

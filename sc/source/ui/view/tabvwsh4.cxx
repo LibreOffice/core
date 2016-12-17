@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include "olkact.hxx"
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>
 
