@@ -20,7 +20,7 @@
 #include "errorbroadcaster.hxx"
 #include <connectivity/dbtools.hxx>
 #include <com/sun/star/sdb/SQLContext.hpp>
-#include <config_features.h>
+
 
 namespace frm
 {
@@ -61,11 +61,9 @@ namespace frm
     void SAL_CALL OErrorBroadcaster::onError( const SQLException& _rException, const OUString& _rContextDescription )
     {
         Any aError;
-#if HAVE_FEATURE_DBCONNECTIVITY
         if ( !_rContextDescription.isEmpty() )
             aError = makeAny( prependErrorInfo( _rException, static_cast< XSQLErrorBroadcaster* >( this ), _rContextDescription ) );
         else
-#endif
             aError = makeAny( _rException );
 
         onError( SQLErrorEvent( static_cast< XSQLErrorBroadcaster* >( this ), aError ) );
@@ -76,6 +74,7 @@ namespace frm
     {
         if ( m_aErrorListeners.getLength() )
         {
+
             ::comphelper::OInterfaceIteratorHelper2 aIter( m_aErrorListeners );
             while ( aIter.hasMoreElements() )
                 static_cast< XSQLErrorListener* >( aIter.next() )->errorOccured( _rError );

@@ -310,8 +310,8 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 		dba \
 		dbase \
 		dbmm \
-		dbtools \
 		dbaxml) \
+	dbtools \
 	deploymentmisc \
 	$(if $(filter-out MACOSX WNT,$(OS)),desktopbe1) \
 	$(if $(USING_X11),desktop_detector) \

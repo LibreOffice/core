@@ -192,15 +192,12 @@ Any SAL_CALL OGridControlModel::queryAggregation( const Type& _rType ) throw (Ru
     return aReturn;
 }
 
-#if HAVE_FEATURE_DBCONNECTIVITY
-
 // XSQLErrorListener
 void SAL_CALL OGridControlModel::errorOccured( const SQLErrorEvent& _rEvent ) throw (RuntimeException, std::exception)
 {
     // forward the errors which happened to my columns to my own listeners
     onError( _rEvent );
 }
-#endif
 
 // XRowSetSupplier
 Reference< XRowSet > SAL_CALL OGridControlModel::getRowSet(  ) throw (RuntimeException, std::exception)
