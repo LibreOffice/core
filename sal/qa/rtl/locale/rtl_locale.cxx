@@ -18,7 +18,6 @@
  */
 
 #include <sal/types.h>
-#include <osl/thread.h>
 #include <rtl/locale.h>
 #include <rtl/ustring.hxx>
 
@@ -277,10 +276,5 @@ CPPUNIT_TEST_SUITE_REGISTRATION(rtl_locale::getVariant);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_locale::hashCode);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_locale::equals);
 } // namespace rtl_locale
-
-// this macro creates an empty function, which will called by the RegisterAllFunctions()
-// to let the user the possibility to also register some functions by hand.
-
-CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

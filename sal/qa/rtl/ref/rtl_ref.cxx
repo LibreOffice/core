@@ -107,6 +107,5 @@ class TestReferenceRefCounting : public CppUnit::TestFixture
 
 } // namespace rtl_ref
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_ref::TestReferenceRefCounting);
-CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

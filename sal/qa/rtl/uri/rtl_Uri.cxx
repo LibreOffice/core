@@ -77,8 +77,4 @@ namespace Stringtest
 
 CPPUNIT_TEST_SUITE_REGISTRATION( Stringtest::Convert );
 
-// LLA: doku anpassen!!!
-
-CPPUNIT_PLUGIN_IMPLEMENT();
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

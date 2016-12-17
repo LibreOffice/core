@@ -151,8 +151,4 @@ CPPUNIT_TEST_SUITE_REGISTRATION(rtl_Uuid::createUuid);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_Uuid::createNamedUuid);
 } // namespace rtl_Uuid
 
-// this macro creates an empty function, which will called by the RegisterAllFunctions()
-// to let the user the possibility to also register some functions by hand.
-CPPUNIT_PLUGIN_IMPLEMENT();
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

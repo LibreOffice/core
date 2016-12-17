@@ -29,26 +29,8 @@ $(eval $(call gb_Module_add_targets,sal,\
 $(eval $(call gb_Module_add_check_targets,sal,\
 	$(if $(filter TRUE,$(DISABLE_DYNLOADING)),,CppunitTest_Module_DLL) \
 	$(if $(filter-out MSC-120,$(COM)-$(VCVER)),CppunitTest_sal_osl_security) \
-	CppunitTest_sal_bytesequence \
 	CppunitTest_sal_osl \
-	CppunitTest_sal_rtl_alloc \
-	CppunitTest_sal_rtl_bootstrap \
-	CppunitTest_sal_rtl_cipher \
-	CppunitTest_sal_rtl_crc32 \
-	CppunitTest_sal_rtl_digest \
-	CppunitTest_sal_rtl_doublelock \
-	CppunitTest_sal_rtl_locale \
-	CppunitTest_sal_rtl_math \
-	CppunitTest_sal_rtl_ostringbuffer \
-	CppunitTest_sal_rtl_oustring \
-	CppunitTest_sal_rtl_oustringbuffer \
-	CppunitTest_sal_rtl_process \
-	CppunitTest_sal_rtl_random \
-	CppunitTest_sal_rtl_ref \
-	CppunitTest_sal_rtl_strings \
-	CppunitTest_sal_rtl_textenc \
-	CppunitTest_sal_rtl_uri \
-	CppunitTest_sal_rtl_uuid \
+	CppunitTest_sal_rtl \
 	CppunitTest_sal_types \
 ))
 
