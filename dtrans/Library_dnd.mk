@@ -77,8 +77,7 @@ $(eval $(call gb_Library_add_cxxobjects,dnd,\
 	dtrans/source/win32/dtobj/FmtFilter \
 	dtrans/source/win32/dtobj/FetcList \
 	dtrans/source/win32/dtobj/Fetc \
-	dtrans/source/win32/dtobj/XNotifyingDataObject \
-	, -GR -Ob0 \
+	, -GR -Ob0 $(gb_LinkTarget_EXCEPTIONFLAGS) \
 ))
 else
 $(eval $(call gb_Library_add_exception_objects,dnd,\
@@ -92,7 +91,6 @@ $(eval $(call gb_Library_add_exception_objects,dnd,\
         dtrans/source/win32/dtobj/FmtFilter \
         dtrans/source/win32/dtobj/FetcList \
         dtrans/source/win32/dtobj/Fetc \
-        dtrans/source/win32/dtobj/XNotifyingDataObject \
 ))
 endif
 
