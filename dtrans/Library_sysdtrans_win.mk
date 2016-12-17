@@ -45,9 +45,10 @@ $(eval $(call gb_Library_add_linked_libs,sysdtrans,\
 	ole32 \
 	oleaut32 \
 	sal \
-	shel32 \
+	shell32 \
 	stl \
 	uuid \
+	user32 \
 	uwinapi \
 	$(gb_STDLIBS) \
 ))
