@@ -27,7 +27,6 @@
 #include <sfx2/ctrlitem.hxx>
 #include <sfx2/dockwin.hxx>
 #include <tools/urlobj.hxx>
-#include <avmedia/avmediadllapi.h>
 
 // -----------
 // - Defines -
@@ -46,7 +45,7 @@ namespace avmedia
 // - MediaPlayer -
 // ---------------
 
-class AVMEDIA_DLLPUBLIC MediaPlayer : public SfxChildWindow
+class MediaPlayer : public SfxChildWindow
 {
 public:
                         MediaPlayer( Window*, sal_uInt16, SfxBindings*, SfxChildWinInfo* );
@@ -61,7 +60,7 @@ public:
 
 class MediaWindow;
 
-class AVMEDIA_DLLPUBLIC MediaFloater : public SfxDockingWindow
+class MediaFloater : public SfxDockingWindow
 {
 public:
 

@@ -26,7 +26,6 @@ $(eval $(call gb_Module_Module,ooo))
 $(eval $(call gb_Module_add_moduledirs,ooo,\
     MathMLDTD \
     animations \
-    avmedia \
     basebmp \
     basegfx \
     binaryurp \

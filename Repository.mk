@@ -46,10 +46,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     agg \
     animcore \
     avmedia \
-    avmediagst \
-    avmediaMacAVF \
-    avmediaQuickTime \
-    avmediawin \
     basebmp \
     basegfx \
     canvastools \

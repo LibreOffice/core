@@ -47,6 +47,7 @@ my_components = \
     stocservices \
     abp \
     analysis \
+    avmedia \
     basctl \
     basprov \
     bib \
@@ -57,7 +58,6 @@ my_components = \
     charttools \
     chartview \
     component/animations/source/animcore/animcore \
-    component/avmedia/util/avmedia \
     component/binaryurp/source/binaryurp \
     component/canvas/source/factory/canvasfactory \
     component/canvas/source/simplecanvas/simplecanvas \
@@ -315,8 +315,8 @@ my_components += \
 
 .IF "$(OS)" == "MACOSX"
 my_components += \
-    component/avmedia/source/macavf/avmediaMacAVF \
-    component/avmedia/source/quicktime/avmediaQuickTime \
+    avmediaQuickTime \
+    avmediaMacAVF \
     fps_aqua \
     macab1 \
     macbe1 \
@@ -352,7 +352,7 @@ my_components += \
 
 .IF "$(OS)" == "WNT" && "$(ENABLE_DIRECTX)" != ""
 my_components += \
-    component/avmedia/source/win/avmediawin \
+    avmediawin \
     component/canvas/source/directx/directx9canvas \
     component/canvas/source/directx/gdipluscanvas
 .END
@@ -387,11 +387,11 @@ my_components += evoab
 .END
 
 .IF "$(OS)" != "WNT" && "$(ENABLE_GSTREAMER)" != ""
-my_components += component/avmedia/source/gstreamer/avmediagst
+my_components += avmediagst
 .END
 
 .IF "$(OS)" != "WNT" && "$(SOLAR_JAVA)" == "TRUE"
-my_components += component/avmedia/source/java/avmedia.jar
+my_components += avmedia.jar
 .END
 
 my_ooo_components = mailmerge

@@ -21,7 +21,34 @@
 
 
 
-$(eval $(call gb_Package_Package,avmedia_jar,$(SRCDIR)/avmedia/source/java))
+PRJ=..$/..
+PRJNAME=avmedia
+TARGET=framework
 
-$(eval $(call gb_Package_add_file,avmedia_jar,bin/avmedia.jar,avmedia.jar))
-$(eval $(call gb_Package_add_file,avmedia_jar,xml/component/avmedia/source/java/avmedia.jar.component,avmedia.jar.component))
+# --- Settings ----------------------------------
+
+.INCLUDE :  settings.mk
+
+# --- Resources ---------------------------------
+
+SRS1NAME=$(TARGET)
+SRC1FILES =\
+        mediacontrol.src
+
+# --- Files -------------------------------------
+
+SLOFILES= \
+        $(SLO)$/mediaitem.obj	 \
+        $(SLO)$/mediamisc.obj 	 \
+        $(SLO)$/mediacontrol.obj \
+        $(SLO)$/mediatoolbox.obj \
+        $(SLO)$/mediaplayer.obj  \
+        $(SLO)$/soundhandler.obj  
+
+EXCEPTIONSFILES = \
+        $(SLO)$/mediatoolbox.obj \
+        $(SLO)$/soundhandler.obj
+
+# --- Targets ----------------------------------
+
+.INCLUDE : target.mk
