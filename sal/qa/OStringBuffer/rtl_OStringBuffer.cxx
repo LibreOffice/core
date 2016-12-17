@@ -16031,6 +16031,4 @@ CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OStringBuffer::append_009_Double_Negative);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OStringBuffer::AppendUninitialized);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OStringBuffer::remove);
 
-CPPUNIT_PLUGIN_IMPLEMENT();
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

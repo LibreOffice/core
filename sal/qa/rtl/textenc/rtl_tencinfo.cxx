@@ -21,7 +21,6 @@
 
 #include <string.h>
 
-#include <osl/thread.h>
 #include <rtl/tencinfo.h>
 
 #include <cppunit/TestFixture.h>
@@ -1664,7 +1663,5 @@ CPPUNIT_TEST_SUITE_REGISTRATION(testBestUnix);
 CPPUNIT_TEST_SUITE_REGISTRATION(testBestWindows);
 CPPUNIT_TEST_SUITE_REGISTRATION(testTextEncodingInfo);
 CPPUNIT_TEST_SUITE_REGISTRATION(testEncodingFromUnix);
-
-CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
