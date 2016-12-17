@@ -1184,6 +1184,7 @@ XclExpNote::XclExpNote( const XclExpRoot& rRoot, const ScAddress& rScPos,
         {
             // TODO: additional text
             if( pScNote )
+            {
                 if( SdrCaptionObj* pCaption = pScNote->GetOrCreateCaption( maScPos ) )
                 {
                     lcl_GetFromTo( rRoot, pCaption->GetLogicRect(), maScPos.Tab(), maCommentFrom, maCommentTo );
@@ -1202,6 +1203,8 @@ XclExpNote::XclExpNote( const XclExpRoot& rRoot, const ScAddress& rScPos,
                     mbRowHidden = (rRoot.GetDoc().RowHidden(maScPos.Row(),maScPos.Tab()));
                     mbColHidden = (rRoot.GetDoc().ColHidden(maScPos.Col(),maScPos.Tab()));
                 }
+                maAuthor = XclExpString( pScNote->GetAuthor() );
+            }
 
             SetRecSize( 9 + maAuthor.GetSize() );
         }
