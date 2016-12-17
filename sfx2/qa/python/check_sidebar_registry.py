@@ -31,7 +31,7 @@ class CheckSidebarRegistry(unittest.TestCase):
         result = True
 
         #open registry node in Sidebar.xcu
-        configProvider = self.createUnoService("com.sun.star.configuration.ConfigurationProvider")
+        config_provider = self.createUnoService("com.sun.star.configuration.ConfigurationProvider")
 
         param = uno.createUnoStruct('com.sun.star.beans.PropertyValue')
         param.Name = "nodepath"
@@ -41,11 +41,11 @@ class CheckSidebarRegistry(unittest.TestCase):
 
         param.Value = "org.openoffice.Office.UI.Sidebar/Content/DeckList"
 
-        sidebarDecksSettings = configProvider.createInstanceWithArguments("com.sun.star.configuration.ConfigurationAccess",
+        sidebar_decks_settings = config_provider.createInstanceWithArguments("com.sun.star.configuration.ConfigurationAccess",
                                                                     (param, ))
-        for nodeName in sidebarDecksSettings:
+        for nodeName in sidebar_decks_settings:
 
-            node = sidebarDecksSettings.getByName(nodeName)
+            node = sidebar_decks_settings.getByName(nodeName)
 
             if (node.Id != nodeName):
                 print("\nNon-consistent sidebar.xcu Deck registry names", nodeName, node.Id)
@@ -55,11 +55,11 @@ class CheckSidebarRegistry(unittest.TestCase):
 
         param.Value = "org.openoffice.Office.UI.Sidebar/Content/PanelList"
 
-        sidebarPanelsSettings = configProvider.createInstanceWithArguments("com.sun.star.configuration.ConfigurationAccess",
+        sidebar_panels_settings = config_provider.createInstanceWithArguments("com.sun.star.configuration.ConfigurationAccess",
                                                                     (param, ))
-        for nodeName in sidebarPanelsSettings:
+        for nodeName in sidebar_panels_settings:
 
-            node = sidebarPanelsSettings.getByName(nodeName)
+            node = sidebar_panels_settings.getByName(nodeName)
 
             if (node.Id != nodeName):
                 print("\nNon-consistent sidebar.xcu Panel registry names", nodeName, node.Id)
@@ -67,9 +67,9 @@ class CheckSidebarRegistry(unittest.TestCase):
 
             # is panel bound to an existing Deck ?
             FoundDeckId = False
-            for deckNodeName in sidebarDecksSettings:
-                deckNode = sidebarDecksSettings.getByName(deckNodeName)
-                if (node.DeckId == deckNode.Id):
+            for deckNodeName in sidebar_decks_settings:
+                deck_node = sidebar_decks_settings.getByName(deckNodeName)
+                if (node.DeckId == deck_node.Id):
                     FoundDeckId = True
             if not FoundDeckId:
                 print("\nNon existing DeckId for the panel ",node.Id)
