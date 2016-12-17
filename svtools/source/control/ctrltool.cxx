@@ -32,6 +32,7 @@
 #include <svtools/svtresid.hxx>
 #include <svtools/ctrltool.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <comphelper/lok.hxx>
 
 // Standard Fontgroessen fuer scalierbare Fonts
 const sal_IntPtr FontList::aStdSizeAry[] =
@@ -249,7 +250,13 @@ void FontList::ImplInsertFonts( OutputDevice* pDevice, bool bAll,
         nType = FontListFontNameType::PRINTER;
 
     // inquire all fonts from the device
-    int const n = pDevice->GetDevFontCount();
+    int n = pDevice->GetDevFontCount();
+    if (n == 0 && comphelper::LibreOfficeKit::isActive())
+    {
+        pDevice->RefreshFontData(true);
+        n = pDevice->GetDevFontCount();
+    }
+
     for (int i = 0; i < n; ++i)
     {
         FontMetric aFontMetric = pDevice->GetDevFont( i );

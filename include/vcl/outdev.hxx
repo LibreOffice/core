@@ -1214,6 +1214,7 @@ public:
     int                         GetDevFontSizeCount( const vcl::Font& ) const;
 
     bool                        AddTempDevFont( const OUString& rFileURL, const OUString& rFontName );
+    void                        RefreshFontData( const bool bNewFontLists );
 
     FontMetric                  GetFontMetric() const;
     FontMetric                  GetFontMetric( const vcl::Font& rFont ) const;

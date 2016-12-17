@@ -547,6 +547,11 @@ void OutputDevice::ImplClearFontData( const bool bNewFontLists )
     }
 }
 
+void OutputDevice::RefreshFontData( const bool bNewFontLists )
+{
+    ImplRefreshFontData( bNewFontLists );
+}
+
 void OutputDevice::ImplRefreshFontData( const bool bNewFontLists )
 {
 //    if ( GetOutDevType() == OUTDEV_PRINTER || mpPDFWriter )
