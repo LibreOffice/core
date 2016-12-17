@@ -874,6 +874,4 @@ namespace osl_StreamPipe
 
 } // namespace osl_StreamPipe
 
-CPPUNIT_PLUGIN_IMPLEMENT();
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

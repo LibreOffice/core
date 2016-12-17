@@ -853,8 +853,6 @@ CPPUNIT_TEST_SUITE_REGISTRATION(osl_ResettableGuard::ctor);
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_ResettableGuard::reset);
 } // namespace osl_ResettableGuard
 
-CPPUNIT_PLUGIN_IMPLEMENT();
-
 // The following sets variables for GNU EMACS
 // Local Variables:
 // tab-width:4
