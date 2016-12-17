@@ -115,6 +115,8 @@ gb_AFLAGS := $(AFLAGS)
 
 # C4505: 'function' : unreferenced local function has been removed
 
+# C4510: 'class' : default constructor could not be generated
+
 # C4512: 'class' : assignment operator could not be generated
 # (an issue with MSVC 2013 that appears to be gone with MSVC 2015)
 
@@ -186,6 +188,7 @@ gb_CXXFLAGS := \
 	-wd4351 \
 	-wd4373 \
 	-wd4505 \
+	-wd4510 \
 	-wd4512 \
 	-wd4611 \
 	-wd4706 \

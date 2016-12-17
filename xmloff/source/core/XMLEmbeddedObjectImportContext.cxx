@@ -134,16 +134,6 @@ void XMLEmbeddedObjectImportContext::SetComponent(
     xComp = rComp;  // keep ref to component only if there is a handler
 }
 
-namespace {
-
-struct Entry {
-    XMLTokenEnum eClass;
-    OUStringLiteral sFilterService;
-    Entry() = delete; // avoid MSVC warning C4510
-};
-
-}
-
 XMLEmbeddedObjectImportContext::XMLEmbeddedObjectImportContext(
         SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
         const Reference< XAttributeList >& xAttrList ) :
@@ -192,7 +182,8 @@ XMLEmbeddedObjectImportContext::XMLEmbeddedObjectImportContext(
 
         if( !sClass.isEmpty() )
         {
-            static Entry const aServiceMap[] = {
+            static struct { XMLTokenEnum eClass; OUStringLiteral sFilterService;
+            } const aServiceMap[] = {
                 { XML_TEXT,         OUStringLiteral(XML_IMPORT_FILTER_WRITER) },
                 { XML_ONLINE_TEXT,  OUStringLiteral(XML_IMPORT_FILTER_WRITER) },
                 { XML_SPREADSHEET,  OUStringLiteral(XML_IMPORT_FILTER_CALC) },
