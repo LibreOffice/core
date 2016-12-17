@@ -5028,8 +5028,6 @@ namespace osl_Directory
     CPPUNIT_TEST_SUITE_REGISTRATION( osl_Directory::createPath );
 }// namespace osl_Directory
 
-CPPUNIT_PLUGIN_IMPLEMENT();
-
 /** get Current PID.
 */
 inline ::rtl::OUString getCurrentPID(  )
