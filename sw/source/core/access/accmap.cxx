@@ -251,9 +251,7 @@ public:
         const SwFEShell *pFESh,
         SwAccessibleObjShape_Impl  **pSelShape ) const;
 
-#if OSL_DEBUG_LEVEL > 0
     iterator begin() { return maMap.begin(); }
-#endif
     iterator end() { return maMap.end(); }
     const_iterator cbegin() const { return maMap.cbegin(); }
     const_iterator cend() const { return maMap.cend(); }
@@ -1684,6 +1682,14 @@ SwAccessibleMap::~SwAccessibleMap()
                 pTmp->SetMap(nullptr);
             }
             ++aIter;
+        }
+    }
+    if( mpShapeMap )
+    {
+        SwAccessibleShapeMap_Impl::iterator aIter = mpShapeMap->begin();
+        while( aIter != mpShapeMap->end() )
+        {
+            aIter = mpShapeMap->erase(aIter);
         }
     }
     {
