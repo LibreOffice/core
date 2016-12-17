@@ -80,10 +80,10 @@ class TestVarFields(unittest.TestCase):
         # Note: we have only one field here, that why nextElement() is just fine here
         xField = xFieldEnum.nextElement()
         # check
-        readContent = xField.getPropertyValue("Content")
-        self.assertEqual("0", readContent)
-        readContent = xField.getPropertyValue("Value")
-        self.assertEqual(0.0, readContent)
+        read_content = xField.getPropertyValue("Content")
+        self.assertEqual("0", read_content)
+        read_content = xField.getPropertyValue("Value")
+        self.assertEqual(0.0, read_content)
         # 16. change the value of the field from 0 to 1 and check
         self.__class__._uno.checkProperties(
             xField,
@@ -100,12 +100,12 @@ class TestVarFields(unittest.TestCase):
         # 19. retrieve the section
         xSection = xDoc.getTextSections().getByIndex(0)
         # 20. retrieve the condition property of that section
-        readContent = xSection.getPropertyValue("Condition")
+        read_content = xSection.getPropertyValue("Condition")
         # 21. check
         # expected:
         # self.assertEqual("foo EQ 1", readContent)
         # reality:
-        self.assertEqual("0", readContent)
+        self.assertEqual("0", read_content)
 
 if __name__ == '__main__':
     unittest.main()
