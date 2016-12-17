@@ -53,116 +53,116 @@ class CheckSidebar(unittest.TestCase):
 
         xDecks = xSidebar.getDecks()
 
-        firstDeckName = "PropertyDeck";
+        first_deck_name = "PropertyDeck";
 
-        deckElementNames = xDecks.getElementNames()
-        assert ( firstDeckName in deckElementNames )
-        assert ( xDecks.hasByName(firstDeckName) )
+        deck_element_names = xDecks.getElementNames()
+        assert ( first_deck_name in deck_element_names )
+        assert ( xDecks.hasByName(first_deck_name) )
 
-        decksCount = xDecks.getCount()
-        self.assertEqual ( 5, decksCount )
+        decks_count = xDecks.getCount()
+        self.assertEqual ( 5, decks_count )
 
-        xDeck = xDecks.getByName(firstDeckName)
+        xDeck = xDecks.getByName(first_deck_name)
         assert ( xDeck )
-        assert ( xDeck.getId() == firstDeckName )
+        assert ( xDeck.getId() == first_deck_name )
 
-        newDeckTitle = "New title"
-        xDeck.setTitle(newDeckTitle)
-        assert ( xDeck.getTitle() == newDeckTitle )
+        new_deck_title = "New title"
+        xDeck.setTitle(new_deck_title)
+        assert ( xDeck.getTitle() == new_deck_title )
 
         xDeck.moveFirst()
-        initialIndex = xDeck.getOrderIndex()
-        self.assertEqual(100, initialIndex)
+        initial_index = xDeck.getOrderIndex()
+        self.assertEqual(100, initial_index)
 
         xDeck.moveLast()
-        assert ( xDeck.getOrderIndex() > initialIndex )
+        assert ( xDeck.getOrderIndex() > initial_index )
 
-        initialIndex = xDeck.getOrderIndex()
+        initial_index = xDeck.getOrderIndex()
         xDeck.moveFirst()
-        assert ( xDeck.getOrderIndex() < initialIndex )
+        assert ( xDeck.getOrderIndex() < initial_index )
 
-        initialIndex = xDeck.getOrderIndex()
+        initial_index = xDeck.getOrderIndex()
         xDeck.moveDown()
-        assert ( xDeck.getOrderIndex() > initialIndex )
+        assert ( xDeck.getOrderIndex() > initial_index )
 
-        initialIndex = xDeck.getOrderIndex()
+        initial_index = xDeck.getOrderIndex()
         xDeck.moveUp()
-        assert ( xDeck.getOrderIndex() < initialIndex )
+        assert ( xDeck.getOrderIndex() < initial_index )
 
         xPanels = xDeck.getPanels()
 
-        panelsCount = xPanels.getCount()
-        self.assertEqual ( panelsCount, 5 )
+        panels_count = xPanels.getCount()
+        self.assertEqual ( panels_count, 5 )
 
-        firstPanelName = self.getFirstPanel(xPanels)
+        first_panel_name = self.getFirstPanel(xPanels)
 
-        panelElementNames = xPanels.getElementNames()
-        assert ( firstPanelName in panelElementNames )
-        assert ( xPanels.hasByName(firstPanelName) )
+        panel_element_names = xPanels.getElementNames()
+        assert ( first_panel_name in panel_element_names )
+        assert ( xPanels.hasByName(first_panel_name) )
 
-        xPanel = xPanels.getByName(firstPanelName)
+        xPanel = xPanels.getByName(first_panel_name)
         assert ( xPanel )
-        assert ( xPanel.getId() == firstPanelName )
+        assert ( xPanel.getId() == first_panel_name )
 
-        newTitle = "New title"
-        xPanel.setTitle(newTitle)
-        assert ( xPanel.getTitle() == newTitle )
+        new_title = "New title"
+        xPanel.setTitle(new_title)
+        assert ( xPanel.getTitle() == new_title )
 
-        initialIndex = xPanel.getOrderIndex()
+        initial_index = xPanel.getOrderIndex()
         xPanel.moveLast()
-        assert ( xPanel.getOrderIndex() > initialIndex )
+        assert ( xPanel.getOrderIndex() > initial_index )
 
-        initialIndex = xPanel.getOrderIndex()
+        initial_index = xPanel.getOrderIndex()
         xPanel.moveFirst()
-        assert ( xPanel.getOrderIndex() < initialIndex )
+        assert ( xPanel.getOrderIndex() < initial_index )
 
-        initialIndex = xPanel.getOrderIndex()
+        initial_index = xPanel.getOrderIndex()
         xPanel.moveDown()
-        assert ( xPanel.getOrderIndex() > initialIndex )
+        assert ( xPanel.getOrderIndex() > initial_index )
 
-        initialIndex = xPanel.getOrderIndex()
+        initial_index = xPanel.getOrderIndex()
         xPanel.moveUp()
-        assert ( xPanel.getOrderIndex() < initialIndex )
+        assert ( xPanel.getOrderIndex() < initial_index )
 
         xPanel.collapse()
         assert( not xPanel.isExpanded() )
 
-        lastPanelName = self.getLastPanel(xPanels)
+        last_panel_name = self.getLastPanel(xPanels)
 
-        otherPanel = xPanels.getByName(lastPanelName)
-        otherPanel.expand(False)
-        assert( otherPanel.isExpanded() )
+        other_panel = xPanels.getByName(last_panel_name)
+        other_panel.expand(False)
+        assert( other_panel.isExpanded() )
 
         xPanel.expand(True)
         assert( xPanel.isExpanded() )
-        assert( not otherPanel.isExpanded() )
+        assert( not other_panel.isExpanded() )
 
     # close the document
         xDoc.dispose()
 
     def getFirstPanel(self, xPanels):
 
-        panelName = ""
-        curIndex = 10000
+        panel_name = ""
+        cur_index = 10000
 
         for panel in xPanels:
-            if panel.getOrderIndex() < curIndex:
-                panelName = panel.getId()
-                curIndex = panel.getOrderIndex()
+            if panel.getOrderIndex() < cur_index:
+                panel_name = panel.getId()
+                cur_index = panel.getOrderIndex()
 
-        return panelName
+        return panel_name
 
     def getLastPanel(self, xPanels):
 
-        panelName = ""
-        curIndex = 0
+        panel_name = ""
+        cur_index = 0
 
         for panel in xPanels:
-            if panel.getOrderIndex() > curIndex:
-                panelName = panel.getId()
-                curIndex = panel.getOrderIndex()
+            if panel.getOrderIndex() > cur_index:
+                panel_name = panel.getId()
+                cur_index = panel.getOrderIndex()
 
-        return panelName
+        return panel_name
 
 if __name__ == "__main__":
     unittest.main()
