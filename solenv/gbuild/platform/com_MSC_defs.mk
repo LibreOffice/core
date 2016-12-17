@@ -120,6 +120,8 @@ gb_AFLAGS := $(AFLAGS)
 # C4512: 'class' : assignment operator could not be generated
 # (an issue with MSVC 2013 that appears to be gone with MSVC 2015)
 
+# C4610: 'class' can never be instantiated - user defined constructor required
+
 # C4611: interaction between 'function' and C++ object destruction is
 #   non-portable
 
@@ -190,6 +192,7 @@ gb_CXXFLAGS := \
 	-wd4505 \
 	-wd4510 \
 	-wd4512 \
+	-wd4610 \
 	-wd4611 \
 	-wd4706 \
 	-wd4800 \
