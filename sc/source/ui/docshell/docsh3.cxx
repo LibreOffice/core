@@ -453,7 +453,12 @@ void ScDocShell::UpdateFontList()
 {
     delete pImpl->pFontList;
     // pImpl->pFontList = new FontList( GetPrinter(), Application::GetDefaultDevice() );
-    pImpl->pFontList = new FontList( GetRefDevice(), nullptr, false ); // sal_False or sal_True???
+    OutputDevice* pRefDevice = GetRefDevice();
+    if (!pRefDevice->GetDevFontCount() && comphelper::LibreOfficeKit::isActive())
+    {
+        pRefDevice->RefreshFontData(true);
+    }
+    pImpl->pFontList = new FontList( pRefDevice, nullptr, false ); // sal_False or sal_True???
     SvxFontListItem aFontListItem( pImpl->pFontList, SID_ATTR_CHAR_FONTLIST );
     PutItem( aFontListItem );
 

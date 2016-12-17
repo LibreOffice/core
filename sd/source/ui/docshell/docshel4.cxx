@@ -49,6 +49,7 @@
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawView.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/lok.hxx>
 
 #include "app.hrc"
 #include "glob.hrc"
@@ -164,6 +165,12 @@ void DrawDocShell::UpdateFontList()
         pRefDevice = GetPrinter(true);
     else
         pRefDevice = SD_MOD()->GetVirtualRefDevice();
+
+    if (!pRefDevice->GetDevFontCount() && comphelper::LibreOfficeKit::isActive())
+    {
+        pRefDevice->RefreshFontData(true);
+    }
+
     mpFontList = new FontList( pRefDevice, nullptr, false );
     SvxFontListItem aFontListItem( mpFontList, SID_ATTR_CHAR_FONTLIST );
     PutItem( aFontListItem );
