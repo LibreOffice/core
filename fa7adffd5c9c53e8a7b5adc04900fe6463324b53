@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a71b18c_30a603c2",
+        "filename": "desktop/unx/source/splashx.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 767,
+      "author": {
+        "id": 1000381
+      },
+      "writtenOn": "2016-12-17T13:22:07Z",
+      "side": 1,
+      "message": "This function can be static, no need to declare it in the header. It should also return bool not int.",
+      "revId": "fa7adffd5c9c53e8a7b5adc04900fe6463324b53",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
