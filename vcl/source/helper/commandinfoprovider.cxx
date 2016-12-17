@@ -49,9 +49,8 @@ namespace
           public FrameListenerInterfaceBase
     {
     public:
-        FrameListener (vcl::CommandInfoProvider& rInfoProvider, const Reference<frame::XFrame>& rxFrame)
+        FrameListener (const Reference<frame::XFrame>& rxFrame)
             : FrameListenerInterfaceBase(m_aMutex),
-              mrInfoProvider(rInfoProvider),
               mxFrame(rxFrame)
         {
             if (mxFrame.is())
@@ -64,7 +63,7 @@ namespace
             // The same frame can be reused for a different component, e.g.
             // starting component from the start center, so need to re-init the cached data.
             if (aEvent.Action == css::frame::FrameAction_COMPONENT_DETACHING)
-                mrInfoProvider.SetFrame(nullptr);
+                vcl::CommandInfoProvider::SetFrame(nullptr);
         }
         virtual void SAL_CALL disposing() override
         {
@@ -75,32 +74,26 @@ namespace
             throw (RuntimeException, std::exception) override
         {
             (void)rEvent;
-            mrInfoProvider.SetFrame(nullptr);
+            vcl::CommandInfoProvider::SetFrame(nullptr);
             mxFrame = nullptr;
         }
 
     private:
-        vcl::CommandInfoProvider& mrInfoProvider;
         Reference<frame::XFrame> mxFrame;
     };
 }
 
 namespace vcl {
 
-CommandInfoProvider& CommandInfoProvider::Instance()
-{
-    static CommandInfoProvider aProvider;
-    return aProvider;
-}
+css::uno::Reference<css::uno::XComponentContext> CommandInfoProvider::mxContext(comphelper::getProcessComponentContext());
+css::uno::Reference<css::lang::XComponent> CommandInfoProvider::mxFrameListener;
+css::uno::Reference<css::ui::XAcceleratorConfiguration> CommandInfoProvider::mxCachedDocumentAcceleratorConfiguration;
+css::uno::Reference<css::ui::XAcceleratorConfiguration> CommandInfoProvider::mxCachedModuleAcceleratorConfiguration;
+css::uno::Reference<css::ui::XAcceleratorConfiguration> CommandInfoProvider::mxCachedGlobalAcceleratorConfiguration;
+css::uno::Reference<css::frame::XFrame> CommandInfoProvider::mxCachedDataFrame;
+OUString CommandInfoProvider::msCachedModuleIdentifier;
 
 CommandInfoProvider::CommandInfoProvider()
-    : mxContext(comphelper::getProcessComponentContext()),
-      mxCachedDataFrame(),
-      mxCachedDocumentAcceleratorConfiguration(),
-      mxCachedModuleAcceleratorConfiguration(),
-      mxCachedGlobalAcceleratorConfiguration(),
-      msCachedModuleIdentifier(),
-      mxFrameListener()
 {
     ImplGetSVData()->mpCommandInfoProvider = this;
 }
@@ -350,7 +343,9 @@ void CommandInfoProvider::SetFrame (const Reference<frame::XFrame>& rxFrame)
 
         // Connect to the new frame.
         if (rxFrame.is())
-            mxFrameListener = new FrameListener(*this, rxFrame);
+        {
+            mxFrameListener = new FrameListener(rxFrame);
+        }
     }
 }
 
