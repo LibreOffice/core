@@ -1201,6 +1201,7 @@ XclExpNote::XclExpNote( const XclExpRoot& rRoot, const ScAddress& rScPos,
                     mbAutoFill  = aCol.isEmpty() && (GETITEMVALUE(aItemSet, XFillStyleItem, XATTR_FILLSTYLE, sal_uLong) == drawing::FillStyle_SOLID);
                     mbRowHidden = (rRoot.GetDoc().RowHidden(maScPos.Row(),maScPos.Tab()));
                     mbColHidden = (rRoot.GetDoc().ColHidden(maScPos.Col(),maScPos.Tab()));
+                    maAuthor    = XclExpString( pScNote->GetAuthor() );
                 }
 
             SetRecSize( 9 + maAuthor.GetSize() );
