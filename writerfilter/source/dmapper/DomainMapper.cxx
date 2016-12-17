@@ -3280,7 +3280,7 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
                            && !bSingleParagraph
                            && !( pContext && pContext->isSet(PROP_BREAK_TYPE) )
                            && !m_pImpl->GetIsDummyParaAddedForTableInSection()
-                           && !m_pImpl->GetIsLastParagraphFramed();
+                           && !m_pImpl->GetIsPreviousParagraphFramed();
             PropertyMapPtr xContext = bRemove ? m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH) : PropertyMapPtr();
             if (xContext)
             {

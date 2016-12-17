@@ -436,7 +436,7 @@ private:
     bool                            m_bIsFirstParaInSection;
     bool                            m_bDummyParaAddedForTableInSection;
     bool                            m_bTextFrameInserted;
-    bool                            m_bIsLastParagraphFramed;
+    bool                            m_bIsPreviousParagraphFramed;
     bool                            m_bIsLastParaInSection;
     bool                            m_bIsLastSectionGroup;
     bool                            m_bIsInComments;
@@ -525,8 +525,8 @@ public:
     bool GetIsDummyParaAddedForTableInSection() { return m_bDummyParaAddedForTableInSection;}
     void SetIsTextFrameInserted( bool bIsInserted );
     bool GetIsTextFrameInserted() { return m_bTextFrameInserted;}
-    void SetIsLastParagraphFramed( bool bIsFramed ) { m_bIsLastParagraphFramed = bIsFramed; }
-    bool GetIsLastParagraphFramed() { return m_bIsLastParagraphFramed; }
+    void SetIsPreviousParagraphFramed( bool bIsFramed ) { m_bIsPreviousParagraphFramed = bIsFramed; }
+    bool GetIsPreviousParagraphFramed() { return m_bIsPreviousParagraphFramed; }
     void SetParaSectpr(bool bParaSectpr);
     bool GetParaSectpr() { return m_bParaSectpr;}
 
