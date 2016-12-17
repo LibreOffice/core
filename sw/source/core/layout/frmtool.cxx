@@ -1985,28 +1985,36 @@ long SwBorderAttrs::CalcLeft( const SwFrame *pCaller ) const
 
 void SwBorderAttrs::CalcTopLine_()
 {
-    m_nTopLine = m_rBox.CalcLineSpace( SvxBoxItemLine::TOP, /*bEvenIfNoLine*/true );
+    m_nTopLine = (m_bBorderDist && !m_rBox.GetTop())
+                            ? m_rBox.GetDistance  (SvxBoxItemLine::TOP)
+                            : m_rBox.CalcLineSpace(SvxBoxItemLine::TOP);
     m_nTopLine = m_nTopLine + m_rShadow.CalcShadowSpace(SvxShadowItemSide::TOP);
     m_bTopLine = false;
 }
 
 void SwBorderAttrs::CalcBottomLine_()
 {
-    m_nBottomLine = m_rBox.CalcLineSpace( SvxBoxItemLine::BOTTOM, true );
+    m_nBottomLine = (m_bBorderDist && !m_rBox.GetBottom())
+                            ? m_rBox.GetDistance  (SvxBoxItemLine::BOTTOM)
+                            : m_rBox.CalcLineSpace(SvxBoxItemLine::BOTTOM);
     m_nBottomLine = m_nBottomLine + m_rShadow.CalcShadowSpace(SvxShadowItemSide::BOTTOM);
     m_bBottomLine = false;
 }
 
 void SwBorderAttrs::CalcLeftLine_()
 {
-    m_nLeftLine = m_rBox.CalcLineSpace( SvxBoxItemLine::LEFT, true );
+    m_nLeftLine = (m_bBorderDist && !m_rBox.GetLeft())
+                            ? m_rBox.GetDistance  (SvxBoxItemLine::LEFT)
+                            : m_rBox.CalcLineSpace(SvxBoxItemLine::LEFT);
     m_nLeftLine = m_nLeftLine + m_rShadow.CalcShadowSpace(SvxShadowItemSide::LEFT);
     m_bLeftLine = false;
 }
 
 void SwBorderAttrs::CalcRightLine_()
 {
-    m_nRightLine = m_rBox.CalcLineSpace(SvxBoxItemLine::RIGHT, true );
+    m_nRightLine = (m_bBorderDist && !m_rBox.GetRight())
+                            ? m_rBox.GetDistance  (SvxBoxItemLine::RIGHT)
+                            : m_rBox.CalcLineSpace(SvxBoxItemLine::RIGHT);
     m_nRightLine = m_nRightLine + m_rShadow.CalcShadowSpace(SvxShadowItemSide::RIGHT);
     m_bRightLine = false;
 }
