@@ -154,7 +154,7 @@ namespace accessibility
 
     void SAL_CALL EditBrowseBoxTableCell::disposing()
     {
-        SolarMethodGuard aGuard( *this, false );
+        SolarMethodGuard aGuard( getMutex() );
         OAccessibleContextWrapperHelper::dispose();
             // TODO: do we need to dispose our inner object? The base class does this, but is it a good idea?
         AccessibleBrowseBoxCell::disposing();

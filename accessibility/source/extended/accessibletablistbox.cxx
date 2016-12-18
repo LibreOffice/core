@@ -91,9 +91,7 @@ namespace accessibility
     AccessibleTabListBox::getAccessibleChild( sal_Int32 nChildIndex )
         throw ( IndexOutOfBoundsException, RuntimeException, std::exception )
     {
-        SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( getMutex() );
-        ensureIsAlive();
+        SolarMethodGuard aGuard(*this);
 
         if ( nChildIndex < 0 || nChildIndex > 1 )
             throw IndexOutOfBoundsException();

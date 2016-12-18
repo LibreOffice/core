@@ -409,12 +409,16 @@ protected:
 class SolarMethodGuard : public SolarMutexGuard, public osl::MutexGuard
 {
 public:
-    inline SolarMethodGuard( AccessibleBrowseBoxBase& _rOwner, bool _bEnsureAlive = true )
+    inline SolarMethodGuard( osl::Mutex& rMutex )
         :SolarMutexGuard( )
-        ,osl::MutexGuard( _rOwner.getMutex( ) )
+        ,osl::MutexGuard( rMutex )
     {
-        if ( _bEnsureAlive )
-            _rOwner.ensureIsAlive( );
+    }
+
+    inline SolarMethodGuard( AccessibleBrowseBoxBase& _rOwner )
+        :SolarMethodGuard( _rOwner.getMutex( ) )
+    {
+        _rOwner.ensureIsAlive( );
     }
 };
 
