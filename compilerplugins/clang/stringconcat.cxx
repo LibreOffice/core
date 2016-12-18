@@ -36,10 +36,6 @@ Expr const * stripCtor(Expr const * expr) {
     return e3->getArg(0)->IgnoreParenImpCasts();
 }
 
-bool isStringLiteral(Expr const * expr) {
-    return isa<clang::StringLiteral>(stripCtor(expr));
-}
-
 class StringConcat:
     public RecursiveASTVisitor<StringConcat>, public loplugin::Plugin
 {
@@ -50,6 +46,9 @@ public:
     { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }
 
     bool VisitCallExpr(CallExpr const * expr);
+
+private:
+    bool isStringLiteral(Expr const * expr);
 };
 
 bool StringConcat::VisitCallExpr(CallExpr const * expr) {
@@ -107,6 +106,24 @@ bool StringConcat::VisitCallExpr(CallExpr const * expr) {
         << (oo == OverloadedOperatorKind::OO_Plus ? "+" : "<<")
         << SourceRange(leftLoc, expr->getArg(1)->getLocEnd());
     return true;
+}
+
+bool StringConcat::isStringLiteral(Expr const * expr) {
+    expr = stripCtor(expr);
+    if (!isa<clang::StringLiteral>(expr)) {
+        return false;
+    }
+    // OSL_THIS_FUNC may be defined as "" in include/osl/diagnose.h, so don't
+    // warn about expressions like 'SAL_INFO(..., OSL_THIS_FUNC << ":")' or
+    // 'OUString(OSL_THIS_FUNC) + ":"':
+    auto loc = expr->getLocStart();
+    while (compiler.getSourceManager().isMacroArgExpansion(loc)) {
+        loc = compiler.getSourceManager().getImmediateMacroCallerLoc(loc);
+    }
+    return !compiler.getSourceManager().isMacroBodyExpansion(loc)
+        || (Lexer::getImmediateMacroName(
+                loc, compiler.getSourceManager(), compiler.getLangOpts())
+            != "OSL_THIS_FUNC");
 }
 
 loplugin::Plugin::Registration<StringConcat> X("stringconcat");
