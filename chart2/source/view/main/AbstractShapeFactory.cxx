@@ -54,6 +54,8 @@ namespace {
 
 typedef opengl::OpenglShapeFactory* (*getOpenglShapeFactory_)(void);
 
+#if HAVE_FEATURE_UI
+
 #ifndef DISABLE_DYNLOADING
 
 void SAL_CALL thisModule() {}
@@ -72,6 +74,8 @@ osl::Module* getOpenGLModule()
 
     return bLoaded ? &aModule : nullptr;
 }
+
+#endif
 
 #endif
 
