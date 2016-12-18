@@ -51,7 +51,7 @@ $(eval $(call gb_Module_add_targets,avmedia,\
 ))
 endif
 
-ifneq ($(ENABLE_DIRECTX),)
+ifeq ($(OS),WNT)
 $(eval $(call gb_Module_add_targets,avmedia,\
 	Library_avmediawin \
 ))
