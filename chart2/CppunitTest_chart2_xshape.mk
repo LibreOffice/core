@@ -115,6 +115,7 @@ $(eval $(call gb_CppunitTest_use_components,chart2_xshape,\
     ucb/source/core/ucb1 \
     ucb/source/ucp/file/ucpfile1 \
     ucb/source/ucp/tdoc/ucptdoc1 \
+    uui/util/uui \
     unotools/util/utl \
     unoxml/source/rdf/unordf \
     unoxml/source/service/unoxml \
