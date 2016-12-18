@@ -326,6 +326,7 @@ my_components += \
 .IF "$(OS)" == "WNT"
 my_components += \
     ado \
+    component/avmedia/source/win/avmediawin \
     component/dtrans/source/generic/dtrans \
     component/dtrans/util/dnd \
     component/dtrans/util/ftransl \
@@ -352,7 +353,6 @@ my_components += \
 
 .IF "$(OS)" == "WNT" && "$(ENABLE_DIRECTX)" != ""
 my_components += \
-    component/avmedia/source/win/avmediawin \
     component/canvas/source/directx/directx9canvas \
     component/canvas/source/directx/gdipluscanvas
 .END

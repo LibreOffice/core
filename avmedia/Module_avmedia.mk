@@ -50,11 +50,9 @@ $(eval $(call gb_Module_add_targets,avmedia,\
 endif
 
 ifeq ($(GUI),WNT)
-ifneq ($(strip $(ENABLE_DIRECTX)),)
 $(eval $(call gb_Module_add_targets,avmedia,\
 	Library_avmediawin \
 ))
-endif
 endif
 
 ifeq ($(GUIBASE),aqua)
