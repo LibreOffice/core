@@ -137,6 +137,7 @@ $(eval $(call gb_Rdb_add_components,services,\
 		vcl/vcl.macosx \
 	) \
 	$(if $(filter WNT,$(OS)), \
+		avmedia/source/win/avmediawin \
 		dtrans/source/generic/dtrans \
 		dtrans/util/dnd \
 		dtrans/util/ftransl \
@@ -188,7 +189,6 @@ $(eval $(call gb_Rdb_add_components,services,\
 		canvas/source/cairo/cairocanvas \
 	) \
 	$(if $(ENABLE_DIRECTX), \
-		avmedia/source/win/avmediawin \
 		canvas/source/directx/directx9canvas \
 		canvas/source/directx/gdipluscanvas \
 	) \
