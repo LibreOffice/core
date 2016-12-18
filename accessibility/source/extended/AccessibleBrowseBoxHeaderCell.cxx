@@ -50,7 +50,8 @@ AccessibleBrowseBoxHeaderCell::AccessibleBrowseBoxHeaderCell(sal_Int32 _nColumnR
 */
 ::utl::AccessibleStateSetHelper* AccessibleBrowseBoxHeaderCell::implCreateStateSetHelper()
 {
-    ::osl::MutexGuard aGuard( getMutex() );
+    SolarMethodGuard aGuard( *this );
+
     ::utl::AccessibleStateSetHelper*
         pStateSetHelper = new ::utl::AccessibleStateSetHelper;
 
@@ -60,7 +61,6 @@ AccessibleBrowseBoxHeaderCell::AccessibleBrowseBoxHeaderCell(sal_Int32 _nColumnR
         if( implIsShowing() )
             pStateSetHelper->AddState( AccessibleStateType::SHOWING );
 
-        SolarMutexGuard aSolarGuard;
         mpBrowseBox->FillAccessibleStateSet( *pStateSetHelper, getType() );
         pStateSetHelper->AddState( AccessibleStateType::VISIBLE );
         pStateSetHelper->AddState( AccessibleStateType::FOCUSABLE );
