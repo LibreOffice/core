@@ -38,7 +38,7 @@
 #include <vcl/cvtgrf.hxx>
 #include <vcl/scheduler.hxx>
 #include <vcl/image.hxx>
-#include <vcl/implimagetree.hxx>
+#include <vcl/ImageTree.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/unowrap.hxx>
 #include <vcl/commandinfoprovider.hxx>
@@ -403,7 +403,7 @@ void DeInitVCL()
     SAL_WARN_IF( nBadTopWindows!=0, "vcl", aBuf.getStr() );
 #endif
 
-    ImplImageTree::get().shutDown();
+    ImageTree::get().shutdown();
 
     osl_removeSignalHandler( pExceptionHandler);
     pExceptionHandler = nullptr;

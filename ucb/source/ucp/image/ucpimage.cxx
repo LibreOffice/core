@@ -20,13 +20,13 @@
 #include <osl/mutex.hxx>
 #include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <vcl/implimagetree.hxx>
+#include <vcl/ImageTree.hxx>
 #include <vcl/svapp.hxx>
 #include <ucbhelper/content.hxx>
 
 // A LO-private ("implementation detail") UCP used to access images from help
 // content, with theme fallback and localization support as provided by VCL's
-// ImplImageTree.
+// ImageTree.
 //
 // The URL scheme is
 //
@@ -133,7 +133,7 @@ private:
         OUString newUrl;
         {
             SolarMutexGuard g;
-            newUrl = ImplImageTree::get().getImageUrl(decPath, auth, lang);
+            newUrl = ImageTree::get().getImageUrl(decPath, auth, lang);
         }
         ucbhelper::Content content;
         return
