@@ -169,7 +169,7 @@ void loadImageFromStream(std::shared_ptr<SvStream> const & xStream, OUString con
         rBitmap.Scale(double(aScaleFactor), double(aScaleFactor), BmpScaleFlag::Fast);
 }
 
-}
+} // end anonymous namespace
 
 ImplImageTree::ImplImageTree()
 {
@@ -263,7 +263,8 @@ bool ImplImageTree::loadImage(OUString const & name, OUString const & style, Bit
     {
         try
         {
-            if (doLoadImage(name, aStyle, rBitmap, localized, eFlags))
+            ImageRequestParameters aParameters(name, aStyle, rBitmap, localized, eFlags);
+            if (doLoadImage(aParameters))
                 return true;
         }
         catch (css::uno::RuntimeException &)
@@ -276,19 +277,20 @@ bool ImplImageTree::loadImage(OUString const & name, OUString const & style, Bit
 
 bool ImplImageTree::loadDefaultImage(OUString const & style, BitmapEx& bitmap, const ImageLoadFlags eFlags)
 {
-    return doLoadImage("res/grafikde.png", style, bitmap, false, eFlags);
+    ImageRequestParameters aParameters("res/grafikde.png", style, bitmap, false, eFlags);
+    return doLoadImage(aParameters);
 }
 
-OUString createVariant(const ImageLoadFlags eFlags)
+OUString createVariant(ImageRequestParameters& rParameters)
 {
     static bool bIconsForDarkTheme = !!getenv("VCL_ICONS_FOR_DARK_THEME");
 
     bool bConvertToDarkTheme = bIconsForDarkTheme;
-    if (eFlags & ImageLoadFlags::IgnoreDarkTheme)
+    if (rParameters.meFlags & ImageLoadFlags::IgnoreDarkTheme)
         bConvertToDarkTheme = false;
 
     sal_Int32 aScalePercentage = Application::GetDefaultDevice()->GetDPIScalePercentage();
-    if (eFlags & ImageLoadFlags::IgnoreScalingFactor)
+    if (rParameters.meFlags & ImageLoadFlags::IgnoreScalingFactor)
         aScalePercentage = 100;
 
     OUString aVariant;
@@ -303,22 +305,22 @@ OUString createVariant(const ImageLoadFlags eFlags)
     return aVariant;
 }
 
-bool loadDiskCachedVersion(OUString const & sStyle, OUString const & sVariant, OUString const & sName, BitmapEx & rBitmapEx)
+bool loadDiskCachedVersion(OUString const & sVariant, ImageRequestParameters& rParameters)
 {
-    OUString sUrl(getIconCacheUrl(sStyle, sVariant, sName));
+    OUString sUrl(getIconCacheUrl(rParameters.msStyle, sVariant, rParameters.msName));
     if (!urlExists(sUrl))
         return false;
     SvFileStream aFileStream(sUrl, StreamMode::READ);
     vcl::PNGReader aPNGReader(aFileStream);
     aPNGReader.SetIgnoreGammaChunk( true );
-    rBitmapEx = aPNGReader.Read();
+    rParameters.mrBitmap = aPNGReader.Read();
     return true;
 }
 
-void cacheBitmapToDisk(OUString const & sStyle, OUString const & sVariant, OUString const & sName, BitmapEx & rBitmapEx)
+void cacheBitmapToDisk(OUString const & sVariant, ImageRequestParameters& rParameters)
 {
-    OUString sUrl(createIconCacheUrl(sStyle, sVariant, sName));
-    vcl::PNGWriter aWriter(rBitmapEx);
+    OUString sUrl(createIconCacheUrl(rParameters.msStyle, sVariant, rParameters.msName));
+    vcl::PNGWriter aWriter(rParameters.mrBitmap);
     try
     {
         SvFileStream aStream(sUrl, StreamMode::WRITE);
@@ -329,38 +331,44 @@ void cacheBitmapToDisk(OUString const & sStyle, OUString const & sVariant, OUStr
     {}
 }
 
-bool ImplImageTree::doLoadImage(OUString const & name, OUString const & style, BitmapEx & bitmap, bool localized, const ImageLoadFlags eFlags)
+bool ImplImageTree::doLoadImage(ImageRequestParameters& rParameters)
 {
-    setStyle(style);
+    setStyle(rParameters.msStyle);
 
-    if (iconCacheLookup(name, localized, eFlags, bitmap))
+    if (iconCacheLookup(rParameters))
         return true;
 
-    if (!bitmap.IsEmpty())
-        bitmap.SetEmpty();
+    if (!rParameters.mrBitmap.IsEmpty())
+        rParameters.mrBitmap.SetEmpty();
 
     LanguageTag aLanguageTag = Application::GetSettings().GetUILanguageTag();
 
-    std::vector<OUString> paths = getPaths(name, aLanguageTag);
+    std::vector<OUString> paths = getPaths(rParameters.msName, aLanguageTag);
 
-    bool found = false;
-    try {
-        found = findImage(paths, bitmap, eFlags);
-    } catch (css::uno::RuntimeException &) {
+    bool bFound = false;
+
+    try
+    {
+        bFound = findImage(paths, rParameters.mrBitmap, rParameters.meFlags);
+    }
+    catch (css::uno::RuntimeException&)
+    {
         throw;
-    } catch (const css::uno::Exception & e) {
+    }
+    catch (const css::uno::Exception& e)
+    {
         SAL_INFO("vcl", "ImplImageTree::doLoadImage exception " << e.Message);
     }
 
-    if (found)
+    if (bFound)
     {
-        OUString aVariant = createVariant(eFlags);
+        OUString aVariant = createVariant(rParameters);
         if (!aVariant.isEmpty())
-            cacheBitmapToDisk(style, aVariant, name, bitmap);
-        getCurrentIconSet().maIconCache[name] = std::make_pair(localized, bitmap);
+            cacheBitmapToDisk(aVariant, rParameters);
+        getCurrentIconSet().maIconCache[rParameters.msName] = std::make_pair(rParameters.mbLocalized, rParameters.mrBitmap);
     }
 
-    return found;
+    return bFound;
 }
 
 void ImplImageTree::shutdown()
@@ -407,19 +415,19 @@ void ImplImageTree::createStyle()
     loadImageLinks();
 }
 
-bool ImplImageTree::iconCacheLookup(OUString const & name, bool localized, const ImageLoadFlags eFlags, BitmapEx & bitmap)
+bool ImplImageTree::iconCacheLookup(ImageRequestParameters& rParameters)
 {
     IconCache& rIconCache = getCurrentIconSet().maIconCache;
 
-    IconCache::iterator i(rIconCache.find(getRealImageName(name)));
-    if (i != rIconCache.end() && i->second.first == localized)
+    IconCache::iterator i(rIconCache.find(getRealImageName(rParameters.msName)));
+    if (i != rIconCache.end() && i->second.first == rParameters.mbLocalized)
     {
-        bitmap = i->second.second;
+        rParameters.mrBitmap = i->second.second;
         return true;
     }
 
-    OUString aVariant = createVariant(eFlags);
-    if (!aVariant.isEmpty() && loadDiskCachedVersion(maCurrentStyle, aVariant, name, bitmap))
+    OUString aVariant = createVariant(rParameters);
+    if (!aVariant.isEmpty() && loadDiskCachedVersion(aVariant, rParameters))
         return true;
 
     return false;

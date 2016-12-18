@@ -38,6 +38,23 @@ namespace com { namespace sun { namespace star { namespace container {
     class XNameAccess;
 }}}}
 
+struct ImageRequestParameters
+{
+    OUString msName;
+    OUString msStyle;
+    BitmapEx& mrBitmap;
+    bool mbLocalized;
+    ImageLoadFlags meFlags;
+
+    ImageRequestParameters(const OUString & rName, const OUString & rStyle, BitmapEx& rBitmap, bool bLocalized, ImageLoadFlags eFlags)
+        : msName(rName)
+        , msStyle(rStyle)
+        , mrBitmap(rBitmap)
+        , mbLocalized(bLocalized)
+        , meFlags(eFlags)
+    {}
+};
+
 class ImplImageTree
 {
 public:
@@ -100,9 +117,7 @@ private:
         return maIconSets[maCurrentStyle];
     }
 
-    bool doLoadImage(
-        OUString const & name, OUString const & style,
-        BitmapEx & bitmap, bool localized, const ImageLoadFlags eFlags);
+    bool doLoadImage(ImageRequestParameters& rParameters);
 
     std::vector<OUString> getPaths(OUString const & name, LanguageTag& rLanguageTag);
 
@@ -112,7 +127,7 @@ private:
 
     void createStyle();
 
-    bool iconCacheLookup(OUString const & rName, bool bLocalized, const ImageLoadFlags eFlags, BitmapEx & rBitmap);
+    bool iconCacheLookup(ImageRequestParameters& rParameters);
 
     bool findImage(std::vector<OUString> const & rPaths, BitmapEx & rBitmap, const ImageLoadFlags eFlags);
 
