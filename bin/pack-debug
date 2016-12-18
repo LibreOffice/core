@@ -51,8 +51,8 @@ cat $DEBUGSRC | awk '
 	/^Brand module/ { print gensub("Brand module", "Source files", "");next }
 	/^%attr/ || /^Summary:/ { next }
 	{print}
-	END { 
-		print "%defattr(-,root,root)" 
+	END {
+		print "%defattr(-,root,root)"
 	}
  ' > ${DEBUGSRC}-debugsource
  buildroot=$(cat $DEBUGSRC-debugsource | awk '/^BuildRoot/{print$2}')
@@ -62,7 +62,7 @@ cat $DEBUGSRC | awk '
 
  # create source file list
 
- find $BUILD_PATH -name '*[.][hc]xx' -o -name '*[.][hc]' | grep -Ev '/(instdir|workdir|qa|DEBS)/' |
+ find $BUILD_PATH -name '*[.][hc]xx' -o -name '*[.][hc]' | grep -Ev '/(instdir|qa|DEBS)/' |
 
  # list all directories for complete rpm remove
 
@@ -190,7 +190,7 @@ cat $DEBUGSRC | awk '
 
  # create source file list
 
- find $BUILD_PATH -name '*[.][hc]xx' -o -name '*[.][hc]' | grep -Ev '/(instdir|workdir|qa|DEBS)/' |
+ find $BUILD_PATH -name '*[.][hc]xx' -o -name '*[.][hc]' | grep -Ev '/(instdir|qa|DEBS)/' |
 
  # list all directories
 
