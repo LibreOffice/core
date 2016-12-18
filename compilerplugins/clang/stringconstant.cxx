@@ -651,8 +651,8 @@ bool StringConstant::VisitCXXConstructExpr(CXXConstructExpr const * expr) {
     if (ignoreLocation(expr)) {
         return true;
     }
-    auto cdecl = expr->getConstructor()->getParent();
-    if (loplugin::DeclCheck(cdecl)
+    auto classdecl = expr->getConstructor()->getParent();
+    if (loplugin::DeclCheck(classdecl)
         .Class("OUString").Namespace("rtl").GlobalNamespace())
     {
         ChangeKind kind;
@@ -693,7 +693,7 @@ bool StringConstant::VisitCXXConstructExpr(CXXConstructExpr const * expr) {
                             ("construction of %0 with string constant argument"
                              " containging non-ASCII characters"),
                             expr->getExprLoc())
-                            << cdecl << expr->getSourceRange();
+                            << classdecl << expr->getSourceRange();
                     }
                     if (emb) {
                         report(
@@ -701,7 +701,7 @@ bool StringConstant::VisitCXXConstructExpr(CXXConstructExpr const * expr) {
                             ("construction of %0 with string constant argument"
                              " containging embedded NULs"),
                             expr->getExprLoc())
-                            << cdecl << expr->getSourceRange();
+                            << classdecl << expr->getSourceRange();
                     }
                     kind = ChangeKind::Char;
                     pass = n == 0
@@ -761,7 +761,7 @@ bool StringConstant::VisitCXXConstructExpr(CXXConstructExpr const * expr) {
                                      " as call of rtl::OUString::isEmpty"),
                                     getMemberLocation(call))
                                     << fdecl->getQualifiedNameAsString()
-                                    << cdecl << call->getSourceRange();
+                                    << classdecl << call->getSourceRange();
                                 return true;
                             }
                             if (dc.Operator(OO_ExclaimEqual).Namespace("rtl")
@@ -774,7 +774,7 @@ bool StringConstant::VisitCXXConstructExpr(CXXConstructExpr const * expr) {
                                      " as call of !rtl::OUString::isEmpty"),
                                     getMemberLocation(call))
                                     << fdecl->getQualifiedNameAsString()
-                                    << cdecl << call->getSourceRange();
+                                    << classdecl << call->getSourceRange();
                                 return true;
                             }
                             if ((dc.Operator(OO_Plus).Namespace("rtl")
@@ -788,7 +788,7 @@ bool StringConstant::VisitCXXConstructExpr(CXXConstructExpr const * expr) {
                                      " %1 with empty string constant argument"),
                                     getMemberLocation(call))
                                     << fdecl->getQualifiedNameAsString()
-                                    << cdecl << call->getSourceRange();
+                                    << classdecl << call->getSourceRange();
                                 return true;
                             }
                             if (dc.Operator(OO_Equal).Class("OUString")
@@ -801,7 +801,7 @@ bool StringConstant::VisitCXXConstructExpr(CXXConstructExpr const * expr) {
                                      " as call of rtl::OUString::clear"),
                                     getMemberLocation(call))
                                     << fdecl->getQualifiedNameAsString()
-                                    << cdecl << call->getSourceRange();
+                                    << classdecl << call->getSourceRange();
                                 return true;
                             }
                         } else {
@@ -817,7 +817,7 @@ bool StringConstant::VisitCXXConstructExpr(CXXConstructExpr const * expr) {
                                      + " as operator =="),
                                     getMemberLocation(call))
                                     << fdecl->getQualifiedNameAsString()
-                                    << cdecl << call->getSourceRange();
+                                    << classdecl << call->getSourceRange();
                                 return true;
                             }
                             if ((dc.Operator(OO_Plus).Namespace("rtl")
@@ -871,7 +871,7 @@ bool StringConstant::VisitCXXConstructExpr(CXXConstructExpr const * expr) {
                                          + (" in call of %1 as construction of"
                                             " OUStringLiteral1")),
                                         getMemberLocation(expr))
-                                        << cdecl
+                                        << classdecl
                                         << fdecl->getQualifiedNameAsString()
                                         << expr->getSourceRange();
                                 } else {
@@ -881,7 +881,7 @@ bool StringConstant::VisitCXXConstructExpr(CXXConstructExpr const * expr) {
                                          + describeChangeKind(kind)
                                          + " in call of %1"),
                                         getMemberLocation(expr))
-                                        << cdecl
+                                        << classdecl
                                         << fdecl->getQualifiedNameAsString()
                                         << expr->getSourceRange();
                                 }
@@ -1184,9 +1184,9 @@ void StringConstant::reportChange(
                         return;
                     }
                 } else if (isa<CXXConstructExpr>(call)) {
-                    auto cdecl = cast<CXXConstructExpr>(call)->getConstructor()
-                        ->getParent();
-                    loplugin::DeclCheck dc(cdecl);
+                    auto classdecl = cast<CXXConstructExpr>(call)
+                        ->getConstructor()->getParent();
+                    loplugin::DeclCheck dc(classdecl);
                     if (dc.Class("OUString").Namespace("rtl").GlobalNamespace()
                         || (dc.Class("OUStringBuffer").Namespace("rtl")
                             .GlobalNamespace()))
@@ -1200,7 +1200,7 @@ void StringConstant::reportChange(
                                  + (" with empty string constant argument as"
                                     " default construction of %0")),
                                 getMemberLocation(call))
-                                << cdecl->getQualifiedNameAsString()
+                                << classdecl->getQualifiedNameAsString()
                                 << call->getSourceRange();
                         } else {
                             assert(pass == PassThrough::NonEmptyConstantString);
@@ -1210,7 +1210,7 @@ void StringConstant::reportChange(
                                  + describeChangeKind(kind)
                                  + " in construction of %0"),
                                 getMemberLocation(expr))
-                                << cdecl->getQualifiedNameAsString()
+                                << classdecl->getQualifiedNameAsString()
                                 << expr->getSourceRange();
                         }
                         return;
