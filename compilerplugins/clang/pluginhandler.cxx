@@ -16,8 +16,13 @@
 #include <clang/Frontend/FrontendPluginRegistry.h>
 #include <clang/Lex/PPCallbacks.h>
 #include <stdio.h>
+
+#if defined _WIN32
+#include <process.h>
+#else
 #include <sys/stat.h>
 #include <unistd.h>
+#endif
 
 /*
 This source file manages all plugin actions. It is not necessary to modify this
