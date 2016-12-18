@@ -35,7 +35,15 @@ public:
 
     explicit operator bool() const { return !type_.isNull(); }
 
+    TypeCheck NonConstVolatile() const;
+
     TypeCheck Const() const;
+
+    TypeCheck Volatile() const;
+
+    TypeCheck ConstVolatile() const;
+
+    TerminalCheck Void() const;
 
     TerminalCheck Char() const;
 

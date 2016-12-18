@@ -291,29 +291,36 @@ bool RedundantCast::VisitCXXStaticCastExpr(CXXStaticCastExpr const * expr) {
     {
         return true;
     }
-    // Don't warn about
-    //
-    //   *pResult = static_cast<oslModule>(RTLD_DEFAULT);
-    //
-    // in osl_getModuleHandle (sal/osl/unx/module.cxx) (where oslModule is a
-    // typedef to void *):
-    if (loplugin::TypeCheck(t2).Typedef("oslModule").GlobalNamespace()
-        && !loplugin::TypeCheck(t1).Typedef())
-    {
-        return true;
-    }
-    // Dont't warn about
-    //
-    //   curl_easy_setopt(static_cast<CURL*>(pData),
-    //                    CURLOPT_HEADERFUNCTION,
-    //                    memory_write_dummy);
-    //
-    // in delete_CURL (ucb/source/ucp/ftp/ftploaderthread.cxx) (where CURL is a
-    // typedef to void):
-    if (loplugin::TypeCheck(t2).Pointer().Typedef("CURL").GlobalNamespace()
-        && !loplugin::TypeCheck(t1).Pointer().Typedef())
-    {
-        return true;
+    // Don't warn if the types are 'void *' and at least one involves a typedef
+    // (and if both involve typedefs, they're different) (this covers cases like
+    // 'oslModule', or 'CURL *', or casts between 'LPVOID' and 'HANDLE' in
+    // Windows-only code):
+    if (loplugin::TypeCheck(t1).Pointer().NonConstVolatile().Void()) {
+        if (auto const td1 = t1->getAs<TypedefType>()) {
+            auto const td2 = t2->getAs<TypedefType>();
+            if (td2 == nullptr || td2 != td1) {
+                return true;
+            }
+        } else if (auto const td2 = t2->getAs<TypedefType>()) {
+            auto const td1 = t1->getAs<TypedefType>();
+            if (td1 == nullptr || td1 != td2) {
+                return true;
+            }
+        } else {
+            auto const pt1 = t1->getAs<clang::PointerType>()->getPointeeType();
+            auto const pt2 = t2->getAs<clang::PointerType>()->getPointeeType();
+            if (auto const ptd1 = pt1->getAs<TypedefType>()) {
+                auto const ptd2 = pt2->getAs<TypedefType>();
+                if (ptd2 == nullptr || ptd2 != ptd1) {
+                    return true;
+                }
+            } else if (auto const ptd2 = pt2->getAs<TypedefType>()) {
+                auto const ptd1 = pt1->getAs<TypedefType>();
+                if (ptd1 == nullptr || ptd1 != ptd2) {
+                    return true;
+                }
+            }
+        }
     }
     report(
         DiagnosticsEngine::Warning,

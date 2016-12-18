@@ -14,6 +14,16 @@
 
 namespace loplugin {
 
+TypeCheck TypeCheck::NonConstVolatile() const {
+    return
+        (!type_.isNull() && !type_.isConstQualified()
+         && !type_.isVolatileQualified())
+        ? *this : TypeCheck();
+        // returning TypeCheck(type_.getUnqualifiedType()) instead of *this
+        // may look tempting, but could remove sugar we might be interested in
+        // checking for
+}
+
 TypeCheck TypeCheck::Const() const {
     return
         (!type_.isNull() && type_.isConstQualified()
@@ -22,6 +32,32 @@ TypeCheck TypeCheck::Const() const {
         // returning TypeCheck(type_.getUnqualifiedType()) instead of *this
         // may look tempting, but could remove sugar we might be interested in
         // checking for
+}
+
+TypeCheck TypeCheck::Volatile() const {
+    return
+        (!type_.isNull() && !type_.isConstQualified()
+         && type_.isVolatileQualified())
+        ? *this : TypeCheck();
+        // returning TypeCheck(type_.getUnqualifiedType()) instead of *this
+        // may look tempting, but could remove sugar we might be interested in
+        // checking for
+}
+
+TypeCheck TypeCheck::ConstVolatile() const {
+    return
+        (!type_.isNull() && type_.isConstQualified()
+         && type_.isVolatileQualified())
+        ? *this : TypeCheck();
+        // returning TypeCheck(type_.getUnqualifiedType()) instead of *this
+        // may look tempting, but could remove sugar we might be interested in
+        // checking for
+}
+
+TerminalCheck TypeCheck::Void() const {
+    return TerminalCheck(
+        !type_.isNull()
+        && type_->isSpecificBuiltinType(clang::BuiltinType::Void));
 }
 
 TerminalCheck TypeCheck::Char() const {
