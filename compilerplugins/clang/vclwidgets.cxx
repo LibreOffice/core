@@ -216,9 +216,17 @@ bool VCLWidgets::VisitCXXDestructorDecl(const CXXDestructorDecl* pCXXDestructorD
                     }
                 }
             }
-            // checking for ParenExpr is a hacky way to ignore assert statements in older versions of clang (i.e. <= 3.2)
-            if (!pCallExpr && !dyn_cast<ParenExpr>(*i))
-                nNumExtraStatements++;
+            if (!pCallExpr) {
+                auto loc = (*i)->getLocStart();
+                if (!compiler.getSourceManager().isMacroBodyExpansion(loc)
+                    || (Lexer::getImmediateMacroName(
+                            loc, compiler.getSourceManager(),
+                            compiler.getLangOpts())
+                        != "assert"))
+                {
+                    nNumExtraStatements++;
+                }
+            }
         }
         bOk = bFoundDisposeOnce && nNumExtraStatements == 0;
     }
