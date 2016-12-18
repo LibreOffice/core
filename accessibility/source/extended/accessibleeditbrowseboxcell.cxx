@@ -75,7 +75,9 @@ namespace accessibility
     // css::accessibility::XAccessibleComponent
     sal_Int32 SAL_CALL EditBrowseBoxTableCell::getForeground(  ) throw (RuntimeException, std::exception)
     {
-        SolarMethodGuard aGuard( *this );
+        SolarMethodGuard aGuard(getMutex());
+        ensureIsAlive();
+
         css::uno::Reference< css::accessibility::XAccessibleComponent > xAccComp( m_xInnerContext, UNO_QUERY );
         if ( xAccComp.is() )
             return xAccComp->getForeground();
@@ -84,7 +86,9 @@ namespace accessibility
 
     sal_Int32 SAL_CALL EditBrowseBoxTableCell::getBackground(  ) throw (RuntimeException, std::exception)
     {
-        SolarMethodGuard aGuard( *this );
+        SolarMethodGuard aGuard(getMutex());
+        ensureIsAlive();
+
         css::uno::Reference< css::accessibility::XAccessibleComponent > xAccComp( m_xInnerContext, UNO_QUERY );
         if ( xAccComp.is() )
             return xAccComp->getBackground();
@@ -98,13 +102,16 @@ namespace accessibility
 
     OUString SAL_CALL EditBrowseBoxTableCell::getAccessibleDescription() throw ( RuntimeException, std::exception )
     {
-        SolarMethodGuard aGuard( *this );
+        SolarMethodGuard aGuard(getMutex());
+        ensureIsAlive();
+
         return m_xInnerContext->getAccessibleDescription();
     }
 
     OUString SAL_CALL EditBrowseBoxTableCell::getAccessibleName() throw ( RuntimeException, std::exception )
     {
-        SolarMethodGuard aGuard( *this );
+        SolarMethodGuard aGuard(getMutex());
+        ensureIsAlive();
 
         return TK_RES_STRING(RID_STR_ACC_COLUMN_NUM).replaceAll("%COLUMNNUMBER", OUString::number(getColumnPos()-1)) + ", "
                + TK_RES_STRING(RID_STR_ACC_ROW_NUM).replaceAll("%ROWNUMBER", OUString::number(getRowPos()));
@@ -112,32 +119,42 @@ namespace accessibility
 
     css::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL EditBrowseBoxTableCell::getAccessibleRelationSet() throw ( RuntimeException, std::exception )
     {
-        SolarMethodGuard aGuard( *this );
+        SolarMethodGuard aGuard(getMutex());
+        ensureIsAlive();
+
         return baseGetAccessibleRelationSet( );
     }
 
     css::uno::Reference<css::accessibility::XAccessibleStateSet > SAL_CALL EditBrowseBoxTableCell::getAccessibleStateSet() throw ( RuntimeException, std::exception )
     {
-        SolarMethodGuard aGuard( *this );
+        SolarMethodGuard aGuard(getMutex());
+        ensureIsAlive();
+
         return m_xInnerContext->getAccessibleStateSet();
             // TODO: shouldn't we add an ACTIVE here? Isn't the EditBrowseBoxTableCell always ACTIVE?
     }
 
     sal_Int32 SAL_CALL EditBrowseBoxTableCell::getAccessibleChildCount(  ) throw (RuntimeException, std::exception)
     {
-        SolarMethodGuard aGuard( *this );
+        SolarMethodGuard aGuard(getMutex());
+        ensureIsAlive();
+
         return baseGetAccessibleChildCount();
     }
 
     css::uno::Reference< css::accessibility::XAccessible > SAL_CALL EditBrowseBoxTableCell::getAccessibleChild( sal_Int32 i ) throw (css::lang::IndexOutOfBoundsException, RuntimeException, std::exception)
     {
-        SolarMethodGuard aGuard( *this );
+        SolarMethodGuard aGuard(getMutex());
+        ensureIsAlive();
+
         return baseGetAccessibleChild( i );
     }
 
     sal_Int16 SAL_CALL EditBrowseBoxTableCell::getAccessibleRole() throw ( RuntimeException, std::exception )
     {
-        SolarMethodGuard aGuard( *this );
+        SolarMethodGuard aGuard(getMutex());
+        ensureIsAlive();
+
         return m_xInnerContext->getAccessibleRole( );
     }
 
@@ -157,7 +174,8 @@ namespace accessibility
 
     void SAL_CALL EditBrowseBoxTableCell::disposing()
     {
-        SolarMethodGuard aGuard( *this, false );
+        SolarMethodGuard aGuard(getMutex());
+
         OAccessibleContextWrapperHelper::dispose();
             // TODO: do we need to dispose our inner object? The base class does this, but is it a good idea?
         AccessibleBrowseBoxCell::disposing();

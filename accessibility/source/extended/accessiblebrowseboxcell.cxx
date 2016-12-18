@@ -50,7 +50,9 @@ namespace accessibility
 
     void SAL_CALL AccessibleBrowseBoxCell::grabFocus() throw ( RuntimeException, std::exception )
     {
-        SolarMethodGuard aGuard( *this );
+        SolarMethodGuard aGuard(getMutex());
+        ensureIsAlive();
+
         mpBrowseBox->GoToCell( m_nRowPos, m_nColPos );
     }
 
