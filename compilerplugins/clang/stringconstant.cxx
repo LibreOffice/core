@@ -687,6 +687,17 @@ bool StringConstant::VisitCXXConstructExpr(CXXConstructExpr const * expr) {
                     {
                         return true;
                     }
+                    // OSL_THIS_FUNC may be defined as "" or as something other
+                    // than a string literal in include/osl/diagnose.h:
+                    auto loc = arg->getLocStart();
+                    if (compiler.getSourceManager().isMacroBodyExpansion(loc)
+                        && (Lexer::getImmediateMacroName(
+                                loc, compiler.getSourceManager(),
+                                compiler.getLangOpts())
+                            == "OSL_THIS_FUNC"))
+                    {
+                        return true;
+                    }
                     if (non) {
                         report(
                             DiagnosticsEngine::Warning,
