@@ -54,6 +54,7 @@ $(eval $(call gb_Library_add_linked_libs,avmediawin,\
 	gdi32 \
 	ole32 \
 	oleaut32 \
+	user32 \
 ))
 
 ifeq ($(COM),GCC)
