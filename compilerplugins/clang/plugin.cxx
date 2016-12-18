@@ -41,8 +41,19 @@ bool Plugin::ignoreLocation( SourceLocation loc )
     if( compiler.getSourceManager().isInSystemHeader( expansionLoc ))
         return true;
     const char* bufferName = compiler.getSourceManager().getPresumedLoc( expansionLoc ).getFilename();
-    if( bufferName == NULL
-        || strncmp( bufferName, SRCDIR "/external/", strlen( SRCDIR "/external/" )) == 0 )
+    if (bufferName == NULL
+        || strncmp( bufferName, SRCDIR "/external/", strlen( SRCDIR "/external/" )) == 0
+        || strcmp( bufferName, SRCDIR "/sdext/source/pdfimport/wrapper/keyword_list" ) == 0 )
+            // workdir/CustomTarget/sdext/pdfimport/hash.cxx is generated from
+            // sdext/source/pdfimport/wrapper/keyword_list by gperf, which
+            // inserts various #line directives denoting the latter into the
+            // former, but fails to add a #line directive returning back to
+            // hash.cxx itself before the gperf generated boilerplate, so
+            // compilers erroneously consider errors in the boilerplate to come
+            // from keyword_list instead of hash.cxx (for Clang on Linux/macOS
+            // this is not an issue due to the '#pragma GCC system_header'
+            // generated into the start of hash.cxx, #if'ed for __GNUC__, but
+            // for clang-cl it is an issue)
         return true;
     if( strncmp( bufferName, WORKDIR, strlen( WORKDIR )) == 0 )
     {
