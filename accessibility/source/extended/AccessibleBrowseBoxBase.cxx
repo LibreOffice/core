@@ -187,8 +187,7 @@ Reference< css::accessibility::XAccessibleStateSet > SAL_CALL
 AccessibleBrowseBoxBase::getAccessibleStateSet()
     throw ( uno::RuntimeException, std::exception )
 {
-    SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard aGuard( getMutex() );
+    SolarMethodGuard aGuard( getMutex() );
     // don't check whether alive -> StateSet may contain DEFUNC
     return implCreateStateSetHelper();
 }
@@ -404,9 +403,9 @@ void AccessibleBrowseBoxBase::ensureIsAlive() const
 Rectangle AccessibleBrowseBoxBase::getBoundingBox()
     throw ( lang::DisposedException )
 {
-    SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard aGuard( getMutex() );
+    SolarMethodGuard aGuard(getMutex());
     ensureIsAlive();
+
     Rectangle aRect = implGetBoundingBox();
     if ( 0 == aRect.Left() && 0 == aRect.Top() && 0 == aRect.Right() && 0 == aRect.Bottom() )
     {
@@ -418,9 +417,9 @@ Rectangle AccessibleBrowseBoxBase::getBoundingBox()
 Rectangle AccessibleBrowseBoxBase::getBoundingBoxOnScreen()
     throw ( lang::DisposedException )
 {
-    SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard aGuard( getMutex() );
+    SolarMethodGuard aGuard(getMutex());
     ensureIsAlive();
+
     Rectangle aRect = implGetBoundingBoxOnScreen();
     if ( 0 == aRect.Left() && 0 == aRect.Top() && 0 == aRect.Right() && 0 == aRect.Bottom() )
     {
@@ -494,8 +493,7 @@ void SAL_CALL AccessibleBrowseBoxBase::disposing( const css::lang::EventObject& 
 
 sal_Int32 SAL_CALL AccessibleBrowseBoxBase::getForeground(  ) throw (css::uno::RuntimeException, std::exception)
 {
-    SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard aGuard( getMutex() );
+    SolarMethodGuard aGuard(getMutex());
     ensureIsAlive();
 
     sal_Int32 nColor = 0;
@@ -520,9 +518,9 @@ sal_Int32 SAL_CALL AccessibleBrowseBoxBase::getForeground(  ) throw (css::uno::R
 
 sal_Int32 SAL_CALL AccessibleBrowseBoxBase::getBackground(  ) throw (css::uno::RuntimeException, std::exception)
 {
-    SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard aGuard( getMutex() );
+    SolarMethodGuard aGuard(getMutex());
     ensureIsAlive();
+
     sal_Int32 nColor = 0;
     vcl::Window* pInst = mpBrowseBox->GetWindowInstance();
     if ( pInst )
