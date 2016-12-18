@@ -177,8 +177,8 @@ public:
                 || name == "g_pHyphIter" // SwEditShell::HyphEnd()
                 || name == "pFieldEditEngine" // ScGlobal::Clear()
                 || name == "xDrawClipDocShellRef" // ScGlobal::Clear()
-                || name == "s_ImplImageTree"
-                    // ImplImageTree::get(), ImplImageTree::shutDown()
+                || name == "s_ImageTree"
+                    // ImageTree::get(), ImageTree::shutDown()
                 || name == "s_pMouseFrame"
                     // vcl/osx/salframeview.mm, mouseEntered/Exited, not owning
                 || name == "pCurrentMenuBar"

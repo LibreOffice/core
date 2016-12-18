@@ -42,7 +42,7 @@ BitmapEx loadFromName(const OUString& rFileName, const ImageLoadFlags eFlags)
 
     OUString aIconTheme = Application::GetSettings().GetStyleSettings().DetermineIconTheme();
 
-    ImplImageTree::get().loadImage(rFileName, aIconTheme, aBitmapEx, true, eFlags);
+    ImageTree::get().loadImage(rFileName, aIconTheme, aBitmapEx, true, eFlags);
 
     return aBitmapEx;
 }

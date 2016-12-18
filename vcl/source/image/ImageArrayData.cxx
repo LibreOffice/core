@@ -26,7 +26,7 @@
 #include <vcl/image.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/implimagetree.hxx>
+#include <vcl/ImageTree.hxx>
 
 #include <image.h>
 #include <memory>
@@ -70,7 +70,7 @@ void ImageAryData::Load(const OUString &rPrefix)
     OUString aFileName = rPrefix;
     aFileName += maName;
 
-    bool bSuccess = ImplImageTree::get().loadImage(aFileName, aIconTheme, maBitmapEx, true);
+    bool bSuccess = ImageTree::get().loadImage(aFileName, aIconTheme, maBitmapEx, true);
 
     if (bSuccess)
     {}

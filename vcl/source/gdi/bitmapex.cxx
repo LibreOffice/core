@@ -25,7 +25,7 @@
 #include <tools/stream.hxx>
 #include <tools/debug.hxx>
 #include <tools/rc.h>
-#include <vcl/implimagetree.hxx>
+#include <vcl/ImageTree.hxx>
 #include <vcl/salbtype.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/alpha.hxx>
@@ -110,7 +110,7 @@ void BitmapEx::loadFromIconTheme( const OUString& rIconName )
 {
     OUString aIconTheme = Application::GetSettings().GetStyleSettings().DetermineIconTheme();
 
-    if( !ImplImageTree::get().loadImage( rIconName, aIconTheme, *this, true ) )
+    if (!ImageTree::get().loadImage(rIconName, aIconTheme, *this, true))
     {
 #ifdef DBG_UTIL
         OStringBuffer aErrorStr(
