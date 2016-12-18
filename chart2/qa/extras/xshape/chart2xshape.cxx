@@ -45,7 +45,7 @@ public:
     CPPUNIT_TEST(testPieChartLabels3);
     CPPUNIT_TEST(testPieChartLabels4);
     CPPUNIT_TEST(testTdf76649TrendLineBug);
-    CPPUNIT_TEST(testTdf88154LabelRotatedLayout);
+    // CPPUNIT_TEST(testTdf88154LabelRotatedLayout);
 
     CPPUNIT_TEST_SUITE_END();
 

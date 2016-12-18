@@ -35,11 +35,10 @@ $(eval $(call gb_Module_add_slowcheck_targets,chart2,\
     CppunitTest_chart2_trendcalculators \
 ))
 
-ifeq ($(ENABLE_CHART_TESTS),TRUE)
+ifeq ($(OS),LINUX)
 $(eval $(call gb_Module_add_slowcheck_targets,chart2,\
     CppunitTest_chart2_xshape \
 ))
-
 endif
 
 $(eval $(call gb_Module_add_subsequentcheck_targets,chart2,\
