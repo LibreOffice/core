@@ -41,17 +41,6 @@ $(eval $(call gb_Library_add_api,passwordcontainer,\
     offapi \
 ))
 
-ifeq ($(GUI),UNX)
-ifeq ($(COM),GCC)
-ifeq ($(CPUNAME),INTEL)
-$(eval $(call gb_Library_set_ldflags,passwordcontainer,\
-    $(gb_LinkTarget_LDFLAGS) \
-    -Wl$(COMMA)--start-group -lc -Wl$(COMMA)--end-group \
-))
-endif
-endif
-endif
-
 $(eval $(call gb_Library_add_linked_libs,passwordcontainer,\
     cppu \
     cppuhelper \

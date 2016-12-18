@@ -241,6 +241,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(patsubst %,-l%,$(EXTERNAL_LIBS)) \
 		-Wl$(COMMA)--start-group $(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) -Wl$(COMMA)--end-group \
 		$(LIBS) \
+		-lc \
 		-o $(1))
 endef
 
