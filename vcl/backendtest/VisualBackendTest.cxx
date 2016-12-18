@@ -41,7 +41,6 @@
 
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <vcldemo-debug.hxx>
 
 #include <rtl/math.hxx>
 

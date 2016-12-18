@@ -30,7 +30,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/image.hxx>
 #include <vcl/imagerepository.hxx>
-#include <vcl/implimagetree.hxx>
+#include <vcl/ImageTree.hxx>
 #include <sal/types.h>
 #include <image.h>
 
