@@ -63,7 +63,7 @@ bool CommaOperator::VisitBinaryOperator(const BinaryOperator* binaryOp)
 //    parent->dump();
     report(
         DiagnosticsEngine::Warning, "comma operator hides code",
-        binaryOp->getSourceRange().getBegin())
+        binaryOp->getOperatorLoc())
       << binaryOp->getSourceRange();
     return true;
 }
