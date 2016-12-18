@@ -109,6 +109,7 @@ $(eval $(call gb_ExternalPackage_add_files,python3,$(gb_Package_PROGRAMDIRNAME)/
 	LO_lib/_testbuffer.cpython-$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)m.so \
 	LO_lib/_testcapi.cpython-$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)m.so \
 	LO_lib/time.cpython-$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)m.so \
+	LO_lib/unicodedata.cpython-$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)m.so \
 	LO_lib/zlib.cpython-$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)m.so \
 ))
 endif
