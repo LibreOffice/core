@@ -456,6 +456,7 @@ gb_Library_PLAINLIBS_NONE += \
 	ole32 \
 	oleaut32 \
 	shell32 \
+	strmiids \
 	user32 \
 	uuid \
 	uwinapi \
