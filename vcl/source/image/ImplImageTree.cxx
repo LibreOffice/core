@@ -37,13 +37,13 @@
 
 #include "tools/stream.hxx"
 #include "tools/urlobj.hxx"
+#include "implimagetree.hxx"
+
 #include <vcl/bitmapex.hxx>
 #include <vcl/dibtools.hxx>
-#include <vcl/implimagetree.hxx>
 #include <vcl/pngread.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
-#include <vcldemo-debug.hxx>
 
 #include <vcl/BitmapProcessor.hxx>
 #include <vcl/BitmapTools.hxx>
@@ -169,11 +169,6 @@ void loadImageFromStream(std::shared_ptr<SvStream> const & xStream, OUString con
         rBitmap.Scale(double(aScaleFactor), double(aScaleFactor), BmpScaleFlag::Fast);
 }
 
-}
-
-ImplImageTree & ImplImageTree::get() {
-    static ImplImageTree s_ImplImageTree;
-    return s_ImplImageTree;
 }
 
 ImplImageTree::ImplImageTree()
@@ -368,7 +363,7 @@ bool ImplImageTree::doLoadImage(OUString const & name, OUString const & style, B
     return found;
 }
 
-void ImplImageTree::shutDown()
+void ImplImageTree::shutdown()
 {
     maCurrentStyle.clear();
     maIconSets.clear();
@@ -543,14 +538,6 @@ css::uno::Reference<css::container::XNameAccess> ImplImageTree::getNameAccess()
 {
     checkPathAccess();
     return getCurrentIconSet().maNameAccess;
-}
-
-/// Recursively dump all names ...
-css::uno::Sequence<OUString> ImageTree_getAllImageNames()
-{
-    css::uno::Reference<css::container::XNameAccess> xRef(ImplImageTree::get().getNameAccess());
-
-    return xRef->getElementNames();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

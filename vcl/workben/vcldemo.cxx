@@ -17,6 +17,9 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
 #include <com/sun/star/ucb/UniversalContentBroker.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/container/XNameAccess.hpp>
 
 #include <osl/time.h>
 #include <vcl/vclmain.hxx>
@@ -38,10 +41,10 @@
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/help.hxx>
 #include <vcl/menu.hxx>
+#include <vcl/ImageTree.hxx>
 
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <vcldemo-debug.hxx>
 #include <opengl/zone.hxx>
 
 // internal headers for OpenGLTests class.
@@ -1211,7 +1214,9 @@ public:
                 return;
             bHasLoadedAll = true;
 
-            css::uno::Sequence< OUString > aAllIcons = ImageTree_getAllImageNames();
+            css::uno::Reference<css::container::XNameAccess> xRef(ImageTree::get().getNameAccess());
+            css::uno::Sequence< OUString > aAllIcons = xRef->getElementNames();
+
             for (sal_Int32 i = 0; i < aAllIcons.getLength(); i++)
             {
                 if (aAllIcons[i].endsWithIgnoreAsciiCase("svg"))

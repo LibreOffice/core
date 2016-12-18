@@ -19,7 +19,7 @@
 
 #include <vcl/bitmapex.hxx>
 #include <vcl/imagerepository.hxx>
-#include <vcl/implimagetree.hxx>
+#include <vcl/ImageTree.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 
@@ -29,13 +29,13 @@ namespace vcl
     {
         OUString sIconTheme = Application::GetSettings().GetStyleSettings().DetermineIconTheme();
 
-        return ImplImageTree::get().loadImage( _rName, sIconTheme, _out_rImage, _bSearchLanguageDependent );
+        return ImageTree::get().loadImage( _rName, sIconTheme, _out_rImage, _bSearchLanguageDependent );
     }
 
     bool ImageRepository::loadDefaultImage( BitmapEx& _out_rImage)
     {
         OUString sIconTheme = Application::GetSettings().GetStyleSettings().DetermineIconTheme();
-        return ImplImageTree::get().loadDefaultImage( sIconTheme,_out_rImage);
+        return ImageTree::get().loadDefaultImage( sIconTheme,_out_rImage);
     }
 
 } // namespace vcl

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_INCLUDE_VCL_IMPLIMAGETREE_HXX
-#define INCLUDED_INCLUDE_VCL_IMPLIMAGETREE_HXX
+#ifndef INCLUDED_VCL_INC_IMPLIMAGETREE_HXX
+#define INCLUDED_VCL_INC_IMPLIMAGETREE_HXX
 
 #include <sal/config.h>
 
@@ -32,30 +32,19 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/dllapi.h>
 #include <i18nlangtag/languagetag.hxx>
+#include <vcl/ImageTree.hxx>
 
 namespace com { namespace sun { namespace star { namespace container {
     class XNameAccess;
-} } } }
+}}}}
 
-enum class ImageLoadFlags : sal_uInt16
+class ImplImageTree
 {
-    NONE                = 0,
-    IgnoreScalingFactor = 1,
-    IgnoreDarkTheme     = 2,
-};
-
-namespace o3tl {
-
-template<> struct typed_flags<ImageLoadFlags>: is_typed_flags<ImageLoadFlags, 0x3> {};
-
-}
-
-
-class ImplImageTree {
 public:
-    VCL_DLLPUBLIC static ImplImageTree & get();
+    ImplImageTree();
+    ~ImplImageTree();
 
-    VCL_DLLPUBLIC OUString getImageUrl(
+    OUString getImageUrl(
         OUString const & name, OUString const & style, OUString const & lang);
 
     bool loadImage(
@@ -71,15 +60,11 @@ public:
     /** a crude form of life cycle control (called from DeInitVCL; otherwise,
      *  if the ImplImageTree singleton were destroyed during exit that would
      *  be too late for the destructors of the bitmaps in maIconCache)*/
-    void shutDown();
+    void shutdown();
 
     css::uno::Reference< css::container::XNameAccess > getNameAccess();
 
 private:
-    ImplImageTree();
-
-    ~ImplImageTree();
-
     ImplImageTree(const ImplImageTree&) = delete;
     ImplImageTree& operator=(const ImplImageTree&) = delete;
 
