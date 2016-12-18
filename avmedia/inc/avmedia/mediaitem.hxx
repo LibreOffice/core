@@ -29,6 +29,7 @@
 #include <svl/poolitem.hxx>
 #endif
 #include <com/sun/star/media/ZoomLevel.hpp>
+#include <avmedia/avmediadllapi.h>
 
 #define AVMEDIA_SETMASK_NONE        ((sal_uInt32)(0x00000000))
 #define AVMEDIA_SETMASK_STATE       ((sal_uInt32)(0x00000001))
@@ -62,7 +63,7 @@ enum MediaState
 // - MediaItem -
 // -------------
 
-class MediaItem : public SfxPoolItem
+class AVMEDIA_DLLPUBLIC MediaItem : public SfxPoolItem
 {
 public:
                             TYPEINFO();

@@ -21,66 +21,10 @@
 
 
 
-$(eval $(call gb_Module_Module,ooo))
+$(eval $(call gb_Package_Package,avmedia_inc,$(SRCDIR)/avmedia/inc))
 
-$(eval $(call gb_Module_add_moduledirs,ooo,\
-    MathMLDTD \
-    animations \
-    avmedia \
-    basebmp \
-    basegfx \
-    binaryurp \
-    canvas \
-    comphelper \
-    configmgr \
-    cppcanvas \
-    dbaccess \
-    drawinglayer \
-    dtrans \
-    editeng \
-    embeddedobj \
-    eventattacher \
-    fileaccess \
-    formula \
-    framework \
-    idl \
-    io \
-    javaunohelper \
-    linguistic \
-    o3tl \
-    offapi \
-    oovbaapi \
-    oox \
-    padmin \
-    package \
-    reportdesign \
-    remotebridges \
-    sax \
-    sd \
-    sfx2 \
-    sot \
-    starmath \
-    svgio \
-    svl \
-    svtools \
-    svx \
-    sw \
-    toolkit \
-    tools \
-    ucbhelper \
-    udkapi \
-    unotools \
-    unoxml \
-    uui \
-    vbahelper \
-    vcl \
-    udm \
-    wizards \
-    writerfilter \
-    x11_extensions \
-    xmloff \
-    xmlreader \
-    xmlscript \
-))
-
-# vim: set noet ts=4 sw=4:
+$(eval $(call gb_Package_add_file,avmedia_inc,inc/avmedia/avmediadllapi.h,avmedia/avmediadllapi.h))
+$(eval $(call gb_Package_add_file,avmedia_inc,inc/avmedia/mediawindow.hxx,avmedia/mediawindow.hxx))
+$(eval $(call gb_Package_add_file,avmedia_inc,inc/avmedia/mediaitem.hxx,avmedia/mediaitem.hxx))
+$(eval $(call gb_Package_add_file,avmedia_inc,inc/avmedia/mediaplayer.hxx,avmedia/mediaplayer.hxx))
+$(eval $(call gb_Package_add_file,avmedia_inc,inc/avmedia/mediatoolbox.hxx,avmedia/mediatoolbox.hxx))

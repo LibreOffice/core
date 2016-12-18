@@ -1,0 +1,2 @@
+<?xml version="1.0"?>
+<component xmlns="http://openoffice.org/2010/uno-components" loader="com.sun.star.loader.Java2" uri="vnd.sun.star.expand:$OOO_BASE_DIR/program/classes/avmedia.jar"><implementation name="com.sun.star.comp.media.Manager_Java"><service name="com.sun.star.media.Manager_Java"/></implementation></component>
