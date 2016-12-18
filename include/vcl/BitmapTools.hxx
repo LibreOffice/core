@@ -13,7 +13,7 @@
 #include <vcl/bitmapex.hxx>
 #include <tools/stream.hxx>
 
-#include <vcl/implimagetree.hxx>
+#include <vcl/ImageTree.hxx>
 
 namespace vcl {
 namespace bitmap {

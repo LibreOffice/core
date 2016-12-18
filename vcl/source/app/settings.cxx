@@ -42,7 +42,7 @@
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/i18nhelp.hxx>
-#include <vcl/implimagetree.hxx>
+#include <vcl/ImageTree.hxx>
 #include <vcl/configsettings.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/outdev.hxx>

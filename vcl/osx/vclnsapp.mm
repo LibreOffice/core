@@ -24,7 +24,7 @@
 
 #include <sal/main.h>
 #include <vcl/commandevent.hxx>
-#include <vcl/implimagetree.hxx>
+#include <vcl/ImageTree.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 
@@ -374,8 +374,8 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
     (void)app;
     std::vector<OUString> aFile;
     aFile.push_back( GetOUString( pFile ) );
-	const ApplicationEvent* pAppEvent = new ApplicationEvent(ApplicationEvent::Type::Print, aFile);
-	AquaSalInstance::aAppEventList.push_back( pAppEvent );
+    const ApplicationEvent* pAppEvent = new ApplicationEvent(ApplicationEvent::Type::Print, aFile);
+    AquaSalInstance::aAppEventList.push_back( pAppEvent );
     return YES;
 }
 -(NSApplicationPrintReply)application: (NSApplication *) app printFiles:(NSArray *)files withSettings: (NSDictionary *)printSettings showPrintPanels:(BOOL)bShowPrintPanels
@@ -393,8 +393,8 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
     {
         aFileList.push_back( GetOUString( pFile ) );
     }
-	const ApplicationEvent* pAppEvent = new ApplicationEvent(ApplicationEvent::Type::Print, aFileList);
-	AquaSalInstance::aAppEventList.push_back( pAppEvent );
+    const ApplicationEvent* pAppEvent = new ApplicationEvent(ApplicationEvent::Type::Print, aFileList);
+    AquaSalInstance::aAppEventList.push_back( pAppEvent );
     // we have no back channel here, we have to assume success
     // correct handling would be NSPrintingReplyLater and then send [app replyToOpenOrPrint]
     return NSPrintingSuccess;
@@ -425,7 +425,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
         {
             ApplicationEvent aEv(ApplicationEvent::Type::PrivateDoShutdown);
             GetpApp()->AppEvent( aEv );
-            ImplImageTree::get().shutDown();
+            ImageTree::get().shutdown();
             // DeInitVCL should be called in ImplSVMain - unless someon _exits first which
             // can occur in Desktop::doShutdown for example
         }
@@ -440,8 +440,8 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
     SolarMutexGuard aGuard;
 
     const SalData* pSalData = GetSalData();
-	if( !pSalData->maFrames.empty() )
-		pSalData->maFrames.front()->CallCallback( SalEvent::SettingsChanged, nullptr );
+    if( !pSalData->maFrames.empty() )
+        pSalData->maFrames.front()->CallCallback( SalEvent::SettingsChanged, nullptr );
 }
 
 -(void)screenParametersChanged: (NSNotification*) pNotification

@@ -151,7 +151,7 @@
 #include <vcl/help.hxx>
 #include <vcl/i18nhelp.hxx>
 #include <vcl/image.hxx>
-#include <vcl/implimagetree.hxx>
+#include <vcl/ImageTree.hxx>
 #include <vcl/keycod.hxx>
 #include <vcl/keycodes.hxx>
 #include <vcl/layout.hxx>
