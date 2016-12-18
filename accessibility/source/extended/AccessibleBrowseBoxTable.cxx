@@ -51,9 +51,9 @@ Reference< XAccessible > SAL_CALL
 AccessibleBrowseBoxTable::getAccessibleChild( sal_Int32 nChildIndex )
     throw ( lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception )
 {
-    SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard aGuard( getMutex() );
+    SolarMethodGuard aGuard(getMutex());
     ensureIsAlive();
+
     ensureIsValidIndex( nChildIndex );
     return mpBrowseBox->CreateAccessibleCell(
         implGetRow( nChildIndex ), (sal_Int16)implGetColumn( nChildIndex ) );
@@ -72,8 +72,7 @@ Reference< XAccessible > SAL_CALL
 AccessibleBrowseBoxTable::getAccessibleAtPoint( const awt::Point& rPoint )
     throw ( uno::RuntimeException, std::exception )
 {
-    SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard aGuard( getMutex() );
+    SolarMethodGuard aGuard(getMutex());
     ensureIsAlive();
 
     Reference< XAccessible > xChild;
@@ -88,8 +87,7 @@ AccessibleBrowseBoxTable::getAccessibleAtPoint( const awt::Point& rPoint )
 void SAL_CALL AccessibleBrowseBoxTable::grabFocus()
     throw ( uno::RuntimeException, std::exception )
 {
-    SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard aGuard( getMutex() );
+    SolarMethodGuard aGuard(getMutex());
     ensureIsAlive();
     mpBrowseBox->GrabTableFocus();
 }
@@ -99,8 +97,7 @@ void SAL_CALL AccessibleBrowseBoxTable::grabFocus()
 OUString SAL_CALL AccessibleBrowseBoxTable::getAccessibleRowDescription( sal_Int32 nRow )
     throw ( lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception )
 {
-    SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard aGuard( getMutex() );
+    SolarMethodGuard aGuard(getMutex());
     ensureIsAlive();
     ensureIsValidRow( nRow );
     return mpBrowseBox->GetRowDescription( nRow );
@@ -109,9 +106,9 @@ OUString SAL_CALL AccessibleBrowseBoxTable::getAccessibleRowDescription( sal_Int
 OUString SAL_CALL AccessibleBrowseBoxTable::getAccessibleColumnDescription( sal_Int32 nColumn )
     throw ( lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception )
 {
-    SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard aGuard( getMutex() );
+    SolarMethodGuard aGuard(getMutex());
     ensureIsAlive();
+
     ensureIsValidColumn( nColumn );
     return mpBrowseBox->GetColumnDescription( (sal_uInt16)nColumn );
 }
@@ -135,8 +132,7 @@ Reference< XAccessibleTable > SAL_CALL AccessibleBrowseBoxTable::getAccessibleCo
 Sequence< sal_Int32 > SAL_CALL AccessibleBrowseBoxTable::getSelectedAccessibleRows()
     throw ( uno::RuntimeException, std::exception )
 {
-    SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard aGuard( getMutex() );
+    SolarMethodGuard aGuard(getMutex());
     ensureIsAlive();
 
     Sequence< sal_Int32 > aSelSeq;
@@ -147,8 +143,7 @@ Sequence< sal_Int32 > SAL_CALL AccessibleBrowseBoxTable::getSelectedAccessibleRo
 Sequence< sal_Int32 > SAL_CALL AccessibleBrowseBoxTable::getSelectedAccessibleColumns()
     throw ( uno::RuntimeException, std::exception )
 {
-    SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard aGuard( getMutex() );
+    SolarMethodGuard aGuard(getMutex());
     ensureIsAlive();
 
     Sequence< sal_Int32 > aSelSeq;
@@ -159,9 +154,9 @@ Sequence< sal_Int32 > SAL_CALL AccessibleBrowseBoxTable::getSelectedAccessibleCo
 sal_Bool SAL_CALL AccessibleBrowseBoxTable::isAccessibleRowSelected( sal_Int32 nRow )
     throw ( lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception )
 {
-    SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard aGuard( getMutex() );
+    SolarMethodGuard aGuard(getMutex());
     ensureIsAlive();
+
     ensureIsValidRow( nRow );
     return implIsRowSelected( nRow );
 }
@@ -169,9 +164,9 @@ sal_Bool SAL_CALL AccessibleBrowseBoxTable::isAccessibleRowSelected( sal_Int32 n
 sal_Bool SAL_CALL AccessibleBrowseBoxTable::isAccessibleColumnSelected( sal_Int32 nColumn )
     throw ( lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception )
 {
-    SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard aGuard( getMutex() );
+    SolarMethodGuard aGuard(getMutex());
     ensureIsAlive();
+
     ensureIsValidColumn( nColumn );
     return implIsColumnSelected( nColumn );
 }
@@ -180,9 +175,9 @@ Reference< XAccessible > SAL_CALL AccessibleBrowseBoxTable::getAccessibleCellAt(
         sal_Int32 nRow, sal_Int32 nColumn )
     throw ( lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception )
 {
-    SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard aGuard( getMutex() );
+    SolarMethodGuard aGuard(getMutex());
     ensureIsAlive();
+
     ensureIsValidAddress( nRow, nColumn );
     return mpBrowseBox->CreateAccessibleCell( nRow, (sal_Int16)nColumn );
 }
@@ -191,9 +186,9 @@ sal_Bool SAL_CALL AccessibleBrowseBoxTable::isAccessibleSelected(
         sal_Int32 nRow, sal_Int32 nColumn )
     throw ( lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception )
 {
-    SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard aGuard( getMutex() );
+    SolarMethodGuard aGuard(getMutex());
     ensureIsAlive();
+
     ensureIsValidAddress( nRow, nColumn );
     return implIsRowSelected( nRow ) || implIsColumnSelected( nColumn );
 }

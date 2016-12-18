@@ -101,9 +101,9 @@ Reference<XAccessible > SAL_CALL AccessibleBrowseBoxHeaderCell::getAccessibleChi
 void SAL_CALL AccessibleBrowseBoxHeaderCell::grabFocus()
     throw ( css::uno::RuntimeException, std::exception )
 {
-    SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard aGuard( getMutex() );
+    SolarMethodGuard aGuard(getMutex());
     ensureIsAlive();
+
     if ( isRowBarCell() )
         mpBrowseBox->SelectRow(m_nColumnRowId);
     else
