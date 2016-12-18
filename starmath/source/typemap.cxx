@@ -27,8 +27,16 @@
 #include <svx/svxids.hrc>
 #include <svl/slstitm.hxx>
 
+#ifdef DISABLE_DYNLOADING
+/* Avoid clash with the ones from svx/source/form/typemap.cxx */
+#define aSfxInt16Item_Impl starmath_source_appl_typemap_aSfxInt16Item_Impl
+#endif
+
 #define SFX_TYPEMAP
 #include "smslots.hxx"
 
+#ifdef DISABLE_DYNLOADING
+#undef aSfxInt16Item_Impl
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

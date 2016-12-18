@@ -39,10 +39,20 @@
 #include <svl/aeitem.hxx>
 #include <svl/srchitem.hxx>
 
+#ifdef DISABLE_DYNLOADING
+/* Avoid clash with the ones from svx/source/form/typemap.cxx */
+#define aSfxDocumentInfoItem_Impl basctl_source_basicide_basidesh_aSfxDocumentInfoItem_Impl
+#endif
+
 #define basctl_Shell
 #define SFX_TYPEMAP
 #include <idetemp.hxx>
 #include <basslots.hxx>
+
+#ifdef DISABLE_DYNLOADING
+#undef aSfxDocumentInfoItem_Impl
+#endif
+
 #include <iderdll.hxx>
 #include <svx/pszctrl.hxx>
 #include <svx/insctrl.hxx>
