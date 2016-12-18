@@ -8989,8 +8989,8 @@ if test -n "$with_tls"; then
         fi
 
         # warn that OpenSSL has been selected but not all TLS code has this option
-        AC_MSG_WARN([TLS/SSL implementation to use is OpenSSL but some code may still be depending on NSS or GNUTLS])
-        add_warning "TLS/SSL implementation to use is OpenSSL but some code may still be depending on NSS or GNUTLS"
+        AC_MSG_WARN([TLS/SSL implementation to use is OpenSSL but some code may still depend on NSS or GNUTLS])
+        add_warning "TLS/SSL implementation to use is OpenSSL but some code may still depend on NSS or GNUTLS"
         ;;
     nss)
         AC_DEFINE(USE_TLS_NSS)
@@ -9491,7 +9491,7 @@ else
     AC_MSG_RESULT([yes])
     DISABLE_OPENSSL=TRUE
 
-    # warn that although OpenSSL is disabled, system libraries may be depending on it
+    # warn that although OpenSSL is disabled, system libraries may depend on it
     AC_MSG_WARN([OpenSSL has been disabled. No code compiled by LibO will make use of it but system librares may create indirect dependencies])
     add_warning "OpenSSL has been disabled. No code compiled by LibO will make use of it but system librares may create indirect dependencies"
 fi
