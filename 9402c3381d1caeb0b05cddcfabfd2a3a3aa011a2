@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a71b18c_1031070c",
+        "filename": "accessibility/inc/extended/AccessibleBrowseBoxBase.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 418,
+      "author": {
+        "id": 1000026
+      },
+      "writtenOn": "2016-12-18T14:39:26Z",
+      "side": 1,
+      "message": "Perhaps we should remove this one and call ensureIsAlive directly outside this class",
+      "range": {
+        "startLine": 418,
+        "startChar": 0,
+        "endLine": 418,
+        "endChar": 63
+      },
+      "revId": "9402c3381d1caeb0b05cddcfabfd2a3a3aa011a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
