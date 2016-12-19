@@ -207,39 +207,37 @@ void sw::FlyContentPortion::Paint(const SwTextPaintInfo& rInf) const
 {
     // Baseline output
     // Re-paint everything at a CompletePaint call
-    SwRect aRepaintRect( rInf.GetPaintRect() );
+    SwRect aRepaintRect(rInf.GetPaintRect());
 
-    if ( rInf.GetTextFrame()->IsRightToLeft() )
-        rInf.GetTextFrame()->SwitchLTRtoRTL( aRepaintRect );
+    if(rInf.GetTextFrame()->IsRightToLeft())
+        rInf.GetTextFrame()->SwitchLTRtoRTL(aRepaintRect);
 
-    if ( rInf.GetTextFrame()->IsVertical() )
-        rInf.GetTextFrame()->SwitchHorizontalToVertical( aRepaintRect );
+    if(rInf.GetTextFrame()->IsVertical())
+        rInf.GetTextFrame()->SwitchHorizontalToVertical(aRepaintRect);
 
-    if( (GetFlyFrame()->IsCompletePaint() ||
-         GetFlyFrame()->Frame().IsOver( aRepaintRect )) &&
-         SwFlyFrame::IsPaint( const_cast<SwVirtFlyDrawObj*>(GetFlyFrame()->GetVirtDrawObj()),
-                            GetFlyFrame()->getRootFrame()->GetCurrShell() ))
+    if((m_pFly->IsCompletePaint() ||
+            m_pFly->Frame().IsOver(aRepaintRect)) &&
+            SwFlyFrame::IsPaint(m_pFly->GetVirtDrawObj(), m_pFly->getRootFrame()->GetCurrShell()))
     {
-        SwRect aRect( GetFlyFrame()->Frame() );
-        if( !GetFlyFrame()->IsCompletePaint() )
-            aRect.Intersection_( aRepaintRect );
+        SwRect aRect(m_pFly->Frame());
+        if(!m_pFly->IsCompletePaint())
+            aRect.Intersection_(aRepaintRect);
 
         // GetFlyFrame() may change the layout mode at the output device.
         {
-            SwLayoutModeModifier aLayoutModeModifier( *rInf.GetOut() );
-            GetFlyFrame()->Paint( const_cast<vcl::RenderContext&>(*rInf.GetOut()), aRect );
+            SwLayoutModeModifier aLayoutModeModifier(*rInf.GetOut());
+            m_pFly->Paint(const_cast<vcl::RenderContext&>(*rInf.GetOut()), aRect);
         }
-        ((SwTextPaintInfo&)rInf).GetRefDev()->SetLayoutMode(
-                rInf.GetOut()->GetLayoutMode() );
+        ((SwTextPaintInfo&)rInf).GetRefDev()->SetLayoutMode(rInf.GetOut()->GetLayoutMode());
 
         // As the OutputDevice might be anything, the font must be re-selected.
         // Being in const method should not be a problem.
         ((SwTextPaintInfo&)rInf).SelectFont();
 
-        OSL_ENSURE( ! rInf.GetVsh() || rInf.GetVsh()->GetOut() == rInf.GetOut(),
-                "SwFlyCntPortion::Paint: Outdev has changed" );
-        if( rInf.GetVsh() )
-            ((SwTextPaintInfo&)rInf).SetOut( rInf.GetVsh()->GetOut() );
+        assert(rInf.GetVsh());
+        SAL_WARN_IF(rInf.GetVsh()->GetOut() != rInf.GetOut(), "sw.core", "SwFlyCntPortion::Paint: Outdev has changed");
+        if(rInf.GetVsh())
+            ((SwTextPaintInfo&)rInf).SetOut(rInf.GetVsh()->GetOut());
     }
 }
 
