@@ -47,6 +47,7 @@ $(call gb_UITest_get_target,%) :| $(gb_UITest_DEPS)
 		$(if $(G_SLICE),G_SLICE=$(G_SLICE)) \
 		$(if $(GLIBCXX_FORCE_NEW),GLIBCXX_FORCE_NEW=$(GLIBCXX_FORCE_NEW)) \
 		$(DEFS) \
+		SAL_LOG_FILE="$(dir $(call gb_UITest_get_target,$*))/soffice.out.log" \
 		TEST_LIB=$(call gb_Library_get_target,test) \
 		URE_BOOTSTRAP=vnd.sun.star.pathname:$(call gb_Helper_get_rcfile,$(INSTROOT)/$(LIBO_ETC_FOLDER)/fundamental) \
 		PYTHONPATH="$(PYPATH)" \
