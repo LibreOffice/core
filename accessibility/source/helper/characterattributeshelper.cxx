@@ -43,23 +43,14 @@ CharacterAttributesHelper::CharacterAttributesHelper( const vcl::Font& rFont, sa
 }
 
 
-CharacterAttributesHelper::~CharacterAttributesHelper()
-{
-    m_aAttributeMap.clear();
-}
-
-
 std::vector< PropertyValue > CharacterAttributesHelper::GetCharacterAttributes()
 {
-    std::vector< PropertyValue > aValues( m_aAttributeMap.size() );
+    std::vector< PropertyValue > aValues;
+    aValues.reserve( m_aAttributeMap.size() );
 
-    int i = 0;
-    for ( AttributeMap::iterator aIt = m_aAttributeMap.begin(); aIt != m_aAttributeMap.end(); ++aIt, ++i )
+    for ( const auto& aIt : m_aAttributeMap)
     {
-        aValues[i].Name   = aIt->first;
-        aValues[i].Handle = (sal_Int32) -1;
-        aValues[i].Value  = aIt->second;
-        aValues[i].State  = PropertyState_DIRECT_VALUE;
+        aValues.emplace_back(aIt.first, (sal_Int32) -1, aIt.second, PropertyState_DIRECT_VALUE);
     }
 
     return aValues;
@@ -72,27 +63,14 @@ Sequence< PropertyValue > CharacterAttributesHelper::GetCharacterAttributes( con
         return comphelper::containerToSequence(GetCharacterAttributes());
 
     std::vector< PropertyValue > aValues;
-    sal_Int32 nLength = aRequestedAttributes.getLength();
 
-    AttributeMap aAttributeMap;
-
-    for ( sal_Int32 i = 0; i < nLength; ++i )
+    for ( const auto& aRequestedAttribute: aRequestedAttributes)
     {
-        AttributeMap::iterator aFound = m_aAttributeMap.find( aRequestedAttributes[i] );
+        AttributeMap::iterator aFound = m_aAttributeMap.find( aRequestedAttribute );
         if ( aFound != m_aAttributeMap.end() )
-            aAttributeMap.insert( *aFound );
+            aValues.emplace_back(aFound->first, (sal_Int32) -1, aFound->second, PropertyState_DIRECT_VALUE);
     }
 
-    aValues.reserve( aAttributeMap.size() );
-
-    int i = 0;
-    for ( AttributeMap::iterator aIt = aAttributeMap.begin(); aIt != aAttributeMap.end(); ++aIt, ++i )
-    {
-        aValues[i].Name   = aIt->first;
-        aValues[i].Handle = (sal_Int32) -1;
-        aValues[i].Value  = aIt->second;
-        aValues[i].State  = PropertyState_DIRECT_VALUE;
-    }
     return comphelper::containerToSequence(aValues);
 }
 
