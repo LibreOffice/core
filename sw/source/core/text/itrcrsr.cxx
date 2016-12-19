@@ -1684,13 +1684,13 @@ sal_Int32 SwTextCursor::GetCursorOfst( SwPosition *pPos, const Point &rPoint,
         }
         else
         {
-            if( bChgNode && pPos && pPor->IsFlyCntPortion()
-                && !static_cast<SwFlyCntPortion*>(pPor)->IsDraw() )
+            sw::FlyContentPortion* pFlyPor(nullptr);
+            if(bChgNode && pPos && (pFlyPor = dynamic_cast<sw::FlyContentPortion*>(pPor)))
             {
                 // JP 24.11.94: if the Position is not in Fly, then
                 //              we many not return with COMPLETE_STRING as value!
                 //              (BugId: 9692 + Change in feshview)
-                SwFlyInContentFrame *pTmp = static_cast<SwFlyCntPortion*>(pPor)->GetFlyFrame();
+                SwFlyInContentFrame *pTmp = pFlyPor->GetFlyFrame();
                 SwFrame* pLower = pTmp->GetLower();
                 bool bChgNodeInner = pLower
                     && (pLower->IsTextFrame() || pLower->IsLayoutFrame());
@@ -1705,7 +1705,7 @@ sal_Int32 SwTextCursor::GetCursorOfst( SwPosition *pPos, const Point &rPoint,
                 if( bChgNodeInner && pTmp->Frame().IsInside( aTmpPoint ) &&
                     !( pTmp->IsProtected() ) )
                 {
-                    static_cast<SwFlyCntPortion*>(pPor)->GetFlyCursorOfst(aTmpPoint, *pPos, pCMS);
+                    pFlyPor->GetFlyCursorOfst(aTmpPoint, *pPos, pCMS);
                     // After a change of the frame, our font must be still
                     // available for/in the OutputDevice.
                     // For comparison: Paint and new SwFlyCntPortion !
