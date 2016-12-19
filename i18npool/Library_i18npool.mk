@@ -35,7 +35,7 @@ $(eval $(call gb_Library_use_externals,i18npool,\
 	icu_headers \
 ))
 
-ifeq ($(OS),IOS)
+ifeq ($(DISABLE_DYNLOADING),TRUE)
 $(eval $(call gb_Library_add_cxxflags,i18npool,\
 	-DDICT_JA_ZH_IN_DATAFILE \
 ))
