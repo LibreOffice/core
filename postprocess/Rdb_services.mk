@@ -109,10 +109,10 @@ $(eval $(call gb_Rdb_add_components,services,\
 	xmloff/source/transform/xof \
 	xmloff/util/xo \
 	xmlscript/util/xmlscript \
-	$(if $(filter-out ANDROID IOS,$(OS)), \
+	$(if $(filter $(OS),ANDROID),,$(if $(filter TRUE,$(DISABLE_DYNLOADING)),, \
 		xmlsecurity/util/xmlsecurity \
 		xmlsecurity/util/xsec_fw \
-		xmlsecurity/util/xsec_xmlsec$(if $(filter WNT,$(OS)),.windows)) \
+		xmlsecurity/util/xsec_xmlsec$(if $(filter WNT,$(OS)),.windows))) \
 	$(if $(ENABLE_COINMP), \
 		sccomp/source/solver/coinmpsolver \
 	) \
