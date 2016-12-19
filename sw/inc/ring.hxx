@@ -48,8 +48,8 @@ namespace sw
             void unlink()
             {
                 algo::unlink(this);
-                pNext = this; // don't leave pointers to old list behind!
-                pPrev = this;
+                m_pNext = this; // don't leave pointers to old list behind!
+                m_pPrev = this;
             }
             /**
              * Removes this item from its current ring container and adds it to
@@ -72,8 +72,8 @@ namespace sw
              * are alone in one.
              */
             Ring()
-                : pNext(this)
-                , pPrev(this)
+                : m_pNext(this)
+                , m_pPrev(this)
                 { }
             /**
              * Creates a new item and add it to an existing ring container.
@@ -83,16 +83,16 @@ namespace sw
             Ring( value_type* pRing );
             /** @return the next item in the ring container */
             value_type* GetNextInRing()
-                { return static_cast<value_type *>(pNext); }
+                { return static_cast<value_type *>(m_pNext); }
             /** @return the previous item in the ring container */
             value_type* GetPrevInRing()
-                { return static_cast<value_type *>(pPrev); }
+                { return static_cast<value_type *>(m_pPrev); }
             /** @return the next item in the ring container */
             const_value_type* GetNextInRing() const
-                { return static_cast<value_type *>(pNext); }
+                { return static_cast<value_type *>(m_pNext); }
             /** @return the previous item in the ring container */
             const_value_type* GetPrevInRing() const
-                { return static_cast<value_type *>(pPrev); }
+                { return static_cast<value_type *>(m_pPrev); }
             /** @return true if and only if this item is alone in its ring */
             bool unique() const
                 { return algo::unique(static_cast< const_value_type* >(this)); }
@@ -104,10 +104,10 @@ namespace sw
                 typedef Ring node;
                 typedef Ring* node_ptr;
                 typedef const Ring* const_node_ptr;
-                static node_ptr get_next(const_node_ptr n) { return const_cast<node_ptr>(n)->pNext; };
-                static void set_next(node_ptr n, node_ptr next) { n->pNext = next; };
-                static node_ptr get_previous(const_node_ptr n) { return const_cast<node_ptr>(n)->pPrev; };
-                static void set_previous(node_ptr n, node_ptr previous) { n->pPrev = previous; };
+                static node_ptr get_next(const_node_ptr n) { return const_cast<node_ptr>(n)->m_pNext; };
+                static void set_next(node_ptr n, node_ptr next) { n->m_pNext = next; };
+                static node_ptr get_previous(const_node_ptr n) { return const_cast<node_ptr>(n)->m_pPrev; };
+                static void set_previous(node_ptr n, node_ptr previous) { n->m_pPrev = previous; };
             };
             friend ring_container;
             friend const_ring_container;
@@ -117,14 +117,14 @@ namespace sw
             friend typename const_ring_container::const_iterator;
             friend class boost::iterator_core_access;
             typedef boost::intrusive::circular_list_algorithms<Ring_node_traits> algo;
-            Ring* pNext;
-            Ring* pPrev;
+            Ring* m_pNext;
+            Ring* m_pPrev;
     };
 
     template <typename value_type>
     inline Ring<value_type>::Ring( value_type* pObj )
-        : pNext(this)
-        , pPrev(this)
+        : m_pNext(this)
+        , m_pPrev(this)
     {
         if( pObj )
         {
@@ -184,10 +184,10 @@ namespace sw
             {
                 // first check that we aren't merged already, swapping would
                 // actually un-merge in this case!
-                assert(m_pStart->pPrev != aDestRing.m_pStart);
-                assert(m_pStart != aDestRing.m_pStart->pPrev);
-                std::swap(*(&m_pStart->pPrev->pNext), *(&aDestRing.m_pStart->pPrev->pNext));
-                std::swap(*(&m_pStart->pPrev), *(&aDestRing.m_pStart->pPrev));
+                assert(m_pStart->m_pPrev != aDestRing.m_pStart);
+                assert(m_pStart != aDestRing.m_pStart->m_pPrev);
+                std::swap(*(&m_pStart->m_pPrev->m_pNext), *(&aDestRing.m_pStart->m_pPrev->m_pNext));
+                std::swap(*(&m_pStart->m_pPrev), *(&aDestRing.m_pStart->m_pPrev));
             }
     };
 
