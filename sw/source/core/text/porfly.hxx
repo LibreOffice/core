@@ -45,53 +45,57 @@ public:
 class SwFlyCntPortion : public SwLinePortion
 {
 protected:
-
-    void *pContact; // bDraw ? DrawContact : FlyInContentFrame
     Point aRef;     // Relatively to this point we calculate the AbsPos
     bool bMax : 1;   // Line adjustment and height == line height
     sal_uInt8 nAlign : 3; // Line adjustment? No, above, middle, bottom
 
-    // Use new datatype for parameter <nFlags>
-    SwFlyCntPortion( const SwTextFrame& rFrame, SwDrawContact *pDrawContact,
-                     const Point &rBase,
-                     long nAscent, long nDescent, long nFlyAsc, long nFlyDesc,
-                     AsCharFlags nFlags );
-    virtual SdrObject* GetSdrObj(const SwTextFrame&);
+    virtual SdrObject* GetSdrObj(const SwTextFrame&) =0;
 
 public:
-    SwFlyCntPortion(SwFlyInContentFrame* pFly);
-    static SwFlyCntPortion* Create(const SwTextFrame& rFrame, SwFlyInContentFrame* pFly, const Point& rBase, long nAscent, long nDescent, long nFlyAsc, long nFlyDesc, AsCharFlags nFlags);
+    SwFlyCntPortion();
     inline const Point& GetRefPoint() const { return aRef; }
-    inline SwFlyInContentFrame *GetFlyFrame() { return static_cast<SwFlyInContentFrame*>(pContact); }
-    inline const SwFlyInContentFrame *GetFlyFrame() const
-        { return static_cast<SwFlyInContentFrame*>(pContact); }
-    inline SwDrawContact *GetDrawContact() { return static_cast<SwDrawContact*>(pContact); }
-    inline const SwDrawContact* GetDrawContact() const
-        { return static_cast<SwDrawContact*>(pContact); }
-    virtual bool IsDraw() const { return false; }
     inline bool IsMax() const { return bMax; }
     inline sal_uInt8 GetAlign() const { return nAlign; }
-    inline void SetAlign( sal_uInt8 nNew ) { nAlign = nNew; }
-    inline void SetMax( bool bNew ) { bMax = bNew; }
-    void SetBase(const SwTextFrame& rFrame, const Point &rBase, long nLnAscent, long nLnDescent, long nFlyAscent, long nFlyDescent, AsCharFlags nFlags);
-    void GetFlyCursorOfst(Point &rPoint, SwPosition& rPos, SwCursorMoveState* pCMS) const;
-    virtual bool Format( SwTextFormatInfo &rInf ) override;
-    virtual void Paint( const SwTextPaintInfo &rInf ) const override;
+    inline void SetAlign(sal_uInt8 nNew) { nAlign = nNew; }
+    inline void SetMax(bool bNew) { bMax = bNew; }
+    void SetBase(const SwTextFrame& rFrame, const Point& rBase, long nLnAscent, long nLnDescent, long nFlyAscent, long nFlyDescent, AsCharFlags nFlags);
+    virtual bool Format(SwTextFormatInfo& rInf) override;
     OUTPUT_OPERATOR_OVERRIDE
+    virtual bool IsDraw() const =0;
     virtual ~SwFlyCntPortion();
 };
 
 namespace sw
 {
-    class DrawFlyCntPortion : public SwFlyCntPortion
+    class FlyContentPortion final : public SwFlyCntPortion
     {
+        private:
+            SwFlyInContentFrame* m_pFly;
+        protected:
+            virtual SdrObject* GetSdrObj(const SwTextFrame&) override;
+        public:
+            FlyContentPortion(SwFlyInContentFrame* pFly);
+            static FlyContentPortion* Create(const SwTextFrame& rFrame, SwFlyInContentFrame* pFly, const Point& rBase, long nAscent, long nDescent, long nFlyAsc, long nFlyDesc, AsCharFlags nFlags);
+            inline SwFlyInContentFrame *GetFlyFrame() { return m_pFly; }
+            inline const SwFlyInContentFrame *GetFlyFrame() const { return m_pFly; }
+            void GetFlyCursorOfst(Point& rPoint, SwPosition& rPos, SwCursorMoveState* pCMS) const;
+            virtual bool IsDraw() const override { return false; }
+            virtual void Paint(const SwTextPaintInfo& rInf) const override;
+            virtual ~FlyContentPortion();
+    };
+    class DrawFlyCntPortion final : public SwFlyCntPortion
+    {
+        private:
+            SwDrawContact* m_pContact;
         protected:
             virtual SdrObject* GetSdrObj(const SwTextFrame&) override;
         public:
             DrawFlyCntPortion(SwDrawContact* pDrawContact);
             static DrawFlyCntPortion* Create(const SwTextFrame& rFrame, SwDrawContact* pDrawContact, const Point& rBase, long nAsc, long nDescent, long nFlyAsc, long nFlyDesc, AsCharFlags nFlags);
-            virtual bool IsDraw() const { return true; }
-            virtual void Paint( const SwTextPaintInfo &rInf ) const override;
+            inline SwDrawContact* GetDrawContact() { return m_pContact; }
+            inline const SwDrawContact* GetDrawContact() const { return m_pContact; }
+            virtual bool IsDraw() const override { return true; }
+            virtual void Paint(const SwTextPaintInfo& rInf) const override;
             virtual ~DrawFlyCntPortion();
     };
 }
