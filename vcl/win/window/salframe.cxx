@@ -827,6 +827,17 @@ static void ImplSalFrameFullScreenPos( WinSalFrame* pFrame, bool bAlways = FALSE
     }
 }
 
+namespace {
+
+void SetForegroundWindow_Impl(HWND hwnd)
+{
+    static bool bUseForegroundWindow = !std::getenv("VCL_HIDE_WINDOWS");
+    if (bUseForegroundWindow)
+        SetForegroundWindow(hwnd);
+}
+
+}
+
 WinSalFrame::WinSalFrame()
 {
     SalData* pSalData = GetSalData();
@@ -1179,8 +1190,8 @@ static void ImplSalShow( HWND hWnd, bool bVisible, bool bNoActivate )
         {
             HWND hWndParent = ::GetParent( hWnd );
             if ( hWndParent )
-                SetForegroundWindow( hWndParent );
-            SetForegroundWindow( hWnd );
+                SetForegroundWindow_Impl( hWndParent );
+            SetForegroundWindow_Impl( hWnd );
         }
 
         pFrame->mbInShow = FALSE;
@@ -1977,7 +1988,7 @@ static void ImplSalToTop( HWND hWnd, SalFrameToTop nFlags )
         DWORD  myThreadID   = GetCurrentThreadId();
         DWORD  currThreadID = GetWindowThreadProcessId(hCurrWnd,nullptr);
         AttachThreadInput(myThreadID, currThreadID,TRUE);
-        SetForegroundWindow(hWnd);
+        SetForegroundWindow_Impl(hWnd);
         AttachThreadInput(myThreadID,currThreadID,FALSE);
     }
 
@@ -2011,7 +2022,7 @@ static void ImplSalToTop( HWND hWnd, SalFrameToTop nFlags )
         // Windows sometimes incorrectly reports to have the focus;
         // thus make sure to really get the focus
         if ( ::GetFocus() == hWnd )
-            SetForegroundWindow( hWnd );
+            SetForegroundWindow_Impl( hWnd );
     }
 }
 
