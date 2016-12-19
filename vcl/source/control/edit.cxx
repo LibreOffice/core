@@ -2924,7 +2924,7 @@ void Edit::dragDropEnd( const css::datatransfer::dnd::DragSourceDropEvent& rDSDE
 {
     SolarMutexGuard aVclGuard;
 
-    if ( rDSDE.DropSuccess && ( rDSDE.DropAction & datatransfer::dnd::DNDConstants::ACTION_MOVE ) )
+    if (rDSDE.DropSuccess && (rDSDE.DropAction & datatransfer::dnd::DNDConstants::ACTION_MOVE) && mpDDInfo)
     {
         Selection aSel( mpDDInfo->aDndStartSel );
         if ( mpDDInfo->bDroppedInMe )
