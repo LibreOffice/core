@@ -351,7 +351,7 @@ void AccessibleGridControl::commitTableEvent(sal_Int16 _nEventId,const Any& _rNe
             if (nCurrentRow > -1 && nCurrentCol > -1)
             {
                 sal_Int32 nColumnCount = m_aTable.GetColumnCount();
-                xChild = m_xImpl->m_pTable->getAccessibleChild(nCurrentRow * nCurrentCol + nColumnCount);
+                xChild = m_xImpl->m_pTable->getAccessibleChild(nCurrentRow * nColumnCount + nCurrentCol);
             }
             m_xImpl->m_pTable->commitEvent(_nEventId, makeAny(xChild),_rOldValue);
         }
