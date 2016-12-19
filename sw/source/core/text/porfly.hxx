@@ -22,6 +22,7 @@
 #include <ascharanchoredobjectposition.hxx>
 
 #include "porglue.hxx"
+#include "flyfrms.hxx"
 
 class SwDrawContact;
 class SwFlyInContentFrame;
@@ -62,7 +63,7 @@ public:
     virtual bool Format(SwTextFormatInfo& rInf) override;
     OUTPUT_OPERATOR_OVERRIDE
     virtual bool IsDraw() const =0;
-    virtual ~SwFlyCntPortion();
+    virtual ~SwFlyCntPortion() {};
 };
 
 namespace sw
@@ -78,7 +79,7 @@ namespace sw
             static FlyContentPortion* Create(const SwTextFrame& rFrame, SwFlyInContentFrame* pFly, const Point& rBase, long nAscent, long nDescent, long nFlyAsc, long nFlyDesc, AsCharFlags nFlags);
             inline SwFlyInContentFrame *GetFlyFrame() { return m_pFly; }
             inline const SwFlyInContentFrame *GetFlyFrame() const { return m_pFly; }
-            void GetFlyCursorOfst(Point& rPoint, SwPosition& rPos, SwCursorMoveState* pCMS) const;
+            void GetFlyCursorOfst(Point& rPoint, SwPosition& rPos, SwCursorMoveState* pCMS) const { m_pFly->GetCursorOfst(&rPos, rPoint, pCMS); };
             virtual bool IsDraw() const { return false; }
             virtual void Paint(const SwTextPaintInfo& rInf) const override;
             virtual ~FlyContentPortion();

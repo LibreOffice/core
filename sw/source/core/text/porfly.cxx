@@ -296,7 +296,6 @@ sw::DrawFlyCntPortion* sw::DrawFlyCntPortion::Create(const SwTextFrame& rFrame, 
     return pNew;
 }
 
-SwFlyCntPortion::~SwFlyCntPortion() {};
 sw::DrawFlyCntPortion::~DrawFlyCntPortion() {};
 sw::FlyContentPortion::~FlyContentPortion() {};
 
@@ -323,6 +322,7 @@ SdrObject* sw::DrawFlyCntPortion::GetSdrObj(const SwTextFrame& rFrame)
         GetDrawContact()->GetAnchoredObj(pSdrObj)->MakeObjPos();
     return pSdrObj;
 }
+
 /**
  * After setting the RefPoints, the ascent needs to be recalculated
  * because it is dependent on RelPos
@@ -410,11 +410,6 @@ void SwFlyCntPortion::SetBase( const SwTextFrame& rFrame, const Point &rBase,
         Height( 1 );
         nAscent = 0;
     }
-}
-
-void sw::FlyContentPortion::GetFlyCursorOfst(Point& rPoint, SwPosition& rPos, SwCursorMoveState* pCMS) const
-{
-    m_pFly->GetCursorOfst(&rPos, rPoint, pCMS);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
