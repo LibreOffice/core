@@ -12494,6 +12494,7 @@ if test "$build_os" = "cygwin"; then
             PathFormat "${UCRTSDKDIR}lib/$UCRTVERSION/ucrt/x64"
             ucrtlibpath_formatted=$formatted_path
             ILIB="$ILIB;$ucrtlibpath_formatted"
+            ILIB1="$ILIB1 -LIBPATH:$ucrtlibpath_formatted"
         fi
     else
         ILIB="$ILIB;$COMPATH/lib"
