@@ -102,6 +102,9 @@ class UITest(object):
             time_ = 0
             while time_ < 30:
                 if event.executed:
+                    frames = self.get_frames()
+                    self.get_desktop().setActiveFrame(frames[0])
+                    print(len(frames))
                     return
                 time_ += DEFAULT_SLEEP
                 time.sleep(DEFAULT_SLEEP)
