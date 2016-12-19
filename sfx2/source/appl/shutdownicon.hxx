@@ -34,6 +34,13 @@
 #include <sfx2/dllapi.h>
 #include <tools/link.hxx>
 
+extern "C" {
+
+void SAL_DLLPUBLIC_EXPORT plugin_init_sys_tray();
+void SAL_DLLPUBLIC_EXPORT plugin_shutdown_sys_tray();
+
+}
+
 class ResMgr;
 namespace sfx2
 {

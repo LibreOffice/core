@@ -49,13 +49,6 @@
 
 using namespace ::osl;
 
-extern "C" {
-
-void SAL_DLLPUBLIC_EXPORT plugin_init_sys_tray();
-void SAL_DLLPUBLIC_EXPORT plugin_shutdown_sys_tray();
-
-}
-
 static ResMgr *pVCLResMgr;
 static GtkStatusIcon* pTrayIcon;
 static GtkWidget *pExitMenuItem = nullptr;
