@@ -15,13 +15,17 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
+#include <ctime>
 #include <sstream>
 
 #include <stdio.h>
 #include <string.h>
+#include <fstream>
 
 #include "osl/thread.hxx"
+#include "osl/process.h"
 #include "rtl/string.h"
+#include "rtl/ustring.hxx"
 #include "sal/detail/log.h"
 #include "sal/log.hxx"
 #include "sal/types.h"
@@ -32,6 +36,7 @@
 #include <android/log.h>
 #elif defined WNT
 #include <process.h>
+#include <windows.h>
 #define OSL_DETAIL_GETPID _getpid()
 #else
 #include <unistd.h>
@@ -80,16 +85,16 @@ char const * toString(sal_detail_LogLevel level) {
 // the process is running":
 #if defined ANDROID
 
-char const * getEnvironmentVariable() {
+char const * getLogLevel() {
     return std::getenv("SAL_LOG");
 }
 
 #else
 
-char const * getEnvironmentVariable_() {
-    char const * p1 = std::getenv("SAL_LOG");
-    if (p1 == 0) {
-        return 0;
+char const * getEnvironmentVariable_(const char* env) {
+    char const * p1 = std::getenv(env);
+    if (p1 == nullptr) {
+        return nullptr;
     }
     char const * p2 = strdup(p1); // leaked
     if (p2 == 0) {
@@ -98,9 +103,146 @@ char const * getEnvironmentVariable_() {
     return p2;
 }
 
-char const * getEnvironmentVariable() {
-    static char const * env = getEnvironmentVariable_();
-    return env;
+bool getValueFromLoggingIniFile(const char* key, char* value) {
+    rtl::OUString programDirectoryURL;
+    rtl::OUString programDirectoryPath;
+    osl_getProcessWorkingDir(&(programDirectoryURL.pData));
+    osl_getSystemPathFromFileURL(programDirectoryURL.pData, &programDirectoryPath.pData);
+    rtl::OUString aLogFile(programDirectoryPath + "/" + "logging.ini");
+    std::ifstream logFileStream(rtl::OUStringToOString( aLogFile, RTL_TEXTENCODING_ASCII_US).getStr());
+    if (!logFileStream.good())
+        return false;
+
+    std::size_t n;
+    std::string aKey;
+    std::string aValue;
+    std::string sWantedKey(key);
+    std::string sLine;
+    while (std::getline(logFileStream, sLine)) {
+        if (sLine.find('#') == 0)
+            continue;
+        if ( ( n = sLine.find('=') ) != std::string::npos) {
+            aKey = sLine.substr(0, n);
+            if (aKey != sWantedKey)
+                continue;
+            aValue = sLine.substr(n+1, sLine.length());
+            sprintf(value, "%s", aValue.c_str());
+            return true;
+        }
+    }
+    return false;
+}
+
+char const * getLogLevel() {
+    // First check the environment variable, then the setting in logging.ini
+    static char const * env = getEnvironmentVariable_("SAL_LOG");
+    if (env != nullptr)
+        return env;
+
+    static char logLevel[1024];
+    if (getValueFromLoggingIniFile("LogLevel", logLevel)) {
+        return logLevel;
+    }
+
+    return nullptr;
+}
+
+char const * getLogFilePath() {
+    // First check the environment variable, then the setting in logging.ini
+    static char const * logFile = getEnvironmentVariable_("SAL_LOG_FILE");
+    if (logFile != nullptr)
+        return logFile;
+
+    static char logFilePath[1024];
+    if (getValueFromLoggingIniFile("LogFilePath", logFilePath)) {
+        return logFilePath;
+    }
+
+    return nullptr;
+}
+
+std::ofstream * getLogFile() {
+    static char const * logFilePath = getLogFilePath();
+    if (logFilePath == nullptr)
+        return nullptr;
+
+    static std::ofstream file(logFilePath, std::ios::app | std::ios::out);
+    return &file;
+}
+
+void maybeOutputTimestamp(std::ostringstream &s) {
+    char const * env = getLogLevel();
+    if (env == nullptr)
+        return;
+    bool outputTimestamp = false;
+    bool outputRelativeTimer = false;
+    for (char const * p = env;;) {
+        switch (*p++) {
+        case '\0':
+            if (outputTimestamp) {
+                char ts[100];
+                TimeValue systemTime;
+                osl_getSystemTime(&systemTime);
+                TimeValue localTime;
+                osl_getLocalTimeFromSystemTime(&systemTime, &localTime);
+                oslDateTime dateTime;
+                osl_getDateTimeFromTimeValue(&localTime, &dateTime);
+                struct tm tm;
+                tm.tm_sec = dateTime.Seconds;
+                tm.tm_min = dateTime.Minutes;
+                tm.tm_hour = dateTime.Hours;
+                tm.tm_mday = dateTime.Day;
+                tm.tm_mon = dateTime.Month - 1;
+                tm.tm_year = dateTime.Year - 1900;
+                strftime(ts, sizeof(ts), "%Y-%m-%d:%H:%M:%S", &tm);
+                char milliSecs[10];
+                sprintf(milliSecs, "%03d", static_cast<int>(dateTime.NanoSeconds/1000000));
+                s << ts << '.' << milliSecs << ':';
+            }
+            if (outputRelativeTimer) {
+                static bool beenHere = false;
+                static TimeValue first;
+                if (!beenHere) {
+                    osl_getSystemTime(&first);
+                    beenHere = true;
+                }
+                TimeValue now;
+                osl_getSystemTime(&now);
+                int seconds = now.Seconds - first.Seconds;
+                int milliSeconds;
+                if (now.Nanosec < first.Nanosec) {
+                    seconds--;
+                    milliSeconds = 1000-(first.Nanosec-now.Nanosec)/1000000;
+                }
+                else
+                    milliSeconds = (now.Nanosec-first.Nanosec)/1000000;
+                char relativeTimestamp[100];
+                sprintf(relativeTimestamp, "%d.%03d", seconds, milliSeconds);
+                s << relativeTimestamp << ':';
+            }
+            return;
+        case '+':
+            {
+                char const * p1 = p;
+                while (*p1 != '.' && *p1 != '+' && *p1 != '-' && *p1 != '\0') {
+                    ++p1;
+                }
+                if (equalStrings(p, p1 - p, RTL_CONSTASCII_STRINGPARAM("TIMESTAMP")))
+                    outputTimestamp = true;
+                else if (equalStrings(p, p1 - p, RTL_CONSTASCII_STRINGPARAM("RELATIVETIMER")))
+                    outputRelativeTimer = true;
+                char const * p2 = p1;
+                while (*p2 != '+' && *p2 != '-' && *p2 != '\0') {
+                    ++p2;
+                }
+                p = p2;
+            }
+            break;
+        default:
+            ; // nothing
+        }
+    }
+    return;
 }
 
 #endif
@@ -109,8 +251,8 @@ bool report(sal_detail_LogLevel level, char const * area) {
     if (level == SAL_DETAIL_LOG_LEVEL_DEBUG)
         return true;
     assert(area != 0);
-    char const * env = getEnvironmentVariable();
-    if (env == 0) {
+    static char const * env = getLogLevel();
+    if (env == 0 || strcmp(env, "+TIMESTAMP") == 0) {
         env = "+WARN";
     }
     std::size_t areaLen = std::strlen(area);
@@ -147,6 +289,10 @@ bool report(sal_detail_LogLevel level, char const * area) {
         } else if (equalStrings(p, p1 - p, RTL_CONSTASCII_STRINGPARAM("WARN")))
         {
             match = level == SAL_DETAIL_LOG_LEVEL_WARN;
+        } else if (equalStrings(p, p1 - p, RTL_CONSTASCII_STRINGPARAM("TIMESTAMP")))
+        {
+            // handled later
+            match = false;
         } else {
             return true;
                 // upon an illegal SAL_LOG value, everything is considered
@@ -181,8 +327,9 @@ void log(
     std::ostringstream s;
 #if !defined ANDROID
     // On Android, the area will be used as the "tag," and log info already
-    // contains the PID
+    // contains timestamp and PID.
     if (!sal_use_syslog) {
+        maybeOutputTimestamp(s);
         s << toString(level) << ':';
     }
     if (level != SAL_DETAIL_LOG_LEVEL_DEBUG) {
@@ -199,7 +346,8 @@ void log(
               + (std::strncmp(where, SRCDIR "/", nStrLen) == 0
                  ? nStrLen : 0));
     }
-    s << message << '\n';
+    s << message;
+
 #if defined ANDROID
     int android_log_level;
     switch (level) {
@@ -240,8 +388,21 @@ void log(
         syslog(prio, "%s", s.str().c_str());
 #endif
     } else {
-        std::fputs(s.str().c_str(), stderr);
-        std::fflush(stderr);
+        static std::ofstream * logFile = getLogFile();
+        if (logFile) {
+            *logFile << s.str() << std::endl;
+        }
+#if defined WNT
+        else {
+            OutputDebugString(s.str().c_str());
+        }
+#else
+        else {
+            s << '\n';
+            std::fputs(s.str().c_str(), stderr);
+            std::fflush(stderr);
+        }
+#endif
     }
 #endif
 }
