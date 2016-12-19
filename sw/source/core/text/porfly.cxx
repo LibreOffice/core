@@ -205,74 +205,92 @@ sal_Int32 SwTextFrame::CalcFlyPos( SwFrameFormat* pSearch )
 
 void SwFlyCntPortion::Paint( const SwTextPaintInfo &rInf ) const
 {
-    if( bDraw )
+    // Baseline output
+    // Re-paint everything at a CompletePaint call
+    SwRect aRepaintRect( rInf.GetPaintRect() );
+
+    if ( rInf.GetTextFrame()->IsRightToLeft() )
+        rInf.GetTextFrame()->SwitchLTRtoRTL( aRepaintRect );
+
+    if ( rInf.GetTextFrame()->IsVertical() )
+        rInf.GetTextFrame()->SwitchHorizontalToVertical( aRepaintRect );
+
+    if( (GetFlyFrame()->IsCompletePaint() ||
+         GetFlyFrame()->Frame().IsOver( aRepaintRect )) &&
+         SwFlyFrame::IsPaint( const_cast<SwVirtFlyDrawObj*>(GetFlyFrame()->GetVirtDrawObj()),
+                            GetFlyFrame()->getRootFrame()->GetCurrShell() ))
     {
-        if( !static_cast<SwDrawContact*>(pContact)->GetAnchorFrame() )
+        SwRect aRect( GetFlyFrame()->Frame() );
+        if( !GetFlyFrame()->IsCompletePaint() )
+            aRect.Intersection_( aRepaintRect );
+
+        // GetFlyFrame() may change the layout mode at the output device.
         {
-            // No direct positioning of the drawing object is needed
-            SwDrawContact* pDrawContact = static_cast<SwDrawContact*>(pContact);
-            pDrawContact->ConnectToLayout();
+            SwLayoutModeModifier aLayoutModeModifier( *rInf.GetOut() );
+            GetFlyFrame()->Paint( const_cast<vcl::RenderContext&>(*rInf.GetOut()), aRect );
         }
+        ((SwTextPaintInfo&)rInf).GetRefDev()->SetLayoutMode(
+                rInf.GetOut()->GetLayoutMode() );
+
+        // As the OutputDevice might be anything, the font must be re-selected.
+        // Being in const method should not be a problem.
+        ((SwTextPaintInfo&)rInf).SelectFont();
+
+        OSL_ENSURE( ! rInf.GetVsh() || rInf.GetVsh()->GetOut() == rInf.GetOut(),
+                "SwFlyCntPortion::Paint: Outdev has changed" );
+        if( rInf.GetVsh() )
+            ((SwTextPaintInfo&)rInf).SetOut( rInf.GetVsh()->GetOut() );
     }
-    else
+}
+void sw::DrawFlyCntPortion::Paint(const SwTextPaintInfo&) const
+{
+    if(!static_cast<SwDrawContact*>(pContact)->GetAnchorFrame())
     {
-        // Baseline output
-        // Re-paint everything at a CompletePaint call
-        SwRect aRepaintRect( rInf.GetPaintRect() );
-
-        if ( rInf.GetTextFrame()->IsRightToLeft() )
-            rInf.GetTextFrame()->SwitchLTRtoRTL( aRepaintRect );
-
-        if ( rInf.GetTextFrame()->IsVertical() )
-            rInf.GetTextFrame()->SwitchHorizontalToVertical( aRepaintRect );
-
-        if( (GetFlyFrame()->IsCompletePaint() ||
-             GetFlyFrame()->Frame().IsOver( aRepaintRect )) &&
-             SwFlyFrame::IsPaint( const_cast<SwVirtFlyDrawObj*>(GetFlyFrame()->GetVirtDrawObj()),
-                                GetFlyFrame()->getRootFrame()->GetCurrShell() ))
-        {
-            SwRect aRect( GetFlyFrame()->Frame() );
-            if( !GetFlyFrame()->IsCompletePaint() )
-                aRect.Intersection_( aRepaintRect );
-
-            // GetFlyFrame() may change the layout mode at the output device.
-            {
-                SwLayoutModeModifier aLayoutModeModifier( *rInf.GetOut() );
-                GetFlyFrame()->Paint( const_cast<vcl::RenderContext&>(*rInf.GetOut()), aRect );
-            }
-            ((SwTextPaintInfo&)rInf).GetRefDev()->SetLayoutMode(
-                    rInf.GetOut()->GetLayoutMode() );
-
-            // As the OutputDevice might be anything, the font must be re-selected.
-            // Being in const method should not be a problem.
-            ((SwTextPaintInfo&)rInf).SelectFont();
-
-            OSL_ENSURE( ! rInf.GetVsh() || rInf.GetVsh()->GetOut() == rInf.GetOut(),
-                    "SwFlyCntPortion::Paint: Outdev has changed" );
-            if( rInf.GetVsh() )
-                ((SwTextPaintInfo&)rInf).SetOut( rInf.GetVsh()->GetOut() );
-        }
+        // No direct positioning of the drawing object is needed
+        SwDrawContact* pDrawContact = static_cast<SwDrawContact*>(pContact);
+        pDrawContact->ConnectToLayout();
     }
 }
 
 /**
  * Use the dimensions of pFly->OutRect()
  */
-SwFlyCntPortion::SwFlyCntPortion( const SwTextFrame& rFrame,
-                                  SwFlyInContentFrame *pFly, const Point &rBase,
-                                  long nLnAscent, long nLnDescent,
-                                  long nFlyAsc, long nFlyDesc,
-                                  AsCharFlags nFlags ) :
-    pContact( pFly ),
-    bDraw( false ),
-    bMax( false ),
-    nAlign( 0 )
+SwFlyCntPortion::SwFlyCntPortion(SwFlyInContentFrame* pFly)
+    : pContact(pFly)
+    , bMax(false)
+    , nAlign(0)
 {
-    OSL_ENSURE( pFly, "SwFlyCntPortion::SwFlyCntPortion: no SwFlyInContentFrame!" );
+    SAL_WARN_IF(!pFly, "sw.core", "SwFlyCntPortion::SwFlyCntPortion: no SwFlyInContentFrame!");
     nLineLength = 1;
-    nFlags |= AsCharFlags::UlSpace | AsCharFlags::Init;
-    SetBase( rFrame, rBase, nLnAscent, nLnDescent, nFlyAsc, nFlyDesc, nFlags );
-    SetWhichPor( POR_FLYCNT );
+    SetWhichPor(POR_FLYCNT);
+}
+
+sw::DrawFlyCntPortion::DrawFlyCntPortion(SwDrawContact* pDrawContact)
+    : SwFlyCntPortion(reinterpret_cast<SwFlyInContentFrame*>(pDrawContact))
+{
+    SAL_WARN_IF(!pDrawContact, "sw.core",  "SwFlyCntPortion::SwFlyCntPortion: no SwDrawContact!");
+    if(!pDrawContact->GetAnchorFrame())
+    {
+        // No direct positioning needed any more
+        pDrawContact->ConnectToLayout();
+        // Move object to visible layer
+        pDrawContact->MoveObjToVisibleLayer(pDrawContact->GetMaster());
+    }
+
+}
+
+SwFlyCntPortion* SwFlyCntPortion::Create(const SwTextFrame& rFrame, SwFlyInContentFrame* pFly, const Point& rBase, long nLnAscent, long nLnDescent, long nFlyAsc, long nFlyDesc, AsCharFlags nFlags)
+{
+    auto pNew(new SwFlyCntPortion(pFly));
+    pNew->SetBase(rFrame, rBase, nLnAscent, nLnDescent, nFlyAsc, nFlyDesc, nFlags | AsCharFlags::UlSpace | AsCharFlags::Init);
+    return pNew;
+}
+
+sw::DrawFlyCntPortion* sw::DrawFlyCntPortion::Create(const SwTextFrame& rFrame, SwDrawContact* pDrawContact, const Point& rBase, long nLnAscent, long nLnDescent, long nFlyAsc, long nFlyDesc, AsCharFlags nFlags)
+{
+    auto pNew(new DrawFlyCntPortion(pDrawContact));
+    pNew->SetBase(rFrame, rBase, nLnAscent, nLnDescent, nFlyAsc, nFlyDesc, nFlags | AsCharFlags::UlSpace | AsCharFlags::Init);
+    return pNew;
 }
 
 SwFlyCntPortion::SwFlyCntPortion( const SwTextFrame& rFrame,
@@ -281,11 +299,9 @@ SwFlyCntPortion::SwFlyCntPortion( const SwTextFrame& rFrame,
                                   long nFlyAsc, long nFlyDesc,
                                   AsCharFlags nFlags ) :
     pContact( pDrawContact ),
-    bDraw( true ),
     bMax( false ),
     nAlign( 0 )
 {
-    OSL_ENSURE( pDrawContact, "SwFlyCntPortion::SwFlyCntPortion: no SwDrawContact!" );
     if( !pDrawContact->GetAnchorFrame() )
     {
         // No direct positioning needed any more
@@ -302,6 +318,33 @@ SwFlyCntPortion::SwFlyCntPortion( const SwTextFrame& rFrame,
     SetWhichPor( POR_FLYCNT );
 }
 
+SwFlyCntPortion::~SwFlyCntPortion() {};
+
+sw::DrawFlyCntPortion::~DrawFlyCntPortion() {};
+
+SdrObject* SwFlyCntPortion::GetSdrObj(const SwTextFrame&)
+{
+    return GetFlyFrame()->GetVirtDrawObj();
+}
+
+SdrObject* sw::DrawFlyCntPortion::GetSdrObj(const SwTextFrame& rFrame)
+{
+    SdrObject* pSdrObj;
+    // Determine drawing object ('master' or 'virtual') by frame
+    pSdrObj = GetDrawContact()->GetDrawObjectByAnchorFrame(rFrame);
+    if(!pSdrObj)
+    {
+        SAL_WARN("sw.core", "SwFlyCntPortion::SetBase(..) - No drawing object found by <GetDrawContact()->GetDrawObjectByAnchorFrame( rFrame )>");
+        pSdrObj = GetDrawContact()->GetMaster();
+    }
+
+    // Call <SwAnchoredDrawObject::MakeObjPos()> to assure that flag at
+    // the <DrawFrameFormat> and at the <SwAnchoredDrawObject> instance are
+    // correctly set
+    if(pSdrObj)
+        GetDrawContact()->GetAnchoredObj(pSdrObj)->MakeObjPos();
+    return pSdrObj;
+}
 /**
  * After setting the RefPoints, the ascent needs to be recalculated
  * because it is dependent on RelPos
@@ -315,30 +358,7 @@ void SwFlyCntPortion::SetBase( const SwTextFrame& rFrame, const Point &rBase,
 {
     // Use new class to position object
     // Determine drawing object
-    SdrObject* pSdrObj = nullptr;
-    if( bDraw )
-    {
-        // Determine drawing object ('master' or 'virtual') by frame
-        pSdrObj = GetDrawContact()->GetDrawObjectByAnchorFrame( rFrame );
-        if ( !pSdrObj )
-        {
-            OSL_FAIL( "SwFlyCntPortion::SetBase(..) - No drawing object found by <GetDrawContact()->GetDrawObjectByAnchorFrame( rFrame )>" );
-            pSdrObj = GetDrawContact()->GetMaster();
-        }
-
-        // Call <SwAnchoredDrawObject::MakeObjPos()> to assure that flag at
-        // the <DrawFrameFormat> and at the <SwAnchoredDrawObject> instance are
-        // correctly set
-        if ( pSdrObj )
-        {
-            GetDrawContact()->GetAnchoredObj( pSdrObj )->MakeObjPos();
-        }
-    }
-    else
-    {
-        pSdrObj = GetFlyFrame()->GetVirtDrawObj();
-    }
-
+    SdrObject* pSdrObj = GetSdrObj(rFrame);
     if (!pSdrObj)
         return;
 
