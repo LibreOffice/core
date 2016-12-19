@@ -165,6 +165,13 @@ done
 
 echo Place of the debug and stripped rpm packages:
 echo $topdir/RPMS/RPMS/
+
+echo Update download tar.gz
+mv $topdir/RPMS/RPMS/*/*.rpm $rpmdir/RPMS/
+cd $rpmdir/..
+TARGET_RPM=$(ls *_download/*.tar.gz)
+tar cv *_rpm | gzip >$TARGET_RPM
+cd -
 }
 
 #################################
