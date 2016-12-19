@@ -1,0 +1,9 @@
+Verified+1: Jenkins <ci@libreoffice.org>
+Code-Review+1: V Stuart Foote <vstuart.foote@utsa.edu>
+Code-Review+2: Caolán McNamara <caolanm@redhat.com>
+Verified+1: Caolán McNamara <caolanm@redhat.com>
+Submitted-by: Caolán McNamara <caolanm@redhat.com>
+Submitted-at: Mon, 19 Dec 2016 15:18:48 +0000
+Reviewed-on: https://gerrit.libreoffice.org/32116
+Project: core
+Branch: refs/heads/master
