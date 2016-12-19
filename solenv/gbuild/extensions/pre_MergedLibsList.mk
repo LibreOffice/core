@@ -16,7 +16,7 @@ MERGE_LIBRARY_LIST := \
 	configmgr \
 	cppcanvas \
 	$(call gb_Helper_optional,BREAKPAD,crashreport) \
-	$(call gb_Helper_optional,DBCONNECTIVITY,dbtools) \
+	dbtools \
 	deployment \
 	deploymentmisc \
 	$(if $(filter-out MACOSX WNT,$(OS)),desktopbe1) \
