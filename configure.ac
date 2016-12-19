@@ -2470,7 +2470,7 @@ dnl "desktop" one but a "mobile" one, we are always cross-compiling.
 dnl Note the direction of the implication; there is no assumption that
 dnl cross-compiling would imply a non-desktop OS.
 
-if test $_os != iOS -a $_os != Android; then
+if test $_os != iOS -a $_os != Android -a "$enable_fuzzers" != "yes"; then
     BUILD_TYPE="$BUILD_TYPE DESKTOP"
     AC_DEFINE(HAVE_FEATURE_DESKTOP)
     AC_DEFINE(HAVE_FEATURE_MULTIUSER_ENVIRONMENT)
