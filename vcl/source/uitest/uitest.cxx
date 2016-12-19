@@ -23,7 +23,7 @@ void UITest::executeCommand(const OUString& rCommand)
         {{"SynchronMode", -1, css::uno::Any(false),
           css::beans::PropertyState_DIRECT_VALUE}});
 
-    SAL_WARN_IF(!bSuccess, "uitest", "failed to execute command: " << rCommand);
+    SAL_WARN_IF(!bSuccess, "vcl.uitest", "failed to execute command: " << rCommand);
 }
 
 std::unique_ptr<UIObject> UITest::getFocusTopWindow()
