@@ -883,6 +883,14 @@ bool lcl_emptyRow(std::vector<RowSequence_t>& rTableRanges, sal_Int32 nRow)
         return false;
     }
 
+    if (!rRowSeq[0][0].is())
+    {
+        // This can happen when we can't import the table, e.g. we're inside a
+        // comment.
+        SAL_WARN("writerfilter.dmapper", "rRowSeq[0][0] is an empty reference");
+        return false;
+    }
+
     uno::Reference<text::XTextRangeCompare> xTextRangeCompare(rRowSeq[0][0]->getText(), uno::UNO_QUERY);
     try
     {
