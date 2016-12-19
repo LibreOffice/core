@@ -62,7 +62,6 @@ public:
     void SetBase(const SwTextFrame& rFrame, const Point& rBase, long nLnAscent, long nLnDescent, long nFlyAscent, long nFlyDescent, AsCharFlags nFlags);
     virtual bool Format(SwTextFormatInfo& rInf) override;
     OUTPUT_OPERATOR_OVERRIDE
-    virtual bool IsDraw() const =0;
     virtual ~SwFlyCntPortion() {};
 };
 
@@ -80,7 +79,6 @@ namespace sw
             inline SwFlyInContentFrame *GetFlyFrame() { return m_pFly; }
             inline const SwFlyInContentFrame *GetFlyFrame() const { return m_pFly; }
             void GetFlyCursorOfst(Point& rPoint, SwPosition& rPos, SwCursorMoveState* pCMS) const { m_pFly->GetCursorOfst(&rPos, rPoint, pCMS); };
-            virtual bool IsDraw() const { return false; }
             virtual void Paint(const SwTextPaintInfo& rInf) const override;
             virtual ~FlyContentPortion();
     };
@@ -95,7 +93,6 @@ namespace sw
             static DrawFlyCntPortion* Create(const SwTextFrame& rFrame, SwDrawContact* pDrawContact, const Point& rBase, long nAsc, long nDescent, long nFlyAsc, long nFlyDesc, AsCharFlags nFlags);
             inline SwDrawContact* GetDrawContact() { return m_pContact; }
             inline const SwDrawContact* GetDrawContact() const { return m_pContact; }
-            virtual bool IsDraw() const { return true; }
             virtual void Paint(const SwTextPaintInfo& rInf) const override;
             virtual ~DrawFlyCntPortion();
     };
