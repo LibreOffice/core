@@ -308,18 +308,18 @@ SdrObject* sw::DrawFlyCntPortion::GetSdrObj(const SwTextFrame& rFrame)
 {
     SdrObject* pSdrObj;
     // Determine drawing object ('master' or 'virtual') by frame
-    pSdrObj = GetDrawContact()->GetDrawObjectByAnchorFrame(rFrame);
+    pSdrObj = m_pContact->GetDrawObjectByAnchorFrame(rFrame);
     if(!pSdrObj)
     {
         SAL_WARN("sw.core", "SwFlyCntPortion::SetBase(..) - No drawing object found by <GetDrawContact()->GetDrawObjectByAnchorFrame( rFrame )>");
-        pSdrObj = GetDrawContact()->GetMaster();
+        pSdrObj = m_pContact->GetMaster();
     }
 
     // Call <SwAnchoredDrawObject::MakeObjPos()> to assure that flag at
     // the <DrawFrameFormat> and at the <SwAnchoredDrawObject> instance are
     // correctly set
     if(pSdrObj)
-        GetDrawContact()->GetAnchoredObj(pSdrObj)->MakeObjPos();
+        m_pContact->GetAnchoredObj(pSdrObj)->MakeObjPos();
     return pSdrObj;
 }
 
