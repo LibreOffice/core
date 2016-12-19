@@ -88,7 +88,6 @@
 #include <swerror.h>
 #include <globals.hrc>
 #include <unochart.hxx>
-#include <comphelper/lok.hxx>
 
 #include <svx/CommonStyleManager.hxx>
 
@@ -447,12 +446,7 @@ void SwDocShell::UpdateFontList()
         if (m_pDoc)
         {
             delete m_pFontList;
-            OutputDevice* pRefDevice = m_pDoc->getIDocumentDeviceAccess().getReferenceDevice(true);
-            if (!pRefDevice->GetDevFontCount() && comphelper::LibreOfficeKit::isActive())
-            {
-                pRefDevice->RefreshFontData(true);
-            }
-            m_pFontList = new FontList( pRefDevice );
+            m_pFontList = new FontList( m_pDoc->getIDocumentDeviceAccess().getReferenceDevice(true) );
             PutItem( SvxFontListItem( m_pFontList, SID_ATTR_CHAR_FONTLIST ) );
         }
         m_IsInUpdateFontList = false;
