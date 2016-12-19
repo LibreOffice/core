@@ -38,7 +38,7 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	$(call gb_Helper_optional,DESKTOP,codemaker) \
 	comphelper \
 	configmgr \
-	$(call gb_Helper_optional,DBCONNECTIVITY,connectivity) \
+	connectivity \
 	cppcanvas \
 	cppu \
 	cppuhelper \
