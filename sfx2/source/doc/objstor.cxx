@@ -630,12 +630,12 @@ bool SfxObjectShell::DoLoad( SfxMedium *pMed )
     bool bOk = false;
     std::shared_ptr<const SfxFilter> pFilter = pMed->GetFilter();
     SfxItemSet* pSet = pMedium->GetItemSet();
-    if( !pImpl->nEventId )
+    if( pImpl->nEventId == SfxEventHintId::NONE )
     {
         const SfxBoolItem* pTemplateItem = SfxItemSet::GetItem<SfxBoolItem>(pSet, SID_TEMPLATE, false);
         SetActivateEvent_Impl(
             ( pTemplateItem && pTemplateItem->GetValue() )
-            ? SFX_EVENT_CREATEDOC : SFX_EVENT_OPENDOC );
+            ? SfxEventHintId::CreateDoc : SfxEventHintId::OpenDoc );
     }
 
     const SfxStringItem* pBaseItem = SfxItemSet::GetItem<SfxStringItem>(pSet, SID_BASEURL, false);
@@ -3065,7 +3065,7 @@ uno::Reference< embed::XStorage > SfxObjectShell::GetStorage()
             SetupStorage( pImpl->m_xDocStorage, SOFFICE_FILEFORMAT_CURRENT, false );
             pImpl->m_bCreateTempStor = false;
             if (!utl::ConfigManager::IsAvoidConfig())
-                SfxGetpApp()->NotifyEvent( SfxEventHint( SFX_EVENT_STORAGECHANGED, GlobalEventConfig::GetEventName(GlobalEventId::STORAGECHANGED), this ) );
+                SfxGetpApp()->NotifyEvent( SfxEventHint( SfxEventHintId::StorageChanged, GlobalEventConfig::GetEventName(GlobalEventId::STORAGECHANGED), this ) );
         }
         catch( uno::Exception& )
         {
@@ -3214,7 +3214,7 @@ bool SfxObjectShell::SaveCompleted( const uno::Reference< embed::XStorage >& xSt
 
     if ( bSendNotification )
     {
-        SfxGetpApp()->NotifyEvent( SfxEventHint( SFX_EVENT_STORAGECHANGED, GlobalEventConfig::GetEventName(GlobalEventId::STORAGECHANGED), this ) );
+        SfxGetpApp()->NotifyEvent( SfxEventHint( SfxEventHintId::StorageChanged, GlobalEventConfig::GetEventName(GlobalEventId::STORAGECHANGED), this ) );
     }
 
     return bResult;

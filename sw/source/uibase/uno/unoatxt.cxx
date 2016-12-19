@@ -764,7 +764,7 @@ void SwXAutoTextEntry::Notify( SfxBroadcaster& _rBC, const SfxHint& _rHint )
     {   // it's our document
         if (const SfxEventHint* pEventHint = dynamic_cast<const SfxEventHint*>(&_rHint))
         {
-            if (SFX_EVENT_PREPARECLOSEDOC == pEventHint->GetEventId())
+            if (SfxEventHintId::PrepareCloseDoc == pEventHint->GetEventId())
             {
                 implFlushDocument();
                 xBodyText = nullptr;

@@ -34,20 +34,55 @@
 class SfxObjectShell;
 
 
+enum class SfxEventHintId {
+    NONE = 0,
+    ActivateDoc,
+    CloseDoc,
+    CloseView,
+    CreateDoc,
+    DeactivateDoc,
+    DocCreated,
+    LoadFinished,
+    ModifyChanged,
+    OpenDoc,
+    PrepareCloseDoc,
+    PrepareCloseView,
+    PrintDoc,
+    SaveAsDoc,
+    SaveAsDocDone,
+    SaveAsDocFailed,
+    SaveDoc,
+    SaveDocDone,
+    SaveDocFailed,
+    SaveToDoc,
+    SaveToDocDone,
+    SaveToDocFailed,
+    StorageChanged,
+    ViewCreated,
+    VisAreaChanged,
+    // SW events
+    SwMailMerge,
+    SwMailMergeEnd,
+    SwEventPageCount,
+    SwEventFieldMerge,
+    SwEventFieldMergeFinished,
+    SwEventLayoutFinished,
+};
+
 class SFX2_DLLPUBLIC SfxEventHint : public SfxHint
 {
     SfxObjectShell*     pObjShell;
-    OUString     aEventName;
-    sal_uInt16              nEventId;
+    OUString            aEventName;
+    SfxEventHintId      nEventId;
 
 public:
-    SfxEventHint( sal_uInt16 nId, const OUString& aName, SfxObjectShell *pObj )
+    SfxEventHint( SfxEventHintId nId, const OUString& aName, SfxObjectShell *pObj )
                         :   pObjShell(pObj),
                             aEventName(aName),
                             nEventId(nId)
                         {}
 
-    sal_uInt16              GetEventId() const
+    SfxEventHintId      GetEventId() const
                         { return nEventId; }
 
     const OUString&     GetEventName() const
@@ -63,12 +98,12 @@ class SFX2_DLLPUBLIC SfxViewEventHint : public SfxEventHint
     css::uno::Reference< css::frame::XController2 > xViewController;
 
 public:
-    SfxViewEventHint( sal_uInt16 nId, const OUString& aName, SfxObjectShell *pObj, const css::uno::Reference< css::frame::XController >& xController )
+    SfxViewEventHint( SfxEventHintId nId, const OUString& aName, SfxObjectShell *pObj, const css::uno::Reference< css::frame::XController >& xController )
                         : SfxEventHint( nId, aName, pObj )
                         , xViewController( xController, css::uno::UNO_QUERY )
                         {}
 
-    SfxViewEventHint( sal_uInt16 nId, const OUString& aName, SfxObjectShell *pObj, const css::uno::Reference< css::frame::XController2 >& xController )
+    SfxViewEventHint( SfxEventHintId nId, const OUString& aName, SfxObjectShell *pObj, const css::uno::Reference< css::frame::XController2 >& xController )
                         : SfxEventHint( nId, aName, pObj )
                         , xViewController( xController )
                         {}
@@ -85,22 +120,22 @@ class SfxPrintingHint : public SfxViewEventHint
     css::uno::Sequence < css::beans::PropertyValue > aOpts;
 public:
         SfxPrintingHint(
-                sal_Int32 nEvent,
+                sal_Int32 nState,
                 const css::uno::Sequence < css::beans::PropertyValue >& rOpts,
                 SfxObjectShell *pObj,
                 const css::uno::Reference< css::frame::XController2 >& xController )
         : SfxViewEventHint(
-            SFX_EVENT_PRINTDOC,
+            SfxEventHintId::PrintDoc,
             GlobalEventConfig::GetEventName( GlobalEventId::PRINTDOC ),
             pObj,
             xController )
-        , mnPrintableState( nEvent )
+        , mnPrintableState( nState )
         , aOpts( rOpts )
         {}
 
-        SfxPrintingHint( sal_Int32 nEvent )
-        : SfxViewEventHint( SFX_EVENT_PRINTDOC, rtl::OUString(), nullptr, css::uno::Reference< css::frame::XController >() )
-        , mnPrintableState( nEvent )
+        SfxPrintingHint( sal_Int32 nState )
+        : SfxViewEventHint( SfxEventHintId::PrintDoc, rtl::OUString(), nullptr, css::uno::Reference< css::frame::XController >() )
+        , mnPrintableState( nState )
         {}
 
     sal_Int32 GetWhich() const { return mnPrintableState; }

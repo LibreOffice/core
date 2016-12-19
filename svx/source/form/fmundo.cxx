@@ -323,10 +323,11 @@ void FmXUndoEnvironment::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
     {
         switch (pEventHint->GetEventId())
         {
-            case SFX_EVENT_CREATEDOC:
-            case SFX_EVENT_OPENDOC:
+            case SfxEventHintId::CreateDoc:
+            case SfxEventHintId::OpenDoc:
                 ModeChanged();
                 break;
+            default: break;
         }
     }
 }

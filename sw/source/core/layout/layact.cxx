@@ -2266,7 +2266,7 @@ SwLayIdle::SwLayIdle( SwRootFrame *pRt, SwViewShellImp *pI ) :
         {
             pRoot->ResetIdleFormat();
             SfxObjectShell* pDocShell = pImp->GetShell()->GetDoc()->GetDocShell();
-            pDocShell->Broadcast( SfxEventHint( SW_EVENT_LAYOUT_FINISHED, SwDocShell::GetEventName(STR_SW_EVENT_LAYOUT_FINISHED), pDocShell ) );
+            pDocShell->Broadcast( SfxEventHint( SfxEventHintId::SwEventLayoutFinished, SwDocShell::GetEventName(STR_SW_EVENT_LAYOUT_FINISHED), pDocShell ) );
         }
     }
 

@@ -3192,18 +3192,18 @@ void ScExternalRefManager::Notify( SfxBroadcaster&, const SfxHint& rHint )
     const SfxEventHint* pEventHint = dynamic_cast<const SfxEventHint*>(&rHint);
     if ( pEventHint )
     {
-        sal_uLong nEventId = pEventHint->GetEventId();
+        SfxEventHintId nEventId = pEventHint->GetEventId();
         switch ( nEventId )
         {
-            case SFX_EVENT_PREPARECLOSEDOC:
+            case SfxEventHintId::PrepareCloseDoc:
                 {
                     ScopedVclPtrInstance<WarningBox> aBox( ScDocShell::GetActiveDialogParent(), WinBits( WB_OK ),
                                         ScGlobal::GetRscString( STR_CLOSE_WITH_UNSAVED_REFS ) );
                     aBox->Execute();
                 }
                 break;
-            case SFX_EVENT_SAVEDOCDONE:
-            case SFX_EVENT_SAVEASDOCDONE:
+            case SfxEventHintId::SaveDocDone:
+            case SfxEventHintId::SaveAsDocDone:
                 {
                     SfxObjectShell* pObjShell = static_cast<const SfxEventHint&>( rHint ).GetObjShell();
                     transformUnsavedRefToSavedRef(pObjShell);

@@ -203,7 +203,7 @@ void SfxPickList::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
         switch ( pEventHint->GetEventId() )
         {
-            case SFX_EVENT_CREATEDOC:
+            case SfxEventHintId::CreateDoc:
             {
                 bool bAllowModif = pDocSh->IsEnableSetModified();
                 if ( bAllowModif )
@@ -223,17 +223,17 @@ void SfxPickList::Notify( SfxBroadcaster&, const SfxHint& rHint )
             }
             break;
 
-            case SFX_EVENT_OPENDOC:
-            case SFX_EVENT_SAVEDOCDONE:
-            case SFX_EVENT_SAVEASDOCDONE:
-            case SFX_EVENT_SAVETODOCDONE:
-            case SFX_EVENT_CLOSEDOC:
+            case SfxEventHintId::OpenDoc:
+            case SfxEventHintId::SaveDocDone:
+            case SfxEventHintId::SaveAsDocDone:
+            case SfxEventHintId::SaveToDocDone:
+            case SfxEventHintId::CloseDoc:
             {
                 AddDocumentToPickList(pDocSh);
             }
             break;
 
-            case SFX_EVENT_SAVEASDOC:
+            case SfxEventHintId::SaveAsDoc:
             {
                 SfxMedium *pMedium = pDocSh->GetMedium();
                 if (!pMedium)
@@ -250,6 +250,7 @@ void SfxPickList::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 }
             }
             break;
+            default: break;
         }
     }
 }

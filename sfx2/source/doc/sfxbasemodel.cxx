@@ -1539,7 +1539,7 @@ void SAL_CALL SfxBaseModel::storeSelf( const    Sequence< beans::PropertyValue >
         SfxAllItemSet *pParams = new SfxAllItemSet( SfxGetpApp()->GetPool() );
         TransformParameters( nSlotId, aArgs, *pParams );
 
-        SfxGetpApp()->NotifyEvent( SfxEventHint( SFX_EVENT_SAVEDOC, GlobalEventConfig::GetEventName(GlobalEventId::SAVEDOC), m_pData->m_pObjectShell.get() ) );
+        SfxGetpApp()->NotifyEvent( SfxEventHint( SfxEventHintId::SaveDoc, GlobalEventConfig::GetEventName(GlobalEventId::SAVEDOC), m_pData->m_pObjectShell.get() ) );
 
         bool bRet = false;
 
@@ -1580,7 +1580,7 @@ void SAL_CALL SfxBaseModel::storeSelf( const    Sequence< beans::PropertyValue >
             m_pData->m_pObjectShell->AddLog( OSL_LOG_PREFIX "successful saving." );
             m_pData->m_aPreusedFilterName = GetMediumFilterName_Impl();
 
-            SfxGetpApp()->NotifyEvent( SfxEventHint( SFX_EVENT_SAVEDOCDONE, GlobalEventConfig::GetEventName(GlobalEventId::SAVEDOCDONE), m_pData->m_pObjectShell.get() ) );
+            SfxGetpApp()->NotifyEvent( SfxEventHint( SfxEventHintId::SaveDocDone, GlobalEventConfig::GetEventName(GlobalEventId::SAVEDOCDONE), m_pData->m_pObjectShell.get() ) );
         }
         else
         {
@@ -1588,7 +1588,7 @@ void SAL_CALL SfxBaseModel::storeSelf( const    Sequence< beans::PropertyValue >
             m_pData->m_pObjectShell->StoreLog();
 
             // write the contents of the logger to the file
-            SfxGetpApp()->NotifyEvent( SfxEventHint( SFX_EVENT_SAVEDOCFAILED, GlobalEventConfig::GetEventName(GlobalEventId::SAVEDOCFAILED), m_pData->m_pObjectShell.get() ) );
+            SfxGetpApp()->NotifyEvent( SfxEventHint( SfxEventHintId::SaveDocFailed, GlobalEventConfig::GetEventName(GlobalEventId::SAVEDOCFAILED), m_pData->m_pObjectShell.get() ) );
 
             throw task::ErrorCodeIOException(
                 "SfxBaseModel::storeSelf: 0x" + OUString::number(nErrCode, 16),
@@ -2725,7 +2725,7 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
 
             switch ( pNamedHint->GetEventId() )
             {
-            case SFX_EVENT_STORAGECHANGED:
+            case SfxEventHintId::StorageChanged:
             {
                 if ( m_pData->m_xUIConfigurationManager.is()
                   && m_pData->m_pObjectShell->GetCreateMode() != SfxObjectCreateMode::EMBEDDED )
@@ -2752,7 +2752,7 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
             }
             break;
 
-            case SFX_EVENT_LOADFINISHED:
+            case SfxEventHintId::LoadFinished:
             {
                 impl_getPrintHelper();
                 ListenForStorage_Impl( m_pData->m_pObjectShell->GetStorage() );
@@ -2760,7 +2760,7 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
             }
             break;
 
-            case SFX_EVENT_SAVEASDOCDONE:
+            case SfxEventHintId::SaveAsDocDone:
             {
                 m_pData->m_sURL = m_pData->m_pObjectShell->GetMedium()->GetName();
 
@@ -2773,20 +2773,20 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
             }
             break;
 
-            case SFX_EVENT_DOCCREATED:
+            case SfxEventHintId::DocCreated:
             {
                 impl_getPrintHelper();
                 m_pData->m_bModifiedSinceLastSave = false;
             }
             break;
 
-            case SFX_EVENT_MODIFYCHANGED:
+            case SfxEventHintId::ModifyChanged:
             {
                 m_pData->m_bModifiedSinceLastSave = isModified();
             }
             break;
+            default: break;
             }
-
 
             const SfxViewEventHint* pViewHint = dynamic_cast<const SfxViewEventHint*>(&rHint);
             postEvent_Impl( pNamedHint->GetEventName(), pViewHint ? pViewHint->GetController() : Reference< frame::XController2 >() );
@@ -2972,7 +2972,7 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
 
     if ( !bSaved && m_pData->m_pObjectShell.Is() )
     {
-        SfxGetpApp()->NotifyEvent( SfxEventHint( bSaveTo ? SFX_EVENT_SAVETODOC : SFX_EVENT_SAVEASDOC, GlobalEventConfig::GetEventName( bSaveTo ? GlobalEventId::SAVETODOC : GlobalEventId::SAVEASDOC ),
+        SfxGetpApp()->NotifyEvent( SfxEventHint( bSaveTo ? SfxEventHintId::SaveToDoc : SfxEventHintId::SaveAsDoc, GlobalEventConfig::GetEventName( bSaveTo ? GlobalEventId::SAVETODOC : GlobalEventId::SAVEASDOC ),
                                                 m_pData->m_pObjectShell.get() ) );
 
         std::unique_ptr<SfxAllItemSet> pItemSet(new SfxAllItemSet(SfxGetpApp()->GetPool()));
@@ -3072,14 +3072,14 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
                 m_pData->m_aPreusedFilterName = GetMediumFilterName_Impl();
                 m_pData->m_pObjectShell->SetModifyPasswordEntered();
 
-                SfxGetpApp()->NotifyEvent( SfxEventHint( SFX_EVENT_SAVEASDOCDONE, GlobalEventConfig::GetEventName(GlobalEventId::SAVEASDOCDONE), m_pData->m_pObjectShell.get() ) );
+                SfxGetpApp()->NotifyEvent( SfxEventHint( SfxEventHintId::SaveAsDocDone, GlobalEventConfig::GetEventName(GlobalEventId::SAVEASDOCDONE), m_pData->m_pObjectShell.get() ) );
             }
             else
             {
                 m_pData->m_pObjectShell->SetModifyPasswordHash( nOldModifyPasswordHash );
                 m_pData->m_pObjectShell->SetModifyPasswordInfo( aOldModifyPasswordInfo );
 
-                SfxGetpApp()->NotifyEvent( SfxEventHint( SFX_EVENT_SAVETODOCDONE, GlobalEventConfig::GetEventName(GlobalEventId::SAVETODOCDONE), m_pData->m_pObjectShell.get() ) );
+                SfxGetpApp()->NotifyEvent( SfxEventHint( SfxEventHintId::SaveToDocDone, GlobalEventConfig::GetEventName(GlobalEventId::SAVETODOCDONE), m_pData->m_pObjectShell.get() ) );
             }
         }
         else
@@ -3092,7 +3092,7 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
             m_pData->m_pObjectShell->SetModifyPasswordInfo( aOldModifyPasswordInfo );
 
 
-            SfxGetpApp()->NotifyEvent( SfxEventHint( bSaveTo ? SFX_EVENT_SAVETODOCFAILED : SFX_EVENT_SAVEASDOCFAILED, GlobalEventConfig::GetEventName( bSaveTo ? GlobalEventId::SAVETODOCFAILED : GlobalEventId::SAVEASDOCFAILED),
+            SfxGetpApp()->NotifyEvent( SfxEventHint( bSaveTo ? SfxEventHintId::SaveToDocFailed : SfxEventHintId::SaveAsDocFailed, GlobalEventConfig::GetEventName( bSaveTo ? GlobalEventId::SAVETODOCFAILED : GlobalEventId::SAVEASDOCFAILED),
                                                     m_pData->m_pObjectShell.get() ) );
 
             throw task::ErrorCodeIOException(
@@ -3696,7 +3696,7 @@ void SAL_CALL SfxBaseModel::loadFromStorage( const Reference< embed::XStorage >&
 
     const SfxBoolItem* pTemplateItem = aSet.GetItem<SfxBoolItem>(SID_TEMPLATE, false);
     bool bTemplate = pTemplateItem && pTemplateItem->GetValue();
-    m_pData->m_pObjectShell->SetActivateEvent_Impl( bTemplate ? SFX_EVENT_CREATEDOC : SFX_EVENT_OPENDOC );
+    m_pData->m_pObjectShell->SetActivateEvent_Impl( bTemplate ? SfxEventHintId::CreateDoc : SfxEventHintId::OpenDoc );
     m_pData->m_pObjectShell->Get_Impl()->bOwnsStorage = false;
 
     // load document

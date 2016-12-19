@@ -840,7 +840,7 @@ IMPL_LINK(SwMMResultPrintDialog, PrintHdl_Impl, Button*, pButton, void)
     }
 
     SfxObjectShell* pObjSh = pTargetView->GetViewFrame()->GetObjectShell();
-    SfxGetpApp()->NotifyEvent(SfxEventHint(SW_EVENT_MAIL_MERGE, SwDocShell::GetEventName(STR_SW_EVENT_MAIL_MERGE), pObjSh));
+    SfxGetpApp()->NotifyEvent(SfxEventHint(SfxEventHintId::SwMailMerge, SwDocShell::GetEventName(STR_SW_EVENT_MAIL_MERGE), pObjSh));
     SfxBoolItem aMergeSilent(SID_SILENT, false);
 
     uno::Sequence < beans::PropertyValue > aProps( 2 );
@@ -850,7 +850,7 @@ IMPL_LINK(SwMMResultPrintDialog, PrintHdl_Impl, Button*, pButton, void)
     aProps[1]. Value <<= sPages;
 
     pTargetView->ExecPrint( aProps, false, true );
-    SfxGetpApp()->NotifyEvent(SfxEventHint(SW_EVENT_MAIL_MERGE_END, SwDocShell::GetEventName(STR_SW_EVENT_MAIL_MERGE_END), pObjSh));
+    SfxGetpApp()->NotifyEvent(SfxEventHint(SfxEventHintId::SwMailMergeEnd, SwDocShell::GetEventName(STR_SW_EVENT_MAIL_MERGE_END), pObjSh));
 
     endDialog(pButton);
 }

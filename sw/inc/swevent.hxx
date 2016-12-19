@@ -26,16 +26,10 @@
 #define     SW_EVENT_OBJECT_SELECT        ( EVENT_APP_START + 0 )
 #define     SW_EVENT_START_INS_GLOSSARY   ( EVENT_APP_START + 1 )
 #define     SW_EVENT_END_INS_GLOSSARY     ( EVENT_APP_START + 2 )
-#define     SW_EVENT_MAIL_MERGE           ( EVENT_APP_START + 3 )
 #define     SW_EVENT_FRM_KEYINPUT_ALPHA   ( EVENT_APP_START + 4 )
 #define     SW_EVENT_FRM_KEYINPUT_NOALPHA ( EVENT_APP_START + 5 )
 #define     SW_EVENT_FRM_RESIZE           ( EVENT_APP_START + 6 )
 #define     SW_EVENT_FRM_MOVE             ( EVENT_APP_START + 7 )
-#define     SW_EVENT_PAGE_COUNT           ( EVENT_APP_START + 8 )
-#define     SW_EVENT_MAIL_MERGE_END       ( EVENT_APP_START + 9 )
-#define     SW_EVENT_FIELD_MERGE          ( EVENT_APP_START + 10 )
-#define     SW_EVENT_FIELD_MERGE_FINISHED ( EVENT_APP_START + 11 )
-#define     SW_EVENT_LAYOUT_FINISHED      ( EVENT_APP_START + 12 )
 
 #define     STR_SW_EVENT_PAGE_COUNT           0
 #define     STR_SW_EVENT_MAIL_MERGE           1

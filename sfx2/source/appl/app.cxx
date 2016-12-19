@@ -320,7 +320,7 @@ void SfxApplication::SetViewFrame_Impl( SfxViewFrame *pFrame )
         if ( pOldFrame )
         {
             if ( bTaskActivate )
-                NotifyEvent( SfxViewEventHint( SFX_EVENT_DEACTIVATEDOC, GlobalEventConfig::GetEventName(GlobalEventId::DEACTIVATEDOC), pOldFrame->GetObjectShell(), pOldFrame->GetFrame().GetController() ) );
+                NotifyEvent( SfxViewEventHint( SfxEventHintId::DeactivateDoc, GlobalEventConfig::GetEventName(GlobalEventId::DEACTIVATEDOC), pOldFrame->GetObjectShell(), pOldFrame->GetFrame().GetController() ) );
             pOldFrame->DoDeactivate( bTaskActivate, pFrame );
 
             if( pOldFrame->GetProgress() )
@@ -335,7 +335,7 @@ void SfxApplication::SetViewFrame_Impl( SfxViewFrame *pFrame )
             if ( bTaskActivate && pFrame->GetObjectShell() )
             {
                 pFrame->GetObjectShell()->PostActivateEvent_Impl( pFrame );
-                NotifyEvent(SfxViewEventHint(SFX_EVENT_ACTIVATEDOC, GlobalEventConfig::GetEventName(GlobalEventId::ACTIVATEDOC), pFrame->GetObjectShell(), pFrame->GetFrame().GetController() ) );
+                NotifyEvent(SfxViewEventHint(SfxEventHintId::ActivateDoc, GlobalEventConfig::GetEventName(GlobalEventId::ACTIVATEDOC), pFrame->GetObjectShell(), pFrame->GetFrame().GetController() ) );
             }
 
             SfxProgress *pProgress = pFrame->GetProgress();

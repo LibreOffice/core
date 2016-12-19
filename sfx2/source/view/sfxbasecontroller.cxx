@@ -572,7 +572,7 @@ void SAL_CALL SfxBaseController::attachFrame( const Reference< frame::XFrame >& 
             ShowInfoBars( );
 
             // attaching the frame to the controller is the last step in the creation of a new view, so notify this
-            SfxViewEventHint aHint( SFX_EVENT_VIEWCREATED, GlobalEventConfig::GetEventName( GlobalEventId::VIEWCREATED ), m_pData->m_pViewShell->GetObjectShell(), Reference< frame::XController2 >( this ) );
+            SfxViewEventHint aHint( SfxEventHintId::ViewCreated, GlobalEventConfig::GetEventName( GlobalEventId::VIEWCREATED ), m_pData->m_pViewShell->GetObjectShell(), Reference< frame::XController2 >( this ) );
             SfxGetpApp()->NotifyEvent( aHint );
         }
     }
@@ -1001,9 +1001,9 @@ void SAL_CALL SfxBaseController::dispose() throw( RuntimeException, std::excepti
                 pView = SfxViewFrame::GetNext( *pView, pDoc );
             }
 
-            SfxGetpApp()->NotifyEvent( SfxViewEventHint(SFX_EVENT_CLOSEVIEW, GlobalEventConfig::GetEventName( GlobalEventId::CLOSEVIEW ), pDoc, Reference< frame::XController2 >( this ) ) );
+            SfxGetpApp()->NotifyEvent( SfxViewEventHint(SfxEventHintId::CloseView, GlobalEventConfig::GetEventName( GlobalEventId::CLOSEVIEW ), pDoc, Reference< frame::XController2 >( this ) ) );
             if ( !pView )
-                SfxGetpApp()->NotifyEvent( SfxEventHint(SFX_EVENT_CLOSEDOC, GlobalEventConfig::GetEventName( GlobalEventId::CLOSEDOC ), pDoc) );
+                SfxGetpApp()->NotifyEvent( SfxEventHint(SfxEventHintId::CloseDoc, GlobalEventConfig::GetEventName( GlobalEventId::CLOSEDOC ), pDoc) );
 
             Reference< frame::XModel > xModel = pDoc->GetModel();
             Reference < util::XCloseable > xCloseable( xModel, uno::UNO_QUERY );

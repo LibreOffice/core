@@ -100,7 +100,7 @@ struct SfxObjectShell_Impl : public ::sfx2::IMacroDocumentAccess
 
     IndexBitSet         aBitSet;
     sal_uInt32          lErr;
-    sal_uInt16          nEventId;           // If Open/Create as to be sent
+    SfxEventHintId      nEventId;           // If Open/Create as to be sent
                                             // before Activate
     AutoReloadTimer_Impl *pReloadTimer;
     SfxLoadedFlags      nLoadedFlags;

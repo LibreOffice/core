@@ -82,6 +82,7 @@ class JobSetup;
 class Size;
 class Point;
 enum class SfxModelFlags;
+enum class SfxEventHintId;
 
 // These values presumably must match exactly the corresponding
 // css::embed::Aspects ones (in offapi/com/sun/star/embed/Aspects.idl)
@@ -691,7 +692,7 @@ public:
     SAL_DLLPRIVATE IndexBitSet& GetNoSet_Impl();
     SAL_DLLPRIVATE void SetProgress_Impl( SfxProgress *pProgress );
     SAL_DLLPRIVATE void PostActivateEvent_Impl( SfxViewFrame* );
-    SAL_DLLPRIVATE void SetActivateEvent_Impl(sal_uInt16 );
+    SAL_DLLPRIVATE void SetActivateEvent_Impl(SfxEventHintId );
     SAL_DLLPRIVATE SfxObjectShell* GetParentShellByModel_Impl();
 
     // configuration items

@@ -241,7 +241,7 @@ SfxObjectShell_Impl::SfxObjectShell_Impl( SfxObjectShell& _rDocShell )
     ,m_bAllowShareControlFileClean( true )
     ,m_bConfigOptionsChecked( false )
     ,lErr(ERRCODE_NONE)
-    ,nEventId ( 0)
+    ,nEventId ( SfxEventHintId::NONE )
     ,pReloadTimer ( nullptr)
     ,nLoadedFlags ( SfxLoadedFlags::ALL )
     ,nFlagsInProgress( SfxLoadedFlags::NONE )
@@ -567,7 +567,7 @@ bool SfxObjectShell::PrepareClose
     }
 
     SfxApplication *pSfxApp = SfxGetpApp();
-    pSfxApp->NotifyEvent( SfxEventHint(SFX_EVENT_PREPARECLOSEDOC, GlobalEventConfig::GetEventName(GlobalEventId::PREPARECLOSEDOC), this) );
+    pSfxApp->NotifyEvent( SfxEventHint(SfxEventHintId::PrepareCloseDoc, GlobalEventConfig::GetEventName(GlobalEventId::PREPARECLOSEDOC), this) );
 
     if( GetCreateMode() == SfxObjectCreateMode::EMBEDDED )
     {
@@ -1106,12 +1106,12 @@ void SfxObjectShell::SetInitialized_Impl( const bool i_fromInitNew )
         return;
     if ( i_fromInitNew )
     {
-        SetActivateEvent_Impl( SFX_EVENT_CREATEDOC );
-        SfxGetpApp()->NotifyEvent( SfxEventHint( SFX_EVENT_DOCCREATED, GlobalEventConfig::GetEventName(GlobalEventId::DOCCREATED), this ) );
+        SetActivateEvent_Impl( SfxEventHintId::CreateDoc );
+        SfxGetpApp()->NotifyEvent( SfxEventHint( SfxEventHintId::DocCreated, GlobalEventConfig::GetEventName(GlobalEventId::DOCCREATED), this ) );
     }
     else
     {
-        SfxGetpApp()->NotifyEvent( SfxEventHint( SFX_EVENT_LOADFINISHED, GlobalEventConfig::GetEventName(GlobalEventId::LOADFINISHED), this ) );
+        SfxGetpApp()->NotifyEvent( SfxEventHint( SfxEventHintId::LoadFinished, GlobalEventConfig::GetEventName(GlobalEventId::LOADFINISHED), this ) );
     }
 }
 

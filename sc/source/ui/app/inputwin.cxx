@@ -1948,8 +1948,8 @@ void ScPosWnd::Notify( SfxBroadcaster&, const SfxHint& rHint )
         // Does the list of range names need updating?
         if ( dynamic_cast<const SfxEventHint*>(&rHint) )
         {
-            sal_uLong nEventId = static_cast<const SfxEventHint*>(&rHint)->GetEventId();
-            if ( nEventId == SFX_EVENT_ACTIVATEDOC )
+            SfxEventHintId nEventId = static_cast<const SfxEventHint*>(&rHint)->GetEventId();
+            if ( nEventId == SfxEventHintId::ActivateDoc )
                 FillRangeNames();
         }
         else
