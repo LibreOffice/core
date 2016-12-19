@@ -91,8 +91,6 @@ namespace sw
         public:
             DrawFlyCntPortion(SwDrawContact* pDrawContact);
             static DrawFlyCntPortion* Create(const SwTextFrame& rFrame, SwDrawContact* pDrawContact, const Point& rBase, long nAsc, long nDescent, long nFlyAsc, long nFlyDesc, AsCharFlags nFlags);
-            inline SwDrawContact* GetDrawContact() { return m_pContact; }
-            inline const SwDrawContact* GetDrawContact() const { return m_pContact; }
             virtual void Paint(const SwTextPaintInfo& rInf) const override;
             virtual ~DrawFlyCntPortion();
     };
