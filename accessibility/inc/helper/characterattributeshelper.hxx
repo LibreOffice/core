@@ -41,7 +41,6 @@ private:
 public:
 
     CharacterAttributesHelper( const vcl::Font& rFont, sal_Int32 nBackColor, sal_Int32 nColor );
-    ~CharacterAttributesHelper();
 
     std::vector< css::beans::PropertyValue > GetCharacterAttributes();
     css::uno::Sequence< css::beans::PropertyValue > GetCharacterAttributes( const css::uno::Sequence< OUString >& aRequestedAttributes );
