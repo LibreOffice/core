@@ -2476,7 +2476,6 @@ void SwTextFormatter::CalcFlyWidth( SwTextFormatInfo &rInf )
 SwFlyCntPortion *SwTextFormatter::NewFlyCntPortion( SwTextFormatInfo &rInf,
                                                    SwTextAttr *pHint ) const
 {
-    SwFlyCntPortion *pRet = nullptr;
     const SwFrame *pFrame = static_cast<SwFrame*>(m_pFrame);
 
     SwFlyInContentFrame *pFly;
@@ -2537,10 +2536,10 @@ SwFlyCntPortion *SwTextFormatter::NewFlyCntPortion( SwTextFormatInfo &rInf,
     if ( GetInfo().GetTextFrame()->IsVertical() )
         GetInfo().GetTextFrame()->SwitchHorizontalToVertical( aTmpBase );
 
+    SwFlyCntPortion* pRet(nullptr);
     if( pFly )
     {
-        pRet = new SwFlyCntPortion( *GetInfo().GetTextFrame(), pFly, aTmpBase,
-                                    nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc, nMode );
+        pRet = SwFlyCntPortion::Create(*GetInfo().GetTextFrame(), pFly, aTmpBase, nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc, nMode);
         // We need to make sure that our font is set again in the OutputDevice
         // It could be that the FlyInCnt was added anew and GetFlyFrame() would
         // in turn cause, that it'd be created anew again.
@@ -2563,8 +2562,7 @@ SwFlyCntPortion *SwTextFormatter::NewFlyCntPortion( SwTextFormatInfo &rInf,
     }
     else
     {
-        pRet = new SwFlyCntPortion( *rInf.GetTextFrame(), static_cast<SwDrawContact*>(pFrameFormat->FindContactObj()),
-           aTmpBase, nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc, nMode );
+        pRet = sw::DrawFlyCntPortion::Create(*rInf.GetTextFrame(), static_cast<SwDrawContact*>(pFrameFormat->FindContactObj()), aTmpBase, nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc, nMode);
     }
     return pRet;
 }
