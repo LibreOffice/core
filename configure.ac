@@ -12509,6 +12509,7 @@ if test "$build_os" = "cygwin"; then
             PathFormat "${UCRTSDKDIR}lib/$UCRTVERSION/ucrt/x86"
             ucrtlibpath_formatted=$formatted_path
             ILIB="$ILIB;$ucrtlibpath_formatted"
+            ILIB1="$ILIB1 -LIBPATH:$ucrtlibpath_formatted"
         fi
     fi
     if test -f "$DOTNET_FRAMEWORK_HOME/lib/mscoree.lib"; then
