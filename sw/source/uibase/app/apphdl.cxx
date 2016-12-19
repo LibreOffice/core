@@ -813,16 +813,15 @@ void SwModule::ExecOther(SfxRequest& rReq)
 // Catch hint for DocInfo
 void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
-    if( dynamic_cast<const SfxEventHint*>(&rHint) )
+    if( const SfxEventHint* pEvHint = dynamic_cast<const SfxEventHint*>( &rHint) )
     {
-        const SfxEventHint& rEvHint = static_cast<const SfxEventHint&>( rHint);
-        SwDocShell* pDocSh = dynamic_cast<SwDocShell*>( rEvHint.GetObjShell()  );
+        SwDocShell* pDocSh = dynamic_cast<SwDocShell*>( pEvHint->GetObjShell()  );
         if( pDocSh )
         {
             SwWrtShell* pWrtSh = pDocSh->GetWrtShell();
-            switch( rEvHint.GetEventId() )
+            switch( pEvHint->GetEventId() )
             {
-            case SFX_EVENT_LOADFINISHED:
+            case SfxEventHintId::LoadFinished:
                 OSL_ASSERT(!pWrtSh);
                 // if it is a new document created from a template,
                 // update fixed fields
@@ -835,7 +834,7 @@ void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                     }
                 }
                 break;
-            case SFX_EVENT_CREATEDOC:
+            case SfxEventHintId::CreateDoc:
                 // Update all FIX-Date/Time fields
                 if( pWrtSh )
                 {
@@ -859,12 +858,13 @@ void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                     }
                 }
                 break;
+            default: break;
             }
         }
     }
-    else if(dynamic_cast<const SfxItemSetHint*>(&rHint))
+    else if(const SfxItemSetHint* pSfxItemSetHint = dynamic_cast<const SfxItemSetHint*>(&rHint))
     {
-        if( SfxItemState::SET == static_cast<const SfxItemSetHint&>(rHint).GetItemSet().GetItemState(SID_ATTR_PATHNAME))
+        if( SfxItemState::SET == pSfxItemSetHint->GetItemSet().GetItemState(SID_ATTR_PATHNAME))
         {
             ::GetGlossaries()->UpdateGlosPath( false );
             SwGlossaryList* pList = ::GetGlossaryList();

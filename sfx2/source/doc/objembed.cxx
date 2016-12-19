@@ -124,7 +124,7 @@ void SfxObjectShell::SetVisArea( const Rectangle & rVisArea )
             if ( IsEnableSetModified() )
                 SetModified();
 
-            SfxGetpApp()->NotifyEvent(SfxEventHint( SFX_EVENT_VISAREACHANGED, GlobalEventConfig::GetEventName(GlobalEventId::VISAREACHANGED), this));
+            SfxGetpApp()->NotifyEvent(SfxEventHint( SfxEventHintId::VisAreaChanged, GlobalEventConfig::GetEventName(GlobalEventId::VISAREACHANGED), this));
         }
     }
 }

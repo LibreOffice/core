@@ -51,11 +51,11 @@ using namespace ::com::sun::star::container;
 
 static HTMLOutEvent aBodyEventTable[] =
 {
-    { OOO_STRING_SVTOOLS_HTML_O_SDonload,       OOO_STRING_SVTOOLS_HTML_O_onload,       SFX_EVENT_OPENDOC   },
-    { OOO_STRING_SVTOOLS_HTML_O_SDonunload, OOO_STRING_SVTOOLS_HTML_O_onunload, SFX_EVENT_PREPARECLOSEDOC   },
-    { OOO_STRING_SVTOOLS_HTML_O_SDonfocus,  OOO_STRING_SVTOOLS_HTML_O_onfocus,  SFX_EVENT_ACTIVATEDOC   },
-    { OOO_STRING_SVTOOLS_HTML_O_SDonblur,       OOO_STRING_SVTOOLS_HTML_O_onblur,       SFX_EVENT_DEACTIVATEDOC },
-    { nullptr,                    nullptr,                  0                   }
+    { OOO_STRING_SVTOOLS_HTML_O_SDonload,    OOO_STRING_SVTOOLS_HTML_O_onload,    (sal_uInt16)SfxEventHintId::OpenDoc   },
+    { OOO_STRING_SVTOOLS_HTML_O_SDonunload,  OOO_STRING_SVTOOLS_HTML_O_onunload,  (sal_uInt16)SfxEventHintId::PrepareCloseDoc   },
+    { OOO_STRING_SVTOOLS_HTML_O_SDonfocus,   OOO_STRING_SVTOOLS_HTML_O_onfocus,   (sal_uInt16)SfxEventHintId::ActivateDoc   },
+    { OOO_STRING_SVTOOLS_HTML_O_SDonblur,    OOO_STRING_SVTOOLS_HTML_O_onblur,    (sal_uInt16)SfxEventHintId::DeactivateDoc },
+    { nullptr,                               nullptr,                             0                   }
 };
 
 void SwHTMLParser::NewScript()

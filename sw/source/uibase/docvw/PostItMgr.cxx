@@ -255,10 +255,9 @@ void SwPostItMgr::RemoveItem( SfxBroadcaster* pBroadcast )
 
 void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    if ( dynamic_cast<const SfxEventHint*>(&rHint) )
+    if ( const SfxEventHint* pSfxEventHint = dynamic_cast<const SfxEventHint*>(&rHint) )
     {
-        sal_uInt32 nId = static_cast<const SfxEventHint&>(rHint).GetEventId();
-        if ( nId == SW_EVENT_LAYOUT_FINISHED )
+        if ( pSfxEventHint->GetEventId() == SfxEventHintId::SwEventLayoutFinished )
         {
             if ( !mbWaitingForCalcRects && !mvPostItFields.empty())
             {
@@ -267,11 +266,10 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             }
         }
     }
-    else if ( dynamic_cast<const SwFormatFieldHint*>(&rHint) )
+    else if ( const SwFormatFieldHint * pFormatHint = dynamic_cast<const SwFormatFieldHint*>(&rHint) )
     {
-        const SwFormatFieldHint& rFormatHint = static_cast<const SwFormatFieldHint&>(rHint);
-        SwFormatField* pField = const_cast <SwFormatField*>( rFormatHint.GetField() );
-        switch ( rFormatHint.Which() )
+        SwFormatField* pField = const_cast <SwFormatField*>( pFormatHint->GetField() );
+        switch ( pFormatHint->Which() )
         {
             case SwFormatFieldHintWhich::INSERTED :
             {
@@ -309,7 +307,7 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             }
             case SwFormatFieldHintWhich::FOCUS:
             {
-                if (rFormatHint.GetView()== mpView)
+                if (pFormatHint->GetView()== mpView)
                     Focus(rBC);
                 break;
             }

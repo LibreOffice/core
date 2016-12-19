@@ -217,18 +217,18 @@ void SwDocShell::DoFlushDocInfo()
 static void lcl_processCompatibleSfxHint( const uno::Reference< script::vba::XVBAEventProcessor >& xVbaEvents, const SfxHint& rHint )
 {
     using namespace com::sun::star::script::vba::VBAEventId;
-    if ( dynamic_cast<const SfxEventHint*>(&rHint) )
+    if ( const SfxEventHint* pSfxEventHint = dynamic_cast<const SfxEventHint*>(&rHint) )
     {
         uno::Sequence< uno::Any > aArgs;
-        sal_uLong nEventId = static_cast<const SfxEventHint&>(rHint).GetEventId();
-        switch( nEventId )
+        switch( pSfxEventHint->GetEventId() )
         {
-            case SFX_EVENT_CREATEDOC:
+            case SfxEventHintId::CreateDoc:
                 xVbaEvents->processVbaEvent( DOCUMENT_NEW, aArgs );
             break;
-            case SFX_EVENT_OPENDOC:
+            case SfxEventHintId::OpenDoc:
                 xVbaEvents->processVbaEvent( DOCUMENT_OPEN, aArgs );
             break;
+            default: break;
         }
     }
 }
@@ -248,7 +248,7 @@ void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
     sal_uInt16 nAction = 0;
     auto pEventHint = dynamic_cast<const SfxEventHint*>(&rHint);
-    if( pEventHint && pEventHint->GetEventId() == SFX_EVENT_LOADFINISHED )
+    if( pEventHint && pEventHint->GetEventId() == SfxEventHintId::LoadFinished )
     {
         // #i38126# - own action id
         nAction = 3;

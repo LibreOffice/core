@@ -429,7 +429,7 @@ void ViewShellBase::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
     {
         switch (pEventHint->GetEventId())
         {
-            case SFX_EVENT_OPENDOC:
+            case SfxEventHintId::OpenDoc:
                 if( GetDocument() && GetDocument()->IsStartWithPresentation() )
                 {
                     if( GetViewFrame() )

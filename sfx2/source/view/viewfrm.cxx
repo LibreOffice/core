@@ -786,7 +786,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     }
 
                     // Propagate document closure.
-                    SfxGetpApp()->NotifyEvent( SfxEventHint( SFX_EVENT_CLOSEDOC, GlobalEventConfig::GetEventName( GlobalEventId::CLOSEDOC ), xOldObj ) );
+                    SfxGetpApp()->NotifyEvent( SfxEventHint( SfxEventHintId::CloseDoc, GlobalEventConfig::GetEventName( GlobalEventId::CLOSEDOC ), xOldObj ) );
                 }
 
                 // Record as done
@@ -1160,7 +1160,7 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
         // is not read only, and the loading is finished.
         switch ( pEventHint->GetEventId() )
         {
-            case SFX_EVENT_MODIFYCHANGED:
+            case SfxEventHintId::ModifyChanged:
             {
                 SfxBindings& rBind = GetBindings();
                 rBind.Invalidate( SID_DOC_MODIFIED );
@@ -1169,8 +1169,8 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 break;
             }
 
-            case SFX_EVENT_OPENDOC:
-            case SFX_EVENT_CREATEDOC:
+            case SfxEventHintId::OpenDoc:
+            case SfxEventHintId::CreateDoc:
             {
                 if ( !m_xObjSh.Is() )
                     break;
@@ -1232,13 +1232,7 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 
                 break;
             }
-
-            case SFX_EVENT_TOGGLEFULLSCREENMODE:
-            {
-                if ( GetFrame().OwnsBindings_Impl() )
-                    GetBindings().GetDispatcher_Impl()->Update_Impl( true );
-                break;
-            }
+            default: break;
         }
     }
     else

@@ -2786,7 +2786,7 @@ void ScModelObj::HandleCalculateEvents()
     {
         ScDocument& rDoc = pDocShell->GetDocument();
         // don't call events before the document is visible
-        // (might also set a flag on SFX_EVENT_LOADFINISHED and only disable while loading)
+        // (might also set a flag on SfxEventHintId::LoadFinished and only disable while loading)
         if ( rDoc.IsDocVisible() )
         {
             SCTAB nTabCount = rDoc.GetTableCount();

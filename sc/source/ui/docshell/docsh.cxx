@@ -673,10 +673,10 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
     else if ( dynamic_cast<const SfxEventHint*>(&rHint) )
     {
-        sal_uLong nEventId = static_cast<const SfxEventHint*>(&rHint)->GetEventId();
+        SfxEventHintId nEventId = static_cast<const SfxEventHint*>(&rHint)->GetEventId();
         switch ( nEventId )
         {
-            case SFX_EVENT_LOADFINISHED:
+            case SfxEventHintId::LoadFinished:
                 {
 #if HAVE_FEATURE_MULTIUSER_ENVIRONMENT
                     // the readonly documents should not be opened in shared mode
@@ -701,7 +701,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
 #endif
                 }
                 break;
-            case SFX_EVENT_VIEWCREATED:
+            case SfxEventHintId::ViewCreated:
                 {
 #if HAVE_FEATURE_MULTIUSER_ENVIRONMENT
                     if ( IsDocShared() && !SC_MOD()->IsInSharedDocLoading() )
@@ -759,7 +759,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                     }
                 }
                 break;
-            case SFX_EVENT_SAVEDOC:
+            case SfxEventHintId::SaveDoc:
                 {
 #if HAVE_FEATURE_MULTIUSER_ENVIRONMENT
                     if ( IsDocShared() && !SC_MOD()->IsInSharedDocSaving() )
@@ -925,7 +925,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                             }
                             catch ( uno::Exception& )
                             {
-                                OSL_FAIL( "SFX_EVENT_SAVEDOC: caught exception\n" );
+                                OSL_FAIL( "SfxEventHintId::SaveDoc: caught exception\n" );
                                 SC_MOD()->SetInSharedDocSaving( false );
 
                                 try
@@ -948,7 +948,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                         pSheetSaveData->SetInSupportedSave(true);
                 }
                 break;
-            case SFX_EVENT_SAVEASDOC:
+            case SfxEventHintId::SaveAsDoc:
                 {
                     if ( GetDocument().GetExternalRefManager()->containsUnsavedReferences() )
                     {
@@ -962,21 +962,21 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                     }
                     SAL_FALLTHROUGH;
                 }
-            case SFX_EVENT_SAVETODOC:
+            case SfxEventHintId::SaveToDoc:
                 // #i108978# If no event is sent before saving, there will also be no "...DONE" event,
                 // and SAVE/SAVEAS can't be distinguished from SAVETO. So stream copying is only enabled
                 // if there is a SAVE/SAVEAS/SAVETO event first.
                 if (pSheetSaveData)
                     pSheetSaveData->SetInSupportedSave(true);
                 break;
-            case SFX_EVENT_SAVEDOCDONE:
-            case SFX_EVENT_SAVEASDOCDONE:
+            case SfxEventHintId::SaveDocDone:
+            case SfxEventHintId::SaveAsDocDone:
                 {
                     // new positions are used after "save" and "save as", but not "save to"
                     UseSheetSaveEntries();      // use positions from saved file for next saving
                     SAL_FALLTHROUGH;
                 }
-            case SFX_EVENT_SAVETODOCDONE:
+            case SfxEventHintId::SaveToDocDone:
                 // only reset the flag, don't use the new positions
                 if (pSheetSaveData)
                     pSheetSaveData->SetInSupportedSave(false);

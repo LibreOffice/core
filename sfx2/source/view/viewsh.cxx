@@ -1405,34 +1405,25 @@ void SfxViewShell::Notify( SfxBroadcaster& rBC,
                             const SfxHint& rHint )
 {
     const SfxEventHint* pEventHint = dynamic_cast<const SfxEventHint*>(&rHint);
-    if ( pEventHint )
+    if ( pEventHint && pEventHint->GetEventId() == SfxEventHintId::LoadFinished )
     {
-        switch ( pEventHint->GetEventId() )
+        if ( GetController().is() )
         {
-            case SFX_EVENT_LOADFINISHED:
+            // avoid access to dangling ViewShells
+            SfxViewFrameArr_Impl &rFrames = SfxGetpApp()->GetViewFrames_Impl();
+            for (SfxViewFrame* frame : rFrames)
             {
-                if ( GetController().is() )
+                if ( frame == GetViewFrame() && &rBC == GetObjectShell() )
                 {
-                    // avoid access to dangling ViewShells
-                    SfxViewFrameArr_Impl &rFrames = SfxGetpApp()->GetViewFrames_Impl();
-                    for (SfxViewFrame* frame : rFrames)
+                    SfxItemSet* pSet = GetObjectShell()->GetMedium()->GetItemSet();
+                    const SfxUnoAnyItem* pItem = SfxItemSet::GetItem<SfxUnoAnyItem>(pSet, SID_VIEW_DATA, false);
+                    if ( pItem )
                     {
-                        if ( frame == GetViewFrame() && &rBC == GetObjectShell() )
-                        {
-                            SfxItemSet* pSet = GetObjectShell()->GetMedium()->GetItemSet();
-                            const SfxUnoAnyItem* pItem = SfxItemSet::GetItem<SfxUnoAnyItem>(pSet, SID_VIEW_DATA, false);
-                            if ( pItem )
-                            {
-                                pImpl->m_pController->restoreViewData( pItem->GetValue() );
-                                pSet->ClearItem( SID_VIEW_DATA );
-                            }
-
-                            break;
-                        }
+                        pImpl->m_pController->restoreViewData( pItem->GetValue() );
+                        pSet->ClearItem( SID_VIEW_DATA );
                     }
+                    break;
                 }
-
-                break;
             }
         }
     }

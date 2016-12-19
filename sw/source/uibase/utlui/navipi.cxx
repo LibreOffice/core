@@ -879,13 +879,8 @@ void SwNavigationPI::Notify( SfxBroadcaster& rBrdc, const SfxHint& rHint )
     {
         if (const SfxEventHint* pHint = dynamic_cast<const SfxEventHint*>(&rHint))
         {
-            if (m_pxObjectShell && pHint->GetEventId() == SFX_EVENT_CLOSEAPP)
+            if (pHint->GetEventId() == SfxEventHintId::OpenDoc)
             {
-                DELETEZ(m_pxObjectShell);
-            }
-            else if (pHint->GetEventId() == SFX_EVENT_OPENDOC)
-            {
-
                 SwView *pActView = GetCreateView();
                 if(pActView)
                 {

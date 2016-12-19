@@ -341,7 +341,7 @@ void SfxObjectShell::ModifyChanged()
     Invalidate( SID_MACRO_SIGNATURE );
     Broadcast( SfxHint( SfxHintId::TitleChanged ) );    // xmlsec05, signed state might change in title...
 
-    SfxGetpApp()->NotifyEvent( SfxEventHint( SFX_EVENT_MODIFYCHANGED, GlobalEventConfig::GetEventName(GlobalEventId::MODIFYCHANGED), this ) );
+    SfxGetpApp()->NotifyEvent( SfxEventHint( SfxEventHintId::ModifyChanged, GlobalEventConfig::GetEventName(GlobalEventId::MODIFYCHANGED), this ) );
 }
 
 
@@ -960,18 +960,18 @@ void SfxObjectShell::PostActivateEvent_Impl( SfxViewFrame* pFrame )
         const SfxBoolItem* pHiddenItem = SfxItemSet::GetItem<SfxBoolItem>(pMedium->GetItemSet(), SID_HIDDEN, false);
         if ( !pHiddenItem || !pHiddenItem->GetValue() )
         {
-            sal_uInt16 nId = pImpl->nEventId;
-            pImpl->nEventId = 0;
-            if ( nId == SFX_EVENT_OPENDOC )
+            SfxEventHintId nId = pImpl->nEventId;
+            pImpl->nEventId = SfxEventHintId::NONE;
+            if ( nId == SfxEventHintId::OpenDoc )
                 pSfxApp->NotifyEvent(SfxViewEventHint( nId, GlobalEventConfig::GetEventName(GlobalEventId::OPENDOC), this, pFrame->GetFrame().GetController() ), false);
-            else if (nId == SFX_EVENT_CREATEDOC )
+            else if (nId == SfxEventHintId::CreateDoc )
                 pSfxApp->NotifyEvent(SfxViewEventHint( nId, GlobalEventConfig::GetEventName(GlobalEventId::CREATEDOC), this, pFrame->GetFrame().GetController() ), false);
         }
     }
 }
 
 
-void SfxObjectShell::SetActivateEvent_Impl(sal_uInt16 nId )
+void SfxObjectShell::SetActivateEvent_Impl(SfxEventHintId nId )
 {
     if ( GetFactory().GetFlags() & SfxObjectShellFlags::HASOPENDOC )
         pImpl->nEventId = nId;
@@ -1211,7 +1211,7 @@ void SfxObjectShell::FinishedLoading( SfxLoadedFlags nFlags )
 
         // Title is not available until loading has finished
         Broadcast( SfxHint( SfxHintId::TitleChanged ) );
-        if ( pImpl->nEventId )
+        if ( pImpl->nEventId != SfxEventHintId::NONE )
             PostActivateEvent_Impl(SfxViewFrame::GetFirst(this));
     }
 }

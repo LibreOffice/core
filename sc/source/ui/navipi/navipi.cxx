@@ -582,8 +582,7 @@ void ScNavigatorDlg::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if (const SfxEventHint* pHint = dynamic_cast<const SfxEventHint*>(&rHint))
     {
-        sal_uLong nEventId = pHint->GetEventId();
-        if (nEventId == SFX_EVENT_ACTIVATEDOC)
+        if (pHint->GetEventId() == SfxEventHintId::ActivateDoc)
         {
             aLbEntries->ActiveDocChanged();
             UpdateAll();
