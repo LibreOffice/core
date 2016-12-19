@@ -33,7 +33,7 @@ $(eval $(call gb_Module_add_check_targets,svtools,\
     CppunitTest_svtools_html \
 ))
 
-ifeq ($(CROSS_COMPILING),)
+ifeq ($(CROSS_COMPILING)$(DISABLE_DYNLOADING),)
 
 ifneq ($(OS),WNT)
 $(eval $(call gb_Module_add_targets,svtools,\
