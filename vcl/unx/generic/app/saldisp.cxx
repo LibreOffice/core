@@ -371,9 +371,9 @@ void SalDisplay::doDestruct()
         pData->SetDisplay( nullptr );
 }
 
-static int DisplayHasEvent( int fd, SalX11Display *pDisplay  )
+static int DisplayHasEvent( int fd, void * data )
 {
-  (void)fd;
+  auto pDisplay = static_cast<SalX11Display *>(data);
   SAL_WARN_IF( ConnectionNumber( pDisplay->GetDisplay() ) != fd, "vcl",
               "wrong fd in DisplayHasEvent" );
   if( ! pDisplay->IsDisplay() )
@@ -386,9 +386,9 @@ static int DisplayHasEvent( int fd, SalX11Display *pDisplay  )
   GetSalData()->m_pInstance->GetYieldMutex()->release();
   return int(result);
 }
-static int DisplayQueue( int fd, SalX11Display *pDisplay )
+static int DisplayQueue( int fd, void * data )
 {
-  (void)fd;
+  auto pDisplay = static_cast<SalX11Display *>(data);
   SAL_WARN_IF( ConnectionNumber( pDisplay->GetDisplay() ) != fd, "vcl",
               "wrong fd in DisplayHasEvent" );
   int result;
@@ -400,9 +400,9 @@ static int DisplayQueue( int fd, SalX11Display *pDisplay )
 
   return result;
 }
-static int DisplayYield( int fd, SalX11Display *pDisplay )
+static int DisplayYield( int fd, void * data )
 {
-  (void)fd;
+  auto pDisplay = static_cast<SalX11Display *>(data);
   SAL_WARN_IF( ConnectionNumber( pDisplay->GetDisplay() ) != fd, "vcl",
               "wrong fd in DisplayHasEvent" );
 
