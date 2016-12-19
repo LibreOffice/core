@@ -577,6 +577,9 @@ void SvxShowCharSet::SelectIndex( int nNewIndex, bool bFocus )
     if( !aVscrollSB )
         return;
 
+    if ( !mxFontCharMap.Is() )
+        RecalculateFont( *this );
+
     if( nNewIndex < 0 )
     {
         // need to scroll see closest unicode
