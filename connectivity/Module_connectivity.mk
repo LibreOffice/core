@@ -11,6 +11,12 @@
 $(eval $(call gb_Module_Module,connectivity))
 
 $(eval $(call gb_Module_add_targets,connectivity,\
+	Library_dbtools \
+))
+
+ifneq (,$(filter DBCONNECTIVITY,$(BUILD_TYPE)))
+
+$(eval $(call gb_Module_add_targets,connectivity,\
 	Configuration_calc \
 	Configuration_dbase \
 	Configuration_flat \
@@ -19,7 +25,6 @@ $(eval $(call gb_Module_add_targets,connectivity,\
 	Library_calc \
 	Library_dbase \
 	Library_dbpool2 \
-	Library_dbtools \
 	Library_file \
 	Library_flat \
 	Library_mysql \
@@ -131,5 +136,7 @@ endif
 $(eval $(call gb_Module_add_check_targets,connectivity,\
 	CppunitTest_connectivity_commontools \
 ))
+
+endif
 
 # vim: set noet sw=4 ts=4:
