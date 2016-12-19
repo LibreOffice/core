@@ -176,6 +176,14 @@ DECLARE_OOXMLEXPORT_TEST(testTdf103651, "tdf103651.docx")
     CPPUNIT_ASSERT_EQUAL( sal_Int32( -1 ) , sContent.indexOf( sal_Unicode( 0xf04a ) ));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf104162, "tdf104162.docx")
+{
+    // This crashed: the comment field contained a table with a <w:hideMark/>.
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XElementAccess> xTextFields(xTextFieldsSupplier->getTextFields());
+    CPPUNIT_ASSERT(xTextFields->hasElements());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
