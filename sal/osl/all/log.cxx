@@ -19,6 +19,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <fstream>
 
 #include "osl/thread.hxx"
 #include "rtl/string.h"
@@ -86,8 +87,8 @@ char const * getEnvironmentVariable() {
 
 #else
 
-char const * getEnvironmentVariable_() {
-    char const * p1 = std::getenv("SAL_LOG");
+char const * getEnvironmentVariable_(const char* env) {
+    char const * p1 = std::getenv(env);
     if (p1 == nullptr) {
         return nullptr;
     }
@@ -99,8 +100,13 @@ char const * getEnvironmentVariable_() {
 }
 
 char const * getEnvironmentVariable() {
-    static char const * env = getEnvironmentVariable_();
+    static char const * env = getEnvironmentVariable_("SAL_LOG");
     return env;
+}
+
+char const * getLogFile() {
+    static char const * logFile = getEnvironmentVariable_("SAL_LOG_FILE");
+    return logFile;
 }
 
 void maybeOutputTimestamp(std::ostringstream &s) {
@@ -339,8 +345,15 @@ void log(
         syslog(prio, "%s", s.str().c_str());
 #endif
     } else {
-        std::fputs(s.str().c_str(), stderr);
-        std::fflush(stderr);
+        const char* logFile = getLogFile();
+        if (logFile) {
+            std::ofstream file(logFile, std::ios::app | std::ios::out);
+            file << s.str();
+        }
+        else {
+            std::fputs(s.str().c_str(), stderr);
+            std::fflush(stderr);
+        }
     }
 #endif
 }
