@@ -21,67 +21,48 @@
 
 
 
-$(eval $(call gb_Module_Module,ooo))
+$(eval $(call gb_Library_Library,communi))
 
-$(eval $(call gb_Module_add_moduledirs,ooo,\
-    MathMLDTD \
-    animations \
-    automation \
-    avmedia \
-    basebmp \
-    basegfx \
-    binaryurp \
-    canvas \
-    comphelper \
-    configmgr \
-    cppcanvas \
-    dbaccess \
-    drawinglayer \
-    dtrans \
-    editeng \
-    embeddedobj \
-    eventattacher \
-    fileaccess \
-    formula \
-    framework \
-    idl \
-    io \
-    javaunohelper \
-    linguistic \
-    o3tl \
-    offapi \
-    oovbaapi \
-    oox \
-    padmin \
-    package \
-    reportdesign \
-    remotebridges \
-    sax \
-    sd \
-    sfx2 \
-    sot \
-    starmath \
-    svgio \
-    svl \
-    svtools \
-    svx \
-    sw \
-    toolkit \
-    tools \
-    ucbhelper \
-    udkapi \
-    unotools \
-    unoxml \
-    uui \
-    vbahelper \
-    vcl \
-    udm \
-    wizards \
-    writerfilter \
-    x11_extensions \
-    xmloff \
-    xmlreader \
-    xmlscript \
+$(eval $(call gb_Library_add_precompiled_header,communi,$(SRCDIR)/automation/inc/pch/precompiled_automation))
+
+$(eval $(call gb_Library_add_package_headers,communi,automation_inc))
+
+$(eval $(call gb_Library_set_include,communi,\
+        $$(INCLUDE) \
+	-I$(SRCDIR)/automation/inc \
+	-I$(SRCDIR)/automation/inc/pch \
+	-I$(SRCDIR)/automation/source/inc \
 ))
 
-# vim: set noet ts=4 sw=4:
+$(eval $(call gb_Library_add_defs,communi,\
+	-DAUTOMATION_DLLIMPLEMENTATION \
+))
+
+$(eval $(call gb_Library_add_api,communi,\
+	offapi \
+	udkapi \
+))
+
+$(eval $(call gb_Library_add_linked_libs,communi,\
+	sal \
+	simplecm \
+	svl \
+	tl \
+	vcl \
+	vos3 \
+	$(gb_STDLIBS) \
+))
+
+ifeq ($(GUI),WNT)
+$(eval $(call gb_Library_add_linked_libs,communi,\
+	advapi32 \
+	gdi32 \
+))
+endif
+
+$(eval $(call gb_Library_add_noexception_objects,communi,\
+	automation/source/communi/communi \
+))
+
+
+# vim: set noet sw=4 ts=4:

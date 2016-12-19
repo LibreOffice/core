@@ -21,67 +21,11 @@
 
 
 
-$(eval $(call gb_Module_Module,ooo))
+$(eval $(call gb_Package_Package,automation_inc,$(SRCDIR)/automation/inc))
 
-$(eval $(call gb_Module_add_moduledirs,ooo,\
-    MathMLDTD \
-    animations \
-    automation \
-    avmedia \
-    basebmp \
-    basegfx \
-    binaryurp \
-    canvas \
-    comphelper \
-    configmgr \
-    cppcanvas \
-    dbaccess \
-    drawinglayer \
-    dtrans \
-    editeng \
-    embeddedobj \
-    eventattacher \
-    fileaccess \
-    formula \
-    framework \
-    idl \
-    io \
-    javaunohelper \
-    linguistic \
-    o3tl \
-    offapi \
-    oovbaapi \
-    oox \
-    padmin \
-    package \
-    reportdesign \
-    remotebridges \
-    sax \
-    sd \
-    sfx2 \
-    sot \
-    starmath \
-    svgio \
-    svl \
-    svtools \
-    svx \
-    sw \
-    toolkit \
-    tools \
-    ucbhelper \
-    udkapi \
-    unotools \
-    unoxml \
-    uui \
-    vbahelper \
-    vcl \
-    udm \
-    wizards \
-    writerfilter \
-    x11_extensions \
-    xmloff \
-    xmlreader \
-    xmlscript \
-))
-
-# vim: set noet ts=4 sw=4:
+$(eval $(call gb_Package_add_file,automation_inc,inc/automation/automationdllapi.h,automation/automationdllapi.h))
+$(eval $(call gb_Package_add_file,automation_inc,inc/automation/automation.hxx,automation/automation.hxx))
+$(eval $(call gb_Package_add_file,automation_inc,inc/automation/commdefines.hxx,automation/commdefines.hxx))
+$(eval $(call gb_Package_add_file,automation_inc,inc/automation/commtypes.hxx,automation/commtypes.hxx))
+$(eval $(call gb_Package_add_file,automation_inc,inc/automation/communi.hxx,automation/communi.hxx))
+$(eval $(call gb_Package_add_file,automation_inc,inc/automation/simplecm.hxx,automation/simplecm.hxx))

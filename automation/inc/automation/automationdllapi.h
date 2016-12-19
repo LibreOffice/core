@@ -20,31 +20,20 @@
  *************************************************************/
 
 
-#ifndef AUTOMATION_HXX
-#define AUTOMATION_HXX
 
-#include <automation/automationdllapi.h>
+#ifndef INCLUDED_AUTOMATIONDLLAPI_H
+#define INCLUDED_AUTOMATIONDLLAPI_H
 
-class ImplRemoteControl;
-
-class AUTOMATION_DLLPUBLIC RemoteControl
-{
-    ImplRemoteControl* pImpl;
-public:
-    RemoteControl();
-    ~RemoteControl();
-};
-
-#ifdef __cplusplus
-extern "C"
-{
+#ifndef _SAL_TYPES_H_
+#include "sal/types.h"
 #endif
 
-    typedef void ( *pfunc_CreateRemoteControl)();
-    typedef void ( *pfunc_DestroyRemoteControl)();
-
-#ifdef __cplusplus
-}
+#if defined(AUTOMATION_DLLIMPLEMENTATION)
+#define AUTOMATION_DLLPUBLIC  SAL_DLLPUBLIC_EXPORT
+#else
+#define AUTOMATION_DLLPUBLIC  SAL_DLLPUBLIC_IMPORT
 #endif
+#define AUTOMATION_DLLPRIVATE SAL_DLLPRIVATE
 
-#endif // AUTOMATION_HXX
+#endif /* INCLUDED_AUTOMATIONDLLAPI_H */
+

@@ -29,6 +29,7 @@
 #include <vos/mutex.hxx>
 #include <vcl/timer.hxx>
 #include <automation/simplecm.hxx>
+#include <automation/automationdllapi.h>
 
 class SvStream;
 class SvMemoryStream;
@@ -37,7 +38,7 @@ class SvMemoryStream;
 class CommunicationManagerServerAcceptThread;
 SV_DECL_PTRARR_SORT( CommunicationLinkList, CommunicationLink*, 1, 10 )
 
-class MultiCommunicationManager : public CommunicationManager
+class AUTOMATION_DLLPUBLIC MultiCommunicationManager : public CommunicationManager
 {
 public:
     MultiCommunicationManager( sal_Bool bUseMultiChannel = sal_False );
@@ -60,19 +61,19 @@ protected:
     sal_Bool bGracefullShutdown;
 };
 
-class CommunicationManagerServer : public MultiCommunicationManager
+class AUTOMATION_DLLPUBLIC CommunicationManagerServer : public MultiCommunicationManager
 {
 public:
     CommunicationManagerServer( sal_Bool bUseMultiChannel = sal_False ):MultiCommunicationManager( bUseMultiChannel ){;}
 };
 
-class CommunicationManagerClient : public MultiCommunicationManager, public ICommunicationManagerClient
+class AUTOMATION_DLLPUBLIC CommunicationManagerClient : public MultiCommunicationManager, public ICommunicationManagerClient
 {
 public:
     CommunicationManagerClient( sal_Bool bUseMultiChannel = sal_False );
 };
 
-class CommunicationLinkViaSocket : public SimpleCommunicationLinkViaSocket, public vos::OThread
+class AUTOMATION_DLLPUBLIC CommunicationLinkViaSocket : public SimpleCommunicationLinkViaSocket, public vos::OThread
 {
 public:
     CommunicationLinkViaSocket( CommunicationManager *pMan, vos::OStreamSocket *pSocket );
@@ -108,7 +109,7 @@ protected:
     Link mlPutDataReceived;
 };
 
-class CommunicationManagerServerViaSocket : public CommunicationManagerServer
+class AUTOMATION_DLLPUBLIC CommunicationManagerServerViaSocket : public CommunicationManagerServer
 {
     friend class CommunicationManagerServerAcceptThread;
 public:
@@ -129,7 +130,7 @@ private:
     void AddConnection( CommunicationLink *pNewConnection );
 };
 
-class CommunicationManagerServerAcceptThread: public vos::OThread
+class AUTOMATION_DLLPUBLIC CommunicationManagerServerAcceptThread: public vos::OThread
 {
 public:
     CommunicationManagerServerAcceptThread( CommunicationManagerServerViaSocket* pServer, sal_uLong nPort, sal_uInt16 nMaxCon = CM_UNLIMITED_CONNECTIONS );
@@ -154,7 +155,7 @@ private:
     DECL_LINK( AddConnection, void* );
 };
 
-class CommunicationManagerClientViaSocket : public CommunicationManagerClient, CommonSocketFunctions
+class AUTOMATION_DLLPUBLIC CommunicationManagerClientViaSocket : public CommunicationManagerClient, CommonSocketFunctions
 {
 public:
     using CommunicationManager::StartCommunication;

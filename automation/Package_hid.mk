@@ -20,48 +20,7 @@
 #**************************************************************
 
 
-PRJ=..$/..
 
-PRJNAME=automation
-TARGET=server
+$(eval $(call gb_Package_Package,automation_hid,$(SRCDIR)/automation/util))
 
-# --- Settings -----------------------------------------------------
-
-.INCLUDE :  settings.mk
-
-# --- Files --------------------------------------------------------
-
-SLOFILES = \
-    $(SLO)$/XMLParser.obj \
-    $(SLO)$/recorder.obj \
-    $(SLO)$/svcommstream.obj \
-    $(SLO)$/cmdbasestream.obj \
-    $(SLO)$/scmdstrm.obj \
-    $(SLO)$/statemnt.obj \
-    $(SLO)$/sta_list.obj \
-    $(SLO)$/editwin.obj \
-    $(SLO)$/server.obj \
-    $(SLO)$/retstrm.obj \
-    $(SLO)$/profiler.obj
-
-
-OBJFILES = \
-    $(OBJ)$/cmdbasestream.obj \
-    $(OBJ)$/svcommstream.obj
-
-EXCEPTIONSFILES = \
-    $(SLO)$/statemnt.obj \
-    $(SLO)$/server.obj \
-    $(SLO)$/XMLParser.obj
-
-NOOPTFILES = $(SLO)$/statemnt.obj
-
-.IF "$(OS)"=="SOLARIS"
-SLOFILES +=   $(SLO)$/prof_usl.obj 
-.ELSE
-SLOFILES +=   $(SLO)$/prof_nul.obj 
-.ENDIF
-
-# --- Tagets -------------------------------------------------------
-
-.INCLUDE :  target.mk
+$(eval $(call gb_Package_add_file,automation_hid,bin/hid/manually_added_ids.hid,manually_added_ids.hid))

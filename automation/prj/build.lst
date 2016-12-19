@@ -1,8 +1,2 @@
-au	automation	:	basic fpicker NULL
-au	automation								usr1	-	all	au_mkout NULL
-au	automation\inc							nmake	-	all	au_inc NULL
-au	automation\source\simplecm				nmake	-	all	au_scom au_inc NULL
-au	automation\source\communi				nmake	-	all	au_comm au_inc NULL
-au	automation\source\app					nmake	-	all	au_app au_inc NULL
-au	automation\source\server				nmake	-	all	au_server au_inc NULL
-au	automation\util							nmake	-	all	au_util au_scom au_comm au_app au_server NULL
+au	automation	:	basic fpicker NULLx
+au	automation\prj								nmake	-	all	au_prj NULL

@@ -53,6 +53,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     basebmp \
     basegfx \
     canvastools \
+    communi \
     cppcanvas \
     cui \
     dba \
@@ -100,10 +101,12 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     sdbc \
     sdbt \
     sfx \
+    simplecm \
     sm \
     smd \
     sot \
     spa \
+    sts \
     svl \
     svt \
     svx \

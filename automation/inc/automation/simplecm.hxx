@@ -31,6 +31,7 @@
 #include <tools/datetime.hxx>
 
 #include <automation/commdefines.hxx>
+#include <automation/automationdllapi.h>
 
 // CM steht für CommunicationManager
 #define CM_UNLIMITED_CONNECTIONS    0xffff
@@ -105,7 +106,7 @@ PRV_SV_DECL_REF_SIGNATURE(ClassName, Ref)       \
 
 SV_DECL_REF( CommunicationLink )
 
-class InfoString : public ByteString
+class AUTOMATION_DLLPUBLIC InfoString : public ByteString
 {
 public:
     InfoString( ByteString &nMsg, CM_InfoType nIT, CommunicationLink *pCL = NULL ): ByteString( nMsg ), nInfoType( nIT ), pCommLink( pCL ) {;}
@@ -121,7 +122,7 @@ class CommunicationManager;
 class SingleCommunicationManager;
 class MultiCommunicationManager;
 class CommunicationManagerServerAcceptThread;
-class CommunicationLink : public SvRefBase
+class AUTOMATION_DLLPUBLIC CommunicationLink : public SvRefBase
 {
 protected:
     friend class CommunicationManager;
@@ -222,7 +223,7 @@ public:
 SV_IMPL_REF( CommunicationLink );
 
 class CommonSocketFunctions;
-class CommunicationManager
+class AUTOMATION_DLLPUBLIC CommunicationManager
 {
     friend class CommunicationLink;
     friend class CommonSocketFunctions;
@@ -291,7 +292,7 @@ private:
     sal_Bool bIsMultiChannel;
 };
 
-class SingleCommunicationManager : public CommunicationManager
+class AUTOMATION_DLLPUBLIC SingleCommunicationManager : public CommunicationManager
 {
 public:
     SingleCommunicationManager( sal_Bool bUseMultiChannel = sal_False );
@@ -309,7 +310,7 @@ protected:
     virtual void DestroyingLink( CommunicationLink *pCL );  // Link trägt sich im Destruktor aus
 };
 
-class ICommunicationManagerClient
+class AUTOMATION_DLLPUBLIC ICommunicationManagerClient
 {
     friend class CommonSocketFunctions;
 protected:
@@ -317,7 +318,7 @@ protected:
 };
 
 class TCPIO;
-class SimpleCommunicationLinkViaSocket : public CommunicationLink
+class AUTOMATION_DLLPUBLIC SimpleCommunicationLinkViaSocket : public CommunicationLink
 {
 public:
     virtual sal_Bool IsCommunicationError();
@@ -351,7 +352,7 @@ protected:
     void SetNewPacketAsCurrent();
 };
 
-class SimpleCommunicationLinkViaSocketWithReceiveCallbacks : public SimpleCommunicationLinkViaSocket
+class AUTOMATION_DLLPUBLIC SimpleCommunicationLinkViaSocketWithReceiveCallbacks : public SimpleCommunicationLinkViaSocket
 {
 public:
     SimpleCommunicationLinkViaSocketWithReceiveCallbacks( CommunicationManager *pMan, vos::OStreamSocket *pSocket );
@@ -362,7 +363,7 @@ protected:
     virtual void WaitForShutdown();
 };
 
-class CommonSocketFunctions
+class AUTOMATION_DLLPUBLIC CommonSocketFunctions
 {
 public:
     sal_Bool DoStartCommunication( CommunicationManager *pCM, ICommunicationManagerClient *pCMC, ByteString aHost, sal_uLong nPort );
@@ -370,7 +371,7 @@ protected:
     virtual CommunicationLink *CreateCommunicationLink( CommunicationManager *pCM, vos::OConnectorSocket *pCS )=0;
 };
 
-class SingleCommunicationManagerClientViaSocket : public SingleCommunicationManager, public ICommunicationManagerClient, CommonSocketFunctions
+class AUTOMATION_DLLPUBLIC SingleCommunicationManagerClientViaSocket : public SingleCommunicationManager, public ICommunicationManagerClient, CommonSocketFunctions
 {
 public:
     using CommunicationManager::StartCommunication;
