@@ -163,10 +163,8 @@ do
  fi
 done
 
-echo Place of the debug and stripped rpm packages:
-echo $topdir/RPMS/RPMS/
+echo Update RPM download tar.gz
 
-echo Update download tar.gz
 mv $topdir/RPMS/RPMS/*/*.rpm $rpmdir/RPMS/
 cd $rpmdir/..
 TARGET_RPM=$(ls *_download/*.tar.gz)
@@ -298,8 +296,14 @@ do
  fi
 done
 
-echo Place of the debug and stripped deb packages:
-echo $BUILD_PATH/DEBS
+echo Update DEB download tar.gz
+
+debdir=$(ls -d $BUILD_PATH/workdir/installation/CollaboraOffice/deb/install/*_deb)
+mv $BUILD_PATH/DEBS/*.deb $debdir/DEBS/
+cd $debdir/..
+TARGET_DEB=$(ls *_download/*.tar.gz)
+tar cv *_deb | gzip >$TARGET_DEB
+cd -
 }
 
 # start deb re-build
