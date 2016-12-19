@@ -1,2 +1,2 @@
-au	automation	:	basic fpicker NULLx
+au	automation	:	basic fpicker NULL
 au	automation\prj								nmake	-	all	au_prj NULL
