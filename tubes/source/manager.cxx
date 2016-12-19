@@ -24,6 +24,7 @@
 #include <osl/mutex.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/uuid.h>
+#include <vcl/svapp.hxx>
 
 #include <telepathy-glib/telepathy-glib.h>
 #include <stdio.h>
@@ -492,7 +493,10 @@ bool TeleManager::createAccountManager()
     TeleManagerImpl::mbAccountManagerReadyHandlerInvoked = false;
     tp_proxy_prepare_async( pImpl->mpAccountManager, nullptr, TeleManagerImpl::AccountManagerReadyHandler, nullptr);
     while (!TeleManagerImpl::mbAccountManagerReadyHandlerInvoked)
+    {
+        SolarMutexReleaser rel;
         g_main_context_iteration( nullptr, TRUE);
+    }
 
     return TeleManagerImpl::mbAccountManagerReady;
 }
