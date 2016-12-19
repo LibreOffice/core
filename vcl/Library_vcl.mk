@@ -60,11 +60,16 @@ $(eval $(call gb_Library_use_externals,vcl,\
 	$(if $(filter LINUX MACOSX %BSD SOLARIS,$(OS)), \
 		curl) \
 	jpeg \
+	libeot \
+))
+
+ifeq ($(TLS),NSS)
+$(eval $(call gb_Library_use_externals,vcl,\
 	$(if $(filter-out IOS WNT,$(OS)), \
 		nss3 \
 		plc4) \
-	libeot \
 ))
+endif
 
 $(eval $(call gb_Library_use_libraries,vcl,\
     $(call gb_Helper_optional,BREAKPAD, \

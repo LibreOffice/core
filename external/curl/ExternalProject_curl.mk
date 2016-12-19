@@ -10,7 +10,7 @@
 $(eval $(call gb_ExternalProject_ExternalProject,curl))
 
 $(eval $(call gb_ExternalProject_use_externals,curl,\
-	nss3 \
+	$(if $(filter TRUE,$(DISABLE_DYNLOADING)),,nss3) \
 	zlib \
 ))
 
@@ -44,7 +44,7 @@ $(call gb_ExternalProject_get_state_target,curl,build):
 		./configure \
 			$(if $(filter IOS MACOSX,$(OS)),\
 				--with-darwinssl,\
-				--with-nss$(if $(SYSTEM_NSS),,="$(call gb_UnpackedTarball_get_dir,nss)/dist/out")) \
+				$(if $(filter TRUE,$(DISABLE_DYNLOADING)),--without-nss,--with-nss$(if $(SYSTEM_NSS),,="$(call gb_UnpackedTarball_get_dir,nss)/dist/out"))) \
 			--without-ssl --without-gnutls --without-polarssl --without-cyassl --without-axtls \
 			--without-libidn --enable-ftp --enable-ipv6 --enable-http --disable-gopher \
 			--disable-file --disable-ldap --disable-telnet --disable-dict --without-libssh2 \
