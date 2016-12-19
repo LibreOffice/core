@@ -1069,7 +1069,7 @@ $(eval $(call gb_Helper_register_resources,\
 	vcl \
 	writerperfect \
 	wzi \
-	xmlsec \
+	$(if $(filter-out ANDROID IOS,$(OS)),xmlsec) \
 	xsltdlg \
 ))
 
@@ -1116,7 +1116,7 @@ $(eval $(call gb_Helper_register_uiconfigs,\
 	uui \
 	vcl \
 	writerperfect \
-	xmlsec \
+	$(if $(filter-out ANDROID IOS,$(OS)),xmlsec) \
 ))
 
 ifeq ($(gb_GBUILDSELFTEST),t)
