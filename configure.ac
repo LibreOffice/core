@@ -8982,6 +8982,28 @@ fi
 AC_SUBST(SYSTEM_OPENLDAP)
 
 dnl ===================================================================
+dnl Check for system NSS
+dnl ===================================================================
+if test $_os != iOS -a $_os != Android -a "$enable_fuzzers" != "yes"; then
+    libo_CHECK_SYSTEM_MODULE([nss],[NSS],[nss >= 3.9.3 nspr >= 4.8])
+    AC_DEFINE(HAVE_FEATURE_NSS)
+    ENABLE_NSS="TRUE"
+    AC_DEFINE(ENABLE_NSS)
+else
+    with_tls=openssl
+fi
+if test "$with_system_nss" = "yes"; then
+    libo_MINGW_CHECK_DLL([libnspr4])
+    libo_MINGW_CHECK_DLL([libplc4])
+    libo_MINGW_CHECK_DLL([libplds4])
+    libo_MINGW_CHECK_DLL([nss3])
+    libo_MINGW_CHECK_DLL([nssutil3])
+    libo_MINGW_CHECK_DLL([smime3])
+    libo_MINGW_CHECK_DLL([ssl3])
+fi
+AC_SUBST(ENABLE_NSS)
+
+dnl ===================================================================
 dnl Check for TLS/SSL and cryptographic implementation to use
 dnl ===================================================================
 AC_MSG_CHECKING([which TLS/SSL and cryptographic implementation to use])
@@ -9010,10 +9032,6 @@ nss - Mozilla's Network Security Services (NSS)
     ])
         ;;
     esac
-elif test $_os = iOS -o $_os = Android; then
-    # We don't build NSS for iOS and Android
-    AC_DEFINE(USE_TLS_OPENSSL)
-    TLS=OPENSSL
 else
     # default to using NSS, it results in smaller oox lib
     AC_DEFINE(USE_TLS_NSS)
@@ -9021,23 +9039,6 @@ else
 fi
 AC_MSG_RESULT([$TLS])
 AC_SUBST(TLS)
-
-dnl ===================================================================
-dnl Check for system NSS
-dnl ===================================================================
-if test $_os != iOS -a "$enable_fuzzers" != "yes"; then
-    libo_CHECK_SYSTEM_MODULE([nss],[NSS],[nss >= 3.9.3 nspr >= 4.8])
-    AC_DEFINE(HAVE_FEATURE_NSS)
-fi
-if test "$with_system_nss" = "yes"; then
-    libo_MINGW_CHECK_DLL([libnspr4])
-    libo_MINGW_CHECK_DLL([libplc4])
-    libo_MINGW_CHECK_DLL([libplds4])
-    libo_MINGW_CHECK_DLL([nss3])
-    libo_MINGW_CHECK_DLL([nssutil3])
-    libo_MINGW_CHECK_DLL([smime3])
-    libo_MINGW_CHECK_DLL([ssl3])
-fi
 
 dnl ===================================================================
 dnl Check for system sane
