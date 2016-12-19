@@ -175,7 +175,7 @@ public:
 
     void AddGroupContext(const SdrObject *pParentObj,
                     css::uno::Reference < css::accessibility::XAccessible > const & xAccParent);
-    void RemoveGroupContext(const SdrObject *pParentObj, css::uno::Reference < css::accessibility::XAccessible > const & xAccParent);
+    void RemoveGroupContext(const SdrObject *pParentObj);
 
     const SwRect& GetVisArea() const;
 
