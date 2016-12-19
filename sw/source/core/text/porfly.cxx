@@ -203,7 +203,7 @@ sal_Int32 SwTextFrame::CalcFlyPos( SwFrameFormat* pSearch )
     return pFound->GetStart();
 }
 
-void SwFlyCntPortion::Paint( const SwTextPaintInfo &rInf ) const
+void sw::FlyContentPortion::Paint(const SwTextPaintInfo& rInf) const
 {
     // Baseline output
     // Re-paint everything at a CompletePaint call
@@ -242,89 +242,67 @@ void SwFlyCntPortion::Paint( const SwTextPaintInfo &rInf ) const
             ((SwTextPaintInfo&)rInf).SetOut( rInf.GetVsh()->GetOut() );
     }
 }
+
 void sw::DrawFlyCntPortion::Paint(const SwTextPaintInfo&) const
 {
-    if(!static_cast<SwDrawContact*>(pContact)->GetAnchorFrame())
+    if(!m_pContact->GetAnchorFrame())
     {
         // No direct positioning of the drawing object is needed
-        SwDrawContact* pDrawContact = static_cast<SwDrawContact*>(pContact);
-        pDrawContact->ConnectToLayout();
+        m_pContact->ConnectToLayout();
     }
 }
 
 /**
  * Use the dimensions of pFly->OutRect()
  */
-SwFlyCntPortion::SwFlyCntPortion(SwFlyInContentFrame* pFly)
-    : pContact(pFly)
-    , bMax(false)
+SwFlyCntPortion::SwFlyCntPortion()
+    : bMax(false)
     , nAlign(0)
 {
-    SAL_WARN_IF(!pFly, "sw.core", "SwFlyCntPortion::SwFlyCntPortion: no SwFlyInContentFrame!");
     nLineLength = 1;
     SetWhichPor(POR_FLYCNT);
 }
 
-sw::DrawFlyCntPortion::DrawFlyCntPortion(SwDrawContact* pDrawContact)
-    : SwFlyCntPortion((SwFlyInContentFrame*) pDrawContact)
+sw::FlyContentPortion::FlyContentPortion(SwFlyInContentFrame* pFly)
+    : m_pFly(pFly)
 {
-    SAL_WARN_IF(!pDrawContact, "sw.core",  "SwFlyCntPortion::SwFlyCntPortion: no SwDrawContact!");
-    if(!pDrawContact->GetAnchorFrame())
-    {
-        // No direct positioning needed any more
-        pDrawContact->ConnectToLayout();
-        // Move object to visible layer
-        pDrawContact->MoveObjToVisibleLayer(pDrawContact->GetMaster());
-    }
-
+    SAL_WARN_IF(!pFly, "sw.core", "SwFlyCntPortion::SwFlyCntPortion: no SwFlyInContentFrame!");
 }
 
-SwFlyCntPortion* SwFlyCntPortion::Create(const SwTextFrame& rFrame, SwFlyInContentFrame* pFly, const Point& rBase, long nLnAscent, long nLnDescent, long nFlyAsc, long nFlyDesc, AsCharFlags nFlags)
+sw::DrawFlyCntPortion::DrawFlyCntPortion(SwDrawContact* pContact)
+    : m_pContact(pContact)
 {
-    auto pNew(new SwFlyCntPortion(pFly));
+    assert(m_pContact);
+    if(!m_pContact->GetAnchorFrame())
+    {
+        // No direct positioning needed any more
+        m_pContact->ConnectToLayout();
+        // Move object to visible layer
+        m_pContact->MoveObjToVisibleLayer(m_pContact->GetMaster());
+    }
+}
+
+sw::FlyContentPortion* sw::FlyContentPortion::Create(const SwTextFrame& rFrame, SwFlyInContentFrame* pFly, const Point& rBase, long nLnAscent, long nLnDescent, long nFlyAsc, long nFlyDesc, AsCharFlags nFlags)
+{
+    auto pNew(new sw::FlyContentPortion(pFly));
     pNew->SetBase(rFrame, rBase, nLnAscent, nLnDescent, nFlyAsc, nFlyDesc, nFlags | AsCharFlags::UlSpace | AsCharFlags::Init);
     return pNew;
 }
 
-sw::DrawFlyCntPortion* sw::DrawFlyCntPortion::Create(const SwTextFrame& rFrame, SwDrawContact* pDrawContact, const Point& rBase, long nLnAscent, long nLnDescent, long nFlyAsc, long nFlyDesc, AsCharFlags nFlags)
+sw::DrawFlyCntPortion* sw::DrawFlyCntPortion::Create(const SwTextFrame& rFrame, SwDrawContact* pContact, const Point& rBase, long nLnAscent, long nLnDescent, long nFlyAsc, long nFlyDesc, AsCharFlags nFlags)
 {
-    auto pNew(new DrawFlyCntPortion(pDrawContact));
+    auto pNew(new DrawFlyCntPortion(pContact));
     pNew->SetBase(rFrame, rBase, nLnAscent, nLnDescent, nFlyAsc, nFlyDesc, nFlags | AsCharFlags::UlSpace | AsCharFlags::Init);
     return pNew;
-}
-
-SwFlyCntPortion::SwFlyCntPortion( const SwTextFrame& rFrame,
-                                  SwDrawContact *pDrawContact, const Point &rBase,
-                                  long nLnAscent, long nLnDescent,
-                                  long nFlyAsc, long nFlyDesc,
-                                  AsCharFlags nFlags ) :
-    pContact( pDrawContact ),
-    bMax( false ),
-    nAlign( 0 )
-{
-    if( !pDrawContact->GetAnchorFrame() )
-    {
-        // No direct positioning needed any more
-        pDrawContact->ConnectToLayout();
-
-        // Move object to visible layer
-        pDrawContact->MoveObjToVisibleLayer( pDrawContact->GetMaster() );
-    }
-    nLineLength = 1;
-    nFlags |= AsCharFlags::UlSpace | AsCharFlags::Init;
-
-    SetBase( rFrame, rBase, nLnAscent, nLnDescent, nFlyAsc, nFlyDesc, nFlags );
-
-    SetWhichPor( POR_FLYCNT );
 }
 
 SwFlyCntPortion::~SwFlyCntPortion() {};
-
 sw::DrawFlyCntPortion::~DrawFlyCntPortion() {};
+sw::FlyContentPortion::~FlyContentPortion() {};
 
-SdrObject* SwFlyCntPortion::GetSdrObj(const SwTextFrame&)
+SdrObject* sw::FlyContentPortion::GetSdrObj(const SwTextFrame&)
 {
-    return GetFlyFrame()->GetVirtDrawObj();
+    return m_pFly->GetVirtDrawObj();
 }
 
 SdrObject* sw::DrawFlyCntPortion::GetSdrObj(const SwTextFrame& rFrame)
@@ -434,9 +412,9 @@ void SwFlyCntPortion::SetBase( const SwTextFrame& rFrame, const Point &rBase,
     }
 }
 
-void SwFlyCntPortion::GetFlyCursorOfst(Point &rPoint, SwPosition &rPos, SwCursorMoveState* pCMS) const
+void sw::FlyContentPortion::GetFlyCursorOfst(Point& rPoint, SwPosition& rPos, SwCursorMoveState* pCMS) const
 {
-    GetFlyFrame()->GetCursorOfst(&rPos, rPoint, pCMS);
+    m_pFly->GetCursorOfst(&rPos, rPoint, pCMS);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
