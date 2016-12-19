@@ -2056,36 +2056,23 @@ void SwAccessibleMap::AddShapeContext(const SdrObject *pObj, uno::Reference < XA
 }
 
 //Added by yanjun for sym2_6407
-void SwAccessibleMap::RemoveGroupContext(const SdrObject *pParentObj, css::uno::Reference < css::accessibility::XAccessible > const & xAccParent)
+void SwAccessibleMap::RemoveGroupContext(const SdrObject *pParentObj)
 {
     osl::MutexGuard aGuard( maMutex );
-    if (mpShapeMap && pParentObj && pParentObj->IsGroupObject() && xAccParent.is())
+    // TODO: Why are sub-shapes of group shapes even added to our map?
+    //       Doesn't the AccessibleShape of the top-level shape create them
+    //       on demand anyway? Why does SwAccessibleMap need to know them?
+    // We cannot rely on getAccessibleChild here to remove the sub-shapes
+    // from mpShapes because the top-level shape may not only be disposed here
+    // but also by visibility checks in svx, then it doesn't return children.
+    if (mpShapeMap && pParentObj && pParentObj->IsGroupObject())
     {
-        uno::Reference < XAccessibleContext > xContext = xAccParent->getAccessibleContext();
-        if (xContext.is())
+        SdrObjList *const pChildren(pParentObj->GetSubList());
+        for (size_t i = 0; pChildren && i < pChildren->GetObjCount(); ++i)
         {
-            for (sal_Int32 i = 0; i < xContext->getAccessibleChildCount(); ++i)
-            {
-                uno::Reference < XAccessible > xChild = xContext->getAccessibleChild(i);
-                if (xChild.is())
-                {
-                    uno::Reference < XAccessibleContext > xChildContext = xChild->getAccessibleContext();
-                    if (xChildContext.is())
-                    {
-                        if (xChildContext->getAccessibleRole() == AccessibleRole::SHAPE)
-                        {
-                            ::accessibility::AccessibleShape* pAccShape = static_cast < ::accessibility::AccessibleShape* >( xChild.get());
-                            uno::Reference < drawing::XShape > xShape = pAccShape->GetXShape();
-                            if (xShape.is())
-                            {
-                                SdrObject* pObj = GetSdrObjectFromXShape(xShape);
-                                if (pObj)
-                                    RemoveContext(pObj);
-                            }
-                        }
-                    }
-                }
-            }
+            SdrObject *const pChild(pChildren->GetObj(i));
+            assert(pChild);
+            RemoveContext(pChild);
         }
     }
 }
@@ -2195,7 +2182,7 @@ void SwAccessibleMap::RemoveContext( const SdrObject *pObj )
         {
             uno::Reference < XAccessible > xAcc( (*aIter).second );
             mpShapeMap->erase( aIter );
-            RemoveGroupContext(pObj, xAcc);
+            RemoveGroupContext(pObj);
             // The shape selection flag is not cleared, but one might do
             // so but has to make sure that the removed context is the one
             // that is selected.
