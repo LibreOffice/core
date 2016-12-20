@@ -58,13 +58,13 @@ static OUString lcl_getAppName( vcl::EnumContext::Application eApp )
 {
     switch ( eApp )
     {
-        case vcl::EnumContext::Application::Application_Writer:
+        case vcl::EnumContext::Application::Writer:
             return OUString( "Writer" );
             break;
-        case vcl::EnumContext::Application::Application_Calc:
+        case vcl::EnumContext::Application::Calc:
             return OUString( "Calc" );
             break;
-        case vcl::EnumContext::Application::Application_Impress:
+        case vcl::EnumContext::Application::Impress:
             return OUString( "Impress" );
             break;
         default:
@@ -79,13 +79,13 @@ static void lcl_setNotebookbarFileName( vcl::EnumContext::Application eApp, cons
                 comphelper::ConfigurationChanges::create( ::comphelper::getProcessComponentContext() ) );
     switch ( eApp )
     {
-        case vcl::EnumContext::Application::Application_Writer:
+        case vcl::EnumContext::Application::Writer:
             officecfg::Office::UI::Notebookbar::ActiveWriter::set( sFileName, aBatch );
             break;
-        case vcl::EnumContext::Application::Application_Calc:
+        case vcl::EnumContext::Application::Calc:
             officecfg::Office::UI::Notebookbar::ActiveCalc::set( sFileName, aBatch );
             break;
-        case vcl::EnumContext::Application::Application_Impress:
+        case vcl::EnumContext::Application::Impress:
             officecfg::Office::UI::Notebookbar::ActiveImpress::set( sFileName, aBatch );
             break;
         default:
@@ -98,13 +98,13 @@ static OUString lcl_getNotebookbarFileName( vcl::EnumContext::Application eApp )
 {
     switch ( eApp )
     {
-        case vcl::EnumContext::Application::Application_Writer:
+        case vcl::EnumContext::Application::Writer:
             return officecfg::Office::UI::Notebookbar::ActiveWriter::get();
             break;
-        case vcl::EnumContext::Application::Application_Calc:
+        case vcl::EnumContext::Application::Calc:
             return officecfg::Office::UI::Notebookbar::ActiveCalc::get();
             break;
-        case vcl::EnumContext::Application::Application_Impress:
+        case vcl::EnumContext::Application::Impress:
             return officecfg::Office::UI::Notebookbar::ActiveImpress::get();
             break;
         default:
@@ -170,7 +170,7 @@ void SfxNotebookBar::CloseMethod(SystemWindow* pSysWindow)
 
 bool SfxNotebookBar::IsActive()
 {
-    vcl::EnumContext::Application eApp = vcl::EnumContext::Application::Application_Any;
+    vcl::EnumContext::Application eApp = vcl::EnumContext::Application::Any;
 
     if (SfxViewFrame::Current())
     {
@@ -354,7 +354,7 @@ void SfxNotebookBar::ShowMenubar(bool bShow)
         m_bLock = true;
 
         Reference<frame::XFrame> xFrame;
-        vcl::EnumContext::Application eCurrentApp = vcl::EnumContext::Application::Application_None;
+        vcl::EnumContext::Application eCurrentApp = vcl::EnumContext::Application::NONE;
         uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
         const Reference<frame::XModuleManager> xModuleManager = frame::ModuleManager::create( xContext );
 

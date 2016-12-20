@@ -31,35 +31,35 @@ namespace vcl {
 class VCL_DLLPUBLIC EnumContext
 {
 public:
-    enum Application
+    enum class Application
     {
-        Application_Writer,
-        Application_WriterGlobal,
-        Application_WriterWeb,
-        Application_WriterXML,
-        Application_WriterForm,
-        Application_WriterReport,
-        Application_Calc,
-        Application_Chart,
-        Application_Draw,
-        Application_Impress,
+        Writer,
+        WriterGlobal,
+        WriterWeb,
+        WriterXML,
+        WriterForm,
+        WriterReport,
+        Calc,
+        Chart,
+        Draw,
+        Impress,
 
         // For your convenience to avoid duplicate code in the common
         // case that Draw and Impress use identical context configurations.
-        Application_DrawImpress,
+        DrawImpress,
 
         // Also for your convenience for the different variants of Writer documents.
-        Application_WriterVariants,
+        WriterVariants,
 
         // Used only by deck or panel descriptors.  Matches any
         // application.
-        Application_Any,
+        Any,
 
         // Use this only in special circumstances.  One might be the
         // wish to disable a deck or panel during debugging.
-        Application_None,
+        NONE,
 
-        LastApplicationEnum = Application_None
+        LAST = Application::NONE
     };
     enum Context
     {
@@ -123,7 +123,7 @@ public:
         made are:
             Draw or Impress     -> DrawImpress
             Writer or WriterWeb -> WriterAndWeb
-        Use the Application_DrawImpress or Application_WriterAndWeb values in the CombinedEnumContext macro.
+        Use the Application::DrawImpress or Application::WriterAndWeb values in the CombinedEnumContext macro.
     */
     sal_Int32 GetCombinedContext_DI() const;
 

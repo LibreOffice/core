@@ -156,16 +156,16 @@ namespace
     {
         switch ( eApp )
         {
-            case vcl::EnumContext::Application::Application_Writer:
+            case vcl::EnumContext::Application::Writer:
                 return OUString( "Writer" );
                 break;
-            case vcl::EnumContext::Application::Application_Calc:
+            case vcl::EnumContext::Application::Calc:
                 return OUString( "Calc" );
                 break;
-            case vcl::EnumContext::Application::Application_Impress:
+            case vcl::EnumContext::Application::Impress:
                 return OUString( "Impress" );
                 break;
-            case vcl::EnumContext::Application::Application_Draw:
+            case vcl::EnumContext::Application::Draw:
                 return OUString( "Draw" );
                 break;
             default:
@@ -719,7 +719,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 
             // Get information about current frame and module
             Reference<XFrame> xCurrentFrame;
-            vcl::EnumContext::Application eCurrentApp = vcl::EnumContext::Application::Application_None;
+            vcl::EnumContext::Application eCurrentApp = vcl::EnumContext::Application::NONE;
             OUString aCurrentMode;
 
             SfxViewFrame* pViewFrame = SfxViewFrame::Current();

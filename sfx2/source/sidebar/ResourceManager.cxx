@@ -469,39 +469,39 @@ void ResourceManager::ReadContextList (
         std::vector<vcl::EnumContext::Application> aApplications;
         vcl::EnumContext::Application eApplication (vcl::EnumContext::GetApplicationEnum(sApplicationName));
 
-        if (eApplication == vcl::EnumContext::Application_None
-            && !sApplicationName.equals(vcl::EnumContext::GetApplicationName(vcl::EnumContext::Application_None)))
+        if (eApplication == vcl::EnumContext::Application::NONE
+            && !sApplicationName.equals(vcl::EnumContext::GetApplicationName(vcl::EnumContext::Application::NONE)))
         {
             // Handle some special names: abbreviations that make
             // context descriptions more readable.
             if (sApplicationName == "Writer")
-                aApplications.push_back(vcl::EnumContext::Application_Writer);
+                aApplications.push_back(vcl::EnumContext::Application::Writer);
             else if (sApplicationName == "Calc")
-                aApplications.push_back(vcl::EnumContext::Application_Calc);
+                aApplications.push_back(vcl::EnumContext::Application::Calc);
             else if (sApplicationName == "Draw")
-                aApplications.push_back(vcl::EnumContext::Application_Draw);
+                aApplications.push_back(vcl::EnumContext::Application::Draw);
             else if (sApplicationName == "Impress")
-                aApplications.push_back(vcl::EnumContext::Application_Impress);
+                aApplications.push_back(vcl::EnumContext::Application::Impress);
             else if (sApplicationName == "Chart")
-                aApplications.push_back(vcl::EnumContext::Application_Chart);
+                aApplications.push_back(vcl::EnumContext::Application::Chart);
             else if (sApplicationName == "DrawImpress")
             {
                 // A special case among the special names:  it is
                 // common to use the same context descriptions for
                 // both Draw and Impress.  This special case helps to
                 // avoid duplication in the .xcu file.
-                aApplications.push_back(vcl::EnumContext::Application_Draw);
-                aApplications.push_back(vcl::EnumContext::Application_Impress);
+                aApplications.push_back(vcl::EnumContext::Application::Draw);
+                aApplications.push_back(vcl::EnumContext::Application::Impress);
             }
             else if (sApplicationName == "WriterVariants")
             {
                 // Another special case for all Writer variants.
-                aApplications.push_back(vcl::EnumContext::Application_Writer);
-                aApplications.push_back(vcl::EnumContext::Application_WriterGlobal);
-                aApplications.push_back(vcl::EnumContext::Application_WriterWeb);
-                aApplications.push_back(vcl::EnumContext::Application_WriterXML);
-                aApplications.push_back(vcl::EnumContext::Application_WriterForm);
-                aApplications.push_back(vcl::EnumContext::Application_WriterReport);
+                aApplications.push_back(vcl::EnumContext::Application::Writer);
+                aApplications.push_back(vcl::EnumContext::Application::WriterGlobal);
+                aApplications.push_back(vcl::EnumContext::Application::WriterWeb);
+                aApplications.push_back(vcl::EnumContext::Application::WriterXML);
+                aApplications.push_back(vcl::EnumContext::Application::WriterForm);
+                aApplications.push_back(vcl::EnumContext::Application::WriterReport);
             }
             else
             {
@@ -541,7 +541,7 @@ void ResourceManager::ReadContextList (
         std::vector<vcl::EnumContext::Application>::const_iterator iApplication;
         for (iApplication = aApplications.begin(); iApplication != aApplications.end(); ++iApplication)
         {
-            if (*iApplication != vcl::EnumContext::Application_None)
+            if (*iApplication != vcl::EnumContext::Application::NONE)
             {
                 rContextList.AddContextDescription(
                     Context(
