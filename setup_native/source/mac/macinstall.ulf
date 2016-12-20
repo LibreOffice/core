@@ -44,7 +44,7 @@ en-US = "Click Install to start the installation"
 en-US = "Installation might take a minute..."
 
 [IdentifyQText]
-en-US = "Installation failed, most likely your account does not have the necessary privileges."
+en-US = "Installation failed; most likely your account does not have the necessary privileges."
 
 [IdentifyQText2]
 en-US = "Do you want to identify as administrator and try again?"
