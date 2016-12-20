@@ -35,7 +35,7 @@
 #include <glosdoc.hxx>
 #include <gloslst.hxx>
 #include <workctrl.hxx>
-#include <workctrl.hrc>
+#include <ribbar.hrc>
 #include <cmdid.h>
 #include <helpid.h>
 #include <wrtsh.hxx>
@@ -181,6 +181,33 @@ static sal_uInt16 aNavigationInsertIds[ NAVI_ENTRIES ] =
     NID_TABLE_FORMULA_ERROR,
     NID_NEXT
 };
+
+static sal_uInt16 aNavigationImgIds[ NAVI_ENTRIES ] =
+{
+    // -- first line
+    RID_BMP_RIBBAR_TBL,
+    RID_BMP_RIBBAR_FRM,
+    RID_BMP_RIBBAR_GRF,
+    RID_BMP_RIBBAR_OLE,
+    RID_BMP_RIBBAR_PGE,
+    RID_BMP_RIBBAR_OUTL,
+    RID_BMP_RIBBAR_MARK,
+    RID_BMP_RIBBAR_DRW,
+    RID_BMP_RIBBAR_CTRL,
+    RID_BMP_RIBBAR_PREV,
+    // -- second line
+    RID_BMP_RIBBAR_REG,
+    RID_BMP_RIBBAR_BKM,
+    RID_BMP_RIBBAR_SEL,
+    RID_BMP_RIBBAR_FTN,
+    RID_BMP_RIBBAR_POSTIT,
+    RID_BMP_RIBBAR_REP,
+    RID_BMP_RIBBAR_ENTRY,
+    RID_BMP_RIBBAR_FORMULA,
+    RID_BMP_RIBBAR_ERROR,
+    RID_BMP_RIBBAR_NEXT
+};
+
 static const char* aNavigationHelpIds[ NAVI_ENTRIES ] =
 {
     // -- first line
@@ -209,8 +236,7 @@ static const char* aNavigationHelpIds[ NAVI_ENTRIES ] =
 
 SwScrollNaviPopup::SwScrollNaviPopup(sal_uInt16 nId, const Reference< XFrame >& rFrame, vcl::Window *pParent)
     : SfxPopupWindow(nId, pParent, "FloatingNavigation",
-        "modules/swriter/ui/floatingnavigation.ui", rFrame),
-    aIList(SW_RES(IL_VALUES))
+        "modules/swriter/ui/floatingnavigation.ui", rFrame)
 {
     m_pToolBox = VclPtr<SwScrollNaviToolBox>::Create(get<vcl::Window>("box"), this, 0);
     get(m_pInfoField, "label");
@@ -239,10 +265,12 @@ SwScrollNaviPopup::SwScrollNaviPopup(sal_uInt16 nId, const Reference< XFrame >& 
             else if (nNaviId == NID_NEXT)
                 sText = SW_RESSTR(STR_IMGBTN_PGE_DOWN);
         }
-        m_pToolBox->InsertItem(nNaviId, sText, nTbxBits);
-        m_pToolBox->SetHelpId( nNaviId, aNavigationHelpIds[i] );
+
+        m_pToolBox->InsertItem(nNaviId, Image(BitmapEx(SW_RES(aNavigationImgIds[i]))),
+                              sText, nTbxBits);
+        m_pToolBox->SetHelpId(nNaviId, aNavigationHelpIds[i]);
     }
-    ApplyImageList();
+
     m_pToolBox->InsertBreak(NID_COUNT/2);
 
     // these are global strings
@@ -270,24 +298,6 @@ void SwScrollNaviPopup::dispose()
     m_pToolBox.disposeAndClear();
     m_pInfoField.clear();
     SfxPopupWindow::dispose();
-}
-
-void SwScrollNaviPopup::DataChanged( const DataChangedEvent& rDCEvt )
-{
-    if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
-         (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
-            ApplyImageList();
-
-    Window::DataChanged( rDCEvt );
-}
-
-void SwScrollNaviPopup::ApplyImageList()
-{
-    ImageList& rImgLst = aIList;
-    for(sal_uInt16 nNaviId : aNavigationInsertIds)
-    {
-        m_pToolBox->SetItemImage(nNaviId, rImgLst.GetImage(nNaviId));
-    }
 }
 
 IMPL_LINK(SwScrollNaviPopup, SelectHdl, ToolBox*, pSet, void)

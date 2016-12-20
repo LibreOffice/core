@@ -122,7 +122,7 @@
 //      RC_INDEX_END                (RC_INDEX + 99)
 
 #define RC_RIBBAR_BEGIN             RC_RIBBAR
-#define RC_RIBBAR_END               (RC_RIBBAR_BEGIN + 79)
+#define RC_RIBBAR_END               (RC_RIBBAR_BEGIN + 99)
 
 // Global Resources
 #define RC_GLOBALS_BEGIN            RC_GLOBALS

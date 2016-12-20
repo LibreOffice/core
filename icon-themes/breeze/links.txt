@@ -1299,26 +1299,25 @@ sw/res/sf03.png cmd/sc_diagramarea.png
 sw/res/sf04.png cmd/sc_showsinglepage.png
 sw/res/sf05.png cmd/sc_defaultbullet.png
 
-sw/imglst/sr20000.png cmd/sc_downsearch.png
-sw/imglst/sr20001.png cmd/sc_upsearch.png
-sw/imglst/sr20002.png cmd/sc_inserttable.png
-sw/imglst/sr20003.png cmd/sc_insertframe.png
-sw/imglst/sr20004.png cmd/sc_showsinglepage.png
-sw/imglst/sr20005d.png cmd/sc_inserthyperlink.png
-sw/imglst/sr20005.png cmd/sc_editdoc.png
-sw/imglst/sr20007.png sw/res/nc20006.png
-sw/imglst/sr20008.png cmd/sc_insertbookmark.png
-sw/imglst/sr20009.png cmd/sc_toggleobjectbeziermode.png
-sw/imglst/sr20010.png cmd/sc_drawchart.png
-sw/imglst/sr20011.png sw/res/nc20000.png
-sw/imglst/sr20012.png cmd/sc_insertreferencefield.png
-sw/imglst/sr20013.png cmd/sc_insertfootnote.png
-sw/imglst/sr20014.png dbaccess/res/exwarning.png
-sw/imglst/sr20015.png cmd/sc_insertbookmark.png
-sw/imglst/sr20016.png cmd/sc_recsearch.png
-sw/imglst/sr20017.png cmd/sc_insertindexesentry.png
-sw/imglst/sr20018.png cmd/sc_inserttable.png
-sw/imglst/sr20019.png cmd/sc_remove.png
+sw/res/sr20000.png cmd/sc_downsearch.png
+sw/res/sr20001.png cmd/sc_upsearch.png
+sw/res/sr20002.png cmd/sc_inserttable.png
+sw/res/sr20003.png cmd/sc_insertframe.png
+sw/res/sr20004.png cmd/sc_showsinglepage.png
+sw/res/sr20005.png cmd/sc_editdoc.png
+sw/res/sr20007.png sw/res/nc20006.png
+sw/res/sr20008.png cmd/sc_insertbookmark.png
+sw/res/sr20009.png cmd/sc_toggleobjectbeziermode.png
+sw/res/sr20010.png cmd/sc_drawchart.png
+sw/res/sr20011.png sw/res/nc20000.png
+sw/res/sr20012.png cmd/sc_insertreferencefield.png
+sw/res/sr20013.png cmd/sc_insertfootnote.png
+sw/res/sr20014.png dbaccess/res/exwarning.png
+sw/res/sr20015.png cmd/sc_insertbookmark.png
+sw/res/sr20016.png cmd/sc_recsearch.png
+sw/res/sr20017.png cmd/sc_insertindexesentry.png
+sw/res/sr20018.png cmd/sc_inserttable.png
+sw/res/sr20019.png cmd/sc_remove.png
 
 sw/res/sx03.png cmd/sc_dbqueryedit.png
 

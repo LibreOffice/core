@@ -114,8 +114,6 @@
 #define SW_STR_READONLY             (RC_GLOBALS_BEGIN + 46)
 
 #define STR_READONLY_PATH           (RC_GLOBALS_BEGIN + 47)
-//free
-#define IL_VALUES                   (RC_GLOBALS_BEGIN + 49)
 
 // INFOBOX ------------------------------------------------------------
 

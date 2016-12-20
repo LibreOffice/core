@@ -19,38 +19,110 @@
 
 #include <svx/svxids.hrc>
 #include "globals.hrc"
-#include "workctrl.hrc"
+#include "ribbar.hrc"
 #include "helpid.h"
 #include "cmdid.h"
 
-ImageList IL_VALUES
+Bitmap RID_BMP_RIBBAR_NEXT
 {
-    Prefix = "sr";
-    IdList =
-    {
-        NID_NEXT ;
-        NID_PREV ;
-        NID_TBL ;
-        NID_FRM ;
-        NID_PGE ;
-        NID_DRW ;
-        NID_CTRL ;
-        NID_REG ;
-        NID_BKM ;
-        NID_GRF ;
-        NID_OLE ;
-        NID_OUTL ;
-        NID_SEL ;
-        NID_FTN ;
-        NID_MARK ;
-        NID_POSTIT ;
-        NID_SRCH_REP ;
-        NID_INDEX_ENTRY;
-        NID_TABLE_FORMULA;
-        NID_TABLE_FORMULA_ERROR;
-    };
-    IdCount = { 20 ; };
+    File = "sr20000.png";
 };
+
+Bitmap RID_BMP_RIBBAR_PREV
+{
+    File = "sr20001.png";
+};
+
+Bitmap RID_BMP_RIBBAR_TBL
+{
+    File = "sr20002.png";
+};
+
+Bitmap RID_BMP_RIBBAR_FRM
+{
+    File = "sr20003.png";
+};
+
+Bitmap RID_BMP_RIBBAR_PGE
+{
+    File = "sr20004.png";
+};
+
+Bitmap RID_BMP_RIBBAR_DRW
+{
+    File = "sr20005.png";
+};
+
+Bitmap RID_BMP_RIBBAR_CTRL
+{
+    File = "sr20006.png";
+};
+
+Bitmap RID_BMP_RIBBAR_REG
+{
+    File = "sr20007.png";
+};
+
+Bitmap RID_BMP_RIBBAR_BKM
+{
+    File = "sr20008.png";
+};
+
+Bitmap RID_BMP_RIBBAR_GRF
+{
+    File = "sr20009.png";
+};
+
+Bitmap RID_BMP_RIBBAR_OLE
+{
+    File = "sr20010.png";
+};
+
+Bitmap RID_BMP_RIBBAR_OUTL
+{
+    File = "sr20011.png";
+};
+
+Bitmap RID_BMP_RIBBAR_SEL
+{
+    File = "sr20012.png";
+};
+
+Bitmap RID_BMP_RIBBAR_FTN
+{
+    File = "sr20013.png";
+};
+
+Bitmap RID_BMP_RIBBAR_MARK
+{
+    File = "sr20014.png";
+};
+
+Bitmap RID_BMP_RIBBAR_POSTIT
+{
+    File = "sr20015.png";
+};
+
+Bitmap RID_BMP_RIBBAR_REP
+{
+    File = "sr20016.png";
+};
+
+Bitmap RID_BMP_RIBBAR_ENTRY
+{
+    File = "sr20017.png";
+};
+
+Bitmap RID_BMP_RIBBAR_FORMULA
+{
+    File = "sr20018.png";
+};
+
+Bitmap RID_BMP_RIBBAR_ERROR
+{
+    File = "sr20019.png";
+};
+
 String ST_TBL
 {
     Text [ en-US ] = "Table" ;

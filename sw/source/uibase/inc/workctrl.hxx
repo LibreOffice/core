@@ -90,15 +90,11 @@ class SwScrollNaviPopup : public SfxPopupWindow
 {
     VclPtr<SwScrollNaviToolBox> m_pToolBox;
     VclPtr<FixedText>           m_pInfoField;
-    ImageList       aIList;
 
     OUString        sQuickHelp[2 * NID_COUNT];
 
-    void            ApplyImageList();
-
 protected:
-        DECL_LINK(SelectHdl, ToolBox*, void);
-        virtual void        DataChanged( const DataChangedEvent& rDCEvt ) override;
+    DECL_LINK(SelectHdl, ToolBox*, void);
 
 public:
     SwScrollNaviPopup( sal_uInt16 nId, const css::uno::Reference< css::frame::XFrame >& rFrame, vcl::Window *pParent );
