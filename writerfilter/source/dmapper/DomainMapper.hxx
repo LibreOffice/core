@@ -108,6 +108,7 @@ public:
     css::uno::Reference<css::drawing::XShape> PopPendingShape();
 
     bool IsInHeaderFooter() const;
+    bool IsInTable() const;
     bool IsStyleSheetImport() const;
     /**
      @see DomainMapper_Impl::processDeferredCharacterProperties()

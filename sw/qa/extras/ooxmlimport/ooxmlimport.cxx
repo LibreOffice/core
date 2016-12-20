@@ -1274,6 +1274,12 @@ DECLARE_OOXMLIMPORT_TEST(testTdf82824, "tdf82824.docx")
     CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER, getProperty<text::TextContentAnchorType>(getShape(1), "AnchorType"));
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf96218, "tdf96218.docx")
+{
+    // Image had a bad position because layoutInCell attribute was not ignored
+    CPPUNIT_ASSERT(!getProperty<bool>(getShape(1), "IsFollowingTextFlow"));
+}
+
 // tests should only be added to ooxmlIMPORT *if* they fail round-tripping in ooxmlEXPORT
 
 CPPUNIT_PLUGIN_IMPLEMENT();
