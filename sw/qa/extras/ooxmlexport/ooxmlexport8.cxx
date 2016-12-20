@@ -2014,14 +2014,18 @@ DECLARE_OOXMLEXPORT_TEST(testTdf92157, "tdf92157.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf97417, "section_break_numbering.docx")
 {
+    uno::Reference<beans::XPropertySet> xProps(getParagraph(1), uno::UNO_QUERY_THROW);
+//    CPPUNIT_ASSERT_MESSAGE("1st page: first paragraph erroneous numbering",
+//        !xProps->getPropertyValue("NumberingRules").hasValue());
     // paragraph with numbering and section break was removed by writerfilter
     // but its numbering was copied to all following paragraphs
-    CPPUNIT_ASSERT_MESSAGE("first paragraph missing numbering",
-        getProperty<uno::Reference<container::XIndexAccess>>(getParagraph(1), "NumberingRules").is());
-    uno::Reference<beans::XPropertySet> const xProps(getParagraph(2), uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_MESSAGE("second paragraph erroneous numbering",
+    CPPUNIT_ASSERT_MESSAGE("2nd page: first paragraph missing numbering",
+        getProperty<uno::Reference<container::XIndexAccess>>(getParagraph(2), "NumberingRules").is());
+    xProps = uno::Reference<beans::XPropertySet>(getParagraph(3), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_MESSAGE("2nd page: second paragraph erroneous numbering",
         !xProps->getPropertyValue("NumberingRules").hasValue());
 
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf94043, "tdf94043.docx")
