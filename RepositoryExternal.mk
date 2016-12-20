@@ -1287,7 +1287,10 @@ endef
 
 define gb_LinkTarget__use_freetype
 $(call gb_LinkTarget_use_external,$(1),freetype_headers)
-$(call gb_LinkTarget_add_libs,$(1),-lfreetype)
+
+$(call gb_LinkTarget_add_libs,$(1),\
+    -L$(call gb_UnpackedTarball_get_dir,freetype)/instdir/lib -lfreetype \
+)
 
 endef
 
@@ -1319,7 +1322,9 @@ $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
 )
 
-$(call gb_LinkTarget_add_libs,$(1),-lfontconfig)
+$(call gb_LinkTarget_add_libs,$(1),\
+    -L$(call gb_UnpackedTarball_get_dir,fontconfig)/src/.libs -lfontconfig \
+)
 
 endef
 
