@@ -116,24 +116,34 @@ SidebarController::SidebarController (
 {
     // Decks and panel collections for this sidebar
     mpResourceManager = o3tl::make_unique<ResourceManager>();
+}
 
-    registerSidebarForFrame(this, mxFrame->getController());
+rtl::Reference<SidebarController> SidebarController::create(
+    SidebarDockingWindow* pParentWindow,
+    const css::uno::Reference<css::frame::XFrame>& rxFrame)
+{
+    rtl::Reference<SidebarController> instance(
+        new SidebarController(pParentWindow, rxFrame));
+
+    registerSidebarForFrame(instance.get(), rxFrame->getController());
     // Listen for window events.
-    mpParentWindow->AddEventListener(LINK(this, SidebarController, WindowEventHandler));
+    instance->mpParentWindow->AddEventListener(LINK(instance.get(), SidebarController, WindowEventHandler));
 
     // Listen for theme property changes.
     Theme::GetPropertySet()->addPropertyChangeListener(
         "",
-        static_cast<css::beans::XPropertyChangeListener*>(this));
+        static_cast<css::beans::XPropertyChangeListener*>(instance.get()));
 
     // Get the dispatch object as preparation to listen for changes of
     // the read-only state.
     const util::URL aURL (Tools::GetURL(gsReadOnlyCommandName));
-    mxReadOnlyModeDispatch = Tools::GetDispatch(mxFrame, aURL);
-    if (mxReadOnlyModeDispatch.is())
-        mxReadOnlyModeDispatch->addStatusListener(this, aURL);
+    instance->mxReadOnlyModeDispatch = Tools::GetDispatch(rxFrame, aURL);
+    if (instance->mxReadOnlyModeDispatch.is())
+        instance->mxReadOnlyModeDispatch->addStatusListener(instance.get(), aURL);
 
-    SwitchToDeck(gsDefaultDeckId);
+    instance->SwitchToDeck(gsDefaultDeckId);
+
+    return instance;
 }
 
 SidebarController::~SidebarController()

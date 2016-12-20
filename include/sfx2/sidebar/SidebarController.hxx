@@ -65,7 +65,7 @@ class SFX2_DLLPUBLIC SidebarController
       public SidebarControllerInterfaceBase
 {
 public:
-    SidebarController(
+    static rtl::Reference<SidebarController> create(
         SidebarDockingWindow* pParentWindow,
         const css::uno::Reference<css::frame::XFrame>& rxFrame);
     virtual ~SidebarController() override;
@@ -163,6 +163,9 @@ public:
     void FadeOut();
 
 private:
+    SidebarController(
+        SidebarDockingWindow* pParentWindow,
+        const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
     VclPtr<Deck> mpCurrentDeck;
     VclPtr<SidebarDockingWindow> mpParentWindow;

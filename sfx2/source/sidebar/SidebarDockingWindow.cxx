@@ -44,7 +44,7 @@ SidebarDockingWindow::SidebarDockingWindow(SfxBindings* pSfxBindings, SidebarChi
     {
         const SfxViewFrame* pViewFrame = pSfxBindings->GetDispatcher()->GetFrame();
         const SfxFrame& rFrame = pViewFrame->GetFrame();
-        mpSidebarController.set(new sfx2::sidebar::SidebarController(this, rFrame.GetFrameInterface()));
+        mpSidebarController.set(sfx2::sidebar::SidebarController::create(this, rFrame.GetFrameInterface()).get());
     }
 }
 
