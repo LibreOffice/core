@@ -11710,7 +11710,7 @@ AC_SUBST(CAIRO_LIBS)
 dnl ===================================================================
 dnl Check for system epoxy
 dnl ===================================================================
-libo_CHECK_SYSTEM_MODULE([epoxy], [EPOXY], [epoxy >= 1.3.1], ["-I${WORKDIR}/UnpackedTarball/epoxy/include"])
+libo_CHECK_SYSTEM_MODULE([epoxy], [EPOXY], [epoxy >= 1.2], ["-I${WORKDIR}/UnpackedTarball/epoxy/include"])
 if test "$with_system_epoxy" = "no"; then
     AC_CHECK_LIB(EGL, eglMakeCurrent, [:], AC_MSG_ERROR([libEGL required.]))
 fi
