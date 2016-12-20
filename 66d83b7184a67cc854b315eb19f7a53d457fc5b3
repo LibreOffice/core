@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a71b18c_c6fc3941",
+        "filename": "sw/source/core/text/guess.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-12-20T08:51:04Z",
+      "side": 1,
+      "message": "Please use 4 spaces for indentation instead of tabs.",
+      "revId": "66d83b7184a67cc854b315eb19f7a53d457fc5b3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
