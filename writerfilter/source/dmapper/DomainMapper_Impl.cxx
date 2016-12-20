@@ -1203,8 +1203,8 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap )
     }
 
     m_bParaChanged = false;
-    if( !IsInShape() && (!pParaContext || !pParaContext->IsFrameMode()) )
-    { // If the paragraph is in a frame, shape or header/footer, it's not a paragraph of the section itself.
+    if( !IsInHeaderFooter() && (!pParaContext || !pParaContext->IsFrameMode()) )
+    { // If the paragraph is in a frame or header/footer, it's not a paragraph of the section itself.
         SetIsFirstParagraphInSection(false);
         SetIsLastParagraphInSection(false);
     }
