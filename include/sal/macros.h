@@ -52,10 +52,6 @@
 #    define SAL_BOUND(x,l,h)        ((x) <= (l) ? (l) : ((x) >= (h) ? (h) : (x)))
 #endif
 
-#ifndef SAL_ABS
-#    define SAL_ABS(a)              (((a) < 0) ? (-(a)) : (a))
-#endif
-
 #ifndef SAL_STRINGIFY
 #   define SAL_STRINGIFY_ARG(x) #x
 #   define SAL_STRINGIFY(x) SAL_STRINGIFY_ARG(x)

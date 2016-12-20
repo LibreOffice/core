@@ -18,6 +18,7 @@
  */
 
 #include <rtl/crc.h>
+#include <cstdlib>
 #include <memory>
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
@@ -611,7 +612,7 @@ bool GDIMetaFile::Mirror( BmpMirrorFlags nMirrorFlags )
 
     if( nMirrorFlags & BmpMirrorFlags::Horizontal )
     {
-        nMoveX = SAL_ABS( aOldPrefSize.Width() ) - 1;
+        nMoveX = std::abs( aOldPrefSize.Width() ) - 1;
         fScaleX = -1.0;
     }
     else
@@ -622,7 +623,7 @@ bool GDIMetaFile::Mirror( BmpMirrorFlags nMirrorFlags )
 
     if( nMirrorFlags & BmpMirrorFlags::Vertical )
     {
-        nMoveY = SAL_ABS( aOldPrefSize.Height() ) - 1;
+        nMoveY = std::abs( aOldPrefSize.Height() ) - 1;
         fScaleY = -1.0;
     }
     else
