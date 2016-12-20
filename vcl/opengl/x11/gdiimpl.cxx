@@ -232,7 +232,7 @@ void X11OpenGLContext::resetCurrent()
 bool X11OpenGLContext::isCurrent()
 {
     OpenGLZone aZone;
-    return m_aGLWin.ctx && glXGetCurrentContext() == m_aGLWin.ctx &&
+    return g_bAnyCurrent && m_aGLWin.ctx && glXGetCurrentContext() == m_aGLWin.ctx &&
            glXGetCurrentDrawable() == m_aGLWin.win;
 }
 
