@@ -22,7 +22,7 @@
 #include "deployment.hrc"
 #include "unopkg_shared.h"
 #include "dp_identifier.hxx"
-#include "../../deployment/gui/dp_gui.hrc"
+#include "dp_gui.hrc"
 #include "lockfile.hxx"
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>

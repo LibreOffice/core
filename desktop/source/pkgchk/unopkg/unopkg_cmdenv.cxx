@@ -18,8 +18,8 @@
  */
 
 
-#include "../../deployment/gui/dp_gui.hrc"
-#include "../../deployment/gui/dp_gui_shared.hxx"
+#include "dp_gui.hrc"
+#include "dp_gui_shared.hxx"
 #include "unopkg_shared.h"
 #include <osl/thread.h>
 #include <tools/resmgr.hxx>
