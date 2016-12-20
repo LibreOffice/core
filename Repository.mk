@@ -795,7 +795,6 @@ $(eval $(call gb_Helper_register_packages, \
 	postprocess_registry \
 	python_zipcore \
 	readlicense_oo_readmes \
-	sc_res_xml \
 	sdext_pdfimport_pdf \
 	setup_native_misc \
 	share \
@@ -805,6 +804,10 @@ $(eval $(call gb_Helper_register_packages, \
 
 $(eval $(call gb_Helper_register_packages_for_install,impress,\
 	sd_xml \
+))
+
+$(eval $(call gb_Helper_register_packages_for_install,calc,\
+	sc_res_xml \
 ))
 
 $(eval $(call gb_Helper_register_packages_for_install,ure,\
