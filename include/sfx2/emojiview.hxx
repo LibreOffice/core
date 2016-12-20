@@ -64,7 +64,7 @@ public:
 
     void setInsertEmojiHdl (const Link<ThumbnailViewItem*, void> &rLink);
 
-    void AppendItem(const OUString &rTitle, const OUString &rCategory );
+    void AppendItem(const OUString &rTitle, const OUString &rCategory, const OUString &rName );
 
 protected:
     virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
