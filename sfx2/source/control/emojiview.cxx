@@ -103,7 +103,7 @@ void EmojiView::Populate()
         return;
     }
 
-    // TODO::populate view using the orcus json parser
+    // Populate view using the orcus json parser
     using node = orcus::json_document_tree::node;
 
     // default json config
@@ -126,7 +126,7 @@ void EmojiView::Populate()
         {
             // iterate each element to get the keys
             std::vector<orcus::pstring> aEmojiParams = value.keys();
-            OUString sTitle, sCategory;
+            OUString sTitle, sCategory, sName;
             bool bDuplicate = false;
 
             for (auto paramIter = aEmojiParams.begin(); paramIter != aEmojiParams.end(); ++paramIter)
@@ -143,18 +143,20 @@ void EmojiView::Populate()
                 {
                     sCategory = rtl::OStringToOUString(OString( prop.string_value().get(), prop.string_value().size() ), RTL_TEXTENCODING_UTF8);
                 }
+                else if(paramVal == "name")
+                {
+                    sName = rtl::OStringToOUString(OString( prop.string_value().get(), prop.string_value().size() ), RTL_TEXTENCODING_UTF8);
+                }
                 else if(paramVal == "duplicate")
                 {
                     bDuplicate = true;
                 }
             }
 
-            // TODO: Check whether the glyph is present in the font file
-            // If the glyph is present, Call EmojiView::AppendItem() to populate each template as it is parsed
             // Don't append if a duplicate emoji
             if(!bDuplicate)
             {
-                AppendItem(sTitle, sCategory);
+                AppendItem(sTitle, sCategory, sName);
             }
         }
     }
@@ -209,12 +211,13 @@ void EmojiView::setInsertEmojiHdl(const Link<ThumbnailViewItem*, void> &rLink)
     maInsertEmojiHdl = rLink;
 }
 
-void EmojiView::AppendItem(const OUString &rTitle, const OUString &rCategory)
+void EmojiView::AppendItem(const OUString &rTitle, const OUString &rCategory, const OUString &rName)
 {
     EmojiViewItem *pItem = new EmojiViewItem(*this, getNextItemId());
 
     pItem->maTitle = rTitle;
     pItem->setCategory(rCategory);
+    pItem->setHelpText(rName);
 
     ThumbnailView::AppendItem(pItem);
 
