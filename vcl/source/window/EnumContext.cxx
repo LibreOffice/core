@@ -19,6 +19,7 @@
 #include <vcl/EnumContext.hxx>
 
 #include <osl/diagnose.h>
+#include <o3tl/enumarray.hxx>
 
 #include <map>
 
@@ -29,7 +30,7 @@ namespace {
 typedef ::std::map<rtl::OUString,EnumContext::Application> ApplicationMap;
 
 static ApplicationMap maApplicationMap;
-static ::std::vector<rtl::OUString> maApplicationVector;
+static o3tl::enumarray<EnumContext::Application, rtl::OUString> maApplicationVector;
 
 typedef ::std::map<rtl::OUString,EnumContext::Context> ContextMap;
 
@@ -42,7 +43,7 @@ const sal_Int32 EnumContext::NoMatch = 4;
 const sal_Int32 EnumContext::OptimalMatch = 0;  // Neither application nor context name is "any".
 
 EnumContext::EnumContext()
-    : meApplication(Application_None),
+    : meApplication(Application::NONE),
       meContext(Context_Unknown)
 {
 }
@@ -72,17 +73,17 @@ EnumContext::Application EnumContext::GetApplication_DI() const
 {
      switch (meApplication)
      {
-         case Application_Draw:
-         case Application_Impress:
-            return Application_DrawImpress;
+         case Application::Draw:
+         case Application::Impress:
+            return Application::DrawImpress;
 
-         case Application_Writer:
-         case Application_WriterGlobal:
-         case Application_WriterWeb:
-         case Application_WriterXML:
-         case Application_WriterForm:
-         case Application_WriterReport:
-             return Application_WriterVariants;
+         case Application::Writer:
+         case Application::WriterGlobal:
+         case Application::WriterWeb:
+         case Application::WriterXML:
+         case Application::WriterForm:
+         case Application::WriterReport:
+             return Application::WriterVariants;
 
          default:
              return meApplication;
@@ -104,9 +105,7 @@ bool EnumContext::operator!= (const EnumContext& rOther)
 void EnumContext::AddEntry (const ::rtl::OUString& rsName, const Application eApplication)
 {
     maApplicationMap[rsName] = eApplication;
-    OSL_ASSERT(eApplication<=LastApplicationEnum);
-    if (maApplicationVector.size() <= size_t(eApplication))
-        maApplicationVector.resize(eApplication+1);
+    OSL_ASSERT(eApplication<=Application::LAST);
     maApplicationVector[eApplication]=rsName;
 }
 
@@ -114,20 +113,19 @@ void EnumContext::ProvideApplicationContainers()
 {
     if (maApplicationMap.empty())
     {
-        maApplicationVector.resize(static_cast<size_t>(EnumContext::LastApplicationEnum)+1);
-        AddEntry("com.sun.star.text.TextDocument", EnumContext::Application_Writer);
-        AddEntry("com.sun.star.text.GlobalDocument", EnumContext::Application_WriterGlobal);
-        AddEntry("com.sun.star.text.WebDocument", EnumContext::Application_WriterWeb);
-        AddEntry("com.sun.star.xforms.XMLFormDocument", EnumContext::Application_WriterXML);
-        AddEntry("com.sun.star.sdb.FormDesign", EnumContext::Application_WriterForm);
-        AddEntry("com.sun.star.sdb.TextReportDesign", EnumContext::Application_WriterReport);
-        AddEntry("com.sun.star.sheet.SpreadsheetDocument", EnumContext::Application_Calc);
-        AddEntry("com.sun.star.chart2.ChartDocument", EnumContext::Application_Chart);
-        AddEntry("com.sun.star.drawing.DrawingDocument", EnumContext::Application_Draw);
-        AddEntry("com.sun.star.presentation.PresentationDocument", EnumContext::Application_Impress);
+        AddEntry("com.sun.star.text.TextDocument", EnumContext::Application::Writer);
+        AddEntry("com.sun.star.text.GlobalDocument", EnumContext::Application::WriterGlobal);
+        AddEntry("com.sun.star.text.WebDocument", EnumContext::Application::WriterWeb);
+        AddEntry("com.sun.star.xforms.XMLFormDocument", EnumContext::Application::WriterXML);
+        AddEntry("com.sun.star.sdb.FormDesign", EnumContext::Application::WriterForm);
+        AddEntry("com.sun.star.sdb.TextReportDesign", EnumContext::Application::WriterReport);
+        AddEntry("com.sun.star.sheet.SpreadsheetDocument", EnumContext::Application::Calc);
+        AddEntry("com.sun.star.chart2.ChartDocument", EnumContext::Application::Chart);
+        AddEntry("com.sun.star.drawing.DrawingDocument", EnumContext::Application::Draw);
+        AddEntry("com.sun.star.presentation.PresentationDocument", EnumContext::Application::Impress);
 
-        AddEntry("any", EnumContext::Application_Any);
-        AddEntry("none", EnumContext::Application_None);
+        AddEntry("any", EnumContext::Application::Any);
+        AddEntry("none", EnumContext::Application::NONE);
     }
 }
 
@@ -140,27 +138,22 @@ EnumContext::Application EnumContext::GetApplicationEnum (const ::rtl::OUString&
     if (iApplication != maApplicationMap.end())
         return iApplication->second;
     else
-        return EnumContext::Application_None;
+        return EnumContext::Application::NONE;
 }
 
 const ::rtl::OUString& EnumContext::GetApplicationName (const Application eApplication)
 {
     ProvideApplicationContainers();
-
-    const sal_Int32 nIndex (eApplication);
-    if (nIndex<0 || nIndex>= LastApplicationEnum)
-        return maApplicationVector[Application_None];
-    else
-        return maApplicationVector[nIndex];
+    return maApplicationVector[eApplication];
 }
 
-void EnumContext::AddEntry (const ::rtl::OUString& rsName, const Context eApplication)
+void EnumContext::AddEntry (const ::rtl::OUString& rsName, const Context eContext)
 {
-    maContextMap[rsName] = eApplication;
-    OSL_ASSERT(eApplication<=LastContextEnum);
-    if (maContextVector.size() <= size_t(eApplication))
-        maContextVector.resize(eApplication+1);
-    maContextVector[eApplication] = rsName;
+    maContextMap[rsName] = eContext;
+    OSL_ASSERT(eContext<=LastContextEnum);
+    if (maContextVector.size() <= size_t(eContext))
+        maContextVector.resize(eContext+1);
+    maContextVector[eContext] = rsName;
 }
 
 void EnumContext::ProvideContextContainers()

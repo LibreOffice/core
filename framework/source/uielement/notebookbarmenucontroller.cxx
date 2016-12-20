@@ -90,13 +90,13 @@ void NotebookbarMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
     OUStringBuffer aPath("org.openoffice.Office.UI.Notebookbar/Applications/");
     switch ( eApp )
     {
-        case vcl::EnumContext::Application::Application_Writer:
+        case vcl::EnumContext::Application::Writer:
             aPath.append("Writer");
             break;
-        case vcl::EnumContext::Application::Application_Calc:
+        case vcl::EnumContext::Application::Calc:
             aPath.append("Calc");
             break;
-        case vcl::EnumContext::Application::Application_Impress:
+        case vcl::EnumContext::Application::Impress:
             aPath.append("Impress");
             break;
         default:
@@ -250,15 +250,15 @@ void SAL_CALL NotebookbarMenuController::itemActivated( const css::awt::MenuEven
     OUStringBuffer aPath("org.openoffice.Office.UI.ToolbarMode/Applications/");
     switch ( eApp )
     {
-        case vcl::EnumContext::Application::Application_Writer:
+        case vcl::EnumContext::Application::Writer:
             aPath.append("Writer");
             aActive = officecfg::Office::UI::Notebookbar::ActiveWriter::get( m_xContext );
             break;
-        case vcl::EnumContext::Application::Application_Calc:
+        case vcl::EnumContext::Application::Calc:
             aPath.append("Calc");
             aActive = officecfg::Office::UI::Notebookbar::ActiveCalc::get( m_xContext );
             break;
-        case vcl::EnumContext::Application::Application_Impress:
+        case vcl::EnumContext::Application::Impress:
             aPath.append("Impress");
             aActive = officecfg::Office::UI::Notebookbar::ActiveImpress::get( m_xContext );
             break;

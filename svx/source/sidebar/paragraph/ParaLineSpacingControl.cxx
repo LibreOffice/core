@@ -213,14 +213,14 @@ void ParaLineSpacingControl::Initialize()
     {
         switch (currentContext.GetCombinedContext_DI())
         {
-        case CombinedEnumContext(Application_DrawImpress, Context_Table):
-        case CombinedEnumContext(Application_DrawImpress, Context_DrawText):
-        case CombinedEnumContext(Application_DrawImpress, Context_Draw):
-        case CombinedEnumContext(Application_DrawImpress, Context_TextObject):
-        case CombinedEnumContext(Application_DrawImpress, Context_Graphic):
-        case CombinedEnumContext(Application_Calc, Context_DrawText):
-        case CombinedEnumContext(Application_WriterVariants, Context_DrawText):
-        case CombinedEnumContext(Application_WriterVariants, Context_Annotation):
+        case CombinedEnumContext(Application::DrawImpress, Context_Table):
+        case CombinedEnumContext(Application::DrawImpress, Context_DrawText):
+        case CombinedEnumContext(Application::DrawImpress, Context_Draw):
+        case CombinedEnumContext(Application::DrawImpress, Context_TextObject):
+        case CombinedEnumContext(Application::DrawImpress, Context_Graphic):
+        case CombinedEnumContext(Application::Calc, Context_DrawText):
+        case CombinedEnumContext(Application::WriterVariants, Context_DrawText):
+        case CombinedEnumContext(Application::WriterVariants, Context_Annotation):
             {
                 mpLineDist->RemoveEntry(LLINESPACE_FIX);
             }
@@ -230,9 +230,9 @@ void ParaLineSpacingControl::Initialize()
     {
         switch (currentContext.GetCombinedContext_DI())
         {
-            case CombinedEnumContext(Application_WriterVariants, Context_Default):
-            case CombinedEnumContext(Application_WriterVariants, Context_Text):
-            case CombinedEnumContext(Application_WriterVariants, Context_Table):
+            case CombinedEnumContext(Application::WriterVariants, Context_Default):
+            case CombinedEnumContext(Application::WriterVariants, Context_Text):
+            case CombinedEnumContext(Application::WriterVariants, Context_Table):
             {
                 mpLineDist->InsertEntry(OUString("Fixed"), LLINESPACE_FIX);
             }

@@ -76,7 +76,7 @@ void ContextChangeEventMultiplexer::NotifyContextChange (
         // Ignore it.
     }
     return vcl::EnumContext::GetApplicationName(
-        vcl::EnumContext::Application_None);
+        vcl::EnumContext::Application::NONE);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

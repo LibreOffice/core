@@ -91,16 +91,16 @@ void ToolbarModeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
     OUStringBuffer aPath("org.openoffice.Office.UI.ToolbarMode/Applications/");
     switch ( eApp )
     {
-        case vcl::EnumContext::Application::Application_Writer:
+        case vcl::EnumContext::Application::Writer:
             aPath.append("Writer");
             break;
-        case vcl::EnumContext::Application::Application_Calc:
+        case vcl::EnumContext::Application::Calc:
             aPath.append("Calc");
             break;
-        case vcl::EnumContext::Application::Application_Impress:
+        case vcl::EnumContext::Application::Impress:
             aPath.append("Impress");
             break;
-        case vcl::EnumContext::Application::Application_Draw:
+        case vcl::EnumContext::Application::Draw:
             aPath.append("Draw");
             break;
         default:
@@ -253,16 +253,16 @@ void SAL_CALL ToolbarModeMenuController::itemActivated( const css::awt::MenuEven
     OUStringBuffer aPath("org.openoffice.Office.UI.ToolbarMode/Applications/");
     switch ( eApp )
     {
-        case vcl::EnumContext::Application::Application_Writer:
+        case vcl::EnumContext::Application::Writer:
             aPath.append("Writer");
             break;
-        case vcl::EnumContext::Application::Application_Calc:
+        case vcl::EnumContext::Application::Calc:
             aPath.append("Calc");
             break;
-        case vcl::EnumContext::Application::Application_Impress:
+        case vcl::EnumContext::Application::Impress:
             aPath.append("Impress");
             break;
-        case vcl::EnumContext::Application::Application_Draw:
+        case vcl::EnumContext::Application::Draw:
             aPath.append("Draw");
             break;
         default:

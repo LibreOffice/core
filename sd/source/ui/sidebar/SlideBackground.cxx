@@ -111,7 +111,7 @@ SlideBackground::SlideBackground(
     mbEditModeChangePending(false),
     mxFrame(rxFrame),
     maContext(),
-    maApplication(vcl::EnumContext::Application_None),
+    maApplication(vcl::EnumContext::Application::NONE),
     mbTitle(false),
     mpBindings(pBindings)
 {
@@ -138,7 +138,7 @@ SlideBackground::~SlideBackground()
 
 bool SlideBackground::IsImpress()
 {
-    return ( maApplication == vcl::EnumContext::Application_Impress );
+    return ( maApplication == vcl::EnumContext::Application::Impress );
 }
 
 void SlideBackground::Initialize()
@@ -391,18 +391,18 @@ IMPL_LINK(SlideBackground, EventMultiplexerListener,
         {
             if(!mbTitle)
             {
-                vcl::EnumContext aDrawOtherContext(vcl::EnumContext::Application_Draw,
+                vcl::EnumContext aDrawOtherContext(vcl::EnumContext::Application::Draw,
                                               vcl::EnumContext::Context_DrawPage);
-                vcl::EnumContext aDrawMasterContext(vcl::EnumContext::Application_Draw,
+                vcl::EnumContext aDrawMasterContext(vcl::EnumContext::Application::Draw,
                                               vcl::EnumContext::Context_MasterPage);
-                vcl::EnumContext aImpressOtherContext(vcl::EnumContext::Application_Impress,
+                vcl::EnumContext aImpressOtherContext(vcl::EnumContext::Application::Impress,
                                                  vcl::EnumContext::Context_DrawPage);
-                vcl::EnumContext aImpressMasterContext(vcl::EnumContext::Application_Impress,
+                vcl::EnumContext aImpressMasterContext(vcl::EnumContext::Application::Impress,
                                                        vcl::EnumContext::Context_MasterPage);
                 if(maContext == aDrawOtherContext || maContext == aDrawMasterContext)
                 {
                     mpMasterLabel->SetText(SD_RESSTR(STR_MASTERPAGE_NAME));
-                    maApplication = vcl::EnumContext::Application_Draw;
+                    maApplication = vcl::EnumContext::Application::Draw;
                     mpCloseMaster->Hide();
                     mpEditMaster->Hide();
                     if( maContext == aDrawMasterContext)
@@ -413,7 +413,7 @@ IMPL_LINK(SlideBackground, EventMultiplexerListener,
                 else if ( maContext == aImpressOtherContext || maContext == aImpressMasterContext )
                 {
                     mpMasterLabel->SetText(SD_RESSTR(STR_MASTERSLIDE_NAME));
-                    maApplication = vcl::EnumContext::Application_Impress;
+                    maApplication = vcl::EnumContext::Application::Impress;
                     mpCloseMaster->Hide();
                     mpEditMaster->Show();
                     if( maContext == aImpressMasterContext )
