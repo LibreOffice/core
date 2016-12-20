@@ -205,8 +205,6 @@ static void ChildStatusProc(void *pData)
                 }
             }
 
-            SAL_INFO("sal.osl", "ChildStatusProc : starting " << data.m_pszArgs[0]);
-
             /* Connect std IO to pipe ends */
 
             /* Write end of stdInput not used in child process */
