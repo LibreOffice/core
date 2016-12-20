@@ -216,6 +216,7 @@ public:
     void testLandscape();
     void testTdf95699();
     void testTdf104425();
+    void testTdf104814();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -328,6 +329,7 @@ public:
     CPPUNIT_TEST(testLandscape);
     CPPUNIT_TEST(testTdf95699);
     CPPUNIT_TEST(testTdf104425);
+    CPPUNIT_TEST(testTdf104814);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -4082,6 +4084,18 @@ void SwUiWriterTest::testTdf104425()
     sal_Int32 nHeight3 = getXPath(pXmlDoc, "//page[3]/body/tab/row/infos/bounds", "height").toInt32();
     double fSumHeight_mm = (nHeight1 + nHeight2 + nHeight3) * 25.4 / 1440.0;
     CPPUNIT_ASSERT_DOUBLES_EQUAL(700.0, fSumHeight_mm, 0.05);
+}
+
+// accepting change tracking gets stuck on change
+void SwUiWriterTest::testTdf104814()
+{
+    SwDoc* const pDoc1(createDoc("tdf104814.docx"));
+
+    SwEditShell* const pEditShell(pDoc1->GetEditShell());
+
+    // accept all redlines
+    while(pEditShell->GetRedlineCount())
+        pEditShell->AcceptRedline(0);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
