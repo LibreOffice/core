@@ -65,8 +65,7 @@ SidebarPanelBase::SidebarPanelBase (
         css::uno::Reference<css::ui::XContextChangeEventMultiplexer> xMultiplexer (
             css::ui::ContextChangeEventMultiplexer::get(
                 ::comphelper::getProcessComponentContext()));
-        if (xMultiplexer.is())
-            xMultiplexer->addContextChangeEventListener(this, mxFrame->getController());
+        xMultiplexer->addContextChangeEventListener(this, mxFrame->getController());
     }
     if (mpControl != nullptr)
     {
@@ -89,8 +88,7 @@ void SAL_CALL SidebarPanelBase::disposing()
         css::uno::Reference<css::ui::XContextChangeEventMultiplexer> xMultiplexer (
             css::ui::ContextChangeEventMultiplexer::get(
                 ::comphelper::getProcessComponentContext()));
-        if (xMultiplexer.is())
-            xMultiplexer->removeAllContextChangeEventListeners(this);
+        xMultiplexer->removeAllContextChangeEventListeners(this);
         mxFrame = nullptr;
     }
 }

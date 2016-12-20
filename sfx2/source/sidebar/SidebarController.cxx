@@ -164,10 +164,9 @@ void SidebarController::registerSidebarForFrame(SidebarController* pController, 
     css::uno::Reference<css::ui::XContextChangeEventMultiplexer> xMultiplexer (
         css::ui::ContextChangeEventMultiplexer::get(
             ::comphelper::getProcessComponentContext()));
-    if (xMultiplexer.is())
-        xMultiplexer->addContextChangeEventListener(
-            static_cast<css::ui::XContextChangeEventListener*>(pController),
-            xController);
+    xMultiplexer->addContextChangeEventListener(
+        static_cast<css::ui::XContextChangeEventListener*>(pController),
+        xController);
 }
 
 void SidebarController::unregisterSidebarForFrame(SidebarController* pController, const css::uno::Reference<css::frame::XController>& xController)
@@ -176,10 +175,9 @@ void SidebarController::unregisterSidebarForFrame(SidebarController* pController
     css::uno::Reference<css::ui::XContextChangeEventMultiplexer> xMultiplexer (
         css::ui::ContextChangeEventMultiplexer::get(
             ::comphelper::getProcessComponentContext()));
-    if (xMultiplexer.is())
-        xMultiplexer->removeContextChangeEventListener(
-            static_cast<css::ui::XContextChangeEventListener*>(pController),
-            xController);
+    xMultiplexer->removeContextChangeEventListener(
+        static_cast<css::ui::XContextChangeEventListener*>(pController),
+        xController);
 }
 
 void SidebarController::disposeDecks()

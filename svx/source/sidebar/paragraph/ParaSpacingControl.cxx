@@ -113,7 +113,7 @@ void ParaLRSpacingControl::StateChanged(sal_uInt16 nSID, SfxItemState eState,
         m_xMultiplexer = css::ui::ContextChangeEventMultiplexer::get(
                                     ::comphelper::getProcessComponentContext());
 
-        if(m_xFrame.is() && m_xMultiplexer.is())
+        if(m_xFrame.is())
             m_xMultiplexer->addContextChangeEventListener(this, m_xFrame->getController());
     }
 
