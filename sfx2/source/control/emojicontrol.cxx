@@ -100,6 +100,7 @@ SfxEmojiControl::SfxEmojiControl(sal_uInt16 nId, const css::uno::Reference< css:
 
     mpEmojiView->setInsertEmojiHdl(LINK(this, SfxEmojiControl, InsertHdl));
     mpEmojiView->Show();
+    mpEmojiView->ShowTooltips(true);
 
     mpTabControl->SetActivatePageHdl(LINK(this, SfxEmojiControl, ActivatePageHdl));
 }
