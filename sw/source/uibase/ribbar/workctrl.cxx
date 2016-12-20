@@ -337,12 +337,12 @@ void SwScrollNaviToolBox::MouseButtonUp( const MouseEvent& rMEvt )
 
 void  SwScrollNaviToolBox::RequestHelp( const HelpEvent& rHEvt )
 {
-    SetItemText(NID_NEXT, SwScrollNaviPopup::GetQuickHelpText(true));
-    SetItemText(NID_PREV, SwScrollNaviPopup::GetQuickHelpText(false));
+    SetItemText(NID_NEXT, SwScrollNaviPopup::GetToolTip(true));
+    SetItemText(NID_PREV, SwScrollNaviPopup::GetToolTip(false));
     ToolBox::RequestHelp( rHEvt );
 }
 
-OUString SwScrollNaviPopup::GetQuickHelpText(bool bNext)
+OUString SwScrollNaviPopup::GetToolTip(bool bNext)
 {
     sal_uInt16 nResId = STR_IMGBTN_START;
     nResId += SwView::GetMoveType() - NID_START;

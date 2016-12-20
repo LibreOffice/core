@@ -96,8 +96,6 @@ class SwScrollNaviPopup : public SfxPopupWindow
 
     void            ApplyImageList();
 
-    using Window::GetQuickHelpText;
-
 protected:
         DECL_LINK(SelectHdl, ToolBox*, void);
         virtual void        DataChanged( const DataChangedEvent& rDCEvt ) override;
@@ -107,7 +105,7 @@ public:
     virtual ~SwScrollNaviPopup() override;
     virtual void dispose() override;
 
-    static OUString         GetQuickHelpText(bool bNext);
+    static OUString     GetToolTip(bool bNext);
 
     void                GrabFocus() { m_pToolBox->GrabFocus(); }
 };

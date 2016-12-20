@@ -441,9 +441,9 @@ void SwNavHelpToolBox::RequestHelp(const HelpEvent& rHEvt)
     const sal_uInt16 nItemId = GetItemId(ScreenToOutputPixel(rHEvt.GetMousePosPixel()));
     const OUString sCommand(GetItemCommand(nItemId));
     if (sCommand == "back")
-        SetQuickHelpText(nItemId, SwScrollNaviPopup::GetQuickHelpText(false));
+        SetQuickHelpText(nItemId, SwScrollNaviPopup::GetToolTip(false));
     else if (sCommand == "forward")
-        SetQuickHelpText(nItemId, SwScrollNaviPopup::GetQuickHelpText(true));
+        SetQuickHelpText(nItemId, SwScrollNaviPopup::GetToolTip(true));
     ToolBox::RequestHelp(rHEvt);
 }
 
