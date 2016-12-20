@@ -12,6 +12,18 @@
 # build path
 export BUILD_PATH=$PWD
 
+if [ $# -gt 0 ]
+then
+ for i in "$@"
+ do
+  case $i in
+--only-rpm) ONLY_RPM=1;;
+--only-deb) ONLY_DEB=1;;
+*) echo "Usage: pack-debug [--only-rpm | --only-deb]" && exit 1;;
+  esac
+ done
+fi
+
 # set install dirname and product version
 if [ ! -f config.log ]; then
     echo "config.log not found. Run this script from build root."
@@ -308,12 +320,12 @@ cd $BUILD_PATH
 }
 
 # start deb re-build
-test "$(find workdir/installation/CollaboraOffice/deb/listfile -name '*.lst')" != "" && repack_deb || \
-	echo 'Missing EPM lst files. Skip DEB debug package generation.'
+test -z "$ONLY_RPM" -a "$(find workdir/installation/CollaboraOffice/deb/listfile -name '*.lst')" != "" && repack_deb || \
+	echo 'Skip DEB debug package generation (--only-rpm or missing EPM lst files).'
 
 # start rpm re-build
-test "$(find workdir -name '*spec.log')" != "" && repack_rpm || \
-	echo 'Missing RPM spec files. Skip RPM debug package generation.'
+test -z "$ONLY_DEB" -a "$(find workdir -name '*spec.log')" != "" && repack_rpm || \
+	echo 'Skip RPM debug package generation (--only-deb or missing RPM spec files).'
 
 
 
