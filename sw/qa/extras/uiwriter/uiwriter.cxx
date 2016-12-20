@@ -203,6 +203,7 @@ public:
     void testTdf95699();
     void testTdf104440();
     void testTdf104425();
+    void testTdf104814();
     void testTdf105417();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
@@ -306,6 +307,7 @@ public:
     CPPUNIT_TEST(testTdf95699);
     CPPUNIT_TEST(testTdf104440);
     CPPUNIT_TEST(testTdf104425);
+    CPPUNIT_TEST(testTdf104814);
     CPPUNIT_TEST(testTdf105417);
     CPPUNIT_TEST_SUITE_END();
 
@@ -3541,6 +3543,18 @@ void SwUiWriterTest::testTdf105417()
     // This never returned, it kept trying to hyphenate the last word
     // (greenbacks) again and again.
     aWrap.SpellDocument();
+}
+
+// accepting change tracking gets stuck on change
+void SwUiWriterTest::testTdf104814()
+{
+    SwDoc* const pDoc1(createDoc("tdf104814.docx"));
+
+    SwEditShell* const pEditShell(pDoc1->GetEditShell());
+
+    // accept all redlines
+    while(pEditShell->GetRedlineCount())
+        pEditShell->AcceptRedline(0);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);

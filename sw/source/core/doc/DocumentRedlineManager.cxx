@@ -274,6 +274,10 @@ namespace
             rArr.DeleteAndDestroy( rPos-- );
             break;
 
+        case nsRedlineType_t::REDLINE_PARAGRAPH_FORMAT:
+            rArr.DeleteAndDestroy( rPos-- );
+            break;
+
         default:
             bRet = false;
         }
