@@ -35,6 +35,7 @@
 #include <vcl/msgbox.hxx>
 #include <globals.hrc>
 #include <config.hrc>
+#include <dbui.hrc>
 #include <helpid.h>
 
 using namespace ::com::sun::star;
@@ -226,6 +227,8 @@ IMPL_LINK_NOARG(SwMailConfigPage, TestHdl, Button*, void)
 
 SwTestAccountSettingsDialog::SwTestAccountSettingsDialog(SwMailConfigPage* pParent)
     : SfxModalDialog(pParent, "TestMailSettings", "modules/swriter/ui/testmailsettings.ui")
+    , m_aCompletedImg(BitmapEx(SW_RES(RID_BMP_FORMULA_APPLY)))
+    , m_aFailedImg(BitmapEx(SW_RES(RID_BMP_FORMULA_CANCEL)))
     , m_pParent(pParent)
     , m_bStop(false)
 {
@@ -243,10 +246,6 @@ SwTestAccountSettingsDialog::SwTestAccountSettingsDialog(SwMailConfigPage* pPare
     get(m_pResult2, "result2");
     m_sCompleted = m_pResult1->GetText();
     m_sFailed = m_pResult2->GetText();
-
-    SfxImageManager* pManager = SfxImageManager::GetImageManager(*SW_MOD());
-    m_aFailedImg = pManager->GetImage(FN_FORMULA_CANCEL);
-    m_aCompletedImg = pManager->GetImage(FN_FORMULA_APPLY);
 
     m_pStopPB->SetClickHdl(LINK(this, SwTestAccountSettingsDialog, StopHdl));
 

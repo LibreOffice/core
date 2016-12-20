@@ -82,9 +82,9 @@
 #define ST_FINISH               (RC_DBUI_BEGIN + 57)
 #define ST_ADDRESSLIST          (RC_DBUI_BEGIN + 58)
 #define ST_EXCLUDE              (RC_DBUI_BEGIN + 59)
-
-// ImageList
-#define ILIST                   (RC_DBUI_BEGIN + 62)
+#define RID_BMP_FORMULA_CALC    (RC_DBUI_BEGIN + 60)
+#define RID_BMP_FORMULA_APPLY   (RC_DBUI_BEGIN + 61)
+#define RID_BMP_FORMULA_CANCEL  (RC_DBUI_BEGIN + 62)
 
 // Elements -----------------------------------------------------------------
 #define MM_PART_TITLE                   0

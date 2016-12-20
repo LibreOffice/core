@@ -260,7 +260,6 @@ SwSendMailDialog::SwSendMailDialog(vcl::Window *pParent, SwMailMergeConfigItem& 
     m_sFailed(      SW_RES(ST_FAILED     )),
     m_bCancel(false),
     m_bDesctructionEnabled(false),
-    m_aImageList( SW_RES( ILIST ) ),
     m_pImpl(new SwSendMailDialog_Impl),
     m_pConfigItem(&rConfigItem),
     m_nSendCount(0),
@@ -459,7 +458,7 @@ void  SwSendMailDialog::IterateMails()
     {
         if(!SwMailMergeHelper::CheckMailAddress( pCurrentMailDescriptor->sEMail ))
         {
-            Image aInsertImg = m_aImageList.GetImage( FN_FORMULA_CANCEL );
+            Image aInsertImg(BitmapEx(SW_RES(RID_BMP_FORMULA_CANCEL)));
 
             OUString sMessage = m_sSendingTo;
             OUString sTmp(pCurrentMailDescriptor->sEMail);
@@ -555,7 +554,7 @@ void SwSendMailDialog::DocumentSent( uno::Reference< mail::XMailMessage> const &
         Application::PostUserEvent( LINK( this, SwSendMailDialog,
                                           StopSendMails ), this, true );
     }
-    Image aInsertImg = m_aImageList.GetImage( bResult ? FN_FORMULA_APPLY : FN_FORMULA_CANCEL );
+    Image aInsertImg(BitmapEx(SW_RES(bResult ? RID_BMP_FORMULA_APPLY : RID_BMP_FORMULA_CANCEL)));
 
     OUString sMessage = m_sSendingTo;
     OUString sTmp(xMessage->getRecipients()[0]);

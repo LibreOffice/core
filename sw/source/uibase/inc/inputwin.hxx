@@ -83,8 +83,6 @@ public:
     virtual         ~SwInputWindow() override;
     virtual void    dispose() override;
 
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
-
     void            ShowWin();
 
     DECL_LINK( SelTableCellsNotify, SwWrtShell&, void );

@@ -40,33 +40,6 @@ String STR_PAGE_COUNT_MACRO
     Text [ en-US ] = "Changing the page count" ;
 };
 
- // Image-list ----------------------------------------------------------------
- // Don't use this image list for normal toolbar images. We have now our commandimagelist
- // folder in icon-themes/(name of theme)/cmd. This list is now only used for special toolboxes that are
- // used in floating windows.
-
-#define IMAGELIST_AND_COUNT             \
-    IdList = {                          \
-        FN_FORMULA_CALC                 ;\
-        FN_FORMULA_CANCEL               ;\
-        FN_FORMULA_APPLY                ;\
-        };                              \
-    IdCount = {                         \
-        3;                              \
-    };
-
-ImageList RID_DEFAULTIMAGELIST_SC
-{
-    Prefix = "sc";
-    IMAGELIST_AND_COUNT
-};
-
-ImageList RID_DEFAULTIMAGELIST_LC
-{
-    Prefix = "lc";
-    IMAGELIST_AND_COUNT
-};
-
 String STR_PARAGRAPHSTYLEFAMILY
 {
     Text [ en-US ] = "Paragraph Styles" ;

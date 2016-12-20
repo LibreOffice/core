@@ -51,6 +51,7 @@
 #include "swundo.hxx"
 #include "ribbar.hrc"
 #include "inputwin.hrc"
+#include "dbui.hrc"
 
 #include <IDocumentContentOperations.hxx>
 
@@ -78,13 +79,11 @@ SwInputWindow::SwInputWindow(vcl::Window* pParent, SfxDispatcher* pDispatcher)
     aEdit->SetSizePixel(aEdit->CalcMinimumSize());
     aPos->SetSizePixel(aPos->LogicToPixel(Size(45, 11), MapMode(MapUnit::MapAppFont)));
 
-    SfxImageManager* pManager = SfxImageManager::GetImageManager(*SW_MOD());
-    pManager->RegisterToolBox(this);
-    InsertItem(FN_FORMULA_CALC, pManager->GetImage(FN_FORMULA_CALC),
+    InsertItem(FN_FORMULA_CALC, Image(BitmapEx(SW_RES(RID_BMP_FORMULA_CALC))),
                SW_RESSTR(STR_FORMULA_CALC));
-    InsertItem(FN_FORMULA_CANCEL, pManager->GetImage(FN_FORMULA_CANCEL),
+    InsertItem(FN_FORMULA_CANCEL, Image(BitmapEx(SW_RES(RID_BMP_FORMULA_CANCEL))),
                SW_RESSTR(STR_FORMULA_CANCEL));
-    InsertItem(FN_FORMULA_APPLY, pManager->GetImage(FN_FORMULA_APPLY),
+    InsertItem(FN_FORMULA_APPLY, Image(BitmapEx(SW_RES(RID_BMP_FORMULA_APPLY))),
                SW_RESSTR(STR_FORMULA_APPLY));
 
     SetHelpId(FN_FORMULA_CALC, HID_TBX_FORMULA_CALC);
@@ -142,8 +141,6 @@ SwInputWindow::~SwInputWindow()
 
 void SwInputWindow::dispose()
 {
-    SfxImageManager::GetImageManager( *SW_MOD() )->ReleaseToolBox(this);
-
     // wake rulers
     if(pView)
     {
@@ -176,21 +173,6 @@ void SwInputWindow::CleanupUglyHackWithUndo()
         }
         m_bResetUndo = false; // #i117122# once is enough :)
     }
-}
-
-void SwInputWindow::DataChanged( const DataChangedEvent& rDCEvt )
-{
-    if ( rDCEvt.GetType() == DataChangedEventType::SETTINGS && (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
-    {
-        // update item images
-        SwModule *pMod  = SW_MOD();
-        SfxImageManager *pImgMgr = SfxImageManager::GetImageManager(*pMod);
-        SetItemImage( FN_FORMULA_CALC,   pImgMgr->GetImage(FN_FORMULA_CALC   ));
-        SetItemImage( FN_FORMULA_CANCEL, pImgMgr->GetImage(FN_FORMULA_CANCEL ));
-        SetItemImage( FN_FORMULA_APPLY,  pImgMgr->GetImage(FN_FORMULA_APPLY  ));
-    }
-
-    ToolBox::DataChanged( rDCEvt );
 }
 
 void SwInputWindow::Resize()
