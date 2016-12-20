@@ -88,8 +88,6 @@ inline SvStream& operator<<( SvStream& rStr, SvStrPtr f );
 
 // SvLockBytes
 
-enum LockType {};
-
 struct SvLockBytesStat
 {
     std::size_t nSize;
