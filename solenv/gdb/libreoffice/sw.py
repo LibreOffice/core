@@ -130,7 +130,7 @@ class SwXTextCursorImplPrinter(object):
         return "%s" % (self.typename)
 
     def children(self):
-        registeredIn = self.value['pRegisteredIn'].dereference()
+        registeredIn = self.value['m_pRegisteredIn'].dereference()
         children = [('registeredIn', registeredIn)]
         return children.__iter__()
 
