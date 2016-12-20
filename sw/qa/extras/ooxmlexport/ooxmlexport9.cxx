@@ -81,13 +81,13 @@ DECLARE_OOXMLEXPORT_TEST(testRhbz988516, "rhbz988516.docx")
 {
     // The problem was that the list properties of the footer leaked into body
     CPPUNIT_ASSERT_EQUAL(OUString(), getProperty<OUString>(getParagraph(1), "NumberingStyleName"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Enclosure 3"), getParagraph(3)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("Enclosure 3"), getParagraph(2)->getString());
     CPPUNIT_ASSERT_EQUAL(OUString(), getProperty<OUString>(getParagraph(2), "NumberingStyleName"));
     CPPUNIT_ASSERT_EQUAL(OUString(), getProperty<OUString>(getParagraph(3), "NumberingStyleName"));
     CPPUNIT_ASSERT_EQUAL(OUString(), getProperty<OUString>(getParagraph(4), "NumberingStyleName"));
 
     // tdf#103975 The problem was that an empty paragraph with page break info was removed.
-    CPPUNIT_ASSERT_EQUAL( 3, getPages() );
+    CPPUNIT_ASSERT_EQUAL( 2, getPages() );
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf103389, "tdf103389.docx")
