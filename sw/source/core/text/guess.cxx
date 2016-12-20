@@ -73,6 +73,28 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
     SwTwips nLineWidth = rInf.Width() - rInf.X();
     sal_Int32 nMaxLen = rInf.GetText().getLength() - rInf.GetIdx();
 
+    const SvxAdjust& rAdjust = rInf.GetTextFrame()->GetTextNode()->GetSwAttrSet().GetAdjust().GetAdjust();
+
+    // tdf#104668 space chars at the end should be cut
+    if ( rAdjust == SVX_ADJUST_RIGHT || rAdjust == SVX_ADJUST_CENTER )
+    {
+        sal_Int32 nSpaceCnt = 0;
+        for ( int i = (rInf.GetText().getLength() - 1); i >= rInf.GetIdx(); --i )
+        {
+            sal_Unicode cChar = rInf.GetText()[i];
+            if ( cChar != CH_BLANK && cChar != CH_FULL_BLANK )
+                break;
+            ++nSpaceCnt;
+        }
+        sal_Int32 nCharsCnt = nMaxLen - nSpaceCnt;
+        if ( nSpaceCnt && nCharsCnt < rPor.GetLen() )
+        {
+            nMaxLen = nCharsCnt;
+            if ( !nMaxLen )
+                return true;
+        }
+    }
+
     if ( rInf.GetLen() < nMaxLen )
         nMaxLen = rInf.GetLen();
 
@@ -212,7 +234,6 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
         nBreakPos = nCutPos;
         sal_Int32 nX = nBreakPos;
 
-        const SvxAdjust& rAdjust = rInf.GetTextFrame()->GetTextNode()->GetSwAttrSet().GetAdjust().GetAdjust();
         if ( rAdjust == SVX_ADJUST_LEFT )
         {
             // we step back until a non blank character has been found
@@ -423,7 +444,6 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
                 CHAR_SOFTHYPHEN == rInf.GetText()[ nBreakPos - 1 ] )
                 nBreakPos = rInf.GetIdx() - 1;
 
-            const SvxAdjust& rAdjust = rInf.GetTextFrame()->GetTextNode()->GetSwAttrSet().GetAdjust().GetAdjust();
             if( rAdjust != SVX_ADJUST_LEFT )
             {
                 // Delete any blanks at the end of a line, but be careful:
