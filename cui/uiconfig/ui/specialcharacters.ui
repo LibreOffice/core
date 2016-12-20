@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.19.0 -->
+<!-- Generated with glade 3.18.3 -->
 <interface>
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
@@ -149,25 +149,12 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="valign">center</property>
-                    <property name="label" translatable="yes">Characters:</property>
+                    <property name="label" translatable="yes">Recently Used:</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
                     <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkEntry" id="showtext">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="valign">center</property>
-                    <property name="invisible_char">•</property>
-                  </object>
-                  <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
                   </packing>
                 </child>
               </object>
@@ -240,7 +227,7 @@
                             <property name="can_focus">True</property>
                             <property name="halign">center</property>
                             <property name="width_chars">8</property>
-                            <property name="text" translatable="no">A2</property>
+                            <property name="text">A2</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -251,7 +238,7 @@
                           <object class="GtkLabel" id="hexulabel">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="no">U+</property>
+                            <property name="label">U+</property>
                             <property name="width_chars">3</property>
                             <property name="single_line_mode">True</property>
                             <property name="max_width_chars">3</property>
@@ -302,6 +289,32 @@
               <packing>
                 <property name="left_attach">1</property>
                 <property name="top_attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox" id="box1">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <child>
+                  <object class="svxlo-SvxShowRecCharSet" id="showreccharset">
+                    <property name="width_request">580</property>
+                    <property name="height_request">50</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">3</property>
+                <property name="width">2</property>
               </packing>
             </child>
           </object>
