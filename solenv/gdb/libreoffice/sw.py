@@ -175,7 +175,7 @@ class BigPtrArrayPrinter(object):
         self.value = value
 
     def to_string(self):
-        length = self.value['nSize']
+        length = self.value['m_nSize']
         if length > 0:
             return "%s of length %d" % (self.typename, length)
         else:
@@ -191,10 +191,10 @@ class BigPtrArrayPrinter(object):
     class _iterator(six.Iterator):
 
         def __init__(self, array):
-            self.blocks = array['ppInf']
-            self.count = array['nSize']
+            self.blocks = array['m_ppInf']
+            self.count = array['m_nSize']
             self.pos = 0
-            self.block_count = array['nBlock']
+            self.block_count = array['m_nBlock']
             self.block_pos = 0
             self.block = None
             self.indent = ""
