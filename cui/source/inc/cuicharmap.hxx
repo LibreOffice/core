@@ -26,6 +26,7 @@
 #include <vcl/lstbox.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <svx/charmap.hxx>
+#include<svx/recusedcharmap.hxx>
 
 class SubsetMap;
 
@@ -68,7 +69,7 @@ private:
     void            init();
 
     VclPtr<SvxShowCharSet> m_pShowSet;
-    VclPtr<Edit>           m_pShowText;
+    VclPtr<SvxShowRecCharSet> m_pRecUsedShowSet;
     VclPtr<PushButton>     m_pOKBtn;
     VclPtr<FixedText>      m_pFontText;
     VclPtr<ListBox>        m_pFontLB;
@@ -80,6 +81,7 @@ private:
     VclPtr<Edit>           m_pDecimalCodeText;
     vcl::Font       aFont;
     bool            bOne;
+    bool            bCharLoc=true;
     const SubsetMap* pSubsetMap;
     enum class Radix : sal_Int16 {decimal = 10, hexadecimal=16};
 
@@ -93,6 +95,10 @@ private:
     DECL_LINK(DecimalCodeChangeHdl, Edit&, void);
     DECL_LINK(HexCodeChangeHdl, Edit&, void);
 
+    DECL_LINK(CharRecUSelectHdl, SvxShowRecCharSet*, void);
+    DECL_LINK(CharRecUHighlightHdl, SvxShowRecCharSet*, void);
+    DECL_LINK(CharRecUPreSelectHdl, SvxShowRecCharSet*, void);
+    DECL_LINK(CharRecUDoubleClickHdl, SvxShowRecCharSet*,void);
     static void fillAllSubsets(ListBox &rListBox);
     void selectCharByCode(Radix radix);
 
@@ -103,7 +109,7 @@ public:
 
     void            DisableFontSelection();
 
-    const vcl::Font&     GetCharFont() const { return aFont;}
+    const vcl::Font&     GetCharFont() const;
     void            SetCharFont( const vcl::Font& rFont );
 
     void            SetChar( sal_UCS4 );

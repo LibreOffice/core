@@ -51,10 +51,9 @@ SvxCharacterMap::SvxCharacterMap( vcl::Window* pParent, bool bOne_, const SfxIte
     , pSubsetMap( nullptr )
 {
     get(m_pShowSet, "showcharset");
+    get(m_pRecUsedShowSet,"showreccharset");
     get(m_pShowChar, "showchar");
     m_pShowChar->SetCentered(true);
-    get(m_pShowText, "showtext");
-    m_pShowText->SetMaxTextLen(CHARMAP_MAXLEN);
     get(m_pOKBtn, "ok");
     get(m_pFontText, "fontft");
     get(m_pFontLB, "fontlb");
@@ -111,7 +110,7 @@ SvxCharacterMap::~SvxCharacterMap()
 void SvxCharacterMap::dispose()
 {
     m_pShowSet.clear();
-    m_pShowText.clear();
+    m_pRecUsedShowSet.clear();
     m_pOKBtn.clear();
     m_pFontText.clear();
     m_pFontLB.clear();
@@ -139,7 +138,19 @@ sal_UCS4 SvxCharacterMap::GetChar() const
 
 OUString SvxCharacterMap::GetCharacters() const
 {
-    return m_pShowText->GetText();
+sal_UCS4 cChar;
+
+  if (bCharLoc)
+    cChar = m_pShowSet->GetSelectCharacter();
+  else {
+    cChar=m_pRecUsedShowSet->GetSelectCharacter();
+      }
+  OUString aText = OUString( &cChar, 1 );
+  return aText;
+
+}
+const vcl::Font& SvxCharacterMap::GetCharFont() const{
+  return aFont;
 }
 
 
@@ -315,7 +326,6 @@ void SvxCharacterMap::init()
     if (bOne)
     {
         m_pSymbolText->Hide();
-        m_pShowText->Hide();
     }
 
     OUString aDefStr( aFont.GetFamilyName() );
@@ -367,6 +377,11 @@ void SvxCharacterMap::init()
     m_pDecimalCodeText->SetModifyHdl( LINK( this, SvxCharacterMap, DecimalCodeChangeHdl ) );
     m_pHexCodeText->SetModifyHdl( LINK( this, SvxCharacterMap, HexCodeChangeHdl ) );
 
+    m_pRecUsedShowSet->SetSelectHdl(LINK (this,SvxCharacterMap,CharRecUSelectHdl));
+    m_pRecUsedShowSet->SetHighlightHdl( LINK( this, SvxCharacterMap, CharRecUHighlightHdl ) );
+    m_pRecUsedShowSet->SetPreSelectHdl( LINK( this, SvxCharacterMap, CharRecUPreSelectHdl ) );
+    m_pRecUsedShowSet->SetDoubleClickHdl( LINK( this, SvxCharacterMap, CharRecUDoubleClickHdl ) );
+
     if( SvxShowCharSet::getSelectedChar() == ' ')
         m_pOKBtn->Disable();
     else
@@ -394,15 +409,11 @@ void SvxCharacterMap::SetCharFont( const vcl::Font& rFont )
 
 IMPL_LINK_NOARG(SvxCharacterMap, OKHdl, Button*, void)
 {
-    OUString aStr = m_pShowText->GetText();
-
-    if ( aStr.isEmpty() )
-    {
-        sal_UCS4 cChar = m_pShowSet->GetSelectCharacter();
-        // using the new UCS4 constructor
-        OUString aOUStr( &cChar, 1 );
-        m_pShowText->SetText( aOUStr );
-    }
+    vcl::Font tmp=m_pRecUsedShowSet->GetSelectCharFont();
+    vcl::Font aTmpFont( tmp.GetFamilyName(), tmp.GetStyleName(), GetCharFont().GetFontSize() );
+    aTmpFont.SetCharSet( tmp.GetCharSet() );
+    aTmpFont.SetPitch(tmp.GetPitch() );
+    SetCharFont(aTmpFont);
     EndDialog( RET_OK );
 }
 
@@ -433,7 +444,6 @@ IMPL_LINK_NOARG(SvxCharacterMap, FontSelectHdl, ListBox&, void)
     // notify children using this font
     m_pShowSet->SetFont( aFont );
     m_pShowChar->SetFont( aFont );
-    m_pShowText->SetControlFont( aFont );
 
     // setup unicode subset listbar with font specific subsets,
     // hide unicode subset listbar for symbol fonts
@@ -486,46 +496,44 @@ IMPL_LINK_NOARG(SvxCharacterMap, SubsetSelectHdl, ListBox&, void)
 
 IMPL_LINK_NOARG(SvxCharacterMap, CharDoubleClickHdl, SvxShowCharSet*, void)
 {
-    if (bOne)
-    {
-        sal_UCS4 cChar = m_pShowSet->GetSelectCharacter();
-        m_pShowText->SetText(OUString(&cChar, 1));
-    }
+    bCharLoc=true;
+    EndDialog( RET_OK );
+}
+IMPL_LINK_NOARG(SvxCharacterMap, CharRecUDoubleClickHdl, SvxShowRecCharSet*, void)
+{
+    vcl::Font tmp=m_pRecUsedShowSet->GetSelectCharFont();
+    vcl::Font aTmpFont( tmp.GetFamilyName(), tmp.GetStyleName(), GetCharFont().GetFontSize() );
+    aTmpFont.SetCharSet( tmp.GetCharSet() );
+    aTmpFont.SetPitch(tmp.GetPitch() );
+    SetCharFont(aTmpFont);
+    bCharLoc=false;
     EndDialog( RET_OK );
 }
 
-
 IMPL_LINK_NOARG(SvxCharacterMap, CharSelectHdl, SvxShowCharSet*, void)
 {
-    if ( !bOne )
-    {
-        OUString aText = m_pShowText->GetText();
-        Selection aSelection = m_pShowText->GetSelection();
-        aSelection.Justify();
-        long nLen = aSelection.Len();
+ if ( !bOne )
+  {
+    sal_UCS4 cChar = m_pShowSet->GetSelectCharacter();
 
-        if ( aText.getLength() != CHARMAP_MAXLEN || nLen > 0 )
-        {
-            sal_UCS4 cChar = m_pShowSet->GetSelectCharacter();
-            // using the new UCS4 constructor
-            OUString aOUStr( &cChar, 1 );
-
-            long nPos = aSelection.Min();
-            if( aText.getLength() )
-            {
-                m_pShowText->SetText( aText.copy( 0, nPos ) + aOUStr + aText.copy( nPos + nLen ) );
-            }
-            else
-                m_pShowText->SetText( aOUStr );
-
-            m_pShowText->SetSelection(Selection(nPos + aOUStr.getLength()));
-        }
-
+    m_pRecUsedShowSet->pushRecentlyChar(cChar,GetCharFont());
     }
+    bCharLoc=true;
     m_pOKBtn->Enable();
 }
-
-
+IMPL_LINK_NOARG(SvxCharacterMap, CharRecUSelectHdl, SvxShowRecCharSet*, void)
+{
+    sal_UCS4 cChar;
+    if ( !bOne )
+    {
+            cChar = m_pRecUsedShowSet->GetSelectCharacter();
+            // using the new UCS4 constructor
+            OUString aOUStr( &cChar, 1 );
+            m_pShowChar->SetText( aOUStr );
+    }
+    bCharLoc=false;
+    m_pOKBtn->Enable();
+}
 IMPL_LINK_NOARG(SvxCharacterMap, CharHighlightHdl, SvxShowCharSet*, void)
 {
     OUString aText;
@@ -569,6 +577,53 @@ IMPL_LINK_NOARG(SvxCharacterMap, CharHighlightHdl, SvxShowCharSet*, void)
         m_pHexCodeText->SetText( aHexText );
     if (m_pDecimalCodeText->GetText() != aDecimalText)
         m_pDecimalCodeText->SetText( aDecimalText );
+    bCharLoc=true;
+}
+
+IMPL_LINK_NOARG(SvxCharacterMap, CharRecUHighlightHdl, SvxShowRecCharSet*, void)
+{
+    OUString aText;
+    OUString aHexText;
+    OUString aDecimalText;
+    vcl::Font TmpFont;
+    sal_UCS4 cChar = m_pRecUsedShowSet->GetSelectCharacter();
+    bool bSelect = (cChar > 0);
+
+    // show char sample
+    if ( bSelect )
+    {
+        // using the new UCS4 constructor
+        aText = OUString( &cChar, 1 );
+        TmpFont=m_pRecUsedShowSet->GetSelectCharFont();
+    }
+     m_pShowChar->SetFont(TmpFont);
+    m_pShowChar->SetText( aText );
+    m_pShowChar->Update();
+
+    // show char codes
+    if ( bSelect )
+    {
+      if ((cChar)!=(char)0){
+        // Get the hexadecimal code
+        char aBuf[32];
+        snprintf( aBuf, sizeof(aBuf), "%X", static_cast<unsigned>(cChar) );
+        aHexText = OUString::createFromAscii(aBuf);
+        // Get the decimal code
+        char aDecBuf[32];
+        snprintf( aDecBuf, sizeof(aDecBuf), "%u", static_cast<unsigned>(cChar) );
+        aDecimalText = OUString::createFromAscii(aDecBuf);
+      }
+      else{
+        aHexText="";
+        aDecimalText ="";
+      }
+    }
+    // Update the hex and decimal codes only if necessary
+    if (m_pHexCodeText->GetText() != aHexText)
+        m_pHexCodeText->SetText( aHexText );
+    if (m_pDecimalCodeText->GetText() != aDecimalText)
+        m_pDecimalCodeText->SetText( aDecimalText );
+    bCharLoc=false;
 }
 
 void SvxCharacterMap::selectCharByCode(Radix radix)
@@ -613,8 +668,12 @@ IMPL_LINK_NOARG(SvxCharacterMap, CharPreSelectHdl, SvxShowCharSet*, void)
         if( pSubset )
             m_pSubsetLB->SelectEntry( pSubset->GetName() );
     }
-
+bCharLoc=true;
     m_pOKBtn->Enable();
 }
-
+IMPL_LINK_NOARG(SvxCharacterMap, CharRecUPreSelectHdl, SvxShowRecCharSet*, void)
+{
+    bCharLoc=false;
+    m_pOKBtn->Enable();
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
