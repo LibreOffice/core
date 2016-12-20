@@ -2639,6 +2639,7 @@ SvxNumPositionTabPage::SvxNumPositionTabPage(vcl::Window* pParent,
     , nActNumLvl(SAL_MAX_UINT16)
     , nNumItemId(SID_ATTR_NUMBERING_RULE)
     , bModified(false)
+    , bDefault(true)
     , bPreset(false)
     , bInInintControl(false)
     , bLabelAlignmentPosAndSpaceModeActive(false)
@@ -2914,7 +2915,7 @@ void SvxNumPositionTabPage::InitControls()
         m_pAlign2LB->SetNoSelection();
     }
 
-    if ( bSameLabelFollowedBy )
+    if ( bSameLabelFollowedBy || bDefault )
     {
         sal_Int32 nPos = 0; // LISTTAB
         if ( aNumFmtArr[nLvl]->GetLabelFollowedBy() == SvxNumberFormat::SPACE )
@@ -2936,7 +2937,7 @@ void SvxNumPositionTabPage::InitControls()
     {
         m_pListtabFT->Enable();
         m_pListtabMF->Enable();
-        if ( bSameListtab )
+        if ( bSameListtab || bDefault )
         {
             SetMetricValue(*m_pListtabMF, aNumFmtArr[nLvl]->GetListtabPos(), eCoreUnit);
         }
@@ -2952,7 +2953,7 @@ void SvxNumPositionTabPage::InitControls()
         m_pListtabMF->SetText("");
     }
 
-    if ( bSameAlignAt )
+    if ( bSameAlignAt || bDefault )
     {
         SetMetricValue(*m_pAlignedAtMF,
                         aNumFmtArr[nLvl]->GetIndentAt() + aNumFmtArr[nLvl]->GetFirstLineIndent(),
@@ -2963,7 +2964,7 @@ void SvxNumPositionTabPage::InitControls()
         m_pAlignedAtMF->SetText("");
     }
 
-    if ( bSameIndentAt )
+    if ( bSameIndentAt || bDefault )
     {
         SetMetricValue(*m_pIndentAtMF, aNumFmtArr[nLvl]->GetIndentAt(), eCoreUnit);
     }
@@ -3234,6 +3235,7 @@ IMPL_LINK( SvxNumPositionTabPage, LevelHdl_Impl, ListBox&, rBox, void )
 {
     sal_uInt16 nSaveNumLvl = nActNumLvl;
     nActNumLvl = 0;
+    bDefault = false;
     if(rBox.IsEntryPosSelected( pActNum->GetLevelCount() ) &&
             (rBox.GetSelectEntryCount() == 1 || nSaveNumLvl != 0xffff))
     {
