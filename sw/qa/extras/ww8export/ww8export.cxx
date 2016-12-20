@@ -691,6 +691,23 @@ DECLARE_WW8EXPORT_TEST(testTdf99474, "tdf99474.odt")
     CPPUNIT_ASSERT_EQUAL(COL_AUTO, charColor);
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf104805, "tdf104805.doc")
+{
+    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("NumberingStyles")->getByName("WW8Num1"), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xLevels(xPropertySet->getPropertyValue("NumberingRules"), uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aNumberingRule;
+    xLevels->getByIndex(1) >>= aNumberingRule; // 2nd level
+    for (const auto& rPair : aNumberingRule)
+    {
+        if (rPair.Name == "Prefix")
+            // This was "." instead of empty, so the second paragraph was
+            // rendered as ".1" instead of "1.".
+            CPPUNIT_ASSERT_EQUAL(OUString(), rPair.Value.get<OUString>());
+        else if (rPair.Name == "Suffix")
+            CPPUNIT_ASSERT_EQUAL(OUString("."), rPair.Value.get<OUString>());
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
