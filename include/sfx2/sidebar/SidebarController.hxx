@@ -41,16 +41,12 @@
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 
-
-namespace
-{
-    typedef cppu::WeakComponentImplHelper <
-        css::ui::XContextChangeEventListener,
-        css::beans::XPropertyChangeListener,
-        css::ui::XSidebar,
-        css::frame::XStatusListener
-        > SidebarControllerInterfaceBase;
-}
+typedef cppu::WeakComponentImplHelper <
+    css::ui::XContextChangeEventListener,
+    css::beans::XPropertyChangeListener,
+    css::ui::XSidebar,
+    css::frame::XStatusListener
+    > SidebarControllerInterfaceBase;
 
 class SfxSplitWindow;
 class FixedBitmap;
