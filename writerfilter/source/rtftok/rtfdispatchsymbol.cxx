@@ -178,13 +178,13 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
         {
             // There were no runs in the cell, so we need to send paragraph and character properties here.
             auto pPValue = std::make_shared<RTFValue>(m_aStates.top().aParagraphAttributes, m_aStates.top().aParagraphSprms);
-            m_aTableBufferStack.back().push_back(Buf_t(BUFFER_PROPS, pPValue, nullptr));
+            m_aTableBufferStack.back().emplace_back(Buf_t(BUFFER_PROPS, pPValue, nullptr));
             auto pCValue = std::make_shared<RTFValue>(m_aStates.top().aCharacterAttributes, m_aStates.top().aCharacterSprms);
-            m_aTableBufferStack.back().push_back(Buf_t(BUFFER_PROPS, pCValue, nullptr));
+            m_aTableBufferStack.back().emplace_back(Buf_t(BUFFER_PROPS, pCValue, nullptr));
         }
 
         RTFValue::Pointer_t pValue;
-        m_aTableBufferStack.back().push_back(Buf_t(BUFFER_CELLEND, pValue, nullptr));
+        m_aTableBufferStack.back().emplace_back(Buf_t(BUFFER_CELLEND, pValue, nullptr));
         m_bNeedPap = true;
     }
     break;
@@ -218,7 +218,7 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             }
         }
         m_aTableBufferStack.pop_back();
-        m_aTableBufferStack.back().push_back(
+        m_aTableBufferStack.back().emplace_back(
             Buf_t(BUFFER_NESTROW, RTFValue::Pointer_t(), pBuffer));
 
         m_aNestedTableCellsSprms.clear();
@@ -322,7 +322,7 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
     {
         bool bColumns = false; // If we have multiple columns
         RTFValue::Pointer_t pCols = m_aStates.top().aSectionSprms.find(NS_ooxml::LN_EG_SectPrContents_cols);
-        if (pCols.get())
+        if (pCols)
         {
             RTFValue::Pointer_t pNum = pCols->getAttributes().find(NS_ooxml::LN_CT_Columns_num);
             if (pNum.get() && pNum->getInt() > 1)

@@ -332,9 +332,8 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
         case RTF_DPTXBXTEXT:
         {
             bool bPictureFrame = false;
-            for (std::size_t i = 0; i < m_aStates.top().aShape.aProperties.size(); ++i)
+            for (auto& rProperty : m_aStates.top().aShape.aProperties)
             {
-                std::pair<OUString, OUString>& rProperty = m_aStates.top().aShape.aProperties[i];
                 if (rProperty.first == "shapeType" && rProperty.second == OUString::number(ESCHER_ShpInst_PictureFrame))
                 {
                     bPictureFrame = true;

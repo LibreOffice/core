@@ -889,10 +889,10 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         {
             m_aStates.top().aDrawingObject.xShape.set(getModelFactory()->createInstance("com.sun.star.text.TextFrame"), uno::UNO_QUERY);
             std::vector<beans::PropertyValue> aDefaults = RTFSdrImport::getTextFrameDefaults(false);
-            for (std::size_t i = 0; i < aDefaults.size(); ++i)
+            for (const auto& rDefault : aDefaults)
             {
-                if (!findPropertyName(m_aStates.top().aDrawingObject.aPendingProperties, aDefaults[i].Name))
-                    m_aStates.top().aDrawingObject.aPendingProperties.push_back(aDefaults[i]);
+                if (!findPropertyName(m_aStates.top().aDrawingObject.aPendingProperties, rDefault.Name))
+                    m_aStates.top().aDrawingObject.aPendingProperties.push_back(rDefault);
             }
             checkFirstRun();
             Mapper().startShape(m_aStates.top().aDrawingObject.xShape);
