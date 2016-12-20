@@ -200,6 +200,7 @@ public:
     void testTdf84695();
     void testTdf84695NormalChar();
     void testTdf78727();
+    void testTdf104814();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -302,6 +303,7 @@ public:
     CPPUNIT_TEST(testTdf84695);
     CPPUNIT_TEST(testTdf84695NormalChar);
     CPPUNIT_TEST(testTdf78727);
+    CPPUNIT_TEST(testTdf104814);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -3714,6 +3716,18 @@ void SwUiWriterTest::testTdf78727()
     // table that is moved inside a text frame.
     std::set<const SwFrameFormat*> aSet;
     CPPUNIT_ASSERT(SwTextBoxHelper::getCount(pPage, aSet) > 1);
+}
+
+// accepting change tracking gets stuck on change
+void SwUiWriterTest::testTdf104814()
+{
+    SwDoc* const pDoc1(createDoc("tdf104814.docx"));
+
+    SwEditShell* const pEditShell(pDoc1->GetEditShell());
+
+    // accept all redlines
+    while(pEditShell->GetRedlineCount())
+        pEditShell->AcceptRedline(0);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
