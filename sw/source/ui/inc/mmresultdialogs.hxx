@@ -189,8 +189,6 @@ class SwSendMailDialog : public ModelessDialog //SfxModalDialog
     bool                    m_bCancel;
     bool                    m_bDesctructionEnabled;
 
-    ImageList               m_aImageList;
-
     SwSendMailDialog_Impl*  m_pImpl;
     SwMailMergeConfigItem*  m_pConfigItem;
     sal_Int32               m_nStatusHeight;
