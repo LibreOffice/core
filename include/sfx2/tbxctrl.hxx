@@ -72,7 +72,7 @@ friend class SfxFrameStatusListener;
     bool                                                                             m_bCascading;
     Link<SfxPopupWindow*,void>                                                       m_aDeleteLink;
     sal_uInt16                                                                       m_nId;
-    css::uno::Reference< css::frame::XFrame >              m_xFrame;
+    css::uno::Reference< css::frame::XFrame > const        m_xFrame;
     SfxFrameStatusListener*                                                          m_pStatusListener;
     css::uno::Reference< css::lang::XComponent >           m_xStatusListener;
 
