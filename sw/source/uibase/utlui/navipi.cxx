@@ -704,9 +704,6 @@ SwNavigationPI::SwNavigationPI(SfxBindings* _pBindings,
     StartListening(*SfxGetpApp());
     if ( m_pCreateView )
         StartListening(*m_pCreateView);
-    SfxImageManager* pImgMan = SfxImageManager::GetImageManager(*SW_MOD());
-    pImgMan->RegisterToolBox(m_aContentToolBox.get(), SfxToolboxFlags::CHANGEOUTSTYLE);
-    pImgMan->RegisterToolBox(m_aGlobalToolBox.get(), SfxToolboxFlags::CHANGEOUTSTYLE);
 
     sal_uInt16 nNavId = m_aContentToolBox->GetItemId("navigation");
     m_aContentToolBox->SetItemBits(nNavId, m_aContentToolBox->GetItemBits(nNavId) | ToolBoxItemBits::DROPDOWNONLY );
@@ -763,9 +760,6 @@ void SwNavigationPI::dispose()
 
     EndListening(*SfxGetpApp());
 
-    SfxImageManager* pImgMan = SfxImageManager::GetImageManager(*SW_MOD());
-    pImgMan->ReleaseToolBox(m_aContentToolBox.get());
-    pImgMan->ReleaseToolBox(m_aGlobalToolBox.get());
     m_aContentToolBox->GetItemWindow(FN_PAGENUMBER)->disposeOnce();
     m_aContentToolBox->Clear();
     if (m_pxObjectShell)
