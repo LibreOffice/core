@@ -114,7 +114,7 @@ gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS)
 # note that `cat $(extraobjectlist)` is needed to build with older gcc versions, e.g. 4.1.2 on SLED10
 # we want to use @$(extraobjectlist) in the long run
 # link with C compiler if there are no C++ files (pyuno_wrapper depends on this)
-# But always link with C++ compiler e.g. under -fsanitze=undefined, as sal uses
+# But always link with C++ compiler e.g. under -fsanitize=undefined, as sal uses
 # __ubsan_handle_dynamic_type_cache_miss_abort and __ubsan_vptr_type_cache from
 # libclang_rt.ubsan_cxx-x86_64.a, and oosplash links against sal but itself only
 # contains .c sources:
