@@ -49,6 +49,7 @@
 #include <com/sun/star/awt/XGraphics.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/graphic/XGraphicRenderer.hpp>
+#include <cstdlib>
 
 using namespace com::sun::star;
 
@@ -611,7 +612,7 @@ bool GDIMetaFile::Mirror( BmpMirrorFlags nMirrorFlags )
 
     if( nMirrorFlags & BmpMirrorFlags::Horizontal )
     {
-        nMoveX = SAL_ABS( aOldPrefSize.Width() ) - 1;
+        nMoveX = labs( aOldPrefSize.Width() ) - 1;
         fScaleX = -1.0;
     }
     else
@@ -622,7 +623,7 @@ bool GDIMetaFile::Mirror( BmpMirrorFlags nMirrorFlags )
 
     if( nMirrorFlags & BmpMirrorFlags::Vertical )
     {
-        nMoveY = SAL_ABS( aOldPrefSize.Height() ) - 1;
+        nMoveY = labs( aOldPrefSize.Height() ) - 1;
         fScaleY = -1.0;
     }
     else
