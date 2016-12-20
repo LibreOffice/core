@@ -66,7 +66,7 @@ bool checkDumpAgainstFile( const OUString& rDump, const OUString& aFilePath)
 
     OString aDump = OUStringToOString(rDump, RTL_TEXTENCODING_UTF8);
     return doXMLDiff(aOFile.getStr(), aDump.getStr(),
-            static_cast<int>(rDump.getLength()), NULL);
+            static_cast<int>(rDump.getLength()), nullptr);
 }
 
 }
