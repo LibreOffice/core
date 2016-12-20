@@ -842,6 +842,24 @@ DECLARE_OOXMLEXPORT_TEST(testTdf103982, "tdf103982.docx")
     CPPUNIT_ASSERT(nDistB >= 0);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf97417, "section_break_numbering.docx")
+{
+    uno::Reference<beans::XPropertySet> xProps(getParagraph(1), uno::UNO_QUERY_THROW);
+    auto prop = xProps->getPropertyValue("NumberingRules");
+
+    CPPUNIT_ASSERT_MESSAGE("1st page: first paragraph erroneous numbering",
+        !xProps->getPropertyValue("NumberingRules").hasValue());
+    // paragraph with numbering and section break was removed by writerfilter
+    // but its numbering was copied to all following paragraphs
+    CPPUNIT_ASSERT_MESSAGE("2nd page: first paragraph missing numbering",
+        getProperty<uno::Reference<container::XIndexAccess>>(getParagraph(2), "NumberingRules").is());
+    xProps = uno::Reference<beans::XPropertySet>(getParagraph(3), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_MESSAGE("2nd page: second paragraph erroneous numbering",
+        !xProps->getPropertyValue("NumberingRules").hasValue());
+
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

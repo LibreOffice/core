@@ -3277,7 +3277,9 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
             // If the paragraph contains only the section properties and it has
             // no runs, we should not create a paragraph for it in Writer, unless that would remove the whole section.
             bool bRemove = !m_pImpl->GetParaChanged() && m_pImpl->GetParaSectpr() && !bSingleParagraph && !m_pImpl->GetIsDummyParaAddedForTableInSection();
-            PropertyMapPtr xContext = bRemove ? m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH) : PropertyMapPtr();
+
+            const bool bNoNumbering = bRemove || (!m_pImpl->GetParaChanged() && m_pImpl->GetParaSectpr() && bSingleParagraph);
+            PropertyMapPtr xContext = bNoNumbering ? m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH) : PropertyMapPtr();
             if (xContext)
             {
                 // tdf#97417 delete numbering of the paragraph
