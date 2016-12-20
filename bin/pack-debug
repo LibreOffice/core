@@ -169,7 +169,7 @@ mv $topdir/RPMS/RPMS/*/*.rpm $rpmdir/RPMS/
 cd $rpmdir/..
 TARGET_RPM=$(ls *_download/*.tar.gz)
 tar cv *_rpm | gzip >$TARGET_RPM
-cd -
+cd $BUILD_PATH
 }
 
 #################################
@@ -304,7 +304,7 @@ mv $BUILD_PATH/DEBS/*.deb $debdir/DEBS/
 cd $debdir/..
 TARGET_DEB=$(ls *_download/*.tar.gz)
 tar cv *_deb | gzip >$TARGET_DEB
-cd -
+cd $BUILD_PATH
 }
 
 # start deb re-build
