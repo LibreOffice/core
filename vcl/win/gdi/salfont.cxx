@@ -1408,8 +1408,15 @@ int CALLBACK SalEnumFontsProcExW( const LOGFONTW* lpelfe,
     {
         // Only SFNT fonts are supported, ignore anything else.
         if (SalLayout::UseCommonLayout() || OpenGLWrapper::isVCLOpenGLEnabled())
-            if (!(nFontType & TRUETYPE_FONTTYPE))
-                return 1;
+        {
+            if (!(nFontType & TRUETYPE_FONTTYPE) &&
+                !(pMetric->ntmTm.ntmFlags & NTM_PS_OPENTYPE) &&
+                !(pMetric->ntmTm.ntmFlags & NTM_TT_OPENTYPE))
+            {
+                SAL_INFO("vcl.gdi", "Unsupported font ignored: " << OUString(pLogFont->elfLogFont.lfFaceName));
+                    return 1;
+            }
+        }
 
         // Ignore non-device font on printer.
         if (pInfo->mbPrinter && !(nFontType & DEVICE_FONTTYPE))
