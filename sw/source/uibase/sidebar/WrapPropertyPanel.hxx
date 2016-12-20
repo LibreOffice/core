@@ -78,9 +78,6 @@ namespace sw { namespace sidebar {
         //custom entry
         OUString aCustomEntry;
 
-        //Image resource.
-        ImageList aWrapIL;
-
         // Controller Items
         ::sfx2::sidebar::ControllerItem maSwNoWrapControl;
         ::sfx2::sidebar::ControllerItem maSwWrapLeftControl;
