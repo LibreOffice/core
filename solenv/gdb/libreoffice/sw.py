@@ -59,8 +59,8 @@ class SwPaMPrinter(object):
         return "%s" % (self.typename)
 
     def children(self):
-        next_ = self.value['pNext']
-        prev  = self.value['pPrev']
+        next_ = self.value['m_pNext']
+        prev  = self.value['m_pPrev']
         point = self.value['m_pPoint'].dereference()
         mark = self.value['m_pMark'].dereference()
         children = [ ( 'point', point), ( 'mark', mark ) ]
