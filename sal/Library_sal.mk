@@ -180,7 +180,7 @@ $(eval $(call gb_Library_add_exception_objects,sal,\
 	sal/osl/unx/tempfile \
 	sal/osl/unx/thread \
 	sal/osl/unx/time \
-	sal/osl/unx/salinit \
+	$(if $(filter-out ANDROID IOS,$(OS)), sal/osl/unx/salinit) \
 ))
 
 # Note that the uunxapi.mm file just includes the uunxapi.cxx one
