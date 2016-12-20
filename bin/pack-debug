@@ -256,8 +256,8 @@ do
 	do
 		cd $(dirname $j)
 		so=$(basename $j)
-		# keep not stripped version
-		echo "$(file $so)" | grep -q 'not stripped' && cp $so $so.copy
+		# keep original file
+		cp $so $so.copy
 		objcopy --only-keep-debug $so $so.dbg
 		objcopy --strip-debug $so
 		objcopy --add-gnu-debuglink=$so.dbg $so
@@ -288,7 +288,8 @@ do
 		cd $(dirname $j)
 		so=$(basename $j)
 		rm $so.dbg
-		echo "$(file $so)" | grep -q 'not stripped' || mv $so.copy $so
+		# restore original file
+		mv -f $so.copy $so
 		cd -
 	done
 
