@@ -32,7 +32,7 @@ else
 $(call gb_ExternalProject_get_state_target,pixman,build) :
 	$(call gb_ExternalProject_run,build,\
 		./configure \
-		$(if $(filter MACOSX IOS ANDROID,$(OS)),--disable-shared,--disable-static) \
+		$(if $(filter TRUE,$(DISABLE_DYNLOADING)),--disable-shared,$(if $(filter ANDROID,$(OS)),--disable-shared,--disable-static)) \
 		$(if $(filter ANDROID,$(OS)),--disable-arm-simd --disable-arm-neon --disable-arm-iwmmxt) \
 		$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) \
 		$(if $(filter INTEL ARM,$(CPUNAME)),ac_cv_c_bigendian=no)) \
