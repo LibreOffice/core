@@ -812,13 +812,21 @@ bool WW8ListManager::ReadLVL(SwNumFormat& rNumFormat, SfxItemSet*& rpItemSet,
     for(nLevelB = 0; nLevelB < nMaxLevel; ++nLevelB)
         aOfsNumsXCH.push_back(aLVL.aOfsNumsXCH[nLevelB]);
 
+    // nLevelB is an index in the aOfsNumsXCH array.
     for(nLevelB = 0; nLevelB <= nLevel; ++nLevelB)
     {
+        // nPos is a one-based character offset to a level placeholder in
+        // sNumString.
         sal_uInt8 nPos = aOfsNumsXCH[nLevelB];
-        if (nPos && nPos < sNumString.getLength()  && sNumString[nPos-1] < nMaxLevel)
+        if (nPos && nPos < sNumString.getLength())
         {
-            if (rNotReallyThere[nLevelB])
-                aOfsNumsXCH[nLevelB] = 0;
+            // nPosValue is the actual numbering level.
+            sal_Unicode nPosValue = sNumString[nPos-1];
+            if (nPosValue < nMaxLevel)
+            {
+                if (rNotReallyThere[nPosValue])
+                    aOfsNumsXCH[nLevelB] = 0;
+            }
         }
     }
     myIter aIter = std::remove(aOfsNumsXCH.begin(), aOfsNumsXCH.end(), 0);
