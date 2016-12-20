@@ -180,7 +180,7 @@ $(eval $(call gb_Library_add_exception_objects,sal,\
 	sal/osl/unx/tempfile \
 	sal/osl/unx/thread \
 	sal/osl/unx/time \
-        $(if $(filter DESKTOP,$(BUILD_TYPE)), sal/osl/unx/salinit) \
+	sal/osl/unx/salinit \
 ))
 
 # Note that the uunxapi.mm file just includes the uunxapi.cxx one
