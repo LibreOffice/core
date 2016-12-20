@@ -471,7 +471,7 @@ void RtfSdrExport::impl_writeGraphic()
     (void)GraphicConverter::Export(aStream, aGraphic, ConvertDataFormat::PNG);
     aStream.Seek(STREAM_SEEK_TO_END);
     sal_uInt32 nSize = aStream.Tell();
-    const sal_uInt8* pGraphicAry = static_cast<sal_uInt8 const*>(aStream.GetData());
+    auto pGraphicAry = static_cast<sal_uInt8 const*>(aStream.GetData());
 
     Size aMapped(aGraphic.GetPrefSize());
 
@@ -531,7 +531,7 @@ sal_Int32 RtfSdrExport::StartShape()
         }
     }
 
-    const SdrTextObj* pTextObj = dynamic_cast<const SdrTextObj*>(m_pSdrObject);
+    auto pTextObj = dynamic_cast<const SdrTextObj*>(m_pSdrObject);
     if (pTextObj)
     {
         const OutlinerParaObject* pParaObj = nullptr;

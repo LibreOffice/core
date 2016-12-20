@@ -68,7 +68,7 @@ void SmartTagHandler::lcl_sprm(Sprm& rSprm)
     case NS_ooxml::LN_CT_SmartTagPr_attr:
     {
         writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
-        if (pProperties.get())
+        if (pProperties)
             pProperties->resolve(*this);
         break;
     }
