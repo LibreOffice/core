@@ -70,8 +70,10 @@ class SwPaMPrinter(object):
             children.append(("prev", prev))
         return children.__iter__()
 
-class SwUnoCrsrPrinter(SwPaMPrinter):
-    '''Prints SwUnoCrsr.'''
+# apparently the purpose of this is to suppress printing all the extra members
+# that SwCursor and SwUnoCursor add
+class SwUnoCursorPrinter(SwPaMPrinter):
+    '''Prints SwUnoCursor.'''
 
 class SwRectPrinter(object):
     '''Prints SwRect.'''
@@ -130,8 +132,9 @@ class SwXTextCursorImplPrinter(object):
         return "%s" % (self.typename)
 
     def children(self):
-        registeredIn = self.value['m_pRegisteredIn'].dereference()
-        children = [('registeredIn', registeredIn)]
+        cursor = self.value['m_pUnoCursor']["m_pCursor"]["_M_ptr"]
+        registeredIn = cursor.dereference()
+        children = [('m_pUnoCursor', registeredIn)]
         return children.__iter__()
 
 class SwUnoImplPtrPrinter(object):
@@ -289,7 +292,7 @@ def build_pretty_printers():
     printer.add('SwNodeIndex', SwNodeIndexPrinter)
     printer.add('SwIndex', SwIndexPrinter)
     printer.add('SwPaM', SwPaMPrinter)
-    printer.add('SwUnoCrsr', SwUnoCrsrPrinter)
+    printer.add('SwUnoCursor', SwUnoCursorPrinter)
     printer.add('SwRect', SwRectPrinter)
     printer.add('sw::mark::Bookmark', MarkBasePrinter)
     printer.add('sw::mark::MarkBase', MarkBasePrinter)
