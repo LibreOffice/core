@@ -48,6 +48,9 @@ class UITest(object):
             time_ = 0
             while time_ < 30:
                 if event.executed:
+                    frames = self.get_frames()
+                    if len(frames) == 1:
+                        self.get_desktop().setActiveFrame(frames[0])
                     time.sleep(DEFAULT_SLEEP)
                     return component
                 time_ += DEFAULT_SLEEP
