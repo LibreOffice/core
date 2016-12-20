@@ -80,10 +80,9 @@ class SwWrapTabPage: public SfxTabPage
     virtual ~SwWrapTabPage() override;
     virtual void dispose() override;
 
-    void            ApplyImageList();
+    void            SetImages();
     virtual void    ActivatePage(const SfxItemSet& rSet) override;
     virtual DeactivateRC   DeactivatePage(SfxItemSet *pSet) override;
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 
     DECL_LINK( RangeModifyHdl, SpinField&, void );
     DECL_LINK( RangeLoseFocusHdl, Control&, void );

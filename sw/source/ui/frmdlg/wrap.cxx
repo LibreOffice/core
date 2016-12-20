@@ -128,7 +128,7 @@ SwWrapTabPage::SwWrapTabPage(vcl::Window *pParent, const SfxItemSet &rSet)
     m_pWrapParallelRB->SetClickHdl(aLk2);
     m_pWrapThroughRB->SetClickHdl(aLk2);
     m_pIdealWrapRB->SetClickHdl(aLk2);
-    ApplyImageList();
+    SetImages();
     m_pWrapOutlineCB->SetClickHdl(LINK(this, SwWrapTabPage, ContourHdl));
 }
 
@@ -640,20 +640,11 @@ IMPL_LINK_NOARG(SwWrapTabPage, ContourHdl, Button*, void)
     if (bEnable == m_bContourImage) // so that it doesn't always flicker
     {
         m_bContourImage = !bEnable;
-        ApplyImageList();
+        SetImages();
     }
 }
 
-void SwWrapTabPage::DataChanged( const DataChangedEvent& rDCEvt )
-{
-    if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
-         (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
-            ApplyImageList();
-
-    SfxTabPage::DataChanged( rDCEvt );
-}
-
-void SwWrapTabPage::ApplyImageList()
+void SwWrapTabPage::SetImages()
 {
     m_pWrapThroughRB->SetModeRadioImage(get<FixedImage>("imgthrough")->GetImage());
     bool bWrapOutline =  !m_pWrapOutlineCB->IsChecked();
