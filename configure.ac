@@ -7642,7 +7642,11 @@ if test "$with_system_zlib" = "auto"; then
         with_system_zlib="$with_system_libs"
         ;;
     *)
-        with_system_zlib=yes
+        if test "$enable_fuzzers" != "yes"; then
+            with_system_zlib=yes
+        else
+            with_system_zlib=no
+        fi
         ;;
     esac
 fi
