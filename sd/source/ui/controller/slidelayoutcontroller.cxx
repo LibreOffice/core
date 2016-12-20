@@ -239,11 +239,11 @@ LayoutToolbarMenu::LayoutToolbarMenu( SlideLayoutController& rController, vcl::W
                 sSlotStr = ".uno:DuplicatePage";
             else
                 sSlotStr = ".uno:Undo";
-            aSlotImage = vcl::CommandInfoProvider::Instance().GetImageForCommand(sSlotStr, xFrame);
+            aSlotImage = vcl::CommandInfoProvider::GetImageForCommand(sSlotStr, xFrame);
 
             OUString sSlotTitle;
             if( bInsertPage )
-                sSlotTitle = vcl::CommandInfoProvider::Instance().GetLabelForCommand( sSlotStr, xFrame );
+                sSlotTitle = vcl::CommandInfoProvider::GetLabelForCommand( sSlotStr, xFrame );
             else
                 sSlotTitle = SD_RESSTR( STR_RESET_LAYOUT );
             appendEntry( 2, sSlotTitle, aSlotImage);

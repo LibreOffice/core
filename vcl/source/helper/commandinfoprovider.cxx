@@ -39,79 +39,19 @@ using namespace css;
 using namespace css::uno;
 
 
-namespace
-{
-    typedef ::cppu::WeakComponentImplHelper <
-        css::frame::XFrameActionListener
-        > FrameListenerInterfaceBase;
-    class FrameListener
-        : public ::cppu::BaseMutex,
-          public FrameListenerInterfaceBase
-    {
-    public:
-        FrameListener (vcl::CommandInfoProvider& rInfoProvider, const Reference<frame::XFrame>& rxFrame)
-            : FrameListenerInterfaceBase(m_aMutex),
-              mrInfoProvider(rInfoProvider),
-              mxFrame(rxFrame)
-        {
-            if (mxFrame.is())
-                mxFrame->addFrameActionListener(this);
-        }
-
-        virtual void SAL_CALL frameAction(const css::frame::FrameActionEvent& aEvent)
-            throw (css::uno::RuntimeException, std::exception) override
-        {
-            // The same frame can be reused for a different component, e.g.
-            // starting component from the start center, so need to re-init the cached data.
-            if (aEvent.Action == css::frame::FrameAction_COMPONENT_DETACHING)
-                mrInfoProvider.SetFrame(nullptr);
-        }
-        virtual void SAL_CALL disposing() override
-        {
-            if (mxFrame.is())
-                mxFrame->removeFrameActionListener(this);
-        }
-        virtual void SAL_CALL disposing (const css::lang::EventObject& rEvent)
-            throw (RuntimeException, std::exception) override
-        {
-            (void)rEvent;
-            mrInfoProvider.SetFrame(nullptr);
-            mxFrame = nullptr;
-        }
-
-    private:
-        vcl::CommandInfoProvider& mrInfoProvider;
-        Reference<frame::XFrame> mxFrame;
-    };
-}
-
 namespace vcl {
 
-CommandInfoProvider& CommandInfoProvider::Instance()
-{
-    static CommandInfoProvider aProvider;
-    return aProvider;
-}
+css::uno::Reference<css::uno::XComponentContext> CommandInfoProvider::mxContext(comphelper::getProcessComponentContext());
+css::uno::Reference<css::ui::XAcceleratorConfiguration> CommandInfoProvider::mxCachedDocumentAcceleratorConfiguration;
+css::uno::Reference<css::ui::XAcceleratorConfiguration> CommandInfoProvider::mxCachedModuleAcceleratorConfiguration;
+css::uno::Reference<css::ui::XAcceleratorConfiguration> CommandInfoProvider::mxCachedGlobalAcceleratorConfiguration;
+css::uno::Reference<css::frame::XFrame> CommandInfoProvider::mxCachedDataFrame;
+OUString CommandInfoProvider::msCachedModuleIdentifier;
 
-CommandInfoProvider::CommandInfoProvider()
-    : mxContext(comphelper::getProcessComponentContext()),
-      mxCachedDataFrame(),
-      mxCachedDocumentAcceleratorConfiguration(),
-      mxCachedModuleAcceleratorConfiguration(),
-      mxCachedGlobalAcceleratorConfiguration(),
-      msCachedModuleIdentifier(),
-      mxFrameListener()
-{
-    ImplGetSVData()->mpCommandInfoProvider = this;
-}
+CommandInfoProvider::CommandInfoProvider() { }
 
 void CommandInfoProvider::dispose()
 {
-    if (mxFrameListener.is())
-    {
-        mxFrameListener->dispose();
-        mxFrameListener.clear();
-    }
     mxCachedGlobalAcceleratorConfiguration.clear();
     mxCachedModuleAcceleratorConfiguration.clear();
     mxCachedDocumentAcceleratorConfiguration.clear();
@@ -335,22 +275,11 @@ void CommandInfoProvider::SetFrame (const Reference<frame::XFrame>& rxFrame)
 {
     if (rxFrame != mxCachedDataFrame)
     {
-        // Detach from the old frame.
-        if (mxFrameListener.is())
-        {
-            mxFrameListener->dispose();
-            mxFrameListener = nullptr;
-        }
-
         // Release objects that are tied to the old frame.
         mxCachedDocumentAcceleratorConfiguration = nullptr;
         mxCachedModuleAcceleratorConfiguration = nullptr;
         msCachedModuleIdentifier.clear();
         mxCachedDataFrame = rxFrame;
-
-        // Connect to the new frame.
-        if (rxFrame.is())
-            mxFrameListener = new FrameListener(*this, rxFrame);
     }
 }
 
