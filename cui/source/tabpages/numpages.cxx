@@ -3042,6 +3042,7 @@ bool SvxNumPositionTabPage::FillItemSet( SfxItemSet* rSet )
 
 void SvxNumPositionTabPage::Reset( const SfxItemSet* rSet )
 {
+    const SvxNumberFormat* aNumFmt;
     const SfxPoolItem* pItem;
     // in Draw the item exists as WhichId, in Writer only as SlotId
     SfxItemState eState = rSet->GetItemState(SID_ATTR_NUMBERING_RULE, false, &pItem);
@@ -3077,6 +3078,16 @@ void SvxNumPositionTabPage::Reset( const SfxItemSet* rSet )
     }
     else
         m_pLevelLB->SelectEntryPos(m_pLevelLB->GetEntryCount() - 1);
+    if(!pActNum)
+        pActNum = new  SvxNumRule(*pSaveNum);
+    else if(*pSaveNum != *pActNum)
+        *pActNum = *pSaveNum;
+    InitControls();
+    aNumFmt = &pActNum->GetLevel(0);
+    SetMetricValue(*m_pAlignedAtMF,aNumFmt->GetIndentAt() + aNumFmt->GetFirstLineIndent(),eCoreUnit);
+    SetMetricValue(*m_pListtabMF, aNumFmt->GetListtabPos(), eCoreUnit);
+    SetMetricValue(*m_pIndentAtMF, aNumFmt->GetIndentAt(), eCoreUnit);
+    m_pLabelFollowedByLB->SelectEntryPos( 0 );
     sal_uInt16 nMask = 1;
     m_pLevelLB->SetUpdateMode(false);
     m_pLevelLB->SetNoSelection();
@@ -3099,16 +3110,11 @@ void SvxNumPositionTabPage::Reset( const SfxItemSet* rSet )
     }
     m_pLevelLB->SetUpdateMode(true);
 
-    if(!pActNum)
-        pActNum = new  SvxNumRule(*pSaveNum);
-    else if(*pSaveNum != *pActNum)
-        *pActNum = *pSaveNum;
     m_pPreviewWIN->SetNumRule(pActNum);
 
     InitPosAndSpaceMode();
     ShowControlsDependingOnPosAndSpaceMode();
 
-    InitControls();
     bModified = false;
 }
 
