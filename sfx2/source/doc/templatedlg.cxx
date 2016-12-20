@@ -302,6 +302,7 @@ short SfxTemplateManagerDlg::Execute()
 bool SfxTemplateManagerDlg::EventNotify( NotifyEvent& rNEvt )
 {
     if (mpSearchFilter != nullptr &&
+        mpSearchFilter->HasControlFocus() &&
         !mpSearchFilter->GetText().isEmpty() &&
         rNEvt.GetType() == MouseNotifyEvent::KEYINPUT)
     {
