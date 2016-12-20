@@ -77,7 +77,7 @@ void WinOpenGLContext::resetCurrent()
 bool WinOpenGLContext::isCurrent()
 {
     OpenGLZone aZone;
-    return m_aGLWin.hRC && wglGetCurrentContext() == m_aGLWin.hRC &&
+    return g_bAnyCurrent && m_aGLWin.hRC && wglGetCurrentContext() == m_aGLWin.hRC &&
            wglGetCurrentDC() == m_aGLWin.hDC;
 }
 
