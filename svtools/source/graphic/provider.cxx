@@ -33,17 +33,20 @@
 #include <svl/solar.hrc>
 #include <vcl/virdev.hxx>
 #include <vcl/settings.hxx>
+#include <com/sun/star/awt/XBitmap.hpp>
+#include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/io/XStream.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <comphelper/servicehelper.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include "descriptor.hxx"
 #include "graphic.hxx"
 #include <rtl/ref.hxx>
 #include <svtools/grfmgr.hxx>
-#include "provider.hxx"
 #include <vcl/dibtools.hxx>
 #include <memory>
 
@@ -53,11 +56,40 @@ namespace {
 
 #define UNO_NAME_GRAPHOBJ_URLPREFIX                             "vnd.sun.star.GraphicObject:"
 
-GraphicProvider::GraphicProvider()
+class GraphicProvider : public ::cppu::WeakImplHelper< css::graphic::XGraphicProvider,
+                                                        css::lang::XServiceInfo >
 {
-}
+public:
 
-GraphicProvider::~GraphicProvider()
+    GraphicProvider();
+
+protected:
+
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName() throw( css::uno::RuntimeException, std::exception ) override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( css::uno::RuntimeException, std::exception ) override;
+
+    // XTypeProvider
+    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw(css::uno::RuntimeException, std::exception) override;
+
+    // XGraphicProvider
+    virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL queryGraphicDescriptor( const css::uno::Sequence< css::beans::PropertyValue >& MediaProperties ) throw (css::io::IOException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::graphic::XGraphic > SAL_CALL queryGraphic( const css::uno::Sequence< css::beans::PropertyValue >& MediaProperties ) throw (css::io::IOException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL storeGraphic( const css::uno::Reference< css::graphic::XGraphic >& Graphic, const css::uno::Sequence< css::beans::PropertyValue >& MediaProperties ) throw (css::io::IOException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+
+private:
+
+    static css::uno::Reference< css::graphic::XGraphic > implLoadMemory( const OUString& rResourceURL );
+    static css::uno::Reference< css::graphic::XGraphic > implLoadGraphicObject( const OUString& rResourceURL );
+    static css::uno::Reference< css::graphic::XGraphic > implLoadResource( const OUString& rResourceURL );
+    static css::uno::Reference< css::graphic::XGraphic > implLoadRepositoryImage( const OUString& rResourceURL );
+    static css::uno::Reference< css::graphic::XGraphic > implLoadBitmap( const css::uno::Reference< css::awt::XBitmap >& rBitmap );
+    static css::uno::Reference< css::graphic::XGraphic > implLoadStandardImage( const OUString& rResourceURL );
+};
+
+GraphicProvider::GraphicProvider()
 {
 }
 
