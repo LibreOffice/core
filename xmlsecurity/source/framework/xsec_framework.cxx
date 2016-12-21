@@ -24,7 +24,7 @@
 
 #include "decryptorimpl.hxx"
 #include "encryptorimpl.hxx"
-#include "signaturecreatorimpl.hxx"
+#include "framework/signaturecreatorimpl.hxx"
 #include "framework/signatureverifierimpl.hxx"
 #include "framework/saxeventkeeperimpl.hxx"
 #include "xmlencryptiontemplateimpl.hxx"

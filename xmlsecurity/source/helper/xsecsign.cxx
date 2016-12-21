@@ -30,16 +30,13 @@
 #include <com/sun/star/embed/StorageFormats.hpp>
 #include <rtl/uuid.h>
 
-#include <stdio.h>
+#include "framework/signaturecreatorimpl.hxx"
 
 using namespace com::sun::star;
 namespace cssu = com::sun::star::uno;
 namespace cssl = com::sun::star::lang;
 namespace cssxc = com::sun::star::xml::crypto;
 namespace cssxs = com::sun::star::xml::sax;
-
-/* xml security framework components */
-#define SIGNATURECREATOR_COMPONENT "com.sun.star.xml.crypto.sax.SignatureCreator"
 
 /* protected: for signature generation */
 OUString XSecController::createId()
@@ -66,20 +63,13 @@ cssu::Reference< cssxc::sax::XReferenceResolvedListener > XSecController::prepar
     SignatureReferenceInformations& vReferenceInfors = internalSignatureInfor.signatureInfor.vSignatureReferenceInfors;
 
     sal_Int32 nIdOfSignatureElementCollector;
-    cssu::Reference< cssxc::sax::XReferenceResolvedListener > xReferenceResolvedListener;
 
     nIdOfSignatureElementCollector =
         m_xSAXEventKeeper->addSecurityElementCollector( cssxc::sax::ElementMarkPriority_AFTERMODIFY, true );
 
     m_xSAXEventKeeper->setSecurityId(nIdOfSignatureElementCollector, nSecurityId);
 
-        /*
-         * create a SignatureCreator
-         */
-    cssu::Reference< cssl::XMultiComponentFactory > xMCF( mxCtx->getServiceManager() );
-    xReferenceResolvedListener.set(
-        xMCF->createInstanceWithContext(SIGNATURECREATOR_COMPONENT, mxCtx),
-        cssu::UNO_QUERY);
+    uno::Reference<xml::crypto::sax::XReferenceResolvedListener> xReferenceResolvedListener(new SignatureCreatorImpl(mxCtx));
 
     cssu::Reference<cssl::XInitialization> xInitialization(xReferenceResolvedListener, cssu::UNO_QUERY);
 
