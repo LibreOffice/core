@@ -12,8 +12,12 @@ from libreoffice.calc.document import get_cell_by_position
 
 from uitest.uihelper.common import get_state_as_dict
 from uitest.uihelper.calc import enter_text_to_cell
+from uitest.path import get_srcdir_url
 
 import time
+
+def get_url_for_data_file(file_name):
+    return get_srcdir_url() + "/uitest/manual_tests/data/" + file_name
 
 class ManualCalcTests(UITestCase):
 
@@ -166,6 +170,25 @@ class ManualCalcTests(UITestCase):
         self.assertEqual(get_cell_by_position(document, 0, 2, 2).getValue(), 35)
         self.assertEqual(get_cell_by_position(document, 0, 3, 1).getString(), "edfg")
         self.assertEqual(get_cell_by_position(document, 0, 3, 2).getValue(), 5678)
+
+        self.ui_test.close_doc()
+
+    # http://manual-test.libreoffice.org/manage/case/151/
+    def test_cell_recalc(self):
+        doc = self.ui_test.load_file(get_url_for_data_file("cell_recalc.ods"))
+
+        xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
+        xGridWin.executeAction("SELECT", mkPropertyValues({"RANGE": "D2:D9"}))
+        self.xUITest.executeCommand(".uno:Cut")
+
+        self.assertEqual(get_cell_by_position(doc, 0, 3, 15).getValue(), 0)
+
+        self.xUITest.executeCommand(".uno:Undo")
+
+        for i in range(1, 9):
+            self.assertTrue(get_cell_by_position(doc, 0, 3, i).getValue() != 0)
+
+        self.assertEqual(get_cell_by_position(doc, 0, 3, 15).getValue(), 195)
 
         self.ui_test.close_doc()
 
