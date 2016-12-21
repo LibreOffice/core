@@ -58,7 +58,7 @@ ScDrawShell::ScDrawShell( ScViewData* pData ) :
     mpSelectionChangeHandler(new svx::sidebar::SelectionChangeHandler(
             [this] () { return this->GetSidebarContextName(); },
             GetFrame()->GetFrame().GetController(),
-            vcl::EnumContext::Context_Cell))
+            vcl::EnumContext::Context::Cell))
 {
     SetPool( &pViewData->GetScDrawView()->GetModel()->GetItemPool() );
     ::svl::IUndoManager* pMgr = pViewData->GetSfxDocShell()->GetUndoManager();

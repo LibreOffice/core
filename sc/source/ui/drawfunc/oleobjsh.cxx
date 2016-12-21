@@ -57,7 +57,7 @@ ScOleObjectShell::ScOleObjectShell(ScViewData* pData) :
 {
     SetHelpId(HID_SCSHELL_OLEOBEJCTSH);
     SetName("OleObject");
-    SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context_OLE));
+    SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context::OLE));
 }
 
 ScOleObjectShell::~ScOleObjectShell()

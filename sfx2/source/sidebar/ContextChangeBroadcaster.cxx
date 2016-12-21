@@ -58,7 +58,7 @@ void ContextChangeBroadcaster::Deactivate (const css::uno::Reference<css::frame:
         BroadcastContextChange(
             rxFrame,
             GetModuleName(rxFrame),
-            vcl::EnumContext::GetContextName(vcl::EnumContext::Context_Default));
+            vcl::EnumContext::GetContextName(vcl::EnumContext::Context::Default));
     }
 }
 

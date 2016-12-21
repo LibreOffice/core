@@ -1406,7 +1406,7 @@ SwTableShell::SwTableShell(SwView &_rView) :
 {
     SetName("Table");
     SetHelpId(SW_TABSHELL);
-    SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context_Table));
+    SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context::Table));
 }
 
 void SwTableShell::GetFrameBorderState(SfxItemSet &rSet)

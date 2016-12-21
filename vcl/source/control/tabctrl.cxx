@@ -2209,7 +2209,7 @@ sal_uInt16 NotebookbarTabControl::m_nHeaderHeight = 0;
 NotebookbarTabControl::NotebookbarTabControl(vcl::Window* pParent)
     : TabControl(pParent, WB_STDTABCONTROL)
     , bLastContextWasSupported(true)
-    , eLastContext(vcl::EnumContext::Context::Context_Any)
+    , eLastContext(vcl::EnumContext::Context::Any)
 {
     LanguageTag aLocale( Application::GetSettings().GetUILanguageTag());
     ResMgr* pResMgr = ResMgr::SearchCreateResMgr( "vcl", aLocale );
@@ -2232,18 +2232,18 @@ void NotebookbarTabControl::SetContext( vcl::EnumContext::Context eContext )
         {
             TabPage* pPage = static_cast<TabPage*>(GetChild(nChild));
 
-            if (pPage->HasContext(eContext) || pPage->HasContext(vcl::EnumContext::Context::Context_Any))
+            if (pPage->HasContext(eContext) || pPage->HasContext(vcl::EnumContext::Context::Any))
                 EnablePage(nChild + 2);
             else
                 EnablePage(nChild + 2, false);
 
             if (!bHandled && bLastContextWasSupported
-                && pPage->HasContext(vcl::EnumContext::Context::Context_Default))
+                && pPage->HasContext(vcl::EnumContext::Context::Default))
             {
                 SetCurPageId(nChild + 2);
             }
 
-            if (pPage->HasContext(eContext) && eContext != vcl::EnumContext::Context::Context_Any)
+            if (pPage->HasContext(eContext) && eContext != vcl::EnumContext::Context::Any)
             {
                 SetCurPageId(nChild + 2);
                 bHandled = true;
@@ -2367,7 +2367,7 @@ bool NotebookbarTabControl::ImplPlaceTabs( long nWidth )
             mbSmallInvalidate = false;
 
         // don't show empty space when tab is hidden, move next tabs to the left
-        if ( it->mpTabPage && !it->mpTabPage->HasContext(vcl::EnumContext::Context_Any) )
+        if ( it->mpTabPage && !it->mpTabPage->HasContext(vcl::EnumContext::Context::Any) )
         {
             aNewRect.setX(aNewRect.getX() - nHiddenWidth);
             nHiddenWidth += aNewRect.getWidth();

@@ -99,7 +99,7 @@ ScEditShell::ScEditShell(EditView* pView, ScViewData* pData) :
     SetPool( pEditView->GetEditEngine()->GetEmptyItemSet().GetPool() );
     SetUndoManager( &pEditView->GetEditEngine()->GetUndoManager() );
     SetName("EditCell");
-    SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context_EditCell));
+    SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context::EditCell));
 }
 
 ScEditShell::~ScEditShell()

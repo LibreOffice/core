@@ -264,37 +264,37 @@ void PosSizePropertyPanel::HandleContextChange(
 
     switch (maContext.GetCombinedContext_DI())
     {
-        case CombinedEnumContext(Application::WriterVariants, Context_Draw):
+        case CombinedEnumContext(Application::WriterVariants, Context::Draw):
             bShowAngle = true;
             bShowFlip = true;
             break;
 
-        case CombinedEnumContext(Application::WriterVariants, Context_Graphic):
+        case CombinedEnumContext(Application::WriterVariants, Context::Graphic):
             bShowFlip = true;
             break;
 
-        case CombinedEnumContext(Application::Calc, Context_Draw):
-        case CombinedEnumContext(Application::Calc, Context_DrawLine):
-        case CombinedEnumContext(Application::Calc, Context_Graphic):
-        case CombinedEnumContext(Application::DrawImpress, Context_Draw):
-        case CombinedEnumContext(Application::DrawImpress, Context_DrawLine):
-        case CombinedEnumContext(Application::DrawImpress, Context_TextObject):
-        case CombinedEnumContext(Application::DrawImpress, Context_Graphic):
+        case CombinedEnumContext(Application::Calc, Context::Draw):
+        case CombinedEnumContext(Application::Calc, Context::DrawLine):
+        case CombinedEnumContext(Application::Calc, Context::Graphic):
+        case CombinedEnumContext(Application::DrawImpress, Context::Draw):
+        case CombinedEnumContext(Application::DrawImpress, Context::DrawLine):
+        case CombinedEnumContext(Application::DrawImpress, Context::TextObject):
+        case CombinedEnumContext(Application::DrawImpress, Context::Graphic):
             bShowPosition = true;
             bShowAngle = true;
             bShowFlip = true;
             break;
 
-        case CombinedEnumContext(Application::Calc, Context_Chart):
-        case CombinedEnumContext(Application::Calc, Context_Form):
-        case CombinedEnumContext(Application::Calc, Context_Media):
-        case CombinedEnumContext(Application::Calc, Context_OLE):
-        case CombinedEnumContext(Application::Calc, Context_MultiObject):
-        case CombinedEnumContext(Application::DrawImpress, Context_Media):
-        case CombinedEnumContext(Application::DrawImpress, Context_Form):
-        case CombinedEnumContext(Application::DrawImpress, Context_OLE):
-        case CombinedEnumContext(Application::DrawImpress, Context_3DObject):
-        case CombinedEnumContext(Application::DrawImpress, Context_MultiObject):
+        case CombinedEnumContext(Application::Calc, Context::Chart):
+        case CombinedEnumContext(Application::Calc, Context::Form):
+        case CombinedEnumContext(Application::Calc, Context::Media):
+        case CombinedEnumContext(Application::Calc, Context::OLE):
+        case CombinedEnumContext(Application::Calc, Context::MultiObject):
+        case CombinedEnumContext(Application::DrawImpress, Context::Media):
+        case CombinedEnumContext(Application::DrawImpress, Context::Form):
+        case CombinedEnumContext(Application::DrawImpress, Context::OLE):
+        case CombinedEnumContext(Application::DrawImpress, Context::ThreeDObject):
+        case CombinedEnumContext(Application::DrawImpress, Context::MultiObject):
             bShowPosition = true;
             break;
     }
@@ -763,8 +763,8 @@ void PosSizePropertyPanel::NotifyItemUpdate(
             const SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
             const SdrObjKind eKind((SdrObjKind)pObj->GetObjIdentifier());
 
-            if(((nCombinedContext == CombinedEnumContext(Application::DrawImpress, Context_Draw)
-               || nCombinedContext == CombinedEnumContext(Application::DrawImpress, Context_TextObject)
+            if(((nCombinedContext == CombinedEnumContext(Application::DrawImpress, Context::Draw)
+               || nCombinedContext == CombinedEnumContext(Application::DrawImpress, Context::TextObject)
                  ) && OBJ_EDGE == eKind)
                || OBJ_CAPTION == eKind)
             {
@@ -787,8 +787,8 @@ void PosSizePropertyPanel::NotifyItemUpdate(
                 const SdrObject* pObj = rMarkList.GetMark(nMarkObj)->GetMarkedSdrObj();
                 const SdrObjKind eKind((SdrObjKind)pObj->GetObjIdentifier());
 
-                if(((nCombinedContext == CombinedEnumContext(Application::DrawImpress, Context_Draw)
-                  || nCombinedContext == CombinedEnumContext(Application::DrawImpress, Context_TextObject)
+                if(((nCombinedContext == CombinedEnumContext(Application::DrawImpress, Context::Draw)
+                  || nCombinedContext == CombinedEnumContext(Application::DrawImpress, Context::TextObject)
                      ) && OBJ_EDGE == eKind)
                   || OBJ_CAPTION == eKind)
                 {
@@ -810,7 +810,7 @@ void PosSizePropertyPanel::NotifyItemUpdate(
         }
     }
 
-    if(nCombinedContext == CombinedEnumContext(Application::DrawImpress, Context_TextObject))
+    if(nCombinedContext == CombinedEnumContext(Application::DrawImpress, Context::TextObject))
     {
         mpFlipTbx->Disable();
         mpFtFlip->Disable();
@@ -855,8 +855,8 @@ void PosSizePropertyPanel::executeSize()
         SfxAllEnumItem aPointItem (SID_ATTR_TRANSFORM_SIZE_POINT, (sal_uInt16)RectPoint::LT);
         const sal_Int32 nCombinedContext(maContext.GetCombinedContext_DI());
 
-        if( nCombinedContext == CombinedEnumContext(Application::WriterVariants, Context_Graphic)
-            || nCombinedContext == CombinedEnumContext(Application::WriterVariants, Context_OLE)
+        if( nCombinedContext == CombinedEnumContext(Application::WriterVariants, Context::Graphic)
+            || nCombinedContext == CombinedEnumContext(Application::WriterVariants, Context::OLE)
             )
         {
             GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_TRANSFORM,

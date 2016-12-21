@@ -65,7 +65,7 @@ ScPivotShell::ScPivotShell( ScTabViewShell* pViewSh ) :
     }
     SetHelpId( HID_SCSHELL_PIVOTSH );
     SetName("Pivot");
-    SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context_Pivot));
+    SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context::Pivot));
 }
 
 ScPivotShell::~ScPivotShell()

@@ -21,7 +21,7 @@ class VCL_DLLPUBLIC IContext
 protected:
     IContext()
     {
-        maContext.push_back( vcl::EnumContext::Context::Context_Any );
+        maContext.push_back( vcl::EnumContext::Context::Any );
     }
 
 public:

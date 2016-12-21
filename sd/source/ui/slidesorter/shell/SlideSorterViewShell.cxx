@@ -464,7 +464,7 @@ void SlideSorterViewShell::Activate (bool bIsMDIActivate)
         ArrangeGUIElements();
 
     // Determine and broadcast the context that belongs to the main view shell.
-    EnumContext::Context eContext = EnumContext::Context_Unknown;
+    EnumContext::Context eContext = EnumContext::Context::Unknown;
     std::shared_ptr<ViewShell> pMainViewShell (GetViewShellBase().GetMainViewShell());
     ViewShell::ShellType eMainViewShellType (
         pMainViewShell
@@ -476,7 +476,7 @@ void SlideSorterViewShell::Activate (bool bIsMDIActivate)
         case ViewShell::ST_SLIDE_SORTER:
         case ViewShell::ST_NOTES:
         case ViewShell::ST_DRAW:
-            eContext = EnumContext::Context_DrawPage;
+            eContext = EnumContext::Context::DrawPage;
             if( nullptr != dynamic_cast< const DrawViewShell *>( pMainViewShell.get() ))
             {
                 DrawViewShell* pDrawViewShell = dynamic_cast<DrawViewShell*>(pMainViewShell.get());

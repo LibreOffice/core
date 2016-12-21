@@ -834,7 +834,7 @@ SwTextShell::SwTextShell(SwView &_rView) :
 {
     SetName("Text");
     SetHelpId(SW_TEXTSHELL);
-    SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context_Text));
+    SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context::Text));
 }
 
 SwTextShell::~SwTextShell()

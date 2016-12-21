@@ -35,7 +35,7 @@ static o3tl::enumarray<EnumContext::Application, rtl::OUString> maApplicationVec
 typedef ::std::map<rtl::OUString,EnumContext::Context> ContextMap;
 
 static ContextMap maContextMap;
-static ::std::vector<rtl::OUString> maContextVector;
+static o3tl::enumarray<EnumContext::Context, rtl::OUString> maContextVector;
 
 }
 
@@ -44,7 +44,7 @@ const sal_Int32 EnumContext::OptimalMatch = 0;  // Neither application nor conte
 
 EnumContext::EnumContext()
     : meApplication(Application::NONE),
-      meContext(Context_Unknown)
+      meContext(Context::Unknown)
 {
 }
 
@@ -150,9 +150,6 @@ const ::rtl::OUString& EnumContext::GetApplicationName (const Application eAppli
 void EnumContext::AddEntry (const ::rtl::OUString& rsName, const Context eContext)
 {
     maContextMap[rsName] = eContext;
-    OSL_ASSERT(eContext<=LastContextEnum);
-    if (maContextVector.size() <= size_t(eContext))
-        maContextVector.resize(eContext+1);
     maContextVector[eContext] = rsName;
 }
 
@@ -160,41 +157,40 @@ void EnumContext::ProvideContextContainers()
 {
     if (maContextMap.empty())
     {
-        maContextVector.resize(static_cast<size_t>(LastContextEnum)+1);
-        AddEntry("any", Context_Any);
-        AddEntry("default", Context_Default);
-        AddEntry("empty", Context_Empty);
-        AddEntry("3DObject", Context_3DObject);
-        AddEntry("Annotation", Context_Annotation);
-        AddEntry("Auditing", Context_Auditing);
-        AddEntry("Axis", Context_Axis);
-        AddEntry("Cell", Context_Cell);
-        AddEntry("Chart", Context_Chart);
-        AddEntry("ChartElements", Context_ChartElements);
-        AddEntry("Draw", Context_Draw);
-        AddEntry("DrawLine", Context_DrawLine);
-        AddEntry("DrawPage", Context_DrawPage);
-        AddEntry("DrawText", Context_DrawText);
-        AddEntry("EditCell", Context_EditCell);
-        AddEntry("ErrorBar", Context_ErrorBar);
-        AddEntry("Form", Context_Form);
-        AddEntry("Frame", Context_Frame);
-        AddEntry("Graphic", Context_Graphic);
-        AddEntry("Grid", Context_Grid);
-        AddEntry("HandoutPage", Context_HandoutPage);
-        AddEntry("MasterPage", Context_MasterPage);
-        AddEntry("Media", Context_Media);
-        AddEntry("MultiObject", Context_MultiObject);
-        AddEntry("NotesPage", Context_NotesPage);
-        AddEntry("OLE", Context_OLE);
-        AddEntry("OutlineText", Context_OutlineText);
-        AddEntry("Pivot", Context_Pivot);
-        AddEntry("Series", Context_Series);
-        AddEntry("SlidesorterPage", Context_SlidesorterPage);
-        AddEntry("Table", Context_Table);
-        AddEntry("Text", Context_Text);
-        AddEntry("TextObject", Context_TextObject);
-        AddEntry("Trendline", Context_Trendline);
+        AddEntry("any", Context::Any);
+        AddEntry("default", Context::Default);
+        AddEntry("empty", Context::Empty);
+        AddEntry("3DObject", Context::ThreeDObject);
+        AddEntry("Annotation", Context::Annotation);
+        AddEntry("Auditing", Context::Auditing);
+        AddEntry("Axis", Context::Axis);
+        AddEntry("Cell", Context::Cell);
+        AddEntry("Chart", Context::Chart);
+        AddEntry("ChartElements", Context::ChartElements);
+        AddEntry("Draw", Context::Draw);
+        AddEntry("DrawLine", Context::DrawLine);
+        AddEntry("DrawPage", Context::DrawPage);
+        AddEntry("DrawText", Context::DrawText);
+        AddEntry("EditCell", Context::EditCell);
+        AddEntry("ErrorBar", Context::ErrorBar);
+        AddEntry("Form", Context::Form);
+        AddEntry("Frame", Context::Frame);
+        AddEntry("Graphic", Context::Graphic);
+        AddEntry("Grid", Context::Grid);
+        AddEntry("HandoutPage", Context::HandoutPage);
+        AddEntry("MasterPage", Context::MasterPage);
+        AddEntry("Media", Context::Media);
+        AddEntry("MultiObject", Context::MultiObject);
+        AddEntry("NotesPage", Context::NotesPage);
+        AddEntry("OLE", Context::OLE);
+        AddEntry("OutlineText", Context::OutlineText);
+        AddEntry("Pivot", Context::Pivot);
+        AddEntry("Series", Context::Series);
+        AddEntry("SlidesorterPage", Context::SlidesorterPage);
+        AddEntry("Table", Context::Table);
+        AddEntry("Text", Context::Text);
+        AddEntry("TextObject", Context::TextObject);
+        AddEntry("Trendline", Context::Trendline);
     }
 }
 
@@ -206,18 +202,13 @@ EnumContext::Context EnumContext::GetContextEnum (const ::rtl::OUString& rsConte
     if (iContext != maContextMap.end())
         return iContext->second;
     else
-        return EnumContext::Context_Unknown;
+        return EnumContext::Context::Unknown;
 }
 
 const ::rtl::OUString& EnumContext::GetContextName (const Context eContext)
 {
     ProvideContextContainers();
-
-    const sal_Int32 nIndex (eContext);
-    if (nIndex<0 || nIndex>= LastContextEnum)
-        return maContextVector[Context_Unknown];
-    else
-        return maContextVector[nIndex];
+    return maContextVector[eContext];
 }
 
 } // end of namespace vcl

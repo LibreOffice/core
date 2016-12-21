@@ -966,7 +966,7 @@ SwFrameShell::SwFrameShell(SwView &_rView) :
     // #96392# Use this to announce it is the frame shell who creates the selection.
     SwTransferable::CreateSelection( _rView.GetWrtShell(), this );
 
-    SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context_Frame));
+    SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context::Frame));
 }
 
 SwFrameShell::~SwFrameShell()

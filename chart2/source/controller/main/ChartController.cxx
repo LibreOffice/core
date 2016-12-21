@@ -120,7 +120,7 @@ ChartController::ChartController(uno::Reference<uno::XComponentContext> const & 
     m_eDrawMode( CHARTDRAW_SELECT ),
     mpSelectionChangeHandler(new svx::sidebar::SelectionChangeHandler(
             [this]() { return this->GetContextName(); },
-                this, vcl::EnumContext::Context_Cell))
+                this, vcl::EnumContext::Context::Cell))
 {
     m_aDoubleClickTimer.SetTimeoutHdl( LINK( this, ChartController, DoubleClickWaitingHdl ) );
 }

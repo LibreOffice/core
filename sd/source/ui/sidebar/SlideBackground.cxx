@@ -392,13 +392,13 @@ IMPL_LINK(SlideBackground, EventMultiplexerListener,
             if(!mbTitle)
             {
                 vcl::EnumContext aDrawOtherContext(vcl::EnumContext::Application::Draw,
-                                              vcl::EnumContext::Context_DrawPage);
+                                              vcl::EnumContext::Context::DrawPage);
                 vcl::EnumContext aDrawMasterContext(vcl::EnumContext::Application::Draw,
-                                              vcl::EnumContext::Context_MasterPage);
+                                              vcl::EnumContext::Context::MasterPage);
                 vcl::EnumContext aImpressOtherContext(vcl::EnumContext::Application::Impress,
-                                                 vcl::EnumContext::Context_DrawPage);
+                                                 vcl::EnumContext::Context::DrawPage);
                 vcl::EnumContext aImpressMasterContext(vcl::EnumContext::Application::Impress,
-                                                       vcl::EnumContext::Context_MasterPage);
+                                                       vcl::EnumContext::Context::MasterPage);
                 if(maContext == aDrawOtherContext || maContext == aDrawMasterContext)
                 {
                     mpMasterLabel->SetText(SD_RESSTR(STR_MASTERPAGE_NAME));

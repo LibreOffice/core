@@ -57,7 +57,7 @@ void SAL_CALL SelectionChangeHandler::selectionChanged (const lang::EventObject&
             vcl::EnumContext::GetContextEnum(maSelectionChangeCallback()));
         ContextChangeEventMultiplexer::NotifyContextChange(
             mxController,
-            eContext==vcl::EnumContext::Context_Unknown
+            eContext==vcl::EnumContext::Context::Unknown
                 ? meDefaultContext
                 : eContext);
     }

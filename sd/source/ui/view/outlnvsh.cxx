@@ -203,7 +203,7 @@ OutlineViewShell::OutlineViewShell (
 
     Construct(GetDocSh());
 
-    SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context_OutlineText));
+    SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context::OutlineText));
 
     m_StrOldPageName.clear();
 

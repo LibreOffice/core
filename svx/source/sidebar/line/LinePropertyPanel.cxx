@@ -188,9 +188,9 @@ void LinePropertyPanel::HandleContextChange(
 
     switch(maContext.GetCombinedContext_DI())
     {
-        case CombinedEnumContext(Application::Calc, Context_DrawLine):
-        case CombinedEnumContext(Application::DrawImpress, Context_DrawLine):
-        case CombinedEnumContext(Application::WriterVariants, Context_Draw):
+        case CombinedEnumContext(Application::Calc, Context::DrawLine):
+        case CombinedEnumContext(Application::DrawImpress, Context::DrawLine):
+        case CombinedEnumContext(Application::WriterVariants, Context::Draw):
             // TODO : Implement DrawLine context in Writer
             bShowArrows = true;
             break;
