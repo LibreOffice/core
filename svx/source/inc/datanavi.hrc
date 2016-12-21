@@ -32,13 +32,6 @@
 #define TBI_ITEM_EDIT           13
 #define TBI_ITEM_REMOVE         14
 
-// ImageIndexes
-#define IID_ITEM_ADD            1
-#define IID_ITEM_ADD_ELEMENT    2
-#define IID_ITEM_ADD_ATTRIBUTE  3
-#define IID_ITEM_EDIT           4
-#define IID_ITEM_REMOVE         5
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

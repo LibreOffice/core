@@ -250,7 +250,6 @@ namespace svxform
         VclPtr<DataNavigatorWindow> m_pNaviWin;
         bool                        m_bHasModel;
         DataGroupType               m_eGroup;
-        ImageList                   m_TbxImageList;
         // these strings are not valid on the Submission and Binding Page
         // mb: furthermore these are properties of an instance, thus
         // it would be much better to get/set them through the UIHelper

@@ -22,23 +22,30 @@
 #include "svx/fmresids.hrc"
 #include "fmhelp.hrc"
 
-#define IMG_LST                 \
-IdList =                        \
-{                               \
-    IID_ITEM_ADD ;              \
-    IID_ITEM_ADD_ELEMENT ;      \
-    IID_ITEM_ADD_ATTRIBUTE ;    \
-    IID_ITEM_EDIT ;             \
-    IID_ITEM_REMOVE ;           \
-};                              \
-IdCount = { 5 ; } ;
-
-ImageList RID_SVXIMGLIST_XFORMS_TBX
+Bitmap RID_SVXBMP_ADD
 {
-    Prefix = "tb";
-    IMG_LST
+    File = "tb01.png";
 };
-#undef IMG_LST
+
+Bitmap RID_SVXBMP_ADD_ELEMENT
+{
+    File = "tb02.png";
+};
+
+Bitmap RID_SVXBMP_ADD_ATTRIBUTE
+{
+    File = "tb03.png";
+};
+
+Bitmap RID_SVXBMP_EDIT
+{
+    File = "tb04.png";
+};
+
+Bitmap RID_SVXBMP_REMOVE
+{
+    File = "tb05.png";
+};
 
 Bitmap RID_SVXBMP_GROUP_CLOSED
 {

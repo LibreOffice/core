@@ -189,6 +189,12 @@
 #define RID_SVXBMP_FRAME11                  (RID_SVX_START +  85)
 #define RID_SVXBMP_FRAME12                  (RID_SVX_START +  86)
 
+#define RID_SVXBMP_ADD                      (RID_SVX_START +  87)
+#define RID_SVXBMP_ADD_ELEMENT              (RID_SVX_START +  88)
+#define RID_SVXBMP_ADD_ATTRIBUTE            (RID_SVX_START +  89)
+#define RID_SVXBMP_EDIT                     (RID_SVX_START +  90)
+#define RID_SVXBMP_REMOVE                   (RID_SVX_START +  91)
+
 // Menu for the ruler
 #define RID_SVXMN_RULER                     (RID_SVX_START +  92)
 

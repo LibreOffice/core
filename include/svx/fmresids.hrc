@@ -26,7 +26,6 @@
 
 // ImageList-Id's -----------------------------------------------------------
 #define RID_SVXIMGLIST_FMEXPL                       (RID_FORMS_START + 0)
-#define RID_SVXIMGLIST_XFORMS_TBX                   (RID_FORMS_START + 1)
 
 // Image-Id's -----------------------------------------------------------
 #define RID_SVXIMG_FORM                             SID_FM_CONFIG

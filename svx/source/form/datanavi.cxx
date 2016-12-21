@@ -308,7 +308,6 @@ namespace svxform
         m_pNaviWin      ( _pNaviWin ),
         m_bHasModel     ( false ),
         m_eGroup        ( _eGroup ),
-        m_TbxImageList  ( SVX_RES( RID_SVXIMGLIST_XFORMS_TBX ) ),
         m_bLinkOnce     ( false )
 
     {
@@ -329,13 +328,12 @@ namespace svxform
 
         m_pItemList->SetToolBoxItemIds(m_nAddId, m_nAddElementId, m_nAddAttributeId, m_nEditId, m_nRemoveId);
 
-        const ImageList& rImageList = m_TbxImageList;
         m_pToolBox->InsertSeparator(4,5);
-        m_pToolBox->SetItemImage( m_nAddId, rImageList.GetImage( IID_ITEM_ADD ) );
-        m_pToolBox->SetItemImage( m_nAddElementId, rImageList.GetImage( IID_ITEM_ADD_ELEMENT ) );
-        m_pToolBox->SetItemImage( m_nAddAttributeId, rImageList.GetImage( IID_ITEM_ADD_ATTRIBUTE ) );
-        m_pToolBox->SetItemImage( m_nEditId, rImageList.GetImage( IID_ITEM_EDIT ) );
-        m_pToolBox->SetItemImage( m_nRemoveId, rImageList.GetImage( IID_ITEM_REMOVE ) );
+        m_pToolBox->SetItemImage(m_nAddId, Image(BitmapEx(SVX_RES(RID_SVXBMP_ADD))));
+        m_pToolBox->SetItemImage(m_nAddElementId, Image(BitmapEx(SVX_RES(RID_SVXBMP_ADD_ELEMENT))));
+        m_pToolBox->SetItemImage(m_nAddAttributeId, Image(BitmapEx(SVX_RES(RID_SVXBMP_ADD_ATTRIBUTE))));
+        m_pToolBox->SetItemImage(m_nEditId, Image(BitmapEx(SVX_RES(RID_SVXBMP_EDIT))));
+        m_pToolBox->SetItemImage(m_nRemoveId, Image(BitmapEx(SVX_RES(RID_SVXBMP_REMOVE))));
 
         if ( DGTInstance == m_eGroup )
             m_pToolBox->RemoveItem( m_pToolBox->GetItemPos( m_nAddId ) );
