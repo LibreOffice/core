@@ -5286,15 +5286,15 @@ void DomainMapper_Impl::substream(Id rName,
     }
 #endif
 
+    //finalize any waiting frames before starting alternate streams
+    CheckUnregisteredFrameConversion();
+    ExecuteFrameConversion();
+
     appendTableManager();
     // Appending a TableManager resets its TableHandler, so we need to append
     // that as well, or tables won't be imported properly in headers/footers.
     appendTableHandler();
     getTableManager().startLevel();
-
-    //finalize any waiting frames before starting alternate streams
-    CheckUnregisteredFrameConversion();
-    ExecuteFrameConversion();
 
     //import of page header/footer
 
