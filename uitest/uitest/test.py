@@ -6,6 +6,7 @@
 #
 
 import time
+import threading
 from uitest.config import DEFAULT_SLEEP
 
 from libreoffice.uno.eventlistener import EventListener
@@ -150,5 +151,22 @@ class UITest(object):
 
                 time_ += DEFAULT_SLEEP
                 time.sleep(DEFAULT_SLEEP)
+
+    def execute_blocking_action(self, action, dialog_element, args = ()):
+        thread = threading.Thread(target=action, args=args)
+        with EventListener(self._xContext, ["DialogExecute", "ModelessDialogExecute"]) as event:
+            thread.start()
+            time_ = 0
+            while time_ < 30:
+                if event.executed:
+                    xDlg = self._xUITest.getTopFocusWindow()
+                    xUIElement = xDlg.getChild(dialog_element)
+                    xUIElement.executeAction("CLICK", tuple())
+                    thread.join()
+                    return
+
+                time_ += DEFAULT_SLEEP
+                time.sleep(DEFAULT_SLEEP)
+        raise DialogNotExecutedException("did not execute a dialog for a blocking action")
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
