@@ -45,8 +45,6 @@
 #define TBI_UNDO                40
 #define TBI_REDO                41
 
-#define IL_IMAPDLG              1024
-
 /******************************************************************************/
 
 #define RID_SVXMN_IMAP          (RID_SVX_IMAPDLG_START + 1)

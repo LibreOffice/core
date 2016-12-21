@@ -20,33 +20,6 @@
 #include "helpid.hrc"
 #include "imapdlg.hrc"
 
-ImageList IL_IMAPDLG
-{
-    Prefix = "id";
-    IdList =
-    {
-        TBI_APPLY ;
-        TBI_OPEN ;
-        TBI_SAVEAS ;
-        TBI_SELECT ;
-        TBI_RECT ;
-        TBI_CIRCLE ;
-        TBI_POLY ;
-        TBI_FREEPOLY ;
-        TBI_POLYEDIT ;
-        TBI_POLYMOVE ;
-        TBI_POLYINSERT ;
-        TBI_POLYDELETE ;
-        TBI_UNDO ;
-        TBI_REDO ;
-        TBI_ACTIVE ;
-        TBI_MACRO ;
-        TBI_PROPERTY ;
-    };
-    IdCount = { 17 ; };
-};
-
-/******************************************************************************/
 Menu RID_SVXMN_IMAP
 {
     ItemList =
