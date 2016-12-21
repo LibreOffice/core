@@ -83,6 +83,7 @@ struct ReorderParam;
 class FormulaGroupAreaListener;
 class ColumnSet;
 class UpdatedRangeNames;
+class TableColumnBlockPositionSet;
 
 }
 
@@ -284,6 +285,7 @@ friend class sc::DocumentStreamAccess;
 friend class sc::ColumnSpanSet;
 friend class sc::EditTextIterator;
 friend class sc::FormulaGroupAreaListener;
+friend class sc::TableColumnBlockPositionSet;
 
     typedef std::vector<ScTable*> TableContainer;
 
