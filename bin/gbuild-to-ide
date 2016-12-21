@@ -187,7 +187,8 @@ class GbuildParser:
                     self.target_by_path[path] = set()
                 self.target_by_path[path] |= set([target])
         for path in self.target_by_path:
-            if len(set(self.target_by_path[path])) > 1:
+            x = self.target_by_path[path]
+            if path != '' and len(set(self.target_by_path[path])) > 1:
                 print('fdo#70422: multiple target use dir %s: %s' % (
                     path, ', '.join([target.short_name() for target in set(self.target_by_path[path])])))
         for location in self.target_by_location:
@@ -280,7 +281,7 @@ class EclipseCDTIntegrationGenerator(IdeIntegrationGenerator):
 </language>
 </section>
 </cdtprojectproperties>
-""" 
+"""
 
         for module in self.gbuildparser.modulenamelist:
             tempxml = []
@@ -305,7 +306,7 @@ class EclipseCDTIntegrationGenerator(IdeIntegrationGenerator):
                 macrokey = macroskeyvalue[0]
                 macrovalue = macroskeyvalue[1]
                 if macrovalue[-1:] == "\n":
-                    macrovalue = macrovalue[:-1] 
+                    macrovalue = macrovalue[:-1]
                 templine = "<macro><name>%s</name><value>%s</value></macro>\n" %(macrokey, macrovalue)
                 tempxml.insert(-13, templine)
             tempxml="".join(tempxml)
@@ -320,7 +321,7 @@ class EclipseCDTIntegrationGenerator(IdeIntegrationGenerator):
     def emit(self):
         self.create_include_paths()
         self.create_macros()
-        self.create_settings_file() 
+        self.create_settings_file()
 
 class DebugIntegrationGenerator(IdeIntegrationGenerator):
 
@@ -567,6 +568,8 @@ class XcodeIntegrationGenerator(IdeIntegrationGenerator):
             file.write('"%s"' % object)
         elif isinstance(object, dict):
             self.write_dict(object, file, indent)
+        elif isinstance(object, list):
+            self.write_list(object, file, indent)
 
     # Write a dictionary out as an "old-style (NeXT) ASCII plist"
     def write_dict(self, dict, file, indent):
@@ -579,6 +582,13 @@ class XcodeIntegrationGenerator(IdeIntegrationGenerator):
             file.write(';\n')
         self.indent(file, indent)
         file.write('}')
+
+    def write_list(self, list, file, indent):
+        file.write('(')
+        for key in list:
+            self.write_object(key, file, 1)
+            file.write(',')
+        file.write(')')
 
     def write_dict_to_plist(self, dict, file):
         file.write('// !$*UTF8*$!\n')
@@ -601,18 +611,21 @@ class XcodeIntegrationGenerator(IdeIntegrationGenerator):
         return result
 
     def generate_root_object(self, modulename):
-        result = {'isa': 'PBXProject',
-                  'attributes': {'LastUpgradeCheck': '0500',
-                                 'ORGANIZATIONNAME': 'LibreOffice'},
-                  'buildConfigurationList': self.generate_id(),
+        result = {'attributes': {'LastUpgradeCheck': '0500',
+                                 'ORGANIZATIONNAME': 'LibreOffice',
+                                 'TargetAttributes' : {self.targetId : {'CreatedOnToolsVersion' : '8.2',
+                                                                        'ProvisioningStyle' : 'Automatic'}}},
                   'compatibilityVersion': 'Xcode 3.2',
+                  'developmentRegion': 'English',
+                  'isa': 'PBXProject',
                   'hasScannedForEncodings': 0,
                   'knownRegions': ['en'],
                   'mainGroup': self.mainGroupId,
                   'productRefGroup': self.productRefGroupId,
                   'projectDirPath': '',
                   'projectRoot': '',
-                  'targets': self.targetId}
+                  'buildConfigurationList': self.generate_id(),
+                  'targets': [self.targetId]}
         return result
 
     def generate_target(self, modulename):
@@ -623,7 +636,7 @@ class XcodeIntegrationGenerator(IdeIntegrationGenerator):
                   'dependencies': [],
                   'name': modulename,
                   'productName': modulename,
-                  'productReference': self.productReferenceId,
+                  'productRefGroup': self.productGroupId,
                   'productType': self.get_product_type(modulename)}
         return result
 
@@ -634,11 +647,12 @@ class XcodeIntegrationGenerator(IdeIntegrationGenerator):
         return result
 
     def generate_sub_main_children(self, modulename):
-        return {}
+        return []
 
     def generate_sub_main_group(self, modulename):
         result = {'isa': 'PBXGroup',
                   'children': self.generate_sub_main_children(modulename),
+                  'name': 'Source',
                   'path': modulename,
                   'sourceTree': '<group>'}
         return result
