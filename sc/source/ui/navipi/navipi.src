@@ -19,22 +19,44 @@
 
 #include "sc.hrc"
 
-ImageList RID_IMAGELIST_NAVCONT
+Bitmap RID_BMP_CONTENT_TABLE
 {
-    Prefix = "nc";
-    // SC_CONTENT_...
-    IdList =
-    {
-        1 ;
-        2 ;
-        3 ;
-        4 ;
-        5 ;
-        6 ;
-        7 ;
-        8 ;
-    };
-    IdCount = { 8 ; };
+    File = "nc01.png";
+};
+
+Bitmap RID_BMP_CONTENT_RANGENAME
+{
+    File = "nc02.png";
+};
+
+Bitmap RID_BMP_CONTENT_DBAREA
+{
+    File = "nc03.png";
+};
+
+Bitmap RID_BMP_CONTENT_GRAPHIC
+{
+    File = "nc04.png";
+};
+
+Bitmap RID_BMP_CONTENT_OLEOBJECT
+{
+    File = "nc05.png";
+};
+
+Bitmap RID_BMP_CONTENT_NOTE
+{
+    File = "nc06.png";
+};
+
+Bitmap RID_BMP_CONTENT_AREALINK
+{
+    File = "nc07.png";
+};
+
+Bitmap RID_BMP_CONTENT_DRAWING
+{
+    File = "nc08.png";
 };
 
 Image RID_IMG_DROP_URL

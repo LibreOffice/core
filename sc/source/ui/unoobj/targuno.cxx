@@ -222,9 +222,8 @@ void ScLinkTargetTypeObj::SetLinkTargetBitmap( uno::Any& rRet, sal_uInt16 nType 
     }
     if (nImgId != ScContentId::ROOT)
     {
-        ImageList aEntryImages( ScResId( RID_IMAGELIST_NAVCONT ) );
-        const Image& rImage = aEntryImages.GetImage( (sal_uInt16)nImgId );
-        rRet <<= uno::Reference< awt::XBitmap > (VCLUnoHelper::CreateBitmap( rImage.GetBitmapEx() ));
+        BitmapEx aBitmapEx(ScResId(RID_BMP_CONTENT_ROOT + (int)nImgId));
+        rRet <<= uno::Reference< awt::XBitmap > (VCLUnoHelper::CreateBitmap(aBitmapEx));
     }
 }
 

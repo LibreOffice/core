@@ -43,7 +43,6 @@ const sal_uLong SC_CONTENT_NOCHILD  = ~0UL;
 class ScContentTree : public SvTreeListBox
 {
     VclPtr<ScNavigatorDlg>  pParentWindow;
-    ImageList               aEntryImages;
     o3tl::enumarray<ScContentId, SvTreeListEntry*> pRootNodes;
     ScContentId             nRootType;          // set as Root
     OUString                aManualDoc;         // Switched in Navigator (Title)

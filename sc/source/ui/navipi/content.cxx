@@ -114,7 +114,6 @@ ScDocShell* ScContentTree::GetManualOrCurrent()
 ScContentTree::ScContentTree(vcl::Window* pParent, ScNavigatorDlg* pNavigatorDlg)
     : SvTreeListBox(pParent, WB_BORDER | WB_QUICK_SEARCH)
     , pParentWindow(pNavigatorDlg)
-    , aEntryImages(ScResId(RID_IMAGELIST_NAVCONT))
     , nRootType(ScContentId::ROOT)
     , bHiddenDoc(false)
     , pHiddenDocument(nullptr)
@@ -226,11 +225,11 @@ void ScContentTree::InitRoot( ScContentId nType )
         return;
     }
 
-    const Image& rImage = aEntryImages.GetImage( (int) nType );
-    OUString aName( ScResId( SCSTR_CONTENT_ROOT + (int)nType ) );
+    Image aImage(BitmapEx(ScResId(RID_BMP_CONTENT_ROOT + (int)nType)));
+    OUString aName(ScResId(SCSTR_CONTENT_ROOT + (int)nType));
     // wieder an die richtige Position:
     sal_uInt16 nPos = nRootType != ScContentId::ROOT ? 0 : pPosList[nType]-1;
-    SvTreeListEntry* pNew = InsertEntry( aName, rImage, rImage, nullptr, false, nPos );
+    SvTreeListEntry* pNew = InsertEntry( aName, aImage, aImage, nullptr, false, nPos );
 
     pRootNodes[nType] = pNew;
 }

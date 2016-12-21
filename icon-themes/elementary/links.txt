@@ -463,11 +463,11 @@ sc/res/lc26050.png cmd/lc_cancel.png
 sc/res/lc26051.png cmd/lc_ok.png
 sc/imglst/na05.png cmd/sc_upsearch.png
 sc/imglst/na06.png cmd/sc_downsearch.png
-sc/imglst/nc01.png cmd/sc_inserttable.png
-sc/imglst/nc04.png cmd/sc_insertgraphic.png
-sc/imglst/nc05.png cmd/sc_drawchart.png
-sc/imglst/nc06.png cmd/sc_insertannotation.png
-sc/imglst/nc08.png cmd/sc_insertdraw.png
+sc/res/nc01.png cmd/sc_inserttable.png
+sc/res/nc04.png cmd/sc_insertgraphic.png
+sc/res/nc05.png cmd/sc_drawchart.png
+sc/res/nc06.png cmd/sc_insertannotation.png
+sc/res/nc08.png cmd/sc_insertdraw.png
 sc/res/sc26047.png cmd/sc_insertformula.png
 sc/res/sc26048.png cmd/sc_autosum.png
 sc/res/sc26050.png cmd/sc_cancel.png
