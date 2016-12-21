@@ -64,8 +64,10 @@ DataEditor::DataEditor(vcl::Window* pParent,
     TBI_DATA_INSERT_TEXT_COL = m_pTbxData->GetItemId("InsertTextColumn");
     TBI_DATA_DELETE_ROW = m_pTbxData->GetItemId("RemoveRow");
     TBI_DATA_DELETE_COL = m_pTbxData->GetItemId("RemoveColumn");
-    TBI_DATA_SWAP_COL = m_pTbxData->GetItemId("SwapColumn");
-    TBI_DATA_SWAP_ROW = m_pTbxData->GetItemId("SwapRow");
+    TBI_DATA_MOVE_LEFT_COL = m_pTbxData->GetItemId("MoveLeftColumn");
+    TBI_DATA_MOVE_RIGHT_COL = m_pTbxData->GetItemId("MoveRightColumn");
+    TBI_DATA_MOVE_UP_ROW = m_pTbxData->GetItemId("MoveUpRow");
+    TBI_DATA_MOVE_DOWN_ROW = m_pTbxData->GetItemId("MoveDownRow");
 
     m_pTbxData->SetSelectHdl( LINK( this, DataEditor, ToolboxHdl ));
 
@@ -124,10 +126,14 @@ IMPL_LINK_NOARG(DataEditor, ToolboxHdl, ToolBox *, void)
         m_xBrwData->RemoveRow();
     else if (nId == TBI_DATA_DELETE_COL)
         m_xBrwData->RemoveColumn();
-    else if (nId == TBI_DATA_SWAP_COL)
-        m_xBrwData->SwapColumn();
-    else if (nId == TBI_DATA_SWAP_ROW)
-        m_xBrwData->SwapRow();
+    else if (nId == TBI_DATA_MOVE_LEFT_COL)
+        m_xBrwData->MoveLeftColumn();
+    else if (nId == TBI_DATA_MOVE_RIGHT_COL)
+        m_xBrwData->MoveRightColumn();
+    else if (nId == TBI_DATA_MOVE_UP_ROW)
+        m_xBrwData->MoveUpRow();
+    else if (nId == TBI_DATA_MOVE_DOWN_ROW)
+        m_xBrwData->MoveDownRow();
 }
 
 // refresh toolbar icons according to currently selected cell in browse box
@@ -144,8 +150,10 @@ IMPL_LINK_NOARG(DataEditor, BrowserCursorMovedHdl, DataBrowser*, void)
     m_pTbxData->EnableItem( TBI_DATA_DELETE_ROW, m_xBrwData->MayDeleteRow() );
     m_pTbxData->EnableItem( TBI_DATA_DELETE_COL, m_xBrwData->MayDeleteColumn() );
 
-    m_pTbxData->EnableItem( TBI_DATA_SWAP_COL,   bIsDataValid && m_xBrwData->MaySwapColumns() );
-    m_pTbxData->EnableItem( TBI_DATA_SWAP_ROW,   bIsDataValid && m_xBrwData->MaySwapRows() );
+    m_pTbxData->EnableItem( TBI_DATA_MOVE_LEFT_COL,   bIsDataValid && m_xBrwData->MayMoveLeftColumns() );
+    m_pTbxData->EnableItem( TBI_DATA_MOVE_RIGHT_COL,   bIsDataValid && m_xBrwData->MayMoveRightColumns() );
+    m_pTbxData->EnableItem( TBI_DATA_MOVE_DOWN_ROW,   bIsDataValid && m_xBrwData->MayMoveDownRows() );
+    m_pTbxData->EnableItem( TBI_DATA_MOVE_UP_ROW,   bIsDataValid && m_xBrwData->MayMoveUpRows() );
 }
 
 // disable all modifying controls
@@ -159,8 +167,10 @@ void DataEditor::SetReadOnly( bool bReadOnly )
         m_pTbxData->EnableItem( TBI_DATA_INSERT_TEXT_COL, false );
         m_pTbxData->EnableItem( TBI_DATA_DELETE_ROW, false );
         m_pTbxData->EnableItem( TBI_DATA_DELETE_COL, false );
-        m_pTbxData->EnableItem( TBI_DATA_SWAP_COL, false );
-        m_pTbxData->EnableItem( TBI_DATA_SWAP_ROW, false );
+        m_pTbxData->EnableItem( TBI_DATA_MOVE_LEFT_COL, false );
+        m_pTbxData->EnableItem( TBI_DATA_MOVE_RIGHT_COL, false );
+        m_pTbxData->EnableItem( TBI_DATA_MOVE_UP_ROW, false );
+        m_pTbxData->EnableItem( TBI_DATA_MOVE_DOWN_ROW, false );
     }
 
     m_xBrwData->SetReadOnly( m_bReadOnly );

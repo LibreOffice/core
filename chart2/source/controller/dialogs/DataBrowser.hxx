@@ -107,8 +107,10 @@ public:
     bool MayDeleteRow() const;
     bool MayDeleteColumn() const;
 
-    bool MaySwapRows() const;
-    bool MaySwapColumns() const;
+    bool MayMoveUpRows() const;
+    bool MayMoveDownRows() const;
+    bool MayMoveRightColumns() const;
+    bool MayMoveLeftColumns() const;
 
     // mutators mutating data
     void InsertRow();
@@ -120,8 +122,10 @@ public:
     using BrowseBox::RemoveColumn;
     using BrowseBox::MouseButtonDown;
 
-    void SwapRow();
-    void SwapColumn();
+    void MoveUpRow();
+    void MoveDownRow();
+    void MoveLeftColumn();
+    void MoveRightColumn();
 
     void SetCursorMovedHdl( const Link<DataBrowser*,void>& rLink );
 

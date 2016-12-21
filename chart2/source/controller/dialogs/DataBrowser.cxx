@@ -497,7 +497,15 @@ bool DataBrowser::MayDeleteColumn() const
         && ( ColCount() > 2 );
 }
 
-bool DataBrowser::MaySwapRows() const
+bool DataBrowser::MayMoveUpRows() const
+{
+    return ! IsReadOnly()
+        && ( !lcl_SeriesHeaderHasFocus( m_aSeriesHeaders ))
+        && ( GetCurRow() > 0 )
+        && ( GetCurRow() <= GetRowCount() - 1 );
+}
+
+bool DataBrowser::MayMoveDownRows() const
 {
     return ! IsReadOnly()
         && ( !lcl_SeriesHeaderHasFocus( m_aSeriesHeaders ))
@@ -505,7 +513,24 @@ bool DataBrowser::MaySwapRows() const
         && ( GetCurRow() < GetRowCount() - 1 );
 }
 
-bool DataBrowser::MaySwapColumns() const
+bool DataBrowser::MayMoveLeftColumns() const
+{
+    // if a series header (except the last one) has the focus
+    {
+        sal_Int32 nColIndex(0);
+        if( lcl_SeriesHeaderHasFocus( m_aSeriesHeaders, &nColIndex ))
+            return (static_cast< sal_uInt32 >( nColIndex ) <= (m_aSeriesHeaders.size() - 1)) && (static_cast< sal_uInt32 >( nColIndex ) != 0);
+    }
+
+    sal_Int32 nColIdx = lcl_getColumnInDataOrHeader( GetCurColumnId(), m_aSeriesHeaders );
+    return ! IsReadOnly()
+        && ( nColIdx > 1 )
+        && ( nColIdx <= ColCount() - 2 )
+        && m_apDataBrowserModel.get()
+        && !m_apDataBrowserModel->isCategoriesColumn( nColIdx );
+}
+
+bool DataBrowser::MayMoveRightColumns() const
 {
     // if a series header (except the last one) has the focus
     {
@@ -901,7 +926,29 @@ void DataBrowser::RemoveRow()
     }
 }
 
-void DataBrowser::SwapColumn()
+void DataBrowser::MoveLeftColumn()
+{
+    sal_Int32 nColIdx = lcl_getColumnInDataOrHeader( GetCurColumnId(), m_aSeriesHeaders );
+
+    if( nColIdx > 0 &&
+        m_apDataBrowserModel.get())
+    {
+        // save changes made to edit-field
+        if( IsModified() )
+            SaveModified();
+
+        m_apDataBrowserModel->swapDataSeries( nColIdx - 1 );
+
+        // keep cursor in swapped column
+        if(( 0 < GetCurColumnId() ) && ( GetCurColumnId() <= ColCount() - 1 ))
+        {
+            Dispatch( BROWSER_CURSORLEFT );
+        }
+        RenewTable();
+    }
+}
+
+void DataBrowser::MoveRightColumn()
 {
     sal_Int32 nColIdx = lcl_getColumnInDataOrHeader( GetCurColumnId(), m_aSeriesHeaders );
 
@@ -923,7 +970,29 @@ void DataBrowser::SwapColumn()
     }
 }
 
-void DataBrowser::SwapRow()
+void DataBrowser::MoveUpRow()
+{
+     sal_Int32 nRowIdx = lcl_getRowInData( GetCurRow());
+
+     if( nRowIdx > 0 &&
+        m_apDataBrowserModel.get())
+    {
+        // save changes made to edit-field
+        if( IsModified() )
+            SaveModified();
+
+        m_apDataBrowserModel->swapDataPointForAllSeries( nRowIdx - 1 );
+
+        // keep cursor in swapped row
+        if(( 0 < GetCurRow() ) && ( GetCurRow() <= GetRowCount() - 1 ))
+        {
+            Dispatch( BROWSER_CURSORUP );
+        }
+        RenewTable();
+    }
+}
+
+void DataBrowser::MoveDownRow()
 {
      sal_Int32 nRowIdx = lcl_getRowInData( GetCurRow());
 
