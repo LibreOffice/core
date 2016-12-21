@@ -48,7 +48,6 @@ class NumberingToolBoxControl : public svt::PopupWindowController
 public:
     explicit NumberingToolBoxControl( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
     virtual VclPtr<vcl::Window> createPopupWindow( vcl::Window* pParent ) override;
-    bool IsInImpressDraw();
 
     // XStatusListener
     virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& rEvent )
@@ -189,14 +188,7 @@ void NumberingPopup::VSSelectHdl(void* pControl)
     }
     else if ( getSelectedEntryId() == 1 )
     {
-        OUString aPageName;
-        if ( mrController.IsInImpressDraw() )
-            aPageName = "customize";
-        else
-            // Writer variants
-            aPageName = "options";
-
-        auto aArgs( comphelper::InitPropertySequence( { { "Page", css::uno::makeAny( aPageName ) } } ) );
+        auto aArgs( comphelper::InitPropertySequence( { { "Page", css::uno::makeAny( OUString("customize") ) } } ) );
         mrController.dispatchCommand( ".uno:OutlineBullet", aArgs );
     }
 }
@@ -214,11 +206,6 @@ VclPtr<vcl::Window> NumberingToolBoxControl::createPopupWindow( vcl::Window* pPa
     return VclPtr<NumberingPopup>::Create( *this, pParent, mePageType );
 }
 
-bool NumberingToolBoxControl::IsInImpressDraw()
-{
-    return ( m_sModuleName == "com.sun.star.presentation.PresentationDocument" ||
-             m_sModuleName == "com.sun.star.drawing.DrawingDocument" );
-}
 
 void SAL_CALL NumberingToolBoxControl::statusChanged( const css::frame::FeatureStateEvent& rEvent )
     throw ( css::uno::RuntimeException, std::exception )
