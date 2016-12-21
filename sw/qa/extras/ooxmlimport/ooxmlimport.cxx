@@ -668,6 +668,21 @@ DECLARE_OOXMLIMPORT_TEST(testTdf75573, "tdf75573_page1frame.docx")
     CPPUNIT_ASSERT(!bProt);
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf75573_lostTable, "tdf75573_lostTable.docx")
+{
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("# of tables", 1, xTables->getCount() );
+
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("# of frames/shapes", 0, xDraws->getCount() );
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("# of paragraphs", 6, getParagraphs() );
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("# of pages", 3, getPages() );
+}
+
 DECLARE_OOXMLIMPORT_TEST(testMultiColumnSeparator, "multi-column-separator-with-line.docx")
 {
     uno::Reference<beans::XPropertySet> xTextSection = getProperty< uno::Reference<beans::XPropertySet> >(getParagraph(1, "First data."), "TextSection");
