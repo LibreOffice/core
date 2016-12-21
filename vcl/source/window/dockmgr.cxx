@@ -500,7 +500,7 @@ void ImplPopupFloatWin::ImplSetBorder()
     //  be used to set the proper window size
     mpWindowImpl->mnTopBorder     = 1;
     if( hasGrip() )
-        mpWindowImpl->mnTopBorder += 2 + ToolBox::ImplGetDragWidth( *this, false );
+        mpWindowImpl->mnTopBorder += 1 + ToolBox::ImplGetDragWidth( *this, false );
     mpWindowImpl->mnBottomBorder  = 1;
     mpWindowImpl->mnLeftBorder    = 1;
     mpWindowImpl->mnRightBorder   = 1;
