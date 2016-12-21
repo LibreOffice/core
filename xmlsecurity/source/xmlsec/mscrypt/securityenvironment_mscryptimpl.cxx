@@ -1120,9 +1120,6 @@ OUString SecurityEnvironment_MSCryptImpl::getSecurityEnvironmentInformation() th
 
 xmlSecKeysMngrPtr SecurityEnvironment_MSCryptImpl::createKeysManager() throw( Exception, RuntimeException ) {
 
-    unsigned int i ;
-    HCRYPTKEY symKey ;
-    HCRYPTKEY pubKey ;
     xmlSecKeysMngrPtr pKeysMngr = nullptr ;
 
     /*-
@@ -1131,24 +1128,6 @@ xmlSecKeysMngrPtr SecurityEnvironment_MSCryptImpl::createKeysManager() throw( Ex
     pKeysMngr = xmlSecMSCryptoAppliedKeysMngrCreate( m_hKeyStore , m_hCertStore ) ;
     if( pKeysMngr == nullptr )
         throw RuntimeException() ;
-
-    /*-
-     * Adopt symmetric key into keys manager
-     */
-    for( i = 0 ; ( symKey = getSymKey( i ) ) != NULL ; i ++ ) {
-        if( xmlSecMSCryptoAppliedKeysMngrSymKeyLoad( pKeysMngr, symKey ) < 0 ) {
-            throw RuntimeException() ;
-        }
-    }
-
-    /*-
-     * Adopt asymmetric public key into keys manager
-     */
-    for( i = 0 ; ( pubKey = getPubKey( i ) ) != NULL ; i ++ ) {
-        if( xmlSecMSCryptoAppliedKeysMngrPubKeyLoad( pKeysMngr, pubKey ) < 0 ) {
-            throw RuntimeException() ;
-        }
-    }
 
     /*-
      * Adopt system default certificate store.

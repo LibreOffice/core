@@ -73,7 +73,7 @@ new file mode 100644
 index 0000000..4858192
 --- /dev/null
 +++ b/include/xmlsec/mscrypto/akmngr.h
-@@ -0,0 +1,71 @@
+@@ -0,0 +1,53 @@
 +/** 
 + * XMLSec library
 + *
@@ -100,24 +100,6 @@ index 0000000..4858192
 +xmlSecMSCryptoAppliedKeysMngrCreate(
 +    HCERTSTORE keyStore ,
 +    HCERTSTORE certStore
-+) ;
-+
-+XMLSEC_CRYPTO_EXPORT int
-+xmlSecMSCryptoAppliedKeysMngrSymKeyLoad(
-+	xmlSecKeysMngrPtr	mngr ,
-+	HCRYPTKEY	symKey
-+) ;
-+
-+XMLSEC_CRYPTO_EXPORT int
-+xmlSecMSCryptoAppliedKeysMngrPubKeyLoad(
-+	xmlSecKeysMngrPtr	mngr ,
-+	HCRYPTKEY	pubKey
-+) ;
-+
-+XMLSEC_CRYPTO_EXPORT int
-+xmlSecMSCryptoAppliedKeysMngrPriKeyLoad(
-+	xmlSecKeysMngrPtr	mngr ,
-+	HCRYPTKEY	priKey
 +) ;
 +
 +XMLSEC_CRYPTO_EXPORT int
@@ -514,7 +496,7 @@ new file mode 100644
 index 0000000..3bbd124
 --- /dev/null
 +++ b/src/mscrypto/akmngr.c
-@@ -0,0 +1,236 @@
+@@ -0,0 +1,209 @@
 +/** 
 + * XMLSec library
 + *
@@ -626,33 +608,6 @@ index 0000000..3bbd124
 +	keyMngr->getKey = xmlSecKeysMngrGetKey ;
 +
 +	return keyMngr ;
-+}
-+
-+int
-+xmlSecMSCryptoAppliedKeysMngrSymKeyLoad(
-+	xmlSecKeysMngrPtr	mngr ,
-+	HCRYPTKEY			symKey
-+) {
-+	/*TODO: import the key into keys manager.*/
-+	return(0) ;
-+}
-+
-+int
-+xmlSecMSCryptoAppliedKeysMngrPubKeyLoad(
-+	xmlSecKeysMngrPtr	mngr ,
-+	HCRYPTKEY	pubKey
-+) {
-+	/*TODO: import the key into keys manager.*/
-+	return(0) ;
-+}
-+
-+int
-+xmlSecMSCryptoAppliedKeysMngrPriKeyLoad(
-+	xmlSecKeysMngrPtr	mngr ,
-+	HCRYPTKEY	priKey
-+) {
-+	/*TODO: import the key into keys manager.*/
-+	return(0) ;
 +}
 +
 +int
