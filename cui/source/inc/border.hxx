@@ -102,7 +102,7 @@ private:
     VclPtr<CheckBox>           m_pRemoveAdjcentCellBordersCB;
 
     std::vector<BitmapEx>      m_aShadowImgVec;
-    ImageList           aBorderImgLst;
+    std::vector<BitmapEx>      m_aBorderImgVec;
 
     long                nMinValue;  ///< minimum distance
     SwBorderModes       nSWMode;    ///< table, textframe, paragraph

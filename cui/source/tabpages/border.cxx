@@ -24,7 +24,6 @@
 #include <svx/dialmgr.hxx>
 
 #include <cuires.hrc>
-#include "border.hrc"
 #include "helpid.hrc"
 
 #include <svx/xtable.hxx>
@@ -94,7 +93,6 @@ const sal_uInt16 SVX_BORDER_SHADOW_COUNT = 5;
 
 SvxBorderTabPage::SvxBorderTabPage(vcl::Window* pParent, const SfxItemSet& rCoreAttrs)
     : SfxTabPage(pParent, "BorderPage", "cui/ui/borderpage.ui", &rCoreAttrs)
-    , aBorderImgLst( CUI_RES(IL_PRE_BITMAPS))
     , nMinValue(0)
     , nSWMode(SwBorderModes::NONE)
     , mbHorEnabled(false)
@@ -137,7 +135,35 @@ SvxBorderTabPage::SvxBorderTabPage(vcl::Window* pParent, const SfxItemSet& rCore
     get(m_pMergeAdjacentBordersCB, "mergeadjacent");
     get(m_pRemoveAdjcentCellBordersCB, "rmadjcellborders");
 
-    static const sal_uInt16 pnImgIds[SVX_BORDER_SHADOW_COUNT] =
+    static const sal_uInt16 pnBorderImgIds[] =
+    {
+        RID_SVXBMP_CELL_NONE,
+        RID_SVXBMP_CELL_ALL,
+        RID_SVXBMP_CELL_LR,
+        RID_SVXBMP_CELL_TB,
+        RID_SVXBMP_CELL_L,
+        RID_SVXBMP_CELL_DIAG,
+        RID_SVXBMP_HOR_NONE,
+        RID_SVXBMP_HOR_OUTER,
+        RID_SVXBMP_HOR_HOR,
+        RID_SVXBMP_HOR_ALL,
+        RID_SVXBMP_HOR_OUTER2,
+        RID_SVXBMP_VER_NONE,
+        RID_SVXBMP_VER_OUTER,
+        RID_SVXBMP_VER_VER,
+        RID_SVXBMP_VER_ALL,
+        RID_SVXBMP_VER_OUTER2,
+        RID_SVXBMP_TABLE_NONE,
+        RID_SVXBMP_TABLE_OUTER,
+        RID_SVXBMP_TABLE_OUTERH,
+        RID_SVXBMP_TABLE_ALL,
+        RID_SVXBMP_TABLE_OUTER2
+    };
+
+    for (size_t i = 0; i < SAL_N_ELEMENTS(pnBorderImgIds); ++i)
+        m_aBorderImgVec.push_back(BitmapEx(CUI_RES(pnBorderImgIds[i])));
+
+    static const sal_uInt16 pnShadowImgIds[SVX_BORDER_SHADOW_COUNT] =
     {
         RID_SVXBMP_SHADOWNONE,
         RID_SVXBMP_SHADOW_BOT_RIGHT,
@@ -146,21 +172,16 @@ SvxBorderTabPage::SvxBorderTabPage(vcl::Window* pParent, const SfxItemSet& rCore
         RID_SVXBMP_SHADOW_TOP_LEFT
     };
 
-    for (size_t i = 0; i < SAL_N_ELEMENTS(pnImgIds); ++i)
-        m_aShadowImgVec.push_back(BitmapEx(CUI_RES(pnImgIds[i])));
+    for (size_t i = 0; i < SAL_N_ELEMENTS(pnShadowImgIds); ++i)
+        m_aShadowImgVec.push_back(BitmapEx(CUI_RES(pnShadowImgIds[i])));
     assert(m_aShadowImgVec.size() == SVX_BORDER_SHADOW_COUNT);
 
     if ( GetDPIScaleFactor() > 1 )
     {
-        for (short i = 0; i < aBorderImgLst.GetImageCount(); i++)
-        {
-            OUString rImageName = aBorderImgLst.GetImageName(i);
-            BitmapEx b = aBorderImgLst.GetImage(rImageName).GetBitmapEx();
-            b.Scale(GetDPIScaleFactor(), GetDPIScaleFactor(), BmpScaleFlag::Fast);
-            aBorderImgLst.ReplaceImage(rImageName, Image(b));
-        }
+        for (size_t i = 0; i < m_aBorderImgVec.size(); ++i)
+            m_aBorderImgVec[i].Scale(GetDPIScaleFactor(), GetDPIScaleFactor(), BmpScaleFlag::Fast);
 
-        for (size_t i = 0; i < m_aShadowImgVec.size(); i++)
+        for (size_t i = 0; i < m_aShadowImgVec.size(); ++i)
             m_aShadowImgVec[i].Scale(GetDPIScaleFactor(), GetDPIScaleFactor(), BmpScaleFlag::Fast);
     }
 
@@ -767,12 +788,32 @@ bool SvxBorderTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
     return bAttrsChanged;
 }
 
-
 void SvxBorderTabPage::HideShadowControls()
 {
     m_pShadowFrame->Hide();
 }
 
+#define IID_PRE_CELL_NONE       1
+#define IID_PRE_CELL_ALL        2
+#define IID_PRE_CELL_LR         3
+#define IID_PRE_CELL_TB         4
+#define IID_PRE_CELL_L          5
+#define IID_PRE_CELL_DIAG       6
+#define IID_PRE_HOR_NONE        7
+#define IID_PRE_HOR_OUTER       8
+#define IID_PRE_HOR_HOR         9
+#define IID_PRE_HOR_ALL         10
+#define IID_PRE_HOR_OUTER2      11
+#define IID_PRE_VER_NONE        12
+#define IID_PRE_VER_OUTER       13
+#define IID_PRE_VER_VER         14
+#define IID_PRE_VER_ALL         15
+#define IID_PRE_VER_OUTER2      16
+#define IID_PRE_TABLE_NONE      17
+#define IID_PRE_TABLE_OUTER     18
+#define IID_PRE_TABLE_OUTERH    19
+#define IID_PRE_TABLE_ALL       20
+#define IID_PRE_TABLE_OUTER2    21
 
 IMPL_LINK_NOARG(SvxBorderTabPage, SelPreHdl_Impl, ValueSet*, void)
 {
@@ -954,11 +995,8 @@ sal_uInt16 SvxBorderTabPage::GetPresetStringId( sal_uInt16 nValueSetIdx ) const
     return pnStrIds[ GetPresetImageId( nValueSetIdx ) - 1 ];
 }
 
-
 void SvxBorderTabPage::FillPresetVS()
 {
-    ImageList& rImgList = aBorderImgLst;
-
     // basic initialization of the ValueSet
     m_pWndPresets->SetStyle( m_pWndPresets->GetStyle() | WB_ITEMBORDER | WB_DOUBLEBORDER );
     m_pWndPresets->SetColCount( SVX_BORDER_PRESET_COUNT );
@@ -967,7 +1005,7 @@ void SvxBorderTabPage::FillPresetVS()
     for( sal_uInt16 nVSIdx = 1; nVSIdx <= SVX_BORDER_PRESET_COUNT; ++nVSIdx )
     {
         m_pWndPresets->InsertItem( nVSIdx );
-        m_pWndPresets->SetItemImage( nVSIdx, rImgList.GetImage( GetPresetImageId( nVSIdx ) ) );
+        m_pWndPresets->SetItemImage(nVSIdx, Image(m_aBorderImgVec[nVSIdx-1]));
         m_pWndPresets->SetItemText( nVSIdx, CUI_RESSTR( GetPresetStringId( nVSIdx ) ) );
     }
 
@@ -975,7 +1013,6 @@ void SvxBorderTabPage::FillPresetVS()
     m_pWndPresets->SetNoSelection();
     m_pWndPresets->Show();
 }
-
 
 void SvxBorderTabPage::FillShadowVS()
 {

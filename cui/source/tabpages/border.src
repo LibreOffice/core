@@ -19,37 +19,111 @@
 
 #include "helpid.hrc"
 #include <cuires.hrc>
-#include "border.hrc"
 #include <svx/dialogs.hrc>
 
-ImageList IL_PRE_BITMAPS
+Bitmap RID_SVXBMP_CELL_NONE
 {
-    Prefix = "pr";
-    IdList =
-    {
-        IID_PRE_CELL_NONE ;
-        IID_PRE_CELL_ALL ;
-        IID_PRE_CELL_LR ;
-        IID_PRE_CELL_TB ;
-        IID_PRE_CELL_L ;
-        IID_PRE_CELL_DIAG ;
-        IID_PRE_HOR_NONE ;
-        IID_PRE_HOR_OUTER ;
-        IID_PRE_HOR_HOR ;
-        IID_PRE_HOR_ALL ;
-        IID_PRE_HOR_OUTER2 ;
-        IID_PRE_VER_NONE ;
-        IID_PRE_VER_OUTER ;
-        IID_PRE_VER_VER ;
-        IID_PRE_VER_ALL ;
-        IID_PRE_VER_OUTER2 ;
-        IID_PRE_TABLE_NONE ;
-        IID_PRE_TABLE_OUTER ;
-        IID_PRE_TABLE_OUTERH ;
-        IID_PRE_TABLE_ALL ;
-        IID_PRE_TABLE_OUTER2 ;
-    };
-    IdCount = { 21 ; };
+    File = "pr01.png";
+};
+
+Bitmap RID_SVXBMP_CELL_ALL
+{
+    File = "pr02.png";
+};
+
+Bitmap RID_SVXBMP_CELL_LR
+{
+    File = "pr03.png";
+};
+
+Bitmap RID_SVXBMP_CELL_TB
+{
+    File = "pr04.png";
+};
+
+Bitmap RID_SVXBMP_CELL_L
+{
+    File = "pr05.png";
+};
+
+Bitmap RID_SVXBMP_CELL_DIAG
+{
+    File = "pr06.png";
+};
+
+Bitmap RID_SVXBMP_HOR_NONE
+{
+    File = "pr07.png";
+};
+
+Bitmap RID_SVXBMP_HOR_OUTER
+{
+    File = "pr08.png";
+};
+
+Bitmap RID_SVXBMP_HOR_HOR
+{
+    File = "pr09.png";
+};
+
+Bitmap RID_SVXBMP_HOR_ALL
+{
+    File = "pr010.png";
+};
+
+Bitmap RID_SVXBMP_HOR_OUTER2
+{
+    File = "pr011.png";
+};
+
+Bitmap RID_SVXBMP_VER_NONE
+{
+    File = "pr012.png";
+};
+
+Bitmap RID_SVXBMP_VER_OUTER
+{
+    File = "pr013.png";
+};
+
+Bitmap RID_SVXBMP_VER_VER
+{
+    File = "pr014.png";
+};
+
+Bitmap RID_SVXBMP_VER_ALL
+{
+    File = "pr015.png";
+};
+
+Bitmap RID_SVXBMP_VER_OUTER2
+{
+    File = "pr016.png";
+};
+
+Bitmap RID_SVXBMP_TABLE_NONE
+{
+    File = "pr017.png";
+};
+
+Bitmap RID_SVXBMP_TABLE_OUTER
+{
+    File = "pr018.png";
+};
+
+Bitmap RID_SVXBMP_TABLE_OUTERH
+{
+    File = "pr019.png";
+};
+
+Bitmap RID_SVXBMP_TABLE_ALL
+{
+    File = "pr020.png";
+};
+
+Bitmap RID_SVXBMP_TABLE_OUTER2
+{
+    File = "pr021.png";
 };
 
 Bitmap RID_SVXBMP_SHADOWNONE
