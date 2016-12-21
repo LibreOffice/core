@@ -55,6 +55,12 @@ StringMap ScGridWinUIObject::get_state()
     aMap["SelectedTable"] = OUString::number(mxGridWindow->getViewData()->GetTabNo());
     aMap["CurrentColumn"] = OUString::number(mxGridWindow->getViewData()->GetCurX());
     aMap["CurrentRow"] = OUString::number(mxGridWindow->getViewData()->GetCurY());
+
+    ScRangeList aMarkedArea = mxGridWindow->getViewData()->GetMarkData().GetMarkedRanges();
+    OUString aMarkedAreaString;
+    ScRangeStringConverter::GetStringFromRangeList(aMarkedAreaString, &aMarkedArea, mxGridWindow->getViewData()->GetDocument(), formula::FormulaGrammar::CONV_OOO);
+
+    aMap["MarkedArea"] = aMarkedAreaString;
     return aMap;
 }
 
