@@ -23,14 +23,10 @@
 
 namespace chart {
 
-namespace {
-
 typedef cppu::WeakComponentImplHelper<
     css::frame::XToolbarController, css::frame::XStatusListener,
     css::util::XUpdatable, css::lang::XInitialization,
     css::lang::XServiceInfo> ChartToolbarControllerBase;
-
-}
 
 class ChartToolbarController : private cppu::BaseMutex,
                                public ChartToolbarControllerBase

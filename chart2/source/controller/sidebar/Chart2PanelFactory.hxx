@@ -28,12 +28,9 @@
 
 namespace chart { namespace sidebar {
 
-namespace
-{
-    typedef ::cppu::WeakComponentImplHelper <
-        css::ui::XUIElementFactory, css::lang::XServiceInfo
-        > PanelFactoryInterfaceBase;
-}
+typedef ::cppu::WeakComponentImplHelper <
+    css::ui::XUIElementFactory, css::lang::XServiceInfo
+    > PanelFactoryInterfaceBase;
 
 class ChartPanelFactory
     : private ::cppu::BaseMutex,
