@@ -569,12 +569,12 @@ public:
     virtual void Command(const CommandEvent& rCEvt) override;
 };
 
-enum VclSizeGroupMode
+enum class VclSizeGroupMode
 {
-    VCL_SIZE_GROUP_NONE,
-    VCL_SIZE_GROUP_HORIZONTAL,
-    VCL_SIZE_GROUP_VERTICAL,
-    VCL_SIZE_GROUP_BOTH
+    NONE,
+    Horizontal,
+    Vertical,
+    Both
 };
 
 class VCL_DLLPUBLIC VclSizeGroup
@@ -588,7 +588,7 @@ private:
 public:
     VclSizeGroup()
         : m_bIgnoreHidden(false)
-        , m_eMode(VCL_SIZE_GROUP_HORIZONTAL)
+        , m_eMode(VclSizeGroupMode::Horizontal)
     {
     }
     void insert(vcl::Window *pWindow)
