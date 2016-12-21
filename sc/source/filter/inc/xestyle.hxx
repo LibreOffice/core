@@ -120,7 +120,6 @@ private:
 
 // FONT record - font information =============================================
 
-namespace { class Font; }
 class SvxFont;
 
 const size_t EXC_FONTLIST_NOTFOUND = static_cast< size_t >( -1 );
