@@ -100,5 +100,11 @@
     <string name="directory_browser_label">Choose Directory</string>
     <string name="bad_directory">Invalid directory path</string>
 
+    <!-- Closing alert dialog strings -->
+    <string name="save_alert_dialog_title">Save the document before closing?</string>
+    <string name="save_document">SAVE</string>
+    <string name="cancel_save_document">CANCEL</string>
+    <string name="no_save_document">NO</string>
+
 
 </resources>
