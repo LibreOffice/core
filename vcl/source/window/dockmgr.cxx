@@ -435,8 +435,7 @@ private:
     void                        ImplSetBorder();
 
 public:
-    ImplPopupFloatWin( vcl::Window* pParent, ImplDockingWindowWrapper* pDockingWin,
-                       bool bHasGrip, bool bUsePopupWin );
+    ImplPopupFloatWin( vcl::Window* pParent, ImplDockingWindowWrapper* pDockingWin, bool bHasGrip );
     virtual ~ImplPopupFloatWin() override;
     virtual void dispose() override;
 
@@ -456,16 +455,15 @@ public:
     bool                hasGrip() const { return mbHasGrip; }
 };
 
-ImplPopupFloatWin::ImplPopupFloatWin( vcl::Window* pParent, ImplDockingWindowWrapper* pDockingWin,
-        bool bHasGrip, bool bUsePopupWin ) :
-    FloatingWindow( pParent, bUsePopupWin ? WB_STDPOPUP : WB_NOBORDER | WB_SYSTEMWINDOW | WB_NOSHADOW)
+ImplPopupFloatWin::ImplPopupFloatWin( vcl::Window* pParent, ImplDockingWindowWrapper* pDockingWin, bool bHasGrip ) :
+    FloatingWindow( pParent, WB_NOBORDER | WB_SYSTEMWINDOW | WB_NOSHADOW )
 {
     mpWindowImpl->mbToolbarFloatingWindow = true;   // indicate window type, required for accessibility
                                                     // which should not see this window as a toplevel window
     mpDockingWin = pDockingWin;
     mbMoving = false;
     mbTrackingEnabled = false;
-    mbHasGrip = !bUsePopupWin && bHasGrip;
+    mbHasGrip = bHasGrip;
 
     ImplSetBorder();
 }
@@ -973,8 +971,11 @@ void ImplDockingWindowWrapper::StartPopupMode( ToolBox *pParentToolBox, FloatWin
     bool bIsToolBox = GetWindow()->GetType() == WINDOW_TOOLBOX;
 
     // the new parent for popup mode
-    VclPtrInstance<ImplPopupFloatWin> pWin( mpParent, this, bAllowTearOff,
-        bAllowTearOff && !bIsToolBox );
+    VclPtr<FloatingWindow> pWin;
+    if ( bAllowTearOff && !bIsToolBox )
+        pWin = VclPtr<FloatingWindow>::Create( mpParent, WB_STDPOPUP );
+    else
+        pWin = VclPtr<ImplPopupFloatWin>::Create( mpParent, this, bAllowTearOff );
     pWin->SetPopupModeEndHdl( LINK( this, ImplDockingWindowWrapper, PopupModeEnd ) );
     pWin->SetText( GetWindow()->GetText() );
 
@@ -987,7 +988,8 @@ void ImplDockingWindowWrapper::StartPopupMode( ToolBox *pParentToolBox, FloatWin
     GetWindow()->mpWindowImpl->mnBottomBorder  = 0;
 
     // position toolbox below the drag grip
-    GetWindow()->SetPosPixel( pWin->GetToolboxPosition() );
+    if ( bIsToolBox )
+        GetWindow()->SetPosPixel( static_cast<ImplPopupFloatWin*>( pWin.get() )->GetToolboxPosition() );
 
     // reparent borderwindow and window
     if ( mpOldBorderWin )
