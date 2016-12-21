@@ -56,7 +56,7 @@ ScAuditingShell::ScAuditingShell(ScViewData* pData) :
     }
     SetHelpId( HID_SCSHELL_AUDIT );
     SetName("Auditing");
-    SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context_Auditing));
+    SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context::Auditing));
 }
 
 ScAuditingShell::~ScAuditingShell()

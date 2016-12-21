@@ -109,7 +109,7 @@ DrawViewShell::DrawViewShell( SfxViewFrame* pFrame, ViewShellBase& rViewShellBas
     , mpSelectionChangeHandler(new svx::sidebar::SelectionChangeHandler(
           [this] () { return this->GetSidebarContextName(); },
           uno::Reference<frame::XController>(&rViewShellBase.GetDrawController()),
-          vcl::EnumContext::Context_Default))
+          vcl::EnumContext::Context::Default))
 {
     if (pFrameViewArgument != nullptr)
         mpFrameView = pFrameViewArgument;

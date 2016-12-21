@@ -57,7 +57,7 @@ ScDrawFormShell::ScDrawFormShell(ScViewData* pData) :
 {
     SetHelpId(HID_SCSHELL_DRAWFORMSH);
     SetName("DrawForm");
-    SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context_Form));
+    SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context::Form));
 }
 
 ScDrawFormShell::~ScDrawFormShell()

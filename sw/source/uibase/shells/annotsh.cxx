@@ -156,7 +156,7 @@ SwAnnotationShell::SwAnnotationShell( SwView& r )
     : rView(r)
 {
     SetPool(SwAnnotationShell::GetAnnotationPool(rView));
-    SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context_Annotation));
+    SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context::Annotation));
 }
 
 SwAnnotationShell::~SwAnnotationShell()

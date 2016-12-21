@@ -147,23 +147,23 @@ void ParaLRSpacingWindow::SetValue(SfxItemState eState, const SfxPoolItem* pStat
     switch(m_aContext.GetCombinedContext_DI())
     {
 
-    case CombinedEnumContext(Application::WriterVariants, Context_DrawText):
-    case CombinedEnumContext(Application::WriterVariants, Context_Annotation):
-    case CombinedEnumContext(Application::Calc, Context_DrawText):
-    case CombinedEnumContext(Application::DrawImpress, Context_DrawText):
-    case CombinedEnumContext(Application::DrawImpress, Context_Draw):
-    case CombinedEnumContext(Application::DrawImpress, Context_TextObject):
-    case CombinedEnumContext(Application::DrawImpress, Context_Graphic):
-    case CombinedEnumContext(Application::DrawImpress, Context_Table):
+    case CombinedEnumContext(Application::WriterVariants, Context::DrawText):
+    case CombinedEnumContext(Application::WriterVariants, Context::Annotation):
+    case CombinedEnumContext(Application::Calc, Context::DrawText):
+    case CombinedEnumContext(Application::DrawImpress, Context::DrawText):
+    case CombinedEnumContext(Application::DrawImpress, Context::Draw):
+    case CombinedEnumContext(Application::DrawImpress, Context::TextObject):
+    case CombinedEnumContext(Application::DrawImpress, Context::Graphic):
+    case CombinedEnumContext(Application::DrawImpress, Context::Table):
         {
             m_pBeforeSpacing->SetMin(DEFAULT_VALUE);
             m_pAfterSpacing->SetMin(DEFAULT_VALUE);
             m_pFLSpacing->SetMin(DEFAULT_VALUE);
         }
         break;
-    case CombinedEnumContext(Application::WriterVariants, Context_Default):
-    case CombinedEnumContext(Application::WriterVariants, Context_Text):
-    case CombinedEnumContext(Application::WriterVariants, Context_Table):
+    case CombinedEnumContext(Application::WriterVariants, Context::Default):
+    case CombinedEnumContext(Application::WriterVariants, Context::Text):
+    case CombinedEnumContext(Application::WriterVariants, Context::Table):
         {
             m_pBeforeSpacing->SetMin(NEGA_MAXVALUE, FUNIT_100TH_MM);
             m_pAfterSpacing->SetMin(NEGA_MAXVALUE, FUNIT_100TH_MM);
@@ -185,9 +185,9 @@ void ParaLRSpacingWindow::SetValue(SfxItemState eState, const SfxPoolItem* pStat
 
         aTxtLeft = (long)m_pBeforeSpacing->Normalize(aTxtLeft);
 
-        if(m_aContext.GetCombinedContext_DI() != CombinedEnumContext(Application::WriterVariants, Context_Text)
-             && m_aContext.GetCombinedContext_DI() != CombinedEnumContext(Application::WriterVariants, Context_Default)
-             && m_aContext.GetCombinedContext_DI() != CombinedEnumContext(Application::WriterVariants, Context_Table))
+        if(m_aContext.GetCombinedContext_DI() != CombinedEnumContext(Application::WriterVariants, Context::Text)
+             && m_aContext.GetCombinedContext_DI() != CombinedEnumContext(Application::WriterVariants, Context::Default)
+             && m_aContext.GetCombinedContext_DI() != CombinedEnumContext(Application::WriterVariants, Context::Table))
         {
             m_pFLSpacing->SetMin(aTxtLeft*(-1), FUNIT_100TH_MM);
         }
@@ -196,22 +196,22 @@ void ParaLRSpacingWindow::SetValue(SfxItemState eState, const SfxPoolItem* pStat
 
         switch(m_aContext.GetCombinedContext_DI())
         {
-        case CombinedEnumContext(Application::WriterVariants, Context_DrawText):
-        case CombinedEnumContext(Application::WriterVariants, Context_Text):
-        case CombinedEnumContext(Application::WriterVariants, Context_Default):
-        case CombinedEnumContext(Application::WriterVariants, Context_Table):
-        case CombinedEnumContext(Application::WriterVariants, Context_Annotation):
+        case CombinedEnumContext(Application::WriterVariants, Context::DrawText):
+        case CombinedEnumContext(Application::WriterVariants, Context::Text):
+        case CombinedEnumContext(Application::WriterVariants, Context::Default):
+        case CombinedEnumContext(Application::WriterVariants, Context::Table):
+        case CombinedEnumContext(Application::WriterVariants, Context::Annotation):
             {
                 m_pBeforeSpacing->SetMax(MAX_SW - aTxtRight, FUNIT_100TH_MM);
                 m_pAfterSpacing->SetMax(MAX_SW - aTxtLeft, FUNIT_100TH_MM);
                 m_pFLSpacing->SetMax(MAX_SW - aTxtLeft - aTxtRight, FUNIT_100TH_MM);
             }
             break;
-        case CombinedEnumContext(Application::DrawImpress, Context_DrawText):
-        case CombinedEnumContext(Application::DrawImpress, Context_Draw):
-        case CombinedEnumContext(Application::DrawImpress, Context_Table):
-        case CombinedEnumContext(Application::DrawImpress, Context_TextObject):
-        case CombinedEnumContext(Application::DrawImpress, Context_Graphic):
+        case CombinedEnumContext(Application::DrawImpress, Context::DrawText):
+        case CombinedEnumContext(Application::DrawImpress, Context::Draw):
+        case CombinedEnumContext(Application::DrawImpress, Context::Table):
+        case CombinedEnumContext(Application::DrawImpress, Context::TextObject):
+        case CombinedEnumContext(Application::DrawImpress, Context::Graphic):
             {
                 m_pBeforeSpacing->SetMax(MAX_SC_SD - aTxtRight, FUNIT_100TH_MM);
                 m_pAfterSpacing->SetMax(MAX_SC_SD - aTxtLeft, FUNIT_100TH_MM);

@@ -192,7 +192,7 @@ SwMediaShell::SwMediaShell(SwView &_rView) :
 {
     SetName("Media Playback");
     SetHelpId(SW_MEDIASHELL);
-    SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context_Media));
+    SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context::Media));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

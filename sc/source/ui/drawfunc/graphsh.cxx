@@ -59,7 +59,7 @@ ScGraphicShell::ScGraphicShell(ScViewData* pData) :
 {
     SetHelpId(HID_SCSHELL_GRAPHIC);
     SetName("GraphicObject");
-        SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context_Graphic));
+        SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context::Graphic));
 }
 
 ScGraphicShell::~ScGraphicShell()

@@ -538,7 +538,7 @@ SwDrawShell::SwDrawShell(SwView &_rView) :
     SetHelpId(SW_DRAWSHELL);
     SetName("Draw");
 
-    SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context_Draw));
+    SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context::Draw));
 }
 
 // Edit SfxRequests for FontWork

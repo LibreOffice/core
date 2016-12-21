@@ -250,7 +250,7 @@ SwDrawFormShell::SwDrawFormShell(SwView &_rView) :
     SetHelpId(SW_DRAWFORMSHELL);
     GetShell().NoEdit();
     SetName("DrawForm");
-    SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context_Form));
+    SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context::Form));
 }
 
 SwDrawFormShell::~SwDrawFormShell()

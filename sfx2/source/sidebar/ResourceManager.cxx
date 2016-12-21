@@ -517,7 +517,7 @@ void ResourceManager::ReadContextList (
 
         // Setup the actual context enum.
         const vcl::EnumContext::Context eContext (vcl::EnumContext::GetContextEnum(sContextName));
-        if (eContext == vcl::EnumContext::Context_Unknown)
+        if (eContext == vcl::EnumContext::Context::Unknown)
         {
             SAL_WARN("sfx.sidebar", "context name " << sContextName << " not recognized");
             continue;

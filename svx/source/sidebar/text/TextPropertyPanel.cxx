@@ -103,31 +103,31 @@ void TextPropertyPanel::HandleContextChange (
 
     switch (maContext.GetCombinedContext_DI())
     {
-        case CombinedEnumContext(Application::Calc, Context_Cell):
-        case CombinedEnumContext(Application::Calc, Context_Pivot):
+        case CombinedEnumContext(Application::Calc, Context::Cell):
+        case CombinedEnumContext(Application::Calc, Context::Pivot):
             // bNeedTextSpacing = false;
             break;
 
-        case CombinedEnumContext(Application::Calc, Context_EditCell):
+        case CombinedEnumContext(Application::Calc, Context::EditCell):
             bNeedTextSpacing = true;
             break;
 
-        case CombinedEnumContext(Application::Calc, Context_DrawText):
-        case CombinedEnumContext(Application::WriterVariants, Context_DrawText):
-        case CombinedEnumContext(Application::WriterVariants, Context_Annotation):
-        case CombinedEnumContext(Application::DrawImpress, Context_DrawText):
-        case CombinedEnumContext(Application::DrawImpress, Context_Text):
-        case CombinedEnumContext(Application::DrawImpress, Context_Table):
-        case CombinedEnumContext(Application::DrawImpress, Context_OutlineText):
-        case CombinedEnumContext(Application::DrawImpress, Context_Draw):
-        case CombinedEnumContext(Application::DrawImpress, Context_TextObject):
-        case CombinedEnumContext(Application::DrawImpress, Context_Graphic):
+        case CombinedEnumContext(Application::Calc, Context::DrawText):
+        case CombinedEnumContext(Application::WriterVariants, Context::DrawText):
+        case CombinedEnumContext(Application::WriterVariants, Context::Annotation):
+        case CombinedEnumContext(Application::DrawImpress, Context::DrawText):
+        case CombinedEnumContext(Application::DrawImpress, Context::Text):
+        case CombinedEnumContext(Application::DrawImpress, Context::Table):
+        case CombinedEnumContext(Application::DrawImpress, Context::OutlineText):
+        case CombinedEnumContext(Application::DrawImpress, Context::Draw):
+        case CombinedEnumContext(Application::DrawImpress, Context::TextObject):
+        case CombinedEnumContext(Application::DrawImpress, Context::Graphic):
             bNeedTextSpacing = true;
             bDrawText = true;
             break;
 
-        case CombinedEnumContext(Application::WriterVariants, Context_Text):
-        case CombinedEnumContext(Application::WriterVariants, Context_Table):
+        case CombinedEnumContext(Application::WriterVariants, Context::Text):
+        case CombinedEnumContext(Application::WriterVariants, Context::Table):
             bNeedTextSpacing = true;
             bWriterText = true;
             break;

@@ -50,7 +50,7 @@ public:
             {
                 VclContainer* pChild = static_cast<VclContainer*>( GetChild( nChild ) );
 
-                if ( pChild->HasContext( eContext ) || pChild->HasContext( vcl::EnumContext::Context::Context_Any ) )
+                if ( pChild->HasContext( eContext ) || pChild->HasContext( vcl::EnumContext::Context::Any ) )
                 {
                     Size aSize( pChild->GetOptimalSize() );
                     aSize.Height() += 6;

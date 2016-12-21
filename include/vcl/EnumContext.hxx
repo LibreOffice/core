@@ -61,53 +61,53 @@ public:
 
         LAST = Application::NONE
     };
-    enum Context
+    enum class Context
     {
-        Context_3DObject,
-        Context_Annotation,
-        Context_Auditing,
-        Context_Axis,
-        Context_Cell,
-        Context_Chart,
-        Context_ChartElements,
-        Context_Draw,
-        Context_DrawLine,
-        Context_DrawPage,
-        Context_DrawText,
-        Context_EditCell,
-        Context_ErrorBar,
-        Context_Form,
-        Context_Frame,
-        Context_Graphic,
-        Context_Grid,
-        Context_HandoutPage,
-        Context_MasterPage,
-        Context_Media,
-        Context_MultiObject,
-        Context_NotesPage,
-        Context_OLE,
-        Context_OutlineText,
-        Context_Pivot,
-        Context_Series,
-        Context_SlidesorterPage,
-        Context_Table,
-        Context_Text,
-        Context_TextObject,
-        Context_Trendline,
+        ThreeDObject,
+        Annotation,
+        Auditing,
+        Axis,
+        Cell,
+        Chart,
+        ChartElements,
+        Draw,
+        DrawLine,
+        DrawPage,
+        DrawText,
+        EditCell,
+        ErrorBar,
+        Form,
+        Frame,
+        Graphic,
+        Grid,
+        HandoutPage,
+        MasterPage,
+        Media,
+        MultiObject,
+        NotesPage,
+        OLE,
+        OutlineText,
+        Pivot,
+        Series,
+        SlidesorterPage,
+        Table,
+        Text,
+        TextObject,
+        Trendline,
 
         // Default context of an application.  Do we need this?
-        Context_Default,
+        Default,
 
         // Used only by deck or panel descriptors.  Matches any context.
-        Context_Any,
+        Any,
 
         // Special context name that is only used when a deck would
         // otherwise be empty.
-        Context_Empty,
+        Empty,
 
-        Context_Unknown,
+        Unknown,
 
-        LastContextEnum = Context_Unknown
+        LAST = Unknown
     };
 
     EnumContext();

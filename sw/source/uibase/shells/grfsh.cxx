@@ -945,7 +945,7 @@ SwGrfShell::SwGrfShell(SwView &_rView) :
 {
     SetName("Graphic");
     SetHelpId(SW_GRFSHELL);
-    SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context_Graphic));
+    SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context::Graphic));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
