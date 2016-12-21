@@ -49,7 +49,7 @@ void VclComplexTextTest::testArabic()
     OUString aOneTwoThree( reinterpret_cast<char const *>(pOneTwoThreeUTF8),
                            SAL_N_ELEMENTS( pOneTwoThreeUTF8 ) - 1,
                            RTL_TEXTENCODING_UTF8 );
-    ScopedVclPtr<vcl::Window> pWin(VclPtr<WorkWindow>::Create( static_cast<vcl::Window *>(nullptr) ));
+    ScopedVclPtrInstance<WorkWindow> pWin(static_cast<vcl::Window *>(nullptr));
     CPPUNIT_ASSERT( pWin );
 
     OutputDevice *pOutDev = static_cast< OutputDevice * >( pWin.get() );
@@ -94,7 +94,7 @@ void VclComplexTextTest::testTdf95650()
         0x030A, 0x0C0B, 0x20E0, 0x0A0D
     };
     OUString aTxt(pTxt, SAL_N_ELEMENTS(pTxt) - 1);
-    ScopedVclPtr<vcl::Window> pWin(VclPtr<WorkWindow>::Create(static_cast<vcl::Window *>(nullptr)));
+    ScopedVclPtrInstance<WorkWindow> pWin(static_cast<vcl::Window *>(nullptr));
     CPPUNIT_ASSERT(pWin);
 
     OutputDevice *pOutDev = static_cast< OutputDevice * >(pWin.get());
