@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a71b18c_5c87180f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-12-21T08:43:42Z",
+      "side": 1,
+      "message": "See https://cgit.freedesktop.org/libreoffice/core/commit/?id\u003d6324efd70dfa8c6be84cba1fa29658e3373cbbe3 for how to create a config option.",
+      "revId": "8611240ae8a665fd5433376085009e875d36ade4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
