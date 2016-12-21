@@ -595,7 +595,7 @@ VclButtonBox::Requisition VclButtonBox::calculatePrimarySecondaryRequisitions() 
     long nMainGroupSecondary = getSecondaryDimension(aMainGroupSize);
     long nSubGroupSecondary = getSecondaryDimension(aSubGroupSize);
 
-    bool bIgnoreSecondaryPacking = (m_eLayoutStyle == VCL_BUTTONBOX_SPREAD || m_eLayoutStyle == VCL_BUTTONBOX_CENTER);
+    bool bIgnoreSecondaryPacking = (m_eLayoutStyle == VclButtonBoxStyle::Spread || m_eLayoutStyle == VclButtonBoxStyle::Center);
 
     std::vector<long> aMainGroupSizes;
     std::vector<bool> aMainGroupNonHomogeneous;
@@ -709,17 +709,17 @@ bool VclButtonBox::set_property(const OString &rKey, const OString &rValue)
 {
     if (rKey == "layout-style")
     {
-        VclButtonBoxStyle eStyle = VCL_BUTTONBOX_DEFAULT_STYLE;
+        VclButtonBoxStyle eStyle = VclButtonBoxStyle::Default;
         if (rValue == "spread")
-            eStyle = VCL_BUTTONBOX_SPREAD;
+            eStyle = VclButtonBoxStyle::Spread;
         else if (rValue == "edge")
-            eStyle = VCL_BUTTONBOX_EDGE;
+            eStyle = VclButtonBoxStyle::Edge;
         else if (rValue == "start")
-            eStyle = VCL_BUTTONBOX_START;
+            eStyle = VclButtonBoxStyle::Start;
         else if (rValue == "end")
-            eStyle = VCL_BUTTONBOX_END;
+            eStyle = VclButtonBoxStyle::End;
         else if (rValue == "center")
-            eStyle = VCL_BUTTONBOX_CENTER;
+            eStyle = VclButtonBoxStyle::Center;
         else
         {
             SAL_WARN("vcl.layout", "unknown layout style " << rValue.getStr());
@@ -746,7 +746,7 @@ void VclButtonBox::setAllocation(const Size &rAllocation)
     //To-Do, other layout styles
     switch (m_eLayoutStyle)
     {
-        case VCL_BUTTONBOX_START:
+        case VclButtonBoxStyle::Start:
             if (!aReq.m_aSubGroupDimensions.empty())
             {
                 long nOtherPrimaryDimension = getPrimaryDimension(
@@ -755,7 +755,7 @@ void VclButtonBox::setAllocation(const Size &rAllocation)
                     nAllocPrimaryDimension - nOtherPrimaryDimension);
             }
             break;
-        case VCL_BUTTONBOX_SPREAD:
+        case VclButtonBoxStyle::Spread:
             if (!aReq.m_aMainGroupDimensions.empty())
             {
                 long nMainPrimaryDimension = getPrimaryDimension(
@@ -766,7 +766,7 @@ void VclButtonBox::setAllocation(const Size &rAllocation)
                 setPrimaryCoordinate(aMainGroupPos, nSpacing);
             }
             break;
-        case VCL_BUTTONBOX_CENTER:
+        case VclButtonBoxStyle::Center:
             if (!aReq.m_aMainGroupDimensions.empty())
             {
                 long nMainPrimaryDimension = getPrimaryDimension(
@@ -778,8 +778,8 @@ void VclButtonBox::setAllocation(const Size &rAllocation)
         default:
             SAL_WARN("vcl.layout", "todo unimplemented layout style");
             SAL_FALLTHROUGH;
-        case VCL_BUTTONBOX_DEFAULT_STYLE:
-        case VCL_BUTTONBOX_END:
+        case VclButtonBoxStyle::Default:
+        case VclButtonBoxStyle::End:
             if (!aReq.m_aMainGroupDimensions.empty())
             {
                 long nMainPrimaryDimension = getPrimaryDimension(
@@ -795,7 +795,7 @@ void VclButtonBox::setAllocation(const Size &rAllocation)
 
     std::vector<long>::const_iterator aPrimaryI = aReq.m_aMainGroupDimensions.begin();
     std::vector<long>::const_iterator aSecondaryI = aReq.m_aSubGroupDimensions.begin();
-    bool bIgnoreSecondaryPacking = (m_eLayoutStyle == VCL_BUTTONBOX_SPREAD || m_eLayoutStyle == VCL_BUTTONBOX_CENTER);
+    bool bIgnoreSecondaryPacking = (m_eLayoutStyle == VclButtonBoxStyle::Spread || m_eLayoutStyle == VclButtonBoxStyle::Center);
     for (vcl::Window *pChild = GetWindow(GetWindowType::FirstChild); pChild; pChild = pChild->GetWindow(GetWindowType::Next))
     {
         if (!pChild->IsVisible())
