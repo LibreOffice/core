@@ -867,7 +867,7 @@ void SdrTextObj::ImpSetCharStretching(SdrOutliner& rOutliner, const Size& rTextS
     OutputDevice* pOut = rOutliner.GetRefDevice();
     bool bNoStretching(false);
 
-    if(pOut && pOut->GetOutDevType() == OUTDEV_PRINTER)
+    if(pOut && pOut->GetOutDevType() == OutDevType::Printer)
     {
         // check whether CharStretching is possible at all
         GDIMetaFile* pMtf = pOut->GetConnectMetaFile();

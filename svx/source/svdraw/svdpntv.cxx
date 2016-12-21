@@ -564,7 +564,7 @@ void SdrPaintView::CompleteRedraw(OutputDevice* pOut, const vcl::Region& rReg, s
     // rectangle which was derived from exactly that repaint region
     vcl::Region aOptimizedRepaintRegion(rReg);
 
-    if(pOut && OUTDEV_WINDOW == pOut->GetOutDevType())
+    if(pOut && OutDevType::Window == pOut->GetOutDevType())
     {
         vcl::Window* pWindow = static_cast<vcl::Window*>(pOut);
 
@@ -830,7 +830,7 @@ vcl::Region SdrPaintView::OptimizeDrawLayersRegion(OutputDevice* pOut, const vcl
     // for print preview in Calc, because the intersection can be empty (if the paint
     // region is outside of the table area of the page), and then no clip region
     // would be set.
-    if(pOut && OUTDEV_WINDOW == pOut->GetOutDevType() && !bDisableIntersect)
+    if(pOut && OutDevType::Window == pOut->GetOutDevType() && !bDisableIntersect)
     {
         vcl::Window* pWindow = static_cast<vcl::Window*>(pOut);
 

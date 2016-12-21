@@ -1078,7 +1078,7 @@ void SdrOle2Obj::Connect_Impl()
         //TODO/LATER: needs a new handling for OnPrinterChanged
         /*
         if (pModel && pModel->GetRefDevice() &&
-            pModel->GetRefDevice()->GetOutDevType() == OUTDEV_PRINTER)
+            pModel->GetRefDevice()->GetOutDevType() == OutDevType::Printer)
         {
             // Kein RefDevice oder RefDevice kein Printer
             bool bModified = (*ppObjRef)->IsModified();
@@ -1958,7 +1958,7 @@ void SdrOle2Obj::GetObjRef_Impl()
             //if ( nMiscStatus & SVOBJ_MISCSTATUS_RESIZEONPRINTERCHANGE )
             {
                 if (pModel && pModel->GetRefDevice() &&
-                    pModel->GetRefDevice()->GetOutDevType() == OUTDEV_PRINTER)
+                    pModel->GetRefDevice()->GetOutDevType() == OutDevType::Printer)
                 {
                     if (!mpImpl->mbInDestruction)
                     {

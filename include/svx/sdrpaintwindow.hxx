@@ -108,13 +108,13 @@ public:
     Rectangle GetVisibleArea() const;
 
     // Is OutDev a printer?
-    bool OutputToPrinter() const { return (OUTDEV_PRINTER == mrOutputDevice.GetOutDevType()); }
+    bool OutputToPrinter() const { return (OutDevType::Printer == mrOutputDevice.GetOutDevType()); }
 
     // Is OutDev a window?
-    bool OutputToWindow() const { return (OUTDEV_WINDOW == mrOutputDevice.GetOutDevType()); }
+    bool OutputToWindow() const { return (OutDevType::Window == mrOutputDevice.GetOutDevType()); }
 
     // Is OutDev a VirtualDevice?
-    bool OutputToVirtualDevice() const { return (OUTDEV_VIRDEV == mrOutputDevice.GetOutDevType()); }
+    bool OutputToVirtualDevice() const { return (OutDevType::VirDev == mrOutputDevice.GetOutDevType()); }
 
     // Is OutDev a recording MetaFile?
     bool OutputToRecordingMetaFile() const;

@@ -1948,7 +1948,7 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                             SdrOutliner& rOutl = mpDoc->GetDrawOutliner();
                             bool bScreenDisplay(true);
 
-                            if(bScreenDisplay && pOut && OUTDEV_PRINTER == pOut->GetOutDevType())
+                            if(bScreenDisplay && pOut && OutDevType::Printer == pOut->GetOutDevType())
                             {
                                 // #i75566# printing; suppress AutoColor BackgroundColor generation
                                 // for visibility reasons by giving GetPageBackgroundColor()

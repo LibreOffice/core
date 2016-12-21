@@ -476,7 +476,7 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
                 const GeoStat& rGeo=pTextObj->GetGeoStat();
                 if (rGeo.nRotationAngle!=0) RotatePoint(aTemporaryTextRelativePosition,Point(),-rGeo.nSin,rGeo.nCos); // -sin for Unrotate
                 // we currently don't account for ticker text
-                if(mpActualOutDev && mpActualOutDev->GetOutDevType() == OUTDEV_WINDOW)
+                if(mpActualOutDev && mpActualOutDev->GetOutDevType() == OutDevType::Window)
                 {
                     OutlinerView aOLV(pOutliner, const_cast<vcl::Window*>(static_cast<const vcl::Window*>(mpActualOutDev.get())));
                     const EditView& aEV=aOLV.GetEditView();
@@ -811,7 +811,7 @@ bool SdrView::DoMouseEvent(const SdrViewEvent& rVEvt)
                     MarkObj(rVEvt.pRootObj,rVEvt.pPV);
                     if (eHit==SdrHitKind::TextEdit)
                     {
-                        bool bRet2(mpActualOutDev && OUTDEV_WINDOW == mpActualOutDev->GetOutDevType() &&
+                        bool bRet2(mpActualOutDev && OutDevType::Window == mpActualOutDev->GetOutDevType() &&
                             SdrBeginTextEdit(rVEvt.pObj, rVEvt.pPV, const_cast<vcl::Window*>(static_cast<const vcl::Window*>(mpActualOutDev.get()))));
 
                         if(bRet2)
@@ -904,7 +904,7 @@ bool SdrView::DoMouseEvent(const SdrViewEvent& rVEvt)
                 MarkObj(rVEvt.pRootObj,rVEvt.pPV);
             }
 
-            bRet = mpActualOutDev && OUTDEV_WINDOW == mpActualOutDev->GetOutDevType()&&
+            bRet = mpActualOutDev && OutDevType::Window == mpActualOutDev->GetOutDevType()&&
                  SdrBeginTextEdit(rVEvt.pObj, rVEvt.pPV, const_cast<vcl::Window*>(static_cast<const vcl::Window*>(mpActualOutDev.get())));
 
             if(bRet)
@@ -917,7 +917,7 @@ bool SdrView::DoMouseEvent(const SdrViewEvent& rVEvt)
         } break;
         default: break;
     } // switch
-    if (bRet && mpActualOutDev && mpActualOutDev->GetOutDevType()==OUTDEV_WINDOW) {
+    if (bRet && mpActualOutDev && mpActualOutDev->GetOutDevType()==OutDevType::Window) {
         vcl::Window* pWin=const_cast<vcl::Window*>(static_cast<const vcl::Window*>(mpActualOutDev.get()));
         // left mouse button pressed?
         bool bLeftDown=(rVEvt.nMouseCode&MOUSE_LEFT)!=0 && rVEvt.bMouseDown;

@@ -1774,7 +1774,7 @@ void Edit::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawF
     }
 
     // Inhalt
-    if ( ( nFlags & DrawFlags::Mono ) || ( eOutDevType == OUTDEV_PRINTER ) )
+    if ( ( nFlags & DrawFlags::Mono ) || ( eOutDevType == OutDevType::Printer ) )
         pDev->SetTextColor( Color( COL_BLACK ) );
     else
     {

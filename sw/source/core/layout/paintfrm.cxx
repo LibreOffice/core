@@ -699,7 +699,7 @@ void SwLineRects::AddLineRect( const SwRect &rRect, const Color *pCol, const Svx
 
 void SwLineRects::ConnectEdges( OutputDevice *pOut, SwPaintProperties& properties )
 {
-    if ( pOut->GetOutDevType() != OUTDEV_PRINTER )
+    if ( pOut->GetOutDevType() != OutDevType::Printer )
     {
         // I'm not doing anything for a too small zoom
         if ( properties.aSScaleX < aEdgeScale || properties.aSScaleY < aEdgeScale )
@@ -1568,7 +1568,7 @@ static void lcl_SubtractFlys( const SwFrame *pFrame, const SwPageFrame *pPage,
             continue;
 
         if (!pFly->GetFormat()->GetPrint().GetValue() &&
-                (OUTDEV_PRINTER == gProp.pSGlobalShell->GetOut()->GetOutDevType() ||
+                (OutDevType::Printer == gProp.pSGlobalShell->GetOut()->GetOutDevType() ||
                 gProp.pSGlobalShell->IsPreview()))
             continue;
 
@@ -3327,7 +3327,7 @@ void SwRootFrame::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect,
                     pSh->DLPrePaint2(aDLRegion);
                 }
 
-                if(OUTDEV_WINDOW == gProp.pSGlobalShell->GetOut()->GetOutDevType())
+                if(OutDevType::Window == gProp.pSGlobalShell->GetOut()->GetOutDevType())
                 {
                     // OD 27.09.2002 #103636# - changed method SwLayVout::Enter(..)
                     // 2nd parameter is no longer <const> and will be set to the
@@ -3751,7 +3751,7 @@ static drawinglayer::primitive2d::Primitive2DContainer lcl_CreateDashedIndicator
 
 void SwPageFrame::PaintBreak( ) const
 {
-    if ( gProp.pSGlobalShell->GetOut()->GetOutDevType() != OUTDEV_PRINTER  &&
+    if ( gProp.pSGlobalShell->GetOut()->GetOutDevType() != OutDevType::Printer  &&
          !gProp.pSGlobalShell->GetViewOptions()->IsPDFExport() &&
          !gProp.pSGlobalShell->GetViewOptions()->IsReadonly() &&
          !gProp.pSGlobalShell->IsPreview() )
@@ -3788,7 +3788,7 @@ void SwPageFrame::PaintBreak( ) const
 
 void SwColumnFrame::PaintBreak( ) const
 {
-    if ( gProp.pSGlobalShell->GetOut()->GetOutDevType() != OUTDEV_PRINTER  &&
+    if ( gProp.pSGlobalShell->GetOut()->GetOutDevType() != OutDevType::Printer  &&
          !gProp.pSGlobalShell->GetViewOptions()->IsPDFExport() &&
          !gProp.pSGlobalShell->GetViewOptions()->IsReadonly() &&
          !gProp.pSGlobalShell->IsPreview() )
@@ -3896,7 +3896,7 @@ void SwPageFrame::PaintDecorators( ) const
         {
             SwRect aBodyRect( pBody->Frame() );
 
-            if ( gProp.pSGlobalShell->GetOut()->GetOutDevType() != OUTDEV_PRINTER &&
+            if ( gProp.pSGlobalShell->GetOut()->GetOutDevType() != OutDevType::Printer &&
                  !gProp.pSGlobalShell->GetViewOptions()->IsPDFExport() &&
                  !gProp.pSGlobalShell->IsPreview() &&
                  !gProp.pSGlobalShell->GetViewOptions()->IsReadonly() &&
@@ -4987,7 +4987,7 @@ static void lcl_PaintLeftRightLine( const bool         _bLeft,
     {
         // OD 06.05.2003 #107169# - init boolean indicating printer output device.
         const bool bPrtOutputDev =
-                ( OUTDEV_PRINTER == properties.pSGlobalShell->GetOut()->GetOutDevType() );
+                ( OutDevType::Printer == properties.pSGlobalShell->GetOut()->GetOutDevType() );
 
         // OD 06.05.2003 #107169# - add 6th parameter
         ::lcl_SubTopBottom( aRect, rBox, _rAttrs, _rFrame, _rRectFn, bPrtOutputDev, properties);
@@ -5664,7 +5664,7 @@ void SwPageFrame::PaintGrid( OutputDevice* pOut, SwRect &rRect ) const
     if( !m_bHasGrid || gProp.pSRetoucheFly || gProp.pSRetoucheFly2 )
         return;
     SwTextGridItem const*const pGrid(GetGridItem(this));
-    if( pGrid && ( OUTDEV_PRINTER != pOut->GetOutDevType() ?
+    if( pGrid && ( OutDevType::Printer != pOut->GetOutDevType() ?
         pGrid->GetDisplayGrid() : pGrid->GetPrintGrid() ) )
     {
         const SwLayoutFrame* pBody = FindBodyCont();
@@ -6526,7 +6526,7 @@ void SwFrame::PaintBackground( const SwRect &rRect, const SwPageFrame *pPage,
             // OD 10.01.2003 #i6467# - on print output, pdf output and
             // in embedded mode not editing color COL_WHITE is used instead of
             // the global retouche color.
-            if ( pSh->GetOut()->GetOutDevType() == OUTDEV_PRINTER ||
+            if ( pSh->GetOut()->GetOutDevType() == OutDevType::Printer ||
                  pSh->GetViewOptions()->IsPDFExport() ||
                  ( pSh->GetDoc()->GetDocShell()->GetCreateMode() == SfxObjectCreateMode::EMBEDDED &&
                    !pSh->GetDoc()->GetDocShell()->IsInPlaceActive()
@@ -7518,7 +7518,7 @@ bool SwFrame::GetBackgroundBrush(
                 !pOpt->IsFormView() &&
                 SwViewOption::IsIndexShadings() &&
                 !pOpt->IsPDFExport() &&
-                pSh->GetOut()->GetOutDevType() != OUTDEV_PRINTER )
+                pSh->GetOut()->GetOutDevType() != OutDevType::Printer )
             {
                 rpCol = &SwViewOption::GetIndexShadingsColor();
             }

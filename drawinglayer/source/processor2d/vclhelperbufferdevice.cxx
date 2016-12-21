@@ -277,7 +277,7 @@ namespace drawinglayer
 #endif
 
             // #i93485# assert when copying from window to VDev is used
-            OSL_ENSURE(mrOutDev.GetOutDevType() != OUTDEV_WINDOW,
+            OSL_ENSURE(mrOutDev.GetOutDevType() != OutDevType::Window,
                 "impBufferDevice render helper: Copying from Window to VDev, this should be avoided (!)");
 
             const bool bWasEnabledSrc(mrOutDev.IsMapModeEnabled());

@@ -208,7 +208,7 @@ static vcl::Window* ImpGetViewWin(SdrView* pView)
         {
             OutputDevice* pOut = &(pView->GetPaintWindow(nNum)->GetOutputDevice());
 
-            if(OUTDEV_WINDOW == pOut->GetOutDevType())
+            if(OutDevType::Window == pOut->GetOutDevType())
             {
                 return static_cast<vcl::Window*>(pOut);
             }

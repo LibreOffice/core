@@ -163,7 +163,7 @@ namespace sdr
 
             // limit to PaintRegion if it's a window. This will be evtl. the expanded one,
             // but always the exact redraw area
-            if(OUTDEV_WINDOW == rSource.GetOutDevType())
+            if(OutDevType::Window == rSource.GetOutDevType())
             {
                 vcl::Window& rWindow = static_cast<vcl::Window&>(rSource);
                 vcl::Region aPaintRegionPixel = rWindow.LogicToPixel(rWindow.GetPaintRegion());
@@ -222,7 +222,7 @@ namespace sdr
                 aBufferRememberedRangeLogic.transform(getOutputDevice().GetInverseViewTransformation());
 
                 // prepare cursor handling
-                const bool bTargetIsWindow(OUTDEV_WINDOW == mrOutputDevice.GetOutDevType());
+                const bool bTargetIsWindow(OutDevType::Window == mrOutputDevice.GetOutDevType());
                 bool bCursorWasEnabled(false);
 
                 // #i80730# switch off VCL cursor during overlay refresh

@@ -589,7 +589,7 @@ void grindFunc( OutputDevice&                       rTarget,
     for( sal_Int32 i=0; i<nTurns; ++i )
         iter->second(&rTarget);
 
-    if( rTarget.GetOutDevType() == OUTDEV_WINDOW )
+    if( rTarget.GetOutDevType() == OutDevType::Window )
         static_cast< vcl::Window & >( rTarget ).Flush();
 
     fprintf( stdout,

@@ -124,7 +124,7 @@ void OutputDevice::ImplDrawWaveLine( long nBaseX, long nBaseY,
         long    nPixHeight;
         bool    bDrawPixAsRect;
         // On printers that ouput pixel via DrawRect()
-        if ( (GetOutDevType() == OUTDEV_PRINTER) || (nLineWidth > 1) )
+        if ( (GetOutDevType() == OutDevType::Printer) || (nLineWidth > 1) )
         {
             if ( mbLineColor || mbInitLineColor )
             {

@@ -242,7 +242,7 @@ void FontList::ImplInsertFonts(OutputDevice* pDevice, bool bInsertData)
     rtl_TextEncoding eSystemEncoding = osl_getThreadTextEncoding();
 
     FontListFontNameType nType;
-    if ( pDevice->GetOutDevType() != OUTDEV_PRINTER )
+    if ( pDevice->GetOutDevType() != OutDevType::Printer )
         nType = FontListFontNameType::SCREEN;
     else
         nType = FontListFontNameType::PRINTER;
@@ -347,7 +347,7 @@ FontList::FontList(OutputDevice* pDevice, OutputDevice* pDevice2)
     // if required compare to the screen fonts
     // in order to map the duplicates to Equal
     bool bCompareWindow = false;
-    if ( !pDevice2 && (pDevice->GetOutDevType() == OUTDEV_PRINTER) )
+    if ( !pDevice2 && (pDevice->GetOutDevType() == OutDevType::Printer) )
     {
         bCompareWindow = true;
         pDevice2 = Application::GetDefaultDevice();

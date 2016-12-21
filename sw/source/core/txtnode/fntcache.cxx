@@ -173,9 +173,9 @@ static bool lcl_IsFontAdjustNecessary( const vcl::RenderContext& rOutDev,
                                 const vcl::RenderContext& rRefDev )
 {
     return &rRefDev != &rOutDev &&
-           OUTDEV_WINDOW != rRefDev.GetOutDevType() &&
-           ( OUTDEV_PRINTER != rRefDev.GetOutDevType() ||
-             OUTDEV_PRINTER != rOutDev.GetOutDevType() );
+           OutDevType::Window != rRefDev.GetOutDevType() &&
+           ( OutDevType::Printer != rRefDev.GetOutDevType() ||
+             OutDevType::Printer != rOutDev.GetOutDevType() );
 }
 
 struct CalcLinePosData
@@ -763,8 +763,8 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
     OutputDevice* pWin = rInf.GetShell()->GetWin();
 
     // true if pOut is the printer and the printer has been used for formatting
-    const bool bPrt = OUTDEV_PRINTER == rInf.GetOut().GetOutDevType() &&
-                      OUTDEV_PRINTER == rRefDev.GetOutDevType();
+    const bool bPrt = OutDevType::Printer == rInf.GetOut().GetOutDevType() &&
+                      OutDevType::Printer == rRefDev.GetOutDevType();
     const bool bBrowse = ( pWin &&
                            rInf.GetShell()->GetViewOptions()->getBrowseMode() &&
                           !rInf.GetShell()->GetViewOptions()->IsPrtFormat() &&
@@ -805,14 +805,14 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                rInf.GetShell()->GetViewOptions()->getBrowseMode() &&
               !rInf.GetShell()->GetViewOptions()->IsPrtFormat() );
 
-    if ( OUTDEV_PRINTER == rInf.GetOut().GetOutDevType() )
+    if ( OutDevType::Printer == rInf.GetOut().GetOutDevType() )
     {
         // Printer output
-        if ( OUTDEV_PRINTER == rRefDev.GetOutDevType() )
+        if ( OutDevType::Printer == rRefDev.GetOutDevType() )
         {
             OSL_ENSURE( bNoAdjust && !bUseScrFont, "Outdev Check failed" );
         }
-        else if ( OUTDEV_VIRDEV == rRefDev.GetOutDevType() )
+        else if ( OutDevType::VirDev == rRefDev.GetOutDevType() )
         {
             OSL_ENSURE( !bNoAdjust && bUseScrFont, "Outdev Check failed" );
         }
@@ -821,14 +821,14 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             OSL_FAIL( "Outdev Check failed" );
         }
     }
-    else if ( OUTDEV_VIRDEV == rInf.GetOut().GetOutDevType() && ! pWin )
+    else if ( OutDevType::VirDev == rInf.GetOut().GetOutDevType() && ! pWin )
     {
         // PDF export
-        if ( OUTDEV_PRINTER == rRefDev.GetOutDevType() )
+        if ( OutDevType::Printer == rRefDev.GetOutDevType() )
         {
             OSL_ENSURE( !bNoAdjust && bUseScrFont, "Outdev Check failed" );
         }
-        else if ( OUTDEV_VIRDEV == rRefDev.GetOutDevType() )
+        else if ( OutDevType::VirDev == rRefDev.GetOutDevType() )
         {
             OSL_ENSURE( !bNoAdjust && bUseScrFont, "Outdev Check failed" );
         }
@@ -837,19 +837,19 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             OSL_FAIL( "Outdev Check failed" );
         }
     }
-    else if ( OUTDEV_WINDOW == rInf.GetOut().GetOutDevType() ||
-               ( OUTDEV_VIRDEV == rInf.GetOut().GetOutDevType() && pWin ) )
+    else if ( OutDevType::Window == rInf.GetOut().GetOutDevType() ||
+               ( OutDevType::VirDev == rInf.GetOut().GetOutDevType() && pWin ) )
     {
         // Window or virtual window
-        if ( OUTDEV_PRINTER == rRefDev.GetOutDevType() )
+        if ( OutDevType::Printer == rRefDev.GetOutDevType() )
         {
             OSL_ENSURE( !bNoAdjust && bUseScrFont, "Outdev Check failed" );
         }
-        else if ( OUTDEV_VIRDEV == rRefDev.GetOutDevType() )
+        else if ( OutDevType::VirDev == rRefDev.GetOutDevType() )
         {
             OSL_ENSURE( !bNoAdjust && bUseScrFont, "Outdev Check failed" );
         }
-        else if ( OUTDEV_WINDOW == rRefDev.GetOutDevType() )
+        else if ( OutDevType::Window == rRefDev.GetOutDevType() )
         {
             OSL_ENSURE( bNoAdjust && !bUseScrFont, "Outdev Check failed" );
         }

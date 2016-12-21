@@ -131,7 +131,7 @@ void ObjectContactOfObjListPainter::ProcessDisplay(DisplayInfo& rDisplayInfo)
 // VirtualDevice?
 bool ObjectContactOfObjListPainter::isOutputToVirtualDevice() const
 {
-    return (OUTDEV_VIRDEV == mrTargetOutputDevice.GetOutDevType());
+    return (OutDevType::VirDev == mrTargetOutputDevice.GetOutDevType());
 }
 
 // recording MetaFile?

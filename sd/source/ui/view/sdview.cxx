@@ -478,7 +478,7 @@ void View::CompleteRedraw(OutputDevice* pOutDev, const vcl::Region& rReg, sdr::c
                 SdrOutliner& rOutl = mrDoc.GetDrawOutliner();
                 bool bScreenDisplay(true);
 
-                if(bScreenDisplay && pOutDev && OUTDEV_PRINTER == pOutDev->GetOutDevType())
+                if(bScreenDisplay && pOutDev && OutDevType::Printer == pOutDev->GetOutDevType())
                 {
                     // #i75566# printing; suppress AutoColor BackgroundColor generation
                     // for visibility reasons by giving GetPageBackgroundColor()

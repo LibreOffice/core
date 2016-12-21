@@ -86,7 +86,7 @@ namespace vcl {
 Window::Window( WindowType nType ) :
     mpWindowImpl(new WindowImpl( nType ))
 {
-    meOutDevType = OUTDEV_WINDOW;
+    meOutDevType = OutDevType::Window;
 
     // true: this outdev will be mirrored if RTL window layout (UI mirroring) is globally active
     mbEnableRTL = AllSettings::GetLayoutRTL();
@@ -95,7 +95,7 @@ Window::Window( WindowType nType ) :
 Window::Window( vcl::Window* pParent, WinBits nStyle ) :
     mpWindowImpl(new WindowImpl( WINDOW_WINDOW ))
 {
-    meOutDevType = OUTDEV_WINDOW;
+    meOutDevType = OutDevType::Window;
 
     // true: this outdev will be mirrored if RTL window layout (UI mirroring) is globally active
     mbEnableRTL = AllSettings::GetLayoutRTL();

@@ -942,7 +942,7 @@ void SwGrfNumPortion::Paint( const SwTextPaintInfo &rInf ) const
             const SwViewShell* pViewShell = rInf.GetVsh();
 
             // virtual device, not pdf export
-            if( OUTDEV_VIRDEV == rInf.GetOut()->GetOutDevType() &&
+            if( OutDevType::VirDev == rInf.GetOut()->GetOutDevType() &&
                 pViewShell && pViewShell->GetWin()  )
             {
                 Graphic* pGraph = const_cast<Graphic*>(pBrush->GetGraphic());

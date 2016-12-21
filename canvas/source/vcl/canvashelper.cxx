@@ -1354,14 +1354,14 @@ namespace vclcanvas
 
     void CanvasHelper::flush() const
     {
-        if( mpOutDev && mpOutDev->getOutDev().GetOutDevType() == OUTDEV_WINDOW )
+        if( mpOutDev && mpOutDev->getOutDev().GetOutDevType() == OutDevType::Window )
         {
             // TODO(Q3): Evil downcast. And what's more, Window::Flush is
             // not even const. Wah.
             static_cast<vcl::Window&>(mpOutDev->getOutDev()).Flush();
         }
 
-        if( mp2ndOutDev && mp2ndOutDev->getOutDev().GetOutDevType() == OUTDEV_WINDOW )
+        if( mp2ndOutDev && mp2ndOutDev->getOutDev().GetOutDevType() == OutDevType::Window )
         {
             // TODO(Q3): Evil downcast. And what's more, Window::Flush is
             // not even const. Wah.

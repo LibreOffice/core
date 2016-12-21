@@ -151,7 +151,7 @@ namespace sdr
             {
                 basegfx::B2DRange aViewRange(maViewInformation2D.getViewport());
 
-                if(OUTDEV_WINDOW == getOutputDevice().GetOutDevType())
+                if(OutDevType::Window == getOutputDevice().GetOutDevType())
                 {
                     const Size aOutputSizePixel(getOutputDevice().GetOutputSizePixel());
 
@@ -297,7 +297,7 @@ namespace sdr
 
         void OverlayManager::invalidateRange(const basegfx::B2DRange& rRange)
         {
-            if(OUTDEV_WINDOW == getOutputDevice().GetOutDevType())
+            if(OutDevType::Window == getOutputDevice().GetOutDevType())
             {
                 if(getDrawinglayerOpt().IsAntiAliasing())
                 {

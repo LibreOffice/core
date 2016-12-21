@@ -213,7 +213,7 @@ void SfxObjectShell::DoDraw_Impl( OutputDevice* pDev,
     pDev->Push();
 
     vcl::Region aRegion;
-    if( pDev->IsClipRegion() && pDev->GetOutDevType() != OUTDEV_PRINTER )
+    if( pDev->IsClipRegion() && pDev->GetOutDevType() != OutDevType::Printer )
     {
         aRegion = pDev->GetClipRegion();
         aRegion = pDev->LogicToPixel( aRegion );
@@ -223,12 +223,12 @@ void SfxObjectShell::DoDraw_Impl( OutputDevice* pDev,
     GDIMetaFile * pMtf = pDev->GetConnectMetaFile();
     if( pMtf )
     {
-        if( pMtf->IsRecord() && pDev->GetOutDevType() != OUTDEV_PRINTER )
+        if( pMtf->IsRecord() && pDev->GetOutDevType() != OutDevType::Printer )
             pMtf->Stop();
         else
             pMtf = nullptr;
     }
-    if( pDev->IsClipRegion() && pDev->GetOutDevType() != OUTDEV_PRINTER )
+    if( pDev->IsClipRegion() && pDev->GetOutDevType() != OutDevType::Printer )
     {
         aRegion = pDev->PixelToLogic( aRegion );
         pDev->SetClipRegion( aRegion );

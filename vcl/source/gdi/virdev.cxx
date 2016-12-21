@@ -170,12 +170,12 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
     if (meFormat == DeviceFormat::BITMASK)
         SetAntialiasing( AntialiasingFlags::DisableText );
 
-    if ( pOutDev->GetOutDevType() == OUTDEV_PRINTER )
+    if ( pOutDev->GetOutDevType() == OutDevType::Printer )
         mbScreenComp = false;
-    else if ( pOutDev->GetOutDevType() == OUTDEV_VIRDEV )
+    else if ( pOutDev->GetOutDevType() == OutDevType::VirDev )
         mbScreenComp = static_cast<const VirtualDevice*>(pOutDev)->mbScreenComp;
 
-    meOutDevType    = OUTDEV_VIRDEV;
+    meOutDevType    = OutDevType::VirDev;
     mbDevOutput     = true;
     mpFontCollection      = pSVData->maGDIData.mpScreenFontList;
     mpFontCache     = pSVData->maGDIData.mpScreenFontCache;

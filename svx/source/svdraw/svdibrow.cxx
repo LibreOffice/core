@@ -1082,7 +1082,7 @@ vcl::Window* SdrItemBrowser::ImpGetViewWin(SdrView& rView)
     {
         SdrPaintWindow* pCandidate = rView.GetPaintWindow(a);
 
-        if(OUTDEV_WINDOW == pCandidate->GetOutputDevice().GetOutDevType())
+        if(OutDevType::Window == pCandidate->GetOutputDevice().GetOutDevType())
         {
             return static_cast<vcl::Window*>(&pCandidate->GetOutputDevice());
         }

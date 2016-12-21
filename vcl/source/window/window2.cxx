@@ -633,7 +633,7 @@ vcl::Font Window::GetDrawPixelFont(OutputDevice* pDev) const
 long Window::GetDrawPixel( OutputDevice* pDev, long nPixels ) const
 {
     long nP = nPixels;
-    if ( pDev->GetOutDevType() != OUTDEV_WINDOW )
+    if ( pDev->GetOutDevType() != OutDevType::Window )
     {
         MapMode aMap( MapUnit::Map100thMM );
         Size aSz( nP, 0 );

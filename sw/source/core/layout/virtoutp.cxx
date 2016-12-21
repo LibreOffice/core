@@ -140,7 +140,7 @@ void SwLayVout::Enter(  SwViewShell *pShell, SwRect &rRect, bool bOn )
         pOut = nullptr;
         OutputDevice *pO = pSh->GetOut();
 // We don't cheat on printers or virtual output devices...
-        if( OUTDEV_WINDOW != pO->GetOutDevType() )
+        if( OutDevType::Window != pO->GetOutDevType() )
             return;
 
         pOut = pO;

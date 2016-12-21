@@ -75,7 +75,7 @@ ImplAnimView::ImplAnimView( Animation* pParent, OutputDevice* pOut,
     // save background
     mpBackground->SetOutputSizePixel( maSzPix );
 
-    if( mpOut->GetOutDevType() == OUTDEV_WINDOW )
+    if( mpOut->GetOutDevType() == OutDevType::Window )
     {
         MapMode aTempMap( mpOut->GetMapMode() );
         aTempMap.SetOrigin( Point() );
@@ -159,7 +159,7 @@ void ImplAnimView::drawToPos( sal_uLong nPos )
     VclPtr<vcl::RenderContext> pRenderContext = mpOut;
 
     std::unique_ptr<PaintBufferGuard> pGuard;
-    if (mpOut->GetOutDevType() == OUTDEV_WINDOW)
+    if (mpOut->GetOutDevType() == OutDevType::Window)
     {
         vcl::Window* pWindow = static_cast<vcl::Window*>(mpOut.get());
         pGuard.reset(new PaintBufferGuard(pWindow->ImplGetWindowImpl()->mpFrameData, pWindow));
@@ -191,7 +191,7 @@ void ImplAnimView::draw( sal_uLong nPos, VirtualDevice* pVDev )
     VclPtr<vcl::RenderContext> pRenderContext = mpOut;
 
     std::unique_ptr<PaintBufferGuard> pGuard;
-    if (!pVDev && mpOut->GetOutDevType() == OUTDEV_WINDOW)
+    if (!pVDev && mpOut->GetOutDevType() == OutDevType::Window)
     {
         vcl::Window* pWindow = static_cast<vcl::Window*>(mpOut.get());
         pGuard.reset(new PaintBufferGuard(pWindow->ImplGetWindowImpl()->mpFrameData, pWindow));
@@ -302,7 +302,7 @@ void ImplAnimView::draw( sal_uLong nPos, VirtualDevice* pVDev )
 
             pDev.disposeAndClear();
 
-            if( pRenderContext->GetOutDevType() == OUTDEV_WINDOW )
+            if( pRenderContext->GetOutDevType() == OutDevType::Window )
                 static_cast<vcl::Window*>( pRenderContext.get() )->Flush();
         }
     }
@@ -312,7 +312,7 @@ void ImplAnimView::repaint()
 {
     const bool bOldPause = mbPause;
 
-    if( mpOut->GetOutDevType() == OUTDEV_WINDOW )
+    if( mpOut->GetOutDevType() == OutDevType::Window )
     {
         MapMode aTempMap( mpOut->GetMapMode() );
         aTempMap.SetOrigin( Point() );

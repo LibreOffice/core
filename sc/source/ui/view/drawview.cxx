@@ -509,7 +509,7 @@ void ScDrawView::MarkListHasChanged()
         SdrPaintWindow* pPaintWindow = GetPaintWindow(a);
         OutputDevice& rOutDev = pPaintWindow->GetOutputDevice();
 
-        if(OUTDEV_WINDOW == rOutDev.GetOutDevType())
+        if(OutDevType::Window == rOutDev.GetOutDevType())
         {
             static_cast<vcl::Window&>(rOutDev).Update();
         }

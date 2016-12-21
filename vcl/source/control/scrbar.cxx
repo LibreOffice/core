@@ -618,7 +618,7 @@ void ScrollBar::ImplDraw(vcl::RenderContext& rRenderContext)
         ImplCalc(false);
 
     //vcl::Window *pWin = NULL;
-    //if (rRenderContext.GetOutDevType() == OUTDEV_WINDOW)
+    //if (rRenderContext.GetOutDevType() == OutDevType::Window)
     //    pWin = static_cast<vcl::Window*>(&rRenderContext);
 
     // Draw the entire control if the native theme engine needs it

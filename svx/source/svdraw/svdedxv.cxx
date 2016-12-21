@@ -148,7 +148,7 @@ SdrPageView* SdrObjEditView::ShowSdrPage(SdrPage* pPage)
                 continue;
 
             OutputDevice* pOutDev = GetFirstOutputDevice();
-            if (!pOutDev || pOutDev->GetOutDevType() != OUTDEV_WINDOW)
+            if (!pOutDev || pOutDev->GetOutDevType() != OutDevType::Window)
                 continue;
 
             // Found one, so create an outliner view, to get invalidations when
@@ -175,7 +175,7 @@ void lcl_RemoveTextEditOutlinerViews(SdrObjEditView* pThis, SdrPageView* pPageVi
     if (!pPageView)
         return;
 
-    if (!pOutputDevice || pOutputDevice->GetOutDevType() != OUTDEV_WINDOW)
+    if (!pOutputDevice || pOutputDevice->GetOutDevType() != OutDevType::Window)
         return;
 
     SdrViewIter aIter(pPageView->GetPage());
@@ -743,7 +743,7 @@ bool SdrObjEditView::SdrBeginTextEdit(
         {
             SdrPaintWindow* pPaintWindow = GetPaintWindow(i);
 
-            if(OUTDEV_WINDOW == pPaintWindow->GetOutputDevice().GetOutDevType())
+            if(OutDevType::Window == pPaintWindow->GetOutputDevice().GetOutDevType())
             {
                 pWin = static_cast<vcl::Window*>(&pPaintWindow->GetOutputDevice());
             }
@@ -888,7 +888,7 @@ bool SdrObjEditView::SdrBeginTextEdit(
                     SdrPaintWindow* pPaintWindow = GetPaintWindow(i);
                     OutputDevice& rOutDev = pPaintWindow->GetOutputDevice();
 
-                    if(&rOutDev != pWin && OUTDEV_WINDOW == rOutDev.GetOutDevType())
+                    if(&rOutDev != pWin && OutDevType::Window == rOutDev.GetOutDevType())
                     {
                         OutlinerView* pOutlView = ImpMakeOutlinerView(static_cast<vcl::Window*>(&rOutDev), !bEmpty, nullptr);
                         pTextEditOutliner->InsertView(pOutlView, (sal_uInt16)i);
@@ -911,7 +911,7 @@ bool SdrObjEditView::SdrBeginTextEdit(
                             SdrPaintWindow* pPaintWindow = pView->GetPaintWindow(nViewPaintWindow);
                             OutputDevice& rOutDev = pPaintWindow->GetOutputDevice();
 
-                            if(&rOutDev != pWin && OUTDEV_WINDOW == rOutDev.GetOutDevType())
+                            if(&rOutDev != pWin && OutDevType::Window == rOutDev.GetOutDevType())
                             {
                                 OutlinerView* pOutlView = ImpMakeOutlinerView(static_cast<vcl::Window*>(&rOutDev), !bEmpty, nullptr);
                                 pOutlView->HideCursor();
@@ -1898,7 +1898,7 @@ void SdrObjEditView::AddWindowToPaintView(OutputDevice* pNewWin, vcl::Window *pW
 {
     SdrGlueEditView::AddWindowToPaintView(pNewWin, pWindow);
 
-    if(mxTextEditObj.is() && !bTextEditOnlyOneView && pNewWin->GetOutDevType()==OUTDEV_WINDOW)
+    if(mxTextEditObj.is() && !bTextEditOnlyOneView && pNewWin->GetOutDevType()==OutDevType::Window)
     {
         OutlinerView* pOutlView=ImpMakeOutlinerView(static_cast<vcl::Window*>(pNewWin),false,nullptr);
         pTextEditOutliner->InsertView(pOutlView);
@@ -1909,7 +1909,7 @@ void SdrObjEditView::DeleteWindowFromPaintView(OutputDevice* pOldWin)
 {
     SdrGlueEditView::DeleteWindowFromPaintView(pOldWin);
 
-    if(mxTextEditObj.is() && !bTextEditOnlyOneView && pOldWin->GetOutDevType()==OUTDEV_WINDOW)
+    if(mxTextEditObj.is() && !bTextEditOnlyOneView && pOldWin->GetOutDevType()==OutDevType::Window)
     {
         for (sal_uIntPtr i=pTextEditOutliner->GetViewCount(); i>0;) {
             i--;

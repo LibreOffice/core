@@ -722,7 +722,7 @@ IMPL_LINK_NOARG(FmXFormView, OnActivate, void*, void)
     }
 
     // setting the controller to activate
-    if (m_pView->GetFormShell() && m_pView->GetActualOutDev() && m_pView->GetActualOutDev()->GetOutDevType() == OUTDEV_WINDOW)
+    if (m_pView->GetFormShell() && m_pView->GetActualOutDev() && m_pView->GetActualOutDev()->GetOutDevType() == OutDevType::Window)
     {
         FmXFormShell* const pShImpl =  m_pView->GetFormShell()->GetImpl();
 
@@ -1252,7 +1252,7 @@ SdrObject* FmXFormView::implCreateFieldControl( const svx::ODataAccessDescriptor
 
         // nur fuer Textgroesse
         OutputDevice* pOutDev = nullptr;
-        if (m_pView->GetActualOutDev() && m_pView->GetActualOutDev()->GetOutDevType() == OUTDEV_WINDOW)
+        if (m_pView->GetActualOutDev() && m_pView->GetActualOutDev()->GetOutDevType() == OutDevType::Window)
             pOutDev = const_cast<OutputDevice*>(m_pView->GetActualOutDev());
         else
         {// OutDev suchen
@@ -1405,7 +1405,7 @@ SdrObject* FmXFormView::implCreateXFormsControl( const svx::OXFormsDescriptor &_
 
         // nur fuer Textgroesse
         OutputDevice* pOutDev = nullptr;
-        if (m_pView->GetActualOutDev() && m_pView->GetActualOutDev()->GetOutDevType() == OUTDEV_WINDOW)
+        if (m_pView->GetActualOutDev() && m_pView->GetActualOutDev()->GetOutDevType() == OutDevType::Window)
             pOutDev = const_cast<OutputDevice*>(m_pView->GetActualOutDev());
         else
         {// OutDev suchen
@@ -1419,7 +1419,7 @@ SdrObject* FmXFormView::implCreateXFormsControl( const svx::OXFormsDescriptor &_
                 {
                     const SdrPageWindow& rPageWindow = *pPageView->GetPageWindow(i);
 
-                    if( rPageWindow.GetPaintWindow().GetOutputDevice().GetOutDevType() == OUTDEV_WINDOW)
+                    if( rPageWindow.GetPaintWindow().GetOutputDevice().GetOutDevType() == OutDevType::Window)
                     {
                         pOutDev = &rPageWindow.GetPaintWindow().GetOutputDevice();
                         break;

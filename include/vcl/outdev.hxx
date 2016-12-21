@@ -293,7 +293,7 @@ namespace o3tl
     template<> struct typed_flags<InvertFlags> : is_typed_flags<InvertFlags, 0x0003> {};
 }
 
-enum OutDevType { OUTDEV_DONTKNOW, OUTDEV_WINDOW, OUTDEV_PRINTER, OUTDEV_VIRDEV };
+enum class OutDevType { DontKnow, Window, Printer, VirDev };
 
 enum class OutDevViewType { DontKnow, PrintPreview, SlideShow };
 

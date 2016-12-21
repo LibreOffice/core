@@ -457,7 +457,7 @@ void ImplSmallBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHei
     mbNWFBorder = false;
 
     vcl::Window *pWin = nullptr, *pCtrl = nullptr;
-    if (mpOutDev->GetOutDevType() == OUTDEV_WINDOW)
+    if (mpOutDev->GetOutDevType() == OutDevType::Window)
         pWin = static_cast<vcl::Window*>(mpOutDev.get());
 
     if (pWin)

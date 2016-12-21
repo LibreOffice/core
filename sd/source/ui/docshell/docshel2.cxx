@@ -94,11 +94,11 @@ void DrawDocShell::Draw(OutputDevice* pOut, const JobSetup&, sal_uInt16 nAspect)
     pOut->IntersectClipRegion(aVisArea);
     pView->ShowSdrPage(pSelectedPage);
 
-    if (pOut->GetOutDevType() != OUTDEV_WINDOW)
+    if (pOut->GetOutDevType() != OutDevType::Window)
     {
         MapMode aOldMapMode = pOut->GetMapMode();
 
-        if (pOut->GetOutDevType() == OUTDEV_PRINTER)
+        if (pOut->GetOutDevType() == OutDevType::Printer)
         {
             MapMode aMapMode = aOldMapMode;
             Point aOrigin = aMapMode.GetOrigin();
@@ -111,7 +111,7 @@ void DrawDocShell::Draw(OutputDevice* pOut, const JobSetup&, sal_uInt16 nAspect)
         vcl::Region aRegion(aVisArea);
         pView->CompleteRedraw(pOut, aRegion);
 
-        if (pOut->GetOutDevType() == OUTDEV_PRINTER)
+        if (pOut->GetOutDevType() == OutDevType::Printer)
         {
             pOut->SetMapMode(aOldMapMode);
         }

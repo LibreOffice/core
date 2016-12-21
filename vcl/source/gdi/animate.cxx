@@ -228,7 +228,7 @@ bool Animation::Start( OutputDevice* pOut, const Point& rDestPt, const Size& rDe
 
     if( !maList.empty() )
     {
-        if(  ( pOut->GetOutDevType() == OUTDEV_WINDOW )
+        if(  ( pOut->GetOutDevType() == OutDevType::Window )
           && !mbLoopTerminated
           && ( ANIMATION_TIMEOUT_ON_CLICK != maList[ mnPos ]->nWait )
           )
@@ -319,7 +319,7 @@ void Animation::Draw( OutputDevice* pOut, const Point& rDestPt, const Size& rDes
         AnimationBitmap* pObj = maList[ std::min( mnPos, nCount - 1 ) ];
 
         if(  pOut->GetConnectMetaFile()
-          || ( pOut->GetOutDevType() == OUTDEV_PRINTER )
+          || ( pOut->GetOutDevType() == OutDevType::Printer )
           )
             maList[ 0 ]->aBmpEx.Draw( pOut, rDestPt, rDestSz );
         else if( ANIMATION_TIMEOUT_ON_CLICK == pObj->nWait )

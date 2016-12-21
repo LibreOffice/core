@@ -261,7 +261,7 @@ void SwTextSizeInfo::CtorInitTextSizeInfo( OutputDevice* pRenderContext, SwTextF
     {
         m_pOut = pRenderContext;
         m_pRef = &m_pVsh->GetRefDev();
-        m_bOnWin = m_pVsh->GetWin() || OUTDEV_WINDOW == m_pOut->GetOutDevType() || m_pVsh->isOutputToWindow();
+        m_bOnWin = m_pVsh->GetWin() || OutDevType::Window == m_pOut->GetOutDevType() || m_pVsh->isOutputToWindow();
     }
     else
     {

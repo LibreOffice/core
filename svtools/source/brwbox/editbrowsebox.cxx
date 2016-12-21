@@ -324,7 +324,7 @@ namespace svt
                            DrawTextFlags::Center | DrawTextFlags::VCenter | DrawTextFlags::Clip );
         }
         // draw an image
-        else if (eStatus != CLEAN && rDev.GetOutDevType() == OUTDEV_WINDOW)
+        else if (eStatus != CLEAN && rDev.GetOutDevType() == OutDevType::Window)
         {
             Image aImage(GetImage(eStatus));
             // calc the image position

@@ -642,7 +642,7 @@ void SpinField::ImplCalcButtonAreas(OutputDevice* pDev, const Size& rOutSz, Rect
         bool bNativeRegionOK = false;
         Rectangle aContentUp, aContentDown;
 
-        if ((pDev->GetOutDevType() == OUTDEV_WINDOW) &&
+        if ((pDev->GetOutDevType() == OutDevType::Window) &&
             // there is just no useful native support for spinfields with dropdown
             ! (GetStyle() & WB_DROPDOWN) &&
             IsNativeControlSupported(ControlType::Spinbox, ControlPart::Entire))
@@ -976,7 +976,7 @@ void SpinField::Draw(OutputDevice* pDev, const Point& rPos, const Size& rSize, D
         pDev->Push();
         pDev->SetMapMode();
 
-        if (eOutDevType == OUTDEV_PRINTER)
+        if (eOutDevType == OutDevType::Printer)
         {
             StyleSettings aStyleSettings = aOldSettings.GetStyleSettings();
             aStyleSettings.SetFaceColor(COL_LIGHTGRAY);
@@ -994,7 +994,7 @@ void SpinField::Draw(OutputDevice* pDev, const Point& rPos, const Size& rSize, D
         aDown.Move(aPos.X(), aPos.Y());
 
         Color aButtonTextColor;
-        if ((nFlags & DrawFlags::Mono) || (eOutDevType == OUTDEV_PRINTER))
+        if ((nFlags & DrawFlags::Mono) || (eOutDevType == OutDevType::Printer))
             aButtonTextColor = Color( COL_BLACK );
         else
             aButtonTextColor = GetSettings().GetStyleSettings().GetButtonTextColor();

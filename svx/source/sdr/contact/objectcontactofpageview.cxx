@@ -454,19 +454,19 @@ namespace sdr
         // print?
         bool ObjectContactOfPageView::isOutputToPrinter() const
         {
-            return (OUTDEV_PRINTER == mrPageWindow.GetPaintWindow().GetOutputDevice().GetOutDevType());
+            return (OutDevType::Printer == mrPageWindow.GetPaintWindow().GetOutputDevice().GetOutDevType());
         }
 
         // window?
         bool ObjectContactOfPageView::isOutputToWindow() const
         {
-            return (OUTDEV_WINDOW == mrPageWindow.GetPaintWindow().GetOutputDevice().GetOutDevType());
+            return (OutDevType::Window == mrPageWindow.GetPaintWindow().GetOutputDevice().GetOutDevType());
         }
 
         // VirtualDevice?
         bool ObjectContactOfPageView::isOutputToVirtualDevice() const
         {
-            return (OUTDEV_VIRDEV == mrPageWindow.GetPaintWindow().GetOutputDevice().GetOutDevType());
+            return (OutDevType::VirDev == mrPageWindow.GetPaintWindow().GetOutputDevice().GetOutDevType());
         }
 
         // recording MetaFile?

@@ -2085,7 +2085,7 @@ namespace svxform
         {
             SdrPaintWindow* pPaintWindow = pFormView->GetPaintWindow( i );
             OutputDevice& rOutDev = pPaintWindow->GetOutputDevice();
-            if ( ( OUTDEV_WINDOW == rOutDev.GetOutDevType() ) && !aMarkRect.IsEmpty() )
+            if ( ( OutDevType::Window == rOutDev.GetOutDevType() ) && !aMarkRect.IsEmpty() )
             {
                 pFormView->MakeVisible( aMarkRect, static_cast<vcl::Window&>(rOutDev) );
             }
@@ -2153,7 +2153,7 @@ namespace svxform
             {
                 SdrPaintWindow* pPaintWindow = pFormView->GetPaintWindow( i );
                 OutputDevice& rOutDev = pPaintWindow->GetOutputDevice();
-                if ( OUTDEV_WINDOW == rOutDev.GetOutDevType() )
+                if ( OutDevType::Window == rOutDev.GetOutDevType() )
                 {
                     pFormView->MakeVisible( aMarkRect, static_cast<vcl::Window&>(rOutDev) );
                 }
