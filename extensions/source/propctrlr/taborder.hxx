@@ -82,9 +82,10 @@ namespace pcr
         DECL_LINK( OKClickHdl, Button*, void );
 
         void FillList();
-        Image GetImage(
+
+        static Image GetImage(
             const css::uno::Reference< css::beans::XPropertySet > & _rxSet
-        ) const;
+        );
 
     public:
         TabOrderDialog(

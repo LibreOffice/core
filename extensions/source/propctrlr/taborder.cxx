@@ -126,7 +126,7 @@ namespace pcr
         ModalDialog::dispose();
     }
 
-    Image TabOrderDialog::GetImage( const Reference< XPropertySet >& _rxSet ) const
+    Image TabOrderDialog::GetImage( const Reference< XPropertySet >& _rxSet )
     {
         sal_uInt16 nImageId = RID_SVXBMP_CONTROL;
         // TODO: classify controls also in Basic propbrw
