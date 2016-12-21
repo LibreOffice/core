@@ -309,6 +309,8 @@ public:
 
 void importSheetFragments( WorkbookFragment& rWorkbookHandler, SheetFragmentVector& rSheets )
 {
+    rWorkbookHandler.getDocImport().initForSheets();
+
     Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
 
     // test sequential read in this mode

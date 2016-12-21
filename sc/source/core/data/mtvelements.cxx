@@ -12,6 +12,11 @@
 #include "document.hxx"
 #include "cellvalue.hxx"
 #include "column.hxx"
+#include <table.hxx>
+
+#include <o3tl/make_unique.hxx>
+
+#include <sstream>
 
 namespace sc {
 
@@ -94,6 +99,60 @@ void ColumnBlockPositionSet::clear()
 {
     osl::MutexGuard aGuard(&maMtxTables);
     maTables.clear();
+}
+
+struct TableColumnBlockPositionSet::Impl
+{
+    typedef std::unordered_map<SCCOL, ColumnBlockPosition> ColumnsType;
+
+    ScTable* mpTab;
+    ColumnsType maColumns;
+
+    Impl() : mpTab(nullptr) {}
+};
+
+TableColumnBlockPositionSet::TableColumnBlockPositionSet( ScDocument& rDoc, SCTAB nTab ) :
+    mpImpl(o3tl::make_unique<Impl>())
+{
+    mpImpl->mpTab = rDoc.FetchTable(nTab);
+
+    if (!mpImpl->mpTab)
+    {
+        std::ostringstream os;
+        os << "Passed table index " << nTab << " is invalid.";
+        throw std::invalid_argument(os.str());
+    }
+}
+
+TableColumnBlockPositionSet::TableColumnBlockPositionSet( TableColumnBlockPositionSet&& rOther ) :
+    mpImpl(std::move(rOther.mpImpl)) {}
+
+TableColumnBlockPositionSet::~TableColumnBlockPositionSet() {}
+
+ColumnBlockPosition* TableColumnBlockPositionSet::getBlockPosition( SCCOL nCol )
+{
+    using ColumnsType = Impl::ColumnsType;
+
+    ColumnsType::iterator it = mpImpl->maColumns.find(nCol);
+
+    if (it != mpImpl->maColumns.end())
+        // Block position for this column has already been fetched.
+        return &it->second;
+
+    std::pair<ColumnsType::iterator,bool> r =
+        mpImpl->maColumns.insert(
+            ColumnsType::value_type(nCol, ColumnBlockPosition()));
+
+    if (!r.second)
+        // insertion failed.
+        return nullptr;
+
+    it = r.first;
+
+    if (!mpImpl->mpTab->InitColumnBlockPosition(it->second, nCol))
+        return nullptr;
+
+    return &it->second;
 }
 
 ScRefCellValue toRefCell( const sc::CellStoreType::const_iterator& itPos, size_t nOffset )
