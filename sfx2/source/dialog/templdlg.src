@@ -21,16 +21,19 @@
 #include "dialog.hrc"
 #include "helpid.hrc"
 
-ImageList RID_STYLE_DESIGNER_IMAGELIST
+Bitmap RID_SFXBMP_WATERCAN
 {
-    Prefix = "sc";
-    IdList =
-    {
-        SID_STYLE_WATERCAN ;
-        SID_STYLE_NEW_BY_EXAMPLE ;
-        SID_STYLE_UPDATE_BY_EXAMPLE ;
-    };
-    IdCount = { 3 ; };
+    File = "sc05554.png";
+};
+
+Bitmap RID_SFXBMP_NEW_BY_EXAMPLE
+{
+    File = "sc05555.png";
+};
+
+Bitmap RID_SFXBMP_UPDATE_BY_EXAMPLE
+{
+    File = "sc05556.png";
 };
 
 // Strings ---------------------------------------------------------------

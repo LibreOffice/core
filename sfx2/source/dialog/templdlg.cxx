@@ -343,8 +343,6 @@ SfxTemplatePanelControl::SfxTemplatePanelControl(SfxBindings* pBindings, vcl::Wi
 {
     OSL_ASSERT(mpBindings!=nullptr);
 
-    pImpl->setNonFamilyImages();
-
     SetStyle(GetStyle() & ~WB_DOCKABLE);
 }
 
@@ -2176,26 +2174,26 @@ SfxTemplateDialog_Impl::SfxTemplateDialog_Impl(SfxBindings* pB, SfxTemplatePanel
                     ::comphelper::getProcessComponentContext()) );
         uno::Reference< container::XNameAccess > xUICommands;
         OUString sTextDoc("com.sun.star.text.TextDocument");
-        if(xNameAccess->hasByName(sTextDoc))
+        if (xNameAccess->hasByName(sTextDoc))
         {
-            uno::Any a = xNameAccess->getByName( sTextDoc );
+            uno::Any a = xNameAccess->getByName(sTextDoc);
             a >>= xUICommands;
         }
         if (xUICommands.is())
         {
             uno::Any aCommand = xUICommands->getByName(".uno:StyleApply");
             OUString sLabel = lcl_GetLabel( aCommand );
-            m_aActionTbR->InsertItem( SID_STYLE_WATERCAN, sLabel );
+            m_aActionTbR->InsertItem(SID_STYLE_WATERCAN, Image(BitmapEx(SfxResId(RID_SFXBMP_WATERCAN))), sLabel);
             m_aActionTbR->SetHelpId(SID_STYLE_WATERCAN, HID_TEMPLDLG_WATERCAN);
 
             aCommand = xUICommands->getByName(".uno:StyleNewByExample");
             sLabel = lcl_GetLabel( aCommand );
-            m_aActionTbR->InsertItem( SID_STYLE_NEW_BY_EXAMPLE, sLabel );
+            m_aActionTbR->InsertItem(SID_STYLE_NEW_BY_EXAMPLE, Image(BitmapEx(SfxResId(RID_SFXBMP_NEW_BY_EXAMPLE))), sLabel);
             m_aActionTbR->SetHelpId(SID_STYLE_NEW_BY_EXAMPLE, HID_TEMPLDLG_NEWBYEXAMPLE);
 
             aCommand = xUICommands->getByName(".uno:StyleUpdateByExample");
             sLabel = lcl_GetLabel( aCommand );
-            m_aActionTbR->InsertItem( SID_STYLE_UPDATE_BY_EXAMPLE, sLabel );
+            m_aActionTbR->InsertItem(SID_STYLE_UPDATE_BY_EXAMPLE, Image(BitmapEx(SfxResId(RID_SFXBMP_UPDATE_BY_EXAMPLE))), sLabel);
             m_aActionTbR->SetHelpId(SID_STYLE_UPDATE_BY_EXAMPLE, HID_TEMPLDLG_UPDATEBYEXAMPLE);
         }
     }
@@ -2249,11 +2247,6 @@ void SfxTemplateDialog_Impl::ReplaceUpdateButtonByMenu()
     m_aActionTbR->HideItem(SID_STYLE_UPDATE_BY_EXAMPLE);
     m_aActionTbR->SetItemBits( SID_STYLE_NEW_BY_EXAMPLE,
             ToolBoxItemBits::DROPDOWNONLY|m_aActionTbR->GetItemBits( SID_STYLE_NEW_BY_EXAMPLE ));
-}
-
-void SfxTemplateDialog_Impl::setNonFamilyImages()
-{
-    m_aActionTbR->SetImageList(ImageList(SfxResId(RID_STYLE_DESIGNER_IMAGELIST)));
 }
 
 void SfxTemplateDialog_Impl::ClearFamilyList()
