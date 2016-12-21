@@ -799,6 +799,19 @@ void ComboBoxUIObject::execute(const OUString& rAction,
         }
         mxComboBox->Select();
     }
+    else if (rAction == "TYPE")
+    {
+        if (mxComboBox->GetSubEdit())
+        {
+            Edit* pEdit = mxComboBox->GetSubEdit();
+            std::unique_ptr<UIObject> pObj = EditUIObject::create(pEdit);
+            pObj->execute(rAction, rParameters);
+        }
+        else
+            WindowUIObject::execute(rAction, rParameters);
+    }
+    else
+        WindowUIObject::execute(rAction, rParameters);
 }
 
 StringMap ComboBoxUIObject::get_state()
