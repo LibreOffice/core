@@ -332,7 +332,7 @@ void XMLFile::Extract()
 
 void XMLFile::InsertL10NElement( XMLElement* pElement )
 {
-    OString sId, sLanguage("");
+    OString sId, sLanguage("en-US");
     LangHashMap* pElem;
 
     if( pElement->GetAttributeList() != nullptr )
@@ -447,7 +447,8 @@ void XMLFile::SearchL10NElements( XMLChildNode *pCur, int nPos )
                 bool bInsert = true;
                 XMLElement *pElement = static_cast<XMLElement*>(pCur);
                 const OString sName(pElement->GetName().toAsciiLowerCase());
-                OString sLanguage, sTmpStrVal, sOldref;
+                OString sLanguage("en-US");
+                OString sTmpStrVal, sOldref;
                 if ( pElement->GetAttributeList())
                 {
                     for ( size_t j = 0 , cnt = pElement->GetAttributeList()->size(); j < cnt && bInsert; ++j )
@@ -617,11 +618,18 @@ void XMLElement::ChangeLanguageTag( const OString &rValue )
     SetLanguageId(rValue);
     if ( m_pAttributes )
     {
+        bool bWasSet = false;
         for (size_t i = 0; i < m_pAttributes->size(); ++i)
         {
-            if ( (*m_pAttributes)[ i ]->GetName() == "xml-lang" )
+            if ((*m_pAttributes)[ i ]->GetName() == XML_LANG)
+            {
                 (*m_pAttributes)[ i ]->setValue(rValue);
+                bWasSet = true;
+            }
         }
+
+        if (!bWasSet)
+            AddAttribute(XML_LANG, rValue);
     }
     XMLChildNodeList* pCList = GetChildList();
 
@@ -695,7 +703,7 @@ void XMLElement::Print(XMLNode *pCur, OStringBuffer& rBuffer, bool bRootelement 
                             for ( size_t j = 0; j < pElement->GetAttributeList()->size(); j++ )
                             {
                                 const OString aAttrName( (*pElement->GetAttributeList())[ j ]->GetName() );
-                                if( !aAttrName.equalsIgnoreAsciiCase( "xml-lang" ) )
+                                if (!aAttrName.equalsIgnoreAsciiCase(XML_LANG))
                                 {
                                     rBuffer.append(
                                         " " + aAttrName + "=\"" +
