@@ -28,12 +28,10 @@
 
 namespace sd { namespace presenter {
 
-namespace {
-    typedef ::cppu::WeakComponentImplHelper<
-        css::lang::XInitialization,
-        css::drawing::XPresenterHelper
-    > PresenterHelperInterfaceBase;
-}
+typedef ::cppu::WeakComponentImplHelper<
+    css::lang::XInitialization,
+    css::drawing::XPresenterHelper
+> PresenterHelperInterfaceBase;
 
 /** Implementation of the XPresenterHelper interface: functionality that can
     not be implemented in an extension.

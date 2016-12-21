@@ -36,11 +36,9 @@ class ViewShellBase;
 
 namespace sd { namespace framework {
 
-namespace {
-    typedef ::cppu::WeakComponentImplHelper <
-        css::drawing::framework::XConfigurationChangeListener
-        > ToolBarModuleInterfaceBase;
-}
+typedef ::cppu::WeakComponentImplHelper <
+    css::drawing::framework::XConfigurationChangeListener
+    > ToolBarModuleInterfaceBase;
 
 /** This module is responsible for locking the ToolBarManager during
     configuration updates and for triggering ToolBarManager updates.

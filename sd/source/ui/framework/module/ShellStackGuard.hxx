@@ -33,14 +33,6 @@
 #include <cppuhelper/compbase.hxx>
 #include <memory>
 
-namespace {
-
-typedef ::cppu::WeakComponentImplHelper <
-    css::drawing::framework::XConfigurationChangeListener
-    > ShellStackGuardInterfaceBase;
-
-} // end of anonymous namespace.
-
 namespace sd {
 
 class ViewShellBase;
@@ -48,6 +40,10 @@ class ViewShellBase;
 }
 
 namespace sd { namespace framework {
+
+typedef ::cppu::WeakComponentImplHelper <
+    css::drawing::framework::XConfigurationChangeListener
+    > ShellStackGuardInterfaceBase;
 
 /** This module locks updates of the current configuration in situations
     when the shell stack must not be modified.

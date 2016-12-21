@@ -29,11 +29,9 @@
 
 namespace sd {
 
-namespace {
-    typedef ::cppu::WeakComponentImplHelper <
-        css::view::XRenderable
-        > DocumentRendererInterfaceBase;
-}
+typedef ::cppu::WeakComponentImplHelper <
+    css::view::XRenderable
+    > DocumentRendererInterfaceBase;
 
 class DocumentRenderer
     : protected ::cppu::BaseMutex,

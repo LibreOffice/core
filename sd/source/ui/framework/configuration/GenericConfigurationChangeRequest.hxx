@@ -29,16 +29,12 @@
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <cppuhelper/compbase.hxx>
 
-namespace {
+namespace sd { namespace framework {
 
 typedef ::cppu::WeakComponentImplHelper <
       css::drawing::framework::XConfigurationChangeRequest,
       css::container::XNamed
     > GenericConfigurationChangeRequestInterfaceBase;
-
-} // end of anonymous namespace.
-
-namespace sd { namespace framework {
 
 /** This implementation of the XConfigurationChangeRequest interface
     represents a single explicit request for a configuration change.  On its

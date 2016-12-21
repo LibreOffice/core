@@ -33,16 +33,12 @@
 
 #include <memory>
 
-namespace {
+namespace sd { namespace framework {
 
 typedef ::cppu::WeakComponentImplHelper <
     css::drawing::framework::XResourceFactory,
     css::drawing::framework::XConfigurationChangeListener
     > PresentationFactoryInterfaceBase;
-
-} // end of anonymous namespace.
-
-namespace sd { namespace framework {
 
 /** This factory creates a marker view whose existence in a configuration
     indicates that a slideshow is running (in another but associated

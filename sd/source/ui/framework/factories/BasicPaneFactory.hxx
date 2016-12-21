@@ -34,22 +34,18 @@
 
 #include <memory>
 
-namespace {
-
-typedef ::cppu::WeakComponentImplHelper <
-    css::lang::XInitialization,
-    css::drawing::framework::XResourceFactory,
-    css::drawing::framework::XConfigurationChangeListener
-    > BasicPaneFactoryInterfaceBase;
-
-} // end of anonymous namespace.
-
 namespace sd {
 
 class ViewShellBase;
 }
 
 namespace sd { namespace framework {
+
+typedef ::cppu::WeakComponentImplHelper <
+    css::lang::XInitialization,
+    css::drawing::framework::XResourceFactory,
+    css::drawing::framework::XConfigurationChangeListener
+    > BasicPaneFactoryInterfaceBase;
 
 /** This factory provides the frequently used standard panes
         private:resource/pane/CenterPane

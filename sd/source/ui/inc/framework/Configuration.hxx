@@ -30,17 +30,13 @@
 
 #include <memory>
 
-namespace {
+namespace sd { namespace framework {
 
 typedef ::cppu::WeakComponentImplHelper <
     css::drawing::framework::XConfiguration,
     css::container::XNamed,
     css::lang::XServiceInfo
     > ConfigurationInterfaceBase;
-
-} // end of anonymous namespace.
-
-namespace sd { namespace framework {
 
 /** A configuration describes the resources of an application like panes,
     views, and tool bars and their relationships that are currently active

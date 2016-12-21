@@ -28,14 +28,6 @@
 #include <osl/mutex.hxx>
 #include <cppuhelper/compbase.hxx>
 
-namespace {
-
-typedef ::cppu::WeakComponentImplHelper <
-    css::drawing::framework::XConfigurationChangeListener
-    > CenterViewFocusModuleInterfaceBase;
-
-} // end of anonymous namespace.
-
 namespace sd {
 
 class ViewShellBase;
@@ -43,6 +35,10 @@ class ViewShellBase;
 }
 
 namespace sd { namespace framework {
+
+typedef ::cppu::WeakComponentImplHelper <
+    css::drawing::framework::XConfigurationChangeListener
+    > CenterViewFocusModuleInterfaceBase;
 
 /** This module waits for new views to be created for the center pane and
     then moves the center view to the top most place on the shell stack.  As

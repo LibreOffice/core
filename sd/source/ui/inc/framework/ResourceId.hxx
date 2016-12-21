@@ -31,17 +31,13 @@
 #include <cppuhelper/implbase.hxx>
 #include <memory>
 
-namespace {
+namespace sd { namespace framework {
 
 typedef ::cppu::WeakImplHelper <
     css::drawing::framework::XResourceId,
     css::lang::XInitialization,
     css::lang::XServiceInfo
     > ResourceIdInterfaceBase;
-
-} // end of anonymous namespace.
-
-namespace sd { namespace framework {
 
 /** Implementation of the css::drawing::framework::ResourceId
     service and the css::drawing::framework::XResourceId

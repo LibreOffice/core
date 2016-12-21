@@ -32,18 +32,13 @@
 
 namespace vcl { class Window; }
 
-
-namespace {
+namespace sd { namespace framework {
 
 typedef ::cppu::WeakComponentImplHelper <
       css::drawing::framework::XPane,
       css::drawing::framework::XPane2,
       css::lang::XUnoTunnel
     > PaneInterfaceBase;
-
-} // end of anonymous namespace.
-
-namespace sd { namespace framework {
 
 /** A pane is a wrapper for a window and possibly for a tab bar (for view
     switching).  Panes are unique resources.

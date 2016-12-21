@@ -33,12 +33,10 @@ namespace com { namespace sun { namespace star { namespace uno {
 
 namespace sd { namespace presenter {
 
-namespace {
-    typedef ::cppu::ImplInheritanceHelper <
-        tools::PropertySet,
-        css::lang::XInitialization
-    > PresenterTextViewInterfaceBase;
-}
+typedef ::cppu::ImplInheritanceHelper <
+    tools::PropertySet,
+    css::lang::XInitialization
+> PresenterTextViewInterfaceBase;
 
 /** Render text into bitmaps.  An edit engine is used to render the text.
     This service is used by the presenter screen to render the notes view.

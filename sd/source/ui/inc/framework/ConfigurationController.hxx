@@ -37,18 +37,14 @@
 
 #include <memory>
 
-namespace {
+namespace sd { class ViewShellBase; }
+
+namespace sd { namespace framework {
 
 typedef ::cppu::WeakComponentImplHelper <
     css::drawing::framework::XConfigurationController,
     css::lang::XInitialization
     > ConfigurationControllerInterfaceBase;
-
-} // end of anonymous namespace.
-
-namespace sd { class ViewShellBase; }
-
-namespace sd { namespace framework {
 
 /** The configuration controller is responsible for maintaining the current
     configuration.

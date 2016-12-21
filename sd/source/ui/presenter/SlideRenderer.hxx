@@ -33,13 +33,11 @@
 
 namespace sd { namespace presenter {
 
-namespace {
-    typedef ::cppu::WeakComponentImplHelper <
-        css::drawing::XSlideRenderer,
-        css::lang::XInitialization,
-        css::lang::XServiceInfo
-    > SlideRendererInterfaceBase;
-}
+typedef ::cppu::WeakComponentImplHelper <
+    css::drawing::XSlideRenderer,
+    css::lang::XInitialization,
+    css::lang::XServiceInfo
+> SlideRendererInterfaceBase;
 
 /** Render single slides into bitmaps.
 */

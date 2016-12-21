@@ -27,15 +27,11 @@
 #include <cppuhelper/compbase.hxx>
 #include <memory>
 
-namespace {
+namespace sd { namespace framework {
 
 typedef ::cppu::WeakComponentImplHelper <
     css::drawing::framework::XConfigurationChangeListener
     > ResourceManagerInterfaceBase;
-
-} // end of anonymous namespace.
-
-namespace sd { namespace framework {
 
 /** Manage the activation state of one resource depending on the view in the
     center pane.  The ResourceManager remembers in which configuration to

@@ -28,11 +28,9 @@
 
 namespace sd { namespace tools {
 
-namespace {
-    typedef ::cppu::WeakComponentImplHelper <
-        css::beans::XPropertySet
-    > PropertySetInterfaceBase;
-}
+typedef ::cppu::WeakComponentImplHelper <
+    css::beans::XPropertySet
+> PropertySetInterfaceBase;
 
 /** A very simple implementation of the XPropertySet interface.  It does not
     support constrained properties and thus does not support vetoable

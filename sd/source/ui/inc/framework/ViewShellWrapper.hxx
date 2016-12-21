@@ -32,7 +32,10 @@
 
 #include <memory>
 
-namespace {
+namespace sd { class ViewShell; }
+namespace sd { namespace slidesorter { class SlideSorterViewShell; } }
+
+namespace sd { namespace framework {
 
 typedef ::cppu::WeakComponentImplHelper    <   css::lang::XUnoTunnel
                                             ,   css::awt::XWindowListener
@@ -40,13 +43,6 @@ typedef ::cppu::WeakComponentImplHelper    <   css::lang::XUnoTunnel
                                             ,   css::drawing::framework::XRelocatableResource
                                             ,   css::drawing::framework::XView
                                             >   ViewShellWrapperInterfaceBase;
-
-} // end of anonymous namespace.
-
-namespace sd { class ViewShell; }
-namespace sd { namespace slidesorter { class SlideSorterViewShell; } }
-
-namespace sd { namespace framework {
 
 /** This class wraps ViewShell objects and makes them look like an XView.
     Most importantly it provides a tunnel to the ViewShell implementation.

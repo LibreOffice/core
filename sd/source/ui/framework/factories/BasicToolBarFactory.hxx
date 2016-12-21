@@ -32,21 +32,17 @@
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 
-namespace {
+namespace sd {
+class ViewShellBase;
+}
+
+namespace sd { namespace framework {
 
 typedef ::cppu::WeakComponentImplHelper <
     css::drawing::framework::XResourceFactory,
     css::lang::XInitialization,
     css::lang::XEventListener
     > BasicToolBarFactoryInterfaceBase;
-
-} // end of anonymous namespace.
-
-namespace sd {
-class ViewShellBase;
-}
-
-namespace sd { namespace framework {
 
 /** This factory provides some of the frequently used tool bars:
         private:resource/toolbar/ViewTabBar

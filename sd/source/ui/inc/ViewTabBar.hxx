@@ -39,16 +39,14 @@ namespace sd {
     class ViewShellBase;
 }
 
-namespace {
-    typedef ::cppu::WeakComponentImplHelper <
-        css::drawing::framework::XToolBar,
-        css::drawing::framework::XTabBar,
-        css::drawing::framework::XConfigurationChangeListener,
-        css::lang::XUnoTunnel
-        > ViewTabBarInterfaceBase;
-}
-
 namespace sd {
+
+typedef ::cppu::WeakComponentImplHelper <
+    css::drawing::framework::XToolBar,
+    css::drawing::framework::XTabBar,
+    css::drawing::framework::XConfigurationChangeListener,
+    css::lang::XUnoTunnel
+    > ViewTabBarInterfaceBase;
 
 /** Tab control for switching between views in the center pane.
 */

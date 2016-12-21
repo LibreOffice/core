@@ -29,15 +29,11 @@
 #include <osl/mutex.hxx>
 #include <cppuhelper/compbase.hxx>
 
-namespace {
+namespace sd { namespace framework {
 
 typedef ::cppu::WeakComponentImplHelper <
     css::drawing::framework::XConfigurationChangeListener
     > ViewTabBarModuleInterfaceBase;
-
-} // end of anonymous namespace.
-
-namespace sd { namespace framework {
 
 /** This module is responsible for showing the ViewTabBar above the view in
     the center pane.

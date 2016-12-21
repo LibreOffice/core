@@ -37,12 +37,9 @@ namespace sd {
 
 namespace sd { namespace sidebar {
 
-namespace
-{
-    typedef ::cppu::WeakComponentImplHelper <
-        css::ui::XUIElementFactory
-        > PanelFactoryInterfaceBase;
-}
+typedef ::cppu::WeakComponentImplHelper <
+    css::ui::XUIElementFactory
+    > PanelFactoryInterfaceBase;
 
 class PanelFactory
     : private ::cppu::BaseMutex,

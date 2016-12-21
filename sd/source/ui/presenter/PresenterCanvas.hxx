@@ -38,13 +38,11 @@
 
 namespace sd { namespace presenter {
 
-namespace {
-    typedef ::cppu::WeakComponentImplHelper <
-        css::rendering::XSpriteCanvas,
-        css::rendering::XBitmap,
-        css::awt::XWindowListener
-    > PresenterCanvasInterfaceBase;
-}
+typedef ::cppu::WeakComponentImplHelper <
+    css::rendering::XSpriteCanvas,
+    css::rendering::XBitmap,
+    css::awt::XWindowListener
+> PresenterCanvasInterfaceBase;
 
 /** Wrapper around a shared canvas that forwards most of its methods to the
     shared canvas.  Most notable differences are:

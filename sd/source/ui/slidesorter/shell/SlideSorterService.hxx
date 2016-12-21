@@ -35,13 +35,11 @@
 
 namespace sd { namespace slidesorter {
 
-namespace {
-    typedef ::cppu::WeakComponentImplHelper <
-        css::drawing::XSlideSorterBase,
-        css::lang::XInitialization,
-        css::awt::XWindowListener
-    > SlideSorterServiceInterfaceBase;
-}
+typedef ::cppu::WeakComponentImplHelper <
+    css::drawing::XSlideSorterBase,
+    css::lang::XInitialization,
+    css::awt::XWindowListener
+> SlideSorterServiceInterfaceBase;
 
 /** Implementation of the com.sun.star.drawing.SlideSorter service.
 */

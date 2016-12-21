@@ -43,16 +43,12 @@ class FrameView;
 class SfxViewFrame;
 namespace vcl { class Window; }
 
-namespace {
+namespace sd { namespace framework {
 
 typedef ::cppu::WeakComponentImplHelper <
     css::drawing::framework::XResourceFactory,
     css::lang::XInitialization
     > BasicViewFactoryInterfaceBase;
-
-} // end of anonymous namespace.
-
-namespace sd { namespace framework {
 
 /** Factory for the frequently used standard views of the drawing framework:
         private:resource/view/

@@ -26,16 +26,12 @@
 #include <com/sun/star/drawing/framework/XConfiguration.hpp>
 #include <cppuhelper/compbase.hxx>
 
-namespace {
+namespace sd { namespace framework {
 
 typedef ::cppu::WeakComponentImplHelper <
       css::drawing::framework::XConfigurationChangeRequest,
       css::container::XNamed
     > UpdateRequestInterfaceBase;
-
-} // end of anonymous namespace.
-
-namespace sd { namespace framework {
 
 /** This update request is used to request configuration updates
     asynchronous when no other requests are being processed.  When there are

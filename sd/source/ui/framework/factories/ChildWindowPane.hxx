@@ -30,18 +30,14 @@
 #include <comphelper/uno3.hxx>
 #include <memory>
 
-namespace {
+namespace sd { class ViewShellBase; }
+
+namespace sd { namespace framework {
 
 typedef ::cppu::ImplInheritanceHelper <
     ::sd::framework::Pane,
     css::lang::XEventListener
     > ChildWindowPaneInterfaceBase;
-
-} // end of anonymous namespace.
-
-namespace sd { class ViewShellBase; }
-
-namespace sd { namespace framework {
 
 /** The ChildWindowPane listens to the child window and disposes itself when
     the child window becomes inaccessible.  This happens for instance when a

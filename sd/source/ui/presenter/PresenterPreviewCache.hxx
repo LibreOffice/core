@@ -30,12 +30,10 @@
 
 namespace sd { namespace presenter {
 
-namespace {
-    typedef ::cppu::WeakComponentImplHelper<
-        css::lang::XInitialization,
-        css::drawing::XSlidePreviewCache
-    > PresenterPreviewCacheInterfaceBase;
-}
+typedef ::cppu::WeakComponentImplHelper<
+    css::lang::XInitialization,
+    css::drawing::XSlidePreviewCache
+> PresenterPreviewCacheInterfaceBase;
 
 /** Uno API wrapper around the slide preview cache.
 */
