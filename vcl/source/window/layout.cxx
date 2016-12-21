@@ -2135,15 +2135,15 @@ bool VclSizeGroup::set_property(const OString &rKey, const OString &rValue)
         set_ignore_hidden(toBool(rValue));
     else if (rKey == "mode")
     {
-        VclSizeGroupMode eMode = VCL_SIZE_GROUP_HORIZONTAL;
+        VclSizeGroupMode eMode = VclSizeGroupMode::Horizontal;
         if (rValue.equals("none"))
-            eMode = VCL_SIZE_GROUP_NONE;
+            eMode = VclSizeGroupMode::NONE;
         else if (rValue.equals("horizontal"))
-            eMode = VCL_SIZE_GROUP_HORIZONTAL;
+            eMode = VclSizeGroupMode::Horizontal;
         else if (rValue.equals("vertical"))
-            eMode = VCL_SIZE_GROUP_VERTICAL;
+            eMode = VclSizeGroupMode::Vertical;
         else if (rValue.equals("both"))
-            eMode = VCL_SIZE_GROUP_BOTH;
+            eMode = VclSizeGroupMode::Both;
         else
         {
             SAL_WARN("vcl.layout", "unknown size group mode" << rValue.getStr());

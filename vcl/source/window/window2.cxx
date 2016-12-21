@@ -1367,7 +1367,7 @@ void Window::queue_resize(StateChangedType eReason)
     }
 
     WindowImpl *pWindowImpl = mpWindowImpl->mpBorderWindow ? mpWindowImpl->mpBorderWindow->mpWindowImpl.get() : mpWindowImpl.get();
-    if (pWindowImpl->m_xSizeGroup && pWindowImpl->m_xSizeGroup->get_mode() != VCL_SIZE_GROUP_NONE)
+    if (pWindowImpl->m_xSizeGroup && pWindowImpl->m_xSizeGroup->get_mode() != VclSizeGroupMode::NONE)
     {
         std::set<VclPtr<vcl::Window> > &rWindows = pWindowImpl->m_xSizeGroup->get_widgets();
         for (VclPtr<vcl::Window> const & pOther : rWindows)
@@ -1665,7 +1665,7 @@ Size Window::get_preferred_size() const
     if (pWindowImpl->m_xSizeGroup)
     {
         const VclSizeGroupMode eMode = pWindowImpl->m_xSizeGroup->get_mode();
-        if (eMode != VCL_SIZE_GROUP_NONE)
+        if (eMode != VclSizeGroupMode::NONE)
         {
             const bool bIgnoreInHidden = pWindowImpl->m_xSizeGroup->get_ignore_hidden();
             const std::set<VclPtr<vcl::Window> > &rWindows = pWindowImpl->m_xSizeGroup->get_widgets();
@@ -1677,9 +1677,9 @@ Size Window::get_preferred_size() const
                 if (bIgnoreInHidden && !pOther->IsVisible())
                     continue;
                 Size aOtherSize = pOther->get_ungrouped_preferred_size();
-                if (eMode == VCL_SIZE_GROUP_BOTH || eMode == VCL_SIZE_GROUP_HORIZONTAL)
+                if (eMode == VclSizeGroupMode::Both || eMode == VclSizeGroupMode::Horizontal)
                     aRet.Width() = std::max(aRet.Width(), aOtherSize.Width());
-                if (eMode == VCL_SIZE_GROUP_BOTH || eMode == VCL_SIZE_GROUP_VERTICAL)
+                if (eMode == VclSizeGroupMode::Both || eMode == VclSizeGroupMode::Vertical)
                     aRet.Height() = std::max(aRet.Height(), aOtherSize.Height());
             }
         }
@@ -1934,7 +1934,7 @@ void Window::add_to_size_group(const std::shared_ptr<VclSizeGroup>& xGroup)
     //To-Do, multiple groups
     pWindowImpl->m_xSizeGroup = xGroup;
     pWindowImpl->m_xSizeGroup->insert(this);
-    if (VCL_SIZE_GROUP_NONE != pWindowImpl->m_xSizeGroup->get_mode())
+    if (VclSizeGroupMode::NONE != pWindowImpl->m_xSizeGroup->get_mode())
         queue_resize();
 }
 
@@ -1944,7 +1944,7 @@ void Window::remove_from_all_size_groups()
     //To-Do, multiple groups
     if (pWindowImpl->m_xSizeGroup)
     {
-        if (VCL_SIZE_GROUP_NONE != pWindowImpl->m_xSizeGroup->get_mode())
+        if (VclSizeGroupMode::NONE != pWindowImpl->m_xSizeGroup->get_mode())
             queue_resize();
         pWindowImpl->m_xSizeGroup->erase(this);
         pWindowImpl->m_xSizeGroup.reset();
