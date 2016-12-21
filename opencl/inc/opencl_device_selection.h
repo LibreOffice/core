@@ -233,9 +233,6 @@ inline ds_status initDSProfile(std::unique_ptr<ds_profile>& rProfile, OString co
     return DS_SUCCESS;
 }
 
-namespace
-{
-
 /**
  * XmlWriter writes a XML to a SvStream. It uses libxml2 for writing but hides
  * all the internal libxml2 workings and uses types that are native for LO
@@ -401,8 +398,6 @@ public:
         return mpCurrent != nullptr;
     }
 };
-
-} // end anonymous namespace
 
 inline ds_status writeProfile(const OUString& rStreamName, std::unique_ptr<ds_profile>& pProfile)
 {
