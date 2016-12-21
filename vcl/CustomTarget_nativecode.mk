@@ -13,6 +13,6 @@ wmffuzzer_PYTHONCOMMAND := $(call gb_ExternalExecutable_get_command,python)
 wmffuzzer_Native_cxx=$(call gb_CustomTarget_get_workdir,vcl/workben)/native-code.cxx
 
 $(wmffuzzer_Native_cxx): $(SRCDIR)/solenv/bin/native-code.py | $(call gb_CustomTarget_get_workdir,vcl/workben)/.dir
-	$(call gb_Helper_abbreviate_dirs, $(wmffuzzer_PYTHONCOMMAND) $(SRCDIR)/solenv/bin/native-code.py -j -g core) > $@
+	$(call gb_Helper_abbreviate_dirs, $(wmffuzzer_PYTHONCOMMAND) $(SRCDIR)/solenv/bin/native-code.py -g core) > $@
 
 # vim: set noet sw=4 ts=4:
