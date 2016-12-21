@@ -271,7 +271,7 @@ namespace o3tl
 }
 
 // GetDefaultFont() flags
-enum GetDefaultFontFlags
+enum class GetDefaultFontFlags
 {
     NONE          = 0x0000,
     OnlyOne       = 0x0001,
