@@ -52,6 +52,8 @@
 
 //kde has an enum that uses this...OO does too
 #undef SETTINGS_MOUSE
+#undef SETTINGS_LOCALE
+#undef SETTINGS_STYLE
 
 #include <kfiledialog.h>
 #include <kwindowsystem.h>
