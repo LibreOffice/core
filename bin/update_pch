@@ -390,10 +390,6 @@ def filter_ignore(line, module):
         ignore_list += [
             'sysformats.hxx',   # Windows headers
             ]
-    if module == 'svx':
-        ignore_list += [
-            'tbunosearchcontrollers.hxx', # Anonymous namespace
-            ]
     if module == 'vcl':
         ignore_list += [
             'accmgr.hxx',   # redefines ImplAccelList
