@@ -746,6 +746,8 @@ void ListBoxUIObject::execute(const OUString& rAction,
         }
         mxListBox->Select();
     }
+    else
+        WindowUIObject::execute(rAction, rParameters);
 }
 
 StringMap ListBoxUIObject::get_state()
