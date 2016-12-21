@@ -22,6 +22,7 @@
 #include <fstream>
 
 #include "osl/thread.hxx"
+#include "osl/process.h"
 #include "rtl/string.h"
 #include "sal/detail/log.h"
 #include "sal/log.hxx"
@@ -81,13 +82,13 @@ char const * toString(sal_detail_LogLevel level) {
 // the process is running":
 #if defined ANDROID
 
-char const * getEnvironmentVariable() {
+char const * getLogLevel() {
     return std::getenv("SAL_LOG");
 }
 
 #else
 
-char const * getEnvironmentVariable_(const char* env) {
+char const * getEnvironmentVariable(const char* env) {
     char const * p1 = std::getenv(env);
     if (p1 == nullptr) {
         return nullptr;
@@ -99,18 +100,85 @@ char const * getEnvironmentVariable_(const char* env) {
     return p2;
 }
 
-char const * getEnvironmentVariable() {
-    static char const * env = getEnvironmentVariable_("SAL_LOG");
-    return env;
+bool getValueFromLoggingIniFile(const char* key, char* value) {
+#ifdef _WIN32
+    char buffer[1024];
+    DWORD   dwLen = 0;
+    dwLen = GetCurrentDirectory( buffer.getBufSizeInSymbols(), ::osl::mingw_reinterpret_cast<LPWSTR>(buffer) );
+    if ( !dwLen || dwLen > buffer.getBufSizeInSymbols() )
+        return false;
+    std::string programDirectory(buffer);
+#else // UNX
+    char buffer[1024];
+
+    if (getcwd (buffer, sizeof(buffer)) == nullptr)
+        return false;
+
+    std::string programDirectory(buffer);
+#endif
+
+    std::string aLogFile(programDirectory + "/logging.ini");
+    std::ifstream logFileStream(aLogFile);
+    if (!logFileStream.good())
+        return false;
+
+    std::size_t n;
+    std::string aKey;
+    std::string aValue;
+    std::string sWantedKey(key);
+    std::string sLine;
+    while (std::getline(logFileStream, sLine)) {
+        if (sLine.find('#') == 0)
+            continue;
+        if ( ( n = sLine.find('=') ) != std::string::npos) {
+            aKey = sLine.substr(0, n);
+            if (aKey != sWantedKey)
+                continue;
+            aValue = sLine.substr(n+1, sLine.length());
+            sprintf(value, "%s", aValue.c_str());
+            return true;
+        }
+    }
+    return false;
 }
 
-char const * getLogFile() {
-    static char const * logFile = getEnvironmentVariable_("SAL_LOG_FILE");
-    return logFile;
+char const * getLogLevel() {
+    // First check the environment variable, then the setting in logging.ini
+    static char const * env = getEnvironmentVariable("SAL_LOG");
+    if (env != nullptr)
+        return env;
+
+    static char logLevel[1024];
+    if (getValueFromLoggingIniFile("LogLevel", logLevel)) {
+        return logLevel;
+    }
+
+    return nullptr;
+}
+
+char const * getLogFilePath() {
+    // First check the environment variable, then the setting in logging.ini
+    static char const * logFile = getEnvironmentVariable("SAL_LOG_FILE");
+    if (logFile != nullptr)
+        return logFile;
+
+    static char logFilePath[1024];
+    if (getValueFromLoggingIniFile("LogFilePath", logFilePath)) {
+        return logFilePath;
+    }
+
+    return nullptr;
+}
+
+
+std::ofstream * getLogFile() {
+    static std::ofstream file(getLogFilePath(), std::ios::app | std::ios::out);
+
+    return &file;
 }
 
 void maybeOutputTimestamp(std::ostringstream &s) {
-    char const * env = getEnvironmentVariable();
+    static char const * env = getLogLevel();
     if (env == nullptr)
         return;
     bool outputTimestamp = false;
@@ -218,7 +286,6 @@ void log(
     }
 
     s << message;
-    s << '\n';
 
 #if defined ANDROID
     int android_log_level;
@@ -260,12 +327,12 @@ void log(
         syslog(prio, "%s", s.str().c_str());
 #endif
     } else {
-        const char* logFile = getLogFile();
+        static std::ofstream * logFile = getLogFile();
         if (logFile) {
-            std::ofstream file(logFile, std::ios::app | std::ios::out);
-            file << s.str();
+            *logFile << s.str() << std::endl;
         }
         else {
+            s << '\n';
             std::fputs(s.str().c_str(), stderr);
             std::fflush(stderr);
         }
@@ -326,7 +393,7 @@ int sal_detail_log_report(enum sal_detail_LogLevel level, char const * area) {
     if (isDebug(level))
         return true;
     assert(area != nullptr);
-    char const * env = getEnvironmentVariable();
+    static char const * env = getLogLevel();
     if (env == nullptr) {
         env = "+WARN";
     }
