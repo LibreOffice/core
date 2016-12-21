@@ -1172,11 +1172,6 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
     {
         sal_uInt16 nItemId = FillItemCommand(aItemCommand,pMenu, i );
 
-        // Command can be just an alias to another command.
-        OUString aRealCommand = vcl::CommandInfoProvider::Instance().GetRealCommandForCommand( aItemCommand, m_xFrame );
-        if ( !aRealCommand.isEmpty() )
-            aItemCommand = aRealCommand;
-
         // Set module identifier when provided from outside
         if ( !rModuleIdentifier.isEmpty() )
         {
@@ -1190,6 +1185,11 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
             if ( !aItemCommand.isEmpty() )
                 pMenu->SetItemText( nItemId, RetrieveLabelFromCommand( aItemCommand ));
         }
+
+        // Command can be just an alias to another command.
+        OUString aRealCommand = vcl::CommandInfoProvider::Instance().GetRealCommandForCommand( aItemCommand, m_xFrame );
+        if ( !aRealCommand.isEmpty() )
+            aItemCommand = aRealCommand;
 
         Reference< XDispatch > xDispatch;
         Reference< XStatusListener > xStatusListener;
