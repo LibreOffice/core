@@ -117,27 +117,19 @@ uno::Reference< uno::XInterface > ScCellRangeObj::getXCellRangeData()
 void ScCellRangeObj::testSortOOB()
 {
     uno::Reference<util::XSortable> xSortable(init(),UNO_QUERY_THROW);
-    try {
-        uno::Sequence<beans::PropertyValue> aEmptyDescriptor;
-        xSortable->sort(aEmptyDescriptor);
-    } catch (const uno::Exception &) {
-        CPPUNIT_FAIL("exception thrown during empty sort");
-    }
+    uno::Sequence<beans::PropertyValue> aEmptyDescriptor;
+    xSortable->sort(aEmptyDescriptor);
 
-    try {
-        uno::Sequence<beans::PropertyValue> aProps(1);
-        uno::Sequence<util::SortField> aSort(1);
+    uno::Sequence<beans::PropertyValue> aProps(1);
+    uno::Sequence<util::SortField> aSort(1);
 
-        aSort[0].Field = 0xffffff;
-        aSort[0].SortAscending = true;
+    aSort[0].Field = 0xffffff;
+    aSort[0].SortAscending = true;
 
-        aProps[0].Name = "SortFields";
-        aProps[0].Value = uno::makeAny(aSort);
+    aProps[0].Name = "SortFields";
+    aProps[0].Value = uno::makeAny(aSort);
 
-        xSortable->sort(aProps);
-    } catch (const uno::Exception &) {
-        CPPUNIT_FAIL("exception thrown during OOB sort");
-    }
+    xSortable->sort(aProps);
 }
 
 void ScCellRangeObj::setUp()
