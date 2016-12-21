@@ -143,7 +143,7 @@ public:
             Application::Abort("Failed to load intro image");
 
         maIntroBW = maIntro.GetBitmap();
-        maIntroBW.Filter(BMP_FILTER_EMBOSS_GREY);
+        maIntroBW.Filter(BmpFilter::EmbossGrey);
 
         InitRenderers();
         mnSegmentsY = rtl::math::round(std::sqrt(maRenderers.size()), 0,

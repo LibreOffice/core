@@ -91,14 +91,14 @@ sal_uIntPtr SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest& rReq, GraphicObj
                 {
                     Animation aAnimation( rGraphic.GetAnimation() );
 
-                    if( aAnimation.Filter( BMP_FILTER_SHARPEN ) )
+                    if( aAnimation.Filter( BmpFilter::Sharpen ) )
                         aGraphic = aAnimation;
                 }
                 else
                 {
                     BitmapEx aBmpEx( rGraphic.GetBitmapEx() );
 
-                    if( aBmpEx.Filter( BMP_FILTER_SHARPEN ) )
+                    if( aBmpEx.Filter( BmpFilter::Sharpen ) )
                         aGraphic = aBmpEx;
                 }
 
@@ -116,14 +116,14 @@ sal_uIntPtr SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest& rReq, GraphicObj
                 {
                     Animation aAnimation( rGraphic.GetAnimation() );
 
-                    if( aAnimation.Filter( BMP_FILTER_REMOVENOISE ) )
+                    if( aAnimation.Filter( BmpFilter::RemoveNoise ) )
                         aGraphic = aAnimation;
                 }
                 else
                 {
                     BitmapEx aBmpEx( rGraphic.GetBitmapEx() );
 
-                    if( aBmpEx.Filter( BMP_FILTER_REMOVENOISE ) )
+                    if( aBmpEx.Filter( BmpFilter::RemoveNoise ) )
                         aGraphic = aBmpEx;
                 }
 
@@ -141,14 +141,14 @@ sal_uIntPtr SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest& rReq, GraphicObj
                 {
                     Animation aAnimation( rGraphic.GetAnimation() );
 
-                    if( aAnimation.Filter( BMP_FILTER_SOBEL_GREY ) )
+                    if( aAnimation.Filter( BmpFilter::SobelGrey ) )
                         aGraphic = aAnimation;
                 }
                 else
                 {
                     BitmapEx aBmpEx( rGraphic.GetBitmapEx() );
 
-                    if( aBmpEx.Filter( BMP_FILTER_SOBEL_GREY ) )
+                    if( aBmpEx.Filter( BmpFilter::SobelGrey ) )
                         aGraphic = aBmpEx;
                 }
 
@@ -205,14 +205,14 @@ sal_uIntPtr SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest& rReq, GraphicObj
                 {
                     Animation aAnimation( rGraphic.GetAnimation() );
 
-                    if( aAnimation.Filter( BMP_FILTER_POPART ) )
+                    if( aAnimation.Filter( BmpFilter::PopArt ) )
                         aGraphic = aAnimation;
                 }
                 else
                 {
                     BitmapEx aBmpEx( rGraphic.GetBitmapEx() );
 
-                    if( aBmpEx.Filter( BMP_FILTER_POPART ) )
+                    if( aBmpEx.Filter( BmpFilter::PopArt ) )
                         aGraphic = aBmpEx;
                 }
 
