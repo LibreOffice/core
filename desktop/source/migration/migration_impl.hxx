@@ -76,13 +76,9 @@ typedef std::vector< migration_step > migrations_v;
 typedef std::unique_ptr< migrations_v > migrations_vr;
 typedef std::vector< supported_migration > migrations_available;
 
-namespace {
-
 inline bool areBothOpenFrom(OUString const & cmd1, OUString const & cmd2)
 {
     return cmd1 == ".uno:Open" && cmd2.startsWith(".uno:OpenFrom");
-}
-
 }
 
 /**
