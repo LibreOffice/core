@@ -35,12 +35,9 @@ class SdrMarkView;
 
 namespace svx { namespace sidebar {
 
-namespace {
-    typedef cppu::WeakComponentImplHelper<
-        css::view::XSelectionChangeListener
-        > SelectionChangeHandlerInterfaceBase;
-}
-
+typedef cppu::WeakComponentImplHelper<
+    css::view::XSelectionChangeListener
+    > SelectionChangeHandlerInterfaceBase;
 
 class SVX_DLLPUBLIC SelectionChangeHandler
     : private ::cppu::BaseMutex,
