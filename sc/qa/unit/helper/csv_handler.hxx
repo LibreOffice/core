@@ -26,9 +26,7 @@
 
 #define DEBUG_CSV_HANDLER 0
 
-namespace {
-
-OUString getConditionalFormatString(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab)
+inline OUString getConditionalFormatString(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab)
 {
     OUString aString;
     Color* pColor;
@@ -44,7 +42,7 @@ OUString getConditionalFormatString(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SC
     return aString;
 }
 
-OString createErrorMessage(SCCOL nCol, SCROW nRow, SCTAB nTab)
+inline OString createErrorMessage(SCCOL nCol, SCROW nRow, SCTAB nTab)
 {
     OStringBuffer aString("Error in Table: ");
     aString.append(static_cast<sal_Int32>(nTab));
@@ -55,7 +53,7 @@ OString createErrorMessage(SCCOL nCol, SCROW nRow, SCTAB nTab)
     return aString.makeStringAndClear();
 }
 
-OString createErrorMessage(SCCOL nCol, SCROW nRow, SCTAB nTab, const OUString& rExpectedString, const OUString& rString)
+inline OString createErrorMessage(SCCOL nCol, SCROW nRow, SCTAB nTab, const OUString& rExpectedString, const OUString& rString)
 {
     OStringBuffer aString(createErrorMessage(nCol, nRow, nTab));
     aString.append("; Expected: '");
@@ -66,7 +64,7 @@ OString createErrorMessage(SCCOL nCol, SCROW nRow, SCTAB nTab, const OUString& r
     return aString.makeStringAndClear();
 }
 
-OString createErrorMessage(SCCOL nCol, SCROW nRow, SCTAB nTab, double aExpected, double aValue)
+inline OString createErrorMessage(SCCOL nCol, SCROW nRow, SCTAB nTab, double aExpected, double aValue)
 {
     OStringBuffer aString(createErrorMessage(nCol, nRow, nTab));
     aString.append("; Expected: '");
@@ -75,8 +73,6 @@ OString createErrorMessage(SCCOL nCol, SCROW nRow, SCTAB nTab, double aExpected,
     aString.append(aValue);
     aString.append("'");
     return aString.makeStringAndClear();
-
-}
 
 }
 
