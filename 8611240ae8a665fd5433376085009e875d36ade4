@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "3a71b18c_bc766c3c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-12-21T08:44:57Z",
+      "side": 1,
+      "message": "Can you try to get a backtrace of the crash? you need to build with --enable-debug for that. See the wiki for more help on this, or ask on IRC.",
+      "revId": "8611240ae8a665fd5433376085009e875d36ade4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a71b18c_5c87180f",
         "filename": "/COMMIT_MSG",
         "patchSetId": 2
