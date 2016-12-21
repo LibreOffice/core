@@ -33,6 +33,7 @@
 #include <mdds/multi_type_vector_custom_func3.hpp>
 
 #include <unordered_map>
+#include <memory>
 
 class ScDocument;
 class ScColumn;
@@ -152,6 +153,22 @@ public:
     ColumnBlockPosition* getBlockPosition(SCTAB nTab, SCCOL nCol);
 
     void clear();
+};
+
+/**
+ * Set of column block positions only for one table.
+ */
+class TableColumnBlockPositionSet
+{
+    struct Impl;
+    std::unique_ptr<Impl> mpImpl;
+
+public:
+    TableColumnBlockPositionSet( ScDocument& rDoc, SCTAB nTab );
+    TableColumnBlockPositionSet( TableColumnBlockPositionSet&& rOther );
+    ~TableColumnBlockPositionSet();
+
+    ColumnBlockPosition* getBlockPosition( SCCOL nCol );
 };
 
 ScRefCellValue toRefCell( const sc::CellStoreType::const_iterator& itPos, size_t nOffset );

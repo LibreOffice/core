@@ -48,19 +48,23 @@ struct ScDocumentImportImpl
 {
     ScDocument& mrDoc;
     sc::StartListeningContext maListenCxt;
-    sc::ColumnBlockPositionSet maBlockPosSet;
+    std::vector<sc::TableColumnBlockPositionSet> maBlockPosSet;
     SvtScriptType mnDefaultScriptNumeric;
     std::vector<TabAttr> maTabAttrs;
 
     explicit ScDocumentImportImpl(ScDocument& rDoc) :
         mrDoc(rDoc),
         maListenCxt(rDoc),
-        maBlockPosSet(rDoc),
         mnDefaultScriptNumeric(SvtScriptType::UNKNOWN) {}
+
+    static bool isValid( size_t nTab, size_t nCol )
+    {
+        return (nTab <= size_t(MAXTAB) && nCol <= size_t(MAXCOL));
+    }
 
     ColAttr* getColAttr( size_t nTab, size_t nCol )
     {
-        if (nTab > static_cast<size_t>(MAXTAB) || nCol > static_cast<size_t>(MAXCOL))
+        if (!isValid(nTab, nCol))
             return nullptr;
 
         if (nTab >= maTabAttrs.size())
@@ -71,6 +75,31 @@ struct ScDocumentImportImpl
             rTab.maCols.resize(nCol+1);
 
         return &rTab.maCols[nCol];
+    }
+
+    sc::ColumnBlockPosition* getBlockPosition( SCTAB nTab, SCCOL nCol )
+    {
+        if (!isValid(nTab, nCol))
+            return nullptr;
+
+        if (size_t(nTab) >= maBlockPosSet.size())
+        {
+            for (SCTAB i = maBlockPosSet.size(); i <= nTab; ++i)
+                maBlockPosSet.emplace_back(mrDoc, i);
+        }
+
+        sc::TableColumnBlockPositionSet& rTab = maBlockPosSet[nTab];
+        return rTab.getBlockPosition(nCol);
+    }
+
+    void initForSheets()
+    {
+        size_t n = mrDoc.GetTableCount();
+        for (size_t i = maBlockPosSet.size(); i < n; ++i)
+            maBlockPosSet.emplace_back(mrDoc, i);
+
+        if (maTabAttrs.size() < n)
+            maTabAttrs.resize(n);
     }
 };
 
@@ -90,6 +119,11 @@ ScDocument& ScDocumentImport::getDoc()
 const ScDocument& ScDocumentImport::getDoc() const
 {
     return mpImpl->mrDoc;
+}
+
+void ScDocumentImport::initForSheets()
+{
+    mpImpl->initForSheets();
 }
 
 void ScDocumentImport::setDefaultNumericScript(SvtScriptType nScript)
@@ -144,8 +178,7 @@ void ScDocumentImport::setAutoInput(const ScAddress& rPos, const OUString& rStr,
     if (!pTab)
         return;
 
-    sc::ColumnBlockPosition* pBlockPos =
-        mpImpl->maBlockPosSet.getBlockPosition(rPos.Tab(), rPos.Col());
+    sc::ColumnBlockPosition* pBlockPos = mpImpl->getBlockPosition(rPos.Tab(), rPos.Col());
 
     if (!pBlockPos)
         return;
@@ -185,8 +218,7 @@ void ScDocumentImport::setNumericCell(const ScAddress& rPos, double fVal)
     if (!pTab)
         return;
 
-    sc::ColumnBlockPosition* pBlockPos =
-        mpImpl->maBlockPosSet.getBlockPosition(rPos.Tab(), rPos.Col());
+    sc::ColumnBlockPosition* pBlockPos = mpImpl->getBlockPosition(rPos.Tab(), rPos.Col());
 
     if (!pBlockPos)
         return;
@@ -201,8 +233,7 @@ void ScDocumentImport::setStringCell(const ScAddress& rPos, const OUString& rStr
     if (!pTab)
         return;
 
-    sc::ColumnBlockPosition* pBlockPos =
-        mpImpl->maBlockPosSet.getBlockPosition(rPos.Tab(), rPos.Col());
+    sc::ColumnBlockPosition* pBlockPos = mpImpl->getBlockPosition(rPos.Tab(), rPos.Col());
 
     if (!pBlockPos)
         return;
@@ -221,8 +252,7 @@ void ScDocumentImport::setEditCell(const ScAddress& rPos, EditTextObject* pEditT
     if (!pTab)
         return;
 
-    sc::ColumnBlockPosition* pBlockPos =
-        mpImpl->maBlockPosSet.getBlockPosition(rPos.Tab(), rPos.Col());
+    sc::ColumnBlockPosition* pBlockPos = mpImpl->getBlockPosition(rPos.Tab(), rPos.Col());
 
     if (!pBlockPos)
         return;
@@ -239,8 +269,7 @@ void ScDocumentImport::setFormulaCell(
     if (!pTab)
         return;
 
-    sc::ColumnBlockPosition* pBlockPos =
-        mpImpl->maBlockPosSet.getBlockPosition(rPos.Tab(), rPos.Col());
+    sc::ColumnBlockPosition* pBlockPos = mpImpl->getBlockPosition(rPos.Tab(), rPos.Col());
 
     if (!pBlockPos)
         return;
@@ -256,8 +285,7 @@ void ScDocumentImport::setFormulaCell(const ScAddress& rPos, ScTokenArray* pArra
     if (!pTab)
         return;
 
-    sc::ColumnBlockPosition* pBlockPos =
-        mpImpl->maBlockPosSet.getBlockPosition(rPos.Tab(), rPos.Col());
+    sc::ColumnBlockPosition* pBlockPos = mpImpl->getBlockPosition(rPos.Tab(), rPos.Col());
 
     if (!pBlockPos)
         return;
@@ -273,8 +301,7 @@ void ScDocumentImport::setFormulaCell(const ScAddress& rPos, ScFormulaCell* pCel
     if (!pTab)
         return;
 
-    sc::ColumnBlockPosition* pBlockPos =
-        mpImpl->maBlockPosSet.getBlockPosition(rPos.Tab(), rPos.Col());
+    sc::ColumnBlockPosition* pBlockPos = mpImpl->getBlockPosition(rPos.Tab(), rPos.Col());
 
     if (!pBlockPos)
         return;
@@ -293,8 +320,7 @@ void ScDocumentImport::setMatrixCells(
     if (!pTab)
         return;
 
-    sc::ColumnBlockPosition* pBlockPos =
-        mpImpl->maBlockPosSet.getBlockPosition(rBasePos.Tab(), rBasePos.Col());
+    sc::ColumnBlockPosition* pBlockPos = mpImpl->getBlockPosition(rBasePos.Tab(), rBasePos.Col());
 
     if (!pBlockPos)
         return;
@@ -338,7 +364,7 @@ void ScDocumentImport::setMatrixCells(
 
     for (SCCOL nCol = rRange.aStart.Col()+1; nCol <= rRange.aEnd.Col(); ++nCol)
     {
-        pBlockPos = mpImpl->maBlockPosSet.getBlockPosition(rBasePos.Tab(), nCol);
+        pBlockPos = mpImpl->getBlockPosition(rBasePos.Tab(), nCol);
         if (!pBlockPos)
             return;
 
@@ -429,8 +455,7 @@ void ScDocumentImport::setTableOpCells(const ScRange& rRange, const ScTabOpParam
 
     for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
     {
-        sc::ColumnBlockPosition* pBlockPos =
-            mpImpl->maBlockPosSet.getBlockPosition(nTab, nCol);
+        sc::ColumnBlockPosition* pBlockPos = mpImpl->getBlockPosition(nTab, nCol);
 
         if (!pBlockPos)
             // Something went horribly wrong.
