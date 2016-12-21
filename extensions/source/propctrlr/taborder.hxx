@@ -83,10 +83,6 @@ namespace pcr
 
         void FillList();
 
-        static Image GetImage(
-            const css::uno::Reference< css::beans::XPropertySet > & _rxSet
-        );
-
     public:
         TabOrderDialog(
             vcl::Window* _pParent,
