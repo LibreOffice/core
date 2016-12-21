@@ -1,0 +1,11 @@
+--- src/hunspell/hunspell.hxx
++++ src/hunspell/hunspell.hxx
+@@ -85,7 +85,7 @@
+ #define MAXSHARPS 5
+ #define MAXWORDLEN 176
+ 
+-#if __GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 1)
++#if defined __GNUC__ && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 1))
+ #  define H_DEPRECATED __attribute__((__deprecated__))
+ #elif defined(_MSC_VER) && (_MSC_VER >= 1300)
+ #  define H_DEPRECATED __declspec(deprecated)
