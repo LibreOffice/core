@@ -8,4 +8,8 @@
 def get_sheet_from_doc(document, index):
     return document.getSheets().getByIndex(index)
 
+def get_cell_by_position(document, tab, column, row):
+    sheet = get_sheet_from_doc(document, tab)
+    return sheet.getCellByPosition(column, row)
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
