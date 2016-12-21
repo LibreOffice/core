@@ -315,7 +315,7 @@ SwTemplateDlg::SwTemplateDlg(vcl::Window* pParent,
             m_nBulletId = AddTabPage("bullets", RID_SVXPAGE_PICK_BULLET);
             m_nNumId = AddTabPage("outline", RID_SVXPAGE_PICK_NUM);
             m_nBmpId = AddTabPage("graphics", RID_SVXPAGE_PICK_BMP);
-            m_nNumOptId = AddTabPage("options", RID_SVXPAGE_NUM_OPTIONS );
+            m_nNumOptId = AddTabPage("customize", RID_SVXPAGE_NUM_OPTIONS );
             m_nNumPosId = AddTabPage("position", RID_SVXPAGE_NUM_POSITION );
         }
         break;
