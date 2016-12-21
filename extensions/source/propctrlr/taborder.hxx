@@ -76,8 +76,6 @@ namespace pcr
         VclPtr<PushButton>          m_pPB_MoveDown;
         VclPtr<PushButton>          m_pPB_AutoOrder;
 
-        ImageList*                  pImageList;
-
         DECL_LINK( MoveUpClickHdl, Button*, void );
         DECL_LINK( MoveDownClickHdl, Button*, void );
         DECL_LINK( AutoOrderClickHdl, Button*, void );

@@ -43,7 +43,6 @@ namespace pcr
         VclPtr<SvTreeListBox>   m_pControlTree;
         VclPtr<CheckBox>        m_pNoAssignment;
 
-        ImageList               m_aModelImages;
         css::uno::Reference< css::beans::XPropertySet >   m_xControlModel;
         OUString m_sRequiredService;
         Image                   m_aRequiredControlImage;

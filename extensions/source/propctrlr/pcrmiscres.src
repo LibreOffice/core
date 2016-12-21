@@ -25,44 +25,144 @@ String RID_STR_CONFIRM_DELETE_DATA_TYPE
              "Please note that this will affect all controls which are bound to this data type.";
 };
 
-#define IMAGE_IDS \
-    IdList = \
-    { \
-        RID_SVXIMG_CONTROL; \
-        RID_SVXIMG_BUTTON; \
-        RID_SVXIMG_RADIOBUTTON; \
-        RID_SVXIMG_CHECKBOX; \
-        RID_SVXIMG_FIXEDTEXT; \
-        RID_SVXIMG_GROUPBOX; \
-        RID_SVXIMG_EDIT; \
-        RID_SVXIMG_LISTBOX; \
-        RID_SVXIMG_COMBOBOX; \
-        RID_SVXIMG_GRID; \
-        RID_SVXIMG_IMAGEBUTTON; \
-        RID_SVXIMG_FILECONTROL; \
-        RID_SVXIMG_DATEFIELD; \
-        RID_SVXIMG_TIMEFIELD; \
-        RID_SVXIMG_NUMERICFIELD; \
-        RID_SVXIMG_CURRENCYFIELD; \
-        RID_SVXIMG_PATTERNFIELD; \
-        RID_SVXIMG_IMAGECONTROL; \
-        RID_SVXIMG_HIDDEN; \
-        RID_SVXIMG_FORMATTEDFIELD; \
-        RID_SVXIMG_FILTER; \
-        RID_SVXIMG_FORMS; \
-        RID_SVXIMG_FORM; \
-        RID_SVXIMG_COLLAPSEDNODE; \
-        RID_SVXIMG_EXPANDEDNODE; \
-        RID_SVXIMG_SCROLLBAR; \
-        RID_SVXIMG_SPINBUTTON; \
-        RID_SVXIMG_NAVIGATIONBAR; \
-    }; \
-    IdCount = 29
-
-ImageList RID_IL_FORMEXPLORER
+Bitmap RID_SVXBMP_CONTROL
 {
-    Prefix = "sx";
-    IMAGE_IDS;
+    File = "sx10144.png";
+};
+
+Bitmap RID_SVXBMP_BUTTON
+{
+    File = "sx10594.png";
+};
+
+Bitmap RID_SVXBMP_RADIOBUTTON
+{
+    File = "sx10595.png";
+};
+
+Bitmap RID_SVXBMP_CHECKBOX
+{
+    File = "sx10596.png";
+};
+
+Bitmap RID_SVXBMP_FIXEDTEXT
+{
+    File = "sx10597.png";
+};
+
+Bitmap RID_SVXBMP_GROUPBOX
+{
+    File = "sx10598.png";
+};
+
+Bitmap RID_SVXBMP_EDIT
+{
+    File = "sx10599.png";
+};
+
+Bitmap RID_SVXBMP_LISTBOX
+{
+    File = "sx10600.png";
+};
+
+Bitmap RID_SVXBMP_COMBOBOX
+{
+    File = "sx10601.png";
+};
+
+Bitmap RID_SVXBMP_GRID
+{
+    File = "sx10603.png";
+};
+
+Bitmap RID_SVXBMP_IMAGEBUTTON
+{
+    File = "sx10604.png";
+};
+
+Bitmap RID_SVXBMP_FILECONTROL
+{
+    File = "sx10605.png";
+};
+
+Bitmap RID_SVXBMP_DATEFIELD
+{
+    File = "sx10704.png";
+};
+
+Bitmap RID_SVXBMP_TIMEFIELD
+{
+    File = "sx10705.png";
+};
+
+Bitmap RID_SVXBMP_NUMERICFIELD
+{
+    File = "sx10706.png";
+};
+
+Bitmap RID_SVXBMP_CURRENCYFIELD
+{
+    File = "sx10707.png";
+};
+
+Bitmap RID_SVXBMP_PATTERNFIELD
+{
+    File = "sx10708.png";
+};
+
+Bitmap RID_SVXBMP_IMAGECONTROL
+{
+    File = "sx10710.png";
+};
+
+Bitmap RID_SVXBMP_HIDDEN
+{
+    File = "sx18022.png";
+};
+
+Bitmap RID_SVXBMP_FORMATTEDFIELD
+{
+    File = "sx10728.png";
+};
+
+Bitmap RID_SVXBMP_FILTER
+{
+    File = "sx10715.png";
+};
+
+Bitmap RID_SVXBMP_FORMS
+{
+    File = "sx18013.png";
+};
+
+Bitmap RID_SVXBMP_FORM
+{
+    File = "sx10593.png";
+};
+
+Bitmap RID_SVXBMP_COLLAPSEDNODE
+{
+    File = "sx18002.png";
+};
+
+Bitmap RID_SVXBMP_EXPANDEDNODE
+{
+    File = "sx18003.png";
+};
+
+Bitmap RID_SVXBMP_SCROLLBAR
+{
+    File = "sx10768.png";
+};
+
+Bitmap RID_SVXBMP_SPINBUTTON
+{
+    File = "sx10769.png";
+};
+
+Bitmap RID_SVXBMP_NAVIGATIONBAR
+{
+    File = "sx10607.png";
 };
 
 String RID_STR_PROPTITLE_PUSHBUTTON

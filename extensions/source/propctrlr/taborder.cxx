@@ -74,7 +74,6 @@ namespace pcr
         ,m_xModel( _rxTabModel )
         ,m_xControlContainer( _rxControlCont )
         ,m_xORB( _rxORB )
-        ,pImageList( nullptr )
     {
         get(m_pLB_Controls, "CTRLtree");
         get(m_pPB_OK, "ok");
@@ -88,8 +87,6 @@ namespace pcr
         m_pPB_AutoOrder->SetClickHdl( LINK( this, TabOrderDialog, AutoOrderClickHdl ) );
         m_pPB_OK->SetClickHdl( LINK( this, TabOrderDialog, OKClickHdl ) );
         m_pPB_OK->Disable();
-
-        pImageList = new ImageList( PcrRes( RID_IL_FORMEXPLORER ) );
 
         if ( m_xModel.is() )
             m_xTempModel = new OSimpleTabModel( m_xModel->getControlModels() );
@@ -121,8 +118,6 @@ namespace pcr
     void TabOrderDialog::dispose()
     {
         m_pLB_Controls->Hide();
-        //  delete pLB_Controls;
-        delete pImageList;
         m_pLB_Controls.clear();
         m_pPB_OK.clear();
         m_pPB_MoveUp.clear();
@@ -131,44 +126,42 @@ namespace pcr
         ModalDialog::dispose();
     }
 
-
     Image TabOrderDialog::GetImage( const Reference< XPropertySet >& _rxSet ) const
     {
-        sal_uInt16 nImageId = RID_SVXIMG_CONTROL;
+        sal_uInt16 nImageId = RID_SVXBMP_CONTROL;
         // TODO: classify controls also in Basic propbrw
         if ( _rxSet.is() && ::comphelper::hasProperty( PROPERTY_CLASSID, _rxSet ) )
         {
             switch( ::comphelper::getINT16( _rxSet->getPropertyValue( PROPERTY_CLASSID ) ) )
             {
-            case FormComponentType::COMMANDBUTTON:  nImageId = RID_SVXIMG_BUTTON; break;
-            case FormComponentType::FIXEDTEXT:      nImageId = RID_SVXIMG_FIXEDTEXT; break;
-            case FormComponentType::TEXTFIELD:      nImageId = RID_SVXIMG_EDIT; break;
-            case FormComponentType::RADIOBUTTON:    nImageId = RID_SVXIMG_RADIOBUTTON; break;
-            case FormComponentType::CHECKBOX:       nImageId = RID_SVXIMG_CHECKBOX; break;
-            case FormComponentType::LISTBOX:        nImageId = RID_SVXIMG_LISTBOX; break;
-            case FormComponentType::COMBOBOX:       nImageId = RID_SVXIMG_COMBOBOX; break;
-            case FormComponentType::GROUPBOX:       nImageId = RID_SVXIMG_GROUPBOX; break;
-            case FormComponentType::IMAGEBUTTON:    nImageId = RID_SVXIMG_IMAGEBUTTON; break;
-            case FormComponentType::FILECONTROL:    nImageId = RID_SVXIMG_FILECONTROL; break;
-            case FormComponentType::HIDDENCONTROL:  nImageId = RID_SVXIMG_HIDDEN; break;
-            case FormComponentType::DATEFIELD:      nImageId = RID_SVXIMG_DATEFIELD; break;
-            case FormComponentType::TIMEFIELD:      nImageId = RID_SVXIMG_TIMEFIELD; break;
-            case FormComponentType::NUMERICFIELD:   nImageId = RID_SVXIMG_NUMERICFIELD; break;
-            case FormComponentType::CURRENCYFIELD:  nImageId = RID_SVXIMG_CURRENCYFIELD; break;
-            case FormComponentType::PATTERNFIELD:   nImageId = RID_SVXIMG_PATTERNFIELD; break;
-            case FormComponentType::IMAGECONTROL:   nImageId = RID_SVXIMG_IMAGECONTROL; break;
-            case FormComponentType::GRIDCONTROL:    nImageId = RID_SVXIMG_GRID; break;
-            case FormComponentType::SCROLLBAR:      nImageId = RID_SVXIMG_SCROLLBAR; break;
-            case FormComponentType::SPINBUTTON:     nImageId = RID_SVXIMG_SPINBUTTON; break;
-            case FormComponentType::NAVIGATIONBAR:  nImageId = RID_SVXIMG_NAVIGATIONBAR; break;
+            case FormComponentType::COMMANDBUTTON:  nImageId = RID_SVXBMP_BUTTON; break;
+            case FormComponentType::FIXEDTEXT:      nImageId = RID_SVXBMP_FIXEDTEXT; break;
+            case FormComponentType::TEXTFIELD:      nImageId = RID_SVXBMP_EDIT; break;
+            case FormComponentType::RADIOBUTTON:    nImageId = RID_SVXBMP_RADIOBUTTON; break;
+            case FormComponentType::CHECKBOX:       nImageId = RID_SVXBMP_CHECKBOX; break;
+            case FormComponentType::LISTBOX:        nImageId = RID_SVXBMP_LISTBOX; break;
+            case FormComponentType::COMBOBOX:       nImageId = RID_SVXBMP_COMBOBOX; break;
+            case FormComponentType::GROUPBOX:       nImageId = RID_SVXBMP_GROUPBOX; break;
+            case FormComponentType::IMAGEBUTTON:    nImageId = RID_SVXBMP_IMAGEBUTTON; break;
+            case FormComponentType::FILECONTROL:    nImageId = RID_SVXBMP_FILECONTROL; break;
+            case FormComponentType::HIDDENCONTROL:  nImageId = RID_SVXBMP_HIDDEN; break;
+            case FormComponentType::DATEFIELD:      nImageId = RID_SVXBMP_DATEFIELD; break;
+            case FormComponentType::TIMEFIELD:      nImageId = RID_SVXBMP_TIMEFIELD; break;
+            case FormComponentType::NUMERICFIELD:   nImageId = RID_SVXBMP_NUMERICFIELD; break;
+            case FormComponentType::CURRENCYFIELD:  nImageId = RID_SVXBMP_CURRENCYFIELD; break;
+            case FormComponentType::PATTERNFIELD:   nImageId = RID_SVXBMP_PATTERNFIELD; break;
+            case FormComponentType::IMAGECONTROL:   nImageId = RID_SVXBMP_IMAGECONTROL; break;
+            case FormComponentType::GRIDCONTROL:    nImageId = RID_SVXBMP_GRID; break;
+            case FormComponentType::SCROLLBAR:      nImageId = RID_SVXBMP_SCROLLBAR; break;
+            case FormComponentType::SPINBUTTON:     nImageId = RID_SVXBMP_SPINBUTTON; break;
+            case FormComponentType::NAVIGATIONBAR:  nImageId = RID_SVXBMP_NAVIGATIONBAR; break;
             default:
                 OSL_FAIL( "TabOrderDialog::GetImage: unknown control type" );
             }
         }
 
-        return pImageList->GetImage( nImageId );
+        return Image(BitmapEx(PcrRes(nImageId)));;
     }
-
 
     void TabOrderDialog::FillList()
     {
