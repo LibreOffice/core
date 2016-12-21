@@ -3265,6 +3265,11 @@ DECLARE_OOXMLIMPORT_TEST(testTdf103664, "tdf103664.docx")
     CPPUNIT_ASSERT_EQUAL(awt::CharSet::SYMBOL, getProperty<sal_Int16>(xRun, "CharFontCharSet"));
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf96218, "tdf96218.docx")
+{
+    // Image had a bad position because layoutInCell attribute was not ignored
+    CPPUNIT_ASSERT(!getProperty<bool>(getShape(1), "IsFollowingTextFlow"));
+}
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
