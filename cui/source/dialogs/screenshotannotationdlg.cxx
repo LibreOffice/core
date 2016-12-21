@@ -54,7 +54,7 @@ namespace
 
     OUString lcl_AltDescr()
     {
-        OUString aTempl = OUString("<alt xml-lang=\"en-US\" id=\"%1\">"
+        OUString aTempl = OUString("<alt id=\"%1\">"
                                    " " //FIXME real dialog title or something
                                   "</alt>");
         aTempl = aTempl.replaceFirst( "%1", lcl_genRandom("alt_id") );
@@ -79,7 +79,7 @@ namespace
 
     OUString lcl_ParagraphWithImage( const OUString& rScreenshotId, const Size& rSize )
     {
-        OUString aTempl = OUString( "<paragraph id=\"%1\" role=\"paragraph\" xml-lang=\"en-US\">%2"
+        OUString aTempl = OUString( "<paragraph id=\"%1\" role=\"paragraph\">%2"
                                     "</paragraph>"  SAL_NEWLINE_STRING );
         aTempl = aTempl.replaceFirst( "%1", lcl_genRandom("par_id") );
         aTempl = aTempl.replaceFirst( "%2", lcl_Image(rScreenshotId, rSize) );
@@ -90,7 +90,7 @@ namespace
     OUString lcl_Bookmark( const OUString& rWidgetId )
     {
         OUString aTempl = "<!-- Bookmark for widget %1 -->" SAL_NEWLINE_STRING
-                          "<bookmark xml-lang=\"en-US\" branch=\"hid/%2\" id=\"%3\" localize=\"false\"/>" SAL_NEWLINE_STRING;
+                          "<bookmark branch=\"hid/%2\" id=\"%3\" localize=\"false\"/>" SAL_NEWLINE_STRING;
         aTempl = aTempl.replaceFirst( "%1", rWidgetId );
         aTempl = aTempl.replaceFirst( "%2", rWidgetId );
         aTempl = aTempl.replaceFirst( "%3", lcl_genRandom("bm_id") );
