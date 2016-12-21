@@ -17,20 +17,19 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "align.hrc"
+Bitmap RID_SVXBMP_BOTTOMLOCK
+{
+    File = "lo01.png";
+};
 
-#define IL_LOCK_MCOL Color { Red=0xFFFF; Green=0x0000; Blue=0xFFFF; }
+Bitmap RID_SVXBMP_TOPLOCK
+{
+    File = "lo02.png";
+};
 
-ImageList IL_LOCK_BMPS
-    {
-        Prefix = "lo";
-        IdList =
-        {
-            IID_BOTTOMLOCK ;
-            IID_TOPLOCK ;
-            IID_CELLLOCK ;
-        };
-        IdCount = { 3 ; };
-    };
+Bitmap RID_SVXBMP_CELLLOCK
+{
+    File = "lo03.png";
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

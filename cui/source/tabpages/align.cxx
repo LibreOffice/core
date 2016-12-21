@@ -22,7 +22,6 @@
 #include <editeng/svxenum.hxx>
 #include <svx/dialogs.hrc>
 #include <cuires.hrc>
-#include "align.hrc"
 #include <svx/rotmodit.hxx>
 
 #include <svx/algitem.hxx>
@@ -39,6 +38,10 @@
 #include <svl/intitem.hxx>
 #include <sfx2/request.hxx>
 #include <vcl/settings.hxx>
+
+#define IID_BOTTOMLOCK 1
+#define IID_TOPLOCK    2
+#define IID_CELLLOCK   3
 
 namespace svx {
 
@@ -337,29 +340,26 @@ void AlignmentTabPage::InitVsRefEgde()
     // remember selection - is deleted in call to ValueSet::Clear()
     sal_uInt16 nSel = m_pVsRefEdge->GetSelectItemId();
 
-    ResId aResId( IL_LOCK_BMPS, CUI_MGR() );
-    ImageList aImageList( aResId );
+    BitmapEx aBottomLock(ResId(RID_SVXBMP_BOTTOMLOCK, CUI_MGR()));
+    BitmapEx aTopLock(ResId(RID_SVXBMP_TOPLOCK, CUI_MGR()));
+    BitmapEx aCellLock(ResId(RID_SVXBMP_CELLLOCK, CUI_MGR()));
 
     if( GetDPIScaleFactor() > 1 )
     {
-        for (short i = 0; i < aImageList.GetImageCount(); i++)
-        {
-            OUString rImageName = aImageList.GetImageName(i);
-            BitmapEx b = aImageList.GetImage(rImageName).GetBitmapEx();
-            b.Scale(GetDPIScaleFactor(), GetDPIScaleFactor(), BmpScaleFlag::Fast);
-            aImageList.ReplaceImage(rImageName, Image(b));
-        }
+        aBottomLock.Scale(GetDPIScaleFactor(), GetDPIScaleFactor(), BmpScaleFlag::Fast);
+        aTopLock.Scale(GetDPIScaleFactor(), GetDPIScaleFactor(), BmpScaleFlag::Fast);
+        aCellLock.Scale(GetDPIScaleFactor(), GetDPIScaleFactor(), BmpScaleFlag::Fast);
     }
 
-    Size aItemSize( aImageList.GetImage( IID_BOTTOMLOCK ).GetSizePixel() );
+    Size aItemSize(aBottomLock.GetSizePixel());
 
     m_pVsRefEdge->Clear();
     m_pVsRefEdge->SetStyle( m_pVsRefEdge->GetStyle() | WB_ITEMBORDER | WB_DOUBLEBORDER );
 
     m_pVsRefEdge->SetColCount( 3 );
-    m_pVsRefEdge->InsertItem( IID_BOTTOMLOCK, aImageList.GetImage( IID_BOTTOMLOCK ),  m_pFtBotLock->GetText() );
-    m_pVsRefEdge->InsertItem( IID_TOPLOCK,    aImageList.GetImage( IID_TOPLOCK ),     m_pFtTopLock->GetText() );
-    m_pVsRefEdge->InsertItem( IID_CELLLOCK,   aImageList.GetImage( IID_CELLLOCK ),    m_pFtCelLock->GetText() );
+    m_pVsRefEdge->InsertItem(IID_BOTTOMLOCK, Image(aBottomLock),  m_pFtBotLock->GetText());
+    m_pVsRefEdge->InsertItem(IID_TOPLOCK,    Image(aTopLock),     m_pFtTopLock->GetText());
+    m_pVsRefEdge->InsertItem(IID_CELLLOCK,   Image(aCellLock),    m_pFtCelLock->GetText());
 
     m_pVsRefEdge->SetSizePixel( m_pVsRefEdge->CalcWindowSizePixel( aItemSize ) );
 
