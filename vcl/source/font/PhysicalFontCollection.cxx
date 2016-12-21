@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <map>
+
 #include <i18nlangtag/mslangid.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/fontdefs.hxx>
@@ -968,6 +970,33 @@ ImplDeviceFontSizeList* PhysicalFontCollection::GetDeviceFontSizeList( const OUS
     return pDeviceFontSizeList;
 }
 
+// These are the metric-compatible replacement fonts that are bundled with
+// LibreOffice, we prefer them over generic substitutions that might be
+// provided by the system.
+static const std::map<OUString, OUString> aMetricCompatibleMap =
+{
+    { "Times New Roman", "Liberation Serif" },
+    { "Arial",           "Liberation Sans" },
+    { "Arial Narrow",    "Liberation Sans Narrow" },
+    { "Courier New",     "Liberation Mono" },
+    { "Cambria",         "Caladea" },
+    { "Calibri",         "Carlito" },
+};
+
+static bool FindMetricCompatibleFont(FontSelectPattern& rFontSelData)
+{
+    for (const auto& aSub : aMetricCompatibleMap)
+    {
+        if (rFontSelData.maSearchName == GetEnglishSearchFontName(aSub.first))
+        {
+            rFontSelData.maSearchName = aSub.second;
+            return true;
+        }
+    }
+
+    return false;
+}
+
 PhysicalFontFamily* PhysicalFontCollection::FindFontFamily( FontSelectPattern& rFSD ) const
 {
     // give up if no fonts are available
@@ -1053,10 +1082,10 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamily( FontSelectPattern& r
                 return pFoundData;
         }
 
-        if( mpPreMatchHook )
+        if (FindMetricCompatibleFont(rFSD) ||
+            (mpPreMatchHook && mpPreMatchHook->FindFontSubstitute(rFSD)))
         {
-            if( mpPreMatchHook->FindFontSubstitute( rFSD ) )
-                aSearchName = GetEnglishSearchFontName( aSearchName );
+            aSearchName = GetEnglishSearchFontName(aSearchName);
         }
 
         // the prematch hook uses the target name to search, but we now need
