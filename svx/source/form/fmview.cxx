@@ -266,7 +266,7 @@ void FmFormView::ChangeDesignMode(bool bDesign)
     {
         if ( bDesign )
         {
-            if ( GetActualOutDev() && GetActualOutDev()->GetOutDevType() == OUTDEV_WINDOW )
+            if ( GetActualOutDev() && GetActualOutDev()->GetOutDevType() == OutDevType::Window )
             {
                 const vcl::Window* pWindow = static_cast< const vcl::Window* >( GetActualOutDev() );
                 const_cast< vcl::Window* >( pWindow )->GrabFocus();

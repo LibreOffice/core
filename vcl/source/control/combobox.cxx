@@ -1193,7 +1193,7 @@ void ComboBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, D
         else
             nTextStyle |= DrawTextFlags::Left;
 
-        if ( ( nFlags & DrawFlags::Mono ) || ( eOutDevType == OUTDEV_PRINTER ) )
+        if ( ( nFlags & DrawFlags::Mono ) || ( eOutDevType == OutDevType::Printer ) )
         {
             pDev->SetTextColor( Color( COL_BLACK ) );
         }

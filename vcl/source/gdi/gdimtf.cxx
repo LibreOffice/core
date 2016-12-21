@@ -335,7 +335,7 @@ void GDIMetaFile::Play( OutputDevice* pOut, size_t nPos )
     {
         MetaAction* pAction = GetCurAction();
         const size_t nObjCount = m_aList.size();
-        size_t  nSyncCount = ( pOut->GetOutDevType() == OUTDEV_WINDOW ) ? 0x000000ff : 0xffffffff;
+        size_t  nSyncCount = ( pOut->GetOutDevType() == OutDevType::Window ) ? 0x000000ff : 0xffffffff;
 
         if( nPos > nObjCount )
             nPos = nObjCount;
@@ -489,7 +489,7 @@ void GDIMetaFile::Play( OutputDevice* pOut, const Point& rPos,
 
         pOut->Push();
 
-        if ( pMtf && pMtf->IsRecord() && ( pOut->GetOutDevType() != OUTDEV_PRINTER ) )
+        if ( pMtf && pMtf->IsRecord() && ( pOut->GetOutDevType() != OutDevType::Printer ) )
             pOut->SetRelativeMapMode( aDrawMap );
         else
             pOut->SetMapMode( aDrawMap );

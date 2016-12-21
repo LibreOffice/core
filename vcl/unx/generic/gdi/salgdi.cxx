@@ -536,10 +536,10 @@ namespace
 cairo::SurfaceSharedPtr X11SalGraphics::CreateSurface( const OutputDevice& rRefDevice,
                                 int x, int y, int width, int height ) const
 {
-    if( rRefDevice.GetOutDevType() == OUTDEV_WINDOW )
+    if( rRefDevice.GetOutDevType() == OutDevType::Window )
         return cairo::SurfaceSharedPtr(new cairo::X11Surface(getSysData(static_cast<const vcl::Window&>(rRefDevice)),
                                                x,y,width,height));
-    if( rRefDevice.GetOutDevType() == OUTDEV_VIRDEV )
+    if( rRefDevice.GetOutDevType() == OutDevType::VirDev )
         return cairo::SurfaceSharedPtr(new cairo::X11Surface(getSysData(static_cast<const VirtualDevice&>(rRefDevice)),
                                                x,y,width,height));
     return cairo::SurfaceSharedPtr();
@@ -554,9 +554,9 @@ cairo::SurfaceSharedPtr X11SalGraphics::CreateBitmapSurface( const OutputDevice&
               << rData.mnHeight);
     if ( rData.mnWidth == rSize.Width() && rData.mnHeight == rSize.Height() )
     {
-        if( rRefDevice.GetOutDevType() == OUTDEV_WINDOW )
+        if( rRefDevice.GetOutDevType() == OutDevType::Window )
             return cairo::SurfaceSharedPtr(new cairo::X11Surface(getSysData(static_cast<const vcl::Window&>(rRefDevice)), rData ));
-        else if( rRefDevice.GetOutDevType() == OUTDEV_VIRDEV )
+        else if( rRefDevice.GetOutDevType() == OutDevType::VirDev )
             return cairo::SurfaceSharedPtr(new cairo::X11Surface(getSysData(static_cast<const VirtualDevice&>(rRefDevice)), rData ));
     }
 

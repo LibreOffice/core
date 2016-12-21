@@ -544,7 +544,7 @@ void ScPrintFunc::DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double /* nPr
 
     //! SetUseStyleColor ??
 
-    if ( bMetaFile && pDev->GetOutDevType() == OUTDEV_VIRDEV )
+    if ( bMetaFile && pDev->GetOutDevType() == OutDevType::VirDev )
         aOutputData.SetSnapPixel();
 
     Point aLogStart = pDev->PixelToLogic( Point(nScrX,nScrY), MapUnit::Map100thMM );

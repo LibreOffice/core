@@ -480,7 +480,7 @@ OUString Printer::GetDefaultPrinterName()
 void Printer::ImplInitData()
 {
     mbDevOutput         = false;
-    meOutDevType        = OUTDEV_PRINTER;
+    meOutDevType        = OutDevType::Printer;
     mbDefPrinter        = false;
     mnError             = 0;
     mnCurPage           = 0;

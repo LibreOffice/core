@@ -108,7 +108,7 @@ bool SalGraphics::drawTransformedBitmap(
 void SalGraphics::mirror( long& x, const OutputDevice *pOutDev ) const
 {
     long w;
-    if( pOutDev && pOutDev->GetOutDevType() == OUTDEV_VIRDEV )
+    if( pOutDev && pOutDev->GetOutDevType() == OutDevType::VirDev )
         w = pOutDev->GetOutputWidthPixel();
     else
         w = GetGraphicsWidth();
@@ -138,7 +138,7 @@ void SalGraphics::mirror( long& x, const OutputDevice *pOutDev ) const
 void SalGraphics::mirror( long& x, long& nWidth, const OutputDevice *pOutDev, bool bBack ) const
 {
     long w;
-    if( pOutDev && pOutDev->GetOutDevType() == OUTDEV_VIRDEV )
+    if( pOutDev && pOutDev->GetOutDevType() == OutDevType::VirDev )
         w = pOutDev->GetOutputWidthPixel();
     else
         w = GetGraphicsWidth();
@@ -175,7 +175,7 @@ void SalGraphics::mirror( long& x, long& nWidth, const OutputDevice *pOutDev, bo
 bool SalGraphics::mirror( sal_uInt32 nPoints, const SalPoint *pPtAry, SalPoint *pPtAry2, const OutputDevice *pOutDev ) const
 {
     long w;
-    if( pOutDev && pOutDev->GetOutDevType() == OUTDEV_VIRDEV )
+    if( pOutDev && pOutDev->GetOutDevType() == OutDevType::VirDev )
         w = pOutDev->GetOutputWidthPixel();
     else
         w = GetGraphicsWidth();
@@ -271,7 +271,7 @@ void SalGraphics::mirror( Rectangle& rRect, const OutputDevice *pOutDev, bool bB
 basegfx::B2DPoint SalGraphics::mirror( const basegfx::B2DPoint& i_rPoint, const OutputDevice *i_pOutDev ) const
 {
     long w;
-    if( i_pOutDev && i_pOutDev->GetOutDevType() == OUTDEV_VIRDEV )
+    if( i_pOutDev && i_pOutDev->GetOutDevType() == OutDevType::VirDev )
         w = i_pOutDev->GetOutputWidthPixel();
     else
         w = GetGraphicsWidth();
@@ -297,7 +297,7 @@ basegfx::B2DPoint SalGraphics::mirror( const basegfx::B2DPoint& i_rPoint, const 
 basegfx::B2DPolygon SalGraphics::mirror( const basegfx::B2DPolygon& i_rPoly, const OutputDevice *i_pOutDev ) const
 {
     long w;
-    if( i_pOutDev && i_pOutDev->GetOutDevType() == OUTDEV_VIRDEV )
+    if( i_pOutDev && i_pOutDev->GetOutDevType() == OutDevType::VirDev )
         w = i_pOutDev->GetOutputWidthPixel();
     else
         w = GetGraphicsWidth();
@@ -327,7 +327,7 @@ basegfx::B2DPolygon SalGraphics::mirror( const basegfx::B2DPolygon& i_rPoly, con
 basegfx::B2DPolyPolygon SalGraphics::mirror( const basegfx::B2DPolyPolygon& i_rPoly, const OutputDevice *i_pOutDev ) const
 {
     long w;
-    if( i_pOutDev && i_pOutDev->GetOutDevType() == OUTDEV_VIRDEV )
+    if( i_pOutDev && i_pOutDev->GetOutDevType() == OutDevType::VirDev )
         w = i_pOutDev->GetOutputWidthPixel();
     else
         w = GetGraphicsWidth();

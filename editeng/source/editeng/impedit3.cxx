@@ -2789,7 +2789,7 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_Int32 nPos, SvxFont& rFo
     if ( ( ( rFont.GetColor() == COL_AUTO ) || ( IsForceAutoColor() ) ) && pOut )
     {
         // #i75566# Do not use AutoColor when printing OR Pdf export
-        const bool bPrinting(OUTDEV_PRINTER == pOut->GetOutDevType());
+        const bool bPrinting(OutDevType::Printer == pOut->GetOutDevType());
         const bool bPDFExporting(nullptr != pOut->GetPDFWriter());
 
         if ( IsAutoColorEnabled() && !bPrinting && !bPDFExporting)
@@ -2866,7 +2866,7 @@ void ImpEditEngine::RecalcFormatterFontMetrics( FormatterFontMetric& rCurMetrics
     {
         sal_uInt16 nIntLeading = ( aMetric.GetInternalLeading() > 0 ) ? (sal_uInt16)aMetric.GetInternalLeading() : 0;
         // Fonts without leading cause problems
-        if ( ( nIntLeading == 0 ) && ( pRefDev->GetOutDevType() == OUTDEV_PRINTER ) )
+        if ( ( nIntLeading == 0 ) && ( pRefDev->GetOutDevType() == OutDevType::Printer ) )
         {
             // Lets see what Leading one gets on the screen
             VclPtr<VirtualDevice> pVDev = GetVirtualDevice( pRefDev->GetMapMode(), pRefDev->GetDrawMode() );
@@ -3064,7 +3064,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
 
                                 if ( ( rTextPortion.GetKind() == PortionKind::FIELD ) && !aTmpFont.IsTransparent() &&
                                      ( GetBackgroundColor() != COL_AUTO ) && GetBackgroundColor().IsDark() &&
-                                     ( IsAutoColorEnabled() && ( pOutDev->GetOutDevType() != OUTDEV_PRINTER ) ) )
+                                     ( IsAutoColorEnabled() && ( pOutDev->GetOutDevType() != OutDevType::Printer ) ) )
                                 {
                                     aTmpFont.SetTransparent( true );
                                     pOutDev->SetFillColor();

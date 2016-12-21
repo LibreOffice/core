@@ -151,7 +151,7 @@ void OutputDevice::InitClipRegion()
             // #102532# Respect output offset also for clip region
             vcl::Region aRegion( ImplPixelToDevicePixel( maRegion ) );
             const bool bClipDeviceBounds( ! GetPDFWriter()
-                                          && GetOutDevType() != OUTDEV_PRINTER );
+                                          && GetOutDevType() != OutDevType::Printer );
             if( bClipDeviceBounds )
             {
                 // Perform actual rect clip against outdev

@@ -152,7 +152,7 @@ void SmRect::BuildRect(const OutputDevice &rDev, const SmFormat *pFormat,
 
     // workaround for printer fonts with very small (possible 0 or even
     // negative(!)) leading
-    if (aFM.GetInternalLeading() < 5  &&  rDev.GetOutDevType() == OUTDEV_PRINTER)
+    if (aFM.GetInternalLeading() < 5  &&  rDev.GetOutDevType() == OutDevType::Printer)
     {
         OutputDevice    *pWindow = Application::GetDefaultDevice();
 
@@ -596,7 +596,7 @@ bool SmGetGlyphBoundRect(const vcl::RenderContext &rDev,
 
     // get a device where 'OutputDevice::GetTextBoundRect' will be successful
     OutputDevice *pGlyphDev;
-    if (rDev.GetOutDevType() != OUTDEV_PRINTER)
+    if (rDev.GetOutDevType() != OutDevType::Printer)
         pGlyphDev = const_cast<OutputDevice *>(&rDev);
     else
     {

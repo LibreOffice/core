@@ -261,7 +261,7 @@ bool SvxTableController::onMouseButtonDown(const MouseEvent& rMEvt, vcl::Window*
         // Tiled rendering: get the window that has the disabled map mode.
         if (OutputDevice* pOutputDevice = mpView->GetFirstOutputDevice())
         {
-            if (pOutputDevice->GetOutDevType() == OUTDEV_WINDOW)
+            if (pOutputDevice->GetOutDevType() == OutDevType::Window)
                 pWindow = static_cast<vcl::Window*>(pOutputDevice);
         }
     }

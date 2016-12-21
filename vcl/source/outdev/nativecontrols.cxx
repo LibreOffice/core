@@ -34,7 +34,7 @@ static bool EnableNativeWidget( const OutputDevice& i_rDevice )
     switch ( eType )
     {
 
-    case OUTDEV_WINDOW:
+    case OutDevType::Window:
         {
             const vcl::Window* pWindow = dynamic_cast< const vcl::Window* >( &i_rDevice );
             if (pWindow)
@@ -49,7 +49,7 @@ static bool EnableNativeWidget( const OutputDevice& i_rDevice )
             }
         }
 
-    case OUTDEV_VIRDEV:
+    case OutDevType::VirDev:
     {
         const vcl::ExtOutDevData* pOutDevData( i_rDevice.GetExtOutDevData() );
         const vcl::PDFExtOutDevData* pPDFData( dynamic_cast< const vcl::PDFExtOutDevData* >( pOutDevData ) );

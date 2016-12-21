@@ -214,7 +214,7 @@ namespace vclcanvas
         const Point aEmptyPoint(0,0);
 
         vcl::Window* pTargetWindow = nullptr;
-        if( rOutDev.GetOutDevType() == OUTDEV_WINDOW )
+        if( rOutDev.GetOutDevType() == OutDevType::Window )
         {
             pTargetWindow = &static_cast<vcl::Window&>(rOutDev); // TODO(Q3): Evil downcast.
 

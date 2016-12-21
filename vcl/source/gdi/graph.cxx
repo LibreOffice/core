@@ -52,7 +52,7 @@ void ImplDrawDefault( OutputDevice* pOutDev, const OUString* pText,
     pOutDev->SetFillColor();
 
     // On the printer a black rectangle and on the screen one with 3D effect
-    if ( pOutDev->GetOutDevType() == OUTDEV_PRINTER )
+    if ( pOutDev->GetOutDevType() == OutDevType::Printer )
         pOutDev->SetLineColor( COL_BLACK );
     else
     {

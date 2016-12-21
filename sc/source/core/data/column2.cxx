@@ -364,7 +364,7 @@ long ScColumn::GetNeededSize(
         ScFieldEditEngine* pEngine = pDocument->CreateFieldEditEngine();
 
         pEngine->SetUpdateMode( false );
-        bool bTextWysiwyg = ( pDev->GetOutDevType() == OUTDEV_PRINTER );
+        bool bTextWysiwyg = ( pDev->GetOutDevType() == OutDevType::Printer );
         EEControlBits nCtrl = pEngine->GetControlWord();
         if ( bTextWysiwyg )
             nCtrl |= EEControlBits::FORMAT100;
@@ -538,7 +538,7 @@ long ScColumn::GetNeededSize(
                 nValue += (long) ( pMargin->GetTopMargin() * nPPT ) +
                           (long) ( pMargin->GetBottomMargin() * nPPT );
 
-                if ( bAsianVertical && pDev->GetOutDevType() != OUTDEV_PRINTER )
+                if ( bAsianVertical && pDev->GetOutDevType() != OutDevType::Printer )
                 {
                     //  add 1pt extra (default margin value) for line breaks with SetVertical
                     nValue += (long) ( 20 * nPPT );

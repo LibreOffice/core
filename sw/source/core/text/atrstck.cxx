@@ -212,7 +212,7 @@ static bool lcl_ChgHyperLinkColor( const SwTextAttr& rAttr,
 
     SwTextINetFormat & rINetAttr(const_cast<SwTextINetFormat&>(
                             static_txtattr_cast<SwTextINetFormat const&>(rAttr)));
-    if ( pShell->GetOut()->GetOutDevType() == OUTDEV_PRINTER ||
+    if ( pShell->GetOut()->GetOutDevType() == OutDevType::Printer ||
          pShell->GetViewOptions()->IsPDFExport() ||
          pShell->GetViewOptions()->IsPagePreview() )
     {

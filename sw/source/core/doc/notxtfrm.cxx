@@ -658,7 +658,7 @@ void SwNoTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
                         ::RepaintPagePreview( &rShell, aRect );
                 }
                 else if ( rShell.VisArea().IsOver( aRect ) &&
-                   OUTDEV_WINDOW == rShell.GetOut()->GetOutDevType() )
+                   OutDevType::Window == rShell.GetOut()->GetOutDevType() )
                 {
                     // invalidate instead of painting
                     rShell.GetWin()->Invalidate( aRect.SVRect() );
@@ -936,7 +936,7 @@ void SwNoTextFrame::PaintPicture( vcl::RenderContext* pOut, const SwRect &rGrfAr
                         pOut = pShell->GetOut();
                     }
                     else if( pShell->GetWin() &&
-                             OUTDEV_VIRDEV == pOut->GetOutDevType() )
+                             OutDevType::VirDev == pOut->GetOutDevType() )
                     {
                         pVout = pOut;
                         pOut = pShell->GetWin();
@@ -944,7 +944,7 @@ void SwNoTextFrame::PaintPicture( vcl::RenderContext* pOut, const SwRect &rGrfAr
                     else
                         pVout = nullptr;
 
-                    OSL_ENSURE( OUTDEV_VIRDEV != pOut->GetOutDevType() ||
+                    OSL_ENSURE( OutDevType::VirDev != pOut->GetOutDevType() ||
                             pShell->GetViewOptions()->IsPDFExport() || pShell->isOutputToWindow(),
                             "pOut should not be a virtual device" );
 

@@ -1217,8 +1217,8 @@ EditSelection ImpEditEngine::InsertTextObject( const EditTextObject& rTextObject
             && ( pPortionInfo->GetStretchY() == nStretchY ) )
     {
         if ( ( pPortionInfo->GetRefDevPtr() == reinterpret_cast<sal_uIntPtr>(GetRefDevice()) ) ||
-             ( ( pPortionInfo->GetRefDevType() == OUTDEV_VIRDEV ) &&
-               ( GetRefDevice()->GetOutDevType() == OUTDEV_VIRDEV ) ) )
+             ( ( pPortionInfo->GetRefDevType() == OutDevType::VirDev ) &&
+               ( GetRefDevice()->GetOutDevType() == OutDevType::VirDev ) ) )
         bUsePortionInfo = true;
     }
 

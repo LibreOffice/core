@@ -193,7 +193,7 @@ void SdrPaintWindow::impCreateOverlayManager()
     if(!mxOverlayManager.is())
     {
         // is it a window?
-        if(OUTDEV_WINDOW == GetOutputDevice().GetOutDevType())
+        if(OutDevType::Window == GetOutputDevice().GetOutDevType())
         {
             vcl::Window& rWindow = dynamic_cast<vcl::Window&>(GetOutputDevice());
             // decide which OverlayManager to use

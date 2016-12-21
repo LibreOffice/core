@@ -96,7 +96,7 @@ bool GraphicManager::DrawObj( OutputDevice* pOut, const Point& rPt, const Size& 
     {
         // create output and fill cache
 
-        if( rObj.IsAnimated() || ( pOut->GetOutDevType() == OUTDEV_PRINTER ) ||
+        if( rObj.IsAnimated() || ( pOut->GetOutDevType() == OutDevType::Printer ) ||
             ( !( nFlags & GraphicManagerDrawFlags::NO_SUBSTITUTE ) &&
               ( ( nFlags & GraphicManagerDrawFlags::SUBSTITUTE ) ||
                 !( nFlags & GraphicManagerDrawFlags::CACHED ) ||
@@ -915,7 +915,7 @@ bool GraphicManager::ImplCreateOutput( OutputDevice* pOutputDevice,
             Rectangle   aOutRect( aPt, pOutputDevice->GetOutputSizePixel() );
             Rectangle   aBmpRect( aOutputPointPix, aOutputSizePix );
 
-            if( pOutputDevice->GetOutDevType() == OUTDEV_WINDOW )
+            if( pOutputDevice->GetOutDevType() == OutDevType::Window )
             {
                 const vcl::Region aPaintRgn( static_cast<vcl::Window*>( pOutputDevice )->GetPaintRegion() );
                 if( !aPaintRgn.IsNull() )
@@ -1001,7 +1001,7 @@ bool GraphicManager::ImplCreateOutput( OutputDevice* pOutputDevice,
                     ImplAdjust( aOutBmpEx, rAttributes, GraphicAdjustmentFlags::DRAWMODE | GraphicAdjustmentFlags::COLORS | GraphicAdjustmentFlags::TRANSPARENCY );
 
                 // OutDev adjustment if necessary
-                if( pOutputDevice->GetOutDevType() != OUTDEV_PRINTER && pOutputDevice->GetBitCount() <= 8 && aOutBmpEx.GetBitCount() >= 8 )
+                if( pOutputDevice->GetOutDevType() != OutDevType::Printer && pOutputDevice->GetBitCount() <= 8 && aOutBmpEx.GetBitCount() >= 8 )
                     aOutBmpEx.Dither();
             }
         }

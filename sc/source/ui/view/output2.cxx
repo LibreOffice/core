@@ -245,7 +245,7 @@ void ScDrawStringsVars::SetShrinkScale( long nScale, SvtScriptType nScript )
         pFmtDevice->SetFont( aFont );
 
     aMetric = pFmtDevice->GetFontMetric();
-    if ( pFmtDevice->GetOutDevType() == OUTDEV_PRINTER && aMetric.GetInternalLeading() == 0 )
+    if ( pFmtDevice->GetOutDevType() == OutDevType::Printer && aMetric.GetInternalLeading() == 0 )
     {
         OutputDevice* pDefaultDev = Application::GetDefaultDevice();
         MapMode aOld = pDefaultDev->GetMapMode();
@@ -399,7 +399,7 @@ void ScDrawStringsVars::SetPattern(
 
     // if there is the leading 0 on a printer device, we have problems
     // -> take metric from the screen (as for EditEngine!)
-    if ( pFmtDevice->GetOutDevType() == OUTDEV_PRINTER && aMetric.GetInternalLeading() == 0 )
+    if ( pFmtDevice->GetOutDevType() == OutDevType::Printer && aMetric.GetInternalLeading() == 0 )
     {
         OutputDevice* pDefaultDev = Application::GetDefaultDevice();
         MapMode aOld = pDefaultDev->GetMapMode();
@@ -693,7 +693,7 @@ void ScDrawStringsVars::SetAutoText( const OUString& rAutoText )
     aTextSize.Width() = pFmtDevice->GetTextWidth( aString );
     aTextSize.Height() = pFmtDevice->GetTextHeight();
 
-    if ( !pRefDevice->GetConnectMetaFile() || pRefDevice->GetOutDevType() == OUTDEV_PRINTER )
+    if ( !pRefDevice->GetConnectMetaFile() || pRefDevice->GetOutDevType() == OutDevType::Printer )
     {
         double fMul = pOutput->GetStretch();
         aTextSize.Width() = (long)(aTextSize.Width() / fMul + 0.5);
@@ -764,7 +764,7 @@ void ScDrawStringsVars::TextChanged()
     aTextSize.Width() = pFmtDevice->GetTextWidth( aString );
     aTextSize.Height() = pFmtDevice->GetTextHeight();
 
-    if ( !pRefDevice->GetConnectMetaFile() || pRefDevice->GetOutDevType() == OUTDEV_PRINTER )
+    if ( !pRefDevice->GetConnectMetaFile() || pRefDevice->GetOutDevType() == OutDevType::Printer )
     {
         double fMul = pOutput->GetStretch();
         aTextSize.Width() = (long)(aTextSize.Width() / fMul + 0.5);
@@ -2087,7 +2087,7 @@ Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, const ScA
                                 pFmtDevice->GetTextArray(aShort, &aDX[0]);
 
                                 if ( !mpRefDevice->GetConnectMetaFile() ||
-                                        mpRefDevice->GetOutDevType() == OUTDEV_PRINTER )
+                                        mpRefDevice->GetOutDevType() == OutDevType::Printer )
                                 {
                                     double fMul = GetStretch();
                                     for (size_t i = 0; i < nLen; ++i)

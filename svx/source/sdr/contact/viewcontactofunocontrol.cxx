@@ -76,7 +76,7 @@ namespace sdr { namespace contact {
         ObjectContactOfPageView* const pPageViewContact = dynamic_cast< ObjectContactOfPageView* >( &_rObjectContact  );
 
         const bool bPrintOrPreview = pPageViewContact
-            && ( ( ( pDevice != nullptr ) && ( pDevice->GetOutDevType() == OUTDEV_PRINTER ) )
+            && ( ( ( pDevice != nullptr ) && ( pDevice->GetOutDevType() == OutDevType::Printer ) )
                     || pPageViewContact->GetPageWindow().GetPageView().GetView().IsPrintPreview()
                )
             ;

@@ -122,12 +122,12 @@ css::awt::DeviceInfo VCLXDevice::getInfo() throw(css::uno::RuntimeException, std
     {
         Size aDevSz;
         OutDevType eDevType = mpOutputDevice->GetOutDevType();
-        if ( eDevType == OUTDEV_WINDOW )
+        if ( eDevType == OutDevType::Window )
         {
             aDevSz = static_cast<vcl::Window*>(mpOutputDevice.get())->GetSizePixel();
             static_cast<vcl::Window*>(mpOutputDevice.get())->GetBorder( aInfo.LeftInset, aInfo.TopInset, aInfo.RightInset, aInfo.BottomInset );
         }
-        else if ( eDevType == OUTDEV_PRINTER )
+        else if ( eDevType == OutDevType::Printer )
         {
             aDevSz = static_cast<Printer*>(mpOutputDevice.get())->GetPaperSizePixel();
             Size aOutSz = mpOutputDevice->GetOutputSizePixel();
@@ -156,7 +156,7 @@ css::awt::DeviceInfo VCLXDevice::getInfo() throw(css::uno::RuntimeException, std
         aInfo.BitsPerPixel = mpOutputDevice->GetBitCount();
 
         aInfo.Capabilities = 0;
-        if ( mpOutputDevice->GetOutDevType() != OUTDEV_PRINTER )
+        if ( mpOutputDevice->GetOutDevType() != OutDevType::Printer )
             aInfo.Capabilities = css::awt::DeviceCapability::RASTEROPERATIONS|css::awt::DeviceCapability::GETBITS;
     }
 

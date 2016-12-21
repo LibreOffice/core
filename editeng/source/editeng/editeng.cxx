@@ -278,7 +278,7 @@ void EditEngine::Draw( OutputDevice* pOutDev, const Rectangle& rOutRect, const P
             // Some printer drivers cause problems if characters graze the
             // ClipRegion, therefore rather add a pixel more ...
             Rectangle aClipRect( aOutRect );
-            if ( pOutDev->GetOutDevType() == OUTDEV_PRINTER )
+            if ( pOutDev->GetOutDevType() == OutDevType::Printer )
             {
                 Size aPixSz( 1, 0 );
                 aPixSz = pOutDev->PixelToLogic( aPixSz );

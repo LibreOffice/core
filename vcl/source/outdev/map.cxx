@@ -675,7 +675,7 @@ void OutputDevice::SetMapMode()
         // create new objects (clip region are not re-scaled)
         mbNewFont   = true;
         mbInitFont  = true;
-        if ( GetOutDevType() == OUTDEV_WINDOW )
+        if ( GetOutDevType() == OutDevType::Window )
         {
             if ( static_cast<vcl::Window*>(this)->mpWindowImpl->mpCursor )
                 static_cast<vcl::Window*>(this)->mpWindowImpl->mpCursor->ImplNew();
@@ -702,7 +702,7 @@ void OutputDevice::SetMapMode( const MapMode& rNewMapMode )
     {
         mpMetaFile->AddAction( new MetaMapModeAction( rNewMapMode ) );
 #ifdef DBG_UTIL
-        if ( GetOutDevType() != OUTDEV_PRINTER )
+        if ( GetOutDevType() != OutDevType::Printer )
             SAL_WARN_IF( !bRelMap, "vcl.gdi", "Please record only relative MapModes!" );
 #endif
     }
@@ -779,7 +779,7 @@ void OutputDevice::SetMapMode( const MapMode& rNewMapMode )
     // create new objects (clip region are not re-scaled)
     mbNewFont   = true;
     mbInitFont  = true;
-    if ( GetOutDevType() == OUTDEV_WINDOW )
+    if ( GetOutDevType() == OutDevType::Window )
     {
         if ( static_cast<vcl::Window*>(this)->mpWindowImpl->mpCursor )
             static_cast<vcl::Window*>(this)->mpWindowImpl->mpCursor->ImplNew();

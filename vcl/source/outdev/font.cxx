@@ -508,7 +508,7 @@ void OutputDevice::ImplClearFontData( const bool bNewFontLists )
             mpGraphics->ReleaseFonts();
     }
 
-//    if ( GetOutDevType() == OUTDEV_PRINTER || mpPDFWriter )
+//    if ( GetOutDevType() == OutDevType::Printer || mpPDFWriter )
     {
         ImplSVData* pSVData = ImplGetSVData();
 
@@ -537,7 +537,7 @@ void OutputDevice::ImplClearFontData( const bool bNewFontLists )
     }
 
     // also update child windows if needed
-    if ( GetOutDevType() == OUTDEV_WINDOW )
+    if ( GetOutDevType() == OutDevType::Window )
     {
         vcl::Window* pChild = static_cast<vcl::Window*>(this)->mpWindowImpl->mpFirstChild;
         while ( pChild )
@@ -555,7 +555,7 @@ void OutputDevice::RefreshFontData( const bool bNewFontLists )
 
 void OutputDevice::ImplRefreshFontData( const bool bNewFontLists )
 {
-//    if ( GetOutDevType() == OUTDEV_PRINTER || mpPDFWriter )
+//    if ( GetOutDevType() == OutDevType::Printer || mpPDFWriter )
     {
         ImplSVData* pSVData = ImplGetSVData();
 
@@ -578,7 +578,7 @@ void OutputDevice::ImplRefreshFontData( const bool bNewFontLists )
     }
 
     // also update child windows if needed
-    if ( GetOutDevType() == OUTDEV_WINDOW )
+    if ( GetOutDevType() == OutDevType::Window )
     {
         vcl::Window* pChild = static_cast<vcl::Window*>(this)->mpWindowImpl->mpFirstChild;
         while ( pChild )

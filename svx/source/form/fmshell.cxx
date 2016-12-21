@@ -232,7 +232,7 @@ bool FmFormShell::PrepareClose(bool bUI)
     // Save the data records, not in DesignMode and FilterMode
     if (!m_bDesignMode && !GetImpl()->isInFilterMode() &&
         m_pFormView && m_pFormView->GetActualOutDev() &&
-        m_pFormView->GetActualOutDev()->GetOutDevType() == OUTDEV_WINDOW)
+        m_pFormView->GetActualOutDev()->GetOutDevType() == OutDevType::Window)
     {
         SdrPageView* pCurPageView = m_pFormView->GetSdrPageView();
 

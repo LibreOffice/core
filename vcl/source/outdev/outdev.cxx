@@ -83,7 +83,7 @@ OutputDevice::OutputDevice() :
     if( AllSettings::GetLayoutRTL() ) //#i84553# tip BiDi preference to RTL
         mnTextLayoutMode            = ComplexTextLayoutFlags::BiDiRtl | ComplexTextLayoutFlags::TextOriginLeft;
 
-    meOutDevType                    = OUTDEV_DONTKNOW;
+    meOutDevType                    = OutDevType::DontKnow;
     meOutDevViewType                = OutDevViewType::DontKnow;
     mbMap                           = false;
     mbClipRegion                    = false;
@@ -608,7 +608,7 @@ void OutputDevice::drawOutDevDirect( const OutputDevice* pSrcDev, SalTwoRect& rP
     else
     {
         if ( (GetOutDevType() != pSrcDev->GetOutDevType()) ||
-             (GetOutDevType() != OUTDEV_WINDOW) )
+             (GetOutDevType() != OutDevType::Window) )
         {
             if ( !pSrcDev->mpGraphics )
             {
@@ -653,7 +653,7 @@ void OutputDevice::drawOutDevDirect( const OutputDevice* pSrcDev, SalTwoRect& rP
         // mirroring may be required
         // because only windows have a SalGraphicsLayout
         // mirroring is performed here
-        if( (GetOutDevType() != OUTDEV_WINDOW) && pSrcGraphics && (pSrcGraphics->GetLayout() & SalLayoutFlags::BiDiRtl) )
+        if( (GetOutDevType() != OutDevType::Window) && pSrcGraphics && (pSrcGraphics->GetLayout() & SalLayoutFlags::BiDiRtl) )
         {
             SalTwoRect aPosAry2 = rPosAry;
             pSrcGraphics->mirror( aPosAry2.mnSrcX, aPosAry2.mnSrcWidth, pSrcDev );

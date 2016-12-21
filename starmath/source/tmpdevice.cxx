@@ -48,12 +48,12 @@ Color SmTmpDevice::Impl_GetColor( const Color& rColor )
     ColorData nNewCol = rColor.GetColor();
     if (COL_AUTO == nNewCol)
     {
-        if (OUTDEV_PRINTER == rOutDev.GetOutDevType())
+        if (OutDevType::Printer == rOutDev.GetOutDevType())
             nNewCol = COL_BLACK;
         else
         {
             Color aBgCol( rOutDev.GetBackground().GetColor() );
-            if (OUTDEV_WINDOW == rOutDev.GetOutDevType())
+            if (OutDevType::Window == rOutDev.GetOutDevType())
                 aBgCol = static_cast<vcl::Window &>(rOutDev).GetDisplayBackground().GetColor();
 
             nNewCol = SM_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor;

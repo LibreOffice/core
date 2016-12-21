@@ -43,7 +43,7 @@ void ButtonFrame::Draw( OutputDevice& rDev )
     rDev.SetFillColor( aColFace );
     rDev.DrawRect( aRect );
 
-    if( rDev.GetOutDevType() != OUTDEV_WINDOW )
+    if( rDev.GetOutDevType() != OutDevType::Window )
     {
         rDev.SetLineColor( aColLight );
         rDev.DrawLine( aRect.TopLeft(), Point( aRect.Right(), aRect.Top() ) );

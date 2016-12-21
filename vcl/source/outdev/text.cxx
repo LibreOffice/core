@@ -285,7 +285,7 @@ void OutputDevice::ImplDrawTextDirect( SalLayout& rSalLayout,
     long nOldX = rSalLayout.DrawBase().X();
     if( HasMirroredGraphics() )
     {
-        long w = meOutDevType == OUTDEV_VIRDEV ? mnOutWidth : mpGraphics->GetGraphicsWidth();
+        long w = meOutDevType == OutDevType::VirDev ? mnOutWidth : mpGraphics->GetGraphicsWidth();
         long x = rSalLayout.DrawBase().X();
            rSalLayout.DrawBase().X() = w - 1 - x;
         if( !IsRTLEnabled() )
@@ -828,7 +828,7 @@ void OutputDevice::DrawText( const Point& rStartPt, const OUString& rStr,
     if( pVector )
     {
         vcl::Region aClip( GetClipRegion() );
-        if( meOutDevType == OUTDEV_WINDOW )
+        if( meOutDevType == OutDevType::Window )
             aClip.Intersect( Rectangle( Point(), GetOutputSize() ) );
         if (mpOutDevData->mpRecordLayout)
         {

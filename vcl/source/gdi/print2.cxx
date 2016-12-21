@@ -745,7 +745,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
         if( rBackground != Color( COL_TRANSPARENT ) )
         {
             aBackgroundComponent.aBgColor = rBackground;
-            if( meOutDevType == OUTDEV_PRINTER )
+            if( meOutDevType == OutDevType::Printer )
             {
                 Printer* pThis = dynamic_cast<Printer*>(this);
                 Point aPageOffset = pThis->GetPageOffsetPixel();
@@ -1116,7 +1116,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
             // also add error code to PDFWriter
             mpPDFWriter->insertError( vcl::PDFWriter::Warning_Transparency_Converted );
         }
-        else if( meOutDevType == OUTDEV_PRINTER )
+        else if( meOutDevType == OutDevType::Printer )
         {
             Printer* pThis = dynamic_cast<Printer*>(this);
             aPageOffset = pThis->GetPageOffsetPixel();

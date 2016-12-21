@@ -508,7 +508,7 @@ void ImplDrawButton( OutputDevice *const pDev, Rectangle aFillRect,
         ImplDrawDPILineRect( pDev, aFillRect, &aBlackColor );
 
         Size aBrdSize( 1, 1 );
-        if ( pDev->GetOutDevType() == OUTDEV_PRINTER )
+        if ( pDev->GetOutDevType() == OutDevType::Printer )
         {
             aBrdSize = pDev->LogicToPixel( Size( 20, 20 ), MapMode(MapUnit::Map100thMM) );
             if ( !aBrdSize.Width() )
@@ -546,7 +546,7 @@ void ImplDrawButton( OutputDevice *const pDev, Rectangle aFillRect,
         if ( !(nStyle & DrawButtonFlags::NoFill) )
         {
             // Hack: in monochrome mode on printers we like to have grey buttons
-            if ( pDev->GetOutDevType() == OUTDEV_PRINTER )
+            if ( pDev->GetOutDevType() == OutDevType::Printer )
                 pDev->SetFillColor( Color( COL_LIGHTGRAY ) );
             else
                 pDev->SetFillColor( Color( COL_WHITE ) );
@@ -623,7 +623,7 @@ void ImplDrawButton( OutputDevice *const pDev, Rectangle aFillRect,
 void ImplDrawFrame( OutputDevice *const pDev, Rectangle& rRect,
                     const StyleSettings& rStyleSettings, DrawFrameStyle nStyle, DrawFrameFlags nFlags )
 {
-    vcl::Window *const pWin = (pDev->GetOutDevType()==OUTDEV_WINDOW) ? static_cast<vcl::Window*>(pDev) : nullptr;
+    vcl::Window *const pWin = (pDev->GetOutDevType()==OutDevType::Window) ? static_cast<vcl::Window*>(pDev) : nullptr;
 
     const bool bMenuStyle(nFlags & DrawFrameFlags::Menu);
 
@@ -646,7 +646,7 @@ void ImplDrawFrame( OutputDevice *const pDev, Rectangle& rRect,
     const bool bNoDraw(nFlags & DrawFrameFlags::NoDraw);
 
     if ( (rStyleSettings.GetOptions() & StyleSettingsOptions::Mono) ||
-         (pDev->GetOutDevType() == OUTDEV_PRINTER) ||
+         (pDev->GetOutDevType() == OutDevType::Printer) ||
          bFlatBorders )
         nFlags |= DrawFrameFlags::Mono;
 
@@ -847,7 +847,7 @@ void DecorationView::DrawSymbol( const Rectangle& rRect, SymbolType eType,
     mpOutDev->EnableMapMode( false );
 
     if ( (rStyleSettings.GetOptions() & StyleSettingsOptions::Mono) ||
-         (mpOutDev->GetOutDevType() == OUTDEV_PRINTER) )
+         (mpOutDev->GetOutDevType() == OutDevType::Printer) )
         nStyle |= DrawSymbolFlags::Mono;
 
     if ( nStyle & DrawSymbolFlags::Mono )
@@ -899,7 +899,7 @@ void DecorationView::DrawHighlightFrame( const Rectangle& rRect,
     Color aShadowColor = rStyleSettings.GetShadowColor();
 
     if ( (rStyleSettings.GetOptions() & StyleSettingsOptions::Mono) ||
-         (mpOutDev->GetOutDevType() == OUTDEV_PRINTER) )
+         (mpOutDev->GetOutDevType() == OutDevType::Printer) )
     {
         aLightColor = Color( COL_BLACK );
         aShadowColor = Color( COL_BLACK );
@@ -1055,7 +1055,7 @@ void DecorationView::DrawSeparator( const Point& rStart, const Point& rStop, boo
 {
     Point aStart( rStart ), aStop( rStop );
     const StyleSettings& rStyleSettings = mpOutDev->GetSettings().GetStyleSettings();
-    vcl::Window *const pWin = (mpOutDev->GetOutDevType()==OUTDEV_WINDOW) ? static_cast<vcl::Window*>(mpOutDev.get()) : nullptr;
+    vcl::Window *const pWin = (mpOutDev->GetOutDevType()==OutDevType::Window) ? static_cast<vcl::Window*>(mpOutDev.get()) : nullptr;
     if(pWin)
     {
         ControlPart nPart = ( bVertical ? ControlPart::SeparatorVert : ControlPart::SeparatorHorz );
