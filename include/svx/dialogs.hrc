@@ -142,7 +142,6 @@
 #define RID_SVXSW_FRAMEPOSITIONS            (RID_SVX_START + 289)
 
 #define RID_SVXIL_FRAME                     (RID_SVX_START +  65)
-#define RID_SVXIL_DATANAVI                  (RID_SVX_START +  66)
 
 #define RID_SVXIMAGE_LIGHT_ON               (RID_SVX_START + 210)
 #define RID_SVXIMAGE_LIGHT_OFF              (RID_SVX_START + 211)
@@ -171,6 +170,13 @@
 #define RID_SVXBMP_SLIDERBUTTON             (RID_SVX_START +  67)
 #define RID_SVXBMP_SLIDERDECREASE           (RID_SVX_START +  68)
 #define RID_SVXBMP_SLIDERINCREASE           (RID_SVX_START +  69)
+
+#define RID_SVXBMP_GROUP_CLOSED             (RID_SVX_START +  69)
+#define RID_SVXBMP_GROUP_OPEN               (RID_SVX_START +  70)
+#define RID_SVXBMP_ELEMENT                  (RID_SVX_START +  71)
+#define RID_SVXBMP_ATTRIBUTE                (RID_SVX_START +  72)
+#define RID_SVXBMP_TEXT                     (RID_SVX_START +  73)
+#define RID_SVXBMP_OTHER                    (RID_SVX_START +  74)
 
 // Menu for the ruler
 #define RID_SVXMN_RULER                     (RID_SVX_START +  92)

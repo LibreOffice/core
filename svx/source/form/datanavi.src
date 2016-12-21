@@ -40,19 +40,34 @@ ImageList RID_SVXIMGLIST_XFORMS_TBX
 };
 #undef IMG_LST
 
-ImageList RID_SVXIL_DATANAVI
+Bitmap RID_SVXBMP_GROUP_CLOSED
 {
-    Prefix = "da";
-    IdList =
-    {
-        IID_GROUP_CLOSED ;
-        IID_GROUP_OPEN ;
-        IID_ELEMENT ;
-        IID_ATTRIBUTE ;
-        IID_TEXT ;
-        IID_OTHER ;
-    };
-    IdCount = { 6 ; } ;
+    File = "da01.png";
+};
+
+Bitmap RID_SVXBMP_GROUP_OPEN
+{
+    File = "da02.png";
+};
+
+Bitmap RID_SVXBMP_ELEMENT
+{
+    File = "da03.png";
+};
+
+Bitmap RID_SVXBMP_ATTRIBUTE
+{
+    File = "da04.png";
+};
+
+Bitmap RID_SVXBMP_TEXT
+{
+    File = "da05.png";
+};
+
+Bitmap RID_SVXBMP_OTHER
+{
+    File = "da06.png";
 };
 
 String RID_STR_QRY_REMOVE_MODEL

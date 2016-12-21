@@ -399,9 +399,8 @@ namespace svxform
         EnableMenuItems( nullptr );
     }
 
-    void XFormsPage::AddChildren(
-        SvTreeListEntry* _pParent, const ImageList& _rImgLst,
-        const Reference< css::xml::dom::XNode >& _xNode )
+    void XFormsPage::AddChildren(SvTreeListEntry* _pParent,
+        const Reference< css::xml::dom::XNode >& _xNode)
     {
         DBG_ASSERT( m_xUIHelper.is(), "XFormsPage::AddChildren(): invalid UIHelper" );
 
@@ -420,16 +419,16 @@ namespace svxform
                     switch ( eChildType )
                     {
                         case css::xml::dom::NodeType_ATTRIBUTE_NODE:
-                            aExpImg = aCollImg = _rImgLst.GetImage( IID_ATTRIBUTE );
+                            aExpImg = aCollImg = Image(BitmapEx(SVX_RES(RID_SVXBMP_ATTRIBUTE)));
                             break;
                         case css::xml::dom::NodeType_ELEMENT_NODE:
-                            aExpImg = aCollImg = _rImgLst.GetImage( IID_ELEMENT );
+                            aExpImg = aCollImg = Image(BitmapEx(SVX_RES(RID_SVXBMP_ELEMENT)));
                             break;
                         case css::xml::dom::NodeType_TEXT_NODE:
-                            aExpImg = aCollImg = _rImgLst.GetImage( IID_TEXT );
+                            aExpImg = aCollImg = Image(BitmapEx(SVX_RES(RID_SVXBMP_TEXT)));
                             break;
                         default:
-                            aExpImg = aCollImg = _rImgLst.GetImage( IID_OTHER );
+                            aExpImg = aCollImg = Image(BitmapEx(SVX_RES(RID_SVXBMP_OTHER)));
                     }
 
                     OUString sName = m_xUIHelper->getNodeDisplayName( xChild, bShowDetails );
@@ -443,7 +442,7 @@ namespace svxform
                             Reference< css::xml::dom::XNamedNodeMap > xMap = xChild->getAttributes();
                             if ( xMap.is() )
                             {
-                                aExpImg = aCollImg = _rImgLst.GetImage( IID_ATTRIBUTE );
+                                aExpImg = aCollImg = Image(BitmapEx(SVX_RES(RID_SVXBMP_ATTRIBUTE)));
                                 sal_Int32 j, nMapLen = xMap->getLength();
                                 for ( j = 0; j < nMapLen; ++j )
                                 {
@@ -458,7 +457,7 @@ namespace svxform
                             }
                         }
                         if ( xChild->hasChildNodes() )
-                            AddChildren( pEntry, _rImgLst, xChild );
+                            AddChildren(pEntry, xChild);
                     }
                 }
             }
@@ -785,13 +784,10 @@ namespace svxform
         return bHandled;
     }
 
-
     SvTreeListEntry* XFormsPage::AddEntry( ItemNode* _pNewNode, bool _bIsElement )
     {
         SvTreeListEntry* pParent = m_pItemList->FirstSelected();
-        const ImageList& rImageList = m_pNaviWin->GetItemImageList();
-        sal_uInt16 nImageID = ( _bIsElement ) ? IID_ELEMENT : IID_ATTRIBUTE;
-        Image aImage = rImageList.GetImage( nImageID );
+        Image aImage(BitmapEx(SVX_RES(_bIsElement ? RID_SVXBMP_ELEMENT : RID_SVXBMP_ATTRIBUTE)));
         OUString sName;
         try
         {
@@ -806,12 +802,10 @@ namespace svxform
             sName, aImage, aImage, pParent, false, TREELIST_APPEND, _pNewNode );
     }
 
-
     SvTreeListEntry* XFormsPage::AddEntry( const Reference< XPropertySet >& _rEntry )
     {
         SvTreeListEntry* pEntry = nullptr;
-        const ImageList& rImageList = m_pNaviWin->GetItemImageList();
-        Image aImage = rImageList.GetImage( IID_ELEMENT );
+        Image aImage(BitmapEx(SVX_RES(RID_SVXBMP_ELEMENT)));
 
         ItemNode* pNode = new ItemNode( _rEntry );
         OUString sTemp;
@@ -1064,7 +1058,6 @@ namespace svxform
         m_xUIHelper.set( _xModel, UNO_QUERY );
         OUString sRet;
         m_bHasModel = true;
-        const ImageList& rImageList = m_pNaviWin->GetItemImageList();
 
         switch ( m_eGroup )
         {
@@ -1091,7 +1084,7 @@ namespace svxform
                                     Sequence< PropertyValue > xPropSeq;
                                     Any aAny = xNum->nextElement();
                                     if ( aAny >>= xPropSeq )
-                                        sRet = LoadInstance( xPropSeq, rImageList );
+                                        sRet = LoadInstance(xPropSeq);
                                     else
                                     {
                                         SAL_WARN( "svx.form", "XFormsPage::SetModel(): invalid instance" );
@@ -1161,8 +1154,7 @@ namespace svxform
                         Reference < XEnumeration > xNum = xNumAccess->createEnumeration();
                         if ( xNum.is() && xNum->hasMoreElements() )
                         {
-                            Image aImage1 = rImageList.GetImage( IID_ELEMENT );
-                            Image aImage2 = rImageList.GetImage( IID_ELEMENT );
+                            Image aImage(BitmapEx(SVX_RES(RID_SVXBMP_ELEMENT)));
                             OUString sDelim( ": " );
                             while ( xNum->hasMoreElements() )
                             {
@@ -1180,7 +1172,7 @@ namespace svxform
 
                                     ItemNode* pNode = new ItemNode( xPropSet );
                                     m_pItemList->InsertEntry(
-                                        sEntry, aImage1, aImage2, nullptr, false, TREELIST_APPEND, pNode );
+                                        sEntry, aImage, aImage, nullptr, false, TREELIST_APPEND, pNode );
                                 }
                             }
                         }
@@ -1208,8 +1200,7 @@ namespace svxform
         m_pItemList->DeleteAndClear();
     }
 
-    OUString XFormsPage::LoadInstance(
-        const Sequence< PropertyValue >& _xPropSeq, const ImageList& _rImgLst )
+    OUString XFormsPage::LoadInstance(const Sequence< PropertyValue >& _xPropSeq)
     {
         OUString sRet;
         OUString sTemp;
@@ -1239,7 +1230,7 @@ namespace svxform
                         if ( sNodeName.isEmpty() )
                             sNodeName = xRoot->getNodeName();
                         if ( xRoot->hasChildNodes() )
-                            AddChildren( nullptr, _rImgLst, xRoot );
+                            AddChildren(nullptr, xRoot);
                     }
                     catch ( Exception& )
                     {
@@ -1363,7 +1354,6 @@ namespace svxform
         , m_nLastSelectedPos(LISTBOX_ENTRY_NOTFOUND)
         , m_bShowDetails(false)
         , m_bIsNotifyDisabled(false)
-        , m_aItemImageList(SVX_RES(RID_SVXIL_DATANAVI))
         , m_xDataListener(new DataListener(this))
     {
         m_pUIBuilder = new VclBuilder(this, getUIRootDir(), "svx/ui/datanavigator.ui", "DataNavigator");

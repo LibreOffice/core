@@ -39,14 +39,6 @@
 #define IID_ITEM_EDIT           4
 #define IID_ITEM_REMOVE         5
 
-// ImageIndexes
-#define IID_GROUP_CLOSED        1
-#define IID_GROUP_OPEN          2
-#define IID_ELEMENT             3
-#define IID_ATTRIBUTE           4
-#define IID_TEXT                5
-#define IID_OTHER               6
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

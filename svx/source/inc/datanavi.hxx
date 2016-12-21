@@ -231,7 +231,6 @@ namespace svxform
         }
     };
 
-
     class XFormsPage : public TabPage
     {
     private:
@@ -263,9 +262,8 @@ namespace svxform
         DECL_LINK(TbxSelectHdl, ToolBox *, void);
         DECL_LINK(ItemSelectHdl, SvTreeListBox*, void);
 
-        void                        AddChildren( SvTreeListEntry* _pParent,
-                                                 const ImageList& _rImgLst,
-                                                 const XNode_ref& _xNode );
+        void                        AddChildren(SvTreeListEntry* _pParent,
+                                                const XNode_ref& _xNode);
         bool                        DoToolBoxAction( sal_uInt16 _nToolBoxID );
         SvTreeListEntry*            AddEntry( ItemNode* _pNewNode, bool _bIsElement );
         SvTreeListEntry*            AddEntry( const XPropertySet_ref& _rPropSet );
@@ -285,8 +283,7 @@ namespace svxform
         inline bool                 HasModel() const { return m_bHasModel; }
         OUString                    SetModel( const XModel_ref& _xModel, sal_uInt16 _nPagePos );
         void                        ClearModel();
-        OUString                    LoadInstance( const PropertyValue_seq& _xPropSeq,
-                                                  const ImageList& _rImgLst );
+        OUString                    LoadInstance(const PropertyValue_seq& _xPropSeq);
 
         bool                        DoMenuAction( sal_uInt16 _nMenuID );
         void                        EnableMenuItems( Menu* _pMenu );
@@ -303,7 +300,6 @@ namespace svxform
         inline OUString             GetServiceNameForNode( const css::uno::Reference<css::xml::dom::XNode> &xNode ) { return m_xUIHelper->getDefaultServiceNameForNode(xNode); }
         const XFormsUIHelper1_ref&  GetXFormsHelper() const { return m_xUIHelper; }
     };
-
 
     typedef std::vector< VclPtr<XFormsPage> >   PageList;
     typedef ::rtl::Reference < DataListener >   DataListener_ref;
@@ -323,7 +319,6 @@ namespace svxform
         sal_Int32                   m_nLastSelectedPos;
         bool                        m_bShowDetails;
         bool                        m_bIsNotifyDisabled;
-        ImageList                   m_aItemImageList;
         PageList                    m_aPageList;
         ContainerList               m_aContainerList;
         EventTargetList             m_aEventTargetList;
@@ -366,11 +361,9 @@ namespace svxform
         void                        AddEventBroadcaster( const XEventTarget_ref& xTarget );
         void                        RemoveBroadcaster();
 
-        inline const ImageList&     GetItemImageList() const { return m_aItemImageList; }
-        inline bool                 IsShowDetails() const { return m_bShowDetails; }
-        inline void                 DisableNotify( bool _bDisable ) { m_bIsNotifyDisabled = _bDisable; }
+        bool                        IsShowDetails() const { return m_bShowDetails; }
+        void                        DisableNotify( bool _bDisable ) { m_bIsNotifyDisabled = _bDisable; }
     };
-
 
     class DataNavigator : public SfxDockingWindow, public SfxControllerItem
     {
