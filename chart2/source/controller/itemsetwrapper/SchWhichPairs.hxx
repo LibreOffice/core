@@ -26,9 +26,6 @@
 
 #include "chartview/ChartSfxItemIds.hxx"
 
-namespace
-{
-
 #define CHARACTER_WHICHPAIRS \
     EE_ITEMS_START, EE_ITEMS_END,  \
     SID_CHAR_DLG_PREVIEW_STRING, SID_CHAR_DLG_PREVIEW_STRING
@@ -239,8 +236,6 @@ const sal_uInt16 nRegEquationWhichPairs[] =
     SID_ATTR_NUMBERFORMAT_VALUE, SID_ATTR_NUMBERFORMAT_VALUE,   // 10585 - 10585  svx/svxids.hrc
     0
 };
-
-} //  anonymous namespace
 
 // INCLUDED_CHART2_SOURCE_CONTROLLER_ITEMSETWRAPPER_SCHWHICHPAIRS_HXX
 #endif
