@@ -41,6 +41,13 @@ class UITest(object):
         frames = desktop.getFrames()
         return frames
 
+    def get_component(self):
+        desktop = self.get_desktop()
+        components = desktop.getComponents()
+        for component in components:
+            if component is not None:
+                return component
+
     def load_file(self, url):
         desktop = self.get_desktop()
         with EventListener(self._xContext, "OnLoad") as event:
