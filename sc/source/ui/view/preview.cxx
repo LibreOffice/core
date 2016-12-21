@@ -127,7 +127,7 @@ ScPreview::ScPreview( vcl::Window* pParent, ScDocShell* pDocSh, ScPreviewShell* 
     nHeaderHeight ( 0 ),
     nFooterHeight ( 0 )
 {
-    SetOutDevViewType( OUTDEV_VIEWTYPE_PRINTPREVIEW );
+    SetOutDevViewType( OutDevViewType::PrintPreview );
     SetBackground();
 
     SetHelpId( HID_SC_WIN_PREVIEW );

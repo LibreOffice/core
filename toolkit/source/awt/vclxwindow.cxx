@@ -2309,7 +2309,7 @@ void VCLXWindow::draw( sal_Int32 nX, sal_Int32 nY ) throw(css::uno::RuntimeExcep
 
             vcl::PDFExtOutDevData* pPDFExport   = dynamic_cast<vcl::PDFExtOutDevData*>(pDev->GetExtOutDevData());
             bool bDrawSimple =    ( pDev->GetOutDevType() == OUTDEV_PRINTER )
-                               || ( pDev->GetOutDevViewType() == OUTDEV_VIEWTYPE_PRINTPREVIEW )
+                               || ( pDev->GetOutDevViewType() == OutDevViewType::PrintPreview )
                                || ( pPDFExport != nullptr );
             if ( bDrawSimple )
             {

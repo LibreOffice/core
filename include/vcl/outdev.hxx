@@ -295,7 +295,7 @@ namespace o3tl
 
 enum OutDevType { OUTDEV_DONTKNOW, OUTDEV_WINDOW, OUTDEV_PRINTER, OUTDEV_VIRDEV };
 
-enum OutDevViewType { OUTDEV_VIEWTYPE_DONTKNOW, OUTDEV_VIEWTYPE_PRINTPREVIEW, OUTDEV_VIEWTYPE_SLIDESHOW };
+enum class OutDevViewType { DontKnow, PrintPreview, SlideShow };
 
 // OutputDevice
 
@@ -626,7 +626,7 @@ public:
 
     /**
     If this OutputDevice is used for displaying a Print Preview
-    the OutDevViewType should be set to 'OUTDEV_VIEWTYPE_PRINTPREVIEW'.
+    the OutDevViewType should be set to 'OutDevViewType::PrintPreview'.
 
     A View can then make painting decisions dependent on this OutDevViewType.
     E.g. text colors need to be handled differently, dependent on whether it's a PrintPreview or not. (see #106611# for more)
