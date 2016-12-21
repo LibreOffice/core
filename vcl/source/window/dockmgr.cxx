@@ -523,7 +523,7 @@ Rectangle ImplPopupFloatWin::GetDragRect() const
 Point ImplPopupFloatWin::GetToolboxPosition() const
 {
     // return inner position where a toolbox could be placed
-    return Point( 1, 1 + GetDragRect().getHeight() );    // grip + border
+    return Point( 1, 1 + ( hasGrip() ? GetDragRect().getHeight() : 0 ) );    // grip + border
 }
 
 void ImplPopupFloatWin::DrawBorder(vcl::RenderContext& rRenderContext)
