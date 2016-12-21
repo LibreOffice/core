@@ -140,8 +140,6 @@ SfxChildWinInfo ScInputWindowWrapper::GetInfo() const
     return aInfo;
 }
 
-#define IMAGE(id) pImgMgr->SeekImage(id)
-
 //  class ScInputWindow
 
 static VclPtr<ScTextWndBase> lcl_chooseRuntimeImpl( vcl::Window* pParent, SfxBindings* pBind )
@@ -173,9 +171,6 @@ ScInputWindow::ScInputWindow( vcl::Window* pParent, SfxBindings* pBind ) :
         bIsOkCancelMode ( false ),
         bInResize       ( false )
 {
-    ScModule*        pScMod  = SC_MOD();
-    SfxImageManager* pImgMgr = SfxImageManager::GetImageManager(*pScMod);
-
     // #i73615# don't rely on SfxViewShell::Current while constructing the input line
     // (also for GetInputHdl below)
     ScTabViewShell* pViewSh = nullptr;
@@ -191,9 +186,9 @@ ScInputWindow::ScInputWindow( vcl::Window* pParent, SfxBindings* pBind ) :
     // Position window, 3 buttons, input window
     InsertWindow    (1, aWndPos.get(), ToolBoxItemBits::NONE, 0);
     InsertSeparator (1);
-    InsertItem      (SID_INPUT_FUNCTION, IMAGE(SID_INPUT_FUNCTION), ToolBoxItemBits::NONE, 2);
-    InsertItem      (SID_INPUT_SUM,      IMAGE(SID_INPUT_SUM), ToolBoxItemBits::NONE, 3);
-    InsertItem      (SID_INPUT_EQUAL,    IMAGE(SID_INPUT_EQUAL), ToolBoxItemBits::NONE, 4);
+    InsertItem      (SID_INPUT_FUNCTION, Image(BitmapEx(ScResId(RID_BMP_INPUT_FUNCTION))), ToolBoxItemBits::NONE, 2);
+    InsertItem      (SID_INPUT_SUM,      Image(BitmapEx(ScResId(RID_BMP_INPUT_SUM))), ToolBoxItemBits::NONE, 3);
+    InsertItem      (SID_INPUT_EQUAL,    Image(BitmapEx(ScResId(RID_BMP_INPUT_EQUAL))), ToolBoxItemBits::NONE, 4);
     InsertSeparator (5);
     InsertWindow    (7, &aTextWindow, ToolBoxItemBits::NONE, 6);
 
@@ -240,7 +235,6 @@ ScInputWindow::ScInputWindow( vcl::Window* pParent, SfxBindings* pBind ) :
     else if (pViewSh)
         pViewSh->UpdateInputHandler(true); // Absolutely necessary update
 
-    pImgMgr->RegisterToolBox(this);
     SetAccessibleName(ScResId(STR_ACC_TOOLBAR_FORMULA));
 }
 
@@ -271,8 +265,6 @@ void ScInputWindow::dispose()
             pSh = SfxViewShell::GetNext( *pSh, true, checkSfxViewShell<ScTabViewShell> );
         }
     }
-
-    SfxImageManager::GetImageManager( *SC_MOD() )->ReleaseToolBox( this );
 
     pRuntimeWindow.disposeAndClear();
     aWndPos.disposeAndClear();
@@ -509,14 +501,12 @@ void ScInputWindow::SetOkCancelMode()
     SfxViewFrame* pViewFrm = SfxViewFrame::Current();
     EnableButtons( pViewFrm && !pViewFrm->GetChildWindow( SID_OPENDLG_FUNCTION ) );
 
-    ScModule* pScMod = SC_MOD();
-    SfxImageManager* pImgMgr = SfxImageManager::GetImageManager(*pScMod);
     if (!bIsOkCancelMode)
     {
         RemoveItem( 3 ); // Remove SID_INPUT_SUM and SID_INPUT_EQUAL
         RemoveItem( 3 );
-        InsertItem( SID_INPUT_CANCEL, IMAGE( SID_INPUT_CANCEL ), ToolBoxItemBits::NONE, 3 );
-        InsertItem( SID_INPUT_OK,     IMAGE( SID_INPUT_OK ),     ToolBoxItemBits::NONE, 4 );
+        InsertItem( SID_INPUT_CANCEL, Image(BitmapEx(ScResId(RID_BMP_INPUT_CANCEL))), ToolBoxItemBits::NONE, 3 );
+        InsertItem( SID_INPUT_OK,     Image(BitmapEx(ScResId(RID_BMP_INPUT_OK))),     ToolBoxItemBits::NONE, 4 );
         SetItemText ( SID_INPUT_CANCEL, aTextCancel );
         SetHelpId   ( SID_INPUT_CANCEL, HID_INSWIN_CANCEL );
         SetItemText ( SID_INPUT_OK,     aTextOk );
@@ -531,15 +521,13 @@ void ScInputWindow::SetSumAssignMode()
     SfxViewFrame* pViewFrm = SfxViewFrame::Current();
     EnableButtons( pViewFrm && !pViewFrm->GetChildWindow( SID_OPENDLG_FUNCTION ) );
 
-    ScModule* pScMod = SC_MOD();
-    SfxImageManager* pImgMgr = SfxImageManager::GetImageManager(*pScMod);
     if (bIsOkCancelMode)
     {
         // Remove SID_INPUT_CANCEL, and SID_INPUT_OK
         RemoveItem( 3 );
         RemoveItem( 3 );
-        InsertItem( SID_INPUT_SUM,   IMAGE( SID_INPUT_SUM ),   ToolBoxItemBits::NONE, 3 );
-        InsertItem( SID_INPUT_EQUAL, IMAGE( SID_INPUT_EQUAL ), ToolBoxItemBits::NONE, 4 );
+        InsertItem( SID_INPUT_SUM,   Image(BitmapEx(ScResId(RID_BMP_INPUT_SUM))),   ToolBoxItemBits::NONE, 3 );
+        InsertItem( SID_INPUT_EQUAL, Image(BitmapEx(ScResId(RID_BMP_INPUT_EQUAL))), ToolBoxItemBits::NONE, 4 );
         SetItemText ( SID_INPUT_SUM,   aTextSum );
         SetHelpId   ( SID_INPUT_SUM,   HID_INSWIN_SUMME );
         SetItemText ( SID_INPUT_EQUAL, aTextEqual );
@@ -634,20 +622,16 @@ void ScInputWindow::DataChanged( const DataChangedEvent& rDCEvt )
     if ( rDCEvt.GetType() == DataChangedEventType::SETTINGS && (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
     {
         //  update item images
-        ScModule*        pScMod  = SC_MOD();
-        SfxImageManager* pImgMgr = SfxImageManager::GetImageManager(*pScMod);
-
-        // IMAGE macro uses pScMod, pImgMg
-        SetItemImage( SID_INPUT_FUNCTION, IMAGE( SID_INPUT_FUNCTION ) );
+        SetItemImage(SID_INPUT_FUNCTION, Image(BitmapEx(ScResId(RID_BMP_INPUT_FUNCTION))));
         if ( bIsOkCancelMode )
         {
-            SetItemImage( SID_INPUT_CANCEL, IMAGE( SID_INPUT_CANCEL ) );
-            SetItemImage( SID_INPUT_OK,     IMAGE( SID_INPUT_OK ) );
+            SetItemImage(SID_INPUT_CANCEL, Image(BitmapEx(ScResId(RID_BMP_INPUT_CANCEL))));
+            SetItemImage(SID_INPUT_OK,     Image(BitmapEx(ScResId(RID_BMP_INPUT_OK))));
         }
         else
         {
-            SetItemImage( SID_INPUT_SUM,   IMAGE( SID_INPUT_SUM ) );
-            SetItemImage( SID_INPUT_EQUAL, IMAGE( SID_INPUT_EQUAL ) );
+            SetItemImage(SID_INPUT_SUM,   Image(BitmapEx(ScResId(RID_BMP_INPUT_SUM))));
+            SetItemImage(SID_INPUT_EQUAL, Image(BitmapEx(ScResId(RID_BMP_INPUT_EQUAL))));
         }
     }
 

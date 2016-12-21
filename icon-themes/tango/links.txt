@@ -18,9 +18,9 @@ cmd/lc_advancedmode.png cmd/lc_toggleobjectrotatemode.png
 res/lc05539.png cmd/lc_designerdialog.png
 cmd/sc_savebasicas.png cmd/sc_saveas.png
 res/lc05711.png cmd/lc_copy.png
-sc/imglst/lc26050.png cmd/lc_cancel.png
+sc/res/lc26050.png cmd/lc_cancel.png
 sw/imglst/lc20557.png cmd/lc_cancel.png
-sc/imglst/sc26050.png cmd/sc_cancel.png
+sc/res/sc26050.png cmd/sc_cancel.png
 sw/imglst/sc20557.png cmd/sc_cancel.png
 res/sc10853.png cmd/sc_recsearch.png
 res/sc05961.png cmd/sc_recsearch.png
@@ -92,10 +92,10 @@ fpicker/res/fp014.png res/newdoc.png
 sd/res/playblue_16.png avmedia/res/av02049.png
 sd/res/breakplayingblue_16.png avmedia/res/av02050.png
 avmedia/res/avl02053.png cmd/lc_ok.png
-sc/imglst/lc26051.png cmd/lc_ok.png
+sc/res/lc26051.png cmd/lc_ok.png
 sw/imglst/lc20558.png cmd/lc_ok.png
 avmedia/res/av02053.png cmd/sc_ok.png
-sc/imglst/sc26051.png cmd/sc_ok.png
+sc/res/sc26051.png cmd/sc_ok.png
 sw/imglst/sc20558.png cmd/sc_ok.png
 avmedia/res/avl02048.png cmd/lc_open.png
 avmedia/res/av02048.png cmd/sc_open.png
@@ -207,8 +207,8 @@ sfx2/res/symphony/sidebar-transition-small.png cmd/sc_dia.png
 sfx2/res/symphony/sidebar-animation-small.png cmd/sc_customanimation.png
 sw/imglst/lc20556.png cmd/lc_insertformula.png
 sw/imglst/sc20556.png cmd/sc_insertformula.png
-sc/imglst/lc26047.png cmd/lc_insertformula.png
-sc/imglst/sc26047.png cmd/sc_insertformula.png
+sc/res/lc26047.png cmd/lc_insertformula.png
+sc/res/sc26047.png cmd/sc_insertformula.png
 cmd/lc_exitsearch.png cmd/lc_closedoc.png
 cmd/sc_exitsearch.png cmd/sc_closedoc.png
 cmd/lc_leftpara.png cmd/lc_alignleft.png
@@ -252,8 +252,8 @@ cmd/lc_openfromwriter.png cmd/lc_open.png
 cmd/lc_openfromcalc.png cmd/lc_open.png
 cmd/sc_openfromwriter.png cmd/sc_open.png
 cmd/sc_openfromcalc.png cmd/sc_open.png
-sc/imglst/lc26048.png cmd/lc_autosum.png
-sc/imglst/sc26048.png cmd/sc_autosum.png
+sc/res/lc26048.png cmd/lc_autosum.png
+sc/res/sc26048.png cmd/sc_autosum.png
 cmd/lc_fontcolor.png cmd/lc_color.png
 cmd/sc_fontcolor.png cmd/sc_color.png
 cmd/lc_circle.png cmd/lc_basicshapes.circle.png

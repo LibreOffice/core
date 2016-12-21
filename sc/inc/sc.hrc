@@ -1026,6 +1026,11 @@
 #define RID_BMP_MINUS           (BMP_START + 32)
 #define RID_BMP_NOTPRESSED      (BMP_START + 33)
 #define RID_BMP_PRESSED         (BMP_START + 34)
+#define RID_BMP_INPUT_FUNCTION  (BMP_START + 35)
+#define RID_BMP_INPUT_SUM       (BMP_START + 36)
+#define RID_BMP_INPUT_EQUAL     (BMP_START + 37)
+#define RID_BMP_INPUT_CANCEL    (BMP_START + 38)
+#define RID_BMP_INPUT_OK        (BMP_START + 39)
 
 #define BMP_END                 (BMP_START + 100)
 

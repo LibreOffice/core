@@ -1043,10 +1043,10 @@ res/sx18003.png res/minus.png
 
 # sc
 # ==============================================
-sc/imglst/lc26047.png cmd/lc_dbviewfunctions.png
-sc/imglst/lc26048.png cmd/lc_autosum.png
-sc/imglst/lc26050.png cmd/lc_cancel.png
-sc/imglst/lc26051.png cmd/lc_ok.png
+sc/res/lc26047.png cmd/lc_dbviewfunctions.png
+sc/res/lc26048.png cmd/lc_autosum.png
+sc/res/lc26050.png cmd/lc_cancel.png
+sc/res/lc26051.png cmd/lc_ok.png
 sc/imglst/na010.png cmd/sc_selectobject.png
 sc/imglst/na011.png cmd/lc_ok.png
 sc/imglst/nc03.png cmd/sc_viewdatasourcebrowser.png
@@ -1055,10 +1055,10 @@ sc/imglst/nc05.png cmd/sc_insertobject.png
 sc/imglst/nc06.png cmd/sc_showannotations.png
 sc/imglst/nc07.png sc/res/droplink.png
 sc/imglst/nc08.png cmd/sc_gallery.png
-sc/imglst/sc26047.png cmd/sc_dbviewfunctions.png
-sc/imglst/sc26048.png cmd/sc_autosum.png
-sc/imglst/sc26050.png cmd/sc_cancel.png
-sc/imglst/sc26051.png cmd/sc_ok.png
+sc/res/sc26047.png cmd/sc_dbviewfunctions.png
+sc/res/sc26048.png cmd/sc_autosum.png
+sc/res/sc26050.png cmd/sc_cancel.png
+sc/res/sc26051.png cmd/sc_ok.png
 
 sc/res/date.png cmd/sc_datefield.png
 sc/res/dropcopy.png cmd/sc_copy.png

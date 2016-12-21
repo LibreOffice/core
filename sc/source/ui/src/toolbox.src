@@ -64,33 +64,29 @@ String SCSTR_QHELP_COLLAPSE_FORMULA
     Text [ en-US ] = "Collapse Formula Bar" ;
 };
 
-// Don't use this image list for normal toolbar images. We have now our commandimagelist
-// folder in icon-themes/(name of theme)/cmd. This list is now only used for special
-//toolboxes that are used in floating windows.
-
-#define DEFAULT_IDLIST \
-    IdList = {                                          \
-        /* Eingabezeile */                              \
-        SID_INPUT_FUNCTION;             /* 26047 */     \
-        SID_INPUT_SUM;                  /* 26048 */     \
-        SID_INPUT_EQUAL;                /* 26049 */     \
-        SID_INPUT_CANCEL;               /* 26050 */     \
-        SID_INPUT_OK;                   /* 26051 */     \
-    };                                                  \
-    IdCount = {                                         \
-        5;                                              \
-    };
-
-ImageList RID_DEFAULTIMAGELIST_SC
+Bitmap RID_BMP_INPUT_FUNCTION
 {
-    Prefix = "sc";
-    DEFAULT_IDLIST
+    File = "sc26047.png";
 };
 
-ImageList RID_DEFAULTIMAGELIST_LC
+Bitmap RID_BMP_INPUT_SUM
 {
-    Prefix = "lc";
-    DEFAULT_IDLIST
+    File = "sc26048.png";
+};
+
+Bitmap RID_BMP_INPUT_EQUAL
+{
+    File = "sc26049.png";
+};
+
+Bitmap RID_BMP_INPUT_CANCEL
+{
+    File = "sc26050.png";
+};
+
+Bitmap RID_BMP_INPUT_OK
+{
+    File = "sc26051.png";
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
