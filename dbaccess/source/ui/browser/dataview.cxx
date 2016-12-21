@@ -24,7 +24,6 @@
 #include <comphelper/types.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <sfx2/app.hxx>
-#include <sfx2/imgmgr.hxx>
 #include <dbaccess/IController.hxx>
 #include "UITools.hxx"
 #include <sfx2/sfx.hrc>

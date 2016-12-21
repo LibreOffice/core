@@ -27,7 +27,6 @@
 #include <svl/szitem.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <sfx2/imgmgr.hxx>
 #include <vcl/configsettings.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/mnemonic.hxx>

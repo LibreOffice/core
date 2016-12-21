@@ -22,7 +22,6 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/event.hxx>
-#include <sfx2/imgmgr.hxx>
 #include <sfx2/navigat.hxx>
 #include <svl/stritem.hxx>
 #include <svl/urlbmk.hxx>

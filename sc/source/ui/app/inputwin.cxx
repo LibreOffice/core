@@ -32,7 +32,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/event.hxx>
-#include <sfx2/imgmgr.hxx>
 #include <stdlib.h>
 #include <editeng/scriptspaceitem.hxx>
 #include <editeng/scripttypeitem.hxx>

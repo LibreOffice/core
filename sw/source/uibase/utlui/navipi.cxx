@@ -28,7 +28,6 @@
 #include <sot/formats.hxx>
 #include <sot/filelist.hxx>
 #include <sfx2/event.hxx>
-#include <sfx2/imgmgr.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/dockwin.hxx>
 #include <sfx2/navigat.hxx>

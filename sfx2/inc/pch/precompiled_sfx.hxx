@@ -462,7 +462,6 @@
 #include <sfx2/frmdescr.hxx>
 #include <sfx2/hintpost.hxx>
 #include <sfx2/imagemgr.hxx>
-#include <sfx2/imgmgr.hxx>
 #include <sfx2/infobar.hxx>
 #include <sfx2/ipclient.hxx>
 #include <sfx2/linkmgr.hxx>

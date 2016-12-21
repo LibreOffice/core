@@ -27,7 +27,6 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/form/runtime/FormFeature.hpp>
 
-#include <sfx2/imgmgr.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/commandinfoprovider.hxx>
 

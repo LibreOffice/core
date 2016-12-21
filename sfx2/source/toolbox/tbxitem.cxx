@@ -87,7 +87,6 @@
 #include <sfx2/unoctitm.hxx>
 #include "helpid.hrc"
 #include "workwin.hxx"
-#include <sfx2/imgmgr.hxx>
 #include <sfx2/imagemgr.hxx>
 #include <ctrlfactoryimpl.hxx>
 

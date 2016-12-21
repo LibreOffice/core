@@ -27,7 +27,6 @@
 #include <sfx2/app.hxx>
 #include "sfxtypes.hxx"
 #include "panelist.hxx"
-#include <sfx2/imgmgr.hxx>
 #include "srchdlg.hxx"
 #include <sfx2/sfxhelp.hxx>
 #include <svtools/treelistentry.hxx>

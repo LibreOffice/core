@@ -20,7 +20,6 @@
 #include <hintids.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/app.hxx>
-#include <sfx2/imgmgr.hxx>
 #include <svx/gallery.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/lrspitem.hxx>

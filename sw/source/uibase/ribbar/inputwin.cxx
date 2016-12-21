@@ -22,7 +22,6 @@
 #include <comphelper/string.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <tools/gen.hxx>
-#include <sfx2/imgmgr.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/ruler.hxx>

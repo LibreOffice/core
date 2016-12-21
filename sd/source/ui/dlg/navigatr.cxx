@@ -21,7 +21,6 @@
 
 #include <osl/file.hxx>
 #include <tools/urlobj.hxx>
-#include <sfx2/imgmgr.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
