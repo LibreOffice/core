@@ -516,9 +516,9 @@ public:
     WW8_WrPlcField* m_pFieldTextBxs;       // fields in textboxes
     WW8_WrPlcField* m_pFieldHFTextBxs;     // fields in header/footer textboxes
     WW8_WrMagicTable *m_pMagicTable;  // keeps track of table cell positions, and
-                                    // marks those that contain graphics,
+                                    // marks those that contain images,
                                     // which is required to make word display
-                                    // graphics inside tables
+                                    // images inside tables
     SwWW8WrGrf* m_pGrf;
     const SwAttrSet* m_pStyAttr;      // StyleAttr for Tabs
     const SwModify* m_pOutFormatNode;    // write Format or Node
@@ -529,7 +529,7 @@ public:
 
     SwEscherEx* m_pEscher;            // escher export class
     // #i43447# - removed
-//    SwTwips nFlyWidth, nFlyHeight;  // for adaptation of graphics
+//    SwTwips nFlyWidth, nFlyHeight;  // for adaptation of images
 
     sal_uInt8 m_nTextTyp;
 
@@ -541,7 +541,7 @@ public:
     bool m_bOutFirstPage : 1;     // write Attrset of FirstPageDesc
     bool m_bOutTable : 1;         // table is being written
                                      // ( is reset e.g. for Flys in a table )
-    bool m_bOutGrf : 1;           // graphics are being written
+    bool m_bOutGrf : 1;           // images are being written
     bool m_bInWriteEscher : 1;    // in write textboxes
     bool m_bStartTOX : 1;         // true: a TOX is started
     bool m_bInWriteTOX : 1;       // true: all content are in a TOX
@@ -779,7 +779,7 @@ public:
 
     const SfxPoolItem* HasItem( sal_uInt16 nWhich ) const;
 
-    /// Returns the index of a picture bullet, used in numberings.
+    /// Returns the index of an image bullet, used in numberings.
     int GetGrfIndex(const SvxBrushItem& rBrush);
 
 protected:
@@ -864,11 +864,11 @@ protected:
 
     /// Get background color of the document, if there is one.
     boost::optional<SvxBrushItem> getBackground();
-    /// Populates m_vecBulletPic with all the bullet graphics used by numberings.
+    /// Populates m_vecBulletPic with all the bullet images used by numberings.
     int CollectGrfsOfBullets();
-    /// Write the numbering picture bullets.
+    /// Write the numbering image bullets.
     void BulletDefinitions();
-    std::vector<const Graphic*> m_vecBulletPic; ///< Vector to record all the graphics of bullets
+    std::vector<const Graphic*> m_vecBulletPic; ///< Vector to record all the images of bullets
 
 public:
     MSWordExportBase( SwDoc *pDocument, SwPaM *pCurrentPam, SwPaM *pOriginalPam );

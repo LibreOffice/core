@@ -162,8 +162,8 @@ RtfExport writes:
 
 --------------
 
-PNG graphics are exported in WMF format as well, so that not only MSO
-and OOo can display graphics from the output document, but Wordpad as
+PNG images are exported in WMF format as well, so that not only MSO
+and OOo can display images from the output document, but Wordpad as
 well.
 
 
@@ -218,7 +218,7 @@ All types supported by the RTF format are exported, namely:
 
 --------------
 
-Their result is exported as a picture - RtfWriter did not export
+Their result is exported as an image - RtfWriter did not export
 anything. (MSO OK, OOo OK)
 
 For math, the native data is written as well, so you can edit the

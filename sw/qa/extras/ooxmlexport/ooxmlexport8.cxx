@@ -312,7 +312,7 @@ DECLARE_OOXMLEXPORT_TEST(testN764005, "n764005.docx")
 {
     uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
 
-    // The picture in the header wasn't absolutely positioned and wasn't in the background.
+    // The image in the header wasn't absolutely positioned and wasn't in the background.
     text::TextContentAnchorType eValue;
     xPropertySet->getPropertyValue("AnchorType") >>= eValue;
     CPPUNIT_ASSERT(eValue != text::TextContentAnchorType_AS_CHARACTER);
@@ -683,7 +683,7 @@ DECLARE_OOXMLEXPORT_TEST(testFineTableDash, "tableborder-finedash.docx")
 DECLARE_OOXMLEXPORT_TEST(testN792778, "n792778.docx")
 {
     /*
-     * The problem was that the importer didn't handle complex groupshapes with groupshapes, textboxes and graphics inside.
+     * The problem was that the importer didn't handle complex groupshapes with groupshapes, textboxes and images inside.
      *
      * xray ThisComponent.DrawPage.Count ' 1 groupshape
      * xray ThisComponent.DrawPage(0).Count ' 2 sub-groupshapes
@@ -1408,7 +1408,7 @@ DECLARE_OOXMLEXPORT_TEST(testDMLGroupShapeCapitalization, "dml-groupshape-capita
 
 DECLARE_OOXMLEXPORT_TEST(testPictureWithSchemeColor, "picture-with-schemecolor.docx")
 {
-    // At the start of the document, a picture which has a color specified with a color scheme, lost
+    // At the start of the document, an image which has a color specified with a color scheme, lost
     // it's color during import.
     uno::Reference<beans::XPropertySet> xImage(getShape(1), uno::UNO_QUERY);
     uno::Reference<graphic::XGraphic> xGraphic = getProperty<uno::Reference<graphic::XGraphic> >(xImage, "Graphic");
@@ -1481,7 +1481,7 @@ DECLARE_OOXMLEXPORT_TEST(testStrict, "strict.docx")
     uno::Reference<text::XText> xHeaderText(xPageStyle->getPropertyValue("HeaderText"), uno::UNO_QUERY);
     getParagraphOfText(1, xHeaderText, "This is a header.");
 
-    // Picture was missing.
+    // Image was missing.
     uno::Reference<lang::XServiceInfo> xServiceInfo(getShape(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.text.TextGraphicObject"));
 

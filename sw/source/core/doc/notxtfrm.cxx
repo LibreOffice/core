@@ -343,7 +343,7 @@ static void lcl_CalcRect( Point& rPt, Size& rDim, sal_uInt16 nMirror )
 /** Calculate the Bitmap's position and the size within the passed rectangle */
 void SwNoTextFrame::GetGrfArea( SwRect &rRect, SwRect* pOrigRect ) const
 {
-    // Currently only used for scaling, cropping and mirroring the contour of graphics!
+    // Currently only used for scaling, cropping and mirroring the contour of images!
     // Everything else is handled by GraphicObject
 
     // We put the graphic's visible rectangle into rRect.
@@ -718,7 +718,7 @@ bool paintUsingPrimitivesHelper(
     {
         if(!basegfx::fTools::equalZero(rTargetRange.getWidth()) && !basegfx::fTools::equalZero(rTargetRange.getHeight()))
         {
-            // map graphic range to target range. This will e.g. automatically include
+            // map image range to target range. This will e.g. automatically include
             // the mapping from 1/100th mm content to twips if needed when the target
             // range is defined in twips
             const basegfx::B2DHomMatrix aMappingTransform(
@@ -780,7 +780,7 @@ void paintGraphicUsingPrimitivesHelper(vcl::RenderContext & rOutputDevice,
     // do with the graphic being linked). This works well for DrawingLayer GraphicObjects (linked
     // and unlinked) but fails for linked Writer GraphicObjects. These have the URL in the
     // GraphicObject, but no GfxLink with the original file data when it's a linked graphic.
-    // Since this blows up PDF size by a factor of 10 (the graphics get embedded as pixel maps
+    // Since this blows up PDF size by a factor of 10 (the images get embedded as pixel maps
     // then) it is okay to add this workarund: In the needed case, load the graphic in a way to
     // get the GfxLink in the needed form and use that Graphic temporarily. Do this only when
     // - we have PDF export
@@ -1079,7 +1079,7 @@ bool SwNoTextFrame::IsTransparent() const
 
 void SwNoTextFrame::StopAnimation( OutputDevice* pOut ) const
 {
-    // Stop animated graphics
+    // Stop animated images
     const SwGrfNode* pGrfNd = dynamic_cast< const SwGrfNode* >(GetNode()->GetGrfNode());
 
     if( pGrfNd && pGrfNd->IsAnimated() )

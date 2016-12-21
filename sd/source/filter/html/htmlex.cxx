@@ -1537,7 +1537,7 @@ OUString HtmlExport::TextAttribToHTMLString( SfxItemSet* pSet, HtmlState* pState
     return aStr.makeStringAndClear();
 }
 
-// create HTML wrapper for picture files
+// create HTML wrapper for image files
 bool HtmlExport::CreateHtmlForPresPages()
 {
     bool bOk = true;
@@ -2656,7 +2656,7 @@ OUString HtmlExport::CreateNavBar( sal_uInt16 nSdPage, bool bIsText ) const
     return aStr.makeStringAndClear();
 }
 
-// export navigation graphics from button set
+// export navigation images from button set
 bool HtmlExport::CreateBitmaps()
 {
     if(mnButtonThema != -1 && mpButtonSet.get() )

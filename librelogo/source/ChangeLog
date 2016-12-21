@@ -67,16 +67,16 @@
      -1: right or top aligned to the turtle position and angle
       n: n * text_width/2 or text_height/2
     * simple SVG SMIL (animation) support using SLEEP, for example:
-      PICTURE 'animation.svg' [ CIRCLE 5 SLEEP 1000 CIRCLE 20 ]
+      IMAGE 'animation.svg' [ CIRCLE 5 SLEEP 1000 CIRCLE 20 ]
     * relative FORWARD (heading = y axis) with vector arg.: FORWARD [20, 10]
     * rounded linejoint of turtle shape
 
 2013-07-15 László Németh:
-    * optional named PICTURE blocks: PICTURE 'name' [ CIRCLE 5 ]
-    * save PICTURE as cropped SVG file using path names, for example:
-      PICTURE 'example.svg' [ CIRCLE 5 CIRCLE 20 ] ; save in the home directory
-      PICTURE '/home/user/example.svg' [ CIRCLE 10 ] ; absolute path (on Linux)
-      PICTURE 'tmp/example.svg' [ CIRCLE 10 ] ; relative to the home directory
+    * optional named IMAGE blocks: IMAGE 'name' [ CIRCLE 5 ]
+    * save IMAGE as cropped SVG file using path names, for example:
+      IMAGE 'example.svg' [ CIRCLE 5 CIRCLE 20 ] ; save in the home directory
+      IMAGE '/home/user/example.svg' [ CIRCLE 10 ] ; absolute path (on Linux)
+      IMAGE 'tmp/example.svg' [ CIRCLE 10 ] ; relative to the home directory
     * support hexadecimal arguments
 
 2013-06-26 László Németh
@@ -144,7 +144,7 @@
 
 2012-06-27 László Németh:
     * fix __string__ (use localized decimal sign)
-    * fix repcount in loops with inner picture block
+    * fix repcount in loops with inner image block
     * handle reopened documents
     * modified argument list of custom dashed penstyle
     * fix warning messages at maximum recursion depth and memory

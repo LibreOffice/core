@@ -56,7 +56,7 @@ en-US = "Encapsulated PostScript File"
 en-US = "OS/2 Metafile"
 
 [STR_REG_VAL_MACINTOSH_PICTURE_METAFILE]
-en-US = "Macintosh Picture Metafile"
+en-US = "Macintosh Image Metafile"
 
 [STR_REG_VAL_MS_WINDOWS_METAFILE]
 en-US = "Microsoft Windows Metafile"
@@ -71,7 +71,7 @@ en-US = "CorelDraw File"
 en-US = "Corel Presentation Exchange File"
 
 [STR_REG_VAL_GRAPHICS_INTERCHANGE_FORMAT]
-en-US = "Graphics Interchange Format File"
+en-US = "Images Interchange Format File"
 
 [STR_REG_VAL_JOINT_PHOTOGRAPHIC_EXPERTS_GROUP]
 en-US = "Joint Photographic Experts Group File"
@@ -86,7 +86,7 @@ en-US = "Personal Computer Exchange File"
 en-US = "Portable Graymap Format File"
 
 [STR_REG_VAL_PORTABLE_NETWORK_GRAPHICS]
-en-US = "Portable Network Graphics File"
+en-US = "Portable Network Image File"
 
 [STR_REG_VAL_PORTABLE_PIXMAP_FORMAT]
 en-US = "Portable Pixmap Format File"
@@ -98,7 +98,7 @@ en-US = "Adobe Photoshop Document"
 en-US = "Sun Raster Graphic File"
 
 [STR_REG_VAL_SCALABLE_VECTOR_GRAPHICS]
-en-US = "Scalable Vector Graphics File"
+en-US = "Scalable Vector Images File"
 
 [STR_REG_VAL_TRUEVISION_TGA]
 en-US = "Truevision TGA File"

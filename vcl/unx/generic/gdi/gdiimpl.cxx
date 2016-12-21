@@ -823,7 +823,7 @@ bool X11SalGraphicsImpl::drawAlphaBitmap( const SalTwoRect& rTR,
 
     //#i75249# workaround for ImplGetDDB() giving us back a different depth than
     // we requested. E.g. mask pixmaps are always compatible with the drawable
-    // TODO: find an appropriate picture format for these cases
+    // TODO: find an appropriate image format for these cases
     //       then remove the workaround below and the one for #i75531#
     if( nDepth != pSrcDDB->ImplGetDepth() )
         return false;
@@ -832,8 +832,8 @@ bool X11SalGraphicsImpl::drawAlphaBitmap( const SalTwoRect& rTR,
     if( !aSrcPM )
         return false;
 
-    // create source picture
-    // TODO: use scoped picture
+    // create source image
+    // TODO: use scoped image
     Visual* pSrcXVisual = rSalVis.GetVisual();
     XRenderPeer& rPeer = XRenderPeer::GetInstance();
     XRenderPictFormat* pSrcVisFmt = rPeer.FindVisualFormat( pSrcXVisual );
@@ -843,7 +843,7 @@ bool X11SalGraphicsImpl::drawAlphaBitmap( const SalTwoRect& rTR,
     if( !aSrcPic )
         return false;
 
-    // create alpha Picture
+    // create alpha Image
 
     // TODO: use SalX11Bitmap functionality and caching for the Alpha Pixmap
     // problem is that they don't provide an 8bit Pixmap on a non-8bit display

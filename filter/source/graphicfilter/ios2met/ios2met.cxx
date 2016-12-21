@@ -351,7 +351,7 @@ private:
     sal_uLong       nOrigPos;            // initial position  in pOS2MET
     Rectangle       aBoundingRect;       // bounding rectangle as stored in the file
     Rectangle       aCalcBndRect;        // bounding rectangle calculated on our own
-    MapMode         aGlobMapMode;        // resolution of the picture
+    MapMode         aGlobMapMode;        // resolution of the image
     bool        bCoord32;
 
     OSPalette  * pPaletteStack;
