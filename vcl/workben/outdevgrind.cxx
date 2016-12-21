@@ -127,7 +127,7 @@ void setupMethodStubs( functor_vector_type& res )
 
     const Bitmap      aBitmap( aIntro.GetBitmap() );
     Bitmap            aBitmapBW( aBitmap );
-    aBitmapBW.Filter( BMP_FILTER_EMBOSS_GREY );
+    aBitmapBW.Filter( BmpFilter::EmbossGrey );
     Bitmap      aBitmapAlien( Size( 100, 100 ), 8 );
     aBitmapAlien.Erase( COL_RED );
 #endif
