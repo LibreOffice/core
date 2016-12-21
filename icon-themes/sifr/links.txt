@@ -45,8 +45,8 @@ sw/res/sr20013.png cmd/sc_insertfootnote.png
 sw/res/sr20014.png sw/imglst/sc20183.png
 sw/res/sr20017.png cmd/sc_insertindexesentry.png
 # Navigator - Calc
-sc/imglst/na05.png cmd/sc_upsearch.png
-sc/imglst/na06.png cmd/sc_downsearch.png
+sc/res/na05.png cmd/sc_upsearch.png
+sc/res/na06.png cmd/sc_downsearch.png
 sc/res/nc01.png cmd/sc_inserttable.png
 sc/res/nc04.png cmd/sc_insertgraphic.png
 sc/res/nc05.png cmd/sc_drawchart.png

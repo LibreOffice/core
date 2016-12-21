@@ -1009,8 +1009,8 @@ sc/res/lc26047.png cmd/lc_dbviewfunctions.png
 sc/res/lc26048.png cmd/lc_autosum.png
 sc/res/lc26050.png cmd/lc_cancel.png
 sc/res/lc26051.png cmd/lc_ok.png
-sc/imglst/na010.png cmd/sc_selectobject.png
-sc/imglst/na011.png cmd/lc_ok.png
+sc/res/na010.png cmd/sc_selectobject.png
+sc/res/na011.png cmd/lc_ok.png
 sc/res/nc03.png cmd/sc_viewdatasourcebrowser.png
 sc/res/nc04.png cmd/sc_gallery.png
 sc/res/nc05.png cmd/sc_insertobject.png

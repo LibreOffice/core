@@ -277,8 +277,8 @@ cmd/sc_circlepie.png cmd/sc_basicshapes.circle-pie.png
 sfx2/res/sortascending.png cmd/lc_sortascending.png
 svx/res/symphony/rotate_left.png cmd/sc_rotateleft.png
 svx/res/symphony/rotate_right.png cmd/sc_rotateright.png
-sc/imglst/na05.png cmd/sc_upsearch.png
-sc/imglst/na06.png cmd/sc_downsearch.png
+sc/res/na05.png cmd/sc_upsearch.png
+sc/res/na06.png cmd/sc_downsearch.png
 sc/res/nc01.png cmd/sc_inserttable.png
 sc/res/nc04.png cmd/sc_insertgraphic.png
 sc/res/nc05.png cmd/sc_drawchart.png
