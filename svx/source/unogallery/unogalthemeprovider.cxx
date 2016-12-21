@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
 
-#include "unogalthemeprovider.hxx"
 #include "unogaltheme.hxx"
 #include "svx/gallery1.hxx"
 #include <osl/mutex.hxx>
@@ -26,8 +26,12 @@
 #include <vcl/svapp.hxx>
 #include <unotools/pathoptions.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/gallery/XGalleryTheme.hpp>
+#include <com/sun/star/gallery/XGalleryThemeProvider.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
@@ -35,14 +39,51 @@ using namespace ::com::sun::star;
 
 namespace {
 
+class GalleryThemeProvider : public ::cppu::WeakImplHelper< css::lang::XInitialization,
+                                                             css::gallery::XGalleryThemeProvider,
+                                                             css::lang::XServiceInfo >
+{
+public:
+
+    GalleryThemeProvider();
+
+protected:
+
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName() throw( css::uno::RuntimeException, std::exception ) override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( css::uno::RuntimeException, std::exception ) override;
+
+    // XTypeProvider
+    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw(css::uno::RuntimeException, std::exception) override;
+
+    // XElementAccess
+    virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL hasElements() throw (css::uno::RuntimeException, std::exception) override;
+
+    // XNameAccess
+    virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) throw (css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (css::uno::RuntimeException, std::exception) override;
+
+    // XInitialization
+    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw ( css::uno::Exception, css::uno::RuntimeException, std::exception ) override;
+
+    // XGalleryThemeProvider
+    virtual css::uno::Reference< css::gallery::XGalleryTheme > SAL_CALL insertNewByName( const OUString& ThemeName ) throw (css::container::ElementExistException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL removeByName( const OUString& ThemeName ) throw (css::container::NoSuchElementException, css::uno::RuntimeException, std::exception) override;
+
+private:
+
+    Gallery*    mpGallery;
+    bool    mbHiddenThemes;
+};
+
 GalleryThemeProvider::GalleryThemeProvider() :
     mbHiddenThemes( false )
 {
     mpGallery = ::Gallery::GetGalleryInstance();
-}
-
-GalleryThemeProvider::~GalleryThemeProvider()
-{
 }
 
 OUString SAL_CALL GalleryThemeProvider::getImplementationName()
