@@ -23,6 +23,7 @@
 
 #include "osl/thread.hxx"
 #include "rtl/string.h"
+#include <rtl/bootstrap.hxx>
 #include "sal/detail/log.h"
 #include "sal/log.hxx"
 #include "sal/types.h"
@@ -81,7 +82,7 @@ char const * toString(sal_detail_LogLevel level) {
 // the process is running":
 #if defined ANDROID
 
-char const * getEnvironmentVariable() {
+char const * getLogLevel() {
     return std::getenv("SAL_LOG");
 }
 
@@ -99,14 +100,29 @@ char const * getEnvironmentVariable_(const char* env) {
     return p2;
 }
 
-char const * getEnvironmentVariable() {
+char const * getLogLevel() {
+    // First check the environment variable, then the bootstrap setting
     static char const * env = getEnvironmentVariable_("SAL_LOG");
-    return env;
+    if (env != nullptr)
+        return env;
+
+    OUString sLogLevel;
+    if (rtl::Bootstrap::get("LogLevel", sLogLevel) && !sLogLevel.isEmpty())
+        return  OUStringToOString( sLogLevel, RTL_TEXTENCODING_ASCII_US).getStr();
+    return nullptr;
+
 }
 
 char const * getLogFile() {
+    // First check the environment variable, then the bootstrap setting
     static char const * logFile = getEnvironmentVariable_("SAL_LOG_FILE");
-    return logFile;
+    if (logFile != nullptr)
+        return logFile;
+
+    OUString sLogFilePath;
+    if (rtl::Bootstrap::get("LogFilePath", sLogFilePath) && !sLogFilePath.isEmpty())
+        return  OUStringToOString( sLogFilePath, RTL_TEXTENCODING_ASCII_US).getStr();
+    return nullptr;
 }
 
 #endif
@@ -115,7 +131,7 @@ bool report(sal_detail_LogLevel level, char const * area) {
     if (level == SAL_DETAIL_LOG_LEVEL_DEBUG)
         return true;
     assert(area != 0);
-    char const * env = getEnvironmentVariable();
+    char const * env = getLogLevel();
     if (env == 0) {
         env = "+WARN";
     }
