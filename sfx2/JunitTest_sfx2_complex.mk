@@ -48,7 +48,6 @@ $(eval $(call gb_JunitTest_add_sourcefiles,sfx2_complex,\
     sfx2/qa/complex/sfx2/undo/DrawDocumentTest \
     sfx2/qa/complex/sfx2/undo/DrawingOrPresentationDocumentTest \
     sfx2/qa/complex/sfx2/undo/ImpressDocumentTest \
-    sfx2/qa/complex/sfx2/undo/WriterDocumentTest \
 ))
 
 $(eval $(call gb_JunitTest_add_classes,sfx2_complex,\
