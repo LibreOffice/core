@@ -100,6 +100,7 @@ class ManualCalcTests(UITestCase):
         time.sleep(2)
         self.ui_test.close_doc()
 
+    # http://manual-test.libreoffice.org/manage/case/191/
     def test_validation(self):
         self.ui_test.create_doc_in_start_center("calc")
 
@@ -131,6 +132,7 @@ class ManualCalcTests(UITestCase):
 
         self.ui_test.close_doc()
 
+    # http://manual-test.libreoffice.org/manage/case/187/
     def test_transpose(self):
         self.ui_test.create_doc_in_start_center("calc")
 
