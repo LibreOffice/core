@@ -1262,7 +1262,7 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
                 }
                 xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_SURROUND ),
                     uno::makeAny(m_pImpl->nWrap));
-                if( m_pImpl->bLayoutInCell && m_pImpl->nWrap != text::WrapTextMode_THROUGHT )
+                if( m_pImpl->rDomainMapper.IsInTable() && m_pImpl->bLayoutInCell && m_pImpl->nWrap != text::WrapTextMode_THROUGHT )
                     xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_FOLLOW_TEXT_FLOW ),
                         uno::makeAny(true));
 
