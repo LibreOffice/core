@@ -56,7 +56,7 @@ bool DocumentSignatureManager::init()
     mxSEInitializer = css::xml::crypto::SEInitializer::create(mxContext);
 
     if (mxSEInitializer.is())
-        mxSecurityContext = mxSEInitializer->createSecurityContext(OUString());
+        mxSecurityContext = mxSEInitializer->createSecurityContext();
 
     return mxSecurityContext.is();
 }

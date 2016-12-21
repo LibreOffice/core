@@ -63,7 +63,7 @@ SEInitializer_NssImpl::~SEInitializer_NssImpl()
 
 /* XSEInitializer */
 uno::Reference< cssxc::XXMLSecurityContext > SAL_CALL
-    SEInitializer_NssImpl::createSecurityContext( const OUString& )
+    SEInitializer_NssImpl::createSecurityContext()
     throw (uno::RuntimeException, std::exception)
 {
     CERTCertDBHandle    *pCertHandle = nullptr ;

@@ -56,7 +56,7 @@ public:
 
     /* XSEInitializer */
     virtual css::uno::Reference< css::xml::crypto::XXMLSecurityContext >
-        SAL_CALL createSecurityContext( const OUString& certDB )
+        SAL_CALL createSecurityContext()
         throw (css::uno::RuntimeException) override;
 
     virtual void SAL_CALL freeSecurityContext( const css::uno::Reference<

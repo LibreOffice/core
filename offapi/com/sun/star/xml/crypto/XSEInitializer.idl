@@ -35,12 +35,9 @@ interface XSEInitializer : com::sun::star::uno::XInterface
     /**
        Creates a security context.
 
-       @param aString
-            reserved for internal use.
-
        @return            the security context created
      */
-    ::com::sun::star::xml::crypto::XXMLSecurityContext createSecurityContext( [in] string aString );
+    ::com::sun::star::xml::crypto::XXMLSecurityContext createSecurityContext();
 
     /**
      * Frees a security context.

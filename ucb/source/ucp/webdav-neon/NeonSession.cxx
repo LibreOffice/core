@@ -398,7 +398,7 @@ extern "C" int NeonSession_CertificationNotify( void *userdata,
         return 1;
 
     uno::Reference< xml::crypto::XXMLSecurityContext > xSecurityContext(
-        xSEInitializer->createSecurityContext( OUString() ) );
+        xSEInitializer->createSecurityContext() );
 
     uno::Reference< xml::crypto::XSecurityEnvironment > xSecurityEnv(
         xSecurityContext->getSecurityEnvironment() );

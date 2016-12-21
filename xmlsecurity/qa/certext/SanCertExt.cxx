@@ -126,7 +126,7 @@ namespace {
         uno::Reference< lang::XMultiServiceFactory > factory(context->getServiceManager(), uno::UNO_QUERY_THROW);
         uno::Reference< xml::crypto::XSEInitializer > xSEInitializer = xml::crypto::SEInitializer::create(context);
         uno::Reference< xml::crypto::XXMLSecurityContext > xSecurityContext(
-            xSEInitializer->createSecurityContext(OUString()));
+            xSEInitializer->createSecurityContext());
         return xSecurityContext->getSecurityEnvironment();
     }
 
