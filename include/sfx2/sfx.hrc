@@ -74,9 +74,6 @@
 
 // temporary due to compatibility
 
-#define RID_DEFAULTIMAGELIST_SC             (RID_SFX_START+15)
-#define RID_DEFAULTIMAGELIST_LC             (RID_SFX_START+17)
-
 #define RID_DEFAULTABOUT                    (RID_SFX_START+0)
 
 #define STR_STYLE_FILTER_AUTO               (RID_SFX_START+9)

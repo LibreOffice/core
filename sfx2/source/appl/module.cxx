@@ -56,7 +56,6 @@ public:
 
                                 SfxModule_Impl();
                                 ~SfxModule_Impl();
-    ImageList*                  GetImageList( ResMgr* pResMgr, bool bBig );
 };
 
 SfxModule_Impl::SfxModule_Impl()
@@ -73,27 +72,6 @@ SfxModule_Impl::~SfxModule_Impl()
     delete pImgListSmall;
     delete pImgListBig;
 }
-
-ImageList* SfxModule_Impl::GetImageList( ResMgr* pResMgr, bool bBig )
-{
-    ImageList*& rpList = bBig ? pImgListBig : pImgListSmall;
-    if ( !rpList )
-    {
-        ResId aResId( bBig ? ( RID_DEFAULTIMAGELIST_LC ) : ( RID_DEFAULTIMAGELIST_SC ), *pResMgr );
-
-        aResId.SetRT( RSC_IMAGELIST );
-
-        DBG_ASSERT( pResMgr->IsAvailable(aResId), "No default ImageList!" );
-
-        if ( pResMgr->IsAvailable(aResId) )
-            rpList = new ImageList( aResId );
-        else
-            rpList = new ImageList();
-    }
-
-    return rpList;
-}
-
 
 SFX_IMPL_SUPERCLASS_INTERFACE(SfxModule, SfxShell)
 
@@ -219,11 +197,6 @@ SfxStbCtrlFactArr_Impl*  SfxModule::GetStbCtrlFactories_Impl() const
 SfxChildWinFactArr_Impl* SfxModule::GetChildWinFactories_Impl() const
 {
     return pImpl->pFactArr;
-}
-
-ImageList* SfxModule::GetImageList_Impl( bool bBig )
-{
-    return pImpl->GetImageList( pResMgr, bBig );
 }
 
 VclPtr<SfxTabPage> SfxModule::CreateTabPage( sal_uInt16, vcl::Window*, const SfxItemSet& )
