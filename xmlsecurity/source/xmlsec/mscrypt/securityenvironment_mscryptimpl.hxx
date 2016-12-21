@@ -167,11 +167,6 @@ class SecurityEnvironment_MSCryptImpl : public ::cppu::WeakImplHelper<
         HCERTSTORE getCertDb() throw( css::uno::Exception , css::uno::RuntimeException ) ;
         void setCertDb( HCERTSTORE aCertDb ) throw( css::uno::Exception , css::uno::RuntimeException ) ;
 
-        void adoptSymKey( HCRYPTKEY aSymKey ) throw( css::uno::Exception , css::uno::RuntimeException ) ;
-        HCRYPTKEY getSymKey( unsigned int position ) throw( css::uno::Exception , css::uno::RuntimeException ) ;
-
-        HCRYPTKEY getPubKey( unsigned int position ) throw( css::uno::Exception , css::uno::RuntimeException ) ;
-
         void enableDefaultCrypt( bool enable ) throw( css::uno::Exception , css::uno::RuntimeException ) ;
         bool defaultEnabled() throw( css::uno::Exception , css::uno::RuntimeException ) ;
 

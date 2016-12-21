@@ -294,56 +294,6 @@ void SecurityEnvironment_MSCryptImpl::setCertDb( HCERTSTORE aCertDb ) throw( Exc
     }
 }
 
-void SecurityEnvironment_MSCryptImpl::adoptSymKey( HCRYPTKEY aSymKey ) throw( Exception , RuntimeException ) {
-    HCRYPTKEY   symkey ;
-    std::list< HCRYPTKEY >::iterator keyIt ;
-
-    if( aSymKey != NULL ) {
-        //First try to find the key in the list
-        for( keyIt = m_tSymKeyList.begin() ; keyIt != m_tSymKeyList.end() ; ++keyIt ) {
-            if( *keyIt == aSymKey )
-                return ;
-        }
-
-        //If we do not find the key in the list, add a new node
-        symkey = aSymKey ;
-
-        try {
-            m_tSymKeyList.push_back( symkey ) ;
-        } catch ( Exception& ) {
-            CryptDestroyKey( symkey ) ;
-        }
-    }
-}
-
-HCRYPTKEY SecurityEnvironment_MSCryptImpl::getSymKey( unsigned int position ) throw( Exception , RuntimeException ) {
-    HCRYPTKEY symkey ;
-    std::list< HCRYPTKEY >::iterator keyIt ;
-    unsigned int pos ;
-
-    symkey = NULL ;
-    for( pos = 0, keyIt = m_tSymKeyList.begin() ; pos < position && keyIt != m_tSymKeyList.end() ; ++pos , ++keyIt ) ;
-
-    if( pos == position && keyIt != m_tSymKeyList.end() )
-        symkey = *keyIt ;
-
-    return symkey ;
-}
-
-HCRYPTKEY SecurityEnvironment_MSCryptImpl::getPubKey( unsigned int position ) throw( Exception , RuntimeException ) {
-    HCRYPTKEY pubkey ;
-    std::list< HCRYPTKEY >::iterator keyIt ;
-    unsigned int pos ;
-
-    pubkey = NULL ;
-    for( pos = 0, keyIt = m_tPubKeyList.begin() ; pos < position && keyIt != m_tPubKeyList.end() ; ++pos , ++keyIt ) ;
-
-    if( pos == position && keyIt != m_tPubKeyList.end() )
-        pubkey = *keyIt ;
-
-    return pubkey ;
-}
-
 #ifdef SAL_LOG_INFO
 
 // Based on sample code from MSDN
