@@ -161,10 +161,24 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkToolButton" id="SwapColumn">
+                  <object class="GtkToolButton" id="MoveLeftColumn">
+                      <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="action_name">MoveLeftColumn</property>
+                    <property name="label" translatable="yes">Move Series Left</property>
+                    <property name="use_underline">True</property>
+                    <property name="icon_name">chart2/res/dataeditor_icon08.png</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToolButton" id="MoveRightColumn">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="action_name">SwapColumn</property>
+                    <property name="action_name">MoveRightColumn</property>
                     <property name="label" translatable="yes">Move Series Right</property>
                     <property name="use_underline">True</property>
                     <property name="icon_name">chart2/res/dataeditor_icon05.png</property>
@@ -175,10 +189,24 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkToolButton" id="SwapRow">
+                  <object class="GtkToolButton" id="MoveUpRow">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="action_name">SwapRow</property>
+                    <property name="action_name">MoveUpRow</property>
+                    <property name="label" translatable="yes">Move Row Up</property>
+                    <property name="use_underline">True</property>
+                    <property name="icon_name">chart2/res/dataeditor_icon09.png</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToolButton" id="MoveDownRow">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="action_name">MoveDownRow</property>
                     <property name="label" translatable="yes">Move Row Down</property>
                     <property name="use_underline">True</property>
                     <property name="icon_name">chart2/res/dataeditor_icon06.png</property>

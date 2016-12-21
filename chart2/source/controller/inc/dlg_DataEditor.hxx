@@ -58,8 +58,10 @@ private:
     sal_uInt16 TBI_DATA_INSERT_TEXT_COL;
     sal_uInt16 TBI_DATA_DELETE_ROW;
     sal_uInt16 TBI_DATA_DELETE_COL;
-    sal_uInt16 TBI_DATA_SWAP_COL;
-    sal_uInt16 TBI_DATA_SWAP_ROW;
+    sal_uInt16 TBI_DATA_MOVE_LEFT_COL;
+    sal_uInt16 TBI_DATA_MOVE_RIGHT_COL;
+    sal_uInt16 TBI_DATA_MOVE_UP_ROW;
+    sal_uInt16 TBI_DATA_MOVE_DOWN_ROW;
 
     bool                           m_bReadOnly;
     VclPtr<DataBrowser>            m_xBrwData;
