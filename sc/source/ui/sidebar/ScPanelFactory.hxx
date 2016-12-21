@@ -28,12 +28,9 @@
 
 namespace sc { namespace sidebar {
 
-namespace
-{
-    typedef ::cppu::WeakComponentImplHelper <
-        css::ui::XUIElementFactory, css::lang::XServiceInfo
-        > PanelFactoryInterfaceBase;
-}
+typedef ::cppu::WeakComponentImplHelper <
+    css::ui::XUIElementFactory, css::lang::XServiceInfo
+    > PanelFactoryInterfaceBase;
 
 class ScPanelFactory
     : private ::cppu::BaseMutex,
