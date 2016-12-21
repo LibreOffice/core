@@ -100,4 +100,35 @@ class ManualCalcTests(UITestCase):
         time.sleep(2)
         self.ui_test.close_doc()
 
+    def test_validation(self):
+        self.ui_test.create_doc_in_start_center("calc")
+
+        xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
+        xGridWin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:C10"}))
+
+        self.ui_test.execute_dialog_through_command(".uno:Validation")
+        xValidationDlg = self.xUITest.getTopFocusWindow()
+
+        xAllowList = xValidationDlg.getChild("allow")
+        xAllowList.executeAction("SELECT", mkPropertyValues({"POS": "1"}))
+
+        xData = xValidationDlg.getChild("data")
+        xData.executeAction("SELECT", mkPropertyValues({"POS": "5"}))
+
+        xVal = xValidationDlg.getChild("max")
+        xVal.executeAction("TYPE", mkPropertyValues({"TEXT":"0"}))
+
+        xOkBtn = xValidationDlg.getChild("ok")
+        self.ui_test.close_dialog_through_button(xOkBtn)
+
+        def enter_text(cell, text):
+            enter_text_to_cell(xGridWin, cell, text)
+
+        self.ui_test.execute_blocking_action(enter_text, "ok", args=("A1", "abc"))
+        self.ui_test.execute_blocking_action(enter_text, "ok", args=("B6", "2.18"))
+
+        enter_text_to_cell(xGridWin, "C2", "24")
+
+        self.ui_test.close_doc()
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
