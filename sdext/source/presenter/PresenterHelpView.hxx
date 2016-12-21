@@ -31,17 +31,15 @@
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
 #include <memory>
 
-namespace {
-    typedef cppu::WeakComponentImplHelper<
-        css::drawing::framework::XView,
-        css::awt::XWindowListener,
-        css::awt::XPaintListener
-        > PresenterHelpViewInterfaceBase;
-}
-
 namespace sdext { namespace presenter {
 
 class PresenterButton;
+
+typedef cppu::WeakComponentImplHelper<
+    css::drawing::framework::XView,
+    css::awt::XWindowListener,
+    css::awt::XPaintListener
+    > PresenterHelpViewInterfaceBase;
 
 /** Show help text that describes the defined keys.
 */

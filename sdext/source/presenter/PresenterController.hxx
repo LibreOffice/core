@@ -57,16 +57,14 @@ class PresenterPaneBorderPainter;
 class PresenterTheme;
 class PresenterWindowManager;
 
-namespace {
-    typedef ::cppu::WeakComponentImplHelper <
-        css::drawing::framework::XConfigurationChangeListener,
-        css::frame::XFrameActionListener,
-        css::awt::XKeyListener,
-        css::awt::XFocusListener,
-        css::awt::XMouseListener,
-        css::awt::XMouseMotionListener
-    > PresenterControllerInterfaceBase;
-}
+typedef ::cppu::WeakComponentImplHelper <
+    css::drawing::framework::XConfigurationChangeListener,
+    css::frame::XFrameActionListener,
+    css::awt::XKeyListener,
+    css::awt::XFocusListener,
+    css::awt::XMouseListener,
+    css::awt::XMouseMotionListener
+> PresenterControllerInterfaceBase;
 
 /// Represents an element in the toolbar that shows the time elapsed since the presentation started.
 class IPresentationTime

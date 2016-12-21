@@ -42,14 +42,12 @@ namespace sdext { namespace presenter {
 
 class PresenterController;
 
-namespace {
-    typedef ::cppu::WeakComponentImplHelper <
-        css::drawing::framework::XPane,
-        css::lang::XInitialization,
-        css::awt::XWindowListener,
-        css::awt::XPaintListener
-    > PresenterPaneBaseInterfaceBase;
-}
+typedef ::cppu::WeakComponentImplHelper <
+    css::drawing::framework::XPane,
+    css::lang::XInitialization,
+    css::awt::XWindowListener,
+    css::awt::XPaintListener
+> PresenterPaneBaseInterfaceBase;
 
 /** Base class of the panes used by the presenter screen.  Pane objects are
     stored in the PresenterPaneContainer.  Sizes and positions are

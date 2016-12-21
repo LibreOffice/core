@@ -36,11 +36,9 @@ namespace sdext { namespace presenter {
 class PresenterPane;
 class PresenterTheme;
 
-namespace {
-    typedef ::cppu::WeakComponentImplHelper<
-        css::drawing::framework::XPaneBorderPainter
-    > PresenterPaneBorderPainterInterfaceBase;
-}
+typedef ::cppu::WeakComponentImplHelper<
+    css::drawing::framework::XPaneBorderPainter
+> PresenterPaneBorderPainterInterfaceBase;
 
 /** This class is responsible for painting window borders of PresenterPane
     objects.

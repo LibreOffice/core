@@ -39,21 +39,19 @@
 #include <rtl/ref.hxx>
 #include <memory>
 
-namespace {
-    typedef cppu::WeakComponentImplHelper<
-        css::awt::XWindowListener,
-        css::awt::XPaintListener,
-        css::drawing::framework::XView,
-        css::drawing::XDrawView,
-        css::awt::XKeyListener
-        > PresenterNotesViewInterfaceBase;
-}
-
 namespace sdext { namespace presenter {
 
 class PresenterButton;
 class PresenterScrollBar;
 class PresenterTextView;
+
+typedef cppu::WeakComponentImplHelper<
+    css::awt::XWindowListener,
+    css::awt::XPaintListener,
+    css::drawing::framework::XView,
+    css::drawing::XDrawView,
+    css::awt::XKeyListener
+    > PresenterNotesViewInterfaceBase;
 
 /** A drawing framework view of the notes of a slide.  At the moment this is
     a simple text view that does not show the original formatting of the

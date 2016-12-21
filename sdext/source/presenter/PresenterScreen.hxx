@@ -39,14 +39,12 @@ namespace sdext { namespace presenter {
 
 class PresenterController;
 
-namespace {
-    typedef ::cppu::WeakComponentImplHelper <
-        css::task::XJob
-        > PresenterScreenJobInterfaceBase;
-    typedef ::cppu::WeakComponentImplHelper <
-        css::lang::XEventListener
-        > PresenterScreenInterfaceBase;
-}
+typedef ::cppu::WeakComponentImplHelper <
+    css::task::XJob
+    > PresenterScreenJobInterfaceBase;
+typedef ::cppu::WeakComponentImplHelper <
+    css::lang::XEventListener
+    > PresenterScreenInterfaceBase;
 
 /** The PresenterScreenJob service is instantiated every time a document is
     created or loaded.  In its execute() method it then filters out all

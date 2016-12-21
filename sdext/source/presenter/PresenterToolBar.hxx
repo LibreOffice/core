@@ -45,23 +45,21 @@
 
 #include <functional>
 
-namespace {
-    typedef cppu::WeakComponentImplHelper<
-        css::awt::XWindowListener,
-        css::awt::XPaintListener,
-        css::awt::XMouseListener,
-        css::awt::XMouseMotionListener,
-        css::drawing::XDrawView
-        > PresenterToolBarInterfaceBase;
-
-    typedef cppu::WeakComponentImplHelper<
-        css::awt::XPaintListener,
-        css::drawing::framework::XView,
-        css::drawing::XDrawView
-        > PresenterToolBarViewInterfaceBase;
-}
-
 namespace sdext { namespace presenter {
+
+typedef cppu::WeakComponentImplHelper<
+    css::awt::XWindowListener,
+    css::awt::XPaintListener,
+    css::awt::XMouseListener,
+    css::awt::XMouseMotionListener,
+    css::drawing::XDrawView
+    > PresenterToolBarInterfaceBase;
+
+typedef cppu::WeakComponentImplHelper<
+    css::awt::XPaintListener,
+    css::drawing::framework::XView,
+    css::drawing::XDrawView
+    > PresenterToolBarViewInterfaceBase;
 
 /** A simple tool bar that can display bitmapped buttons and labels.  At the
     moment there are buttons for moving to the next and previous slide and

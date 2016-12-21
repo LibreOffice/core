@@ -31,13 +31,11 @@
 
 namespace sdext { namespace presenter {
 
-namespace {
-    typedef ::cppu::WeakComponentImplHelper <
-        css::lang::XInitialization,
-        css::lang::XServiceInfo,
-        css::frame::XDispatchProvider
-    > PresenterProtocolHandlerInterfaceBase;
-}
+typedef ::cppu::WeakComponentImplHelper <
+    css::lang::XInitialization,
+    css::lang::XServiceInfo,
+    css::frame::XDispatchProvider
+> PresenterProtocolHandlerInterfaceBase;
 
 class PresenterController;
 

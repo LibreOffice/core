@@ -38,14 +38,12 @@ namespace sdext { namespace presenter {
 
 class PresenterController;
 
-namespace {
-    typedef ::cppu::WeakComponentImplHelper <
-        css::awt::XWindowListener,
-        css::awt::XPaintListener,
-        css::awt::XMouseListener,
-        css::awt::XMouseMotionListener
-    > PresenterButtonInterfaceBase;
-}
+typedef ::cppu::WeakComponentImplHelper <
+    css::awt::XWindowListener,
+    css::awt::XPaintListener,
+    css::awt::XMouseListener,
+    css::awt::XMouseMotionListener
+> PresenterButtonInterfaceBase;
 
 /** Button for the presenter screen.  It displays a text surrounded by a
     frame.

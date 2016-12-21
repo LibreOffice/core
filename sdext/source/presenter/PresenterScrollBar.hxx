@@ -37,14 +37,12 @@ namespace sdext { namespace presenter {
 class PresenterCanvasHelper;
 class PresenterPaintManager;
 
-namespace {
-    typedef ::cppu::WeakComponentImplHelper <
-        css::awt::XWindowListener,
-        css::awt::XPaintListener,
-        css::awt::XMouseListener,
-        css::awt::XMouseMotionListener
-    > PresenterScrollBarInterfaceBase;
-}
+typedef ::cppu::WeakComponentImplHelper <
+    css::awt::XWindowListener,
+    css::awt::XPaintListener,
+    css::awt::XMouseListener,
+    css::awt::XMouseMotionListener
+> PresenterScrollBarInterfaceBase;
 
 /** Base class of horizontal and vertical scroll bars.
 */

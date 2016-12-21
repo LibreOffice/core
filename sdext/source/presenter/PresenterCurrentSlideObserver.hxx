@@ -31,11 +31,9 @@
 
 namespace sdext { namespace presenter {
 
-namespace {
-    typedef ::cppu::WeakComponentImplHelper <
-        css::presentation::XSlideShowListener
-    > PresenterCurrentSlideObserverInterfaceBase;
-}
+typedef ::cppu::WeakComponentImplHelper <
+    css::presentation::XSlideShowListener
+> PresenterCurrentSlideObserverInterfaceBase;
 
 /** Check periodically the slide show controller and the
     frame::XController whether the current slide has changed.  If so,

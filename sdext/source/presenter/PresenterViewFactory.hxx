@@ -34,11 +34,9 @@
 
 namespace sdext { namespace presenter {
 
-namespace {
-    typedef ::cppu::WeakComponentImplHelper <
-        css::drawing::framework::XResourceFactory
-    > PresenterViewFactoryInterfaceBase;
-}
+typedef ::cppu::WeakComponentImplHelper <
+    css::drawing::framework::XResourceFactory
+> PresenterViewFactoryInterfaceBase;
 
 /** Base class for presenter views that allows the view factory to store
     them in a cache and reuse deactivated views.

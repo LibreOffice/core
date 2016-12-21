@@ -42,17 +42,15 @@
 
 namespace sdext { namespace presenter {
 
-namespace {
-    typedef cppu::WeakComponentImplHelper<
-        css::presentation::XSlideShowView,
-        css::awt::XPaintListener,
-        css::awt::XMouseListener,
-        css::awt::XMouseMotionListener,
-        css::awt::XWindowListener,
-        css::drawing::framework::XView,
-        css::drawing::XDrawView
-        > PresenterSlideShowViewInterfaceBase;
-}
+typedef cppu::WeakComponentImplHelper<
+    css::presentation::XSlideShowView,
+    css::awt::XPaintListener,
+    css::awt::XMouseListener,
+    css::awt::XMouseMotionListener,
+    css::awt::XWindowListener,
+    css::drawing::framework::XView,
+    css::drawing::XDrawView
+    > PresenterSlideShowViewInterfaceBase;
 
 /** Life view in a secondary window of a full screen slide show.
 */

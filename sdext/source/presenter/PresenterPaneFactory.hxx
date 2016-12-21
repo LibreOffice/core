@@ -37,11 +37,9 @@ namespace sdext { namespace presenter {
 
 class PresenterController;
 
-namespace {
-    typedef ::cppu::WeakComponentImplHelper <
-        css::drawing::framework::XResourceFactory
-    > PresenterPaneFactoryInterfaceBase;
-}
+typedef ::cppu::WeakComponentImplHelper <
+    css::drawing::framework::XResourceFactory
+> PresenterPaneFactoryInterfaceBase;
 
 /** The PresenterPaneFactory provides a fixed set of panes.
 

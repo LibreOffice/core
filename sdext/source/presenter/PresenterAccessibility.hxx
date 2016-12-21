@@ -45,13 +45,11 @@ namespace sdext { namespace presenter {
 class PresenterController;
 class PresenterTextView;
 
-namespace {
-    typedef ::cppu::WeakComponentImplHelper <
-        css::accessibility::XAccessible,
-        css::lang::XInitialization,
-        css::awt::XFocusListener
-    > PresenterAccessibleInterfaceBase;
-}
+typedef ::cppu::WeakComponentImplHelper <
+    css::accessibility::XAccessible,
+    css::lang::XInitialization,
+    css::awt::XFocusListener
+> PresenterAccessibleInterfaceBase;
 
 class PresenterAccessible
     : public ::cppu::BaseMutex,

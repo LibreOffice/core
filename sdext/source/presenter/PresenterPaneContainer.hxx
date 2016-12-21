@@ -43,11 +43,9 @@ namespace sdext { namespace presenter {
 class PresenterPaneBase;
 class PresenterSprite;
 
-namespace {
-    typedef ::cppu::WeakComponentImplHelper <
-        css::lang::XEventListener
-    > PresenterPaneContainerInterfaceBase;
-}
+typedef ::cppu::WeakComponentImplHelper <
+    css::lang::XEventListener
+> PresenterPaneContainerInterfaceBase;
 
 /** This class could also be called PresenterPaneAndViewContainer because it
     stores not only references to all panes that belong to the presenter

@@ -38,23 +38,21 @@
 #include <com/sun/star/rendering/XSprite.hpp>
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
 
-namespace {
-    typedef cppu::WeakComponentImplHelper<
-        css::drawing::framework::XView,
-        css::awt::XWindowListener,
-        css::awt::XPaintListener,
-        css::beans::XPropertyChangeListener,
-        css::drawing::XSlidePreviewCacheListener,
-        css::awt::XMouseListener,
-        css::awt::XMouseMotionListener,
-        css::drawing::XDrawView
-        > PresenterSlideSorterInterfaceBase;
-}
-
 namespace sdext { namespace presenter {
 
 class PresenterButton;
 class PresenterScrollBar;
+
+typedef cppu::WeakComponentImplHelper<
+    css::drawing::framework::XView,
+    css::awt::XWindowListener,
+    css::awt::XPaintListener,
+    css::beans::XPropertyChangeListener,
+    css::drawing::XSlidePreviewCacheListener,
+    css::awt::XMouseListener,
+    css::awt::XMouseMotionListener,
+    css::drawing::XDrawView
+    > PresenterSlideSorterInterfaceBase;
 
 /** A simple slide sorter for the presenter screen.  It uses a preview cache
     to create the slide previews.  Painting is done via a canvas.

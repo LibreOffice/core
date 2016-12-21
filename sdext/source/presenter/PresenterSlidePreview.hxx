@@ -39,14 +39,12 @@
 
 namespace sdext { namespace presenter {
 
-namespace {
-    typedef ::cppu::WeakComponentImplHelper <
-        css::drawing::framework::XView,
-        css::drawing::XDrawView,
-        css::awt::XPaintListener,
-        css::awt::XWindowListener
-    > PresenterSlidePreviewInterfaceBase;
-}
+typedef ::cppu::WeakComponentImplHelper <
+    css::drawing::framework::XView,
+    css::drawing::XDrawView,
+    css::awt::XPaintListener,
+    css::awt::XWindowListener
+> PresenterSlidePreviewInterfaceBase;
 
 /** Static preview of a slide.  Typically used for the preview of the next
     slide.

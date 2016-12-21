@@ -47,14 +47,12 @@ class PresenterController;
 class PresenterPaneBorderPainter;
 class PresenterTheme;
 
-namespace {
-    typedef ::cppu::WeakComponentImplHelper<
-        css::awt::XWindowListener,
-        css::awt::XPaintListener,
-        css::awt::XMouseListener,
-        css::awt::XFocusListener
-    > PresenterWindowManagerInterfaceBase;
-}
+typedef ::cppu::WeakComponentImplHelper<
+    css::awt::XWindowListener,
+    css::awt::XPaintListener,
+    css::awt::XMouseListener,
+    css::awt::XFocusListener
+> PresenterWindowManagerInterfaceBase;
 
 /** A simple manager of the positions of the panes of the presenter screen.
     Uses relative coordinates of the four sides of each pane.  Allows panes
