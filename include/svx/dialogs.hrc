@@ -141,8 +141,6 @@
 // ResId's fuer Dialoge aus StarDraw
 #define RID_SVXSW_FRAMEPOSITIONS            (RID_SVX_START + 289)
 
-#define RID_SVXIL_FRAME                     (RID_SVX_START +  65)
-
 #define RID_SVXIMAGE_LIGHT_ON               (RID_SVX_START + 210)
 #define RID_SVXIMAGE_LIGHT_OFF              (RID_SVX_START + 211)
 #define RID_SVXIMAGE_COLORDLG               (RID_SVX_START + 214)
@@ -177,6 +175,19 @@
 #define RID_SVXBMP_ATTRIBUTE                (RID_SVX_START +  72)
 #define RID_SVXBMP_TEXT                     (RID_SVX_START +  73)
 #define RID_SVXBMP_OTHER                    (RID_SVX_START +  74)
+
+#define RID_SVXBMP_FRAME1                   (RID_SVX_START +  75)
+#define RID_SVXBMP_FRAME2                   (RID_SVX_START +  76)
+#define RID_SVXBMP_FRAME3                   (RID_SVX_START +  77)
+#define RID_SVXBMP_FRAME4                   (RID_SVX_START +  78)
+#define RID_SVXBMP_FRAME5                   (RID_SVX_START +  79)
+#define RID_SVXBMP_FRAME6                   (RID_SVX_START +  80)
+#define RID_SVXBMP_FRAME7                   (RID_SVX_START +  81)
+#define RID_SVXBMP_FRAME8                   (RID_SVX_START +  82)
+#define RID_SVXBMP_FRAME9                   (RID_SVX_START +  83)
+#define RID_SVXBMP_FRAME10                  (RID_SVX_START +  84)
+#define RID_SVXBMP_FRAME11                  (RID_SVX_START +  85)
+#define RID_SVXBMP_FRAME12                  (RID_SVX_START +  86)
 
 // Menu for the ruler
 #define RID_SVXMN_RULER                     (RID_SVX_START +  92)

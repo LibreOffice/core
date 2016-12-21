@@ -255,7 +255,7 @@ class SvxFrameWindow_Impl : public svtools::ToolbarPopup
 private:
     VclPtr<SvxFrmValueSet_Impl> aFrameSet;
     svt::ToolboxController&     mrController;
-    ImageList                   aImgList;
+    std::vector<BitmapEx>       aImgVec;
     bool                        bParagraphMode;
 
     void InitImageList();
@@ -272,7 +272,6 @@ public:
     virtual void dispose() override;
 
     virtual void    statusChanged( const css::frame::FeatureStateEvent& rEvent ) throw ( css::uno::RuntimeException ) override;
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 };
 
 class SvxLineWindow_Impl : public svtools::ToolbarPopup
@@ -1746,12 +1745,12 @@ SvxFrameWindow_Impl::SvxFrameWindow_Impl ( svt::ToolboxController& rController, 
     sal_uInt16 i = 0;
 
     for ( i=1; i<9; i++ )
-        aFrameSet->InsertItem( i, aImgList.GetImage(i) );
+        aFrameSet->InsertItem(i, Image(aImgVec[i-1]));
 
     //bParagraphMode should have been set in StateChanged
     if ( !bParagraphMode )
         for ( i = 9; i < 13; i++ )
-            aFrameSet->InsertItem( i, aImgList.GetImage(i) );
+            aFrameSet->InsertItem(i, Image(aImgVec[i-1]));
 
     aFrameSet->SetColCount( 4 );
     aFrameSet->SetSelectHdl( LINK( this, SvxFrameWindow_Impl, SelectHdl ) );
@@ -1784,21 +1783,6 @@ void SvxFrameWindow_Impl::KeyInput( const KeyEvent& rKEvt )
 {
     aFrameSet->GrabFocus();
     aFrameSet->KeyInput( rKEvt );
-}
-
-void SvxFrameWindow_Impl::DataChanged( const DataChangedEvent& rDCEvt )
-{
-    ToolbarPopup::DataChanged( rDCEvt );
-
-    if( ( rDCEvt.GetType() == DataChangedEventType::SETTINGS ) && ( rDCEvt.GetFlags() & AllSettingsFlags::STYLE ) )
-    {
-        InitImageList();
-
-        sal_uInt16  nNumOfItems = aFrameSet->GetItemCount();
-
-        for( sal_uInt16 i = 1 ; i <= nNumOfItems ; ++i )
-            aFrameSet->SetItemImage( i, aImgList.GetImage( i ) );
-    }
 }
 
 enum class FrmValidFlags {
@@ -1956,7 +1940,7 @@ void SvxFrameWindow_Impl::statusChanged( const css::frame::FeatureStateEvent& rE
                 else if ( !bTableMode && !bParagraphMode )
                 {
                     for ( sal_uInt16 i = 9; i < 13; i++ )
-                        aFrameSet->InsertItem( i, aImgList.GetImage(i) );
+                        aFrameSet->InsertItem(i, Image(aImgVec[i-1]));
                     bResize = true;
                 }
 
@@ -1981,16 +1965,25 @@ void SvxFrameWindow_Impl::CalcSizeValueSet()
 
 void SvxFrameWindow_Impl::InitImageList()
 {
-    aImgList = ImageList( SVX_RES( RID_SVXIL_FRAME ) );
+    aImgVec.clear();
+    aImgVec.push_back(BitmapEx(SVX_RES(RID_SVXBMP_FRAME1)));
+    aImgVec.push_back(BitmapEx(SVX_RES(RID_SVXBMP_FRAME2)));
+    aImgVec.push_back(BitmapEx(SVX_RES(RID_SVXBMP_FRAME3)));
+    aImgVec.push_back(BitmapEx(SVX_RES(RID_SVXBMP_FRAME4)));
+    aImgVec.push_back(BitmapEx(SVX_RES(RID_SVXBMP_FRAME5)));
+    aImgVec.push_back(BitmapEx(SVX_RES(RID_SVXBMP_FRAME6)));
+    aImgVec.push_back(BitmapEx(SVX_RES(RID_SVXBMP_FRAME7)));
+    aImgVec.push_back(BitmapEx(SVX_RES(RID_SVXBMP_FRAME8)));
+    aImgVec.push_back(BitmapEx(SVX_RES(RID_SVXBMP_FRAME9)));
+    aImgVec.push_back(BitmapEx(SVX_RES(RID_SVXBMP_FRAME10)));
+    aImgVec.push_back(BitmapEx(SVX_RES(RID_SVXBMP_FRAME11)));
+    aImgVec.push_back(BitmapEx(SVX_RES(RID_SVXBMP_FRAME12)));
 
-    if( GetParent()->GetDPIScaleFactor() > 1 )
+    if (GetParent()->GetDPIScaleFactor() > 1)
     {
-        for (short i = 0; i < aImgList.GetImageCount(); i++)
+        for (size_t i = 0; i < aImgVec.size(); ++i)
         {
-            OUString rImageName = aImgList.GetImageName(i);
-            BitmapEx b = aImgList.GetImage(rImageName).GetBitmapEx();
-            b.Scale(GetParent()->GetDPIScaleFactor(), GetParent()->GetDPIScaleFactor());
-            aImgList.ReplaceImage(rImageName, Image(b));
+            aImgVec[i].Scale(GetParent()->GetDPIScaleFactor(), GetParent()->GetDPIScaleFactor());
         }
     }
 }

@@ -34,11 +34,64 @@ Image RID_SVX_RELOAD_SPECIAL
     ImageBitmap = Bitmap { File = "reloads.png" ; };
 };
 
-ImageList RID_SVXIL_FRAME
+Bitmap RID_SVXBMP_FRAME1
 {
-    Prefix = "fr";
-    IdList = { 1 ; 2 ; 3 ; 4 ; 5 ; 6 ; 7 ; 8 ; 9 ; 10 ; 11 ; 12 ; };
-    IdCount = { 12 ; };
+    File = "fr01.png";
+};
+
+Bitmap RID_SVXBMP_FRAME2
+{
+    File = "fr02.png";
+};
+
+Bitmap RID_SVXBMP_FRAME3
+{
+    File = "fr03.png";
+};
+
+Bitmap RID_SVXBMP_FRAME4
+{
+    File = "fr04.png";
+};
+
+Bitmap RID_SVXBMP_FRAME5
+{
+    File = "fr05.png";
+};
+
+Bitmap RID_SVXBMP_FRAME6
+{
+    File = "fr06.png";
+};
+
+Bitmap RID_SVXBMP_FRAME7
+{
+    File = "fr07.png";
+};
+
+Bitmap RID_SVXBMP_FRAME8
+{
+    File = "fr08.png";
+};
+
+Bitmap RID_SVXBMP_FRAME9
+{
+    File = "fr09.png";
+};
+
+Bitmap RID_SVXBMP_FRAME10
+{
+    File = "fr010.png";
+};
+
+Bitmap RID_SVXBMP_FRAME11
+{
+    File = "fr011.png";
+};
+
+Bitmap RID_SVXBMP_FRAME12
+{
+    File = "fr012.png";
 };
 
 String RID_SVXSTR_NOFILL
