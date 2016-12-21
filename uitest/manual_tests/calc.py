@@ -131,4 +131,40 @@ class ManualCalcTests(UITestCase):
 
         self.ui_test.close_doc()
 
+    def test_transpose(self):
+        self.ui_test.create_doc_in_start_center("calc")
+
+        xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
+        enter_text_to_cell(xGridWin, "B3", "abcd")
+        enter_text_to_cell(xGridWin, "B4", "edfg")
+        enter_text_to_cell(xGridWin, "C3", "35")
+        enter_text_to_cell(xGridWin, "C4", "5678")
+
+        xGridWin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:C10"}))
+
+        self.xUITest.executeCommand(".uno:Cut")
+
+        xGridWin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
+
+        self.ui_test.execute_dialog_through_command(".uno:PasteSpecial")
+
+        xPasteSpecialDlg = self.xUITest.getTopFocusWindow()
+
+        xAllChkBox = xPasteSpecialDlg.getChild("paste_all")
+        xAllChkBox.executeAction("CLICK", tuple())
+
+        xTransposeChkBox = xPasteSpecialDlg.getChild("transpose")
+        xTransposeChkBox.executeAction("CLICK", tuple())
+
+        xOkBtn = xPasteSpecialDlg.getChild("ok")
+        self.ui_test.close_dialog_through_button(xOkBtn)
+
+        document = self.ui_test.get_component()
+        self.assertEqual(get_cell_by_position(document, 0, 2, 1).getString(), "abcd")
+        self.assertEqual(get_cell_by_position(document, 0, 2, 2).getValue(), 35)
+        self.assertEqual(get_cell_by_position(document, 0, 3, 1).getString(), "edfg")
+        self.assertEqual(get_cell_by_position(document, 0, 3, 2).getValue(), 5678)
+
+        self.ui_test.close_doc()
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
