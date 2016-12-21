@@ -15,6 +15,7 @@ import time
 
 class ManualCalcTests(UITestCase):
 
+    # http://manual-test.libreoffice.org/manage/case/189/
     def test_define_database_range(self):
 
         self.ui_test.create_doc_in_start_center("calc")
