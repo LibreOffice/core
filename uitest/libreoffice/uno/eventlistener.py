@@ -18,12 +18,13 @@ except ImportError:
 
 class EventListener(XDocumentEventListener,unohelper.Base):
 
-    def __init__(self, xContext, eventNames):
+    def __init__(self, xContext, eventNames, **kwargs):
         self.xGEB = xContext.ServiceManager.createInstanceWithContext(
             "com.sun.star.frame.GlobalEventBroadcaster", xContext)
         self.xContext = xContext
         self.executed = False
         self.eventExecuted = []
+        self.printEvents = kwargs.get('printNames', False)
         if isinstance(eventNames, str):
             self.eventNames = [eventNames]
         elif isinstance(eventNames, list):
@@ -37,6 +38,9 @@ class EventListener(XDocumentEventListener,unohelper.Base):
         self.xGEB.removeDocumentEventListener(self)
 
     def documentEventOccured(self, event):
+        if self.printEvents is True:
+            print(event.EventName)
+
         if event.EventName in self.eventNames:
             self.executed = True
             self.eventExecuted.append(event.EventName)
