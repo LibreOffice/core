@@ -668,6 +668,25 @@ DECLARE_OOXMLIMPORT_TEST(testTdf75573, "tdf75573_page1frame.docx")
     CPPUNIT_ASSERT(!bProt);
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf75573_SchindlerExcellence, "tdf75573_SchindlerExcellence.docx")
+{
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Did you fix or cause a bug? # of tables changed",
+        4, xTables->getCount() );
+
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Did you fix or cause a bug? # of shapes changed",
+        3, xDraws->getCount() );
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Did you fix or cause a bug? # of paragraphs changed",
+        197, getParagraphs() );
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Did you fix or cause a bug? # of pages changed",
+        10, getPages() );
+}
+
 DECLARE_OOXMLIMPORT_TEST(testMultiColumnSeparator, "multi-column-separator-with-line.docx")
 {
     uno::Reference<beans::XPropertySet> xTextSection = getProperty< uno::Reference<beans::XPropertySet> >(getParagraph(1, "First data."), "TextSection");
