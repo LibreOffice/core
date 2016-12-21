@@ -26,9 +26,6 @@
 #include <QtCore/QSocketNotifier>
 #include <unistd.h>
 
-namespace
-{
-
 class TestExcludeSocketNotifiers
     : public QObject
 {
@@ -58,8 +55,6 @@ TestExcludeSocketNotifiers::~TestExcludeSocketNotifiers()
 void TestExcludeSocketNotifiers::slotReceived()
 {
     received = true;
-}
-
 }
 
 #define QVERIFY(a) \
