@@ -43,12 +43,7 @@ class ListBox;
 class ToolBox;
 class FloatingWindow;
 
-namespace
-{
-
 #define SIDEBAR_LINE_WIDTH_GLOBAL_VALUE "PopupPanel_LineWidth"
-
-} //end of anonymous namespace
 
 namespace svx
 {
