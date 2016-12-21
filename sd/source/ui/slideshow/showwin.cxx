@@ -52,7 +52,7 @@ ShowWindow::ShowWindow( const ::rtl::Reference< SlideshowImpl >& xController, vc
 , mnFirstMouseMove(0)
 , mxController( xController )
 {
-    SetOutDevViewType( OUTDEV_VIEWTYPE_SLIDESHOW );
+    SetOutDevViewType( OutDevViewType::SlideShow );
 
     // Do never mirror the preview window.  This explicitly includes right
     // to left writing environments.

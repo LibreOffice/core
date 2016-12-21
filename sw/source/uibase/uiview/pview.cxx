@@ -193,7 +193,7 @@ SwPagePreviewWin::SwPagePreviewWin( vcl::Window *pParent, SwPagePreview& rPView 
     , maPaintedPreviewDocRect(Rectangle(0,0,0,0))
     , mpPgPreviewLayout(nullptr)
 {
-    SetOutDevViewType( OUTDEV_VIEWTYPE_PRINTPREVIEW );
+    SetOutDevViewType( OutDevViewType::PrintPreview );
     SetHelpId(HID_PAGEPREVIEW);
     SetFillColor( GetBackground().GetColor() );
     SetLineColor( GetBackground().GetColor());

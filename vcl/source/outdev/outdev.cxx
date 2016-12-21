@@ -84,7 +84,7 @@ OutputDevice::OutputDevice() :
         mnTextLayoutMode            = ComplexTextLayoutFlags::BiDiRtl | ComplexTextLayoutFlags::TextOriginLeft;
 
     meOutDevType                    = OUTDEV_DONTKNOW;
-    meOutDevViewType                = OUTDEV_VIEWTYPE_DONTKNOW;
+    meOutDevViewType                = OutDevViewType::DontKnow;
     mbMap                           = false;
     mbClipRegion                    = false;
     mbBackground                    = false;
