@@ -517,7 +517,7 @@ void OApplicationController::askToReconnect()
         bool bClear = true;
         if ( !m_pSubComponentManager->empty() )
         {
-            ScopedVclPtrInstance< MessageDialog > aQry(getView(), ModuleRes(STR_QUERY_CLOSEDOCUMENTS), VclMessageType::Question, VCL_BUTTONS_YES_NO);
+            ScopedVclPtrInstance< MessageDialog > aQry(getView(), ModuleRes(STR_QUERY_CLOSEDOCUMENTS), VclMessageType::Question, VclButtonsType::YesNo);
             switch (aQry->Execute())
             {
                 case RET_YES:

@@ -883,7 +883,7 @@ void SaneDlg::AcquirePreview()
     if( nOption == -1 )
     {
         OUString aString(SaneResId(STR_SLOW_PREVIEW));
-        ScopedVclPtrInstance< MessageDialog > aBox(this, aString, VclMessageType::Warning, VCL_BUTTONS_OK_CANCEL);
+        ScopedVclPtrInstance< MessageDialog > aBox(this, aString, VclMessageType::Warning, VclButtonsType::OkCancel);
         if (aBox->Execute() == RET_CANCEL)
             return;
     }

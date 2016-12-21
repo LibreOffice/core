@@ -1172,7 +1172,7 @@ void SfxTemplateManagerDlg::OnCategoryDelete()
         OUString sCategory = aDlg->GetSelectedCategory();
         aDlg.disposeAndClear();
         ScopedVclPtrInstance< MessageDialog > popupDlg(this, SfxResId(STR_QMSG_SEL_FOLDER_DELETE),
-            VclMessageType::Question, VCL_BUTTONS_YES_NO);
+            VclMessageType::Question, VclButtonsType::YesNo);
 
         if ( popupDlg->Execute() != RET_YES )
             return;

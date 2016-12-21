@@ -988,7 +988,7 @@ IMPL_LINK( SwEditRegionDlg, UseFileHdl, Button *, pButton, void )
             bool bContent = pSectRepr->IsContent();
             if( pBox->IsChecked() && bContent && rSh.HasSelection() )
             {
-                if (RET_NO == ScopedVclPtrInstance<MessageDialog>(this, SW_RES(STR_QUERY_CONNECT), VclMessageType::Question, VCL_BUTTONS_YES_NO)->Execute())
+                if (RET_NO == ScopedVclPtrInstance<MessageDialog>(this, SW_RES(STR_QUERY_CONNECT), VclMessageType::Question, VclButtonsType::YesNo)->Execute())
                     pBox->Check( false );
             }
             if( bFile )
@@ -1725,7 +1725,7 @@ IMPL_LINK( SwInsertSectionTabPage, UseFileHdl, Button *, pButton, void )
     if( pBox->IsChecked() )
     {
         if( m_pWrtSh->HasSelection() &&
-            RET_NO == ScopedVclPtrInstance<MessageDialog>(this, SW_RES(STR_QUERY_CONNECT), VclMessageType::Question, VCL_BUTTONS_YES_NO)->Execute())
+            RET_NO == ScopedVclPtrInstance<MessageDialog>(this, SW_RES(STR_QUERY_CONNECT), VclMessageType::Question, VclButtonsType::YesNo)->Execute())
             pBox->Check( false );
     }
 

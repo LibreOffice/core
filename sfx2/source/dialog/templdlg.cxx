@@ -1888,10 +1888,10 @@ void SfxCommonTemplateDialog_Impl::DeleteHdl()
         {
         #if defined UNX
             ScopedVclPtrInstance<MessageDialog> aBox(SfxGetpApp()->GetTopWindow(), aMsg,
-                               VclMessageType::Question, VCL_BUTTONS_YES_NO);
+                               VclMessageType::Question, VclButtonsType::YesNo);
         #else
             ScopedVclPtrInstance<MessageDialog> aBox(GetWindow(), aMsg,
-                               VclMessageType::Question, VCL_BUTTONS_YES_NO);
+                               VclMessageType::Question, VclButtonsType::YesNo);
         #endif
             aApproved = aBox->Execute() == RET_YES;
         }

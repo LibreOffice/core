@@ -392,7 +392,7 @@ The code below would only be part of the solution.
             {
                 LockFocusNotification( true );
                 sal_uInt16 nRet = ScopedVclPtrInstance<MessageDialog>(GetWindow(), SW_RES(STR_QUERY_SPELL_CONTINUE),
-                                                VclMessageType::Question, VCL_BUTTONS_YES_NO)->Execute();
+                                                VclMessageType::Question, VclButtonsType::YesNo)->Execute();
                 if(RET_YES == nRet)
                 {
                     SwUnoInternalPaM aPam(*pWrtShell->GetDoc());

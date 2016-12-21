@@ -522,7 +522,7 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn, bool )
     }
     else if (sItemIdent == "delete")
     {
-        ScopedVclPtrInstance< MessageDialog > aQuery(this, SW_RES(STR_QUERY_DELETE), VclMessageType::Question, VCL_BUTTONS_YES_NO);
+        ScopedVclPtrInstance< MessageDialog > aQuery(this, SW_RES(STR_QUERY_DELETE), VclMessageType::Question, VclButtonsType::YesNo);
         if (RET_YES == aQuery->Execute())
         {
             const OUString aShortName(m_pShortNameEdit->GetText());
@@ -680,7 +680,7 @@ IMPL_LINK_NOARG(SwGlossaryDlg, BibHdl, Button*, void)
         }
         else
         {
-            ScopedVclPtrInstance< MessageDialog > aBox(this, sReadonlyPath, VclMessageType::Question, VCL_BUTTONS_YES_NO);
+            ScopedVclPtrInstance< MessageDialog > aBox(this, sReadonlyPath, VclMessageType::Question, VclButtonsType::YesNo);
 
             if(RET_YES == aBox->Execute())
                 PathHdl(m_pPathBtn);

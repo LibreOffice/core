@@ -59,7 +59,7 @@ void TemplateSearchView::KeyInput( const KeyEvent& rKEvt )
     }
     else if( aKeyCode == KEY_DELETE && !mFilteredItemList.empty())
     {
-        ScopedVclPtrInstance< MessageDialog > aQueryDlg(this, SfxResId(STR_QMSG_SEL_TEMPLATE_DELETE), VclMessageType::Question, VCL_BUTTONS_YES_NO);
+        ScopedVclPtrInstance< MessageDialog > aQueryDlg(this, SfxResId(STR_QMSG_SEL_TEMPLATE_DELETE), VclMessageType::Question, VclButtonsType::YesNo);
 
         if ( aQueryDlg->Execute() != RET_YES )
             return;
@@ -158,7 +158,7 @@ IMPL_LINK(TemplateSearchView, ContextMenuSelectHdl, Menu*, pMenu, bool)
         break;
     case MNI_DELETE:
     {
-        ScopedVclPtrInstance< MessageDialog > aQueryDlg(this, SfxResId(STR_QMSG_SEL_TEMPLATE_DELETE), VclMessageType::Question, VCL_BUTTONS_YES_NO);
+        ScopedVclPtrInstance< MessageDialog > aQueryDlg(this, SfxResId(STR_QMSG_SEL_TEMPLATE_DELETE), VclMessageType::Question, VclButtonsType::YesNo);
         if ( aQueryDlg->Execute() != RET_YES )
             break;
 
