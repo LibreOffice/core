@@ -74,7 +74,7 @@ void KDEXLib::Init()
     pInputMethod->SetLocale();
     XrmInitialize();
 
-    KAboutData *kAboutData = new KAboutData("Apache OpenOffice",
+    KAboutData *kAboutData = new KAboutData("soffice",
             "kdelibs4",
             ki18n( "Apache OpenOffice" ),
             "3.4.0",
