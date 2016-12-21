@@ -3302,7 +3302,7 @@ void SvxToolbarConfigPage::DeleteSelectedContent()
              GetTopLevelSelection()->IsDeletable() )
         {
             ScopedVclPtrInstance<MessageDialog> qbox(this,
-                CUI_RES(RID_SXVSTR_CONFIRM_DELETE_TOOLBAR), VclMessageType::Question, VCL_BUTTONS_YES_NO);
+                CUI_RES(RID_SXVSTR_CONFIRM_DELETE_TOOLBAR), VclMessageType::Question, VclButtonsType::YesNo);
 
             if ( qbox->Execute() == RET_YES )
             {
@@ -4742,7 +4742,7 @@ IMPL_LINK_NOARG( SvxToolbarConfigPage, ResetTopLevelHdl, Button *, void )
         static_cast<SvxConfigEntry*>(m_pTopLevelListBox->GetEntryData( nSelectionPos ));
 
     ScopedVclPtrInstance<MessageDialog> qbox(this,
-        CUI_RES(RID_SVXSTR_CONFIRM_RESTORE_DEFAULT), VclMessageType::Question, VCL_BUTTONS_YES_NO);
+        CUI_RES(RID_SVXSTR_CONFIRM_RESTORE_DEFAULT), VclMessageType::Question, VclButtonsType::YesNo);
 
     if ( qbox->Execute() == RET_YES )
     {

@@ -841,7 +841,7 @@ void RecovDocList::InitEntry(SvTreeListEntry* pEntry,
 
 short impl_askUserForWizardCancel(vcl::Window* pParent, sal_Int16 nRes)
 {
-    ScopedVclPtrInstance< MessageDialog > aQuery(pParent, SVX_RES(nRes), VclMessageType::Question, VCL_BUTTONS_YES_NO);
+    ScopedVclPtrInstance< MessageDialog > aQuery(pParent, SVX_RES(nRes), VclMessageType::Question, VclButtonsType::YesNo);
     if (aQuery->Execute() == RET_YES)
         return DLG_RET_OK;
     else

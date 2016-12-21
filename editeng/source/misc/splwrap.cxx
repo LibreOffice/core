@@ -370,7 +370,7 @@ bool SvxSpellWrapper::SpellNext( )
         WAIT_OFF();
 
         sal_uInt16 nResId = bReverse ? RID_SVXSTR_QUERY_BW_CONTINUE : RID_SVXSTR_QUERY_CONTINUE;
-        ScopedVclPtrInstance< MessageDialog > aBox(pWin, EditResId(nResId), VclMessageType::Question, VCL_BUTTONS_YES_NO);
+        ScopedVclPtrInstance< MessageDialog > aBox(pWin, EditResId(nResId), VclMessageType::Question, VclButtonsType::YesNo);
         if ( aBox->Execute() != RET_YES )
         {
             // sacrifice the other area if necessary ask for special area

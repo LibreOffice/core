@@ -59,7 +59,7 @@ IMPL_LINK( SfxNewStyleDlg, ModifyHdl, Edit&, rBox, void )
 SfxNewStyleDlg::SfxNewStyleDlg( vcl::Window* pParent, SfxStyleSheetBasePool& rInPool )
     : ModalDialog(pParent, "CreateStyleDialog", "sfx/ui/newstyle.ui")
     , aQueryOverwriteBox(VclPtr<MessageDialog>::Create(this, SfxResId(STR_QUERY_OVERWRITE),
-                                           VclMessageType::Question, VCL_BUTTONS_YES_NO))
+                                           VclMessageType::Question, VclButtonsType::YesNo))
     , rPool(rInPool)
 {
     get(m_pColBox, "stylename");

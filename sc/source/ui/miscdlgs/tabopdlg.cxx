@@ -223,7 +223,7 @@ void ScTabOpDlg::RaiseError( ScTabOpErr eError )
             break;
     }
 
-    ScopedVclPtrInstance<MessageDialog>(this, *pMsg, VclMessageType::Error, VCL_BUTTONS_OK_CANCEL)->Execute();
+    ScopedVclPtrInstance<MessageDialog>(this, *pMsg, VclMessageType::Error, VclButtonsType::OkCancel)->Execute();
     pEd->GrabFocus();
 }
 

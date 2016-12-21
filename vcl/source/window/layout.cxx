@@ -2171,7 +2171,7 @@ void MessageDialog::create_owned_areas()
 
 MessageDialog::MessageDialog(vcl::Window* pParent, WinBits nStyle)
     : Dialog(pParent, nStyle)
-    , m_eButtonsType(VCL_BUTTONS_NONE)
+    , m_eButtonsType(VclButtonsType::NONE)
     , m_eMessageType(VclMessageType::Info)
     , m_pOwnedContentArea(nullptr)
     , m_pOwnedActionArea(nullptr)
@@ -2202,7 +2202,7 @@ MessageDialog::MessageDialog(vcl::Window* pParent,
 
 MessageDialog::MessageDialog(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription)
     : Dialog(pParent, OStringToOUString(rID, RTL_TEXTENCODING_UTF8), rUIXMLDescription, WINDOW_MESSBOX)
-    , m_eButtonsType(VCL_BUTTONS_NONE)
+    , m_eButtonsType(VclButtonsType::NONE)
     , m_eMessageType(VclMessageType::Info)
     , m_pOwnedContentArea(nullptr)
     , m_pOwnedActionArea(nullptr)
@@ -2376,9 +2376,9 @@ short MessageDialog::Execute()
         VclPtr<PushButton> pBtn;
         switch (m_eButtonsType)
         {
-            case VCL_BUTTONS_NONE:
+            case VclButtonsType::NONE:
                 break;
-            case VCL_BUTTONS_OK:
+            case VclButtonsType::Ok:
                 pBtn.set( VclPtr<OKButton>::Create(pButtonBox) );
                 pBtn->SetStyle(pBtn->GetStyle() & WB_DEFBUTTON);
                 pBtn->Show();
@@ -2386,7 +2386,7 @@ short MessageDialog::Execute()
                 m_aOwnedButtons.push_back(pBtn);
                 m_aResponses[pBtn] = RET_OK;
                 break;
-            case VCL_BUTTONS_CLOSE:
+            case VclButtonsType::Close:
                 pBtn.set( VclPtr<CloseButton>::Create(pButtonBox) );
                 pBtn->SetStyle(pBtn->GetStyle() & WB_DEFBUTTON);
                 pBtn->Show();
@@ -2394,14 +2394,14 @@ short MessageDialog::Execute()
                 m_aOwnedButtons.push_back(pBtn);
                 m_aResponses[pBtn] = RET_CLOSE;
                 break;
-            case VCL_BUTTONS_CANCEL:
+            case VclButtonsType::Cancel:
                 pBtn.set( VclPtr<CancelButton>::Create(pButtonBox) );
                 pBtn->SetStyle(pBtn->GetStyle() & WB_DEFBUTTON);
                 pBtn->set_id("cancel");
                 m_aOwnedButtons.push_back(pBtn);
                 m_aResponses[pBtn] = RET_CANCEL;
                 break;
-            case VCL_BUTTONS_YES_NO:
+            case VclButtonsType::YesNo:
                 pBtn = VclPtr<PushButton>::Create(pButtonBox);
                 pBtn->SetText(Button::GetStandardText(StandardButtonType::Yes));
                 pBtn->Show();
@@ -2417,7 +2417,7 @@ short MessageDialog::Execute()
                 m_aOwnedButtons.push_back(pBtn);
                 m_aResponses[pBtn] = RET_NO;
                 break;
-            case VCL_BUTTONS_OK_CANCEL:
+            case VclButtonsType::OkCancel:
                 pBtn.set( VclPtr<OKButton>::Create(pButtonBox) );
                 pBtn->Show();
                 pBtn->set_id("ok");
@@ -2478,19 +2478,19 @@ bool MessageDialog::set_property(const OString &rKey, const OString &rValue)
     }
     else if (rKey == "buttons")
     {
-        VclButtonsType eMode = VCL_BUTTONS_NONE;
+        VclButtonsType eMode = VclButtonsType::NONE;
         if (rValue.equals("none"))
-            eMode = VCL_BUTTONS_NONE;
+            eMode = VclButtonsType::NONE;
         else if (rValue.equals("ok"))
-            eMode = VCL_BUTTONS_OK;
+            eMode = VclButtonsType::Ok;
         else if (rValue.equals("cancel"))
-            eMode = VCL_BUTTONS_CANCEL;
+            eMode = VclButtonsType::Cancel;
         else if (rValue.equals("close"))
-            eMode = VCL_BUTTONS_CLOSE;
+            eMode = VclButtonsType::Close;
         else if (rValue.equals("yes-no"))
-            eMode = VCL_BUTTONS_YES_NO;
+            eMode = VclButtonsType::YesNo;
         else if (rValue.equals("ok-cancel"))
-            eMode = VCL_BUTTONS_OK_CANCEL;
+            eMode = VclButtonsType::OkCancel;
         else
         {
             SAL_WARN("vcl.layout", "unknown buttons type mode" << rValue.getStr());

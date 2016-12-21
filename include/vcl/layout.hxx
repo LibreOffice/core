@@ -620,14 +620,14 @@ public:
     bool set_property(const OString &rKey, const OString &rValue);
 };
 
-enum VclButtonsType
+enum class VclButtonsType
 {
-    VCL_BUTTONS_NONE,
-    VCL_BUTTONS_OK,
-    VCL_BUTTONS_CLOSE,
-    VCL_BUTTONS_CANCEL,
-    VCL_BUTTONS_YES_NO,
-    VCL_BUTTONS_OK_CANCEL
+    NONE,
+    Ok,
+    Close,
+    Cancel,
+    YesNo,
+    OkCancel
 };
 
 enum class VclMessageType
@@ -665,7 +665,7 @@ public:
     MessageDialog(vcl::Window* pParent,
         const OUString &rMessage,
         VclMessageType eMessageType = VclMessageType::Error,
-        VclButtonsType eButtonsType = VCL_BUTTONS_OK);
+        VclButtonsType eButtonsType = VclButtonsType::Ok);
     MessageDialog(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription);
     virtual bool set_property(const OString &rKey, const OString &rValue) override;
     virtual short Execute() override;

@@ -285,7 +285,7 @@ IMPL_LINK(TemplateLocalView, ContextMenuSelectHdl, Menu*, pMenu, bool)
         break;
     case MNI_DELETE:
     {
-        ScopedVclPtrInstance< MessageDialog > aQueryDlg(this, SfxResId(STR_QMSG_SEL_TEMPLATE_DELETE), VclMessageType::Question, VCL_BUTTONS_YES_NO);
+        ScopedVclPtrInstance< MessageDialog > aQueryDlg(this, SfxResId(STR_QMSG_SEL_TEMPLATE_DELETE), VclMessageType::Question, VclButtonsType::YesNo);
         if ( aQueryDlg->Execute() != RET_YES )
             break;
 
@@ -518,7 +518,7 @@ bool TemplateLocalView::moveTemplate (const ThumbnailViewItem *pItem, const sal_
         {
             OUString sQuery = (OUString(SfxResId(STR_MSG_QUERY_COPY).toString()).replaceFirst("$1", pViewItem->maTitle)).replaceFirst("$2",
                 getRegionName(nTargetRegion));
-            ScopedVclPtrInstance< MessageDialog > aQueryDlg(this, sQuery, VclMessageType::Question, VCL_BUTTONS_YES_NO);
+            ScopedVclPtrInstance< MessageDialog > aQueryDlg(this, sQuery, VclMessageType::Question, VclButtonsType::YesNo);
             if ( aQueryDlg->Execute() != RET_YES )
                 return false;
 
@@ -619,7 +619,7 @@ bool TemplateLocalView::moveTemplates(const std::set<const ThumbnailViewItem*, s
                 {
                     OUString sQuery = (OUString(SfxResId(STR_MSG_QUERY_COPY).toString()).replaceFirst("$1", pViewItem->maTitle)).replaceFirst("$2",
                         getRegionName(nTargetRegion));
-                    ScopedVclPtrInstance< MessageDialog > aQueryDlg(this, sQuery, VclMessageType::Question, VCL_BUTTONS_YES_NO);
+                    ScopedVclPtrInstance< MessageDialog > aQueryDlg(this, sQuery, VclMessageType::Question, VclButtonsType::YesNo);
 
                     if ( aQueryDlg->Execute() != RET_YES )
                     {
@@ -912,7 +912,7 @@ void TemplateLocalView::KeyInput( const KeyEvent& rKEvt )
     }
     else if( aKeyCode == KEY_DELETE && !mFilteredItemList.empty())
     {
-        ScopedVclPtrInstance< MessageDialog > aQueryDlg(this, SfxResId(STR_QMSG_SEL_TEMPLATE_DELETE), VclMessageType::Question, VCL_BUTTONS_YES_NO);
+        ScopedVclPtrInstance< MessageDialog > aQueryDlg(this, SfxResId(STR_QMSG_SEL_TEMPLATE_DELETE), VclMessageType::Question, VclButtonsType::YesNo);
 
         if ( aQueryDlg->Execute() != RET_YES )
             return;
