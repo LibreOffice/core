@@ -1916,6 +1916,7 @@ typedefDefn:
                   break;
               case unoidl::detail::SourceProviderEntity::KIND_MODULE:
                   assert(false && "this cannot happen");
+                  SAL_FALLTHROUGH;
               default:
                   assert(t.entity->entity.is() || t.entity->pad.is());
                   unpub
@@ -1935,6 +1936,7 @@ typedefDefn:
           break;
       case unoidl::detail::SourceProviderType::TYPE_PARAMETER:
           assert(false && "this cannot happen");
+          SAL_FALLTHROUGH;
       default:
           break;
       }
