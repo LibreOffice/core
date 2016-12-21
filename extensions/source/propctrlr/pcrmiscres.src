@@ -55,7 +55,7 @@ Bitmap RID_SVXBMP_GROUPBOX
     File = "sx10598.png";
 };
 
-Bitmap RID_SVXBMP_EDIT
+Bitmap RID_SVXBMP_EDITBOX
 {
     File = "sx10599.png";
 };

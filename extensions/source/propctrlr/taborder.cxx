@@ -136,7 +136,7 @@ namespace pcr
             {
             case FormComponentType::COMMANDBUTTON:  nImageId = RID_SVXBMP_BUTTON; break;
             case FormComponentType::FIXEDTEXT:      nImageId = RID_SVXBMP_FIXEDTEXT; break;
-            case FormComponentType::TEXTFIELD:      nImageId = RID_SVXBMP_EDIT; break;
+            case FormComponentType::TEXTFIELD:      nImageId = RID_SVXBMP_EDITBOX; break;
             case FormComponentType::RADIOBUTTON:    nImageId = RID_SVXBMP_RADIOBUTTON; break;
             case FormComponentType::CHECKBOX:       nImageId = RID_SVXBMP_CHECKBOX; break;
             case FormComponentType::LISTBOX:        nImageId = RID_SVXBMP_LISTBOX; break;
