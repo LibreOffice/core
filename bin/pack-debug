@@ -11,6 +11,7 @@
 
 # build path
 export BUILD_PATH=$PWD
+export BUILD_LOG=$BUILD_PATH/pack-debug.log
 
 if [ $# -gt 0 ]
 then
@@ -30,13 +31,14 @@ if [ ! -f config.log ]; then
     exit 1;
 fi
 
+# create pack-debug.log file
+echo create debug packages >$BUILD_LOG
+
 eval $(grep ^INSTALLDIRNAME config.log)
 eval $(grep ^PRODUCTVERSION config.log)
 
 # set package base name, eg. collaboraoffice5.1
 DEBUGSRC_PACKAGENAME=$INSTALLDIRNAME$PRODUCTVERSION
-
-echo PACKAGENAME: $DEBUGSRC_PACKAGENAME
 
 #################################
 # Function for re-build RPM files
@@ -50,13 +52,11 @@ export PLATFORMID
 eval $(grep ^build_cpu config.log)
 export build_cpu
 
-#########################################
-# create source package
-#########################################
+####################################
+echo create RPM debug source package
+####################################
 
 DEBUGSRC="$(find workdir -name ${DEBUGSRC_PACKAGENAME}.spec.log)"
-
-echo Base spec file: $DEBUGSRC
 
 # create spec file, based on the spec file of the brand package
 
@@ -94,9 +94,7 @@ cat $DEBUGSRC | awk '
 		print $0
 	}' >> ${DEBUGSRC}-debugsource
 
- echo Spec file of debug source package: ${DEBUGSRC}-debugsource
-
- echo Start rpmbuild for debug source package...
+ # start rpmbuild for debug source package
 
  ln -s / $buildroot
 
@@ -104,10 +102,9 @@ cat $DEBUGSRC | awk '
 
  rpmbuild -bb --define "_unpackaged_files_terminate_build  0" ${DEBUGSRC}-debugsource --target $build_cpu --buildroot=$buildroot
 
-#################################
-# create rpm debug info packages
-# by processing logged spec files
-#################################
+###################################################################
+echo create rpm debug info packages by processing logged spec files
+###################################################################
 
 for i in $BUILD_PATH/workdir/installation/CollaboraOffice/rpm/logging/*/*.spec.log
 do
@@ -121,7 +118,6 @@ do
 	buildroot=$(cat $i | awk '/^BuildRoot/{print$2}')
 	topdir=$(dirname $(dirname $buildroot))
 	rpmdir=$(echo $topdir | sed 's/_inprogress$//')
-	echo $rpmdir
 
 	# create empty buildroot directory
 
@@ -145,7 +141,7 @@ do
 		objcopy --only-keep-debug $so $so.dbg
 		objcopy --strip-debug $so
 		objcopy --add-gnu-debuglink=$so.dbg $so
-		cd -
+		cd $buildroot
 	done
 
 	# copy files for double package generation (using hard links)
@@ -180,8 +176,13 @@ echo Update RPM download tar.gz
 mv $topdir/RPMS/RPMS/*/*.rpm $rpmdir/RPMS/
 cd $rpmdir/..
 TARGET_RPM=$(ls *_download/*.tar.gz)
-tar cv *_rpm | gzip >$TARGET_RPM
+TARGET_DEBUG=$(echo $TARGET_RPM | sed 's/.tar.gz$/-debug.tar.gz/')
+SOURCE_RPM=$(find *_rpm -type f | grep -v debug)
+SOURCE_DEBUG=$(find *_rpm -type f | grep -E '(debug|readme|README)')
+tar c $SOURCE_RPM | gzip >$TARGET_RPM
+tar c $SOURCE_DEBUG | gzip >$TARGET_DEBUG
 cd $BUILD_PATH
+rm -rf $topdir
 }
 
 #################################
@@ -189,9 +190,9 @@ cd $BUILD_PATH
 #################################
 function repack_deb {
 
-#########################################
-# create deb source package
-#########################################
+####################################
+echo create DEB debug source package
+####################################
 
 DEBUGSRC=$BUILD_PATH/workdir/installation/CollaboraOffice/deb/listfile/en-US/epm_gid_Module_Root_Brand.lst
 
@@ -231,10 +232,9 @@ cat $DEBUGSRC | awk '
 
  $BUILD_PATH/workdir/UnpackedTarball/epm/epm -f deb -g ${INSTALLDIRNAME}${PRODUCTVERSION}-debugsource ${DEBUGSRC}-debugsource --output-dir DEBS -v
 
-####################################
-# create deb debug info packages
-# by processing logged EPM lst files
-####################################
+######################################################################
+echo create DEB debug info packages by processing logged EPM lst files
+######################################################################
 
 for i in $BUILD_PATH/workdir/installation/CollaboraOffice/deb/listfile/en-US/*.lst
 do
@@ -268,12 +268,14 @@ do
 	do
 		cd $(dirname $j)
 		so=$(basename $j)
+		# remove old temporary files
+		rm -f $so.copy $so.dbg
 		# keep original file
 		cp $so $so.copy
 		objcopy --only-keep-debug $so $so.dbg
 		objcopy --strip-debug $so
 		objcopy --add-gnu-debuglink=$so.dbg $so
-		cd -
+		cd $BUILD_PATH
 	done
 
 	# create stripped package
@@ -302,10 +304,8 @@ do
 		rm $so.dbg
 		# restore original file
 		mv -f $so.copy $so
-		cd -
+		cd $BUILD_PATH
 	done
-
-
  fi
 done
 
@@ -315,18 +315,21 @@ debdir=$(ls -d $BUILD_PATH/workdir/installation/CollaboraOffice/deb/install/*_de
 mv $BUILD_PATH/DEBS/*.deb $debdir/DEBS/
 cd $debdir/..
 TARGET_DEB=$(ls *_download/*.tar.gz)
-tar cv *_deb | gzip >$TARGET_DEB
+TARGET_DEBUG=$(echo $TARGET_DEB | sed 's/.tar.gz$/-debug.tar.gz/')
+SOURCE_DEB=$(find *_deb -type f | grep -v debug)
+SOURCE_DEBUG=$(find *_deb -type f | grep -E '(debug|readme|README)')
+tar c $SOURCE_DEB | gzip >$TARGET_DEB
+tar c $SOURCE_DEBUG | gzip >$TARGET_DEBUG
+
 cd $BUILD_PATH
+rm -rf DEBS
 }
 
 # start deb re-build
-test -z "$ONLY_RPM" -a "$(find workdir/installation/CollaboraOffice/deb/listfile -name '*.lst')" != "" && repack_deb || \
+test -z "$ONLY_RPM" -a "$(find workdir/installation/CollaboraOffice/deb/listfile -name '*.lst')" != "" && repack_deb >$BUILD_LOG 2>&1 || \
 	echo 'Skip DEB debug package generation (--only-rpm or missing EPM lst files).'
 
 # start rpm re-build
-test -z "$ONLY_DEB" -a "$(find workdir -name '*spec.log')" != "" && repack_rpm || \
+test -z "$ONLY_DEB" -a "$(find workdir -name '*spec.log')" != "" && repack_rpm >>$BUILD_LOG 2>&1 || \
 	echo 'Skip RPM debug package generation (--only-deb or missing RPM spec files).'
-
-
-
 
