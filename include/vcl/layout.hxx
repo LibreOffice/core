@@ -186,14 +186,14 @@ protected:
     }
 };
 
-enum VclButtonBoxStyle
+enum class VclButtonBoxStyle
 {
-    VCL_BUTTONBOX_DEFAULT_STYLE,
-    VCL_BUTTONBOX_SPREAD,
-    VCL_BUTTONBOX_EDGE,
-    VCL_BUTTONBOX_START,
-    VCL_BUTTONBOX_END,
-    VCL_BUTTONBOX_CENTER
+    Default,
+    Spread,
+    Edge,
+    Start,
+    End,
+    Center
 };
 
 class VCL_DLLPUBLIC VclButtonBox : public VclBox
@@ -201,7 +201,7 @@ class VCL_DLLPUBLIC VclButtonBox : public VclBox
 public:
     VclButtonBox(vcl::Window *pParent)
         : VclBox(pParent, false, 0/*nSpacing*/)
-        , m_eLayoutStyle(VCL_BUTTONBOX_DEFAULT_STYLE)
+        , m_eLayoutStyle(VclButtonBoxStyle::Default)
     {
     }
     virtual bool set_property(const OString &rKey, const OString &rValue) override;
