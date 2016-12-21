@@ -18,6 +18,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -100,6 +101,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
     private boolean isKeyboardOpen = false;
     private boolean isFormattingToolbarOpen = false;
     private boolean isSearchToolbarOpen = false;
+    private boolean isDocumentChanged = false;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         Log.w(LOGTAG, "onCreate..");
@@ -181,6 +183,16 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
         mLayerClient.setView(layerView);
         layerView.setInputConnectionHandler(new LOKitInputConnectionHandler());
         mLayerClient.notifyReady();
+
+        layerView.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                if(keyEvent.getKeyCode() != KeyEvent.KEYCODE_BACK){
+                    isDocumentChanged=true;
+                }
+                return false;
+            }
+        });
 
         // create TextCursorLayer
         mDocumentOverlay = new DocumentOverlay(mAppContext, layerView);
@@ -270,6 +282,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
             protected void onPostExecute(Void param) {
                 Toast.makeText(activity, R.string.message_saved,
                         Toast.LENGTH_SHORT).show();
+                isDocumentChanged=false;
             }
         };
         // Delay the call to document provider save operation and check the
@@ -347,6 +360,45 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
                 mTempFile.delete();
             }
         }
+    }
+    @Override
+    public void onBackPressed() {
+        if (!isDocumentChanged) {
+            super.onBackPressed();
+            return;
+        }
+
+
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which){
+                    case DialogInterface.BUTTON_POSITIVE:
+                        //SAVE
+                        saveDocument();
+                        isDocumentChanged=false;
+                        onBackPressed();
+                        break;
+
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        //CANCEL
+                        break;
+                    case DialogInterface.BUTTON_NEUTRAL:
+                        //NO
+                        isDocumentChanged=false;
+                        onBackPressed();
+                        break;
+                }
+            }
+        };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(mAppContext);
+        builder.setMessage(R.string.save_alert_dialog_title)
+                .setPositiveButton(R.string.save_document, dialogClickListener)
+                .setNegativeButton(R.string.cancel_save_document, dialogClickListener)
+                .setNeutralButton(R.string.no_save_document, dialogClickListener)
+                .show();
+
     }
 
     public LOKitThread getLOKitThread() {
