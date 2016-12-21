@@ -24,9 +24,9 @@ class CheckFields(unittest.TestCase):
             xField = xFieldEnum.nextElement()
             if xField.supportsService("com.sun.star.text.TextField.JumpEdit"):
                 xAnchor = xField.getAnchor()
-                readContent = xAnchor.getString()
-                self.assertTrue(readContent in placeholders,
-                                "field %s is not contained: " % readContent)
+                read_content = xAnchor.getString()
+                self.assertTrue(read_content in placeholders,
+                                "field %s is not contained: " % read_content)
 
     def test_fdo42073(self):
         xDoc = self.__class__._xEmptyDoc
@@ -34,12 +34,12 @@ class CheckFields(unittest.TestCase):
         xCursor = xBodyText.createTextCursor()
         xTextField = xDoc.createInstance("com.sun.star.text.TextField.Input")
         xBodyText.insertTextContent(xCursor, xTextField, True)
-        readContent = xTextField.getPropertyValue("Content")
-        self.assertEqual("", readContent)
+        read_content = xTextField.getPropertyValue("Content")
+        self.assertEqual("", read_content)
         content = "this is not surprising"
         xTextField.setPropertyValue("Content", content)
-        readContent = xTextField.getPropertyValue("Content")
-        self.assertEqual(content, readContent)
+        read_content = xTextField.getPropertyValue("Content")
+        self.assertEqual(content, read_content)
 
 if __name__ == '__main__':
     unittest.main()

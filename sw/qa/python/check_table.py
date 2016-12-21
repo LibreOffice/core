@@ -35,15 +35,15 @@ class CheckTable(unittest.TestCase):
     def tearDownClass(cls):
         cls._uno.tearDown()
 
-    def __test_borderAsserts(self, xBorderLine, lineValid):
-        self.assertTrue(lineValid)
+    def __test_borderAsserts(self, xBorderLine, line_valid):
+        self.assertTrue(line_valid)
         self.assertEqual(0, xBorderLine.InnerLineWidth)
         self.assertEqual(self.OOLineHairline, xBorderLine.OuterLineWidth)
         self.assertEqual(0, xBorderLine.LineDistance)
         self.assertEqual(0, xBorderLine.Color)
 
-    def __test_borderAssertsWithLineStyle(self, xBorderLine, lineValid):
-        self.__test_borderAsserts(xBorderLine, lineValid)
+    def __test_borderAssertsWithLineStyle(self, xBorderLine, line_valid):
+        self.__test_borderAsserts(xBorderLine, line_valid)
         self.assertEqual(self.OOLineHairline, xBorderLine.LineWidth)
         self.assertEqual(SOLID, xBorderLine.LineStyle)
 
@@ -60,17 +60,17 @@ class CheckTable(unittest.TestCase):
         xCursor = xText.createTextCursor()
         xText.insertTextContent(xCursor, xTable, False)
 
-        borderDistances = xTable.TableBorderDistances
+        border_distances = xTable.TableBorderDistances
 
-        self.assertEqual(97, borderDistances.TopDistance)
-        self.assertEqual(97, borderDistances.BottomDistance)
-        self.assertEqual(97, borderDistances.LeftDistance)
-        self.assertEqual(97, borderDistances.RightDistance)
+        self.assertEqual(97, border_distances.TopDistance)
+        self.assertEqual(97, border_distances.BottomDistance)
+        self.assertEqual(97, border_distances.LeftDistance)
+        self.assertEqual(97, border_distances.RightDistance)
 
-        self.assertEqual(True, borderDistances.IsTopDistanceValid)
-        self.assertEqual(True, borderDistances.IsBottomDistanceValid)
-        self.assertEqual(True, borderDistances.IsLeftDistanceValid)
-        self.assertEqual(True, borderDistances.IsRightDistanceValid)
+        self.assertEqual(True, border_distances.IsTopDistanceValid)
+        self.assertEqual(True, border_distances.IsBottomDistanceValid)
+        self.assertEqual(True, border_distances.IsLeftDistanceValid)
+        self.assertEqual(True, border_distances.IsRightDistanceValid)
 
         border = xTable.getPropertyValue("TableBorder")
 
@@ -415,8 +415,8 @@ class CheckTable(unittest.TestCase):
         pv.Value = 'Table1.A1:C2'
         xDataSource = xChartdataprovider.createDataSource((pv,))
         self.assertEqual(len(xDataSource.DataSequences), 3)
-        expectedValues = ((1, 4), (2, 5), (3, 6))
-        expectedCellrange = ('A1:A2', 'B1:B2', 'C1:C2')
+        expected_values = ((1, 4), (2, 5), (3, 6))
+        expected_cellrange = ('A1:A2', 'B1:B2', 'C1:C2')
 
         for col in range(3):
             xSeq = xDataSource.DataSequences[col].Values
@@ -424,12 +424,12 @@ class CheckTable(unittest.TestCase):
             self.assertTrue(xSeq.supportsService('com.sun.star.chart2.data.DataSequence'))
             self.assertFalse(xSeq.supportsService('foo'))
             self.assertIn('com.sun.star.chart2.data.DataSequence', xSeq.SupportedServiceNames)
-            self.assertEqual(xSeq.SourceRangeRepresentation, 'Table1.%s' % expectedCellrange[col])
-            self.assertEqual(xSeq.Data, expectedValues[col])
-            self.assertEqual(xSeq.NumericalData, expectedValues[col])
+            self.assertEqual(xSeq.SourceRangeRepresentation, 'Table1.%s' % expected_cellrange[col])
+            self.assertEqual(xSeq.Data, expected_values[col])
+            self.assertEqual(xSeq.NumericalData, expected_values[col])
             self.assertEqual(
                     [int(txtval) for txtval in xSeq.TextualData],
-                    [val for val in expectedValues[col]])
+                    [val for val in expected_values[col]])
 
             xSeq.Role = "One xSeq to rule them all"
             self.assertEqual("One xSeq to rule them all", xSeq.Role)
@@ -453,10 +453,10 @@ class CheckTable(unittest.TestCase):
         # Setup numberformat for the cell
         xNumberFormats = xDoc.NumberFormats
         xLocale = Locale('en', 'US', '')
-        formatString = '#,##0.00 [$€-407];[RED]-#,##0.00 [$€-407]'
-        key = xNumberFormats.queryKey(formatString, xLocale, True)
+        format_string = '#,##0.00 [$€-407];[RED]-#,##0.00 [$€-407]'
+        key = xNumberFormats.queryKey(format_string, xLocale, True)
         if key == -1:
-            key = xNumberFormats.addNew(formatString, xLocale)
+            key = xNumberFormats.addNew(format_string, xLocale)
         # Apply the format on the first cell
         xTable.getCellByPosition(0, 0).NumberFormat = key
         xDispatcher.executeDispatch(xDocFrame, '.uno:GoToStartOfDoc', '', 0, ())
