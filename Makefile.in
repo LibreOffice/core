@@ -421,10 +421,10 @@ $(foreach ide,\
 	vim \
 	xcode \
 	qtcreator \
-        eclipsecdt,\
+    eclipsecdt,\
 $(eval $(call gb_Top_GbuildToIdeIntegration,$(ide))))
 
-fuzzers: Library_sal Library_salhelper Library_reg Library_store Library_unoidl codemaker Library_cppu Library_i18nlangtag StaticLibrary_ulingu StaticLibrary_jpeg StaticLibrary_findsofficepath Rdb_services udkapi offapi Library_clew Library_gie Library_reflection Library_invocadapt Library_bootstrap Library_introspection Library_stocservices Library_cppuhelper Library_xmlreader Library_gcc3_uno instsetoo_native more_fonts Executable_wmffuzzer
+fuzzers: Library_sal Library_salhelper Library_reg Library_store Library_unoidl codemaker Library_cppu Library_i18nlangtag Library_cppuhelper Library_comphelper StaticLibrary_ulingu StaticLibrary_jpeg StaticLibrary_findsofficepath Library_tl Rdb_services udkapi offapi Library_clew Library_gie Library_reflection Library_invocadapt Library_bootstrap Library_introspection Library_stocservices Library_xmlreader Library_gcc3_uno instsetoo_native more_fonts Executable_wmffuzzer
 
 endif # MAKE_RESTARTS
 
