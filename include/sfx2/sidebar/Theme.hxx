@@ -39,14 +39,10 @@ class SvBorder;
 
 namespace sfx2 { namespace sidebar {
 
-
-namespace
-{
-    typedef cppu::WeakComponentImplHelper <
-        css::beans::XPropertySet,
-        css::beans::XPropertySetInfo
-        > ThemeInterfaceBase;
-}
+typedef cppu::WeakComponentImplHelper <
+    css::beans::XPropertySet,
+    css::beans::XPropertySetInfo
+    > ThemeInterfaceBase;
 
 class Paint;
 

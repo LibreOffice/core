@@ -25,12 +25,9 @@
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 
-namespace
-{
-    typedef cppu::WeakComponentImplHelper <
-        css::accessibility::XAccessible
-        > AccessibleInterfaceBase;
-}
+typedef cppu::WeakComponentImplHelper <
+    css::accessibility::XAccessible
+    > AccessibleInterfaceBase;
 
 namespace sfx2 { namespace sidebar {
 

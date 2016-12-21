@@ -39,16 +39,12 @@ namespace vcl { class Window; }
 
 namespace sfx2 { namespace sidebar {
 
-namespace
-{
-
 typedef cppu::WeakComponentImplHelper<css::ui::XContextChangeEventListener,
                                        css::ui::XUIElement,
                                        css::ui::XToolPanel,
                                        css::ui::XSidebarPanel,
                                        css::ui::XUpdateModel>
             SidebarPanelBaseInterfaceBase;
-}
 
 /** Base class for sidebar panels that provides some convenience
     functionality.
