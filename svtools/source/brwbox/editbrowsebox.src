@@ -17,24 +17,51 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "editbrowsebox.hrc"
 #include <svtools/svtools.hrc>
 
-ImageList RID_SVTOOLS_IMAGELIST_EDITBROWSEBOX
+Bitmap BMP_CURRENT
 {
-    Prefix = "ed";
-    IdList = {
-        IMG_EBB_CURRENT;
-        IMG_EBB_MODIFIED;
-        IMG_EBB_NEW;
-        IMG_EBB_DELETED;
-        IMG_EBB_CURRENTNEW;
-        IMG_EBB_PRIMARYKEY;
-        IMG_EBB_CURRENT_PRIMARYKEY;
-        IMG_EBB_FILTER;
-        IMG_EBB_HEADERFOOTER;
-    };
-    IdCount = { 9; };
+    File = "ed01.png";
+};
+
+Bitmap BMP_MODIFIED
+{
+    File = "ed02.png";
+};
+
+Bitmap BMP_NEW
+{
+    File = "ed03.png";
+};
+
+Bitmap BMP_DELETED
+{
+    File = "ed04.png";
+};
+
+Bitmap BMP_CURRENTNEW
+{
+    File = "ed05.png";
+};
+
+Bitmap BMP_PRIMARYKEY
+{
+    File = "ed06.png";
+};
+
+Bitmap BMP_CURRENT_PRIMARYKEY
+{
+    File = "ed07.png";
+};
+
+Bitmap BMP_FILTER
+{
+    File = "ed08.png";
+};
+
+Bitmap BMP_HEADERFOOTER
+{
+    File = "ed09.png";
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -246,12 +246,20 @@
 
 #define BMP_PLUGIN                      (RID_SVTOOLS_BITMAP_START +   3)
 #define BMP_LIST_ADD                    (RID_SVTOOLS_BITMAP_START +   4)
+#define BMP_CURRENT                     (RID_SVTOOLS_BITMAP_START +   5)
+#define BMP_MODIFIED                    (RID_SVTOOLS_BITMAP_START +   6)
+#define BMP_NEW                         (RID_SVTOOLS_BITMAP_START +   7)
+#define BMP_DELETED                     (RID_SVTOOLS_BITMAP_START +   8)
+#define BMP_CURRENTNEW                  (RID_SVTOOLS_BITMAP_START +   9)
+#define BMP_PRIMARYKEY                  (RID_SVTOOLS_BITMAP_START +  10)
+#define BMP_CURRENT_PRIMARYKEY          (RID_SVTOOLS_BITMAP_START +  11)
+#define BMP_FILTER                      (RID_SVTOOLS_BITMAP_START +  12)
+#define BMP_HEADERFOOTER                (RID_SVTOOLS_BITMAP_START +  13)
 
 // image lists
 
 #define RID_SVTOOLS_IMAGELIST_BIG                   (RID_SVTOOLS_IMAGELIST_START +  1)
 #define RID_SVTOOLS_IMAGELIST_SMALL                 (RID_SVTOOLS_IMAGELIST_START +  2)
-#define RID_SVTOOLS_IMAGELIST_EDITBROWSEBOX         (RID_SVTOOLS_IMAGELIST_START +  3)
 
 // images
 #define RID_IMG_TREENODE_COLLAPSED      (RID_SVTOOLS_START +  0)

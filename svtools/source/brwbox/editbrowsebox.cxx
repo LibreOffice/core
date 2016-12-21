@@ -19,8 +19,6 @@
 
 #include <svtools/editbrowsebox.hxx>
 
-#include "editbrowsebox.hrc"
-
 #include <vcl/svapp.hxx>
 #include <tools/debug.hxx>
 #include <vcl/window.hxx>
@@ -230,7 +228,6 @@ namespace svt
         }
     }
 
-
     void EditBrowseBox::PaintField( OutputDevice& rDev, const Rectangle& rRect,
                                     sal_uInt16 nColumnId ) const
     {
@@ -253,58 +250,49 @@ namespace svt
         }
     }
 
-
     Image EditBrowseBox::GetImage(RowStatus eStatus) const
     {
-        if ( !m_aStatusImages.GetImageCount() )
-        {
-            const_cast<EditBrowseBox*>(this)->m_aStatusImages = ImageList( SvtResId( RID_SVTOOLS_IMAGELIST_EDITBROWSEBOX ) );
-        }
-
-        Image aImage;
+        BitmapEx aBitmap;
         bool bNeedMirror = IsRTLEnabled();
         switch (eStatus)
         {
             case CURRENT:
-                aImage = m_aStatusImages.GetImage(IMG_EBB_CURRENT);
+                aBitmap = BitmapEx(SvtResId((BMP_CURRENT)));
                 break;
             case CURRENTNEW:
-                aImage = m_aStatusImages.GetImage(IMG_EBB_CURRENTNEW);
+                aBitmap = BitmapEx(SvtResId((BMP_CURRENTNEW)));
                 break;
             case MODIFIED:
-                aImage = m_aStatusImages.GetImage(IMG_EBB_MODIFIED);
+                aBitmap = BitmapEx(SvtResId((BMP_MODIFIED)));
                 bNeedMirror = false;    // the pen is not mirrored
                 break;
             case NEW:
-                aImage = m_aStatusImages.GetImage(IMG_EBB_NEW);
+                aBitmap = BitmapEx(SvtResId((BMP_NEW)));
                 break;
             case DELETED:
-                aImage = m_aStatusImages.GetImage(IMG_EBB_DELETED);
+                aBitmap = BitmapEx(SvtResId((BMP_DELETED)));
                 break;
             case PRIMARYKEY:
-                aImage = m_aStatusImages.GetImage(IMG_EBB_PRIMARYKEY);
+                aBitmap = BitmapEx(SvtResId((BMP_PRIMARYKEY)));
                 break;
             case CURRENT_PRIMARYKEY:
-                aImage = m_aStatusImages.GetImage(IMG_EBB_CURRENT_PRIMARYKEY);
+                aBitmap = BitmapEx(SvtResId((BMP_CURRENT_PRIMARYKEY)));
                 break;
             case FILTER:
-                aImage = m_aStatusImages.GetImage(IMG_EBB_FILTER);
+                aBitmap = BitmapEx(SvtResId((BMP_FILTER)));
                 break;
             case HEADERFOOTER:
-                aImage = m_aStatusImages.GetImage(IMG_EBB_HEADERFOOTER);
+                aBitmap = BitmapEx(SvtResId((BMP_HEADERFOOTER)));
                 break;
             case CLEAN:
                 break;
         }
         if ( bNeedMirror )
         {
-            BitmapEx aBitmap( aImage.GetBitmapEx() );
             aBitmap.Mirror( BmpMirrorFlags::Horizontal );
-            aImage = Image( aBitmap );
         }
-        return aImage;
+        return Image(aBitmap);
     }
-
 
     void EditBrowseBox::PaintStatusCell(OutputDevice& rDev, const Rectangle& rRect) const
     {

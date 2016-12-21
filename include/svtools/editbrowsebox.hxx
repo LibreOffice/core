@@ -490,8 +490,7 @@ namespace svt
         VclPtr<CheckBoxControl> pCheckBoxPaint;
 
         EditBrowseBoxFlags  m_nBrowserFlags;
-        ImageList   m_aStatusImages;
-        ::std::unique_ptr< EditBrowseBoxImpl> m_aImpl;
+        std::unique_ptr< EditBrowseBoxImpl> m_aImpl;
 
     protected:
         VclPtr<BrowserHeader>  pHeader;
