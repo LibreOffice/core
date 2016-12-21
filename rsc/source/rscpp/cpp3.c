@@ -362,27 +362,6 @@ int readoptions(char* filename, char*** pfargv)
     return (back);
 }
 
-#if HOST != SYS_UNIX
-
-/*
- * Dec operating systems mangle upper-lower case in command lines.
- * This routine forces the -D and -U arguments to uppercase.
- * It is called only on cpp startup by dooptions().
- */
-static void zap_uc(char* ap)
-{
-    while (*ap != EOS)
-    {
-        /*
-         * Don't use islower() here so it works with Multinational
-         */
-        if (*ap >= 'a' && *ap <= 'z')
-            *ap = (char)toupper(*ap);
-        ap++;
-    }
-}
-#endif
-
 /*
  * Initialize the built-in #define's.  There are two flavors:
  *      #define decus   1               (static definitions)
