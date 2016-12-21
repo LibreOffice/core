@@ -56,6 +56,7 @@ icu_CFLAGS:=" \
 	$(if $(ENABLE_LTO),$(gb_LTOFLAGS)) \
 	$(if $(filter GCC,$(COM)),-fno-strict-aliasing) \
 	$(if $(filter $(true),$(gb_SYMBOL)),$(gb_DEBUGINFO_FLAGS)) \
+	$(if $(filter FUZZERS,$(BUILD_TYPE)),-DU_USE_STRTOD_L=0) \
 	$(if $(filter ANDROID,$(OS)),-fvisibility=hidden -fno-omit-frame-pointer)"
 icu_CXXFLAGS:="$(CXXFLAGS) $(CXXFLAGS_CXX11) \
 	$(if $(filter IOS,$(OS)),-DUCONFIG_NO_FILE_IO) \
@@ -63,6 +64,7 @@ icu_CXXFLAGS:="$(CXXFLAGS) $(CXXFLAGS_CXX11) \
 	$(if $(ENABLE_LTO),$(gb_LTOFLAGS)) \
 	$(if $(filter GCC,$(COM)),-fno-strict-aliasing) \
 	$(if $(filter $(true),$(gb_SYMBOL)),$(gb_DEBUGINFO_FLAGS)) \
+	$(if $(filter FUZZERS,$(BUILD_TYPE)),-DU_USE_STRTOD_L=0) \
 	$(if $(filter ANDROID,$(OS)),-fvisibility=hidden -fno-omit-frame-pointer)"
 icu_LDFLAGS:=" \
 	$(if $(ENABLE_LTO),$(gb_LTOFLAGS)) \
