@@ -44,7 +44,7 @@ bool Bitmap::Filter( BmpFilter eFilter, const BmpFilterParam* pFilterParam )
 
     switch( eFilter )
     {
-        case BMP_FILTER_SMOOTH:
+        case BmpFilter::Smooth:
         {
             // Blur for positive values of mnRadius
             if (pFilterParam->mnRadius > 0.0)
@@ -63,42 +63,42 @@ bool Bitmap::Filter( BmpFilter eFilter, const BmpFilterParam* pFilterParam )
         }
         break;
 
-        case BMP_FILTER_SHARPEN:
+        case BmpFilter::Sharpen:
         {
             const long pSharpenMatrix[] = { -1, -1,  -1, -1, 16, -1, -1, -1,  -1 };
             bRet = ImplConvolute3( &pSharpenMatrix[ 0 ] );
         }
         break;
 
-        case BMP_FILTER_REMOVENOISE:
+        case BmpFilter::RemoveNoise:
             bRet = ImplMedianFilter();
         break;
 
-        case BMP_FILTER_SOBEL_GREY:
+        case BmpFilter::SobelGrey:
             bRet = ImplSobelGrey();
         break;
 
-        case BMP_FILTER_SOLARIZE:
+        case BmpFilter::Solarize:
             bRet = ImplSolarize( pFilterParam );
         break;
 
-        case BMP_FILTER_SEPIA:
+        case BmpFilter::Sepia:
             bRet = ImplSepia( pFilterParam );
         break;
 
-        case BMP_FILTER_MOSAIC:
+        case BmpFilter::Mosaic:
             bRet = ImplMosaic( pFilterParam );
         break;
 
-        case BMP_FILTER_EMBOSS_GREY:
+        case BmpFilter::EmbossGrey:
             bRet = ImplEmbossGrey( pFilterParam );
         break;
 
-        case BMP_FILTER_POPART:
+        case BmpFilter::PopArt:
             bRet = ImplPopArt();
         break;
 
-        case BMP_FILTER_DUOTONE:
+        case BmpFilter::DuoTone:
             bRet = ImplDuotoneFilter( pFilterParam->mnProgressStart, pFilterParam->mnProgressEnd );
         break;
 
@@ -576,9 +576,9 @@ bool Bitmap::ImplEmbossGrey( const BmpFilterParam* pFilterParam )
                 long        nGrey11, nGrey12, nGrey13;
                 long        nGrey21, nGrey22, nGrey23;
                 long        nGrey31, nGrey32, nGrey33;
-                double      fAzim = ( ( pFilterParam && pFilterParam->meFilter == BMP_FILTER_EMBOSS_GREY ) ?
+                double      fAzim = ( ( pFilterParam && pFilterParam->meFilter == BmpFilter::EmbossGrey ) ?
                                       ( pFilterParam->maEmbossAngles.mnAzimuthAngle100 * 0.01 ) : 0.0 ) * F_PI180;
-                double      fElev = ( ( pFilterParam && pFilterParam->meFilter == BMP_FILTER_EMBOSS_GREY ) ?
+                double      fElev = ( ( pFilterParam && pFilterParam->meFilter == BmpFilter::EmbossGrey ) ?
                                       ( pFilterParam->maEmbossAngles.mnElevationAngle100 * 0.01 ) : 90.0 ) * F_PI180;
                 long*       pHMap = new long[ nWidth + 2 ];
                 long*       pVMap = new long[ nHeight + 2 ];
@@ -672,7 +672,7 @@ bool Bitmap::ImplSolarize( const BmpFilterParam* pFilterParam )
 
     if( pWriteAcc )
     {
-        const sal_uInt8 cThreshold = ( pFilterParam && pFilterParam->meFilter == BMP_FILTER_SOLARIZE ) ?
+        const sal_uInt8 cThreshold = ( pFilterParam && pFilterParam->meFilter == BmpFilter::Solarize ) ?
                                 pFilterParam->mcSolarGreyThreshold : 128;
 
         if( pWriteAcc->HasPalette() )
@@ -720,7 +720,7 @@ bool Bitmap::ImplSepia( const BmpFilterParam* pFilterParam )
 
     if( pReadAcc )
     {
-        long            nSepiaPercent = ( pFilterParam && pFilterParam->meFilter == BMP_FILTER_SEPIA ) ?
+        long            nSepiaPercent = ( pFilterParam && pFilterParam->meFilter == BmpFilter::Sepia ) ?
                                         pFilterParam->mnSepiaPercent : 10;
         const long      nSepia = 10000 - 100 * SAL_BOUND( nSepiaPercent, 0, 100 );
         BitmapPalette   aSepiaPal( 256 );
@@ -798,9 +798,9 @@ bool Bitmap::ImplSepia( const BmpFilterParam* pFilterParam )
 
 bool Bitmap::ImplMosaic( const BmpFilterParam* pFilterParam )
 {
-    sal_uLong               nTileWidth = ( pFilterParam && pFilterParam->meFilter == BMP_FILTER_MOSAIC ) ?
+    sal_uLong               nTileWidth = ( pFilterParam && pFilterParam->meFilter == BmpFilter::Mosaic ) ?
                                      pFilterParam->maMosaicTileSize.mnTileWidth : 4;
-    sal_uLong               nTileHeight = ( pFilterParam && pFilterParam->meFilter == BMP_FILTER_MOSAIC ) ?
+    sal_uLong               nTileHeight = ( pFilterParam && pFilterParam->meFilter == BmpFilter::Mosaic ) ?
                                       pFilterParam->maMosaicTileSize.mnTileHeight : 4;
     bool                bRet = false;
 

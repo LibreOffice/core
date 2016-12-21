@@ -242,10 +242,10 @@ Graphic GraphicFilterMosaic::GetFilteredGraphic( const Graphic& rGraphic,
     {
         Animation aAnim( rGraphic.GetAnimation() );
 
-        if( aAnim.Filter( BMP_FILTER_MOSAIC, &aParam ) )
+        if( aAnim.Filter( BmpFilter::Mosaic, &aParam ) )
         {
             if( IsEnhanceEdges() )
-                aAnim.Filter( BMP_FILTER_SHARPEN );
+                aAnim.Filter( BmpFilter::Sharpen );
 
             aRet = aAnim;
         }
@@ -254,10 +254,10 @@ Graphic GraphicFilterMosaic::GetFilteredGraphic( const Graphic& rGraphic,
     {
         BitmapEx aBmpEx( rGraphic.GetBitmapEx() );
 
-        if( aBmpEx.Filter( BMP_FILTER_MOSAIC, &aParam ) )
+        if( aBmpEx.Filter( BmpFilter::Mosaic, &aParam ) )
         {
             if( IsEnhanceEdges() )
-                (void)aBmpEx.Filter( BMP_FILTER_SHARPEN );
+                (void)aBmpEx.Filter( BmpFilter::Sharpen );
 
             aRet = aBmpEx;
         }
@@ -308,7 +308,7 @@ Graphic GraphicFilterSmooth::GetFilteredGraphic( const Graphic& rGraphic, double
     {
         Animation aAnim( rGraphic.GetAnimation() );
 
-        if( aAnim.Filter( BMP_FILTER_SMOOTH, &aParam ) )
+        if( aAnim.Filter( BmpFilter::Smooth, &aParam ) )
         {
             aRet = aAnim;
         }
@@ -317,7 +317,7 @@ Graphic GraphicFilterSmooth::GetFilteredGraphic( const Graphic& rGraphic, double
     {
         BitmapEx aBmpEx( rGraphic.GetBitmapEx() );
 
-        if( aBmpEx.Filter( BMP_FILTER_SMOOTH, &aParam ) )
+        if( aBmpEx.Filter( BmpFilter::Smooth, &aParam ) )
         {
             aRet = aBmpEx;
         }
@@ -379,7 +379,7 @@ Graphic GraphicFilterSolarize::GetFilteredGraphic( const Graphic& rGraphic, doub
     {
         Animation aAnim( rGraphic.GetAnimation() );
 
-        if( aAnim.Filter( BMP_FILTER_SOLARIZE, &aParam ) )
+        if( aAnim.Filter( BmpFilter::Solarize, &aParam ) )
         {
             if( IsInvert() )
                 aAnim.Invert();
@@ -391,7 +391,7 @@ Graphic GraphicFilterSolarize::GetFilteredGraphic( const Graphic& rGraphic, doub
     {
         BitmapEx aBmpEx( rGraphic.GetBitmapEx() );
 
-        if( aBmpEx.Filter( BMP_FILTER_SOLARIZE, &aParam ) )
+        if( aBmpEx.Filter( BmpFilter::Solarize, &aParam ) )
         {
             if( IsInvert() )
                 aBmpEx.Invert();
@@ -441,14 +441,14 @@ Graphic GraphicFilterSepia::GetFilteredGraphic( const Graphic& rGraphic, double,
     {
         Animation aAnim( rGraphic.GetAnimation() );
 
-        if( aAnim.Filter( BMP_FILTER_SEPIA, &aParam ) )
+        if( aAnim.Filter( BmpFilter::Sepia, &aParam ) )
             aRet = aAnim;
     }
     else
     {
         BitmapEx aBmpEx( rGraphic.GetBitmapEx() );
 
-        if( aBmpEx.Filter( BMP_FILTER_SEPIA, &aParam ) )
+        if( aBmpEx.Filter( BmpFilter::Sepia, &aParam ) )
             aRet = aBmpEx;
     }
 
@@ -584,14 +584,14 @@ Graphic GraphicFilterEmboss::GetFilteredGraphic( const Graphic& rGraphic, double
     {
         Animation aAnim( rGraphic.GetAnimation() );
 
-        if( aAnim.Filter( BMP_FILTER_EMBOSS_GREY, &aParam ) )
+        if( aAnim.Filter( BmpFilter::EmbossGrey, &aParam ) )
             aRet = aAnim;
     }
     else
     {
         BitmapEx aBmpEx( rGraphic.GetBitmapEx() );
 
-        if( aBmpEx.Filter( BMP_FILTER_EMBOSS_GREY, &aParam ) )
+        if( aBmpEx.Filter( BmpFilter::EmbossGrey, &aParam ) )
             aRet = aBmpEx;
     }
 
