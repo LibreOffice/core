@@ -52,18 +52,29 @@ ImageList IL_PRE_BITMAPS
     IdCount = { 21 ; };
 };
 
-ImageList IL_SDW_BITMAPS
+Bitmap RID_SVXBMP_SHADOWNONE
 {
-    Prefix = "sh";
-    IdList =
-    {
-        IID_SHADOWNONE ;
-        IID_SHADOW_BOT_RIGHT ;
-        IID_SHADOW_BOT_LEFT ;
-        IID_SHADOW_TOP_RIGHT ;
-        IID_SHADOW_TOP_LEFT ;
-    };
-    IdCount = { 5 ; };
+    File = "sh01.png";
+};
+
+Bitmap RID_SVXBMP_SHADOW_BOT_RIGHT
+{
+    File = "sh02.png";
+};
+
+Bitmap RID_SVXBMP_SHADOW_BOT_LEFT
+{
+    File = "sh03.png";
+};
+
+Bitmap RID_SVXBMP_SHADOW_TOP_RIGHT
+{
+    File = "sh04.png";
+};
+
+Bitmap RID_SVXBMP_SHADOW_TOP_LEFT
+{
+    File = "sh05.png";
 };
 
 String RID_SVXSTR_TABLE_PRESET_NONE

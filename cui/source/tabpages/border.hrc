@@ -43,13 +43,6 @@
 #define IID_PRE_TABLE_ALL       20
 #define IID_PRE_TABLE_OUTER2    21
 
-#define IL_SDW_BITMAPS          1500
-#define IID_SHADOWNONE          1
-#define IID_SHADOW_BOT_RIGHT    2
-#define IID_SHADOW_BOT_LEFT     3
-#define IID_SHADOW_TOP_RIGHT    4
-#define IID_SHADOW_TOP_LEFT     5
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -101,7 +101,7 @@ private:
     VclPtr<CheckBox>           m_pMergeAdjacentBordersCB;
     VclPtr<CheckBox>           m_pRemoveAdjcentCellBordersCB;
 
-    ImageList           aShadowImgLst;
+    std::vector<BitmapEx>      m_aShadowImgVec;
     ImageList           aBorderImgLst;
 
     long                nMinValue;  ///< minimum distance

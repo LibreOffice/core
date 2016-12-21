@@ -79,7 +79,6 @@ const sal_uInt16 SvxBorderTabPage::pRanges[] =
     0
 };
 
-
 static void lcl_SetDecimalDigitsTo1(MetricField& rField)
 {
     sal_Int64 nMin = rField.Denormalize( rField.GetMin( FUNIT_TWIP ) );
@@ -87,26 +86,26 @@ static void lcl_SetDecimalDigitsTo1(MetricField& rField)
     rField.SetMin( rField.Normalize( nMin ), FUNIT_TWIP );
 }
 
+// number of preset images to show
+const sal_uInt16 SVX_BORDER_PRESET_COUNT = 5;
+
+// number of shadow images to show
+const sal_uInt16 SVX_BORDER_SHADOW_COUNT = 5;
 
 SvxBorderTabPage::SvxBorderTabPage(vcl::Window* pParent, const SfxItemSet& rCoreAttrs)
     : SfxTabPage(pParent, "BorderPage", "cui/ui/borderpage.ui", &rCoreAttrs)
-
-,
-
-        aShadowImgLst( CUI_RES(IL_SDW_BITMAPS)),
-        aBorderImgLst( CUI_RES(IL_PRE_BITMAPS)),
-        nMinValue(0),
-        nSWMode(SwBorderModes::NONE),
-        mbHorEnabled( false ),
-        mbVerEnabled( false ),
-        mbTLBREnabled( false ),
-        mbBLTREnabled( false ),
-        mbUseMarginItem( false ),
-        mbAllowPaddingWithoutBorders( true ),
-        mbSync(true),
-        mbRemoveAdjacentCellBorders( false ),
-        bIsCalcDoc( false )
-
+    , aBorderImgLst( CUI_RES(IL_PRE_BITMAPS))
+    , nMinValue(0)
+    , nSWMode(SwBorderModes::NONE)
+    , mbHorEnabled(false)
+    , mbVerEnabled(false)
+    , mbTLBREnabled(false)
+    , mbBLTREnabled(false)
+    , mbUseMarginItem(false)
+    , mbAllowPaddingWithoutBorders(true)
+    , mbSync(true)
+    , mbRemoveAdjacentCellBorders(false)
+    , bIsCalcDoc(false)
 {
     get(m_pWndPresets, "presets");
     get(m_pUserDefFT, "userdefft");
@@ -138,6 +137,19 @@ SvxBorderTabPage::SvxBorderTabPage(vcl::Window* pParent, const SfxItemSet& rCore
     get(m_pMergeAdjacentBordersCB, "mergeadjacent");
     get(m_pRemoveAdjcentCellBordersCB, "rmadjcellborders");
 
+    static const sal_uInt16 pnImgIds[SVX_BORDER_SHADOW_COUNT] =
+    {
+        RID_SVXBMP_SHADOWNONE,
+        RID_SVXBMP_SHADOW_BOT_RIGHT,
+        RID_SVXBMP_SHADOW_BOT_LEFT,
+        RID_SVXBMP_SHADOW_TOP_RIGHT,
+        RID_SVXBMP_SHADOW_TOP_LEFT
+    };
+
+    for (size_t i = 0; i < SAL_N_ELEMENTS(pnImgIds); ++i)
+        m_aShadowImgVec.push_back(BitmapEx(CUI_RES(pnImgIds[i])));
+    assert(m_aShadowImgVec.size() == SVX_BORDER_SHADOW_COUNT);
+
     if ( GetDPIScaleFactor() > 1 )
     {
         for (short i = 0; i < aBorderImgLst.GetImageCount(); i++)
@@ -148,13 +160,8 @@ SvxBorderTabPage::SvxBorderTabPage(vcl::Window* pParent, const SfxItemSet& rCore
             aBorderImgLst.ReplaceImage(rImageName, Image(b));
         }
 
-        for (short i = 0; i < aShadowImgLst.GetImageCount(); i++)
-        {
-            OUString rImageName = aShadowImgLst.GetImageName(i);
-            BitmapEx b = aShadowImgLst.GetImage(rImageName).GetBitmapEx();
-            b.Scale(GetDPIScaleFactor(), GetDPIScaleFactor(), BmpScaleFlag::Fast);
-            aShadowImgLst.ReplaceImage(rImageName, Image(b));
-        }
+        for (size_t i = 0; i < m_aShadowImgVec.size(); i++)
+            m_aShadowImgVec[i].Scale(GetDPIScaleFactor(), GetDPIScaleFactor(), BmpScaleFlag::Fast);
     }
 
     // this page needs ExchangeSupport
@@ -881,15 +888,6 @@ IMPL_LINK( SvxBorderTabPage, SelStyleHdl_Impl, ListBox&, rLb, void )
 
 
 // ValueSet handling
-
-
-// number of preset images to show
-const sal_uInt16 SVX_BORDER_PRESET_COUNT = 5;
-
-// number of shadow images to show
-const sal_uInt16 SVX_BORDER_SHADOW_COUNT = 5;
-
-
 sal_uInt16 SvxBorderTabPage::GetPresetImageId( sal_uInt16 nValueSetIdx ) const
 {
     // table with all sets of predefined border styles
@@ -981,15 +979,10 @@ void SvxBorderTabPage::FillPresetVS()
 
 void SvxBorderTabPage::FillShadowVS()
 {
-    ImageList& rImgList = aShadowImgLst;
-
     // basic initialization of the ValueSet
     m_pWndShadows->SetStyle( m_pWndShadows->GetStyle() | WB_ITEMBORDER | WB_DOUBLEBORDER );
     m_pWndShadows->SetColCount( SVX_BORDER_SHADOW_COUNT );
 
-    // image resource IDs
-    static const sal_uInt16 pnImgIds[ SVX_BORDER_SHADOW_COUNT ] =
-        { IID_SHADOWNONE, IID_SHADOW_BOT_RIGHT, IID_SHADOW_TOP_RIGHT, IID_SHADOW_BOT_LEFT, IID_SHADOW_TOP_LEFT };
     // string resource IDs for each image
     static const sal_uInt16 pnStrIds[ SVX_BORDER_SHADOW_COUNT ] =
         { RID_SVXSTR_SHADOW_STYLE_NONE, RID_SVXSTR_SHADOW_STYLE_BOTTOMRIGHT, RID_SVXSTR_SHADOW_STYLE_TOPRIGHT, RID_SVXSTR_SHADOW_STYLE_BOTTOMLEFT, RID_SVXSTR_SHADOW_STYLE_TOPLEFT };
@@ -998,7 +991,7 @@ void SvxBorderTabPage::FillShadowVS()
     for( sal_uInt16 nVSIdx = 1; nVSIdx <= SVX_BORDER_SHADOW_COUNT; ++nVSIdx )
     {
         m_pWndShadows->InsertItem( nVSIdx );
-        m_pWndShadows->SetItemImage( nVSIdx, rImgList.GetImage( pnImgIds[ nVSIdx - 1 ] ) );
+        m_pWndShadows->SetItemImage(nVSIdx, Image(m_aShadowImgVec[nVSIdx-1]));
         m_pWndShadows->SetItemText( nVSIdx, CUI_RESSTR( pnStrIds[ nVSIdx - 1 ] ) );
     }
 
