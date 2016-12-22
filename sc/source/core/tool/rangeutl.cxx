@@ -579,24 +579,6 @@ bool ScRangeStringConverter::GetAreaFromString(
     return bResult;
 }
 
-bool ScRangeStringConverter::GetAddressFromString(
-        table::CellAddress& rAddress,
-        const OUString& rAddressStr,
-        const ScDocument* pDocument,
-        FormulaGrammar::AddressConvention eConv,
-        sal_Int32& nOffset,
-        sal_Unicode cSeparator )
-{
-    ScAddress aScAddress;
-    bool bResult(false);
-    if( GetAddressFromString( aScAddress, rAddressStr, pDocument, eConv, nOffset, cSeparator ) && (nOffset >= 0) )
-    {
-        ScUnoConversion::FillApiAddress( rAddress, aScAddress );
-        bResult = true;
-    }
-    return bResult;
-}
-
 bool ScRangeStringConverter::GetRangeFromString(
         table::CellRangeAddress& rRange,
         const OUString& rRangeStr,

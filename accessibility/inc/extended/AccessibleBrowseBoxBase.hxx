@@ -283,9 +283,6 @@ protected:
 
     // internal helper methods
 
-    /** @return  The osl::Mutex member provided by the class BaseMutex. */
-    inline ::osl::Mutex& getOslMutex();
-
     /** Changes the name of the object (flat assignment, no notify).
         @attention  This method requires a locked mutex. */
     inline void implSetName( const OUString& rName );

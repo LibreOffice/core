@@ -78,7 +78,6 @@ public:
     Bitmap setupDrawBitmapExWithAlpha();
     Bitmap setupDrawMask();
 
-    static TestResult checkBitmap(Bitmap& rBitmap);
     static TestResult checkTransformedBitmap(Bitmap& rBitmap);
     static TestResult checkBitmapExWithAlpha(Bitmap& rBitmap);
     static TestResult checkMask(Bitmap& rBitmap);

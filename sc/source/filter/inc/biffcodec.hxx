@@ -44,13 +44,6 @@ public:
     /** Returns true, if the decoder has been initialized correctly. */
     inline bool         isValid() const { return mbValid; }
 
-    /** Decodes nBytes bytes and writes encrypted data into the buffer pnDestData. */
-    void                decode(
-                            sal_uInt8* pnDestData,
-                            const sal_uInt8* pnSrcData,
-                            sal_Int64 nStreamPos,
-                            sal_uInt16 nBytes );
-
 private:
     /** Derived classes implement password verification and initialization of
         the decoder. */

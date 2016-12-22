@@ -623,7 +623,6 @@ public:
     inline bool operator!=( const ScRange& rRange ) const;
     inline bool operator<( const ScRange& rRange ) const;
     inline bool operator<=( const ScRange& rRange ) const;
-    inline bool lessThanByRow( const ScRange& rRange ) const;
 
     /// Hash 2D area ignoring table number.
     inline size_t hashArea() const;
@@ -669,12 +668,6 @@ inline bool ScRange::operator<( const ScRange& r ) const
 inline bool ScRange::operator<=( const ScRange& rRange ) const
 {
     return operator<( rRange ) || operator==( rRange );
-}
-
-/// Sort on upper left corner tab,row,col, if equal then use lower right too.
-inline bool ScRange::lessThanByRow( const ScRange& r ) const
-{
-    return aStart.lessThanByRow( r.aStart) || (aStart == r.aStart && aEnd.lessThanByRow( r.aEnd)) ;
 }
 
 inline bool ScRange::In( const ScAddress& rAddress ) const

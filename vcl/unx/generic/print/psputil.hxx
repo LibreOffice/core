@@ -53,15 +53,11 @@ public:
     ConverterFactory();
     ~ConverterFactory();
     rtl_UnicodeToTextConverter  Get (rtl_TextEncoding nEncoding);
-    std::size_t                 Convert (const sal_Unicode *pText, int nTextLen,
-                                         unsigned char *pBuffer, std::size_t nBufferSize,
-                                         rtl_TextEncoding nEncoding);
+
 private:
 
     std::map< rtl_TextEncoding, rtl_UnicodeToTextConverter >        m_aConverters;
 };
-
-ConverterFactory& GetConverterFactory ();
 
 }  /* namespace psp */
 

@@ -250,7 +250,6 @@ public:
     void            PSPointOp (const Point& rPoint, const sal_Char* pOperator);
     void            PSHexString (const unsigned char* pString, sal_Int16 nLen);
     void            PSShowGlyph (const unsigned char nGlyphId);
-    void            PSComment (const sal_Char* pComment );
 
     void            OnEndJob ();
     void            writeResources( osl::File* pFile, std::list< OString >& rSuppliedFonts );
@@ -321,8 +320,6 @@ public:
                              bool bArtItalic,
                              bool bArtBold
                              );
-    sal_Int32       GetFontAngle () const
-    { return mnTextAngle; }
     sal_Int32       GetFontID () const
     { return mnFontID; }
     bool            GetFontVertical() const

@@ -50,10 +50,6 @@ public:
     int             GetSlant()                                                      { return mnSlant; }
     long            GetMinKashida()                                                 { return mnMinKashida; }
 
-    void            SetAscent(long nAscent)                                         { mnAscent=nAscent; }
-    void            SetDescent(long nDescent)                                       { mnDescent=nDescent; }
-    void            SetInternalLeading(long nIntLeading)                            { mnIntLeading = nIntLeading; }
-    void            SetExternalLeading(long nExtLeading)                            { mnExtLeading = nExtLeading; }
     void            SetSlant(int nSlant)                                            { mnSlant=nSlant; }
     void            SetMinKashida( long nMinKashida )                               { mnMinKashida=nMinKashida; }
 

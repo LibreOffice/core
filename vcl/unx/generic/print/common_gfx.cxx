@@ -1052,25 +1052,6 @@ PrinterGfx::PSShowGlyph (const unsigned char nGlyphId)
         PSGRestore ();
 }
 
-void
-PrinterGfx::PSComment( const sal_Char* pComment )
-{
-    const sal_Char* pLast = pComment;
-    while( pComment && *pComment )
-    {
-        while( *pComment && *pComment != '\n' && *pComment != '\r' )
-            pComment++;
-        if( pComment - pLast > 1 )
-        {
-            WritePS( mpPageBody, "% ", 2 );
-            WritePS( mpPageBody, pLast, pComment - pLast );
-            WritePS( mpPageBody, "\n", 1 );
-        }
-        if( *pComment )
-            pLast = ++pComment;
-    }
-}
-
 bool
 PrinterGfx::DrawEPS( const Rectangle& rBoundingBox, void* pPtr, sal_uInt32 nSize )
 {

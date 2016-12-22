@@ -70,9 +70,7 @@ public:
     static OString
     GetReencodedFontName (rtl_TextEncoding nEnc,
                           const OString &rFontName);
-    static OString
-    GetGlyphSetEncodingName (rtl_TextEncoding nEnc,
-                             const OString &rFontName);
+
     bool            IsVertical () { return mbVertical;}
 
     void            DrawGlyph (PrinterGfx& rGfx,

@@ -970,21 +970,6 @@ void ToolBox::SetItemImage( sal_uInt16 nItemId, const Image& rImage )
     }
 }
 
-void ToolBox::SetImageList( const ImageList& rImageList )
-{
-    maImageList = rImageList;
-
-    sal_uInt16 nCount = (sal_uInt16)mpData->m_aItems.size();
-    for( sal_uInt16 i = 0; i < nCount; i++ )
-    {
-        Image aImage;
-        if ( mpData->m_aItems[i].mnId )
-            aImage = maImageList.GetImage( mpData->m_aItems[i].mnId );
-        if( !!aImage )
-            SetItemImage( mpData->m_aItems[i].mnId, aImage );
-    }
-}
-
 static Image ImplRotImage( const Image& rImage, long nAngle10 )
 {
     Image       aRet;

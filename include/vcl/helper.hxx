@@ -42,8 +42,6 @@ void VCL_DLLPUBLIC getPrinterPathList( std::list< OUString >& rPathList, const c
 // seems to be a bug in gcc, now we return an object instead of a reference
 VCL_DLLPUBLIC OUString const & getFontPath();
 
-bool VCL_DLLPUBLIC convertPfbToPfa( osl::File& rInFile, osl::File& rOutFile );
-
 // normalized path (equivalent to realpath)
 void VCL_DLLPUBLIC normPath( OString& rPath );
 

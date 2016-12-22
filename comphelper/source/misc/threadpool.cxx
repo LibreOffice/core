@@ -76,7 +76,6 @@ public:
 };
 
 ThreadPool::ThreadPool( sal_Int32 nWorkers ) :
-    mnThreadsWorking( 0 ),
     mbTerminate( false )
 {
     std::unique_lock< std::mutex > aGuard( maMutex );
@@ -199,19 +198,6 @@ ThreadTask *ThreadPool::popWorkLocked( std::unique_lock< std::mutex > & rGuard, 
 
     return nullptr;
 }
-
-void ThreadPool::startWorkLocked()
-{
-    mnThreadsWorking++;
-}
-
-void ThreadPool::stopWorkLocked()
-{
-    assert( mnThreadsWorking > 0 );
-    if ( --mnThreadsWorking == 0 )
-        maTasksChanged.notify_all();
-}
-
 
 void ThreadPool::waitUntilDone(const std::shared_ptr<ThreadTaskTag>& rTag)
 {

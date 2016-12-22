@@ -30,23 +30,14 @@ class SvStringHashEntry
 {
     OString     aName;
     sal_uLong   nValue;
-    bool        bHasId;
 public:
-    SvStringHashEntry()
-        : nValue(0)
-        , bHasId(false)
-    {
-    }
-
     SvStringHashEntry( const OString& rName )
         : aName(rName)
         , nValue(0)
-        , bHasId(true)
     {
     }
 
     const OString&  GetName() const { return aName; }
-    bool            HasId() const { return bHasId; }
 
     void            SetValue( sal_uLong n ) { nValue = n; }
     sal_uLong       GetValue() const { return nValue; }

@@ -111,16 +111,6 @@ Bitmap OutputDeviceTestBitmap::setupDrawMask()
     return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
 }
 
-TestResult OutputDeviceTestBitmap::checkBitmap(Bitmap& rBitmap)
-{
-    std::vector<Color> aExpected
-    {
-        constBackgroundColor, constBackgroundColor,
-        COL_YELLOW, constFillColor, COL_YELLOW, constFillColor, constFillColor
-    };
-    return checkRectangles(rBitmap, aExpected);
-}
-
 TestResult OutputDeviceTestBitmap::checkTransformedBitmap(Bitmap& rBitmap)
 {
     std::vector<Color> aExpected

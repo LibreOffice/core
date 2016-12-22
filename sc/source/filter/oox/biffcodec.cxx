@@ -52,17 +52,6 @@ BiffDecoderBase::~BiffDecoderBase()
     return mbValid ? ::comphelper::DocPasswordVerifierResult::OK : ::comphelper::DocPasswordVerifierResult::WrongPassword;
 }
 
-void BiffDecoderBase::decode( sal_uInt8* pnDestData, const sal_uInt8* pnSrcData, sal_Int64 nStreamPos, sal_uInt16 nBytes )
-{
-    if( pnDestData && pnSrcData && (nBytes > 0) )
-    {
-        if( mbValid )
-            implDecode( pnDestData, pnSrcData, nStreamPos, nBytes );
-        else
-            memcpy( pnDestData, pnSrcData, nBytes );
-    }
-}
-
 BiffDecoder_XOR::BiffDecoder_XOR( const BiffDecoder_XOR& rDecoder ) :
     BiffDecoderBase(),  // must be called to prevent compiler warning
     maCodec( ::oox::core::BinaryCodec_XOR::CODEC_EXCEL ),
