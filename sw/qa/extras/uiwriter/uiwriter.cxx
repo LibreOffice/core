@@ -220,6 +220,7 @@ public:
     void testTdf104440();
     void testTdf104425();
     void testTdf104814();
+    void testTdf104492();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -336,6 +337,7 @@ public:
     CPPUNIT_TEST(testTdf104440);
     CPPUNIT_TEST(testTdf104425);
     CPPUNIT_TEST(testTdf104814);
+    CPPUNIT_TEST(testTdf104492);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -4157,6 +4159,14 @@ void SwUiWriterTest::testTdf104814()
     // accept all redlines
     while(pEditShell->GetRedlineCount())
         pEditShell->AcceptRedline(0);
+}
+
+void SwUiWriterTest::testTdf104492()
+{
+    createDoc("tdf104492.docx");
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    // The document should split table over 3 pages.
+    assertXPath(pXmlDoc, "//page", 3);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
