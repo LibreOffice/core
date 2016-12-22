@@ -3877,6 +3877,11 @@ if test -n "$enable_dbgutil" -a "$enable_dbgutil" != "no"; then
     else
         with_system_libgltf=no
     fi
+    if test "$with_system_hunspell" = "yes"; then
+        AC_MSG_ERROR([--with-system-hunspell conflicts with --enable-dbgutil])
+    else
+        with_system_hunspell=no
+    fi
 else
     ENABLE_DBGUTIL=""
     MSVC_USE_DEBUG_RUNTIME=""
