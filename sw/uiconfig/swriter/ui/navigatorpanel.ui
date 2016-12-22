@@ -33,7 +33,7 @@
                     <property name="can_focus">False</property>
                     <property name="tooltip_text" translatable="yes">Toggle Master View</property>
                     <property name="action_name">toggle</property>
-                    <property name="icon_name">sw/imglst/sc20244.png</property>
+                    <property name="icon_name">sw/res/sc20244.png</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -46,7 +46,7 @@
                     <property name="can_focus">False</property>
                     <property name="tooltip_text" translatable="yes">Navigation</property>
                     <property name="action_name">navigation</property>
-                    <property name="icon_name">sw/imglst/sc20249.png</property>
+                    <property name="icon_name">sw/res/sc20249.png</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -59,7 +59,7 @@
                     <property name="can_focus">False</property>
                     <property name="tooltip_text" translatable="yes">Back</property>
                     <property name="action_name">back</property>
-                    <property name="icon_name">sw/imglst/sc20186.png</property>
+                    <property name="icon_name">sw/res/sc20186.png</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -72,7 +72,7 @@
                     <property name="can_focus">False</property>
                     <property name="tooltip_text" translatable="yes">Forward</property>
                     <property name="action_name">forward</property>
-                    <property name="icon_name">sw/imglst/sc20175.png</property>
+                    <property name="icon_name">sw/res/sc20175.png</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -85,7 +85,7 @@
                     <property name="can_focus">False</property>
                     <property name="tooltip_text" translatable="yes">Drag Mode</property>
                     <property name="action_name">dragmode</property>
-                    <property name="icon_name">sw/imglst/sc20235.png</property>
+                    <property name="icon_name">sw/res/sc20235.png</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -108,7 +108,7 @@
                     <property name="can_focus">False</property>
                     <property name="tooltip_text" translatable="yes">Promote Chapter</property>
                     <property name="action_name">up</property>
-                    <property name="icon_name">sw/imglst/sc20174.png</property>
+                    <property name="icon_name">sw/res/sc20174.png</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -121,7 +121,7 @@
                     <property name="can_focus">False</property>
                     <property name="tooltip_text" translatable="yes">Demote Chapter</property>
                     <property name="action_name">down</property>
-                    <property name="icon_name">sw/imglst/sc20171.png</property>
+                    <property name="icon_name">sw/res/sc20171.png</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -134,7 +134,7 @@
                     <property name="can_focus">False</property>
                     <property name="tooltip_text" translatable="yes">List Box On/Off</property>
                     <property name="action_name">listbox</property>
-                    <property name="icon_name">sw/imglst/sc20233.png</property>
+                    <property name="icon_name">sw/res/sc20233.png</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -147,7 +147,7 @@
                     <property name="can_focus">False</property>
                     <property name="tooltip_text" translatable="yes">Content Navigation View</property>
                     <property name="action_name">root</property>
-                    <property name="icon_name">sw/imglst/sc20234.png</property>
+                    <property name="icon_name">sw/res/sc20234.png</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -170,7 +170,7 @@
                     <property name="can_focus">False</property>
                     <property name="tooltip_text" translatable="yes">Set Reminder</property>
                     <property name="action_name">reminder</property>
-                    <property name="icon_name">sw/imglst/sc20183.png</property>
+                    <property name="icon_name">sw/res/sc20183.png</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -193,7 +193,7 @@
                     <property name="can_focus">False</property>
                     <property name="tooltip_text" translatable="yes">Header</property>
                     <property name="action_name">header</property>
-                    <property name="icon_name">sw/imglst/sc20179.png</property>
+                    <property name="icon_name">sw/res/sc20179.png</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -206,7 +206,7 @@
                     <property name="can_focus">False</property>
                     <property name="tooltip_text" translatable="yes">Footer</property>
                     <property name="action_name">footer</property>
-                    <property name="icon_name">sw/imglst/sc20177.png</property>
+                    <property name="icon_name">sw/res/sc20177.png</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -219,7 +219,7 @@
                     <property name="can_focus">False</property>
                     <property name="tooltip_text" translatable="yes">Anchor&lt;-&gt;Text</property>
                     <property name="action_name">anchor</property>
-                    <property name="icon_name">sw/imglst/sc20182.png</property>
+                    <property name="icon_name">sw/res/sc20182.png</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -242,7 +242,7 @@
                     <property name="can_focus">False</property>
                     <property name="tooltip_text" translatable="yes">Heading Levels Shown</property>
                     <property name="action_name">headings</property>
-                    <property name="icon_name">sw/imglst/sc20236.png</property>
+                    <property name="icon_name">sw/res/sc20236.png</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -265,7 +265,7 @@
                     <property name="can_focus">False</property>
                     <property name="tooltip_text" translatable="yes">Promote Level</property>
                     <property name="action_name">promote</property>
-                    <property name="icon_name">sw/imglst/sc20172.png</property>
+                    <property name="icon_name">sw/res/sc20172.png</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -278,7 +278,7 @@
                     <property name="can_focus">False</property>
                     <property name="tooltip_text" translatable="yes">Demote Level</property>
                     <property name="action_name">demote</property>
-                    <property name="icon_name">sw/imglst/sc20173.png</property>
+                    <property name="icon_name">sw/res/sc20173.png</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -340,7 +340,7 @@
                 <property name="can_focus">False</property>
                 <property name="tooltip_text" translatable="yes">Toggle Master View</property>
                 <property name="action_name">toggle</property>
-                <property name="icon_name">sw/imglst/sc20244.png</property>
+                <property name="icon_name">sw/res/sc20244.png</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -363,7 +363,7 @@
                 <property name="can_focus">False</property>
                 <property name="tooltip_text" translatable="yes">Edit</property>
                 <property name="action_name">edit</property>
-                <property name="icon_name">sw/imglst/sc20245.png</property>
+                <property name="icon_name">sw/res/sc20245.png</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -376,7 +376,7 @@
                 <property name="can_focus">False</property>
                 <property name="tooltip_text" translatable="yes">Update</property>
                 <property name="action_name">update</property>
-                <property name="icon_name">sw/imglst/sc20246.png</property>
+                <property name="icon_name">sw/res/sc20246.png</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -389,7 +389,7 @@
                 <property name="can_focus">False</property>
                 <property name="tooltip_text" translatable="yes">Insert</property>
                 <property name="action_name">insert</property>
-                <property name="icon_name">sw/imglst/sc20247.png</property>
+                <property name="icon_name">sw/res/sc20247.png</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -412,7 +412,7 @@
                 <property name="can_focus">False</property>
                 <property name="tooltip_text" translatable="yes">Save Contents as well</property>
                 <property name="action_name">save</property>
-                <property name="icon_name">sw/imglst/sc20248.png</property>
+                <property name="icon_name">sw/res/sc20248.png</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -435,7 +435,7 @@
                 <property name="can_focus">False</property>
                 <property name="tooltip_text" translatable="yes">Move Up</property>
                 <property name="action_name">up</property>
-                <property name="icon_name">sw/imglst/sc20174.png</property>
+                <property name="icon_name">sw/res/sc20174.png</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -448,7 +448,7 @@
                 <property name="can_focus">False</property>
                 <property name="tooltip_text" translatable="yes">Move Down</property>
                 <property name="action_name">down</property>
-                <property name="icon_name">sw/imglst/sc20171.png</property>
+                <property name="icon_name">sw/res/sc20171.png</property>
               </object>
               <packing>
                 <property name="expand">False</property>

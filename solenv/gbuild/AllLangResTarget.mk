@@ -257,8 +257,6 @@ $(call gb_ResTarget_get_target,%) : $(gb_Helper_MISCDUMMY) \
 			-lg$(LANGUAGE) \
 			-fs=$@ \
 			-lip=$(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION)/$(LIBRARY) \
-			-lip=$(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION)/imglst/$(LANGUAGE) \
-			-lip=$(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION)/imglst \
 			-lip=$(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION)/res/$(LANGUAGE) \
 			-lip=$(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION)/res \
 			-lip=$(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION) \

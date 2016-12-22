@@ -57,7 +57,7 @@
                 <property name="can_focus">False</property>
                 <property name="tooltip_text" translatable="yes">First Slide</property>
                 <property name="action_name">first</property>
-                <property name="icon_name">sd/imglst/nv03.png</property>
+                <property name="icon_name">sd/res/nv03.png</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -70,7 +70,7 @@
                 <property name="can_focus">False</property>
                 <property name="tooltip_text" translatable="yes">Previous Slide</property>
                 <property name="action_name">previous</property>
-                <property name="icon_name">sd/imglst/nv04.png</property>
+                <property name="icon_name">sd/res/nv04.png</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -83,7 +83,7 @@
                 <property name="can_focus">False</property>
                 <property name="tooltip_text" translatable="yes">Next Slide</property>
                 <property name="action_name">next</property>
-                <property name="icon_name">sd/imglst/nv05.png</property>
+                <property name="icon_name">sd/res/nv05.png</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -96,7 +96,7 @@
                 <property name="can_focus">False</property>
                 <property name="tooltip_text" translatable="yes">Last Slide</property>
                 <property name="action_name">last</property>
-                <property name="icon_name">sd/imglst/nv06.png</property>
+                <property name="icon_name">sd/res/nv06.png</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -119,7 +119,7 @@
                 <property name="can_focus">False</property>
                 <property name="tooltip_text" translatable="yes">Drag Mode</property>
                 <property name="action_name">dragmode</property>
-                <property name="icon_name">sd/imglst/nv09.png</property>
+                <property name="icon_name">sd/res/nv09.png</property>
               </object>
               <packing>
                 <property name="expand">False</property>

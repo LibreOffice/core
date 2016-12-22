@@ -68,7 +68,7 @@
                       <object class="GtkImage" id="imgright">
                         <property name="can_focus">False</property>
                         <property name="no_show_all">True</property>
-                        <property name="pixbuf">sw/imglst/wr03.png</property>
+                        <property name="pixbuf">sw/res/wr03.png</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -80,7 +80,7 @@
                       <object class="GtkImage" id="imgkonright">
                         <property name="can_focus">False</property>
                         <property name="no_show_all">True</property>
-                        <property name="pixbuf">sw/imglst/wr09.png</property>
+                        <property name="pixbuf">sw/res/wr09.png</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -125,7 +125,7 @@
                       <object class="GtkImage" id="imgleft">
                         <property name="can_focus">False</property>
                         <property name="no_show_all">True</property>
-                        <property name="pixbuf">sw/imglst/wr02.png</property>
+                        <property name="pixbuf">sw/res/wr02.png</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -137,7 +137,7 @@
                       <object class="GtkImage" id="imgkonleft">
                         <property name="can_focus">False</property>
                         <property name="no_show_all">True</property>
-                        <property name="pixbuf">sw/imglst/wr08.png</property>
+                        <property name="pixbuf">sw/res/wr08.png</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -183,7 +183,7 @@
                       <object class="GtkImage" id="imgnone">
                         <property name="can_focus">False</property>
                         <property name="no_show_all">True</property>
-                        <property name="pixbuf">sw/imglst/wr01.png</property>
+                        <property name="pixbuf">sw/res/wr01.png</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -195,7 +195,7 @@
                       <object class="GtkImage" id="imgkonnone">
                         <property name="can_focus">False</property>
                         <property name="no_show_all">True</property>
-                        <property name="pixbuf">sw/imglst/wr07.png</property>
+                        <property name="pixbuf">sw/res/wr07.png</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -240,7 +240,7 @@
                       <object class="GtkImage" id="imgideal">
                         <property name="can_focus">False</property>
                         <property name="no_show_all">True</property>
-                        <property name="pixbuf">sw/imglst/wr06.png</property>
+                        <property name="pixbuf">sw/res/wr06.png</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -252,7 +252,7 @@
                       <object class="GtkImage" id="imgkonideal">
                         <property name="can_focus">False</property>
                         <property name="no_show_all">True</property>
-                        <property name="pixbuf">sw/imglst/wr011.png</property>
+                        <property name="pixbuf">sw/res/wr011.png</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -297,7 +297,7 @@
                       <object class="GtkImage" id="imgthrough">
                         <property name="can_focus">False</property>
                         <property name="no_show_all">True</property>
-                        <property name="pixbuf">sw/imglst/wr05.png</property>
+                        <property name="pixbuf">sw/res/wr05.png</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -343,7 +343,7 @@
                       <object class="GtkImage" id="imgparallel">
                         <property name="can_focus">False</property>
                         <property name="no_show_all">True</property>
-                        <property name="pixbuf">sw/imglst/wr04.png</property>
+                        <property name="pixbuf">sw/res/wr04.png</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -355,7 +355,7 @@
                       <object class="GtkImage" id="imgkonparallel">
                         <property name="can_focus">False</property>
                         <property name="no_show_all">True</property>
-                        <property name="pixbuf">sw/imglst/wr010.png</property>
+                        <property name="pixbuf">sw/res/wr010.png</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>

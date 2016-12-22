@@ -1075,14 +1075,14 @@ sc/res/time.png cmd/sc_timefield.png
 
 # sd
 # ==============================================
-sd/imglst/nv02.png cmd/sc_freeline_unfilled.png
-sd/imglst/nv03.png cmd/sc_firstrecord.png
-sd/imglst/nv04.png cmd/sc_prevrecord.png
-sd/imglst/nv05.png cmd/sc_nextrecord.png
-sd/imglst/nv06.png cmd/sc_lastrecord.png
-sd/imglst/nv08.png cmd/sc_copy.png
-sd/imglst/nv09.png sc/res/droplink.png
-sd/imglst/nv010.png cmd/sc_inserthyperlink.png
+sd/res/nv02.png cmd/sc_freeline_unfilled.png
+sd/res/nv03.png cmd/sc_firstrecord.png
+sd/res/nv04.png cmd/sc_prevrecord.png
+sd/res/nv05.png cmd/sc_nextrecord.png
+sd/res/nv06.png cmd/sc_lastrecord.png
+sd/res/nv08.png cmd/sc_copy.png
+sd/res/nv09.png sc/res/droplink.png
+sd/res/nv010.png cmd/sc_inserthyperlink.png
 sd/res/sf01.png cmd/sc_showfmexplorer.png
 sd/res/sf02.png cmd/sc_dia.png
 
@@ -1101,17 +1101,17 @@ sd/res/waiticon.png cmd/sc_mediapause.png
 
 # sfx2
 # ==============================================
-sfx2/imglst/actionaction012.png cmd/lc_recsearch.png
-sfx2/imglst/actionaction013.png cmd/lc_controlproperties.png
-sfx2/imglst/actiontemplates015.png cmd/lc_ok.png
-sfx2/imglst/actiontemplates016.png cmd/lc_formproperties.png
-sfx2/imglst/actiontemplates018.png cmd/lc_delete.png
-sfx2/imglst/actiontemplates019.png cmd/lc_editdoc.png
-sfx2/imglst/actiontemplates020.png cmd/lc_exportto.png
-sfx2/imglst/actionview010.png cmd/lc_starshapes.png
-sfx2/imglst/actionview025.png cmd/lc_delete.png
-sfx2/imglst/actionview028.png cmd/lc_save.png
-sfx2/imglst/actionview030.png cmd/lc_open.png
+sfx2/res/actionaction012.png cmd/lc_recsearch.png
+sfx2/res/actionaction013.png cmd/lc_controlproperties.png
+sfx2/res/actiontemplates015.png cmd/lc_ok.png
+sfx2/res/actiontemplates016.png cmd/lc_formproperties.png
+sfx2/res/actiontemplates018.png cmd/lc_delete.png
+sfx2/res/actiontemplates019.png cmd/lc_editdoc.png
+sfx2/res/actiontemplates020.png cmd/lc_exportto.png
+sfx2/res/actionview010.png cmd/lc_starshapes.png
+sfx2/res/actionview025.png cmd/lc_delete.png
+sfx2/res/actionview028.png cmd/lc_save.png
+sfx2/res/actionview030.png cmd/lc_open.png
 
 sfx2/res/closedoc.png vcl/res/closedoc.png
 sfx2/res/deleterow.png cmd/sc_cancel.png
@@ -1252,10 +1252,10 @@ svx/res/symphony/spacing3.png cmd/sc_spacepara1.png
 
 # sw
 # ==============================================
-# imglst
-sw/imglst/lc20556.png cmd/lc_dbviewfunctions.png
-sw/imglst/lc20557.png cmd/lc_cancel.png
-sw/imglst/lc20558.png cmd/lc_ok.png
+# res
+sw/res/lc20556.png cmd/lc_dbviewfunctions.png
+sw/res/lc20557.png cmd/lc_cancel.png
+sw/res/lc20558.png cmd/lc_ok.png
 sw/res/nc20001.png cmd/sc_inserttable.png
 sw/res/nc20002.png cmd/sc_diagramarea.png
 sw/res/nc20003.png cmd/sc_gallery.png
@@ -1272,26 +1272,26 @@ sw/res/re02.png cmd/lc_unsetcellsreadonly.png
 sw/res/re03.png cmd/sc_protect.png
 sw/res/re04.png cmd/sc_protect.png
 
-sw/imglst/sc20171.png cmd/sc_downsearch.png
-sw/imglst/sc20172.png cmd/sc_prevrecord.png
-sw/imglst/sc20173.png cmd/sc_nextrecord.png
-sw/imglst/sc20174.png cmd/sc_upsearch.png
-sw/imglst/sc20175.png cmd/sc_nextrecord.png
-sw/imglst/sc20182.png cmd/sc_anchormenu.png
-sw/imglst/sc20186.png cmd/sc_prevrecord.png
-sw/imglst/sc20233.png cmd/sc_ok.png
-sw/imglst/sc20235.png cmd/sc_editdoc.png
-sw/imglst/sc20238.png sc/res/droplink.png
-sw/imglst/sc20239.png cmd/sc_copy.png
-sw/imglst/sc20245.png cmd/sc_editdoc.png
-sw/imglst/sc20246.png sc/res/droplink.png
-sw/imglst/sc20248.png cmd/sc_save.png
-sw/imglst/sc20249.png cmd/sc_navigator.png
-sw/imglst/sc20556.png cmd/sc_dbviewfunctions.png
-sw/imglst/sc20557.png cmd/sc_cancel.png
-sw/imglst/sc20558.png cmd/sc_ok.png
+sw/res/sc20171.png cmd/sc_downsearch.png
+sw/res/sc20172.png cmd/sc_prevrecord.png
+sw/res/sc20173.png cmd/sc_nextrecord.png
+sw/res/sc20174.png cmd/sc_upsearch.png
+sw/res/sc20175.png cmd/sc_nextrecord.png
+sw/res/sc20182.png cmd/sc_anchormenu.png
+sw/res/sc20186.png cmd/sc_prevrecord.png
+sw/res/sc20233.png cmd/sc_ok.png
+sw/res/sc20235.png cmd/sc_editdoc.png
+sw/res/sc20238.png sc/res/droplink.png
+sw/res/sc20239.png cmd/sc_copy.png
+sw/res/sc20245.png cmd/sc_editdoc.png
+sw/res/sc20246.png sc/res/droplink.png
+sw/res/sc20248.png cmd/sc_save.png
+sw/res/sc20249.png cmd/sc_navigator.png
+sw/res/sc20556.png cmd/sc_dbviewfunctions.png
+sw/res/sc20557.png cmd/sc_cancel.png
+sw/res/sc20558.png cmd/sc_ok.png
 
-sw/imglst/sc_datainrows.png cmd/sc_datainrows.png
+sw/res/sc_datainrows.png cmd/sc_datainrows.png
 
 sw/res/sf01.png cmd/sc_controlcodes.png
 sw/res/sf02.png cmd/sc_charfontname.png
