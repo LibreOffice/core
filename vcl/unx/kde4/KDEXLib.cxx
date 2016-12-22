@@ -18,8 +18,7 @@
  * under the License.
  *
  *************************************************************/
-
-
+/* $Id$ */
 
 #include <vos/process.hxx>
 
@@ -77,13 +76,13 @@ void KDEXLib::Init()
     KAboutData *kAboutData = new KAboutData("OpenOffice",
             "kdelibs4",
             ki18n( "Apache OpenOffice" ),
-            "3.4.0",
+            "4.2.0",
             ki18n( "Apache OpenOffice with KDE Native Widget Support." ),
             KAboutData::License_File,
             ki18n( "Joint Copyright (c) 2003, 2004, 2005, 2006, 2007, 2008, 2009 Novell, Inc and Apache Software Foundation"),
             ki18n( "Apache OpenOffice is an office suite.\n" ),
             "http://openoffice.apache.org/",
-            "ooo-issues@incubator.apache.org" );
+            "issues@openoffice.apache.org" );
 
     kAboutData->addAuthor( ki18n( "Jan Holesovsky" ),
             ki18n( "Original author and maintainer of the KDE NWF." ),

@@ -20,7 +20,7 @@
 #
 # *************************************************************
 #
-# $Id: gcov_resultinterpreter.pl,v 1.3 2005-11-02 17:24:12 kz Exp $
+# $Id$
 #
 
 # GCOV_RESULTINTERPRETER

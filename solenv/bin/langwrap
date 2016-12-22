@@ -22,7 +22,7 @@
 #
 # langwrap - language wrapper for building resources
 #
-# $Id: langwrap,v 1.2 2008-08-18 13:10:41 vg Exp $
+# $Id$
 
 use Getopt::Std;
 

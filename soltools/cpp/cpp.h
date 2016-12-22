@@ -18,7 +18,7 @@
  * under the License.
  *
  *************************************************************/
-/* $Id: cpp.h,v 1.4 2006-06-20 05:07:28 hr Exp $ */
+/* $Id$ */
 
 #define INS         32768   /* input buffer                             */
 #define OBS         8092    /* outbut buffer                            */
