@@ -221,6 +221,7 @@ public:
     void testTdf104425();
     void testTdf104814();
     void testTdf66405();
+    void testTdf104492();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -338,6 +339,7 @@ public:
     CPPUNIT_TEST(testTdf104425);
     CPPUNIT_TEST(testTdf104814);
     CPPUNIT_TEST(testTdf66405);
+    CPPUNIT_TEST(testTdf104492);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -4200,6 +4202,13 @@ void SwUiWriterTest::testTdf66405()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nRightMargin);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nTopMargin);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nBottomMargin);
+}
+void SwUiWriterTest::testTdf104492()
+{
+    createDoc("tdf104492.docx");
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    // The document should split table over 3 pages.
+    assertXPath(pXmlDoc, "//page", 3);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
