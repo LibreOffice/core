@@ -19,7 +19,7 @@
 #ifndef INCLUDED_STARMATH_INC_PARSE_HXX
 #define INCLUDED_STARMATH_INC_PARSE_HXX
 
-#include <com/sun/star/lang/Locale.hpp>
+#include <unotools/charclass.hxx>
 #include <memory>
 #include <set>
 #include <vector>
@@ -46,8 +46,10 @@ class SmParser
     // map of used symbols (used to reduce file size by exporting only actually used symbols)
     std::set< OUString >   m_aUsedSymbols;
 
-    //! locale where '.' is decimal separator!
-    css::lang::Locale m_aDotLoc;
+    // CharClass representing a locale for parsing numbers
+    CharClass m_aNumCC;
+    // pointer to System locale's CharClass, which is alive inside SM_MOD()
+    const CharClass* m_pSysCC;
 
     SmParser(const SmParser&) = delete;
     SmParser& operator=(const SmParser&) = delete;
