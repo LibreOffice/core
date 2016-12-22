@@ -43,6 +43,17 @@ namespace o3tl {
     template<> struct typed_flags<AsCharFlags> : is_typed_flags<AsCharFlags, 0x3f> {};
 };
 
+namespace sw
+{
+    // TODO: merge/migrate this to com::sun::star::VertOrientation instead of duplicating?
+    enum class LineAlign
+    {
+        NONE,
+        TOP,
+        CENTER,
+        BOTTOM
+    };
+};
 namespace objectpositioning
 {
     class SwAsCharAnchoredObjectPosition : public SwAnchoredObjectPosition
@@ -70,9 +81,8 @@ namespace objectpositioning
         Point       maAnchorPos;
         SwTwips     mnRelPos;
         SwRect      maObjBoundRect;
-        // line alignment relative to line height; gives feedback for line formatting
-        // 0 - no line alignment, 1 - at top, 2 - at center, 3 - at bottom
-        sal_uInt8   mnLineAlignment;
+        // line alignment relative to line height
+        sw::LineAlign   mnLineAlignment;
 
         // method to cast <SwAnchoredObjectPosition::GetAnchorFrame()>
         const SwTextFrame& GetAnchorTextFrame() const;
@@ -142,7 +152,7 @@ namespace objectpositioning
         const SwRect& GetObjBoundRectInclSpacing() const { return maObjBoundRect;}
 
         // determined line alignment relative to line height
-        sal_uInt8 GetLineAlignment() const { return mnLineAlignment;}
+        sw::LineAlign GetLineAlignment() const { return mnLineAlignment;}
     };
 }
 

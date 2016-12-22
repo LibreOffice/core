@@ -255,7 +255,7 @@ void sw::DrawFlyCntPortion::Paint(const SwTextPaintInfo&) const
  */
 SwFlyCntPortion::SwFlyCntPortion()
     : bMax(false)
-    , nAlign(0)
+    , eAlign(sw::LineAlign::NONE)
 {
     nLineLength = 1;
     SetWhichPor(POR_FLYCNT);
