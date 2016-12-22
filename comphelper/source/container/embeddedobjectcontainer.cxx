@@ -1244,7 +1244,7 @@ namespace {
         }
         catch (const uno::Exception&)
         {
-            SAL_WARN( "comphelper.container", "The pictures storage is not available!\n" );
+            SAL_WARN( "comphelper.container", "The images storage is not available!\n" );
         }
     }
 
