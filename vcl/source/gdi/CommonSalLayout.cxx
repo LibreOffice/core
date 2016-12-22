@@ -628,7 +628,7 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
 
                 nAdvance = std::lround(nAdvance * nXScale);
                 nXOffset = std::lround(nXOffset * nXScale);
-                nYOffset = std::lround(nXOffset * nYScale);
+                nYOffset = std::lround(nYOffset * nYScale);
 
                 Point aNewPos(aCurrPos.X() + nXOffset, aCurrPos.Y() + nYOffset);
                 const GlyphItem aGI(nCharPos, nGlyphIndex, aNewPos, nGlyphFlags,
