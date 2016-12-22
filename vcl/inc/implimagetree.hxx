@@ -53,6 +53,9 @@ struct ImageRequestParameters
         , mbLocalized(bLocalized)
         , meFlags(eFlags)
     {}
+
+    bool convertToDarkTheme();
+    sal_Int32 scalePrecentage();
 };
 
 class ImplImageTree

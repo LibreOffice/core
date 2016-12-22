@@ -49,6 +49,25 @@
 #include <vcl/BitmapTools.hxx>
 #include <vcl/pngwrite.hxx>
 
+bool ImageRequestParameters::convertToDarkTheme()
+{
+    static bool bIconsForDarkTheme = !!getenv("VCL_ICONS_FOR_DARK_THEME");
+
+    bool bConvertToDarkTheme = false;
+    if (!(meFlags & ImageLoadFlags::IgnoreDarkTheme))
+        bConvertToDarkTheme = bIconsForDarkTheme;
+
+    return bConvertToDarkTheme;
+}
+
+sal_Int32 ImageRequestParameters::scalePrecentage()
+{
+    sal_Int32 aScalePercentage = 100;
+    if (!(meFlags & ImageLoadFlags::IgnoreScalingFactor))
+        aScalePercentage = Application::GetDefaultDevice()->GetDPIScalePercentage();
+    return aScalePercentage;
+}
+
 namespace
 {
 
@@ -134,15 +153,8 @@ std::shared_ptr<SvStream> wrapStream(css::uno::Reference< css::io::XInputStream 
 
 void loadImageFromStream(std::shared_ptr<SvStream> const & xStream, OUString const & rPath, ImageRequestParameters& rParameters)
 {
-    static bool bIconsForDarkTheme = !!getenv("VCL_ICONS_FOR_DARK_THEME");
-
-    bool bConvertToDarkTheme = bIconsForDarkTheme;
-    if (rParameters.meFlags & ImageLoadFlags::IgnoreDarkTheme)
-        bConvertToDarkTheme = false;
-
-    float aScaleFactor = Application::GetDefaultDevice()->GetDPIScaleFactor();
-    if (rParameters.meFlags & ImageLoadFlags::IgnoreScalingFactor)
-        aScaleFactor = 1.0f;
+    bool bConvertToDarkTheme = rParameters.convertToDarkTheme();
+    sal_Int32 aScalePercentage = rParameters.scalePrecentage();
 
     if (rPath.endsWith(".png"))
     {
@@ -152,7 +164,7 @@ void loadImageFromStream(std::shared_ptr<SvStream> const & xStream, OUString con
     }
     else if (rPath.endsWith(".svg"))
     {
-        vcl::bitmap::loadFromSvg(*xStream.get(), rPath, rParameters.mrBitmap, double(aScaleFactor));
+        vcl::bitmap::loadFromSvg(*xStream.get(), rPath, rParameters.mrBitmap, aScalePercentage / 100.0);
         if (bConvertToDarkTheme)
             rParameters.mrBitmap = BitmapProcessor::createLightImage(rParameters.mrBitmap);
         return;
@@ -165,8 +177,11 @@ void loadImageFromStream(std::shared_ptr<SvStream> const & xStream, OUString con
     if (bConvertToDarkTheme)
         rParameters.mrBitmap = BitmapProcessor::createLightImage(rParameters.mrBitmap);
 
-    if (aScaleFactor > 1.0f)
-        rParameters.mrBitmap.Scale(double(aScaleFactor), double(aScaleFactor), BmpScaleFlag::Fast);
+    if (aScalePercentage > 100)
+    {
+        double aScaleFactor(aScalePercentage / 100.0);
+        rParameters.mrBitmap.Scale(aScaleFactor, aScaleFactor, BmpScaleFlag::Fast);
+    }
 }
 
 } // end anonymous namespace
@@ -283,15 +298,8 @@ bool ImplImageTree::loadDefaultImage(OUString const & style, BitmapEx& bitmap, c
 
 OUString createVariant(ImageRequestParameters& rParameters)
 {
-    static bool bIconsForDarkTheme = !!getenv("VCL_ICONS_FOR_DARK_THEME");
-
-    bool bConvertToDarkTheme = bIconsForDarkTheme;
-    if (rParameters.meFlags & ImageLoadFlags::IgnoreDarkTheme)
-        bConvertToDarkTheme = false;
-
-    sal_Int32 aScalePercentage = Application::GetDefaultDevice()->GetDPIScalePercentage();
-    if (rParameters.meFlags & ImageLoadFlags::IgnoreScalingFactor)
-        aScalePercentage = 100;
+    bool bConvertToDarkTheme = rParameters.convertToDarkTheme();
+    sal_Int32 aScalePercentage = rParameters.scalePrecentage();
 
     OUString aVariant;
     if (aScalePercentage == 100 && !bConvertToDarkTheme)
