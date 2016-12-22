@@ -192,4 +192,43 @@ class ManualCalcTests(UITestCase):
 
         self.ui_test.close_doc()
 
+    # http://manual-test.libreoffice.org/manage/case/143/
+    def test_random_numbers(self):
+        self.ui_test.create_doc_in_start_center("calc")
+        xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
+
+        xGridWin.executeAction("SELECT", mkPropertyValues({"RANGE": "A2:A10"}))
+
+        self.ui_test.execute_modeless_dialog_through_command(".uno:RandomNumberGeneratorDialog")
+        xRandomNumberDlg = self.xUITest.getTopFocusWindow()
+        xDistributionLstBox = xRandomNumberDlg.getChild("distribution-combo")
+        xDistributionLstBox.executeAction("SELECT", mkPropertyValues({"POS": "1"}))
+
+        xMin = xRandomNumberDlg.getChild("parameter1-spin")
+        xMin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "CTRL+A"}))
+        xMin.executeAction("TYPE", mkPropertyValues({"TEXT": "-2"}))
+        xMax = xRandomNumberDlg.getChild("parameter2-spin")
+        xMax.executeAction("TYPE", mkPropertyValues({"KEYCODE": "CTRL+A"}))
+        xMax.executeAction("TYPE", mkPropertyValues({"TEXT": "10"}))
+
+        xApplyBtn = xRandomNumberDlg.getChild("apply")
+        xApplyBtn.executeAction("CLICK", tuple())
+
+        doc = self.ui_test.get_component()
+
+        def check_random_values():
+            for i in range(1, 9):
+                val = get_cell_by_position(doc, 0, 0, i).getValue()
+                self.assertTrue(val <= 10 and val >= -2)
+
+        check_random_values()
+
+        xOkBtn = xRandomNumberDlg.getChild("ok")
+        self.ui_test.close_dialog_through_button(xOkBtn)
+
+        # we might want to check that clicking 'ok' actually changes the values
+        check_random_values()
+
+        self.ui_test.close_doc()
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
