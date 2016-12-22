@@ -45,10 +45,9 @@ public:
 /// This portion represents an as-character anchored fly (shape, frame, etc.)
 class SwFlyCntPortion : public SwLinePortion
 {
-protected:
     Point aRef;     // Relatively to this point we calculate the AbsPos
-    bool bMax : 1;   // Line adjustment and height == line height
-    sal_uInt8 nAlign : 3; // Line adjustment? No, above, middle, bottom
+    bool bMax;   // Line adjustment and height == line height
+    sw::LineAlign eAlign;
 
     virtual SdrObject* GetSdrObj(const SwTextFrame&) =0;
 
@@ -56,8 +55,8 @@ public:
     SwFlyCntPortion();
     inline const Point& GetRefPoint() const { return aRef; }
     inline bool IsMax() const { return bMax; }
-    inline sal_uInt8 GetAlign() const { return nAlign; }
-    inline void SetAlign(sal_uInt8 nNew) { nAlign = nNew; }
+    inline sw::LineAlign GetAlign() const { return eAlign; }
+    inline void SetAlign(sw::LineAlign eNew) { eAlign = eNew; }
     inline void SetMax(bool bNew) { bMax = bNew; }
     void SetBase(const SwTextFrame& rFrame, const Point& rBase, long nLnAscent, long nLnDescent, long nFlyAscent, long nFlyDescent, AsCharFlags nFlags);
     virtual bool Format(SwTextFormatInfo& rInf) override;

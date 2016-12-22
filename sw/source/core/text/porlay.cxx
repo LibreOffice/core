@@ -460,15 +460,17 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
                                 // Just care about the portion height.
                                 Height(nPosHeight);
                         }
-                        if( pPos->IsFlyCntPortion() || ( pPos->IsMultiPortion()
+                        SwFlyCntPortion* pAsFly(nullptr);
+                        if(pPos->IsFlyCntPortion())
+                            pAsFly = static_cast<SwFlyCntPortion*>(pPos);
+                        if( pAsFly || ( pPos->IsMultiPortion()
                             && static_cast<SwMultiPortion*>(pPos)->HasFlyInContent() ) )
                             rLine.SetFlyInCntBase();
-                        if( pPos->IsFlyCntPortion() &&
-                            static_cast<SwFlyCntPortion*>(pPos)->GetAlign() )
+                        if(pAsFly && pAsFly->GetAlign() != sw::LineAlign::NONE)
                         {
-                            static_cast<SwFlyCntPortion*>(pPos)->SetMax( false );
+                            pAsFly->SetMax(false);
                             if( !pFlyCnt || pPos->Height() > pFlyCnt->Height() )
-                                pFlyCnt = static_cast<SwFlyCntPortion*>(pPos);
+                                pFlyCnt = pAsFly;
                         }
                         else
                         {
@@ -508,9 +510,9 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
                     pFlyCnt->SetMax( true );
                     if( Height() > nMaxDescent + nAscent )
                     {
-                        if( 3 == pFlyCnt->GetAlign() ) // Bottom
+                        if( sw::LineAlign::BOTTOM == pFlyCnt->GetAlign() )
                             nAscent = Height() - nMaxDescent;
-                        else if( 2 == pFlyCnt->GetAlign() ) // Center
+                        else if( sw::LineAlign::CENTER == pFlyCnt->GetAlign() )
                             nAscent = ( Height() + nAscent - nMaxDescent ) / 2;
                     }
                     pFlyCnt->SetAscent( nAscent );

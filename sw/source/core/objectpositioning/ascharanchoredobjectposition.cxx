@@ -52,7 +52,7 @@ SwAsCharAnchoredObjectPosition::SwAsCharAnchoredObjectPosition(
       maAnchorPos ( Point() ),
       mnRelPos ( 0 ),
       maObjBoundRect ( SwRect() ),
-      mnLineAlignment ( 0 )
+      mnLineAlignment ( sw::LineAlign::NONE )
 {}
 
 /** destructor */
@@ -337,7 +337,7 @@ SwTwips SwAsCharAnchoredObjectPosition::GetRelPosToBase(
 {
     SwTwips nRelPosToBase = 0;
 
-    mnLineAlignment = 0;
+    mnLineAlignment = sw::LineAlign::NONE;
 
     const sal_Int16 eVertOrient = _rVert.GetVertOrient();
 
@@ -365,26 +365,26 @@ SwTwips SwAsCharAnchoredObjectPosition::GetRelPosToBase(
                 // positioning necessary. Also, the max. ascent isn't changed.
                 nRelPosToBase -= mnLineAscentInclObjs;
                 if ( eVertOrient == text::VertOrientation::LINE_CENTER )
-                    mnLineAlignment = 2;
+                    mnLineAlignment = sw::LineAlign::CENTER;
                 else if ( eVertOrient == text::VertOrientation::LINE_TOP )
-                    mnLineAlignment = 1;
+                    mnLineAlignment = sw::LineAlign::TOP;
                 else if ( eVertOrient == text::VertOrientation::LINE_BOTTOM )
-                    mnLineAlignment = 3;
+                    mnLineAlignment = sw::LineAlign::BOTTOM;
             }
             else if ( eVertOrient == text::VertOrientation::LINE_CENTER )
             {
                 nRelPosToBase -= ( _nObjBoundHeight + mnLineAscentInclObjs - mnLineDescentInclObjs ) / 2;
-                mnLineAlignment = 2;
+                mnLineAlignment = sw::LineAlign::CENTER;
             }
             else if ( eVertOrient == text::VertOrientation::LINE_TOP )
             {
                 nRelPosToBase -= mnLineAscentInclObjs;
-                mnLineAlignment = 1;
+                mnLineAlignment = sw::LineAlign::TOP;
             }
             else if ( eVertOrient == text::VertOrientation::LINE_BOTTOM )
             {
                 nRelPosToBase += mnLineDescentInclObjs - _nObjBoundHeight;
-                mnLineAlignment = 3;
+                mnLineAlignment = sw::LineAlign::BOTTOM;
             }
         }
     }
