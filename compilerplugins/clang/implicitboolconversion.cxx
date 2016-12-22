@@ -995,7 +995,7 @@ void ImplicitBoolConversion::checkCXXConstructExpr(
 }
 
 void ImplicitBoolConversion::reportWarning(ImplicitCastExpr const * expr) {
-    if (!compiler.getLangOpts().ObjC2 || compiler.getLangOpts().CPlusPlus) {
+    if (compiler.getLangOpts().CPlusPlus) {
         report(
             DiagnosticsEngine::Warning,
             "implicit conversion (%0) from %1 to %2", expr->getLocStart())
