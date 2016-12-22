@@ -60,6 +60,11 @@ public:
             else
                 mxMMComponent->dispose();
         }
+        if (mxCurResultSet.is())
+        {
+            css::uno::Reference<css::lang::XComponent>(
+                mxCurResultSet, css::uno::UNO_QUERY_THROW)->dispose();
+        }
         SwModelTestBase::tearDown();
     }
 
@@ -161,13 +166,13 @@ public:
 
         if (nDataSets > 0)
         {
-            uno::Reference< sdbc::XRowSet > xCurResultSet = getXResultFromDataset( tablename, aDBName );
-            uno::Reference< sdbcx::XRowLocate > xCurRowLocate( xCurResultSet, uno::UNO_QUERY );
-            mMMargs.push_back( beans::NamedValue( OUString( UNO_NAME_RESULT_SET ), uno::Any( xCurResultSet ) ) );
+            mxCurResultSet = getXResultFromDataset( tablename, aDBName );
+            uno::Reference< sdbcx::XRowLocate > xCurRowLocate( mxCurResultSet, uno::UNO_QUERY );
+            mMMargs.push_back( beans::NamedValue( OUString( UNO_NAME_RESULT_SET ), uno::Any( mxCurResultSet ) ) );
             std::vector< uno::Any > vResult;
             vResult.reserve( nDataSets );
             sal_Int32 i;
-            for (i = 0, xCurResultSet->first(); i < nDataSets; i++, xCurResultSet->next())
+            for (i = 0, mxCurResultSet->first(); i < nDataSets; i++, mxCurResultSet->next())
             {
                 vResult.push_back( uno::Any( xCurRowLocate->getBookmark() ) );
             }
@@ -282,6 +287,7 @@ protected:
     OUString msMailMergeOutputPrefix;
     sal_Int16 mnCurOutputType;
     uno::Reference< lang::XComponent > mxMMComponent;
+    uno::Reference< sdbc::XRowSet > mxCurResultSet;
     const char* maMMtestFilename;
 };
 
