@@ -8,6 +8,7 @@
 from libreoffice.uno.propertyvalue import mkPropertyValues
 
 from uitest.framework import UITestCase
+from uitest.uihelper.common import type_text
 
 class CreateRangeNameTest(UITestCase):
 
@@ -19,11 +20,9 @@ class CreateRangeNameTest(UITestCase):
 
         xAddNameDlg = self.xUITest.getTopFocusWindow()
 
-        props = {"TEXT": "simpleRangeName"}
-        actionProps = mkPropertyValues(props)
-
         xEdit = xAddNameDlg.getChild("edit")
-        xEdit.executeAction("TYPE", actionProps)
+        type_text(xEdit, "simpleRangeName")
+
         xAddBtn = xAddNameDlg.getChild("add")
         xAddBtn.executeAction("CLICK", tuple())
 
@@ -37,11 +36,8 @@ class CreateRangeNameTest(UITestCase):
 
         xAddNameDlg = self.xUITest.getTopFocusWindow()
 
-        props = {"TEXT": "simpleRangeName"}
-        actionProps = mkPropertyValues(props)
-
         xEdit = xAddNameDlg.getChild("edit")
-        xEdit.executeAction("TYPE", actionProps)
+        type_text(xEdit, "simpleRangeName")
 
         xScope = xAddNameDlg.getChild("scope")
         props = {"POS": "1"}

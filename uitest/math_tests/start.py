@@ -10,7 +10,7 @@ from uitest.uihelper.common import get_state_as_dict
 from libreoffice.uno.propertyvalue import mkPropertyValues
 
 from uitest.framework import UITestCase
-
+from uitest.uihelper.common import type_text
 from uitest.debug import sleep
 
 import unittest
@@ -47,7 +47,7 @@ class SimpleMathTest(UITestCase):
 
         xMathEdit = xMathDoc.getChild("math_edit")
 
-        xMathEdit.executeAction("TYPE", mkPropertyValues({"TEXT": "E=mc^2"}))
+        type_text(xMathEdit, "E=mc^2")
 
         self.ui_test.close_doc()
 
@@ -80,9 +80,9 @@ class SimpleMathTest(UITestCase):
         xElement.executeAction("SELECT", tuple())
 
         xMathEdit = xMathDoc.getChild("math_edit")
-        xMathEdit.executeAction("TYPE", mkPropertyValues({"TEXT":"1"}))
+        type_text(xMathEdit, "1")
         xMathEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"F4"}))
-        xMathEdit.executeAction("TYPE", mkPropertyValues({"TEXT":"2"}))
+        type_text(xMathEdit, "2")
 
         edit_state = get_state_as_dict(xMathEdit)
         self.assertEqual("1 <> 2 ", edit_state["Text"])

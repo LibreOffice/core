@@ -5,11 +5,10 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-from uitest.uihelper.common import get_state_as_dict
-
 from libreoffice.uno.propertyvalue import mkPropertyValues
 
 from uitest.framework import UITestCase
+from uitest.uihelper.common import get_state_as_dict, type_text
 
 import time
 
@@ -34,7 +33,7 @@ class SimpleWriterTest(UITestCase):
         xWriterDoc = self.xUITest.getTopFocusWindow()
         xWriterEdit = xWriterDoc.getChild("writer_edit")
 
-        xWriterEdit.executeAction("TYPE", mkPropertyValues({"TEXT": "This is my first writer text written through the UI testing"}))
+        type_text(xWriterEdit, "This is my first writer text written through the UI testing")
 
         self.ui_test.close_doc()
 
@@ -62,7 +61,7 @@ class SimpleWriterTest(UITestCase):
         xWriterDoc = self.xUITest.getTopFocusWindow()
         xWriterEdit = xWriterDoc.getChild("writer_edit")
 
-        xWriterEdit.executeAction("TYPE", mkPropertyValues({"TEXT": "This is my first writer text written through the UI testing"}))
+        type_text(xWriterEdit, "This is my first writer text written through the UI testing")
 
         xWriterEdit.executeAction("SELECT", mkPropertyValues({"START_POS": "0", "END_POS": "4"}))
 

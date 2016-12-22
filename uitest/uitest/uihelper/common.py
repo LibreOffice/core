@@ -5,9 +5,12 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-from libreoffice.uno.propertyvalue import convert_property_values_to_dict
+from libreoffice.uno.propertyvalue import convert_property_values_to_dict, mkPropertyValues
 
 def get_state_as_dict(ui_object):
     return convert_property_values_to_dict(ui_object.getState())
+
+def type_text(ui_object, text):
+    ui_object.executeAction("TYPE", mkPropertyValues({"TEXT": text}))
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

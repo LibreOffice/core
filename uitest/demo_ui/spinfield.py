@@ -6,9 +6,9 @@
 #
 
 from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.uihelper.common import get_state_as_dict
 
 from uitest.framework import UITestCase
+from uitest.uihelper.common import get_state_as_dict, type_text
 
 class SpinFieldTest(UITestCase):
 
@@ -68,7 +68,7 @@ class SpinFieldTest(UITestCase):
         xCellsDlg = self.xUITest.getTopFocusWindow()
         
         xDecimalPlaces = xCellsDlg.getChild("leadzerosed")
-        xDecimalPlaces.executeAction("TYPE", mkPropertyValues({"TEXT": "4"}))
+        type_text(xDecimalPlaces, "4")
 
         decimal_places_state = get_state_as_dict(xDecimalPlaces)
         assert(decimal_places_state["Text"] == "41")
