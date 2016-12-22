@@ -8,6 +8,7 @@
 from libreoffice.uno.propertyvalue import mkPropertyValues
 
 from uitest.uihelper.calc import enter_text_to_cell
+from uitest.uihelper.common import select_pos
 
 from uitest.framework import UITestCase
 
@@ -27,7 +28,7 @@ class TabControlTest(UITestCase):
         xFunctionDlg = self.xUITest.getTopFocusWindow()
 
         xTabs = xFunctionDlg.getChild("tabs")
-        xTabs.executeAction("SELECT", mkPropertyValues({"POS":"1"}))
+        select_pos(xTabs, "1")
 
         xCancelBtn = xFunctionDlg.getChild("cancel")
         xCancelBtn.executeAction("CLICK", tuple())

@@ -8,6 +8,7 @@
 from libreoffice.uno.propertyvalue import mkPropertyValues
 
 from uitest.framework import UITestCase
+from uitest.uihelper.common import select_pos
 
 class ListBoxTest(UITestCase):
 
@@ -19,9 +20,7 @@ class ListBoxTest(UITestCase):
         xCellsDlg = self.xUITest.getTopFocusWindow()
 
         categoryLB = xCellsDlg.getChild("categorylb")
-        props = {"POS": "4"}
-        actionProps = mkPropertyValues(props)
-        categoryLB.executeAction("SELECT", actionProps)
+        select_pos(categoryLB, "4")
 
         xOkBtn = xCellsDlg.getChild("ok")
         xOkBtn.executeAction("CLICK", tuple())

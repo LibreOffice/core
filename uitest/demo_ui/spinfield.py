@@ -8,7 +8,7 @@
 from libreoffice.uno.propertyvalue import mkPropertyValues
 
 from uitest.framework import UITestCase
-from uitest.uihelper.common import get_state_as_dict, type_text
+from uitest.uihelper.common import get_state_as_dict, type_text, select_pos
 
 class SpinFieldTest(UITestCase):
 
@@ -20,7 +20,7 @@ class SpinFieldTest(UITestCase):
         xCellsDlg = self.xUITest.getTopFocusWindow()
 
         # select the numbers tab page
-        xCellsDlg.executeAction("SELECT", mkPropertyValues({"POS": "0"}))
+        select_pos(xCellsDlg, "0")
         
         xDecimalPlaces = xCellsDlg.getChild("leadzerosed")
         xDecimalPlaces.executeAction("UP", tuple())
@@ -41,7 +41,7 @@ class SpinFieldTest(UITestCase):
         xCellsDlg = self.xUITest.getTopFocusWindow()
 
         # select the numbers tab page
-        xCellsDlg.executeAction("SELECT", mkPropertyValues({"POS": "0"}))
+        select_pos(xCellsDlg, "0")
         
         xDecimalPlaces = xCellsDlg.getChild("leadzerosed")
         xDecimalPlaces.executeAction("UP", tuple())
