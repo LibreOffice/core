@@ -74,7 +74,7 @@
         </child>
         <child>
           <object class="GtkImage" id="picture">
-            <property name="name">picture</property>
+            <property name="name">image</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="stock">gtk-missing-image</property>
