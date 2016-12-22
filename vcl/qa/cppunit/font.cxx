@@ -130,32 +130,32 @@ void VclFontTest::testSymbolFlagAndCharSet()
     vcl::Font aFont;
 
     CPPUNIT_ASSERT_MESSAGE( "Should not be seen as a symbol font after default constructor called", !aFont.IsSymbolFont() );
-    CPPUNIT_ASSERT_MESSAGE( "Character set should be RTL_TEXTENCODING_DONTKNOW after default constructor called",
-                            aFont.GetCharSet() == RTL_TEXTENCODING_DONTKNOW );
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Character set should be RTL_TEXTENCODING_DONTKNOW after default constructor called",
+                            RTL_TEXTENCODING_DONTKNOW, aFont.GetCharSet() );
 
     aFont.SetSymbolFlag(true);
 
     CPPUNIT_ASSERT_MESSAGE( "Test 1: Symbol font flag should be on", aFont.IsSymbolFont() );
-    CPPUNIT_ASSERT_MESSAGE( "Test 1: Character set should be RTL_TEXTENCODING_SYMBOL",
-                            aFont.GetCharSet() == RTL_TEXTENCODING_SYMBOL );
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Test 1: Character set should be RTL_TEXTENCODING_SYMBOL",
+                            RTL_TEXTENCODING_SYMBOL, aFont.GetCharSet() );
 
     aFont.SetSymbolFlag(false);
 
     CPPUNIT_ASSERT_MESSAGE( "Test 2: Symbol font flag should be off", !aFont.IsSymbolFont() );
-    CPPUNIT_ASSERT_MESSAGE( "Test 2: Character set should be RTL_TEXTENCODING_DONTKNOW",
-                            aFont.GetCharSet() == RTL_TEXTENCODING_DONTKNOW );
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Test 2: Character set should be RTL_TEXTENCODING_DONTKNOW",
+                            RTL_TEXTENCODING_DONTKNOW, aFont.GetCharSet() );
 
     aFont.SetCharSet( RTL_TEXTENCODING_SYMBOL );
 
     CPPUNIT_ASSERT_MESSAGE( "Test 3: Symbol font flag should be on", aFont.IsSymbolFont() );
-    CPPUNIT_ASSERT_MESSAGE( "Test 3: Character set should be RTL_TEXTENCODING_SYMBOL",
-                            aFont.GetCharSet() == RTL_TEXTENCODING_SYMBOL );
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Test 3: Character set should be RTL_TEXTENCODING_SYMBOL",
+                            RTL_TEXTENCODING_SYMBOL, aFont.GetCharSet() );
 
     aFont.SetCharSet( RTL_TEXTENCODING_UNICODE );
 
     CPPUNIT_ASSERT_MESSAGE( "Test 4: Symbol font flag should be off", !aFont.IsSymbolFont() );
-    CPPUNIT_ASSERT_MESSAGE( "Test 4: Character set should be RTL_TEXTENCODING_UNICODE",
-                            aFont.GetCharSet() == RTL_TEXTENCODING_UNICODE );
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Test 4: Character set should be RTL_TEXTENCODING_UNICODE",
+                            RTL_TEXTENCODING_UNICODE, aFont.GetCharSet() );
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(VclFontTest);

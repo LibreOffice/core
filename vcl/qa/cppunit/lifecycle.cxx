@@ -85,9 +85,9 @@ void LifecycleTest::testMultiDispose()
     xWin->disposeOnce();
     xWin->disposeOnce();
     xWin->disposeOnce();
-    CPPUNIT_ASSERT(xWin->GetWindow(GetWindowType::Parent) == nullptr);
-    CPPUNIT_ASSERT(xWin->GetChild(0) == nullptr);
-    CPPUNIT_ASSERT(xWin->GetChildCount() == 0);
+    CPPUNIT_ASSERT(!xWin->GetWindow(GetWindowType::Parent));
+    CPPUNIT_ASSERT(!xWin->GetChild(0));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(0), xWin->GetChildCount());
 }
 
 void LifecycleTest::testWidgets(vcl::Window *pParent)
