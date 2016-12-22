@@ -31,7 +31,6 @@ public:
     explicit    ConverterCache();
                 ~ConverterCache();
     sal_uInt16  convertOne( int nSelect, sal_Unicode );
-    void        convertStr( int nSelect, const sal_Unicode* pSrc, sal_uInt16* pDst, int nCount );
 protected:
     void        ensureConverter( int nSelect );
 private:
@@ -109,34 +108,6 @@ sal_uInt16 ConverterCache::convertOne( int nSelect, sal_Unicode aChar )
     return aCode;
 }
 
-void ConverterCache::convertStr( int nSelect, const sal_Unicode* pSrc, sal_uInt16* pDst, int nCount )
-{
-    ensureConverter( nSelect );
-
-    for( int n = 0; n < nCount; ++n )
-    {
-        sal_Unicode aUCS2Char = pSrc[n];
-
-        sal_Char aTempArray[8];
-        sal_Size nTempSize;
-        sal_uInt32 nCvtInfo;
-
-        // assume that non-unicode-fonts do not support codepoints >U+FFFF
-        // TODO: use direct unicode->mbcs converter should there ever be one
-        int nCodeLen = rtl_convertUnicodeToText(
-            maConverterCache[ nSelect ], maContexts[ nSelect ],
-            &aUCS2Char, 1, aTempArray, sizeof(aTempArray),
-            RTL_UNICODETOTEXT_FLAGS_UNDEFINED_0
-            | RTL_UNICODETOTEXT_FLAGS_INVALID_0,
-            &nCvtInfo, &nTempSize );
-
-        sal_uInt16 aCode = aTempArray[0];
-        for( int i = 1; i < nCodeLen; ++i )
-            aCode = (aCode << 8) + (aTempArray[i] & 0xFF);
-        pDst[n] = aCode;
-    }
-}
-
 } // anonymous namespace
 
 namespace vcl
@@ -169,30 +140,6 @@ sal_uInt16 TranslateChar16(sal_uInt16 src)
     return aCC.convertOne( 6, src);
 }
 
-void TranslateString12(sal_uInt16 *src, sal_uInt16 *dst, sal_uInt32 n)
-{
-    aCC.convertStr( 2, reinterpret_cast<sal_Unicode *>(src), dst, n);
-}
-
-void TranslateString13(sal_uInt16 *src, sal_uInt16 *dst, sal_uInt32 n)
-{
-    aCC.convertStr( 3, reinterpret_cast<sal_Unicode *>(src), dst, n);
-}
-
-void TranslateString14(sal_uInt16 *src, sal_uInt16 *dst, sal_uInt32 n)
-{
-    aCC.convertStr( 4, reinterpret_cast<sal_Unicode *>(src), dst, n);
-}
-
-void TranslateString15(sal_uInt16 *src, sal_uInt16 *dst, sal_uInt32 n)
-{
-    aCC.convertStr( 5, reinterpret_cast<sal_Unicode *>(src), dst, n);
-}
-
-void TranslateString16(sal_uInt16 *src, sal_uInt16 *dst, sal_uInt32 n)
-{
-    aCC.convertStr( 6, reinterpret_cast<sal_Unicode *>(src), dst, n);
-}
 
 } // namespace vcl
 

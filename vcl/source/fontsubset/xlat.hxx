@@ -33,12 +33,6 @@ namespace vcl
     sal_uInt16 TranslateChar14(sal_uInt16);
     sal_uInt16 TranslateChar15(sal_uInt16);
     sal_uInt16 TranslateChar16(sal_uInt16);
-
-    void TranslateString12(sal_uInt16 *, sal_uInt16 *, sal_uInt32);
-    void TranslateString13(sal_uInt16 *, sal_uInt16 *, sal_uInt32);
-    void TranslateString14(sal_uInt16 *, sal_uInt16 *, sal_uInt32);
-    void TranslateString15(sal_uInt16 *, sal_uInt16 *, sal_uInt32);
-    void TranslateString16(sal_uInt16 *, sal_uInt16 *, sal_uInt32);
 }
 
 #endif // INCLUDED_VCL_SOURCE_FONTSUBSET_XLAT_HXX

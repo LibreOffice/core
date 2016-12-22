@@ -138,41 +138,4 @@ void ElementCollector::doNotify()
     }
 }
 
-ElementCollector* ElementCollector::clone(
-    sal_Int32 nBufferId,
-    cssxc::sax::ElementMarkPriority nPriority ) const
-/****** ElementCollector/clone ************************************************
- *
- *   NAME
- *  clone -- duplicates this ElementCollector object
- *
- *   SYNOPSIS
- *  cloned = clone(nBufferId, nPriority);
- *
- *   FUNCTION
- *  duplicates this ElementCollector object with new buffer Id, priority.
- *
- *   INPUTS
- *  nBufferId - the buffer node's Id
- *  nPriority - the priority
- ******************************************************************************/
-{
-    ElementCollector* pClonedOne
-        = new ElementCollector(m_nSecurityId,
-                       nBufferId, nPriority, m_bToModify,
-                       m_xReferenceResolvedListener);
-
-    if (m_bAbleToNotify)
-    {
-        pClonedOne->notifyListener();
-    }
-
-    if (m_pBufferNode != nullptr)
-    {
-        m_pBufferNode->addElementCollector(pClonedOne);
-    }
-
-    return pClonedOne;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

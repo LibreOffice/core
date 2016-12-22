@@ -105,8 +105,6 @@ public:
     bool        GetNextPos( int* nCharPos, bool* bRTL )
                     { return maRuns.GetNextPos( nCharPos, bRTL ); }
     bool        GetNextRun( int* nMinRunPos, int* nEndRunPos, bool* bRTL );
-    void        NeedFallback( int nCharPos, bool bRTL )
-                    { maFallbackRuns.AddPos( nCharPos, bRTL ); }
     void        NeedFallback( int nMinRunPos, int nEndRunPos, bool bRTL )
                     { maFallbackRuns.AddRun( nMinRunPos, nEndRunPos, bRTL ); }
     // methods used by BiDi and glyph fallback
@@ -200,7 +198,6 @@ protected:
     virtual         ~SalLayout();
 
     // used by layout layers
-    void            SetUnitsPerPixel( int n )               { mnUnitsPerPixel = n; }
     void            SetOrientation( int nOrientation )      // in 0-3600 system
                     { mnOrientation = nOrientation; }
 

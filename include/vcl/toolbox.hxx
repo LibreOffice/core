@@ -328,9 +328,6 @@ public:
     void                CopyItem( const ToolBox& rToolBox, sal_uInt16 nItemId );
     void                Clear();
 
-    const ImageList&    GetImageList() const { return maImageList; }
-    void                SetImageList( const ImageList& rImageList );
-
     void                SetButtonType( ButtonType eNewType = ButtonType::SYMBOLONLY );
     ButtonType          GetButtonType() const { return meButtonType; }
 

@@ -76,9 +76,6 @@ public:
     void setReferenceResolvedListener(
         const css::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener >& referenceResolvedListener);
     void doNotify();
-    ElementCollector* clone(
-        sal_Int32 nId,
-        css::xml::crypto::sax::ElementMarkPriority nPriority ) const;
 };
 
 #endif

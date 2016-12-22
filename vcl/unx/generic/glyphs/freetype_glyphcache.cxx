@@ -454,59 +454,6 @@ FreetypeFont::FreetypeFont( const FontSelectPattern& rFSD, FreetypeFontInfo* pFI
         mnLoadFlags |= FT_LOAD_NO_BITMAP;
 }
 
-void FreetypeFont::SetFontOptions(const std::shared_ptr<FontConfigFontOptions>& xFontOptions)
-{
-    mxFontOptions = xFontOptions;
-
-    if (!mxFontOptions)
-        return;
-
-    FontAutoHint eHint = mxFontOptions->GetUseAutoHint();
-    if( eHint == FontAutoHint::DontKnow )
-        eHint = mbUseGamma ? FontAutoHint::Yes : FontAutoHint::No;
-
-    if( eHint == FontAutoHint::Yes )
-        mnLoadFlags |= FT_LOAD_FORCE_AUTOHINT;
-
-    if( (mnSin != 0) && (mnCos != 0) ) // hinting for 0/90/180/270 degrees only
-        mnLoadFlags |= FT_LOAD_NO_HINTING;
-    mnLoadFlags |= FT_LOAD_IGNORE_GLOBAL_ADVANCE_WIDTH;
-
-    if (mxFontOptions->DontUseAntiAlias())
-      mnPrioAntiAlias = 0;
-    if (mxFontOptions->DontUseEmbeddedBitmaps())
-      mnPrioEmbedded = 0;
-    if (mxFontOptions->DontUseHinting())
-      mnPrioAutoHint = 0;
-
-    if( mnPrioAutoHint <= 0 )
-        mnLoadFlags |= FT_LOAD_NO_HINTING;
-
-#if defined(FT_LOAD_TARGET_LIGHT) && defined(FT_LOAD_TARGET_NORMAL)
-    if( !(mnLoadFlags & FT_LOAD_NO_HINTING) )
-    {
-       mnLoadFlags |= FT_LOAD_TARGET_NORMAL;
-       switch (mxFontOptions->GetHintStyle())
-       {
-           case FontHintStyle::NONE:
-                mnLoadFlags |= FT_LOAD_NO_HINTING;
-                break;
-           case FontHintStyle::Slight:
-                mnLoadFlags |= FT_LOAD_TARGET_LIGHT;
-                break;
-           case FontHintStyle::Medium:
-                break;
-           case FontHintStyle::Full:
-           default:
-                break;
-       }
-    }
-#endif
-
-    if( mnPrioEmbedded <= 0 )
-        mnLoadFlags |= FT_LOAD_NO_BITMAP;
-}
-
 namespace
 {
     FontConfigFontOptions* GetFCFontOptions( const FontAttributes& rFontAttributes, int nSize)

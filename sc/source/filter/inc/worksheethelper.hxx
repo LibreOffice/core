@@ -249,7 +249,6 @@ public:
     /** Extends the used area of this sheet by the passed cell position. */
     void                extendUsedArea( const ScAddress& rAddress );
     /** Extends the used area of this sheet by the passed cell range. */
-    void                extendUsedArea( const ScRange& rRange );
     void                extendUsedArea( const css::table::CellRangeAddress& rRange );
     /** Extends the shape bounding box by the position and size of the passed rectangle (in 1/100 mm). */
     void                extendShapeBoundingBox( const css::awt::Rectangle& rShapeRect );

@@ -348,7 +348,6 @@ public:
         return GetItemPos( mnSelItemId );
     }
     void                SaveValue() { mnSavedItemId = GetSelectItemId(); }
-    sal_Int32           GetSavedValue() const { return mnSavedItemId; }
     bool IsItemSelected( sal_uInt16 nItemId ) const
     {
         return !mbNoSelection && (nItemId == mnSelItemId);

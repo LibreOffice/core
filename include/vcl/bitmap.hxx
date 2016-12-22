@@ -589,19 +589,6 @@ public:
                                 sal_uLong nColorCount,
                                 sal_uLong* pTols = nullptr );
 
-    /** Convert the bitmap to a PolyPolygon
-
-        This works by putting continuous areas of the same color into
-        a polygon, by tracing its bounding line.
-
-        @param rPolyPoly
-        The resulting PolyPolygon
-
-        @return true, if the operation was completed successfully.
-     */
-    bool                    Vectorize(
-                                tools::PolyPolygon& rPolyPoly );
-
     /** Convert the bitmap to a meta file
 
         This works by putting continuous areas of the same color into

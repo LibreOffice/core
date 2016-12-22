@@ -143,7 +143,6 @@ public:
     bool                    TestFont() const { return mbFaceOk;}
     FT_Face                 GetFtFace() const;
     int                     GetLoadFlags() const { return (mnLoadFlags & ~FT_LOAD_IGNORE_TRANSFORM); }
-    void                    SetFontOptions(const std::shared_ptr<FontConfigFontOptions>&);
     const std::shared_ptr<FontConfigFontOptions>& GetFontOptions() const;
     bool                    NeedsArtificialBold() const { return mbArtBold; }
     bool                    NeedsArtificialItalic() const { return mbArtItalic; }
@@ -152,8 +151,6 @@ public:
 
     void                    GetFontMetric(ImplFontMetricDataRef&) const;
     const unsigned char*    GetTable( const char* pName, sal_uLong* pLength );
-    int                     GetEmUnits() const { return maFaceFT->units_per_EM;}
-    double                  GetStretch() { return mfStretch; }
     const FontCharMapRef    GetFontCharMap() const;
     bool                    GetFontCapabilities(vcl::FontCapabilities &) const;
 

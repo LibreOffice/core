@@ -154,13 +154,6 @@ public:
                             sal_Unicode cSeparator = ' ');
 
 /// String to Range API
-    static bool     GetAddressFromString(
-                            css::table::CellAddress& rAddress,
-                            const OUString& rAddressStr,
-                            const ScDocument* pDocument,
-                            formula::FormulaGrammar::AddressConvention eConv,
-                            sal_Int32& nOffset,
-                            sal_Unicode cSeparator = ' ');
     static bool     GetRangeFromString(
                             css::table::CellRangeAddress& rRange,
                             const OUString& rRangeStr,
