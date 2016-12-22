@@ -42,7 +42,7 @@ public:
 void CanvasTest::testComposite()
 {
 #ifdef LINUX
-    VclPtrInstance<WorkWindow> pWin( nullptr, WB_STDWORK );
+    ScopedVclPtrInstance<WorkWindow> pWin( nullptr, WB_STDWORK );
 
     uno::Reference<rendering::XCanvas> xCanvas = pWin->GetCanvas ();
     if( !xCanvas.is() )
