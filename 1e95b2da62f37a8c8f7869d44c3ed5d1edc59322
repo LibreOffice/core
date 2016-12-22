@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a6eadb0_b3a5d8b6",
+        "filename": "basic/source/basmgr/basmgr.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-12-22T08:36:37Z",
+      "side": 1,
+      "message": "Patterns\n\n  assert(p);\n  if (p) ...\n\nare obviously wrong.  Either the condition p must always hold (so use \u0027assert\u0027) or it might or might not hold (so use \u0027if\u0027), but not both.",
+      "revId": "1e95b2da62f37a8c8f7869d44c3ed5d1edc59322",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
