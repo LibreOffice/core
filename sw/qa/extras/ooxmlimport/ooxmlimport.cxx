@@ -736,8 +736,6 @@ DECLARE_OOXMLIMPORT_TEST(testTdf75573_lostTable, "tdf75573_lostTable.docx")
     uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("# of frames/shapes", sal_Int32(0), xDraws->getCount() );
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("# of paragraphs", 6, getParagraphs() );
-
     CPPUNIT_ASSERT_EQUAL_MESSAGE("# of pages", 3, getPages() );
 }
 
