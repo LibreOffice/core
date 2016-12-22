@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a6eadb0_1325acc1",
+        "filename": "starmath/inc/parse.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000381
+      },
+      "writtenOn": "2016-12-22T18:45:39Z",
+      "side": 1,
+      "message": "I think this comment need rewording, I’m not sure I understand it.",
+      "revId": "7354fdffba661075a4b838b7662fc0923f3be1ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a6eadb0_3322a8ba",
+        "filename": "starmath/source/parse.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2292,
+      "author": {
+        "id": 1000381
+      },
+      "writtenOn": "2016-12-22T18:45:39Z",
+      "side": 1,
+      "message": "What does CC stand for?",
+      "revId": "7354fdffba661075a4b838b7662fc0923f3be1ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
