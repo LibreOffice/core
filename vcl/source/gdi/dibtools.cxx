@@ -565,6 +565,9 @@ bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& r
             {
                 case 1:
                 {
+                    const bool bHasPalette = rAcc.HasPalette();
+                    const sal_uInt16 nPaletteEntryCount = rAcc.GetPaletteEntryCount();
+
                     for( ; nCount--; nY += nI )
                     {
                         sal_uInt8 * pTmp = pBuf.get();
@@ -583,7 +586,8 @@ bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& r
                                 cTmp = *pTmp++;
                             }
 
-                            rAcc.SetPixelIndex( nY, nX, (cTmp >> --nShift) & 1);
+                            auto nIndex = (cTmp >> --nShift) & 1;
+                            rAcc.SetPixelIndex(nY, nX, SanitizePaletteIndex(nIndex, bHasPalette, nPaletteEntryCount));
                         }
                     }
                 }
