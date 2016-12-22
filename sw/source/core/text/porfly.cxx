@@ -254,8 +254,8 @@ void sw::DrawFlyCntPortion::Paint(const SwTextPaintInfo&) const
  * Use the dimensions of pFly->OutRect()
  */
 SwFlyCntPortion::SwFlyCntPortion()
-    : bMax(false)
-    , eAlign(sw::LineAlign::NONE)
+    : m_bMax(false)
+    , m_eAlign(sw::LineAlign::NONE)
 {
     nLineLength = 1;
     SetWhichPor(POR_FLYCNT);
@@ -381,7 +381,7 @@ void SwFlyCntPortion::SetBase( const SwTextFrame& rFrame, const Point &rBase,
 
     SetAlign( aObjPositioning.GetLineAlignment() );
 
-    aRef = aObjPositioning.GetAnchorPos();
+    m_aRef = aObjPositioning.GetAnchorPos();
     if( nFlags & AsCharFlags::Rotate )
         SvXSize( aObjPositioning.GetObjBoundRectInclSpacing().SSize() );
     else
