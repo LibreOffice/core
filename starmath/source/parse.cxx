@@ -19,7 +19,6 @@
 
 #include <com/sun/star/i18n/UnicodeType.hpp>
 #include <i18nlangtag/lang.h>
-#include <unotools/charclass.hxx>
 #include <editeng/unolingu.hxx>
 #include <unotools/syslocale.hxx>
 #include <sal/macros.h>
@@ -379,29 +378,25 @@ void SmParser::NextToken()
     ParseResult aRes;
     sal_Int32   nRealStart;
     bool        bCont;
-    CharClass   aCC(SM_MOD()->GetSysLocale().GetLanguageTag());
     do
     {
         // skip white spaces
         while (UnicodeType::SPACE_SEPARATOR ==
-                        aCC.getType( m_aBufferString, m_nBufferIndex ))
+                        m_pSysCC->getType( m_aBufferString, m_nBufferIndex ))
            ++m_nBufferIndex;
 
-        // Try to parse a number. This should be independent from the locale
-        // setting, so temporarily set the language to English.
+        // Try to parse a number in a locale-independent manner using
+        // '.' as decimal separator.
         // See https://bz.apache.org/ooo/show_bug.cgi?id=45779
-        LanguageTag aOldLoc(aCC.getLanguageTag());
-        aCC.setLanguageTag(LanguageTag(m_aDotLoc));
-        aRes = aCC.parsePredefinedToken(KParseType::ASC_NUMBER,
+        aRes = m_aNumCC.parsePredefinedToken(KParseType::ASC_NUMBER,
                                         m_aBufferString, m_nBufferIndex,
                                         coNumStartFlags, "",
                                         coNumContFlags, "");
-        aCC.setLanguageTag(aOldLoc);
 
         if (aRes.TokenType == 0)
         {
             // Try again with the default token parsing.
-            aRes = aCC.parseAnyToken(m_aBufferString, m_nBufferIndex,
+            aRes = m_pSysCC->parseAnyToken(m_aBufferString, m_nBufferIndex,
                                      coStartFlags, "",
                                      coContFlags, "");
         }
@@ -454,7 +449,7 @@ void SmParser::NextToken()
         assert(aRes.EndPos > 0);
         if ( m_aBufferString[aRes.EndPos-1] == ',' &&
              aRes.EndPos < nBufLen &&
-             aCC.getType( m_aBufferString, aRes.EndPos ) != UnicodeType::SPACE_SEPARATOR )
+             m_pSysCC->getType( m_aBufferString, aRes.EndPos ) != UnicodeType::SPACE_SEPARATOR )
         {
             // Comma followed by a non-space char is unlikely for decimal/thousands separator.
             --aRes.EndPos;
@@ -639,7 +634,7 @@ void SmParser::NextToken()
                                 "unexpected comment start" );
 
                         // get identifier of user-defined character
-                        ParseResult aTmpRes = aCC.parseAnyToken(
+                        ParseResult aTmpRes = m_pSysCC->parseAnyToken(
                                 m_aBufferString, rnEndPos,
                                 KParseTokens::ANY_LETTER,
                                 "",
@@ -1374,7 +1369,6 @@ void SmParser::DoTerm(bool bGroupNumberIdent)
                 // See https://bz.apache.org/ooo/show_bug.cgi?id=11752 and
                 // https://bugs.libreoffice.org/show_bug.cgi?id=55853
                 sal_Int32 nBufLen = m_aBufferString.getLength();
-                CharClass aCC(SM_MOD()->GetSysLocale().GetLanguageTag());
                 sal_Int32 nTokens = 1;
 
                 // We need to be careful to call NextToken() only after having
@@ -1382,7 +1376,7 @@ void SmParser::DoTerm(bool bGroupNumberIdent)
                 // skipped!)
                 bool moveToNextToken = true;
                 while (m_nBufferIndex < nBufLen &&
-                       aCC.getType(m_aBufferString, m_nBufferIndex) !=
+                       m_pSysCC->getType(m_aBufferString, m_nBufferIndex) !=
                        UnicodeType::SPACE_SEPARATOR)
                 {
                     NextToken();
@@ -2295,7 +2289,8 @@ SmParser::SmParser()
     , m_nColOff( 0 )
     , m_bImportSymNames( false )
     , m_bExportSymNames( false )
-    , m_aDotLoc( LanguageTag::convertToLocale( LANGUAGE_ENGLISH_US ) )
+    , m_aNumCC( LanguageTag( LANGUAGE_ENGLISH_US ) )
+    , m_pSysCC( SM_MOD()->GetSysLocale().GetCharClassPtr() )
 {
 }
 
