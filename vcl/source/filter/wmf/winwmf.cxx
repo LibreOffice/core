@@ -886,7 +886,6 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
         {
             Size aFontSize;
             char lfFaceName[LF_FACESIZE+1];
-            lfFaceName[LF_FACESIZE] = 0;
             sal_Int16 lfEscapement = 0;
             sal_Int16 lfOrientation = 0;
             sal_Int16 lfWeight = 0;
@@ -904,7 +903,8 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
             pWMF->ReadUChar( aLogFont.lfClipPrecision );
             pWMF->ReadUChar( aLogFont.lfQuality );
             pWMF->ReadUChar( aLogFont.lfPitchAndFamily );
-            pWMF->Read( lfFaceName, LF_FACESIZE );
+            size_t nRet = pWMF->Read( lfFaceName, LF_FACESIZE );
+            lfFaceName[nRet] = 0;
             aLogFont.lfWidth = aFontSize.Width();
             aLogFont.lfHeight = aFontSize.Height();
             aLogFont.lfEscapement = lfEscapement;
