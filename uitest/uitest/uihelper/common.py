@@ -13,4 +13,7 @@ def get_state_as_dict(ui_object):
 def type_text(ui_object, text):
     ui_object.executeAction("TYPE", mkPropertyValues({"TEXT": text}))
 
+def select_pos(ui_object, pos):
+    ui_object.executeAction("SELECT", mkPropertyValues({"POS": pos}))
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

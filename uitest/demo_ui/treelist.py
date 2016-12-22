@@ -8,7 +8,7 @@
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.uihelper.calc import enter_text_to_cell
 
-from uitest.uihelper.common import get_state_as_dict
+from uitest.uihelper.common import get_state_as_dict, select_pos
 
 from uitest.framework import UITestCase
 
@@ -28,7 +28,7 @@ class TreeListTest(UITestCase):
         xFunctionDlg = self.xUITest.getTopFocusWindow()
 
         xTabs = xFunctionDlg.getChild("tabs")
-        xTabs.executeAction("SELECT", mkPropertyValues({"POS":"1"}))
+        select_pos(xTabs, "1")
 
         xTreelist = xTabs.getChild("struct")
 

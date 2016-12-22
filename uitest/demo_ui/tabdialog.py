@@ -8,6 +8,7 @@
 from libreoffice.uno.propertyvalue import mkPropertyValues
 
 from uitest.framework import UITestCase
+from uitest.uihelper.common import select_pos
 
 class TabDialogTest(UITestCase):
 
@@ -18,9 +19,7 @@ class TabDialogTest(UITestCase):
         self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog")
         xCellsDlg = self.xUITest.getTopFocusWindow()
 
-        props = {"POS": "1"}
-        propsUNO = mkPropertyValues(props)
-        xCellsDlg.executeAction("SELECT", propsUNO)
+        select_pos(xCellsDlg, "1")
 
         xOkBtn = xCellsDlg.getChild("ok")
         xOkBtn.executeAction("CLICK", tuple())

@@ -8,6 +8,7 @@
 from libreoffice.uno.propertyvalue import mkPropertyValues
 
 from uitest.framework import UITestCase
+from uitest.uihelper.common import select_pos
 
 class ComboBoxTest(UITestCase):
 
@@ -19,9 +20,7 @@ class ComboBoxTest(UITestCase):
         xAddNameDlg = self.xUITest.getTopFocusWindow()
 
         scopeCB = xAddNameDlg.getChild("scope")
-        props = {"POS": "1"}
-        actionProps = mkPropertyValues(props)
-        scopeCB.executeAction("SELECT", actionProps)
+        select_pos(scopeCB, "1")
 
         xCancelBtn = xAddNameDlg.getChild("cancel")
         xCancelBtn.executeAction("CLICK", tuple())

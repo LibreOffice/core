@@ -10,7 +10,7 @@ from uitest.uihelper.common import get_state_as_dict
 from libreoffice.uno.propertyvalue import mkPropertyValues
 
 from uitest.framework import UITestCase
-from uitest.uihelper.common import type_text
+from uitest.uihelper.common import type_text, select_pos
 from uitest.debug import sleep
 
 import unittest
@@ -34,7 +34,7 @@ class SimpleMathTest(UITestCase):
         xList = xMathDoc.getChild("listbox")
         state = get_state_as_dict(xList)
         self.assertEqual(state["SelectEntryText"], "Unary/Binary Operators")
-        xList.executeAction("SELECT", mkPropertyValues({"POS": "1"}))
+        select_pos(xList, "1")
         state = get_state_as_dict(xList)
         self.assertEqual(state["SelectEntryText"], "Relations")
 
@@ -72,7 +72,7 @@ class SimpleMathTest(UITestCase):
         xList = xMathDoc.getChild("listbox")
         state = get_state_as_dict(xList)
         self.assertEqual(state["SelectEntryText"], "Unary/Binary Operators")
-        xList.executeAction("SELECT", mkPropertyValues({"POS": "1"}))
+        select_pos(xList, "1")
 
         xMathSelector = xMathDoc.getChild("element_selector")
 

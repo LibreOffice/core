@@ -8,7 +8,7 @@
 from libreoffice.uno.propertyvalue import mkPropertyValues
 
 from uitest.framework import UITestCase
-from uitest.uihelper.common import type_text
+from uitest.uihelper.common import type_text, select_pos
 
 class CreateRangeNameTest(UITestCase):
 
@@ -40,9 +40,7 @@ class CreateRangeNameTest(UITestCase):
         type_text(xEdit, "simpleRangeName")
 
         xScope = xAddNameDlg.getChild("scope")
-        props = {"POS": "1"}
-        scopeProps = mkPropertyValues(props)
-        xScope.executeAction("SELECT", scopeProps)
+        select_pos(xScope, "1")
 
         xAddBtn = xAddNameDlg.getChild("add")
         xAddBtn.executeAction("CLICK", tuple())
