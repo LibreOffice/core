@@ -56,7 +56,7 @@ String RID_GALLERYSTR_THEME_EMOTICONS
 
 String RID_GALLERYSTR_THEME_PHOTOS
 {
-    Text [ en-US ] = "Pictures";
+    Text [ en-US ] = "Images";
 };
 
 String RID_GALLERYSTR_THEME_BACKGROUNDS
