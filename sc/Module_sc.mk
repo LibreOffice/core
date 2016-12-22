@@ -64,7 +64,6 @@ $(eval $(call gb_Module_add_slowcheck_targets,sc, \
 	CppunitTest_sc_subsequent_filters_test \
 	CppunitTest_sc_subsequent_export_test \
 	CppunitTest_sc_html_export_test \
-	CppunitTest_sc_opencl_test \
 	CppunitTest_sc_copypaste \
 ))
 
@@ -101,6 +100,7 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
 	JunitTest_sc_unoapi_5 \
 	JunitTest_sc_unoapi_6 \
 	JunitTest_sc_unoapi_7 \
+	CppunitTest_sc_opencl_test \
 	CppunitTest_sc_anchor_test \
 	CppunitTest_sc_annotationshapeobj \
 	CppunitTest_sc_outlineobj \
