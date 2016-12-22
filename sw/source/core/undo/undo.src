@@ -628,7 +628,7 @@ String STR_FOOTNOTE
 };
 String STR_GRAPHIC
 {
-    Text[ en-US ] = "picture";
+    Text[ en-US ] = "image";
 };
 String STR_DRAWING_OBJECTS
 {
