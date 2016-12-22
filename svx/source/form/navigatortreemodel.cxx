@@ -186,16 +186,14 @@ namespace svxform
         Remove( xElement );
     }
 
-    NavigatorTreeModel::NavigatorTreeModel( const ImageList& _rNormalImages )
+    NavigatorTreeModel::NavigatorTreeModel()
                     :m_pFormShell(nullptr)
                     ,m_pFormPage(nullptr)
                     ,m_pFormModel(nullptr)
-                    ,m_aNormalImages( _rNormalImages )
     {
         m_pPropChangeList = new OFormComponentObserver(this);
         m_pRootList = new FmEntryDataList();
     }
-
 
     NavigatorTreeModel::~NavigatorTreeModel()
     {
@@ -521,9 +519,8 @@ namespace svxform
                     "NavigatorTreeModel::FillBranch : the root container should supply only elements of type XForm");
 
                 xForms->getByIndex(i) >>= xSubForm;
-                FmFormData* pSubFormData = new FmFormData( xSubForm, m_aNormalImages, pFormData );
+                FmFormData* pSubFormData = new FmFormData(xSubForm, pFormData);
                 Insert( pSubFormData );
-
 
                 // new branch, if SubForm contains Subforms itself
                 FillBranch( pSubFormData );
@@ -550,7 +547,7 @@ namespace svxform
 
                 if (xSubForm.is())
                 {   // actual component is a form
-                    pSubFormData = new FmFormData(xSubForm, m_aNormalImages, pFormData);
+                    pSubFormData = new FmFormData(xSubForm, pFormData);
                     Insert(pSubFormData);
 
 
@@ -559,7 +556,7 @@ namespace svxform
                 }
                 else
                 {
-                    pNewControlData = new FmControlData(xCurrentComponent, m_aNormalImages, pFormData);
+                    pNewControlData = new FmControlData(xCurrentComponent, pFormData);
                     Insert(pNewControlData);
                 }
             }
@@ -581,7 +578,7 @@ namespace svxform
         if (xParentForm.is())
             pParentData = static_cast<FmFormData*>(FindData( xParentForm, GetRootList() ));
 
-        pFormData = new FmFormData( xForm, m_aNormalImages, pParentData );
+        pFormData = new FmFormData(xForm, pParentData);
         Insert( pFormData, nRelPos );
     }
 
@@ -598,7 +595,7 @@ namespace svxform
         FmFormData* pParentData = static_cast<FmFormData*>(FindData( xForm, GetRootList() ));
         if( !pParentData )
         {
-            pParentData = new FmFormData( xForm, m_aNormalImages, nullptr );
+            pParentData = new FmFormData(xForm, nullptr);
             Insert( pParentData );
         }
 
@@ -606,14 +603,13 @@ namespace svxform
         {
 
             // set new EntryData
-            FmEntryData* pNewEntryData = new FmControlData( xComp, m_aNormalImages, pParentData );
+            FmEntryData* pNewEntryData = new FmControlData(xComp, pParentData);
 
 
             // insert new EntryData
             Insert( pNewEntryData, nRelPos );
         }
     }
-
 
     void NavigatorTreeModel::ReplaceFormComponent(
         const Reference< XFormComponent > & xOld,
@@ -624,12 +620,11 @@ namespace svxform
         assert(pData && dynamic_cast<const FmControlData*>( pData) !=  nullptr); //NavigatorTreeModel::ReplaceFormComponent : invalid argument
         if (!pData || dynamic_cast<const FmControlData*>( pData) ==  nullptr)
             return;
-        static_cast<FmControlData*>(pData)->ModelReplaced( xNew, m_aNormalImages );
+        static_cast<FmControlData*>(pData)->ModelReplaced(xNew);
 
         FmNavModelReplacedHint aReplacedHint( pData );
         Broadcast( aReplacedHint );
     }
-
 
     FmEntryData* NavigatorTreeModel::FindData(const Reference< XInterface > & xElement, FmEntryDataList* pDataList, bool bRecurs)
     {

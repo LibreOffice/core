@@ -134,18 +134,16 @@ namespace svxform
     {
         SetHelpId( HID_FORM_NAVIGATOR );
 
-        m_aNavigatorImages = ImageList( SVX_RES( RID_SVXIMGLIST_FMEXPL ) );
-
         SetNodeBitmaps(
-            m_aNavigatorImages.GetImage( RID_SVXIMG_COLLAPSEDNODE ),
-            m_aNavigatorImages.GetImage( RID_SVXIMG_EXPANDEDNODE )
+            Image(BitmapEx(SVX_RES(RID_SVXBMP_COLLAPSEDNODE))),
+            Image(BitmapEx(SVX_RES(RID_SVXBMP_EXPANDEDNODE)))
         );
 
         SetDragDropMode(DragDropMode::ALL);
         EnableInplaceEditing( true );
         SetSelectionMode(SelectionMode::Multiple);
 
-        m_pNavModel = new NavigatorTreeModel( m_aNavigatorImages );
+        m_pNavModel = new NavigatorTreeModel();
         Clear();
 
         StartListening( *m_pNavModel );
@@ -368,8 +366,8 @@ namespace svxform
 
                     // 'New'\'Form' under the same terms
                     pSubMenuNew->EnableItem( SID_FM_NEW_FORM, bSingleSelection && (m_nFormsSelected || m_bRootSelected) );
-                    pSubMenuNew->SetItemImage(SID_FM_NEW_FORM, m_aNavigatorImages.GetImage(RID_SVXIMG_FORM));
-                    pSubMenuNew->SetItemImage(SID_FM_NEW_HIDDEN, m_aNavigatorImages.GetImage(RID_SVXIMG_HIDDEN));
+                    pSubMenuNew->SetItemImage(SID_FM_NEW_FORM, Image(BitmapEx(SVX_RES(RID_SVXBMP_FORM))));
+                    pSubMenuNew->SetItemImage(SID_FM_NEW_HIDDEN, Image(BitmapEx(SVX_RES(RID_SVXBMP_HIDDEN))));
 
                     // 'New'\'hidden...', if exactly one form is selected
                     pSubMenuNew->EnableItem( SID_FM_NEW_HIDDEN, bSingleSelection && m_nFormsSelected );
@@ -590,9 +588,8 @@ namespace svxform
         {
             SvTreeListBox::Clear();
 
-
             // default-entry "Forms"
-            Image aRootImage( m_aNavigatorImages.GetImage( RID_SVXIMG_FORMS ) );
+            Image aRootImage(BitmapEx(SVX_RES(RID_SVXBMP_FORMS)));
             m_pRootEntry = InsertEntry( SVX_RESSTR(RID_STR_FORMS), aRootImage, aRootImage,
                 nullptr, false, 0 );
         }
@@ -1337,7 +1334,7 @@ namespace svxform
         if (!xPropertySet.is())
             return;
 
-        FmFormData* pNewFormData = new FmFormData( xNewForm, m_aNavigatorImages, pParentFormData );
+        FmFormData* pNewFormData = new FmFormData(xNewForm, pParentFormData);
 
 
         // set name
@@ -1398,7 +1395,7 @@ namespace svxform
         if (!xNewComponent.is())
             return nullptr;
 
-        FmControlData* pNewFormControlData = new FmControlData( xNewComponent, m_aNavigatorImages, pParentFormData );
+        FmControlData* pNewFormControlData = new FmControlData(xNewComponent, pParentFormData);
 
 
         // set name

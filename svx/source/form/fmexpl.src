@@ -257,46 +257,154 @@ Menu RID_FMSHELL_CONVERSIONMENU
     };
 };
 
-#define NAVIGATOR_IMAGEIDS \
-    IdList = \
-    { \
-        RID_SVXIMG_BUTTON ; \
-        RID_SVXIMG_RADIOBUTTON ; \
-        RID_SVXIMG_CHECKBOX ; \
-        RID_SVXIMG_FIXEDTEXT ; \
-        RID_SVXIMG_GROUPBOX ; \
-        RID_SVXIMG_EDIT ; \
-        RID_SVXIMG_LISTBOX ; \
-        RID_SVXIMG_COMBOBOX ; \
-        RID_SVXIMG_NAVIGATIONBAR ; \
-        RID_SVXIMG_CONTROL ; \
-        RID_SVXIMG_FORM ; \
-        RID_SVXIMG_FORMS ; \
-        RID_SVXIMG_COLLAPSEDNODE ; \
-        RID_SVXIMG_EXPANDEDNODE ; \
-        RID_SVXIMG_IMAGEBUTTON ; \
-        RID_SVXIMG_FILECONTROL ; \
-        RID_SVXIMG_DATEFIELD ; \
-        RID_SVXIMG_TIMEFIELD ; \
-        RID_SVXIMG_NUMERICFIELD ; \
-        RID_SVXIMG_CURRENCYFIELD ; \
-        RID_SVXIMG_PATTERNFIELD ; \
-        RID_SVXIMG_HIDDEN ; \
-        RID_SVXIMG_IMAGECONTROL ; \
-        RID_SVXIMG_GRID ; \
-        RID_SVXIMG_FILTER ; \
-        RID_SVXIMG_FORMATTEDFIELD ; \
-        RID_SVXIMG_DATE_N_TIME_FIELDS ; \
-        RID_SVXIMG_FIELD ; \
-        RID_SVXIMG_SCROLLBAR; \
-        RID_SVXIMG_SPINBUTTON; \
-    }; \
-    IdCount = 30
-
-ImageList RID_SVXIMGLIST_FMEXPL
+Bitmap RID_SVXBMP_FORM
 {
-    Prefix = "sx";
-    NAVIGATOR_IMAGEIDS;
+    File = "sx10593.png";
+};
+
+Bitmap RID_SVXBMP_CONTROL
+{
+    File = "sx10144.png";
+};
+
+Bitmap RID_SVXBMP_COLLAPSEDNODE
+{
+    File = "sx18002.png";
+};
+
+Bitmap RID_SVXBMP_EXPANDEDNODE
+{
+    File = "sx18003.png";
+};
+
+Bitmap RID_SVXBMP_BUTTON
+{
+    File = "sx10594.png";
+};
+
+Bitmap RID_SVXBMP_RADIOBUTTON
+{
+    File = "sx10595.png";
+};
+
+Bitmap RID_SVXBMP_CHECKBOX
+{
+    File = "sx10596.png";
+};
+
+Bitmap RID_SVXBMP_FIXEDTEXT
+{
+    File = "sx10597.png";
+};
+
+Bitmap RID_SVXBMP_GROUPBOX
+{
+    File = "sx10598.png";
+};
+
+Bitmap RID_SVXBMP_EDITBOX
+{
+    File = "sx10599.png";
+};
+
+Bitmap RID_SVXBMP_LISTBOX
+{
+    File = "sx10600.png";
+};
+
+Bitmap RID_SVXBMP_COMBOBOX
+{
+    File = "sx10600.png";
+};
+
+Bitmap RID_SVXBMP_FORMS
+{
+    File = "sx18013.png";
+};
+
+Bitmap RID_SVXBMP_IMAGEBUTTON
+{
+    File = "sx10604.png";
+};
+
+Bitmap RID_SVXBMP_IMAGECONTROL
+{
+    File = "sx10710.png";
+};
+
+Bitmap RID_SVXBMP_FILECONTROL
+{
+    File = "sx10605.png";
+};
+
+Bitmap RID_SVXBMP_DATEFIELD
+{
+    File = "sx10704.png";
+};
+
+Bitmap RID_SVXBMP_TIMEFIELD
+{
+    File = "sx10705.png";
+};
+
+Bitmap RID_SVXBMP_NUMERICFIELD
+{
+    File = "sx10706.png";
+};
+
+Bitmap RID_SVXBMP_CURRENCYFIELD
+{
+    File = "sx10707.png";
+};
+
+Bitmap RID_SVXBMP_PATTERNFIELD
+{
+    File = "sx10708.png";
+};
+
+Bitmap RID_SVXBMP_HIDDEN
+{
+    File = "sx18022.png";
+};
+
+Bitmap RID_SVXBMP_GRID
+{
+    File = "sx10603.png";
+};
+
+Bitmap RID_SVXBMP_FORMATTEDFIELD
+{
+    File = "sx10728.png";
+};
+
+Bitmap RID_SVXBMP_FILTER
+{
+    File = "sx10715.png";
+};
+
+Bitmap RID_SVXBMP_DATE_N_TIME_FIELDS
+{
+    File = "sx10757.png";
+};
+
+Bitmap RID_SVXBMP_FIELD
+{
+    File = "sx18027.png";
+};
+
+Bitmap RID_SVXBMP_SCROLLBAR
+{
+    File = "sx10768.png";
+};
+
+Bitmap RID_SVXBMP_SPINBUTTON
+{
+    File = "sx10769.png";
+};
+
+Bitmap RID_SVXBMP_NAVIGATIONBAR
+{
+    File = "sx10607.png";
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

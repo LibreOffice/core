@@ -116,12 +116,13 @@ struct FmGridHeaderData
 };
 
 const sal_Int16 nChangeTypeOffset = 1000;
-void SetMenuItem(const ImageList& rList, sal_uInt16 nID, Menu* pMenu, Menu& rNewMenu, bool bDesignMode, sal_Int16 nOffset = nChangeTypeOffset)
+void SetMenuItem(sal_uInt16 nImgID, sal_uInt16 nID, Menu* pMenu, Menu& rNewMenu, bool bDesignMode, sal_Int16 nOffset = nChangeTypeOffset)
 {
-    pMenu->SetItemImage(nID, rList.GetImage(nID));
+    Image aImage(BitmapEx(SVX_RES(nImgID)));
+    pMenu->SetItemImage(nID, aImage);
     pMenu->EnableItem(nID, bDesignMode);
     rNewMenu.InsertItem(nID + nOffset, pMenu->GetItemText(nID));
-    rNewMenu.SetItemImage(nID + nOffset, rList.GetImage(nID));
+    rNewMenu.SetItemImage(nID + nOffset, aImage);
     rNewMenu.SetHelpId(nID + nOffset, pMenu->GetHelpId(nID));
     rNewMenu.EnableItem(nID + nOffset, bDesignMode);
 }
@@ -434,45 +435,61 @@ IMPL_LINK_NOARG( FmGridHeader, OnAsyncExecuteDrop, void*, void )
 
         // Create Column based on type, default textfield
         std::vector<sal_uInt16> aPossibleTypes;
+        std::vector<sal_uInt16> aImgResId;
         switch (nDataType)
         {
             case DataType::BIT:
             case DataType::BOOLEAN:
                 aPossibleTypes.push_back(SID_FM_CHECKBOX);
+                aImgResId.push_back(RID_SVXBMP_CHECKBOX);
                 break;
             case DataType::TINYINT:
             case DataType::SMALLINT:
             case DataType::INTEGER:
                 aPossibleTypes.push_back(SID_FM_NUMERICFIELD);
+                aImgResId.push_back(RID_SVXBMP_NUMERICFIELD);
                 aPossibleTypes.push_back(SID_FM_FORMATTEDFIELD);
+                aImgResId.push_back(RID_SVXBMP_FORMATTEDFIELD);
                 break;
             case DataType::REAL:
             case DataType::DOUBLE:
             case DataType::NUMERIC:
             case DataType::DECIMAL:
                 aPossibleTypes.push_back(SID_FM_FORMATTEDFIELD);
+                aImgResId.push_back(RID_SVXBMP_FORMATTEDFIELD);
                 aPossibleTypes.push_back(SID_FM_NUMERICFIELD);
+                aImgResId.push_back(RID_SVXBMP_NUMERICFIELD);
                 break;
             case DataType::TIMESTAMP:
                 aPossibleTypes.push_back(SID_FM_TWOFIELDS_DATE_N_TIME);
+                aImgResId.push_back(RID_SVXBMP_DATE_N_TIME_FIELDS);
                 aPossibleTypes.push_back(SID_FM_DATEFIELD);
+                aImgResId.push_back(RID_SVXBMP_DATEFIELD);
                 aPossibleTypes.push_back(SID_FM_TIMEFIELD);
+                aImgResId.push_back(RID_SVXBMP_TIMEFIELD);
                 aPossibleTypes.push_back(SID_FM_FORMATTEDFIELD);
+                aImgResId.push_back(RID_SVXBMP_FORMATTEDFIELD);
                 break;
             case DataType::DATE:
                 aPossibleTypes.push_back(SID_FM_DATEFIELD);
+                aImgResId.push_back(RID_SVXBMP_DATEFIELD);
                 aPossibleTypes.push_back(SID_FM_FORMATTEDFIELD);
+                aImgResId.push_back(RID_SVXBMP_FORMATTEDFIELD);
                 break;
             case DataType::TIME:
                 aPossibleTypes.push_back(SID_FM_TIMEFIELD);
+                aImgResId.push_back(RID_SVXBMP_TIMEFIELD);
                 aPossibleTypes.push_back(SID_FM_FORMATTEDFIELD);
+                aImgResId.push_back(RID_SVXBMP_FORMATTEDFIELD);
                 break;
             case DataType::CHAR:
             case DataType::VARCHAR:
             case DataType::LONGVARCHAR:
             default:
                 aPossibleTypes.push_back(SID_FM_EDIT);
+                aImgResId.push_back(RID_SVXBMP_EDITBOX);
                 aPossibleTypes.push_back(SID_FM_FORMATTEDFIELD);
+                aImgResId.push_back(RID_SVXBMP_FORMATTEDFIELD);
                 break;
         }
         // if it's a currency field, a "currency field" option
@@ -480,12 +497,17 @@ IMPL_LINK_NOARG( FmGridHeader, OnAsyncExecuteDrop, void*, void )
         {
             if  (   ::comphelper::hasProperty(FM_PROP_ISCURRENCY, xField)
                 &&  ::comphelper::getBOOL(xField->getPropertyValue(FM_PROP_ISCURRENCY)))
+            {
                 aPossibleTypes.insert(aPossibleTypes.begin(), SID_FM_CURRENCYFIELD);
+                aImgResId.insert(aImgResId.begin(), RID_SVXBMP_CURRENCYFIELD);
+            }
         }
-        catch(Exception&)
+        catch (const Exception&)
         {
             OSL_FAIL("FmGridHeader::ExecuteDrop: Exception occurred!");
         }
+
+        assert(aPossibleTypes.size() == aImgResId.size());
 
         bool bDateNTimeCol = false;
         if (!aPossibleTypes.empty())
@@ -493,13 +515,14 @@ IMPL_LINK_NOARG( FmGridHeader, OnAsyncExecuteDrop, void*, void )
             sal_Int32 nPreferredType = aPossibleTypes[0];
             if ((m_pImpl->nDropAction == DND_ACTION_LINK) && (aPossibleTypes.size() > 1))
             {
-                ImageList aImageList( SVX_RES(RID_SVXIMGLIST_FMEXPL) );
-
                 ScopedVclPtrInstance<PopupMenu> aInsertMenu(SVX_RES(RID_SVXMNU_COLS));
                 ScopedVclPtrInstance<PopupMenu> aTypeMenu;
                 PopupMenu* pMenu = aInsertMenu->GetPopupMenu(SID_FM_INSERTCOL);
-                for (std::vector<sal_uInt16>::const_iterator iter = aPossibleTypes.begin(); iter != aPossibleTypes.end(); ++iter)
-                    SetMenuItem(aImageList, *iter, pMenu, *aTypeMenu.get(), true, 0);
+                for (std::vector<sal_uInt16>::const_iterator iter = aPossibleTypes.begin(), imgiter = aImgResId.begin();
+                     iter != aPossibleTypes.end(); ++iter, ++imgiter)
+                {
+                    SetMenuItem(*imgiter, *iter, pMenu, *aTypeMenu.get(), true, 0);
+                }
                 nPreferredType = aTypeMenu->Execute(this, m_pImpl->aDropPosPixel);
             }
 
@@ -655,22 +678,21 @@ void FmGridHeader::PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rMe
     sal_uInt16 nPos = GetModelColumnPos(nColId);
     bool bMarked = nColId && static_cast<FmGridControl*>(GetParent())->isColumnMarked(nColId);
 
-    ImageList aImageList( SVX_RES(RID_SVXIMGLIST_FMEXPL) );
     VclPtrInstance<PopupMenu> pControlMenu;
 
     PopupMenu* pMenu = rMenu.GetPopupMenu(SID_FM_INSERTCOL);
     if (pMenu)
     {
-        SetMenuItem(aImageList, SID_FM_EDIT, pMenu, *pControlMenu, bDesignMode);
-        SetMenuItem(aImageList, SID_FM_CHECKBOX, pMenu, *pControlMenu, bDesignMode);
-        SetMenuItem(aImageList, SID_FM_COMBOBOX, pMenu, *pControlMenu, bDesignMode);
-        SetMenuItem(aImageList, SID_FM_LISTBOX, pMenu, *pControlMenu, bDesignMode);
-        SetMenuItem(aImageList, SID_FM_DATEFIELD, pMenu, *pControlMenu, bDesignMode);
-        SetMenuItem(aImageList, SID_FM_TIMEFIELD, pMenu, *pControlMenu, bDesignMode);
-        SetMenuItem(aImageList, SID_FM_NUMERICFIELD, pMenu, *pControlMenu, bDesignMode);
-        SetMenuItem(aImageList, SID_FM_CURRENCYFIELD, pMenu, *pControlMenu, bDesignMode);
-        SetMenuItem(aImageList, SID_FM_PATTERNFIELD, pMenu, *pControlMenu, bDesignMode);
-        SetMenuItem(aImageList, SID_FM_FORMATTEDFIELD, pMenu, *pControlMenu, bDesignMode);
+        SetMenuItem(RID_SVXBMP_EDITBOX, SID_FM_EDIT, pMenu, *pControlMenu, bDesignMode);
+        SetMenuItem(RID_SVXBMP_CHECKBOX, SID_FM_CHECKBOX, pMenu, *pControlMenu, bDesignMode);
+        SetMenuItem(RID_SVXBMP_COMBOBOX, SID_FM_COMBOBOX, pMenu, *pControlMenu, bDesignMode);
+        SetMenuItem(RID_SVXBMP_LISTBOX, SID_FM_LISTBOX, pMenu, *pControlMenu, bDesignMode);
+        SetMenuItem(RID_SVXBMP_DATEFIELD, SID_FM_DATEFIELD, pMenu, *pControlMenu, bDesignMode);
+        SetMenuItem(RID_SVXBMP_TIMEFIELD, SID_FM_TIMEFIELD, pMenu, *pControlMenu, bDesignMode);
+        SetMenuItem(RID_SVXBMP_NUMERICFIELD, SID_FM_NUMERICFIELD, pMenu, *pControlMenu, bDesignMode);
+        SetMenuItem(RID_SVXBMP_CURRENCYFIELD, SID_FM_CURRENCYFIELD, pMenu, *pControlMenu, bDesignMode);
+        SetMenuItem(RID_SVXBMP_PATTERNFIELD, SID_FM_PATTERNFIELD, pMenu, *pControlMenu, bDesignMode);
+        SetMenuItem(RID_SVXBMP_FORMATTEDFIELD, SID_FM_FORMATTEDFIELD, pMenu, *pControlMenu, bDesignMode);
     }
 
     if (pMenu && xCols.is() && nColId)
