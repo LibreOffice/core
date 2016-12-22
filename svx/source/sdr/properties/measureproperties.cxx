@@ -39,20 +39,17 @@ namespace sdr
         SfxItemSet* MeasureProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
         {
             return new SfxItemSet(rPool,
-
-                // range from SdrAttrObj
+                // ranges from SdrAttrObj
                 SDRATTR_START, SDRATTR_SHADOW_LAST,
                 SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST,
-                SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
-
                 // range from SdrMeasureObj
                 SDRATTR_MEASURE_FIRST, SDRATTR_MEASURE_LAST,
-
+                // range from SdrAttrObj
+                SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
                 // range from SdrTextObj
                 EE_ITEMS_START, EE_ITEMS_END,
-
                 // end
-                0, 0);
+                0);
         }
 
         MeasureProperties::MeasureProperties(SdrObject& rObj)
