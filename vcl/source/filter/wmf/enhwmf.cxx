@@ -1246,13 +1246,22 @@ bool EnhWMFReader::ReadEnhWMF()
                     else
                     {
                         const sal_uInt32 nSourceSize = cbBmiSrc + cbBitsSrc + 14;
-                        if ( nSourceSize <= ( nEndPos - nStartPos ) )
+                        bool bSafeRead = nSourceSize <= (nEndPos - nStartPos);
+                        sal_uInt32 nDeltaToDIB5HeaderSize(0);
+                        const bool bReadAlpha(0x01 == aFunc.aAlphaFormat);
+                        if (bSafeRead && bReadAlpha)
                         {
                             // we need to read alpha channel data if AlphaFormat of BLENDFUNCTION is
                             // AC_SRC_ALPHA (==0x01). To read it, create a temp DIB-File which is ready
                             // for DIB-5 format
-                            const bool bReadAlpha(0x01 == aFunc.aAlphaFormat);
-                            const sal_uInt32 nDeltaToDIB5HeaderSize(bReadAlpha ? getDIBV5HeaderSize() - cbBmiSrc : 0);
+                            const sal_uInt32 nHeaderSize = getDIBV5HeaderSize();
+                            if (cbBmiSrc > nHeaderSize)
+                                bSafeRead = false;
+                            else
+                                nDeltaToDIB5HeaderSize = nHeaderSize - cbBmiSrc;
+                        }
+                        if (bSafeRead)
+                        {
                             const sal_uInt32 nTargetSize(cbBmiSrc + nDeltaToDIB5HeaderSize + cbBitsSrc + 14);
                             char* pBuf = new char[ nTargetSize ];
                             SvMemoryStream aTmp( pBuf, nTargetSize, StreamMode::READ | StreamMode::WRITE );
@@ -1271,7 +1280,7 @@ bool EnhWMFReader::ReadEnhWMF()
                             pWMF->Seek( nStart + offBmiSrc );
                             pWMF->Read( pBuf + 14, cbBmiSrc );
 
-                            if(bReadAlpha)
+                            if (bReadAlpha)
                             {
                                 // need to add values for all stuff that DIBV5Header is bigger
                                 // than DIBInfoHeader, all values are correctly initialized to zero,
