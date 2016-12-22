@@ -94,12 +94,16 @@ atk_wrapper_focus_idle_handler (gpointer data)
 
                     if (xText.is())
                     {
-                        gint caretPos = xText->getCaretPosition();
+                        try {
+                            gint caretPos = xText->getCaretPosition();
 
-                        if ( caretPos != -1 )
-                        {
-                            atk_object_notify_state_change( atk_obj, ATK_STATE_FOCUSED, TRUE );
-                            g_signal_emit_by_name( atk_obj, "text_caret_moved", caretPos );
+                            if ( caretPos != -1 )
+                            {
+                                atk_object_notify_state_change( atk_obj, ATK_STATE_FOCUSED, TRUE );
+                                g_signal_emit_by_name( atk_obj, "text_caret_moved", caretPos );
+                            }
+                        } catch (const uno::Exception& e) {
+                            SAL_INFO("vcl.a11y", "exception: " << e.Message);
                         }
                     }
                 }
