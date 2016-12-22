@@ -203,28 +203,28 @@ static const sal_Int16 nConvertSlots[] =
     SID_FM_CONVERTTO_NAVIGATIONBAR
 };
 
-static const sal_Int16 nCreateSlots[] =
+static const sal_Int16 nImgIds[] =
 {
-    SID_FM_EDIT,
-    SID_FM_PUSHBUTTON,
-    SID_FM_FIXEDTEXT,
-    SID_FM_LISTBOX,
-    SID_FM_CHECKBOX,
-    SID_FM_RADIOBUTTON,
-    SID_FM_GROUPBOX,
-    SID_FM_COMBOBOX,
-    SID_FM_IMAGEBUTTON,
-    SID_FM_FILECONTROL,
-    SID_FM_DATEFIELD,
-    SID_FM_TIMEFIELD,
-    SID_FM_NUMERICFIELD,
-    SID_FM_CURRENCYFIELD,
-    SID_FM_PATTERNFIELD,
-    SID_FM_IMAGECONTROL,
-    SID_FM_FORMATTEDFIELD,
-    SID_FM_SCROLLBAR,
-    SID_FM_SPINBUTTON,
-    SID_FM_NAVIGATIONBAR
+    RID_SVXBMP_EDITBOX,
+    RID_SVXBMP_BUTTON,
+    RID_SVXBMP_FIXEDTEXT,
+    RID_SVXBMP_LISTBOX,
+    RID_SVXBMP_CHECKBOX,
+    RID_SVXBMP_RADIOBUTTON,
+    RID_SVXBMP_GROUPBOX,
+    RID_SVXBMP_COMBOBOX,
+    RID_SVXBMP_IMAGEBUTTON,
+    RID_SVXBMP_FILECONTROL,
+    RID_SVXBMP_DATEFIELD,
+    RID_SVXBMP_TIMEFIELD,
+    RID_SVXBMP_NUMERICFIELD,
+    RID_SVXBMP_CURRENCYFIELD,
+    RID_SVXBMP_PATTERNFIELD,
+    RID_SVXBMP_IMAGECONTROL,
+    RID_SVXBMP_FORMATTEDFIELD,
+    RID_SVXBMP_SCROLLBAR,
+    RID_SVXBMP_SPINBUTTON,
+    RID_SVXBMP_NAVIGATIONBAR
 };
 
 static const sal_Int16 nObjectTypes[] =
@@ -1028,22 +1028,17 @@ void FmXFormShell::ForceUpdateSelection()
     }
 }
 
-
 VclPtr<PopupMenu> FmXFormShell::GetConversionMenu()
 {
 
     VclPtrInstance<PopupMenu> pNewMenu(SVX_RES( RID_FMSHELL_CONVERSIONMENU ));
-
-    ImageList aImageList( SVX_RES( RID_SVXIMGLIST_FMEXPL) );
     for ( size_t i = 0; i < SAL_N_ELEMENTS(nConvertSlots); ++i )
     {
         // das entsprechende Image dran
-        pNewMenu->SetItemImage(nConvertSlots[i], aImageList.GetImage(nCreateSlots[i]));
+        pNewMenu->SetItemImage(nConvertSlots[i], Image(BitmapEx(SVX_RES(nImgIds[i]))));
     }
-
     return pNewMenu;
 }
-
 
 bool FmXFormShell::isControlConversionSlot( sal_uInt16 nSlotId )
 {
@@ -1052,7 +1047,6 @@ bool FmXFormShell::isControlConversionSlot( sal_uInt16 nSlotId )
             return true;
     return false;
 }
-
 
 void FmXFormShell::executeControlConversionSlot( sal_uInt16 _nSlotId )
 {

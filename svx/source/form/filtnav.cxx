@@ -135,7 +135,6 @@ Image FmFilterData::GetImage() const
     return Image();
 }
 
-
 FmParentData::~FmParentData()
 {
     for (::std::vector<FmFilterData*>::const_iterator i = m_aChildren.begin();
@@ -143,13 +142,10 @@ FmParentData::~FmParentData()
         delete (*i);
 }
 
-
 Image FmFormItem::GetImage() const
 {
-    ImageList aNavigatorImages( SVX_RES( RID_SVXIMGLIST_FMEXPL ) );
-    return aNavigatorImages.GetImage( RID_SVXIMG_FORM );
+    return Image(BitmapEx(SVX_RES(RID_SVXBMP_FORM)));
 }
-
 
 FmFilterItem* FmFilterItems::Find( const ::sal_Int32 _nFilterComponentIndex ) const
 {
@@ -166,13 +162,10 @@ FmFilterItem* FmFilterItems::Find( const ::sal_Int32 _nFilterComponentIndex ) co
     return nullptr;
 }
 
-
 Image FmFilterItems::GetImage() const
 {
-    ImageList aNavigatorImages( SVX_RES( RID_SVXIMGLIST_FMEXPL ) );
-    return aNavigatorImages.GetImage( RID_SVXIMG_FILTER );
+    return Image(BitmapEx(SVX_RES(RID_SVXBMP_FILTER)));
 }
-
 
 FmFilterItem::FmFilterItem( FmFilterItems* pParent,
                             const OUString& aFieldName,
@@ -184,13 +177,10 @@ FmFilterItem::FmFilterItem( FmFilterItems* pParent,
 {
 }
 
-
 Image FmFilterItem::GetImage() const
 {
-    ImageList aNavigatorImages( SVX_RES( RID_SVXIMGLIST_FMEXPL ) );
-    return aNavigatorImages.GetImage( RID_SVXIMG_FIELD );
+    return Image(BitmapEx(SVX_RES(RID_SVXBMP_FIELD)));
 }
-
 
 // Hints for communication between model and view
 
@@ -203,7 +193,6 @@ public:
     FmFilterData* GetData() const { return m_pData; }
 };
 
-
 class FmFilterInsertedHint : public FmFilterHint
 {
     sal_uLong m_nPos;   // Position relative to the parent of the data
@@ -215,7 +204,6 @@ public:
 
     sal_uLong GetPos() const { return m_nPos; }
 };
-
 
 class FmFilterRemovedHint : public FmFilterHint
 {
@@ -232,13 +220,11 @@ public:
         :FmFilterHint(pData){}
 };
 
-
 class FilterClearingHint : public SfxHint
 {
 public:
     FilterClearingHint(){}
 };
-
 
 class FmFilterCurrentChangedHint : public SfxHint
 {
@@ -246,9 +232,7 @@ public:
     FmFilterCurrentChangedHint(){}
 };
 
-
 // class FmFilterAdapter, Listener an den FilterControls
-
 class FmFilterAdapter : public ::cppu::WeakImplHelper< XFilterControllerListener >
 {
     FmFilterModel*              m_pModel;
@@ -1096,13 +1080,10 @@ FmFilterNavigator::FmFilterNavigator( vcl::Window* pParent )
 {
     SetHelpId( HID_FILTER_NAVIGATOR );
 
-    {
-        ImageList aNavigatorImages( SVX_RES( RID_SVXIMGLIST_FMEXPL ) );
-        SetNodeBitmaps(
-            aNavigatorImages.GetImage( RID_SVXIMG_COLLAPSEDNODE ),
-            aNavigatorImages.GetImage( RID_SVXIMG_EXPANDEDNODE )
-        );
-    }
+    SetNodeBitmaps(
+        Image(BitmapEx(SVX_RES(RID_SVXBMP_COLLAPSEDNODE))),
+        Image(BitmapEx(SVX_RES(RID_SVXBMP_EXPANDEDNODE)))
+    );
 
     m_pModel = new FmFilterModel();
     StartListening( *m_pModel );

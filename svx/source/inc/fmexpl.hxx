@@ -238,13 +238,7 @@ class FmFormData : public FmEntryData
     css::uno::Reference< css::container::XContainer > m_xContainer;
 
 public:
-
-    FmFormData(
-        const css::uno::Reference< css::form::XForm >& _rxForm,
-        const ImageList& _rNormalImages,
-        FmFormData* _pParent
-    );
-
+    FmFormData(const css::uno::Reference< css::form::XForm >& _rxForm, FmFormData* _pParent);
     FmFormData( const FmFormData& rFormData );
     virtual ~FmFormData() override;
 
@@ -260,13 +254,12 @@ class FmControlData : public FmEntryData
 {
     css::uno::Reference< css::form::XFormComponent >  m_xFormComponent;
 
-    Image GetImage(const ImageList& ilNavigatorImages) const;
+    Image GetImage() const;
 
 public:
 
     FmControlData(
         const css::uno::Reference< css::form::XFormComponent >& _rxComponent,
-        const ImageList& _rNormalImages,
         FmFormData* _pParent
     );
     FmControlData( const FmControlData& rControlData );
@@ -276,10 +269,7 @@ public:
     virtual bool IsEqualWithoutChildren( FmEntryData* pEntryData ) override;
     virtual FmEntryData* Clone() override;
 
-    void ModelReplaced(
-        const css::uno::Reference< css::form::XFormComponent >& _rxNew,
-        const ImageList& _rNormalImages
-    );
+    void ModelReplaced(const css::uno::Reference< css::form::XFormComponent >& _rxNew);
 };
 
 
@@ -335,8 +325,6 @@ namespace svxform
         FmFormModel*                m_pFormModel;
         rtl::Reference<OFormComponentObserver> m_pPropChangeList;
 
-        ImageList                   m_aNormalImages;
-
         void UpdateContent( const css::uno::Reference< css::form::XForms >& xForms );
 
         void InsertForm(const css::uno::Reference< css::form::XForm >& xForm, sal_uInt32 nRelPos);
@@ -356,7 +344,7 @@ namespace svxform
             // Rueckgabe sal_True, wenn das Objekt eine FormComponent ist (oder rekursiv nur aus solchen besteht)
 
     public:
-        NavigatorTreeModel( const ImageList& _rNormalImages );
+        NavigatorTreeModel();
         virtual ~NavigatorTreeModel() override;
 
         void FillBranch( FmFormData* pParentData );
@@ -399,8 +387,6 @@ namespace svxform
         SvLBoxEntrySortedArray  m_arrCurrentSelection;
         // the entries which, in the view, are currently marked as "cut" (painted semi-transparent)
         ListBoxEntrySet         m_aCutEntries;
-        // die Images, die ich brauche (und an FormDatas und EntryDatas weiterreiche)
-        ImageList           m_aNavigatorImages;
 
         ::svxform::OControlExchangeHelper   m_aControlExchange;
 

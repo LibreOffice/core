@@ -21,43 +21,37 @@
 
 #include <svl/solar.hrc>
 
-// unnamed resources -------------------------------------------------------
-// sub resources .....................
-
-// ImageList-Id's -----------------------------------------------------------
-#define RID_SVXIMGLIST_FMEXPL                       (RID_FORMS_START + 0)
-
 // Image-Id's -----------------------------------------------------------
-#define RID_SVXIMG_FORM                             SID_FM_CONFIG
-#define RID_SVXIMG_CONTROL                          SID_CHOOSE_CONTROLS
-#define RID_SVXIMG_COLLAPSEDNODE                    (RID_FORMS_START + 2)
-#define RID_SVXIMG_EXPANDEDNODE                     (RID_FORMS_START + 3)
-#define RID_SVXIMG_BUTTON                           SID_FM_PUSHBUTTON
-#define RID_SVXIMG_RADIOBUTTON                      SID_FM_RADIOBUTTON
-#define RID_SVXIMG_CHECKBOX                         SID_FM_CHECKBOX
-#define RID_SVXIMG_FIXEDTEXT                        SID_FM_FIXEDTEXT
-#define RID_SVXIMG_GROUPBOX                         SID_FM_GROUPBOX
-#define RID_SVXIMG_EDIT                             SID_FM_EDIT
-#define RID_SVXIMG_LISTBOX                          SID_FM_LISTBOX
-#define RID_SVXIMG_COMBOBOX                         SID_FM_COMBOBOX
-#define RID_SVXIMG_FORMS                            (RID_FORMS_START +13)
-#define RID_SVXIMG_IMAGEBUTTON                      SID_FM_IMAGEBUTTON
-#define RID_SVXIMG_IMAGECONTROL                     SID_FM_IMAGECONTROL
-#define RID_SVXIMG_FILECONTROL                      SID_FM_FILECONTROL
-#define RID_SVXIMG_DATEFIELD                        SID_FM_DATEFIELD
-#define RID_SVXIMG_TIMEFIELD                        SID_FM_TIMEFIELD
-#define RID_SVXIMG_NUMERICFIELD                     SID_FM_NUMERICFIELD
-#define RID_SVXIMG_CURRENCYFIELD                    SID_FM_CURRENCYFIELD
-#define RID_SVXIMG_PATTERNFIELD                     SID_FM_PATTERNFIELD
-#define RID_SVXIMG_HIDDEN                           (RID_FORMS_START +22)
-#define RID_SVXIMG_GRID                             SID_FM_DBGRID
-#define RID_SVXIMG_FORMATTEDFIELD                   SID_FM_FORMATTEDFIELD
-#define RID_SVXIMG_FILTER                           SID_FM_FILTERCRIT
-#define RID_SVXIMG_DATE_N_TIME_FIELDS               SID_FM_TWOFIELDS_DATE_N_TIME
-#define RID_SVXIMG_FIELD                            (RID_FORMS_START +27)
-#define RID_SVXIMG_SCROLLBAR                        SID_FM_SCROLLBAR
-#define RID_SVXIMG_SPINBUTTON                       SID_FM_SPINBUTTON
-#define RID_SVXIMG_NAVIGATIONBAR                    SID_FM_NAVIGATIONBAR
+#define RID_SVXBMP_FORM                             (RID_FORMS_START +  1)
+#define RID_SVXBMP_CONTROL                          (RID_FORMS_START +  2)
+#define RID_SVXBMP_COLLAPSEDNODE                    (RID_FORMS_START +  3)
+#define RID_SVXBMP_EXPANDEDNODE                     (RID_FORMS_START +  4)
+#define RID_SVXBMP_BUTTON                           (RID_FORMS_START +  5)
+#define RID_SVXBMP_RADIOBUTTON                      (RID_FORMS_START +  6)
+#define RID_SVXBMP_CHECKBOX                         (RID_FORMS_START +  7)
+#define RID_SVXBMP_FIXEDTEXT                        (RID_FORMS_START +  8)
+#define RID_SVXBMP_GROUPBOX                         (RID_FORMS_START +  9)
+#define RID_SVXBMP_EDITBOX                          (RID_FORMS_START + 10)
+#define RID_SVXBMP_LISTBOX                          (RID_FORMS_START + 11)
+#define RID_SVXBMP_COMBOBOX                         (RID_FORMS_START + 12)
+#define RID_SVXBMP_FORMS                            (RID_FORMS_START + 13)
+#define RID_SVXBMP_IMAGEBUTTON                      (RID_FORMS_START + 14)
+#define RID_SVXBMP_IMAGECONTROL                     (RID_FORMS_START + 15)
+#define RID_SVXBMP_FILECONTROL                      (RID_FORMS_START + 16)
+#define RID_SVXBMP_DATEFIELD                        (RID_FORMS_START + 17)
+#define RID_SVXBMP_TIMEFIELD                        (RID_FORMS_START + 18)
+#define RID_SVXBMP_NUMERICFIELD                     (RID_FORMS_START + 19)
+#define RID_SVXBMP_CURRENCYFIELD                    (RID_FORMS_START + 20)
+#define RID_SVXBMP_PATTERNFIELD                     (RID_FORMS_START + 21)
+#define RID_SVXBMP_HIDDEN                           (RID_FORMS_START + 22)
+#define RID_SVXBMP_GRID                             (RID_FORMS_START + 23)
+#define RID_SVXBMP_FORMATTEDFIELD                   (RID_FORMS_START + 24)
+#define RID_SVXBMP_FILTER                           (RID_FORMS_START + 25)
+#define RID_SVXBMP_DATE_N_TIME_FIELDS               (RID_FORMS_START + 26)
+#define RID_SVXBMP_FIELD                            (RID_FORMS_START + 27)
+#define RID_SVXBMP_SCROLLBAR                        (RID_FORMS_START + 28)
+#define RID_SVXBMP_SPINBUTTON                       (RID_FORMS_START + 29)
+#define RID_SVXBMP_NAVIGATIONBAR                    (RID_FORMS_START + 30)
 
 // Toolbars ------------------------------------------------------------
 #define RID_SVXTBX_FORM_NAVIGATION                  (RID_FORMS_START +  1)

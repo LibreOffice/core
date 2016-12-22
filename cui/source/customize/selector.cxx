@@ -208,11 +208,9 @@ SvxConfigGroupListBox::SvxConfigGroupListBox(vcl::Window* pParent, WinBits nStyl
     , m_sMyMacros(CUI_RESSTR(RID_SVXSTR_MYMACROS))
     , m_sProdMacros(CUI_RESSTR(RID_SVXSTR_PRODMACROS))
 {
-    ImageList aNavigatorImages( SVX_RES( RID_SVXIMGLIST_FMEXPL ) );
-
     SetNodeBitmaps(
-        aNavigatorImages.GetImage( RID_SVXIMG_COLLAPSEDNODE ),
-        aNavigatorImages.GetImage( RID_SVXIMG_EXPANDEDNODE )
+        Image(BitmapEx(SVX_RES(RID_SVXBMP_COLLAPSEDNODE))),
+        Image(BitmapEx(SVX_RES(RID_SVXBMP_EXPANDEDNODE)))
     );
 }
 
