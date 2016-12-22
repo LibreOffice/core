@@ -34,6 +34,7 @@
 #include "OOXMLFastContextHandler.hxx"
 #include "OOXMLFactory.hxx"
 #include "Handler.hxx"
+#include "dmapper/PropertyIds.hxx"
 
 static const sal_Unicode uCR = 0xd;
 static const sal_Unicode uFtnEdnRef = 0x2;
@@ -2078,6 +2079,18 @@ void OOXMLFastContextHandlerMath::process()
     if (!ref.is())
         return;
     uno::Reference< uno::XInterface > component(ref->getComponent(), uno::UNO_QUERY_THROW);
+    {
+        // tdf#66405: set initial zero margins for embedded object's model
+        uno::Reference< beans::XPropertySet > xRefProperties(component, uno::UNO_QUERY_THROW);
+        xRefProperties->setPropertyValue(writerfilter::dmapper::getPropertyName(writerfilter::dmapper::PROP_LEFT_MARGIN),
+            uno::makeAny(sal_Int32(0)));
+        xRefProperties->setPropertyValue(writerfilter::dmapper::getPropertyName(writerfilter::dmapper::PROP_RIGHT_MARGIN),
+            uno::makeAny(sal_Int32(0)));
+        xRefProperties->setPropertyValue(writerfilter::dmapper::getPropertyName(writerfilter::dmapper::PROP_TOP_MARGIN),
+            uno::makeAny(sal_Int32(0)));
+        xRefProperties->setPropertyValue(writerfilter::dmapper::getPropertyName(writerfilter::dmapper::PROP_BOTTOM_MARGIN),
+            uno::makeAny(sal_Int32(0)));
+    }
 // gcc4.4 (and 4.3 and possibly older) have a problem with dynamic_cast directly to the target class,
 // so help it with an intermediate cast. I'm not sure what exactly the problem is, seems to be unrelated
 // to RTLD_GLOBAL, so most probably a gcc bug.
