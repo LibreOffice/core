@@ -35,6 +35,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/opengl/OpenGLContext.hxx>
+#include <vcl/BitmapTools.hxx>
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
@@ -209,7 +210,10 @@ static void CreateNetWmAppIcon( sal_uInt16 nIcon, NetWmIconData& netwm_icon )
             nIconSizeOffset = SV_ICON_SIZE32_START;
         else
             nIconSizeOffset = SV_ICON_SIZE16_START;
-        BitmapEx aIcon( ResId(nIconSizeOffset + nIcon, *ImplGetResMgr()));
+
+        BitmapEx aIcon = vcl::bitmap::loadFromResource(ResId(nIconSizeOffset + nIcon, *ImplGetResMgr()),
+                                                       ImageLoadFlags::IgnoreScalingFactor);
+
         if( aIcon.IsEmpty())
             continue;
         Bitmap icon = aIcon.GetBitmap();
@@ -250,7 +254,6 @@ static bool lcl_SelectAppIconPixmap( SalDisplay *pDisplay, SalX11Screen nXScreen
                                          sal_uInt16 nIcon, sal_uInt16 iconSize,
                                          Pixmap& icon_pixmap, Pixmap& icon_mask, NetWmIconData& netwm_icon)
 {
-    return true;
     if( ! ImplGetResMgr() )
         return false;
 
@@ -267,7 +270,9 @@ static bool lcl_SelectAppIconPixmap( SalDisplay *pDisplay, SalX11Screen nXScreen
     else
         return false;
 
-    BitmapEx aIcon( ResId(nIconSizeOffset + nIcon, *ImplGetResMgr()));
+    BitmapEx aIcon = vcl::bitmap::loadFromResource(ResId(nIconSizeOffset + nIcon, *ImplGetResMgr()),
+                                                   ImageLoadFlags::IgnoreScalingFactor);
+
     if( aIcon.IsEmpty() )
         return false;
 
