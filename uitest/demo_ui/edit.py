@@ -8,6 +8,7 @@
 from libreoffice.uno.propertyvalue import mkPropertyValues
 
 from uitest.framework import UITestCase
+from uitest.uihelper.common import type_text
 
 class EditTest(UITestCase):
 
@@ -20,9 +21,7 @@ class EditTest(UITestCase):
 
         xEdit = xAddNameDlg.getChild("edit")
 
-        props = {"TEXT": "simpleRangeName"}
-        actionProps = mkPropertyValues(props)
-        xEdit.executeAction("TYPE", actionProps)
+        type_text(xEdit, "simpleRangeName")
 
         xAddBtn = xAddNameDlg.getChild("cancel")
         xAddBtn.executeAction("CLICK", tuple())

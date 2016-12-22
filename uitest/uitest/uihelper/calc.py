@@ -6,10 +6,11 @@
 #
 
 from libreoffice.uno.propertyvalue import mkPropertyValues
+from uitest.uihelper.common import type_text
 
 def enter_text_to_cell(gridwin, cell, text):
     gridwin.executeAction("SELECT", mkPropertyValues({"CELL": cell}))
-    gridwin.executeAction("TYPE", mkPropertyValues({"TEXT": text}))
+    type_text(gridwin, text)
     gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RETURN"}))
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

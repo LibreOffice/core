@@ -10,7 +10,7 @@ from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from libreoffice.calc.document import get_cell_by_position
 
-from uitest.uihelper.common import get_state_as_dict
+from uitest.uihelper.common import get_state_as_dict, type_text
 from uitest.uihelper.calc import enter_text_to_cell
 from uitest.path import get_srcdir_url
 
@@ -36,7 +36,7 @@ class ManualCalcTests(UITestCase):
         xDefineNameDlg = self.xUITest.getTopFocusWindow()
 
         xEntryBox = xDefineNameDlg.getChild("entry")
-        xEntryBox.executeAction("TYPE", mkPropertyValues({"TEXT": "my_database"}))
+        type_text(xEntryBox, "my_database")
 
         xOkBtn = xDefineNameDlg.getChild("ok")
         self.ui_test.close_dialog_through_button(xOkBtn)

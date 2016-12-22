@@ -8,28 +8,22 @@
 from libreoffice.uno.propertyvalue import mkPropertyValues
 
 from uitest.framework import UITestCase
+from uitest.uihelper.calc import enter_text_to_cell
 
 import unittest
 
 class CalcChartEditUIDemo(UITestCase):
 
-    def add_content_to_cell(self, gridwin, cell, content):
-        selectProps = mkPropertyValues({"CELL": cell})
-        gridwin.executeAction("SELECT", selectProps)
-
-        contentProps = mkPropertyValues({"TEXT": content})
-        gridwin.executeAction("TYPE", contentProps)
-
     def fill_spreadsheet(self):
         xCalcDoc = self.xUITest.getTopFocusWindow()
         xGridWindow = xCalcDoc.getChild("grid_window")
 
-        self.add_content_to_cell(xGridWindow, "A1", "col1")
-        self.add_content_to_cell(xGridWindow, "B1", "col2")
-        self.add_content_to_cell(xGridWindow, "C1", "col3")
-        self.add_content_to_cell(xGridWindow, "A2", "1")
-        self.add_content_to_cell(xGridWindow, "B2", "3")
-        self.add_content_to_cell(xGridWindow, "C2", "5")
+        enter_text_to_cell(xGridWindow, "A1", "col1")
+        enter_text_to_cell(xGridWindow, "B1", "col2")
+        enter_text_to_cell(xGridWindow, "C1", "col3")
+        enter_text_to_cell(xGridWindow, "A2", "1")
+        enter_text_to_cell(xGridWindow, "B2", "3")
+        enter_text_to_cell(xGridWindow, "C2", "5")
 
         xGridWindow.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:C2"}))
 
