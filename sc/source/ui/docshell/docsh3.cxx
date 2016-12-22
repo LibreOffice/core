@@ -466,7 +466,7 @@ OutputDevice* ScDocShell::GetRefDevice()
     return aDocument.GetRefDevice();
 }
 
-sal_uInt16 ScDocShell::SetPrinter( SfxPrinter* pNewPrinter, SfxPrinterChangeFlags nDiffFlags )
+sal_uInt16 ScDocShell::SetPrinter( VclPtr<SfxPrinter> const & pNewPrinter, SfxPrinterChangeFlags nDiffFlags )
 {
     SfxPrinter *pOld = aDocument.GetPrinter( false );
     if ( pOld && pOld->IsPrinting() )

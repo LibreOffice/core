@@ -229,7 +229,7 @@ public:
 #endif
 
     SfxPrinter*     GetPrinter( bool bCreateIfNotExist = true );
-    sal_uInt16      SetPrinter( SfxPrinter* pNewPrinter, SfxPrinterChangeFlags nDiffFlags = SFX_PRINTER_ALL );
+    sal_uInt16      SetPrinter( VclPtr<SfxPrinter> const & pNewPrinter, SfxPrinterChangeFlags nDiffFlags = SFX_PRINTER_ALL );
 
     void            UpdateFontList();
 

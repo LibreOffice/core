@@ -1901,7 +1901,7 @@ public:
                                     SCTAB nTab );
 
     SfxPrinter*     GetPrinter( bool bCreateIfNotExist = true );
-    void            SetPrinter( SfxPrinter* pNewPrinter );
+    void            SetPrinter( VclPtr<SfxPrinter> const & pNewPrinter );
     VirtualDevice*  GetVirtualDevice_100th_mm();
     SC_DLLPUBLIC OutputDevice*  GetRefDevice(); // WYSIWYG: Printer, otherwise VirtualDevice...
 

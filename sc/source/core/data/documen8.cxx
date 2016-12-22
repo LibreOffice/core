@@ -145,7 +145,7 @@ SfxPrinter* ScDocument::GetPrinter(bool bCreateIfNotExist)
     return pPrinter;
 }
 
-void ScDocument::SetPrinter( SfxPrinter* pNewPrinter )
+void ScDocument::SetPrinter( VclPtr<SfxPrinter> const & pNewPrinter )
 {
     if ( pNewPrinter == pPrinter.get() )
     {
