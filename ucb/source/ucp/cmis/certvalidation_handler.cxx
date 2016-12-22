@@ -46,7 +46,7 @@ namespace cmis
             if ( xSEInitializer.is() )
             {
                 uno::Reference< xml::crypto::XXMLSecurityContext > xSecurityContext(
-                    xSEInitializer->createSecurityContext() );
+                    xSEInitializer->createSecurityContext( OUString() ) );
 
                 uno::Reference< xml::crypto::XSecurityEnvironment > xSecurityEnv(
                         xSecurityContext->getSecurityEnvironment() );

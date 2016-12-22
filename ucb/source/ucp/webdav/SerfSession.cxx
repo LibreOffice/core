@@ -373,7 +373,7 @@ apr_status_t SerfSession::verifySerfCertificateChain (
         css::uno::Reference< css::xml::crypto::XSEInitializer > xSEInitializer =
             css::xml::crypto::SEInitializer::create( xContext );
 
-        xSecurityContext = xSEInitializer->createSecurityContext();
+        xSecurityContext = xSEInitializer->createSecurityContext( OUString() );
         if (xSecurityContext.is())
             xSecurityEnv = xSecurityContext->getSecurityEnvironment();
 

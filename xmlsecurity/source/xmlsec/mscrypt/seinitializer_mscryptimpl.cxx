@@ -45,12 +45,31 @@ SEInitializer_MSCryptImpl::~SEInitializer_MSCryptImpl()
 
 /* XSEInitializer */
 cssu::Reference< cssxc::XXMLSecurityContext > SAL_CALL
-    SEInitializer_MSCryptImpl::createSecurityContext()
+    SEInitializer_MSCryptImpl::createSecurityContext(
+    const OUString& sCertDB )
     throw (cssu::RuntimeException)
 {
-    //Initialize the crypto engine
+    const char* n_pCertStore ;
+    HCERTSTORE  n_hStoreHandle ;
 
-    xmlSecMSCryptoAppInit( nullptr ) ;
+    //Initialize the crypto engine
+    if( sCertDB.getLength() > 0 )
+    {
+        OString sCertDir(sCertDB.getStr(), sCertDB.getLength(), RTL_TEXTENCODING_ASCII_US);
+        n_pCertStore = sCertDir.getStr();
+        n_hStoreHandle = CertOpenSystemStore( NULL, n_pCertStore ) ;
+        if( n_hStoreHandle == nullptr )
+        {
+            return nullptr;
+        }
+    }
+    else
+    {
+        n_pCertStore = nullptr ;
+        n_hStoreHandle = nullptr ;
+    }
+
+    xmlSecMSCryptoAppInit( n_pCertStore ) ;
 
     try {
         /* Build Security Environment */
@@ -61,11 +80,24 @@ cssu::Reference< cssxc::XXMLSecurityContext > SAL_CALL
         SecurityEnvironment_MSCryptImpl* pSecEnv = reinterpret_cast<SecurityEnvironment_MSCryptImpl*>(xSecEnvTunnel->getSomething( SecurityEnvironment_MSCryptImpl::getUnoTunnelId() ));
         if( pSecEnv == nullptr )
         {
+            if( n_hStoreHandle != nullptr )
+            {
+                CertCloseStore( n_hStoreHandle, CERT_CLOSE_STORE_FORCE_FLAG ) ;
+            }
+
             xmlSecMSCryptoAppShutdown() ;
             return nullptr;
         }
 
-        pSecEnv->enableDefaultCrypt( true ) ;
+        if( n_hStoreHandle != nullptr )
+        {
+            pSecEnv->setCryptoSlot( n_hStoreHandle ) ;
+            pSecEnv->setCertDb( n_hStoreHandle ) ;
+        }
+        else
+        {
+            pSecEnv->enableDefaultCrypt( true ) ;
+        }
 
         /* Build XML Security Context */
         cssu::Reference< cssxc::XXMLSecurityContext > xSecCtx = cssxc::XMLSecurityContext::create( mxContext );
@@ -75,6 +107,11 @@ cssu::Reference< cssxc::XXMLSecurityContext > SAL_CALL
     }
     catch( cssu::Exception& )
     {
+        if( n_hStoreHandle != nullptr )
+        {
+            CertCloseStore( n_hStoreHandle, CERT_CLOSE_STORE_FORCE_FLAG ) ;
+        }
+
         xmlSecMSCryptoAppShutdown() ;
         return nullptr;
     }
