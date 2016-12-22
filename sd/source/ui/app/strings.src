@@ -444,7 +444,7 @@ String STR_WARN_PRINTFORMAT_FAILURE
 };
 String STR_REMOVE_LINK
 {
-    Text [ en-US ] = "This graphic is linked to a document. \nDo you want to unlink the graphic in order to edit it?" ;
+    Text [ en-US ] = "This image is linked to a document. \nDo you want to unlink the image in order to edit it?" ;
 };
 String STR_IMPORT_GRFILTER_OPENERROR
 {
@@ -918,7 +918,7 @@ String STR_HTMLEXP_SETTEXT
 
 String STR_HTMLEXP_SETGRAPHIC
 {
-    Text [ en-US ] = "Graphics";
+    Text [ en-US ] = "Image";
 };
 
 String STR_HTMLEXP_OUTLINE
@@ -963,7 +963,7 @@ String STR_ISLOADING
 
 String STR_DRAW_GRAF_TOOLBOX
 {
-    Text [ en-US ] = "Graphics Object Bar" ;
+    Text [ en-US ] = "Image Object Bar" ;
 };
 
 String STR_UNDO_APPLY_3D_FAVOURITE
@@ -973,7 +973,7 @@ String STR_UNDO_APPLY_3D_FAVOURITE
 
 String STR_UNDO_GRAFFILTER
 {
-    Text [ en-US ] = "Graphics filter" ;
+    Text [ en-US ] = "Image filter" ;
 };
 
 String STR_WARNING_NOSOUNDFILE
@@ -1157,7 +1157,7 @@ String STR_TASKPANEL_LAYOUT_MENU_TITLE
 };
 String STR_GRAPHICS_STYLE_FAMILY
 {
-    Text [ en-US ] = "Graphic Styles";
+    Text [ en-US ] = "Image Styles";
 };
 String STR_PRESENTATIONS_STYLE_FAMILY
 {
