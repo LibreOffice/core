@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a6eadb0_7390a0ed",
+        "filename": "sw/source/core/text/guess.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2016-12-22T17:24:38Z",
+      "side": 1,
+      "message": "Variables should be moved where they are used: nSpaceCnt to line 85 before \"for\", nCharsCnt to line 98, cChar to line 87.",
+      "range": {
+        "startLine": 79,
+        "startChar": 4,
+        "endLine": 81,
+        "endChar": 22
+      },
+      "revId": "f02abdd654caede9e27ed95de1080b20bea44f0f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
