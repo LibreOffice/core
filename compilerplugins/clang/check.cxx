@@ -78,9 +78,9 @@ TerminalCheck TypeCheck::AnyBoolean() const {
     auto n =t->getDecl()->getName();
     return TerminalCheck(
         n == "sal_Bool" || n == "BOOL" || n == "Boolean" || n == "FT_Bool"
-        || n == "FcBool" || n == "GLboolean" || n == "NPBool" || n == "UBool"
-        || n == "dbus_bool_t" || n == "gboolean" || n == "hb_bool_t"
-        || n == "jboolean");
+        || n == "FcBool" || n == "GLboolean" || n == "NPBool" || n == "TW_BOOL"
+        || n == "UBool" || n == "boolean" || n == "dbus_bool_t"
+        || n == "gboolean" || n == "hb_bool_t" || n == "jboolean");
 }
 
 TypeCheck TypeCheck::LvalueReference() const {
