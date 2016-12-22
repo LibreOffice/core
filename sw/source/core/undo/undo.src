@@ -416,11 +416,11 @@ String STR_TOXCHANGE
 };
 String STR_START_QUOTE
 {
-    Text [ en-US ] = "'";
+    Text [ en-US ] = "“";
 };
 String STR_END_QUOTE
 {
-    Text [ en-US ] = "'";
+    Text [ en-US ] = "”";
 };
 String STR_LDOTS
 {
@@ -444,7 +444,7 @@ String STR_PASTE_CLIPBOARD_UNDO
 };
 String STR_YIELDS
 {
-    Text [ en-US ] = "->";
+    Text [ en-US ] = "→";
 };
 String STR_OCCURRENCES_OF
 {
