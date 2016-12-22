@@ -425,19 +425,19 @@ String STR_ObjNamePluralCUSTOMSHAPE
 };
 String STR_ObjNameSingulGRAFMAC
 {
-    Text [ en-US ] = "Mac graphic" ;
+    Text [ en-US ] = "Mac image" ;
 };
 String STR_ObjNamePluralGRAFMAC
 {
-    Text [ en-US ] = "Mac graphics" ;
+    Text [ en-US ] = "Mac image" ;
 };
 String STR_ObjNameSingulGRAFMACLNK
 {
-    Text [ en-US ] = "Linked Mac graphic" ;
+    Text [ en-US ] = "Linked Mac image" ;
 };
 String STR_ObjNamePluralGRAFMACLNK
 {
-    Text [ en-US ] = "Linked Mac graphics" ;
+    Text [ en-US ] = "Linked Mac image" ;
 };
 
 // Svg support
@@ -1461,7 +1461,7 @@ String STR_ItemNam_GRAFINVERT
 };
 String STR_ItemNam_GRAFMODE
 {
-    Text [ en-US ] = "Graphics mode";
+    Text [ en-US ] = "Image mode";
 };
 String STR_ItemNam_GRAFRESERVE2 { Text = "" ; };
 String STR_ItemNam_GRAFRESERVE3 { Text = "" ; };
@@ -2661,7 +2661,7 @@ String SIP_SA_GRAFINVERT
 };
 String SIP_SA_GRAFMODE
 {
-    Text [ en-US ] = "Graphics mode";
+    Text [ en-US ] = "Image mode";
 };
 String SIP_SA_GRAFCROP
 {
