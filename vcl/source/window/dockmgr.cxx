@@ -968,11 +968,11 @@ void ImplDockingWindowWrapper::StartPopupMode( ToolBox *pParentToolBox, FloatWin
         mpOldBorderWin = nullptr;  // no border window found
 
     bool bAllowTearOff = bool( nFlags & FloatWinPopupFlags::AllowTearOff );
-    bool bIsToolBox = GetWindow()->GetType() == WINDOW_TOOLBOX;
+    bool bUseStdPopup = bAllowTearOff && GetWindow()->GetType() != WINDOW_TOOLBOX;
 
     // the new parent for popup mode
     VclPtr<FloatingWindow> pWin;
-    if ( bAllowTearOff && !bIsToolBox )
+    if ( bUseStdPopup )
         pWin = VclPtr<FloatingWindow>::Create( mpParent, WB_STDPOPUP );
     else
         pWin = VclPtr<ImplPopupFloatWin>::Create( mpParent, this, bAllowTearOff );
@@ -988,7 +988,7 @@ void ImplDockingWindowWrapper::StartPopupMode( ToolBox *pParentToolBox, FloatWin
     GetWindow()->mpWindowImpl->mnBottomBorder  = 0;
 
     // position toolbox below the drag grip
-    if ( bIsToolBox )
+    if ( !bUseStdPopup )
         GetWindow()->SetPosPixel( static_cast<ImplPopupFloatWin*>( pWin.get() )->GetToolboxPosition() );
 
     // reparent borderwindow and window
