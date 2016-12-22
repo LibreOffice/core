@@ -21,27 +21,42 @@
 
 
 
-PRJ=..$/..$/..
-PRJNAME=fpicker
-TARGET=fop
-#LIBTARGET=NO
-ENABLE_EXCEPTIONS=TRUE
-COMP1TYPELIST=$(TARGET)
+$(eval $(call gb_Library_Library,fps_aqua))
 
-# --- Settings -----------------------------------------------------
+$(eval $(call gb_Library_set_componentfile,fps_aqua,fpicker/source/aqua/fps_aqua))
 
-.INCLUDE :  settings.mk
+$(eval $(call gb_Library_set_include,fps_aqua,\
+        $$(INCLUDE) \
+	-I$(SRCDIR)/fpicker/inc/pch \
+))
 
-# --- Files --------------------------------------------------------
+$(eval $(call gb_Library_add_api,fps_aqua,\
+	offapi \
+	udkapi \
+))
 
-# enable rtti
-CFLAGS+=-GR
+$(eval $(call gb_Library_add_linked_libs,fps_aqua,\
+	cppu \
+	cppuhelper \
+	sal \
+	tl \
+	vcl \
+	$(gb_STDLIBS) \
+))
 
-SLOFILES=$(SLO)$/fopentry.obj\
-         $(SLO)$/folderpicker.obj\
-         $(SLO)$/WinFopImpl.obj\
-         $(SLO)$/MtaFop.obj
+$(eval $(call gb_Library_add_exception_objects,fps_aqua,\
+	fpicker/source/aqua/resourceprovider \
+	fpicker/source/aqua/FPentry \
+	fpicker/source/aqua/SalAquaPicker \
+	fpicker/source/aqua/SalAquaFilePicker \
+	fpicker/source/aqua/SalAquaFolderPicker \
+	fpicker/source/aqua/CFStringUtilities \
+	fpicker/source/aqua/FilterHelper \
+	fpicker/source/aqua/ControlHelper \
+	fpicker/source/aqua/NSString_OOoAdditions \
+	fpicker/source/aqua/NSURL_OOoAdditions \
+	fpicker/source/aqua/AquaFilePickerDelegate \
+))
 
-# --- Targets ------------------------------------------------------
 
-.INCLUDE :	target.mk
+# vim: set noet sw=4 ts=4:

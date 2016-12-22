@@ -20,24 +20,46 @@
 #**************************************************************
 
 
-PRJ=..
 
-PRJNAME=fpicker
-TARGET=inc
+$(eval $(call gb_Library_Library,fps_gnome))
 
-# --- Settings -----------------------------------------------------
+$(eval $(call gb_Library_set_componentfile,fps_gnome,fpicker/source/unx/gnome/fps_gnome))
 
-.INCLUDE :  settings.mk
+$(eval $(call gb_Library_set_include,fps_gnome,\
+        $$(INCLUDE) \
+	$(filter -I%,$(GTK_CFLAGS)) \
+	-I$(SRCDIR)/fpicker/inc/pch \
+))
 
-# --- Files --------------------------------------------------------
-# --- Targets -------------------------------------------------------
+$(eval $(call gb_Library_add_cflags,gps_gnome,\
+	$(filter-out -I%,$(GTK_CFLAGS)) \
+))
 
-.INCLUDE :  target.mk
+$(eval $(call gb_Library_add_api,fps_gnome,\
+	offapi \
+	udkapi \
+))
 
-.IF "$(ENABLE_PCH)"!=""
-ALLTAR : \
-    $(SLO)$/precompiled.pch \
-    $(SLO)$/precompiled_ex.pch
-    
-.ENDIF			# "$(ENABLE_PCH)"!=""
+$(eval $(call gb_Library_add_linked_libs,fps_gnome,\
+	comphelper \
+	cppu \
+	cppuhelper \
+	sal \
+	tl \
+	vcl \
+	$(gb_STDLIBS) \
+))
 
+$(eval $(call gb_Library_add_libs,fps_gnome,\
+	$(GTK_LIBS) \
+))
+
+$(eval $(call gb_Library_add_exception_objects,fps_gnome,\
+	fpicker/source/unx/gnome/SalGtkPicker \
+	fpicker/source/unx/gnome/SalGtkFilePicker \
+	fpicker/source/unx/gnome/SalGtkFolderPicker \
+	fpicker/source/unx/gnome/resourceprovider \
+	fpicker/source/unx/gnome/FPentry \
+))
+
+# vim: set noet sw=4 ts=4:

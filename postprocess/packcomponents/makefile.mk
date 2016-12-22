@@ -77,6 +77,8 @@ my_components = \
     component/eventattacher/source/evtatt \
     component/fileaccess/util/fileacc \
     component/formula/util/for \
+    component/fpicker/source/generic/fpicker \
+    component/fpicker/source/office/fps_office \
     component/framework/util/fwk \
     component/framework/util/fwl \
     component/framework/util/fwm \
@@ -137,8 +139,6 @@ my_components = \
     filterconfig1 \
     flash \
     flat \
-    fpicker \
-    fps_office \
     frm \
     guesslang \
     i18npool \
@@ -317,7 +317,7 @@ my_components += \
 my_components += \
     component/avmedia/source/macavf/avmediaMacAVF \
     component/avmedia/source/quicktime/avmediaQuickTime \
-    fps_aqua \
+    components/fpicker/source/aqua/fps_aqua \
     macab1 \
     macbe1 \
     MacOSXSpell
@@ -331,8 +331,8 @@ my_components += \
     component/dtrans/util/dnd \
     component/dtrans/util/ftransl \
     component/dtrans/util/sysdtrans \
-    fop \
-    fps \
+    component/fpicker/source/win32/folderpicker/fop \
+    component/fpicker/source/win32/filepicker/fps \
     java_uno_accessbridge \
     sysmail \
     winaccessibility \
@@ -371,11 +371,11 @@ my_components += desktopbe1
 .END
 
 .IF "$(GTK_TWO_FOUR)" != ""
-my_components += fps_gnome
+my_components += component/fpicker/source/unx/gnome/fps_gnome
 .END
 
 .IF "$(OS)" != "MACOSX" && "$(OS)" != "WNT" && "$(ENABLE_KDE4)" != ""
-my_components += fps_kde4
+my_components += component/fpicker/source/unx/kde4/fps_kde4
 .END
 
 .IF "$(OS)" != "WNT"

@@ -21,38 +21,35 @@
 
 
 
-PRJ=..$/..$/..$/..
+$(eval $(call gb_Library_Library,fpicker))
 
-PRJNAME=sysui
-TARGET=testfps
-LIBTARGET=NO
-TARGETTYPE=CUI
+$(eval $(call gb_Library_add_precompiled_header,fpicker,$(SRCDIR)/fpicker/inc/pch/precompiled_fpicker))
 
-# --- Settings -----------------------------------------------------
+$(eval $(call gb_Library_set_componentfile,fpicker,fpicker/source/generic/fpicker))
 
-.INCLUDE :  settings.mk
+$(eval $(call gb_Library_set_include,fpicker,\
+        $$(INCLUDE) \
+	-I$(SRCDIR)/fpicker/inc/pch \
+))
 
-CFLAGS+=-GR -GX
+$(eval $(call gb_Library_add_api,fpicker,\
+	offapi \
+	udkapi \
+))
 
-# --- Files --------------------------------------------------------
-
-                
-OBJFILES=$(OBJ)$/test_fps.obj
-
-APP1TARGET=$(TARGET)
-APP1OBJS=$(OBJFILES) 
-                
-APP1STDLIBS+=\
-            $(CPPULIB)\
-            $(CPPUHELPERLIB)\
-            $(SALLIB)\
-            $(USER32LIB)\
-            $(OLE32LIB)
-
-APP1DEF=$(MISC)$/$(APP1TARGET).def
-
-# --- Targets ------------------------------------------------------
-
-.INCLUDE :		target.mk
+$(eval $(call gb_Library_add_linked_libs,fpicker,\
+	cppu \
+	cppuhelper \
+	sal \
+	svl \
+	vcl \
+	svt \
+	$(gb_STDLIBS) \
+))
 
 
+$(eval $(call gb_Library_add_exception_objects,fpicker,\
+	fpicker/source/generic/fpicker \
+))
+
+# vim: set noet sw=4 ts=4:

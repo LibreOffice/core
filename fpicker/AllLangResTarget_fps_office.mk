@@ -21,33 +21,24 @@
 
 
 
-PRJ=..$/..$/..
-PRJNAME=fpicker
-TARGET=utils
-LIBTARGET=NO
-ENABLE_EXCEPTIONS=TRUE
+$(eval $(call gb_AllLangResTarget_AllLangResTarget,fps_office))
 
-# --- Settings ----------------------------------
+$(eval $(call gb_AllLangResTarget_set_reslocation,fps_office,fpicker))
 
-.INCLUDE : settings.mk
+$(eval $(call gb_AllLangResTarget_add_srs,fps_office,\
+	fps_office/res \
+))
 
-.IF "$(COM)"=="GCC"
-CFLAGSAPPEND+=-fexceptions -fno-enforce-eh-specs -DUNICODE -D_UNICODE
-.ELSE
-CFLAGS+=-EHa -DUNICODE -D_UNICODE
-.ENDIF
+$(eval $(call gb_SrsTarget_SrsTarget,fps_office/res))
 
-# --- Files -------------------------------------
+$(eval $(call gb_SrsTarget_set_include,fps_office/res,\
+	$$(INCLUDE) \
+	-I$(WORKDIR)/inc \
+))
 
-SLOFILES=$(SLO)$/WinImplHelper.obj\
-         $(SLO)$/AutoBuffer.obj\
-         $(SLO)$/resourceprovider.obj
-
-LIB1TARGET=$(SLB)$/$(TARGET).lib
-LIB1OBJFILES=$(SLOFILES)
-
-# --- Targets ----------------------------------
-
-.INCLUDE : target.mk
+$(eval $(call gb_SrsTarget_add_files,fps_office/res,\
+	fpicker/source/office/iodlg.src \
+	fpicker/source/office/OfficeFilePicker.src \
+))
 
 

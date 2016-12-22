@@ -178,6 +178,13 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
     directx9canvas \
     expwrap \
     fastsax \
+    fop \
+    fpicker \
+    fps \
+    fps_aqua \
+    fps_gnome \
+    fps_kde4 \
+    fps_office \
     fsstorage \
     gdipluscanvas \
     hatchwindowfactory \

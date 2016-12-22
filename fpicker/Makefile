@@ -19,40 +19,14 @@
 #  
 #**************************************************************
 
+ifeq ($(strip $(SOLARENV)),)
+$(error No environment set!)
+endif
 
+gb_PARTIALBUILD := T
+GBUILDDIR := $(SOLARENV)/gbuild
+include $(GBUILDDIR)/gbuild.mk
 
-PRJ=..$/..$/..$/..
+$(eval $(call gb_Module_make_global_targets,$(shell ls $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/Module*.mk)))
 
-PRJNAME=		sysui
-TARGET=			testfops
-LIBTARGET=		NO
-TARGETTYPE=		CUI
-
-
-# --- Settings -----------------------------------------------------
-#.INCLUDE :		$(PRJ)$/util$/makefile.pmk
-
-.INCLUDE :  settings.mk
-
-CFLAGS+=-GR -EHa
-
-# --- Files --------------------------------------------------------
-
-            
-OBJFILES=   	$(OBJ)$/test_fops.obj
-
-APP1TARGET=		test_fops
-
-APP1OBJS=		$(OBJ)$/test_fops.obj 
-
-APP1STDLIBS+=	$(CPPULIB)			\
-                $(CPPUHELPERLIB)	\
-                $(SALLIB) 	 		\
-                $(USER32LIB)\
-                $(OLE32LIB)
-                
-APP1DEF=		$(MISC)$/$(APP1TARGET).def
-
-# --- Targets ------------------------------------------------------
-.INCLUDE :		target.mk
-
+# vim: set noet sw=4 ts=4:

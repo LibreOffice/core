@@ -43,6 +43,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     eventattacher \
     fileaccess \
     formula \
+    fpicker \
     framework \
     idl \
     io \
