@@ -178,12 +178,13 @@ bool BadVectorInit::VisitCXXConstructExpr(const CXXConstructExpr* expr)
     if (aParentName.find("vector") == string::npos && aParentName.find("deque") == string::npos)
         return true;
 
-    // ignore the copy constructor
+    // ignore the copy/move constructors, and those taking an initializer_list
+    // etc.:
+    if (consDecl->isCopyConstructor() || consDecl->isMoveConstructor())
+        return true;
     const ParmVarDecl* pParam = consDecl->getParamDecl(0);
     std::string aParam1 = pParam->getOriginalType().getAsString();
-    if (aParam1.find("vector") != string::npos
-        || aParam1.find("deque") != string::npos
-        || aParam1.find("initializer_list") != string::npos
+    if (aParam1.find("initializer_list") != string::npos
         || aParam1.find("iterator") != string::npos)
         return true;
 
