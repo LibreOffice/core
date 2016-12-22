@@ -805,6 +805,7 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	wizards_basicsrvtutorials \
 	xmlsec \
 	chart2_opengl_shader \
+	sc_res_xml \
 	vcl_opengl_shader \
 	$(if $(filter WNT,$(OS)), \
 		vcl_opengl_blacklist \
