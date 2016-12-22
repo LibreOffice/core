@@ -2541,6 +2541,8 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                 lcl_RecalcTable( *this, nullptr, aNotify );
                 m_bLowersFormatted = true;
                 m_bCalcLowers = false;
+                if (!mbValidPrtArea)
+                    m_pTable->SetRowsToRepeat(1);
             }
 #if OSL_DEBUG_LEVEL > 0
             else

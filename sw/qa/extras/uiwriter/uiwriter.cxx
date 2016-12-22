@@ -234,6 +234,7 @@ public:
     void testTdf104032();
     void testTdf104425();
     void testTdf104814();
+    void testTdf104492();
     void testTdf105417();
     void testTdf105625();
     void testTdf107976();
@@ -361,6 +362,7 @@ public:
     CPPUNIT_TEST(testTdf104032);
     CPPUNIT_TEST(testTdf104425);
     CPPUNIT_TEST(testTdf104814);
+    CPPUNIT_TEST(testTdf104492);
     CPPUNIT_TEST(testTdf105417);
     CPPUNIT_TEST(testTdf105625);
     CPPUNIT_TEST(testTdf107976);
@@ -4627,6 +4629,13 @@ void SwUiWriterTest::testTdf113790()
     // Save it as DOCX & load it again
     reload("Office Open XML Text", "tdf113790.docx");
     CPPUNIT_ASSERT(dynamic_cast<SwXTextDocument *>(mxComponent.get()));
+}
+void SwUiWriterTest::testTdf104492()
+{
+    createDoc("tdf104492.docx");
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    // The document should split table over 3 pages.
+    assertXPath(pXmlDoc, "//page", 3);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
