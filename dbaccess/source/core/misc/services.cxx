@@ -23,7 +23,7 @@
 #include "DatabaseDataProvider.hxx"
 #include "dbadllapi.hxx"
 
-#include <../dataaccess/databasecontext.hxx>
+#include "databasecontext.hxx"
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
