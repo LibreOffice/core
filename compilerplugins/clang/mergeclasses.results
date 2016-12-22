@@ -8,7 +8,7 @@ merge (anonymous namespace)::Data with cppu::PropertySetMixinImpl::Impl
 merge (anonymous namespace)::N with (anonymous namespace)::P
 merge (anonymous namespace)::O with (anonymous namespace)::O2
 merge (anonymous namespace)::ParserData with (anonymous namespace)::Entity
-merge (anonymous namespace)::PublishableDescription with cppu::ImplInheritanceHelper1
+merge (anonymous namespace)::PublishableDescription with cppu::ImplInheritanceHelper
 merge (anonymous namespace)::RecursiveTest with (anonymous namespace)::SimpleRecursiveTest
 merge (anonymous namespace)::ReflectionTransition with (anonymous namespace)::RochadeTransition
 merge (anonymous namespace)::SimpleTransition with (anonymous namespace)::DiamondTransition
@@ -19,6 +19,7 @@ merge AbstractSwInsertDBColAutoPilot with AbstractSwInsertDBColAutoPilot_Impl
 merge AddressWalker with AddressWalkerWriter
 merge B3dTransformationSet with B3dViewport
 merge B3dViewport with B3dCamera
+merge Bar with Foo
 merge CSS1Parser with SvxCSS1Parser
 merge CffGlobal with CffSubsetterContext
 merge DbGridControl with FmGridControl
@@ -37,7 +38,7 @@ merge FmGridListener with FmXGridPeer::GridListenerDelegator
 merge FmXDisposeListener with DisposeListenerGridBridge
 merge FontSelectPatternAttributes with FontSelectPattern
 merge GLWindow with GLX11Window
-merge GraphiteLayout with GraphiteLayoutImpl
+merge GenericSalLayout with CommonSalLayout
 merge GroupTable with PPTWriterBase
 merge HostDetailsContainer with DavDetailsContainer
 merge IDocumentChartDataProviderAccess with sw::DocumentChartDataProviderManager
@@ -82,6 +83,7 @@ merge OpenGLDeviceInfo with X11OpenGLDeviceInfo
 merge OpenGLSalGraphicsImpl with X11OpenGLSalGraphicsImpl
 merge PPTExBulletProvider with PPTWriter
 merge RefNode with RscTop
+merge RscLongRange with RscLongEnumRange
 merge SOParagraph with ParagraphObj
 merge SalData with SalGenericData
 merge SalInfoPrinter with PspSalInfoPrinter
@@ -91,7 +93,6 @@ merge SalMenuItem with GtkSalMenuItem
 merge SalPrinter with PspSalPrinter
 merge SalSession with (anonymous namespace)::IceSalSession
 merge SalSystem with SalGenericSystem
-merge ScBiffReader with ScQProReader
 merge ScDBFunc with ScTabViewShell
 merge ScDPCache::DBConnector with (anonymous namespace)::DBConnector
 merge ScDocFunc with ScDocFuncDirect
@@ -126,7 +127,6 @@ merge SdrPolyEditView with SdrGlueEditView
 merge SdrPowerPointImport with ImplSdPPTImport
 merge SdrSnapView with SdrMarkView
 merge SdwTextBoxRecord with SdwTextArt
-merge ServerFontLayoutEngine with HbLayoutEngine
 merge SfxModelSubComponent with sfx2::DocumentUndoManager
 merge SfxMultiFixRecordWriter with SfxMultiVarRecordWriter
 merge SfxSingleRecordReader with SfxMultiRecordReader
@@ -138,7 +138,6 @@ merge StgAvlNode with StgDirEntry
 merge StgCache with StgIo
 merge StgReader with WW8Reader
 merge StringNode with RscDefine
-merge SvHashTable with SvStringHashTable
 merge SvListView with SvTreeListBox
 merge SvXMLExportItemMapper with SwXMLTableItemMapper_Impl
 merge SvXMLImportItemMapper with SwXMLImportTableItemMapper_Impl
@@ -194,7 +193,6 @@ merge chart::LegendEntryProvider with chart::VSeriesPlotter
 merge chart::MarkHandleProvider with chart::SelectionHelper
 merge chart::ResourceChangeListener with chart::ChartTypeTabPage
 merge comphelper::ChainablePropertySet with comphelper::ChainableHelperNoState
-merge comphelper::NameContainerImpl with comphelper::NameContainer
 merge comphelper::OAccessibleContextHelper with comphelper::OCommonAccessibleComponent
 merge comphelper::OAnyEnumeration_BASE with comphelper::OAnyEnumeration
 merge comphelper::OComponentProxyAggregation with comphelper::OAccessibleWrapper
@@ -270,6 +268,7 @@ merge registry::tools::Options with Options_Impl
 merge reportdesign::ITraverseReport with rptui::NavigatorTree
 merge rptui::IConditionalFormatAction with rptui::ConditionalFormattingDialog
 merge sc::CompiledFormula with sc::opencl::DynamicKernel
+merge sc::DataProvider with sc::CSVDataProvider
 merge sc::opencl::Cumipmt with sc::opencl::OpCumipmt
 merge sc::opencl::Fvschedule with sc::opencl::OpFvschedule
 merge sc::opencl::IRR with sc::opencl::OpIRR
@@ -346,6 +345,7 @@ merge svx::IControllerFeatureInvalidation with FmXFormShell
 merge svx::IFocusObserver with svx::FmTextControlShell
 merge svx::IPropertyValueProvider with svx::PropertyValueProvider
 merge svx::RegistrationItemSetHolder with svx::DatabaseRegistrationDialog
+merge svx::sidebar::BulletsSettings with svx::sidebar::BulletsSettings_Impl
 merge svx::sidebar::SvxShapeCommandsMap with svx::sidebar::DefaultShapesPanel
 merge svxform::(anonymous namespace)::IScript with svxform::(anonymous namespace)::NewStyleUNOScript
 merge svxform::DispatchInterceptor with svxform::FormController
@@ -373,6 +373,7 @@ merge writerfilter::ooxml::OOXMLDocument with writerfilter::ooxml::OOXMLDocument
 merge writerfilter::ooxml::OOXMLFastContextHandlerLinear with writerfilter::ooxml::OOXMLFastContextHandlerMath
 merge writerfilter::ooxml::OOXMLStream with writerfilter::ooxml::OOXMLStreamImpl
 merge writerfilter::rtftok::RTFDocument with writerfilter::rtftok::RTFDocumentImpl
+merge writerperfect::test::WpftFilterFixture with writerperfect::test::WpftFilterTestBase
 merge xmloff::IEventAttacher with xmloff::OElementImport
 merge xmloff::IEventAttacherManager with xmloff::ODefaultEventAttacherManager
 merge xmloff::IFormsExportContext with xmloff::OFormLayerXMLExport_Impl
