@@ -111,7 +111,7 @@ SvtCTLOptions_Impl::SvtCTLOptions_Impl() :
     utl::ConfigItem("Office.Common/I18N/CTL"),
 
     m_bIsLoaded             ( false ),
-    m_bCTLFontEnabled       ( false ),
+    m_bCTLFontEnabled       ( true ),
     m_bCTLSequenceChecking  ( false ),
     m_bCTLRestricted        ( false ),
     m_bCTLTypeAndReplace    ( false ),
@@ -276,43 +276,6 @@ void SvtCTLOptions_Impl::Load()
                     }
                 }
             }
-        }
-    }
-
-    if (!m_bCTLFontEnabled)
-    {
-        SvtScriptType nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage(LANGUAGE_SYSTEM);
-        //system locale is CTL
-        bool bAutoEnableCTL = bool(nScriptType & SvtScriptType::COMPLEX);
-
-        LanguageType eSystemLanguage = LANGUAGE_SYSTEM;
-
-        if (!bAutoEnableCTL)
-        {
-            SvtSystemLanguageOptions aSystemLocaleSettings;
-
-            //windows secondary system locale is CTL
-            eSystemLanguage = aSystemLocaleSettings.GetWin16SystemLanguage();
-            if (eSystemLanguage != LANGUAGE_SYSTEM)
-            {
-                SvtScriptType nWinScript = SvtLanguageOptions::GetScriptTypeOfLanguage( eSystemLanguage );
-                bAutoEnableCTL = bool(nWinScript & SvtScriptType::COMPLEX);
-            }
-
-            //CTL keyboard is installed
-            if (!bAutoEnableCTL)
-                bAutoEnableCTL = aSystemLocaleSettings.isCTLKeyboardLayoutInstalled();
-        }
-
-        if (bAutoEnableCTL)
-        {
-            m_bCTLFontEnabled = true;
-            sal_uInt16 nLanguage = SvtSysLocale().GetLanguageTag().getLanguageType();
-            //enable sequence checking for the appropriate languages
-            m_bCTLSequenceChecking = m_bCTLRestricted = m_bCTLTypeAndReplace =
-                (MsLangId::needsSequenceChecking( nLanguage) ||
-                 MsLangId::needsSequenceChecking( eSystemLanguage));
-            Commit();
         }
     }
 
