@@ -51,6 +51,7 @@ void DBAccessTest::test()
     createFileURL(aFileNameBase, aFileName);
     uno::Reference< lang::XComponent > xComponent = loadFromDesktop(aFileName);
     CPPUNIT_ASSERT(xComponent.is());
+    xComponent->dispose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DBAccessTest);
