@@ -39,11 +39,11 @@ String STR_SVT_24BIT_TRUE_COLOR
 };
 String STR_SVT_ESTIMATED_SIZE_PIX_1
 {
-    Text [ en-US ] = "The picture needs about %1 KB of memory.";
+    Text [ en-US ] = "The image needs about %1 KB of memory.";
 };
 String STR_SVT_ESTIMATED_SIZE_PIX_2
 {
-    Text [ en-US ] = "The picture needs about %1 KB of memory, the file size is %2 KB.";
+    Text [ en-US ] = "The image needs about %1 KB of memory, the file size is %2 KB.";
 };
 String STR_SVT_ESTIMATED_SIZE_VEC
 {
