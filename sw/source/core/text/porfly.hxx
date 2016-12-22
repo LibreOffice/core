@@ -45,19 +45,19 @@ public:
 /// This portion represents an as-character anchored fly (shape, frame, etc.)
 class SwFlyCntPortion : public SwLinePortion
 {
-    Point aRef;     // Relatively to this point we calculate the AbsPos
-    bool bMax;   // Line adjustment and height == line height
-    sw::LineAlign eAlign;
+    Point m_aRef;     // Relatively to this point we calculate the AbsPos
+    bool m_bMax;   // Line adjustment and height == line height
+    sw::LineAlign m_eAlign;
 
     virtual SdrObject* GetSdrObj(const SwTextFrame&) =0;
 
 public:
     SwFlyCntPortion();
-    inline const Point& GetRefPoint() const { return aRef; }
-    inline bool IsMax() const { return bMax; }
-    inline sw::LineAlign GetAlign() const { return eAlign; }
-    inline void SetAlign(sw::LineAlign eNew) { eAlign = eNew; }
-    inline void SetMax(bool bNew) { bMax = bNew; }
+    inline const Point& GetRefPoint() const { return m_aRef; }
+    inline bool IsMax() const { return m_bMax; }
+    inline sw::LineAlign GetAlign() const { return m_eAlign; }
+    inline void SetAlign(sw::LineAlign eAlign) { m_eAlign = eAlign; }
+    inline void SetMax(bool bMax) { m_bMax = bMax; }
     void SetBase(const SwTextFrame& rFrame, const Point& rBase, long nLnAscent, long nLnDescent, long nFlyAscent, long nFlyDescent, AsCharFlags nFlags);
     virtual bool Format(SwTextFormatInfo& rInf) override;
     OUTPUT_OPERATOR_OVERRIDE
