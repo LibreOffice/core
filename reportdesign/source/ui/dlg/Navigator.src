@@ -22,47 +22,101 @@
 #include <svx/svxids.hrc>
 #include <svl/solar.hrc>
 
-#define RID_SVXIMG_COLLAPSEDNODE                    (RID_FORMS_START + 2)
-#define RID_SVXIMG_EXPANDEDNODE                     (RID_FORMS_START + 3)
-#define RID_SVXIMG_FORMS                            (RID_FORMS_START +13)
-
-#define NAVIGATOR_IMAGEIDS \
-    IdList = \
-    { \
-        SID_SELECT_REPORT;\
-        SID_FM_FIXEDTEXT ; \
-        SID_INSERT_HFIXEDLINE ; \
-        SID_INSERT_VFIXEDLINE;\
-        SID_FM_IMAGECONTROL ; \
-        SID_FM_EDIT ; \
-        SID_RPT_NEW_FUNCTION;\
-        SID_REPORTHEADERFOOTER;\
-        SID_PAGEHEADERFOOTER;\
-        SID_GROUPHEADER;\
-        SID_GROUPFOOTER;\
-        RID_SVXIMG_COLLAPSEDNODE ; \
-        RID_SVXIMG_EXPANDEDNODE ; \
-        SID_SORTINGANDGROUPING;\
-        SID_DRAWTBX_CS_BASIC;\
-        SID_GROUP;\
-        SID_ICON_DETAIL;\
-    }; \
-    IdCount = 17
-
-ImageList RID_SVXIMGLIST_RPTEXPL
+Bitmap RID_SVXBMP_SELECT_REPORT
 {
-    Prefix = "sx";
-    NAVIGATOR_IMAGEIDS;
+    File = "sx12464.png";
+};
+
+Bitmap RID_SVXBMP_FM_FIXEDTEXT
+{
+    File = "sx10597.png";
+};
+
+Bitmap RID_SVXBMP_INSERT_HFIXEDLINE
+{
+    File = "sx10928.png";
+};
+
+Bitmap RID_SVXBMP_INSERT_VFIXEDLINE
+{
+    File = "sx10929.png";
+};
+
+Bitmap RID_SVXBMP_FM_IMAGECONTROL
+{
+    File = "sx10710.png";
+};
+
+Bitmap RID_SVXBMP_FM_EDIT
+{
+    File = "sx10599.png";
+};
+
+Bitmap RID_SVXBMP_RPT_NEW_FUNCTION
+{
+    File = "sx12594.png";
+};
+
+Bitmap RID_SVXBMP_REPORTHEADERFOOTER
+{
+    File = "sx12453.png";
+};
+
+Bitmap RID_SVXBMP_PAGEHEADERFOOTER
+{
+    File = "sx12452.png";
+};
+
+Bitmap RID_SVXBMP_GROUPHEADER
+{
+    File = "sx12466.png";
+};
+
+Bitmap RID_SVXBMP_GROUPFOOTER
+{
+    File = "sx12468.png";
+};
+
+Bitmap RID_SVXBMP_COLLAPSEDNODE
+{
+    File = "sx18002.png";
+};
+
+Bitmap RID_SVXBMP_EXPANDEDNODE
+{
+    File = "sx18003.png";
+};
+
+Bitmap RID_SVXBMP_SORTINGANDGROUPING
+{
+    File = "sx12454.png";
+};
+
+Bitmap RID_SVXBMP_DRAWTBX_CS_BASIC
+{
+    File = "sx11047.png";
+};
+
+Bitmap RID_SVXBMP_GROUP
+{
+    File = "sx10454.png";
+};
+
+Bitmap RID_SVXBMP_ICON_DETAIL
+{
+    File = "sx12603.png";
 };
 
 String RID_STR_FUNCTIONS
 {
     Text [ en-US ] = "Functions" ;
 };
+
 String RID_STR_GROUPS
 {
     Text [ en-US ] = "Groups" ;
 };
+
 Menu RID_MENU_NAVIGATOR
 {
     ItemList =
