@@ -58,8 +58,17 @@ namespace
     }
 }
 
+extern "C"
+{
+    __attribute__((weak)) void __lsan_enable();
+    __attribute__((weak)) void __lsan_disable();
+}
+
 extern "C" int LLVMFuzzerInitialize(int *argc, char ***argv)
 {
+    if (__lsan_enable)
+        __lsan_enable();
+
     setenv("SAL_USE_VCLPLUGIN", "svp", 1);
 
     osl_setCommandArgs(*argc, *argv);
@@ -75,6 +84,9 @@ extern "C" int LLVMFuzzerInitialize(int *argc, char ***argv)
     comphelper::setProcessServiceFactory( xServiceManager );
     utl::ConfigManager::EnableAvoidConfig();
     InitVCL();
+
+    if (__lsan_disable)
+        __lsan_disable();
 
     return 0;
 }
