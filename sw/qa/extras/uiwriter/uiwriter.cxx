@@ -220,6 +220,7 @@ public:
     void testTdf104440();
     void testTdf104425();
     void testTdf104814();
+    void testTdf66405();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -336,6 +337,7 @@ public:
     CPPUNIT_TEST(testTdf104440);
     CPPUNIT_TEST(testTdf104425);
     CPPUNIT_TEST(testTdf104814);
+    CPPUNIT_TEST(testTdf66405);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -4157,6 +4159,39 @@ void SwUiWriterTest::testTdf104814()
     // accept all redlines
     while(pEditShell->GetRedlineCount())
         pEditShell->AcceptRedline(0);
+}
+
+void SwUiWriterTest::testTdf66405()
+{
+    // Imported formula should have zero margins
+    createDoc("tdf66405.docx");
+    uno::Reference<text::XTextEmbeddedObjectsSupplier> xEmbeddedObjectsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xEmbeddedObjects = xEmbeddedObjectsSupplier->getEmbeddedObjects();
+    uno::Reference<beans::XPropertySet> xFormula;
+    xEmbeddedObjects->getByName(xEmbeddedObjects->getElementNames()[0]) >>= xFormula;
+    uno::Reference<beans::XPropertySet> xComponent;
+    xFormula->getPropertyValue("Component") >>= xComponent;
+
+    // Test embedded object's margins
+    sal_Int32 nLeftMargin, nRightMargin, nTopMargin, nBottomMargin;
+    xFormula->getPropertyValue("LeftMargin") >>= nLeftMargin;
+    xFormula->getPropertyValue("RightMargin") >>= nRightMargin;
+    xFormula->getPropertyValue("TopMargin") >>= nTopMargin;
+    xFormula->getPropertyValue("BottomMargin") >>= nBottomMargin;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nLeftMargin);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nRightMargin);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nTopMargin);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nBottomMargin);
+
+    // Test embedded object component's margins
+    xComponent->getPropertyValue("LeftMargin") >>= nLeftMargin;
+    xComponent->getPropertyValue("RightMargin") >>= nRightMargin;
+    xComponent->getPropertyValue("TopMargin") >>= nTopMargin;
+    xComponent->getPropertyValue("BottomMargin") >>= nBottomMargin;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nLeftMargin);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nRightMargin);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nTopMargin);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nBottomMargin);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);

@@ -1424,8 +1424,27 @@ void DomainMapper_Impl::appendStarMath( const Value& val )
 
             xStarMathProperties->setPropertyValue(getPropertyName( PROP_EMBEDDED_OBJECT ),
                 val.getAny());
+            // tdf#66405: set zero margins for embedded object
+            xStarMathProperties->setPropertyValue(getPropertyName( PROP_LEFT_MARGIN ),
+                uno::makeAny(sal_Int32(0)));
+            xStarMathProperties->setPropertyValue(getPropertyName( PROP_RIGHT_MARGIN ),
+                uno::makeAny(sal_Int32(0)));
+            xStarMathProperties->setPropertyValue(getPropertyName( PROP_TOP_MARGIN ),
+                uno::makeAny(sal_Int32(0)));
+            xStarMathProperties->setPropertyValue(getPropertyName( PROP_BOTTOM_MARGIN ),
+                uno::makeAny(sal_Int32(0)));
 
             uno::Reference< uno::XInterface > xInterface( formula->getComponent(), uno::UNO_QUERY );
+            // set zero margins for object's component
+            uno::Reference< beans::XPropertySet > xComponentProperties( xInterface, uno::UNO_QUERY_THROW );
+            xComponentProperties->setPropertyValue(getPropertyName( PROP_LEFT_MARGIN ),
+                uno::makeAny(sal_Int32(0)));
+            xComponentProperties->setPropertyValue(getPropertyName( PROP_RIGHT_MARGIN ),
+                uno::makeAny(sal_Int32(0)));
+            xComponentProperties->setPropertyValue(getPropertyName( PROP_TOP_MARGIN ),
+                uno::makeAny(sal_Int32(0)));
+            xComponentProperties->setPropertyValue(getPropertyName( PROP_BOTTOM_MARGIN ),
+                uno::makeAny(sal_Int32(0)));
             Size size( 1000, 1000 );
             if( oox::FormulaImportBase* formulaimport = dynamic_cast< oox::FormulaImportBase* >( xInterface.get()))
                 size = formulaimport->getFormulaSize();
