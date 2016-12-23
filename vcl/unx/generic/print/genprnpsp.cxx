@@ -874,7 +874,7 @@ bool PspSalPrinter::StartJob(
     bool bDirect,
     ImplJobSetup* pJobSetup )
 {
-    SAL_INFO( "vcl", "PspSalPrinter::StartJob");
+    SAL_INFO( "vcl.unx.print", "PspSalPrinter::StartJob");
     GetSalData()->m_pInstance->jobStartedPrinterUpdate();
     m_bPdf      = false;
     if (pFileName)
@@ -931,7 +931,7 @@ bool PspSalPrinter::EndJob()
     else
     {
         bSuccess = m_aPrintJob.EndJob();
-        SAL_INFO( "vcl", "PspSalPrinter::EndJob " << bSuccess);
+        SAL_INFO( "vcl.unx.print", "PspSalPrinter::EndJob " << bSuccess);
 
         if( bSuccess && m_bPdf )
         {
@@ -945,7 +945,7 @@ bool PspSalPrinter::EndJob()
 
 SalGraphics* PspSalPrinter::StartPage( ImplJobSetup* pJobSetup, bool )
 {
-    SAL_INFO( "vcl", "PspSalPrinter::StartPage");
+    SAL_INFO( "vcl.unx.print", "PspSalPrinter::StartPage");
 
     JobData::constructFromStreamBuffer( pJobSetup->GetDriverData(), pJobSetup->GetDriverDataLen(), m_aJobData );
     m_pGraphics = GetGenericInstance()->CreatePrintGraphics();
@@ -969,7 +969,7 @@ void PspSalPrinter::EndPage()
 {
     m_aPrintJob.EndPage();
     m_aPrinterGfx.Clear();
-    SAL_INFO( "vcl", "PspSalPrinter::EndPage");
+    SAL_INFO( "vcl.unx.print", "PspSalPrinter::EndPage");
 }
 
 sal_uLong PspSalPrinter::GetErrorCode()
@@ -1016,7 +1016,7 @@ struct PDFPrintFile
 bool PspSalPrinter::StartJob( const OUString* i_pFileName, const OUString& i_rJobName, const OUString& i_rAppName,
                               ImplJobSetup* i_pSetupData, vcl::PrinterController& i_rController )
 {
-    SAL_INFO( "vcl", "StartJob with controller: pFilename = " << (i_pFileName ? *i_pFileName : "<nil>") );
+    SAL_INFO( "vcl.unx.print", "StartJob with controller: pFilename = " << (i_pFileName ? *i_pFileName : "<nil>") );
     // mark for endjob
     m_bIsPDFWriterJob = true;
     // reset IsLastPage
@@ -1259,7 +1259,7 @@ bool PspSalPrinter::StartJob( const OUString* i_pFileName, const OUString& i_rJo
         for(PDFPrintFile & rPDFFile : aPDFFiles)
         {
             osl_removeFile( rPDFFile.maTmpURL.pData );
-            SAL_INFO( "vcl", "removed print PDF file " << rPDFFile.maTmpURL );
+            SAL_INFO( "vcl.unx.print", "removed print PDF file " << rPDFFile.maTmpURL );
         }
     }
 
