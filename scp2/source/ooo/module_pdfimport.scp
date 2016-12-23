@@ -34,20 +34,12 @@ Module gid_Module_Pdfimport
     Styles = (HIDDEN_ROOT);
     Dirs = (gid_Dir_Share_Xpdfimport);
     Files = (auto_pdfimport_ALL,
-        gid_File_Dat_XpdfimportErrPdf,
         gid_File_Xcd_Pdfimport);
 End
 
 Directory gid_Dir_Share_Xpdfimport
     ParentID = gid_Brand_Dir_Share;
     DosName = "xpdfimport";
-End
-
-File gid_File_Dat_XpdfimportErrPdf
-    TXT_FILE_BODY;
-    Dir = gid_Dir_Share_Xpdfimport;
-    Name = "xpdfimport_err.pdf";
-    Styles = (PACKED);
 End
 
 File gid_File_Xcd_Pdfimport
