@@ -36,7 +36,7 @@ class CntItemPool;
 class CntStaticPoolDefaults_Impl
 {
     static const sal_uInt32  m_nItems = 1;
-    SfxPoolItem** m_ppDefaults;
+    std::vector<SfxPoolItem*>* m_pDefaults;
     SfxItemInfo*  m_pItemInfos;
 
 private:
@@ -48,8 +48,8 @@ public:
     CntStaticPoolDefaults_Impl(const CntStaticPoolDefaults_Impl&) = delete;
     CntStaticPoolDefaults_Impl& operator=(const CntStaticPoolDefaults_Impl&) = delete;
 
-    SfxPoolItem**      GetDefaults() const  { return m_ppDefaults; }
-    const SfxItemInfo* GetItemInfos() const { return m_pItemInfos; }
+    std::vector<SfxPoolItem*>*  GetDefaults() const  { return m_pDefaults; }
+    const SfxItemInfo*          GetItemInfos() const { return m_pItemInfos; }
 };
 
 
@@ -162,7 +162,7 @@ inline void CntStaticPoolDefaults_Impl::Insert(
 {
     sal_uInt16 nPos = pItem->Which() - WID_CHAOS_START;
 
-    m_ppDefaults[ nPos ]         = pItem;
+    (*m_pDefaults)[ nPos ]         = pItem;
     m_pItemInfos[ nPos ]._nSID   = 0;
     m_pItemInfos[ nPos ]._bPoolable = true;
 }
@@ -171,18 +171,17 @@ inline void CntStaticPoolDefaults_Impl::Insert(
 CntStaticPoolDefaults_Impl::~CntStaticPoolDefaults_Impl()
 {
     for ( sal_uInt32 n = 0; n < m_nItems; ++n )
-        delete m_ppDefaults[ n ];
+        delete (*m_pDefaults)[ n ];
 
-    delete [] m_ppDefaults;
+    delete m_pDefaults;
     delete [] m_pItemInfos;
 }
 
 
 CntStaticPoolDefaults_Impl::CntStaticPoolDefaults_Impl( CntItemPool* /*pPool*/ )
-: m_ppDefaults( new SfxPoolItem* [ m_nItems ] ),
+: m_pDefaults( new std::vector<SfxPoolItem*>( m_nItems, nullptr ) ),
   m_pItemInfos( new SfxItemInfo  [ m_nItems ] )
 {
-    memset( m_ppDefaults, 0, sizeof( SfxPoolItem* ) * m_nItems );
     memset( m_pItemInfos, 0, sizeof( SfxItemInfo ) * m_nItems );
     Insert( new SfxStringItem( WID_CHAOS_START, OUString() ) );
 }

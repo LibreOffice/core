@@ -23,6 +23,7 @@
 #include <sal/types.h>
 #include <svx/xdef.hxx>
 #include "swdllapi.h"
+#include <vector>
 
 // For SwTextHints without end index the following char is added:
 
@@ -420,7 +421,7 @@ inline bool isUNKNOWNATR(const sal_uInt16 nWhich)
 // Inline in PRODUCT.
 class SfxPoolItem;
 struct SfxItemInfo;
-typedef SfxPoolItem* SwDfltAttrTab[ POOLATTR_END - POOLATTR_BEGIN  ];
+typedef std::vector<SfxPoolItem*> SwDfltAttrTab;
 
 extern SwDfltAttrTab aAttrTab;
 extern SfxItemInfo   aSlotTab[];

@@ -295,17 +295,17 @@ void ODbAdminDialog::clearPassword()
     m_pImpl->clearPassword();
 }
 
-SfxItemSet* ODbAdminDialog::createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rpPool, SfxPoolItem**& _rppDefaults, ::dbaccess::ODsnTypeCollection* _pTypeCollection)
+SfxItemSet* ODbAdminDialog::createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rpPool, std::vector<SfxPoolItem*>*& _rpDefaults, ::dbaccess::ODsnTypeCollection* _pTypeCollection)
 {
     // just to be sure ....
     _rpSet = nullptr;
     _rpPool = nullptr;
-    _rppDefaults = nullptr;
+    _rpDefaults = nullptr;
 
     const OUString sFilterAll( "%", 1, RTL_TEXTENCODING_ASCII_US );
     // create and initialize the defaults
-    _rppDefaults = new SfxPoolItem*[DSID_LAST_ITEM_ID - DSID_FIRST_ITEM_ID + 1];
-    SfxPoolItem** pCounter = _rppDefaults;  // want to modify this without affecting the out param _rppDefaults
+    _rpDefaults = new std::vector<SfxPoolItem*>(DSID_LAST_ITEM_ID - DSID_FIRST_ITEM_ID + 1);
+    SfxPoolItem** pCounter = _rpDefaults->data();  // want to modify this without affecting the out param _rppDefaults
     *pCounter++ = new SfxStringItem(DSID_NAME, OUString());
     *pCounter++ = new SfxStringItem(DSID_ORIGINALNAME, OUString());
     *pCounter++ = new SfxStringItem(DSID_CONNECTURL, OUString());
@@ -436,7 +436,7 @@ SfxItemSet* ODbAdminDialog::createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rp
 
     OSL_ENSURE(SAL_N_ELEMENTS(aItemInfos) == DSID_LAST_ITEM_ID,"Invalid Ids!");
     _rpPool = new SfxItemPool(OUString("DSAItemPool"), DSID_FIRST_ITEM_ID, DSID_LAST_ITEM_ID,
-        aItemInfos, _rppDefaults);
+        aItemInfos, _rpDefaults);
     _rpPool->FreezeIdRanges();
 
     // and, finally, the set
@@ -445,7 +445,7 @@ SfxItemSet* ODbAdminDialog::createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rp
     return _rpSet;
 }
 
-void ODbAdminDialog::destroyItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rpPool, SfxPoolItem**& _rppDefaults)
+void ODbAdminDialog::destroyItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rpPool, std::vector<SfxPoolItem*>*& _rpDefaults)
 {
     // _first_ delete the set (referring the pool)
     if (_rpSet)
@@ -464,7 +464,7 @@ void ODbAdminDialog::destroyItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rpPool, 
     }
 
     // reset the defaults ptr
-    _rppDefaults = nullptr;
+    _rpDefaults = nullptr;
         // no need to explicitly delete the defaults, this has been done by the ReleaseDefaults
 }
 

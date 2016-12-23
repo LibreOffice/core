@@ -219,25 +219,25 @@ SvStream &SfxItemPool::Store(SvStream &rStream) const
             pImpl->bInSetItem = ft != 0;
 
             std::vector<SfxPoolItemArray_Impl*>::const_iterator itrArr = pImpl->maPoolItems.begin();
-            SfxPoolItem **ppDefItem = pImpl->ppStaticDefaults;
+            std::vector<SfxPoolItem*> & rStaticDefaults = *pImpl->mpStaticDefaults;
             const sal_uInt16 nSize = GetSize_Impl();
-            for ( size_t i = 0; i < nSize && !rStream.GetError(); ++i, ++itrArr, ++ppDefItem )
+            for ( size_t i = 0; i < nSize && !rStream.GetError(); ++i, ++itrArr )
             {
                 // Get version of the Item
-                sal_uInt16 nItemVersion = (*ppDefItem)->GetVersion( pImpl->mnFileFormatVersion );
+                sal_uInt16 nItemVersion = rStaticDefaults[i]->GetVersion( pImpl->mnFileFormatVersion );
                 if ( USHRT_MAX == nItemVersion )
                     // => Was not present in the version that was supposed to be exported
                     continue;
 
                 // ! Poolable is not even saved in the Pool
                 // And itemsets/plain-items depending on the round
-                if ( *itrArr && IsItemPoolable(**ppDefItem) &&
-                     pImpl->bInSetItem == (dynamic_cast< const SfxSetItem* >(*ppDefItem) !=  nullptr) )
+                if ( *itrArr && IsItemPoolable(*rStaticDefaults[i]) &&
+                     pImpl->bInSetItem == (dynamic_cast< const SfxSetItem* >(rStaticDefaults[i]) != nullptr) )
                 {
                     // Own signature, global WhichId and ItemVersion
-                    sal_uInt16 nSlotId = GetSlotId( (*ppDefItem)->Which(), false );
+                    sal_uInt16 nSlotId = GetSlotId( rStaticDefaults[i]->Which(), false );
                     aWhichIdsRec.NewContent(nSlotId, 0);
-                    rStream.WriteUInt16( (*ppDefItem)->Which() );
+                    rStream.WriteUInt16( rStaticDefaults[i]->Which() );
                     rStream.WriteUInt16( nItemVersion );
                     const sal_uInt32 nCount = ::std::min<size_t>( (*itrArr)->size(), SAL_MAX_UINT32 );
                     DBG_ASSERT(nCount, "ItemArr is empty");
@@ -483,7 +483,7 @@ void SfxItemPool_Impl::readTheItems (
 
 SvStream &SfxItemPool::Load(SvStream &rStream)
 {
-    DBG_ASSERT(pImpl->ppStaticDefaults, "No DefaultArray");
+    DBG_ASSERT(pImpl->mpStaticDefaults, "No DefaultArray");
 
     // Protect items by increasing ref count
     if ( !pImpl->mbPersistentRefCounts )
@@ -661,7 +661,7 @@ SvStream &SfxItemPool::Load(SvStream &rStream)
             SfxPoolItemArray_Impl **ppArr = &pImpl->maPoolItems[0] + nIndex;
 
             // SfxSetItems could contain Items from secondary Pools
-            SfxPoolItem *pDefItem = *(pImpl->ppStaticDefaults + nIndex);
+            SfxPoolItem *pDefItem = (*pImpl->mpStaticDefaults)[nIndex];
             pImpl->bInSetItem = dynamic_cast<const SfxSetItem*>( pDefItem ) !=  nullptr;
             if ( !bSecondaryLoaded && pImpl->mpSecondary && pImpl->bInSetItem )
             {
@@ -708,11 +708,10 @@ SvStream &SfxItemPool::Load(SvStream &rStream)
             //!         nWhich, "Slot/Which mismatch" );
 
             // Load PoolDefaultItem
-            SfxPoolItem *pItem =
-                    ( *( pImpl->ppStaticDefaults + GetIndex_Impl(nWhich) ) )
-                    ->Create( rStream, nVersion );
+            sal_uInt16 nIndex = GetIndex_Impl(nWhich);
+            SfxPoolItem *pItem = (*pImpl->mpStaticDefaults)[ nIndex ]->Create( rStream, nVersion );
             pItem->SetKind( SfxItemKind::PoolDefault );
-            pImpl->maPoolDefaults[GetIndex_Impl(nWhich)] = pItem;
+            pImpl->maPoolDefaults[nIndex] = pItem;
         }
     }
 
@@ -832,13 +831,12 @@ const SfxPoolItem* SfxItemPool::LoadSurrogate
             // Found the right (Range-)Pool?
             if ( pTarget->IsInRange(rWhich) )
             {
+                sal_uInt16 nIndex = pTarget->GetIndex_Impl(rWhich);
                 // Default attribute?
                 if ( SFX_ITEMS_DEFAULT == nSurrogat )
-                    return *(pTarget->pImpl->ppStaticDefaults +
-                            pTarget->GetIndex_Impl(rWhich));
+                    return (*pTarget->pImpl->mpStaticDefaults)[ nIndex ];
 
-                SfxPoolItemArray_Impl* pItemArr =
-                    pTarget->pImpl->maPoolItems[pTarget->GetIndex_Impl(rWhich)];
+                SfxPoolItemArray_Impl* pItemArr = pTarget->pImpl->maPoolItems[nIndex];
                 pItem = pItemArr && nSurrogat < pItemArr->size()
                             ? (*pItemArr)[nSurrogat]
                             : nullptr;
@@ -1238,7 +1236,7 @@ const SfxPoolItem* SfxItemPool::LoadItem( SvStream &rStream,
         nWhich = pRefPool->GetNewWhich( nWhich ); // Map WhichId to new version
 
     DBG_ASSERT( !nWhich || !pImpl->bInSetItem ||
-                dynamic_cast<const SfxSetItem*>( pRefPool->pImpl->ppStaticDefaults[pRefPool->GetIndex_Impl(nWhich)] ) == nullptr,
+                dynamic_cast<const SfxSetItem*>( (*pRefPool->pImpl->mpStaticDefaults)[pRefPool->GetIndex_Impl(nWhich)] ) == nullptr,
                 "loading SetItem in ItemSet of SetItem" );
 
     // Are we loading via surrogate?

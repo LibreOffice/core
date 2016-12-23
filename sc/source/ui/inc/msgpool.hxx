@@ -47,8 +47,8 @@ class ScMessagePool: public SfxItemPool
     SfxBoolItem         aPrintWarnItem;
     ScCondFormatDlgItem aCondFormatDlgItem;
 
-    SfxPoolItem**   ppPoolDefaults;
-    ScDocumentPool* pDocPool;
+    std::vector<SfxPoolItem*>*   mpPoolDefaults;
+    ScDocumentPool*              pDocPool;
 
 public:
     ScMessagePool();

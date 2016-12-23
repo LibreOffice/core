@@ -30,7 +30,7 @@ class GlobalEditData
 {
 private:
     css::uno::Reference< css::linguistic2::XLanguageGuessing >  xLanguageGuesser;
-    SfxPoolItem**   ppDefItems;
+    std::vector<SfxPoolItem*>*   ppDefItems;
 
     rtl::Reference<SvxForbiddenCharactersTable> xForbiddenCharsTable;
 
@@ -38,7 +38,7 @@ public:
                     GlobalEditData();
                     ~GlobalEditData();
 
-    SfxPoolItem**   GetDefItems();
+    std::vector<SfxPoolItem*>*   GetDefItems();
 
     rtl::Reference<SvxForbiddenCharactersTable> const & GetForbiddenCharsTable();
     void            SetForbiddenCharsTable( rtl::Reference<SvxForbiddenCharactersTable> const & xForbiddenChars ) { xForbiddenCharsTable = xForbiddenChars; }
