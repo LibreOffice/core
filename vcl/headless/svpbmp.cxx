@@ -121,9 +121,15 @@ BitmapBuffer* ImplCreateDIB(
         pDIB->maPalette.SetEntryCount( nColors );
     }
 
+    size_t size = pDIB->mnScanlineSize * pDIB->mnHeight;
+    if (size > SAL_MAX_INT32)
+    {
+        delete pDIB;
+        return nullptr;
+    }
+
     try
     {
-        size_t size = pDIB->mnScanlineSize * pDIB->mnHeight;
         pDIB->mpBits = new sal_uInt8[size];
 #ifdef __SANITIZE_ADDRESS__
         if (!pDIB->mpBits)
