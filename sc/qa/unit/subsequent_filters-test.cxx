@@ -926,6 +926,7 @@ void ScFiltersTest::testDoubleThinBorder()
     CPPUNIT_ASSERT(pTop);
     CPPUNIT_ASSERT(pRight);
     CPPUNIT_ASSERT_EQUAL( table::BorderLineStyle::DOUBLE_THIN, pRight->GetBorderLineStyle() );
+    xDocSh->DoClose();
 }
 
 void ScFiltersTest::testBorderODS()
@@ -3825,6 +3826,7 @@ void ScFiltersTest::testTdf100458()
     CPPUNIT_ASSERT(rDoc.HasValueData(0, 0, 0));
     CPPUNIT_ASSERT_EQUAL(double(0.0), rDoc.GetValue(0,0,0));
     CPPUNIT_ASSERT(!rDoc.HasStringData(0, 0, 0));
+    xDocSh->DoClose();
 }
 
 void ScFiltersTest::testTdf100709XLSX()
