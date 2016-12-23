@@ -22,6 +22,29 @@
       "revId": "f02abdd654caede9e27ed95de1080b20bea44f0f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a6eadb0_b6ba26bf",
+        "filename": "sw/source/core/text/guess.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2016-12-23T11:29:26Z",
+      "side": 1,
+      "message": "Please check if it\u0027s correct to use GetLineStart() here; in the code above (line 74) GetIdx() is used",
+      "range": {
+        "startLine": 85,
+        "startChar": 66,
+        "endLine": 85,
+        "endChar": 78
+      },
+      "revId": "f02abdd654caede9e27ed95de1080b20bea44f0f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
