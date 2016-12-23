@@ -3077,7 +3077,7 @@ EditEngineItemPool::EditEngineItemPool( bool bPersistenRefCounts )
     SetVersionMap( 5, 3994, 4037, aV5Map );
     SetVersionMap( 6, 3994, 4038, aV6Map );
 
-    SfxPoolItem** ppDefItems = EE_DLL().GetGlobalData()->GetDefItems();
+    std::vector<SfxPoolItem*>* ppDefItems = EE_DLL().GetGlobalData()->GetDefItems();
     SetDefaults( ppDefItems );
 }
 

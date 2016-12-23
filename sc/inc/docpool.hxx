@@ -29,7 +29,7 @@ class ScDocument;
 
 class SC_DLLPUBLIC ScDocumentPool: public SfxItemPool
 {
-    SfxPoolItem**   ppPoolDefaults;
+    std::vector<SfxPoolItem*>* mpPoolDefaults;
     static sal_uInt16*  pVersionMap1;
     static sal_uInt16*  pVersionMap2;
     static sal_uInt16*  pVersionMap3;
