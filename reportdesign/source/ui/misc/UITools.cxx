@@ -648,7 +648,7 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
     VclPtr<vcl::Window> pParent = VCLUnoHelper::GetWindow( _rxParentWindow );
     ::std::unique_ptr<FontList> pFontList(new FontList( pParent ));
     XColorListRef pColorList( XColorList::CreateStdColorList() );
-    SfxPoolItem* pDefaults[] =
+    std::vector<SfxPoolItem*> pDefaults
     {
         new SvxFontItem(ITEMID_FONT),
         new SvxFontHeightItem(240,100,ITEMID_FONTHEIGHT),
@@ -694,7 +694,7 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
 
     };
 
-    OSL_ASSERT( SAL_N_ELEMENTS(pDefaults) == SAL_N_ELEMENTS(aItemInfos) );
+    OSL_ASSERT( pDefaults.size() == SAL_N_ELEMENTS(aItemInfos) );
 
     static const sal_uInt16 pRanges[] =
     {
@@ -702,7 +702,7 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
         0
     };
 
-    SfxItemPool* pPool( new SfxItemPool(OUString("ReportCharProperties"), ITEMID_FONT,ITEMID_WEIGHT_COMPLEX, aItemInfos, pDefaults) );
+    SfxItemPool* pPool( new SfxItemPool(OUString("ReportCharProperties"), ITEMID_FONT,ITEMID_WEIGHT_COMPLEX, aItemInfos, &pDefaults) );
     // not needed for font height pPool->SetDefaultMetric( MapUnit::Map100thMM );  // ripped, don't understand why
     pPool->FreezeIdRanges();                        // the same
     bool bSuccess = false;

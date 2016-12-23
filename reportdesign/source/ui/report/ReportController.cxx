@@ -2381,7 +2381,7 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
     const XGradient aNullGrad(RGB_Color(COL_BLACK), RGB_Color(COL_WHITE));
     const XHatch aNullHatch(aNullLineCol);
 
-    SfxPoolItem* pDefaults[] =
+    std::vector<SfxPoolItem*> pDefaults
     {
         new SvxLRSpaceItem(RPTUI_ID_LRSPACE),
         new SvxULSpaceItem(RPTUI_ID_ULSPACE),
@@ -2414,7 +2414,7 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
         new SfxUInt16Item(RPTUI_ID_METRIC,static_cast<sal_uInt16>(eUserMetric))
     };
 
-    pPool->SetDefaults(pDefaults);
+    pPool->SetDefaults(&pDefaults);
 
 
     pPool->SetDefaultMetric( MapUnit::Map100thMM );    // ripped, don't understand why
@@ -4197,7 +4197,7 @@ void OReportController::openZoomDialog()
         {
             { SID_ATTR_ZOOM, true }
         };
-        SfxPoolItem* pDefaults[] =
+        std::vector<SfxPoolItem*> pDefaults
         {
             new SvxZoomItem()
         };
@@ -4206,7 +4206,7 @@ void OReportController::openZoomDialog()
             SID_ATTR_ZOOM,SID_ATTR_ZOOM,
             0
         };
-        SfxItemPool* pPool( new SfxItemPool(OUString("ZoomProperties"), SID_ATTR_ZOOM,SID_ATTR_ZOOM, aItemInfos, pDefaults) );
+        SfxItemPool* pPool( new SfxItemPool(OUString("ZoomProperties"), SID_ATTR_ZOOM,SID_ATTR_ZOOM, aItemInfos, &pDefaults) );
         pPool->SetDefaultMetric( MapUnit::Map100thMM );    // ripped, don't understand why
         pPool->FreezeIdRanges();                        // the same
         try

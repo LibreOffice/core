@@ -47,7 +47,8 @@ namespace pcr
 
         SfxItemSet*             m_pFontItems;           // item set for the dialog
         SfxItemPool*            m_pItemPool;            // item pool for the item set for the dialog
-        SfxPoolItem**           m_pItemPoolDefaults;    // pool defaults
+        std::vector<SfxPoolItem*>*
+                                m_pItemPoolDefaults;    // pool defaults
 
     public:
         explicit OControlFontDialog(const css::uno::Reference< css::uno::XComponentContext >& _rxContext);
