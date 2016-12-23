@@ -3901,6 +3901,7 @@ void ScExportTest::testHiddenRepeatedRowsODS()
     CPPUNIT_ASSERT(bHidden);
     CPPUNIT_ASSERT_EQUAL((SCROW)0, nFirstRow);
     CPPUNIT_ASSERT_EQUAL((SCROW)20, nLastRow);
+    xDocSh->DoClose();
 }
 
 void ScExportTest::testHyperlinkTargetFrameODS()
