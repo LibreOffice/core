@@ -2839,7 +2839,7 @@ namespace pcr
         // create an item set for use with the dialog
         SfxItemSet* pSet = nullptr;
         SfxItemPool* pPool = nullptr;
-        SfxPoolItem** pDefaults = nullptr;
+        std::vector<SfxPoolItem*>* pDefaults = nullptr;
         ControlCharacterDialog::createItemSet(pSet, pPool, pDefaults);
         ControlCharacterDialog::translatePropertiesToItems(m_xComponent, pSet);
 

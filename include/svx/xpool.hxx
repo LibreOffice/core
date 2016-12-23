@@ -33,8 +33,8 @@
 class SVX_DLLPUBLIC XOutdevItemPool : public SfxItemPool
 {
 protected:
-    SfxPoolItem**   mppLocalPoolDefaults;
-    SfxItemInfo*    mpLocalItemInfos;
+    std::vector<SfxPoolItem*>* mpLocalPoolDefaults;
+    SfxItemInfo*               mpLocalItemInfos;
 
 public:
     XOutdevItemPool( SfxItemPool* pMaster, bool bLoadRefCounts = true);

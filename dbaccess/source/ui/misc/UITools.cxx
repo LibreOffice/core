@@ -809,7 +809,7 @@ bool callColumnFormatDialog(vcl::Window* _pParent,
         0
     };
 
-    SfxPoolItem* pDefaults[] =
+    std::vector<SfxPoolItem*> pDefaults
     {
         new SfxRangeItem(SBA_DEF_RANGEFORMAT, SBA_DEF_FMTVALUE, SBA_ATTR_ALIGN_HOR_JUSTIFY),
         new SfxUInt32Item(SBA_DEF_FMTVALUE),
@@ -818,7 +818,7 @@ bool callColumnFormatDialog(vcl::Window* _pParent,
         new SvxNumberInfoItem(SID_ATTR_NUMBERFORMAT_INFO)
     };
 
-    SfxItemPool* pPool = new SfxItemPool(OUString("GridBrowserProperties"), SBA_DEF_RANGEFORMAT, SBA_ATTR_ALIGN_HOR_JUSTIFY, aItemInfos, pDefaults);
+    SfxItemPool* pPool = new SfxItemPool(OUString("GridBrowserProperties"), SBA_DEF_RANGEFORMAT, SBA_ATTR_ALIGN_HOR_JUSTIFY, aItemInfos, &pDefaults);
     pPool->SetDefaultMetric( MapUnit::MapTwip );    // ripped, don't understand why
     pPool->FreezeIdRanges();                        // the same
 
