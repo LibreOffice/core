@@ -859,7 +859,6 @@ static bool ImplHandleKey( vcl::Window* pWindow, MouseNotifyEvent nSVEvent,
     // allow application key listeners to remove the key event
     // but make sure we're not forwarding external KeyEvents, (ie where bForward is false)
     // because those are coming back from the listener itself and MUST be processed
-    KeyEvent aKeyEvent( (sal_Unicode)nCharCode, aKeyCode, nRepeat );
     if( bForward )
     {
         VclEventId nVCLEvent;
@@ -875,7 +874,8 @@ static bool ImplHandleKey( vcl::Window* pWindow, MouseNotifyEvent nSVEvent,
                 nVCLEvent = VclEventId::NONE;
                 break;
         }
-        if( nVCLEvent != VclEventId::NONE && Application::HandleKey( nVCLEvent, pWindow, &aKeyEvent ) )
+        KeyEvent aKeyEvent((sal_Unicode)nCharCode, aKeyCode, nRepeat);
+        if (nVCLEvent != VclEventId::NONE && Application::HandleKey(nVCLEvent, pWindow, &aKeyEvent))
             return true;
     }
 
@@ -1088,8 +1088,7 @@ static bool ImplHandleKey( vcl::Window* pWindow, MouseNotifyEvent nSVEvent,
         pChild = pWindow->GetParent();
 
         // call handler
-        KeyEvent    aKEvt( (sal_Unicode)nCharCode, aKeyCode, nRepeat );
-        NotifyEvent aNEvt( nSVEvent, pChild, &aKEvt );
+        NotifyEvent aNEvt( nSVEvent, pChild, &aKeyEvt );
         bool bPreNotify = ImplCallPreNotify( aNEvt );
         if ( pChild->IsDisposed() )
             return true;
@@ -1099,12 +1098,12 @@ static bool ImplHandleKey( vcl::Window* pWindow, MouseNotifyEvent nSVEvent,
             if ( nSVEvent == MouseNotifyEvent::KEYINPUT )
             {
                 pChild->ImplGetWindowImpl()->mbKeyInput = false;
-                pChild->KeyInput( aKEvt );
+                pChild->KeyInput( aKeyEvt );
             }
             else
             {
                 pChild->ImplGetWindowImpl()->mbKeyUp = false;
-                pChild->KeyUp( aKEvt );
+                pChild->KeyUp( aKeyEvt );
             }
 
             if( !pChild->IsDisposed() )
