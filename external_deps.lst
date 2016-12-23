@@ -28,9 +28,6 @@
 # OOO_EXTRAS=http://ooo-extras.apache-extras.org.codespot.com/files/
 OOO_EXTRAS=http://sourceforge.net/projects/oooextras.mirror/files/
 
-# Must not fallback to svn
-# SVN_TRUNK=http://svn.apache.org/repos/asf/!svn/bc/1336449/incubator/ooo/trunk/ext_sources/
-
 
 ###############################################################################
 # Libraries with category A license
