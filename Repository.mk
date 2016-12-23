@@ -773,7 +773,6 @@ endif
 $(eval $(call gb_Helper_register_packages, \
 	test_unittest \
 	cli_basetypes_copy \
-	$(if $(BUILD_POSTGRESQL_SDBC),connectivity_postgresql-sdbc) \
 	$(if $(and $(filter MSC,$(COM)),$(ENABLE_CRASHDUMP)),dbghelp) \
 	desktop_install \
 	$(if $(filter DESKTOP,$(BUILD_TYPE)),desktop_scripts_install) \
@@ -819,6 +818,10 @@ $(eval $(call gb_Helper_register_packages_for_install,ure,\
 		jvmfwk_jreproperties \
 		$(if $(filter MACOSX,$(OS)),bridges_jnilib_java_uno) \
 	) \
+))
+
+$(eval $(call gb_Helper_register_packages_for_install,postgresqlsdbc,\
+	$(if $(BUILD_POSTGRESQL_SDBC),connectivity_postgresql-sdbc) \
 ))
 
 $(eval $(call gb_Helper_register_packages_for_install,sdk,\
