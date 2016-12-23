@@ -162,9 +162,6 @@ sal_uInt32 SAL_CALL osl_getCommandArgCount()
     sal_uInt32 result = 0;
 
     pthread_mutex_lock (&(g_command_args.m_mutex));
-    SAL_INFO_IF(
-        g_command_args.m_nCount == 0, "sal.osl",
-        "osl_getCommandArgCount w/o prior call to osl_setCommandArgs");
     if (g_command_args.m_nCount > 0)
         result = g_command_args.m_nCount - 1;
     pthread_mutex_unlock (&(g_command_args.m_mutex));

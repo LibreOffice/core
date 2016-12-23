@@ -327,9 +327,6 @@ sal_uInt32 SAL_CALL osl_getCommandArgCount()
     sal_uInt32 result = 0;
 
     osl_acquireMutex (*osl_getGlobalMutex());
-    SAL_INFO_IF(
-        g_command_args.m_nCount == 0, "sal.osl",
-        "osl_getCommandArgCount w/o prior call to osl_setCommandArgs");
     if (g_command_args.m_nCount > 0)
     {
         /* We're not counting argv[0] here. */
