@@ -123,9 +123,9 @@ void MediaControl::InitializeWidgets()
 {
     if( MEDIACONTROLSTYLE_SINGLELINE != meControlStyle )
     {
-        mpPlayToolBox->InsertItem( AVMEDIA_TOOLBOXITEM_OPEN, GetImage( AVMEDIA_IMG_OPEN ), OUString( AVMEDIA_RESID( AVMEDIA_STR_OPEN ) ) );
+        mpPlayToolBox->InsertItem( AVMEDIA_TOOLBOXITEM_OPEN, GetImage(AVMEDIA_TOOLBOXITEM_OPEN), OUString( AVMEDIA_RESID( AVMEDIA_STR_OPEN ) ) );
         mpPlayToolBox->SetHelpId( AVMEDIA_TOOLBOXITEM_OPEN, HID_AVMEDIA_TOOLBOXITEM_OPEN );
-        mpPlayToolBox->InsertItem( AVMEDIA_TOOLBOXITEM_INSERT, GetImage( AVMEDIA_IMG_INSERT ), OUString( AVMEDIA_RESID( AVMEDIA_STR_INSERT ) ) );
+        mpPlayToolBox->InsertItem( AVMEDIA_TOOLBOXITEM_INSERT, GetImage(AVMEDIA_TOOLBOXITEM_INSERT), OUString( AVMEDIA_RESID( AVMEDIA_STR_INSERT ) ) );
         mpPlayToolBox->SetHelpId( AVMEDIA_TOOLBOXITEM_INSERT, HID_AVMEDIA_TOOLBOXITEM_INSERT );
         mpPlayToolBox->InsertSeparator();
     }

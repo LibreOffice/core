@@ -34,8 +34,7 @@ using ::rtl::OUString;
 
 namespace avmedia {
 
-MediaControlBase::MediaControlBase():
-    maImageList( SvtMiscOptions().AreCurrentSymbolsLarge() ? AVMEDIA_RESID( AVMEDIA_IMGLST_L ) : AVMEDIA_RESID( AVMEDIA_IMGLST ) )
+MediaControlBase::MediaControlBase()
 {
 }
 
@@ -97,21 +96,21 @@ void MediaControlBase::UpdateTimeSlider( MediaItem aMediaItem )
 
 void MediaControlBase::InitializeWidgets()
 {
-    mpPlayToolBox->InsertItem( AVMEDIA_TOOLBOXITEM_PLAY, GetImage( AVMEDIA_IMG_PLAY ), OUString( AVMEDIA_RESID( AVMEDIA_STR_PLAY ) ), ToolBoxItemBits::CHECKABLE );
+    mpPlayToolBox->InsertItem( AVMEDIA_TOOLBOXITEM_PLAY, GetImage(AVMEDIA_TOOLBOXITEM_PLAY), OUString( AVMEDIA_RESID( AVMEDIA_STR_PLAY ) ), ToolBoxItemBits::CHECKABLE );
     mpPlayToolBox->SetHelpId( AVMEDIA_TOOLBOXITEM_PLAY, HID_AVMEDIA_TOOLBOXITEM_PLAY );
 
-    mpPlayToolBox->InsertItem( AVMEDIA_TOOLBOXITEM_PAUSE, GetImage( AVMEDIA_IMG_PAUSE ), OUString( AVMEDIA_RESID( AVMEDIA_STR_PAUSE ) ), ToolBoxItemBits::CHECKABLE );
+    mpPlayToolBox->InsertItem( AVMEDIA_TOOLBOXITEM_PAUSE, GetImage(AVMEDIA_TOOLBOXITEM_PAUSE), OUString( AVMEDIA_RESID( AVMEDIA_STR_PAUSE ) ), ToolBoxItemBits::CHECKABLE );
     mpPlayToolBox->SetHelpId( AVMEDIA_TOOLBOXITEM_PAUSE, HID_AVMEDIA_TOOLBOXITEM_PAUSE );
 
-    mpPlayToolBox->InsertItem( AVMEDIA_TOOLBOXITEM_STOP, GetImage( AVMEDIA_IMG_STOP ), OUString( AVMEDIA_RESID( AVMEDIA_STR_STOP ) ), ToolBoxItemBits::CHECKABLE );
+    mpPlayToolBox->InsertItem( AVMEDIA_TOOLBOXITEM_STOP, GetImage(AVMEDIA_TOOLBOXITEM_STOP), OUString( AVMEDIA_RESID( AVMEDIA_STR_STOP ) ), ToolBoxItemBits::CHECKABLE );
     mpPlayToolBox->SetHelpId( AVMEDIA_TOOLBOXITEM_STOP, HID_AVMEDIA_TOOLBOXITEM_STOP );
 
     mpPlayToolBox->InsertSeparator();
 
-    mpPlayToolBox->InsertItem( AVMEDIA_TOOLBOXITEM_LOOP, GetImage( AVMEDIA_IMG_ENDLESS ), OUString( AVMEDIA_RESID( AVMEDIA_STR_ENDLESS ) ) );
+    mpPlayToolBox->InsertItem( AVMEDIA_TOOLBOXITEM_LOOP, GetImage(AVMEDIA_TOOLBOXITEM_LOOP), OUString( AVMEDIA_RESID( AVMEDIA_STR_LOOP ) ) );
     mpPlayToolBox->SetHelpId( AVMEDIA_TOOLBOXITEM_LOOP, HID_AVMEDIA_TOOLBOXITEM_LOOP );
 
-    mpMuteToolBox->InsertItem( AVMEDIA_TOOLBOXITEM_MUTE, GetImage( AVMEDIA_IMG_MUTE ), OUString( AVMEDIA_RESID( AVMEDIA_STR_MUTE ) ) );
+    mpMuteToolBox->InsertItem( AVMEDIA_TOOLBOXITEM_MUTE, GetImage(AVMEDIA_TOOLBOXITEM_MUTE), OUString( AVMEDIA_RESID( AVMEDIA_STR_MUTE ) ) );
     mpMuteToolBox->SetHelpId( AVMEDIA_TOOLBOXITEM_MUTE, HID_AVMEDIA_TOOLBOXITEM_MUTE );
 
     mpZoomListBox->InsertEntry( OUString( AVMEDIA_RESID( AVMEDIA_STR_ZOOM_50 ) ), AVMEDIA_ZOOMLEVEL_50 );
@@ -265,9 +264,38 @@ void MediaControlBase::SelectPlayToolBoxItem( MediaItem& aExecItem, MediaItem aI
     }
 }
 
-Image MediaControlBase::GetImage( sal_Int32 nImageId) const
+Image MediaControlBase::GetImage(sal_Int32 nImageId)
 {
-    return maImageList.GetImage( static_cast< sal_uInt16 >( nImageId ) );
+    const bool bLarge = SvtMiscOptions().AreCurrentSymbolsLarge();
+
+    switch (nImageId)
+    {
+        default:
+        case AVMEDIA_TOOLBOXITEM_PLAY:
+            nImageId = bLarge ? AVMEDIA_IMG_PLAY_LARGE : AVMEDIA_IMG_PLAY_NORMAL;
+            break;
+        case AVMEDIA_TOOLBOXITEM_PAUSE:
+            nImageId = bLarge ? AVMEDIA_IMG_PAUSE_LARGE : AVMEDIA_IMG_PAUSE_NORMAL;
+            break;
+        case AVMEDIA_TOOLBOXITEM_STOP:
+            nImageId = bLarge ? AVMEDIA_IMG_STOP_LARGE : AVMEDIA_IMG_STOP_NORMAL;
+            break;
+        case AVMEDIA_TOOLBOXITEM_MUTE:
+            nImageId = bLarge ? AVMEDIA_IMG_MUTE_LARGE : AVMEDIA_IMG_MUTE_NORMAL;
+            break;
+        case AVMEDIA_TOOLBOXITEM_LOOP:
+            nImageId = bLarge ? AVMEDIA_IMG_LOOP_LARGE : AVMEDIA_IMG_LOOP_NORMAL;
+            break;
+        case AVMEDIA_TOOLBOXITEM_OPEN:
+            nImageId = bLarge ? AVMEDIA_IMG_OPEN_LARGE : AVMEDIA_IMG_OPEN_NORMAL;
+            break;
+        case AVMEDIA_TOOLBOXITEM_INSERT:
+            nImageId = bLarge ? AVMEDIA_IMG_INSERT_LARGE : AVMEDIA_IMG_INSERT_NORMAL;
+            break;
+
+    }
+
+    return Image(BitmapEx(AVMEDIA_RESID(nImageId)));
 }
 
 }

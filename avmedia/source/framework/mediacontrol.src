@@ -44,7 +44,7 @@ String AVMEDIA_STR_STOP
     Text[en-US] = "Stop";
 };
 
-String AVMEDIA_STR_ENDLESS
+String AVMEDIA_STR_LOOP
 {
     Text[en-US] = "Repeat";
 };
@@ -84,38 +84,75 @@ String AVMEDIA_STR_MEDIAPLAYER
     Text[en-US] = "Media Player";
 };
 
-ImageList AVMEDIA_IMGLST
+Bitmap AVMEDIA_IMG_OPEN_NORMAL
 {
-    Prefix = "av";
-    IdList =
-    {
-        AVMEDIA_IMG_OPEN;
-        AVMEDIA_IMG_PLAY;
-        AVMEDIA_IMG_PAUSE;
-        AVMEDIA_IMG_STOP;
-        AVMEDIA_IMG_ENDLESS;
-        AVMEDIA_IMG_INSERT;
-        AVMEDIA_IMG_MUTE;
-    };
-    IdCount = 7;
+    File = "av02048.png";
 };
 
-ImageList AVMEDIA_IMGLST_L
+Bitmap AVMEDIA_IMG_PLAY_NORMAL
 {
-    Prefix = "avl";
-    IdList =
-    {
-        AVMEDIA_IMG_OPEN;
-        AVMEDIA_IMG_PLAY;
-        AVMEDIA_IMG_PAUSE;
-        AVMEDIA_IMG_STOP;
-        AVMEDIA_IMG_ENDLESS;
-        AVMEDIA_IMG_INSERT;
-        AVMEDIA_IMG_MUTE;
-    };
-    IdCount = 7;
+    File = "av02049.png";
 };
 
+Bitmap AVMEDIA_IMG_PAUSE_NORMAL
+{
+    File = "av02050.png";
+};
+
+Bitmap AVMEDIA_IMG_STOP_NORMAL
+{
+    File = "av02051.png";
+};
+
+Bitmap AVMEDIA_IMG_LOOP_NORMAL
+{
+    File = "av02052.png";
+};
+
+Bitmap AVMEDIA_IMG_INSERT_NORMAL
+{
+    File = "av02053.png";
+};
+
+Bitmap AVMEDIA_IMG_MUTE_NORMAL
+{
+    File = "av02054.png";
+};
+
+Bitmap AVMEDIA_IMG_OPEN_LARGE
+{
+    File = "avl02048.png";
+};
+
+Bitmap AVMEDIA_IMG_PLAY_LARGE
+{
+    File = "avl02049.png";
+};
+
+Bitmap AVMEDIA_IMG_PAUSE_LARGE
+{
+    File = "avl02050.png";
+};
+
+Bitmap AVMEDIA_IMG_STOP_LARGE
+{
+    File = "avl02051.png";
+};
+
+Bitmap AVMEDIA_IMG_LOOP_LARGE
+{
+    File = "avl02052.png";
+};
+
+Bitmap AVMEDIA_IMG_INSERT_LARGE
+{
+    File = "avl02053.png";
+};
+
+Bitmap AVMEDIA_IMG_MUTE_LARGE
+{
+    File = "avl02054.png";
+};
 String AVMEDIA_MEDIA_PATH
 {
     Text[en-US] = "Media Path";

@@ -69,16 +69,13 @@ protected:
     VclPtr<Slider>      mpVolumeSlider;
     VclPtr<ListBox>     mpZoomListBox;
     VclPtr<Edit>        mpTimeEdit;
-    Image GetImage( sal_Int32 nImageId ) const;
+    static Image GetImage(sal_Int32 nImageId);
     virtual void InitializeWidgets();
     virtual void UpdateToolBoxes( MediaItem aMediaItem );
     void UpdateVolumeSlider( MediaItem aMediaItem );
     void UpdateTimeSlider( MediaItem aMediaItem );
     void UpdateTimeField( MediaItem aMediaItem, double fTime );
     void SelectPlayToolBoxItem( MediaItem& aExecItem, MediaItem aItem, sal_uInt16 nId);
-
-private:
-    ImageList           maImageList;
 };
 
 }
