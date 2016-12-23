@@ -197,9 +197,9 @@ public:
     static const sal_uInt16 HandleColumnId = 0;
 
 private:
-    VclPtr<vcl::Window> pDataWin;       // window to display data rows
-    VclPtr<ScrollBar>  pVScroll;       // vertical scrollbar
-    VclPtr<ScrollBar>  aHScroll;       // horizontal scrollbar
+    VclPtr<BrowserDataWin> pDataWin;       // window to display data rows
+    VclPtr<ScrollBar>      pVScroll;       // vertical scrollbar
+    VclPtr<ScrollBar>      aHScroll;       // horizontal scrollbar
 
     long            nDataRowHeight; // height of a single data-row
     sal_uInt16      nTitleLines;    // number of lines in title row
@@ -356,8 +356,7 @@ protected:
     virtual void    VisibleRowsChanged( long nNewTopRow, sal_uInt16 nNumRows);
 
     // number of visible rows in the window (incl. "truncated" rows)
-    sal_uInt16      GetVisibleRows()
-                        { return (sal_uInt16)((pDataWin->GetOutputSizePixel().Height() - 1 )/ GetDataRowHeight() + 1); }
+    sal_uInt16      GetVisibleRows();
     long            GetTopRow() { return nTopRow; }
     sal_uInt16      GetFirstVisibleColNumber() const { return nFirstCol; }
 
@@ -436,7 +435,7 @@ public:
 
     // map-mode and font control
     void            SetFont( const vcl::Font& rNewFont );
-    const vcl::Font& GetFont() const { return pDataWin->GetFont(); }
+    const vcl::Font& GetFont() const;
     void            SetTitleFont( const vcl::Font& rNewFont )
                         { Control::SetFont( rNewFont ); }
 
@@ -505,7 +504,7 @@ public:
     bool            IsResizing() const { return bResizing; }
 
     // access to positions of fields, column and rows
-    vcl::Window&    GetDataWindow() const { return *pDataWin; }
+    vcl::Window&    GetDataWindow() const;
     Rectangle       GetRowRectPixel( long nRow ) const;
     Rectangle       GetFieldRectPixel( long nRow, sal_uInt16 nColId,
                                        bool bRelToBrowser = true) const;
