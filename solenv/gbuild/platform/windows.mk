@@ -441,6 +441,7 @@ gb_Library_PLAINEXT := .lib
 
 gb_Library_PLAINLIBS_NONE += \
 	advapi32 \
+	comdlg32 \
 	d3d9 \
 	d3dx \
 	ddraw \

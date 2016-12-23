@@ -331,8 +331,8 @@ my_components += \
     component/dtrans/util/dnd \
     component/dtrans/util/ftransl \
     component/dtrans/util/sysdtrans \
-    component/fpicker/source/win32/folderpicker/fop \
-    component/fpicker/source/win32/filepicker/fps \
+    component/fpicker/util/fop \
+    component/fpicker/util/fps \
     java_uno_accessbridge \
     sysmail \
     winaccessibility \

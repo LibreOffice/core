@@ -30,6 +30,7 @@ $(eval $(call gb_Module_add_targets,fpicker,\
 	Package_xml \
 ))
 
+ifeq ($(GUIBASE),unx)
 ifeq ($(ENABLE_GTK),TRUE)
 GTK_TWO_FOUR:=$(shell pkg-config --exists 'gtk+-2.0 >= 2.4.0' && echo ok)
 ifeq ($(GTK_TWO_FOUR),ok)
@@ -37,7 +38,8 @@ $(eval $(call gb_Module_add_targets,fpicker,\
 	Library_fps_gnome \
 ))
 else
-	$(shell pkg-config --print-errors --exists 'gtk+-2.0 >= 2.4.0')
+	_GTK_VERSION_ERR := $(shell pkg-config --print-errors --exists 'gtk+-2.0 >= 2.4.0')
+endif
 endif
 endif
 
@@ -53,9 +55,8 @@ ifeq ($(GUI),WNT)
 $(eval $(call gb_Module_add_targets,fpicker,\
 	Library_fps \
 	Library_fop \
-	WinResTarget_vcl \
+	WinResTarget_fpicker \
 ))
-$(eval 
 endif
 
 # vim: set noet sw=4 ts=4:

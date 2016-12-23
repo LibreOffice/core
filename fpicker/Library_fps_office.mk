@@ -41,6 +41,7 @@ $(eval $(call gb_Library_add_linked_libs,fps_office,\
 	cppuhelper \
 	ootk \
 	sal \
+	stl \
 	svl \
 	svt \
 	tl \

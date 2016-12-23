@@ -40,6 +40,7 @@ $(eval $(call gb_Library_add_linked_libs,fop,\
 	cppu \
 	cppuhelper \
 	sal \
+	stl \
 	tl \
 	vcl \
 	$(gb_STDLIBS) \
@@ -51,13 +52,14 @@ $(eval $(call gb_Library_add_linked_libs,fop,\
 	ole32 \
 	oleaut32 \
 	shell32 \
+	user32 \
 	uwinapi \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,fop,\
-	fpicker/source/win32/folderpicker/fopentry \
-	fpicker/source/win32/folderpicker/folderpicker \
-	fpicker/source/win32/folderpicker/WinFopImpl \
+	fpicker/source/win32/folderpicker/Fopentry \
+	fpicker/source/win32/folderpicker/FolderPicker \
+	fpicker/source/win32/folderpicker/WinFOPImpl \
 	fpicker/source/win32/folderpicker/MtaFop \
 ))
 
@@ -75,6 +77,6 @@ $(eval $(call gb_Library_add_cxxobjects,fop,\
 	fpicker/source/win32/misc/resourceprovider \
 	, -DUNICODE -D_UNICODE $(gb_LinkTarget_EXCEPTIONFLAGS) \
 ))
-fi
+endif
 
 # vim: set noet sw=4 ts=4:

@@ -40,6 +40,7 @@ $(eval $(call gb_Library_add_linked_libs,fps,\
 	cppu \
 	cppuhelper \
 	sal \
+	stl \
 	tl \
 	vcl \
 	$(gb_STDLIBS) \
@@ -53,6 +54,7 @@ $(eval $(call gb_Library_add_linked_libs,fps,\
 	ole32 \
 	oleaut32 \
 	shell32 \
+	user32\
 	uuid \
 	uwinapi \
 ))
@@ -99,6 +101,6 @@ $(eval $(call gb_Library_add_cxxobjects,fps,\
 	fpicker/source/win32/misc/resourceprovider \
 	, -DUNICODE -D_UNICODE $(gb_LinkTarget_EXCEPTIONFLAGS) \
 ))
-fi
+endif
 
 # vim: set noet sw=4 ts=4:

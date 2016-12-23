@@ -73,8 +73,10 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     evtatt \
     file \
     fileacc \
+    fop \
     for \
     forui \
+    fps \
     ftransl \
     fwe \
     fwi \
@@ -178,9 +180,7 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
     directx9canvas \
     expwrap \
     fastsax \
-    fop \
     fpicker \
-    fps \
     fps_aqua \
     fps_gnome \
     fps_kde4 \
