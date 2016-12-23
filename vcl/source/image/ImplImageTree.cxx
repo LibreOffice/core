@@ -60,7 +60,7 @@ bool ImageRequestParameters::convertToDarkTheme()
     return bConvertToDarkTheme;
 }
 
-sal_Int32 ImageRequestParameters::scalePrecentage()
+sal_Int32 ImageRequestParameters::scalePercentage()
 {
     sal_Int32 aScalePercentage = 100;
     if (!(meFlags & ImageLoadFlags::IgnoreScalingFactor))
@@ -154,7 +154,7 @@ std::shared_ptr<SvStream> wrapStream(css::uno::Reference< css::io::XInputStream 
 void loadImageFromStream(std::shared_ptr<SvStream> const & xStream, OUString const & rPath, ImageRequestParameters& rParameters)
 {
     bool bConvertToDarkTheme = rParameters.convertToDarkTheme();
-    sal_Int32 aScalePercentage = rParameters.scalePrecentage();
+    sal_Int32 aScalePercentage = rParameters.scalePercentage();
 
     if (rPath.endsWith(".png"))
     {
@@ -299,7 +299,7 @@ bool ImplImageTree::loadDefaultImage(OUString const & style, BitmapEx& bitmap, c
 OUString createVariant(ImageRequestParameters& rParameters)
 {
     bool bConvertToDarkTheme = rParameters.convertToDarkTheme();
-    sal_Int32 aScalePercentage = rParameters.scalePrecentage();
+    sal_Int32 aScalePercentage = rParameters.scalePercentage();
 
     OUString aVariant;
     if (aScalePercentage == 100 && !bConvertToDarkTheme)
