@@ -950,19 +950,7 @@ namespace svxform
 
     namespace
     {
-
-        //. NewStyleUNOScript
-
-        class SAL_NO_VTABLE IScript
-        {
-        public:
-            virtual void invoke( const Sequence< Any >& _rArguments, Any& _rSynchronousResult ) = 0;
-
-            virtual ~IScript() { }
-        };
-        typedef std::shared_ptr< IScript >  PScript;
-
-        class NewStyleUNOScript : public IScript
+        class NewStyleUNOScript
         {
             SfxObjectShell&         m_rObjectShell;
             const OUString   m_sScriptCode;
@@ -974,8 +962,7 @@ namespace svxform
             {
             }
 
-            // IScript
-            virtual void invoke( const Sequence< Any >& _rArguments, Any& _rSynchronousResult ) override;
+            void invoke( const Sequence< Any >& _rArguments, Any& _rSynchronousResult );
         };
 
 
@@ -1019,7 +1006,7 @@ namespace svxform
             return;
 
         // the script to execute
-        PScript pScript;
+        std::shared_ptr< NewStyleUNOScript > pScript;
 
         if ( _rEvent.ScriptType != "StarBasic" )
         {
