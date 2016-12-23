@@ -18,18 +18,10 @@ Module gid_Module_Optional_PostgresqlSdbc
     MOD_NAME_DESC(MODULE_OPTIONAL_POSTGRESQLSDBC);
     ParentID = gid_Module_Prg_Base_Bin;
     Files = (auto_postgresqlsdbc_ALL,
-             gid_File_PostgresqlSdbc_Ini,
              gid_File_PostgresqlSdbc_Rdb,
              gid_File_PostgresqlSdbc_Xcd);
     Default = YES;
     Styles = ();
-End
-
-File gid_File_PostgresqlSdbc_Ini
-    TXT_FILE_BODY;
-    Dir = GID_BRAND_DIR_ETC;
-    Name = "postgresql-sdbc.ini";
-    Styles = (PACKED);
 End
 
 File gid_File_PostgresqlSdbc_Rdb
