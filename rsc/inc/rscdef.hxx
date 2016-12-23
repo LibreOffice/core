@@ -114,34 +114,41 @@ public:
 };
 
 /*********** R s c D e f i n e *******************************************/
-class RscDefine : public StringNode
+class RscDefine : public NameNode
 {
 friend class RscFileTab;
 friend class RscDefineList;
 friend class RscDefTree;
 friend class RscExpression;
 friend class RscId;
+
     sal_uLong   lFileKey;   // file the define belongs to
     sal_uInt32  nRefCount;  // reference count to this object
     sal_Int32   lId;        // identifier
-    RscExpression * pExp;       // expression
+    RscExpression * pExp;   // expression
+    OString     m_aName;
+
+    virtual COMPARE Compare( const NameNode * ) const override;
+    virtual COMPARE Compare( const void * ) const override;
+
 protected:
 
-                RscDefine( sal_uLong lFileKey, const OString& rDefName,
+    RscDefine( sal_uLong lFileKey, const OString& rDefName,
                            sal_Int32 lDefId );
-                RscDefine( sal_uLong lFileKey, const OString& rDefName,
+    RscDefine( sal_uLong lFileKey, const OString& rDefName,
                            RscExpression * pExpression );
-                virtual ~RscDefine() override;
-    void        IncRef(){ nRefCount++; }
-    void        DecRef();
-    void        DefineToNumber();
+    virtual ~RscDefine() override;
 
-    using StringNode::Search;
+    void          IncRef() { nRefCount++; }
+    void          DecRef();
+    void          DefineToNumber();
+
 public:
-    RscDefine * Search( const char * );
-    sal_uLong   GetFileKey() const { return lFileKey; }
-    void        Evaluate();
-    sal_Int32   GetNumber() const  { return lId;      }
+    sal_uLong      GetFileKey() const { return lFileKey; }
+    void           Evaluate();
+    sal_Int32      GetNumber() const  { return lId;      }
+    RscDefine*     Search( const char * ) const;
+    const OString& GetName() const { return m_aName; }
 };
 
 typedef ::std::vector< RscDefine* > RscSubDefList;

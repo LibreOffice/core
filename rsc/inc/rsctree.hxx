@@ -71,23 +71,6 @@ public:
     virtual sal_uInt32  GetId() const;
 };
 
-class StringNode : public NameNode
-{
-    virtual COMPARE Compare( const NameNode * ) const override;
-    virtual COMPARE Compare( const void * ) const override;
-
-protected:
-    using NameNode::Search;
-
-    OString m_aName;
-
-public:
-    StringNode(const OString& rStr) { m_aName = rStr; }
-
-    StringNode*     Search( const char * ) const;
-    const OString&  GetName() const { return m_aName; }
-};
-
 #endif // INCLUDED_RSC_INC_RSCTREE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

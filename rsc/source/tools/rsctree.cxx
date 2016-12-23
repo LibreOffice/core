@@ -355,34 +355,5 @@ sal_uInt32 IdNode::GetId() const
     return 0xFFFFFFFF;
 }
 
-StringNode * StringNode::Search( const char * pSearch ) const
-{
-    return static_cast<StringNode *>(NameNode::Search( static_cast<const void *>(pSearch) ));
-}
-
-COMPARE StringNode::Compare( const NameNode * pSearch ) const
-{
-    int nCmp = strcmp( m_aName.getStr(),
-                       static_cast<const StringNode *>(pSearch)->m_aName.getStr() );
-    if( nCmp < 0 )
-        return LESS;
-    else if( nCmp > 0 )
-        return GREATER;
-    else
-        return EQUAL;
-}
-
-// pSearch is a pointer to const char *
-COMPARE StringNode::Compare( const void * pSearch ) const
-{
-    int nCmp = strcmp( m_aName.getStr(), static_cast<const char *>(pSearch) );
-
-    if( nCmp < 0 )
-        return LESS;
-    else if( nCmp > 0 )
-        return GREATER;
-    else
-        return EQUAL;
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
