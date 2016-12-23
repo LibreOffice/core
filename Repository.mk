@@ -794,7 +794,6 @@ $(eval $(call gb_Helper_register_packages, \
 	postprocess_registry \
 	python_zipcore \
 	readlicense_oo_readmes \
-	sdext_pdfimport_pdf \
 	setup_native_misc \
 	share \
 	shell_senddoc \
@@ -936,6 +935,12 @@ $(eval $(call gb_Helper_register_packages_for_install,ogltrans,\
 	sd_opengl \
 	slideshow_opengl_shader \
 ))
+
+ifneq ($(ENABLE_PDFIMPORT),)
+$(eval $(call gb_Helper_register_packages_for_install,pdfimport, \
+	sdext_pdfimport_pdf \
+))
+endif
 
 $(eval $(call gb_Helper_register_packages_for_install,reportbuilder,\
 	reportbuilder-templates \
