@@ -969,14 +969,14 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     break;
     case RTF_PNDEC:
     {
-        auto pValue = std::make_shared<RTFValue>(0); // decimal, same as \levelnfc0
+        auto pValue = std::make_shared<RTFValue>(NS_ooxml::LN_Value_ST_NumberFormat_decimal);
         m_aStates.top().aTableSprms.set(NS_ooxml::LN_CT_Lvl_numFmt, pValue);
     }
     break;
     case RTF_PNLVLBLT:
     {
         m_aStates.top().aTableAttributes.set(NS_ooxml::LN_CT_AbstractNum_nsid, std::make_shared<RTFValue>(1));
-        m_aStates.top().aTableSprms.set(NS_ooxml::LN_CT_Lvl_numFmt, std::make_shared<RTFValue>(23)); // bullets, same as \levelnfc23
+        m_aStates.top().aTableSprms.set(NS_ooxml::LN_CT_Lvl_numFmt, std::make_shared<RTFValue>(NS_ooxml::LN_Value_ST_NumberFormat_bullet));
     }
     break;
     case RTF_LANDSCAPE:
