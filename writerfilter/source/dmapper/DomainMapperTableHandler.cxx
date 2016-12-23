@@ -928,7 +928,6 @@ css::uno::Sequence<css::beans::PropertyValues> DomainMapperTableHandler::endTabl
     TagLogger::getInstance().startElement("getRowProperties");
 #endif
 
-    static const int MINLAY = 23; // sw/inc/swtypes.hxx, minimal possible size of frames.
     css::uno::Sequence<css::beans::PropertyValues> aRowProperties( m_aRowProperties.size() );
     PropertyMapVector1::const_iterator aRowIter = m_aRowProperties.begin();
     PropertyMapVector1::const_iterator aRowIterEnd = m_aRowProperties.end();
@@ -948,9 +947,8 @@ css::uno::Sequence<css::beans::PropertyValues> DomainMapperTableHandler::endTabl
             if (lcl_hideMarks(m_aCellProperties[nRow]) && lcl_emptyRow(m_aTableRanges, nRow))
             {
                 // We have CellHideMark on all cells, and also all cells are empty:
-                // Set the row height to minimal as Word does.
+                // Force the row height to be exactly as specified, and not just as the minimum suggestion.
                 (*aRowIter)->Insert(PROP_SIZE_TYPE, uno::makeAny(text::SizeType::FIX));
-                (*aRowIter)->Insert(PROP_HEIGHT, uno::makeAny(static_cast<sal_Int32>(ConversionHelper::convertTwipToMM100(MINLAY))));
             }
 
             aRowProperties[nRow] = (*aRowIter)->GetPropertyValues();

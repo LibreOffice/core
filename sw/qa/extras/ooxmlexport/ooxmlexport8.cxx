@@ -1737,6 +1737,19 @@ DECLARE_OOXMLEXPORT_TEST(testHidemark, "hidemark.docx")
     CPPUNIT_ASSERT_MESSAGE("table size is less than 7000?",sal_Int32(7000) > getProperty<sal_Int32>(xTextTable, "Width"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testHidemarkb, "tdf99616_hidemarkb.docx")
+{
+    // Problem was that the smallest possible height was forced, not the min specified size.
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<table::XTableRows> xTableRows(xTextTable->getRows(), uno::UNO_QUERY);
+    // Height should be .5cm
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(501), getProperty<sal_Int64>(xTableRows->getByIndex(1), "Height"));
+    // Size type was MIN, should be FIX to avoid considering the end of paragraph marker.
+    CPPUNIT_ASSERT_EQUAL(text::SizeType::FIX, getProperty<sal_Int16>(xTableRows->getByIndex(1), "SizeType"));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testBnc891663, "bnc891663.docx")
 {
     // The image should be inside a cell, so the text in the following cell should be below it.
