@@ -93,7 +93,6 @@ class VCL_DLLPUBLIC ToolBox : public DockingWindow
 private:
     ImplToolBoxPrivateData*   mpData;
     std::vector<ImplToolSize> maFloatSizes;
-    ImageList           maImageList;
     Idle               *mpIdle;
     Rectangle           maUpperRect;
     Rectangle           maLowerRect;
