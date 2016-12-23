@@ -474,19 +474,19 @@ namespace pcr
     }
 
 
-    SfxItemSet* ControlCharacterDialog::createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rpPool, SfxPoolItem**& _rppDefaults)
+    SfxItemSet* ControlCharacterDialog::createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rpPool, std::vector<SfxPoolItem*>*& _rpDefaults)
     {
         // just to be sure ....
         _rpSet = nullptr;
         _rpPool = nullptr;
-        _rppDefaults = nullptr;
+        _rpDefaults = nullptr;
 
         // create and initialize the defaults
-        _rppDefaults = new SfxPoolItem*[CFID_LAST_ITEM_ID - CFID_FIRST_ITEM_ID + 1];
+        _rpDefaults = new std::vector<SfxPoolItem*>(CFID_LAST_ITEM_ID - CFID_FIRST_ITEM_ID + 1);
 
         vcl::Font aDefaultVCLFont = Application::GetDefaultDevice()->GetSettings().GetStyleSettings().GetAppFont();
 
-        SfxPoolItem** pCounter = _rppDefaults;  // want to modify this without affecting the out param _rppDefaults
+        SfxPoolItem** pCounter = _rpDefaults->data();  // want to modify this without affecting the out param _rppDefaults
         *pCounter++ = new SvxFontItem(aDefaultVCLFont.GetFamilyType(), aDefaultVCLFont.GetFamilyName(), aDefaultVCLFont.GetStyleName(), aDefaultVCLFont.GetPitch(), aDefaultVCLFont.GetCharSet(), CFID_FONT);
         *pCounter++ = new SvxFontHeightItem(aDefaultVCLFont.GetFontHeight(), 100, CFID_HEIGHT);
         *pCounter++ = new SvxWeightItem(aDefaultVCLFont.GetWeight(), CFID_WEIGHT);
@@ -537,7 +537,7 @@ namespace pcr
         };
 
         _rpPool = new SfxItemPool(OUString("PCRControlFontItemPool"), CFID_FIRST_ITEM_ID, CFID_LAST_ITEM_ID,
-            aItemInfos, _rppDefaults);
+            aItemInfos, _rpDefaults);
         _rpPool->FreezeIdRanges();
 
         // and, finally, the set
@@ -547,7 +547,7 @@ namespace pcr
     }
 
 
-    void ControlCharacterDialog::destroyItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rpPool, SfxPoolItem**& _rppDefaults)
+    void ControlCharacterDialog::destroyItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rpPool, std::vector<SfxPoolItem*>*& _rpDefaults)
     {
         // from the pool, get and remember the font list (needs to be deleted)
         const SvxFontListItem& rFontListItem = static_cast<const SvxFontListItem&>(_rpPool->GetDefaultItem(CFID_FONTLIST));
@@ -567,7 +567,7 @@ namespace pcr
         _rpPool = nullptr;
 
         // reset the defaults ptr
-        _rppDefaults = nullptr;
+        _rpDefaults = nullptr;
             // no need to explicitly delete the defaults, this has been done by the ReleaseDefaults
 
         delete pFontList;

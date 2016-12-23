@@ -155,10 +155,10 @@ SfxBroadcaster& SfxItemPool::BC()
  *
  *  If the Pool is supposed to hold SfxSetItems, the ctor cannot yet contain
  *  static Defaults. This needs to be done afterwards, using
- *  @see SfxItemPool::SetDefaults(SfxItemPool**).
+ *  @see SfxItemPool::SetDefaults(std::vector<SfxPoolItem*>*).
  *
- *  @see SfxItemPool::SetDefaults(SfxItemPool**)
- *  @see SfxItemPool::ReleaseDefaults(SfxPoolItem**,sal_uInt16,sal_Bool)
+ *  @see SfxItemPool::SetDefaults(std::vector<SfxPoolItem*>*)
+ *  @see SfxItemPool::ReleaseDefaults(std::vector<SfxPoolItem*>*,sal_uInt16,sal_Bool)
  *  @see SfxItemPool::ReldaseDefaults(sal_Bool)
  */
 SfxItemPool::SfxItemPool
@@ -166,8 +166,9 @@ SfxItemPool::SfxItemPool
     const OUString&     rName,          /* Pool name to identify in the file format */
     sal_uInt16          nStartWhich,    /* First WhichId of the Pool (must be > 0) */
     sal_uInt16          nEndWhich,      /* Last WhichId of the Pool */
-    const SfxItemInfo*  pInfo,         /* SID Map and Item flags */
-    SfxPoolItem**       pDefaults,      /* Pointer to static Defaults;
+    const SfxItemInfo*  pInfo,          /* SID Map and Item flags */
+    std::vector<SfxPoolItem*>*
+                        pDefaults,      /* Pointer to static Defaults;
                                            is directly referenced by the Pool,
                                            but no transfer of ownership */
     bool                bLoadRefCounts  /* Load RefCounts or set to 1? */
@@ -224,17 +225,17 @@ SfxItemPool::SfxItemPool
     // Take over static Defaults
     if ( bCloneStaticDefaults )
     {
-        SfxPoolItem **ppDefaults = new SfxPoolItem*[pImpl->mnEnd-pImpl->mnStart+1];
+        std::vector<SfxPoolItem *>* ppDefaults = new std::vector<SfxPoolItem*>(pImpl->mnEnd-pImpl->mnStart+1);
         for ( sal_uInt16 n = 0; n <= pImpl->mnEnd - pImpl->mnStart; ++n )
         {
-            (*( ppDefaults + n )) = (*( rPool.pImpl->ppStaticDefaults + n ))->Clone(this);
-            (*( ppDefaults + n ))->SetKind(SfxItemKind::StaticDefault);
+            (*ppDefaults)[n] = (*rPool.pImpl->mpStaticDefaults)[n]->Clone(this);
+            (*ppDefaults)[n]->SetKind(SfxItemKind::StaticDefault);
         }
 
         SetDefaults( ppDefaults );
     }
     else
-        SetDefaults( rPool.pImpl->ppStaticDefaults );
+        SetDefaults( rPool.pImpl->mpStaticDefaults );
 
     // Copy Pool Defaults
     for (size_t n = 0; n < pImpl->maPoolDefaults.size(); ++n )
@@ -257,23 +258,23 @@ SfxItemPool::SfxItemPool
 }
 
 
-void SfxItemPool::SetDefaults( SfxPoolItem **pDefaults )
+void SfxItemPool::SetDefaults( std::vector<SfxPoolItem*>* pDefaults )
 {
     DBG_ASSERT( pDefaults, "first we ask for it, and then we don't give back..." );
-    DBG_ASSERT( !pImpl->ppStaticDefaults, "already have Defaults" );
+    DBG_ASSERT( !pImpl->mpStaticDefaults, "already have Defaults" );
 
-    pImpl->ppStaticDefaults = pDefaults;
-    //! if ((*ppStaticDefaults)->GetKind() != SfxItemKind::StaticDefault)
+    pImpl->mpStaticDefaults = pDefaults;
+    //! if ((*mpStaticDefaults)->GetKind() != SfxItemKind::StaticDefault)
     //! FIXME: Probably doesn't work with SetItems at the end
     {
-        DBG_ASSERT( (*pImpl->ppStaticDefaults)->GetRefCount() == 0 ||
-                    IsDefaultItem( (*pImpl->ppStaticDefaults) ),
+        DBG_ASSERT( (*pImpl->mpStaticDefaults)[0]->GetRefCount() == 0 ||
+                    IsDefaultItem( (*pImpl->mpStaticDefaults)[0] ),
                     "these are not static" );
         for ( sal_uInt16 n = 0; n <= pImpl->mnEnd - pImpl->mnStart; ++n )
         {
-            assert(((*(pImpl->ppStaticDefaults + n))->Which() == n + pImpl->mnStart)
+            assert(  ((*pImpl->mpStaticDefaults)[n]->Which() == n + pImpl->mnStart)
                         && "static defaults not sorted" );
-            (*( pImpl->ppStaticDefaults + n ))->SetKind(SfxItemKind::StaticDefault);
+            (*pImpl->mpStaticDefaults)[n]->SetKind(SfxItemKind::StaticDefault);
             DBG_ASSERT( !(pImpl->maPoolItems[n]), "defaults with setitems with items?!" );
         }
     }
@@ -298,12 +299,12 @@ void SfxItemPool::ReleaseDefaults
 
 
 {
-    DBG_ASSERT( pImpl->ppStaticDefaults, "requirements not met" );
-    ReleaseDefaults( pImpl->ppStaticDefaults, pImpl->mnEnd - pImpl->mnStart + 1, bDelete );
+    DBG_ASSERT( pImpl->mpStaticDefaults, "requirements not met" );
+    ReleaseDefaults( pImpl->mpStaticDefaults, bDelete );
 
-    // ppStaticDefaults points to deleted memory if bDelete == true.
+    // mpStaticDefaults points to deleted memory if bDelete == true.
     if ( bDelete )
-        pImpl->ppStaticDefaults = nullptr;
+        pImpl->mpStaticDefaults = nullptr;
 }
 
 
@@ -316,9 +317,8 @@ void SfxItemPool::ReleaseDefaults
  */
 void SfxItemPool::ReleaseDefaults
 (
-    SfxPoolItem**   pDefaults,  /*  Static Defaults that are to be freed */
-
-    sal_uInt16      nCount,     /*  Count of static Defaults */
+    std::vector<SfxPoolItem*>*
+                    pDefaults,  /*  Static Defaults that are to be freed */
 
     bool            bDelete     /*  true
                                     Deletes the array as well as the specified
@@ -331,16 +331,22 @@ void SfxItemPool::ReleaseDefaults
 {
     DBG_ASSERT( pDefaults, "we first ask for it and the return nothing ..." );
 
-    for ( sal_uInt16 n = 0; n < nCount; ++n )
+    for ( auto & rpItem : *pDefaults )
     {
-        assert(IsStaticDefaultItem(pDefaults[n]));
-        pDefaults[n]->SetRefCount(0);
+        assert(IsStaticDefaultItem(rpItem));
+        rpItem->SetRefCount(0);
         if ( bDelete )
-            { delete pDefaults[n] ; pDefaults[n]= nullptr; }
+        {
+            delete rpItem;
+            rpItem = nullptr;
+        }
     }
 
     if ( bDelete )
-        { delete[] pDefaults; pDefaults = nullptr; }
+    {
+        delete pDefaults;
+        pDefaults = nullptr;
+    }
 }
 
 
@@ -390,14 +396,14 @@ void SfxItemPool::SetSecondaryPool( SfxItemPool *pPool )
     if ( pImpl->mpSecondary )
     {
 #ifdef DBG_UTIL
-        if (pImpl->ppStaticDefaults != nullptr && !pImpl->maPoolItems.empty()
+        if (pImpl->mpStaticDefaults != nullptr && !pImpl->maPoolItems.empty()
             && !pImpl->mpSecondary->pImpl->maPoolItems.empty())
             // Delete() did not yet run?
         {
                 // Does the Master have SetItems?
             bool bHasSetItems = false;
             for ( sal_uInt16 i = 0; !bHasSetItems && i < pImpl->mnEnd - pImpl->mnStart; ++i )
-                bHasSetItems = dynamic_cast<const SfxSetItem *>(pImpl->ppStaticDefaults[i]) != nullptr;
+                bHasSetItems = dynamic_cast<const SfxSetItem *>((*pImpl->mpStaticDefaults)[i]) != nullptr;
 
             // Detached Pools must be empty
             bool bOK = bHasSetItems;
@@ -490,13 +496,13 @@ void SfxItemPool::Delete()
     pImpl->aBC.Broadcast( SfxHint( SfxHintId::Dying ) );
 
     // Iterate through twice: first for the SetItems.
-    if (pImpl->ppStaticDefaults != nullptr) {
+    if (pImpl->mpStaticDefaults != nullptr) {
         for (size_t n = 0; n < GetSize_Impl(); ++n)
         {
-            // *ppStaticDefaultItem could've already been deleted in a class derived
+            // *mpStaticDefaultItem could've already been deleted in a class derived
             // from SfxItemPool
             // This causes chaos in Itempool!
-            const SfxPoolItem* pStaticDefaultItem = pImpl->ppStaticDefaults[n];
+            const SfxPoolItem* pStaticDefaultItem = (*pImpl->mpStaticDefaults)[n];
             if (pStaticDefaultItem && dynamic_cast<const SfxSetItem*>(pStaticDefaultItem) !=  nullptr)
             {
                 // SfxSetItem found, remove PoolItems (and defaults) with same ID
@@ -631,7 +637,7 @@ const SfxPoolItem& SfxItemPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich
         return *pPoolItem;
     }
 
-    assert(!pImpl->ppStaticDefaults ||
+    assert(!pImpl->mpStaticDefaults ||
             typeid(rItem) == typeid(GetDefaultItem(nWhich)));
 
     const sal_uInt16 nIndex = GetIndex_Impl(nWhich);
@@ -765,7 +771,7 @@ void SfxItemPool::Remove( const SfxPoolItem& rItem )
     const sal_uInt16 nIndex = GetIndex_Impl(nWhich);
     // Static Defaults are just there
     if ( IsStaticDefaultItem(&rItem) &&
-         &rItem == pImpl->ppStaticDefaults[nIndex])
+         &rItem == (*pImpl->mpStaticDefaults)[nIndex])
         return;
 
     // Find Item in own Pool
@@ -811,12 +817,12 @@ const SfxPoolItem& SfxItemPool::GetDefaultItem( sal_uInt16 nWhich ) const
         assert(!"unknown which - don't ask me for defaults");
     }
 
-    DBG_ASSERT( pImpl->ppStaticDefaults, "no defaults known - don't ask me for defaults" );
+    DBG_ASSERT( pImpl->mpStaticDefaults, "no defaults known - don't ask me for defaults" );
     sal_uInt16 nPos = GetIndex_Impl(nWhich);
     SfxPoolItem* pDefault = pImpl->maPoolDefaults[nPos];
     if ( pDefault )
         return *pDefault;
-    return **(pImpl->ppStaticDefaults + nPos);
+    return *(*pImpl->mpStaticDefaults)[nPos];
 }
 
 SfxItemPool* SfxItemPool::GetSecondaryPool() const
@@ -884,7 +890,7 @@ const SfxPoolItem *SfxItemPool::GetItem2(sal_uInt16 nWhich, sal_uInt32 nOfst) co
 
     // default attribute?
     if ( nOfst == SFX_ITEMS_DEFAULT )
-        return *(pImpl->ppStaticDefaults + GetIndex_Impl(nWhich));
+        return (*pImpl->mpStaticDefaults)[ GetIndex_Impl(nWhich) ];
 
     SfxPoolItemArray_Impl* pItemArr = pImpl->maPoolItems[GetIndex_Impl(nWhich)];
     if( pItemArr && nOfst < pItemArr->size() )

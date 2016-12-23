@@ -41,7 +41,8 @@ class ODatabaseAdministrationDialog
 protected:
     SfxItemSet*             m_pDatasourceItems;     // item set for the dialog
     SfxItemPool*            m_pItemPool;            // item pool for the item set for the dialog
-    SfxPoolItem**           m_pItemPoolDefaults;    // pool defaults
+    std::vector<SfxPoolItem*>*
+                            m_pItemPoolDefaults;    // pool defaults
     ::dbaccess::ODsnTypeCollection*
                             m_pCollection;          // datasource type collection
 

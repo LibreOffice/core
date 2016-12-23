@@ -57,22 +57,23 @@ ScMessagePool::ScMessagePool()
     aPrintWarnItem          ( SfxBoolItem           ( SCITEM_PRINTWARN, false ) ),
     aCondFormatDlgItem      ( ScCondFormatDlgItem   ( nullptr, -1, false ) ),
 
-    ppPoolDefaults(new SfxPoolItem*[MSGPOOL_END - MSGPOOL_START + 1]),
+    mpPoolDefaults(new std::vector<SfxPoolItem*>(MSGPOOL_END - MSGPOOL_START + 1)),
     pDocPool(new ScDocumentPool)
 {
-    ppPoolDefaults[SCITEM_STRING            - MSGPOOL_START] = &aGlobalStringItem;
-    ppPoolDefaults[SCITEM_SEARCHDATA        - MSGPOOL_START] = &aGlobalSearchItem;
-    ppPoolDefaults[SCITEM_SORTDATA          - MSGPOOL_START] = &aGlobalSortItem;
-    ppPoolDefaults[SCITEM_QUERYDATA         - MSGPOOL_START] = &aGlobalQueryItem;
-    ppPoolDefaults[SCITEM_SUBTDATA          - MSGPOOL_START] = &aGlobalSubTotalItem;
-    ppPoolDefaults[SCITEM_CONSOLIDATEDATA   - MSGPOOL_START] = &aGlobalConsolidateItem;
-    ppPoolDefaults[SCITEM_PIVOTDATA         - MSGPOOL_START] = &aGlobalPivotItem;
-    ppPoolDefaults[SCITEM_SOLVEDATA         - MSGPOOL_START] = &aGlobalSolveItem;
-    ppPoolDefaults[SCITEM_USERLIST          - MSGPOOL_START] = &aGlobalUserListItem;
-    ppPoolDefaults[SCITEM_PRINTWARN         - MSGPOOL_START] = &aPrintWarnItem;
-    ppPoolDefaults[SCITEM_CONDFORMATDLGDATA - MSGPOOL_START] = &aCondFormatDlgItem;
+    std::vector<SfxPoolItem*>& rPoolDefaults = *mpPoolDefaults;
+    rPoolDefaults[SCITEM_STRING            - MSGPOOL_START] = &aGlobalStringItem;
+    rPoolDefaults[SCITEM_SEARCHDATA        - MSGPOOL_START] = &aGlobalSearchItem;
+    rPoolDefaults[SCITEM_SORTDATA          - MSGPOOL_START] = &aGlobalSortItem;
+    rPoolDefaults[SCITEM_QUERYDATA         - MSGPOOL_START] = &aGlobalQueryItem;
+    rPoolDefaults[SCITEM_SUBTDATA          - MSGPOOL_START] = &aGlobalSubTotalItem;
+    rPoolDefaults[SCITEM_CONSOLIDATEDATA   - MSGPOOL_START] = &aGlobalConsolidateItem;
+    rPoolDefaults[SCITEM_PIVOTDATA         - MSGPOOL_START] = &aGlobalPivotItem;
+    rPoolDefaults[SCITEM_SOLVEDATA         - MSGPOOL_START] = &aGlobalSolveItem;
+    rPoolDefaults[SCITEM_USERLIST          - MSGPOOL_START] = &aGlobalUserListItem;
+    rPoolDefaults[SCITEM_PRINTWARN         - MSGPOOL_START] = &aPrintWarnItem;
+    rPoolDefaults[SCITEM_CONDFORMATDLGDATA - MSGPOOL_START] = &aCondFormatDlgItem;
 
-    SetDefaults( ppPoolDefaults );
+    SetDefaults( mpPoolDefaults );
 
     SetSecondaryPool( pDocPool );
 }
@@ -83,9 +84,9 @@ ScMessagePool::~ScMessagePool()
     SetSecondaryPool( nullptr ); // before deleting defaults (accesses defaults)
 
     for ( sal_uInt16 i=0; i <= MSGPOOL_END-MSGPOOL_START; i++ )
-        SetRefCount( *ppPoolDefaults[i], 0 );
+        SetRefCount( *(*mpPoolDefaults)[i], 0 );
 
-    delete[] ppPoolDefaults;
+    delete mpPoolDefaults;
 
     SfxItemPool::Free(pDocPool);
 }

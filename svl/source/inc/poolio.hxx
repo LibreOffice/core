@@ -99,7 +99,7 @@ struct SfxItemPool_Impl
     std::vector<SfxItemPoolUser*>   maSfxItemPoolUsers; /// ObjectUser section
     OUString                        aName;
     std::vector<SfxPoolItem*>       maPoolDefaults;
-    SfxPoolItem**                   ppStaticDefaults;
+    std::vector<SfxPoolItem*>*      mpStaticDefaults;
     SfxItemPool*                    mpMaster;
     SfxItemPool*                    mpSecondary;
     sal_uInt16*                     mpPoolRanges;
@@ -122,7 +122,7 @@ struct SfxItemPool_Impl
         : maPoolItems(nEnd - nStart + 1)
         , aName(rName)
         , maPoolDefaults(nEnd - nStart + 1)
-        , ppStaticDefaults(nullptr)
+        , mpStaticDefaults(nullptr)
         , mpMaster(pMaster)
         , mpSecondary(nullptr)
         , mpPoolRanges(nullptr)

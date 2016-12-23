@@ -260,7 +260,7 @@ sal_uInt16 aPgFrameFormatSetRange[] = {
 };
 
 // create table for accessing default format attributes
-SwDfltAttrTab aAttrTab;
+SwDfltAttrTab aAttrTab( POOLATTR_END - POOLATTR_BEGIN, nullptr );
 
 SfxItemInfo aSlotTab[] =
 {
@@ -459,9 +459,6 @@ salhelper::SingletonRef<SwCalendarWrapper>* s_getCalendarWrapper()
 void InitCore()
 {
     SfxPoolItem* pItem;
-
-    // first initialize all attribute pointers with 0
-    memset( aAttrTab, 0, (POOLATTR_END - POOLATTR_BEGIN) * sizeof( SfxPoolItem* ) );
 
     aAttrTab[ RES_CHRATR_CASEMAP- POOLATTR_BEGIN ] =        new SvxCaseMapItem( SVX_CASEMAP_NOT_MAPPED, RES_CHRATR_CASEMAP);
     aAttrTab[ RES_CHRATR_CHARSETCOLOR- POOLATTR_BEGIN ] =   new SvxCharSetColorItem(RES_CHRATR_CHARSETCOLOR);
@@ -774,7 +771,7 @@ void FinitCore()
 #if OSL_DEBUG_LEVEL > 0
     // free defaults to prevent assertions
     if ( aAttrTab[0]->GetRefCount() )
-        SfxItemPool::ReleaseDefaults( aAttrTab, POOLATTR_END-POOLATTR_BEGIN);
+        SfxItemPool::ReleaseDefaults( &aAttrTab );
 #endif
     delete SwDoc::mpACmpltWords;
 

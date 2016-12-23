@@ -90,7 +90,7 @@ public:
                                     SfxItemPool( const OUString &rName,
                                                  sal_uInt16 nStart, sal_uInt16 nEnd,
                                                  const SfxItemInfo *pItemInfos,
-                                                 SfxPoolItem **pDefaults = nullptr,
+                                                 std::vector<SfxPoolItem*> *pDefaults = nullptr,
                                                  bool bLoadRefCounts = true );
 
 protected:
@@ -105,9 +105,9 @@ public:
     const SfxPoolItem*              GetPoolDefaultItem( sal_uInt16 nWhich ) const;
     void                            ResetPoolDefaultItem( sal_uInt16 nWhich );
 
-    void                            SetDefaults( SfxPoolItem **pDefaults );
+    void                            SetDefaults( std::vector<SfxPoolItem*>* pDefaults );
     void                            ReleaseDefaults( bool bDelete = false );
-    static void                     ReleaseDefaults( SfxPoolItem **pDefaults, sal_uInt16 nCount, bool bDelete = false );
+    static void                     ReleaseDefaults( std::vector<SfxPoolItem*> *pDefaults, bool bDelete = false );
 
     virtual MapUnit                 GetMetric( sal_uInt16 nWhich ) const;
     void                            SetDefaultMetric( MapUnit eNewMetric );
