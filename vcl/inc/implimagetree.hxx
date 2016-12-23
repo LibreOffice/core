@@ -55,7 +55,7 @@ struct ImageRequestParameters
     {}
 
     bool convertToDarkTheme();
-    sal_Int32 scalePrecentage();
+    sal_Int32 scalePercentage();
 };
 
 class ImplImageTree
