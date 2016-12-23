@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a6eadb0_b616a6a5",
+        "filename": "comphelper/source/container/embeddedobjectcontainer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1247,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2016-12-23T13:53:28Z",
+      "side": 1,
+      "message": "Have a closer look at the end of the line, I doubt that compiles on your local system.",
+      "revId": "3d2885cf71c4b84ac7c8eebe39c0239b623c51c8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
