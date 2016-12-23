@@ -137,7 +137,6 @@ merge StgAvlIterator with StgIterator
 merge StgAvlNode with StgDirEntry
 merge StgCache with StgIo
 merge StgReader with WW8Reader
-merge StringNode with RscDefine
 merge SvListView with SvTreeListBox
 merge SvXMLExportItemMapper with SwXMLTableItemMapper_Impl
 merge SvXMLImportItemMapper with SwXMLImportTableItemMapper_Impl

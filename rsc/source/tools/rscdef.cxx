@@ -115,7 +115,7 @@ OString RscId::GetName() const
 }
 
 RscDefine::RscDefine( sal_uLong lKey, const OString& rDefName, sal_Int32 lDefId )
-    : StringNode( rDefName )
+    : m_aName( rDefName )
 {
     nRefCount = 0;
     lFileKey  = lKey;
@@ -125,8 +125,7 @@ RscDefine::RscDefine( sal_uLong lKey, const OString& rDefName, sal_Int32 lDefId 
 
 RscDefine::RscDefine( sal_uLong lKey, const OString& rDefName,
                       RscExpression * pExpression  )
-    : StringNode( rDefName )
-    , lId(0)
+    : lId(0), m_aName( rDefName )
 {
     nRefCount = 0;
     lFileKey  = lKey;
@@ -163,9 +162,34 @@ void RscDefine::Evaluate()
         pExp->Evaluate( &lId );
 }
 
-RscDefine * RscDefine::Search( const char * pStr )
+RscDefine * RscDefine::Search( const char * pSearch ) const
 {
-    return static_cast<RscDefine *>(StringNode::Search( pStr ));
+    return static_cast<RscDefine *>(NameNode::Search( static_cast<const void *>(pSearch) ));
+}
+
+COMPARE RscDefine::Compare( const NameNode * pSearch ) const
+{
+    int nCmp = strcmp( m_aName.getStr(),
+                       static_cast<const RscDefine *>(pSearch)->m_aName.getStr() );
+    if( nCmp < 0 )
+        return LESS;
+    else if( nCmp > 0 )
+        return GREATER;
+    else
+        return EQUAL;
+}
+
+// pSearch is a pointer to const char *
+COMPARE RscDefine::Compare( const void * pSearch ) const
+{
+    int nCmp = strcmp( m_aName.getStr(), static_cast<const char *>(pSearch) );
+
+    if( nCmp < 0 )
+        return LESS;
+    else if( nCmp > 0 )
+        return GREATER;
+    else
+        return EQUAL;
 }
 
 RscDefine * RscDefineList::New( sal_uLong lFileKey, const OString& rDefName,
