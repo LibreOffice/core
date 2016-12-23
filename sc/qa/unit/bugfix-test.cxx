@@ -195,6 +195,8 @@ void ScFiltersTest::testTdf98657()
 
     // this was a NaN before the fix
     CPPUNIT_ASSERT_EQUAL(double(285.0), rDoc.GetValue(ScAddress(1, 1, 0)));
+
+    xDocSh->DoClose();
 }
 
 void ScFiltersTest::testTdf88821()
