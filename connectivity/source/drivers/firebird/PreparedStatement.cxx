@@ -377,7 +377,7 @@ void OPreparedStatement::setValue(sal_Int32 nIndex, T& nValue, ISC_SHORT nType)
     if ((pVar->sqltype & ~1) != nType)
     {
        ::dbtools::throwSQLException(
-            "Incorrect type for setString",
+            "Incorrect type for setValue",
             ::dbtools::StandardSQLState::INVALID_SQL_DATA_TYPE,
             *this);
     }
