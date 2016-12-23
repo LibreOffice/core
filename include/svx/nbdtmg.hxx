@@ -76,28 +76,14 @@ typedef std::vector< std::shared_ptr<NumSettings_Impl> > NumSettingsArr_Impl;
 
 class  SVX_DLLPUBLIC BulletsSettings
 {
-    public:
-        bool            bIsCustomized;
-        rtl::OUString   sDescription;
-    public:
-        BulletsSettings() :
-            bIsCustomized(false)
-            {}
-        virtual ~BulletsSettings(){}
+public:
+    bool            bIsCustomized;
+    rtl::OUString   sDescription;
+    sal_Unicode     cBulletChar;
+    vcl::Font       aFont;
+    BulletsSettings() : bIsCustomized(false), cBulletChar(0) {}
 };
 
-class  SVX_DLLPUBLIC BulletsSettings_Impl:public BulletsSettings
-{
-    public:
-        sal_Unicode cBulletChar;
-        vcl::Font   aFont;
-
-    public:
-        BulletsSettings_Impl()
-            : cBulletChar(0)
-            {}
-        virtual ~BulletsSettings_Impl() override {}
-};
 
 class  SVX_DLLPUBLIC NumberSettings_Impl
 {
@@ -180,7 +166,7 @@ class SVX_DLLPUBLIC BulletsTypeMgr: public NBOTypeMgrBase
     public:
         static sal_Unicode aDynamicBulletTypes[DEFAULT_BULLET_TYPES];
         static sal_Unicode aDynamicRTLBulletTypes[DEFAULT_BULLET_TYPES];
-        static BulletsSettings_Impl* pActualBullets[DEFAULT_BULLET_TYPES];
+        static BulletsSettings* pActualBullets[DEFAULT_BULLET_TYPES];
     public:
         BulletsTypeMgr();
         virtual ~BulletsTypeMgr() override {}

@@ -237,7 +237,7 @@ void NBOTypeMgrBase::ImplStore(const OUString& filename)
 }
 
 // Character Bullet Type lib
-BulletsSettings_Impl* BulletsTypeMgr::pActualBullets[] ={nullptr,nullptr,nullptr,nullptr,nullptr,nullptr,nullptr,nullptr};
+BulletsSettings* BulletsTypeMgr::pActualBullets[] ={nullptr,nullptr,nullptr,nullptr,nullptr,nullptr,nullptr,nullptr};
 sal_Unicode BulletsTypeMgr::aDynamicBulletTypes[]={' ',' ',' ',' ',' ',' ',' ',' '};
 sal_Unicode BulletsTypeMgr::aDynamicRTLBulletTypes[]={' ',' ',' ',' ',' ',' ',' ',' '};
 
@@ -260,7 +260,7 @@ void BulletsTypeMgr::Init()
 
     for (sal_uInt16 i=0;i<DEFAULT_BULLET_TYPES;i++)
     {
-        pActualBullets[i] = new BulletsSettings_Impl;
+        pActualBullets[i] = new BulletsSettings;
         pActualBullets[i]->cBulletChar = aDefaultBulletTypes[i];
         pActualBullets[i]->aFont =rActBulletFont;
         pActualBullets[i]->sDescription = SVX_RESSTR( RID_SVXSTR_BULLET_DESCRIPTION_0 + i );
@@ -306,7 +306,6 @@ sal_uInt16 BulletsTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 mLe
             }
         }
     }*/
-    //nLength = sizeof(pActualBullets)/sizeof(BulletsSettings_Impl);
     for(sal_uInt16 i = nFromIndex; i < DEFAULT_BULLET_TYPES; i++)
     {
         if ( (cChar == pActualBullets[i]->cBulletChar||
@@ -354,7 +353,6 @@ void BulletsTypeMgr::RelplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uI
 
         aDynamicBulletTypes[nIndex] = cChar;
     }*/
-    //nLength = sizeof(pActualBullets)/sizeof(BulletsSettings_Impl);
     if ( nIndex >= DEFAULT_BULLET_TYPES )
         return;
 
@@ -394,7 +392,6 @@ void BulletsTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt1
 
         cChar = aDynamicBulletTypes[nIndex];
     }*/
-    //nLength = sizeof(pActualBullets)/sizeof(BulletsSettings_Impl);
     if ( nIndex >= DEFAULT_BULLET_TYPES )
         return;
     cChar = pActualBullets[nIndex]->cBulletChar;
@@ -424,8 +421,6 @@ void BulletsTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt1
 OUString BulletsTypeMgr::GetDescription(sal_uInt16 nIndex, bool /*isDefault*/)
 {
     OUString sRet;
-    //sal_uInt16 nLength = 0;
-    //nLength = sizeof(pActualBullets)/sizeof(BulletsSettings_Impl);
 
     if ( nIndex >= DEFAULT_BULLET_TYPES )
         return sRet;
@@ -438,8 +433,6 @@ OUString BulletsTypeMgr::GetDescription(sal_uInt16 nIndex, bool /*isDefault*/)
 bool BulletsTypeMgr::IsCustomized(sal_uInt16 nIndex)
 {
     bool bRet = false;
-    //sal_uInt16 nLength = 0;
-    //nLength = sizeof(pActualBullets)/sizeof(BulletsSettings_Impl);
 
     if ( nIndex >= DEFAULT_BULLET_TYPES )
         bRet = false;
