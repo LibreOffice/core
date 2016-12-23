@@ -121,10 +121,6 @@
 // free
 #define FORMFOLDER_TREE_ICON            RID_IMAGE_START + 55
 
-// image lists
-#define IMG_INDEX_DLG_SC                RID_IMAGELIST_START +  1
-#define IMG_INDEX_DLG_LC                RID_IMAGELIST_START +  3
-
 // menus
 
 #define RID_SBA_GRID_COLCTXMENU         RID_MENU_START +  2

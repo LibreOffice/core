@@ -20,31 +20,6 @@
 #include "dbu_dlg.hrc"
 #include "browserids.hxx"
 
-#define IL_TOOL_2 \
-\
-    IdList = {\
-        ID_INDEX_NEW;\
-        ID_INDEX_DROP;\
-        ID_INDEX_RENAME;\
-        ID_INDEX_SAVE;\
-        ID_INDEX_RESET;\
-        };\
-    IdCount = {\
-    5;\
-    }
-
-ImageList IMG_INDEX_DLG_SC
-{
-    prefix = "sc";
-    IL_TOOL_2 ;
-};
-
-ImageList IMG_INDEX_DLG_LC
-{
-    prefix = "lc";
-    IL_TOOL_2 ;
-};
-
 Image IMG_FORMFOLDER_TREE_L
 {
     ImageBitmap = Bitmap { File = "forms_32"; };
