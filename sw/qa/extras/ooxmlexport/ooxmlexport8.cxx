@@ -1732,6 +1732,9 @@ DECLARE_OOXMLEXPORT_TEST(testHidemark, "hidemark.docx")
     CPPUNIT_ASSERT_EQUAL(convertTwipToMm100(MINLAY), getProperty<sal_Int64>(xTableRows->getByIndex(1), "Height"));
     // Size type was MIN, should be FIX to avoid considering the end of paragraph marker.
     CPPUNIT_ASSERT_EQUAL(text::SizeType::FIX, getProperty<sal_Int16>(xTableRows->getByIndex(1), "SizeType"));
+
+    //tdf#104876: Width was not recognized during import when table size was 'auto'
+    CPPUNIT_ASSERT_MESSAGE("table size is less than 7000?",sal_Int32(7000) > getProperty<sal_Int32>(xTextTable, "Width"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testBnc891663, "bnc891663.docx")
