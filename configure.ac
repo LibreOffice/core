@@ -3653,13 +3653,6 @@ AC_SUBST(DISABLE_ACTIVEX)
 AC_SUBST(DISABLE_ATL)
 
 #
-# dbghelp.dll
-#
-if test "$_os" = "WINNT"; then
-    BUILD_TYPE="$BUILD_TYPE DBGHELP"
-fi
-
-#
 # unowinreg.dll
 #
 UNOWINREG_DLL="185d60944ea767075d27247c3162b3bc-unowinreg.dll"
