@@ -26,7 +26,7 @@ package com.sun.star.lib.uno.environments.remote;
 /**
  * An abstraction for giving back a reply for a request.
  *
- * @version $Revision: 1.6 $ $ $Date: 2008-04-11 11:19:43 $
+ * @version $Revision: 1.6 $ $ $Date$
  * @author Kay Ramme
  * @see com.sun.star.uno.IQueryInterface
  */

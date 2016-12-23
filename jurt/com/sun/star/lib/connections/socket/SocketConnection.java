@@ -45,7 +45,7 @@ import com.sun.star.connection.XConnectionBroadcaster;
  * and is uses by the <code>SocketConnector</code> and the <code>SocketAcceptor</code>.
  * This class is not part of the provided <code>api</code>.
  * <p>
- * @version     $Revision: 1.6 $ $ $Date: 2008-04-11 11:14:31 $
+ * @version     $Revision: 1.6 $ $ $Date$
  * @author      Kay Ramme
  * @see         com.sun.star.comp.connections.SocketAcceptor
  * @see         com.sun.star.comp.connections.SocketConnector

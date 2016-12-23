@@ -22,7 +22,7 @@
 #
 #  $Revision: 1.3 $
 #
-#  Last changes: $Author: kz $ $Date: 2005-01-21 16:54:21 $
+#  Last changes: $Author$ $Date$
 #
 #  Generate node tree from verbose logfile
 #

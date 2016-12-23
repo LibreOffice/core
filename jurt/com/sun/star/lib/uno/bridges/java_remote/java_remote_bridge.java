@@ -76,7 +76,7 @@ import com.sun.star.uno.Any;
  * The protocol to used is passed by name, the bridge
  * then looks for it under <code>com.sun.star.lib.uno.protocols</code>.
  * <p>
- * @version     $Revision: 1.45 $ $ $Date: 2008-04-11 11:18:08 $
+ * @version     $Revision: 1.45 $ $ $Date$
  * @author      Kay Ramme
  * @since       UDK1.0
  */

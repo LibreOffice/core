@@ -38,7 +38,7 @@ int ifdepth;
 int ifsatisfied[NIF];
 int skipping;
 
-char rcsid[] = "$Version 1.2 $ $Revision: 1.5 $ $Date: 2006-06-20 05:05:46 $";
+char rcsid[] = "$Version 1.2 $ $Revision: 1.5 $ $Date$";
 
 int
 #ifdef _WIN32
