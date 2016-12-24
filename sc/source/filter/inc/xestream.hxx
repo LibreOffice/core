@@ -30,6 +30,7 @@
 
 #include <oox/core/xmlfilterbase.hxx>
 #include <oox/token/tokens.hxx>
+#include <oox/token/relationshipexport.hxx>
 #include <sax/fshelper.hxx>
 
 #include "xlstream.hxx"
@@ -288,7 +289,7 @@ public:
     static sax_fastparser::FSHelperPtr  WriteFontData( sax_fastparser::FSHelperPtr pStream, const XclFontData& rFontData, sal_Int32 nNameId );
 };
 
-class XclExpXmlStream : public oox::core::XmlFilterBase
+class XclExpXmlStream : public oox::core::XmlFilterBase, public RelationshipExport
 {
 public:
     XclExpXmlStream( const css::uno::Reference< css::uno::XComponentContext >& rCC, bool bExportVBA );
