@@ -11,10 +11,6 @@ $(eval $(call gb_InstallModule_InstallModule,scp2/gnome))
 
 $(eval $(call gb_InstallModule_use_auto_install_libs,scp2/gnome,gnome))
 
-$(eval $(call gb_InstallModule_define_if_set,scp2/gnome,\
-    ENABLE_GTK \
-))
-
 $(eval $(call gb_InstallModule_add_scpfiles,scp2/gnome,\
     scp2/source/gnome/file_gnome \
 ))
