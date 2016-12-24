@@ -103,4 +103,6 @@ $(eval $(call gb_Library_add_cxxobjects,fps,\
 ))
 endif
 
+$(eval $(call gb_Library_add_nativeres,fps,src))
+
 # vim: set noet sw=4 ts=4:

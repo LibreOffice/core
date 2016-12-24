@@ -21,13 +21,13 @@
 
 
 
-$(eval $(call gb_WinResTarget_WinResTarget,fpicker/src))
+$(eval $(call gb_WinResTarget_WinResTarget,fps/src))
 
-$(eval $(call gb_WinResTarget_set_include,fpicker/src,\
+$(eval $(call gb_WinResTarget_set_include,fps/src,\
         $$(INCLUDE) \
         -I$(SRCDIR)/fpicker/inc \
 ))
 
-$(eval $(call gb_WinResTarget_add_file,fpicker/src,\
+$(eval $(call gb_WinResTarget_add_file,fps/src,\
 	fpicker/source/win32/filepicker/Fps \
 ))
