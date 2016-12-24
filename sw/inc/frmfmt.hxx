@@ -236,6 +236,8 @@ public:
 
 
 class SwDrawFrameFormat;
+class SwDrawContact;
+
 namespace sw
 {
     enum class DrawFrameFormatHintId {
@@ -301,6 +303,12 @@ namespace sw
         const Point m_aPos;
         RestoreFlyAnchorHint(Point aPos) : m_aPos(aPos) {};
         virtual ~RestoreFlyAnchorHint() override;
+    };
+    struct SW_DLLPUBLIC CreatePortionHint final : SfxHint
+    {
+        SwDrawContact** m_ppContact;
+        CreatePortionHint(SwDrawContact** ppContact) : m_ppContact(ppContact) {};
+        virtual ~CreatePortionHint() override;
     };
 }
 

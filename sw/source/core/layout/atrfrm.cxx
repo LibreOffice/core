@@ -3334,6 +3334,7 @@ namespace sw
     DrawFormatLayoutCopyHint::~DrawFormatLayoutCopyHint() {}
     WW8AnchorConvHint::~WW8AnchorConvHint() {}
     RestoreFlyAnchorHint::~RestoreFlyAnchorHint() {}
+    CreatePortionHint::~CreatePortionHint() {}
 }
 
 SwDrawFrameFormat::~SwDrawFrameFormat()
