@@ -63,12 +63,10 @@ public:
     virtual bool Connect( sfx2::SvBaseLink* ) override;
 };
 
-
 LinkManager::LinkManager(SfxObjectShell* p)
     : pPersist( p )
 {
 }
-
 
 LinkManager::~LinkManager()
 {
@@ -101,7 +99,6 @@ void LinkManager::CloseCachedComps()
     maCachedComps.clear();
 }
 
-
 void LinkManager::Remove( SvBaseLink *pLink )
 {
     // No duplicate links inserted
@@ -129,7 +126,6 @@ void LinkManager::Remove( SvBaseLink *pLink )
     }
 }
 
-
 void LinkManager::Remove( size_t nPos, size_t nCnt )
 {
     if( nCnt && nPos < aLinkTbl.size() )
@@ -150,7 +146,6 @@ void LinkManager::Remove( size_t nPos, size_t nCnt )
     }
 }
 
-
 bool LinkManager::Insert( SvBaseLink* pLink )
 {
     for( size_t n = 0; n < aLinkTbl.size(); ++n )
@@ -169,7 +164,6 @@ bool LinkManager::Insert( SvBaseLink* pLink )
     return true;
 }
 
-
 bool LinkManager::InsertLink( SvBaseLink * pLink,
                                 sal_uInt16 nObjType,
                                 SfxLinkUpdateMode nUpdateMode,
@@ -182,7 +176,6 @@ bool LinkManager::InsertLink( SvBaseLink * pLink,
     pLink->SetUpdateMode( nUpdateMode );
     return Insert( pLink );
 }
-
 
 void LinkManager::InsertDDELink( SvBaseLink * pLink,
                                     const OUString& rServer,
@@ -200,7 +193,6 @@ void LinkManager::InsertDDELink( SvBaseLink * pLink,
     Insert( pLink );
 }
 
-
 void LinkManager::InsertDDELink( SvBaseLink * pLink )
 {
     DBG_ASSERT( OBJECT_CLIENT_SO & pLink->GetObjType(), "no OBJECT_CLIENT_SO" );
@@ -212,7 +204,6 @@ void LinkManager::InsertDDELink( SvBaseLink * pLink )
 
     Insert( pLink );
 }
-
 
 // Obtain the string for the dialog
 bool LinkManager::GetDisplayNames( const SvBaseLink * pLink,
@@ -338,7 +329,6 @@ void LinkManager::UpdateAllLinks(
     CloseCachedComps();
 }
 
-
 SvLinkSourceRef LinkManager::CreateObj( SvBaseLink * pLink )
 {
     switch( pLink->GetObjType() )
@@ -365,12 +355,10 @@ bool LinkManager::InsertServer( SvLinkSource* pObj )
     return aServerTbl.insert( pObj ).second;
 }
 
-
 void LinkManager::RemoveServer( SvLinkSource* pObj )
 {
     aServerTbl.erase( pObj );
 }
-
 
 void MakeLnkName( OUString& rName, const OUString* pType, const OUString& rFile,
                     const OUString& rLink, const OUString* pFilter )
@@ -484,11 +472,12 @@ void LinkManager::CancelTransfers()
             nullptr != ( pFileObj = static_cast<SvFileObject*>(pLnk->GetObj()) ) )
             pFileObj->CancelTransfers();
 }
-    // For the purpose of sending Status information from the file object to
-    // the base link, there exist a dedicated ClipBoardId. The SvData-object
-    // gets the appropriate information as a string
-    // For now this is required for file object in conjunction with JavaScript
-    // - needs information about Load/Abort/Error
+
+// For the purpose of sending Status information from the file object to
+// the base link, there exist a dedicated ClipBoardId. The SvData-object
+// gets the appropriate information as a string
+// For now this is required for file object in conjunction with JavaScript
+// - needs information about Load/Abort/Error
 SotClipboardFormatId LinkManager::RegisterStatusInfoId()
 {
     static SotClipboardFormatId nFormat = SotClipboardFormatId::NONE;
@@ -500,7 +489,6 @@ SotClipboardFormatId LinkManager::RegisterStatusInfoId()
     }
     return nFormat;
 }
-
 
 bool LinkManager::GetGraphicFromAny( const OUString& rMimeType,
                                 const css::uno::Any & rValue,
@@ -543,7 +531,6 @@ bool LinkManager::GetGraphicFromAny( const OUString& rMimeType,
     }
     return bRet;
 }
-
 
 OUString lcl_DDE_RelToAbs( const OUString& rTopic, const OUString& rBaseURL )
 {
@@ -680,8 +667,6 @@ bool SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
     return false;
 }
 
-
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
