@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a6eadb0_f9af2f92",
+        "filename": "cui/source/tabpages/numpages.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3090,
+      "author": {
+        "id": 1000169
+      },
+      "writtenOn": "2016-12-24T15:36:35Z",
+      "side": 1,
+      "message": "I think it\u0027s not a good idea to set this things \"manually\", after InitControls() already set them. This looks like the code initialize controls twice, which has no sense.",
+      "revId": "1a6cdc95072061f5ae5f652c33b8aa0fc4df2015",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
