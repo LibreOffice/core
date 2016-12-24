@@ -378,6 +378,17 @@ sal_uInt32 SwContact::GetMaxOrdNum() const
     return nMaxOrdNum;
 }
 
+void SwContact::SwClientNotify(const SwModify&, const SfxHint& rHint)
+{
+    // this does not call SwClient::SwClientNotify and thus doesnt handle RES_OBJECTDYING as usual. Is this intentional?
+    if (auto pFindSdrObjectHint = dynamic_cast<const sw::FindSdrObjectHint*>(&rHint))
+    {
+        if(!*pFindSdrObjectHint->m_ppObject)
+            *pFindSdrObjectHint->m_ppObject = GetMaster();
+    }
+}
+
+
 SwFlyDrawContact::SwFlyDrawContact( SwFlyFrameFormat *pToRegisterIn, SdrModel * ) :
     SwContact( pToRegisterIn )
 {
@@ -432,10 +443,6 @@ void SwFlyDrawContact::SetMaster( SdrObject* _pNewMaster )
 {
     assert(dynamic_cast<const SwFlyDrawObj*>(_pNewMaster) != nullptr);
     mpMasterObj = static_cast<SwFlyDrawObj *>(_pNewMaster);
-}
-
-void SwFlyDrawContact::SwClientNotify(const SwModify&, const SfxHint&)
-{
 }
 
 /**
@@ -1382,7 +1389,8 @@ namespace
 
 void SwDrawContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
 {
-    SwClient::SwClientNotify(rMod, rHint);
+    SwClient::SwClientNotify(rMod, rHint); // needed as SwContact::SwClientNotify doesnt explicitly call SwClient::SwClientNotify
+    SwContact::SwClientNotify(rMod, rHint);
     if (auto pLegacyHint = dynamic_cast<const sw::LegacyModifyHint*>(&rHint))
     {
         SAL_WARN_IF(mbDisconnectInProgress, "sw.core", "<SwDrawContact::Modify(..)> called during disconnection.");

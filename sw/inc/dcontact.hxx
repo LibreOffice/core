@@ -100,6 +100,7 @@ class SwContact : public SdrObjUserCall, public SwClient
 
 protected:
     void SetInDTOR();
+    virtual void SwClientNotify(const SwModify&, const SfxHint& rHint) override;
 
 public:
 
@@ -190,8 +191,6 @@ class SW_DLLPUBLIC SwFlyDrawContact : public SwContact
 private:
     SwFlyDrawObj* mpMasterObj;
 
-protected:
-    virtual void SwClientNotify(const SwModify&, const SfxHint& rHint) override;
 
 public:
 
