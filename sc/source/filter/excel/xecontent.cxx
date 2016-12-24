@@ -44,6 +44,8 @@
 #include "xestyle.hxx"
 #include "xename.hxx"
 #include <rtl/uuid.h>
+#include <oox/token/namespaces.hxx>
+#include <oox/token/relationship.hxx>
 
 using namespace ::oox;
 
@@ -511,7 +513,7 @@ void XclExpHyperlink::WriteEmbeddedData( XclExpStream& rStrm )
 void XclExpHyperlink::SaveXml( XclExpXmlStream& rStrm )
 {
     OUString sId = !msTarget.isEmpty() ? rStrm.addRelation( rStrm.GetCurrentStream()->getOutputStream(),
-            XclXmlUtils::ToOUString( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink" ),
+            oox::getRelationship(Relationship::HYPERLINK),
             msTarget, true ) : OUString();
     rStrm.GetCurrentStream()->singleElement( XML_hyperlink,
             XML_ref,                XclXmlUtils::ToOString( maScPos ).getStr(),
