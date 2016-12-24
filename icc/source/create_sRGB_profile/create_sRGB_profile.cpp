@@ -89,15 +89,15 @@ const char * const this_file_name_and_location =" * icc/source/create_sRGB_profi
 const char* const description = "sRGB IEC61966-2.1";
 //const char* const devicemanufact = "IEC http://www.iec.ch"; not used, device manufactured by OOo seems funny...
 const char* const devicemodel = "IEC 61966-2.1 Default RGB colour space - sRGB";
-const char* const copyright = "Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License.";
+const char* const copyright = "Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements; and to You under the Apache License, Version 2.0. ";
 
 // the creation date is fixed, corresponds to the last time this file has been changed
 // NOTE: change this date values whenever the data inside the profile are changed.
-const int  data_last_changed_year =     2011;
-const int  data_last_changed_month =    10;
-const int  data_last_day =              16;
-const int  data_last_changed_hour =     18;
-const int  data_last_changed_minute =   55;
+const int  data_last_changed_year =     2016;
+const int  data_last_changed_month =    12;
+const int  data_last_day =              24;
+const int  data_last_changed_hour =     43;
+const int  data_last_changed_minute =   00;
 
 // the following string array it's the standard OOo header format
 const char * const TheHeader1[] =
@@ -115,20 +115,22 @@ const char * const TheHeader1[] =
 const char * const TheHeader2[] =
 {
     " *",
-    " * Copyright 2012, 2011 Apache OpenOffice.",
+    " * Licensed to the Apache Software Foundation (ASF) under one",
+    " * or more contributor license agreements.  See the NOTICE file",
+    " * distributed with this work for additional information",
+    " * regarding copyright ownership.  The ASF licenses this file",
+    " * to you under the Apache License, Version 2.0 (the",
+    " * \"License\"); you may not use this file except in compliance",
+    " *  with the License.  You may obtain a copy of the License at",
     " *",
-    " * Licensed under the Apache License, Version 2.0 (the \"License\");",
-    " * you may not use this file except in compliance with the License.",
-    " * You may obtain a copy of the License at",
+    " *   http://www.apache.org/licenses/LICENSE-2.0",
     " *",
-    " *     http://www.apache.org/licenses/LICENSE-2.0",
-    " *",
-    " * Unless required by applicable law or agreed to in writing, software",
-    " * distributed under the License is distributed on an \"AS IS\" BASIS,",
-    " * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.",
-    " * See the License for the specific language governing permissions and",
-    " * limitations under the License.",
-    " *",
+    " * Unless required by applicable law or agreed to in writing,",
+    " * software distributed under the License is distributed on an",
+    " * \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY",
+    " * KIND, either express or implied.  See the License for the",
+    " *  specific language governing permissions and limitations",
+    " *  under the License.",
     " ************************************************************************/",
     "",
     "#ifndef INCLUDED_ICC_SRGB_IEC61966_2_1_H",
