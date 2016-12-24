@@ -27,7 +27,7 @@
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 
-#include "../../source/deployment/inc/dp_version.hxx"
+#include "dp_version.hxx"
 
 namespace {
 
