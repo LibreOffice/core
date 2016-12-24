@@ -22,7 +22,7 @@
 
 
 #ifndef _RTL_CRC_H_
-#define _RTL_CRC_H_ "$Revision: 1.4 $"
+#define _RTL_CRC_H_ "$Revision$"
 
 #include <sal/types.h>
 

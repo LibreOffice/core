@@ -22,7 +22,7 @@
 
 
 #ifndef _STORE_TYPES_H_
-#define _STORE_TYPES_H_ "$Revision: 1.8 $"
+#define _STORE_TYPES_H_ "$Revision$"
 
 #include <sal/types.h>
 #include <rtl/ustring.h>

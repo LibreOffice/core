@@ -21,7 +21,7 @@
 
 
 
-#define _RTL_CIPHER_C_ "$Revision: 1.5 $"
+#define _RTL_CIPHER_C_ "$Revision$"
 
 #include <sal/types.h>
 #include <rtl/alloc.h>

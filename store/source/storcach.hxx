@@ -22,7 +22,7 @@
 
 
 #ifndef _STORE_STORCACH_HXX
-#define _STORE_STORCACH_HXX "$Revision: 1.6.8.2 $"
+#define _STORE_STORCACH_HXX "$Revision$"
 
 #include "sal/types.h"
 #include "rtl/ref.hxx"

@@ -24,7 +24,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_store.hxx"
 
-#define _T_STORE_CXX "$Revision: 1.7.8.2 $"
+#define _T_STORE_CXX "$Revision$"
 #include <sal/types.h>
 #include <osl/diagnose.h>
 #include <osl/thread.h>

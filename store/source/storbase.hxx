@@ -22,7 +22,7 @@
 
 
 #ifndef _STORE_STORBASE_HXX_
-#define _STORE_STORBASE_HXX_ "$Revision: 1.10.8.4 $"
+#define _STORE_STORBASE_HXX_ "$Revision$"
 
 #include "sal/types.h"
 

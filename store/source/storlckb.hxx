@@ -22,7 +22,7 @@
 
 
 #ifndef _STORE_STORLCKB_HXX_
-#define _STORE_STORLCKB_HXX_ "$Revision: 1.6.8.1 $"
+#define _STORE_STORLCKB_HXX_ "$Revision$"
 
 #include "sal/types.h"
 

@@ -22,7 +22,7 @@
 
 
 #ifndef _RTL_CIPHER_H_
-#define _RTL_CIPHER_H_ "$Revision: 1.7 $"
+#define _RTL_CIPHER_H_ "$Revision$"
 
 #include <sal/types.h>
 
