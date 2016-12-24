@@ -12,8 +12,8 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 
-#include "../gfxtypes.hxx"
-#include "../parserfragments.hxx"
+#include "gfxtypes.hxx"
+#include "parserfragments.hxx"
 
 using namespace svgi;
 
