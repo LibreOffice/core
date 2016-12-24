@@ -273,6 +273,7 @@ public:
     virtual void dispose() override;
 
     virtual void    statusChanged( const css::frame::FeatureStateEvent& rEvent ) throw ( css::uno::RuntimeException ) override;
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 };
 
 class SvxLineWindow_Impl : public svtools::ToolbarPopup
@@ -1752,6 +1753,20 @@ void SvxFrameWindow_Impl::KeyInput( const KeyEvent& rKEvt )
 {
     aFrameSet->GrabFocus();
     aFrameSet->KeyInput( rKEvt );
+}
+
+void SvxFrameWindow_Impl::DataChanged( const DataChangedEvent& rDCEvt )
+{
+    ToolbarPopup::DataChanged( rDCEvt );
+
+    if ( ( rDCEvt.GetType() == DataChangedEventType::SETTINGS ) && ( rDCEvt.GetFlags() & AllSettingsFlags::STYLE ) )
+    {
+        InitImageList();
+
+        sal_uInt16 nNumOfItems = aFrameSet->GetItemCount();
+        for ( sal_uInt16 i = 1 ; i <= nNumOfItems ; ++i )
+            aFrameSet->SetItemImage( i, Image(aImgVec[i-1]) );
+    }
 }
 
 enum class FrmValidFlags {
