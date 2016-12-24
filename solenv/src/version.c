@@ -28,22 +28,16 @@
 
 struct VersionInfo
 {
-    const char* pTime;
-    const char* pDate;
     const char* pUpd;
     const char* pMinor;
     const char* pBuild;
-    const char* pInpath;
 };
 
 static const struct VersionInfo g_aVersionInfo =
 {
-    __TIME__,
-    __DATE__,
     _UPD,
     _LAST_MINOR,
     _BUILD,
-    _INPATH
 };
 
 #if defined(WNT) || defined(OS2)
@@ -65,8 +59,6 @@ const struct VersionInfo *GetVersionInfo(void)
 int main( int argc, char **argv )
 {
     const VersionInfo *pInfo = GetVersionInfo();
-    fprintf( stderr, "Date : %s\n", pInfo->pDate);
-    fprintf( stderr, "Time : %s\n", pInfo->pTime);
     fprintf( stderr, "UPD : %s\n", pInfo->pUpd);
     delete pInfo;
     return 0;

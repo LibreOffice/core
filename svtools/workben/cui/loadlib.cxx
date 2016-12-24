@@ -37,12 +37,9 @@ using namespace rtl;
 extern "C" {
 struct VersionInfo
 {
-        const char*     pTime;
-        const char*     pDate;
         const char*     pUpd;
         const char*     pMinor;
         const char*     pBuild;
-        const char*     pInpath;
 };
 
 typedef VersionInfo*(__LOADONCALLAPI *GetVersionInfo)(void);
@@ -67,12 +64,9 @@ int __LOADONCALLAPI main( int argc, char **argv )
     }
     if ( pInfo )
     {
-        fprintf( stdout, "Date : %s\n", pInfo->pDate );
-        fprintf( stdout, "Time : %s\n", pInfo->pTime );
         fprintf( stdout, "UPD : %s\n", pInfo->pUpd );
         fprintf( stdout, "Minor : %s\n", pInfo->pMinor );
         fprintf( stdout, "Build : %s\n", pInfo->pBuild );
-        fprintf( stdout, "Inpath : %s\n", pInfo->pInpath );
     }
     else
         fprintf( stderr, "VersionInfo not Found !\n" );
