@@ -786,7 +786,6 @@ $(eval $(call gb_Helper_register_packages, \
 	more_fonts_conf \
 	instsetoo_native_setup \
 	$(if $(ENABLE_OOENV),instsetoo_native_ooenv) \
-	libreofficekit_selectionhandles \
 	odk_headers_generated \
 	oox_customshapes \
 	oox_generated \
@@ -805,6 +804,10 @@ $(eval $(call gb_Helper_register_packages_for_install,impress,\
 
 $(eval $(call gb_Helper_register_packages_for_install,calc,\
 	sc_res_xml \
+))
+
+$(eval $(call gb_Helper_register_packages_for_install,libreofficekit,\
+	$(if $(filter LINUX %BSD SOLARIS, $(OS)),$(if $(ENABLE_GTK3),libreofficekit_selectionhandles)) \
 ))
 
 $(eval $(call gb_Helper_register_packages_for_install,ure,\

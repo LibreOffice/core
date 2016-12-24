@@ -11,16 +11,16 @@ $(eval $(call gb_InstallModule_InstallModule,scp2/ooo))
 
 $(eval $(call gb_InstallModule_use_auto_install_libs,scp2/ooo,\
 	brand \
+	libreofficekit \
 	ooo \
 	ooobinarytable \
-	reportbuilder \
 	pdfimport \
+	reportbuilder \
 ))
 
 $(eval $(call gb_InstallModule_define_if_set,scp2/ooo,\
 	ENABLE_GTK \
 	ENABLE_SYSTRAY_GTK \
-	ENABLE_GTK3 \
 	ENABLE_MACOSX_SANDBOX \
 	ENABLE_ONLINE_UPDATE \
 	ENABLE_TDE \
