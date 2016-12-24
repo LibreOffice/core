@@ -94,7 +94,6 @@ using ::sax_fastparser::FSHelperPtr;
 
 
 void dump_pset(Reference< XPropertySet > const & rXPropSet);
-#define IDS(x) OString(OStringLiteral(#x " ") + OString::number( mnShapeIdMax++ )).getStr()
 
 namespace oox {
     using namespace drawingml;
@@ -1891,7 +1890,8 @@ ShapeExport& PowerPointShapeExport::WritePlaceholderShape( const Reference< XSha
 
     // non visual shape properties
     mpFS->startElementNS( XML_p, XML_nvSpPr, FSEND );
-    WriteNonVisualDrawingProperties( xShape, IDS( PlaceHolder ) );
+    const OString aPlaceholderID("PlaceHolder " + OString::number(mnShapeIdMax++));
+    WriteNonVisualDrawingProperties( xShape, aPlaceholderID.getStr() );
     mpFS->startElementNS( XML_p, XML_cNvSpPr, FSEND );
     mpFS->singleElementNS( XML_a, XML_spLocks, XML_noGrp, "1", FSEND );
     mpFS->endElementNS( XML_p, XML_cNvSpPr );
