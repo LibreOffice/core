@@ -83,8 +83,6 @@ private:
     sal_uInt16      nCols;
     sal_uInt16      nLines;
     Size            aBmpSize;
-    bool            bPopupMode;
-    bool            mbInResize;
     css::uno::Reference< css::frame::XFrame > mxFrame;
 
 
@@ -94,10 +92,6 @@ private:
     void            implInit();
 
 protected:
-    virtual void    Resizing( Size& rSize ) override;
-    virtual void    Resize() override;
-    virtual void    PopupModeEnd() override;
-
     /** This function is called when the window gets the focus.  It grabs
         the focus to the line ends value set so that it can be controlled with
         the keyboard.

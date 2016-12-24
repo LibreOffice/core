@@ -255,8 +255,6 @@ SvxLineEndWindow::SvxLineEndWindow(
     aLineEndSet     ( VclPtr<ValueSet>::Create(this, WinBits( WB_ITEMBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT ) )),
     nCols           ( 2 ),
     nLines          ( 12 ),
-    bPopupMode      ( true ),
-    mbInResize      ( false ),
     mxFrame         ( rFrame )
 {
     SetText( rWndTitle );
@@ -404,79 +402,6 @@ void SvxLineEndWindow::FillValueSet()
     }
 }
 
-
-void SvxLineEndWindow::Resize()
-{
-    // since we change the size inside this call, check if we
-    // are called recursive
-    if( !mbInResize )
-    {
-        mbInResize = true;
-        if ( !IsRollUp() )
-        {
-            aLineEndSet->SetColCount( nCols );
-            aLineEndSet->SetLineCount( nLines );
-
-            SetSize();
-
-            Size aSize = GetOutputSizePixel();
-            aSize.Width()  -= 4;
-            aSize.Height() -= 4;
-            aLineEndSet->SetPosSizePixel( Point( 2, 2 ), aSize );
-        }
-        //SfxPopupWindow::Resize();
-        mbInResize = false;
-    }
-}
-
-
-void SvxLineEndWindow::Resizing( Size& rNewSize )
-{
-    Size aBitmapSize = aBmpSize; // -> Member
-    aBitmapSize.Width()  += 6;
-    aBitmapSize.Height() += 6;
-
-    Size aItemSize = aLineEndSet->CalcItemSizePixel( aBitmapSize );  // -> Member
-    //Size aOldSize = GetOutputSizePixel(); // for width
-
-    sal_uInt16 nItemCount = aLineEndSet->GetItemCount(); // -> Member
-
-    // identify columns
-    long nItemW = aItemSize.Width();
-    long nW = rNewSize.Width();
-    nCols = (sal_uInt16) std::max( ( (sal_uIntPtr)(( nW + nItemW ) / ( nItemW * 2 ) )),
-                                            (sal_uIntPtr) 1L );
-    nCols *= 2;
-
-    // identify lines
-    long nItemH = aItemSize.Height();
-    long nH = rNewSize.Height();
-    nLines = (sal_uInt16) std::max( ( ( nH + nItemH / 2 ) / nItemH ), 1L );
-
-    sal_uInt16 nMaxCols  = nItemCount / nLines;
-    if( nItemCount % nLines )
-        nMaxCols++;
-    if( nCols > nMaxCols )
-        nCols = nMaxCols;
-    nW = nItemW * nCols;
-
-    // No odd number of columns
-    if( nCols % 2 )
-        nCols--;
-    nCols = std::max( nCols, (sal_uInt16) 2 );
-
-    sal_uInt16 nMaxLines  = nItemCount / nCols;
-    if( nItemCount % nCols )
-        nMaxLines++;
-    if( nLines > nMaxLines )
-        nLines = nMaxLines;
-    nH = nItemH * nLines;
-
-    rNewSize.Width() = nW;
-    rNewSize.Height() = nH;
-}
-
-
 void SvxLineEndWindow::StartSelection()
 {
     aLineEndSet->StartSelection();
@@ -496,54 +421,30 @@ void SvxLineEndWindow::statusChanged( const css::frame::FeatureStateEvent& rEven
 
             aLineEndSet->Clear();
             FillValueSet();
-
-            Size aSize = GetOutputSizePixel();
-            Resizing( aSize );
-            Resize();
         }
     }
 }
 
-
-void SvxLineEndWindow::PopupModeEnd()
-{
-    if ( IsVisible() )
-    {
-        bPopupMode = false;
-        SetSize();
-    }
-    SfxPopupWindow::PopupModeEnd();
-}
-
-
 void SvxLineEndWindow::SetSize()
 {
-    //if( !bPopupMode )
-    if( !IsInPopupMode() )
-    {
-        sal_uInt16 nItemCount = aLineEndSet->GetItemCount(); // -> Member
-        sal_uInt16 nMaxLines  = nItemCount / nCols; // -> Member ?
-        if( nItemCount % nCols )
-            nMaxLines++;
+    sal_uInt16 nItemCount = aLineEndSet->GetItemCount();
+    sal_uInt16 nMaxLines  = nItemCount / nCols;
 
-        WinBits nBits = aLineEndSet->GetStyle();
-        if ( nLines == nMaxLines )
-            nBits &= ~WB_VSCROLL;
-        else
-            nBits |= WB_VSCROLL;
-        aLineEndSet->SetStyle( nBits );
-    }
+    WinBits nBits = aLineEndSet->GetStyle();
+    if ( nLines == nMaxLines )
+        nBits &= ~WB_VSCROLL;
+    else
+        nBits |= WB_VSCROLL;
+    aLineEndSet->SetStyle( nBits );
 
     Size aSize( aBmpSize );
     aSize.Width()  += 6;
     aSize.Height() += 6;
     aSize = aLineEndSet->CalcWindowSizePixel( aSize );
+    aLineEndSet->SetPosSizePixel( Point( 2, 2 ), aSize );
     aSize.Width()  += 4;
     aSize.Height() += 4;
     SetOutputSizePixel( aSize );
-    aSize.Height() = aBmpSize.Height();
-    aSize.Height() += 14;
-    //SetMinOutputSizePixel( aSize );
 }
 
 void SvxLineEndWindow::GetFocus()
