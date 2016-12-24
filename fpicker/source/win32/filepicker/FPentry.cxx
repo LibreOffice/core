@@ -30,9 +30,9 @@
 #include "../misc/WinImplHelper.hxx"
 #include <stdio.h>
 
-#include "../folderpicker/FolderPicker.hxx"
-#include "../folderpicker/FOPServiceInfo.hxx"
-#include "../folderpicker/WinFOPImpl.hxx"
+#include "FolderPicker.hxx"
+#include "FOPServiceInfo.hxx"
+#include "WinFOPImpl.hxx"
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
