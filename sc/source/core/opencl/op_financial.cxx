@@ -929,7 +929,7 @@ void IRR::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    int gid0 = get_global_id(0);\n";
     FormulaToken* pSur = vSubArguments[1]->GetFormulaToken();
     assert(pSur);
-    ss << "    double fSchaetzwert = ";
+    ss << "    double fEstimated = ";
     ss << vSubArguments[1]->GenSlidingWindowDeclRef() << ";\n";
     ss << "    double fEps = 1.0;\n";
     ss << "    double x = 0.0, xNeu = 0.0, fZaehler = 0.0, fNenner = 0.0;\n";
@@ -939,18 +939,18 @@ void IRR::GenSlidingWindowFunction(std::stringstream &ss,
         const formula::SingleVectorRefToken* pSVR =
             static_cast< const formula::SingleVectorRefToken* >(pSur);
         ss << "    if (gid0 >= " << pSVR->GetArrayLength() << ")\n";
-        ss << "        fSchaetzwert = 0.1;\n";
-        ss << "    if (isnan(fSchaetzwert))\n";
+        ss << "        fEstimated = 0.1;\n";
+        ss << "    if (isnan(fEstimated))\n";
         ss << "        x = 0.1;\n";
         ss << "    else\n";
     }
     else if (pSur->GetType() == formula::svDouble)
     {
-        ss << "    if (isnan(fSchaetzwert))\n";
+        ss << "    if (isnan(fEstimated))\n";
         ss << "        x = 0.1;\n";
         ss << "    else\n";
     }
-    ss << "        x = fSchaetzwert;\n";
+    ss << "        x = fEstimated;\n";
     ss << "    unsigned short nItCount = 0;\n";
     ss << "    while (fEps > Epsilon && nItCount < 20){\n";
     ss << "        nCount = 0.0; fZaehler = 0.0;  fNenner = 0.0;\n";
@@ -1061,7 +1061,7 @@ void IRR::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "        fEps = fabs(xNeu - x);\n";
     ss << "        x = xNeu;\n";
     ss << "        nItCount++;\n    }\n";
-    ss << "        if (fSchaetzwert == 0.0 && fabs(x) < Epsilon)\n";
+    ss << "        if (fEstimated == 0.0 && fabs(x) < Epsilon)\n";
     ss << "            x = 0.0;\n";
     ss << "        if (fEps < Epsilon)\n";
     ss << "            return x;\n";
