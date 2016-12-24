@@ -4188,6 +4188,23 @@ SfxVoidItem SelectBackground SID_SELECT_BACKGROUND
     GroupId = GID_OPTIONS;
 ]
 
+SfxVoidItem RemoveBackground SID_REMOVE_BACKGROUND
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_OPTIONS;
+]
+
 SfxVoidItem SaveBackground SID_SAVE_BACKGROUND
 ()
 [

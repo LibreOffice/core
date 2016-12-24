@@ -679,6 +679,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     {
         rSet.DisableItem(SID_PRESENTATION_LAYOUT);
         rSet.DisableItem(SID_SELECT_BACKGROUND);
+        rSet.DisableItem(SID_REMOVE_BACKGROUND);
         rSet.DisableItem(SID_SAVE_BACKGROUND);
     }
 
@@ -696,6 +697,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
             rSet.DisableItem(SID_MODIFYPAGE);
 
         rSet.DisableItem(SID_SELECT_BACKGROUND);
+        rSet.DisableItem(SID_REMOVE_BACKGROUND);
         rSet.DisableItem(SID_SAVE_BACKGROUND);
         rSet.DisableItem(SID_INSERTLAYER);
         rSet.DisableItem(SID_LAYERMODE);
@@ -717,6 +719,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.DisableItem(SID_INSERTFILE);
         rSet.DisableItem(SID_PAGEMODE);
         rSet.DisableItem(SID_SELECT_BACKGROUND);
+        rSet.DisableItem(SID_REMOVE_BACKGROUND);
         rSet.DisableItem(SID_SAVE_BACKGROUND);
     }
     else

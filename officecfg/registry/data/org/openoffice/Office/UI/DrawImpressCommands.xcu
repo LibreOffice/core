@@ -1443,6 +1443,11 @@
           <value xml:lang="en-US">Set Background Image...</value>
         </prop>
       </node>
+      <node oor:name=".uno:RemoveBackground" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Remove Background Image...</value>
+        </prop>
+      </node>
       <node oor:name=".uno:SaveBackground" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Save Background Image...</value>

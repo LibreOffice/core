@@ -1187,6 +1187,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         break;
 
         case SID_SELECT_BACKGROUND:
+        case SID_REMOVE_BACKGROUND:
         case SID_SAVE_BACKGROUND:
         case SID_ATTR_PAGE_SIZE:
         case SID_ATTR_PAGE:
