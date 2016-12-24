@@ -913,9 +913,10 @@ Error_Function:
 End Function	&apos;	_ReadFileIntoArray	V1.4.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
-Function _RegexSearch(ByRef psString As String _
+Public Function _RegexSearch(ByRef psString As String _
 						, ByVal psRegex As String _
 						, Optional ByRef plStart As Long _
+						, Optional ByVal bForward As Boolean _
 						) As String
 &apos;	Search is not case-sensitive
 &apos;	Return &quot;&quot; if regex not found, otherwise returns the matching string
@@ -924,26 +925,35 @@ Function _RegexSearch(ByRef psString As String _
 &apos;	To search again the same or another pattern =&gt; plStart = plStart + Len(matching string)
 
 Dim oTextSearch As Object
-Dim vOptions As New com.sun.star.util.SearchOptions, vResult As Object
-Dim lEnd As Long
+Dim vOptions As Variant	&apos;com.sun.star.util.SearchOptions
+Dim lEnd As Long, vResult As Object
 
 	_RegexSearch = &quot;&quot;
 	Set oTextSearch = _A2B_.TextSearch		&apos;	UNO XTextSearch service
-	With vOptions
-		.algorithmType = com.sun.star.util.SearchAlgorithms.REGEXP
-		.searchFlag = 0
-		.searchString = psRegex				&apos;	Pattern to be searched
-		.transliterateFlags = com.sun.star.i18n.TransliterationModules.IGNORE_CASE
-	End With
+	vOptions = _A2B_.SearchOptions
+	vOptions.searchString = psRegex				&apos;	Pattern to be searched
 	oTextSearch.setOptions(vOptions)
 	If IsMissing(plStart) Then plStart = 1
-	If plStart &lt;= 0 Then Exit Function
-	lEnd = Len(psString)
-	vResult = oTextSearch.searchForward(psString, plStart - 1, lEnd)
+	If plStart &lt;= 0 Or plStart &gt; Len(psString) Then Exit Function
+	If IsMissing(bForWard) Then bForward = True
+	If bForward Then
+		lEnd = Len(psString)
+		vResult = oTextSearch.searchForward(psString, plStart - 1, lEnd)
+	Else
+		lEnd = 1
+		vResult = oTextSearch.searchForward(psString, plStart, lEnd - 1)
+	End If
 	With vResult
 		If .subRegExpressions &gt;= 1 Then
-			plStart = .startOffset(0) + 1
-			lEnd = .endOffset(0) + 1
+			&apos;	http://www.openoffice.org/api/docs/common/ref/com/sun/star/util/SearchResult.html
+			Select Case bForward
+				Case True
+					plStart = .startOffset(0) + 1
+					lEnd = .endOffset(0) + 1
+				Case False
+					plStart = .endOffset(0) + 1
+					lEnd = .startOffset(0)
+			End Select
 			_RegexSearch = Mid(psString, plStart, lEnd - plStart)
 		Else
 			plStart = 0
@@ -953,7 +963,7 @@ Dim lEnd As Long
 End Function
 
 REM -----------------------------------------------------------------------------------------------------------------------
-Function _RegisterEventScript(poObject As Object _
+Public Function _RegisterEventScript(poObject As Object _
 								, ByVal psEvent As String _
 								, ByVal psListener As String _
 								, ByVal psScriptCode As String _
@@ -1061,12 +1071,12 @@ End Function	&apos;	Surround
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Public Function _Trim(ByVal psString As String) As String
-&apos;	Remove leading and trailing spaces, remove surrounding square brackets
+&apos;	Remove leading and trailing spaces, remove surrounding square brackets, replace tabs by spaces
 Const cstSquareOpen = &quot;[&quot;
 Const cstSquareClose = &quot;]&quot;
 Dim sTrim As String
 	
-	sTrim = Trim(psString)
+	sTrim = Trim(Replace(psString, vbTab, &quot; &quot;))
 	_Trim = sTrim
 	If Len(sTrim) &lt;= 2 Then Exit Function
 	

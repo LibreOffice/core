@@ -14,7 +14,7 @@ REM ----------------------------------------------------------------------------
 REM --- CLASS ROOT FIELDS 								        														---
 REM -----------------------------------------------------------------------------------------------------------------------
 
-Private	_Type					As String				&apos;	Must be FORM
+Private	_Type					As String				&apos;	Must be DIALOG
 Private	_Name					As String
 Private _Shortcut				As String
 Private _Dialog					As Object				&apos;	com.sun.star.io.XInputStreamProvider
@@ -199,7 +199,11 @@ Public Function Properties(ByVal Optional pvIndex As Variant) As Variant
 &apos;		a Collection object if pvIndex absent
 &apos;		a Property object otherwise
 
+Const cstThisSub = &quot;Dialog.Properties&quot;
+	Utils._SetCalledSub(cstThisSub)
+
 Dim vProperty As Variant, vPropertiesList() As Variant, sObject As String
+
 	vPropertiesList = _PropertiesList()
 	sObject = Utils._PCase(_Type)
 	If IsMissing(pvIndex) Then
@@ -211,6 +215,7 @@ Dim vProperty As Variant, vPropertiesList() As Variant, sObject As String
 	
 Exit_Function:
 	Set Properties = vProperty
+	Utils._ResetCalledSub(cstThisSub)
 	Exit Function
 End Function	&apos;	Properties
 

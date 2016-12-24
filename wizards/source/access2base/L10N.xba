@@ -80,6 +80,8 @@ Dim sLocal As String
 				Case &quot;ERR&quot; &amp; ERRWINDOW				:	sLocal = &quot;Current window is not a document&quot;
 				Case &quot;ERR&quot; &amp; ERRCOMPATIBILITY		:	sLocal = &quot;Field &apos;%0&apos; could not be converted due to incompatibility of field types between the respective database systems&quot;
 				Case &quot;ERR&quot; &amp; ERRPRECISION			:	sLocal = &quot;Field &apos;%0&apos; could not be loaded in record #%1 due to capacity shortage&quot;
+				Case &quot;ERR&quot; &amp; ERRMODULENOTFOUND		:	sLocal = &quot;Module &apos;%0&apos; not found in the currently loaded libraries&quot;
+				Case &quot;ERR&quot; &amp; ERRPROCEDURENOTFOUND	:	sLocal = &quot;Procedure &apos;%0&apos; not found in module &apos;%1&apos;&quot;
 				&apos;----------------------------------------------------------------------------------------------------------------------
 				Case &quot;OBJECT&quot;						:	sLocal = &quot;Object&quot;
 				Case &quot;TABLE&quot;						:	sLocal = &quot;Table&quot;
@@ -191,6 +193,8 @@ Dim sLocal As String
 				Case &quot;ERR&quot; &amp; ERRWINDOW				:	sLocal = &quot;La fenêtre courante n&apos;est pas un document&quot;
 				Case &quot;ERR&quot; &amp; ERRCOMPATIBILITY		:	sLocal = &quot;Le champ &apos;%0&apos; n&apos;a pas pu être converti à cause d&apos;une incompatibilité entre les types de champs supportés par les systèmes de bases de données respectifs&quot;
 				Case &quot;ERR&quot; &amp; ERRPRECISION			:	sLocal = &quot;Le champ &apos;%0&apos; n&apos;a pas pu être chargé dans l&apos;enregistrement #%1 par manque de capacité&quot;
+				Case &quot;ERR&quot; &amp; ERRMODULENOTFOUND		:	sLocal = &quot;Le module &apos;%0&apos; est introuvable dans les librairies chargées actuellement&quot;
+				Case &quot;ERR&quot; &amp; ERRPROCEDURENOTFOUND	:	sLocal = &quot;La procédure &apos;%0&apos; est introuvable dans le module &apos;%1&apos;&quot;
 				&apos;----------------------------------------------------------------------------------------------------------------------
 				Case &quot;OBJECT&quot;						:	sLocal = &quot;Objet&quot;
 				Case &quot;TABLE&quot;						:	sLocal = &quot;Table&quot;
@@ -305,6 +309,8 @@ Dim sLocal As String
 				Case &quot;ERR&quot; &amp; ERRWINDOW				:	sLocal = &quot;La ventana actual no es un documento&quot;
 				Case &quot;ERR&quot; &amp; ERRCOMPATIBILITY		:	sLocal = &quot;El campo &apos;%0&apos; no se ha convertido debido a una incompatibilidad de los tipos de campo soportados entre las dos bases de datos&quot;
 				Case &quot;ERR&quot; &amp; ERRPRECISION			:	sLocal = &quot;El campo &apos;%0&apos; no se ha cargado en el registro #%1 por falta de capacidad&quot;
+				Case &quot;ERR&quot; &amp; ERRMODULENOTFOUND		:	sLocal = &quot;Module &apos;%0&apos; not found in the currently loaded libraries&quot;
+				Case &quot;ERR&quot; &amp; ERRPROCEDURENOTFOUND	:	sLocal = &quot;Procedure &apos;%0&apos; not found in module &apos;%1&apos;&quot;
 				&apos;----------------------------------------------------------------------------------------------------------------------
 				Case &quot;OBJECT&quot;						:	sLocal = &quot;Objeto&quot;
 				Case &quot;TABLE&quot;						:	sLocal = &quot;Tabla&quot;

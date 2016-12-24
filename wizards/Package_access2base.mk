@@ -40,6 +40,7 @@ $(eval $(call gb_Package_add_files,wizards_basicsrvaccess2base,$(LIBO_SHARE_FOLD
 	Form.xba \
 	L10N.xba \
 	Methods.xba \
+	Module.xba \
 	OptionGroup.xba \
 	PropertiesGet.xba \
 	PropertiesSet.xba \

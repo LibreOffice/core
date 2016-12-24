@@ -45,6 +45,7 @@ Global Const ERRSQLSTATEMENT		=	1523
 Global Const ERROBJECTNOTFOUND		=	1524
 Global Const ERROPENOBJECT			=	1525
 Global Const ERRCLOSEOBJECT			=	1526
+Global Const ERRMETHOD				=	1527
 Global Const ERRACTION				=	1528
 Global Const ERRSENDMAIL			=	1529
 Global Const ERRFORMYETOPEN			=	1530
@@ -74,6 +75,8 @@ Global Const ERRSUBFORMNOTFOUND		=	1553
 Global Const ERRWINDOW				=	1554
 Global Const ERRCOMPATIBILITY		=	1555
 Global Const ERRPRECISION			=	1556
+Global Const ERRMODULENOTFOUND		=	1557
+Global Const ERRPROCEDURENOTFOUND	=	1558
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Global Const DBCONNECTBASE			=	1			&apos;	Connection from Base document (OpenConnection)
@@ -94,6 +97,7 @@ Global Const DBMS_SQLITE			=	8
 REM -----------------------------------------------------------------------------------------------------------------------
 Global Const COLLALLDIALOGS 		= &quot;ALLDIALOGS&quot;
 Global Const COLLALLFORMS			= &quot;ALLFORMS&quot;
+Global Const COLLALLMODULES			= &quot;ALLMODULES&quot;
 Global Const COLLCOMMANDBARS		= &quot;COMMANDBARS&quot;
 Global Const COLLCOMMANDBARCONTROLS	= &quot;COMMANDBARCONTROLS&quot;
 Global Const COLLCONTROLS			= &quot;CONTROLS&quot;
@@ -116,6 +120,7 @@ Global Const OBJDIALOG				= &quot;DIALOG&quot;
 Global Const OBJEVENT				= &quot;EVENT&quot;
 Global Const OBJFIELD				= &quot;FIELD&quot;
 Global Const OBJFORM				= &quot;FORM&quot;
+Global Const OBJMODULE				= &quot;MODULE&quot;
 Global Const OBJOPTIONGROUP			= &quot;OPTIONGROUP&quot;
 Global Const OBJPROPERTY			= &quot;PROPERTY&quot;
 Global Const OBJQUERYDEF			= &quot;QUERYDEF&quot;
@@ -158,6 +163,10 @@ Global Const CTLPARENTISDIALOG	= &quot;DIALOG&quot;
 Global Const CTLPARENTISSUBFORM	= &quot;SUBFORM&quot;
 Global Const CTLPARENTISGRID	= &quot;GRID&quot;
 Global Const CTLPARENTISGROUP	= &quot;OPTIONGROUP&quot;
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Global Const MODDOCUMENT		= &quot;DOCUMENT&quot;
+Global Const MODGLOBAL			= &quot;GLOBAL&quot;
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Type DocContainer
@@ -205,9 +214,11 @@ Const cstSepar = &quot;!&quot;
 	Set oMacLibraries = DialogLibraries
 	vMacLibraries = oMacLibraries.getElementNames()
 	&apos;Remove Access2Base from the list
-	For i = 0 To UBound(vMacLibraries)
-		If Left(vMacLibraries(i), 11) = &quot;Access2Base&quot; Then vMacLibraries(i) = &quot;&quot;
-	Next i
+	If _A2B_.ExcludeA2B Then
+		For i = 0 To UBound(vMacLibraries)
+			If Left(vMacLibraries(i), 11) = &quot;Access2Base&quot; Then vMacLibraries(i) = &quot;&quot;
+		Next i
+	End If
 	vMacLibraries = Utils._TrimArray(vMacLibraries)
 
 	If UBound(vDocLibraries) + UBound(vMacLibraries) &lt; 0 Then				&apos;	No library
@@ -392,6 +403,149 @@ Error_Function:
 	Set vAllForms = Nothing
 	GoTo Exit_Function
 End Function		&apos;	AllForms	V0.9.0
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function AllModules(ByVal Optional pvIndex As Variant, ByVal Optional pbAllModules As Boolean) As Variant
+&apos;	Return either a Collection or a Module object
+&apos;	The modules are selected only if library is loaded
+&apos;	(UNPUBLISHED) pbAllModules = False collects only the modules located in the currently open document
+
+	If _ErrorHandler() Then On Local Error Goto Error_Function
+Const cstThisSub = &quot;AllModules&quot;
+	Utils._SetCalledSub(cstThisSub)
+
+Dim iMode As Integer, vModules() As Variant, i As Integer, j As Integer, iCount As Integer
+Dim oMacLibraries As Object, vAllModules As Variant, oLibrary As Object, vNames() As Variant, bFound As Boolean
+Dim sScript As String, sLibrary As String, oDocLibraries As Object, sStorage As String
+Dim vLibraries() As Variant, vMacLibraries() As Variant, vDocLibraries() As Variant, oDocMacLib As Object
+Const cstCount = 0, cstByIndex = 1, cstByName = 2
+Const cstDot = &quot;.&quot;
+
+	If IsMissing(pvIndex) Then
+		iMode = cstCount
+	Else
+		If Not Utils._CheckArgument(pvIndex, 1, Utils._AddNumeric(vbString)) Then Goto Exit_Function
+		If VarType(pvIndex) = vbString Then
+			iMode = cstByName
+			&apos;	Dtermine full name STORAGE.LIBRARY.MODULE
+			vNames = Split(pvIndex, cstDot)
+			If UBound(vNames) = 2 Then
+			ElseIf UBound(vNames) = 1 Then
+				pvIndex = MODDOCUMENT &amp; cstDot &amp; pvIndex
+			ElseIf UBound(vNames) = 0 Then
+				pvIndex = MODDOCUMENT &amp; cstDot &amp; &quot;STANDARD&quot; &amp; cstDot &amp; pvIndex
+			Else
+				GoTo Trace_Not_Found
+			End If
+		Else
+			iMode = cstByIndex
+		End If
+	End If
+
+	If IsMissing(pbAllModules) Then pbAllModules = True
+	If Not Utils._CheckArgument(pbAllModules, 2, vbBoolean) Then Goto Exit_Function
+
+	Set vAllModules = Nothing
+
+	Set oDocLibraries = ThisComponent.BasicLibraries
+	vDocLibraries = oDocLibraries.getElementNames()
+	If pbAllModules Then
+		Set oMacLibraries = GlobalScope.BasicLibraries
+		vMacLibraries = oMacLibraries.getElementNames()
+		&apos;Remove Access2Base from the list
+		If _A2B_.ExcludeA2B Then
+			For i = 0 To UBound(vMacLibraries)
+				If Left(vMacLibraries(i), 11) = &quot;Access2Base&quot; Then vMacLibraries(i) = &quot;&quot;
+			Next i
+		End If
+		vMacLibraries = Utils._TrimArray(vMacLibraries)
+	End If
+
+	If UBound(vDocLibraries) + UBound(vMacLibraries) &lt; 0 Then				&apos;	No library
+		Set vAllModules = New Collect
+		vAllModules._CollType = COLLALLMODULES
+		vAllModules._ParentType = OBJAPPLICATION
+		vAllModules._ParentName = &quot;&quot;
+		vAllModules._Count = 0
+		Goto Exit_Function
+	End If
+	
+	iCount = 0
+	For i = 0 To UBound(vDocLibraries) + UBound(vMacLibraries) + 1
+		bFound = False
+		If i &lt;= UBound(vDocLibraries) Then
+			sLibrary = vDocLibraries(i)
+			sStorage = MODDOCUMENT
+			Set oDocMacLib = oDocLibraries
+			&apos;	Sometimes library not loaded as should ??
+			If Not oDocMacLib.IsLibraryLoaded(sLibrary) Then oDocMacLib.loadLibrary(sLibrary)
+		Else
+			sLibrary = vMacLibraries(i - UBound(vDocLibraries) - 1)
+			sStorage = MODGLOBAL
+			Set oDocMacLib = oMacLibraries
+		End If
+		If oDocMacLib.IsLibraryLoaded(sLibrary) Then
+			Set oLibrary = oDocMacLib.getByName(sLibrary)
+			If oLibrary.hasElements() Then
+				vModules = oLibrary.getElementNames()
+				Select Case iMode
+					Case cstCount
+						iCount = iCount + UBound(vModules) + 1
+					Case cstByIndex, cstByName
+						For j = 0 To UBound(vModules)
+							If iMode = cstByIndex Then
+								If pvIndex = iCount Then bFound = True
+								iCount = iCount + 1
+							Else
+								If UCase(pvIndex) = UCase(sStorage &amp; cstDot &amp; sLibrary &amp; cstDot &amp; vModules(j)) Then bFound = True
+							End If
+							If bFound Then
+								sScript = oLibrary.getByName(vModules(j))	&apos;	Initiate Module object
+								iCount = i
+								Exit For
+							End If
+						Next j
+				End Select						
+			End If
+		End If
+		If bFound Then Exit For
+	Next i
+	
+	If iMode = cstCount Then
+		Set vAllModules = New Collect
+		vAllModules._CollType = COLLALLMODULES
+		vAllModules._ParentType = OBJAPPLICATION
+		vAllModules._ParentName = &quot;&quot;
+		vAllModules._Count = iCount
+	Else
+		If Not bFound Then
+			If iMode = cstByIndex Then Goto Trace_Error_Index Else Goto Trace_Not_Found
+		End If
+		Set vAllModules = New Module
+		vAllModules._Name = vModules(j)
+		vAllModules._LibraryName = sLibrary
+		Set vAllModules._Library = oLibrary
+		vAllModules._Storage = sStorage
+		vAllModules._Script = sScript
+		vAllModules._Initialize()
+	End If
+
+Exit_Function:
+	Set AllModules = vAllModules
+	Utils._ResetCalledSub(cstThisSub)
+	Exit Function
+Trace_Not_Found:
+	TraceError(TRACEFATAL, ERRMODULENOTFOUND, Utils._CalledSub(), 0, , pvIndex)
+	Goto Exit_Function
+Trace_Error_Index:
+	TraceError(TRACEFATAL, ERRCOLLECTION, Utils._CalledSub(), 0, 1)
+	Set vModules = Nothing
+	Goto Exit_Function
+Error_Function:
+	TraceError(TRACEABORT, Err, cstThisSub, Erl)
+	Set vModules = Nothing
+	GoTo Exit_Function
+End Function		&apos;	AllModules	V1.7.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Public Sub CloseConnection ()
