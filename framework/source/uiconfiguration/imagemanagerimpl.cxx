@@ -889,7 +889,6 @@ throw ( css::lang::IllegalArgumentException,
             sal_uInt16 nPos = pImageList->GetImagePos( aCommandURLSequence[i] );
             if ( nPos != IMAGELIST_IMAGE_NOTFOUND )
             {
-                Image aImage = pImageList->GetImage( nPos );
                 sal_uInt16 nId   = pImageList->GetImageId( nPos );
                 pImageList->RemoveImage( nId );
 
