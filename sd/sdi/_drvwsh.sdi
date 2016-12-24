@@ -2616,6 +2616,11 @@ interface DrawView
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
     ]
+    SID_REMOVE_BACKGROUND
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
     SID_SAVE_BACKGROUND
     [
         ExecMethod = FuTemporary ;
