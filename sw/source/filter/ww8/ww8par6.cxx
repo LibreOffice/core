@@ -2360,8 +2360,9 @@ bool SwWW8ImplReader::StartApo(const ApoTestResults &rApo,
                 if (aFlySet.HasItem(RES_VERT_ORIENT, &pItem))
                 {
                     const SwFormatVertOrient* pOrient = static_cast<const SwFormatVertOrient*>(pItem);
-                    if (pOrient->GetPos() != 0)
-                        pULSpaceItem->SetUpper(pOrient->GetPos());
+                    SwTwips nPos = pOrient->GetPos();
+                    if( 0 < nPos && nPos <= SAL_MAX_UINT16 )
+                        pULSpaceItem->SetUpper( sal_uInt16(nPos) );
                 }
             }
         }
