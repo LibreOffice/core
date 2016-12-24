@@ -288,6 +288,7 @@ $(eval $(call gb_Library_add_exception_objects,oox,\
     oox/source/token/namespacemap \
     oox/source/token/propertynames \
     oox/source/token/tokenmap \
+    oox/source/token/relationship \
     oox/source/vml/vmldrawing \
     oox/source/vml/vmldrawingfragment \
     oox/source/vml/vmlformatting \
