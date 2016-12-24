@@ -21,25 +21,34 @@
 #include "svx/svxcommands.h"
 #include "bib.hrc"
 
-#define BIB_IMAGES \
-    IdList =                                \
-    {                                       \
-        SID_FM_AUTOFILTER;      /*10716*/     \
-        SID_FM_FILTERCRIT;      /*10715*/     \
-        SID_FM_REMOVE_FILTER_SORT ; /*10711*/ \
-    };                                     \
-    IdCount = { 3; };
-
-ImageList RID_TOOLBAR_IMGLIST
+Bitmap RID_EXTBMP_AUTOFILTER_SC
 {
-    Prefix = "sc";
-    BIB_IMAGES
+    File = "sc10716.png";
 };
 
-ImageList RID_TOOLBAR_BIGIMGLIST
+Bitmap RID_EXTBMP_FILTERCRIT_SC
 {
-    Prefix = "lc";
-    BIB_IMAGES
+    File = "sc10715.png";
+};
+
+Bitmap RID_EXTBMP_REMOVE_FILTER_SORT_SC
+{
+    File = "sc10711.png";
+};
+
+Bitmap RID_EXTBMP_AUTOFILTER_LC
+{
+    File = "lc10716.png";
+};
+
+Bitmap RID_EXTBMP_FILTERCRIT_LC
+{
+    File = "lc10715.png";
+};
+
+Bitmap RID_EXTBMP_REMOVE_FILTER_SORT_LC
+{
+    File = "lc10711.png";
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

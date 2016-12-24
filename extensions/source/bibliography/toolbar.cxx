@@ -175,18 +175,16 @@ void BibTBEditListener::statusChanged(const frame::FeatureStateEvent& rEvt)throw
 
 BibToolBar::BibToolBar(vcl::Window* pParent, Link<void*,void> aLink)
     : ToolBox(pParent, "toolbar", "modules/sbibliography/ui/toolbar.ui")
-    , aImgLst(BibResId(  RID_TOOLBAR_IMGLIST     )),
-    aBigImgLst(BibResId( RID_TOOLBAR_BIGIMGLIST )),
-    aFtSource(VclPtr<FixedText>::Create(this,WB_VCENTER)),
-    aLBSource(VclPtr<ListBox>::Create(this,WB_DROPDOWN)),
-    aFtQuery(VclPtr<FixedText>::Create(this,WB_VCENTER)),
-    aEdQuery(VclPtr<Edit>::Create(this)),
-    pPopupMenu(VclPtr<PopupMenu>::Create()),
-    nMenuId(0),
-    nSelMenuItem(0),
-    aLayoutManager( aLink ),
-    nSymbolsSize( SFX_SYMBOLS_SIZE_SMALL ),
-    nOutStyle( 0 )
+    , aFtSource(VclPtr<FixedText>::Create(this,WB_VCENTER))
+    , aLBSource(VclPtr<ListBox>::Create(this,WB_DROPDOWN))
+    , aFtQuery(VclPtr<FixedText>::Create(this,WB_VCENTER))
+    , aEdQuery(VclPtr<Edit>::Create(this))
+    , pPopupMenu(VclPtr<PopupMenu>::Create())
+    , nMenuId(0)
+    , nSelMenuItem(0)
+    , aLayoutManager(aLink)
+    , nSymbolsSize(SFX_SYMBOLS_SIZE_SMALL)
+    , nOutStyle(0)
 {
     SvtMiscOptions aSvtMiscOptions;
     nSymbolsSize = aSvtMiscOptions.GetCurrentSymbolsSize();
@@ -556,7 +554,6 @@ IMPL_LINK_NOARG( BibToolBar, OptionsChanged_Impl, LinkParamNone*, void )
         RebuildToolbar();
 }
 
-
 IMPL_LINK_NOARG( BibToolBar, SettingsChanged_Impl, VclSimpleEvent&, void )
 {
     // Check if toolbar button size have changed and we have to use system settings
@@ -568,7 +565,6 @@ IMPL_LINK_NOARG( BibToolBar, SettingsChanged_Impl, VclSimpleEvent&, void )
     }
 }
 
-
 void BibToolBar::RebuildToolbar()
 {
     ApplyImageList();
@@ -576,16 +572,11 @@ void BibToolBar::RebuildToolbar()
     Application::PostUserEvent( aLayoutManager );
 }
 
-
 void BibToolBar::ApplyImageList()
 {
-    ImageList& rList = ( nSymbolsSize == SFX_SYMBOLS_SIZE_SMALL ) ?
-                       ( aImgLst ) :
-                       ( aBigImgLst );
-
-    SetItemImage(nTBC_BT_AUTOFILTER  , rList.GetImage(SID_FM_AUTOFILTER));
-    SetItemImage(nTBC_BT_FILTERCRIT  , rList.GetImage(SID_FM_FILTERCRIT));
-    SetItemImage(nTBC_BT_REMOVEFILTER, rList.GetImage(SID_FM_REMOVE_FILTER_SORT ));
+    SetItemImage(nTBC_BT_AUTOFILTER, Image(BitmapEx(BibResId(nSymbolsSize == SFX_SYMBOLS_SIZE_SMALL ? RID_EXTBMP_AUTOFILTER_SC : RID_EXTBMP_AUTOFILTER_LC))));
+    SetItemImage(nTBC_BT_FILTERCRIT, Image(BitmapEx(BibResId(nSymbolsSize == SFX_SYMBOLS_SIZE_SMALL ? RID_EXTBMP_FILTERCRIT_SC : RID_EXTBMP_FILTERCRIT_LC))));
+    SetItemImage(nTBC_BT_REMOVEFILTER, Image(BitmapEx(BibResId(nSymbolsSize == SFX_SYMBOLS_SIZE_SMALL ? RID_EXTBMP_REMOVE_FILTER_SORT_SC : RID_EXTBMP_REMOVE_FILTER_SORT_LC))));
     AdjustToolBox();
 }
 

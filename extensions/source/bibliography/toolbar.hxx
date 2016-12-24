@@ -110,8 +110,6 @@ class BibToolBar:   public ToolBox
         BibToolBarListenerArr   aListenerArr;
         css::uno::Reference< css::frame::XController >  xController;
         Idle                    aIdle;
-        ImageList               aImgLst;
-        ImageList               aBigImgLst;
         VclPtr<FixedText>       aFtSource;
         VclPtr<ListBox>         aLBSource;
         VclPtr<FixedText>       aFtQuery;
