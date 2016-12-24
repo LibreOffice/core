@@ -27,15 +27,6 @@
 
 #include "macros.inc"
 
-#if defined UNX && ! defined ENABLE_MACOSX_SANDBOX
-File gid_File_Bin_Senddoc
-    BIN_FILE_BODY;
-    Dir = FILELIST_DIR;
-    Name = "shell_senddoc.filelist";
-    Styles = (FILELIST, PACKED);
-End
-#endif
-
 STD_RES_FILE( gid_File_Res_Eps, eps )
 
 #if defined WITH_HELP

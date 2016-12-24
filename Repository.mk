@@ -796,7 +796,6 @@ $(eval $(call gb_Helper_register_packages, \
 	readlicense_oo_readmes \
 	setup_native_misc \
 	share \
-	shell_senddoc \
 	vcl_fontunxpsprint \
 ))
 
@@ -886,6 +885,8 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	package_dtd \
 	sd_web \
 	sfx2_emojiconfig \
+	$(call gb_Helper_optional,DESKTOP,\
+		$(if $(filter-out WNT,$(OS)),$(if $(ENABLE_MACOSX_SANDBOX),,shell_senddoc))) \
 	$(call gb_Helper_optional,DESKTOP,$(if $(filter-out MACOSX WNT,$(OS)),svx_gengal)) \
 	$(if $(USING_X11),vcl_fontunxppds) \
 	$(if $(filter $(OS),MACOSX),vcl_osxres) \

@@ -94,14 +94,6 @@ $(eval $(call gb_Module_add_targets,shell,\
 	Library_syssh \
 ))
 
-ifneq ($(OS),WNT)
-
-$(eval $(call gb_Module_add_targets,shell,\
-	StaticLibrary_xmlparser \
-))
-
-endif
-
 ifeq ($(USING_X11),TRUE)
 $(eval $(call gb_Module_add_targets,shell,\
 	Library_recentfile \
@@ -111,9 +103,10 @@ endif
 ifneq ($(OS),WNT)
 
 $(eval $(call gb_Module_add_targets,shell,\
+	StaticLibrary_xmlparser \
 	Executable_uri_encode \
 	Library_cmdmail \
-	Package_senddoc \
+	$(if $(ENABLE_MACOSX_SANDBOX),,Package_senddoc) \
 ))
 
 endif
