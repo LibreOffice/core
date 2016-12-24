@@ -27,7 +27,7 @@
 #include "jni.h"
 #include <vector>
 #include <utility>
-#include "../source/elements.hxx"
+#include "elements.hxx"
 #include <vendorbase.hxx>
 
 /**
