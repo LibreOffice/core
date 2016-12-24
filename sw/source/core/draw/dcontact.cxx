@@ -1572,6 +1572,19 @@ void SwDrawContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
         }
         pObj->SetRelativePos(pRestoreFlyAnchorHint->m_aPos);
     }
+    else if (auto pCreatePortionHint = dynamic_cast<const sw::CreatePortionHint*>(&rHint))
+    {
+        if(*pCreatePortionHint->m_ppContact)
+            return;
+        *pCreatePortionHint->m_ppContact = this; // This is kind of rediculous: the FrameFormat doesnt even hold a pointer to the contact itself,  but here we are leaking it out randomly
+        if(!GetAnchorFrame())
+        {
+            // No direct positioning needed any more
+            ConnectToLayout();
+            // Move object to visible layer
+            MoveObjToVisibleLayer(GetMaster());
+        }
+    }
 }
 
 // #i26791#

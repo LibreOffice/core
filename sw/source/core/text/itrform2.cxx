@@ -2562,7 +2562,7 @@ SwFlyCntPortion *SwTextFormatter::NewFlyCntPortion( SwTextFormatInfo &rInf,
     }
     else
     {
-        pRet = sw::DrawFlyCntPortion::Create(*rInf.GetTextFrame(), static_cast<SwDrawContact*>(pFrameFormat->FindContactObj()), aTmpBase, nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc, nMode);
+        pRet = sw::DrawFlyCntPortion::Create(*rInf.GetTextFrame(), *pFrameFormat, aTmpBase, nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc, nMode);
     }
     return pRet;
 }

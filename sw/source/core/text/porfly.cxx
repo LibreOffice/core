@@ -267,17 +267,11 @@ sw::FlyContentPortion::FlyContentPortion(SwFlyInContentFrame* pFly)
     SAL_WARN_IF(!pFly, "sw.core", "SwFlyCntPortion::SwFlyCntPortion: no SwFlyInContentFrame!");
 }
 
-sw::DrawFlyCntPortion::DrawFlyCntPortion(SwDrawContact* pContact)
-    : m_pContact(pContact)
+sw::DrawFlyCntPortion::DrawFlyCntPortion(SwFrameFormat& rFormat)
+    : m_pContact(nullptr)
 {
+    rFormat.CallSwClientNotify(sw::CreatePortionHint(&m_pContact));
     assert(m_pContact);
-    if(!m_pContact->GetAnchorFrame())
-    {
-        // No direct positioning needed any more
-        m_pContact->ConnectToLayout();
-        // Move object to visible layer
-        m_pContact->MoveObjToVisibleLayer(m_pContact->GetMaster());
-    }
 }
 
 sw::FlyContentPortion* sw::FlyContentPortion::Create(const SwTextFrame& rFrame, SwFlyInContentFrame* pFly, const Point& rBase, long nLnAscent, long nLnDescent, long nFlyAsc, long nFlyDesc, AsCharFlags nFlags)
@@ -287,9 +281,9 @@ sw::FlyContentPortion* sw::FlyContentPortion::Create(const SwTextFrame& rFrame, 
     return pNew;
 }
 
-sw::DrawFlyCntPortion* sw::DrawFlyCntPortion::Create(const SwTextFrame& rFrame, SwDrawContact* pContact, const Point& rBase, long nLnAscent, long nLnDescent, long nFlyAsc, long nFlyDesc, AsCharFlags nFlags)
+sw::DrawFlyCntPortion* sw::DrawFlyCntPortion::Create(const SwTextFrame& rFrame, SwFrameFormat& rFormat, const Point& rBase, long nLnAscent, long nLnDescent, long nFlyAsc, long nFlyDesc, AsCharFlags nFlags)
 {
-    auto pNew(new DrawFlyCntPortion(pContact));
+    auto pNew(new DrawFlyCntPortion(rFormat));
     pNew->SetBase(rFrame, rBase, nLnAscent, nLnDescent, nFlyAsc, nFlyDesc, nFlags | AsCharFlags::UlSpace | AsCharFlags::Init);
     return pNew;
 }
