@@ -378,13 +378,66 @@ sal_uInt32 SwContact::GetMaxOrdNum() const
     return nMaxOrdNum;
 }
 
-void SwContact::SwClientNotify(const SwModify&, const SfxHint& rHint)
+namespace
+{
+    Point lcl_GetWW8Pos(SwAnchoredObject* pAnchoredObj, const bool bFollowTextFlow, sw::WW8AnchorConv& reConv)
+    {
+        switch(reConv)
+        {
+            case sw::WW8AnchorConv::CONV2PG:
+            {
+                bool bRelToTableCell(false);
+                Point aPos(pAnchoredObj->GetRelPosToPageFrame(bFollowTextFlow, bRelToTableCell));
+                if(bRelToTableCell)
+                    reConv = sw::WW8AnchorConv::RELTOTABLECELL;
+                return aPos;
+            }
+            case sw::WW8AnchorConv::CONV2COL_OR_PARA:
+                return pAnchoredObj->GetRelPosToAnchorFrame();
+            case sw::WW8AnchorConv::CONV2CHAR:
+                return pAnchoredObj->GetRelPosToChar();
+            case sw::WW8AnchorConv::CONV2LINE:
+                return pAnchoredObj->GetRelPosToLine();
+            default: ;
+        }
+        return Point();
+    }
+}
+void SwContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
 {
     // this does not call SwClient::SwClientNotify and thus doesnt handle RES_OBJECTDYING as usual. Is this intentional?
     if (auto pFindSdrObjectHint = dynamic_cast<const sw::FindSdrObjectHint*>(&rHint))
     {
         if(!*pFindSdrObjectHint->m_ppObject)
             *pFindSdrObjectHint->m_ppObject = GetMaster();
+    }
+    else if (auto pWW8AnchorConvHint = dynamic_cast<const sw::WW8AnchorConvHint*>(&rHint))
+    {
+        // determine anchored object
+        SwAnchoredObject* pAnchoredObj(nullptr);
+        {
+            std::list<SwAnchoredObject*> aAnchoredObjs;
+            GetAnchoredObjs(aAnchoredObjs);
+            if(!aAnchoredObjs.empty())
+                pAnchoredObj = aAnchoredObjs.front();
+        }
+        // no anchored object found. Thus, the needed layout information can't
+        // be determined. --> no conversion
+        if(!pAnchoredObj)
+            return;
+        // no conversion for anchored drawing object, which aren't attached to an
+        // anchor frame.
+        // This is the case for drawing objects, which are anchored inside a page
+        // header/footer of an *unused* page style.
+        if(dynamic_cast<SwAnchoredDrawObject*>(pAnchoredObj) && !pAnchoredObj->GetAnchorFrame())
+            return;
+        const bool bFollowTextFlow = static_cast<const SwFrameFormat&>(rMod).GetFollowTextFlow().GetValue();
+        sw::WW8AnchorConvResult& rResult(pWW8AnchorConvHint->m_rResult);
+        // No distinction between layout directions, because of missing
+        // information about WW8 in vertical layout.
+        rResult.m_aPos.setX(lcl_GetWW8Pos(pAnchoredObj, bFollowTextFlow, rResult.m_eHoriConv).getX());
+        rResult.m_aPos.setY(lcl_GetWW8Pos(pAnchoredObj, bFollowTextFlow, rResult.m_eVertConv).getY());
+        rResult.m_bConverted = true;
     }
 }
 
@@ -1363,28 +1416,6 @@ namespace
         }
         return pAnchorFormat;
     }
-    Point lcl_GetWW8Pos(SwAnchoredObject* pAnchoredObj, const bool bFollowTextFlow, sw::WW8AnchorConv& reConv)
-    {
-        switch(reConv)
-        {
-            case sw::WW8AnchorConv::CONV2PG:
-            {
-                bool bRelToTableCell(false);
-                Point aPos(pAnchoredObj->GetRelPosToPageFrame(bFollowTextFlow, bRelToTableCell));
-                if(bRelToTableCell)
-                    reConv = sw::WW8AnchorConv::RELTOTABLECELL;
-                return aPos;
-            }
-            case sw::WW8AnchorConv::CONV2COL_OR_PARA:
-                return pAnchoredObj->GetRelPosToAnchorFrame();
-            case sw::WW8AnchorConv::CONV2CHAR:
-                return pAnchoredObj->GetRelPosToChar();
-            case sw::WW8AnchorConv::CONV2LINE:
-                return pAnchoredObj->GetRelPosToLine();
-            default: ;
-        }
-        return Point();
-    }
 }
 
 void SwDrawContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
@@ -1540,34 +1571,6 @@ void SwDrawContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
         // source draw frame format.
         if(rFormat.IsPosAttrSet())
             pDrawFormatLayoutCopyHint->m_rDestFormat.PosAttrSet();
-    }
-    else if (auto pWW8AnchorConvHint = dynamic_cast<const sw::WW8AnchorConvHint*>(&rHint))
-    {
-        // determine anchored object
-        SwAnchoredObject* pAnchoredObj(nullptr);
-        {
-            std::list<SwAnchoredObject*> aAnchoredObjs;
-            GetAnchoredObjs(aAnchoredObjs);
-            if(!aAnchoredObjs.empty())
-                pAnchoredObj = aAnchoredObjs.front();
-        }
-        // no anchored object found. Thus, the needed layout information can't
-        // be determined. --> no conversion
-        if(!pAnchoredObj)
-            return;
-        // no conversion for anchored drawing object, which aren't attached to an
-        // anchor frame.
-        // This is the case for drawing objects, which are anchored inside a page
-        // header/footer of an *unused* page style.
-        if(dynamic_cast<SwAnchoredDrawObject*>(pAnchoredObj) && !pAnchoredObj->GetAnchorFrame())
-            return;
-        const bool bFollowTextFlow = static_cast<const SwDrawFrameFormat&>(rMod).GetFollowTextFlow().GetValue();
-        sw::WW8AnchorConvResult& rResult(pWW8AnchorConvHint->m_rResult);
-        // No distinction between layout directions, because of missing
-        // information about WW8 in vertical layout.
-        rResult.m_aPos.setX(lcl_GetWW8Pos(pAnchoredObj, bFollowTextFlow, rResult.m_eHoriConv).getX());
-        rResult.m_aPos.setY(lcl_GetWW8Pos(pAnchoredObj, bFollowTextFlow, rResult.m_eVertConv).getY());
-        rResult.m_bConverted = true;
     }
     else if (auto pRestoreFlyAnchorHint = dynamic_cast<const sw::RestoreFlyAnchorHint*>(&rHint))
     {
