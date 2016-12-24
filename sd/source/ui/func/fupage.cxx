@@ -331,6 +331,11 @@ const SfxItemSet* FuPage::ExecuteDialog( vcl::Window* pParent )
             }
         }
     }
+    else if (nId == SID_REMOVE_BACKGROUND)
+    {
+        pTempSet.reset( new SfxItemSet( mpDoc->GetPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST, 0) );
+        pTempSet->Put( XFillStyleItem( drawing::FillStyle_NONE ) );
+    }
 
     else
     {
