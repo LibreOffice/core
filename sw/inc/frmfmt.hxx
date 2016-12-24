@@ -33,7 +33,19 @@ class IMapObject;
 class SwRect;
 class SwContact;
 class SdrObject;
-namespace sw { class DocumentLayoutManager; }
+namespace sw
+{
+    class DocumentLayoutManager;
+    // This is cheating: we are not really decoupling much with this hint.
+    // SwDrawFrameFormat should probably bookkeep its SdrObject (and
+    // SwDrawFrameFormat too) as members
+    struct SW_DLLPUBLIC FindSdrObjectHint final : SfxHint
+    {
+        SdrObject** m_ppObject;
+        FindSdrObjectHint(SdrObject** ppObject) : m_ppObject(ppObject) {};
+        virtual ~FindSdrObjectHint() override;
+    };
+}
 class SwFrameFormats;
 
 /// Style of a layout element.
@@ -106,17 +118,16 @@ public:
     SwRect FindLayoutRect( const bool bPrtArea = false,
                            const Point* pPoint = nullptr ) const;
 
-    /** Searches SdrObject. SdrObjUserCall is client of the format.
-       The UserCall knows its SdrObject. */
-          SwContact *FindContactObj();
-    const SwContact *FindContactObj() const
-        { return const_cast<SwFrameFormat*>(this)->FindContactObj(); }
-
     /** @return the SdrObject, that is connected to the ContactObject.
        Only DrawFrameFormats are connected to the "real SdrObject". FlyFrameFormats
        are connected to a Master and all FlyFrames has the "real SdrObject".
        "Real SdrObject" has position and a Z-order. */
-          SdrObject *FindSdrObject();
+    SdrObject* FindSdrObject()
+    {
+        SdrObject* pObject(nullptr);
+        CallSwClientNotify(sw::FindSdrObjectHint(&pObject));
+        return pObject;
+    }
     const SdrObject *FindSdrObject() const
         { return const_cast<SwFrameFormat*>(this)->FindSdrObject(); }
 

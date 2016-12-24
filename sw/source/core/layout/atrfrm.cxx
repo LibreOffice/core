@@ -2739,19 +2739,6 @@ SwRect SwFrameFormat::FindLayoutRect( const bool bPrtArea, const Point* pPoint )
     return aRet;
 }
 
-SwContact* SwFrameFormat::FindContactObj()
-{
-    return SwIterator<SwContact,SwFormat>( *this ).First();
-}
-
-SdrObject* SwFrameFormat::FindSdrObject()
-{
-    // #i30669# - use method <FindContactObj()> instead of
-    // duplicated code.
-    SwContact* pFoundContact = FindContactObj();
-    return pFoundContact ? pFoundContact->GetMaster() : nullptr;
-}
-
 SdrObject* SwFrameFormat::FindRealSdrObject()
 {
     if( RES_FLYFRMFMT == Which() )
@@ -3335,6 +3322,7 @@ namespace sw
     WW8AnchorConvHint::~WW8AnchorConvHint() {}
     RestoreFlyAnchorHint::~RestoreFlyAnchorHint() {}
     CreatePortionHint::~CreatePortionHint() {}
+    FindSdrObjectHint::~FindSdrObjectHint() {}
 }
 
 SwDrawFrameFormat::~SwDrawFrameFormat()

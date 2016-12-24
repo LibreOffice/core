@@ -66,7 +66,7 @@ SwContact* GetUserCall( const SdrObject* );
 bool IsMarqueeTextObj( const SdrObject& rObj );
 
 /// Base class for the following contact objects (frame + draw objects).
-class SwContact : public SdrObjUserCall, public SwClient
+class SW_DLLPUBLIC SwContact : public SdrObjUserCall, public SwClient
 {
     /** boolean, indicating destruction of contact object
      important note: boolean has to be set at the beginning of each destructor
@@ -100,6 +100,7 @@ class SwContact : public SdrObjUserCall, public SwClient
 
 protected:
     void SetInDTOR();
+    virtual void SwClientNotify(const SwModify&, const SfxHint& rHint) override;
 
 public:
 
@@ -190,8 +191,6 @@ class SW_DLLPUBLIC SwFlyDrawContact : public SwContact
 private:
     SwFlyDrawObj* mpMasterObj;
 
-protected:
-    virtual void SwClientNotify(const SwModify&, const SfxHint& rHint) override;
 
 public:
 
