@@ -745,7 +745,7 @@ void ScIRR();
 void ScMIRR();
 void ScISPMT();
 
-static double ScGetBw(double fZins, double fZzr, double fRmz,
+static double ScGetBw(double fInterest, double fZzr, double fRmz,
                       double fZw, bool bPayInAdvance);
 void ScPV();
 void ScSYD();
@@ -758,18 +758,18 @@ static double ScInterVDB(double fWert,double fRest,double fDauer,double fDauer1,
 void ScVDB();
 void ScPDuration();
 void ScSLN();
-static double ScGetRmz(double fZins, double fZzr, double fBw,
+static double ScGetRmz(double fInterest, double fZzr, double fBw,
                        double fZw, bool bPayInAdvance);
 void ScPMT();
 void ScRRI();
-static double ScGetZw(double fZins, double fZzr, double fRmz,
+static double ScGetZw(double fInterest, double fZzr, double fRmz,
                       double fBw, bool bFlag);
 void ScFV();
 void ScNper();
 static bool RateIteration(double fNper, double fPayment, double fPv,
                                 double fFv, bool bPayType, double& fGuess);
 void ScRate();
-double ScGetCompoundInterest(double fZins, double fZr, double fZzr, double fBw,
+double ScGetCompoundInterest(double fInterest, double fZr, double fZzr, double fBw,
                          double fZw, bool bPayInAdvance, double& fRmz);
 void ScIpmt();
 void ScPpmt();
