@@ -287,7 +287,7 @@ sal_uInt16 ImageList::GetImagePos( sal_uInt16 nId ) const
     return IMAGELIST_IMAGE_NOTFOUND;
 }
 
-bool ImageList::HasImageAtPos( sal_uInt16 nId ) const
+bool ImageList::HasImageForId( sal_uInt16 nId ) const
 {
     return GetImagePos( nId ) != IMAGELIST_IMAGE_NOTFOUND;
 }

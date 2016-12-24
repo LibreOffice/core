@@ -517,7 +517,7 @@ static Image GetImageFromList_Impl( sal_uInt16 nImageId, bool bBig )
         pList = xSmallImageList.get();
     }
 
-    if ( pList->HasImageAtPos( nImageId ) )
+    if ( pList->HasImageForId( nImageId ) )
         return pList->GetImage( nImageId );
     return Image();
 }
