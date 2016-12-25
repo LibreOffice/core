@@ -34,6 +34,7 @@
 #include "salgeom.hxx"
 #include "sallayout.hxx"
 #include "vclpluginapi.h"
+#include "ControlCacheKey.hxx"
 
 #include <deque>
 #include <memory>

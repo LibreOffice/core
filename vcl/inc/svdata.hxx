@@ -37,6 +37,7 @@
 #include <list>
 #include <unordered_map>
 #include <boost/functional/hash.hpp>
+#include "ControlCacheKey.hxx"
 
 struct ImplPostEventData;
 struct ImplTimerData;

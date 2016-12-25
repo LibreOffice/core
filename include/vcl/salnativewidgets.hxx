@@ -225,7 +225,7 @@ namespace o3tl
 {
     template<> struct typed_flags<ControlState> : is_typed_flags<ControlState, 0xc06f> {};
 }
-
+/*
 class ControlCacheKey
 {
 public:
@@ -277,7 +277,7 @@ public:
         }
         return true;
     }
-};
+}; Shifted this class to a new header file in /vc/inc/ControlCacheKey.hxx */
 
 /* ButtonValue:
  *
