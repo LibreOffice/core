@@ -72,62 +72,6 @@ public:
     virtual VclPtr<vcl::Window> CreateItemWindow( vcl::Window *pParent ) override;
 };
 
-
-// class SvxLineEndWindow
-
-class SvxLineEndWindow : public SfxPopupWindow
-{
-private:
-    XLineEndListRef  mpLineEndList;
-    VclPtr<ValueSet> mpLineEndSet;
-    sal_uInt16       mnCols;
-    sal_uInt16       mnLines;
-    Size             maBmpSize;
-    css::uno::Reference< css::frame::XFrame > mxFrame;
-
-
-    DECL_LINK( SelectHdl, ValueSet*, void );
-    void            FillValueSet();
-    void            SetSize();
-    void            implInit();
-
-protected:
-    /** This function is called when the window gets the focus.  It grabs
-        the focus to the line ends value set so that it can be controlled with
-        the keyboard.
-    */
-    virtual void GetFocus() override;
-
-public:
-    SvxLineEndWindow( sal_uInt16 nId,
-                      const css::uno::Reference< css::frame::XFrame >& rFrame,
-                      vcl::Window* pParentWindow,
-                      const OUString& rWndTitle );
-    virtual ~SvxLineEndWindow() override;
-    virtual void    dispose() override;
-
-    void            StartSelection();
-
-    virtual void    statusChanged( const css::frame::FeatureStateEvent& rEvent ) override;
-};
-
-
-// class SvxLineEndToolBoxControl
-
-
-class SVX_DLLPUBLIC SvxLineEndToolBoxControl : public SfxToolBoxControl
-{
-public:
-    SFX_DECL_TOOLBOX_CONTROL();
-    SvxLineEndToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
-    virtual ~SvxLineEndToolBoxControl() override;
-
-    virtual void                StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                              const SfxPoolItem* pState ) override;
-    virtual VclPtr<SfxPopupWindow> CreatePopupWindow() override;
-};
-
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

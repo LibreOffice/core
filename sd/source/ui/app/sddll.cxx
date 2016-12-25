@@ -186,8 +186,6 @@ void SdDLL::RegisterControllers(SdModule* pMod)
     SvxColorToolBoxControl::RegisterControl(SID_ATTR_LINE_COLOR, pMod);
     SvxColorToolBoxControl::RegisterControl(SID_ATTR_FILL_COLOR, pMod);
 
-    SvxLineEndToolBoxControl::RegisterControl( SID_ATTR_LINEEND_STYLE, pMod );
-
     SvxStyleToolBoxControl::RegisterControl(0, pMod);
     SvxColorToolBoxControl::RegisterControl( SID_ATTR_CHAR_COLOR, pMod );
     SvxColorToolBoxControl::RegisterControl( SID_ATTR_CHAR_BACK_COLOR, pMod );

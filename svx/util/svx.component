@@ -100,4 +100,8 @@
       constructor="com_sun_star_comp_svx_SmartTagMenuController_get_implementation">
     <service name="com.sun.star.frame.PopupMenuController"/>
   </implementation>
+  <implementation name="com.sun.star.comp.svx.LineEndToolBoxControl"
+      constructor="com_sun_star_comp_svx_LineEndToolBoxControl_get_implementation">
+    <service name="com.sun.star.frame.ToolbarController"/>
+  </implementation>
 </component>

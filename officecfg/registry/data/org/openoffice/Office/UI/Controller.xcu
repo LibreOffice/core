@@ -1130,6 +1130,17 @@
           <value>com.sun.star.comp.sfx2.ClassificationCategoriesController</value>
         </prop>
       </node>
+      <node oor:name="LineEndToolBoxControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:LineEndStyle</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.LineEndToolBoxControl</value>
+        </prop>
+      </node>
       <node oor:name="BorderStyleToolBoxControl" oor:op="replace">
         <prop oor:name="Command">
           <value>.uno:SetBorderStyle</value>

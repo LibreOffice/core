@@ -24,6 +24,9 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objsh.hxx>
 
+#include <svtools/toolbarmenu.hxx>
+#include <svtools/popupwindowcontroller.hxx>
+
 #include <svx/dialogs.hrc>
 #include "helpid.hrc"
 
@@ -49,7 +52,6 @@ using namespace ::com::sun::star;
 
 SFX_IMPL_TOOLBOX_CONTROL( SvxLineStyleToolBoxControl, XLineStyleItem );
 SFX_IMPL_TOOLBOX_CONTROL( SvxLineWidthToolBoxControl, XLineWidthItem );
-SFX_IMPL_TOOLBOX_CONTROL( SvxLineEndToolBoxControl,   SfxBoolItem );
 
 SvxLineStyleToolBoxControl::SvxLineStyleToolBoxControl( sal_uInt16 nSlotId,
                                                         sal_uInt16 nId,
@@ -243,31 +245,42 @@ VclPtr<vcl::Window> SvxLineWidthToolBoxControl::CreateItemWindow( vcl::Window *p
     return VclPtr<SvxMetricField>::Create( pParent, m_xFrame ).get();
 }
 
-SvxLineEndWindow::SvxLineEndWindow(
-    sal_uInt16 nSlotId,
-    const Reference< XFrame >& rFrame,
-    vcl::Window* pParentWindow,
-    const OUString& rWndTitle ) :
-    SfxPopupWindow( nSlotId,
-                    rFrame,
-                    pParentWindow,
-                    WinBits( WB_STDPOPUP | WB_OWNERDRAWDECORATION ) ),
+class SvxLineEndWindow : public svtools::ToolbarPopup
+{
+private:
+    XLineEndListRef mpLineEndList;
+    VclPtr<ValueSet> mpLineEndSet;
+    sal_uInt16 mnCols;
+    sal_uInt16 mnLines;
+    Size maBmpSize;
+    svt::ToolboxController& mrController;
+
+    DECL_LINK( SelectHdl, ValueSet*, void );
+    void FillValueSet();
+    void SetSize();
+
+protected:
+    virtual void GetFocus() override;
+
+public:
+    SvxLineEndWindow( svt::ToolboxController& rController, vcl::Window* pParentWindow );
+    virtual ~SvxLineEndWindow() override;
+    virtual void dispose() override;
+    virtual void statusChanged( const css::frame::FeatureStateEvent& rEvent ) throw ( css::uno::RuntimeException, std::exception ) override;
+};
+
+SvxLineEndWindow::SvxLineEndWindow( svt::ToolboxController& rController, vcl::Window* pParentWindow )
+    :  ToolbarPopup ( rController.getFrameInterface(), pParentWindow, WB_STDPOPUP | WB_MOVEABLE | WB_CLOSEABLE ),
     mpLineEndSet    ( VclPtr<ValueSet>::Create(this, WinBits( WB_ITEMBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT ) )),
     mnCols          ( 2 ),
     mnLines         ( 12 ),
-    mxFrame         ( rFrame )
+    mrController    ( rController )
 {
-    SetText( rWndTitle );
-    implInit();
-}
-
-void SvxLineEndWindow::implInit()
-{
-    SfxObjectShell*     pDocSh  = SfxObjectShell::Current();
-
+    SetText( SVX_RESSTR( RID_SVXSTR_LINEEND ) );
     SetHelpId( HID_POPUP_LINEEND );
     mpLineEndSet->SetHelpId( HID_POPUP_LINEEND_CTRL );
 
+    SfxObjectShell* pDocSh = SfxObjectShell::Current();
     if ( pDocSh )
     {
         const SfxPoolItem*  pItem = pDocSh->GetItem( SID_LINEEND_LIST );
@@ -284,7 +297,6 @@ void SvxLineEndWindow::implInit()
 
     AddStatusListener( ".uno:LineEndListState");
 
-    //ChangeHelpId( HID_POPUP_LINEENDSTYLE );
     mpLineEndSet->Show();
 }
 
@@ -296,7 +308,7 @@ SvxLineEndWindow::~SvxLineEndWindow()
 void SvxLineEndWindow::dispose()
 {
     mpLineEndSet.disposeAndClear();
-    SfxPopupWindow::dispose();
+    ToolbarPopup::dispose();
 }
 
 IMPL_LINK_NOARG(SvxLineEndWindow, SelectHdl, ValueSet*, void)
@@ -348,11 +360,8 @@ IMPL_LINK_NOARG(SvxLineEndWindow, SelectHdl, ValueSet*, void)
         while in Dispatch()), accessing members will crash in this case. */
     mpLineEndSet->SetNoSelection();
 
-    SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( mxFrame->getController(), UNO_QUERY ),
-                                 ".uno:LineEndStyle",
-                                 aArgs );
+    mrController.dispatchCommand( mrController.getCommandURL(), aArgs );
 }
-
 
 void SvxLineEndWindow::FillValueSet()
 {
@@ -402,13 +411,8 @@ void SvxLineEndWindow::FillValueSet()
     }
 }
 
-void SvxLineEndWindow::StartSelection()
-{
-    mpLineEndSet->StartSelection();
-}
-
-
 void SvxLineEndWindow::statusChanged( const css::frame::FeatureStateEvent& rEvent )
+    throw ( css::uno::RuntimeException, std::exception )
 {
     if ( rEvent.FeatureURL.Complete == ".uno:LineEndListState" )
     {
@@ -449,46 +453,68 @@ void SvxLineEndWindow::SetSize()
 
 void SvxLineEndWindow::GetFocus()
 {
-    SfxPopupWindow::GetFocus();
-    // Grab the focus to the line ends value set so that it can be controlled
-    // with the keyboard.
     if ( mpLineEndSet )
+    {
         mpLineEndSet->GrabFocus();
+        mpLineEndSet->StartSelection();
+    }
 }
 
-SvxLineEndToolBoxControl::SvxLineEndToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox &rTbx ) :
-    SfxToolBoxControl( nSlotId, nId, rTbx )
+class SvxLineEndToolBoxControl : public svt::PopupWindowController
 {
-    rTbx.SetItemBits( nId, ToolBoxItemBits::DROPDOWNONLY | rTbx.GetItemBits( nId ) );
-    rTbx.Invalidate();
+public:
+    explicit SvxLineEndToolBoxControl( const css::uno::Reference<css::uno::XComponentContext>& rContext );
+
+    // XInitialization
+    virtual void SAL_CALL initialize( const css::uno::Sequence<css::uno::Any>& rArguments ) throw ( css::uno::Exception, css::uno::RuntimeException, std::exception ) override;
+
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName() throw ( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw ( css::uno::RuntimeException, std::exception ) override;
+
+private:
+    virtual VclPtr<vcl::Window> createPopupWindow( vcl::Window* pParent ) override;
+    using svt::ToolboxController::createPopupWindow;
+};
+
+SvxLineEndToolBoxControl::SvxLineEndToolBoxControl( const css::uno::Reference<css::uno::XComponentContext>& rContext )
+    : svt::PopupWindowController( rContext, nullptr, OUString() )
+{
 }
 
-
-SvxLineEndToolBoxControl::~SvxLineEndToolBoxControl()
+void SvxLineEndToolBoxControl::initialize( const css::uno::Sequence<css::uno::Any>& rArguments )
+    throw ( css::uno::Exception, css::uno::RuntimeException, std::exception )
 {
+    svt::PopupWindowController::initialize( rArguments );
+    ToolBox* pToolBox = nullptr;
+    sal_uInt16 nId = 0;
+    if ( getToolboxId( nId, &pToolBox ) )
+        pToolBox->SetItemBits( nId, pToolBox->GetItemBits( nId ) | ToolBoxItemBits::DROPDOWNONLY );
 }
 
-
-VclPtr<SfxPopupWindow> SvxLineEndToolBoxControl::CreatePopupWindow()
+VclPtr<vcl::Window> SvxLineEndToolBoxControl::createPopupWindow( vcl::Window* pParent )
 {
-    VclPtrInstance<SvxLineEndWindow> pLineEndWin( GetId(), m_xFrame, &GetToolBox(), SVX_RESSTR( RID_SVXSTR_LINEEND ) );
-    pLineEndWin->StartPopupMode( &GetToolBox(),
-                                 FloatWinPopupFlags::GrabFocus |
-                                 FloatWinPopupFlags::AllowTearOff |
-                                 FloatWinPopupFlags::NoAppFocusClose );
-    pLineEndWin->StartSelection();
-    SetPopupWindow( pLineEndWin );
-    return pLineEndWin;
+    return VclPtr<SvxLineEndWindow>::Create( *this, pParent );
 }
 
-
-void SvxLineEndToolBoxControl::StateChanged( sal_uInt16, SfxItemState eState, const SfxPoolItem* )
+OUString SvxLineEndToolBoxControl::getImplementationName()
+    throw ( css::uno::RuntimeException, std::exception )
 {
-    sal_uInt16 nId = GetId();
-    ToolBox& rTbx = GetToolBox();
+    return OUString( "com.sun.star.comp.svx.LineEndToolBoxControl" );
+}
 
-    rTbx.EnableItem( nId, SfxItemState::DISABLED != eState );
-    rTbx.SetItemState( nId, ( SfxItemState::DONTCARE == eState ) ? TRISTATE_INDET : TRISTATE_FALSE );
+css::uno::Sequence<OUString> SvxLineEndToolBoxControl::getSupportedServiceNames()
+    throw ( css::uno::RuntimeException, std::exception )
+{
+    return { "com.sun.star.frame.ToolbarController" };
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_svx_LineEndToolBoxControl_get_implementation(
+    css::uno::XComponentContext* rContext,
+    css::uno::Sequence<css::uno::Any> const & )
+{
+    return cppu::acquire( new SvxLineEndToolBoxControl( rContext ) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

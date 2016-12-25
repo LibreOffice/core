@@ -162,7 +162,6 @@ void ScDLL::Init()
     SvxLineWidthToolBoxControl      ::RegisterControl(0, pMod);
     SvxColorToolBoxControl          ::RegisterControl(SID_ATTR_LINE_COLOR,      pMod);
     SvxColorToolBoxControl          ::RegisterControl(SID_ATTR_FILL_COLOR,      pMod);
-    SvxLineEndToolBoxControl        ::RegisterControl(SID_ATTR_LINEEND_STYLE,   pMod);
     SvxStyleToolBoxControl          ::RegisterControl(SID_STYLE_APPLY,          pMod);
     SvxColorToolBoxControl          ::RegisterControl(SID_ATTR_CHAR_COLOR,      pMod);
     SvxColorToolBoxControl          ::RegisterControl(SID_BACKGROUND_COLOR,     pMod);
