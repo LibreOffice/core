@@ -1169,6 +1169,7 @@ Dim sControlTypes() As Variant, i As Integer, vSplit() As Variant, sTrailer As S
 				_ControlType = _ClassId
 				If _SubType = CTLTEXTFIELD Then			&apos;	Formatted fields belong to the TextField family
 					If _ImplementationName = &quot;com.sun.star.comp.forms.OFormattedFieldWrapper&quot; _
+					Or _ImplementationName = &quot;com.sun.star.comp.forms.OFormattedFieldWrapper_ForcedFormatted&quot; _
 					Or _ImplementationName = &quot;com.sun.star.form.component.FormattedField&quot; Then		&apos;	When in datagrid
 						_SubType = CTLFORMATTEDFIELD
 						_ControlType = acFormattedField
