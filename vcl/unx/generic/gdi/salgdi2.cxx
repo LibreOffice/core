@@ -38,6 +38,7 @@
 
 #include <vcl/bitmapaccess.hxx>
 #include <outdata.hxx>
+#include "ControlCacheKey.hxx"
 
 void X11SalGraphics::CopyScreenArea( Display* pDisplay,
                                      Drawable aSrc, SalX11Screen nXScreenSrc, int nSrcDepth,
