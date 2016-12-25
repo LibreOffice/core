@@ -624,6 +624,8 @@ class XcodeIntegrationGenerator(IdeIntegrationGenerator):
             return 'com.apple.product-type.library.dynamic'
         elif modulename in self.gbuildparser.exes:
             return 'com.apple.product-type.something'
+        else:
+            return 'com.apple.product-type.cppunit'
 
     counter = 0
 
