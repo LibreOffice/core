@@ -242,7 +242,7 @@ bool OutputDevice::ImplDrawRotateText( SalLayout& rSalLayout )
 
     // draw text into upper left corner
     rSalLayout.DrawBase() -= aBoundRect.TopLeft();
-    rSalLayout.DrawText( *static_cast<OutputDevice*>(pVDev)->mpGraphics );
+    rSalLayout.DrawText( *pVDev->mpGraphics );
 
     Bitmap aBmp = pVDev->GetBitmap( Point(), aBoundRect.GetSize() );
     if ( !aBmp || !aBmp.Rotate( mpFontInstance->mnOwnOrientation, COL_WHITE ) )
