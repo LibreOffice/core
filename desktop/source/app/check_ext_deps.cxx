@@ -56,7 +56,7 @@
 
 #include "app.hxx"
 
-#include "../deployment/inc/dp_misc.h"
+#include "dp_misc.h"
 
 using namespace desktop;
 using namespace com::sun::star;
