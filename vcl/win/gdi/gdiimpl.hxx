@@ -23,6 +23,7 @@
 #include <vcl/gradient.hxx>
 
 #include "svsys.h"
+#include "ControlCacheKey.hxx"
 
 class WinSalGraphics;
 

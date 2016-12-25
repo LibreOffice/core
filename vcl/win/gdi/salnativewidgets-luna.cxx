@@ -49,7 +49,7 @@
 #include <map>
 #include <string>
 #include <boost/optional.hpp>
-
+#include "ControlCacheKey.hxx"
 using namespace std;
 
 typedef map< wstring, HTHEME > ThemeMap;
