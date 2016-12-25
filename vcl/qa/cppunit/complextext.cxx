@@ -52,7 +52,7 @@ void VclComplexTextTest::testArabic()
     ScopedVclPtrInstance<WorkWindow> pWin(static_cast<vcl::Window *>(nullptr));
     CPPUNIT_ASSERT( pWin );
 
-    OutputDevice *pOutDev = static_cast< OutputDevice * >( pWin.get() );
+    OutputDevice *pOutDev = pWin.get();
 
     vcl::Font aFont = OutputDevice::GetDefaultFont(
                         DefaultFontType::CTL_SPREADSHEET,
@@ -97,7 +97,7 @@ void VclComplexTextTest::testTdf95650()
     ScopedVclPtrInstance<WorkWindow> pWin(static_cast<vcl::Window *>(nullptr));
     CPPUNIT_ASSERT(pWin);
 
-    OutputDevice *pOutDev = static_cast< OutputDevice * >(pWin.get());
+    OutputDevice *pOutDev = pWin.get();
     // Check that the following executes without failing assertion
     pOutDev->ImplLayout(aTxt, 9, 1, Point(), 0, nullptr, SalLayoutFlags::BiDiRtl);
 }

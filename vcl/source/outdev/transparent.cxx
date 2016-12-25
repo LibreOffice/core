@@ -699,8 +699,8 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
         {
             ScopedVclPtrInstance< VirtualDevice > xVDev;
 
-            static_cast<OutputDevice*>(xVDev.get())->mnDPIX = mnDPIX;
-            static_cast<OutputDevice*>(xVDev.get())->mnDPIY = mnDPIY;
+            xVDev.get()->mnDPIX = mnDPIX;
+            xVDev.get()->mnDPIY = mnDPIY;
 
             if( xVDev->SetOutputSizePixel( aDstRect.GetSize() ) )
             {
