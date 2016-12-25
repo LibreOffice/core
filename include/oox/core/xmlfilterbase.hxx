@@ -236,6 +236,8 @@ public:
     void checkDocumentProperties(
             const css::uno::Reference<css::document::XDocumentProperties>& xDocProps);
 
+    OUString getNamespaceURL(sal_Int32 nNSID) const;
+
 protected:
     virtual css::uno::Reference< css::io::XInputStream >
         implGetInputStream( utl::MediaDescriptor& rMediaDesc ) const override;

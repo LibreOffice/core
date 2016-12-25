@@ -63,6 +63,7 @@
 #include <tools/datetime.hxx>
 #include <com/sun/star/util/Duration.hpp>
 #include <sax/tools/converter.hxx>
+#include <oox/token/namespacemap.hxx>
 
 using ::com::sun::star::xml::dom::DocumentBuilder;
 using ::com::sun::star::xml::dom::XDocument;
@@ -178,6 +179,7 @@ struct XmlFilterBaseImpl
     const OUString                 maBinSuffix;
     RelationsMap                   maRelationsMap;
     TextFieldStack                 maTextFieldStack;
+    const NamespaceMap&             mrNamespaceMap;
 
     explicit            XmlFilterBaseImpl( const Reference< XComponentContext >& rxContext ) throw( RuntimeException );
     ~XmlFilterBaseImpl();
@@ -186,7 +188,8 @@ struct XmlFilterBaseImpl
 XmlFilterBaseImpl::XmlFilterBaseImpl( const Reference< XComponentContext >& rxContext ) throw( RuntimeException ) :
     mxContext(rxContext),
     maFastParser( rxContext ),
-    maBinSuffix( ".bin" )
+    maBinSuffix( ".bin" ),
+    mrNamespaceMap(StaticNamespaceMap::get())
 {
     // register XML namespaces
     registerNamespaces(maFastParser);
@@ -908,6 +911,18 @@ StorageRef XmlFilterBase::implCreateStorage( const Reference< XStream >& rxOutSt
 bool XmlFilterBase::isMSO2007Document() const
 {
     return mbMSO2007;
+}
+
+OUString XmlFilterBase::getNamespaceURL(sal_Int32 nNSID) const
+{
+    auto itr = mxImpl->mrNamespaceMap.maTransitionalNamespaceMap.find(nNSID);
+    if (itr == mxImpl->mrNamespaceMap.maTransitionalNamespaceMap.end())
+    {
+        SAL_WARN("oox", "missing namespace in the namespace map for : " << nNSID);
+        return OUString();
+    }
+
+    return itr->second;
 }
 
 } // namespace core

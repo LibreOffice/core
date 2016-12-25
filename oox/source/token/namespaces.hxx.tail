@@ -30,6 +30,7 @@ inline sal_Int32 getNamespace( sal_Int32 nToken ) { return nToken & NMSP_MASK; }
 
 // defines for tokens with specific namespaces
 #define OOX_TOKEN( namespace, token ) (::oox::NMSP_##namespace | ::oox::XML_##token)
+#define OOX_NS( namespace ) (::oox::NMSP_##namespace)
 
 #define A_TOKEN( token )        OOX_TOKEN( dml, token )
 #define AX_TOKEN( token )       OOX_TOKEN( ax, token )
