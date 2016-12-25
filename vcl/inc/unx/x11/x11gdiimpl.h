@@ -11,6 +11,7 @@
 #define INCLUDED_VCL_INC_UNX_X11_X11GDIIMPL_HXX
 
 #include "unx/pixmap.hxx"
+#include "ControlCacheKey.hxx"
 
 class ControlCacheKey;
 

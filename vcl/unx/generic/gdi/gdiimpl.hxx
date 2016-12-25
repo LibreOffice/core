@@ -30,6 +30,7 @@
 #include "salgdiimpl.hxx"
 
 #include <basegfx/polygon/b2dtrapezoid.hxx>
+#include "ControlCacheKey.hxx"
 
 /* From <X11/Intrinsic.h> */
 typedef unsigned long Pixel;
