@@ -44,6 +44,7 @@
 #include "xestyle.hxx"
 #include "xename.hxx"
 #include <rtl/uuid.h>
+#include <oox/token/namespaces.hxx>
 
 using namespace ::oox;
 
@@ -1396,7 +1397,7 @@ void XclExpDataBar::SaveXml( XclExpXmlStream& rStrm )
     // extLst entries for Excel 2010 and 2013
     rWorksheet->startElement( XML_extLst, FSEND );
     rWorksheet->startElement( XML_ext,
-                                FSNS( XML_xmlns, XML_x14 ), "http://schemas.microsoft.com/office/spreadsheetml/2009/9/main",
+                                FSNS( XML_xmlns, XML_x14 ), XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(xls14Lst))).getStr(),
                                 XML_uri, "{B025F937-C7B1-47D3-B67F-A62EFF666E3E}",
                                 FSEND );
 
