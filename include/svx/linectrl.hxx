@@ -78,11 +78,11 @@ public:
 class SvxLineEndWindow : public SfxPopupWindow
 {
 private:
-    XLineEndListRef pLineEndList;
-    VclPtr<ValueSet> aLineEndSet;
-    sal_uInt16      nCols;
-    sal_uInt16      nLines;
-    Size            aBmpSize;
+    XLineEndListRef  mpLineEndList;
+    VclPtr<ValueSet> mpLineEndSet;
+    sal_uInt16       mnCols;
+    sal_uInt16       mnLines;
+    Size             maBmpSize;
     css::uno::Reference< css::frame::XFrame > mxFrame;
 
 

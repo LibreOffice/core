@@ -252,9 +252,9 @@ SvxLineEndWindow::SvxLineEndWindow(
                     rFrame,
                     pParentWindow,
                     WinBits( WB_STDPOPUP | WB_OWNERDRAWDECORATION ) ),
-    aLineEndSet     ( VclPtr<ValueSet>::Create(this, WinBits( WB_ITEMBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT ) )),
-    nCols           ( 2 ),
-    nLines          ( 12 ),
+    mpLineEndSet    ( VclPtr<ValueSet>::Create(this, WinBits( WB_ITEMBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT ) )),
+    mnCols          ( 2 ),
+    mnLines         ( 12 ),
     mxFrame         ( rFrame )
 {
     SetText( rWndTitle );
@@ -266,18 +266,18 @@ void SvxLineEndWindow::implInit()
     SfxObjectShell*     pDocSh  = SfxObjectShell::Current();
 
     SetHelpId( HID_POPUP_LINEEND );
-    aLineEndSet->SetHelpId( HID_POPUP_LINEEND_CTRL );
+    mpLineEndSet->SetHelpId( HID_POPUP_LINEEND_CTRL );
 
     if ( pDocSh )
     {
         const SfxPoolItem*  pItem = pDocSh->GetItem( SID_LINEEND_LIST );
         if( pItem )
-            pLineEndList = static_cast<const SvxLineEndListItem*>( pItem )->GetLineEndList();
+            mpLineEndList = static_cast<const SvxLineEndListItem*>( pItem )->GetLineEndList();
     }
-    DBG_ASSERT( pLineEndList.is(), "LineEndList not found" );
+    DBG_ASSERT( mpLineEndList.is(), "LineEndList not found" );
 
-    aLineEndSet->SetSelectHdl( LINK( this, SvxLineEndWindow, SelectHdl ) );
-    aLineEndSet->SetColCount( nCols );
+    mpLineEndSet->SetSelectHdl( LINK( this, SvxLineEndWindow, SelectHdl ) );
+    mpLineEndSet->SetColCount( mnCols );
 
     // ValueSet fill with entries of LineEndList
     FillValueSet();
@@ -285,7 +285,7 @@ void SvxLineEndWindow::implInit()
     AddStatusListener( ".uno:LineEndListState");
 
     //ChangeHelpId( HID_POPUP_LINEENDSTYLE );
-    aLineEndSet->Show();
+    mpLineEndSet->Show();
 }
 
 SvxLineEndWindow::~SvxLineEndWindow()
@@ -295,7 +295,7 @@ SvxLineEndWindow::~SvxLineEndWindow()
 
 void SvxLineEndWindow::dispose()
 {
-    aLineEndSet.disposeAndClear();
+    mpLineEndSet.disposeAndClear();
     SfxPopupWindow::dispose();
 }
 
@@ -303,7 +303,7 @@ IMPL_LINK_NOARG(SvxLineEndWindow, SelectHdl, ValueSet*, void)
 {
     std::unique_ptr<XLineEndItem> pLineEndItem;
     std::unique_ptr<XLineStartItem> pLineStartItem;
-    sal_uInt16                  nId = aLineEndSet->GetSelectItemId();
+    sal_uInt16 nId = mpLineEndSet->GetSelectItemId();
 
     if( nId == 1 )
     {
@@ -315,12 +315,12 @@ IMPL_LINK_NOARG(SvxLineEndWindow, SelectHdl, ValueSet*, void)
     }
     else if( nId % 2 ) // beginning of line
     {
-        const XLineEndEntry* pEntry = pLineEndList->GetLineEnd( (nId - 1) / 2 - 1 );
+        const XLineEndEntry* pEntry = mpLineEndList->GetLineEnd( (nId - 1) / 2 - 1 );
         pLineStartItem.reset(new XLineStartItem(pEntry->GetName(), pEntry->GetLineEnd()));
     }
     else // end of line
     {
-        const XLineEndEntry* pEntry = pLineEndList->GetLineEnd( nId / 2 - 2 );
+        const XLineEndEntry* pEntry = mpLineEndList->GetLineEnd( nId / 2 - 2 );
         pLineEndItem.reset(new XLineEndItem(pEntry->GetName(), pEntry->GetLineEnd()));
     }
 
@@ -346,7 +346,7 @@ IMPL_LINK_NOARG(SvxLineEndWindow, SelectHdl, ValueSet*, void)
     /*  #i33380# DR 2004-09-03 Moved the following line above the Dispatch() call.
         This instance may be deleted in the meantime (i.e. when a dialog is opened
         while in Dispatch()), accessing members will crash in this case. */
-    aLineEndSet->SetNoSelection();
+    mpLineEndSet->SetNoSelection();
 
     SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( mxFrame->getController(), UNO_QUERY ),
                                  ".uno:LineEndStyle",
@@ -356,47 +356,47 @@ IMPL_LINK_NOARG(SvxLineEndWindow, SelectHdl, ValueSet*, void)
 
 void SvxLineEndWindow::FillValueSet()
 {
-    if( pLineEndList.is() )
+    if( mpLineEndList.is() )
     {
         ScopedVclPtrInstance< VirtualDevice > pVD;
 
-        long nCount = pLineEndList->Count();
+        long nCount = mpLineEndList->Count();
 
         // First entry: no line end.
         // An entry is temporarly added to get the UI bitmap
         basegfx::B2DPolyPolygon aNothing;
-        pLineEndList->Insert(o3tl::make_unique<XLineEndEntry>(aNothing, SVX_RESSTR(RID_SVXSTR_NONE)));
-        const XLineEndEntry* pEntry = pLineEndList->GetLineEnd(nCount);
-        Bitmap aBmp = pLineEndList->GetUiBitmap( nCount );
+        mpLineEndList->Insert(o3tl::make_unique<XLineEndEntry>(aNothing, SVX_RESSTR(RID_SVXSTR_NONE)));
+        const XLineEndEntry* pEntry = mpLineEndList->GetLineEnd(nCount);
+        Bitmap aBmp = mpLineEndList->GetUiBitmap( nCount );
         OSL_ENSURE( !aBmp.IsEmpty(), "UI bitmap was not created" );
 
-        aBmpSize = aBmp.GetSizePixel();
-        pVD->SetOutputSizePixel( aBmpSize, false );
-        aBmpSize.Width() = aBmpSize.Width() / 2;
+        maBmpSize = aBmp.GetSizePixel();
+        pVD->SetOutputSizePixel( maBmpSize, false );
+        maBmpSize.Width() = maBmpSize.Width() / 2;
         Point aPt0( 0, 0 );
-        Point aPt1( aBmpSize.Width(), 0 );
+        Point aPt1( maBmpSize.Width(), 0 );
 
         pVD->DrawBitmap( Point(), aBmp );
-        aLineEndSet->InsertItem(1, Image(pVD->GetBitmap(aPt0, aBmpSize)), pEntry->GetName());
-        aLineEndSet->InsertItem(2, Image(pVD->GetBitmap(aPt1, aBmpSize)), pEntry->GetName());
+        mpLineEndSet->InsertItem(1, Image(pVD->GetBitmap(aPt0, maBmpSize)), pEntry->GetName());
+        mpLineEndSet->InsertItem(2, Image(pVD->GetBitmap(aPt1, maBmpSize)), pEntry->GetName());
 
-        pLineEndList->Remove(nCount);
+        mpLineEndList->Remove(nCount);
 
         for( long i = 0; i < nCount; i++ )
         {
-            pEntry = pLineEndList->GetLineEnd( i );
+            pEntry = mpLineEndList->GetLineEnd( i );
             DBG_ASSERT( pEntry, "Could not access LineEndEntry" );
-            aBmp = pLineEndList->GetUiBitmap( i );
+            aBmp = mpLineEndList->GetUiBitmap( i );
             OSL_ENSURE( !aBmp.IsEmpty(), "UI bitmap was not created" );
 
             pVD->DrawBitmap( aPt0, aBmp );
-            aLineEndSet->InsertItem((sal_uInt16)((i+1L)*2L+1L),
-                    Image(pVD->GetBitmap(aPt0, aBmpSize)), pEntry->GetName());
-            aLineEndSet->InsertItem((sal_uInt16)((i+2L)*2L),
-                    Image(pVD->GetBitmap(aPt1, aBmpSize)), pEntry->GetName());
+            mpLineEndSet->InsertItem((sal_uInt16)((i+1L)*2L+1L),
+                    Image(pVD->GetBitmap(aPt0, maBmpSize)), pEntry->GetName());
+            mpLineEndSet->InsertItem((sal_uInt16)((i+2L)*2L),
+                    Image(pVD->GetBitmap(aPt1, maBmpSize)), pEntry->GetName());
         }
-        nLines = std::min( (sal_uInt16)(nCount + 1), (sal_uInt16) MAX_LINES );
-        aLineEndSet->SetLineCount( nLines );
+        mnLines = std::min( (sal_uInt16)(nCount + 1), (sal_uInt16) MAX_LINES );
+        mpLineEndSet->SetLineCount( mnLines );
 
         SetSize();
     }
@@ -404,7 +404,7 @@ void SvxLineEndWindow::FillValueSet()
 
 void SvxLineEndWindow::StartSelection()
 {
-    aLineEndSet->StartSelection();
+    mpLineEndSet->StartSelection();
 }
 
 
@@ -416,10 +416,10 @@ void SvxLineEndWindow::statusChanged( const css::frame::FeatureStateEvent& rEven
         css::uno::Reference< css::uno::XWeak > xWeak;
         if ( rEvent.State >>= xWeak )
         {
-            pLineEndList.set( static_cast< XLineEndList* >( xWeak.get() ) );
-            DBG_ASSERT( pLineEndList.is(), "LineEndList not found" );
+            mpLineEndList.set( static_cast< XLineEndList* >( xWeak.get() ) );
+            DBG_ASSERT( mpLineEndList.is(), "LineEndList not found" );
 
-            aLineEndSet->Clear();
+            mpLineEndSet->Clear();
             FillValueSet();
         }
     }
@@ -427,21 +427,21 @@ void SvxLineEndWindow::statusChanged( const css::frame::FeatureStateEvent& rEven
 
 void SvxLineEndWindow::SetSize()
 {
-    sal_uInt16 nItemCount = aLineEndSet->GetItemCount();
-    sal_uInt16 nMaxLines  = nItemCount / nCols;
+    sal_uInt16 nItemCount = mpLineEndSet->GetItemCount();
+    sal_uInt16 nMaxLines  = nItemCount / mnCols;
 
-    WinBits nBits = aLineEndSet->GetStyle();
-    if ( nLines == nMaxLines )
+    WinBits nBits = mpLineEndSet->GetStyle();
+    if ( mnLines == nMaxLines )
         nBits &= ~WB_VSCROLL;
     else
         nBits |= WB_VSCROLL;
-    aLineEndSet->SetStyle( nBits );
+    mpLineEndSet->SetStyle( nBits );
 
-    Size aSize( aBmpSize );
+    Size aSize( maBmpSize );
     aSize.Width()  += 6;
     aSize.Height() += 6;
-    aSize = aLineEndSet->CalcWindowSizePixel( aSize );
-    aLineEndSet->SetPosSizePixel( Point( 2, 2 ), aSize );
+    aSize = mpLineEndSet->CalcWindowSizePixel( aSize );
+    mpLineEndSet->SetPosSizePixel( Point( 2, 2 ), aSize );
     aSize.Width()  += 4;
     aSize.Height() += 4;
     SetOutputSizePixel( aSize );
@@ -452,8 +452,8 @@ void SvxLineEndWindow::GetFocus()
     SfxPopupWindow::GetFocus();
     // Grab the focus to the line ends value set so that it can be controlled
     // with the keyboard.
-    if ( aLineEndSet )
-        aLineEndSet->GrabFocus();
+    if ( mpLineEndSet )
+        mpLineEndSet->GrabFocus();
 }
 
 SvxLineEndToolBoxControl::SvxLineEndToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox &rTbx ) :
