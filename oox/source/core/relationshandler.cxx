@@ -73,11 +73,11 @@ Reference< XFastContextHandler > RelationsFragment::createFastChildContext(
             if( !aRelation.maId.isEmpty() && !aRelation.maType.isEmpty() && !aRelation.maTarget.isEmpty() )
             {
                 sal_Int32 nTargetMode = aAttribs.getToken( XML_TargetMode, XML_Internal );
-                OSL_ENSURE( (nTargetMode == XML_Internal) || (nTargetMode == XML_External),
+                SAL_WARN_IF( (nTargetMode != XML_Internal) && (nTargetMode != XML_External), "oox",
                     "RelationsFragment::createFastChildContext - unexpected target mode, assuming external" );
                 aRelation.mbExternal = nTargetMode != XML_Internal;
 
-                OSL_ENSURE( mxRelations->count( aRelation.maId ) == 0,
+                SAL_WARN_IF( mxRelations->count( aRelation.maId ) != 0, "oox",
                     "RelationsFragment::createFastChildContext - relation identifier exists already" );
                 mxRelations->insert( ::std::map< OUString, Relation >::value_type( aRelation.maId, aRelation ) );
             }
