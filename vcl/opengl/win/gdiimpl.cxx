@@ -17,6 +17,7 @@
 #include <win/salframe.h>
 #include <win/salinst.h>
 #include <epoxy/wgl.h>
+#include "ControlCacheKey.hxx"
 
 static std::vector<HGLRC> g_vShareList;
 static bool g_bAnyCurrent;

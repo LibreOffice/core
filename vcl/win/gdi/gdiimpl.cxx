@@ -38,6 +38,7 @@
 
 #include "outdata.hxx"
 #include "win/salids.hrc"
+#include "ControlCacheKey.hxx"
 
 #if defined _MSC_VER
 #ifndef min
