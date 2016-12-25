@@ -15,6 +15,7 @@
 #include "openglgdiimpl.hxx"
 #include "win/salgdi.h"
 #include <vcl/opengl/OpenGLContext.hxx>
+#include "ControlCacheKey.hxx"
 
 class WinOpenGLSalGraphicsImpl : public OpenGLSalGraphicsImpl
 {

@@ -48,6 +48,7 @@
 #include "basegfx/matrix/b2dhommatrixtools.hxx"
 #include "basegfx/polygon/b2dpolypolygoncutter.hxx"
 #include "basegfx/polygon/b2dtrapezoid.hxx"
+#include "ControlCacheKey.hxx"
 
 #undef SALGDI2_TESTTRANS
 

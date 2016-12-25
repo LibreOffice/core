@@ -44,6 +44,7 @@
 #include <vcl/decoview.hxx>
 
 #include <vcl/opengl/OpenGLHelper.hxx>
+#include "ControlCacheKey.hxx"
 
 typedef struct _cairo_font_options cairo_font_options_t;
 const char* const tabPrelitDataName="libreoffice-tab-is-prelit";
