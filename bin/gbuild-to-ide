@@ -46,6 +46,14 @@ class GbuildLib(GbuildLinkTarget):
         """Return the short name of target based on the Library_* makefile name"""
         return 'Library %s' % self.name
 
+    def short_name(self):
+        """Return the short name of target based on the Library_* makefile name"""
+        return 'Library %s' % self.name
+
+    def module(self):
+        """Return module name """
+        return self.location[self.location.rindex('/')+1:]
+
     def target_name(self):
         return 'Library_%s' % self.name
 
@@ -60,6 +68,10 @@ class GbuildTest(GbuildLinkTarget):
         """Return the short name of target based n the CppunitTest_* makefile names"""
         return 'CppunitTest %s' % self.name
 
+    def module(self):
+        """Return module name """
+        return self.location[self.location.rindex('/')+1:]
+
     def target_name(self):
         return 'CppunitTest_%s' % self.name
 
@@ -70,6 +82,10 @@ class GbuildExe(GbuildLinkTarget):
     def short_name(self):
         """Return the short name of target based on the Executable_* makefile name"""
         return 'Executable %s' % self.name
+
+    def module(self):
+        """Return module name """
+        return self.location[self.location.rindex('/')+1:]
 
     def target_name(self):
         return 'Executable_%s' % self.name
@@ -721,9 +737,13 @@ class XcodeIntegrationGenerator(IdeIntegrationGenerator):
         return list(self.sourceRefList.keys())
 
     def generate_sub_main_group(self, modulename):
+        try:
+          name = modulename.module()
+        except:
+          name = 'target'
         result = {'isa': 'PBXGroup',
                   'children': self.generate_sub_main_children(modulename),
-                  'name': 'Source',
+                  'name': name,
                   'path': modulename,
                   'sourceTree': '<group>'}
         return result
@@ -754,13 +774,13 @@ class XcodeIntegrationGenerator(IdeIntegrationGenerator):
         return result
 
     def generate_project(self, target):
-        self.rootObjectId = "X0000001" # self.generate_id()
-        self.mainGroupId = "X0000003" # self.generate_id()
-        self.subMainGroupId = "X0000005" # self.generate_id()
-        self.productReferenceId = "X0000006" # self.generate_id()
+        self.rootObjectId = self.generate_id()
+        self.mainGroupId = self.generate_id()
+        self.subMainGroupId = self.generate_id()
+        self.productReferenceId = self.generate_id()
         self.productRefGroupId = self.generate_id()
-        self.productGroupId = "X0000004" # self.generate_id()
-        self.targetId = "X9000001" # self.generate_id()
+        self.productGroupId = self.generate_id()
+        self.targetId = self.generate_id()
         self.targetRefId = self.generate_id()
         self.build_source_list(target)
         self.sourcesBuildPhaseId = self.generate_id()
@@ -782,13 +802,12 @@ class XcodeIntegrationGenerator(IdeIntegrationGenerator):
                           'fileRef': ref}
             path = self.sourceRefList[ref]['path']
             try:
-                path = path[path.index('/')+1:]
                 name = path[path.rindex('/')+1:]
             except:
                 name = path
             objects[ref] = {'isa': 'PBXFileReference',
                             'lastKnownFileType': self.sourceRefList[ref]['lastKnownFileType'],
-                            'path': path,
+                            'path': '../' + path,
                             'name': name,
                             'sourceTree': '<group>'}
         project = {'archiveVersion': 1,
