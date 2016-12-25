@@ -226,59 +226,6 @@ namespace o3tl
     template<> struct typed_flags<ControlState> : is_typed_flags<ControlState, 0xc06f> {};
 }
 
-class ControlCacheKey
-{
-public:
-    ControlType mnType;
-    ControlPart mnPart;
-    ControlState mnState;
-    Size maSize;
-
-    ControlCacheKey(ControlType nType, ControlPart nPart, ControlState nState, const Size& rSize)
-        : mnType(nType)
-        , mnPart(nPart)
-        , mnState(nState)
-        , maSize(rSize)
-    {}
-
-    bool operator==(ControlCacheKey const& aOther) const
-    {
-        return mnType == aOther.mnType
-            && mnPart == aOther.mnPart
-            && mnState == aOther.mnState
-            && maSize.Width() == aOther.maSize.Width()
-            && maSize.Height() == aOther.maSize.Height();
-    }
-
-    bool canCacheControl()
-    {
-        switch(mnType)
-        {
-            case ControlType::Checkbox:
-            case ControlType::Radiobutton:
-            case ControlType::ListNode:
-            case ControlType::Slider:
-            case ControlType::Progress:
-            // FIXME: these guys have complex state hidden in ImplControlValue
-            // structs which affects rendering, needs to be a and needs to be
-            // part of the key to our cache.
-            case ControlType::Spinbox:
-            case ControlType::SpinButtons:
-            case ControlType::TabItem:
-                return false;
-
-            case ControlType::Menubar:
-                if (mnPart == ControlPart::Entire)
-                    return false;
-                break;
-
-            default:
-                break;
-        }
-        return true;
-    }
-};
-
 /* ButtonValue:
  *
  *   Identifies the tri-state value options

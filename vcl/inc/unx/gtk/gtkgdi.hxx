@@ -27,6 +27,7 @@
 #include <gdk/gdkkeysyms.h>
 
 #include <unx/gtk/gtkframe.hxx>
+#include "ControlCacheKey.hxx"
 
 #if GTK_CHECK_VERSION(3,0,0)
 
