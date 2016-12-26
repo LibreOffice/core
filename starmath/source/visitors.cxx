@@ -176,7 +176,7 @@ SmCaretDrawingVisitor::SmCaretDrawingVisitor( OutputDevice& rDevice,
 
 void SmCaretDrawingVisitor::Visit( SmTextNode* pNode )
 {
-    long i = maPos.Index;
+    long i = maPos.nIndex;
 
     mrDev.SetFont( pNode->GetFont( ) );
 
@@ -212,7 +212,7 @@ void SmCaretDrawingVisitor::DefaultVisit( SmNode* pNode )
     SmNode* pLine = SmCursor::FindTopMostNodeInLine( pNode );
 
     //Find coordinates
-    long left = pNode->GetLeft( ) + maOffset.X( ) + ( maPos.Index == 1 ? pNode->GetWidth( ) : 0 );
+    long left = pNode->GetLeft( ) + maOffset.X( ) + ( maPos.nIndex == 1 ? pNode->GetWidth( ) : 0 );
     long top = pLine->GetTop( ) + maOffset.Y( );
     long height = pLine->GetHeight( );
     long left_line = pLine->GetLeft( ) + maOffset.X( );
@@ -241,7 +241,7 @@ void SmCaretPos2LineVisitor::Visit( SmTextNode* pNode )
     //Save device state
     mpDev->Push( PushFlags::FONT | PushFlags::TEXTCOLOR );
 
-    long i = maPos.Index;
+    long i = maPos.nIndex;
 
     mpDev->SetFont( pNode->GetFont( ) );
 
@@ -260,7 +260,7 @@ void SmCaretPos2LineVisitor::DefaultVisit( SmNode* pNode )
 {
     //Vertical line ( code from SmCaretDrawingVisitor )
     Point p1 = pNode->GetTopLeft( );
-    if( maPos.Index == 1 )
+    if( maPos.nIndex == 1 )
         p1.Move( pNode->GetWidth( ), 0 );
 
     maLine = SmCaretLine( p1.X( ), p1.Y( ), pNode->GetHeight( ) );
@@ -528,10 +528,10 @@ SmSetSelectionVisitor::SmSetSelectionVisitor( SmCaretPos startPos, SmCaretPos en
     //Visit root node, this is special as this node cannot be selected, but its children can!
     if(pTree->GetType() == NTABLE){
         //Change state if maStartPos is in front of this node
-        if( maStartPos.pSelectedNode == pTree && maStartPos.Index == 0 )
+        if( maStartPos.pSelectedNode == pTree && maStartPos.nIndex == 0 )
             mbSelecting = !mbSelecting;
         //Change state if maEndPos is in front of this node
-        if( maEndPos.pSelectedNode == pTree && maEndPos.Index == 0 )
+        if( maEndPos.pSelectedNode == pTree && maEndPos.nIndex == 0 )
             mbSelecting = !mbSelecting;
         SAL_WARN_IF(mbSelecting, "starmath", "Caret positions needed to set mbSelecting about, shouldn't be possible!");
 
@@ -575,10 +575,10 @@ void SmSetSelectionVisitor::SetSelectedOnAll( SmNode* pSubTree, bool IsSelected 
 
 void SmSetSelectionVisitor::DefaultVisit( SmNode* pNode ) {
     //Change state if maStartPos is in front of this node
-    if( maStartPos.pSelectedNode == pNode && maStartPos.Index == 0 )
+    if( maStartPos.pSelectedNode == pNode && maStartPos.nIndex == 0 )
         mbSelecting = !mbSelecting;
     //Change state if maEndPos is in front of this node
-    if( maEndPos.pSelectedNode == pNode && maEndPos.Index == 0 )
+    if( maEndPos.pSelectedNode == pNode && maEndPos.nIndex == 0 )
         mbSelecting = !mbSelecting;
 
     //Cache current state
@@ -621,12 +621,12 @@ void SmSetSelectionVisitor::DefaultVisit( SmNode* pNode ) {
     }
 
     //Change state if maStartPos is after this node
-    if( maStartPos.pSelectedNode == pNode && maStartPos.Index == 1 )
+    if( maStartPos.pSelectedNode == pNode && maStartPos.nIndex == 1 )
     {
         mbSelecting = !mbSelecting;
     }
     //Change state if maEndPos is after of this node
-    if( maEndPos.pSelectedNode == pNode && maEndPos.Index == 1 )
+    if( maEndPos.pSelectedNode == pNode && maEndPos.nIndex == 1 )
     {
         mbSelecting = !mbSelecting;
     }
@@ -635,10 +635,10 @@ void SmSetSelectionVisitor::DefaultVisit( SmNode* pNode ) {
 void SmSetSelectionVisitor::VisitCompositionNode( SmStructureNode* pNode )
 {
     //Change state if maStartPos is in front of this node
-    if( maStartPos.pSelectedNode == pNode && maStartPos.Index == 0 )
+    if( maStartPos.pSelectedNode == pNode && maStartPos.nIndex == 0 )
         mbSelecting = !mbSelecting;
     //Change state if maEndPos is in front of this node
-    if( maEndPos.pSelectedNode == pNode && maEndPos.Index == 0 )
+    if( maEndPos.pSelectedNode == pNode && maEndPos.nIndex == 0 )
         mbSelecting = !mbSelecting;
 
     //Cache current state
@@ -656,10 +656,10 @@ void SmSetSelectionVisitor::VisitCompositionNode( SmStructureNode* pNode )
     pNode->SetSelected( WasSelecting && mbSelecting );
 
     //Change state if maStartPos is after this node
-    if( maStartPos.pSelectedNode == pNode && maStartPos.Index == 1 )
+    if( maStartPos.pSelectedNode == pNode && maStartPos.nIndex == 1 )
         mbSelecting = !mbSelecting;
     //Change state if maEndPos is after of this node
-    if( maEndPos.pSelectedNode == pNode && maEndPos.Index == 1 )
+    if( maEndPos.pSelectedNode == pNode && maEndPos.nIndex == 1 )
         mbSelecting = !mbSelecting;
 }
 
@@ -667,9 +667,9 @@ void SmSetSelectionVisitor::Visit( SmTextNode* pNode ) {
     long    i1 = -1,
             i2 = -1;
     if( maStartPos.pSelectedNode == pNode )
-        i1 = maStartPos.Index;
+        i1 = maStartPos.nIndex;
     if( maEndPos.pSelectedNode == pNode )
-        i2 = maEndPos.Index;
+        i2 = maEndPos.nIndex;
 
     long start, end;
     pNode->SetSelected(true);

@@ -20,9 +20,10 @@
 
 /** Representation of caret position with an equation */
 struct SmCaretPos{
-    SmCaretPos(SmNode* selectedNode = nullptr, int iIndex = 0) {
-        pSelectedNode = selectedNode;
-        Index = iIndex;
+    SmCaretPos(SmNode* selectedNode = nullptr, int iIndex = 0)
+        : pSelectedNode(selectedNode)
+        , nIndex(iIndex)
+    {
     }
     /** Selected node */
     SmNode* pSelectedNode;
@@ -36,11 +37,11 @@ struct SmCaretPos{
      */
     //TODO: Special cases for SmBlankNode is needed
     //TODO: Consider forgetting about the todo above... As it's really unpleasant.
-    int Index;
+    int nIndex;
     /** True, if this is a valid caret position */
     bool IsValid() const { return pSelectedNode != nullptr; }
     bool operator==(const SmCaretPos &pos) const {
-        return pos.pSelectedNode == pSelectedNode && Index == pos.Index;
+        return pos.pSelectedNode == pSelectedNode && nIndex == pos.nIndex;
     }
     /** Get the caret position after pNode, regardless of pNode
      *
