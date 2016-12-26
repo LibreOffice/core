@@ -186,18 +186,6 @@ Scenario& SheetScenarios::createScenario()
 void SheetScenarios::finalizeImport()
 {
     maScenarios.forEachMem( &Scenario::finalizeImport );
-
-    // activate a scenario
-    try
-    {
-        Reference< XScenariosSupplier > xScenariosSupp( getSheetFromDoc( mnSheet ), UNO_QUERY_THROW );
-        Reference< XIndexAccess > xScenariosIA( xScenariosSupp->getScenarios(), UNO_QUERY_THROW );
-        Reference< XScenario > xScenario( xScenariosIA->getByIndex( maModel.mnShown ), UNO_QUERY_THROW );
-        xScenario->apply();
-    }
-    catch( Exception& )
-    {
-    }
 }
 
 ScenarioBuffer::ScenarioBuffer( const WorkbookHelper& rHelper ) :
