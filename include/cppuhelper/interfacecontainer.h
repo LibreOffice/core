@@ -410,7 +410,7 @@ private:
             equalImpl equal;
             if( equal( iter->first, rKey ) )
                 break;
-            iter++;
+            ++iter;
         }
         return iter;
     }
