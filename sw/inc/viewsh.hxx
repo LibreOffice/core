@@ -416,6 +416,8 @@ public:
 
     void SetProtectForm( bool _bProtectForm );
 
+    void SetMsWordTextFormat( bool _bMsWordTextFormat );
+
     // DOCUMENT COMPATIBILITY FLAGS END
 
     // Calls Idle-formatter of Layout.
