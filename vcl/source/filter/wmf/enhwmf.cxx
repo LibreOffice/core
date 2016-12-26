@@ -1568,17 +1568,20 @@ bool EnhWMFReader::ReadEnhWMF()
                     bool bOffStringSane = nOffString <= nEndPos - nCurPos;
                     if (bLenSane && bOffStringSane)
                     {
-                        if ( offDx && (( nCurPos + offDx + nLen * 4 ) <= nNextPos ) )
+                        sal_Int32 nDxSize = nLen * ((nOptions & ETO_PDY) ? 8 : 4);
+                        if ( offDx && (( nCurPos + offDx + nDxSize ) <= nNextPos ) && nNextPos <= nEndPos )
                         {
                             pWMF->Seek( nCurPos + offDx );
-                            if ( ( nLen * sizeof(sal_uInt32) ) <= ( nEndPos - pWMF->Tell() ) )
+                            aDX.resize(nLen);
+                            for (sal_Int32 i = 0; i < nLen; ++i)
                             {
-                                aDX.resize(nLen);
-                                for (sal_Int32 i = 0; i < nLen; ++i)
+                                sal_Int32 val(0);
+                                pWMF->ReadInt32(val);
+                                aDX[i] = val;
+                                if (nOptions & ETO_PDY)
                                 {
-                                    sal_Int32 val(0);
                                     pWMF->ReadInt32(val);
-                                    aDX[i] = val;
+                                    // TODO: Use Dy value
                                 }
                             }
                         }
