@@ -84,7 +84,7 @@ OUString lcl_dbg_out(const std::unordered_map<tKey, tMember, fHashFunction> & rM
 
     typename std::unordered_map<tKey, tMember, fHashFunction>::const_iterator aIt;
 
-    for (aIt = rMap.begin(); aIt != rMap.end(); aIt++)
+    for (aIt = rMap.begin(); aIt != rMap.end(); ++aIt)
     {
         if (aIt != rMap.begin())
             aResult += ", ";
