@@ -134,7 +134,7 @@ static const std::vector< FormatEntry > g_TranslTable {
     // SotClipboardFormatId::SIMPLE_FILE
         FormatEntry("application/x-openoffice-file;windows_formatname=\"FileName\"", "FileName", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
     // SotClipboardFormatId::RTF
-        FormatEntry("text/richtext", "Rich Text Format", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("text/rtf", "Rich Text Format", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
     // SotClipboardFormatId::DRAWING
         FormatEntry("application/x-openoffice-drawing;windows_formatname=\"Drawing Format\"", "Drawing Format", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
     // SotClipboardFormatId::SVXB
