@@ -233,6 +233,7 @@ public:
 
     void testTdf100458();
     void testTdf100709XLSX();
+    void testTdf97598XLSX();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testBooleanFormatXLSX);
@@ -347,6 +348,7 @@ public:
 
     CPPUNIT_TEST(testTdf100458);
     CPPUNIT_TEST(testTdf100709XLSX);
+    CPPUNIT_TEST(testTdf97598XLSX);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -3813,6 +3815,19 @@ void ScFiltersTest::testTdf100709XLSX()
 
     xDocSh->DoClose();
 }
+
+void ScFiltersTest::testTdf97598XLSX()
+{
+    ScDocShellRef xDocSh = loadDoc("tdf97598_scenarios.", FORMAT_XLSX);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load tdf97598_secenarios.xlsx", xDocSh.Is());
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+    OUString aStr = rDoc.GetString(0, 0, 0); // A1
+    CPPUNIT_ASSERT_EQUAL(OUString("Cell A1"), aStr);
+
+    xDocSh->DoClose();
+}
+
 
 ScFiltersTest::ScFiltersTest()
       : ScBootstrapFixture( "sc/qa/unit/data" )
