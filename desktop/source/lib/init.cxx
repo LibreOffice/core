@@ -394,7 +394,7 @@ struct RectangleAndPart
     static RectangleAndPart Create(const std::string& rPayload)
     {
         RectangleAndPart aRet;
-        if (rPayload.find("EMPTY") == 0) // payload starts with "EMPTY"
+        if (rPayload.compare(0, 5, "EMPTY") == 0) // payload starts with "EMPTY"
         {
             aRet.m_aRectangle = Rectangle(0, 0, SfxLokHelper::MaxTwips, SfxLokHelper::MaxTwips);
             if (comphelper::LibreOfficeKit::isPartInInvalidation())
