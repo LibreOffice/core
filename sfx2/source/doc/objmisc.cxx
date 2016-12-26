@@ -1169,8 +1169,13 @@ void SfxObjectShell::FinishedLoading( SfxLoadedFlags nFlags )
         if ( pImpl->nEventId != SfxEventHintId::NONE )
             PostActivateEvent_Impl(SfxViewFrame::GetFirst(this));
     }
+
+    PostFinishedLoading( pMedium );
 }
 
+void SfxObjectShell::PostFinishedLoading( SfxMedium* pMed )
+{
+}
 
 void SfxObjectShell::TemplateDisconnectionAfterLoad()
 {

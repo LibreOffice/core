@@ -461,6 +461,7 @@ public:
     // Transfer IFace
     bool                        IsAbortingImport() const;
     void                        FinishedLoading( SfxLoadedFlags nWhich = SfxLoadedFlags::ALL );
+    virtual void                PostFinishedLoading( SfxMedium* pMed );
     void                        TemplateDisconnectionAfterLoad();
     bool                        IsLoading() const;
     bool                        IsLoadingFinished() const;

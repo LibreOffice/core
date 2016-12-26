@@ -138,6 +138,7 @@ class DocumentSettingManager :
     bool mbUnixForceZeroExtLeading                  : 1;   // #i60945#
     bool mbTabRelativeToIndent                      : 1;   // #i24363# tab stops relative to indent
     bool mbProtectForm                              : 1;
+    bool mbMsWordTextFormat                         : 1;   // tdf#104349
     bool mbInvertBorderSpacing                      : 1;
     bool mbCollapseEmptyCellPara                    : 1;
     bool mbTabAtLeftIndentForParagraphsInList;             // #i89181# - see above

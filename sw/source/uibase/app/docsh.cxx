@@ -1156,6 +1156,21 @@ void SwDocShell::LoadingFinished()
     }
 }
 
+void SwDocShell::PostFinishedLoading( SfxMedium* pMed )
+{
+    //Enable MS Word-compatibility option for MS Word files
+    //It can be override in *::ReadUserDataSequence()
+    OUString Type = pMed->GetFilter()->GetTypeName();
+    if ( Type == "writer_MS_Word_95" ||
+         Type == "writer_MS_Word_97" ||
+         Type == "writer_MS_Word_2003_XML" ||
+         Type == "writer_MS_Word_2007" ||
+         Type == "writer_MS_Word_2007_Template" )
+    {
+        GetDoc()->getIDocumentSettingAccess().set( DocumentSettingId::MS_WORD_TEXT_FORMAT, true );
+    }
+}
+
 // a Transfer is cancelled (is called from SFX)
 void SwDocShell::CancelTransfers()
 {
