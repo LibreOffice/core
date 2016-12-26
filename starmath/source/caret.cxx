@@ -17,7 +17,7 @@ SmCaretPosGraph::~SmCaretPosGraph() = default;
 SmCaretPosGraphEntry* SmCaretPosGraph::Add(SmCaretPos pos,
                                            SmCaretPosGraphEntry* left)
 {
-    SAL_WARN_IF( pos.Index < 0, "starmath", "Index shouldn't be -1!" );
+    SAL_WARN_IF( pos.nIndex < 0, "starmath", "nIndex shouldn't be -1!" );
     auto entry = o3tl::make_unique<SmCaretPosGraphEntry>(pos, left, nullptr);
     SmCaretPosGraphEntry* e = entry.get();
     //Set Left and Right to point to the entry itself if they are NULL

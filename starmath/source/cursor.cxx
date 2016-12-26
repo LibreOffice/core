@@ -184,7 +184,7 @@ void SmCursor::DeletePrev(OutputDevice* pDev){
     assert(nLineOffset >= 0);
 
     //If we're in front of a node who's parent is a TABLE
-    if(pLineParent->GetType() == NTABLE && mpPosition->CaretPos.Index == 0 && nLineOffset > 0){
+    if(pLineParent->GetType() == NTABLE && mpPosition->CaretPos.nIndex == 0 && nLineOffset > 0){
         //Now we can merge with nLineOffset - 1
         BeginEdit();
         //Line to merge things into, so we can delete pLine
@@ -342,13 +342,13 @@ SmNodeList::iterator SmCursor::FindPositionInLineList(SmNodeList* pLineList,
             if((*it)->GetType() == NTEXT)
             {
                 //Split textnode if needed
-                if(rCaretPos.Index > 0)
+                if(rCaretPos.nIndex > 0)
                 {
                     SmTextNode* pText = static_cast<SmTextNode*>(rCaretPos.pSelectedNode);
-                    if (rCaretPos.Index == pText->GetText().getLength())
+                    if (rCaretPos.nIndex == pText->GetText().getLength())
                         return ++it;
-                    OUString str1 = pText->GetText().copy(0, rCaretPos.Index);
-                    OUString str2 = pText->GetText().copy(rCaretPos.Index);
+                    OUString str1 = pText->GetText().copy(0, rCaretPos.nIndex);
+                    OUString str2 = pText->GetText().copy(rCaretPos.nIndex);
                     pText->ChangeText(str1);
                     ++it;
                     //Insert str2 as new text node
@@ -1462,12 +1462,12 @@ bool SmCursor::IsAtTailOfBracket(SmBracketType eBracketType, SmBraceNode** ppBra
 
     if (pNode->GetType() == NTEXT) {
         SmTextNode* pTextNode = static_cast<SmTextNode*>(pNode);
-        if (pos.Index < pTextNode->GetText().getLength()) {
+        if (pos.nIndex < pTextNode->GetText().getLength()) {
             // The cursor is on a text node and at the middle of it.
             return false;
         }
     } else {
-        if (pos.Index < 1) {
+        if (pos.nIndex < 1) {
             return false;
         }
     }
@@ -1533,9 +1533,9 @@ bool SmCursor::IsAtTailOfBracket(SmBracketType eBracketType, SmBraceNode** ppBra
 void SmCursor::MoveAfterBracket(SmBraceNode* pBraceNode)
 {
     mpPosition->CaretPos.pSelectedNode = pBraceNode;
-    mpPosition->CaretPos.Index = 1;
+    mpPosition->CaretPos.nIndex = 1;
     mpAnchor->CaretPos.pSelectedNode = pBraceNode;
-    mpAnchor->CaretPos.Index = 1;
+    mpAnchor->CaretPos.nIndex = 1;
     RequestRepaint();
 }
 
