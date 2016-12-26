@@ -904,6 +904,17 @@ void SwViewShell::SetProtectForm( bool _bProtectForm )
     rIDSA.set(DocumentSettingId::PROTECT_FORM, _bProtectForm );
 }
 
+void SwViewShell::SetMsWordTextFormat( bool _bMsWordTextFormat )
+{
+    IDocumentSettingAccess& rIDSA = getIDocumentSettingAccess();
+    if (rIDSA.get(DocumentSettingId::MS_WORD_TEXT_FORMAT) != _bMsWordTextFormat)
+    {
+        SwWait aWait(*GetDoc()->GetDocShell(), true);
+        rIDSA.set(DocumentSettingId::MS_WORD_TEXT_FORMAT, _bMsWordTextFormat);
+        const SwInvalidateFlags nInv = SwInvalidateFlags::PrtArea | SwInvalidateFlags::Size | SwInvalidateFlags::Table | SwInvalidateFlags::Section;
+        lcl_InvalidateAllContent(*this, nInv);
+    }
+}
 
 void SwViewShell::Reformat()
 {
