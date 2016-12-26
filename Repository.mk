@@ -170,6 +170,7 @@ $(eval $(call gb_Helper_register_libraries,STLLIBS, \
 ))
 
 $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
+    OGLTrans \
     acceptor \
     binaryurp \
     cairocanvas \
@@ -191,6 +192,7 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
     nullcanvas \
     passwordcontainer \
     simplecanvas \
+    slideshow \
     streams \
     textinstream \
     textoutstream \
@@ -212,6 +214,7 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
     basegfx_s \
     ooopathutils \
     salcpprt \
+    sldshw_s \
     vclmain \
     udm \
 ))

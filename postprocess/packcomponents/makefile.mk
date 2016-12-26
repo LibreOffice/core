@@ -102,6 +102,7 @@ my_components = \
     component/sd/util/sd \
     component/sd/util/sdd \
     component/sfx2/util/sfx \
+    component/slideshow/util/slideshow \
     component/sot/util/sot \
     component/svgio/svgio \
     component/starmath/util/sm \
@@ -167,7 +168,6 @@ my_components = \
     scn \
     scriptframe \
     sdbc2 \
-    slideshow \
     spl \
     srtrs1 \
     stringresource \
@@ -274,7 +274,7 @@ my_components += kde4be1
 .END
 
 .IF "$(ENABLE_OPENGL)" == "TRUE"
-my_components += ogltrans
+my_components += component/slideshow/source/engine/OGLTrans/ogltrans
 .END
 
 .IF "$(SOLAR_JAVA)" == "TRUE"

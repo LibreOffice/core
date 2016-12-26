@@ -468,6 +468,7 @@ gb_Library_PLAINLIBS_NONE += \
 	ddraw \
 	gdi32 \
 	gdiplus \
+	glu32 \
 	gnu_getopt \
 	imm32\
 	kernel32 \
@@ -477,6 +478,7 @@ gb_Library_PLAINLIBS_NONE += \
 	moldname \
 	ole32 \
 	oleaut32 \
+	opengl32 \
 	shell32 \
 	strmiids \
 	user32 \

@@ -60,6 +60,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     sax \
     sd \
     sfx2 \
+    slideshow \
     sot \
     starmath \
     svgio \

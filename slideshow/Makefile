@@ -19,31 +19,14 @@
 #  
 #**************************************************************
 
+ifeq ($(strip $(SOLARENV)),)
+$(error No environment set!)
+endif
 
+gb_PARTIALBUILD := T
+GBUILDDIR := $(SOLARENV)/gbuild
+include $(GBUILDDIR)/gbuild.mk
 
-PRJ=..$/..$/..
+$(eval $(call gb_Module_make_global_targets,$(shell ls $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/Module*.mk)))
 
-PRJNAME=slideshow
-TARGET=activities
-ENABLE_EXCEPTIONS=TRUE
-PRJINC=..$/..
-
-
-# --- Settings -----------------------------------------------------------
-
-.INCLUDE :	settings.mk
-.INCLUDE : $(PRJ)$/util$/makefile.pmk
-
-# --- Common ----------------------------------------------------------
-
-SLOFILES =	$(SLO)$/activitybase.obj 					\
-            $(SLO)$/activitiesfactory.obj 				\
-            $(SLO)$/continuousactivitybase.obj			\
-            $(SLO)$/continuouskeytimeactivitybase.obj	\
-            $(SLO)$/discreteactivitybase.obj			\
-            $(SLO)$/simplecontinuousactivitybase.obj
-
-
-# ==========================================================================
-
-.INCLUDE :	target.mk
+# vim: set noet sw=4 ts=4:

@@ -19,8 +19,6 @@
  *
  *************************************************************/
 
-#include "precompiled_slideshow.hxx"
-
 #include "gtest/gtest.h"
 
 int main(int argc, char **argv)

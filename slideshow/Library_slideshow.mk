@@ -19,29 +19,42 @@
 #  
 #**************************************************************
 
+ifeq ($(OS),OS2)
+	SLIDESHOW_NAME := slidesho
+else
+	SLIDESHOW_NAME := slideshow
+endif
 
 
-PRJ=..$/..$/..
+$(eval $(call gb_Library_Library,$(SLIDESHOW_NAME)))
 
-PRJNAME=slideshow
-TARGET=slide
-ENABLE_EXCEPTIONS=TRUE
-PRJINC=..$/..
+$(eval $(call gb_Library_set_componentfile,$(SLIDESHOW_NAME),slideshow/util/slideshow))
 
-# --- Settings -----------------------------------------------------------
+$(eval $(call gb_Library_add_linked_libs,$(SLIDESHOW_NAME),\
+	avmedia \
+	basegfx \
+	canvastools \
+	comphelper \
+	cppcanvas \
+	cppuhelper \
+	cppu \
+	sal \
+	stl \
+	svt \
+	tl \
+	utl \
+	vcl \
+	$(gb_STDLIBS) \
+))
 
-.INCLUDE :	settings.mk
-.INCLUDE : $(PRJ)$/util$/makefile.pmk
+$(eval $(call gb_Library_add_linked_static_libs,$(SLIDESHOW_NAME),\
+	sldshw_s \
+))
 
-# --- Common ----------------------------------------------------------
+# List this file again, even though it's in the static lib, so that
+# component_getFactory and component_getImplementationEnvironment are exported:
+$(eval $(call gb_Library_add_exception_objects,$(SLIDESHOW_NAME),\
+	slideshow/source/engine/slideshowimpl \
+))
 
-SLOFILES =	$(SLO)$/layer.obj \
-            $(SLO)$/layermanager.obj \
-            $(SLO)$/shapemanagerimpl.obj \
-            $(SLO)$/slideanimations.obj \
-            $(SLO)$/slideimpl.obj  \
-            $(SLO)$/userpaintoverlay.obj
-
-# ==========================================================================
-
-.INCLUDE :	target.mk
+# vim: set noet sw=4 ts=4:
