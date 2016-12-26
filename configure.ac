@@ -1633,7 +1633,8 @@ AC_ARG_WITH(system-cairo,
 AC_ARG_WITH(system-epoxy,
     AS_HELP_STRING([--with-system-epoxy],
         [Use epoxy libraries already on system.  Happens automatically for
-         --enable-gtk3.]))
+         --enable-gtk3.]),,
+       [with_system_epoxy="$with_system_libs"])
 
 AC_ARG_WITH(myspell-dicts,
     AS_HELP_STRING([--with-myspell-dicts],
@@ -10083,6 +10084,11 @@ if ! "$TOUCH" -h warn 2>/dev/null > /dev/null; then
 fi
 
 dnl ===================================================================
+dnl Check for system epoxy
+dnl ===================================================================
+libo_CHECK_SYSTEM_MODULE([epoxy], [EPOXY], [epoxy >= 1.2], ["-I${WORKDIR}/UnpackedTarball/epoxy/include"])
+
+dnl ===================================================================
 dnl Set vcl option: coordinate device in double or sal_Int32
 dnl ===================================================================
 
@@ -10124,6 +10130,11 @@ if test "x$enable_gtk3" = "xyes"; then
     GTK3_CFLAGS=$(printf '%s' "$GTK3_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
     FilterLibs "${GTK3_LIBS}"
     GTK3_LIBS="${filteredlibs}"
+
+    dnl We require egl only for the gtk3 plugin. Otherwise we use glx.
+    if test "$with_system_epoxy" != "yes"; then
+        AC_CHECK_LIB(EGL, eglMakeCurrent, [:], AC_MSG_ERROR([libEGL required.]))
+    fi
 fi
 AC_SUBST(GTK3_LIBS)
 AC_SUBST(GTK3_CFLAGS)
@@ -11712,14 +11723,6 @@ fi
 AC_SUBST(SYSTEM_CAIRO)
 AC_SUBST(CAIRO_CFLAGS)
 AC_SUBST(CAIRO_LIBS)
-
-dnl ===================================================================
-dnl Check for system epoxy
-dnl ===================================================================
-libo_CHECK_SYSTEM_MODULE([epoxy], [EPOXY], [epoxy >= 1.2], ["-I${WORKDIR}/UnpackedTarball/epoxy/include"])
-if test "$with_system_epoxy" = "no"; then
-    AC_CHECK_LIB(EGL, eglMakeCurrent, [:], AC_MSG_ERROR([libEGL required.]))
-fi
 
 dnl ===================================================================
 dnl Test whether to use avahi
