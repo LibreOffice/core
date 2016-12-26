@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a6eadb0_dcaa6185",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2016-12-26T23:41:17Z",
+      "side": 1,
+      "message": "Looks like the solution must be \"rebased\" to use the latest SDK 10: Effectively, this line is added:\n\n \u003cWindowsTargetPlatformVersion\u003e10.0.14393.0\u003c/WindowsTargetPlatformVersion\u003e\n\nE.g. this diff fixed the lcms2 build: [1].\n\n* [1] http://paste.openstack.org/show/593405",
+      "range": {
+        "startLine": 19,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 3
+      },
+      "revId": "dffbb10da472d85203310cf17847472168140679",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
