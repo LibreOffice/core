@@ -59,6 +59,7 @@ public:
     void testWorldTransformFontSize();
     void testTdf93750();
     void testTdf99402();
+    void testTdf39894();
 
     CPPUNIT_TEST_SUITE(WmfTest);
     CPPUNIT_TEST(globalSetUp);
@@ -69,6 +70,7 @@ public:
     CPPUNIT_TEST(testWorldTransformFontSize);
     CPPUNIT_TEST(testTdf93750);
     CPPUNIT_TEST(testTdf99402);
+    CPPUNIT_TEST(testTdf39894);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -264,6 +266,27 @@ void WmfTest::testTdf99402()
     WinMtfFontStyle fontStyle(logfontw);
 
     CPPUNIT_ASSERT_EQUAL(RTL_TEXTENCODING_SYMBOL, fontStyle.aFont.GetCharSet());
+}
+
+void WmfTest::testTdf39894()
+{
+    OUString files[] = { "tdf39894.wmf", "tdf39894.emf" };
+    for (const auto& file: files)
+    {
+        SvFileStream aFileStream(getFullUrl(file), StreamMode::READ);
+        GDIMetaFile aGDIMetaFile;
+        ReadWindowMetafile(aFileStream, aGDIMetaFile);
+
+        MetafileXmlDump dumper;
+        xmlDocPtr pDoc = dumper.dumpAndParse(aGDIMetaFile);
+
+        CPPUNIT_ASSERT(pDoc);
+
+        // The x position of the second text must take into account
+        // the previous text's last Dx (previously was ~300)
+        auto x = getXPath(pDoc, "/metafile/push[2]/textarray[2]", "x");
+        CPPUNIT_ASSERT_MESSAGE(file.toUtf8().getStr(), x.toInt32() > 2700);
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(WmfTest);

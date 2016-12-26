@@ -1363,14 +1363,12 @@ void WinMtfOutput::DrawText( Point& rPosition, OUString& rText, long* pDXArry, b
 
         for (i = 0; i < nLen; i++ )
         {
-            if (i > 0)
-            {
-                // #i121382# Map DXArray using WorldTransform
-                const Size aSize(ImplMap(Size(nSum, 0)));
-                const basegfx::B2DVector aVector(aSize.Width(), aSize.Height());
-                pDXArry[i - 1] = basegfx::fround(aVector.getLength());
-            }
             nSum += pDXArry[i];
+
+            // #i121382# Map DXArray using WorldTransform
+            const Size aSize(ImplMap(Size(nSum, 0)));
+            const basegfx::B2DVector aVector(aSize.Width(), aSize.Height());
+            pDXArry[i] = basegfx::fround(aVector.getLength());
         }
     }
     if ( mnLatestTextLayoutMode != mnTextLayoutMode )
@@ -1457,7 +1455,7 @@ void WinMtfOutput::DrawText( Point& rPosition, OUString& rText, long* pDXArry, b
         // #i117968# VirtualDevice is not thread safe, but filter is used in multithreading
         SolarMutexGuard aGuard;
         ScopedVclPtrInstance< VirtualDevice > pVDev;
-        sal_Int32 nTextWidth;
+        sal_Int32 nTextWidth, nActPosDeltaX = 0;
         pVDev->SetMapMode( MapMode( MapUnit::Map100thMM ) );
         pVDev->SetFont( maFont );
         if( pDXArry )
@@ -1466,6 +1464,8 @@ void WinMtfOutput::DrawText( Point& rPosition, OUString& rText, long* pDXArry, b
             nTextWidth = pVDev->GetTextWidth( OUString(rText[ nLen - 1 ]) );
             if( nLen > 1 )
                 nTextWidth += pDXArry[ nLen - 2 ];
+            // tdf#39894: We should consider the distance to next character cell origin
+            nActPosDeltaX = pDXArry[ nLen - 1 ];
         }
         else
             nTextWidth = pVDev->GetTextWidth( rText );
@@ -1481,7 +1481,7 @@ void WinMtfOutput::DrawText( Point& rPosition, OUString& rText, long* pDXArry, b
         }
 
         if( mnTextAlign & TA_UPDATECP )
-            maActPos.X() = rPosition.X() + nTextWidth;
+            maActPos.X() = rPosition.X() + (pDXArry ? nActPosDeltaX : nTextWidth);
     }
     if ( bChangeFont || ( maLatestFont != aTmp ) )
     {

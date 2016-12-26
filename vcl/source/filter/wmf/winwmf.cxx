@@ -519,19 +519,13 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
 
         case W_META_EXTTEXTOUT:
         {
-            sal_uInt16  nLen = 0, nOptions = 0;
-            sal_Int32   nRecordPos, nRecordSize = 0, nOriginalTextLen, nNewTextLen;
-            Point       aPosition;
-            Rectangle   aRect;
-            std::unique_ptr<long[]> pDXAry;
-
             pWMF->SeekRel(-6);
-            nRecordPos = pWMF->Tell();
+            sal_Int32 nRecordPos = pWMF->Tell(), nRecordSize = 0;
             pWMF->ReadInt32( nRecordSize );
             pWMF->SeekRel(2);
-            aPosition = ReadYX();
-            pWMF->ReadUInt16( nLen );
-            pWMF->ReadUInt16( nOptions );
+            Point aPosition = ReadYX();
+            sal_uInt16 nLen = 0, nOptions = 0;
+            pWMF->ReadUInt16( nLen ).ReadUInt16( nOptions );
 
             ComplexTextLayoutFlags nTextLayoutMode = ComplexTextLayoutFlags::Default;
             if ( nOptions & ETO_RTLREADING )
@@ -542,7 +536,8 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
             // output only makes sense if the text contains characters
             if( nLen )
             {
-                nOriginalTextLen = nLen;
+                sal_Int32 nOriginalTextLen = nLen;
+                Rectangle aRect;
                 if( nOptions & ETO_CLIPPED )
                 {
                     const Point aPt1( ReadPoint() );
@@ -552,11 +547,11 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                 std::unique_ptr<char[]> pChar(new char[ ( nOriginalTextLen + 1 ) &~ 1 ]);
                 pWMF->ReadBytes(pChar.get(), (nOriginalTextLen + 1) &~ 1);
                 OUString aText( pChar.get(), (sal_uInt16)nOriginalTextLen, pOut->GetCharSet() );// after this conversion the text may contain
-                nNewTextLen = aText.getLength();                                          // less character (japanese version), so the
-                pChar.reset();                                                         // dxAry will not fit
-
+                sal_Int32 nNewTextLen = aText.getLength();                                      // less character (japanese version), so the
+                                                                                                // dxAry will not fit
                 if ( nNewTextLen )
                 {
+                    std::unique_ptr<long[]> pDXAry;
                     sal_uInt32  nMaxStreamPos = nRecordPos + ( nRecordSize << 1 );
                     sal_Int32   nDxArySize =  nMaxStreamPos - pWMF->Tell();
                     sal_Int32   nDxAryEntries = nDxArySize >> 1;
@@ -564,30 +559,41 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
 
                     if ( ( ( nDxAryEntries % nOriginalTextLen ) == 0 ) && ( nNewTextLen <= nOriginalTextLen ) )
                     {
-                        sal_Int16 nDx = 0, nDxTmp = 0;
-                        sal_uInt16 i; //needed just outside the for
+                        sal_uInt16 i; // needed just outside the for
                         pDXAry.reset(new long[ nNewTextLen ]);
                         for (i = 0; i < nNewTextLen; i++ )
                         {
                             if ( pWMF->Tell() >= nMaxStreamPos )
                                 break;
-                            pWMF->ReadInt16( nDx );
+                            sal_Int32 nDxCount = 1;
                             if ( nNewTextLen != nOriginalTextLen )
                             {
                                 sal_Unicode nUniChar = aText[i];
                                 OString aTmp(&nUniChar, 1, pOut->GetCharSet());
                                 if ( aTmp.getLength() > 1 )
                                 {
-                                    sal_Int32 nDxCount = aTmp.getLength() - 1;
-                                    if ( ( ( nDxCount * 2 ) + pWMF->Tell() ) > nMaxStreamPos )
-                                        break;
-                                    while ( nDxCount-- )
-                                    {
-                                        pWMF->ReadInt16( nDxTmp );
-                                        nDx = nDx + nDxTmp;
-                                    }
+                                    nDxCount = aTmp.getLength();
                                 }
                             }
+
+                            sal_Int16 nDx = 0;
+                            while ( nDxCount-- )
+                            {
+                                if ( ( pWMF->Tell() + 2 ) > nMaxStreamPos )
+                                    break;
+                                sal_Int16 nDxTmp = 0;
+                                pWMF->ReadInt16(nDxTmp);
+                                nDx += nDxTmp;
+                                if ( nOptions & ETO_PDY )
+                                {
+                                    if ( ( pWMF->Tell() + 2 ) > nMaxStreamPos )
+                                        break;
+                                    sal_Int16 nDyTmp = 0;
+                                    pWMF->ReadInt16(nDyTmp);
+                                    // TODO: use Dy offset
+                                }
+                            }
+
                             pDXAry[ i ] = nDx;
                         }
                         if ( i == nNewTextLen )
