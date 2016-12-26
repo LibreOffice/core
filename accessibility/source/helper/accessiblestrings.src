@@ -106,6 +106,16 @@ String RID_STR_ACC_PANEL_DESCRIPTION
     Text [ en-US ] = "Please press enter to go into child control for more operations";
 };
 
+String RID_STR_ACC_COLUMN_NUM
+{
+    Text [ en-US ] = "Column %COLUMNNUMBER";
+};
+
+String RID_STR_ACC_ROW_NUM
+{
+    Text [ en-US ] = "Row %ROWNUMBER";
+};
+
 String RID_STR_ACC_DESC_PANELDECL_TABBAR
 {
     Text [ en-US ] = "Panel Deck Tab Bar";

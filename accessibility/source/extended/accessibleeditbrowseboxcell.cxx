@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <helper/accresmgr.hxx>
+#include <helper/accessiblestrings.hrc>
+
 #include <extended/accessibleeditbrowseboxcell.hxx>
 #include <svtools/editbrowsebox.hxx>
 #include <comphelper/processfactory.hxx>
@@ -103,8 +106,8 @@ namespace accessibility
     {
         SolarMethodGuard aGuard( *this );
 
-        // TODO: localize this!
-        return "Column " + OUString::number(getColumnPos()-1) + ", Row " + OUString::number(getRowPos());
+        return TK_RES_STRING(RID_STR_ACC_COLUMN_NUM).replaceAll("%COLUMNNUMBER", OUString::number(getColumnPos()-1)) + ", "
+               + TK_RES_STRING(RID_STR_ACC_ROW_NUM).replaceAll("%ROWNUMBER", OUString::number(getRowPos()));
     }
 
     css::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL EditBrowseBoxTableCell::getAccessibleRelationSet() throw ( RuntimeException, std::exception )
