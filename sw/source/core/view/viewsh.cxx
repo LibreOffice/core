@@ -904,6 +904,11 @@ void SwViewShell::SetProtectForm( bool _bProtectForm )
     rIDSA.set(DocumentSettingId::PROTECT_FORM, _bProtectForm );
 }
 
+void SwViewShell::SetMsWordTextFormat( bool _bMsWordTextFormat )
+{
+    IDocumentSettingAccess& rIDSA = getIDocumentSettingAccess();
+    rIDSA.set(DocumentSettingId::MS_WORD_TEXT_FORMAT, _bMsWordTextFormat );
+}
 
 void SwViewShell::Reformat()
 {
