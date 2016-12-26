@@ -22,6 +22,30 @@
       "revId": "a48b845320a16e8803199b3a885eaafa79f09f11",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a6eadb0_fc72bdac",
+        "filename": "include/svl/itempool.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-12-26T06:50:16Z",
+      "side": 1,
+      "message": "thanks! good idea!",
+      "parentUuid": "1a6eadb0_362296ba",
+      "range": {
+        "startLine": 111,
+        "startChar": 91,
+        "endLine": 111,
+        "endChar": 110
+      },
+      "revId": "a48b845320a16e8803199b3a885eaafa79f09f11",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
