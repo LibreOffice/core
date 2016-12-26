@@ -191,6 +191,7 @@ static MasterPropertySetInfo * lcl_createSettingsInfo()
         { OUString("Rsid"), HANDLE_RSID, cppu::UnoType<sal_Int32>::get(), 0},
         { OUString("RsidRoot"), HANDLE_RSID_ROOT, cppu::UnoType<sal_Int32>::get(), 0},
         { OUString("ProtectForm"), HANDLE_PROTECT_FORM, cppu::UnoType<bool>::get(), 0},
+		{ OUString("MsWordTextFormat"), HANDLE_PROTECT_FORM, cppu::UnoType<bool>::get(), 0 },
         { OUString("TabAtLeftIndentForParagraphsInList"), HANDLE_TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST, cppu::UnoType<bool>::get(), 0},
         { OUString("ModifyPasswordInfo"), HANDLE_MODIFYPASSWORDINFO, cppu::UnoType< cppu::UnoSequenceType<css::beans::PropertyValue> >::get(), 0},
         { OUString("MathBaselineAlignment"), HANDLE_MATH_BASELINE_ALIGNMENT, cppu::UnoType<bool>::get(), 0},
