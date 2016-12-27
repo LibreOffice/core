@@ -58,7 +58,7 @@ IDI_DIALOG ICON ICON_PATH
 
 STRINGTABLE
 {
-  IDS_UPDATER_IDENTITY, "moz-updater.exe-4cdccec4-5ee0-4a06-9817-4cd899a9db49"
+  IDS_UPDATER_IDENTITY, "libreoffice-updater.exe-7bab28a0-0599-4f37-9efe-f7f8b71f05e3"
 }
 
 

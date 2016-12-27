@@ -18,5 +18,5 @@ BOOL VerifySameFiles(LPCWSTR file1Path, LPCWSTR file2Path, BOOL &sameContent);
 // execute the updater it must have this updater identity string in its string
 // table.  No other signed Mozilla product will have this string table value.
 #define UPDATER_IDENTITY_STRING \
-  "libo-updater.exe-4cdccec4-5ee0-4a06-9817-4cd899a9db49"
+  "libreoffice-updater.exe-7bab28a0-0599-4f37-9efe-f7f8b71f05e3"
 #define IDS_UPDATER_IDENTITY 1006
