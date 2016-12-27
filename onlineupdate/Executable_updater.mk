@@ -18,6 +18,7 @@ $(eval $(call gb_Executable_set_include,updater,\
 
 $(eval $(call gb_Executable_use_static_libraries,updater,\
     libmar \
+    updatehelper \
 	$(if $(filter WNT,$(OS)), \
 		winhelper )\
 ))
@@ -51,6 +52,7 @@ $(eval $(call gb_Executable_use_externals,updater,\
 $(eval $(call gb_Executable_add_defs,updater,\
 	-DVERIFY_MAR_SIGNATURE \
 	-DNSS3 \
+	-DUNICODE \
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,updater,\
@@ -60,11 +62,6 @@ $(eval $(call gb_Executable_add_exception_objects,updater,\
 	onlineupdate/source/update/updater/progressui_gtk \
 	onlineupdate/source/update/updater/progressui_null \
 	onlineupdate/source/update/updater/updater \
-	onlineupdate/source/update/common/pathhash \
-	onlineupdate/source/update/common/readstrings \
-	onlineupdate/source/update/common/uachelper \
-	onlineupdate/source/update/common/updatehelper \
-	onlineupdate/source/update/common/updatelogging \
 	$(if $(filter WNT,$(OS)),\
 		onlineupdate/source/update/updater/loaddlls \
 		onlineupdate/source/update/updater/progressui_win \

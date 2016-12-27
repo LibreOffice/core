@@ -13,6 +13,7 @@ $(eval $(call gb_Module_Module,onlineupdate))
 ifneq ($(ENABLE_ONLINE_UPDATE_MAR),)
 $(eval $(call gb_Module_add_targets,onlineupdate,\
 	StaticLibrary_libmar \
+	StaticLibrary_updatehelper \
 	$(if $(filter WNT,$(OS)),\
 		StaticLibrary_winhelper )\
 	Executable_mar \
