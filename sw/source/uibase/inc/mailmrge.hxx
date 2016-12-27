@@ -91,7 +91,7 @@ class SwMailMergeDlg : public SvxStandardDialog
 
     VclPtr<OKButton>        m_pOkBTN;
 
-    SwMailMergeDlg_Impl* pImpl;
+    std::unique_ptr<SwMailMergeDlg_Impl> pImpl;
 
     SwWrtShell&     rSh;
     SwModuleOptions* pModOpt;
