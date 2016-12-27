@@ -2611,11 +2611,12 @@ gboolean GtkSalFrame::signalButton( GtkWidget*, GdkEventButton* pEvent, gpointer
 
     vcl::DeletionListener aDel( pThis );
 
-    if (pEvent->type == GDK_BUTTON_PRESS && pThis->isFloatGrabWindow())
+    if (pThis->isFloatGrabWindow() && pEvent->window != widget_get_window(pThis->getMouseEventWidget()))
     {
-        bool bClosePopups = (pEvent->window != widget_get_window(pThis->getMouseEventWidget()));
-        if (bClosePopups)
+        if (pEvent->type == GDK_BUTTON_PRESS)
             pThis->closePopup();
+        else if (pEvent->type == GDK_BUTTON_RELEASE)
+            return true;
     }
 
     if (!aDel.isDeleted())
