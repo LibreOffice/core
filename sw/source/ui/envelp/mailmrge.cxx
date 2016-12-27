@@ -375,7 +375,6 @@ void SwMailMergeDlg::dispose()
         OUString* pData = static_cast< OUString* >( m_pFilterLB->GetEntryData(nFilter) );
         delete pData;
     }
-    delete pImpl;
     m_pBeamerWin.clear();
     m_pAllRB.clear();
     m_pMarkedRB.clear();
