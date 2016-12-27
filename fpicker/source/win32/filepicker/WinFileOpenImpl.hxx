@@ -29,7 +29,7 @@
 #include "previewadapter.hxx"
 #include "helppopupwindow.hxx"
 #include "customcontrol.hxx"
-#include "../misc/resourceprovider.hxx"
+#include "resourceprovider.hxx"
 
 #include <utility>
 #include <memory>

@@ -36,7 +36,7 @@
 #ifdef __MINGW32__
 #include <limits.h>
 #endif
-#include "../misc/WinImplHelper.hxx"
+#include "WinImplHelper.hxx"
 
 #include <shlguid.h>
 

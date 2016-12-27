@@ -41,7 +41,7 @@
 #if defined _MSC_VER
 #pragma warning(pop)
 #endif
-#include "../misc/WinImplHelper.hxx"
+#include "WinImplHelper.hxx"
 
 
 // a simple helper class used to provide a buffer for different

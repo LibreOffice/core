@@ -18,7 +18,7 @@
  */
 
 #include <osl/diagnose.h>
-#include "../misc/WinImplHelper.hxx"
+#include "WinImplHelper.hxx"
 #include "FileOpenDlg.hxx"
 
 

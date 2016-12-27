@@ -32,7 +32,7 @@
 #include "FileOpenDlg.hxx"
 #include <memory>
 
-#include "../misc/WinImplHelper.hxx"
+#include "WinImplHelper.hxx"
 
 
 using com::sun::star::uno::Any;

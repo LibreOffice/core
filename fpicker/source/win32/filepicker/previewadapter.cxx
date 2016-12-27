@@ -23,7 +23,7 @@
 #include <com/sun/star/ui/dialogs/FilePreviewImageFormats.hpp>
 #include <osl/diagnose.h>
 #include "dibpreview.hxx"
-#include "../misc/WinImplHelper.hxx"
+#include "WinImplHelper.hxx"
 
 #include <memory>
 #include <stdexcept>
