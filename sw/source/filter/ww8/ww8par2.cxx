@@ -735,8 +735,8 @@ void SwWW8ImplReader::SetAnlvStrings(SwNumFormat &rNum, WW8_ANLV const &rAV,
             sP += sText.copy( rAV.cbTextBefore, rAV.cbTextAfter);
             rNum.SetSuffix( sP );
         }
-// The characters before and after multipe digits do not apply because
-// those are handled different by the writer and the result is in most
+// The characters before and after multiple digits do not apply because
+// those are handled differently by the writer and the result is in most
 // cases worse than without.
     }
 }
