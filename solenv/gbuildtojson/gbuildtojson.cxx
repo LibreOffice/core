@@ -75,7 +75,7 @@ int main(int argc, char** argv)
         if(first)
             first =false;
         else
-            cout << ", ";
+            cout << "," << endl;
         string varupper(varandfile.first);
         for(auto& c : varupper)
             if(c != '_')
