@@ -34,6 +34,7 @@ endif
 
 $(eval $(call gb_Executable_add_defs,mar,\
 	-DMAR_NSS \
+	-DUNICODE \
 ))
 
 $(eval $(call gb_Executable_add_defs,mar,\
