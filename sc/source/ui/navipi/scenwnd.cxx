@@ -67,7 +67,7 @@ void ScScenarioListBox::UpdateEntries( const std::vector<OUString> &aNewEntryLis
         default:
         {
             // sheet contains scenarios
-            OSL_ENSURE( aNewEntryList.size() % 3 == 0, "ScScenarioListBox::UpdateEntries - wrong list size" );
+            assert(aNewEntryList.size() % 3 == 0 && "ScScenarioListBox::UpdateEntries - wrong list size");
             SetUpdateMode( false );
 
             std::vector<OUString>::const_iterator iter;
