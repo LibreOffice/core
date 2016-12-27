@@ -183,16 +183,12 @@ static void lcl_AddStamp( OUString& rStr, const OUString& rName,
 
 static OString lcl_makeHTMLColorTriplet(const Color& rColor)
 {
-    OStringBuffer aStr( "\"#" );
+    sal_Char    buf[24];
+
     // <font COLOR="#00FF40">hello</font>
-    sal_Char    buf[64];
-    sal_Char*   p = buf;
-    p += sprintf( p, "%02X", rColor.GetRed() );
-    p += sprintf( p, "%02X", rColor.GetGreen() );
-    sprintf( p, "%02X", rColor.GetBlue() );
-    aStr.append(buf);
-    aStr.append('\"');
-    return aStr.makeStringAndClear();
+    snprintf( buf, 24, "\"#%02X%02X%02X\"", rColor.GetRed(), rColor.GetGreen(), rColor.GetBlue() );
+
+    return OString(buf);
 }
 
 ScHTMLExport::ScHTMLExport( SvStream& rStrmP, const OUString& rBaseURL, ScDocument* pDocP,
