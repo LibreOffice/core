@@ -27,7 +27,7 @@
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/FilePreviewImageFormats.hpp>
 #include <com/sun/star/ui/dialogs/ListboxControlActions.hpp>
-#include "../misc/WinImplHelper.hxx"
+#include "WinImplHelper.hxx"
 
 #include "FilePicker.hxx"
 #include "controlaccess.hxx"

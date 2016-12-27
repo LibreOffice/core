@@ -43,7 +43,7 @@
 #include "FilterContainer.hxx"
 #include "VistaFilePickerEventHandler.hxx"
 #include "IVistaFilePickerInternalNotify.hxx"
-#include "../misc/resourceprovider.hxx"
+#include "resourceprovider.hxx"
 
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/basemutex.hxx>

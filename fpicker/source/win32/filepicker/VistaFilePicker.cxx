@@ -27,7 +27,7 @@
 #ifdef __IFileDialogCustomize_INTERFACE_DEFINED__
 
 #include "WinFileOpenImpl.hxx"
-#include "../misc/WinImplHelper.hxx"
+#include "WinImplHelper.hxx"
 #include "shared.hxx"
 
 #include <com/sun/star/awt/XWindow.hpp>

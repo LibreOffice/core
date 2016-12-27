@@ -27,7 +27,7 @@
 #include "WinFileOpenImpl.hxx"
 
 #include "FPServiceInfo.hxx"
-#include "../misc/WinImplHelper.hxx"
+#include "WinImplHelper.hxx"
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include "filepickereventnotification.hxx"
 
