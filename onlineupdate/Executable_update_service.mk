@@ -9,16 +9,44 @@
 
 $(eval $(call gb_Executable_Executable,update_service))
 
+$(eval $(call gb_Executable_set_targettype_gui,update_service,YES))
+
 $(eval $(call gb_Executable_set_include,update_service,\
 	-I$(SRCDIR)/onlineupdate/source/libmar/src/ \
 	-I$(SRCDIR)/onlineupdate/source/libmar/verify/ \
 	-I$(SRCDIR)/onlineupdate/source/libmar/sign/ \
+	-I$(SRCDIR)/onlineupdate/source/update/common/ \
 	$$(INCLUDE) \
+))
+
+$(eval $(call gb_Executable_use_static_libraries,update_service,\
+	updatehelper \
+	winhelper \
 ))
 
 $(eval $(call gb_Executable_add_libs,update_service,\
     ws2_32.lib \
     Crypt32.lib \
+    shell32.lib \
+    wintrust.lib \
+    version.lib \
+    wtsapi32.lib \
+    userenv.lib \
+    shlwapi.lib \
+    ole32.lib \
+    rpcrt4.lib \
+    comctl32.lib \
+    shlwapi.lib \
+    kernel32.lib \
+    advapi32.lib \
+))
+
+$(eval $(call gb_Executable_add_defs,update_service,\
+	-DUNICODE \
+))
+
+$(eval $(call gb_Executable_add_ldflags,update_service,\
+    /ENTRY:wmainCRTStartup \
 ))
 
 $(eval $(call gb_Executable_add_cxxobjects,update_service,\
