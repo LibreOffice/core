@@ -45,9 +45,10 @@
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 
-#include <vcl/BitmapProcessor.hxx>
 #include <vcl/BitmapTools.hxx>
 #include <vcl/pngwrite.hxx>
+
+#include "BitmapProcessor.hxx"
 
 bool ImageRequestParameters::convertToDarkTheme()
 {

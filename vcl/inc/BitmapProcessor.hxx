@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_BITMAP_PROCESSOR_HXX
-#define INCLUDED_VCL_BITMAP_PROCESSOR_HXX
+#ifndef VCL_INC_BITMAP_PROCESSOR_HXX
+#define VCL_INC_BITMAP_PROCESSOR_HXX
 
 #include <vcl/bitmapex.hxx>
 
@@ -20,6 +20,6 @@ public:
     static void colorizeImage(BitmapEx& rBitmapEx, Color aColor);
 };
 
-#endif // INCLUDED_VCL_BITMAP_PROCESSOR_HXX
+#endif // VCL_INC_BITMAP_PROCESSOR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
