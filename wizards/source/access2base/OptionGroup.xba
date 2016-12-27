@@ -216,9 +216,9 @@ Private Function _PropertyGet(ByVal psProperty As String) As Variant
 	Utils._SetCalledSub(&quot;OptionGroup.get&quot; &amp; psProperty)
 	
 &apos;Execute
-Dim oDatabase As Object, vBookmark As Variant, vEMPTY As Variant
+Dim oDatabase As Object, vBookmark As Variant
 Dim iValue As Integer, i As Integer
-	_PropertyGet = vEMPTY
+	_PropertyGet = EMPTY
 	Select Case UCase(psProperty)
 		Case UCase(&quot;Count&quot;)
 			_PropertyGet = _Count
@@ -244,15 +244,15 @@ Exit_Function:
 	Exit Function
 Trace_Error:
 	TraceError(TRACEWARNING, ERRPROPERTY, Utils._CalledSub(), 0, 1, psProperty)
-	_PropertyGet = vEMPTY
+	_PropertyGet = EMPTY
 	Goto Exit_Function
 Trace_Error_Index:
 	TraceError(TRACEFATAL, ERRINDEXVALUE, Utils._CalledSub(), 0, 1, psProperty)
-	_PropertyGet = vEMPTY
+	_PropertyGet = EMPTY
 	Goto Exit_Function
 Error_Function:
 	TraceError(TRACEABORT, Err, &quot;OptionGroup._PropertyGet&quot;, Erl)
-	_PropertyGet = vEMPTY
+	_PropertyGet = EMPTY
 	GoTo Exit_Function
 End Function		&apos;	_PropertyGet
 

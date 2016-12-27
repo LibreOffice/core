@@ -1135,8 +1135,7 @@ Dim cstThisSub As String
 	cstThisSub = &quot;Recordset.get&quot;
 	Utils._SetCalledSub(cstThisSub &amp; psProperty)
 
-Dim vEMPTY As Variant
-	_PropertyGet = vEMPTY
+	_PropertyGet = EMPTY
 	
 	Select Case UCase(psProperty)
 		Case UCase(&quot;AbsolutePosition&quot;)
@@ -1203,7 +1202,7 @@ Exit_Function:
 	Exit Function
 Trace_Error:
 	TraceError(TRACEFATAL, ERRPROPERTY, Utils._CalledSub(), 0, , psProperty)
-	_PropertyGet = vEMPTY
+	_PropertyGet = EMPTY
 	Goto Exit_Function
 Trace_Forward:
 	TraceError(TRACEFATAL, ERRRECORDSETFORWARD, Utils._CalledSub(), 0)
@@ -1213,7 +1212,7 @@ Trace_Closed:
 	Goto Exit_Function
 Error_Function:
 	TraceError(TRACEABORT, Err, cstThisSub &amp; &quot;._PropertyGet&quot;, Erl)
-	_PropertyGet = vEMPTY
+	_PropertyGet = EMPTY
 	GoTo Exit_Function
 End Function		&apos;	_PropertyGet
 

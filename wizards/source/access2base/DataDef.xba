@@ -477,8 +477,8 @@ Private Function _PropertyGet(ByVal psProperty As String) As Variant
 Dim cstThisSub As String
 	cstThisSub = Utils._PCase(_Type)
 	Utils._SetCalledSub(cstThisSub &amp; &quot;.get&quot; &amp; psProperty)
-Dim vEMPTY As Variant, sSql As String, sVerb As String, iType As Integer
-	_PropertyGet = vEMPTY
+Dim sSql As String, sVerb As String, iType As Integer
+	_PropertyGet = EMPTY
 	If Not hasProperty(psProperty) Then Goto Trace_Error
 	
 	Select Case UCase(psProperty)
@@ -517,11 +517,11 @@ Exit_Function:
 	Exit Function
 Trace_Error:
 	TraceError(TRACEWARNING, ERRPROPERTY, Utils._CalledSub(), 0, , psProperty)
-	_PropertyGet = vEMPTY
+	_PropertyGet = EMPTY
 	Goto Exit_Function
 Error_Function:
 	TraceError(TRACEABORT, Err, cstThisSub &amp; &quot;._PropertyGet&quot;, Erl)
-	_PropertyGet = vEMPTY
+	_PropertyGet = EMPTY
 	GoTo Exit_Function
 End Function		&apos;	_PropertyGet
 

@@ -1657,8 +1657,8 @@ Private Function _PropertyGet(ByVal psProperty As String) As Variant
 
 	If _ErrorHandler() Then On Local Error Goto Error_Function
 	Utils._SetCalledSub(&quot;Database.get&quot; &amp; psProperty)
-Dim vEMPTY As Variant
-	_PropertyGet = vEMPTY
+
+	_PropertyGet = EMPTY
 	
 	Select Case UCase(psProperty)
 		Case UCase(&quot;Connect&quot;)
@@ -1679,11 +1679,11 @@ Exit_Function:
 	Exit Function
 Trace_Error:
 	TraceError(TRACEFATAL, ERRPROPERTY, Utils._CalledSub(), 0, , psProperty)
-	_PropertyGet = vEMPTY
+	_PropertyGet = EMPTY
 	Goto Exit_Function
 Error_Function:
 	TraceError(TRACEABORT, Err, &quot;Database._PropertyGet&quot;, Erl)
-	_PropertyGet = vEMPTY
+	_PropertyGet = EMPTY
 	GoTo Exit_Function
 End Function		&apos;	_PropertyGet
 

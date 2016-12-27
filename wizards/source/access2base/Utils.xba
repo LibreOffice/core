@@ -211,7 +211,7 @@ Public Function _CVar(ByRef psArg As String, ByVal Optional pbStrDate As Boolean
 &apos;	Return values may of types Array, Long, Double, Date, Boolean, String, Null or Empty
 &apos;	pbStrDate = True keeps dates as strings
 
-Dim cstEscape1 As String, cstEscape2 As String, vEMPTY As Variant
+Dim cstEscape1 As String, cstEscape2 As String
 	cstEscape1 = Chr(14)			&apos;	Form feed used as temporary escape character for \\
 	cstEscape2 = Chr(27)			&apos;	ESC used as temporary escape character for \;
 
@@ -242,7 +242,7 @@ Dim sArg As String, vArgs() As Variant, vVars() As Variant, i As Integer
 
 	&apos;	Usual case
 	Select Case True
-		Case sArg = &quot;[EMPTY]&quot;						:	_CVar = vEMPTY
+		Case sArg = &quot;[EMPTY]&quot;						:	_CVar = EMPTY
 		Case sArg = &quot;[NULL]&quot; Or sArg = &quot;[VARIANT]&quot;	:	_CVar = Null
 		Case sArg = &quot;[OBJECT]&quot;						:	_CVar = Nothing
 		Case sArg = &quot;[TRUE]&quot;						:	_CVar = True

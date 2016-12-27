@@ -734,13 +734,13 @@ Public Function Controls(ByVal Optional pvObject As Variant, Optional ByVal pvIn
 &apos;	If no pvIndex argument, return a Collection type
 
 If _ErrorHandler() Then On Local Error Goto Error_Function
-Dim vObject As Object, vEMPTY As variant
+Dim vObject As Object
 Const cstThisSub = &quot;Controls&quot;
 	Utils._SetCalledSub(cstThisSub)
 
 	If IsMissing(pvObject) Then Call _TraceArguments()
 	If IsNull(pvObject) Or IsEmpty(pvObject) Then Call _TraceArguments()
-	Controls = vEMPTY
+	Controls = EMPTY
 
 	If VarType(pvObject) = vbString Then
 		Set vObject = Forms(pvObject)

@@ -845,10 +845,10 @@ Private Function _PropertyGet(ByVal psProperty As String) As Variant
 	Utils._SetCalledSub(&quot;Form.get&quot; &amp; psProperty)
 	
 &apos;Execute
-Dim oDatabase As Object, vBookmark As Variant, vEMPTY As Variant
+Dim oDatabase As Object, vBookmark As Variant
 Dim i As Integer, oObject As Object
 
-	_PropertyGet = vEMPTY
+	_PropertyGet = EMPTY
 
 	Select Case UCase(psProperty)
 		Case UCase(&quot;Name&quot;), UCase(&quot;IsLoaded&quot;)
@@ -937,15 +937,15 @@ Exit_Function:
 	Exit Function
 Trace_Error:
 	TraceError(TRACEWARNING, ERRPROPERTY, Utils._CalledSub(), 0, 1, psProperty)
-	_PropertyGet = vEMPTY
+	_PropertyGet = EMPTY
 	Goto Exit_Function
 Trace_Error_Form:
 	TraceError(TRACEFATAL, ERRFORMNOTOPEN, Utils._CalledSub(), 0, 1, _Name)
-	_PropertyGet = vEMPTY
+	_PropertyGet = EMPTY
 	Goto Exit_Function
 Error_Function:
 	TraceError(TRACEABORT, Err, &quot;Form._PropertyGet&quot;, Erl)
-	_PropertyGet = vEMPTY
+	_PropertyGet = EMPTY
 	GoTo Exit_Function
 End Function		&apos;	_PropertyGet
 

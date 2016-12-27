@@ -398,12 +398,12 @@ Dim cstThisSub As String
 
 	If Not hasProperty(psProperty) Then Goto Trace_Error
 
-Dim vEMPTY As Variant, bCond1 As Boolean, bCond2 As Boolean, vValue As Variant, oValue As Object, sValue As String
+Dim bCond1 As Boolean, bCond2 As Boolean, vValue As Variant, oValue As Object, sValue As String
 Dim oSize As Object, lSize As Long, bNullable As Boolean, bNull As Boolean
 Const cstMaxTextLength = 65535
 Const cstMaxBinlength = 2 * 65535
 
-	_PropertyGet = vEMPTY
+	_PropertyGet = EMPTY
 	
 	Select Case UCase(psProperty)
 		Case UCase(&quot;DataType&quot;)
@@ -490,7 +490,7 @@ Const cstMaxBinlength = 2 * 65535
 				End If
 				oSize.closeInput()
 			Else
-				_PropertyGet = vEMPTY
+				_PropertyGet = EMPTY
 			End If
 		Case UCase(&quot;Name&quot;)
 			_PropertyGet = _Name
@@ -594,15 +594,15 @@ Exit_Function:
 	Exit Function
 Trace_Error:
 	TraceError(TRACEWARNING, ERRPROPERTY, Utils._CalledSub(), 0, , psProperty)
-	_PropertyGet = vEMPTY
+	_PropertyGet = EMPTY
 	Goto Exit_Function
 Trace_Length:
 	TraceError(TRACEFATAL, ERROVERFLOW, Utils._CalledSub(), 0, , Array(lSize, &quot;GetChunk&quot;))
-	_PropertyGet = vEMPTY
+	_PropertyGet = EMPTY
 	Goto Exit_Function
 Error_Function:
 	TraceError(TRACEABORT, Err, cstThisSub, Erl)
-	_PropertyGet = vEMPTY
+	_PropertyGet = EMPTY
 	GoTo Exit_Function
 End Function		&apos;	_PropertyGet	V1.1.0
 

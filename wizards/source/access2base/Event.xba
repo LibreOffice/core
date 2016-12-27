@@ -420,8 +420,8 @@ Private Function _PropertyGet(ByVal psProperty As String) As Variant
 
 	If _ErrorHandler() Then On Local Error Goto Error_Function
 	Utils._SetCalledSub(&quot;Event.get&quot; &amp; psProperty)
-Dim vEMPTY As Variant
-	_PropertyGet = vEMPTY
+
+	_PropertyGet = EMPTY
 	
 	Select Case UCase(psProperty)
 		Case UCase(&quot;ButtonLeft&quot;)
@@ -486,11 +486,11 @@ Exit_Function:
 Trace_Error:
 	&apos;	Errors are not displayed to avoid display infinite cycling
 	TraceError(TRACEWARNING, ERRPROPERTY, Utils._CalledSub(), 0, False, psProperty)
-	_PropertyGet = vEMPTY
+	_PropertyGet = EMPTY
 	Goto Exit_Function
 Error_Function:
 	TraceError(TRACEABORT, Err, &quot;Event._PropertyGet&quot;, Erl)
-	_PropertyGet = vEMPTY
+	_PropertyGet = EMPTY
 	GoTo Exit_Function
 End Function		&apos;	_PropertyGet	V1.1.0
 </script:module>
