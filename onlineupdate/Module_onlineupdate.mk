@@ -18,6 +18,7 @@ $(eval $(call gb_Module_add_targets,onlineupdate,\
 		StaticLibrary_winhelper )\
 	Executable_mar \
 	Executable_updater \
+	Executable_update_service \
 ))
 endif
 

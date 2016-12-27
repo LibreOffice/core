@@ -6,12 +6,45 @@
 #include <stdlib.h>
 #include <windows.h>
 
+#include <memory>
+
 #include "registrycertificates.hxx"
-#include "pathhash.hxx"
-#include "nsWindowsHelpers.hxx"
+#include "pathhash.h"
 #include "servicebase.hxx"
-#include "updatehelper.hxx"
+#include "updatehelper.h"
 #define MAX_KEY_LENGTH 255
+
+namespace {
+
+struct AutoRegKey
+{
+    AutoRegKey(HKEY key):
+        mKey(key)
+    {
+    }
+
+    ~AutoRegKey()
+    {
+        releaseKey(mKey);
+    }
+
+    void releaseKey(HKEY key)
+    {
+        if (key != nullptr)
+        {
+            RegCloseKey(key);
+        }
+    }
+
+    HKEY mKey;
+
+    HKEY get()
+    {
+        return mKey;
+    }
+};
+
+}
 
 /**
  * Verifies if the file path matches any certificate stored in the registry.
@@ -21,9 +54,9 @@
  */
 BOOL
 DoesBinaryMatchAllowedCertificates(LPCWSTR basePathForUpdate, LPCWSTR filePath)
-{ 
+{
   WCHAR maintenanceServiceKey[MAX_PATH + 1];
-  if (!CalculateRegistryPathFromFilePath(basePathForUpdate, 
+  if (!CalculateRegistryPathFromFilePath(basePathForUpdate,
                                          maintenanceServiceKey)) {
     return FALSE;
   }
@@ -35,15 +68,15 @@ DoesBinaryMatchAllowedCertificates(LPCWSTR basePathForUpdate, LPCWSTR filePath)
   // force the non redirected registry under Wow6432Node.
   // This flag is ignored on 32bit systems.
   HKEY baseKeyRaw;
-  LONG retCode = RegOpenKeyExW(HKEY_LOCAL_MACHINE, 
-                               maintenanceServiceKey, 0, 
+  LONG retCode = RegOpenKeyExW(HKEY_LOCAL_MACHINE,
+                               maintenanceServiceKey, 0,
                                KEY_READ | KEY_WOW64_64KEY, &baseKeyRaw);
   if (retCode != ERROR_SUCCESS) {
     LOG_WARN(("Could not open key.  (%d)", retCode));
     // Our tests run with a different apply directory for each test.
-    // We use this registry key on our test slaves to store the 
+    // We use this registry key on our test slaves to store the
     // allowed name/issuers.
-    retCode = RegOpenKeyExW(HKEY_LOCAL_MACHINE, 
+    retCode = RegOpenKeyExW(HKEY_LOCAL_MACHINE,
                             TEST_ONLY_FALLBACK_KEY_PATH, 0,
                             KEY_READ | KEY_WOW64_64KEY, &baseKeyRaw);
     if (retCode != ERROR_SUCCESS) {
@@ -51,11 +84,11 @@ DoesBinaryMatchAllowedCertificates(LPCWSTR basePathForUpdate, LPCWSTR filePath)
       return FALSE;
     }
   }
-  nsAutoRegKey baseKey(baseKeyRaw);
+  AutoRegKey baseKey(baseKeyRaw);
 
   // Get the number of subkeys.
   DWORD subkeyCount = 0;
-  retCode = RegQueryInfoKeyW(baseKey, nullptr, nullptr, nullptr, &subkeyCount,
+  retCode = RegQueryInfoKeyW(baseKey.get(), nullptr, nullptr, nullptr, &subkeyCount,
                              nullptr, nullptr, nullptr, nullptr, nullptr,
                              nullptr, nullptr);
   if (retCode != ERROR_SUCCESS) {
@@ -64,12 +97,12 @@ DoesBinaryMatchAllowedCertificates(LPCWSTR basePathForUpdate, LPCWSTR filePath)
   }
 
   // Enumerate the subkeys, each subkey represents an allowed certificate.
-  for (DWORD i = 0; i < subkeyCount; i++) { 
+  for (DWORD i = 0; i < subkeyCount; i++) {
     WCHAR subkeyBuffer[MAX_KEY_LENGTH];
-    DWORD subkeyBufferCount = MAX_KEY_LENGTH;  
-    retCode = RegEnumKeyExW(baseKey, i, subkeyBuffer, 
-                            &subkeyBufferCount, nullptr, 
-                            nullptr, nullptr, nullptr); 
+    DWORD subkeyBufferCount = MAX_KEY_LENGTH;
+    retCode = RegEnumKeyExW(baseKey.get(), i, subkeyBuffer,
+                            &subkeyBufferCount, nullptr,
+                            nullptr, nullptr, nullptr);
     if (retCode != ERROR_SUCCESS) {
       LOG_WARN(("Could not enum certs.  (%d)", retCode));
       return FALSE;
@@ -77,12 +110,12 @@ DoesBinaryMatchAllowedCertificates(LPCWSTR basePathForUpdate, LPCWSTR filePath)
 
     // Open the subkey for the current certificate
     HKEY subKeyRaw;
-    retCode = RegOpenKeyExW(baseKey, 
-                            subkeyBuffer, 
-                            0, 
-                            KEY_READ | KEY_WOW64_64KEY, 
+    retCode = RegOpenKeyExW(baseKey.get(),
+                            subkeyBuffer,
+                            0,
+                            KEY_READ | KEY_WOW64_64KEY,
                             &subKeyRaw);
-    nsAutoRegKey subKey(subKeyRaw);
+    AutoRegKey subKey(subKeyRaw);
     if (retCode != ERROR_SUCCESS) {
       LOG_WARN(("Could not open subkey.  (%d)", retCode));
       continue; // Try the next subkey
@@ -94,7 +127,7 @@ DoesBinaryMatchAllowedCertificates(LPCWSTR basePathForUpdate, LPCWSTR filePath)
     WCHAR issuer[MAX_CHAR_COUNT] = { L'\0' };
 
     // Get the name from the registry
-    retCode = RegQueryValueExW(subKey, L"name", 0, nullptr, 
+    retCode = RegQueryValueExW(subKey.get(), L"name", 0, nullptr,
                                (LPBYTE)name, &valueBufSize);
     if (retCode != ERROR_SUCCESS) {
       LOG_WARN(("Could not obtain name from registry.  (%d)", retCode));
@@ -103,7 +136,7 @@ DoesBinaryMatchAllowedCertificates(LPCWSTR basePathForUpdate, LPCWSTR filePath)
 
     // Get the issuer from the registry
     valueBufSize = MAX_CHAR_COUNT * sizeof(WCHAR);
-    retCode = RegQueryValueExW(subKey, L"issuer", 0, nullptr, 
+    retCode = RegQueryValueExW(subKey.get(), L"issuer", 0, nullptr,
                                (LPBYTE)issuer, &valueBufSize);
     if (retCode != ERROR_SUCCESS) {
       LOG_WARN(("Could not obtain issuer from registry.  (%d)", retCode));
@@ -111,8 +144,8 @@ DoesBinaryMatchAllowedCertificates(LPCWSTR basePathForUpdate, LPCWSTR filePath)
     }
 
     CertificateCheckInfo allowedCertificate = {
-      name, 
-      issuer, 
+      name,
+      issuer,
     };
 
     retCode = CheckCertificateForPEFile(filePath, allowedCertificate);
@@ -128,9 +161,9 @@ DoesBinaryMatchAllowedCertificates(LPCWSTR basePathForUpdate, LPCWSTR filePath)
     }
 
     // Raise the roof, we found a match!
-    return TRUE; 
+    return TRUE;
   }
-  
+
   // No certificates match, :'(
   return FALSE;
 }

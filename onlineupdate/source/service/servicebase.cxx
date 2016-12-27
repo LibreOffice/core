@@ -3,10 +3,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 #include "servicebase.hxx"
-#include "nsWindowsHelpers.hxx"
+#include "windowsHelper.hxx"
 
 // Shared code between applications and updater.exe
-#include "nsWindowsRestart.cpp"
 
 /**
  * Verifies if 2 files are byte for byte equivalent.
@@ -20,19 +19,19 @@ BOOL
 VerifySameFiles(LPCWSTR file1Path, LPCWSTR file2Path, BOOL &sameContent)
 {
   sameContent = FALSE;
-  nsAutoHandle file1(CreateFileW(file1Path, GENERIC_READ, FILE_SHARE_READ, 
+  AutoHandle file1(CreateFileW(file1Path, GENERIC_READ, FILE_SHARE_READ,
                                  nullptr, OPEN_EXISTING, 0, nullptr));
-  if (INVALID_HANDLE_VALUE == file1) {
+  if (file1 == INVALID_HANDLE_VALUE) {
     return FALSE;
   }
-  nsAutoHandle file2(CreateFileW(file2Path, GENERIC_READ, FILE_SHARE_READ, 
+  AutoHandle file2(CreateFileW(file2Path, GENERIC_READ, FILE_SHARE_READ,
                                  nullptr, OPEN_EXISTING, 0, nullptr));
-  if (INVALID_HANDLE_VALUE == file2) {
+  if (file2 == INVALID_HANDLE_VALUE) {
     return FALSE;
   }
 
-  DWORD fileSize1 = GetFileSize(file1, nullptr);
-  DWORD fileSize2 = GetFileSize(file2, nullptr);
+  DWORD fileSize1 = GetFileSize(file1.get(), nullptr);
+  DWORD fileSize2 = GetFileSize(file2.get(), nullptr);
   if (INVALID_FILE_SIZE == fileSize1 || INVALID_FILE_SIZE == fileSize2) {
     return FALSE;
   }
@@ -48,12 +47,12 @@ VerifySameFiles(LPCWSTR file1Path, LPCWSTR file2Path, BOOL &sameContent)
   DWORD leftOver = fileSize1 % COMPARE_BLOCKSIZE;
   DWORD readAmount;
   for (DWORD i = 0; i < numBlocks; i++) {
-    if (!ReadFile(file1, buf1, COMPARE_BLOCKSIZE, &readAmount, nullptr) ||
+    if (!ReadFile(file1.get(), buf1, COMPARE_BLOCKSIZE, &readAmount, nullptr) ||
         readAmount != COMPARE_BLOCKSIZE) {
       return FALSE;
     }
 
-    if (!ReadFile(file2, buf2, COMPARE_BLOCKSIZE, &readAmount, nullptr) ||
+    if (!ReadFile(file2.get(), buf2, COMPARE_BLOCKSIZE, &readAmount, nullptr) ||
         readAmount != COMPARE_BLOCKSIZE) {
       return FALSE;
     }
@@ -65,12 +64,12 @@ VerifySameFiles(LPCWSTR file1Path, LPCWSTR file2Path, BOOL &sameContent)
   }
 
   if (leftOver) {
-    if (!ReadFile(file1, buf1, leftOver, &readAmount, nullptr) ||
+    if (!ReadFile(file1.get(), buf1, leftOver, &readAmount, nullptr) ||
         readAmount != leftOver) {
       return FALSE;
     }
 
-    if (!ReadFile(file2, buf2, leftOver, &readAmount, nullptr) ||
+    if (!ReadFile(file2.get(), buf2, leftOver, &readAmount, nullptr) ||
         readAmount != leftOver) {
       return FALSE;
     }
