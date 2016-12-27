@@ -18,10 +18,10 @@ BOOL IsLocalFile(LPCWSTR file, BOOL &isLocal);
 DWORD StartServiceCommand(int argc, LPCWSTR* argv);
 BOOL IsUnpromptedElevation(BOOL &isUnpromptedElevation);
 
-#define SVC_NAME L"MozillaMaintenance"
+#define SVC_NAME L"LibreOfficeMaintenance"
 
 #define BASE_SERVICE_REG_KEY \
-  L"SOFTWARE\\Mozilla\\MaintenanceService"
+  L"SOFTWARE\\LibreOffice\\MaintenanceService"
 
 // The test only fallback key, as its name implies, is only present on machines
 // that will use automated tests.  Since automated tests always run from a
