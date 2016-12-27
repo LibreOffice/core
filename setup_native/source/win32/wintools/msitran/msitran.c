@@ -13,6 +13,7 @@
 #include <windows.h>
 #include <msi.h>
 #include <msiquery.h>
+#include <rtl/character.hxx>
 
 #define MSITRANSFORM_ERROR_ADDEXISTINGROW   0x01
 #define MSITRANSFORM_ERROR_DELMISSINGROW    0x02
@@ -70,7 +71,7 @@ int main(int argc, char *argv[])
     /* Get parameters */
     while (argv[1] && (argv[1][0] == '-' || argv[1][0] == '/'))
     {
-        switch(tolower(argv[1][1]))
+        switch(rtl::toAsciiLowerCase(argv[1][1]))
         {
         case 'g':
             for (i = 0; i < 3; i++)
