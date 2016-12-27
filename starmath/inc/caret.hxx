@@ -15,6 +15,7 @@
 
 #include "node.hxx"
 
+#include <cassert>
 #include <memory>
 #include <vector>
 
@@ -24,10 +25,13 @@ struct SmCaretPos{
         : pSelectedNode(selectedNode)
         , nIndex(iIndex)
     {
+        assert(nIndex >= 0);
     }
+
     /** Selected node */
     SmNode* pSelectedNode;
-    /** Index within the selected node
+
+    /** Index (invariant: non-negative) within the selected node
      *
      * 0: Position in front of a node
      * 1: Position after a node or after first char in SmTextNode
@@ -38,6 +42,7 @@ struct SmCaretPos{
     //TODO: Special cases for SmBlankNode is needed
     //TODO: Consider forgetting about the todo above... As it's really unpleasant.
     int nIndex;
+
     /** True, if this is a valid caret position */
     bool IsValid() const { return pSelectedNode != nullptr; }
     bool operator==(const SmCaretPos &pos) const {
