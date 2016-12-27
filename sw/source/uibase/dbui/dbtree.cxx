@@ -161,7 +161,6 @@ SwDBTreeList::~SwDBTreeList()
 
 void SwDBTreeList::dispose()
 {
-    delete pImpl;
     pImpl = nullptr;
     SvTreeListBox::dispose();
 }
