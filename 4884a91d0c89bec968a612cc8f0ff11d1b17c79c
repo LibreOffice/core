@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a6eadb0_2713425e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2016-12-27T18:02:12Z",
+      "side": 1,
+      "message": "Please remove this from your commit message. It isn’t interesting for it to be left in the permanent Git history. These workflow comments can be posted as comments in Gerrit.",
+      "revId": "4884a91d0c89bec968a612cc8f0ff11d1b17c79c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
