@@ -59,10 +59,10 @@ class CheckSidebar(unittest.TestCase):
         assert ( firstDeckName in deckElementNames )
         assert ( xDecks.hasByName(firstDeckName) )
 
-        decksCount = xDecks.getCount()
+        decksCount = len(xDecks)
         self.assertEqual ( 5, decksCount )
 
-        xDeck = xDecks.getByName(firstDeckName)
+        xDeck = xDecks[firstDeckName]
         assert ( xDeck )
         assert ( xDeck.getId() == firstDeckName )
 
@@ -91,7 +91,7 @@ class CheckSidebar(unittest.TestCase):
 
         xPanels = xDeck.getPanels()
 
-        panelsCount = xPanels.getCount()
+        panelsCount = len(xPanels)
         self.assertEqual ( panelsCount, 5 )
 
         firstPanelName = self.getFirstPanel(xPanels)
@@ -100,7 +100,7 @@ class CheckSidebar(unittest.TestCase):
         assert ( firstPanelName in panelElementNames )
         assert ( xPanels.hasByName(firstPanelName) )
 
-        xPanel = xPanels.getByName(firstPanelName)
+        xPanel = xPanels[firstPanelName]
         assert ( xPanel )
         assert ( xPanel.getId() == firstPanelName )
 
@@ -129,7 +129,7 @@ class CheckSidebar(unittest.TestCase):
 
         lastPanelName = self.getLastPanel(xPanels)
 
-        otherPanel = xPanels.getByName(lastPanelName)
+        otherPanel = xPanels[lastPanelName]
         otherPanel.expand(False)
         assert( otherPanel.isExpanded() )
 
