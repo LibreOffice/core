@@ -21,6 +21,7 @@
 #include <ctype.h>
 #include "cppdef.h"
 #include "cpp.h"
+#include <rtl/character.hxx>
 
 static int evallex(int skip);
 static int dosizeof(void);
@@ -666,7 +667,7 @@ static int evalnum(int c)
     {
         c1 = c;
         if (isascii(c) && isupper(c1))
-            c1 = tolower(c1);
+            c1 = rtl::toAsciiLowerCase(c1);
         if (c1 >= 'a')
             c1 -= ('a' - 10);
         else
