@@ -2534,10 +2534,12 @@ WW8PLCFx_Fc_FKP::WW8Fkp::WW8Fkp(const WW8Fib& rFib, SvStream* pSt,
                          are expanding, then we tack the old data onto the end
                          of the new data
                         */
-                        bool bExpand = IsExpandableSprm(nSpId);
+                        const bool bExpand = IsExpandableSprm(nSpId);
                         const sal_uInt8* pStartData = aEntry.mpData + 2;
                         const sal_uInt8* pLastValidDataPos = maRawData + 512 - sizeof(sal_uInt32);
-                        if ((IsReplaceAllSprm(nSpId) || bExpand) && pStartData <= pLastValidDataPos)
+                        if (pStartData > pLastValidDataPos)
+                            pStartData = nullptr;
+                        if ((IsReplaceAllSprm(nSpId) || bExpand) && pStartData)
                         {
                             sal_uInt32 nCurr = pDataSt->Tell();
                             sal_uInt32 nPos = SVBT32ToUInt32(pStartData);
