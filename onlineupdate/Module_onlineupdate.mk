@@ -15,10 +15,10 @@ $(eval $(call gb_Module_add_targets,onlineupdate,\
 	StaticLibrary_libmar \
 	StaticLibrary_updatehelper \
 	$(if $(filter WNT,$(OS)),\
+		Executable_update_service \
 		StaticLibrary_winhelper )\
 	Executable_mar \
 	Executable_updater \
-	Executable_update_service \
 ))
 endif
 
