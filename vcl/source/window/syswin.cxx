@@ -979,6 +979,8 @@ void SystemWindow::SetNotebookBar(const OUString& rUIXMLDescription, const css::
     {
         static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->SetNotebookBar(rUIXMLDescription, rFrame);
         maNotebookBarUIFile = rUIXMLDescription;
+        if(GetNotebookBar())
+            GetNotebookBar()->SetSystemWindow(this);
     }
 }
 

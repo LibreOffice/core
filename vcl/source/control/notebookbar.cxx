@@ -10,6 +10,7 @@
 #include <vcl/layout.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/notebookbar.hxx>
+#include <vcl/taskpanelist.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/implbase.hxx>
 
@@ -50,9 +51,25 @@ NotebookBar::~NotebookBar()
 
 void NotebookBar::dispose()
 {
+    if (m_pSystemWindow && m_pSystemWindow->ImplIsInTaskPaneList(this))
+    {
+        m_pSystemWindow->GetTaskPaneList()->RemoveWindow(this);
+        m_pSystemWindow.clear();
+    }
     disposeBuilder();
     m_pEventListener.clear();
     Control::dispose();
+}
+
+bool NotebookBar::PreNotify(NotifyEvent& rNEvt)
+{
+    // capture KeyEvents for taskpane cycling
+    if (rNEvt.GetType() == MouseNotifyEvent::KEYINPUT)
+    {
+        if (m_pSystemWindow)
+            return m_pSystemWindow->PreNotify(rNEvt);
+    }
+    return Window::PreNotify( rNEvt );
 }
 
 Size NotebookBar::GetOptimalSize() const
@@ -96,6 +113,16 @@ void NotebookBar::SetIconClickHdl(Link<NotebookBar*, void> aHdl)
 {
     if (m_pContextContainer)
         m_pContextContainer->SetIconClickHdl(aHdl);
+}
+
+void NotebookBar::SetSystemWindow(SystemWindow* pSystemWindow)
+{
+    if (m_pSystemWindow)
+        m_pSystemWindow.clear();
+
+    m_pSystemWindow = VclPtr<SystemWindow>(pSystemWindow);
+    if (!m_pSystemWindow->ImplIsInTaskPaneList(this))
+        m_pSystemWindow->GetTaskPaneList()->AddWindow(this);
 }
 
 void SAL_CALL NotebookBarContextChangeEventListener::notifyContextChangeEvent(const css::ui::ContextChangeEventObject& rEvent)
