@@ -240,6 +240,8 @@ bool SystemWindow::PreNotify( NotifyEvent& rNEvt )
                 }
                 pTList = pSysWin->mpImplData->mpTaskPaneList;
             }
+            if( GetNotebookBar() != nullptr )
+                pTList->AddWindow( GetNotebookBar() );
             if( pTList && pTList->HandleKeyEvent( *rNEvt.GetKeyEvent() ) )
                 return true;
         }
@@ -990,6 +992,8 @@ void SystemWindow::SetNotebookBar(const OUString& rUIXMLDescription, const css::
     {
         static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->SetNotebookBar(rUIXMLDescription, rFrame);
         maNotebookBarUIFile = rUIXMLDescription;
+        if(GetNotebookBar())
+            GetNotebookBar()->SetSystemWindow(this);
     }
 }
 

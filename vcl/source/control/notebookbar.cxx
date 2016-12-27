@@ -41,6 +41,7 @@ NotebookBar::NotebookBar(Window* pParent, const OString& rID, const OUString& rU
     // In the Notebookbar's .ui file must exist control handling context
     // - implementing NotebookbarContextControl interface with id "ContextContainer"
     m_pContextContainer = dynamic_cast<NotebookbarContextControl*>(m_pUIBuilder->get<Window>("ContextContainer"));
+    m_pSystemWindow = nullptr;
 }
 
 NotebookBar::~NotebookBar()
@@ -53,6 +54,17 @@ void NotebookBar::dispose()
     disposeBuilder();
     m_pEventListener.clear();
     Control::dispose();
+}
+
+bool NotebookBar::PreNotify(NotifyEvent& rNEvt)
+{
+    // capture KeyEvents for taskpane cycling
+    if (rNEvt.GetType() == MouseNotifyEvent::KEYINPUT)
+    {
+        if (m_pSystemWindow != nullptr)
+            return (*m_pSystemWindow)->PreNotify(rNEvt);
+    }
+    return Window::PreNotify( rNEvt );
 }
 
 Size NotebookBar::GetOptimalSize() const
@@ -96,6 +108,11 @@ void NotebookBar::SetIconClickHdl(Link<NotebookBar*, void> aHdl)
 {
     if (m_pContextContainer)
         m_pContextContainer->SetIconClickHdl(aHdl);
+}
+
+void NotebookBar::SetSystemWindow(SystemWindow* pSystemWindow)
+{
+    m_pSystemWindow = new ScopedVclPtr<SystemWindow>(pSystemWindow);
 }
 
 void SAL_CALL NotebookBarContextChangeEventListener::notifyContextChangeEvent(const css::ui::ContextChangeEventObject& rEvent)
