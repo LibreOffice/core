@@ -7,6 +7,7 @@
 #include <wtsapi32.h>
 #include <userenv.h>
 #include <shellapi.h>
+#include <cstddef>
 
 #pragma comment(lib, "wtsapi32.lib")
 #pragma comment(lib, "userenv.lib")
@@ -14,23 +15,22 @@
 #pragma comment(lib, "ole32.lib")
 #pragma comment(lib, "rpcrt4.lib")
 
-#include "nsWindowsHelpers.h"
-
-#include "workmonitor.h"
-#include "serviceinstall.h"
-#include "servicebase.h"
-#include "registrycertificates.h"
+#include "workmonitor.hxx"
+#include "serviceinstall.hxx"
+#include "servicebase.hxx"
+#include "registrycertificates.hxx"
 #include "uachelper.h"
 #include "updatehelper.h"
 #include "errors.h"
+#include "windowsHelper.hxx"
 
 // Wait 15 minutes for an update operation to run at most.
 // Updates usually take less than a minute so this seems like a
 // significantly large and safe amount of time to wait.
 static const int TIME_TO_WAIT_ON_UPDATER = 15 * 60 * 1000;
-char16_t* MakeCommandLine(int argc, char16_t **argv);
+wchar_t* MakeCommandLine(int argc, wchar_t **argv);
 BOOL WriteStatusFailure(LPCWSTR updateDirPath, int errorCode);
-BOOL PathGetSiblingFilePath(LPWSTR destinationBuffer,  LPCWSTR siblingFilePath, 
+BOOL PathGetSiblingFilePath(LPWSTR destinationBuffer,  LPCWSTR siblingFilePath,
                             LPCWSTR newFileName);
 
 /*
@@ -53,20 +53,20 @@ IsStatusApplying(LPCWSTR updateDirPath, BOOL &isApplying)
     return FALSE;
   }
 
-  nsAutoHandle statusFile(CreateFileW(updateStatusFilePath, GENERIC_READ,
+  AutoHandle statusFile(CreateFileW(updateStatusFilePath, GENERIC_READ,
                                       FILE_SHARE_READ |
                                       FILE_SHARE_WRITE |
                                       FILE_SHARE_DELETE,
                                       nullptr, OPEN_EXISTING, 0, nullptr));
 
-  if (INVALID_HANDLE_VALUE == statusFile) {
+  if (statusFile == INVALID_HANDLE_VALUE) {
     LOG_WARN(("Could not open update.status file"));
     return FALSE;
   }
 
   char buf[32] = { 0 };
   DWORD read;
-  if (!ReadFile(statusFile, buf, sizeof(buf), &read, nullptr)) {
+  if (!ReadFile(statusFile.get(), buf, sizeof(buf), &read, nullptr)) {
     LOG_WARN(("Could not read from update.status file"));
     return FALSE;
   }
@@ -378,9 +378,9 @@ ProcessSoftwareUpdateCommand(DWORD argc, LPWSTR *argv)
     return FALSE;
   }
 
-  nsAutoHandle noWriteLock(CreateFileW(argv[0], GENERIC_READ, FILE_SHARE_READ,
+  AutoHandle noWriteLock(CreateFileW(argv[0], GENERIC_READ, FILE_SHARE_READ,
                                        nullptr, OPEN_EXISTING, 0, nullptr));
-  if (INVALID_HANDLE_VALUE == noWriteLock) {
+  if (noWriteLock == INVALID_HANDLE_VALUE) {
       LOG_WARN(("Could not set no write sharing access on file.  (%d)",
                 GetLastError()));
     if (!WriteStatusFailure(argv[1],
@@ -401,7 +401,7 @@ ProcessSoftwareUpdateCommand(DWORD argc, LPWSTR *argv)
     result = FALSE;
   }
 
-  BOOL updaterIsCorrect;
+  BOOL updaterIsCorrect = FALSE;
   if (result && !VerifySameFiles(argv[0], installDirUpdater,
                                  updaterIsCorrect)) {
     LOG_WARN(("Error checking if the updaters are the same.\n"
