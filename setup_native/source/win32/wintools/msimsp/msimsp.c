@@ -12,6 +12,7 @@
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
+#include <rtl/character.hxx>
 
 void usage(void)
 {
@@ -44,7 +45,7 @@ int main(int argc, char *argv[])
     /* Get parameters */
     while (argv[1] && (argv[1][0] == '-' || argv[1][0] == '/'))
     {
-        switch(tolower(argv[1][1]))
+        switch(rtl::toAsciiLowerCase(argv[1][1]))
         {
         case 's':
             argv++; argc++;
