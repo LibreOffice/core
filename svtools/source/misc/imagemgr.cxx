@@ -489,36 +489,108 @@ static Image GetImageFromList_Impl( sal_uInt16 nImageId, bool bBig )
         // return our new small folder image (256 colors)
         return Image( SvtResId( IMG_SVT_FOLDER ) );
 
-    ImageList* pList = nullptr;
-
-    static vcl::DeleteOnDeinit< ImageList > xSmallImageList( nullptr );
-    static vcl::DeleteOnDeinit< ImageList > xBigImageList( nullptr );
-    static OUString style = Application::GetSettings().GetStyleSettings().DetermineIconTheme();
-
-    // If the style has been changed, throw away our cache of the older images
-    OUString currentStyle = Application::GetSettings().GetStyleSettings().DetermineIconTheme();
-    if ( style != currentStyle)
+    switch (nImageId)
     {
-        xSmallImageList.reset();
-        xBigImageList.reset();
-        style = currentStyle;
+        case IMG_IMPRESS:
+            return Image(BitmapEx(SvtResId(bBig ? BMP_IMPRESS_LC : BMP_IMPRESS_SC)));
+        case IMG_BITMAP:
+            return Image(BitmapEx(SvtResId(bBig ? BMP_BITMAP_LC : BMP_BITMAP_SC)));
+        case IMG_CALC:
+            return Image(BitmapEx(SvtResId(bBig ? BMP_CALC_LC : BMP_CALC_SC)));
+        case IMG_CALCTEMPLATE:
+            return Image(BitmapEx(SvtResId(bBig ? BMP_CALCTEMPLATE_LC : BMP_CALCTEMPLATE_SC)));
+        case IMG_DATABASE:
+            return Image(BitmapEx(SvtResId(bBig ? BMP_DATABASE_LC : BMP_DATABASE_SC)));
+        case IMG_IMPRESSTEMPLATE:
+            return Image(BitmapEx(SvtResId(bBig ? BMP_IMPRESSTEMPLATE_LC : BMP_IMPRESSTEMPLATE_SC)));
+        case IMG_GIF:
+            return Image(BitmapEx(SvtResId(bBig ? BMP_GIF_LC : BMP_GIF_SC)));
+        case IMG_HTML:
+            return Image(BitmapEx(SvtResId(bBig ? BMP_HTML_LC : BMP_HTML_SC)));
+        case IMG_JPG:
+            return Image(BitmapEx(SvtResId(bBig ? BMP_JPG_LC : BMP_JPG_SC)));
+        case IMG_MATH:
+            return Image(BitmapEx(SvtResId(bBig ? BMP_MATH_LC : BMP_MATH_SC)));
+        case IMG_MATHTEMPLATE:
+            return Image(BitmapEx(SvtResId(bBig ? BMP_MATHTEMPLATE_LC : BMP_MATHTEMPLATE_SC)));
+        case IMG_FILE:
+            return Image(BitmapEx(SvtResId(bBig ? BMP_FILE_LC : BMP_FILE_SC)));
+        case IMG_PCD:
+            return Image(BitmapEx(SvtResId(bBig ? BMP_PCD_LC : BMP_PCD_SC)));
+        case IMG_PCT:
+            return Image(BitmapEx(SvtResId(bBig ? BMP_PCT_LC : BMP_PCT_SC)));
+        case IMG_PCX:
+            return Image(BitmapEx(SvtResId(bBig ? BMP_PCX_LC : BMP_PCX_SC)));
+        case IMG_SIM:
+            return Image(BitmapEx(SvtResId(bBig ? BMP_SIM_LC : BMP_SIM_SC)));
+        case IMG_TEXTFILE:
+            return Image(BitmapEx(SvtResId(bBig ? BMP_TEXTFILE_LC : BMP_TEXTFILE_SC)));
+        case IMG_TIFF:
+            return Image(BitmapEx(SvtResId(bBig ? BMP_TIFF_LC : BMP_TIFF_SC)));
+        case IMG_WMF:
+            return Image(BitmapEx(SvtResId(bBig ? BMP_WMF_LC : BMP_WMF_SC)));
+        case IMG_WRITER:
+            return Image(BitmapEx(SvtResId(bBig ? BMP_WRITER_LC : BMP_WRITER_SC)));
+        case IMG_WRITERTEMPLATE:
+            return Image(BitmapEx(SvtResId(bBig ? BMP_WRITERTEMPLATE_LC : BMP_WRITERTEMPLATE_SC)));
+        case IMG_FIXEDDEV:
+            return Image(BitmapEx(SvtResId(bBig ? BMP_FIXEDDEV_LC : BMP_FIXEDDEV_SC)));
+        case IMG_REMOVABLEDEV:
+            return Image(BitmapEx(SvtResId(bBig ? BMP_REMOVABLEDEV_LC : BMP_REMOVABLEDEV_SC)));
+        case IMG_CDROMDEV:
+            return Image(BitmapEx(SvtResId(bBig ? BMP_CDROMDEV_LC : BMP_CDROMDEV_SC)));
+        case IMG_NETWORKDEV:
+            return Image(BitmapEx(SvtResId(bBig ? BMP_NETWORKDEV_LC : BMP_NETWORKDEV_SC)));
+        case IMG_TABLE:
+            return Image(BitmapEx(SvtResId(bBig ? BMP_TABLE_LC : BMP_TABLE_SC)));
+        case IMG_FOLDER:
+            return Image(BitmapEx(SvtResId(bBig ? BMP_FOLDER_LC : BMP_FOLDER_SC)));
+        case IMG_DXF:
+            return Image(BitmapEx(SvtResId(bBig ? BMP_DXF_LC : BMP_DXF_SC)));
+        case IMG_MET:
+            return Image(BitmapEx(SvtResId(bBig ? BMP_MET_LC : BMP_MET_SC)));
+        case IMG_PNG:
+            return Image(BitmapEx(SvtResId(bBig ? BMP_PNG_LC : BMP_PNG_SC)));
+        case IMG_SGF:
+            return Image(BitmapEx(SvtResId(bBig ? BMP_SGF_LC : BMP_SGF_SC)));
+        case IMG_SGV:
+            return Image(BitmapEx(SvtResId(bBig ? BMP_SGV_LC : BMP_SGV_SC)));
+        case IMG_SVM:
+            return Image(BitmapEx(SvtResId(bBig ? BMP_SVM_LC : BMP_SVM_SC)));
+        case IMG_GLOBAL_DOC:
+            return Image(BitmapEx(SvtResId(bBig ? BMP_GLOBAL_DOC_LC : BMP_GLOBAL_DOC_SC)));
+        case IMG_DRAW:
+            return Image(BitmapEx(SvtResId(bBig ? BMP_DRAW_LC : BMP_DRAW_SC)));
+        case IMG_DRAWTEMPLATE:
+            return Image(BitmapEx(SvtResId(bBig ? BMP_DRAWTEMPLATE_LC : BMP_DRAWTEMPLATE_SC)));
+        case IMG_TEMPLATE:
+            return Image(BitmapEx(SvtResId(bBig ? BMP_TEMPLATE_LC : BMP_TEMPLATE_SC)));
+        case IMG_OO_DATABASE_DOC:
+            return Image(BitmapEx(SvtResId(bBig ? BMP_OO_DATABASE_DOC_LC : BMP_OO_DATABASE_DOC_SC)));
+        case IMG_OO_DRAW_DOC:
+            return Image(BitmapEx(SvtResId(bBig ? BMP_OO_DRAW_DOC_LC : BMP_OO_DRAW_DOC_SC)));
+        case IMG_OO_MATH_DOC:
+            return Image(BitmapEx(SvtResId(bBig ? BMP_OO_MATH_DOC_LC : BMP_OO_MATH_DOC_SC)));
+        case IMG_OO_GLOBAL_DOC:
+            return Image(BitmapEx(SvtResId(bBig ? BMP_OO_GLOBAL_DOC_LC : BMP_OO_GLOBAL_DOC_SC)));
+        case IMG_OO_IMPRESS_DOC:
+            return Image(BitmapEx(SvtResId(bBig ? BMP_OO_IMPRESS_DOC_LC : BMP_OO_IMPRESS_DOC_SC)));
+        case IMG_OO_CALC_DOC:
+            return Image(BitmapEx(SvtResId(bBig ? BMP_OO_CALC_DOC_LC : BMP_OO_CALC_DOC_SC)));
+        case IMG_OO_WRITER_DOC:
+            return Image(BitmapEx(SvtResId(bBig ? BMP_OO_WRITER_DOC_LC : BMP_OO_WRITER_DOC_SC)));
+        case IMG_OO_DRAW_TEMPLATE:
+            return Image(BitmapEx(SvtResId(bBig ? BMP_OO_DRAW_TEMPLATE_LC : BMP_OO_DRAW_TEMPLATE_SC)));
+        case IMG_OO_IMPRESS_TEMPLATE:
+            return Image(BitmapEx(SvtResId(bBig ? BMP_OO_IMPRESS_TEMPLATE_LC : BMP_OO_IMPRESS_TEMPLATE_SC)));
+        case IMG_OO_CALC_TEMPLATE:
+            return Image(BitmapEx(SvtResId(bBig ? BMP_OO_CALC_TEMPLATE_LC : BMP_OO_CALC_TEMPLATE_SC)));
+        case IMG_OO_WRITER_TEMPLATE:
+            return Image(BitmapEx(SvtResId(bBig ? BMP_OO_WRITER_TEMPLATE_LC : BMP_OO_WRITER_TEMPLATE_SC)));
+        case IMG_EXTENSION:
+            return Image(BitmapEx(SvtResId(bBig ? BMP_EXTENSION_LC : BMP_EXTENSION_SC)));
     }
 
-    if ( bBig )
-    {
-        if ( !xBigImageList.get() )
-            xBigImageList.reset(new ImageList(SvtResId(RID_SVTOOLS_IMAGELIST_BIG)));
-        pList = xBigImageList.get();
-    }
-    else
-    {
-        if ( !xSmallImageList.get() )
-            xSmallImageList.reset(new ImageList(SvtResId(RID_SVTOOLS_IMAGELIST_SMALL)));
-        pList = xSmallImageList.get();
-    }
-
-    if ( pList->HasImageForId( nImageId ) )
-        return pList->GetImage( nImageId );
     return Image();
 }
 
