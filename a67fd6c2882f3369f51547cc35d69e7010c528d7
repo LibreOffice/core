@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a6eadb0_0781e64a",
+        "filename": "sw/source/ui/envelp/mailmrge.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 378,
+      "author": {
+        "id": 1000169
+      },
+      "writtenOn": "2016-12-28T02:36:53Z",
+      "side": 0,
+      "message": "Here it would be good to reset the pImpl pointer as the old code also freed the object pImpl points.",
+      "range": {
+        "startLine": 378,
+        "startChar": 16,
+        "endLine": 378,
+        "endChar": 17
+      },
+      "revId": "a67fd6c2882f3369f51547cc35d69e7010c528d7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
