@@ -406,6 +406,11 @@ bool DrawDocShell::IsNewPageNameValid( OUString & rInOutPageName, bool bResetStr
     return bCanUseNewName;
 }
 
+bool DrawDocShell::IsPageNameUnique( const OUString & rPageName ) const
+{
+    return mpDoc->IsPageNameUnique(rPageName);
+}
+
 IMPL_LINK( DrawDocShell, RenameSlideHdl, AbstractSvxNameDialog&, rDialog, bool )
 {
     OUString aNewName;

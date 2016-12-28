@@ -389,9 +389,26 @@ void Clipboard::CreateSlideTransferable (
     SdDrawDocument* const pDocument = mrSlideSorter.GetModel().GetDocument();
     DrawDocShell* const pDataDocSh = pDocument ? pDocument->GetDocSh() : nullptr;
 
+    sal_Int32 nUniqueID = 0;
     while (aSelectedPages.HasMoreElements())
     {
         model::SharedPageDescriptor pDescriptor (aSelectedPages.GetNextElement());
+
+        //ensure that the slides have unique names
+        const OUString sOrigName = pDescriptor->GetPage()->GetName();
+        if ( pDataDocSh && !pDataDocSh->IsPageNameUnique( sOrigName ) )
+        {
+            OUString sUniqueName;
+            bool bUnique = false;
+            while ( !bUnique )
+            {
+                sUniqueName = sOrigName + "_clipboard" + OUString::number(nUniqueID++);
+                bUnique = pDataDocSh->IsNewPageNameValid( sUniqueName );
+                if ( bUnique )
+                    pDescriptor->GetPage()->SetName(sUniqueName);
+            }
+        }
+
         aBookmarkList.push_back(pDescriptor->GetPage()->GetName());
         maPagesToRemove.push_back (pDescriptor->GetPage());
     }
