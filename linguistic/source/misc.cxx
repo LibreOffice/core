@@ -18,7 +18,6 @@
  */
 
 #include <sal/macros.h>
-#include <tools/debug.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svl/lngmisc.hxx>
 #include <ucbhelper/content.hxx>
@@ -149,9 +148,9 @@ IntArray2D::~IntArray2D()
 
 sal_Int32 & IntArray2D::Value( int i, int k  )
 {
-    DBG_ASSERT( 0 <= i && i < n1, "first index out of range" );
-    DBG_ASSERT( 0 <= k && k < n2, "first index out of range" );
-    DBG_ASSERT( i * n2 + k < n1 * n2, "index out of range" );
+    assert( (0 <= i && i < n1) && "first index out of range" );
+    assert( (0 <= k && k < n2) && "second index out of range" );
+    assert( (i * n2 + k < n1 * n2) && "index out of range" );
     return pData[ i * n2 + k ];
 }
 
@@ -299,8 +298,8 @@ uno::Reference< XDictionaryEntry > SearchDicList(
         if ( axDic.is() && axDic->isActive()
             && (nLang == nLanguage  ||  LinguIsUnspecified( nLang)) )
         {
-            DBG_ASSERT( eType != DictionaryType_MIXED,
-                "lng : unexpected dictionary type" );
+            // DictionaryType_MIXED is deprecated
+            SAL_WARN_IF(eType == DictionaryType_MIXED, "linguistic", "unexpected dictionary type");
 
             if (   (!bSearchPosDics  &&  eType == DictionaryType_NEGATIVE)
                 || ( bSearchPosDics  &&  eType == DictionaryType_POSITIVE))
@@ -477,7 +476,7 @@ static bool GetAltSpelling( sal_Int16 &rnChgPos, sal_Int16 &rnChgLen, OUString &
 
         rnChgPos = sal::static_int_cast< sal_Int16 >(nPosL);
         rnChgLen = sal::static_int_cast< sal_Int16 >(nAltPosR - nPosL);
-        DBG_ASSERT( rnChgLen >= 0, "nChgLen < 0");
+        assert( rnChgLen >= 0 && "nChgLen < 0");
 
         sal_Int32 nTxtStart = nPosL;
         sal_Int32 nTxtLen   = nAltPosR - nPosL + 1;
