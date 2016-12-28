@@ -29,7 +29,7 @@ public:
     void testTdf43700();
     void testTdf43534();
     void testTdf91979();
-    // void testTdf40110();
+    void testTdf40110();
     void testTdf98657();
     void testTdf88821();
     void testTdf88821_2();
@@ -43,7 +43,7 @@ public:
     CPPUNIT_TEST(testTdf43700);
     CPPUNIT_TEST(testTdf43534);
     CPPUNIT_TEST(testTdf91979);
-    // CPPUNIT_TEST(testTdf40110);
+    CPPUNIT_TEST(testTdf40110);
     CPPUNIT_TEST(testTdf98657);
     CPPUNIT_TEST(testTdf88821);
     CPPUNIT_TEST(testTdf88821_2);
@@ -166,7 +166,7 @@ void ScFiltersTest::testTdf91979()
     xComponent->dispose();
 }
 
-/*
+
 void ScFiltersTest::testTdf40110()
 {
     ScDocShellRef xDocSh = loadDoc("fdo40110test.", FORMAT_ODS);
@@ -184,7 +184,7 @@ void ScFiltersTest::testTdf40110()
 
     xDocSh->DoClose();
 }
-*/
+
 
 void ScFiltersTest::testTdf98657()
 {
