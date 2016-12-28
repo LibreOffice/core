@@ -86,7 +86,6 @@ class DataProvider
 public:
     virtual ~DataProvider() = 0;
 
-private:
     virtual void StartImport() = 0;
     virtual void StopImport() = 0;
     virtual void Refresh() = 0;
