@@ -22,6 +22,8 @@
 #include <breakiterator_unicode.hxx>
 #include <xdictionary.hxx>
 
+#include <memory>
+
 namespace com { namespace sun { namespace star { namespace i18n {
 
 //  class BreakIterator_CJK
@@ -46,7 +48,7 @@ public:
         throw(css::uno::RuntimeException, std::exception) override;
 
 protected:
-    xdictionary *dict;
+    std::unique_ptr<xdictionary> m_xDict;
     OUString hangingCharacters;
 };
 
@@ -54,7 +56,6 @@ protected:
 class BreakIterator_##lang : public BreakIterator_CJK {\
 public:\
     BreakIterator_##lang (); \
-    virtual ~BreakIterator_##lang () override; \
 };
 
 BREAKITERATOR_CJK( zh )
