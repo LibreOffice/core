@@ -34,7 +34,7 @@ die()
 get_config_sha()
 {
     pushd ${SRCDIR?} > /dev/null
-    cat ${BUILDDIR?}/config_host.mk | git hash-object --stdin
+    git hash-object ${BUILDDIR?}/config_host.mk
     popd > /dev/null
 }
 
