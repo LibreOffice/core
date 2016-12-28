@@ -62,6 +62,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/instance.hxx>
 #include <vcl/svapp.hxx>
+#include <desktop/crashreport.hxx>
 
 #include <tools/errinf.hxx>
 #include <unotools/configmgr.hxx>
@@ -317,6 +318,7 @@ sal_Bool SAL_CALL Desktop::terminate()
         // see dispose() for further information.
         /* SAFE AREA --------------------------------------------------------------------------------------- */
         SolarMutexClearableGuard aWriteLock;
+        CrashReporter::AddKeyValue("ShutDown", OUString::boolean(true));
         m_bIsTerminated = true;
         aWriteLock.clear();
         /* UNSAFE AREA ------------------------------------------------------------------------------------- */
