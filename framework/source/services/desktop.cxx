@@ -313,13 +313,13 @@ sal_Bool SAL_CALL Desktop::terminate()
         impl_sendCancelTerminationEvent(lCalledTerminationListener);
     else
     {
-            // "Protect" us against dispose before terminate calls!
-            // see dispose() for further information.
-            /* SAFE AREA --------------------------------------------------------------------------------------- */
-            SolarMutexClearableGuard aWriteLock;
-            m_bIsTerminated = true;
-            aWriteLock.clear();
-            /* UNSAFE AREA ------------------------------------------------------------------------------------- */
+        // "Protect" us against dispose before terminate calls!
+        // see dispose() for further information.
+        /* SAFE AREA --------------------------------------------------------------------------------------- */
+        SolarMutexClearableGuard aWriteLock;
+        m_bIsTerminated = true;
+        aWriteLock.clear();
+        /* UNSAFE AREA ------------------------------------------------------------------------------------- */
 
         impl_sendNotifyTerminationEvent();
 
