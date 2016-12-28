@@ -3323,6 +3323,7 @@ namespace sw
     RestoreFlyAnchorHint::~RestoreFlyAnchorHint() {}
     CreatePortionHint::~CreatePortionHint() {}
     FindSdrObjectHint::~FindSdrObjectHint() {}
+    CollectTextObjectsHint::~CollectTextObjectsHint() {}
 }
 
 SwDrawFrameFormat::~SwDrawFrameFormat()
