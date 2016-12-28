@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a6eadb0_47a03e91",
+        "filename": "linguistic/source/misc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2016-12-28T19:50:50Z",
+      "side": 1,
+      "message": "Shouldn\u0027t it be \"second\" here?",
+      "range": {
+        "startLine": 152,
+        "startChar": 35,
+        "endLine": 152,
+        "endChar": 40
+      },
+      "revId": "cbd02f526aace49f4427ef019fa0a558920be632",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
