@@ -63,6 +63,7 @@
 #include <rtl/instance.hxx>
 #include <vcl/svapp.hxx>
 #include <desktop/crashreport.hxx>
+#include <vcl/scheduler.hxx>
 
 #include <tools/errinf.hxx>
 #include <unotools/configmgr.hxx>
@@ -324,6 +325,7 @@ sal_Bool SAL_CALL Desktop::terminate()
         /* UNSAFE AREA ------------------------------------------------------------------------------------- */
 
         impl_sendNotifyTerminationEvent();
+        Scheduler::ProcessEventsToIdle();
 
         if(
             ( bAskQuickStart      ) &&
