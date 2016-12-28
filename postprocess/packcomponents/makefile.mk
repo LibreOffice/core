@@ -55,6 +55,7 @@ my_components = \
     chartmodel \
     charttools \
     chartview \
+    component/UnoControls/util/ctl \
     component/animations/source/animcore/animcore \
     component/avmedia/util/avmedia \
     component/basctl/util/basctl \
@@ -128,7 +129,6 @@ my_components = \
     component/xmloff/source/transform/xof \
     component/xmloff/util/xo \
     component/xmlscript/util/xcr \
-    ctl \
     date \
     dbase \
     dbp \

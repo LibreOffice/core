@@ -20,26 +20,25 @@
 #**************************************************************
 
 
-PRJ=..$/..
 
-PRJNAME=UnoControls
-TARGET=controls
-ENABLE_EXCEPTIONS=TRUE
-.IF "$(L10N_framework)"==""
+PRJ=..
+TARGET=prj
 
-# --- Settings -----------------------------------------------------
-.INCLUDE :	$(PRJ)$/util$/makefile.pmk
+.INCLUDE : settings.mk
 
-# --- Files --------------------------------------------------------
-SLOFILES=\
-            $(SLO)$/progressbar.obj						\
-            $(SLO)$/framecontrol.obj					\
-            $(SLO)$/progressmonitor.obj					\
-            $(SLO)$/OConnectionPointHelper.obj			\
-            $(SLO)$/OConnectionPointContainerHelper.obj	\
-            $(SLO)$/statusindicator.obj
+.IF "$(VERBOSE)"!=""
+VERBOSEFLAG :=
+.ELSE
+VERBOSEFLAG := -s
+.ENDIF
 
-# --- Targets ------------------------------------------------------
-.ENDIF # L10N_framework
+.IF "$(DEBUG)"!=""
+DEBUG_ARGUMENT=DEBUG=$(DEBUG)
+.ELIF "$(debug)"!=""
+DEBUG_ARGUMENT=debug=$(debug)
+.ELSE
+DEBUG_ARGUMENT=
+.ENDIF
 
-.INCLUDE :	target.mk
+all:
+    cd $(PRJ) && $(GNUMAKE) $(VERBOSEFLAG) -r -j$(MAXPROCESS) $(gb_MAKETARGET) $(DEBUG_ARGUMENT) && $(GNUMAKE) $(VERBOSEFLAG) -r deliverlog

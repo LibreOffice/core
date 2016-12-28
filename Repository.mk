@@ -56,6 +56,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     canvastools \
     communi \
     cppcanvas \
+    ctl \
     cui \
     dba \
     dbaxml \

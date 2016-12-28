@@ -20,12 +20,11 @@
 #**************************************************************
 
 
-ALLSLO: $(SLOFILES)
 
-SOSHL: $(SHL1TARGETN)
+$(eval $(call gb_Module_Module,UnoControls))
 
-WHOLEPRJ:
-    cd $(PRJ)$/prj
-    make debug linkinc prjpch compinc
-    @echo "READY"
+$(eval $(call gb_Module_add_targets,UnoControls,\
+	Library_ctl \
+))
 
+# vim: set noet sw=4 ts=4:
