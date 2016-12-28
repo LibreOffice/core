@@ -657,41 +657,12 @@ SwDrawContact::~SwDrawContact()
     }
 }
 
-void SwDrawContact::GetTextObjectsFromFormat( std::list<SdrTextObj*>& rTextObjects, SwDoc* pDoc )
+void SwDrawContact::GetTextObjectsFromFormat(std::list<SdrTextObj*>& o_rTextObjects, SwDoc* pDoc)
 {
-    for( sal_Int32 n=0; n<(sal_Int32)pDoc->GetSpzFrameFormats()->size(); n++ )
+    for(auto& rpFly : *pDoc->GetSpzFrameFormats())
     {
-        const SwFrameFormat* pFly = (*pDoc->GetSpzFrameFormats())[n];
-        if( dynamic_cast<const SwDrawFrameFormat*>( pFly ) !=  nullptr )
-        {
-            SwDrawContact* pContact = SwIterator<SwDrawContact,SwFrameFormat>(*pFly).First();
-            if( pContact )
-            {
-                SdrObject* pSdrO = pContact->GetMaster();
-                if ( pSdrO )
-                {
-                    if ( dynamic_cast<const SdrObjGroup*>(pSdrO) !=  nullptr )
-                    {
-                        SdrObjListIter aListIter( *pSdrO, SdrIterMode::DeepNoGroups );
-                        //iterate inside of a grouped object
-                        while( aListIter.IsMore() )
-                        {
-                            SdrObject* pSdrOElement = aListIter.Next();
-                            if( pSdrOElement && dynamic_cast<const SdrTextObj*>(pSdrOElement) !=  nullptr &&
-                                static_cast<SdrTextObj*>( pSdrOElement)->HasText() )
-                            {
-                                rTextObjects.push_back(static_cast<SdrTextObj*>( pSdrOElement ));
-                            }
-                        }
-                    }
-                    else if( dynamic_cast<const SdrTextObj*>(pSdrO) !=  nullptr &&
-                            static_cast<SdrTextObj*>( pSdrO )->HasText() )
-                    {
-                        rTextObjects.push_back(static_cast<SdrTextObj*>( pSdrO ));
-                    }
-                }
-            }
-        }
+        if(dynamic_cast<const SwDrawFrameFormat*>(rpFly))
+            rpFly->CallSwClientNotify(sw::CollectTextObjectsHint(o_rTextObjects));
     }
 }
 
@@ -1594,6 +1565,29 @@ void SwDrawContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
             ConnectToLayout();
             // Move object to visible layer
             MoveObjToVisibleLayer(GetMaster());
+        }
+    }
+    else if (auto pCollectTextObjectsHint = dynamic_cast<const sw::CollectTextObjectsHint*>(&rHint))
+    {
+        auto pSdrO = GetMaster();
+        if(!pSdrO)
+            return;
+        if(dynamic_cast<const SdrObjGroup*>(pSdrO))
+        {
+            SdrObjListIter aListIter(*pSdrO, SdrIterMode::DeepNoGroups);
+            //iterate inside of a grouped object
+            while(aListIter.IsMore())
+            {
+                SdrObject* pSdrOElement = aListIter.Next();
+                auto pTextObj = const_cast<SdrTextObj*>(dynamic_cast<const SdrTextObj*>(pSdrOElement));
+                if(pTextObj && pTextObj->HasText())
+                    pCollectTextObjectsHint->m_rTextObjects.push_back(pTextObj);
+            }
+        }
+        else if(auto pTextObj = const_cast<SdrTextObj*>(dynamic_cast<const SdrTextObj*>(pSdrO)))
+        {
+            if(pTextObj->HasText())
+                pCollectTextObjectsHint->m_rTextObjects.push_back(pTextObj);
         }
     }
 }

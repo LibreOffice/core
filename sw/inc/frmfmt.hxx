@@ -24,6 +24,7 @@
 #include <tools/gen.hxx>
 #include <format.hxx>
 #include "swdllapi.h"
+#include <list>
 
 class SwFlyFrame;
 class SwAnchoredObject;
@@ -248,6 +249,7 @@ public:
 
 class SwDrawFrameFormat;
 class SwDrawContact;
+class SdrTextObj;
 
 namespace sw
 {
@@ -320,6 +322,12 @@ namespace sw
         SwDrawContact** m_ppContact;
         CreatePortionHint(SwDrawContact** ppContact) : m_ppContact(ppContact) {};
         virtual ~CreatePortionHint() override;
+    };
+    struct SW_DLLPUBLIC CollectTextObjectsHint final : SfxHint
+    {
+        std::list<SdrTextObj*>& m_rTextObjects;
+        CollectTextObjectsHint(std::list<SdrTextObj*>& rTextObjects) : m_rTextObjects(rTextObjects) {};
+        virtual ~CollectTextObjectsHint() override;
     };
 }
 
