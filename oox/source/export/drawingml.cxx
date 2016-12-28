@@ -2982,7 +2982,7 @@ void DrawingML::WriteShapeEffects( const Reference< XPropertySet >& rXPropSet )
             aShadowAttribsGrabBag[0].Name = "dist";
             aShadowAttribsGrabBag[0].Value = Any(static_cast< sal_Int32 >(sqrt(dX*dX + dY*dY) * 360));
             aShadowAttribsGrabBag[1].Name = "dir";
-            aShadowAttribsGrabBag[1].Value = Any(static_cast< sal_Int32 >(atan2(dY,dX) * 180 * 60000 / M_PI));
+            aShadowAttribsGrabBag[1].Value = Any((static_cast< sal_Int32 >(atan2(dY,dX) * 180 * 60000 / M_PI) + 21600000) % 21600000);
 
             aShadowGrabBag[0].Name = "Attribs";
             aShadowGrabBag[0].Value = Any(aShadowAttribsGrabBag);
