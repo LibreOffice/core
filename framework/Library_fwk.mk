@@ -41,6 +41,7 @@ $(eval $(call gb_Library_use_libraries,fwk,\
     comphelper \
     cppu \
     cppuhelper \
+    crashreport \
     fwe \
     fwi \
     i18nlangtag \
