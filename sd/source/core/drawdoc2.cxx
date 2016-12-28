@@ -184,6 +184,43 @@ sal_uInt16 SdDrawDocument::GetPageByName(const OUString& rPgName, bool& rbIsMast
     return nPageNum;
 }
 
+bool SdDrawDocument::IsPageNameUnique( const OUString& rPgName ) const
+{
+    sal_uInt16 nCount = 0;
+    SdPage* pPage = nullptr;
+
+    // Search all regular pages and all notes pages (handout pages are ignored)
+    sal_uInt16 nPage = 0;
+    sal_uInt16 nMaxPages = GetPageCount();
+    while (nPage < nMaxPages)
+    {
+        pPage = const_cast<SdPage*>(static_cast<const SdPage*>(GetPage(nPage)));
+
+        if (pPage && pPage->GetName() == rPgName && pPage->GetPageKind() != PageKind::Handout)
+            nCount++;
+
+        nPage++;
+    }
+
+    // Search all master pages
+    nPage = 0;
+    nMaxPages = GetMasterPageCount();
+    while (nPage < nMaxPages)
+    {
+        pPage = const_cast<SdPage*>(static_cast<const SdPage*>(GetMasterPage(nPage)));
+
+        if (pPage && pPage->GetName() == rPgName)
+            nCount++;;
+
+        nPage++;
+    }
+
+    if (nCount == 1)
+        return true;
+    else
+        return false;
+}
+
 SdPage* SdDrawDocument::GetSdPage(sal_uInt16 nPgNum, PageKind ePgKind) const
 {
     return mpDrawPageListWatcher->GetSdPage(ePgKind, sal_uInt32(nPgNum));

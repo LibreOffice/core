@@ -355,6 +355,13 @@ public:
             SDRPAGE_NOTFOUND (=0xffff) when such a page does not exist.
     */
     SAL_DLLPRIVATE sal_uInt16 GetPageByName(const OUString& rPgName, bool& rbIsMasterPage ) const;
+    /** checks, if the given name is a *unique* name for an *existing* slide
+
+        @param rPageName the name of an existing slide
+
+        @return true, if the name is unique and the slide exists
+    */
+    bool IsPageNameUnique( const OUString& rPageName ) const;
     SdPage*GetSdPage(sal_uInt16 nPgNum, PageKind ePgKind) const;
     sal_uInt16 GetSdPageCount(PageKind ePgKind) const;
 

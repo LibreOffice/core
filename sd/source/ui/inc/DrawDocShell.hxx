@@ -183,6 +183,14 @@ public:
      */
     bool                    IsNewPageNameValid( OUString & rInOutPageName, bool bResetStringIfStandardName = false );
 
+    /** checks, if the given name is a *unique* name for an *existing* slide
+
+        @param rPageName the name of an existing slide
+
+        @return true, if the name is unique and the slide exists
+    */
+    bool                    IsPageNameUnique(const OUString& rPagName) const;
+
     /** Return the reference device for the current document.  When the
         inherited implementation returns a device then this is passed to the
         caller.  Otherwise the returned value depends on the printer
