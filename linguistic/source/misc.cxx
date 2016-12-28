@@ -130,6 +130,7 @@ private:
 
 public:
     IntArray2D( int nDim1, int nDim2 );
+    IntArray2D(const IntArray2D& rArray);
     ~IntArray2D();
 
     sal_Int32 & Value( int i, int k  );
@@ -140,6 +141,14 @@ IntArray2D::IntArray2D( int nDim1, int nDim2 )
     n1 = nDim1;
     n2 = nDim2;
     pData = new sal_Int32[n1 * n2];
+}
+
+IntArray2D::IntArray2D( const IntArray2D& rArray ) :
+    pData(new sal_Int32[rArray.n1 * rArray.n2]),
+    n1(rArray.n1),
+    n2(rArray.n2)
+{
+    std::memcpy( pData, rArray.pData, sizeof(sal_Int32) * rArray.n1 * rArray.n2 );
 }
 
 IntArray2D::~IntArray2D()
