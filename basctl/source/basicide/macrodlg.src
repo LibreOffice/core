@@ -22,7 +22,7 @@
 
 
 #include <sfx2/sfx.hrc>
-#include <macrodlg.hrc>
+#include "macrodlg.hrc"
 #include <basidesh.hrc>
 #include <helpid.hrc>
 ModalDialog RID_MACROCHOOSER

@@ -22,7 +22,7 @@
 
 
 #include "helpid.hrc"
-#include <brkdlg.hrc>
+#include "brkdlg.hrc"
 ModalDialog RID_BASICIDE_BREAKPOINTDLG
 {
     HelpId = "basctl:RID_BASICIDE_BREAKPOINTDLG" ;

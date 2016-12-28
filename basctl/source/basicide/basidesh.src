@@ -21,7 +21,7 @@
 
 
 
-#include <baside2.hrc>
+#include "baside2.hrc"
 #include <helpid.hrc>
 #ifndef _GLOBLMN_HRC
 #include <svx/globlmn.hrc>

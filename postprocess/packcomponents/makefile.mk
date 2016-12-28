@@ -47,7 +47,6 @@ my_components = \
     stocservices \
     abp \
     analysis \
-    basctl \
     basprov \
     bib \
     cached1 \
@@ -58,6 +57,7 @@ my_components = \
     chartview \
     component/animations/source/animcore/animcore \
     component/avmedia/util/avmedia \
+    component/basctl/util/basctl \
     component/binaryurp/source/binaryurp \
     component/canvas/source/factory/canvasfactory \
     component/canvas/source/simplecanvas/simplecanvas \

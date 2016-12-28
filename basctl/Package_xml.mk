@@ -1,4 +1,4 @@
-#**************************************************************
+###############################################################
 #  
 #  Licensed to the Apache Software Foundation (ASF) under one
 #  or more contributor license agreements.  See the NOTICE file
@@ -17,6 +17,10 @@
 #  specific language governing permissions and limitations
 #  under the License.
 #  
-#**************************************************************
+###############################################################
 
 
+
+$(eval $(call gb_Package_Package,basctl_xml,$(SRCDIR)/basctl))
+
+$(eval $(call gb_Package_add_file,basctl_xml,xml/basctl.xml,util/basctl.xml))

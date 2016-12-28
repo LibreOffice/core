@@ -21,30 +21,13 @@
 
 
 
+$(eval $(call gb_Module_Module,basctl))
 
-PRJ=..
+$(eval $(call gb_Module_add_targets,basctl,\
+	AllLangResTarget_basctl \
+	Library_basctl \
+	Package_uiconfig \
+	Package_xml \
+))
 
-PRJNAME=basctl
-TARGET=basslots
-
-# --- Settings -----------------------------------------------------
-
-.INCLUDE :  settings.mk
-.IF "$(L10N_framework)"==""
-SDI1NAME=$(TARGET)
-SDI1EXPORT=basctl
-
-# --- Files --------------------------------------------------------
-
-SVSDI1DEPEND= \
-        $(SOLARINCXDIR)$/sfx2/sfx.sdi \
-        $(SOLARINCXDIR)$/sfx2/sfxitems.sdi \
-        $(SOLARINCXDIR)$/svx/svx.sdi \
-        $(SOLARINCXDIR)$/svx/svxitems.sdi \
-        $(SOLARINCXDIR)$/svx/xoitems.sdi \
-    baside.sdi
-
-# --- Targets -------------------------------------------------------
-.ENDIF
-.INCLUDE :  target.mk
-
+# vim: set noet sw=4 ts=4:

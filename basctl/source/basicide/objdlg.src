@@ -21,7 +21,7 @@
 
 
 
-#include <objdlg.hrc>
+#include "objdlg.hrc"
 #include <helpid.hrc>
 
 #define MASKCOLOR   MaskColor = Color { Red = 0xFFFF; Green = 0x0000; Blue = 0xFFFF; };

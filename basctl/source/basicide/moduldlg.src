@@ -22,7 +22,7 @@
 
 
 #include "helpid.hrc"
-#include <moduldlg.hrc>
+#include "moduldlg.hrc"
 #include <basidesh.hrc>
 TabDialog RID_TD_ORGANIZE
 {

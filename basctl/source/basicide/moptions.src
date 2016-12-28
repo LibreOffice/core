@@ -22,7 +22,7 @@
 
 
 #include "helpid.hrc"
-#include <moptions.hrc>
+#include "moptions.hrc"
 ModalDialog RID_MACROOPTIONS
 {
     HelpId = "basctl:ModalDialog:RID_MACROOPTIONS" ;

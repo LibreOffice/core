@@ -50,6 +50,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     avmediaMacAVF \
     avmediaQuickTime \
     avmediawin \
+    basctl \
     basebmp \
     basegfx \
     canvastools \

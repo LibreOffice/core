@@ -28,6 +28,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     animations \
     automation \
     avmedia \
+    basctl \
     basebmp \
     basegfx \
     binaryurp \

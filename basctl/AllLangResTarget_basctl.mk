@@ -21,39 +21,29 @@
 
 
 
-PRJ=..$/..
+$(eval $(call gb_AllLangResTarget_AllLangResTarget,basctl))
 
-PRJNAME=basctl
-TARGET=dlged
-AUTOSEG=true
-VISIBILITY_HIDDEN=TRUE
+$(eval $(call gb_AllLangResTarget_add_srs,basctl,basctl/res))
 
-# --- Settings -----------------------------------------------------
+$(eval $(call gb_SrsTarget_SrsTarget,basctl/res))
 
-.INCLUDE :  settings.mk
-.INCLUDE :  $(PRJ)$/util$/makefile.pmk
+$(eval $(call gb_SrsTarget_set_include,basctl/res,\
+	$$(INCLUDE) \
+	-I$(SRCDIR)/basctl/inc \
+	-I$(SRCDIR)/basctl/source/inc \
+))
 
-# --- Files --------------------------------------------------------
+# add src files here (complete path relative to repository root)
+$(eval $(call gb_SrsTarget_add_files,basctl/res,\
+	basctl/source/basicide/basidesh.src \
+	basctl/source/basicide/macrodlg.src \
+	basctl/source/basicide/moptions.src \
+	basctl/source/basicide/moduldlg.src \
+	basctl/source/basicide/objdlg.src \
+	basctl/source/basicide/brkdlg.src \
+	basctl/source/basicide/basicprint.src \
+	basctl/source/dlged/dlgresid.src \
+	basctl/source/dlged/managelang.src \
+))
 
-EXCEPTIONSFILES=$(SLO)$/dlged.obj	\
-                $(SLO)$/dlgedobj.obj \
-                $(SLO)$/dlgedfac.obj	\
-                $(SLO)$/dlgedlist.obj	\
-                $(SLO)$/dlgedclip.obj	\
-                $(SLO)$/propbrw.obj
-
-SLOFILES=   $(EXCEPTIONSFILES)      \
-            $(SLO)$/dlgedfunc.obj	\
-            $(SLO)$/dlgedmod.obj	\
-            $(SLO)$/dlgedpage.obj	\
-            $(SLO)$/dlgedview.obj	\
-            $(SLO)$/managelang.obj
-
-SRS1NAME=$(TARGET)
-SRC1FILES=	dlgresid.src \
-            managelang.src
-
-# --- Targets -------------------------------------------------------
-
-.INCLUDE :  target.mk
-
+# vim: set noet sw=4 ts=4:
