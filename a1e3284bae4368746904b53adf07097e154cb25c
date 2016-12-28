@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a6eadb0_27afc2e4",
+        "filename": "include/vcl/notebookbar.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2016-12-28T00:25:38Z",
+      "side": 1,
+      "message": "A pointer to ScopedVclPtr? This looks odd. Probably what you want here is a plain VclPtr (with a proper clear() call is dispose).",
+      "revId": "a1e3284bae4368746904b53adf07097e154cb25c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a6eadb0_47acbeed",
+        "filename": "vcl/source/control/notebookbar.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2016-12-28T00:25:38Z",
+      "side": 1,
+      "message": "Won\u0027t this leak the ScopedVclPtr instances?",
+      "revId": "a1e3284bae4368746904b53adf07097e154cb25c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
