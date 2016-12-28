@@ -17,6 +17,30 @@
 
 namespace sc {
 
+ExternalDataMapper::ExternalDataMapper(ScDocShell* pDocShell, const OUString& rURL, const OUString& rName, SCTAB nTab,
+    SCCOL nCol1,SCROW nRow1, SCCOL nCol2, SCROW nRow2, bool& bSuccess):
+    maRange (ScRange::ScRange(nCol1, nRow1, nTab, nCol2, nRow2, nTab)),
+    mpDataProvider (new CSVDataProvider(maURL, maRange)),
+    mpDocShell(pDocShell),
+    mpDBCollection (pDocShell->GetDocument().GetDBCollection()),
+    maURL(rURL)
+{
+    bSuccess = true;
+    ScDBCollection::NamedDBs& rNamedDBS = mpDBCollection->getNamedDBs();
+    if(!rNamedDBS.insert (new ScDBData::ScDBData (rName, nTab, nCol1, nRow1, nCol2, nRow2)))
+        bSuccess = false;
+}
+
+ExternalDataMapper::~ExternalDataMapper()
+{
+    delete mpDataProvider;
+}
+
+void ExternalDataMapper::StartImport()
+{
+    mpDataProvider->StartImport();
+}
+
 DataProvider::~DataProvider()
 {
 }

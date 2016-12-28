@@ -18,6 +18,10 @@
 #include <osl/mutex.hxx>
 #include <osl/conditn.hxx>
 #include <vcl/timer.hxx>
+#include <dbdata.hxx>
+#include <document.hxx>
+
+#include "docsh.hxx"
 
 #include <queue>
 
@@ -29,6 +33,26 @@
 #include <orcus/csv_parser.hpp>
 
 namespace sc {
+
+class DataProvider;
+
+class ExternalDataMapper
+{
+    ScRange maRange;
+    DataProvider* mpDataProvider;
+
+    ScDocShell* mpDocShell;
+    ScDBCollection* mpDBCollection;
+
+    OUString maURL;
+
+public:
+    ExternalDataMapper(ScDocShell* pDocShell, const OUString& rUrl, const OUString& rName,
+    SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCOL2, SCROW nRow2, bool& bSuccess);
+    ~ExternalDataMapper();
+
+    void StartImport();
+};
 
 struct Cell
 {
