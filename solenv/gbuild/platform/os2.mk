@@ -322,9 +322,9 @@ $(call gb_Helper_abbreviate_dirs_native,\
 		@$${RESPONSEFILE} \
 		$(if $(DLLTARGET), $(DLLDEF)) \
 		$(NATIVERES) \
+		$(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) \
 		$(patsubst %.lib,-l%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_filename,$(lib)))) \
 		$(patsubst %,-l%,$(EXTERNAL_LIBS)) \
-		$(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) \
 		$(LIBS) \
 		$(if $(DLLTARGET),-o $(DLLTARGET), -o $(1) ); \
 		RC=$$?; rm $${RESPONSEFILE} \
