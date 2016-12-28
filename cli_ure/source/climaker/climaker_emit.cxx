@@ -339,7 +339,7 @@ Assembly ^ TypeEmitter::type_resolve(
             ::System::Text::StringBuilder ^ sb = gcnew ::System::Text::StringBuilder();
             sb->Append(gcnew ::System::String("\nThe type "));
             sb->Append(cts_name);
-            sb->Append(gcnew ::System::String(" \n could not be found. Did you forget to " \
+            sb->Append(gcnew ::System::String(" \n could not be found. Did you forget to "
                 "specify an additional assembly with the --reference option?\n"));
             if (throw_exc)
                 throw gcnew ::System::Exception(sb->ToString(), exc);

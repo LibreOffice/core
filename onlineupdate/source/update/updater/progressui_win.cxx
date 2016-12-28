@@ -153,9 +153,9 @@ InitDialog(HWND hDlg)
     // Calculate the additional space needed for the text by subtracting from
     // the rectangle returned by DrawText the existing client rectangle's width
     // and height.
-    extra.cx = (textSize.right - textSize.left) - \
+    extra.cx = (textSize.right - textSize.left) -
                (infoSize.right - infoSize.left);
-    extra.cy = (textSize.bottom - textSize.top) - \
+    extra.cy = (textSize.bottom - textSize.top) -
                (infoSize.bottom - infoSize.top);
     if (extra.cx < 0)
       extra.cx = 0;

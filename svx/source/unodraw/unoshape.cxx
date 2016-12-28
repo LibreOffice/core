@@ -306,7 +306,7 @@ SvxShape* SvxShape::getImplementation( const uno::Reference< uno::XInterface >& 
 }
 
 
-sal_Int64 SAL_CALL SvxShape::getSomething( const css::uno::Sequence< sal_Int8 >& rId ) throw(css::uno::RuntimeException, std::exception) \
+sal_Int64 SAL_CALL SvxShape::getSomething( const css::uno::Sequence< sal_Int8 >& rId ) throw(css::uno::RuntimeException, std::exception)
 {
     if( rId.getLength() == 16 && 0 == memcmp( getUnoTunnelId().getConstArray(), rId.getConstArray(), 16 ) )
     {
@@ -3965,7 +3965,7 @@ uno::Sequence< uno::Type > SAL_CALL SvxShapeText::getTypes()
     return SvxShape::getTypes();
 }
 
-sal_Int64 SAL_CALL SvxShapeText::getSomething( const css::uno::Sequence< sal_Int8 >& rId ) throw(css::uno::RuntimeException, std::exception) \
+sal_Int64 SAL_CALL SvxShapeText::getSomething( const css::uno::Sequence< sal_Int8 >& rId ) throw(css::uno::RuntimeException, std::exception)
 {
     const sal_Int64 nReturn = SvxShape::getSomething( rId );
     if( nReturn )

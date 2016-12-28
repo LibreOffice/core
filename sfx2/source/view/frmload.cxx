@@ -762,7 +762,7 @@ OUString SAL_CALL SfxFrameLoader_Impl::getImplementationName() throw( RuntimeExc
 {
     return OUString("com.sun.star.comp.office.FrameLoader");
 }
-                                                                                                                                \
+
 /* XServiceInfo */
 sal_Bool SAL_CALL SfxFrameLoader_Impl::supportsService( const OUString& sServiceName ) throw( RuntimeException, std::exception )
 {

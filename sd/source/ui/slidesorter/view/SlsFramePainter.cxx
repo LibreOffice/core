@@ -175,7 +175,7 @@ void FramePainter::OffsetBitmap::PaintSide (
             + rCornerBitmap1.maOffset.X());
         const sal_Int32 nRight (
             rAnchor2.X()
-            + rCornerBitmap2.maOffset.X()\
+            + rCornerBitmap2.maOffset.X()
             - 1);
         for (sal_Int32 nX=nLeft; nX<=nRight; nX+=aBitmapSize.Width())
         {

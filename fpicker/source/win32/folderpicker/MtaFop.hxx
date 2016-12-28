@@ -68,14 +68,14 @@ public:
 
     operator sal_Unicode*( )
     {
-        OSL_PRECOND( pBuff, \
+        OSL_PRECOND( pBuff,
             "No path buffer allocated" );
         return pBuff;
     }
 
     sal_Unicode* get( )
     {
-        OSL_PRECOND( pBuff, \
+        OSL_PRECOND( pBuff,
             "No path buffer allocated" );
         return pBuff;
     }

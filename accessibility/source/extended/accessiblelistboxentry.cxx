@@ -823,7 +823,7 @@ namespace accessibility
         }else if( (nIndex == 1 && (treeFlag & SvTreeFlags::CHKBTN)) || nIndex == 0 )
         {
             if( pEntry->HasChildren() || pEntry->HasChildrenOnDemand() )
-                return getListBox()->IsExpanded( pEntry ) ? \
+                return getListBox()->IsExpanded( pEntry ) ?
                 OUString(TK_RES_STRING(STR_SVT_ACC_ACTION_COLLAPSE)) :
                 OUString(TK_RES_STRING(STR_SVT_ACC_ACTION_EXPAND));
             return OUString();

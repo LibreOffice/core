@@ -188,7 +188,7 @@ css::uno::Sequence< OUString > SAL_CALL GridWrapper::getSupportedServiceNames()
         "com.sun.star.chart.ChartGrid",
         "com.sun.star.xml.UserDefinedAttributesSupplier",
         "com.sun.star.drawing.LineProperties",
-        "com.sun.star.beans.PropertySet"\
+        "com.sun.star.beans.PropertySet"
     };
 }
 
