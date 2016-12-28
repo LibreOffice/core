@@ -490,10 +490,12 @@ Dim sSql As String, sVerb As String, iType As Integer
 			_PropertyGet = Query.Command
 		Case UCase(&quot;Type&quot;)
 			iType = 0
-			sSql = Trim(UCase(Query.Command))
+			sSql = Utils._Trim(UCase(Query.Command))
 			sVerb = Split(sSql, &quot; &quot;)(0)
 			If sVerb = &quot;SELECT&quot; Then iType = iType + dbQSelect
-			If sVerb = &quot;SELECT&quot; And InStr(sSql, &quot; INTO &quot;) &gt; 0 Then iType = iType + dbQMakeTable
+			If sVerb = &quot;SELECT&quot; And InStr(sSql, &quot; INTO &quot;) &gt; 0 _
+			Or sVerb = &quot;CREATE&quot; And InStr(sSql, &quot; TABLE &quot;) &gt; 0 _
+				Then iType = iType + dbQMakeTable
 			If sVerb = &quot;SELECT&quot; And InStr(sSql, &quot; UNION &quot;) &gt; 0 Then iType = iType + dbQSetOperation
 			If Not Query.EscapeProcessing Then iType = iType + dbQSQLPassThrough
 			If sVerb = &quot;INSERT&quot; Then iType = iType + dbQAppend
