@@ -61,6 +61,7 @@
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <vcl/svapp.hxx>
+#include <desktop/crashreport.hxx>
 
 #include <tools/errinf.hxx>
 #include <comphelper/extract.hxx>
@@ -297,13 +298,14 @@ sal_Bool SAL_CALL Desktop::terminate()
         impl_sendCancelTerminationEvent(lCalledTerminationListener);
     else
     {
-            // "Protect" us against dispose before terminate calls!
-            // see dispose() for further information.
-            /* SAFE AREA --------------------------------------------------------------------------------------- */
-            SolarMutexClearableGuard aWriteLock;
-            m_bIsTerminated = true;
-            aWriteLock.clear();
-            /* UNSAFE AREA ------------------------------------------------------------------------------------- */
+        // "Protect" us against dispose before terminate calls!
+        // see dispose() for further information.
+        /* SAFE AREA --------------------------------------------------------------------------------------- */
+        SolarMutexClearableGuard aWriteLock;
+        CrashReporter::AddKeyValue("ShutDown", OUString::boolean(true));
+        m_bIsTerminated = true;
+        aWriteLock.clear();
+        /* UNSAFE AREA ------------------------------------------------------------------------------------- */
 
         impl_sendNotifyTerminationEvent();
 
