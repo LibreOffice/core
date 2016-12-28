@@ -243,16 +243,12 @@
 // Strings of the ToolBox-Controls from tbcontrl.cxx
 #define RID_SVXSTR_FILLPATTERN              (RID_SVX_START + 191)
 #define RID_SVXSTR_FRAME                    (RID_SVX_START + 192)
-#define RID_SVXSTR_FRAME_COLOR              (RID_SVX_START + 194)
 #define RID_SVXSTR_FRAME_STYLE              (RID_SVX_START + 195)
-#define RID_SVXSTR_EXTRAS_CHARBACKGROUND    (RID_SVX_START + 196)
 #define RID_SVXSTR_CLEARFORM                (RID_SVX_START + 197)
 #define RID_SVXSTR_MORE                     (RID_SVX_START + 198)
 #define RID_SVXSTR_CHARFONTNAME_NOTAVAILABLE (RID_SVX_START + 199)
 #define RID_SVXSTR_CHARFONTNAME             (RID_SVX_START + 200)
-#define RID_SVXSTR_LINECOLOR                (RID_SVX_START + 201)
 #define RID_SVXSTR_MORE_STYLES              (RID_SVX_START + 202)
-#define RID_SVXSTR_FILLCOLOR                (RID_SVX_START + 203)
 #define RID_SVXSTR_MORENUMBERING            (RID_SVX_START + 204)
 #define RID_SVXSTR_MOREBULLETS              (RID_SVX_START + 205)
 
@@ -383,8 +379,6 @@
 #define STR_EXTFILTER_ALL                   (RID_SVX_START + 528)
 #define STR_INSERT_SOUND_TITLE              (RID_SVX_START + 529)
 #define STR_INSERT_VIDEO_TITLE              (RID_SVX_START + 530)
-
-#define RID_SVXSTR_BACKGROUND               (RID_SVX_START + 531)
 
 #define RID_SVXIMG_WIRE_FRAME               (RID_SVX_START + 532)
 #define RID_SVXIMG_MATTE                    (RID_SVX_START + 533)
@@ -885,8 +879,6 @@
 #define RID_SVX_EXTRUSION_BAR               (RID_SVX_START + 986)
 #define RID_SVX_FONTWORK_BAR                (RID_SVX_START + 987)
 
-#define RID_SVXSTR_EXTRUSION_COLOR          (RID_SVX_START + 991)
-
 #define RID_SVXSTR_DEPTH_0                  (RID_SVX_START + 992)
 #define RID_SVXSTR_DEPTH_1                  (RID_SVX_START + 993)
 #define RID_SVXSTR_DEPTH_2                  (RID_SVX_START + 994)
@@ -948,8 +940,6 @@
 #define RID_SVXSTR_OUTLINENUM_DESCRIPTION_5                 (RID_SVXSTR_OUTLINENUM_DESCRIPTIONS + 5)//?
 #define RID_SVXSTR_OUTLINENUM_DESCRIPTION_6                 (RID_SVXSTR_OUTLINENUM_DESCRIPTIONS + 6)//?
 #define RID_SVXSTR_OUTLINENUM_DESCRIPTION_7                 (RID_SVXSTR_OUTLINENUM_DESCRIPTIONS + 7)//?
-
-#define RID_SVXSTR_TEXTCOLOR                                (RID_SVX_START + 1178)
 
 #define RID_SVXSTR_FINDBAR_SEARCHFORMATTED                  (RID_SVX_START + 1188)
 #define RID_SVXSTR_FINDBAR_MATCHCASE                        (RID_SVX_START + 1189)

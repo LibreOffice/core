@@ -119,21 +119,6 @@ String RID_SVXSTR_FRAME_STYLE
     Text [ en-US ] = "Border Style" ;
 };
 
-String RID_SVXSTR_FRAME_COLOR
-{
-    Text [ en-US ] = "Border Color" ;
-};
-
-String RID_SVXSTR_LINECOLOR
-{
-    Text [ en-US ] = "Line Color" ;
-};
-
-String RID_SVXSTR_FILLCOLOR
-{
-    Text [ en-US ] = "Fill Color" ;
-};
-
 String RID_SVXSTR_MORENUMBERING
 {
     Text [ en-US ] = "More Numbering..." ;
@@ -176,16 +161,6 @@ Menu RID_SVX_PRESET_MENU
             Text [ en-US ] = "Delete";
         };
     };
-};
-
-String RID_SVXSTR_EXTRAS_CHARBACKGROUND
-{
-    Text [ en-US ] = "Highlight Color" ;
-};
-
-String RID_SVXSTR_BACKGROUND
-{
-    Text [ en-US ] = "Background";
 };
 
 String RID_SVXSTR_AUTOMATIC
@@ -245,11 +220,6 @@ String RID_SVXSTR_MORE_STYLES
 String RID_SVXSTR_MORE
 {
     Text [ en-US ] = "More Options...";
-};
-
-String RID_SVXSTR_TEXTCOLOR
-{
-    Text [ en-US ] = "Font color";
 };
 
 // This is duplicated in GenericCommands.xcu in officecfg.

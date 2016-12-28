@@ -355,11 +355,6 @@ Image RID_SVXIMG_DEPTH_INFINITY
     ImageBitmap = Bitmap { File = "extrusioninfinity_16.bmp"; };
 };
 
-String RID_SVXSTR_EXTRUSION_COLOR
-{
-    Text [ en-US ] = "Extrusion Color";
-};
-
 String RID_SVXSTR_DEPTH_0
 {
     Text [ en-US ] = "~0 cm";

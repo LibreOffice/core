@@ -25,6 +25,7 @@
 #include <svl/poolitem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/itemset.hxx>
+#include <vcl/commandinfoprovider.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/menubtn.hxx>
@@ -1309,39 +1310,7 @@ SvxColorWindow::SvxColorWindow(const OUString&            rCommand,
         }
     }
 
-    OUString aWindowTitle;
-    switch ( theSlotId )
-    {
-        case SID_ATTR_CHAR_COLOR:
-        case SID_ATTR_CHAR_COLOR2:
-            aWindowTitle = SVX_RESSTR( RID_SVXSTR_TEXTCOLOR );
-            break;
-
-        case SID_ATTR_CHAR_COLOR_BACKGROUND:
-        case SID_ATTR_CHAR_BACK_COLOR:
-            aWindowTitle = SVX_RESSTR( RID_SVXSTR_EXTRAS_CHARBACKGROUND );
-            break;
-
-        case SID_BACKGROUND_COLOR:
-            aWindowTitle = SVX_RESSTR( RID_SVXSTR_BACKGROUND );
-            break;
-
-        case SID_FRAME_LINECOLOR:
-            aWindowTitle = SVX_RESSTR( RID_SVXSTR_FRAME_COLOR );
-            break;
-
-        case SID_EXTRUSION_3D_COLOR:
-            aWindowTitle = SVX_RESSTR( RID_SVXSTR_EXTRUSION_COLOR );
-            break;
-
-        case SID_ATTR_LINE_COLOR:
-            aWindowTitle = SVX_RESSTR( RID_SVXSTR_LINECOLOR );
-            break;
-
-        case SID_ATTR_FILL_COLOR:
-            aWindowTitle = SVX_RESSTR( RID_SVXSTR_FILLCOLOR );
-            break;
-    }
+    OUString aWindowTitle = vcl::CommandInfoProvider::Instance().GetLabelForCommand( rCommand, rFrame );
     SetText( aWindowTitle );
     mpColorSet->SetAccessibleName( aWindowTitle );
 
