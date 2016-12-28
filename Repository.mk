@@ -31,8 +31,10 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     mkunroll \
     rscdep \
     so_checksum \
+    srvdepy \
     svidl \
     sspretty \
+    xml2cmp \
 ))
 
 $(eval $(call gb_Helper_register_executables,OOO, \
