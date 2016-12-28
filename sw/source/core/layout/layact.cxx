@@ -765,7 +765,7 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
                         pPg->InvalidateFlyLayout();
                         pPg->InvalidateFlyContent();
                     }
-                    // we are statisfied, if the content is formatted once complete.
+                    // we are satisfied if the content is formatted once complete.
                     else
                     {
                         break;
