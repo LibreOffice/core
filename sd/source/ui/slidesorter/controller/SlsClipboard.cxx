@@ -386,6 +386,9 @@ void Clipboard::CreateSlideTransferable (
     model::PageEnumeration aSelectedPages
         (model::PageEnumerationProvider::CreateSelectedPagesEnumeration(
             mrSlideSorter.GetModel()));
+    SdDrawDocument* const pDocument = mrSlideSorter.GetModel().GetDocument();
+    DrawDocShell* const pDataDocSh = pDocument ? pDocument->GetDocSh() : nullptr;
+
     while (aSelectedPages.HasMoreElements())
     {
         model::SharedPageDescriptor pDescriptor (aSelectedPages.GetNextElement());
@@ -417,7 +420,6 @@ void Clipboard::CreateSlideTransferable (
     if (!aBookmarkList.empty())
     {
         mrSlideSorter.GetView().BrkAction();
-        SdDrawDocument* pDocument = mrSlideSorter.GetModel().GetDocument();
         SdTransferable* pTransferable = TransferableData::CreateTransferable (
             pDocument,
             nullptr,
@@ -436,9 +438,8 @@ void Clipboard::CreateSlideTransferable (
         pTransferable->GetWorkDocument()->GetDocSh()
             ->FillTransferableObjectDescriptor (aObjDesc);
 
-        if (pDocument->GetDocSh() != nullptr)
-            aObjDesc.maDisplayName = pDocument->GetDocSh()
-                ->GetMedium()->GetURLObject().GetURLNoPass();
+        if (pDataDocSh != nullptr)
+            aObjDesc.maDisplayName = pDataDocSh->GetMedium()->GetURLObject().GetURLNoPass();
 
         vcl::Window* pActionWindow = pWindow;
         if (pActionWindow == nullptr)
