@@ -5127,6 +5127,11 @@ TRANSITION_SPECIAL              = 2;    // Transition expressed by hand-crafted 
 
 aTransitionClassOutMap = ['invalid', 'clip polypolygon', 'special'];
 
+/*
+ * All Transition types should be in sync with aTransitionTypeInMap:
+ * Comments '//' followed by integers represent the transition values in their 
+ * C++ implementations.
+ */
 
 // Transition Types
 BARWIPE_TRANSITION          = 1;
@@ -5141,6 +5146,7 @@ FADE_TRANSITION             = 9; // 37
 RANDOMBARWIPE_TRANSITION    = 10; // 38
 CHECKERBOARDWIPE_TRANSITION = 11; // 39
 DISSOLVE_TRANSITION         = 12; // 40
+IRISWIPE_TRANSITION         = 14; // 12
 
 aTransitionTypeInMap = {
     'barWipe'           : BARWIPE_TRANSITION,
@@ -5154,14 +5160,20 @@ aTransitionTypeInMap = {
     'fade'              : FADE_TRANSITION,
     'randomBarWipe'     : RANDOMBARWIPE_TRANSITION,
     'checkerBoardWipe'  : CHECKERBOARDWIPE_TRANSITION,
-    'dissolve'          : DISSOLVE_TRANSITION
+    'dissolve'          : DISSOLVE_TRANSITION,
+    'irisWipe'          : IRISWIPE_TRANSITION
 };
 
 aTransitionTypeOutMap = [ '', 'barWipe', 'boxWipe', 'fourBoxWipe', 'ellipseWipe',
                           'clockWipe', 'pinWheelWipe', 'pushWipe', 'slideWipe',
-                          'fade', 'randomBarWipe', 'checkerBoardWipe', 'dissolve' ];
+                          'fade', 'randomBarWipe', 'checkerBoardWipe', 'dissolve' , 'irisWipe'];
 
 
+/*
+ * All Transition subtypes should be in sync with aTransitionSubtypeInMap:
+ * Comments '//' followed by integers represent the transition values in their 
+ * C++ implementations.
+ */
 // Transition Subtypes
 DEFAULT_TRANS_SUBTYPE               = 0;
 LEFTTORIGHT_TRANS_SUBTYPE           = 1;
@@ -5191,6 +5203,8 @@ THREEBLADE_TRANS_SUBTYPE            = 24;
 EIGHTBLADE_TRANS_SUBTYPE            = 25;
 ONEBLADE_TRANS_SUBTYPE              = 26; // 107
 ACROSS_TRANS_SUBTYPE                = 27;
+RECTANGLE_TRANS_SUBTYPE             = 34; // 101
+DIAMOND_TRANS_SUBTYPE               = 35; // 102
 
 aTransitionSubtypeInMap = {
     'default'           : DEFAULT_TRANS_SUBTYPE,
@@ -5220,7 +5234,9 @@ aTransitionSubtypeInMap = {
     'threeBlade'        : THREEBLADE_TRANS_SUBTYPE,
     'eightBlade'        : EIGHTBLADE_TRANS_SUBTYPE,
     'oneBlade'          : ONEBLADE_TRANS_SUBTYPE,
-    'across'            : ACROSS_TRANS_SUBTYPE
+    'across'            : ACROSS_TRANS_SUBTYPE,
+    'rectangle'         : RECTANGLE_TRANS_SUBTYPE,
+    'diamond'           : DIAMOND_TRANS_SUBTYPE
 };
 
 aTransitionSubtypeOutMap = [ 'default', 'leftToRight', 'topToBottom', 'cornersIn',
@@ -5230,7 +5246,7 @@ aTransitionSubtypeOutMap = [ 'default', 'leftToRight', 'topToBottom', 'cornersIn
                              'fourBlade', 'fromLeft', 'fromTop', 'fromRight',
                              'fromBottom', 'crossfade', 'fadeToColor', 'fadeFromColor',
                              'fadeOverColor', 'threeBlade', 'eightBlade', 'oneBlade',
-                             'across' ];
+                             'across', 'rectangle', 'diamond' ];
 
 
 // Transition Modes
@@ -5282,6 +5298,28 @@ aTransitionInfoTable[0][0] =
     'scaleIsotropically' : false
 };
 
+aTransitionInfoTable[IRISWIPE_TRANSITION] = {};
+aTransitionInfoTable[IRISWIPE_TRANSITION][RECTANGLE_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle': 0.0,
+    'scaleX': 1.0,
+    'scaleY': 1.0,
+    'reverseMethod': REVERSEMETHOD_SUBTRACT_AND_INVERT,
+    'outInvertsSweep': true,
+    'scaleIsotropically': false
+};
+
+aTransitionInfoTable[IRISWIPE_TRANSITION][DIAMOND_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle': 45.0,
+    'scaleX': Math.SQRT2,
+    'scaleY': Math.SQRT2,
+    'reverseMethod': REVERSEMETHOD_SUBTRACT_AND_INVERT,
+    'outInvertsSweep': true,
+    'scaleIsotropically': false
+};
 
 aTransitionInfoTable[BARWIPE_TRANSITION] = {};
 aTransitionInfoTable[BARWIPE_TRANSITION][LEFTTORIGHT_TRANS_SUBTYPE] =
@@ -9108,6 +9146,17 @@ function createClipPolyPolygon( nType, nSubtype )
             return new RandomWipePath( 128, true /* bars */ );
         case CHECKERBOARDWIPE_TRANSITION:
             return new CheckerBoardWipePath( 10 );
+        case IRISWIPE_TRANSITION:
+            switch(nSubtype)
+            {
+                case RECTANGLE_TRANS_SUBTYPE:
+                    return new IrisWipePath(0);
+                case DIAMOND_TRANS_SUBTYPE:
+                    return new IrisWipePath(1);
+                default:
+                    log( 'createClipPolyPolygon: unknown subtype: ' + nSubtype );
+                    return null;
+            }
         case DISSOLVE_TRANSITION:
             return new RandomWipePath( 16 * 16, false /* dissolve */ );
     }
@@ -9371,7 +9420,32 @@ PinWheelWipePath.prototype.perform = function( nT )
     return aPolyPath;
 };
 
+/** Class Iriswipe
+  *
+  * @param unitRect
+  *
+  */
+function IrisWipePath(unitRect) {
+    this.unitRect = unitRect;
+    this.aBasePath = createUnitSquarePath();
+}
 
+
+/** perform
+  *
+  *  @param nT
+  *      A parameter in [0,1] representing the diamond or rectangle.
+  *  @return SVGPathElement
+  *      A svg <path> element representing a transition.
+  */
+IrisWipePath.prototype.perform = function( nT ) {
+    var d = pruneScaleValue(nT);
+    var aTransform = SVGIdentityMatrix.translate(-0.5, -0.5);
+    aTransform = aTransform.multiply(SVGIdentityMatrix.scaleNonUniform(d, d).translate(0.5, 0.5));
+    var aPath = this.aBasePath.cloneNode(true);
+    aPath.matrixTransform(aTransform);
+    return aPath;
+}
 
 /** Class CheckerBoardWipePath
  *
