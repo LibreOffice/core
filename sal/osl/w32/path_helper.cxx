@@ -41,7 +41,7 @@ const rtl::OUString SLASH     ("/");
 
 void osl_systemPathEnsureSeparator(/*inout*/ rtl_uString** ppustrPath)
 {
-    OSL_PRECOND(ppustrPath && (nullptr != *ppustrPath), \
+    OSL_PRECOND(ppustrPath && (nullptr != *ppustrPath),
                 "osl_systemPathEnsureSeparator: Invalid parameter");
 
      rtl::OUString path(*ppustrPath);

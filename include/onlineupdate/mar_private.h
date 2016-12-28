@@ -32,7 +32,7 @@ MOZ_STATIC_ASSERT(MAX_SIZE_OF_MAR_FILE < ((int64_t)LONG_MAX),
 
 /* We store at most the size up to the signature block + 4
    bytes per BLOCKSIZE bytes */
-MOZ_STATIC_ASSERT(sizeof(BLOCKSIZE) < \
+MOZ_STATIC_ASSERT(sizeof(BLOCKSIZE) <
                   (SIGNATURE_BLOCK_OFFSET + sizeof(uint32_t)),
                   "BLOCKSIZE is too big");
 

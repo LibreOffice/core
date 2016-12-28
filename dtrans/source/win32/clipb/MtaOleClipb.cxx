@@ -211,10 +211,10 @@ public:
         m_hResult = CoInitialize( nullptr );
 
         if ( S_OK == m_hResult )
-            OSL_FAIL( \
+            OSL_FAIL(
             "com was not yet initialzed, the thread was not created using osl_createThread" );
         else if ( FAILED( m_hResult ) && !( RPC_E_CHANGED_MODE == m_hResult ) )
-            OSL_FAIL( \
+            OSL_FAIL(
             "com could not be initialized, maybe the thread was not created using osl_createThread" );
     }
 
@@ -325,7 +325,7 @@ CMtaOleClipboard::~CMtaOleClipboard( )
         UnregisterClassA( g_szWndClsName, nullptr );
 
     OSL_ENSURE( ( nullptr == m_pfncClipViewerCallback ) &&
-                !IsWindow( m_hwndNextClipViewer ), \
+                !IsWindow( m_hwndNextClipViewer ),
                 "Clipboard viewer not properly unregistered" );
 }
 
@@ -337,7 +337,7 @@ HRESULT CMtaOleClipboard::flushClipboard( )
         return E_FAIL;
     }
 
-    OSL_ENSURE( GetCurrentThreadId( ) != m_uOleThreadId, \
+    OSL_ENSURE( GetCurrentThreadId( ) != m_uOleThreadId,
         "flushClipboard from within clipboard sta thread called" );
 
     MsgCtx  aMsgCtx;

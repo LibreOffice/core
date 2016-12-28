@@ -54,7 +54,7 @@ using namespace com::sun::star::sdbc;
 
 
 //  IMPLEMENT_SERVICE_INFO(OResultSet,"com.sun.star.sdbcx.AResultSet","com.sun.star.sdbc.ResultSet");
-OUString SAL_CALL OResultSet::getImplementationName(  ) throw (css::uno::RuntimeException)  \
+OUString SAL_CALL OResultSet::getImplementationName(  ) throw (css::uno::RuntimeException)
 {
     return OUString("com.sun.star.sdbcx.ado.ResultSet");
 }

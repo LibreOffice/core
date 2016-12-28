@@ -2428,7 +2428,7 @@ void SAL_CALL SfxBaseModel::updateCmisProperties( const Sequence< document::Cmis
         {
             ::ucbhelper::Content aContent( pMedium->GetName( ),
                 Reference<ucb::XCommandEnvironment>(),
-                comphelper::getProcessComponentContext() );\
+                comphelper::getProcessComponentContext() );
 
             aContent.executeCommand( "updateProperties", uno::makeAny( aProperties ) );
             loadCmisProperties( );

@@ -2647,9 +2647,9 @@ void OpConvert::GenSlidingWindowFunction(
     // convert between as string arguments. This implementation
     // handles just a very small subset of such conversions.
 
-    int arg1=vSubArguments[1]->GetFormulaToken()->GetString().\
+    int arg1=vSubArguments[1]->GetFormulaToken()->GetString().
         getString().toAsciiUpperCase().hashCode();
-    int arg2=vSubArguments[2]->GetFormulaToken()->GetString().\
+    int arg2=vSubArguments[2]->GetFormulaToken()->GetString().
         getString().toAsciiUpperCase().hashCode();
 
     // Check if the from and to units are those combinations that the

@@ -64,7 +64,7 @@ using namespace com::sun::star::io;
 namespace ErrorCondition = ::com::sun::star::sdb::ErrorCondition;
 
 
-OUString SAL_CALL OEvoabResultSet::getImplementationName(  ) throw ( RuntimeException, std::exception)   \
+OUString SAL_CALL OEvoabResultSet::getImplementationName(  ) throw ( RuntimeException, std::exception)
 {
     return OUString("com.sun.star.sdbcx.evoab.ResultSet");
 }

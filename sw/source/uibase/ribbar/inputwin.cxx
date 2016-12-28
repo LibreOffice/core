@@ -621,7 +621,7 @@ SwInputChild::~SwInputChild()
 
 SfxChildWinInfo SwInputChild::GetInfo() const
 {
-    SfxChildWinInfo aInfo = SfxChildWindow::GetInfo();     \
+    SfxChildWinInfo aInfo = SfxChildWindow::GetInfo();
     return aInfo;
 }
 

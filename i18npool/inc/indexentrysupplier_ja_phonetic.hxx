@@ -33,17 +33,17 @@ public:
     IndexEntrySupplier_ja_phonetic( const css::uno::Reference < css::uno::XComponentContext >& rxContext ) : IndexEntrySupplier_Common(rxContext) {
         implementationName = "com.sun.star.i18n.IndexEntrySupplier_ja_phonetic";
     };
-    virtual OUString SAL_CALL getIndexCharacter( const OUString& rIndexEntry,\
-        const css::lang::Locale& rLocale, const OUString& rSortAlgorithm ) \
-        throw (css::uno::RuntimeException, std::exception) override;\
-    virtual OUString SAL_CALL getIndexKey( const OUString& IndexEntry, \
-        const OUString& PhoneticEntry, const css::lang::Locale& rLocale )\
-        throw (css::uno::RuntimeException, std::exception) override;\
-    virtual sal_Int16 SAL_CALL compareIndexEntry( const OUString& IndexEntry1,\
-        const OUString& PhoneticEntry1, const css::lang::Locale& rLocale1,\
-        const OUString& IndexEntry2, const OUString& PhoneticEntry2,\
-        const css::lang::Locale& rLocale2 )\
-        throw (css::uno::RuntimeException, std::exception) override;\
+    virtual OUString SAL_CALL getIndexCharacter( const OUString& rIndexEntry,
+        const css::lang::Locale& rLocale, const OUString& rSortAlgorithm )
+        throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getIndexKey( const OUString& IndexEntry,
+        const OUString& PhoneticEntry, const css::lang::Locale& rLocale )
+        throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Int16 SAL_CALL compareIndexEntry( const OUString& IndexEntry1,
+        const OUString& PhoneticEntry1, const css::lang::Locale& rLocale1,
+        const OUString& IndexEntry2, const OUString& PhoneticEntry2,
+        const css::lang::Locale& rLocale2 )
+        throw (css::uno::RuntimeException, std::exception) override;
 };
 
 #define INDEXENTRYSUPPLIER_JA_PHONETIC( algorithm ) \

@@ -144,7 +144,7 @@ void SAL_CALL GenericClipboard::removeClipboardListener( const Reference< XClipb
     MutexGuard aGuard( rBHelper.rMutex );
     OSL_ENSURE( !rBHelper.bDisposed, "object is disposed" );
     if (!rBHelper.bInDispose && !rBHelper.bDisposed)
-        rBHelper.aLC.removeInterface( cppu::UnoType<XClipboardListener>::get(), listener ); \
+        rBHelper.aLC.removeInterface( cppu::UnoType<XClipboardListener>::get(), listener );
 }
 
 Sequence< OUString > SAL_CALL GenericClipboard_getSupportedServiceNames()

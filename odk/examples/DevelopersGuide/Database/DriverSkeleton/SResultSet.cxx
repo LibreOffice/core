@@ -55,7 +55,7 @@ using namespace com::sun::star::io;
 using namespace com::sun::star::util;
 
 //  IMPLEMENT_SERVICE_INFO(OResultSet,"com.sun.star.sdbcx.OResultSet","com.sun.star.sdbc.ResultSet");
-::rtl::OUString SAL_CALL OResultSet::getImplementationName(  ) throw ( RuntimeException)    \
+::rtl::OUString SAL_CALL OResultSet::getImplementationName(  ) throw ( RuntimeException)
 {
     return ::rtl::OUString("com.sun.star.sdbcx.skeleton.ResultSet");
 }

@@ -138,7 +138,7 @@ UcbContentProviderProxy::queryInterface( const Type & rType )
 XTYPEPROVIDER_COMMON_IMPL( UcbContentProviderProxy );
 
 
-Sequence< Type > SAL_CALL UcbContentProviderProxy::getTypes()                                                           \
+Sequence< Type > SAL_CALL UcbContentProviderProxy::getTypes()
     throw( RuntimeException, std::exception )
 {
     // Get original provider an forward the call...

@@ -105,7 +105,7 @@ void SAL_CALL osl_systemPathGetFileNameOrLastDirectoryPart(
     const rtl_uString*     pustrPath,
     rtl_uString**       ppustrFileNameOrLastDirPart)
 {
-    OSL_PRECOND(pustrPath && ppustrFileNameOrLastDirPart, \
+    OSL_PRECOND(pustrPath && ppustrFileNameOrLastDirPart,
                 "osl_systemPathGetFileNameOrLastDirectoryPart: Invalid parameter");
 
     rtl::OUString path(const_cast<rtl_uString*>(pustrPath));

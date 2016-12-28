@@ -32,7 +32,7 @@ void SAL_CALL SbaXStatusMultiplexer::statusChanged(const css::frame::FeatureStat
     ::comphelper::OInterfaceIteratorHelper2 aIt( *this );
     while ( aIt.hasMoreElements() )
         static_cast< css::frame::XStatusListener* >( aIt.next() )->statusChanged( m_aLastKnownStatus );
-}                                                                                       \
+}
 
 // LoadListener
 IMPLEMENT_LISTENER_MULTIPLEXER_CORE(SbaXLoadMultiplexer, css::form::XLoadListener)

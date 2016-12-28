@@ -504,8 +504,8 @@ void SwTabPortion::Paint( const SwTextPaintInfo &rInf ) const
 #if OSL_DEBUG_LEVEL > 1
     // We want to view the fixed width
     if( rInf.OnWin() && OPTDBG( rInf ) &&
-        !rInf.GetOpt().IsPagePreview() && \
-        !rInf.GetOpt().IsReadonly() && \
+        !rInf.GetOpt().IsPagePreview() &&
+        !rInf.GetOpt().IsReadonly() &&
         SwViewOption::IsFieldShadings()    )
     {
         const sal_uInt16 nTmpWidth = PrtWidth();
