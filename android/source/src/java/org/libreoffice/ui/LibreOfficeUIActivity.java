@@ -20,6 +20,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -730,6 +731,8 @@ public class LibreOfficeUIActivity extends AppCompatActivity {
             LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(
                     Context.LAYOUT_INFLATER_SERVICE);
 
+            Context context = inflater.getContext();
+
             View listItem;
 
             if (convertView == null) {
@@ -808,7 +811,9 @@ public class LibreOfficeUIActivity extends AppCompatActivity {
             if (filePaths.get(position).isDirectory()) {
                 //Eventually have thumbnails of each sub file on a black circle
                 //For now just a folder icon
-                imageView.setImageResource(R.drawable.folder);
+                imageView.setImageResource(R.drawable.ic_folder_black_24dp);
+                //for tint
+                imageView.setColorFilter(ContextCompat.getColor(context,R.color.text_color_secondary));
             }
             //imageView.setClickable(true);
             return listItem;
