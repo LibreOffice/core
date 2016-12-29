@@ -3112,10 +3112,14 @@ void SwUiWriterTest::testEmbeddedDataSource()
     // Data source has a table named Sheet1.
     uno::Reference<sdbc::XDataSource> xDataSource(xDatabaseContext->getByName("calc-data-source"), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xDataSource.is());
-    uno::Reference<sdbcx::XTablesSupplier> xConnection(xDataSource->getConnection("", ""), uno::UNO_QUERY);
-    uno::Reference<container::XNameAccess> xTables(xConnection->getTables(), uno::UNO_QUERY);
+    auto xConnection = xDataSource->getConnection("", "");
+    uno::Reference<container::XNameAccess> xTables(
+        css::uno::Reference<css::sdbcx::XTablesSupplier>(
+            xConnection, uno::UNO_QUERY_THROW)->getTables(),
+        uno::UNO_QUERY);
     CPPUNIT_ASSERT(xTables.is());
     CPPUNIT_ASSERT(xTables->hasByName("Sheet1"));
+    xConnection->close();
 
     // Reload: should still have a component and a data source, too.
     reload("writer8", "embedded-data-source.odt");
@@ -3126,9 +3130,13 @@ void SwUiWriterTest::testEmbeddedDataSource()
     xDataSource.set(xDatabaseContext->getByName("calc-data-source"), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xDataSource.is());
     xConnection.set(xDataSource->getConnection("", ""), uno::UNO_QUERY);
-    xTables.set(xConnection->getTables(), uno::UNO_QUERY);
+    xTables.set(
+        css::uno::Reference<css::sdbcx::XTablesSupplier>(
+            xConnection, uno::UNO_QUERY_THROW)->getTables(),
+        uno::UNO_QUERY);
     CPPUNIT_ASSERT(xTables.is());
     CPPUNIT_ASSERT(xTables->hasByName("Sheet1"));
+    xConnection->close();
 
     // Close: should not have a data source anymore.
     mxComponent->dispose();
