@@ -7248,7 +7248,7 @@ if test "$with_export_validation" = yes; then
             fi
         fi
         if test "$build_os" = "cygwin"; then
-            # In case of CygWin it will be executed from Windows,
+            # In case of Cygwin it will be executed from Windows,
             # so we need to run bash and absolute path to validator
             # so instead of "odfvalidator" it will be
             # something like "bash.exe C:\cygwin\opt\lo\bin\odfvalidator"
@@ -7281,7 +7281,7 @@ if test "$with_export_validation" = yes; then
             fi
         fi
         if test "$build_os" = "cygwin"; then
-            # In case of CygWin it will be executed from Windows,
+            # In case of Cygwin it will be executed from Windows,
             # so we need to run bash and absolute path to validator
             # so instead of "odfvalidator" it will be
             # something like "bash.exe C:\cygwin\opt\lo\bin\odfvalidator"
@@ -7316,7 +7316,7 @@ if test "$with_bffvalidator" != "no"; then
             AC_MSG_ERROR([bffvalidator not found, but required by --with-bffvalidator])
         fi
     elif test -n "$BFFVALIDATOR"; then
-        # We are not in CygWin but need to run Windows binary with wine
+        # We are not in Cygwin but need to run Windows binary with wine
         AC_PATH_PROGS(WINE, wine)
 
         # so swap in a shell wrapper that converts paths transparently
