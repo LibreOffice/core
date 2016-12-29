@@ -3257,30 +3257,6 @@ vs_versions_to_check()
     fi
 }
 
-find_msvs()
-{
-    # Find Visual Studio 2013/2015
-    # Args: $1 (optional) : versions to check, in the order of preference
-    # Return value: $vstest
-
-    unset vstest
-
-    vs_versions_to_check "$1"
-
-    for ver in $vsversions; do
-        reg_get_value_32 HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VisualStudio/$ver/Setup/VS/ProductDir
-        if test -n "$regvalue"; then
-            vstest=$regvalue
-            break
-        fi
-        reg_get_value_32 HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VCExpress/$ver/Setup/VS/ProductDir
-        if test -n "$regvalue"; then
-            vstest=$regvalue
-            break
-        fi
-    done
-}
-
 win_get_env_from_vsvars32bat()
 {
     WRAPPERBATCHFILEPATH="`mktemp -t wrpXXXXXX.bat`"
