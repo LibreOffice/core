@@ -47,6 +47,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     formula \
     fpicker \
     framework \
+    i18nutil \
     idl \
     io \
     javaunohelper \

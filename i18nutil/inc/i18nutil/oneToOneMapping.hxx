@@ -25,6 +25,7 @@
 
 #include <utility>
 #include <rtl/ustring.hxx>
+#include "i18nutil/i18nutildllapi.h"
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
@@ -42,7 +43,7 @@ typedef struct _UnicodePairWithFlag
     UnicodePairFlag flag;
 } UnicodePairWithFlag;
 
-class oneToOneMapping
+class I18NUTIL_DLLPUBLIC oneToOneMapping
 {
 private:
     // no copy, no substitution
@@ -67,7 +68,7 @@ protected:
     size_t                  mnSize;
 };
 
-class oneToOneMappingWithFlag : public oneToOneMapping
+class I18NUTIL_DLLPUBLIC oneToOneMappingWithFlag : public oneToOneMapping
 {
     friend class widthfolding;
 
