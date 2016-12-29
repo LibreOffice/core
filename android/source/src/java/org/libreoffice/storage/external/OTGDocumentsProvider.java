@@ -3,7 +3,6 @@ package org.libreoffice.storage.external;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import org.libreoffice.R;
 import org.libreoffice.storage.DocumentProviderSettingsActivity;
