@@ -170,6 +170,19 @@ SvxHFPage::SvxHFPage( vcl::Window* pParent, const SfxItemSet& rSet, sal_uInt16 n
     {
         get(m_pPageLbl,"labelFooterFormat");
         get(m_pTurnOnBox, "checkFooterOn");
+
+        /* Set custom HIDs for the Footer help page (shared/01/05040400.xhp)
+        otherwise it would display the same extended help
+        on both the Header and Footer tabs */
+        m_pCntSharedBox->SetHelpId( "SVX_HID_FOOTER_CHECKSAMELR" );
+        m_pCntSharedFirstBox->SetHelpId( "SVX_HID_FOOTER_CHECKSAMEFP" );
+        m_pLMEdit->SetHelpId( "SVX_HID_FOOTER_SPINMARGLEFT" );
+        m_pRMEdit->SetHelpId( "SVX_HID_FOOTER_SPINMARGRIGHT" );
+        m_pDistEdit->SetHelpId( "SVX_HID_FOOTER_SPINSPACING" );
+        m_pDynSpacingCB->SetHelpId( "SVX_HID_FOOTER_CHECKDYNSPACING" );
+        m_pHeightEdit->SetHelpId( "SVX_HID_FOOTER_SPINHEIGHT" );
+        m_pHeightDynBtn->SetHelpId( "SVX_HID_FOOTER_CHECKAUTOFIT" );
+        m_pBackgroundBtn->SetHelpId( "SVX_HID_FOOTER_BUTTONMORE" );
     }
     else //Header
     {
