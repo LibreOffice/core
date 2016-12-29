@@ -221,8 +221,7 @@ FcFontSet* FontCfgWrapper::getFontSet()
     {
         m_pOutlineSet = FcFontSetCreate();
         addFontSet( FcSetSystem );
-        if( FcGetVersion() > 20400 ) // #i85462# prevent crashes
-            addFontSet( FcSetApplication );
+        addFontSet( FcSetApplication );
 
         ::std::sort(m_pOutlineSet->fonts,m_pOutlineSet->fonts+m_pOutlineSet->nfont,SortFont());
     }
@@ -659,11 +658,6 @@ void PrintFontManager::deinitFontconfig()
 
 void PrintFontManager::addFontconfigDir( const OString& rDirName )
 {
-    // workaround for a stability problems in older FC versions
-    // when handling application specific fonts
-    const int nVersion = FcGetVersion();
-    if( nVersion <= 20400 )
-        return;
     const char* pDirName = rDirName.getStr();
     bool bDirOk = (FcConfigAppFontAddDir(FcConfigGetCurrent(), reinterpret_cast<FcChar8 const *>(pDirName) ) == FcTrue);
 
