@@ -36,7 +36,8 @@ $(eval $(call gb_Executable_set_include,xml2cmp,\
 ))
 
 $(eval $(call gb_Executable_add_linked_libs,xml2cmp,\
-	$(gb_STDLIBS) \
+	stl \
+	$(filter-out uwinapi,$(gb_STDLIBS)) \
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,xml2cmp,\

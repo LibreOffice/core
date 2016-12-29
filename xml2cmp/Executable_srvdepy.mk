@@ -36,8 +36,10 @@ $(eval $(call gb_Executable_set_include,srvdepy,\
 ))
 
 $(eval $(call gb_Executable_add_linked_libs,srvdepy,\
-	$(gb_STDLIBS) \
+	stl \
+	$(filter-out uwinapi,$(gb_STDLIBS)) \
 ))
+
 
 $(eval $(call gb_Executable_add_exception_objects,srvdepy,\
 	xml2cmp/source/finder/dependy \
