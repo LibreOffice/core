@@ -1348,7 +1348,7 @@ void WinMtfOutput::DrawPolyBezier( tools::Polygon& rPolygon, bool bTo, bool bRec
     }
 }
 
-void WinMtfOutput::DrawText( Point& rPosition, OUString& rText, long* pDXArry, bool bRecordPath, sal_Int32 nGfxMode )
+void WinMtfOutput::DrawText( Point& rPosition, OUString& rText, long* pDXArry, long* pDYArry, bool bRecordPath, sal_Int32 nGfxMode )
 {
     UpdateClipRegion();
     rPosition = ImplMap( rPosition );
@@ -1357,18 +1357,25 @@ void WinMtfOutput::DrawText( Point& rPosition, OUString& rText, long* pDXArry, b
 
     if (pDXArry)
     {
-        sal_Int32 i;
-        sal_Int32 nSum = 0;
-        sal_Int32 nLen = rText.getLength();
-
-        for (i = 0; i < nLen; i++ )
+        sal_Int32 nSumX = 0, nSumY = 0;
+        for (sal_Int32 i = 0; i < rText.getLength(); i++ )
         {
-            nSum += pDXArry[i];
+            nSumX += pDXArry[i];
 
             // #i121382# Map DXArray using WorldTransform
-            const Size aSize(ImplMap(Size(nSum, 0)));
-            const basegfx::B2DVector aVector(aSize.Width(), aSize.Height());
-            pDXArry[i] = basegfx::fround(aVector.getLength());
+            const Size aSizeX(ImplMap(Size(nSumX, 0)));
+            const basegfx::B2DVector aVectorX(aSizeX.Width(), aSizeX.Height());
+            pDXArry[i] = basegfx::fround(aVectorX.getLength()) * (nSumX >= 0 ? 1 : -1);
+
+            if (pDYArry)
+            {
+                nSumY += pDYArry[i];
+
+                const Size aSizeY(ImplMap(Size(0, nSumY)));
+                const basegfx::B2DVector aVectorY(aSizeY.Width(), aSizeY.Height());
+                // Reverse Y
+                pDYArry[i] = basegfx::fround(aVectorY.getLength()) * (nSumY >= 0 ? -1 : 1);
+            }
         }
     }
     if ( mnLatestTextLayoutMode != mnTextLayoutMode )
@@ -1377,18 +1384,18 @@ void WinMtfOutput::DrawText( Point& rPosition, OUString& rText, long* pDXArry, b
         mpGDIMetaFile->AddAction( new MetaLayoutModeAction( mnTextLayoutMode ) );
     }
     SetGfxMode( nGfxMode );
+    TextAlign eTextAlign;
+    if ( ( mnTextAlign & TA_BASELINE) == TA_BASELINE )
+        eTextAlign = ALIGN_BASELINE;
+    else if( ( mnTextAlign & TA_BOTTOM) == TA_BOTTOM )
+        eTextAlign = ALIGN_BOTTOM;
+    else
+        eTextAlign = ALIGN_TOP;
     bool bChangeFont = false;
     if ( mnLatestTextAlign != mnTextAlign )
     {
         bChangeFont = true;
         mnLatestTextAlign = mnTextAlign;
-        TextAlign eTextAlign;
-        if ( ( mnTextAlign & TA_BASELINE) == TA_BASELINE )
-            eTextAlign = ALIGN_BASELINE;
-        else if( ( mnTextAlign & TA_BOTTOM) == TA_BOTTOM )
-            eTextAlign = ALIGN_BOTTOM;
-        else
-            eTextAlign = ALIGN_TOP;
         mpGDIMetaFile->AddAction( new MetaTextAlignAction( eTextAlign ) );
     }
     if ( maLatestTextColor != maTextColor )
@@ -1422,12 +1429,7 @@ void WinMtfOutput::DrawText( Point& rPosition, OUString& rText, long* pDXArry, b
     else
         aTmp.SetTransparent( false );
 
-    if ( ( mnTextAlign & TA_BASELINE) == TA_BASELINE )
-        aTmp.SetAlignment( ALIGN_BASELINE );
-    else if( ( mnTextAlign & TA_BOTTOM) == TA_BOTTOM )
-        aTmp.SetAlignment( ALIGN_BOTTOM );
-    else
-        aTmp.SetAlignment( ALIGN_TOP );
+    aTmp.SetAlignment( eTextAlign );
 
     if ( nGfxMode == GM_ADVANCED )
     {
@@ -1455,7 +1457,8 @@ void WinMtfOutput::DrawText( Point& rPosition, OUString& rText, long* pDXArry, b
         // #i117968# VirtualDevice is not thread safe, but filter is used in multithreading
         SolarMutexGuard aGuard;
         ScopedVclPtrInstance< VirtualDevice > pVDev;
-        sal_Int32 nTextWidth, nActPosDeltaX = 0;
+        sal_Int32 nTextWidth;
+        Point aActPosDelta;
         pVDev->SetMapMode( MapMode( MapUnit::Map100thMM ) );
         pVDev->SetFont( maFont );
         if( pDXArry )
@@ -1465,23 +1468,33 @@ void WinMtfOutput::DrawText( Point& rPosition, OUString& rText, long* pDXArry, b
             if( nLen > 1 )
                 nTextWidth += pDXArry[ nLen - 2 ];
             // tdf#39894: We should consider the distance to next character cell origin
-            nActPosDeltaX = pDXArry[ nLen - 1 ];
+            aActPosDelta.X() = pDXArry[ nLen - 1 ];
+            if ( pDYArry )
+            {
+                aActPosDelta.Y() = pDYArry[ nLen - 1 ];
+            }
         }
         else
+        {
             nTextWidth = pVDev->GetTextWidth( rText );
+            aActPosDelta.X() = nTextWidth;
+        }
 
         if( mnTextAlign & TA_UPDATECP )
             rPosition = maActPos;
 
         if ( mnTextAlign & TA_RIGHT_CENTER )
         {
-            double fLength = ( ( mnTextAlign & TA_RIGHT_CENTER ) == TA_RIGHT ) ? nTextWidth : nTextWidth >> 1;
-            rPosition.X() -= (sal_Int32)( fLength * cos( maFont.GetOrientation() * F_PI1800 ) );
-            rPosition.Y() -= (sal_Int32)(-( fLength * sin( maFont.GetOrientation() * F_PI1800 ) ) );
+            Point aDisplacement( ( ( mnTextAlign & TA_RIGHT_CENTER ) == TA_RIGHT ) ? nTextWidth : nTextWidth >> 1, 0 );
+            Point().RotateAround(aDisplacement.X(), aDisplacement.Y(), maFont.GetOrientation());
+            rPosition -= aDisplacement;
         }
 
         if( mnTextAlign & TA_UPDATECP )
-            maActPos.X() = rPosition.X() + (pDXArry ? nActPosDeltaX : nTextWidth);
+        {
+            Point().RotateAround(aActPosDelta.X(), aActPosDelta.Y(), maFont.GetOrientation());
+            maActPos = rPosition + aActPosDelta;
+        }
     }
     if ( bChangeFont || ( maLatestFont != aTmp ) )
     {
@@ -1497,22 +1510,34 @@ void WinMtfOutput::DrawText( Point& rPosition, OUString& rText, long* pDXArry, b
     }
     else
     {
-        /* because text without dx array is badly scaled, we
-           will create such an array if necessary */
-        long* pDX = pDXArry;
-        if (!pDXArry)
+        if ( pDXArry && pDYArry )
         {
-            // #i117968# VirtualDevice is not thread safe, but filter is used in multithreading
-            SolarMutexGuard aGuard;
-            ScopedVclPtrInstance< VirtualDevice > pVDev;
-            pDX = new long[ rText.getLength() ];
-            pVDev->SetMapMode( MapUnit::Map100thMM );
-            pVDev->SetFont( maLatestFont );
-            pVDev->GetTextArray( rText, pDX, 0, rText.getLength());
+            for (sal_Int32 i = 0; i < rText.getLength(); ++i)
+            {
+                Point aCharDisplacement( i ? pDXArry[i-1] : 0, i ? pDYArry[i-1] : 0 );
+                Point().RotateAround(aCharDisplacement.X(), aCharDisplacement.Y(), maFont.GetOrientation());
+                mpGDIMetaFile->AddAction( new MetaTextArrayAction( rPosition + aCharDisplacement, OUString( rText[i] ), nullptr, 0, 1 ) );
+            }
         }
-        mpGDIMetaFile->AddAction( new MetaTextArrayAction( rPosition, rText, pDX, 0, rText.getLength() ) );
-        if ( !pDXArry )     // this means we have created our own array
-            delete[] pDX;   // which must be deleted
+        else
+        {
+            /* because text without dx array is badly scaled, we
+               will create such an array if necessary */
+            long* pDX = pDXArry;
+            if (!pDXArry)
+            {
+                // #i117968# VirtualDevice is not thread safe, but filter is used in multithreading
+                SolarMutexGuard aGuard;
+                ScopedVclPtrInstance< VirtualDevice > pVDev;
+                pDX = new long[ rText.getLength() ];
+                pVDev->SetMapMode( MapUnit::Map100thMM );
+                pVDev->SetFont( maLatestFont );
+                pVDev->GetTextArray( rText, pDX, 0, rText.getLength());
+            }
+            mpGDIMetaFile->AddAction( new MetaTextArrayAction( rPosition, rText, pDX, 0, rText.getLength() ) );
+            if ( !pDXArry )     // this means we have created our own array
+                delete[] pDX;   // which must be deleted
+        }
     }
     SetGfxMode( nOldGfxMode );
 }
