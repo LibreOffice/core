@@ -600,6 +600,7 @@ public:
     void                DrawText( Point& rPosition,
                                   OUString& rString,
                                   long* pDXArry = nullptr,
+                                  long* pDYArry = nullptr,
                                   bool bRecordPath = false,
                                   sal_Int32 nGraphicsMode = GM_COMPATIBLE);
 

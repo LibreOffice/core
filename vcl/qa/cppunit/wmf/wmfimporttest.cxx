@@ -60,6 +60,7 @@ public:
     void testTdf93750();
     void testTdf99402();
     void testTdf39894();
+    void testETO_PDY();
 
     CPPUNIT_TEST_SUITE(WmfTest);
     CPPUNIT_TEST(globalSetUp);
@@ -71,6 +72,7 @@ public:
     CPPUNIT_TEST(testTdf93750);
     CPPUNIT_TEST(testTdf99402);
     CPPUNIT_TEST(testTdf39894);
+    CPPUNIT_TEST(testETO_PDY);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -286,6 +288,30 @@ void WmfTest::testTdf39894()
         // the previous text's last Dx (previously was ~300)
         auto x = getXPath(pDoc, "/metafile/push[2]/textarray[2]", "x");
         CPPUNIT_ASSERT_MESSAGE(file.toUtf8().getStr(), x.toInt32() > 2700);
+    }
+}
+
+void WmfTest::testETO_PDY()
+{
+    OUString files[] = { "ETO_PDY.wmf", "ETO_PDY.emf" };
+    for (const auto& file: files)
+    {
+        SvFileStream aFileStream(getFullUrl(file), StreamMode::READ);
+        GDIMetaFile aGDIMetaFile;
+        ReadWindowMetafile(aFileStream, aGDIMetaFile);
+
+        MetafileXmlDump dumper;
+        xmlDocPtr pDoc = dumper.dumpAndParse(aGDIMetaFile);
+
+        CPPUNIT_ASSERT(pDoc);
+
+        // The y position of following text
+        // must be smaller than that of previous
+        auto y1 = getXPath(pDoc, "/metafile/push[2]/textarray[1]", "y");
+        auto y2 = getXPath(pDoc, "/metafile/push[2]/textarray[2]", "y");
+        auto y3 = getXPath(pDoc, "/metafile/push[2]/textarray[3]", "y");
+        CPPUNIT_ASSERT_MESSAGE(file.toUtf8().getStr(), y2.toInt32() < y1.toInt32());
+        CPPUNIT_ASSERT_MESSAGE(file.toUtf8().getStr(), y3.toInt32() < y2.toInt32());
     }
 }
 

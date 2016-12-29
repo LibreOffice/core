@@ -421,15 +421,18 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, XmlWriter& rWriter)
                 rWriter.attribute("index", aIndex);
                 rWriter.attribute("length", aLength);
 
-                rWriter.startElement("dxarray");
-                OUString sDxLengthString;
-                for (sal_Int32 i = 0; i < aLength; ++i)
+                if (pMetaTextArrayAction->GetDXArray())
                 {
-                    sDxLengthString += OUString::number(pMetaTextArrayAction->GetDXArray()[aIndex+i]);
-                    sDxLengthString += " ";
+                    rWriter.startElement("dxarray");
+                    OUString sDxLengthString;
+                    for (sal_Int32 i = 0; i < aLength; ++i)
+                    {
+                        sDxLengthString += OUString::number(pMetaTextArrayAction->GetDXArray()[aIndex + i]);
+                        sDxLengthString += " ";
+                    }
+                    rWriter.content(sDxLengthString);
+                    rWriter.endElement();
                 }
-                rWriter.content(sDxLengthString);
-                rWriter.endElement();
 
                 rWriter.startElement("text");
                 rWriter.content(pMetaTextArrayAction->GetText());
