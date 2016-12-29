@@ -24,6 +24,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -66,7 +67,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-public class LibreOfficeUIActivity extends AppCompatActivity implements ActionBar.OnNavigationListener {
+public class LibreOfficeUIActivity extends AppCompatActivity {
     private String LOGTAG = LibreOfficeUIActivity.class.getSimpleName();
     private SharedPreferences prefs;
     private int filterMode = FileUtilities.ALL;
@@ -128,19 +129,34 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements ActionBa
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayShowTitleEnabled(false); //This should show current directory if anything
-        actionBar.setDisplayHomeAsUpEnabled(true);
 
-        //make the navigation spinner
-        Context context = actionBar.getThemedContext();
-        ArrayAdapter<CharSequence> list = ArrayAdapter.createFromResource(context, R.array.file_view_modes, android.R.layout.simple_spinner_item);
-        list.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        if (actionBar != null) {
+            actionBar.setDisplayShowTitleEnabled(false);
+            actionBar.setDisplayHomeAsUpEnabled(true);
 
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
-        actionBar.setListNavigationCallbacks(list, this);
+            //make the navigation spinner
+            Context context = actionBar.getThemedContext();
+            AppCompatSpinner toolbarSpinner = (AppCompatSpinner) findViewById(R.id.toolbar_spinner);
+            ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(context, R.array.file_view_modes, android.R.layout.simple_spinner_item);
+            spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            toolbarSpinner.setAdapter(spinnerAdapter);
+            toolbarSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long id) {
+                    filterMode = pos -1; //bit of a hack, I know. -1 is ALL 0 Docs etc
+                    openDirectory(currentDirectory);// Uses filter mode
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> adapterView) {
+                    filterMode = FileUtilities.ALL;
+                    openDirectory(currentDirectory);
+                }
+            });
+        }
+
 
         LinearLayout content = (LinearLayout) findViewById(R.id.browser_main_content);
-
         if (viewMode == GRID_VIEW) {
             // code to make a grid view
             getLayoutInflater().inflate(R.layout.file_grid, content);
@@ -151,13 +167,13 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements ActionBa
                     open(position);
                 }
             });
-            actionBar.setSelectedNavigationItem(filterMode + 1);//This triggers the listener which modifies the view.
+            openDirectory(currentDirectory);
             registerForContextMenu(gv);
         } else {
             getLayoutInflater().inflate(R.layout.file_list, content);
             lv = (ListView)findViewById(R.id.file_explorer_list_view);
             lv.setClickable(true);
-            actionBar.setSelectedNavigationItem(filterMode + 1);
+            openDirectory(currentDirectory);
             registerForContextMenu(lv);
         }
 
@@ -676,12 +692,6 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements ActionBa
     protected void onDestroy() {
         super.onDestroy();
         Log.d(LOGTAG, "onDestroy");
-    }
-
-    public boolean onNavigationItemSelected(int itemPosition, long itemId) {
-        filterMode = itemPosition -1; //bit of a hack, I know. -1 is ALL 0 Docs etc
-        openDirectory(currentDirectory);// Uses filter mode
-        return true;
     }
 
     private int dpToPx(int dp){
