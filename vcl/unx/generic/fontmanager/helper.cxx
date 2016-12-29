@@ -76,13 +76,8 @@ OUString const & getOfficePath( whichOfficePath ePath )
         }
         // ensure user path exists
         aUPath += "/user/psprint";
-        #if OSL_DEBUG_LEVEL > 1
-        oslFileError eErr =
-        #endif
+        SAL_INFO("vcl.fonts", "Trying to create: " << aUPath);
         osl_createDirectoryPath( aUPath.pData, nullptr, nullptr );
-        #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "try to create \"%s\" = %d\n", OUStringToOString( aUPath, RTL_TEXTENCODING_UTF8 ).getStr(), eErr );
-        #endif
     }
 
     switch( ePath )
@@ -228,9 +223,7 @@ OUString const & psp::getFontPath()
         }
 
         aPath = aPathBuffer.makeStringAndClear();
-#if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "initializing font path to \"%s\"\n", OUStringToOString( aPath, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
-#endif
+        SAL_INFO("vcl.fonts", "Initializing font path to: " << aPath);
     }
     return aPath;
 }
