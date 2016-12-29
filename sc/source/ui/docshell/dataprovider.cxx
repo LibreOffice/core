@@ -19,6 +19,30 @@
 
 namespace sc {
 
+ExternalDataMapper::ExternalDataMapper(ScDocShell* pDocShell, const OUString& rURL, const OUString& rName, SCTAB nTab,
+    SCCOL nCol1,SCROW nRow1, SCCOL nCol2, SCROW nRow2, bool& bSuccess):
+    maRange (ScRange(nCol1, nRow1, nTab, nCol2, nRow2, nTab)),
+    mpDocShell(pDocShell),
+    mpDataProvider (new CSVDataProvider(mpDocShell, maURL, maRange)),
+    mpDBCollection (pDocShell->GetDocument().GetDBCollection()),
+    maURL(rURL)
+{
+    bSuccess = true;
+    ScDBCollection::NamedDBs& rNamedDBS = mpDBCollection->getNamedDBs();
+    if(!rNamedDBS.insert (new ScDBData (rName, nTab, nCol1, nRow1, nCol2, nRow2)))
+        bSuccess = false;
+}
+
+ExternalDataMapper::~ExternalDataMapper()
+{
+    delete mpDataProvider;
+}
+
+void ExternalDataMapper::StartImport()
+{
+    mpDataProvider->StartImport();
+}
+
 DataProvider::~DataProvider()
 {
 }
@@ -124,9 +148,10 @@ void CSVFetchThread::execute()
         RequestTerminate();
 }
 
-CSVDataProvider::CSVDataProvider(const OUString& rURL, const ScRange& rRange):
+CSVDataProvider::CSVDataProvider(ScDocShell* pDocShell, const OUString& rURL, const ScRange& rRange):
     maURL(rURL),
     mrRange(rRange),
+    mpDocShell(pDocShell),
     mbImportUnderway(false)
 {
 }
@@ -172,7 +197,8 @@ void CSVDataProvider::StopImport()
 
 void CSVDataProvider::Refresh()
 {
-
+    mpDocShell->DoHardRecalc(true);
+    mpDocShell->SetDocumentModified();
 }
 
 }
