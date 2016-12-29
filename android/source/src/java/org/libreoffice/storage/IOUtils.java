@@ -1,9 +1,6 @@
 package org.libreoffice.storage;
 
-import android.content.Context;
 import android.util.Log;
-
-import org.libreoffice.R;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
