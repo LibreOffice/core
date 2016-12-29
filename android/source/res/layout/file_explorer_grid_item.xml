@@ -14,7 +14,8 @@
 
     <ImageView
         android:id="@+id/grid_item_image"
-        tools:src="@drawable/folder"
+        tools:src="@drawable/ic_folder_black_24dp"
+        tools:tint="@color/text_color_secondary"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:scaleType="fitStart"

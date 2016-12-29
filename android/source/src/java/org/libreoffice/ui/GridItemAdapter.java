@@ -10,6 +10,7 @@
 package org.libreoffice.ui;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,6 +55,8 @@ public class GridItemAdapter extends BaseAdapter {
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(
                 Context.LAYOUT_INFLATER_SERVICE);
 
+        Context context = inflater.getContext();
+
         View gridView;
 
         if (convertView == null) {
@@ -74,7 +77,10 @@ public class GridItemAdapter extends BaseAdapter {
             .findViewById(R.id.grid_item_image);
         if (filePaths.get(position).isDirectory()) { // Is a folder
             // Default view is a generic folder icon.
-            imageView.setImageResource(R.drawable.folder);
+            imageView.setImageResource(R.drawable.ic_folder_black_24dp);
+            //for tint
+            imageView.setColorFilter(ContextCompat.getColor(context,R.color.text_color_secondary));
+
         } else {
             /*
             File thumbnailFile = new File( filePaths[position].getParent() , "."

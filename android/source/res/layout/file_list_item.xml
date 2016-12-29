@@ -12,7 +12,8 @@
     android:orientation="horizontal" >
     <ImageView
         android:id="@+id/file_list_item_icon"
-        tools:src="@drawable/folder"
+        tools:src="@drawable/ic_folder_black_24dp"
+        tools:tint="@color/text_color_secondary"
         android:layout_height="match_parent"
         android:layout_width="32dp"
         android:layout_margin="8dp"
