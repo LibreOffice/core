@@ -73,6 +73,15 @@
 #define HID_STYLE_LISTBOX                                     "SVX_HID_STYLE_LISTBOX"
 #define HID_VALUESET_EXTRUSION_LIGHTING                       "SVX_HID_VALUESET_EXTRUSION_LIGHTING"
 #define HID_XMLSEC_CALL                                       "SVX_HID_XMLSEC_CALL"
+#define HID_FOOTER_CHECKSAMELR                                "SVX_HID_FOOTER_CHECKSAMELR"
+#define HID_FOOTER_CHECKSAMEFP                                "SVX_HID_FOOTER_CHECKSAMEFP"
+#define HID_FOOTER_SPINMARGLEFT                               "SVX_HID_FOOTER_SPINMARGLEFT"
+#define HID_FOOTER_SPINMARGRIGHT                              "SVX_HID_FOOTER_SPINMARGRIGHT"
+#define HID_FOOTER_SPINSPACING                                "SVX_HID_FOOTER_SPINSPACING"
+#define HID_FOOTER_CHECKDYNSPACING                            "SVX_HID_FOOTER_CHECKDYNSPACING"
+#define HID_FOOTER_SPINHEIGHT                                 "SVX_HID_FOOTER_SPINHEIGHT"
+#define HID_FOOTER_CHECKAUTOFIT                               "SVX_HID_FOOTER_CHECKAUTOFIT"
+#define HID_FOOTER_BUTTONMORE                                 "SVX_HID_FOOTER_BUTTONMORE"
 
 #endif
 
