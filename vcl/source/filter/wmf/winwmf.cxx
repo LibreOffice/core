@@ -551,7 +551,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                                                                                                 // dxAry will not fit
                 if ( nNewTextLen )
                 {
-                    std::unique_ptr<long[]> pDXAry;
+                    std::unique_ptr<long[]> pDXAry, pDYAry;
                     sal_uInt32  nMaxStreamPos = nRecordPos + ( nRecordSize << 1 );
                     sal_Int32   nDxArySize =  nMaxStreamPos - pWMF->Tell();
                     sal_Int32   nDxAryEntries = nDxArySize >> 1;
@@ -561,6 +561,10 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                     {
                         sal_uInt16 i; // needed just outside the for
                         pDXAry.reset(new long[ nNewTextLen ]);
+                        if ( nOptions & ETO_PDY )
+                        {
+                            pDYAry.reset(new long[ nNewTextLen ]);
+                        }
                         for (i = 0; i < nNewTextLen; i++ )
                         {
                             if ( pWMF->Tell() >= nMaxStreamPos )
@@ -568,15 +572,15 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                             sal_Int32 nDxCount = 1;
                             if ( nNewTextLen != nOriginalTextLen )
                             {
-                                sal_Unicode nUniChar = aText[i];
-                                OString aTmp(&nUniChar, 1, pOut->GetCharSet());
+                                sal_Unicode cUniChar = aText[i];
+                                OString aTmp(&cUniChar, 1, pOut->GetCharSet());
                                 if ( aTmp.getLength() > 1 )
                                 {
                                     nDxCount = aTmp.getLength();
                                 }
                             }
 
-                            sal_Int16 nDx = 0;
+                            sal_Int16 nDx = 0, nDy = 0;
                             while ( nDxCount-- )
                             {
                                 if ( ( pWMF->Tell() + 2 ) > nMaxStreamPos )
@@ -590,17 +594,21 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                                         break;
                                     sal_Int16 nDyTmp = 0;
                                     pWMF->ReadInt16(nDyTmp);
-                                    // TODO: use Dy offset
+                                    nDy += nDyTmp;
                                 }
                             }
 
                             pDXAry[ i ] = nDx;
+                            if ( nOptions & ETO_PDY )
+                            {
+                                pDYAry[i] = nDy;
+                            }
                         }
                         if ( i == nNewTextLen )
                             bUseDXAry = true;
                     }
                     if ( pDXAry && bUseDXAry )
-                        pOut->DrawText( aPosition, aText, pDXAry.get() );
+                        pOut->DrawText( aPosition, aText, pDXAry.get(), pDYAry.get() );
                     else
                         pOut->DrawText( aPosition, aText );
                 }

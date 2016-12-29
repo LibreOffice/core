@@ -1547,7 +1547,6 @@ bool EnhWMFReader::ReadEnhWMF()
                     sal_Int32   nLeft, nTop, nRight, nBottom, ptlReferenceX, ptlReferenceY, nGfxMode, nXScale, nYScale;
                     sal_uInt32  nOffString, nOptions, offDx;
                     sal_Int32   nLen;
-                    std::vector<long> aDX;
 
                     nCurPos = pWMF->Tell() - 8;
 
@@ -1568,23 +1567,6 @@ bool EnhWMFReader::ReadEnhWMF()
                     bool bOffStringSane = nOffString <= nEndPos - nCurPos;
                     if (bLenSane && bOffStringSane)
                     {
-                        sal_Int32 nDxSize = nLen * ((nOptions & ETO_PDY) ? 8 : 4);
-                        if ( offDx && (( nCurPos + offDx + nDxSize ) <= nNextPos ) && nNextPos <= nEndPos )
-                        {
-                            pWMF->Seek( nCurPos + offDx );
-                            aDX.resize(nLen);
-                            for (sal_Int32 i = 0; i < nLen; ++i)
-                            {
-                                sal_Int32 val(0);
-                                pWMF->ReadInt32(val);
-                                aDX[i] = val;
-                                if (nOptions & ETO_PDY)
-                                {
-                                    pWMF->ReadInt32(val);
-                                    // TODO: Use Dy value
-                                }
-                            }
-                        }
                         pWMF->Seek( nCurPos + nOffString );
                         OUString aText;
                         if ( bFlag )
@@ -1594,22 +1576,6 @@ bool EnhWMFReader::ReadEnhWMF()
                                 std::unique_ptr<sal_Char[]> pBuf(new sal_Char[ nLen ]);
                                 pWMF->ReadBytes(pBuf.get(), nLen);
                                 aText = OUString(pBuf.get(), nLen, pOut->GetCharSet());
-                                pBuf.reset();
-
-                                if ( aText.getLength() != nLen )
-                                {
-                                    std::vector<long> aOldDX(aText.getLength());
-                                    aOldDX.swap(aDX);
-                                    sal_Int32 nDXLen = std::min<sal_Int32>(nLen, aOldDX.size());
-                                    for (sal_Int32 i = 0, j = 0; i < aText.getLength(); ++i)
-                                    {
-                                        sal_Unicode cUniChar = aText[i];
-                                        OString aCharacter(&cUniChar, 1, pOut->GetCharSet());
-                                        aDX[i] = 0;
-                                        for (sal_Int32 k = 0; ( k < aCharacter.getLength() ) && ( j < nDXLen ) && ( i < aText.getLength() ); ++k)
-                                            aDX[ i ] += aOldDX[j++];
-                                    }
-                                }
                             }
                         }
                         else
@@ -1630,7 +1596,53 @@ bool EnhWMFReader::ReadEnhWMF()
                                 aText = OUString(pBuf.get(), nLen);
                             }
                         }
-                        pOut->DrawText(aPos, aText, aDX.data(), bRecordPath, nGfxMode);
+
+                        std::unique_ptr<long[]> pDXAry, pDYAry;
+                        sal_Int32 nDxSize = nLen * ((nOptions & ETO_PDY) ? 8 : 4);
+                        if ( offDx && (( nCurPos + offDx + nDxSize ) <= nNextPos ) && nNextPos <= nEndPos )
+                        {
+                            pWMF->Seek( nCurPos + offDx );
+                            pDXAry.reset( new long[aText.getLength()] );
+                            if (nOptions & ETO_PDY)
+                            {
+                                pDYAry.reset( new long[aText.getLength()] );
+                            }
+
+                            for (sal_Int32 i = 0; i < aText.getLength(); ++i)
+                            {
+                                sal_Int32 nDxCount = 1;
+                                if (aText.getLength() != nLen)
+                                {
+                                    sal_Unicode cUniChar = aText[i];
+                                    OString aTmp(&cUniChar, 1, pOut->GetCharSet());
+                                    if (aTmp.getLength() > 1)
+                                    {
+                                        nDxCount = aTmp.getLength();
+                                    }
+                                }
+
+                                sal_Int32 nDx = 0, nDy = 0;
+                                while (nDxCount--)
+                                {
+                                    sal_Int32 nDxTmp = 0;
+                                    pWMF->ReadInt32(nDxTmp);
+                                    nDx += nDxTmp;
+                                    if (nOptions & ETO_PDY)
+                                    {
+                                        sal_Int32 nDyTmp = 0;
+                                        pWMF->ReadInt32(nDyTmp);
+                                        nDy += nDyTmp;
+                                    }
+                                }
+
+                                pDXAry[i] = nDx;
+                                if (nOptions & ETO_PDY)
+                                {
+                                    pDYAry[i] = nDy;
+                                }
+                            }
+                        }
+                        pOut->DrawText(aPos, aText, pDXAry.get(), pDYAry.get(), bRecordPath, nGfxMode);
                     }
                 }
                 break;
