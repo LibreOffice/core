@@ -149,16 +149,8 @@ class GbuildParser:
     @staticmethod
     def __test_from_json(json):
         (foundincludes, foundisystem) = GbuildParser.__split_includes(json['INCLUDE'])
-        testname_match = GbuildParser.testpattern.match(os.path.basename(json['MAKEFILE']))
-
-        # Workaround strange writer test makefile setup
-        if testname_match is None:
-            testname = "StrangeWriterMakefiles"
-        else:
-            testname = testname_match.group(1)
-
         return GbuildTest(
-            testname,
+            GbuildParser.testpattern.match(os.path.basename(json['MAKEFILE'])).group(1),
             os.path.dirname(json['MAKEFILE']),
             foundincludes,
             foundisystem,

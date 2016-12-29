@@ -9,8 +9,6 @@
 #
 #*************************************************************************
 
-include $(SRCDIR)/sw/ooxmlexport_setup.mk
-
 $(eval $(call gb_CppunitTest_CppunitTest,sw_ooxmlw14export))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,sw_ooxmlw14export, \

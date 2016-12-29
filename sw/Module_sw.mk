@@ -17,6 +17,8 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
+include $(SRCDIR)/sw/ooxmlexport_setup.mk
+
 $(eval $(call gb_Module_Module,sw))
 
 $(eval $(call gb_Module_add_targets,sw,\
