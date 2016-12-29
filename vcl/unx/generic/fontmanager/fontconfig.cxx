@@ -657,13 +657,13 @@ void PrintFontManager::deinitFontconfig()
     FontCfgWrapper::release();
 }
 
-bool PrintFontManager::addFontconfigDir( const OString& rDirName )
+void PrintFontManager::addFontconfigDir( const OString& rDirName )
 {
     // workaround for a stability problems in older FC versions
     // when handling application specific fonts
     const int nVersion = FcGetVersion();
     if( nVersion <= 20400 )
-        return false;
+        return;
     const char* pDirName = rDirName.getStr();
     bool bDirOk = (FcConfigAppFontAddDir(FcConfigGetCurrent(), reinterpret_cast<FcChar8 const *>(pDirName) ) == FcTrue);
 
@@ -672,7 +672,7 @@ bool PrintFontManager::addFontconfigDir( const OString& rDirName )
 #endif
 
     if( !bDirOk )
-        return false;
+        return;
 
     // load dir-specific fc-config file too if available
     const OString aConfFileName = rDirName + "/fc_local.conf";
@@ -686,7 +686,7 @@ bool PrintFontManager::addFontconfigDir( const OString& rDirName )
             fprintf( stderr, "FcConfigParseAndLoad( \"%s\") => %d\n", aConfFileName.getStr(), bCfgOk );
     }
 
-    return true;
+    return;
 }
 
 static void addtopattern(FcPattern *pPattern,

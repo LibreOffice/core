@@ -205,12 +205,8 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
     since fontconfig is asked for font substitutes before OOo will check for font availability
     and fontconfig will happily substitute fonts it doesn't know (e.g. "Arial Narrow" -> "DejaVu Sans Book"!)
     it becomes necessary to tell the library about all the hidden font treasures
-
-    @returns
-    true if libfontconfig accepted the directory
-    false else (e.g. no libfontconfig found)
     */
-    static bool addFontconfigDir(const OString& rDirectory);
+    static void addFontconfigDir(const OString& rDirectory);
 
     std::set<OString> m_aPreviousLangSupportRequests;
 #if ENABLE_DBUS
