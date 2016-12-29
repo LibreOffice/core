@@ -60,14 +60,14 @@ namespace
 
 extern "C"
 {
-    __attribute__((weak)) void __lsan_enable();
     __attribute__((weak)) void __lsan_disable();
+    __attribute__((weak)) void __lsan_enable();
 }
 
 extern "C" int LLVMFuzzerInitialize(int *argc, char ***argv)
 {
-    if (__lsan_enable)
-        __lsan_enable();
+    if (__lsan_disable)
+        __lsan_disable();
 
     setenv("SAL_USE_VCLPLUGIN", "svp", 1);
 
@@ -85,8 +85,8 @@ extern "C" int LLVMFuzzerInitialize(int *argc, char ***argv)
     utl::ConfigManager::EnableAvoidConfig();
     InitVCL();
 
-    if (__lsan_disable)
-        __lsan_disable();
+    if (__lsan_enable)
+        __lsan_enable();
 
     return 0;
 }
