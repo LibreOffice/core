@@ -49,7 +49,6 @@ namespace xls {
 
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::sheet;
-using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 
@@ -1075,10 +1074,7 @@ void PivotCache::finalizeInternalSheetSource()
         // local or global defined name
         if( const DefinedName* pDefName = getDefinedNames().getByModelName( maSheetSrcModel.maDefName, nSheet ).get() )
         {
-            CellRangeAddress aCellRange = CellRangeAddress( maSheetSrcModel.maRange.aStart.Tab(),
-                                                            maSheetSrcModel.maRange.aStart.Col(), maSheetSrcModel.maRange.aStart.Row(),
-                                                            maSheetSrcModel.maRange.aEnd.Col(), maSheetSrcModel.maRange.aEnd.Row() );
-            mbValidSource = pDefName->getAbsoluteRange( aCellRange );
+            mbValidSource = pDefName->getAbsoluteRange( maSheetSrcModel.maRange );
         }
         // table
         else if( const Table* pTable = getTables().getTable( maSheetSrcModel.maDefName ).get() )
