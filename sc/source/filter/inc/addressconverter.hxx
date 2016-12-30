@@ -400,6 +400,10 @@ public:
                             css::table::CellRangeAddress& orRange,
                             bool bAllowOverflow, bool bTrackOverflow );
 
+    bool                validateCellRange(
+                            ScRange& orRange,
+                            bool bAllowOverflow, bool bTrackOverflow );
+
     /** Converts the passed string to a cell range address, without checking
         any sheet limits.
 

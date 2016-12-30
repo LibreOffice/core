@@ -383,6 +383,29 @@ bool AddressConverter::checkCellRange( const CellRangeAddress& rRange, bool bAll
         checkRow( rRange.StartRow, bTrackOverflow );
 }
 
+bool AddressConverter::validateCellRange( ScRange& orRange, bool bAllowOverflow, bool bTrackOverflow )
+{
+    if( orRange.aStart.Col() > orRange.aEnd.Col() )
+    {
+        SCCOL nCol = orRange.aStart.Col();
+        orRange.aStart.SetCol( orRange.aEnd.Col() );
+        orRange.aEnd.SetCol( nCol );
+    }
+    if( orRange.aStart.Row() > orRange.aEnd.Row() )
+    {
+        SCROW nRow = orRange.aStart.Row();
+        orRange.aStart.SetRow( orRange.aEnd.Row() );
+        orRange.aEnd.SetRow( nRow );
+    }
+    if( !checkCellRange( orRange, bAllowOverflow, bTrackOverflow ) )
+        return false;
+    if( orRange.aEnd.Col() > maMaxPos.Col() )
+        orRange.aEnd.SetCol( maMaxPos.Col() );
+    if( orRange.aEnd.Row() > maMaxPos.Row() )
+        orRange.aEnd.SetRow( maMaxPos.Row() );
+    return true;
+}
+
 bool AddressConverter::validateCellRange( CellRangeAddress& orRange, bool bAllowOverflow, bool bTrackOverflow )
 {
     if( orRange.StartColumn > orRange.EndColumn )

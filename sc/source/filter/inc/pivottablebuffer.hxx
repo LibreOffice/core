@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_PIVOTTABLEBUFFER_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_PIVOTTABLEBUFFER_HXX
 
-#include <com/sun/star/table/CellRangeAddress.hpp>
 #include "pivotcachebuffer.hxx"
 #include "stylesbuffer.hxx"
 
@@ -271,8 +270,7 @@ struct PTDefinitionModel : public AutoFormatModel
 
 struct PTLocationModel
 {
-    css::table::CellRangeAddress
-                        maRange;            /// Target cell range for the pivot table.
+    ScRange             maRange;            /// Target cell range for the pivot table.
     sal_Int32           mnFirstHeaderRow;   /// First row of header cells (relative in pivot table).
     sal_Int32           mnFirstDataRow;     /// First row of data cells (relative in pivot table).
     sal_Int32           mnFirstDataCol;     /// First column of data cells (relative in pivot table).

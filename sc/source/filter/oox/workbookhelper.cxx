@@ -799,6 +799,20 @@ Reference< XCellRange > WorkbookHelper::getCellRangeFromDoc( const CellRangeAddr
     return xRange;
 }
 
+Reference< XCellRange > WorkbookHelper::getCellRangeFromDoc( const ScRange& rRange ) const
+{
+    Reference< XCellRange > xRange;
+    try
+    {
+        Reference< XSpreadsheet > xSheet( getSheetFromDoc( rRange.aStart.Tab() ), UNO_SET_THROW );
+        xRange = xSheet->getCellRangeByPosition( rRange.aStart.Col(), rRange.aStart.Row(), rRange.aEnd.Col(), rRange.aEnd.Row() );
+    }
+    catch( Exception& )
+    {
+    }
+    return xRange;
+}
+
 Reference< XNameContainer > WorkbookHelper::getCellStyleFamily() const
 {
     return mrBookGlob.getStyleFamily( false/*bPageStyles*/ );
