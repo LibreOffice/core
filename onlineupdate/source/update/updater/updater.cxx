@@ -223,7 +223,6 @@ static bool gSucceeded = false;
 static bool sStagedUpdate = false;
 static bool sReplaceRequest = false;
 static bool sUsingService = false;
-static bool sIsOSUpdate = false;
 
 #ifdef _WIN32
 // The current working directory specified in the command line.
@@ -2417,7 +2416,7 @@ UpdateThreadFunc(void * /*param*/)
         }
 #endif
 
-        if (rv == OK && sStagedUpdate && !sIsOSUpdate) {
+        if (rv == OK && sStagedUpdate) {
 #ifdef TEST_UPDATER
             // The MOZ_TEST_SKIP_UPDATE_STAGE environment variable prevents copying
             // the files in dist/bin in the test updater when staging an update since
@@ -2727,11 +2726,6 @@ int NS_main(int argc, NS_tchar **argv)
         return gSucceeded ? 0 : 1;
     }
 #endif
-
-    if (EnvHasValue("MOZ_OS_UPDATE")) {
-        sIsOSUpdate = true;
-        putenv(const_cast<char*>("MOZ_OS_UPDATE="));
-    }
 
     LogInit(gPatchDirPath, NS_T("update.log"));
 
@@ -3901,10 +3895,6 @@ GetManifestContents(const NS_tchar *manifest)
 
 int AddPreCompleteActions(ActionList *list)
 {
-    if (sIsOSUpdate) {
-        return OK;
-    }
-
 #ifdef MACOSX
     std::unique_ptr<NS_tchar> manifestPath(get_full_path(
                 NS_T("Contents/Resources/precomplete")));
