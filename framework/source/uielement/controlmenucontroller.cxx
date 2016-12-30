@@ -44,54 +44,12 @@
 #include <osl/mutex.hxx>
 #include <memory>
 
+#include "svx/svxids.hrc"
+
 // Copied from svx
 // Function-Id's
 #define RID_FMSHELL_CONVERSIONMENU (RID_FORMS_START + 4)
 #define RID_SVXIMGLIST_FMEXPL      (RID_FORMS_START + 0)
-
-// Forms - Ids, used to address images from image list
-#define SID_FMSLOTS_START                   (SID_SVX_START + 592)
-#define SID_MORE_FMSLOTS_START              (SID_SVX_START + 702)
-
-#define SID_FM_CONVERTTO_EDIT               (SID_MORE_FMSLOTS_START +  32)
-#define SID_FM_CONVERTTO_BUTTON             (SID_MORE_FMSLOTS_START +  33)
-#define SID_FM_CONVERTTO_FIXEDTEXT          (SID_MORE_FMSLOTS_START +  34)
-#define SID_FM_CONVERTTO_LISTBOX            (SID_MORE_FMSLOTS_START +  35)
-#define SID_FM_CONVERTTO_CHECKBOX           (SID_MORE_FMSLOTS_START +  36)
-#define SID_FM_CONVERTTO_RADIOBUTTON        (SID_MORE_FMSLOTS_START +  37)
-#define SID_FM_CONVERTTO_GROUPBOX           (SID_MORE_FMSLOTS_START +  38)
-#define SID_FM_CONVERTTO_COMBOBOX           (SID_MORE_FMSLOTS_START +  39)
-#define SID_FM_CONVERTTO_IMAGEBUTTON        (SID_MORE_FMSLOTS_START +  41)
-#define SID_FM_CONVERTTO_FILECONTROL        (SID_MORE_FMSLOTS_START +  42)
-#define SID_FM_CONVERTTO_DATE               (SID_MORE_FMSLOTS_START +  43)
-#define SID_FM_CONVERTTO_TIME               (SID_MORE_FMSLOTS_START +  44)
-#define SID_FM_CONVERTTO_NUMERIC            (SID_MORE_FMSLOTS_START +  45)
-#define SID_FM_CONVERTTO_CURRENCY           (SID_MORE_FMSLOTS_START +  46)
-#define SID_FM_CONVERTTO_PATTERN            (SID_MORE_FMSLOTS_START +  47)
-#define SID_FM_CONVERTTO_IMAGECONTROL       (SID_MORE_FMSLOTS_START +  48)
-#define SID_FM_CONVERTTO_FORMATTED          (SID_MORE_FMSLOTS_START +  49)
-#define SID_FM_CONVERTTO_SCROLLBAR          (SID_MORE_FMSLOTS_START +  68)
-#define SID_FM_CONVERTTO_SPINBUTTON         (SID_MORE_FMSLOTS_START +  69)
-
-#define SID_FM_DATEFIELD                    (SID_MORE_FMSLOTS_START +   2)
-#define SID_FM_TIMEFIELD                    (SID_MORE_FMSLOTS_START +   3)
-#define SID_FM_NUMERICFIELD                 (SID_MORE_FMSLOTS_START +   4)
-#define SID_FM_CURRENCYFIELD                (SID_MORE_FMSLOTS_START +   5)
-#define SID_FM_PATTERNFIELD                 (SID_MORE_FMSLOTS_START +   6)
-#define SID_FM_IMAGECONTROL                 (SID_MORE_FMSLOTS_START +   8)
-#define SID_FM_FORMATTEDFIELD               (SID_MORE_FMSLOTS_START +  26)
-#define SID_FM_SCROLLBAR                    (SID_MORE_FMSLOTS_START +  66)
-#define SID_FM_SPINBUTTON                   (SID_MORE_FMSLOTS_START +  67)
-#define SID_FM_PUSHBUTTON                   (SID_FMSLOTS_START + 2)
-#define SID_FM_RADIOBUTTON                  (SID_FMSLOTS_START + 3)
-#define SID_FM_CHECKBOX                     (SID_FMSLOTS_START + 4)
-#define SID_FM_FIXEDTEXT                    (SID_FMSLOTS_START + 5)
-#define SID_FM_GROUPBOX                     (SID_FMSLOTS_START + 6)
-#define SID_FM_EDIT                         (SID_FMSLOTS_START + 7)
-#define SID_FM_LISTBOX                      (SID_FMSLOTS_START + 8)
-#define SID_FM_COMBOBOX                     (SID_FMSLOTS_START + 9)
-#define SID_FM_IMAGEBUTTON                  (SID_FMSLOTS_START + 12)
-#define SID_FM_FILECONTROL                  (SID_FMSLOTS_START + 13)
 
 static const sal_Int16 nConvertSlots[] =
 {
