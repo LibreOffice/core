@@ -253,6 +253,7 @@ void FuInsertClipboard::DoExecute( SfxRequest&  )
         pDlg->Insert( SotClipboardFormatId::STRING, OUString() );
         pDlg->Insert( SotClipboardFormatId::HTML, OUString() );
         pDlg->Insert( SotClipboardFormatId::RTF, OUString() );
+        pDlg->Insert( SotClipboardFormatId::RICHTEXT, OUString() );
         pDlg->Insert( SotClipboardFormatId::EDITENGINE, OUString() );
 
         //TODO/MBA: testing
