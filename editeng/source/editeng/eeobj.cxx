@@ -57,7 +57,7 @@ uno::Any EditDataObject::getTransferData( const datatransfer::DataFlavor& rFlavo
     {
         aAny <<= GetString();
     }
-    else if ( ( nT == SotClipboardFormatId::EDITENGINE ) || ( nT == SotClipboardFormatId::RTF ) )
+    else if ( ( nT == SotClipboardFormatId::EDITENGINE ) || ( nT == SotClipboardFormatId::RTF ) || ( nT == SotClipboardFormatId::RICHTEXT ) )
     {
         // No RTF on demand any more:
         // 1) Was not working, because I had to flush() the clipboard immediately anyway
@@ -84,10 +84,11 @@ uno::Any EditDataObject::getTransferData( const datatransfer::DataFlavor& rFlavo
 
 uno::Sequence< datatransfer::DataFlavor > EditDataObject::getTransferDataFlavors(  ) throw(uno::RuntimeException, std::exception)
 {
-    uno::Sequence< datatransfer::DataFlavor > aDataFlavors(3);
+    uno::Sequence< datatransfer::DataFlavor > aDataFlavors(4);
     SotExchange::GetFormatDataFlavor( SotClipboardFormatId::EDITENGINE, aDataFlavors.getArray()[0] );
     SotExchange::GetFormatDataFlavor( SotClipboardFormatId::STRING, aDataFlavors.getArray()[1] );
     SotExchange::GetFormatDataFlavor( SotClipboardFormatId::RTF, aDataFlavors.getArray()[2] );
+    SotExchange::GetFormatDataFlavor( SotClipboardFormatId::RICHTEXT, aDataFlavors.getArray()[3] );
 
     return aDataFlavors;
 }
@@ -97,7 +98,8 @@ sal_Bool EditDataObject::isDataFlavorSupported( const datatransfer::DataFlavor& 
     bool bSupported = false;
 
     SotClipboardFormatId nT = SotExchange::GetFormat( rFlavor );
-    if ( ( nT == SotClipboardFormatId::STRING ) || ( nT == SotClipboardFormatId::RTF ) || ( nT == SotClipboardFormatId::EDITENGINE ) )
+    if ( ( nT == SotClipboardFormatId::STRING ) || ( nT == SotClipboardFormatId::RTF ) || ( nT == SotClipboardFormatId::RICHTEXT )
+        || ( nT == SotClipboardFormatId::EDITENGINE ) )
         bSupported = true;
 
     return bSupported;

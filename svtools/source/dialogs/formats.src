@@ -35,6 +35,10 @@ String STR_FORMAT_RTF
 {
     Text [ en-US ] = "Formatted text [RTF]" ;
 };
+String STR_FORMAT_ID_RICHTEXT
+{
+    Text [ en-US ] = "Formatted text [Richtext]" ;
+};
 String STR_FORMAT_ID_DRAWING
 {
     Text [ en-US ] = "Drawing format";

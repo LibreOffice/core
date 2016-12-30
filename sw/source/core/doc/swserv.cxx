@@ -51,6 +51,7 @@ bool SwServerObject::GetData( uno::Any & rData,
         break;
 
     case SotClipboardFormatId::RTF:
+    case SotClipboardFormatId::RICHTEXT:
         // mba: no BaseURL for data exchange
         ::GetRTFWriter( OUString(), OUString(), xWrt );
         break;
