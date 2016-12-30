@@ -58,15 +58,6 @@ namespace o3tl {
     template<> struct typed_flags<RscImageFlags> : is_typed_flags<RscImageFlags, 0x01> {};
 }
 
-// For "ImageList":
-enum class RscImageListFlags {
-    IdList            = 0x08,
-    IdCount           = 0x10
-};
-namespace o3tl {
-    template<> struct typed_flags<RscImageListFlags> : is_typed_flags<RscImageListFlags, 0x18> {};
-}
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
