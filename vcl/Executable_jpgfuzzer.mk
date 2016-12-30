@@ -10,37 +10,37 @@
 
 include $(SRCDIR)/vcl/commonfuzzer.mk
 
-$(eval $(call gb_Executable_Executable,wmffuzzer))
+$(eval $(call gb_Executable_Executable,jpgfuzzer))
 
-$(eval $(call gb_Executable_use_api,wmffuzzer,\
+$(eval $(call gb_Executable_use_api,jpgfuzzer,\
     offapi \
     udkapi \
 ))
 
-$(eval $(call gb_Executable_use_externals,wmffuzzer,\
+$(eval $(call gb_Executable_use_externals,jpgfuzzer,\
 	$(fuzzer_externals) \
 ))
 
-$(eval $(call gb_Executable_set_include,wmffuzzer,\
+$(eval $(call gb_Executable_set_include,jpgfuzzer,\
     $$(INCLUDE) \
     -I$(SRCDIR)/vcl/inc \
 ))
 
-$(eval $(call gb_Executable_use_libraries,wmffuzzer,\
+$(eval $(call gb_Executable_use_libraries,jpgfuzzer,\
 	$(fuzzer_libraries) \
 ))
 
-$(eval $(call gb_Executable_use_static_libraries,wmffuzzer,\
+$(eval $(call gb_Executable_use_static_libraries,jpgfuzzer,\
     findsofficepath \
     ulingu \
     fuzzer \
 ))
 
-$(eval $(call gb_Executable_add_exception_objects,wmffuzzer,\
-	vcl/workben/wmffuzzer \
+$(eval $(call gb_Executable_add_exception_objects,jpgfuzzer,\
+	vcl/workben/jpgfuzzer \
 ))
 
-$(eval $(call gb_Executable_add_libs,wmffuzzer,\
+$(eval $(call gb_Executable_add_libs,jpgfuzzer,\
 	-lFuzzingEngine \
 ))
 

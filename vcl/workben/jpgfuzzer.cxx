@@ -8,15 +8,14 @@
  */
 
 #include <tools/stream.hxx>
-#include <vcl/gdimtf.hxx>
-#include <vcl/wmf.hxx>
+#include <../source/filter/jpeg/jpeg.hxx>
 #include "commonfuzzer.hxx"
 
 extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size)
 {
     SvMemoryStream aStream(const_cast<uint8_t*>(data), size, StreamMode::READ);
-    GDIMetaFile aGDIMetaFile;
-    (void)ReadWindowMetafile(aStream, aGDIMetaFile);
+    Graphic aGraphic;
+    (void)ImportJPEG(aStream, aGraphic, nullptr, GraphicFilterImportFlags::NONE);
     return 0;
 }
 

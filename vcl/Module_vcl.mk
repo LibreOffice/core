@@ -105,7 +105,9 @@ endif
 ifneq ($(ENABLE_FUZZERS),)
 $(eval $(call gb_Module_add_targets,vcl,\
     CustomTarget_nativecode \
+    StaticLibrary_fuzzer \
     Executable_wmffuzzer \
+    Executable_jpgfuzzer \
 ))
 endif
 
