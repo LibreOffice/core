@@ -697,6 +697,10 @@ public:
                             css::table::CellRangeAddress& orRange,
                             const ApiTokenSequence& rTokens,
                             bool bAllowRelative ) const;
+    bool                extractCellRange(
+                            ScRange& orRange,
+                            const ApiTokenSequence& rTokens,
+                            bool bAllowRelative ) const;
 
     /** Tries to extract a cell range list from a formula token sequence.
 

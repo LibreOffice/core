@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_PIVOTCACHEBUFFER_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_PIVOTCACHEBUFFER_HXX
 
-#include <com/sun/star/table/CellRangeAddress.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <oox/helper/containerhelper.hxx>
 #include <oox/helper/refvector.hxx>
