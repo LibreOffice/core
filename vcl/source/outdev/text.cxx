@@ -25,11 +25,14 @@
 
 #include <comphelper/processfactory.hxx>
 
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
+
 #include <vcl/textrectinfo.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/unohelp.hxx>
+#include <vcl/canvastools.hxx>
 #include <vcl/controllayout.hxx>
 
 #include "outdata.hxx"
@@ -209,17 +212,11 @@ bool OutputDevice::ImplDrawRotateText( SalLayout& rSalLayout )
     int nX = rSalLayout.DrawBase().X();
     int nY = rSalLayout.DrawBase().Y();
 
-    Rectangle aBoundRect;
     rSalLayout.DrawBase() = Point( 0, 0 );
     rSalLayout.DrawOffset() = Point( 0, 0 );
-    if( !rSalLayout.GetBoundRect( *mpGraphics, aBoundRect ) )
-    {
-        // guess vertical text extents if GetBoundRect failed
-        int nRight = rSalLayout.GetTextWidth();
-        int nTop = mpFontInstance->mxFontMetric->GetAscent() + mnEmphasisAscent;
-        long nHeight = mpFontInstance->mnLineHeight + mnEmphasisAscent + mnEmphasisDescent;
-        aBoundRect = Rectangle( 0, -nTop, nRight, nHeight - nTop );
-    }
+
+    Rectangle aBoundRect = vcl::unotools::rectangleFromB2DRectangle(
+            rSalLayout.GetBoundRect(*mpGraphics));
 
     // cache virtual device for rotation
     if (!mpOutDevData->mpRotateDev)
@@ -2364,35 +2361,26 @@ bool OutputDevice::GetTextBoundRect( Rectangle& rRect,
     }
 
     pSalLayout = ImplLayout( rStr, nIndex, nLen, aPoint, nLayoutWidth, pDXAry );
-    Rectangle aPixelRect;
     if( pSalLayout )
     {
-        bRet = pSalLayout->GetBoundRect( *mpGraphics, aPixelRect );
+        basegfx::B2DRectangle aRect = pSalLayout->GetBoundRect(*mpGraphics);
 
-        if( bRet )
+        int nWidthFactor = pSalLayout->GetUnitsPerPixel();
+
+        if (nWidthFactor > 1)
         {
-            int nWidthFactor = pSalLayout->GetUnitsPerPixel();
-
-            if( nWidthFactor > 1 )
-            {
-                double fFactor = 1.0 / nWidthFactor;
-                aPixelRect.Left()
-                    = static_cast< long >(aPixelRect.Left() * fFactor);
-                aPixelRect.Right()
-                    = static_cast< long >(aPixelRect.Right() * fFactor);
-                aPixelRect.Top()
-                    = static_cast< long >(aPixelRect.Top() * fFactor);
-                aPixelRect.Bottom()
-                    = static_cast< long >(aPixelRect.Bottom() * fFactor);
-            }
-
-            Point aRotatedOfs( mnTextOffX, mnTextOffY );
-            aRotatedOfs -= pSalLayout->GetDrawPosition( Point( nXOffset, 0 ) );
-            aPixelRect += aRotatedOfs;
-            rRect = PixelToLogic( aPixelRect );
-            if( mbMap )
-                rRect += Point( maMapRes.mnMapOfsX, maMapRes.mnMapOfsY );
+            double fFactor = 1.0 / nWidthFactor;
+            basegfx::B2DHomMatrix aTransform = basegfx::tools::createScaleB2DHomMatrix(fFactor, fFactor);
+            aRect.transform(aTransform);
         }
+
+        Rectangle aPixelRect = vcl::unotools::rectangleFromB2DRectangle(aRect);
+        Point aRotatedOfs(mnTextOffX, mnTextOffY);
+        aRotatedOfs -= pSalLayout->GetDrawPosition(Point(nXOffset, 0));
+        aPixelRect += aRotatedOfs;
+        rRect = PixelToLogic(aPixelRect);
+        if (mbMap)
+            rRect += Point(maMapRes.mnMapOfsX, maMapRes.mnMapOfsY);
 
         pSalLayout->Release();
     }
