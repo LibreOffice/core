@@ -334,7 +334,9 @@ private:
 class SmCloningVisitor : public SmVisitor
 {
 public:
-    SmCloningVisitor( ){ pResult = nullptr; }
+    SmCloningVisitor()
+        : mpResult(nullptr)
+    {}
     virtual ~SmCloningVisitor() {}
     void Visit( SmTableNode* pNode ) override;
     void Visit( SmBraceNode* pNode ) override;
@@ -366,7 +368,7 @@ public:
     /** Clone a pNode */
     SmNode* Clone( SmNode* pNode );
 private:
-    SmNode* pResult;
+    SmNode* mpResult;
     /** Clone children of pSource and give them to pTarget */
     void CloneKids( SmStructureNode* pSource, SmStructureNode* pTarget );
     /** Clone attributes on a pNode */

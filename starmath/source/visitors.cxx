@@ -1593,10 +1593,10 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmPolyLineNode* )
 
 SmNode* SmCloningVisitor::Clone( SmNode* pNode )
 {
-    SmNode* pCurrResult = pResult;
+    SmNode* pCurrResult = mpResult;
     pNode->Accept( this );
-    SmNode* pClone = pResult;
-    pResult = pCurrResult;
+    SmNode* pClone = mpResult;
+    mpResult = pCurrResult;
     return pClone;
 }
 
@@ -1610,7 +1610,7 @@ void SmCloningVisitor::CloneNodeAttr( SmNode* pSource, SmNode* pTarget )
 void SmCloningVisitor::CloneKids( SmStructureNode* pSource, SmStructureNode* pTarget )
 {
     //Cache current result
-    SmNode* pCurrResult = pResult;
+    SmNode* pCurrResult = mpResult;
 
     //Create array for holding clones
     sal_uInt16 nSize = pSource->GetNumSubNodes( );
@@ -1622,15 +1622,15 @@ void SmCloningVisitor::CloneKids( SmStructureNode* pSource, SmStructureNode* pTa
         if( nullptr != ( pKid = pSource->GetSubNode( i ) ) )
             pKid->Accept( this );
         else
-            pResult = nullptr;
-        aNodes[i] = pResult;
+            mpResult = nullptr;
+        aNodes[i] = mpResult;
     }
 
     //Set subnodes of pTarget
     pTarget->SetSubNodes( aNodes );
 
     //Restore result as where prior to call
-    pResult = pCurrResult;
+    mpResult = pCurrResult;
 }
 
 void SmCloningVisitor::Visit( SmTableNode* pNode )
@@ -1638,7 +1638,7 @@ void SmCloningVisitor::Visit( SmTableNode* pNode )
     SmTableNode* pClone = new SmTableNode( pNode->GetToken( ) );
     CloneNodeAttr( pNode, pClone );
     CloneKids( pNode, pClone );
-    pResult = pClone;
+    mpResult = pClone;
 }
 
 void SmCloningVisitor::Visit( SmBraceNode* pNode )
@@ -1646,7 +1646,7 @@ void SmCloningVisitor::Visit( SmBraceNode* pNode )
     SmBraceNode* pClone = new SmBraceNode( pNode->GetToken( ) );
     CloneNodeAttr( pNode, pClone );
     CloneKids( pNode, pClone );
-    pResult = pClone;
+    mpResult = pClone;
 }
 
 void SmCloningVisitor::Visit( SmBracebodyNode* pNode )
@@ -1654,7 +1654,7 @@ void SmCloningVisitor::Visit( SmBracebodyNode* pNode )
     SmBracebodyNode* pClone = new SmBracebodyNode( pNode->GetToken( ) );
     CloneNodeAttr( pNode, pClone );
     CloneKids( pNode, pClone );
-    pResult = pClone;
+    mpResult = pClone;
 }
 
 void SmCloningVisitor::Visit( SmOperNode* pNode )
@@ -1662,7 +1662,7 @@ void SmCloningVisitor::Visit( SmOperNode* pNode )
     SmOperNode* pClone = new SmOperNode( pNode->GetToken( ) );
     CloneNodeAttr( pNode, pClone );
     CloneKids( pNode, pClone );
-    pResult = pClone;
+    mpResult = pClone;
 }
 
 void SmCloningVisitor::Visit( SmAlignNode* pNode )
@@ -1670,7 +1670,7 @@ void SmCloningVisitor::Visit( SmAlignNode* pNode )
     SmAlignNode* pClone = new SmAlignNode( pNode->GetToken( ) );
     CloneNodeAttr( pNode, pClone );
     CloneKids( pNode, pClone );
-    pResult = pClone;
+    mpResult = pClone;
 }
 
 void SmCloningVisitor::Visit( SmAttributNode* pNode )
@@ -1678,7 +1678,7 @@ void SmCloningVisitor::Visit( SmAttributNode* pNode )
     SmAttributNode* pClone = new SmAttributNode( pNode->GetToken( ) );
     CloneNodeAttr( pNode, pClone );
     CloneKids( pNode, pClone );
-    pResult = pClone;
+    mpResult = pClone;
 }
 
 void SmCloningVisitor::Visit( SmFontNode* pNode )
@@ -1687,7 +1687,7 @@ void SmCloningVisitor::Visit( SmFontNode* pNode )
     pClone->SetSizeParameter( pNode->GetSizeParameter( ), pNode->GetSizeType( ) );
     CloneNodeAttr( pNode, pClone );
     CloneKids( pNode, pClone );
-    pResult = pClone;
+    mpResult = pClone;
 }
 
 void SmCloningVisitor::Visit( SmUnHorNode* pNode )
@@ -1695,7 +1695,7 @@ void SmCloningVisitor::Visit( SmUnHorNode* pNode )
     SmUnHorNode* pClone = new SmUnHorNode( pNode->GetToken( ) );
     CloneNodeAttr( pNode, pClone );
     CloneKids( pNode, pClone );
-    pResult = pClone;
+    mpResult = pClone;
 }
 
 void SmCloningVisitor::Visit( SmBinHorNode* pNode )
@@ -1703,7 +1703,7 @@ void SmCloningVisitor::Visit( SmBinHorNode* pNode )
     SmBinHorNode* pClone = new SmBinHorNode( pNode->GetToken( ) );
     CloneNodeAttr( pNode, pClone );
     CloneKids( pNode, pClone );
-    pResult = pClone;
+    mpResult = pClone;
 }
 
 void SmCloningVisitor::Visit( SmBinVerNode* pNode )
@@ -1711,7 +1711,7 @@ void SmCloningVisitor::Visit( SmBinVerNode* pNode )
     SmBinVerNode* pClone = new SmBinVerNode( pNode->GetToken( ) );
     CloneNodeAttr( pNode, pClone );
     CloneKids( pNode, pClone );
-    pResult = pClone;
+    mpResult = pClone;
 }
 
 void SmCloningVisitor::Visit( SmBinDiagonalNode* pNode )
@@ -1720,7 +1720,7 @@ void SmCloningVisitor::Visit( SmBinDiagonalNode* pNode )
     pClone->SetAscending( pNode->IsAscending( ) );
     CloneNodeAttr( pNode, pClone );
     CloneKids( pNode, pClone );
-    pResult = pClone;
+    mpResult = pClone;
 }
 
 void SmCloningVisitor::Visit( SmSubSupNode* pNode )
@@ -1729,7 +1729,7 @@ void SmCloningVisitor::Visit( SmSubSupNode* pNode )
     pClone->SetUseLimits( pNode->IsUseLimits( ) );
     CloneNodeAttr( pNode, pClone );
     CloneKids( pNode, pClone );
-    pResult = pClone;
+    mpResult = pClone;
 }
 
 void SmCloningVisitor::Visit( SmMatrixNode* pNode )
@@ -1738,13 +1738,13 @@ void SmCloningVisitor::Visit( SmMatrixNode* pNode )
     pClone->SetRowCol( pNode->GetNumRows( ), pNode->GetNumCols( ) );
     CloneNodeAttr( pNode, pClone );
     CloneKids( pNode, pClone );
-    pResult = pClone;
+    mpResult = pClone;
 }
 
 void SmCloningVisitor::Visit( SmPlaceNode* pNode )
 {
-    pResult = new SmPlaceNode( pNode->GetToken( ) );
-    CloneNodeAttr( pNode, pResult );
+    mpResult = new SmPlaceNode( pNode->GetToken( ) );
+    CloneNodeAttr( pNode, mpResult );
 }
 
 void SmCloningVisitor::Visit( SmTextNode* pNode )
@@ -1752,39 +1752,39 @@ void SmCloningVisitor::Visit( SmTextNode* pNode )
     SmTextNode* pClone = new SmTextNode( pNode->GetToken( ), pNode->GetFontDesc( ) );
     pClone->ChangeText( pNode->GetText( ) );
     CloneNodeAttr( pNode, pClone );
-    pResult = pClone;
+    mpResult = pClone;
 }
 
 void SmCloningVisitor::Visit( SmSpecialNode* pNode )
 {
-    pResult = new SmSpecialNode( pNode->GetToken( ) );
-    CloneNodeAttr( pNode, pResult );
+    mpResult = new SmSpecialNode( pNode->GetToken( ) );
+    CloneNodeAttr( pNode, mpResult );
 }
 
 void SmCloningVisitor::Visit( SmGlyphSpecialNode* pNode )
 {
-    pResult = new SmGlyphSpecialNode( pNode->GetToken( ) );
-    CloneNodeAttr( pNode, pResult );
+    mpResult = new SmGlyphSpecialNode( pNode->GetToken( ) );
+    CloneNodeAttr( pNode, mpResult );
 }
 
 void SmCloningVisitor::Visit( SmMathSymbolNode* pNode )
 {
-    pResult = new SmMathSymbolNode( pNode->GetToken( ) );
-    CloneNodeAttr( pNode, pResult );
+    mpResult = new SmMathSymbolNode( pNode->GetToken( ) );
+    CloneNodeAttr( pNode, mpResult );
 }
 
 void SmCloningVisitor::Visit( SmBlankNode* pNode )
 {
     SmBlankNode* pClone = new SmBlankNode( pNode->GetToken( ) );
     pClone->SetBlankNum( pNode->GetBlankNum( ) );
-    pResult = pClone;
-    CloneNodeAttr( pNode, pResult );
+    mpResult = pClone;
+    CloneNodeAttr( pNode, mpResult );
 }
 
 void SmCloningVisitor::Visit( SmErrorNode* pNode )
 {
-    pResult = new SmErrorNode( pNode->GetToken( ) );
-    CloneNodeAttr( pNode, pResult );
+    mpResult = new SmErrorNode( pNode->GetToken( ) );
+    CloneNodeAttr( pNode, mpResult );
 }
 
 void SmCloningVisitor::Visit( SmLineNode* pNode )
@@ -1792,7 +1792,7 @@ void SmCloningVisitor::Visit( SmLineNode* pNode )
     SmLineNode* pClone = new SmLineNode( pNode->GetToken( ) );
     CloneNodeAttr( pNode, pClone );
     CloneKids( pNode, pClone );
-    pResult = pClone;
+    mpResult = pClone;
 }
 
 void SmCloningVisitor::Visit( SmExpressionNode* pNode )
@@ -1800,13 +1800,13 @@ void SmCloningVisitor::Visit( SmExpressionNode* pNode )
     SmExpressionNode* pClone = new SmExpressionNode( pNode->GetToken( ) );
     CloneNodeAttr( pNode, pClone );
     CloneKids( pNode, pClone );
-    pResult = pClone;
+    mpResult = pClone;
 }
 
 void SmCloningVisitor::Visit( SmPolyLineNode* pNode )
 {
-    pResult = new SmPolyLineNode( pNode->GetToken( ) );
-    CloneNodeAttr( pNode, pResult );
+    mpResult = new SmPolyLineNode( pNode->GetToken( ) );
+    CloneNodeAttr( pNode, mpResult );
 }
 
 void SmCloningVisitor::Visit( SmRootNode* pNode )
@@ -1814,19 +1814,19 @@ void SmCloningVisitor::Visit( SmRootNode* pNode )
     SmRootNode* pClone = new SmRootNode( pNode->GetToken( ) );
     CloneNodeAttr( pNode, pClone );
     CloneKids( pNode, pClone );
-    pResult = pClone;
+    mpResult = pClone;
 }
 
 void SmCloningVisitor::Visit( SmRootSymbolNode* pNode )
 {
-    pResult = new SmRootSymbolNode( pNode->GetToken( ) );
-    CloneNodeAttr( pNode, pResult );
+    mpResult = new SmRootSymbolNode( pNode->GetToken( ) );
+    CloneNodeAttr( pNode, mpResult );
 }
 
 void SmCloningVisitor::Visit( SmRectangleNode* pNode )
 {
-    pResult = new SmRectangleNode( pNode->GetToken( ) );
-    CloneNodeAttr( pNode, pResult );
+    mpResult = new SmRectangleNode( pNode->GetToken( ) );
+    CloneNodeAttr( pNode, mpResult );
 }
 
 void SmCloningVisitor::Visit( SmVerticalBraceNode* pNode )
@@ -1834,7 +1834,7 @@ void SmCloningVisitor::Visit( SmVerticalBraceNode* pNode )
     SmVerticalBraceNode* pClone = new SmVerticalBraceNode( pNode->GetToken( ) );
     CloneNodeAttr( pNode, pClone );
     CloneKids( pNode, pClone );
-    pResult = pClone;
+    mpResult = pClone;
 }
 
 // SmSelectionDrawingVisitor
