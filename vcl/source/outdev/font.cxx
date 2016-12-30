@@ -1294,18 +1294,16 @@ void OutputDevice::ImplDrawEmphasisMarks( SalLayout& rSalLayout )
     aOffset += Point( nEmphasisWidth2, nEmphasisHeight2 );
 
     Point aOutPoint;
-    Rectangle aRectangle;
     const GlyphItem* pGlyph;
     int nStart = 0;
     while (rSalLayout.GetNextGlyphs(1, &pGlyph, aOutPoint, nStart))
     {
-        if (!mpGraphics->GetGlyphBoundRect(*pGlyph, aRectangle ) )
-            continue;
+        basegfx::B2DRectangle aRect = mpGraphics->GetGlyphBoundRect(*pGlyph);
 
         if (!pGlyph->IsSpacing())
         {
             Point aAdjPoint = aOffset;
-            aAdjPoint.X() += aRectangle.Left() + (aRectangle.GetWidth() - nEmphasisWidth) / 2;
+            aAdjPoint.X() += aRect.getMinX() + (aRect.getWidth() - nEmphasisWidth) / 2;
             if ( mpFontInstance->mnOrientation )
             {
                 Point aOriginPt(0, 0);
