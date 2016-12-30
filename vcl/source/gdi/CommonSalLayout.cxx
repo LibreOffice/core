@@ -558,6 +558,7 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
             (void) ok;
             hb_buffer_set_content_type(pHbBuffer, HB_BUFFER_CONTENT_TYPE_GLYPHS);
             SAL_INFO("vcl.harfbuzz", hb_shape_plan_get_shaper(pHbPlan) << " shaper used for " << mrFontSelData.GetFamilyName());
+            hb_shape_plan_destroy(pHbPlan);
 
             int nRunGlyphCount = hb_buffer_get_length(pHbBuffer);
             hb_glyph_info_t *pHbGlyphInfos = hb_buffer_get_glyph_infos(pHbBuffer, nullptr);
