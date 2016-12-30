@@ -2592,6 +2592,21 @@ void WW8TabDesc::MergeCells()
                         }
                     }
 
+                    // remove numbering from cells that will be disabled in the merge
+                    if( rCell.bVertMerge && !rCell.bVertRestart )
+                    {
+                        SwPaM aPam( *m_pTabBox->GetSttNd(), 0 );
+                        aPam.GetPoint()->nNode++;
+                        SwTextNode* pNd = aPam.GetNode().GetTextNode();
+                        while( pNd )
+                        {
+                            pNd->SetCountedInList( false );
+
+                            aPam.GetPoint()->nNode++;
+                            pNd = aPam.GetNode().GetTextNode();
+                        }
+                    }
+
                     if (bMerge)
                     {
                         short nX1    = m_pActBand->nCenter[ i ];
