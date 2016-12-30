@@ -228,12 +228,12 @@ void QueryTable::finalizeImport()
                 OSL_ENSURE( xDefName.get(), "QueryTable::finalizeImport - missing defined name" );
                 if( xDefName.get() )
                 {
-                    CellRangeAddress aDestRange;
-                    bool bIsRange = xDefName->getAbsoluteRange( aDestRange ) && (aDestRange.Sheet == getSheetIndex());
+                    ScRange aDestRange;
+                    bool bIsRange = xDefName->getAbsoluteRange( aDestRange ) && (aDestRange.aStart.Tab() == getSheetIndex());
                     OSL_ENSURE( bIsRange, "QueryTable::finalizeImport - defined name does not contain valid cell range" );
                     if( bIsRange && getAddressConverter().checkCellRange( aDestRange, false, true ) )
                     {
-                        CellAddress aDestPos( aDestRange.Sheet, aDestRange.StartColumn, aDestRange.StartRow );
+                        CellAddress aDestPos( aDestRange.aStart.Tab(), aDestRange.aStart.Col(), aDestRange.aStart.Row() );
                         // find tables mode: entire document, all tables, or specific tables
                         OUString aTables = pWebPr->mbHtmlTables ? lclBuildWebQueryTables( pWebPr->maTables ) : "HTML_all";
                         if( !aTables.isEmpty() ) try
