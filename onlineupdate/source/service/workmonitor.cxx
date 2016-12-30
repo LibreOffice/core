@@ -223,10 +223,10 @@ StartUpdateProcess(int argc,
                                        MOVEFILE_REPLACE_EXISTING);
   }
 
-  // Add an env var for MOZ_USING_SERVICE so the updater.exe can
+  // Add an env var for USING_SERVICE so the updater.exe can
   // do anything special that it needs to do for service updates.
-  // Search in updater.cpp for more info on MOZ_USING_SERVICE.
-  putenv(const_cast<char*>("MOZ_USING_SERVICE=1"));
+  // Search in updater.cpp for more info on USING_SERVICE.
+  putenv(const_cast<char*>("USING_SERVICE=1"));
   LOG(("Starting service with cmdline: %ls", cmdLine));
   processStarted = CreateProcessW(argv[0], cmdLine,
                                   nullptr, nullptr, FALSE,
@@ -234,7 +234,7 @@ StartUpdateProcess(int argc,
                                   nullptr,
                                   nullptr, &si, &pi);
   // Empty value on putenv is how you remove an env variable in Windows
-  putenv(const_cast<char*>("MOZ_USING_SERVICE="));
+  putenv(const_cast<char*>("USING_SERVICE="));
 
   BOOL updateWasSuccessful = FALSE;
   if (processStarted) {

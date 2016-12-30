@@ -120,7 +120,7 @@ struct UpdateServerThreadArgs
 #endif
 
 #ifdef _WIN32
-#ifdef MOZ_MAINTENANCE_SERVICE
+#ifdef MAINTENANCE_SERVICE
 #include "registrycertificates.h"
 #endif
 BOOL PathAppendSafe(LPWSTR base, LPCWSTR extra);
@@ -1881,7 +1881,7 @@ LaunchWinPostProcess(const WCHAR *installationDir,
         return false;
     }
 
-#if !defined(TEST_UPDATER) && defined(MOZ_MAINTENANCE_SERVICE)
+#if !defined(TEST_UPDATER) && defined(MAINTENANCE_SERVICE)
     if (sUsingService &&
             !DoesBinaryMatchAllowedCertificates(installationDir, exefullpath)) {
         return false;
@@ -2043,7 +2043,7 @@ WriteStatusFile(int status)
     WriteStatusFile(text);
 }
 
-#ifdef MOZ_MAINTENANCE_SERVICE
+#ifdef MAINTENANCE_SERVICE
 /*
  * Read the update.status file and sets isPendingService to true if
  * the status is set to pending-service.
@@ -2529,7 +2529,7 @@ int LaunchCallbackAndPostProcessApps(int argc, NS_tchar** argv,
             // because it's possible we are updating with updater.exe without the
             // service if the service failed to apply the update. We want to update
             // the service to a newer version in that case. If we are not running
-            // through the service, then MOZ_USING_SERVICE will not exist.
+            // through the service, then USING_SERVICE will not exist.
             if (!sUsingService) {
                 StartServiceUpdate(gInstallDirPath);
             }
@@ -2639,7 +2639,7 @@ int NS_main(int argc, NS_tchar **argv)
 
     // We never want the service to be used unless we build with
     // the maintenance service.
-#ifdef MOZ_MAINTENANCE_SERVICE
+#ifdef MAINTENANCE_SERVICE
     useService = IsUpdateStatusPendingService();
     // Our tests run with a different apply directory for each test.
     // We use this registry key on our test slaves to store the
@@ -2796,9 +2796,9 @@ int NS_main(int argc, NS_tchar **argv)
 #endif
 
 #if defined(_WIN32)
-#ifdef MOZ_MAINTENANCE_SERVICE
-    sUsingService = EnvHasValue("MOZ_USING_SERVICE");
-    putenv(const_cast<char*>("MOZ_USING_SERVICE="));
+#ifdef MAINTENANCE_SERVICE
+    sUsingService = EnvHasValue("USING_SERVICE");
+    putenv(const_cast<char*>("USING_SERVICE="));
 #endif
     // lastFallbackError keeps track of the last error for the service not being
     // used, in case of an error when fallback is not enabled we write the
