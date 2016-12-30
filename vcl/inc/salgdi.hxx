@@ -55,6 +55,8 @@ namespace basegfx {
     class B2DVector;
     class B2DPolygon;
     class B2DPolyPolygon;
+    class B2DRange;
+    typedef B2DRange B2DRectangle;
 }
 
 typedef sal_Unicode sal_Ucs; // TODO: use sal_UCS4 instead of sal_Unicode
@@ -191,7 +193,7 @@ public:
                                     std::vector< sal_Int32 >& rWidths,
                                     Ucs2UIntMap& rUnicodeEnc ) = 0;
 
-    virtual bool                GetGlyphBoundRect(const GlyphItem&, Rectangle&) = 0;
+    virtual basegfx::B2DRectangle GetGlyphBoundRect(const GlyphItem&) = 0;
     virtual bool                GetGlyphOutline(const GlyphItem&, basegfx::B2DPolyPolygon&) = 0;
 
     virtual SalLayout*          GetTextLayout( ImplLayoutArgs&, int nFallbackLevel ) = 0;

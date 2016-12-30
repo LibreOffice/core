@@ -693,12 +693,9 @@ bool SalLayout::GetOutline( SalGraphics& rSalGraphics,
     return (bAllOk && bOneOk);
 }
 
-bool SalLayout::GetBoundRect( SalGraphics& rSalGraphics, Rectangle& rRect ) const
+basegfx::B2DRectangle SalLayout::GetBoundRect(SalGraphics& rSalGraphics) const
 {
-    bool bRet = false;
-    rRect.SetEmpty();
-
-    Rectangle aRectangle;
+    basegfx::B2DRectangle aRect;
 
     Point aPos;
     const GlyphItem* pGlyph;
@@ -706,19 +703,16 @@ bool SalLayout::GetBoundRect( SalGraphics& rSalGraphics, Rectangle& rRect ) cons
     while (GetNextGlyphs(1, &pGlyph, aPos, nStart))
     {
         // get bounding rectangle of individual glyph
-        if (rSalGraphics.GetGlyphBoundRect(*pGlyph, aRectangle))
-        {
-            // merge rectangle
-            aRectangle += aPos;
-            if (rRect.IsEmpty())
-                rRect = aRectangle;
-            else
-                rRect.Union(aRectangle);
-            bRet = true;
-        }
+        basegfx::B2DRectangle aGlyphRect(aPos.X(), aPos.Y(), aPos.X(), aPos.Y());
+        aGlyphRect.expand(rSalGraphics.GetGlyphBoundRect(*pGlyph));
+        // merge rectangle
+        if (aRect.isEmpty())
+            aRect = aGlyphRect;
+        else
+            aRect.expand(aGlyphRect);
     }
 
-    return bRet;
+    return aRect;
 }
 
 GenericSalLayout::GenericSalLayout()

@@ -632,7 +632,7 @@ void FreetypeFont::InitGlyphData(const GlyphItem& rGlyph, GlyphData& rGD ) const
 {
     FT_Activate_Size( maSizeFT );
 
-    FT_Error rc = FT_Load_Glyph(maFaceFT, rGlyph.maGlyphId, mnLoadFlags);
+    FT_Error rc = FT_Load_Glyph(maFaceFT, rGlyph.maGlyphId, mnLoadFlags | FT_LOAD_NO_SCALE);
 
     if( rc != FT_Err_Ok )
         return;
@@ -646,9 +646,11 @@ void FreetypeFont::InitGlyphData(const GlyphItem& rGlyph, GlyphData& rGD ) const
     ApplyGlyphTransform(rGlyph.IsVertical(), pGlyphFT);
 
     FT_BBox aBbox;
-    FT_Glyph_Get_CBox( pGlyphFT, FT_GLYPH_BBOX_PIXELS, &aBbox );
+    FT_Glyph_Get_CBox(pGlyphFT, FT_GLYPH_BBOX_UNSCALED, &aBbox);
 
-    rGD.SetBoundRect(Rectangle(aBbox.xMin, -aBbox.yMax, aBbox.xMax, -aBbox.yMin));
+    basegfx::B2DRectangle rRect(aBbox.xMin, -aBbox.yMax,
+                                aBbox.xMax, -aBbox.yMin);
+    rGD.SetBoundRect(rRect);
 
     FT_Done_Glyph( pGlyphFT );
 }
