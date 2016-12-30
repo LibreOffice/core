@@ -236,12 +236,6 @@ static const NS_tchar kWhitespace[] = NS_T(" \t");
 static const NS_tchar kNL[] = NS_T("\r\n");
 static const NS_tchar kQuote[] = NS_T("\"");
 
-static inline size_t
-mmin(size_t a, size_t b)
-{
-    return (a > b) ? b : a;
-}
-
 static NS_tchar*
 mstrtok(const NS_tchar *delims, NS_tchar **str)
 {
@@ -1417,7 +1411,7 @@ PatchFile::LoadSourceFile(FILE* ofile)
     size_t r = header.slen;
     unsigned char *rb = buf;
     while (r) {
-        const size_t count = mmin(SSIZE_MAX, r);
+        const size_t count = std::min<size_t>(SSIZE_MAX, r);
         size_t c = fread(rb, 1, count, ofile);
         if (c != count) {
             LOG(("LoadSourceFile: error reading destination file: " LOG_S,
@@ -3857,7 +3851,7 @@ GetManifestContents(const NS_tchar *manifest)
     size_t r = ms.st_size;
     char *rb = mbuf;
     while (r) {
-        const size_t count = mmin(SSIZE_MAX, r);
+        const size_t count = std::min<size_t>(SSIZE_MAX, r);
         size_t c = fread(rb, 1, count, mfile);
         if (c != count) {
             LOG(("GetManifestContents: error reading manifest file: " LOG_S, manifest));
