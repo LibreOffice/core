@@ -47,8 +47,6 @@ published service MediaProperties
             <li>private:resource/projectshortname/bitmap/12345</li>
             <li>private:resource/projectshortname/bitmapex/12345</li>
             <li>private:resource/projectshortname/image/12345</li>
-            <li>private:resource/projectshortname/imagelist/12345</li>
-            <li>private:resource/projectshortname/imagelist/12345/12</li>
         </ul>
 And additionally, GraphicObject scheme URLs like
             <ul> <li>vnd.sun.star.GraphicObject:10000000000001940000012FB99807BD</li> </ul>
