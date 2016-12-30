@@ -1199,7 +1199,7 @@ void PivotTable::finalizeImport()
             try
             {
                 // create a new data pilot descriptor based on the source data
-                Reference< XDataPilotTablesSupplier > xDPTablesSupp( getSheetFromDoc( maLocationModel.maRange.Sheet ), UNO_QUERY_THROW );
+                Reference< XDataPilotTablesSupplier > xDPTablesSupp( getSheetFromDoc( maLocationModel.maRange.aStart.Tab() ), UNO_QUERY_THROW );
                 Reference< XDataPilotTables > xDPTables( xDPTablesSupp->getDataPilotTables(), UNO_SET_THROW );
                 mxDPDescriptor.set( xDPTables->createDataPilotDescriptor(), UNO_SET_THROW );
                 ScRange aRange = mpPivotCache->getSourceRange();
@@ -1269,7 +1269,7 @@ void PivotTable::finalizeImport()
                 maFilters.forEachMem( &PivotTableFilter::finalizeImport );
 
                 // calculate base position of table
-                CellAddress aPos( maLocationModel.maRange.Sheet, maLocationModel.maRange.StartColumn, maLocationModel.maRange.StartRow );
+                CellAddress aPos( maLocationModel.maRange.aStart.Tab(), maLocationModel.maRange.aStart.Col(), maLocationModel.maRange.aStart.Row() );
                 /*  If page fields exist, include them into the destination
                     area (they are excluded in Excel). Add an extra blank row. */
                 if( !maPageFields.empty() )
