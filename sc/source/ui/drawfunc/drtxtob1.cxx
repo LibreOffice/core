@@ -118,6 +118,7 @@ void ScDrawTextObjectBar::ExecutePasteContents( SfxRequest & /* rReq */ )
 
     pDlg->Insert( SotClipboardFormatId::STRING, EMPTY_OUSTRING );
     pDlg->Insert( SotClipboardFormatId::RTF,    EMPTY_OUSTRING );
+    pDlg->Insert( SotClipboardFormatId::RICHTEXT,  EMPTY_OUSTRING );
 
     TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pViewData->GetActiveWin() ) );
 

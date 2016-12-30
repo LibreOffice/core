@@ -263,7 +263,8 @@ OUString SvPasteObjectHelper::GetSotFormatUIName( SotClipboardFormatId nId )
         { SotClipboardFormatId::DBACCESS_COMMAND,    STR_FORMAT_ID_DBACCESS_COMMAND },
         { SotClipboardFormatId::DIALOG_60,           STR_FORMAT_ID_DIALOG_60 },
         { SotClipboardFormatId::FILEGRPDESCRIPTOR,   STR_FORMAT_ID_FILEGRPDESCRIPTOR },
-        { SotClipboardFormatId::HTML_NO_COMMENT,     STR_FORMAT_ID_HTML_NO_COMMENT }
+        { SotClipboardFormatId::HTML_NO_COMMENT,     STR_FORMAT_ID_HTML_NO_COMMENT },
+        { SotClipboardFormatId::RICHTEXT,            STR_FORMAT_ID_RICHTEXT },
     };
 
     OUString aUIName;

@@ -166,6 +166,10 @@ void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,
             aImpEx.ImportStream( *xStream, OUString(), SotClipboardFormatId::RTF );
         else if ( aDataHelper.GetString( SotClipboardFormatId::RTF, aStr ) )
             aImpEx.ImportString( aStr, SotClipboardFormatId::RTF );
+        else if ( aDataHelper.GetSotStorageStream( SotClipboardFormatId::RICHTEXT, xStream ) && xStream.Is() )
+            aImpEx.ImportStream( *xStream, OUString(), SotClipboardFormatId::RICHTEXT );
+        else if ( aDataHelper.GetString( SotClipboardFormatId::RICHTEXT, aStr ) )
+            aImpEx.ImportString( aStr, SotClipboardFormatId::RICHTEXT );
 
         AdjustRowHeight( nStartRow, aImpEx.GetRange().aEnd.Row() );
         pDocSh->UpdateOle(&GetViewData());

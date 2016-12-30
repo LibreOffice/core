@@ -134,7 +134,7 @@ static const std::vector< FormatEntry > g_TranslTable {
     // SotClipboardFormatId::SIMPLE_FILE
         FormatEntry("application/x-openoffice-file;windows_formatname=\"FileName\"", "FileName", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
     // SotClipboardFormatId::RTF
-        FormatEntry("text/richtext", "Rich Text Format", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("text/rtf", "Rich Text Format", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
     // SotClipboardFormatId::DRAWING
         FormatEntry("application/x-openoffice-drawing;windows_formatname=\"Drawing Format\"", "Drawing Format", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
     // SotClipboardFormatId::SVXB
@@ -352,6 +352,8 @@ static const std::vector< FormatEntry > g_TranslTable {
         FormatEntry("application/x-openoffice-dummy3;windows_formatname=\"SO_DUMMYFORMAT_3\"", "SO_DUMMYFORMAT_3", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
     //SotClipboardFormatId::DUMMY4
         FormatEntry("application/x-openoffice-dummy4;windows_formatname=\"SO_DUMMYFORMAT_4\"", "SO_DUMMYFORMAT_4", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+    // SotClipboardFormatId::RICHTEXT
+        FormatEntry("text/richtext", "Richtext Format", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
     };
 
 namespace {
