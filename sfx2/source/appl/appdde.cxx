@@ -434,6 +434,7 @@ bool SfxApplication::InitializeDde()
 
         // we certainly want to support RTF!
         pImpl->pDdeService->AddFormat( SotClipboardFormatId::RTF );
+        pImpl->pDdeService->AddFormat( SotClipboardFormatId::RICHTEXT );
 
         // Config path as a topic because of multiple starts
         INetURLObject aOfficeLockFile( SvtPathOptions().GetUserConfigPath() );
