@@ -785,20 +785,6 @@ Reference< XSpreadsheet > WorkbookHelper::getSheetFromDoc( const OUString& rShee
     return xSheet;
 }
 
-Reference< XCellRange > WorkbookHelper::getCellRangeFromDoc( const CellRangeAddress& rRange ) const
-{
-    Reference< XCellRange > xRange;
-    try
-    {
-        Reference< XSpreadsheet > xSheet( getSheetFromDoc( rRange.Sheet ), UNO_SET_THROW );
-        xRange = xSheet->getCellRangeByPosition( rRange.StartColumn, rRange.StartRow, rRange.EndColumn, rRange.EndRow );
-    }
-    catch( Exception& )
-    {
-    }
-    return xRange;
-}
-
 Reference< XCellRange > WorkbookHelper::getCellRangeFromDoc( const ScRange& rRange ) const
 {
     Reference< XCellRange > xRange;

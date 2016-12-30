@@ -49,7 +49,6 @@ namespace xls {
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::document;
-using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::uno;
 
 using ::oox::core::FilterBase;
@@ -538,9 +537,7 @@ void ViewSettings::setSheetUsedArea( const ScRange& rUsedArea )
     assert( rUsedArea.IsValid() );
     assert( rUsedArea.aStart.Col() <= MAXCOLCOUNT );
     assert( rUsedArea.aStart.Row() <= MAXROWCOUNT );
-    maSheetUsedAreas[ rUsedArea.aStart.Tab() ] = CellRangeAddress( rUsedArea.aStart.Tab(),
-                                                                   rUsedArea.aStart.Col(), rUsedArea.aStart.Row(),
-                                                                   rUsedArea.aEnd.Col(), rUsedArea.aEnd.Row() );
+    maSheetUsedAreas[ rUsedArea.aStart.Tab() ] = rUsedArea;
 }
 
 void ViewSettings::finalizeImport()
@@ -601,8 +598,9 @@ void ViewSettings::finalizeImport()
         #i44077# If a new OLE object is inserted from file, there is no OLESIZE
         record in the Excel file. In this case, use the used area calculated
         from file contents (used cells and drawing objects). */
-    maOleSize.Sheet = nActiveSheet;
-    const CellRangeAddress* pVisibleArea = mbValidOleSize ?
+    maOleSize.aStart.SetTab( nActiveSheet );
+    maOleSize.aEnd.SetTab( nActiveSheet );
+    const ScRange* pVisibleArea = mbValidOleSize ?
         &maOleSize : ContainerHelper::getMapElement( maSheetUsedAreas, nActiveSheet );
     if( pVisibleArea )
     {
