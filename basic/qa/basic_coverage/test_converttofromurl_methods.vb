@@ -1,4 +1,3 @@
-'
 ' This file is part of the LibreOffice project.
 '
 ' This Source Code Form is subject to the terms of the Mozilla Public
@@ -7,19 +6,8 @@
 '
 
 Function doUnitTest as Integer
-    Wait(0)
-    Beep
-    'dim aDate as Variant
-    'aDate = Date()
-    'WaitUntil( aDate )
-    ' CompatibilityMode
-    If (CompatibilityMode(True) <> True) Then
-        doUnitTest = 0
     ' ConvertFromUrl ConvertToUrl
-    ElseIf ( ConvertToUrl( ConvertFromUrl("") ) <> "") Then
-        doUnitTest = 0
-    ' GetSolarVersion
-    ElseIf ( GetSolarVersion() < 50000) Then
+    If ( ConvertToUrl( ConvertFromUrl("") ) <> "") Then
         doUnitTest = 0
     Else
         doUnitTest = 1
