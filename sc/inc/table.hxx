@@ -40,6 +40,7 @@
 #include <set>
 #include <map>
 #include <memory>
+#include <vector>
 
 namespace utl {
     class TextSearch;
@@ -147,7 +148,7 @@ private:
     sal_uInt16*         pColWidth;
     std::unique_ptr<ScFlatUInt16RowSegments> mpRowHeights;
 
-    CRFlags*            pColFlags;
+    std::vector< CRFlags >                  aColFlags;
     ScBitMaskCompressedArray< SCROW, CRFlags>*     pRowFlags;
     std::unique_ptr<ScFlatBoolColSegments>  mpHiddenCols;
     std::unique_ptr<ScFlatBoolRowSegments>  mpHiddenRows;
