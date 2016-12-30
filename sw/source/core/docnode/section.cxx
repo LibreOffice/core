@@ -1244,6 +1244,7 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
         pRead = ReadAscii;
         break;
 
+    case SotClipboardFormatId::RICHTEXT:
     case SotClipboardFormatId::RTF:
         pRead = SwReaderWriter::GetRtfReader();
         break;

@@ -3490,8 +3490,17 @@ EditSelection ImpEditEngine::InsertText( uno::Reference< datatransfer::XTransfer
         {
             // RTF
             SotExchange::GetFormatDataFlavor( SotClipboardFormatId::RTF, aFlavor );
-            if ( rxDataObj->isDataFlavorSupported( aFlavor ) )
+            // RICHTEXT
+            datatransfer::DataFlavor aFlavorRichtext;
+            SotExchange::GetFormatDataFlavor( SotClipboardFormatId::RTF, aFlavorRichtext );
+            bool bRtfSupported = rxDataObj->isDataFlavorSupported( aFlavor );
+            bool bRichtextSupported  = rxDataObj->isDataFlavorSupported( aFlavorRichtext );
+            if ( bRtfSupported || bRichtextSupported )
             {
+                if(bRichtextSupported)
+                {
+                    aFlavor = aFlavorRichtext;
+                }
                 try
                 {
                     uno::Any aData = rxDataObj->getTransferData( aFlavor );

@@ -1271,6 +1271,10 @@ void TransferableDataHelper::FillDataFlavorExVector( const Sequence< DataFlavor 
             {
                 rDataFlavorExVector[ rDataFlavorExVector.size() - 1 ].mnSotId = SotClipboardFormatId::RTF;
             }
+            else if( xMimeType.is() && xMimeType->getFullMediaType().equalsIgnoreAsciiCase( "text/richtext" ) )
+            {
+                rDataFlavorExVector[ rDataFlavorExVector.size() - 1 ].mnSotId = SotClipboardFormatId::RICHTEXT;
+            }
             else if( xMimeType.is() && xMimeType->getFullMediaType().equalsIgnoreAsciiCase( "text/html" ) )
 
             {

@@ -327,14 +327,16 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
     bool bTable = false;
     // check special cases for pasting table formats as RTL
-    if( !bLink && (nFormat == SotClipboardFormatId::NONE || (nFormat == SotClipboardFormatId::RTF)) )
+    if( !bLink && (nFormat == SotClipboardFormatId::NONE || (nFormat == SotClipboardFormatId::RTF) || (nFormat == SotClipboardFormatId::RICHTEXT)) )
     {
         // if the objekt supports rtf and there is a table involved, default is to create a table
-        if( aDataHelper.HasFormat( SotClipboardFormatId::RTF ) && ! aDataHelper.HasFormat( SotClipboardFormatId::DRAWING ) )
+        bool bIsRTF = aDataHelper.HasFormat( SotClipboardFormatId::RTF );
+        if( ( bIsRTF || aDataHelper.HasFormat( SotClipboardFormatId::RICHTEXT ) )
+            && ! aDataHelper.HasFormat( SotClipboardFormatId::DRAWING ) )
         {
             ::tools::SvRef<SotStorageStream> xStm;
 
-            if( aDataHelper.GetSotStorageStream( SotClipboardFormatId::RTF, xStm ) )
+            if( aDataHelper.GetSotStorageStream( bIsRTF ? SotClipboardFormatId::RTF : SotClipboardFormatId::RICHTEXT, xStm ) )
             {
                 xStm->Seek( 0 );
 
@@ -345,7 +347,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                     if (x != -1)
                     {
                         bTable = true;
-                        nFormat = SotClipboardFormatId::RTF;
+                        nFormat = bIsRTF ? SotClipboardFormatId::RTF : SotClipboardFormatId::RICHTEXT;
                         break;
                     }
                 }
@@ -1419,11 +1421,12 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
         }
     }
 
-    if(!bReturn && !bLink && CHECK_FORMAT_TRANS(SotClipboardFormatId::RTF))
+    bool bIsRTF = false;
+    if(!bReturn && !bLink && (( bIsRTF = CHECK_FORMAT_TRANS(SotClipboardFormatId::RTF) ) || CHECK_FORMAT_TRANS(SotClipboardFormatId::RICHTEXT) ))
     {
         ::tools::SvRef<SotStorageStream> xStm;
 
-        if( aDataHelper.GetSotStorageStream( SotClipboardFormatId::RTF, xStm ) )
+        if( aDataHelper.GetSotStorageStream( bIsRTF ? SotClipboardFormatId::RTF : SotClipboardFormatId::RICHTEXT, xStm ) )
         {
             xStm->Seek( 0 );
 

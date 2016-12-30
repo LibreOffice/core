@@ -240,6 +240,7 @@ void ScTransferObj::AddSupportedFormats()
     AddFormat( SotClipboardFormatId::STRING );
 
     AddFormat( SotClipboardFormatId::RTF );
+    AddFormat( SotClipboardFormatId::RICHTEXT );
     if ( aBlock.aStart == aBlock.aEnd )
         AddFormat( SotClipboardFormatId::EDITENGINE );
 }
@@ -255,7 +256,8 @@ bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUSt
         {
             bOK = SetTransferableObjectDescriptor( aObjDesc, rFlavor );
         }
-        else if ( ( nFormat == SotClipboardFormatId::RTF || nFormat == SotClipboardFormatId::EDITENGINE ) &&
+        else if ( ( nFormat == SotClipboardFormatId::RTF || nFormat == SotClipboardFormatId::RICHTEXT ||
+            nFormat == SotClipboardFormatId::EDITENGINE ) &&
                         aBlock.aStart == aBlock.aEnd )
         {
             //  RTF from a single cell is handled by EditEngine
@@ -288,7 +290,8 @@ bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUSt
                             (nFormat == SotClipboardFormatId::RTF) ? SCTRANS_TYPE_EDIT_RTF : SCTRANS_TYPE_EDIT_BIN,
                             rFlavor );
         }
-        else if ( ScImportExport::IsFormatSupported( nFormat ) || nFormat == SotClipboardFormatId::RTF )
+        else if ( ScImportExport::IsFormatSupported( nFormat ) || nFormat == SotClipboardFormatId::RTF
+            || nFormat == SotClipboardFormatId::RICHTEXT )
         {
             //  if this transfer object was used to create a DDE link, filtered rows
             //  have to be included for subsequent calls (to be consistent with link data)
@@ -297,7 +300,8 @@ bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUSt
 
             bool bIncludeFiltered = pDoc->IsCutMode() || bUsedForLink;
 
-            bool bReduceBlockFormat = nFormat == SotClipboardFormatId::HTML || nFormat == SotClipboardFormatId::RTF;
+            bool bReduceBlockFormat = nFormat == SotClipboardFormatId::HTML || nFormat == SotClipboardFormatId::RTF
+                || nFormat == SotClipboardFormatId::RICHTEXT;
             ScRange aReducedBlock = aBlock;
             if (bReduceBlockFormat && (aBlock.aEnd.Col() == MAXCOL || aBlock.aEnd.Row() == MAXROW) && aBlock.aStart.Tab() == aBlock.aEnd.Tab())
             {

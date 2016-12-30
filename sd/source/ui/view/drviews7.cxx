@@ -157,6 +157,7 @@ using namespace ::com::sun::star::linguistic2;
                 case SotClipboardFormatId::STRING:
                 case SotClipboardFormatId::HTML:
                 case SotClipboardFormatId::RTF:
+                case SotClipboardFormatId::RICHTEXT:
                 case SotClipboardFormatId::EDITENGINE:
                     pResult->AddClipbrdFormat(nTestFormat);
                     break;

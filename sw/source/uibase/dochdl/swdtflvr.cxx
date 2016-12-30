@@ -144,6 +144,7 @@ extern bool g_bExecuteDrag;
 #define SWTRANSFER_OBJECTTYPE_STRING            static_cast<SotClipboardFormatId>(0x00000008)
 #define SWTRANSFER_OBJECTTYPE_SWOLE             static_cast<SotClipboardFormatId>(0x00000010)
 #define SWTRANSFER_OBJECTTYPE_DDE               static_cast<SotClipboardFormatId>(0x00000020)
+#define SWTRANSFER_OBJECTTYPE_RICHTEXT          static_cast<SotClipboardFormatId>(0x00000040)
 
 using namespace ::svx;
 using namespace ::com::sun::star;
@@ -547,7 +548,13 @@ bool SwTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
             SwDoc *const pDoc = lcl_GetDoc(*m_pClpDocFac);
             bOK = SetObject( pDoc, SWTRANSFER_OBJECTTYPE_RTF, rFlavor );
         }
-            break;
+        break;
+        case SotClipboardFormatId::RICHTEXT:
+        {
+            SwDoc *const pDoc = lcl_GetDoc(*m_pClpDocFac);
+            bOK = SetObject( pDoc, SWTRANSFER_OBJECTTYPE_RICHTEXT, rFlavor );
+        }
+        break;
 
         case SotClipboardFormatId::HTML:
         {
@@ -719,6 +726,7 @@ bool SwTransferable::WriteObject( tools::SvRef<SotStorageStream>& xStream,
         break;
 
     case SWTRANSFER_OBJECTTYPE_RTF:
+    case SWTRANSFER_OBJECTTYPE_RICHTEXT:
         GetRTFWriter( aEmptyOUStr, OUString(), xWrt );
         break;
 
@@ -927,6 +935,7 @@ int SwTransferable::PrepareForCopy( bool bIsCut )
         if( !m_pWrtShell->IsObjSelected() )
         {
             AddFormat( SotClipboardFormatId::RTF );
+            AddFormat( SotClipboardFormatId::RICHTEXT );
             AddFormat( SotClipboardFormatId::HTML );
         }
         if( m_pWrtShell->IsSelection() )
@@ -1066,6 +1075,7 @@ int SwTransferable::CopyGlossary( SwTextBlocks& rGlossary, const OUString& rStr 
     //When someone needs it, we 'OLE' her something.
     AddFormat( SotClipboardFormatId::EMBED_SOURCE );
     AddFormat( SotClipboardFormatId::RTF );
+    AddFormat( SotClipboardFormatId::RICHTEXT );
     AddFormat( SotClipboardFormatId::HTML );
     AddFormat( SotClipboardFormatId::STRING );
 
@@ -1167,6 +1177,11 @@ bool SwTransferable::Paste(SwWrtShell& rSh, TransferableDataHelper& rData, sal_u
         {
             nAction = EXCHG_OUT_ACTION_INSERT_STRING;
             nFormat = SotClipboardFormatId::RTF;
+        }
+        else if( rData.HasFormat( SotClipboardFormatId::RICHTEXT ) )
+        {
+            nAction = EXCHG_OUT_ACTION_INSERT_STRING;
+            nFormat = SotClipboardFormatId::RICHTEXT;
         }
     }
 
@@ -1324,6 +1339,7 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
             case SotClipboardFormatId::HTML_SIMPLE:
             case SotClipboardFormatId::HTML_NO_COMMENT:
             case SotClipboardFormatId::RTF:
+            case SotClipboardFormatId::RICHTEXT:
             case SotClipboardFormatId::STRING:
                 bRet = SwTransferable::PasteFileContent( rData, rSh,
                                                             nFormat, bMsg );
@@ -1658,7 +1674,7 @@ bool SwTransferable::PasteFileContent( TransferableDataHelper& rData,
             else
             {
                 pStream = xStrm.get();
-                if( SotClipboardFormatId::RTF == nFormat )
+                if( SotClipboardFormatId::RTF == nFormat || SotClipboardFormatId::RICHTEXT == nFormat)
                     pRead = SwReaderWriter::GetRtfReader();
                 else if( !pRead )
                 {
@@ -2068,6 +2084,7 @@ bool SwTransferable::PasteDDE( TransferableDataHelper& rData,
     // do we want to read in a graphic now?
     SotClipboardFormatId nFormat;
     if( !rData.HasFormat( SotClipboardFormatId::RTF ) &&
+        !rData.HasFormat( SotClipboardFormatId::RICHTEXT ) &&
         !rData.HasFormat( SotClipboardFormatId::HTML ) &&
         !rData.HasFormat( SotClipboardFormatId::STRING ) &&
         (rData.HasFormat( nFormat = SotClipboardFormatId::GDIMETAFILE ) ||
@@ -2856,6 +2873,7 @@ static SotClipboardFormatId aPasteSpecialIds[] =
     SotClipboardFormatId::HTML_SIMPLE,
     SotClipboardFormatId::HTML_NO_COMMENT,
     SotClipboardFormatId::RTF,
+    SotClipboardFormatId::RICHTEXT,
     SotClipboardFormatId::STRING,
     SotClipboardFormatId::SONLK,
     SotClipboardFormatId::NETSCAPE_BOOKMARK,
@@ -3051,6 +3069,7 @@ void SwTransferable::SetDataForDragAndDrop( const Point& rSttPos )
         if( !m_pWrtShell->IsObjSelected() )
         {
             AddFormat( SotClipboardFormatId::RTF );
+            AddFormat( SotClipboardFormatId::RICHTEXT );
             AddFormat( SotClipboardFormatId::HTML );
         }
         if( m_pWrtShell->IsSelection() )

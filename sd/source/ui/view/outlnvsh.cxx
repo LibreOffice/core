@@ -707,6 +707,7 @@ IMPL_LINK( OutlineViewShell, ClipboardChanged, TransferableDataHelper*, pDataHel
     bPastePossible = pDataHelper->GetFormatCount() != 0 &&
                      ( pDataHelper->HasFormat( SotClipboardFormatId::STRING ) ||
                        pDataHelper->HasFormat( SotClipboardFormatId::RTF ) ||
+                       pDataHelper->HasFormat( SotClipboardFormatId::RICHTEXT ) ||
                        pDataHelper->HasFormat( SotClipboardFormatId::HTML ) );
 
     SfxBindings& rBindings = GetViewFrame()->GetBindings();
@@ -890,6 +891,7 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
             bPastePossible = ( aDataHelper.GetFormatCount() != 0 &&
                                 ( aDataHelper.HasFormat( SotClipboardFormatId::STRING ) ||
                                   aDataHelper.HasFormat( SotClipboardFormatId::RTF ) ||
+                                  aDataHelper.HasFormat( SotClipboardFormatId::RICHTEXT ) ||
                                   aDataHelper.HasFormat( SotClipboardFormatId::HTML ) ) );
         }
 

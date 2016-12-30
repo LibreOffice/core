@@ -529,6 +529,10 @@ void ScViewFunc::PasteFromSystem()
                     {
                         PasteFromSystem( SotClipboardFormatId::RTF );
                     }
+                    else if( aDataHelper.HasFormat( SotClipboardFormatId::RICHTEXT ) )
+                    {
+                        PasteFromSystem( SotClipboardFormatId::RICHTEXT );
+                    }
                     else
                     {
                         PasteFromSystem( SotClipboardFormatId::DRAWING );
@@ -548,10 +552,10 @@ void ScViewFunc::PasteFromSystem()
                     {
                         bDoRtf = ( ( aObjDesc.maClassName == SvGlobalName( SO3_SW_CLASSID ) ||
                                      aObjDesc.maClassName == SvGlobalName( SO3_SWWEB_CLASSID ) )
-                                   && aDataHelper.HasFormat( SotClipboardFormatId::RTF ) );
+                                   && ( aDataHelper.HasFormat( SotClipboardFormatId::RTF ) || aDataHelper.HasFormat( SotClipboardFormatId::RICHTEXT ) ) );
                     }
                     if ( bDoRtf )
-                        PasteFromSystem( SotClipboardFormatId::RTF );
+                        PasteFromSystem( aDataHelper.HasFormat( SotClipboardFormatId::RTF ) ? SotClipboardFormatId::RTF : SotClipboardFormatId::RICHTEXT );
                     else if ( aObjDesc.maClassName == SvGlobalName( 0,0,0,0,0,0,0,0,0,0,0 )
                               && aDataHelper.HasFormat( SotClipboardFormatId::SYLK ))
                         PasteFromSystem( SotClipboardFormatId::SYLK );
@@ -570,6 +574,8 @@ void ScViewFunc::PasteFromSystem()
                     PasteFromSystem(nBiff5);
                 else if (aDataHelper.HasFormat(SotClipboardFormatId::RTF))
                     PasteFromSystem(SotClipboardFormatId::RTF);
+                else if (aDataHelper.HasFormat(SotClipboardFormatId::RICHTEXT))
+                    PasteFromSystem(SotClipboardFormatId::RICHTEXT);
                 else if (aDataHelper.HasFormat(SotClipboardFormatId::HTML))
                     PasteFromSystem(SotClipboardFormatId::HTML);
                 else if (aDataHelper.HasFormat(SotClipboardFormatId::HTML_SIMPLE))
@@ -648,10 +654,10 @@ void ScViewFunc::PasteFromTransferable( const uno::Reference<datatransfer::XTran
                 {
                     bDoRtf = ( ( aObjDesc.maClassName == SvGlobalName( SO3_SW_CLASSID ) ||
                                  aObjDesc.maClassName == SvGlobalName( SO3_SWWEB_CLASSID ) )
-                               && aDataHelper.HasFormat( SotClipboardFormatId::RTF ) );
+                               && ( aDataHelper.HasFormat( SotClipboardFormatId::RTF ) || aDataHelper.HasFormat( SotClipboardFormatId::RICHTEXT ) ));
                 }
                 if ( bDoRtf )
-                    nFormatId = SotClipboardFormatId::RTF;
+                    nFormatId = aDataHelper.HasFormat( SotClipboardFormatId::RTF ) ? SotClipboardFormatId::RTF : SotClipboardFormatId::RICHTEXT;
                 else
                     nFormatId = SotClipboardFormatId::EMBED_SOURCE;
             }
@@ -667,6 +673,8 @@ void ScViewFunc::PasteFromTransferable( const uno::Reference<datatransfer::XTran
                 nFormatId = nBiff5;
             else if (aDataHelper.HasFormat(SotClipboardFormatId::RTF))
                 nFormatId = SotClipboardFormatId::RTF;
+            else if (aDataHelper.HasFormat(SotClipboardFormatId::RICHTEXT))
+                nFormatId = SotClipboardFormatId::RICHTEXT;
             else if (aDataHelper.HasFormat(SotClipboardFormatId::HTML))
                 nFormatId = SotClipboardFormatId::HTML;
             else if (aDataHelper.HasFormat(SotClipboardFormatId::HTML_SIMPLE))

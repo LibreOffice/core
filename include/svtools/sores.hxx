@@ -100,7 +100,9 @@
 #define STR_FORMAT_ID_DBACCESS_COMMAND          (STR_FORMAT_START + 115)
 #define STR_FORMAT_ID_DIALOG_60                 (STR_FORMAT_START + 116)
 #define STR_FORMAT_ID_HTML_NO_COMMENT           (STR_FORMAT_START + 119)
-#define STR_FORMAT_END                          (STR_FORMAT_ID_HTML_NO_COMMENT)
+#define STR_FORMAT_ID_RICHTEXT                  (STR_FORMAT_START + 120)
+
+#define STR_FORMAT_END                          (STR_FORMAT_ID_RICHTEXT)
 
 #endif // INCLUDED_SVTOOLS_SORES_HXX
 

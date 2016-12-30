@@ -445,8 +445,10 @@ void SdTransferable::AddSupportedFormats()
                 AddFormat( SotClipboardFormatId::BITMAP );
             }
 
-            if( lcl_HasOnlyOneTable( mpSdDrawDocument ) )
+            if( lcl_HasOnlyOneTable( mpSdDrawDocument ) ) {
                 AddFormat( SotClipboardFormatId::RTF );
+                AddFormat( SotClipboardFormatId::RICHTEXT );
+            }
         }
 
         if( mpImageMap )
