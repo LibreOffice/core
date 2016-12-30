@@ -277,12 +277,14 @@ mstrtok(const NS_tchar *delims, NS_tchar **str)
     return ret;
 }
 
+#if defined(_WIN32) && defined(MAINTENANCE_SERVICE)
 static bool
 EnvHasValue(const char *name)
 {
     const char *val = getenv(name);
     return (val && *val);
 }
+#endif
 
 /**
  * Coverts a relative update path to a full path.
