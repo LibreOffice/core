@@ -29,8 +29,7 @@ namespace xls {
 
 struct CommentModel
 {
-    css::table::CellRangeAddress
-                        maRange;            /// Position of the comment in the worksheet.
+    ScRange             maRange;            /// Position of the comment in the worksheet.
     RichStringRef       mxText;             /// Formatted text of the comment (not used in BIFF8).
     sal_Int32           mnAuthorId;         /// Identifier of the comment's author (OOXML and BIFF12 only).
     bool                mbAutoFill;         /// Auto Selection of comment object's fill style

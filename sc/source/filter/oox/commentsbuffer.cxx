@@ -131,10 +131,9 @@ RichStringRef const & Comment::createText()
 void Comment::finalizeImport()
 {
     // BIFF12 stores cell range instead of cell address, use first cell of this range
-    OSL_ENSURE( (maModel.maRange.StartColumn == maModel.maRange.EndColumn) &&
-        (maModel.maRange.StartRow == maModel.maRange.EndRow),
+    OSL_ENSURE( maModel.maRange.aStart == maModel.maRange.aEnd,
         "Comment::finalizeImport - comment anchor should be a single cell" );
-    CellAddress aNotePos( maModel.maRange.Sheet, maModel.maRange.StartColumn, maModel.maRange.StartRow );
+    CellAddress aNotePos( maModel.maRange.aStart.Tab(), maModel.maRange.aStart.Col(), maModel.maRange.aStart.Row() );
     if( getAddressConverter().checkCellAddress( aNotePos, true ) && maModel.mxText.get() ) try
     {
         Reference< XSheetAnnotationsSupplier > xAnnosSupp( getSheet(), UNO_QUERY_THROW );
