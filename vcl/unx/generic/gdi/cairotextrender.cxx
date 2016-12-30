@@ -435,8 +435,7 @@ bool CairoTextRender::GetGlyphBoundRect(const GlyphItem& rGlyph, Rectangle& rRec
     if( !pSF )
         return false;
 
-    const GlyphMetric& rGM = pSF->GetGlyphMetric(rGlyph);
-    Rectangle aRect( rGM.GetOffset(), rGM.GetSize() );
+    Rectangle aRect = pSF->GetGlyphBoundRect(rGlyph);
 
     if ( pSF->mnCos != 0x10000 && pSF->mnSin != 0 )
     {

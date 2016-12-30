@@ -768,8 +768,7 @@ bool GenPspGraphics::GetGlyphBoundRect(const GlyphItem& rGlyph, Rectangle& rRect
     if( !pSF )
         return false;
 
-    const GlyphMetric& rGM = pSF->GetGlyphMetric(rGlyph);
-    rRect = Rectangle( rGM.GetOffset(), rGM.GetSize() );
+    rRect = pSF->GetGlyphBoundRect(rGlyph);
     return true;
 }
 

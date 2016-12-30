@@ -635,12 +635,7 @@ void FreetypeFont::InitGlyphData(const GlyphItem& rGlyph, GlyphData& rGD ) const
     FT_Error rc = FT_Load_Glyph(maFaceFT, rGlyph.maGlyphId, mnLoadFlags);
 
     if( rc != FT_Err_Ok )
-    {
-        // we get here e.g. when a PS font lacks the default glyph
-        rGD.SetOffset( 0, 0 );
-        rGD.SetSize( Size( 0, 0 ) );
         return;
-    }
 
     if (mbArtBold)
         FT_GlyphSlot_Embolden(maFaceFT->glyph);
@@ -652,15 +647,8 @@ void FreetypeFont::InitGlyphData(const GlyphItem& rGlyph, GlyphData& rGD ) const
 
     FT_BBox aBbox;
     FT_Glyph_Get_CBox( pGlyphFT, FT_GLYPH_BBOX_PIXELS, &aBbox );
-    if( aBbox.yMin > aBbox.yMax )   // circumvent freetype bug
-    {
-        int t=aBbox.yMin;
-        aBbox.yMin=aBbox.yMax;
-        aBbox.yMax=t;
-    }
 
-    rGD.SetOffset( aBbox.xMin, -aBbox.yMax );
-    rGD.SetSize( Size( (aBbox.xMax-aBbox.xMin+1), (aBbox.yMax-aBbox.yMin) ) );
+    rGD.SetBoundRect(Rectangle(aBbox.xMin, -aBbox.yMax, aBbox.xMax, -aBbox.yMin));
 
     FT_Done_Glyph( pGlyphFT );
 }

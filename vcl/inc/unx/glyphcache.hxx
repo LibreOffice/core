@@ -94,39 +94,19 @@ private:
     FreetypeManager*        mpFtManager;
 };
 
-class GlyphMetric
-{
-public:
-                            GlyphMetric() {}
-
-    const Point&            GetOffset() const   { return maOffset; }
-    const Size&             GetSize() const     { return maSize; }
-
-protected:
-    friend class GlyphData;
-    void                    SetOffset( int nX, int nY ) { maOffset = Point( nX, nY); }
-    void                    SetSize( const Size& s )    { maSize = s; }
-
-private:
-    Point                   maOffset;
-    Size                    maSize;
-};
-
 class GlyphData
 {
 public:
                             GlyphData() : mnLruValue(0) {}
 
-    const GlyphMetric&      GetMetric() const           { return maGlyphMetric; }
-
-    void                    SetSize( const Size& s)     { maGlyphMetric.SetSize( s ); }
-    void                    SetOffset( int nX, int nY ) { maGlyphMetric.SetOffset( nX, nY ); }
+    const Rectangle&        GetBoundRect() const        { return maBoundRect; }
+    void                    SetBoundRect(Rectangle r)   { maBoundRect = r; }
 
     void                    SetLruValue( int n ) const  { mnLruValue = n; }
     long                    GetLruValue() const         { return mnLruValue;}
 
 private:
-    GlyphMetric             maGlyphMetric;
+    Rectangle               maBoundRect;
 
     // used by GlyphCache for cache LRU algorithm
     mutable long            mnLruValue;
@@ -154,8 +134,7 @@ public:
     const FontCharMapRef    GetFontCharMap() const;
     bool                    GetFontCapabilities(vcl::FontCapabilities &) const;
 
-    const GlyphMetric&      GetGlyphMetric(const GlyphItem& rGlyph);
-
+    const Rectangle&        GetGlyphBoundRect(const GlyphItem& rGlyph);
     bool                    GetGlyphOutline(const GlyphItem& rGlyph, basegfx::B2DPolyPolygon&) const;
     bool                    GetAntialiasAdvice() const;
     hb_font_t*              GetHbFont() { return mpHbFont; }
