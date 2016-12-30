@@ -451,12 +451,11 @@ void DAVResourceAccess::GET(
     while ( bRetry );
 }
 
-
 uno::Reference< io::XInputStream > DAVResourceAccess::GET(
     const std::vector< OUString > & rHeaderNames,
     DAVResource & rResource,
     const uno::Reference< ucb::XCommandEnvironment > & xEnv )
-  throw( DAVException )
+  throw (css::uno::RuntimeException, DAVException)
 {
     initialize();
 
@@ -495,7 +494,6 @@ uno::Reference< io::XInputStream > DAVResourceAccess::GET(
 
     return xStream;
 }
-
 
 // used as HEAD substitute when HEAD is not implemented on server
 void DAVResourceAccess::GET0(

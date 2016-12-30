@@ -132,7 +132,7 @@ public:
     GET( const std::vector< OUString > & rHeaderNames, // empty == 'all'
          DAVResource & rResource,
          const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv )
-        throw ( DAVException );
+        throw (css::uno::RuntimeException, DAVException);
 
     // used as HEAD substitute when HEAD is not implemented on server
     void
