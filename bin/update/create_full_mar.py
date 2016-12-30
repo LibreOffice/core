@@ -47,7 +47,7 @@ def main():
     subprocess.call([os.path.join(current_dir_path, 'make_full_update.sh'), mar_file, uncompress_dir])
 
     signed_mar_file = make_mar_name(target_dir, filename_prefix + '_signed')
-    subprocess.call([mar_executable, '-C', target_dir, '-d', config.certificate_path, '-n', config.certificate_name, '-s', mar_file, signed_mar_file])
+    subprocess.check_call([mar_executable, '-C', target_dir, '-d', config.certificate_path, '-n', config.certificate_name, '-s', mar_file, signed_mar_file])
 
     os.rename(signed_mar_file, mar_file)
 
