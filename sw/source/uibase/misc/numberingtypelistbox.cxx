@@ -73,7 +73,7 @@ SwNumberingTypeListBox::~SwNumberingTypeListBox()
 
 void SwNumberingTypeListBox::dispose()
 {
-    delete pImpl;
+    pImpl.reset();
     ListBox::dispose();
 }
 

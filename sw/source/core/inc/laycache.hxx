@@ -21,6 +21,12 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_LAYCACHE_HXX
 
 #include <tools/solar.h>
+#include <bits/c++allocator.h>
+
+
+#include <svx/stddlg.hxx>
+
+
 
 class SwDoc;
 class SwLayCacheImpl;

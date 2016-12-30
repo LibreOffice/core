@@ -60,7 +60,18 @@ enum class DbgAction {
 #ifdef DBG_UTIL
 
 #include <tools/solar.h>
+#include <svx/stddlg.hxx>
 
+#include <vcl/button.hxx>
+
+#include <vcl/field.hxx>
+
+#include <vcl/fixed.hxx>
+#include <vcl/edit.hxx>
+#include <memory.h>
+#include <vcl/lstbox.hxx>
+#include <com/sun/star/uno/Sequence.h>
+#include <com/sun/star/uno/Reference.h>
 #include "swtypes.hxx"
 
 class SwImplProtocol;
@@ -84,7 +95,7 @@ public:
 
 class SwEnterLeave
 {
-    std::unique_ptr<SwImplEnterLeave> pImpl;
+    std::<SwImplEnterLeave> pImpl;
     void Ctor( const SwFrame* pFrame, PROT nFunc, DbgAction nAct, void* pPar );
     void Dtor();
 

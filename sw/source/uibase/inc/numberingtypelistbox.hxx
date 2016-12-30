@@ -40,7 +40,7 @@ struct SwNumberingTypeListBox_Impl;
 
 class SW_DLLPUBLIC SwNumberingTypeListBox : public ListBox
 {
-    SwNumberingTypeListBox_Impl* pImpl;
+    std::unique_ptr<SwNumberingTypeListBox_Impl> pImpl;
 
 public:
     SwNumberingTypeListBox( vcl::Window* pWin, WinBits nStyle );
