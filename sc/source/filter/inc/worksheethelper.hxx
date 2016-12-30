@@ -124,8 +124,7 @@ struct PageBreakModel
 /** Stores data about a hyperlink range. */
 struct HyperlinkModel : public ::oox::ole::StdHlinkInfo
 {
-    css::table::CellRangeAddress
-                        maRange;            /// The cell area containing the hyperlink.
+    ScRange             maRange;            /// The cell area containing the hyperlink.
     OUString            maTooltip;          /// Additional tooltip text.
 
     explicit            HyperlinkModel();

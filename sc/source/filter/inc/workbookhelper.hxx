@@ -154,11 +154,7 @@ public:
 
     /** Returns the XCellRange interface for the passed cell range address. */
     css::uno::Reference< css::table::XCellRange >
-                        getCellRangeFromDoc(
-                            const css::table::CellRangeAddress& rRange ) const;
-    css::uno::Reference< css::table::XCellRange >
                         getCellRangeFromDoc( const ScRange& rRange ) const;
-
 
     /** Returns the cell styles container from the Calc document. */
     css::uno::Reference< css::container::XNameContainer >
