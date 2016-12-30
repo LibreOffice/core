@@ -250,7 +250,6 @@ ScTable::ScTable( ScDocument* pDoc, SCTAB nNewTab, const OUString& rNewName,
     pTabProtection( nullptr ),
     pColWidth( nullptr ),
     mpRowHeights( static_cast<ScFlatUInt16RowSegments*>(nullptr) ),
-    pColFlags( nullptr ),
     pRowFlags( nullptr ),
     mpHiddenCols(new ScFlatBoolColSegments),
     mpHiddenRows(new ScFlatBoolRowSegments),
@@ -290,17 +289,16 @@ ScTable::ScTable( ScDocument* pDoc, SCTAB nNewTab, const OUString& rNewName,
     mbForceBreaks(false),
     aNextColAttrArray(static_cast<SCCOL>(-1), nNewTab, pDoc, nullptr, true)
 {
-
+    SCCOL aColSize = aCol.size();
     if (bColInfo)
     {
         pColWidth  = new sal_uInt16[ MAXCOL+1 ];
-        pColFlags  = new CRFlags[ MAXCOL+1 ];
 
-        for (SCCOL i=0; i<=MAXCOL; i++)
+        for (SCCOL i=0; i < aColSize; i++)
         {
             pColWidth[i] = STD_COL_WIDTH;
-            pColFlags[i] = CRFlags::NONE;
         }
+        aColFlags = std::vector< CRFlags >( aColSize, CRFlags::NONE );
     }
 
     if (bRowInfo)
@@ -328,7 +326,7 @@ ScTable::ScTable( ScDocument* pDoc, SCTAB nNewTab, const OUString& rNewName,
         }
     }
 
-    for (SCCOL k=0; k<=MAXCOL; k++)
+    for (SCCOL k=0; k < aColSize; k++)
         aCol[k].Init( k, nTab, pDocument, true );
 }
 
@@ -350,7 +348,6 @@ ScTable::~ScTable()
     }
 
     delete[] pColWidth;
-    delete[] pColFlags;
     delete pRowFlags;
     delete pSheetEvents;
     delete pOutlineTable;
@@ -1785,7 +1782,7 @@ void ScTable::FindRangeNamesInUse(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW n
 void ScTable::ExtendPrintArea( OutputDevice* pDev,
                     SCCOL /* nStartCol */, SCROW nStartRow, SCCOL& rEndCol, SCROW nEndRow )
 {
-    if ( !pColFlags || !pRowFlags )
+    if ( aColFlags.empty() || !pRowFlags )
     {
         OSL_FAIL("ExtendPrintArea: No ColInfo or RowInfo");
         return;

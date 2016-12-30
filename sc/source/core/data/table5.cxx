@@ -946,15 +946,17 @@ bool ScTable::IsManualRowHeight(SCROW nRow) const
 namespace {
 
 void lcl_syncFlags(ScFlatBoolColSegments& rColSegments, ScFlatBoolRowSegments& rRowSegments,
-    CRFlags* pColFlags, ScBitMaskCompressedArray< SCROW, CRFlags>* pRowFlags, const CRFlags nFlagMask)
+    std::vector< CRFlags >& aColFlags, ScBitMaskCompressedArray< SCROW, CRFlags>* pRowFlags, const CRFlags nFlagMask)
 {
     using ::sal::static_int_cast;
 
     CRFlags nFlagMaskComplement = ~nFlagMask;
 
     pRowFlags->AndValue(0, MAXROW, nFlagMaskComplement);
-    for (SCCOL i = 0; i <= MAXCOL; ++i)
-        pColFlags[i] &= nFlagMaskComplement;
+    for (SCCOL i = 0; i < static_cast< SCCOL >( aColFlags.size() ); ++i)
+    {
+        aColFlags[i] &= nFlagMaskComplement;
+    }
 
     {
         // row hidden flags.
@@ -978,7 +980,7 @@ void lcl_syncFlags(ScFlatBoolColSegments& rColSegments, ScFlatBoolRowSegments& r
 
         SCCOL nCol = 0;
         ScFlatBoolColSegments::RangeData aData;
-        while (nCol <= MAXCOL)
+        while ( nCol < static_cast< SCCOL >( aColFlags.size() ) )
         {
             if (!rColSegments.getRangeData(nCol, aData))
                 break;
@@ -986,7 +988,7 @@ void lcl_syncFlags(ScFlatBoolColSegments& rColSegments, ScFlatBoolRowSegments& r
             if (aData.mbValue)
             {
                 for (SCCOL i = nCol; i <= aData.mnCol2; ++i)
-                    pColFlags[i] |= nFlagMask;
+                    aColFlags[i] |= nFlagMask;
             }
 
             nCol = aData.mnCol2 + 1;
@@ -1004,8 +1006,8 @@ void ScTable::SyncColRowFlags()
 
     // Manual breaks.
     pRowFlags->AndValue(0, MAXROW, nManualBreakComplement);
-    for (SCCOL i = 0; i <= MAXCOL; ++i)
-        pColFlags[i] &= nManualBreakComplement;
+    for (SCCOL i = 0; i < static_cast< SCCOL >( aColFlags.size() ); ++i)
+        aColFlags[i] &= nManualBreakComplement;
 
     if (!maRowManualBreaks.empty())
     {
@@ -1018,12 +1020,14 @@ void ScTable::SyncColRowFlags()
     {
         for (set<SCCOL>::const_iterator itr = maColManualBreaks.begin(), itrEnd = maColManualBreaks.end();
               itr != itrEnd; ++itr)
-            pColFlags[*itr] |= CRFlags::ManualBreak;
+        {
+               aColFlags[*itr] |= CRFlags::ManualBreak;
+        }
     }
 
     // Hidden flags.
-    lcl_syncFlags(*mpHiddenCols, *mpHiddenRows, pColFlags, pRowFlags, CRFlags::Hidden);
-    lcl_syncFlags(*mpFilteredCols, *mpFilteredRows, pColFlags, pRowFlags, CRFlags::Filtered);
+    lcl_syncFlags(*mpHiddenCols, *mpHiddenRows, aColFlags, pRowFlags, CRFlags::Hidden);
+    lcl_syncFlags(*mpFilteredCols, *mpFilteredRows, aColFlags, pRowFlags, CRFlags::Filtered);
 }
 
 void ScTable::SetPageSize( const Size& rSize )

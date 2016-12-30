@@ -63,6 +63,7 @@
 #include <math.h>
 #include <svl/PasswordHelper.hxx>
 #include <unotools/transliterationwrapper.hxx>
+#include <algorithm>
 
 namespace {
 
@@ -281,12 +282,16 @@ void ScTable::InsertCol(
 {
     if (nStartRow==0 && nEndRow==MAXROW)
     {
-        if (pColWidth && pColFlags)
+        if ( !aColFlags.empty() && pColWidth )
         {
             memmove( &pColWidth[nStartCol+nSize], &pColWidth[nStartCol],
                     (MAXCOL - nStartCol + 1 - nSize) * sizeof(pColWidth[0]) );
-            memmove( &pColFlags[nStartCol+nSize], &pColFlags[nStartCol],
-                    (MAXCOL - nStartCol + 1 - nSize) * sizeof(pColFlags[0]) );
+
+            // We are copying because we don't want to increase the size of aColFlags vector
+            std::copy ( aColFlags.begin() + nStartCol, aColFlags.end() - nSize, aColFlags.begin() + ( nStartCol + nSize ) );
+            assert( aColFlags.size() >= nSize );
+            // TODO In future we would like to change to:
+            // aColFlags.insert( aColFlags.begin() + ( nStartCol + nSize ), aColFlags.begin() + nStartCol , aColFlags.end() );
         }
         if (pOutlineTable)
             pOutlineTable->InsertCol( nStartCol, nSize );
@@ -308,10 +313,7 @@ void ScTable::InsertCol(
 
             maColManualBreaks.swap(aNewBreaks);
         }
-    }
 
-    if ((nStartRow == 0) && (nEndRow == MAXROW))
-    {
         for (SCSIZE i=0; i < nSize; i++)
             for (SCCOL nCol = MAXCOL; nCol > nStartCol; nCol--)
                 aCol[nCol].SwapCol(aCol[nCol-1]);
@@ -358,13 +360,18 @@ void ScTable::DeleteCol(
 {
     if (nStartRow==0 && nEndRow==MAXROW)
     {
-        if (pColWidth && pColFlags)
+        if ( !aColFlags.empty() && pColWidth )
         {
             memmove( &pColWidth[nStartCol], &pColWidth[nStartCol+nSize],
                     (MAXCOL - nStartCol + 1 - nSize) * sizeof(pColWidth[0]) );
-            memmove( &pColFlags[nStartCol], &pColFlags[nStartCol+nSize],
-                    (MAXCOL - nStartCol + 1 - nSize) * sizeof(pColFlags[0]) );
+
+            assert( aColFlags.size() >= ( nStartCol + nSize ) );
+            // We are copying because we don't want to decrease the size of aColFlags vector
+            std::copy ( aColFlags.begin() + ( nStartCol + nSize ), aColFlags.end(), aColFlags.begin() + nStartCol );
+            // TODO We need to change it to (it will change size of aColFlags:
+            // aColFlags.erase( aColFlags.begin() + nStartCol, aColFlags.begin() + ( nStartCol + nSize ) );
         }
+
         if (pOutlineTable)
             if (pOutlineTable->DeleteCol( nStartCol, nSize ))
                 if (pUndoOutline)
@@ -1139,7 +1146,7 @@ void ScTable::CopyToTable(
                 bool bHiddenChange = (pDestTab->ColHidden(i) != bThisHidden);
                 bool bChange = bHiddenChange || (pDestTab->pColWidth[i] != pColWidth[i]);
                 pDestTab->pColWidth[i] = pColWidth[i];
-                pDestTab->pColFlags[i] = pColFlags[i];
+                pDestTab->aColFlags[i] = aColFlags[i];
                 pDestTab->SetColHidden(i, i, bThisHidden);
                 //TODO: collect changes?
                 if (bHiddenChange && pCharts)
@@ -2048,7 +2055,7 @@ SCSIZE ScTable::FillMaxRot( RowInfo* pRowInfo, SCSIZE nArrCount, SCCOL nX1, SCCO
 
 void ScTable::FindMaxRotCol( RowInfo* pRowInfo, SCSIZE nArrCount, SCCOL nX1, SCCOL nX2 )
 {
-    if ( !pColWidth || !mpRowHeights || !pColFlags || !pRowFlags )
+    if ( !pColWidth || !mpRowHeights || !pRowFlags || aColFlags.empty() )
     {
         OSL_FAIL( "Row/column info missing" );
         return;
@@ -2870,7 +2877,7 @@ sal_uInt16 ScTable::GetColWidth( SCCOL nCol, bool bHiddenAsZero ) const
 {
     OSL_ENSURE(ValidCol(nCol),"wrong column number");
 
-    if (ValidCol(nCol) && pColFlags && pColWidth)
+    if ( ValidCol(nCol) && pColWidth && !aColFlags.empty() )
     {
         if (bHiddenAsZero && ColHidden(nCol))
             return 0;
@@ -3277,8 +3284,8 @@ void ScTable::SetRowFlags( SCROW nStartRow, SCROW nEndRow, CRFlags nNewFlags )
 
 CRFlags ScTable::GetColFlags( SCCOL nCol ) const
 {
-    if (ValidCol(nCol) && pColFlags)
-        return pColFlags[nCol];
+    if ( ValidCol(nCol) && !aColFlags.empty() )
+        return aColFlags[nCol];
     else
         return CRFlags::NONE;
 }
@@ -3323,14 +3330,16 @@ SCROW ScTable::GetLastFlaggedRow() const
 
 SCCOL ScTable::GetLastChangedCol() const
 {
-    if ( !pColFlags )
+    if ( aColFlags.empty() )
         return 0;
 
     SCCOL nLastFound = 0;
-    for (SCCOL nCol = 1; nCol <= MAXCOL; nCol++)
-        if ((pColFlags[nCol] & CRFlags::All) || (pColWidth[nCol] != STD_COL_WIDTH))
+    SCCOL aColSize = aCol.size();
+    for (SCCOL nCol = 1; nCol < aColSize; nCol++)
+    {
+        if ( ( aColFlags[nCol] & CRFlags::All ) || ( pColWidth[nCol] != STD_COL_WIDTH ) )
             nLastFound = nCol;
-
+    }
     return nLastFound;
 }
 
@@ -3353,7 +3362,7 @@ SCROW ScTable::GetLastChangedRow() const
 
 bool ScTable::UpdateOutlineCol( SCCOL nStartCol, SCCOL nEndCol, bool bShow )
 {
-    if (pOutlineTable && pColFlags)
+    if ( pOutlineTable && !aColFlags.empty() )
     {
         return pOutlineTable->GetColArray().ManualAction( nStartCol, nEndCol, bShow, *this, true );
     }
