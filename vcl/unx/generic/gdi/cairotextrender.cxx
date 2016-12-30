@@ -425,32 +425,28 @@ void CairoTextRender::GetFontMetric( ImplFontMetricDataRef& rxFontMetric, int nF
         mpFreetypeFont[nFallbackLevel]->GetFontMetric(rxFontMetric);
 }
 
-bool CairoTextRender::GetGlyphBoundRect(const GlyphItem& rGlyph, Rectangle& rRect)
+basegfx::B2DRectangle CairoTextRender::GetGlyphBoundRect(const GlyphItem& rGlyph)
 {
     const int nLevel = rGlyph.mnFallbackLevel;
-    if( nLevel >= MAX_FALLBACK )
-        return false;
-
-    FreetypeFont* pSF = mpFreetypeFont[ nLevel ];
-    if( !pSF )
-        return false;
-
-    Rectangle aRect = pSF->GetGlyphBoundRect(rGlyph);
-
-    if ( pSF->mnCos != 0x10000 && pSF->mnSin != 0 )
+    if (nLevel < MAX_FALLBACK && mpFreetypeFont[nLevel])
     {
-        double nCos = pSF->mnCos / 65536.0;
-        double nSin = pSF->mnSin / 65536.0;
-        rRect.Left() =  nCos*aRect.Left() + nSin*aRect.Top();
-        rRect.Top()  = -nSin*aRect.Left() - nCos*aRect.Top();
+        FreetypeFont* pFreetypeFont = mpFreetypeFont[nLevel];
+        basegfx::B2DRectangle aRect = pFreetypeFont->GetGlyphBoundRect(rGlyph);
 
-        rRect.Right()  =  nCos*aRect.Right() + nSin*aRect.Bottom();
-        rRect.Bottom() = -nSin*aRect.Right() - nCos*aRect.Bottom();
+        if (pFreetypeFont->mnCos != 0x10000 && pFreetypeFont->mnSin != 0)
+        {
+            double nCos = pFreetypeFont->mnCos / 65536.0;
+            double nSin = pFreetypeFont->mnSin / 65536.0;
+            return basegfx::B2DRectangle(nCos * aRect.getMinX() + nSin * aRect.getMinY(),
+                                        -nSin * aRect.getMinX() - nCos * aRect.getMinY(),
+                                         nCos * aRect.getMaxX() + nSin * aRect.getMaxY(),
+                                        -nSin * aRect.getMaxX() - nCos * aRect.getMaxY());
+        }
+        else
+            return aRect;
     }
-    else
-        rRect = aRect;
 
-    return true;
+    return basegfx::B2DRectangle();
 }
 
 bool CairoTextRender::GetGlyphOutline(const GlyphItem& rGlyph,

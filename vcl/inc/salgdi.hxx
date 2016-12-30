@@ -20,6 +20,8 @@
 #ifndef INCLUDED_VCL_INC_SALGDI_HXX
 #define INCLUDED_VCL_INC_SALGDI_HXX
 
+#include <basegfx/range/b2drectangle.hxx>
+
 #include <vcl/metric.hxx>
 
 #include "impfontmetricdata.hxx"
@@ -191,7 +193,7 @@ public:
                                     std::vector< sal_Int32 >& rWidths,
                                     Ucs2UIntMap& rUnicodeEnc ) = 0;
 
-    virtual bool                GetGlyphBoundRect(const GlyphItem&, Rectangle&) = 0;
+    virtual basegfx::B2DRectangle GetGlyphBoundRect(const GlyphItem&) = 0;
     virtual bool                GetGlyphOutline(const GlyphItem&, basegfx::B2DPolyPolygon&) = 0;
 
     virtual SalLayout*          GetTextLayout( ImplLayoutArgs&, int nFallbackLevel ) = 0;

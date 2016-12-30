@@ -24,6 +24,7 @@
 #include FT_FREETYPE_H
 #include FT_GLYPH_H
 
+#include <basegfx/range/b2drectangle.hxx>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <tools/gen.hxx>
 #include <vcl/dllapi.h>
@@ -45,7 +46,6 @@ class PhysicalFontCollection;
 class FreetypeFont;
 class SvpGcpHelper;
 
-namespace basegfx { class B2DPolyPolygon; }
 namespace vcl { struct FontCapabilities; }
 
 class VCL_DLLPUBLIC GlyphCache
@@ -99,14 +99,14 @@ class GlyphData
 public:
                             GlyphData() : mnLruValue(0) {}
 
-    const Rectangle&        GetBoundRect() const        { return maBoundRect; }
-    void                    SetBoundRect(Rectangle r)   { maBoundRect = r; }
+    const basegfx::B2DRectangle& GetBoundRect() const   { return maBoundRect; }
+    void                    SetBoundRect(basegfx::B2DRectangle aRect) { maBoundRect = aRect; }
 
     void                    SetLruValue( int n ) const  { mnLruValue = n; }
     long                    GetLruValue() const         { return mnLruValue;}
 
 private:
-    Rectangle               maBoundRect;
+    basegfx::B2DRectangle   maBoundRect;
 
     // used by GlyphCache for cache LRU algorithm
     mutable long            mnLruValue;
@@ -134,7 +134,7 @@ public:
     const FontCharMapRef    GetFontCharMap() const;
     bool                    GetFontCapabilities(vcl::FontCapabilities &) const;
 
-    const Rectangle&        GetGlyphBoundRect(const GlyphItem& rGlyph);
+    const basegfx::B2DRectangle& GetGlyphBoundRect(const GlyphItem& rGlyph);
     bool                    GetGlyphOutline(const GlyphItem& rGlyph, basegfx::B2DPolyPolygon&) const;
     bool                    GetAntialiasAdvice() const;
     hb_font_t*              GetHbFont() { return mpHbFont; }

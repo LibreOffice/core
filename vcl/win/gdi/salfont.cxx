@@ -1349,7 +1349,7 @@ void WinSalGraphics::ClearDevFontCache()
     //anything to do here ?
 }
 
-bool WinSalGraphics::GetGlyphBoundRect(const GlyphItem& rGlyph, Rectangle& rRect)
+basegfx::B2DRectangle WinSalGraphics::GetGlyphBoundRect(const GlyphItem& rGlyph)
 {
     HDC hDC = getHDC();
 
@@ -1365,16 +1365,14 @@ bool WinSalGraphics::GetGlyphBoundRect(const GlyphItem& rGlyph, Rectangle& rRect
     aGM.gmptGlyphOrigin.x = aGM.gmptGlyphOrigin.y = 0;
     aGM.gmBlackBoxX = aGM.gmBlackBoxY = 0;
     DWORD nSize = ::GetGlyphOutlineW(hDC, rGlyph.maGlyphId, nGGOFlags, &aGM, 0, nullptr, &aMat);
-    if( nSize == GDI_ERROR )
-        return false;
+    if (nSize != GDI_ERROR)
+    {
+        return basegfx::B2DRectangle(aGM.gmptGlyphOrigin.x, -aGM.gmptGlyphOrigin.y,
+                                     aGM.gmptGlyphOrigin.x + aGM.gmBlackBoxX,
+                                    -aGM.gmptGlyphOrigin.y + aGM.gmBlackBoxY);
+    }
 
-    rRect = Rectangle( Point( +aGM.gmptGlyphOrigin.x, -aGM.gmptGlyphOrigin.y ),
-        Size( aGM.gmBlackBoxX, aGM.gmBlackBoxY ) );
-    rRect.Left()    = static_cast<int>( mfCurrentFontScale * rRect.Left() );
-    rRect.Right()   = static_cast<int>( mfCurrentFontScale * rRect.Right() ) + 1;
-    rRect.Top()     = static_cast<int>( mfCurrentFontScale * rRect.Top() );
-    rRect.Bottom()  = static_cast<int>( mfCurrentFontScale * rRect.Bottom() ) + 1;
-    return true;
+    return basegfx::B2DRectangle();
 }
 
 bool WinSalGraphics::GetGlyphOutline(const GlyphItem& rGlyph,
