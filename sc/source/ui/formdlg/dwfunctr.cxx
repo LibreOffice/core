@@ -42,9 +42,9 @@
 #*  Member:     ScFunctionWin
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:     ScFunctionWin
+#*  Class:      ScFunctionWin
 #*
-#*  Funktion:   Konstruktor der Klasse ScFunctionWin
+#*  Function:   Constructor of ScFunctionWin Class
 #*
 #*  Input:      Sfx- Verknuepfungen, Fenster, Resource
 #*
@@ -88,9 +88,9 @@ ScFunctionWin::ScFunctionWin(vcl::Window* pParent, const css::uno::Reference<css
 #*  Member:     ScFunctionWin
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:     ScFunctionWin
+#*  Class:      ScFunctionWin
 #*
-#*  Funktion:   Destruktor der Klasse ScFunctionWin
+#*  Function:   Destructor of ScFunctionWin Class
 #*
 #*  Input:      ---
 #*
@@ -116,9 +116,9 @@ void ScFunctionWin::dispose()
 #*  Member:     UpdateFunctionList
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:     ScFunctionWin
+#*  Class:      ScFunctionWin
 #*
-#*  Funktion:   Aktualisiert die Liste der Funktionen ab-
+#*  Function:   Aktualisiert die Liste der Funktionen ab-
 #*              haengig von der eingestellten Kategorie.
 #*
 #*  Input:      ---
@@ -142,9 +142,9 @@ void ScFunctionWin::InitLRUList()
 #*  Member:     UpdateFunctionList
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:     ScFunctionWin
+#*  Class:      ScFunctionWin
 #*
-#*  Funktion:   Aktualisiert die Liste der zuletzt verwendeten Funktionen.
+#*  Function:   Aktualisiert die Liste der zuletzt verwendeten Funktionen.
 #*
 #*  Input:      ---
 #*
@@ -165,9 +165,9 @@ void ScFunctionWin::UpdateLRUList()
 #*  Member:     SetDescription
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:     ScFunctionWin
+#*  Class:      ScFunctionWin
 #*
-#*  Funktion:   Erklaerungstext fuer die Funktion einstellen.
+#*  Function:   Erklaerungstext fuer die Funktion einstellen.
 #*
 #*  Input:      ---
 #*
@@ -203,9 +203,9 @@ void ScFunctionWin::SetDescription()
 #*  Member:     UpdateFunctionList
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:     ScFunctionWin
+#*  Class:      ScFunctionWin
 #*
-#*  Funktion:   Aktualisiert die Liste der Funktionen ab-
+#*  Function:   Aktualisiert die Liste der Funktionen ab-
 #*              haengig von der eingestellten Kategorie.
 #*
 #*  Input:      ---
@@ -264,9 +264,9 @@ void ScFunctionWin::UpdateFunctionList()
 #*  Member:     DoEnter
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:     ScFunctionWin
+#*  Class:      ScFunctionWin
 #*
-#*  Funktion:   Eingabe ins Dokument uebernehmen. Wird aufgerufen
+#*  Function:   Eingabe ins Dokument uebernehmen. Wird aufgerufen
 #*              nach betaetigen der Uebernehmen- Schaltflaeche
 #*              oder einem Doppelklick in die Funktionsliste.
 #*
@@ -385,9 +385,9 @@ void ScFunctionWin::DoEnter()
 #*  Handle:     SelHdl
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:     ScFunctionWin
+#*  Class:      ScFunctionWin
 #*
-#*  Funktion:   Bei einer Aenderung der Kategorie wird die
+#*  Function:   Bei einer Aenderung der Kategorie wird die
 #*              die Liste der Funktionen aktualisiert.
 #*
 #*  Input:      ---
@@ -414,9 +414,9 @@ IMPL_LINK( ScFunctionWin, SelHdl, ListBox&, rLb, void )
 #*  Handle:     SelHdl
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:     ScFunctionWin
+#*  Class:      ScFunctionWin
 #*
-#*  Funktion:   Bei einer Aenderung der Kategorie wird die
+#*  Function:   Bei einer Aenderung der Kategorie wird die
 #*              die Liste der Funktionen aktualisiert.
 #*
 #*  Input:      ---
