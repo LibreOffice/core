@@ -137,7 +137,8 @@ namespace frm
 
         // initial state
         TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( _rView.GetWindow() ) );
-        m_bPastePossible = ( aDataHelper.HasFormat( SotClipboardFormatId::STRING ) || aDataHelper.HasFormat( SotClipboardFormatId::RTF ) );
+        m_bPastePossible = ( aDataHelper.HasFormat( SotClipboardFormatId::STRING ) ||
+        aDataHelper.HasFormat( SotClipboardFormatId::RTF ) || aDataHelper.HasFormat( SotClipboardFormatId::RICHTEXT ) );
     }
 
 
@@ -155,7 +156,8 @@ namespace frm
     {
         OSL_ENSURE( _pDataHelper, "OPasteClipboardDispatcher::OnClipboardChanged: ooops!" );
         m_bPastePossible = _pDataHelper->HasFormat( SotClipboardFormatId::STRING )
-                        || _pDataHelper->HasFormat( SotClipboardFormatId::RTF );
+                        || _pDataHelper->HasFormat( SotClipboardFormatId::RTF )
+                        || _pDataHelper->HasFormat( SotClipboardFormatId::RICHTEXT );
 
         invalidate();
     }

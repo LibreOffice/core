@@ -3826,6 +3826,7 @@ sal_Int8 ScGridWindow::AcceptDrop( const AcceptDropEvent& rEvt )
                                  IsDropFormatSupported( SotClipboardFormatId::DRAWING ) ||
                                  IsDropFormatSupported( SotClipboardFormatId::SVXB ) ||
                                  IsDropFormatSupported( SotClipboardFormatId::RTF ) ||
+                                 IsDropFormatSupported( SotClipboardFormatId::RICHTEXT ) ||
                                  IsDropFormatSupported( SotClipboardFormatId::GDIMETAFILE ) ||
                                  IsDropFormatSupported( SotClipboardFormatId::PNG ) ||
                                  IsDropFormatSupported( SotClipboardFormatId::BITMAP ) ||
@@ -3925,10 +3926,10 @@ static SotClipboardFormatId lcl_GetDropFormatId( const uno::Reference<datatransf
             tools::SvRef<SotStorage> xStore( new SotStorage( *xStm ) );
             bDoRtf = ( ( aObjDesc.maClassName == SvGlobalName( SO3_SW_CLASSID ) ||
                          aObjDesc.maClassName == SvGlobalName( SO3_SWWEB_CLASSID ) )
-                       && aDataHelper.HasFormat( SotClipboardFormatId::RTF ) );
+                       && ( aDataHelper.HasFormat( SotClipboardFormatId::RTF ) || aDataHelper.HasFormat( SotClipboardFormatId::RICHTEXT ) ) );
         }
         if ( bDoRtf )
-            nFormatId = SotClipboardFormatId::RTF;
+            nFormatId = aDataHelper.HasFormat( SotClipboardFormatId::RTF ) ? SotClipboardFormatId::RTF : SotClipboardFormatId::RICHTEXT;
         else
             nFormatId = SotClipboardFormatId::EMBED_SOURCE;
     }
@@ -3950,6 +3951,8 @@ static SotClipboardFormatId lcl_GetDropFormatId( const uno::Reference<datatransf
         nFormatId = SotClipboardFormatId::LINK_SOURCE_OLE;
     else if ( aDataHelper.HasFormat( SotClipboardFormatId::RTF ) )
         nFormatId = SotClipboardFormatId::RTF;
+    else if ( aDataHelper.HasFormat( SotClipboardFormatId::RICHTEXT ) )
+        nFormatId = SotClipboardFormatId::RICHTEXT;
     else if ( aDataHelper.HasFormat( SotClipboardFormatId::HTML ) )
         nFormatId = SotClipboardFormatId::HTML;
     else if ( aDataHelper.HasFormat( SotClipboardFormatId::HTML_SIMPLE ) )

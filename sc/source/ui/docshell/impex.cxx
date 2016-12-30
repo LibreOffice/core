@@ -385,7 +385,7 @@ bool ScImportExport::ImportStream( SvStream& rStrm, const OUString& rBaseURL, So
         if( Dif2Doc( rStrm ) )
             return true;
     }
-    if( nFmt == SotClipboardFormatId::RTF )
+    if( nFmt == SotClipboardFormatId::RTF || nFmt == SotClipboardFormatId::RICHTEXT )
     {
         if( RTF2Doc( rStrm, rBaseURL ) )
             return true;
@@ -473,7 +473,7 @@ bool ScImportExport::ExportStream( SvStream& rStrm, const OUString& rBaseURL, So
         if( Doc2HTML( rStrm, rBaseURL ) )
             return true;
     }
-    if( nFmt == SotClipboardFormatId::RTF )
+    if( nFmt == SotClipboardFormatId::RTF || nFmt == SotClipboardFormatId::RICHTEXT )
     {
         if( Doc2RTF( rStrm ) )
             return true;
