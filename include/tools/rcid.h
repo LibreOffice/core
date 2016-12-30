@@ -41,7 +41,6 @@
 #define RSC_MENUITEM            (RSC_NOTYPE + 0x1d) // only used internally
 #define RSC_KEYCODE             (RSC_NOTYPE + 0x1f)
 #define RSC_IMAGE               (RSC_NOTYPE + 0x23)
-#define RSC_IMAGELIST           (RSC_NOTYPE + 0x24)
 
 #define RSC_STRINGARRAY         (RSC_NOTYPE + 0x79)
 

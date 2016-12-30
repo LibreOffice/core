@@ -37,43 +37,6 @@ ImageList::ImageList()
 {
 }
 
-ImageList::ImageList(const ResId& rResId)
-{
-    SAL_INFO( "vcl", "vcl: ImageList::ImageList( const ResId& rResId )" );
-
-    rResId.SetRT( RSC_IMAGELIST );
-
-    ResMgr* pResMgr = rResId.GetResMgr();
-
-    if( pResMgr && pResMgr->GetResource( rResId ) )
-    {
-        pResMgr->Increment( sizeof( RSHEADER_TYPE ) );
-
-        RscImageListFlags nObjMask = (RscImageListFlags)pResMgr->ReadLong();
-        pResMgr->ReadString(); //skip string
-
-        if( nObjMask & RscImageListFlags::IdList )
-        {
-            for( sal_Int32 i = 0, nCount = pResMgr->ReadLong(); i < nCount; ++i )
-                pResMgr->ReadLong();
-        }
-
-        sal_Int32 nCount = pResMgr->ReadLong();
-        ImplInit( static_cast< sal_uInt16 >( nCount ), Size() );
-
-        BitmapEx aEmpty;
-        for( sal_Int32 i = 0; i < nCount; ++i )
-        {
-            OUString aName = pResMgr->ReadString();
-            sal_uInt16 nId = static_cast< sal_uInt16 >( pResMgr->ReadLong() );
-            mpImplData->AddImage( aName, nId, aEmpty );
-        }
-
-        if( nObjMask & RscImageListFlags::IdCount )
-            pResMgr->ReadShort();
-    }
-}
-
 ImageList::ImageList(const std::vector< OUString >& rNameVector,
                      const OUString& rPrefix)
 {

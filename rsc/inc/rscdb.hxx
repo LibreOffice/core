@@ -93,7 +93,6 @@ class RscTypCont
     RscTop *    InitClassString( RscTop * pSuper );
     RscTop *    InitClassBitmap( RscTop * pSuper );
     RscTop *    InitClassImage( RscTop * pSuper, RscTop *pClassBitmap );
-    RscTop *    InitClassImageList( RscTop * pSuper, RscCont * pStrLst );
     RscTop *    InitClassKeyCode( RscTop * pSuper, RscEnum * pKey );
     RscTop *    InitClassMenuItem( RscTop * pSuper );
     RscTop *    InitClassMenu( RscTop * pSuper, RscTop * pMenuItem );

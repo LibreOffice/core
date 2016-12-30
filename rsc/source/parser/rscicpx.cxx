@@ -115,36 +115,6 @@ RscTop * RscTypCont::InitClassImage( RscTop * pSuper, RscTop * pClassBitmap )
     return pClassImage;
 }
 
-RscTop * RscTypCont::InitClassImageList( RscTop * pSuper, RscCont * pStrLst )
-{
-    Atom        nId;
-    RscTop *    pClassImageList;
-
-    // initialize class
-    nId = pHS->getID( "ImageList" );
-    pClassImageList = new RscClass( nId, RSC_IMAGELIST, pSuper );
-    pClassImageList->SetCallPar( *pStdPar1, *pStdPar2, *pStdParType );
-    aNmTb.Put( nId, CLASSNAME, pClassImageList );
-
-    nId = aNmTb.Put( "Prefix", VARNAME );
-    pClassImageList->SetVariable( nId, &aString );
-
-    RscCont * pCont = new RscCont( pHS->getID( "sal_uInt16 *" ), RSC_NOTYPE );
-    pCont->SetTypeClass( &aIdUShort );
-    aBaseLst.push_back( pCont );
-    nId = aNmTb.Put( "IdList", VARNAME );
-    pClassImageList->SetVariable( nId, pCont, nullptr, RSCVAR::NONE,
-                                      (sal_uInt32)RscImageListFlags::IdList );
-
-    nId = aNmTb.Put( "FileList", VARNAME );
-    pClassImageList->SetVariable( nId, pStrLst );
-
-    nId = aNmTb.Put( "IdCount", VARNAME );
-    pClassImageList->SetVariable( nId, &aUShort, nullptr, RSCVAR::NONE,
-                                  (sal_uInt32)RscImageListFlags::IdCount );
-    return pClassImageList;
-}
-
 RscTop * RscTypCont::InitClassKeyCode( RscTop * pSuper, RscEnum * pKey )
 {
     Atom        nId;

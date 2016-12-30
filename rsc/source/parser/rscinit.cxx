@@ -50,7 +50,6 @@ void RscTypCont::Init()
     RscTop   *  pClassStringArray;
     RscTop   *  pClassBitmap;
     RscTop   *  pClassImage;
-    RscTop   *  pClassImageList;
     RscTop   *  pClassKeyCode;
 
     Atom        nId;
@@ -121,9 +120,6 @@ void RscTypCont::Init()
 {
     pClassImage = InitClassImage( pClassMgr, pClassBitmap );
     pRoot->Insert( pClassImage );
-
-    pClassImageList = InitClassImageList( pClassMgr, pStringLongTupelList );
-    pRoot->Insert( pClassImageList );
 }
 {
     pClassKeyCode = InitClassKeyCode( pClassMgr, pKey );

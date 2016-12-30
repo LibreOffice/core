@@ -75,7 +75,6 @@ class VCL_DLLPUBLIC ImageList
 {
 public:
                     explicit ImageList();
-                    explicit ImageList( const ResId& rResId );
                     ImageList( const std::vector<OUString>& rNameVector,
                                const OUString& rPrefix);
 

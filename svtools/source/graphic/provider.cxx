@@ -294,26 +294,6 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadResource( const O
                         aBmpEx = aImage.GetBitmapEx();
                     }
                 }
-                else if( aResourceType == "imagelist" )
-                {
-                    aResId.SetRT( RSC_IMAGELIST );
-
-                    if( pResMgr->IsAvailable( aResId ) )
-                    {
-                        const ImageList aImageList( aResId );
-                        sal_Int32       nImageId = ( nIndex > -1 ) ? rResourceURL.getToken( 0, '/', nIndex ).toInt32() : 0;
-
-                        if( 0 < nImageId )
-                        {
-                            const Image aImage( aImageList.GetImage( sal::static_int_cast< sal_uInt16 >(nImageId) ) );
-                            aBmpEx = aImage.GetBitmapEx();
-                        }
-                        else
-                        {
-                            aBmpEx = aImageList.GetAsHorizontalStrip();
-                        }
-                    }
-                }
 
                 if( !aBmpEx.IsEmpty() )
                 {
