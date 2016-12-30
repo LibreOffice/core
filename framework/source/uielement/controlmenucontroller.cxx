@@ -45,11 +45,11 @@
 #include <memory>
 
 #include "svx/svxids.hrc"
+#include "svx/fmresids.hrc"
 
 // Copied from svx
 // Function-Id's
 #define RID_FMSHELL_CONVERSIONMENU (RID_FORMS_START + 4)
-#define RID_SVXIMGLIST_FMEXPL      (RID_FORMS_START + 0)
 
 static const sal_Int16 nConvertSlots[] =
 {
@@ -61,7 +61,6 @@ static const sal_Int16 nConvertSlots[] =
     SID_FM_CONVERTTO_RADIOBUTTON,
     SID_FM_CONVERTTO_GROUPBOX,
     SID_FM_CONVERTTO_COMBOBOX,
-//  SID_FM_CONVERTTO_GRID,
     SID_FM_CONVERTTO_IMAGEBUTTON,
     SID_FM_CONVERTTO_FILECONTROL,
     SID_FM_CONVERTTO_DATE,
@@ -75,30 +74,6 @@ static const sal_Int16 nConvertSlots[] =
     SID_FM_CONVERTTO_SPINBUTTON
 };
 
-static const sal_Int16 nCreateSlots[] =
-{
-    SID_FM_EDIT,
-    SID_FM_PUSHBUTTON,
-    SID_FM_FIXEDTEXT,
-    SID_FM_LISTBOX,
-    SID_FM_CHECKBOX,
-    SID_FM_RADIOBUTTON,
-    SID_FM_GROUPBOX,
-    SID_FM_COMBOBOX,
-//  SID_FM_DBGRID,
-    SID_FM_IMAGEBUTTON,
-    SID_FM_FILECONTROL,
-    SID_FM_DATEFIELD,
-    SID_FM_TIMEFIELD,
-    SID_FM_NUMERICFIELD,
-    SID_FM_CURRENCYFIELD,
-    SID_FM_PATTERNFIELD,
-    SID_FM_IMAGECONTROL,
-    SID_FM_FORMATTEDFIELD,
-    SID_FM_SCROLLBAR,
-    SID_FM_SPINBUTTON
-};
-
 static const char* aCommands[] =
 {
     ".uno:ConvertToEdit",
@@ -109,7 +84,6 @@ static const char* aCommands[] =
     ".uno:ConvertToRadio",
     ".uno:ConvertToGroup",
     ".uno:ConvertToCombo",
-//    ".uno:ConvertToGrid",
     ".uno:ConvertToImageBtn",
     ".uno:ConvertToFileControl",
     ".uno:ConvertToDate",
@@ -121,6 +95,30 @@ static const char* aCommands[] =
     ".uno:ConvertToFormatted",
     ".uno:ConvertToScrollBar",
     ".uno:ConvertToSpinButton"
+};
+
+static const sal_Int16 nImgIds[] =
+{
+    RID_SVXBMP_EDITBOX,
+    RID_SVXBMP_BUTTON,
+    RID_SVXBMP_FIXEDTEXT,
+    RID_SVXBMP_LISTBOX,
+    RID_SVXBMP_CHECKBOX,
+    RID_SVXBMP_RADIOBUTTON,
+    RID_SVXBMP_GROUPBOX,
+    RID_SVXBMP_COMBOBOX,
+    RID_SVXBMP_IMAGEBUTTON,
+    RID_SVXBMP_FILECONTROL,
+    RID_SVXBMP_DATEFIELD,
+    RID_SVXBMP_TIMEFIELD,
+    RID_SVXBMP_NUMERICFIELD,
+    RID_SVXBMP_CURRENCYFIELD,
+    RID_SVXBMP_PATTERNFIELD,
+    RID_SVXBMP_IMAGECONTROL,
+    RID_SVXBMP_FORMATTEDFIELD,
+    RID_SVXBMP_SCROLLBAR,
+    RID_SVXBMP_SPINBUTTON,
+    RID_SVXBMP_NAVIGATIONBAR
 };
 
 using namespace css;
@@ -206,21 +204,14 @@ ControlMenuController::ControlMenuController( const css::uno::Reference< css::un
 // private function
 void ControlMenuController::updateImagesPopupMenu( PopupMenu* pPopupMenu )
 {
-    std::unique_ptr<ResMgr> pResMgr(ResMgr::CreateResMgr("svx", Application::GetSettings().GetUILanguageTag()));
-    ResId aResId( RID_SVXIMGLIST_FMEXPL, *pResMgr );
-    aResId.SetRT( RSC_IMAGELIST );
-
-    if ( pResMgr->IsAvailable( aResId ))
+    std::unique_ptr<ResMgr> xResMgr(ResMgr::CreateResMgr("svx", Application::GetSettings().GetUILanguageTag()));
+    for (sal_uInt32 i=0; i < SAL_N_ELEMENTS(nConvertSlots); ++i)
     {
-        ImageList aImageList( aResId );
-        for ( sal_uInt32 i=0; i < SAL_N_ELEMENTS(nConvertSlots); ++i )
-        {
-            // das entsprechende Image dran
-            if ( m_bShowMenuImages )
-                pPopupMenu->SetItemImage( nConvertSlots[i], aImageList.GetImage(nCreateSlots[i]));
-            else
-                pPopupMenu->SetItemImage( nConvertSlots[i], Image() );
-        }
+        ResId aResId(nImgIds[i], *xResMgr);
+        if (m_bShowMenuImages && xResMgr->IsAvailable(aResId))
+            pPopupMenu->SetItemImage(nConvertSlots[i], Image(BitmapEx(aResId)));
+        else
+            pPopupMenu->SetItemImage(nConvertSlots[i], Image());
     }
 }
 
