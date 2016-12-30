@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_VIEWSETTINGS_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_VIEWSETTINGS_HXX
 
-#include <com/sun/star/table/CellRangeAddress.hpp>
 #include "addressconverter.hxx"
 #include "stylesbuffer.hxx"
 #include "worksheethelper.hxx"
@@ -178,14 +177,13 @@ private:
     typedef RefVector< WorkbookViewModel >                                      WorkbookViewModelVec;
     typedef RefMap< sal_Int16, SheetViewModel >                                 SheetViewModelMap;
     typedef ::std::map< sal_Int16, css::uno::Any >                 SheetPropertiesMap;
-    typedef ::std::map< sal_Int16, css::table::CellRangeAddress >  SheetUsedAreaMap;
+    typedef ::std::map< sal_Int16, ScRange >                                    SheetUsedAreaMap;
 
     WorkbookViewModelVec maBookViews;       /// Workbook view models.
     SheetViewModelMap   maSheetViews;       /// Active view model for each sheet.
     SheetPropertiesMap  maSheetProps;       /// Converted property sequences for each sheet.
     SheetUsedAreaMap    maSheetUsedAreas;   /// Used area (cell range) of every sheet.
-    css::table::CellRangeAddress
-                        maOleSize;          /// Visible area if this is an embedded OLE object.
+    ScRange             maOleSize;          /// Visible area if this is an embedded OLE object.
     bool                mbValidOleSize;     /// True = imported OLE size is a valid cell range.
 };
 

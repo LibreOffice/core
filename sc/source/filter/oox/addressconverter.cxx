@@ -453,6 +453,14 @@ bool AddressConverter::convertToCellRange( CellRangeAddress& orRange,
         validateCellRange( orRange, bAllowOverflow, bTrackOverflow );
 }
 
+bool AddressConverter::convertToCellRange( ScRange& orRange,
+        const OUString& rString, sal_Int16 nSheet, bool bAllowOverflow, bool bTrackOverflow )
+{
+    return
+        convertToCellRangeUnchecked( orRange, rString, nSheet ) &&
+        validateCellRange( orRange, bAllowOverflow, bTrackOverflow );
+}
+
 void AddressConverter::convertToCellRangeUnchecked( CellRangeAddress& orRange,
         const BinRange& rBinRange, sal_Int16 nSheet )
 {
@@ -475,6 +483,13 @@ void AddressConverter::convertToCellRangeUnchecked( ScRange& orRange,
 }
 
 bool AddressConverter::convertToCellRange( CellRangeAddress& orRange,
+        const BinRange& rBinRange, sal_Int16 nSheet, bool bAllowOverflow, bool bTrackOverflow )
+{
+    convertToCellRangeUnchecked( orRange, rBinRange, nSheet );
+    return validateCellRange( orRange, bAllowOverflow, bTrackOverflow );
+}
+
+bool AddressConverter::convertToCellRange( ScRange& orRange,
         const BinRange& rBinRange, sal_Int16 nSheet, bool bAllowOverflow, bool bTrackOverflow )
 {
     convertToCellRangeUnchecked( orRange, rBinRange, nSheet );

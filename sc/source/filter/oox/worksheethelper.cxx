@@ -975,8 +975,8 @@ void WorksheetGlobals::finalizeHyperlinkRanges()
         OUString aUrl = getHyperlinkUrl( *aIt );
         // try to insert URL into each cell of the range
         if( !aUrl.isEmpty() )
-            for( CellAddress aAddress( getSheetIndex(), aIt->maRange.StartColumn, aIt->maRange.StartRow ); aAddress.Row <= aIt->maRange.EndRow; ++aAddress.Row )
-                for( aAddress.Column = aIt->maRange.StartColumn; aAddress.Column <= aIt->maRange.EndColumn; ++aAddress.Column )
+            for( CellAddress aAddress( getSheetIndex(), aIt->maRange.aStart.Col(), aIt->maRange.aStart.Row() ); aAddress.Row <= aIt->maRange.aEnd.Row(); ++aAddress.Row )
+                for( aAddress.Column = aIt->maRange.aStart.Col(); aAddress.Column <= aIt->maRange.aEnd.Col(); ++aAddress.Column )
                     insertHyperlink( aAddress, aUrl );
     }
 }
