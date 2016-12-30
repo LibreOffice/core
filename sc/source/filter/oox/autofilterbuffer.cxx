@@ -678,13 +678,13 @@ void AutoFilterBuffer::finalizeImport( sal_Int16 nSheet )
 
                         // position of output data (if built-in defined name 'Extract' exists)
                         DefinedNameRef xExtractName = getDefinedNames().getByBuiltinId( BIFF_DEFNAME_EXTRACT, nSheet );
-                        CellRangeAddress aOutputRange;
+                        ScRange aOutputRange;
                         bool bHasOutputRange = xExtractName.get() && xExtractName->getAbsoluteRange( aOutputRange );
                         aDescProps.setProperty( PROP_CopyOutputData, bHasOutputRange );
                         if( bHasOutputRange )
                         {
                             aDescProps.setProperty( PROP_SaveOutputPosition, true );
-                            aDescProps.setProperty( PROP_OutputPosition, CellAddress( aOutputRange.Sheet, aOutputRange.StartColumn, aOutputRange.StartRow ) );
+                            aDescProps.setProperty( PROP_OutputPosition, CellAddress( aOutputRange.aStart.Tab(), aOutputRange.aStart.Col(), aOutputRange.aStart.Row() ) );
                         }
 
                         /*  Properties of the database range (must be set after
