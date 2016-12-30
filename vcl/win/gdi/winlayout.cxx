@@ -689,9 +689,6 @@ bool WinSalGraphics::DrawCachedGlyphs(const CommonSalLayout& rLayout)
 {
     HDC hDC = getHDC();
 
-    Rectangle aRect;
-    rLayout.GetBoundRect(*this, aRect);
-
     COLORREF color = GetTextColor(hDC);
     SalColor salColor = MAKE_SALCOLOR(GetRValue(color), GetGValue(color), GetBValue(color));
 
@@ -778,8 +775,7 @@ void WinSalGraphics::DrawTextLayout(const CommonSalLayout& rLayout)
         // TODO: check the performance of this 2nd approach at some stage and
         // switch to that if it performs well.
 
-        Rectangle aRect;
-        rLayout.GetBoundRect(*this, aRect);
+        basegfx::B2DRectangle aRect = rLayout.GetBoundRect(*this);
 
         WinOpenGLSalGraphicsImpl *pImpl = dynamic_cast<WinOpenGLSalGraphicsImpl*>(mpImpl.get());
 
@@ -792,7 +788,7 @@ void WinSalGraphics::DrawTextLayout(const CommonSalLayout& rLayout)
             // we are making changes to the DC, make sure we got a new one
             assert(aDC.getCompatibleHDC() != hDC);
 
-            RECT aWinRect = { aRect.Left(), aRect.Top(), aRect.Left() + aRect.GetWidth(), aRect.Top() + aRect.GetHeight() };
+            RECT aWinRect = { aRect.getMinX(), aRect.getMinY(), aRect.getMaxX(), aRect.getMaxY() };
             ::FillRect(aDC.getCompatibleHDC(), &aWinRect, static_cast<HBRUSH>(::GetStockObject(WHITE_BRUSH)));
 
             // setup the hidden DC with black color and white background, we will
