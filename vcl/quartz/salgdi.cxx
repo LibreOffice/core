@@ -393,15 +393,13 @@ bool AquaSalGraphics::GetGlyphOutline(const GlyphItem& rGlyph, basegfx::B2DPolyP
     return false;
 }
 
-bool AquaSalGraphics::GetGlyphBoundRect(const GlyphItem& rGlyph, Rectangle& rRect )
+basegfx::B2DRectangle AquaSalGraphics::GetGlyphBoundRect(const GlyphItem& rGlyph)
 {
     const int nFallbackLevel = rGlyph.mnFallbackLevel;
     if (nFallbackLevel < MAX_FALLBACK && mpTextStyle[nFallbackLevel])
-    {
-        const bool bRC = mpTextStyle[nFallbackLevel]->GetGlyphBoundRect(rGlyph, rRect);
-        return bRC;
-    }
-    return false;
+        return mpTextStyle[nFallbackLevel]->GetGlyphBoundRect(rGlyph);
+
+    return basegfx::B2DRectangle();
 }
 
 void AquaSalGraphics::DrawTextLayout(const CommonSalLayout& rLayout)

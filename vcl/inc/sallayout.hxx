@@ -25,6 +25,7 @@
 #include <vector>
 
 #include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/range/b2drectangle.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <tools/gen.hxx>
 #include <vcl/dllapi.h>
@@ -178,7 +179,7 @@ public:
     virtual int     GetNextGlyphs(int nLen, const GlyphItem** pGlyphs, Point& rPos, int&,
                                   const PhysicalFontFace** pFallbackFonts = nullptr) const = 0;
     virtual bool    GetOutline( SalGraphics&, basegfx::B2DPolyPolygonVector& ) const;
-    virtual bool    GetBoundRect( SalGraphics&, Rectangle& ) const;
+    basegfx::B2DRectangle GetBoundRect(SalGraphics&) const;
 
     // reference counting
     void            Release() const;

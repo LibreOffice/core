@@ -380,7 +380,7 @@ public:
                                             Ucs2UIntMap& rUnicodeEnc ) override;
             int             GetMinKashidaWidth();
 
-    virtual bool            GetGlyphBoundRect(const GlyphItem&, Rectangle&) override;
+    virtual basegfx::B2DRectangle GetGlyphBoundRect(const GlyphItem&) override;
     virtual bool            GetGlyphOutline(const GlyphItem&, basegfx::B2DPolyPolygon&) override;
 
     virtual SalLayout*      GetTextLayout( ImplLayoutArgs&, int nFallbackLevel ) override;

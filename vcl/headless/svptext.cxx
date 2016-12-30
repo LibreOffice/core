@@ -91,9 +91,9 @@ void SvpSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFont,
     m_aTextRenderImpl.GetGlyphWidths(pFont, bVertical, rWidths, rUnicodeEnc);
 }
 
-bool SvpSalGraphics::GetGlyphBoundRect(const GlyphItem& rGlyph, Rectangle& rRect)
+basegfx::B2DRectangle SvpSalGraphics::GetGlyphBoundRect(const GlyphItem& rGlyph)
 {
-    return m_aTextRenderImpl.GetGlyphBoundRect(rGlyph, rRect);
+    return m_aTextRenderImpl.GetGlyphBoundRect(rGlyph);
 }
 
 bool SvpSalGraphics::GetGlyphOutline(const GlyphItem& rGlyph, basegfx::B2DPolyPolygon& rPolyPoly)

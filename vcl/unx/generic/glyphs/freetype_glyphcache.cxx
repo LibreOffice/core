@@ -646,9 +646,11 @@ void FreetypeFont::InitGlyphData(const GlyphItem& rGlyph, GlyphData& rGD ) const
     ApplyGlyphTransform(rGlyph.IsVertical(), pGlyphFT);
 
     FT_BBox aBbox;
-    FT_Glyph_Get_CBox( pGlyphFT, FT_GLYPH_BBOX_PIXELS, &aBbox );
+    FT_Glyph_Get_CBox(pGlyphFT, FT_GLYPH_BBOX_UNSCALED, &aBbox);
 
-    rGD.SetBoundRect(Rectangle(aBbox.xMin, -aBbox.yMax, aBbox.xMax, -aBbox.yMin));
+    basegfx::B2DRectangle aRect(aBbox.xMin / 64.0, -aBbox.yMax / 64.0,
+                                aBbox.xMax / 64.0, -aBbox.yMin / 64.0);
+    rGD.SetBoundRect(aRect);
 
     FT_Done_Glyph( pGlyphFT );
 }
