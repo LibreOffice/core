@@ -73,20 +73,17 @@ class LoadSaveTest(unittest.TestCase):
 
             filepath = os.path.abspath("FIXME")
             if os.name == "nt":
-                source_file = "file:///" + filepath + "/" + quote(self.file_name)
+                source_file = ''.join(("file:///", filepath, "/", quote(self.file_name)))
             else:
-                source_file = "file://" + quote(filepath) + "/" + quote(self.file_name)
+                source_file = ''.join(("file://", quote(filepath), "/", quote(self.file_name)))
+
             self.xDoc = desktop.loadComponentFromURL(source_file, "_blank", 0, load_props)
             assert(self.xDoc)
 
             if os.name == "nt":
-                target_file = "file:///" + self.m_TargetDir + quote(self.m_SourceDir) + "/" + quote(self.file_name)
+                target_file = ''.join(("file:///", self.m_TargetDir, quote(self.m_SourceDir), "/", quote(self.file_name)))
             else:
-                target_file = "file://" +
-                            quote(self.m_TargetDir) +
-                            quote(self.m_SourceDir) +
-                            "/" +
-                            quote(self.fileName)
+                target_file = ''.join(("file://", quote(self.m_TargetDir), quote(self.m_SourceDir), "/", quote(self.fileName)))
 
             p1 = PropertyValue()
             PropValue = uno.Any("[]com.sun.star.beans.PropertyValue", (p1,))
@@ -98,7 +95,8 @@ class LoadSaveTest(unittest.TestCase):
     def getDirAndFile(self, dir):
 
         root2 = os.mkdir(dir)
-        root = open(dir + "/" + dir + ".odt", 'a')
+        root_path = ''.join((dir, "/", dir, ".odt"))
+        root = open(root_path, 'a')
 
         self.getDirAndFileNames(dir)
         return self.dirs, self.files
@@ -129,5 +127,6 @@ class LoadSaveTest(unittest.TestCase):
                 f = os.mkdir(target + dir)
                 self.assertTrue(os.path.exists(target + dir))
 
-        root = open(target + dir + "/" + self.m_SourceDir + ".odt", 'a')
-        filepath = os.path.abspath(target + dir + "/" + self.m_SourceDir + ".odt")
+        target_path = ''.join((target, dir, "/", self.m_SourceDir, ".odt"))
+        root = open(target_path, 'a')
+        filepath = os.path.abspath(target_path)
