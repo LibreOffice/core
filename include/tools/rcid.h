@@ -36,7 +36,6 @@
 #define RSC_RESOURCE            (RSC_NOTYPE + 0x10)
 #define RSC_STRING              (RSC_NOTYPE + 0x11)
 #define RSC_BITMAP              (RSC_NOTYPE + 0x13)
-#define RSC_ACCEL               (RSC_NOTYPE + 0x1a)
 #define RSC_MENU                (RSC_NOTYPE + 0x1c)
 #define RSC_MENUITEM            (RSC_NOTYPE + 0x1d) // only used internally
 #define RSC_IMAGE               (RSC_NOTYPE + 0x23)
