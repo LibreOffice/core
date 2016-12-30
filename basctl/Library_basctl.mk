@@ -68,7 +68,7 @@ $(eval $(call gb_Library_add_linked_libs,basctl,\
 
 ifeq ($(GUI),WNT)
 $(eval $(call gb_Library_add_linked_libs,basctl,\
-	shell \
+	shell32 \
 ))
 endif
 
