@@ -152,7 +152,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
     }
 }
 
-bool CoreTextStyle::GetGlyphBoundRect(const GlyphItem& rGlyph, Rectangle& rRect ) const
+basegfx::B2DRectangle CoreTextStyle::GetGlyphBoundRect(const GlyphItem& rGlyph) const
 {
     CGGlyph nCGGlyph = rGlyph.maGlyphId;
     CTFontRef aCTFontRef = static_cast<CTFontRef>(CFDictionaryGetValue( mpStyleDict, kCTFontAttributeName ));
@@ -166,11 +166,10 @@ bool CoreTextStyle::GetGlyphBoundRect(const GlyphItem& rGlyph, Rectangle& rRect 
     if (mfFontRotation && !rGlyph.IsVertical())
         aCGRect = CGRectApplyAffineTransform(aCGRect, CGAffineTransformMakeRotation(mfFontRotation));
 
-    rRect.Left()   = lrint( aCGRect.origin.x );
-    rRect.Top()    = lrint(-aCGRect.origin.y );
-    rRect.Right()  = lrint( aCGRect.origin.x + aCGRect.size.width );
-    rRect.Bottom() = lrint( aCGRect.origin.y - aCGRect.size.height );
-    return true;
+    basegfx::B2DRectangle rRect(aCGRect.origin.x, -aCGRect.origin.y,
+                                aCGRect.origin.x + aCGRect.size.width,
+                                aCGRect.origin.y - aCGRect.size.height);
+    return rRect;
 }
 
 // callbacks from CTFontCreatePathForGlyph+CGPathApply for GetGlyphOutline()
