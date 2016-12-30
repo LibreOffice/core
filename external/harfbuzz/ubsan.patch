@@ -52,3 +52,13 @@
    unsigned int da, db;
    const char *p;
  
+--- src/hb-private.hh
++++ src/hb-private.hh
+@@ -466,6 +466,7 @@
+   template <typename T>
+   inline const Type *bsearch (T *key) const
+   {
++    if (len == 0) return nullptr;
+     return (const Type *) ::bsearch (key, array, len, sizeof (Type), (hb_compare_func_t) Type::cmp);
+   }
+ 
