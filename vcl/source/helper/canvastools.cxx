@@ -344,16 +344,12 @@ namespace vcl
 
         ::Point pointFromB2DPoint( const basegfx::B2DPoint& rPoint )
         {
-            return ::Point( FRound( rPoint.getX() ),
-                            FRound( rPoint.getY() ) );
+            return pointFromB2IPoint(basegfx::fround(rPoint));
         }
 
         ::Rectangle rectangleFromB2DRectangle( const basegfx::B2DRange& rRect )
         {
-            return ::Rectangle( FRound( rRect.getMinX() ),
-                                FRound( rRect.getMinY() ),
-                                FRound( rRect.getMaxX() ),
-                                FRound( rRect.getMaxY() ) );
+            return rectangleFromB2IRectangle(basegfx::fround(rRect));
         }
 
         Point pointFromB2IPoint( const basegfx::B2IPoint& rPoint )
