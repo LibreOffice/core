@@ -451,6 +451,11 @@ public:
                             const OUString& rString,
                             sal_Int16 nSheet,
                             bool bAllowOverflow, bool bTrackOverflow );
+    bool                convertToCellRange(
+                            ScRange& orRange,
+                            const OUString& rString,
+                            sal_Int16 nSheet,
+                            bool bAllowOverflow, bool bTrackOverflow );
 
     /** Converts the passed range to a cell range address, without checking any
         sheet limits.
@@ -496,6 +501,12 @@ public:
                             const BinRange& rBinRange,
                             sal_Int16 nSheet,
                             bool bAllowOverflow, bool bTrackOverflow );
+    bool                convertToCellRange(
+                            ScRange& orRange,
+                            const BinRange& rBinRange,
+                            sal_Int16 nSheet,
+                            bool bAllowOverflow, bool bTrackOverflow );
+
 
     /** Tries to restrict the passed cell range list to current sheet limits.
 
