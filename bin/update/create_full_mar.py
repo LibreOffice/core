@@ -27,6 +27,10 @@ def main():
     workdir = sys.argv[2]
     product_name = sys.argv[1]
 
+    if len(update_config) == 0:
+        print("missing update config")
+        sys.exit(1)
+
     config = parse_config(update_config)
 
     tar_dir = os.path.join(workdir, "installation", product_name, "archive", "install", "en-US")
