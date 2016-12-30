@@ -20,6 +20,7 @@
 #include <swtable.hxx>
 #include <tblsel.hxx>
 #include <tblrwcl.hxx>
+#include <ndtxt.hxx>
 #include <node.hxx>
 #include <UndoTable.hxx>
 #include <pam.hxx>
@@ -940,7 +941,23 @@ bool SwTable::PrepareMerge( const SwPaM& rPam, SwSelBoxes& rBoxes,
                     pFormat->SetFormatAttr( SwFormatFrameSize( ATT_VAR_SIZE, 0, 0 ) );
                 }
                 else
+                {
                     pBox->ChgFrameFormat( static_cast<SwTableBoxFormat*>(pNewFormat) );
+                    // remove numbering from cells that will be disabled in the merge
+                    if( nCurrLine )
+                    {
+                        SwPaM aPam( *pBox->GetSttNd(), 0 );
+                        aPam.GetPoint()->nNode++;
+                        SwTextNode* pNd = aPam.GetNode().GetTextNode();
+                        while( pNd )
+                        {
+                            pNd->SetCountedInList( false );
+
+                            aPam.GetPoint()->nNode++;
+                            pNd = aPam.GetNode().GetTextNode();
+                        }
+                    }
+                }
             }
         }
         if( pLastBox ) // Robust
