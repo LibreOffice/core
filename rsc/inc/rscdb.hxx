@@ -102,7 +102,6 @@ public:
     RscRange            aShort;
     RscRange            aUShort;
     RscLongEnumRange    aEnumLong;
-    RscIdRange          aIdUShort;
     RscIdRange          aIdNoZeroUShort;
     RscString           aString;
     RscString           aStringLiteral;

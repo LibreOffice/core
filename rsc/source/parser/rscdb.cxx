@@ -49,7 +49,6 @@ RscTypCont::RscTypCont( RscError * pErrHdl,
     , aShort( pHS->getID( "short" ), RSC_NOTYPE )
     , aUShort( pHS->getID( "sal_uInt16" ), RSC_NOTYPE )
     , aEnumLong( pHS->getID( "enum_long" ), RSC_NOTYPE )
-    , aIdUShort( pHS->getID( "IDUSHORT" ), RSC_NOTYPE )
     , aIdNoZeroUShort( pHS->getID( "IDUSHORT" ), RSC_NOTYPE )
     , aString( pHS->getID( "Chars" ), RSC_NOTYPE )
     , aStringLiteral( pHS->getID( "Chars" ), RSC_NOTYPE )
@@ -176,7 +175,6 @@ RscTypCont::~RscTypCont()
     aBool.Pre_dtor();
     aShort.Pre_dtor();
     aUShort.Pre_dtor();
-    aIdUShort.Pre_dtor();
     aIdNoZeroUShort.Pre_dtor();
     aString.Pre_dtor();
     aVersion.pClass->Pre_dtor();
