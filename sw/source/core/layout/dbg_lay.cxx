@@ -750,7 +750,7 @@ void SwEnterLeave::Dtor()
     if( pImpl )
     {
         pImpl->Leave();
-        delete pImpl;
+        pImpl->reset();
     }
 }
 

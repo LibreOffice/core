@@ -84,7 +84,7 @@ public:
 
 class SwEnterLeave
 {
-    SwImplEnterLeave* pImpl;
+    std::unique_ptr<SwImplEnterLeave> pImpl;
     void Ctor( const SwFrame* pFrame, PROT nFunc, DbgAction nAct, void* pPar );
     void Dtor();
 
