@@ -1610,6 +1610,19 @@ bool FormulaProcessorBase::extractCellRange( CellRangeAddress& orRange,
     return false;
 }
 
+bool FormulaProcessorBase::extractCellRange( ScRange& orRange,
+        const ApiTokenSequence& rTokens, bool bAllowRelative ) const
+{
+    ApiCellRangeList aRanges;
+    lclProcessRef( aRanges, extractReference( rTokens ), bAllowRelative, -1 );
+    if( !aRanges.empty() )
+    {
+        orRange = aRanges.getBaseAddress();
+        return true;
+    }
+    return false;
+}
+
 void FormulaProcessorBase::extractCellRangeList( ApiCellRangeList& orRanges,
         const ApiTokenSequence& rTokens, bool bAllowRelative, sal_Int32 nFilterBySheet ) const
 {
