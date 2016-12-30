@@ -84,7 +84,6 @@ class RscTypCont
     inline void SETCONST( RscConst *p1, const char * p2, KeyFuncType p3 ) { SETCONST(p1, p2, static_cast<sal_uInt32>(p3)); }
     inline void SETCONST( RscConst *p1, Atom p2, MenuItemBits p3 ) { SETCONST(p1, p2, static_cast<sal_uInt32>(p3)); }
     RscEnum *   InitFieldUnitsType();
-    RscEnum *   InitKey();
     RscTupel *  InitStringLongTupel();
     static RscCont  *  InitStringLongTupelList( RscTupel * pStringLongTupel );
     RscArray *  InitLangStringLongTupelList( RscCont * pStrLongTupelLst );
@@ -93,7 +92,6 @@ class RscTypCont
     RscTop *    InitClassString( RscTop * pSuper );
     RscTop *    InitClassBitmap( RscTop * pSuper );
     RscTop *    InitClassImage( RscTop * pSuper, RscTop *pClassBitmap );
-    RscTop *    InitClassKeyCode( RscTop * pSuper, RscEnum * pKey );
     RscTop *    InitClassMenuItem( RscTop * pSuper );
     RscTop *    InitClassMenu( RscTop * pSuper, RscTop * pMenuItem );
 

@@ -40,7 +40,6 @@
 
 void RscTypCont::Init()
 {
-    RscEnum *   pKey;
     RscTupel *  pStringLongTupel;
     RscCont  *  pStringLongTupelList;
     RscArray *  pLangStringLongTupelList;
@@ -50,7 +49,6 @@ void RscTypCont::Init()
     RscTop   *  pClassStringArray;
     RscTop   *  pClassBitmap;
     RscTop   *  pClassImage;
-    RscTop   *  pClassKeyCode;
 
     Atom        nId;
 
@@ -81,7 +79,6 @@ void RscTypCont::Init()
 {
     aLangType.Init( aNmTb );
     aBaseLst.push_back( InitFieldUnitsType() );
-    aBaseLst.push_back( pKey             = InitKey() );
 
     aBaseLst.push_back( pStringLongTupel = InitStringLongTupel() );
     aBaseLst.push_back( pStringLongTupelList = InitStringLongTupelList( pStringLongTupel ) );
@@ -118,10 +115,6 @@ void RscTypCont::Init()
 {
     pClassImage = InitClassImage( pClassMgr, pClassBitmap );
     pRoot->Insert( pClassImage );
-}
-{
-    pClassKeyCode = InitClassKeyCode( pClassMgr, pKey );
-    pRoot->Insert( pClassKeyCode );
 }
 {
     RscTop* pClassMenuItem = InitClassMenuItem(pClassMgr);
