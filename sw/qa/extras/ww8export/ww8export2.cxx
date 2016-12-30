@@ -33,6 +33,10 @@ DECLARE_WW8EXPORT_TEST(testTdf41542_borderlessPadding, "tdf41542_borderlessPaddi
     CPPUNIT_ASSERT_EQUAL( 3, getPages() );
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf49102_mergedCellNumbering, "tdf49102_mergedCellNumbering.doc")
+{
+    CPPUNIT_ASSERT_EQUAL( OUString("2."), parseDump("/root/page/body/tab/row[4]/cell/txt/Special[@nType='POR_NUMBER']", "rText") );
+}
 
 DECLARE_WW8EXPORT_TEST(testTdf89377, "tdf89377_tableWithBreakBeforeParaStyle.doc")
 {
