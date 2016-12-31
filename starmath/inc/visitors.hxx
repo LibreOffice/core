@@ -388,11 +388,11 @@ public:
     using SmDefaultingVisitor::Visit;
 private:
     /** Reference to drawing device */
-    OutputDevice& rDev;
+    OutputDevice& mrDev;
     /** True if  aSelectionArea have been initialized */
-    bool bHasSelectionArea;
+    bool mbHasSelectionArea;
     /** The current area that is selected */
-    Rectangle aSelectionArea;
+    Rectangle maSelectionArea;
     /** Extend the area that must be selected  */
     void ExtendSelectionArea(const Rectangle& rArea);
     /** Default visiting method */

@@ -1840,39 +1840,39 @@ void SmCloningVisitor::Visit( SmVerticalBraceNode* pNode )
 // SmSelectionDrawingVisitor
 
 SmSelectionDrawingVisitor::SmSelectionDrawingVisitor( OutputDevice& rDevice, SmNode* pTree, const Point& rOffset )
-    : rDev( rDevice ) {
-    bHasSelectionArea = false;
-
+    : mrDev( rDevice )
+    , mbHasSelectionArea( false )
+{
     //Visit everything
     SAL_WARN_IF( !pTree, "starmath", "pTree can't be null!" );
     if( pTree )
         pTree->Accept( this );
 
     //Draw selection if there's any
-    if( bHasSelectionArea ){
-        aSelectionArea.Move( rOffset.X( ), rOffset.Y( ) );
+    if( mbHasSelectionArea ){
+        maSelectionArea.Move( rOffset.X( ), rOffset.Y( ) );
 
         //Save device state
-        rDev.Push( PushFlags::LINECOLOR | PushFlags::FILLCOLOR );
+        mrDev.Push( PushFlags::LINECOLOR | PushFlags::FILLCOLOR );
         //Change colors
-        rDev.SetLineColor( );
-        rDev.SetFillColor( Color( COL_LIGHTGRAY ) );
+        mrDev.SetLineColor( );
+        mrDev.SetFillColor( Color( COL_LIGHTGRAY ) );
 
         //Draw rectangle
-        rDev.DrawRect( aSelectionArea );
+        mrDev.DrawRect( maSelectionArea );
 
         //Restore device state
-        rDev.Pop( );
+        mrDev.Pop( );
     }
 }
 
 void SmSelectionDrawingVisitor::ExtendSelectionArea(const Rectangle& rArea)
 {
-    if ( ! bHasSelectionArea ) {
-        aSelectionArea = rArea;
-        bHasSelectionArea = true;
+    if ( ! mbHasSelectionArea ) {
+        maSelectionArea = rArea;
+        mbHasSelectionArea = true;
     } else
-        aSelectionArea.Union(rArea);
+        maSelectionArea.Union(rArea);
 }
 
 void SmSelectionDrawingVisitor::DefaultVisit( SmNode* pNode )
@@ -1897,19 +1897,19 @@ void SmSelectionDrawingVisitor::VisitChildren( SmNode* pNode )
 void SmSelectionDrawingVisitor::Visit( SmTextNode* pNode )
 {
     if( pNode->IsSelected( ) ){
-        rDev.Push( PushFlags::TEXTCOLOR | PushFlags::FONT );
+        mrDev.Push( PushFlags::TEXTCOLOR | PushFlags::FONT );
 
-        rDev.SetFont( pNode->GetFont( ) );
+        mrDev.SetFont( pNode->GetFont( ) );
         Point Position = pNode->GetTopLeft( );
-        long left   = Position.getX( ) + rDev.GetTextWidth( pNode->GetText( ), 0, pNode->GetSelectionStart( ) );
-        long right  = Position.getX( ) + rDev.GetTextWidth( pNode->GetText( ), 0, pNode->GetSelectionEnd( ) );
+        long left   = Position.getX( ) + mrDev.GetTextWidth( pNode->GetText( ), 0, pNode->GetSelectionStart( ) );
+        long right  = Position.getX( ) + mrDev.GetTextWidth( pNode->GetText( ), 0, pNode->GetSelectionEnd( ) );
         long top    = Position.getY( );
         long bottom = top + pNode->GetHeight( );
         Rectangle rect( left, top, right, bottom );
 
         ExtendSelectionArea( rect );
 
-        rDev.Pop( );
+        mrDev.Pop( );
     }
 }
 
