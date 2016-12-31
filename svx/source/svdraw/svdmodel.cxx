@@ -122,8 +122,8 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbe
     eObjUnit=SdrEngineDefaults::GetMapUnit();
     eUIUnit=FUNIT_MM;
     aUIScale=Fraction(1,1);
-    nUIUnitKomma=0;
-    bUIOnlyKomma=false;
+    nUIUnitComma=0;
+    bUIOnlyComma=false;
     pLayerAdmin=nullptr;
     pItemPool=pPool;
     bMyPool=false;
@@ -930,23 +930,23 @@ void SdrModel::ImpSetUIUnit()
     }
 
     // set start values
-    nUIUnitKomma = 0;
+    nUIUnitComma = 0;
     sal_Int64 nMul(1);
     sal_Int64 nDiv(1);
 
     // normalize on meters resp. inch
     switch (eObjUnit)
     {
-        case MapUnit::Map100thMM   : nUIUnitKomma+=5; break;
-        case MapUnit::Map10thMM    : nUIUnitKomma+=4; break;
-        case MapUnit::MapMM         : nUIUnitKomma+=3; break;
-        case MapUnit::MapCM         : nUIUnitKomma+=2; break;
-        case MapUnit::Map1000thInch: nUIUnitKomma+=3; break;
-        case MapUnit::Map100thInch : nUIUnitKomma+=2; break;
-        case MapUnit::Map10thInch  : nUIUnitKomma+=1; break;
-        case MapUnit::MapInch       : nUIUnitKomma+=0; break;
+        case MapUnit::Map100thMM   : nUIUnitComma+=5; break;
+        case MapUnit::Map10thMM    : nUIUnitComma+=4; break;
+        case MapUnit::MapMM         : nUIUnitComma+=3; break;
+        case MapUnit::MapCM         : nUIUnitComma+=2; break;
+        case MapUnit::Map1000thInch: nUIUnitComma+=3; break;
+        case MapUnit::Map100thInch : nUIUnitComma+=2; break;
+        case MapUnit::Map10thInch  : nUIUnitComma+=1; break;
+        case MapUnit::MapInch       : nUIUnitComma+=0; break;
         case MapUnit::MapPoint      : nDiv=72;     break;          // 1Pt   = 1/72"
-        case MapUnit::MapTwip       : nDiv=144; nUIUnitKomma++; break; // 1Twip = 1/1440"
+        case MapUnit::MapTwip       : nDiv=144; nUIUnitComma++; break; // 1Twip = 1/1440"
         case MapUnit::MapPixel      : break;
         case MapUnit::MapSysFont    : break;
         case MapUnit::MapAppFont    : break;
@@ -964,21 +964,21 @@ void SdrModel::ImpSetUIUnit()
     {
         case FUNIT_NONE   : break;
         // metric
-        case FUNIT_100TH_MM: nUIUnitKomma-=5; break;
-        case FUNIT_MM     : nUIUnitKomma-=3; break;
-        case FUNIT_CM     : nUIUnitKomma-=2; break;
-        case FUNIT_M      : nUIUnitKomma+=0; break;
-        case FUNIT_KM     : nUIUnitKomma+=3; break;
+        case FUNIT_100TH_MM: nUIUnitComma-=5; break;
+        case FUNIT_MM     : nUIUnitComma-=3; break;
+        case FUNIT_CM     : nUIUnitComma-=2; break;
+        case FUNIT_M      : nUIUnitComma+=0; break;
+        case FUNIT_KM     : nUIUnitComma+=3; break;
         // Inch
-        case FUNIT_TWIP   : nMul=144; nUIUnitKomma--;  break;  // 1Twip = 1/1440"
+        case FUNIT_TWIP   : nMul=144; nUIUnitComma--;  break;  // 1Twip = 1/1440"
         case FUNIT_POINT  : nMul=72;     break;            // 1Pt   = 1/72"
         case FUNIT_PICA   : nMul=6;      break;            // 1Pica = 1/6"
         case FUNIT_INCH   : break;                         // 1"    = 1"
         case FUNIT_FOOT   : nDiv*=12;    break;            // 1Ft   = 12"
-        case FUNIT_MILE   : nDiv*=6336; nUIUnitKomma++; break; // 1mile = 63360"
+        case FUNIT_MILE   : nDiv*=6336; nUIUnitComma++; break; // 1mile = 63360"
         // other
         case FUNIT_CUSTOM : break;
-        case FUNIT_PERCENT: nUIUnitKomma+=2; break;
+        case FUNIT_PERCENT: nUIUnitComma+=2; break;
         // TODO: Add code to handle the following if needed (added to remove warning)
         case FUNIT_CHAR   : break;
         case FUNIT_LINE   : break;
@@ -994,7 +994,7 @@ void SdrModel::ImpSetUIUnit()
 
     if (bMapInch && bUIMetr)
     {
-        nUIUnitKomma += 4;
+        nUIUnitComma += 4;
         nMul *= 254;
     }
 
@@ -1004,7 +1004,7 @@ void SdrModel::ImpSetUIUnit()
 
     if (bMapMetr && bUIInch)
     {
-        nUIUnitKomma -= 4;
+        nUIUnitComma -= 4;
         nDiv *= 254;
     }
 
@@ -1028,20 +1028,20 @@ void SdrModel::ImpSetUIUnit()
     // shorten trailing zeros for dividend
     while(0 == (nMul % 10))
     {
-        nUIUnitKomma--;
+        nUIUnitComma--;
         nMul /= 10;
     }
 
     // shorten trailing zeros for divisor
     while(0 == (nDiv % 10))
     {
-        nUIUnitKomma++;
+        nUIUnitComma++;
         nDiv /= 10;
     }
 
     // end preparations, set member values
     aUIUnitFact = Fraction(sal_Int32(nMul), sal_Int32(nDiv));
-    bUIOnlyKomma = (nMul == nDiv);
+    bUIOnlyComma = (nMul == nDiv);
     TakeUnitStr(eUIUnit, aUIUnitStr);
 }
 
@@ -1202,45 +1202,45 @@ void SdrModel::TakeMetricStr(long nVal, OUString& rStr, bool bNoUnitChars, sal_I
         nNumDigits = LocaleDataWrapper::getNumDigits();
     }
 
-    sal_Int32 nKomma(nUIUnitKomma);
+    sal_Int32 nComma(nUIUnitComma);
 
-    if(nKomma > nNumDigits)
+    if(nComma > nNumDigits)
     {
-        const sal_Int32 nDiff(nKomma - nNumDigits);
+        const sal_Int32 nDiff(nComma - nNumDigits);
         const double fFactor(pow(10.0, static_cast<const int>(nDiff)));
 
         fLocalValue /= fFactor;
-        nKomma = nNumDigits;
+        nComma = nNumDigits;
     }
-    else if(nKomma < nNumDigits)
+    else if(nComma < nNumDigits)
     {
-        const sal_Int32 nDiff(nNumDigits - nKomma);
+        const sal_Int32 nDiff(nNumDigits - nComma);
         const double fFactor(pow(10.0, static_cast<const int>(nDiff)));
 
         fLocalValue *= fFactor;
-        nKomma = nNumDigits;
+        nComma = nNumDigits;
     }
 
     OUStringBuffer aBuf;
     aBuf.append(static_cast<sal_Int32>(fLocalValue + 0.5));
 
-    if(nKomma < 0)
+    if(nComma < 0)
     {
-        // negative nKomma (decimal point) means: add zeros
-        sal_Int32 nCount(-nKomma);
+        // negative nComma (decimal point) means: add zeros
+        sal_Int32 nCount(-nComma);
 
         for(sal_Int32 i=0; i<nCount; i++)
             aBuf.append('0');
 
-        nKomma = 0;
+        nComma = 0;
     }
 
     // the second condition needs to be <= since inside this loop
     // also the leading zero is inserted.
-    if (nKomma > 0 && aBuf.getLength() <= nKomma)
+    if (nComma > 0 && aBuf.getLength() <= nComma)
     {
         // if necessary, add zeros before the decimal point
-        sal_Int32 nCount = nKomma - aBuf.getLength();
+        sal_Int32 nCount = nComma - aBuf.getLength();
 
         if(nCount >= 0 && LocaleDataWrapper::isNumLeadingZero())
             nCount++;
@@ -1251,11 +1251,11 @@ void SdrModel::TakeMetricStr(long nVal, OUString& rStr, bool bNoUnitChars, sal_I
 
     sal_Unicode cDec( rLoc.getNumDecimalSep()[0] );
 
-    // insert KommaChar (decimal point character)
-    sal_Int32 nVorKomma = aBuf.getLength() - nKomma;
+    // insert CommaChar (decimal point character)
+    sal_Int32 nVorComma = aBuf.getLength() - nComma;
 
-    if(nKomma > 0)
-        aBuf.insert(nVorKomma, cDec);
+    if(nComma > 0)
+        aBuf.insert(nVorComma, cDec);
 
     if(!LocaleDataWrapper::isNumTrailingZeros())
     {
@@ -1269,13 +1269,13 @@ void SdrModel::TakeMetricStr(long nVal, OUString& rStr, bool bNoUnitChars, sal_I
     }
 
     // if necessary, add separators before every third digit
-    if( nVorKomma > 3 )
+    if( nVorComma > 3 )
     {
         const OUString& aThoSep( rLoc.getNumThousandSep() );
         if ( !aThoSep.isEmpty() )
         {
             sal_Unicode cTho( aThoSep[0] );
-            sal_Int32 i(nVorKomma - 3);
+            sal_Int32 i(nVorComma - 3);
 
             while(i > 0)
             {
