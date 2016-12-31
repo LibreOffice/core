@@ -4203,8 +4203,8 @@ StackVar ScInterpreter::Interpret()
                 case ocExpDist_MS       : ScExpDist();                  break;
                 case ocBinomDist        :
                 case ocBinomDist_MS     : ScBinomDist();                break;
-                case ocPoissonDist      :
-                case ocPoissonDist_MS   : ScPoissonDist();              break;
+                case ocPoissonDist      : ScPoissonDist( true );        break;
+                case ocPoissonDist_MS   : ScPoissonDist( false );       break;
                 case ocCombin           : ScCombin();                   break;
                 case ocCombinA          : ScCombinA();                  break;
                 case ocPermut           : ScPermut();                   break;

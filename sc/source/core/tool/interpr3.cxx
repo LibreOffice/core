@@ -1765,61 +1765,51 @@ void ScInterpreter::ScWeibull()
     }
 }
 
-void ScInterpreter::ScPoissonDist()
+void ScInterpreter::ScPoissonDist( bool bODFF )
 {
     sal_uInt8 nParamCount = GetByte();
-    if ( MustHaveParamCount( nParamCount, 2, 3 ) )
+    if ( MustHaveParamCount( nParamCount, ( bODFF ? 2 : 3 ), 3 ) )
     {
-        bool bCumulative = nParamCount != 3 || GetBool(); // default cumulative
+        bool bCumulative = nParamCount != 3 || GetBool();         // default cumulative
         double lambda    = GetDouble();                           // Mean
         double x         = ::rtl::math::approxFloor(GetDouble()); // discrete distribution
-        if (lambda < 0.0 || x < 0.0)
+        if (lambda <= 0.0 || x < 0.0)
             PushIllegalArgument();
         else if (!bCumulative)                            // Probability mass function
         {
-            if (lambda == 0.0)
-                PushInt(0);
+            if (lambda >712.0)    // underflow in exp(-lambda)
+            {   // accuracy 11 Digits
+                PushDouble( exp(x*log(lambda)-lambda-GetLogGamma(x+1.0)));
+            }
             else
             {
-                if (lambda >712)    // underflow in exp(-lambda)
-                {   // accuracy 11 Digits
-                    PushDouble( exp(x*log(lambda)-lambda-GetLogGamma(x+1.0)));
-                }
-                else
-                {
-                    double fPoissonVar = 1.0;
-                    for ( double f = 0.0; f < x; ++f )
-                        fPoissonVar *= lambda / ( f + 1.0 );
-                    PushDouble( fPoissonVar * exp( -lambda ) );
-                }
+                double fPoissonVar = 1.0;
+                for ( double f = 0.0; f < x; ++f )
+                    fPoissonVar *= lambda / ( f + 1.0 );
+                PushDouble( fPoissonVar * exp( -lambda ) );
             }
         }
         else                                // Cumulative distribution function
         {
-            if (lambda == 0.0)
-                PushInt(1);
+            if (lambda > 712.0)  // underflow in exp(-lambda)
+            {   // accuracy 12 Digits
+                PushDouble(GetUpRegIGamma(x+1.0,lambda));
+            }
             else
             {
-                if (lambda > 712 )  // underflow in exp(-lambda)
-                {   // accuracy 12 Digits
-                    PushDouble(GetUpRegIGamma(x+1.0,lambda));
-                }
+                if (x >= 936.0) // result is always undistinghable from 1
+                    PushDouble (1.0);
                 else
                 {
-                    if (x >= 936.0) // result is always undistinghable from 1
-                        PushDouble (1.0);
-                    else
+                    double fSummand = exp(-lambda);
+                    double fSum = fSummand;
+                    int nEnd = sal::static_int_cast<int>( x );
+                    for (int i = 1; i <= nEnd; i++)
                     {
-                        double fSummand = exp(-lambda);
-                        double fSum = fSummand;
-                        int nEnd = sal::static_int_cast<int>( x );
-                        for (int i = 1; i <= nEnd; i++)
-                        {
-                            fSummand = (fSummand * lambda)/(double)i;
-                            fSum += fSummand;
-                        }
-                        PushDouble(fSum);
+                        fSummand = (fSummand * lambda)/(double)i;
+                        fSum += fSummand;
                     }
+                    PushDouble(fSum);
                 }
             }
         }

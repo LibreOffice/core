@@ -861,7 +861,7 @@ void ScGammaDist( bool bODFF );
 void ScGammaInv();
 void ScExpDist();
 void ScBinomDist();
-void ScPoissonDist();
+void ScPoissonDist( bool bODFF );
 void ScCombin();
 void ScCombinA();
 void ScPermut();
