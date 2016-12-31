@@ -58,8 +58,8 @@ public:
     struct TokenAddressItem
     {
         OUString maTokenStr;
-        ScAddress maCellAddress;
-        TokenAddressItem( const OUString& rTokenStr, const ScAddress& rCellAddress ) : maTokenStr( rTokenStr ), maCellAddress( rCellAddress ) {}
+        ScAddress maAddress;
+        TokenAddressItem( const OUString& rTokenStr, const ScAddress& rAddress ) : maTokenStr( rTokenStr ), maAddress( rAddress ) {}
     };
 
     struct TokenRangeAddressItem
@@ -71,7 +71,7 @@ public:
 
     struct FormulaValue
     {
-        ScAddress maCellAddress;
+        ScAddress maAddress;
         OUString maValueStr;
         sal_Int32 mnCellType;
     };

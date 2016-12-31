@@ -61,9 +61,8 @@ public:
 
     ~CachedTokenArray()
     {
-        ColCacheType::const_iterator it = maCache.begin(), itEnd = maCache.end();
-        for (; it != itEnd; ++it)
-            delete it->second;
+        for (const std::pair<SCCOL, Item*>& rCacheItem : maCache)
+            delete rCacheItem.second;
     }
 
     Item* get( const ScAddress& rPos, const OUString& rFormula )
@@ -117,12 +116,11 @@ void applySharedFormulas(
     sc::SharedFormulaGroups aGroups;
     {
         // Process shared formulas first.
-        std::vector<FormulaBuffer::SharedFormulaEntry>::const_iterator it = rSharedFormulas.begin(), itEnd = rSharedFormulas.end();
-        for (; it != itEnd; ++it)
+        for (const FormulaBuffer::SharedFormulaEntry& rEntry : rSharedFormulas)
         {
-            const ScAddress& aPos = it->maAddress;
-            sal_Int32 nId = it->mnSharedId;
-            const OUString& rTokenStr = it->maTokenStr;
+            const ScAddress& aPos = rEntry.maAddress;
+            sal_Int32 nId = rEntry.mnSharedId;
+            const OUString& rTokenStr = rEntry.maTokenStr;
 
             ScCompiler aComp(&rDoc.getDoc(), aPos);
             aComp.SetNumberFormatter(&rFormatter);
@@ -138,17 +136,16 @@ void applySharedFormulas(
 
     {
         // Process formulas that use shared formulas.
-        std::vector<FormulaBuffer::SharedFormulaDesc>::const_iterator it = rCells.begin(), itEnd = rCells.end();
-        for (; it != itEnd; ++it)
+        for (const FormulaBuffer::SharedFormulaDesc& rDesc : rCells)
         {
-            const ScAddress& aPos = it->maAddress;
-            const ScTokenArray* pArray = aGroups.get(it->mnSharedId);
+            const ScAddress& aPos = rDesc.maAddress;
+            const ScTokenArray* pArray = aGroups.get(rDesc.mnSharedId);
             if (!pArray)
                 continue;
 
             ScFormulaCell* pCell = new ScFormulaCell(&rDoc.getDoc(), aPos, *pArray);
             rDoc.setFormulaCell(aPos, pCell);
-            if (it->maCellValue.isEmpty())
+            if (rDesc.maCellValue.isEmpty())
             {
                 // No cached cell value. Mark it for re-calculation.
                 pCell->SetDirty();
@@ -157,11 +154,11 @@ void applySharedFormulas(
 
             // Set cached formula results. For now, we only use numeric
             // results. Find out how to utilize cached results of other types.
-            switch (it->mnValueType)
+            switch (rDesc.mnValueType)
             {
                 case XML_n:
                     // numeric value.
-                    pCell->SetResultDouble(it->maCellValue.toDouble());
+                    pCell->SetResultDouble(rDesc.maCellValue.toDouble());
                 break;
                 default:
                     // Mark it for re-calculation.
@@ -176,11 +173,10 @@ void applyCellFormulas(
     const uno::Sequence<sheet::ExternalLinkInfo>& rExternalLinks,
     const std::vector<FormulaBuffer::TokenAddressItem>& rCells )
 {
-    std::vector<FormulaBuffer::TokenAddressItem>::const_iterator it = rCells.begin(), itEnd = rCells.end();
-    for (; it != itEnd; ++it)
+    for (const FormulaBuffer::TokenAddressItem& rItem : rCells)
     {
-        const ScAddress& aPos = it->maCellAddress;
-        CachedTokenArray::Item* p = rCache.get(aPos, it->maTokenStr);
+        const ScAddress& aPos = rItem.maAddress;
+        CachedTokenArray::Item* p = rCache.get(aPos, rItem.maTokenStr);
         if (p)
         {
             // Use the cached version to avoid re-compilation.
@@ -216,7 +212,7 @@ void applyCellFormulas(
         aCompiler.SetNumberFormatter(&rFormatter);
         aCompiler.SetGrammar(formula::FormulaGrammar::GRAM_OOXML);
         aCompiler.SetExternalLinks(rExternalLinks);
-        ScTokenArray* pCode = aCompiler.CompileString(it->maTokenStr);
+        ScTokenArray* pCode = aCompiler.CompileString(rItem.maTokenStr);
         if (!pCode)
             continue;
 
@@ -233,7 +229,7 @@ void applyArrayFormulas(
 {
     for (const FormulaBuffer::TokenRangeAddressItem& rAddressItem : rArrays)
     {
-        const ScAddress& aPos = rAddressItem.maTokenAndAddress.maCellAddress;
+        const ScAddress& aPos = rAddressItem.maTokenAndAddress.maAddress;
 
         ScCompiler aComp(&rDoc.getDoc(), aPos);
         aComp.SetNumberFormatter(&rFormatter);
@@ -249,16 +245,15 @@ void applyCellFormulaValues(
 {
     svl::SharedStringPool& rStrPool = rDoc.getDoc().GetSharedStringPool();
 
-    std::vector<FormulaBuffer::FormulaValue>::const_iterator it = rVector.begin(), itEnd = rVector.end();
-    for (; it != itEnd; ++it)
+    for (const FormulaBuffer::FormulaValue& rValue : rVector)
     {
-        const ScAddress& aCellPos = it->maCellAddress;
+        const ScAddress& aCellPos = rValue.maAddress;
         ScFormulaCell* pCell = rDoc.getDoc().GetFormulaCell(aCellPos);
-        const OUString& rValueStr = it->maValueStr;
+        const OUString& rValueStr = rValue.maValueStr;
         if (!pCell)
             continue;
 
-        switch (it->mnCellType)
+        switch (rValue.mnCellType)
         {
             case XML_n:
             {
@@ -360,10 +355,8 @@ void FormulaBuffer::finalizeImport()
     for (SCTAB nTab = 0; nTab < nTabCount; ++nTab)
         aSheetItems.push_back(getSheetItem(nTab));
 
-    std::vector<SheetItem>::iterator it = aSheetItems.begin(), itEnd = aSheetItems.end();
-
-    for (; it != itEnd; ++it)
-        processSheetFormulaCells(rDoc, *it, *rDoc.getDoc().GetFormatTable(), getExternalLinks().getLinkInfos(),
+    for (SheetItem& rItem : aSheetItems)
+        processSheetFormulaCells(rDoc, rItem, *rDoc.getDoc().GetFormatTable(), getExternalLinks().getLinkInfos(),
                 isGeneratorKnownGood());
 
     // With formula results being set and not recalculated we need to
@@ -438,7 +431,7 @@ void FormulaBuffer::setCellFormulaValue(
 {
     assert( rAddress.Tab() >= 0 && (size_t)rAddress.Tab() < maCellFormulaValues.size() );
     FormulaValue aVal;
-    aVal.maCellAddress = rAddress;
+    aVal.maAddress = rAddress;
     aVal.maValueStr = rValueStr;
     aVal.mnCellType = nCellType;
     maCellFormulaValues[rAddress.Tab()].push_back(aVal);
