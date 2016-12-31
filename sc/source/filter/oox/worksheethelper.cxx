@@ -833,7 +833,7 @@ void WorksheetGlobals::setColumnModel( const ColumnModel& rModel )
 
 void WorksheetGlobals::convertColumnFormat( sal_Int32 nFirstCol, sal_Int32 nLastCol, sal_Int32 nXfId )
 {
-    CellRangeAddress aRange( getSheetIndex(), nFirstCol, 0, nLastCol, mrMaxApiPos.Row() );
+    ScRange aRange( nFirstCol, 0, getSheetIndex(), nLastCol, mrMaxApiPos.Row(), getSheetIndex() );
     if( getAddressConverter().validateCellRange( aRange, true, false ) )
     {
         const StylesBuffer& rStyles = getStyles();
