@@ -13,7 +13,6 @@
 #include "formulacell.hxx"
 #include "document.hxx"
 #include "documentimport.hxx"
-#include "convuno.hxx"
 
 #include "rangelst.hxx"
 #include "autonamecache.hxx"
@@ -27,7 +26,6 @@
 
 using namespace com::sun::star;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::sheet;
 using namespace ::com::sun::star::container;
 
@@ -233,19 +231,16 @@ void applyArrayFormulas(
     ScDocumentImport& rDoc, SvNumberFormatter& rFormatter,
     const std::vector<FormulaBuffer::TokenRangeAddressItem>& rArrays )
 {
-    std::vector<FormulaBuffer::TokenRangeAddressItem>::const_iterator it = rArrays.begin(), itEnd = rArrays.end();
-    for (; it != itEnd; ++it)
+    for (const FormulaBuffer::TokenRangeAddressItem& rAddressItem : rArrays)
     {
-        const ScAddress& aPos = it->maTokenAndAddress.maCellAddress;
-        ScRange aRange;
-        ScUnoConversion::FillScRange(aRange, it->maCellRangeAddress);
+        const ScAddress& aPos = rAddressItem.maTokenAndAddress.maCellAddress;
 
         ScCompiler aComp(&rDoc.getDoc(), aPos);
         aComp.SetNumberFormatter(&rFormatter);
         aComp.SetGrammar(formula::FormulaGrammar::GRAM_OOXML);
-        std::unique_ptr<ScTokenArray> pArray(aComp.CompileString(it->maTokenAndAddress.maTokenStr));
+        std::unique_ptr<ScTokenArray> pArray(aComp.CompileString(rAddressItem.maTokenAndAddress.maTokenStr));
         if (pArray)
-            rDoc.setMatrixCells(aRange, *pArray, formula::FormulaGrammar::GRAM_OOXML);
+            rDoc.setMatrixCells(rAddressItem.maRange, *pArray, formula::FormulaGrammar::GRAM_OOXML);
     }
 }
 
@@ -430,12 +425,12 @@ void FormulaBuffer::setCellFormula(
         SharedFormulaDesc(rAddress, nSharedId, rCellValue, nValueType));
 }
 
-void FormulaBuffer::setCellArrayFormula( const css::table::CellRangeAddress& rRangeAddress, const ScAddress& rTokenAddress, const OUString& rTokenStr )
+void FormulaBuffer::setCellArrayFormula( const ScRange& rRangeAddress, const ScAddress& rTokenAddress, const OUString& rTokenStr )
 {
 
     TokenAddressItem tokenPair( rTokenStr, rTokenAddress );
-    assert( rRangeAddress.Sheet >= 0 && (size_t)rRangeAddress.Sheet < maCellArrayFormulas.size() );
-    maCellArrayFormulas[ rRangeAddress.Sheet ].push_back( TokenRangeAddressItem( tokenPair, rRangeAddress ) );
+    assert( rRangeAddress.aStart.Tab() >= 0 && (size_t)rRangeAddress.aStart.Tab() < maCellArrayFormulas.size() );
+    maCellArrayFormulas[ rRangeAddress.aStart.Tab() ].push_back( TokenRangeAddressItem( tokenPair, rRangeAddress ) );
 }
 
 void FormulaBuffer::setCellFormulaValue(

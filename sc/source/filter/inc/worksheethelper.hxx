@@ -294,7 +294,7 @@ public:
         const ScAddress& rAddr, sal_Int32 nSharedId,
         const OUString& rCellValue, sal_Int32 nValueType );
 
-    void                setCellArrayFormula( const css::table::CellRangeAddress& rRangeAddress, const ScAddress& rTokenAddress, const OUString&  );
+    void                setCellArrayFormula( const ScRange& rRangeAddress, const ScAddress& rTokenAddress, const OUString& rTokenStr );
 
     void createSharedFormulaMapEntry(
         const ScAddress& rAddress,

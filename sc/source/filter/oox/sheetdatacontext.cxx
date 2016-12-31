@@ -173,7 +173,11 @@ void SheetDataContext::onEndElement()
             break;
             case XML_array:
                 if( mbValidRange && maFmlaData.isValidArrayRef( maCellData.maCellAddr ) )
-                    setCellArrayFormula( maFmlaData.maFormulaRef, maCellData.maCellAddr, maFormulaStr );
+                {
+                    ScRange aRangeAddr( maFmlaData.maFormulaRef.StartColumn, maFmlaData.maFormulaRef.StartRow, maFmlaData.maFormulaRef.Sheet,
+                                        maFmlaData.maFormulaRef.EndColumn, maFmlaData.maFormulaRef.EndRow, maFmlaData.maFormulaRef.Sheet);
+                    setCellArrayFormula( aRangeAddr, maCellData.maCellAddr, maFormulaStr );
+                }
                 // set cell formatting, but do not set result as cell value
                 mrSheetData.setBlankCell( maCellData );
             break;
