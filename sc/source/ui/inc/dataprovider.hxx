@@ -34,6 +34,9 @@
 
 namespace sc {
 
+/* Fetch Data Stream from local or remote locations */
+SvStream* FetchStreamFromURL(OUString& rUrl);
+
 class DataProvider;
 
 class ExternalDataMapper
