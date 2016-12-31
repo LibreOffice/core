@@ -1448,7 +1448,7 @@ SalBitmap* AquaSalGraphics::getBitmap( long  nX, long  nY, long  nDX, long  nDY 
     ApplyXorContext();
 
     QuartzSalBitmap* pBitmap = new QuartzSalBitmap;
-    if( !pBitmap->Create( mxLayer, mnBitmapDepth, nX, nY, nDX, nDY) )
+    if( !pBitmap->Create( mxLayer, mnBitmapDepth, nX, nY, nDX, nDY, IsFlipped()) )
     {
         delete pBitmap;
         pBitmap = nullptr;

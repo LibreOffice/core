@@ -107,7 +107,7 @@ QuartzSalBitmap::~QuartzSalBitmap()
 }
 
 bool QuartzSalBitmap::Create( CGLayerRef xLayer, int nBitmapBits,
-    int nX, int nY, int nWidth, int nHeight )
+    int nX, int nY, int nWidth, int nHeight, bool bFlipped )
 {
     SAL_WARN_IF( !xLayer, "vcl", "QuartzSalBitmap::Create() from non-layered context" );
 
@@ -146,6 +146,14 @@ bool QuartzSalBitmap::Create( CGLayerRef xLayer, int nBitmapBits,
     if(mxGraphicContext) // remove warning
     {
         SAL_INFO("vcl.cg", "CGContextDrawLayerAtPoint(" << mxGraphicContext << "," << aSrcPoint << "," << xLayer << ")" );
+        if( bFlipped )
+        {
+            SAL_INFO( "vcl.cg", "CGContextTranslateCTM(" << mxGraphicContext << ",0," << mnHeight << ")" );
+            CGContextTranslateCTM( mxGraphicContext, 0, +mnHeight );
+            SAL_INFO( "vcl.cg", "CGContextScaleCTM(" << mxGraphicContext << ",+1,-1)" );
+            CGContextScaleCTM( mxGraphicContext, +1, -1 );
+        }
+
         CGContextDrawLayerAtPoint( mxGraphicContext, aSrcPoint, xLayer );
     }
     return true;
