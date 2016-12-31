@@ -545,7 +545,7 @@ void AquaSalGraphics::copyArea( long nDstX, long nDstY,long nSrcX, long nSrcY,
         SAL_INFO( "vcl.cg", "CGLayerGetContext(" << xSrcLayer << ") = " << xSrcContext );
 
         CGPoint aSrcPoint = CGPointMake(-nSrcX, -nSrcY);
-        if( IsFlipped() )
+        if( IsFlipped() && !mbWindow )
         {
             SAL_INFO( "vcl.cg", "CGContextTranslateCTM(" << xSrcContext << ",0," << nSrcHeight << ")" );
             CGContextTranslateCTM( xSrcContext, 0, +nSrcHeight );
