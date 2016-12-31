@@ -47,7 +47,6 @@
 namespace oox {
 namespace xls {
 
-using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::uno;
 using namespace ::oox::core;
 
@@ -694,7 +693,7 @@ void WorksheetFragment::importCol( const AttributeList& rAttribs )
 
 void WorksheetFragment::importMergeCell( const AttributeList& rAttribs )
 {
-    CellRangeAddress aRange;
+    ScRange aRange;
     if( getAddressConverter().convertToCellRange( aRange, rAttribs.getString( XML_ref, OUString() ), getSheetIndex(), true, true ) )
         getSheetData().setMergedRange( aRange );
 }
@@ -825,7 +824,7 @@ void WorksheetFragment::importMergeCell( SequenceInputStream& rStrm )
 {
     BinRange aBinRange;
     rStrm >> aBinRange;
-    CellRangeAddress aRange;
+    ScRange aRange;
     if( getAddressConverter().convertToCellRange( aRange, aBinRange, getSheetIndex(), true, true ) )
         getSheetData().setMergedRange( aRange );
 }

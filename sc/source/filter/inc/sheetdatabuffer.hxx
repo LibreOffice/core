@@ -139,7 +139,7 @@ public:
     /** Sets default cell formatting for the specified range of rows. */
     void                setRowFormat( sal_Int32 nRow, sal_Int32 nXfId, bool bCustomFormat );
     /** Merges the cells in the passed cell range. */
-    void                setMergedRange( const css::table::CellRangeAddress& rRange );
+    void                setMergedRange( const ScRange& rRange );
 
     /** Processes the cell formatting data of the passed cell. */
     void                setCellFormat( const CellModel& rModel );
@@ -167,7 +167,7 @@ private:
         const css::table::CellRangeAddress& rRange, const DataTableModel& rModel );
 
     /** Writes all cell formatting attributes to the passed cell range list. (depreciates writeXfIdRangeProperties) */
-    void                applyCellMerging( const css::table::CellRangeAddress& rRange );
+    void                applyCellMerging( const ScRange& rRange );
     void                addColXfStyle( sal_Int32 nXfId, sal_Int32 nFormatId, const css::table::CellRangeAddress& rAddress, bool bProcessRowRange = false );
 private:
     /** Stores cell range address and formula token array of an array formula. */
@@ -211,11 +211,10 @@ private:
     /** Stores information about a merged cell range. */
     struct MergedRange
     {
-        css::table::CellRangeAddress
-                            maRange;            /// The formatted cell range.
+        ScRange             maRange;            /// The formatted cell range.
         sal_Int32           mnHorAlign;         /// Horizontal alignment in the range.
 
-        explicit            MergedRange( const css::table::CellRangeAddress& rRange );
+        explicit            MergedRange( const ScRange& rRange );
         explicit            MergedRange( const ScAddress& rAddress, sal_Int32 nHorAlign );
         bool                tryExpand( const ScAddress& rAddress, sal_Int32 nHorAlign );
     };
