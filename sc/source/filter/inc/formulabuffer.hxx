@@ -16,8 +16,6 @@
 #include <salhelper/thread.hxx>
 #include <osl/mutex.hxx>
 #include "workbookhelper.hxx"
-#include <com/sun/star/table/CellAddress.hpp>
-#include <com/sun/star/table/CellRangeAddress.hpp>
 #include <map>
 #include <vector>
 #include "worksheethelper.hxx"
@@ -67,8 +65,8 @@ public:
     struct TokenRangeAddressItem
     {
         TokenAddressItem maTokenAndAddress;
-        css::table::CellRangeAddress maCellRangeAddress;
-        TokenRangeAddressItem( const TokenAddressItem& rTokenAndAddress, const css::table::CellRangeAddress& rCellRangeAddress ) : maTokenAndAddress( rTokenAndAddress ), maCellRangeAddress( rCellRangeAddress ) {}
+        ScRange maRange;
+        TokenRangeAddressItem( const TokenAddressItem& rTokenAndAddress, const ScRange& rRange ) : maTokenAndAddress( rTokenAndAddress ), maRange( rRange ) {}
     };
 
     struct FormulaValue
@@ -121,7 +119,7 @@ public:
     void setCellFormulaValue(
         const ScAddress& rAddress, const OUString& rValueStr, sal_Int32 nCellType );
 
-    void                setCellArrayFormula( const css::table::CellRangeAddress& rRangeAddress,
+    void                setCellArrayFormula( const ScRange& rRangeAddress,
                                              const ScAddress& rTokenAddress,
                                              const OUString& );
 
