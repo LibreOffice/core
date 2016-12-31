@@ -3534,6 +3534,11 @@ void ScInterpreter::ScPercentrank( bool bInclusive )
     if ( !MustHaveParamCount( nParamCount, 2, 3 ) )
         return;
     double fSignificance = ( nParamCount == 3 ? ::rtl::math::approxFloor( GetDouble() ) : 3.0 );
+    if ( fSignificance < 1.0 )
+    {
+        PushIllegalArgument();
+        return;
+    }
     double fNum = GetDouble();
     vector<double> aSortArray;
     GetSortArray( 1, aSortArray, nullptr, false, false );
@@ -3553,8 +3558,8 @@ void ScInterpreter::ScPercentrank( bool bInclusive )
                 fRes = GetPercentrank( aSortArray, fNum, bInclusive );
             if ( fRes != 0.0 )
             {
-                double fExp = ::rtl::math::approxFloor( log( fRes ) );
-                fRes = ::rtl::math::round( fRes * pow( 10, -fExp + fSignificance - 1 ) ) / pow( 10, -fExp + fSignificance - 1 );
+                double fExp = ::rtl::math::approxFloor( log10( fRes ) ) + 1.0 - fSignificance;
+                fRes = ::rtl::math::round( fRes * pow( 10, -fExp ) ) / pow( 10, -fExp );
             }
             PushDouble( fRes );
         }
