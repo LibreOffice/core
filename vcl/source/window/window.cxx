@@ -822,6 +822,8 @@ ImplFrameData::ImplFrameData( vcl::Window *pWindow )
     maResizeIdle.SetDebugName( "vcl::Window maResizeIdle" );
     mbInternalDragGestureRecognizer = false;
     mbInBufferedPaint = false;
+    mnDPIX = 96;
+    mnDPIY = 96;
 }
 
 namespace vcl {
