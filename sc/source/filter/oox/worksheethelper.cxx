@@ -222,7 +222,7 @@ public:
     Reference< XCell >  getCell( const CellAddress& rAddress ) const;
     Reference< XCell >  getCell( const ScAddress& rAddress ) const;
     /** Returns the XCellRange interface for the passed cell range address. */
-    Reference< XCellRange > getCellRange( const CellRangeAddress& rRange ) const;
+    Reference< XCellRange > getCellRange( const ScRange& rRange ) const;
     /** Returns the XSheetCellRanges interface for the passed cell range addresses. */
     Reference< XSheetCellRanges > getCellRangeList( const ApiCellRangeList& rRanges ) const;
 
@@ -475,12 +475,12 @@ Reference< XCell > WorksheetGlobals::getCell( const ScAddress& rAddress ) const
     return xCell;
 }
 
-Reference< XCellRange > WorksheetGlobals::getCellRange( const CellRangeAddress& rRange ) const
+Reference< XCellRange > WorksheetGlobals::getCellRange( const ScRange& rRange ) const
 {
     Reference< XCellRange > xRange;
     if( mxSheet.is() ) try
     {
-        xRange = mxSheet->getCellRangeByPosition( rRange.StartColumn, rRange.StartRow, rRange.EndColumn, rRange.EndRow );
+        xRange = mxSheet->getCellRangeByPosition( rRange.aStart.Col(), rRange.aStart.Row(), rRange.aEnd.Col(), rRange.aEnd.Row() );
     }
     catch( Exception& )
     {
@@ -1318,7 +1318,7 @@ void WorksheetGlobals::groupColumnsOrRows( sal_Int32 nFirstColRow, sal_Int32 nLa
 void WorksheetGlobals::finalizeDrawings()
 {
     // calculate the current drawing page size (after rows/columns are imported)
-    PropertySet aRangeProp( getCellRange( CellRangeAddress( getSheetIndex(), 0, 0, mrMaxApiPos.Col(), mrMaxApiPos.Row() ) ) );
+    PropertySet aRangeProp( getCellRange( ScRange( 0, 0, getSheetIndex(), mrMaxApiPos.Col(), mrMaxApiPos.Row(), getSheetIndex() ) ) );
     aRangeProp.getProperty( maDrawPageSize, PROP_Size );
 
     // import DML and VML
@@ -1408,7 +1408,7 @@ Reference< XCell > WorksheetHelper::getCell( const ScAddress& rAddress ) const
     return mrSheetGlob.getCell( rAddress );
 }
 
-Reference< XCellRange > WorksheetHelper::getCellRange( const CellRangeAddress& rRange ) const
+Reference< XCellRange > WorksheetHelper::getCellRange( const ScRange& rRange ) const
 {
     return mrSheetGlob.getCellRange( rRange );
 }
