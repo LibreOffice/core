@@ -758,8 +758,10 @@ namespace
             ++nContStart; // now its start of content, directly after Id
 
             sal_Int32  nContEnd = _rRawString.indexOf( ',', nContStart );
-
-            s = _rRawString.copy( nContStart, nContEnd - nContStart );
+            if (nContEnd != -1)
+                s = _rRawString.copy( nContStart, nContEnd - nContStart );
+            else
+                s = _rRawString.copy(nContStart);
         }
 
         return s;
