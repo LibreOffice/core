@@ -49,9 +49,9 @@
 
 using namespace ::com::sun::star;
 
-BitmapEx::BitmapEx() :
-        eTransparent( TransparentType::NONE ),
-        bAlpha      ( false )
+BitmapEx::BitmapEx()
+    : eTransparent(TransparentType::NONE)
+    , bAlpha(false)
 {
 }
 
@@ -65,9 +65,9 @@ BitmapEx::BitmapEx( const BitmapEx& rBitmapEx ) :
 {
 }
 
-BitmapEx::BitmapEx( const BitmapEx& rBitmapEx, Point aSrc, Size aSize ) :
-        eTransparent( TransparentType::NONE ),
-        bAlpha      ( false )
+BitmapEx::BitmapEx( const BitmapEx& rBitmapEx, Point aSrc, Size aSize )
+    : eTransparent(TransparentType::NONE)
+    , bAlpha(false)
 {
     if( rBitmapEx.IsEmpty() )
         return;
@@ -88,6 +88,8 @@ BitmapEx::BitmapEx( const BitmapEx& rBitmapEx, Point aSrc, Size aSize ) :
 }
 
 BitmapEx::BitmapEx( const OUString& rIconName )
+    : eTransparent(TransparentType::NONE)
+    , bAlpha(false)
 {
     loadFromIconTheme( rIconName );
 }
