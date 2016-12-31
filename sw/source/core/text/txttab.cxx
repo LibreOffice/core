@@ -455,7 +455,7 @@ bool SwTabPortion::PostFormat( SwTextFormatInfo &rInf )
         // no value was set => no decimal character was found
         if ( USHRT_MAX != nPrePorWidth )
         {
-            if ( nPrePorWidth && nPorWidth - nPrePorWidth > rInf.Width() - nRight )
+            if ( !bTabOverMargin && nPrePorWidth && nPorWidth - nPrePorWidth > rInf.Width() - nRight )
             {
                 nPrePorWidth += nPorWidth - nPrePorWidth - ( rInf.Width() - nRight );
             }
@@ -469,7 +469,7 @@ bool SwTabPortion::PostFormat( SwTextFormatInfo &rInf )
         // centered tabs are problematic:
         // We have to detect how much fits into the line.
         sal_uInt16 nNewWidth = nPorWidth /2;
-        if( nNewWidth > rInf.Width() - nRight )
+        if( !bTabOverMargin && nNewWidth > rInf.Width() - nRight )
             nNewWidth = nPorWidth - (rInf.Width() - nRight);
         nPorWidth = nNewWidth;
     }
