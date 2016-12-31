@@ -329,6 +329,8 @@ public class TestParameters extends Hashtable {
             }
         } else if (osname.indexOf ("mac")>-1) {
             operatingSystem = PropertyName.UNXMACXI;
+        } else if (osname.equals("freebsd")) {
+            operatingSystem = PropertyName.UNXFBSDX;
         } else {
             System.out.println("ERROR: not supported platform: " + osname);
             System.exit(1);

@@ -144,6 +144,10 @@ public interface PropertyName {
     /**
      * internal only, no parameter
      */
+    final public static String UNXFBSDX = "unxfbsdx";
+    /**
+     * internal only, no parameter
+     */
     final public static String UNXLNGI = "unxlngi";
     /**
      * internal only, no parameter
