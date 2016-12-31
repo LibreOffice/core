@@ -312,7 +312,7 @@ bool SwTabPortion::Format( SwTextFormatInfo &rInf )
 
 void SwTabPortion::FormatEOL( SwTextFormatInfo &rInf )
 {
-    if( rInf.GetLastTab() == this && !IsTabLeftPortion() )
+    if( rInf.GetLastTab() == this )
         PostFormat( rInf );
 }
 
@@ -325,6 +325,7 @@ bool SwTabPortion::PreFormat( SwTextFormatInfo &rInf )
 
     const bool bTabCompat = rInf.GetTextFrame()->GetTextNode()->getIDocumentSettingAccess()->get(DocumentSettingId::TAB_COMPAT);
     const bool bTabOverflow = rInf.GetTextFrame()->GetTextNode()->getIDocumentSettingAccess()->get(DocumentSettingId::TAB_OVERFLOW);
+    const bool bTabOverMargin = rInf.GetTextFrame()->GetTextNode()->getIDocumentSettingAccess()->get(DocumentSettingId::TAB_OVER_MARGIN);
 
     // The minimal width of a tab is one blank at least.
     // #i37686# In compatibility mode, the minimum width
@@ -376,6 +377,13 @@ bool SwTabPortion::PreFormat( SwTextFormatInfo &rInf )
             }
             case POR_TABLEFT:
             {
+                // handle this case in PostFormat
+                if( bTabOverMargin && GetTabPos() > rInf.Width() )
+                {
+                    rInf.SetLastTab( this );
+                    break;
+                }
+
                 PrtWidth( static_cast<sal_uInt16>(GetTabPos() - rInf.X()) );
                 bFull = rInf.Width() <= rInf.X() + PrtWidth();
 
@@ -444,8 +452,12 @@ bool SwTabPortion::PostFormat( SwTextFormatInfo &rInf )
     }
 
     const sal_uInt16 nWhich = GetWhichPor();
-    OSL_ENSURE( POR_TABLEFT != nWhich, "SwTabPortion::PostFormat: already formatted" );
     const bool bTabCompat = rInf.GetTextFrame()->GetTextNode()->getIDocumentSettingAccess()->get(DocumentSettingId::TAB_COMPAT);
+
+    if ( bTabOverMargin && POR_TABLEFT == nWhich )
+    {
+        nPorWidth = 0;
+    }
 
     // #127428# Abandon dec. tab position if line is full
     if ( bTabCompat && POR_TABDECIMAL == nWhich )
