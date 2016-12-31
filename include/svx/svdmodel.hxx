@@ -155,7 +155,7 @@ protected:
     Fraction       aUIScale;     // see above
     OUString       aUIUnitStr;   // see above
     Fraction       aUIUnitFact;  // see above
-    int            nUIUnitKomma; // see above
+    int            nUIUnitComma; // see above
 
     SdrLayerAdmin*  pLayerAdmin;
     SfxItemPool*    pItemPool;
@@ -175,7 +175,7 @@ protected:
     SdrUndoGroup*       pAktUndoGroup;  // for deeper
     sal_uInt16          nUndoLevel;     // undo nesting
     bool                bMyPool:1;        // to clean up pMyPool from 303a
-    bool                bUIOnlyKomma:1; // see eUIUnit
+    bool                bUIOnlyComma:1; // see eUIUnit
     bool                mbUndoEnabled:1;  // If false no undo is recorded or we are during the execution of an undo action
     bool                bExtColorTable:1; // ne separate ColorTable
     bool                mbChanged:1;
