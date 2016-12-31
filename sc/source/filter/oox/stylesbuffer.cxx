@@ -82,7 +82,6 @@
 #include <documentimport.hxx>
 #include <numformat.hxx>
 
-using ::com::sun::star::table::BorderLine2;
 namespace oox {
 namespace xls {
 
@@ -2083,7 +2082,7 @@ void Xf::applyPatternToAttrList( AttrList& rAttrs, SCROW nRow1, SCROW nRow2, sal
     }
 }
 
-void Xf::writeToDoc( ScDocumentImport& rDoc, const table::CellRangeAddress& rRange )
+void Xf::writeToDoc( ScDocumentImport& rDoc, const ScRange& rRange )
 {
     const StylesBuffer& rStyles = getStyles();
 
@@ -2099,14 +2098,14 @@ void Xf::writeToDoc( ScDocumentImport& rDoc, const table::CellRangeAddress& rRan
         if (pStyleSheet)
         {
             rDoc.getDoc().ApplyStyleAreaTab(
-                rRange.StartColumn, rRange.StartRow, rRange.EndColumn, rRange.EndRow, rRange.Sheet,
+                rRange.aStart.Col(), rRange.aStart.Row(), rRange.aEnd.Col(), rRange.aEnd.Row(), rRange.aStart.Tab(),
                 *pStyleSheet);
         }
     }
 
     const ScPatternAttr& rAttr = createPattern();
     rDoc.getDoc().ApplyPatternAreaTab(
-        rRange.StartColumn, rRange.StartRow, rRange.EndColumn, rRange.EndRow, rRange.Sheet, rAttr);
+        rRange.aStart.Col(), rRange.aStart.Row(), rRange.aEnd.Col(), rRange.aEnd.Row(), rRange.aStart.Tab(), rAttr);
 }
 
 const ::ScPatternAttr&
@@ -2963,7 +2962,7 @@ bool operator==( const Xf& rXf1, const Xf& rXf2 )
 }
 
 void StylesBuffer::writeCellXfToDoc(
-    ScDocumentImport& rDoc, const table::CellRangeAddress& rRange, sal_Int32 nXfId ) const
+    ScDocumentImport& rDoc, const ScRange& rRange, sal_Int32 nXfId ) const
 {
     Xf* pXf = maCellXfs.get(nXfId).get();
     if (!pXf)
