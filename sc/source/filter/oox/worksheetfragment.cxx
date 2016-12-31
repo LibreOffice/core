@@ -646,13 +646,13 @@ void WorksheetFragment::importPageSetUpPr( const AttributeList& rAttribs )
 
 void WorksheetFragment::importDimension( const AttributeList& rAttribs )
 {
-    CellRangeAddress aRange;
+    ScRange aRange;
     AddressConverter::convertToCellRangeUnchecked( aRange, rAttribs.getString( XML_ref, OUString() ), getSheetIndex() );
     /*  OOXML stores the used area, if existing, or "A1" if the sheet is empty.
         In case of "A1", the dimension at the WorksheetHelper object will not
         be set. If the cell A1 exists, the used area will be updated while
         importing the cell. */
-    if( (aRange.EndColumn > 0) || (aRange.EndRow > 0) )
+    if( (aRange.aEnd.Col() > 0) || (aRange.aEnd.Row() > 0) )
     {
         extendUsedArea( aRange );
     }
@@ -763,13 +763,13 @@ void WorksheetFragment::importDimension( SequenceInputStream& rStrm )
 {
     BinRange aBinRange;
     aBinRange.read( rStrm );
-    CellRangeAddress aRange;
+    ScRange aRange;
     AddressConverter::convertToCellRangeUnchecked( aRange, aBinRange, getSheetIndex() );
     /*  BIFF12 stores the used area, if existing, or "A1" if the sheet is
         empty. In case of "A1", the dimension at the WorksheetHelper object
         will not be set. If the cell A1 exists, the used area will be updated
         while importing the cell. */
-    if( (aRange.EndColumn > 0) || (aRange.EndRow > 0) )
+    if( (aRange.aEnd.Col() > 0) || (aRange.aEnd.Row() > 0) )
         extendUsedArea( aRange );
 }
 
