@@ -118,7 +118,6 @@ struct ImplFrameData
     ImplFontCache*      mpFontCache;            //< Font-Cache for this frame
     sal_Int32           mnDPIX;                 //< Original Screen Resolution
     sal_Int32           mnDPIY;                 //< Original Screen Resolution
-    ImplMapRes          maMapUnitRes;           //< for LogicUnitToPixel
     ImplSVEvent *       mnFocusId;              //< FocusId for PostUserLink
     ImplSVEvent *       mnMouseMoveId;          //< MoveId for PostUserLink
     long                mnLastMouseX;           //< last x mouse position
