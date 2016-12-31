@@ -7,8 +7,12 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 #include <dataprovider.hxx>
+#include <com/sun/star/ucb/XSimpleFileAccess3.hpp>
+#include <com/sun/star/ucb/SimpleFileAccess.hpp>
+#include <com/sun/star/io/XInputStream.hpp>
 #include "officecfg/Office/Calc.hxx"
 #include <stringutil.hxx>
+#include <rtl/strbuf.hxx>
 
 #if defined(_WIN32)
 #if !defined __ORCUS_STATIC_LIB // avoid -Werror,-Wunused-macros
@@ -17,7 +21,39 @@
 #endif
 #include <orcus/csv_parser.hpp>
 
+using namespace com::sun::star;
+
 namespace sc {
+
+SvStream* FetchStreamFromURL (OUString& rURL)
+{
+    uno::Reference< ucb::XSimpleFileAccess3 > xFileAccess( ucb::SimpleFileAccess::create( comphelper::getProcessComponentContext() ), uno::UNO_QUERY );
+
+    uno::Reference< io::XInputStream > xStream;
+    xStream = xFileAccess->openFileRead( rURL );
+
+    const sal_Int32 BUF_LEN = 8000;
+    uno::Sequence< sal_Int8 > buffer( BUF_LEN );
+    OStringBuffer aBuffer( 64000 );
+
+    sal_Int32 nRead = 0;
+    while ( ( nRead = xStream->readBytes( buffer, BUF_LEN ) ) == BUF_LEN )
+    {
+        aBuffer.append( reinterpret_cast< const char* >( buffer.getConstArray() ), nRead );
+    }
+
+    if ( nRead > 0 )
+    {
+        aBuffer.append( reinterpret_cast< const char* >( buffer.getConstArray() ), nRead );
+    }
+
+    xStream->closeInput();
+
+    SvStream* pStream = new SvStream;
+    pStream->WriteCharPtr(aBuffer.getStr());
+
+    return pStream;
+}
 
 ExternalDataMapper::ExternalDataMapper(ScDocShell* pDocShell, const OUString& rURL, const OUString& rName, SCTAB nTab,
     SCCOL nCol1,SCROW nRow1, SCCOL nCol2, SCROW nRow2, bool& bSuccess):
@@ -175,8 +211,7 @@ void CSVDataProvider::StartImport()
 
     if (!mxCSVFetchThread.is())
     {
-        SvStream *pStream = nullptr;
-        pStream = new SvFileStream(maURL, StreamMode::READ);
+        SvStream* pStream = FetchStreamFromURL(maURL);
         mxCSVFetchThread = new CSVFetchThread(pStream, mrRange.aEnd.Col() - mrRange.aStart.Col() + 1);
         mxCSVFetchThread->launch();
     }
