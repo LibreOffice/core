@@ -1592,7 +1592,7 @@ void WorksheetHelper::setCellFormula(
     getFormulaBuffer().setCellFormula(rAddr, nSharedId, rCellValue, nValueType);
 }
 
-void WorksheetHelper::setCellArrayFormula( const css::table::CellRangeAddress& rRangeAddress, const ScAddress& rTokenAddress, const OUString& rTokenStr )
+void WorksheetHelper::setCellArrayFormula( const ScRange& rRangeAddress, const ScAddress& rTokenAddress, const OUString& rTokenStr )
 {
     getFormulaBuffer().setCellArrayFormula( rRangeAddress,  rTokenAddress, rTokenStr );
 }
