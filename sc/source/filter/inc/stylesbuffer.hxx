@@ -636,7 +636,7 @@ public:
     void applyPatternToAttrList(
         AttrList& rAttrs, SCROW nRow1, SCROW nRow2, sal_Int32 nForceScNumFmt );
 
-    void writeToDoc( ScDocumentImport& rDoc, const css::table::CellRangeAddress& rRange );
+    void writeToDoc( ScDocumentImport& rDoc, const ScRange& rRange );
 
     const ::ScPatternAttr& createPattern( bool bSkipPoolDefs = false );
 
@@ -871,7 +871,7 @@ public:
     void                writeFillToItemSet( SfxItemSet& rItemSet, sal_Int32 nFillId, bool bSkipPoolDefs ) const;
 
     /** Writes the cell formatting attributes of the specified XF to the passed property set. */
-    void                writeCellXfToDoc( ScDocumentImport& rDoc, const css::table::CellRangeAddress& rRange, sal_Int32 nXfId ) const;
+    void                writeCellXfToDoc( ScDocumentImport& rDoc, const ScRange& rRange, sal_Int32 nXfId ) const;
 
 private:
     typedef RefVector< Font >                           FontVector;
