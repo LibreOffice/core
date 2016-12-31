@@ -737,10 +737,10 @@ void WorksheetGlobals::extendUsedArea( const ScRange& rRange )
     extendUsedArea( rRange.aEnd );
 }
 
-void WorksheetHelper::extendUsedArea( const css::table::CellRangeAddress& rRange )
+void WorksheetHelper::extendUsedArea( const ScRange& rRange )
 {
-    extendUsedArea( ScAddress( rRange.StartColumn, rRange.StartRow, rRange.Sheet ) );
-    extendUsedArea( ScAddress( rRange.EndColumn, rRange.EndRow, rRange.Sheet ) );
+    extendUsedArea( rRange.aStart );
+    extendUsedArea( rRange.aEnd );
 }
 
 void WorksheetGlobals::extendShapeBoundingBox( const awt::Rectangle& rShapeRect )
