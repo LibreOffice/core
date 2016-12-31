@@ -43,7 +43,6 @@
 #include "formulaparser.hxx"
 #include "sharedstringsbuffer.hxx"
 #include "unitconverter.hxx"
-#include "convuno.hxx"
 #include "markdata.hxx"
 #include "rangelst.hxx"
 #include "document.hxx"
@@ -80,18 +79,15 @@ CellFormulaModel::CellFormulaModel() :
 
 bool CellFormulaModel::isValidArrayRef( const ScAddress& rCellAddr )
 {
-    return
-        (maFormulaRef.Sheet == rCellAddr.Tab() ) &&
-        (maFormulaRef.StartColumn == rCellAddr.Col() ) &&
-        (maFormulaRef.StartRow == rCellAddr.Row() );
+    return (maFormulaRef.aStart == rCellAddr );
 }
 
 bool CellFormulaModel::isValidSharedRef( const ScAddress& rCellAddr )
 {
     return
-        (maFormulaRef.Sheet == rCellAddr.Tab() ) &&
-        (maFormulaRef.StartColumn <= rCellAddr.Col() ) && (rCellAddr.Col() <= maFormulaRef.EndColumn) &&
-        (maFormulaRef.StartRow <= rCellAddr.Row() ) && (rCellAddr.Row() <= maFormulaRef.EndRow);
+        (maFormulaRef.aStart.Tab() == rCellAddr.Tab() ) &&
+        (maFormulaRef.aStart.Col() <= rCellAddr.Col() ) && (rCellAddr.Col() <= maFormulaRef.aEnd.Col()) &&
+        (maFormulaRef.aStart.Row() <= rCellAddr.Row() ) && (rCellAddr.Row() <= maFormulaRef.aEnd.Row());
 }
 
 DataTableModel::DataTableModel() :
@@ -285,7 +281,7 @@ void SheetDataBuffer::setFormulaCell( const CellModel& rModel, const ApiTokenSeq
     setCellFormat( rModel );
 }
 
-void SheetDataBuffer::createArrayFormula( const CellRangeAddress& rRange, const ApiTokenSequence& rTokens )
+void SheetDataBuffer::createArrayFormula( const ScRange& rRange, const ApiTokenSequence& rTokens )
 {
     /*  Array formulas will be inserted later in finalizeImport(). This is
         needed to not disturb collecting all the cells, which will be put into
@@ -293,7 +289,7 @@ void SheetDataBuffer::createArrayFormula( const CellRangeAddress& rRange, const 
     maArrayFormulas.push_back( ArrayFormula( rRange, rTokens ) );
 }
 
-void SheetDataBuffer::createTableOperation( const CellRangeAddress& rRange, const DataTableModel& rModel )
+void SheetDataBuffer::createTableOperation( const ScRange& rRange, const DataTableModel& rModel )
 {
     /*  Table operations will be inserted later in finalizeImport(). This is
         needed to not disturb collecting all the cells, which will be put into
@@ -565,7 +561,7 @@ ApiTokenSequence SheetDataBuffer::resolveSharedFormula( const ScAddress& rAddr )
     return aTokens;
 }
 
-void SheetDataBuffer::finalizeArrayFormula( const CellRangeAddress& rRange, const ApiTokenSequence& rTokens ) const
+void SheetDataBuffer::finalizeArrayFormula( const ScRange& rRange, const ApiTokenSequence& rTokens ) const
 {
     Reference< XArrayFormulaTokens > xTokens( getCellRange( rRange ), UNO_QUERY );
     OSL_ENSURE( xTokens.is(), "SheetDataBuffer::finalizeArrayFormula - missing formula token interface" );
@@ -573,7 +569,7 @@ void SheetDataBuffer::finalizeArrayFormula( const CellRangeAddress& rRange, cons
         xTokens->setArrayTokens( rTokens );
 }
 
-void SheetDataBuffer::finalizeTableOperation( const CellRangeAddress& rRange, const DataTableModel& rModel )
+void SheetDataBuffer::finalizeTableOperation( const ScRange& rRange, const DataTableModel& rModel )
 {
     if (rModel.mbRef1Deleted)
         return;
@@ -581,7 +577,7 @@ void SheetDataBuffer::finalizeTableOperation( const CellRangeAddress& rRange, co
     if (rModel.maRef1.isEmpty())
         return;
 
-    if (rRange.StartColumn <= 0 || rRange.StartRow <= 0)
+    if (rRange.aStart.Col() <= 0 || rRange.aStart.Row() <= 0)
         return;
 
     sal_Int16 nSheet = getSheetIndex();
@@ -593,8 +589,7 @@ void SheetDataBuffer::finalizeTableOperation( const CellRangeAddress& rRange, co
     ScDocumentImport& rDoc = getDocImport();
     ScTabOpParam aParam;
 
-    ScRange aScRange;
-    ScUnoConversion::FillScRange(aScRange, rRange);
+    ScRange aScRange(rRange);
 
     if (rModel.mb2dTable)
     {
@@ -611,11 +606,11 @@ void SheetDataBuffer::finalizeTableOperation( const CellRangeAddress& rRange, co
 
         aParam.meMode = ScTabOpParam::Both;
 
-        aParam.aRefFormulaCell.Set(rRange.StartColumn-1, rRange.StartRow-1, nSheet, false, false, false);
-        aParam.aRefFormulaEnd = aParam.aRefFormulaCell;
-
-        aScRange.aStart.IncRow(-1);
         aScRange.aStart.IncCol(-1);
+        aScRange.aStart.IncRow(-1);
+
+        aParam.aRefFormulaCell.Set(aScRange.aStart.Col(), aScRange.aStart.Row(), nSheet, false, false, false);
+        aParam.aRefFormulaEnd = aParam.aRefFormulaCell;
 
         // Ref1 is row input cell and Ref2 is column input cell.
         aParam.aRefRowCell.Set(aRef1.Col(), aRef1.Row(), aRef1.Tab(), false, false, false);
@@ -632,7 +627,7 @@ void SheetDataBuffer::finalizeTableOperation( const CellRangeAddress& rRange, co
         // One-variable row input cell (horizontal).
         aParam.meMode = ScTabOpParam::Row;
         aParam.aRefRowCell.Set(aRef1.Col(), aRef1.Row(), aRef1.Tab(), false, false, false);
-        aParam.aRefFormulaCell.Set(rRange.StartColumn-1, rRange.StartRow, nSheet, false, true, false);
+        aParam.aRefFormulaCell.Set(rRange.aStart.Col()-1, rRange.aStart.Row(), nSheet, false, true, false);
         aParam.aRefFormulaEnd = aParam.aRefFormulaCell;
         aScRange.aStart.IncRow(-1);
         rDoc.setTableOpCells(aScRange, aParam);
@@ -642,7 +637,7 @@ void SheetDataBuffer::finalizeTableOperation( const CellRangeAddress& rRange, co
         // One-variable column input cell (vertical).
         aParam.meMode = ScTabOpParam::Column;
         aParam.aRefColCell.Set(aRef1.Col(), aRef1.Row(), aRef1.Tab(), false, false, false);
-        aParam.aRefFormulaCell.Set(rRange.StartColumn, rRange.StartRow-1, nSheet, true, false, false);
+        aParam.aRefFormulaCell.Set(rRange.aStart.Col(), rRange.aStart.Row()-1, nSheet, true, false, false);
         aParam.aRefFormulaEnd = aParam.aRefFormulaCell;
         aScRange.aStart.IncCol(-1);
         rDoc.setTableOpCells(aScRange, aParam);

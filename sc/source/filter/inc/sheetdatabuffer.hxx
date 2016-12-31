@@ -48,8 +48,7 @@ struct CellModel
 /** Stores data about cell formulas. */
 struct CellFormulaModel
 {
-    css::table::CellRangeAddress
-                        maFormulaRef;       /// Formula range for array/shared formulas and data tables.
+    ScRange             maFormulaRef;       /// Formula range for array/shared formulas and data tables.
     sal_Int32           mnFormulaType;      /// Type of the formula (regular, array, shared, table).
     sal_Int32           mnSharedId;         /// Identifier of a shared formula (OOXML only).
 
@@ -129,11 +128,11 @@ public:
 
     /** Inserts the passed token array as array formula. */
     void                createArrayFormula(
-                            const css::table::CellRangeAddress& rRange,
+                            const ScRange& rRange,
                             const ApiTokenSequence& rTokens );
     /** Sets a multiple table operation to the passed range. */
     void                createTableOperation(
-                            const css::table::CellRangeAddress& rRange,
+                            const ScRange& rRange,
                             const DataTableModel& rModel );
 
     /** Sets default cell formatting for the specified range of rows. */
@@ -160,22 +159,22 @@ private:
 
     /** Inserts the passed array formula into the sheet. */
     void                finalizeArrayFormula(
-                            const css::table::CellRangeAddress& rRange,
+                            const ScRange& rRange,
                             const ApiTokenSequence& rTokens ) const;
     /** Inserts the passed table operation into the sheet. */
     void finalizeTableOperation(
-        const css::table::CellRangeAddress& rRange, const DataTableModel& rModel );
+        const ScRange& rRange, const DataTableModel& rModel );
 
     /** Writes all cell formatting attributes to the passed cell range list. (depreciates writeXfIdRangeProperties) */
     void                applyCellMerging( const ScRange& rRange );
     void                addColXfStyle( sal_Int32 nXfId, sal_Int32 nFormatId, const css::table::CellRangeAddress& rAddress, bool bProcessRowRange = false );
 private:
     /** Stores cell range address and formula token array of an array formula. */
-    typedef ::std::pair< css::table::CellRangeAddress, ApiTokenSequence > ArrayFormula;
+    typedef std::pair< ScRange, ApiTokenSequence > ArrayFormula;
     typedef ::std::list< ArrayFormula > ArrayFormulaList;
 
     /** Stores cell range address and settings of a table operation. */
-    typedef ::std::pair< css::table::CellRangeAddress, DataTableModel > TableOperation;
+    typedef std::pair< ScRange, DataTableModel > TableOperation;
     typedef ::std::list< TableOperation > TableOperationList;
 
     /** Stores information about a range of rows with equal cell formatting. */

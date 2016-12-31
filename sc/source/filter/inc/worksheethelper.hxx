@@ -200,7 +200,7 @@ public:
                         getCell( const ScAddress& rAddress ) const;
     /** Returns the XCellRange interface for the passed cell range address. */
     css::uno::Reference< css::table::XCellRange >
-                        getCellRange( const css::table::CellRangeAddress& rRange ) const;
+                        getCellRange( const ScRange& rRange ) const;
 
     /** Returns the XDrawPage interface of the draw page of the current sheet. */
     css::uno::Reference< css::drawing::XDrawPage >
