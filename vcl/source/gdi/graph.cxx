@@ -569,10 +569,10 @@ bool Graphic::ExportNative( SvStream& rOStream ) const
     return mxImpGraphic->ImplExportNative( rOStream );
 }
 
-SvStream& ReadGraphic( SvStream& rIStream, Graphic& rGraphic )
+void ReadGraphic(SvStream& rIStream, Graphic& rGraphic)
 {
     rGraphic.ImplTestRefCount();
-    return ReadImpGraphic(rIStream, *rGraphic.mxImpGraphic);
+    ReadImpGraphic(rIStream, *rGraphic.mxImpGraphic);
 }
 
 SvStream& WriteGraphic( SvStream& rOStream, const Graphic& rGraphic )
