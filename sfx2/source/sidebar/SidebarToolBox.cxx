@@ -293,7 +293,7 @@ IMPL_LINK_NOARG(SidebarToolBox, ChangedIconSizeHandler, LinkParamNone*, void)
             if(SfxViewFrame::Current())
             {
                 css::uno::Reference<frame::XFrame> xFrame = SfxViewFrame::Current()->GetFrame().GetFrameInterface();
-                Image aImage = vcl::CommandInfoProvider::Instance().GetImageForCommand(aCommandURL, xFrame, eImageType);
+                Image aImage = vcl::CommandInfoProvider::GetImageForCommand(aCommandURL, xFrame, eImageType);
                 // Try also to query for add-on images before giving up and use an
                 // empty image.
                 if (!aImage)

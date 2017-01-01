@@ -123,14 +123,14 @@ static Image RetrieveImage( Reference< css::frame::XFrame >& rFrame,
         if ( !!aImage )
             return aImage;
         else
-            aImage = vcl::CommandInfoProvider::Instance().GetImageForCommand(aImageId, rFrame, eImageType);
+            aImage = vcl::CommandInfoProvider::GetImageForCommand(aImageId, rFrame, eImageType);
         if ( !!aImage )
             return aImage;
     }
 
     aImage = framework::AddonsOptions().GetImageFromURL( aURL, bBigImage );
     if ( !aImage )
-        aImage = vcl::CommandInfoProvider::Instance().GetImageForCommand(aImageId, rFrame, eImageType);
+        aImage = vcl::CommandInfoProvider::GetImageForCommand(aImageId, rFrame, eImageType);
 
     return aImage;
 }
@@ -260,7 +260,7 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
 
                 m_pToolBar->InsertItem( nId, aTitle );
 
-                OUString aShortcut(vcl::CommandInfoProvider::Instance().GetCommandShortcut(aURL, m_xFrame));
+                OUString aShortcut(vcl::CommandInfoProvider::GetCommandShortcut(aURL, m_xFrame));
                 if (!aShortcut.isEmpty())
                     m_pToolBar->SetQuickHelpText(nId, aTitle + " (" + aShortcut + ")");
 
