@@ -1644,6 +1644,15 @@ void SfxViewShell::NotifyCursor(SfxViewShell* /*pViewShell*/) const
 {
 }
 
+bool SfxViewShell::UseLOKOutputDevice(const OutputDevice* /*pOutputDevice*/) const
+{
+    return false;
+}
+
+void SfxViewShell::InvalidateWindows(std::function<void (vcl::Window& )>& /*f*/)
+{
+}
+
 void SfxViewShell::setTiledSearching(bool bTiledSearching)
 {
     pImp->m_bTiledSearching = bTiledSearching;
