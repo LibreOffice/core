@@ -134,6 +134,7 @@ private:
     ScHeaderFunctionSet      aHdrFunc;
 
     ScDrawView*         pDrawView;
+    std::unique_ptr<FmFormView> pLOKDrawView;
 
     Size                aFrameSize;             // passed on as for DoResize
     Point               aBorderPos;
@@ -327,6 +328,9 @@ public:
     ScDrawView*     GetScDrawView()         { return pDrawView; }
     // gegen CLOKs
     SdrView*        GetSdrView()            { return pDrawView; }
+
+    FmFormView*     GetLOKDrawView();
+    bool            UseLOKOutputDevice(const OutputDevice* pOutputDevice) const;
 
     bool            IsMinimized() const     { return bMinimized; }
 
@@ -582,6 +586,7 @@ public:
     /// @see ScModelObj::getRowColumnHeaders().
     OUString getRowColumnHeaders(const Rectangle& rRectangle);
     void OnLOKNoteStateChanged(const ScAddress& rPos);
+    void ForEachGridWindow(std::function<void (vcl::Window& )>& f);
 };
 
 #endif
