@@ -29,7 +29,6 @@
 
 #include <vector>
 
-class ImageList;
 class Bitmap;
 class SfxItemSet;
 class Color;

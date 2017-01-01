@@ -27,8 +27,6 @@
 #include <vcl/dllapi.h>
 #include <vcl/bitmap.hxx>
 
-
-class ImageList;
 class BitmapEx;
 
 class VCL_DLLPUBLIC AlphaMask : private Bitmap

@@ -29,8 +29,6 @@
 #include <tools/fldunit.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 
-class ImageList;
-
 class SfxBindings;
 class SfxObjectFactory;
 class ModalDialog;
