@@ -69,18 +69,6 @@ namespace
             virtual css::uno::Type SAL_CALL getElementType(  ) throw (css::uno::RuntimeException, std::exception) override
                 { return ::cppu::UnoType<OUString>::get(); };
     };
-
-    class ResourceStringListIndexAccess : public ResourceIndexAccessBase
-    {
-        public:
-            explicit ResourceStringListIndexAccess(const std::shared_ptr<ResMgr>& pResMgr)
-                : ResourceIndexAccessBase(pResMgr) {}
-            // XIndexAccess
-            virtual css::uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
-            // XElementAccessBase
-            virtual css::uno::Type SAL_CALL getElementType(  ) throw (css::uno::RuntimeException, std::exception) override
-                { return cppu::UnoType<Sequence<PropertyValue>>::get(); };
-    };
 }
 
 ResourceIndexAccess::ResourceIndexAccess(Sequence<Any> const& rArgs, Reference<XComponentContext> const&)
@@ -138,32 +126,6 @@ Any SAL_CALL ResourceStringIndexAccess::getByIndex(sal_Int32 nIdx)
         throw RuntimeException("string resource for id not available");
 
     return makeAny(aId.toString());
-}
-
-Any SAL_CALL ResourceStringListIndexAccess::getByIndex(sal_Int32 nIdx)
-    throw (IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception)
-{
-    if(nIdx > SAL_MAX_UINT16 || nIdx < 0)
-        throw IndexOutOfBoundsException();
-    SolarMutexGuard aGuard;
-
-    if(!m_pResMgr.get())
-        throw RuntimeException("resource manager not available");
-
-    const ResId aId(static_cast<sal_uInt16>(nIdx), *m_pResMgr);
-    aId.SetRT(RSC_STRINGARRAY);
-    if(!m_pResMgr->IsAvailable(aId))
-        throw RuntimeException("string list resource for id not available");
-    const ResStringArray aStringList(aId);
-    Sequence<PropertyValue> aPropList(aStringList.Count());
-    for(sal_Int32 nCount = 0; nCount != aPropList.getLength(); ++nCount)
-    {
-        aPropList[nCount].Name = aStringList.GetString(nCount);
-        aPropList[nCount].Handle = -1;
-        aPropList[nCount].Value <<= aStringList.GetValue(nCount);
-        aPropList[nCount].State = PropertyState_DIRECT_VALUE;
-    }
-    return makeAny(aPropList);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
