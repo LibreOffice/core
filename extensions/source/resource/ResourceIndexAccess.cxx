@@ -97,9 +97,6 @@ Any SAL_CALL ResourceIndexAccess::getByName(const OUString& aName)
         case 0:
             xResult.set(new ResourceStringIndexAccess(m_pResMgr));
             break;
-        case 1:
-            xResult.set(new ResourceStringListIndexAccess(m_pResMgr));
-            break;
         default:
             throw NoSuchElementException();
     }
@@ -112,9 +109,8 @@ Sequence<OUString> SAL_CALL ResourceIndexAccess::getElementNames(  )
     static Sequence<OUString> aResult;
     if( aResult.getLength() == 0)
     {
-        aResult.realloc(2);
+        aResult.realloc(1);
         aResult[0] = "String";
-        aResult[1] = "StringList";
     }
     return aResult;
 }
