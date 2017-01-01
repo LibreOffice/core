@@ -575,9 +575,9 @@ void ReadGraphic(SvStream& rIStream, Graphic& rGraphic)
     ReadImpGraphic(rIStream, *rGraphic.mxImpGraphic);
 }
 
-SvStream& WriteGraphic( SvStream& rOStream, const Graphic& rGraphic )
+void WriteGraphic( SvStream& rOStream, const Graphic& rGraphic )
 {
-    return WriteImpGraphic(rOStream, *rGraphic.mxImpGraphic);
+    WriteImpGraphic(rOStream, *rGraphic.mxImpGraphic);
 }
 
 const SvgDataPtr& Graphic::getSvgData() const
