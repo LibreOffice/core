@@ -46,7 +46,7 @@ PaintTransparentChildren(vcl::Window & rWindow, Rectangle const& rPixelRect);
 class SdrPreRenderDevice
 {
     // The original OutputDevice
-    OutputDevice&          mrOutputDevice;
+    VclPtr<OutputDevice>   mpOutputDevice;
 
     // The VirtualDevice for PreRendering
     VclPtr<VirtualDevice>  mpPreRenderDevice;
@@ -65,7 +65,7 @@ class SVX_DLLPUBLIC SdrPaintWindow
 {
 private:
     // the OutputDevice this window represents
-    OutputDevice&                                       mrOutputDevice;
+    VclPtr<OutputDevice>                                mpOutputDevice;
 
     /// In case mrOutputDevice is a buffer for a vcl::Window, this is the window.
     VclPtr<vcl::Window>                                 mpWindow;
@@ -95,7 +95,7 @@ public:
 
     // data read accesses
     SdrPaintView& GetPaintView() const { return mrPaintView; }
-    OutputDevice& GetOutputDevice() const { return mrOutputDevice; }
+    OutputDevice& GetOutputDevice() const { return *mpOutputDevice.get(); }
     vcl::Window* GetWindow() const { return mpWindow; }
 
     // OVERLAYMANAGER
@@ -108,13 +108,13 @@ public:
     Rectangle GetVisibleArea() const;
 
     // Is OutDev a printer?
-    bool OutputToPrinter() const { return (OUTDEV_PRINTER == mrOutputDevice.GetOutDevType()); }
+    bool OutputToPrinter() const { return (OUTDEV_PRINTER == mpOutputDevice->GetOutDevType()); }
 
     // Is OutDev a window?
-    bool OutputToWindow() const { return (OUTDEV_WINDOW == mrOutputDevice.GetOutDevType()); }
+    bool OutputToWindow() const { return (OUTDEV_WINDOW == mpOutputDevice->GetOutDevType()); }
 
     // Is OutDev a VirtualDevice?
-    bool OutputToVirtualDevice() const { return (OUTDEV_VIRDEV == mrOutputDevice.GetOutDevType()); }
+    bool OutputToVirtualDevice() const { return (OUTDEV_VIRDEV == mpOutputDevice->GetOutDevType()); }
 
     // Is OutDev a recording MetaFile?
     bool OutputToRecordingMetaFile() const;
@@ -134,7 +134,7 @@ public:
     void setTemporaryTarget(bool bNew) { mbTemporaryTarget = bNew; }
 
     // #i72889# get target output device, take into account output buffering
-    OutputDevice& GetTargetOutputDevice() { if(mpPreRenderDevice) return mpPreRenderDevice->GetPreRenderDevice(); else return mrOutputDevice; }
+    OutputDevice& GetTargetOutputDevice() { if(mpPreRenderDevice) return mpPreRenderDevice->GetPreRenderDevice(); else return *mpOutputDevice.get(); }
 };
 
 // typedefs for a list of SdrPaintWindows
