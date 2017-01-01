@@ -51,15 +51,13 @@ public:
     SfxTbxCtrlFactArr_Impl*     pTbxCtrlFac;
     SfxStbCtrlFactArr_Impl*     pStbCtrlFac;
     SfxChildWinFactArr_Impl*    pFactArr;
-    ImageList*                  pImgListSmall;
-    ImageList*                  pImgListBig;
 
                                 SfxModule_Impl();
                                 ~SfxModule_Impl();
 };
 
 SfxModule_Impl::SfxModule_Impl()
- : pSlotPool(nullptr), pTbxCtrlFac(nullptr), pStbCtrlFac(nullptr), pFactArr(nullptr), pImgListSmall(nullptr), pImgListBig(nullptr)
+ : pSlotPool(nullptr), pTbxCtrlFac(nullptr), pStbCtrlFac(nullptr), pFactArr(nullptr)
 {
 }
 
@@ -69,8 +67,6 @@ SfxModule_Impl::~SfxModule_Impl()
     delete pTbxCtrlFac;
     delete pStbCtrlFac;
     delete pFactArr;
-    delete pImgListSmall;
-    delete pImgListBig;
 }
 
 SFX_IMPL_SUPERCLASS_INTERFACE(SfxModule, SfxShell)
@@ -100,8 +96,6 @@ void SfxModule::Construct_Impl()
     pImpl->pTbxCtrlFac=nullptr;
     pImpl->pStbCtrlFac=nullptr;
     pImpl->pFactArr=nullptr;
-    pImpl->pImgListSmall=nullptr;
-    pImpl->pImgListBig=nullptr;
 
     SetPool( &pApp->GetPool() );
 }
