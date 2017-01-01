@@ -212,8 +212,8 @@ public:
 
     bool            ExportNative( SvStream& rOStream ) const;
 
-    friend VCL_DLLPUBLIC SvStream& WriteGraphic( SvStream& rOStream, const Graphic& rGraphic );
-    friend VCL_DLLPUBLIC void ReadGraphic( SvStream& rIStream, Graphic& rGraphic );
+    friend VCL_DLLPUBLIC void WriteGraphic(SvStream& rOStream, const Graphic& rGraphic);
+    friend VCL_DLLPUBLIC void ReadGraphic(SvStream& rIStream, Graphic& rGraphic);
 
 public:
 
