@@ -651,8 +651,8 @@ void AutoFilterBuffer::finalizeImport( sal_Int16 nSheet )
     // rely on existence of the defined name '_FilterDatabase' containing the range address of the filtered area
     if( const DefinedName* pFilterDBName = getDefinedNames().getByBuiltinId( BIFF_DEFNAME_FILTERDATABASE, nSheet ).get() )
     {
-        CellRangeAddress aFilterRange;
-        if( pFilterDBName->getAbsoluteRange( aFilterRange ) && (aFilterRange.Sheet == nSheet) )
+        ScRange aFilterRange;
+        if( pFilterDBName->getAbsoluteRange( aFilterRange ) && (aFilterRange.aStart.Tab() == nSheet) )
         {
             // use the same name for the database range as used for the defined name '_FilterDatabase'
             Reference< XDatabaseRange > xDatabaseRange = createUnnamedDatabaseRangeObject( aFilterRange );
