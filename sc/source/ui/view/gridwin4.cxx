@@ -1196,12 +1196,19 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
 
     // setup the SdrPage so that drawinglayer works correctly
     ScDrawLayer* pModel = pDoc->GetDrawLayer();
-    std::unique_ptr<FmFormView> pDrawView;
+
     if (pModel)
     {
-        pDrawView.reset(new FmFormView(pModel, &rDevice));
-        pDrawView->ShowSdrPage(pDrawView->GetModel()->GetPage(nTab));
-        aOutputData.SetDrawView( pDrawView.get() );
+        FmFormView* pDrawView = pViewData->GetLOKDrawView();
+        if (pDrawView)
+        {
+            if (mpLOKOutputDevice)
+                pDrawView->DeleteWindowFromPaintView(mpLOKOutputDevice.get());
+            mpLOKOutputDevice.reset(&rDevice);
+            pDrawView->AddWindowToPaintView(&rDevice, nullptr);
+            pDrawView->ShowSdrPage(pDrawView->GetModel()->GetPage(nTab));
+            aOutputData.SetDrawView( pDrawView );
+        }
     }
 
     // draw the content

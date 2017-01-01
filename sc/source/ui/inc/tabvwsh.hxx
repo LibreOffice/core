@@ -395,6 +395,12 @@ public:
     int getPart() const override;
     /// See SfxViewShell::NotifyCursor().
     void NotifyCursor(SfxViewShell* pViewShell) const override;
+    /// See SfxViewShell:: UseLOKOutputDevice().
+    virtual bool UseLOKOutputDevice(const OutputDevice* pOutputDevice) const override
+            { return ScTabView::UseLOKOutputDevice(pOutputDevice); }
+    /// See SfxViewShell::InvalidateWindows().
+    virtual void InvalidateWindows(std::function<void (vcl::Window& )>& f) override
+            { ScTabView::ForEachGridWindow(f); }
 };
 
 #endif
