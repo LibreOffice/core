@@ -1356,10 +1356,10 @@ bool ImpGraphic::ImplExportNative( SvStream& rOStm ) const
 }
 
 
-SvStream& ReadImpGraphic( SvStream& rIStm, ImpGraphic& rImpGraphic )
+void ReadImpGraphic( SvStream& rIStm, ImpGraphic& rImpGraphic )
 {
     if (rIStm.GetError())
-        return rIStm;
+        return;
 
     const sal_uLong nStmPos1 = rIStm.Tell();
     sal_uInt32 nTmp;
@@ -1375,7 +1375,7 @@ SvStream& ReadImpGraphic( SvStream& rIStm, ImpGraphic& rImpGraphic )
     // read nothing. CAUTION: Eof is only true AFTER reading another
     // byte, a speciality of SvMemoryStream (!)
     if (rIStm.GetError() || rIStm.IsEof())
-        return rIStm;
+        return;
 
     if (NATIVE_FORMAT_50 == nTmp)
     {
@@ -1414,7 +1414,7 @@ SvStream& ReadImpGraphic( SvStream& rIStm, ImpGraphic& rImpGraphic )
             rIStm.Seek( nStmPos1 );
             rIStm.SetError( ERRCODE_IO_WRONGFORMAT );
         }
-        return rIStm;
+        return;
     }
 
     BitmapEx        aBmpEx;
@@ -1516,11 +1516,9 @@ SvStream& ReadImpGraphic( SvStream& rIStm, ImpGraphic& rImpGraphic )
     }
 
     rIStm.SetEndian( nOldFormat );
-
-    return rIStm;
 }
 
-SvStream& WriteImpGraphic( SvStream& rOStm, const ImpGraphic& rImpGraphic )
+void WriteImpGraphic(SvStream& rOStm, const ImpGraphic& rImpGraphic)
 {
     if( !rOStm.GetError() )
     {
@@ -1603,8 +1601,6 @@ SvStream& WriteImpGraphic( SvStream& rOStm, const ImpGraphic& rImpGraphic )
         else
              rOStm.SetError( SVSTREAM_GENERALERROR );
     }
-
-    return rOStm;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

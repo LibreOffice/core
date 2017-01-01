@@ -138,8 +138,8 @@ private:
 
     bool                ImplExportNative( SvStream& rOStm ) const;
 
-    friend SvStream&    WriteImpGraphic( SvStream& rOStm, const ImpGraphic& rImpGraphic );
-    friend SvStream&    ReadImpGraphic( SvStream& rIStm, ImpGraphic& rImpGraphic );
+    friend void         WriteImpGraphic(SvStream& rOStm, const ImpGraphic& rImpGraphic);
+    friend void         ReadImpGraphic(SvStream& rIStm, ImpGraphic& rImpGraphic);
 
     const SvgDataPtr&   getSvgData() const { return maSvgData; }
 };
