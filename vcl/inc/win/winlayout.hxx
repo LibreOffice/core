@@ -157,18 +157,6 @@ public:
 private:
     // TODO: also add HFONT??? Watch out for issues with too many active fonts...
 
-public:
-    SCRIPT_CACHE&           GetScriptCache() const
-                            { return maScriptCache; }
-private:
-    mutable SCRIPT_CACHE    maScriptCache;
-
-public:
-    bool                    InitKashidaHandling( HDC );
-    int                     GetMinKashidaWidth() const { return mnMinKashidaWidth; }
-    int                     GetMinKashidaGlyph() const { return mnMinKashidaGlyph; }
-
-private:
     GlyphCache maGlyphCache;
 public:
     bool CacheGlyphToAtlas(HDC hDC, HFONT hFont, int nGlyphIndex, SalGraphics& rGraphics);
@@ -177,10 +165,6 @@ public:
     {
         return maGlyphCache;
     }
-
-private:
-    mutable int                     mnMinKashidaWidth;
-    mutable int                     mnMinKashidaGlyph;
 };
 
 class TextOutRenderer
