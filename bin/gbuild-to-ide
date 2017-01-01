@@ -108,26 +108,26 @@ class GbuildParser:
                 with open(os.path.join(self.workdir, 'GbuildToJson', jsontype, jsonfilename), 'r') as f:
                     jsondata = json.load(f)
 
-                    (foundincludes, foundisystem) = self.__split_includes(jsondata['INCLUDE'])
-                    match = self.buildpattern[jsontype].match(os.path.basename(jsondata['MAKEFILE'])).group(1)
+                    (foundincludes, foundisystem) = GbuildParser.__split_includes(jsondata['INCLUDE'])
+                    match = GbuildParser.buildpattern[jsontype].match(os.path.basename(jsondata['MAKEFILE'])).group(1)
                     newObj = GbuildLinkTarget(match,
                                               os.path.dirname(jsondata['MAKEFILE']),
                                               foundincludes,
                                               foundisystem,
-                                              self.__split_defs(jsondata['DEFS']),
-                                              self.__split_objs(jsondata['CXXOBJECTS']),
-                                              self.__split_flags(jsondata['CXXFLAGS'], jsondata['CXXFLAGSAPPEND']),
+                                              GbuildParser.__split_defs(jsondata['DEFS']),
+                                              GbuildParser.__split_objs(jsondata['CXXOBJECTS']),
+                                              GbuildParser.__split_flags(jsondata['CXXFLAGS'], jsondata['CXXFLAGSAPPEND']),
                                               jsondata['LINKED_LIBS'].strip().split(' '),
                                               jsondata['ASMOBJECTS'],
-                                              self.__split_flags(jsondata['CFLAGS'], jsondata['CFLAGSAPPEND']),
+                                              GbuildParser.__split_flags(jsondata['CFLAGS'], jsondata['CFLAGSAPPEND']),
                                               jsondata['GENCOBJECTS'],
                                               jsondata['GENCXXOBJECTS'],
                                               jsondata['ILIBTARGET'],
                                               jsondata['LINKED_STATIC_LIBS'],
                                               jsondata['LINKTARGET'],
-                                              self.__split_flags(jsondata['OBJCFLAGS'], jsondata['OBJCFLAGSAPPEND']),
+                                              GbuildParser.__split_flags(jsondata['OBJCFLAGS'], jsondata['OBJCFLAGSAPPEND']),
                                               jsondata['OBJCOBJECTS'],
-                                              self.__split_flags(jsondata['OBJCXXFLAGS'], jsondata['OBJCXXFLAGSAPPEND']),
+                                              GbuildParser.__split_flags(jsondata['OBJCXXFLAGS'], jsondata['OBJCXXFLAGSAPPEND']),
                                               jsondata['OBJCXXOBJECTS'],
                                               jsondata['YACCOBJECTS'],
                                               jsontype)
@@ -154,8 +154,7 @@ class GbuildParser:
 class IdeIntegrationGenerator:
 
     def __init__(self, gbuildparser, ide):
-        self.gbuildparser = gbuildparser
-        self.ide = ide
+        (self.gbuildparser, self.ide) = (gbuildparser, ide)
 
     def emit(self):
         pass
