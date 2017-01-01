@@ -1116,9 +1116,11 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamily( FontSelectPattern& r
         }
         else
             nTokenPos = -1;
-        if( mpPreMatchHook )
-            if( mpPreMatchHook->FindFontSubstitute( rFSD ) )
-                aSearchName = GetEnglishSearchFontName( aSearchName );
+        if (FindMetricCompatibleFont(rFSD) ||
+            (mpPreMatchHook && mpPreMatchHook->FindFontSubstitute(rFSD)))
+        {
+            aSearchName = GetEnglishSearchFontName( aSearchName );
+        }
         ImplFontSubstitute( aSearchName );
         PhysicalFontFamily* pFoundData = ImplFindFontFamilyBySearchName( aSearchName );
         if( pFoundData )
