@@ -65,7 +65,7 @@ class GbuildParser:
         self.makecmd = makecmd
         self.binpath = os.path.dirname(os.environ['GPERF']) # woha, this is quite a hack
         (self.srcdir, self.builddir, self.instdir, self.workdir) = (os.environ['SRCDIR'], os.environ['BUILDDIR'], os.environ['INSTDIR'], os.environ['WORKDIR'])
-        (self.libs, self.exes, self.tests, self.modulenamelist) = ([], [], [], [])
+        (self.modulenamelist, self.files) = ([], [])
         (self.target_by_path, self.target_by_location) = ({}, {})
 
     includepattern = re.compile('-I(\S+)')
@@ -131,13 +131,8 @@ class GbuildParser:
                                               jsondata['OBJCXXOBJECTS'],
                                               jsondata['YACCOBJECTS'],
                                               jsontype)
-                    if jsontype == 'Library':
-                        self.libs.append(newObj)
-                    elif jsontype == 'Executable':
-                        self.exes.append(newObj)
-                    elif jsontype == 'CppunitTest':
-                        self.tests.append(newObj)
-        for target in set(self.libs) | set(self.exes) | set(self.tests):
+                    self.files.append(newObj)
+        for target in self.files:
             if target.location not in self.target_by_location:
                 self.target_by_location[target.location] = set()
             self.target_by_location[target.location] |= set([target])
@@ -291,12 +286,8 @@ class DebugIntegrationGenerator(IdeIntegrationGenerator):
     def emit(self):
         print(self.gbuildparser.srcdir)
         print(self.gbuildparser.builddir)
-        for lib in self.gbuildparser.libs:
-            print(lib)
-        for exe in self.gbuildparser.exes:
-            print(exe)
-        for test in self.gbuildparser.tests:
-            print(test)
+        for f in self.gbuildparser.files:
+            print(f)
 
 
 class VimIntegrationGenerator(IdeIntegrationGenerator):
@@ -306,7 +297,7 @@ class VimIntegrationGenerator(IdeIntegrationGenerator):
 
     def emit(self):
         global_list = []
-        for lib in set(self.gbuildparser.libs) | set(self.gbuildparser.tests):
+        for lib in self.gbuildparser.files:
             entries = []
             for file in lib.cxxobjects:
                 filePath = os.path.join(self.gbuildparser.srcdir, file) + ".cxx"
@@ -560,12 +551,14 @@ class XcodeIntegrationGenerator(IdeIntegrationGenerator):
         self.write_dict(dict, file, 0)
 
     def get_product_type(self, modulename):
-        if modulename in self.gbuildparser.libs:
+        if modulename.build_type == 'Library':
             return 'com.apple.product-type.library.dynamic'
-        elif modulename in self.gbuildparser.exes:
-            return 'com.apple.product-type.something'
-        else:
+        elif modulename.build_type == 'Executable':
+            return 'com.apple.product-type.executable'
+        elif modulename.build_type == 'CppunitTest':
             return 'com.apple.product-type.cppunit'
+        else:
+            return 'com.apple.product-type.something'
 
     counter = 0
 
@@ -849,7 +842,7 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
 
     def write_solution(self, solution_path, projects):
         print('Solution %s:' % os.path.splitext(os.path.basename(solution_path))[0], end='')
-        library_projects = [project for project in projects if project.target in self.gbuildparser.libs]
+        library_projects = [project for project in projects if project.target.build_type == 'Library']
         with open(solution_path, 'w') as f:
             f.write('Microsoft Visual Studio Solution File, Format Version 12.00\n')
             for project in projects:
@@ -1038,7 +1031,7 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
     def __init__(self, gbuildparser, ide):
         IdeIntegrationGenerator.__init__(self, gbuildparser, ide)
         self.target_by_location = {}
-        for target in set(self.gbuildparser.libs) | set(self.gbuildparser.exes):
+        for target in self.gbuildparser.files:
             if target.location not in self.target_by_location:
                 self.target_by_location[target.location] = set()
             self.target_by_location[target.location] |= set([target])
@@ -1494,7 +1487,7 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
 
         self.data_libs = {}
 
-        all_libs = set(self.gbuildparser.libs) | set(self.gbuildparser.exes)
+        all_libs = self.gbuildparser.files
         for lib in all_libs:
             self._log("\nlibrary : %s, loc=%s" % (lib.short_name(), lib.location))
             lib_name = os.path.basename(lib.location)
