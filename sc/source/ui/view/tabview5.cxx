@@ -268,6 +268,40 @@ void ScTabView::MakeDrawView( TriState nForceDesignMode )
     }
 }
 
+FmFormView* ScTabView::GetLOKDrawView()
+{
+    if (!comphelper::LibreOfficeKit::isActive())
+        return nullptr;
+
+    if (!pLOKDrawView)
+    {
+        ScDrawLayer* pLayer = aViewData.GetDocument()->GetDrawLayer();
+        OSL_ENSURE(pLayer, "no Draw Layer available");
+        pLOKDrawView.reset(new FmFormView(pLayer, nullptr));
+    }
+
+    return pLOKDrawView.get();
+}
+
+bool ScTabView::UseLOKOutputDevice(const OutputDevice* pOutputDevice) const
+{
+    if (!comphelper::LibreOfficeKit::isActive())
+        return false;
+
+    if (pOutputDevice)
+    {
+        for (int i = 0; i < 4; ++i)
+        {
+            if (pGridWin[i])
+            {
+                if (pGridWin[i]->GetLOKVirtualDevice() == pOutputDevice)
+                    return true;
+            }
+        }
+    }
+    return false;
+}
+
 void ScTabView::DoAddWin( ScGridWindow* pWin )
 {
     if (pDrawView)
@@ -277,6 +311,7 @@ void ScTabView::DoAddWin( ScGridWindow* pWin )
         pWin->DrawLayerCreated();
     }
 }
+
 
 void ScTabView::TabChanged( bool bSameTabButMoved )
 {
@@ -688,6 +723,17 @@ void ScTabView::OnLOKNoteStateChanged(const ScAddress& rPos)
                 }
             }
             pViewShell = SfxViewShell::GetNext(*pViewShell);
+        }
+    }
+}
+
+void  ScTabView::ForEachGridWindow(std::function<void (vcl::Window& )>& f)
+{
+    for (auto& pWin: pGridWin)
+    {
+        if (pWin && pWin->IsVisible())
+        {
+            f(*pWin);
         }
     }
 }
