@@ -36,8 +36,6 @@ namespace com { namespace sun { namespace star {
     namespace sheet { class XSpreadsheetDocument; }
     namespace sheet { struct FormulaToken; }
     namespace style { class XStyle; }
-    namespace table { struct CellAddress; }
-    namespace table { struct CellRangeAddress; }
     namespace table { class XCell; }
     namespace table { class XCellRange; }
 } } }
@@ -187,13 +185,13 @@ public:
     css::uno::Reference< css::sheet::XDatabaseRange >
                         createDatabaseRangeObject(
                             OUString& orName,
-                            const css::table::CellRangeAddress& rRangeAddr ) const;
+                            const ScRange& rRangeAddr ) const;
 
     /** Creates and returns an unnamed database range on-the-fly in the Calc document.
         The range will not be buffered in the global table buffer. */
     css::uno::Reference< css::sheet::XDatabaseRange >
                         createUnnamedDatabaseRangeObject(
-                            const css::table::CellRangeAddress& rRangeAddr ) const;
+                            const ScRange& rRangeAddr ) const;
 
     /** Finds the (already existing) database range of the given formula token index. */
     ScDBData* findDatabaseRangeByIndex( sal_uInt16 nIndex ) const;
