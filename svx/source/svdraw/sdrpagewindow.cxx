@@ -37,6 +37,9 @@
 #include <svx/fmview.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <comphelper/lok.hxx>
+#include <sfx2/lokhelper.hxx>
 
 using namespace ::com::sun::star;
 
@@ -402,14 +405,10 @@ void SdrPageWindow::RedrawLayer( const SdrLayerID* pId, sdr::contact::ViewObject
     // reset redirector
     GetObjectContact().SetViewObjectContactRedirector(nullptr);
 }
-
-// Invalidate call, used from ObjectContact(OfPageView) in InvalidatePartOfView(...)
-void SdrPageWindow::InvalidatePageWindow(const basegfx::B2DRange& rRange)
-{
-    if(GetPageView().IsVisible() && GetPaintWindow().OutputToWindow())
+namespace {
+    void lcl_InvalidateWindow(const basegfx::B2DRange& rRange, vcl::Window& rWindow)
     {
         const SvtOptionsDrawinglayer aDrawinglayerOpt;
-        vcl::Window& rWindow(static_cast< vcl::Window& >(GetPaintWindow().GetOutputDevice()));
         basegfx::B2DRange aDiscreteRange(rRange);
         aDiscreteRange.transform(rWindow.GetViewTransformation());
 
@@ -430,6 +429,41 @@ void SdrPageWindow::InvalidatePageWindow(const basegfx::B2DRange& rRange)
         rWindow.EnableMapMode(false);
         rWindow.Invalidate(aVCLDiscreteRectangle, InvalidateFlags::NoErase);
         rWindow.EnableMapMode(bWasMapModeEnabled);
+    }
+} // end of anonymous namespace
+
+// Invalidate call, used from ObjectContact(OfPageView) in InvalidatePartOfView(...)
+void SdrPageWindow::InvalidatePageWindow(const basegfx::B2DRange& rRange)
+{
+    if (!GetPageView().IsVisible())
+        return;
+    SdrPaintWindow& rPaintWindow = GetPaintWindow();
+
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        SfxViewShell* pCurViewShell = SfxViewShell::Current();
+        if (pCurViewShell)
+        {
+            OutputDevice& rOutDev = rPaintWindow.GetOutputDevice();
+            if (pCurViewShell->UseLOKOutputDevice(&rOutDev))
+            {
+                std::function<void(vcl::Window&)> lInvalidateWindow =
+                        std::bind(lcl_InvalidateWindow, rRange, std::placeholders::_1);
+
+                SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+                while (pViewShell)
+                {
+                    pViewShell->InvalidateWindows(lInvalidateWindow);
+                    pViewShell = SfxViewShell::GetNext(*pViewShell);
+                }
+            }
+        }
+    }
+
+    if(rPaintWindow.OutputToWindow())
+    {
+        vcl::Window& rWindow(static_cast< vcl::Window& >(rPaintWindow.GetOutputDevice()));
+        lcl_InvalidateWindow(rRange, rWindow);
     }
 }
 

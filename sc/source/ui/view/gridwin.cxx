@@ -515,6 +515,7 @@ void ScGridWindow::dispose()
 {
     ImpDestroyOverlayObjects();
 
+    mpLOKOutputDevice.disposeAndClear();
     mpFilterBox.disposeAndClear();
     mpFilterFloat.disposeAndClear();
     mpNoteMarker.reset();
