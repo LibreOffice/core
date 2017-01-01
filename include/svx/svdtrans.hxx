@@ -281,7 +281,7 @@ inline bool IsInch(FieldUnit eU) {
 class SVX_DLLPUBLIC SdrFormatter {
     long      nMul_;
     long      nDiv_;
-    short     nKomma_;
+    short     nComma_;
     bool      bDirty;
     MapUnit   eSrcMU;
     MapUnit   eDstMU;
@@ -291,7 +291,7 @@ public:
     SdrFormatter(MapUnit eSrc, MapUnit eDst)
         : nMul_(0)
         , nDiv_(0)
-        , nKomma_(0)
+        , nComma_(0)
         , bDirty(true)
         , eSrcMU(eSrc)
         , eDstMU(eDst)

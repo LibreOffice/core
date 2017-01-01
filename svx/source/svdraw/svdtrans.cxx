@@ -660,32 +660,32 @@ FrPair GetMapFactor(FieldUnit eS, FieldUnit eD)
     // 1 yd      =  3 ft      =     36" =       914,4mm
     // 1 ft      = 12 "       =      1" =       304,8mm
 
-void GetMeterOrInch(MapUnit eMU, short& rnKomma, long& rnMul, long& rnDiv, bool& rbMetr, bool& rbInch)
+void GetMeterOrInch(MapUnit eMU, short& rnComma, long& rnMul, long& rnDiv, bool& rbMetr, bool& rbInch)
 {
     rnMul=1; rnDiv=1;
-    short nKomma=0;
+    short nComma=0;
     bool bMetr = false, bInch = false;
     switch (eMU) {
-        // Metrisch
-        case MapUnit::Map100thMM   : bMetr = true; nKomma=5; break;
-        case MapUnit::Map10thMM    : bMetr = true; nKomma=4; break;
-        case MapUnit::MapMM         : bMetr = true; nKomma=3; break;
-        case MapUnit::MapCM         : bMetr = true; nKomma=2; break;
+        // Metrically
+        case MapUnit::Map100thMM   : bMetr = true; nComma=5; break;
+        case MapUnit::Map10thMM    : bMetr = true; nComma=4; break;
+        case MapUnit::MapMM         : bMetr = true; nComma=3; break;
+        case MapUnit::MapCM         : bMetr = true; nComma=2; break;
         // Inch
-        case MapUnit::Map1000thInch: bInch = true; nKomma=3; break;
-        case MapUnit::Map100thInch : bInch = true; nKomma=2; break;
-        case MapUnit::Map10thInch  : bInch = true; nKomma=1; break;
-        case MapUnit::MapInch       : bInch = true; nKomma=0; break;
+        case MapUnit::Map1000thInch: bInch = true; nComma=3; break;
+        case MapUnit::Map100thInch : bInch = true; nComma=2; break;
+        case MapUnit::Map10thInch  : bInch = true; nComma=1; break;
+        case MapUnit::MapInch       : bInch = true; nComma=0; break;
         case MapUnit::MapPoint      : bInch = true; rnDiv=72;  break;          // 1Pt   = 1/72"
-        case MapUnit::MapTwip       : bInch = true; rnDiv=144; nKomma=1; break; // 1Twip = 1/1440"
-        // Sonstiges
+        case MapUnit::MapTwip       : bInch = true; rnDiv=144; nComma=1; break; // 1Twip = 1/1440"
+        // Others
         case MapUnit::MapPixel      : break;
         case MapUnit::MapSysFont    : break;
         case MapUnit::MapAppFont    : break;
         case MapUnit::MapRelative   : break;
         default: break;
     } // switch
-    rnKomma=nKomma;
+    rnComma=nComma;
     rbMetr=bMetr;
     rbInch=bInch;
 }
@@ -695,20 +695,20 @@ void SdrFormatter::Undirty()
 {
     bool bSrcMetr,bSrcInch,bDstMetr,bDstInch;
     long nMul1,nDiv1,nMul2,nDiv2;
-    short nKomma1,nKomma2;
+    short nComma1,nComma2;
     // first: normalize to m or in
-    GetMeterOrInch(eSrcMU,nKomma1,nMul1,nDiv1,bSrcMetr,bSrcInch);
-    GetMeterOrInch(eDstMU,nKomma2,nMul2,nDiv2,bDstMetr,bDstInch);
+    GetMeterOrInch(eSrcMU,nComma1,nMul1,nDiv1,bSrcMetr,bSrcInch);
+    GetMeterOrInch(eDstMU,nComma2,nMul2,nDiv2,bDstMetr,bDstInch);
     nMul1*=nDiv2;
     nDiv1*=nMul2;
-    nKomma1=nKomma1-nKomma2;
+    nComma1=nComma1-nComma2;
 
     if (bSrcInch && bDstMetr) {
-        nKomma1+=4;
+        nComma1+=4;
         nMul1*=254;
     }
     if (bSrcMetr && bDstInch) {
-        nKomma1-=4;
+        nComma1-=4;
         nDiv1*=254;
     }
 
@@ -719,7 +719,7 @@ void SdrFormatter::Undirty()
 
     nMul_=nMul1;
     nDiv_=nDiv1;
-    nKomma_=nKomma1;
+    nComma_=nComma1;
     bDirty=false;
 }
 
@@ -742,7 +742,7 @@ void SdrFormatter::TakeStr(long nVal, OUString& rStr) const
     if (bDirty)
         const_cast<SdrFormatter*>(this)->Undirty();
 
-    sal_Int16 nC(nKomma_);
+    sal_Int16 nC(nComma_);
 
     if(bNeg)
         nVal = -nVal;
