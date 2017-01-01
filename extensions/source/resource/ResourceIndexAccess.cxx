@@ -37,10 +37,10 @@ namespace
         return std::shared_ptr<ResMgr>(ResMgr::CreateResMgr(sEncName.getStr()));
     }
 
-    class ResourceIndexAccessBase : public cppu::WeakImplHelper< css::container::XIndexAccess>
+    class ResourceStringIndexAccess : public cppu::WeakImplHelper< css::container::XIndexAccess>
     {
         public:
-            explicit ResourceIndexAccessBase(const std::shared_ptr<ResMgr>& pResMgr)
+            explicit ResourceStringIndexAccess(const std::shared_ptr<ResMgr>& pResMgr)
                 : m_pResMgr(pResMgr)
             {
                 OSL_ENSURE(m_pResMgr, "no resource manager given");
@@ -49,25 +49,15 @@ namespace
             // XIndexAccess
             virtual ::sal_Int32 SAL_CALL getCount(  ) throw (css::uno::RuntimeException, std::exception) override
                 { return m_pResMgr.get() ? SAL_MAX_UINT16 : 0; };
+            virtual css::uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
             // XElementAccess
             virtual sal_Bool SAL_CALL hasElements(  ) throw (css::uno::RuntimeException, std::exception) override
                 { return static_cast<bool>(m_pResMgr.get()); };
-
-        protected:
-            // m_pResMgr should never be NULL
-            const std::shared_ptr<ResMgr> m_pResMgr;
-    };
-
-    class ResourceStringIndexAccess : public ResourceIndexAccessBase
-    {
-        public:
-            explicit ResourceStringIndexAccess(const std::shared_ptr<ResMgr>& pResMgr)
-                : ResourceIndexAccessBase(pResMgr) {}
-            // XIndexAccess
-            virtual css::uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
-            // XElementAccessBase
             virtual css::uno::Type SAL_CALL getElementType(  ) throw (css::uno::RuntimeException, std::exception) override
                 { return ::cppu::UnoType<OUString>::get(); };
+        private:
+            // m_pResMgr should never be NULL
+            const std::shared_ptr<ResMgr> m_pResMgr;
     };
 }
 
