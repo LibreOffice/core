@@ -126,7 +126,7 @@ public:
 
     css::awt::Size GetExtent( sal_Int64 nAspect );
     css::awt::Size GetCachedExtent( sal_Int64 nAspect );
-    css::awt::Size GetReccomendedExtent( sal_Int64 nAspect );
+    css::awt::Size GetRecommendedExtent( sal_Int64 nAspect );
 
     sal_Int64 GetMiscStatus( sal_Int64 nAspect );
 
