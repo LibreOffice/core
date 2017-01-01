@@ -596,14 +596,6 @@ SalLayout* WinSalGraphics::GetTextLayout(ImplLayoutArgs& /*rArgs*/, int nFallbac
     return new CommonSalLayout(getHDC(), *mpWinFontEntry[nFallbackLevel], *mpWinFontData[nFallbackLevel]);
 }
 
-int    WinSalGraphics::GetMinKashidaWidth()
-{
-    if( !mpWinFontEntry[0] )
-        return 0;
-    mpWinFontEntry[0]->InitKashidaHandling( getHDC() );
-    return mpWinFontEntry[0]->GetMinKashidaWidth();
-}
-
 LogicalFontInstance * WinSalGraphics::GetWinFontEntry(int const nFallbackLevel)
 {
     return mpWinFontEntry[nFallbackLevel];
@@ -611,37 +603,11 @@ LogicalFontInstance * WinSalGraphics::GetWinFontEntry(int const nFallbackLevel)
 
 WinFontInstance::WinFontInstance( FontSelectPattern& rFSD )
 :   LogicalFontInstance( rFSD )
-,    mnMinKashidaWidth( -1 )
-,    mnMinKashidaGlyph( -1 )
 {
-    maScriptCache = nullptr;
 }
 
 WinFontInstance::~WinFontInstance()
 {
-    if( maScriptCache != nullptr )
-        ScriptFreeCache( &maScriptCache );
-}
-
-bool WinFontInstance::InitKashidaHandling( HDC hDC )
-{
-    if( mnMinKashidaWidth >= 0 )    // already cached?
-        return mnMinKashidaWidth;
-
-    // initialize the kashida width
-    mnMinKashidaWidth = 0;
-    mnMinKashidaGlyph = 0;
-
-    SCRIPT_FONTPROPERTIES aFontProperties;
-    aFontProperties.cBytes = sizeof (aFontProperties);
-    SCRIPT_CACHE& rScriptCache = GetScriptCache();
-    HRESULT nRC = ScriptGetFontProperties( hDC, &rScriptCache, &aFontProperties );
-    if( nRC != 0 )
-        return false;
-    mnMinKashidaWidth = aFontProperties.iKashidaWidth;
-    mnMinKashidaGlyph = aFontProperties.wgKashida;
-
-    return true;
 }
 
 PhysicalFontFace* WinFontFace::Clone() const
