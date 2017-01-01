@@ -49,11 +49,6 @@ public class Resource
             this.xStringIndexAccess = UnoRuntime.queryInterface(
                 XIndexAccess.class,
                 xNameAccess.getByName("String"));
-            XIndexAccess xStringListIndexAccess = UnoRuntime.queryInterface(
-                XIndexAccess.class,
-                xNameAccess.getByName("StringList"));
-            if(xStringListIndexAccess == null)
-                throw new Exception("could not initialize xStringListIndexAccess");
             if(this.xStringIndexAccess == null)
                 throw new Exception("could not initialize xStringIndexAccess");
         }
