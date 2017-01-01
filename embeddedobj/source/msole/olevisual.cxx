@@ -267,7 +267,7 @@ awt::Size SAL_CALL OleEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
                     try
                     {
                         // third try the size reported by the object
-                        aSize = m_pOleComponent->GetReccomendedExtent( nAspect ); // will throw an exception in case of failure
+                        aSize = m_pOleComponent->GetRecommendedExtent( nAspect ); // will throw an exception in case of failure
                         bSuccess = true;
                     }
                     catch( const uno::Exception& )

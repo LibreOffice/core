@@ -1209,7 +1209,7 @@ awt::Size OleComponent::GetCachedExtent( sal_Int64 nAspect )
 }
 
 
-awt::Size OleComponent::GetReccomendedExtent( sal_Int64 nAspect )
+awt::Size OleComponent::GetRecommendedExtent( sal_Int64 nAspect )
 {
     if ( !m_pNativeImpl->m_pOleObject )
         throw embed::WrongStateException(); // TODO: the object is in wrong state
