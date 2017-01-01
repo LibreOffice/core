@@ -1209,7 +1209,7 @@ void ScInterpreter::ScPermutationA()
     {
         double k = ::rtl::math::approxFloor(GetDouble());
         double n = ::rtl::math::approxFloor(GetDouble());
-        if (n < 0.0 || k < 0.0 || k > n)
+        if (n < 0.0 || k < 0.0)
             PushIllegalArgument();
         else
             PushDouble(pow(n,k));
