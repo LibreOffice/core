@@ -601,8 +601,7 @@ int    WinSalGraphics::GetMinKashidaWidth()
     if( !mpWinFontEntry[0] )
         return 0;
     mpWinFontEntry[0]->InitKashidaHandling( getHDC() );
-    int nMinKashida = static_cast<int>(mfFontScale[0] * mpWinFontEntry[0]->GetMinKashidaWidth());
-    return nMinKashida;
+    return mpWinFontEntry[0]->GetMinKashidaWidth();
 }
 
 LogicalFontInstance * WinSalGraphics::GetWinFontEntry(int const nFallbackLevel)
