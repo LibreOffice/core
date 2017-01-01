@@ -376,7 +376,6 @@ public:
                                             bool bVertical,
                                             std::vector< sal_Int32 >& rWidths,
                                             Ucs2UIntMap& rUnicodeEnc ) override;
-            int             GetMinKashidaWidth();
 
     virtual bool            GetGlyphBoundRect(const GlyphItem&, Rectangle&) override;
     virtual bool            GetGlyphOutline(const GlyphItem&, basegfx::B2DPolyPolygon&) override;
