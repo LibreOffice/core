@@ -339,6 +339,8 @@ public:
     void NotifyOtherView(OutlinerViewShell* pOtherShell, int nType, const OString& rKey, const OString& rPayload) override;
     /// Ask this view to send its cursor position to pViewShell.
     virtual void NotifyCursor(SfxViewShell* /*pViewShell*/) const;
+    virtual bool UseLOKOutputDevice(const OutputDevice* pOutputDevice) const;
+    virtual void InvalidateWindows(std::function<void (vcl::Window& )>& f);
 };
 
 
