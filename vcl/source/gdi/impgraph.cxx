@@ -1358,165 +1358,164 @@ bool ImpGraphic::ImplExportNative( SvStream& rOStm ) const
 
 SvStream& ReadImpGraphic( SvStream& rIStm, ImpGraphic& rImpGraphic )
 {
+    if (rIStm.GetError())
+        return rIStm;
+
+    const sal_uLong nStmPos1 = rIStm.Tell();
+    sal_uInt32 nTmp;
+
+    if ( !rImpGraphic.mbSwapUnderway )
+        rImpGraphic.ImplClear();
+
+    // read Id
+    rIStm.ReadUInt32( nTmp );
+
+    // if there is no more data, avoid further expensive
+    // reading which will create VDevs and other stuff, just to
+    // read nothing. CAUTION: Eof is only true AFTER reading another
+    // byte, a speciality of SvMemoryStream (!)
+    if (rIStm.GetError() || rIStm.IsEof())
+        return rIStm;
+
+    if (NATIVE_FORMAT_50 == nTmp)
+    {
+        Graphic         aGraphic;
+        GfxLink         aLink;
+
+        // read compat info
+        std::unique_ptr<VersionCompat> pCompat(new VersionCompat( rIStm, StreamMode::READ ));
+        pCompat.reset(); // destructor writes stuff into the header
+
+        ReadGfxLink( rIStm, aLink );
+
+        // set dummy link to avoid creation of additional link after filtering;
+        // we set a default link to avoid unnecessary swapping of native data
+        aGraphic.SetLink( GfxLink() );
+
+        if( !rIStm.GetError() && aLink.LoadNative( aGraphic ) )
+        {
+            // set link only, if no other link was set
+            const bool bSetLink = ( !rImpGraphic.mpGfxLink );
+
+            // assign graphic
+            rImpGraphic = *aGraphic.ImplGetImpGraphic();
+
+            if( aLink.IsPrefMapModeValid() )
+                rImpGraphic.ImplSetPrefMapMode( aLink.GetPrefMapMode() );
+
+            if( aLink.IsPrefSizeValid() )
+                rImpGraphic.ImplSetPrefSize( aLink.GetPrefSize() );
+
+            if( bSetLink )
+                rImpGraphic.ImplSetLink( aLink );
+        }
+        else
+        {
+            rIStm.Seek( nStmPos1 );
+            rIStm.SetError( ERRCODE_IO_WRONGFORMAT );
+        }
+        return rIStm;
+    }
+
+    BitmapEx        aBmpEx;
+    const SvStreamEndian nOldFormat = rIStm.GetEndian();
+
+    rIStm.SeekRel( -4 );
+    rIStm.SetEndian( SvStreamEndian::LITTLE );
+    ReadDIBBitmapEx(aBmpEx, rIStm);
+
     if( !rIStm.GetError() )
     {
-        const sal_uLong nStmPos1 = rIStm.Tell();
-        sal_uInt32 nTmp;
+        sal_uInt32  nMagic1(0), nMagic2(0);
+        sal_uLong   nActPos = rIStm.Tell();
 
-        if ( !rImpGraphic.mbSwapUnderway )
-            rImpGraphic.ImplClear();
+        rIStm.ReadUInt32( nMagic1 ).ReadUInt32( nMagic2 );
+        rIStm.Seek( nActPos );
 
-        // read Id
-        rIStm.ReadUInt32( nTmp );
+        rImpGraphic = ImpGraphic( aBmpEx );
 
-        // if there is no more data, avoid further expensive
-        // reading which will create VDevs and other stuff, just to
-        // read nothing. CAUTION: Eof is only true AFTER reading another
-        // byte, a speciality of SvMemoryStream (!)
-        if(!rIStm.GetError() && !rIStm.IsEof())
+        if( !rIStm.GetError() && ( 0x5344414e == nMagic1 ) && ( 0x494d4931 == nMagic2 ) )
         {
-            if( NATIVE_FORMAT_50 == nTmp )
+            rImpGraphic.mpAnimation = o3tl::make_unique<Animation>();
+            ReadAnimation( rIStm, *rImpGraphic.mpAnimation );
+
+            // #108077# manually set loaded BmpEx to Animation
+            // (which skips loading its BmpEx if already done)
+            rImpGraphic.mpAnimation->SetBitmapEx(aBmpEx);
+        }
+        else
+            rIStm.ResetError();
+    }
+    else
+    {
+        GDIMetaFile aMtf;
+
+        rIStm.Seek( nStmPos1 );
+        rIStm.ResetError();
+        ReadGDIMetaFile( rIStm, aMtf );
+
+        if( !rIStm.GetError() )
+        {
+            rImpGraphic = aMtf;
+        }
+        else
+        {
+            sal_uInt32 nOrigError = rIStm.GetErrorCode();
+            // try to stream in Svg defining data (length, byte array and evtl. path)
+            // See below (operator<<) for more information
+            const sal_uInt32 nSvgMagic((sal_uInt32('s') << 24) | (sal_uInt32('v') << 16) | (sal_uInt32('g') << 8) | sal_uInt32('0'));
+            sal_uInt32 nMagic;
+            rIStm.Seek(nStmPos1);
+            rIStm.ResetError();
+            rIStm.ReadUInt32( nMagic );
+
+            if (nSvgMagic == nMagic)
             {
-                Graphic         aGraphic;
-                GfxLink         aLink;
+                sal_uInt32 nSvgDataArrayLength(0);
+                rIStm.ReadUInt32(nSvgDataArrayLength);
 
-                // read compat info
-                std::unique_ptr<VersionCompat> pCompat(new VersionCompat( rIStm, StreamMode::READ ));
-                pCompat.reset(); // destructor writes stuff into the header
-
-                ReadGfxLink( rIStm, aLink );
-
-                // set dummy link to avoid creation of additional link after filtering;
-                // we set a default link to avoid unnecessary swapping of native data
-                aGraphic.SetLink( GfxLink() );
-
-                if( !rIStm.GetError() && aLink.LoadNative( aGraphic ) )
+                if (nSvgDataArrayLength)
                 {
-                    // set link only, if no other link was set
-                    const bool bSetLink = ( !rImpGraphic.mpGfxLink );
+                    SvgDataArray aNewData(nSvgDataArrayLength);
 
-                    // assign graphic
-                    rImpGraphic = *aGraphic.ImplGetImpGraphic();
+                    rIStm.ReadBytes(aNewData.getArray(), nSvgDataArrayLength);
+                    OUString aPath = rIStm.ReadUniOrByteString(rIStm.GetStreamCharSet());
 
-                    if( aLink.IsPrefMapModeValid() )
-                        rImpGraphic.ImplSetPrefMapMode( aLink.GetPrefMapMode() );
+                    if (!rIStm.GetError())
+                    {
+                        SvgDataPtr aSvgDataPtr(
+                            new SvgData(
+                                aNewData,
+                                OUString(aPath)));
 
-                    if( aLink.IsPrefSizeValid() )
-                        rImpGraphic.ImplSetPrefSize( aLink.GetPrefSize() );
-
-                    if( bSetLink )
-                        rImpGraphic.ImplSetLink( aLink );
+                        rImpGraphic = aSvgDataPtr;
+                    }
                 }
-                else
+            }
+            else if (nMagic == nPdfMagic)
+            {
+                // Stream in PDF data.
+                sal_uInt32 nPdfDataLength = 0;
+                rIStm.ReadUInt32(nPdfDataLength);
+
+                if (nPdfDataLength)
                 {
-                    rIStm.Seek( nStmPos1 );
-                    rIStm.SetError( ERRCODE_IO_WRONGFORMAT );
+                    uno::Sequence<sal_Int8> aPdfData(nPdfDataLength);
+                    rIStm.ReadBytes(aPdfData.getArray(), nPdfDataLength);
+                    if (!rIStm.GetError())
+                        rImpGraphic.maPdfData = aPdfData;
                 }
             }
             else
             {
-                BitmapEx        aBmpEx;
-                const SvStreamEndian nOldFormat = rIStm.GetEndian();
-
-                rIStm.SeekRel( -4 );
-                rIStm.SetEndian( SvStreamEndian::LITTLE );
-                ReadDIBBitmapEx(aBmpEx, rIStm);
-
-                if( !rIStm.GetError() )
-                {
-                    sal_uInt32  nMagic1(0), nMagic2(0);
-                    sal_uLong   nActPos = rIStm.Tell();
-
-                    rIStm.ReadUInt32( nMagic1 ).ReadUInt32( nMagic2 );
-                    rIStm.Seek( nActPos );
-
-                    rImpGraphic = ImpGraphic( aBmpEx );
-
-                    if( !rIStm.GetError() && ( 0x5344414e == nMagic1 ) && ( 0x494d4931 == nMagic2 ) )
-                    {
-                        rImpGraphic.mpAnimation = o3tl::make_unique<Animation>();
-                        ReadAnimation( rIStm, *rImpGraphic.mpAnimation );
-
-                        // #108077# manually set loaded BmpEx to Animation
-                        // (which skips loading its BmpEx if already done)
-                        rImpGraphic.mpAnimation->SetBitmapEx(aBmpEx);
-                    }
-                    else
-                        rIStm.ResetError();
-                }
-                else
-                {
-                    GDIMetaFile aMtf;
-
-                    rIStm.Seek( nStmPos1 );
-                    rIStm.ResetError();
-                    ReadGDIMetaFile( rIStm, aMtf );
-
-                    if( !rIStm.GetError() )
-                    {
-                        rImpGraphic = aMtf;
-                    }
-                    else
-                    {
-                        sal_uInt32 nOrigError = rIStm.GetErrorCode();
-                        // try to stream in Svg defining data (length, byte array and evtl. path)
-                        // See below (operator<<) for more information
-                        const sal_uInt32 nSvgMagic((sal_uInt32('s') << 24) | (sal_uInt32('v') << 16) | (sal_uInt32('g') << 8) | sal_uInt32('0'));
-                        sal_uInt32 nMagic;
-                        rIStm.Seek(nStmPos1);
-                        rIStm.ResetError();
-                        rIStm.ReadUInt32( nMagic );
-
-                        if (nSvgMagic == nMagic)
-                        {
-                            sal_uInt32 nSvgDataArrayLength(0);
-                            rIStm.ReadUInt32(nSvgDataArrayLength);
-
-                            if (nSvgDataArrayLength)
-                            {
-                                SvgDataArray aNewData(nSvgDataArrayLength);
-
-                                rIStm.ReadBytes(aNewData.getArray(), nSvgDataArrayLength);
-                                OUString aPath = rIStm.ReadUniOrByteString(rIStm.GetStreamCharSet());
-
-                                if (!rIStm.GetError())
-                                {
-                                    SvgDataPtr aSvgDataPtr(
-                                        new SvgData(
-                                            aNewData,
-                                            OUString(aPath)));
-
-                                    rImpGraphic = aSvgDataPtr;
-                                }
-                            }
-                        }
-                        else if (nMagic == nPdfMagic)
-                        {
-                            // Stream in PDF data.
-                            sal_uInt32 nPdfDataLength = 0;
-                            rIStm.ReadUInt32(nPdfDataLength);
-
-                            if (nPdfDataLength)
-                            {
-                                uno::Sequence<sal_Int8> aPdfData(nPdfDataLength);
-                                rIStm.ReadBytes(aPdfData.getArray(), nPdfDataLength);
-                                if (!rIStm.GetError())
-                                    rImpGraphic.maPdfData = aPdfData;
-                            }
-                        }
-                        else
-                        {
-                            rIStm.SetError(nOrigError);
-                        }
-
-                        rIStm.Seek(nStmPos1);
-                    }
-                }
-
-                rIStm.SetEndian( nOldFormat );
+                rIStm.SetError(nOrigError);
             }
+
+            rIStm.Seek(nStmPos1);
         }
     }
+
+    rIStm.SetEndian( nOldFormat );
 
     return rIStm;
 }
