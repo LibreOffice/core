@@ -1520,86 +1520,87 @@ void ReadImpGraphic( SvStream& rIStm, ImpGraphic& rImpGraphic )
 
 void WriteImpGraphic(SvStream& rOStm, const ImpGraphic& rImpGraphic)
 {
-    if( !rOStm.GetError() )
+    if (rOStm.GetError())
+        return;
+
+    if (rImpGraphic.ImplIsSwapOut())
     {
-        if( !rImpGraphic.ImplIsSwapOut() )
+        rOStm.SetError( SVSTREAM_GENERALERROR );
+        return;
+    }
+
+    if( ( rOStm.GetVersion() >= SOFFICE_FILEFORMAT_50 ) &&
+        ( rOStm.GetCompressMode() & SvStreamCompressFlags::NATIVE ) &&
+        rImpGraphic.mpGfxLink && rImpGraphic.mpGfxLink->IsNative() &&
+        !rImpGraphic.maPdfData.hasElements())
+    {
+        // native format
+        rOStm.WriteUInt32( NATIVE_FORMAT_50 );
+
+        // write compat info
+        std::unique_ptr<VersionCompat> pCompat(new VersionCompat( rOStm, StreamMode::WRITE, 1 ));
+        pCompat.reset(); // destructor writes stuff into the header
+
+        rImpGraphic.mpGfxLink->SetPrefMapMode( rImpGraphic.ImplGetPrefMapMode() );
+        rImpGraphic.mpGfxLink->SetPrefSize( rImpGraphic.ImplGetPrefSize() );
+        WriteGfxLink( rOStm, *rImpGraphic.mpGfxLink );
+    }
+    else
+    {
+        // own format
+        const SvStreamEndian nOldFormat = rOStm.GetEndian();
+        rOStm.SetEndian( SvStreamEndian::LITTLE );
+
+        switch( rImpGraphic.ImplGetType() )
         {
-            if( ( rOStm.GetVersion() >= SOFFICE_FILEFORMAT_50 ) &&
-                ( rOStm.GetCompressMode() & SvStreamCompressFlags::NATIVE ) &&
-                rImpGraphic.mpGfxLink && rImpGraphic.mpGfxLink->IsNative() &&
-                !rImpGraphic.maPdfData.hasElements())
+            case GraphicType::NONE:
+            case GraphicType::Default:
+            break;
+
+            case GraphicType::Bitmap:
             {
-                // native format
-                rOStm.WriteUInt32( NATIVE_FORMAT_50 );
-
-                // write compat info
-                std::unique_ptr<VersionCompat> pCompat(new VersionCompat( rOStm, StreamMode::WRITE, 1 ));
-                pCompat.reset(); // destructor writes stuff into the header
-
-                rImpGraphic.mpGfxLink->SetPrefMapMode( rImpGraphic.ImplGetPrefMapMode() );
-                rImpGraphic.mpGfxLink->SetPrefSize( rImpGraphic.ImplGetPrefSize() );
-                WriteGfxLink( rOStm, *rImpGraphic.mpGfxLink );
-            }
-            else
-            {
-                // own format
-                const SvStreamEndian nOldFormat = rOStm.GetEndian();
-                rOStm.SetEndian( SvStreamEndian::LITTLE );
-
-                switch( rImpGraphic.ImplGetType() )
+                if(rImpGraphic.getSvgData().get())
                 {
-                    case GraphicType::NONE:
-                    case GraphicType::Default:
-                    break;
+                    // stream out Svg defining data (length, byte array and evtl. path)
+                    // this is used e.g. in swapping out graphic data and in transporting it over UNO API
+                    // as sequence of bytes, but AFAIK not written anywhere to any kind of file, so it should be
+                    // no problem to extend it; only used at runtime
+                    const sal_uInt32 nSvgMagic((sal_uInt32('s') << 24) | (sal_uInt32('v') << 16) | (sal_uInt32('g') << 8) | sal_uInt32('0'));
 
-                    case GraphicType::Bitmap:
-                    {
-                        if(rImpGraphic.getSvgData().get())
-                        {
-                            // stream out Svg defining data (length, byte array and evtl. path)
-                            // this is used e.g. in swapping out graphic data and in transporting it over UNO API
-                            // as sequence of bytes, but AFAIK not written anywhere to any kind of file, so it should be
-                            // no problem to extend it; only used at runtime
-                            const sal_uInt32 nSvgMagic((sal_uInt32('s') << 24) | (sal_uInt32('v') << 16) | (sal_uInt32('g') << 8) | sal_uInt32('0'));
-
-                            rOStm.WriteUInt32( nSvgMagic );
-                            rOStm.WriteUInt32( rImpGraphic.getSvgData()->getSvgDataArrayLength() );
-                            rOStm.WriteBytes(rImpGraphic.getSvgData()->getSvgDataArray().getConstArray(),
-                                rImpGraphic.getSvgData()->getSvgDataArrayLength());
-                            rOStm.WriteUniOrByteString(rImpGraphic.getSvgData()->getPath(),
-                                                       rOStm.GetStreamCharSet());
-                        }
-                        else if( rImpGraphic.ImplIsAnimated())
-                        {
-                            WriteAnimation( rOStm, *rImpGraphic.mpAnimation );
-                        }
-                        else
-                        {
-                            WriteDIBBitmapEx(rImpGraphic.maEx, rOStm);
-                        }
-                    }
-                    break;
-
-                    default:
-                    {
-                        if (rImpGraphic.maPdfData.hasElements())
-                        {
-                            // Stream out PDF data.
-                            rOStm.WriteUInt32(nPdfMagic);
-                            rOStm.WriteUInt32(rImpGraphic.maPdfData.getLength());
-                            rOStm.WriteBytes(rImpGraphic.maPdfData.getConstArray(), rImpGraphic.maPdfData.getLength());
-                        }
-                        if( rImpGraphic.ImplIsSupportedGraphic() )
-                            WriteGDIMetaFile( rOStm, rImpGraphic.maMetaFile );
-                    }
-                    break;
+                    rOStm.WriteUInt32( nSvgMagic );
+                    rOStm.WriteUInt32( rImpGraphic.getSvgData()->getSvgDataArrayLength() );
+                    rOStm.WriteBytes(rImpGraphic.getSvgData()->getSvgDataArray().getConstArray(),
+                        rImpGraphic.getSvgData()->getSvgDataArrayLength());
+                    rOStm.WriteUniOrByteString(rImpGraphic.getSvgData()->getPath(),
+                                               rOStm.GetStreamCharSet());
                 }
-
-                rOStm.SetEndian( nOldFormat );
+                else if( rImpGraphic.ImplIsAnimated())
+                {
+                    WriteAnimation( rOStm, *rImpGraphic.mpAnimation );
+                }
+                else
+                {
+                    WriteDIBBitmapEx(rImpGraphic.maEx, rOStm);
+                }
             }
+            break;
+
+            default:
+            {
+                if (rImpGraphic.maPdfData.hasElements())
+                {
+                    // Stream out PDF data.
+                    rOStm.WriteUInt32(nPdfMagic);
+                    rOStm.WriteUInt32(rImpGraphic.maPdfData.getLength());
+                    rOStm.WriteBytes(rImpGraphic.maPdfData.getConstArray(), rImpGraphic.maPdfData.getLength());
+                }
+                if( rImpGraphic.ImplIsSupportedGraphic() )
+                    WriteGDIMetaFile( rOStm, rImpGraphic.maMetaFile );
+            }
+            break;
         }
-        else
-             rOStm.SetError( SVSTREAM_GENERALERROR );
+
+        rOStm.SetEndian( nOldFormat );
     }
 }
 
