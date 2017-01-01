@@ -980,6 +980,16 @@ void WinSalGraphics::GetFontMetric( ImplFontMetricDataRef& rxFontMetric, int nFa
     const RawFontData aHheaRawData(getHDC(), nHheaTag);
     const RawFontData aOS2RawData(getHDC(), nOS2Tag);
 
+    WCHAR nKashidaCh = 0x0640;
+    WORD nKashidaGid;
+    DWORD ret = GetGlyphIndicesW(getHDC(), &nKashidaCh, 1, &nKashidaGid, GGI_MARK_NONEXISTING_GLYPHS);
+    if (ret != GDI_ERROR && nKashidaGid != 0xFFFF)
+    {
+        int nKashidaWidth = 0;
+        if (GetCharWidthI(getHDC(), nKashidaGid, 1, nullptr, &nKashidaWidth))
+            rxFontMetric->SetMinKashida(nKashidaWidth);
+    }
+
     // get the font metric
     OUTLINETEXTMETRICW aOutlineMetric;
     const bool bOK = GetOutlineTextMetricsW(getHDC(), sizeof(OUTLINETEXTMETRICW), &aOutlineMetric);
@@ -1004,8 +1014,6 @@ void WinSalGraphics::GetFontMetric( ImplFontMetricDataRef& rxFontMetric, int nFa
     const std::vector<uint8_t> rHhea(aHheaRawData.get(), aHheaRawData.get() + aHheaRawData.size());
     const std::vector<uint8_t> rOS2(aOS2RawData.get(), aOS2RawData.get() + aOS2RawData.size());
     rxFontMetric->ImplCalcLineSpacing(rHhea, rOS2, aOutlineMetric.otmEMSquare);
-
-    rxFontMetric->SetMinKashida( GetMinKashidaWidth() );
 }
 
 const FontCharMapRef WinSalGraphics::GetFontCharMap() const
