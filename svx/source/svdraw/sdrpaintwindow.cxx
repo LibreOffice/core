@@ -108,7 +108,7 @@ void CandidateMgr::PaintTransparentChildren(vcl::Window & rWindow, Rectangle con
 }
 
 SdrPreRenderDevice::SdrPreRenderDevice(OutputDevice& rOriginal)
-:   mrOutputDevice(rOriginal),
+:   mpOutputDevice(&rOriginal),
     mpPreRenderDevice(VclPtr<VirtualDevice>::Create())
 {
 }
@@ -121,33 +121,33 @@ SdrPreRenderDevice::~SdrPreRenderDevice()
 void SdrPreRenderDevice::PreparePreRenderDevice()
 {
     // compare size of mpPreRenderDevice with size of visible area
-    if(mpPreRenderDevice->GetOutputSizePixel() != mrOutputDevice.GetOutputSizePixel())
+    if(mpPreRenderDevice->GetOutputSizePixel() != mpOutputDevice->GetOutputSizePixel())
     {
-        mpPreRenderDevice->SetOutputSizePixel(mrOutputDevice.GetOutputSizePixel());
+        mpPreRenderDevice->SetOutputSizePixel(mpOutputDevice->GetOutputSizePixel());
     }
 
     // Also compare the MapModes for zoom/scroll changes
-    if(mpPreRenderDevice->GetMapMode() != mrOutputDevice.GetMapMode())
+    if(mpPreRenderDevice->GetMapMode() != mpOutputDevice->GetMapMode())
     {
-        mpPreRenderDevice->SetMapMode(mrOutputDevice.GetMapMode());
+        mpPreRenderDevice->SetMapMode(mpOutputDevice->GetMapMode());
     }
 
     // #i29186#
-    mpPreRenderDevice->SetDrawMode(mrOutputDevice.GetDrawMode());
-    mpPreRenderDevice->SetSettings(mrOutputDevice.GetSettings());
+    mpPreRenderDevice->SetDrawMode(mpOutputDevice->GetDrawMode());
+    mpPreRenderDevice->SetSettings(mpOutputDevice->GetSettings());
 }
 
 void SdrPreRenderDevice::OutputPreRenderDevice(const vcl::Region& rExpandedRegion)
 {
     // region to pixels
-    const vcl::Region aRegionPixel(mrOutputDevice.LogicToPixel(rExpandedRegion));
+    const vcl::Region aRegionPixel(mpOutputDevice->LogicToPixel(rExpandedRegion));
     //RegionHandle aRegionHandle(aRegionPixel.BeginEnumRects());
     //Rectangle aRegionRectanglePixel;
 
     // MapModes off
-    bool bMapModeWasEnabledDest(mrOutputDevice.IsMapModeEnabled());
+    bool bMapModeWasEnabledDest(mpOutputDevice->IsMapModeEnabled());
     bool bMapModeWasEnabledSource(mpPreRenderDevice->IsMapModeEnabled());
-    mrOutputDevice.EnableMapMode(false);
+    mpOutputDevice->EnableMapMode(false);
     mpPreRenderDevice->EnableMapMode(false);
 
     RectangleVector aRectangles;
@@ -159,7 +159,7 @@ void SdrPreRenderDevice::OutputPreRenderDevice(const vcl::Region& rExpandedRegio
         const Point aTopLeft(aRectIter->TopLeft());
         const Size aSize(aRectIter->GetSize());
 
-        mrOutputDevice.DrawOutDev(
+        mpOutputDevice->DrawOutDev(
             aTopLeft, aSize,
             aTopLeft, aSize,
             *mpPreRenderDevice.get());
@@ -175,14 +175,14 @@ void SdrPreRenderDevice::OutputPreRenderDevice(const vcl::Region& rExpandedRegio
             int nB = comphelper::rng::uniform_int_distribution(0, 0x7F-1);
             const Color aColor(((((nR|0x80)<<8L)|(nG|0x80))<<8L)|(nB|0x80));
 
-            mrOutputDevice.SetLineColor(aColor);
-            mrOutputDevice.SetFillColor();
-            mrOutputDevice.DrawRect(*aRectIter);
+            mpOutputDevice->SetLineColor(aColor);
+            mpOutputDevice->SetFillColor();
+            mpOutputDevice->DrawRect(*aRectIter);
         }
 #endif
     }
 
-    mrOutputDevice.EnableMapMode(bMapModeWasEnabledDest);
+    mpOutputDevice->EnableMapMode(bMapModeWasEnabledDest);
     mpPreRenderDevice->EnableMapMode(bMapModeWasEnabledSource);
 }
 
@@ -242,7 +242,7 @@ void SdrPaintWindow::impCreateOverlayManager()
 }
 
 SdrPaintWindow::SdrPaintWindow(SdrPaintView& rNewPaintView, OutputDevice& rOut, vcl::Window* pWindow)
-:   mrOutputDevice(rOut),
+:   mpOutputDevice(&rOut),
     mpWindow(pWindow),
     mrPaintView(rNewPaintView),
     mpPreRenderDevice(nullptr),
@@ -276,7 +276,7 @@ Rectangle SdrPaintWindow::GetVisibleArea() const
 
 bool SdrPaintWindow::OutputToRecordingMetaFile() const
 {
-    GDIMetaFile* pMetaFile = mrOutputDevice.GetConnectMetaFile();
+    GDIMetaFile* pMetaFile = mpOutputDevice->GetConnectMetaFile();
     return (pMetaFile && pMetaFile->IsRecord() && !pMetaFile->IsPause());
 }
 
@@ -292,7 +292,7 @@ void SdrPaintWindow::PreparePreRenderDevice()
     {
         if(!mpPreRenderDevice)
         {
-            mpPreRenderDevice = new SdrPreRenderDevice(mrOutputDevice);
+            mpPreRenderDevice = new SdrPreRenderDevice(*mpOutputDevice.get());
         }
     }
     else
