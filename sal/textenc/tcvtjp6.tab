@@ -162,7 +162,7 @@ static ImplDBCSToUniLeadTab const aSJISUniLeadTab[256] =
     {      0, 0x40, 0xFC, aImplDBCSToUniTab_MS932_81 },         /* 0x81 */
     {      0, 0x4F, 0xF1, aImplDBCSToUniTab_SJIS_82 },          /* 0x82 */
     {      0, 0x40, 0xD6, aImplDBCSToUniTab_SJIS_83 },          /* 0x83 */
-    {      0, 0x40, 0xBF, aImplDBCSToUniTab_SJIS_84 },          /* 0x84 */
+    {      0, 0x40, 0xBE, aImplDBCSToUniTab_SJIS_84 },          /* 0x84 */
     {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x85 */ /* We convert this as double byte */
     {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x86 */ /* We convert this as double byte */
     {      0, 0x40, 0x9C, aImplDBCSToUniTab_MS932_87 },         /* 0x87 */ /* We use the MS table for better MS compatibility */
@@ -734,7 +734,7 @@ static ImplDBCSToUniLeadTab const aMS932UniLeadTab[256] =
     {      0, 0x40, 0xFC, aImplDBCSToUniTab_MS932_81 },         /* 0x81 */
     {      0, 0x4F, 0xF1, aImplDBCSToUniTab_SJIS_82 },          /* 0x82 */
     {      0, 0x40, 0xD6, aImplDBCSToUniTab_SJIS_83 },          /* 0x83 */
-    {      0, 0x40, 0xBF, aImplDBCSToUniTab_SJIS_84 },          /* 0x84 */
+    {      0, 0x40, 0xBE, aImplDBCSToUniTab_SJIS_84 },          /* 0x84 */
     {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x85 */ /* We convert this as double byte */
     {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x86 */ /* We convert this as double byte */
     {      0, 0x40, 0x9C, aImplDBCSToUniTab_MS932_87 },         /* 0x87 */
@@ -1291,7 +1291,7 @@ static ImplDBCSToUniLeadTab const aAPPLEJAPANESEUniLeadTab[256] =
     {      0, 0x40, 0xFC, aImplDBCSToUniTab_MS932_81 },         /* 0x81 */
     {      0, 0x4F, 0xF1, aImplDBCSToUniTab_SJIS_82 },          /* 0x82 */
     {      0, 0x40, 0xD6, aImplDBCSToUniTab_SJIS_83 },          /* 0x83 */
-    {      0, 0x40, 0xBF, aImplDBCSToUniTab_SJIS_84 },          /* 0x84 */
+    {      0, 0x40, 0xBE, aImplDBCSToUniTab_SJIS_84 },          /* 0x84 */
     {      0, 0x40, 0xF4, aImplDBCSToUniTab_APPLEJAPANESE_85 }, /* 0x85 */
     {      0, 0x40, 0xD2, aImplDBCSToUniTab_APPLEJAPANESE_86 }, /* 0x86 */
     {      0, 0x40, 0xFA, aImplDBCSToUniTab_APPLEJAPANESE_87 }, /* 0x87 */
