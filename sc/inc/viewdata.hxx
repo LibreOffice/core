@@ -117,6 +117,7 @@ class ScExtDocOptions;
 class ScViewData;
 class ScMarkData;
 class ScGridWindow;
+class FmFormView;
 
 class ScViewDataTable                           // per-sheet data
 {
@@ -233,7 +234,7 @@ private:
     bool                bGrowing;
 
     long                m_nLOKPageUpDownOffset;
-    
+
     DECL_DLLPRIVATE_LINK( EditEngineHdl, EditStatus&, void );
 
 
@@ -267,6 +268,7 @@ public:
     const ScGridWindow* GetActiveWin() const;
     ScDrawView*     GetScDrawView();            // from View
     bool            IsMinimized();              // from View
+    FmFormView*     GetLOKDrawView();           // from View
 
     void            UpdateInputHandler( bool bForce = false );
 

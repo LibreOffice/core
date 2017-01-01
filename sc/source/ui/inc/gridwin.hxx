@@ -126,6 +126,7 @@ class ScGridWindow : public vcl::Window, public DropTargetHelper, public DragSou
 
     std::unique_ptr<sc::SpellCheckContext> mpSpellCheckCxt;
 
+    VclPtr<OutputDevice>    mpLOKOutputDevice;
     ScViewData*             pViewData;
     ScSplitPos              eWhich;
     ScHSplitPos             eHWhich;
@@ -431,6 +432,8 @@ public:
                                   long nTileWidth,
                                   long nTileHeight);
     void updateLibreOfficeKitCellCursor(SfxViewShell* pOtherShell) const;
+
+    const OutputDevice* GetLOKVirtualDevice() const { return  mpLOKOutputDevice.get(); }
 
     ScViewData* getViewData();
     virtual FactoryFunction GetUITestFactory() const override;

@@ -2228,6 +2228,12 @@ ScDrawView* ScViewData::GetScDrawView()
     return pView->GetScDrawView();
 }
 
+FmFormView* ScViewData::GetLOKDrawView()
+{
+    OSL_ENSURE( pView, "GetLOKDrawView() without View" );
+    return pView->GetLOKDrawView();
+}
+
 bool ScViewData::IsMinimized()
 {
     OSL_ENSURE( pView, "IsMinimized() without View" );
