@@ -905,7 +905,6 @@ void WinSalGraphics::SetFont( FontSelectPattern* pFont, int nFallbackLevel )
         // deselect still active font
         if( mhDefFont )
             ::SelectFont( getHDC(), mhDefFont );
-        mfCurrentFontScale = mfFontScale[nFallbackLevel];
         // release no longer referenced font handles
         for( int i = nFallbackLevel; i < MAX_FALLBACK; ++i )
         {
@@ -938,8 +937,7 @@ void WinSalGraphics::SetFont( FontSelectPattern* pFont, int nFallbackLevel )
     mpWinFontData[ nFallbackLevel ] = static_cast<const WinFontFace*>( pFont->mpFontData );
 
     HFONT hOldFont = nullptr;
-    HFONT hNewFont = ImplDoSetFont( pFont, mfFontScale[ nFallbackLevel ], hOldFont );
-    mfCurrentFontScale = mfFontScale[nFallbackLevel];
+    HFONT hNewFont = ImplDoSetFont(pFont, 1.0, hOldFont);
 
     if( !mhDefFont )
     {
@@ -1000,7 +998,7 @@ void WinSalGraphics::GetFontMetric( ImplFontMetricDataRef& rxFontMetric, int nFa
     rxFontMetric->SetSlant( 0 );
 
     // transformation dependent font metrics
-    rxFontMetric->SetWidth( static_cast<int>( mfFontScale[nFallbackLevel] * aWinMetric.tmAveCharWidth ) );
+    rxFontMetric->SetWidth(aWinMetric.tmAveCharWidth);
 
     const std::vector<uint8_t> rHhea(aHheaRawData.get(), aHheaRawData.get() + aHheaRawData.size());
     const std::vector<uint8_t> rOS2(aOS2RawData.get(), aOS2RawData.get() + aOS2RawData.size());
@@ -1370,10 +1368,8 @@ bool WinSalGraphics::GetGlyphBoundRect(const GlyphItem& rGlyph, Rectangle& rRect
 
     rRect = Rectangle( Point( +aGM.gmptGlyphOrigin.x, -aGM.gmptGlyphOrigin.y ),
         Size( aGM.gmBlackBoxX, aGM.gmBlackBoxY ) );
-    rRect.Left()    = static_cast<int>( mfCurrentFontScale * rRect.Left() );
-    rRect.Right()   = static_cast<int>( mfCurrentFontScale * rRect.Right() ) + 1;
-    rRect.Top()     = static_cast<int>( mfCurrentFontScale * rRect.Top() );
-    rRect.Bottom()  = static_cast<int>( mfCurrentFontScale * rRect.Bottom() ) + 1;
+    rRect.Right()  += 1;
+    rRect.Bottom() += 1;
     return true;
 }
 
@@ -1550,7 +1546,7 @@ bool WinSalGraphics::GetGlyphOutline(const GlyphItem& rGlyph,
     // rescaling needed for the tools::PolyPolygon conversion
     if( rB2DPolyPoly.count() )
     {
-        const double fFactor(mfCurrentFontScale/256);
+        const double fFactor(1.0/256);
         rB2DPolyPoly.transform(basegfx::tools::createScaleB2DHomMatrix(fFactor, fFactor));
     }
 
