@@ -34,6 +34,24 @@
       "revId": "4e9af515d7e5af809ccd65549e4f01391e8eac0e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a6eadb0_9c5f040e",
+        "filename": "dbaccess/source/ui/dlg/finteraction.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-01-02T15:45:20Z",
+      "side": 1,
+      "message": "But that\u0027s not what SAL_WARN_IF is for.  Please do not make the code confusing by making it unclear whether some condition is an unusual event (that the code nevertheless needs to handle somehow) or indicates a programming error.  It is vital to distinguish these cases.\n\nFor indications of programming errors (i.e., firing asserts) we don\u0027t see any logs in non-debug builds by design---we assume that the program is free of programming errors, so avoid the overhead of checking for signs of them.  That\u0027s a deliberate tradeoff.  (Not to mention that SAL_WARN is disabled in non-debug builds, too.)",
+      "parentUuid": "1a6eadb0_3c68b0ba",
+      "revId": "4e9af515d7e5af809ccd65549e4f01391e8eac0e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
