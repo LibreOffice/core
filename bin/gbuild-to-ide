@@ -507,10 +507,10 @@ class XcodeIntegrationGenerator(IdeIntegrationGenerator):
         IdeIntegrationGenerator.__init__(self, gbuildparser, ide)
 
     def emit(self):
-        self.rootlocation = './'
+        self.rootlocation = './osx'
         for location in self.gbuildparser.target_by_location:
             for target in self.gbuildparser.target_by_location[location]:
-                xcodeprojdir = os.path.join(location, '%s.xcodeproj' % target.target_name())
+                xcodeprojdir = os.path.join(self.rootlocation, '%s.xcodeproj' % target.target_name())
                 try:
                     os.mkdir(xcodeprojdir)
                 except:
@@ -692,7 +692,7 @@ class XcodeIntegrationGenerator(IdeIntegrationGenerator):
         result = {'isa': 'PBXGroup',
                   'children': self.generate_sub_main_children(modulename),
                   'name': name,
-                  'path': name,
+                  'path': '../' + name,
                   'sourceTree': '<group>'}
         return result
 
@@ -709,9 +709,7 @@ class XcodeIntegrationGenerator(IdeIntegrationGenerator):
 
         for i in module.cxxobjects:
             ref = self.generate_id()
-            ref = 'X0100012'  # Ugly hack for today
-            self.sourceList['X0100011'] = ref # second ugly hack
-            #self.sourceList[self.generate_id()] = ref
+            self.sourceList[self.generate_id()] = ref
             self.sourceRefList[ref] = {'lastKnownFileType': 'sourcecode.cpp.cpp',
                                        'path': i + '.cxx',
                                        'sourceTree': '<group>'}
@@ -732,16 +730,16 @@ class XcodeIntegrationGenerator(IdeIntegrationGenerator):
                   'runOnlyForDeploymentPostprocessing': 0}
         return result
     def generate_project(self, target):
-        self.rootObjectId = 'X0100001' # self.generate_id()
-        self.mainGroupId = 'X0100002' # self.generate_id()
-        self.targetId = 'X0100003' # self.generate_id()
-        self.configurationListId = 'X0100004' # self.generate_id()
-        self.productRefGroupId = 'X0100005' # self.generate_id()
-        self.subMainGroupId = 'X0100006' # self.generate_id()
-        self.sourcesBuildPhaseId = 'X0100007' #  self.generate_id()
-        self.copyBuildPhaseId = 'X0100008' # self.generate_id()
-        self.targetRefId = 'X0100009' # self.generate_id()
-        self.configurationDebugId = 'X0100010' # self.generate_id()
+        self.rootObjectId = self.generate_id()
+        self.mainGroupId = self.generate_id()
+        self.targetId = self.generate_id()
+        self.configurationListId = self.generate_id()
+        self.productRefGroupId = self.generate_id()
+        self.subMainGroupId = self.generate_id()
+        self.sourcesBuildPhaseId = self.generate_id()
+        self.copyBuildPhaseId = self.generate_id()
+        self.targetRefId = self.generate_id()
+        self.configurationDebugId = self.generate_id()
 
         self.productReferenceId = self.generate_id()
         self.productGroupId = self.generate_id()
@@ -768,7 +766,7 @@ class XcodeIntegrationGenerator(IdeIntegrationGenerator):
                 name = path
             objects[ref] = {'isa': 'PBXFileReference',
                             'lastKnownFileType': self.sourceRefList[ref]['lastKnownFileType'],
-                            'path': '../../' + path,
+                            'path': '../' + path,
                             'name': name,
                             'sourceTree': '<group>'}
         project = {'archiveVersion': 1,
