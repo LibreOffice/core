@@ -13847,4 +13847,11 @@ void PDFWriterImpl::addStream( const OUString& rMimeType, PDFOutputStream* pStre
     }
 }
 
+void PDFWriterImpl::MARK( const char* pString )
+{
+    beginStructureElementMCSeq();
+    if (g_bDebugDisableCompression)
+        emitComment( pString );
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

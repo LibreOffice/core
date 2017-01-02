@@ -1212,17 +1212,7 @@ public:
 
     // helper: eventually begin marked content sequence and
     // emit a comment in debug case
-    void MARK( const char*
-#if OSL_DEBUG_LEVEL > 1
-        pString
-#endif
-        )
-    {
-        beginStructureElementMCSeq();
-#if OSL_DEBUG_LEVEL > 1
-        emitComment( pString );
-#endif
-    }
+    void MARK( const char* pString );
 };
 
 class PdfBuiltinFontFace : public PhysicalFontFace
