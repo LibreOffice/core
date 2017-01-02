@@ -19,7 +19,6 @@
 
 #include "userinformation.hxx"
 
-#include <osl/diagnose.h>
 #include <i18nlangtag/languagetag.hxx>
 #include <unotools/configmgr.hxx>
 
