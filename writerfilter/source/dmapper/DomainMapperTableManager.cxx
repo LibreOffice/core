@@ -158,6 +158,7 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                         {
                             pPropMap->setValue( TablePropertyMap::TABLE_WIDTH_TYPE, text::SizeType::FIX );
                             pPropMap->setValue( TablePropertyMap::TABLE_WIDTH, m_nTableWidth );
+                            m_bTableSizeTypeInserted = true;
                         }
                         else if( sal::static_int_cast<Id>(pMeasureHandler->getUnit()) == NS_ooxml::LN_Value_ST_TblWidth_pct )
                         {
@@ -166,6 +167,7 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                                 nPercent = 100;
                             pPropMap->setValue( TablePropertyMap::TABLE_WIDTH_TYPE, text::SizeType::VARIABLE );
                             pPropMap->setValue( TablePropertyMap::TABLE_WIDTH, nPercent );
+                            m_bTableSizeTypeInserted = true;
                         }
                         else if( sal::static_int_cast<Id>(pMeasureHandler->getUnit()) == NS_ooxml::LN_Value_ST_TblWidth_auto )
                         {
@@ -197,9 +199,9 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                                 // Set the width type of table with 'Auto' and set the width value to 100(%)
                                 pPropMap->setValue( TablePropertyMap::TABLE_WIDTH_TYPE, text::SizeType::VARIABLE );
                                 pPropMap->setValue( TablePropertyMap::TABLE_WIDTH, 0 );
+                                m_bTableSizeTypeInserted = true;
                             }
                         }
-                        m_bTableSizeTypeInserted = true;
                     }
 #ifdef DEBUG_WRITERFILTER
                     pPropMap->dumpXml();
