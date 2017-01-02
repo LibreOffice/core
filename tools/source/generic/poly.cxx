@@ -212,11 +212,14 @@ void ImplPolygon::ImplSetSize( sal_uInt16 nNewSize, bool bResize )
     mnPoints   = nNewSize;
 }
 
-void ImplPolygon::ImplSplit( sal_uInt16 nPos, sal_uInt16 nSpace, ImplPolygon const * pInitPoly )
+bool ImplPolygon::ImplSplit( sal_uInt16 nPos, sal_uInt16 nSpace, ImplPolygon const * pInitPoly )
 {
     //Can't fit this in :-(, throw ?
     if (mnPoints + nSpace > USHRT_MAX)
-        return;
+    {
+        SAL_WARN("tools", "Polygon needs " << mnPoints + nSpace << " points, but only " << USHRT_MAX << " possible");
+        return false;
+    }
 
     const sal_uInt16    nNewSize = mnPoints + nSpace;
     const std::size_t   nSpaceSize = static_cast<std::size_t>(nSpace) * sizeof(Point);
@@ -272,6 +275,8 @@ void ImplPolygon::ImplSplit( sal_uInt16 nPos, sal_uInt16 nSpace, ImplPolygon con
         mpPointAry = pNewAry;
         mnPoints   = nNewSize;
     }
+
+    return true;
 }
 
 void ImplPolygon::ImplCreateFlagArray()
@@ -1472,8 +1477,8 @@ void Polygon::Insert( sal_uInt16 nPos, const Point& rPt )
     if( nPos >= mpImplPolygon->mnPoints )
         nPos = mpImplPolygon->mnPoints;
 
-    mpImplPolygon->ImplSplit( nPos, 1 );
-    mpImplPolygon->mpPointAry[ nPos ] = rPt;
+    if (mpImplPolygon->ImplSplit(nPos, 1))
+        mpImplPolygon->mpPointAry[ nPos ] = rPt;
 }
 
 void Polygon::Insert( sal_uInt16 nPos, const tools::Polygon& rPoly )
