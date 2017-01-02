@@ -1302,8 +1302,8 @@ void X11SalGraphicsImpl::drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry
      * menubar background. workaround for the special case of
      * of a rectangle overlapping to the left.
      */
-    if( nPoints == 5 &&
-    Points[ 0 ].x == Points[ 1 ].x &&
+    if (nPoints == 5 &&
+        Points[ 0 ].x == Points[ 1 ].x &&
         Points[ 1 ].y == Points[ 2 ].y &&
         Points[ 2 ].x == Points[ 3 ].x &&
         Points[ 0 ].x == Points[ 4 ].x && Points[ 0 ].y == Points[ 4 ].y
@@ -1312,15 +1312,15 @@ void X11SalGraphicsImpl::drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry
         bool bLeft = false;
         bool bRight = false;
         for(unsigned int i = 0; i < nPoints; i++ )
-    {
+        {
             if( Points[i].x < 0 )
                 bLeft = true;
             else
                 bRight= true;
-    }
-    if( bLeft && ! bRight )
-        return;
-    if( bLeft && bRight )
+        }
+        if( bLeft && ! bRight )
+            return;
+        if( bLeft && bRight )
         {
             for( unsigned int i = 0; i < nPoints; i++ )
                 if( Points[i].x < 0 )
