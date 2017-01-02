@@ -679,9 +679,9 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
     if( ( rTransparenceGradient.GetStartColor() == aBlack && rTransparenceGradient.GetEndColor() == aBlack ) ||
         ( mnDrawMode & ( DrawModeFlags::NoTransparency ) ) )
     {
-        ( (GDIMetaFile&) rMtf ).WindStart();
-        ( (GDIMetaFile&) rMtf ).Play( this, rPos, rSize );
-        ( (GDIMetaFile&) rMtf ).WindStart();
+        const_cast<GDIMetaFile&>(rMtf).WindStart();
+        const_cast<GDIMetaFile&>(rMtf).Play( this, rPos, rSize );
+        const_cast<GDIMetaFile&>(rMtf).WindStart();
     }
     else
     {
@@ -734,9 +734,9 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
 
                     // draw MetaFile to buffer
                     xVDev->EnableMapMode(bBufferMapModeEnabled);
-                    ((GDIMetaFile&)rMtf).WindStart();
-                    ((GDIMetaFile&)rMtf).Play(xVDev.get(), rPos, rSize);
-                    ((GDIMetaFile&)rMtf).WindStart();
+                    const_cast<GDIMetaFile&>(rMtf).WindStart();
+                    const_cast<GDIMetaFile&>(rMtf).Play(xVDev.get(), rPos, rSize);
+                    const_cast<GDIMetaFile&>(rMtf).WindStart();
 
                     // get content bitmap from buffer
                     xVDev->EnableMapMode(false);
@@ -771,9 +771,9 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
                     const bool bVDevOldMap = xVDev->IsMapModeEnabled();
 
                     // create paint bitmap
-                    ( (GDIMetaFile&) rMtf ).WindStart();
-                    ( (GDIMetaFile&) rMtf ).Play( xVDev.get(), rPos, rSize );
-                    ( (GDIMetaFile&) rMtf ).WindStart();
+                    const_cast<GDIMetaFile&>(rMtf).WindStart();
+                    const_cast<GDIMetaFile&>(rMtf).Play( xVDev.get(), rPos, rSize );
+                    const_cast<GDIMetaFile&>(rMtf).WindStart();
                     xVDev->EnableMapMode( false );
                     aPaint = xVDev->GetBitmap( Point(), xVDev->GetOutputSizePixel() );
                     xVDev->EnableMapMode( bVDevOldMap ); // #i35331#: MUST NOT use EnableMapMode( sal_True ) here!
@@ -784,9 +784,9 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
                     xVDev->DrawRect( Rectangle( xVDev->PixelToLogic( Point() ), xVDev->GetOutputSize() ) );
                     xVDev->SetDrawMode( DrawModeFlags::WhiteLine | DrawModeFlags::WhiteFill | DrawModeFlags::WhiteText |
                                         DrawModeFlags::WhiteBitmap | DrawModeFlags::WhiteGradient );
-                    ( (GDIMetaFile&) rMtf ).WindStart();
-                    ( (GDIMetaFile&) rMtf ).Play( xVDev.get(), rPos, rSize );
-                    ( (GDIMetaFile&) rMtf ).WindStart();
+                    const_cast<GDIMetaFile&>(rMtf).WindStart();
+                    const_cast<GDIMetaFile&>(rMtf).Play( xVDev.get(), rPos, rSize );
+                    const_cast<GDIMetaFile&>(rMtf).WindStart();
                     xVDev->EnableMapMode( false );
                     aMask = xVDev->GetBitmap( Point(), xVDev->GetOutputSizePixel() );
                     xVDev->EnableMapMode( bVDevOldMap ); // #i35331#: MUST NOT use EnableMapMode( sal_True ) here!
