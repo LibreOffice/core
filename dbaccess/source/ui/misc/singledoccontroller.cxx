@@ -26,7 +26,6 @@
 #include "moduledbu.hxx"
 
 #include <svl/undo.hxx>
-#include <osl/diagnose.h>
 
 namespace dbaui
 {

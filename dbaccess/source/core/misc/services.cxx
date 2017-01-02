@@ -19,7 +19,6 @@
 
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implementationentry.hxx>
-#include <osl/diagnose.h>
 #include "DatabaseDataProvider.hxx"
 #include "dbadllapi.hxx"
 

@@ -18,7 +18,6 @@
  */
 
 #include <cppuhelper/factory.hxx>
-#include <osl/diagnose.h>
 #include "dbu_reghelper.hxx"
 #include "uiservices.hxx"
 
