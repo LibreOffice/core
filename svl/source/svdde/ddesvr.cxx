@@ -263,11 +263,11 @@ found:
             if ( pData )
             {
                 return DdeCreateDataHandle( pInst->hDdeInstSvr,
-                                            static_cast<LPBYTE>(const_cast<void *>(pData->pImp->pData)),
-                                            pData->pImp->nData,
+                                            static_cast<LPBYTE>(const_cast<void *>(pData->xImp->pData)),
+                                            pData->xImp->nData,
                                             0, hText2,
                                             DdeData::GetExternalFormat(
-                                                pData->pImp->nFmt ),
+                                                pData->xImp->nFmt ),
                                             0 );
             }
         }
@@ -277,8 +277,8 @@ found:
         if ( !pTopic->IsSystemTopic() )
         {
             DdeData d;
-            d.pImp->hData = hData;
-            d.pImp->nFmt  = DdeData::GetInternalFormat( nCbType );
+            d.xImp->hData = hData;
+            d.xImp->nFmt  = DdeData::GetInternalFormat( nCbType );
             d.Lock();
             if( DDEGETPUTITEM == pItem->nType )
                 bRes = static_cast<DdeGetPutItem*>(pItem)->Put( &d );
@@ -337,12 +337,12 @@ found:
     case XTYP_EXECUTE:
         {
             DdeData aExec;
-            aExec.pImp->hData = hData;
-            aExec.pImp->nFmt  = DdeData::GetInternalFormat( nCbType );
+            aExec.xImp->hData = hData;
+            aExec.xImp->nFmt  = DdeData::GetInternalFormat( nCbType );
             aExec.Lock();
             OUString aName;
 
-            aName = static_cast<const sal_Unicode *>(aExec.pImp->pData);
+            aName = static_cast<const sal_Unicode *>(aExec.xImp->pData);
 
             if( pTopic->IsSystemTopic() )
                 bRes = false;

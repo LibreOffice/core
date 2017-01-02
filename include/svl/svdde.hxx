@@ -26,6 +26,7 @@
 #include <sot/exchange.hxx>
 #include <tools/solar.h>
 #include <tools/link.hxx>
+#include <memory>
 #include <vector>
 
 class DdeString;
@@ -56,7 +57,7 @@ class SVL_DLLPUBLIC DdeData
     friend class    DdeService;
     friend class    DdeConnection;
     friend class    DdeTransaction;
-    DdeDataImp*     pImp;
+    std::unique_ptr<DdeDataImp>    xImp;
 
     SVL_DLLPRIVATE void            Lock();
 

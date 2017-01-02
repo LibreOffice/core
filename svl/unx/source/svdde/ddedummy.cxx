@@ -20,23 +20,23 @@
 #include <svl/svdde.hxx>
 #include <rtl/instance.hxx>
 
+struct DdeDataImp
+{
+};
+
 DdeData::DdeData()
-    : pImp(nullptr)
 {
 }
 
 DdeData::DdeData( const OUString& )
-    : pImp(nullptr)
 {
 }
 
 DdeData::DdeData( const DdeData& )
-    : pImp(nullptr)
 {
 }
 
 DdeData::DdeData( const void*, long, SotClipboardFormatId)
-    : pImp(nullptr)
 {
 }
 
