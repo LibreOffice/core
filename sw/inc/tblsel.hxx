@@ -157,26 +157,26 @@ typedef std::vector<std::unique_ptr<FndLine_>> FndLines_t;
 
 class FndBox_
 {
-    SwTableBox* pBox;
+    SwTableBox* m_pBox;
     FndLines_t m_Lines;
-    FndLine_* pUpper;
+    FndLine_* m_pUpper;
 
-    SwTableLine *pLineBefore;   // For deleting/restoring the layout.
-    SwTableLine *pLineBehind;
+    SwTableLine *m_pLineBefore;   // For deleting/restoring the layout.
+    SwTableLine *m_pLineBehind;
 
     FndBox_(FndBox_ const&) = delete;
     FndBox_& operator=(FndBox_ const&) = delete;
 
 public:
     FndBox_( SwTableBox* pB, FndLine_* pFL ) :
-        pBox(pB), pUpper(pFL), pLineBefore( nullptr ), pLineBehind( nullptr ) {}
+        m_pBox(pB), m_pUpper(pFL), m_pLineBefore( nullptr ), m_pLineBehind( nullptr ) {}
 
     const FndLines_t&   GetLines() const    { return m_Lines; }
         FndLines_t&     GetLines()          { return m_Lines; }
-    const SwTableBox*   GetBox() const      { return pBox; }
-        SwTableBox*     GetBox()            { return pBox; }
-    const FndLine_*     GetUpper() const    { return pUpper; }
-        FndLine_*       GetUpper()          { return pUpper; }
+    const SwTableBox*   GetBox() const      { return m_pBox; }
+        SwTableBox*     GetBox()            { return m_pBox; }
+    const FndLine_*     GetUpper() const    { return m_pUpper; }
+        FndLine_*       GetUpper()          { return m_pUpper; }
 
     void SetTableLines( const SwSelBoxes &rBoxes, const SwTable &rTable );
     void SetTableLines( const SwTable &rTable );
@@ -187,7 +187,7 @@ public:
                                        const bool bBehind );
     bool AreLinesToRestore( const SwTable &rTable ) const;
 
-    void ClearLineBehind() { pLineBehind = nullptr; }
+    void ClearLineBehind() { m_pLineBehind = nullptr; }
 };
 
 class FndLine_

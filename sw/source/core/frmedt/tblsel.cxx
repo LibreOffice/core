@@ -2101,9 +2101,9 @@ void FndBox_::SetTableLines( const SwSelBoxes &rBoxes, const SwTable &rTable )
             nEndPos = nPos;
     }
     if (USHRT_MAX != nStPos && nStPos > 1)
-        pLineBefore = rTable.GetTabLines()[nStPos - 2];
+        m_pLineBefore = rTable.GetTabLines()[nStPos - 2];
     if ( nEndPos < rTable.GetTabLines().size() )
-        pLineBehind = rTable.GetTabLines()[nEndPos];
+        m_pLineBehind = rTable.GetTabLines()[nEndPos];
 }
 
 void FndBox_::SetTableLines( const SwTable &rTable )
@@ -2121,13 +2121,13 @@ void FndBox_::SetTableLines( const SwTable &rTable )
     sal_uInt16 nPos = rTable.GetTabLines().GetPos( pTmpLine );
     OSL_ENSURE( USHRT_MAX != nPos, "Line steht nicht in der Tabelle" );
     if( nPos )
-        pLineBefore = rTable.GetTabLines()[ nPos - 1 ];
+        m_pLineBefore = rTable.GetTabLines()[ nPos - 1 ];
 
     pTmpLine = GetLines().back()->GetLine();
     nPos = rTable.GetTabLines().GetPos( pTmpLine );
     OSL_ENSURE( USHRT_MAX != nPos, "Line steht nicht in der Tabelle" );
     if( ++nPos < rTable.GetTabLines().size() )
-        pLineBehind = rTable.GetTabLines()[nPos];
+        m_pLineBehind = rTable.GetTabLines()[nPos];
 }
 
 inline void UnsetFollow( SwFlowFrame *pTab )
@@ -2145,21 +2145,21 @@ void FndBox_::DelFrames( SwTable &rTable )
 
     sal_uInt16 nStPos = 0;
     sal_uInt16 nEndPos= rTable.GetTabLines().size() - 1;
-    if( rTable.IsNewModel() && pLineBefore )
-        rTable.CheckRowSpan( pLineBefore, true );
-    if ( pLineBefore )
+    if( rTable.IsNewModel() && m_pLineBefore )
+        rTable.CheckRowSpan( m_pLineBefore, true );
+    if ( m_pLineBefore )
     {
         nStPos = rTable.GetTabLines().GetPos(
-                        const_cast<const SwTableLine*&>(pLineBefore) );
+                        const_cast<const SwTableLine*&>(m_pLineBefore) );
         OSL_ENSURE( nStPos != USHRT_MAX, "The fox stole the line!" );
         ++nStPos;
     }
-    if( rTable.IsNewModel() && pLineBehind )
-        rTable.CheckRowSpan( pLineBehind, false );
-    if ( pLineBehind )
+    if( rTable.IsNewModel() && m_pLineBehind )
+        rTable.CheckRowSpan( m_pLineBehind, false );
+    if ( m_pLineBehind )
     {
         nEndPos = rTable.GetTabLines().GetPos(
-                        const_cast<const SwTableLine*&>(pLineBehind) );
+                        const_cast<const SwTableLine*&>(m_pLineBehind) );
         OSL_ENSURE( nEndPos != USHRT_MAX, "The fox stole the line!" );
         if (nEndPos != 0)
             --nEndPos;
@@ -2306,18 +2306,18 @@ void FndBox_::MakeFrames( SwTable &rTable )
     // And this for all instances of a table (for example in header/footer).
     sal_uInt16 nStPos = 0;
     sal_uInt16 nEndPos= rTable.GetTabLines().size() - 1;
-    if ( pLineBefore )
+    if ( m_pLineBefore )
     {
         nStPos = rTable.GetTabLines().GetPos(
-                        const_cast<const SwTableLine*&>(pLineBefore) );
+                        const_cast<const SwTableLine*&>(m_pLineBefore) );
         OSL_ENSURE( nStPos != USHRT_MAX, "Fox stole the line!" );
         ++nStPos;
 
     }
-    if ( pLineBehind )
+    if ( m_pLineBehind )
     {
         nEndPos = rTable.GetTabLines().GetPos(
-                        const_cast<const SwTableLine*&>(pLineBehind) );
+                        const_cast<const SwTableLine*&>(m_pLineBehind) );
         OSL_ENSURE( nEndPos != USHRT_MAX, "Fox stole the line!" );
         --nEndPos;
     }
@@ -2333,7 +2333,7 @@ void FndBox_::MakeFrames( SwTable &rTable )
             for ( i = rTable.GetTabLines().size()-1;
                     i >= 0 && !pSibling; --i )
             {
-                SwTableLine *pLine = pLineBehind ? pLineBehind :
+                SwTableLine *pLine = m_pLineBehind ? m_pLineBehind :
                                                     rTable.GetTabLines()[static_cast<sal_uInt16>(i)];
                 SwIterator<SwRowFrame,SwFormat> aIter( *pLine->GetFrameFormat() );
                 pSibling = aIter.First();
@@ -2343,8 +2343,8 @@ void FndBox_::MakeFrames( SwTable &rTable )
                             pSibling->IsRepeatedHeadline() ||
                             // #i53647# If !pLineBehind,
                             // IsInSplitTableRow() should be checked.
-                            ( pLineBehind && pSibling->IsInFollowFlowRow() ) ||
-                            (!pLineBehind && pSibling->IsInSplitTableRow() ) ) )
+                            ( m_pLineBehind && pSibling->IsInFollowFlowRow() ) ||
+                            (!m_pLineBehind && pSibling->IsInSplitTableRow() ) ) )
                 {
                     pSibling = aIter.Next();
                 }
@@ -2352,7 +2352,7 @@ void FndBox_::MakeFrames( SwTable &rTable )
             if ( pSibling )
             {
                 pUpperFrame = pSibling->GetUpper();
-                if ( !pLineBehind )
+                if ( !m_pLineBehind )
                     pSibling = nullptr;
             }
             else
@@ -2379,11 +2379,11 @@ void FndBox_::MakeNewFrames( SwTable &rTable, const sal_uInt16 nNumber,
     // Create Frames for newly inserted lines
     // bBehind == true:  before  pLineBehind
     //         == false: after   pLineBefore
-    const sal_uInt16 nBfPos = pLineBefore ?
-        rTable.GetTabLines().GetPos( const_cast<const SwTableLine*&>(pLineBefore) ) :
+    const sal_uInt16 nBfPos = m_pLineBefore ?
+        rTable.GetTabLines().GetPos( const_cast<const SwTableLine*&>(m_pLineBefore) ) :
         USHRT_MAX;
-    const sal_uInt16 nBhPos = pLineBehind ?
-        rTable.GetTabLines().GetPos( const_cast<const SwTableLine*&>(pLineBehind) ) :
+    const sal_uInt16 nBhPos = m_pLineBehind ?
+        rTable.GetTabLines().GetPos( const_cast<const SwTableLine*&>(m_pLineBehind) ) :
         USHRT_MAX;
 
     //nNumber: how often did we insert
@@ -2404,13 +2404,13 @@ void FndBox_::MakeNewFrames( SwTable &rTable, const sal_uInt16 nNumber,
             SwLayoutFrame *pUpperFrame   = nullptr;
             if ( bBehind )
             {
-                if ( pLineBehind )
+                if ( m_pLineBehind )
                 {
-                    SwIterator<SwRowFrame,SwFormat> aIter( *pLineBehind->GetFrameFormat() );
+                    SwIterator<SwRowFrame,SwFormat> aIter( *m_pLineBehind->GetFrameFormat() );
                     pSibling = aIter.First();
                     while ( pSibling && (
                                 // only consider row frames associated with pLineBehind:
-                                pSibling->GetTabLine() != pLineBehind ||
+                                pSibling->GetTabLine() != m_pLineBehind ||
                                 // only consider row frames that are in pTables Master-Follow chain:
                                 !lcl_IsLineOfTableFrame( *pTable, *pSibling ) ||
                                 // only consider row frames that are not repeated headlines:
@@ -2447,7 +2447,7 @@ void FndBox_::MakeNewFrames( SwTable &rTable, const sal_uInt16 nNumber,
                 // that should be inserted.
                 for ( i = 0; !pSibling; ++i )
                 {
-                    SwTableLine* pLine = pLineBefore ? pLineBefore : rTable.GetTabLines()[i];
+                    SwTableLine* pLine = m_pLineBefore ? m_pLineBefore : rTable.GetTabLines()[i];
 
                     SwIterator<SwRowFrame,SwFormat> aIter( *pLine->GetFrameFormat() );
                     pSibling = aIter.First();
@@ -2465,15 +2465,15 @@ void FndBox_::MakeNewFrames( SwTable &rTable, const sal_uInt16 nNumber,
                             // only consider row frames that are not split table rows
                             // #i37476# If !pLineBefore,
                             // check IsInFollowFlowRow instead of IsInSplitTableRow.
-                            ( ( !pLineBefore && pSibling->IsInFollowFlowRow() ) ||
-                              (  pLineBefore && pSibling->IsInSplitTableRow() ) ) ) )
+                            ( ( !m_pLineBefore && pSibling->IsInFollowFlowRow() ) ||
+                              (  m_pLineBefore && pSibling->IsInSplitTableRow() ) ) ) )
                     {
                         pSibling = aIter.Next();
                     }
                 }
 
                 pUpperFrame = pSibling->GetUpper();
-                if ( pLineBefore )
+                if ( m_pLineBefore )
                     pSibling = static_cast<SwRowFrame*>( pSibling->GetNext() );
 
                 sal_uInt16 nMax = nBhPos != USHRT_MAX ?
@@ -2517,22 +2517,22 @@ bool FndBox_::AreLinesToRestore( const SwTable &rTable ) const
 {
     // Should we call MakeFrames here?
 
-    if ( !pLineBefore && !pLineBehind && rTable.GetTabLines().size() )
+    if ( !m_pLineBefore && !m_pLineBehind && rTable.GetTabLines().size() )
         return true;
 
     sal_uInt16 nBfPos;
-    if(pLineBefore)
+    if(m_pLineBefore)
     {
-        const SwTableLine* rLBefore = const_cast<const SwTableLine*>(pLineBefore);
+        const SwTableLine* rLBefore = const_cast<const SwTableLine*>(m_pLineBefore);
         nBfPos = rTable.GetTabLines().GetPos( rLBefore );
     }
     else
         nBfPos = USHRT_MAX;
 
     sal_uInt16 nBhPos;
-    if(pLineBehind)
+    if(m_pLineBehind)
     {
-        const SwTableLine* rLBehind = const_cast<const SwTableLine*>(pLineBehind);
+        const SwTableLine* rLBehind = const_cast<const SwTableLine*>(m_pLineBehind);
         nBhPos = rTable.GetTabLines().GetPos( rLBehind );
     }
     else
