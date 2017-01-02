@@ -31,7 +31,6 @@ namespace dbaui
         :m_xMaster( _rxMaster )
         ,m_bDoesNotExist(false)
     {
-        SAL_WARN_IF( !m_xMaster.is(), "dbaccess.ui", "OFilePickerInteractionHandler::OFilePickerInteractionHandler: invalid master handler!");
         assert(m_xMaster.is());
     }
 
