@@ -690,7 +690,7 @@ bool TransferableHelper::SetGDIMetaFile( const GDIMetaFile& rMtf, const DataFlav
     {
         SvMemoryStream aMemStm( 65535, 65535 );
 
-        ( (GDIMetaFile&) rMtf ).Write( aMemStm );
+        const_cast<GDIMetaFile&>(rMtf).Write( aMemStm );
         maAny <<= Sequence< sal_Int8 >( static_cast< const sal_Int8* >( aMemStm.GetData() ), aMemStm.Seek( STREAM_SEEK_TO_END ) );
     }
 

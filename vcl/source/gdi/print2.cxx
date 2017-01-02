@@ -667,9 +667,9 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
     if( ! bReduceTransparency || bTransparencyAutoMode )
     {
         // watch for transparent drawing actions
-        for( pCurrAct = ( (GDIMetaFile&) rInMtf ).FirstAction();
+        for( pCurrAct = const_cast<GDIMetaFile&>(rInMtf).FirstAction();
              pCurrAct && !bTransparent;
-             pCurrAct = ( (GDIMetaFile&) rInMtf ).NextAction() )
+             pCurrAct = const_cast<GDIMetaFile&>(rInMtf).NextAction() )
         {
             // #i10613# determine if the action is transparency capable
 
