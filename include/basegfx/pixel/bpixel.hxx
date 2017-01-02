@@ -72,22 +72,6 @@ namespace basegfx
             maPixelUnion.maRGBO.mnO = nOpacity;
         }
 
-        // copy constructor
-        BPixel(const BPixel& rPixel)
-        {
-            maPixelUnion.maCombinedRGBO.mnValue = rPixel.maPixelUnion.maCombinedRGBO.mnValue;
-        }
-
-        ~BPixel()
-        {}
-
-        // assignment operator
-        BPixel& operator=( const BPixel& rPixel )
-        {
-            maPixelUnion.maCombinedRGBO.mnValue = rPixel.maPixelUnion.maCombinedRGBO.mnValue;
-            return *this;
-        }
-
         // data access read
         sal_uInt8 getRed() const { return maPixelUnion.maRGBO.mnR; }
         sal_uInt8 getGreen() const { return maPixelUnion.maRGBO.mnG; }

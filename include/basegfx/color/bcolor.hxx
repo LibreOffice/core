@@ -69,23 +69,11 @@ namespace basegfx
         :   B3DTuple(fLuminosity, fLuminosity, fLuminosity)
         {}
 
-        /** Create a copy of a Color
-
-            @param rVec
-            The Color which will be copied.
-        */
-        BColor(const BColor& rVec)
-        :   B3DTuple(rVec)
-        {}
-
         /** constructor with tuple to allow copy-constructing
             from B3DTuple-based classes
         */
         BColor(const ::basegfx::B3DTuple& rTuple)
         :   B3DTuple(rTuple)
-        {}
-
-        ~BColor()
         {}
 
         // data access read
