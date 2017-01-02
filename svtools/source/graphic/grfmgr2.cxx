@@ -1622,9 +1622,9 @@ void GraphicManager::ImplDraw( OutputDevice* pOut, const Point& rPt, const Size&
     pOut->Push( PushFlags::CLIPREGION );
     pOut->IntersectClipRegion( Rectangle( aOutPt, aOutSz ) );
 
-    ( (GDIMetaFile&) rMtf ).WindStart();
-    ( (GDIMetaFile&) rMtf ).Play( pOut, aOutPt, aOutSz );
-    ( (GDIMetaFile&) rMtf ).WindStart();
+    const_cast<GDIMetaFile&>(rMtf).WindStart();
+    const_cast<GDIMetaFile&>(rMtf).Play( pOut, aOutPt, aOutSz );
+    const_cast<GDIMetaFile&>(rMtf).WindStart();
 
     pOut->Pop();
 }

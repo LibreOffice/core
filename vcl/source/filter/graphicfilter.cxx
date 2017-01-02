@@ -2058,7 +2058,7 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString
                                 SvMemoryStream aMemStm( 65535, 65535 );
 
                                 // #i119735# just use GetGDIMetaFile, it will create a buffered version of contained bitmap now automatically
-                                ( (GDIMetaFile&) aGraphic.GetGDIMetaFile() ).Write( aMemStm );
+                                const_cast<GDIMetaFile&>( aGraphic.GetGDIMetaFile() ).Write( aMemStm );
 
                                 xActiveDataSource->setOutputStream( css::uno::Reference< css::io::XOutputStream >(
                                     xStmIf, css::uno::UNO_QUERY ) );

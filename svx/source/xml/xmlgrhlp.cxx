@@ -134,7 +134,7 @@ SvXMLGraphicInputStream::SvXMLGraphicInputStream( const OUString& rGraphicId )
                 {
                     pStm->SetVersion( SOFFICE_FILEFORMAT_8 );
                     pStm->SetCompressMode( SvStreamCompressFlags::ZBITMAP );
-                    ( (GDIMetaFile&) aGraphic.GetGDIMetaFile() ).Write( *pStm );
+                    const_cast<GDIMetaFile&>( aGraphic.GetGDIMetaFile() ).Write( *pStm );
                     bRet = ( pStm->GetError() == 0 );
                 }
             }
@@ -581,7 +581,7 @@ bool SvXMLGraphicHelper::ImplWriteGraphic( const OUString& rPictureStorageName,
                     pStream->SetCompressMode( SvStreamCompressFlags::ZBITMAP );
 
                     // SJ: first check if this metafile is just a eps file, then we will store the eps instead of svm
-                    GDIMetaFile& rMtf( (GDIMetaFile&)aGraphic.GetGDIMetaFile() );
+                    GDIMetaFile& rMtf(const_cast<GDIMetaFile&>( aGraphic.GetGDIMetaFile() ));
                     const MetaCommentAction* pComment = ImplCheckForEPS( rMtf );
                     if ( pComment )
                     {
@@ -706,7 +706,7 @@ void SvXMLGraphicHelper::ImplInsertGraphicURL( const OUString& rURLStr, sal_uInt
                     else if( aGrfObject.GetType() == GraphicType::GdiMetafile )
                     {
                         // SJ: first check if this metafile is just a eps file, then we will store the eps instead of svm
-                        GDIMetaFile& rMtf( (GDIMetaFile&)aGraphic.GetGDIMetaFile() );
+                        GDIMetaFile& rMtf(const_cast<GDIMetaFile&>( aGraphic.GetGDIMetaFile() ));
                         if ( ImplCheckForEPS( rMtf ) )
                             aExtension = ".eps";
                         else
