@@ -227,7 +227,7 @@ ScXMLDataBarFormatContext::ScXMLDataBarFormatContext( ScXMLImport& rImport, sal_
     if(!sGradient.isEmpty())
     {
         bool bGradient = true;
-        sax::Converter::convertBool( bGradient, sGradient);
+        (void)sax::Converter::convertBool( bGradient, sGradient);
         mpFormatData->mbGradient = bGradient;
     }
 
