@@ -36,8 +36,10 @@ struct PDFExtOutDevDataSync
     enum Action{    CreateNamedDest,
                     CreateDest,
                     CreateLink,
+                    CreateScreen,
                     SetLinkDest,
                     SetLinkURL,
+                    SetScreenURL,
                     RegisterDest,
                     CreateOutlineItem,
                     SetOutlineItemParent,
@@ -183,6 +185,17 @@ void GlobalSyncData::PlayGlobalActions( PDFWriter& rWriter )
                 rWriter.Pop();
             }
             break;
+            case PDFExtOutDevDataSync::CreateScreen:
+            {
+                rWriter.Push(PushFlags::MAPMODE);
+                rWriter.SetMapMode(mParaMapModes.front());
+                mParaMapModes.pop_front();
+                mParaIds.push_back(rWriter.CreateScreen(mParaRects.front(), mParaInts.front()));
+                mParaRects.pop_front();
+                mParaInts.pop_front();
+                rWriter.Pop();
+            }
+            break;
             case PDFExtOutDevDataSync::SetLinkDest :
             {
                 sal_Int32 nLinkId = GetMappedId();
@@ -194,6 +207,13 @@ void GlobalSyncData::PlayGlobalActions( PDFWriter& rWriter )
             {
                 sal_Int32 nLinkId = GetMappedId();
                 rWriter.SetLinkURL( nLinkId, mParaOUStrings.front() );
+                mParaOUStrings.pop_front();
+            }
+            break;
+            case PDFExtOutDevDataSync::SetScreenURL:
+            {
+                sal_Int32 nScreenId = GetMappedId();
+                rWriter.SetScreenURL(nScreenId, mParaOUStrings.front());
                 mParaOUStrings.pop_front();
             }
             break;
@@ -494,8 +514,10 @@ bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIMtfAc
             case PDFExtOutDevDataSync::CreateNamedDest:
             case PDFExtOutDevDataSync::CreateDest:
             case PDFExtOutDevDataSync::CreateLink:
+            case PDFExtOutDevDataSync::CreateScreen:
             case PDFExtOutDevDataSync::SetLinkDest:
             case PDFExtOutDevDataSync::SetLinkURL:
+            case PDFExtOutDevDataSync::SetScreenURL:
             case PDFExtOutDevDataSync::RegisterDest:
             case PDFExtOutDevDataSync::CreateOutlineItem:
             case PDFExtOutDevDataSync::SetOutlineItemParent:
@@ -672,6 +694,16 @@ sal_Int32 PDFExtOutDevData::CreateLink( const Rectangle& rRect, sal_Int32 nPageN
     mpGlobalSyncData->mParaInts.push_back( nPageNr == -1 ? mnPage : nPageNr );
     return mpGlobalSyncData->mCurId++;
 }
+
+sal_Int32 PDFExtOutDevData::CreateScreen(const Rectangle& rRect)
+{
+    mpGlobalSyncData->mActions.push_back(PDFExtOutDevDataSync::CreateScreen);
+    mpGlobalSyncData->mParaRects.push_back(rRect);
+    mpGlobalSyncData->mParaMapModes.push_back(mrOutDev.GetMapMode());
+    mpGlobalSyncData->mParaInts.push_back(mnPage);
+    return mpGlobalSyncData->mCurId++;
+}
+
 sal_Int32 PDFExtOutDevData::SetLinkDest( sal_Int32 nLinkId, sal_Int32 nDestId )
 {
     mpGlobalSyncData->mActions.push_back( PDFExtOutDevDataSync::SetLinkDest );
@@ -686,6 +718,14 @@ sal_Int32 PDFExtOutDevData::SetLinkURL( sal_Int32 nLinkId, const OUString& rURL 
     mpGlobalSyncData->mParaOUStrings.push_back( rURL );
     return 0;
 }
+
+void PDFExtOutDevData::SetScreenURL(sal_Int32 nScreenId, const OUString& rURL)
+{
+    mpGlobalSyncData->mActions.push_back(PDFExtOutDevDataSync::SetScreenURL);
+    mpGlobalSyncData->mParaInts.push_back(nScreenId);
+    mpGlobalSyncData->mParaOUStrings.push_back(rURL);
+}
+
 sal_Int32 PDFExtOutDevData::CreateOutlineItem( sal_Int32 nParent, const OUString& rText, sal_Int32 nDestID )
 {
     mpGlobalSyncData->mActions.push_back( PDFExtOutDevDataSync::CreateOutlineItem );
