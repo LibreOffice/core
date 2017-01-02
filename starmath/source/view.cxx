@@ -1305,7 +1305,7 @@ void SmViewShell::SetStatusText(const OUString& rText)
 
 void SmViewShell::ShowError(const SmErrorDesc* pErrorDesc)
 {
-    SAL_WARN_IF( !GetDoc(), "starmath", "Document missing" );
+    assert(GetDoc());
     if (pErrorDesc || nullptr != (pErrorDesc = GetDoc()->GetParser().GetError(0)) )
     {
         SetStatusText( pErrorDesc->m_aText );
@@ -1316,7 +1316,7 @@ void SmViewShell::ShowError(const SmErrorDesc* pErrorDesc)
 
 void SmViewShell::NextError()
 {
-    SAL_WARN_IF( !GetDoc(), "starmath", "Document missing" );
+    assert(GetDoc());
     const SmErrorDesc   *pErrorDesc = GetDoc()->GetParser().NextError();
 
     if (pErrorDesc)
@@ -1325,7 +1325,7 @@ void SmViewShell::NextError()
 
 void SmViewShell::PrevError()
 {
-    SAL_WARN_IF( !GetDoc(), "starmath", "Document missing" );
+    assert(GetDoc());
     const SmErrorDesc   *pErrorDesc = GetDoc()->GetParser().PrevError();
 
     if (pErrorDesc)
