@@ -63,40 +63,34 @@
 #define DBG_TESTTRANS( _def_drawable )
 #endif // (OSL_DEBUG_LEVEL > 1) && defined SALGDI2_TESTTRANS
 
-#define STATIC_POINTS 64
-
 /* From <X11/Intrinsic.h> */
 typedef unsigned long Pixel;
 
 class SalPolyLine
 {
-    XPoint Points_[STATIC_POINTS];
-    XPoint *pFirst_;
+    std::vector<XPoint> Points_;
 public:
     SalPolyLine(sal_uLong nPoints, const SalPoint *p)
-        : pFirst_(nPoints+1 > STATIC_POINTS ? new XPoint[nPoints+1] : Points_)
+        : Points_(nPoints+1)
     {
-        for( sal_uLong i = 0; i < nPoints; i++ )
+        for (sal_uLong i = 0; i < nPoints; ++i)
         {
-            pFirst_[i].x = (short)p[i].mnX;
-            pFirst_[i].y = (short)p[i].mnY;
+            Points_[i].x = (short)p[i].mnX;
+            Points_[i].y = (short)p[i].mnY;
         }
-        pFirst_[nPoints] = pFirst_[0]; // close polyline
+        Points_[nPoints] = Points_[0]; // close polyline
     }
 
-    ~SalPolyLine()
+    const XPoint &operator[](sal_uLong n) const
     {
-        if( pFirst_ != Points_ )
-            delete [] pFirst_;
+        return Points_[n];
     }
 
-    XPoint &operator [] ( sal_uLong n ) const
+    XPoint &operator[](sal_uLong n)
     {
-        return pFirst_[n];
+        return Points_[n];
     }
 };
-
-#undef STATIC_POINTS
 
 namespace
 {
@@ -480,11 +474,10 @@ GC X11SalGraphicsImpl::SelectPen()
     return mpPenGC;
 }
 
-void X11SalGraphicsImpl::DrawLines( sal_uLong              nPoints,
-                                const SalPolyLine &rPoints,
-                                GC                 pGC,
-                                bool               bClose
-                                )
+void X11SalGraphicsImpl::DrawLines(sal_uLong              nPoints,
+                                   const SalPolyLine &rPoints,
+                                   GC                 pGC,
+                                   bool               bClose)
 {
     // calculate how many lines XWindow can draw in one go
     sal_uLong nMaxLines = (mrParent.GetDisplay()->GetMaxRequestSize() - sizeof(xPolyPointReq))
@@ -497,7 +490,7 @@ void X11SalGraphicsImpl::DrawLines( sal_uLong              nPoints,
         XDrawLines( mrParent.GetXDisplay(),
                     mrParent.GetDrawable(),
                     pGC,
-                    &rPoints[n],
+                    const_cast<XPoint*>(&rPoints[n]),
                     nMaxLines,
                     CoordModeOrigin );
 
@@ -505,7 +498,7 @@ void X11SalGraphicsImpl::DrawLines( sal_uLong              nPoints,
         XDrawLines( mrParent.GetXDisplay(),
                     mrParent.GetDrawable(),
                     pGC,
-                    &rPoints[n],
+                    const_cast<XPoint*>(&rPoints[n]),
                     nPoints - n,
                     CoordModeOrigin );
     if( bClose )
