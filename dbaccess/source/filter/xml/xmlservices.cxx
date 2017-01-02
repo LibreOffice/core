@@ -18,7 +18,6 @@
  */
 
 #include <cppuhelper/factory.hxx>
-#include <osl/diagnose.h>
 #include "flt_reghelper.hxx"
 #include "xmlservices.hxx"
 
