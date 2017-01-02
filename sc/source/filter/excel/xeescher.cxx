@@ -1152,12 +1152,19 @@ const css::uno::Reference<css::chart::XChartDocument>& XclExpChartObj::GetChartD
     return mxChartDoc;
 }
 
-XclExpNote::XclExpNote( const XclExpRoot& rRoot, const ScAddress& rScPos,
-        const ScPostIt* pScNote, const OUString& rAddText ) :
-    XclExpRecord( EXC_ID_NOTE ),
-    maScPos( rScPos ),
-    mnObjId( EXC_OBJ_INVALID_ID ),
-    mbVisible( pScNote && pScNote->IsCaptionShown() )
+XclExpNote::XclExpNote(const XclExpRoot& rRoot, const ScAddress& rScPos,
+        const ScPostIt* pScNote, const OUString& rAddText)
+    : XclExpRecord(EXC_ID_NOTE)
+    , maScPos(rScPos)
+    , mnObjId(EXC_OBJ_INVALID_ID)
+    , mbVisible(pScNote && pScNote->IsCaptionShown())
+    , meTHA(SDRTEXTHORZADJUST_LEFT)
+    , meTVA(SDRTEXTVERTADJUST_TOP)
+    , mbAutoScale(false)
+    , mbLocked(false)
+    , mbAutoFill(false)
+    , mbColHidden(false)
+    , mbRowHidden(false)
 {
     // get the main note text
     OUString aNoteText;
