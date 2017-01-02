@@ -211,7 +211,7 @@ void SvxGeneralTabPage::InitControls ()
 {
     // which language bit do we use? (see Lang and vRowInfo[] above)
     unsigned LangBit;
-    switch (LanguageType const eLang = Application::GetSettings().GetUILanguageTag().getLanguageType())
+    switch (Application::GetSettings().GetUILanguageTag().getLanguageType())
     {
         case LANGUAGE_ENGLISH_US:
             LangBit = Lang::US;
