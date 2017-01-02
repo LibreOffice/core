@@ -228,7 +228,7 @@ void Test::SimpleOperators()
     parseandparseagain("coprod{a}", "Coproduct");
     parseandparseagain("int from {r_0} to {r_t} a", "Upper and lower bounds shown with integral (from & to)");
     ParseAndCheck("int csup {r_0} csub {r_t} a", "int csup { r _ 0 } csub { r _ t } a ", "Upper and lower bounds shown with integral (csub & csup)");
-//FIXME    ParseAndCheck("sum csup { size 8 { x - 1 } } csub { size 8 a } b ", "sum csup { size 8 { x - 1 } } csub { size 8 a } b ", "Sum with sized upper and lower bounds");
+    ParseAndCheck("sum csup { size 8 { x - 1 } } csub { size 8 a } b ", "sum csup { size 8 { x - 1 } } csub { size 8 a } b ", "Sum with sized upper and lower bounds");
     parseandparseagain("int{a}", "Integral");
     parseandparseagain("intd_{1}^{2}{x dx}", "Dynamically-sized integral");
     parseandparseagain("iint{a}", "Double integral");
