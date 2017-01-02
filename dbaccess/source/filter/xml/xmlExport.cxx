@@ -665,13 +665,9 @@ void ODBExport::exportDataSourceSettings()
     ::std::vector< TypedPropertyValue >::const_iterator aEnd = m_aDataSourceSettings.end();
     for ( ; aIter != aEnd; ++aIter )
     {
-        bool bIsSequence = TypeClass_SEQUENCE == aIter->Type.getTypeClass();
+        const bool bIsSequence = TypeClass_SEQUENCE == aIter->Type.getTypeClass();
 
-        Type aSimpleType;
-        if ( bIsSequence )
-            aSimpleType = ::comphelper::getSequenceElementType( aIter->Value.getValueType() );
-        else
-            aSimpleType = aIter->Type;
+        Type aSimpleType(bIsSequence ? comphelper::getSequenceElementType(aIter->Value.getValueType()) : aIter->Type);
 
         AddAttribute( XML_NAMESPACE_DB, XML_DATA_SOURCE_SETTING_IS_LIST,bIsSequence ? XML_TRUE : XML_FALSE );
         AddAttribute( XML_NAMESPACE_DB, XML_DATA_SOURCE_SETTING_NAME, aIter->Name );
