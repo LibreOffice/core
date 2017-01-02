@@ -206,8 +206,8 @@ Rectangle OutputDevice::ImplGetTextBoundRect( const SalLayout& rSalLayout )
 
 bool OutputDevice::ImplDrawRotateText( SalLayout& rSalLayout )
 {
-    int nX = rSalLayout.DrawBase().X();
-    int nY = rSalLayout.DrawBase().Y();
+    long nX = rSalLayout.DrawBase().X();
+    long nY = rSalLayout.DrawBase().Y();
 
     Rectangle aBoundRect;
     rSalLayout.DrawBase() = Point( 0, 0 );
@@ -215,8 +215,8 @@ bool OutputDevice::ImplDrawRotateText( SalLayout& rSalLayout )
     if( !rSalLayout.GetBoundRect( *mpGraphics, aBoundRect ) )
     {
         // guess vertical text extents if GetBoundRect failed
-        int nRight = rSalLayout.GetTextWidth();
-        int nTop = mpFontInstance->mxFontMetric->GetAscent() + mnEmphasisAscent;
+        long nRight = rSalLayout.GetTextWidth();
+        long nTop = mpFontInstance->mxFontMetric->GetAscent() + mnEmphasisAscent;
         long nHeight = mpFontInstance->mnLineHeight + mnEmphasisAscent + mnEmphasisDescent;
         aBoundRect = Rectangle( 0, -nTop, nRight, nHeight - nTop );
     }

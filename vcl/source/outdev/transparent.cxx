@@ -251,8 +251,8 @@ void OutputDevice::DrawTransparent( const basegfx::B2DPolyPolygon& rB2DPolyPoly,
         if( bDrawnOk && IsLineColor() )
         {
             const basegfx::B2DVector aHairlineWidth(1,1);
-            const int nPolyCount = aB2DPolyPolygon.count();
-            for( int nPolyIdx = 0; nPolyIdx < nPolyCount; ++nPolyIdx )
+            const sal_uInt32 nPolyCount = aB2DPolyPolygon.count();
+            for( sal_uInt32 nPolyIdx = 0; nPolyIdx < nPolyCount; ++nPolyIdx )
             {
                 const basegfx::B2DPolygon aOnePoly = aB2DPolyPolygon.getB2DPolygon( nPolyIdx );
                 mpGraphics->DrawPolyLine(
@@ -354,8 +354,8 @@ bool OutputDevice::DrawTransparentNatively ( const tools::PolyPolygon& rPolyPoly
             mpGraphics->SetFillColor();
             // draw the border line
             const basegfx::B2DVector aLineWidths( 1, 1 );
-            const int nPolyCount = aB2DPolyPolygon.count();
-            for( int nPolyIdx = 0; nPolyIdx < nPolyCount; ++nPolyIdx )
+            const sal_uInt32 nPolyCount = aB2DPolyPolygon.count();
+            for( sal_uInt32 nPolyIdx = 0; nPolyIdx < nPolyCount; ++nPolyIdx )
             {
                 const basegfx::B2DPolygon& rPolygon = aB2DPolyPolygon.getB2DPolygon( nPolyIdx );
                 bDrawn = mpGraphics->DrawPolyLine(
