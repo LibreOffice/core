@@ -2189,16 +2189,22 @@ void SmNodeToTextVisitor::Visit( SmUnHorNode* pNode )
 
 void SmNodeToTextVisitor::Visit( SmBinHorNode* pNode )
 {
+    const SmNode *pParent = pNode->GetParent();
+    bool bBraceNeeded = pParent && pParent->GetType() == NFONT;
     SmNode *pLeft  = pNode->LeftOperand(),
            *pOper  = pNode->Symbol(),
            *pRight = pNode->RightOperand();
     Separate( );
+    if (bBraceNeeded)
+        Append( "{ " );
     pLeft->Accept( this );
     Separate( );
     pOper->Accept( this );
     Separate( );
     pRight->Accept( this );
     Separate( );
+    if (bBraceNeeded)
+        Append( "} " );
 }
 
 void SmNodeToTextVisitor::Visit( SmBinVerNode* pNode )
