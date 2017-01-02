@@ -262,6 +262,10 @@ public:
     -1 if page id does not exist
     */
     sal_Int32 CreateLink( const Rectangle& rRect, sal_Int32 nPageNr = -1 );
+
+    /// Create a Screen annotation.
+    sal_Int32 CreateScreen(const Rectangle& rRect);
+
     /** Set the destination for a link
         <p>will change a URL type link to a dest link if necessary</p>
 
@@ -293,6 +297,10 @@ public:
         -1 in case the link id does not exist
     */
     sal_Int32 SetLinkURL( sal_Int32 nLinkId, const OUString& rURL );
+
+    /// Set URL for a Screen annotation.
+    void SetScreenURL(sal_Int32 nScreenId, const OUString& rURL);
+
     /** Create a new outline item
 
         @param nParent

@@ -104,6 +104,7 @@
 #endif
 
 using namespace vcl;
+using namespace::com::sun::star;
 
 static bool g_bDebugDisableCompression = getenv("VCL_DEBUG_DISABLE_PDFCOMPRESSION");
 
@@ -4417,6 +4418,64 @@ bool PDFWriterImpl::appendDest( sal_Int32 nDestID, OStringBuffer& rBuffer )
     return true;
 }
 
+bool PDFWriterImpl::emitScreenAnnotations()
+{
+    int nAnnots = m_aScreens.size();
+    for (int i = 0; i < nAnnots; i++)
+    {
+        const PDFScreen& rScreen = m_aScreens[i];
+        if (!updateObject(rScreen.m_nObject))
+            continue;
+
+        // Annot dictionary.
+        OStringBuffer aLine;
+        aLine.append(rScreen.m_nObject);
+        aLine.append(" 0 obj\n");
+        aLine.append("<</Type/Annot");
+        aLine.append("/Subtype/Screen/Rect[");
+        appendFixedInt(rScreen.m_aRect.Left(), aLine);
+        aLine.append(' ');
+        appendFixedInt(rScreen.m_aRect.Top(), aLine);
+        aLine.append(' ');
+        appendFixedInt(rScreen.m_aRect.Right(), aLine);
+        aLine.append(' ');
+        appendFixedInt(rScreen.m_aRect.Bottom(), aLine);
+        aLine.append("]");
+
+        // Action dictionary.
+        aLine.append("/A<</Type/Action /S/Rendition /AN ");
+        aLine.append(rScreen.m_nObject);
+        aLine.append(" 0 R ");
+
+        // Rendition dictionary.
+        aLine.append("/R<</Type/Rendition /S/MR ");
+
+        // MediaClip dictionary.
+        aLine.append("/C<</Type/MediaClip /S/MCD ");
+        aLine.append("/D << /FS /URL /Type /Filespec /F ");
+        appendLiteralStringEncrypt(rScreen.m_aURL, rScreen.m_nObject, aLine, osl_getThreadTextEncoding());
+        aLine.append(" >>");
+        // Is there anything Acrobat supports natively other than this?
+        aLine.append("/CT (video/mpeg)");
+        aLine.append(">>");
+
+        // End Rendition dictionary by requesting play/pause/stop controls.
+        aLine.append("/P<</BE<</C true >>>>");
+        aLine.append(">>");
+
+        // End Action dictionary.
+        aLine.append("/OP 0 >>");
+
+        // End Annot dictionary.
+        aLine.append("/P ");
+        aLine.append(m_aPages[rScreen.m_nPage].m_nPageObject);
+        aLine.append(" 0 R\n>>\nendobj\n\n");
+        CHECK_RETURN(writeBuffer(aLine.getStr(), aLine.getLength()));
+    }
+
+    return true;
+}
+
 bool PDFWriterImpl::emitLinkAnnotations()
 {
     int nAnnots = m_aLinks.size();
@@ -5547,6 +5606,7 @@ bool PDFWriterImpl::emitAnnotations()
         return false;
 
     CHECK_RETURN( emitLinkAnnotations() );
+    CHECK_RETURN(emitScreenAnnotations());
     CHECK_RETURN( emitNoteAnnotations() );
     CHECK_RETURN( emitWidgetAnnotations() );
 
@@ -12619,6 +12679,29 @@ sal_Int32 PDFWriterImpl::createLink( const Rectangle& rRect, sal_Int32 nPageNr )
     return nRet;
 }
 
+sal_Int32 PDFWriterImpl::createScreen(const Rectangle& rRect, sal_Int32 nPageNr)
+{
+    if (nPageNr < 0)
+        nPageNr = m_nCurrentPage;
+
+    if (nPageNr < 0 || nPageNr >= static_cast<sal_Int32>(m_aPages.size()))
+        return -1;
+
+    sal_Int32 nRet = m_aScreens.size();
+
+    m_aScreens.push_back(PDFScreen());
+    m_aScreens.back().m_nObject = createObject();
+    m_aScreens.back().m_nPage = nPageNr;
+    m_aScreens.back().m_aRect = rRect;
+    // Convert to default user space now, since the mapmode may change.
+    m_aPages[nPageNr].convertRect(m_aScreens.back().m_aRect);
+
+    // Insert link to page's annotation list.
+    m_aPages[nPageNr].m_aAnnotations.push_back(m_aScreens.back().m_nObject);
+
+    return nRet;
+}
+
 //--->i56629
 sal_Int32 PDFWriterImpl::createNamedDest( const OUString& sDestName, const Rectangle& rRect, sal_Int32 nPageNr, PDFWriter::DestAreaType eType )
 {
@@ -12698,6 +12781,14 @@ void PDFWriterImpl::setLinkURL( sal_Int32 nLinkId, const OUString& rURL )
     m_xTrans->parseStrict( aURL );
 
     m_aLinks[ nLinkId ].m_aURL  = aURL.Complete;
+}
+
+void PDFWriterImpl::setScreenURL(sal_Int32 nScreenId, const OUString& rURL)
+{
+    if (nScreenId < 0 || nScreenId >= static_cast<sal_Int32>(m_aScreens.size()))
+        return;
+
+    m_aScreens[nScreenId].m_aURL = rURL;
 }
 
 void PDFWriterImpl::setLinkPropertyId( sal_Int32 nLinkId, sal_Int32 nPropertyId )

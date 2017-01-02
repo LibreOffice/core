@@ -928,6 +928,9 @@ The following structure describes the permissions used in PDF security
     */
     sal_Int32           CreateLink( const Rectangle& rRect, sal_Int32 nPageNr );
 
+    /// Creates a screen annotation.
+    sal_Int32 CreateScreen(const Rectangle& rRect, sal_Int32 nPageNr);
+
     /** creates a destination which is not intended to be referred to by a link, but by a public destination Id.
 
         Form widgets, for instance, might refer to a destination, without ever actually creating a source link to
@@ -974,6 +977,10 @@ The following structure describes the permissions used in PDF security
         service; the result will then appear literally in the PDF file produced
     */
     void           SetLinkURL( sal_Int32 nLinkId, const OUString& rURL );
+
+    /// Sets the URL of a linked screen annotation.
+    void SetScreenURL(sal_Int32 nScreenId, const OUString& rURL);
+
     /** Resolve link in logical structure
 
         If a link is created after the corresponding visual appearance was drawn

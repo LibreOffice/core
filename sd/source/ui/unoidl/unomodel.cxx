@@ -1668,6 +1668,18 @@ void ImplPDFExportShapeInteraction( const uno::Reference< drawing::XShape >& xSh
             awt::Size   aShapeSize( xShape->getSize() );
             Rectangle   aLinkRect( Point( aShapePos.X, aShapePos.Y ), Size( aShapeSize.Width, aShapeSize.Height ) );
 
+            // Handle linked videos.
+            if (xShape->getShapeType() == "com.sun.star.drawing.MediaShape")
+            {
+                OUString aMediaURL;
+                xShapePropSet->getPropertyValue("MediaURL") >>= aMediaURL;
+                if (!aMediaURL.isEmpty())
+                {
+                    sal_Int32 nScreenId = rPDFExtOutDevData.CreateScreen(aLinkRect);
+                    rPDFExtOutDevData.SetScreenURL(nScreenId, aMediaURL);
+                }
+            }
+
             presentation::ClickAction eCa;
             uno::Any aAny( xShapePropSet->getPropertyValue( "OnClick" ) );
             if ( aAny >>= eCa )

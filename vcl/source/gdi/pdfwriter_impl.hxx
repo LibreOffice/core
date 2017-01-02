@@ -395,6 +395,12 @@ public:
         {}
     };
 
+    /// A PDF Screen annotation.
+    struct PDFScreen : public PDFAnnotation
+    {
+        OUString m_aURL;
+    };
+
     struct PDFNoteEntry : public PDFAnnotation
     {
         PDFNote                     m_aContents;
@@ -582,6 +588,8 @@ private:
        link id is always the link's position in this vector
     */
     std::vector<PDFLink>                m_aLinks;
+    /// Contains all screen annotations.
+    std::vector<PDFScreen> m_aScreens;
     /* makes correctly encoded for export to PDF URLS
     */
     css::uno::Reference< css::util::XURLTransformer > m_xTrans;
@@ -845,6 +853,8 @@ i12626
     bool appendDest( sal_Int32 nDestID, OStringBuffer& rBuffer );
     // write all links
     bool emitLinkAnnotations();
+    /// Write all screen annotations.
+    bool emitScreenAnnotations();
     // write all notes
     bool emitNoteAnnotations();
     // write the appearance streams of a widget
@@ -1181,6 +1191,10 @@ public:
     void      setLinkDest( sal_Int32 nLinkId, sal_Int32 nDestId );
     void      setLinkURL( sal_Int32 nLinkId, const OUString& rURL );
     void      setLinkPropertyId( sal_Int32 nLinkId, sal_Int32 nPropertyId );
+
+    // screens
+    sal_Int32 createScreen(const Rectangle& rRect, sal_Int32 nPageNr);
+    void setScreenURL(sal_Int32 nScreenId, const OUString& rURL);
 
     // outline
     sal_Int32 createOutlineItem( sal_Int32 nParent, const OUString& rText, sal_Int32 nDestID );
