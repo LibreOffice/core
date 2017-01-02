@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a6eadb0_fc6d58cd",
+        "filename": "dbaccess/source/ui/dlg/finteraction.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-01-02T15:21:40Z",
+      "side": 1,
+      "message": "m_xMaster.is() can either be an invariant that must always hold (-\u003e assert) or not (-\u003e SAL_WARN_IF), but not both",
+      "revId": "4e9af515d7e5af809ccd65549e4f01391e8eac0e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
