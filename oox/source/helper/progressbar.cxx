@@ -19,7 +19,6 @@
 
 #include "oox/helper/progressbar.hxx"
 
-#include <osl/diagnose.h>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include "oox/helper/helper.hxx"
 
@@ -63,7 +62,7 @@ double ProgressBar::getPosition() const
 
 void ProgressBar::setPosition( double fPosition )
 {
-    OSL_ENSURE( (mfPosition <= fPosition) && (fPosition <= 1.0), "ProgressBar::setPosition - invalid position" );
+    SAL_WARN_IF( (mfPosition > fPosition) || (fPosition > 1.0), "oox", "ProgressBar::setPosition - invalid position" );
     mfPosition = getLimitedValue< double >( fPosition, mfPosition, 1.0 );
     if( mxIndicator.is() )
         mxIndicator->setValue( static_cast< sal_Int32 >( mfPosition * PROGRESS_RANGE ) );
@@ -106,7 +105,7 @@ double SubSegment::getPosition() const
 
 void SubSegment::setPosition( double fPosition )
 {
-    OSL_ENSURE( (mfPosition <= fPosition) && (fPosition <= 1.0), "SubSegment::setPosition - invalid position" );
+    SAL_WARN_IF( (mfPosition > fPosition) || (fPosition > 1.0), "oox", "SubSegment::setPosition - invalid position" );
     mfPosition = getLimitedValue< double >( fPosition, mfPosition, 1.0 );
     mrParentProgress.setPosition( mfStartPos + mfPosition * mfLength );
 }
@@ -118,7 +117,7 @@ double SubSegment::getFreeLength() const
 
 ISegmentProgressBarRef SubSegment::createSegment( double fLength )
 {
-    OSL_ENSURE( (0.0 < fLength) && (fLength <= getFreeLength()), "SubSegment::createSegment - invalid length" );
+    SAL_WARN_IF( (0.0 >= fLength) || (fLength > getFreeLength()), "oox", "SubSegment::createSegment - invalid length" );
     fLength = getLimitedValue< double >( fLength, 0.0, getFreeLength() );
     ISegmentProgressBarRef xSegment( new prv::SubSegment( *this, mfFreeStart, fLength ) );
     mfFreeStart += fLength;
@@ -150,7 +149,7 @@ double SegmentProgressBar::getFreeLength() const
 
 ISegmentProgressBarRef SegmentProgressBar::createSegment( double fLength )
 {
-    OSL_ENSURE( (0.0 < fLength) && (fLength <= getFreeLength()), "SegmentProgressBar::createSegment - invalid length" );
+    SAL_WARN_IF( (0.0 >= fLength) || (fLength > getFreeLength()), "oox", "SegmentProgressBar::createSegment - invalid length" );
     fLength = getLimitedValue< double >( fLength, 0.0, getFreeLength() );
     ISegmentProgressBarRef xSegment( new prv::SubSegment( maProgress, mfFreeStart, fLength ) );
     mfFreeStart += fLength;
