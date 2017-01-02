@@ -32,7 +32,11 @@ DdeData::DdeData( const OUString& )
 {
 }
 
-DdeData::DdeData( const DdeData& )
+DdeData::DdeData(const DdeData&)
+{
+}
+
+DdeData::DdeData(DdeData&&)
 {
 }
 
@@ -53,7 +57,12 @@ SotClipboardFormatId DdeData::GetFormat() const
     return SotClipboardFormatId::NONE;
 }
 
-DdeData& DdeData::operator = ( const DdeData& )
+DdeData& DdeData::operator=(const DdeData&)
+{
+    return *this;
+}
+
+DdeData& DdeData::operator=(DdeData&&)
 {
     return *this;
 }
