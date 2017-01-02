@@ -57,7 +57,7 @@ DdeData::DdeData( const OUString& s )
     xImp->nFmt = SotClipboardFormatId::STRING;
 }
 
-DdeData::DdeData( const DdeData& rData )
+DdeData::DdeData(const DdeData& rData)
 {
     xImp.reset(new DdeDataImp);
     xImp->hData = rData.xImp->hData;
@@ -65,6 +65,11 @@ DdeData::DdeData( const DdeData& rData )
     xImp->pData = rData.xImp->pData;
     xImp->nFmt  = rData.xImp->nFmt;
     Lock();
+}
+
+DdeData::DdeData(DdeData&& rData)
+    : xImp(std::move(rData.xImp))
+{
 }
 
 DdeData::~DdeData()
@@ -99,7 +104,7 @@ long DdeData::getSize() const
     return xImp->nData;
 }
 
-DdeData& DdeData::operator = ( const DdeData& rData )
+DdeData& DdeData::operator=(const DdeData& rData)
 {
     if ( &rData != this )
     {
@@ -107,6 +112,12 @@ DdeData& DdeData::operator = ( const DdeData& rData )
         xImp = std::move(tmp.xImp);
     }
 
+    return *this;
+}
+
+DdeData& DdeData::operator=(DdeData&& rData)
+{
+    xImp = std::move(rData.xImp);
     return *this;
 }
 
