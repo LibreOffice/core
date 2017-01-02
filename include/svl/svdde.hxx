@@ -56,7 +56,7 @@ class SVL_DLLPUBLIC DdeData
     friend class    DdeService;
     friend class    DdeConnection;
     friend class    DdeTransaction;
-    DdeDataImp*     pImp;
+    std::unique_ptr<DdeDataImp>    xImp;
 
     SVL_DLLPRIVATE void            Lock();
 
