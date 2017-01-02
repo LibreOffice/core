@@ -44,7 +44,7 @@ class GbuildLinkTarget:
         return self.name
 
     def target_name(self):
-        return self.build_type + '-' + self.name
+        return self.build_type + '_' + self.name
 
     def short_name(self):
         return self.build_type + ' ' + self.name
@@ -503,6 +503,23 @@ VersionControl=kdevgit
 
 class XcodeIntegrationGenerator(IdeIntegrationGenerator):
 
+    def __init__(self, gbuildparser, ide):
+        IdeIntegrationGenerator.__init__(self, gbuildparser, ide)
+
+    def emit(self):
+        self.rootlocation = self.gbuildparser.srcdir + '/osx'
+        for location in self.gbuildparser.target_by_location:
+            for target in self.gbuildparser.target_by_location[location]:
+                xcodeprojdir = os.path.join(location, '%s.xcodeproj' % target.target_name())
+                try:
+                    os.mkdir(xcodeprojdir)
+                except:
+                    pass
+                p = self.generate_project(target)
+                with open(os.path.join(xcodeprojdir, 'project.pbxproj'), 'w') as f:
+                    f.write('// !$*UTF8*$!\n')
+                    self.write_dict(p, f, 0)
+
     def indent(self, file, level):
         if level == 0:
             return
@@ -544,10 +561,6 @@ class XcodeIntegrationGenerator(IdeIntegrationGenerator):
             self.write_object(key, file, 1)
             file.write(',')
         file.write(')')
-
-    def write_dict_to_plist(self, dict, file):
-        file.write('// !$*UTF8*$!\n')
-        self.write_dict(dict, file, 0)
 
     def get_product_type(self, modulename):
         if modulename.build_type == 'Library':
@@ -708,17 +721,18 @@ class XcodeIntegrationGenerator(IdeIntegrationGenerator):
         return result
 
     def generate_project(self, target):
-        self.rootObjectId = self.generate_id()
-        self.mainGroupId = self.generate_id()
+        self.rootObjectId = 'X0100001' # self.generate_id()
+        self.mainGroupId = 'X0100002' # self.generate_id()
+        self.targetId = 'X0100003' # self.generate_id()
+        self.configurationListId = 'X0100004' # self.generate_id()
+        self.productRefGroupId = 'X0100005' # self.generate_id()
+
         self.subMainGroupId = self.generate_id()
         self.productReferenceId = self.generate_id()
-        self.productRefGroupId = self.generate_id()
         self.productGroupId = self.generate_id()
-        self.targetId = self.generate_id()
         self.targetRefId = self.generate_id()
         self.build_source_list(target)
         self.sourcesBuildPhaseId = self.generate_id()
-        self.configurationListId =  self.generate_id()
         self.configurationDebugId =  self.generate_id()
         objects = {self.rootObjectId: self.generate_root_object(target),
                    self.targetId: self.generate_target(target),
@@ -750,29 +764,6 @@ class XcodeIntegrationGenerator(IdeIntegrationGenerator):
                    'objects': objects,
                    'rootObject': self.rootObjectId}
         return project
-
-    # For some reverse-engineered documentation on the project.pbxproj format,
-    # see http://www.monobjc.net/xcode-project-file-format.html .
-    def write_xcodeproj(self, moduledir, target):
-        xcodeprojdir = os.path.join(moduledir, '%s.xcodeproj' % target.target_name())
-        try:
-            os.mkdir(xcodeprojdir)
-        except:
-            pass
-        self.write_dict_to_plist(self.generate_project(target),
-                                 open(os.path.join(xcodeprojdir, 'project.pbxproj'), 'w'))
-
-    def __init__(self, gbuildparser, ide):
-        IdeIntegrationGenerator.__init__(self, gbuildparser, ide)
-
-    def emit(self):
-        self.rootlocation = './'
-        for location in self.gbuildparser.target_by_location:
-            # module = location.split('/')[-1]
-            # module_directory = os.path.join(self.rootlocation, module)
-            for target in self.gbuildparser.target_by_location[location]:
-                # project_path = os.path.join(module_directory, '%s.pbxroj' % target.target_name())
-                self.write_xcodeproj(location, target)
 
 
 class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
