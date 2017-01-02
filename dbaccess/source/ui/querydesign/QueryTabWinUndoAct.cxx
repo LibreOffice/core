@@ -30,7 +30,7 @@ using namespace dbaui;
 OQueryDesignFieldUndoAct::OQueryDesignFieldUndoAct(OSelectionBrowseBox* pSelBrwBox, sal_uInt16 nCommentID)
     : OCommentUndoAction(nCommentID)
     , pOwner(pSelBrwBox)
-    , m_nColumnPostion(BROWSER_INVALIDID)
+    , m_nColumnPosition(BROWSER_INVALIDID)
 {
 }
 
@@ -73,11 +73,11 @@ OQueryTabWinUndoAct::~OQueryTabWinUndoAct()
 void OTabFieldCellModifiedUndoAct::Undo()
 {
     pOwner->EnterUndoMode();
-    OSL_ENSURE(m_nColumnPostion != BROWSER_INVALIDID,"Column position was not set add the undo action!");
-    OSL_ENSURE(m_nColumnPostion < pOwner->GetColumnCount(),"Position outside the column count!");
-    if ( m_nColumnPostion != BROWSER_INVALIDID )
+    OSL_ENSURE(m_nColumnPosition != BROWSER_INVALIDID,"Column position was not set add the undo action!");
+    OSL_ENSURE(m_nColumnPosition < pOwner->GetColumnCount(),"Position outside the column count!");
+    if ( m_nColumnPosition != BROWSER_INVALIDID )
     {
-        sal_uInt16 nColumnId = pOwner->GetColumnId(m_nColumnPostion);
+        sal_uInt16 nColumnId = pOwner->GetColumnId(m_nColumnPosition);
         OUString strNext = pOwner->GetCellContents(m_nCellIndex, nColumnId);
         pOwner->SetCellContents(m_nCellIndex, nColumnId, m_strNextCellContents);
         m_strNextCellContents = strNext;
@@ -88,10 +88,10 @@ void OTabFieldCellModifiedUndoAct::Undo()
 void OTabFieldSizedUndoAct::Undo()
 {
     pOwner->EnterUndoMode();
-    OSL_ENSURE(m_nColumnPostion != BROWSER_INVALIDID,"Column position was not set add the undo action!");
-    if ( m_nColumnPostion != BROWSER_INVALIDID )
+    OSL_ENSURE(m_nColumnPosition != BROWSER_INVALIDID,"Column position was not set add the undo action!");
+    if ( m_nColumnPosition != BROWSER_INVALIDID )
     {
-        sal_uInt16 nColumnId = pOwner->GetColumnId(m_nColumnPostion);
+        sal_uInt16 nColumnId = pOwner->GetColumnId(m_nColumnPosition);
         long nNextWidth = pOwner->GetColumnWidth(nColumnId);
         pOwner->SetColWidth(nColumnId, m_nNextWidth);
         m_nNextWidth = nNextWidth;
@@ -102,14 +102,14 @@ void OTabFieldSizedUndoAct::Undo()
 void OTabFieldMovedUndoAct::Undo()
 {
     pOwner->EnterUndoMode();
-    OSL_ENSURE(m_nColumnPostion != BROWSER_INVALIDID,"Column position was not set add the undo action!");
-    if ( m_nColumnPostion != BROWSER_INVALIDID )
+    OSL_ENSURE(m_nColumnPosition != BROWSER_INVALIDID,"Column position was not set add the undo action!");
+    if ( m_nColumnPosition != BROWSER_INVALIDID )
     {
         sal_uInt16 nId = pDescr->GetColumnId();
         sal_uInt16 nOldPos = pOwner->GetColumnPos(nId);
-        pOwner->SetColumnPos(nId,m_nColumnPostion);
+        pOwner->SetColumnPos(nId,m_nColumnPosition);
         pOwner->ColumnMoved(nId,false);
-        m_nColumnPostion = nOldPos;
+        m_nColumnPosition = nOldPos;
     }
     pOwner->LeaveUndoMode();
 }
