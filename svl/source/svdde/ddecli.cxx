@@ -133,8 +133,8 @@ HDDEDATA CALLBACK DdeInternal::CliCallback( UINT nCode, UINT nCbType,
                 }
 
                 DdeData d;
-                d.pImp->hData = hData;
-                d.pImp->nFmt  = DdeData::GetInternalFormat( nCbType );
+                d.xImp->hData = hData;
+                d.xImp->nFmt  = DdeData::GetInternalFormat( nCbType );
                 d.Lock();
                 (*iter)->Data( &d );
                 nRet = reinterpret_cast<HDDEDATA>(DDE_FACK);
@@ -274,7 +274,7 @@ void DdeTransaction::Execute()
     HSZ     hItem = pName->getHSZ();
     void const * pData = aDdeData.getData();
     DWORD   nData = (DWORD)aDdeData.getSize();
-    SotClipboardFormatId nIntFmt = aDdeData.pImp->nFmt;
+    SotClipboardFormatId nIntFmt = aDdeData.xImp->nFmt;
     UINT    nExtFmt  = DdeData::GetExternalFormat( nIntFmt );
     DdeInstData* pInst = ImpGetInstData();
 
@@ -297,8 +297,8 @@ void DdeTransaction::Execute()
         {
             {
                 DdeData d;
-                d.pImp->hData = hData;
-                d.pImp->nFmt = nIntFmt;
+                d.xImp->hData = hData;
+                d.xImp->nFmt = nIntFmt;
                 d.Lock();
                 Data( &d );
             }
