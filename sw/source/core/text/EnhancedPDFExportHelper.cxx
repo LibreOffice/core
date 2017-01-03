@@ -1831,8 +1831,11 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                         {
                             const SwPageFrame* pCurrPage = mrSh.GetLayout()->GetPageAtPos(aSnapRect.Center());
                             Rectangle aPDFRect(SwRectToPDFRect(pCurrPage, aSnapRect.SVRect()));
-                            sal_Int32 nScreenId = pPDFExtOutDevData->CreateScreen(aPDFRect);
-                            pPDFExtOutDevData->SetScreenURL(nScreenId, aMediaURL);
+                            for (sal_Int32 nScreenPageNum : aScreenPageNums)
+                            {
+                                sal_Int32 nScreenId = pPDFExtOutDevData->CreateScreen(aPDFRect, nScreenPageNum);
+                                pPDFExtOutDevData->SetScreenURL(nScreenId, aMediaURL);
+                            }
                         }
                     }
                 }
