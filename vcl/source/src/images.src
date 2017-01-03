@@ -54,11 +54,6 @@ Bitmap SV_RESID_BITMAP_MSGBOX
     File = "msgbox.png";
 };
 
-Bitmap SV_RESID_BITMAP_PIN
-{
-    File = "pin.png";
-};
-
 Bitmap SV_RESID_BITMAP_CLOSEDOC
 {
     File = "closedoc.png";

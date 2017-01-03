@@ -211,7 +211,6 @@ struct ImplSVCtrlData
 {
     ImageList*              mpCheckImgList = nullptr;       // ImageList for CheckBoxes
     ImageList*              mpRadioImgList = nullptr;       // ImageList for RadioButtons
-    ImageList*              mpPinImgList = nullptr;         // ImageList for PIN
     ImageList*              mpSplitHPinImgList = nullptr;   // ImageList for Horizontale SplitWindows
     ImageList*              mpSplitVPinImgList = nullptr;   // ImageList for Vertikale SplitWindows (PIN's)
     Image*                  mpDisclosurePlus = nullptr;

@@ -31,8 +31,6 @@
 
 #define SV_RESID_BITMAP_MSGBOX                       1020
 
-#define SV_RESID_BITMAP_PIN                          1030
-
 #define SV_RESID_BITMAP_SPLITHPIN                    1040
 #define SV_RESID_BITMAP_SPLITVPIN                    1041
 #define SV_RESID_BITMAP_SPLITHARW                    1042
