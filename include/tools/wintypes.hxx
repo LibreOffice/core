@@ -130,7 +130,6 @@ WinBits const WB_ROLLABLE =             0x00000200;
 WinBits const WB_CLOSEABLE =            0x00000400;
 WinBits const WB_STANDALONE =           0x00000800;
 WinBits const WB_APP =                  0x00001000;
-WinBits const WB_PINABLE =              0x00002000;
 WinBits const WB_SYSTEMWINDOW =         SAL_CONST_INT64(0x40000000);
 // warning: do not confuse WB_SYSTEMCHILDWINDOW with the SystemChildWindow class
 //

@@ -36,7 +36,7 @@
 #include <vcl/unowrap.hxx>
 #include <vcl/settings.hxx>
 
-#define DOCKWIN_FLOATSTYLES         (WB_SIZEABLE | WB_MOVEABLE | WB_CLOSEABLE | WB_STANDALONE | WB_PINABLE | WB_ROLLABLE )
+#define DOCKWIN_FLOATSTYLES         (WB_SIZEABLE | WB_MOVEABLE | WB_CLOSEABLE | WB_STANDALONE | WB_ROLLABLE )
 
 class ImplDockFloatWin2 : public FloatingWindow
 {

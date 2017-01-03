@@ -1424,20 +1424,10 @@ void ImplStdBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHeigh
 
         if ( pData->mnTitleType & (BorderWindowTitleType::Normal | BorderWindowTitleType::Small) )
         {
-            long nLeft          = pData->maTitleRect.Left() + 1;
             long nRight         = pData->maTitleRect.Right() - 3;
             long const nItemTop = pData->maTitleRect.Top() + 2;
             long const nItemBottom = pData->maTitleRect.Bottom() - 2;
 
-            auto addOnLeft = [&nLeft, nItemTop, nItemBottom](
-                Rectangle & rect, long width, long gap)
-            {
-                rect.Top() = nItemTop;
-                rect.Bottom() = nItemBottom;
-                rect.Left() = nLeft;
-                rect.Right() = rect.Left() + width;
-                nLeft += rect.GetWidth() + gap;
-            };
             auto addSquareOnRight = [&nRight, nItemTop, nItemBottom](
                 Rectangle & rect, long gap)
             {
@@ -1447,13 +1437,6 @@ void ImplStdBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHeigh
                 rect.Left() = rect.Right() - rect.GetHeight() + 1;
                 nRight -= rect.GetWidth() + gap;
             };
-
-            if ( pBorderWindow->GetStyle() & WB_PINABLE )
-            {
-                Image aImage;
-                ImplGetPinImage( DrawButtonFlags::NONE, false, aImage );
-                addOnLeft(pData->maPinRect, aImage.GetSizePixel().Width(), 3);
-            }
 
             if ( pBorderWindow->GetStyle() & WB_CLOSEABLE )
             {
@@ -1710,7 +1693,7 @@ void ImplBorderWindow::ImplInit( vcl::Window* pParent,
 {
     // remove all unwanted WindowBits
     WinBits nOrgStyle = nStyle;
-    WinBits nTestStyle = (WB_MOVEABLE | WB_SIZEABLE | WB_ROLLABLE | WB_PINABLE | WB_CLOSEABLE | WB_STANDALONE | WB_DIALOGCONTROL | WB_NODIALOGCONTROL | WB_SYSTEMFLOATWIN | WB_INTROWIN | WB_DEFAULTWIN | WB_TOOLTIPWIN | WB_NOSHADOW | WB_OWNERDRAWDECORATION | WB_SYSTEMCHILDWINDOW  | WB_POPUP);
+    WinBits nTestStyle = (WB_MOVEABLE | WB_SIZEABLE | WB_ROLLABLE | WB_CLOSEABLE | WB_STANDALONE | WB_DIALOGCONTROL | WB_NODIALOGCONTROL | WB_SYSTEMFLOATWIN | WB_INTROWIN | WB_DEFAULTWIN | WB_TOOLTIPWIN | WB_NOSHADOW | WB_OWNERDRAWDECORATION | WB_SYSTEMCHILDWINDOW  | WB_POPUP);
     if ( nTypeStyle & BorderWindowStyle::App )
         nTestStyle |= WB_APP;
     nStyle &= nTestStyle;
