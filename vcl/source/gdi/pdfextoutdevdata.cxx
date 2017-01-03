@@ -695,12 +695,12 @@ sal_Int32 PDFExtOutDevData::CreateLink( const Rectangle& rRect, sal_Int32 nPageN
     return mpGlobalSyncData->mCurId++;
 }
 
-sal_Int32 PDFExtOutDevData::CreateScreen(const Rectangle& rRect)
+sal_Int32 PDFExtOutDevData::CreateScreen(const Rectangle& rRect, sal_Int32 nPageNr)
 {
     mpGlobalSyncData->mActions.push_back(PDFExtOutDevDataSync::CreateScreen);
     mpGlobalSyncData->mParaRects.push_back(rRect);
     mpGlobalSyncData->mParaMapModes.push_back(mrOutDev.GetMapMode());
-    mpGlobalSyncData->mParaInts.push_back(mnPage);
+    mpGlobalSyncData->mParaInts.push_back(nPageNr);
     return mpGlobalSyncData->mCurId++;
 }
 

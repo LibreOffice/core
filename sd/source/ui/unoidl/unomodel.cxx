@@ -1675,7 +1675,7 @@ void ImplPDFExportShapeInteraction( const uno::Reference< drawing::XShape >& xSh
                 xShapePropSet->getPropertyValue("MediaURL") >>= aMediaURL;
                 if (!aMediaURL.isEmpty())
                 {
-                    sal_Int32 nScreenId = rPDFExtOutDevData.CreateScreen(aLinkRect);
+                    sal_Int32 nScreenId = rPDFExtOutDevData.CreateScreen(aLinkRect, rPDFExtOutDevData.GetCurrentPageNumber());
                     rPDFExtOutDevData.SetScreenURL(nScreenId, aMediaURL);
                 }
             }
