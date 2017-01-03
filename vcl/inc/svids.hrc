@@ -76,7 +76,7 @@
 #define SV_HELPTEXT_ROLLDOWN                        10004
 #define SV_HELPTEXT_ROLLUP                          10005
 #define SV_HELPTEXT_HELP                            10006
-#define SV_HELPTEXT_ALWAYSVISIBLE                   10007
+//free
 #define SV_HELPTEXT_FADEIN                          10008
 #define SV_HELPTEXT_FADEOUT                         10009
 #define SV_HELPTEXT_SPLITFLOATING                   10010

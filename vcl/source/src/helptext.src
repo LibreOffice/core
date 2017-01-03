@@ -57,11 +57,6 @@ String SV_HELPTEXT_HELP
     Text [ en-US ] = "Help";
 };
 
-String SV_HELPTEXT_ALWAYSVISIBLE
-{
-    Text [ en-US ] = "Always visible";
-};
-
 String SV_HELPTEXT_FADEIN
 {
     Text [ en-US ] = "Show";
