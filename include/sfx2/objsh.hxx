@@ -475,6 +475,45 @@ public:
 
     // Naming Interface
     void                        SetTitle( const OUString& rTitle );
+    /* Small non-zero values of nMaxLen don't mean length, but have a magic meaning:
+       0 (default)
+       the title itself, as it is
+
+       1 (==SFX_TITLE_FILENAME)
+       provides the logical file name without path
+       (under WNT depending on the system settings
+       without extension)
+
+       2 (==SFX_TITLE_FULLNAME)
+       provides the logical file names with full path
+       (remote =>:: com:: sun:: star:: util:: URL)
+
+       3 (==SFX_TITLE_APINAME)
+       provides the logical filename without path
+       and extension
+
+       4 (==SFX_TITLE_DETECT)
+       provides the complete title, if not set yet
+       it will be created from DocInfo or the name of
+       the medium.
+
+       5 (==SFX_TITLE_CAPTION)
+       provides the Title just like MB now in the
+       CaptionBar view
+
+       6 (==SFX_TITLE_PICKLIST)
+       returns the Title, just like MB now would
+       display it in the PickList
+
+       7 (==SFX_TITLE_HISTORY)
+       returns the Title just like MB now would
+       display it in the History
+
+       10 bis USHRT_MAX
+       provides the 'nMaxLength' of the logical
+       file name including the path
+       (remote => css::util::URL)
+    */
     OUString                    GetTitle( sal_uInt16 nMaxLen = 0 ) const;
     void                        InvalidateName();  // Re-set to unnamed
 
