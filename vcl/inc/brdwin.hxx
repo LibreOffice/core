@@ -58,7 +58,6 @@ enum class BorderWindowHitTest {
     Dock           = 0x1000,
     Hide           = 0x2000,
     Help           = 0x4000,
-    Pin            = 0x8000
 };
 namespace o3tl {
     template<> struct typed_flags<BorderWindowHitTest> : is_typed_flags<BorderWindowHitTest, 0xffff> {};

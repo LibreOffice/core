@@ -326,11 +326,6 @@ OUString ImplBorderWindowView::ImplRequestHelp( ImplBorderFrameData* pData,
             nHelpId     = SV_HELPTEXT_HELP;
             rHelpRect   = pData->maHelpRect;
         }
-        else if ( nHitTest & BorderWindowHitTest::Pin )
-        {
-            nHelpId     = SV_HELPTEXT_ALWAYSVISIBLE;
-            rHelpRect   = Rectangle();
-        }
         else if ( nHitTest & BorderWindowHitTest::Title )
         {
             if( !pData->maTitleRect.IsEmpty() )
@@ -826,11 +821,6 @@ bool ImplStdBorderWindowView::MouseButtonDown( const MouseEvent& rMEvt )
                 maFrameData.mnHelpState |= DrawButtonFlags::Pressed;
                 pBorderWindow->InvalidateBorder();
             }
-            else if ( maFrameData.mnHitTest & BorderWindowHitTest::Pin )
-            {
-                maFrameData.mnPinState |= DrawButtonFlags::Pressed;
-                pBorderWindow->InvalidateBorder();
-            }
             else
             {
                 if ( rMEvt.GetClicks() == 1 )
@@ -1003,24 +993,6 @@ bool ImplStdBorderWindowView::Tracking( const TrackingEvent& rTEvt )
                 }
             }
         }
-        else if ( nHitTest & BorderWindowHitTest::Pin )
-        {
-            if ( maFrameData.mnPinState & DrawButtonFlags::Pressed )
-            {
-                maFrameData.mnPinState &= ~DrawButtonFlags::Pressed;
-                pBorderWindow->InvalidateBorder();
-
-                // do not call a Click-Handler when aborting
-                if ( !rTEvt.IsTrackingCanceled() )
-                {
-                    if ( pBorderWindow->ImplGetClientWindow()->IsSystemWindow() )
-                    {
-                        SystemWindow* pClientWindow = static_cast<SystemWindow*>(pBorderWindow->ImplGetClientWindow());
-                        pClientWindow->SetPin( !pClientWindow->IsPinned() );
-                    }
-                }
-            }
-        }
         else
         {
             if ( maFrameData.mbDragFull )
@@ -1162,14 +1134,6 @@ bool ImplStdBorderWindowView::Tracking( const TrackingEvent& rTEvt )
                     maFrameData.mnHelpState &= ~DrawButtonFlags::Pressed;
                     pBorderWindow->InvalidateBorder();
                 }
-            }
-        }
-        else if ( maFrameData.mnHitTest & BorderWindowHitTest::Pin )
-        {
-            if ( maFrameData.mnPinState & DrawButtonFlags::Pressed )
-            {
-                maFrameData.mnPinState &= ~DrawButtonFlags::Pressed;
-                pBorderWindow->InvalidateBorder();
             }
         }
         else
