@@ -27,10 +27,6 @@
 #include "cmdlinehelp.hxx"
 
 #ifdef _WIN32
-#if _WIN32_WINNT < 0x0501
-// For AttachConsole() and MAPVK_VK_TO_VSC
-#define _WIN32_WINNT 0x0501
-#endif
 #include "windows.h"
 #include "io.h"
 #include "fcntl.h"

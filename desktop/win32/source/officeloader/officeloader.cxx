@@ -23,9 +23,6 @@
 #include <cstddef>
 #include <cwchar>
 
-#if _WIN32_WINNT < 0x0501
-#define _WIN32_WINNT 0x0501
-#endif
 #define WIN32_LEAN_AND_MEAN
 #if defined _MSC_VER
 #pragma warning(push, 1)
