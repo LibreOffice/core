@@ -2721,6 +2721,13 @@ DECLARE_RTFIMPORT_TEST(testTdf104317, "tdf104317.rtf")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xDrawPage->getCount());
 }
 
+DECLARE_RTFIMPORT_TEST(testTdf104744, "tdf104744.rtf")
+{
+    // This was 0, as an unexpected "left margin is 0" token was created during
+    // import.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1270), getProperty<sal_Int32>(getParagraph(1), "ParaLeftMargin"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
