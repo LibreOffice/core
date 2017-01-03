@@ -322,7 +322,7 @@ void SheetDataBuffer::setRowFormat( sal_Int32 nRow, sal_Int32 nXfId, bool bCusto
     }
 }
 
-void SheetDataBuffer::setMergedRange( const CellRangeAddress& rRange )
+void SheetDataBuffer::setMergedRange( const ScRange& rRange )
 {
     maMergedRanges.push_back( MergedRange( rRange ) );
 }
@@ -526,24 +526,24 @@ bool SheetDataBuffer::XfIdRowRange::tryExpand( sal_Int32 nRow, sal_Int32 nXfId )
     return false;
 }
 
-SheetDataBuffer::MergedRange::MergedRange( const CellRangeAddress& rRange ) :
+SheetDataBuffer::MergedRange::MergedRange( const ScRange& rRange ) :
     maRange( rRange ),
     mnHorAlign( XML_TOKEN_INVALID )
 {
 }
 
 SheetDataBuffer::MergedRange::MergedRange( const ScAddress& rAddress, sal_Int32 nHorAlign ) :
-    maRange( rAddress.Tab(), rAddress.Col(), rAddress.Row(), rAddress.Col(), rAddress.Row() ),
+    maRange( rAddress, rAddress ),
     mnHorAlign( nHorAlign )
 {
 }
 
 bool SheetDataBuffer::MergedRange::tryExpand( const ScAddress& rAddress, sal_Int32 nHorAlign )
 {
-    if( (mnHorAlign == nHorAlign) && (maRange.StartRow == rAddress.Row() ) &&
-        (maRange.EndRow == rAddress.Row() ) && (maRange.EndColumn + 1 == rAddress.Col() ) )
+    if( (mnHorAlign == nHorAlign) && (maRange.aStart.Row() == rAddress.Row() ) &&
+        (maRange.aEnd.Row() == rAddress.Row() ) && (maRange.aEnd.Col() + 1 == rAddress.Col() ) )
     {
-        ++maRange.EndColumn;
+        maRange.aEnd.IncCol();
         return true;
     }
     return false;
@@ -714,7 +714,7 @@ void SheetDataBuffer::setCellFormat( const CellModel& rModel )
     }
 }
 
-void lcl_SetBorderLine( ScDocument& rDoc, ScRange& rRange, SCTAB nScTab, SvxBoxItemLine nLine )
+void lcl_SetBorderLine( ScDocument& rDoc, const ScRange& rRange, SCTAB nScTab, SvxBoxItemLine nLine )
 {
     SCCOL nFromScCol = (nLine == SvxBoxItemLine::RIGHT) ? rRange.aEnd.Col() : rRange.aStart.Col();
     SCROW nFromScRow = (nLine == SvxBoxItemLine::BOTTOM) ? rRange.aEnd.Row() : rRange.aStart.Row();
@@ -729,22 +729,20 @@ void lcl_SetBorderLine( ScDocument& rDoc, ScRange& rRange, SCTAB nScTab, SvxBoxI
     rDoc.ApplyAttr( rRange.aStart.Col(), rRange.aStart.Row(), nScTab, aNewItem );
 }
 
-void SheetDataBuffer::applyCellMerging( const CellRangeAddress& rRange )
+void SheetDataBuffer::applyCellMerging( const ScRange& rRange )
 {
-    bool bMultiCol = rRange.StartColumn < rRange.EndColumn;
-    bool bMultiRow = rRange.StartRow < rRange.EndRow;
+    bool bMultiCol = rRange.aStart.Col() < rRange.aEnd.Col();
+    bool bMultiRow = rRange.aStart.Row() < rRange.aEnd.Row();
 
-    ScRange aRange;
-    ScUnoConversion::FillScRange( aRange, rRange );
-    const ScAddress& rStart = aRange.aStart;
-    const ScAddress& rEnd = aRange.aEnd;
+    const ScAddress& rStart = rRange.aStart;
+    const ScAddress& rEnd = rRange.aEnd;
     ScDocument& rDoc = getScDocument();
     // set correct right border
     if( bMultiCol )
-        lcl_SetBorderLine( rDoc, aRange, getSheetIndex(), SvxBoxItemLine::RIGHT );
+        lcl_SetBorderLine( rDoc, rRange, getSheetIndex(), SvxBoxItemLine::RIGHT );
         // set correct lower border
     if( bMultiRow )
-        lcl_SetBorderLine( rDoc, aRange, getSheetIndex(), SvxBoxItemLine::BOTTOM );
+        lcl_SetBorderLine( rDoc, rRange, getSheetIndex(), SvxBoxItemLine::BOTTOM );
     // do merge
     if( bMultiCol || bMultiRow )
         rDoc.DoMerge( getSheetIndex(), rStart.Col(), rStart.Row(), rEnd.Col(), rEnd.Row() );
