@@ -38,7 +38,6 @@
 using namespace css;
 using namespace css::uno;
 
-
 namespace
 {
     typedef ::cppu::WeakComponentImplHelper <
@@ -49,9 +48,8 @@ namespace
           public FrameListenerInterfaceBase
     {
     public:
-        FrameListener (vcl::CommandInfoProvider& rInfoProvider, const Reference<frame::XFrame>& rxFrame)
+        FrameListener (const Reference<frame::XFrame>& rxFrame)
             : FrameListenerInterfaceBase(m_aMutex),
-              mrInfoProvider(rInfoProvider),
               mxFrame(rxFrame)
         {
             if (mxFrame.is())
@@ -64,7 +62,7 @@ namespace
             // The same frame can be reused for a different component, e.g.
             // starting component from the start center, so need to re-init the cached data.
             if (aEvent.Action == css::frame::FrameAction_COMPONENT_DETACHING)
-                mrInfoProvider.SetFrame(nullptr);
+                vcl::CommandInfoProvider::SetFrame(nullptr);
         }
         virtual void SAL_CALL disposing() override
         {
@@ -75,35 +73,25 @@ namespace
             throw (RuntimeException, std::exception) override
         {
             (void)rEvent;
-            mrInfoProvider.SetFrame(nullptr);
+            vcl::CommandInfoProvider::SetFrame(nullptr);
             mxFrame = nullptr;
         }
 
     private:
-        vcl::CommandInfoProvider& mrInfoProvider;
         Reference<frame::XFrame> mxFrame;
     };
 }
 
 namespace vcl {
 
-CommandInfoProvider& CommandInfoProvider::Instance()
-{
-    static CommandInfoProvider aProvider;
-    return aProvider;
-}
+css::uno::Reference<css::ui::XAcceleratorConfiguration> CommandInfoProvider::mxCachedDocumentAcceleratorConfiguration;
+css::uno::Reference<css::ui::XAcceleratorConfiguration> CommandInfoProvider::mxCachedModuleAcceleratorConfiguration;
+css::uno::Reference<css::ui::XAcceleratorConfiguration> CommandInfoProvider::mxCachedGlobalAcceleratorConfiguration;
+css::uno::Reference<css::frame::XFrame> CommandInfoProvider::mxCachedDataFrame;
+css::uno::Reference<css::lang::XComponent> CommandInfoProvider::mxFrameListener;
+OUString CommandInfoProvider::msCachedModuleIdentifier;
 
-CommandInfoProvider::CommandInfoProvider()
-    : mxContext(comphelper::getProcessComponentContext()),
-      mxCachedDataFrame(),
-      mxCachedDocumentAcceleratorConfiguration(),
-      mxCachedModuleAcceleratorConfiguration(),
-      mxCachedGlobalAcceleratorConfiguration(),
-      msCachedModuleIdentifier(),
-      mxFrameListener()
-{
-    ImplGetSVData()->mpCommandInfoProvider = this;
-}
+CommandInfoProvider::CommandInfoProvider() { }
 
 void CommandInfoProvider::dispose()
 {
@@ -116,7 +104,6 @@ void CommandInfoProvider::dispose()
     mxCachedModuleAcceleratorConfiguration.clear();
     mxCachedDocumentAcceleratorConfiguration.clear();
     mxCachedDataFrame.clear();
-    mxContext.clear();
 }
 
 CommandInfoProvider::~CommandInfoProvider()
@@ -252,7 +239,7 @@ Image CommandInfoProvider::GetImageForCommand(const OUString& rsCommandName,
     }
 
     try {
-        Reference<ui::XModuleUIConfigurationManagerSupplier> xModuleCfgMgrSupplier(ui::theModuleUIConfigurationManagerSupplier::get(mxContext));
+        Reference<ui::XModuleUIConfigurationManagerSupplier> xModuleCfgMgrSupplier(ui::theModuleUIConfigurationManagerSupplier::get(comphelper::getProcessComponentContext()));
         Reference<ui::XUIConfigurationManager> xUICfgMgr(xModuleCfgMgrSupplier->getUIConfigurationManager(GetModuleIdentifier()));
 
         Sequence< Reference<graphic::XGraphic> > aGraphicSeq;
@@ -310,7 +297,7 @@ bool CommandInfoProvider::IsExperimental(const OUString& rsCommandName,
     {
         if( rModuleName.getLength() > 0)
         {
-            Reference<container::XNameAccess> xNameAccess  = frame::theUICommandDescription::get(mxContext);
+            Reference<container::XNameAccess> xNameAccess  = frame::theUICommandDescription::get(comphelper::getProcessComponentContext());
             Reference<container::XNameAccess> xUICommandLabels;
             if (xNameAccess->getByName( rModuleName ) >>= xUICommandLabels )
                 xUICommandLabels->getByName(rsCommandName) >>= aProperties;
@@ -335,22 +322,19 @@ void CommandInfoProvider::SetFrame (const Reference<frame::XFrame>& rxFrame)
 {
     if (rxFrame != mxCachedDataFrame)
     {
-        // Detach from the old frame.
         if (mxFrameListener.is())
         {
             mxFrameListener->dispose();
             mxFrameListener = nullptr;
         }
-
         // Release objects that are tied to the old frame.
         mxCachedDocumentAcceleratorConfiguration = nullptr;
         mxCachedModuleAcceleratorConfiguration = nullptr;
         msCachedModuleIdentifier.clear();
         mxCachedDataFrame = rxFrame;
-
         // Connect to the new frame.
         if (rxFrame.is())
-            mxFrameListener = new FrameListener(*this, rxFrame);
+            mxFrameListener = new FrameListener(rxFrame);
     }
 }
 
@@ -391,7 +375,7 @@ Reference<ui::XAcceleratorConfiguration> const & CommandInfoProvider::GetModuleA
     {
         try
         {
-            Reference<ui::XModuleUIConfigurationManagerSupplier> xSupplier  = ui::theModuleUIConfigurationManagerSupplier::get(mxContext);
+            Reference<ui::XModuleUIConfigurationManagerSupplier> xSupplier  = ui::theModuleUIConfigurationManagerSupplier::get(comphelper::getProcessComponentContext());
             Reference<ui::XUIConfigurationManager> xManager (
                 xSupplier->getUIConfigurationManager(GetModuleIdentifier()));
             if (xManager.is())
@@ -411,7 +395,7 @@ Reference<ui::XAcceleratorConfiguration> const & CommandInfoProvider::GetGlobalA
     // Get the global accelerator configuration.
     if ( ! mxCachedGlobalAcceleratorConfiguration.is())
     {
-        mxCachedGlobalAcceleratorConfiguration = ui::GlobalAcceleratorConfiguration::create(mxContext);
+        mxCachedGlobalAcceleratorConfiguration = ui::GlobalAcceleratorConfiguration::create(comphelper::getProcessComponentContext());
     }
 
     return mxCachedGlobalAcceleratorConfiguration;
@@ -421,7 +405,7 @@ OUString const & CommandInfoProvider::GetModuleIdentifier()
 {
     if (msCachedModuleIdentifier.getLength() == 0)
     {
-        Reference<frame::XModuleManager2> xModuleManager = frame::ModuleManager::create(mxContext);
+        Reference<frame::XModuleManager2> xModuleManager = frame::ModuleManager::create(comphelper::getProcessComponentContext());
         msCachedModuleIdentifier = xModuleManager->identify(mxCachedDataFrame);
     }
     return msCachedModuleIdentifier;
@@ -462,7 +446,7 @@ bool CommandInfoProvider::ResourceHasKey(const OUString& rsResourceName, const O
         const OUString sModuleIdentifier (GetModuleIdentifier());
         if (!sModuleIdentifier.isEmpty())
         {
-            Reference<container::XNameAccess> xNameAccess  = frame::theUICommandDescription::get(mxContext);
+            Reference<container::XNameAccess> xNameAccess  = frame::theUICommandDescription::get(comphelper::getProcessComponentContext());
             Reference<container::XNameAccess> xUICommandLabels;
             if (xNameAccess->getByName(sModuleIdentifier) >>= xUICommandLabels) {
                 xUICommandLabels->getByName(rsResourceName) >>= aSequence;
@@ -489,7 +473,7 @@ Sequence<beans::PropertyValue> CommandInfoProvider::GetCommandProperties(const O
         const OUString sModuleIdentifier (GetModuleIdentifier());
         if (sModuleIdentifier.getLength() > 0)
         {
-            Reference<container::XNameAccess> xNameAccess  = frame::theUICommandDescription::get(mxContext);
+            Reference<container::XNameAccess> xNameAccess  = frame::theUICommandDescription::get(comphelper::getProcessComponentContext());
             Reference<container::XNameAccess> xUICommandLabels;
             if (xNameAccess->getByName(sModuleIdentifier) >>= xUICommandLabels)
                 xUICommandLabels->getByName(rsCommandName) >>= aProperties;
@@ -528,7 +512,7 @@ OUString CommandInfoProvider::GetCommandPropertyFromModule( const OUString& rCom
     {
         if( rModuleName.getLength() > 0)
         {
-            Reference<container::XNameAccess> xNameAccess  = frame::theUICommandDescription::get(mxContext);
+            Reference<container::XNameAccess> xNameAccess  = frame::theUICommandDescription::get(comphelper::getProcessComponentContext());
             Reference<container::XNameAccess> xUICommandLabels;
             if (xNameAccess->getByName( rModuleName ) >>= xUICommandLabels )
                 xUICommandLabels->getByName(rCommandName) >>= aProperties;
