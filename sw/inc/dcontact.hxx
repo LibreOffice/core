@@ -186,10 +186,11 @@ public:
 /** ContactObject for connection between frames (or their formats respectively)
  in SwClient and the drawobjects of Drawing (DsrObjUserCall). */
 
-class SW_DLLPUBLIC SwFlyDrawContact : public SwContact
+class SW_DLLPUBLIC SwFlyDrawContact final : public SwContact
 {
 private:
     SwFlyDrawObj* mpMasterObj;
+    void SwClientNotify(const SwModify&, const SfxHint& rHint) override;
 
 
 public:

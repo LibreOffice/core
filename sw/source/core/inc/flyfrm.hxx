@@ -141,6 +141,7 @@ protected:
 
     virtual const SwRect GetObjBoundRect() const override;
     virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) override;
+    virtual void SwClientNotify(const SwModify& rMod, const SfxHint& rHint) override;
 
     virtual const IDocumentDrawModelAccess& getIDocumentDrawModelAccess( ) override;
 

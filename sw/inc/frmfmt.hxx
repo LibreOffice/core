@@ -329,6 +329,12 @@ namespace sw
         CollectTextObjectsHint(std::list<SdrTextObj*>& rTextObjects) : m_rTextObjects(rTextObjects) {};
         virtual ~CollectTextObjectsHint() override;
     };
+    struct SW_DLLPUBLIC GetZOrderHint final : SfxHint
+    {
+        sal_uInt32& m_rnZOrder;
+        GetZOrderHint(sal_uInt32& rnZOrder) : m_rnZOrder(rnZOrder) {};
+        virtual ~GetZOrderHint() override;
+    };
 }
 
 class SW_DLLPUBLIC SwDrawFrameFormat: public SwFrameFormat

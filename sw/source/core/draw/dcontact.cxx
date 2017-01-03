@@ -578,6 +578,19 @@ void SwFlyDrawContact::GetAnchoredObjs( std::list<SwAnchoredObject*>& _roAnchore
     const SwFrameFormat* pFormat = GetFormat();
     SwFlyFrame::GetAnchoredObjects( _roAnchoredObjs, *pFormat );
 }
+void SwFlyDrawContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
+{
+    SwContact::SwClientNotify(rMod, rHint);
+    if(auto pGetZOrdnerHint = dynamic_cast<const sw::GetZOrderHint*>(&rHint))
+    {
+        // #i11176#
+        // This also needs to work when no layout exists. Thus, for
+        // FlyFrames an alternative method is used now in that case.
+        auto pFormat(dynamic_cast<const SwFrameFormat*>(&rMod));
+        if(pFormat->Which() == RES_FLYFRMFMT && !pFormat->getIDocumentLayoutAccess().GetCurrentViewShell())
+            pGetZOrdnerHint->m_rnZOrder = GetMaster()->GetOrdNum();
+    }
+}
 
 // SwDrawContact
 
@@ -1589,6 +1602,12 @@ void SwDrawContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
             if(pTextObj->HasText())
                 pCollectTextObjectsHint->m_rTextObjects.push_back(pTextObj);
         }
+    }
+    else if (auto pGetZOrdnerHint = dynamic_cast<const sw::GetZOrderHint*>(&rHint))
+    {
+        auto pFormat(dynamic_cast<const SwFrameFormat*>(&rMod));
+        if(pFormat->Which() == RES_DRAWFRMFMT)
+            pGetZOrdnerHint->m_rnZOrder = GetMaster()->GetOrdNum();
     }
 }
 

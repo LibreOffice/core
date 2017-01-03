@@ -3324,6 +3324,7 @@ namespace sw
     CreatePortionHint::~CreatePortionHint() {}
     FindSdrObjectHint::~FindSdrObjectHint() {}
     CollectTextObjectsHint::~CollectTextObjectsHint() {}
+    GetZOrderHint::~GetZOrderHint() {}
 }
 
 SwDrawFrameFormat::~SwDrawFrameFormat()
