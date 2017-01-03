@@ -28,45 +28,44 @@
 namespace oox {
 namespace xls {
 
-/** A vector of com.sun.star.table.CellRangeAddress elements and additional
-    functionality. */
-class ApiCellRangeList
+/** A vector of ScRange elements and additional functionality. */
+class RangeList
 {
 public:
-    inline explicit     ApiCellRangeList() : mvAddresses() {}
+    inline explicit     RangeList() : mvAddresses() {}
 
     size_t size() const { return mvAddresses.size(); }
 
     bool empty() const { return mvAddresses.empty(); }
 
-    const css::table::CellRangeAddress& front() const
+    const ScRange& front() const
     { return mvAddresses.front(); }
 
-    css::table::CellRangeAddress& operator[]( size_t i )
+    ScRange& operator[]( size_t i )
     { return mvAddresses[ i ]; }
 
-    ::std::vector< css::table::CellRangeAddress >::const_iterator begin() const
+    std::vector< ScRange >::const_iterator begin() const
     { return mvAddresses.begin(); }
-    ::std::vector< css::table::CellRangeAddress >::iterator begin()
+    std::vector< ScRange >::iterator begin()
     { return mvAddresses.begin(); }
 
-    ::std::vector< css::table::CellRangeAddress >::const_iterator end() const
+    std::vector< ScRange >::const_iterator end() const
     { return mvAddresses.end(); }
 
-    ::std::vector< css::table::CellRangeAddress >::reverse_iterator rbegin()
+    std::vector< ScRange >::reverse_iterator rbegin()
     { return mvAddresses.rbegin(); }
 
-    ::std::vector< css::table::CellRangeAddress >::reverse_iterator rend()
+    std::vector< ScRange >::reverse_iterator rend()
     { return mvAddresses.rend(); }
 
     void clear() { mvAddresses.clear(); }
 
-    void erase( ::std::vector< css::table::CellRangeAddress >::iterator it )
+    void erase( std::vector< ScRange >::iterator it )
     { mvAddresses.erase( it ); }
 
     void pop_back() { mvAddresses.pop_back(); }
 
-    void push_back( const css::table::CellRangeAddress& rAddress )
+    void push_back( const ScRange& rAddress )
     { mvAddresses.push_back( rAddress ); }
 
     /** Returns the base address of this range list (top-left cell of first range). */
@@ -74,10 +73,10 @@ public:
 
     /** Converts to a sequence. */
     css::uno::Sequence< css::table::CellRangeAddress >
-    toSequence() const;
+    toApiSequence() const;
 
 private:
-    ::std::vector< css::table::CellRangeAddress > mvAddresses;
+    std::vector< ScRange > mvAddresses;
 };
 
 /** A 2D cell address struct for binary filters. */
@@ -363,10 +362,6 @@ public:
             overflow is not allowed via parameter bAllowOverflow.
      */
     bool                checkCellRange(
-                            const css::table::CellRangeAddress& rRange,
-                            bool bAllowOverflow, bool bTrackOverflow );
-
-    bool                checkCellRange(
                             const ScRange& rRange,
                             bool bAllowOverflow, bool bTrackOverflow );
 
@@ -397,10 +392,6 @@ public:
             allowed via parameter bAllowOverflow.
      */
     bool                validateCellRange(
-                            css::table::CellRangeAddress& orRange,
-                            bool bAllowOverflow, bool bTrackOverflow );
-
-    bool                validateCellRange(
                             ScRange& orRange,
                             bool bAllowOverflow, bool bTrackOverflow );
 
@@ -412,11 +403,6 @@ public:
         @param nSheet  Sheet index to be inserted into orRange.
         @return  true = Range address could be parsed from the passed string.
      */
-    static bool         convertToCellRangeUnchecked(
-                            css::table::CellRangeAddress& orRange,
-                            const OUString& rString,
-                            sal_Int16 nSheet );
-
     static bool         convertToCellRangeUnchecked(
                             ScRange& orRange,
                             const OUString& rString,
@@ -447,11 +433,6 @@ public:
             allowed via parameter bAllowOverflow.
      */
     bool                convertToCellRange(
-                            css::table::CellRangeAddress& orRange,
-                            const OUString& rString,
-                            sal_Int16 nSheet,
-                            bool bAllowOverflow, bool bTrackOverflow );
-    bool                convertToCellRange(
                             ScRange& orRange,
                             const OUString& rString,
                             sal_Int16 nSheet,
@@ -464,11 +445,6 @@ public:
         @param rBinRange  Binary cell range struct.
         @param nSheet  Sheet index to be inserted into orRange.
      */
-    static void         convertToCellRangeUnchecked(
-                            css::table::CellRangeAddress& orRange,
-                            const BinRange& rBinRange,
-                            sal_Int16 nSheet );
-
     static void         convertToCellRangeUnchecked(
                             ScRange& orRange,
                             const BinRange& rBinRange,
@@ -497,16 +473,10 @@ public:
             allowed via parameter bAllowOverflow.
      */
     bool                convertToCellRange(
-                            css::table::CellRangeAddress& orRange,
-                            const BinRange& rBinRange,
-                            sal_Int16 nSheet,
-                            bool bAllowOverflow, bool bTrackOverflow );
-    bool                convertToCellRange(
                             ScRange& orRange,
                             const BinRange& rBinRange,
                             sal_Int16 nSheet,
                             bool bAllowOverflow, bool bTrackOverflow );
-
 
     /** Tries to restrict the passed cell range list to current sheet limits.
 
@@ -518,7 +488,7 @@ public:
             limits.
      */
     void                validateCellRangeList(
-                            ApiCellRangeList& orRanges,
+                            RangeList& orRanges,
                             bool bTrackOverflow );
 
     /** Tries to convert the passed string to a cell range list.
@@ -536,7 +506,7 @@ public:
             limits.
      */
     void                convertToCellRangeList(
-                            ApiCellRangeList& orRanges,
+                            RangeList& orRanges,
                             const OUString& rString,
                             sal_Int16 nSheet,
                             bool bTrackOverflow );
@@ -556,7 +526,7 @@ public:
             limits.
      */
     void                convertToCellRangeList(
-                            ApiCellRangeList& orRanges,
+                            RangeList& orRanges,
                             const BinRangeList& rBinRanges,
                             sal_Int16 nSheet,
                             bool bTrackOverflow );

@@ -224,7 +224,7 @@ public:
     /** Returns the XCellRange interface for the passed cell range address. */
     Reference< XCellRange > getCellRange( const ScRange& rRange ) const;
     /** Returns the XSheetCellRanges interface for the passed cell range addresses. */
-    Reference< XSheetCellRanges > getCellRangeList( const ApiCellRangeList& rRanges ) const;
+    Reference< XSheetCellRanges > getCellRangeList( const RangeList& rRanges ) const;
 
     /** Returns the XCellRange interface for a column. */
     Reference< XCellRange > getColumn( sal_Int32 nCol ) const;
@@ -488,14 +488,14 @@ Reference< XCellRange > WorksheetGlobals::getCellRange( const ScRange& rRange ) 
     return xRange;
 }
 
-Reference< XSheetCellRanges > WorksheetGlobals::getCellRangeList( const ApiCellRangeList& rRanges ) const
+Reference< XSheetCellRanges > WorksheetGlobals::getCellRangeList( const RangeList& rRanges ) const
 {
     Reference< XSheetCellRanges > xRanges;
     if( mxSheet.is() && !rRanges.empty() ) try
     {
         xRanges.set( getBaseFilter().getModelFactory()->createInstance( maSheetCellRanges ), UNO_QUERY_THROW );
         Reference< XSheetCellRangeContainer > xRangeCont( xRanges, UNO_QUERY_THROW );
-        xRangeCont->addRangeAddresses( rRanges.toSequence(), false );
+        xRangeCont->addRangeAddresses( rRanges.toApiSequence(), false );
     }
     catch( Exception& )
     {

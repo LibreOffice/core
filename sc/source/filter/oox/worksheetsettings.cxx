@@ -155,17 +155,15 @@ void WorksheetSettings::importProtectedRange( const AttributeList& rAttribs )
     OUString aRefs( rAttribs.getString( XML_sqref, OUString()));
     if (!aRefs.isEmpty())
     {
-        ApiCellRangeList aRangeList;
+        RangeList aRangeList;
         getAddressConverter().convertToCellRangeList( aRangeList, aRefs, getSheetIndex(), true );
         if (!aRangeList.empty())
         {
             aProt.maRangeList = new ScRangeList;
             ScRangeList* pRangeList = aProt.maRangeList.get();
-            for (::std::vector< css::table::CellRangeAddress >::const_iterator itr( aRangeList.begin()), end( aRangeList.end()); itr != end; ++itr)
+            for (std::vector< ScRange >::const_iterator itr( aRangeList.begin()), end( aRangeList.end()); itr != end; ++itr)
             {
-                ScRange aRange;
-                ScUnoConversion::FillScRange( aRange, *itr);
-                pRangeList->Append( aRange);
+                pRangeList->Append( *itr);
             }
         }
     }

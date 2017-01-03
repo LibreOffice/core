@@ -59,7 +59,6 @@ namespace xls {
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sheet;
-using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
@@ -325,12 +324,12 @@ void SheetDataBuffer::setMergedRange( const ScRange& rRange )
 
 typedef std::pair<sal_Int32, sal_Int32> FormatKeyPair;
 
-void addIfNotInMyMap( StylesBuffer& rStyles, std::map< FormatKeyPair, ApiCellRangeList >& rMap, sal_Int32 nXfId, sal_Int32 nFormatId, const ApiCellRangeList& rRangeList )
+void addIfNotInMyMap( StylesBuffer& rStyles, std::map< FormatKeyPair, RangeList >& rMap, sal_Int32 nXfId, sal_Int32 nFormatId, const RangeList& rRangeList )
 {
     Xf* pXf1 = rStyles.getCellXf( nXfId ).get();
     if ( pXf1 )
     {
-        for ( std::map< FormatKeyPair, ApiCellRangeList >::iterator it = rMap.begin(), it_end = rMap.end(); it != it_end; ++it )
+        for ( std::map< FormatKeyPair, RangeList >::iterator it = rMap.begin(), it_end = rMap.end(); it != it_end; ++it )
         {
             if ( it->first.second == nFormatId )
             {
@@ -339,7 +338,7 @@ void addIfNotInMyMap( StylesBuffer& rStyles, std::map< FormatKeyPair, ApiCellRan
                 {
                     // add ranges from the rangelist to the existing rangelist for the
                     // matching style ( should we check if they overlap ? )
-                    for ( ::std::vector< CellRangeAddress >::const_iterator iter = rRangeList.begin(), iter_end =  rRangeList.end(); iter != iter_end; ++iter )
+                    for ( std::vector< ScRange >::const_iterator iter = rRangeList.begin(), iter_end =  rRangeList.end(); iter != iter_end; ++iter )
                        it->second.push_back( *iter );
                     return;
                 }
@@ -349,14 +348,14 @@ void addIfNotInMyMap( StylesBuffer& rStyles, std::map< FormatKeyPair, ApiCellRan
     }
 }
 
-void SheetDataBuffer::addColXfStyle( sal_Int32 nXfId, sal_Int32 nFormatId, const css::table::CellRangeAddress& rAddress, bool bProcessRowRange )
+void SheetDataBuffer::addColXfStyle( sal_Int32 nXfId, sal_Int32 nFormatId, const ScRange& rAddress, bool bProcessRowRange )
 {
     RowRangeStyle aStyleRows;
     aStyleRows.mnNumFmt.first = nXfId;
     aStyleRows.mnNumFmt.second = nFormatId;
-    aStyleRows.mnStartRow = rAddress.StartRow;
-    aStyleRows.mnEndRow = rAddress.EndRow;
-    for ( sal_Int32 nCol = rAddress.StartColumn; nCol <= rAddress.EndColumn; ++nCol )
+    aStyleRows.mnStartRow = rAddress.aStart.Row();
+    aStyleRows.mnEndRow = rAddress.aEnd.Row();
+    for ( sal_Int32 nCol = rAddress.aStart.Col(); nCol <= rAddress.aEnd.Col(); ++nCol )
     {
         if ( !bProcessRowRange )
             maStylesPerColumn[ nCol ].insert( aStyleRows );
@@ -364,8 +363,8 @@ void SheetDataBuffer::addColXfStyle( sal_Int32 nXfId, sal_Int32 nFormatId, const
         {
             RowStyles& rRowStyles = maStylesPerColumn[ nCol ];
             // Reset row range for each column
-            aStyleRows.mnStartRow = rAddress.StartRow;
-            aStyleRows.mnEndRow = rAddress.EndRow;
+            aStyleRows.mnStartRow = rAddress.aStart.Row();
+            aStyleRows.mnEndRow = rAddress.aEnd.Row();
 
             // If aStyleRows includes rows already allocated to a style
             // in rRowStyles, then we need to split it into parts.
@@ -417,29 +416,29 @@ void SheetDataBuffer::finalizeImport()
     // write default formatting of remaining row range
     maXfIdRowRangeList[ maXfIdRowRange.mnXfId ].push_back( maXfIdRowRange.maRowRange );
 
-    std::map< FormatKeyPair, ApiCellRangeList > rangeStyleListMap;
+    std::map< FormatKeyPair, RangeList > rangeStyleListMap;
     for( XfIdRangeListMap::const_iterator aIt = maXfIdRangeLists.begin(), aEnd = maXfIdRangeLists.end(); aIt != aEnd; ++aIt )
     {
         addIfNotInMyMap( getStyles(), rangeStyleListMap, aIt->first.first, aIt->first.second, aIt->second );
     }
     // gather all ranges that have the same style and apply them in bulk
-    for (  std::map< FormatKeyPair, ApiCellRangeList >::iterator it = rangeStyleListMap.begin(), it_end = rangeStyleListMap.end(); it != it_end; ++it )
+    for (  std::map< FormatKeyPair, RangeList >::iterator it = rangeStyleListMap.begin(), it_end = rangeStyleListMap.end(); it != it_end; ++it )
     {
-        const ApiCellRangeList& rRanges( it->second );
-        for ( ::std::vector< CellRangeAddress >::const_iterator it_range = rRanges.begin(), it_rangeend = rRanges.end(); it_range!=it_rangeend; ++it_range )
+        const RangeList& rRanges( it->second );
+        for ( std::vector< ScRange >::const_iterator it_range = rRanges.begin(), it_rangeend = rRanges.end(); it_range!=it_rangeend; ++it_range )
             addColXfStyle( it->first.first, it->first.second, *it_range );
     }
 
     for ( std::map< sal_Int32, std::vector< ValueRange > >::iterator it = maXfIdRowRangeList.begin(), it_end =  maXfIdRowRangeList.end(); it != it_end; ++it )
     {
-        ApiCellRangeList rangeList;
+        RangeList rangeList;
         AddressConverter& rAddrConv = getAddressConverter();
         // get all row ranges for id
         for ( std::vector< ValueRange >::iterator rangeIter = it->second.begin(), rangeIter_end = it->second.end(); rangeIter != rangeIter_end; ++rangeIter )
         {
             if ( it->first == -1 ) // it's a dud skip it
                 continue;
-            CellRangeAddress aRange( getSheetIndex(), 0, rangeIter->mnFirst, rAddrConv.getMaxApiAddress().Col(), rangeIter->mnLast );
+            ScRange aRange( 0, rangeIter->mnFirst, getSheetIndex(), rAddrConv.getMaxApiAddress().Col(), rangeIter->mnLast, getSheetIndex() );
 
             addColXfStyle( it->first, -1, aRange, true );
         }
@@ -648,43 +647,41 @@ void SheetDataBuffer::setCellFormat( const CellModel& rModel )
 {
     if( rModel.mnXfId >= 0 )
     {
-        ::std::vector< CellRangeAddress >::reverse_iterator aIt = maXfIdRangeLists[ XfIdNumFmtKey( rModel.mnXfId, -1 ) ].rbegin();
-        ::std::vector< CellRangeAddress >::reverse_iterator aItEnd = maXfIdRangeLists[ XfIdNumFmtKey( rModel.mnXfId, -1 ) ].rend();
+        std::vector< ScRange >::reverse_iterator aIt = maXfIdRangeLists[ XfIdNumFmtKey( rModel.mnXfId, -1 ) ].rbegin();
+        std::vector< ScRange >::reverse_iterator aItEnd = maXfIdRangeLists[ XfIdNumFmtKey( rModel.mnXfId, -1 ) ].rend();
         /* The xlsx sheet data contains row wise information.
          * It is sufficient to check if the row range size is one
          */
         if(     aIt                 != aItEnd &&
-                aIt->Sheet          == rModel.maCellAddr.Tab() &&
-                aIt->StartRow       == aIt->EndRow &&
-                aIt->StartRow       == rModel.maCellAddr.Row() &&
-                (aIt->EndColumn+1)  == rModel.maCellAddr.Col() )
+                aIt->aStart.Tab()   == rModel.maCellAddr.Tab() &&
+                aIt->aStart.Row()   == aIt->aEnd.Row() &&
+                aIt->aStart.Row()   == rModel.maCellAddr.Row() &&
+                (aIt->aEnd.Col()+1) == rModel.maCellAddr.Col() )
         {
-            aIt->EndColumn++;       // Expand Column
+            aIt->aEnd.IncCol();       // Expand Column
         }
         else
         {
-            maXfIdRangeLists[ XfIdNumFmtKey (rModel.mnXfId, -1 ) ].push_back(
-                              CellRangeAddress( rModel.maCellAddr.Tab(), rModel.maCellAddr.Col(), rModel.maCellAddr.Row(),
-                              rModel.maCellAddr.Col(), rModel.maCellAddr.Row() ) );
+            maXfIdRangeLists[ XfIdNumFmtKey (rModel.mnXfId, -1 ) ].push_back( rModel.maCellAddr );
         }
 
         aIt = maXfIdRangeLists[ XfIdNumFmtKey( rModel.mnXfId, -1 ) ].rbegin();
         aItEnd = maXfIdRangeLists[ XfIdNumFmtKey( rModel.mnXfId, -1 ) ].rend();
-        ::std::vector< CellRangeAddress >::reverse_iterator aItM = aIt+1;
+        std::vector< ScRange >::reverse_iterator aItM = aIt+1;
         while( aItM != aItEnd )
         {
-            if( aIt->Sheet == aItM->Sheet )
+            if( aIt->aStart.Tab() == aItM->aStart.Tab() )
             {
                 /* Try to merge this with the previous range */
-                if( aIt->StartRow == (aItM->EndRow + 1) &&
-                        aIt->StartColumn == aItM->StartColumn &&
-                        aIt->EndColumn == aItM->EndColumn)
+                if( aIt->aStart.Row() == (aItM->aEnd.Row() + 1) &&
+                    aIt->aStart.Col() == aItM->aStart.Col() &&
+                    aIt->aEnd.Col()   == aItM->aEnd.Col())
                 {
-                    aItM->EndRow = aIt->EndRow;
+                    aItM->aEnd.SetRow( aIt->aEnd.Row() );
                     maXfIdRangeLists[ XfIdNumFmtKey( rModel.mnXfId, -1 ) ].pop_back();
                     break;
                 }
-                else if( aIt->StartRow > aItM->EndRow + 1 )
+                else if( aIt->aStart.Row() > aItM->aEnd.Row() + 1 )
                     break; // Un-necessary to check with any other rows
             }
             else

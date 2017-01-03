@@ -20,7 +20,6 @@
 #include "condformatbuffer.hxx"
 
 #include <com/sun/star/sheet/ConditionOperator2.hpp>
-#include <com/sun/star/table/CellRangeAddress.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
 #include <svl/intitem.hxx>
@@ -39,7 +38,6 @@
 #include "colorscale.hxx"
 #include "conditio.hxx"
 #include "document.hxx"
-#include "convuno.hxx"
 #include "docfunc.hxx"
 #include "tokenarray.hxx"
 #include "tokenuno.hxx"
@@ -49,7 +47,6 @@ namespace xls {
 
 using namespace ::com::sun::star::sheet;
 using namespace ::com::sun::star::style;
-using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::uno;
 
 namespace {
@@ -1064,11 +1061,9 @@ void CondFormat::finalizeImport()
     sal_Int32 nIndex = getScDocument().AddCondFormat(mpFormat, nTab);
 
     ScRangeList aList;
-    for( ::std::vector< CellRangeAddress >::const_iterator itr = maModel.maRanges.begin(); itr != maModel.maRanges.end(); ++itr)
+    for( std::vector< ScRange >::const_iterator itr = maModel.maRanges.begin(); itr != maModel.maRanges.end(); ++itr)
     {
-        ScRange aRange;
-        ScUnoConversion::FillScRange(aRange, *itr);
-        aList.Append(aRange);
+        aList.Append(*itr);
     }
     rDoc.AddCondFormatData( aList, nTab, nIndex );
     mpFormat->SetRange(aList);

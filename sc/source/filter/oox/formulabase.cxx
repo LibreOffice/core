@@ -1466,11 +1466,11 @@ bool lclConvertToCellAddress( ScAddress& orAddress, const SingleReference& rSing
         ((nFilterBySheet < 0) || (nFilterBySheet == rSingleRef.Sheet));
 }
 
-bool lclConvertToCellRange( CellRangeAddress& orRange, const ComplexReference& rComplexRef, sal_Int32 nForbiddenFlags, sal_Int32 nFilterBySheet )
+bool lclConvertToScRange( ScRange& orRange, const ComplexReference& rComplexRef, sal_Int32 nForbiddenFlags, sal_Int32 nFilterBySheet )
 {
-    orRange = CellRangeAddress( static_cast< sal_Int16 >( rComplexRef.Reference1.Sheet ),
-        rComplexRef.Reference1.Column, rComplexRef.Reference1.Row,
-        rComplexRef.Reference2.Column, rComplexRef.Reference2.Row );
+    orRange = ScRange(
+        rComplexRef.Reference1.Column, rComplexRef.Reference1.Row, static_cast<SCTAB>( rComplexRef.Reference1.Sheet ),
+        rComplexRef.Reference2.Column, rComplexRef.Reference2.Row, static_cast<SCTAB>( rComplexRef.Reference1.Sheet ) );
     return
         !getFlag( rComplexRef.Reference1.Flags, nForbiddenFlags ) &&
         !getFlag( rComplexRef.Reference2.Flags, nForbiddenFlags ) &&
@@ -1480,7 +1480,7 @@ bool lclConvertToCellRange( CellRangeAddress& orRange, const ComplexReference& r
 
 enum TokenToRangeListState { STATE_REF, STATE_SEP, STATE_OPEN, STATE_CLOSE, STATE_ERROR };
 
-TokenToRangeListState lclProcessRef( ApiCellRangeList& orRanges, const Any& rData, bool bAllowRelative, sal_Int32 nFilterBySheet )
+TokenToRangeListState lclProcessRef( RangeList& orRanges, const Any& rData, bool bAllowRelative, sal_Int32 nFilterBySheet )
 {
     using namespace ::com::sun::star::sheet::ReferenceFlags;
     const sal_Int32 FORBIDDEN_FLAGS_DEL = COLUMN_DELETED | ROW_DELETED | SHEET_DELETED;
@@ -1493,15 +1493,15 @@ TokenToRangeListState lclProcessRef( ApiCellRangeList& orRanges, const Any& rDat
         ScAddress aAddress ( 0, 0, 0 );
         // ignore invalid addresses (with #REF! errors), but do not stop parsing
         if( lclConvertToCellAddress( aAddress, aSingleRef, nForbiddenFlags, nFilterBySheet ) )
-            orRanges.push_back( CellRangeAddress( aAddress.Tab(), aAddress.Col(), aAddress.Row(), aAddress.Col(), aAddress.Row() ) );
+            orRanges.push_back( ScRange( aAddress, aAddress ) );
         return STATE_REF;
     }
     ComplexReference aComplexRef;
     if( rData >>= aComplexRef )
     {
-        CellRangeAddress aRange;
+        ScRange aRange;
         // ignore invalid ranges (with #REF! errors), but do not stop parsing
-        if( lclConvertToCellRange( aRange, aComplexRef, nForbiddenFlags, nFilterBySheet ) )
+        if( lclConvertToScRange( aRange, aComplexRef, nForbiddenFlags, nFilterBySheet ) )
             orRanges.push_back( aRange );
         return STATE_REF;
     }
@@ -1597,10 +1597,10 @@ Any FormulaProcessorBase::extractReference( const ApiTokenSequence& rTokens ) co
     return Any();
 }
 
-bool FormulaProcessorBase::extractCellRange( CellRangeAddress& orRange,
+bool FormulaProcessorBase::extractCellRange( ScRange& orRange,
         const ApiTokenSequence& rTokens, bool bAllowRelative ) const
 {
-    ApiCellRangeList aRanges;
+    RangeList aRanges;
     lclProcessRef( aRanges, extractReference( rTokens ), bAllowRelative, -1 );
     if( !aRanges.empty() )
     {
@@ -1610,20 +1610,7 @@ bool FormulaProcessorBase::extractCellRange( CellRangeAddress& orRange,
     return false;
 }
 
-bool FormulaProcessorBase::extractCellRange( ScRange& orRange,
-        const ApiTokenSequence& rTokens, bool bAllowRelative ) const
-{
-    ApiCellRangeList aRanges;
-    lclProcessRef( aRanges, extractReference( rTokens ), bAllowRelative, -1 );
-    if( !aRanges.empty() )
-    {
-        orRange = aRanges.getBaseAddress();
-        return true;
-    }
-    return false;
-}
-
-void FormulaProcessorBase::extractCellRangeList( ApiCellRangeList& orRanges,
+void FormulaProcessorBase::extractCellRangeList( RangeList& orRanges,
         const ApiTokenSequence& rTokens, bool bAllowRelative, sal_Int32 nFilterBySheet ) const
 {
     orRanges.clear();

@@ -359,35 +359,39 @@ void DefinedName::convertFormula( const css::uno::Sequence<css::sheet::ExternalL
         case BIFF_DEFNAME_PRINTAREA:
         {
             Reference< XPrintAreas > xPrintAreas( getSheetFromDoc( mnCalcSheet ), UNO_QUERY );
-            ApiCellRangeList aPrintRanges;
+            RangeList aPrintRanges;
             getFormulaParser().extractCellRangeList( aPrintRanges, aFTokenSeq, false, mnCalcSheet );
             if( xPrintAreas.is() && !aPrintRanges.empty() )
-                xPrintAreas->setPrintAreas( aPrintRanges.toSequence() );
+                xPrintAreas->setPrintAreas( aPrintRanges.toApiSequence() );
         }
         break;
         case BIFF_DEFNAME_PRINTTITLES:
         {
             Reference< XPrintAreas > xPrintAreas( getSheetFromDoc( mnCalcSheet ), UNO_QUERY );
-            ApiCellRangeList aTitleRanges;
+            RangeList aTitleRanges;
             getFormulaParser().extractCellRangeList( aTitleRanges, aFTokenSeq, false, mnCalcSheet );
             if( xPrintAreas.is() && !aTitleRanges.empty() )
             {
                 bool bHasRowTitles = false;
                 bool bHasColTitles = false;
                 const ScAddress& rMaxPos = getAddressConverter().getMaxAddress();
-                for( ::std::vector< CellRangeAddress >::const_iterator aIt = aTitleRanges.begin(), aEnd = aTitleRanges.end(); (aIt != aEnd) && (!bHasRowTitles || !bHasColTitles); ++aIt )
+                for( std::vector< ScRange >::const_iterator aIt = aTitleRanges.begin(), aEnd = aTitleRanges.end(); (aIt != aEnd) && (!bHasRowTitles || !bHasColTitles); ++aIt )
                 {
-                    bool bFullRow = (aIt->StartColumn == 0) && ( aIt->EndColumn >= rMaxPos.Col() );
-                    bool bFullCol = (aIt->StartRow == 0) && ( aIt->EndRow >= rMaxPos.Row() );
+                    bool bFullRow = (aIt->aStart.Col() == 0) && ( aIt->aEnd.Col() >= rMaxPos.Col() );
+                    bool bFullCol = (aIt->aStart.Row() == 0) && ( aIt->aEnd.Row() >= rMaxPos.Row() );
                     if( !bHasRowTitles && bFullRow && !bFullCol )
                     {
-                        xPrintAreas->setTitleRows( *aIt );
+                        CellRangeAddress aTitlesRange(aIt->aStart.Tab(), aIt->aStart.Col(), aIt->aStart.Row(),
+                                                      aIt->aEnd.Col(), aIt->aEnd.Row());
+                        xPrintAreas->setTitleRows( aTitlesRange );
                         xPrintAreas->setPrintTitleRows( true );
                         bHasRowTitles = true;
                     }
                     else if( !bHasColTitles && bFullCol && !bFullRow )
                     {
-                        xPrintAreas->setTitleColumns( *aIt );
+                        CellRangeAddress aTitlesRange(aIt->aStart.Tab(), aIt->aStart.Col(), aIt->aStart.Row(),
+                                                      aIt->aEnd.Col(), aIt->aEnd.Row());
+                        xPrintAreas->setTitleColumns( aTitlesRange );
                         xPrintAreas->setPrintTitleColumns( true );
                         bHasColTitles = true;
                     }
@@ -398,14 +402,6 @@ void DefinedName::convertFormula( const css::uno::Sequence<css::sheet::ExternalL
     }
 }
 
-bool DefinedName::getAbsoluteRange( CellRangeAddress& orRange ) const
-{
-    ScTokenArray* pTokenArray = mpScRangeData->GetCode();
-    Sequence< FormulaToken > aFTokenSeq;
-    ScTokenConversion::ConvertToTokenSequence(getScDocument(), aFTokenSeq, *pTokenArray);
-    return getFormulaParser().extractCellRange( orRange, aFTokenSeq, false );
-}
-
 bool DefinedName::getAbsoluteRange( ScRange& orRange ) const
 {
     ScTokenArray* pTokenArray = mpScRangeData->GetCode();
@@ -413,7 +409,6 @@ bool DefinedName::getAbsoluteRange( ScRange& orRange ) const
     ScTokenConversion::ConvertToTokenSequence(getScDocument(), aFTokenSeq, *pTokenArray);
     return getFormulaParser().extractCellRange( orRange, aFTokenSeq, false );
 }
-
 
 DefinedNamesBuffer::DefinedNamesBuffer( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper )

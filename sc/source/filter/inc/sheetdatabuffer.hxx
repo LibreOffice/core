@@ -167,7 +167,7 @@ private:
 
     /** Writes all cell formatting attributes to the passed cell range list. (depreciates writeXfIdRangeProperties) */
     void                applyCellMerging( const ScRange& rRange );
-    void                addColXfStyle( sal_Int32 nXfId, sal_Int32 nFormatId, const css::table::CellRangeAddress& rAddress, bool bProcessRowRange = false );
+    void                addColXfStyle( sal_Int32 nXfId, sal_Int32 nFormatId, const ScRange& rAddress, bool bProcessRowRange = false );
 private:
     /** Stores cell range address and formula token array of an array formula. */
     typedef std::pair< ScRange, ApiTokenSequence > ArrayFormula;
@@ -189,7 +189,7 @@ private:
     };
 
     typedef ::std::pair< sal_Int32, sal_Int32 > XfIdNumFmtKey;
-    typedef ::std::map< XfIdNumFmtKey, ApiCellRangeList > XfIdRangeListMap;
+    typedef std::map< XfIdNumFmtKey, RangeList > XfIdRangeListMap;
 
     typedef ::std::pair< sal_Int32, sal_Int32 > RowRange;
     struct RowRangeStyle
