@@ -382,6 +382,10 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
 ))
 
 define gb_LinkTarget__use_apr
+$(call gb_LinkTarget_set_include,$(1),\
+    $$(INCLUDE) \
+    -I$(OUTDIR)/inc/apr \
+)
 $(call gb_LinkTarget_add_linked_libs,$(1),\
     apr-1 \
 )
@@ -410,6 +414,10 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
 ))
 
 define gb_LinkTarget__use_apr_util
+$(call gb_LinkTarget_set_include,$(1),\
+    $$(INCLUDE) \
+    -I$(OUTDIR)/inc/apr-util \
+)
 $(call gb_LinkTarget_add_linked_libs,$(1),\
     aprutil-1 \
 )
