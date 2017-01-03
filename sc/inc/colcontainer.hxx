@@ -40,30 +40,30 @@ public:
     ScColContainer( ScDocument* pDoc, const size_t nSize );
     ~ScColContainer();
 
-    const ScColumn& operator[] ( const size_t nIndex ) const
+    inline const ScColumn& operator[] ( const size_t nIndex ) const
     {
         return *aCols[nIndex];
     }
 
-    ScColumn& operator[] ( const size_t nIndex )
+    inline ScColumn& operator[] ( const size_t nIndex )
     {
         return *aCols[nIndex];
     }
 
-    SCCOL size() const
+    inline SCCOL size() const
     {
         return static_cast<SCCOL>( aCols.size() );
     }
 
     void Clear();
 
-    const ScColumn& back() const
+    inline const ScColumn& back() const
     {
         assert(aCols.size() > 0);
         return *aCols.back();
     }
 
-    ScColumn& back()
+    inline ScColumn& back()
     {
         assert(aCols.size() > 0);
         return *aCols.back();
