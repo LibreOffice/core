@@ -20,6 +20,7 @@
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
+#include <sfx2/infobar.hxx>
 #include <sfx2/objsh.hxx>
 #include <o3tl/make_unique.hxx>
 #include <comphelper/processfactory.hxx>

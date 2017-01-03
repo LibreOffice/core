@@ -1201,7 +1201,7 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 {
                     bool bSignPDF = IsSignPDF(m_xObjSh);
 
-                    SfxInfoBarWindow* pInfoBar = AppendInfoBar("readonly", SfxResId(bSignPDF ? STR_READONLY_PDF : STR_READONLY_DOCUMENT));
+                    auto pInfoBar = AppendInfoBar("readonly", SfxResId(bSignPDF ? STR_READONLY_PDF : STR_READONLY_DOCUMENT));
                     if (pInfoBar)
                     {
                         if (bSignPDF)
@@ -3063,7 +3063,7 @@ void SfxViewFrame::SetViewFrame( SfxViewFrame* pFrame )
     SfxGetpApp()->SetViewFrame_Impl( pFrame );
 }
 
-SfxInfoBarWindow* SfxViewFrame::AppendInfoBar( const OUString& sId,
+VclPtr<SfxInfoBarWindow> SfxViewFrame::AppendInfoBar( const OUString& sId,
                                                const OUString& sMessage,
                                                const basegfx::BColor* pBackgroundColor,
                                                const basegfx::BColor* pForegroundColor,
@@ -3080,7 +3080,7 @@ SfxInfoBarWindow* SfxViewFrame::AppendInfoBar( const OUString& sId,
     if (pChild)
     {
         SfxInfoBarContainerWindow* pInfoBarContainer = static_cast<SfxInfoBarContainerWindow*>(pChild->GetWindow());
-        SfxInfoBarWindow* pInfoBar = pInfoBarContainer->appendInfoBar(sId, sMessage, pBackgroundColor, pForegroundColor, pMessageColor, nMessageStyle);
+        auto pInfoBar = pInfoBarContainer->appendInfoBar(sId, sMessage, pBackgroundColor, pForegroundColor, pMessageColor, nMessageStyle);
         ShowChildWindow(nId);
         return pInfoBar;
     }
@@ -3099,7 +3099,7 @@ void SfxViewFrame::RemoveInfoBar( const OUString& sId )
     if (pChild)
     {
         SfxInfoBarContainerWindow* pInfoBarContainer = static_cast<SfxInfoBarContainerWindow*>(pChild->GetWindow());
-        SfxInfoBarWindow* pInfoBar = pInfoBarContainer->getInfoBar(sId);
+        auto pInfoBar = pInfoBarContainer->getInfoBar(sId);
         pInfoBarContainer->removeInfoBar(pInfoBar);
         ShowChildWindow(nId);
     }

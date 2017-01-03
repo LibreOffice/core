@@ -84,14 +84,14 @@ class SfxInfoBarContainerWindow : public vcl::Window
         virtual ~SfxInfoBarContainerWindow( ) override;
         virtual void dispose() override;
 
-        SfxInfoBarWindow* appendInfoBar(const OUString& sId,
+        VclPtr<SfxInfoBarWindow> appendInfoBar(const OUString& sId,
                                         const OUString& sMessage,
                                         const basegfx::BColor* pBackgroundColor,
                                         const basegfx::BColor* pForegroundColor,
                                         const basegfx::BColor* pMessageColor,
                                         WinBits nMessageStyle);
-        SfxInfoBarWindow* getInfoBar(const OUString& sId);
-        void removeInfoBar(SfxInfoBarWindow* pInfoBar);
+        VclPtr<SfxInfoBarWindow> getInfoBar(const OUString& sId);
+        void removeInfoBar(VclPtr<SfxInfoBarWindow> const & pInfoBar);
 
         virtual void Resize() override;
 };

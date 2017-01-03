@@ -279,7 +279,7 @@ void SfxInfoBarContainerWindow::dispose()
     Window::dispose();
 }
 
-SfxInfoBarWindow* SfxInfoBarContainerWindow::appendInfoBar(const OUString& sId,
+VclPtr<SfxInfoBarWindow> SfxInfoBarContainerWindow::appendInfoBar(const OUString& sId,
                                                            const OUString& sMessage,
                                                            const basegfx::BColor* pBackgroundColor,
                                                            const basegfx::BColor* pForegroundColor,
@@ -299,25 +299,22 @@ SfxInfoBarWindow* SfxInfoBarContainerWindow::appendInfoBar(const OUString& sId,
     return pInfoBar;
 }
 
-SfxInfoBarWindow* SfxInfoBarContainerWindow::getInfoBar(const OUString& sId)
+VclPtr<SfxInfoBarWindow> SfxInfoBarContainerWindow::getInfoBar(const OUString& sId)
 {
     for (auto it = m_pInfoBars.begin(); it != m_pInfoBars.end(); ++it)
     {
         if ((*it)->getId() == sId)
-            return it->get();
+            return *it;
     }
     return nullptr;
 }
 
-void SfxInfoBarContainerWindow::removeInfoBar(SfxInfoBarWindow* pInfoBar)
+void SfxInfoBarContainerWindow::removeInfoBar(VclPtr<SfxInfoBarWindow> const & pInfoBar)
 {
-    // Store a VclPtr to the pInfoBar while we remove it from m_pInfoBars
-    ScopedVclPtr<SfxInfoBarWindow> pTmp(pInfoBar);
-
     // Remove
     for (auto it = m_pInfoBars.begin(); it != m_pInfoBars.end(); ++it)
     {
-        if (pInfoBar == it->get())
+        if (pInfoBar == *it)
         {
             it->disposeAndClear();
             m_pInfoBars.erase(it);
