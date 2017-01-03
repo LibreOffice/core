@@ -1,0 +1,147 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a6eadb0_9f48d65d",
+        "filename": "sc/source/ui/src/globstr.src",
+        "patchSetId": 5
+      },
+      "lineNbr": 2114,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-01-03T12:07:18Z",
+      "side": 1,
+      "message": "It\u0027s not obvious to the user what actually is happening, let\u0027s reword that a little. Also \"delete the selected sheet(s)\" occurs twice.",
+      "revId": "d2742a14536ba5d8699b33bbd680628249ffad05",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a6eadb0_ff6d4acd",
+        "filename": "sc/source/ui/view/tabvwshf.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 596,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-01-03T12:07:18Z",
+      "side": 1,
+      "message": "The MarkedTabsType doesn\u0027t need to be copied.\nAlso, it only needs to be obtained if the document has pivot tables.",
+      "range": {
+        "startLine": 596,
+        "startChar": 16,
+        "endLine": 596,
+        "endChar": 55
+      },
+      "revId": "d2742a14536ba5d8699b33bbd680628249ffad05",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a6eadb0_df516e10",
+        "filename": "sc/source/ui/view/tabvwshf.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 603,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-01-03T12:07:18Z",
+      "side": 1,
+      "message": "The ScDPCollection is not to be modified, so it should be a const pointer.",
+      "range": {
+        "startLine": 603,
+        "startChar": 24,
+        "endLine": 603,
+        "endChar": 38
+      },
+      "revId": "d2742a14536ba5d8699b33bbd680628249ffad05",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a6eadb0_3f3a62ce",
+        "filename": "sc/source/ui/view/tabvwshf.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 605,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-01-03T12:07:18Z",
+      "side": 1,
+      "message": "There is only one ScDPCollection per document, so it doesn\u0027t need to be obtained and check for each iterated sheet, only once.",
+      "revId": "d2742a14536ba5d8699b33bbd680628249ffad05",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a6eadb0_9f31b6ef",
+        "filename": "sc/source/ui/view/tabvwshf.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 611,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-01-03T12:07:18Z",
+      "side": 1,
+      "message": "The ScDPObject is not to be modified, so it should be a const reference.",
+      "range": {
+        "startLine": 611,
+        "startChar": 32,
+        "endLine": 611,
+        "endChar": 42
+      },
+      "revId": "d2742a14536ba5d8699b33bbd680628249ffad05",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a6eadb0_df788e92",
+        "filename": "sc/source/ui/view/tabvwshf.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 613,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-01-03T12:07:18Z",
+      "side": 1,
+      "message": "The ScRange doesn\u0027t need to be copied.",
+      "range": {
+        "startLine": 613,
+        "startChar": 32,
+        "endLine": 613,
+        "endChar": 52
+      },
+      "revId": "d2742a14536ba5d8699b33bbd680628249ffad05",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a6eadb0_1f25a6aa",
+        "filename": "sc/source/ui/view/tabvwshf.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 619,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-01-03T12:07:18Z",
+      "side": 1,
+      "message": "Actually we need this entire check only in the if(!bDoIt) case; if bHasIndex\u003d\u003dtrue then a query box wouldn\u0027t be executed anyway (because the slot was called with an argument which sheet to delete).",
+      "revId": "d2742a14536ba5d8699b33bbd680628249ffad05",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
