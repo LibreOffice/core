@@ -397,6 +397,17 @@ elsif ( $platform =~ m/freebsd/ )
       $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."client";
       $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."native_threads";
    }
+   elsif ($platform =~ m/^arm.*?l-/)
+   {  print "Setting FreeBSD ARM specific values... ";
+      $outfile        = "FreeBSDARMEnv.Set"; 
+      $CPU            = "R";
+      $CPUNAME        = "ARM";
+      $OUTPATH        = "unxfbsdr";
+      $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."arm";
+      $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."arm".$ds."server";
+      $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."arm".$ds."native_threads";
+      $EPM_FLAGS      = "-a arm";
+   }
    elsif ($platform =~ m/^powerpc/)
    {
       if (($platform =~ m/^powerpc64/) && ('@SIZEOF_LONG@' eq '8')) {
