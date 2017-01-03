@@ -15,6 +15,7 @@
 #include <document.hxx>
 
 #include <oox/export/utils.hxx>
+#include <oox/token/namespaces.hxx>
 
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 #include <com/sun/star/sheet/DataPilotOutputRangeType.hpp>
@@ -36,8 +37,8 @@ void savePivotCacheRecordsXml( XclExpXmlStream& rStrm, const ScDPCache& rCache )
 
     sax_fastparser::FSHelperPtr& pRecStrm = rStrm.GetCurrentStream();
     pRecStrm->startElement(XML_pivotCacheRecords,
-        XML_xmlns, "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
-        FSNS(XML_xmlns, XML_r), "http://schemas.openxmlformats.org/officeDocument/2006/relationships",
+        XML_xmlns, XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(xls))).getStr(),
+        FSNS(XML_xmlns, XML_r), XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(officeRel))).getStr(),
         XML_count, OString::number(static_cast<long>(nCount)).getStr(),
         FSEND);
 
@@ -192,8 +193,8 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
     rStrm.PopStream();
 
     pDefStrm->startElement(XML_pivotCacheDefinition,
-        XML_xmlns, "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
-        FSNS(XML_xmlns, XML_r), "http://schemas.openxmlformats.org/officeDocument/2006/relationships",
+        XML_xmlns, XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(xls))).getStr(),
+        FSNS(XML_xmlns, XML_r), XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(officeRel))).getStr(),
         FSNS(XML_r, XML_id), XclXmlUtils::ToOString(aRelId).getStr(),
         XML_recordCount, OString::number(rEntry.mpCache->GetDataSize()).getStr(),
         FSEND);
@@ -497,7 +498,7 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
 
     sax_fastparser::FSHelperPtr& pPivotStrm = rStrm.GetCurrentStream();
     pPivotStrm->startElement(XML_pivotTableDefinition,
-        XML_xmlns, "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
+        XML_xmlns, XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(xls))).getStr(),
         XML_name, XclXmlUtils::ToOString(rDPObj.GetName()).getStr(),
         XML_cacheId, OString::number(nCacheId).getStr(),
         XML_applyNumberFormats, BS(false),
