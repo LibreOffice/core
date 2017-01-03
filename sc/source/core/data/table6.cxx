@@ -633,9 +633,9 @@ bool ScTable::SearchStyle(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& 
     }
     else                                            // by column
     {
-        SCsROW nNextRows[MAXCOLCOUNT];
+        SCsROW nNextRows[ aCol.size() ];
         SCsCOL i;
-        for (i=0; i<=MAXCOL; i++)
+        for (i=0; i < aCol.size(); i++)
         {
             SCsROW nSRow = nRow;
             if (bBack)  { if (i>=nCol) --nSRow; }
@@ -645,7 +645,7 @@ bool ScTable::SearchStyle(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& 
         if (bBack)                          // backwards
         {
             nRow = -1;
-            for (i=MAXCOL; i>=0; i--)
+            for (i = aCol.size() - 1; i>=0; i--)
                 if (nNextRows[i]>nRow)
                 {
                     nCol = i;
@@ -656,7 +656,7 @@ bool ScTable::SearchStyle(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& 
         else                                // forwards
         {
             nRow = MAXROW+1;
-            for (i=0; i<=MAXCOL; i++)
+            for (i=0; i < aCol.size(); i++)
                 if (nNextRows[i]<nRow)
                 {
                     nCol = i;
@@ -711,7 +711,7 @@ bool ScTable::SearchAllStyle(
     bool bBack = rSearchItem.GetBackward();
     bool bEverFound = false;
 
-    for (SCCOL i=0; i<=MAXCOL; i++)
+    for (SCCOL i=0; i < aCol.size(); i++)
     {
         bool bFound = true;
         SCsROW nRow = 0;

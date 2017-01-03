@@ -50,7 +50,7 @@ public:
         return *aCols[nIndex];
     }
 
-    SCCOL size() const
+    inline SCCOL size() const
     {
         return static_cast<SCCOL>( aCols.size() );
     }
