@@ -29,9 +29,34 @@ Bitmap (SV_RESID_BITMAP_CHECK + SV_RESID_MONOOFFSET)
     File = "checkmono.bmp";
 };
 
-Bitmap (SV_RESID_BITMAP_SCROLLBMP)
+Bitmap (SV_RESID_BITMAP_SCROLLVH)
 {
-    File = "scrbmp.png";
+    File = "scrollvh.png";
+};
+
+Bitmap (SV_RESID_BITMAP_SCROLLV)
+{
+    File = "scrollv.png";
+};
+
+Bitmap (SV_RESID_BITMAP_SCROLLH)
+{
+    File = "scrollh.png";
+};
+
+Bitmap (SV_RESID_BITMAP_WHEELVH)
+{
+    File = "wheelvh.png";
+};
+
+Bitmap (SV_RESID_BITMAP_WHEELV)
+{
+    File = "wheelv.png";
+};
+
+Bitmap (SV_RESID_BITMAP_WHEELH)
+{
+    File = "wheelh.png";
 };
 
 Bitmap (SV_RESID_BITMAP_SCROLLMSK)

@@ -121,9 +121,15 @@ void ImplWheelWindow::ImplSetRegion( const Bitmap& rRegionBmp )
 void ImplWheelWindow::ImplCreateImageList()
 {
     ResMgr* pResMgr = ImplGetResMgr();
-    if( pResMgr )
-        maImgList.InsertFromHorizontalBitmap
-            ( ResId( SV_RESID_BITMAP_SCROLLBMP, *pResMgr ), 6, nullptr );
+    if (pResMgr)
+    {
+        maImgList.push_back(Image(BitmapEx(ResId(SV_RESID_BITMAP_SCROLLVH, *pResMgr))));
+        maImgList.push_back(Image(BitmapEx(ResId(SV_RESID_BITMAP_SCROLLV, *pResMgr))));
+        maImgList.push_back(Image(BitmapEx(ResId(SV_RESID_BITMAP_SCROLLH, *pResMgr))));
+        maImgList.push_back(Image(BitmapEx(ResId(SV_RESID_BITMAP_WHEELVH, *pResMgr))));
+        maImgList.push_back(Image(BitmapEx(ResId(SV_RESID_BITMAP_WHEELV, *pResMgr))));
+        maImgList.push_back(Image(BitmapEx(ResId(SV_RESID_BITMAP_WHEELH, *pResMgr))));
+    }
 }
 
 void ImplWheelWindow::ImplSetWheelMode( WheelMode nWheelMode )
@@ -149,35 +155,35 @@ void ImplWheelWindow::ImplSetWheelMode( WheelMode nWheelMode )
 
 void ImplWheelWindow::ImplDrawWheel(vcl::RenderContext& rRenderContext)
 {
-    sal_uInt16 nId;
+    int nIndex;
 
     switch (mnWheelMode)
     {
         case WheelMode::VH:
-            nId = 1;
+            nIndex = 0;
         break;
         case WheelMode::V:
-            nId = 2;
+            nIndex = 1;
         break;
         case WheelMode::H:
-            nId = 3;
+            nIndex = 2;
         break;
         case WheelMode::ScrollVH:
-            nId = 4;
+            nIndex = 3;
         break;
         case WheelMode::ScrollV:
-            nId = 5;
+            nIndex = 4;
         break;
         case WheelMode::ScrollH:
-            nId = 6;
+            nIndex = 5;
         break;
         default:
-            nId = 0;
+            nIndex = -1;
         break;
     }
 
-    if (nId)
-        rRenderContext.DrawImage(Point(), maImgList.GetImage(nId));
+    if (nIndex >= 0)
+        rRenderContext.DrawImage(Point(), maImgList[nIndex]);
 }
 
 void ImplWheelWindow::ImplRecalcScrollValues()

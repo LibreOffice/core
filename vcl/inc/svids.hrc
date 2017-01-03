@@ -37,16 +37,21 @@
 #define SV_RESID_BITMAP_SPLITVARW                    1043
 
 #define SV_RESID_BITMAP_SCROLLMSK                    1050
-#define SV_RESID_BITMAP_SCROLLBMP                    1051
-#define SV_RESID_BITMAP_CLOSEDOC                     1052
-#define SV_RESID_BITMAP_INDEX                        1053
-#define SV_RESID_BITMAP_REFRESH                      1054
-#define SV_RESID_BITMAP_NOTEBOOKBAR                  1055
+#define SV_RESID_BITMAP_WHEELVH                      1051
+#define SV_RESID_BITMAP_WHEELV                       1052
+#define SV_RESID_BITMAP_WHEELH                       1053
+#define SV_RESID_BITMAP_SCROLLVH                     1054
+#define SV_RESID_BITMAP_SCROLLV                      1055
+#define SV_RESID_BITMAP_SCROLLH                      1056
+#define SV_RESID_BITMAP_CLOSEDOC                     1057
+#define SV_RESID_BITMAP_INDEX                        1058
+#define SV_RESID_BITMAP_REFRESH                      1059
+#define SV_RESID_BITMAP_NOTEBOOKBAR                  1060
 
-#define SV_DISCLOSURE_PLUS                           1060
-#define SV_DISCLOSURE_MINUS                          1061
+#define SV_DISCLOSURE_PLUS                           1070
+#define SV_DISCLOSURE_MINUS                          1071
 
-#define RID_STR_PAPERNAMES                           1070
+#define RID_STR_PAPERNAMES                           1080
 
 #define SV_RESID_MENU_EDIT                           2000
 #define SV_MENU_EDIT_UNDO                               1

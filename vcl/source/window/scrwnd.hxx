@@ -43,7 +43,7 @@ class ImplWheelWindow : public FloatingWindow
 {
 private:
 
-    ImageList           maImgList;
+    std::vector<Image>  maImgList;
     Point               maLastMousePos;
     Point               maCenter;
     Timer*              mpTimer;
