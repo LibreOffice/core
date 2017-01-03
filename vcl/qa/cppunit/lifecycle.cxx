@@ -92,18 +92,42 @@ void LifecycleTest::testMultiDispose()
 
 void LifecycleTest::testWidgets(vcl::Window *pParent)
 {
-    { ScopedVclPtrInstance< PushButton > aPtr( pParent );   }
-    { ScopedVclPtrInstance< OKButton > aPtr( pParent );     }
-    { ScopedVclPtrInstance< CancelButton > aPtr( pParent ); }
-    { ScopedVclPtrInstance< HelpButton > aPtr( pParent );   }
+    {
+        ScopedVclPtrInstance< PushButton > aPtr( pParent );
+        (void)aPtr; // silence unused variable warning
+    }
+    {
+        ScopedVclPtrInstance< OKButton > aPtr( pParent );
+        (void)aPtr; // silence unused variable warning
+    }
+    {
+        ScopedVclPtrInstance< CancelButton > aPtr( pParent );
+        (void)aPtr; // silence unused variable warning
+    }
+    {
+        ScopedVclPtrInstance< HelpButton > aPtr( pParent );
+        (void)aPtr; // silence unused variable warning
+    }
 
     // Some widgets really insist on adoption.
     if (pParent)
     {
-        { ScopedVclPtrInstance< CheckBox > aPtr( pParent );     }
-        { ScopedVclPtrInstance< Edit > aPtr( pParent );         }
-        { ScopedVclPtrInstance< ComboBox > aPtr( pParent );     }
-        { ScopedVclPtrInstance< RadioButton > aPtr( pParent );  }
+        {
+            ScopedVclPtrInstance< CheckBox > aPtr( pParent );
+            (void)aPtr; // silence unused variable warning
+        }
+        {
+            ScopedVclPtrInstance< Edit > aPtr( pParent );
+            (void)aPtr; // silence unused variable warning
+        }
+        {
+            ScopedVclPtrInstance< ComboBox > aPtr( pParent );
+            (void)aPtr; // silence unused variable warning
+        }
+        {
+            ScopedVclPtrInstance< RadioButton > aPtr( pParent );
+            (void)aPtr; // silence unused variable warning
+        }
     }
 }
 
