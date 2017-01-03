@@ -13,6 +13,7 @@
 #include "dbdata.hxx"
 #include "document.hxx"
 #include <oox/export/utils.hxx>
+#include <oox/token/namespaces.hxx>
 
 using namespace oox;
 
@@ -180,7 +181,7 @@ void XclExpTables::SaveTableXml( XclExpXmlStream& rStrm, const Entry& rEntry )
     rData.GetArea( aRange);
     sax_fastparser::FSHelperPtr& pTableStrm = rStrm.GetCurrentStream();
     pTableStrm->startElement( XML_table,
-        XML_xmlns, "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
+        XML_xmlns, XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(xls14Lst))).getStr(),
         XML_id, OString::number( rEntry.mnTableId).getStr(),
         XML_name, XclXmlUtils::ToOString( rData.GetName()).getStr(),
         XML_displayName, XclXmlUtils::ToOString( rData.GetName()).getStr(),

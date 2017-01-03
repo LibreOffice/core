@@ -74,6 +74,7 @@
 #include <oox/export/drawingml.hxx>
 #include <oox/export/chartexport.hxx>
 #include <oox/export/utils.hxx>
+#include <oox/token/namespaces.hxx>
 #include <memory>
 
 using namespace com::sun::star;
@@ -1422,16 +1423,16 @@ void XclExpComments::SaveXml( XclExpXmlStream& rStrm )
 
     if( rStrm.getVersion() == oox::core::ISOIEC_29500_2008 )
         rComments->startElement( XML_comments,
-            XML_xmlns, "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
-            FSNS( XML_xmlns, XML_mc ), "http://schemas.openxmlformats.org/markup-compatibility/2006",
-            FSNS( XML_xmlns, XML_xdr ), "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing",
-            FSNS( XML_xmlns, XML_v2 ), "http://schemas.openxmlformats.org/spreadsheetml/2006/main/v2",
+            XML_xmlns, XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(xls))).getStr(),
+            FSNS( XML_xmlns, XML_mc ), XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(mce))).getStr(),
+            FSNS( XML_xmlns, XML_xdr ), XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(dmlSpreadDr))).getStr(),
+            FSNS( XML_xmlns, XML_v2 ), XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(mceTest))).getStr(),
             FSNS( XML_mc, XML_Ignorable ), "v2",
             FSEND );
     else
         rComments->startElement( XML_comments,
-            XML_xmlns, "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
-            FSNS( XML_xmlns, XML_xdr ), "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing",
+            XML_xmlns, XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(xls))).getStr(),
+            FSNS( XML_xmlns, XML_xdr ), XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(dmlSpreadDr))).getStr(),
             FSEND );
 
     rComments->startElement( XML_authors, FSEND );

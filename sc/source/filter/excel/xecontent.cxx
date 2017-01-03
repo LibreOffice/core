@@ -204,7 +204,7 @@ void XclExpSstImpl::SaveXml( XclExpXmlStream& rStrm )
     rStrm.PushStream( pSst );
 
     pSst->startElement( XML_sst,
-            XML_xmlns, "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
+            XML_xmlns, XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(xls))).getStr(),
             XML_count, OString::number(  mnTotal ).getStr(),
             XML_uniqueCount, OString::number(  mnSize ).getStr(),
             FSEND );
