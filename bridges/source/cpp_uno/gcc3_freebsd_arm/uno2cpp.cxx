@@ -21,7 +21,7 @@
 
 
 
-#include <malloc.h>
+#include <stdlib.h>
 #include <rtl/alloc.h>
 
 #include <com/sun/star/uno/genfunc.hxx>

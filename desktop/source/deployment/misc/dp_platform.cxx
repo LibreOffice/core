@@ -56,6 +56,7 @@
 #define PLATFORM_SOLARIS_SPARC      "solaris_sparc"
 #define PLATFORM_SOLARIS_SPARC64    "solaris_sparc64"
 #define PLATFORM_SOLARIS_X86        "solaris_x86"
+#define PLATFORM_FREEBSD_ARM        "freebsd_arm"
 #define PLATFORM_FREEBSD_POWERPC    "freebsd_powerpc"
 #define PLATFORM_FREEBSD_POWERPC64  "freebsd_powerpc64"
 #define PLATFORM_FREEBSD_X86        "freebsd_x86"
