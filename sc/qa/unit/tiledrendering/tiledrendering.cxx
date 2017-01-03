@@ -70,6 +70,7 @@ public:
     void testInvalidateOnCopyPasteCells();
     void testInvalidateOnInserRowCol();
     void testUndoLimiting();
+    void testInsertGraphicInvalidations();
     void testUndoRepairDispatch();
 
     CPPUNIT_TEST_SUITE(ScTiledRenderingTest);
@@ -92,6 +93,7 @@ public:
     CPPUNIT_TEST(testInvalidateOnCopyPasteCells);
     CPPUNIT_TEST(testInvalidateOnInserRowCol);
     CPPUNIT_TEST(testUndoLimiting);
+    CPPUNIT_TEST(testInsertGraphicInvalidations);
     CPPUNIT_TEST(testUndoRepairDispatch);
     CPPUNIT_TEST_SUITE_END();
 
@@ -386,6 +388,7 @@ public:
         : m_bOwnCursorInvalidated(false),
           m_bViewCursorInvalidated(false),
           m_bTextViewSelectionInvalidated(false),
+          m_bGraphicSelection(false),
           m_bGraphicViewSelection(false),
           m_bFullInvalidateTiles(false),
           m_bInvalidateTiles(false),
@@ -1074,6 +1077,71 @@ void ScTiledRenderingTest::testUndoLimiting()
     Scheduler::ProcessEventsToIdle();
     // check that redo has been executed on view #1
     CPPUNIT_ASSERT(pUndoManager->GetRedoActionCount() == 0);
+
+    mxComponent->dispose();
+    mxComponent.clear();
+
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+template<typename T>
+struct NoDelete
+{
+   void operator()(T* /* p */) {}
+};
+
+void ScTiledRenderingTest::testInsertGraphicInvalidations()
+{
+    comphelper::LibreOfficeKit::setActive();
+
+    ScModelObj* pModelObj = createDoc("small.ods");
+    CPPUNIT_ASSERT(pModelObj);
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    CPPUNIT_ASSERT(pViewData);
+
+    // view #1
+    ViewCallback aView1;
+    int nView1 = SfxLokHelper::getView();
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
+
+    // view #2
+    SfxLokHelper::createView();
+    ViewCallback aView2;
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView2);
+
+    // we need to paint a tile in view #1 for triggering the tile invalidation solution
+    SfxLokHelper::setView(nView1);
+    int nCanvasWidth = 256;
+    int nCanvasHeight = 256;
+    std::vector<unsigned char> aBuffer(nCanvasWidth * nCanvasHeight * 4);
+    ScopedVclPtrInstance<VirtualDevice> pDevice(nullptr, Size(1, 1), DeviceFormat::DEFAULT);
+    boost::shared_array<sal_uInt8> aSharedBuffer(aBuffer.data(), NoDelete<sal_uInt8>());
+    pDevice->SetOutputSizePixelScaleOffsetAndBuffer(Size(nCanvasWidth, nCanvasHeight), Fraction(1.0), Point(), aSharedBuffer);
+    pModelObj->paintTile(*pDevice.get(), nCanvasWidth, nCanvasHeight, /*nTilePosX=*/0, /*nTilePosY=*/0, /*nTileWidth=*/3840, /*nTileHeight=*/3840);
+    Scheduler::ProcessEventsToIdle();
+
+    // insert an image in view #1 and see if both views are invalidated
+    SfxLokHelper::setView(nView1);
+    aView1.m_bInvalidateTiles = false;
+    aView2.m_bInvalidateTiles = false;
+    uno::Sequence<beans::PropertyValue> aArgs(1);
+    aArgs[0].Name = OUString::fromUtf8("FileName");
+    aArgs[0].Value <<= (getURLFromSrc(DATA_DIRECTORY) + OUString::createFromAscii("smile.png"));
+    comphelper::dispatchCommand(".uno:InsertGraphic", aArgs);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(aView1.m_bInvalidateTiles);
+    CPPUNIT_ASSERT(aView2.m_bInvalidateTiles);
+
+    // undo image insertion in view #1 and see if both views are invalidated
+    SfxLokHelper::setView(nView1);
+    aView1.m_bInvalidateTiles = false;
+    aView2.m_bInvalidateTiles = false;
+    uno::Sequence<beans::PropertyValue> aArgs2;
+    comphelper::dispatchCommand(".uno:Undo", aArgs2);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(aView1.m_bInvalidateTiles);
+    CPPUNIT_ASSERT(aView2.m_bInvalidateTiles);
 
     mxComponent->dispose();
     mxComponent.clear();
