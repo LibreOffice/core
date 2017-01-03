@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a6eadb0_5c5bac54",
+        "filename": "sfx2/source/view/viewprn.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 608,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2017-01-03T08:21:21Z",
+      "side": 1,
+      "message": "Surely you should use the symbolic constant SFX_TITLE_FILENAME here.",
+      "range": {
+        "startLine": 608,
+        "startChar": 63,
+        "endLine": 608,
+        "endChar": 64
+      },
+      "revId": "78430ed142d791971ec2243aefcfaecb24330000",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
