@@ -673,6 +673,20 @@ bool SwFlyFrame::FrameSizeChg( const SwFormatFrameSize &rFrameSize )
     return bRet;
 }
 
+void SwFlyFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
+{
+    if (auto pLegacyHint = dynamic_cast<const sw::LegacyModifyHint*>(&rHint))
+    {
+        Modify(pLegacyHint->m_pOld, pLegacyHint->m_pNew);
+    }
+    else if(auto pGetZOrdnerHint = dynamic_cast<const sw::GetZOrderHint*>(&rHint))
+    {
+        auto pFormat(dynamic_cast<const SwFrameFormat*>(&rMod));
+        if(pFormat->Which() == RES_FLYFRMFMT && pFormat->getIDocumentLayoutAccess().GetCurrentViewShell()) // #i11176#
+            pGetZOrdnerHint->m_rnZOrder = GetVirtDrawObj()->GetOrdNum();
+     }
+};
+
 void SwFlyFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
 {
     sal_uInt8 nInvFlags = 0;

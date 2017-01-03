@@ -478,40 +478,13 @@ bool SwDoc::DeleteSelection( SwDrawView& rDrawView )
     return bCallBase;
 }
 
-ZSortFly::ZSortFly( const SwFrameFormat* pFrameFormat, const SwFormatAnchor* pFlyAn,
-                      sal_uInt32 nArrOrdNum )
-    : pFormat( pFrameFormat ), pAnchor( pFlyAn ), nOrdNum( nArrOrdNum )
+ZSortFly::ZSortFly(const SwFrameFormat* pFrameFormat, const SwFormatAnchor* pFlyAn, sal_uInt32 nArrOrdNum)
+    : pFormat(pFrameFormat)
+    , pAnchor(pFlyAn)
+    , nOrdNum(nArrOrdNum)
 {
-    // #i11176#
-    // This also needs to work when no layout exists. Thus, for
-    // FlyFrames an alternative method is used now in that case.
-    if( RES_FLYFRMFMT == pFormat->Which() )
-    {
-        if( pFormat->getIDocumentLayoutAccess().GetCurrentViewShell() )
-        {
-            // See if there is an SdrObject for it
-            SwFlyFrame* pFly = SwIterator<SwFlyFrame,SwFormat>( *pFrameFormat ).First();
-            if( pFly )
-                nOrdNum = pFly->GetVirtDrawObj()->GetOrdNum();
-        }
-        else
-        {
-            // See if there is an SdrObject for it
-            SwFlyDrawContact* pContact = SwIterator<SwFlyDrawContact,SwFormat>( *pFrameFormat ).First();
-            if( pContact )
-                nOrdNum = pContact->GetMaster()->GetOrdNum();
-        }
-    }
-    else if( RES_DRAWFRMFMT == pFormat->Which() )
-    {
-        // See if there is an SdrObject for it
-        SwDrawContact* pContact = SwIterator<SwDrawContact,SwFormat>( *pFrameFormat ).First();
-        if( pContact )
-            nOrdNum = pContact->GetMaster()->GetOrdNum();
-    }
-    else {
-        OSL_ENSURE( false, "what kind of format is this?" );
-    }
+    SAL_WARN_IF(pFormat->Which() != RES_FLYFRMFMT && pFormat->Which() != RES_DRAWFRMFMT, "sw.core", "What kind of format is this?");
+    pFormat->CallSwClientNotify(sw::GetZOrderHint(nOrdNum));
 }
 
 /// In the Outliner, set a link to the method for field display in edit objects.
