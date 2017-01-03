@@ -1413,7 +1413,7 @@ bool Window::ImplUpdatePos()
         mnOutOffY  = mpWindowImpl->mnY + pParent->mnOutOffY;
     }
 
-    vcl::Window* pChild = mpWindowImpl->mpFirstChild;
+    VclPtr< vcl::Window > pChild = mpWindowImpl->mpFirstChild;
     while ( pChild )
     {
         if ( pChild->ImplUpdatePos() )
@@ -1432,7 +1432,7 @@ void Window::ImplUpdateSysObjPos()
     if ( mpWindowImpl->mpSysObj )
         mpWindowImpl->mpSysObj->SetPosSize( mnOutOffX, mnOutOffY, mnOutWidth, mnOutHeight );
 
-    vcl::Window* pChild = mpWindowImpl->mpFirstChild;
+    VclPtr< vcl::Window > pChild = mpWindowImpl->mpFirstChild;
     while ( pChild )
     {
         pChild->ImplUpdateSysObjPos();
@@ -1962,7 +1962,7 @@ bool Window::IsLocked() const
     if ( mpWindowImpl->mnLockCount != 0 )
         return true;
 
-    vcl::Window* pChild = mpWindowImpl->mpFirstChild;
+    VclPtr<vcl::Window> pChild = mpWindowImpl->mpFirstChild;
     while ( pChild )
     {
         if ( pChild->IsLocked() )
@@ -2161,7 +2161,7 @@ void Window::CollectChildren(::std::vector<vcl::Window *>& rAllChildren )
 {
     rAllChildren.push_back( this );
 
-    vcl::Window* pChild = mpWindowImpl->mpFirstChild;
+    VclPtr< vcl::Window > pChild = mpWindowImpl->mpFirstChild;
     while ( pChild )
     {
         pChild->CollectChildren( rAllChildren );
@@ -2475,7 +2475,7 @@ void Window::Enable( bool bEnable, bool bChild )
 
     if ( bChild )
     {
-        vcl::Window* pChild = mpWindowImpl->mpFirstChild;
+        VclPtr< vcl::Window > pChild = mpWindowImpl->mpFirstChild;
         while ( pChild )
         {
             pChild->Enable( bEnable, bChild );
@@ -2491,7 +2491,7 @@ void Window::SetCallHandlersOnInputDisabled( bool bCall )
 {
     mpWindowImpl->mbCallHandlersDuringInputDisabled = bCall;
 
-    vcl::Window* pChild = mpWindowImpl->mpFirstChild;
+    VclPtr< vcl::Window > pChild = mpWindowImpl->mpFirstChild;
     while ( pChild )
     {
         pChild->SetCallHandlersOnInputDisabled( bCall );
@@ -2548,7 +2548,7 @@ void Window::EnableInput( bool bEnable, bool bChild )
 
     if ( bChild )
     {
-        vcl::Window* pChild = mpWindowImpl->mpFirstChild;
+        VclPtr< vcl::Window > pChild = mpWindowImpl->mpFirstChild;
         while ( pChild )
         {
             pChild->EnableInput( bEnable, bChild );
@@ -2647,7 +2647,7 @@ void Window::AlwaysEnableInput( bool bAlways, bool bChild )
 
     if ( bChild )
     {
-        vcl::Window* pChild = mpWindowImpl->mpFirstChild;
+        VclPtr< vcl::Window > pChild = mpWindowImpl->mpFirstChild;
         while ( pChild )
         {
             pChild->AlwaysEnableInput( bAlways, bChild );
@@ -2676,7 +2676,7 @@ void Window::AlwaysDisableInput( bool bAlways, bool bChild )
 
     if ( bChild )
     {
-        vcl::Window* pChild = mpWindowImpl->mpFirstChild;
+        VclPtr< vcl::Window > pChild = mpWindowImpl->mpFirstChild;
         while ( pChild )
         {
             pChild->AlwaysDisableInput( bAlways, bChild );
@@ -3420,7 +3420,7 @@ void Window::DrawSelectionBackground( const Rectangle& rRect,
 bool Window::IsScrollable() const
 {
     // check for scrollbars
-    vcl::Window *pChild = mpWindowImpl->mpFirstChild;
+    VclPtr< vcl::Window > pChild = mpWindowImpl->mpFirstChild;
     while( pChild )
     {
         if( pChild->GetType() == WINDOW_SCROLLBAR )
@@ -3493,14 +3493,14 @@ bool Window::HasActiveChildFrame()
         if( pFrameWin != mpWindowImpl->mpFrameWindow )
         {
             bool bDecorated = false;
-            vcl::Window *pChildFrame = pFrameWin->ImplGetWindow();
+            VclPtr< vcl::Window > pChildFrame = pFrameWin->ImplGetWindow();
             // #i15285# unfortunately WB_MOVEABLE is the same as WB_TABSTOP which can
             // be removed for ToolBoxes to influence the keyboard accessibility
             // thus WB_MOVEABLE is no indicator for decoration anymore
             // but FloatingWindows carry this information in their TitleType...
             // TODO: avoid duplicate WinBits !!!
             if( pChildFrame && pChildFrame->ImplIsFloatingWindow() )
-                bDecorated = static_cast<FloatingWindow*>(pChildFrame)->GetTitleType() != FloatWinTitleType::NONE;
+                bDecorated = static_cast<FloatingWindow*>(pChildFrame.get())->GetTitleType() != FloatWinTitleType::NONE;
             if( bDecorated || (pFrameWin->mpWindowImpl->mnStyle & (WB_MOVEABLE | WB_SIZEABLE) ) )
                 if( pChildFrame && pChildFrame->IsVisible() && pChildFrame->IsActive() )
                 {
@@ -3542,7 +3542,7 @@ void Window::EnableNativeWidget( bool bEnable )
     }
 
     // push down, useful for compound controls
-    vcl::Window *pChild = mpWindowImpl->mpFirstChild;
+    VclPtr< vcl::Window > pChild = mpWindowImpl->mpFirstChild;
     while( pChild )
     {
         pChild->EnableNativeWidget( bEnable );
