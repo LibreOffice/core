@@ -438,6 +438,10 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
 ))
 
 define gb_LinkTarget__use_serf
+$(call gb_LinkTarget_set_include,$(1),\
+    $$(INCLUDE) \
+    -I$(OUTDIR)/inc/serf \
+)
 $(call gb_LinkTarget_add_linked_libs,$(1),\
     serf-1 \
 )
