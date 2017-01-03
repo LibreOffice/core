@@ -124,21 +124,21 @@ void ScTable::SwapNonEmpty(
 void ScTable::PreprocessRangeNameUpdate(
     sc::EndListeningContext& rEndListenCxt, sc::CompileFormulaContext& rCompileCxt )
 {
-    for (SCCOL i = 0; i <= MAXCOL; ++i)
+    for (SCCOL i = 0; i < aCol.size(); ++i)
         aCol[i].PreprocessRangeNameUpdate(rEndListenCxt, rCompileCxt);
 }
 
 void ScTable::PreprocessDBDataUpdate(
     sc::EndListeningContext& rEndListenCxt, sc::CompileFormulaContext& rCompileCxt )
 {
-    for (SCCOL i = 0; i <= MAXCOL; ++i)
+    for (SCCOL i = 0; i < aCol.size(); ++i)
         aCol[i].PreprocessDBDataUpdate(rEndListenCxt, rCompileCxt);
 }
 
 void ScTable::CompileHybridFormula(
     sc::StartListeningContext& rStartListenCxt, sc::CompileFormulaContext& rCompileCxt )
 {
-    for (SCCOL i = 0; i <= MAXCOL; ++i)
+    for (SCCOL i = 0; i < aCol.size(); ++i)
         aCol[i].CompileHybridFormula(rStartListenCxt, rCompileCxt);
 }
 
