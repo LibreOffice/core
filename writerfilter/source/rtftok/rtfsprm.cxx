@@ -153,6 +153,43 @@ static RTFValue::Pointer_t getDefaultSPRM(Id const id)
     }
 }
 
+/// Does the clone / deduplication of a single sprm.
+static void cloneAndDeduplicateSprm(std::pair<Id, RTFValue::Pointer_t>& rSprm, RTFSprms& ret)
+{
+    RTFValue::Pointer_t const pValue(ret.find(rSprm.first));
+    if (pValue)
+    {
+        if (rSprm.second->equals(*pValue))
+        {
+            ret.erase(rSprm.first); // duplicate to style
+        }
+        else if (!rSprm.second->getSprms().empty() || !rSprm.second->getAttributes().empty())
+        {
+            RTFSprms const sprms(pValue->getSprms().cloneAndDeduplicate(rSprm.second->getSprms()));
+            RTFSprms const attributes(pValue->getAttributes().cloneAndDeduplicate(rSprm.second->getAttributes()));
+            ret.set(rSprm.first, RTFValue::Pointer_t(pValue->CloneWithSprms(attributes, sprms)));
+        }
+    }
+    else
+    {
+        // not found - try to override style with default
+        RTFValue::Pointer_t const pDefault(getDefaultSPRM(rSprm.first));
+        if (pDefault)
+        {
+            ret.set(rSprm.first, pDefault);
+        }
+        else if (!rSprm.second->getSprms().empty() || !rSprm.second->getAttributes().empty())
+        {
+            RTFSprms const sprms(RTFSprms().cloneAndDeduplicate(rSprm.second->getSprms()));
+            RTFSprms const attributes(RTFSprms().cloneAndDeduplicate(rSprm.second->getAttributes()));
+            if (!sprms.empty() || !attributes.empty())
+            {
+                ret.set(rSprm.first, std::make_shared<RTFValue>(attributes, sprms));
+            }
+        }
+    }
+}
+
 RTFSprms RTFSprms::cloneAndDeduplicate(RTFSprms& rReference) const
 {
     RTFSprms ret(*this);
@@ -162,38 +199,17 @@ RTFSprms RTFSprms::cloneAndDeduplicate(RTFSprms& rReference) const
     // it is probably a bad idea to mess with those in any way here?
     for (auto& rSprm : rReference)
     {
-        RTFValue::Pointer_t const pValue(ret.find(rSprm.first));
-        if (pValue)
+        // Paragraph formatting sprms are directly contained in case of
+        // paragraphs, but they are below NS_ooxml::LN_CT_Style_pPr in case of
+        // styles. So handle those children directly, to avoid unexpected
+        // addition of direct formatting sprms at the paragraph level.
+        if (rSprm.first == NS_ooxml::LN_CT_Style_pPr)
         {
-            if (rSprm.second->equals(*pValue))
-            {
-                ret.erase(rSprm.first); // duplicate to style
-            }
-            else if (!rSprm.second->getSprms().empty() || !rSprm.second->getAttributes().empty())
-            {
-                RTFSprms const sprms(pValue->getSprms().cloneAndDeduplicate(rSprm.second->getSprms()));
-                RTFSprms const attributes(pValue->getAttributes().cloneAndDeduplicate(rSprm.second->getAttributes()));
-                ret.set(rSprm.first, RTFValue::Pointer_t(pValue->CloneWithSprms(attributes, sprms)));
-            }
+            for (auto& i : rSprm.second->getSprms())
+                cloneAndDeduplicateSprm(i, ret);
         }
         else
-        {
-            // not found - try to override style with default
-            RTFValue::Pointer_t const pDefault(getDefaultSPRM(rSprm.first));
-            if (pDefault)
-            {
-                ret.set(rSprm.first, pDefault);
-            }
-            else if (!rSprm.second->getSprms().empty() || !rSprm.second->getAttributes().empty())
-            {
-                RTFSprms const sprms(RTFSprms().cloneAndDeduplicate(rSprm.second->getSprms()));
-                RTFSprms const attributes(RTFSprms().cloneAndDeduplicate(rSprm.second->getAttributes()));
-                if (!sprms.empty() || !attributes.empty())
-                {
-                    ret.set(rSprm.first, std::make_shared<RTFValue>(attributes, sprms));
-                }
-            }
-        }
+            cloneAndDeduplicateSprm(rSprm, ret);
     }
     return ret;
 }
