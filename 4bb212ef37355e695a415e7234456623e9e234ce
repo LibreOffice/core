@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a6eadb0_1fb046f4",
+        "filename": "sw/source/ui/dbui/mmoutputtypepage.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2017-01-03T16:35:00Z",
+      "side": 1,
+      "message": "Corresponds to (A \u0026\u0026 !A) so always false.",
+      "range": {
+        "startLine": 392,
+        "startChar": 4,
+        "endLine": 393,
+        "endChar": 38
+      },
+      "revId": "4bb212ef37355e695a415e7234456623e9e234ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
