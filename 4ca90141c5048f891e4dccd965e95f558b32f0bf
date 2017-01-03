@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a6eadb0_9fe4563c",
+        "filename": "sc/source/filter/excel/xeescher.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1204,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-01-03T13:22:27Z",
+      "side": 1,
+      "message": "I think this should not go into the if(...pCaption...) but already into the if(pScNote) instead because it is independent of the drawing layer caption.",
+      "revId": "4ca90141c5048f891e4dccd965e95f558b32f0bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
