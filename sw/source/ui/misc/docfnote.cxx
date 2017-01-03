@@ -276,7 +276,7 @@ void SwEndNoteOptionPage::SelectNumbering(int eNum)
 int SwEndNoteOptionPage::GetNumbering() const
 {
     const sal_Int32 nPos = m_pNumCountBox->GetSelectEntryPos();
-    return (int) bPosDoc? nPos + 1: nPos;
+    return (int) bPosDoc? nPos + 2: nPos;
 }
 
 void SwEndNoteOptionPage::SetShell( SwWrtShell &rShell )
