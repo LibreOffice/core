@@ -42,42 +42,6 @@ using namespace ::com::sun::star::uno;
 // useful caption height for title bar buttons
 #define MIN_CAPTION_HEIGHT 18
 
-static void ImplGetPinImage( DrawButtonFlags nStyle, bool bPinIn, Image& rImage )
-{
-    // load ImageList if not available yet
-    ImplSVData* pSVData = ImplGetSVData();
-    if ( !pSVData->maCtrlData.mpPinImgList )
-    {
-        ResMgr* pResMgr = ImplGetResMgr();
-        pSVData->maCtrlData.mpPinImgList = new ImageList();
-        if( pResMgr )
-        {
-            Color aMaskColor( 0x00, 0x00, 0xFF );
-            pSVData->maCtrlData.mpPinImgList->InsertFromHorizontalBitmap
-                ( ResId( SV_RESID_BITMAP_PIN, *pResMgr ), 4,
-                  &aMaskColor );
-        }
-    }
-
-    // get and return Image
-    sal_uInt16 nId;
-    if ( nStyle & DrawButtonFlags::Pressed )
-    {
-        if ( bPinIn )
-            nId = 4;
-        else
-            nId = 3;
-    }
-    else
-    {
-        if ( bPinIn )
-            nId = 2;
-        else
-            nId = 1;
-    }
-    rImage = pSVData->maCtrlData.mpPinImgList->GetImage( nId );
-}
-
 namespace vcl {
 
 void Window::ImplCalcSymbolRect( Rectangle& rRect )
@@ -228,8 +192,6 @@ BorderWindowHitTest ImplBorderWindowView::ImplHitTest( ImplBorderFrameData* pDat
             return BorderWindowHitTest::Hide;
         else if ( pData->maHelpRect.IsInside( rPos ) )
             return BorderWindowHitTest::Help;
-        else if ( pData->maPinRect.IsInside( rPos ) )
-            return BorderWindowHitTest::Pin;
         else
             return BorderWindowHitTest::Title;
     }
@@ -367,7 +329,7 @@ OUString ImplBorderWindowView::ImplRequestHelp( ImplBorderFrameData* pData,
         else if ( nHitTest & BorderWindowHitTest::Pin )
         {
             nHelpId     = SV_HELPTEXT_ALWAYSVISIBLE;
-            rHelpRect   = pData->maPinRect;
+            rHelpRect   = Rectangle();
         }
         else if ( nHitTest & BorderWindowHitTest::Title )
         {
@@ -398,7 +360,6 @@ long ImplBorderWindowView::ImplCalcTitleWidth( const ImplBorderFrameData* pData 
 
     ImplBorderWindow* pBorderWindow = pData->mpBorderWindow;
     long nTitleWidth = pBorderWindow->GetTextWidth( pBorderWindow->GetText() )+6;
-    nTitleWidth += pData->maPinRect.GetWidth();
     nTitleWidth += pData->maCloseRect.GetWidth();
     nTitleWidth += pData->maRollRect.GetWidth();
     nTitleWidth += pData->maDockRect.GetWidth();
@@ -1205,21 +1166,10 @@ bool ImplStdBorderWindowView::Tracking( const TrackingEvent& rTEvt )
         }
         else if ( maFrameData.mnHitTest & BorderWindowHitTest::Pin )
         {
-            if ( maFrameData.maPinRect.IsInside( aMousePos ) )
+            if ( maFrameData.mnPinState & DrawButtonFlags::Pressed )
             {
-                if ( !(maFrameData.mnPinState & DrawButtonFlags::Pressed) )
-                {
-                    maFrameData.mnPinState |= DrawButtonFlags::Pressed;
-                    pBorderWindow->InvalidateBorder();
-                }
-            }
-            else
-            {
-                if ( maFrameData.mnPinState & DrawButtonFlags::Pressed )
-                {
-                    maFrameData.mnPinState &= ~DrawButtonFlags::Pressed;
-                    pBorderWindow->InvalidateBorder();
-                }
+                maFrameData.mnPinState &= ~DrawButtonFlags::Pressed;
+                pBorderWindow->InvalidateBorder();
             }
         }
         else
@@ -1465,7 +1415,6 @@ void ImplStdBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHeigh
         }
         else
         {
-            pData->maPinRect.SetEmpty();
             pData->maCloseRect.SetEmpty();
             pData->maDockRect.SetEmpty();
             pData->maMenuRect.SetEmpty();
@@ -1479,7 +1428,6 @@ void ImplStdBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHeigh
     else
     {
         pData->maTitleRect.SetEmpty();
-        pData->maPinRect.SetEmpty();
         pData->maCloseRect.SetEmpty();
         pData->maDockRect.SetEmpty();
         pData->maMenuRect.SetEmpty();
@@ -1587,9 +1535,6 @@ void ImplStdBorderWindowView::DrawWindow(vcl::RenderContext& rRenderContext, con
             aInRect.Left()  += 2;
             aInRect.Right() -= 2;
 
-            if (!pData->maPinRect.IsEmpty())
-                aInRect.Left() = pData->maPinRect.Right() + 2;
-
             if (!pData->maHelpRect.IsEmpty())
                 aInRect.Right() = pData->maHelpRect.Left() - 2;
             else if (!pData->maRollRect.IsEmpty())
@@ -1664,25 +1609,6 @@ void ImplStdBorderWindowView::DrawWindow(vcl::RenderContext& rRenderContext, con
         if (pOffset)
             aSymbolRect.Move(pOffset->X(), pOffset->Y());
         ImplDrawBrdWinSymbolButton(&rRenderContext, aSymbolRect, SymbolType::HELP, pData->mnHelpState);
-    }
-    if (!pData->maPinRect.IsEmpty())
-    {
-        Image aImage;
-        ImplGetPinImage(pData->mnPinState, pBorderWindow->mbPinned, aImage);
-        Size  aImageSize = aImage.GetSizePixel();
-        long  nRectHeight = pData->maPinRect.GetHeight();
-        Point aPos(pData->maPinRect.TopLeft());
-        if (pOffset)
-            aPos.Move(pOffset->X(), pOffset->Y());
-        if (nRectHeight < aImageSize.Height())
-        {
-            rRenderContext.DrawImage(aPos, Size( aImageSize.Width(), nRectHeight ), aImage);
-        }
-        else
-        {
-            aPos.Y() += (nRectHeight-aImageSize.Height()) / 2;
-            rRenderContext.DrawImage(aPos, aImage);
-        }
     }
 }
 

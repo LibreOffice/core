@@ -180,7 +180,6 @@ struct ImplBorderFrameData
     VclPtr<ImplBorderWindow> mpBorderWindow;
     VclPtr<OutputDevice>     mpOutDev;
     Rectangle                maTitleRect;
-    Rectangle                maPinRect;
     Rectangle                maCloseRect;
     Rectangle                maRollRect;
     Rectangle                maDockRect;
