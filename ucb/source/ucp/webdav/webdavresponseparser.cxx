@@ -20,7 +20,7 @@
  *************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_ucb.hxx"
+#include "precompiled_webdav.hxx"
 
 #include "webdavresponseparser.hxx"
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>

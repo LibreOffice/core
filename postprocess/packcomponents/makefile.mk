@@ -49,7 +49,6 @@ my_components = \
     analysis \
     basprov \
     bib \
-    cached1 \
     calc \
     chartcontroller \
     chartmodel \
@@ -123,6 +122,17 @@ my_components = \
     component/unotools/util/utl \
     component/uui/util/uui \
     component/toolkit/util/ootk \
+    component/ucb/source/cacher/cached1 \
+    component/ucb/source/core/ucb1 \
+    component/ucb/source/sorter/srtrs1 \
+    component/ucb/source/ucp/expand/ucpexpand1 \
+    component/ucb/source/ucp/ext/ucpext \
+    component/ucb/source/ucp/file/ucpfile1 \
+    component/ucb/source/ucp/ftp/ucpftp1 \
+    component/ucb/source/ucp/hierarchy/ucphier1 \
+    component/ucb/source/ucp/package/ucppkg1 \
+    component/ucb/source/ucp/tdoc/ucptdoc1 \
+    component/ucb/source/ucp/webdav/ucpdav1 \
     component/unoxml/source/rdf/unordf \
     component/unoxml/source/service/unoxml \
     component/writerfilter/util/writerfilter \
@@ -169,22 +179,12 @@ my_components = \
     scriptframe \
     sdbc2 \
     spl \
-    srtrs1 \
     stringresource \
     svgfilter \
     syssh \
     t602filter \
     tvhlp1 \
-    ucb1 \
     ucpchelp1 \
-    ucpdav1 \
-    ucpexpand1 \
-    ucpext \
-    ucpfile1 \
-    ucpftp1 \
-    ucphier1 \
-    ucppkg1 \
-    ucptdoc1 \
     updatefeed \
     updchk \
     vbaevents \
@@ -254,11 +254,11 @@ my_components += gconfbe1
 .END
 
 .IF "$(ENABLE_GIO)" != ""
-my_components += ucpgio
+my_components += component/ucb/source/ucp/gio/ucpgio
 .END
 
 .IF "$(ENABLE_GNOMEVFS)" != ""
-my_components += ucpgvfs
+my_components += component/ucb/source/ucp/gvfs/ucpgvfs
 .END
 
 .IF "$(ENABLE_KAB)" != ""

@@ -21,47 +21,40 @@
 
 
 
-PRJ=..$/..
-PRJNAME=ucb
-TARGET=srtrs
-ENABLE_EXCEPTIONS=TRUE
+$(eval $(call gb_Module_Module,ucb))
 
-# Version
-UCB_MAJOR=1
+$(eval $(call gb_Module_add_targets,ucb,\
+	Library_cached1 \
+	Library_srtrs1 \
+	Library_ucb1 \
+	Library_ucpdav1 \
+	Library_ucpexpand1 \
+	Library_ucpext \
+	Library_ucpfile1 \
+	Library_ucpftp1 \
+	Library_ucphier1 \
+	Library_ucppkg1 \
+	Library_ucptdoc1 \
+	Package_xml \
+))
 
-.INCLUDE: settings.mk
-.IF "$(L10N_framework)"==""
+ifeq ($(ENABLE_GNOMEVFS),TRUE)
+$(eval $(call gb_Module_add_targets,ucb,\
+	Library_ucpgvfs1 \
+))
+endif
 
-SLOFILES=\
-    $(SLO)$/sortdynres.obj \
-    $(SLO)$/sortresult.obj \
-    $(SLO)$/sortmain.obj
+ifeq ($(ENABLE_GIO),TRUE)
+$(eval $(call gb_Module_add_targets,ucb,\
+	Library_ucpgio1 \
+))
+endif
 
-LIB1TARGET=$(SLB)$/_$(TARGET).lib
-LIB1OBJFILES=$(SLOFILES)
+ifneq ($(OOO_JUNIT_JAR),)
+$(eval $(call gb_Module_add_subsequentcheck_targets,ucb,\
+	JunitTest_ucb_complex \
+	JunitTest_ucb_unoapi \
+))
+endif
 
-SHL1TARGET=$(TARGET)$(UCB_MAJOR)
-SHL1DEF=$(MISC)$/$(SHL1TARGET).def
-SHL1STDLIBS=\
-    $(CPPUHELPERLIB) \
-    $(CPPULIB) \
-    $(SALLIB)
-
-SHL1LIBS=$(LIB1TARGET)
-SHL1IMPLIB=i$(TARGET)
-
-SHL1VERSIONMAP=$(SOLARENV)/src/component.map
-
-DEF1NAME=$(SHL1TARGET)
-.ENDIF # L10N_framework
-
-.INCLUDE: target.mk
-
-
-ALLTAR : $(MISC)/srtrs1.component
-
-$(MISC)/srtrs1.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
-        srtrs1.component
-    $(XSLTPROC) --nonet --stringparam uri \
-        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
-        $(SOLARENV)/bin/createcomponent.xslt srtrs1.component
+# vim: set noet sw=4 ts=4:

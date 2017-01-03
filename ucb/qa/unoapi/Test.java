@@ -25,6 +25,7 @@ package org.openoffice.ucb.qa.unoapi;
 
 import org.openoffice.Runner;
 import org.openoffice.test.OfficeConnection;
+import org.openoffice.test.Argument;
 import static org.junit.Assert.*;
 
 public final class Test {
@@ -41,7 +42,7 @@ public final class Test {
     @org.junit.Test public void test() {
         assertTrue(
             Runner.run(
-                "-sce", "ucb.sce", "-xcl", "knownissues.xcl", "-cs",
+                "-sce", Argument.get("sce"), "-xcl", Argument.get("xcl"), "-cs",
                 connection.getDescription()));
     }
 

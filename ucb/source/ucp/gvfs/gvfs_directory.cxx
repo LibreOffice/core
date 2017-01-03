@@ -21,8 +21,6 @@
 
 
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_ucb.hxx"
 /*
  * This file pinched from webdavdatasupplier (etc.)
  * cut & paste + new getData impl. & collate ResultSet code.

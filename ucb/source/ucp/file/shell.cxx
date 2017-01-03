@@ -22,7 +22,7 @@
 
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_ucb.hxx"
+#include "precompiled_file.hxx"
 #ifndef INCLUDED_STL_STACK
 #include <stack>
 #define INCLUDED_STL_STACK

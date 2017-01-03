@@ -21,17 +21,40 @@
 
 
 
-PRJ=..$/..
-PRJNAME=ucb
-TARGET=regexp
-AUTOSEG=true
-ENABLE_EXCEPTIONS=true
+$(eval $(call gb_Library_Library,cached1))
 
-.INCLUDE : settings.mk
-.IF "$(L10N_framework)"==""
+$(eval $(call gb_Library_add_precompiled_header,cached1,$(SRCDIR)/ucb/inc/pch/precompiled_cacher))
 
-SLOFILES=\
-    $(SLO)$/regexp.obj
-.ENDIF	# L10N_framework
+$(eval $(call gb_Library_set_componentfile,cached1,ucb/source/cacher/cached1))
 
-.INCLUDE : target.mk
+$(eval $(call gb_Library_set_include,cached1,\
+        $$(INCLUDE) \
+	-I$(SRCDIR)/ucb/inc/pch \
+	-I$(SRCDIR)/ucb/source/inc \
+))
+
+$(eval $(call gb_Library_add_api,cached1,\
+	offapi \
+	udkapi \
+))
+
+$(eval $(call gb_Library_add_linked_libs,cached1,\
+	cppuhelper \
+	cppu \
+	sal \
+	stl \
+	$(gb_STDLIBS) \
+))
+
+
+$(eval $(call gb_Library_add_exception_objects,cached1,\
+	ucb/source/cacher/contentresultsetwrapper \
+	ucb/source/cacher/cachedcontentresultsetstub \
+	ucb/source/cacher/cachedcontentresultset \
+	ucb/source/cacher/dynamicresultsetwrapper \
+	ucb/source/cacher/cacheddynamicresultsetstub \
+	ucb/source/cacher/cacheddynamicresultset \
+	ucb/source/cacher/cacheserv \
+))
+
+# vim: set noet sw=4 ts=4:

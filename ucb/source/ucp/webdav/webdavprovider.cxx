@@ -22,7 +22,7 @@
 
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_ucb.hxx"
+#include "precompiled_webdav.hxx"
 
 /**************************************************************************
                                 TODO
@@ -39,6 +39,9 @@
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <apr_version.h>
+#include <apu_version.h>
+#include <serf.h>
 
 using namespace com::sun::star;
 using namespace http_dav_ucp;
@@ -50,17 +53,20 @@ rtl::OUString &WebDAVUserAgent::operator()() const
     aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( "Apache " ));
     aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( "$ooName/$ooSetupVersion" ));
 #if OSL_DEBUG_LEVEL > 0
-#ifdef APR_VERSION
-    aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( " apr/" APR_VERSION ));
-#endif
+    aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( " apr/" ) );
+    aBuffer.appendAscii(apr_version_string());
 
-#ifdef APR_UTIL_VERSION
-    aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( " apr-util/" APR_UTIL_VERSION ));
-#endif
+    aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( " apr-util/" ) );
+    aBuffer.appendAscii(apu_version_string());
 
-#ifdef SERF_VERSION
-    aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( " serf/" SERF_VERSION ));
-#endif
+    int major, minor, patch;
+    serf_lib_version(&major, &minor, &patch);
+    aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( " serf/" ) );
+    aBuffer.append(major);
+    aBuffer.append( L'.' );
+    aBuffer.append(minor);
+    aBuffer.append( L'.' );
+    aBuffer.append(patch);
 #endif
     static rtl::OUString aUserAgent( aBuffer.makeStringAndClear() );
     return aUserAgent;

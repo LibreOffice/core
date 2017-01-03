@@ -22,7 +22,7 @@
 
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_ucb.hxx"
+#include "precompiled_cacher.hxx"
 
 #include <cacheddynamicresultsetstub.hxx>
 #include <com/sun/star/sdbc/XResultSet.hpp>

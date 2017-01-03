@@ -21,38 +21,36 @@
 
 
 
-.IF "$(OOO_SUBSEQUENT_TESTS)" == ""
-nothing .PHONY:
-.ELSE
+$(eval $(call gb_Library_Library,srtrs1))
 
-PRJ = ../../..
-PRJNAME = UCB
-TARGET = qa_complex_ucb
+$(eval $(call gb_Library_add_precompiled_header,srtrs1,$(SRCDIR)/ucb/inc/pch/precompiled_sorter))
 
-.IF "$(OOO_JUNIT_JAR)" != ""
-PACKAGE = complex/ucb
-JAVATESTFILES = \
-    UCB.java
+$(eval $(call gb_Library_set_componentfile,srtrs1,ucb/source/sorter/srtrs1))
 
-JAVAFILES = $(JAVATESTFILES) 
+$(eval $(call gb_Library_set_include,srtrs1,\
+        $$(INCLUDE) \
+	-I$(SRCDIR)/ucb/inc/pch \
+	-I$(SRCDIR)/ucb/source/inc \
+))
 
-JARFILES = OOoRunner.jar ridl.jar test.jar unoil.jar jurt.jar
-EXTRAJARFILES = $(OOO_JUNIT_JAR)
+$(eval $(call gb_Library_add_api,srtrs1,\
+	offapi \
+	udkapi \
+))
 
-# Sample how to debug
-# JAVAIFLAGS=-Xdebug  -Xrunjdwp:transport=dt_socket,server=y,address=9003,suspend=y
-.END
-
-.INCLUDE: settings.mk
-.INCLUDE: target.mk
-.INCLUDE: installationtest.mk
-
-ALLTAR : javatest
-
-.END
+$(eval $(call gb_Library_add_linked_libs,srtrs1,\
+	cppuhelper \
+	cppu \
+	sal \
+	stl \
+	$(gb_STDLIBS) \
+))
 
 
+$(eval $(call gb_Library_add_exception_objects,srtrs1,\
+	ucb/source/sorter/sortdynres \
+	ucb/source/sorter/sortresult \
+	ucb/source/sorter/sortmain \
+))
 
-
-
-
+# vim: set noet sw=4 ts=4:

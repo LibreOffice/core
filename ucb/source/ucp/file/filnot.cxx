@@ -22,7 +22,7 @@
 
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_ucb.hxx"
+#include "precompiled_file.hxx"
 #include <com/sun/star/ucb/XContent.hpp>
 #include <com/sun/star/ucb/ContentAction.hpp>
 #include <com/sun/star/beans/PropertySetInfoChange.hpp>

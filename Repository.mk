@@ -55,6 +55,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     basctl \
     basebmp \
     basegfx \
+    cached1 \
     canvastools \
     communi \
     cppcanvas \
@@ -124,6 +125,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     sdd \
     sdui \
     sdfilt \
+    srtrs1 \
     sysdtran \
     sysdtrans \
     textconversiondlgs \
@@ -134,6 +136,14 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     unoxml \
     vbahelper \
     writerfilter \
+    ucb1 \
+    ucpdav1 \
+    ucpfile1 \
+    ucpftp1 \
+    ucpgio1 \
+    ucpgvfs1 \
+    ucphier1 \
+    ucppkg1 \
     vcl \
     vclplug_gen \
     vclplug_gtk \
@@ -203,6 +213,9 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
     vbaswobj \
     msforms \
     vclcanvas \
+    ucpext \
+    ucpexpand1 \
+    ucptdoc1 \
     uuresolver \
     writerfilter_debug \
 ))

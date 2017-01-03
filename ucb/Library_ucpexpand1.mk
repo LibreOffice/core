@@ -21,26 +21,34 @@
 
 
 
-.IF "$(OOO_SUBSEQUENT_TESTS)" == ""
-nothing .PHONY:
-.ELSE
+$(eval $(call gb_Library_Library,ucpexpand1))
 
-PRJ = ../..
-PRJNAME = ucb
-TARGET = qa_unoapi
+$(eval $(call gb_Library_add_precompiled_header,ucpexpand1,$(SRCDIR)/ucb/inc/pch/precompiled_ftp))
 
-.IF "$(OOO_JUNIT_JAR)" != ""
-PACKAGE = org/openoffice/ucb/qa/unoapi
-JAVATESTFILES = Test.java
-JAVAFILES = $(JAVATESTFILES)
-JARFILES = OOoRunner.jar ridl.jar test.jar
-EXTRAJARFILES = $(OOO_JUNIT_JAR)
-.END
+$(eval $(call gb_Library_set_componentfile,ucpexpand1,ucb/source/ucp/expand/ucpexpand1))
 
-.INCLUDE: settings.mk
-.INCLUDE: target.mk
-.INCLUDE: installationtest.mk
+$(eval $(call gb_Library_set_include,ucpexpand1,\
+        $$(INCLUDE) \
+	-I$(SRCDIR)/ucb/inc/pch \
+	-I$(SRCDIR)/ucb/source/inc \
+))
 
-ALLTAR : javatest
+$(eval $(call gb_Library_add_api,ucpexpand1,\
+	offapi \
+	udkapi \
+))
 
-.END
+$(eval $(call gb_Library_add_linked_libs,ucpexpand1,\
+	cppuhelper \
+	cppu \
+	sal \
+	stl \
+	ucbhelper \
+	$(gb_STDLIBS) \
+))
+
+$(eval $(call gb_Library_add_exception_objects,ucpexpand1,\
+	ucb/source/ucp/expand/ucpexpand \
+))
+
+# vim: set noet sw=4 ts=4:

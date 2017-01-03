@@ -21,45 +21,24 @@
 
 
 
-PRJ = ..$/..$/..
-PRJNAME = ucb
-UCPEXPAND_MAJOR = 1
-TARGET = ucpexpand$(UCPEXPAND_MAJOR).uno
-ENABLE_EXCEPTIONS = TRUE
-NO_BSYMBOLIC = TRUE
+PRJ=..
+TARGET=prj
 
 .INCLUDE : settings.mk
-DLLPRE =
 
-.IF "$(L10N_framework)"==""
+.IF "$(VERBOSE)"!=""
+VERBOSEFLAG :=
+.ELSE
+VERBOSEFLAG := -s
+.ENDIF
 
-SLOFILES= \
-        $(SLO)$/ucpexpand.obj
+.IF "$(DEBUG)"!=""
+DEBUG_ARGUMENT=DEBUG=$(DEBUG)
+.ELIF "$(debug)"!=""
+DEBUG_ARGUMENT=debug=$(debug)
+.ELSE
+DEBUG_ARGUMENT=
+.ENDIF
 
-SHL1STDLIBS = \
-        $(UCBHELPERLIB)        	\
-        $(CPPUHELPERLIB)        \
-        $(CPPULIB)              \
-        $(SALLIB)
-
-SHL1VERSIONMAP = $(SOLARENV)/src/component.map
-SHL1TARGET = $(TARGET)
-
-SHL1DEPN =
-SHL1IMPLIB = i$(TARGET)
-SHL1LIBS = $(SLB)$/$(TARGET).lib
-SHL1DEF = $(MISC)$/$(SHL1TARGET).def
-
-DEF1NAME = $(SHL1TARGET)
-
-.ENDIF # L10N_framework
-
-.INCLUDE : target.mk
-
-ALLTAR : $(MISC)/ucpexpand1.component
-
-$(MISC)/ucpexpand1.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
-        ucpexpand1.component
-    $(XSLTPROC) --nonet --stringparam uri \
-        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
-        $(SOLARENV)/bin/createcomponent.xslt ucpexpand1.component
+all:
+    cd $(PRJ) && $(GNUMAKE) $(VERBOSEFLAG) -r -j$(MAXPROCESS) $(gb_MAKETARGET) $(DEBUG_ARGUMENT) && $(GNUMAKE) $(VERBOSEFLAG) -r deliverlog

@@ -23,7 +23,7 @@
 
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_ucb.hxx"
+#include "precompiled_ftp.hxx"
 #include <com/sun/star/ucb/UnsupportedNameClashException.hpp>
 #include <com/sun/star/ucb/NameClash.hpp>
 #include "ftpintreq.hxx"

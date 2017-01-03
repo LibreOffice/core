@@ -22,7 +22,7 @@
 
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_ucb.hxx"
+#include "precompiled_file.hxx"
 #include "com/sun/star/io/IOException.hpp"
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "osl/diagnose.h"

@@ -21,7 +21,7 @@
 
 
 
-#include "precompiled_ucb.hxx"
+#include "precompiled_ext.hxx"
 
 #include "ucpext_datasupplier.hxx"
 #include "ucpext_content.hxx"

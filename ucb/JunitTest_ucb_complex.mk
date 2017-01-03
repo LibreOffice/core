@@ -20,25 +20,23 @@
 #**************************************************************
 
 
-PRJ=..
 
-PRJNAME=ucb
-TARGET=inc
+$(eval $(call gb_JunitTest_JunitTest,ucb_complex,SRCDIR))
 
-# --- Settings -----------------------------------------------------
+$(eval $(call gb_JunitTest_add_jars,ucb_complex,\
+	$(OUTDIR)/bin/OOoRunner.jar \
+	$(OUTDIR)/bin/ridl.jar \
+	$(OUTDIR)/bin/test.jar \
+	$(OUTDIR)/bin/unoil.jar \
+	$(OUTDIR)/bin/jurt.jar \
+))
 
-.INCLUDE :  settings.mk
+$(eval $(call gb_JunitTest_add_sourcefiles,ucb_complex,\
+	ucb/qa/complex/ucb/UCB \
+))
 
-# --- Files --------------------------------------------------------
-# --- Targets -------------------------------------------------------
+$(eval $(call gb_JunitTest_add_classes,ucb_complex,\
+	complex.ucb.UCB \
+))
 
-.INCLUDE :  target.mk
-.IF "$(L10N_framework)"==""
-
-.IF "$(ENABLE_PCH)"!=""
-ALLTAR : \
-    $(SLO)$/precompiled.pch \
-    $(SLO)$/precompiled_ex.pch
-    
-.ENDIF			# "$(ENABLE_PCH)"!=""
-.ENDIF 		# L10N_framework
+# vim: set noet sw=4 ts=4:

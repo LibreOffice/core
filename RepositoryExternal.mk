@@ -362,4 +362,88 @@ endef
 endif # SYSTEM_OPENSSL
 
 
+ifeq ($(SYSTEM_APR),YES)
+
+define gb_LinkTarget__use_apr
+$(call gb_LinkTarget_add_defs,$(1),\
+        -DSYSTEM_APR \
+)
+$(call gb_LinkTarget_set_include,$(1),\
+    $$(INCLUDE) \
+    $(APR_CFLAGS) \
+)       
+$(call gb_LinkTarget_add_libs,$(1),$(APR_LIBS))
+endef
+
+else # !SYSTEM_APR
+
+$(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
+    apr-1 \
+))
+
+define gb_LinkTarget__use_apr
+$(call gb_LinkTarget_add_linked_libs,$(1),\
+    apr-1 \
+)
+endef
+
+endif # SYSTEM_APR
+
+
+ifeq ($(SYSTEM_APR_UTIL),YES)
+
+define gb_LinkTarget__use_apr_util
+$(call gb_LinkTarget_add_defs,$(1),\
+    -DSYSTEM_APR_UTIL \
+)
+$(call gb_LinkTarget_set_include,$(1),\
+    $$(INCLUDE) \
+    $(APR_UTIL_CFLAGS) \
+)
+$(call gb_LinkTarget_add_libs,$(1),$(APR_UTIL_LIBS))
+endef
+
+else # !SYSTEM_APR_UTIL
+
+$(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
+    aprutil-1 \
+))
+
+define gb_LinkTarget__use_apr_util
+$(call gb_LinkTarget_add_linked_libs,$(1),\
+    aprutil-1 \
+)
+endef
+
+endif # SYSTEM_APR_UTIL
+
+
+ifeq ($(SYSTEM_SERF),YES)
+
+define gb_LinkTarget__use_serf
+$(call gb_LinkTarget_add_defs,$(1),\
+    -DSYSTEM_SERF \
+)
+$(call gb_LinkTarget_set_include,$(1),\
+    $$(INCLUDE) \
+    $(SERF_CFLAGS) \
+)
+$(call gb_LinkTarget_add_libs,$(1),$(SERF_LIBS))
+endef
+
+else # !SYSTEM_SERF
+
+$(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
+    serf-1 \
+))
+
+define gb_LinkTarget__use_serf
+$(call gb_LinkTarget_add_linked_libs,$(1),\
+    serf-1 \
+)
+endef
+
+endif # SYSTEM_SERF
+
+
 # vim: set noet sw=4 ts=4:
