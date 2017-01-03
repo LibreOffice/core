@@ -389,7 +389,8 @@ IMPL_STATIC_LINK( SwSendMailDialog, StartSendMails, void*, pDialog, void )
 
 IMPL_LINK( SwSendMailDialog, RemoveThis, Idle*, pTimer, void )
 {
-    if( m_pImpl->xMailDispatcher.is() )
+    if( m_pImpl->xMailDispatcher.is() &&
+        !m_pImpl->xMailDispatcher.is())
     {
         if(m_pImpl->xMailDispatcher->isStarted())
             m_pImpl->xMailDispatcher->stop();

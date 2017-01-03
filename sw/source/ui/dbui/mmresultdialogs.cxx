@@ -1248,7 +1248,6 @@ IMPL_LINK(SwMMResultEmailDialog, SendDocumentsHdl_Impl, Button*, pButton, void)
     pDlg->EnableDesctruction();
     ::osl::File::remove( sTargetTempURL );
 
-    endDialog(pButton);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
