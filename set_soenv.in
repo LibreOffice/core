@@ -425,7 +425,7 @@ elsif ( $platform =~ m/freebsd/ )
       else {
          print "Setting FreeBSD PPC specific values... ";
          $outfile = "FreeBSDPPCEnv.Set"; 
-         $OUTPATH = "unxlngppc";
+         $OUTPATH = "unxfbsdppc";
          $CPUNAME = "POWERPC";
 
          if ( $JDK eq "gcj" ) {
