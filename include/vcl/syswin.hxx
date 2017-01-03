@@ -155,7 +155,6 @@ private:
     Size            maOrgSize;
     Size            maRollUpOutSize;
     Size            maMinOutSize;
-    bool            mbPinned;
     bool            mbRollUp;
     bool            mbRollFunc;
     bool            mbDockBtn;
@@ -215,9 +214,6 @@ public:
 
     void            ShowTitleButton( TitleButton nButton, bool bVisible );
     bool            IsTitleButtonVisible( TitleButton nButton ) const;
-
-    void            SetPin( bool bPin );
-    bool            IsPinned() const { return mbPinned; }
 
     void            RollUp();
     void            RollDown();

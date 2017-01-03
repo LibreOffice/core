@@ -299,7 +299,6 @@ void DockingWindow::ImplInitDockingWindowData()
     mbDragFull     = false;
     mbLastFloatMode = false;
     mbStartFloat   = false;
-    mbPinned       = false;
     mbRollUp       = false;
     mbDockBtn      = false;
     mbHideBtn      = false;
@@ -751,7 +750,6 @@ void DockingWindow::SetFloatingMode( bool bFloatMode )
                 // pass on DockingData to FloatingWindow
                 pWin->ShowTitleButton( TitleButton::Docking, mbDockBtn );
                 pWin->ShowTitleButton( TitleButton::Hide, mbHideBtn );
-                pWin->SetPin( mbPinned );
                 if ( mbRollUp )
                     pWin->RollUp();
                 else
@@ -780,7 +778,6 @@ void DockingWindow::SetFloatingMode( bool bFloatMode )
                 maFloatPos      = mpFloatWin->GetPosPixel();
                 mbDockBtn       = mpFloatWin->IsTitleButtonVisible( TitleButton::Docking );
                 mbHideBtn       = mpFloatWin->IsTitleButtonVisible( TitleButton::Hide );
-                mbPinned        = mpFloatWin->IsPinned();
                 mbRollUp        = mpFloatWin->IsRollUp();
                 maRollUpOutSize = mpFloatWin->GetRollUpOutputSizePixel();
                 maMinOutSize    = mpFloatWin->GetMinOutputSizePixel();

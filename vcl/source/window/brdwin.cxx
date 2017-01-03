@@ -1637,7 +1637,6 @@ void ImplBorderWindow::ImplInit( vcl::Window* pParent,
     mnMaxHeight     = SHRT_MAX;
     mnRollHeight    = 0;
     mnOrgMenuHeight = 0;
-    mbPinned        = false;
     mbRollUp        = false;
     mbMenuHide      = false;
     mbDockBtn       = false;
@@ -1955,12 +1954,6 @@ void ImplBorderWindow::SetBorderStyle( WindowBorderStyle nStyle )
         mnBorderStyle = nStyle;
         UpdateView( false, ImplGetWindow()->GetOutputSizePixel() );
     }
-}
-
-void ImplBorderWindow::SetPin( bool bPin )
-{
-    mbPinned = bPin;
-    InvalidateBorder();
 }
 
 void ImplBorderWindow::SetRollUp( bool bRollUp, const Size& rSize )

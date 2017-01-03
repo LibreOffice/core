@@ -96,7 +96,6 @@ private:
     bool                    mbFloatWindow;
     bool                    mbSmallOutBorder;
     bool                    mbFrameBorder;
-    bool                    mbPinned;
     bool                    mbRollUp;
     bool                    mbMenuHide;
     bool                    mbDockBtn;
@@ -145,7 +144,6 @@ public:
     void                    SetTitleType( BorderWindowTitleType nTitleType, const Size& rSize );
     void                    SetBorderStyle( WindowBorderStyle nStyle );
     WindowBorderStyle       GetBorderStyle() const { return mnBorderStyle; }
-    void                    SetPin( bool bPin );
     void                    SetRollUp( bool bRollUp, const Size& rSize );
     void                    SetCloseButton();
     void                    SetDockButton( bool bDockButton );

@@ -70,7 +70,6 @@ SystemWindow::ImplData::~ImplData()
 
 SystemWindow::SystemWindow(WindowType nType)
     : Window(nType)
-    , mbPinned(false)
     , mbRollUp(false)
     , mbRollFunc(false)
     , mbDockBtn(false)
@@ -370,16 +369,6 @@ bool SystemWindow::IsTitleButtonVisible( TitleButton nButton ) const
         return mbDockBtn;
     else /* if ( nButton == TitleButton::Hide ) */
         return mbHideBtn;
-}
-
-void SystemWindow::SetPin( bool bPin )
-{
-    if ( bPin != mbPinned )
-    {
-        mbPinned = bPin;
-        if ( mpWindowImpl->mpBorderWindow )
-            static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->SetPin( bPin );
-    }
 }
 
 void SystemWindow::RollUp()
