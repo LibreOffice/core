@@ -79,6 +79,7 @@ public:
     void testCommentCallback();
     void testUndoLimiting();
     void testUndoRepairDispatch();
+    void testInsertGraphicInvalidations();
 
     CPPUNIT_TEST_SUITE(ScTiledRenderingTest);
     CPPUNIT_TEST(testRowColumnSelections);
@@ -103,6 +104,7 @@ public:
     CPPUNIT_TEST(testCommentCallback);
     CPPUNIT_TEST(testUndoLimiting);
     CPPUNIT_TEST(testUndoRepairDispatch);
+    CPPUNIT_TEST(testInsertGraphicInvalidations);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1264,7 +1266,49 @@ void ScTiledRenderingTest::testUndoRepairDispatch()
 
     mxComponent->dispose();
     mxComponent.clear();
+    comphelper::LibreOfficeKit::setActive(false);
+}
 
+void ScTiledRenderingTest::testInsertGraphicInvalidations()
+{
+    comphelper::LibreOfficeKit::setActive();
+
+    ScModelObj* pModelObj = createDoc("small.ods");
+    CPPUNIT_ASSERT(pModelObj);
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    CPPUNIT_ASSERT(pViewData);
+
+    // view
+    ViewCallback aView;
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView);
+
+    // we need to paint a tile in the view for triggering the tile invalidation solution
+    int nCanvasWidth = 256;
+    int nCanvasHeight = 256;
+    std::vector<unsigned char> aBuffer(nCanvasWidth * nCanvasHeight * 4);
+    ScopedVclPtrInstance<VirtualDevice> pDevice(nullptr, Size(1, 1), DeviceFormat::DEFAULT);
+    pDevice->SetOutputSizePixelScaleOffsetAndBuffer(Size(nCanvasWidth, nCanvasHeight), Fraction(1.0), Point(), aBuffer.data());
+    pModelObj->paintTile(*pDevice.get(), nCanvasWidth, nCanvasHeight, /*nTilePosX=*/0, /*nTilePosY=*/0, /*nTileWidth=*/3840, /*nTileHeight=*/3840);
+    Scheduler::ProcessEventsToIdle();
+
+    // insert an image in view and see if both views are invalidated
+    aView.m_bInvalidateTiles = false;
+    uno::Sequence<beans::PropertyValue> aArgs(1);
+    aArgs[0].Name = OUString::fromUtf8("FileName");
+    aArgs[0].Value <<= (m_directories.getURLFromSrc(DATA_DIRECTORY) + "smile.png");
+    comphelper::dispatchCommand(".uno:InsertGraphic", aArgs);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(aView.m_bInvalidateTiles);
+
+    // undo image insertion in view and see if both views are invalidated
+    aView.m_bInvalidateTiles = false;
+    uno::Sequence<beans::PropertyValue> aArgs2;
+    comphelper::dispatchCommand(".uno:Undo", aArgs2);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(aView.m_bInvalidateTiles);
+
+    mxComponent->dispose();
+    mxComponent.clear();
     comphelper::LibreOfficeKit::setActive(false);
 }
 
