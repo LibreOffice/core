@@ -264,7 +264,7 @@ public:
     sal_Int32 CreateLink( const Rectangle& rRect, sal_Int32 nPageNr = -1 );
 
     /// Create a Screen annotation.
-    sal_Int32 CreateScreen(const Rectangle& rRect);
+    sal_Int32 CreateScreen(const Rectangle& rRect, sal_Int32 nPageNr);
 
     /** Set the destination for a link
         <p>will change a URL type link to a dest link if necessary</p>
