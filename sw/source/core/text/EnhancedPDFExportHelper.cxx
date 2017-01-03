@@ -75,6 +75,7 @@
 #include <stack>
 
 #include <tools/globname.hxx>
+#include <svx/svdobj.hxx>
 
 using namespace ::com::sun::star;
 
@@ -1735,11 +1736,11 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
 
         // HYPERLINKS (Graphics, Frames, OLEs )
 
-        const SwFrameFormats* pTable = pDoc->GetSpzFrameFormats();
+        SwFrameFormats* pTable = pDoc->GetSpzFrameFormats();
         const size_t nSpzFrameFormatsCount = pTable->size();
         for( size_t n = 0; n < nSpzFrameFormatsCount; ++n )
         {
-            const SwFrameFormat* pFrameFormat = (*pTable)[n];
+            SwFrameFormat* pFrameFormat = (*pTable)[n];
             const SfxPoolItem* pItem;
             if ( RES_DRAWFRMFMT != pFrameFormat->Which() &&
                  SfxItemState::SET == pFrameFormat->GetAttrSet().GetItemState( RES_URL, true, &pItem ) )
@@ -1806,6 +1807,32 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                                 if ( pTNd )
                                     MakeHeaderFooterLinks( *pPDFExtOutDevData, *pTNd, aLinkRect, nDestId, aURL, bIntern );
                             }
+                        }
+                    }
+                }
+            }
+            else if (pFrameFormat->Which() == RES_DRAWFRMFMT)
+            {
+                // Handle linked videos.
+                if (SdrObject* pObject = pFrameFormat->FindRealSdrObject())
+                {
+                    SwRect aSnapRect = pObject->GetSnapRect();
+                    std::vector<sal_Int32> aScreenPageNums = CalcOutputPageNums(aSnapRect);
+                    if (aScreenPageNums.empty())
+                        continue;
+
+                    uno::Reference<drawing::XShape> xShape(pObject->getUnoShape(), uno::UNO_QUERY);
+                    if (xShape->getShapeType() == "com.sun.star.drawing.MediaShape")
+                    {
+                        uno::Reference<beans::XPropertySet> xShapePropSet(xShape, uno::UNO_QUERY);
+                        OUString aMediaURL;
+                        xShapePropSet->getPropertyValue("MediaURL") >>= aMediaURL;
+                        if (!aMediaURL.isEmpty())
+                        {
+                            const SwPageFrame* pCurrPage = mrSh.GetLayout()->GetPageAtPos(aSnapRect.Center());
+                            Rectangle aPDFRect(SwRectToPDFRect(pCurrPage, aSnapRect.SVRect()));
+                            sal_Int32 nScreenId = pPDFExtOutDevData->CreateScreen(aPDFRect);
+                            pPDFExtOutDevData->SetScreenURL(nScreenId, aMediaURL);
                         }
                     }
                 }
