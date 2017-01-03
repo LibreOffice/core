@@ -2226,7 +2226,7 @@ void ScTable::SetError( SCCOL nCol, SCROW nRow, FormulaError nError)
 
 void ScTable::UpdateInsertTabAbs(SCTAB nTable)
 {
-    for (SCCOL i=0; i <= MAXCOL; i++)
+    for (SCCOL i=0; i < aCol.size(); i++)
         aCol[i].UpdateInsertTabAbs(nTable);
 }
 
@@ -2274,20 +2274,20 @@ bool ScTable::GetNextSpellingCell(SCCOL& rCol, SCROW& rRow, bool bInSel,
 
 void ScTable::TestTabRefAbs(SCTAB nTable) const
 {
-    for (SCCOL i=0; i <= MAXCOL; i++)
+    for (SCCOL i=0; i < aCol.size(); i++)
         if (aCol[i].TestTabRefAbs(nTable))
             return;
 }
 
 void ScTable::CompileDBFormula( sc::CompileFormulaContext& rCxt )
 {
-    for (SCCOL i = 0; i <= MAXCOL; ++i)
+    for (SCCOL i = 0; i < aCol.size(); ++i)
         aCol[i].CompileDBFormula(rCxt);
 }
 
 void ScTable::CompileColRowNameFormula( sc::CompileFormulaContext& rCxt )
 {
-    for (SCCOL i = 0; i <= MAXCOL; ++i)
+    for (SCCOL i = 0; i < aCol.size(); ++i)
         aCol[i].CompileColRowNameFormula(rCxt);
 }
 
