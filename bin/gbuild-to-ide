@@ -40,8 +40,13 @@ class GbuildLinkTarget:
                              objcflags, objcobjects, objcxxflags,
                              objcxxobjects, yaccobjects, build_type)
 
+    @property
     def name(self):
-        return self.name
+        return self._name
+
+    @name.setter
+    def name(self, val):
+        self._name = val
 
     def target_name(self):
         return self.build_type + '_' + self.name
