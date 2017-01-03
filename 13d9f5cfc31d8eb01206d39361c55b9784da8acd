@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a6eadb0_bfb912ef",
+        "filename": "sc/source/filter/oox/scenariobuffer.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-01-03T15:39:19Z",
+      "side": 0,
+      "message": "Simply removing this without any replacement is not correct, we need to keep track of the currently active scenario. However, I agree that calling XScenario::apply() is unnecessary and may even harm here.",
+      "revId": "13d9f5cfc31d8eb01206d39361c55b9784da8acd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
