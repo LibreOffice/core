@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a6eadb0_5f48fe2d",
+        "filename": "test/source/sheet/xheaderfootercontent.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-01-03T13:43:36Z",
+      "side": 1,
+      "message": "As can be seen in the Jenkins failure http://ci.libreoffice.org/job/lo_gerrit/4507/Config\u003dlinux_clang_dbgutil_64/console\n\n/home/tdf/lode/jenkins/workspace/lo_gerrit/Config/linux_clang_dbgutil_64/test/source/sheet/xheaderfootercontent.cxx:29:43: error: rewrite call of rtl::OUString::equals with construction of \u0027OUString\u0027 with string constant argument as operator \u003d\u003d [loplugin:stringconstant]\n    CPPUNIT_ASSERT(xLeftText-\u003egetString().equals(\"LEFT\"));\n                   ~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~\n\nthis should be rewritten using the OUString::operator\u003d\u003d() instead, i.e. xLeftText-\u003egetString() \u003d\u003d \"LEFT\"",
+      "revId": "d99395a906185bcf1bd784402a887312a7562625",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a6eadb0_7f55bac4",
+        "filename": "test/source/sheet/xheaderfootercontent.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-01-03T13:43:36Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "d99395a906185bcf1bd784402a887312a7562625",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a6eadb0_9f5296dc",
+        "filename": "test/source/sheet/xheaderfootercontent.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-01-03T13:43:36Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "d99395a906185bcf1bd784402a887312a7562625",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
