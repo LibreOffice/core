@@ -852,15 +852,8 @@ bool ImplStdBorderWindowView::MouseButtonDown( const MouseEvent& rMEvt )
                         if ( pBorderWindow->ImplGetClientWindow()->IsSystemWindow() )
                         {
                             SystemWindow* pClientWindow = static_cast<SystemWindow*>(pBorderWindow->ImplGetClientWindow());
-                            if ( true /*pBorderWindow->mbDockBtn*/ )   // always perform docking on double click, no button required
-                                pClientWindow->TitleButtonClick( TitleButton::Docking );
-                            else if ( pBorderWindow->GetStyle() & WB_ROLLABLE )
-                            {
-                                if ( pClientWindow->IsRollUp() )
-                                    pClientWindow->RollDown();
-                                else
-                                    pClientWindow->RollUp();
-                            }
+                            // always perform docking on double click, no button required
+                            pClientWindow->TitleButtonClick( TitleButton::Docking );
                         }
                     }
                 }
