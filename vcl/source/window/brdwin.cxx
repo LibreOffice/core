@@ -746,7 +746,6 @@ ImplStdBorderWindowView::ImplStdBorderWindowView( ImplBorderWindow* pBorderWindo
     maFrameData.mpBorderWindow  = pBorderWindow;
     maFrameData.mbDragFull      = false;
     maFrameData.mnHitTest       = BorderWindowHitTest::NONE;
-    maFrameData.mnPinState      = DrawButtonFlags::NONE;
     maFrameData.mnCloseState    = DrawButtonFlags::NONE;
     maFrameData.mnRollState     = DrawButtonFlags::NONE;
     maFrameData.mnDockState     = DrawButtonFlags::NONE;

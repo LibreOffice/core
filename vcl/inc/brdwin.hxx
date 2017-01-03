@@ -200,7 +200,6 @@ struct ImplBorderFrameData
     long                     mnBorderSize;
     long                     mnTitleHeight;
     BorderWindowHitTest      mnHitTest;
-    DrawButtonFlags          mnPinState;
     DrawButtonFlags          mnCloseState;
     DrawButtonFlags          mnRollState;
     DrawButtonFlags          mnDockState;
