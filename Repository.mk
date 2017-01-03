@@ -140,8 +140,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     ucpdav1 \
     ucpfile1 \
     ucpftp1 \
-    ucpgio1 \
-    ucpgvfs1 \
     ucphier1 \
     ucppkg1 \
     vcl \
@@ -215,6 +213,8 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
     vclcanvas \
     ucpext \
     ucpexpand1 \
+    ucpgio1 \
+    ucpgvfs1 \
     ucptdoc1 \
     uuresolver \
     writerfilter_debug \
