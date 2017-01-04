@@ -219,6 +219,11 @@ void CopyFromClipContext::setSingleCell( const ScAddress& rSrcPos, const ScColum
                     rSrcCell.set(pErrCell);
                 }
             }
+            else if (rSrcCell.mpFormula->IsEmptyDisplayedAsString())
+            {
+                // Empty stays empty and doesn't become 0.
+                rSrcCell.clear();
+            }
             else if (rSrcCell.mpFormula->IsValue())
             {
                 bool bPaste = isDateCell(rSrcCol, rSrcPos.Row()) ? bDateTime : bNumeric;
