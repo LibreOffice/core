@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1a6eadb0_b2dce919",
+        "filename": "sc/inc/table.hxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2017-01-04T16:37:30Z",
+      "side": 0,
+      "message": "Should I create new class (ScFlatUInt16ColSegments ?) and use it there?\nI found some documentation about it there:\nhttp://kohei.us/files/mdds/doc/flat_segment_tree.html",
+      "parentUuid": "1a6eadb0_3f02623f",
+      "revId": "f42751f534f56f1d465582ebce8d17094f640175",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a6eadb0_bf491291",
         "filename": "sc/inc/table.hxx",
         "patchSetId": 11
@@ -30,6 +48,24 @@
       "writtenOn": "2017-01-04T01:39:51Z",
       "side": 0,
       "message": "Also, if you are changing the name of this member, consider prefixing it with \u0027m\u0027.",
+      "revId": "f42751f534f56f1d465582ebce8d17094f640175",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a6eadb0_d2e165d2",
+        "filename": "sc/inc/table.hxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2017-01-04T16:37:30Z",
+      "side": 0,
+      "message": "I will change it to mpColFlags.",
+      "parentUuid": "1a6eadb0_bf491291",
       "revId": "f42751f534f56f1d465582ebce8d17094f640175",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
