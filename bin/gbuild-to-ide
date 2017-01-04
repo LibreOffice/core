@@ -502,23 +502,75 @@ VersionControl=kdevgit
 
 
 class XcodeIntegrationGenerator(IdeIntegrationGenerator):
-
     def __init__(self, gbuildparser, ide):
         IdeIntegrationGenerator.__init__(self, gbuildparser, ide)
 
+
     def emit(self):
-        self.rootlocation = './osx'
+        rootId = 'X0000001'
+        mainGroupId = 'X0000002'
+        self.rootObj = {'attributes': {'LastUpgradeCheck': '0500',
+                                       'ORGANIZATIONNAME': 'LibreOffice',
+                                       'TargetAttributes': {}},
+                        'compatibilityVersion': 'Xcode 3.2',
+                        'developmentRegion': 'English',
+                        'isa': 'PBXProject',
+                        'hasScannedForEncodings': 0,
+                        'knownRegions': ['en'],
+                        'mainGroup': mainGroupId,
+                        'projectDirPath': '',
+                        'projectRoot': '',
+                        'buildConfigurationList': '',
+                        'targets': []}
+        mainGroup = {'isa': 'PBXGroup', 'children': [], 'sourceTree': '<group>'}
+        pbxproj = {'archiveVersion': 1,
+                   'classes': {},
+                   'objectVersion': 46,
+                   'objects': {rootId : self.rootObj,
+                               mainGroupId : mainGroup},
+                   'rootObject': rootId}
+
         for location in self.gbuildparser.target_by_location:
+            module = location[location.rindex('/') + 1:]
+            sourceId, self.sourceObj = self.define_pbxgroup('Sources', 'source', '<group>')
+            includeId, self.includeObj = self.define_pbxgroup('Headers', 'inc', '<group>')
+            targetId, self.targetObj = self.define_pbxgroup('Targets', 'target', '<group>')
+            moduleId, self.moduleObj = self.define_pbxgroup(module, module,'<group>')
+            self.moduleObj['children'] = [sourceId, includeId, targetId ]
+            pbxproj['objects'].update( {sourceId: self.sourceObj,
+                                        includeId: self.includeObj,
+                                        targetId: self.targetObj,
+                                        moduleId: self.moduleObj})
+            mainGroup['children'].append(moduleId)
+
             for target in self.gbuildparser.target_by_location[location]:
-                xcodeprojdir = os.path.join(self.rootlocation, '%s.xcodeproj' % target.target_name())
-                try:
-                    os.mkdir(xcodeprojdir)
-                except:
-                    pass
-                p = self.generate_project(target)
-                with open(os.path.join(xcodeprojdir, 'project.pbxproj'), 'w') as f:
-                    f.write('// !$*UTF8*$!\n')
-                    self.write_dict(p, f, 0)
+                pbxproj['objects'].update(self.generate_project(target))
+
+        xcodeprojdir = './osx/libreoffice.xcodeproj'
+        try:
+            os.mkdir(xcodeprojdir)
+        except:
+            pass
+        with open(os.path.join(xcodeprojdir, 'project.pbxproj'), 'w') as f:
+            f.write('// !$*UTF8*$!\n')
+            self.write_dict(pbxproj, f, 0)
+
+
+    def define_pbxgroup(self, name, pathEnd, sourcetree):
+        return self.generate_id(), {'isa': 'PBXGroup',
+                              'children': [],
+                              'name': name,
+                              'path': '../../' + name + '/' + pathEnd,
+                              'sourceTree': sourcetree}
+
+    counter = 16777216
+
+    def generate_id(self):
+        XcodeIntegrationGenerator.counter += 1
+        return str('X%07x' % XcodeIntegrationGenerator.counter)
+
+
+
 
     def indent(self, file, level):
         if level == 0:
@@ -572,32 +624,11 @@ class XcodeIntegrationGenerator(IdeIntegrationGenerator):
         else:
             return 'com.apple.product-type.something'
 
-    counter = 16777216
-
-    def generate_id(self):
-        XcodeIntegrationGenerator.counter = XcodeIntegrationGenerator.counter + 1
-        return str('X%07x' % XcodeIntegrationGenerator.counter)
-
     def generate_build_phases(self, modulename):
         result = [self.sourcesBuildPhaseId, self.copyBuildPhaseId]
         return result
 
-    def generate_root_object(self, modulename):
-        result = {'attributes': {'LastUpgradeCheck': '0500',
-                                 'ORGANIZATIONNAME': 'LibreOffice',
-                                 'TargetAttributes' : {self.targetId : {'CreatedOnToolsVersion' : '8.2',
-                                                                        'ProvisioningStyle' : 'Automatic'}}},
-                  'compatibilityVersion': 'Xcode 3.2',
-                  'developmentRegion': 'English',
-                  'isa': 'PBXProject',
-                  'hasScannedForEncodings': 0,
-                  'knownRegions': ['en'],
-                  'mainGroup': self.mainGroupId,
-                  'projectDirPath': '',
-                  'projectRoot': '',
-                  'buildConfigurationList': self.configurationListId,
-                  'targets': [self.targetId]}
-        return result
+
 
     def generate_ref_target(self, modulename):
         result = {'isa': 'PBXFileReference',
@@ -674,42 +705,6 @@ class XcodeIntegrationGenerator(IdeIntegrationGenerator):
                   'defaultConfigurationName': 'Debug'}
         return result
 
-    def generate_module_group(self, modulename):
-        try:
-          name = modulename.module()
-        except:
-          name = 'target'
-        moduleId = self.generate_id()
-        sourceId = self.generate_id()
-        includeId = self.generate_id()
-        targetId = self.generate_id()
-        otherId = self.generate_id()
-        objs = {moduleId: {'isa': 'PBXGroup',
-                                  'children': [sourceId, includeId, targetId, otherId],
-                                  'name': name,
-                                  'path': '../' + name,
-                                  'sourceTree': '<group>'},
-                sourceId : {'isa': 'PBXGroup',
-                            'children': list(self.sourceRefList.keys()),
-                            'name': 'Sources',
-                            'path': '../../' + name + '/source',
-                            'sourceTree': '<group>'},
-                includeId: {'isa': 'PBXGroup',
-                            'children': [],
-                            'name': 'Headers',
-                            'path': '../../' + name,
-                            'sourceTree': '<group>'},
-                targetId : {'isa': 'PBXGroup',
-                            'children': [self.targetRefId],
-                            'name': 'Targets',
-                            'sourceTree': '<group>'},
-                otherId: {'isa': 'PBXGroup',
-                          'children': [],
-                            'name': 'Other files',
-                            'path': '../' + name,
-                            'sourceTree': '<group>'}}
-        return moduleId, objs
-
     def build_source_list(self, module):
         self.sourceRefList = {}
         self.sourceList = {}
@@ -736,9 +731,9 @@ class XcodeIntegrationGenerator(IdeIntegrationGenerator):
                   'files': [],
                   'runOnlyForDeploymentPostprocessing': 0}
         return result
+
     def generate_project(self, target):
-        self.rootObjectId = self.generate_id()
-        self.mainGroupId = self.generate_id()
+
         self.targetId = self.generate_id()
         self.configurationListId = self.generate_id()
         self.sourcesBuildPhaseId = self.generate_id()
@@ -749,18 +744,21 @@ class XcodeIntegrationGenerator(IdeIntegrationGenerator):
         self.productReferenceId = self.generate_id()
         self.productGroupId = self.generate_id()
         self.build_source_list(target)
-        objects = {self.rootObjectId: self.generate_root_object(target),
-                   self.targetId: self.generate_target(target),
+        self.sourceObj['children'].extend(list(self.sourceRefList.keys()))
+        self.targetObj['children'].append(self.targetRefId)
+
+        self.rootObj['attributes']['TargetAttributes'].update({
+        self.targetId: {'CreatedOnToolsVersion': '8.2',
+                        'ProvisioningStyle': 'Automatic'}})
+        self.rootObj['buildConfigurationList'] = self.configurationListId
+        self.rootObj['targets'].append(self.targetId)
+        objects = {self.targetId: self.generate_target(target),
                    self.targetRefId: self.generate_ref_target(target),
-                   self.mainGroupId: {'isa': 'PBXGroup', 'children': [], 'sourceTree': '<group>'},
                    self.sourcesBuildPhaseId: self.generate_sources_build_phase(target),
                    self.copyBuildPhaseId: self.generate_copy_build_phase(target),
                    self.configurationListId: self.generate_configuration_list(target),
                    self.configurationDebugId: self.generate_configuration_debug(target)
                    }
-        (id, objs) = self.generate_module_group(target)
-        objects.update(objs)
-        objects[self.mainGroupId]['children'].append(id)
         for i in self.sourceList.keys():
             ref = self.sourceList[i]
             objects[i] = {'isa': 'PBXBuildFile',
@@ -775,12 +773,7 @@ class XcodeIntegrationGenerator(IdeIntegrationGenerator):
                             'path': '../' + path,
                             'name': name,
                             'sourceTree': '<group>'}
-        project = {'archiveVersion': 1,
-                   'classes': {},
-                   'objectVersion': 46,
-                   'objects': objects,
-                   'rootObject': self.rootObjectId}
-        return project
+        return objects
 
 
 class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
