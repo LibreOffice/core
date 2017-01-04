@@ -92,7 +92,6 @@ private:
     SAL_DLLPRIVATE void ImplGetButtonRect( Rectangle& rRect, long nEx, bool bTest ) const;
     SAL_DLLPRIVATE void ImplGetFadeInRect( Rectangle& rRect, bool bTest = false ) const;
     SAL_DLLPRIVATE void ImplGetFadeOutRect( Rectangle& rRect, bool bTest = false ) const;
-    SAL_DLLPRIVATE void ImplDrawButtonRect(vcl::RenderContext& rRenderContext, const Rectangle& rRect, long nSize);
     SAL_DLLPRIVATE void ImplDrawFadeIn(vcl::RenderContext& rRenderContext);
     SAL_DLLPRIVATE void ImplDrawFadeOut(vcl::RenderContext& rRenderContext);
     SAL_DLLPRIVATE void ImplNewAlign();
