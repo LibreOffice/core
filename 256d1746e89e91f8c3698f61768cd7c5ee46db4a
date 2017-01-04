@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a6eadb0_32953940",
+        "filename": "sc/source/core/data/column.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-01-04T16:24:46Z",
+      "side": 1,
+      "message": "I\u0027m strongly against copy\u0026pasting an entire algorithm ...",
+      "revId": "256d1746e89e91f8c3698f61768cd7c5ee46db4a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a6eadb0_5292b558",
+        "filename": "sc/source/core/data/column.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 320,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-01-04T16:24:46Z",
+      "side": 1,
+      "message": "... for the only difference of one call.",
+      "revId": "256d1746e89e91f8c3698f61768cd7c5ee46db4a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a6eadb0_b2878911",
+        "filename": "sc/source/core/data/markdata.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 418,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-01-04T16:24:46Z",
+      "side": 1,
+      "message": "Also here, copy\u0026paste an entire function just to handle one specific case is inappropriate.",
+      "revId": "256d1746e89e91f8c3698f61768cd7c5ee46db4a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a6eadb0_d293254e",
+        "filename": "sc/source/core/data/markdata.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 433,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-01-04T16:24:46Z",
+      "side": 1,
+      "message": "Why still calculating with the end column of the overall range if this is for one column only?",
+      "revId": "256d1746e89e91f8c3698f61768cd7c5ee46db4a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a6eadb0_d28c0538",
+        "filename": "sc/source/core/data/markdata.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 435,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-01-04T16:24:46Z",
+      "side": 1,
+      "message": "As a side note, commenting out such old functionality doesn\u0027t help anyone.",
+      "revId": "256d1746e89e91f8c3698f61768cd7c5ee46db4a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a6eadb0_327c5920",
+        "filename": "sc/source/core/data/table3.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3473,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-01-04T16:24:46Z",
+      "side": 1,
+      "message": "Why this change of removing one call to ScMarkData::GetMarkedRangesForTab() and replacing it with a bunch of individual calls to ScMarkData::GetMarkedRangesForTabByCol()? I guess this makes it even slower.",
+      "revId": "256d1746e89e91f8c3698f61768cd7c5ee46db4a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
