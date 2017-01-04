@@ -339,7 +339,7 @@ SwDoc::SwDoc()
     new SwTextNode( SwNodeIndex( GetNodes().GetEndOfContent() ),
                     getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_STANDARD ));
 
-    maOLEModifiedIdle.SetPriority( SchedulerPriority::LOWEST );
+    maOLEModifiedIdle.SetPriority( TaskPriority::LOWEST );
     maOLEModifiedIdle.SetIdleHdl( LINK( this, SwDoc, DoUpdateModifiedOLE ));
     maOLEModifiedIdle.SetDebugName( "sw::SwDoc maOLEModifiedIdle" );
 

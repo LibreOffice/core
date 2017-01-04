@@ -2773,7 +2773,7 @@ namespace svxform
         m_pConditionED->SetModifyHdl( LINK( this, AddConditionDialog, ModifyHdl ) );
         m_pEditNamespacesBtn->SetClickHdl( LINK( this, AddConditionDialog, EditHdl ) );
         m_pOKBtn->SetClickHdl( LINK( this, AddConditionDialog, OKHdl ) );
-        m_aResultIdle.SetPriority( SchedulerPriority::LOWEST );
+        m_aResultIdle.SetPriority( TaskPriority::LOWEST );
         m_aResultIdle.SetIdleHdl( LINK( this, AddConditionDialog, ResultHdl ) );
 
         if ( !m_sPropertyName.isEmpty() )

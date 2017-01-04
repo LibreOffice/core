@@ -952,7 +952,7 @@ void SvxBackgroundTabPage::ShowSelector()
 
         // delayed loading via timer (because of UI-Update)
         pPageImpl->pLoadIdle = new Idle("DelayedLoad");
-        pPageImpl->pLoadIdle->SetPriority( SchedulerPriority::LOWEST );
+        pPageImpl->pLoadIdle->SetPriority( TaskPriority::LOWEST );
         pPageImpl->pLoadIdle->SetIdleHdl(
             LINK( this, SvxBackgroundTabPage, LoadIdleHdl_Impl ) );
 

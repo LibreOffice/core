@@ -132,7 +132,7 @@ IMPL_LINK_NOARG_TYPED(SdFileDialog_Imp, PlayMusicHdl, void*, void)
             {
                 mxPlayer.set( avmedia::MediaWindow::createPlayer( aUrl, "" ), css::uno::UNO_QUERY_THROW );
                 mxPlayer->start();
-                maUpdateIdle.SetPriority( SchedulerPriority::LOW );
+                maUpdateIdle.SetPriority( TaskPriority::LOW );
                 maUpdateIdle.Start();
             }
             catch (const css::uno::Exception&)

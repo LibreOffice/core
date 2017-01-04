@@ -184,7 +184,7 @@ void SdrPaintView::ImpClearVars()
     mpDefaultStyleSheet=nullptr;
     mbSomeObjChgdFlag=false;
     mnGraphicManagerDrawMode = GraphicManagerDrawFlags::STANDARD;
-    maComeBackIdle.SetPriority(SchedulerPriority::REPAINT);
+    maComeBackIdle.SetPriority(TaskPriority::REPAINT);
     maComeBackIdle.SetIdleHdl(LINK(this,SdrPaintView,ImpComeBackHdl));
     maComeBackIdle.SetDebugName( "svx::SdrPaintView aComeBackIdle" );
 

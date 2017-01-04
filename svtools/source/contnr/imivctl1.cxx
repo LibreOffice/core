@@ -139,23 +139,23 @@ SvxIconChoiceCtrl_Impl::SvxIconChoiceCtrl_Impl(
     nHorSBarHeight = aHorSBar->GetSizePixel().Height();
     nVerSBarWidth = aVerSBar->GetSizePixel().Width();
 
-    aEditIdle.SetPriority( SchedulerPriority::LOWEST );
+    aEditIdle.SetPriority( TaskPriority::LOWEST );
     aEditIdle.SetIdleHdl(LINK(this,SvxIconChoiceCtrl_Impl,EditTimeoutHdl));
     aEditIdle.SetDebugName( "svtools::SvxIconChoiceCtrl_Impl aEditIdle" );
 
-    aAutoArrangeIdle.SetPriority( SchedulerPriority::LOW );
+    aAutoArrangeIdle.SetPriority( TaskPriority::LOW );
     aAutoArrangeIdle.SetIdleHdl(LINK(this,SvxIconChoiceCtrl_Impl,AutoArrangeHdl));
     aAutoArrangeIdle.SetDebugName( "svtools::SvxIconChoiceCtrl_Impl aAutoArrangeIdle" );
 
-    aCallSelectHdlIdle.SetPriority( SchedulerPriority::LOWEST );
+    aCallSelectHdlIdle.SetPriority( TaskPriority::LOWEST );
     aCallSelectHdlIdle.SetIdleHdl( LINK(this,SvxIconChoiceCtrl_Impl,CallSelectHdlHdl));
     aCallSelectHdlIdle.SetDebugName( "svtools::SvxIconChoiceCtrl_Impl aCallSelectHdlIdle" );
 
-    aDocRectChangedIdle.SetPriority( SchedulerPriority::MEDIUM );
+    aDocRectChangedIdle.SetPriority( TaskPriority::MEDIUM );
     aDocRectChangedIdle.SetIdleHdl(LINK(this,SvxIconChoiceCtrl_Impl,DocRectChangedHdl));
     aDocRectChangedIdle.SetDebugName( "svtools::SvxIconChoiceCtrl_Impl aDocRectChangedIdle" );
 
-    aVisRectChangedIdle.SetPriority( SchedulerPriority::MEDIUM );
+    aVisRectChangedIdle.SetPriority( TaskPriority::MEDIUM );
     aVisRectChangedIdle.SetIdleHdl(LINK(this,SvxIconChoiceCtrl_Impl,VisRectChangedHdl));
     aVisRectChangedIdle.SetDebugName( "svtools::SvxIconChoiceCtrl_Impl aVisRectChangedIdle" );
 
@@ -3063,7 +3063,7 @@ IcnViewEdit_Impl::IcnViewEdit_Impl( SvtIconChoiceCtrl* pParent, const Point& rPo
     bAlreadyInCallback( false ),
     bGrabFocus( false )
 {
-    maLoseFocusIdle.SetPriority(SchedulerPriority::REPAINT);
+    maLoseFocusIdle.SetPriority(TaskPriority::REPAINT);
     maLoseFocusIdle.SetIdleHdl(LINK(this,IcnViewEdit_Impl,Timeout_Impl));
     maLoseFocusIdle.SetDebugName( "svx::IcnViewEdit_Impl maLoseFocusIdle" );
 

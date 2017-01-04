@@ -1789,7 +1789,7 @@ namespace frm
 
         doSetDelegator();
 
-        m_aChangeIdle.SetPriority(SchedulerPriority::LOWEST);
+        m_aChangeIdle.SetPriority(TaskPriority::LOWEST);
         m_aChangeIdle.SetIdleHdl(LINK(this,OListBoxControl,OnTimeout));
     }
 

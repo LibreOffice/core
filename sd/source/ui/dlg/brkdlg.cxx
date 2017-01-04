@@ -47,7 +47,7 @@ BreakDlg::BreakDlg(
     : SfxModalDialog(pWindow, "BreakDialog", "modules/sdraw/ui/breakdialog.ui")
     , mpProgress( nullptr )
 {
-    m_aUpdateIdle.SetPriority( SchedulerPriority::REPAINT );
+    m_aUpdateIdle.SetPriority( TaskPriority::REPAINT );
     m_aUpdateIdle.SetIdleHdl( LINK( this, BreakDlg, InitialUpdate ) );
     m_aUpdateIdle.SetDebugName( "sd::BreakDlg m_aUpdateIdle" );
 

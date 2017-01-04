@@ -415,7 +415,7 @@ TabBarEdit::TabBarEdit( TabBar* pParent, WinBits nWinStyle ) :
     Edit( pParent, nWinStyle )
 {
     mbPostEvt = false;
-    maLoseFocusIdle.SetPriority( SchedulerPriority::REPAINT );
+    maLoseFocusIdle.SetPriority( TaskPriority::REPAINT );
     maLoseFocusIdle.SetIdleHdl( LINK( this, TabBarEdit, ImplEndTimerHdl ) );
     maLoseFocusIdle.SetDebugName( "svtools::TabBarEdit maLoseFocusIdle" );
 }

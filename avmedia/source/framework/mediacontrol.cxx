@@ -183,7 +183,7 @@ MediaControl::MediaControl( vcl::Window* pParent, MediaControlStyle eControlStyl
         maMinSize.Height() = ( maMinSize.Height() << 1 ) + AVMEDIA_CONTROLOFFSET;
     }
 
-    maIdle.SetPriority( SchedulerPriority::LOW );
+    maIdle.SetPriority( TaskPriority::LOW );
     maIdle.SetIdleHdl( LINK( this, MediaControl, implTimeoutHdl ) );
     maIdle.Start();
 }

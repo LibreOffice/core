@@ -23,7 +23,7 @@
 #include <tools/link.hxx>
 #include <vcl/scheduler.hxx>
 
-class VCL_DLLPUBLIC Idle : public Scheduler
+class VCL_DLLPUBLIC Idle : public Task
 {
 protected:
     Link<Idle *, void> maIdleHdl;          // Callback Link

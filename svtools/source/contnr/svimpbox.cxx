@@ -89,7 +89,7 @@ SvImpLBox::SvImpLBox( SvTreeListBox* pLBView, SvTreeList* pLBTree, WinBits nWinS
     nNodeBmpWidth       = 0;
 
     bAsyncBeginDrag     = false;
-    aAsyncBeginDragIdle.SetPriority( SchedulerPriority::HIGHEST );
+    aAsyncBeginDragIdle.SetPriority( TaskPriority::HIGHEST );
     aAsyncBeginDragIdle.SetIdleHdl( LINK(this,SvImpLBox,BeginDragHdl));
     // button animation in listbox
     pActiveButton = nullptr;
@@ -99,7 +99,7 @@ SvImpLBox::SvImpLBox( SvTreeListBox* pLBView, SvTreeList* pLBTree, WinBits nWinS
     nFlags = LBoxFlags::NONE;
     nCurTabPos = FIRST_ENTRY_TAB;
 
-    aEditIdle.SetPriority( SchedulerPriority::LOWEST );
+    aEditIdle.SetPriority( TaskPriority::LOWEST );
     aEditIdle.SetIdleHdl( LINK(this,SvImpLBox,EditTimerCall) );
 
     nMostRight = -1;

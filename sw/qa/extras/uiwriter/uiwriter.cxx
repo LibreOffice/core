@@ -3160,7 +3160,7 @@ class IdleTask
 IdleTask::IdleTask() : flag( false )
 {
     //setting the Priority of Idle task to LOW, LOWEST
-    maIdle.SetPriority( SchedulerPriority::LOWEST );
+    maIdle.SetPriority( TaskPriority::LOWEST );
     //set idle for callback
     maIdle.SetIdleHdl( LINK( this, IdleTask, FlipFlag) );
     //starting the idle

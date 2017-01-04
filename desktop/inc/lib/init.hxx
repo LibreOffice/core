@@ -36,7 +36,7 @@ namespace desktop {
               m_pData(pData),
               m_bPartTilePainting(false)
         {
-            SetPriority(SchedulerPriority::POST_PAINT);
+            SetPriority(TaskPriority::POST_PAINT);
 
             // Add the states that are safe to skip duplicates on,
             // even when not consequent.

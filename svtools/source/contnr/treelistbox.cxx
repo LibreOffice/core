@@ -198,7 +198,7 @@ void SvInplaceEdit2::LoseFocus()
     )
     {
         bCanceled = false;
-        aIdle.SetPriority(SchedulerPriority::REPAINT);
+        aIdle.SetPriority(TaskPriority::REPAINT);
         aIdle.SetIdleHdl(LINK(this,SvInplaceEdit2,Timeout_Impl));
         aIdle.SetDebugName( "svtools::SvInplaceEdit2 aIdle" );
         aIdle.Start();

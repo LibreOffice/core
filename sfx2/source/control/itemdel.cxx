@@ -47,7 +47,6 @@ SfxItemDisruptor_Impl::SfxItemDisruptor_Impl( SfxPoolItem *pItemToDesrupt ):
     pItem(pItemToDesrupt),
     aLink( LINK(this, SfxItemDisruptor_Impl, Delete) )
 {
-
     DBG_ASSERT( 0 == pItem->GetRefCount(), "disrupting pooled item" );
     pItem->SetKind( SFX_ITEMS_DELETEONIDLE );
 }

@@ -320,7 +320,7 @@ void SfxModelessDialog::Init(SfxBindings *pBindinx, SfxChildWindow *pCW)
     pImpl->bConstructed = false;
     if ( pBindinx )
         pImpl->StartListening( *pBindinx );
-    pImpl->aMoveIdle.SetPriority(SchedulerPriority::RESIZE);
+    pImpl->aMoveIdle.SetPriority(TaskPriority::RESIZE);
     pImpl->aMoveIdle.SetIdleHdl(LINK(this,SfxModelessDialog,TimerHdl));
 }
 
@@ -456,7 +456,7 @@ SfxFloatingWindow::SfxFloatingWindow( SfxBindings *pBindinx,
     pImpl->bConstructed = false;
     if ( pBindinx )
         pImpl->StartListening( *pBindinx );
-    pImpl->aMoveIdle.SetPriority(SchedulerPriority::RESIZE);
+    pImpl->aMoveIdle.SetPriority(TaskPriority::RESIZE);
     pImpl->aMoveIdle.SetIdleHdl(LINK(this,SfxFloatingWindow,TimerHdl));
 }
 
@@ -473,7 +473,7 @@ SfxFloatingWindow::SfxFloatingWindow( SfxBindings *pBindinx,
 
     if ( pBindinx )
         pImpl->StartListening( *pBindinx );
-    pImpl->aMoveIdle.SetPriority(SchedulerPriority::RESIZE);
+    pImpl->aMoveIdle.SetPriority(TaskPriority::RESIZE);
     pImpl->aMoveIdle.SetIdleHdl(LINK(this,SfxFloatingWindow,TimerHdl));
 }
 

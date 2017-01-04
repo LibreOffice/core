@@ -24,7 +24,6 @@
 
 #include <tools/fldunit.hxx>
 #include <unotools/options.hxx>
-#include <vcl/idle.hxx>
 #include <vcl/svapp.hxx>
 
 #include <com/sun/star/lang/XComponent.hpp>
@@ -42,6 +41,7 @@ struct ImplConfigData;
 class ImplDirectFontSubstitution;
 struct ImplHotKey;
 struct ImplEventHook;
+struct ImplSchedulerData;
 class Point;
 class ResMgr;
 class ImplAccelManager;

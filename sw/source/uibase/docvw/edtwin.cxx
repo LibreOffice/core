@@ -5119,7 +5119,7 @@ SwEditWin::SwEditWin(vcl::Window *pParent, SwView &rMyView):
 
     // TemplatePointer for colors should be resetted without
     // selection after single click
-    m_aTemplateIdle.SetPriority(SchedulerPriority::LOWEST);
+    m_aTemplateIdle.SetPriority(TaskPriority::LOWEST);
     m_aTemplateIdle.SetIdleHdl(LINK(this, SwEditWin, TemplateTimerHdl));
 
     // temporary solution!!! Should set the font of the current

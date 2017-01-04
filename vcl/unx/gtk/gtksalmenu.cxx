@@ -436,7 +436,7 @@ GtkSalMenu::GtkSalMenu( bool bMenuBar ) :
     //typically this only gets called after the menu has been customized on the
     //next idle slot, in the normal case of a new menubar SetFrame is called
     //directly long before this idle would get called.
-    maUpdateMenuBarIdle.SetPriority(SchedulerPriority::HIGHEST);
+    maUpdateMenuBarIdle.SetPriority(TaskPriority::HIGHEST);
     maUpdateMenuBarIdle.SetIdleHdl(LINK(this, GtkSalMenu, MenuBarHierarchyChangeHandler));
     maUpdateMenuBarIdle.SetDebugName("Native Gtk Menu Update Idle");
 }

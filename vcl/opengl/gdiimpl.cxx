@@ -20,6 +20,7 @@
 #include "openglgdiimpl.hxx"
 
 #include <vcl/gradient.hxx>
+#include <vcl/idle.hxx>
 #include <salframe.hxx>
 #include "salvd.hxx"
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
@@ -52,7 +53,7 @@ public:
         , m_pImpl( pImpl )
     {
         // We don't want to be swapping before we've painted.
-        SetPriority( SchedulerPriority::POST_PAINT );
+        SetPriority( TaskPriority::POST_PAINT );
     }
     virtual ~OpenGLFlushIdle()
     {
@@ -60,7 +61,7 @@ public:
     virtual void Invoke() override
     {
         m_pImpl->doFlush();
-        SetPriority( SchedulerPriority::HIGHEST );
+        SetPriority( TaskPriority::HIGHEST );
         Stop();
     }
 };
@@ -150,7 +151,7 @@ void OpenGLSalGraphicsImpl::Init()
         maOffscreenTex.GetHeight() != GetHeight() )
     {
         // We don't want to be swapping before we've painted.
-        mpFlush->SetPriority( SchedulerPriority::POST_PAINT );
+        mpFlush->SetPriority( TaskPriority::POST_PAINT );
 
         if( maOffscreenTex && // don't work to release empty textures
             mpContext.is() )  // valid context
@@ -516,7 +517,7 @@ bool OpenGLSalGraphicsImpl::CheckOffscreenTexture()
             maOffscreenTex.GetHeight() != GetHeight() )
         {
             VCL_GL_INFO( "re-size offscreen texture " << maOffscreenTex.Id() );
-            mpFlush->SetPriority( SchedulerPriority::POST_PAINT );
+            mpFlush->SetPriority( TaskPriority::POST_PAINT );
             mpContext->ReleaseFramebuffer( maOffscreenTex );
             maOffscreenTex = OpenGLTexture();
         }

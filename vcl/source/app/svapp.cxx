@@ -464,7 +464,7 @@ void Application::Execute()
         pSVData->maAppData.mnEventTestLimit = 50;
         pSVData->maAppData.mpEventTestingIdle = new Idle("eventtesting");
         pSVData->maAppData.mpEventTestingIdle->SetIdleHdl(LINK(&(pSVData->maAppData), ImplSVAppData, VclEventTestingHdl));
-        pSVData->maAppData.mpEventTestingIdle->SetPriority(SchedulerPriority::MEDIUM);
+        pSVData->maAppData.mpEventTestingIdle->SetPriority(TaskPriority::MEDIUM);
         pSVData->maAppData.mpEventTestInput = new SvFileStream("eventtesting", StreamMode::READ);
         pSVData->maAppData.mpEventTestingIdle->Start();
     }

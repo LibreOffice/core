@@ -383,7 +383,7 @@ namespace sdr
             mbRefreshWithPreRendering(bRefreshWithPreRendering)
         {
             // Init timer
-            maBufferIdle.SetPriority( SchedulerPriority::POST_PAINT );
+            maBufferIdle.SetPriority( TaskPriority::POST_PAINT );
             maBufferIdle.SetIdleHdl(LINK(this, OverlayManagerBuffered, ImpBufferTimerHandler));
             maBufferIdle.SetDebugName( "sdr::overlay::OverlayManagerBuffered maBufferIdle" );
         }

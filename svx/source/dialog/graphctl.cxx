@@ -70,7 +70,7 @@ GraphCtrl::GraphCtrl( vcl::Window* pParent, WinBits nStyle ) :
             pView           ( nullptr )
 {
     pUserCall = new GraphCtrlUserCall( *this );
-    aUpdateIdle.SetPriority( SchedulerPriority::LOWEST );
+    aUpdateIdle.SetPriority( TaskPriority::LOWEST );
     aUpdateIdle.SetIdleHdl( LINK( this, GraphCtrl, UpdateHdl ) );
     aUpdateIdle.Start();
     EnableRTL( false );

@@ -841,7 +841,7 @@ SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
     pImpl->bNewLine = false;
     pImpl->SetDockAlignment(SfxChildAlignment::NOALIGNMENT);
     pImpl->SetLastAlignment(SfxChildAlignment::NOALIGNMENT);
-    pImpl->aMoveIdle.SetPriority(SchedulerPriority::RESIZE);
+    pImpl->aMoveIdle.SetPriority(TaskPriority::RESIZE);
     pImpl->aMoveIdle.SetIdleHdl(LINK(this,SfxDockingWindow,TimerHdl));
     pImpl->aMoveIdle.SetDebugName( "sfx::SfxDockingWindow_Impl aMoveIdle" );
 }
@@ -869,8 +869,9 @@ SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
     pImpl->bNewLine = false;
     pImpl->SetDockAlignment(SfxChildAlignment::NOALIGNMENT);
     pImpl->SetLastAlignment(SfxChildAlignment::NOALIGNMENT);
-    pImpl->aMoveIdle.SetPriority(SchedulerPriority::RESIZE);
+    pImpl->aMoveIdle.SetPriority(TaskPriority::RESIZE);
     pImpl->aMoveIdle.SetIdleHdl(LINK(this,SfxDockingWindow,TimerHdl));
+    pImpl->aMoveIdle.SetDebugName( "sfx::SfxDockingWindow_Impl aMoveIdle" );
 }
 
 /** Initialization of the SfxDockingDialog class via a SfxChildWinInfo.

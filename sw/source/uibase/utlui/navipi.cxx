@@ -834,7 +834,7 @@ SwNavigationPI::SwNavigationPI( SfxBindings* _pBindings,
         m_aContentTree->GrabFocus();
     UsePage();
     m_aPageChgIdle.SetIdleHdl(LINK(this, SwNavigationPI, ChangePageHdl));
-    m_aPageChgIdle.SetPriority(SchedulerPriority::LOWEST);
+    m_aPageChgIdle.SetPriority(TaskPriority::LOWEST);
 
     m_aContentTree->SetAccessibleName(SW_RESSTR(STR_ACCESS_TL_CONTENT));
     m_aGlobalTree->SetAccessibleName(SW_RESSTR(STR_ACCESS_TL_GLOBAL));

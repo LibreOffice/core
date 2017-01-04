@@ -1476,9 +1476,9 @@ CustomPropertiesWindow::CustomPropertiesWindow(vcl::Window* pParent,
     m_aDateField->SetPosSizePixel(aPos, aSize);
     m_aTimeField->SetPosSizePixel(aPos, aSize);
 
-    m_aEditLoseFocusIdle.SetPriority( SchedulerPriority::LOWEST );
+    m_aEditLoseFocusIdle.SetPriority( TaskPriority::LOWEST );
     m_aEditLoseFocusIdle.SetIdleHdl( LINK( this, CustomPropertiesWindow, EditTimeoutHdl ) );
-    m_aBoxLoseFocusIdle.SetPriority( SchedulerPriority::LOWEST );
+    m_aBoxLoseFocusIdle.SetPriority( TaskPriority::LOWEST );
     m_aBoxLoseFocusIdle.SetIdleHdl( LINK( this, CustomPropertiesWindow, BoxTimeoutHdl ) );
 
     m_aNameBox->add_mnemonic_label(m_pHeaderAccName);

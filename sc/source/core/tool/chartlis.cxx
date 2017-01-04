@@ -405,7 +405,7 @@ ScChartHiddenRangeListener::~ScChartHiddenRangeListener()
 void ScChartListenerCollection::Init()
 {
     aIdle.SetIdleHdl( LINK( this, ScChartListenerCollection, TimerHdl ) );
-    aIdle.SetPriority( SchedulerPriority::REPAINT );
+    aIdle.SetPriority( TaskPriority::REPAINT );
     aIdle.SetDebugName( "sc::ScChartListenerCollection aIdle" );
 }
 

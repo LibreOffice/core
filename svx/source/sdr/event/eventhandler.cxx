@@ -121,7 +121,7 @@ namespace sdr
     {
         TimerEventHandler::TimerEventHandler()
         {
-            SetPriority(SchedulerPriority::HIGH);
+            SetPriority(TaskPriority::HIGH);
             Stop();
         }
 

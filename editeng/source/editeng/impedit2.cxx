@@ -147,7 +147,7 @@ ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
     aStatusTimer.SetTimeoutHdl( LINK( this, ImpEditEngine, StatusTimerHdl ) );
     aStatusTimer.SetDebugName( "editeng::ImpEditEngine aStatusTimer" );
 
-    aIdleFormatter.SetPriority( SchedulerPriority::REPAINT );
+    aIdleFormatter.SetPriority( TaskPriority::REPAINT );
     aIdleFormatter.SetIdleHdl( LINK( this, ImpEditEngine, IdleFormatHdl ) );
     aIdleFormatter.SetDebugName( "editeng::ImpEditEngine aIdleFormatter" );
 

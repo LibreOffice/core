@@ -88,7 +88,7 @@ ScSpecialFilterDlg::ScSpecialFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, vc
     // Hack: RefInput-Kontrolle
     pIdle = new Idle;
     // FIXME: this is an abomination
-    pIdle->SetPriority( SchedulerPriority::LOWEST );
+    pIdle->SetPriority( TaskPriority::LOWEST );
     pIdle->SetIdleHdl( LINK( this, ScSpecialFilterDlg, TimeOutHdl ) );
     pIdle->Start();
 

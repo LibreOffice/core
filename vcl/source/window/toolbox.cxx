@@ -1391,7 +1391,7 @@ void ToolBox::ImplInitToolBoxData()
     mpStatusListener  = new VclStatusListener<ToolBox>(this, ".uno:ImageOrientation");
 
     mpIdle = new Idle("vcl::ToolBox maIdle update");
-    mpIdle->SetPriority( SchedulerPriority::RESIZE );
+    mpIdle->SetPriority( TaskPriority::RESIZE );
     mpIdle->SetIdleHdl( LINK( this, ToolBox, ImplUpdateHdl ) );
 
     // set timeout and handler for dropdown items
