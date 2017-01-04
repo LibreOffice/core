@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a6eadb0_d26245ad",
+        "filename": "sc/inc/markdata.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2017-01-04T12:40:58Z",
+      "side": 1,
+      "message": "Please avoid adding new default parameter values, use of such is an anti-pattern. (In my opinion, but what else is a review supposed to be, if not the reviewer\u0027s opinion?) And here I don\u0027t think this even is called ever with these parameters being defaulted.",
+      "range": {
+        "startLine": 118,
+        "startChar": 98,
+        "endLine": 118,
+        "endChar": 103
+      },
+      "revId": "2745256a4ec5dc37adb7542aa28f7d41cff55cc8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
