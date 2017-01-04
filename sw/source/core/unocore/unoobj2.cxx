@@ -1705,11 +1705,10 @@ bool SwXParaFrameEnumerationImpl::CreateNextObject()
     // the format should be valid here, otherwise the client
     // would have been removed by PurgeFrameClients
     // check for a shape first
-    bool bHasContact(false);
-    SdrObject* pObject(nullptr);
-    pFormat->CallSwClientNotify(sw::FindSdrObjectHint(bHasContact, pObject));
-    if(bHasContact)
+    if(pFormat->Which() == RES_DRAWFRMFMT)
     {
+        SdrObject* pObject(nullptr);
+        pFormat->CallSwClientNotify(sw::FindSdrObjectHint(pObject));
         if(pObject)
             m_xNextObject.set(pObject->getUnoShape(), uno::UNO_QUERY);
     }
