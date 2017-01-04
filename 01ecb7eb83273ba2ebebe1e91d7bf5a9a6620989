@@ -16,6 +16,24 @@
       "revId": "01ecb7eb83273ba2ebebe1e91d7bf5a9a6620989",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a6eadb0_7f813a8f",
+        "filename": "sc/source/filter/inc/addressconverter.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2017-01-04T01:12:03Z",
+      "side": 1,
+      "message": "yes, I saw that one but it isn\u0027t 100% compatible. it missed some functionality, also ScRangeList holds a pointer to a ScRange instead of a plain ScRange\n\nThis needs more changes in the code using it.\n\nwas about to ask you, if this new RangeList should be replaced with ScRangeList.\n\nbut perhaps it\u0027s a better idea to replace the uses of ApiCellRangeList with ScRangeList one by one.",
+      "parentUuid": "1a6eadb0_3f77c2d5",
+      "revId": "01ecb7eb83273ba2ebebe1e91d7bf5a9a6620989",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
