@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include "../sdmodeltestbase.hxx"
 #include <test/bootstrapfixture.hxx>
 #include <unotest/macros_test.hxx>
 #include <test/xmltesttools.hxx>
@@ -19,6 +20,7 @@
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/string.hxx>
 #include <editeng/editids.hrc>
+#include <editeng/editobj.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/outliner.hxx>
@@ -45,7 +47,7 @@ using namespace css;
 
 static const char* DATA_DIRECTORY = "/sd/qa/unit/tiledrendering/data/";
 
-class SdTiledRenderingTest : public test::BootstrapFixture, public unotest::MacrosTest, public XmlTestTools
+class SdTiledRenderingTest : public SdModelTestBase, public XmlTestTools
 {
 public:
     SdTiledRenderingTest();
@@ -81,6 +83,7 @@ public:
     void testPostKeyEventInvalidation();
     void testTdf103083();
     void testTdf104405();
+    void testTdf81754();
 
     CPPUNIT_TEST_SUITE(SdTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -112,6 +115,8 @@ public:
     CPPUNIT_TEST(testPostKeyEventInvalidation);
     CPPUNIT_TEST(testTdf103083);
     CPPUNIT_TEST(testTdf104405);
+    CPPUNIT_TEST(testTdf81754);
+
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1464,6 +1469,40 @@ void SdTiledRenderingTest::testTdf104405()
     xmlFreeDoc(pXmlDoc);
 
     comphelper::LibreOfficeKit::setActive(false);
+}
+
+void SdTiledRenderingTest::testTdf81754()
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("tdf81754.pptx");
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdPage* pActualPage = pViewShell->GetActualPage();
+    SdrObject* pObject = pActualPage->GetObj(1);
+
+    SdrTextObj* pTextObj = static_cast<SdrTextObj*>(pObject);
+    SdrView* pView = pViewShell->GetView();
+    pView->MarkObj(pTextObj, pView->GetSdrPageView());
+    SfxStringItem aInputString(SID_ATTR_CHAR, "x");
+    pViewShell->GetViewFrame()->GetDispatcher()->ExecuteList(SID_ATTR_CHAR,
+            SfxCallMode::SYNCHRON, { &aInputString });
+
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
+
+    Scheduler::ProcessEventsToIdle();
+
+    // now save, reload, and assert that we did not lose the edit
+    ::sd::DrawDocShellRef xDocShRef = saveAndReload(pXImpressDocument->GetDocShell(), PPTX);
+
+    const SdrPage *pPage = GetPage(1, xDocShRef);
+    SdrTextObj* pTextObject = dynamic_cast<SdrTextObj*>(pPage->GetObj(1));
+    CPPUNIT_ASSERT(pTextObject);
+
+    OutlinerParaObject* pOutlinerParagraphObject = pTextObject->GetOutlinerParaObject();
+    const EditTextObject& aEdit = pOutlinerParagraphObject->GetTextObject();
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Somethingxx"), aEdit.GetText(0));
+
+    xDocShRef->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdTiledRenderingTest);

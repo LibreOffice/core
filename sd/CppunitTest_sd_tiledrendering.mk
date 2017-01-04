@@ -19,6 +19,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sd_tiledrendering, \
     comphelper \
     cppu \
     cppuhelper \
+    drawinglayer \
     editeng \
     sal \
     sfx \
