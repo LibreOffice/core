@@ -87,9 +87,15 @@ public class SwXAutoTextEntry extends TestCase {
         try {
             if ( oGroup.hasByName("NewEntryName") ) {
                 log.println("Removing 'NewEntryName' element");
+                ((com.sun.star.lang.XComponent) AnyConverter.toObject(
+                    new Type(com.sun.star.lang.XComponent.class),
+                    oGroup.getByName("NewEntryName"))).dispose();
                 oGroup.removeByName("NewEntryName");
             }
         } catch ( com.sun.star.container.NoSuchElementException e ) {
+            log.println("Cannot remove TextEntry from group...");
+            e.printStackTrace(log);
+        } catch ( com.sun.star.lang.WrappedTargetException e ) {
             log.println("Cannot remove TextEntry from group...");
             e.printStackTrace(log);
         }
