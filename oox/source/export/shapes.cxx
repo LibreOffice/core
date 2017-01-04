@@ -25,6 +25,7 @@
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/export/shapes.hxx"
 #include "oox/export/utils.hxx"
+#include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 
 #include <cstdio>
@@ -1079,12 +1080,13 @@ void ShapeExport::WriteGraphicObjectShapePart( const Reference< XShape >& xShape
     }
 
     FSHelperPtr pFS = GetFS();
+    XmlFilterBase* pFB = GetFB();
 
     if (GetDocumentType() != DOCUMENT_DOCX)
         pFS->startElementNS( mnXmlNamespace, XML_pic, FSEND );
     else
         pFS->startElementNS( mnXmlNamespace, XML_pic,
-                             FSNS(XML_xmlns, XML_pic), "http://schemas.openxmlformats.org/drawingml/2006/picture",
+                             FSNS(XML_xmlns, XML_pic), OUStringToOString(pFB->getNamespaceURL(OOX_NS(dmlPicture)), RTL_TEXTENCODING_UTF8).getStr(),
                              FSEND );
 
     pFS->startElementNS( mnXmlNamespace, XML_nvPicPr, FSEND );
@@ -1813,7 +1815,7 @@ void ShapeExport::WriteMathShape(Reference<XShape> const& xShape)
     // WordProcessingML so write a MCE like PPT 2010 does
     mpFS->startElementNS(XML_mc, XML_AlternateContent, FSEND);
     mpFS->startElementNS(XML_mc, XML_Choice,
-        FSNS(XML_xmlns, XML_a14), "http://schemas.microsoft.com/office/drawing/2010/main",
+        FSNS(XML_xmlns, XML_a14), OUStringToOString(mpFB->getNamespaceURL(OOX_NS(a14)), RTL_TEXTENCODING_UTF8).getStr(),
         XML_Requires, "a14",
         FSEND);
     mpFS->startElementNS(mnXmlNamespace, XML_sp, FSEND);

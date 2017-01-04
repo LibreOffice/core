@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/export/chartexport.hxx"
@@ -594,9 +595,10 @@ void ChartExport::WriteChartObj( const Reference< XShape >& xShape, sal_Int32 nC
             "http://schemas.openxmlformats.org/officeDocument/2006/relationships/chart",
             &sId );
 
+    XmlFilterBase* pFB = GetFB();
     pFS->singleElement(  FSNS( XML_c, XML_chart ),
-            FSNS( XML_xmlns, XML_c ), "http://schemas.openxmlformats.org/drawingml/2006/chart",
-            FSNS( XML_xmlns, XML_r ), "http://schemas.openxmlformats.org/officeDocument/2006/relationships",
+            FSNS( XML_xmlns, XML_c ), OUStringToOString(pFB->getNamespaceURL(OOX_NS(dmlChart)), RTL_TEXTENCODING_UTF8).getStr(),
+            FSNS( XML_xmlns, XML_r ), OUStringToOString(pFB->getNamespaceURL(OOX_NS(officeRel)), RTL_TEXTENCODING_UTF8).getStr(),
             FSNS( XML_r, XML_id ), USS( sId ),
             FSEND );
 
@@ -732,10 +734,11 @@ void ChartExport::exportChartSpace( const Reference< css::chart::XChartDocument 
                                     bool bIncludeTable )
 {
     FSHelperPtr pFS = GetFS();
+    XmlFilterBase* pFB = GetFB();
     pFS->startElement( FSNS( XML_c, XML_chartSpace ),
-            FSNS( XML_xmlns, XML_c ), "http://schemas.openxmlformats.org/drawingml/2006/chart",
-            FSNS( XML_xmlns, XML_a ), "http://schemas.openxmlformats.org/drawingml/2006/main",
-            FSNS( XML_xmlns, XML_r ), "http://schemas.openxmlformats.org/officeDocument/2006/relationships",
+            FSNS( XML_xmlns, XML_c ), OUStringToOString(pFB->getNamespaceURL(OOX_NS(dmlChart)), RTL_TEXTENCODING_UTF8).getStr(),
+            FSNS( XML_xmlns, XML_a ), OUStringToOString(pFB->getNamespaceURL(OOX_NS(dml)), RTL_TEXTENCODING_UTF8).getStr(),
+            FSNS( XML_xmlns, XML_r ), OUStringToOString(pFB->getNamespaceURL(OOX_NS(officeRel)), RTL_TEXTENCODING_UTF8).getStr(),
             FSEND );
     // TODO: get the correct editing language
     pFS->singleElement( FSNS( XML_c, XML_lang ),

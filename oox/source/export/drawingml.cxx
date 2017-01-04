@@ -24,6 +24,7 @@
 #include "oox/export/utils.hxx"
 #include <oox/drawingml/color.hxx>
 #include <oox/drawingml/fillproperties.hxx>
+#include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
 
@@ -3350,7 +3351,7 @@ void DrawingML::WriteArtisticEffect( const Reference< XPropertySet >& rXPropSet 
                           XML_uri, "{BEBA8EAE-BF5A-486C-A8C5-ECC9F3942E4B}",
                           FSEND );
     mpFS->startElementNS( XML_a14, XML_imgProps,
-                          FSNS( XML_xmlns, XML_a14 ), "http://schemas.microsoft.com/office/drawing/2010/main",
+                          FSNS( XML_xmlns, XML_a14 ), OUStringToOString(mpFB->getNamespaceURL(OOX_NS(a14)), RTL_TEXTENCODING_UTF8).getStr(),
                           FSEND );
     mpFS->startElementNS( XML_a14, XML_imgLayer,
                           FSNS( XML_r, XML_embed), sRelId.getStr(),

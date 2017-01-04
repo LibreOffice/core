@@ -20,6 +20,7 @@
 
 xml                     http://www.w3.org/XML/1998/namespace
 schema                  http://schemas.openxmlformats.org/schemaLibrary/2006/main
+xsi                     http://www.w3.org/2001/XMLSchema-instance
 
 # package ---------------------------------------------------------------------
 
@@ -67,6 +68,7 @@ vmlWord                 urn:schemas-microsoft-com:office:word
 ax                      http://schemas.microsoft.com/office/2006/activeX
 dc                      http://purl.org/dc/elements/1.1/
 dcTerms                 http://purl.org/dc/terms/
+dcmiType                http://purl.org/dc/dcmitype/
 xm                      http://schemas.microsoft.com/office/excel/2006/main
 mce                     http://schemas.openxmlformats.org/markup-compatibility/2006
 mceTest                 http://schemas.openxmlformats.org/spreadsheetml/2006/main/v2
