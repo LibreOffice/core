@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a6eadb0_3220d949",
+        "filename": "sw/source/ui/misc/docfnote.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-01-04T14:24:30Z",
+      "side": 0,
+      "message": "i don\u0027t understand why bPosDoc is being cast to an int here?\n\nsome problem with a 1995 C++ compiler that didn\u0027t support \"bool\" properly?",
+      "revId": "fd3d7a1f2c5bc817fd2473c71df1e6d1801dda99",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
