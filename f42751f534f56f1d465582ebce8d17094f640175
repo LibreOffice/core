@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "1a6eadb0_f2b5817e",
+        "filename": "sc/inc/table.hxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2017-01-04T22:10:06Z",
+      "side": 0,
+      "message": "Yes. Let\u0027s do it the way the Bool variants are handled, that is, you basically copy-n-paste the envelop class from ScFlatUInt16RowSegments, change its name to ScFlatUInt16ColSegments, and use the same implementation class i.e. ScFlatUInt16SegmentsImpl to avoid duplicating the backend code.\n\nAnd that documentation (which I authored) should give you the API reference for the underlying flat_segment_tree structure.  But for this task, you probably don\u0027t need to know much about it as long as you get to know how the wrapper class works.",
+      "parentUuid": "1a6eadb0_b2dce919",
+      "revId": "f42751f534f56f1d465582ebce8d17094f640175",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a6eadb0_bf491291",
         "filename": "sc/inc/table.hxx",
         "patchSetId": 11
@@ -66,6 +84,24 @@
       "side": 0,
       "message": "I will change it to mpColFlags.",
       "parentUuid": "1a6eadb0_bf491291",
+      "revId": "f42751f534f56f1d465582ebce8d17094f640175",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a6eadb0_12bbdd73",
+        "filename": "sc/inc/table.hxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2017-01-04T22:10:06Z",
+      "side": 0,
+      "message": "Let\u0027s call it maColFlags (with an \u0027a\u0027).  The \u0027p\u0027 prefix is reserved for pointer values, which the new vector based one is not.",
+      "parentUuid": "1a6eadb0_d2e165d2",
       "revId": "f42751f534f56f1d465582ebce8d17094f640175",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
