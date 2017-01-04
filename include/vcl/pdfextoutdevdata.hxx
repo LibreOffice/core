@@ -298,8 +298,10 @@ public:
     */
     sal_Int32 SetLinkURL( sal_Int32 nLinkId, const OUString& rURL );
 
-    /// Set URL for a Screen annotation.
+    /// Set URL for a linked Screen annotation.
     void SetScreenURL(sal_Int32 nScreenId, const OUString& rURL);
+    /// Set URL for an embedded Screen annotation.
+    void SetScreenStream(sal_Int32 nScreenId, const OUString& rURL);
 
     /** Create a new outline item
 
