@@ -30,8 +30,8 @@
 
 #include <connectivity/internalnode.hxx>
 
-#ifndef _CONNECTIVITY_SQLYACC_HXX
-#define _CONNECTIVITY_SQLYACC_HXX
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_PARSE_SQLFLEX_L
+#define INCLUDED_CONNECTIVITY_SOURCE_PARSE_SQLFLEX_L
 
 #ifndef SQLYYDEBUG
 #define SQLYYDEBUG 1
@@ -66,7 +66,7 @@ static sal_Int32    gatherString(int delim, sal_Int32 nTyp);
 static sal_Int32    gatherName(const sal_Char*);
 static sal_Int32    gatherNamePre(const sal_Char* );
 // has to be set before the parser starts
-OSQLScanner* xxx_pGLOBAL_SQLSCAN = NULL;
+OSQLScanner* xxx_pGLOBAL_SQLSCAN = nullptr;
 
 #define SQL_NEW_NODE(text, token)   \
         SQLyylval.pParseNode = new OSQLInternalNode(text, token);
@@ -688,9 +688,9 @@ using namespace connectivity;
 static bool IN_SQLyyerror;
 //------------------------------------------------------------------------------
 OSQLScanner::OSQLScanner()
-            : m_pContext(NULL)
+            : m_pContext(nullptr)
             , m_nCurrentPos(0)
-            , m_bInternational(sal_False)
+            , m_bInternational(false)
             , m_nRule(0) // 0 is INITIAL
 {
     IN_SQLyyerror = false;
@@ -712,11 +712,11 @@ void OSQLScanner::SQLyyerror(char const *fmt)
     m_sErrorMessage = ::rtl::OUString(fmt,strlen(fmt),RTL_TEXTENCODING_UTF8);
     if (m_nCurrentPos < m_sStatement.getLength())
     {
-        m_sErrorMessage += ::rtl::OUString(": ");
+        m_sErrorMessage += ": ";
 
         ::rtl::OUString aError;
         static sal_Int32 BUFFERSIZE = 256;
-        static sal_Char* Buffer = 0;
+        static sal_Char* Buffer = nullptr;
         if(!Buffer)
             Buffer = new sal_Char[BUFFERSIZE];
 
@@ -754,7 +754,7 @@ void OSQLScanner::SQLyyerror(char const *fmt)
 		}
 		m_sErrorMessage += aError;
 		delete[] Buffer;
-		Buffer = NULL;
+		Buffer = nullptr;
 	}
 	IN_SQLyyerror = false;
 	YY_FLUSH_BUFFER;
@@ -794,7 +794,7 @@ sal_Int32	OSQLScanner::GetDATERule()	{ return DATE; }
 sal_Int32	OSQLScanner::GetSTRINGRule()	{ return STRING; }
 void OSQLScanner::setScanner(bool _bNull)
 {
-	xxx_pGLOBAL_SQLSCAN = _bNull ? NULL : this;
+	xxx_pGLOBAL_SQLSCAN = _bNull ? nullptr : this;
 }
 sal_Int32 OSQLScanner::SQLlex()
 {
