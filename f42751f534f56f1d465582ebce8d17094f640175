@@ -16,6 +16,23 @@
       "revId": "f42751f534f56f1d465582ebce8d17094f640175",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a6eadb0_bf491291",
+        "filename": "sc/inc/table.hxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2017-01-04T01:39:51Z",
+      "side": 0,
+      "message": "Also, if you are changing the name of this member, consider prefixing it with \u0027m\u0027.",
+      "revId": "f42751f534f56f1d465582ebce8d17094f640175",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
