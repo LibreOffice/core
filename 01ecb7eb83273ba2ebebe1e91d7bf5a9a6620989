@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a6eadb0_3f77c2d5",
+        "filename": "sc/source/filter/inc/addressconverter.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-01-04T00:49:39Z",
+      "side": 1,
+      "message": "There is already such a class. ScRangeList so please don\u0027t introduce another one.",
+      "revId": "01ecb7eb83273ba2ebebe1e91d7bf5a9a6620989",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
