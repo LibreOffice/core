@@ -283,9 +283,6 @@ SfxSplitWindow::SfxSplitWindow( vcl::Window* pParent, SfxChildAlignment eAl,
         pEmptyWin->bFadeIn = true;
         pEmptyWin->nState = 2;
     }
-
-    SetAutoHideState( !bPinned );
-    pEmptyWin->SetAutoHideState( !bPinned );
 }
 
 
@@ -1092,11 +1089,7 @@ void SfxSplitWindow::SetPinned_Impl( bool bOn )
             pWorkWin->RegisterChild_Impl( *this, eAlign, true )->nVisible = SfxChildVisibility::VISIBLE;
         }
     }
-
-    SetAutoHideState( !bPinned );
-    pEmptyWin->SetAutoHideState( !bPinned );
 }
-
 
 void SfxSplitWindow::SetFadeIn_Impl( bool bOn )
 {

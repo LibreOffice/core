@@ -75,11 +75,8 @@ private:
                         mbInvalidate:1,
                         mbFadeIn:1,
                         mbFadeOut:1,
-                        mbAutoHideIn:1,
-                        mbAutoHideDown:1,
                         mbFadeInDown:1,
                         mbFadeOutDown:1,
-                        mbAutoHidePressed:1,
                         mbFadeInPressed:1,
                         mbFadeOutPressed:1,
                         mbFadeNoButtonMode:1;
@@ -187,7 +184,6 @@ public:
     long                GetFadeInSize() const;
     bool                IsFadeNoButtonMode() const { return mbFadeNoButtonMode; }
 
-    void                SetAutoHideState( bool bAutoHide );
     void                SetSplitHdl( const Link<SplitWindow*,void>& rLink ) { maSplitHdl = rLink; }
 };
 

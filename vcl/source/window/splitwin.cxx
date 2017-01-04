@@ -1320,11 +1320,8 @@ void SplitWindow::ImplInit( vcl::Window* pParent, WinBits nStyle )
     mbInvalidate            = true;
     mbFadeIn                = false;
     mbFadeOut               = false;
-    mbAutoHideIn            = false;
-    mbAutoHideDown          = false;
     mbFadeInDown            = false;
     mbFadeOutDown           = false;
-    mbAutoHidePressed       = false;
     mbFadeInPressed         = false;
     mbFadeOutPressed        = false;
     mbFadeNoButtonMode      = false;
@@ -2156,7 +2153,7 @@ void SplitWindow::MouseButtonDown( const MouseEvent& rMEvt )
         }
     }
 
-    if ( mbAutoHideDown || mbFadeInDown || mbFadeOutDown )
+    if ( mbFadeInDown || mbFadeOutDown )
         StartTracking();
     else
         ImplStartSplit( rMEvt );
@@ -2198,36 +2195,7 @@ void SplitWindow::Tracking( const TrackingEvent& rTEvt )
 {
     Point aMousePosPixel = rTEvt.GetMouseEvent().GetPosPixel();
 
-    if ( mbAutoHideDown )
-    {
-        if ( rTEvt.IsTrackingEnded() )
-        {
-            mbAutoHideDown = false;
-            if ( mbAutoHidePressed )
-            {
-                mbAutoHidePressed = false;
-
-                if ( !rTEvt.IsTrackingCanceled() )
-                {
-                    mbAutoHideIn = !mbAutoHideIn;
-                    Invalidate();
-                    AutoHide();
-                }
-                else
-                    Invalidate();
-            }
-        }
-        else
-        {
-            bool bNewPressed = false;
-            if ( bNewPressed != mbAutoHidePressed )
-            {
-                mbAutoHidePressed = bNewPressed;
-                Invalidate();
-            }
-        }
-    }
-    else if ( mbFadeInDown )
+    if ( mbFadeInDown )
     {
         if ( rTEvt.IsTrackingEnded() )
         {
@@ -3083,15 +3051,6 @@ void SplitWindow::ShowFadeOutButton()
 {
     mbFadeOut = true;
     ImplUpdate();
-}
-
-void SplitWindow::SetAutoHideState( bool bAutoHide )
-{
-    mbAutoHideIn = bAutoHide;
-    if ( IsReallyVisible() )
-    {
-        Invalidate(Rectangle());
-    }
 }
 
 long SplitWindow::GetFadeInSize() const

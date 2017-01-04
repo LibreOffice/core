@@ -430,16 +430,6 @@ void DeInitVCL()
         delete pSVData->maCtrlData.mpRadioImgList;
         pSVData->maCtrlData.mpRadioImgList = nullptr;
     }
-    if ( pSVData->maCtrlData.mpSplitHPinImgList )
-    {
-        delete pSVData->maCtrlData.mpSplitHPinImgList;
-        pSVData->maCtrlData.mpSplitHPinImgList = nullptr;
-    }
-    if ( pSVData->maCtrlData.mpSplitVPinImgList )
-    {
-        delete pSVData->maCtrlData.mpSplitVPinImgList;
-        pSVData->maCtrlData.mpSplitVPinImgList = nullptr;
-    }
     if ( pSVData->maCtrlData.mpDisclosurePlus )
     {
         delete pSVData->maCtrlData.mpDisclosurePlus;
