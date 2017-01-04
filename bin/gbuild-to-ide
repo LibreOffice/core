@@ -593,7 +593,6 @@ class XcodeIntegrationGenerator(IdeIntegrationGenerator):
                   'hasScannedForEncodings': 0,
                   'knownRegions': ['en'],
                   'mainGroup': self.mainGroupId,
-                  'productRefGroup': self.productRefGroupId,
                   'projectDirPath': '',
                   'projectRoot': '',
                   'buildConfigurationList': self.configurationListId,
@@ -675,33 +674,41 @@ class XcodeIntegrationGenerator(IdeIntegrationGenerator):
                   'defaultConfigurationName': 'Debug'}
         return result
 
-    def generate_main_group(self, modulename):
-        result = {'isa': 'PBXGroup',
-                  'children': [self.subMainGroupId, self.productRefGroupId],
-                  'sourceTree': '<group>'}
-        return result
-
-    def generate_sub_main_children(self, modulename):
-        return list(self.sourceRefList.keys())
-
-    def generate_sub_main_group(self, modulename):
+    def generate_module_group(self, modulename):
         try:
           name = modulename.module()
         except:
           name = 'target'
-        result = {'isa': 'PBXGroup',
-                  'children': self.generate_sub_main_children(modulename),
-                  'name': name,
-                  'path': '../' + name,
-                  'sourceTree': '<group>'}
-        return result
-
-    def generate_product_group(self, modulename):
-        result = {'isa': 'PBXGroup',
-                  'children': [self.targetRefId],
-                  'name': 'Products',
-                  'sourceTree': '<group>'}
-        return result
+        moduleId = self.generate_id()
+        sourceId = self.generate_id()
+        includeId = self.generate_id()
+        targetId = self.generate_id()
+        otherId = self.generate_id()
+        objs = {moduleId: {'isa': 'PBXGroup',
+                                  'children': [sourceId, includeId, targetId, otherId],
+                                  'name': name,
+                                  'path': '../' + name,
+                                  'sourceTree': '<group>'},
+                sourceId : {'isa': 'PBXGroup',
+                            'children': list(self.sourceRefList.keys()),
+                            'name': 'Sources',
+                            'path': '../../' + name + '/source',
+                            'sourceTree': '<group>'},
+                includeId: {'isa': 'PBXGroup',
+                            'children': [],
+                            'name': 'Headers',
+                            'path': '../../' + name,
+                            'sourceTree': '<group>'},
+                targetId : {'isa': 'PBXGroup',
+                            'children': [self.targetRefId],
+                            'name': 'Targets',
+                            'sourceTree': '<group>'},
+                otherId: {'isa': 'PBXGroup',
+                          'children': [],
+                            'name': 'Other files',
+                            'path': '../' + name,
+                            'sourceTree': '<group>'}}
+        return moduleId, objs
 
     def build_source_list(self, module):
         self.sourceRefList = {}
@@ -734,8 +741,6 @@ class XcodeIntegrationGenerator(IdeIntegrationGenerator):
         self.mainGroupId = self.generate_id()
         self.targetId = self.generate_id()
         self.configurationListId = self.generate_id()
-        self.productRefGroupId = self.generate_id()
-        self.subMainGroupId = self.generate_id()
         self.sourcesBuildPhaseId = self.generate_id()
         self.copyBuildPhaseId = self.generate_id()
         self.targetRefId = self.generate_id()
@@ -747,14 +752,15 @@ class XcodeIntegrationGenerator(IdeIntegrationGenerator):
         objects = {self.rootObjectId: self.generate_root_object(target),
                    self.targetId: self.generate_target(target),
                    self.targetRefId: self.generate_ref_target(target),
-                   self.mainGroupId: self.generate_main_group(target),
-                   self.subMainGroupId: self.generate_sub_main_group(target),
-                   self.productRefGroupId: self.generate_product_group(target),
+                   self.mainGroupId: {'isa': 'PBXGroup', 'children': [], 'sourceTree': '<group>'},
                    self.sourcesBuildPhaseId: self.generate_sources_build_phase(target),
                    self.copyBuildPhaseId: self.generate_copy_build_phase(target),
                    self.configurationListId: self.generate_configuration_list(target),
                    self.configurationDebugId: self.generate_configuration_debug(target)
                    }
+        (id, objs) = self.generate_module_group(target)
+        objects.update(objs)
+        objects[self.mainGroupId]['children'].append(id)
         for i in self.sourceList.keys():
             ref = self.sourceList[i]
             objects[i] = {'isa': 'PBXBuildFile',
