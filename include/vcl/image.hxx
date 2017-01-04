@@ -82,7 +82,6 @@ public:
                                    const std::vector< OUString > &rNameVector );
     void                    InsertFromHorizontalBitmap(const ResId& rResId,
                                     sal_uInt16       nCount,
-                                    const Color *pNonAlphaMaskColor,
                                     const Color *pSearchColors,
                                     const Color *pReplaceColors,
                                     sal_uLong        nColorCount);

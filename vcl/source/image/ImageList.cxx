@@ -120,19 +120,12 @@ void ImageList::InsertFromHorizontalStrip( const BitmapEx &rBitmapEx,
 
 void ImageList::InsertFromHorizontalBitmap( const ResId& rResId,
                                             sal_uInt16       nCount,
-                                            const Color *pMaskColor,
                                             const Color *pSearchColors,
                                             const Color *pReplaceColors,
                                             sal_uLong        nColorCount)
 {
     BitmapEx aBmpEx( rResId );
-    if (!aBmpEx.IsTransparent())
-    {
-        if( pMaskColor )
-            aBmpEx = BitmapEx( aBmpEx.GetBitmap(), *pMaskColor );
-        else
-            aBmpEx = BitmapEx( aBmpEx.GetBitmap() );
-    }
+
     if ( nColorCount && pSearchColors && pReplaceColors )
         aBmpEx.Replace( pSearchColors, pReplaceColors, nColorCount );
 

@@ -321,7 +321,7 @@ void FrameSelectorImpl::InitArrowImageList()
 
     GetRes( SVX_RES( RID_SVXSTR_BORDER_CONTROL ).SetRT( RSC_RESOURCE ) );
     maILArrows.InsertFromHorizontalBitmap(
-        SVX_RES( BMP_FRMSEL_ARROWS ), 16, nullptr, pColorAry1, pColorAry2, 3);
+        SVX_RES( BMP_FRMSEL_ARROWS ), 16, pColorAry1, pColorAry2, 3);
     FreeResource();
     DBG_ASSERT( maILArrows.GetImageSize().Height() == maILArrows.GetImageSize().Width(),
         "svx::FrameSelectorImpl::InitArrowImageList - images are not squarish" );

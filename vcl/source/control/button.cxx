@@ -2764,10 +2764,9 @@ static void LoadThemedImageList (const StyleSettings &rStyleSettings,
     aColorAry2[4] = rStyleSettings.GetDarkShadowColor();
     aColorAry2[5] = rStyleSettings.GetWindowTextColor();
 
-    Color aMaskColor(0x00, 0x00, 0xFF );
     static_assert( sizeof(aColorAry1) == sizeof(aColorAry2), "aColorAry1 must match aColorAry2" );
     // FIXME: do we want the mask for the checkbox ?
-    pList->InsertFromHorizontalBitmap (rResId, nImages, &aMaskColor,
+    pList->InsertFromHorizontalBitmap (rResId, nImages,
         aColorAry1, aColorAry2, SAL_N_ELEMENTS(aColorAry1));
 }
 
