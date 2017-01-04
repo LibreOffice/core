@@ -36,41 +36,15 @@ bool SwPosFlyFrameCmp::operator()(const SwPosFlyFramePtr& rA, const SwPosFlyFram
     return rA->GetNdIndex() < rB->GetNdIndex();
 }
 
-SwPosFlyFrame::SwPosFlyFrame( const SwNodeIndex& rIdx, const SwFrameFormat* pFormat,
-                            sal_uInt16 nArrPos )
-    : m_pFrameFormat( pFormat ), m_pNodeIndex( const_cast<SwNodeIndex*>(&rIdx) )
+SwPosFlyFrame::SwPosFlyFrame(const SwNodeIndex& rIdx, const SwFrameFormat* pFormat, sal_uInt16 nArrPos)
+    : m_pFrameFormat(pFormat), m_pNodeIndex(const_cast<SwNodeIndex*>(&rIdx)), m_nOrdNum(SAL_MAX_UINT32)
 {
-    bool bFnd = false;
     const SwFormatAnchor& rAnchor = pFormat->GetAnchor();
-    if (FLY_AT_PAGE == rAnchor.GetAnchorId())
-    {
-        m_pNodeIndex = new SwNodeIndex( rIdx );
-    }
-    else if( pFormat->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell() )
-    {
-        if( RES_FLYFRMFMT == pFormat->Which() )
-        {
-            // Let's see if we have an SdrObject for this
-            SwFlyFrame* pFly = SwIterator<SwFlyFrame,SwFormat>(*pFormat).First();
-            if( pFly )
-            {
-                m_nOrdNum = pFly->GetVirtDrawObj()->GetOrdNum();
-                bFnd = true;
-            }
-        }
-        else if( RES_DRAWFRMFMT == pFormat->Which() )
-        {
-            // Let's see if we have an SdrObject for this
-            SwDrawContact* pContact = SwIterator<SwDrawContact,SwFormat>(*pFormat).First();
-            if( pContact )
-            {
-                m_nOrdNum = pContact->GetMaster()->GetOrdNum();
-                bFnd = true;
-            }
-        }
-    }
-
-    if( !bFnd )
+    if(FLY_AT_PAGE == rAnchor.GetAnchorId())
+        m_pNodeIndex = new SwNodeIndex(rIdx);
+    else if(pFormat->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell())
+        pFormat->CallSwClientNotify(sw::GetZOrderHint(m_nOrdNum));
+    if(m_nOrdNum == SAL_MAX_UINT32)
     {
         m_nOrdNum = pFormat->GetDoc()->GetSpzFrameFormats()->size();
         m_nOrdNum += nArrPos;
