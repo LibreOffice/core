@@ -19,6 +19,7 @@ import json
 import xml.etree.ElementTree as ET
 import xml.dom.minidom as minidom
 import traceback
+import collections
 
 
 class GbuildLinkTarget:
@@ -66,7 +67,7 @@ class GbuildParser:
         self.binpath = os.path.dirname(os.environ['GPERF']) # woha, this is quite a hack
         (self.srcdir, self.builddir, self.instdir, self.workdir) = (os.environ['SRCDIR'], os.environ['BUILDDIR'], os.environ['INSTDIR'], os.environ['WORKDIR'])
         (self.modulenamelist, self.files) = ([], [])
-        (self.target_by_path, self.target_by_location) = ({}, {})
+        (self.target_by_path, self.target_by_location) = (collections.OrderedDict(), collections.OrderedDict())
 
     includepattern = re.compile('-I(\S+)')
     isystempattern = re.compile('-isystem\s*(\S+)')
@@ -135,12 +136,12 @@ class GbuildParser:
         for target in self.files:
             if target.location not in self.target_by_location:
                 self.target_by_location[target.location] = set()
-            self.target_by_location[target.location] |= set([target])
+                self.target_by_location[target.location] |= set([target])
             for cxx in target.cxxobjects:
                 path = '/'.join(cxx.split('/')[:-1])
                 if path not in self.target_by_path:
                     self.target_by_path[path] = set()
-                self.target_by_path[path] |= set([target])
+                    self.target_by_path[path] |= set([target])
         for path in self.target_by_path:
             x = self.target_by_path[path]
             if path != '' and len(set(self.target_by_path[path])) > 1:
@@ -529,17 +530,24 @@ class XcodeIntegrationGenerator(IdeIntegrationGenerator):
                    'objects': {rootId : self.rootObj,
                                mainGroupId : mainGroup},
                    'rootObject': rootId}
-
         for location in self.gbuildparser.target_by_location:
             module = location[location.rindex('/') + 1:]
             sourceId, self.sourceObj = self.define_pbxgroup('Sources', 'source', '<group>')
             includeId, self.includeObj = self.define_pbxgroup('Headers', 'inc', '<group>')
-            targetId, self.targetObj = self.define_pbxgroup('Targets', 'target', '<group>')
+            targetId, targetObj = self.define_pbxgroup('Targets', 'target', '<group>')
+            targetLibId, self.targetLibObj = self.define_pbxgroup('Libraries', 'target', '<group>')
+            targetCUId, self.targetCUObj = self.define_pbxgroup('Unittests', 'target', '<group>')
+            targetExeId, self.targetExeObj = self.define_pbxgroup('Executable', 'target', '<group>')
             moduleId, self.moduleObj = self.define_pbxgroup(module, module,'<group>')
-            self.moduleObj['children'] = [sourceId, includeId, targetId ]
+
+            targetObj['children'] = [targetLibId, targetCUId,targetExeId]
+            self.moduleObj['children'] = [sourceId, includeId, targetId]
             pbxproj['objects'].update( {sourceId: self.sourceObj,
                                         includeId: self.includeObj,
-                                        targetId: self.targetObj,
+                                        targetId: targetObj,
+                                        targetLibId: self.targetLibObj,
+                                        targetCUId: self.targetCUObj,
+                                        targetExeId: self.targetExeObj,
                                         moduleId: self.moduleObj})
             mainGroup['children'].append(moduleId)
 
@@ -733,7 +741,6 @@ class XcodeIntegrationGenerator(IdeIntegrationGenerator):
         return result
 
     def generate_project(self, target):
-
         self.targetId = self.generate_id()
         self.configurationListId = self.generate_id()
         self.sourcesBuildPhaseId = self.generate_id()
@@ -745,7 +752,14 @@ class XcodeIntegrationGenerator(IdeIntegrationGenerator):
         self.productGroupId = self.generate_id()
         self.build_source_list(target)
         self.sourceObj['children'].extend(list(self.sourceRefList.keys()))
-        self.targetObj['children'].append(self.targetRefId)
+        if target.build_type == 'Executable':
+            self.targetExeObj['children'].append(self.targetRefId)
+        elif target.build_type == 'Library':
+            self.targetLibObj['children'].append(self.targetRefId)
+        elif target.build_type == 'CppunitTest':
+            self.targetCUObj['children'].append(self.targetRefId)
+        else:
+            raise Exception('this should not happen')
 
         self.rootObj['attributes']['TargetAttributes'].update({
         self.targetId: {'CreatedOnToolsVersion': '8.2',
