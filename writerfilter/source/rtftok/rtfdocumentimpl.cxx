@@ -152,7 +152,7 @@ void putBorderProperty(RTFStack& aStates, Id nId, const RTFValue::Pointer_t& pVa
         for (int i = 0; i < 4; i++)
         {
             RTFValue::Pointer_t p = aStates.top().aParagraphSprms.find(getParagraphBorder(i));
-            if (p.get())
+            if (p)
             {
                 RTFSprms& rAttributes = p->getAttributes();
                 rAttributes.set(nId, pValue);
@@ -161,7 +161,7 @@ void putBorderProperty(RTFStack& aStates, Id nId, const RTFValue::Pointer_t& pVa
     else if (aStates.top().nBorderState == RTFBorderState::CHARACTER)
     {
         RTFValue::Pointer_t pPointer = aStates.top().aCharacterSprms.find(NS_ooxml::LN_EG_RPrBase_bdr);
-        if (pPointer.get())
+        if (pPointer)
         {
             RTFSprms& rAttributes = pPointer->getAttributes();
             rAttributes.set(nId, pValue);
@@ -250,18 +250,12 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
       m_pMapperStream(nullptr),
       m_aDefaultState(this),
       m_bSkipUnknown(false),
-      m_aFontIndexes(),
-      m_aColorTable(),
       m_bFirstRun(true),
       m_bNeedPap(true),
       m_bNeedCr(false),
       m_bNeedCrOrig(false),
       m_bNeedPar(true),
       m_bNeedFinalPar(false),
-      m_aListTableSprms(),
-      m_aSettingsTableAttributes(),
-      m_aSettingsTableSprms(),
-      m_xStorage(),
       m_nNestedCells(0),
       m_nTopLevelCells(0),
       m_nInheritingCells(0),
@@ -269,28 +263,16 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
       m_nTopLevelCurrentCellX(0),
       m_nBackupTopLevelCurrentCellX(0),
       m_aTableBufferStack(1), // create top-level buffer already
-      m_aSuperBuffer(),
       m_pSuperstream(nullptr),
       m_nStreamType(0),
-      m_nHeaderFooterPositions(),
       m_nGroupStartPos(0),
-      m_aBookmarks(),
-      m_aAuthors(),
-      m_aFormfieldSprms(),
-      m_aFormfieldAttributes(),
       m_nFormFieldType(RTFFormFieldType::NONE),
-      m_aOLEAttributes(),
-      m_aObjectAttributes(),
       m_bObject(false),
-      m_aFontTableEntries(),
       m_nCurrentFontIndex(0),
       m_nCurrentEncoding(-1),
       m_nDefaultFontIndex(-1),
-      m_aStyleTableEntries(),
       m_nCurrentStyleIndex(0),
       m_bFormField(false),
-      m_aUnicodeBuffer(),
-      m_aHexBuffer(),
       m_bMathNor(false),
       m_bIgnoreNextContSectBreak(false),
       m_nResetBreakOnSectBreak(RTF_invalid),
@@ -546,7 +528,7 @@ void RTFDocumentImpl::runProps()
     // Delete the sprm, so the trackchange range will be started only once.
     // OTOH set a boolean flag, so we'll know we need to end the range later.
     RTFValue::Pointer_t pTrackchange = m_aStates.top().aCharacterSprms.find(NS_ooxml::LN_trackchange);
-    if (pTrackchange.get())
+    if (pTrackchange)
     {
         m_aStates.top().bStartedTrackchange = true;
         m_aStates.top().aCharacterSprms.erase(NS_ooxml::LN_trackchange);
@@ -1354,7 +1336,7 @@ void RTFDocumentImpl::text(OUString& rString)
     if (m_aStates.top().aTableCellSprms.find(NS_ooxml::LN_CT_TcPrBase_vAlign).get() &&
             m_nTopLevelCells == 0)
     {
-        m_aTableBufferStack.back().push_back(Buf_t(BUFFER_UTEXT, std::make_shared<RTFValue>(rString), nullptr));
+        m_aTableBufferStack.back().emplace_back(Buf_t(BUFFER_UTEXT, std::make_shared<RTFValue>(rString), nullptr));
         return;
     }
 
@@ -2328,7 +2310,7 @@ RTFError RTFDocumentImpl::popState()
         uno::Reference<drawing::XShape> xShape;
         RTFValue::Pointer_t pShape = m_aObjectAttributes.find(NS_ooxml::LN_shape);
         OSL_ASSERT(pShape.get());
-        if (pShape.get())
+        if (pShape)
             pShape->getAny() >>= xShape;
         if (xShape.is())
         {
@@ -2477,7 +2459,7 @@ RTFError RTFDocumentImpl::popState()
         // gcc4.4 (and 4.3 and possibly older) have a problem with dynamic_cast directly to the target class,
         // so help it with an intermediate cast. I'm not sure what exactly the problem is, seems to be unrelated
         // to RTLD_GLOBAL, so most probably a gcc bug.
-        oox::FormulaImportBase& rImport = dynamic_cast<oox::FormulaImportBase&>(dynamic_cast<SfxBaseModel&>(*xComponent.get()));
+        auto& rImport = dynamic_cast<oox::FormulaImportBase&>(dynamic_cast<SfxBaseModel&>(*xComponent.get()));
         rImport.readFormulaOoxml(m_aMathBuffer);
         auto pValue = std::make_shared<RTFValue>(xObject);
         RTFSprms aMathAttributes;
@@ -2817,11 +2799,11 @@ RTFError RTFDocumentImpl::popState()
             RTFSprms aLeveltextAttributes;
             OUString aTextValue;
             RTFValue::Pointer_t pTextBefore = aState.aTableAttributes.find(NS_ooxml::LN_CT_LevelText_val);
-            if (pTextBefore.get())
+            if (pTextBefore)
                 aTextValue += pTextBefore->getString();
             aTextValue += "%1";
             RTFValue::Pointer_t pTextAfter = aState.aTableAttributes.find(NS_ooxml::LN_CT_LevelSuffix_val);
-            if (pTextAfter.get())
+            if (pTextAfter)
                 aTextValue += pTextAfter->getString();
             auto pTextValue = std::make_shared<RTFValue>(aTextValue);
             aLeveltextAttributes.set(NS_ooxml::LN_CT_LevelText_val, pTextValue);
@@ -2832,17 +2814,17 @@ RTFError RTFDocumentImpl::popState()
             aLevelAttributes.set(NS_ooxml::LN_CT_Lvl_ilvl, pIlvlValue);
 
             RTFValue::Pointer_t pFmtValue = aState.aTableSprms.find(NS_ooxml::LN_CT_Lvl_numFmt);
-            if (pFmtValue.get())
+            if (pFmtValue)
                 aLevelSprms.set(NS_ooxml::LN_CT_Lvl_numFmt, pFmtValue);
 
             RTFValue::Pointer_t pStartatValue = aState.aTableSprms.find(NS_ooxml::LN_CT_Lvl_start);
-            if (pStartatValue.get())
+            if (pStartatValue)
                 aLevelSprms.set(NS_ooxml::LN_CT_Lvl_start, pStartatValue);
 
             auto pLeveltextValue = std::make_shared<RTFValue>(aLeveltextAttributes);
             aLevelSprms.set(NS_ooxml::LN_CT_Lvl_lvlText, pLeveltextValue);
             RTFValue::Pointer_t pRunProps = aState.aTableSprms.find(NS_ooxml::LN_CT_Lvl_rPr);
-            if (pRunProps.get())
+            if (pRunProps)
                 aLevelSprms.set(NS_ooxml::LN_CT_Lvl_rPr, pRunProps);
 
             RTFSprms aAbstractAttributes;
@@ -3193,31 +3175,12 @@ RTFParserState::RTFParserState(RTFDocumentImpl* pDocumentImpl)
       eDestination(Destination::NORMAL),
       eFieldStatus(RTFFieldStatus::NONE),
       nBorderState(RTFBorderState::NONE),
-      aTableSprms(),
-      aTableAttributes(),
-      aCharacterSprms(),
-      aCharacterAttributes(),
-      aParagraphSprms(),
-      aParagraphAttributes(),
-      aSectionSprms(),
-      aSectionAttributes(),
-      aTableRowSprms(),
-      aTableRowAttributes(),
-      aTableCellSprms(),
-      aTableCellAttributes(),
-      aTabAttributes(),
-      aCurrentColor(),
       nCurrentEncoding(rtl_getTextEncodingFromWindowsCharset(0)),
       nUc(1),
       nCharsToSkip(0),
       nBinaryToRead(0),
       nListLevelNum(0),
-      aListLevelEntries(),
-      aLevelNumbers(),
       bLevelNumbersValid(true),
-      aPicture(),
-      aShape(),
-      aDrawingObject(),
       aFrame(this),
       eRunType(RunType::LOCH),
       isRightToLeft(false),
@@ -3458,7 +3421,7 @@ RTFSprms RTFFrame::getSprms()
             break;
         }
 
-        if (pValue.get())
+        if (pValue)
             sprms.set(nId, pValue);
     }
 
