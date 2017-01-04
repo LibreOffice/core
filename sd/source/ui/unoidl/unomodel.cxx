@@ -1669,7 +1669,7 @@ void ImplPDFExportShapeInteraction( const uno::Reference< drawing::XShape >& xSh
             Rectangle   aLinkRect( Point( aShapePos.X, aShapePos.Y ), Size( aShapeSize.Width, aShapeSize.Height ) );
 
             // Handle linked videos.
-            if (xShape->getShapeType() == "com.sun.star.drawing.MediaShape")
+            if (xShape->getShapeType() == "com.sun.star.drawing.MediaShape" || xShape->getShapeType() == "com.sun.star.presentation.MediaShape")
             {
                 OUString aMediaURL;
                 xShapePropSet->getPropertyValue("MediaURL") >>= aMediaURL;
