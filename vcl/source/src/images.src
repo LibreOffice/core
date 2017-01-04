@@ -26,7 +26,7 @@ Bitmap (SV_RESID_BITMAP_CHECK + SV_RESID_STDOFFSET)
 
 Bitmap (SV_RESID_BITMAP_CHECK + SV_RESID_MONOOFFSET)
 {
-    File = "checkmono.bmp";
+    File = "checkmono.png";
 };
 
 Bitmap (SV_RESID_BITMAP_SCROLLVH)
@@ -71,7 +71,7 @@ Bitmap (SV_RESID_BITMAP_RADIO + SV_RESID_STDOFFSET)
 
 Bitmap (SV_RESID_BITMAP_RADIO + SV_RESID_MONOOFFSET)
 {
-    File = "radiomono.bmp";
+    File = "radiomono.png";
 };
 
 Bitmap SV_RESID_BITMAP_ERRORBOX
