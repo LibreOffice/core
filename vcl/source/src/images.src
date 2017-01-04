@@ -109,16 +109,6 @@ Bitmap SV_RESID_BITMAP_REFRESH
     File = "reload.png";
 };
 
-Bitmap SV_RESID_BITMAP_SPLITHARW
-{
-    File = "splharw.png";
-};
-
-Bitmap SV_RESID_BITMAP_SPLITVARW
-{
-    File = "splvarw.png";
-};
-
 Bitmap (SV_ICON_SIZE48_START)
 {
     File = "mainapp_48_8.png" ;

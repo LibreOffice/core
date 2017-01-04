@@ -34,9 +34,6 @@
 #define SV_RESID_BITMAP_WARNINGBOX                   1022
 #define SV_RESID_BITMAP_INFOBOX                      1023
 
-#define SV_RESID_BITMAP_SPLITHARW                    1042
-#define SV_RESID_BITMAP_SPLITVARW                    1043
-
 #define SV_RESID_BITMAP_SCROLLMSK                    1050
 #define SV_RESID_BITMAP_WHEELVH                      1051
 #define SV_RESID_BITMAP_WHEELV                       1052
