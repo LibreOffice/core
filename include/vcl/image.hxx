@@ -80,12 +80,12 @@ public:
 
     void                    InsertFromHorizontalStrip( const BitmapEx &rBitmapEx,
                                    const std::vector< OUString > &rNameVector );
-    void                    InsertFromHorizontalBitmap( const ResId& rResId,
+    void                    InsertFromHorizontalBitmap(const ResId& rResId,
                                     sal_uInt16       nCount,
                                     const Color *pNonAlphaMaskColor,
-                                    const Color *pSearchColors = nullptr,
-                                    const Color *pReplaceColors = nullptr,
-                                    sal_uLong        nColorCount = 0);
+                                    const Color *pSearchColors,
+                                    const Color *pReplaceColors,
+                                    sal_uLong        nColorCount);
     BitmapEx        GetAsHorizontalStrip() const;
     sal_uInt16      GetImageCount() const;
     Size            GetImageSize() const;
