@@ -728,17 +728,10 @@ SwXAutoTextEntry::SwXAutoTextEntry(SwGlossaries* pGlss, const OUString& rGroupNa
 
 SwXAutoTextEntry::~SwXAutoTextEntry()
 {
-    {
-        SolarMutexGuard aGuard;
+    SolarMutexGuard aGuard;
 
-        // ensure that any pending modifications are written
-        implFlushDocument( true );
-
-        //! Bug #96559
-        // DocShell must be cleared before mutex is lost.
-        // Needs to be done explicitly since xDocSh is a class member.
-        // Thus, an own block here, guarded by the SolarMutex
-    }
+    // ensure that any pending modifications are written
+    implFlushDocument( true );
 }
 
 void SwXAutoTextEntry::implFlushDocument( bool _bCloseDoc )
