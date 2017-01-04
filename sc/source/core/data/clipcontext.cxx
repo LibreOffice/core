@@ -210,6 +210,13 @@ void CopyFromClipContext::setSingleCell( const ScAddress& rSrcPos, const ScColum
                 if (!bNumeric)
                     // Error code is treated as numeric value. Don't paste it.
                     rSrcCell.clear();
+                else
+                {
+                    // Turn this into a formula cell with just the error code.
+                    ScFormulaCell* pErrCell = new ScFormulaCell(mpClipDoc, rSrcPos);
+                    pErrCell->SetErrCode(nErr);
+                    rSrcCell.set(pErrCell);
+                }
             }
             else if (rSrcCell.mpFormula->IsValue())
             {
