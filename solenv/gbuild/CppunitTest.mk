@@ -106,7 +106,7 @@ $(call gb_CppunitTest_get_clean_target,%) :
 $(call gb_CppunitTest_get_target,%) :| $(gb_CppunitTest_RUNTIMEDEPS)
 	$(call gb_Output_announce,$*,$(true),CUT,2)
 	$(call gb_Helper_abbreviate_dirs,\
-	        $(if $(gb_CppunitTest_vcl_hide_windows),VCL_HIDE_WINDOWS=1 && ) \
+	        $(if $(gb_CppunitTest_vcl_hide_windows),export VCL_HIDE_WINDOWS=1 && ) \
 	        $(if $(gb_CppunitTest_vcl_show_windows),unset VCL_HIDE_WINDOWS && ) \
 		mkdir -p $(dir $@) && \
 		rm -fr $@.user && mkdir $@.user && \
