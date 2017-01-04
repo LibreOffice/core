@@ -2211,7 +2211,7 @@ bool ScTable::HasSelectionMatrixFragment( const ScMarkData& rMark ) const
     {
         for ( SCCOLROW j=aSpan.mnStart; j<aSpan.mnEnd; j++ )
         {
-            if ( aCol[j].HasSelectionMatrixFragment(rMark) )
+            if ( aCol[j].HasSelectionMatrixFragmentByCol(rMark, (SCCOL)j) )
                 return true;
         }
     }

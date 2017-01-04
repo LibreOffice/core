@@ -238,6 +238,7 @@ public:
     SCSIZE             VisibleCount( SCROW nStartRow, SCROW nEndRow ) const;
     sc::MatrixEdge     GetBlockMatrixEdges(SCROW nRow1, SCROW nRow2, sc::MatrixEdge nMask ) const;
     bool    HasSelectionMatrixFragment(const ScMarkData& rMark) const;
+    bool    HasSelectionMatrixFragmentByCol(const ScMarkData& rMark, SCCOL) const;
 
     bool    GetFirstVisibleAttr( SCROW& rFirstRow ) const;
     bool    GetLastVisibleAttr( SCROW& rLastRow ) const;

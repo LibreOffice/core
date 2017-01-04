@@ -115,14 +115,17 @@ public:
                 If >= 0, use given sheet-tab in ranges.
      */
     void        FillRangeListWithMarks( ScRangeList* pList, bool bClear, SCTAB nForTab = -1 ) const;
+    void        FillRangeListWithMarksByCol( ScRangeList* pList, bool bClear, SCTAB nForTab = -1, SCCOL nCol = -1 ) const;
     void        ExtendRangeListTables( ScRangeList* pList ) const;
 
     ScRangeList GetMarkedRanges() const;
+    ScRangeList GetMarkedRangesByCol( SCCOL nCol ) const;
     /** Get marked ranges with sheet-tab set to nTab.
         Marks are stored for the currently active sheet respectively the
         multi-area start-sheet-tab, update ranges with the sheet for which this
         is called. */
     ScRangeList GetMarkedRangesForTab( SCTAB nTab ) const;
+    ScRangeList GetMarkedRangesForTabByCol( SCTAB nTab, SCCOL nCol ) const;
 
     void        MarkFromRangeList( const ScRangeList& rList, bool bReset );
 
