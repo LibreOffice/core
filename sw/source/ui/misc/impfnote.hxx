@@ -26,6 +26,7 @@
 #include <vcl/field.hxx>
 #include <numberingtypelistbox.hxx>
 
+enum SwFootnoteNum : unsigned;
 class SwWrtShell;
 
 class SwEndNoteOptionPage : public SfxTabPage
@@ -60,7 +61,7 @@ class SwEndNoteOptionPage : public SfxTabPage
     bool    bEndNote;
 
     inline void SelectNumbering(int eNum);
-    int GetNumbering() const;
+    SwFootnoteNum GetNumbering() const;
 
     DECL_LINK(PosPageHdl, Button*, void);
     DECL_LINK(PosChapterHdl, Button*, void);

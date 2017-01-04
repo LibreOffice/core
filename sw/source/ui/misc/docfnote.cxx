@@ -273,10 +273,10 @@ void SwEndNoteOptionPage::SelectNumbering(int eNum)
     NumCountHdl(*m_pNumCountBox);
 }
 
-int SwEndNoteOptionPage::GetNumbering() const
+SwFootnoteNum SwEndNoteOptionPage::GetNumbering() const
 {
     const sal_Int32 nPos = m_pNumCountBox->GetSelectEntryPos();
-    return (int) bPosDoc? nPos + 2: nPos;
+    return static_cast<SwFootnoteNum>((bPosDoc) ? nPos + 2 : nPos);
 }
 
 void SwEndNoteOptionPage::SetShell( SwWrtShell &rShell )
@@ -296,7 +296,7 @@ void SwEndNoteOptionPage::SetShell( SwWrtShell &rShell )
 // all kinds of numbering can be used.
 IMPL_LINK_NOARG(SwEndNoteOptionPage, PosPageHdl, Button*, void)
 {
-    const SwFootnoteNum eNum = (const SwFootnoteNum)GetNumbering();
+    const SwFootnoteNum eNum = GetNumbering();
     bPosDoc = false;
     if(LISTBOX_ENTRY_NOTFOUND == m_pNumCountBox->GetEntryPos(aNumPage))
     {
@@ -396,7 +396,7 @@ bool SwEndNoteOptionPage::FillItemSet( SfxItemSet * )
     {
         SwFootnoteInfo *pI = static_cast<SwFootnoteInfo*>(pInf.get());
         pI->ePos = m_pPosPageBox->IsChecked() ? FTNPOS_PAGE : FTNPOS_CHAPTER;
-        pI->eNum = (SwFootnoteNum)GetNumbering();
+        pI->eNum = GetNumbering();
         pI->aQuoVadis = m_pContEdit->GetText();
         pI->aErgoSum = m_pContFromEdit->GetText();
         if ( !(*pI == pSh->GetFootnoteInfo()) )

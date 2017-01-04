@@ -81,7 +81,7 @@ enum SwFootnotePos
     FTNPOS_CHAPTER = 8
 };
 
-enum SwFootnoteNum
+enum SwFootnoteNum : unsigned
 {
     FTNNUM_PAGE, FTNNUM_CHAPTER, FTNNUM_DOC
 };
