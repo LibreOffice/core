@@ -306,6 +306,117 @@ bool ScColumn::HasSelectionMatrixFragment(const ScMarkData& rMark) const
     return false;
 }
 
+bool ScColumn::HasSelectionMatrixFragmentByCol(const ScMarkData& rMark, SCCOL nColu) const
+{
+    using namespace sc;
+
+    if (!rMark.IsMultiMarked())
+        return false;
+
+    ScAddress aOrigin(ScAddress::INITIALIZE_INVALID);
+    ScAddress aCurOrigin = aOrigin;
+
+    bool bOpen = false;
+    ScRangeList aRanges = rMark.GetMarkedRangesByCol(nColu);
+    for (size_t i = 0, n = aRanges.size(); i < n; ++i)
+    {
+        const ScRange& r = *aRanges[i];
+        if (nTab < r.aStart.Tab() || r.aEnd.Tab() < nTab)
+            continue;
+
+        if (nCol < r.aStart.Col() || r.aEnd.Col() < nCol)
+            continue;
+
+        SCROW nTop = r.aStart.Row(), nBottom = r.aEnd.Row();
+        SCROW nRow = nTop;
+        std::pair<sc::CellStoreType::const_iterator,size_t> aPos = maCells.position(nRow);
+        sc::CellStoreType::const_iterator it = aPos.first;
+        size_t nOffset = aPos.second;
+
+        for (;it != maCells.end() && nRow <= nBottom; ++it, nOffset = 0)
+        {
+            if (it->type != sc::element_type_formula)
+            {
+                // Skip this block.
+                nRow += it->size - nOffset;
+                continue;
+            }
+
+            // This is a formula cell block.
+            size_t nRowsToRead = nBottom - nRow + 1;
+            size_t nEnd = std::min(it->size, nRowsToRead);
+            sc::formula_block::const_iterator itCell = sc::formula_block::begin(*it->data);
+            std::advance(itCell, nOffset);
+            for (size_t j = nOffset; j < nEnd; ++itCell, ++j)
+            {
+                // Loop inside the formula block.
+                const ScFormulaCell* pCell = *itCell;
+                if (!pCell->GetMatrixFlag())
+                    // cell is not a part of a matrix.
+                    continue;
+
+                MatrixEdge nEdges = pCell->GetMatrixEdge(aOrigin);
+                if (nEdges == MatrixEdge::Nothing)
+                    continue;
+
+                bool bFound = false;
+
+                if (nEdges & MatrixEdge::Top)
+                    bOpen = true;   // top edge opens, keep on looking
+                else if (!bOpen)
+                    return true;    // there's something that wasn't opened
+                else if (nEdges & MatrixEdge::Inside)
+                    bFound = true;  // inside, all selected?
+
+                if ((((nEdges & MatrixEdge::Left) | MatrixEdge::Right) ^ ((nEdges & MatrixEdge::Right) | MatrixEdge::Left)))
+                    // either left or right, but not both.
+                    bFound = true;  // only left/right edge, all selected?
+
+                if (nEdges & MatrixEdge::Bottom)
+                    bOpen = false;  // bottom edge closes
+
+                if (bFound)
+                {
+                    // Check if the matrix is inside the selection in its entirety.
+                    //
+                    // TODO: It's more efficient to skip the matrix range if
+                    // it's within selection, to avoid checking it again and
+                    // again.
+
+                    if (aCurOrigin != aOrigin)
+                    {   // new matrix to check?
+                        aCurOrigin = aOrigin;
+                        const ScFormulaCell* pFCell;
+                        if (pCell->GetMatrixFlag() == MM_REFERENCE)
+                            pFCell = pDocument->GetFormulaCell(aOrigin);
+                        else
+                            pFCell = pCell;
+
+                        SCCOL nC;
+                        SCROW nR;
+                        pFCell->GetMatColsRows(nC, nR);
+                        ScRange aRange(aOrigin, ScAddress(aOrigin.Col()+nC-1, aOrigin.Row()+nR-1, aOrigin.Tab()));
+                        if (rMark.IsAllMarked(aRange))
+                            bFound = false;
+                    }
+                    else
+                        bFound = false;     // done already
+                }
+
+                if (bFound)
+                    return true;
+            }
+
+            nRow += nEnd;
+        }
+    }
+
+    if (bOpen)
+        return true;
+
+    return false;
+}
+
 bool ScColumn::HasAttrib( SCROW nRow1, SCROW nRow2, HasAttrFlags nMask ) const
 {
     return pAttrArray->HasAttrib( nRow1, nRow2, nMask );

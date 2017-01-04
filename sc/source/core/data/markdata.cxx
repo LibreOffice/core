@@ -415,6 +415,66 @@ void ScMarkData::FillRangeListWithMarks( ScRangeList* pList, bool bClear, SCTAB 
     }
 }
 
+void ScMarkData::FillRangeListWithMarksByCol( ScRangeList* pList, bool bClear, SCCOL nCol, SCTAB nForTab) const
+{
+    if (!pList)
+        return;
+
+    if (bClear)
+        pList->RemoveAll();
+
+    //TODO: for multiple selected tables enter multiple ranges !!!
+
+    if ( bMultiMarked )
+    {
+        SCTAB nTab = (nForTab < 0 ? aMultiRange.aStart.Tab() : nForTab);
+
+        //SCCOL nStartCol = aMultiRange.aStart.Col();
+        SCCOL nEndCol = aMultiRange.aEnd.Col();
+        //for (SCCOL nCol=nStartCol; nCol<=nEndCol; nCol++)
+        //{
+            if (aMultiSel.HasMarks( nCol ))
+            {
+                // Feeding column-wise fragments to ScRangeList::Join() is a
+                // huge bottleneck, speed this up for multiple columns
+                // consisting of identical row sets by building a column span
+                // first. This is usually the case for filtered data, for
+                // example.
+                SCCOL nToCol = nCol+1;
+                for ( ; nToCol <= nEndCol; ++nToCol)
+                {
+                    if (!aMultiSel.HasEqualRowsMarked(nCol, nToCol))
+                        break;
+                }
+                --nToCol;
+                ScRange aRange( nCol, 0, nTab, nToCol, 0, nTab );
+                SCROW nTop, nBottom;
+                ScMultiSelIter aMultiIter( aMultiSel, nCol );
+                while ( aMultiIter.Next( nTop, nBottom ) )
+                {
+                    aRange.aStart.SetRow( nTop );
+                    aRange.aEnd.SetRow( nBottom );
+                    pList->Join( aRange );
+                }
+                nCol = nToCol;
+            }
+        //}
+    }
+
+    if ( bMarked )
+    {
+        if (nForTab < 0)
+            pList->Append( aMarkRange );
+        else
+        {
+            ScRange aRange( aMarkRange );
+            aRange.aStart.SetTab( nForTab );
+            aRange.aEnd.SetTab( nForTab );
+            pList->Append( aRange );
+        }
+    }
+}
+
 void ScMarkData::ExtendRangeListTables( ScRangeList* pList ) const
 {
     if (!pList)
@@ -441,10 +501,24 @@ ScRangeList ScMarkData::GetMarkedRanges() const
     return aRet;
 }
 
+ScRangeList ScMarkData::GetMarkedRangesByCol( SCCOL nCol ) const
+{
+    ScRangeList aRet;
+    FillRangeListWithMarksByCol(&aRet, false, nCol);
+    return aRet;
+}
+
 ScRangeList ScMarkData::GetMarkedRangesForTab( SCTAB nTab ) const
 {
     ScRangeList aRet;
     FillRangeListWithMarks(&aRet, false, nTab);
+    return aRet;
+}
+
+ScRangeList ScMarkData::GetMarkedRangesForTabByCol( SCTAB nTab, SCCOL nCol ) const
+{
+    ScRangeList aRet;
+    FillRangeListWithMarksByCol(&aRet, false, nCol, nTab);
     return aRet;
 }
 
