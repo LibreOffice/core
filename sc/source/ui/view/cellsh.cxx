@@ -879,6 +879,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                             aList.push_back(aStr);
                             // Protection is sal_True if both Sheet and Scenario are protected
                             aList.push_back((bSheetProtected && (nFlags & ScScenarioFlags::Protected)) ? OUString("1") : OUString("0"));
+                            aList.push_back(pDoc->IsActiveScenario(nScTab) ? OUString("1") : OUString("0"));
                             ++nScTab;
                         }
                     }

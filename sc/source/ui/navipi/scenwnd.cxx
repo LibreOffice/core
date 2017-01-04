@@ -67,30 +67,45 @@ void ScScenarioListBox::UpdateEntries( const std::vector<OUString> &aNewEntryLis
         default:
         {
             // sheet contains scenarios
-            OSL_ENSURE( aNewEntryList.size() % 3 == 0, "ScScenarioListBox::UpdateEntries - wrong list size" );
+            OSL_ENSURE( aNewEntryList.size() % 4 == 0, "ScScenarioListBox::UpdateEntries - wrong list size" );
             SetUpdateMode( false );
+            sal_uInt32 nActiveCount = 0;
+            OUString sActiveName;
 
             std::vector<OUString>::const_iterator iter;
             for (iter = aNewEntryList.begin(); iter != aNewEntryList.end(); ++iter)
             {
                 ScenarioEntry aEntry;
 
-                // first entry of a triple is the scenario name
+                // first entry is the scenario name
                 aEntry.maName = *iter;
 
-                // second entry of a triple is the scenario comment
+                // second entry is the scenario comment
                 ++iter;
                 aEntry.maComment = *iter;
 
-                // third entry of a triple is the protection ("0" = not protected, "1" = protected)
+                // third entry is the protection ("0" = not protected, "1" = protected)
                 ++iter;
                 aEntry.mbProtected = !(*iter).isEmpty() && (*iter)[0] != '0';
 
                 maEntries.push_back( aEntry );
                 InsertEntry( aEntry.maName );
+
+                // fourth entry is the Active state
+                ++iter;
+                if( iter->equals("1") )
+                {
+                    ++nActiveCount;
+                    sActiveName = aEntry.maName;
+                }
             }
             SetUpdateMode( true );
-            SetNoSelection();
+            // if more than one scenario, but only one is active, then indicate that by auto-selecting it
+            if( nActiveCount == 1 && maEntries.size() > 1 )
+                SelectEntry( sActiveName );
+            else
+                SetNoSelection();
+
             mrParent.SetComment( EMPTY_OUSTRING );
         }
     }
