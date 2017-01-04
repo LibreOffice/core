@@ -87,6 +87,24 @@
     },
     {
       "key": {
+        "uuid": "1a6eadb0_92efedaf",
+        "filename": "sc/source/core/data/markdata.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 435,
+      "author": {
+        "id": 1000749
+      },
+      "writtenOn": "2017-01-04T17:07:22Z",
+      "side": 1,
+      "message": "commenting out this line makes this function for only one column, currently it loops every column, looping columns in the other function already",
+      "parentUuid": "1a6eadb0_d28c0538",
+      "revId": "256d1746e89e91f8c3698f61768cd7c5ee46db4a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a6eadb0_327c5920",
         "filename": "sc/source/core/data/table3.cxx",
         "patchSetId": 2
@@ -98,6 +116,24 @@
       "writtenOn": "2017-01-04T16:24:46Z",
       "side": 1,
       "message": "Why this change of removing one call to ScMarkData::GetMarkedRangesForTab() and replacing it with a bunch of individual calls to ScMarkData::GetMarkedRangesForTabByCol()? I guess this makes it even slower.",
+      "revId": "256d1746e89e91f8c3698f61768cd7c5ee46db4a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a6eadb0_72f2519c",
+        "filename": "sc/source/core/data/table3.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3473,
+      "author": {
+        "id": 1000749
+      },
+      "writtenOn": "2017-01-04T17:07:22Z",
+      "side": 1,
+      "message": "For example, 16000 cells spreaded to 60 column with 400~500 rows each, In current code looping 16000*60\n\nbut this loops 400-500*60\n\ncalling function count is high but final loop is lower",
+      "parentUuid": "1a6eadb0_327c5920",
       "revId": "256d1746e89e91f8c3698f61768cd7c5ee46db4a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
