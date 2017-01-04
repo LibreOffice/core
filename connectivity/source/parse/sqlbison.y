@@ -60,11 +60,11 @@ inline connectivity::OSQLInternalNode* newNode(const sal_Char* pNewValue,
         const connectivity::SQLNodeType eNodeType,
         const sal_uInt32 nNodeID = 0);
 
-inline connectivity::OSQLInternalNode* newNode(const OString& _NewValue,
+inline connectivity::OSQLInternalNode* newNode(const OString& _newValue,
         const connectivity::SQLNodeType eNodeType,
         const sal_uInt32 nNodeID = 0);
 
-inline connectivity::OSQLInternalNode* newNode(const OUString& _NewValue,
+inline connectivity::OSQLInternalNode* newNode(const OUString& _newValue,
         const connectivity::SQLNodeType eNodeType,
         const sal_uInt32 nNodeID = 0);
 
@@ -1600,7 +1600,7 @@ literal:
 				$$ = SQL_NEW_RULE;
 				$$->append($1);
 				$$->append($2);
-				xxx_pGLOBAL_SQLPARSER->reduceLiteral($$, sal_True);
+				OSQLParser::reduceLiteral($$, true);
 			}
 			else
 				YYERROR;
@@ -1612,7 +1612,7 @@ literal:
 				$$ = SQL_NEW_RULE;
 				$$->append($1);
 				$$->append($2);
-				xxx_pGLOBAL_SQLPARSER->reduceLiteral($$, sal_True);
+				OSQLParser::reduceLiteral($$, true);
 			}
 			else
 				YYERROR;
@@ -1624,7 +1624,7 @@ literal:
 				$$ = SQL_NEW_RULE;
 				$$->append($1);
 				$$->append($2);
-				xxx_pGLOBAL_SQLPARSER->reduceLiteral($$, sal_True);
+				OSQLParser::reduceLiteral($$, true);
 			}
 			else
 				YYERROR;
@@ -1636,7 +1636,7 @@ literal:
 				$$ = SQL_NEW_RULE;
 				$$->append($1);
 				$$->append($2);
-				xxx_pGLOBAL_SQLPARSER->reduceLiteral($$, sal_True);
+				OSQLParser::reduceLiteral($$, true);
 			}
 			else
 				YYERROR;
@@ -3858,19 +3858,19 @@ column:
 		{
 			sal_uInt32 nNod = $$->getRuleID();
 			delete $$;
-			$$ = newNode(xxx_pGLOBAL_SQLPARSER->TokenIDToStr(nNod), SQLNodeType::Name);
+			$$ = newNode(OSQLParser::TokenIDToStr(nNod), SQLNodeType::Name);
 		}
 	|	SQL_TOKEN_CHAR_LENGTH
 		{
 			sal_uInt32 nNod = $$->getRuleID();
 			delete $$;
-			$$ = newNode(xxx_pGLOBAL_SQLPARSER->TokenIDToStr(nNod), SQLNodeType::Name);
+			$$ = newNode(OSQLParser::TokenIDToStr(nNod), SQLNodeType::Name);
 		}
 	|	SQL_TOKEN_EXTRACT
 		{
 			sal_uInt32 nNod = $$->getRuleID();
 			delete $$;
-			$$ = newNode(xxx_pGLOBAL_SQLPARSER->TokenIDToStr(nNod), SQLNodeType::Name);
+			$$ = newNode(OSQLParser::TokenIDToStr(nNod), SQLNodeType::Name);
 		}
 	;
 case_expression:
@@ -4279,18 +4279,18 @@ connectivity::OSQLInternalNode* newNode(const sal_Char* pNewValue,
     return new connectivity::OSQLInternalNode(pNewValue, eNodeType, nNodeID);
 }
 
-connectivity::OSQLInternalNode* newNode(const OString& _NewValue,
+connectivity::OSQLInternalNode* newNode(const OString& _newValue,
         const connectivity::SQLNodeType eNodeType,
         const sal_uInt32 nNodeID)
 {
-    return new connectivity::OSQLInternalNode(_NewValue, eNodeType, nNodeID);
+    return new connectivity::OSQLInternalNode(_newValue, eNodeType, nNodeID);
 }
 
-connectivity::OSQLInternalNode* newNode(const OUString& _NewValue,
+connectivity::OSQLInternalNode* newNode(const OUString& _newValue,
         const connectivity::SQLNodeType eNodeType,
         const sal_uInt32 nNodeID)
 {
-    return new connectivity::OSQLInternalNode(_NewValue, eNodeType, nNodeID);
+    return new connectivity::OSQLInternalNode(_newValue, eNodeType, nNodeID);
 }
 
 OParseContext::OParseContext()
@@ -4430,13 +4430,13 @@ OUString ConvertLikeToken(const OSQLParseNode* pTokenNode, const OSQLParseNode* 
 		OUStringBuffer sSearch,sReplace;
 		if ( bInternational )
 		{
-		    sSearch.appendAscii("%_",2);
-		    sReplace.appendAscii("*?",2);
+		    sSearch.append("%_");
+		    sReplace.append("*?");
 		}
 		else
 		{
-		    sSearch.appendAscii("*?",2);
-		    sReplace.appendAscii("%_",2);
+		    sSearch.append("*?");
+		    sReplace.append("%_");
 		}
 
 		bool wasEscape = false;
@@ -4479,9 +4479,9 @@ OParseContext		    OSQLParser::s_aDefaultContext;
 
 sal_Int32			OSQLParser::s_nRefCount	= 0;
 //	::osl::Mutex		OSQLParser::s_aMutex;
-OSQLScanner*		OSQLParser::s_pScanner = 0;
-OSQLParseNodesGarbageCollector*		OSQLParser::s_pGarbageCollector = 0;
-css::uno::Reference< css::i18n::XLocaleData4>  OSQLParser::s_xLocaleData = NULL;
+OSQLScanner*		OSQLParser::s_pScanner = nullptr;
+OSQLParseNodesGarbageCollector*		OSQLParser::s_pGarbageCollector = nullptr;
+css::uno::Reference< css::i18n::XLocaleData4>  OSQLParser::s_xLocaleData = nullptr;
 
 void setParser(OSQLParser* _pParser)
 {
@@ -4504,8 +4504,8 @@ static OUString delComment( const OUString& rQuery )
 {
     // First a quick search if there is any "--" or "//" or "/*", if not then the whole
     // copying loop is pointless.
-    if (rQuery.indexOfAsciiL( "--", 2, 0) < 0 && rQuery.indexOfAsciiL( "//", 2, 0) < 0 &&
-            rQuery.indexOfAsciiL( "/*", 2, 0) < 0)
+    if (rQuery.indexOf("--") < 0 && rQuery.indexOf("//") < 0 &&
+            rQuery.indexOf("/*") < 0)
         return rQuery;
 
     const sal_Unicode* pCopy = rQuery.getStr();
@@ -4570,12 +4570,12 @@ OSQLParseNode* OSQLParser::parseTree(OUString& rErrorMessage,
 	OUString sTemp = delComment(rStatement);
 
 	// defines how to scan
-	s_pScanner->SetRule(s_pScanner->GetSQLRule()); // initial
+	s_pScanner->SetRule(OSQLScanner::GetSQLRule()); // initial
 	s_pScanner->prepareScan(sTemp, m_pContext, bInternational);
 
-	SQLyylval.pParseNode = NULL;
+	SQLyylval.pParseNode = nullptr;
 	//	SQLyypvt = NULL;
-	m_pParseTree = NULL;
+	m_pParseTree = nullptr;
 	m_sErrorMessage = "";
 
     // start parsing
@@ -4591,7 +4591,7 @@ OSQLParseNode* OSQLParser::parseTree(OUString& rErrorMessage,
 
 		// clear the garbage collector
 		(*s_pGarbageCollector)->clearAndDelete();
-		return NULL;
+		return nullptr;
 	}
 	else
 	{
@@ -4702,7 +4702,7 @@ sal_Int16 OSQLParser::buildNode(OSQLParseNode*& pAppend,OSQLParseNode* pCompare,
 {
 	OSQLParseNode* pColumnRef = new OSQLInternalNode("", SQLNodeType::Rule,OSQLParser::RuleID(OSQLParseNode::column_ref));
 	pColumnRef->append(new OSQLInternalNode(m_sFieldName,SQLNodeType::Name));
-	OSQLParseNode* pComp = NULL;
+	OSQLParseNode* pComp = nullptr;
 	if ( SQL_ISTOKEN( pCompare, BETWEEN) && pLiteral2 )
 		pComp = new OSQLInternalNode("", SQLNodeType::Rule,OSQLParser::RuleID(OSQLParseNode::between_predicate_part_2));
 	else
@@ -4736,11 +4736,11 @@ sal_Int16 OSQLParser::buildStringNodes(OSQLParseNode*& pLiteral)
 		OSQLParseNode* pNewNode = new OSQLInternalNode(pLiteral->getTokenValue(), SQLNodeType::String);
 		pParent->replace(pLiteral, pNewNode);
 		delete pLiteral;
-		pLiteral = NULL;
+		pLiteral = nullptr;
 		return 1;
 	}
 
-	for(sal_uInt32 i=0;i<pLiteral->count();++i)
+	for(size_t i=0;i<pLiteral->count();++i)
 	{
 		OSQLParseNode* pChild = pLiteral->getChild(i);
 		buildStringNodes(pChild);
@@ -4769,7 +4769,7 @@ void OSQLParser::reduceLiteral(OSQLParseNode*& pLiteral, bool bAppendBlank)
 	OUStringBuffer aValue(pLiteral->getChild(0)->getTokenValue());
 	if (bAppendBlank)
 	{
-		aValue.appendAscii(" ");
+		aValue.append(" ");
 	}
 
 	aValue.append(pLiteral->getChild(1)->getTokenValue());
@@ -4816,7 +4816,7 @@ void OSQLParser::error(const sal_Char *fmt)
 
 int OSQLParser::SQLlex()
 {
-	return s_pScanner->SQLlex();
+	return OSQLScanner::SQLlex();
 }
 
 #if defined _MSC_VER
