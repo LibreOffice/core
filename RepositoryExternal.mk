@@ -458,4 +458,32 @@ endef
 endif # SYSTEM_SERF
 
 
+ifeq ($(SYSTEM_CURL),YES)
+
+define gb_LinkTarget__use_curl
+$(call gb_LinkTarget_add_defs,$(1),\
+    -DSYSTEM_CURL \
+)
+$(call gb_LinkTarget_set_include,$(1),\
+    $$(INCLUDE) \
+    $(CURL_CFLAGS) \
+)
+$(call gb_LinkTarget_add_libs,$(1),$(CURL_LIBS))
+endef
+
+else # !SYSTEM_CURL
+
+$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
+    curl \
+))
+
+define gb_LinkTarget__use_curl
+$(call gb_LinkTarget_add_linked_libs,$(1),\
+    curl \
+)
+endef
+
+endif # SYSTEM_CURL
+
+
 # vim: set noet sw=4 ts=4:

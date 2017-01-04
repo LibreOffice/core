@@ -31,11 +31,6 @@ $(eval $(call gb_Library_set_include,ucpftp1,\
         $$(INCLUDE) \
 	-I$(SRCDIR)/ucb/inc/pch \
 	-I$(SRCDIR)/ucb/source/inc \
-	$(filter -I%,$(CURL_CFLAGS)) \
-))
-
-$(eval $(call gb_Library_add_cflags,ucpftp1,\
-	$(filter-out -I%,$(CURL_CFLAGS)) \
 ))
 
 $(eval $(call gb_Library_add_api,ucpftp1,\
@@ -52,9 +47,7 @@ $(eval $(call gb_Library_add_linked_libs,ucpftp1,\
 	$(gb_STDLIBS) \
 ))
 
-$(eval $(call gb_Library_add_libs,ucpftp1,\
-	$(CURL_LIBS) \
-))
+$(call gb_Library_use_external,ucpftp1,curl)
 
 $(eval $(call gb_Library_add_exception_objects,ucpftp1,\
 	ucb/source/ucp/ftp/ftpservices \
