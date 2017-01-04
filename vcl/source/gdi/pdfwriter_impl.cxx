@@ -4424,11 +4424,38 @@ bool PDFWriterImpl::emitScreenAnnotations()
     for (int i = 0; i < nAnnots; i++)
     {
         const PDFScreen& rScreen = m_aScreens[i];
+
+        OStringBuffer aLine;
+        bool bEmbed = false;
+        if (!rScreen.m_aTempFileURL.isEmpty())
+        {
+            bEmbed = true;
+            if (!updateObject(rScreen.m_nTempFileObject))
+                continue;
+
+            SvFileStream aFileStream(rScreen.m_aTempFileURL, StreamMode::READ);
+            SvMemoryStream aMemoryStream;
+            aMemoryStream.WriteStream(aFileStream);
+
+            aLine.append(rScreen.m_nTempFileObject);
+            aLine.append(" 0 obj\n");
+            aLine.append("<< /Type /EmbeddedFile /Length ");
+            aLine.append(static_cast<sal_Int64>(aMemoryStream.GetSize()));
+            aLine.append(" >>\nstream\n");
+            CHECK_RETURN(writeBuffer(aLine.getStr(), aLine.getLength()));
+            aLine.setLength(0);
+
+            CHECK_RETURN(writeBuffer(aMemoryStream.GetData(), aMemoryStream.GetSize()));
+
+            aLine.append("\nendstream\nendobj\n\n");
+            CHECK_RETURN(writeBuffer(aLine.getStr(), aLine.getLength()));
+            aLine.setLength(0);
+        }
+
         if (!updateObject(rScreen.m_nObject))
             continue;
 
         // Annot dictionary.
-        OStringBuffer aLine;
         aLine.append(rScreen.m_nObject);
         aLine.append(" 0 obj\n");
         aLine.append("<</Type/Annot");
@@ -4452,11 +4479,23 @@ bool PDFWriterImpl::emitScreenAnnotations()
 
         // MediaClip dictionary.
         aLine.append("/C<</Type/MediaClip /S/MCD ");
-        aLine.append("/D << /FS /URL /Type /Filespec /F ");
-        appendLiteralStringEncrypt(rScreen.m_aURL, rScreen.m_nObject, aLine, osl_getThreadTextEncoding());
-        aLine.append(" >>");
-        // Is there anything Acrobat supports natively other than this?
-        aLine.append("/CT (video/mpeg)");
+        if (bEmbed)
+        {
+            aLine.append("/D << /Type /Filespec /F (<embedded file>) /EF << /F ");
+            aLine.append(rScreen.m_nTempFileObject);
+            aLine.append(" 0 R >> >>");
+        }
+        else
+        {
+            // Linked.
+            aLine.append("/D << /Type /Filespec /FS /URL /F ");
+            appendLiteralStringEncrypt(rScreen.m_aURL, rScreen.m_nObject, aLine, osl_getThreadTextEncoding());
+            aLine.append(" >>");
+        }
+        // Allow playing the video via a tempfile.
+        aLine.append("/P <</TF (TEMPACCESS)>>");
+        // Until the real MIME type (instead of application/vnd.sun.star.media) is available here.
+        aLine.append("/CT (video/mp4)");
         aLine.append(">>");
 
         // End Rendition dictionary by requesting play/pause/stop controls.
@@ -12789,6 +12828,15 @@ void PDFWriterImpl::setScreenURL(sal_Int32 nScreenId, const OUString& rURL)
         return;
 
     m_aScreens[nScreenId].m_aURL = rURL;
+}
+
+void PDFWriterImpl::setScreenStream(sal_Int32 nScreenId, const OUString& rURL)
+{
+    if (nScreenId < 0 || nScreenId >= static_cast<sal_Int32>(m_aScreens.size()))
+        return;
+
+    m_aScreens[nScreenId].m_aTempFileURL = rURL;
+    m_aScreens[nScreenId].m_nTempFileObject = createObject();
 }
 
 void PDFWriterImpl::setLinkPropertyId( sal_Int32 nLinkId, sal_Int32 nPropertyId )

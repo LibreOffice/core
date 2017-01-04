@@ -378,6 +378,11 @@ void PDFWriter::SetScreenURL(sal_Int32 nScreenId, const OUString& rURL)
     xImplementation->setScreenURL(nScreenId, rURL);
 }
 
+void PDFWriter::SetScreenStream(sal_Int32 nScreenId, const OUString& rURL)
+{
+    xImplementation->setScreenStream(nScreenId, rURL);
+}
+
 void PDFWriter::SetLinkPropertyID( sal_Int32 nLinkId, sal_Int32 nPropertyId )
 {
     xImplementation->setLinkPropertyId( nLinkId, nPropertyId );

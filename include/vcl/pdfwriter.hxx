@@ -980,6 +980,8 @@ The following structure describes the permissions used in PDF security
 
     /// Sets the URL of a linked screen annotation.
     void SetScreenURL(sal_Int32 nScreenId, const OUString& rURL);
+    /// Sets the URL of an embedded screen annotation.
+    void SetScreenStream(sal_Int32 nScreenId, const OUString& rURL);
 
     /** Resolve link in logical structure
 

@@ -398,7 +398,17 @@ public:
     /// A PDF Screen annotation.
     struct PDFScreen : public PDFAnnotation
     {
+        /// Linked video.
         OUString m_aURL;
+        /// Embedded video.
+        OUString m_aTempFileURL;
+        /// ID of the EmbeddedFile object.
+        sal_Int32 m_nTempFileObject;
+
+        PDFScreen()
+            : m_nTempFileObject(0)
+        {
+        }
     };
 
     struct PDFNoteEntry : public PDFAnnotation
@@ -1195,6 +1205,7 @@ public:
     // screens
     sal_Int32 createScreen(const Rectangle& rRect, sal_Int32 nPageNr);
     void setScreenURL(sal_Int32 nScreenId, const OUString& rURL);
+    void setScreenStream(sal_Int32 nScreenId, const OUString& rURL);
 
     // outline
     sal_Int32 createOutlineItem( sal_Int32 nParent, const OUString& rText, sal_Int32 nDestID );
