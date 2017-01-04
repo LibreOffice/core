@@ -29,7 +29,10 @@
 #define SV_RESID_BITMAP_CHECK                        1000
 #define SV_RESID_BITMAP_RADIO                        1010
 
-#define SV_RESID_BITMAP_MSGBOX                       1020
+#define SV_RESID_BITMAP_ERRORBOX                     1020
+#define SV_RESID_BITMAP_QUERYBOX                     1021
+#define SV_RESID_BITMAP_WARNINGBOX                   1022
+#define SV_RESID_BITMAP_INFOBOX                      1023
 
 #define SV_RESID_BITMAP_SPLITHPIN                    1040
 #define SV_RESID_BITMAP_SPLITVPIN                    1041

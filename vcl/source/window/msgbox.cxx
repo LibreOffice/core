@@ -38,15 +38,15 @@
 static void ImplInitMsgBoxImageList()
 {
     ImplSVData* pSVData = ImplGetSVData();
-    if ( !pSVData->maWinData.mpMsgBoxImgList )
+    if (pSVData->maWinData.maMsgBoxImgList.empty())
     {
         ResMgr* pResMgr = ImplGetResMgr();
-        pSVData->maWinData.mpMsgBoxImgList = new ImageList();
-        if( pResMgr )
+        if (pResMgr)
         {
-            Color aNonAlphaMask( 0xC0, 0xC0, 0xC0 );
-            pSVData->maWinData.mpMsgBoxImgList->InsertFromHorizontalBitmap
-                ( ResId( SV_RESID_BITMAP_MSGBOX, *pResMgr ), 4, &aNonAlphaMask );
+            pSVData->maWinData.maMsgBoxImgList.push_back(Image(BitmapEx(ResId(SV_RESID_BITMAP_ERRORBOX, *pResMgr))));
+            pSVData->maWinData.maMsgBoxImgList.push_back(Image(BitmapEx(ResId(SV_RESID_BITMAP_QUERYBOX, *pResMgr))));
+            pSVData->maWinData.maMsgBoxImgList.push_back(Image(BitmapEx(ResId(SV_RESID_BITMAP_WARNINGBOX, *pResMgr))));
+            pSVData->maWinData.maMsgBoxImgList.push_back(Image(BitmapEx(ResId(SV_RESID_BITMAP_INFOBOX, *pResMgr))));
         }
     }
 }
@@ -394,7 +394,7 @@ InfoBox::InfoBox( vcl::Window* pParent, WinBits nStyle, const OUString& rMessage
 Image InfoBox::GetStandardImage()
 {
     ImplInitMsgBoxImageList();
-    return ImplGetSVData()->maWinData.mpMsgBoxImgList->GetImage( 4 );
+    return ImplGetSVData()->maWinData.maMsgBoxImgList[3];
 }
 
 WarningBox::WarningBox( vcl::Window* pParent, WinBits nStyle,
@@ -418,7 +418,7 @@ void WarningBox::SetDefaultCheckBoxText()
 Image WarningBox::GetStandardImage()
 {
     ImplInitMsgBoxImageList();
-    return ImplGetSVData()->maWinData.mpMsgBoxImgList->GetImage( 3 );
+    return ImplGetSVData()->maWinData.maMsgBoxImgList[2];
 }
 
 ErrorBox::ErrorBox( vcl::Window* pParent, WinBits nStyle,
@@ -444,7 +444,7 @@ Image ErrorBox::GetStandardImage()
         // ucb and hence no ability to get this image, so nop.
         return Image();
     }
-    return ImplGetSVData()->maWinData.mpMsgBoxImgList->GetImage( 1 );
+    return ImplGetSVData()->maWinData.maMsgBoxImgList[0];
 }
 
 QueryBox::QueryBox( vcl::Window* pParent, WinBits nStyle, const OUString& rMessage ) :
@@ -467,7 +467,7 @@ void QueryBox::SetDefaultCheckBoxText()
 Image QueryBox::GetStandardImage()
 {
     ImplInitMsgBoxImageList();
-    return ImplGetSVData()->maWinData.mpMsgBoxImgList->GetImage( 2 );
+    return ImplGetSVData()->maWinData.maMsgBoxImgList[1];
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

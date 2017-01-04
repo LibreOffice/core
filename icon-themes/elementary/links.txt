@@ -620,7 +620,10 @@ sw/res/sidebar/pageproppanel/last_custom_common.png svx/res/symphony/last_custom
 sw/res/sidebar/pageproppanel/last_custom_common_grey.png svx/res/symphony/last_custom_common_grey.png
 sw/res/styfamnu.png sw/res/sf05.png
 vcl/res/closedoc.png sfx2/res/closedoc.png
-vcl/source/src/msgbox.png vcl/res/msgbox.png
+vcl/source/src/error.png vcl/res/errorbox.png
+vcl/source/src/warningbox.png vcl/res/warningbox.png
+vcl/source/src/infobox.png vcl/res/infobox.png
+vcl/source/src/querybox.png vcl/res/querybox.png
 xmlsecurity/res/signet_11x16.png svx/res/signet_11x16.png
 
 # Mail merge

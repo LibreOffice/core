@@ -74,9 +74,24 @@ Bitmap (SV_RESID_BITMAP_RADIO + SV_RESID_MONOOFFSET)
     File = "radiomono.bmp";
 };
 
-Bitmap SV_RESID_BITMAP_MSGBOX
+Bitmap SV_RESID_BITMAP_ERRORBOX
 {
-    File = "msgbox.png";
+    File = "errorbox.png";
+};
+
+Bitmap SV_RESID_BITMAP_WARNINGBOX
+{
+    File = "warningbox.png";
+};
+
+Bitmap SV_RESID_BITMAP_QUERYBOX
+{
+    File = "querybox.png";
+};
+
+Bitmap SV_RESID_BITMAP_INFOBOX
+{
+    File = "infobox.png";
 };
 
 Bitmap SV_RESID_BITMAP_CLOSEDOC

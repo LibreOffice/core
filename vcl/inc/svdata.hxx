@@ -194,7 +194,7 @@ struct ImplSVWinData
     VclPtr<vcl::Window>     mpExtTextInputWin;              // Window, which is in ExtTextInput
     VclPtr<vcl::Window>     mpTrackWin;                     // window, that is in tracking mode
     AutoTimer*              mpTrackTimer = nullptr;         // tracking timer
-    ImageList*              mpMsgBoxImgList = nullptr;      // ImageList for MessageBox
+    std::vector<Image>      maMsgBoxImgList;                // ImageList for MessageBox
     VclPtr<vcl::Window>     mpAutoScrollWin;                // window, that is in AutoScrollMode mode
     VclPtr<vcl::Window>     mpLastWheelWindow;              // window, that last received a mouse wheel event
     SalWheelMouseEvent      maLastWheelEvent;               // the last received mouse whell event
