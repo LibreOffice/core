@@ -250,7 +250,7 @@ VclPtr<SfxTabPage> SwEndNoteOptionPage::Create( vcl::Window *pParent, const SfxI
 
 // Different kinds of numbering; because the Listbox has varying numbers of
 // entries, here are functions to set and query the intended kind of numbering.
-void SwEndNoteOptionPage::SelectNumbering(int eNum)
+void SwEndNoteOptionPage::SelectNumbering(SwFootnoteNum const eNum)
 {
     OUString sSelect;
     switch(eNum)
@@ -264,10 +264,8 @@ void SwEndNoteOptionPage::SelectNumbering(int eNum)
         case FTNNUM_CHAPTER:
             sSelect = aNumChapter;
         break;
-#if OSL_DEBUG_LEVEL > 0
         default:
-            OSL_FAIL("Which numbering type?");
-#endif
+            assert(false);
     }
     m_pNumCountBox->SelectEntry(sSelect);
     NumCountHdl(*m_pNumCountBox);

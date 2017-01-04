@@ -60,7 +60,7 @@ class SwEndNoteOptionPage : public SfxTabPage
     bool    bPosDoc;
     bool    bEndNote;
 
-    inline void SelectNumbering(int eNum);
+    inline void SelectNumbering(SwFootnoteNum eNum);
     SwFootnoteNum GetNumbering() const;
 
     DECL_LINK(PosPageHdl, Button*, void);
