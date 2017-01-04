@@ -42,8 +42,8 @@ namespace sw
     // SwDrawFrameFormat too) as members
     struct SW_DLLPUBLIC FindSdrObjectHint final : SfxHint
     {
-        SdrObject** m_ppObject;
-        FindSdrObjectHint(SdrObject** ppObject) : m_ppObject(ppObject) {};
+        SdrObject*& m_rpObject;
+        FindSdrObjectHint(SdrObject*& rpObject) : m_rpObject(rpObject) {};
         virtual ~FindSdrObjectHint() override;
     };
 }
@@ -126,7 +126,7 @@ public:
     SdrObject* FindSdrObject()
     {
         SdrObject* pObject(nullptr);
-        CallSwClientNotify(sw::FindSdrObjectHint(&pObject));
+        CallSwClientNotify(sw::FindSdrObjectHint(pObject));
         return pObject;
     }
     const SdrObject *FindSdrObject() const

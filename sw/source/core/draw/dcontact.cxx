@@ -408,8 +408,8 @@ void SwContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
     // this does not call SwClient::SwClientNotify and thus doesnt handle RES_OBJECTDYING as usual. Is this intentional?
     if (auto pFindSdrObjectHint = dynamic_cast<const sw::FindSdrObjectHint*>(&rHint))
     {
-        if(!*pFindSdrObjectHint->m_ppObject)
-            *pFindSdrObjectHint->m_ppObject = GetMaster();
+        if(!pFindSdrObjectHint->m_rpObject)
+            pFindSdrObjectHint->m_rpObject = GetMaster();
     }
     else if (auto pWW8AnchorConvHint = dynamic_cast<const sw::WW8AnchorConvHint*>(&rHint))
     {
