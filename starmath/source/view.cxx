@@ -99,6 +99,7 @@ SmGraphicWindow::SmGraphicWindow(SmViewShell* pShell)
     , pViewShell(pShell)
     , nZoom(100)
 {
+    assert(pViewShell);
     // docking windows are usually hidden (often already done in the
     // resource) and will be shown by the sfx framework.
     Hide();
@@ -370,8 +371,6 @@ const SmNode * SmGraphicWindow::SetCursorPos(sal_uInt16 nRow, sal_uInt16 nCol)
 
 void SmGraphicWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 {
-    SAL_WARN_IF(!pViewShell, "starmath", "view shell missing");
-
     ApplyColorConfigValues(SM_MOD()->GetColorConfig());
 
     SmDocShell& rDoc = *pViewShell->GetDoc();
@@ -547,7 +546,6 @@ void SmGraphicWindow::Command(const CommandEvent& rCEvt)
                 Point aPos(5, 5);
                 if (rCEvt.IsMouseEvent())
                     aPos = rCEvt.GetMousePosPixel();
-                SAL_WARN_IF( !pViewShell, "starmath", "view shell missing" );
 
                 // added for replaceability of context menus
                 SfxDispatcher::ExecutePopup( this, &aPos );
