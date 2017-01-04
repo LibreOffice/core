@@ -283,7 +283,7 @@ void SplitWindow::ImplDrawBorder(vcl::RenderContext& rRenderContext)
 
 void SplitWindow::ImplDrawBorderLine(vcl::RenderContext& rRenderContext)
 {
-    if (mbFadeOut || mbAutoHide)
+    if (mbFadeOut)
     {
         const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
         long nDX = mnDX;
@@ -1231,7 +1231,7 @@ sal_uInt16 SplitWindow::ImplTestSplit( SplitWindow* pWindow, const Point& rPos,
             nTPos = rPos.X();
         }
         long nSplitSize = pWindow->mpMainSet->mnSplitSize-2;
-        if ( pWindow->mbAutoHide || pWindow->mbFadeOut )
+        if (pWindow->mbFadeOut)
             nSplitSize += SPLITWIN_SPLITSIZEEXLN;
         if ( !pWindow->mbBottomRight )
             nPos -= nSplitSize;
@@ -1266,7 +1266,7 @@ void SplitWindow::ImplDrawSplitTracking(const Point& rPos)
         aRect.Right()  = aRect.Left() + mpSplitSet->mnSplitSize - 1;
         if (!(mnWinStyle & WB_NOSPLITDRAW))
             aRect.Right()--;
-        if ((mnSplitTest & SPLIT_WINDOW) && (mbAutoHide || mbFadeOut))
+        if ((mnSplitTest & SPLIT_WINDOW) && (mbFadeOut))
         {
             aRect.Left()  += SPLITWIN_SPLITSIZEEXLN;
             aRect.Right() += SPLITWIN_SPLITSIZEEXLN;
@@ -1280,7 +1280,7 @@ void SplitWindow::ImplDrawSplitTracking(const Point& rPos)
         aRect.Bottom() = aRect.Top() + mpSplitSet->mnSplitSize - 1;
         if (!(mnWinStyle & WB_NOSPLITDRAW))
             aRect.Bottom()--;
-        if ((mnSplitTest & SPLIT_WINDOW) && (mbAutoHide || mbFadeOut))
+        if ((mnSplitTest & SPLIT_WINDOW) && (mbFadeOut))
         {
             aRect.Top() += SPLITWIN_SPLITSIZEEXLN;
             aRect.Bottom() += SPLITWIN_SPLITSIZEEXLN;
@@ -1318,7 +1318,6 @@ void SplitWindow::ImplInit( vcl::Window* pParent, WinBits nStyle )
     mbCalc                  = false;
     mbRecalc                = true;
     mbInvalidate            = true;
-    mbAutoHide              = false;
     mbFadeIn                = false;
     mbFadeOut               = false;
     mbAutoHideIn            = false;
@@ -1444,7 +1443,7 @@ Size SplitWindow::CalcLayoutSizePixel( const Size& aNewSize )
     Size aSize( aNewSize );
     long nSplitSize = mpMainSet->mnSplitSize-2;
 
-    if ( mbAutoHide || mbFadeOut )
+    if (mbFadeOut)
         nSplitSize += SPLITWIN_SPLITSIZEEXLN;
 
     // if the window is sizeable and if it does not contain a relative window,
@@ -1509,7 +1508,7 @@ void SplitWindow::ImplCalcLayout()
         return;
 
     long nSplitSize = mpMainSet->mnSplitSize-2;
-    if ( mbAutoHide || mbFadeOut )
+    if (mbFadeOut)
         nSplitSize += SPLITWIN_SPLITSIZEEXLN;
 
     // if the window is sizeable and if it does not contain a relative window,
@@ -1623,7 +1622,7 @@ void SplitWindow::ImplSplitMousePos( Point& rMousePos )
 void SplitWindow::ImplGetButtonRect( Rectangle& rRect, long nEx, bool bTest ) const
 {
     long nSplitSize = mpMainSet->mnSplitSize-1;
-    if ( mbAutoHide || mbFadeOut || mbFadeIn )
+    if (mbFadeOut || mbFadeIn)
         nSplitSize += SPLITWIN_SPLITSIZEEX;
 
     long nButtonSize = 0;
@@ -1631,8 +1630,6 @@ void SplitWindow::ImplGetButtonRect( Rectangle& rRect, long nEx, bool bTest ) co
         nButtonSize += SPLITWIN_SPLITSIZEFADE+1;
     if ( mbFadeOut )
         nButtonSize += SPLITWIN_SPLITSIZEFADE+1;
-    if ( mbAutoHide )
-        nButtonSize += SPLITWIN_SPLITSIZEAUTOHIDE+1;
     long nCenterEx = 0;
     if ( mbHorz )
         nCenterEx += ((mnDX-mnLeftBorder-mnRightBorder)-nButtonSize)/2;
@@ -1688,21 +1685,6 @@ void SplitWindow::ImplGetButtonRect( Rectangle& rRect, long nEx, bool bTest ) co
         }
         break;
     }
-}
-
-void SplitWindow::ImplGetAutoHideRect( Rectangle& rRect, bool bTest ) const
-{
-    Rectangle aRect;
-
-    if ( mbAutoHide )
-    {
-        long nEx = 0;
-        if ( mbFadeIn || mbFadeOut )
-            nEx = SPLITWIN_SPLITSIZEFADE+1;
-        ImplGetButtonRect( aRect, nEx, bTest && mbFadeIn );
-    }
-
-    rRect = aRect;
 }
 
 void SplitWindow::ImplGetFadeInRect( Rectangle& rRect, bool bTest ) const
@@ -1788,81 +1770,6 @@ void SplitWindow::ImplDrawButtonRect(vcl::RenderContext& rRenderContext, const R
             }
             i += 2;
         }
-    }
-}
-
-void SplitWindow::ImplDrawAutoHide(vcl::RenderContext& rRenderContext)
-{
-    if (mbAutoHide)
-    {
-        Rectangle aTempRect;
-        ImplGetAutoHideRect( aTempRect );
-
-        // load ImageListe, if not available
-        ImplSVData* pSVData = ImplGetSVData();
-        ImageList*  pImageList;
-        if (mbHorz)
-        {
-            if (!pSVData->maCtrlData.mpSplitHPinImgList)
-            {
-                ResMgr* pResMgr = ImplGetResMgr();
-                if (pResMgr)
-                {
-                    Color aNonAlphaMask( 0x00, 0x00, 0xFF );
-                    pSVData->maCtrlData.mpSplitHPinImgList = new ImageList;
-                    pSVData->maCtrlData.mpSplitHPinImgList->InsertFromHorizontalBitmap
-                        ( ResId( SV_RESID_BITMAP_SPLITHPIN, *pResMgr ), 4, &aNonAlphaMask );
-                }
-            }
-            pImageList = pSVData->maCtrlData.mpSplitHPinImgList;
-        }
-        else
-        {
-            if (!pSVData->maCtrlData.mpSplitVPinImgList)
-            {
-                ResMgr* pResMgr = ImplGetResMgr();
-                pSVData->maCtrlData.mpSplitVPinImgList = new ImageList;
-                if (pResMgr)
-                {
-                    Color aNonAlphaMask( 0x00, 0x00, 0xFF );
-                    pSVData->maCtrlData.mpSplitVPinImgList->InsertFromHorizontalBitmap(
-                        ResId( SV_RESID_BITMAP_SPLITVPIN, *pResMgr ), 4, &aNonAlphaMask);
-                }
-            }
-            pImageList = pSVData->maCtrlData.mpSplitVPinImgList;
-        }
-
-        if (!pImageList)
-            return;
-
-        // retrieve and return image
-        sal_uInt16 nId;
-        if (mbAutoHidePressed)
-        {
-            if (mbAutoHideIn)
-                nId = 3;
-            else
-                nId = 4;
-        }
-        else
-        {
-            if (mbAutoHideIn)
-                nId = 1;
-            else
-                nId = 2;
-        }
-
-        Image aImage = pImageList->GetImage( nId );
-        Size aImageSize = aImage.GetSizePixel();
-        Point aPos(aTempRect.Left() + ((aTempRect.GetWidth()  - aImageSize.Width())  / 2),
-                   aTempRect.Top()  + ((aTempRect.GetHeight() - aImageSize.Height()) / 2));
-        long nSize;
-        if (mbHorz)
-            nSize = aImageSize.Width();
-        else
-            nSize = aImageSize.Height();
-        ImplDrawButtonRect(rRenderContext, aTempRect, nSize);
-        rRenderContext.DrawImage(aPos, aImage);
     }
 }
 
@@ -2224,37 +2131,28 @@ void SplitWindow::MouseButtonDown( const MouseEvent& rMEvt )
     Rectangle       aTestRect;
 
     mbFadeNoButtonMode = false;
-    ImplGetAutoHideRect( aTestRect, true );
+
+    ImplGetFadeOutRect( aTestRect, true );
     if ( aTestRect.IsInside( aMousePosPixel ) )
     {
-        mbAutoHideDown = true;
-        mbAutoHidePressed = true;
+        mbFadeOutDown = true;
+        mbFadeOutPressed = true;
         Invalidate();
     }
     else
     {
-        ImplGetFadeOutRect( aTestRect, true );
+        ImplGetFadeInRect( aTestRect, true );
         if ( aTestRect.IsInside( aMousePosPixel ) )
         {
-            mbFadeOutDown = true;
-            mbFadeOutPressed = true;
+            mbFadeInDown = true;
+            mbFadeInPressed = true;
             Invalidate();
         }
-        else
+        else if ( !aTestRect.IsEmpty() && !(mnWinStyle & WB_SIZEABLE) )
         {
-            ImplGetFadeInRect( aTestRect, true );
-            if ( aTestRect.IsInside( aMousePosPixel ) )
-            {
-                mbFadeInDown = true;
-                mbFadeInPressed = true;
-                Invalidate();
-            }
-            else if ( !aTestRect.IsEmpty() && !(mnWinStyle & WB_SIZEABLE) )
-            {
-                mbFadeNoButtonMode = true;
-                FadeIn();
-                return;
-            }
+            mbFadeNoButtonMode = true;
+            FadeIn();
+            return;
         }
     }
 
@@ -2274,15 +2172,12 @@ void SplitWindow::MouseMove( const MouseEvent& rMEvt )
         sal_uInt16          nTempSplitPos;
         sal_uInt16          nSplitTest = ImplTestSplit( this, aPos, nTemp, &pTempSplitSet, nTempSplitPos );
         PointerStyle    eStyle = PointerStyle::Arrow;
-        Rectangle       aAutoHideRect;
         Rectangle       aFadeInRect;
         Rectangle       aFadeOutRect;
 
-        ImplGetAutoHideRect( aAutoHideRect );
         ImplGetFadeInRect( aFadeInRect );
         ImplGetFadeOutRect( aFadeOutRect );
-        if ( !aAutoHideRect.IsInside( aPos ) &&
-             !aFadeInRect.IsInside( aPos ) &&
+        if ( !aFadeInRect.IsInside( aPos ) &&
              !aFadeOutRect.IsInside( aPos ) )
         {
             if ( nSplitTest && !(nSplitTest & SPLIT_NOSPLIT) )
@@ -2324,9 +2219,7 @@ void SplitWindow::Tracking( const TrackingEvent& rTEvt )
         }
         else
         {
-            Rectangle aTestRect;
-            ImplGetAutoHideRect( aTestRect, true );
-            bool bNewPressed = aTestRect.IsInside( aMousePosPixel );
+            bool bNewPressed = false;
             if ( bNewPressed != mbAutoHidePressed )
             {
                 mbAutoHidePressed = bNewPressed;
@@ -2517,7 +2410,6 @@ void SplitWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
     ImplDrawBorderLine(rRenderContext);
     ImplDrawFadeOut(rRenderContext);
     ImplDrawFadeIn(rRenderContext);
-    ImplDrawAutoHide(rRenderContext);
 
     // draw FrameSet-backgrounds
     ImplDrawBack(rRenderContext, mpMainSet);
@@ -2549,25 +2441,14 @@ void SplitWindow::RequestHelp( const HelpEvent& rHEvt )
         Rectangle   aHelpRect;
         sal_uInt16      nHelpResId = 0;
 
-        ImplGetAutoHideRect( aHelpRect, true );
+        ImplGetFadeInRect( aHelpRect, true );
         if ( aHelpRect.IsInside( aMousePosPixel ) )
-        {
-            if ( mbAutoHideIn )
-                nHelpResId = SV_HELPTEXT_SPLITFIXED;
-            else
-                nHelpResId = SV_HELPTEXT_SPLITFLOATING;
-        }
+            nHelpResId = SV_HELPTEXT_FADEIN;
         else
         {
-            ImplGetFadeInRect( aHelpRect, true );
+            ImplGetFadeOutRect( aHelpRect, true );
             if ( aHelpRect.IsInside( aMousePosPixel ) )
-                nHelpResId = SV_HELPTEXT_FADEIN;
-            else
-            {
-                ImplGetFadeOutRect( aHelpRect, true );
-                if ( aHelpRect.IsInside( aMousePosPixel ) )
-                    nHelpResId = SV_HELPTEXT_FADEOUT;
-            }
+                nHelpResId = SV_HELPTEXT_FADEOUT;
         }
 
         // get rectangle
@@ -3192,12 +3073,6 @@ void SplitWindow::SetAlign( WindowAlign eNewAlign )
     }
 }
 
-void SplitWindow::ShowAutoHideButton( bool bShow )
-{
-    mbAutoHide = bShow;
-    ImplUpdate();
-}
-
 void SplitWindow::ShowFadeInHideButton()
 {
     mbFadeIn = true;
@@ -3215,9 +3090,7 @@ void SplitWindow::SetAutoHideState( bool bAutoHide )
     mbAutoHideIn = bAutoHide;
     if ( IsReallyVisible() )
     {
-        Rectangle aRect;
-        ImplGetAutoHideRect( aRect );
-        Invalidate( aRect );
+        Invalidate(Rectangle());
     }
 }
 

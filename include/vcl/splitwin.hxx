@@ -73,7 +73,6 @@ private:
                         mbCalc:1,
                         mbRecalc:1,
                         mbInvalidate:1,
-                        mbAutoHide:1,
                         mbFadeIn:1,
                         mbFadeOut:1,
                         mbAutoHideIn:1,
@@ -94,11 +93,9 @@ private:
     SAL_DLLPRIVATE void ImplSetWindowSize( long nDelta );
     SAL_DLLPRIVATE void ImplSplitMousePos( Point& rMousePos );
     SAL_DLLPRIVATE void ImplGetButtonRect( Rectangle& rRect, long nEx, bool bTest ) const;
-    SAL_DLLPRIVATE void ImplGetAutoHideRect( Rectangle& rRect, bool bTest = false ) const;
     SAL_DLLPRIVATE void ImplGetFadeInRect( Rectangle& rRect, bool bTest = false ) const;
     SAL_DLLPRIVATE void ImplGetFadeOutRect( Rectangle& rRect, bool bTest = false ) const;
     SAL_DLLPRIVATE void ImplDrawButtonRect(vcl::RenderContext& rRenderContext, const Rectangle& rRect, long nSize);
-    SAL_DLLPRIVATE void ImplDrawAutoHide(vcl::RenderContext& rRenderContext);
     SAL_DLLPRIVATE void ImplDrawFadeIn(vcl::RenderContext& rRenderContext);
     SAL_DLLPRIVATE void ImplDrawFadeOut(vcl::RenderContext& rRenderContext);
     SAL_DLLPRIVATE void ImplNewAlign();
@@ -185,8 +182,6 @@ public:
 
     Size                CalcLayoutSizePixel( const Size& aNewSize );
 
-    void                ShowAutoHideButton( bool bShow = true );
-    bool                IsAutoHideButtonVisible() const { return mbAutoHide; }
     void                ShowFadeInHideButton();
     void                ShowFadeOutButton();
     long                GetFadeInSize() const;

@@ -110,7 +110,6 @@ public:
                             aTimer.SetTimeout( 200 );
                             SetAlign( pOwner->GetAlign() );
                             Actualize();
-                            ShowAutoHideButton( pOwner->IsAutoHideButtonVisible() );
                             ShowFadeInHideButton();
                         }
 
@@ -198,9 +197,8 @@ SfxSplitWindow::SfxSplitWindow( vcl::Window* pParent, SfxChildAlignment eAl,
     pEmptyWin(nullptr),
     pActive(nullptr)
 {
-    if ( bWithButtons )
+    if (bWithButtons)
     {
-        ShowAutoHideButton( false );    // no autohide button (pin) anymore
         ShowFadeOutButton();
     }
 
