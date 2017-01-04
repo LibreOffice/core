@@ -27,32 +27,32 @@ void Idle::Invoke()
 
 Idle& Idle::operator=( const Idle& rIdle )
 {
-    Scheduler::operator=(rIdle);
+    Task::operator=(rIdle);
     maIdleHdl = rIdle.maIdleHdl;
     return *this;
 }
 
-Idle::Idle( const sal_Char *pDebugName ) : Scheduler( pDebugName )
+Idle::Idle( const sal_Char *pDebugName ) : Task( pDebugName )
 {
 }
 
-Idle::Idle( const Idle& rIdle ) : Scheduler(rIdle)
+Idle::Idle( const Idle& rIdle ) : Task(rIdle)
 {
     maIdleHdl = rIdle.maIdleHdl;
 }
 
 void Idle::Start()
 {
-    Scheduler::Start();
+    Task::Start();
 
     sal_uInt64 nPeriod = Scheduler::ImmediateTimeoutMs;
     if (Scheduler::GetDeterministicMode())
     {
         switch (mePriority)
         {
-            case SchedulerPriority::LOW:
-            case SchedulerPriority::LOWER:
-            case SchedulerPriority::LOWEST:
+            case TaskPriority::LOW:
+            case TaskPriority::LOWER:
+            case TaskPriority::LOWEST:
                 nPeriod = Scheduler::InfiniteTimeoutMs;
                 break;
             default:
@@ -60,7 +60,7 @@ void Idle::Start()
         }
     }
 
-    Scheduler::ImplStartTimer(nPeriod);
+    Task::StartTimer(nPeriod);
 }
 
 bool Idle::ReadyForSchedule( bool bIdle, sal_uInt64 /* nTimeNow */ ) const
@@ -77,7 +77,7 @@ bool Idle::IsIdle() const
 sal_uInt64 Idle::UpdateMinPeriod( sal_uInt64 /* nMinPeriod */, sal_uInt64 /* nTimeNow */ ) const
 {
     assert(false); // idles currently don't hit this.
-    return ImmediateTimeoutMs;
+    return Scheduler::ImmediateTimeoutMs;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

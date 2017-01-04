@@ -206,7 +206,7 @@ UpdateCheckUI::UpdateCheckUI(const uno::Reference<uno::XComponentContext>& xCont
 
     maBubbleImage = GetBubbleImage( maBubbleImageURL );
 
-    maWaitIdle.SetPriority( SchedulerPriority::LOWEST );
+    maWaitIdle.SetPriority( TaskPriority::LOWEST );
     maWaitIdle.SetIdleHdl( LINK( this, UpdateCheckUI, WaitTimeOutHdl ) );
 
     maTimeoutTimer.SetTimeout( 10000 );

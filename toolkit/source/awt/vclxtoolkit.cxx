@@ -150,7 +150,7 @@ public:
         Idle("pause"),
         m_nPauseMilliseconds(nPauseMilliseconds)
     {
-        SetPriority(SchedulerPriority::HIGHEST);
+        SetPriority(TaskPriority::HIGHEST);
         Start();
     }
 

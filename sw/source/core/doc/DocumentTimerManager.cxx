@@ -42,7 +42,7 @@ DocumentTimerManager::DocumentTimerManager( SwDoc& i_rSwdoc ) : m_rDoc( i_rSwdoc
                                                                 mIdleBlockCount( 0 ),
                                                                 maIdle("DocumentTimerManagerIdleTimer")
 {
-    maIdle.SetPriority( SchedulerPriority::LOWEST );
+    maIdle.SetPriority( TaskPriority::LOWEST );
     maIdle.SetIdleHdl( LINK( this, DocumentTimerManager, DoIdleJobs) );
     maIdle.SetDebugName( "sw::DocumentTimerManager maIdle" );
 }

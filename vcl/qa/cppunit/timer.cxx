@@ -102,7 +102,7 @@ public:
     explicit IdleBool( bool &rBool ) :
         Idle(), mrBool( rBool )
     {
-        SetPriority( SchedulerPriority::LOWEST );
+        SetPriority( TaskPriority::LOWEST );
         Start();
         mrBool = false;
     }

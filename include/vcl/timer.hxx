@@ -23,7 +23,7 @@
 #include <tools/link.hxx>
 #include <vcl/scheduler.hxx>
 
-class VCL_DLLPUBLIC Timer : public Scheduler
+class VCL_DLLPUBLIC Timer : public Task
 {
 protected:
     Link<Timer *, void> maTimeoutHdl;          // Callback Link

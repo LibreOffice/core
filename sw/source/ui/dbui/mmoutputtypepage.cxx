@@ -105,7 +105,7 @@ struct SwSendMailDialog_Impl
         nCurrentDescriptor(0),
         nDocumentCount(0)
              {
-                aRemoveIdle.SetPriority(SchedulerPriority::LOWEST);
+                aRemoveIdle.SetPriority(TaskPriority::LOWEST);
              }
 
     ~SwSendMailDialog_Impl()

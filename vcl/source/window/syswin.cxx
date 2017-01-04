@@ -85,7 +85,7 @@ SystemWindow::SystemWindow(WindowType nType)
     mpWindowImpl->mnActivateMode      = ActivateModeFlags::GrabFocus;
 
     //To-Do, reuse maResizeTimer
-    maLayoutIdle.SetPriority(SchedulerPriority::RESIZE);
+    maLayoutIdle.SetPriority(TaskPriority::RESIZE);
     maLayoutIdle.SetIdleHdl( LINK( this, SystemWindow, ImplHandleLayoutTimerHdl ) );
     maLayoutIdle.SetDebugName( "vcl::SystemWindow maLayoutIdle" );
 }

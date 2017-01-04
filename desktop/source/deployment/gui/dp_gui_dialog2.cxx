@@ -521,7 +521,7 @@ ExtMgrDialog::ExtMgrDialog(vcl::Window *pParent, TheExtensionManager *pManager, 
     m_pUpdateBtn->Hide();
 #endif
 
-    m_aIdle.SetPriority(SchedulerPriority::LOWEST);
+    m_aIdle.SetPriority(TaskPriority::LOWEST);
     m_aIdle.SetIdleHdl( LINK( this, ExtMgrDialog, TimeOutHdl ) );
 }
 
@@ -1065,7 +1065,7 @@ UpdateRequiredDialog::UpdateRequiredDialog(vcl::Window *pParent, TheExtensionMan
     m_pUpdateBtn->Enable( false );
     m_pCloseBtn->GrabFocus();
 
-    m_aIdle.SetPriority( SchedulerPriority::LOWEST );
+    m_aIdle.SetPriority( TaskPriority::LOWEST );
     m_aIdle.SetIdleHdl( LINK( this, UpdateRequiredDialog, TimeOutHdl ) );
 }
 

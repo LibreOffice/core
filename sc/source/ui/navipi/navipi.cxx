@@ -528,7 +528,7 @@ ScNavigatorDlg::ScNavigatorDlg(SfxBindings* pB, bool bSidebar, vcl::Window* pPar
     aScenarioBox->Hide();
 
     aContentIdle.SetIdleHdl( LINK( this, ScNavigatorDlg, TimeHdl ) );
-    aContentIdle.SetPriority( SchedulerPriority::LOWEST );
+    aContentIdle.SetPriority( TaskPriority::LOWEST );
 
     if (bInSidebar)
     {

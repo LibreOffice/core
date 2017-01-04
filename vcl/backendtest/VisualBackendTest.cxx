@@ -118,7 +118,7 @@ public:
         , mpVDev(VclPtr<VirtualDevice>::Create())
     {
         maUpdateTimer.SetTimeoutHdl(LINK(this, VisualBackendTestWindow, updateHdl));
-        maUpdateTimer.SetPriority(SchedulerPriority::REPAINT);
+        maUpdateTimer.SetPriority(TaskPriority::REPAINT);
         if (mbAnimate)
         {
             maUpdateTimer.SetTimeout(1000.0);

@@ -56,21 +56,20 @@ public:
     }
 };
 
-class Scheduler;
+class Task;
 
 // Internal scheduler record holding intrusive linked list pieces
 struct ImplSchedulerData
 {
-    ImplSchedulerData*  mpNext;        // Pointer to the next element in list
-    Scheduler*          mpScheduler;   // Pointer to VCL Scheduler instance
-    bool                mbDelete;      // Destroy this scheduler?
-    bool                mbInScheduler; // Scheduler currently processed?
+    ImplSchedulerData  *mpNext;        // Pointer to the next element in list
+    Task               *mpTask;        // Pointer to VCL Task instance
+    bool                mbDelete;      // Destroy this task?
+    bool                mbInScheduler; // Task currently processed?
     sal_uInt64          mnUpdateTime;  // Last Update Time
 
     void Invoke();
 
     const char *GetDebugName() const;
-    static ImplSchedulerData *GetMostImportantTask( bool bIdle, sal_uInt64 nTimeNow );
 };
 
 #endif // INCLUDED_VCL_INC_SALTIMER_HXX

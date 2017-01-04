@@ -408,7 +408,7 @@ SfxNewFileDialog_Impl::SfxNewFileDialog_Impl(
         m_pRegionLb->SetSelectHdl(LINK(this, SfxNewFileDialog_Impl, RegionSelect));
     }
 
-    aPrevIdle.SetPriority( SchedulerPriority::LOWEST );
+    aPrevIdle.SetPriority( TaskPriority::LOWEST );
     aPrevIdle.SetIdleHdl( LINK( this, SfxNewFileDialog_Impl, Update));
 
     m_pRegionLb->SelectEntryPos(0);

@@ -512,7 +512,7 @@ SlideshowImpl::SlideshowImpl( const Reference< XPresentation2 >& xPresentation, 
 
     maUpdateTimer.SetTimeoutHdl(LINK(this, SlideshowImpl, updateHdl));
     // Priority must not be too high or we'll starve input handling etc.
-    maUpdateTimer.SetPriority(SchedulerPriority::REPAINT);
+    maUpdateTimer.SetPriority(TaskPriority::REPAINT);
 
     maDeactivateTimer.SetTimeoutHdl(LINK(this, SlideshowImpl, deactivateHdl));
     maDeactivateTimer.SetTimeout( 20 );

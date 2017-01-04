@@ -558,7 +558,7 @@ GL3DBarChart::GL3DBarChart(
         {
             mbAutoFly = atoi(aAutoFly);
         }
-        maIdle.SetPriority(SchedulerPriority::REPAINT);
+        maIdle.SetPriority(TaskPriority::REPAINT);
         maIdle.SetIdleHdl(LINK(this, GL3DBarChart, UpdateTimerHdl));
         maIdle.SetDebugName( "charttypes::GL3DBarChart maIdle" );
         maIdle.Start();

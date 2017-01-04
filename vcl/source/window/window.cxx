@@ -814,10 +814,10 @@ ImplFrameData::ImplFrameData( vcl::Window *pWindow )
     mbInSysObjFocusHdl = false;
     mbInSysObjToTopHdl = false;
     mbSysObjFocus      = false;
-    maPaintIdle.SetPriority( SchedulerPriority::REPAINT );
+    maPaintIdle.SetPriority( TaskPriority::REPAINT );
     maPaintIdle.SetIdleHdl( LINK( pWindow, vcl::Window, ImplHandlePaintHdl ) );
     maPaintIdle.SetDebugName( "vcl::Window maPaintIdle" );
-    maResizeIdle.SetPriority( SchedulerPriority::RESIZE );
+    maResizeIdle.SetPriority( TaskPriority::RESIZE );
     maResizeIdle.SetIdleHdl( LINK( pWindow, vcl::Window, ImplHandleResizeTimerHdl ) );
     maResizeIdle.SetDebugName( "vcl::Window maResizeIdle" );
     mbInternalDragGestureRecognizer = false;

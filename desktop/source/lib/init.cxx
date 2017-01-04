@@ -602,7 +602,7 @@ CallbackFlushHandler::CallbackFlushHandler(LibreOfficeKitDocument* pDocument, Li
       m_bPartTilePainting(false),
       m_bEventLatch(false)
 {
-    SetPriority(SchedulerPriority::POST_PAINT);
+    SetPriority(TaskPriority::POST_PAINT);
 
     // Add the states that are safe to skip duplicates on,
     // even when not consequent.

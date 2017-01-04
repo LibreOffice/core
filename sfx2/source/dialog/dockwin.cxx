@@ -433,7 +433,7 @@ SfxDockingWindow_Impl::SfxDockingWindow_Impl(SfxDockingWindow* pBase)
     ,bNewLine(false)
     ,bDockingPrevented(false)
 {
-    aMoveIdle.SetPriority(SchedulerPriority::RESIZE);
+    aMoveIdle.SetPriority(TaskPriority::RESIZE);
     aMoveIdle.SetIdleHdl(LINK(pBase,SfxDockingWindow,TimerHdl));
     aMoveIdle.SetDebugName( "sfx::SfxDockingWindow_Impl aMoveIdle" );
 }

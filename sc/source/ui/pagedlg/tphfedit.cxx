@@ -341,7 +341,7 @@ ScExtIButton::ScExtIButton(vcl::Window* pParent, WinBits nBits )
     pPopupMenu(nullptr)
 {
     nSelected=0;
-    aIdle.SetPriority(SchedulerPriority::LOWEST);
+    aIdle.SetPriority(TaskPriority::LOWEST);
     SetDropDown(PushButtonDropdownStyle::Toolbox);
 }
 

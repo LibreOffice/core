@@ -81,7 +81,7 @@ void MediaPlaybackPanel::Initialize()
     mpMuteToolBox->SetSelectHdl(LINK(this, MediaPlaybackPanel, PlayToolBoxSelectHdl));
     mpTimeSlider->SetSlideHdl(LINK(this, MediaPlaybackPanel, SeekHdl));
 
-    maIdle.SetPriority( SchedulerPriority::HIGHEST );
+    maIdle.SetPriority( TaskPriority::HIGHEST );
     maIdle.SetIdleHdl( LINK( this, MediaPlaybackPanel, TimeoutHdl ) );
     maIdle.Start();
     mpBindings->Invalidate(SID_AVMEDIA_TOOLBOX);

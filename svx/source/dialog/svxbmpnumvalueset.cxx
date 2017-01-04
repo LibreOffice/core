@@ -466,7 +466,7 @@ void SvxBmpNumValueSet::init()
     GalleryExplorer::BeginLocking(GALLERY_THEME_BULLETS);
     SetStyle( GetStyle() | WB_VSCROLL );
     SetLineCount( 3 );
-    aFormatIdle.SetPriority(SchedulerPriority::LOWEST);
+    aFormatIdle.SetPriority(TaskPriority::LOWEST);
     aFormatIdle.SetIdleHdl(LINK(this, SvxBmpNumValueSet, FormatHdl_Impl));
 }
 
