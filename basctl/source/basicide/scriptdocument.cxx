@@ -34,6 +34,8 @@
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
 #include <com/sun/star/script/vba/XVBACompatibility.hpp>
 #include <com/sun/star/script/vba/XVBAModuleInfo.hpp>
+#include <com/sun/star/script/ModuleInfo.hpp>
+#include <com/sun/star/script/ModuleType.hpp>
 
 #include <sfx2/objsh.hxx>
 #include <sfx2/bindings.hxx>
@@ -668,6 +670,14 @@ namespace basctl
             _out_rNewModuleCode = "REM  *****  BASIC  *****\n\n" ;
             if ( _bCreateMain )
                 _out_rNewModuleCode += "Sub Main\n\nEnd Sub\n" ;
+
+            Reference< XVBAModuleInfo > xVBAModuleInfo(xLib, UNO_QUERY);
+            if (xVBAModuleInfo.is())
+            {
+                css::script::ModuleInfo aModuleInfo;
+                aModuleInfo.ModuleType = css::script::ModuleType::NORMAL;
+                xVBAModuleInfo->insertModuleInfo(_rModName, aModuleInfo);
+            }
 
             // insert module into library
             xLib->insertByName( _rModName, makeAny( _out_rNewModuleCode ) );
