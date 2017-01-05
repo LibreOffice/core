@@ -148,8 +148,8 @@ svt::WizardTypes::WizardState CreationWizard::determineNextState( WizardState nC
 void CreationWizard::enterState(WizardState nState)
 {
     m_aTimerTriggeredControllerLock.startTimer();
-    enableButtons( WizardButtonFlags::PREVIOUS, bool( nState > STATE_FIRST ) );
-    enableButtons( WizardButtonFlags::NEXT, bool( nState < m_nLastState ) );
+    enableButtons( WizardButtonFlags::PREVIOUS, nState > STATE_FIRST );
+    enableButtons( WizardButtonFlags::NEXT, nState < m_nLastState );
     if( isStateEnabled( nState ))
         svt::RoadmapWizard::enterState(nState);
 }
