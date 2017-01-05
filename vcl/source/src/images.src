@@ -19,59 +19,189 @@
 
 #include <svids.hrc>
 
-Bitmap (SV_RESID_BITMAP_CHECK + SV_RESID_STDOFFSET)
+Bitmap SV_RESID_BITMAP_CHECK1
 {
-    File = "check.png";
+    File = "check1.png";
 };
 
-Bitmap (SV_RESID_BITMAP_CHECK + SV_RESID_MONOOFFSET)
+Bitmap SV_RESID_BITMAP_CHECK2
 {
-    File = "checkmono.png";
+    File = "check2.png";
 };
 
-Bitmap (SV_RESID_BITMAP_SCROLLVH)
+Bitmap SV_RESID_BITMAP_CHECK3
+{
+    File = "check3.png";
+};
+
+Bitmap SV_RESID_BITMAP_CHECK4
+{
+    File = "check4.png";
+};
+
+Bitmap SV_RESID_BITMAP_CHECK5
+{
+    File = "check5.png";
+};
+
+Bitmap SV_RESID_BITMAP_CHECK6
+{
+    File = "check6.png";
+};
+
+Bitmap SV_RESID_BITMAP_CHECK7
+{
+    File = "check7.png";
+};
+
+Bitmap SV_RESID_BITMAP_CHECK8
+{
+    File = "check8.png";
+};
+
+Bitmap SV_RESID_BITMAP_CHECK9
+{
+    File = "check9.png";
+};
+
+Bitmap SV_RESID_BITMAP_CHECKMONO1
+{
+    File = "checkmono1.png";
+};
+
+Bitmap SV_RESID_BITMAP_CHECKMONO2
+{
+    File = "checkmono2.png";
+};
+
+Bitmap SV_RESID_BITMAP_CHECKMONO3
+{
+    File = "checkmono3.png";
+};
+
+Bitmap SV_RESID_BITMAP_CHECKMONO4
+{
+    File = "checkmono4.png";
+};
+
+Bitmap SV_RESID_BITMAP_CHECKMONO5
+{
+    File = "checkmono5.png";
+};
+
+Bitmap SV_RESID_BITMAP_CHECKMONO6
+{
+    File = "checkmono6.png";
+};
+
+Bitmap SV_RESID_BITMAP_CHECKMONO7
+{
+    File = "checkmono7.png";
+};
+
+Bitmap SV_RESID_BITMAP_CHECKMONO8
+{
+    File = "checkmono8.png";
+};
+
+Bitmap SV_RESID_BITMAP_CHECKMONO9
+{
+    File = "checkmono9.png";
+};
+
+Bitmap SV_RESID_BITMAP_SCROLLVH
 {
     File = "scrollvh.png";
 };
 
-Bitmap (SV_RESID_BITMAP_SCROLLV)
+Bitmap SV_RESID_BITMAP_SCROLLV
 {
     File = "scrollv.png";
 };
 
-Bitmap (SV_RESID_BITMAP_SCROLLH)
+Bitmap SV_RESID_BITMAP_SCROLLH
 {
     File = "scrollh.png";
 };
 
-Bitmap (SV_RESID_BITMAP_WHEELVH)
+Bitmap SV_RESID_BITMAP_WHEELVH
 {
     File = "wheelvh.png";
 };
 
-Bitmap (SV_RESID_BITMAP_WHEELV)
+Bitmap SV_RESID_BITMAP_WHEELV
 {
     File = "wheelv.png";
 };
 
-Bitmap (SV_RESID_BITMAP_WHEELH)
+Bitmap SV_RESID_BITMAP_WHEELH
 {
     File = "wheelh.png";
 };
 
-Bitmap (SV_RESID_BITMAP_SCROLLMSK)
+Bitmap SV_RESID_BITMAP_SCROLLMSK
 {
     File = "scrmsk.png";
 };
 
-Bitmap (SV_RESID_BITMAP_RADIO + SV_RESID_STDOFFSET)
+Bitmap SV_RESID_BITMAP_RADIO1
 {
-    File = "radio.png";
+    File = "radio1.png";
 };
 
-Bitmap (SV_RESID_BITMAP_RADIO + SV_RESID_MONOOFFSET)
+Bitmap SV_RESID_BITMAP_RADIO2
 {
-    File = "radiomono.png";
+    File = "radio2.png";
+};
+
+Bitmap SV_RESID_BITMAP_RADIO3
+{
+    File = "radio3.png";
+};
+
+Bitmap SV_RESID_BITMAP_RADIO4
+{
+    File = "radio4.png";
+};
+
+Bitmap SV_RESID_BITMAP_RADIO5
+{
+    File = "radio5.png";
+};
+
+Bitmap SV_RESID_BITMAP_RADIO6
+{
+    File = "radio6.png";
+};
+
+Bitmap SV_RESID_BITMAP_RADIOMONO1
+{
+    File = "radiomono1.png";
+};
+
+Bitmap SV_RESID_BITMAP_RADIOMONO2
+{
+    File = "radiomono2.png";
+};
+
+Bitmap SV_RESID_BITMAP_RADIOMONO3
+{
+    File = "radiomono3.png";
+};
+
+Bitmap SV_RESID_BITMAP_RADIOMONO4
+{
+    File = "radiomono4.png";
+};
+
+Bitmap SV_RESID_BITMAP_RADIOMONO5
+{
+    File = "radiomono5.png";
+};
+
+Bitmap SV_RESID_BITMAP_RADIOMONO6
+{
+    File = "radiomono6.png";
 };
 
 Bitmap SV_RESID_BITMAP_ERRORBOX

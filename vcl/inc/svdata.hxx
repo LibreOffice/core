@@ -210,8 +210,8 @@ typedef std::vector< std::pair< OUString, FieldUnit > > FieldUnitStringList;
 
 struct ImplSVCtrlData
 {
-    ImageList*              mpCheckImgList = nullptr;       // ImageList for CheckBoxes
-    ImageList*              mpRadioImgList = nullptr;       // ImageList for RadioButtons
+    std::vector<Image>      maCheckImgList;                 // ImageList for CheckBoxes
+    std::vector<Image>      maRadioImgList;                 // ImageList for RadioButtons
     Image*                  mpDisclosurePlus = nullptr;
     Image*                  mpDisclosureMinus = nullptr;
     ImplTBDragMgr*          mpTBDragMgr = nullptr;          // DragMgr for ToolBox

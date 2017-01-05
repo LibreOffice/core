@@ -2745,9 +2745,8 @@ Size RadioButton::ImplGetRadioImageSize() const
     return aSize;
 }
 
-static void LoadThemedImageList (const StyleSettings &rStyleSettings,
-                                 ImageList *pList, const ResId &rResId,
-                                 sal_uInt16 nImages)
+static void LoadThemedImageList(const StyleSettings &rStyleSettings,
+                                std::vector<Image>& rList, const std::vector<ResId> &rResources)
 {
     Color aColorAry1[6];
     Color aColorAry2[6];
@@ -2765,9 +2764,13 @@ static void LoadThemedImageList (const StyleSettings &rStyleSettings,
     aColorAry2[5] = rStyleSettings.GetWindowTextColor();
 
     static_assert( sizeof(aColorAry1) == sizeof(aColorAry2), "aColorAry1 must match aColorAry2" );
-    // FIXME: do we want the mask for the checkbox ?
-    pList->InsertFromHorizontalBitmap (rResId, nImages,
-        aColorAry1, aColorAry2, SAL_N_ELEMENTS(aColorAry1));
+
+    for (const auto &a : rResources)
+    {
+        BitmapEx aBmpEx(a);
+        aBmpEx.Replace(aColorAry1, aColorAry2, SAL_N_ELEMENTS(aColorAry1));
+        rList.push_back(Image(aBmpEx));
+    }
 }
 
 Image RadioButton::GetRadioImage( const AllSettings& rSettings, DrawButtonFlags nFlags )
@@ -2779,52 +2782,56 @@ Image RadioButton::GetRadioImage( const AllSettings& rSettings, DrawButtonFlags 
     if ( rStyleSettings.GetOptions() & StyleSettingsOptions::Mono )
         nStyle = STYLE_RADIOBUTTON_MONO;
 
-    if ( !pSVData->maCtrlData.mpRadioImgList ||
+    if ( pSVData->maCtrlData.maRadioImgList.empty() ||
          (pSVData->maCtrlData.mnRadioStyle != nStyle) ||
          (pSVData->maCtrlData.mnLastRadioFColor != rStyleSettings.GetFaceColor().GetColor()) ||
          (pSVData->maCtrlData.mnLastRadioWColor != rStyleSettings.GetWindowColor().GetColor()) ||
          (pSVData->maCtrlData.mnLastRadioLColor != rStyleSettings.GetLightColor().GetColor()) )
     {
-        if ( pSVData->maCtrlData.mpRadioImgList )
-            delete pSVData->maCtrlData.mpRadioImgList;
+        pSVData->maCtrlData.maRadioImgList.clear();
 
         pSVData->maCtrlData.mnLastRadioFColor = rStyleSettings.GetFaceColor().GetColor();
         pSVData->maCtrlData.mnLastRadioWColor = rStyleSettings.GetWindowColor().GetColor();
         pSVData->maCtrlData.mnLastRadioLColor = rStyleSettings.GetLightColor().GetColor();
 
         ResMgr* pResMgr = ImplGetResMgr();
-        pSVData->maCtrlData.mpRadioImgList = new ImageList();
-        if( pResMgr )
-            LoadThemedImageList( rStyleSettings,
-                 pSVData->maCtrlData.mpRadioImgList,
-                 ResId( SV_RESID_BITMAP_RADIO+nStyle, *pResMgr ), 6
-            );
+        if (pResMgr)
+        {
+            std::vector<ResId> aResources;
+            aResources.push_back(ResId(nStyle ? SV_RESID_BITMAP_RADIOMONO1 : SV_RESID_BITMAP_RADIO1, *pResMgr));
+            aResources.push_back(ResId(nStyle ? SV_RESID_BITMAP_RADIOMONO2 : SV_RESID_BITMAP_RADIO2, *pResMgr));
+            aResources.push_back(ResId(nStyle ? SV_RESID_BITMAP_RADIOMONO3 : SV_RESID_BITMAP_RADIO3, *pResMgr));
+            aResources.push_back(ResId(nStyle ? SV_RESID_BITMAP_RADIOMONO4 : SV_RESID_BITMAP_RADIO4, *pResMgr));
+            aResources.push_back(ResId(nStyle ? SV_RESID_BITMAP_RADIOMONO5 : SV_RESID_BITMAP_RADIO5, *pResMgr));
+            aResources.push_back(ResId(nStyle ? SV_RESID_BITMAP_RADIOMONO6 : SV_RESID_BITMAP_RADIO6, *pResMgr));
+            LoadThemedImageList( rStyleSettings, pSVData->maCtrlData.maRadioImgList, aResources);
+        }
         pSVData->maCtrlData.mnRadioStyle = nStyle;
     }
 
-    sal_uInt16 nId;
+    sal_uInt16 nIndex;
     if ( nFlags & DrawButtonFlags::Disabled )
     {
         if ( nFlags & DrawButtonFlags::Checked )
-            nId = 6;
+            nIndex = 5;
         else
-            nId = 5;
+            nIndex = 4;
     }
     else if ( nFlags & DrawButtonFlags::Pressed )
     {
         if ( nFlags & DrawButtonFlags::Checked )
-            nId = 4;
+            nIndex = 3;
         else
-            nId = 3;
+            nIndex = 2;
     }
     else
     {
         if ( nFlags & DrawButtonFlags::Checked )
-            nId = 2;
+            nIndex = 1;
         else
-            nId = 1;
+            nIndex = 0;
     }
-    return pSVData->maCtrlData.mpRadioImgList->GetImage( nId );
+    return pSVData->maCtrlData.maRadioImgList[nIndex];
 }
 
 void RadioButton::ImplSetMinimumNWFSize()
@@ -3613,57 +3620,65 @@ Image CheckBox::GetCheckImage( const AllSettings& rSettings, DrawButtonFlags nFl
     if ( rStyleSettings.GetOptions() & StyleSettingsOptions::Mono )
         nStyle = STYLE_CHECKBOX_MONO;
 
-    if ( !pSVData->maCtrlData.mpCheckImgList ||
+    if ( pSVData->maCtrlData.maCheckImgList.empty() ||
          (pSVData->maCtrlData.mnCheckStyle != nStyle) ||
          (pSVData->maCtrlData.mnLastCheckFColor != rStyleSettings.GetFaceColor().GetColor()) ||
          (pSVData->maCtrlData.mnLastCheckWColor != rStyleSettings.GetWindowColor().GetColor()) ||
          (pSVData->maCtrlData.mnLastCheckLColor != rStyleSettings.GetLightColor().GetColor()) )
     {
-        if ( pSVData->maCtrlData.mpCheckImgList )
-            delete pSVData->maCtrlData.mpCheckImgList;
+        pSVData->maCtrlData.maCheckImgList.clear();
 
         pSVData->maCtrlData.mnLastCheckFColor = rStyleSettings.GetFaceColor().GetColor();
         pSVData->maCtrlData.mnLastCheckWColor = rStyleSettings.GetWindowColor().GetColor();
         pSVData->maCtrlData.mnLastCheckLColor = rStyleSettings.GetLightColor().GetColor();
 
         ResMgr* pResMgr = ImplGetResMgr();
-        pSVData->maCtrlData.mpCheckImgList = new ImageList();
         if( pResMgr )
-            LoadThemedImageList( rStyleSettings,
-                pSVData->maCtrlData.mpCheckImgList,
-                ResId( SV_RESID_BITMAP_CHECK+nStyle, *pResMgr ), 9 );
+        {
+            std::vector<ResId> aResources;
+            aResources.push_back(ResId(nStyle ? SV_RESID_BITMAP_CHECKMONO1 : SV_RESID_BITMAP_CHECK1, *pResMgr));
+            aResources.push_back(ResId(nStyle ? SV_RESID_BITMAP_CHECKMONO2 : SV_RESID_BITMAP_CHECK2, *pResMgr));
+            aResources.push_back(ResId(nStyle ? SV_RESID_BITMAP_CHECKMONO3 : SV_RESID_BITMAP_CHECK3, *pResMgr));
+            aResources.push_back(ResId(nStyle ? SV_RESID_BITMAP_CHECKMONO4 : SV_RESID_BITMAP_CHECK4, *pResMgr));
+            aResources.push_back(ResId(nStyle ? SV_RESID_BITMAP_CHECKMONO5 : SV_RESID_BITMAP_CHECK5, *pResMgr));
+            aResources.push_back(ResId(nStyle ? SV_RESID_BITMAP_CHECKMONO6 : SV_RESID_BITMAP_CHECK6, *pResMgr));
+            aResources.push_back(ResId(nStyle ? SV_RESID_BITMAP_CHECKMONO7 : SV_RESID_BITMAP_CHECK7, *pResMgr));
+            aResources.push_back(ResId(nStyle ? SV_RESID_BITMAP_CHECKMONO8 : SV_RESID_BITMAP_CHECK8, *pResMgr));
+            aResources.push_back(ResId(nStyle ? SV_RESID_BITMAP_CHECKMONO9 : SV_RESID_BITMAP_CHECK9, *pResMgr));
+            LoadThemedImageList(rStyleSettings, pSVData->maCtrlData.maCheckImgList, aResources);
+        }
         pSVData->maCtrlData.mnCheckStyle = nStyle;
     }
 
-    sal_uInt16 nId;
+    sal_uInt16 nIndex;
     if ( nFlags & DrawButtonFlags::Disabled )
     {
         if ( nFlags & DrawButtonFlags::DontKnow )
-            nId = 9;
+            nIndex = 8;
         else if ( nFlags & DrawButtonFlags::Checked )
-            nId = 6;
+            nIndex = 5;
         else
-            nId = 5;
+            nIndex = 4;
     }
     else if ( nFlags & DrawButtonFlags::Pressed )
     {
         if ( nFlags & DrawButtonFlags::DontKnow )
-            nId = 8;
+            nIndex = 7;
         else if ( nFlags & DrawButtonFlags::Checked )
-            nId = 4;
+            nIndex = 3;
         else
-            nId = 3;
+            nIndex = 2;
     }
     else
     {
         if ( nFlags & DrawButtonFlags::DontKnow )
-            nId = 7;
+            nIndex = 6;
         else if ( nFlags & DrawButtonFlags::Checked )
-            nId = 2;
+            nIndex = 1;
         else
-            nId = 1;
+            nIndex = 0;
     }
-    return pSVData->maCtrlData.mpCheckImgList->GetImage( nId );
+    return pSVData->maCtrlData.maCheckImgList[nIndex];
 }
 
 void CheckBox::ImplSetMinimumNWFSize()

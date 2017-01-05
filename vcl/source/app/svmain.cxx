@@ -420,16 +420,8 @@ void DeInitVCL()
     Scheduler::ImplDeInitScheduler();
 
     pSVData->maWinData.maMsgBoxImgList.clear();
-    if ( pSVData->maCtrlData.mpCheckImgList )
-    {
-        delete pSVData->maCtrlData.mpCheckImgList;
-        pSVData->maCtrlData.mpCheckImgList = nullptr;
-    }
-    if ( pSVData->maCtrlData.mpRadioImgList )
-    {
-        delete pSVData->maCtrlData.mpRadioImgList;
-        pSVData->maCtrlData.mpRadioImgList = nullptr;
-    }
+    pSVData->maCtrlData.maCheckImgList.clear();
+    pSVData->maCtrlData.maRadioImgList.clear();
     if ( pSVData->maCtrlData.mpDisclosurePlus )
     {
         delete pSVData->maCtrlData.mpDisclosurePlus;

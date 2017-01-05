@@ -23,16 +23,41 @@
 #define SV_RESID_STDOFFSET                              0
 #define SV_RESID_MONOOFFSET                             1
 
-// ATTENTION: These IDs must be spaced at least by 10, as, depending on style,
-// an offset will get added:
+#define SV_RESID_BITMAP_CHECK1                       1000
+#define SV_RESID_BITMAP_CHECK2                       1001
+#define SV_RESID_BITMAP_CHECK3                       1002
+#define SV_RESID_BITMAP_CHECK4                       1003
+#define SV_RESID_BITMAP_CHECK5                       1004
+#define SV_RESID_BITMAP_CHECK6                       1005
+#define SV_RESID_BITMAP_CHECK7                       1006
+#define SV_RESID_BITMAP_CHECK8                       1007
+#define SV_RESID_BITMAP_CHECK9                       1008
+#define SV_RESID_BITMAP_CHECKMONO1                   1009
+#define SV_RESID_BITMAP_CHECKMONO2                   1010
+#define SV_RESID_BITMAP_CHECKMONO3                   1011
+#define SV_RESID_BITMAP_CHECKMONO4                   1012
+#define SV_RESID_BITMAP_CHECKMONO5                   1013
+#define SV_RESID_BITMAP_CHECKMONO6                   1014
+#define SV_RESID_BITMAP_CHECKMONO7                   1015
+#define SV_RESID_BITMAP_CHECKMONO8                   1016
+#define SV_RESID_BITMAP_CHECKMONO9                   1017
+#define SV_RESID_BITMAP_RADIO1                       1018
+#define SV_RESID_BITMAP_RADIO2                       1019
+#define SV_RESID_BITMAP_RADIO3                       1020
+#define SV_RESID_BITMAP_RADIO4                       1021
+#define SV_RESID_BITMAP_RADIO5                       1022
+#define SV_RESID_BITMAP_RADIO6                       1023
+#define SV_RESID_BITMAP_RADIOMONO1                   1024
+#define SV_RESID_BITMAP_RADIOMONO2                   1025
+#define SV_RESID_BITMAP_RADIOMONO3                   1026
+#define SV_RESID_BITMAP_RADIOMONO4                   1027
+#define SV_RESID_BITMAP_RADIOMONO5                   1028
+#define SV_RESID_BITMAP_RADIOMONO6                   1029
 
-#define SV_RESID_BITMAP_CHECK                        1000
-#define SV_RESID_BITMAP_RADIO                        1010
-
-#define SV_RESID_BITMAP_ERRORBOX                     1020
-#define SV_RESID_BITMAP_QUERYBOX                     1021
-#define SV_RESID_BITMAP_WARNINGBOX                   1022
-#define SV_RESID_BITMAP_INFOBOX                      1023
+#define SV_RESID_BITMAP_ERRORBOX                     1030
+#define SV_RESID_BITMAP_QUERYBOX                     1031
+#define SV_RESID_BITMAP_WARNINGBOX                   1032
+#define SV_RESID_BITMAP_INFOBOX                      1033
 
 #define SV_RESID_BITMAP_SCROLLMSK                    1050
 #define SV_RESID_BITMAP_WHEELVH                      1051
