@@ -1192,7 +1192,7 @@ FormulaError FormulaCompiler::GetErrorConstant( const OUString& rName ) const
         if (rName.startsWithIgnoreAsciiCase("#ERR") && rName[rName.getLength()-1] == '!')
         {
             sal_uInt32 nErr = rName.copy( 4, rName.getLength() - 5).toUInt32();
-            if (0 < nErr && nErr <= SAL_MAX_UINT16)
+            if (0 < nErr && nErr <= SAL_MAX_UINT16 && isPublishedFormulaError(static_cast<FormulaError>(nErr)))
                 nError = static_cast<FormulaError>(nErr);
         }
     }
