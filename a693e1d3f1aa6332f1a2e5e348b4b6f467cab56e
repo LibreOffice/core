@@ -16,6 +16,24 @@
       "revId": "a693e1d3f1aa6332f1a2e5e348b4b6f467cab56e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a6eadb0_5548df2d",
+        "filename": "sw/source/core/layout/frmtool.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1128,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2017-01-05T12:12:25Z",
+      "side": 1,
+      "message": "Eh, yeah: Fixed.\nThis was a side-effect from me changing the line to:\n\n if(lcl_InHeaderOrFooter(...) || !(bAlreadyConnected \u003d ...))\n\nbut then I realized that lcl_InHeaderOrFooter(...) has a precondition: bAlreadyConnected must be true. So I changed it back.",
+      "parentUuid": "1a6eadb0_15f827e5",
+      "revId": "a693e1d3f1aa6332f1a2e5e348b4b6f467cab56e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
