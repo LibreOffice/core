@@ -1242,19 +1242,18 @@ void ScRangePairList::Remove(size_t nPos)
 
 ScRangePair* ScRangePairList::Remove( ScRangePair* Adr)
 {
-    ScRangePair* p = nullptr;
+    if (Adr == nullptr)
+        return nullptr;
 
-    if (Adr == nullptr) return nullptr;
-
-    for ( vector<ScRangePair*>::iterator itr = maPairs.begin(); itr < maPairs.end(); ++itr )
+    for ( vector<ScRangePair*>::iterator itr = maPairs.begin(); itr != maPairs.end(); ++itr )
     {
-        if ( Adr == (p = *itr) )
+        if (Adr == *itr)
         {
             maPairs.erase( itr );
-            break;
+            return Adr;
         }
     }
-    return p;
+    return nullptr;
 }
 
 ScRangePair* ScRangePairList::operator [](size_t idx)
