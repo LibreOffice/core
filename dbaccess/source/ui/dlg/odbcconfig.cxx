@@ -38,8 +38,9 @@
 #ifdef MACOSX
 #define ODBC_LIBRARY        "libiodbc.dylib"
 #else
+#define ODBC_LIBRARY_PLAIN  "libodbc.so"
 #define ODBC_LIBRARY_1      "libodbc.so.1"
-#define ODBC_LIBRARY        "libodbc.so"
+#define ODBC_LIBRARY        "libodbc.so.2"
 #endif
 #endif
 
@@ -123,6 +124,10 @@ OOdbcEnumeration::OOdbcEnumeration()
 #ifdef ODBC_LIBRARY_1
     if ( !bLoaded )
         bLoaded = load(ODBC_LIBRARY_1);
+#endif
+#ifdef ODBC_LIBRARY_PLAIN
+    if ( !bLoaded )
+        bLoaded = load(ODBC_LIBRARY_PLAIN);
 #endif
 
     if ( bLoaded )
