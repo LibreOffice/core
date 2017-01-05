@@ -136,12 +136,12 @@ class GbuildParser:
         for target in self.files:
             if target.location not in self.target_by_location:
                 self.target_by_location[target.location] = set()
-                self.target_by_location[target.location] |= set([target])
+            self.target_by_location[target.location] |= set([target])
             for cxx in target.cxxobjects:
                 path = '/'.join(cxx.split('/')[:-1])
                 if path not in self.target_by_path:
                     self.target_by_path[path] = set()
-                    self.target_by_path[path] |= set([target])
+                self.target_by_path[path] |= set([target])
         for path in self.target_by_path:
             x = self.target_by_path[path]
             if path != '' and len(set(self.target_by_path[path])) > 1:
