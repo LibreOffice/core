@@ -21,24 +21,11 @@
 
 
 
-PRJ=..
+$(eval $(call gb_Module_Module,cui))
 
-PRJNAME=cui
-TARGET=inc
+$(eval $(call gb_Module_add_targets,cui,\
+	AllLangResTarget_cui \
+	Library_cui \
+))
 
-# --- Settings -----------------------------------------------------
-
-.INCLUDE :  settings.mk
-.INCLUDE :  $(PRJ)$/util$/makefile.pmk
-
-# --- Files --------------------------------------------------------
-
-.INCLUDE :  target.mk
-
-.IF "$(ENABLE_PCH)"!=""
-ALLTAR : \
-    $(SLO)$/precompiled.pch \
-    $(SLO)$/precompiled_ex.pch
-    
-.ENDIF			# "$(ENABLE_PCH)"!=""
-
+# vim: set noet sw=4 ts=4:

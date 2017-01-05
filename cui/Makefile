@@ -19,21 +19,14 @@
 #  
 #**************************************************************
 
-PRJ=..$/..$/..
-PRJNAME=cui
-TARGET=services
-ENABLE_EXCEPTIONS=TRUE
+ifeq ($(strip $(SOLARENV)),)
+$(error No environment set!)
+endif
 
-# --- Settings -----------------------------------------------------
+gb_PARTIALBUILD := T
+GBUILDDIR := $(SOLARENV)/gbuild
+include $(GBUILDDIR)/gbuild.mk
 
-.INCLUDE :  settings.mk
-.INCLUDE :  $(PRJ)$/util$/makefile.pmk
+$(eval $(call gb_Module_make_global_targets,$(shell ls $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/Module*.mk)))
 
-# --- Files --------------------------------------------------------
-
-SLOFILES+=\
-        $(SLO)$/services.obj
-
-# --- Targets -------------------------------------------------------
-
-.INCLUDE :  target.mk
+# vim: set noet sw=4 ts=4:

@@ -20,29 +20,25 @@
 #**************************************************************
 
 
-PRJ=..$/..
-PRJNAME=cui
-TARGET=factory
-ENABLE_EXCEPTIONS=TRUE
 
-# --- Settings -----------------------------------------------------
+PRJ=..
+TARGET=prj
 
-.INCLUDE :  settings.mk
-.INCLUDE :  $(PRJ)$/util$/makefile.pmk
+.INCLUDE : settings.mk
 
-.IF "$(ENABLE_LAYOUT)" == "TRUE"
-CFLAGS+= -DENABLE_LAYOUT=1 -I../$(PRJ)/layout/inc -I../$(PRJ)/layout/$(INPATH)/inc
-.ENDIF # ENABLE_LAYOUT == TRUE
+.IF "$(VERBOSE)"!=""
+VERBOSEFLAG :=
+.ELSE
+VERBOSEFLAG := -s
+.ENDIF
 
-# --- Files --------------------------------------------------------
+.IF "$(DEBUG)"!=""
+DEBUG_ARGUMENT=DEBUG=$(DEBUG)
+.ELIF "$(debug)"!=""
+DEBUG_ARGUMENT=debug=$(debug)
+.ELSE
+DEBUG_ARGUMENT=
+.ENDIF
 
-SLOFILES+=\
-        $(SLO)$/dlgfact.obj \
-        $(SLO)$/cuiexp.obj \
-        $(SLO)$/cuiresmgr.obj \
-        $(SLO)$/init.obj \
-
-
-# --- Targets -------------------------------------------------------
-
-.INCLUDE :  target.mk
+all:
+    cd $(PRJ) && $(GNUMAKE) $(VERBOSEFLAG) -r -j$(MAXPROCESS) $(gb_MAKETARGET) $(DEBUG_ARGUMENT) && $(GNUMAKE) $(VERBOSEFLAG) -r deliverlog
