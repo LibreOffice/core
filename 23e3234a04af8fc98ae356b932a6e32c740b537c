@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a6eadb0_f50e4be4",
+        "filename": "sw/source/core/layout/frmtool.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1128,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2017-01-05T13:13:09Z",
+      "side": 1,
+      "message": "Now it contains a typo, which won\u0027t compile:\n\nif(!__(__bAlreadyConnected …",
+      "revId": "23e3234a04af8fc98ae356b932a6e32c740b537c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
