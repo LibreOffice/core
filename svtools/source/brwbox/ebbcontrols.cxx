@@ -289,7 +289,8 @@ namespace svt
 
     void CheckBoxControl::GetFocus()
     {
-        pBox->GrabFocus();
+        if (pBox)
+            pBox->GrabFocus();
     }
 
 
