@@ -20,9 +20,6 @@
 #ifndef INCLUDED_VCL_INC_SVIDS_HRC
 #define INCLUDED_VCL_INC_SVIDS_HRC
 
-#define SV_RESID_STDOFFSET                              0
-#define SV_RESID_MONOOFFSET                             1
-
 #define SV_RESID_BITMAP_CHECK1                       1000
 #define SV_RESID_BITMAP_CHECK2                       1001
 #define SV_RESID_BITMAP_CHECK3                       1002
