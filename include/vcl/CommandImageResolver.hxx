@@ -22,15 +22,6 @@
 namespace vcl
 {
 
-enum class ImageType
-{
-    Size16,
-    Size26,
-    Size32,
-    Small = Size16,
-    LAST = Size32,
-};
-
 class VCL_DLLPUBLIC CommandImageResolver final
 {
 private:

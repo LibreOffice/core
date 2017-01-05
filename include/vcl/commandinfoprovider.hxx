@@ -22,7 +22,6 @@
 #include <vcl/dllapi.h>
 #include <vcl/keycod.hxx>
 #include <vcl/image.hxx>
-#include <vcl/CommandImageResolver.hxx>
 
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>

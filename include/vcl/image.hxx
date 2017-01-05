@@ -36,6 +36,18 @@ struct ImplImage;
 struct ImplImageList;
 namespace com { namespace sun { namespace star { namespace graphic { class XGraphic;} } } }
 
+namespace vcl
+{
+    enum class ImageType
+    {
+        Size16,
+        Size26,
+        Size32,
+        Small = Size16,
+        LAST = Size32,
+    };
+}
+
 #define IMAGELIST_IMAGE_NOTFOUND    ((sal_uInt16)0xFFFF)
 
 class VCL_DLLPUBLIC Image
