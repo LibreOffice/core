@@ -665,7 +665,7 @@ IMPL_LINK_NOARG(GeometryResourceGroup, GeometryChangeHdl, ListBox&, void)
 
 ChartTypeTabPage::ChartTypeTabPage(vcl::Window* pParent
         , const uno::Reference< XChartDocument >& xChartModel
-        , bool bDoLiveUpdate, bool bShowDescription)
+        , bool bShowDescription)
         : OWizardPage(pParent, "tp_ChartType",
             "modules/schart/ui/tp_ChartType.ui")
         , m_pDim3DLookResourceGroup( new Dim3DLookResourceGroup(this) )
@@ -678,7 +678,6 @@ ChartTypeTabPage::ChartTypeTabPage(vcl::Window* pParent
         , m_aChartTypeDialogControllerList(0)
         , m_pCurrentMainType(nullptr)
         , m_nChangingCalls(0)
-        , m_bDoLiveUpdate(bDoLiveUpdate)
         , m_aTimerTriggeredControllerLock( uno::Reference< frame::XModel >( m_xChartModel, uno::UNO_QUERY ) )
 {
     get(m_pFT_ChooseType, "FT_CAPTION_FOR_WIZARD");
@@ -827,8 +826,7 @@ void ChartTypeTabPage::stateChanged( ChangingResource* /*pResource*/ )
         m_pCurrentMainType->adjustParameterToSubType( aParameter );
         m_pCurrentMainType->adjustSubTypeAndEnableControls( aParameter );
     }
-    if( m_bDoLiveUpdate )
-        commitToModel( aParameter );
+    commitToModel( aParameter );
 
     //detect the new ThreeDLookScheme
     uno::Reference<XDiagram> xDiagram = ChartModelHelper::findDiagram(m_xChartModel);
@@ -863,8 +861,7 @@ IMPL_LINK_NOARG(ChartTypeTabPage, SelectSubTypeHdl, ValueSet*, void)
         ChartTypeParameter aParameter( this->getCurrentParamter() );
         m_pCurrentMainType->adjustParameterToSubType( aParameter );
         this->fillAllControls( aParameter, false );
-        if( m_bDoLiveUpdate )
-            commitToModel( aParameter );
+        commitToModel( aParameter );
     }
 }
 
@@ -889,8 +886,7 @@ void ChartTypeTabPage::selectMainType()
         this->showAllControls(*m_pCurrentMainType);
 
         m_pCurrentMainType->adjustParameterToMainType( aParameter );
-        if( m_bDoLiveUpdate )
-            commitToModel( aParameter );
+        commitToModel( aParameter );
         //detect the new ThreeDLookScheme
         aParameter.eThreeDLookScheme = ThreeDHelper::detectScheme( ChartModelHelper::findDiagram( m_xChartModel ) );
         if(!aParameter.b3DLook && aParameter.eThreeDLookScheme!=ThreeDLookScheme_Realistic )
@@ -1013,14 +1009,6 @@ void ChartTypeTabPage::initializePage()
 
 bool ChartTypeTabPage::commitPage( ::svt::WizardTypes::CommitPageReason /*eReason*/ )
 {
-    //commit changes to model
-    if( !m_bDoLiveUpdate && m_pCurrentMainType )
-    {
-        ChartTypeParameter aParameter( this->getCurrentParamter() );
-        m_pCurrentMainType->adjustParameterToSubType( aParameter );
-        commitToModel( aParameter );
-    }
-
     return true; // return false if this page should not be left
 }
 

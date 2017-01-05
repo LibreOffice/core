@@ -50,7 +50,7 @@ class ChartTypeTabPage : public ResourceChangeListener, public svt::OWizardPage,
 public:
     ChartTypeTabPage( vcl::Window* pParent
                 , const css::uno::Reference< css::chart2::XChartDocument >& xChartModel
-                , bool bDoLiveUpdate, bool bShowDescription = true );
+                , bool bShowDescription = true );
     virtual ~ChartTypeTabPage() override;
     virtual void        dispose() override;
 
@@ -91,7 +91,6 @@ protected:
     ChartTypeDialogController*                  m_pCurrentMainType;
 
     sal_Int32 m_nChangingCalls;
-    bool      m_bDoLiveUpdate;
 
     TimerTriggeredControllerLock   m_aTimerTriggeredControllerLock;
 };
