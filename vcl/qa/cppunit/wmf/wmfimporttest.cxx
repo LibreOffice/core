@@ -129,15 +129,15 @@ void WmfTest::testEmfProblem()
 
     MetafileXmlDump dumper;
     dumper.filterAllActionTypes();
-    dumper.filterActionType(MetaActionType::ISECTRECTCLIPREGION, false);
+    dumper.filterActionType(MetaActionType::ISECTREGIONCLIPREGION, false);
     xmlDocPtr pDoc = dumper.dumpAndParse(aGDIMetaFile);
 
     CPPUNIT_ASSERT (pDoc);
 
-    assertXPath(pDoc, "/metafile/sectrectclipregion[1]", "top", "427");
-    assertXPath(pDoc, "/metafile/sectrectclipregion[1]", "left", "740");
-    assertXPath(pDoc, "/metafile/sectrectclipregion[1]", "bottom", "2823");
-    assertXPath(pDoc, "/metafile/sectrectclipregion[1]", "right", "1876");
+    assertXPath(pDoc, "/metafile/sectregionclipregion[1]", "top", "427");
+    assertXPath(pDoc, "/metafile/sectregionclipregion[1]", "left", "740");
+    assertXPath(pDoc, "/metafile/sectregionclipregion[1]", "bottom", "2823");
+    assertXPath(pDoc, "/metafile/sectregionclipregion[1]", "right", "1876");
 }
 
 void WmfTest::testEmfLineStyles()

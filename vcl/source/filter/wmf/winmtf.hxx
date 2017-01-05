@@ -468,7 +468,6 @@ class WinMtfOutput final
     bool            mbNopMode;
     bool            mbFillStyleSelected;
     bool            mbClipNeedsUpdate;
-    bool            mbComplexClip;
 
     std::vector< std::shared_ptr<SaveStruct> > vSaveStack;
 
@@ -504,7 +503,6 @@ class WinMtfOutput final
     tools::PolyPolygon& ImplScale( tools::PolyPolygon& rPolyPolygon );
     void                ImplResizeObjectArry( sal_uInt32 nNewEntry );
     void                ImplSetNonPersistentLineColorTransparenz();
-    void                ImplDrawClippedPolyPolygon( const tools::PolyPolygon& rPolyPoly );
     void                ImplDrawBitmap( const Point& rPos, const Size& rSize, const BitmapEx& rBitmap );
 
 public:
