@@ -206,7 +206,6 @@ FrameBorderType FrameBorder::GetKeyboardNeighbor( sal_uInt16 nKeyCode ) const
 FrameSelectorImpl::FrameSelectorImpl( FrameSelector& rFrameSel ) :
     mrFrameSel( rFrameSel ),
     mpVirDev( VclPtr<VirtualDevice>::Create() ),
-    maILArrows(),
     maLeft( FrameBorderType::Left ),
     maRight( FrameBorderType::Right ),
     maTop( FrameBorderType::Top ),
@@ -303,8 +302,30 @@ void FrameSelectorImpl::InitColors()
     maHCLineCol = rSettings.GetLabelTextColor();
 }
 
+static const sal_uInt16 aImageIds[] =
+{
+    RID_SVXBMP_FRMSEL_ARROW1,
+    RID_SVXBMP_FRMSEL_ARROW2,
+    RID_SVXBMP_FRMSEL_ARROW3,
+    RID_SVXBMP_FRMSEL_ARROW4,
+    RID_SVXBMP_FRMSEL_ARROW5,
+    RID_SVXBMP_FRMSEL_ARROW6,
+    RID_SVXBMP_FRMSEL_ARROW7,
+    RID_SVXBMP_FRMSEL_ARROW8,
+    RID_SVXBMP_FRMSEL_ARROW9,
+    RID_SVXBMP_FRMSEL_ARROW10,
+    RID_SVXBMP_FRMSEL_ARROW11,
+    RID_SVXBMP_FRMSEL_ARROW12,
+    RID_SVXBMP_FRMSEL_ARROW13,
+    RID_SVXBMP_FRMSEL_ARROW14,
+    RID_SVXBMP_FRMSEL_ARROW15,
+    RID_SVXBMP_FRMSEL_ARROW16
+};
+
 void FrameSelectorImpl::InitArrowImageList()
 {
+    maArrows.clear();
+
     /* Build the arrow images bitmap with current colors. */
     Color pColorAry1[3];
     Color pColorAry2[3];
@@ -315,11 +336,16 @@ void FrameSelectorImpl::InitArrowImageList()
     pColorAry1[2] = Color( 255, 0, 255 );
     pColorAry2[2] = maBackCol;       // magenta -> background
 
-    maILArrows.InsertFromHorizontalBitmap(
-        SVX_RES( RID_SVXBMP_FRMSEL_ARROWS ), 16, pColorAry1, pColorAry2, 3);
-    DBG_ASSERT( maILArrows.GetImageSize().Height() == maILArrows.GetImageSize().Width(),
-        "svx::FrameSelectorImpl::InitArrowImageList - images are not squarish" );
-    mnArrowSize = maILArrows.GetImageSize().Height();
+    assert(SAL_N_ELEMENTS(aImageIds) == 16);
+    for (size_t i = 0; i < SAL_N_ELEMENTS(aImageIds); ++i)
+    {
+        BitmapEx aBmpEx(SVX_RES(aImageIds[i]));
+        aBmpEx.Replace(pColorAry1, pColorAry2, 3);
+        maArrows.push_back(Image(aBmpEx));
+    }
+    assert(maArrows.size() == 16);
+
+    mnArrowSize = maArrows[0].GetSizePixel().Height();
 }
 
 void FrameSelectorImpl::InitGlobalGeometry()
@@ -551,38 +577,40 @@ void FrameSelectorImpl::DrawArrows( const FrameBorder& rBorder )
     long nTLPos = 0;
     long nBRPos = mnCtrlSize - mnArrowSize;
     Point aPos1, aPos2;
-    sal_uInt16 nImgId1 = 0, nImgId2 = 0;
+    int nImgIndex1 = -1, nImgIndex2 = -1;
     switch( rBorder.GetType() )
     {
         case FrameBorderType::Left:
         case FrameBorderType::Right:
         case FrameBorderType::Vertical:
-            aPos1 = Point( nLinePos, nTLPos ); nImgId1 = 1;
-            aPos2 = Point( nLinePos, nBRPos ); nImgId2 = 2;
+            aPos1 = Point( nLinePos, nTLPos ); nImgIndex1 = 0;
+            aPos2 = Point( nLinePos, nBRPos ); nImgIndex2 = 1;
         break;
 
         case FrameBorderType::Top:
         case FrameBorderType::Bottom:
         case FrameBorderType::Horizontal:
-            aPos1 = Point( nTLPos, nLinePos ); nImgId1 = 3;
-            aPos2 = Point( nBRPos, nLinePos ); nImgId2 = 4;
+            aPos1 = Point( nTLPos, nLinePos ); nImgIndex1 = 2;
+            aPos2 = Point( nBRPos, nLinePos ); nImgIndex2 = 3;
         break;
 
         case FrameBorderType::TLBR:
-            aPos1 = Point( nTLPos, nTLPos ); nImgId1 = 5;
-            aPos2 = Point( nBRPos, nBRPos ); nImgId2 = 6;
+            aPos1 = Point( nTLPos, nTLPos ); nImgIndex1 = 4;
+            aPos2 = Point( nBRPos, nBRPos ); nImgIndex2 = 5;
         break;
         case FrameBorderType::BLTR:
-            aPos1 = Point( nTLPos, nBRPos ); nImgId1 = 7;
-            aPos2 = Point( nBRPos, nTLPos ); nImgId2 = 8;
+            aPos1 = Point( nTLPos, nBRPos ); nImgIndex1 = 6;
+            aPos2 = Point( nBRPos, nTLPos ); nImgIndex2 = 7;
         break;
         default: ; //prevent warning
     }
 
     // Arrow or marker? Do not draw arrows into disabled control.
     sal_uInt16 nSelectAdd = (mrFrameSel.IsEnabled() && rBorder.IsSelected()) ? 0 : 8;
-    mpVirDev->DrawImage( aPos1, maILArrows.GetImage( nImgId1 + nSelectAdd ) );
-    mpVirDev->DrawImage( aPos2, maILArrows.GetImage( nImgId2 + nSelectAdd ) );
+    if (nImgIndex1 >= 0)
+        mpVirDev->DrawImage(aPos1, maArrows[nImgIndex1 + nSelectAdd]);
+    if (nImgIndex2 >= 0)
+        mpVirDev->DrawImage(aPos2, maArrows[nImgIndex2 + nSelectAdd]);
 }
 
 Color FrameSelectorImpl::GetDrawLineColor( const Color& rColor ) const

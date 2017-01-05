@@ -99,7 +99,7 @@ struct FrameSelectorImpl
 {
     FrameSelector&      mrFrameSel;     /// The control itself.
     ScopedVclPtr<VirtualDevice> mpVirDev; /// For all buffered drawing operations.
-    ImageList           maILArrows;     /// Arrows in current system colors.
+    std::vector<Image>  maArrows;       /// Arrows in current system colors.
     Color               maBackCol;      /// Background color.
     Color               maArrowCol;     /// Selection arrow color.
     Color               maMarkCol;      /// Selection marker color.
