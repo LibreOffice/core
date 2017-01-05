@@ -66,6 +66,7 @@
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentState.hxx>
+#include <boost/circular_buffer.hpp>
 
 //UUUU
 #include <svx/sdr/attribute/sdrallfillattributeshelper.hxx>
@@ -1097,76 +1098,47 @@ static bool lcl_ObjConnected( const SwFrameFormat *pFormat, const SwFrame* pSib 
 
     OD 23.06.2003 #108784#
 */
-static bool lcl_InHeaderOrFooter( const SwFrameFormat& _rFormat )
+static inline bool lcl_InHeaderOrFooter(const SwFrameFormat& rFormat)
 {
-    bool bRetVal = false;
-
-    const SwFormatAnchor& rAnch = _rFormat.GetAnchor();
-
-    if (rAnch.GetAnchorId() != FLY_AT_PAGE)
-    {
-        bRetVal = _rFormat.GetDoc()->IsInHeaderFooter( rAnch.GetContentAnchor()->nNode );
-    }
-
-    return bRetVal;
+    const SwFormatAnchor& rAnch = rFormat.GetAnchor();
+    if (rAnch.GetAnchorId() == FLY_AT_PAGE)
+        return false;
+    return rFormat.GetDoc()->IsInHeaderFooter(rAnch.GetContentAnchor()->nNode);
 }
 
-void AppendAllObjs( const SwFrameFormats *pTable, const SwFrame* pSib )
+void AppendAllObjs(const SwFrameFormats* pTable, const SwFrame* pSib)
 {
     //Connecting of all Objects, which are described in the SpzTable with the
     //layout.
-    //If nothing happens anymore we can stop. Then formats can still remain,
-    //because we neither use character bound frames nor objects which
-    //are anchored to character bounds.
 
-    // Optimization: This code used to make a copy of pTable and erase() handled items, but using
-    // vector::erase() is a bad idea for performance (especially with large mailmerge documents
-    // it results in extensive repeated copying). Use another vector for marking whether the item
-    // has been handled and operate on the original data without altering them.
-    std::vector< bool > handled( pTable->size(), false );
-    size_t handledCount = 0;
-
-    while ( handledCount < pTable->size())
+    boost::circular_buffer<SwFrameFormat*> vFormatsToConnect(pTable->size());
+    for(const auto& pFormat : *pTable)
     {
-        bool changed = false;
-        for ( int i = 0; i < int(pTable->size()); ++i )
+        const auto& rAnch = pFormat->GetAnchor();
+        // Formats can still remain, because we neither use character bound
+        // frames nor objects which are anchored to character bounds.
+        if ((rAnch.GetAnchorId() != FLY_AT_PAGE) && (rAnch.GetAnchorId() != FLY_AS_CHAR))
+            vFormatsToConnect.push_back(pFormat);
+    }
+    const SwFrameFormat* pFirstRequeued(nullptr);
+    while(!vFormatsToConnect.empty())
+    {
+        auto& pFormat = vFormatsToConnect.front();
+        const bool bAlreadyConnected(lcl_ObjConnected(pFormat, pSib));
+        if(!bAlreadyConnected || lcl_InHeaderOrFooter(*pFormat))
+            pFormat->MakeFrames();
+        if(bAlreadyConnected || lcl_ObjConnected(pFormat, pSib))
+            pFirstRequeued = nullptr;
+        else
         {
-            if( handled[ i ] )
-                continue;
-            SwFrameFormat *pFormat = (*pTable)[ i ];
-            const SwFormatAnchor &rAnch = pFormat->GetAnchor();
-            bool bRemove = false;
-            if ((rAnch.GetAnchorId() == FLY_AT_PAGE) ||
-                (rAnch.GetAnchorId() == FLY_AS_CHAR))
-            {
-                //Page bounded are already anchored, character bounded
-                //I don't want here.
-                bRemove = true;
-            }
-            else
-            {
-                bRemove = ::lcl_ObjConnected( pFormat, pSib );
-                if  ( !bRemove || ::lcl_InHeaderOrFooter( *pFormat ) )
-                {
-                    // OD 23.06.2003 #108784# - correction: for objects in header
-                    // or footer create frames, in spite of the fact that an connected
-                    // objects already exists.
-                    //Call for Flys and DrawObjs only a MakeFrames if nor
-                    //no dependent exists, otherwise, or if the MakeDrms creates no
-                    //dependents, remove.
-                    pFormat->MakeFrames();
-                    bRemove = ::lcl_ObjConnected( pFormat, pSib );
-                }
-            }
-            if ( bRemove )
-            {
-                handled[ i ] = true;
-                ++handledCount;
-                changed = true;
-            }
+            if(pFirstRequeued == pFormat)
+                // If nothing happens anymore we can stop.
+                break;
+            if(!pFirstRequeued)
+                pFirstRequeued = pFormat;
+            vFormatsToConnect.push_back(pFormat);
         }
-        if( !changed )
-            break;
+        vFormatsToConnect.pop_front();
     }
 }
 
