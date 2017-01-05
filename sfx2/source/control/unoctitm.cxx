@@ -1096,7 +1096,7 @@ static void InterceptLOKStateChangeEvent(const SfxViewFrame* pViewFrame, const c
              aEvent.FeatureURL.Path == "NumberFormatPercent" ||
              aEvent.FeatureURL.Path == "NumberFormatDate")
     {
-        sal_Bool aBool;
+        bool aBool;
 
         if (aEvent.IsEnabled && (aEvent.State >>= aBool))
         {
@@ -1105,7 +1105,7 @@ static void InterceptLOKStateChangeEvent(const SfxViewFrame* pViewFrame, const c
     }
     else if (aEvent.FeatureURL.Path == "ToggleMergeCells")
     {
-        sal_Bool aBool;
+        bool aBool;
 
         if (aEvent.IsEnabled && (aEvent.State >>= aBool))
         {

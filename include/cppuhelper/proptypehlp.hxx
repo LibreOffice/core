@@ -36,7 +36,7 @@ inline void SAL_CALL convertPropertyValue( target &value , const  css::uno::Any 
     }
 }
 
-inline void SAL_CALL convertPropertyValue( sal_Bool & b   , const css::uno::Any & a )
+void convertPropertyValue(bool & b, const css::uno::Any & a)
 {
     if( !(a >>= b) ) {
         switch( a.getValueType().getTypeClass() ) {
@@ -71,8 +71,8 @@ inline void SAL_CALL convertPropertyValue( sal_Bool & b   , const css::uno::Any 
     }
 }
 
-void convertPropertyValue(bool & target, css::uno::Any const & source) {
-    sal_Bool b;
+void convertPropertyValue(sal_Bool & target, css::uno::Any const & source) {
+    bool b;
     convertPropertyValue(b, source);
     target = b;
 }

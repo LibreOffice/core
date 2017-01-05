@@ -70,37 +70,72 @@ OverrideKind getOverrideKind(FunctionDecl const * decl) {
     return OverrideKind::MAYBE;
 }
 
+enum class BoolOverloadKind { No, Yes, CheckNext };
+
+BoolOverloadKind isBoolOverloadOf(
+    FunctionDecl const * f, FunctionDecl const * decl, bool mustBeDeleted)
+{
+    if (!mustBeDeleted || f->isDeleted()) {
+        unsigned n = decl->getNumParams();
+        if (f->getNumParams() == n) {
+            bool hasSB = false;
+            for (unsigned i = 0; i != n; ++i) {
+                QualType t1 { decl->getParamDecl(i)->getType() };
+                bool isSB = isSalBool(t1);
+                bool isSBRef = !isSB && t1->isReferenceType()
+                    && isSalBool(t1.getNonReferenceType());
+                QualType t2 { f->getParamDecl(i)->getType() };
+                if (!(isSB
+                      ? t2->isBooleanType()
+                      : isSBRef
+                      ? (t2->isReferenceType()
+                         && t2.getNonReferenceType()->isBooleanType())
+                      : t2.getCanonicalType() == t1.getCanonicalType()))
+                {
+                    return BoolOverloadKind::CheckNext;
+                }
+                hasSB |= isSB || isSBRef;
+            }
+            return hasSB ? BoolOverloadKind::Yes : BoolOverloadKind::No;
+                // cheaply protect against the case where decl would have no
+                // sal_Bool parameters at all and would match itself
+        }
+    }
+    return BoolOverloadKind::CheckNext;
+}
+
 //TODO: current implementation is not at all general, just tests what we
 // encounter in practice:
 bool hasBoolOverload(FunctionDecl const * decl, bool mustBeDeleted) {
-    unsigned n = decl->getNumParams();
-    auto res = decl->getDeclContext()->lookup(decl->getDeclName());
+    auto ctx = decl->getDeclContext();
+    if (!ctx->isLookupContext()) {
+        return false;
+    }
+    auto res = ctx->lookup(decl->getDeclName());
     for (auto d = res.begin(); d != res.end(); ++d) {
-        FunctionDecl const * f = dyn_cast<FunctionDecl>(*d);
-        if (f != nullptr && (!mustBeDeleted || f->isDeleted())) {
-            if (f->getNumParams() == n) {
-                bool hasSB = false;
-                for (unsigned i = 0; i != n; ++i) {
-                    QualType t1 { decl->getParamDecl(i)->getType() };
-                    bool isSB = isSalBool(t1);
-                    bool isSBRef = !isSB && t1->isReferenceType()
-                        && isSalBool(t1.getNonReferenceType());
-                    QualType t2 { f->getParamDecl(i)->getType() };
-                    if (!(isSB
-                          ? t2->isBooleanType()
-                          : isSBRef
-                          ? (t2->isReferenceType()
-                             && t2.getNonReferenceType()->isBooleanType())
-                          : t2 == t1))
-                    {
-                        goto next;
+        if (auto f = dyn_cast<FunctionDecl>(*d)) {
+            switch (isBoolOverloadOf(f, decl, mustBeDeleted)) {
+            case BoolOverloadKind::No:
+                return false;
+            case BoolOverloadKind::Yes:
+                return true;
+            case BoolOverloadKind::CheckNext:
+                break;
+            }
+        } else if (auto ftd = dyn_cast<FunctionTemplateDecl>(*d)) {
+            for (auto f: ftd->specializations()) {
+                if (f->getTemplateSpecializationKind()
+                    == TSK_ExplicitSpecialization)
+                {
+                    switch (isBoolOverloadOf(f, decl, mustBeDeleted)) {
+                    case BoolOverloadKind::No:
+                        return false;
+                    case BoolOverloadKind::Yes:
+                        return true;
+                    case BoolOverloadKind::CheckNext:
+                        break;
                     }
-                    hasSB |= isSB || isSBRef;
                 }
-                return hasSB;
-                    // cheaply protect against the case where decl would have no
-                    // sal_Bool parameters at all and would match itself
-            next:;
             }
         }
     }
@@ -226,14 +261,17 @@ bool SalBool::VisitCallExpr(CallExpr * expr) {
     if (d != nullptr) {
         FunctionDecl const * fd = dyn_cast<FunctionDecl>(d);
         if (fd != nullptr) {
-            PointerType const * pt = fd->getType()->getAs<PointerType>();
-            QualType t2(pt == nullptr ? fd->getType() : pt->getPointeeType());
-            ft = t2->getAs<FunctionProtoType>();
-            assert(
-                ft != nullptr || !compiler.getLangOpts().CPlusPlus
-                || (fd->getBuiltinID() != Builtin::NotBuiltin
-                    && isa<FunctionNoProtoType>(t2)));
-                // __builtin_*s have no proto type?
+            if (!hasBoolOverload(fd, false)) {
+                PointerType const * pt = fd->getType()->getAs<PointerType>();
+                QualType t2(
+                    pt == nullptr ? fd->getType() : pt->getPointeeType());
+                ft = t2->getAs<FunctionProtoType>();
+                assert(
+                    ft != nullptr || !compiler.getLangOpts().CPlusPlus
+                    || (fd->getBuiltinID() != Builtin::NotBuiltin
+                        && isa<FunctionNoProtoType>(t2)));
+                    // __builtin_*s have no proto type?
+            }
         } else {
             VarDecl const * vd = dyn_cast<VarDecl>(d);
             if (vd != nullptr) {
