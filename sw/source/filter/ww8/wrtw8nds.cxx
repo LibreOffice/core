@@ -2899,7 +2899,7 @@ void MSWordExportBase::OutputSectionNode( const SwSectionNode& rSectionNode )
         if ( pSet && NoPageBreakSection( pSet ) )
             pSet = nullptr;
 
-        if ( !pSet )
+        if ( !pSet || rNd.IsTableNode() )
         {
             // new Section with no own PageDesc/-Break
             //  -> write follow section break;
