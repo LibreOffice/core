@@ -99,7 +99,7 @@ class OOX_DLLPUBLIC VMLExport : public EscherEx
     sal_uInt32 m_nShapeFlags;
 
     /// Remember style, the most important shape attribute ;-)
-    OStringBuffer m_pShapeStyle;
+    OStringBuffer m_ShapeStyle;
 
     /// Remember which shape types we had already written.
     bool *m_pShapeTypeWritten;

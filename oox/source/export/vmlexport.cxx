@@ -64,7 +64,7 @@ VMLExport::VMLExport( ::sax_fastparser::FSHelperPtr const & pSerializer, VMLText
     , m_pShapeAttrList( nullptr )
     , m_nShapeType( ESCHER_ShpInst_Nil )
     , m_nShapeFlags(0)
-    , m_pShapeStyle( 200 )
+    , m_ShapeStyle( 200 )
     , m_pShapeTypeWritten( new bool[ ESCHER_ShpInst_COUNT ] )
 {
     mnGroupLevel = 1;
@@ -98,10 +98,10 @@ void VMLExport::OpenContainer( sal_uInt16 nEscherContainer, int nRecInstance )
         m_nShapeType = ESCHER_ShpInst_Nil;
         m_pShapeAttrList = FastSerializerHelper::createAttrList();
 
-        if ( !m_pShapeStyle.isEmpty() )
-            m_pShapeStyle.setLength(0);
+        if (!m_ShapeStyle.isEmpty())
+            m_ShapeStyle.setLength(0);
 
-        m_pShapeStyle.ensureCapacity( 200 );
+        m_ShapeStyle.ensureCapacity(200);
 
         // postpone the output so that we are able to write even the elements
         // that we learn inside Commit()
@@ -370,7 +370,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
     if ( m_nShapeType == ESCHER_ShpInst_Line )
         AddLineDimensions( rRect );
     else
-        AddRectangleDimensions( m_pShapeStyle, rRect );
+        AddRectangleDimensions( m_ShapeStyle, rRect );
 
     // properties
     bool bAlreadyWritten[ 0xFFF ];
@@ -761,7 +761,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
 
             case ESCHER_Prop_fHidden:
                 if ( !it->nPropValue )
-                    m_pShapeStyle.append( ";visibility:hidden" );
+                    m_ShapeStyle.append( ";visibility:hidden" );
                 break;
             case ESCHER_Prop_shadowColor:
             case ESCHER_Prop_fshadowObscured:
@@ -830,7 +830,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
             case ESCHER_Prop_Rotation:
                 {
                     // The higher half of the variable contains the angle.
-                    m_pShapeStyle.append(";rotation:").append(double(it->nPropValue >> 16));
+                    m_ShapeStyle.append(";rotation:").append(double(it->nPropValue >> 16));
                     bAlreadyWritten[ESCHER_Prop_Rotation] = true;
                 }
                 break;
@@ -887,19 +887,19 @@ void VMLExport::AddFlipXY( )
     const sal_uInt32 nFlipHandV = SHAPEFLAG_FLIPH + SHAPEFLAG_FLIPV;
     switch ( m_nShapeFlags & nFlipHandV )
     {
-        case SHAPEFLAG_FLIPH:   m_pShapeStyle.append( ";flip:x" );  break;
-        case SHAPEFLAG_FLIPV:   m_pShapeStyle.append( ";flip:y" );  break;
-        case nFlipHandV:        m_pShapeStyle.append( ";flip:xy" ); break;
+        case SHAPEFLAG_FLIPH:   m_ShapeStyle.append( ";flip:x" );  break;
+        case SHAPEFLAG_FLIPV:   m_ShapeStyle.append( ";flip:y" );  break;
+        case nFlipHandV:        m_ShapeStyle.append( ";flip:xy" ); break;
     }
 }
 
 void VMLExport::AddLineDimensions( const Rectangle& rRectangle )
 {
     // style
-    if ( !m_pShapeStyle.isEmpty() )
-        m_pShapeStyle.append( ";" );
+    if (!m_ShapeStyle.isEmpty())
+        m_ShapeStyle.append( ";" );
 
-    m_pShapeStyle.append( "position:absolute" );
+    m_ShapeStyle.append( "position:absolute" );
 
     AddFlipXY();
 
@@ -1060,19 +1060,19 @@ sal_Int32 VMLExport::StartShape()
     switch (m_eHOri)
     {
         case text::HoriOrientation::LEFT:
-            m_pShapeStyle.append(";mso-position-horizontal:left");
+            m_ShapeStyle.append(";mso-position-horizontal:left");
             break;
         case text::HoriOrientation::CENTER:
-            m_pShapeStyle.append(";mso-position-horizontal:center");
+            m_ShapeStyle.append(";mso-position-horizontal:center");
             break;
         case text::HoriOrientation::RIGHT:
-            m_pShapeStyle.append(";mso-position-horizontal:right");
+            m_ShapeStyle.append(";mso-position-horizontal:right");
             break;
         case text::HoriOrientation::INSIDE:
-            m_pShapeStyle.append(";mso-position-horizontal:inside");
+            m_ShapeStyle.append(";mso-position-horizontal:inside");
             break;
         case text::HoriOrientation::OUTSIDE:
-            m_pShapeStyle.append(";mso-position-horizontal:outside");
+            m_ShapeStyle.append(";mso-position-horizontal:outside");
             break;
         default:
         case text::HoriOrientation::NONE:
@@ -1081,15 +1081,15 @@ sal_Int32 VMLExport::StartShape()
     switch (m_eHRel)
     {
         case text::RelOrientation::PAGE_PRINT_AREA:
-            m_pShapeStyle.append(";mso-position-horizontal-relative:margin");
+            m_ShapeStyle.append(";mso-position-horizontal-relative:margin");
             break;
         case text::RelOrientation::PAGE_FRAME:
         case text::RelOrientation::PAGE_LEFT:
         case text::RelOrientation::PAGE_RIGHT:
-            m_pShapeStyle.append(";mso-position-horizontal-relative:page");
+            m_ShapeStyle.append(";mso-position-horizontal-relative:page");
             break;
         case text::RelOrientation::CHAR:
-            m_pShapeStyle.append(";mso-position-horizontal-relative:char");
+            m_ShapeStyle.append(";mso-position-horizontal-relative:char");
             break;
         default:
             break;
@@ -1100,16 +1100,16 @@ sal_Int32 VMLExport::StartShape()
         case text::VertOrientation::TOP:
         case text::VertOrientation::LINE_TOP:
         case text::VertOrientation::CHAR_TOP:
-            m_pShapeStyle.append(";mso-position-vertical:top");
+            m_ShapeStyle.append(";mso-position-vertical:top");
             break;
         case text::VertOrientation::CENTER:
         case text::VertOrientation::LINE_CENTER:
-            m_pShapeStyle.append(";mso-position-vertical:center");
+            m_ShapeStyle.append(";mso-position-vertical:center");
             break;
         case text::VertOrientation::BOTTOM:
         case text::VertOrientation::LINE_BOTTOM:
         case text::VertOrientation::CHAR_BOTTOM:
-            m_pShapeStyle.append(";mso-position-vertical:bottom");
+            m_ShapeStyle.append(";mso-position-vertical:bottom");
             break;
         default:
         case text::VertOrientation::NONE:
@@ -1118,17 +1118,17 @@ sal_Int32 VMLExport::StartShape()
     switch (m_eVRel)
     {
         case text::RelOrientation::PAGE_PRINT_AREA:
-            m_pShapeStyle.append(";mso-position-vertical-relative:margin");
+            m_ShapeStyle.append(";mso-position-vertical-relative:margin");
             break;
         case text::RelOrientation::PAGE_FRAME:
-            m_pShapeStyle.append(";mso-position-vertical-relative:page");
+            m_ShapeStyle.append(";mso-position-vertical-relative:page");
             break;
         default:
             break;
     }
 
     // add style
-    m_pShapeAttrList->add( XML_style, m_pShapeStyle.makeStringAndClear() );
+    m_pShapeAttrList->add( XML_style, m_ShapeStyle.makeStringAndClear() );
 
     OUString sAnchorId = lcl_getAnchorIdFromGrabBag(m_pSdrObject);
     if (!sAnchorId.isEmpty())
