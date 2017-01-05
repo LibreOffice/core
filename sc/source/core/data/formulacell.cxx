@@ -1042,7 +1042,10 @@ OUString ScFormulaCell::GetFormula( sc::CompileFormulaContext& rCxt ) const
     OUStringBuffer aBuf;
     if (pCode->GetCodeError() != FormulaError::NONE && !pCode->GetLen())
     {
-        aBuf = OUStringBuffer( ScGlobal::GetErrorString( pCode->GetCodeError()));
+        ScTokenArray aCode;
+        aCode.AddToken( FormulaErrorToken( pCode->GetCodeError()));
+        ScCompiler aComp(rCxt, aPos, aCode);
+        aComp.CreateStringFromTokenArray(aBuf);
         return aBuf.makeStringAndClear();
     }
     else if( cMatrixFlag == MM_REFERENCE )
