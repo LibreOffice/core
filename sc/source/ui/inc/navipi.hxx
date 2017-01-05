@@ -112,6 +112,10 @@ class ColumnEdit : public SpinField
 public:
     ColumnEdit(Window* pParent, WinBits nWinBits);
     ~ColumnEdit() override;
+    void SetNavigatorDlg(ScNavigatorDlg *pNaviDlg)
+    {
+        xDlg = pNaviDlg;
+    }
     SCCOL   GetCol() { return nCol; }
     void    SetCol( SCCOL nColNo );
 
@@ -140,6 +144,10 @@ class RowEdit : public NumericField
 public:
     RowEdit(Window* pParent, WinBits nWinBits);
     ~RowEdit() override;
+    void SetNavigatorDlg(ScNavigatorDlg *pNaviDlg)
+    {
+        xDlg = pNaviDlg;
+    }
     SCROW   GetRow() { return (SCROW)GetValue(); }
     void    SetRow(SCROW nRow) { SetValue(nRow); }
 

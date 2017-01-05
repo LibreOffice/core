@@ -450,7 +450,9 @@ ScNavigatorDlg::ScNavigatorDlg(SfxBindings* pB, bool bSidebar, vcl::Window* pPar
 {
     get(aLbDocuments, "documents");
     get(aEdCol, "column");
+    aEdCol->SetNavigatorDlg(this);
     get(aEdRow, "row");
+    aEdRow->SetNavigatorDlg(this);
     get(aTbxCmd, "toolbox");
     aTbxCmd->SetSelectHdl(LINK(this, ScNavigatorDlg, ToolBoxSelectHdl));
     aTbxCmd->SetDropdownClickHdl(LINK(this, ScNavigatorDlg, ToolBoxDropdownClickHdl));
