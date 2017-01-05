@@ -832,7 +832,6 @@ WinMtfOutput::WinMtfOutput( GDIMetaFile& rGDIMetaFile ) :
     mbNopMode           ( false ),
     mbFillStyleSelected ( false ),
     mbClipNeedsUpdate   ( true ),
-    mbComplexClip       ( false ),
     mnGfxMode           ( GM_COMPATIBLE ),
     mnMapMode           ( MM_TEXT ),
     mnDevOrgX           ( 0 ),
@@ -883,7 +882,6 @@ void WinMtfOutput::UpdateClipRegion()
     if ( mbClipNeedsUpdate )
     {
         mbClipNeedsUpdate = false;
-        mbComplexClip = false;
 
         mpGDIMetaFile->AddAction( new MetaPopAction() );                    // taking the original clipregion
         mpGDIMetaFile->AddAction( new MetaPushAction( PushFlags::CLIPREGION ) );
@@ -892,13 +890,21 @@ void WinMtfOutput::UpdateClipRegion()
         if( !aClipPath.isEmpty() )
         {
             const basegfx::B2DPolyPolygon& rClipPoly( aClipPath.getClipPath() );
-            mpGDIMetaFile->AddAction(
-                new MetaISectRectClipRegionAction(
-                    vcl::unotools::rectangleFromB2DRectangle(
-                        rClipPoly.getB2DRange())));
-
-            mbComplexClip = rClipPoly.count() > 1
+            const bool bComplexClip = rClipPoly.count() > 1
                 || !basegfx::tools::isRectangle(rClipPoly);
+            if (bComplexClip)
+            {
+                mpGDIMetaFile->AddAction(
+                    new MetaISectRegionClipRegionAction(
+                        vcl::Region(rClipPoly)));
+            }
+            else
+            {
+                mpGDIMetaFile->AddAction(
+                    new MetaISectRectClipRegionAction(
+                        vcl::unotools::rectangleFromB2DRectangle(
+                            rClipPoly.getB2DRange())));
+            }
         }
     }
 }
@@ -1052,36 +1058,25 @@ void WinMtfOutput::DrawRect( const Rectangle& rRect, bool bEdge )
     UpdateClipRegion();
     UpdateFillStyle();
 
-    if ( mbComplexClip )
+    if ( bEdge )
     {
-        tools::Polygon aPoly( ImplMap( rRect ) );
-        tools::PolyPolygon aPolyPolyRect( aPoly );
-        tools::PolyPolygon aDest;
-        tools::PolyPolygon(aClipPath.getClipPath()).GetIntersection( aPolyPolyRect, aDest );
-        ImplDrawClippedPolyPolygon( aDest );
-    }
-    else
-    {
-        if ( bEdge )
-        {
-            if ( maLineStyle.aLineInfo.GetWidth() || ( maLineStyle.aLineInfo.GetStyle() == LineStyle::Dash ) )
-            {
-                ImplSetNonPersistentLineColorTransparenz();
-                mpGDIMetaFile->AddAction( new MetaRectAction( ImplMap( rRect ) ) );
-                UpdateLineStyle();
-                mpGDIMetaFile->AddAction( new MetaPolyLineAction( tools::Polygon( ImplMap( rRect ) ),maLineStyle.aLineInfo ) );
-            }
-            else
-            {
-                UpdateLineStyle();
-                mpGDIMetaFile->AddAction( new MetaRectAction( ImplMap( rRect ) ) );
-            }
-        }
-        else
+        if ( maLineStyle.aLineInfo.GetWidth() || ( maLineStyle.aLineInfo.GetStyle() == LineStyle::Dash ) )
         {
             ImplSetNonPersistentLineColorTransparenz();
             mpGDIMetaFile->AddAction( new MetaRectAction( ImplMap( rRect ) ) );
+            UpdateLineStyle();
+            mpGDIMetaFile->AddAction( new MetaPolyLineAction( tools::Polygon( ImplMap( rRect ) ),maLineStyle.aLineInfo ) );
         }
+        else
+        {
+            UpdateLineStyle();
+            mpGDIMetaFile->AddAction( new MetaRectAction( ImplMap( rRect ) ) );
+        }
+    }
+    else
+    {
+        ImplSetNonPersistentLineColorTransparenz();
+        mpGDIMetaFile->AddAction( new MetaRectAction( ImplMap( rRect ) ) );
     }
 }
 
@@ -1200,64 +1195,54 @@ void WinMtfOutput::DrawPolygon( tools::Polygon& rPolygon, bool bRecordPath )
     {
         UpdateFillStyle();
 
-        if ( mbComplexClip )
+        if ( maLineStyle.aLineInfo.GetWidth() || ( maLineStyle.aLineInfo.GetStyle() == LineStyle::Dash ) )
         {
-            tools::PolyPolygon aPolyPoly( rPolygon );
-            tools::PolyPolygon aDest;
-            tools::PolyPolygon(aClipPath.getClipPath()).GetIntersection( aPolyPoly, aDest );
-            ImplDrawClippedPolyPolygon( aDest );
+            sal_uInt16 nCount = rPolygon.GetSize();
+            if ( nCount )
+            {
+                if ( rPolygon[ nCount - 1 ] != rPolygon[ 0 ] )
+                {
+                    Point aPoint( rPolygon[ 0 ] );
+                    rPolygon.Insert( nCount, aPoint );
+                }
+            }
+            ImplSetNonPersistentLineColorTransparenz();
+            mpGDIMetaFile->AddAction( new MetaPolygonAction( rPolygon ) );
+            UpdateLineStyle();
+            mpGDIMetaFile->AddAction( new MetaPolyLineAction( rPolygon, maLineStyle.aLineInfo ) );
         }
         else
         {
-            if ( maLineStyle.aLineInfo.GetWidth() || ( maLineStyle.aLineInfo.GetStyle() == LineStyle::Dash ) )
-            {
-                sal_uInt16 nCount = rPolygon.GetSize();
-                if ( nCount )
-                {
-                    if ( rPolygon[ nCount - 1 ] != rPolygon[ 0 ] )
-                    {
-                        Point aPoint( rPolygon[ 0 ] );
-                        rPolygon.Insert( nCount, aPoint );
-                    }
-                }
-                ImplSetNonPersistentLineColorTransparenz();
+            UpdateLineStyle();
+
+            if (maLatestFillStyle.aType != WinMtfFillStyleType::Pattern)
                 mpGDIMetaFile->AddAction( new MetaPolygonAction( rPolygon ) );
-                UpdateLineStyle();
-                mpGDIMetaFile->AddAction( new MetaPolyLineAction( rPolygon, maLineStyle.aLineInfo ) );
+            else {
+                SvtGraphicFill aFill = SvtGraphicFill( tools::PolyPolygon( rPolygon ),
+                                                       Color(),
+                                                       0.0,
+                                                       SvtGraphicFill::fillNonZero,
+                                                       SvtGraphicFill::fillTexture,
+                                                       SvtGraphicFill::Transform(),
+                                                       true,
+                                                       SvtGraphicFill::hatchSingle,
+                                                       Color(),
+                                                       SvtGraphicFill::gradientLinear,
+                                                       Color(),
+                                                       Color(),
+                                                       0,
+                                                       Graphic (maLatestFillStyle.aBmp) );
+
+                SvMemoryStream  aMemStm;
+
+                WriteSvtGraphicFill( aMemStm, aFill );
+
+                mpGDIMetaFile->AddAction( new MetaCommentAction( "XPATHFILL_SEQ_BEGIN", 0,
+                                                        static_cast<const sal_uInt8*>(aMemStm.GetData()),
+                                                        aMemStm.Seek( STREAM_SEEK_TO_END ) ) );
+                mpGDIMetaFile->AddAction( new MetaCommentAction( "XPATHFILL_SEQ_END" ) );
             }
-            else
-            {
-                UpdateLineStyle();
 
-                if (maLatestFillStyle.aType != WinMtfFillStyleType::Pattern)
-                    mpGDIMetaFile->AddAction( new MetaPolygonAction( rPolygon ) );
-                else {
-                    SvtGraphicFill aFill = SvtGraphicFill( tools::PolyPolygon( rPolygon ),
-                                                           Color(),
-                                                           0.0,
-                                                           SvtGraphicFill::fillNonZero,
-                                                           SvtGraphicFill::fillTexture,
-                                                           SvtGraphicFill::Transform(),
-                                                           true,
-                                                           SvtGraphicFill::hatchSingle,
-                                                           Color(),
-                                                           SvtGraphicFill::gradientLinear,
-                                                           Color(),
-                                                           Color(),
-                                                           0,
-                                                           Graphic (maLatestFillStyle.aBmp) );
-
-                    SvMemoryStream  aMemStm;
-
-                    WriteSvtGraphicFill( aMemStm, aFill );
-
-                    mpGDIMetaFile->AddAction( new MetaCommentAction( "XPATHFILL_SEQ_BEGIN", 0,
-                                                            static_cast<const sal_uInt8*>(aMemStm.GetData()),
-                                                            aMemStm.Seek( STREAM_SEEK_TO_END ) ) );
-                    mpGDIMetaFile->AddAction( new MetaCommentAction( "XPATHFILL_SEQ_END" ) );
-                }
-
-            }
         }
     }
 }
@@ -1273,23 +1258,13 @@ void WinMtfOutput::DrawPolyPolygon( tools::PolyPolygon& rPolyPolygon, bool bReco
     else
     {
         UpdateFillStyle();
-
-        if ( mbComplexClip )
+        UpdateLineStyle();
+        mpGDIMetaFile->AddAction( new MetaPolyPolygonAction( rPolyPolygon ) );
+        if (maLineStyle.aLineInfo.GetWidth() > 0 || maLineStyle.aLineInfo.GetStyle() == LineStyle::Dash)
         {
-            tools::PolyPolygon aDest;
-            tools::PolyPolygon(aClipPath.getClipPath()).GetIntersection( rPolyPolygon, aDest );
-            ImplDrawClippedPolyPolygon( aDest );
-        }
-        else
-        {
-            UpdateLineStyle();
-            mpGDIMetaFile->AddAction( new MetaPolyPolygonAction( rPolyPolygon ) );
-            if (maLineStyle.aLineInfo.GetWidth() > 0 || maLineStyle.aLineInfo.GetStyle() == LineStyle::Dash)
+            for (sal_uInt16 nPoly = 0; nPoly < rPolyPolygon.Count(); ++nPoly)
             {
-                for (sal_uInt16 nPoly = 0; nPoly < rPolyPolygon.Count(); ++nPoly)
-                {
-                    mpGDIMetaFile->AddAction(new MetaPolyLineAction(rPolyPolygon[nPoly], maLineStyle.aLineInfo));
-                }
+                mpGDIMetaFile->AddAction(new MetaPolyLineAction(rPolyPolygon[nPoly], maLineStyle.aLineInfo));
             }
         }
     }
@@ -1544,94 +1519,10 @@ void WinMtfOutput::DrawText( Point& rPosition, OUString& rText, long* pDXArry, l
 
 void WinMtfOutput::ImplDrawBitmap( const Point& rPos, const Size& rSize, const BitmapEx& rBitmap )
 {
-    BitmapEx aBmpEx( rBitmap );
-    if ( mbComplexClip )
-    {
-        VclPtrInstance< VirtualDevice > pVDev;
-        MapMode aMapMode( MapUnit::Map100thMM );
-        aMapMode.SetOrigin( Point( -rPos.X(), -rPos.Y() ) );
-        const Size aOutputSizePixel( pVDev->LogicToPixel( rSize, aMapMode ) );
-        const Size aSizePixel( rBitmap.GetSizePixel() );
-        if ( aOutputSizePixel.Width() && aOutputSizePixel.Height() )
-        {
-            aMapMode.SetScaleX( Fraction( aSizePixel.Width(), aOutputSizePixel.Width() ) );
-            aMapMode.SetScaleY( Fraction( aSizePixel.Height(), aOutputSizePixel.Height() ) );
-        }
-        pVDev->SetMapMode( aMapMode );
-        pVDev->SetOutputSizePixel( aSizePixel );
-        pVDev->SetFillColor( Color( COL_BLACK ) );
-        const tools::PolyPolygon aClip( aClipPath.getClipPath() );
-        pVDev->DrawPolyPolygon( aClip );
-        const Point aEmptyPoint;
-
-        // #i50672# Extract whole VDev content (to match size of rBitmap)
-        pVDev->EnableMapMode( false );
-        const Bitmap aVDevMask(pVDev->GetBitmap(aEmptyPoint, aSizePixel));
-
-        if(aBmpEx.IsTransparent())
-        {
-            // bitmap already uses a Mask or Alpha, we need to blend that with
-            // the new masking in pVDev
-            if(aBmpEx.IsAlpha())
-            {
-                // need to blend in AlphaMask quality (8Bit)
-                AlphaMask fromVDev(aVDevMask);
-                AlphaMask fromBmpEx(aBmpEx.GetAlpha());
-                AlphaMask::ScopedReadAccess pR(fromVDev);
-                AlphaMask::ScopedWriteAccess pW(fromBmpEx);
-
-                if(pR && pW)
-                {
-                    const long nWidth(std::min(pR->Width(), pW->Width()));
-                    const long nHeight(std::min(pR->Height(), pW->Height()));
-
-                    for(long nY(0); nY < nHeight; nY++) for(long nX(0); nX < nWidth; nX++)
-                    {
-                        const sal_uInt8 nIndR(pR->GetPixelIndex(nY, nX));
-                        const sal_uInt8 nIndW(pW->GetPixelIndex(nY, nX));
-
-                        // these values represent transparency (0 == no, 255 == fully transparent),
-                        // so to blend these we have to multiply the inverse (opacity)
-                        // and re-invert the result to transparence
-                        const sal_uInt8 nCombined(0x00ff - (((0x00ff - nIndR) * (0x00ff - nIndW)) >> 8));
-
-                        pW->SetPixelIndex(nY, nX, nCombined);
-                    }
-                }
-
-                pR.reset();
-                pW.reset();
-                aBmpEx = BitmapEx(aBmpEx.GetBitmap(), fromBmpEx);
-            }
-            else
-            {
-                // need to blend in Mask quality (1Bit)
-                Bitmap aMask(aVDevMask.CreateMask(Color(COL_WHITE)));
-
-                if ( rBitmap.GetTransparentColor() == Color( COL_WHITE ) )
-                {
-                    aMask.CombineSimple( rBitmap.GetMask(), BMP_COMBINE_OR );
-                }
-                else
-                {
-                    aMask.CombineSimple( rBitmap.GetMask(), BMP_COMBINE_AND );
-                }
-
-                aBmpEx = BitmapEx( rBitmap.GetBitmap(), aMask );
-            }
-        }
-        else
-        {
-            // no mask yet, create and add new mask. For better quality, use Alpha,
-            // this allows the drawn mask being processed with AnitAliasing (AAed)
-            aBmpEx = BitmapEx(rBitmap.GetBitmap(), aVDevMask);
-        }
-    }
-
-    if ( aBmpEx.IsTransparent() )
-        mpGDIMetaFile->AddAction( new MetaBmpExScaleAction( rPos, rSize, aBmpEx ) );
+    if (rBitmap.IsTransparent())
+        mpGDIMetaFile->AddAction( new MetaBmpExScaleAction( rPos, rSize, rBitmap ) );
     else
-        mpGDIMetaFile->AddAction( new MetaBmpScaleAction( rPos, rSize, aBmpEx.GetBitmap() ) );
+        mpGDIMetaFile->AddAction( new MetaBmpScaleAction( rPos, rSize, rBitmap.GetBitmap() ) );
 }
 
 void WinMtfOutput::ResolveBitmapActions( std::vector<std::unique_ptr<BSaveStruct>>& rSaveList )

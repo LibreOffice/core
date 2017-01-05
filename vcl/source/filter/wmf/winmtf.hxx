@@ -468,7 +468,6 @@ class WinMtfOutput final
     bool            mbNopMode;
     bool            mbFillStyleSelected;
     bool            mbClipNeedsUpdate;
-    bool            mbComplexClip;
 
     std::vector< std::shared_ptr<SaveStruct> > vSaveStack;
 
