@@ -95,7 +95,7 @@ private:
 
 typedef std::vector< FrameBorder* > FrameBorderPtrVec;
 
-struct FrameSelectorImpl : public Resource
+struct FrameSelectorImpl
 {
     FrameSelector&      mrFrameSel;     /// The control itself.
     ScopedVclPtr<VirtualDevice> mpVirDev; /// For all buffered drawing operations.

@@ -53,8 +53,7 @@ class AccFrameSelector :
                 css::accessibility::XAccessibleComponent,
                 css::accessibility::XAccessibleEventBroadcaster,
                 css::lang::XServiceInfo
-                >,
-    public Resource
+                >
 {
 public:
     explicit            AccFrameSelector( FrameSelector& rFrameSel, FrameBorderType eBorder );

@@ -37,7 +37,6 @@
 #include "editeng/unolingu.hxx"
 
 #include <svx/dialogs.hrc>
-#include "frmsel.hrc"
 
 namespace svx {
 namespace a11y {
@@ -56,17 +55,14 @@ using namespace ::com::sun::star::accessibility;
 
 
 AccFrameSelector::AccFrameSelector( FrameSelector& rFrameSel, FrameBorderType eBorder ) :
-    Resource( SVX_RES( RID_SVXSTR_BORDER_CONTROL ) ),
     mpFrameSel( &rFrameSel ),
     meBorder( eBorder ),
     maFocusListeners( maFocusMutex ),
     maPropertyListeners( maPropertyMutex ),
-    maNames( SVX_RES( ARR_TEXTS ) ),
-    maDescriptions( SVX_RES(ARR_DESCRIPTIONS ) ),
+    maNames( SVX_RES( RID_SVXSTR_FRMSEL_TEXTS ) ),
+    maDescriptions( SVX_RES(RID_SVXSTR_FRMSEL_DESCRIPTIONS) ),
     mnClientId( 0 )
 {
-    FreeResource();
-
     if ( mpFrameSel )
     {
         mpFrameSel->AddEventListener( LINK( this, AccFrameSelector, WindowEventListener ) );

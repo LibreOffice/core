@@ -18,42 +18,42 @@
  */
 
 #include <svx/dialogs.hrc>
-#include "frmsel.hrc"
 
-Resource RID_SVXSTR_BORDER_CONTROL
+StringArray RID_SVXSTR_FRMSEL_TEXTS
 {
-    StringArray ARR_TEXTS
+    ItemList [ en-US ] =
     {
-        ItemList [ en-US ] =
-        {
-            < "Border setting" ; 0; > ;
-            < "Left border line" ; 1; > ;
-            < "Right border line" ; 2; > ;
-            < "Top border line" ; 3; > ;
-            < "Bottom border line" ; 4; > ;
-            < "Horizontal border line" ; 5; > ;
-            < "Vertical border line" ; 6; > ;
-            < "Diagonal border line from top left to bottom right" ; 7; > ;
-            < "Diagonal border line from bottom left to top right" ; 8; > ;
-        };
+        < "Border setting" ; 0; > ;
+        < "Left border line" ; 1; > ;
+        < "Right border line" ; 2; > ;
+        < "Top border line" ; 3; > ;
+        < "Bottom border line" ; 4; > ;
+        < "Horizontal border line" ; 5; > ;
+        < "Vertical border line" ; 6; > ;
+        < "Diagonal border line from top left to bottom right" ; 7; > ;
+        < "Diagonal border line from bottom left to top right" ; 8; > ;
     };
-    StringArray ARR_DESCRIPTIONS
-    {
-        ItemList [ en-US ] =
-        {
-            < "Border setting" ; 0; > ;
-            < "Left border line" ; 1; > ;
-            < "Right border line" ; 2; > ;
-            < "Top border line" ; 3; > ;
-            < "Bottom border line" ; 4; > ;
-            < "Horizontal border line" ; 5; > ;
-            < "Vertical border line" ; 6; > ;
-            < "Diagonal border line from top left to bottom right" ; 7; > ;
-            < "Diagonal border line from bottom left to top right" ; 8; > ;
-        };
-    };
+};
 
-    Bitmap BMP_FRMSEL_ARROWS { File = "frmsel.png"; };
+StringArray RID_SVXSTR_FRMSEL_DESCRIPTIONS
+{
+    ItemList [ en-US ] =
+    {
+        < "Border setting" ; 0; > ;
+        < "Left border line" ; 1; > ;
+        < "Right border line" ; 2; > ;
+        < "Top border line" ; 3; > ;
+        < "Bottom border line" ; 4; > ;
+        < "Horizontal border line" ; 5; > ;
+        < "Vertical border line" ; 6; > ;
+        < "Diagonal border line from top left to bottom right" ; 7; > ;
+        < "Diagonal border line from bottom left to top right" ; 8; > ;
+    };
+};
+
+Bitmap RID_SVXBMP_FRMSEL_ARROWS
+{
+    File = "frmsel.png";
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

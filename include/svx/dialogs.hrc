@@ -198,6 +198,10 @@
 // Menu for the ruler
 #define RID_SVXMN_RULER                     (RID_SVX_START +  92)
 
+#define RID_SVXBMP_FRMSEL_ARROWS            (RID_SVX_START +  93)
+#define RID_SVXSTR_FRMSEL_TEXTS             (RID_SVX_START +  94)
+#define RID_SVXSTR_FRMSEL_DESCRIPTIONS      (RID_SVX_START +  95)
+
 // for Toolbox-Control style
 #define RID_SVX_STYLE_MENU                  (RID_SVX_START + 121)
 #define RID_SVX_UPDATE_STYLE                (RID_SVX_START + 122)
@@ -865,8 +869,6 @@
 #define RID_SVXSTR_TRASNGR_DEF_END          RID_SVXSTR_TRASNGR0_DEF
 #define RID_SVXSTR_TRASNGR_START            RID_SVXSTR_TRASNGR0
 //      RID_SVXSTR_TRASNGR_END              RID_SVXSTR_TRASNGR0
-
-#define RID_SVXSTR_BORDER_CONTROL           (RID_SVX_START + 852)
 
 // Accessibility strings.  The actual string ids are defined in
 // svx/inc/accessibility.hrc, the strings are defined in

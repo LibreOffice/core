@@ -30,7 +30,6 @@
 #include <vcl/settings.hxx>
 
 #include <svx/dialogs.hrc>
-#include "frmsel.hrc"
 
 #include <tools/rcid.h>
 
@@ -205,7 +204,6 @@ FrameBorderType FrameBorder::GetKeyboardNeighbor( sal_uInt16 nKeyCode ) const
 }
 
 FrameSelectorImpl::FrameSelectorImpl( FrameSelector& rFrameSel ) :
-    Resource( SVX_RES( RID_SVXSTR_BORDER_CONTROL ) ),
     mrFrameSel( rFrameSel ),
     mpVirDev( VclPtr<VirtualDevice>::Create() ),
     maILArrows(),
@@ -236,8 +234,6 @@ FrameSelectorImpl::FrameSelectorImpl( FrameSelector& rFrameSel ) :
     maChildVec( 8, static_cast< a11y::AccFrameSelector* >( nullptr ) ),
     mxChildVec( 8 )
 {
-    FreeResource();
-
     maAllBorders.resize( FRAMEBORDERTYPE_COUNT, nullptr );
     maAllBorders[ GetIndexFromFrameBorderType( FrameBorderType::Left   ) ] = &maLeft;
     maAllBorders[ GetIndexFromFrameBorderType( FrameBorderType::Right  ) ] = &maRight;
@@ -319,10 +315,8 @@ void FrameSelectorImpl::InitArrowImageList()
     pColorAry1[2] = Color( 255, 0, 255 );
     pColorAry2[2] = maBackCol;       // magenta -> background
 
-    GetRes( SVX_RES( RID_SVXSTR_BORDER_CONTROL ).SetRT( RSC_RESOURCE ) );
     maILArrows.InsertFromHorizontalBitmap(
-        SVX_RES( BMP_FRMSEL_ARROWS ), 16, pColorAry1, pColorAry2, 3);
-    FreeResource();
+        SVX_RES( RID_SVXBMP_FRMSEL_ARROWS ), 16, pColorAry1, pColorAry2, 3);
     DBG_ASSERT( maILArrows.GetImageSize().Height() == maILArrows.GetImageSize().Width(),
         "svx::FrameSelectorImpl::InitArrowImageList - images are not squarish" );
     mnArrowSize = maILArrows.GetImageSize().Height();
