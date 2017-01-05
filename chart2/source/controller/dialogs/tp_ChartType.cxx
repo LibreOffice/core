@@ -805,6 +805,7 @@ ChartTypeParameter ChartTypeTabPage::getCurrentParamter() const
     m_pGL3DResourceGroup->fillParameter(aParameter);
     return aParameter;
 }
+
 void ChartTypeTabPage::commitToModel( const ChartTypeParameter& rParameter )
 {
     if( !m_pCurrentMainType )
@@ -814,6 +815,7 @@ void ChartTypeTabPage::commitToModel( const ChartTypeParameter& rParameter )
     ControllerLockGuardUNO aLockedControllers( uno::Reference< frame::XModel >( m_xChartModel, uno::UNO_QUERY ) );
     m_pCurrentMainType->commitToModel( rParameter, m_xChartModel );
 }
+
 void ChartTypeTabPage::stateChanged( ChangingResource* /*pResource*/ )
 {
     if(m_nChangingCalls)
@@ -845,6 +847,7 @@ void ChartTypeTabPage::stateChanged( ChangingResource* /*pResource*/ )
 
     m_nChangingCalls--;
 }
+
 ChartTypeDialogController* ChartTypeTabPage::getSelectedMainType()
 {
     ChartTypeDialogController* pTypeController = nullptr;
@@ -854,6 +857,7 @@ ChartTypeDialogController* ChartTypeTabPage::getSelectedMainType()
         pTypeController = m_aChartTypeDialogControllerList[nM];
     return pTypeController;
 }
+
 IMPL_LINK_NOARG(ChartTypeTabPage, SelectSubTypeHdl, ValueSet*, void)
 {
     if( m_pCurrentMainType )
