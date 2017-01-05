@@ -307,22 +307,20 @@ SalYieldResult KDEXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
     }
 }
 
-SalYieldResult KDEXLib::processYield( bool bWait, bool bHandleAllCurrentEvents )
+/**
+ * Quoting the Qt docs: [QAbstractEventDispatcher::processEvents] processes
+ * pending events that match flags until there are no more events to process.
+ */
+SalYieldResult KDEXLib::processYield( bool bWait, bool )
 {
     blockIdleTimeout = !bWait;
     QAbstractEventDispatcher* dispatcher = QAbstractEventDispatcher::instance( qApp->thread());
     bool wasEvent = false;
-    for( int cnt = bHandleAllCurrentEvents ? 100 : 1;
-         cnt > 0;
-         --cnt )
-    {
-        if( !dispatcher->processEvents( QEventLoop::AllEvents ))
-            break;
-        wasEvent = true;
-    }
-    if( bWait && !wasEvent )
-        dispatcher->processEvents( QEventLoop::WaitForMoreEvents );
-    blockIdleTimeout = false;
+    if ( bWait )
+        wasEvent = dispatcher->processEvents( QEventLoop::WaitForMoreEvents );
+    else
+        wasEvent = dispatcher->processEvents( QEventLoop::AllEvents );
+    m_blockIdleTimeout = false;
     return wasEvent ? SalYieldResult::EVENT
                     : SalYieldResult::TIMEOUT;
 }
