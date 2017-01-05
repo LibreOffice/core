@@ -1813,7 +1813,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
             }
             else if (pFrameFormat->Which() == RES_DRAWFRMFMT)
             {
-                // Handle linked videos.
+                // Turn media shapes into Screen annotations.
                 if (SdrObject* pObject = pFrameFormat->FindRealSdrObject())
                 {
                     SwRect aSnapRect = pObject->GetSnapRect();
@@ -1834,7 +1834,16 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                             for (sal_Int32 nScreenPageNum : aScreenPageNums)
                             {
                                 sal_Int32 nScreenId = pPDFExtOutDevData->CreateScreen(aPDFRect, nScreenPageNum);
-                                pPDFExtOutDevData->SetScreenURL(nScreenId, aMediaURL);
+                                if (aMediaURL.startsWith("vnd.sun.star.Package:"))
+                                {
+                                    // Embedded media.
+                                    OUString aTempFileURL;
+                                    xShapePropSet->getPropertyValue("PrivateTempFileURL") >>= aTempFileURL;
+                                    pPDFExtOutDevData->SetScreenStream(nScreenId, aTempFileURL);
+                                }
+                                else
+                                    // Linked media.
+                                    pPDFExtOutDevData->SetScreenURL(nScreenId, aMediaURL);
                             }
                         }
                     }
