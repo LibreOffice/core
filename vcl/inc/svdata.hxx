@@ -61,7 +61,6 @@ class Timer;
 class AutoTimer;
 class Idle;
 class Help;
-class ImageList;
 class Image;
 class PopupMenu;
 class Application;
