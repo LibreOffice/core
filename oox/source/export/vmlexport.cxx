@@ -98,9 +98,7 @@ void VMLExport::OpenContainer( sal_uInt16 nEscherContainer, int nRecInstance )
         m_nShapeType = ESCHER_ShpInst_Nil;
         m_pShapeAttrList = FastSerializerHelper::createAttrList();
 
-        if (!m_ShapeStyle.isEmpty())
-            m_ShapeStyle.setLength(0);
-
+        m_ShapeStyle.setLength(0);
         m_ShapeStyle.ensureCapacity(200);
 
         // postpone the output so that we are able to write even the elements
