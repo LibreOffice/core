@@ -3844,6 +3844,13 @@ ScFormulaCell::CompareState ScFormulaCell::CompareByTokenArray( ScFormulaCell& r
     if ( nThisLen != nOtherLen )
         return NotEqual;
 
+    // No tokens can be an error cell so check error code, otherwise we could
+    // end up with a series of equal error values instead of individual error
+    // values. Also if for any reason different errors are set even if all
+    // tokens are equal, the cells are not equal.
+    if (pCode->GetCodeError() != rOther.pCode->GetCodeError())
+        return NotEqual;
+
     bool bInvariant = true;
 
     // check we are basically the same function
@@ -3927,6 +3934,12 @@ ScFormulaCell::CompareState ScFormulaCell::CompareByTokenArray( ScFormulaCell& r
                     return NotEqual;
 
                 if (pThisTok->GetByte() != pOtherTok->GetByte())
+                    return NotEqual;
+            }
+            break;
+            case formula::svError:
+            {
+                if (pThisTok->GetError() != pOtherTok->GetError())
                     return NotEqual;
             }
             break;
