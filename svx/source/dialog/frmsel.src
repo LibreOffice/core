@@ -53,7 +53,7 @@ Resource RID_SVXSTR_BORDER_CONTROL
         };
     };
 
-    Bitmap BMP_FRMSEL_ARROWS { File = "frmsel.bmp"; };
+    Bitmap BMP_FRMSEL_ARROWS { File = "frmsel.png"; };
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
