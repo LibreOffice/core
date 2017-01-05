@@ -75,7 +75,7 @@ public:
 
     ScRangeList     GetIntersectedRange(const ScRange& rRange) const;
 
-    ScRange*        Remove(size_t nPos);
+    void            Remove(size_t nPos);
     void            RemoveAll();
 
     ScRange         Combine() const;
@@ -123,7 +123,7 @@ public:
     ScRangePair**       CreateNameSortedArray( size_t& nCount, ScDocument* ) const;
 
     void                Remove(size_t nPos);
-    ScRangePair*        Remove(ScRangePair* pAdr);
+    void                Remove(ScRangePair* pAdr);
 
     size_t              size() const;
     ScRangePair*        operator[](size_t idx);

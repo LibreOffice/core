@@ -330,7 +330,6 @@ void ScRangeList::Join( const ScRange& r, bool bIsInList )
             {   // innerhalb der Liste Range loeschen
                 Remove(nOldPos);
                 i--;
-                delete pOver;
                 pOver = nullptr;
                 if ( nOldPos )
                     nOldPos--;          // Seek richtig aufsetzen
@@ -948,8 +947,7 @@ bool ScRangeList::DeleteArea( SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
     {
         if(FindRangeIn< ScRange >(aRange)(maRanges[i]))
         {
-            ScRange* pRange = Remove(i);
-            delete pRange;
+            Remove(i);
             bChanged = true;
         }
         else
@@ -1079,17 +1077,16 @@ size_t ScRangeList::GetCellCount() const
     return for_each(maRanges.begin(), maRanges.end(), func).getCellCount();
 }
 
-ScRange* ScRangeList::Remove(size_t nPos)
+void ScRangeList::Remove(size_t nPos)
 {
     if (maRanges.size() <= nPos)
         // Out-of-bound condition.  Bail out.
-        return nullptr;
+        return;
 
     iterator itr = maRanges.begin();
     advance(itr, nPos);
-    ScRange* p = *itr;
+    delete *itr;
     maRanges.erase(itr);
-    return p;
 }
 
 void ScRangeList::RemoveAll()
@@ -1237,24 +1234,25 @@ void ScRangePairList::Remove(size_t nPos)
 
     vector<ScRangePair*>::iterator itr = maPairs.begin();
     advance(itr, nPos);
+    delete *itr;
     maPairs.erase(itr);
 }
 
-ScRangePair* ScRangePairList::Remove( ScRangePair* Adr)
+void ScRangePairList::Remove( ScRangePair* Adr)
 {
-    ScRangePair* p = nullptr;
+    if (Adr == nullptr)
+        return;
 
-    if (Adr == nullptr) return nullptr;
-
-    for ( vector<ScRangePair*>::iterator itr = maPairs.begin(); itr < maPairs.end(); ++itr )
+    for ( vector<ScRangePair*>::iterator itr = maPairs.begin(); itr != maPairs.end(); ++itr )
     {
-        if ( Adr == (p = *itr) )
+        if (Adr == *itr)
         {
+            delete *itr;
             maPairs.erase( itr );
-            break;
+            return;
         }
     }
-    return p;
+    assert(false);
 }
 
 ScRangePair* ScRangePairList::operator [](size_t idx)
@@ -1323,7 +1321,6 @@ void ScRangePairList::DeleteOnTab( SCTAB nTab )
         if ( aRange.aStart.Tab() == nTab && aRange.aEnd.Tab() == nTab )
         {
             Remove( nPos );
-            delete pR;
             nListCount = maPairs.size();
         }
         else
@@ -1544,7 +1541,6 @@ void ScRangePairList::Join( const ScRangePair& r, bool bIsInList )
             {   // innerhalb der Liste RangePair loeschen
                 Remove( nOldPos );
                 i--;
-                delete pOver;
                 pOver = nullptr;
                 if ( nOldPos )
                     nOldPos--;          // Seek richtig aufsetzen
