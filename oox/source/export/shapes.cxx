@@ -1059,7 +1059,7 @@ void ShapeExport::WriteGraphicObjectShapePart( const Reference< XShape >& xShape
         // avoid treating all 'IsPresentationObject' objects as having text.
         Reference< XSimpleText > xText( xShape, UNO_QUERY );
 
-        if( xText.is() && xText->getString().getLength() )
+        if( xText.is() && !xText->getString().isEmpty() )
         {
             SAL_INFO("oox.shape", "graphicObject: wrote only text");
 
