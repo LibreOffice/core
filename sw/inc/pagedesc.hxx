@@ -282,15 +282,15 @@ public:
 };
 
 namespace std {
-   template<>
-   struct less<SwPageDesc*> {
-       bool operator()(const SwPageDesc *pPageDesc, const OUString &rName) const
-           { return pPageDesc->GetName() < rName; }
-       bool operator()(const OUString &rName, const SwPageDesc *pPageDesc) const
-           { return rName < pPageDesc->GetName(); }
-       bool operator()(const SwPageDesc *lhs, const SwPageDesc *rhs) const
-           { return lhs->GetName() < rhs->GetName(); }
-   };
+    template<>
+    struct less<SwPageDesc*> {
+        bool operator()(const SwPageDesc *pPageDesc, const OUString &rName) const
+            { return pPageDesc->GetName() < rName; }
+        bool operator()(const OUString &rName, const SwPageDesc *pPageDesc) const
+            { return rName < pPageDesc->GetName(); }
+        bool operator()(const SwPageDesc *lhs, const SwPageDesc *rhs) const
+            { return lhs->GetName() < rhs->GetName(); }
+    };
 }
 
 inline void SwPageDesc::SetFollow( const SwPageDesc* pNew )

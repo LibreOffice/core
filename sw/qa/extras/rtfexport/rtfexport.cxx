@@ -1146,8 +1146,8 @@ DECLARE_RTFEXPORT_TEST(testTdf104228, "tdf104228.rtf")
 DECLARE_RTFEXPORT_TEST(testTdf104085, "tdf104085.rtf")
 {
     uno::Reference<text::XTextRange> xPara(getParagraph(1));
-    uno::Reference< beans::XPropertySet > properties( xPara, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xLevels( properties->getPropertyValue("NumberingRules"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> properties(xPara, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xLevels(properties->getPropertyValue("NumberingRules"), uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aProps;
     xLevels->getByIndex(0) >>= aProps;
     for (int i = 0; i < aProps.getLength(); ++i)
