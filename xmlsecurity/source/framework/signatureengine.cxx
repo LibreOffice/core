@@ -19,9 +19,10 @@
 
 
 #include "framework/signatureengine.hxx"
-#include <com/sun/star/xml/crypto/XMLSignatureTemplate.hpp>
+#include "xmlsignaturetemplateimpl.hxx"
 #include <com/sun/star/xml/wrapper/XXMLElementWrapper.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <rtl/ref.hxx>
 
 using namespace com::sun::star::uno;
 namespace cssu = com::sun::star::uno;
@@ -91,8 +92,7 @@ void SignatureEngine::tryToPerform( )
 {
     if (checkReady())
     {
-        cssu::Reference < cssxc::XXMLSignatureTemplate >
-            xSignatureTemplate = cssxc::XMLSignatureTemplate::create( m_xContext );
+        rtl::Reference<XMLSignatureTemplateImpl> xSignatureTemplate = new XMLSignatureTemplateImpl();
 
         cssu::Reference< cssxw::XXMLElementWrapper >
             xXMLElement = m_xSAXEventKeeper->getElement( m_nIdOfTemplateEC );
@@ -112,7 +112,7 @@ void SignatureEngine::tryToPerform( )
          */
         xSignatureTemplate->setBinding( this );
 
-        startEngine( xSignatureTemplate );
+        startEngine(css::uno::Reference<css::xml::crypto::XXMLSignatureTemplate>(xSignatureTemplate.get()));
 
         /*
          * done
