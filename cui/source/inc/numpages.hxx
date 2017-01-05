@@ -404,7 +404,6 @@ class SvxNumPositionTabPage : public SfxTabPage
     MapUnit             eCoreUnit;
 
     bool                bModified           : 1;
-    bool                bDefault            : 1;
     bool                bPreset             : 1;
     bool                bInInintControl     : 1;  // workaround for Modify-error, is said to be corrected from 391 on
     bool                bLabelAlignmentPosAndSpaceModeActive;
