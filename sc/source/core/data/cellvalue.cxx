@@ -63,6 +63,9 @@ bool equalsFormulaCells( const ScFormulaCell* p1, const ScFormulaCell* p2 )
     if (pCode1->GetLen() != pCode2->GetLen())
         return false;
 
+    if (pCode1->GetCodeError() != pCode2->GetCodeError())
+        return false;
+
     sal_uInt16 n = pCode1->GetLen();
     formula::FormulaToken** ppToken1 = pCode1->GetArray();
     formula::FormulaToken** ppToken2 = pCode2->GetArray();
