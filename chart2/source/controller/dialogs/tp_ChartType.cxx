@@ -812,7 +812,6 @@ void ChartTypeTabPage::commitToModel( const ChartTypeParameter& rParameter )
         return;
 
     m_aTimerTriggeredControllerLock.startTimer();
-    ControllerLockGuardUNO aLockedControllers( uno::Reference< frame::XModel >( m_xChartModel, uno::UNO_QUERY ) );
     m_pCurrentMainType->commitToModel( rParameter, m_xChartModel );
 }
 
