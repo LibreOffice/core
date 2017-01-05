@@ -40,7 +40,6 @@ namespace com { namespace sun { namespace star { namespace graphic { class XGrap
 
 class VCL_DLLPUBLIC Image
 {
-    friend class ImageList;
     friend class ::OutputDevice;
 
 public:
