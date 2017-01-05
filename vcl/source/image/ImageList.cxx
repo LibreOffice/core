@@ -118,21 +118,6 @@ void ImageList::InsertFromHorizontalStrip( const BitmapEx &rBitmapEx,
     }
 }
 
-void ImageList::InsertFromHorizontalBitmap( const ResId& rResId,
-                                            sal_uInt16       nCount,
-                                            const Color *pSearchColors,
-                                            const Color *pReplaceColors,
-                                            sal_uLong        nColorCount)
-{
-    BitmapEx aBmpEx( rResId );
-
-    if ( nColorCount && pSearchColors && pReplaceColors )
-        aBmpEx.Replace( pSearchColors, pReplaceColors, nColorCount );
-
-    std::vector< OUString > aNames( nCount );
-    InsertFromHorizontalStrip( aBmpEx, aNames );
-}
-
 sal_uInt16 ImageList::ImplGetImageId( const OUString& rImageName ) const
 {
     ImageAryData *pImg = mpImplData->maNameHash[ rImageName ];
