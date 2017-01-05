@@ -53,7 +53,7 @@ namespace dbaccess
             #ifdef DBG_UTIL
             m_bUsed = false;
             #endif
-            m_aBuffer.makeStringAndClear();
+            m_aBuffer.setLength(0);
         }
 
     public:

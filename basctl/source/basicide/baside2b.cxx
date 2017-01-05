@@ -2736,7 +2736,7 @@ void CodeCompleteListBox::KeyInput( const KeyEvent& rKeyEvt )
 
                     if( !aTabInsertedStr.isEmpty() && aTabInsertedStr != aFuncBuffer.toString() )
                     {
-                        aFuncBuffer.makeStringAndClear();
+                        aFuncBuffer.setLength(0);
                         aFuncBuffer = aFuncBuffer.append(aTabInsertedStr);
                     }
                     aFuncBuffer = aFuncBuffer.remove(aFuncBuffer.getLength()-1, 1);
@@ -2799,7 +2799,7 @@ void CodeCompleteWindow::InsertEntry( const OUString& aStr )
 void CodeCompleteWindow::ClearListBox()
 {
     pListBox->Clear();
-    pListBox->aFuncBuffer.makeStringAndClear();
+    pListBox->aFuncBuffer.setLength(0);
 }
 
 void CodeCompleteWindow::SetTextSelection( const TextSelection& aSel )

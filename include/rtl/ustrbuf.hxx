@@ -336,7 +336,7 @@ public:
 
         @return the string previously contained in the buffer.
      */
-    OUString makeStringAndClear()
+    SAL_WARN_UNUSED_RESULT OUString makeStringAndClear()
     {
         return OUString(
                   rtl_uStringBuffer_makeStringAndClear( &pData, &nCapacity ),

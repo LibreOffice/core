@@ -101,7 +101,7 @@ void VMLExport::OpenContainer( sal_uInt16 nEscherContainer, int nRecInstance )
         m_pShapeAttrList = FastSerializerHelper::createAttrList();
 
         if ( !m_pShapeStyle->isEmpty() )
-            m_pShapeStyle->makeStringAndClear();
+            m_pShapeStyle->setLength(0);
 
         m_pShapeStyle->ensureCapacity( 200 );
 

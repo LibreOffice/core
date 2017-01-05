@@ -130,13 +130,13 @@ namespace dbtools
             else if (!m_aLinkFilterComponent.isEmpty())
                 o_singleComponent = m_aLinkFilterComponent;
             else
-                o_singleComponent.makeStringAndClear();
+                o_singleComponent.setLength(0);
             return true;
         }
         else
         {
             if (m_aLinkFilterComponent.isEmpty())
-                o_singleComponent.makeStringAndClear();
+                o_singleComponent.setLength(0);
             else
                 o_singleComponent = m_aLinkFilterComponent;
             return true;

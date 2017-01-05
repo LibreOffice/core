@@ -242,7 +242,7 @@ OUString Model::getDefaultBindingExpressionForNode(
             // unknown type? fail!
             OSL_FAIL( "unknown node type!" );
             xCurrent.set( nullptr );
-            aBuffer.makeStringAndClear();
+            aBuffer.setLength(0);
             // we'll remove the slash below
             aBuffer.insert( 0, '/' );
             break;

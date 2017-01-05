@@ -3031,7 +3031,7 @@ void ScHTMLQueryParser::MetaOn( const ImportInfo& rInfo )
 void ScHTMLQueryParser::TitleOn( const ImportInfo& /*rInfo*/ )
 {
     mbTitleOn = true;
-    maTitle.makeStringAndClear();
+    maTitle.setLength(0);
 }
 
 void ScHTMLQueryParser::TitleOff( const ImportInfo& rInfo )
