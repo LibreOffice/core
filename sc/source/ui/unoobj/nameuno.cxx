@@ -975,15 +975,12 @@ void ScLabelRangeObj::Modify_Impl( const ScRange* pLabel, const ScRange* pData )
             ScRangePair* pEntry = xNewList->Find( aRange );
             if (pEntry)
             {
-                xNewList->Remove( pEntry );     // only removed from list, not deleted
-
                 if ( pLabel )
                     pEntry->GetRange(0) = *pLabel;
                 if ( pData )
                     pEntry->GetRange(1) = *pData;
 
-                xNewList->Join( *pEntry );
-                delete pEntry;
+                xNewList->Join( *pEntry, true );
 
                 if (bColumn)
                     rDoc.GetColNameRangesRef() = xNewList;
@@ -1139,7 +1136,6 @@ void SAL_CALL ScLabelRangesObj::removeByIndex( sal_Int32 nIndex )
             if (pEntry)
             {
                 xNewList->Remove( pEntry );
-                delete pEntry;
 
                 if (bColumn)
                     rDoc.GetColNameRangesRef() = xNewList;
