@@ -25,43 +25,6 @@
 #include <unordered_map>
 #include <vector>
 
-struct ImageAryData
-{
-    OUString maName;
-    // Images identified by either name, or by id
-    sal_uInt16              mnId;
-    BitmapEx                maBitmapEx;
-
-    ImageAryData( const OUString &aName,
-                  sal_uInt16 nId, const BitmapEx &aBitmap );
-    ImageAryData( const ImageAryData& rData );
-    ~ImageAryData();
-
-    bool IsLoadable() { return maBitmapEx.IsEmpty() && !maName.isEmpty(); }
-    void Load(const OUString &rPrefix);
-
-    ImageAryData&   operator=( const ImageAryData& rData );
-};
-
-struct ImplImageList
-{
-    typedef std::unordered_map< OUString, ImageAryData *, OUStringHash >
-        ImageAryDataNameHash;
-
-    std::vector<ImageAryData *>        maImages;
-    ImageAryDataNameHash   maNameHash;
-    OUString               maPrefix;
-    Size                   maImageSize;
-
-    ImplImageList();
-    ImplImageList( const ImplImageList &aSrc );
-    ~ImplImageList();
-
-    void AddImage( const OUString &aName,
-                   sal_uInt16 nId, const BitmapEx &aBitmapEx );
-    void RemoveImage( sal_uInt16 nPos );
-};
-
 struct ImplImage
 {
     BitmapChecksum maBitmapChecksum;

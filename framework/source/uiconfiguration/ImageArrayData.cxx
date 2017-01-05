@@ -35,8 +35,6 @@
 #include <rtl/strbuf.hxx>
 #endif
 
-#include "BitmapProcessor.hxx"
-
 ImageAryData::ImageAryData( const ImageAryData& rData ) :
     maName( rData.maName ),
     mnId( rData.mnId ),

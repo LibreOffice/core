@@ -54,7 +54,7 @@ public:
     VCL_DLLPUBLIC OUString getImageUrl(
         OUString const & name, OUString const & style, OUString const & lang);
 
-    bool loadImage(
+    VCL_DLLPUBLIC bool loadImage(
         OUString const & name, OUString const & style,
         BitmapEx & bitmap, bool localized,
         const ImageLoadFlags eFlags = ImageLoadFlags::NONE);

@@ -312,12 +312,9 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/bitmap/BitmapTools \
     vcl/source/bitmap/checksum \
     vcl/source/image/Image \
-    vcl/source/image/ImageArrayData \
-    vcl/source/image/ImageList \
     vcl/source/image/ImageTree \
     vcl/source/image/ImageRepository \
     vcl/source/image/ImplImage \
-    vcl/source/image/ImplImageList \
     vcl/source/image/ImplImageTree \
     vcl/source/helper/canvasbitmap \
     vcl/source/helper/canvastools \
