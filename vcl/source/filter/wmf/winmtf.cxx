@@ -892,13 +892,40 @@ void WinMtfOutput::UpdateClipRegion()
         if( !aClipPath.isEmpty() )
         {
             const basegfx::B2DPolyPolygon& rClipPoly( aClipPath.getClipPath() );
-            mpGDIMetaFile->AddAction(
-                new MetaISectRectClipRegionAction(
-                    vcl::unotools::rectangleFromB2DRectangle(
-                        rClipPoly.getB2DRange())));
 
             mbComplexClip = rClipPoly.count() > 1
                 || !basegfx::tools::isRectangle(rClipPoly);
+
+            static bool bEnableComplexClipViaRegion = getenv("SAL_WMF_COMPLEXCLIP_VIA_REGION") != nullptr;
+
+            if (bEnableComplexClipViaRegion)
+            {
+                //this makes cases like tdf#45820 work in reasonable time, and I feel in theory should
+                //be just fine. In practice I see the output is different so needs work before its the
+                //default, but for file fuzzing it should good enough
+                if (mbComplexClip)
+                {
+                    mpGDIMetaFile->AddAction(
+                        new MetaISectRegionClipRegionAction(
+                            vcl::Region(rClipPoly)));
+                    mbComplexClip = false;
+                }
+                else
+                {
+                    mpGDIMetaFile->AddAction(
+                        new MetaISectRectClipRegionAction(
+                            vcl::unotools::rectangleFromB2DRectangle(
+                                rClipPoly.getB2DRange())));
+                }
+            }
+            else
+            {
+                //normal case
+                mpGDIMetaFile->AddAction(
+                    new MetaISectRectClipRegionAction(
+                        vcl::unotools::rectangleFromB2DRectangle(
+                            rClipPoly.getB2DRange())));
+            }
         }
     }
 }

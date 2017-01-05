@@ -101,6 +101,8 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         utl::ConfigManager::EnableAvoidConfig();
         InitVCL();
 
+        setenv("SAL_WMF_COMPLEXCLIP_VIA_REGION", "1", 1);
+
 try_again:
 
         {
