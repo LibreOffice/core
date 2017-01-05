@@ -1088,7 +1088,7 @@ SvxNumOptionsTabPage::SvxNumOptionsTabPage(vcl::Window* pParent,
     , bHTMLMode(false)
     , bMenuButtonInitialized(false)
     , nBullet(0xff)
-    , nActNumLvl(SAL_MAX_UINT16)
+    , nActNumLvl(1)
     , nNumItemId(SID_ATTR_NUMBERING_RULE)
 {
     get(m_pLevelLB, "levellb");
@@ -1257,7 +1257,7 @@ void    SvxNumOptionsTabPage::ActivatePage(const SfxItemSet& rSet)
 {
     const SfxPoolItem* pItem;
     const SfxItemSet* pExampleSet = GetTabDialog()->GetExampleSet();
-    sal_uInt16 nTmpNumLvl = SAL_MAX_UINT16;
+    sal_uInt16 nTmpNumLvl = 1;
     if(pExampleSet)
     {
         if(SfxItemState::SET == pExampleSet->GetItemState(SID_PARAM_NUM_PRESET, false, &pItem))
@@ -1275,15 +1275,11 @@ void    SvxNumOptionsTabPage::ActivatePage(const SfxItemSet& rSet)
     if(*pActNum != *pSaveNum ||
         nActNumLvl != nTmpNumLvl)
     {
-        *pActNum = *pSaveNum;
         nActNumLvl = nTmpNumLvl;
         sal_uInt16 nMask = 1;
         m_pLevelLB->SetUpdateMode(false);
         m_pLevelLB->SetNoSelection();
-        if(bModified)
-            m_pLevelLB->SelectEntryPos( 0 );
-        else
-            m_pLevelLB->SelectEntryPos( pActNum->GetLevelCount(), nActNumLvl == SAL_MAX_UINT16);
+        m_pLevelLB->SelectEntryPos( pActNum->GetLevelCount(), nActNumLvl == SAL_MAX_UINT16);
         if(nActNumLvl != SAL_MAX_UINT16)
             for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
             {
@@ -1292,6 +1288,7 @@ void    SvxNumOptionsTabPage::ActivatePage(const SfxItemSet& rSet)
                 nMask <<= 1 ;
             }
         m_pLevelLB->SetUpdateMode(true);
+        *pActNum = *pSaveNum;
 
         InitControls();
     }
@@ -1358,11 +1355,7 @@ void    SvxNumOptionsTabPage::Reset( const SfxItemSet* rSet )
     sal_uInt16 nMask = 1;
     m_pLevelLB->SetUpdateMode(false);
     m_pLevelLB->SetNoSelection();
-    if(nActNumLvl == SAL_MAX_UINT16  && !bModified)
-    {
-        m_pLevelLB->SelectEntryPos( 0 );
-    }
-    else if (nActNumLvl == SAL_MAX_UINT16)
+    if (nActNumLvl == SAL_MAX_UINT16)
     {
         m_pLevelLB->SelectEntryPos( pSaveNum->GetLevelCount() );
     }
@@ -2636,10 +2629,9 @@ SvxNumPositionTabPage::SvxNumPositionTabPage(vcl::Window* pParent,
     : SfxTabPage(pParent, "NumberingPositionPage", "cui/ui/numberingpositionpage.ui", &rSet)
     , pActNum(nullptr)
     , pSaveNum(nullptr)
-    , nActNumLvl(SAL_MAX_UINT16)
+    , nActNumLvl(1)
     , nNumItemId(SID_ATTR_NUMBERING_RULE)
     , bModified(false)
-    , bDefault(true)
     , bPreset(false)
     , bInInintControl(false)
     , bLabelAlignmentPosAndSpaceModeActive(false)
@@ -2915,7 +2907,7 @@ void SvxNumPositionTabPage::InitControls()
         m_pAlign2LB->SetNoSelection();
     }
 
-    if ( bSameLabelFollowedBy || bDefault )
+    if ( bSameLabelFollowedBy )
     {
         sal_Int32 nPos = 0; // LISTTAB
         if ( aNumFmtArr[nLvl]->GetLabelFollowedBy() == SvxNumberFormat::SPACE )
@@ -2937,7 +2929,7 @@ void SvxNumPositionTabPage::InitControls()
     {
         m_pListtabFT->Enable();
         m_pListtabMF->Enable();
-        if ( bSameListtab || bDefault )
+        if ( bSameListtab )
         {
             SetMetricValue(*m_pListtabMF, aNumFmtArr[nLvl]->GetListtabPos(), eCoreUnit);
         }
@@ -2953,7 +2945,7 @@ void SvxNumPositionTabPage::InitControls()
         m_pListtabMF->SetText("");
     }
 
-    if ( bSameAlignAt || bDefault )
+    if ( bSameAlignAt )
     {
         SetMetricValue(*m_pAlignedAtMF,
                         aNumFmtArr[nLvl]->GetIndentAt() + aNumFmtArr[nLvl]->GetFirstLineIndent(),
@@ -2964,7 +2956,7 @@ void SvxNumPositionTabPage::InitControls()
         m_pAlignedAtMF->SetText("");
     }
 
-    if ( bSameIndentAt || bDefault )
+    if ( bSameIndentAt )
     {
         SetMetricValue(*m_pIndentAtMF, aNumFmtArr[nLvl]->GetIndentAt(), eCoreUnit);
     }
@@ -2982,7 +2974,7 @@ void SvxNumPositionTabPage::InitControls()
 void SvxNumPositionTabPage::ActivatePage(const SfxItemSet& rSet)
 {
     const SfxPoolItem* pItem;
-    sal_uInt16 nTmpNumLvl = SAL_MAX_UINT16;
+    sal_uInt16 nTmpNumLvl = 1;
     const SfxItemSet* pExampleSet = GetTabDialog()->GetExampleSet();
     if(pExampleSet)
     {
@@ -3005,10 +2997,7 @@ void SvxNumPositionTabPage::ActivatePage(const SfxItemSet& rSet)
         sal_uInt16 nMask = 1;
         m_pLevelLB->SetUpdateMode(false);
         m_pLevelLB->SetNoSelection();
-        if(bModified)
-            m_pLevelLB->SelectEntryPos( 0 );
-        else
-            m_pLevelLB->SelectEntryPos( pActNum->GetLevelCount(), nActNumLvl == SAL_MAX_UINT16);
+        m_pLevelLB->SelectEntryPos( pActNum->GetLevelCount(), nActNumLvl == SAL_MAX_UINT16);
         if(nActNumLvl != SAL_MAX_UINT16)
             for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
             {
@@ -3093,11 +3082,7 @@ void SvxNumPositionTabPage::Reset( const SfxItemSet* rSet )
     sal_uInt16 nMask = 1;
     m_pLevelLB->SetUpdateMode(false);
     m_pLevelLB->SetNoSelection();
-    if(nActNumLvl == SAL_MAX_UINT16  && !bModified)
-    {
-        m_pLevelLB->SelectEntryPos( 0 );
-    }
-    else if (nActNumLvl == SAL_MAX_UINT16)
+    if (nActNumLvl == SAL_MAX_UINT16)
     {
         m_pLevelLB->SelectEntryPos( pSaveNum->GetLevelCount() );
     }
@@ -3235,7 +3220,6 @@ IMPL_LINK( SvxNumPositionTabPage, LevelHdl_Impl, ListBox&, rBox, void )
 {
     sal_uInt16 nSaveNumLvl = nActNumLvl;
     nActNumLvl = 0;
-    bDefault = false;
     if(rBox.IsEntryPosSelected( pActNum->GetLevelCount() ) &&
             (rBox.GetSelectEntryCount() == 1 || nSaveNumLvl != 0xffff))
     {
