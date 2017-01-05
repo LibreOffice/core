@@ -1185,6 +1185,17 @@ FormulaError FormulaCompiler::GetErrorConstant( const OUString& rName ) const
                 ;   // nothing
         }
     }
+    else
+    {
+        // Per convention recognize detailed "#ERRxxx!" constants, always
+        // untranslated.
+        if (rName.startsWithIgnoreAsciiCase("#ERR") && rName[rName.getLength()-1] == '!')
+        {
+            sal_uInt32 nErr = rName.copy( 4, rName.getLength() - 5).toUInt32();
+            if (0 < nErr && nErr <= SAL_MAX_UINT16)
+                nError = static_cast<FormulaError>(nErr);
+        }
+    }
     return nError;
 }
 
@@ -1203,7 +1214,6 @@ void FormulaCompiler::AppendErrorConstant( OUStringBuffer& rBuffer, FormulaError
     OpCode eOp;
     switch (nError)
     {
-        default:
         case FormulaError::NoCode:
             eOp = ocErrNull;
             break;
@@ -1225,6 +1235,15 @@ void FormulaCompiler::AppendErrorConstant( OUStringBuffer& rBuffer, FormulaError
         case FormulaError::NotAvailable:
             eOp = ocErrNA;
             break;
+        default:
+            {
+                // Per convention create detailed "#ERRxxx!" constants, always
+                // untranslated.
+                rBuffer.append("#ERR");
+                rBuffer.append(static_cast<sal_Int32>(nError));
+                rBuffer.append('!');
+                return;
+            }
     }
     rBuffer.append( mxSymbols->getSymbol( eOp));
 }
