@@ -22,7 +22,7 @@
 namespace vcl
 {
 
-class VCL_DLLPUBLIC CommandImageResolver final
+class CommandImageResolver final
 {
 private:
     typedef std::unordered_map<OUString, OUString, OUStringHash > CommandToImageNameMap;

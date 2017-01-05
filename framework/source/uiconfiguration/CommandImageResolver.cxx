@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <vcl/CommandImageResolver.hxx>
+#include "CommandImageResolver.hxx"
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <rtl/ustrbuf.hxx>

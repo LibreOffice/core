@@ -48,7 +48,7 @@
 #include <unordered_map>
 #include <vector>
 
-#include <vcl/CommandImageResolver.hxx>
+#include "CommandImageResolver.hxx"
 
 namespace framework
 {

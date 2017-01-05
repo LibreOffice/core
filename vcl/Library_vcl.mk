@@ -311,7 +311,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/bitmap/BitmapProcessor \
     vcl/source/bitmap/BitmapTools \
     vcl/source/bitmap/checksum \
-    vcl/source/bitmap/CommandImageResolver \
     vcl/source/image/Image \
     vcl/source/image/ImageArrayData \
     vcl/source/image/ImageList \
