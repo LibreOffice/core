@@ -252,7 +252,7 @@ void XclExpAddressConverter::ValidateRangeList( ScRangeList& rScRanges, bool bWa
     {
         ScRange* pScRange = rScRanges[ --nRange ];
         if( !CheckRange( *pScRange, bWarn ) )
-            delete rScRanges.Remove(nRange);
+            rScRanges.Remove(nRange);
     }
 }
 

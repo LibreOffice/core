@@ -539,12 +539,10 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, AddBtnHdl, Button*, void)
             if ( ( pPair = xColNameRanges->Find( theCurArea ) ) != nullptr )
             {
                 xColNameRanges->Remove( pPair );
-                delete pPair;
             }
             if ( ( pPair = xRowNameRanges->Find( theCurArea ) ) != nullptr )
             {
                 xRowNameRanges->Remove( pPair );
-                delete pPair;
             }
             if ( pBtnColHead->IsChecked() )
                 xColNameRanges->Join( ScRangePair( theCurArea, theCurData ) );
@@ -605,7 +603,6 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, RemoveBtnHdl, Button*, void)
                 xColNameRanges->Remove( pPair );
             else
                 xRowNameRanges->Remove( pPair );
-            delete pPair;
 
             UpdateNames();
             const sal_Int32 nCnt = pLbRange->GetEntryCount();
