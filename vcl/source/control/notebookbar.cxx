@@ -52,10 +52,8 @@ NotebookBar::~NotebookBar()
 void NotebookBar::dispose()
 {
     if (m_pSystemWindow && m_pSystemWindow->ImplIsInTaskPaneList(this))
-    {
         m_pSystemWindow->GetTaskPaneList()->RemoveWindow(this);
-        m_pSystemWindow.clear();
-    }
+    m_pSystemWindow.clear();
     disposeBuilder();
     m_pEventListener.clear();
     Control::dispose();
@@ -117,10 +115,7 @@ void NotebookBar::SetIconClickHdl(Link<NotebookBar*, void> aHdl)
 
 void NotebookBar::SetSystemWindow(SystemWindow* pSystemWindow)
 {
-    if (m_pSystemWindow)
-        m_pSystemWindow.clear();
-
-    m_pSystemWindow = VclPtr<SystemWindow>(pSystemWindow);
+    m_pSystemWindow = pSystemWindow;
     if (!m_pSystemWindow->ImplIsInTaskPaneList(this))
         m_pSystemWindow->GetTaskPaneList()->AddWindow(this);
 }
