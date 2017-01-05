@@ -2166,6 +2166,8 @@ void Desktop::OpenClients()
     }
 #if HAVE_FEATURE_BREAKPAD
     CrashReporter::writeCommonInfo();
+    // write this information here to avoid depending on vcl in the crash reporter lib
+    CrashReporter::AddKeyValue("Language", Application::GetSettings().GetLanguageTag().getBcp47());
 #endif
 
     RequestHandler::EnableRequests();
