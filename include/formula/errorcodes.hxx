@@ -119,6 +119,73 @@ inline FormulaError GetDoubleErrorValue( double fVal )
     return (FormulaError)(nErr & 0x0000ffff);
 }
 
+/** Error values that are accepted as detailed "#ERRxxx!" constants.
+
+    Used in FormulaCompiler::GetErrorConstant() to prevent users from inventing
+    arbitrary values that already have or later might get a significant meaning.
+ */
+inline bool isPublishedFormulaError( FormulaError nErr )
+{
+    // Every value has to be handled explicitly, do not add a default case to
+    // let the compiler complain if a value is missing.
+    switch (nErr)
+    {
+        case FormulaError::NONE:
+            return false;
+
+        case FormulaError::IllegalChar:
+        case FormulaError::IllegalArgument:
+        case FormulaError::IllegalFPOperation:
+        case FormulaError::IllegalParameter:
+        case FormulaError::IllegalJump:
+        case FormulaError::Separator:
+        case FormulaError::Pair:
+        case FormulaError::PairExpected:
+        case FormulaError::OperatorExpected:
+        case FormulaError::VariableExpected:
+        case FormulaError::ParameterExpected:
+        case FormulaError::CodeOverflow:
+        case FormulaError::StringOverflow:
+        case FormulaError::StackOverflow:
+        case FormulaError::UnknownState:
+        case FormulaError::UnknownVariable:
+        case FormulaError::UnknownOpCode:
+        case FormulaError::UnknownStackVariable:
+        case FormulaError::NoValue:
+        case FormulaError::UnknownToken:
+        case FormulaError::NoCode:
+        case FormulaError::CircularReference:
+        case FormulaError::NoConvergence:
+        case FormulaError::NoRef:
+        case FormulaError::NoName:
+        case FormulaError::DoubleRef:
+            return true;
+
+        case FormulaError::TrackFromCircRef:
+        case FormulaError::CellNoValue:
+            return false;
+
+        case FormulaError::NoAddin:
+        case FormulaError::NoMacro:
+        case FormulaError::DivisionByZero:
+        case FormulaError::NestedArray:
+            return true;
+
+        case FormulaError::NotNumericString:
+        case FormulaError::JumpMatHasResult:
+        case FormulaError::ElementNaN:
+        case FormulaError::RetryCircular:
+            return false;
+
+        case FormulaError::MatrixSize:
+            return true;
+
+        case FormulaError::NotAvailable:
+            return false;
+    }
+    return false;
+}
+
 #endif // INCLUDED_FORMULA_ERRORCODES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
