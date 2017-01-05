@@ -16,6 +16,8 @@
 
 #include <com/sun/star/uno/Sequence.hxx>
 
+#include "ImageList.hxx"
+
 #include <unordered_map>
 #include <vector>
 

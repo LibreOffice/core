@@ -32,6 +32,7 @@
 #include <vcl/imagerepository.hxx>
 #include <vcl/ImageTree.hxx>
 #include <image.h>
+#include "ImageList.hxx"
 
 ImageList::ImageList()
 {

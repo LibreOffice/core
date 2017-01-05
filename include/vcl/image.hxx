@@ -82,48 +82,6 @@ private:
     SAL_DLLPRIVATE void    ImplInit( const BitmapEx& rBmpEx );
 };
 
-class VCL_DLLPUBLIC ImageList
-{
-public:
-                    explicit ImageList();
-                    ImageList( const std::vector<OUString>& rNameVector,
-                               const OUString& rPrefix);
-
-    void                    InsertFromHorizontalStrip( const BitmapEx &rBitmapEx,
-                                   const std::vector< OUString > &rNameVector );
-    BitmapEx        GetAsHorizontalStrip() const;
-    sal_uInt16      GetImageCount() const;
-    Size            GetImageSize() const;
-
-    void            AddImage( const OUString& rImageName, const Image& rImage );
-
-    void            ReplaceImage( const OUString& rImageName, const Image& rImage );
-
-    void            RemoveImage( sal_uInt16 nId );
-
-    Image           GetImage( sal_uInt16 nId ) const;
-    Image           GetImage( const OUString& rImageName ) const;
-
-    sal_uInt16      GetImagePos( sal_uInt16 nId ) const;
-    bool            HasImageForId( sal_uInt16 nId ) const;
-    sal_uInt16      GetImagePos( const OUString& rImageName ) const;
-
-    sal_uInt16      GetImageId( sal_uInt16 nPos ) const;
-
-    OUString        GetImageName( sal_uInt16 nPos ) const;
-    void            GetImageNames( ::std::vector< OUString >& rNames ) const;
-
-    bool            operator==( const ImageList& rImageList ) const;
-    bool            operator!=( const ImageList& rImageList ) const { return !(ImageList::operator==( rImageList )); }
-
-private:
-
-    std::shared_ptr<ImplImageList> mpImplData;
-
-    SAL_DLLPRIVATE void    ImplInit( sal_uInt16 nItems, const Size &rSize );
-    SAL_DLLPRIVATE sal_uInt16  ImplGetImageId( const OUString& rImageName ) const;
-};
-
 #endif // INCLUDED_VCL_IMAGE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
