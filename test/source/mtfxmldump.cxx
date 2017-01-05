@@ -495,6 +495,24 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, XmlWriter& rWriter)
             }
             break;
 
+            case MetaActionType::ISECTREGIONCLIPREGION:
+            {
+                MetaISectRegionClipRegionAction* pMetaISectRegionClipRegionAction = static_cast<MetaISectRegionClipRegionAction*>(pAction);
+                rWriter.startElement(sCurrentElementTag);
+
+                // FIXME for now we dump only the bounding box; this is
+                // enough for the tests we have, but may need extending to
+                // dumping the real polypolygon in the future
+                Rectangle aRectangle = pMetaISectRegionClipRegionAction->GetRegion().GetBoundRect();
+                rWriter.attribute("top",    aRectangle.Top());
+                rWriter.attribute("left",   aRectangle.Left());
+                rWriter.attribute("bottom", aRectangle.Bottom());
+                rWriter.attribute("right",  aRectangle.Right());
+
+                rWriter.endElement();
+            }
+            break;
+
             case MetaActionType::POLYLINE:
             {
                 MetaPolyLineAction* pMetaPolyLineAction = static_cast<MetaPolyLineAction*>(pAction);
