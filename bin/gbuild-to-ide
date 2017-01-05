@@ -532,13 +532,13 @@ class XcodeIntegrationGenerator(IdeIntegrationGenerator):
                    'rootObject': rootId}
         for location in self.gbuildparser.target_by_location:
             module = location[location.rindex('/') + 1:]
-            sourceId, self.sourceObj = self.define_pbxgroup('Sources', 'source', '<group>')
-            includeId, self.includeObj = self.define_pbxgroup('Headers', 'inc', '<group>')
-            targetId, targetObj = self.define_pbxgroup('Targets', 'target', '<group>')
-            targetLibId, self.targetLibObj = self.define_pbxgroup('Libraries', 'target', '<group>')
-            targetCUId, self.targetCUObj = self.define_pbxgroup('Unittests', 'target', '<group>')
-            targetExeId, self.targetExeObj = self.define_pbxgroup('Executable', 'target', '<group>')
-            moduleId, self.moduleObj = self.define_pbxgroup(module, module,'<group>')
+            sourceId, self.sourceObj = self.define_pbxgroup('Sources')
+            includeId, self.includeObj = self.define_pbxgroup('Headers')
+            targetId, targetObj = self.define_pbxgroup('Targets')
+            targetLibId, self.targetLibObj = self.define_pbxgroup('Libraries')
+            targetCUId, self.targetCUObj = self.define_pbxgroup('Unittests')
+            targetExeId, self.targetExeObj = self.define_pbxgroup('Executable')
+            moduleId, self.moduleObj = self.define_pbxgroup(module)
 
             targetObj['children'] = [targetLibId, targetCUId,targetExeId]
             self.moduleObj['children'] = [sourceId, includeId, targetId]
@@ -561,15 +561,11 @@ class XcodeIntegrationGenerator(IdeIntegrationGenerator):
             pass
         with open(os.path.join(xcodeprojdir, 'project.pbxproj'), 'w') as f:
             f.write('// !$*UTF8*$!\n')
-            self.write_dict(pbxproj, f, 0)
+            self.write_object(pbxproj, f, 0)
 
 
-    def define_pbxgroup(self, name, pathEnd, sourcetree):
-        return self.generate_id(), {'isa': 'PBXGroup',
-                              'children': [],
-                              'name': name,
-                              'path': '../../' + name + '/' + pathEnd,
-                              'sourceTree': sourcetree}
+    def define_pbxgroup(self, name):
+        return self.generate_id(), {'isa': 'PBXGroup','children': [],'name': name,'sourceTree': '<group>'}
 
     counter = 16777216
 
@@ -577,14 +573,10 @@ class XcodeIntegrationGenerator(IdeIntegrationGenerator):
         XcodeIntegrationGenerator.counter += 1
         return str('X%07x' % XcodeIntegrationGenerator.counter)
 
-
-
-
     def indent(self, file, level):
-        if level == 0:
-            return
-        for i in range(0, level):
-            file.write('\t')
+        if level != 0:
+            for i in range(0, level):
+                file.write('\t')
 
     def write_object(self, object, file, indent):
         if isinstance(object, int):
@@ -597,44 +589,24 @@ class XcodeIntegrationGenerator(IdeIntegrationGenerator):
           else:
             file.write('"%s"' % object)
         elif isinstance(object, dict):
-            self.write_dict(object, file, indent)
+            file.write('{')
+            file.write('\n')
+            for key in sorted(object.keys()):
+                self.indent(file, indent + 1)
+                file.write('%s = ' % key)
+                self.write_object(object[key], file, indent + 1)
+                file.write(';\n')
+            self.indent(file, indent)
+            file.write('}')
         elif isinstance(object, list):
-            self.write_list(object, file, indent)
+            file.write('(')
+            for key in object:
+                self.write_object(key, file, 1)
+                file.write(',')
+            file.write(')')
         elif isinstance(object, GbuildLinkTarget):
             file.write('""')
 
-    # Write a dictionary out as an "old-style (NeXT) ASCII plist"
-    def write_dict(self, dict, file, indent):
-        file.write('{')
-        file.write('\n')
-        for key in sorted(dict.keys()):
-            self.indent(file, indent + 1)
-            file.write('%s = ' % key)
-            self.write_object(dict[key], file, indent + 1)
-            file.write(';\n')
-        self.indent(file, indent)
-        file.write('}')
-
-    def write_list(self, list, file, indent):
-        file.write('(')
-        for key in list:
-            self.write_object(key, file, 1)
-            file.write(',')
-        file.write(')')
-
-    def get_product_type(self, modulename):
-        if modulename.build_type == 'Library':
-            return 'com.apple.product-type.library.dynamic'
-        elif modulename.build_type == 'Executable':
-            return 'com.apple.product-type.executable'
-        elif modulename.build_type == 'CppunitTest':
-            return 'com.apple.product-type.cppunit'
-        else:
-            return 'com.apple.product-type.something'
-
-    def generate_build_phases(self, modulename):
-        result = [self.sourcesBuildPhaseId, self.copyBuildPhaseId]
-        return result
 
 
 
@@ -647,15 +619,24 @@ class XcodeIntegrationGenerator(IdeIntegrationGenerator):
         return result
 
     def generate_target(self, modulename):
+        if modulename.build_type == 'Library':
+            product = 'com.apple.product-type.library.dynamic'
+        elif modulename.build_type == 'Executable':
+            product = 'com.apple.product-type.executable'
+        elif modulename.build_type == 'CppunitTest':
+            product = 'com.apple.product-type.cppunit'
+        else:
+            product = 'com.apple.product-type.something'
+
         result = {'isa': 'PBXNativeTarget',
                   'buildConfigurationList': self.configurationListId,
-                  'buildPhases': self.generate_build_phases(modulename),
+                  'buildPhases': [self.sourcesBuildPhaseId, self.copyBuildPhaseId],
                   'buildRules': [],
                   'dependencies': [],
                   'name': modulename.name, # modulename,
                   'productName': modulename.name, # modulename,
                   'productReference': self.targetRefId,
-                  'productType': self.get_product_type(modulename)}
+                  'productType': product}
         return result
 
     def generate_configuration_debug(self, modulename):
