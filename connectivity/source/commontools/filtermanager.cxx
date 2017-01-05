@@ -120,7 +120,7 @@ namespace dbtools
     }
 
 
-    bool FilterManager::isThereAtMostOneComponent( OUStringBuffer& o_singleComponent ) const
+    bool FilterManager::isThereAtMostOneComponent( OUString& o_singleComponent ) const
     {
         if (m_bApplyPublicFilter) {
             if (!m_aPublicFilterComponent.isEmpty() && !m_aLinkFilterComponent.isEmpty())
@@ -130,13 +130,13 @@ namespace dbtools
             else if (!m_aLinkFilterComponent.isEmpty())
                 o_singleComponent = m_aLinkFilterComponent;
             else
-                o_singleComponent.setLength(0);
+                o_singleComponent.clear();
             return true;
         }
         else
         {
             if (m_aLinkFilterComponent.isEmpty())
-                o_singleComponent.setLength(0);
+                o_singleComponent.clear();
             else
                 o_singleComponent = m_aLinkFilterComponent;
             return true;
@@ -146,17 +146,17 @@ namespace dbtools
 
     OUString FilterManager::getComposedFilter( ) const
     {
-        OUStringBuffer aComposedFilter;
-
         // if we have only one non-empty component, then there's no need to compose anything
-        if ( !isThereAtMostOneComponent( aComposedFilter ) )
+        OUString singleComponent;
+        if ( isThereAtMostOneComponent( singleComponent ) )
         {
-            // append the single components
-            if (m_bApplyPublicFilter)
-                appendFilterComponent( aComposedFilter, m_aPublicFilterComponent );
-            appendFilterComponent( aComposedFilter, m_aLinkFilterComponent );
+            return singleComponent;
         }
-
+        // append the single components
+        OUStringBuffer aComposedFilter(singleComponent);
+        if (m_bApplyPublicFilter)
+            appendFilterComponent( aComposedFilter, m_aPublicFilterComponent );
+        appendFilterComponent( aComposedFilter, m_aLinkFilterComponent );
         return aComposedFilter.makeStringAndClear();
     }
 
