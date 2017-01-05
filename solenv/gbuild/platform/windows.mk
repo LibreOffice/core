@@ -464,7 +464,8 @@ gb_Library_PLAINLIBS_NONE += \
 	uuid \
 	uwinapi \
 	winmm \
-	winspool
+	winspool \
+	wsock32
 
 gb_Library_LAYER := \
 	$(foreach lib,$(gb_Library_OOOLIBS),$(lib):OOO) \
