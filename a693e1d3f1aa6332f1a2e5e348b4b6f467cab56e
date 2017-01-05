@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a6eadb0_15f827e5",
+        "filename": "sw/source/core/layout/frmtool.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1128,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2017-01-05T11:28:15Z",
+      "side": 1,
+      "message": "bool bAlreadyConnected \u003d lcl_ObjConnected(pFormat, pSib);\nif(!bAlreadyConnected || lcl_InHeaderOrFooter(*pFormat))\n\nis IMHO easier to read.",
+      "revId": "a693e1d3f1aa6332f1a2e5e348b4b6f467cab56e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
