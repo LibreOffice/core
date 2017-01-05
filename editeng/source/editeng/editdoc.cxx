@@ -425,7 +425,7 @@ void TextPortionList::Reset()
 
 void TextPortionList::DeleteFromPortion(sal_Int32 nDelFrom)
 {
-    DBG_ASSERT( ( nDelFrom < (sal_Int32)maPortions.size() ) || ( (nDelFrom == 0) && maPortions.empty() ), "DeleteFromPortion: Out of range" );
+    assert((nDelFrom < static_cast<sal_Int32>(maPortions.size())) || ((nDelFrom == 0) && maPortions.empty()));
     PortionsType::iterator it = maPortions.begin();
     std::advance(it, nDelFrom);
     maPortions.erase(it, maPortions.end());
@@ -873,7 +873,7 @@ void ConvertItem( SfxPoolItem& rPoolItem, MapUnit eSourceUnit, MapUnit eDestUnit
     {
         case EE_PARA_LRSPACE:
         {
-            DBG_ASSERT( dynamic_cast<const SvxLRSpaceItem *>(&rPoolItem) != nullptr, "ConvertItem: invalid Item!" );
+            assert(dynamic_cast<const SvxLRSpaceItem *>(&rPoolItem) != nullptr);
             SvxLRSpaceItem& rItem = static_cast<SvxLRSpaceItem&>(rPoolItem);
             rItem.SetTextFirstLineOfst( sal::static_int_cast< short >( OutputDevice::LogicToLogic( rItem.GetTextFirstLineOfst(), eSourceUnit, eDestUnit ) ) );
             rItem.SetTextLeft( OutputDevice::LogicToLogic( rItem.GetTextLeft(), eSourceUnit, eDestUnit ) );
@@ -882,7 +882,7 @@ void ConvertItem( SfxPoolItem& rPoolItem, MapUnit eSourceUnit, MapUnit eDestUnit
         break;
         case EE_PARA_ULSPACE:
         {
-            DBG_ASSERT( dynamic_cast<const SvxULSpaceItem *>(&rPoolItem) != nullptr, "ConvertItem: Invalid Item!" );
+            assert(dynamic_cast<const SvxULSpaceItem *>(&rPoolItem) != nullptr);
             SvxULSpaceItem& rItem = static_cast<SvxULSpaceItem&>(rPoolItem);
             rItem.SetUpper( sal::static_int_cast< sal_uInt16 >( OutputDevice::LogicToLogic( rItem.GetUpper(), eSourceUnit, eDestUnit ) ) );
             rItem.SetLower( sal::static_int_cast< sal_uInt16 >( OutputDevice::LogicToLogic( rItem.GetLower(), eSourceUnit, eDestUnit ) ) );
@@ -890,7 +890,7 @@ void ConvertItem( SfxPoolItem& rPoolItem, MapUnit eSourceUnit, MapUnit eDestUnit
         break;
         case EE_PARA_SBL:
         {
-            DBG_ASSERT( dynamic_cast<const SvxLineSpacingItem *>(&rPoolItem) != nullptr, "ConvertItem: Invalid Item!" );
+            assert(dynamic_cast<const SvxLineSpacingItem *>(&rPoolItem) != nullptr);
             SvxLineSpacingItem& rItem = static_cast<SvxLineSpacingItem&>(rPoolItem);
             // SetLineHeight changes also eLineSpace!
             if ( rItem.GetLineSpaceRule() == SvxLineSpaceRule::Min )
@@ -899,7 +899,7 @@ void ConvertItem( SfxPoolItem& rPoolItem, MapUnit eSourceUnit, MapUnit eDestUnit
         break;
         case EE_PARA_TABS:
         {
-            DBG_ASSERT( dynamic_cast<const SvxTabStopItem *>(&rPoolItem) != nullptr, "ConvertItem: Invalid Item!" );
+            assert(dynamic_cast<const SvxTabStopItem *>(&rPoolItem) != nullptr);
             SvxTabStopItem& rItem = static_cast<SvxTabStopItem&>(rPoolItem);
             SvxTabStopItem aNewItem( EE_PARA_TABS );
             for ( sal_uInt16 i = 0; i < rItem.Count(); i++ )
@@ -915,7 +915,7 @@ void ConvertItem( SfxPoolItem& rPoolItem, MapUnit eSourceUnit, MapUnit eDestUnit
         case EE_CHAR_FONTHEIGHT_CJK:
         case EE_CHAR_FONTHEIGHT_CTL:
         {
-            DBG_ASSERT( dynamic_cast<const SvxFontHeightItem *>(&rPoolItem) != nullptr, "ConvertItem: Invalid Item!" );
+            assert(dynamic_cast<const SvxFontHeightItem *>(&rPoolItem) != nullptr);
             SvxFontHeightItem& rItem = static_cast<SvxFontHeightItem&>(rPoolItem);
             rItem.SetHeight( OutputDevice::LogicToLogic( rItem.GetHeight(), eSourceUnit, eDestUnit ) );
         }
@@ -1111,7 +1111,7 @@ void EditLineList::Reset()
 
 void EditLineList::DeleteFromLine(sal_Int32 nDelFrom)
 {
-    DBG_ASSERT( nDelFrom <= ((sal_Int32)maLines.size() - 1), "DeleteFromLine: Out of range" );
+    assert(nDelFrom <= (static_cast<sal_Int32>(maLines.size()) - 1));
     LinesType::iterator it = maLines.begin();
     std::advance(it, nDelFrom);
     maLines.erase(it, maLines.end());
@@ -1497,7 +1497,7 @@ void ContentNode::CollapseAttribs( sal_Int32 nIndex, sal_Int32 nDeleted, SfxItem
 
 void ContentNode::CopyAndCutAttribs( ContentNode* pPrevNode, SfxItemPool& rPool, bool bKeepEndingAttribs )
 {
-    DBG_ASSERT( pPrevNode, "Copy of attributes to a null pointer?" );
+    assert(pPrevNode);
 
 #if OSL_DEBUG_LEVEL > 0
     CharAttribList::DbgCheckAttribs(aCharAttribList);
@@ -1522,7 +1522,7 @@ void ContentNode::CopyAndCutAttribs( ContentNode* pPrevNode, SfxItemPool& rPool,
             if ( bKeepEndingAttribs && !pAttrib->IsFeature() && !aCharAttribList.FindAttrib( pAttrib->GetItem()->Which(), 0 ) )
             {
                 EditCharAttrib* pNewAttrib = MakeCharAttrib( rPool, *(pAttrib->GetItem()), 0, 0 );
-                DBG_ASSERT( pNewAttrib, "MakeCharAttrib failed!" );
+                assert(pNewAttrib);
                 aCharAttribList.InsertAttrib( pNewAttrib );
             }
         }
@@ -1531,7 +1531,7 @@ void ContentNode::CopyAndCutAttribs( ContentNode* pPrevNode, SfxItemPool& rPool,
             // If cut is done right at the front then the attribute must be
             // kept! Has to be copied and changed.
             EditCharAttrib* pNewAttrib = MakeCharAttrib( rPool, *(pAttrib->GetItem()), 0, pAttrib->GetEnd()-nCut );
-            DBG_ASSERT( pNewAttrib, "MakeCharAttrib failed!" );
+            assert(pNewAttrib);
             aCharAttribList.InsertAttrib( pNewAttrib );
             pAttrib->GetEnd() = nCut;
         }
@@ -1556,7 +1556,7 @@ void ContentNode::CopyAndCutAttribs( ContentNode* pPrevNode, SfxItemPool& rPool,
 
 void ContentNode::AppendAttribs( ContentNode* pNextNode )
 {
-    DBG_ASSERT( pNextNode, "Copy of attributes to a null pointer?" );
+    assert(pNextNode);
 
     sal_Int32 nNewStart = maString.getLength();
 
@@ -2311,7 +2311,7 @@ EditPaM EditDoc::InsertText( EditPaM aPaM, const OUString& rStr )
     DBG_ASSERT( rStr.indexOf( 0x0A ) == -1, "EditDoc::InsertText: Newlines prohibited in paragraph!" );
     DBG_ASSERT( rStr.indexOf( 0x0D ) == -1, "EditDoc::InsertText: Newlines prohibited in paragraph!" );
     DBG_ASSERT( rStr.indexOf( '\t' ) == -1, "EditDoc::InsertText: Newlines prohibited in paragraph!" );
-    DBG_ASSERT( aPaM.GetNode(), "Blinder PaM in EditDoc::InsertText1" );
+    assert(aPaM.GetNode());
 
     aPaM.GetNode()->Insert( rStr, aPaM.GetIndex() );
     aPaM.GetNode()->ExpandAttribs( aPaM.GetIndex(), rStr.getLength(), GetItemPool() );
@@ -2324,7 +2324,7 @@ EditPaM EditDoc::InsertText( EditPaM aPaM, const OUString& rStr )
 
 EditPaM EditDoc::InsertParaBreak( EditPaM aPaM, bool bKeepEndingAttribs )
 {
-    DBG_ASSERT( aPaM.GetNode(), "Blinder PaM in EditDoc::InsertParaBreak" );
+    assert(aPaM.GetNode());
     ContentNode* pCurNode = aPaM.GetNode();
     sal_Int32 nPos = GetPos( pCurNode );
     OUString aStr = aPaM.GetNode()->Copy( aPaM.GetIndex() );
@@ -2366,14 +2366,14 @@ EditPaM EditDoc::InsertParaBreak( EditPaM aPaM, bool bKeepEndingAttribs )
 
 EditPaM EditDoc::InsertFeature( EditPaM aPaM, const SfxPoolItem& rItem  )
 {
-    DBG_ASSERT( aPaM.GetNode(), "Blinder PaM in EditDoc::InsertFeature" );
+    assert(aPaM.GetNode());
 
     aPaM.GetNode()->Insert( OUString(CH_FEATURE), aPaM.GetIndex() );
     aPaM.GetNode()->ExpandAttribs( aPaM.GetIndex(), 1, GetItemPool() );
 
     // Create a feature-attribute for the feature...
     EditCharAttrib* pAttrib = MakeCharAttrib( GetItemPool(), rItem, aPaM.GetIndex(), aPaM.GetIndex()+1 );
-    DBG_ASSERT( pAttrib, "Why can not the feature be created?" );
+    assert(pAttrib);
     aPaM.GetNode()->GetCharAttribs().InsertAttrib( pAttrib );
 
     SetModified( true );
@@ -2412,7 +2412,7 @@ void EditDoc::RemoveChars( EditPaM aPaM, sal_Int32 nChars )
 
 void EditDoc::InsertAttribInSelection( ContentNode* pNode, sal_Int32 nStart, sal_Int32 nEnd, const SfxPoolItem& rPoolItem )
 {
-    DBG_ASSERT( pNode, "What to do with the attribute?" );
+    assert(pNode);
     DBG_ASSERT( nEnd <= pNode->Len(), "InsertAttrib: Attribute to large!" );
 
     // for Optimization:
@@ -2457,7 +2457,7 @@ bool EditDoc::RemoveAttribs( ContentNode* pNode, sal_Int32 nStart, sal_Int32 nEn
 bool EditDoc::RemoveAttribs( ContentNode* pNode, sal_Int32 nStart, sal_Int32 nEnd, EditCharAttrib*& rpStarting, EditCharAttrib*& rpEnding, sal_uInt16 nWhich )
 {
 
-    DBG_ASSERT( pNode, "What to do with the attribute?" );
+    assert(pNode);
     DBG_ASSERT( nEnd <= pNode->Len(), "InsertAttrib: Attribute to large!" );
 
     // This ends at the beginning of the selection => can be expanded
@@ -2576,7 +2576,7 @@ void EditDoc::InsertAttrib( const SfxPoolItem& rPoolItem, ContentNode* pNode, sa
     // This method no longer checks whether a corresponding attribute already
     // exists at this place!
     EditCharAttrib* pAttrib = MakeCharAttrib( GetItemPool(), rPoolItem, nStart, nEnd );
-    DBG_ASSERT( pAttrib, "MakeCharAttrib failed!" );
+    assert(pAttrib);
     pNode->GetCharAttribs().InsertAttrib( pAttrib );
 
     SetModified( true );
@@ -2627,7 +2627,7 @@ void EditDoc::InsertAttrib( ContentNode* pNode, sal_Int32 nStart, sal_Int32 nEnd
 
 void EditDoc::FindAttribs( ContentNode* pNode, sal_Int32 nStartPos, sal_Int32 nEndPos, SfxItemSet& rCurSet )
 {
-    DBG_ASSERT( pNode, "Where to search?" );
+    assert(pNode);
     DBG_ASSERT( nStartPos <= nEndPos, "Invalid region!" );
 
     sal_uInt16 nAttr = 0;
@@ -2896,7 +2896,7 @@ EditCharAttrib* CharAttribList::FindAttrib( sal_uInt16 nWhich, sal_Int32 nPos )
 
 const EditCharAttrib* CharAttribList::FindNextAttrib( sal_uInt16 nWhich, sal_Int32 nFromPos ) const
 {
-    DBG_ASSERT( nWhich, "FindNextAttrib: Which?" );
+    assert(nWhich);
     AttribsType::const_iterator it = aAttribs.begin(), itEnd = aAttribs.end();
     for (; it != itEnd; ++it)
     {
