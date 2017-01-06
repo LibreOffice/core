@@ -1211,18 +1211,6 @@ public:
                                tools::rgb2hsv(BColor(.5,.25,.25)) == BColor(0,.5,.5));
     }
 
-    void ciexyzTest()
-    {
-        tools::rgb2ciexyz(maWhite);
-        tools::rgb2ciexyz(maBlack);
-        tools::rgb2ciexyz(maRed);
-        tools::rgb2ciexyz(maGreen);
-        tools::rgb2ciexyz(maBlue);
-        tools::rgb2ciexyz(maYellow);
-        tools::rgb2ciexyz(maMagenta);
-        tools::rgb2ciexyz(maCyan);
-    }
-
     // Change the following lines only, if you add, remove or rename
     // member functions of the current class,
     // because these macros are need by auto register mechanism.
@@ -1230,7 +1218,6 @@ public:
     CPPUNIT_TEST_SUITE(bcolor);
     CPPUNIT_TEST(hslTest);
     CPPUNIT_TEST(hsvTest);
-    CPPUNIT_TEST(ciexyzTest);
     CPPUNIT_TEST_SUITE_END();
 }; // class b2dvector
 
