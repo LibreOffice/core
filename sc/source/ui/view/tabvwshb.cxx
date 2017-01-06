@@ -62,6 +62,7 @@
 
 #include <tools/urlobj.hxx>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
+#include <comphelper/lok.hxx>
 
 using namespace com::sun::star;
 
@@ -521,6 +522,33 @@ void ScTabViewShell::ExecuteUndo(SfxRequest& rReq)
                 const SfxPoolItem* pItem;
                 if ( pReqArgs && pReqArgs->GetItemState( nSlot, true, &pItem ) == SfxItemState::SET )
                     nCount = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
+
+                // Repair mode: allow undo/redo of all undo actions, even if access would
+                // be limited based on the view shell ID.
+                bool bRepair = false;
+                if (pReqArgs && pReqArgs->GetItemState(SID_REPAIRPACKAGE, false, &pItem) == SfxItemState::SET)
+                    bRepair = static_cast<const SfxBoolItem*>(pItem)->GetValue();
+
+                if (comphelper::LibreOfficeKit::isActive() && !bRepair)
+                {
+                    SfxUndoAction* pAction = nullptr;
+                    if (bIsUndo)
+                    {
+                        if (pUndoManager->GetUndoActionCount() != 0)
+                            pAction = pUndoManager->GetUndoAction();
+                    }
+                    else
+                    {
+                        if (pUndoManager->GetRedoActionCount() != 0)
+                            pAction = pUndoManager->GetRedoAction();
+                    }
+                    if (pAction)
+                    {
+                        ViewShellId nViewShellId = GetViewShellId();
+                        if (pAction->GetViewShellId() != nViewShellId)
+                            return;
+                    }
+                }
 
                 // lock paint for more than one cell undo action (not for editing within a cell)
                 bool bLockPaint = ( nCount > 1 && pUndoManager == GetUndoManager() );
