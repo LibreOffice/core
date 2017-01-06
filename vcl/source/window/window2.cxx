@@ -371,7 +371,11 @@ void Window::EndTracking( TrackingEventFlags nFlags )
                                    mpWindowImpl->mpFrameData->mnMouseCode,
                                    mpWindowImpl->mpFrameData->mnMouseCode );
             TrackingEvent   aTEvt( aMEvt, nFlags | TrackingEventFlags::End );
-            Tracking( aTEvt );
+            // CompatTracking effectively
+            if (!mpWindowImpl || mpWindowImpl->mbInDispose)
+                return Window::Tracking( aTEvt );
+            else
+                return Tracking( aTEvt );
         }
     }
 }
