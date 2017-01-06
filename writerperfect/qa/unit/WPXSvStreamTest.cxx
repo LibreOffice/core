@@ -197,7 +197,7 @@ void WPXSvStreamTest::testSeekSet()
     CPPUNIT_ASSERT(!pInput->isEnd());
 
     CPPUNIT_ASSERT_EQUAL(0, pInput->seek(nLen, RVNG_SEEK_SET));
-    CPPUNIT_ASSERT(nLen == pInput->tell());
+    CPPUNIT_ASSERT_EQUAL(pInput->tell(), nLen);
     CPPUNIT_ASSERT(pInput->isEnd());
 
     // go back to the beginning
@@ -212,7 +212,7 @@ void WPXSvStreamTest::testSeekSet()
     CPPUNIT_ASSERT(!pInput->isEnd());
 
     CPPUNIT_ASSERT(0 != pInput->seek(nLen + 1, RVNG_SEEK_SET));
-    CPPUNIT_ASSERT(nLen == pInput->tell());
+    CPPUNIT_ASSERT_EQUAL(pInput->tell(), nLen);
     CPPUNIT_ASSERT(pInput->isEnd());
 }
 
@@ -249,7 +249,7 @@ void WPXSvStreamTest::testSeekCur()
     CPPUNIT_ASSERT(!pInput->isEnd());
 
     CPPUNIT_ASSERT(0 != pInput->seek(nLen + 1, RVNG_SEEK_CUR));
-    CPPUNIT_ASSERT(nLen == pInput->tell());
+    CPPUNIT_ASSERT_EQUAL(pInput->tell(), nLen);
     CPPUNIT_ASSERT(pInput->isEnd());
 }
 
@@ -264,11 +264,11 @@ void WPXSvStreamTest::testSeekEnd()
 
     // valid seeks
     CPPUNIT_ASSERT_EQUAL(0, pInput->seek(0, RVNG_SEEK_END));
-    CPPUNIT_ASSERT(nLen == pInput->tell());
+    CPPUNIT_ASSERT_EQUAL(pInput->tell(), nLen);
     CPPUNIT_ASSERT(pInput->isEnd());
 
     CPPUNIT_ASSERT_EQUAL(0, pInput->seek(-1, RVNG_SEEK_END));
-    CPPUNIT_ASSERT((nLen - 1) == pInput->tell());
+    CPPUNIT_ASSERT_EQUAL(pInput->tell(), (nLen - 1));
     CPPUNIT_ASSERT(!pInput->isEnd());
 
     CPPUNIT_ASSERT_EQUAL(0, pInput->seek(-nLen, RVNG_SEEK_END));
@@ -281,7 +281,7 @@ void WPXSvStreamTest::testSeekEnd()
 
     // invalid seeks
     CPPUNIT_ASSERT(0 != pInput->seek(1, RVNG_SEEK_END));
-    CPPUNIT_ASSERT(nLen == pInput->tell());
+    CPPUNIT_ASSERT_EQUAL(pInput->tell(), nLen);
     CPPUNIT_ASSERT(pInput->isEnd());
 
     CPPUNIT_ASSERT(0 != pInput->seek(-nLen - 1, RVNG_SEEK_END));
@@ -297,7 +297,7 @@ void WPXSvStreamTest::testStructured()
         assert(bool(pInput));
 
         CPPUNIT_ASSERT(pInput->isStructured());
-        CPPUNIT_ASSERT(2 == pInput->subStreamCount());
+        CPPUNIT_ASSERT_EQUAL(static_cast<unsigned>(2), pInput->subStreamCount());
         lcl_testSubStreams(pInput);
 
         // check for existing substream
@@ -318,7 +318,7 @@ void WPXSvStreamTest::testStructured()
         assert(bool(pInput));
 
         CPPUNIT_ASSERT(pInput->isStructured());
-        CPPUNIT_ASSERT(9 == pInput->subStreamCount());
+        CPPUNIT_ASSERT_EQUAL(static_cast<unsigned>(9), pInput->subStreamCount());
         lcl_testSubStreams(pInput);
 
         // check for existing substream
@@ -338,11 +338,11 @@ void WPXSvStreamTest::testStructured()
         const shared_ptr<RVNGInputStream> pInput(lcl_createStream());
 
         CPPUNIT_ASSERT(!pInput->isStructured());
-        CPPUNIT_ASSERT(0 == pInput->subStreamCount());
+        CPPUNIT_ASSERT_EQUAL(static_cast<unsigned>(0), pInput->subStreamCount());
         CPPUNIT_ASSERT(!pInput->existsSubStream("foo"));
-        CPPUNIT_ASSERT(nullptr == pInput->getSubStreamByName("foo"));
-        CPPUNIT_ASSERT(nullptr == pInput->getSubStreamById(42));
-        CPPUNIT_ASSERT(nullptr == pInput->subStreamName(42));
+        CPPUNIT_ASSERT(!pInput->getSubStreamByName("foo"));
+        CPPUNIT_ASSERT(!pInput->getSubStreamById(42));
+        CPPUNIT_ASSERT(!pInput->subStreamName(42));
     }
 }
 

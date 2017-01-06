@@ -78,13 +78,13 @@ void Test::testAutoStylePool()
     // not that interesting but worth checking
     bool bHack = (getenv("LIBO_ONEWAY_STABLE_ODF_EXPORT") != nullptr);
     if (bHack)
-        CPPUNIT_ASSERT_MESSAGE( "style / naming changed", aName == "Bob" );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "style / naming changed", OUString("Bob"), aName );
     else
-        CPPUNIT_ASSERT_MESSAGE( "style / naming changed", aName == "Bob1" );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "style / naming changed", OUString("Bob1"), aName );
 
     // find ourselves again:
     OUString aSameName = xPool->Find( XML_STYLE_FAMILY_TEXT_PARAGRAPH, "", aProperties );
-    CPPUNIT_ASSERT_MESSAGE( "same style not found", aSameName == aName );
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "same style not found", aName, aSameName );
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
