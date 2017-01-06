@@ -135,6 +135,7 @@ public:
     void testTdf103477();
     void testTdf104445();
     void testTdf105150();
+    void testTdf105150PPT();
 
     CPPUNIT_TEST_SUITE(SdImportTest);
 
@@ -194,6 +195,7 @@ public:
     CPPUNIT_TEST(testTdf103477);
     CPPUNIT_TEST(testTdf104445);
     CPPUNIT_TEST(testTdf105150);
+    CPPUNIT_TEST(testTdf105150PPT);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -1651,6 +1653,18 @@ void SdImportTest::testTdf105150()
     auto& rFillStyleItem = dynamic_cast<const XFillStyleItem&>(pObj->GetMergedItem(XATTR_FILLSTYLE));
     // This was drawing::FillStyle_NONE, <p:sp useBgFill="1"> was ignored when
     // the slide didn't have an explicit background fill.
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, rFillStyleItem.GetValue());
+    xDocShRef->DoClose();
+}
+
+void SdImportTest::testTdf105150PPT()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/ppt/tdf105150.ppt"), PPT);
+    const SdrPage* pPage = GetPage(1, xDocShRef);
+    const SdrObject* pObj = pPage->GetObj(1);
+    // This was drawing::FillStyle_NONE, the shape's mso_fillBackground was
+    // ignored when the slide didn't have an explicit background fill.
+    auto& rFillStyleItem = dynamic_cast<const XFillStyleItem&>(pObj->GetMergedItem(XATTR_FILLSTYLE));
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, rFillStyleItem.GetValue());
     xDocShRef->DoClose();
 }

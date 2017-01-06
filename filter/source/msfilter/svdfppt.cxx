@@ -2898,6 +2898,27 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
                                 break;
                         }
 
+                        // Handle shapes where the fill matches the background
+                        // fill (mso_fillBackground).
+                        if (rSlidePersist.ePageKind == PPT_SLIDEPAGE)
+                        {
+                            if (!aProcessData.aBackgroundColoredObjects.empty())
+                            {
+                                if (!rSlidePersist.pBObj)
+                                {
+                                    for (auto pObject : aProcessData.aBackgroundColoredObjects)
+                                    {
+                                        // The shape wants a background, but the slide doesn't have
+                                        // one: default to white.
+                                        SfxItemSet aNewSet(*pObject->GetMergedItemSet().GetPool());
+                                        aNewSet.Put(XFillStyleItem(css::drawing::FillStyle_SOLID));
+                                        aNewSet.Put(XFillColorItem(OUString(), Color(COL_WHITE)));
+                                        pObject->SetMergedItemSet(aNewSet);
+                                    }
+                                }
+                            }
+                        }
+
                         if ( rSlidePersist.pBObj )
                         {
                             // #i99386# transfer the attributes from the temporary BackgroundObject
