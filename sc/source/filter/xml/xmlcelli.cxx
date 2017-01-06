@@ -1357,11 +1357,22 @@ void ScXMLTableRowCellContext::PutFormulaCell( const ScAddress& rCellPos )
         }
         else
         {
-            OUString aFormulaNmsp = maFormula->second;
-            if( eGrammar != formula::FormulaGrammar::GRAM_EXTERNAL )
-                aFormulaNmsp.clear();
-            pCode->AssignXMLString( aText, aFormulaNmsp );
-            rDoc.getDoc().IncXMLImportedFormulaCount( aText.getLength() );
+            // 5.2 and earlier wrote broken "Err:xxx" as formula to designate
+            // an error formula cell.
+            if (aText.startsWithIgnoreAsciiCase("Err:") && aText.getLength() <= 9 &&
+                    ((nError =
+                      GetScImport().GetFormulaErrorConstant( "#ERR" + aText.copy(4) + "!")) != FormulaError::NONE))
+            {
+                pCode->SetCodeError(nError);
+            }
+            else
+            {
+                OUString aFormulaNmsp = maFormula->second;
+                if( eGrammar != formula::FormulaGrammar::GRAM_EXTERNAL )
+                    aFormulaNmsp.clear();
+                pCode->AssignXMLString( aText, aFormulaNmsp );
+                rDoc.getDoc().IncXMLImportedFormulaCount( aText.getLength() );
+            }
         }
 
         ScFormulaCell* pNewCell = new ScFormulaCell(pDoc, rCellPos, pCode, eGrammar, MM_NONE);
