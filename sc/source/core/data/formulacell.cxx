@@ -1355,7 +1355,7 @@ void ScFormulaCell::CompileXML( sc::CompileFormulaContext& rCxt, ScProgress& rPr
         {
             if ( !pCode->GetLen() )
             {
-                if ( aFormula[0] == '=' )
+                if ( !aFormula.isEmpty() && aFormula[0] == '=' )
                     pCode->AddBad( aFormula.copy( 1 ) );
                 else
                     pCode->AddBad( aFormula );
