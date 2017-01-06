@@ -857,7 +857,7 @@ static OUString lcl_serializeForDisplay( const Reference<XXPathObject>& xResult 
     switch( xResult->getObjectType() )
     {
     case XPathObjectType_XPATH_BOOLEAN:
-        return xResult->getBoolean() ? OUString("true") : OUString("false");
+        return OUString::boolean(xResult->getBoolean());
 
     case XPathObjectType_XPATH_STRING:
         return "\"" + xResult->getString() + "\"";
