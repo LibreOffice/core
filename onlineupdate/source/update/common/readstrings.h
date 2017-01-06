@@ -11,9 +11,9 @@
 
 #ifdef _WIN32
 # include <windows.h>
-  typedef WCHAR NS_tchar;
+typedef WCHAR NS_tchar;
 #else
-  typedef char NS_tchar;
+typedef char NS_tchar;
 #endif
 
 #ifndef NULL
@@ -22,8 +22,8 @@
 
 struct StringTable
 {
-  char title[MAX_TEXT_LEN];
-  char info[MAX_TEXT_LEN];
+    char title[MAX_TEXT_LEN];
+    char info[MAX_TEXT_LEN];
 };
 
 /**

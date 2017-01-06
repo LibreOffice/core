@@ -51,120 +51,120 @@ int32_t CompareVersions(const wchar_t* aStrA, const wchar_t* aStrB);
 
 struct Version
 {
-  explicit Version(const char* aVersionString)
-  {
-    versionContent = strdup(aVersionString);
-  }
+    explicit Version(const char* aVersionString)
+    {
+        versionContent = strdup(aVersionString);
+    }
 
-  const char* ReadContent() const
-  {
-    return versionContent;
-  }
+    const char* ReadContent() const
+    {
+        return versionContent;
+    }
 
-  ~Version()
-  {
-    free(versionContent);
-  }
+    ~Version()
+    {
+        free(versionContent);
+    }
 
-  bool operator<(const Version& aRhs) const
-  {
-    return CompareVersions(versionContent, aRhs.ReadContent()) == -1;
-  }
-  bool operator<=(const Version& aRhs) const
-  {
-    return CompareVersions(versionContent, aRhs.ReadContent()) < 1;
-  }
-  bool operator>(const Version& aRhs) const
-  {
-    return CompareVersions(versionContent, aRhs.ReadContent()) == 1;
-  }
-  bool operator>=(const Version& aRhs) const
-  {
-    return CompareVersions(versionContent, aRhs.ReadContent()) > -1;
-  }
-  bool operator==(const Version& aRhs) const
-  {
-    return CompareVersions(versionContent, aRhs.ReadContent()) == 0;
-  }
-  bool operator!=(const Version& aRhs) const
-  {
-    return CompareVersions(versionContent, aRhs.ReadContent()) != 0;
-  }
-  bool operator<(const char* aRhs) const
-  {
-    return CompareVersions(versionContent, aRhs) == -1;
-  }
-  bool operator<=(const char* aRhs) const
-  {
-    return CompareVersions(versionContent, aRhs) < 1;
-  }
-  bool operator>(const char* aRhs) const
-  {
-    return CompareVersions(versionContent, aRhs) == 1;
-  }
-  bool operator>=(const char* aRhs) const
-  {
-    return CompareVersions(versionContent, aRhs) > -1;
-  }
-  bool operator==(const char* aRhs) const
-  {
-    return CompareVersions(versionContent, aRhs) == 0;
-  }
-  bool operator!=(const char* aRhs) const
-  {
-    return CompareVersions(versionContent, aRhs) != 0;
-  }
+    bool operator<(const Version& aRhs) const
+    {
+        return CompareVersions(versionContent, aRhs.ReadContent()) == -1;
+    }
+    bool operator<=(const Version& aRhs) const
+    {
+        return CompareVersions(versionContent, aRhs.ReadContent()) < 1;
+    }
+    bool operator>(const Version& aRhs) const
+    {
+        return CompareVersions(versionContent, aRhs.ReadContent()) == 1;
+    }
+    bool operator>=(const Version& aRhs) const
+    {
+        return CompareVersions(versionContent, aRhs.ReadContent()) > -1;
+    }
+    bool operator==(const Version& aRhs) const
+    {
+        return CompareVersions(versionContent, aRhs.ReadContent()) == 0;
+    }
+    bool operator!=(const Version& aRhs) const
+    {
+        return CompareVersions(versionContent, aRhs.ReadContent()) != 0;
+    }
+    bool operator<(const char* aRhs) const
+    {
+        return CompareVersions(versionContent, aRhs) == -1;
+    }
+    bool operator<=(const char* aRhs) const
+    {
+        return CompareVersions(versionContent, aRhs) < 1;
+    }
+    bool operator>(const char* aRhs) const
+    {
+        return CompareVersions(versionContent, aRhs) == 1;
+    }
+    bool operator>=(const char* aRhs) const
+    {
+        return CompareVersions(versionContent, aRhs) > -1;
+    }
+    bool operator==(const char* aRhs) const
+    {
+        return CompareVersions(versionContent, aRhs) == 0;
+    }
+    bool operator!=(const char* aRhs) const
+    {
+        return CompareVersions(versionContent, aRhs) != 0;
+    }
 
 private:
-  char* versionContent;
+    char* versionContent;
 };
 
 #ifdef _WIN32
 struct VersionW
 {
-  explicit VersionW(const wchar_t* aVersionStringW)
-  {
-    versionContentW =
-      reinterpret_cast<wchar_t*>(wcsdup(aVersionStringW));
-  }
+    explicit VersionW(const wchar_t* aVersionStringW)
+    {
+        versionContentW =
+            reinterpret_cast<wchar_t*>(wcsdup(aVersionStringW));
+    }
 
-  const wchar_t* ReadContentW() const
-  {
-    return versionContentW;
-  }
+    const wchar_t* ReadContentW() const
+    {
+        return versionContentW;
+    }
 
-  ~VersionW()
-  {
-    free(versionContentW);
-  }
+    ~VersionW()
+    {
+        free(versionContentW);
+    }
 
-  bool operator<(const VersionW& aRhs) const
-  {
-    return CompareVersions(versionContentW, aRhs.ReadContentW()) == -1;
-  }
-  bool operator<=(const VersionW& aRhs) const
-  {
-    return CompareVersions(versionContentW, aRhs.ReadContentW()) < 1;
-  }
-  bool operator>(const VersionW& aRhs) const
-  {
-    return CompareVersions(versionContentW, aRhs.ReadContentW()) == 1;
-  }
-  bool operator>=(const VersionW& aRhs) const
-  {
-    return CompareVersions(versionContentW, aRhs.ReadContentW()) > -1;
-  }
-  bool operator==(const VersionW& aRhs) const
-  {
-    return CompareVersions(versionContentW, aRhs.ReadContentW()) == 0;
-  }
-  bool operator!=(const VersionW& aRhs) const
-  {
-    return CompareVersions(versionContentW, aRhs.ReadContentW()) != 0;
-  }
+    bool operator<(const VersionW& aRhs) const
+    {
+        return CompareVersions(versionContentW, aRhs.ReadContentW()) == -1;
+    }
+    bool operator<=(const VersionW& aRhs) const
+    {
+        return CompareVersions(versionContentW, aRhs.ReadContentW()) < 1;
+    }
+    bool operator>(const VersionW& aRhs) const
+    {
+        return CompareVersions(versionContentW, aRhs.ReadContentW()) == 1;
+    }
+    bool operator>=(const VersionW& aRhs) const
+    {
+        return CompareVersions(versionContentW, aRhs.ReadContentW()) > -1;
+    }
+    bool operator==(const VersionW& aRhs) const
+    {
+        return CompareVersions(versionContentW, aRhs.ReadContentW()) == 0;
+    }
+    bool operator!=(const VersionW& aRhs) const
+    {
+        return CompareVersions(versionContentW, aRhs.ReadContentW()) != 0;
+    }
 
 private:
-  wchar_t* versionContentW;
+    wchar_t* versionContentW;
 };
 #endif
 

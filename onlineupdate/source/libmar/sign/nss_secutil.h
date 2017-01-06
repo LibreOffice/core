@@ -16,14 +16,16 @@
 #include "key.h"
 #include <stdint.h>
 
-typedef struct {
-  enum {
-    PW_NONE = 0,
-    PW_FROMFILE = 1,
-    PW_PLAINTEXT = 2,
-    PW_EXTERNAL = 3
-  } source;
-  char *data;
+typedef struct
+{
+    enum
+    {
+        PW_NONE = 0,
+        PW_FROMFILE = 1,
+        PW_PLAINTEXT = 2,
+        PW_EXTERNAL = 3
+    } source;
+    char *data;
 } secuPWData;
 
 #if( defined(_WINDOWS) && !defined(_WIN32_WCE))

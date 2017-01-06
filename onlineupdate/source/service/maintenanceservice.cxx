@@ -33,92 +33,106 @@ BOOL GetLogDirectoryPath(WCHAR *path);
 int
 wmain(int argc, WCHAR **argv)
 {
-  if (argc < 2)
-  {
-    LOG_WARN(("missing mandatory command line argument"));
-    return 1;
-  }
-  // If command-line parameter is "install", install the service
-  // or upgrade if already installed
-  // If command line parameter is "forceinstall", install the service
-  // even if it is older than what is already installed.
-  // If command-line parameter is "upgrade", upgrade the service
-  // but do not install it if it is not already installed.
-  // If command line parameter is "uninstall", uninstall the service.
-  // Otherwise, the service is probably being started by the SCM.
-  bool forceInstall = !lstrcmpi(argv[1], L"forceinstall");
-  if (!lstrcmpi(argv[1], L"install") || forceInstall) {
-    WCHAR updatePath[MAX_PATH + 1];
-    if (GetLogDirectoryPath(updatePath)) {
-      LogInit(updatePath, L"maintenanceservice-install.log");
+    if (argc < 2)
+    {
+        LOG_WARN(("missing mandatory command line argument"));
+        return 1;
+    }
+    // If command-line parameter is "install", install the service
+    // or upgrade if already installed
+    // If command line parameter is "forceinstall", install the service
+    // even if it is older than what is already installed.
+    // If command-line parameter is "upgrade", upgrade the service
+    // but do not install it if it is not already installed.
+    // If command line parameter is "uninstall", uninstall the service.
+    // Otherwise, the service is probably being started by the SCM.
+    bool forceInstall = !lstrcmpi(argv[1], L"forceinstall");
+    if (!lstrcmpi(argv[1], L"install") || forceInstall)
+    {
+        WCHAR updatePath[MAX_PATH + 1];
+        if (GetLogDirectoryPath(updatePath))
+        {
+            LogInit(updatePath, L"maintenanceservice-install.log");
+        }
+
+        SvcInstallAction action = InstallSvc;
+        if (forceInstall)
+        {
+            action = ForceInstallSvc;
+            LOG(("Installing service with force specified..."));
+        }
+        else
+        {
+            LOG(("Installing service..."));
+        }
+
+        bool ret = SvcInstall(action);
+        if (!ret)
+        {
+            LOG_WARN(("Could not install service.  (%d)", GetLastError()));
+            LogFinish();
+            return 1;
+        }
+
+        LOG(("The service was installed successfully"));
+        LogFinish();
+        return 0;
     }
 
-    SvcInstallAction action = InstallSvc;
-    if (forceInstall) {
-      action = ForceInstallSvc;
-      LOG(("Installing service with force specified..."));
-    } else {
-      LOG(("Installing service..."));
+    if (!lstrcmpi(argv[1], L"upgrade"))
+    {
+        WCHAR updatePath[MAX_PATH + 1];
+        if (GetLogDirectoryPath(updatePath))
+        {
+            LogInit(updatePath, L"maintenanceservice-install.log");
+        }
+
+        LOG(("Upgrading service if installed..."));
+        if (!SvcInstall(UpgradeSvc))
+        {
+            LOG_WARN(("Could not upgrade service.  (%d)", GetLastError()));
+            LogFinish();
+            return 1;
+        }
+
+        LOG(("The service was upgraded successfully"));
+        LogFinish();
+        return 0;
     }
 
-    bool ret = SvcInstall(action);
-    if (!ret) {
-      LOG_WARN(("Could not install service.  (%d)", GetLastError()));
-      LogFinish();
-      return 1;
+    if (!lstrcmpi(argv[1], L"uninstall"))
+    {
+        WCHAR updatePath[MAX_PATH + 1];
+        if (GetLogDirectoryPath(updatePath))
+        {
+            LogInit(updatePath, L"maintenanceservice-uninstall.log");
+        }
+        LOG(("Uninstalling service..."));
+        if (!SvcUninstall())
+        {
+            LOG_WARN(("Could not uninstall service.  (%d)", GetLastError()));
+            LogFinish();
+            return 1;
+        }
+        LOG(("The service was uninstalled successfully"));
+        LogFinish();
+        return 0;
     }
 
-    LOG(("The service was installed successfully"));
-    LogFinish();
+    SERVICE_TABLE_ENTRYW DispatchTable[] =
+    {
+        { SVC_NAME, (LPSERVICE_MAIN_FUNCTIONW) SvcMain },
+        { nullptr, nullptr }
+    };
+
+    // This call returns when the service has stopped.
+    // The process should simply terminate when the call returns.
+    if (!StartServiceCtrlDispatcherW(DispatchTable))
+    {
+        LOG_WARN(("StartServiceCtrlDispatcher failed.  (%d)", GetLastError()));
+    }
+
     return 0;
-  }
-
-  if (!lstrcmpi(argv[1], L"upgrade")) {
-    WCHAR updatePath[MAX_PATH + 1];
-    if (GetLogDirectoryPath(updatePath)) {
-      LogInit(updatePath, L"maintenanceservice-install.log");
-    }
-
-    LOG(("Upgrading service if installed..."));
-    if (!SvcInstall(UpgradeSvc)) {
-      LOG_WARN(("Could not upgrade service.  (%d)", GetLastError()));
-      LogFinish();
-      return 1;
-    }
-
-    LOG(("The service was upgraded successfully"));
-    LogFinish();
-    return 0;
-  }
-
-  if (!lstrcmpi(argv[1], L"uninstall")) {
-    WCHAR updatePath[MAX_PATH + 1];
-    if (GetLogDirectoryPath(updatePath)) {
-      LogInit(updatePath, L"maintenanceservice-uninstall.log");
-    }
-    LOG(("Uninstalling service..."));
-    if (!SvcUninstall()) {
-      LOG_WARN(("Could not uninstall service.  (%d)", GetLastError()));
-      LogFinish();
-      return 1;
-    }
-    LOG(("The service was uninstalled successfully"));
-    LogFinish();
-    return 0;
-  }
-
-  SERVICE_TABLE_ENTRYW DispatchTable[] = {
-    { SVC_NAME, (LPSERVICE_MAIN_FUNCTIONW) SvcMain },
-    { nullptr, nullptr }
-  };
-
-  // This call returns when the service has stopped.
-  // The process should simply terminate when the call returns.
-  if (!StartServiceCtrlDispatcherW(DispatchTable)) {
-    LOG_WARN(("StartServiceCtrlDispatcher failed.  (%d)", GetLastError()));
-  }
-
-  return 0;
 }
 
 /**
@@ -130,24 +144,27 @@ wmain(int argc, WCHAR **argv)
 BOOL
 GetLogDirectoryPath(WCHAR *path)
 {
-  HRESULT hr = SHGetFolderPathW(nullptr, CSIDL_COMMON_APPDATA, nullptr,
-    SHGFP_TYPE_CURRENT, path);
-  if (FAILED(hr)) {
-    return FALSE;
-  }
+    HRESULT hr = SHGetFolderPathW(nullptr, CSIDL_COMMON_APPDATA, nullptr,
+                                  SHGFP_TYPE_CURRENT, path);
+    if (FAILED(hr))
+    {
+        return FALSE;
+    }
 
-  if (!PathAppendSafe(path, L"Mozilla")) {
-    return FALSE;
-  }
-  // The directory should already be created from the installer, but
-  // just to be safe in case someone deletes.
-  CreateDirectoryW(path, nullptr);
+    if (!PathAppendSafe(path, L"Mozilla"))
+    {
+        return FALSE;
+    }
+    // The directory should already be created from the installer, but
+    // just to be safe in case someone deletes.
+    CreateDirectoryW(path, nullptr);
 
-  if (!PathAppendSafe(path, L"logs")) {
-    return FALSE;
-  }
-  CreateDirectoryW(path, nullptr);
-  return TRUE;
+    if (!PathAppendSafe(path, L"logs"))
+    {
+        return FALSE;
+    }
+    CreateDirectoryW(path, nullptr);
+    return TRUE;
 }
 
 /**
@@ -161,16 +178,19 @@ GetLogDirectoryPath(WCHAR *path)
 BOOL
 GetBackupLogPath(LPWSTR path, LPCWSTR basePath, int logNumber)
 {
-  WCHAR logName[64] = { L'\0' };
-  wcsncpy(path, basePath, sizeof(logName) / sizeof(logName[0]) - 1);
-  if (logNumber <= 0) {
-    swprintf(logName, sizeof(logName) / sizeof(logName[0]),
-             L"maintenanceservice.log");
-  } else {
-    swprintf(logName, sizeof(logName) / sizeof(logName[0]),
-             L"maintenanceservice-%d.log", logNumber);
-  }
-  return PathAppendSafe(path, logName);
+    WCHAR logName[64] = { L'\0' };
+    wcsncpy(path, basePath, sizeof(logName) / sizeof(logName[0]) - 1);
+    if (logNumber <= 0)
+    {
+        swprintf(logName, sizeof(logName) / sizeof(logName[0]),
+                 L"maintenanceservice.log");
+    }
+    else
+    {
+        swprintf(logName, sizeof(logName) / sizeof(logName[0]),
+                 L"maintenanceservice-%d.log", logNumber);
+    }
+    return PathAppendSafe(path, logName);
 }
 
 /**
@@ -187,21 +207,25 @@ GetBackupLogPath(LPWSTR path, LPCWSTR basePath, int logNumber)
 void
 BackupOldLogs(LPCWSTR basePath, int numLogsToKeep)
 {
-  WCHAR oldPath[MAX_PATH + 1];
-  WCHAR newPath[MAX_PATH + 1];
-  for (int i = numLogsToKeep; i >= 1; i--) {
-    if (!GetBackupLogPath(oldPath, basePath, i -1)) {
-      continue;
-    }
+    WCHAR oldPath[MAX_PATH + 1];
+    WCHAR newPath[MAX_PATH + 1];
+    for (int i = numLogsToKeep; i >= 1; i--)
+    {
+        if (!GetBackupLogPath(oldPath, basePath, i -1))
+        {
+            continue;
+        }
 
-    if (!GetBackupLogPath(newPath, basePath, i)) {
-      continue;
-    }
+        if (!GetBackupLogPath(newPath, basePath, i))
+        {
+            continue;
+        }
 
-    if (!MoveFileExW(oldPath, newPath, MOVEFILE_REPLACE_EXISTING)) {
-      continue;
+        if (!MoveFileExW(oldPath, newPath, MOVEFILE_REPLACE_EXISTING))
+        {
+            continue;
+        }
     }
-  }
 }
 
 /**
@@ -221,20 +245,21 @@ BackupOldLogs(LPCWSTR basePath, int numLogsToKeep)
 DWORD WINAPI
 EnsureProcessTerminatedThread(LPVOID)
 {
-  Sleep(5000);
-  exit(0);
+    Sleep(5000);
+    exit(0);
 }
 
 void
 StartTerminationThread()
 {
-  // If the process does not self terminate like it should, this thread
-  // will terminate the process after 5 seconds.
-  HANDLE thread = CreateThread(nullptr, 0, EnsureProcessTerminatedThread,
-                               nullptr, 0, nullptr);
-  if (thread) {
-    CloseHandle(thread);
-  }
+    // If the process does not self terminate like it should, this thread
+    // will terminate the process after 5 seconds.
+    HANDLE thread = CreateThread(nullptr, 0, EnsureProcessTerminatedThread,
+                                 nullptr, 0, nullptr);
+    if (thread)
+    {
+        CloseHandle(thread);
+    }
 }
 
 /**
@@ -243,61 +268,65 @@ StartTerminationThread()
 void WINAPI
 SvcMain(DWORD argc, LPWSTR *argv)
 {
-  // Setup logging, and backup the old logs
-  WCHAR updatePath[MAX_PATH + 1];
-  if (GetLogDirectoryPath(updatePath)) {
-    BackupOldLogs(updatePath, LOGS_TO_KEEP);
-    LogInit(updatePath, L"maintenanceservice.log");
-  }
+    // Setup logging, and backup the old logs
+    WCHAR updatePath[MAX_PATH + 1];
+    if (GetLogDirectoryPath(updatePath))
+    {
+        BackupOldLogs(updatePath, LOGS_TO_KEEP);
+        LogInit(updatePath, L"maintenanceservice.log");
+    }
 
-  // Disable every privilege we don't need. Processes started using
-  // CreateProcess will use the same token as this process.
-  UACHelper::DisablePrivileges(nullptr);
+    // Disable every privilege we don't need. Processes started using
+    // CreateProcess will use the same token as this process.
+    UACHelper::DisablePrivileges(nullptr);
 
-  // Register the handler function for the service
-  gSvcStatusHandle = RegisterServiceCtrlHandlerW(SVC_NAME, SvcCtrlHandler);
-  if (!gSvcStatusHandle) {
-    LOG_WARN(("RegisterServiceCtrlHandler failed.  (%d)", GetLastError()));
+    // Register the handler function for the service
+    gSvcStatusHandle = RegisterServiceCtrlHandlerW(SVC_NAME, SvcCtrlHandler);
+    if (!gSvcStatusHandle)
+    {
+        LOG_WARN(("RegisterServiceCtrlHandler failed.  (%d)", GetLastError()));
+        ExecuteServiceCommand(argc, argv);
+        LogFinish();
+        exit(1);
+    }
+
+    // These values will be re-used later in calls involving gSvcStatus
+    gSvcStatus.dwServiceType = SERVICE_WIN32_OWN_PROCESS;
+    gSvcStatus.dwServiceSpecificExitCode = 0;
+
+    // Report initial status to the SCM
+    ReportSvcStatus(SERVICE_START_PENDING, NO_ERROR, 3000);
+
+    // This event will be used to tell the SvcCtrlHandler when the work is
+    // done for when a stop comamnd is manually issued.
+    gWorkDoneEvent = CreateEvent(nullptr, TRUE, FALSE, nullptr);
+    if (!gWorkDoneEvent)
+    {
+        ReportSvcStatus(SERVICE_STOPPED, 1, 0);
+        StartTerminationThread();
+        return;
+    }
+
+    // Initialization complete and we're about to start working on
+    // the actual command.  Report the service state as running to the SCM.
+    ReportSvcStatus(SERVICE_RUNNING, NO_ERROR, 0);
+
+    // The service command was executed, stop logging and set an event
+    // to indicate the work is done in case someone is waiting on a
+    // service stop operation.
     ExecuteServiceCommand(argc, argv);
     LogFinish();
-    exit(1);
-  }
 
-  // These values will be re-used later in calls involving gSvcStatus
-  gSvcStatus.dwServiceType = SERVICE_WIN32_OWN_PROCESS;
-  gSvcStatus.dwServiceSpecificExitCode = 0;
+    SetEvent(gWorkDoneEvent);
 
-  // Report initial status to the SCM
-  ReportSvcStatus(SERVICE_START_PENDING, NO_ERROR, 3000);
-
-  // This event will be used to tell the SvcCtrlHandler when the work is
-  // done for when a stop comamnd is manually issued.
-  gWorkDoneEvent = CreateEvent(nullptr, TRUE, FALSE, nullptr);
-  if (!gWorkDoneEvent) {
-    ReportSvcStatus(SERVICE_STOPPED, 1, 0);
-    StartTerminationThread();
-    return;
-  }
-
-  // Initialization complete and we're about to start working on
-  // the actual command.  Report the service state as running to the SCM.
-  ReportSvcStatus(SERVICE_RUNNING, NO_ERROR, 0);
-
-  // The service command was executed, stop logging and set an event
-  // to indicate the work is done in case someone is waiting on a
-  // service stop operation.
-  ExecuteServiceCommand(argc, argv);
-  LogFinish();
-
-  SetEvent(gWorkDoneEvent);
-
-  // If we aren't already in a stopping state then tell the SCM we're stopped
-  // now.  If we are already in a stopping state then the SERVICE_STOPPED state
-  // will be set by the SvcCtrlHandler.
-  if (!gServiceControlStopping) {
-    ReportSvcStatus(SERVICE_STOPPED, NO_ERROR, 0);
-    StartTerminationThread();
-  }
+    // If we aren't already in a stopping state then tell the SCM we're stopped
+    // now.  If we are already in a stopping state then the SERVICE_STOPPED state
+    // will be set by the SvcCtrlHandler.
+    if (!gServiceControlStopping)
+    {
+        ReportSvcStatus(SERVICE_STOPPED, NO_ERROR, 0);
+        StartTerminationThread();
+    }
 }
 
 /**
@@ -312,29 +341,35 @@ ReportSvcStatus(DWORD currentState,
                 DWORD exitCode,
                 DWORD waitHint)
 {
-  static DWORD dwCheckPoint = 1;
+    static DWORD dwCheckPoint = 1;
 
-  gSvcStatus.dwCurrentState = currentState;
-  gSvcStatus.dwWin32ExitCode = exitCode;
-  gSvcStatus.dwWaitHint = waitHint;
+    gSvcStatus.dwCurrentState = currentState;
+    gSvcStatus.dwWin32ExitCode = exitCode;
+    gSvcStatus.dwWaitHint = waitHint;
 
-  if (SERVICE_START_PENDING == currentState ||
-      SERVICE_STOP_PENDING == currentState) {
-    gSvcStatus.dwControlsAccepted = 0;
-  } else {
-    gSvcStatus.dwControlsAccepted = SERVICE_ACCEPT_STOP |
-                                    SERVICE_ACCEPT_SHUTDOWN;
-  }
+    if (SERVICE_START_PENDING == currentState ||
+            SERVICE_STOP_PENDING == currentState)
+    {
+        gSvcStatus.dwControlsAccepted = 0;
+    }
+    else
+    {
+        gSvcStatus.dwControlsAccepted = SERVICE_ACCEPT_STOP |
+                                        SERVICE_ACCEPT_SHUTDOWN;
+    }
 
-  if ((SERVICE_RUNNING == currentState) ||
-      (SERVICE_STOPPED == currentState)) {
-    gSvcStatus.dwCheckPoint = 0;
-  } else {
-    gSvcStatus.dwCheckPoint = dwCheckPoint++;
-  }
+    if ((SERVICE_RUNNING == currentState) ||
+            (SERVICE_STOPPED == currentState))
+    {
+        gSvcStatus.dwCheckPoint = 0;
+    }
+    else
+    {
+        gSvcStatus.dwCheckPoint = dwCheckPoint++;
+    }
 
-  // Report the status of the service to the SCM.
-  SetServiceStatus(gSvcStatusHandle, &gSvcStatus);
+    // Report the status of the service to the SCM.
+    SetServiceStatus(gSvcStatusHandle, &gSvcStatus);
 }
 
 /**
@@ -344,14 +379,16 @@ ReportSvcStatus(DWORD currentState,
 DWORD WINAPI
 StopServiceAndWaitForCommandThread(LPVOID)
 {
-  do {
-    ReportSvcStatus(SERVICE_STOP_PENDING, NO_ERROR, 1000);
-  } while(WaitForSingleObject(gWorkDoneEvent, 100) == WAIT_TIMEOUT);
-  CloseHandle(gWorkDoneEvent);
-  gWorkDoneEvent = nullptr;
-  ReportSvcStatus(SERVICE_STOPPED, NO_ERROR, 0);
-  StartTerminationThread();
-  return 0;
+    do
+    {
+        ReportSvcStatus(SERVICE_STOP_PENDING, NO_ERROR, 1000);
+    }
+    while (WaitForSingleObject(gWorkDoneEvent, 100) == WAIT_TIMEOUT);
+    CloseHandle(gWorkDoneEvent);
+    gWorkDoneEvent = nullptr;
+    ReportSvcStatus(SERVICE_STOPPED, NO_ERROR, 0);
+    StartTerminationThread();
+    return 0;
 }
 
 /**
@@ -361,35 +398,41 @@ StopServiceAndWaitForCommandThread(LPVOID)
 void WINAPI
 SvcCtrlHandler(DWORD dwCtrl)
 {
-  // After a SERVICE_CONTROL_STOP there should be no more commands sent to
-  // the SvcCtrlHandler.
-  if (gServiceControlStopping) {
-    return;
-  }
-
-  // Handle the requested control code.
-  switch(dwCtrl) {
-  case SERVICE_CONTROL_SHUTDOWN:
-  case SERVICE_CONTROL_STOP: {
-      gServiceControlStopping = true;
-      ReportSvcStatus(SERVICE_STOP_PENDING, NO_ERROR, 1000);
-
-      // The SvcCtrlHandler thread should not spend more than 30 seconds in
-      // shutdown so we spawn a new thread for stopping the service
-      HANDLE thread = CreateThread(nullptr, 0,
-                                   StopServiceAndWaitForCommandThread,
-                                   nullptr, 0, nullptr);
-      if (thread) {
-        CloseHandle(thread);
-      } else {
-        // Couldn't start the thread so just call the stop ourselves.
-        // If it happens to take longer than 30 seconds the caller will
-        // get an error.
-        StopServiceAndWaitForCommandThread(nullptr);
-      }
+    // After a SERVICE_CONTROL_STOP there should be no more commands sent to
+    // the SvcCtrlHandler.
+    if (gServiceControlStopping)
+    {
+        return;
     }
-    break;
-  default:
-    break;
-  }
+
+    // Handle the requested control code.
+    switch (dwCtrl)
+    {
+        case SERVICE_CONTROL_SHUTDOWN:
+        case SERVICE_CONTROL_STOP:
+        {
+            gServiceControlStopping = true;
+            ReportSvcStatus(SERVICE_STOP_PENDING, NO_ERROR, 1000);
+
+            // The SvcCtrlHandler thread should not spend more than 30 seconds in
+            // shutdown so we spawn a new thread for stopping the service
+            HANDLE thread = CreateThread(nullptr, 0,
+                                         StopServiceAndWaitForCommandThread,
+                                         nullptr, 0, nullptr);
+            if (thread)
+            {
+                CloseHandle(thread);
+            }
+            else
+            {
+                // Couldn't start the thread so just call the stop ourselves.
+                // If it happens to take longer than 30 seconds the caller will
+                // get an error.
+                StopServiceAndWaitForCommandThread(nullptr);
+            }
+        }
+        break;
+        default:
+            break;
+    }
 }
