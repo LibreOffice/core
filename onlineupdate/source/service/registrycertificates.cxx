@@ -55,115 +55,127 @@ struct AutoRegKey
 BOOL
 DoesBinaryMatchAllowedCertificates(LPCWSTR basePathForUpdate, LPCWSTR filePath)
 {
-  WCHAR maintenanceServiceKey[MAX_PATH + 1];
-  if (!CalculateRegistryPathFromFilePath(basePathForUpdate,
-                                         maintenanceServiceKey)) {
+    WCHAR maintenanceServiceKey[MAX_PATH + 1];
+    if (!CalculateRegistryPathFromFilePath(basePathForUpdate,
+                                           maintenanceServiceKey))
+    {
+        return FALSE;
+    }
+
+    // We use KEY_WOW64_64KEY to always force 64-bit view.
+    // The user may have both x86 and x64 applications installed
+    // which each register information.  We need a consistent place
+    // to put those certificate attributes in and hence why we always
+    // force the non redirected registry under Wow6432Node.
+    // This flag is ignored on 32bit systems.
+    HKEY baseKeyRaw;
+    LONG retCode = RegOpenKeyExW(HKEY_LOCAL_MACHINE,
+                                 maintenanceServiceKey, 0,
+                                 KEY_READ | KEY_WOW64_64KEY, &baseKeyRaw);
+    if (retCode != ERROR_SUCCESS)
+    {
+        LOG_WARN(("Could not open key.  (%d)", retCode));
+        // Our tests run with a different apply directory for each test.
+        // We use this registry key on our test slaves to store the
+        // allowed name/issuers.
+        retCode = RegOpenKeyExW(HKEY_LOCAL_MACHINE,
+                                TEST_ONLY_FALLBACK_KEY_PATH, 0,
+                                KEY_READ | KEY_WOW64_64KEY, &baseKeyRaw);
+        if (retCode != ERROR_SUCCESS)
+        {
+            LOG_WARN(("Could not open fallback key.  (%d)", retCode));
+            return FALSE;
+        }
+    }
+    AutoRegKey baseKey(baseKeyRaw);
+
+    // Get the number of subkeys.
+    DWORD subkeyCount = 0;
+    retCode = RegQueryInfoKeyW(baseKey.get(), nullptr, nullptr, nullptr, &subkeyCount,
+                               nullptr, nullptr, nullptr, nullptr, nullptr,
+                               nullptr, nullptr);
+    if (retCode != ERROR_SUCCESS)
+    {
+        LOG_WARN(("Could not query info key.  (%d)", retCode));
+        return FALSE;
+    }
+
+    // Enumerate the subkeys, each subkey represents an allowed certificate.
+    for (DWORD i = 0; i < subkeyCount; i++)
+    {
+        WCHAR subkeyBuffer[MAX_KEY_LENGTH];
+        DWORD subkeyBufferCount = MAX_KEY_LENGTH;
+        retCode = RegEnumKeyExW(baseKey.get(), i, subkeyBuffer,
+                                &subkeyBufferCount, nullptr,
+                                nullptr, nullptr, nullptr);
+        if (retCode != ERROR_SUCCESS)
+        {
+            LOG_WARN(("Could not enum certs.  (%d)", retCode));
+            return FALSE;
+        }
+
+        // Open the subkey for the current certificate
+        HKEY subKeyRaw;
+        retCode = RegOpenKeyExW(baseKey.get(),
+                                subkeyBuffer,
+                                0,
+                                KEY_READ | KEY_WOW64_64KEY,
+                                &subKeyRaw);
+        AutoRegKey subKey(subKeyRaw);
+        if (retCode != ERROR_SUCCESS)
+        {
+            LOG_WARN(("Could not open subkey.  (%d)", retCode));
+            continue; // Try the next subkey
+        }
+
+        const int MAX_CHAR_COUNT = 256;
+        DWORD valueBufSize = MAX_CHAR_COUNT * sizeof(WCHAR);
+        WCHAR name[MAX_CHAR_COUNT] = { L'\0' };
+        WCHAR issuer[MAX_CHAR_COUNT] = { L'\0' };
+
+        // Get the name from the registry
+        retCode = RegQueryValueExW(subKey.get(), L"name", 0, nullptr,
+                                   (LPBYTE)name, &valueBufSize);
+        if (retCode != ERROR_SUCCESS)
+        {
+            LOG_WARN(("Could not obtain name from registry.  (%d)", retCode));
+            continue; // Try the next subkey
+        }
+
+        // Get the issuer from the registry
+        valueBufSize = MAX_CHAR_COUNT * sizeof(WCHAR);
+        retCode = RegQueryValueExW(subKey.get(), L"issuer", 0, nullptr,
+                                   (LPBYTE)issuer, &valueBufSize);
+        if (retCode != ERROR_SUCCESS)
+        {
+            LOG_WARN(("Could not obtain issuer from registry.  (%d)", retCode));
+            continue; // Try the next subkey
+        }
+
+        CertificateCheckInfo allowedCertificate =
+        {
+            name,
+            issuer,
+        };
+
+        retCode = CheckCertificateForPEFile(filePath, allowedCertificate);
+        if (retCode != ERROR_SUCCESS)
+        {
+            LOG_WARN(("Error on certificate check.  (%d)", retCode));
+            continue; // Try the next subkey
+        }
+
+        retCode = VerifyCertificateTrustForFile(filePath);
+        if (retCode != ERROR_SUCCESS)
+        {
+            LOG_WARN(("Error on certificate trust check.  (%d)", retCode));
+            continue; // Try the next subkey
+        }
+
+        // Raise the roof, we found a match!
+        return TRUE;
+    }
+
+    // No certificates match, :'(
     return FALSE;
-  }
-
-  // We use KEY_WOW64_64KEY to always force 64-bit view.
-  // The user may have both x86 and x64 applications installed
-  // which each register information.  We need a consistent place
-  // to put those certificate attributes in and hence why we always
-  // force the non redirected registry under Wow6432Node.
-  // This flag is ignored on 32bit systems.
-  HKEY baseKeyRaw;
-  LONG retCode = RegOpenKeyExW(HKEY_LOCAL_MACHINE,
-                               maintenanceServiceKey, 0,
-                               KEY_READ | KEY_WOW64_64KEY, &baseKeyRaw);
-  if (retCode != ERROR_SUCCESS) {
-    LOG_WARN(("Could not open key.  (%d)", retCode));
-    // Our tests run with a different apply directory for each test.
-    // We use this registry key on our test slaves to store the
-    // allowed name/issuers.
-    retCode = RegOpenKeyExW(HKEY_LOCAL_MACHINE,
-                            TEST_ONLY_FALLBACK_KEY_PATH, 0,
-                            KEY_READ | KEY_WOW64_64KEY, &baseKeyRaw);
-    if (retCode != ERROR_SUCCESS) {
-      LOG_WARN(("Could not open fallback key.  (%d)", retCode));
-      return FALSE;
-    }
-  }
-  AutoRegKey baseKey(baseKeyRaw);
-
-  // Get the number of subkeys.
-  DWORD subkeyCount = 0;
-  retCode = RegQueryInfoKeyW(baseKey.get(), nullptr, nullptr, nullptr, &subkeyCount,
-                             nullptr, nullptr, nullptr, nullptr, nullptr,
-                             nullptr, nullptr);
-  if (retCode != ERROR_SUCCESS) {
-    LOG_WARN(("Could not query info key.  (%d)", retCode));
-    return FALSE;
-  }
-
-  // Enumerate the subkeys, each subkey represents an allowed certificate.
-  for (DWORD i = 0; i < subkeyCount; i++) {
-    WCHAR subkeyBuffer[MAX_KEY_LENGTH];
-    DWORD subkeyBufferCount = MAX_KEY_LENGTH;
-    retCode = RegEnumKeyExW(baseKey.get(), i, subkeyBuffer,
-                            &subkeyBufferCount, nullptr,
-                            nullptr, nullptr, nullptr);
-    if (retCode != ERROR_SUCCESS) {
-      LOG_WARN(("Could not enum certs.  (%d)", retCode));
-      return FALSE;
-    }
-
-    // Open the subkey for the current certificate
-    HKEY subKeyRaw;
-    retCode = RegOpenKeyExW(baseKey.get(),
-                            subkeyBuffer,
-                            0,
-                            KEY_READ | KEY_WOW64_64KEY,
-                            &subKeyRaw);
-    AutoRegKey subKey(subKeyRaw);
-    if (retCode != ERROR_SUCCESS) {
-      LOG_WARN(("Could not open subkey.  (%d)", retCode));
-      continue; // Try the next subkey
-    }
-
-    const int MAX_CHAR_COUNT = 256;
-    DWORD valueBufSize = MAX_CHAR_COUNT * sizeof(WCHAR);
-    WCHAR name[MAX_CHAR_COUNT] = { L'\0' };
-    WCHAR issuer[MAX_CHAR_COUNT] = { L'\0' };
-
-    // Get the name from the registry
-    retCode = RegQueryValueExW(subKey.get(), L"name", 0, nullptr,
-                               (LPBYTE)name, &valueBufSize);
-    if (retCode != ERROR_SUCCESS) {
-      LOG_WARN(("Could not obtain name from registry.  (%d)", retCode));
-      continue; // Try the next subkey
-    }
-
-    // Get the issuer from the registry
-    valueBufSize = MAX_CHAR_COUNT * sizeof(WCHAR);
-    retCode = RegQueryValueExW(subKey.get(), L"issuer", 0, nullptr,
-                               (LPBYTE)issuer, &valueBufSize);
-    if (retCode != ERROR_SUCCESS) {
-      LOG_WARN(("Could not obtain issuer from registry.  (%d)", retCode));
-      continue; // Try the next subkey
-    }
-
-    CertificateCheckInfo allowedCertificate = {
-      name,
-      issuer,
-    };
-
-    retCode = CheckCertificateForPEFile(filePath, allowedCertificate);
-    if (retCode != ERROR_SUCCESS) {
-      LOG_WARN(("Error on certificate check.  (%d)", retCode));
-      continue; // Try the next subkey
-    }
-
-    retCode = VerifyCertificateTrustForFile(filePath);
-    if (retCode != ERROR_SUCCESS) {
-      LOG_WARN(("Error on certificate trust check.  (%d)", retCode));
-      continue; // Try the next subkey
-    }
-
-    // Raise the roof, we found a match!
-    return TRUE;
-  }
-
-  // No certificates match, :'(
-  return FALSE;
 }

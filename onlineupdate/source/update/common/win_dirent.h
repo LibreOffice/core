@@ -9,16 +9,18 @@
 #ifdef _WIN32
 #include <windows.h>
 
-struct DIR {
-  explicit DIR(const WCHAR* path);
-  ~DIR();
-  HANDLE findHandle;
-  WCHAR name[MAX_PATH];
+struct DIR
+{
+    explicit DIR(const WCHAR* path);
+    ~DIR();
+    HANDLE findHandle;
+    WCHAR name[MAX_PATH];
 };
 
-struct dirent {
-  dirent();
-  WCHAR d_name[MAX_PATH];
+struct dirent
+{
+    dirent();
+    WCHAR d_name[MAX_PATH];
 };
 
 DIR* opendir(const WCHAR* path);
