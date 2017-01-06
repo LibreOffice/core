@@ -1348,12 +1348,22 @@ void ScXMLTableRowCellContext::PutFormulaCell( const ScAddress& rCellPos )
         // temporary formula string as string tokens
         ScTokenArray *pCode = new ScTokenArray();
 
-        OUString aFormulaNmsp = maFormula->second;
-        if( eGrammar != formula::FormulaGrammar::GRAM_EXTERNAL )
-            aFormulaNmsp.clear();
-        pCode->AssignXMLString( aText, aFormulaNmsp );
+        // Check the special case of a single error constant without leading
+        // '=' and create an error formula cell without tokens.
+        FormulaError nError = GetScImport().GetFormulaErrorConstant(aText);
+        if (nError != FormulaError::NONE)
+        {
+            pCode->SetCodeError(nError);
+        }
+        else
+        {
+            OUString aFormulaNmsp = maFormula->second;
+            if( eGrammar != formula::FormulaGrammar::GRAM_EXTERNAL )
+                aFormulaNmsp.clear();
+            pCode->AssignXMLString( aText, aFormulaNmsp );
+            rDoc.getDoc().IncXMLImportedFormulaCount( aText.getLength() );
+        }
 
-        rDoc.getDoc().IncXMLImportedFormulaCount( aText.getLength() );
         ScFormulaCell* pNewCell = new ScFormulaCell(pDoc, rCellPos, pCode, eGrammar, MM_NONE);
         SetFormulaCell(pNewCell);
         rDoc.setFormulaCell(rCellPos, pNewCell);
@@ -1466,7 +1476,8 @@ bool ScXMLTableRowCellContext::IsPossibleErrorString() const
         return false;
     else if(mbNewValueType && mbErrorValue)
         return true;
-    return mbPossibleErrorCell || ( mbCheckWithCompilerForError && GetScImport().IsFormulaErrorConstant(*maStringValue) );
+    return mbPossibleErrorCell || (mbCheckWithCompilerForError &&
+            GetScImport().GetFormulaErrorConstant(*maStringValue) != FormulaError::NONE);
 }
 
 void ScXMLTableRowCellContext::EndElement()

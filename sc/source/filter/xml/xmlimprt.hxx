@@ -1223,7 +1223,7 @@ public:
             const OUString& rAttrValue,
             bool bRestrictToExternalNmsp = false ) const;
 
-    bool IsFormulaErrorConstant( const OUString& rStr ) const;
+    FormulaError GetFormulaErrorConstant( const OUString& rStr ) const;
 
     ScEditEngineDefaulter* GetEditEngine();
     const ScXMLEditAttributeMap& GetEditAttributeMap() const;

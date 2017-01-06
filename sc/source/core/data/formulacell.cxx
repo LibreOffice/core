@@ -1282,6 +1282,10 @@ void ScFormulaCell::CompileXML( sc::CompileFormulaContext& rCxt, ScProgress& rPr
         return ;
     }
 
+    // Error constant formula cell stays as is.
+    if (!pCode->GetLen() && pCode->GetCodeError() != FormulaError::NONE)
+        return;
+
     // Compilation changes RPN count, remove and reinsert to FormulaTree if it
     // was in to update its count.
     bool bWasInFormulaTree = pDocument->IsInFormulaTree( this);
