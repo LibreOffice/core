@@ -750,7 +750,7 @@ public:
     void                        DrawLine( const Point& rStartPt, const Point& rEndPt );
 
     void                        DrawLine( const Point& rStartPt, const Point& rEndPt,
-                                          const LineInfo& rLineInfo );
+                                          const LineInfo& rLineInfo, bool bMapLineInfo = true );
 
 private:
 
