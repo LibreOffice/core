@@ -111,6 +111,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     simplecm \
     sm \
     smd \
+    solver \
     sot \
     spa \
     sts \

@@ -486,4 +486,49 @@ endef
 endif # SYSTEM_CURL
 
 
+ifeq ($(SYSTEM_COINMP),YES)
+
+define gb_LinkTarget__use_coinmp
+$(call gb_LinkTarget_add_defs,$(1),\
+    -DSYSTEM_COINMP \
+)
+$(call gb_LinkTarget_set_include,$(1),\
+    $$(INCLUDE) \
+    $(COINMP_CFLAGS) \
+)
+$(call gb_LinkTarget_add_libs,$(1),$(COINMP_LIBS))
+endef
+
+else # !SYSTEM_COINMP
+
+$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
+    CoinMP \
+    CoinUtils \
+    Clp \
+    Cbc \
+    Osi \
+    OsiClp \
+    Cgl \
+    CbcSolver \
+))
+
+define gb_LinkTarget__use_coinmp
+$(call gb_LinkTarget_set_include,$(1),\
+    $$(INCLUDE) \
+    -I$(OUTDIR)/inc/coinmp \
+)
+$(call gb_LinkTarget_add_linked_libs,$(1),\
+    CoinMP \
+    CoinUtils \
+    Clp \
+    Cbc \
+    Osi \
+    OsiClp \
+    Cgl \
+    CbcSolver \
+)
+endef
+
+endif # SYSTEM_COINMP
+
 # vim: set noet sw=4 ts=4:

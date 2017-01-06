@@ -219,7 +219,7 @@ my_components += oooimprovement
 .END
 
 .IF "$(ENABLE_COINMP)"=="YES"
-my_components += solver
+my_components += component/sccomp/source/solver/solver
 .END
 
 .IF "$(DISABLE_SAXON)" == ""
