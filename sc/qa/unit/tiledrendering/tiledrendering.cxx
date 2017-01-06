@@ -77,6 +77,8 @@ public:
     void testInvalidateOnCopyPasteCells();
     void testInvalidateOnInserRowCol();
     void testCommentCallback();
+    void testUndoLimiting();
+    void testUndoRepairDispatch();
 
     CPPUNIT_TEST_SUITE(ScTiledRenderingTest);
     CPPUNIT_TEST(testRowColumnSelections);
@@ -99,6 +101,8 @@ public:
     CPPUNIT_TEST(testInvalidateOnCopyPasteCells);
     CPPUNIT_TEST(testInvalidateOnInserRowCol);
     CPPUNIT_TEST(testCommentCallback);
+    CPPUNIT_TEST(testUndoLimiting);
+    CPPUNIT_TEST(testUndoRepairDispatch);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1132,6 +1136,135 @@ void ScTiledRenderingTest::testCommentCallback()
     mxComponent->dispose();
     mxComponent.clear();
     comphelper::LibreOfficeKit::setTiledAnnotations(true);
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void ScTiledRenderingTest::testUndoLimiting()
+{
+    comphelper::LibreOfficeKit::setActive();
+
+    ScModelObj* pModelObj = createDoc("small.ods");
+    CPPUNIT_ASSERT(pModelObj);
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+    SfxUndoManager* pUndoManager = pDoc->GetUndoManager();
+    CPPUNIT_ASSERT(pUndoManager);
+
+    // view #1
+    ViewCallback aView1;
+    int nView1 = SfxLokHelper::getView();
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
+
+    // view #2
+    SfxLokHelper::createView();
+    ViewCallback aView2;
+    int nView2 = SfxLokHelper::getView();
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView2);
+
+    // text edit a cell in view #1
+    SfxLokHelper::setView(nView1);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
+    Scheduler::ProcessEventsToIdle();
+
+    // check that undo action count in not 0
+    CPPUNIT_ASSERT(pUndoManager->GetUndoActionCount() == 1);
+
+    // try to execute undo in view #2
+    SfxLokHelper::setView(nView2);
+    comphelper::dispatchCommand(".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+    // check that undo has not been executed on view #2
+    CPPUNIT_ASSERT(pUndoManager->GetUndoActionCount() == 1);
+
+    // try to execute undo in view #1
+    SfxLokHelper::setView(nView1);
+    comphelper::dispatchCommand(".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+    // check that undo has been executed on view #1
+    CPPUNIT_ASSERT(pUndoManager->GetUndoActionCount() == 0);
+
+    // check that redo action count in not 0
+    CPPUNIT_ASSERT(pUndoManager->GetRedoActionCount() == 1);
+
+    // try to execute redo in view #2
+    SfxLokHelper::setView(nView2);
+    comphelper::dispatchCommand(".uno:Redo", {});
+    Scheduler::ProcessEventsToIdle();
+    // check that redo has not been executed on view #2
+    CPPUNIT_ASSERT(pUndoManager->GetRedoActionCount() == 1);
+
+    // try to execute redo in view #1
+    SfxLokHelper::setView(nView1);
+    comphelper::dispatchCommand(".uno:Redo", {});
+    Scheduler::ProcessEventsToIdle();
+    // check that redo has been executed on view #1
+    CPPUNIT_ASSERT(pUndoManager->GetRedoActionCount() == 0);
+
+    mxComponent->dispose();
+    mxComponent.clear();
+
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void ScTiledRenderingTest::testUndoRepairDispatch()
+{
+    comphelper::LibreOfficeKit::setActive();
+
+    ScModelObj* pModelObj = createDoc("small.ods");
+    CPPUNIT_ASSERT(pModelObj);
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+    SfxUndoManager* pUndoManager = pDoc->GetUndoManager();
+    CPPUNIT_ASSERT(pUndoManager);
+
+    // view #1
+    ViewCallback aView1;
+    int nView1 = SfxLokHelper::getView();
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
+
+    // view #2
+    SfxLokHelper::createView();
+    ViewCallback aView2;
+    int nView2 = SfxLokHelper::getView();
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView2);
+
+    // text edit a cell in view #1
+    SfxLokHelper::setView(nView1);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
+    Scheduler::ProcessEventsToIdle();
+
+    // check that undo action count in not 0
+    CPPUNIT_ASSERT(pUndoManager->GetUndoActionCount() == 1);
+
+    // try to execute undo in view #2
+    SfxLokHelper::setView(nView2);
+    comphelper::dispatchCommand(".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+    // check that undo has not been executed on view #2
+    CPPUNIT_ASSERT(pUndoManager->GetUndoActionCount() == 1);
+
+    // try to execute undo in view #2 in repair mode
+    SfxLokHelper::setView(nView2);
+    uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
+    {
+        {"Repair", uno::makeAny(true)}
+    }));
+    comphelper::dispatchCommand(".uno:Undo", aPropertyValues);
+    Scheduler::ProcessEventsToIdle();
+    // check that undo has been executed on view #2 in repair mode
+    CPPUNIT_ASSERT(pUndoManager->GetUndoActionCount() == 0);
+
+    mxComponent->dispose();
+    mxComponent.clear();
+
     comphelper::LibreOfficeKit::setActive(false);
 }
 
