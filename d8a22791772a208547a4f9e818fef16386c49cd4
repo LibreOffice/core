@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a6eadb0_f543ab6a",
+        "filename": "accessibility/source/extended/accessibleeditbrowseboxcell.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2017-01-06T09:08:41Z",
+      "side": 1,
+      "message": "It would be better to localize \"Row %ROWNUMBER\" and \"Column %COLUMNNUMBER\", because in some languages the word order is different.",
+      "range": {
+        "startLine": 109,
+        "startChar": 15,
+        "endLine": 109,
+        "endChar": 28
+      },
+      "revId": "d8a22791772a208547a4f9e818fef16386c49cd4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
