@@ -1405,11 +1405,26 @@ void ScXMLTableRowCellContext::PutFormulaCell( const ScAddress& rCellPos )
             sal_uInt32 nEnglish = pFormatter->GetStandardIndex(LANGUAGE_ENGLISH_US);
             double fVal;
             if ( pFormatter->IsNumberFormat( aText, nEnglish, fVal ) )
+            {
                 rDoc.setNumericCell(rCellPos, fVal);
-            //the (english) number format will not be set
-            //search matching local format and apply it
+                //the (english) number format will not be set
+                //search matching local format and apply it
+            }
             else
+            {
+                // Error constants are stored as "#ERRxxx!" by 5.3+, error
+                // numbers are sal_uInt16 so at most 5 decimal digits, no
+                // other expression must be present.
+                if (aText.startsWithIgnoreAsciiCase("#ERR") && aText.getLength() <= 10 &&
+                        aText[aText.getLength()-1] == '!')
+                {
+                    // Display error constants written by 5.3+ in the for 5.2 usual way.
+                    sal_uInt32 nErr = aText.copy( 4, aText.getLength() - 5).toUInt32();
+                    if (0 < nErr && nErr <= SAL_MAX_UINT16)
+                        aText = ScGlobal::GetErrorString(nErr);
+                }
                 rDoc.setStringCell(rCellPos, aText);
+            }
         }
     }
 }
