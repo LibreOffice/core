@@ -86,9 +86,9 @@ void ScGridMerger::AddLine( long nStart, long nEnd, long nPos )
     }
 }
 
-void ScGridMerger::AddHorLine(bool bWorksInPixels, long nX1, long nX2, long nY)
+void ScGridMerger::AddHorLine(bool bWorksInPixels, long nX1, long nX2, long nY, bool bDashed)
 {
-    if (bWorksInPixels)
+    if ( bWorksInPixels )
     {
         Point aPoint(pDev->PixelToLogic(Point(nX1, nY)));
         nX1 = aPoint.X();
@@ -96,7 +96,32 @@ void ScGridMerger::AddHorLine(bool bWorksInPixels, long nX1, long nX2, long nY)
         nX2 = pDev->PixelToLogic(Point(nX2, 0)).X();
     }
 
-    if ( bOptimize )
+    if ( bDashed )
+    {
+        // If there are some unflushed lines they must be flushed since
+        // new line is of different style
+        if (bOptimize) {
+            Flush();
+            bVertical = false;
+        }
+
+        LineInfo aLineInfo(LineStyle::Dash, 1);
+        aLineInfo.SetDashCount( 10 );
+
+        // TODO: Probably magic constants should be defined in some config file
+#define PAGEBREAK_LINE_DISTANCE_PIXEL 5
+#define PAGEBREAK_LINE_DASH_LEN_PIXEL 5
+
+        // Calculating logic values of DashLen and Distance from fixed pixel values
+        Size aDashDistanceLen( pDev->PixelToLogic( Size( PAGEBREAK_LINE_DISTANCE_PIXEL,
+                                                         PAGEBREAK_LINE_DASH_LEN_PIXEL )));
+
+        aLineInfo.SetDistance( aDashDistanceLen.Width() );
+        aLineInfo.SetDashLen( aDashDistanceLen.Height() );
+
+        pDev->DrawLine( Point( nX1, nY ), Point( nX2, nY ), aLineInfo );
+    }
+    else if ( bOptimize )
     {
         if ( bVertical )
         {
@@ -109,7 +134,7 @@ void ScGridMerger::AddHorLine(bool bWorksInPixels, long nX1, long nX2, long nY)
         pDev->DrawLine( Point( nX1, nY ), Point( nX2, nY ) );
 }
 
-void ScGridMerger::AddVerLine(bool bWorksInPixels, long nX, long nY1, long nY2)
+void ScGridMerger::AddVerLine(bool bWorksInPixels, long nX, long nY1, long nY2, bool bDashed)
 {
     if (bWorksInPixels)
     {
@@ -119,7 +144,32 @@ void ScGridMerger::AddVerLine(bool bWorksInPixels, long nX, long nY1, long nY2)
         nY2 = pDev->PixelToLogic(Point(0, nY2)).Y();
     }
 
-    if ( bOptimize )
+    if ( bDashed )
+    {
+        // If there are some unflushed lines they must be flushed since
+        // new line is of different style
+        if (bOptimize) {
+            Flush();
+            bVertical = false;
+        }
+
+        LineInfo aLineInfo(LineStyle::Dash, 1);
+        aLineInfo.SetDashCount( 10 );
+
+        // TODO: Probably magic constants should be defined in some config file
+#define PAGEBREAK_LINE_DISTANCE_PIXEL 5
+#define PAGEBREAK_LINE_DASH_LEN_PIXEL 5
+
+        // Calculating logic values of DashLen and Distance from fixed pixel values
+        Size aDashDistanceLen( pDev->PixelToLogic( Size( PAGEBREAK_LINE_DISTANCE_PIXEL,
+                                                         PAGEBREAK_LINE_DASH_LEN_PIXEL )));
+
+        aLineInfo.SetDistance( aDashDistanceLen.Width() );
+        aLineInfo.SetDashLen( aDashDistanceLen.Height() );
+
+        pDev->DrawLine( Point( nX, nY1 ), Point( nX, nY2 ), aLineInfo);
+    }
+    else if ( bOptimize )
     {
         if ( !bVertical )
         {
