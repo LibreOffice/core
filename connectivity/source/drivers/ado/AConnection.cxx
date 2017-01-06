@@ -108,15 +108,12 @@ void OConnection::construct(const OUString& url,const Sequence< PropertyValue >&
         aDSN = aDSN.copy(7);
 
     sal_Int32 nTimeout = 20;
-    bool bSilent = true;
     const PropertyValue *pIter  = info.getConstArray();
     const PropertyValue *pEnd   = pIter + info.getLength();
     for(;pIter != pEnd;++pIter)
     {
         if(pIter->Name == "Timeout")
             pIter->Value >>= nTimeout;
-        else if(pIter->Name == "Silent")
-            pIter->Value >>= bSilent;
         else if(pIter->Name == "user")
             pIter->Value >>= aUID;
         else if(pIter->Name == "password")
