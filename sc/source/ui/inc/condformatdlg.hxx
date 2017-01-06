@@ -66,6 +66,7 @@ public:
         condformat::dialog::ScCondFormatDialogType eType);
 
     virtual Size GetOptimalSize() const override;
+    virtual void queue_resize(StateChangedType eReason = StateChangedType::Layout) override;
     virtual void Resize() override;
 
     ScConditionalFormat* GetConditionalFormat() const;

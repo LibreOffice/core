@@ -157,6 +157,14 @@ void ScCondFormatList::Resize()
     RecalcAll();
 }
 
+void ScCondFormatList::queue_resize(StateChangedType eReason)
+{
+    Control::queue_resize(eReason);
+    if (!mpDialogParent) //detects that this is during dispose
+        return;
+    RecalcAll();
+}
+
 ScConditionalFormat* ScCondFormatList::GetConditionalFormat() const
 {
     if(maEntries.empty())
