@@ -175,6 +175,3 @@ export ZLIB_TARBALL := zlib-1.2.8.tar.gz
 export ZMF_MD5SUM := c611df8664240de0276ab95670f413d8
 export ZMF_TARBALL := libzmf-0.0.1.tar.bz2
 
-export MOZ_ZIP_INC := $(OS)$(COM)$(if $(filter INTEL,$(CPUNAME)),I,X)inc.zip
-export MOZ_ZIP_LIB := $(OS)$(COM)$(if $(filter INTEL,$(CPUNAME)),I,X)lib.zip
-export MOZ_ZIP_RUNTIME := $(OS)$(COM)$(if $(filter INTEL,$(CPUNAME)),I,X)runtime.zip
