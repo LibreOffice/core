@@ -60,8 +60,7 @@ void RtfSdrExport::OpenContainer(sal_uInt16 nEscherContainer, int nRecInstance)
     if (nEscherContainer == ESCHER_SpContainer)
     {
         m_nShapeType = ESCHER_ShpInst_Nil;
-        if (!m_aShapeStyle.isEmpty())
-            m_aShapeStyle.setLength(0);
+        m_aShapeStyle.setLength(0);
         m_aShapeStyle.ensureCapacity(200);
         m_aShapeProps.clear();
     }
