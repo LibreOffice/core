@@ -34,7 +34,7 @@
 #include <basegfx/polygon/b2dlinegeometry.hxx>
 
 void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt,
-                             const LineInfo& rLineInfo )
+                             const LineInfo& rLineInfo, bool bMapLineInfo )
 {
     assert(!is_double_buffered_window());
 
@@ -64,7 +64,10 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt,
 
     const Point aStartPt( ImplLogicToDevicePixel( rStartPt ) );
     const Point aEndPt( ImplLogicToDevicePixel( rEndPt ) );
-    const LineInfo aInfo( ImplLogicToDevicePixel( rLineInfo ) );
+
+    // If calculating map scale is disabled for LineInfo, leave it as it is
+    const LineInfo aInfo( (bMapLineInfo) ? ImplLogicToDevicePixel( rLineInfo ) : rLineInfo );
+
     const bool bDashUsed(LineStyle::Dash == aInfo.GetStyle());
     const bool bLineWidthUsed(aInfo.GetWidth() > 1);
 
