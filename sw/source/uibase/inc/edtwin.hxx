@@ -73,8 +73,8 @@ friend void     PageNumNotify(  SwViewShell* pVwSh,
 
     static  long    m_nDDStartPosX, m_nDDStartPosY;
 
-    static  Color   m_aWaterCanTextColor;     // text color; for the watering can
-    static  Color   m_aWaterCanTextBackColor; // text background; for the watering can
+    Color m_aWaterCanTextColor;     // text color; for the watering can
+    Color m_aWaterCanTextBackColor; // text background; for the watering can
 
     /*
      * timer and handler for scrolling on when the mousepointer
@@ -249,14 +249,12 @@ public:
     void            StartExecuteDrag();
     void            DragFinished();
 
-    static const Color& GetWaterCanTextColor() { return m_aWaterCanTextColor; }
+    const Color& GetWaterCanTextColor() { return m_aWaterCanTextColor; }
+    void         SetWaterCanTextColor(const Color& rCol ) { m_aWaterCanTextColor = rCol; }
 
-    static void     SetWaterCanTextColor(const Color& rCol ) { m_aWaterCanTextColor = rCol; }
+    const Color& GetWaterCanTextBackColor() { return m_aWaterCanTextBackColor; }
+    void         SetWaterCanTextBackColor(const Color& rCol ) { m_aWaterCanTextBackColor = rCol; }
 
-    static const Color& GetWaterCanTextBackColor()
-                                            { return m_aWaterCanTextBackColor; }
-    static void     SetWaterCanTextBackColor(const Color& rCol )
-                                            { m_aWaterCanTextBackColor = rCol; }
     void            LockKeyInput(bool bSet){m_bLockInput = bSet;}
 
     const SwView &GetView() const { return m_rView; }

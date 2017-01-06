@@ -185,12 +185,6 @@ QuickHelpData* SwEditWin::m_pQuickHlpData = nullptr;
 
 long    SwEditWin::m_nDDStartPosY = 0;
 long    SwEditWin::m_nDDStartPosX = 0;
-/**
- * The actual color used by the button is set in svx/source/tbxctrls/tbxcolorupdate.cxx
- * (ToolboxButtonColorUpdater::ToolboxButtonColorUpdater()) .
- */
-Color   SwEditWin::m_aWaterCanTextBackColor(COL_YELLOW);
-Color   SwEditWin::m_aWaterCanTextColor(COL_RED);
 
 extern bool     g_bExecuteDrag;
 

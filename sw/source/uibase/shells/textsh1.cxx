@@ -1177,7 +1177,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             {
                 Color aSet = static_cast<const SvxColorItem*>(pItem)->GetValue();
                 SwEditWin& rEditWin = GetView().GetEditWin();
-                SwEditWin::SetWaterCanTextColor(aSet);
+                rEditWin.SetWaterCanTextColor(aSet);
                 SwApplyTemplate* pApply = rEditWin.GetApplyTemplate();
 
                 // If there is a selection, then set the color on it
@@ -1200,7 +1200,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 aSet = COL_TRANSPARENT;
 
             SwEditWin& rEdtWin = GetView().GetEditWin();
-            SwEditWin::SetWaterCanTextBackColor(aSet);
+            rEdtWin.SetWaterCanTextBackColor(aSet);
             SwApplyTemplate* pApply = rEdtWin.GetApplyTemplate();
 
             if(!pApply && (rWrtSh.HasSelection() || rReq.IsAPI()))
@@ -1249,9 +1249,9 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 // and reopened, its color resets, while SwEditWin still holds the old one.
                 Color aSet = static_cast<const SvxColorItem*>(pItem)->GetValue();
                 if( nSlot == SID_ATTR_CHAR_COLOR_BACKGROUND_EXT )
-                    SwEditWin::SetWaterCanTextBackColor(aSet);
+                    rEdtWin.SetWaterCanTextBackColor(aSet);
                 else
-                    SwEditWin::SetWaterCanTextColor(aSet);
+                    rEdtWin.SetWaterCanTextColor(aSet);
             }
 
             SwApplyTemplate* pApply = rEdtWin.GetApplyTemplate();
@@ -1262,7 +1262,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 {
                     rWrtSh.StartUndo( UNDO_INSATTR );
                     rWrtSh.SetAttrItem(
-                        SvxBrushItem( SwEditWin::GetWaterCanTextBackColor(), RES_CHRATR_BACKGROUND) );
+                        SvxBrushItem( rEdtWin.GetWaterCanTextBackColor(), RES_CHRATR_BACKGROUND) );
 
                     // Remove MS specific highlight when background is set
                     rWrtSh.SetAttrItem( SvxBrushItem(RES_CHRATR_HIGHLIGHT) );
@@ -1287,7 +1287,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 }
                 else
                     rWrtSh.SetAttrItem(
-                        SvxColorItem( SwEditWin::GetWaterCanTextColor(), RES_CHRATR_COLOR) );
+                        SvxColorItem( rEdtWin.GetWaterCanTextColor(), RES_CHRATR_COLOR) );
             }
             else
             {
