@@ -318,6 +318,7 @@ void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool
     ScBreakType nBreakOld = ScBreakType::NONE;
 
     bool bSingle;
+    bool bDashed = false;
     Color aPageColor;
     Color aManualColor;
 
@@ -404,8 +405,19 @@ void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool
                 if (nBreak != nBreakOld)
                 {
                     aGrid.Flush();
-                    rRenderContext.SetLineColor( (nBreak & ScBreakType::Manual) ? aManualColor :
-                                        nBreak != ScBreakType::NONE ? aPageColor : aGridColor );
+
+                    if (static_cast<int>(nBreak))
+                    {
+                        rRenderContext.SetLineColor( (nBreak & ScBreakType::Manual) ? aManualColor :
+                                                        aPageColor );
+                        bDashed = true;
+                    }
+                    else
+                    {
+                        rRenderContext.SetLineColor( aGridColor );
+                        bDashed = false;
+                    }
+
                     nBreakOld = nBreak;
                 }
             }
@@ -462,14 +474,14 @@ void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool
 
                         if (pThisRowInfo->bChanged && !bHOver)
                         {
-                            aGrid.AddVerLine(bWorksInPixels, nPosX-nSignedOneX, nPosY, nNextY-nOneY);
+                            aGrid.AddVerLine(bWorksInPixels, nPosX-nSignedOneX, nPosY, nNextY-nOneY, bDashed);
                         }
                         nPosY = nNextY;
                     }
                 }
                 else
                 {
-                    aGrid.AddVerLine(bWorksInPixels, nPosX-nSignedOneX, nScrY, nScrY+nScrH-nOneY);
+                    aGrid.AddVerLine(bWorksInPixels, nPosX-nSignedOneX, nScrY, nScrY+nScrH-nOneY, bDashed);
                 }
             }
         }
@@ -510,8 +522,19 @@ void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool
                 if (nBreakOld != nBreak)
                 {
                     aGrid.Flush();
-                    rRenderContext.SetLineColor( (nBreak & ScBreakType::Manual) ? aManualColor :
-                                        (nBreak != ScBreakType::NONE) ? aPageColor : aGridColor );
+
+                    if (static_cast<int>(nBreak))
+                    {
+                        rRenderContext.SetLineColor( (nBreak & ScBreakType::Manual) ? aManualColor :
+                                                        aPageColor );
+                        bDashed = true;
+                    }
+                    else
+                    {
+                        rRenderContext.SetLineColor( aGridColor );
+                        bDashed = false;
+                    }
+
                     nBreakOld = nBreak;
                 }
             }
@@ -556,7 +579,7 @@ void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool
                             }
                             if (!bVOver)
                             {
-                                aGrid.AddHorLine(bWorksInPixels, nPosX, nNextX-nSignedOneX, nPosY-nOneY);
+                                aGrid.AddHorLine(bWorksInPixels, nPosX, nNextX-nSignedOneX, nPosY-nOneY, bDashed);
                             }
                         }
                         nPosX = nNextX;
@@ -564,7 +587,7 @@ void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool
                 }
                 else
                 {
-                    aGrid.AddHorLine(bWorksInPixels, nScrX, nScrX+nScrW-nOneX, nPosY-nOneY);
+                    aGrid.AddHorLine(bWorksInPixels, nScrX, nScrX+nScrW-nOneX, nPosY-nOneY, bDashed);
                 }
             }
         }
