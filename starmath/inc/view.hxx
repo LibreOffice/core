@@ -219,13 +219,13 @@ struct SmViewShell_Impl;
 
 class SmViewShell: public SfxViewShell
 {
-    std::unique_ptr<SmViewShell_Impl> pImpl;
+    std::unique_ptr<SmViewShell_Impl> mpImpl;
 
-    VclPtr<SmGraphicWindow> aGraphic;
-    SmGraphicController aGraphicController;
-    OUString aStatusText;
+    VclPtr<SmGraphicWindow> mpGraphic;
+    SmGraphicController maGraphicController;
+    OUString maStatusText;
 
-    bool bPasteState;
+    bool mbPasteState;
 
     DECL_LINK( DialogClosedHdl, sfx2::FileDialogHelper*, void );
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
@@ -234,7 +234,7 @@ class SmViewShell: public SfxViewShell
      * should be inserted into SmEditWindow or directly into the SmDocShell as done if the
      * visual editor was last to have focus.
      */
-    bool bInsertIntoEditWindow;
+    bool mbInsertIntoEditWindow;
 protected:
 
     static Size GetTextLineSize(OutputDevice& rDevice,
@@ -282,11 +282,11 @@ public:
 
     SmGraphicWindow& GetGraphicWindow()
     {
-        return *aGraphic.get();
+        return *mpGraphic.get();
     }
     const SmGraphicWindow& GetGraphicWindow() const
     {
-        return *aGraphic.get();
+        return *mpGraphic.get();
     }
 
     void        SetStatusText(const OUString& rText);
@@ -316,7 +316,7 @@ public:
      * insert for the visual editor, or the text editor.
      */
     void SetInsertIntoEditWindow(bool bEditWindowHadFocusLast){
-        bInsertIntoEditWindow = bEditWindowHadFocusLast;
+        mbInsertIntoEditWindow = bEditWindowHadFocusLast;
     }
     bool IsInlineEditEnabled() const;
 
