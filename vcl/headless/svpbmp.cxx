@@ -192,10 +192,18 @@ bool SvpSalBitmap::Create(const SalBitmap& rBmp)
     {
         // TODO: reference counting...
         mpDIB = new BitmapBuffer( *rSalBmp.mpDIB );
+
+        const size_t size = mpDIB->mnScanlineSize * mpDIB->mnHeight;
+        if (size > SAL_MAX_INT32)
+        {
+            delete mpDIB;
+            mpDIB = nullptr;
+            return false;
+        }
+
         // TODO: get rid of this when BitmapBuffer gets copy constructor
         try
         {
-            size_t size = mpDIB->mnScanlineSize * mpDIB->mnHeight;
             mpDIB->mpBits = new sal_uInt8[size];
             std::memcpy(mpDIB->mpBits, rSalBmp.mpDIB->mpBits, size);
         }
