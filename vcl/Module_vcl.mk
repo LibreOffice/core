@@ -109,6 +109,7 @@ $(eval $(call gb_Module_add_targets,vcl,\
     Executable_wmffuzzer \
     Executable_jpgfuzzer \
     Executable_giffuzzer \
+    Executable_xbmfuzzer \
 ))
 endif
 
