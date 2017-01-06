@@ -464,7 +464,7 @@ ShapeExport& ShapeExport::WritePolyPolygonShape( const Reference< XShape >& xSha
     // visual shape properties
     pFS->startElementNS( mnXmlNamespace, XML_spPr, FSEND );
     WriteTransformation( aRect, XML_a );
-    WritePolyPolygon( aPolyPolygon );
+    WritePolyPolygon( aPolyPolygon , aRect );
     Reference< XPropertySet > xProps( xShape, UNO_QUERY );
     if( xProps.is() ) {
         if( bClosed )
@@ -832,7 +832,20 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
             xPropertySet->getPropertyValue("RotateAngle") >>= nRotation;
         if (nRotation != 0)
             aPolyPolygon.Rotate(Point(0,0), static_cast<sal_uInt16>(3600-nRotation/10));
-        WritePolyPolygon( aPolyPolygon );
+
+        Rectangle aRect;
+        if ( aViewBox.Width || aViewBox.Height )
+        {
+            aRect = Rectangle( Point( aViewBox.X, aViewBox.Y), Size( aViewBox.Width, aViewBox.Height));
+        }
+        else
+        {
+            Point aPoint( xShape->getPosition().X, xShape->getPosition().Y );
+            Size aSize( xShape->getSize().Width, xShape->getSize().Height );
+            aRect = Rectangle( aPoint, aSize );
+        }
+
+        WritePolyPolygon( aPolyPolygon , aRect );
     }
     else if (bCustGeom)
     {
