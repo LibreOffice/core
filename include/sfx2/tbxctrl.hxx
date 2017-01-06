@@ -139,7 +139,6 @@ class SFX2_DLLPUBLIC SfxToolBoxControl:
     public cppu::ImplInheritanceHelper<
         svt::ToolboxController, css::frame::XSubToolbarController>
 {
-friend class SfxToolbox;
 friend class SfxPopupWindow;
 friend struct SfxTbxCtrlFactory;
 
