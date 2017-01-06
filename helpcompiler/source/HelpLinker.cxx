@@ -216,7 +216,7 @@ namespace URLEncoder
                 result += c;
             else {
                 result += '%';
-                result += hex[c >> 4];
+                result += hex[static_cast<unsigned char>(c) >> 4];
                 result += hex[c & 0xf];
             }
         }

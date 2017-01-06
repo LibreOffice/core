@@ -1777,7 +1777,7 @@ inline void Type1Emitter::emitAllHex()
         char* pOut = aHexBuf;
         while( (p < mpPtr) && (pOut < aHexBuf+sizeof(aHexBuf)-4)) {
             // convert each byte to hex
-            char cNibble = (*p >> 4) & 0x0F;
+            char cNibble = (static_cast<unsigned char>(*p) >> 4) & 0x0F;
             cNibble += (cNibble < 10) ? '0' : 'A'-10;
             *(pOut++) = cNibble;
             cNibble = *(p++) & 0x0F;
