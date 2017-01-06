@@ -191,68 +191,55 @@ SQLRETURN OConnection::Construct(const OUString& url,const Sequence< PropertyVal
     OUString aDSN("DSN="), aUID, aPWD, aSysDrvSettings;
     aDSN += url.copy(nLen+1);
 
-    const char* pUser       = "user";
-    const char* pTimeout    = "Timeout";
-    const char* pSilent     = "Silent";
-    const char* pPwd        = "password";
-    const char* pUseCatalog = "UseCatalog";
-    const char* pSysDrv     = "SystemDriverSettings";
-    const char* pCharSet    = "CharSet";
-    const char* pParaName   = "ParameterNameSubstitution";
-    const char* pPrivName   = "IgnoreDriverPrivileges";
-    const char* pVerColName = "PreventGetVersionColumns";   // #i60273#
-    const char* pRetrieving = "IsAutoRetrievingEnabled";
-    const char* pRetriStmt  = "AutoRetrievingStatement";
-
     sal_Int32 nTimeout = 20;
     bool bSilent = true;
     const PropertyValue *pBegin = info.getConstArray();
     const PropertyValue *pEnd   = pBegin + info.getLength();
     for(;pBegin != pEnd;++pBegin)
     {
-        if( pBegin->Name.equalsAscii(pTimeout))
+        if( pBegin->Name == "Timeout")
             OSL_VERIFY( pBegin->Value >>= nTimeout );
-        else if( pBegin->Name.equalsAscii(pSilent))
+        else if( pBegin->Name == "Silent")
             OSL_VERIFY( pBegin->Value >>= bSilent );
-        else if( pBegin->Name.equalsAscii(pPrivName))
+        else if( pBegin->Name == "IgnoreDriverPrivileges")
             OSL_VERIFY( pBegin->Value >>= m_bIgnoreDriverPrivileges );
-        else if( pBegin->Name.equalsAscii(pVerColName))
+        else if( pBegin->Name == "PreventGetVersionColumns")
             OSL_VERIFY( pBegin->Value >>= m_bPreventGetVersionColumns );
-        else if( pBegin->Name.equalsAscii(pParaName))
+        else if( pBegin->Name == "ParameterNameSubstitution")
             OSL_VERIFY( pBegin->Value >>= m_bParameterSubstitution );
-        else if( pBegin->Name.equalsAscii(pRetrieving))
+        else if( pBegin->Name == "IsAutoRetrievingEnabled")
         {
             bool bAutoRetrievingEnabled = false;
             OSL_VERIFY( pBegin->Value >>= bAutoRetrievingEnabled );
             enableAutoRetrievingEnabled(bAutoRetrievingEnabled);
         }
-        else if( pBegin->Name.equalsAscii(pRetriStmt))
+        else if( pBegin->Name == "AutoRetrievingStatement")
         {
             OUString sGeneratedValueStatement;
             OSL_VERIFY( pBegin->Value >>= sGeneratedValueStatement );
             setAutoRetrievingStatement(sGeneratedValueStatement);
         }
-        else if( pBegin->Name.equalsAscii(pUser))
+        else if( pBegin->Name == "user")
         {
             OSL_VERIFY( pBegin->Value >>= aUID );
             aDSN = aDSN + ";UID=" + aUID;
         }
-        else if( pBegin->Name.equalsAscii(pPwd))
+        else if( pBegin->Name == "password")
         {
             OSL_VERIFY( pBegin->Value >>= aPWD );
             aDSN = aDSN + ";PWD=" + aPWD;
         }
-        else if( pBegin->Name.equalsAscii(pUseCatalog))
+        else if( pBegin->Name == "UseCatalog")
         {
              OSL_VERIFY( pBegin->Value >>= m_bUseCatalog );
         }
-        else if( pBegin->Name.equalsAscii(pSysDrv))
+        else if( pBegin->Name == "SystemDriverSettings")
         {
             OSL_VERIFY( pBegin->Value >>= aSysDrvSettings );
             aDSN += ";";
             aDSN += aSysDrvSettings;
         }
-        else if( pBegin->Name.equalsAscii(pCharSet))
+        else if( pBegin->Name == "CharSet")
         {
             OUString sIanaName;
             OSL_VERIFY( pBegin->Value >>= sIanaName );
