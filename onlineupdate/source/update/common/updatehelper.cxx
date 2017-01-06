@@ -35,20 +35,23 @@ PathGetSiblingFilePath(LPWSTR destinationBuffer,
                        LPCWSTR siblingFilePath,
                        LPCWSTR newFileName)
 {
-  if (wcslen(siblingFilePath) >= MAX_PATH) {
-    return FALSE;
-  }
+    if (wcslen(siblingFilePath) >= MAX_PATH)
+    {
+        return FALSE;
+    }
 
-  wcsncpy(destinationBuffer, siblingFilePath, MAX_PATH);
-  if (!PathRemoveFileSpecW(destinationBuffer)) {
-    return FALSE;
-  }
+    wcsncpy(destinationBuffer, siblingFilePath, MAX_PATH);
+    if (!PathRemoveFileSpecW(destinationBuffer))
+    {
+        return FALSE;
+    }
 
-  if (wcslen(destinationBuffer) + wcslen(newFileName) >= MAX_PATH) {
-    return FALSE;
-  }
+    if (wcslen(destinationBuffer) + wcslen(newFileName) >= MAX_PATH)
+    {
+        return FALSE;
+    }
 
-  return PathAppendSafe(destinationBuffer, newFileName);
+    return PathAppendSafe(destinationBuffer, newFileName);
 }
 
 /**
@@ -71,115 +74,128 @@ LaunchWinPostProcess(const WCHAR *installationDir,
                      bool forceSync,
                      HANDLE userToken)
 {
-  WCHAR workingDirectory[MAX_PATH + 1] = { L'\0' };
-  wcsncpy(workingDirectory, installationDir, MAX_PATH);
+    WCHAR workingDirectory[MAX_PATH + 1] = { L'\0' };
+    wcsncpy(workingDirectory, installationDir, MAX_PATH);
 
-  // Launch helper.exe to perform post processing (e.g. registry and log file
-  // modifications) for the update.
-  WCHAR inifile[MAX_PATH + 1] = { L'\0' };
-  wcsncpy(inifile, installationDir, MAX_PATH);
-  if (!PathAppendSafe(inifile, L"updater.ini")) {
-    return FALSE;
-  }
+    // Launch helper.exe to perform post processing (e.g. registry and log file
+    // modifications) for the update.
+    WCHAR inifile[MAX_PATH + 1] = { L'\0' };
+    wcsncpy(inifile, installationDir, MAX_PATH);
+    if (!PathAppendSafe(inifile, L"updater.ini"))
+    {
+        return FALSE;
+    }
 
-  WCHAR exefile[MAX_PATH + 1];
-  WCHAR exearg[MAX_PATH + 1];
-  WCHAR exeasync[10];
-  bool async = true;
-  if (!GetPrivateProfileStringW(L"PostUpdateWin", L"ExeRelPath", nullptr,
-                                exefile, MAX_PATH + 1, inifile)) {
-    return FALSE;
-  }
+    WCHAR exefile[MAX_PATH + 1];
+    WCHAR exearg[MAX_PATH + 1];
+    WCHAR exeasync[10];
+    bool async = true;
+    if (!GetPrivateProfileStringW(L"PostUpdateWin", L"ExeRelPath", nullptr,
+                                  exefile, MAX_PATH + 1, inifile))
+    {
+        return FALSE;
+    }
 
-  if (!GetPrivateProfileStringW(L"PostUpdateWin", L"ExeArg", nullptr, exearg,
-                                MAX_PATH + 1, inifile)) {
-    return FALSE;
-  }
+    if (!GetPrivateProfileStringW(L"PostUpdateWin", L"ExeArg", nullptr, exearg,
+                                  MAX_PATH + 1, inifile))
+    {
+        return FALSE;
+    }
 
-  if (!GetPrivateProfileStringW(L"PostUpdateWin", L"ExeAsync", L"TRUE",
-                                exeasync,
-                                sizeof(exeasync)/sizeof(exeasync[0]),
-                                inifile)) {
-    return FALSE;
-  }
+    if (!GetPrivateProfileStringW(L"PostUpdateWin", L"ExeAsync", L"TRUE",
+                                  exeasync,
+                                  sizeof(exeasync)/sizeof(exeasync[0]),
+                                  inifile))
+    {
+        return FALSE;
+    }
 
-  WCHAR exefullpath[MAX_PATH + 1] = { L'\0' };
-  wcsncpy(exefullpath, installationDir, MAX_PATH);
-  if (!PathAppendSafe(exefullpath, exefile)) {
-    return false;
-  }
+    WCHAR exefullpath[MAX_PATH + 1] = { L'\0' };
+    wcsncpy(exefullpath, installationDir, MAX_PATH);
+    if (!PathAppendSafe(exefullpath, exefile))
+    {
+        return false;
+    }
 
-  WCHAR dlogFile[MAX_PATH + 1];
-  if (!PathGetSiblingFilePath(dlogFile, exefullpath, L"uninstall.update")) {
-    return FALSE;
-  }
+    WCHAR dlogFile[MAX_PATH + 1];
+    if (!PathGetSiblingFilePath(dlogFile, exefullpath, L"uninstall.update"))
+    {
+        return FALSE;
+    }
 
-  WCHAR slogFile[MAX_PATH + 1] = { L'\0' };
-  wcsncpy(slogFile, updateInfoDir, MAX_PATH);
-  if (!PathAppendSafe(slogFile, L"update.log")) {
-    return FALSE;
-  }
+    WCHAR slogFile[MAX_PATH + 1] = { L'\0' };
+    wcsncpy(slogFile, updateInfoDir, MAX_PATH);
+    if (!PathAppendSafe(slogFile, L"update.log"))
+    {
+        return FALSE;
+    }
 
-  WCHAR dummyArg[14] = { L'\0' };
-  wcsncpy(dummyArg, L"argv0ignored ", sizeof(dummyArg) / sizeof(dummyArg[0]) - 1);
+    WCHAR dummyArg[14] = { L'\0' };
+    wcsncpy(dummyArg, L"argv0ignored ", sizeof(dummyArg) / sizeof(dummyArg[0]) - 1);
 
-  size_t len = wcslen(exearg) + wcslen(dummyArg);
-  WCHAR *cmdline = (WCHAR *) malloc((len + 1) * sizeof(WCHAR));
-  if (!cmdline) {
-    return FALSE;
-  }
+    size_t len = wcslen(exearg) + wcslen(dummyArg);
+    WCHAR *cmdline = (WCHAR *) malloc((len + 1) * sizeof(WCHAR));
+    if (!cmdline)
+    {
+        return FALSE;
+    }
 
-  wcsncpy(cmdline, dummyArg, len);
-  wcscat(cmdline, exearg);
+    wcsncpy(cmdline, dummyArg, len);
+    wcscat(cmdline, exearg);
 
-  if (forceSync ||
-      !_wcsnicmp(exeasync, L"false", 6) ||
-      !_wcsnicmp(exeasync, L"0", 2)) {
-    async = false;
-  }
+    if (forceSync ||
+            !_wcsnicmp(exeasync, L"false", 6) ||
+            !_wcsnicmp(exeasync, L"0", 2))
+    {
+        async = false;
+    }
 
-  // We want to launch the post update helper app to update the Windows
-  // registry even if there is a failure with removing the uninstall.update
-  // file or copying the update.log file.
-  CopyFileW(slogFile, dlogFile, false);
+    // We want to launch the post update helper app to update the Windows
+    // registry even if there is a failure with removing the uninstall.update
+    // file or copying the update.log file.
+    CopyFileW(slogFile, dlogFile, false);
 
-  STARTUPINFOW si = {sizeof(si), 0};
-  si.lpDesktop = L"";
-  PROCESS_INFORMATION pi = {0};
+    STARTUPINFOW si = {sizeof(si), 0};
+    si.lpDesktop = L"";
+    PROCESS_INFORMATION pi = {0};
 
-  bool ok;
-  if (userToken) {
-    ok = CreateProcessAsUserW(userToken,
-                              exefullpath,
-                              cmdline,
-                              nullptr,  // no special security attributes
-                              nullptr,  // no special thread attributes
-                              false,    // don't inherit filehandles
-                              0,        // No special process creation flags
-                              nullptr,  // inherit my environment
-                              workingDirectory,
-                              &si,
-                              &pi);
-  } else {
-    ok = CreateProcessW(exefullpath,
-                        cmdline,
-                        nullptr,  // no special security attributes
-                        nullptr,  // no special thread attributes
-                        false,    // don't inherit filehandles
-                        0,        // No special process creation flags
-                        nullptr,  // inherit my environment
-                        workingDirectory,
-                        &si,
-                        &pi);
-  }
-  free(cmdline);
-  if (ok) {
-    if (!async)
-      WaitForSingleObject(pi.hProcess, INFINITE);
-    CloseHandle(pi.hProcess);
-    CloseHandle(pi.hThread);
-  }
-  return ok;
+    bool ok;
+    if (userToken)
+    {
+        ok = CreateProcessAsUserW(userToken,
+                                  exefullpath,
+                                  cmdline,
+                                  nullptr,  // no special security attributes
+                                  nullptr,  // no special thread attributes
+                                  false,    // don't inherit filehandles
+                                  0,        // No special process creation flags
+                                  nullptr,  // inherit my environment
+                                  workingDirectory,
+                                  &si,
+                                  &pi);
+    }
+    else
+    {
+        ok = CreateProcessW(exefullpath,
+                            cmdline,
+                            nullptr,  // no special security attributes
+                            nullptr,  // no special thread attributes
+                            false,    // don't inherit filehandles
+                            0,        // No special process creation flags
+                            nullptr,  // inherit my environment
+                            workingDirectory,
+                            &si,
+                            &pi);
+    }
+    free(cmdline);
+    if (ok)
+    {
+        if (!async)
+            WaitForSingleObject(pi.hProcess, INFINITE);
+        CloseHandle(pi.hProcess);
+        CloseHandle(pi.hThread);
+    }
+    return ok;
 }
 
 /**
@@ -193,89 +209,96 @@ LaunchWinPostProcess(const WCHAR *installationDir,
 BOOL
 StartServiceUpdate(LPCWSTR installDir)
 {
-  // Get a handle to the local computer SCM database
-  SC_HANDLE manager = OpenSCManager(nullptr, nullptr,
-                                    SC_MANAGER_ALL_ACCESS);
-  if (!manager) {
-    return FALSE;
-  }
+    // Get a handle to the local computer SCM database
+    SC_HANDLE manager = OpenSCManager(nullptr, nullptr,
+                                      SC_MANAGER_ALL_ACCESS);
+    if (!manager)
+    {
+        return FALSE;
+    }
 
-  // Open the service
-  SC_HANDLE svc = OpenServiceW(manager, SVC_NAME,
-                               SERVICE_ALL_ACCESS);
-  if (!svc) {
+    // Open the service
+    SC_HANDLE svc = OpenServiceW(manager, SVC_NAME,
+                                 SERVICE_ALL_ACCESS);
+    if (!svc)
+    {
+        CloseServiceHandle(manager);
+        return FALSE;
+    }
+
+    // If we reach here, then the service is installed, so
+    // proceed with upgrading it.
+
     CloseServiceHandle(manager);
-    return FALSE;
-  }
 
-  // If we reach here, then the service is installed, so
-  // proceed with upgrading it.
+    // The service exists and we opened it, get the config bytes needed
+    DWORD bytesNeeded;
+    if (!QueryServiceConfigW(svc, nullptr, 0, &bytesNeeded) &&
+            GetLastError() != ERROR_INSUFFICIENT_BUFFER)
+    {
+        CloseServiceHandle(svc);
+        return FALSE;
+    }
 
-  CloseServiceHandle(manager);
+    // Get the service config information, in particular we want the binary
+    // path of the service.
+    std::unique_ptr<char[]> serviceConfigBuffer = std::make_unique<char[]>(bytesNeeded);
+    if (!QueryServiceConfigW(svc,
+                             reinterpret_cast<QUERY_SERVICE_CONFIGW*>(serviceConfigBuffer.get()),
+                             bytesNeeded, &bytesNeeded))
+    {
+        CloseServiceHandle(svc);
+        return FALSE;
+    }
 
-  // The service exists and we opened it, get the config bytes needed
-  DWORD bytesNeeded;
-  if (!QueryServiceConfigW(svc, nullptr, 0, &bytesNeeded) &&
-      GetLastError() != ERROR_INSUFFICIENT_BUFFER) {
     CloseServiceHandle(svc);
-    return FALSE;
-  }
 
-  // Get the service config information, in particular we want the binary
-  // path of the service.
-  std::unique_ptr<char[]> serviceConfigBuffer = std::make_unique<char[]>(bytesNeeded);
-  if (!QueryServiceConfigW(svc,
-      reinterpret_cast<QUERY_SERVICE_CONFIGW*>(serviceConfigBuffer.get()),
-      bytesNeeded, &bytesNeeded)) {
-    CloseServiceHandle(svc);
-    return FALSE;
-  }
+    QUERY_SERVICE_CONFIGW &serviceConfig =
+        *reinterpret_cast<QUERY_SERVICE_CONFIGW*>(serviceConfigBuffer.get());
 
-  CloseServiceHandle(svc);
+    PathUnquoteSpacesW(serviceConfig.lpBinaryPathName);
 
-  QUERY_SERVICE_CONFIGW &serviceConfig =
-    *reinterpret_cast<QUERY_SERVICE_CONFIGW*>(serviceConfigBuffer.get());
+    // Obtain the temp path of the maintenance service binary
+    WCHAR tmpService[MAX_PATH + 1] = { L'\0' };
+    if (!PathGetSiblingFilePath(tmpService, serviceConfig.lpBinaryPathName,
+                                L"maintenanceservice_tmp.exe"))
+    {
+        return FALSE;
+    }
 
-  PathUnquoteSpacesW(serviceConfig.lpBinaryPathName);
+    // Get the new maintenance service path from the install dir
+    WCHAR newMaintServicePath[MAX_PATH + 1] = { L'\0' };
+    wcsncpy(newMaintServicePath, installDir, MAX_PATH);
+    PathAppendSafe(newMaintServicePath,
+                   L"maintenanceservice.exe");
 
-  // Obtain the temp path of the maintenance service binary
-  WCHAR tmpService[MAX_PATH + 1] = { L'\0' };
-  if (!PathGetSiblingFilePath(tmpService, serviceConfig.lpBinaryPathName,
-                              L"maintenanceservice_tmp.exe")) {
-    return FALSE;
-  }
+    // Copy the temp file in alongside the maintenace service.
+    // This is a requirement for maintenance service upgrades.
+    if (!CopyFileW(newMaintServicePath, tmpService, FALSE))
+    {
+        return FALSE;
+    }
 
-  // Get the new maintenance service path from the install dir
-  WCHAR newMaintServicePath[MAX_PATH + 1] = { L'\0' };
-  wcsncpy(newMaintServicePath, installDir, MAX_PATH);
-  PathAppendSafe(newMaintServicePath,
-                 L"maintenanceservice.exe");
-
-  // Copy the temp file in alongside the maintenance service.
-  // This is a requirement for maintenance service upgrades.
-  if (!CopyFileW(newMaintServicePath, tmpService, FALSE)) {
-    return FALSE;
-  }
-
-  // Start the upgrade comparison process
-  STARTUPINFOW si = {0};
-  si.cb = sizeof(STARTUPINFOW);
-  // No particular desktop because no UI
-  si.lpDesktop = L"";
-  PROCESS_INFORMATION pi = {0};
-  WCHAR cmdLine[64] = { '\0' };
-  wcsncpy(cmdLine, L"dummyparam.exe upgrade",
-          sizeof(cmdLine) / sizeof(cmdLine[0]) - 1);
-  BOOL svcUpdateProcessStarted = CreateProcessW(tmpService,
-                                                cmdLine,
-                                                nullptr, nullptr, FALSE,
-                                                0,
-                                                nullptr, installDir, &si, &pi);
-  if (svcUpdateProcessStarted) {
-    CloseHandle(pi.hProcess);
-    CloseHandle(pi.hThread);
-  }
-  return svcUpdateProcessStarted;
+    // Start the upgrade comparison process
+    STARTUPINFOW si = {0};
+    si.cb = sizeof(STARTUPINFOW);
+    // No particular desktop because no UI
+    si.lpDesktop = L"";
+    PROCESS_INFORMATION pi = {0};
+    WCHAR cmdLine[64] = { '\0' };
+    wcsncpy(cmdLine, L"dummyparam.exe upgrade",
+            sizeof(cmdLine) / sizeof(cmdLine[0]) - 1);
+    BOOL svcUpdateProcessStarted = CreateProcessW(tmpService,
+                                   cmdLine,
+                                   nullptr, nullptr, FALSE,
+                                   0,
+                                   nullptr, installDir, &si, &pi);
+    if (svcUpdateProcessStarted)
+    {
+        CloseHandle(pi.hProcess);
+        CloseHandle(pi.hThread);
+    }
+    return svcUpdateProcessStarted;
 }
 
 #endif
@@ -295,47 +318,54 @@ StartServiceUpdate(LPCWSTR installDir)
 DWORD
 StartServiceCommand(int argc, LPCWSTR* argv)
 {
-  DWORD lastState = WaitForServiceStop(SVC_NAME, 5);
-  if (lastState != SERVICE_STOPPED) {
-    return 20000 + lastState;
-  }
-
-  // Get a handle to the SCM database.
-  SC_HANDLE serviceManager = OpenSCManager(nullptr, nullptr,
-                                           SC_MANAGER_CONNECT |
-                                           SC_MANAGER_ENUMERATE_SERVICE);
-  if (!serviceManager)  {
-    return 17001;
-  }
-
-  // Get a handle to the service.
-  SC_HANDLE service = OpenServiceW(serviceManager,
-                                   SVC_NAME,
-                                   SERVICE_START);
-  if (!service) {
-    CloseServiceHandle(serviceManager);
-    return 17002;
-  }
-
-  // Wait at most 5 seconds trying to start the service in case of errors
-  // like ERROR_SERVICE_DATABASE_LOCKED or ERROR_SERVICE_REQUEST_TIMEOUT.
-  const DWORD maxWaitMS = 5000;
-  DWORD currentWaitMS = 0;
-  DWORD lastError = ERROR_SUCCESS;
-  while (currentWaitMS < maxWaitMS) {
-    BOOL result = StartServiceW(service, argc, argv);
-    if (result) {
-      lastError = ERROR_SUCCESS;
-      break;
-    } else {
-      lastError = GetLastError();
+    DWORD lastState = WaitForServiceStop(SVC_NAME, 5);
+    if (lastState != SERVICE_STOPPED)
+    {
+        return 20000 + lastState;
     }
-    Sleep(100);
-    currentWaitMS += 100;
-  }
-  CloseServiceHandle(service);
-  CloseServiceHandle(serviceManager);
-  return lastError;
+
+    // Get a handle to the SCM database.
+    SC_HANDLE serviceManager = OpenSCManager(nullptr, nullptr,
+                               SC_MANAGER_CONNECT |
+                               SC_MANAGER_ENUMERATE_SERVICE);
+    if (!serviceManager)
+    {
+        return 17001;
+    }
+
+    // Get a handle to the service.
+    SC_HANDLE service = OpenServiceW(serviceManager,
+                                     SVC_NAME,
+                                     SERVICE_START);
+    if (!service)
+    {
+        CloseServiceHandle(serviceManager);
+        return 17002;
+    }
+
+    // Wait at most 5 seconds trying to start the service in case of errors
+    // like ERROR_SERVICE_DATABASE_LOCKED or ERROR_SERVICE_REQUEST_TIMEOUT.
+    const DWORD maxWaitMS = 5000;
+    DWORD currentWaitMS = 0;
+    DWORD lastError = ERROR_SUCCESS;
+    while (currentWaitMS < maxWaitMS)
+    {
+        BOOL result = StartServiceW(service, argc, argv);
+        if (result)
+        {
+            lastError = ERROR_SUCCESS;
+            break;
+        }
+        else
+        {
+            lastError = GetLastError();
+        }
+        Sleep(100);
+        currentWaitMS += 100;
+    }
+    CloseServiceHandle(service);
+    CloseServiceHandle(serviceManager);
+    return lastError;
 }
 
 #ifndef ONLY_SERVICE_LAUNCHING
@@ -353,22 +383,23 @@ StartServiceCommand(int argc, LPCWSTR* argv)
 DWORD
 LaunchServiceSoftwareUpdateCommand(int argc, LPCWSTR* argv)
 {
-  // The service command is the same as the updater.exe command line except
-  // it has 2 extra args: 1) The Path to updater.exe, and 2) the command
-  // being executed which is "software-update"
-  LPCWSTR *updaterServiceArgv = new LPCWSTR[argc + 2];
-  updaterServiceArgv[0] = L"MozillaMaintenance";
-  updaterServiceArgv[1] = L"software-update";
+    // The service command is the same as the updater.exe command line except
+    // it has 2 extra args: 1) The Path to updater.exe, and 2) the command
+    // being executed which is "software-update"
+    LPCWSTR *updaterServiceArgv = new LPCWSTR[argc + 2];
+    updaterServiceArgv[0] = L"MozillaMaintenance";
+    updaterServiceArgv[1] = L"software-update";
 
-  for (int i = 0; i < argc; ++i) {
-    updaterServiceArgv[i + 2] = argv[i];
-  }
+    for (int i = 0; i < argc; ++i)
+    {
+        updaterServiceArgv[i + 2] = argv[i];
+    }
 
-  // Execute the service command by starting the service with
-  // the passed in arguments.
-  DWORD ret = StartServiceCommand(argc + 2, updaterServiceArgv);
-  delete[] updaterServiceArgv;
-  return ret;
+    // Execute the service command by starting the service with
+    // the passed in arguments.
+    DWORD ret = StartServiceCommand(argc + 2, updaterServiceArgv);
+    delete[] updaterServiceArgv;
+    return ret;
 }
 
 /**
@@ -381,11 +412,12 @@ LaunchServiceSoftwareUpdateCommand(int argc, LPCWSTR* argv)
 BOOL
 PathAppendSafe(LPWSTR base, LPCWSTR extra)
 {
-  if (wcslen(base) + wcslen(extra) >= MAX_PATH) {
-    return FALSE;
-  }
+    if (wcslen(base) + wcslen(extra) >= MAX_PATH)
+    {
+        return FALSE;
+    }
 
-  return PathAppendW(base, extra);
+    return PathAppendW(base, extra);
 }
 
 /**
@@ -398,24 +430,26 @@ PathAppendSafe(LPWSTR base, LPCWSTR extra)
 BOOL
 WriteStatusPending(LPCWSTR updateDirPath)
 {
-  WCHAR updateStatusFilePath[MAX_PATH + 1] = { L'\0' };
-  wcsncpy(updateStatusFilePath, updateDirPath, MAX_PATH);
-  if (!PathAppendSafe(updateStatusFilePath, L"update.status")) {
-    return FALSE;
-  }
+    WCHAR updateStatusFilePath[MAX_PATH + 1] = { L'\0' };
+    wcsncpy(updateStatusFilePath, updateDirPath, MAX_PATH);
+    if (!PathAppendSafe(updateStatusFilePath, L"update.status"))
+    {
+        return FALSE;
+    }
 
-  const char pending[] = "pending";
-  HANDLE statusFile = CreateFileW(updateStatusFilePath, GENERIC_WRITE, 0,
-                                  nullptr, CREATE_ALWAYS, 0, nullptr);
-  if (statusFile == INVALID_HANDLE_VALUE) {
-    return FALSE;
-  }
+    const char pending[] = "pending";
+    HANDLE statusFile = CreateFileW(updateStatusFilePath, GENERIC_WRITE, 0,
+                                    nullptr, CREATE_ALWAYS, 0, nullptr);
+    if (statusFile == INVALID_HANDLE_VALUE)
+    {
+        return FALSE;
+    }
 
-  DWORD wrote;
-  BOOL ok = WriteFile(statusFile, pending,
-                      sizeof(pending) - 1, &wrote, nullptr);
-  CloseHandle(statusFile);
-  return ok && (wrote == sizeof(pending) - 1);
+    DWORD wrote;
+    BOOL ok = WriteFile(statusFile, pending,
+                        sizeof(pending) - 1, &wrote, nullptr);
+    CloseHandle(statusFile);
+    return ok && (wrote == sizeof(pending) - 1);
 }
 
 /**
@@ -427,26 +461,28 @@ WriteStatusPending(LPCWSTR updateDirPath)
 BOOL
 WriteStatusFailure(LPCWSTR updateDirPath, int errorCode)
 {
-  WCHAR updateStatusFilePath[MAX_PATH + 1] = { L'\0' };
-  wcsncpy(updateStatusFilePath, updateDirPath, MAX_PATH);
-  if (!PathAppendSafe(updateStatusFilePath, L"update.status")) {
-    return FALSE;
-  }
+    WCHAR updateStatusFilePath[MAX_PATH + 1] = { L'\0' };
+    wcsncpy(updateStatusFilePath, updateDirPath, MAX_PATH);
+    if (!PathAppendSafe(updateStatusFilePath, L"update.status"))
+    {
+        return FALSE;
+    }
 
-  HANDLE statusFile = CreateFileW(updateStatusFilePath, GENERIC_WRITE, 0,
-                                  nullptr, CREATE_ALWAYS, 0, nullptr);
-  if (statusFile == INVALID_HANDLE_VALUE) {
-    return FALSE;
-  }
-  char failure[32];
-  sprintf(failure, "failed: %d", errorCode);
+    HANDLE statusFile = CreateFileW(updateStatusFilePath, GENERIC_WRITE, 0,
+                                    nullptr, CREATE_ALWAYS, 0, nullptr);
+    if (statusFile == INVALID_HANDLE_VALUE)
+    {
+        return FALSE;
+    }
+    char failure[32];
+    sprintf(failure, "failed: %d", errorCode);
 
-  DWORD toWrite = strlen(failure);
-  DWORD wrote;
-  BOOL ok = WriteFile(statusFile, failure,
-                      toWrite, &wrote, nullptr);
-  CloseHandle(statusFile);
-  return ok && wrote == toWrite;
+    DWORD toWrite = strlen(failure);
+    DWORD wrote;
+    BOOL ok = WriteFile(statusFile, failure,
+                        toWrite, &wrote, nullptr);
+    CloseHandle(statusFile);
+    return ok && wrote == toWrite;
 }
 
 #endif
@@ -486,101 +522,109 @@ WriteStatusFailure(LPCWSTR updateDirPath, int errorCode)
 DWORD
 WaitForServiceStop(LPCWSTR serviceName, DWORD maxWaitSeconds)
 {
-  // 0x000000CF is defined above to be not set
-  DWORD lastServiceState = 0x000000CF;
+    // 0x000000CF is defined above to be not set
+    DWORD lastServiceState = 0x000000CF;
 
-  // Get a handle to the SCM database.
-  SC_HANDLE serviceManager = OpenSCManager(nullptr, nullptr,
-                                           SC_MANAGER_CONNECT |
-                                           SC_MANAGER_ENUMERATE_SERVICE);
-  if (!serviceManager)  {
-    DWORD lastError = GetLastError();
-    switch(lastError) {
-    case ERROR_ACCESS_DENIED:
-      return 0x000000FD;
-    case ERROR_DATABASE_DOES_NOT_EXIST:
-      return 0x000000FE;
-    default:
-      return 0x000000FF;
+    // Get a handle to the SCM database.
+    SC_HANDLE serviceManager = OpenSCManager(nullptr, nullptr,
+                               SC_MANAGER_CONNECT |
+                               SC_MANAGER_ENUMERATE_SERVICE);
+    if (!serviceManager)
+    {
+        DWORD lastError = GetLastError();
+        switch (lastError)
+        {
+            case ERROR_ACCESS_DENIED:
+                return 0x000000FD;
+            case ERROR_DATABASE_DOES_NOT_EXIST:
+                return 0x000000FE;
+            default:
+                return 0x000000FF;
+        }
     }
-  }
 
-  // Get a handle to the service.
-  SC_HANDLE service = OpenServiceW(serviceManager,
-                                   serviceName,
-                                   SERVICE_QUERY_STATUS);
-  if (!service) {
-    DWORD lastError = GetLastError();
-    CloseServiceHandle(serviceManager);
-    switch(lastError) {
-    case ERROR_ACCESS_DENIED:
-      return 0x000000EB;
-    case ERROR_INVALID_HANDLE:
-      return 0x000000EC;
-    case ERROR_INVALID_NAME:
-      return 0x000000ED;
-    case ERROR_SERVICE_DOES_NOT_EXIST:
-      return 0x000000EE;
-    default:
-      return 0x000000EF;
+    // Get a handle to the service.
+    SC_HANDLE service = OpenServiceW(serviceManager,
+                                     serviceName,
+                                     SERVICE_QUERY_STATUS);
+    if (!service)
+    {
+        DWORD lastError = GetLastError();
+        CloseServiceHandle(serviceManager);
+        switch (lastError)
+        {
+            case ERROR_ACCESS_DENIED:
+                return 0x000000EB;
+            case ERROR_INVALID_HANDLE:
+                return 0x000000EC;
+            case ERROR_INVALID_NAME:
+                return 0x000000ED;
+            case ERROR_SERVICE_DOES_NOT_EXIST:
+                return 0x000000EE;
+            default:
+                return 0x000000EF;
+        }
     }
-  }
 
-  DWORD currentWaitMS = 0;
-  SERVICE_STATUS_PROCESS ssp;
-  ssp.dwCurrentState = lastServiceState;
-  while (currentWaitMS < maxWaitSeconds * 1000) {
-    DWORD bytesNeeded;
-    if (!QueryServiceStatusEx(service, SC_STATUS_PROCESS_INFO, (LPBYTE)&ssp,
-                              sizeof(SERVICE_STATUS_PROCESS), &bytesNeeded)) {
-      DWORD lastError = GetLastError();
-      switch (lastError) {
-      case ERROR_INVALID_HANDLE:
-        ssp.dwCurrentState = 0x000000D9;
-        break;
-      case ERROR_ACCESS_DENIED:
-        ssp.dwCurrentState = 0x000000DA;
-        break;
-      case ERROR_INSUFFICIENT_BUFFER:
-        ssp.dwCurrentState = 0x000000DB;
-        break;
-      case ERROR_INVALID_PARAMETER:
-        ssp.dwCurrentState = 0x000000DC;
-        break;
-      case ERROR_INVALID_LEVEL:
-        ssp.dwCurrentState = 0x000000DD;
-        break;
-      case ERROR_SHUTDOWN_IN_PROGRESS:
-        ssp.dwCurrentState = 0x000000DE;
-        break;
-      // These 3 errors can occur when the service is not yet stopped but
-      // it is stopping.
-      case ERROR_INVALID_SERVICE_CONTROL:
-      case ERROR_SERVICE_CANNOT_ACCEPT_CTRL:
-      case ERROR_SERVICE_NOT_ACTIVE:
+    DWORD currentWaitMS = 0;
+    SERVICE_STATUS_PROCESS ssp;
+    ssp.dwCurrentState = lastServiceState;
+    while (currentWaitMS < maxWaitSeconds * 1000)
+    {
+        DWORD bytesNeeded;
+        if (!QueryServiceStatusEx(service, SC_STATUS_PROCESS_INFO, (LPBYTE)&ssp,
+                                  sizeof(SERVICE_STATUS_PROCESS), &bytesNeeded))
+        {
+            DWORD lastError = GetLastError();
+            switch (lastError)
+            {
+                case ERROR_INVALID_HANDLE:
+                    ssp.dwCurrentState = 0x000000D9;
+                    break;
+                case ERROR_ACCESS_DENIED:
+                    ssp.dwCurrentState = 0x000000DA;
+                    break;
+                case ERROR_INSUFFICIENT_BUFFER:
+                    ssp.dwCurrentState = 0x000000DB;
+                    break;
+                case ERROR_INVALID_PARAMETER:
+                    ssp.dwCurrentState = 0x000000DC;
+                    break;
+                case ERROR_INVALID_LEVEL:
+                    ssp.dwCurrentState = 0x000000DD;
+                    break;
+                case ERROR_SHUTDOWN_IN_PROGRESS:
+                    ssp.dwCurrentState = 0x000000DE;
+                    break;
+                // These 3 errors can occur when the service is not yet stopped but
+                // it is stopping.
+                case ERROR_INVALID_SERVICE_CONTROL:
+                case ERROR_SERVICE_CANNOT_ACCEPT_CTRL:
+                case ERROR_SERVICE_NOT_ACTIVE:
+                    currentWaitMS += 50;
+                    Sleep(50);
+                    continue;
+                default:
+                    ssp.dwCurrentState = 0x000000DF;
+            }
+
+            // We couldn't query the status so just break out
+            break;
+        }
+
+        // The service is already in use.
+        if (ssp.dwCurrentState == SERVICE_STOPPED)
+        {
+            break;
+        }
         currentWaitMS += 50;
         Sleep(50);
-        continue;
-      default:
-        ssp.dwCurrentState = 0x000000DF;
-      }
-
-      // We couldn't query the status so just break out
-      break;
     }
 
-    // The service is already in use.
-    if (ssp.dwCurrentState == SERVICE_STOPPED) {
-      break;
-    }
-    currentWaitMS += 50;
-    Sleep(50);
-  }
-
-  lastServiceState = ssp.dwCurrentState;
-  CloseServiceHandle(service);
-  CloseServiceHandle(serviceManager);
-  return lastServiceState;
+    lastServiceState = ssp.dwCurrentState;
+    CloseServiceHandle(service);
+    CloseServiceHandle(serviceManager);
+    return lastServiceState;
 }
 
 #ifndef ONLY_SERVICE_LAUNCHING
@@ -597,28 +641,33 @@ WaitForServiceStop(LPCWSTR serviceName, DWORD maxWaitSeconds)
 DWORD
 IsProcessRunning(LPCWSTR filename)
 {
-  // Take a snapshot of all processes in the system.
-  HANDLE snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
-  if (INVALID_HANDLE_VALUE == snapshot) {
-    return GetLastError();
-  }
-
-  PROCESSENTRY32W processEntry;
-  processEntry.dwSize = sizeof(PROCESSENTRY32W);
-  if (!Process32FirstW(snapshot, &processEntry)) {
-    DWORD lastError = GetLastError();
-    CloseHandle(snapshot);
-    return lastError;
-  }
-
-  do {
-    if (wcsicmp(filename, processEntry.szExeFile) == 0) {
-      CloseHandle(snapshot);
-      return ERROR_SUCCESS;
+    // Take a snapshot of all processes in the system.
+    HANDLE snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+    if (INVALID_HANDLE_VALUE == snapshot)
+    {
+        return GetLastError();
     }
-  } while (Process32NextW(snapshot, &processEntry));
-  CloseHandle(snapshot);
-  return ERROR_NOT_FOUND;
+
+    PROCESSENTRY32W processEntry;
+    processEntry.dwSize = sizeof(PROCESSENTRY32W);
+    if (!Process32FirstW(snapshot, &processEntry))
+    {
+        DWORD lastError = GetLastError();
+        CloseHandle(snapshot);
+        return lastError;
+    }
+
+    do
+    {
+        if (wcsicmp(filename, processEntry.szExeFile) == 0)
+        {
+            CloseHandle(snapshot);
+            return ERROR_SUCCESS;
+        }
+    }
+    while (Process32NextW(snapshot, &processEntry));
+    CloseHandle(snapshot);
+    return ERROR_NOT_FOUND;
 }
 
 /**
@@ -634,20 +683,23 @@ IsProcessRunning(LPCWSTR filename)
 DWORD
 WaitForProcessExit(LPCWSTR filename, DWORD maxSeconds)
 {
-  DWORD applicationRunningError = WAIT_TIMEOUT;
-  for(DWORD i = 0; i < maxSeconds; i++) {
-    DWORD applicationRunningError = IsProcessRunning(filename);
-    if (ERROR_NOT_FOUND == applicationRunningError) {
-      return ERROR_SUCCESS;
+    DWORD applicationRunningError = WAIT_TIMEOUT;
+    for (DWORD i = 0; i < maxSeconds; i++)
+    {
+        DWORD applicationRunningError = IsProcessRunning(filename);
+        if (ERROR_NOT_FOUND == applicationRunningError)
+        {
+            return ERROR_SUCCESS;
+        }
+        Sleep(1000);
     }
-    Sleep(1000);
-  }
 
-  if (ERROR_SUCCESS == applicationRunningError) {
-    return WAIT_TIMEOUT;
-  }
+    if (ERROR_SUCCESS == applicationRunningError)
+    {
+        return WAIT_TIMEOUT;
+    }
 
-  return applicationRunningError;
+    return applicationRunningError;
 }
 
 /**
@@ -658,16 +710,17 @@ WaitForProcessExit(LPCWSTR filename, DWORD maxSeconds)
 BOOL
 DoesFallbackKeyExist()
 {
-  HKEY testOnlyFallbackKey;
-  if (RegOpenKeyExW(HKEY_LOCAL_MACHINE,
-                    TEST_ONLY_FALLBACK_KEY_PATH, 0,
-                    KEY_READ | KEY_WOW64_64KEY,
-                    &testOnlyFallbackKey) != ERROR_SUCCESS) {
-    return FALSE;
-  }
+    HKEY testOnlyFallbackKey;
+    if (RegOpenKeyExW(HKEY_LOCAL_MACHINE,
+                      TEST_ONLY_FALLBACK_KEY_PATH, 0,
+                      KEY_READ | KEY_WOW64_64KEY,
+                      &testOnlyFallbackKey) != ERROR_SUCCESS)
+    {
+        return FALSE;
+    }
 
-  RegCloseKey(testOnlyFallbackKey);
-  return TRUE;
+    RegCloseKey(testOnlyFallbackKey);
+    return TRUE;
 }
 
 #endif
@@ -681,15 +734,16 @@ DoesFallbackKeyExist()
 BOOL
 IsLocalFile(LPCWSTR file, BOOL &isLocal)
 {
-  WCHAR rootPath[MAX_PATH + 1] = { L'\0' };
-  if (wcslen(file) > MAX_PATH) {
-    return FALSE;
-  }
+    WCHAR rootPath[MAX_PATH + 1] = { L'\0' };
+    if (wcslen(file) > MAX_PATH)
+    {
+        return FALSE;
+    }
 
-  wcsncpy(rootPath, file, MAX_PATH);
-  PathStripToRootW(rootPath);
-  isLocal = GetDriveTypeW(rootPath) == DRIVE_FIXED;
-  return TRUE;
+    wcsncpy(rootPath, file, MAX_PATH);
+    PathStripToRootW(rootPath);
+    isLocal = GetDriveTypeW(rootPath) == DRIVE_FIXED;
+    return TRUE;
 }
 
 
@@ -704,11 +758,11 @@ IsLocalFile(LPCWSTR file, BOOL &isLocal)
 static BOOL
 GetDWORDValue(HKEY key, LPCWSTR valueName, DWORD &retValue)
 {
-  DWORD regDWORDValueSize = sizeof(DWORD);
-  LONG retCode = RegQueryValueExW(key, valueName, 0, nullptr,
-                                  reinterpret_cast<LPBYTE>(&retValue),
-                                  &regDWORDValueSize);
-  return ERROR_SUCCESS == retCode;
+    DWORD regDWORDValueSize = sizeof(DWORD);
+    LONG retCode = RegQueryValueExW(key, valueName, 0, nullptr,
+                                    reinterpret_cast<LPBYTE>(&retValue),
+                                    &regDWORDValueSize);
+    return ERROR_SUCCESS == retCode;
 }
 
 /**
@@ -723,29 +777,31 @@ GetDWORDValue(HKEY key, LPCWSTR valueName, DWORD &retValue)
 BOOL
 IsUnpromptedElevation(BOOL &isUnpromptedElevation)
 {
-  if (!UACHelper::CanUserElevate()) {
-    return FALSE;
-  }
+    if (!UACHelper::CanUserElevate())
+    {
+        return FALSE;
+    }
 
-  LPCWSTR UACBaseRegKey =
-    L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System";
-  HKEY baseKey;
-  LONG retCode = RegOpenKeyExW(HKEY_LOCAL_MACHINE,
-                               UACBaseRegKey, 0,
-                               KEY_READ, &baseKey);
-  if (retCode != ERROR_SUCCESS) {
-    return FALSE;
-  }
+    LPCWSTR UACBaseRegKey =
+        L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System";
+    HKEY baseKey;
+    LONG retCode = RegOpenKeyExW(HKEY_LOCAL_MACHINE,
+                                 UACBaseRegKey, 0,
+                                 KEY_READ, &baseKey);
+    if (retCode != ERROR_SUCCESS)
+    {
+        return FALSE;
+    }
 
-  DWORD consent;
-  DWORD secureDesktop = 0;
-  BOOL success = GetDWORDValue(baseKey, L"ConsentPromptBehaviorAdmin",
-                               consent);
-  success = success &&
-            GetDWORDValue(baseKey, L"PromptOnSecureDesktop", secureDesktop);
-  isUnpromptedElevation = !consent && !secureDesktop;
+    DWORD consent;
+    DWORD secureDesktop = 0;
+    BOOL success = GetDWORDValue(baseKey, L"ConsentPromptBehaviorAdmin",
+                                 consent);
+    success = success &&
+              GetDWORDValue(baseKey, L"PromptOnSecureDesktop", secureDesktop);
+    isUnpromptedElevation = !consent && !secureDesktop;
 
-  RegCloseKey(baseKey);
-  return success;
+    RegCloseKey(baseKey);
+    return success;
 }
 #endif
