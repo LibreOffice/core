@@ -121,6 +121,7 @@ public:
     GtkWidget* m_pFormulabarEntry;
     GtkWidget* m_pScrolledWindow;
     std::map<GtkToolItem*, std::string> m_aToolItemCommandNames;
+    std::map<GtkToolItem*, std::string> m_aToolItemCommandArgs;
     std::map<std::string, GtkToolItem*> m_aCommandNameToolItems;
     /// Sensitivity (enabled or disabled) or each tool item, ignoring edit
     /// state.
@@ -207,6 +208,14 @@ static std::string getNextAuthor()
     static int nCounter = 0;
     struct passwd* pPasswd = getpwuid(getuid());
     return std::string(pPasswd->pw_gecos) + " #" + std::to_string(++nCounter);
+}
+
+static void lcl_registerToolItem(TiledWindow& rWindow, GtkToolItem* pItem, const std::string& rName, const std::string& rArgs = "")
+{
+    rWindow.m_aToolItemCommandNames[pItem] = rName;
+    rWindow.m_aToolItemCommandArgs[pItem] = rArgs;
+    rWindow.m_aCommandNameToolItems[rName] = pItem;
+    rWindow.m_aToolItemSensitivities[pItem] = true;
 }
 
 TiledRowColumnBar::TiledRowColumnBar(TiledBarType eType)
@@ -394,13 +403,6 @@ gboolean TiledCornerButton::drawImpl(GtkWidget* /*pWidget*/, cairo_t* pCairo)
     cairo_stroke(pCairo);
 
     return FALSE;
-}
-
-static void lcl_registerToolItem(TiledWindow& rWindow, GtkToolItem* pItem, const std::string& rName)
-{
-    rWindow.m_aToolItemCommandNames[pItem] = rName;
-    rWindow.m_aCommandNameToolItems[rName] = pItem;
-    rWindow.m_aToolItemSensitivities[pItem] = true;
 }
 
 const float fZooms[] = { 0.25, 0.5, 0.75, 1.0, 1.5, 2.0, 3.0, 5.0 };
@@ -1332,12 +1334,13 @@ static void toggleToolItem(GtkWidget* pWidget, gpointer /*pData*/)
         LOKDocView* pLOKDocView = LOK_DOC_VIEW(rWindow.m_pDocView);
         GtkToolItem* pItem = GTK_TOOL_ITEM(pWidget);
         const std::string& rString = rWindow.m_aToolItemCommandNames[pItem];
-        g_info("toggleToolItem: lok_doc_view_post_command('%s')", rString.c_str());
+        const std::string& rArguments = rWindow.m_aToolItemCommandArgs[pItem];
+        g_info("toggleToolItem: lok_doc_view_post_command('%s %s')", rString.c_str(), rArguments.c_str());
 
         // notify about the finished Save
         gboolean bNotify = (rString == ".uno:Save");
 
-        lok_doc_view_post_command(pLOKDocView, rString.c_str(), /*pArguments=*/nullptr, bNotify);
+        lok_doc_view_post_command(pLOKDocView, rString.c_str(), rArguments.c_str(), bNotify);
     }
 }
 
