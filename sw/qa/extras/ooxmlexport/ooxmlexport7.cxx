@@ -1116,12 +1116,14 @@ DECLARE_OOXMLEXPORT_TEST(testFlipAndRotateCustomShape, "flip_and_rotate.odt")
 #ifndef MACOSX /* Retina-related rounding rountrip error
                 * hard to smooth out due to the use of string compare
                 * instead of number */
-    assertXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path/a:lnTo[1]/a:pt", "x", "2351");
-    assertXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path/a:lnTo[1]/a:pt", "y", "3171");
-    assertXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path/a:lnTo[2]/a:pt", "x", "1695");
-    assertXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path/a:lnTo[2]/a:pt", "y", "3171");
-    assertXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path/a:lnTo[3]/a:pt", "x", "1695");
-    assertXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path/a:lnTo[3]/a:pt", "y", "1701");
+    assertXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path", "w", "4419");
+    assertXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path", "h", "4402");
+    assertXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path/a:lnTo[1]/a:pt", "x", "2358");
+    assertXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path/a:lnTo[1]/a:pt", "y", "3162");
+    assertXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path/a:lnTo[2]/a:pt", "x", "1702");
+    assertXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path/a:lnTo[2]/a:pt", "y", "3162");
+    assertXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path/a:lnTo[3]/a:pt", "x", "1702");
+    assertXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path/a:lnTo[3]/a:pt", "y", "1692");
 #endif
 }
 
