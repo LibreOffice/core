@@ -62,11 +62,11 @@ rtl::OUString &WebDAVUserAgent::operator()() const
     int major, minor, patch;
     serf_lib_version(&major, &minor, &patch);
     aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( " serf/" ) );
-    aBuffer.append(major);
-    aBuffer.append( L'.' );
-    aBuffer.append(minor);
-    aBuffer.append( L'.' );
-    aBuffer.append(patch);
+    aBuffer.append( sal_Int32 ( major ) );
+    aBuffer.append( sal_Unicode( L'.' ) );
+    aBuffer.append( sal_Int32 ( minor ) );
+    aBuffer.append( sal_Unicode( L'.' ) );
+    aBuffer.append( sal_Int32 ( patch ) );
 #endif
     static rtl::OUString aUserAgent( aBuffer.makeStringAndClear() );
     return aUserAgent;
