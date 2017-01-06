@@ -122,7 +122,7 @@ BitmapBuffer* ImplCreateDIB(
     }
 
     const size_t size = pDIB->mnScanlineSize * pDIB->mnHeight;
-    if (size > SAL_MAX_INT32)
+    if (size > SAL_MAX_INT32/2)
     {
         delete pDIB;
         return nullptr;
@@ -178,7 +178,7 @@ bool SvpSalBitmap::Create(const SalBitmap& rBmp)
         mpDIB = new BitmapBuffer( *rSalBmp.mpDIB );
 
         const size_t size = mpDIB->mnScanlineSize * mpDIB->mnHeight;
-        if (size > SAL_MAX_INT32)
+        if (size > SAL_MAX_INT32/2)
         {
             delete mpDIB;
             mpDIB = nullptr;
