@@ -69,6 +69,24 @@
       "revId": "574f5d4508a51baaf4ab8ef0eaeb2ccacf3b01a7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a6eadb0_d5678f23",
+        "filename": "basic/source/runtime/basrdll.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-01-06T08:19:41Z",
+      "side": 1,
+      "message": "There is no easy solution here.  Ideally, you\u0027d need to understand the surrounding code deeply enough to know what the real invariant is here, and then act accordingly.\n\nSuperficially, it may look like the invariant \"of course\" is that pThis may legitimately be null here (why else would there be the \u0027if ( pThis )\u0027?).  Unfortunately, quite some parts of LO use this \"defensive programming\" anti-pattern where impossible conditions are checked and acted upon in dubious ways, obfuscating the code and turning otherwise straight-to-detect programming errors into a nightmare.  In short, it is useful to detect such \"defensive programming\" nonsense and get it fixed.  Occurrences of \u0027DBG_ASSERT(x); if (x) ...\u0027 may or may not be indicator of such \"defensive programming\", and it would be unfortunate if such signposts were naively cleaned up the wrong way, removing clues that would be helpful in a true fix.",
+      "parentUuid": "ba5da102_b374effd",
+      "revId": "574f5d4508a51baaf4ab8ef0eaeb2ccacf3b01a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
