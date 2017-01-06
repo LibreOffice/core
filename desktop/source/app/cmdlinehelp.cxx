@@ -182,7 +182,8 @@ namespace desktop
                     hErr = GetStdHandle(STD_ERROR_HANDLE);
                 if (hOut == NULL) // application does not have associated standard handles
                 {
-                    STARTUPINFOA aStartupInfo{ sizeof(aStartupInfo) };
+                    STARTUPINFOA aStartupInfo;
+                    aStartupInfo.cb = sizeof(aStartupInfo);
                     GetStartupInfoA(&aStartupInfo);
                     if ((aStartupInfo.dwFlags & STARTF_USESTDHANDLES) == STARTF_USESTDHANDLES)
                     {
