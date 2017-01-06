@@ -180,7 +180,7 @@ namespace desktop
                 HANDLE hIn = GetStdHandle(STD_INPUT_HANDLE),
                     hOut = GetStdHandle(STD_OUTPUT_HANDLE),
                     hErr = GetStdHandle(STD_ERROR_HANDLE);
-                if (hOut == NULL) // application does not have associated standard handles
+                if (hOut == nullptr) // application does not have associated standard handles
                 {
                     STARTUPINFOA aStartupInfo;
                     aStartupInfo.cb = sizeof(aStartupInfo);
