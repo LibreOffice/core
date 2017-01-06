@@ -587,7 +587,7 @@ void SwFlyDrawContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint
         // This also needs to work when no layout exists. Thus, for
         // FlyFrames an alternative method is used now in that case.
         auto pFormat(dynamic_cast<const SwFrameFormat*>(&rMod));
-        if(pFormat->Which() == RES_FLYFRMFMT && !pFormat->getIDocumentLayoutAccess().GetCurrentViewShell())
+        if (pFormat && pFormat->Which() == RES_FLYFRMFMT && !pFormat->getIDocumentLayoutAccess().GetCurrentViewShell())
             pGetZOrdnerHint->m_rnZOrder = GetMaster()->GetOrdNum();
     }
 }
@@ -598,9 +598,9 @@ bool CheckControlLayer( const SdrObject *pObj )
 {
     if ( SdrInventor::FmForm == pObj->GetObjInventor() )
         return true;
-    if (const SdrObjList *pObjLst = dynamic_cast<const SdrObjGroup*>(pObj))
+    if (const SdrObjGroup *pObjGroup = dynamic_cast<const SdrObjGroup*>(pObj))
     {
-        const SdrObjList *pLst = pObjLst->GetSubList();
+        const SdrObjList *pLst = pObjGroup->GetSubList();
         for ( size_t i = 0; i < pLst->GetObjCount(); ++i )
         {
             if ( ::CheckControlLayer( pLst->GetObj( i ) ) )
