@@ -49,7 +49,6 @@ class SvStream;
 
 class GIFReader : public GraphicReader
 {
-    Graphic             aImGraphic;
     Animation           aAnimation;
     Bitmap              aBmp8;
     Bitmap              aBmp1;
@@ -103,10 +102,9 @@ class GIFReader : public GraphicReader
 public:
 
     ReadState           ReadGIF( Graphic& rGraphic );
-    const Graphic&      GetIntermediateGraphic();
+    Graphic             GetIntermediateGraphic();
 
     explicit            GIFReader( SvStream& rStm );
-    virtual             ~GIFReader() override;
 };
 
 GIFReader::GIFReader( SvStream& rStm )
@@ -143,11 +141,6 @@ GIFReader::GIFReader( SvStream& rStm )
     maUpperName = "SVIGIF";
     aSrcBuf.resize(256);    // Memory buffer for ReadNextBlock
     ClearImageExtensions();
-}
-
-GIFReader::~GIFReader()
-{
-    aImGraphic.SetContext( nullptr );
 }
 
 void GIFReader::ClearImageExtensions()
@@ -651,8 +644,10 @@ void GIFReader::CreateNewBitmaps()
     }
 }
 
-const Graphic& GIFReader::GetIntermediateGraphic()
+Graphic GIFReader::GetIntermediateGraphic()
 {
+    Graphic aImGraphic;
+
     // only create intermediate graphic, if data is available
     // but graphic still not completely read
     if ( bImGraphicReady && !aAnimation.Count() )
