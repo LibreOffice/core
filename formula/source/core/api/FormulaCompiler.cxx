@@ -1188,8 +1188,9 @@ FormulaError FormulaCompiler::GetErrorConstant( const OUString& rName ) const
     else
     {
         // Per convention recognize detailed "#ERRxxx!" constants, always
-        // untranslated.
-        if (rName.startsWithIgnoreAsciiCase("#ERR") && rName[rName.getLength()-1] == '!')
+        // untranslated. Error numbers are sal_uInt16 so at most 5 decimal
+        // digits.
+        if (rName.startsWithIgnoreAsciiCase("#ERR") && rName.getLength() <= 10 && rName[rName.getLength()-1] == '!')
         {
             sal_uInt32 nErr = rName.copy( 4, rName.getLength() - 5).toUInt32();
             if (0 < nErr && nErr <= SAL_MAX_UINT16 && isPublishedFormulaError(static_cast<FormulaError>(nErr)))
