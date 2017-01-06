@@ -2620,7 +2620,7 @@ TextView* CodeCompleteListBox::GetParentEditView()
 
 void CodeCompleteListBox::InsertSelectedEntry()
 {
-    if( !aFuncBuffer.toString().isEmpty() )
+    if( !aFuncBuffer.isEmpty() )
     {
         // if the user typed in something: remove, and insert
         GetParentEditView()->SetSelection( pCodeCompleteWindow->pParent->GetLastHighlightPortionTextSelection() );
@@ -2725,7 +2725,7 @@ void CodeCompleteListBox::KeyInput( const KeyEvent& rKeyEvt )
                 HideAndRestoreFocus();
                 break;
             case KEY_BACKSPACE: case KEY_DELETE:
-                if( !aFuncBuffer.toString().isEmpty() )
+                if( !aFuncBuffer.isEmpty() )
                 {
                     //if there was something inserted by tab: add it to aFuncBuffer
                     TextSelection aSel( GetParentEditView()->GetSelection() );
@@ -2736,10 +2736,9 @@ void CodeCompleteListBox::KeyInput( const KeyEvent& rKeyEvt )
 
                     if( !aTabInsertedStr.isEmpty() && aTabInsertedStr != aFuncBuffer.toString() )
                     {
-                        aFuncBuffer.setLength(0);
-                        aFuncBuffer = aFuncBuffer.append(aTabInsertedStr);
+                        aFuncBuffer = aTabInsertedStr;
                     }
-                    aFuncBuffer = aFuncBuffer.remove(aFuncBuffer.getLength()-1, 1);
+                    aFuncBuffer.remove(aFuncBuffer.getLength()-1, 1);
                     SetMatchingEntries();
                 }
                 else
