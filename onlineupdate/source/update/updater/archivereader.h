@@ -11,31 +11,34 @@
 #include <onlineupdate/mar.h>
 
 #ifdef _WIN32
-  typedef WCHAR NS_tchar;
+typedef WCHAR NS_tchar;
 #else
-  typedef char NS_tchar;
+typedef char NS_tchar;
 #endif
 
 // This class provides an API to extract files from an update archive.
 class ArchiveReader
 {
 public:
-  ArchiveReader() : mArchive(nullptr) {}
-  ~ArchiveReader() { Close(); }
+    ArchiveReader() : mArchive(nullptr) {}
+    ~ArchiveReader()
+    {
+        Close();
+    }
 
-  int Open(const NS_tchar *path);
-  int VerifySignature();
-  int VerifyProductInformation(const char *MARChannelID,
-                               const char *appVersion);
-  void Close();
+    int Open(const NS_tchar *path);
+    int VerifySignature();
+    int VerifyProductInformation(const char *MARChannelID,
+                                 const char *appVersion);
+    void Close();
 
-  int ExtractFile(const char *item, const NS_tchar *destination);
-  int ExtractFileToStream(const char *item, FILE *fp);
+    int ExtractFile(const char *item, const NS_tchar *destination);
+    int ExtractFileToStream(const char *item, FILE *fp);
 
 private:
-  int ExtractItemToStream(const MarItem *item, FILE *fp);
+    int ExtractItemToStream(const MarItem *item, FILE *fp);
 
-  MarFile *mArchive;
+    MarFile *mArchive;
 };
 
 #endif  // ArchiveReader_h__

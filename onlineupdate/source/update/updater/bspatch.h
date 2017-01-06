@@ -35,31 +35,32 @@
 #include <stdint.h>
 #include <stdio.h>
 
-typedef struct MBSPatchHeader_ {
-  /* "MBDIFF10" */
-  char tag[8];
+typedef struct MBSPatchHeader_
+{
+    /* "MBDIFF10" */
+    char tag[8];
 
-  /* Length of the file to be patched */
-  uint32_t slen;
+    /* Length of the file to be patched */
+    uint32_t slen;
 
-  /* CRC32 of the file to be patched */
-  uint32_t scrc32;
+    /* CRC32 of the file to be patched */
+    uint32_t scrc32;
 
-  /* Length of the result file */
-  uint32_t dlen;
+    /* Length of the result file */
+    uint32_t dlen;
 
-  /* Length of the control block in bytes */
-  uint32_t cblen;
+    /* Length of the control block in bytes */
+    uint32_t cblen;
 
-  /* Length of the diff block in bytes */
-  uint32_t difflen;
+    /* Length of the diff block in bytes */
+    uint32_t difflen;
 
-  /* Length of the extra block in bytes */
-  uint32_t extralen;
+    /* Length of the extra block in bytes */
+    uint32_t extralen;
 
-  /* Control block (MBSPatchTriple[]) */
-  /* Diff block (binary data) */
-  /* Extra block (binary data) */
+    /* Control block (MBSPatchTriple[]) */
+    /* Diff block (binary data) */
+    /* Extra block (binary data) */
 } MBSPatchHeader;
 
 /**
@@ -84,10 +85,11 @@ int MBS_ReadHeader(FILE* file, MBSPatchHeader *header);
 int MBS_ApplyPatch(const MBSPatchHeader *header, FILE* patchFile,
                    unsigned char *fbuffer, FILE* file);
 
-typedef struct MBSPatchTriple_ {
-  uint32_t x; /* add x bytes from oldfile to x bytes from the diff block */
-  uint32_t y; /* copy y bytes from the extra block */
-  int32_t  z; /* seek forwards in oldfile by z bytes */
+typedef struct MBSPatchTriple_
+{
+    uint32_t x; /* add x bytes from oldfile to x bytes from the diff block */
+    uint32_t y; /* copy y bytes from the extra block */
+    int32_t  z; /* seek forwards in oldfile by z bytes */
 } MBSPatchTriple;
 
 #endif  // bspatch_h__

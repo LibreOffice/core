@@ -11,28 +11,28 @@
 class UpdateLog
 {
 public:
-  static UpdateLog & GetPrimaryLog()
-  {
-    static UpdateLog primaryLog;
-    return primaryLog;
-  }
+    static UpdateLog & GetPrimaryLog()
+    {
+        static UpdateLog primaryLog;
+        return primaryLog;
+    }
 
-  void Init(NS_tchar* sourcePath, const NS_tchar* fileName,
-            const NS_tchar* alternateFileName, bool append);
-  void Finish();
-  void Flush();
-  void Printf(const char *fmt, ... );
-  void WarnPrintf(const char *fmt, ... );
+    void Init(NS_tchar* sourcePath, const NS_tchar* fileName,
+              const NS_tchar* alternateFileName, bool append);
+    void Finish();
+    void Flush();
+    void Printf(const char *fmt, ... );
+    void WarnPrintf(const char *fmt, ... );
 
-  ~UpdateLog()
-  {
-    Finish();
-  }
+    ~UpdateLog()
+    {
+        Finish();
+    }
 
 protected:
-  UpdateLog();
-  FILE *logFP;
-  NS_tchar* sourcePath;
+    UpdateLog();
+    FILE *logFP;
+    NS_tchar* sourcePath;
 };
 
 #define LOG_WARN(args) UpdateLog::GetPrimaryLog().WarnPrintf args

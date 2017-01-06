@@ -10,23 +10,23 @@
 #include "updatedefines.h"
 
 #if defined(_WIN32)
-  typedef WCHAR NS_tchar;
-  #define NS_main wmain
+typedef WCHAR NS_tchar;
+#define NS_main wmain
 #else
-  typedef char NS_tchar;
-  #define NS_main main
+typedef char NS_tchar;
+#define NS_main main
 #endif
 
 // Called to perform any initialization of the widget toolkit
 int InitProgressUI(int *argc, NS_tchar ***argv);
 
 #if defined(_WIN32)
-  // Called on the main thread at startup
-  int ShowProgressUI(bool indeterminate = false, bool initUIStrings = true);
-  int InitProgressUIStrings();
+// Called on the main thread at startup
+int ShowProgressUI(bool indeterminate = false, bool initUIStrings = true);
+int InitProgressUIStrings();
 #else
-  // Called on the main thread at startup
-  int ShowProgressUI();
+// Called on the main thread at startup
+int ShowProgressUI();
 #endif
 // May be called from any thread
 void QuitProgressUI();
