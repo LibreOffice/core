@@ -598,9 +598,9 @@ bool CheckControlLayer( const SdrObject *pObj )
 {
     if ( SdrInventor::FmForm == pObj->GetObjInventor() )
         return true;
-    if ( dynamic_cast<const SdrObjGroup*>( pObj) !=  nullptr )
+    if (const SdrObjList *pObjLst = dynamic_cast<const SdrObjGroup*>(pObj))
     {
-        const SdrObjList *pLst = static_cast<const SdrObjGroup*>(pObj)->GetSubList();
+        const SdrObjList *pLst = pObjLst->GetSubList();
         for ( size_t i = 0; i < pLst->GetObjCount(); ++i )
         {
             if ( ::CheckControlLayer( pLst->GetObj( i ) ) )
