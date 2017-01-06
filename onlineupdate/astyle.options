@@ -1,0 +1,7 @@
+--style=allman
+-s4
+--indent=spaces=4
+--attach-namespaces
+--indent-switches
+--indent-col1-comments
+--pad-header
