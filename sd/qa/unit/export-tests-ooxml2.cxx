@@ -103,6 +103,7 @@ public:
     void testTdf99224();
     void testTdf92076();
     void testTdf59046();
+    void testCShapeArc();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
@@ -129,6 +130,7 @@ public:
     CPPUNIT_TEST(testTdf99224);
     CPPUNIT_TEST(testTdf92076);
     CPPUNIT_TEST(testTdf59046);
+    CPPUNIT_TEST(testCShapeArc);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -755,6 +757,17 @@ void SdOOXMLExportTest2::testTdf59046()
     xShell->DoClose();
     xmlDocPtr pXmlDocRels = parseExport(tempFile, "ppt/slides/slide1.xml");
     assertXPath(pXmlDocRels, "/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:custGeom/a:pathLst/a:path", 1);
+}
+
+void SdOOXMLExportTest2::testCShapeArc()
+{
+    ::sd::DrawDocShellRef xShell = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/cshape-arc.pptx"), PPTX);
+    utl::TempFile tempFile;
+    xShell = saveAndReload(xShell.get(), PPTX, &tempFile);
+    xShell->DoClose();
+    xmlDocPtr pXmlDocRels = parseExport(tempFile, "ppt/slides/slide1.xml");
+    // The arc occupied upper-right corner of the whole area, so x=0 would not appear.
+    assertXPath(pXmlDocRels, "/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:custGeom/a:pathLst/a:path/a:moveTo/a:pt[@x='0']", 0);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest2);
