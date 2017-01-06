@@ -134,6 +134,7 @@ public:
     void testTdf104201();
     void testTdf103477();
     void testTdf104445();
+    void testTdf105150();
 
     CPPUNIT_TEST_SUITE(SdImportTest);
 
@@ -192,6 +193,7 @@ public:
     CPPUNIT_TEST(testTdf104201);
     CPPUNIT_TEST(testTdf103477);
     CPPUNIT_TEST(testTdf104445);
+    CPPUNIT_TEST(testTdf105150);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -1638,6 +1640,18 @@ void SdImportTest::testTdf103477()
     CPPUNIT_ASSERT(pNumFmt);
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Bullet's color is wrong!", sal_uInt32(0x000000), pNumFmt->GetNumRule()->GetLevel(1).GetBulletColor().GetColor());
 
+    xDocShRef->DoClose();
+}
+
+void SdImportTest::testTdf105150()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf105150.pptx"), PPTX);
+    const SdrPage* pPage = GetPage(1, xDocShRef);
+    const SdrObject* pObj = pPage->GetObj(1);
+    auto& rFillStyleItem = dynamic_cast<const XFillStyleItem&>(pObj->GetMergedItem(XATTR_FILLSTYLE));
+    // This was drawing::FillStyle_NONE, <p:sp useBgFill="1"> was ignored when
+    // the slide didn't have an explicit background fill.
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, rFillStyleItem.GetValue());
     xDocShRef->DoClose();
 }
 
