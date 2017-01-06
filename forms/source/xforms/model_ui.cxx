@@ -853,29 +853,20 @@ static OUString lcl_serializeForDisplay( const Reference<XXPathObject>& xResult 
     if( ! xResult.is() )
         return getResource( RID_STR_XFORMS_CANT_EVALUATE );
 
-
     // TODO: localize
-    OUStringBuffer aBuffer;
-
     switch( xResult->getObjectType() )
     {
     case XPathObjectType_XPATH_BOOLEAN:
-        aBuffer.append( xResult->getBoolean()
-                        ? OUString("true")
-                        : OUString("false") );
-        break;
+        return xResult->getBoolean() ? OUString("true") : OUString("false");
 
     case XPathObjectType_XPATH_STRING:
-        aBuffer.append("\"" + xResult->getString() + "\"");
-        break;
+        return "\"" + xResult->getString() + "\"";
 
     case XPathObjectType_XPATH_NODESET:
-        aBuffer.append( lcl_serializeForDisplay( xResult->getNodeList() ) );
-        break;
+        return lcl_serializeForDisplay( xResult->getNodeList() );
 
     case XPathObjectType_XPATH_NUMBER:
-        aBuffer.append( xResult->getDouble() );
-        break;
+        return OUString::number(xResult->getDouble());
 
     case XPathObjectType_XPATH_UNDEFINED:
     case XPathObjectType_XPATH_POINT:
@@ -885,10 +876,8 @@ static OUString lcl_serializeForDisplay( const Reference<XXPathObject>& xResult 
     case XPathObjectType_XPATH_XSLT_TREE:
     default:
         // TODO: localized error message?
-        break;
+        return OUString();
     }
-
-    return aBuffer.makeStringAndClear();
 }
 
 OUString Model::getResultForExpression(
