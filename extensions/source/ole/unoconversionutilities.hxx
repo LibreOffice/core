@@ -794,7 +794,7 @@ void UnoConversionUtilities<T>::anyToVariant(VARIANT* pVariant, const Any& rAny)
         }
         case TypeClass_BOOLEAN:
         {
-            sal_Bool value;
+            bool value;
             if (rAny >>= value)
             {
                 pVariant->vt = VT_BOOL;

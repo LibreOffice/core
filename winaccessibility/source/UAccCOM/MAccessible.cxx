@@ -2678,7 +2678,7 @@ void CMAccessible::get_OLECHARFromAny(Any& pAny, OLECHAR* pChar)
         }
     case TypeClass_BOOLEAN:
         {
-            sal_Bool val;
+            bool val;
             pAny >>= val;
             swprintf( pChar, L"%d", val);
             break;

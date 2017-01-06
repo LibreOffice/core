@@ -1074,7 +1074,7 @@ void VistaFilePickerImpl::impl_sta_SetControlValue(const RequestRef& rRequest)
         //case css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_PREVIEW : // can be ignored ... preview is supported native now !
         case css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_SELECTION :
             {
-                sal_Bool bValue   = false;
+                bool bValue   = false;
                            aValue >>= bValue;
                 iCustom->SetCheckButtonState(nId, bValue);
             }

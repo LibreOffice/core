@@ -89,7 +89,7 @@ namespace dxcanvas
         awt::Rectangle aRect;
         maArguments[2] >>= aRect;
 
-        sal_Bool bIsFullscreen( false );
+        bool bIsFullscreen( false );
         maArguments[3] >>= bIsFullscreen;
 
         // setup helper
