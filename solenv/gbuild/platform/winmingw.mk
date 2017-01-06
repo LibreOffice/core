@@ -486,6 +486,7 @@ gb_Library_PLAINLIBS_NONE += \
 	uwinapi \
 	winmm \
 	winspool \
+	ws2_32 \
 	wsock32
 
 gb_Library_LAYER := \
