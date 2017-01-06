@@ -368,10 +368,14 @@ const SwFrame* SwAccessibleChild::GetParent( const bool bInPagePreview ) const
             else
             {
                 // In any other case the parent is the root frm
-                if( bInPagePreview )
-                    pParent = pContact->GetAnchorFrame()->FindPageFrame();
-                else
-                    pParent = pContact->GetAnchorFrame()->getRootFrame();
+                SwFrame const*const pAnchor(pContact->GetAnchorFrame());
+                if (pAnchor) // null if object removed from layout
+                {
+                    if (bInPagePreview)
+                        pParent = pAnchor->FindPageFrame();
+                    else
+                        pParent = pAnchor->getRootFrame();
+                }
             }
         }
     }
