@@ -140,7 +140,7 @@ BitmapBuffer* ImplCreateDIB(
         size_t size;
         bFail = o3tl::checked_multiply<size_t>(pDIB->mnHeight, pDIB->mnScanlineSize, size);
         SAL_WARN_IF(bFail, "vcl.gdi", "checked multiply failed");
-        if (bFail)
+        if (bFail || size > SAL_MAX_INT32/2)
         {
             delete pDIB;
             return nullptr;
@@ -194,7 +194,7 @@ bool SvpSalBitmap::Create(const SalBitmap& rBmp)
         mpDIB = new BitmapBuffer( *rSalBmp.mpDIB );
 
         const size_t size = mpDIB->mnScanlineSize * mpDIB->mnHeight;
-        if (size > SAL_MAX_INT32)
+        if (size > SAL_MAX_INT32/2)
         {
             delete mpDIB;
             mpDIB = nullptr;
