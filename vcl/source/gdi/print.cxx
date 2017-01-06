@@ -106,18 +106,6 @@ PrinterOptions::~PrinterOptions()
 {
 }
 
-#define PROPERTYNAME_REDUCETRANSPARENCY                 "ReduceTransparency"
-#define PROPERTYNAME_REDUCEDTRANSPARENCYMODE            "ReducedTransparencyMode"
-#define PROPERTYNAME_REDUCEGRADIENTS                    "ReduceGradients"
-#define PROPERTYNAME_REDUCEDGRADIENTMODE                "ReducedGradientMode"
-#define PROPERTYNAME_REDUCEDGRADIENTSTEPCOUNT           "ReducedGradientStepCount"
-#define PROPERTYNAME_REDUCEBITMAPS                      "ReduceBitmaps"
-#define PROPERTYNAME_REDUCEDBITMAPMODE                  "ReducedBitmapMode"
-#define PROPERTYNAME_REDUCEDBITMAPRESOLUTION            "ReducedBitmapResolution"
-#define PROPERTYNAME_REDUCEDBITMAPINCLUDESTRANSPARENCY  "ReducedBitmapIncludesTransparency"
-#define PROPERTYNAME_CONVERTTOGREYSCALES                "ConvertToGreyscales"
-#define PROPERTYNAME_PDFASSTANDARDPRINTJOBFORMAT        "PDFAsStandardPrintJobFormat"
-
 bool PrinterOptions::ReadFromConfig( bool i_bFile )
 {
     bool bSuccess = false;
@@ -155,27 +143,27 @@ bool PrinterOptions::ReadFromConfig( bool i_bFile )
                 {
                     sal_Int32 nValue = 0;
                     bool  bValue = false;
-                    if( xSet->getPropertyValue(PROPERTYNAME_REDUCETRANSPARENCY) >>= bValue )
+                    if( xSet->getPropertyValue("ReduceTransparency") >>= bValue )
                         SetReduceTransparency( bValue );
-                    if( xSet->getPropertyValue(PROPERTYNAME_REDUCEDTRANSPARENCYMODE) >>= nValue )
+                    if( xSet->getPropertyValue("ReducedTransparencyMode") >>= nValue )
                         SetReducedTransparencyMode( (PrinterTransparencyMode)nValue );
-                    if( xSet->getPropertyValue(PROPERTYNAME_REDUCEGRADIENTS) >>= bValue )
+                    if( xSet->getPropertyValue("ReduceGradients") >>= bValue )
                         SetReduceGradients( bValue );
-                    if( xSet->getPropertyValue(PROPERTYNAME_REDUCEDGRADIENTMODE) >>= nValue )
+                    if( xSet->getPropertyValue("ReducedGradientMode") >>= nValue )
                         SetReducedGradientMode( (PrinterGradientMode)nValue );
-                    if( xSet->getPropertyValue(PROPERTYNAME_REDUCEDGRADIENTSTEPCOUNT) >>= nValue )
+                    if( xSet->getPropertyValue("ReducedGradientStepCount") >>= nValue )
                         SetReducedGradientStepCount( (sal_uInt16)nValue );
-                    if( xSet->getPropertyValue(PROPERTYNAME_REDUCEBITMAPS) >>= bValue )
+                    if( xSet->getPropertyValue("ReduceBitmaps") >>= bValue )
                         SetReduceBitmaps( bValue );
-                    if( xSet->getPropertyValue(PROPERTYNAME_REDUCEDBITMAPMODE) >>= nValue )
+                    if( xSet->getPropertyValue("ReducedBitmapMode") >>= nValue )
                         SetReducedBitmapMode( (PrinterBitmapMode)nValue );
-                    if( xSet->getPropertyValue(PROPERTYNAME_REDUCEDBITMAPRESOLUTION) >>= nValue )
+                    if( xSet->getPropertyValue("ReducedBitmapResolution") >>= nValue )
                         SetReducedBitmapResolution( (sal_uInt16)nValue );
-                    if( xSet->getPropertyValue(PROPERTYNAME_REDUCEDBITMAPINCLUDESTRANSPARENCY) >>= bValue )
+                    if( xSet->getPropertyValue("ReducedBitmapIncludesTransparency") >>= bValue )
                         SetReducedBitmapIncludesTransparency( bValue );
-                    if( xSet->getPropertyValue(PROPERTYNAME_CONVERTTOGREYSCALES) >>= bValue )
+                    if( xSet->getPropertyValue("ConvertToGreyscales") >>= bValue )
                         SetConvertToGreyscales( bValue );
-                    if( xSet->getPropertyValue(PROPERTYNAME_PDFASSTANDARDPRINTJOBFORMAT) >>= bValue )
+                    if( xSet->getPropertyValue("PDFAsStandardPrintJobFormat") >>= bValue )
                         SetPDFAsStandardPrintJobFormat( bValue );
 
                     bSuccess = true;
