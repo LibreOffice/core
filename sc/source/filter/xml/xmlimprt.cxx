@@ -3393,12 +3393,12 @@ void ScXMLImport::ExtractFormulaNamespaceGrammar(
     reGrammar = eDefaultGrammar;
 }
 
-bool ScXMLImport::IsFormulaErrorConstant( const OUString& rStr ) const
+FormulaError ScXMLImport::GetFormulaErrorConstant( const OUString& rStr ) const
 {
     if (!mpComp)
-        return false;
+        return FormulaError::NONE;
 
-    return mpComp->GetErrorConstant(rStr) > FormulaError::NONE;
+    return mpComp->GetErrorConstant(rStr);
 }
 
 ScEditEngineDefaulter* ScXMLImport::GetEditEngine()
