@@ -27,7 +27,6 @@
 #include <vcl/fixed.hxx>
 #include <vcl/floatwin.hxx>
 #include <comphelper/processfactory.hxx>
-#include <cppuhelper/implbase.hxx>
 #include <sfx2/ctrlitem.hxx>
 #include <sfx2/sfxstatuslistener.hxx>
 #include <svtools/toolboxcontroller.hxx>
@@ -135,9 +134,7 @@ public:
  */
 
 struct SfxToolBoxControl_Impl;
-class SFX2_DLLPUBLIC SfxToolBoxControl:
-    public cppu::ImplInheritanceHelper<
-        svt::ToolboxController, css::frame::XSubToolbarController>
+class SFX2_DLLPUBLIC SfxToolBoxControl: public svt::ToolboxController
 {
 friend class SfxPopupWindow;
 friend struct SfxTbxCtrlFactory;
@@ -183,12 +180,6 @@ public:
         throw (css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Reference< css::awt::XWindow > SAL_CALL createItemWindow( const css::uno::Reference< css::awt::XWindow >& rParent )
         throw (css::uno::RuntimeException, std::exception) override;
-
-    // XSubToolbarController
-    virtual sal_Bool SAL_CALL opensSubToolbar(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getSubToolbarName(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL functionSelected( const OUString& aCommand ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL updateImage(  ) throw (css::uno::RuntimeException, std::exception) override;
 
 public:
                                SFX_DECL_TOOLBOX_CONTROL();

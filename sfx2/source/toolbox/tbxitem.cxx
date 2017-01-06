@@ -538,27 +538,6 @@ throw ( css::uno::RuntimeException, std::exception )
     }
 }
 
-// XSubToolbarController
-sal_Bool SAL_CALL SfxToolBoxControl::opensSubToolbar() throw (css::uno::RuntimeException, std::exception)
-{
-    return false;
-}
-
-OUString SAL_CALL SfxToolBoxControl::getSubToolbarName() throw (css::uno::RuntimeException, std::exception)
-{
-    return OUString();
-}
-
-void SAL_CALL SfxToolBoxControl::functionSelected( const OUString& /*aCommand*/ ) throw (css::uno::RuntimeException, std::exception)
-{
-    // must be implemented by sub-class
-}
-
-void SAL_CALL SfxToolBoxControl::updateImage() throw (css::uno::RuntimeException, std::exception)
-{
-    // must be implemented by sub-class
-}
-
 // XToolbarController
 void SAL_CALL SfxToolBoxControl::execute( sal_Int16 KeyModifier ) throw (css::uno::RuntimeException, std::exception)
 {

@@ -206,7 +206,8 @@ friend class SfxStyleControllerItem_Impl;
 
 typedef std::function<void(const OUString&, const NamedColor&)> ColorSelectFunction;
 
-class SVX_DLLPUBLIC SvxColorToolBoxControl : public SfxToolBoxControl
+class SVX_DLLPUBLIC SvxColorToolBoxControl : public cppu::ImplInheritanceHelper< SfxToolBoxControl,
+                                                                                 css::frame::XSubToolbarController >
 {
     std::unique_ptr<svx::ToolboxButtonColorUpdater> m_xBtnUpdater;
     PaletteManager m_aPaletteManager;
@@ -227,6 +228,8 @@ public:
 
     // XSubToolbarController
     virtual sal_Bool SAL_CALL opensSubToolbar() throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getSubToolbarName() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL functionSelected( const OUString& rCommand ) throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL updateImage() throw (css::uno::RuntimeException, std::exception) override;
 
     void setColorSelectFunction(const ColorSelectFunction& aColorSelectFunction);

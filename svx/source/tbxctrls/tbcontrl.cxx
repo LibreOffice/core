@@ -2766,7 +2766,7 @@ SvxColorToolBoxControl::SvxColorToolBoxControl(
     sal_uInt16 nSlotId,
     sal_uInt16 nId,
     ToolBox& rTbx ):
-    SfxToolBoxControl( nSlotId, nId, rTbx ),
+    ImplInheritanceHelper( nSlotId, nId, rTbx ),
     m_bSplitButton(dynamic_cast< sfx2::sidebar::SidebarToolBox* >(&rTbx) == nullptr),
     m_aColorSelectFunction(PaletteManager::DispatchColorCommand)
 {
@@ -2907,6 +2907,17 @@ void SvxColorToolBoxControl::updateImage()
         GetToolBox().SetItemImage( GetId(), aImage );
         m_xBtnUpdater->Update( m_aPaletteManager.GetLastColor(), true );
     }
+}
+
+OUString SvxColorToolBoxControl::getSubToolbarName()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return OUString();
+}
+
+void SvxColorToolBoxControl::functionSelected( const OUString& /*rCommand*/ )
+    throw (css::uno::RuntimeException, std::exception)
+{
 }
 
 SfxToolBoxControl* SvxColorToolBoxControl::CreateImpl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox &rTbx )

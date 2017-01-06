@@ -30,12 +30,12 @@
 #include <com/sun/star/frame/XSubToolbarController.hpp>
 #include <cppuhelper/implbase2.hxx>
 
-class SfxToolBoxControl;
+class SvxColorToolBoxControl;
 namespace rptui
 {
     typedef ::cppu::ImplHelper2 <   css::lang::XServiceInfo,
                                     css::frame::XSubToolbarController> TToolboxController_BASE;
-    typedef rtl::Reference<SfxToolBoxControl> TToolbarHelper;
+    typedef rtl::Reference<SvxColorToolBoxControl> TToolbarHelper;
 
     class OToolboxController : public ::svt::ToolboxController
                               ,public TToolboxController_BASE
