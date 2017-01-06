@@ -41,6 +41,10 @@ namespace desktop {
         void setEventLatch(const bool bEventLatch)
         {
             m_bEventLatch = bEventLatch;
+            if (!IsActive())
+            {
+                Start();
+            }
         }
 
         bool isEventLatchOn() const { return m_bEventLatch; }
