@@ -373,6 +373,25 @@ gboolean TiledRowColumnBar::docConfigureEvent(GtkWidget* pDocView, GdkEventConfi
         gtk_widget_show(rWindow.m_pColumnBar->m_pDrawingArea);
         gtk_widget_queue_draw(rWindow.m_pColumnBar->m_pDrawingArea);
         gtk_widget_show(rWindow.m_pFormulabarEntry);
+
+        // Change horizontal alignment uno commands for spreadsheet
+        const char* unoHorAlignArgs =
+            "{"
+            "\"HorizontalAlignment\":{"
+            "\"type\":\"unsigned short\", "
+            "\"value\":\"%d\""
+            "}"
+            "}";
+
+        char unoHorAlignArgsFormatted[strlen(unoHorAlignArgs)];
+        snprintf(unoHorAlignArgsFormatted, sizeof(unoHorAlignArgsFormatted), unoHorAlignArgs, 1);
+        lcl_registerToolItem(rWindow, rWindow.m_pLeftpara, ".uno:HorizontalAlignment", std::string(unoHorAlignArgsFormatted));
+        snprintf(unoHorAlignArgsFormatted, sizeof(unoHorAlignArgsFormatted), unoHorAlignArgs, 2);
+        lcl_registerToolItem(rWindow, rWindow.m_pCenterpara, ".uno:HorizontalAlignment", std::string(unoHorAlignArgsFormatted));
+        snprintf(unoHorAlignArgsFormatted, sizeof(unoHorAlignArgsFormatted), unoHorAlignArgs, 3);
+        lcl_registerToolItem(rWindow, rWindow.m_pRightpara, ".uno:HorizontalAlignment", std::string(unoHorAlignArgsFormatted));
+        snprintf(unoHorAlignArgsFormatted, sizeof(unoHorAlignArgsFormatted), unoHorAlignArgs, 4);
+        lcl_registerToolItem(rWindow, rWindow.m_pJustifypara, ".uno:HorizontalAlignment", std::string(unoHorAlignArgsFormatted));
     }
 
     return TRUE;
