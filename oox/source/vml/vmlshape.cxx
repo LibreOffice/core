@@ -1058,6 +1058,28 @@ Reference< XShape > BezierShape::implConvertAndInsert( const Reference< XShapes 
         aPropSet.setProperty( PROP_PolyPolygonBezier, aBezierCoords );
     }
 
+    // Handle horizontal and vertical flip.
+    if (!maTypeModel.maFlip.isEmpty())
+    {
+        if (SdrObject* pShape = GetSdrObjectFromXShape(xShape))
+        {
+            if (maTypeModel.maFlip.startsWith("x"))
+            {
+                Point aCenter(pShape->GetSnapRect().Center());
+                Point aPoint2(aCenter);
+                aPoint2.setY(aPoint2.getY() + 1);
+                pShape->NbcMirror(aCenter, aPoint2);
+            }
+            if (maTypeModel.maFlip.endsWith("y"))
+            {
+                Point aCenter(pShape->GetSnapRect().Center());
+                Point aPoint2(aCenter);
+                aPoint2.setX(aPoint2.getX() + 1);
+                pShape->NbcMirror(aCenter, aPoint2);
+            }
+        }
+    }
+
     // Hacky way of ensuring the shape is correctly sized/positioned
     xShape->setSize( awt::Size( rShapeRect.Width, rShapeRect.Height ) );
     xShape->setPosition( awt::Point( rShapeRect.X, rShapeRect.Y ) );

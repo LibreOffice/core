@@ -692,6 +692,13 @@ DECLARE_OOXMLIMPORT_TEST(testBnc779620, "bnc779620.docx")
     lcl_countTextFrames( mxComponent, 1 );
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf105127, "tdf105127.docx")
+{
+    auto aPolyPolygon = getProperty<drawing::PolyPolygonBezierCoords>(getShape(1), "PolyPolygonBezier");
+    // This was 1910, the shape was rendered upside down.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3257), aPolyPolygon.Coordinates[0][0].Y);
+}
+
 DECLARE_OOXMLIMPORT_TEST(testfdo76583, "fdo76583.docx")
 {
     // The problem was that the floating table was imported as a non-floating one.
