@@ -205,7 +205,7 @@ public:
     void WritePresetShape( const char* pShape );
     void WritePresetShape( const char* pShape, MSO_SPT eShapeType, bool bPredefinedHandlesUsed, sal_Int32 nAdjustmentsWhichNeedsToBeConverted, const css::beans::PropertyValue& rProp );
     bool WriteCustomGeometry( const css::uno::Reference<css::drawing::XShape>& rXShape );
-    void WritePolyPolygon( const tools::PolyPolygon& rPolyPolygon );
+    void WritePolyPolygon( const tools::PolyPolygon& rPolyPolygon, const Rectangle &rRect );
     void WriteFill( const css::uno::Reference< css::beans::XPropertySet >& xPropSet );
     void WriteShapeStyle( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );
     void WriteShapeEffects( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );

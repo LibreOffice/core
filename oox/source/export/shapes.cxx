@@ -464,7 +464,7 @@ ShapeExport& ShapeExport::WritePolyPolygonShape( const Reference< XShape >& xSha
     // visual shape properties
     pFS->startElementNS( mnXmlNamespace, XML_spPr, FSEND );
     WriteTransformation( aRect, XML_a );
-    WritePolyPolygon( aPolyPolygon );
+    WritePolyPolygon( aPolyPolygon , aRect );
     Reference< XPropertySet > xProps( xShape, UNO_QUERY );
     if( xProps.is() ) {
         if( bClosed )
@@ -824,6 +824,7 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
     {
         WriteShapeTransformation( xShape, XML_a ); // do not flip, polypolygon coordinates are flipped already
         tools::PolyPolygon aPolyPolygon( pShape->GetLineGeometry(true) );
+        Rectangle aLogicRect = pShape->GetLogicRect();
         sal_Int32 nRotation = 0;
         // The RotateAngle property's value is independent from any flipping, and that's exactly what we need here.
         uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
@@ -831,8 +832,15 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
         if (xPropertySetInfo->hasPropertyByName("RotateAngle"))
             xPropertySet->getPropertyValue("RotateAngle") >>= nRotation;
         if (nRotation != 0)
-            aPolyPolygon.Rotate(Point(0,0), static_cast<sal_uInt16>(3600-nRotation/10));
-        WritePolyPolygon( aPolyPolygon );
+        {
+            Rectangle aSnapRect = pShape->GetSnapRect();
+            Point aCenter = aSnapRect.Center();
+            aPolyPolygon.Rotate( aCenter , static_cast<sal_uInt16>(3600-nRotation/10));
+            aLogicRect.Move( aCenter.X() - aLogicRect.Center().X(), aCenter.Y() - aLogicRect.Center().Y() );
+        }
+        aLogicRect.setWidth( aLogicRect.getWidth() + 1 );
+        aLogicRect.setHeight( aLogicRect.getHeight() + 1 );
+        WritePolyPolygon( aPolyPolygon , aLogicRect );
     }
     else if (bCustGeom)
     {

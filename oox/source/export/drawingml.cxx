@@ -2539,7 +2539,7 @@ bool DrawingML::WriteCustomGeometry( const Reference< XShape >& rXShape )
     return false;
 }
 
-void DrawingML::WritePolyPolygon( const tools::PolyPolygon& rPolyPolygon )
+void DrawingML::WritePolyPolygon( const tools::PolyPolygon& rPolyPolygon , const Rectangle &rRect)
 {
     // In case of Writer, the parent element is <wps:spPr>, and there the
     // <a:custGeom> element is not optional.
@@ -2559,13 +2559,12 @@ void DrawingML::WritePolyPolygon( const tools::PolyPolygon& rPolyPolygon )
 
     mpFS->startElementNS( XML_a, XML_pathLst, FSEND );
 
-    const Rectangle aRect( rPolyPolygon.GetBoundRect() );
 
     // Put all polygons of rPolyPolygon in the same path elemnt
     // to subtract the overlapped areas.
     mpFS->startElementNS( XML_a, XML_path,
-            XML_w, I64S( aRect.GetWidth() ),
-            XML_h, I64S( aRect.GetHeight() ),
+            XML_w, I64S( rRect.GetWidth() ),
+            XML_h, I64S( rRect.GetHeight() ),
             FSEND );
 
     for( sal_uInt16 i = 0; i < rPolyPolygon.Count(); i ++ )
@@ -2578,8 +2577,8 @@ void DrawingML::WritePolyPolygon( const tools::PolyPolygon& rPolyPolygon )
             mpFS->startElementNS( XML_a, XML_moveTo, FSEND );
 
             mpFS->singleElementNS( XML_a, XML_pt,
-                                   XML_x, I64S( rPoly[ 0 ].X() - aRect.Left() ),
-                                   XML_y, I64S( rPoly[ 0 ].Y() - aRect.Top() ),
+                                   XML_x, I64S( rPoly[ 0 ].X() - rRect.Left() ),
+                                   XML_y, I64S( rPoly[ 0 ].Y() - rRect.Top() ),
                                    FSEND );
 
             mpFS->endElementNS( XML_a, XML_moveTo );
@@ -2598,8 +2597,8 @@ void DrawingML::WritePolyPolygon( const tools::PolyPolygon& rPolyPolygon )
                     for( sal_uInt8 k = 0; k <= 2; ++k )
                     {
                         mpFS->singleElementNS( XML_a, XML_pt,
-                                               XML_x, I64S( rPoly[j+k].X() - aRect.Left() ),
-                                               XML_y, I64S( rPoly[j+k].Y() - aRect.Top() ),
+                                               XML_x, I64S( rPoly[j+k].X() - rRect.Left() ),
+                                               XML_y, I64S( rPoly[j+k].Y() - rRect.Top() ),
                                                FSEND );
 
                     }
@@ -2611,8 +2610,8 @@ void DrawingML::WritePolyPolygon( const tools::PolyPolygon& rPolyPolygon )
             {
                 mpFS->startElementNS( XML_a, XML_lnTo, FSEND );
                 mpFS->singleElementNS( XML_a, XML_pt,
-                                       XML_x, I64S( rPoly[j].X() - aRect.Left() ),
-                                       XML_y, I64S( rPoly[j].Y() - aRect.Top() ),
+                                       XML_x, I64S( rPoly[j].X() - rRect.Left() ),
+                                       XML_y, I64S( rPoly[j].Y() - rRect.Top() ),
                                        FSEND );
                 mpFS->endElementNS( XML_a, XML_lnTo );
             }
