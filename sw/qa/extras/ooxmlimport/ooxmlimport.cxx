@@ -699,6 +699,14 @@ DECLARE_OOXMLIMPORT_TEST(testTdf105127, "tdf105127.docx")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3257), aPolyPolygon.Coordinates[0][0].Y);
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf105143, "tdf105143.docx")
+{
+    OUString aTop = parseDump("/root/page/body/txt/anchored/SwAnchoredDrawObject/bounds", "top");
+    // This was 6272, i.e. the shape was moved up (incorrect position) to be
+    // inside the page rectangle.
+    CPPUNIT_ASSERT_EQUAL(OUString("6674"), aTop);
+}
+
 DECLARE_OOXMLIMPORT_TEST(testfdo76583, "fdo76583.docx")
 {
     // The problem was that the floating table was imported as a non-floating one.
