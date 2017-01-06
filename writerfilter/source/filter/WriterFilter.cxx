@@ -300,6 +300,7 @@ void WriterFilter::setTargetDocument(const uno::Reference< lang::XComponent >& x
     xSettings->setPropertyValue("TreatSingleColumnBreakAsPageBreak", uno::makeAny(true));
     xSettings->setPropertyValue("PropLineSpacingShrinksFirstLine", uno::makeAny(true));
     xSettings->setPropertyValue("AllowPaddingWithoutBorders", uno::makeAny(true));
+    xSettings->setPropertyValue("DoNotCaptureDrawObjsOnPage", uno::makeAny(true));
 }
 
 void WriterFilter::setSourceDocument(const uno::Reference< lang::XComponent >& xDoc) throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
