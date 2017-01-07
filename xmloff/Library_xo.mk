@@ -368,4 +368,10 @@ $(eval $(call gb_Library_add_exception_objects,xo,\
     xmloff/source/xforms/xformsimport \
 ))
 
+ifeq ($(CPUNAME),M68K)
+$(eval $(call gb_Library_add_cxxflags,xo,\
+    -mlong-jump-table-offsets \
+))
+endif
+
 # vim: set noet sw=4 ts=4:

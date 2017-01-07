@@ -3778,6 +3778,19 @@ if test "$GCC" = "yes"; then
             AC_MSG_RESULT([no])
         fi
     fi
+
+    if test "$host_cpu" = "m68k"; then
+        AC_MSG_CHECKING([whether $CC supports -mlong-jump-table-offsets])
+        save_CFLAGS=$CFLAGS
+        CFLAGS="$CFLAGS -Werror -mlong-jump-table-offsets"
+        AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[ return 0; ]])],[ HAVE_GCC_LONG_JUMP_TABLE_OFFSETS=TRUE ],[])
+        CFLAGS=$save_CFLAGS
+        if test "$HAVE_GCC_LONG_JUMP_TABLE_OFFSETS" = "TRUE"; then
+            AC_MSG_RESULT([yes])
+        else
+            AC_MSG_ERROR([no])
+        fi
+    fi
 fi
 AC_SUBST(HAVE_GCC_GGDB2)
 AC_SUBST(HAVE_GCC_FINLINE_LIMIT)
