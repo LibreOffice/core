@@ -22,6 +22,8 @@
 
 #include <vcl/bitmap.hxx>
 
+class Graphic;
+
 VCL_DLLPUBLIC bool ImportXPM( SvStream& rStream, Graphic& rGraphic );
 
 #endif // INCLUDED_VCL_SOURCE_FILTER_IXPM_XPMREAD_HXX
