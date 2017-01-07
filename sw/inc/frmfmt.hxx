@@ -34,6 +34,7 @@ class IMapObject;
 class SwRect;
 class SwContact;
 class SdrObject;
+class SwRootFrame;
 namespace sw
 {
     class DocumentLayoutManager;
@@ -334,6 +335,13 @@ namespace sw
         sal_uInt32& m_rnZOrder;
         GetZOrderHint(sal_uInt32& rnZOrder) : m_rnZOrder(rnZOrder) {};
         virtual ~GetZOrderHint() override;
+    };
+    struct SW_DLLPUBLIC GetObjectConnectedHint final : SfxHint
+    {
+        bool& m_risConnected;
+        const SwRootFrame* m_pRoot;
+        GetObjectConnectedHint(bool& risConnected, const SwRootFrame* pRoot) : m_risConnected(risConnected), m_pRoot(pRoot) {};
+        virtual ~GetObjectConnectedHint() override;
     };
 }
 

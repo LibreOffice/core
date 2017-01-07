@@ -3325,6 +3325,7 @@ namespace sw
     FindSdrObjectHint::~FindSdrObjectHint() {}
     CollectTextObjectsHint::~CollectTextObjectsHint() {}
     GetZOrderHint::~GetZOrderHint() {}
+    GetObjectConnectedHint::~GetObjectConnectedHint() {}
 }
 
 SwDrawFrameFormat::~SwDrawFrameFormat()

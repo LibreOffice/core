@@ -1071,26 +1071,12 @@ void AppendObjs( const SwFrameFormats *pTable, sal_uLong nIndex,
 #endif
 }
 
-static bool lcl_ObjConnected( const SwFrameFormat *pFormat, const SwFrame* pSib )
+static inline bool lcl_ObjConnected(const SwFrameFormat* pFormat, const SwFrame* pSib)
 {
-    if ( RES_FLYFRMFMT == pFormat->Which() )
-    {
-        SwIterator<SwFlyFrame,SwFormat> aIter( *pFormat );
-        const SwRootFrame* pRoot = pSib ? pSib->getRootFrame() : nullptr;
-        const SwFlyFrame* pTmpFrame;
-        for( pTmpFrame = aIter.First(); pTmpFrame; pTmpFrame = aIter.Next() )
-        {
-            if(! pRoot || pRoot == pTmpFrame->getRootFrame() )
-                return true;
-        }
-    }
-    else
-    {
-        SwDrawContact *pContact = SwIterator<SwDrawContact,SwFormat>(*pFormat).First();
-        if ( pContact )
-            return pContact->GetAnchorFrame() != nullptr;
-    }
-    return false;
+    const SwRootFrame* pRoot = pSib ? pSib->getRootFrame() : nullptr;
+    bool isConnected(false);
+    pFormat->CallSwClientNotify(sw::GetObjectConnectedHint(isConnected, pRoot));
+    return isConnected;
 }
 
 /** helper method to determine, if a <SwFrameFormat>, which has an object connected,
