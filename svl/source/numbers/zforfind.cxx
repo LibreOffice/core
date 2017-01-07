@@ -3439,7 +3439,18 @@ bool ImpSvNumberInputScan::IsNumberFormat( const OUString& rString,         // s
     else
     {
         // NoMoreUpperNeeded, all comparisons on UpperCase
-        aString = pFormatter->GetCharClass()->uppercase( rString );
+        OUStringBuffer sStringBuffer = pFormatter->GetCharClass()->uppercase( rString );
+
+        // remove any comment anchor marks
+        const sal_Unicode CH_TXTATR_INWORD = 0xfff9; /* INTERLINEAR ANNOTATION ANCHOR */
+        sal_Int32 nCommentPosition = sStringBuffer.indexOf( CH_TXTATR_INWORD );
+        while( nCommentPosition != -1 )
+        {
+            sStringBuffer.remove( nCommentPosition, 1 );
+            nCommentPosition = sStringBuffer.indexOf( CH_TXTATR_INWORD );
+        }
+        aString = sStringBuffer.makeStringAndClear();
+
         // convert native number to ASCII if necessary
         TransformInput(pFormatter, aString);
         res = IsNumberFormatMain( aString, pFormat );
