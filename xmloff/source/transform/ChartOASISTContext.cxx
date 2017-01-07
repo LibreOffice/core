@@ -121,7 +121,7 @@ void XMLChartOASISTransformerContext::StartElement(
         OUString aAttrQName( GetTransformer().GetNamespaceMap().GetQNameByKey(
                                 XML_NAMESPACE_CHART,
                                 GetXMLToken( XML_ADD_IN_NAME ) ) );
-        // coverity[var_deref_model] - pMutableAttrList is assigned in a superset of the enclosing if condition entry logic
+        assert(pMutableAttrList && "coverity[var_deref_model] - pMutableAttrList should be assigned in a superset of the enclosing if condition entry logic");
         pMutableAttrList->AddAttribute( aAttrQName, aAddInName );
     }
 
