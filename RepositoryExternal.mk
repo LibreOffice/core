@@ -515,8 +515,9 @@ endef
 
 else # !SYSTEM_COINMP
 
-$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
-    CoinMP \
+$(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE,CoinMP))
+ifneq ($(OS),WNT)
+$(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE, \
     CoinUtils \
     Clp \
     Cbc \
@@ -525,14 +526,16 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
     Cgl \
     CbcSolver \
 ))
+endif
 
 define gb_LinkTarget__use_coinmp
 $(call gb_LinkTarget_set_include,$(1),\
     $$(INCLUDE) \
     -I$(OUTDIR)/inc/coinmp \
 )
+$(call gb_LinkTarget_add_linked_libs,$(1),CoinMP)
+ifneq ($(OS),WNT)
 $(call gb_LinkTarget_add_linked_libs,$(1),\
-    CoinMP \
     CoinUtils \
     Clp \
     Cbc \
@@ -541,6 +544,7 @@ $(call gb_LinkTarget_add_linked_libs,$(1),\
     Cgl \
     CbcSolver \
 )
+endif
 endef
 
 endif # SYSTEM_COINMP
