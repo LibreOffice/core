@@ -208,7 +208,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="invisible_char">•</property>
-                                    <property name="text" translatable="yes">90</property>
+                                    <property name="text" translatable="no">90</property>
                                     <property name="adjustment">quality-adjustment</property>
                                     <property name="numeric">True</property>
                                     <property name="value">90</property>
@@ -256,7 +256,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="invisible_char">•</property>
-                                    <property name="text" translatable="yes">9</property>
+                                    <property name="text" translatable="no">9</property>
                                     <property name="adjustment">compression-adjustment</property>
                                     <property name="numeric">True</property>
                                     <property name="value">9</property>
@@ -392,7 +392,7 @@
                           <object class="GtkSpinButton" id="spin-new-width">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="text" translatable="yes">1</property>
+                            <property name="text" translatable="no">1</property>
                             <property name="adjustment">width-adjustment</property>
                             <property name="numeric">True</property>
                             <property name="value">1</property>
@@ -406,7 +406,7 @@
                           <object class="GtkSpinButton" id="spin-new-height">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="text" translatable="yes">1</property>
+                            <property name="text" translatable="no">1</property>
                             <property name="adjustment">height-adjustment</property>
                             <property name="numeric">True</property>
                             <property name="value">1</property>
