@@ -48,7 +48,6 @@
 	exclude-result-prefixes="chart config dc dom dr3d draw fo form math meta number office ooo oooc ooow script style svg table text xforms xlink xsd xsi xforms xsd xsi"
 	xmlns="http://www.w3.org/1999/xhtml">
 
-
 	<!-- ************** -->
 	<!-- *** header *** -->
 	<!-- ************** -->
@@ -73,7 +72,6 @@
 
 	</xsl:template>
 
-
 	<!-- Creating a CSS style header from the collected styles of the 'globalData' parameter -->
 	<xsl:template name='create-css-styleheader'>
 		<xsl:param name="globalData" />
@@ -93,13 +91,13 @@
 		<xsl:otherwise><xsl:text>td, th { vertical-align:top; font-size:12pt;}
 	</xsl:text></xsl:otherwise>
 	</xsl:choose>
-<xsl:text>h1, h2, h3, h4, h5, h6 { clear:both }
+<xsl:text>h1, h2, h3, h4, h5, h6 { clear:both;}
 	</xsl:text>
 <xsl:text>ol, ul { margin:0; padding:0;}
 	</xsl:text>
 <xsl:text>li { list-style: none; margin:0; padding:0;}
 	</xsl:text>
-<xsl:comment> "li span.odfLiEnd" - IE 7 issue</xsl:comment>
+/* "li span.odfLiEnd" - IE 7 issue*/
 <xsl:text>
 	</xsl:text>
 <xsl:text>li span. { clear: both; line-height:0; width:0; height:0; margin:0; padding:0; }
@@ -199,8 +197,6 @@
 		</xsl:choose>
 	</xsl:template>
 
-
-
 	<xsl:template name="page-margin">
 		<xsl:param name="globalData" />
 		<xsl:param name="pageProperties" />
@@ -229,7 +225,6 @@
 			<xsl:value-of select="$marginRight" />
 		</xsl:if>
 	</xsl:template>
-
 
 	<!-- *************************** -->
 	<!-- *** Common XHTML header *** -->
