@@ -16,6 +16,24 @@
       "revId": "95581e13bf3d7f4915ee32617cac1e655c685074",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a6eadb0_2b25c4aa",
+        "filename": "sc/source/ui/view/gridwin4.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 899,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2017-01-07T16:09:57Z",
+      "side": 1,
+      "message": "I had introduced the twipFactor elsewhere, so let me comment.\n\nIt\u0027s a conversion factor. This (conversion of units in general) is needed here because some layers are rendered in twips, some in pixels, and some in 100mm. By trial and error, I found that in one case the ratio was this twipFactor.\n\nThe conversion was necessary when rendering bitmaps/images/buttons (which are done in pixels). Just changing the MapMode is not enough, as the origin (which is what is being corrected here) is not correct.\n\nIn short, the twipFactor is to recalculate the origin in pixels.\n\nHowever I don\u0027t know what the case is here, the above is a description of how I ended up introducing it elsewhere. Though I expect Marco\u0027s patch needs to fix a similar case (where a conversion is needed) and he relied on my previous patch.",
+      "parentUuid": "3a71b18c_efb593d0",
+      "revId": "95581e13bf3d7f4915ee32617cac1e655c685074",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
