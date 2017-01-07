@@ -141,7 +141,7 @@ public class InBlocksLabelsAbove extends ColumnarTwoColumns
     }
 
     @Override
-    protected void insertDetailFieldTitles(int lastGroupPostion)
+    protected void insertDetailFieldTitles(int lastGroupPosition)
     {
         // we won't extra field titles
     }

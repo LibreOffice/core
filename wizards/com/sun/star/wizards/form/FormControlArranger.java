@@ -71,7 +71,7 @@ public class FormControlArranger
     private int nFormHeight;
     private int m_currentMaxRowHeight;
     private int nSecMaxRowY;
-    private int m_maxPostionX;
+    private int m_maxPositionX;
     private int a;
     private int StartA;
     private int m_controlMaxPosY = 0;     //the maximum YPosition of a DBControl in the form
@@ -169,7 +169,7 @@ public class FormControlArranger
     private void checkJustifiedPosition(int a)
     {
         int nBaseWidth = nFormWidth + cXOffset;
-        int nLeftDist = m_maxPostionX - nBaseWidth;
+        int nLeftDist = m_maxPositionX - nBaseWidth;
         int nRightDist = nBaseWidth - (DBControlList[a].getPosition().X - cHoriDistance);
         if (nLeftDist < 0.5 * nRightDist)
         {
@@ -202,7 +202,7 @@ public class FormControlArranger
             DBControlList[a].setPosition(new Point(cXOffset, m_currentControlPosY));
             bIsFirstRun = true;
             checkOuterPoints(m_currentControlPosX, m_dbControlWidth > m_LabelWidth ? m_dbControlWidth : m_LabelWidth, m_currentControlPosY, m_dbControlHeight, true);
-            m_currentLabelPosX = m_maxPostionX + cHoriDistance;
+            m_currentLabelPosX = m_maxPositionX + cHoriDistance;
             m_currentControlPosX = m_currentLabelPosX;
             adjustLineWidth(StartA, a - 1, nRightDist, 1);
             StartA = a;
@@ -317,15 +317,15 @@ public class FormControlArranger
         // Find the outer right point
         if (bIsFirstRun)
         {
-            m_maxPostionX = i_nXPos + i_nWidth;
+            m_maxPositionX = i_nXPos + i_nWidth;
             bIsFirstRun = false;
         }
         else
         {
             int nColRightX = i_nXPos + i_nWidth;
-            if (nColRightX > m_maxPostionX)
+            if (nColRightX > m_maxPositionX)
             {
-                m_maxPostionX = nColRightX;
+                m_maxPositionX = nColRightX;
             }
         }
     }
@@ -342,7 +342,7 @@ public class FormControlArranger
             bIsVeryFirstRun = true;
             m_currentMaxRowHeight = 0;
             nSecMaxRowY = 0;
-            m_maxPostionX = 0;
+            m_maxPositionX = 0;
             xProgressBar.start(PropertyNames.EMPTY_STRING, FieldColumns.length);
             for (int i = 0; i < FieldColumns.length; i++)
             {
@@ -398,7 +398,7 @@ public class FormControlArranger
                 if ((m_currentControlPosY > cYOffset + nFormHeight) || (LastIndex == (FieldColumns.length - 1)))
                 {
                     repositionColumnarLeftControls(LastIndex);
-                    m_currentLabelPosX = m_maxPostionX + 2 * cHoriDistance;
+                    m_currentLabelPosX = m_maxPositionX + 2 * cHoriDistance;
                     m_currentControlPosX = m_currentLabelPosX + cLabelGap + m_MaxLabelWidth;
                     m_currentControlPosY = cYOffset;
                     nYRefPos = m_currentControlPosY;
@@ -422,7 +422,7 @@ public class FormControlArranger
 
                 if ((m_currentLabelPosY > cYOffset + nFormHeight) || (LastIndex == (FieldColumns.length - 1)))
                 {
-                    m_currentControlPosX = m_maxPostionX + cHoriDistance;
+                    m_currentControlPosX = m_maxPositionX + cHoriDistance;
                     m_currentLabelPosX = m_currentControlPosX;
                     nYRefPos = m_currentControlPosY;
                     m_currentControlPosY = cYOffset + m_LabelHeight + cVertDistance;
@@ -444,14 +444,14 @@ public class FormControlArranger
                 {
                     ++iReduceWidth;
                 }
-                if (m_maxPostionX > cXOffset + nFormWidth)
+                if (m_maxPositionX > cXOffset + nFormWidth)
                 {
                     checkJustifiedPosition(a);
                     nYRefPos = m_currentControlPosY;
                 }
                 else
                 {
-                    m_currentLabelPosX = m_maxPostionX + cHoriDistance;
+                    m_currentLabelPosX = m_maxPositionX + cHoriDistance;
                 }
                 if (a == FieldColumns.length - 1)
                 {

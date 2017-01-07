@@ -373,8 +373,8 @@ void SAL_CALL
 ScVbaShape::ZOrder( sal_Int32 ZOrderCmd ) throw (uno::RuntimeException, std::exception)
 {
     sal_Int32 nOrderPosition;
-    uno::Any aOrderPostion = m_xPropertySet->getPropertyValue( "ZOrder" );
-    aOrderPostion >>= nOrderPosition;
+    uno::Any aOrderPosition = m_xPropertySet->getPropertyValue( "ZOrder" );
+    aOrderPosition >>= nOrderPosition;
     switch( ZOrderCmd )
     {
     case office::MsoZOrderCmd::msoBringToFront:
