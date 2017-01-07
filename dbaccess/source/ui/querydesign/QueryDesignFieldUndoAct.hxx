@@ -40,9 +40,9 @@ namespace dbaui
         OQueryDesignFieldUndoAct(OSelectionBrowseBox* pSelBrwBox, sal_uInt16 nCommentID);
         virtual ~OQueryDesignFieldUndoAct() override;
 
-        inline void SetColumnPosition(sal_uInt16 _nColumnPostion)
+        inline void SetColumnPosition(sal_uInt16 _nColumnPosition)
         {
-            m_nColumnPosition = _nColumnPostion;
+            m_nColumnPosition = _nColumnPosition;
             OSL_ENSURE(m_nColumnPosition != BROWSER_INVALIDID,"Column position was not set add the undo action!");
             OSL_ENSURE(m_nColumnPosition < pOwner->GetColumnCount(),"Position outside the column count!");
         }

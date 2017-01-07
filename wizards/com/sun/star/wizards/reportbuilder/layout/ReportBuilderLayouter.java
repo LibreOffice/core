@@ -140,10 +140,10 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
             insertPageFooter();
 
             clearGroups();
-            int lastGroupPostion = insertGroups();
+            int lastGroupPosition = insertGroups();
 
             clearDetails();
-            insertDetailFieldTitles(lastGroupPostion);
+            insertDetailFieldTitles(lastGroupPosition);
             insertDetailFields();
         }
         catch (java.lang.ArrayIndexOutOfBoundsException e)
@@ -576,7 +576,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
     }
 
 
-    abstract protected void insertDetailFieldTitles(int lastGroupPostion);
+    abstract protected void insertDetailFieldTitles(int lastGroupPosition);
 
 
     /**

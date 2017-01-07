@@ -742,15 +742,15 @@ bool OSelectionBrowseBox::saveField(OUString& _sFieldName ,OTableFieldDescRef& _
         {
             if ( i > 0 ) // may we have to append more than one field
             {
-                sal_uInt16 nColumnPostion;
-                aSelEntry = FindFirstFreeCol(nColumnPostion);
+                sal_uInt16 nColumnPosition;
+                aSelEntry = FindFirstFreeCol(nColumnPosition);
                 if ( !aSelEntry.is() )
                 {
                     AppendNewCol();
-                    aSelEntry = FindFirstFreeCol(nColumnPostion);
+                    aSelEntry = FindFirstFreeCol(nColumnPosition);
                 }
-                ++nColumnPostion;
-                nColumnId = GetColumnId(nColumnPostion);
+                ++nColumnPosition;
+                nColumnId = GetColumnId(nColumnPosition);
             }
 
             ::connectivity::OSQLParseNode* pChild = pSelection->getChild( i );

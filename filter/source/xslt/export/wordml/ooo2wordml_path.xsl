@@ -419,7 +419,7 @@
         </xsl:choose>
     </xsl:template>
     <xsl:template name="get-number-before">
-        <!--  get $count number of number before current position , output format:number1 number2 ... numberN:newpostion 
+        <!--  get $count number of number before current position , output format:number1 number2 ... numberN:newposition
             skip $skipcount of numbers
         -->
         <xsl:param name="svg-path"/>
@@ -473,7 +473,7 @@
         </xsl:choose>
     </xsl:template>
     <xsl:template name="get-number-after">
-        <!--  get $count number of number after current position, output format:number1 number2 ... numberN:newpostion 
+        <!--  get $count number of number after current position, output format:number1 number2 ... numberN:newposition
             skip $skipcount of numbers
         -->
         <xsl:param name="svg-path"/>

@@ -78,7 +78,7 @@ public class Tabular extends ReportBuilderLayouter
     }
 
     @Override
-    protected void insertDetailFieldTitles(int lastGroupPostion)
+    protected void insertDetailFieldTitles(int lastGroupPosition)
     {
         final String[] aFieldTitleNames = getFieldTitleNames();
         if (aFieldTitleNames == null || aFieldTitleNames.length == 0)
@@ -90,7 +90,7 @@ public class Tabular extends ReportBuilderLayouter
             SectionObject aSO = null;
             final XGroups xGroups = getReportDefinition().getGroups();
             final XGroup xGroup;
-            if (lastGroupPostion == -1)
+            if (lastGroupPosition == -1)
             {
                 // Spezial case, there is no Group.
                 xGroup = xGroups.createGroup();
@@ -104,17 +104,17 @@ public class Tabular extends ReportBuilderLayouter
             else
             {
                 // we insert the titles in the last group
-                xGroup = UnoRuntime.queryInterface(XGroup.class, xGroups.getByIndex(lastGroupPostion));
+                xGroup = UnoRuntime.queryInterface(XGroup.class, xGroups.getByIndex(lastGroupPosition));
 
                 // We don't need to copy the GroupProperties, because this is done in the insertGroup() member function
                 // copyGroupProperties(0);
-                aSO = getDesignTemplate().getGroupLabel(lastGroupPostion);
+                aSO = getDesignTemplate().getGroupLabel(lastGroupPosition);
             }
 
             XSection xSection = xGroup.getHeader();
             Rectangle aRect = new Rectangle();
             aRect.X = getLeftPageIndent() + getLeftGroupIndent(getCountOfGroups());
-            if (lastGroupPostion == -1)
+            if (lastGroupPosition == -1)
             {
                 xSection.setHeight(0);  // group height + a little empty line)
                 aRect.Y = 0;

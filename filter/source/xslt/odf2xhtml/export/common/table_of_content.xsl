@@ -297,7 +297,7 @@ Scenarios tabstops
 
 Scenarios unmatched:
 - text:styleposition 'center' will not be matched in our case (effort for nothing), there will be only 'right' and not 'right'
-- If the last tabStop is not from text:stylepostion 'right', the length of the last cell is undefined and a document length must be found.
+- If the last tabStop is not from text:styleposition 'right', the length of the last cell is undefined and a document length must be found.
   Not happens in our master document case. Also the algorithm below would have to be expanded (cp. scenario 5).
 
 -->
