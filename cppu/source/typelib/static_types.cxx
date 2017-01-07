@@ -289,7 +289,7 @@ void SAL_CALL typelib_static_type_init(
             OUString aTypeName( OUString::createFromAscii( pTypeName ) );
             ::typelib_typedescriptionreference_new( ppRef, eTypeClass, aTypeName.pData );
 
-            // coverity[var_deref_op] - another static ref
+            assert(*ppRef && "coverity[var_deref_op] - shouldn't be possible");
             ++((*ppRef)->nStaticRefCount);
         }
     }
