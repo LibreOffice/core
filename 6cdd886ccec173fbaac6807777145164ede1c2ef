@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a6eadb0_105af583",
+        "filename": "sc/inc/table.hxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2017-01-07T06:05:17Z",
+      "side": 1,
+      "message": "After some more analysis I think it will be the best to split these commit into to:\n1. Migrate pColWidth and pColFlags to vector (it is the almost the same structure as for standard array) to allow dynamic structure.\n2. Apply performance improvements to mpColWidths\nI would really don\u0027t want to introduce regression, and by separate these two commits, it will be much easier to track changes.",
+      "revId": "6cdd886ccec173fbaac6807777145164ede1c2ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
