@@ -80,7 +80,7 @@ else ifeq ($(COM),MSC)
 
 $(call gb_ExternalProject_get_state_target,curl,build):
 	$(call gb_ExternalProject_run,build,\
-		MAKEFLAGS= LIB="$(ILIB)" nmake -f Makefile.vc12 \
+		MAKEFLAGS= LIB="$(ILIB)" nmake -f Makefile.vc10 \
 			cfg=$(if $(MSVC_USE_DEBUG_RUNTIME),debug-dll,release-dll) \
 			EXCFLAGS="/EHs /D_CRT_SECURE_NO_DEPRECATE /DUSE_WINDOWS_SSPI /D_USING_V110_SDK71_ $(SOLARINC)" $(if $(filter X86_64,$(CPUNAME)),MACHINE=X64) \
 	,lib)

@@ -1,5 +1,5 @@
---- curl-7.26.0/lib/Makefile.vc12
-+++ misc/build/curl-7.26.0/lib/Makefile.vc12
+--- curl-7.26.0/lib/Makefile.vc10
++++ misc/build/curl-7.26.0/lib/Makefile.vc10
 @@ -118,7 +118,7 @@
  WINSSLLIBS   = crypt32.lib
  ZLIBLIBSDLL  = zdll.lib
@@ -13,7 +13,7 @@
 +++ misc/build/curl-7.26.0/lib/url.c
 @@ -78,6 +78,10 @@
  bool curl_win32_idn_to_ascii(const char *in, char **out);
- #endif  /* USE_LIBIDN2 */
+ #endif  /* USE_LIBIDN */
  
 +#ifdef _WIN32
 +#include <WinHttp.h>
@@ -52,7 +52,7 @@
  
  #ifndef CURL_DISABLE_HTTP
    /* If proxy was not specified, we check for default proxy environment
-@@ -4613,7 +4633,64 @@
+@@ -4613,7 +4633,63 @@
     * For compatibility, the all-uppercase versions of these variables are
     * checked if the lowercase versions don't exist.
     */
@@ -83,10 +83,9 @@
 +      if(!check_noproxy(conn->host.name, no_proxy)) {
 +        /* Look for the http proxy setting */
 +        char* tok;
-+        char *saveptr;
 +
 +        if(NULL != ieProxy) {
-+          tok = strtok_s(ieProxy, ";", &saveptr);
++          tok = strtok(ieProxy, ";");
 +          if(strchr(tok, '=') == NULL) {
 +            proxy = strdup(ieProxy);
 +          }
@@ -96,7 +95,7 @@
 +                /* We found HTTP proxy value, then use it */
 +                proxy = strdup(tok + 5);
 +              }
-+              tok = strtok_s(NULL, ";", &saveptr);
++              tok = strtok(NULL, ";");
 +            }
 +            while(NULL != tok);
 +          }
