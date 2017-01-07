@@ -2016,17 +2016,18 @@ void ChgTextToNum( SwTableBox& rBox, const OUString& rText, const Color* pCol,
 
         if( pTNd->GetText() != rText )
         {
-            // Exchange text. Bugfix to keep Tabs (front and back!)
+            // Exchange text. Bugfix to keep Tabs (front and back!) and annotations (inword comment anchors)
             const OUString& rOrig = pTNd->GetText();
             sal_Int32 n;
 
-            for( n = 0; n < rOrig.getLength() && '\x9' == rOrig[n]; ++n )
+            for( n = 0; n < rOrig.getLength() && ('\x9' == rOrig[n] || CH_TXTATR_INWORD == rOrig[n]); ++n )
                 ;
             for( ; n < rOrig.getLength() && '\x01' == rOrig[n]; ++n )
                 ;
             SwIndex aIdx( pTNd, n );
-            for( n = rOrig.getLength(); n && '\x9' == rOrig[--n]; )
+            for( n = rOrig.getLength(); n && ('\x9' == rOrig[--n] || CH_TXTATR_INWORD == rOrig[n]); )
                 ;
+            sal_Int32 nEndPos = n;
             n -= aIdx.GetIndex() - 1;
 
             // Reset DontExpand-Flags before exchange, to retrigger expansion
@@ -2039,6 +2040,22 @@ void ChgTextToNum( SwTableBox& rBox, const OUString& rText, const Color* pCol,
             {
                 SwPaM aTemp(*pTNd, 0, *pTNd, rOrig.getLength());
                 pDoc->getIDocumentRedlineAccess().DeleteRedline(aTemp, true, USHRT_MAX);
+            }
+
+            // preserve comments inside of the number by deleting number portions starting from the back
+            sal_Int32 nCommentPos = pTNd->GetText().lastIndexOf( CH_TXTATR_INWORD, nEndPos );
+            while( nCommentPos > aIdx.GetIndex() )
+            {
+                pTNd->EraseText( SwIndex(pTNd, nCommentPos+1), nEndPos - nCommentPos, SwInsertFlags::EMPTYEXPAND );
+                // find the next non-sequential comment anchor
+                do
+                {
+                    nEndPos = nCommentPos;
+                    n = nEndPos - aIdx.GetIndex();
+                    nCommentPos = pTNd->GetText().lastIndexOf( CH_TXTATR_INWORD, nEndPos );
+                    --nEndPos;
+                }
+                while( nCommentPos > aIdx.GetIndex() && nCommentPos == nEndPos );
             }
 
             pTNd->EraseText( aIdx, n, SwInsertFlags::EMPTYEXPAND );
@@ -2490,6 +2507,10 @@ sal_uLong SwTableBox::IsValidNumTextNd( bool bCheckAttr ) const
                                     nNextSetField = pAttr->GetStart() + 1;
                                     continue;
                                 }
+                            }
+                            else if( RES_TXTATR_ANNOTATION == pAttr->Which() )
+                            {
+                                continue;
                             }
                             nPos = ULONG_MAX;
                             break;
