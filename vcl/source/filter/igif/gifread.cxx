@@ -61,6 +61,7 @@ class GIFReader : public GraphicReader
     Bitmap::ScopedWriteAccess pAcc1;
     long                nYAcc;
     long                nLastPos;
+    sal_uInt64          nMaxStreamData;
     sal_uInt32          nLogWidth100;
     sal_uInt32          nLogHeight100;
     sal_uInt16          nTimer;
@@ -113,6 +114,7 @@ GIFReader::GIFReader( SvStream& rStm )
     , rIStm ( rStm )
     , nYAcc ( 0 )
     , nLastPos ( rStm.Tell() )
+    , nMaxStreamData( rStm.remainingSize() )
     , nLogWidth100 ( 0UL )
     , nLogHeight100 ( 0UL )
     , nGlobalWidth ( 0 )
@@ -168,6 +170,20 @@ void GIFReader::CreateBitmaps( long nWidth, long nHeight, BitmapPalette* pPal,
         return;
     }
 #endif
+
+    // "Overall data compression asymptotically approaches 3839 × 8 / 12 = 2559 1/3"
+    // so assume compression of 1:2560 is possible
+    // (http://cloudinary.com/blog/a_one_color_image_is_worth_two_thousand_words suggests
+    // 1:1472.88 [184.11 x 8] is more realistic)
+    const sal_uInt64 nMinFileData = nWidth * nHeight / 2560;
+    if (nMaxStreamData < nMinFileData)
+    {
+        //there is nowhere near enough data in this stream to fill the claimed dimensions
+        SAL_WARN("vcl.filter", "gif claims dimensions " << nWidth << " x " << nHeight <<
+                               " but filesize of " << nMaxStreamData << " is surely insufficiently large to fill it");
+        bStatus = false;
+        return;
+    }
 
     if( bGCTransparent )
     {
