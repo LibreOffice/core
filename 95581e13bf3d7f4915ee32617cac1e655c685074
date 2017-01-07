@@ -34,6 +34,24 @@
       "revId": "95581e13bf3d7f4915ee32617cac1e655c685074",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a6eadb0_cb9a90c5",
+        "filename": "sc/source/ui/view/gridwin4.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 899,
+      "author": {
+        "id": 1000119
+      },
+      "writtenOn": "2017-01-07T16:46:35Z",
+      "side": 1,
+      "message": "Indeed that\u0027s the case: when I was investigating on the misplacing issue, I noted that for bitmaps the origin was converted to a new value, so I tried to mimic the same implementation for rendering notes in editing mode and I found out that this hack was the correct solution to the problem.",
+      "parentUuid": "1a6eadb0_2b25c4aa",
+      "revId": "95581e13bf3d7f4915ee32617cac1e655c685074",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
