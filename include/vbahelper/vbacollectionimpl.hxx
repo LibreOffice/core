@@ -179,7 +179,7 @@ public:
     // XElementAccess
     virtual css::uno::Type SAL_CALL getElementType(  ) throw (css::uno::RuntimeException, std::exception) override { return cppu::UnoType< OneIfc >::get(); }
     virtual sal_Bool SAL_CALL hasElements(  ) throw (css::uno::RuntimeException, std::exception) override { return ( mXNamedVec.size() > 0 ); }
-    // XNameAcess
+    // XNameAccess
     virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) throw (css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override
     {
         if ( !hasByName(aName) )

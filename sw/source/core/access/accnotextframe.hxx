@@ -68,7 +68,7 @@ public:
         throw (css::uno::RuntimeException, std::exception) override;
 
     // XInterface methods need to be implemented to disambiguate
-    // between those inherited through SwAcessibleContext and
+    // between those inherited through SwAccessibleContext and
     // XAccessibleImage.
 
     virtual css::uno::Any SAL_CALL queryInterface(

@@ -66,7 +66,7 @@ namespace dbaui
         try
         {
             OUString aName = GetEntryText( _pApplyTo );
-            OUString aDSName = getDataSourceAcessor( m_pTreeView->getListBox().GetRootLevelParent( _pApplyTo ) );
+            OUString aDSName = getDataSourceAccessor( m_pTreeView->getListBox().GetRootLevelParent( _pApplyTo ) );
 
             ODataClipboard* pData = nullptr;
             SharedConnection xConnection;
@@ -227,7 +227,7 @@ namespace dbaui
             if ( ensureConnection( m_aAsyncDrop.pDroppedAt, xDestConnection ) && xDestConnection.is() )
             {
                 SvTreeListEntry* pDataSourceEntry = m_pTreeView->getListBox().GetRootLevelParent(m_aAsyncDrop.pDroppedAt);
-                m_aTableCopyHelper.asyncCopyTagTable( m_aAsyncDrop, getDataSourceAcessor( pDataSourceEntry ), xDestConnection );
+                m_aTableCopyHelper.asyncCopyTagTable( m_aAsyncDrop, getDataSourceAccessor( pDataSourceEntry ), xDestConnection );
             }
         }
 

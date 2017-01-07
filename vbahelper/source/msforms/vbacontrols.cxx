@@ -121,7 +121,7 @@ public:
         return ( !mControls.empty() );
     }
 
-    // XNameAcess
+    // XNameAccess
     virtual uno::Any SAL_CALL getByName( const OUString& aName ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception) override
     {
         if ( !hasByName( aName ) )

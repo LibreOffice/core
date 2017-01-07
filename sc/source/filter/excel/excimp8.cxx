@@ -124,7 +124,7 @@ public:
         ::osl::MutexGuard aGuard( m_aMutex );
         return ( !IdToOleNameHash.empty() );
     }
-    // XNameAcess
+    // XNameAccess
     virtual uno::Any SAL_CALL getByName( const OUString& aName ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception) override
     {
         ::osl::MutexGuard aGuard( m_aMutex );

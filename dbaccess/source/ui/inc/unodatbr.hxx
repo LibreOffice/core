@@ -428,7 +428,7 @@ namespace dbaui
         bool impl_isDataSourceEntry( SvTreeListEntry* _pEntry ) const;
 
         /// retrieves the data source URL/name for the given entry representing a data source
-        OUString  getDataSourceAcessor( SvTreeListEntry* _pDataSourceEntry ) const;
+        OUString  getDataSourceAccessor( SvTreeListEntry* _pDataSourceEntry ) const;
 
         /** get the signature (command/escape processing) of the query the form is based on
             <p>If the for is not based on a query or not even loaded, nothing happens and <FALSE/> is returned.</p>

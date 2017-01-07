@@ -1108,13 +1108,13 @@ namespace
     }
 }
 
-OUString SbaTableQueryBrowser::getDataSourceAcessor( SvTreeListEntry* _pDataSourceEntry ) const
+OUString SbaTableQueryBrowser::getDataSourceAccessor( SvTreeListEntry* _pDataSourceEntry ) const
 {
-    OSL_ENSURE( _pDataSourceEntry, "SbaTableQueryBrowser::getDataSourceAcessor: invalid entry!" );
+    OSL_ENSURE( _pDataSourceEntry, "SbaTableQueryBrowser::getDataSourceAccessor: invalid entry!" );
 
     DBTreeListUserData* pData = static_cast< DBTreeListUserData* >( _pDataSourceEntry->GetUserData() );
-    OSL_ENSURE( pData, "SbaTableQueryBrowser::getDataSourceAcessor: invalid entry data!" );
-    OSL_ENSURE( pData->eType == etDatasource, "SbaTableQueryBrowser::getDataSourceAcessor: entry does not denote a data source!" );
+    OSL_ENSURE( pData, "SbaTableQueryBrowser::getDataSourceAccessor: invalid entry data!" );
+    OSL_ENSURE( pData->eType == etDatasource, "SbaTableQueryBrowser::getDataSourceAccessor: entry does not denote a data source!" );
     return !pData->sAccessor.isEmpty() ? OUString(pData->sAccessor) : GetEntryText( _pDataSourceEntry );
 }
 
@@ -2304,7 +2304,7 @@ bool SbaTableQueryBrowser::ensureEntryObject( SvTreeListEntry* _pEntry )
                     try
                     {
                         Reference< XQueryDefinitionsSupplier > xQuerySup;
-                        m_xDatabaseContext->getByName( getDataSourceAcessor( pDataSourceEntry ) ) >>= xQuerySup;
+                        m_xDatabaseContext->getByName( getDataSourceAccessor( pDataSourceEntry ) ) >>= xQuerySup;
                         if (xQuerySup.is())
                         {
                             Reference< XNameAccess > xQueryDefs = xQuerySup->getQueryDefinitions();
@@ -2676,7 +2676,7 @@ bool SbaTableQueryBrowser::implSelect( SvTreeListEntry* _pEntry )
                 }
             }
 
-            OUString sDataSourceName( getDataSourceAcessor( pConnection ) );
+            OUString sDataSourceName( getDataSourceAccessor( pConnection ) );
             bSuccess = implLoadAnything( sDataSourceName, aName, nCommandType, bEscapeProcessing, pConData->xConnection );
             if ( !bSuccess )
             {   // clean up
@@ -3331,7 +3331,7 @@ bool SbaTableQueryBrowser::ensureConnection( SvTreeListEntry* _pDSEntry, void* p
 
             // connect
             _rConnection.reset(
-                connect( getDataSourceAcessor( _pDSEntry ), sConnectingContext, nullptr ),
+                connect( getDataSourceAccessor( _pDSEntry ), sConnectingContext, nullptr ),
                 SharedConnection::TakeOwnership
             );
 
@@ -3425,7 +3425,7 @@ void SbaTableQueryBrowser::implAdministrate( SvTreeListEntry* _pApplyTo )
             pTopLevelSelected = m_pTreeView->getListBox().GetParent(pTopLevelSelected);
         OUString sInitialSelection;
         if (pTopLevelSelected)
-            sInitialSelection = getDataSourceAcessor( pTopLevelSelected );
+            sInitialSelection = getDataSourceAccessor( pTopLevelSelected );
 
         Reference< XDataSource > xDataSource( getDataSourceByName( sInitialSelection, getView(), getORB(), nullptr ) );
         Reference< XModel > xDocumentModel( getDataSourceOrModel( xDataSource ), UNO_QUERY );
@@ -3522,7 +3522,7 @@ Any SbaTableQueryBrowser::getCurrentSelection( Control& _rControl ) const
     case DatabaseObjectContainer::DATA_SOURCE:
     case DatabaseObjectContainer::QUERIES:
     case DatabaseObjectContainer::TABLES:
-        aSelectedObject.Name = getDataSourceAcessor( pSelected );
+        aSelectedObject.Name = getDataSourceAccessor( pSelected );
         break;
 
     default:
