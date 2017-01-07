@@ -19,7 +19,8 @@
  *
  *************************************************************/
 
-
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_cui.hxx"
 
 #if defined _MSC_VER
 #pragma warning(push, 1)
