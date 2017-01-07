@@ -1167,7 +1167,7 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
             bRet = aTmpState.m_bInNumPortion;
             rContentAtPos.aFnd.pNode = pTextNd;
 
-            Size aSizeLogic(aTmpState.m_nInNumPostionOffset, 0);
+            Size aSizeLogic(aTmpState.m_nInNumPortionOffset, 0);
             Size aSizePixel = GetWin()->LogicToPixel(aSizeLogic);
             rContentAtPos.nDist = aSizePixel.Width();
         }

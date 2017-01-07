@@ -1433,7 +1433,7 @@ sal_Int32 SwTextCursor::GetCursorOfst( SwPosition *pPos, const Point &rPoint,
                     pCMS->m_bFootnoteNoInfo = true;
                 else if (pPor->InNumberGrp() ) // #i23726#
                 {
-                    pCMS->m_nInNumPostionOffset = nX;
+                    pCMS->m_nInNumPortionOffset = nX;
                     pCMS->m_bInNumPortion = true;
                 }
             }
