@@ -158,7 +158,7 @@ struct SwCursorMoveState
      */
     bool m_bInFrontOfLabel;
     bool m_bInNumPortion;         ///< point is in number portion #i23726#
-    int m_nInNumPostionOffset;        ///< distance from number portion's start
+    int m_nInNumPortionOffset;        ///< distance from number portion's start
 
     SwCursorMoveState( CursorMoveState eSt = MV_NONE ) :
         m_pFill( nullptr ),
@@ -181,7 +181,7 @@ struct SwCursorMoveState
         m_bContentCheck( false ), // #i43742#
         m_bInFrontOfLabel( false ), // #i27615#
         m_bInNumPortion(false), // #i26726#
-        m_nInNumPostionOffset(0) // #i26726#
+        m_nInNumPortionOffset(0) // #i26726#
     {}
     SwCursorMoveState( SwFillCursorPos *pInitFill ) :
         m_pFill( pInitFill ),
@@ -204,7 +204,7 @@ struct SwCursorMoveState
         m_bContentCheck( false ), // #i43742#
         m_bInFrontOfLabel( false ), // #i27615#
         m_bInNumPortion(false), // #i23726#
-        m_nInNumPostionOffset(0) // #i23726#
+        m_nInNumPortionOffset(0) // #i23726#
     {}
 };
 
