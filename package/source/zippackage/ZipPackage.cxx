@@ -782,76 +782,76 @@ Any SAL_CALL ZipPackage::getByHierarchicalName( const OUString& aName )
 
     if ( ( nIndex = aName.getLength() ) == 1 && *aName.getStr() == '/' )
         return makeAny ( uno::Reference < XUnoTunnel > ( m_pRootFolder ) );
-    else
+
+    nStreamIndex = aName.lastIndexOf ( '/' );
+    bool bFolder = nStreamIndex == nIndex-1;
+    if ( nStreamIndex != -1 )
     {
-        nStreamIndex = aName.lastIndexOf ( '/' );
-        bool bFolder = nStreamIndex == nIndex-1;
-        if ( nStreamIndex != -1 )
+        sDirName = aName.copy ( 0, nStreamIndex );
+        aIter = m_aRecent.find ( sDirName );
+        if ( aIter != m_aRecent.end() )
         {
-            sDirName = aName.copy ( 0, nStreamIndex );
-            aIter = m_aRecent.find ( sDirName );
-            if ( aIter != m_aRecent.end() )
+            if ( bFolder )
             {
-                if ( bFolder )
-                {
-                    sal_Int32 nDirIndex = aName.lastIndexOf ( '/', nStreamIndex );
-                    sTemp = aName.copy ( nDirIndex == -1 ? 0 : nDirIndex+1, nStreamIndex-nDirIndex-1 );
-                    if ( sTemp == ( *aIter ).second->getName() )
-                        return makeAny ( uno::Reference < XUnoTunnel > ( ( *aIter ).second ) );
-                    else
-                        m_aRecent.erase ( aIter );
-                }
-                else
-                {
-                    sTemp = aName.copy ( nStreamIndex + 1 );
-                    if ( ( *aIter ).second->hasByName( sTemp ) )
-                        return ( *aIter ).second->getByName( sTemp );
-                    else
-                        m_aRecent.erase( aIter );
-                }
-            }
-        }
-        else
-        {
-            if ( m_pRootFolder->hasByName ( aName ) )
-                return m_pRootFolder->getByName ( aName );
-        }
-        nOldIndex = 0;
-        ZipPackageFolder * pCurrent = m_pRootFolder;
-        ZipPackageFolder * pPrevious = nullptr;
-        while ( ( nIndex = aName.indexOf( '/', nOldIndex )) != -1 )
-        {
-            sTemp = aName.copy ( nOldIndex, nIndex - nOldIndex );
-            if ( nIndex == nOldIndex )
-                break;
-            if ( pCurrent->hasByName( sTemp ) )
-            {
-                pPrevious = pCurrent;
-                pCurrent = pCurrent->doGetByName( sTemp ).pFolder;
+                sal_Int32 nDirIndex = aName.lastIndexOf ( '/', nStreamIndex );
+                sTemp = aName.copy ( nDirIndex == -1 ? 0 : nDirIndex+1, nStreamIndex-nDirIndex-1 );
+                if ( sTemp == ( *aIter ).second->getName() )
+                    return makeAny ( uno::Reference < XUnoTunnel > ( ( *aIter ).second ) );
+
+                m_aRecent.erase ( aIter );
             }
             else
-                throw NoSuchElementException(THROW_WHERE );
-            nOldIndex = nIndex+1;
-        }
-        if ( bFolder )
-        {
-            if ( nStreamIndex != -1 )
-                m_aRecent[sDirName] = pPrevious;
-            return makeAny ( uno::Reference < XUnoTunnel > ( pCurrent ) );
-        }
-        else
-        {
-            sTemp = aName.copy( nOldIndex, aName.getLength() - nOldIndex );
-            if ( pCurrent->hasByName ( sTemp ) )
             {
-                if ( nStreamIndex != -1 )
-                    m_aRecent[sDirName] = pCurrent;
-                return pCurrent->getByName( sTemp );
+                sTemp = aName.copy ( nStreamIndex + 1 );
+                if ( ( *aIter ).second->hasByName( sTemp ) )
+                    return ( *aIter ).second->getByName( sTemp );
+
+                m_aRecent.erase( aIter );
             }
-            else
-                throw NoSuchElementException(THROW_WHERE );
         }
     }
+    else
+    {
+        if ( m_pRootFolder->hasByName ( aName ) )
+            return m_pRootFolder->getByName ( aName );
+    }
+
+    nOldIndex = 0;
+    ZipPackageFolder * pCurrent = m_pRootFolder;
+    ZipPackageFolder * pPrevious = nullptr;
+
+    while ( ( nIndex = aName.indexOf( '/', nOldIndex )) != -1 )
+    {
+        sTemp = aName.copy ( nOldIndex, nIndex - nOldIndex );
+        if ( nIndex == nOldIndex )
+            break;
+        if ( pCurrent->hasByName( sTemp ) )
+        {
+            pPrevious = pCurrent;
+            pCurrent = pCurrent->doGetByName( sTemp ).pFolder;
+        }
+        else
+            throw NoSuchElementException(THROW_WHERE );
+        nOldIndex = nIndex+1;
+    }
+
+    if ( bFolder )
+    {
+        if ( nStreamIndex != -1 )
+            m_aRecent[sDirName] = pPrevious;
+        return makeAny ( uno::Reference < XUnoTunnel > ( pCurrent ) );
+    }
+
+    sTemp = aName.copy( nOldIndex, aName.getLength() - nOldIndex );
+
+    if ( pCurrent->hasByName ( sTemp ) )
+    {
+        if ( nStreamIndex != -1 )
+            m_aRecent[sDirName] = pCurrent;
+        return pCurrent->getByName( sTemp );
+    }
+
+    throw NoSuchElementException(THROW_WHERE);
 }
 
 sal_Bool SAL_CALL ZipPackage::hasByHierarchicalName( const OUString& aName )
