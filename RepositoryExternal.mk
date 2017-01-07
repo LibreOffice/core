@@ -377,18 +377,22 @@ endef
 
 else # !SYSTEM_APR
 
-$(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
-    apr-1 \
-))
+ifeq ($(OS),WNT)
+$(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE,libapr-1))
+else
+$(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE,apr-1))
+endif
 
 define gb_LinkTarget__use_apr
 $(call gb_LinkTarget_set_include,$(1),\
     $$(INCLUDE) \
     -I$(OUTDIR)/inc/apr \
 )
-$(call gb_LinkTarget_add_linked_libs,$(1),\
-    apr-1 \
-)
+ifeq ($(OS),WNT)
+$(call gb_LinkTarget_add_linked_libs,$(1),libapr-1)
+else
+$(call gb_LinkTarget_add_linked_libs,$(1),apr-1)
+endif
 endef
 
 endif # SYSTEM_APR
@@ -409,18 +413,21 @@ endef
 
 else # !SYSTEM_APR_UTIL
 
-$(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
-    aprutil-1 \
-))
+# on Windows apr-util is registered by ext_libraries/Repository.mk
+ifneq ($(OS),WNT)
+$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO,aprutil-1))
+endif
 
 define gb_LinkTarget__use_apr_util
 $(call gb_LinkTarget_set_include,$(1),\
     $$(INCLUDE) \
     -I$(OUTDIR)/inc/apr-util \
 )
-$(call gb_LinkTarget_add_linked_libs,$(1),\
-    aprutil-1 \
-)
+ifeq ($(OS),WNT)
+$(call gb_LinkTarget_add_linked_libs,$(1),apr-util)
+else
+$(call gb_LinkTarget_add_linked_libs,$(1),aprutil-1)
+endif
 endef
 
 endif # SYSTEM_APR_UTIL
@@ -441,18 +448,21 @@ endef
 
 else # !SYSTEM_SERF
 
-$(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
-    serf-1 \
-))
+# on Windows serf is registered by ext_libraries/Repository.mk
+ifneq ($(OS),WNT)
+$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO,serf-1))
+endif
 
 define gb_LinkTarget__use_serf
 $(call gb_LinkTarget_set_include,$(1),\
     $$(INCLUDE) \
     -I$(OUTDIR)/inc/serf \
 )
-$(call gb_LinkTarget_add_linked_libs,$(1),\
-    serf-1 \
-)
+ifeq ($(OS),WNT)
+$(call gb_LinkTarget_add_linked_libs,$(1),serf)
+else
+$(call gb_LinkTarget_add_linked_libs,$(1),serf-1)
+endif
 endef
 
 endif # SYSTEM_SERF
@@ -473,14 +483,18 @@ endef
 
 else # !SYSTEM_CURL
 
-$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
-    curl \
-))
+ifeq ($(OS),WNT)
+$(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE,libcurl))
+else
+$(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE,curl))
+endif
 
 define gb_LinkTarget__use_curl
-$(call gb_LinkTarget_add_linked_libs,$(1),\
-    curl \
-)
+ifeq ($(OS),WNT)
+$(call gb_LinkTarget_add_linked_libs,$(1),libcurl)
+else
+$(call gb_LinkTarget_add_linked_libs,$(1),curl)
+endif
 endef
 
 endif # SYSTEM_CURL
