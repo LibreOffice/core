@@ -459,6 +459,7 @@ gb_Library_PLAINLIBS_NONE += \
 	oleaut32 \
 	opengl32 \
 	shell32 \
+	shlwapi \
 	strmiids \
 	user32 \
 	uuid \
