@@ -23,7 +23,7 @@
 
 $(eval $(call gb_Library_Library,ucpexpand1))
 
-$(eval $(call gb_Library_add_precompiled_header,ucpexpand1,$(SRCDIR)/ucb/inc/pch/precompiled_ftp))
+$(eval $(call gb_Library_add_precompiled_header,ucpexpand1,$(SRCDIR)/ucb/inc/pch/precompiled_expand))
 
 $(eval $(call gb_Library_set_componentfile,ucpexpand1,ucb/source/ucp/expand/ucpexpand1))
 
