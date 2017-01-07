@@ -553,6 +553,7 @@ bool TokenPool::GetElementRek( const sal_uInt16 nId )
     }
     for( ; nAnz > 0 ; nAnz--, pAkt++ )
     {
+        assert(pAkt);
         if( *pAkt < nScTokenOff )
         {// recursion or not?
             if (*pAkt >= nElementAkt)
