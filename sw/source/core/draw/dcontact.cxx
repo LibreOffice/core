@@ -1609,6 +1609,10 @@ void SwDrawContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
         if(pFormat->Which() == RES_DRAWFRMFMT)
             pGetZOrdnerHint->m_rnZOrder = GetMaster()->GetOrdNum();
     }
+    else if (auto pConnectedHint = dynamic_cast<const sw::GetObjectConnectedHint*>(&rHint))
+    {
+        pConnectedHint->m_risConnected |= (GetAnchorFrame() != nullptr);
+    }
 }
 
 // #i26791#
