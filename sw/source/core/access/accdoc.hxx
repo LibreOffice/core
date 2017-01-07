@@ -143,7 +143,7 @@ public:
 
     // XInterface
 
-    // XInterface is inherited through SwAcessibleContext and
+    // XInterface is inherited through SwAccessibleContext and
     // XAccessibleSelection. These methods are needed to avoid
     // ambiguities.
 

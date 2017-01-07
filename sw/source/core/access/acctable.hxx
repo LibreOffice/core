@@ -91,7 +91,7 @@ public:
     // XInterface
 
     // (XInterface methods need to be implemented to disambigouate
-    // between those inherited through SwAcessibleContext and
+    // between those inherited through SwAccessibleContext and
     // XAccessibleTable).
 
     virtual css::uno::Any SAL_CALL queryInterface(

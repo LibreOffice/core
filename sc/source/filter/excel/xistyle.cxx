@@ -90,7 +90,7 @@ public:
         return uno::makeAny( sal_Int32( maColorData[ Index ] ) );
     }
 
-    // Methods XElementAcess
+    // Methods XElementAccess
     virtual uno::Type SAL_CALL getElementType() throw (uno::RuntimeException, std::exception) override
     {
         return ::cppu::UnoType<sal_Int32>::get();
