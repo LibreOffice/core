@@ -46,7 +46,6 @@ protected:
 
 public:
     SvxOptionsGrid();
-    ~SvxOptionsGrid();
 
     void    SetFieldDrawX(    sal_uInt32 nSet){nFldDrawX      = nSet;}
     void    SetFieldDivisionX(sal_uInt32 nSet){nFldDivisionX  = nSet;}

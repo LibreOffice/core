@@ -78,11 +78,6 @@ class COMPHELPER_DLLPUBLIC SequenceAsHashMap : public SequenceAsHashMapBase
         SequenceAsHashMap(const css::uno::Sequence< css::beans::NamedValue >& lSource);
 
 
-        /** @short  not really used but maybe useful :-)
-         */
-        ~SequenceAsHashMap();
-
-
         /** @short  fill this map from the given
                     Any, which of course must contain
                     a suitable sequence of element types

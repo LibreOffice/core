@@ -51,10 +51,6 @@ SequenceAsHashMap::SequenceAsHashMap(const css::uno::Sequence< css::beans::Named
     (*this) << lSource;
 }
 
-SequenceAsHashMap::~SequenceAsHashMap()
-{
-}
-
 void SequenceAsHashMap::operator<<(const css::uno::Any& aSource)
 {
     // An empty Any reset this instance!

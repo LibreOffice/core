@@ -58,10 +58,6 @@ SvxOptionsGrid::SvxOptionsGrid() :
 {
 }
 
-SvxOptionsGrid::~SvxOptionsGrid()
-{
-}
-
 SvxGridItem::SvxGridItem( const SvxGridItem& rItem )
 :   SvxOptionsGrid()
 ,   SfxPoolItem(rItem)

@@ -60,23 +60,11 @@ namespace basegfx
         :   B2ITuple(nX, nY)
         {}
 
-        /** Create a copy of a 2D Point
-
-            @param rPoint
-            The 2D Point which will be copied.
-        */
-        B2IPoint(const B2IPoint& rPoint)
-        :   B2ITuple(rPoint)
-        {}
-
         /** constructor with tuple to allow copy-constructing
             from B2ITuple-based classes
         */
         B2IPoint(const ::basegfx::B2ITuple& rTuple)
         :   B2ITuple(rTuple)
-        {}
-
-        ~B2IPoint()
         {}
 
         /** *=operator to allow usage from B2IPoint, too
