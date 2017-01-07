@@ -11,30 +11,23 @@ Code listed as unused is code that gcc outputs but that nothing calls
 
 a) It's possible that some other platform or configuration uses the code,
    so manual inspection is always required.
-b) At the time of writing the majority of unused code now originates via 
-   macros, mostly from pre-STL containers, see [2] for killing two birds
-   with one stone. These are typically methods of signatures...
-	*::Insert
-	*::Remove
-	*::DeleteAndDestroy
-	*::Replace
-c) callcatcher ignores virtuals. But implementations of "pure virtuals"
+b) callcatcher ignores virtuals. But implementations of "pure virtuals"
    are not actually virtual methods. If something is declared pure virtual
    and provides an impl and that base-class impl is not explicitly called
    anywhere, then that impl can go away.
-d) gcc will only emit code for inlines if those inlines are used, so
+c) gcc will only emit code for inlines if those inlines are used, so
    sometimes something is listed correctly as unused but some inline
-   code takes a pointer or reference to something which cannot be 
+   code takes a pointer or reference to something which cannot be
    instantiated so removal of some method/class fails at build time because
    gcc never emits any code for the unused inline but trips over it at
    compile time after an attempt at removal. i.e. generally the inline method
    can go as well because nothing calls it either, a double win.
-e) if a constructor is listed as unused, and it's the *only* ctor in the class,
+d) if a constructor is listed as unused, and it's the *only* ctor in the class,
    then no object of that class can be constructed, so the whole thing is
    unused, which can lead to a whole cascade of tricky but logical fallout.
-f) if a destructor is listed as unused, and a constructor isn't, then there's
+e) if a destructor is listed as unused, and a constructor isn't, then there's
    a leak somewhere, and the destructor most likely *should* be called.
-g) there's more actually unused code then what's listed. The idea is that what's
+f) there's more actually unused code then what's listed. The idea is that what's
    listed is definitely unused under the generation configuration, not that
    it's a list of all unused code. If the count of unused easy hits 0 then
    we can have a look at the non-easy and if that hits 0, then strip out
@@ -44,4 +37,3 @@ g) there's more actually unused code then what's listed. The idea is that what's
 Symbols that are known to be false alarms are listed in: unusedcode.exclude
 
 [1] http://www.skynet.ie/~caolan/Packages/callcatcher.html
-[2] https://bugs.libreoffice.org/show_bug.cgi?id=38832
