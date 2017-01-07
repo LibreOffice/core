@@ -2312,10 +2312,6 @@ static sal_uInt16 lcl_DrawBullet(VirtualDevice* pVDev,
     aFont.SetFontSize(aTmpSize);
     aFont.SetTransparent(true);
     Color aBulletColor = rFmt.GetBulletColor();
-    if(aBulletColor.GetColor() == COL_AUTO)
-        aBulletColor = Color(pVDev->GetFillColor().IsDark() ? COL_WHITE : COL_BLACK);
-    else if(aBulletColor == pVDev->GetFillColor())
-        aBulletColor.Invert();
     aFont.SetColor(aBulletColor);
     pVDev->SetFont( aFont );
     OUString aText(rFmt.GetBulletChar());
