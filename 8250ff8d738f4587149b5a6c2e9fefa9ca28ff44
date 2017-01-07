@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1a6eadb0_0ba56803",
+        "filename": "sc/source/ui/view/tabview5.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 656,
+      "author": {
+        "id": 1000119
+      },
+      "writtenOn": "2017-01-07T16:51:45Z",
+      "side": 1,
+      "message": "oh well, I usually do, except when the condition is very short; in such a case I find having them on the same line more visually pleasant",
+      "parentUuid": "3a71b18c_4f9e8757",
+      "range": {
+        "startLine": 656,
+        "startChar": 4,
+        "endLine": 656,
+        "endChar": 26
+      },
+      "revId": "8250ff8d738f4587149b5a6c2e9fefa9ca28ff44",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a71b18c_6fa3439f",
         "filename": "sc/source/ui/view/tabview5.cxx",
         "patchSetId": 5
@@ -36,6 +60,30 @@
       "writtenOn": "2016-12-12T13:44:05Z",
       "side": 1,
       "message": "This doesn\u0027t need to be a static variable held constantly in memory.\n\nBtw, why enlarge the rectangle on each side? If there is a reason then please document it, and also the value chosen (i.e. why 200)",
+      "range": {
+        "startLine": 663,
+        "startChar": 4,
+        "endLine": 663,
+        "endChar": 10
+      },
+      "revId": "8250ff8d738f4587149b5a6c2e9fefa9ca28ff44",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a6eadb0_4baf60e3",
+        "filename": "sc/source/ui/view/tabview5.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 663,
+      "author": {
+        "id": 1000119
+      },
+      "writtenOn": "2017-01-07T16:51:45Z",
+      "side": 1,
+      "message": "1) yep, we can avoid to use static; initializing an int is very cheap, so from a performance point of view it should be the same\n\n2) I should have added a comment; the reason is that, sometime, in the tiled rendering case the tip of the note arrow is misplaced by a fixed offset; that has to be fixed in a separate patch, but in the meanwhile I needed a workaround for not missing to invalidate the tile where the arrow tip is placed.",
+      "parentUuid": "3a71b18c_6fa3439f",
       "range": {
         "startLine": 663,
         "startChar": 4,
