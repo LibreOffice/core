@@ -132,7 +132,7 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
 
     if (rsResourceURL.endsWith("/TextPropertyPanel"))
     {
-        pControl = TextPropertyPanel::Create(pParentWindow, xFrame, pBindings, aContext);
+        pControl = TextPropertyPanel::Create(pParentWindow, xFrame);
     }
     else if (rsResourceURL.endsWith("/StylesPropertyPanel"))
     {

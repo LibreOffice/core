@@ -19,16 +19,8 @@
 #ifndef INCLUDED_SVX_SOURCE_SIDEBAR_TEXT_TEXTPROPERTYPANEL_HXX
 #define INCLUDED_SVX_SOURCE_SIDEBAR_TEXT_TEXTPROPERTYPANEL_HXX
 
-#include <sfx2/sidebar/SidebarPanelBase.hxx>
-#include <sfx2/sidebar/ControllerItem.hxx>
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
 #include <vcl/EnumContext.hxx>
-#include <svtools/ctrlbox.hxx>
-#include <editeng/fhgtitem.hxx>
-
-#include <com/sun/star/ui/XSidebar.hpp>
-#include <com/sun/star/frame/XToolbarController.hpp>
-
 #include <svx/sidebar/PanelLayout.hxx>
 
 class ToolBox;
@@ -37,8 +29,7 @@ namespace svx { namespace sidebar {
 
 class TextPropertyPanel
     : public PanelLayout,
-      public ::sfx2::sidebar::IContextChangeReceiver,
-      public ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
+      public ::sfx2::sidebar::IContextChangeReceiver
 {
 public:
     virtual ~TextPropertyPanel() override;
@@ -46,40 +37,20 @@ public:
 
     static VclPtr<vcl::Window> Create (
         vcl::Window* pParent,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame,
-        SfxBindings* pBindings,
-        const vcl::EnumContext& rContext);
-
+        const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
     virtual void HandleContextChange (
         const vcl::EnumContext& rContext) override;
 
-
-    virtual void NotifyItemUpdate(
-        const sal_uInt16 nSId,
-        const SfxItemState eState,
-        const SfxPoolItem* pState,
-        const bool bIsEnabled) override;
-
     TextPropertyPanel (
         vcl::Window* pParent,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame,
-        SfxBindings* pBindings,
-        const vcl::EnumContext& rContext);
+        const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
 private:
-    //ui controls
-    VclPtr<ToolBox> mpToolBoxFont;
-    VclPtr<ToolBox> mpToolBoxIncDec;
     VclPtr<ToolBox> mpToolBoxSpacing;
     VclPtr<ToolBox> mpToolBoxFontColorSw;
     VclPtr<ToolBox> mpToolBoxFontColor;
     VclPtr<ToolBox> mpToolBoxBackgroundColor;
-
-    //control items
-    ::sfx2::sidebar::ControllerItem maFontSizeControl;
-
-    SvxFontHeightItem*          mpHeightItem;
 
     vcl::EnumContext maContext;
 };
