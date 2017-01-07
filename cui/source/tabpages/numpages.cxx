@@ -2544,6 +2544,7 @@ void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext, const Rectan
                 const SvxNumberFormat &rFmt = pActNum->GetLevel(nLevel);
                 aNum.GetLevelVal()[ nLevel ] = rFmt.GetStart();
                 sal_uInt16 nXStart( 0 );
+                pVDev->SetFillColor( aBackColor );
 
                 if (rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION)
                 {
