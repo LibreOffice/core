@@ -21,6 +21,7 @@
 
 #include <transliteration_commonclass.hxx>
 #include <i18nutil/oneToOneMapping.hxx>
+#include <unicode/translit.h>
 
 typedef sal_Unicode (*TransFunc)(const sal_Unicode);
 
@@ -91,8 +92,24 @@ TRANSLITERATION_IGNORE(Space_ja_JP)
 TRANSLITERATION_IGNORE(TraditionalKana_ja_JP)
 TRANSLITERATION_IGNORE(TraditionalKanji_ja_JP)
 TRANSLITERATION_IGNORE(ZiZu_ja_JP)
-TRANSLITERATION_IGNORE(Diacritics_CTL)
 TRANSLITERATION_IGNORE(Kashida_CTL)
+
+class ignoreDiacritics_CTL : public transliteration_Ignore
+{
+    icu::Transliterator* m_transliterator;
+
+public:
+    ignoreDiacritics_CTL();
+
+    OUString SAL_CALL
+    folding(const OUString& rInStr, sal_Int32 nStartPos, sal_Int32 nCount, css::uno::Sequence<sal_Int32>& rOffset)
+        throw(css::uno::RuntimeException, std::exception) override;
+
+    sal_Unicode SAL_CALL
+    transliterateChar2Char(sal_Unicode nInChar)
+        throw(css::uno::RuntimeException,
+        css::i18n::MultipleCharsOutputException, std::exception) override;
+};
 
 #undef TRANSLITERATION_IGNORE
 
