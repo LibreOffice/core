@@ -19,7 +19,6 @@
 
 #include "CommonSalLayout.hxx"
 
-#include <vcl/opengl/OpenGLHelper.hxx>
 #include <vcl/unohelp.hxx>
 #include <scrptrun.h>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
@@ -37,6 +36,10 @@ T lround(T x)
     return ::lround(x);
 }
 }
+#endif
+
+#ifdef _WIN32
+#  include <vcl/opengl/OpenGLHelper.hxx>
 #endif
 
 
