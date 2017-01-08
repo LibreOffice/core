@@ -447,6 +447,12 @@ void AquaSalGraphics::DrawTextLayout(const CommonSalLayout& rLayout)
         return;
 
     CTFontRef pFont = static_cast<CTFontRef>(CFDictionaryGetValue(rStyle.GetStyleDict(), kCTFontAttributeName));
+#if MACOSX_SDK_VERSION < 1070
+    CGFontRef cgFont = CTFontCopyGraphicsFont( pFont, nullptr );
+    CGContextSetFont( mrContext, cgFont );
+    CGContextSetFontSize( mrContext, CTFontGetSize( pFont ) );
+#endif
+
     CGAffineTransform aRotMatrix = CGAffineTransformMakeRotation(-rStyle.mfFontRotation);
 
     Point aPos;
@@ -505,13 +511,22 @@ void AquaSalGraphics::DrawTextLayout(const CommonSalLayout& rLayout)
         CGContextSaveGState(mrContext);
         if (rStyle.mfFontRotation && !bUprightGlyph)
             CGContextRotateCTM(mrContext, rStyle.mfFontRotation);
+
+    #if MACOSX_SDK_VERSION < 1070
+        CGContextShowGlyphsAtPositions( mrContext, &aGlyphIds[ nStartIndex ], &aGlyphPos[ nStartIndex ], nLen );
+    #else
         CTFontDrawGlyphs(pFont, &aGlyphIds[nStartIndex], &aGlyphPos[nStartIndex], nLen, mrContext);
+    #endif
         CGContextRestoreGState(mrContext);
 
         aIt = aNext;
     }
 
     CGContextRestoreGState(mrContext);
+
+#if MACOSX_SDK_VERSION < 1070
+    CFRelease( cgFont );
+#endif
 }
 
 void AquaSalGraphics::SetFont(FontSelectPattern* pReqFont, int nFallbackLevel)

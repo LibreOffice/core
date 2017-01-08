@@ -371,6 +371,7 @@ FontAttributes DevFontFromCTFontDescriptor( CTFontDescriptorRef pFD, bool* bFont
     // get font attributes
     CFDictionaryRef pAttrDict = static_cast<CFDictionaryRef>(CTFontDescriptorCopyAttribute( pFD, kCTFontTraitsAttribute ));
 
+# if MACOSX_SDK_VERSION >= 1060
     if (bFontEnabled && *bFontEnabled)
     {
         // Ignore font formats not supported.
@@ -384,6 +385,7 @@ FontAttributes DevFontFromCTFontDescriptor( CTFontDescriptorRef pFD, bool* bFont
         }
         CFRelease(pFormat);
     }
+# endif
 
     // get symbolic trait
     // TODO: use other traits such as MonoSpace/Condensed/Expanded or Vertical too

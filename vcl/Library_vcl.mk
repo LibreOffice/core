@@ -296,7 +296,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/gdi/virdev \
     vcl/source/gdi/wall \
     vcl/source/gdi/scrptrun \
-    vcl/source/gdi/CommonSalLayout \
+    $(if $(filter-out MACOSX,$(OS)),vcl/source/gdi/CommonSalLayout) \
     vcl/source/bitmap/bitmapfilter \
     vcl/source/bitmap/bitmapscalesuper \
     vcl/source/bitmap/BitmapScaleConvolution \
@@ -426,6 +426,7 @@ $(eval $(call gb_Library_add_defs,vcl,\
 
 $(eval $(call gb_Library_add_objcxxflags_exception_objects,vcl,\
     $(vcl_coretext_code) \
+    vcl/source/gdi/CommonSalLayout \
 ))
 
 $(eval $(call gb_Library_use_system_darwin_frameworks,vcl,\
