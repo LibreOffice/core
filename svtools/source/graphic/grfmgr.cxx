@@ -91,7 +91,6 @@ GraphicObject::GraphicObject( const Graphic& rGraphic ) :
 }
 
 GraphicObject::GraphicObject( const GraphicObject& rGraphicObj, const GraphicManager* pMgr ) :
-    SvDataCopyStream(),
     maGraphic   ( rGraphicObj.GetGraphic() ),
     maAttr      ( rGraphicObj.maAttr ),
     maLink      ( rGraphicObj.maLink ),
