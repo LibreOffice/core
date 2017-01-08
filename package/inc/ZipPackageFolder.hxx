@@ -59,8 +59,7 @@ public:
     void doInsertByName ( ZipPackageEntry *pEntry, bool bSetParent )
         throw(css::lang::IllegalArgumentException, css::container::ElementExistException, css::lang::WrappedTargetException, css::uno::RuntimeException);
 
-    css::packages::ContentInfo & doGetByName( const OUString& aName )
-        throw(css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException);
+    ZipContentInfo& doGetByName( const OUString& aName );
 
     static void copyZipEntry( ZipEntry &rDest, const ZipEntry &rSource);
     static css::uno::Sequence < sal_Int8 > static_getImplementationId();

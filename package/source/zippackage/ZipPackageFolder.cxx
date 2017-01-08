@@ -37,6 +37,8 @@
 #include <EncryptedDataHeader.hxx>
 #include <rtl/instance.hxx>
 
+#include <o3tl/make_unique.hxx>
+
 using namespace com::sun::star;
 using namespace com::sun::star::packages::zip::ZipConstants;
 using namespace com::sun::star::packages::zip;
@@ -86,7 +88,7 @@ bool ZipPackageFolder::LookForUnexpectedODF12Streams( const OUString& aPath )
           ++aCI)
     {
         const OUString &rShortName = (*aCI).first;
-        const ContentInfo &rInfo = *(*aCI).second;
+        const ZipContentInfo &rInfo = *(*aCI).second;
 
         if ( rInfo.bFolder )
         {
@@ -143,7 +145,7 @@ void ZipPackageFolder::setChildStreamsTypeByExtension( const beans::StringPair& 
           ++aCI)
     {
         const OUString &rShortName = (*aCI).first;
-        const ContentInfo &rInfo = *(*aCI).second;
+        const ZipContentInfo &rInfo = *(*aCI).second;
 
         if ( rInfo.bFolder )
             rInfo.pFolder->setChildStreamsTypeByExtension( aPair );
@@ -238,14 +240,14 @@ sal_Bool SAL_CALL ZipPackageFolder::hasElements(  )
     return maContents.size() > 0;
 }
     // XNameAccess
-ContentInfo& ZipPackageFolder::doGetByName( const OUString& aName )
-    throw(NoSuchElementException, WrappedTargetException, uno::RuntimeException)
+ZipContentInfo& ZipPackageFolder::doGetByName( const OUString& aName )
 {
     ContentHash::iterator aIter = maContents.find ( aName );
     if ( aIter == maContents.end())
         throw NoSuchElementException(THROW_WHERE );
-    return *(*aIter).second;
+    return *aIter->second;
 }
+
 uno::Any SAL_CALL ZipPackageFolder::getByName( const OUString& aName )
     throw(NoSuchElementException, WrappedTargetException, uno::RuntimeException, std::exception)
 {
@@ -369,7 +371,7 @@ void ZipPackageFolder::saveContents(
           ++aCI)
     {
         const OUString &rShortName = (*aCI).first;
-        const ContentInfo &rInfo = *(*aCI).second;
+        const ZipContentInfo &rInfo = *(*aCI).second;
 
         if ( !bMimeTypeStreamStored || !rShortName.equals( aMimeTypeStreamName ) )
         {
@@ -442,9 +444,9 @@ void ZipPackageFolder::doInsertByName ( ZipPackageEntry *pEntry, bool bSetParent
     try
     {
         if ( pEntry->IsFolder() )
-            maContents[pEntry->getName()] = new ContentInfo ( static_cast < ZipPackageFolder *> ( pEntry ) );
+            maContents[pEntry->getName()] = o3tl::make_unique<ZipContentInfo>(static_cast<ZipPackageFolder*>(pEntry));
         else
-            maContents[pEntry->getName()] = new ContentInfo ( static_cast < ZipPackageStream *> ( pEntry ) );
+            maContents[pEntry->getName()] = o3tl::make_unique<ZipContentInfo>(static_cast<ZipPackageStream*>(pEntry));
     }
     catch(const uno::Exception& rEx)
     {
