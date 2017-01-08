@@ -474,16 +474,15 @@ HuffmanTreeNode::~HuffmanTreeNode()
 HuffmanTreeNode * HuffmanTreeNode::InsertNode(sal_uInt32 nValue, const sal_Char * pInCode)
 {
     HuffmanTreeNode *pNew = new HuffmanTreeNode(nValue);
-    sal_Char pCode[32];
-        strcpy(pCode, pInCode );
+    std::string aCode(pInCode);
 
     // query its parents
-    sal_Char cLast = pCode[strlen(pCode) - 1];
-    pCode[strlen(pCode) - 1] = '\0';
-    HuffmanTreeNode * pParent = QueryNode(pCode);
+    const sal_Char cLast = aCode.back();
+    aCode.pop_back();
+    HuffmanTreeNode * pParent = QueryNode(aCode.c_str());
     if (!pParent)
     {
-        pParent = InsertNode(0xffffffff, pCode);
+        pParent = InsertNode(0xffffffff, aCode.c_str());
     }
     if (cLast == '0')
         pParent->left = pNew;
@@ -492,6 +491,7 @@ HuffmanTreeNode * HuffmanTreeNode::InsertNode(sal_uInt32 nValue, const sal_Char 
 
     return pNew;
 }
+
 HuffmanTreeNode * HuffmanTreeNode::QueryNode(const sal_Char * pCode)
 {
     sal_uInt32 nLen = strlen(pCode);
