@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.16.1 -->
+<!-- Generated with glade 3.20.0 -->
 <interface>
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkBox" id="TableSelectionPage">
@@ -37,10 +37,8 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="valign">start</property>
+                    <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
-                    <property name="xalign">0</property>
-                    <property name="yalign">0</property>
                     <property name="label" translatable="yes">Currently, the form the control belongs to is not (or not completely) bound to a data source.
 
 Please choose a data source and a table.
@@ -49,6 +47,8 @@ Please choose a data source and a table.
 Please note that the settings made on this page will take effect immediately upon leaving the page.</property>
                     <property name="wrap">True</property>
                     <property name="max_width_chars">45</property>
+                    <property name="xalign">0</property>
+                    <property name="yalign">0</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
