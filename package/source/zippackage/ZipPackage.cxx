@@ -156,21 +156,14 @@ ZipPackage::ZipPackage ( const uno::Reference < XComponentContext > &xContext )
 , m_bAllowRemoveOnInsert( true )
 , m_eMode ( e_IMode_None )
 , m_xContext( xContext )
-, m_pRootFolder( nullptr )
 , m_pZipFile( nullptr )
 {
-    m_xRootFolder = m_pRootFolder = new ZipPackageFolder( m_xContext, m_nFormat, m_bAllowRemoveOnInsert );
+    m_xRootFolder = new ZipPackageFolder( m_xContext, m_nFormat, m_bAllowRemoveOnInsert );
 }
 
 ZipPackage::~ZipPackage()
 {
     delete m_pZipFile;
-
-    // All folders and streams contain pointers to their parents, when a parent disappeares
-    // it should disconnect all the children from itself during destruction automatically.
-    // So there is no need in explicit m_pRootFolder->releaseUpwardRef() call here any more
-    // since m_pRootFolder has no parent and cleaning of its children will be done automatically
-    // during m_pRootFolder dying by refcount.
 }
 
 bool ZipPackage::isLocalFile() const
@@ -375,27 +368,27 @@ void ZipPackage::parseManifest()
                 if ( aPackageMediatype.startsWith("application/vnd.") )
                 {
                     // accept only types that look similar to own mediatypes
-                    m_pRootFolder->SetMediaType( aPackageMediatype );
+                    m_xRootFolder->SetMediaType( aPackageMediatype );
                     m_bMediaTypeFallbackUsed = true;
                 }
             }
             else if ( !m_bForceRecovery )
             {
                 // the mimetype stream should contain the information from manifest.xml
-                if ( !m_pRootFolder->GetMediaType().equals( aPackageMediatype ) )
+                if ( !m_xRootFolder->GetMediaType().equals( aPackageMediatype ) )
                     throw ZipIOException(
                         THROW_WHERE
                         "mimetype conflicts with manifest.xml, \""
-                        + m_pRootFolder->GetMediaType() + "\" vs. \""
+                        + m_xRootFolder->GetMediaType() + "\" vs. \""
                         + aPackageMediatype + "\"" );
             }
 
             m_xRootFolder->removeByName( sMimetype );
         }
 
-        m_bInconsistent = m_pRootFolder->LookForUnexpectedODF12Streams( OUString() );
+        m_bInconsistent = m_xRootFolder->LookForUnexpectedODF12Streams( OUString() );
 
-        bool bODF12AndNewer = ( m_pRootFolder->GetVersion().compareTo( ODFVER_012_TEXT ) >= 0 );
+        bool bODF12AndNewer = ( m_xRootFolder->GetVersion().compareTo( ODFVER_012_TEXT ) >= 0 );
         if ( !m_bForceRecovery && bODF12AndNewer )
         {
             bool bDifferentStartKeyAlgorithm = false;
@@ -453,7 +446,7 @@ void ZipPackage::parseContentType()
 
                     // set the implicit types fist
                     for ( nInd = 0; nInd < aContentTypeInfo[0].getLength(); nInd++ )
-                        m_pRootFolder->setChildStreamsTypeByExtension( aContentTypeInfo[0][nInd] );
+                        m_xRootFolder->setChildStreamsTypeByExtension( aContentTypeInfo[0][nInd] );
 
                     // now set the explicit types
                     for ( nInd = 0; nInd < aContentTypeInfo[1].getLength(); nInd++ )
@@ -503,7 +496,7 @@ void ZipPackage::getZipFileContents()
     while (xEnum->hasMoreElements())
     {
         nOldIndex = 0;
-        pCurrent = m_pRootFolder;
+        pCurrent = m_xRootFolder.get();
         const ZipEntry & rEntry = *xEnum->nextElement();
         OUString rName = rEntry.sPath;
 
@@ -523,7 +516,7 @@ void ZipPackage::getZipFileContents()
                 pCurrent = ( *aIter ).second;
         }
 
-        if ( pCurrent == m_pRootFolder )
+        if ( pCurrent == m_xRootFolder.get() )
         {
             sal_Int32 nIndex;
             while ( ( nIndex = rName.indexOf( '/', nOldIndex ) ) != -1 )
@@ -599,13 +592,13 @@ void SAL_CALL ZipPackage::initialize( const uno::Sequence< Any >& aArguments )
                             else if ( aCommand == "purezip" )
                             {
                                 m_nFormat = embed::StorageFormats::ZIP;
-                                m_pRootFolder->setPackageFormat_Impl( m_nFormat );
+                                m_xRootFolder->setPackageFormat_Impl( m_nFormat );
                                 break;
                             }
                             else if ( aCommand == "ofopxml" )
                             {
                                 m_nFormat = embed::StorageFormats::OFOPXML;
-                                m_pRootFolder->setPackageFormat_Impl( m_nFormat );
+                                m_xRootFolder->setPackageFormat_Impl( m_nFormat );
                                 break;
                             }
                         }
@@ -663,7 +656,7 @@ void SAL_CALL ZipPackage::initialize( const uno::Sequence< Any >& aArguments )
                     if ( !bPackFormat )
                         m_nFormat = embed::StorageFormats::ZIP;
 
-                    m_pRootFolder->setPackageFormat_Impl( m_nFormat );
+                    m_xRootFolder->setPackageFormat_Impl( m_nFormat );
                 }
                 else if ( aNamedValue.Name == "StorageFormat" )
                 {
@@ -692,12 +685,12 @@ void SAL_CALL ZipPackage::initialize( const uno::Sequence< Any >& aArguments )
                     else
                         throw lang::IllegalArgumentException(THROW_WHERE, uno::Reference< uno::XInterface >(), 1 );
 
-                    m_pRootFolder->setPackageFormat_Impl( m_nFormat );
+                    m_xRootFolder->setPackageFormat_Impl( m_nFormat );
                 }
                 else if ( aNamedValue.Name == "AllowRemoveOnInsert" )
                 {
                     aNamedValue.Value >>= m_bAllowRemoveOnInsert;
-                    m_pRootFolder->setRemoveOnInsertMode_Impl( m_bAllowRemoveOnInsert );
+                    m_xRootFolder->setRemoveOnInsertMode_Impl( m_bAllowRemoveOnInsert );
                 }
 
                 // for now the progress handler is not used, probably it will never be
@@ -784,7 +777,7 @@ Any SAL_CALL ZipPackage::getByHierarchicalName( const OUString& aName )
 
     if (aName == "/")
         // root directory.
-        return makeAny ( uno::Reference < XUnoTunnel > ( m_pRootFolder ) );
+        return makeAny ( uno::Reference < XUnoTunnel > ( m_xRootFolder.get() ) );
 
     nStreamIndex = aName.lastIndexOf ( '/' );
     bool bFolder = nStreamIndex == nIndex-1; // last character is '/'.
@@ -821,14 +814,14 @@ Any SAL_CALL ZipPackage::getByHierarchicalName( const OUString& aName )
             m_aRecent.erase( aIter );
         }
     }
-    else if ( m_pRootFolder->hasByName ( aName ) )
+    else if ( m_xRootFolder->hasByName ( aName ) )
         // top-level element.
-        return m_pRootFolder->getByName ( aName );
+        return m_xRootFolder->getByName ( aName );
 
     // Not in the cache. Search normally.
 
     nOldIndex = 0;
-    ZipPackageFolder * pCurrent = m_pRootFolder;
+    ZipPackageFolder * pCurrent = m_xRootFolder.get();
     ZipPackageFolder * pPrevious = nullptr;
 
     // Find the right directory for the given path.
@@ -911,10 +904,10 @@ sal_Bool SAL_CALL ZipPackage::hasByHierarchicalName( const OUString& aName )
         }
         else
         {
-            if ( m_pRootFolder->hasByName ( aName ) )
+            if ( m_xRootFolder->hasByName ( aName ) )
                 return true;
         }
-        ZipPackageFolder * pCurrent = m_pRootFolder;
+        ZipPackageFolder * pCurrent = m_xRootFolder.get();
         ZipPackageFolder * pPrevious = nullptr;
         nOldIndex = 0;
         while ( ( nIndex = aName.indexOf( '/', nOldIndex )) != -1 )
@@ -990,8 +983,8 @@ void ZipPackage::WriteMimetypeMagicFile( ZipOutputStream& aZipOut )
         m_xRootFolder->removeByName( sMime );
 
     ZipEntry * pEntry = new ZipEntry;
-    sal_Int32 nBufferLength = m_pRootFolder->GetMediaType().getLength();
-    OString sMediaType = OUStringToOString( m_pRootFolder->GetMediaType(), RTL_TEXTENCODING_ASCII_US );
+    sal_Int32 nBufferLength = m_xRootFolder->GetMediaType().getLength();
+    OString sMediaType = OUStringToOString( m_xRootFolder->GetMediaType(), RTL_TEXTENCODING_ASCII_US );
     const uno::Sequence< sal_Int8 > aType( reinterpret_cast<sal_Int8 const *>(sMediaType.getStr()),
                                      nBufferLength );
 
@@ -1233,9 +1226,9 @@ uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
         {
             uno::Sequence < PropertyValue > aPropSeq( PKG_SIZE_NOENCR_MNFST );
             aPropSeq [PKG_MNFST_MEDIATYPE].Name = sMediaType;
-            aPropSeq [PKG_MNFST_MEDIATYPE].Value <<= m_pRootFolder->GetMediaType();
+            aPropSeq [PKG_MNFST_MEDIATYPE].Value <<= m_xRootFolder->GetMediaType();
             aPropSeq [PKG_MNFST_VERSION].Name = sVersion;
-            aPropSeq [PKG_MNFST_VERSION].Value <<= m_pRootFolder->GetVersion();
+            aPropSeq [PKG_MNFST_VERSION].Value <<= m_xRootFolder->GetVersion();
             aPropSeq [PKG_MNFST_FULLPATH].Name = sFullPath;
             aPropSeq [PKG_MNFST_FULLPATH].Value <<= OUString("/");
 
@@ -1249,7 +1242,7 @@ uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
 
             // call saveContents ( it will recursively save sub-directories
             OUString aEmptyString;
-            m_pRootFolder->saveContents(aEmptyString, aManList, aZipOut, GetEncryptionKey(), aRandomPool.get());
+            m_xRootFolder->saveContents(aEmptyString, aManList, aZipOut, GetEncryptionKey(), aRandomPool.get());
         }
 
         if( m_nFormat == embed::StorageFormats::PACKAGE )
