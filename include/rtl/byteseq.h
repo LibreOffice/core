@@ -189,6 +189,9 @@ public:
         @param rSeq another byte sequence
     */
     inline ByteSequence( const ByteSequence & rSeq );
+#if defined LIBO_INTERNAL_ONLY
+    inline ByteSequence( ByteSequence && rSeq );
+#endif
     /** Copy constructor Creates a copy from the C-Handle.
 
         @param pSequence another byte sequence handle
@@ -232,6 +235,9 @@ public:
         @return this sequence
     */
     inline ByteSequence & SAL_CALL operator = ( const ByteSequence & rSeq );
+#if defined LIBO_INTERNAL_ONLY
+    inline ByteSequence & SAL_CALL operator = ( ByteSequence && rSeq );
+#endif
 
     /** Gets the length of sequence.
 
