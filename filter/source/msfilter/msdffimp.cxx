@@ -1369,24 +1369,30 @@ void DffPropertyReader::ApplyFillAttributes( SvStream& rIn, SfxItemSet& rSet, co
                             if ( IsProperty( DFF_Prop_fillBackColor ) )
                                 aCol2 = rManager.MSO_CLR_ToColor( GetPropertyValue( DFF_Prop_fillBackColor, 0 ), DFF_Prop_fillBackColor );
 
-                            XOBitmap aXOBitmap( aBmp );
-                            aXOBitmap.Bitmap2Array();
-                            aXOBitmap.SetBitmapType( XBitmapType::N8x8 );
-                            aXOBitmap.SetPixelSize( aBmp.GetSizePixel() );
-
-                            if( aXOBitmap.GetBackgroundColor() == COL_BLACK )
+                            // Create a bitmap for the pattern with expected colors
+                            Bitmap aResult(Size(8, 8), 24);
                             {
-                                aXOBitmap.SetPixelColor( aCol1 );
-                                aXOBitmap.SetBackgroundColor( aCol2 );
-                            }
-                            else
-                            {
-                                aXOBitmap.SetPixelColor( aCol2 );
-                                aXOBitmap.SetBackgroundColor( aCol1 );
-                            }
+                                Bitmap::ScopedReadAccess pRead(aBmp);
+                                Bitmap::ScopedWriteAccess pWrite(aResult);
 
-                            aXOBitmap.Array2Bitmap();
-                            aGraf = Graphic( aXOBitmap.GetBitmap()  );
+                                for (long y = 0; y < pWrite->Height(); ++y)
+                                {
+                                    for (long x = 0; x < pWrite->Width(); ++x)
+                                    {
+                                        Color aReadColor;
+                                        if (pRead->HasPalette())
+                                            aReadColor = pRead->GetPaletteColor(pRead->GetPixelIndex(y, x));
+                                        else
+                                            aReadColor = pRead->GetPixel(y, x);
+
+                                        if (aReadColor.GetColor() == 0)
+                                            pWrite->SetPixel(y, x, aCol2);
+                                        else
+                                            pWrite->SetPixel(y, x, aCol1);
+                                    }
+                                }
+                            }
+                            aGraf = Graphic(aResult);
                         }
 
                         rSet.Put(XFillBitmapItem(OUString(), aGraf));
