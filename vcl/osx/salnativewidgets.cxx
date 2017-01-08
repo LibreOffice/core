@@ -659,7 +659,7 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
             if( nType == ControlType::IntroProgress )
                 aTrackInfo.enableState          = kThemeTrackActive;
             aTrackInfo.filler1              = 0;
-            aTrackInfo.trackInfo.progress.phase   = static_cast<UInt8>(CFAbsoluteTimeGetCurrent()*10.0);
+            aTrackInfo.trackInfo.progress.phase   = static_cast<long long>(CFAbsoluteTimeGetCurrent()*10.0);
 
             HIThemeDrawTrack( &aTrackInfo, nullptr, mrContext, kHIThemeOrientationNormal );
             bOK = true;
