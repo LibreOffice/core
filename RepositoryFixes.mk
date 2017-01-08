@@ -70,7 +70,6 @@ ifeq ($(OS),WNT)
 ifneq ($(USE_MINGW),)
 
 gb_Library_FILENAMES := $(patsubst comphelper:icomphelper%,comphelper:icomphelp%,$(gb_Library_FILENAMES))
-gb_Library_FILENAMES := $(patsubst cui:icui%,cui:icuin%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst i18nisolang1:ii18nisolang1%,i18nisolang1:ii18nisolang%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst i18nisolang1:iii18nisolang1%,i18nisolang1:iii18nisolang%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst sb:isb%,sb:basic%,$(gb_Library_FILENAMES))
@@ -93,7 +92,10 @@ gb_Library_FILENAMES := $(patsubst stl:istl%,stl:msvcprt%,$(gb_Library_FILENAMES
 # all other libraries built by OOo and all platform libraries (exceptions see below) are used without an import library
 # we link against their dlls in gcc format directly
 gb_Library_NOILIBFILENAMES:=\
+    icudt \
+    icuin \
     icule \
+    icutu \
     icuuc \
     uwinapi \
     winmm \
@@ -112,7 +114,10 @@ gb_Library_DLLFILENAMES := $(filter-out $(foreach lib,$(gb_Library_ILIBFILENAMES
 gb_Library_DLLFILENAMES += $(foreach lib,$(gb_Library_ILIBFILENAMES),$(lib):$(PSDK_HOME)/lib/$(lib)$(gb_Library_ILIBEXT))
 
 gb_Library_DLLFILENAMES := $(patsubst comphelper:comphelper%,comphelper:comphelp%,$(gb_Library_DLLFILENAMES))
+gb_Library_DLLFILENAMES := $(patsubst icudt:icudt%,icudt:icudt40%,$(gb_Library_DLLFILENAMES))
+gb_Library_DLLFILENAMES := $(patsubst icuin:icuin%,icuin:icuin40%,$(gb_Library_DLLFILENAMES))
 gb_Library_DLLFILENAMES := $(patsubst icule:icule%,icule:icule40%,$(gb_Library_DLLFILENAMES))
+gb_Library_DLLFILENAMES := $(patsubst icutu:icutu%,icutu:icutu40%,$(gb_Library_DLLFILENAMES))
 gb_Library_DLLFILENAMES := $(patsubst icuuc:icuuc%,icuuc:icuuc40%,$(gb_Library_DLLFILENAMES))
 gb_Library_DLLFILENAMES := $(patsubst jvmaccess:jvmaccess%,jvmaccess:jvmaccess$(gb_Library_MAJORVER)%,$(gb_Library_DLLFILENAMES))
 gb_Library_DLLFILENAMES := $(patsubst z:z%,z:zlib%,$(gb_Library_DLLFILENAMES))
@@ -123,7 +128,6 @@ gb_Library_TARGETS := $(filter-out stl,$(gb_Library_TARGETS))
 else #ifneq ($(USE_MINGW),)
 
 gb_Library_FILENAMES := $(patsubst comphelper:icomphelper%,comphelper:icomphelp%,$(gb_Library_FILENAMES))
-gb_Library_FILENAMES := $(patsubst cui:icui%,cui:icuin%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst i18nisolang1:ii18nisolang1%,i18nisolang1:ii18nisolang%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst i18nisolang1:iii18nisolang1%,i18nisolang1:iii18nisolang%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst sb:isb%,sb:basic%,$(gb_Library_FILENAMES))
@@ -143,7 +147,12 @@ gb_Library_FILENAMES := $(patsubst stl:istl%,stl:msvcprt%,$(gb_Library_FILENAMES
 
 # change the names of all import libraries that don't have an "i" prefix as in our standard naming schema
 gb_Library_NOILIBFILENAMES := $(gb_Library_PLAINLIBS_NONE)
-gb_Library_NOILIBFILENAMES += icuuc icule
+gb_Library_NOILIBFILENAMES += \
+    icudt \
+    icuin \
+    icule \
+    icutu \
+    icuuc
 
 gb_Library_FILENAMES := $(filter-out $(foreach lib,$(gb_Library_NOILIBFILENAMES),$(lib):%),$(gb_Library_FILENAMES))
 gb_Library_FILENAMES += $(foreach lib,$(gb_Library_NOILIBFILENAMES),$(lib):$(lib)$(gb_Library_PLAINEXT))
@@ -154,6 +163,10 @@ gb_Library_FILENAMES := $(patsubst z:z%,z:zlib%,$(gb_Library_FILENAMES))
 #endif
 
 gb_Library_DLLFILENAMES := $(patsubst comphelper:comphelper%,comphelper:comphelp%,$(gb_Library_DLLFILENAMES))
+gb_Library_DLLFILENAMES := $(patsubst icudt:icudt%,icudt:icudt40%,$(gb_Library_DLLFILENAMES))
+gb_Library_DLLFILENAMES := $(patsubst icuin:icuin%,icuin:icuin40%,$(gb_Library_DLLFILENAMES))
+gb_Library_DLLFILENAMES := $(patsubst icule:icule%,icule:icule40%,$(gb_Library_DLLFILENAMES))
+gb_Library_DLLFILENAMES := $(patsubst icutu:icutu%,icutu:icutu40%,$(gb_Library_DLLFILENAMES))
 gb_Library_DLLFILENAMES := $(patsubst icuuc:icuuc%,icuuc:icuuc40%,$(gb_Library_DLLFILENAMES))
 gb_Library_DLLFILENAMES := $(patsubst z:z%,z:zlib%,$(gb_Library_DLLFILENAMES))
 
@@ -200,8 +213,11 @@ gb_Library_DLLFILENAMES := $(patsubst sfx:test_sfx2_metadatable%,sfx:tstsfx2m%,$
 
 gb_Library_NOILIBFILENAMES:=\
     ft2lib \
-    icuuc \
-    icule
+    icudt \
+    icuin \
+    icule \
+    icutu \
+    icuuc
 
 gb_Library_ILIBFILENAMES:=\
     ft2lib \
