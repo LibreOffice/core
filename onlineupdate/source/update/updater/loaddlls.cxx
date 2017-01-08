@@ -36,6 +36,7 @@ struct AutoLoadSystemDependencies
             }
         }
 
+        // TODO: moggi: do we need all that code?
         // When SetDefaultDllDirectories is not available, fallback to preloading
         // dlls. The order that these are loaded does not matter since they are
         // loaded using the LOAD_WITH_ALTERED_SEARCH_PATH flag.
