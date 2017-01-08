@@ -25,7 +25,7 @@
 
 #include <vector>
 
-class SOT_DLLPUBLIC FileList : public SvDataCopyStream
+class SOT_DLLPUBLIC FileList
 {
     ::std::vector< OUString >  aStrList;
 
@@ -36,7 +36,7 @@ protected:
 
 public:
     FileList() {};
-    virtual ~FileList() override;
+    ~FileList();
 
     // Zuweisungsoperator
     FileList&           operator=( const FileList& rFileList );

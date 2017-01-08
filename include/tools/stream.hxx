@@ -681,18 +681,6 @@ public:
     virtual bool good() const override;
 };
 
-/** Data Copy Stream
-
-    This class is the foundation for all classes, using SvData
-    (SO2\DTRANS.HXX/CXX) for transportation (e.g., graphics).
-*/
-class TOOLS_DLLPUBLIC SvDataCopyStream
-{
-public:
-    // repeated execution of Load or Assign is allowed
-    virtual         ~SvDataCopyStream(){}
-};
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
