@@ -46,7 +46,7 @@
 #include "salsys.hxx"
 #include "svids.hrc"
 #include "helpwin.hxx"
-#include "../window/scrwnd.hxx"
+#include "scrwnd.hxx"
 
 #include "com/sun/star/accessibility/MSAAService.hpp"
 
