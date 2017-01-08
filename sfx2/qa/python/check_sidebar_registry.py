@@ -45,7 +45,7 @@ class CheckSidebarRegistry(unittest.TestCase):
                                                                     (param, ))
         for nodeName in sidebar_decks_settings:
 
-            node = sidebar_decks_settings.getByName(nodeName)
+            node = sidebar_decks_settings[nodeName]
 
             if (node.Id != nodeName):
                 print("\nNon-consistent sidebar.xcu Deck registry names", nodeName, node.Id)
@@ -59,7 +59,7 @@ class CheckSidebarRegistry(unittest.TestCase):
                                                                     (param, ))
         for nodeName in sidebar_panels_settings:
 
-            node = sidebar_panels_settings.getByName(nodeName)
+            node = sidebar_panels_settings[nodeName]
 
             if (node.Id != nodeName):
                 print("\nNon-consistent sidebar.xcu Panel registry names", nodeName, node.Id)
@@ -68,7 +68,7 @@ class CheckSidebarRegistry(unittest.TestCase):
             # is panel bound to an existing Deck ?
             FoundDeckId = False
             for deckNodeName in sidebar_decks_settings:
-                deck_node = sidebar_decks_settings.getByName(deckNodeName)
+                deck_node = sidebar_decks_settings[deckNodeName]
                 if (node.DeckId == deck_node.Id):
                     FoundDeckId = True
             if not FoundDeckId:
