@@ -24,6 +24,7 @@
 
 #ifdef _WIN32
 #include "win/winlayout.hxx"
+#include <vcl/opengl/OpenGLHelper.hxx>
 
 #elif defined(MACOSX) || defined(IOS)
 #include "quartz/ctfonts.hxx"
