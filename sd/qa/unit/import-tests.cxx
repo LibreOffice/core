@@ -75,6 +75,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <vcl/pngread.hxx>
 #include <vcl/bitmapaccess.hxx>
+#include <vcl/dibtools.hxx>
 #include <sfx2/frame.hxx>
 #include <com/sun/star/frame/XModel2.hpp>
 #include <com/sun/star/frame/XController2.hpp>
@@ -142,6 +143,9 @@ public:
     void testTdf104201();
     void testTdf104445();
 
+    bool checkPattern(sd::DrawDocShellRef& rDocRef, int nShapeNumber, std::vector<sal_uInt8>& rExpected);
+    void testPatternImport();
+
     CPPUNIT_TEST_SUITE(SdImportTest);
 
     CPPUNIT_TEST(testDocumentLayout);
@@ -200,6 +204,7 @@ public:
     CPPUNIT_TEST(testTdf104015);
     CPPUNIT_TEST(testTdf104201);
     CPPUNIT_TEST(testTdf104445);
+    CPPUNIT_TEST(testPatternImport);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -1768,6 +1773,340 @@ void SdImportTest::testTdf104445()
         }
     }
     xDocShRef->DoClose();
+}
+
+namespace
+{
+
+bool checkPatternValues(std::vector<sal_uInt8>& rExpected, Bitmap& rBitmap)
+{
+    bool bResult = true;
+
+    Color aFGColor(0xFF0000);
+    Color aBGColor(0xFFFFFF);
+
+    Bitmap::ScopedReadAccess pAccess(rBitmap);
+    for (long y = 0; y < pAccess->Height(); ++y)
+    {
+        for (long x = 0; x < pAccess->Width(); ++x)
+        {
+            Color aColor = pAccess->GetPixel(y, x);
+            sal_uInt8 aValue = rExpected[y*8+x];
+
+            if (aValue == 1 && aColor != aFGColor)
+                bResult = false;
+            else if (aValue == 0 && aColor != aBGColor)
+                bResult = false;
+        }
+    }
+
+    return bResult;
+}
+
+} // end anonymous namespace
+
+bool SdImportTest::checkPattern(sd::DrawDocShellRef& rDocRef, int nShapeNumber, std::vector<sal_uInt8>& rExpected)
+{
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(nShapeNumber, 0, rDocRef));
+    CPPUNIT_ASSERT_MESSAGE("Not a shape", xShape.is());
+
+    Bitmap aBitmap;
+    if (xShape.is())
+    {
+        uno::Any aBitmapAny = xShape->getPropertyValue("FillBitmap");
+        uno::Reference<awt::XBitmap> xBitmap;
+        if (aBitmapAny >>= xBitmap)
+        {
+            uno::Sequence<sal_Int8> aBitmapSequence(xBitmap->getDIB());
+            SvMemoryStream aBitmapStream(aBitmapSequence.getArray(),
+                                         aBitmapSequence.getLength(),
+                                         StreamMode::READ);
+            ReadDIB(aBitmap, aBitmapStream, true);
+        }
+    }
+    CPPUNIT_ASSERT_EQUAL(8L, aBitmap.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(8L, aBitmap.GetSizePixel().Height());
+    return checkPatternValues(rExpected, aBitmap);
+}
+
+/* Test checks that importing a PPT file with all supported fill patterns is
+ * correctly imported as a tiled fill bitmap with the expected pattern.
+ */
+void SdImportTest::testPatternImport()
+{
+    sd::DrawDocShellRef xDocRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/ppt/FillPatterns.ppt"), PPT);
+
+    std::vector<sal_uInt8> aExpectedPattern1 = {
+        1,0,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,
+        0,0,0,0,1,0,0,0,
+        0,0,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,
+    };
+    std::vector<sal_uInt8> aExpectedPattern2 = {
+        1,0,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,
+        0,0,0,0,1,0,0,0,
+        0,0,0,0,0,0,0,0,
+        1,0,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,
+        0,0,0,0,1,0,0,0,
+        0,0,0,0,0,0,0,0,
+    };
+    std::vector<sal_uInt8> aExpectedPattern3 = {
+        1,0,0,0,1,0,0,0,
+        0,0,0,0,0,0,0,0,
+        0,0,1,0,0,0,1,0,
+        0,0,0,0,0,0,0,0,
+        1,0,0,0,1,0,0,0,
+        0,0,0,0,0,0,0,0,
+        0,0,1,0,0,0,1,0,
+        0,0,0,0,0,0,0,0,
+    };
+    std::vector<sal_uInt8> aExpectedPattern4 = {
+        1,0,0,0,1,0,0,0,
+        0,0,1,0,0,0,1,0,
+        1,0,0,0,1,0,0,0,
+        0,0,1,0,0,0,1,0,
+        1,0,0,0,1,0,0,0,
+        0,0,1,0,0,0,1,0,
+        1,0,0,0,1,0,0,0,
+        0,0,1,0,0,0,1,0,
+    };
+    std::vector<sal_uInt8> aExpectedPattern5 = {
+        1,0,1,0,1,0,1,0,
+        0,1,0,0,0,1,0,0,
+        1,0,1,0,1,0,1,0,
+        0,0,0,1,0,0,0,1,
+        1,0,1,0,1,0,1,0,
+        0,1,0,0,0,1,0,0,
+        1,0,1,0,1,0,1,0,
+        0,0,0,1,0,0,0,1,
+    };
+    std::vector<sal_uInt8> aExpectedPattern6 = {
+        1,0,1,0,1,0,1,0,
+        0,1,0,1,0,1,0,1,
+        1,0,1,0,1,0,1,0,
+        0,1,0,1,0,0,0,1,
+        1,0,1,0,1,0,1,0,
+        0,1,0,1,0,1,0,1,
+        1,0,1,0,1,0,1,0,
+        0,0,0,1,0,1,0,1,
+    };
+    std::vector<sal_uInt8> aExpectedPattern7 = {
+        1,0,1,0,1,0,1,0,
+        0,1,0,1,0,1,0,1,
+        1,0,1,0,1,0,1,0,
+        0,1,0,1,0,1,0,1,
+        1,0,1,0,1,0,1,0,
+        0,1,0,1,0,1,0,1,
+        1,0,1,0,1,0,1,0,
+        0,1,0,1,0,1,0,1,
+    };
+    std::vector<sal_uInt8> aExpectedPattern8 = {
+        1,1,1,0,1,1,1,0,
+        0,1,0,1,0,1,0,1,
+        1,0,1,1,1,0,1,1,
+        0,1,0,1,0,1,0,1,
+        1,1,1,0,1,1,1,0,
+        0,1,0,1,0,1,0,1,
+        1,0,1,1,1,0,1,1,
+        0,1,0,1,0,1,0,1,
+    };
+    std::vector<sal_uInt8> aExpectedPattern9 = {
+        0,1,1,1,0,1,1,1,
+        1,1,0,1,1,1,0,1,
+        0,1,1,1,0,1,1,1,
+        1,1,0,1,1,1,0,1,
+        0,1,1,1,0,1,1,1,
+        1,1,0,1,1,1,0,1,
+        0,1,1,1,0,1,1,1,
+        1,1,0,1,1,1,0,1,
+    };
+    std::vector<sal_uInt8> aExpectedPattern10 = {
+        0,1,1,1,0,1,1,1,
+        1,1,1,1,1,1,1,1,
+        1,1,0,1,1,1,0,1,
+        1,1,1,1,1,1,1,1,
+        0,1,1,1,0,1,1,1,
+        1,1,1,1,1,1,1,1,
+        1,1,0,1,1,1,0,1,
+        1,1,1,1,1,1,1,1,
+    };
+    std::vector<sal_uInt8> aExpectedPattern11 = {
+        1,1,1,0,1,1,1,1,
+        1,1,1,1,1,1,1,1,
+        1,1,1,1,1,1,1,0,
+        1,1,1,1,1,1,1,1,
+        1,1,1,0,1,1,1,1,
+        1,1,1,1,1,1,1,1,
+        1,1,1,1,1,1,1,0,
+        1,1,1,1,1,1,1,1,
+    };
+    std::vector<sal_uInt8> aExpectedPattern12 = {
+        1,1,1,1,1,1,1,1,
+        1,1,1,1,1,1,1,1,
+        1,1,1,1,1,1,1,1,
+        1,1,1,1,0,1,1,1,
+        1,1,1,1,1,1,1,1,
+        1,1,1,1,1,1,1,1,
+        1,1,1,1,1,1,1,1,
+        0,1,1,1,1,1,1,1,
+    };
+    std::vector<sal_uInt8> aExpectedPatternLine1 = {
+        1,0,0,0,1,0,0,0,
+        0,1,0,0,0,1,0,0,
+        0,0,1,0,0,0,1,0,
+        0,0,0,1,0,0,0,1,
+        1,0,0,0,1,0,0,0,
+        0,1,0,0,0,1,0,0,
+        0,0,1,0,0,0,1,0,
+        0,0,0,1,0,0,0,1,
+    };
+    std::vector<sal_uInt8> aExpectedPatternLine2 = {
+        0,0,0,1,0,0,0,1,
+        0,0,1,0,0,0,1,0,
+        0,1,0,0,0,1,0,0,
+        1,0,0,0,1,0,0,0,
+        0,0,0,1,0,0,0,1,
+        0,0,1,0,0,0,1,0,
+        0,1,0,0,0,1,0,0,
+        1,0,0,0,1,0,0,0,
+    };
+    std::vector<sal_uInt8> aExpectedPatternLine3 = {
+        1,1,0,0,1,1,0,0,
+        0,1,1,0,0,1,1,0,
+        0,0,1,1,0,0,1,1,
+        1,0,0,1,1,0,0,1,
+        1,1,0,0,1,1,0,0,
+        0,1,1,0,0,1,1,0,
+        0,0,1,1,0,0,1,1,
+        1,0,0,1,1,0,0,1,
+    };
+    std::vector<sal_uInt8> aExpectedPatternLine4 = {
+        0,0,1,1,0,0,1,1,
+        0,1,1,0,0,1,1,0,
+        1,1,0,0,1,1,0,0,
+        1,0,0,1,1,0,0,1,
+        0,0,1,1,0,0,1,1,
+        0,1,1,0,0,1,1,0,
+        1,1,0,0,1,1,0,0,
+        1,0,0,1,1,0,0,1,
+    };
+    std::vector<sal_uInt8> aExpectedPatternLine5 = {
+        1,1,0,0,0,0,0,1,
+        1,1,1,0,0,0,0,0,
+        0,1,1,1,0,0,0,0,
+        0,0,1,1,1,0,0,0,
+        0,0,0,1,1,1,0,0,
+        0,0,0,0,1,1,1,0,
+        0,0,0,0,0,1,1,1,
+        1,0,0,0,0,0,1,1,
+    };
+    std::vector<sal_uInt8> aExpectedPatternLine6 = {
+        1,0,0,0,0,0,1,1,
+        0,0,0,0,0,1,1,1,
+        0,0,0,0,1,1,1,0,
+        0,0,0,1,1,1,0,0,
+        0,0,1,1,1,0,0,0,
+        0,1,1,1,0,0,0,0,
+        1,1,1,0,0,0,0,0,
+        1,1,0,0,0,0,0,1,
+    };
+    std::vector<sal_uInt8> aExpectedPatternLine7 = {
+        1,0,0,0,1,0,0,0,
+        1,0,0,0,1,0,0,0,
+        1,0,0,0,1,0,0,0,
+        1,0,0,0,1,0,0,0,
+        1,0,0,0,1,0,0,0,
+        1,0,0,0,1,0,0,0,
+        1,0,0,0,1,0,0,0,
+        1,0,0,0,1,0,0,0,
+    };
+    std::vector<sal_uInt8> aExpectedPatternLine8 = {
+        1,1,1,1,1,1,1,1,
+        0,0,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,
+        1,1,1,1,1,1,1,1,
+        0,0,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,
+    };
+    std::vector<sal_uInt8> aExpectedPatternLine9 = {
+        0,1,0,1,0,1,0,1,
+        0,1,0,1,0,1,0,1,
+        0,1,0,1,0,1,0,1,
+        0,1,0,1,0,1,0,1,
+        0,1,0,1,0,1,0,1,
+        0,1,0,1,0,1,0,1,
+        0,1,0,1,0,1,0,1,
+        0,1,0,1,0,1,0,1,
+    };
+    std::vector<sal_uInt8> aExpectedPatternLine10 = {
+        1,1,1,1,1,1,1,1,
+        0,0,0,0,0,0,0,0,
+        1,1,1,1,1,1,1,1,
+        0,0,0,0,0,0,0,0,
+        1,1,1,1,1,1,1,1,
+        0,0,0,0,0,0,0,0,
+        1,1,1,1,1,1,1,1,
+        0,0,0,0,0,0,0,0,
+    };
+    std::vector<sal_uInt8> aExpectedPatternLine11 = {
+        1,1,0,0,1,1,0,0,
+        1,1,0,0,1,1,0,0,
+        1,1,0,0,1,1,0,0,
+        1,1,0,0,1,1,0,0,
+        1,1,0,0,1,1,0,0,
+        1,1,0,0,1,1,0,0,
+        1,1,0,0,1,1,0,0,
+        1,1,0,0,1,1,0,0,
+    };
+    std::vector<sal_uInt8> aExpectedPatternLine12 = {
+        1,1,1,1,1,1,1,1,
+        1,1,1,1,1,1,1,1,
+        0,0,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,
+        1,1,1,1,1,1,1,1,
+        1,1,1,1,1,1,1,1,
+        0,0,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,
+    };
+
+    CPPUNIT_ASSERT_MESSAGE("Pattern1 - 5%" ,  checkPattern(xDocRef, 0,  aExpectedPattern1));
+    CPPUNIT_ASSERT_MESSAGE("Pattern2 - 10%",  checkPattern(xDocRef, 1,  aExpectedPattern2));
+    CPPUNIT_ASSERT_MESSAGE("Pattern3 - 20%",  checkPattern(xDocRef, 2,  aExpectedPattern3));
+    CPPUNIT_ASSERT_MESSAGE("Pattern4 - 25%",  checkPattern(xDocRef, 3,  aExpectedPattern4));
+    CPPUNIT_ASSERT_MESSAGE("Pattern5 - 30%",  checkPattern(xDocRef, 4,  aExpectedPattern5));
+    CPPUNIT_ASSERT_MESSAGE("Pattern6 - 40%",  checkPattern(xDocRef, 5,  aExpectedPattern6));
+    CPPUNIT_ASSERT_MESSAGE("Pattern7 - 50%",  checkPattern(xDocRef, 6,  aExpectedPattern7));
+    CPPUNIT_ASSERT_MESSAGE("Pattern8 - 60%",  checkPattern(xDocRef, 7,  aExpectedPattern8));
+    CPPUNIT_ASSERT_MESSAGE("Pattern9 - 70%",  checkPattern(xDocRef, 8,  aExpectedPattern9));
+    CPPUNIT_ASSERT_MESSAGE("Pattern10 - 75%", checkPattern(xDocRef, 9,  aExpectedPattern10));
+    CPPUNIT_ASSERT_MESSAGE("Pattern11 - 80%", checkPattern(xDocRef, 10, aExpectedPattern11));
+    CPPUNIT_ASSERT_MESSAGE("Pattern12 - 90%", checkPattern(xDocRef, 11, aExpectedPattern12));
+
+    CPPUNIT_ASSERT_MESSAGE("Pattern13 - Light downward diagonal", checkPattern(xDocRef, 12, aExpectedPatternLine1));
+    CPPUNIT_ASSERT_MESSAGE("Pattern14 - Light upward diagonal",   checkPattern(xDocRef, 13, aExpectedPatternLine2));
+    CPPUNIT_ASSERT_MESSAGE("Pattern15 - Dark downward diagonal",  checkPattern(xDocRef, 14, aExpectedPatternLine3));
+    CPPUNIT_ASSERT_MESSAGE("Pattern16 - Dark upward diagonal",    checkPattern(xDocRef, 15, aExpectedPatternLine4));
+    CPPUNIT_ASSERT_MESSAGE("Pattern17 - Wide downward diagonal",  checkPattern(xDocRef, 16, aExpectedPatternLine5));
+    CPPUNIT_ASSERT_MESSAGE("Pattern18 - Wide upward diagonal",    checkPattern(xDocRef, 17, aExpectedPatternLine6));
+
+    CPPUNIT_ASSERT_MESSAGE("Pattern19 - Light vertical",    checkPattern(xDocRef, 18, aExpectedPatternLine7));
+    CPPUNIT_ASSERT_MESSAGE("Pattern20 - Light horizontal",  checkPattern(xDocRef, 19, aExpectedPatternLine8));
+    CPPUNIT_ASSERT_MESSAGE("Pattern21 - Narrow vertical",   checkPattern(xDocRef, 20, aExpectedPatternLine9));
+    CPPUNIT_ASSERT_MESSAGE("Pattern22 - Narrow horizontal", checkPattern(xDocRef, 21, aExpectedPatternLine10));
+    CPPUNIT_ASSERT_MESSAGE("Pattern23 - Dark vertical",     checkPattern(xDocRef, 22, aExpectedPatternLine11));
+    CPPUNIT_ASSERT_MESSAGE("Pattern24 - Dark horizontal",   checkPattern(xDocRef, 23, aExpectedPatternLine12));
+
+    // TODO: other patterns in the test document
+
+    xDocRef->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdImportTest);
