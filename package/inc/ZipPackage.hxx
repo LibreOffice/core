@@ -91,13 +91,12 @@ protected:
 
     InitialisationMode m_eMode;
 
-    css::uno::Reference < css::container::XNameContainer > m_xRootFolder;
+    rtl::Reference < ZipPackageFolder > m_xRootFolder;
     css::uno::Reference < css::io::XStream > m_xStream;
     css::uno::Reference < css::io::XInputStream > m_xContentStream;
     css::uno::Reference < css::io::XSeekable > m_xContentSeek;
     const css::uno::Reference < css::uno::XComponentContext > m_xContext;
 
-    ZipPackageFolder *m_pRootFolder;
     ZipFile          *m_pZipFile;
 
     bool isLocalFile() const;
