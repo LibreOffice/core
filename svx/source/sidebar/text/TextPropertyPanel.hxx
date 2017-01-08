@@ -47,7 +47,6 @@ public:
         const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
 private:
-    VclPtr<ToolBox> mpToolBoxSpacing;
     VclPtr<ToolBox> mpToolBoxFontColorSw;
     VclPtr<ToolBox> mpToolBoxFontColor;
     VclPtr<ToolBox> mpToolBoxBackgroundColor;
