@@ -33,8 +33,11 @@ $(eval $(call gb_Library_set_include,cui,\
 	-I$(SRCDIR)/cui/source/inc \
 ))
 
+ifneq ($(BUILD_VER_STRING),)
+$(eval $(call gb_Library_add_defs,cui,-DBUILD_VER_STRING="$(BUILD_VER_STRING"))
+endif
+
 $(eval $(call gb_Library_add_defs,cui,\
-	-DBUILD_VER_STRING="$(BUILD_VER_STRING)" \
 	-DCOPYRIGHT_YEAR=$(shell perl -e 'use POSIX qw(strftime); print strftime("%Y", gmtime($$ENV{SOURCE_DATE_EPOCH} || time));') \
 ))
 
