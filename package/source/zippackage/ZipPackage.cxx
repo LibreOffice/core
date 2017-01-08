@@ -777,48 +777,61 @@ Any SAL_CALL ZipPackage::getByHierarchicalName( const OUString& aName )
         throw( NoSuchElementException, RuntimeException, std::exception )
 {
     OUString sTemp, sDirName;
-    sal_Int32 nOldIndex, nIndex, nStreamIndex;
+    sal_Int32 nOldIndex, nStreamIndex;
     FolderHash::iterator aIter;
 
-    if ( ( nIndex = aName.getLength() ) == 1 && *aName.getStr() == '/' )
+    sal_Int32 nIndex = aName.getLength();
+
+    if (aName == "/")
+        // root directory.
         return makeAny ( uno::Reference < XUnoTunnel > ( m_pRootFolder ) );
 
     nStreamIndex = aName.lastIndexOf ( '/' );
-    bool bFolder = nStreamIndex == nIndex-1;
+    bool bFolder = nStreamIndex == nIndex-1; // last character is '/'.
+
     if ( nStreamIndex != -1 )
     {
+        // The name contains '/'.
         sDirName = aName.copy ( 0, nStreamIndex );
         aIter = m_aRecent.find ( sDirName );
         if ( aIter != m_aRecent.end() )
         {
+            // There is a cached entry for this name.
+
+            ZipPackageFolder* pFolder = aIter->second;
+
             if ( bFolder )
             {
+                // Determine the directory name.
                 sal_Int32 nDirIndex = aName.lastIndexOf ( '/', nStreamIndex );
                 sTemp = aName.copy ( nDirIndex == -1 ? 0 : nDirIndex+1, nStreamIndex-nDirIndex-1 );
-                if ( sTemp == ( *aIter ).second->getName() )
-                    return makeAny ( uno::Reference < XUnoTunnel > ( ( *aIter ).second ) );
 
-                m_aRecent.erase ( aIter );
+                if (sTemp == pFolder->getName())
+                    return makeAny(uno::Reference<XUnoTunnel>(pFolder));
             }
             else
             {
+                // Determine the file name.
                 sTemp = aName.copy ( nStreamIndex + 1 );
-                if ( ( *aIter ).second->hasByName( sTemp ) )
-                    return ( *aIter ).second->getByName( sTemp );
 
-                m_aRecent.erase( aIter );
+                if (pFolder->hasByName(sTemp))
+                    return pFolder->getByName(sTemp);
             }
+
+            m_aRecent.erase( aIter );
         }
     }
-    else
-    {
-        if ( m_pRootFolder->hasByName ( aName ) )
-            return m_pRootFolder->getByName ( aName );
-    }
+    else if ( m_pRootFolder->hasByName ( aName ) )
+        // top-level element.
+        return m_pRootFolder->getByName ( aName );
+
+    // Not in the cache. Search normally.
 
     nOldIndex = 0;
     ZipPackageFolder * pCurrent = m_pRootFolder;
     ZipPackageFolder * pPrevious = nullptr;
+
+    // Find the right directory for the given path.
 
     while ( ( nIndex = aName.indexOf( '/', nOldIndex )) != -1 )
     {
@@ -838,7 +851,7 @@ Any SAL_CALL ZipPackage::getByHierarchicalName( const OUString& aName )
     if ( bFolder )
     {
         if ( nStreamIndex != -1 )
-            m_aRecent[sDirName] = pPrevious;
+            m_aRecent[sDirName] = pPrevious; // cache it.
         return makeAny ( uno::Reference < XUnoTunnel > ( pCurrent ) );
     }
 
@@ -847,7 +860,7 @@ Any SAL_CALL ZipPackage::getByHierarchicalName( const OUString& aName )
     if ( pCurrent->hasByName ( sTemp ) )
     {
         if ( nStreamIndex != -1 )
-            m_aRecent[sDirName] = pCurrent;
+            m_aRecent[sDirName] = pCurrent; // cache it.
         return pCurrent->getByName( sTemp );
     }
 
@@ -858,10 +871,13 @@ sal_Bool SAL_CALL ZipPackage::hasByHierarchicalName( const OUString& aName )
         throw( RuntimeException, std::exception )
 {
     OUString sTemp, sDirName;
-    sal_Int32 nOldIndex, nIndex, nStreamIndex;
+    sal_Int32 nOldIndex, nStreamIndex;
     FolderHash::iterator aIter;
 
-    if ( ( nIndex = aName.getLength() ) == 1 && *aName.getStr() == '/' )
+    sal_Int32 nIndex = aName.getLength();
+
+    if (aName == "/")
+        // root directory
         return true;
 
     try
