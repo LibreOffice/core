@@ -24,10 +24,8 @@
 #include <ZipPackageFolder.hxx>
 #include <ZipPackageStream.hxx>
 
-namespace com { namespace sun { namespace star { namespace packages {
-class ContentInfo : public cppu::OWeakObject
+struct ZipContentInfo
 {
-public:
     css::uno::Reference < css::lang::XUnoTunnel > xTunnel;
     bool bFolder;
     union
@@ -35,19 +33,20 @@ public:
         ZipPackageFolder *pFolder;
         ZipPackageStream *pStream;
     };
-    ContentInfo ( ZipPackageStream * pNewStream )
+    ZipContentInfo ( ZipPackageStream * pNewStream )
     : xTunnel ( pNewStream )
     , bFolder ( false )
     , pStream ( pNewStream )
     {
     }
-    ContentInfo ( ZipPackageFolder * pNewFolder )
+    ZipContentInfo ( ZipPackageFolder * pNewFolder )
     : xTunnel ( pNewFolder )
     , bFolder ( true )
     , pFolder ( pNewFolder )
     {
     }
-    virtual ~ContentInfo () override
+
+    ~ZipContentInfo()
     {
         if ( bFolder )
             pFolder->clearParent();
@@ -55,7 +54,7 @@ public:
             pStream->clearParent();
     }
 };
-} } } }
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
