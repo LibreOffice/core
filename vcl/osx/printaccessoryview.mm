@@ -1083,7 +1083,7 @@ static void addEdit( NSView* pCurParent, long& rCurX, long& rCurY, long nAttachO
             }
             else if( rEntry.Name == "Enabled" )
             {
-                sal_Bool bValue = true;
+                bool bValue = true;
                 rEntry.Value >>= bValue;
                 bEnabled = bValue;
             }
@@ -1101,7 +1101,7 @@ static void addEdit( NSView* pCurParent, long& rCurX, long& rCurY, long nAttachO
             }
             else if( rEntry.Name == "InternalUIOnly" )
             {
-                sal_Bool bValue = false;
+                bool bValue = false;
                 rEntry.Value >>= bValue;
                 bIgnore = bValue;
             }
@@ -1177,7 +1177,7 @@ static void addEdit( NSView* pCurParent, long& rCurX, long& rCurY, long nAttachO
             }
             else if( aCtrlType == "Bool" && pCurParent )
             {
-                sal_Bool bVal = false;
+                bool bVal = false;
                 PropertyValue* pVal = pController->getValue( aPropertyName );
                 if( pVal )
                     pVal->Value >>= bVal;
