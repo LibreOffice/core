@@ -166,7 +166,7 @@ public:
                     }
 };
 
-class SVT_DLLPUBLIC GraphicObject : public SvDataCopyStream
+class SVT_DLLPUBLIC GraphicObject
 {
     friend class GraphicManager;
     friend class SdrGrafObj;
@@ -325,7 +325,7 @@ public:
                             GraphicObject( const Graphic& rGraphic );
                             GraphicObject( const GraphicObject& rCacheObj, const GraphicManager* pMgr = nullptr );
                             explicit GraphicObject( const OString& rUniqueID );
-                            virtual ~GraphicObject() override;
+                            ~GraphicObject();
 
     GraphicObject&          operator=( const GraphicObject& rCacheObj );
     bool                    operator==( const GraphicObject& rCacheObj ) const;

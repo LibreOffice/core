@@ -100,7 +100,7 @@ public:
     bool            getSnapHorVerLines() const { return mbSnapHorVerLines; }
 };
 
-class VCL_DLLPUBLIC Graphic : public SvDataCopyStream
+class VCL_DLLPUBLIC Graphic
 {
 private:
 
@@ -121,7 +121,7 @@ public:
                     Graphic( const Animation& rAnimation );
                     Graphic( const GDIMetaFile& rMtf );
                     Graphic( const css::uno::Reference< css::graphic::XGraphic >& rxGraphic );
-    virtual         ~Graphic() override;
+                   ~Graphic();
 
     Graphic&        operator=( const Graphic& rGraphic );
     Graphic&        operator=( Graphic&& rGraphic );
