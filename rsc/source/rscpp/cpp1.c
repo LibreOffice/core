@@ -25,7 +25,7 @@
 #include "cpp.h"
 
 FILE* pCppOut = NULL;
-FILE* pCppIn  = NULL;
+static FILE* pCppIn  = NULL;
 
 #if OSL_DEBUG_LEVEL > 1
 FILE* pDefOut = NULL;       /* ER  evtl. #define's dump */
@@ -187,7 +187,7 @@ char* magic[] =
 
 static char* sharpfilename = NULL;
 
-int nRunde = 0;
+static int nRunde = 0;
 
 void InitCpp1()
 {
