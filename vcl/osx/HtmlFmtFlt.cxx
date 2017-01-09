@@ -115,7 +115,7 @@ Sequence<sal_Int8> SAL_CALL TextHtmlToHTMLFormat(Sequence<sal_Int8>& aTextHtml)
     return byteSequence;
 }
 
-const char* HtmlStartTag = "<html";
+const char* const HtmlStartTag = "<html";
 
 Sequence<sal_Int8> HTMLFormatToTextHtml(const Sequence<sal_Int8>& aHTMLFormat)
 {
@@ -149,7 +149,7 @@ Sequence<sal_Int8> HTMLFormatToTextHtml(const Sequence<sal_Int8>& aHTMLFormat)
    can improve this
 */
 const char HtmlFormatStart[] = "Version:";
-int HtmlFormatStartLen = (sizeof(HtmlFormatStart) - 1);
+int const HtmlFormatStartLen = (sizeof(HtmlFormatStart) - 1);
 
 bool isHTMLFormat(const Sequence<sal_Int8>& aHtmlSequence)
 {
