@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a6eadb0_66cb7373",
+        "filename": "accessibility/source/extended/accessibleeditbrowseboxcell.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-01-09T07:32:48Z",
+      "side": 1,
+      "message": "the ensureIsAlive call is different from what the previous code was doing, are you sure about that?",
+      "revId": "8e96e6b7fa21872246e3a016b4e93451a3b77a51",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
