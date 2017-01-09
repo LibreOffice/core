@@ -1941,6 +1941,11 @@
           <value xml:lang="en-US">~Sections...</value>
         </prop>
       </node>
+      <node oor:name=".uno:EditRegionContextual" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Edit Section</value>
+        </prop>
+      </node>
       <node oor:name=".uno:JumpToReference" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">To Reference</value>

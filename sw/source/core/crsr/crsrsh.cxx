@@ -3003,6 +3003,15 @@ bool SwCursorShell::FindValidContentNode( bool bOnlyText )
     return bOk;
 }
 
+bool SwCursorShell::IsCursorInSection() const
+    // A section should contain at least a paragraph so we need check its parent node.
+    bool aIsInSection = m_pCurrentCursor->GetNode().StartOfSectionNode()->IsSectionNode();
+
+    if (aIsInSection)
+        return true;
+    return false;
+}
+
 bool SwCursorShell::IsCursorReadonly() const
 {
     if ( GetViewOptions()->IsReadonly() ||
