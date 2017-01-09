@@ -24,6 +24,7 @@
 #include <com/sun/star/lang/XLocalizable.hpp>
 
 #include "bibmod.hxx"
+#include "bibprop.hrc"
 #include "bibview.hxx"
 #include "bibresid.hxx"
 #include "datman.hxx"

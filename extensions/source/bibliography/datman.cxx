@@ -607,11 +607,11 @@ void SAL_CALL BibInterceptorHelper::setMasterDispatchProvider( const css::uno::R
 
 
 #define STR_UID "uid"
-OUString gGridName("theGrid");
-OUString gViewName("theView");
-OUString gGlobalName("theGlobals");
-OUString gBeamerSize("theBeamerSize");
-OUString gViewSize("theViewSize");
+OUString const gGridName("theGrid");
+OUString const gViewName("theView");
+OUString const gGlobalName("theGlobals");
+OUString const gBeamerSize("theBeamerSize");
+OUString const gViewSize("theViewSize");
 
 BibDataManager::BibDataManager()
     :BibDataManager_Base( GetMutex() )
