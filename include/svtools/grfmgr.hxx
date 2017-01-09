@@ -323,7 +323,7 @@ protected:
 public:
                             GraphicObject();
                             GraphicObject( const Graphic& rGraphic );
-                            GraphicObject( const GraphicObject& rCacheObj, const GraphicManager* pMgr = nullptr );
+                            GraphicObject( const GraphicObject& rCacheObj );
                             explicit GraphicObject( const OString& rUniqueID );
                             ~GraphicObject();
 
