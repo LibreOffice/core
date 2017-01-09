@@ -99,6 +99,15 @@ void XmlTestTools::assertXPath(xmlDocPtr pXmlDoc, const OString& rXPath, const O
                                  rExpectedValue, aValue);
 }
 
+
+void XmlTestTools::assertXPathAttrs(xmlDocPtr pXmlDoc, const OString& rXPath, std::vector<std::pair<OString, OUString>> aPairVector)
+{
+    for (auto& rPair : aPairVector)
+    {
+        assertXPath(pXmlDoc, rXPath, rPair.first, rPair.second);
+    }
+}
+
 void XmlTestTools::assertXPath(xmlDocPtr pXmlDoc, const OString& rXPath, int nNumberOfNodes)
 {
     xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, rXPath);

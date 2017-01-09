@@ -56,25 +56,28 @@ OUString flagToString(PushFlags nFlag)
 
 OUString collectPushFlags(PushFlags nFlags)
 {
-    if ((nFlags & PushFlags::ALL) == nFlags)
+    if ((nFlags & PushFlags::ALL) == PushFlags::ALL)
         return OUString("PushAll");
-    else if ((nFlags & PUSH_ALLFONT) == nFlags)
+    else if ((nFlags & PUSH_ALLFONT) == PUSH_ALLFONT)
         return OUString("PushAllFont");
-    else if ((nFlags & PUSH_ALLTEXT) == nFlags)
+    else if ((nFlags & PUSH_ALLTEXT) == PUSH_ALLTEXT)
         return OUString("PushAllText");
 
     OUString sFlags;
 
     for (sal_uInt16 nFlag = 1; nFlag > 0; nFlag <<= 1)
     {
-        OUString sFlag = flagToString(static_cast<PushFlags>(nFlag));
-        if (!sFlag.isEmpty())
+        if ((nFlag & sal_uInt16(nFlags)) == nFlag)
         {
-            if (!sFlags.isEmpty())
+            OUString sFlag = flagToString(static_cast<PushFlags>(nFlag));
+            if (!sFlag.isEmpty())
             {
-                sFlags += ",";
+                if (!sFlags.isEmpty())
+                {
+                    sFlags += ", ";
+                }
+                sFlags += flagToString(static_cast<PushFlags>(nFlag));
             }
-            sFlags += flagToString(static_cast<PushFlags>(nFlag));
         }
     }
 
@@ -144,6 +147,18 @@ OUString convertLineCapToString(css::drawing::LineCap eCap)
         case css::drawing::LineCap_BUTT:   return OUString("butt");
         case css::drawing::LineCap_ROUND:  return OUString("round");
         case css::drawing::LineCap_SQUARE: return OUString("square");
+    }
+}
+
+OUString convertPolygonFlags(PolyFlags eFlags)
+{
+    switch (eFlags)
+    {
+        default:
+        case PolyFlags::Normal:   return OUString("normal");
+        case PolyFlags::Control:  return OUString("control");
+        case PolyFlags::Smooth:   return OUString("smooth");
+        case PolyFlags::Symmetric:   return OUString("symmetric");
     }
 }
 
@@ -233,6 +248,25 @@ OString convertLineStyleToString(const MetaActionType nActionType)
     return "";
 }
 
+OUString convertBitmapExTransparentType(TransparentType eType)
+{
+    switch (eType)
+    {
+        default:
+        case TransparentType::NONE:   return OUString("none");
+        case TransparentType::Bitmap: return OUString("bitmap");
+        case TransparentType::Color:  return OUString("color");
+    }
+}
+
+
+OUString hex32(sal_uInt32 nNumber)
+{
+    std::stringstream ss;
+    ss << std::hex << std::setfill ('0') << std::setw(8) << nNumber;
+    return OUString::createFromAscii(ss.str().c_str());
+}
+
 } // anonymous namespace
 
 MetafileXmlDump::MetafileXmlDump()
@@ -291,6 +325,119 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, XmlWriter& rWriter)
 
         switch (nActionType)
         {
+            case MetaActionType::PIXEL:
+            {
+                auto* pMetaAction = static_cast<MetaPixelAction*>(pAction);
+                rWriter.startElement(sCurrentElementTag);
+                rWriter.attribute("x", pMetaAction->GetPoint().X());
+                rWriter.attribute("y", pMetaAction->GetPoint().Y());
+                rWriter.attribute("color", convertColorToString(pMetaAction->GetColor()));
+                rWriter.endElement();
+            }
+            break;
+
+            case MetaActionType::POINT:
+            {
+                auto* pMetaAction = static_cast<MetaPointAction*>(pAction);
+                rWriter.startElement(sCurrentElementTag);
+                rWriter.attribute("x", pMetaAction->GetPoint().X());
+                rWriter.attribute("y", pMetaAction->GetPoint().Y());
+                rWriter.endElement();
+            }
+            break;
+
+            case MetaActionType::RECT:
+            {
+                MetaRectAction* pMetaAction = static_cast<MetaRectAction*>(pAction);
+                rWriter.startElement(sCurrentElementTag);
+                rWriter.attribute("left", pMetaAction->GetRect().Left());
+                rWriter.attribute("top", pMetaAction->GetRect().Top());
+                rWriter.attribute("right", pMetaAction->GetRect().Right());
+                rWriter.attribute("bottom", pMetaAction->GetRect().Bottom());
+                rWriter.endElement();
+            }
+            break;
+
+            case MetaActionType::ROUNDRECT:
+            {
+                auto pMetaAction = static_cast<MetaRoundRectAction*>(pAction);
+                rWriter.startElement(sCurrentElementTag);
+                rWriter.attribute("left", pMetaAction->GetRect().Left());
+                rWriter.attribute("top", pMetaAction->GetRect().Top());
+                rWriter.attribute("right", pMetaAction->GetRect().Right());
+                rWriter.attribute("bottom", pMetaAction->GetRect().Bottom());
+                rWriter.attribute("horizontalround", pMetaAction->GetHorzRound());
+                rWriter.attribute("verticalround", pMetaAction->GetVertRound());
+                rWriter.endElement();
+            }
+            break;
+
+            case MetaActionType::ELLIPSE:
+            {
+                auto pMetaAction = static_cast<MetaEllipseAction*>(pAction);
+                rWriter.startElement(sCurrentElementTag);
+                rWriter.attribute("left", pMetaAction->GetRect().Left());
+                rWriter.attribute("top", pMetaAction->GetRect().Top());
+                rWriter.attribute("right", pMetaAction->GetRect().Right());
+                rWriter.attribute("bottom", pMetaAction->GetRect().Bottom());
+                rWriter.endElement();
+            }
+            break;
+
+            case MetaActionType::ARC:
+            {
+                auto pMetaAction = static_cast<MetaArcAction*>(pAction);
+                rWriter.startElement(sCurrentElementTag);
+                rWriter.attribute("left", pMetaAction->GetRect().Left());
+                rWriter.attribute("top", pMetaAction->GetRect().Top());
+                rWriter.attribute("right", pMetaAction->GetRect().Right());
+                rWriter.attribute("bottom", pMetaAction->GetRect().Bottom());
+
+                rWriter.attribute("startx", pMetaAction->GetStartPoint().X());
+                rWriter.attribute("starty", pMetaAction->GetStartPoint().Y());
+                rWriter.attribute("endx", pMetaAction->GetEndPoint().X());
+                rWriter.attribute("endy", pMetaAction->GetEndPoint().Y());
+
+                rWriter.endElement();
+            }
+            break;
+
+            case MetaActionType::PIE:
+            {
+                auto pMetaAction = static_cast<MetaPieAction*>(pAction);
+                rWriter.startElement(sCurrentElementTag);
+                rWriter.attribute("left", pMetaAction->GetRect().Left());
+                rWriter.attribute("top", pMetaAction->GetRect().Top());
+                rWriter.attribute("right", pMetaAction->GetRect().Right());
+                rWriter.attribute("bottom", pMetaAction->GetRect().Bottom());
+
+                rWriter.attribute("startx", pMetaAction->GetStartPoint().X());
+                rWriter.attribute("starty", pMetaAction->GetStartPoint().Y());
+                rWriter.attribute("endx", pMetaAction->GetEndPoint().X());
+                rWriter.attribute("endy", pMetaAction->GetEndPoint().Y());
+
+                rWriter.endElement();
+            }
+            break;
+
+            case MetaActionType::CHORD:
+            {
+                auto pMetaAction = static_cast<MetaChordAction*>(pAction);
+                rWriter.startElement(sCurrentElementTag);
+                rWriter.attribute("left", pMetaAction->GetRect().Left());
+                rWriter.attribute("top", pMetaAction->GetRect().Top());
+                rWriter.attribute("right", pMetaAction->GetRect().Right());
+                rWriter.attribute("bottom", pMetaAction->GetRect().Bottom());
+
+                rWriter.attribute("startx", pMetaAction->GetStartPoint().X());
+                rWriter.attribute("starty", pMetaAction->GetStartPoint().Y());
+                rWriter.attribute("endx", pMetaAction->GetEndPoint().X());
+                rWriter.attribute("endy", pMetaAction->GetEndPoint().Y());
+
+                rWriter.endElement();
+            }
+            break;
+
             case MetaActionType::LINE:
             {
                 MetaLineAction* pMetaLineAction = static_cast<MetaLineAction*>(pAction);
@@ -408,6 +555,24 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, XmlWriter& rWriter)
             }
             break;
 
+            case MetaActionType::TEXT:
+            {
+                auto* pMeta = static_cast<MetaTextAction*>(pAction);
+                rWriter.startElement(sCurrentElementTag);
+
+                rWriter.attribute("x", pMeta->GetPoint().X());
+                rWriter.attribute("y", pMeta->GetPoint().Y());
+                rWriter.attribute("index", pMeta->GetIndex());
+                rWriter.attribute("length", pMeta->GetLen());
+
+                rWriter.startElement("textcontent");
+                rWriter.content(pMeta->GetText());
+                rWriter.endElement();
+
+                rWriter.endElement();
+            }
+            break;
+
             case MetaActionType::TEXTARRAY:
             {
                 MetaTextArrayAction* pMetaTextArrayAction = static_cast<MetaTextArrayAction*>(pAction);
@@ -425,7 +590,7 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, XmlWriter& rWriter)
                 {
                     rWriter.startElement("dxarray");
                     OUString sDxLengthString;
-                    for (sal_Int32 i = 0; i < aLength; ++i)
+                    for (sal_Int32 i = 0; i < aLength - aIndex; ++i)
                     {
                         sDxLengthString += OUString::number(pMetaTextArrayAction->GetDXArray()[aIndex + i]);
                         sDxLengthString += " ";
@@ -436,6 +601,25 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, XmlWriter& rWriter)
 
                 rWriter.startElement("text");
                 rWriter.content(pMetaTextArrayAction->GetText());
+                rWriter.endElement();
+
+                rWriter.endElement();
+            }
+            break;
+
+            case MetaActionType::STRETCHTEXT:
+            {
+                auto* pMeta = static_cast<MetaStretchTextAction*>(pAction);
+                rWriter.startElement(sCurrentElementTag);
+
+                rWriter.attribute("x", pMeta->GetPoint().X());
+                rWriter.attribute("y", pMeta->GetPoint().Y());
+                rWriter.attribute("index", pMeta->GetIndex());
+                rWriter.attribute("length", pMeta->GetLen());
+                rWriter.attribute("width", pMeta->GetWidth());
+
+                rWriter.startElement("textcontent");
+                rWriter.content(pMeta->GetText());
                 rWriter.endElement();
 
                 rWriter.endElement();
@@ -518,21 +702,28 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, XmlWriter& rWriter)
                 MetaPolyLineAction* pMetaPolyLineAction = static_cast<MetaPolyLineAction*>(pAction);
                 rWriter.startElement(sCurrentElementTag);
 
+                LineInfo aLineInfo = pMetaPolyLineAction->GetLineInfo();
+                rWriter.attribute("style", convertLineStyleToString(aLineInfo.GetStyle()));
+                rWriter.attribute("width", aLineInfo.GetWidth());
+                rWriter.attribute("dashlen", aLineInfo.GetDashLen());
+                rWriter.attribute("dashcount", aLineInfo.GetDashCount());
+                rWriter.attribute("dotlen", aLineInfo.GetDotLen());
+                rWriter.attribute("dotcount", aLineInfo.GetDotCount());
+                rWriter.attribute("distance", aLineInfo.GetDistance());
+                rWriter.attribute("join", convertLineJoinToString(aLineInfo.GetLineJoin()));
+                rWriter.attribute("cap", convertLineCapToString(aLineInfo.GetLineCap()));
+
                 tools::Polygon aPolygon = pMetaPolyLineAction->GetPolygon();
+                bool bFlags = aPolygon.HasFlags();
                 for (sal_uInt16 i = 0; i < aPolygon.GetSize(); i++)
                 {
                     rWriter.startElement("point");
                     rWriter.attribute("x", aPolygon[i].X());
                     rWriter.attribute("y", aPolygon[i].Y());
+                    if (bFlags)
+                        rWriter.attribute("flags", convertPolygonFlags(aPolygon.GetFlags(i)));
                     rWriter.endElement();
                 }
-
-                LineInfo aLineInfo = pMetaPolyLineAction->GetLineInfo();
-                rWriter.attribute("style", convertLineStyleToString(aLineInfo.GetStyle()));
-                rWriter.attribute("width", aLineInfo.GetWidth());
-                rWriter.attribute("dashlen", aLineInfo.GetDashLen());
-                rWriter.attribute("dotlen", aLineInfo.GetDotLen());
-                rWriter.attribute("distance", aLineInfo.GetDistance());
 
                 rWriter.endElement();
             }
@@ -544,11 +735,14 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, XmlWriter& rWriter)
                 rWriter.startElement(sCurrentElementTag);
 
                 tools::Polygon aPolygon = pMetaPolygonAction->GetPolygon();
+                bool bFlags = aPolygon.HasFlags();
                 for (sal_uInt16 i = 0; i < aPolygon.GetSize(); i++)
                 {
                     rWriter.startElement("point");
                     rWriter.attribute("x", aPolygon[i].X());
                     rWriter.attribute("y", aPolygon[i].Y());
+                    if (bFlags)
+                        rWriter.attribute("flags", convertPolygonFlags(aPolygon.GetFlags(i)));
                     rWriter.endElement();
                 }
 
@@ -558,19 +752,23 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, XmlWriter& rWriter)
 
             case MetaActionType::POLYPOLYGON:
             {
-                MetaPolyPolygonAction *const pMPPAction(
-                        static_cast<MetaPolyPolygonAction*>(pAction));
+                MetaPolyPolygonAction *const pMetaPolyPolygonAction = static_cast<MetaPolyPolygonAction*>(pAction);
                 rWriter.startElement(sCurrentElementTag);
 
-                tools::PolyPolygon const& rPoly(pMPPAction->GetPolyPolygon());
-                for (sal_uInt16 j = 0; j < rPoly.Count(); ++j)
+                tools::PolyPolygon const& rPolyPolygon(pMetaPolyPolygonAction->GetPolyPolygon());
+
+                for (sal_uInt16 j = 0; j < rPolyPolygon.Count(); ++j)
                 {
                     rWriter.startElement("polygon");
-                    for (sal_uInt16 i = 0; i < rPoly[j].GetSize(); i++)
+                    tools::Polygon const& rPolygon = rPolyPolygon[j];
+                    bool bFlags = rPolygon.HasFlags();
+                    for (sal_uInt16 i = 0; i < rPolygon.GetSize(); ++i)
                     {
                         rWriter.startElement("point");
-                        rWriter.attribute("x", rPoly[j][i].X());
-                        rWriter.attribute("y", rPoly[j][i].Y());
+                        rWriter.attribute("x", rPolygon[i].X());
+                        rWriter.attribute("y", rPolygon[i].Y());
+                        if (bFlags)
+                            rWriter.attribute("flags", convertPolygonFlags(rPolygon.GetFlags(i)));
                         rWriter.endElement();
                     }
                     rWriter.endElement();
@@ -596,6 +794,91 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, XmlWriter& rWriter)
                     rWriter.endElement();
                 }
 
+                rWriter.endElement();
+            }
+            break;
+
+            case MetaActionType::BMP:
+            {
+                auto pMeta = static_cast<MetaBmpAction*>(pAction);
+                rWriter.startElement(sCurrentElementTag);
+                rWriter.attribute("x", pMeta->GetPoint().X());
+                rWriter.attribute("y", pMeta->GetPoint().Y());
+                rWriter.attribute("crc", hex32(pMeta->GetBitmap().GetChecksum()));
+                rWriter.endElement();
+            }
+            break;
+
+            case MetaActionType::BMPSCALE:
+            {
+                auto pMeta = static_cast<MetaBmpScaleAction*>(pAction);
+                rWriter.startElement(sCurrentElementTag);
+                rWriter.attribute("x", pMeta->GetPoint().X());
+                rWriter.attribute("y", pMeta->GetPoint().Y());
+                rWriter.attribute("width", pMeta->GetSize().Width());
+                rWriter.attribute("height", pMeta->GetSize().Height());
+                rWriter.attribute("crc", hex32(pMeta->GetBitmap().GetChecksum()));
+                rWriter.endElement();
+            }
+            break;
+
+            case MetaActionType::BMPSCALEPART:
+            {
+                auto pMeta = static_cast<MetaBmpScalePartAction*>(pAction);
+                rWriter.startElement(sCurrentElementTag);
+                rWriter.attribute("destx", pMeta->GetDestPoint().X());
+                rWriter.attribute("desty", pMeta->GetDestPoint().Y());
+                rWriter.attribute("destwidth", pMeta->GetDestSize().Width());
+                rWriter.attribute("destheight", pMeta->GetDestSize().Height());
+                rWriter.attribute("srcx", pMeta->GetSrcPoint().X());
+                rWriter.attribute("srcy", pMeta->GetSrcPoint().Y());
+                rWriter.attribute("srcwidth", pMeta->GetSrcSize().Width());
+                rWriter.attribute("srcheight", pMeta->GetSrcSize().Height());
+                rWriter.attribute("crc", hex32(pMeta->GetBitmap().GetChecksum()));
+                rWriter.endElement();
+            }
+            break;
+
+            case MetaActionType::BMPEX:
+            {
+                auto pMeta = static_cast<MetaBmpExAction*>(pAction);
+                rWriter.startElement(sCurrentElementTag);
+                rWriter.attribute("x", pMeta->GetPoint().X());
+                rWriter.attribute("y", pMeta->GetPoint().Y());
+                rWriter.attribute("crc", hex32(pMeta->GetBitmapEx().GetBitmap().GetChecksum()));
+                rWriter.attribute("transparenttype", convertBitmapExTransparentType(pMeta->GetBitmapEx().GetTransparentType()));
+                rWriter.endElement();
+            }
+            break;
+
+            case MetaActionType::BMPEXSCALE:
+            {
+                auto pMeta = static_cast<MetaBmpExScaleAction*>(pAction);
+                rWriter.startElement(sCurrentElementTag);
+                rWriter.attribute("x", pMeta->GetPoint().X());
+                rWriter.attribute("y", pMeta->GetPoint().Y());
+                rWriter.attribute("width", pMeta->GetSize().Width());
+                rWriter.attribute("height", pMeta->GetSize().Height());
+                rWriter.attribute("crc", hex32(pMeta->GetBitmapEx().GetBitmap().GetChecksum()));
+                rWriter.attribute("transparenttype", convertBitmapExTransparentType(pMeta->GetBitmapEx().GetTransparentType()));
+                rWriter.endElement();
+            }
+            break;
+
+            case MetaActionType::BMPEXSCALEPART:
+            {
+                auto pMeta = static_cast<MetaBmpExScalePartAction*>(pAction);
+                rWriter.startElement(sCurrentElementTag);
+                rWriter.attribute("destx", pMeta->GetDestPoint().X());
+                rWriter.attribute("desty", pMeta->GetDestPoint().Y());
+                rWriter.attribute("destwidth", pMeta->GetDestSize().Width());
+                rWriter.attribute("destheight", pMeta->GetDestSize().Height());
+                rWriter.attribute("srcx", pMeta->GetSrcPoint().X());
+                rWriter.attribute("srcy", pMeta->GetSrcPoint().Y());
+                rWriter.attribute("srcwidth", pMeta->GetSrcSize().Width());
+                rWriter.attribute("srcheight", pMeta->GetSrcSize().Height());
+                rWriter.attribute("crc", hex32(pMeta->GetBitmapEx().GetBitmap().GetChecksum()));
+                rWriter.attribute("transparenttype", convertBitmapExTransparentType(pMeta->GetBitmapEx().GetTransparentType()));
                 rWriter.endElement();
             }
             break;
