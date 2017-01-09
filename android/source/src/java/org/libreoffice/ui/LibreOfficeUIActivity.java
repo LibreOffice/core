@@ -20,6 +20,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -63,6 +64,8 @@ import java.io.FilenameFilter;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -92,7 +95,7 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements ActionBa
     public static final int LIST_VIEW = 1;
 
     private DrawerLayout drawerLayout;
-    private ListView drawerList;
+    private NavigationView navigationDrawer;
     private ActionBarDrawerToggle drawerToggle;
     GridView gv;
     ListView lv;
@@ -161,10 +164,54 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements ActionBa
             registerForContextMenu(lv);
         }
 
-        // setup the drawer
-
+        //Setting up navigation drawer
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawerList = (ListView) findViewById(R.id.left_drawer);
+        navigationDrawer = (NavigationView) findViewById(R.id.navigation_drawer);
+        /*
+         * These are the currently-known document providers (for which icons are assigned).
+         * This is to ensure that there is an icon available if the provider is recognized, while
+         * the unrecognized ones still appear, but without an icon. If there is a document provider
+         * not on this list, it should be added and an icon assigned to it, in the if-else ladder
+         * bellow. This is a hacky implementation, maybe we could make something better in the
+         * future, i.e. we could move this into the menu file and load it that way.
+         */
+        final String LOCAL_DOCUMENTS_NAME = "Local documents";
+        final String LOCAL_FILE_SYSTEM_NAME = "Local file system";
+        final String EXTERNAL_SD_NAME = "External SD";
+        final String OTG_FILE_SYSTEM_NAME = "OTG device (experimental)";
+        final String OWNCLOUD_NAME = "Remote server";
+
+        //Provider names are wrapped as a ArrayList so indexOf(Object) method could be used
+        final ArrayList<CharSequence> providerNames = new ArrayList<CharSequence>(
+                Arrays.asList(documentProviderFactory.getNames())
+        );
+        for (CharSequence name : providerNames) {
+            int iconRes = 0;
+            if (name.equals(LOCAL_DOCUMENTS_NAME)) {
+                iconRes = R.drawable.ic_insert_drive_file_black_24dp;
+            } else if (name.equals(LOCAL_FILE_SYSTEM_NAME)) {
+                iconRes = R.drawable.ic_storage_black_24dp;
+            } else if (name.equals(EXTERNAL_SD_NAME)) {
+                iconRes = R.drawable.ic_sd_card_black_24dp;
+            } else if (name.equals(OTG_FILE_SYSTEM_NAME)) {
+                iconRes = R.drawable.ic_usb_black_24dp;
+            } else if (name.equals(OWNCLOUD_NAME)) {
+                iconRes = R.drawable.ic_cloud_black_24dp;
+            }
+            MenuItem item = navigationDrawer.getMenu().add(R.id.group_providers, Menu.NONE, Menu.NONE, name)
+                            .setCheckable(true);
+            if (iconRes != 0) {
+                item.setIcon(iconRes);
+            }
+        }
+        navigationDrawer.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(final MenuItem item) {
+                int position = providerNames.indexOf(item.getTitle());
+                switchToDocumentProvider(documentProviderFactory.getProvider(position));
+                return true;
+            }
+        });
         drawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
                 R.string.document_locations, R.string.close_document_locations) {
 
@@ -172,7 +219,7 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements ActionBa
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
                 supportInvalidateOptionsMenu();
-                drawerList.requestFocus(); // Make keypad navigation easier
+                navigationDrawer.requestFocus(); // Make keypad navigation easier
             }
 
             @Override
@@ -182,21 +229,8 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements ActionBa
             }
         };
         drawerToggle.setDrawerIndicatorEnabled(true);
-        drawerLayout.setDrawerListener(drawerToggle);
+        drawerLayout.addDrawerListener(drawerToggle);
         drawerToggle.syncState();
-
-        // Set the adapter for the list view
-        drawerList.setAdapter(new ArrayAdapter<String>(this,
-                R.layout.item_in_drawer, documentProviderFactory.getNames()));
-        // Set the list's click listener
-        drawerList.setOnItemClickListener(new ListView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView parent, View view,
-                    int position, long id) {
-                switchToDocumentProvider(documentProviderFactory
-                        .getProvider(position));
-            }
-        });
     }
 
     @Override
@@ -224,13 +258,13 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements ActionBa
                     filePaths));
         }
         // close drawer if it was open
-        drawerLayout.closeDrawer(drawerList);
+        drawerLayout.closeDrawer(navigationDrawer);
     }
 
     @Override
     public void onBackPressed() {
-        if (drawerLayout.isDrawerOpen(drawerList)) {
-            drawerLayout.closeDrawer(drawerList);
+        if (drawerLayout.isDrawerOpen(navigationDrawer)) {
+            drawerLayout.closeDrawer(navigationDrawer);
         } else if (!currentDirectory.equals(homeDirectory)) {
             // navigate upwards in directory hierarchy
             openParentDirectory();
