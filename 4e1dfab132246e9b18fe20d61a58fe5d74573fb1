@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a6eadb0_c6b9a7ee",
+        "filename": "framework/inc/services/desktop.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 458,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-01-09T07:26:41Z",
+      "side": 1,
+      "message": "It\u0027s not necessary to use a Sequence unless we need to pass it via an UNO interface\n\nJust use a std::vector here, much more efficient, and more natural coding :-)",
+      "revId": "4e1dfab132246e9b18fe20d61a58fe5d74573fb1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
