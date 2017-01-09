@@ -455,6 +455,8 @@ class Desktop : private cppu::BaseMutex,
 
         css::uno::Reference< css::frame::XUntitledNumbers > m_xTitleNumberGenerator;
 
+        std::vector<css::uno::Reference<css::frame::XTerminateListener>> m_xComponentDllListeners;
+
 };      //  class Desktop
 
 }       //  namespace framework
