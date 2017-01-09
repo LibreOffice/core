@@ -29,6 +29,15 @@ const sal_Int16 BORDER_3D = 1;
 const sal_Int16 BORDER_SIMPLE = 2;
 const sal_Int16 BORDER_SIMPLE_COLOR = 3;
 
+struct StringTriple
+{
+    char const * first;
+    char const * second;
+    char const * third;
+};
+
+extern StringTriple const * const g_pEventTranslations;
+
 }
 
 #define XMLSCRIPT_GRAPHOBJ_URLPREFIX "vnd.sun.star.GraphicObject:"

@@ -1383,12 +1383,6 @@ bool ImportContext::importImageScaleModeProperty(
     return false;
 }
 
-struct StringTriple
-{
-    char const * first;
-    char const * second;
-    char const * third;
-};
 static StringTriple const s_aEventTranslations[] =
 {
     // from xmloff/source/forms/formevents.cxx
@@ -1428,7 +1422,7 @@ static StringTriple const s_aEventTranslations[] =
     { "com.sun.star.awt.XAdjustmentListener", "adjustmentValueChanged", "on-adjustmentvaluechange" },
     { nullptr, nullptr, nullptr }
 };
-extern StringTriple const * const g_pEventTranslations;
+
 StringTriple const * const g_pEventTranslations = s_aEventTranslations;
 
 void ImportContext::importEvents(

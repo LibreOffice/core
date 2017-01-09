@@ -1133,14 +1133,6 @@ void ElementDescriptor::readDefaults( bool supportPrintable, bool supportVisible
     readStringAttr( "HelpURL", XMLNS_DIALOGS_PREFIX ":help-url" );
 }
 
-struct StringTriple
-{
-    char const * first;
-    char const * second;
-    char const * third;
-};
-extern StringTriple const * const g_pEventTranslations;
-
 void ElementDescriptor::readEvents()
 {
     Reference< script::XScriptEventsSupplier > xSupplier( _xProps, UNO_QUERY );
