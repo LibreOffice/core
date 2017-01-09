@@ -451,6 +451,10 @@ ScComplexRefData& ScComplexRefData::Extend( const ScSingleRefData & rRef, const 
     if (rRef.IsFlag3D())
         Ref1.SetFlag3D( true);
 
+    // Inherit RelNameRef from extending part.
+    if (rRef.IsRelName())
+        Ref2.SetRelName(true);
+
     SetRange(aAbsRange, rPos);
 
     return *this;
