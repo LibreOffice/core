@@ -31,7 +31,7 @@
 #include <database.hxx>
 #include <parser.hxx>
 
-char const * SyntaxStrings[] = {
+char const * const SyntaxStrings[] = {
 "basic-type:",
 "\tvoid|        char|       int|        float|      double|",
 "\tUINT16|      INT16|      UINT32|     INT32|      BOOL|",
@@ -101,7 +101,7 @@ char const * SyntaxStrings[] = {
 "---syntax example is sfx.idl---\n",
 nullptr };
 
-char CommandLineSyntax[] =
+char const CommandLineSyntax[] =
 "-fs<slotmap file>\n"
 "-fm<makefile target file>\n"
 "-help, ?                   @<file> response file\n"
