@@ -99,7 +99,6 @@ GraphicObject::GraphicObject( const GraphicObject& rGraphicObj ) :
 {
     ImplConstruct();
     ImplAssignGraphicData();
-    ImplEnsureGraphicManager();
     mpGlobalMgr->ImplRegisterObj(*this, maGraphic, nullptr, &rGraphicObj);
     if( rGraphicObj.HasUserData() && rGraphicObj.IsSwappedOut() )
         SetSwapState();
