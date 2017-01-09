@@ -163,51 +163,34 @@ void GraphicObject::ImplAssignGraphicData()
 
 void GraphicObject::ImplSetGraphicManager(const OString* pID, const GraphicObject* pCopyObj)
 {
-    if (mpMgr && mpMgr == mpGlobalMgr)
+    if (mpMgr)
         return;
     else
     {
-        if( mpMgr )
+        if( !mpGlobalMgr )
         {
-            mpMgr->ImplUnregisterObj( *this );
-
-            if( ( mpMgr == mpGlobalMgr ) && !mpGlobalMgr->ImplHasObjects() )
+            if (!utl::ConfigManager::IsAvoidConfig())
             {
-                delete mpGlobalMgr;
-                mpGlobalMgr = nullptr;
+                mpGlobalMgr = new GraphicManager(
+                    (officecfg::Office::Common::Cache::GraphicManager::
+                     TotalCacheSize::get()),
+                    (officecfg::Office::Common::Cache::GraphicManager::
+                     ObjectCacheSize::get()));
+                mpGlobalMgr->SetCacheTimeout(
+                    officecfg::Office::Common::Cache::GraphicManager::
+                    ObjectReleaseTime::get());
+            }
+            else
+            {
+                mpGlobalMgr = new GraphicManager(
+                    20000,
+                    20000);
+                mpGlobalMgr->SetCacheTimeout(
+                    20000);
             }
         }
 
-        if (true)
-        {
-            if( !mpGlobalMgr )
-            {
-                if (!utl::ConfigManager::IsAvoidConfig())
-                {
-                    mpGlobalMgr = new GraphicManager(
-                        (officecfg::Office::Common::Cache::GraphicManager::
-                         TotalCacheSize::get()),
-                        (officecfg::Office::Common::Cache::GraphicManager::
-                         ObjectCacheSize::get()));
-                    mpGlobalMgr->SetCacheTimeout(
-                        officecfg::Office::Common::Cache::GraphicManager::
-                        ObjectReleaseTime::get());
-                }
-                else
-                {
-                    mpGlobalMgr = new GraphicManager(
-                        20000,
-                        20000);
-                    mpGlobalMgr->SetCacheTimeout(
-                        20000);
-                }
-            }
-
-            mpMgr = mpGlobalMgr;
-        }
-        else
-            mpMgr = nullptr;
-
+        mpMgr = mpGlobalMgr;
         mpMgr->ImplRegisterObj( *this, maGraphic, pID, pCopyObj );
     }
 }
