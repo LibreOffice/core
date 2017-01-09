@@ -67,18 +67,17 @@ void GraphicObject::ImplAfterDataChange()
     mnDataChangeTimeStamp = aIncrementingTimeOfLastDataChange++;
 
     // check memory footprint of all GraphicObjects managed and evtl. take action
-    if (mpMgr)
-        mpMgr->ImplCheckSizeOfSwappedInGraphics(this);
+    mpGlobalMgr->ImplCheckSizeOfSwappedInGraphics(this);
 }
 
 GraphicObject::GraphicObject() :
     maLink      (),
     maUserData  ()
 {
+    ImplEnsureGraphicManager();
     ImplConstruct();
     ImplAssignGraphicData();
-    ImplEnsureGraphicManager();
-    mpMgr->ImplRegisterObj(*this, maGraphic, nullptr, nullptr);
+    mpGlobalMgr->ImplRegisterObj(*this, maGraphic, nullptr, nullptr);
 }
 
 GraphicObject::GraphicObject( const Graphic& rGraphic ) :
@@ -86,10 +85,10 @@ GraphicObject::GraphicObject( const Graphic& rGraphic ) :
     maLink      (),
     maUserData  ()
 {
+    ImplEnsureGraphicManager();
     ImplConstruct();
     ImplAssignGraphicData();
-    ImplEnsureGraphicManager();
-    mpMgr->ImplRegisterObj(*this, maGraphic, nullptr, nullptr);
+    mpGlobalMgr->ImplRegisterObj(*this, maGraphic, nullptr, nullptr);
 }
 
 GraphicObject::GraphicObject( const GraphicObject& rGraphicObj ) :
@@ -98,10 +97,10 @@ GraphicObject::GraphicObject( const GraphicObject& rGraphicObj ) :
     maLink      ( rGraphicObj.maLink ),
     maUserData  ( rGraphicObj.maUserData )
 {
+    ImplEnsureGraphicManager();
     ImplConstruct();
     ImplAssignGraphicData();
-    ImplEnsureGraphicManager();
-    mpMgr->ImplRegisterObj(*this, maGraphic, nullptr, &rGraphicObj);
+    mpGlobalMgr->ImplRegisterObj(*this, maGraphic, nullptr, &rGraphicObj);
     if( rGraphicObj.HasUserData() && rGraphicObj.IsSwappedOut() )
         SetSwapState();
 }
@@ -110,13 +109,14 @@ GraphicObject::GraphicObject( const OString& rUniqueID ) :
     maLink      (),
     maUserData  ()
 {
+    ImplEnsureGraphicManager();
+
     ImplConstruct();
 
     // assign default properties
     ImplAssignGraphicData();
 
-    ImplEnsureGraphicManager();
-    mpMgr->ImplRegisterObj(*this, maGraphic, &rUniqueID, nullptr);
+    mpGlobalMgr->ImplRegisterObj(*this, maGraphic, &rUniqueID, nullptr);
 
     // update properties
     ImplAssignGraphicData();
@@ -124,7 +124,7 @@ GraphicObject::GraphicObject( const OString& rUniqueID ) :
 
 GraphicObject::~GraphicObject()
 {
-    mpMgr->ImplUnregisterObj( *this );
+    mpGlobalMgr->ImplUnregisterObj( *this );
 
     if (!mpGlobalMgr->ImplHasObjects())
     {
@@ -135,7 +135,6 @@ GraphicObject::~GraphicObject()
 
 void GraphicObject::ImplConstruct()
 {
-    mpMgr = nullptr;
     maSwapStreamHdl = Link<const GraphicObject*, SvStream*>();
     mnAnimationLoopCount = 0;
     mbAutoSwapped = false;
@@ -186,8 +185,6 @@ void GraphicObject::ImplEnsureGraphicManager()
                 20000);
         }
     }
-
-    mpMgr = mpGlobalMgr;
 }
 
 void GraphicObject::ImplAutoSwapIn()
@@ -242,8 +239,8 @@ void GraphicObject::ImplAutoSwapIn()
 
             mbIsInSwapIn = false;
 
-            if( !mbAutoSwapped && mpMgr )
-                mpMgr->ImplGraphicObjectWasSwappedIn( *this );
+            if (!mbAutoSwapped)
+                mpGlobalMgr->ImplGraphicObjectWasSwappedIn( *this );
         }
         ImplAssignGraphicData();
     }
@@ -322,7 +319,7 @@ GraphicObject& GraphicObject::operator=( const GraphicObject& rGraphicObj )
 {
     if( &rGraphicObj != this )
     {
-        mpMgr->ImplUnregisterObj( *this );
+        mpGlobalMgr->ImplUnregisterObj( *this );
 
         maSwapStreamHdl = Link<const GraphicObject*, SvStream*>();
         mxSimpleCache.reset();
@@ -333,8 +330,7 @@ GraphicObject& GraphicObject::operator=( const GraphicObject& rGraphicObj )
         maUserData = rGraphicObj.maUserData;
         ImplAssignGraphicData();
         mbAutoSwapped = false;
-        mpMgr = rGraphicObj.mpMgr;
-        mpMgr->ImplRegisterObj( *this, maGraphic, nullptr, &rGraphicObj );
+        mpGlobalMgr->ImplRegisterObj( *this, maGraphic, nullptr, &rGraphicObj );
         if( rGraphicObj.HasUserData() && rGraphicObj.IsSwappedOut() )
             SetSwapState();
     }
@@ -354,12 +350,7 @@ OString GraphicObject::GetUniqueID() const
     if ( !IsInSwapIn() && IsEPS() )
         const_cast<GraphicObject*>(this)->FireSwapInRequest();
 
-    OString aRet;
-
-    if( mpMgr )
-        aRet = mpMgr->ImplGetUniqueID( *this );
-
-    return aRet;
+    return mpGlobalMgr->ImplGetUniqueID(*this);
 }
 
 SvStream* GraphicObject::GetSwapStream() const
@@ -459,7 +450,7 @@ bool GraphicObject::IsCached( OutputDevice* pOut, const Point& rPt, const Size& 
             bool bRectClip;
             ImplGetCropParams( pOut, aPt, aSz, pAttr, aClipPolyPoly, bRectClip );
         }
-        bRet = mpMgr->IsInCache( pOut, aPt, aSz, *this, ( pAttr ? *pAttr : GetAttr() ) );
+        bRet = mpGlobalMgr->IsInCache( pOut, aPt, aSz, *this, ( pAttr ? *pAttr : GetAttr() ) );
     }
     else
         bRet = false;
@@ -524,7 +515,7 @@ bool GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
         }
     }
 
-    bRet = mpMgr->DrawObj( pOut, aPt, aSz, *this, aAttr, nFlags, bCached );
+    bRet = mpGlobalMgr->DrawObj( pOut, aPt, aSz, *this, aAttr, nFlags, bCached );
 
     if( bCropped )
         pOut->Pop();
@@ -647,7 +638,7 @@ const Graphic& GraphicObject::GetGraphic() const
 
 void GraphicObject::SetGraphic( const Graphic& rGraphic, const GraphicObject* pCopyObj )
 {
-    mpMgr->ImplUnregisterObj( *this );
+    mpGlobalMgr->ImplUnregisterObj( *this );
 
     if (mxSwapOutTimer)
         mxSwapOutTimer->Stop();
@@ -658,7 +649,7 @@ void GraphicObject::SetGraphic( const Graphic& rGraphic, const GraphicObject* pC
     maLink.clear();
     mxSimpleCache.reset();
 
-    mpMgr->ImplRegisterObj( *this, maGraphic, nullptr, pCopyObj);
+    mpGlobalMgr->ImplRegisterObj( *this, maGraphic, nullptr, pCopyObj);
 
     if (mxSwapOutTimer)
         mxSwapOutTimer->Start();
@@ -954,8 +945,8 @@ bool GraphicObject::SwapOut()
 {
     const bool bRet = !mbAutoSwapped && maGraphic.SwapOut();
 
-    if( bRet && mpMgr )
-        mpMgr->ImplGraphicObjectWasSwappedOut( *this );
+    if (bRet)
+        mpGlobalMgr->ImplGraphicObjectWasSwappedOut( *this );
 
     return bRet;
 }
@@ -973,8 +964,8 @@ bool GraphicObject::SwapOut( SvStream* pOStm )
         bRet = bRet && maGraphic.SwapOut( pOStm );
     }
 
-    if( bRet && mpMgr )
-        mpMgr->ImplGraphicObjectWasSwappedOut( *this );
+    if (bRet)
+        mpGlobalMgr->ImplGraphicObjectWasSwappedOut(*this);
 
     return bRet;
 }
@@ -992,8 +983,8 @@ bool GraphicObject::SwapIn()
     {
         bRet = maGraphic.SwapIn();
 
-        if( bRet && mpMgr )
-            mpMgr->ImplGraphicObjectWasSwappedIn( *this );
+        if (bRet)
+            mpGlobalMgr->ImplGraphicObjectWasSwappedIn(*this);
     }
 
     if( bRet )
@@ -1010,8 +1001,7 @@ void GraphicObject::SetSwapState()
     {
         mbAutoSwapped = true;
 
-        if( mpMgr )
-            mpMgr->ImplGraphicObjectWasSwappedOut( *this );
+        mpGlobalMgr->ImplGraphicObjectWasSwappedOut(*this);
     }
 }
 
