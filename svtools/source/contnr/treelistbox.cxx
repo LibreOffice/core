@@ -2905,7 +2905,7 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, long nLine, vcl::Render
         rRenderContext.SetFont(aBackupFont);
     }
 
-    sal_uInt16 nFirstDynTabPos;
+    sal_uInt16 nFirstDynTabPos(0);
     SvLBoxTab* pFirstDynamicTab = GetFirstDynamicTab(nFirstDynTabPos);
     long nDynTabPos = GetTabPos(&rEntry, pFirstDynamicTab);
     nDynTabPos += pImpl->nNodeBmpTabDistance;
