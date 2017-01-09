@@ -42,6 +42,7 @@
 #include "dp_dependencies.hxx"
 #include "dp_descriptioninfoset.hxx"
 #include "dp_identifier.hxx"
+#include "dp_services.hxx"
 #include "dp_version.hxx"
 #include "dp_misc.h"
 #include "dp_update.hxx"
@@ -314,8 +315,8 @@ uno::Sequence< uno::Sequence< OUString > > SAL_CALL PackageInformationProvider::
 
 
 namespace sdecl = comphelper::service_decl;
-sdecl::class_<PackageInformationProvider> servicePIP;
-extern sdecl::ServiceDecl const serviceDecl(
+sdecl::class_<PackageInformationProvider> const servicePIP;
+sdecl::ServiceDecl const serviceDecl(
     servicePIP,
     // a private one:
     "com.sun.star.comp.deployment.PackageInformationProvider",

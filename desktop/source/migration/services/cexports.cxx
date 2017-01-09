@@ -26,7 +26,7 @@
 extern "C"
 {
 
-::cppu::ImplementationEntry oo2_entries [] =
+::cppu::ImplementationEntry const oo2_entries [] =
 {
     {
         migration::BasicMigration_create, migration::BasicMigration_getImplementationName,

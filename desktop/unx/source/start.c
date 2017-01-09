@@ -705,7 +705,7 @@ exec_javaldx (Args *args)
 #endif
 
 // has to be a global :(
-oslProcess * volatile g_pProcess = NULL;
+static oslProcess * volatile g_pProcess = NULL;
 
 void sigterm_handler(int ignored)
 {

@@ -299,19 +299,19 @@ void ServiceImpl::trigger( OUString const &rEvent ) throw (RuntimeException, std
     startExecuteModal( Reference< ui::dialogs::XDialogClosedListener >() );
 }
 
-sdecl::class_<ServiceImpl, sdecl::with_args<true> > serviceSI;
+sdecl::class_<ServiceImpl, sdecl::with_args<true> > const serviceSI;
 sdecl::ServiceDecl const serviceDecl(
     serviceSI,
     "com.sun.star.comp.deployment.ui.PackageManagerDialog",
     "com.sun.star.deployment.ui.PackageManagerDialog" );
 
-sdecl::class_<LicenseDialog, sdecl::with_args<true> > licenseSI;
+sdecl::class_<LicenseDialog, sdecl::with_args<true> > const licenseSI;
 sdecl::ServiceDecl const licenseDecl(
     licenseSI,
     "com.sun.star.comp.deployment.ui.LicenseDialog",
     "com.sun.star.deployment.ui.LicenseDialog" );
 
-sdecl::class_<UpdateRequiredDialogService, sdecl::with_args<true> > updateSI;
+sdecl::class_<UpdateRequiredDialogService, sdecl::with_args<true> > const updateSI;
 sdecl::ServiceDecl const updateDecl(
     updateSI,
     "com.sun.star.comp.deployment.ui.UpdateRequiredDialog",

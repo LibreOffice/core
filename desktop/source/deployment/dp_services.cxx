@@ -20,53 +20,10 @@
 
 #include <comphelper/servicedecl.hxx>
 
+#include <dp_services.hxx>
+
 using namespace com::sun::star;
 namespace sdecl = comphelper::service_decl;
-
-namespace dp_registry {
-namespace backend {
-
-namespace configuration {
-extern sdecl::ServiceDecl const serviceDecl;
-}
-
-namespace component {
-extern sdecl::ServiceDecl const serviceDecl;
-}
-
-namespace script {
-extern sdecl::ServiceDecl const serviceDecl;
-}
-
-namespace sfwk {
-extern sdecl::ServiceDecl const serviceDecl;
-}
-
-namespace help {
-extern sdecl::ServiceDecl const serviceDecl;
-}
-
-namespace executable {
-extern sdecl::ServiceDecl const serviceDecl;
-}
-
-} // namespace backend
-} // namespace dp_registry
-
-namespace dp_manager {
-namespace factory {
-extern sdecl::ServiceDecl const serviceDecl;
-}
-extern sdecl::ServiceDecl const serviceDecl;
-}
-
-namespace dp_log {
-extern sdecl::ServiceDecl const serviceDecl;
-}
-
-namespace dp_info {
-extern sdecl::ServiceDecl const serviceDecl;
-}
 
 extern "C" {
 

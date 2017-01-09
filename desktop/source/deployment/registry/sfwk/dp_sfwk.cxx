@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include "dp_services.hxx"
 #include "dp_sfwk.hrc"
 #include "dp_backend.h"
 #include "dp_ucb.h"
@@ -361,8 +364,8 @@ void BackendImpl::PackageImpl::processPackage_(
 }
 
 namespace sdecl = comphelper::service_decl;
-sdecl::class_<BackendImpl, sdecl::with_args<true> > serviceBI;
-extern sdecl::ServiceDecl const serviceDecl(
+sdecl::class_<BackendImpl, sdecl::with_args<true> > const serviceBI;
+sdecl::ServiceDecl const serviceDecl(
     serviceBI,
     "com.sun.star.comp.deployment.sfwk.PackageRegistryBackend",
     BACKEND_SERVICE_NAME );

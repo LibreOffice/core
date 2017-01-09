@@ -27,6 +27,7 @@
 #if HAVE_FEATURE_EXTENSIONS
 #include "dp_persmap.h"
 #endif
+#include "dp_services.hxx"
 #include "dp_ucb.h"
 #include <rtl/string.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -802,7 +803,7 @@ void BackendImpl::PackageImpl::processPackage_(
 
 namespace sdecl = comphelper::service_decl;
 sdecl::class_<BackendImpl, sdecl::with_args<true> > serviceBI;
-extern sdecl::ServiceDecl const serviceDecl(
+sdecl::ServiceDecl const serviceDecl(
     serviceBI,
     "com.sun.star.comp.deployment.configuration.PackageRegistryBackend",
     BACKEND_SERVICE_NAME );

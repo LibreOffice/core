@@ -19,6 +19,7 @@
 
 
 #include "dp_misc.h"
+#include "dp_services.hxx"
 #include <rtl/strbuf.hxx>
 #include <osl/time.h>
 #include <osl/thread.h>
@@ -185,8 +186,8 @@ void ProgressLogImpl::pop() throw (RuntimeException, std::exception)
 }
 
 namespace sdecl = comphelper::service_decl;
-sdecl::class_<ProgressLogImpl, sdecl::with_args<true> > servicePLI;
-extern sdecl::ServiceDecl const serviceDecl(
+sdecl::class_<ProgressLogImpl, sdecl::with_args<true> > const servicePLI;
+sdecl::ServiceDecl const serviceDecl(
     servicePLI,
     // a private one:
     "com.sun.star.comp.deployment.ProgressLog",

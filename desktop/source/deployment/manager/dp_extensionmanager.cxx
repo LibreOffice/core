@@ -47,6 +47,7 @@
 #include <vcl/svapp.hxx>
 #include "dp_interact.h"
 #include "dp_resource.h"
+#include "dp_services.hxx"
 #include "dp_ucb.h"
 #include "dp_identifier.hxx"
 #include "dp_descriptioninfoset.hxx"
@@ -1439,8 +1440,8 @@ sal_Bool ExtensionManager::isReadOnlyRepository(OUString const & repository)
 
 
 namespace sdecl = comphelper::service_decl;
-sdecl::class_<ExtensionManager> servicePIP;
-extern sdecl::ServiceDecl const serviceDecl(
+sdecl::class_<ExtensionManager> const servicePIP;
+sdecl::ServiceDecl const serviceDecl(
     servicePIP,
     // a private one:
     "com.sun.star.comp.deployment.ExtensionManager",

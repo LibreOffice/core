@@ -21,6 +21,7 @@
 #include "dp_component.hrc"
 #include "dp_backend.h"
 #include "dp_platform.hxx"
+#include "dp_services.hxx"
 #include "dp_ucb.h"
 #include <rtl/string.hxx>
 #include <rtl/strbuf.hxx>
@@ -1722,7 +1723,7 @@ BackendImpl::ComponentsPackageImpl::ComponentsPackageImpl(
 
 namespace sdecl = comphelper::service_decl;
 sdecl::class_<BackendImpl, sdecl::with_args<true> > serviceBI;
-extern sdecl::ServiceDecl const serviceDecl(
+sdecl::ServiceDecl const serviceDecl(
     serviceBI,
     IMPLEMENTATION_NAME,
     BACKEND_SERVICE_NAME );

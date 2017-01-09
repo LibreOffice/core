@@ -20,6 +20,7 @@
 
 #include "dp_misc.h"
 #include "dp_backend.h"
+#include "dp_services.hxx"
 #include "dp_ucb.h"
 #include "dp_interact.h"
 #include <rtl/string.hxx>
@@ -310,7 +311,7 @@ bool BackendImpl::ExecutablePackageImpl::getFileAttributes(sal_uInt64& out_Attri
 
 namespace sdecl = comphelper::service_decl;
 sdecl::class_<BackendImpl, sdecl::with_args<true> > serviceBI;
-extern sdecl::ServiceDecl const serviceDecl(
+sdecl::ServiceDecl const serviceDecl(
     serviceBI,
     "com.sun.star.comp.deployment.executable.PackageRegistryBackend",
     BACKEND_SERVICE_NAME );

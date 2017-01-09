@@ -20,6 +20,7 @@
 
 #include "dp_manager.h"
 #include "dp_resource.h"
+#include "dp_services.hxx"
 #include <cppuhelper/compbase.hxx>
 #include <comphelper/servicedecl.hxx>
 #include <com/sun/star/deployment/thePackageManagerFactory.hpp>
@@ -65,8 +66,8 @@ public:
 
 
 namespace sdecl = comphelper::service_decl;
-sdecl::class_<PackageManagerFactoryImpl> servicePMFI;
-extern sdecl::ServiceDecl const serviceDecl(
+sdecl::class_<PackageManagerFactoryImpl> const servicePMFI;
+sdecl::ServiceDecl const serviceDecl(
     servicePMFI,
     // a private one:
     "com.sun.star.comp.deployment.PackageManagerFactory",

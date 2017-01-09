@@ -24,7 +24,7 @@
 extern "C"
 {
 
-::cppu::ImplementationEntry oo3_entries [] =
+::cppu::ImplementationEntry const oo3_entries [] =
 {
     {
         migration::OO3ExtensionMigration_create, migration::OO3ExtensionMigration_getImplementationName,

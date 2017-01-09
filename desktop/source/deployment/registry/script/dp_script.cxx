@@ -19,6 +19,7 @@
 
 
 #include "dp_script.hrc"
+#include "dp_services.hxx"
 #include "dp_lib_container.h"
 #include "dp_backend.h"
 #include "dp_ucb.h"
@@ -457,7 +458,7 @@ void BackendImpl::PackageImpl::processPackage_(
 
 namespace sdecl = comphelper::service_decl;
 sdecl::class_<BackendImpl, sdecl::with_args<true> > serviceBI;
-extern sdecl::ServiceDecl const serviceDecl(
+sdecl::ServiceDecl const serviceDecl(
     serviceBI,
     "com.sun.star.comp.deployment.script.PackageRegistryBackend",
     BACKEND_SERVICE_NAME );
