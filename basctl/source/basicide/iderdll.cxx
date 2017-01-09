@@ -61,7 +61,7 @@ public:
 class DllInstance : public comphelper::unique_disposing_solar_mutex_reset_ptr<Dll>
 {
 public:
-    DllInstance() : comphelper::unique_disposing_solar_mutex_reset_ptr<Dll>(Reference<lang::XComponent>( frame::Desktop::create(comphelper::getProcessComponentContext()), UNO_QUERY_THROW), new Dll)
+    DllInstance() : comphelper::unique_disposing_solar_mutex_reset_ptr<Dll>(Reference<lang::XComponent>( frame::Desktop::create(comphelper::getProcessComponentContext()), UNO_QUERY_THROW), new Dll, true)
     { }
 };
 
