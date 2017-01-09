@@ -85,11 +85,11 @@ public:
 
     /// Return value of specified value oid
 
-    std::string &getValue( int oid );
+    std::string const &getValue( int oid );
 
     /// Return value of specified column oid
 
-    std::string &getColumn( int oid );
+    std::string const &getColumn( int oid );
 
     void retrieveLists(std::set<std::string>& lists);
     void getRecordKeysForListTable(std::string& listName, std::set<int>& records);

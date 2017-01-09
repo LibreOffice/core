@@ -70,8 +70,6 @@ using namespace ::osl;
 using namespace ::dbtools;
 using namespace ::comphelper;
 
-connectivity::OSQLParser* xxx_pGLOBAL_SQLPARSER;
-
 namespace
 {
 

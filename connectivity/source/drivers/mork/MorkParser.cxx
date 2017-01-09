@@ -43,12 +43,9 @@
 #include <iostream>
 #include <algorithm>
 
-std::string g_Empty = "";
+std::string const g_Empty = "";
 
-// Mork header of supported format version
-const char *MorkMagicHeader = "// <!-- <mdb:mork:z v=\"1.4\"/> -->";
-
-const char *MorkDictColumnMeta = "<(a=c)>";
+const char * const MorkDictColumnMeta = "<(a=c)>";
 
 static const int defaultScope_ = 0x80;
 
@@ -574,7 +571,7 @@ MorkRowMap *MorkParser::getRows( int RowScope, RowScopeMap *table )
     return &iter->second;
 }
 
-std::string &MorkParser::getValue( int oid )
+std::string const &MorkParser::getValue( int oid )
 {
     MorkDict::iterator foundIter = values_.find( oid );
 
@@ -586,7 +583,7 @@ std::string &MorkParser::getValue( int oid )
     return foundIter->second;
 }
 
-std::string &MorkParser::getColumn( int oid )
+std::string const &MorkParser::getColumn( int oid )
 {
     MorkDict::iterator foundIter = columns_.find( oid );
 

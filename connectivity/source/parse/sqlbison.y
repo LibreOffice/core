@@ -4272,6 +4272,8 @@ using namespace ::com::sun::star::util;
 using namespace ::osl;
 using namespace ::dbtools;
 
+connectivity::OSQLParser* xxx_pGLOBAL_SQLPARSER;
+
 connectivity::OSQLInternalNode* newNode(const sal_Char* pNewValue,
         const connectivity::SQLNodeType eNodeType,
         const sal_uInt32 nNodeID)
