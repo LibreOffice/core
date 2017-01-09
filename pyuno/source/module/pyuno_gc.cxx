@@ -27,7 +27,7 @@
 namespace pyuno
 {
 
-bool g_destructorsOfStaticObjectsHaveBeenCalled;
+static bool g_destructorsOfStaticObjectsHaveBeenCalled;
 class StaticDestructorGuard
 {
 public:
@@ -36,7 +36,7 @@ public:
         g_destructorsOfStaticObjectsHaveBeenCalled = true;
     }
 };
-StaticDestructorGuard guard;
+static StaticDestructorGuard guard;
 
 static bool isAfterUnloadOrPy_Finalize()
 {
