@@ -37,7 +37,7 @@
  */
 static char enableXmlStreamIO = 0x00 ;
 
-css::uno::Reference< css::xml::crypto::XUriBinding > m_xUriBinding ;
+static css::uno::Reference< css::xml::crypto::XUriBinding > m_xUriBinding ;
 
 extern "C"
 int xmlStreamMatch( const char* uri )
