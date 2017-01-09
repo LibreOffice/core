@@ -31,6 +31,7 @@
 #include <com/sun/star/xml/sax/XSAXSerializable.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
 
+#include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 #include <oox/export/drawingml.hxx>
 #include <oox/export/vmlexport.hxx>
@@ -676,10 +677,10 @@ void DocxExport::WriteNumbering()
     m_pDrawingML->SetFS( pNumberingFS );
 
     pNumberingFS->startElementNS( XML_w, XML_numbering,
-            FSNS( XML_xmlns, XML_w ), "http://schemas.openxmlformats.org/wordprocessingml/2006/main",
-            FSNS( XML_xmlns, XML_o ), "urn:schemas-microsoft-com:office:office",
-            FSNS( XML_xmlns, XML_r ), "http://schemas.openxmlformats.org/officeDocument/2006/relationships",
-            FSNS( XML_xmlns, XML_v ), "urn:schemas-microsoft-com:vml",
+            FSNS( XML_xmlns, XML_w ), OUStringToOString(m_pFilter->getNamespaceURL(OOX_NS(doc)), RTL_TEXTENCODING_UTF8).getStr(),
+            FSNS( XML_xmlns, XML_o ), OUStringToOString(m_pFilter->getNamespaceURL(OOX_NS(vmlOffice)), RTL_TEXTENCODING_UTF8).getStr(),
+            FSNS( XML_xmlns, XML_r ), OUStringToOString(m_pFilter->getNamespaceURL(OOX_NS(officeRel)), RTL_TEXTENCODING_UTF8).getStr(),
+            FSNS( XML_xmlns, XML_v ), OUStringToOString(m_pFilter->getNamespaceURL(OOX_NS(vml)), RTL_TEXTENCODING_UTF8).getStr(),
             FSEND );
 
     BulletDefinitions();
@@ -784,8 +785,8 @@ void DocxExport::WriteFonts()
             "application/vnd.openxmlformats-officedocument.wordprocessingml.fontTable+xml" );
 
     pFS->startElementNS( XML_w, XML_fonts,
-            FSNS( XML_xmlns, XML_w ), "http://schemas.openxmlformats.org/wordprocessingml/2006/main",
-            FSNS( XML_xmlns, XML_r ), "http://schemas.openxmlformats.org/officeDocument/2006/relationships",
+            FSNS( XML_xmlns, XML_w ), OUStringToOString(m_pFilter->getNamespaceURL(OOX_NS(doc)), RTL_TEXTENCODING_UTF8).getStr(),
+            FSNS( XML_xmlns, XML_r ), OUStringToOString(m_pFilter->getNamespaceURL(OOX_NS(officeRel)), RTL_TEXTENCODING_UTF8).getStr(),
             FSEND );
 
     // switch the serializer to redirect the output to word/styles.xml
@@ -830,7 +831,7 @@ void DocxExport::WriteSettings()
             "application/vnd.openxmlformats-officedocument.wordprocessingml.settings+xml" );
 
     pFS->startElementNS( XML_w, XML_settings,
-            FSNS( XML_xmlns, XML_w ), "http://schemas.openxmlformats.org/wordprocessingml/2006/main",
+            FSNS( XML_xmlns, XML_w ), OUStringToOString(m_pFilter->getNamespaceURL(OOX_NS(doc)), RTL_TEXTENCODING_UTF8).getStr(),
             FSEND );
 
     // Zoom
@@ -1370,17 +1371,17 @@ void DocxExport::WriteMainText()
 XFastAttributeListRef DocxExport::MainXmlNamespaces()
 {
     FastAttributeList* pAttr = FastSerializerHelper::createAttrList();
-    pAttr->add( FSNS( XML_xmlns, XML_o ), "urn:schemas-microsoft-com:office:office" );
-    pAttr->add( FSNS( XML_xmlns, XML_r ), "http://schemas.openxmlformats.org/officeDocument/2006/relationships" );
-    pAttr->add( FSNS( XML_xmlns, XML_v ), "urn:schemas-microsoft-com:vml" );
-    pAttr->add( FSNS( XML_xmlns, XML_w ), "http://schemas.openxmlformats.org/wordprocessingml/2006/main" );
-    pAttr->add( FSNS( XML_xmlns, XML_w10 ), "urn:schemas-microsoft-com:office:word" );
-    pAttr->add( FSNS( XML_xmlns, XML_wp ), "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" );
-    pAttr->add( FSNS( XML_xmlns, XML_wps ), "http://schemas.microsoft.com/office/word/2010/wordprocessingShape" );
-    pAttr->add( FSNS( XML_xmlns, XML_wpg ), "http://schemas.microsoft.com/office/word/2010/wordprocessingGroup" );
-    pAttr->add( FSNS( XML_xmlns, XML_mc ), "http://schemas.openxmlformats.org/markup-compatibility/2006" );
-    pAttr->add( FSNS( XML_xmlns, XML_wp14 ), "http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing" );
-    pAttr->add( FSNS( XML_xmlns, XML_w14 ), "http://schemas.microsoft.com/office/word/2010/wordml" );
+    pAttr->add( FSNS( XML_xmlns, XML_o ), OUStringToOString(m_pFilter->getNamespaceURL(OOX_NS(vmlOffice)), RTL_TEXTENCODING_UTF8).getStr() );
+    pAttr->add( FSNS( XML_xmlns, XML_r ), OUStringToOString(m_pFilter->getNamespaceURL(OOX_NS(officeRel)), RTL_TEXTENCODING_UTF8).getStr() );
+    pAttr->add( FSNS( XML_xmlns, XML_v ), OUStringToOString(m_pFilter->getNamespaceURL(OOX_NS(vml)), RTL_TEXTENCODING_UTF8).getStr() );
+    pAttr->add( FSNS( XML_xmlns, XML_w ), OUStringToOString(m_pFilter->getNamespaceURL(OOX_NS(doc)), RTL_TEXTENCODING_UTF8).getStr() );
+    pAttr->add( FSNS( XML_xmlns, XML_w10 ), OUStringToOString(m_pFilter->getNamespaceURL(OOX_NS(vmlWord)), RTL_TEXTENCODING_UTF8).getStr() );
+    pAttr->add( FSNS( XML_xmlns, XML_wp ), OUStringToOString(m_pFilter->getNamespaceURL(OOX_NS(dmlWordDr)), RTL_TEXTENCODING_UTF8).getStr() );
+    pAttr->add( FSNS( XML_xmlns, XML_wps ), OUStringToOString(m_pFilter->getNamespaceURL(OOX_NS(wps)), RTL_TEXTENCODING_UTF8).getStr() );
+    pAttr->add( FSNS( XML_xmlns, XML_wpg ), OUStringToOString(m_pFilter->getNamespaceURL(OOX_NS(wpg)), RTL_TEXTENCODING_UTF8).getStr() );
+    pAttr->add( FSNS( XML_xmlns, XML_mc ), OUStringToOString(m_pFilter->getNamespaceURL(OOX_NS(mce)), RTL_TEXTENCODING_UTF8).getStr() );
+    pAttr->add( FSNS( XML_xmlns, XML_wp14 ), OUStringToOString(m_pFilter->getNamespaceURL(OOX_NS(wp14)), RTL_TEXTENCODING_UTF8).getStr() );
+    pAttr->add( FSNS( XML_xmlns, XML_w14 ), OUStringToOString(m_pFilter->getNamespaceURL(OOX_NS(w14)), RTL_TEXTENCODING_UTF8).getStr() );
     pAttr->add( FSNS( XML_mc, XML_Ignorable ), "w14 wp14" );
     return XFastAttributeListRef( pAttr );
 }
