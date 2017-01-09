@@ -50,13 +50,6 @@ private:
     virtual css::uno::Sequence< css::beans::NamedValue > implVerifyPassword( const OUString& rPassword ) = 0;
     virtual bool implVerifyEncryptionData( const css::uno::Sequence< css::beans::NamedValue >& rEncryptionData ) = 0;
 
-    /** Implementation of decryption of a memory block. */
-    virtual void        implDecode(
-                            sal_uInt8* pnDestData,
-                            const sal_uInt8* pnSrcData,
-                            sal_Int64 nStreamPos,
-                            sal_uInt16 nBytes ) = 0;
-
 private:
     bool                mbValid;        /// True = decoder is correctly initialized.
 };
@@ -73,13 +66,6 @@ private:
     /** Implements password verification and initialization of the decoder. */
     virtual css::uno::Sequence< css::beans::NamedValue > implVerifyPassword( const OUString& rPassword ) override;
     virtual bool implVerifyEncryptionData( const css::uno::Sequence< css::beans::NamedValue >& rEncryptionData ) override;
-
-    /** Implementation of decryption of a memory block. */
-    virtual void        implDecode(
-                            sal_uInt8* pnDestData,
-                            const sal_uInt8* pnSrcData,
-                            sal_Int64 nStreamPos,
-                            sal_uInt16 nBytes ) override;
 
 private:
     ::oox::core::BinaryCodec_XOR maCodec;   /// Cipher algorithm implementation.
@@ -98,13 +84,6 @@ private:
     /** Implements password verification and initialization of the decoder. */
     virtual css::uno::Sequence< css::beans::NamedValue > implVerifyPassword( const OUString& rPassword ) override;
     virtual bool implVerifyEncryptionData( const css::uno::Sequence< css::beans::NamedValue >& rEncryptionData ) override;
-
-    /** Implementation of decryption of a memory block. */
-    virtual void        implDecode(
-                            sal_uInt8* pnDestData,
-                            const sal_uInt8* pnSrcData,
-                            sal_Int64 nStreamPos,
-                            sal_uInt16 nBytes ) override;
 
 private:
     ::oox::core::BinaryCodec_RCF maCodec;   /// Cipher algorithm implementation.

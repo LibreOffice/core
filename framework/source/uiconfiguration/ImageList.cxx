@@ -229,11 +229,6 @@ sal_uInt16 ImageList::GetImagePos( sal_uInt16 nId ) const
     return IMAGELIST_IMAGE_NOTFOUND;
 }
 
-bool ImageList::HasImageForId( sal_uInt16 nId ) const
-{
-    return GetImagePos( nId ) != IMAGELIST_IMAGE_NOTFOUND;
-}
-
 sal_uInt16 ImageList::GetImagePos( const OUString& rImageName ) const
 {
     if( mpImplData && !rImageName.isEmpty() )
@@ -279,25 +274,6 @@ void ImageList::GetImageNames( std::vector< OUString >& rNames ) const
                 rNames.push_back( rName );
         }
     }
-}
-
-Size ImageList::GetImageSize() const
-{
-    Size aRet;
-
-    if( mpImplData )
-    {
-        aRet = mpImplData->maImageSize;
-
-        // force load of 1st image to see - uncommon case.
-        if( aRet.Width() == 0 && aRet.Height() == 0 &&
-            !mpImplData->maImages.empty() )
-        {
-            Image aTmp = GetImage( mpImplData->maImages[ 0 ]->mnId );
-            aRet = mpImplData->maImageSize = aTmp.GetSizePixel();
-        }
-    }
-    return aRet;
 }
 
 bool ImageList::operator==( const ImageList& rImageList ) const

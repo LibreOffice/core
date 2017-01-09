@@ -174,48 +174,6 @@ WritePS (osl::File* pFile, const OUString &rString)
     return WritePS (pFile, OUStringToOString(rString, RTL_TEXTENCODING_ASCII_US));
 }
 
-/*
- * cache converter for use in postscript drawing routines
- */
-
-ConverterFactory::ConverterFactory()
-{
-}
-
-ConverterFactory::~ConverterFactory ()
-{
-    for( std::map< rtl_TextEncoding, rtl_UnicodeToTextConverter >::const_iterator it = m_aConverters.begin(); it != m_aConverters.end(); ++it )
-            rtl_destroyUnicodeToTextConverter (it->second);
-}
-
-rtl_UnicodeToTextConverter
-ConverterFactory::Get (rtl_TextEncoding nEncoding)
-{
-    if (rtl_isOctetTextEncoding( nEncoding ))
-    {
-        std::map< rtl_TextEncoding, rtl_UnicodeToTextConverter >::const_iterator it =
-            m_aConverters.find( nEncoding );
-        rtl_UnicodeToTextConverter aConverter;
-        if (it == m_aConverters.end())
-        {
-            aConverter = rtl_createUnicodeToTextConverter (nEncoding);
-            m_aConverters[nEncoding] = aConverter;
-        }
-        else
-            aConverter = it->second;
-        return aConverter;
-    }
-    return nullptr;
-}
-
-namespace
-{
-    class theConverterFactory
-        : public rtl::Static<ConverterFactory, theConverterFactory>
-    {
-    };
-}
-
 } /* namespace psp */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
