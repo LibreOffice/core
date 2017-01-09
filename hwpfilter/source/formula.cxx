@@ -25,9 +25,6 @@
 #include "mapping.h"
 #include "hwpeq.h"
 #include <iostream>
-#include <list>
-
-extern std::list<Node*> nodelist;
 
 #ifndef DEBUG
 

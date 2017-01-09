@@ -126,7 +126,7 @@ const char* RepFontTab[] =
     "\xb1\xc3\xbc\xad"                                        /* 3 */
 };
 #elif defined(LINUX)
-const char* RepFontTab[] =
+const char* const RepFontTab[] =
 {
     "\xb9\xe9\xb9\xac \xb9\xd9\xc5\xc1",                                     /* 0 */
     "\xb9\xe9\xb9\xac \xb5\xb8\xbf\xf2",                                      /* 1 */

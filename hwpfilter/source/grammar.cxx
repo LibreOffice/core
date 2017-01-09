@@ -36,11 +36,15 @@
 #include "lexer.hxx"
 #include "nodes.h"
 
+extern "C" {
+#include "grammar.h"
+}
+
 std::list<Node*> nodelist;
 
 void yyerror(const char *);
 
-Node *top=nullptr;
+static Node *top=nullptr;
 
 int Node::count = 0;
 
@@ -50,12 +54,6 @@ int Node::count = 0;
 int debug(const char *format, ...);
 #endif
 
-
-typedef union {
-    char *dval;
-    char *str;
-    Node *ptr;
-} YYSTYPE;
 #include <stdio.h>
 
 #define YYFINAL     102
@@ -389,7 +387,7 @@ static const short yycheck[] = {    11,
 
 #ifndef YYPURE
 
-int yychar;         /*  the lookahead symbol        */
+static int yychar;  /*  the lookahead symbol        */
 YYSTYPE yylval;         /*  the semantic value of the       */
                 /*  lookahead symbol            */
 
@@ -398,7 +396,7 @@ YYLTYPE yylloc;         /*  location data for the lookahead */
                 /*  symbol              */
 #endif
 
-int yynerrs;            /*  number of parse errors so far       */
+static int yynerrs;     /*  number of parse errors so far       */
 #endif  /* not YYPURE */
 
 #if YYDEBUG != 0

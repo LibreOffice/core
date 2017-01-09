@@ -91,9 +91,6 @@
 
 typedef struct yy_buffer_state *YY_BUFFER_STATE;
 
-extern int yyleng;
-extern FILE *yyin, *yyout;
-
 #define EOB_ACT_CONTINUE_SCAN 0
 #define EOB_ACT_END_OF_FILE 1
 #define EOB_ACT_LAST_MATCH 2
@@ -179,7 +176,7 @@ static char yy_hold_char;
 static int yy_n_chars;      /* number of characters read into yy_ch_buf */
 
 
-int yyleng;
+static int yyleng;
 
 /* Points to current character in buffer. */
 static char *yy_c_buf_p = nullptr;
@@ -209,9 +206,8 @@ static void *yy_flex_realloc YY_PROTO(( void *, yy_size_t ));
 static void yy_flex_free YY_PROTO(( void * ));
 
 typedef unsigned char YY_CHAR;
-FILE *yyin = nullptr, *yyout = nullptr;
+static FILE *yyin = nullptr, *yyout = nullptr;
 typedef int yy_state_type;
-extern char *yytext;
 #define yytext_ptr yytext
 
 static yy_state_type yy_get_previous_state YY_PROTO(( void ));
@@ -933,7 +929,7 @@ static char *yy_last_accepting_cpos;
 
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
-char *yytext;
+static char *yytext;
 #define INITIAL 0
 #include <stdlib.h>
 #include <string.h>

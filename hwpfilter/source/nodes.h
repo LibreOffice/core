@@ -20,6 +20,9 @@
 #ifndef INCLUDED_HWPFILTER_SOURCE_NODES_H
 #define INCLUDED_HWPFILTER_SOURCE_NODES_H
 
+#include <sal/config.h>
+
+#include <list>
 #include <stdio.h>
 #include <stdlib.h>
 #include <osl/diagnose.h>
@@ -92,7 +95,7 @@ public:
      Node *next;
 };
 
-//static LinkedList<Node> nodelist;
+extern std::list<Node *> nodelist;
 
 #endif
 
