@@ -22,7 +22,7 @@
 namespace com { namespace sun { namespace star { namespace i18n {
 
 // traditional Kanji characters --> modern Kanji characters
-OneToOneMappingTable_t traditionalKanji2updateKanji[] = {
+OneToOneMappingTable_t const traditionalKanji2updateKanji[] = {
     { 0x4E17, 0x4E16 },
     { 0x4E55, 0x864E },
     { 0x4E58, 0x4E57 },

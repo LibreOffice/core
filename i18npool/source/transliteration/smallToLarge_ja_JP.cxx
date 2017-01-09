@@ -32,7 +32,7 @@ namespace com { namespace sun { namespace star { namespace i18n {
 // http://charts.unicode.org/Web/U30A0.html Katakana (U+30A0..U+30FF)
 // http://charts.unicode.org/Web/UFF00.html
 
-OneToOneMappingTable_t small2large[] = {
+OneToOneMappingTable_t const small2large[] = {
     { 0x3041, 0x3042 },  // HIRAGANA LETTER SMALL A --> HIRAGANA LETTER A
     { 0x3043, 0x3044 },  // HIRAGANA LETTER SMALL I --> HIRAGANA LETTER I
     { 0x3045, 0x3046 },  // HIRAGANA LETTER SMALL U --> HIRAGANA LETTER U

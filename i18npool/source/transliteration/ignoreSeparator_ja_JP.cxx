@@ -21,7 +21,7 @@
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-OneToOneMappingTable_t ignoreSeparatorTable[] = {
+OneToOneMappingTable_t const ignoreSeparatorTable[] = {
     { 0x0021, 0xFFFF },  // EXCLAMATION MARK
     { 0x0023, 0xFFFF },  // NUMBER SIGN
     { 0x0024, 0xFFFF },  // DOLLAR SIGN

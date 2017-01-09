@@ -21,7 +21,7 @@
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-OneToOneMappingTable_t ignoreSpace_ja_JP_mappingTable[] = {
+OneToOneMappingTable_t const ignoreSpace_ja_JP_mappingTable[] = {
     { 0x0020, 0xffff },  // SPACE
     { 0x00A0, 0xffff },  // NO-BREAK SPACE
     { 0x2002, 0xffff },  // EN SPACE

@@ -813,7 +813,7 @@ sal_Int16 SAL_CALL NativeNumberSupplierService::convertFromXmlAttributes( const 
 struct HebrewNumberChar {
     sal_Unicode code;
     sal_Int16 value;
-} HebrewNumberCharArray[] = {
+} const HebrewNumberCharArray[] = {
     { 0x05ea, 400 },
     { 0x05ea, 400 },
     { 0x05e9, 300 },
@@ -920,7 +920,7 @@ static sal_Unicode cyrillicTen = 0x0456;
 struct CyrillicNumberChar {
     sal_Unicode code;
     sal_Int16 value;
-} CyrillicNumberCharArray[] = {
+} const CyrillicNumberCharArray[] = {
     { 0x0446, 900 },
     { 0x047f, 800 },
     { 0x0471, 700 },

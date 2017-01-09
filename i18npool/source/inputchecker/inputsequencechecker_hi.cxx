@@ -99,7 +99,7 @@ static const sal_uInt16 dev_cell_check[14][14] = {
   /* 13 */ { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0 }  /* HD */
 };
 
-bool DEV_Composible[2][2] = {
+bool const DEV_Composible[2][2] = {
 /* Mode 0 */    {true, true }, // PASSTHROUGH = 0
 /* Mode 1 */    {false, true}  // STRICT = 1
 };

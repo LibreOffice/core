@@ -73,12 +73,12 @@ ChapterCollator::compareSubstring( const OUString& str1, sal_Int32 off1, sal_Int
     return res1.Value == res2.Value ? 0 : res1.Value > res2.Value ? 1 : -1;
 }
 
-const sal_Char *cChapCollator = "com.sun.star.i18n.ChapterCollator";
+const sal_Char cChapCollator[] = "com.sun.star.i18n.ChapterCollator";
 
 OUString SAL_CALL
 ChapterCollator::getImplementationName() throw( RuntimeException, std::exception )
 {
-    return OUString::createFromAscii(cChapCollator);
+    return OUString(cChapCollator);
 }
 
 sal_Bool SAL_CALL
@@ -90,7 +90,7 @@ ChapterCollator::supportsService(const OUString& rServiceName) throw( RuntimeExc
 Sequence< OUString > SAL_CALL
 ChapterCollator::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
-    Sequence< OUString > aRet { OUString::createFromAscii(cChapCollator) };
+    Sequence< OUString > aRet { cChapCollator };
     return aRet;
 }
 

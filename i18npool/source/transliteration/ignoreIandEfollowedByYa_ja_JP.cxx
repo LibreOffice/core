@@ -26,7 +26,7 @@ using namespace com::sun::star::lang;
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-OneToOneMappingTable_t IandE[] = {
+OneToOneMappingTable_t const IandE[] = {
     { 0x30A3, 0x0000 },  // KATAKANA LETTER SMALL I
     { 0x30A4, 0x0000 },  // KATAKANA LETTER I
     { 0x30A7, 0x0000 },  // KATAKANA LETTER SMALL E

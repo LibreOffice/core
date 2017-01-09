@@ -34,7 +34,7 @@ InputSequenceChecker_th::~InputSequenceChecker_th()
 }
 
 /* Table for Thai Cell Manipulation */
-sal_Char TAC_celltype_inputcheck[17][17] = {
+sal_Char const TAC_celltype_inputcheck[17][17] = {
 /* Cn */ /*  0,   1,   2,   3,   4,   5,   6,   7,   8,   9,   A,   B,   C,   D,   E,   F       */
 /* Cn-1 00 */{  'X', 'A', 'A', 'A', 'A', 'A', 'A', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R' },
      /* 10 */{  'X', 'A', 'A', 'A', 'S', 'S', 'A', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R' },
@@ -55,7 +55,7 @@ sal_Char TAC_celltype_inputcheck[17][17] = {
          { 'X', 'A', 'A', 'A', 'S', 'S', 'A', 'R', 'R', 'R', 'C', 'R', 'C', 'R', 'R', 'R', 'R' }
 };
 
-bool TAC_Composible[3][5] = {
+bool const TAC_Composible[3][5] = {
         /*  'A',    'C',        'S',        'R',        'X'   */
 /* Mode 0 */    {true,  true,   true,   true,   true}, // PASSTHROUGH = 0
 /* Mode 1 */    {true,  true,   true,   false,      true}, // BASIC = 1

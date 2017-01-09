@@ -46,7 +46,7 @@ private:
     oneToOneMapping(const oneToOneMapping&) = delete;
     oneToOneMapping& operator=(const oneToOneMapping&) = delete;
 public:
-    oneToOneMapping( OneToOneMappingTable_t *rpTable, const size_t rnSize, const size_t rnUnitSize = sizeof(OneToOneMappingTable_t) );
+    oneToOneMapping( OneToOneMappingTable_t const *rpTable, const size_t rnSize, const size_t rnUnitSize = sizeof(OneToOneMappingTable_t) );
     virtual ~oneToOneMapping();
 
     // binary search
@@ -56,7 +56,7 @@ public:
     sal_Unicode operator[] ( const sal_Unicode nKey ) const { return find( nKey ); };
 
 protected:
-    OneToOneMappingTable_t *mpTable;
+    OneToOneMappingTable_t const *mpTable;
     size_t                  mnSize;
 };
 

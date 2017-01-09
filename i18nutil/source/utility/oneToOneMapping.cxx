@@ -21,7 +21,7 @@
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-oneToOneMapping::oneToOneMapping( OneToOneMappingTable_t *rpTable, const size_t rnBytes, const size_t rnUnitSize )
+oneToOneMapping::oneToOneMapping( OneToOneMappingTable_t const *rpTable, const size_t rnBytes, const size_t rnUnitSize )
     : mpTable( rpTable ),
       mnSize( rnBytes / rnUnitSize )
 {
