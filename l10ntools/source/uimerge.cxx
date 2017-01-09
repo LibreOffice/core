@@ -29,8 +29,8 @@
 #include <fstream>
 #include <vector>
 
-OString sInputFileName;
-OString sOutputFile;
+static OString sInputFileName;
+static OString sOutputFile;
 
 int extractTranslations()
 {
