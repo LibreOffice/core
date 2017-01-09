@@ -176,7 +176,7 @@ sal_uInt32 Get10ThSec()
     return n10Ticks / CLOCKS_PER_SEC;
 }
 
-sal_Int32 m_nInReschedule = 0;  /// static counter for rescheduling
+static sal_Int32 m_nInReschedule = 0;  /// static counter for rescheduling
 
 void reschedule()
 {

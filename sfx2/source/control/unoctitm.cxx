@@ -99,7 +99,7 @@ enum URLTypeId
     URLType_COUNT
 };
 
-const char* URLTypeNames[URLType_COUNT] =
+const char* const URLTypeNames[URLType_COUNT] =
 {
     "bool",
     "byte",

@@ -79,7 +79,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::io;
 
 // needs to be converted to a better data structure
-SfxFormalArgument aFormalArgs[] = {
+SfxFormalArgument const aFormalArgs[] = {
     { reinterpret_cast<SfxType*>(&aSfxStringItem_Impl), "SuggestedSaveAsName", SID_DEFAULTFILENAME },
     { reinterpret_cast<SfxType*>(&aSfxStringItem_Impl), "SuggestedSaveAsDir", SID_DEFAULTFILEPATH },
     { reinterpret_cast<SfxType*>(&aSfxStringItem_Impl), "VersionAuthor", SID_DOCINFO_AUTHOR },

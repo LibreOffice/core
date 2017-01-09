@@ -55,7 +55,7 @@ static GtkWidget *pExitMenuItem = nullptr;
 static GtkWidget *pOpenMenuItem = nullptr;
 static GtkWidget *pDisableMenuItem = nullptr;
 #if ENABLE_GIO
-GFileMonitor* pMonitor = nullptr;
+static GFileMonitor* pMonitor = nullptr;
 #endif
 
 static void open_url_cb( GtkWidget *, gpointer data )

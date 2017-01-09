@@ -66,7 +66,7 @@ using namespace ::com::sun::star::document;
 const char SERVICENAME_CFGREADACCESS[] = "com.sun.star.configuration.ConfigurationAccess";
 
 // increase size of the text in the buttons on the left fMultiplier-times
-float fMultiplier = 1.4f;
+float const fMultiplier = 1.4f;
 
 BackingWindow::BackingWindow( vcl::Window* i_pParent ) :
     Window( i_pParent ),

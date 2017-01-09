@@ -251,7 +251,7 @@ public:
     }
 };
 
-SfxDocTemplate_Impl *gpTemplateData = nullptr;
+static SfxDocTemplate_Impl *gpTemplateData = nullptr;
 
 
 static bool getTextProperty_Impl( Content& rContent,
