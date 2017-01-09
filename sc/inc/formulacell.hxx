@@ -241,7 +241,14 @@ public:
        It is similar to HasOneReference(), but more general.
      */
     bool HasRefListExpressibleAsOneReference(ScRange& rRange) const;
-    bool            HasRelNameReference() const;
+
+    enum class RelNameRef
+    {
+        NONE,   ///< no relative reference from named expression
+        SINGLE, ///< only single cell relative reference
+        DOUBLE  ///< at least one range relative reference from named expression
+    };
+    RelNameRef      HasRelNameReference() const;
 
     bool UpdateReference(
         const sc::RefUpdateContext& rCxt, ScDocument* pUndoDoc = nullptr, const ScAddress* pUndoCellPos = nullptr );
