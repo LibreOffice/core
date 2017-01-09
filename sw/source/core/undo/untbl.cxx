@@ -209,7 +209,7 @@ private:
 
 };
 
-sal_uInt16 aSave_BoxContentSet[] = {
+sal_uInt16 const aSave_BoxContentSet[] = {
     RES_CHRATR_COLOR, RES_CHRATR_CROSSEDOUT,
     RES_CHRATR_FONT, RES_CHRATR_FONTSIZE,
     RES_CHRATR_POSTURE, RES_CHRATR_POSTURE,
@@ -1276,7 +1276,7 @@ void SaveBox::RestoreAttr( SwTableBox& rBox, SaveTable& rSTable )
                     std::shared_ptr<SfxItemSet> pSet( (*Ptrs.pContentAttrs)[ nSet++ ] );
                     if( pSet )
                     {
-                        sal_uInt16 *pRstAttr = aSave_BoxContentSet;
+                        sal_uInt16 const *pRstAttr = aSave_BoxContentSet;
                         while( *pRstAttr )
                         {
                             pCNd->ResetAttr( *pRstAttr, *(pRstAttr+1) );

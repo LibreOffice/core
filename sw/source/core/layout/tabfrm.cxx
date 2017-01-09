@@ -24,6 +24,7 @@
 #include "swtable.hxx"
 #include "dflyobj.hxx"
 #include <anchoreddrawobject.hxx>
+#include <fetab.hxx>
 #include <fmtanchr.hxx>
 #include "viewopt.hxx"
 #include "hints.hxx"
@@ -121,13 +122,6 @@ SwTabFrame::SwTabFrame( SwTabFrame &rTab )
     SetFollow( rTab.GetFollow() );
     rTab.SetFollow( this );
 }
-
-extern const SwTable   *g_pColumnCacheLastTable;
-extern const SwTabFrame  *g_pColumnCacheLastTabFrame;
-extern const SwFrame     *g_pColumnCacheLastCellFrame;
-extern const SwTable   *g_pRowCacheLastTable;
-extern const SwTabFrame  *g_pRowCacheLastTabFrame;
-extern const SwFrame     *g_pRowCacheLastCellFrame;
 
 void SwTabFrame::DestroyImpl()
 {

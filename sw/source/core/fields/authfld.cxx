@@ -595,7 +595,7 @@ OUString SwAuthorityField::GetDescription() const
     return SW_RES(STR_AUTHORITY_ENTRY);
 }
 
-const char* aFieldNames[] =
+const char* const aFieldNames[] =
 {
     "Identifier",
     "BibiliographicType",

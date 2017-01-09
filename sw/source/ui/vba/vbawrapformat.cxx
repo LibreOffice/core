@@ -16,6 +16,10 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
+#include <sal/config.h>
+
+#include "service.hxx"
 #include "vbawrapformat.hxx"
 #include <ooo/vba/word/WdWrapSideType.hpp>
 #include <ooo/vba/word/WdWrapType.hpp>
@@ -235,8 +239,8 @@ SwVbaWrapFormat::getServiceNames()
 namespace wrapformat
 {
 namespace sdecl = comphelper::service_decl;
-sdecl::vba_service_class_<SwVbaWrapFormat, sdecl::with_args<true> > serviceImpl;
-extern sdecl::ServiceDecl const serviceDecl(
+sdecl::vba_service_class_<SwVbaWrapFormat, sdecl::with_args<true> > const serviceImpl;
+sdecl::ServiceDecl const serviceDecl(
     serviceImpl,
     "SwVbaWrapFormat",
     "ooo.vba.word.WrapFormat" );

@@ -45,10 +45,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::xmloff::token;
 
-extern SvXMLItemMapEntry aXMLTableItemMap[];
-extern SvXMLItemMapEntry aXMLTableRowItemMap[];
-extern SvXMLItemMapEntry aXMLTableCellItemMap[];
-
 class SwXMLTableItemMapper_Impl: public SvXMLExportItemMapper
 {
     SwXMLBrushItemExport aBrushItemExport;

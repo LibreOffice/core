@@ -95,7 +95,7 @@ void SvXMLImportItemMapper::importXML( SfxItemSet& rSet,
         const OUString& rValue = xAttrList->getValueByIndex( i );
 
         // find a map entry for this attribute
-        SvXMLItemMapEntry* pEntry = mrMapEntries->getByName( nPrefix, aLocalName );
+        SvXMLItemMapEntry const * pEntry = mrMapEntries->getByName( nPrefix, aLocalName );
 
         if( pEntry )
         {

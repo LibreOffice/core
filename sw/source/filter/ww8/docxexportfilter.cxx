@@ -107,7 +107,7 @@ uno::Reference< uno::XInterface > SAL_CALL DocxExport_createInstance(const uno::
 extern "C"
 {
 
-::cppu::ImplementationEntry entries [] =
+::cppu::ImplementationEntry const entries [] =
 {
     {
         DocxExport_createInstance, DocxExport_getImplementationName,

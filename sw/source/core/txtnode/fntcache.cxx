@@ -32,6 +32,7 @@
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
 #include <breakit.hxx>
+#include <paintfrm.hxx>
 #include <viewsh.hxx>
 #include <viewopt.hxx>
 #include <fntcache.hxx>
@@ -2491,8 +2492,6 @@ sal_Int32 SwFont::GetTextBreak( SwDrawTextInfo& rInf, long nTextWidth )
 
     return nTextBreak2;
 }
-
-extern Color aGlobalRetoucheColor;
 
 bool SwDrawTextInfo::ApplyAutoColor( vcl::Font* pFont )
 {

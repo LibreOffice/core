@@ -37,6 +37,7 @@
 #include <editeng/unolingu.hxx>
 #include <breakit.hxx>
 #include <editeng/forbiddenruleitem.hxx>
+#include <paintfrm.hxx>
 #include <txatbase.hxx>
 #include <fmtinfmt.hxx>
 #include <swmodule.hxx>
@@ -527,8 +528,6 @@ SwTextPaintInfo::SwTextPaintInfo( SwTextFrame *pFrame, const SwRect &rPaint )
 {
     CtorInitTextPaintInfo( pFrame->getRootFrame()->GetCurrShell()->GetOut(), pFrame, rPaint );
 }
-
-extern Color aGlobalRetoucheColor;
 
 /// Returns if the current background color is dark.
 static bool lcl_IsDarkBackground( const SwTextPaintInfo& rInf )

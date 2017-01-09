@@ -55,11 +55,11 @@ using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 
-const char* cAddressDataAssignments     = "AddressDataAssignments";
-const char* cDBColumnAssignments        = "DBColumnAssignments";
-const char* cDataSourceName             = "DataSource/DataSourceName";
-const char* cDataTableName              = "DataSource/DataTableName" ;
-const char* cDataCommandType            = "DataSource/DataCommandType";
+const char cAddressDataAssignments[] = "AddressDataAssignments";
+const char cDBColumnAssignments[]    = "DBColumnAssignments";
+const char cDataSourceName[]         = "DataSource/DataSourceName";
+const char cDataTableName[]          = "DataSource/DataTableName" ;
+const char cDataCommandType[]        = "DataSource/DataCommandType";
 
 #define SECURE_PORT     465
 #define DEFAULT_PORT    25
@@ -284,7 +284,7 @@ SwMailMergeConfigItem_Impl::SwMailMergeConfigItem_Impl() :
         }
     }
     //read the list of data base assignments
-    Sequence<OUString> aAssignments = GetNodeNames(OUString::createFromAscii(cAddressDataAssignments));
+    Sequence<OUString> aAssignments = GetNodeNames(cAddressDataAssignments);
     if(aAssignments.getLength())
     {
         //create a list of property names to load the URLs of all data bases
@@ -294,18 +294,18 @@ SwMailMergeConfigItem_Impl::SwMailMergeConfigItem_Impl() :
         sal_Int32 nAssign;
         for(nAssign = 0; nAssign < aAssignProperties.getLength(); nAssign += 4)
         {
-            OUString sAssignPath = OUString::createFromAscii(cAddressDataAssignments);
+            OUString sAssignPath = cAddressDataAssignments;
             sAssignPath += "/";
             sAssignPath += pAssignments[nAssign / 4];
             sAssignPath += "/";
             pAssignProperties[nAssign] = sAssignPath;
-            pAssignProperties[nAssign] += OUString::createFromAscii(cDataSourceName);
+            pAssignProperties[nAssign] += cDataSourceName;
             pAssignProperties[nAssign + 1] = sAssignPath;
-            pAssignProperties[nAssign + 1] += OUString::createFromAscii(cDataTableName);
+            pAssignProperties[nAssign + 1] += cDataTableName;
             pAssignProperties[nAssign + 2] = sAssignPath;
-            pAssignProperties[nAssign + 2] += OUString::createFromAscii(cDataCommandType);
+            pAssignProperties[nAssign + 2] += cDataCommandType;
             pAssignProperties[nAssign + 3] = sAssignPath;
-            pAssignProperties[nAssign + 3] += OUString::createFromAscii(cDBColumnAssignments);
+            pAssignProperties[nAssign + 3] += cDBColumnAssignments;
         }
         Sequence<Any> aAssignValues = GetProperties(aAssignProperties);
         const Any* pAssignValues = aAssignValues.getConstArray();
@@ -569,7 +569,7 @@ void  SwMailMergeConfigItem_Impl::ImplCommit()
     //store the changed / new assignments
 
     //load the existing node names to find new names
-    Sequence<OUString> aAssignments = GetNodeNames(OUString::createFromAscii(cAddressDataAssignments));
+    Sequence<OUString> aAssignments = GetNodeNames(cAddressDataAssignments);
 
     std::vector<DBAddressDataAssignment>::iterator aAssignIter;
     for(aAssignIter = m_aAddressDataAssignments.begin();
@@ -582,7 +582,7 @@ void  SwMailMergeConfigItem_Impl::ImplCommit()
                         aAssignIter->sConfigNodeName :
                         lcl_CreateNodeName(aAssignments);
             OUString sSlash = "/";
-            OUString sNodePath = OUString::createFromAscii(cAddressDataAssignments);
+            OUString sNodePath = cAddressDataAssignments;
             sNodePath += sSlash;
             sNodePath += sNewNode;
             sNodePath += sSlash;
@@ -590,19 +590,19 @@ void  SwMailMergeConfigItem_Impl::ImplCommit()
             Sequence< PropertyValue > aNewValues(4);
             PropertyValue* pNewValues = aNewValues.getArray();
             pNewValues[0].Name = sNodePath;
-            pNewValues[0].Name += OUString::createFromAscii(cDataSourceName);
+            pNewValues[0].Name += cDataSourceName;
             pNewValues[0].Value <<= aAssignIter->aDBData.sDataSource;
             pNewValues[1].Name = sNodePath;
-            pNewValues[1].Name += OUString::createFromAscii(cDataTableName);
+            pNewValues[1].Name += cDataTableName;
             pNewValues[1].Value <<= aAssignIter->aDBData.sCommand;
             pNewValues[2].Name = sNodePath;
-            pNewValues[2].Name += OUString::createFromAscii(cDataCommandType);
+            pNewValues[2].Name += cDataCommandType;
             pNewValues[2].Value <<= aAssignIter->aDBData.nCommandType;
             pNewValues[3].Name = sNodePath;
-            pNewValues[3].Name += OUString::createFromAscii(cDBColumnAssignments);
+            pNewValues[3].Name += cDBColumnAssignments;
             pNewValues[3].Value <<= aAssignIter->aDBColumnAssignments;
 
-            SetSetProperties(OUString::createFromAscii(cAddressDataAssignments), aNewValues);
+            SetSetProperties(cAddressDataAssignments, aNewValues);
         }
     }
 

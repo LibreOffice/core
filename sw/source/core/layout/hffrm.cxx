@@ -33,8 +33,6 @@
 #include <objectformatter.hxx>
 #include <o3tl/make_unique.hxx>
 
-extern bool bObjsDirect;    //frmtool.cxx
-
 static SwTwips lcl_GetFrameMinHeight(const SwLayoutFrame & rFrame)
 {
     const SwFormatFrameSize &rSz = rFrame.GetFormat()->GetFrameSize();

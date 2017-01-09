@@ -52,11 +52,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-extern SvXMLItemMapEntry aXMLTableItemMap[];
-extern SvXMLItemMapEntry aXMLTableColItemMap[];
-extern SvXMLItemMapEntry aXMLTableRowItemMap[];
-extern SvXMLItemMapEntry aXMLTableCellItemMap[];
-
 class SwXMLImportTableItemMapper_Impl: public SvXMLImportItemMapper
 {
 

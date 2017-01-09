@@ -597,10 +597,10 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-const char* START = "START: ";
-const char* END = "END: ";
-
 #if defined TIMELOG
+
+const char* const START = "START: ";
+const char* const END = "END: ";
 
 class PerformanceTracer
 {

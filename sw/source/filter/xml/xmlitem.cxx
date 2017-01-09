@@ -47,7 +47,7 @@ SvXMLImportContext *SvXMLItemSetContext::CreateChildContext( sal_uInt16 nPrefix,
                                             const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
     SvXMLItemMapEntriesRef xMapEntries = rIMapper.getMapEntries();
-    SvXMLItemMapEntry* pEntry = xMapEntries->getByName( nPrefix, rLocalName );
+    SvXMLItemMapEntry const * pEntry = xMapEntries->getByName( nPrefix, rLocalName );
 
     if( pEntry && 0 != (pEntry->nMemberId & MID_SW_FLAG_ELEMENT_ITEM_IMPORT) )
     {

@@ -16,6 +16,10 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
+#include <sal/config.h>
+
+#include "service.hxx"
 #include "vbadocument.hxx"
 #include "vbarange.hxx"
 #include "vbarangehelper.hxx"
@@ -158,8 +162,8 @@ SwVbaDocument::Bookmarks( const uno::Any& rIndex ) throw ( uno::RuntimeException
 uno::Any SAL_CALL
 SwVbaDocument::Variables( const uno::Any& rIndex ) throw ( uno::RuntimeException, std::exception )
 {
-    uno::Reference< document::XDocumentPropertiesSupplier > xDocumentPropertiesSupplier( getModel(),uno::UNO_QUERY_THROW );
-    uno::Reference< document::XDocumentProperties > xDocumentProperties =  xDocumentPropertiesSupplier->getDocumentProperties();
+    uno::Reference< css::document::XDocumentPropertiesSupplier > xDocumentPropertiesSupplier( getModel(),uno::UNO_QUERY_THROW );
+    uno::Reference< css::document::XDocumentProperties > xDocumentProperties =  xDocumentPropertiesSupplier->getDocumentProperties();
     uno::Reference< beans::XPropertyAccess > xUserDefined( xDocumentProperties->getUserDefinedProperties(), uno::UNO_QUERY_THROW );
 
     uno::Reference< XCollection > xVariables( new SwVbaVariables( this, mxContext, xUserDefined ) );
@@ -251,9 +255,9 @@ uno::Any SAL_CALL
 SwVbaDocument::getAttachedTemplate() throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< word::XTemplate > xTemplate;
-    uno::Reference<document::XDocumentPropertiesSupplier> const xDocPropSupp(
+    uno::Reference<css::document::XDocumentPropertiesSupplier> const xDocPropSupp(
             getModel(), uno::UNO_QUERY_THROW);
-    uno::Reference< document::XDocumentProperties > xDocProps( xDocPropSupp->getDocumentProperties(), uno::UNO_QUERY_THROW );
+    uno::Reference< css::document::XDocumentProperties > xDocProps( xDocPropSupp->getDocumentProperties(), uno::UNO_QUERY_THROW );
     OUString sTemplateUrl = xDocProps->getTemplateURL();
 
     xTemplate = new SwVbaTemplate( this, mxContext, sTemplateUrl );
@@ -278,9 +282,9 @@ SwVbaDocument::setAttachedTemplate( const css::uno::Any& _attachedtemplate ) thr
         osl::FileBase::getFileURLFromSystemPath( sTemplate, aURL );
 
     uno::Reference< word::XTemplate > xTemplate;
-    uno::Reference<document::XDocumentPropertiesSupplier> const xDocPropSupp(
+    uno::Reference<css::document::XDocumentPropertiesSupplier> const xDocPropSupp(
             getModel(), uno::UNO_QUERY_THROW );
-    uno::Reference< document::XDocumentProperties > xDocProps( xDocPropSupp->getDocumentProperties(), uno::UNO_QUERY_THROW );
+    uno::Reference< css::document::XDocumentProperties > xDocProps( xDocPropSupp->getDocumentProperties(), uno::UNO_QUERY_THROW );
     xDocProps->setTemplateURL( aURL );
 }
 
@@ -391,7 +395,7 @@ void SAL_CALL SwVbaDocument::ClosePrintPreview(  ) throw (uno::RuntimeException,
 uno::Any SAL_CALL
 SwVbaDocument::Revisions( const uno::Any& index ) throw (uno::RuntimeException, std::exception)
 {
-    uno::Reference< document::XRedlinesSupplier > xRedlinesSupp( mxTextDocument, uno::UNO_QUERY_THROW );
+    uno::Reference< css::document::XRedlinesSupplier > xRedlinesSupp( mxTextDocument, uno::UNO_QUERY_THROW );
     uno::Reference< container::XIndexAccess > xRedlines( xRedlinesSupp->getRedlines(), uno::UNO_QUERY_THROW );
     uno::Reference< XCollection > xCol( new SwVbaRevisions( this, mxContext, getModel(), xRedlines ) );
     if ( index.hasValue() )
@@ -513,8 +517,8 @@ SwVbaDocument::getServiceNames()
 namespace document
 {
 namespace sdecl = comphelper::service_decl;
-sdecl::vba_service_class_<SwVbaDocument, sdecl::with_args<true> > serviceImpl;
-extern sdecl::ServiceDecl const serviceDecl(
+sdecl::vba_service_class_<SwVbaDocument, sdecl::with_args<true> > const serviceImpl;
+sdecl::ServiceDecl const serviceDecl(
     serviceImpl,
     "SwVbaDocument",
     "ooo.vba.word.Document" );

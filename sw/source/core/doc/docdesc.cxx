@@ -18,6 +18,7 @@
  */
 
 #include <cmdid.h>
+#include <init.hxx>
 #include <svx/svdmodel.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/paperinf.hxx>
@@ -682,12 +683,6 @@ SwPageDesc* SwDoc::MakePageDesc(const OUString &rName, const SwPageDesc *pCpy,
     getIDocumentState().SetModified();
     return pNew;
 }
-
-// We collect the GlobalNames of the servers at runtime, who don't want to be notified
-// about printer changes. Thereby saving loading a lot of objects (luckily all foreign
-// objects are mapped to one ID).
-// Initialisation and deinitialisation can be found in init.cxx
-extern std::vector<SvGlobalName*> *pGlobalOLEExcludeList;
 
 void SwDoc::PrtOLENotify( bool bAll )
 {

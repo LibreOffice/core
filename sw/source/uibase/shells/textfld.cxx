@@ -74,8 +74,6 @@
 
 using namespace nsSwDocInfoSubType;
 
-extern bool g_bNoInterrupt;       // in swmodule.cxx
-
 static OUString lcl_BuildTitleWithRedline( const SwRangeRedline *pRedline )
 {
     const OUString sTitle(SW_RESSTR(STR_REDLINE_COMMENT));

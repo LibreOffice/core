@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include "service.hxx"
 #include "vbaeventshelper.hxx"
 #include <com/sun/star/script/ModuleType.hpp>
 #include <com/sun/star/script/vba/VBAEventId.hpp>
@@ -82,8 +85,8 @@ OUString SwVbaEventsHelper::implGetDocumentModuleName( const EventHandlerInfo& /
 namespace vbaeventshelper
 {
 namespace sdecl = comphelper::service_decl;
-sdecl::inheritingClass_<SwVbaEventsHelper, sdecl::with_args<true> > serviceImpl;
-extern sdecl::ServiceDecl const serviceDecl(
+sdecl::inheritingClass_<SwVbaEventsHelper, sdecl::with_args<true> > const serviceImpl;
+sdecl::ServiceDecl const serviceDecl(
     serviceImpl,
     "SwVbaEventsHelper",
     "com.sun.star.document.vba.VBATextEventProcessor" );

@@ -30,6 +30,7 @@
 #include <fmturl.hxx>
 #include <frmfmt.hxx>
 #include <wrtsh.hxx>
+#include <edtdd.hxx>
 #include <edtwin.hxx>
 #include <view.hxx>
 #include <viewopt.hxx>
@@ -42,10 +43,6 @@
 using namespace ::com::sun::star;
 
 // no include "dbgoutsw.hxx" here!!!!!!
-
-extern bool g_bNoInterrupt;
-extern bool g_bFrameDrag;
-extern bool g_bDDTimerStarted;
 
 bool g_bExecuteDrag = false;
 

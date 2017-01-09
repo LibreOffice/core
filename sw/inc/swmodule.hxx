@@ -260,6 +260,8 @@ namespace sw
 SW_DLLPUBLIC Color* GetActiveRetoucheColor();
 }
 
+extern bool g_bNoInterrupt;
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

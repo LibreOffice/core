@@ -72,7 +72,7 @@ void SvXMLExportItemMapper::exportXML( const SvXMLExport& rExport,
 
     while( nIndex < nCount )
     {
-        SvXMLItemMapEntry& rEntry = mrMapEntries->getByIndex( nIndex );
+        SvXMLItemMapEntry const & rEntry = mrMapEntries->getByIndex( nIndex );
 
         // we have a valid map entry here, so lets use it...
         if( 0 == (rEntry.nMemberId & MID_SW_FLAG_NO_ITEM_EXPORT) )
@@ -228,7 +228,7 @@ void SvXMLExportItemMapper::exportElementItems(
     for( size_t nIndex = 0; nIndex < nCount; ++nIndex )
     {
         const sal_uInt16 nElement = rIndexArray[ nIndex ];
-        SvXMLItemMapEntry& rEntry = mrMapEntries->getByIndex( nElement );
+        SvXMLItemMapEntry const & rEntry = mrMapEntries->getByIndex( nElement );
         OSL_ENSURE( 0 != (rEntry.nMemberId & MID_SW_FLAG_ELEMENT_ITEM_EXPORT),
                     "wrong mid flag!" );
 

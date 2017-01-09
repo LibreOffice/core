@@ -445,9 +445,9 @@ std::vector<SvGlobalName*> *pGlobalOLEExcludeList = nullptr;
 SwAutoCompleteWord* SwDoc::mpACmpltWords = nullptr;
 
 SwCheckIt* pCheckIt = nullptr;
-CharClass* pAppCharClass = nullptr;
+static CharClass* pAppCharClass = nullptr;
 
-CollatorWrapper* pCollator = nullptr,
+static CollatorWrapper* pCollator = nullptr,
                 *pCaseCollator = nullptr;
 
 salhelper::SingletonRef<SwCalendarWrapper>* s_getCalendarWrapper()

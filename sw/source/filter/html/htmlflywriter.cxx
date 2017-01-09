@@ -61,6 +61,7 @@
 #include "frmfmt.hxx"
 #include "wrthtml.hxx"
 #include "css1kywd.hxx"
+#include "htmlatr.hxx"
 #include "htmlfly.hxx"
 
 using namespace css;
@@ -140,8 +141,6 @@ static Writer& OutHTML_FrameFormatGrfNode( Writer& rWrt, const SwFrameFormat& rF
 
 static Writer& OutHTML_FrameFormatAsMarquee( Writer& rWrt, const SwFrameFormat& rFrameFormat,
                                         const SdrObject& rSdrObj    );
-
-extern HTMLOutEvent aAnchorEventTable[];
 
 static HTMLOutEvent aImageEventTable[] =
 {

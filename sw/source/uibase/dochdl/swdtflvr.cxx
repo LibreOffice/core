@@ -89,6 +89,7 @@
 #include <docary.hxx>
 #include <section.hxx>
 #include <ndtxt.hxx>
+#include <edtdd.hxx>
 #include <edtwin.hxx>
 #include <navicont.hxx>
 #include <swcont.hxx>
@@ -131,10 +132,6 @@
 #include <sfx2/sfxresid.hxx>
 
 #include <memory>
-
-extern bool g_bFrameDrag;
-extern bool g_bDDINetAttr;
-extern bool g_bExecuteDrag;
 
 #define OLESIZE 11905 - 2 * lMinBorder, 6 * MM50
 

@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <vbahelper/helperdecl.hxx>
+#include "service.hxx"
 #include "vbaglobals.hxx"
 #include <osl/diagnose.h>
 #include <sal/macros.h>
@@ -176,8 +177,8 @@ SwVbaGlobals::getAvailableServiceNames(  ) throw (uno::RuntimeException, std::ex
 namespace globals
 {
 namespace sdecl = comphelper::service_decl;
-sdecl::vba_service_class_<SwVbaGlobals, sdecl::with_args<true> > serviceImpl;
-extern sdecl::ServiceDecl const serviceDecl(
+sdecl::vba_service_class_<SwVbaGlobals, sdecl::with_args<true> > const serviceImpl;
+sdecl::ServiceDecl const serviceDecl(
     serviceImpl,
     "SwVbaGlobals",
     "ooo.vba.word.Globals" );

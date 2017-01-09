@@ -90,7 +90,7 @@ bool SwViewShell::mbLstAct = false;
 ShellResource *SwViewShell::mpShellRes = nullptr;
 vcl::DeleteOnDeinit< VclPtr<vcl::Window> > SwViewShell::mpCareWindow(new VclPtr<vcl::Window>);
 
-bool bInSizeNotify = false;
+static bool bInSizeNotify = false;
 
 
 using namespace ::com::sun::star;

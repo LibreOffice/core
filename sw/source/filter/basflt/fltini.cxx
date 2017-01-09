@@ -67,7 +67,7 @@ Reader* GetWW8Reader();
 
 // Note: if editing, please don't forget to modify also the enum
 // ReaderWriterEnum and aFilterDetect in shellio.hxx
-SwReaderWriterEntry aReaderWriter[] =
+static SwReaderWriterEntry aReaderWriter[] =
 {
     SwReaderWriterEntry( &::GetRTFReader, &::GetRTFWriter,  true  ),
     SwReaderWriterEntry( nullptr,               &::GetASCWriter,  false ),

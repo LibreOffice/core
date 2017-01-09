@@ -42,7 +42,7 @@
 //!! order of entries has to be the same as in
 //!! CommandStruct SwCondCollItem::aCmds[]
 
-const char *aCommandContext[COND_COMMAND_COUNT] =
+const char * const aCommandContext[COND_COMMAND_COUNT] =
 {
     "TableHeader",
     "Table",

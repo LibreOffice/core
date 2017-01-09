@@ -310,6 +310,11 @@ public:
     virtual FactoryFunction GetUITestFactory() const override;
 };
 
+extern bool g_bFrameDrag;
+extern bool g_bDDTimerStarted;
+extern bool g_bFlushCharBuffer;
+extern bool g_bDDINetAttr;
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

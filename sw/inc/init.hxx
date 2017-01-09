@@ -21,9 +21,12 @@
 
 #include <sal/config.h>
 
+#include <vector>
+
 #include <osl/module.h>
 #include <osl/module.hxx>
 
+class SvGlobalName;
 class SwViewShell;
 
 void InitCore();   // bastyp/init.cxx
@@ -60,6 +63,12 @@ void SetShell( SwViewShell *pSh );
 // text/txtfrm.cxx
 void TextInit_();
 void TextFinit();
+
+// We collect the GlobalNames of the servers at runtime, who don't want to be notified
+// about printer changes. Thereby saving loading a lot of objects (luckily all foreign
+// objects are mapped to one ID).
+// Initialisation and deinitialisation can be found in init.cxx
+extern std::vector<SvGlobalName*> *pGlobalOLEExcludeList;
 
 #endif
 

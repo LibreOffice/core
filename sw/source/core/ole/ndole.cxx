@@ -83,7 +83,7 @@ public:
     void RemoveObj( SwOLEObj& rObj );
 };
 
-std::shared_ptr<SwOLELRUCache> g_pOLELRU_Cache;
+static std::shared_ptr<SwOLELRUCache> g_pOLELRU_Cache;
 
 class SwOLEListener_Impl : public ::cppu::WeakImplHelper< embed::XStateChangeListener >
 {

@@ -28,6 +28,7 @@
 #include <editeng/brushitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <svtools/ruler.hxx>
+#include <fetab.hxx>
 #include <swwait.hxx>
 #include <fmtfsize.hxx>
 #include <fmtornt.hxx>
@@ -72,13 +73,13 @@ using namespace ::com::sun::star;
 inline bool IsSame( long nA, long nB ) { return  std::abs(nA-nB) <= COLFUZZY; }
 
 // table column cache
-SwTabCols *pLastCols   = nullptr;
+static SwTabCols *pLastCols   = nullptr;
 const SwTable   *g_pColumnCacheLastTable  = nullptr;
 const SwTabFrame  *g_pColumnCacheLastTabFrame = nullptr;
 const SwFrame     *g_pColumnCacheLastCellFrame = nullptr;
 
 // table row cache
-SwTabCols *pLastRows   = nullptr;
+static SwTabCols *pLastRows   = nullptr;
 const SwTable   *g_pRowCacheLastTable  = nullptr;
 const SwTabFrame  *g_pRowCacheLastTabFrame = nullptr;
 const SwFrame     *g_pRowCacheLastCellFrame = nullptr;

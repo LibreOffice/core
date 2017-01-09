@@ -665,6 +665,8 @@ VclPtr<SfxTabPage> CreatePrintOptionsPage( vcl::Window *pParent,
                                            const SfxItemSet &rOptions,
                                            bool bPreview);
 
+extern bool bDocSzUpdated;
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

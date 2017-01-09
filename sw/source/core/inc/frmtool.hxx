@@ -112,6 +112,8 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc, sal_uLong nIndex,
 void MakeFrames( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
                             const SwNodeIndex &rEndIdx );
 
+extern bool bObjsDirect;
+
 // prevent creation of Flys in InsertCnt_, e.g. for table headlines
 extern bool bDontCreateObjects;
 

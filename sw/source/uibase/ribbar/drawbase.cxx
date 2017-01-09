@@ -33,13 +33,12 @@
 #include "drawbase.hxx"
 #include "edtwin.hxx"
 #include "caption.hxx"
+#include "swmodule.hxx"
 #include "swundo.hxx"
 #include <SwRewriter.hxx>
 #include "comcore.hrc"
 
 using namespace ::com::sun::star;
-
-extern bool g_bNoInterrupt;       // in swmodule.cxx
 
 SwDrawBase::SwDrawBase(SwWrtShell* pSwWrtShell, SwEditWin* pWindow, SwView* pSwView) :
     m_pView(pSwView),

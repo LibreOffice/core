@@ -123,8 +123,6 @@ namespace o3tl {
 
 #define DOT_LEADERS_MAX_WIDTH   18
 
-extern SwAttrFnTab aCSS1AttrFnTab;
-
 static Writer& OutCSS1_SwFormat( Writer& rWrt, const SwFormat& rFormat,
                               IDocumentStylePoolAccess /*SwDoc*/ *pDoc, SwDoc *pTemplate );
 static Writer& OutCSS1_SwPageDesc( Writer& rWrt, const SwPageDesc& rFormat,
@@ -480,68 +478,6 @@ void SwHTMLWriter::OutCSS1_PixelProperty( const sal_Char *pProp, long nVal,
 {
     OString sOut(OString::number(ToPixel(nVal,bVert)) + sCSS1_UNIT_px);
     OutCSS1_PropertyAscii(pProp, sOut);
-}
-
-void SwHTMLWriter::OutCSS1_SfxItemSet( const SfxItemSet& rItemSet,
-                                       bool bDeep )
-{
-    // print ItemSet, including all attributes
-    Out_SfxItemSet( aCSS1AttrFnTab, *this, rItemSet, bDeep );
-
-    // some Attributes require special treatment
-    const SfxPoolItem *pItem = nullptr;
-
-    // Underline, Overline, CrossedOut and Blink form together a CSS1-Property
-    // (doesn't work of course for Hints)
-    if( !IsCSS1Source(CSS1_OUTMODE_HINT) )
-    {
-        const SvxUnderlineItem *pUnderlineItem = nullptr;
-        if( SfxItemState::SET==rItemSet.GetItemState( RES_CHRATR_UNDERLINE, bDeep, &pItem ))
-            pUnderlineItem = static_cast<const SvxUnderlineItem *>(pItem);
-
-        const SvxOverlineItem *pOverlineItem = nullptr;
-        if( SfxItemState::SET==rItemSet.GetItemState( RES_CHRATR_OVERLINE, bDeep, &pItem ))
-            pOverlineItem = static_cast<const SvxOverlineItem *>(pItem);
-
-        const SvxCrossedOutItem *pCrossedOutItem = nullptr;
-        if( SfxItemState::SET==rItemSet.GetItemState( RES_CHRATR_CROSSEDOUT, bDeep, &pItem ))
-            pCrossedOutItem = static_cast<const SvxCrossedOutItem *>(pItem);
-
-        const SvxBlinkItem *pBlinkItem = nullptr;
-        if( SfxItemState::SET==rItemSet.GetItemState( RES_CHRATR_BLINK, bDeep, &pItem ))
-            pBlinkItem = static_cast<const SvxBlinkItem *>(pItem);
-
-        if( pUnderlineItem || pOverlineItem || pCrossedOutItem || pBlinkItem )
-            OutCSS1_SvxTextLn_SvxCrOut_SvxBlink( *this, pUnderlineItem,
-                                                 pOverlineItem,
-                                                 pCrossedOutItem,
-                                                 pBlinkItem );
-
-        OutCSS1_SvxFormatBreak_SwFormatPDesc_SvxFormatKeep( *this, rItemSet, bDeep );
-    }
-
-    if( !m_bFirstCSS1Property )
-    {
-        // if a Property was exported as part of a Style-Option,
-        // the Option still needs to be finished
-        OStringBuffer sOut;
-        switch( m_nCSS1OutMode & CSS1_OUTMODE_ANY_OFF )
-        {
-        case CSS1_OUTMODE_SPAN_TAG_OFF:
-            sOut.append(sCSS1_span_tag_end);
-            break;
-
-        case CSS1_OUTMODE_STYLE_OPT_OFF:
-            sOut.append(cCSS1_style_opt_end);
-            break;
-
-        case CSS1_OUTMODE_RULE_OFF:
-            sOut.append(sCSS1_rule_end);
-            break;
-        }
-        if (!sOut.isEmpty())
-            Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
-    }
 }
 
 void SwHTMLWriter::OutStyleSheet( const SwPageDesc& rPageDesc )
@@ -1883,37 +1819,6 @@ Writer& OutCSS1_ParaTagStyleOpt( Writer& rWrt, const SfxItemSet& rItemSet )
     SwCSS1OutMode aMode( rHTMLWrt, rHTMLWrt.m_nCSS1Script|CSS1_OUTMODE_STYLE_OPT |
                                    CSS1_OUTMODE_ENCODE|CSS1_OUTMODE_PARA, nullptr );
     rHTMLWrt.OutCSS1_SfxItemSet( rItemSet, false );
-
-    return rWrt;
-}
-
-Writer& OutCSS1_HintSpanTag( Writer& rWrt, const SfxPoolItem& rHt )
-{
-    SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
-
-    SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_SPAN_TAG |
-                                   CSS1_OUTMODE_ENCODE|CSS1_OUTMODE_HINT, nullptr );
-
-    Out( aCSS1AttrFnTab, rHt, rWrt );
-
-    if( !rHTMLWrt.m_bFirstCSS1Property  && rHTMLWrt.m_bTagOn )
-        rWrt.Strm().WriteCharPtr( sCSS1_span_tag_end );
-
-    return rWrt;
-}
-
-Writer& OutCSS1_HintStyleOpt( Writer& rWrt, const SfxPoolItem& rHt )
-{
-    SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
-
-    SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_STYLE_OPT_ON |
-                                   CSS1_OUTMODE_ENCODE|
-                                   CSS1_OUTMODE_HINT, nullptr );
-
-    Out( aCSS1AttrFnTab, rHt, rWrt );
-
-    if( !rHTMLWrt.m_bFirstCSS1Property )
-        rWrt.Strm().WriteChar( '\"' );
 
     return rWrt;
 }
@@ -3580,7 +3485,7 @@ static Writer& OutCSS1_SvxFrameDirection( Writer& rWrt, const SfxPoolItem& rHt )
  * They are local structures, only needed within the HTML-DLL.
  */
 
-SwAttrFnTab aCSS1AttrFnTab = {
+static SwAttrFnTab const aCSS1AttrFnTab = {
 /* RES_CHRATR_CASEMAP   */          OutCSS1_SvxCaseMap,
 /* RES_CHRATR_CHARSETCOLOR  */      nullptr,
 /* RES_CHRATR_COLOR */              OutCSS1_SvxColor,
@@ -3738,5 +3643,98 @@ SwAttrFnTab aCSS1AttrFnTab = {
 /* RES_BOXATR_FORMULA */            nullptr,
 /* RES_BOXATR_VALUE */              nullptr
 };
+
+void SwHTMLWriter::OutCSS1_SfxItemSet( const SfxItemSet& rItemSet,
+                                       bool bDeep )
+{
+    // print ItemSet, including all attributes
+    Out_SfxItemSet( aCSS1AttrFnTab, *this, rItemSet, bDeep );
+
+    // some Attributes require special treatment
+    const SfxPoolItem *pItem = nullptr;
+
+    // Underline, Overline, CrossedOut and Blink form together a CSS1-Property
+    // (doesn't work of course for Hints)
+    if( !IsCSS1Source(CSS1_OUTMODE_HINT) )
+    {
+        const SvxUnderlineItem *pUnderlineItem = nullptr;
+        if( SfxItemState::SET==rItemSet.GetItemState( RES_CHRATR_UNDERLINE, bDeep, &pItem ))
+            pUnderlineItem = static_cast<const SvxUnderlineItem *>(pItem);
+
+        const SvxOverlineItem *pOverlineItem = nullptr;
+        if( SfxItemState::SET==rItemSet.GetItemState( RES_CHRATR_OVERLINE, bDeep, &pItem ))
+            pOverlineItem = static_cast<const SvxOverlineItem *>(pItem);
+
+        const SvxCrossedOutItem *pCrossedOutItem = nullptr;
+        if( SfxItemState::SET==rItemSet.GetItemState( RES_CHRATR_CROSSEDOUT, bDeep, &pItem ))
+            pCrossedOutItem = static_cast<const SvxCrossedOutItem *>(pItem);
+
+        const SvxBlinkItem *pBlinkItem = nullptr;
+        if( SfxItemState::SET==rItemSet.GetItemState( RES_CHRATR_BLINK, bDeep, &pItem ))
+            pBlinkItem = static_cast<const SvxBlinkItem *>(pItem);
+
+        if( pUnderlineItem || pOverlineItem || pCrossedOutItem || pBlinkItem )
+            OutCSS1_SvxTextLn_SvxCrOut_SvxBlink( *this, pUnderlineItem,
+                                                 pOverlineItem,
+                                                 pCrossedOutItem,
+                                                 pBlinkItem );
+
+        OutCSS1_SvxFormatBreak_SwFormatPDesc_SvxFormatKeep( *this, rItemSet, bDeep );
+    }
+
+    if( !m_bFirstCSS1Property )
+    {
+        // if a Property was exported as part of a Style-Option,
+        // the Option still needs to be finished
+        OStringBuffer sOut;
+        switch( m_nCSS1OutMode & CSS1_OUTMODE_ANY_OFF )
+        {
+        case CSS1_OUTMODE_SPAN_TAG_OFF:
+            sOut.append(sCSS1_span_tag_end);
+            break;
+
+        case CSS1_OUTMODE_STYLE_OPT_OFF:
+            sOut.append(cCSS1_style_opt_end);
+            break;
+
+        case CSS1_OUTMODE_RULE_OFF:
+            sOut.append(sCSS1_rule_end);
+            break;
+        }
+        if (!sOut.isEmpty())
+            Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
+    }
+}
+
+Writer& OutCSS1_HintSpanTag( Writer& rWrt, const SfxPoolItem& rHt )
+{
+    SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
+
+    SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_SPAN_TAG |
+                                   CSS1_OUTMODE_ENCODE|CSS1_OUTMODE_HINT, nullptr );
+
+    Out( aCSS1AttrFnTab, rHt, rWrt );
+
+    if( !rHTMLWrt.m_bFirstCSS1Property  && rHTMLWrt.m_bTagOn )
+        rWrt.Strm().WriteCharPtr( sCSS1_span_tag_end );
+
+    return rWrt;
+}
+
+Writer& OutCSS1_HintStyleOpt( Writer& rWrt, const SfxPoolItem& rHt )
+{
+    SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
+
+    SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_STYLE_OPT_ON |
+                                   CSS1_OUTMODE_ENCODE|
+                                   CSS1_OUTMODE_HINT, nullptr );
+
+    Out( aCSS1AttrFnTab, rHt, rWrt );
+
+    if( !rHTMLWrt.m_bFirstCSS1Property )
+        rWrt.Strm().WriteChar( '\"' );
+
+    return rWrt;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

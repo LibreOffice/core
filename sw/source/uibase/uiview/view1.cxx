@@ -38,8 +38,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <wordcountdialog.hxx>
 
-extern bool bDocSzUpdated;
-
 void SwView::Activate(bool bMDIActivate)
 {
     // fdo#40438 Update the layout to make sure everything is correct before showing the content
@@ -115,9 +113,7 @@ void SwView::Activate(bool bMDIActivate)
 
 void SwView::Deactivate(bool bMDIActivate)
 {
-    extern bool g_bFlushCharBuffer ;
-        // Are Characters still in the input buffer?
-    if( g_bFlushCharBuffer )
+    if( g_bFlushCharBuffer ) // Are Characters still in the input buffer?
         GetEditWin().FlushInBuffer();
 
     if( bMDIActivate )

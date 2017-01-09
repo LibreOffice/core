@@ -39,10 +39,10 @@
 
 // Global Pointer
 
-SwGlossaries*       pGlossaries = nullptr;
+static SwGlossaries* pGlossaries = nullptr;
 
 // Provides all needed paths. Is initialized by UI.
-SwGlossaryList*     pGlossaryList = nullptr;
+static SwGlossaryList* pGlossaryList = nullptr;
 
 namespace
 {

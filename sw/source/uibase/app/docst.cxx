@@ -86,8 +86,6 @@
 #include <paratr.hxx>
 #include <tblafmt.hxx>
 
-extern bool g_bNoInterrupt;       // in swmodule.cxx
-
 using namespace ::com::sun::star;
 
 void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)

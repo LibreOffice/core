@@ -69,6 +69,7 @@
 #include <swtable.hxx>
 #include "fldbas.hxx"
 #include <breakit.hxx>
+#include <htmlatr.hxx>
 #include <htmlnum.hxx>
 #include <wrthtml.hxx>
 #include <htmlfly.hxx>
@@ -82,7 +83,7 @@
 
 using namespace css;
 
-HTMLOutEvent aAnchorEventTable[] =
+HTMLOutEvent const aAnchorEventTable[] =
 {
     { OOO_STRING_SVTOOLS_HTML_O_SDonclick,      OOO_STRING_SVTOOLS_HTML_O_onclick,      SFX_EVENT_MOUSECLICK_OBJECT },
     { OOO_STRING_SVTOOLS_HTML_O_SDonmouseover,  OOO_STRING_SVTOOLS_HTML_O_onmouseover,  SFX_EVENT_MOUSEOVER_OBJECT  },

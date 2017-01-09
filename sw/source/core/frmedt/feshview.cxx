@@ -64,6 +64,7 @@
 #include <fmtcnct.hxx>
 #include <docary.hxx>
 #include <tblsel.hxx>
+#include <swmodule.hxx>
 #include <swtable.hxx>
 #include <flyfrms.hxx>
 #include "fesh.hxx"
@@ -157,7 +158,6 @@ static void lcl_GrabCursor( SwFEShell* pSh, SwFlyFrame* pOldSelFly)
     {
         // now call set macro if applicable
         pSh->GetFlyMacroLnk().Call( static_cast<const SwFlyFrameFormat*>(pFlyFormat) );
-extern bool g_bNoInterrupt;       // in swmodule.cxx
         // if a dialog was started inside a macro, then
         // MouseButtonUp arrives at macro and not to us. Therefore
         // flag is always set here and will never be switched to

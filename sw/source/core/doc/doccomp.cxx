@@ -317,7 +317,8 @@ struct CmpOptionsContainer
     SwCompareMode eCmpMode;
     int nIgnoreLen;
     bool bUseRsid;
-} CmpOptions;
+};
+static CmpOptionsContainer CmpOptions;
 
 class CommonSubseq
 {

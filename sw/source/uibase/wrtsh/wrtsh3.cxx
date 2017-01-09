@@ -28,6 +28,7 @@
 #include <com/sun/star/form/FormButtonType.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <sfx2/htmlmode.hxx>
+#include "swmodule.hxx"
 #include "wrtsh.hxx"
 #include "view.hxx"
 #include "IMark.hxx"
@@ -37,8 +38,6 @@
 #include <unomid.h>
 
 using namespace ::com::sun::star;
-
-extern bool g_bNoInterrupt;       // in swmodule.cxx
 
 bool SwWrtShell::MoveBookMark( BookMarkMove eFuncId, const ::sw::mark::IMark* const pMark)
 {

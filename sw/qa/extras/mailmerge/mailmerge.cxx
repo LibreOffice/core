@@ -40,7 +40,7 @@
  * Maps database URIs to the registered database names for quick lookups
  */
 typedef std::map<OUString, OUString> DBuriMap;
-DBuriMap aDBuriMap;
+static DBuriMap aDBuriMap;
 
 class MMTest : public SwModelTestBase
 {

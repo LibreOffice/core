@@ -75,6 +75,7 @@
 
 #include <editeng/acorrcfg.hxx>
 #include <SwSmartTagMgr.hxx>
+#include <edtdd.hxx>
 #include <edtwin.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>
@@ -164,7 +165,6 @@ using namespace ::com::sun::star;
  * Globals
  */
 static bool g_bInputLanguageSwitched = false;
-extern bool g_bNoInterrupt;       // in mainwn.cxx
 
 // Usually in MouseButtonUp a selection is revoked when the selection is
 // not currently being pulled open. Unfortunately in MouseButtonDown there
@@ -174,19 +174,17 @@ extern bool g_bNoInterrupt;       // in mainwn.cxx
 static bool g_bHoldSelection      = false;
 
 bool g_bFrameDrag                   = false;
-bool g_bValidCursorPos              = false;
-bool g_bModePushed                = false;
+static bool g_bValidCursorPos       = false;
+static bool g_bModePushed         = false;
 bool g_bDDTimerStarted            = false;
 bool g_bFlushCharBuffer           = false;
 bool g_bDDINetAttr                = false;
-SdrHdlKind g_eSdrMoveHdl          = SdrHdlKind::User;
+static SdrHdlKind g_eSdrMoveHdl   = SdrHdlKind::User;
 
 QuickHelpData* SwEditWin::m_pQuickHlpData = nullptr;
 
 long    SwEditWin::m_nDDStartPosY = 0;
 long    SwEditWin::m_nDDStartPosX = 0;
-
-extern bool     g_bExecuteDrag;
 
 static SfxShell* lcl_GetTextShellFromDispatcher( SwView& rView );
 
