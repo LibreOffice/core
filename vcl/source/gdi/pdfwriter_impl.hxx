@@ -335,21 +335,9 @@ public:
         FontMapping         m_aMapping;
     };
     typedef std::map< const PhysicalFontFace*, FontSubset > FontSubsetData;
-    struct EmbedCode
-    {
-        sal_Ucs             m_aUnicode;
-        OString        m_aName;
-    };
-    struct EmbedEncoding
-    {
-        sal_Int32                       m_nFontID;
-        std::vector< EmbedCode >        m_aEncVector;
-        std::map< sal_Ucs, sal_Int8 >   m_aCMap;
-    };
     struct EmbedFont
     {
         sal_Int32                       m_nNormalFontID;
-        std::list< EmbedEncoding >      m_aExtendedEncodings;
 
         EmbedFont() : m_nNormalFontID( 0 ) {}
     };

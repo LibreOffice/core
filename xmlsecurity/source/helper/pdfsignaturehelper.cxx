@@ -23,8 +23,7 @@
 
 using namespace ::com::sun::star;
 
-PDFSignatureHelper::PDFSignatureHelper(const uno::Reference<uno::XComponentContext>& xComponentContext)
-    : m_xComponentContext(xComponentContext)
+PDFSignatureHelper::PDFSignatureHelper()
 {
 }
 

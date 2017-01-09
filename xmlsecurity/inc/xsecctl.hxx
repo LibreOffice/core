@@ -255,12 +255,6 @@ private:
      */
     bool m_bVerifyCurrentSignature;
 
-    /*
-     * the type of signature to generate (from the css::xml::crypto::DigestID alternatives) when there is a choice,
-     * in practice currently SHA1 or SHA256 for ODF.
-     */
-    sal_Int32 m_nDigestID;
-
 public:
     /*
      * An xUriBinding is provided to map Uris to XInputStream interfaces.

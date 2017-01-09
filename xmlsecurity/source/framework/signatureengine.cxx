@@ -29,8 +29,8 @@ namespace cssu = com::sun::star::uno;
 namespace cssxc = com::sun::star::xml::crypto;
 namespace cssxw = com::sun::star::xml::wrapper;
 
-SignatureEngine::SignatureEngine( const Reference<XComponentContext> & xContext)
-    : m_xContext(xContext), m_nTotalReferenceNumber(-1)
+SignatureEngine::SignatureEngine()
+    : m_nTotalReferenceNumber(-1)
 {
 }
 

@@ -387,7 +387,7 @@ Reference< chart2::XDataInterpreter > SAL_CALL ScatterChartTypeTemplate::getData
     throw (uno::RuntimeException, std::exception)
 {
     if( ! m_xDataInterpreter.is())
-        m_xDataInterpreter.set( new XYDataInterpreter( GetComponentContext()) );
+        m_xDataInterpreter.set( new XYDataInterpreter );
 
     return m_xDataInterpreter;
 }

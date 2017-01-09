@@ -32,7 +32,7 @@ class DataInterpreter : public ::cppu::WeakImplHelper<
         css::lang::XServiceInfo >
 {
 public:
-    explicit DataInterpreter( const css::uno::Reference< css::uno::XComponentContext > & xContext );
+    explicit DataInterpreter();
     virtual ~DataInterpreter() override;
 
     /// XServiceInfo declarations
@@ -77,9 +77,6 @@ protected:
     virtual css::uno::Reference< css::chart2::data::XDataSource > SAL_CALL mergeInterpretedData(
         const css::chart2::InterpretedData& aInterpretedData )
         throw (css::uno::RuntimeException, std::exception) override;
-
-    css::uno::Reference< css::uno::XComponentContext >
-        m_xContext;
 };
 
 } // namespace chart

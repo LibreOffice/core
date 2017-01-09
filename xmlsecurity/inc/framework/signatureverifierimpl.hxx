@@ -61,8 +61,7 @@ private:
         throw (css::uno::Exception, css::uno::RuntimeException) override;
 
 public:
-    explicit SignatureVerifierImpl( const css::uno::Reference<
-        css::uno::XComponentContext >& rxContext);
+    explicit SignatureVerifierImpl();
     virtual ~SignatureVerifierImpl() override;
 
     /* XSignatureVerifyResultBroadcaster */
