@@ -334,7 +334,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 		flat \
 		file) \
 	filterconfig \
-	$(if $(filter $(ENABLE_FIREBIRD_SDBC),TRUE),firebird_sdbc) \
 	fps_office \
 	for \
 	forui \
@@ -455,6 +454,10 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,postgresqlsdbc, \
 	$(if $(BUILD_POSTGRESQL_SDBC), \
 		postgresql-sdbc \
 		postgresql-sdbc-impl) \
+))
+
+$(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,firebirdsdbc, \
+	$(if $(ENABLE_FIREBIRD_SDBC),firebird_sdbc) \
 ))
 
 ifneq ($(ENABLE_PDFIMPORT),)
