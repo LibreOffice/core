@@ -39,8 +39,8 @@
 #include <rsclex.hxx>
 
 ObjectStack                     S;
-RscTop *                        pCurClass;
-char                            szErrBuf[ 100 ];
+static RscTop *                 pCurClass;
+static char                     szErrBuf[ 100 ];
 
 RSCINST GetVarInst( const RSCINST & rInst, const char * pVarName )
 {

@@ -49,8 +49,8 @@ const char* StringContainer::putString( const char* pString )
     return aInsert.first->getStr();
 }
 
-int             c;
-bool            bLastInclude;//  true, if last symbol was INCLUDE
+static int      c;
+static bool     bLastInclude;//  true, if last symbol was INCLUDE
 RscFileInst*    pFI;
 RscTypCont*     pTC;
 RscExpression * pExp;
@@ -58,8 +58,9 @@ struct KeyVal
 {
     int     nKeyWord;
     YYSTYPE aYYSType;
-} aKeyVal[ 1 ];
-bool bTargetDefined;
+};
+static KeyVal aKeyVal[ 1 ];
+static bool bTargetDefined;
 
 StringContainer* pStringContainer = nullptr;
 
