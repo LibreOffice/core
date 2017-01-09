@@ -121,7 +121,6 @@ public:
                     Graphic( const Animation& rAnimation );
                     Graphic( const GDIMetaFile& rMtf );
                     Graphic( const css::uno::Reference< css::graphic::XGraphic >& rxGraphic );
-                   ~Graphic();
 
     Graphic&        operator=( const Graphic& rGraphic );
     Graphic&        operator=( Graphic&& rGraphic );
