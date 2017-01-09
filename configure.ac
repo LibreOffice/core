@@ -3764,7 +3764,7 @@ if test "$GCC" = "yes"; then
     fi
 
     # clang as of version 4.0.0 (trunk 289424) doesn't do this very well (missing locals, bad param info in stack frame)
-    if "$COM_IS_CLANG" != "TRUE"; then
+    if test "$COM_IS_CLANG" != "TRUE"; then
         AC_MSG_CHECKING([whether $CC supports -Og])
         # Note that clang-3.1 reports a real error for this option
         # so we do not need a special case for clang<=3.1 as above.
