@@ -34,48 +34,8 @@ class ItemSetPrinter(object):
         return whiches
 
     def children(self):
-        whichranges = self.which_ranges()
-        size = 0
-        whichids = []
-        for (whichfrom, whichto) in whichranges:
-            size += whichto - whichfrom + 1
-            whichids += [which for which in range(whichfrom, whichto+1)]
-        return self._iterator(self.value['m_pItems'], size, whichids)
-
-    class _iterator(six.Iterator):
-
-        def __init__(self, data, count, whichids):
-            self.data = data
-            self.whichids = whichids
-            self.count = count
-            self.pos = 0
-            self._check_invariant()
-
-        def __iter__(self):
-            return self
-
-        def __next__(self):
-            if self.pos == self.count:
-                raise StopIteration()
-
-            which = self.whichids[self.pos]
-            elem = self.data[self.pos]
-            self.pos = self.pos + 1
-
-            self._check_invariant()
-            if (elem == -1):
-                elem = "(Invalid)"
-            elif (elem != 0):
-                # let's try how well that works...
-                elem = elem.cast(elem.dynamic_type).dereference()
-            return (str(which), elem)
-
-        def _check_invariant(self):
-            assert self.count >= 0
-            assert self.data
-            assert self.pos >= 0
-            assert self.pos <= self.count
-            assert len(self.whichids) == self.count
+        children = [ ( 'items', self.value['m_aItems'] ) ]
+        return children.__iter__()
 
 printer = None
 
