@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 #include <ServiceDocumenter.hxx>
+#include <unotoolsservices.hxx>
 #include <comphelper/servicedecl.hxx>
 #include <com/sun/star/system/XSystemShellExecute.hpp>
 using namespace com::sun::star;
@@ -59,8 +60,8 @@ void unotools::misc::ServiceDocumenter::showServiceDocs(const Reference<XService
 }
 
 namespace sdecl = ::comphelper::service_decl;
-sdecl::class_< unotools::misc::ServiceDocumenter > ServiceDocumenterImpl;
-extern const sdecl::ServiceDecl ServiceDocumenterDecl(
+sdecl::class_< unotools::misc::ServiceDocumenter > const ServiceDocumenterImpl;
+const sdecl::ServiceDecl ServiceDocumenterDecl(
     ServiceDocumenterImpl,
     "com.sun.star.comp.unotools.misc.ServiceDocumenter",
     "");

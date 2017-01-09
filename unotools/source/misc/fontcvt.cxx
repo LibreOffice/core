@@ -1018,7 +1018,7 @@ enum SymbolFont
     Wingdings3=32, MTExtra=64, TimesNewRoman=128
 };
 
-const char *aSymbolNames[] =
+const char * const aSymbolNames[] =
 {
     "Symbol", "Wingdings", "Monotype Sorts", "Webdings", "Wingdings 2",
     "Wingdings 3", "MT Extra", "Times New Roman"
@@ -1041,7 +1041,7 @@ public:
 
 struct ExtraTable { sal_Unicode cStar; sal_uInt8 cMS;};
 
-ExtraTable aWingDingsExtraTab[] =
+ExtraTable const aWingDingsExtraTab[] =
 {
     {0x25cf, 0x6C}, {0x2714, 0xFC}, {0x2717, 0xFB}, {0x2794, 0xE8},
     {0x27a2, 0xD8}, {0xe000, 0x6F}, {0xe001, 0x73}, {0xe002, 0x74},
@@ -1059,7 +1059,7 @@ ExtraTable aWingDingsExtraTab[] =
     {0xe034, 0x4D}, {0xe0aa, 0x71}, {0xe422, 0x44}
 };
 
-ExtraTable aSymbolExtraTab2[] =
+ExtraTable const aSymbolExtraTab2[] =
 {
     {0x0020, 0x20}, {0x00A0, 0x20}, {0x0021, 0x21}, {0x2200, 0x22},
     {0x0023, 0x23}, {0x2203, 0x24}, {0x0025, 0x25}, {0x0026, 0x26},
@@ -1087,7 +1087,7 @@ ExtraTable aSymbolExtraTab2[] =
     {0x2320, 0xF3}, {0x2321, 0xF5}, {0x2013, 0x2D}
 };
 
-ExtraTable aSymbolExtraTab[] =
+ExtraTable const aSymbolExtraTab[] =
 {
     {0xe021, 0xD3}, {0xe024, 0xD2}, {0xe035, 0x20}, {0xe036, 0x28},
     {0xe037, 0x29}, {0xe039, 0x20}, {0xe083, 0x2B}, {0xe084, 0x3C},
@@ -1109,7 +1109,7 @@ ExtraTable aSymbolExtraTab[] =
     {0xe0dc, 0xAD}, {0xe0dd, 0xAF}
 };
 
-ExtraTable aTNRExtraTab[] =
+ExtraTable const aTNRExtraTab[] =
 {
     {0xe021, 0xA9},
     {0xe022, 0x40},
@@ -1207,7 +1207,7 @@ StarSymbolToMSMultiFontImpl::StarSymbolToMSMultiFontImpl()
 
 const char *SymbolFontToString(int nResult)
 {
-    const char **ppName = aSymbolNames;
+    const char * const *ppName = aSymbolNames;
     int nI = Symbol;
     while (nI <= nResult)
     {

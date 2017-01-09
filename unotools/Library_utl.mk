@@ -20,6 +20,11 @@ $(eval $(call gb_Library_use_custom_headers,utl,\
 # in case UNO services are exported: declare location of component file
 $(eval $(call gb_Library_set_componentfile,utl,unotools/util/utl))
 
+$(eval $(call gb_Library_set_include,utl, \
+    $$(INCLUDE) \
+    -I$(SRCDIR)/unotools/inc \
+))
+
 # add any additional definitions to be set for compilation here
 # (e.g. -DLIB_DLLIMPLEMENTATION)
 $(eval $(call gb_Library_add_defs,utl,\

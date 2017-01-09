@@ -36,7 +36,7 @@ namespace utl
 {
 class SfxMiscCfg;
 
-std::weak_ptr<SfxMiscCfg> g_pOptions;
+static std::weak_ptr<SfxMiscCfg> g_pOptions;
 
 class SfxMiscCfg : public utl::ConfigItem
 {

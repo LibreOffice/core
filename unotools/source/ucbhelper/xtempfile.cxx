@@ -18,6 +18,7 @@
  */
 
 #include "XTempFile.hxx"
+#include <unotoolsservices.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
@@ -402,8 +403,8 @@ throw ( css::io::IOException, css::uno::RuntimeException, std::exception )
 }
 
 namespace sdecl = ::comphelper::service_decl;
-sdecl::class_< OTempFileService> OTempFileServiceImpl;
-extern const sdecl::ServiceDecl OTempFileServiceDecl(
+sdecl::class_< OTempFileService> const OTempFileServiceImpl;
+const sdecl::ServiceDecl OTempFileServiceDecl(
     OTempFileServiceImpl,
     "com.sun.star.io.comp.TempFile",
     "com.sun.star.io.TempFile");

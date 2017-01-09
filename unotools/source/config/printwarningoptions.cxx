@@ -221,7 +221,7 @@ Sequence< OUString > SvtPrintWarningOptions_Impl::impl_GetPropertyNames()
     return seqPropertyNames;
 }
 
-std::weak_ptr<SvtPrintWarningOptions_Impl> g_pPrintWarningOptions;
+static std::weak_ptr<SvtPrintWarningOptions_Impl> g_pPrintWarningOptions;
 
 SvtPrintWarningOptions::SvtPrintWarningOptions()
 {

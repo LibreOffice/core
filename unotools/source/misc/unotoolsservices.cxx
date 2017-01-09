@@ -11,11 +11,9 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <uno/environment.h>
 
+#include <unotoolsservices.hxx>
+
 namespace sdecl = ::comphelper::service_decl;
-
-extern sdecl::ServiceDecl const OTempFileServiceDecl;
-extern sdecl::ServiceDecl const ServiceDocumenterDecl;
-
 
 extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL utl_component_getFactory(
     sal_Char const* pImplName, void*, void*)
