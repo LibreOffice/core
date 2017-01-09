@@ -90,7 +90,7 @@ GraphicObject::GraphicObject( const Graphic& rGraphic ) :
     ImplSetGraphicManager( nullptr );
 }
 
-GraphicObject::GraphicObject( const GraphicObject& rGraphicObj, const GraphicManager* pMgr ) :
+GraphicObject::GraphicObject( const GraphicObject& rGraphicObj ) :
     maGraphic   ( rGraphicObj.GetGraphic() ),
     maAttr      ( rGraphicObj.maAttr ),
     maLink      ( rGraphicObj.maLink ),
@@ -98,7 +98,7 @@ GraphicObject::GraphicObject( const GraphicObject& rGraphicObj, const GraphicMan
 {
     ImplConstruct();
     ImplAssignGraphicData();
-    ImplSetGraphicManager( pMgr, nullptr, &rGraphicObj );
+    ImplSetGraphicManager( nullptr, nullptr, &rGraphicObj );
     if( rGraphicObj.HasUserData() && rGraphicObj.IsSwappedOut() )
         SetSwapState();
 }
