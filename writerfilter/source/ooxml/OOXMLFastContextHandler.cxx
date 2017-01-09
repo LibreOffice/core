@@ -53,7 +53,7 @@ using namespace ::com::sun::star;
 using namespace oox;
 using namespace ::std;
 
-set<OOXMLFastContextHandler *> aSetContexts;
+static set<OOXMLFastContextHandler *> aSetContexts;
 
 /*
   class OOXMLFastContextHandler
