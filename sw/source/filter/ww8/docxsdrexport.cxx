@@ -16,6 +16,7 @@
 #include <editeng/charrotateitem.hxx>
 #include <svx/svdogrp.hxx>
 #include <oox/helper/propertyset.hxx>
+#include <oox/token/namespaces.hxx>
 #include <oox/token/properties.hxx>
 #include <textboxhelper.hxx>
 #include <fmtanchr.hxx>
@@ -835,7 +836,7 @@ void DocxSdrExport::writeDMLDrawing(const SdrObject* pSdrObject, const SwFrameFo
     else if (xServiceInfo->supportsService("com.sun.star.drawing.GraphicObjectShape"))
         pNamespace = "http://schemas.openxmlformats.org/drawingml/2006/picture";
     pFS->startElementNS(XML_a, XML_graphic,
-                        FSNS(XML_xmlns, XML_a), "http://schemas.openxmlformats.org/drawingml/2006/main",
+                        FSNS(XML_xmlns, XML_a), OUStringToOString(m_pImpl->m_rExport.GetFilter().getNamespaceURL(OOX_NS(dml)), RTL_TEXTENCODING_UTF8).getStr(),
                         FSEND);
     pFS->startElementNS(XML_a, XML_graphicData,
                         XML_uri, pNamespace,
@@ -844,7 +845,7 @@ void DocxSdrExport::writeDMLDrawing(const SdrObject* pSdrObject, const SwFrameFo
     bool bLockedCanvas = lcl_isLockedCanvas(xShape);
     if (bLockedCanvas)
         pFS->startElementNS(XML_lc, XML_lockedCanvas,
-                            FSNS(XML_xmlns, XML_lc), "http://schemas.openxmlformats.org/drawingml/2006/lockedCanvas",
+                            FSNS(XML_xmlns, XML_lc), OUStringToOString(m_pImpl->m_rExport.GetFilter().getNamespaceURL(OOX_NS(dmlLockedCanvas)), RTL_TEXTENCODING_UTF8).getStr(),
                             FSEND);
 
     m_pImpl->m_rExport.OutputDML(xShape);
@@ -1168,7 +1169,7 @@ void DocxSdrExport::writeDiagram(const SdrObject* sdrObject, const SwFrameFormat
                          FSEND);
 
     pFS->startElementNS(XML_a, XML_graphic,
-                        FSNS(XML_xmlns, XML_a), "http://schemas.openxmlformats.org/drawingml/2006/main",
+                        FSNS(XML_xmlns, XML_a), OUStringToOString(m_pImpl->m_rExport.GetFilter().getNamespaceURL(OOX_NS(dml)), RTL_TEXTENCODING_UTF8).getStr(),
                         FSEND);
 
     pFS->startElementNS(XML_a, XML_graphicData,
@@ -1228,8 +1229,8 @@ void DocxSdrExport::writeDiagram(const SdrObject* sdrObject, const SwFrameFormat
     }
 
     pFS->singleElementNS(XML_dgm, XML_relIds,
-                         FSNS(XML_xmlns, XML_dgm), "http://schemas.openxmlformats.org/drawingml/2006/diagram",
-                         FSNS(XML_xmlns, XML_r), "http://schemas.openxmlformats.org/officeDocument/2006/relationships",
+                         FSNS(XML_xmlns, XML_dgm), OUStringToOString(m_pImpl->m_rExport.GetFilter().getNamespaceURL(OOX_NS(dmlDiagram)), RTL_TEXTENCODING_UTF8).getStr(),
+                         FSNS(XML_xmlns, XML_r), OUStringToOString(m_pImpl->m_rExport.GetFilter().getNamespaceURL(OOX_NS(officeRel)), RTL_TEXTENCODING_UTF8).getStr(),
                          FSNS(XML_r, XML_dm), dataRelId.getStr(),
                          FSNS(XML_r, XML_lo), layoutRelId.getStr(),
                          FSNS(XML_r, XML_qs), styleRelId.getStr(),
@@ -1406,7 +1407,7 @@ void DocxSdrExport::writeDMLTextFrame(ww8::Frame* pParentFrame, int nAnchorId, b
         pFS->singleElementNS(XML_wp, XML_docPr, xDocPrAttrListRef);
 
         pFS->startElementNS(XML_a, XML_graphic,
-                            FSNS(XML_xmlns, XML_a), "http://schemas.openxmlformats.org/drawingml/2006/main",
+                            FSNS(XML_xmlns, XML_a), OUStringToOString(m_pImpl->m_rExport.GetFilter().getNamespaceURL(OOX_NS(dml)), RTL_TEXTENCODING_UTF8).getStr(),
                             FSEND);
         pFS->startElementNS(XML_a, XML_graphicData,
                             XML_uri, "http://schemas.microsoft.com/office/word/2010/wordprocessingShape",

@@ -42,6 +42,7 @@
 #include <comphelper/random.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/flagguard.hxx>
+#include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 #include <oox/export/utils.hxx>
 #include <oox/mathml/export.hxx>
@@ -3774,9 +3775,9 @@ void DocxAttributeOutput::TableRowEnd( sal_uInt32 /*nDepth*/ )
 void DocxAttributeOutput::StartStyles()
 {
     m_pSerializer->startElementNS( XML_w, XML_styles,
-            FSNS( XML_xmlns, XML_w ),   "http://schemas.openxmlformats.org/wordprocessingml/2006/main",
-            FSNS( XML_xmlns, XML_w14 ), "http://schemas.microsoft.com/office/word/2010/wordml",
-            FSNS( XML_xmlns, XML_mc ),  "http://schemas.openxmlformats.org/markup-compatibility/2006",
+            FSNS( XML_xmlns, XML_w ),   OUStringToOString(GetExport().GetFilter().getNamespaceURL(OOX_NS(doc)), RTL_TEXTENCODING_UTF8).getStr(),
+            FSNS( XML_xmlns, XML_w14 ), OUStringToOString(GetExport().GetFilter().getNamespaceURL(OOX_NS(w14)), RTL_TEXTENCODING_UTF8).getStr(),
+            FSNS( XML_xmlns, XML_mc ),  OUStringToOString(GetExport().GetFilter().getNamespaceURL(OOX_NS(mce)), RTL_TEXTENCODING_UTF8).getStr(),
             FSNS( XML_mc, XML_Ignorable ), "w14",
             FSEND );
 
@@ -4291,20 +4292,20 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
             FSEND );
     // TODO change aspect?
     m_pSerializer->singleElementNS( XML_a, XML_graphicFrameLocks,
-            FSNS( XML_xmlns, XML_a ), "http://schemas.openxmlformats.org/drawingml/2006/main",
+            FSNS( XML_xmlns, XML_a ), OUStringToOString(GetExport().GetFilter().getNamespaceURL(OOX_NS(dml)), RTL_TEXTENCODING_UTF8).getStr(),
             XML_noChangeAspect, "1",
             FSEND );
     m_pSerializer->endElementNS( XML_wp, XML_cNvGraphicFramePr );
 
     m_pSerializer->startElementNS( XML_a, XML_graphic,
-            FSNS( XML_xmlns, XML_a ), "http://schemas.openxmlformats.org/drawingml/2006/main",
+            FSNS( XML_xmlns, XML_a ), OUStringToOString(GetExport().GetFilter().getNamespaceURL(OOX_NS(dml)), RTL_TEXTENCODING_UTF8).getStr(),
             FSEND );
     m_pSerializer->startElementNS( XML_a, XML_graphicData,
             XML_uri, "http://schemas.openxmlformats.org/drawingml/2006/picture",
             FSEND );
 
     m_pSerializer->startElementNS( XML_pic, XML_pic,
-            FSNS( XML_xmlns, XML_pic ), "http://schemas.openxmlformats.org/drawingml/2006/picture",
+            FSNS( XML_xmlns, XML_pic ), OUStringToOString(GetExport().GetFilter().getNamespaceURL(OOX_NS(dmlPicture)), RTL_TEXTENCODING_UTF8).getStr(),
             FSEND );
 
     m_pSerializer->startElementNS( XML_pic, XML_nvPicPr,
@@ -4509,7 +4510,7 @@ void DocxAttributeOutput::WritePostponedChart()
             FSEND );
 
         m_pSerializer->startElementNS( XML_a, XML_graphic,
-            FSNS( XML_xmlns, XML_a ), "http://schemas.openxmlformats.org/drawingml/2006/main",
+            FSNS( XML_xmlns, XML_a ), OUStringToOString(GetExport().GetFilter().getNamespaceURL(OOX_NS(dml)), RTL_TEXTENCODING_UTF8).getStr(),
             FSEND );
 
         m_pSerializer->startElementNS( XML_a, XML_graphicData,
@@ -4522,8 +4523,8 @@ void DocxAttributeOutput::WritePostponedChart()
         aRelId = m_rExport.OutputChart( xModel, m_nChartCount, m_pSerializer );
 
         m_pSerializer->singleElementNS( XML_c, XML_chart,
-            FSNS( XML_xmlns, XML_c ), "http://schemas.openxmlformats.org/drawingml/2006/chart",
-            FSNS( XML_xmlns, XML_r ), "http://schemas.openxmlformats.org/officeDocument/2006/relationships",
+            FSNS( XML_xmlns, XML_c ), OUStringToOString(GetExport().GetFilter().getNamespaceURL(OOX_NS(dmlChart)), RTL_TEXTENCODING_UTF8).getStr(),
+            FSNS( XML_xmlns, XML_r ), OUStringToOString(GetExport().GetFilter().getNamespaceURL(OOX_NS(officeRel)), RTL_TEXTENCODING_UTF8).getStr(),
             FSNS( XML_r, XML_id ), aRelId.getStr(),
             FSEND );
 
@@ -6886,7 +6887,7 @@ void DocxAttributeOutput::FootnotesEndnotes( bool bFootnotes )
     sal_Int32 nBody = bFootnotes? XML_footnotes: XML_endnotes;
     sal_Int32 nItem = bFootnotes? XML_footnote:  XML_endnote;
 
-    m_pSerializer->startElementNS( XML_w, nBody, DocxExport::MainXmlNamespaces() );
+    m_pSerializer->startElementNS( XML_w, nBody, m_rExport.MainXmlNamespaces() );
 
     sal_Int32 nIndex = 0;
 
