@@ -74,7 +74,7 @@ typedef bool (*HFilterCall)(const OUString &rUrl);
  * hiccups. */
 
 #define PERSIST_MAX 1000
-unsigned int persist_cnt;
+static unsigned int persist_cnt;
 
 SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 {

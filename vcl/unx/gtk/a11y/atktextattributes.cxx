@@ -434,7 +434,7 @@ Justification2Adjust( uno::Any& rAny, const gchar * value )
 
 /*****************************************************************************/
 
-const gchar * font_strikethrough[] = {
+const gchar * const font_strikethrough[] = {
     "none",   // FontStrikeout::NONE
     "single", // FontStrikeout::SINGLE
     "double", // FontStrikeout::DOUBLE
@@ -667,7 +667,7 @@ String2CaseMap( uno::Any& rAny, const gchar * value )
 
 /*****************************************************************************/
 
-const gchar * font_stretch[] = {
+const gchar * const font_stretch[] = {
     "ultra_condensed",
     "extra_condensed",
     "condensed",
@@ -839,7 +839,7 @@ Short2Degree( const uno::Any& rAny )
 
 /*****************************************************************************/
 
-const gchar * directions[] = { "ltr", "rtl", "rtl", "ltr", "none" };
+const gchar * const directions[] = { "ltr", "rtl", "rtl", "ltr", "none" };
 
 static gchar *
 WritingMode2Direction( const uno::Any& rAny )
@@ -854,7 +854,7 @@ WritingMode2Direction( const uno::Any& rAny )
 
 // @see http://www.w3.org/TR/2001/WD-css3-text-20010517/#PrimaryTextAdvanceDirection
 
-const gchar * writing_modes[] = { "lr-tb", "rl-tb", "tb-rl", "tb-lr", "none" };
+const gchar * const writing_modes[] = { "lr-tb", "rl-tb", "tb-rl", "tb-lr", "none" };
 static gchar *
 WritingMode2String( const uno::Any& rAny )
 {
@@ -868,7 +868,7 @@ WritingMode2String( const uno::Any& rAny )
 
 /*****************************************************************************/
 
-const char * baseline_values[] = { "baseline", "sub", "super" };
+const char * const baseline_values[] = { "baseline", "sub", "super" };
 
 // @see http://www.w3.org/TR/REC-CSS2/visudet.html#propdef-vertical-align
 static gchar *

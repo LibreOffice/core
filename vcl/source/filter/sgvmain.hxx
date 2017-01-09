@@ -358,6 +358,8 @@ public:
     SgfFontOne* GetFontDesc(sal_uInt32 ID);
 };
 
+extern SgfFontLst* pSgfFonts;
+
 #endif // INCLUDED_VCL_SOURCE_FILTER_SGVMAIN_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

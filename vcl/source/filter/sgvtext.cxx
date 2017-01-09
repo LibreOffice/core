@@ -31,8 +31,6 @@
 #include <memory>
 #include <cstdlib>
 
-extern SgfFontLst* pSgfFonts;
-
 //  Limitations:  only grey shadows, 2D and with fixed distance.
 // Start of AbsBase.Pas
 

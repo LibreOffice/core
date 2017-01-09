@@ -639,7 +639,7 @@ bool X11OpenGLSalGraphicsImpl::FillPixmapFromScreen( X11Pixmap* pPixmap, int nX,
 typedef typename std::pair<ControlCacheKey, std::unique_ptr<TextureCombo>> ControlCachePair;
 typedef o3tl::lru_map<ControlCacheKey, std::unique_ptr<TextureCombo>, ControlCacheHashFunction> ControlCacheType;
 
-vcl::DeleteOnDeinit<ControlCacheType> gTextureCache(new ControlCacheType(200));
+static vcl::DeleteOnDeinit<ControlCacheType> gTextureCache(new ControlCacheType(200));
 
 namespace
 {

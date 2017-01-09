@@ -390,6 +390,8 @@ struct ControlCacheHashFunction
     }
 };
 
+extern int nImplSysDialog;
+
 #endif // INCLUDED_VCL_INC_SVDATA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

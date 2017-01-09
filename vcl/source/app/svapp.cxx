@@ -635,8 +635,6 @@ sal_uInt64 Application::GetLastInputInterval()
     return (tools::Time::GetSystemTicks()-ImplGetSVData()->maAppData.mnLastInputTime);
 }
 
-extern int nImplSysDialog;
-
 bool Application::IsUICaptured()
 {
     ImplSVData* pSVData = ImplGetSVData();

@@ -392,7 +392,7 @@ GtkData::GtkData( SalInstance *pInstance )
 }
 
 #if defined(GDK_WINDOWING_X11)
-XIOErrorHandler aOrigXIOErrorHandler = nullptr;
+static XIOErrorHandler aOrigXIOErrorHandler = nullptr;
 
 extern "C" {
 

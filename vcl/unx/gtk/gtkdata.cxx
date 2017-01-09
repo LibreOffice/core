@@ -428,7 +428,7 @@ GtkData::GtkData( SalInstance *pInstance )
     m_aDispatchCondition = osl_createCondition();
 }
 
-XIOErrorHandler aOrigXIOErrorHandler = nullptr;
+static XIOErrorHandler aOrigXIOErrorHandler = nullptr;
 
 extern "C" {
 
