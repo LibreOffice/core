@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a6eadb0_211405f4",
+        "filename": "svl/source/numbers/zforfind.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3450,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-01-09T19:03:34Z",
+      "side": 1,
+      "message": "I would add fromIndex \u003d nCommentPosition here for optimization... because cell contents is frequently rather sizeable.",
+      "range": {
+        "startLine": 3450,
+        "startChar": 70,
+        "endLine": 3450,
+        "endChar": 71
+      },
+      "revId": "44f9db20e54a530036a89b99490c51933207ce35",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
