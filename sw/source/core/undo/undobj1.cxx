@@ -532,8 +532,7 @@ void SwUndoSetFlyFormat::UndoImpl(::sw::UndoRedoContext & rContext)
         while( pItem )
         {
             if( IsInvalidItem( pItem ))
-                pFrameFormat->ResetFormatAttr( pItemSet->GetWhichByPos(
-                                        aIter.GetCurPos() ));
+                pFrameFormat->ResetFormatAttr( aIter.GetCurWhich() );
             else
                 pFrameFormat->SetFormatAttr( *pItem );
 
