@@ -153,7 +153,7 @@ OString XBMReader::FindTokenLine( SvStream* pInStm, const char* pTok1,
 long XBMReader::ParseDefine( const sal_Char* pDefine )
 {
     long    nRet = 0;
-    char*   pTmp = const_cast<char*>(pDefine);
+    const char* pTmp = pDefine;
     unsigned char   cTmp;
 
     // move to end
