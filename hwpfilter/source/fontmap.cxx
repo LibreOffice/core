@@ -134,7 +134,7 @@ const char* const RepFontTab[] =
     "\xb9\xe9\xb9\xac \xc7\xec\xb5\xe5\xb6\xf3\xc0\xce"                                      /* 3 */
 };
 #else
-const char* RepFontTab[] =
+const char* const RepFontTab[] =
 {
     "Batang",                                     /* 0 */
     "Dotum",                                      /* 1 */
