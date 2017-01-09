@@ -31,7 +31,6 @@ public:
                                    const std::vector< OUString > &rNameVector );
     BitmapEx        GetAsHorizontalStrip() const;
     sal_uInt16      GetImageCount() const;
-    Size            GetImageSize() const;
 
     void            AddImage( const OUString& rImageName, const Image& rImage );
 
@@ -43,7 +42,6 @@ public:
     Image           GetImage( const OUString& rImageName ) const;
 
     sal_uInt16      GetImagePos( sal_uInt16 nId ) const;
-    bool            HasImageForId( sal_uInt16 nId ) const;
     sal_uInt16      GetImagePos( const OUString& rImageName ) const;
 
     sal_uInt16      GetImageId( sal_uInt16 nPos ) const;

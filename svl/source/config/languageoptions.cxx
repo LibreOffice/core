@@ -254,12 +254,6 @@ bool SvtSystemLanguageOptions::isKeyboardLayoutTypeInstalled(sal_Int16 scriptTyp
 }
 
 
-bool SvtSystemLanguageOptions::isCTLKeyboardLayoutInstalled() const
-{
-    return isKeyboardLayoutTypeInstalled(css::i18n::ScriptType::COMPLEX);
-}
-
-
 bool SvtSystemLanguageOptions::isCJKKeyboardLayoutInstalled() const
 {
     return isKeyboardLayoutTypeInstalled(css::i18n::ScriptType::ASIAN);
