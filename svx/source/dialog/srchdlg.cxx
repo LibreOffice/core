@@ -194,7 +194,7 @@ void SearchAttrItemList::Put( const SfxItemSet& rSet )
         // only test that it is available?
         if( IsInvalidItem( pItem ) )
         {
-            nWhich = rSet.GetWhichByPos( aIter.GetCurPos() );
+            nWhich = aIter.GetCurWhich();
             aItem.pItem = const_cast<SfxPoolItem*>(pItem);
         }
         else
