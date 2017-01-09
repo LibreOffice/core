@@ -235,7 +235,7 @@ private:
         m_aCurrencyInfo[nC++]=LwpCurrencyInfo("W");                    //FMT_SOUTHKOREANWON        = 37,
         m_aCurrencyInfo[nC++]=LwpCurrencyInfo("Pts",true, true);//FMT_SPANISHPESETA        = 38,
         m_aCurrencyInfo[nC++]=LwpCurrencyInfo("Skr",true, true);//FMT_SWEDISHKRONA     = 39,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("SFr",false, true);//FMT_SWISSFRANC          = 40,
+        m_aCurrencyInfo[nC++]=LwpCurrencyInfo("CHF",false, true);//FMT_SWISSFRANC          = 40,
         m_aCurrencyInfo[nC++]=LwpCurrencyInfo("NT$");                  //FMT_TAIWANDOLLAR      = 41,
         m_aCurrencyInfo[nC++]=LwpCurrencyInfo("Bt",true, true);//FMT_THAIBAHT          = 42,
         m_aCurrencyInfo[nC++]=LwpCurrencyInfo("$");                    //FMT_USDOLLAR          = 43,

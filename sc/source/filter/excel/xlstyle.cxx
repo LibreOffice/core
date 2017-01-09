@@ -1046,10 +1046,10 @@ static const XclBuiltInFormat spBuiltInFormats_FRENCH_SWISS[] =
     EXC_NUMFMT_STRING(  16, "DD.MMM" ),
     EXC_NUMFMT_STRING(  17, "MMM.YY" ),
     EXC_NUMFMT_STRING(  22, "DD.MM.YYYY hh:mm" ),
-    EXC_NUMFMT_STRING(  63, "\"SFr. \"#,##0;\"SFr. \"-#,##0" ),
-    EXC_NUMFMT_STRING(  64, "\"SFr. \"#,##0;[RED]\"SFr. \"-#,##0" ),
-    EXC_NUMFMT_STRING(  65, "\"SFr. \"#,##0.00;\"SFr. \"-#,##0.00" ),
-    EXC_NUMFMT_STRING(  66, "\"SFr. \"#,##0.00;[RED]\"SFr. \"-#,##0.00" ),
+    EXC_NUMFMT_STRING(  63, "\"CHF. \"#,##0;\"CHF. \"-#,##0" ),
+    EXC_NUMFMT_STRING(  64, "\"CHF. \"#,##0;[RED]\"CHF. \"-#,##0" ),
+    EXC_NUMFMT_STRING(  65, "\"CHF. \"#,##0.00;\"CHF. \"-#,##0.00" ),
+    EXC_NUMFMT_STRING(  66, "\"CHF. \"#,##0.00;[RED]\"CHF. \"-#,##0.00" ),
     EXC_NUMFMT_ENDTABLE()
 };
 
@@ -1105,10 +1105,10 @@ static const XclBuiltInFormat spBuiltInFormats_GERMAN_AUSTRIAN[] =
 
 static const XclBuiltInFormat spBuiltInFormats_GERMAN_SWISS[] =
 {
-    EXC_NUMFMT_STRING(  63, "\"SFr. \"#,##0;\"SFr. \"-#,##0" ),
-    EXC_NUMFMT_STRING(  64, "\"SFr. \"#,##0;[RED]\"SFr. \"-#,##0" ),
-    EXC_NUMFMT_STRING(  65, "\"SFr. \"#,##0.00;\"SFr. \"-#,##0.00" ),
-    EXC_NUMFMT_STRING(  66, "\"SFr. \"#,##0.00;[RED]\"SFr. \"-#,##0.00" ),
+    EXC_NUMFMT_STRING(  63, "\"CHF. \"#,##0;\"CHF. \"-#,##0" ),
+    EXC_NUMFMT_STRING(  64, "\"CHF. \"#,##0;[RED]\"CHF. \"-#,##0" ),
+    EXC_NUMFMT_STRING(  65, "\"CHF. \"#,##0.00;\"CHF. \"-#,##0.00" ),
+    EXC_NUMFMT_STRING(  66, "\"CHF. \"#,##0.00;[RED]\"CHF. \"-#,##0.00" ),
     EXC_NUMFMT_ENDTABLE()
 };
 
@@ -1164,10 +1164,10 @@ static const XclBuiltInFormat spBuiltInFormats_ITALIAN_SWISS[] =
     EXC_NUMFMT_STRING(  18, "h:mm AM/PM" ),
     EXC_NUMFMT_STRING(  19, "h:mm:ss AM/PM" ),
     EXC_NUMFMT_STRING(  22, "DD.MM.YYYY hh:mm" ),
-    EXC_NUMFMT_STRING(  63, "\"SFr. \"#,##0;\"SFr. \"-#,##0" ),
-    EXC_NUMFMT_STRING(  64, "\"SFr. \"#,##0;[RED]\"SFr. \"-#,##0" ),
-    EXC_NUMFMT_STRING(  65, "\"SFr. \"#,##0.00;\"SFr. \"-#,##0.00" ),
-    EXC_NUMFMT_STRING(  66, "\"SFr. \"#,##0.00;[RED]\"SFr. \"-#,##0.00" ),
+    EXC_NUMFMT_STRING(  63, "\"CHF. \"#,##0;\"CHF. \"-#,##0" ),
+    EXC_NUMFMT_STRING(  64, "\"CHF. \"#,##0;[RED]\"CHF. \"-#,##0" ),
+    EXC_NUMFMT_STRING(  65, "\"CHF. \"#,##0.00;\"CHF. \"-#,##0.00" ),
+    EXC_NUMFMT_STRING(  66, "\"CHF. \"#,##0.00;[RED]\"CHF. \"-#,##0.00" ),
     EXC_NUMFMT_ENDTABLE()
 };
 

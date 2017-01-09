@@ -712,7 +712,7 @@ static const BuiltinFormat spBuiltinFormats_de_AT[] =
 static const BuiltinFormat spBuiltinFormats_de_CH[] =
 {
     NUMFMT_ALLDATETIMES( "DD.MM.YYYY", "DD", ". ", "MMM", " ", "YY", "h", "hh" ),
-    NUMFMT_ALLCURRENCIES_SYMBOL_MINUS_NUMBER( "\"SFr.\"", " " ),
+    NUMFMT_ALLCURRENCIES_SYMBOL_MINUS_NUMBER( "\"CHF.\"", " " ),
     NUMFMT_ENDTABLE()
 };
 
@@ -1074,7 +1074,7 @@ static const BuiltinFormat spBuiltinFormats_fr_CA[] =
 static const BuiltinFormat spBuiltinFormats_fr_CH[] =
 {
     NUMFMT_ALLDATETIMES( "DD.MM.YYYY", "DD", ".", "MMM", ".", "YY", "h", "hh" ),
-    NUMFMT_ALLCURRENCIES_SYMBOL_MINUS_NUMBER( "\"SFr.\"", " " ),
+    NUMFMT_ALLCURRENCIES_SYMBOL_MINUS_NUMBER( "\"CHF.\"", " " ),
     NUMFMT_ENDTABLE()
 };
 
@@ -1191,7 +1191,7 @@ static const BuiltinFormat spBuiltinFormats_is_IS[] =
 static const BuiltinFormat spBuiltinFormats_it_CH[] =
 {
     NUMFMT_ALLDATETIMES( "DD.MM.YYYY", "DD", ".", "MMM", ".", "YY", "h", "hh" ),
-    NUMFMT_ALLCURRENCIES_SYMBOL_MINUS_NUMBER( "\"SFr.\"", " " ),
+    NUMFMT_ALLCURRENCIES_SYMBOL_MINUS_NUMBER( "\"CHF.\"", " " ),
     NUMFMT_ENDTABLE()
 };
 
