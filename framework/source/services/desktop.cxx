@@ -335,6 +335,14 @@ sal_Bool SAL_CALL Desktop::terminate()
         if ( xPipeTerminator.is() )
             xPipeTerminator->notifyTermination( aEvent );
 
+        // we need a copy here as the notifyTermination call might cause a removeTerminateListener call
+        std::vector< css::uno::Reference<css::frame::XTerminateListener> > xComponentDllListeners = m_xComponentDllListeners;
+        for (auto& xListener : xComponentDllListeners)
+        {
+            xListener->notifyTermination(aEvent);
+        }
+        m_xComponentDllListeners.clear();
+
         // Must be really the last listener to be called.
         // Because it shutdown the whole process asynchronous !
         if ( xSfxTerminator.is() )
@@ -407,6 +415,11 @@ void SAL_CALL Desktop::addTerminateListener( const css::uno::Reference< css::fra
             m_xSWThreadManager = xListener;
             return;
         }
+        else if ( sImplementationName == "com.sun.star.comp.ComponentDLLListener" )
+        {
+            m_xComponentDllListeners.push_back(xListener);
+            return;
+        }
     }
 
     // No lock required ... container is threadsafe by itself.
@@ -446,6 +459,13 @@ void SAL_CALL Desktop::removeTerminateListener( const css::uno::Reference< css::
         if( sImplementationName == "com.sun.star.util.comp.FinalThreadManager" )
         {
             m_xSWThreadManager.clear();
+            return;
+        }
+        else if (sImplementationName == "com.sun.star.comp.ComponentDLLListener")
+        {
+            m_xComponentDllListeners.erase(
+                    std::remove(m_xComponentDllListeners.begin(), m_xComponentDllListeners.end(), xListener),
+                    m_xComponentDllListeners.end());
             return;
         }
     }
@@ -1076,6 +1096,15 @@ void SAL_CALL Desktop::disposing()
     m_xPipeTerminator.clear();
     m_xQuickLauncher.clear();
     m_xSWThreadManager.clear();
+
+    // we need a copy because the notifyTermination might call the removeEventListener method
+    std::vector< css::uno::Reference<css::frame::XTerminateListener> > xComponentDllListeners = m_xComponentDllListeners;
+    for (auto& xListener: xComponentDllListeners)
+    {
+        xListener->notifyTermination(aEvent);
+    }
+    xComponentDllListeners.clear();
+    m_xComponentDllListeners.clear();
     m_xSfxTerminator.clear();
     m_xCommandOptions.reset();
 

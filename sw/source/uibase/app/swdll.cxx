@@ -58,7 +58,7 @@ namespace
     class SwDLLInstance : public comphelper::unique_disposing_solar_mutex_reset_ptr<SwDLL>
     {
     public:
-        SwDLLInstance() : comphelper::unique_disposing_solar_mutex_reset_ptr<SwDLL>(uno::Reference<lang::XComponent>( frame::Desktop::create(comphelper::getProcessComponentContext()), uno::UNO_QUERY_THROW), new SwDLL)
+        SwDLLInstance() : comphelper::unique_disposing_solar_mutex_reset_ptr<SwDLL>(uno::Reference<lang::XComponent>( frame::Desktop::create(comphelper::getProcessComponentContext()), uno::UNO_QUERY_THROW), new SwDLL, true)
         {
         }
     };
