@@ -293,7 +293,7 @@ void GraphicObjectTest::testTdf88935()
     // Create and remove some copy of the first image
     for( int i = 0; i < 50; ++i )
     {
-        GraphicObject aGraphObj3(*pGraphObj1, &pGraphObj1->GetGraphicManager());
+        GraphicObject aGraphObj3(*pGraphObj1);
         CPPUNIT_ASSERT(aGraphObj3.SwapOut());
         CPPUNIT_ASSERT(aGraphObj3.SwapIn());
     }
