@@ -2925,6 +2925,10 @@ endef
 
 else # !SYSTEM_FIREBIRD
 
+$(eval $(call gb_Helper_register_packages_for_install,firebirdsdbc,\
+	firebird \
+))
+
 #$(call gb_LinkTarget__use_libatomic_ops,$(1))
 #$(call gb_LinkTarget__use_libtommath,$(1))
 

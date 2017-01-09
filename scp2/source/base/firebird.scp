@@ -18,6 +18,8 @@
 
 #include "macros.inc"
 
+#include "AutoInstall/firebirdsdbc"
+
 #if defined( ENABLE_FIREBIRD_SDBC ) && !defined( SYSTEM_FIREBIRD )
 
 Module gid_Module_Optional_Firebird
@@ -25,17 +27,8 @@ Module gid_Module_Optional_Firebird
     Description = "Firebird embedded database";
     PackageInfo = "packinfo_office.txt";
     ParentID = gid_Module_Root_Brand;
-    Files = (
-        File gid_File_Firebird
-    );
+    Files = (auto_firebirdsdbc_ALL);
     Styles = (HIDDEN_ROOT);
-End
-
-File gid_File_Firebird
-    TXT_FILE_BODY;
-    Styles = (FILELIST, PACKED);
-    Dir = FILELIST_DIR;
-    Name = "firebird.filelist";
 End
 
 #endif
