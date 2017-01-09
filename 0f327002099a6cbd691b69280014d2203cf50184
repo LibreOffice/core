@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a6eadb0_e64ea395",
+        "filename": "svx/uiconfig/ui/floatingareastyle.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-01-09T12:22:15Z",
+      "side": 1,
+      "message": "I think you can even remove those lines completely, The Right Way TM to do things here is to set initial value via GtkAdjustment (see \u0027adjustment\u0027 attribute referenced 1 line down), but even that might be unnecessary, as the implicit value is 0 anyway",
+      "revId": "0f327002099a6cbd691b69280014d2203cf50184",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
