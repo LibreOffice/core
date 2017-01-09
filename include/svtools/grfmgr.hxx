@@ -202,10 +202,7 @@ private:
 
     void                    SVT_DLLPRIVATE ImplConstruct();
     void                    SVT_DLLPRIVATE ImplAssignGraphicData();
-    void                    SVT_DLLPRIVATE ImplSetGraphicManager(
-                                const OString* pID = nullptr,
-                                const GraphicObject* pCopyObj = nullptr
-                            );
+    void                    SVT_DLLPRIVATE ImplEnsureGraphicManager();
     void                    SVT_DLLPRIVATE ImplAutoSwapIn();
     bool                    SVT_DLLPRIVATE ImplGetCropParams(
                                 OutputDevice* pOut,

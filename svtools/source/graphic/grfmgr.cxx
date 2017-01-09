@@ -77,7 +77,8 @@ GraphicObject::GraphicObject() :
 {
     ImplConstruct();
     ImplAssignGraphicData();
-    ImplSetGraphicManager();
+    ImplEnsureGraphicManager();
+    mpMgr->ImplRegisterObj(*this, maGraphic, nullptr, nullptr);
 }
 
 GraphicObject::GraphicObject( const Graphic& rGraphic ) :
@@ -87,7 +88,8 @@ GraphicObject::GraphicObject( const Graphic& rGraphic ) :
 {
     ImplConstruct();
     ImplAssignGraphicData();
-    ImplSetGraphicManager();
+    ImplEnsureGraphicManager();
+    mpMgr->ImplRegisterObj(*this, maGraphic, nullptr, nullptr);
 }
 
 GraphicObject::GraphicObject( const GraphicObject& rGraphicObj ) :
@@ -98,7 +100,8 @@ GraphicObject::GraphicObject( const GraphicObject& rGraphicObj ) :
 {
     ImplConstruct();
     ImplAssignGraphicData();
-    ImplSetGraphicManager(nullptr, &rGraphicObj);
+    ImplEnsureGraphicManager();
+    mpMgr->ImplRegisterObj(*this, maGraphic, nullptr, &rGraphicObj);
     if( rGraphicObj.HasUserData() && rGraphicObj.IsSwappedOut() )
         SetSwapState();
 }
@@ -112,7 +115,8 @@ GraphicObject::GraphicObject( const OString& rUniqueID ) :
     // assign default properties
     ImplAssignGraphicData();
 
-    ImplSetGraphicManager(&rUniqueID);
+    ImplEnsureGraphicManager();
+    mpMgr->ImplRegisterObj(*this, maGraphic, &rUniqueID, nullptr);
 
     // update properties
     ImplAssignGraphicData();
@@ -161,7 +165,7 @@ void GraphicObject::ImplAssignGraphicData()
     ImplAfterDataChange();
 }
 
-void GraphicObject::ImplSetGraphicManager(const OString* pID, const GraphicObject* pCopyObj)
+void GraphicObject::ImplEnsureGraphicManager()
 {
     if (!mpGlobalMgr)
     {
@@ -187,7 +191,6 @@ void GraphicObject::ImplSetGraphicManager(const OString* pID, const GraphicObjec
     }
 
     mpMgr = mpGlobalMgr;
-    mpMgr->ImplRegisterObj( *this, maGraphic, pID, pCopyObj );
 }
 
 void GraphicObject::ImplAutoSwapIn()
