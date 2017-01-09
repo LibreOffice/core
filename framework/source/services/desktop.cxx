@@ -347,6 +347,12 @@ sal_Bool SAL_CALL Desktop::terminate()
         if ( xPipeTerminator.is() )
             xPipeTerminator->notifyTermination( aEvent );
 
+        sal_Int32 nDllListeners = m_xComponentDllListeners.getLength();
+        for (sal_Int32 i = 0; i < nDllListeners; ++i)
+        {
+            m_xComponentDllListeners[i]->notifyTermination(aEvent);
+        }
+
         // Must be really the last listener to be called.
         // Because it shutdown the whole process asynchronous !
         if ( xSfxTerminator.is() )
@@ -424,6 +430,13 @@ void SAL_CALL Desktop::addTerminateListener( const css::uno::Reference< css::fra
             m_xSWThreadManager = xListener;
             return;
         }
+        else if ( sImplementationName == "com.sun.star.comp.ComponentDLLListener" )
+        {
+            sal_Int32 nSize = m_xComponentDllListeners.getLength();
+            m_xComponentDllListeners.realloc(nSize+1);
+            m_xComponentDllListeners[nSize] = xListener;
+            return;
+        }
     }
 
     // No lock required ... container is threadsafe by itself.
@@ -469,6 +482,25 @@ void SAL_CALL Desktop::removeTerminateListener( const css::uno::Reference< css::
         if( sImplementationName == "com.sun.star.util.comp.FinalThreadManager" )
         {
             m_xSWThreadManager.clear();
+            return;
+        }
+        else if (sImplementationName == "com.sun.star.comp.ComponentDLLListener")
+        {
+            sal_Int32 nSize = m_xComponentDllListeners.getLength();
+            for (sal_Int32 i = 0; i < nSize; ++i)
+            {
+                if (m_xComponentDllListeners[i] == xListener)
+                {
+                    m_xComponentDllListeners[i].clear();
+                    // remove the entry from the sequence and shift all entries
+                    for (sal_Int32 j = i; j < nSize - 1; ++ j)
+                    {
+                        m_xComponentDllListeners[j] = m_xComponentDllListeners[j+1];
+                    }
+                    m_xComponentDllListeners.realloc(nSize - 1);
+                    -- nSize;
+                }
+            }
             return;
         }
     }
@@ -1100,6 +1132,7 @@ void SAL_CALL Desktop::disposing()
     m_xQuickLauncher.clear();
     m_xStarBasicQuitGuard.clear();
     m_xSWThreadManager.clear();
+    m_xComponentDllListeners.realloc(0);
     m_xSfxTerminator.clear();
     m_xCommandOptions.reset();
 
