@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "1a6eadb0_212b2532",
+        "filename": "svl/source/numbers/zforfind.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3445,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2017-01-09T19:22:29Z",
+      "side": 1,
+      "message": "Any complaints about the way I did this (in caps, non-#define)?  In Writer(sw), it is a #define somewhere that is inaccessible here.",
+      "revId": "44f9db20e54a530036a89b99490c51933207ce35",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a6eadb0_211405f4",
         "filename": "svl/source/numbers/zforfind.cxx",
         "patchSetId": 1
