@@ -347,6 +347,12 @@ sal_Bool SAL_CALL Desktop::terminate()
         if ( xPipeTerminator.is() )
             xPipeTerminator->notifyTermination( aEvent );
 
+        sal_Int32 nDllListeners = m_xComponentDllListeners.getLength();
+        for (sal_Int32 i = 0; i < nDllListeners; ++i)
+        {
+            m_xComponentDllListeners[i]->notifyTermination(aEvent);
+        }
+
         // Must be really the last listener to be called.
         // Because it shutdown the whole process asynchronous !
         if ( xSfxTerminator.is() )
@@ -422,6 +428,13 @@ void SAL_CALL Desktop::addTerminateListener( const css::uno::Reference< css::fra
         if( sImplementationName == "com.sun.star.util.comp.FinalThreadManager" )
         {
             m_xSWThreadManager = xListener;
+            return;
+        }
+        else if ( sImplementationName == "com.sun.star.comp.ComponentDLLListener" )
+        {
+            sal_Int32 nSize = m_xComponentDllListeners.getLength();
+            m_xComponentDllListeners.realloc(nSize+1);
+            m_xComponentDllListeners[nSize] = xListener;
             return;
         }
     }
