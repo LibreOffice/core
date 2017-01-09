@@ -181,7 +181,6 @@ private:
     MapMode                 maPrefMapMode;
     sal_uLong               mnSizeBytes;
     GraphicType             meType;
-    GraphicManager*         mpMgr;
     OUString                maLink;
     Link<const GraphicObject*, SvStream*> maSwapStreamHdl;
     OUString                maUserData;
@@ -332,7 +331,12 @@ public:
     void                    FireSwapInRequest();
     void                    FireSwapOutRequest();
 
-    GraphicManager&         GetGraphicManager() const { return *mpMgr; }
+    GraphicManager&         GetGraphicManager() const
+    {
+        (void)this; // avoid loplugin:staticmethods because first GraphicManager ctor creates
+                    // mpGlobalMgr and the last GraphicManager dtor destroys it
+        return *mpGlobalMgr;
+    }
 
     bool                    IsCached(
                                 OutputDevice* pOut,
