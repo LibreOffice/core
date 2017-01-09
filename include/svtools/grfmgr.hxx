@@ -181,7 +181,6 @@ private:
     MapMode                 maPrefMapMode;
     sal_uLong               mnSizeBytes;
     GraphicType             meType;
-    GraphicManager*         mpMgr;
     OUString                maLink;
     Link<const GraphicObject*, SvStream*> maSwapStreamHdl;
     OUString                maUserData;
@@ -202,7 +201,7 @@ private:
 
     void                    SVT_DLLPRIVATE ImplConstruct();
     void                    SVT_DLLPRIVATE ImplAssignGraphicData();
-    void                    SVT_DLLPRIVATE ImplEnsureGraphicManager();
+    static void             SVT_DLLPRIVATE ImplEnsureGraphicManager();
     void                    SVT_DLLPRIVATE ImplAutoSwapIn();
     bool                    SVT_DLLPRIVATE ImplGetCropParams(
                                 OutputDevice* pOut,
@@ -332,7 +331,12 @@ public:
     void                    FireSwapInRequest();
     void                    FireSwapOutRequest();
 
-    GraphicManager&         GetGraphicManager() const { return *mpMgr; }
+    GraphicManager&         GetGraphicManager() const
+    {
+        (void)this; // avoid loplugin:staticmethods because first GraphicManager ctor creates
+                    // mpGlobalMgr and the last GraphicManager dtor destroys it
+        return *mpGlobalMgr;
+    }
 
     bool                    IsCached(
                                 OutputDevice* pOut,
