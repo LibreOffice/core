@@ -156,11 +156,11 @@ long XBMReader::ParseDefine( const sal_Char* pDefine )
     cTmp = *pTmp--;
 
     // search last digit
-    while( pHexTable[ cTmp ] == -1 )
+    while (pHexTable[ cTmp ] == -1 && pTmp >= pDefine)
         cTmp = *pTmp--;
 
     // move before number
-    while( pHexTable[ cTmp ] != -1 )
+    while (pHexTable[ cTmp ] != -1 && pTmp >= pDefine)
         cTmp = *pTmp--;
 
     // move to start of number
