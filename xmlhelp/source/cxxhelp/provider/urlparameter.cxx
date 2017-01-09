@@ -575,7 +575,7 @@ struct UserData {
     URLParameter*                       m_pInitial;
 };
 
-UserData *ugblData = nullptr;
+static UserData *ugblData = nullptr;
 
 extern "C" {
 
