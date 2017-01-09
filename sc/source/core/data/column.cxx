@@ -2834,7 +2834,7 @@ struct SetDirtyIfPostponedHandler
 {
     void operator() (size_t /*nRow*/, ScFormulaCell* pCell)
     {
-        if (pCell->IsPostponedDirty() || pCell->HasRelNameReference())
+        if (pCell->IsPostponedDirty() || (pCell->HasRelNameReference() != ScFormulaCell::RelNameRef::NONE))
             pCell->SetDirty();
     }
 };
