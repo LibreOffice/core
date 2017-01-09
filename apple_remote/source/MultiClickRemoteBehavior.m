@@ -31,8 +31,8 @@
 
 #import "MultiClickRemoteBehavior.h"
 
-const NSTimeInterval DEFAULT_MAXIMUM_CLICK_TIME_DIFFERENCE = 0.35;
-const NSTimeInterval HOLD_RECOGNITION_TIME_INTERVAL = 0.4;
+static const NSTimeInterval DEFAULT_MAXIMUM_CLICK_TIME_DIFFERENCE = 0.35;
+static const NSTimeInterval HOLD_RECOGNITION_TIME_INTERVAL = 0.4;
 
 @implementation MultiClickRemoteBehavior
 

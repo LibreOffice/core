@@ -37,7 +37,7 @@
 #import <IOKit/IOCFPlugIn.h>
 #import <IOKit/hid/IOHIDKeys.h>
 
-const char* AppleRemoteDeviceName = "AppleIRController";
+static const char* AppleRemoteDeviceName = "AppleIRController";
 
 @implementation AppleRemote
 
