@@ -72,7 +72,7 @@ namespace accessibility
             return ( lhs.Name == rhs.Name && lhs.Value == rhs.Value );
         }
     };
-    sal_Unicode cNewLine(0x0a);
+    sal_Unicode const cNewLine(0x0a);
 
 
     // Static Helper
