@@ -32,12 +32,6 @@
 
 #include "salvd.hxx"
 
-struct SalVirDevData
-{
-};
-
-typedef struct SalVirDevData   SalVirDevData;
-
 class AquaSalGraphics;
 
 class AquaSalVirtualDevice : public SalVirtualDevice

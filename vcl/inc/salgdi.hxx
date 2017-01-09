@@ -58,9 +58,7 @@ namespace basegfx {
 }
 
 typedef sal_Unicode sal_Ucs; // TODO: use sal_UCS4 instead of sal_Unicode
-typedef std::map< sal_Ucs, sal_Int32 >    Ucs2SIntMap;
 typedef std::map< sal_Ucs, sal_uInt32 >   Ucs2UIntMap;
-typedef std::map< sal_Ucs, OString > Ucs2OStrMap;
 
 // note: if you add any new methods to class SalGraphics using coordinates
 //       make sure they have a corresponding protected pure virtual method

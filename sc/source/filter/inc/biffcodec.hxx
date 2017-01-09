@@ -54,8 +54,6 @@ private:
     bool                mbValid;        /// True = decoder is correctly initialized.
 };
 
-typedef std::shared_ptr< BiffDecoderBase > BiffDecoderRef;
-
 /** Decodes BIFF stream contents that are encoded using the old XOR algorithm. */
 class BiffDecoder_XOR : public BiffDecoderBase
 {
