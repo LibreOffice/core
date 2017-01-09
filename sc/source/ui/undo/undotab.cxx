@@ -51,8 +51,6 @@
 #include <utility>
 #include <vector>
 
-extern bool bDrawIsInUndo; // somewhere as member!
-
 using namespace com::sun::star;
 using ::std::unique_ptr;
 using ::std::vector;

@@ -68,8 +68,6 @@
 
 #define D_MAX_LONG_  (double) 0x7fffffff
 
-extern sal_uInt16 nScFillModeMouseModifier;     // global.cxx
-
 namespace {
 
 short lcl_DecompValueString( OUString& rValue, sal_Int32& nVal, sal_uInt16* pMinDigits = nullptr )

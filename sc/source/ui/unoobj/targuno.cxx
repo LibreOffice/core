@@ -39,7 +39,7 @@
 
 using  namespace ::com::sun::star;
 
-sal_uInt16 nTypeResIds[SC_LINKTARGETTYPE_COUNT] =
+sal_uInt16 const nTypeResIds[SC_LINKTARGETTYPE_COUNT] =
 {
     SCSTR_CONTENT_TABLE,        // SC_LINKTARGETTYPE_SHEET
     SCSTR_CONTENT_RANGENAME,    // SC_LINKTARGETTYPE_RANGENAME

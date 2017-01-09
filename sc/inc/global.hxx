@@ -31,6 +31,7 @@
 
 class Bitmap;
 class SfxItemSet;
+class SfxViewShell;
 class Color;
 struct ScCalcConfig;
 enum class SvtScriptType;
@@ -896,6 +897,10 @@ struct ScConsolidateParam
     void                ClearDataAreas  ();
     void                SetAreas        ( ScArea* const* ppAreas, sal_uInt16 nCount );
 };
+
+extern SfxViewShell* pScActiveViewShell;
+extern sal_uInt16 nScClickMouseModifier;
+extern sal_uInt16 nScFillModeMouseModifier;
 
 #endif
 

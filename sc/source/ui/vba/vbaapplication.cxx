@@ -35,6 +35,7 @@
 #include <ooo/vba/excel/XlMousePointer.hpp>
 #include <ooo/vba/office/MsoShapeType.hpp>
 
+#include "service.hxx"
 #include "vbaapplication.hxx"
 #include "vbaworkbooks.hxx"
 #include "vbaworkbook.hxx"
@@ -1334,8 +1335,8 @@ ScVbaApplication::getServiceNames()
 namespace application
 {
 namespace sdecl = comphelper::service_decl;
-sdecl::vba_service_class_<ScVbaApplication, sdecl::with_args<false> > serviceImpl;
-extern sdecl::ServiceDecl const serviceDecl(
+sdecl::vba_service_class_<ScVbaApplication, sdecl::with_args<false> > const serviceImpl;
+sdecl::ServiceDecl const serviceDecl(
     serviceImpl,
     "ScVbaApplication",
     "ooo.vba.excel.Application" );

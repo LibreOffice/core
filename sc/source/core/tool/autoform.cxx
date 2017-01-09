@@ -41,8 +41,6 @@
  * be synchronized with Writer's SwTableAutoFmtTbl sw/source/core/doc/tblafmt.cxx
  */
 
-const sal_Char *linker_dummy = "";
-
 static const sal_Char sAutoTblFmtName[] = "autotbl.fmt";
 
 // till SO5PF

@@ -158,6 +158,8 @@ public:
     SfxViewShell* GetSfxViewShell() const override;
 };
 
+extern Point aDragStartDiff;
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

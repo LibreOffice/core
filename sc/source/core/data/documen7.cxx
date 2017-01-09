@@ -41,8 +41,6 @@
 
 #include "globstr.hrc"
 
-extern const ScFormulaCell* pLastFormulaTreeTop;    // cellform.cxx Err527 WorkAround
-
 void ScDocument::StartListeningArea(
     const ScRange& rRange, bool bGroupListening, SvtListener* pListener )
 {

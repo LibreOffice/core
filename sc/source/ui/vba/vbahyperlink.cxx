@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include "service.hxx"
 #include "vbahyperlink.hxx"
 #include <vbahelper/helperdecl.hxx>
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -224,8 +227,8 @@ void ScVbaHyperlink::setUrlComponents( const UrlComponents& rUrlComp ) throw (un
 namespace hyperlink
 {
 namespace sdecl = comphelper::service_decl;
-sdecl::vba_service_class_<ScVbaHyperlink, sdecl::with_args<true> > serviceImpl;
-extern sdecl::ServiceDecl const serviceDecl(
+sdecl::vba_service_class_<ScVbaHyperlink, sdecl::with_args<true> > const serviceImpl;
+sdecl::ServiceDecl const serviceDecl(
     serviceImpl,
     "ScVbaHyperlink",
     "ooo.vba.excel.Hyperlink" );

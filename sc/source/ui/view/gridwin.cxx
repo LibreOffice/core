@@ -162,10 +162,6 @@ enum ScFilterBoxMode
     SC_FILTERBOX_PAGEFIELD
 };
 
-extern SfxViewShell* pScActiveViewShell;    // global.cxx
-extern sal_uInt16 nScClickMouseModifier;    // global.cxx
-extern sal_uInt16 nScFillModeMouseModifier; // global.cxx
-
 struct ScGridWindow::MouseEventState
 {
     bool mbActivatePart;
@@ -3504,9 +3500,6 @@ static ScRange lcl_MakeDropRange( SCCOL nPosX, SCROW nPosY, SCTAB nTab, const Sc
 
     return ScRange( nCol1, nRow1, nTab, nCol2, nRow2, nTab );
 }
-
-extern bool bPasteIsDrop;       // viewfun4 -> move to header
-extern bool bPasteIsMove;       // viewfun7 -> move to header
 
 sal_Int8 ScGridWindow::AcceptPrivateDrop( const AcceptDropEvent& rEvt )
 {

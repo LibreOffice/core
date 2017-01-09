@@ -30,9 +30,6 @@
 #include "sc.hrc"
 #include <editutil.hxx>
 
-// Err527 Workaround
-const ScFormulaCell* pLastFormulaTreeTop = nullptr;
-
 void ScCellFormat::GetString( ScRefCellValue& rCell, sal_uLong nFormat, OUString& rString,
                               Color** ppColor, SvNumberFormatter& rFormatter, const ScDocument* pDoc,
                               bool bNullVals, bool bFormula, bool bUseStarFormat )

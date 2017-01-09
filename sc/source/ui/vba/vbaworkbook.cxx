@@ -34,6 +34,7 @@
 #include <ooo/vba/excel/XApplication.hpp>
 
 #include "scextopt.hxx"
+#include "service.hxx"
 #include "vbaworksheet.hxx"
 #include "vbaworksheets.hxx"
 #include "vbaworkbook.hxx"
@@ -416,8 +417,8 @@ ScVbaWorkbook::getSomething(const uno::Sequence<sal_Int8 >& rId ) throw(css::uno
 namespace workbook
 {
 namespace sdecl = comphelper::service_decl;
-sdecl::vba_service_class_<ScVbaWorkbook, sdecl::with_args<true> > serviceImpl;
-extern sdecl::ServiceDecl const serviceDecl(
+sdecl::vba_service_class_<ScVbaWorkbook, sdecl::with_args<true> > const serviceImpl;
+sdecl::ServiceDecl const serviceDecl(
     serviceImpl,
     "ScVbaWorkbook",
     "ooo.vba.excel.Workbook" );

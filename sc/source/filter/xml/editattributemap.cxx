@@ -13,7 +13,7 @@
 #include <editeng/memberids.hrc>
 #include <xmloff/xmlnmspe.hxx>
 
-ScXMLEditAttributeMap::Entry aEntries[] = {
+ScXMLEditAttributeMap::Entry const aEntries[] = {
 
     { XML_NAMESPACE_FO, "color", "CharColor", EE_CHAR_COLOR, 0 },
     { XML_NAMESPACE_STYLE, "font-charset", "CharFontCharSet", EE_CHAR_FONTINFO, MID_FONT_CHAR_SET },

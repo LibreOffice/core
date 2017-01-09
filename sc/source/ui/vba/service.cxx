@@ -19,38 +19,14 @@
 #include <cppuhelper/implementationentry.hxx>
 #include <comphelper/servicedecl.hxx>
 
+#include <service.hxx>
+
 // component exports
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
 namespace sdecl = comphelper::service_decl;
-
-// reference service helper(s)
-namespace  range
-{
-extern sdecl::ServiceDecl const serviceDecl;
-}
-namespace  workbook
-{
-extern sdecl::ServiceDecl const serviceDecl;
-}
-namespace  worksheet
-{
-extern sdecl::ServiceDecl const serviceDecl;
-}
-namespace window
-{
-extern sdecl::ServiceDecl const serviceDecl;
-}
-namespace hyperlink
-{
-extern sdecl::ServiceDecl const serviceDecl;
-}
-namespace application
-{
-extern sdecl::ServiceDecl const serviceDecl;
-}
 
 extern "C"
 {

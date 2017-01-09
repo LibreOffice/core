@@ -84,6 +84,7 @@
 #include "drwlayer.hxx"
 #include "tabprotection.hxx"
 #include "scextopt.hxx"
+#include "service.hxx"
 #include "vbaoutline.hxx"
 #include "vbarange.hxx"
 #include "vbacomments.hxx"
@@ -1098,8 +1099,8 @@ ScVbaWorksheet::getSomething(const uno::Sequence<sal_Int8 > & rId) throw(uno::Ru
 namespace worksheet
 {
 namespace sdecl = comphelper::service_decl;
-sdecl::vba_service_class_<ScVbaWorksheet, sdecl::with_args<true> > serviceImpl;
-extern sdecl::ServiceDecl const serviceDecl(
+sdecl::vba_service_class_<ScVbaWorksheet, sdecl::with_args<true> > const serviceImpl;
+sdecl::ServiceDecl const serviceDecl(
     serviceImpl,
     "ScVbaWorksheet",
     "ooo.vba.excel.Worksheet" );

@@ -102,8 +102,6 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
 
-extern SfxViewShell* pScActiveViewShell;            // global.cxx
-
 using namespace com::sun::star;
 
 void ScTabViewShell::Activate(bool bMDI)

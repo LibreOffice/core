@@ -65,8 +65,6 @@
 
 using ::com::sun::star::i18n::LocaleDataItem;
 
-// Err527 Workaround
-extern const ScFormulaCell* pLastFormulaTreeTop; // in cellform.cxx
 using namespace formula;
 
 void ScColumn::Broadcast( SCROW nRow )

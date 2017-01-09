@@ -216,6 +216,8 @@ protected:
     virtual css::uno::Reference< css::uno::XInterface > createUnoModel() override;
 };
 
+extern bool bDrawIsInUndo; // somewhere as member!
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

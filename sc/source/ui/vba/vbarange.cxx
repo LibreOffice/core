@@ -135,6 +135,7 @@
 #include <globstr.hrc>
 #include <unonames.hxx>
 
+#include "service.hxx"
 #include "vbaapplication.hxx"
 #include "vbafont.hxx"
 #include "vbacomment.hxx"
@@ -5589,8 +5590,8 @@ ScVbaRange::hasError() throw (uno::RuntimeException, std::exception)
 namespace range
 {
 namespace sdecl = comphelper::service_decl;
-sdecl::vba_service_class_<ScVbaRange, sdecl::with_args<true> > serviceImpl;
-extern sdecl::ServiceDecl const serviceDecl(
+sdecl::vba_service_class_<ScVbaRange, sdecl::with_args<true> > const serviceImpl;
+sdecl::ServiceDecl const serviceDecl(
     serviceImpl,
     "SvVbaRange",
     "ooo.vba.excel.Range" );

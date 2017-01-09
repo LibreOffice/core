@@ -29,8 +29,6 @@
 #include "formulacell.hxx"
 #include "dociter.hxx"
 
-extern sal_uInt16 nScFillModeMouseModifier;             // global.cxx
-
 // ---  Referenz-Eingabe / Fill-Cursor
 
 void ScTabView::HideTip()

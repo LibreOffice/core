@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <vbahelper/helperdecl.hxx>
+#include "service.hxx"
 #include "vbawindow.hxx"
 #include "vbaworksheets.hxx"
 #include "vbaworksheet.hxx"
@@ -898,8 +899,8 @@ ScVbaWindow::getServiceNames()
 namespace window
 {
 namespace sdecl = comphelper::service_decl;
-sdecl::vba_service_class_<ScVbaWindow, sdecl::with_args<true> > serviceImpl;
-extern sdecl::ServiceDecl const serviceDecl(
+sdecl::vba_service_class_<ScVbaWindow, sdecl::with_args<true> > const serviceImpl;
+sdecl::ServiceDecl const serviceDecl(
     serviceImpl,
     "ScVbaWindow",
     "ooo.vba.excel.Window" );

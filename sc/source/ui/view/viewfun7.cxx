@@ -49,8 +49,6 @@
 #include "dragdata.hxx"
 #include <gridwin.hxx>
 
-extern Point aDragStartDiff;
-
 bool bPasteIsMove = false;
 
 using namespace com::sun::star;

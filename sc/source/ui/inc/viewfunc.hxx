@@ -353,6 +353,9 @@ private:
                                        SCCOL nEndCol, SCROW nEndRow, sal_uLong nCount );
 };
 
+extern bool bPasteIsDrop;
+extern bool bPasteIsMove;
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

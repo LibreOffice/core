@@ -36,8 +36,6 @@
 #define SC_SELENG_REFMODE_UPDATE_INTERVAL_MIN 65
 #endif
 
-extern sal_uInt16 nScFillModeMouseModifier;             // global.cxx
-
 using namespace com::sun::star;
 
 static Point aSwitchPos;                //! Member
