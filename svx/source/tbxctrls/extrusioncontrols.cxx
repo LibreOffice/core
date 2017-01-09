@@ -314,8 +314,8 @@ double ExtrusionDepthDialog::getDepth() const
     return (double)( m_pMtrDepth->GetValue( FUNIT_100TH_MM ) ) / 100.0;
 }
 
-double aDepthListInch[] = { 0, 1270,2540,5080,10160 };
-double aDepthListMM[] = { 0, 1000, 2500, 5000, 10000 };
+double const aDepthListInch[] = { 0, 1270,2540,5080,10160 };
+double const aDepthListMM[] = { 0, 1000, 2500, 5000, 10000 };
 
 ExtrusionDepthWindow::ExtrusionDepthWindow(
     svt::ToolboxController& rController,

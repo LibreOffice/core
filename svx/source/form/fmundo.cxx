@@ -164,7 +164,7 @@ struct PropertySetInfo
 typedef std::map<Reference< XPropertySet >, PropertySetInfo> PropertySetInfoCache;
 
 
-OUString static_STR_UNDO_PROPERTY;
+static OUString static_STR_UNDO_PROPERTY;
 
 
 FmXUndoEnvironment::FmXUndoEnvironment(FmFormModel& _rModel)

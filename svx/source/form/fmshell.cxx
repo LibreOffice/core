@@ -92,7 +92,7 @@
 
 // wird fuer Invalidate verwendet -> mitpflegen
 // aufsteigend sortieren !!!!!!
-sal_uInt16 ControllerSlotMap[] =    // slots des Controllers
+sal_uInt16 const ControllerSlotMap[] =    // slots des Controllers
 {
     SID_FM_CONFIG,
     SID_FM_PUSHBUTTON,
