@@ -18,7 +18,7 @@
 namespace global{
 
 /// Default values
-sal_Int64 aDefLimitAry[] =
+sal_Int64 const aDefLimitAry[] =
 {
     5,
     10,
