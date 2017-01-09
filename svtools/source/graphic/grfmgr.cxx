@@ -77,7 +77,7 @@ GraphicObject::GraphicObject() :
 {
     ImplConstruct();
     ImplAssignGraphicData();
-    ImplSetGraphicManager( nullptr );
+    ImplSetGraphicManager();
 }
 
 GraphicObject::GraphicObject( const Graphic& rGraphic ) :
@@ -87,7 +87,7 @@ GraphicObject::GraphicObject( const Graphic& rGraphic ) :
 {
     ImplConstruct();
     ImplAssignGraphicData();
-    ImplSetGraphicManager( nullptr );
+    ImplSetGraphicManager();
 }
 
 GraphicObject::GraphicObject( const GraphicObject& rGraphicObj ) :
@@ -98,7 +98,7 @@ GraphicObject::GraphicObject( const GraphicObject& rGraphicObj ) :
 {
     ImplConstruct();
     ImplAssignGraphicData();
-    ImplSetGraphicManager( nullptr, nullptr, &rGraphicObj );
+    ImplSetGraphicManager(nullptr, &rGraphicObj);
     if( rGraphicObj.HasUserData() && rGraphicObj.IsSwappedOut() )
         SetSwapState();
 }
@@ -112,7 +112,7 @@ GraphicObject::GraphicObject( const OString& rUniqueID ) :
     // assign default properties
     ImplAssignGraphicData();
 
-    ImplSetGraphicManager( nullptr, &rUniqueID );
+    ImplSetGraphicManager(&rUniqueID);
 
     // update properties
     ImplAssignGraphicData();
@@ -161,11 +161,11 @@ void GraphicObject::ImplAssignGraphicData()
     ImplAfterDataChange();
 }
 
-void GraphicObject::ImplSetGraphicManager( const GraphicManager* pMgr, const OString* pID, const GraphicObject* pCopyObj )
+void GraphicObject::ImplSetGraphicManager(const OString* pID, const GraphicObject* pCopyObj)
 {
-    if( !mpMgr || ( pMgr != mpMgr ) )
+    if (!mpMgr || mpMgr)
     {
-        if( !pMgr && mpMgr && ( mpMgr == mpGlobalMgr ) )
+        if (mpMgr && mpMgr == mpGlobalMgr)
             return;
         else
         {
@@ -180,7 +180,7 @@ void GraphicObject::ImplSetGraphicManager( const GraphicManager* pMgr, const OSt
                 }
             }
 
-            if( !pMgr )
+            if (true)
             {
                 if( !mpGlobalMgr )
                 {
@@ -208,7 +208,7 @@ void GraphicObject::ImplSetGraphicManager( const GraphicManager* pMgr, const OSt
                 mpMgr = mpGlobalMgr;
             }
             else
-                mpMgr = const_cast<GraphicManager*>(pMgr);
+                mpMgr = nullptr;
 
             mpMgr->ImplRegisterObj( *this, maGraphic, pID, pCopyObj );
         }
@@ -473,7 +473,7 @@ void GraphicObject::GraphicManagerDestroyed()
 {
     // we're alive, but our manager doesn't live anymore ==> connect to default manager
     mpMgr = nullptr;
-    ImplSetGraphicManager( nullptr );
+    ImplSetGraphicManager();
 }
 
 bool GraphicObject::IsCached( OutputDevice* pOut, const Point& rPt, const Size& rSz,

@@ -203,7 +203,6 @@ private:
     void                    SVT_DLLPRIVATE ImplConstruct();
     void                    SVT_DLLPRIVATE ImplAssignGraphicData();
     void                    SVT_DLLPRIVATE ImplSetGraphicManager(
-                                const GraphicManager* pMgr,
                                 const OString* pID = nullptr,
                                 const GraphicObject* pCopyObj = nullptr
                             );
