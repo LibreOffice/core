@@ -99,9 +99,6 @@ using com::sun::star::uno::UNO_QUERY_THROW;
 
 namespace pq_sdbc_driver
 {
-typedef std::vector< css::uno::Sequence< css::uno::Any > > SequenceAnyVector;
-
-
 #define QUOTEME(X)  #X
 #define STRINGIFY(X) QUOTEME(X)
 

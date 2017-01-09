@@ -32,8 +32,6 @@
 
 #include "opengl/PackedTextureAtlas.hxx"
 
-typedef std::unordered_map<int,int> IntMap;
-
 class WinFontInstance;
 
 namespace
