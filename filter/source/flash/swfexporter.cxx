@@ -386,7 +386,7 @@ sal_uInt16 FlashExporter::exportBackgrounds( Reference< XDrawPage > const & xDra
 }
 
 
-sal_Int32 nPlaceDepth;
+static sal_Int32 nPlaceDepth;
 // AS: A Slide can have a private background or use its masterpage's background.
 //  We use the checksums on the metafiles to tell if backgrounds are the same and
 //  should be reused.  The return value indicates which slide's background to use.

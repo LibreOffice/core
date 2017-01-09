@@ -642,7 +642,7 @@ struct KeyCodeEntry
    sal_uInt16 nCode;
 };
 
-KeyCodeEntry aMSKeyCodesData[] = {
+KeyCodeEntry const aMSKeyCodesData[] = {
     { "BACKSPACE", KEY_BACKSPACE },
     { "BS", KEY_BACKSPACE },
     { "DELETE", KEY_DELETE },
@@ -684,7 +684,7 @@ awt::KeyEvent parseKeyEvent( const OUString& Key ) throw ( uno::RuntimeException
     static std::map< OUString, sal_uInt16 > s_KeyCodes;
     if ( s_KeyCodes.empty() )
     {
-        for (KeyCodeEntry & i : aMSKeyCodesData)
+        for (KeyCodeEntry const & i : aMSKeyCodesData)
         {
             s_KeyCodes[ OUString::createFromAscii( i.sName ) ] = i.nCode;
         }

@@ -55,7 +55,7 @@ using com::sun::star::io::XInputStream;
 
 namespace T602ImportFilter {
 
-    unsigned char kam2lat[129] =
+    unsigned char const kam2lat[129] =
         //    0   1   2   3   4   5   6   7   8   9   A   B   C   D   E   F
         "\xAC\x81\x82\xD4\x84\xD2\x9B\x9F\xD8\xB7\x91\xD6\x96\x92\x8E\xB5"  // 8
         "\x90\xA7\xA6\x93\x94\xE0\x85\xE9\xEC\x99\x9A\xE6\x95\xED\xFC\x9C"  // 9
@@ -66,7 +66,7 @@ namespace T602ImportFilter {
         "\xD0\xD1\xD3\xD7\xAA\xAB\xDD\xB0\xE3\xE4\xEB\xEE\xEF\xF0\xF2\xF4"  // E
         "\xBC\xBD\xBE\xC6\xC7\xC8\xF6\xC9\xCA\xFA\xFB\xCB\xF1\xCC\xFE\xFF"; // F
 
-    unsigned char koi2lat[129] =
+    unsigned char const koi2lat[129] =
         //    0   1   2   3   4   5   6   7   8   9   A   B   C   D   E   F
         "\x80\x83\x86\xF5\xE1\x87\x88\x89\x8A\x8B\x8C\x8F\x97\xCF\xCF\x98"  // 8
         "\x9D\x9E\xA4\xA5\xA8\xA9\xDB\xDC\xDF\xB1\xB2\xB6\xB8\xB9\xBA\xBB"  // 9
@@ -77,7 +77,7 @@ namespace T602ImportFilter {
         "\xBF\xB5\xD9\xAC\xD2\xB7\xE8\xB3\x9A\xD6\xDE\x91\x95\x99\xD5\xE0"  // E
         "\xE2\x8E\xFC\xE6\x9B\xE9\xB4\x90\xFA\xED\xA6\xC1\xF1\xFB\xFE\xFF"; // F
 
-    unsigned char lat2UNC[257] =
+    unsigned char const lat2UNC[257] =
         //    0       1       2       3       4       5       6       7
         //    8       9       A       B       C       D       E       F
         "\x00\xe7\x00\xfc\x00\xe9\x00\xf9\x00\xe4\x01\x6f\x00\xe8\x00\xa3"  // 8
@@ -97,7 +97,7 @@ namespace T602ImportFilter {
         "\x00\xf8\x02\xdd\x03\xb5\x02\xc7\x22\x29\x00\xa7\x00\xf7\x00\xe0"  // F
         "\x00\xb4\x00\xb0\x00\xc0\x02\xc6\x01\x58\x01\x59\x00\x20\x00\x20";
 
-    unsigned char rus2UNC[257] =
+    unsigned char const rus2UNC[257] =
         //    0       1       2       3       4       5       6       7
         //    8       9       A       B       C       D       E       F
         "\x04\x11\x00\xfc\x00\xe9\x04\x12\x00\xe4\x01\x6f\x04\x13\x04\x14"  // 8
@@ -131,7 +131,7 @@ namespace T602ImportFilter {
         mxHandler->endElement(_nam); \
     }
 
-inistruct ini;
+static inistruct ini;
 
 T602ImportFilter::T602ImportFilter(const css::uno::Reference<css::lang::XMultiServiceFactory > &r )
     : mxMSF(r)

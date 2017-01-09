@@ -387,7 +387,7 @@ OUString SAL_CALL SVGFilter::detect(Sequence<PropertyValue>& rDescriptor) throw 
 #define SVG_WRITER_IMPL_NAME "com.sun.star.comp.Draw.SVGWriter"
 
 namespace sdecl = comphelper::service_decl;
- sdecl::class_<SVGFilter> serviceFilterImpl;
+ sdecl::class_<SVGFilter> const serviceFilterImpl;
  const sdecl::ServiceDecl svgFilter(
      serviceFilterImpl,
      SVG_FILTER_IMPL_NAME,
@@ -395,7 +395,7 @@ namespace sdecl = comphelper::service_decl;
      "com.sun.star.document.ExportFilter;"
      "com.sun.star.document.ExtendedTypeDetection" );
 
- sdecl::class_<SVGWriter, sdecl::with_args<true> > serviceWriterImpl;
+ sdecl::class_<SVGWriter, sdecl::with_args<true> > const serviceWriterImpl;
  const sdecl::ServiceDecl svgWriter(
      serviceWriterImpl,
      SVG_WRITER_IMPL_NAME,

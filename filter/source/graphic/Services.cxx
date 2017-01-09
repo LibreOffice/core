@@ -24,13 +24,13 @@
 #define GRAPHIC_EXPORT_FILTER_SERVICE "com.sun.star.comp.GraphicExportFilter"
 #define GRAPHIC_EXPORT_DIALOG_SERVICE "com.sun.star.comp.GraphicExportDialog"
 
-comphelper::service_decl::class_<GraphicExportFilter> serviceGraphicExportFilter;
+comphelper::service_decl::class_<GraphicExportFilter> const serviceGraphicExportFilter;
 const comphelper::service_decl::ServiceDecl graphicExportFilter(
     serviceGraphicExportFilter,
     GRAPHIC_EXPORT_FILTER_SERVICE,
     "com.sun.star.document.ExportFilter" );
 
-comphelper::service_decl::class_<GraphicExportDialog> serviceGraphicExportDialog;
+comphelper::service_decl::class_<GraphicExportDialog> const serviceGraphicExportDialog;
 const comphelper::service_decl::ServiceDecl graphicExportDialog(
     serviceGraphicExportDialog,
     GRAPHIC_EXPORT_DIALOG_SERVICE,
