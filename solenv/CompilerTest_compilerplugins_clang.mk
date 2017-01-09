@@ -11,6 +11,7 @@ $(eval $(call gb_CompilerTest_CompilerTest,compilerplugins_clang))
 
 $(eval $(call gb_CompilerTest_add_exception_objects,compilerplugins_clang, \
     compilerplugins/clang/test/datamembershadow \
+    compilerplugins/clang/test/externvar \
     compilerplugins/clang/test/finalprotected \
     compilerplugins/clang/test/passstuffbyref \
     compilerplugins/clang/test/oslendian-1 \
