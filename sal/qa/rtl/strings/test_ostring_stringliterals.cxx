@@ -9,10 +9,6 @@
 
 // activate the extra needed ctor
 #define RTL_STRING_UNITTEST
-bool rtl_string_unittest_const_literal;
-bool rtl_string_unittest_invalid_conversion;
-bool rtl_string_unittest_const_literal_function;
-bool rtl_string_unittest_non_const_literal_function;
 
 #include <sal/types.h>
 #include <cppunit/TestFixture.h>
@@ -20,6 +16,10 @@ bool rtl_string_unittest_non_const_literal_function;
 #include "rtl/string.h"
 #include "rtl/string.hxx"
 #include "rtl/strbuf.hxx"
+
+bool rtl_string_unittest_const_literal;
+bool rtl_string_unittest_const_literal_function;
+static bool rtl_string_unittest_non_const_literal_function;
 
 namespace test { namespace ostring {
 

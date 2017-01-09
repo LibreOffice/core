@@ -33,12 +33,11 @@
 #include "sal/types.h"
 
 #include <saltime.hxx>
+#include <salusesyslog.hxx>
 
 #if HAVE_SYSLOG_H
 #include <string.h>
 #include <syslog.h>
-// from sal/osl/all/log.cxx:
-extern bool sal_use_syslog;
 #endif
 
 extern "C" {

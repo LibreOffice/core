@@ -27,6 +27,7 @@
 #include "sal/log.hxx"
 #include "sal/types.h"
 #include "misc.hxx"
+#include "salusesyslog.hxx"
 
 #if defined ANDROID
 #include <android/log.h>

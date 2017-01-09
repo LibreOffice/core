@@ -9,7 +9,6 @@
 
 // activate support for detecting errors instead of getting compile errors
 #define RTL_STRING_UNITTEST_CONCAT
-bool rtl_string_unittest_invalid_concat = false;
 
 #include <sal/types.h>
 #include <cppunit/TestFixture.h>
@@ -21,6 +20,8 @@ bool rtl_string_unittest_invalid_concat = false;
 #include <rtl/ustrbuf.hxx>
 
 #include <typeinfo>
+
+bool rtl_string_unittest_invalid_concat = false;
 
 using namespace rtl;
 

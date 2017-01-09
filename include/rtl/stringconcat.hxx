@@ -17,6 +17,10 @@
 
 #ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
 
+#if defined RTL_STRING_UNITTEST_CONCAT
+extern bool rtl_string_unittest_invalid_concat;
+#endif
+
 #ifdef RTL_STRING_UNITTEST
 #define rtl rtlunittest
 #endif

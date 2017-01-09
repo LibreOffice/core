@@ -5090,6 +5090,6 @@ class GlobalObject
     }
 };
 
-GlobalObject theGlobalObject;
+static GlobalObject theGlobalObject;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
