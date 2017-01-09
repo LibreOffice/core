@@ -35,8 +35,8 @@
 char const* getPath(void);
 char* createCommandName( char* argv0 );
 
-const int SEPARATOR = '/';
-const char* PATHSEPARATOR = ":";
+static const int SEPARATOR = '/';
+static const char* PATHSEPARATOR = ":";
 
 
 /*
