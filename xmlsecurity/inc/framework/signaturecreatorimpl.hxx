@@ -67,7 +67,7 @@ private:
         throw (css::uno::Exception, css::uno::RuntimeException) override;
 
 public:
-    explicit SignatureCreatorImpl( const css::uno::Reference< css::uno::XComponentContext > & xContext );
+    explicit SignatureCreatorImpl();
     virtual ~SignatureCreatorImpl() override;
 
     /* XBlockerMonitor */

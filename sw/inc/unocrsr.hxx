@@ -117,17 +117,16 @@ namespace sw
     {
         public:
             UnoCursorPointer()
-                : m_pCursor(nullptr), m_bSectionRestricted(false)
-            {}
-            UnoCursorPointer(std::shared_ptr<SwUnoCursor> pCursor, bool bSectionRestricted=false)
-                : m_pCursor(pCursor), m_bSectionRestricted(bSectionRestricted)
+                : m_pCursor(nullptr)
+           {}
+            UnoCursorPointer(std::shared_ptr<SwUnoCursor> pCursor)
+                : m_pCursor(pCursor)
             {
                 StartListening(m_pCursor->m_aNotifier);
             }
             UnoCursorPointer(const UnoCursorPointer& rOther)
                 : SfxListener()
                 , m_pCursor(rOther.m_pCursor)
-                , m_bSectionRestricted(rOther.m_bSectionRestricted)
             {
                 if(m_pCursor)
                     StartListening(m_pCursor->m_aNotifier);
@@ -172,7 +171,6 @@ namespace sw
             }
         private:
             std::shared_ptr<SwUnoCursor> m_pCursor;
-            const bool m_bSectionRestricted;
     };
 }
 #endif

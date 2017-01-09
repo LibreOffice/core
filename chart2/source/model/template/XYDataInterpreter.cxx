@@ -36,9 +36,8 @@ using ::com::sun::star::uno::Sequence;
 namespace chart
 {
 
-XYDataInterpreter::XYDataInterpreter(
-    const uno::Reference< uno::XComponentContext > & xContext ) :
-        DataInterpreter( xContext )
+XYDataInterpreter::XYDataInterpreter() :
+        DataInterpreter()
 {
 }
 

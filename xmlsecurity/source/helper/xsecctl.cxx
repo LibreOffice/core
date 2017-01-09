@@ -58,7 +58,6 @@ XSecController::XSecController( const cssu::Reference<cssu::XComponentContext>& 
     , m_bIsSAXEventKeeperSticky(false)
     , m_nReservedSignatureId(0)
     , m_bVerifyCurrentSignature(false)
-    , m_nDigestID(cssxc::DigestID::SHA1)
 {
 }
 

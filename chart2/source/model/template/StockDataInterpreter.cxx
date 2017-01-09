@@ -41,9 +41,8 @@ namespace chart
 
 // explicit
 StockDataInterpreter::StockDataInterpreter(
-    StockChartTypeTemplate::StockVariant eVariant,
-    const Reference< uno::XComponentContext > & xContext ) :
-        DataInterpreter( xContext ),
+    StockChartTypeTemplate::StockVariant eVariant ) :
+        DataInterpreter(),
         m_eStockVariant( eVariant )
 {}
 

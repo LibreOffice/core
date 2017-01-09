@@ -27,8 +27,7 @@ namespace chart
 class BubbleDataInterpreter : public DataInterpreter
 {
 public:
-    explicit BubbleDataInterpreter(
-        const css::uno::Reference< css::uno::XComponentContext > & xContext );
+    explicit BubbleDataInterpreter();
     virtual ~BubbleDataInterpreter() override;
 
 protected:

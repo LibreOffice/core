@@ -508,7 +508,7 @@ Reference< XDataInterpreter > SAL_CALL StockChartTypeTemplate::getDataInterprete
     throw (uno::RuntimeException, std::exception)
 {
     if( ! m_xDataInterpreter.is())
-        m_xDataInterpreter.set( new StockDataInterpreter( m_eStockVariant, GetComponentContext() ) );
+        m_xDataInterpreter.set( new StockDataInterpreter( m_eStockVariant ) );
 
     return m_xDataInterpreter;
 }

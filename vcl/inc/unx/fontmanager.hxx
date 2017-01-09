@@ -142,7 +142,6 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
         int               m_nYMin;
         int               m_nXMax;
         int               m_nYMax;
-        bool              m_bUserOverride;
 
         int               m_nDirectory;       // atom containing system dependent path
         OString           m_aFontFile;        // relative to directory
