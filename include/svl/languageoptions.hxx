@@ -128,7 +128,6 @@ public:
 
     LanguageType    GetWin16SystemLanguage() const;
 
-    bool            isCTLKeyboardLayoutInstalled() const;
     bool            isCJKKeyboardLayoutInstalled() const;
 };
 

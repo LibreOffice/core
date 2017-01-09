@@ -46,19 +46,6 @@ bool    WritePS (osl::File* pFile, const sal_Char* pString, sal_uInt64 nInLength
 bool    WritePS (osl::File* pFile, const OString &rString);
 bool    WritePS (osl::File* pFile, const OUString &rString);
 
-class ConverterFactory
-{
-
-public:
-    ConverterFactory();
-    ~ConverterFactory();
-    rtl_UnicodeToTextConverter  Get (rtl_TextEncoding nEncoding);
-
-private:
-
-    std::map< rtl_TextEncoding, rtl_UnicodeToTextConverter >        m_aConverters;
-};
-
 }  /* namespace psp */
 
 #endif // INCLUDED_VCL_GENERIC_PRINT_PSPUTIL_HXX

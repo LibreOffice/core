@@ -99,28 +99,6 @@ bool BiffDecoder_XOR::implVerifyEncryptionData( const Sequence< NamedValue >& rE
     return maEncryptionData.hasElements();
 }
 
-void BiffDecoder_XOR::implDecode( sal_uInt8* pnDestData, const sal_uInt8* pnSrcData, sal_Int64 nStreamPos, sal_uInt16 nBytes )
-{
-    maCodec.startBlock();
-    maCodec.skip( static_cast< sal_Int32 >( (nStreamPos + nBytes) & 0x0F ) );
-    maCodec.decode( pnDestData, pnSrcData, nBytes );
-}
-
-namespace {
-
-/** Returns the block index of the passed stream position for RCF decryption. */
-sal_Int32 lclGetRcfBlock( sal_Int64 nStreamPos )
-{
-    return static_cast< sal_Int32 >( nStreamPos / BIFF_RCF_BLOCKSIZE );
-}
-
-/** Returns the offset of the passed stream position in a block for RCF decryption. */
-sal_Int32 lclGetRcfOffset( sal_Int64 nStreamPos )
-{
-    return static_cast< sal_Int32 >( nStreamPos % BIFF_RCF_BLOCKSIZE );
-}
-
-} // namespace
 
 BiffDecoder_RCF::BiffDecoder_RCF( const BiffDecoder_RCF& rDecoder ) :
     BiffDecoderBase(),  // must be called to prevent compiler warning
@@ -171,31 +149,6 @@ bool BiffDecoder_RCF::implVerifyEncryptionData( const Sequence< NamedValue >& rE
     }
 
     return maEncryptionData.hasElements();
-}
-
-void BiffDecoder_RCF::implDecode( sal_uInt8* pnDestData, const sal_uInt8* pnSrcData, sal_Int64 nStreamPos, sal_uInt16 nBytes )
-{
-    sal_uInt8* pnCurrDest = pnDestData;
-    const sal_uInt8* pnCurrSrc = pnSrcData;
-    sal_Int64 nCurrPos = nStreamPos;
-    sal_uInt16 nBytesLeft = nBytes;
-    while( nBytesLeft > 0 )
-    {
-        // initialize codec for current stream position
-        maCodec.startBlock( lclGetRcfBlock( nCurrPos ) );
-        maCodec.skip( lclGetRcfOffset( nCurrPos ) );
-
-        // decode the block
-        sal_uInt16 nBlockLeft = static_cast< sal_uInt16 >( BIFF_RCF_BLOCKSIZE - lclGetRcfOffset( nCurrPos ) );
-        sal_uInt16 nDecBytes = ::std::min( nBytesLeft, nBlockLeft );
-        maCodec.decode( pnCurrDest, pnCurrSrc, static_cast< sal_Int32 >( nDecBytes ) );
-
-        // prepare for next block
-        pnCurrDest += nDecBytes;
-        pnCurrSrc += nDecBytes;
-        nCurrPos += nDecBytes;
-        nBytesLeft = nBytesLeft - nDecBytes;
-    }
 }
 
 } // namespace xls
