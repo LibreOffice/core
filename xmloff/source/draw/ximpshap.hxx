@@ -37,6 +37,8 @@
 #include <xmloff/xmlmultiimagehelper.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
+struct SvXMLEnumMapEntry;
+
 // common shape context
 
 class SdXMLShapeContext : public SvXMLShapeContext
@@ -619,6 +621,9 @@ private:
     OUString msTemplateStyleName;
     bool maTemplateStylesUsed[6];
 };
+
+extern SvXMLEnumMapEntry const aXML_GlueAlignment_EnumMap[];
+extern SvXMLEnumMapEntry const aXML_GlueEscapeDirection_EnumMap[];
 
 #endif // INCLUDED_XMLOFF_SOURCE_DRAW_XIMPSHAP_HXX
 

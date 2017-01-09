@@ -33,7 +33,7 @@ using namespace ::xmloff::token;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
-XMLTokenEnum aMetaTokens[] =
+XMLTokenEnum const aMetaTokens[] =
 {
     XML_GENERATOR,
     XML_TITLE,
@@ -85,7 +85,7 @@ void XMLMetaTransformerContext::EndElement()
 {
     // export everything in the correct order
     OUString aKeywordsQName;
-    XMLTokenEnum *pToken = aMetaTokens;
+    XMLTokenEnum const *pToken = aMetaTokens;
     while( *pToken != XML_TOKEN_END )
     {
         const OUString& rToken = GetXMLToken( *pToken );

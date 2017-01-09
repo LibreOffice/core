@@ -18,6 +18,7 @@
  */
 
 #include "PageMasterPropHdlFactory.hxx"
+#include "enummaps.hxx"
 #include <xmloff/xmltypes.hxx>
 #include <xmloff/xmltoken.hxx>
 #include "xmlbahdl.hxx"
@@ -42,11 +43,6 @@ using namespace ::xmloff::token;
 using namespace ::com::sun::star;
 //UUUU
 using namespace ::com::sun::star::drawing;
-
-//UUUU
-extern SvXMLEnumMapEntry aXML_FillStyle_EnumMap[];
-extern SvXMLEnumMapEntry aXML_RefPoint_EnumMap[];
-extern SvXMLEnumMapEntry aXML_BitmapMode_EnumMap[];
 
 static SvXMLEnumMapEntry const aXML_TextGridMode_ConstantMap[] =
 {

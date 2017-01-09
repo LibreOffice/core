@@ -42,6 +42,7 @@
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmltoken.hxx>
 #include "XMLAnchorTypePropHdl.hxx"
+#include "enummaps.hxx"
 #include <xmloff/XMLConstantsPropertyHandler.hxx>
 #include "XMLClipPropertyHandler.hxx"
 #include "XMLTextColumnsPropertyHandler.hxx"
@@ -66,11 +67,6 @@ using namespace ::xmloff::token;
 
 //UUUU
 using namespace ::com::sun::star::drawing;
-
-//UUUU
-extern SvXMLEnumMapEntry aXML_FillStyle_EnumMap[];
-extern SvXMLEnumMapEntry aXML_RefPoint_EnumMap[];
-extern SvXMLEnumMapEntry aXML_BitmapMode_EnumMap[];
 
 static SvXMLEnumMapEntry const pXML_HoriPos_Enum[] =
 {

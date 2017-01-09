@@ -32,7 +32,7 @@
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
-SvXMLEnumMapEntry pXML_tabstop_style[] =
+SvXMLEnumMapEntry const pXML_tabstop_style[] =
 {
     { XML_LEFT,     style::TabAlign_LEFT    },
     { XML_CENTER,   style::TabAlign_CENTER  },

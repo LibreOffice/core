@@ -38,7 +38,7 @@ struct SdXMLDataStyleNumber
     bool    mbDecimal02;
     const char* mpText;
 }
-    aSdXMLDataStyleNumbers[] =
+const aSdXMLDataStyleNumbers[] =
 {
     { XML_DAY,          false,      false,      false,      nullptr },
     { XML_DAY,          true,       false,      false,      nullptr },
@@ -286,7 +286,7 @@ const SdXMLFixedDataStyle aSdXML_TimeStyle_7 =
     }
 };
 
-const SdXMLFixedDataStyle* aSdXMLFixedDateFormats[SdXMLDateFormatCount] =
+const SdXMLFixedDataStyle* const aSdXMLFixedDateFormats[SdXMLDateFormatCount] =
 {
     &aSdXML_Standard_Short,
     &aSdXML_Standard_Long,
@@ -298,7 +298,7 @@ const SdXMLFixedDataStyle* aSdXMLFixedDateFormats[SdXMLDateFormatCount] =
     &aSdXML_DateStyle_6,
 };
 
-const SdXMLFixedDataStyle* aSdXMLFixedTimeFormats[SdXMLTimeFormatCount] =
+const SdXMLFixedDataStyle* const aSdXMLFixedTimeFormats[SdXMLTimeFormatCount] =
 {
     &aSdXML_TimeStyle_1,
     &aSdXML_TimeStyle_2,
@@ -311,7 +311,7 @@ const SdXMLFixedDataStyle* aSdXMLFixedTimeFormats[SdXMLTimeFormatCount] =
 
 // export
 
-static void SdXMLExportDataStyleNumber( SdXMLExport& rExport, SdXMLDataStyleNumber& rElement )
+static void SdXMLExportDataStyleNumber( SdXMLExport& rExport, SdXMLDataStyleNumber const & rElement )
 {
     if( rElement.mbDecimal02 )
     {
@@ -361,13 +361,13 @@ static void SdXMLExportStyle( SdXMLExport& rExport, const SdXMLFixedDataStyle* p
 
         while( *pElements )
         {
-            SdXMLDataStyleNumber& rElement = aSdXMLDataStyleNumbers[ (*pElements++) - 1 ];
+            SdXMLDataStyleNumber const & rElement = aSdXMLDataStyleNumbers[ (*pElements++) - 1 ];
             SdXMLExportDataStyleNumber( rExport, rElement );
         }
 
         if( pStyle2 )
         {
-            SdXMLDataStyleNumber& rElement = aSdXMLDataStyleNumbers[ DATA_STYLE_NUMBER_TEXT_SPACE - 1 ];
+            SdXMLDataStyleNumber const & rElement = aSdXMLDataStyleNumbers[ DATA_STYLE_NUMBER_TEXT_SPACE - 1 ];
             SdXMLExportDataStyleNumber( rExport, rElement );
         }
 

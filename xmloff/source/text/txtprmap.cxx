@@ -86,7 +86,7 @@ using namespace ::xmloff::token;
 #define MAP_(name,prefix,token,type,context)  { name, sizeof(name)-1, prefix, token, type, context, SvtSaveOptions::ODFVER_010, false }
 #define GMAP(name,prefix,token,type,context) MAP_(name,prefix,token,static_cast<sal_Int32>(type|XML_TYPE_PROP_GRAPHIC),context)
 
-XMLPropertyMapEntry aXMLParaPropMap[] =
+XMLPropertyMapEntry const aXMLParaPropMap[] =
 {
     // RES_UNKNOWNATR_CONTAINER
     MP_E( "ParaUserDefinedAttributes", TEXT, XMLNS, XML_TYPE_ATTRIBUTE_CONTAINER | MID_FLAG_SPECIAL_ITEM, 0 ),
@@ -459,7 +459,7 @@ XMLPropertyMapEntry aXMLParaPropMap[] =
 };
 
 
-XMLPropertyMapEntry aXMLAdditionalTextDefaultsMap[] =
+XMLPropertyMapEntry const aXMLAdditionalTextDefaultsMap[] =
 {
     // RES_FOLLOW_TEXT_FLOW - DVO #i18732#
     MG_ED( "IsFollowingTextFlow", STYLE, FLOW_WITH_TEXT,      XML_TYPE_BOOL, 0 ),
@@ -470,7 +470,7 @@ XMLPropertyMapEntry aXMLAdditionalTextDefaultsMap[] =
     M_END()
 };
 
-XMLPropertyMapEntry aXMLTextPropMap[] =
+XMLPropertyMapEntry const aXMLTextPropMap[] =
 {
     // RES_CHRATR_CASEMAP
     MT_E( "CharCaseMap",        FO,     FONT_VARIANT,       XML_TYPE_TEXT_CASEMAP_VAR,  0 ),
@@ -673,7 +673,7 @@ XMLPropertyMapEntry aXMLTextPropMap[] =
     M_END()
 };
 
-XMLPropertyMapEntry aXMLFramePropMap[] =
+XMLPropertyMapEntry const aXMLFramePropMap[] =
 {
     // RES_FILL_ORDER
     // TODO: not required???
@@ -879,7 +879,7 @@ XMLPropertyMapEntry aXMLFramePropMap[] =
     M_END()
 };
 
-XMLPropertyMapEntry aXMLShapePropMap[] =
+XMLPropertyMapEntry const aXMLShapePropMap[] =
 {
     // RES_LR_SPACE
     MG_E( "LeftMargin",             FO, MARGIN_LEFT,        XML_TYPE_MEASURE,  0),
@@ -924,7 +924,7 @@ XMLPropertyMapEntry aXMLShapePropMap[] =
     M_END()
 };
 
-XMLPropertyMapEntry aXMLSectionPropMap[] =
+XMLPropertyMapEntry const aXMLSectionPropMap[] =
 {
     // RES_COL
     MS_E( "TextColumns",            STYLE,  COLUMNS,    MID_FLAG_ELEMENT_ITEM|XML_TYPE_TEXT_COLUMNS, CTF_TEXTCOLUMNS ),
@@ -970,7 +970,7 @@ XMLPropertyMapEntry aXMLSectionPropMap[] =
     M_END()
 };
 
-XMLPropertyMapEntry aXMLRubyPropMap[] =
+XMLPropertyMapEntry const aXMLRubyPropMap[] =
 {
     MR_E( "RubyAdjust", STYLE, RUBY_ALIGN, XML_TYPE_TEXT_RUBY_ADJUST, 0 ),
     MR_E( "RubyIsAbove",    STYLE, RUBY_POSITION, XML_TYPE_TEXT_RUBY_POSITION, 0 ),
@@ -978,7 +978,7 @@ XMLPropertyMapEntry aXMLRubyPropMap[] =
 };
 
 
-XMLPropertyMapEntry aXMLTableDefaultsMap[] =
+XMLPropertyMapEntry const aXMLTableDefaultsMap[] =
 {
     // RES_COLLAPSING_BORDERS: only occurs in tables, but we need to
     // read/write the default for this item
@@ -987,7 +987,7 @@ XMLPropertyMapEntry aXMLTableDefaultsMap[] =
     M_END()
 };
 
-XMLPropertyMapEntry aXMLTableRowDefaultsMap[] =
+XMLPropertyMapEntry const aXMLTableRowDefaultsMap[] =
 {
     // RES_ROW_SPLIT: only occurs in table rows, but we need to
     // read/write the default for this item
@@ -996,7 +996,7 @@ XMLPropertyMapEntry aXMLTableRowDefaultsMap[] =
     M_END()
 };
 
-XMLPropertyMapEntry aXMLCellPropMap[] =
+XMLPropertyMapEntry const aXMLCellPropMap[] =
 {
     MC_E( "BackColor",            FO,    BACKGROUND_COLOR, XML_TYPE_COLORTRANSPARENT|MID_FLAG_MULTI_PROPERTY, 0 ),
     MC_E( "LeftBorder",           FO,    BORDER_LEFT,      XML_TYPE_BORDER,                                   0 ),
@@ -1064,9 +1064,9 @@ XMLPropertyMapEntry aXMLCellPropMap[] =
     M_END()
 };
 
-static XMLPropertyMapEntry *lcl_txtprmap_getMap( TextPropMap nType )
+static XMLPropertyMapEntry const *lcl_txtprmap_getMap( TextPropMap nType )
 {
-    XMLPropertyMapEntry *pMap = nullptr;
+    XMLPropertyMapEntry const *pMap = nullptr;
     switch( nType )
     {
     case TextPropMap::TEXT:

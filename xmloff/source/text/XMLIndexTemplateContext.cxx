@@ -197,7 +197,7 @@ enum TemplateTokenType
 };
 
 
-SvXMLEnumMapEntry aTemplateTokenTypeMap[] =
+SvXMLEnumMapEntry const aTemplateTokenTypeMap[] =
 {
     { XML_INDEX_ENTRY_TEXT,         XML_TOK_INDEX_TYPE_ENTRY_TEXT },
     { XML_INDEX_ENTRY_TAB_STOP,     XML_TOK_INDEX_TYPE_TAB_STOP },

@@ -30,7 +30,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::awt;
 using namespace ::xmloff::token;
 
-SvXMLEnumMapEntry pXML_CrossedoutType_Enum[] =
+SvXMLEnumMapEntry const pXML_CrossedoutType_Enum[] =
 {
     { XML_NONE,                 awt::FontStrikeout::NONE },
     { XML_SINGLE,   awt::FontStrikeout::SINGLE },
@@ -41,7 +41,7 @@ SvXMLEnumMapEntry pXML_CrossedoutType_Enum[] =
     { XML_TOKEN_INVALID,                0 }
 };
 
-SvXMLEnumMapEntry pXML_CrossedoutStyle_Enum[] =
+SvXMLEnumMapEntry const pXML_CrossedoutStyle_Enum[] =
 {
     { XML_NONE,                         awt::FontStrikeout::NONE },
     { XML_SOLID,                        awt::FontStrikeout::SINGLE },
@@ -58,7 +58,7 @@ SvXMLEnumMapEntry pXML_CrossedoutStyle_Enum[] =
     { XML_TOKEN_INVALID,                0 }
 };
 
-SvXMLEnumMapEntry pXML_CrossedoutWidth_Enum[] =
+SvXMLEnumMapEntry const pXML_CrossedoutWidth_Enum[] =
 {
     { XML_AUTO,                 awt::FontStrikeout::NONE },
     { XML_AUTO,                 awt::FontStrikeout::SINGLE },

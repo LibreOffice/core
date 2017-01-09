@@ -97,7 +97,7 @@ using namespace ::com::sun::star::document;
 using namespace ::xmloff::token;
 using namespace ::xmloff::EnhancedCustomShapeToken;
 
-SvXMLEnumMapEntry aXML_GlueAlignment_EnumMap[] =
+SvXMLEnumMapEntry const aXML_GlueAlignment_EnumMap[] =
 {
     { XML_TOP_LEFT,     drawing::Alignment_TOP_LEFT },
     { XML_TOP,          drawing::Alignment_TOP },
@@ -111,7 +111,7 @@ SvXMLEnumMapEntry aXML_GlueAlignment_EnumMap[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-SvXMLEnumMapEntry aXML_GlueEscapeDirection_EnumMap[] =
+SvXMLEnumMapEntry const aXML_GlueEscapeDirection_EnumMap[] =
 {
     { XML_AUTO,         drawing::EscapeDirection_SMART },
     { XML_LEFT,         drawing::EscapeDirection_LEFT },

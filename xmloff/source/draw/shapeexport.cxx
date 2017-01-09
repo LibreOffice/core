@@ -114,6 +114,7 @@
 #include "sdpropls.hxx"
 #include "sdxmlexp_impl.hxx"
 #include "xexptran.hxx"
+#include "ximpshap.hxx"
 #include "XMLBase64Export.hxx"
 #include "XMLImageMapExport.hxx"
 #include <memory>
@@ -1206,9 +1207,6 @@ void XMLShapeExport::ImpCalcShapeType(const uno::Reference< drawing::XShape >& x
         }
     }
 }
-
-extern SvXMLEnumMapEntry aXML_GlueAlignment_EnumMap[];
-extern SvXMLEnumMapEntry aXML_GlueEscapeDirection_EnumMap[];
 
 /** exports all user defined glue points */
 void XMLShapeExport::ImpExportGluePoints( const uno::Reference< drawing::XShape >& xShape )

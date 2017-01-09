@@ -28,14 +28,14 @@
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
-SvXMLEnumMapEntry pXML_BrushHorizontalPos[] =
+SvXMLEnumMapEntry const pXML_BrushHorizontalPos[] =
 {
     { XML_LEFT,             style::GraphicLocation_LEFT_MIDDLE   },
     { XML_RIGHT,            style::GraphicLocation_RIGHT_MIDDLE },
     { XML_TOKEN_INVALID,    0       }
 };
 
-SvXMLEnumMapEntry pXML_BrushVerticalPos[] =
+SvXMLEnumMapEntry const pXML_BrushVerticalPos[] =
 {
     { XML_TOP,              style::GraphicLocation_MIDDLE_TOP   },
     { XML_BOTTOM,           style::GraphicLocation_MIDDLE_BOTTOM    },
