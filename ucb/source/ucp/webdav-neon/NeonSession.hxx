@@ -293,6 +293,8 @@ private:
 
 } // namespace webdav_ucp
 
+extern osl::Mutex aGlobalNeonMutex;
+
 #endif // INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_NEONSESSION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -31,6 +31,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
 #include "NeonHeadRequest.hxx"
+#include "NeonSession.hxx"
 
 using namespace webdav_ucp;
 using namespace com::sun::star;
@@ -112,8 +113,6 @@ void process_headers( ne_request * req,
 }
 
 } // namespace
-
-extern osl::Mutex aGlobalNeonMutex;
 
 NeonHeadRequest::NeonHeadRequest( HttpSession * inSession,
                                   const OUString & inPath,
