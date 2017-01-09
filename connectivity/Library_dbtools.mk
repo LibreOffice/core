@@ -67,8 +67,6 @@ connectivity/source/parse/sqlflex \
 
 $(call gb_LexTarget_get_scanner_target,connectivity/source/parse/sqlflex) : T_LEXFLAGS := -i -8 -PSQLyy -L
 
-
-
 $(eval $(call gb_Library_add_exception_objects,dbtools,\
 	connectivity/source/commontools/AutoRetrievingBase \
 	connectivity/source/commontools/BlobHelper \

@@ -87,6 +87,8 @@ OSQLScanner* xxx_pGLOBAL_SQLSCAN = nullptr;
 #define YY_FATAL_ERROR(msg)                         \
 {                                                   \
     xxx_pGLOBAL_SQLSCAN->SQLyyerror(msg);           \
+    /*hack to silence -Wunused-function*/           \
+    if (0) yy_fatal_error(msg);                     \
 }
 
 %}
