@@ -31,14 +31,8 @@ in this Software without prior written authorization from the X Consortium.
 #include <string.h>
 size_t pr( struct inclist *ip, char *file,char *base);
 
-extern struct   inclist inclist[ MAXFILES ],
-                *inclistp;
-extern char *objprefix;
-extern char *objsuffix;
+extern struct   inclist inclist[ MAXFILES ];
 extern int  width;
-extern boolean  printed;
-extern boolean  verbose;
-extern boolean  show_where_not;
 
 void add_include(struct filepointer *filep, struct inclist *file, struct inclist *file_red, char *include, boolean dot, boolean failOK, struct IncludesCollection* incCollection, struct symhash *symbols)
 {

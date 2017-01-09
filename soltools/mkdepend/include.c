@@ -38,12 +38,9 @@ int issymbolic(char * dir, char * component);
 int exists_path(struct IncludesCollection*, char*);
 
 
-extern struct inclist inclist[ MAXFILES ],
-                      *inclistp;
+extern struct inclist inclist[ MAXFILES ];
 extern char *includedirs[ ];
 extern char *notdotdot[ ];
-extern boolean show_where_not;
-extern boolean warn_multiple;
 
 struct inclist *inc_path(char *file, char *include, boolean dot, struct IncludesCollection *incCollection)
 {

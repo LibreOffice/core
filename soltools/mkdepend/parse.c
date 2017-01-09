@@ -38,7 +38,6 @@ int deftype ( char *line, struct filepointer *filep,
 int zero_value(char *exp, struct filepointer *filep,
     struct inclist *file_red, struct symhash *symbols);
 
-extern char *directives[];
 extern struct symhash *maininclist;
 
 int find_includes(struct filepointer *filep, struct inclist *file, struct inclist *file_red, int recursion, boolean failOK, struct IncludesCollection* incCollection, struct symhash *symbols)
@@ -361,7 +360,7 @@ int deftype (char *line, struct filepointer *filep, struct inclist *file_red, st
  * HACK! - so that we do not have to introduce 'symbols' in each cppsetup.c
  * function...  It's safe, functions from cppsetup.c don't return here.
  */
-struct symhash *global_symbols = NULL;
+static struct symhash *global_symbols = NULL;
 
 char * isdefined( char *symbol )
 {

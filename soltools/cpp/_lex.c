@@ -73,7 +73,7 @@ struct fsm
     int nextstate;                      /* enter this state if +ve */
 };
 
- /*const*/ struct fsm fsm[] = {
+static /*const*/ struct fsm fsm[] = {
     /* start state */
          {START, {C_XX}, ACT(UNCLASS, S_SELF)},
          {START, {' ', '\t', '\v'}, WS1},
