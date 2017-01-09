@@ -174,8 +174,8 @@ struct TranslateInfo
 {
     OUString sVBAName; //vba event name
     Translator toVBA;       //the method to convert OO event parameters to VBA event parameters
-    bool (*ApproveRule)(const ScriptEvent& evt, void* pPara); //this method is used to determine which types of controls should execute the event
-    void *pPara;            //Parameters for the above approve method
+    bool (*ApproveRule)(const ScriptEvent& evt, void const * pPara); //this method is used to determine which types of controls should execute the event
+    void const *pPara;            //Parameters for the above approve method
 };
 
 
@@ -191,41 +191,41 @@ struct TranslatePropMap
     TranslateInfo aTransInfo;
 };
 
-bool ApproveAll(const ScriptEvent& evt, void* pPara); //allow all types of controls to execute the event
-bool ApproveType(const ScriptEvent& evt, void* pPara); //certain types of controls should execute the event, those types are given by pPara
-bool DenyType(const ScriptEvent& evt, void* pPara);    //certain types of controls should not execute the event, those types are given by pPara
-bool DenyMouseDrag(const ScriptEvent& evt, void* pPara); //used for VBA MouseMove event when "Shift" key is pressed
+bool ApproveAll(const ScriptEvent& evt, void const * pPara); //allow all types of controls to execute the event
+bool ApproveType(const ScriptEvent& evt, void const * pPara); //certain types of controls should execute the event, those types are given by pPara
+bool DenyType(const ScriptEvent& evt, void const * pPara);    //certain types of controls should not execute the event, those types are given by pPara
+bool DenyMouseDrag(const ScriptEvent& evt, void const * pPara); //used for VBA MouseMove event when "Shift" key is pressed
 
 struct TypeList
 {
-    uno::Type* pTypeList;
+    uno::Type const * pTypeList;
     int nListLength;
 };
 
-Type typeXFixedText = cppu::UnoType<awt::XFixedText>::get();
-Type typeXTextComponent = cppu::UnoType<awt::XTextComponent>::get();
-Type typeXComboBox = cppu::UnoType<awt::XComboBox>::get();
-Type typeXRadioButton = cppu::UnoType<awt::XRadioButton>::get();
-Type typeXListBox = cppu::UnoType<awt::XListBox>::get();
+Type const typeXFixedText = cppu::UnoType<awt::XFixedText>::get();
+Type const typeXTextComponent = cppu::UnoType<awt::XTextComponent>::get();
+Type const typeXComboBox = cppu::UnoType<awt::XComboBox>::get();
+Type const typeXRadioButton = cppu::UnoType<awt::XRadioButton>::get();
+Type const typeXListBox = cppu::UnoType<awt::XListBox>::get();
 
 
-TypeList fixedTextList = {&typeXFixedText, 1};
-TypeList textCompList = {&typeXTextComponent, 1};
-TypeList radioButtonList = {&typeXRadioButton, 1};
-TypeList comboBoxList = {&typeXComboBox, 1};
-TypeList listBoxList = {&typeXListBox, 1};
+TypeList const fixedTextList = {&typeXFixedText, 1};
+TypeList const textCompList = {&typeXTextComponent, 1};
+TypeList const radioButtonList = {&typeXRadioButton, 1};
+TypeList const comboBoxList = {&typeXComboBox, 1};
+TypeList const listBoxList = {&typeXListBox, 1};
 
 //this array stores the OO event to VBA event translation info
 static TranslatePropMap aTranslatePropMap_Impl[] =
 {
-    { OUString("actionPerformed"), { OUString("_Change"), nullptr, DenyType, static_cast<void*>(&radioButtonList) } },
+    { OUString("actionPerformed"), { OUString("_Change"), nullptr, DenyType, static_cast<void const *>(&radioButtonList) } },
     // actionPerformed ooo event
     { OUString("actionPerformed"), { OUString("_Click"), nullptr, ApproveAll, nullptr } },
-    { OUString("itemStateChanged"), { OUString("_Change"), nullptr, ApproveType, static_cast<void*>(&radioButtonList) } },
+    { OUString("itemStateChanged"), { OUString("_Change"), nullptr, ApproveType, static_cast<void const *>(&radioButtonList) } },
     // itemStateChanged ooo event
-    { OUString("itemStateChanged"), { OUString("_Click"), nullptr, ApproveType, static_cast<void*>(&comboBoxList) } },
+    { OUString("itemStateChanged"), { OUString("_Click"), nullptr, ApproveType, static_cast<void const *>(&comboBoxList) } },
 
-    { OUString("itemStateChanged"), { OUString("_Click"), nullptr, ApproveType, static_cast<void*>(&listBoxList) } },
+    { OUString("itemStateChanged"), { OUString("_Click"), nullptr, ApproveType, static_cast<void const *>(&listBoxList) } },
     // changed ooo event
     { OUString("changed"), { OUString("_Change"), nullptr, ApproveAll, nullptr } },
 
@@ -234,7 +234,7 @@ static TranslatePropMap aTranslatePropMap_Impl[] =
 
     // focusLost ooo event
     { OUString("focusLost"), { OUString("_LostFocus"), nullptr, ApproveAll, nullptr } },
-    { OUString("focusLost"), { OUString("_Exit"), nullptr, ApproveType, static_cast<void*>(&textCompList) } }, // support VBA TextBox_Exit event
+    { OUString("focusLost"), { OUString("_Exit"), nullptr, ApproveType, static_cast<void const *>(&textCompList) } }, // support VBA TextBox_Exit event
 
     // adjustmentValueChanged ooo event
     { OUString("adjustmentValueChanged"), { OUString("_Scroll"), nullptr, ApproveAll, nullptr } },
@@ -247,7 +247,7 @@ static TranslatePropMap aTranslatePropMap_Impl[] =
     { OUString("keyReleased"), { OUString("_KeyUp"), ooKeyPressedToVBAKeyUpDown, ApproveAll, nullptr } },
 
     // mouseReleased ooo event
-    { OUString("mouseReleased"), { OUString("_Click"), ooMouseEvtToVBAMouseEvt, ApproveType, static_cast<void*>(&fixedTextList) } },
+    { OUString("mouseReleased"), { OUString("_Click"), ooMouseEvtToVBAMouseEvt, ApproveType, static_cast<void const *>(&fixedTextList) } },
     { OUString("mouseReleased"), { OUString("_MouseUp"), ooMouseEvtToVBAMouseEvt, ApproveAll, nullptr } },
 
     // mousePressed ooo event
@@ -748,20 +748,20 @@ EventListener::getPropertySetInfo(  ) throw (RuntimeException, std::exception)
 
 
 //decide if the control should execute the event
-bool ApproveAll(const ScriptEvent&, void* )
+bool ApproveAll(const ScriptEvent&, void const * )
 {
     return true;
 }
 
 //for the given control type in evt.Arguments[0], look for if it appears in the type list in pPara
-bool FindControl(const ScriptEvent& evt, void* pPara)
+bool FindControl(const ScriptEvent& evt, void const * pPara)
 {
     lang::EventObject aEvent;
     evt.Arguments[ 0 ] >>= aEvent;
     uno::Reference< uno::XInterface > xInterface( aEvent.Source, uno::UNO_QUERY );
 
-    TypeList* pTypeListInfo = static_cast<TypeList*>(pPara);
-    Type* pType = pTypeListInfo->pTypeList;
+    TypeList const * pTypeListInfo = static_cast<TypeList const *>(pPara);
+    Type const * pType = pTypeListInfo->pTypeList;
     int nLen = pTypeListInfo->nListLength;
 
     for (int i = 0; i < nLen; i++)
@@ -777,13 +777,13 @@ bool FindControl(const ScriptEvent& evt, void* pPara)
 }
 
 //if the given control type in evt.Arguments[0] appears in the type list in pPara, then approve the execution
-bool ApproveType(const ScriptEvent& evt, void* pPara)
+bool ApproveType(const ScriptEvent& evt, void const * pPara)
 {
     return FindControl(evt, pPara);
 }
 
 //if the given control type in evt.Arguments[0] appears in the type list in pPara, then deny the execution
-bool DenyType(const ScriptEvent& evt, void* pPara)
+bool DenyType(const ScriptEvent& evt, void const * pPara)
 {
     return !FindControl(evt, pPara);
 }
@@ -791,7 +791,7 @@ bool DenyType(const ScriptEvent& evt, void* pPara)
 //when mouse is moving, either the mouse button is pressed or some key is pressed can trigger the OO mouseDragged event,
 //the former should be denied, and the latter allowed, only by doing so can the VBA MouseMove event when the "Shift" key is
 //pressed can be correctly triggered
-bool DenyMouseDrag(const ScriptEvent& evt, void* )
+bool DenyMouseDrag(const ScriptEvent& evt, void const * )
 {
     awt::MouseEvent aEvent;
     evt.Arguments[ 0 ] >>= aEvent;
