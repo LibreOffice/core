@@ -24,35 +24,6 @@
 #include <osl/diagnose.h>
 #include <osl/thread.h>
 
-/*************************************************************************
-|*
-|*    FileList - Ctor/Dtor
-|*
-\*************************************************************************/
-
-FileList::~FileList()
-{
-    ClearAll();
-}
-
-void FileList::ClearAll()
-{
-    aStrList.clear();
-}
-
-/*************************************************************************
-|*
-|*    FileList - Zuweisungsoperator
-|*
-\*************************************************************************/
-
-FileList& FileList::operator=( const FileList& rFileList )
-{
-    for (const auto & i : rFileList.aStrList)
-        aStrList.push_back( i );
-    return *this;
-}
-
 /******************************************************************************
 |*
 |*  Stream-Operatoren
@@ -67,7 +38,7 @@ FileList& FileList::operator=( const FileList& rFileList )
    resolved by the Windows clipboard bridge.*/
 SvStream& ReadFileList( SvStream& rIStm, FileList& rFileList )
 {
-    rFileList.ClearAll();
+    rFileList.clear();
 
     OUStringBuffer sBuf(512);
     sal_uInt16 c;
