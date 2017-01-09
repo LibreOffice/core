@@ -13,7 +13,7 @@
 
 namespace sdecl = ::comphelper::service_decl;
 
-sdecl::class_< ::shell::sessioninstall::SyncDbusSessionHelper> SyncDbusSessionHelperServiceImpl;
+sdecl::class_< ::shell::sessioninstall::SyncDbusSessionHelper> const SyncDbusSessionHelperServiceImpl;
 
 const sdecl::ServiceDecl SyncDbusSessionHelperServiceDecl(
     SyncDbusSessionHelperServiceImpl,
