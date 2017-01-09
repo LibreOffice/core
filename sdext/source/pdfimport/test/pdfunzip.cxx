@@ -393,7 +393,7 @@ int write_fonts( const char* i_pInFile, const char* i_pOutFile, PDFFile* i_pPDFF
     return nRet;
 }
 
-std::vector< std::pair< sal_Int32, sal_Int32 > > s_aEmitObjects;
+static std::vector< std::pair< sal_Int32, sal_Int32 > > s_aEmitObjects;
 
 int write_objects( const char* i_pInFile, const char* i_pOutFile, PDFFile* i_pPDFFile )
 {
