@@ -51,45 +51,6 @@ protected:
     typedef cppu::OMultiTypeInterfaceContainerHelperVar<OUString>
         PropertyChangeListenerContainer_Impl;
 
-    class ReacquireableGuard
-    {
-    protected:
-        osl::Mutex* pT;
-    public:
-
-        ReacquireableGuard(osl::Mutex& t) : pT(&t)
-        {
-            pT->acquire();
-        }
-
-        /** Releases mutex. */
-        ~ReacquireableGuard()
-        {
-            if (pT)
-                pT->release();
-        }
-
-        /** Releases mutex. */
-        void clear()
-        {
-            if(pT)
-            {
-                pT->release();
-                pT = nullptr;
-            }
-        }
-
-        /** Reacquire mutex. */
-        void reacquire()
-        {
-            if(pT)
-            {
-                pT->acquire();
-            }
-        }
-    };
-
-
     //members
 
     //my Mutex

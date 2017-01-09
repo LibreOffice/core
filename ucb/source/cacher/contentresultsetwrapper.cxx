@@ -348,7 +348,8 @@ void SAL_CALL ContentResultSetWrapper::dispose()
 {
     impl_EnsureNotDisposed();
 
-    ReacquireableGuard aGuard( m_aMutex );
+    bool isCleared = false;
+    osl::ResettableMutexGuard aGuard(m_aMutex);
     if( m_bInDispose || m_bDisposed )
         return;
     m_bInDispose = true;
@@ -356,6 +357,7 @@ void SAL_CALL ContentResultSetWrapper::dispose()
     if( m_xPropertySetOrigin.is() )
     {
         aGuard.clear();
+        isCleared = true;
         try
         {
             m_xPropertySetOrigin->removePropertyChangeListener(
@@ -380,37 +382,55 @@ void SAL_CALL ContentResultSetWrapper::dispose()
         xComponentOrigin->removeEventListener( static_cast< XPropertyChangeListener * >( m_pMyListenerImpl ) );
     }
 
-    aGuard.reacquire();
+    if (isCleared)
+    {
+        aGuard.reset();
+        isCleared = false;
+    }
     if( m_pDisposeEventListeners && m_pDisposeEventListeners->getLength() )
     {
         EventObject aEvt;
         aEvt.Source = static_cast< XComponent * >( this );
 
         aGuard.clear();
+        isCleared = true;
         m_pDisposeEventListeners->disposeAndClear( aEvt );
     }
 
-    aGuard.reacquire();
+    if (isCleared)
+    {
+        aGuard.reset();
+        isCleared = false;
+    }
     if( m_pPropertyChangeListeners )
     {
         EventObject aEvt;
         aEvt.Source = static_cast< XPropertySet * >( this );
 
         aGuard.clear();
+        isCleared = true;
         m_pPropertyChangeListeners->disposeAndClear( aEvt );
     }
 
-    aGuard.reacquire();
+    if (isCleared)
+    {
+        aGuard.reset();
+        isCleared = false;
+    }
     if( m_pVetoableChangeListeners )
     {
         EventObject aEvt;
         aEvt.Source = static_cast< XPropertySet * >( this );
 
         aGuard.clear();
+        isCleared = true;
         m_pVetoableChangeListeners->disposeAndClear( aEvt );
     }
 
-    aGuard.reacquire();
+    if (isCleared)
+    {
+        aGuard.reset();
+    }
     m_bDisposed = true;
     m_bInDispose = false;
 }
@@ -464,7 +484,7 @@ Reference< XResultSetMetaData > SAL_CALL ContentResultSetWrapper::getMetaData()
 {
     impl_EnsureNotDisposed();
 
-    ReacquireableGuard aGuard( m_aMutex );
+    osl::ResettableMutexGuard aGuard(m_aMutex);
     if( !m_xMetaDataFromOrigin.is() && m_xResultSetOrigin.is() )
     {
         Reference< XResultSetMetaDataSupplier > xMetaDataSupplier(
@@ -477,7 +497,7 @@ Reference< XResultSetMetaData > SAL_CALL ContentResultSetWrapper::getMetaData()
             Reference< XResultSetMetaData > xMetaData
                 = xMetaDataSupplier->getMetaData();
 
-            aGuard.reacquire();
+            aGuard.reset();
             m_xMetaDataFromOrigin = xMetaData;
         }
     }
