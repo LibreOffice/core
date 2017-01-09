@@ -220,6 +220,12 @@ interface BaseTextSelection
         StateMethod = GetState ;
     ]
 
+    FN_EDIT_CURRENT_REGION // status(final|play)
+    [
+        ExecMethod = EditRegionDialog ;
+        StateMethod = GetState ;
+    ]
+
     FN_INSERT_REGION // status()
     [
         ExecMethod = InsertRegionDialog;

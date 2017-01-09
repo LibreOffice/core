@@ -214,6 +214,7 @@ void SwBaseShell::EditRegionDialog(SfxRequest& rReq)
     switch ( nSlot )
     {
         case FN_EDIT_REGION:
+        case FN_EDIT_CURRENT_REGION:
         {
             vcl::Window* pParentWin = &GetView().GetViewFrame()->GetWindow();
             {

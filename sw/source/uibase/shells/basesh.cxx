@@ -1395,6 +1395,11 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                     rSet.DisableItem(nWhich);
                 break;
 
+            case FN_EDIT_CURRENT_REGION:
+                if( !rSh.GetCurrSection() )
+                    rSet.DisableItem(nWhich);
+                break;
+
             case FN_INSERT_REGION:
                 if( rSh.CursorInsideInputField()
                     || rSh.IsSelFrameMode()
