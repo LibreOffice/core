@@ -124,15 +124,12 @@ GraphicObject::GraphicObject( const OString& rUniqueID ) :
 
 GraphicObject::~GraphicObject()
 {
-    if( mpMgr )
-    {
-        mpMgr->ImplUnregisterObj( *this );
+    mpMgr->ImplUnregisterObj( *this );
 
-        if (!mpGlobalMgr->ImplHasObjects())
-        {
-            delete mpGlobalMgr;
-            mpGlobalMgr = nullptr;
-        }
+    if (!mpGlobalMgr->ImplHasObjects())
+    {
+        delete mpGlobalMgr;
+        mpGlobalMgr = nullptr;
     }
 }
 
