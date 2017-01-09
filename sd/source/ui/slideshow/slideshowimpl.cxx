@@ -716,7 +716,7 @@ void SAL_CALL SlideshowImpl::disposing()
 
     if( mpShowWindow )
     {
-        mpShowWindow.clear();
+        mpShowWindow.disposeAndClear();
     }
 
     setActiveXToolbarsVisible( true );
