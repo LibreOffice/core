@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a6eadb0_a67e6bac",
+        "filename": "svl/qa/unit/items/test_itempool.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2017-01-09T12:29:07Z",
+      "side": 1,
+      "message": "last year you changed the defaults from naked array to a std::vector\nhttps://gerrit.libreoffice.org/#/c/32384",
+      "range": {
+        "startLine": 115,
+        "startChar": 0,
+        "endLine": 125,
+        "endChar": 34
+      },
+      "revId": "976ec7714eba5f31fa5aa554ca18ba7961c11f9a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
