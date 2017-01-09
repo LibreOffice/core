@@ -163,9 +163,6 @@ void GraphicObject::ImplAssignGraphicData()
 
 void GraphicObject::ImplSetGraphicManager(const OString* pID, const GraphicObject* pCopyObj)
 {
-    if (mpMgr)
-        return;
-
     if (!mpGlobalMgr)
     {
         if (!utl::ConfigManager::IsAvoidConfig())
