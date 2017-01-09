@@ -39,7 +39,7 @@
 
 using namespace ::osl;
 
-std::list< OString >* pCreatedDirectories = nullptr;
+static std::list< OString >* pCreatedDirectories = nullptr;
 
 static bool checkOutputPath(const OString& completeName)
 {

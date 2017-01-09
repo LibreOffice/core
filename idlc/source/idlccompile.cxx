@@ -48,9 +48,6 @@ extern int yyparse();
 extern FILE* yyin;
 extern int yydebug;
 
-sal_Int32 lineNumber = 1;
-
-
 static sal_Char tmpFilePattern[512];
 
 bool isFileUrl(const OString& fileName)
