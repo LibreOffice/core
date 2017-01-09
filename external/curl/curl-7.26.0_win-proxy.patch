@@ -27,7 +27,7 @@
  }
  
 +#ifdef WIN32
-+static char* wstrToCstr( LPWSTR wStr )
++static char* wstrToCstr(LPWSTR wStr)
 +{
 +  int bufSize;
 +  char* out = NULL;
