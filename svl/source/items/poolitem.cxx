@@ -28,11 +28,11 @@
 #if OSL_DEBUG_LEVEL > 0
 static sal_uLong nItemCount = 0;
 
-const char* pw1 = "Wow! 10.000 items!";
-const char* pw2 = "Wow! 100.000 items!";
-const char* pw3 = "Wow! 1.000.000 items!";
-const char* pw4 = "Wow! 50.000.000 items!";
-const char* pw5 = "Wow! 10.000.000 items!";
+static const char* pw1 = "Wow! 10.000 items!";
+static const char* pw2 = "Wow! 100.000 items!";
+static const char* pw3 = "Wow! 1.000.000 items!";
+static const char* pw4 = "Wow! 50.000.000 items!";
+static const char* pw5 = "Wow! 10.000.000 items!";
 #endif
 
 SfxPoolItem::SfxPoolItem(sal_uInt16 const nWhich)

@@ -54,9 +54,9 @@ public:
 
     sal_uInt32 mnStyles;
     sal_uInt32 mnPools;
-}
-aDbgStyleSheetReferences;
+};
 
+static DbgStyleSheetReferences aDbgStyleSheetReferences;
 #endif
 
 
