@@ -115,8 +115,6 @@ char const *g_arSearchPaths[] = {
 
 namespace jfw_plugin
 {
-extern VendorSupportMapEntry gVendorMap[];
-
 #if defined(_WIN32)
 bool getSDKInfoFromRegistry(vector<OUString> & vecHome);
 bool getJREInfoFromRegistry(vector<OUString>& vecJavaHome);

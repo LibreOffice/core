@@ -35,6 +35,8 @@ struct VendorSupportMapEntry
     createInstance_func  createFunc;
 };
 
+extern VendorSupportMapEntry gVendorMap[];
+
 #define BEGIN_VENDOR_MAP() \
 VendorSupportMapEntry gVendorMap[] ={
 

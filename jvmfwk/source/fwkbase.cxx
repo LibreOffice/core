@@ -43,7 +43,7 @@ using namespace osl;
 
 namespace jfw
 {
-bool  g_bJavaSet = false;
+static bool  g_bJavaSet = false;
 
 namespace {
 
