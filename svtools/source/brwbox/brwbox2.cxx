@@ -1459,8 +1459,8 @@ void BrowseBox::MouseButtonUp( const MouseEvent & rEvt )
 }
 
 
-bool bExtendedMode = false;
-bool bFieldMode = false;
+static bool bExtendedMode = false;
+static bool bFieldMode = false;
 
 void BrowseBox::MouseButtonDown( const BrowserMouseEvent& rEvt )
 {

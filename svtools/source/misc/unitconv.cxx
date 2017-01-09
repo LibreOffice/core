@@ -585,7 +585,7 @@ long Nothing( long nIn )
     return nRet;
 }
 
-FUNC_CONVERT ConvertTable[6][6] =
+FUNC_CONVERT const ConvertTable[6][6] =
 {
 //  CM,         MM          INCH         POINT        PICAS=32     TWIPS
     { Nothing,  CMToMM,     CMToInch,    CMToPoint,   CMToPica,    CMToTwips },

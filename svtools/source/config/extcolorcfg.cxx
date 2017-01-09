@@ -48,7 +48,7 @@ using namespace com::sun::star;
 namespace svtools
 {
 
-sal_Int32            nExtendedColorRefCount_Impl = 0;
+static sal_Int32            nExtendedColorRefCount_Impl = 0;
 namespace
 {
     struct ColorMutex_Impl

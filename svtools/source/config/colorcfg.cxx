@@ -52,7 +52,7 @@ static const char g_sIsVisible[] = "/IsVisible";
 namespace svtools
 {
 
-sal_Int32            nColorRefCount_Impl = 0;
+static sal_Int32            nColorRefCount_Impl = 0;
 namespace
 {
     struct ColorMutex_Impl
