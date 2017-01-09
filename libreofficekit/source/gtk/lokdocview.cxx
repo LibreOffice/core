@@ -46,7 +46,7 @@
 #define MIN_ZOOM 0.25f
 
 /// This is expected to be locked during setView(), doSomethingElse() LOK calls.
-std::mutex g_aLOKMutex;
+static std::mutex g_aLOKMutex;
 
 /// Same as a GdkRectangle, but also tracks in which part the rectangle is.
 struct ViewRectangle
