@@ -38,6 +38,7 @@
 #include <ooo/vba/XControlProvider.hpp>
 #include <ooo/vba/msforms/fmMousePointer.hpp>
 #include <svtools/bindablecontrolhelper.hxx>
+#include "service.hxx"
 #include "vbacontrol.hxx"
 #include "vbacombobox.hxx"
 #include "vbabutton.hxx"
@@ -439,7 +440,7 @@ struct PointerStyles
 };
 
 // 1 -> 1 map of styles ( some dubious choices in there though )
-PointerStyles styles[] = {
+PointerStyles const styles[] = {
   /// assuming pointer default is Arrow
   { msforms::fmMousePointer::fmMousePointerDefault, PointerStyle::Arrow },
   { msforms::fmMousePointer::fmMousePointerArrow, PointerStyle::Arrow },
@@ -713,7 +714,7 @@ ScVbaControl::getServiceNames()
     return aServiceNames;
 }
 
-sal_Int32 nSysCols[] = { 0xC8D0D4, 0x0, 0x6A240A, 0x808080, 0xE4E4E4, 0xFFFFFF, 0x0, 0x0, 0x0, 0xFFFFFF, 0xE4E4E4, 0xE4E4E4, 0x808080, 0x6A240A, 0xFFFFFF, 0xE4E4E4, 0x808080, 0x808080, 0x0, 0xC8D0D4, 0xFFFFFF, 0x404040, 0xE4E4E4, 0x0, 0xE1FFFF };
+sal_Int32 const nSysCols[] = { 0xC8D0D4, 0x0, 0x6A240A, 0x808080, 0xE4E4E4, 0xFFFFFF, 0x0, 0x0, 0x0, 0xFFFFFF, 0xE4E4E4, 0xE4E4E4, 0x808080, 0x6A240A, 0xFFFFFF, 0xE4E4E4, 0x808080, 0x808080, 0x0, 0xC8D0D4, 0xFFFFFF, 0x404040, 0xE4E4E4, 0x0, 0xE1FFFF };
 
 sal_Int32 ScVbaControl::getBackColor() throw (uno::RuntimeException)
 {
@@ -784,8 +785,8 @@ ControlProviderImpl::createControl( const uno::Reference< drawing::XControlShape
 namespace controlprovider
 {
 namespace sdecl = comphelper::service_decl;
-sdecl::class_<ControlProviderImpl, sdecl::with_args<false> > serviceImpl;
-extern sdecl::ServiceDecl const serviceDecl(
+sdecl::class_<ControlProviderImpl, sdecl::with_args<false> > const serviceImpl;
+sdecl::ServiceDecl const serviceDecl(
     serviceImpl,
     "ControlProviderImpl",
     "ooo.vba.ControlProvider" );

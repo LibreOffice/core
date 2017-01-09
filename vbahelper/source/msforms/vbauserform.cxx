@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <vbahelper/helperdecl.hxx>
+#include "service.hxx"
 #include "vbauserform.hxx"
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/awt/XControlContainer.hpp>
@@ -312,8 +313,8 @@ ScVbaUserForm::hasProperty( const OUString& aName ) throw (uno::RuntimeException
 namespace userform
 {
 namespace sdecl = comphelper::service_decl;
-sdecl::vba_service_class_<ScVbaUserForm, sdecl::with_args<true> > serviceImpl;
-extern sdecl::ServiceDecl const serviceDecl(
+sdecl::vba_service_class_<ScVbaUserForm, sdecl::with_args<true> > const serviceImpl;
+sdecl::ServiceDecl const serviceDecl(
     serviceImpl,
     "ScVbaUserForm",
     "ooo.vba.msforms.UserForm" );
