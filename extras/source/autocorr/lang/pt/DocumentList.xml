@@ -3259,4 +3259,38 @@
   <block-list:block block-list:abbreviated-name=":zeta:" block-list:name="ζ"/>
   <block-list:block block-list:abbreviated-name=":Zeta:" block-list:name="Ζ"/>
   <block-list:block block-list:abbreviated-name=":zzz:" block-list:name="💤"/>
+  <block-list:block block-list:abbreviated-name="automatico" block-list:name="automático"/>
+  <block-list:block block-list:abbreviated-name="automaticos" block-list:name="automáticos"/>
+  <block-list:block block-list:abbreviated-name="campião" block-list:name="campeão"/>
+  <block-list:block block-list:abbreviated-name="cheque-mate" block-list:name="xeque-mate"/>
+  <block-list:block block-list:abbreviated-name="contribuitivo" block-list:name="contributivo"/>
+  <block-list:block block-list:abbreviated-name="contribuitivos" block-list:name="contributivos"/>
+  <block-list:block block-list:abbreviated-name="coroneis" block-list:name="coronéis"/>
+  <block-list:block block-list:abbreviated-name="cálculado" block-list:name="calculado"/>
+  <block-list:block block-list:abbreviated-name="cálculados" block-list:name="calculados"/>
+  <block-list:block block-list:abbreviated-name="desincronização" block-list:name="dessincronização"/>
+  <block-list:block block-list:abbreviated-name="equisema" block-list:name="eczema"/>
+  <block-list:block block-list:abbreviated-name="erpes" block-list:name="herpes"/>
+  <block-list:block block-list:abbreviated-name="esclamar" block-list:name="exclamar"/>
+  <block-list:block block-list:abbreviated-name="esclamou" block-list:name="exclamou"/>
+  <block-list:block block-list:abbreviated-name="hurbano" block-list:name="urbano"/>
+  <block-list:block block-list:abbreviated-name="hurbanos" block-list:name="urbanos"/>
+  <block-list:block block-list:abbreviated-name="normalisado" block-list:name="normalizado"/>
+  <block-list:block block-list:abbreviated-name="normalisados" block-list:name="normalizados"/>
+  <block-list:block block-list:abbreviated-name="tanjente" block-list:name="tangente"/>
+  <block-list:block block-list:abbreviated-name="tanjentes" block-list:name="tangentes"/>
+  <block-list:block block-list:abbreviated-name="textil" block-list:name="têxtil"/>
+  <block-list:block block-list:abbreviated-name="trangénicos" block-list:name="transgénicos"/>
+  <block-list:block block-list:abbreviated-name="transfegar" block-list:name="trasfegar"/>
+  <block-list:block block-list:abbreviated-name="transuentes" block-list:name="transeuntes"/>
+  <block-list:block block-list:abbreviated-name="trazeiro" block-list:name="traseiro"/>
+  <block-list:block block-list:abbreviated-name="trazeiros" block-list:name="traseiros"/>
+  <block-list:block block-list:abbreviated-name="triologia" block-list:name="trilogia"/>
+  <block-list:block block-list:abbreviated-name="unisexo" block-list:name="unissexo"/>
+  <block-list:block block-list:abbreviated-name="usofruto" block-list:name="usufruto"/>
+  <block-list:block block-list:abbreviated-name="verosímel" block-list:name="verosímil"/>
+  <block-list:block block-list:abbreviated-name="virus" block-list:name="vírus"/>
+  <block-list:block block-list:abbreviated-name="vizar" block-list:name="visar"/>
+  <block-list:block block-list:abbreviated-name="vôos" block-list:name="voos"/>
+  <block-list:block block-list:abbreviated-name="ídem" block-list:name="idem"/>
 </block-list:block-list>
