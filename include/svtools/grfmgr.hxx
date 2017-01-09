@@ -315,7 +315,6 @@ private:
     void SVT_DLLPRIVATE     ImplAfterDataChange();
 protected:
 
-    void                    GraphicManagerDestroyed();
     SvStream*               GetSwapStream() const;
     void                    SetSwapState();
 
