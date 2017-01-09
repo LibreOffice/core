@@ -1,7 +1,7 @@
-diff -ruN misc/Python-2.7.12/configure misc/build/Python-2.7.12/configure
---- misc/Python-2.7.12/configure	2014-06-29 21:05:48.000000000 -0500
-+++ misc/build/Python-2.7.12/configure	2016-01-01 15:18:37.398344671 -0500
-@@ -3227,7 +3227,9 @@
+diff -ruN misc/Python-2.7.13/configure misc/build/Python-2.7.13/configure
+--- misc/Python-2.7.13/configure	2014-06-29 21:05:48.000000000 -0500
++++ misc/build/Python-2.7.13/configure	2016-01-01 15:18:37.398344671 -0500
+@@ -3253,7 +3253,9 @@
  	ac_sys_release=
      else
  	ac_sys_system=`uname -s`

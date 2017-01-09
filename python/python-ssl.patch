@@ -1,15 +1,15 @@
-diff -ruN misc/Python-2.7.12/PC/VS9.0/build_ssl.py misc/build/Python-2.7.12/PC/VS9.0/build_ssl.py
---- misc/Python-2.7.12/PC/VS9.0/build_ssl.py	2014-06-29 21:05:46.000000000 -0500
-+++ misc/build/Python-2.7.12/PC/VS9.0/build_ssl.py	2016-01-01 15:15:32.256357072 -0500
+diff -ruN misc/Python-2.7.13/PC/VS9.0/build_ssl.py misc/build/Python-2.7.13/PC/VS9.0/build_ssl.py
+--- misc/Python-2.7.13/PC/VS9.0/build_ssl.py	2014-06-29 21:05:46.000000000 -0500
++++ misc/build/Python-2.7.13/PC/VS9.0/build_ssl.py	2016-01-01 15:15:32.256357072 -0500
 @@ -242,4 +242,4 @@
      sys.exit(rc)
  
  if __name__=='__main__':
 -    main()
 +    sys.exit(0)
-diff -ruN misc/Python-2.7.12/setup.py misc/build/Python-2.7.12/setup.py
---- misc/Python-2.7.12/setup.py	2014-06-29 21:05:48.000000000 -0500
-+++ misc/build/Python-2.7.12/setup.py	2016-01-01 15:15:32.258356209 -0500
+diff -ruN misc/Python-2.7.13/setup.py misc/build/Python-2.7.13/setup.py
+--- misc/Python-2.7.13/setup.py	2014-06-29 21:05:48.000000000 -0500
++++ misc/build/Python-2.7.13/setup.py	2016-01-01 15:15:32.258356209 -0500
 @@ -808,7 +808,15 @@
                                 depends=['socketmodule.h'],
                                 libraries=math_libs) )

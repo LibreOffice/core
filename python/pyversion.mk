@@ -22,7 +22,7 @@
 # in the python project accordingly !!!
 PYMAJOR=2
 PYMINOR=7
-PYMICRO=12
+PYMICRO=13
 PYVERSION=$(PYMAJOR).$(PYMINOR).$(PYMICRO)
 
 .IF "$(GUI)" == "UNX"
