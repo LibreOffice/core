@@ -103,7 +103,7 @@ const MenuStyleItem MenuItemStyles[ ] = {
     { css::ui::ItemStyle::RADIO_CHECK, ATTRIBUTE_ITEMSTYLE_RADIO }
 };
 
-sal_Int32 nMenuStyleItemEntries = SAL_N_ELEMENTS(MenuItemStyles);
+sal_Int32 const nMenuStyleItemEntries = SAL_N_ELEMENTS(MenuItemStyles);
 
 static void ExtractMenuParameters( const Sequence< PropertyValue >& rProp,
                                    OUString&                       rCommandURL,

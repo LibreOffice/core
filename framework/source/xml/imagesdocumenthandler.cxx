@@ -81,7 +81,7 @@ struct ImageXMLEntryProperty
     char                                            aEntryName[20];
 };
 
-ImageXMLEntryProperty ImagesEntries[OReadImagesDocumentHandler::IMG_XML_ENTRY_COUNT] =
+ImageXMLEntryProperty const ImagesEntries[OReadImagesDocumentHandler::IMG_XML_ENTRY_COUNT] =
 {
     { OReadImagesDocumentHandler::IMG_NS_IMAGE, ELEMENT_IMAGECONTAINER          },
     { OReadImagesDocumentHandler::IMG_NS_IMAGE, ELEMENT_IMAGES                  },

@@ -128,7 +128,7 @@ struct StatusBarEntryProperty
     char                                                    aEntryName[20];
 };
 
-StatusBarEntryProperty StatusBarEntries[OReadStatusBarDocumentHandler::SB_XML_ENTRY_COUNT] =
+StatusBarEntryProperty const StatusBarEntries[OReadStatusBarDocumentHandler::SB_XML_ENTRY_COUNT] =
 {
     { OReadStatusBarDocumentHandler::SB_NS_STATUSBAR,   ELEMENT_STATUSBAR       },
     { OReadStatusBarDocumentHandler::SB_NS_STATUSBAR,   ELEMENT_STATUSBARITEM   },

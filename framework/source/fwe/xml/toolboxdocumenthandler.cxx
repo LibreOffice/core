@@ -99,7 +99,7 @@ const ToolboxStyleItem Styles[ ] = {
     { css::ui::ItemStyle::TEXT,          ATTRIBUTE_ITEMSTYLE_TEXT },
 };
 
-sal_Int32 nStyleItemEntries = SAL_N_ELEMENTS(Styles);
+sal_Int32 const nStyleItemEntries = SAL_N_ELEMENTS(Styles);
 
 struct ToolBarEntryProperty
 {
@@ -107,7 +107,7 @@ struct ToolBarEntryProperty
     char                                                aEntryName[20];
 };
 
-ToolBarEntryProperty ToolBoxEntries[OReadToolBoxDocumentHandler::TB_XML_ENTRY_COUNT] =
+ToolBarEntryProperty const ToolBoxEntries[OReadToolBoxDocumentHandler::TB_XML_ENTRY_COUNT] =
 {
     { OReadToolBoxDocumentHandler::TB_NS_TOOLBAR,   ELEMENT_TOOLBAR             },
     { OReadToolBoxDocumentHandler::TB_NS_TOOLBAR,   ELEMENT_TOOLBARITEM         },
