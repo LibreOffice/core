@@ -2308,7 +2308,7 @@ void ScDPObject::FillOldParam(ScPivotParam& rParam) const
     rParam.nTab = aOutRange.aStart.Tab();
     // ppLabelArr / nLabels is not changed
 
-    bool bAddData = ( lcl_GetDataGetOrientation( xSource ) != sheet::DataPilotFieldOrientation_HIDDEN );
+    bool bAddData = ( lcl_GetDataGetOrientation( xSource ) == sheet::DataPilotFieldOrientation_HIDDEN );
     lcl_FillOldFields(
         rParam.maPageFields, xSource, sheet::DataPilotFieldOrientation_PAGE, false);
     lcl_FillOldFields(
