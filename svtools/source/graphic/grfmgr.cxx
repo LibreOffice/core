@@ -128,7 +128,7 @@ GraphicObject::~GraphicObject()
     {
         mpMgr->ImplUnregisterObj( *this );
 
-        if( ( mpMgr == mpGlobalMgr ) && !mpGlobalMgr->ImplHasObjects() )
+        if (!mpGlobalMgr->ImplHasObjects())
         {
             delete mpGlobalMgr;
             mpGlobalMgr = nullptr;
