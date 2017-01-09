@@ -2906,18 +2906,34 @@ ScFormulaCell::HasRefListExpressibleAsOneReference(ScRange& rRange) const
     return false;
 }
 
-bool ScFormulaCell::HasRelNameReference() const
+ScFormulaCell::RelNameRef ScFormulaCell::HasRelNameReference() const
 {
+    RelNameRef eRelNameRef = RelNameRef::NONE;
     pCode->Reset();
     formula::FormulaToken* t;
     while ( ( t = pCode->GetNextReferenceRPN() ) != nullptr )
     {
-        if ( t->GetSingleRef()->IsRelName() ||
-                (t->GetType() == formula::svDoubleRef &&
-                t->GetDoubleRef()->Ref2.IsRelName()) )
-            return true;
+        switch (t->GetType())
+        {
+            case formula::svSingleRef:
+                if (t->GetSingleRef()->IsRelName() && eRelNameRef == RelNameRef::NONE)
+                    eRelNameRef = RelNameRef::SINGLE;
+            break;
+            case formula::svDoubleRef:
+                if (t->GetDoubleRef()->Ref1.IsRelName() || t->GetDoubleRef()->Ref2.IsRelName())
+                    // May originate from individual cell names, in which case
+                    // it needs recompilation.
+                    return RelNameRef::DOUBLE;
+                /* TODO: have an extra flag at ScComplexRefData if range was
+                 * extended? or too cumbersome? might narrow recompilation to
+                 * only needed cases.
+                 * */
+            break;
+            default:
+                ;   // nothing
+        }
     }
-    return false;
+    return eRelNameRef;
 }
 
 bool ScFormulaCell::UpdatePosOnShift( const sc::RefUpdateContext& rCxt )
@@ -3122,7 +3138,13 @@ bool ScFormulaCell::UpdateReferenceOnShift(
         bInDeleteUndo = (pChangeTrack && pChangeTrack->IsInDeleteUndo());
 
         // RelNameRefs are always moved
-        bool bHasRelName = HasRelNameReference();
+        bool bHasRelName = false;
+        if (!bRecompile)
+        {
+            RelNameRef eRelNameRef = HasRelNameReference();
+            bHasRelName = (eRelNameRef != RelNameRef::NONE);
+            bRecompile = (eRelNameRef == RelNameRef::DOUBLE);
+        }
         // Reference changed and new listening needed?
         // Except in Insert/Delete without specialties.
         bNewListening = (bRefModified || bRecompile
@@ -3246,7 +3268,9 @@ bool ScFormulaCell::UpdateReferenceOnMove(
         bInDeleteUndo = (pChangeTrack && pChangeTrack->IsInDeleteUndo());
 
         // RelNameRefs are always moved
-        bHasRelName = HasRelNameReference();
+        RelNameRef eRelNameRef = HasRelNameReference();
+        bHasRelName = (eRelNameRef != RelNameRef::NONE);
+        bCompile |= (eRelNameRef == RelNameRef::DOUBLE);
         // Reference changed and new listening needed?
         // Except in Insert/Delete without specialties.
         bNewListening = (bRefModified || bColRowNameCompile
