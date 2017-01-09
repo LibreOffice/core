@@ -53,12 +53,13 @@ template<typename T> T CachedContentResultSet::rowOriginGet(
     T (SAL_CALL css::sdbc::XRow::* f)(sal_Int32), sal_Int32 columnIndex)
 {
     impl_EnsureNotDisposed();
-    ReacquireableGuard aGuard( m_aMutex );
+    osl::ResettableMutexGuard aGuard(m_aMutex);
     sal_Int32 nRow = m_nRow;
     sal_Int32 nFetchSize = m_nFetchSize;
     sal_Int32 nFetchDirection = m_nFetchDirection;
     if( !m_aCache.hasRow( nRow ) )
     {
+        bool isCleared = false;
         if( !m_aCache.hasCausedException( nRow ) )
         {
             if( !m_xFetchProvider.is() )
@@ -67,12 +68,16 @@ template<typename T> T CachedContentResultSet::rowOriginGet(
                 throw SQLException();
             }
             aGuard.clear();
+            isCleared = true;
             if( impl_isForwardOnly() )
                 applyPositionToOrigin( nRow );
 
             impl_fetchData( nRow, nFetchSize, nFetchDirection );
         }
-        aGuard.reacquire();
+        if (isCleared)
+        {
+            aGuard.reset();
+        }
         if( !m_aCache.hasRow( nRow ) )
         {
             m_bLastReadWasFromCache = false;
@@ -718,7 +723,7 @@ bool SAL_CALL CachedContentResultSet
         the result set.
     */
 
-    ReacquireableGuard aGuard( m_aMutex );
+    osl::ResettableMutexGuard aGuard(m_aMutex);
     OSL_ENSURE( nRow >= 0, "only positive values supported" );
     if( !m_xResultSetOrigin.is() )
     {
@@ -749,7 +754,7 @@ bool SAL_CALL CachedContentResultSet
                     break;
             }
 
-            aGuard.reacquire();
+            aGuard.reset();
             m_nLastAppliedPos += nM;
             m_bAfterLastApplied = nRow != m_nLastAppliedPos;
             return nRow == m_nLastAppliedPos;
@@ -759,7 +764,7 @@ bool SAL_CALL CachedContentResultSet
         {
             m_xResultSetOrigin->beforeFirst();
 
-            aGuard.reacquire();
+            aGuard.reset();
             m_nLastAppliedPos = 0;
             m_bAfterLastApplied = false;
             return false;
@@ -772,7 +777,7 @@ bool SAL_CALL CachedContentResultSet
             {
                 bool bValid = m_xResultSetOrigin->absolute( nRow );
 
-                aGuard.reacquire();
+                aGuard.reset();
                 m_nLastAppliedPos = nRow;
                 m_bAfterLastApplied = !bValid;
                 return bValid;
@@ -781,7 +786,7 @@ bool SAL_CALL CachedContentResultSet
             {
                 bool bValid = m_xResultSetOrigin->relative( nRow - nLastAppliedPos );
 
-                aGuard.reacquire();
+                aGuard.reset();
                 m_nLastAppliedPos += ( nRow - nLastAppliedPos );
                 m_bAfterLastApplied = !bValid;
                 return bValid;
@@ -799,7 +804,7 @@ bool SAL_CALL CachedContentResultSet
                         break;
                 }
 
-                aGuard.reacquire();
+                aGuard.reset();
                 m_nLastAppliedPos += nM;
                 m_bAfterLastApplied = nRow != m_nLastAppliedPos;
             }
@@ -1264,7 +1269,7 @@ void SAL_CALL CachedContentResultSet
 
 #define XCONTENTACCESS_queryXXX( queryXXX, XXX, TYPE )      \
 impl_EnsureNotDisposed();                                   \
-ReacquireableGuard aGuard( m_aMutex );                      \
+osl::ResettableMutexGuard aGuard(m_aMutex);                 \
 sal_Int32 nRow = m_nRow;                                    \
 sal_Int32 nFetchSize = m_nFetchSize;                        \
 sal_Int32 nFetchDirection = m_nFetchDirection;              \
@@ -1272,6 +1277,7 @@ if( !m_aCache##XXX.hasRow( nRow ) )                         \
 {                                                           \
     try                                                     \
     {                                                       \
+        bool isCleared = false;                             \
         if( !m_aCache##XXX.hasCausedException( nRow ) )     \
         {                                                   \
             if( !m_xFetchProviderForContentAccess.is() )    \
@@ -1280,12 +1286,16 @@ if( !m_aCache##XXX.hasRow( nRow ) )                         \
                 throw RuntimeException();                   \
             }                                               \
             aGuard.clear();                                 \
+            isCleared = true;                               \
             if( impl_isForwardOnly() )                      \
                 applyPositionToOrigin( nRow );              \
                                                             \
             FETCH_XXX( m_aCache##XXX, m_xFetchProviderForContentAccess, fetch##XXX##s ); \
         }                                                   \
-        aGuard.reacquire();                                 \
+        if (isCleared)                                      \
+        {                                                   \
+            aGuard.reset();                                 \
+        }                                                   \
         if( !m_aCache##XXX.hasRow( nRow ) )                 \
         {                                                   \
             aGuard.clear();                                 \
@@ -1348,7 +1358,7 @@ sal_Bool SAL_CALL CachedContentResultSet
 {
     impl_EnsureNotDisposed();
 
-    ReacquireableGuard aGuard( m_aMutex );
+    osl::ResettableMutexGuard aGuard(m_aMutex);
     //after last
     if( m_bAfterLast )
         return false;
@@ -1356,12 +1366,12 @@ sal_Bool SAL_CALL CachedContentResultSet
     aGuard.clear();
     if( isLast() )
     {
-        aGuard.reacquire();
+        aGuard.reset();
         m_nRow++;
         m_bAfterLast = true;
         return false;
     }
-    aGuard.reacquire();
+    aGuard.reset();
     //known valid position
     if( impl_isKnownValidPosition( m_nRow + 1 ) )
     {
@@ -1375,7 +1385,7 @@ sal_Bool SAL_CALL CachedContentResultSet
 
     bool bValid = applyPositionToOrigin( nRow + 1 );
 
-    aGuard.reacquire();
+    aGuard.reset();
     m_nRow = nRow + 1;
     m_bAfterLast = !bValid;
     return bValid;
@@ -1392,7 +1402,7 @@ sal_Bool SAL_CALL CachedContentResultSet
     if( impl_isForwardOnly() )
         throw SQLException();
 
-    ReacquireableGuard aGuard( m_aMutex );
+    osl::ResettableMutexGuard aGuard(m_aMutex);
     //before first ?:
     if( !m_bAfterLast && !m_nRow )
         return false;
@@ -1416,7 +1426,7 @@ sal_Bool SAL_CALL CachedContentResultSet
 
     bool bValid = applyPositionToOrigin( nRow - 1  );
 
-    aGuard.reacquire();
+    aGuard.reset();
     m_nRow = nRow - 1;
     m_bAfterLast = false;
     return bValid;
@@ -1436,7 +1446,7 @@ sal_Bool SAL_CALL CachedContentResultSet
     if( impl_isForwardOnly() )
         throw SQLException();
 
-    ReacquireableGuard aGuard( m_aMutex );
+    osl::ResettableMutexGuard aGuard(m_aMutex);
 
     if( !m_xResultSetOrigin.is() )
     {
@@ -1474,7 +1484,7 @@ sal_Bool SAL_CALL CachedContentResultSet
             throw;
         }
 
-        aGuard.reacquire();
+        aGuard.reset();
         if( m_bFinalCount )
         {
             sal_Int32 nNewRow = m_nKnownCount + 1 + row;
@@ -1489,7 +1499,7 @@ sal_Bool SAL_CALL CachedContentResultSet
 
         sal_Int32 nCurRow = m_xResultSetOrigin->getRow();
 
-        aGuard.reacquire();
+        aGuard.reset();
         m_nLastAppliedPos = nCurRow;
         m_nRow = nCurRow;
         m_bAfterLast = false;
@@ -1513,7 +1523,7 @@ sal_Bool SAL_CALL CachedContentResultSet
 
     bool bValid = m_xResultSetOrigin->absolute( row );
 
-    aGuard.reacquire();
+    aGuard.reset();
     if( m_bFinalCount )
     {
         sal_Int32 nNewRow = row;
@@ -1534,7 +1544,7 @@ sal_Bool SAL_CALL CachedContentResultSet
     sal_Int32 nCurRow = m_xResultSetOrigin->getRow();
     bool bIsAfterLast = m_xResultSetOrigin->isAfterLast();
 
-    aGuard.reacquire();
+    aGuard.reset();
     m_nLastAppliedPos = nCurRow;
     m_nRow = nCurRow;
     m_bAfterLastApplied = m_bAfterLast = bIsAfterLast;
@@ -1552,7 +1562,7 @@ sal_Bool SAL_CALL CachedContentResultSet
     if( impl_isForwardOnly() )
         throw SQLException();
 
-    ReacquireableGuard aGuard( m_aMutex );
+    osl::ResettableMutexGuard aGuard(m_aMutex);
     if( m_bAfterLast || impl_isKnownInvalidPosition( m_nRow ) )
         throw SQLException();
 
@@ -1588,7 +1598,7 @@ sal_Bool SAL_CALL CachedContentResultSet
         aGuard.clear();
         bool bValid = applyPositionToOrigin( nNewRow );
 
-        aGuard.reacquire();
+        aGuard.reset();
         m_nRow = nNewRow;
         m_bAfterLast = !bValid && nNewRow > 0;
         return bValid;
@@ -1607,7 +1617,7 @@ sal_Bool SAL_CALL CachedContentResultSet
     if( impl_isForwardOnly() )
         throw SQLException();
 
-    ReacquireableGuard aGuard( m_aMutex );
+    osl::ResettableMutexGuard aGuard(m_aMutex);
     if( impl_isKnownValidPosition( 1 ) )
     {
         m_nRow = 1;
@@ -1625,7 +1635,7 @@ sal_Bool SAL_CALL CachedContentResultSet
 
     bool bValid = applyPositionToOrigin( 1 );
 
-    aGuard.reacquire();
+    aGuard.reset();
     m_nRow = 1;
     m_bAfterLast = false;
     return bValid;
@@ -1642,7 +1652,7 @@ sal_Bool SAL_CALL CachedContentResultSet
     if( impl_isForwardOnly() )
         throw SQLException();
 
-    ReacquireableGuard aGuard( m_aMutex );
+    osl::ResettableMutexGuard aGuard(m_aMutex);
     if( m_bFinalCount )
     {
         m_nRow = m_nKnownCount;
@@ -1659,7 +1669,7 @@ sal_Bool SAL_CALL CachedContentResultSet
 
     bool bValid = m_xResultSetOrigin->last();
 
-    aGuard.reacquire();
+    aGuard.reset();
     m_bAfterLastApplied = m_bAfterLast = false;
     if( m_bFinalCount )
     {
@@ -1671,7 +1681,7 @@ sal_Bool SAL_CALL CachedContentResultSet
 
     sal_Int32 nCurRow = m_xResultSetOrigin->getRow();
 
-    aGuard.reacquire();
+    aGuard.reset();
     m_nLastAppliedPos = nCurRow;
     m_nRow = nCurRow;
     OSL_ENSURE( nCurRow >= m_nKnownCount, "position of last row < known Count, that could not be" );
@@ -1720,7 +1730,7 @@ sal_Bool SAL_CALL CachedContentResultSet
 {
     impl_EnsureNotDisposed();
 
-    ReacquireableGuard aGuard( m_aMutex );
+    osl::ResettableMutexGuard aGuard(m_aMutex);
     if( !m_bAfterLast )
         return false;
     if( m_nKnownCount )
@@ -1738,7 +1748,7 @@ sal_Bool SAL_CALL CachedContentResultSet
     //find out whethter the original resultset contains rows or not
     m_xResultSetOrigin->afterLast();
 
-    aGuard.reacquire();
+    aGuard.reset();
     m_bAfterLastApplied = true;
     aGuard.clear();
 
@@ -1753,7 +1763,7 @@ sal_Bool SAL_CALL CachedContentResultSet
 {
     impl_EnsureNotDisposed();
 
-    ReacquireableGuard aGuard( m_aMutex );
+    osl::ResettableMutexGuard aGuard(m_aMutex);
     if( m_bAfterLast )
         return false;
     if( m_nRow )
@@ -1773,7 +1783,7 @@ sal_Bool SAL_CALL CachedContentResultSet
     //find out whethter the original resultset contains rows or not
     m_xResultSetOrigin->beforeFirst();
 
-    aGuard.reacquire();
+    aGuard.reset();
     m_bAfterLastApplied = false;
     m_nLastAppliedPos = 0;
     aGuard.clear();
@@ -2091,12 +2101,13 @@ Any SAL_CALL CachedContentResultSet
     //if you change this function please pay attention to
     //function template rowOriginGet, where this is similar implemented
 
-    ReacquireableGuard aGuard( m_aMutex );
+    osl::ResettableMutexGuard aGuard(m_aMutex);
     sal_Int32 nRow = m_nRow;
     sal_Int32 nFetchSize = m_nFetchSize;
     sal_Int32 nFetchDirection = m_nFetchDirection;
     if( !m_aCache.hasRow( nRow ) )
     {
+        bool isCleared = false;
         if( !m_aCache.hasCausedException( nRow ) )
         {
             if( !m_xFetchProvider.is() )
@@ -2104,11 +2115,15 @@ Any SAL_CALL CachedContentResultSet
                 OSL_FAIL( "broadcaster was disposed already" );
                 return Any();
             }
+            isCleared = true;
             aGuard.clear();
 
             impl_fetchData( nRow, nFetchSize, nFetchDirection );
         }
-        aGuard.reacquire();
+        if (isCleared)
+        {
+            aGuard.reset();
+        }
         if( !m_aCache.hasRow( nRow ) )
         {
             m_bLastReadWasFromCache = false;
