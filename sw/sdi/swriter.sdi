@@ -1076,6 +1076,24 @@ SfxVoidItem EditRegion FN_EDIT_REGION
     GroupId = GID_EDIT;
 ]
 
+SfxVoidItem EditCurrentRegion FN_EDIT_CURRENT_REGION
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_EDIT;
+]
+
 SfxVoidItem EndOfDocumentSel FN_END_OF_DOCUMENT_SEL
 ()
 [

@@ -110,6 +110,7 @@
 
 #define FN_EDIT_REGION          (FN_EDIT + 65)  /* Edit region */
 #define FN_GOTO_REFERENCE       (FN_EDIT + 66)  /* From Refmark to the reference */
+#define FN_EDIT_CURRENT_REGION  (FN_EDIT + 67)  /* Edit current region*/
 
 // already defined in SVX
 #define FN_NEXT_BOOKMARK        (FN_EDIT + 68)  /*  */
