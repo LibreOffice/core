@@ -530,7 +530,7 @@ void WorkbookFragment::recalcFormulaCells()
     Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
     ScRecalcOptions nRecalcMode =
         static_cast<ScRecalcOptions>(officecfg::Office::Calc::Formula::Load::OOXMLRecalcMode::get(xContext));
-    bool bHardRecalc = false;
+    bool bHardRecalc = true;
     if (nRecalcMode == RECALC_ASK)
     {
         if (rDoc.IsUserInteractionEnabled())
@@ -559,13 +559,13 @@ void WorkbookFragment::recalcFormulaCells()
             }
         }
     }
-    else if (nRecalcMode == RECALC_ALWAYS)
-        bHardRecalc = true;
+    else if (nRecalcMode == RECALC_NEVER)
+        bHardRecalc = false;
 
     if (bHardRecalc)
-        rDocSh.DoHardRecalc(false);
+        rDocSh.DoHardRecalc(true);
     else
-        rDoc.CalcFormulaTree(false, true, false);
+        rDoc.CalcFormulaTree(true, true, false);
 }
 
 // private --------------------------------------------------------------------
