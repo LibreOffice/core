@@ -24,51 +24,12 @@
 #include <libxml/xmlwriter.h>
 #include <typeinfo>
 
-
-#if OSL_DEBUG_LEVEL > 0
-static sal_uLong nItemCount = 0;
-
-static const char* pw1 = "Wow! 10.000 items!";
-static const char* pw2 = "Wow! 100.000 items!";
-static const char* pw3 = "Wow! 1.000.000 items!";
-static const char* pw4 = "Wow! 50.000.000 items!";
-static const char* pw5 = "Wow! 10.000.000 items!";
-#endif
-
 SfxPoolItem::SfxPoolItem(sal_uInt16 const nWhich)
     : m_nRefCount(0)
     , m_nWhich(nWhich)
     , m_nKind(SfxItemKind::NONE)
 {
     assert(nWhich <= SHRT_MAX);
-#if OSL_DEBUG_LEVEL > 0
-    ++nItemCount;
-    if ( pw1 && nItemCount>=10000 )
-    {
-        SAL_INFO( "svl", pw1 );
-        pw1 = nullptr;
-    }
-    if ( pw2 && nItemCount>=100000 )
-    {
-        SAL_INFO( "svl", pw2 );
-        pw2 = nullptr;
-    }
-    if ( pw3 && nItemCount>=1000000 )
-    {
-        SAL_INFO( "svl", pw3 );
-        pw3 = nullptr;
-    }
-    if ( pw4 && nItemCount>=5000000 )
-    {
-        SAL_INFO( "svl", pw4 );
-        pw4 = nullptr;
-    }
-    if ( pw5 && nItemCount>=10000000 )
-    {
-        SAL_INFO( "svl", pw5 );
-        pw5 = nullptr;
-    }
-#endif
 }
 
 
@@ -76,45 +37,13 @@ SfxPoolItem::SfxPoolItem( const SfxPoolItem& rCpy )
     : m_nRefCount(0) // don't copy that
     , m_nWhich(rCpy.m_nWhich)
     , m_nKind(SfxItemKind::NONE)
-{
-#if OSL_DEBUG_LEVEL > 0
-    ++nItemCount;
-    if ( pw1 && nItemCount>=10000 )
-    {
-        SAL_INFO( "svl", pw1 );
-        pw1 = nullptr;
-    }
-    if ( pw2 && nItemCount>=100000 )
-    {
-        SAL_INFO( "svl", pw2 );
-        pw2 = nullptr;
-    }
-    if ( pw3 && nItemCount>=1000000 )
-    {
-        SAL_INFO( "svl", pw3 );
-        pw3 = nullptr;
-    }
-    if ( pw4 && nItemCount>=5000000 )
-    {
-        SAL_INFO( "svl", pw4 );
-        pw4 = nullptr;
-    }
-    if ( pw5 && nItemCount>=10000000 )
-    {
-        SAL_INFO( "svl", pw5 );
-        pw5 = nullptr;
-    }
-#endif
-}
+{}
 
 
 SfxPoolItem::~SfxPoolItem()
 {
     assert((m_nRefCount == 0 || m_nRefCount > SFX_ITEMS_MAXREF)
             && "destroying item in use");
-#if OSL_DEBUG_LEVEL > 0
-    --nItemCount;
-#endif
 }
 
 
