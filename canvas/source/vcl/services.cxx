@@ -52,7 +52,7 @@ namespace vclcanvas
         return xRet;
     }
 
-    sdecl::class_<Canvas, sdecl::with_args<true> > serviceImpl1(&initCanvas);
+    sdecl::class_<Canvas, sdecl::with_args<true> > const serviceImpl1(&initCanvas);
     const sdecl::ServiceDecl vclCanvasDecl(
         serviceImpl1,
         CANVAS_IMPLEMENTATION_NAME,
@@ -65,7 +65,7 @@ namespace vclcanvas
         return xRet;
     }
 
-    sdecl::class_<SpriteCanvas, sdecl::with_args<true> > serviceImpl2(&initSpriteCanvas);
+    sdecl::class_<SpriteCanvas, sdecl::with_args<true> > const serviceImpl2(&initSpriteCanvas);
     const sdecl::ServiceDecl vclSpriteCanvasDecl(
         serviceImpl2,
         SPRITECANVAS_IMPLEMENTATION_NAME,

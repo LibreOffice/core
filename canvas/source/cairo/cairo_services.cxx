@@ -51,7 +51,7 @@ namespace cairocanvas
         return xRet;
     }
 
-    sdecl::class_< Canvas, sdecl::with_args<true> > serviceImpl1(&initCanvas);
+    sdecl::class_< Canvas, sdecl::with_args<true> > const serviceImpl1(&initCanvas);
     const sdecl::ServiceDecl cairoCanvasDecl(
         serviceImpl1,
         CANVAS_IMPLEMENTATION_NAME,
@@ -65,7 +65,7 @@ namespace cairocanvas
     }
 
     namespace sdecl = comphelper::service_decl;
-    sdecl::class_< SpriteCanvas, sdecl::with_args<true> > serviceImpl2(&initSpriteCanvas);
+    sdecl::class_< SpriteCanvas, sdecl::with_args<true> > const serviceImpl2(&initSpriteCanvas);
     const sdecl::ServiceDecl cairoSpriteCanvasDecl(
         serviceImpl2,
         SPRITECANVAS_IMPLEMENTATION_NAME,
