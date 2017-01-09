@@ -27,7 +27,7 @@ namespace chart
 class XYDataInterpreter : public DataInterpreter
 {
 public:
-    explicit XYDataInterpreter( const css::uno::Reference< css::uno::XComponentContext > & xContext );
+    explicit XYDataInterpreter();
     virtual ~XYDataInterpreter() override;
 
 protected:

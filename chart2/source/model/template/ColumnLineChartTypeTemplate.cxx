@@ -394,7 +394,7 @@ Reference< XDataInterpreter > SAL_CALL ColumnLineChartTypeTemplate::getDataInter
     {
         sal_Int32 nNumberOfLines = 1;
         getFastPropertyValue( PROP_COL_LINE_NUMBER_OF_LINES ) >>= nNumberOfLines;
-        m_xDataInterpreter.set( new ColumnLineDataInterpreter( nNumberOfLines, GetComponentContext() ) );
+        m_xDataInterpreter.set( new ColumnLineDataInterpreter( nNumberOfLines ) );
     }
     else
     {

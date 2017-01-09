@@ -670,7 +670,7 @@ public:
         : m_rPropSet(*aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_CURSOR))
         , m_eType(eType)
         , m_xParentText(xParent)
-        , m_pUnoCursor(rDoc.CreateUnoCursor(rPoint), true)
+        , m_pUnoCursor(rDoc.CreateUnoCursor(rPoint))
     {
         if (pMark)
         {

@@ -375,7 +375,6 @@ FreetypeFont::FreetypeFont( const FontSelectPattern& rFSD, FreetypeFontInfo* pFI
     mnSin( 0 ),
     mnPrioEmbedded(nDefaultPrioEmbedded),
     mnPrioAntiAlias(nDefaultPrioAntiAlias),
-    mnPrioAutoHint(nDefaultPrioAutoHint),
     mpFontInfo( pFI ),
     mnLoadFlags( 0 ),
     maFaceFT( nullptr ),

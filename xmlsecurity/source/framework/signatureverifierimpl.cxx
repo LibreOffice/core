@@ -32,8 +32,8 @@ namespace cssxc = com::sun::star::xml::crypto;
 
 #define IMPLEMENTATION_NAME "com.sun.star.xml.security.framework.SignatureVerifierImpl"
 
-SignatureVerifierImpl::SignatureVerifierImpl( const cssu::Reference< css::uno::XComponentContext >& xContext)
-  : SignatureVerifierImpl_Base(xContext)
+SignatureVerifierImpl::SignatureVerifierImpl()
+  : SignatureVerifierImpl_Base()
 {
 }
 
@@ -153,10 +153,10 @@ cssu::Sequence< OUString > SAL_CALL SignatureVerifierImpl_getSupportedServiceNam
 }
 
 cssu::Reference< cssu::XInterface > SAL_CALL SignatureVerifierImpl_createInstance(
-    const cssu::Reference< cssl::XMultiServiceFactory >& rSMgr)
+    const cssu::Reference< cssl::XMultiServiceFactory >& /*rSMgr*/)
     throw( cssu::Exception )
 {
-    return static_cast<cppu::OWeakObject*>(new SignatureVerifierImpl( comphelper::getComponentContext(rSMgr) ));
+    return static_cast<cppu::OWeakObject*>(new SignatureVerifierImpl);
 }
 
 /* XServiceInfo */

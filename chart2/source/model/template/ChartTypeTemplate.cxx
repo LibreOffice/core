@@ -376,7 +376,7 @@ Reference< chart2::XDataInterpreter > SAL_CALL ChartTypeTemplate::getDataInterpr
     throw (uno::RuntimeException, std::exception)
 {
     if( ! m_xDataInterpreter.is())
-        m_xDataInterpreter.set( new DataInterpreter( GetComponentContext() ) );
+        m_xDataInterpreter.set( new DataInterpreter );
 
     return m_xDataInterpreter;
 }

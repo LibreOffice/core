@@ -41,9 +41,8 @@ namespace chart
 
 // explicit
 ColumnLineDataInterpreter::ColumnLineDataInterpreter(
-    sal_Int32 nNumberOfLines,
-    const Reference< uno::XComponentContext > & xContext ) :
-        DataInterpreter( xContext ),
+    sal_Int32 nNumberOfLines ) :
+        DataInterpreter(),
         m_nNumberOfLines( nNumberOfLines )
 {}
 

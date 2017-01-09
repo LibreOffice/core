@@ -30,8 +30,7 @@ class StockDataInterpreter : public DataInterpreter
 {
 public:
     explicit StockDataInterpreter(
-        StockChartTypeTemplate::StockVariant eVariant,
-        const css::uno::Reference< css::uno::XComponentContext > & xContext );
+        StockChartTypeTemplate::StockVariant eVariant );
     virtual ~StockDataInterpreter() override;
 
 protected:

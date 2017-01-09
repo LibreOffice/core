@@ -70,7 +70,7 @@ PDFSignatureHelper& DocumentSignatureManager::getPDFSignatureHelper()
     SAL_WARN_IF(!bInit, "xmlsecurity.comp", "Error initializing security context!");
 
     if (!mpPDFSignatureHelper)
-        mpPDFSignatureHelper.reset(new PDFSignatureHelper(mxContext));
+        mpPDFSignatureHelper.reset(new PDFSignatureHelper);
 
     return *mpPDFSignatureHelper;
 }

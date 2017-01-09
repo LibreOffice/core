@@ -206,7 +206,7 @@ Reference< chart2::XDataInterpreter > SAL_CALL BubbleChartTypeTemplate::getDataI
     throw (uno::RuntimeException, std::exception)
 {
     if( ! m_xDataInterpreter.is())
-        m_xDataInterpreter.set( new BubbleDataInterpreter( GetComponentContext()) );
+        m_xDataInterpreter.set( new BubbleDataInterpreter );
 
     return m_xDataInterpreter;
 }

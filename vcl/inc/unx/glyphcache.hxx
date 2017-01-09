@@ -176,8 +176,7 @@ private:
     int                     mnWidth;
     int                     mnPrioEmbedded;
     int                     mnPrioAntiAlias;
-    int                     mnPrioAutoHint;
-    FreetypeFontInfo*             mpFontInfo;
+    FreetypeFontInfo*       mpFontInfo;
     FT_Int                  mnLoadFlags;
     double                  mfStretch;
     FT_FaceRec_*            maFaceFT;
@@ -189,9 +188,6 @@ private:
     bool                    mbArtItalic;
     bool                    mbArtBold;
     bool                    mbUseGamma;
-
-    typedef std::unordered_map<int,int> GlyphSubstitution;
-    GlyphSubstitution       maGlyphSubstitution;
 
     hb_font_t*              mpHbFont;
 };

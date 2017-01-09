@@ -48,9 +48,7 @@ void lcl_ShowDataSource( const Reference< data::XDataSource > & xSource );
 namespace chart
 {
 
-DataInterpreter::DataInterpreter(
-    const Reference< uno::XComponentContext > & xContext ) :
-        m_xContext( xContext )
+DataInterpreter::DataInterpreter()
 {}
 
 DataInterpreter::~DataInterpreter()

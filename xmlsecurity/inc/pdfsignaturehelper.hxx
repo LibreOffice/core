@@ -24,14 +24,13 @@
 /// Handles signatures of a PDF file.
 class XMLSECURITY_DLLPUBLIC PDFSignatureHelper
 {
-    css::uno::Reference<css::uno::XComponentContext> m_xComponentContext;
     SignatureInformations m_aSignatureInfos;
 
     css::uno::Reference<css::security::XCertificate> m_xCertificate;
     OUString m_aDescription;
 
 public:
-    PDFSignatureHelper(const css::uno::Reference<css::uno::XComponentContext>& xComponentContext);
+    PDFSignatureHelper();
     bool ReadAndVerifySignature(const css::uno::Reference<css::io::XInputStream>& xInputStream);
     css::uno::Sequence<css::security::DocumentSignatureInformation> GetDocumentSignatureInformations(const css::uno::Reference<css::xml::crypto::XSecurityEnvironment>& xSecEnv) const;
     SignatureInformations GetSignatureInformations() const;

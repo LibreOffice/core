@@ -60,7 +60,7 @@ cssu::Reference< cssxc::sax::XReferenceResolvedListener > XSecController::prepar
          * create a SignatureVerifier
          */
     cssu::Reference< cssl::XMultiComponentFactory > xMCF( mxCtx->getServiceManager() );
-    xReferenceResolvedListener = new SignatureVerifierImpl(mxCtx);
+    xReferenceResolvedListener = new SignatureVerifierImpl;
 
     cssu::Reference<cssl::XInitialization> xInitialization(xReferenceResolvedListener, cssu::UNO_QUERY);
 

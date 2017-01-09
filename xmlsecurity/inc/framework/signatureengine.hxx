@@ -54,9 +54,6 @@ class XSECFW_DLLPUBLIC SignatureEngine : public cppu::ImplInheritanceHelper
  *  Maintains common members and methods related with signature operation.
  ******************************************************************************/
 {
-private:
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
-
 protected:
 
     /*
@@ -86,7 +83,7 @@ protected:
     std::vector< css::uno::Reference< css::io::XInputStream > > m_vXInputStreams;
 
 protected:
-    explicit SignatureEngine( const css::uno::Reference< css::uno::XComponentContext > & xContext);
+    explicit SignatureEngine();
     virtual ~SignatureEngine() override {};
 
     virtual void tryToPerform( )

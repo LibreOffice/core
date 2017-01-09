@@ -34,8 +34,8 @@ namespace cssxw = com::sun::star::xml::wrapper;
 
 #define IMPLEMENTATION_NAME "com.sun.star.xml.security.framework.SignatureCreatorImpl"
 
-SignatureCreatorImpl::SignatureCreatorImpl( const Reference<XComponentContext> & xContext )
-    : SignatureCreatorImpl_Base(xContext), m_nIdOfBlocker(-1)
+SignatureCreatorImpl::SignatureCreatorImpl()
+    : SignatureCreatorImpl_Base(), m_nIdOfBlocker(-1)
 {
 }
 
@@ -200,10 +200,10 @@ cssu::Sequence< OUString > SAL_CALL SignatureCreatorImpl_getSupportedServiceName
 }
 
 cssu::Reference< cssu::XInterface > SAL_CALL SignatureCreatorImpl_createInstance(
-    const cssu::Reference< cssl::XMultiServiceFactory >& xMSF )
+    const cssu::Reference< cssl::XMultiServiceFactory >& /*xMSF*/ )
     throw( cssu::Exception )
 {
-    return static_cast<cppu::OWeakObject*>(new SignatureCreatorImpl( comphelper::getComponentContext( xMSF ) ));
+    return static_cast<cppu::OWeakObject*>(new SignatureCreatorImpl);
 }
 
 /* XServiceInfo */
