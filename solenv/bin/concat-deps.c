@@ -108,7 +108,7 @@
 #define FALSE 0
 #endif
 
-int internal_boost = 0;
+static int internal_boost = 0;
 static char* base_dir;
 static char* work_dir;
 size_t work_dir_len;
