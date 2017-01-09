@@ -96,7 +96,7 @@ using namespace sdr::table;
 // get parameter from Itemset
 #define RESTOHTML( res ) StringToHTMLString(SD_RESSTR(res))
 
-const char *pButtonNames[] =
+const char * const pButtonNames[] =
 {
     "first-inactive.png",
     "first.png",

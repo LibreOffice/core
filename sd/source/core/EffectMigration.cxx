@@ -52,7 +52,7 @@ struct deprecated_FadeEffect_conversion_table_entry
     const sal_Char* mpPresetId;
 }
 
-deprecated_FadeEffect_conversion_table[] =
+const deprecated_FadeEffect_conversion_table[] =
 {
 // OOo 1.x transitions
     { FadeEffect_FADE_FROM_LEFT,            "wipe-right" },
@@ -160,7 +160,7 @@ wedge                           wedge
 
 void EffectMigration::SetFadeEffect( SdPage* pPage, css::presentation::FadeEffect eNewEffect)
 {
-    deprecated_FadeEffect_conversion_table_entry* pEntry = deprecated_FadeEffect_conversion_table;
+    deprecated_FadeEffect_conversion_table_entry const * pEntry = deprecated_FadeEffect_conversion_table;
     while( (pEntry->meFadeEffect != FadeEffect_NONE) && (pEntry->meFadeEffect != eNewEffect) )
         pEntry++;
 
@@ -207,7 +207,7 @@ FadeEffect EffectMigration::GetFadeEffect( const SdPage* pPage )
         {
             const OUString& aPresetId = (*aIt)->getPresetId();
 
-            deprecated_FadeEffect_conversion_table_entry* pEntry = deprecated_FadeEffect_conversion_table;
+            deprecated_FadeEffect_conversion_table_entry const * pEntry = deprecated_FadeEffect_conversion_table;
             while( (pEntry->meFadeEffect != FadeEffect_NONE) && (!aPresetId.equalsAscii( pEntry->mpPresetId ) ) )
                 pEntry++;
 
@@ -223,7 +223,7 @@ struct deprecated_AnimationEffect_conversion_table_entry
     const sal_Char* mpPresetId;
     const sal_Char* mpPresetSubType;
 }
-deprecated_AnimationEffect_conversion_table[] =
+const deprecated_AnimationEffect_conversion_table[] =
 {
 // OOo 1.x entrance effects
     { AnimationEffect_APPEAR, "ooo-entrance-appear",nullptr },
@@ -746,7 +746,7 @@ bool EffectMigration::ConvertPreset( const OUString& rPresetId, const OUString* 
     if( !rPresetId.isEmpty() )
     {
         // first try a match for preset id and subtype
-        deprecated_AnimationEffect_conversion_table_entry* p = deprecated_AnimationEffect_conversion_table;
+        deprecated_AnimationEffect_conversion_table_entry const * p = deprecated_AnimationEffect_conversion_table;
         while( p->mpPresetId )
         {
             if( rPresetId.equalsAscii( p->mpPresetId ) &&
@@ -770,7 +770,7 @@ bool EffectMigration::ConvertPreset( const OUString& rPresetId, const OUString* 
 
 bool EffectMigration::ConvertAnimationEffect( const AnimationEffect& rEffect, OUString& rPresetId, OUString& rPresetSubType )
 {
-    deprecated_AnimationEffect_conversion_table_entry* p = deprecated_AnimationEffect_conversion_table;
+    deprecated_AnimationEffect_conversion_table_entry const * p = deprecated_AnimationEffect_conversion_table;
     while( p->mpPresetId )
     {
         if( p->meEffect == rEffect )

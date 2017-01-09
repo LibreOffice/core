@@ -45,7 +45,7 @@ using ::rtl::OUString;
 
 namespace sd { namespace sidebar {
 
-Reference<lang::XEventListener> mxControllerDisposeListener;
+static Reference<lang::XEventListener> mxControllerDisposeListener;
 
 //----- PanelFactory --------------------------------------------------------
 

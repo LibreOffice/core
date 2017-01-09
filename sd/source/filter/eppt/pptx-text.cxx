@@ -52,7 +52,7 @@
 #include <vcl/virdev.hxx>
 #include <o3tl/make_unique.hxx>
 
-css::uno::Reference< css::i18n::XBreakIterator > xPPTBreakIter;
+static css::uno::Reference< css::i18n::XBreakIterator > xPPTBreakIter;
 
 PortionObj::PortionObj(const css::uno::Reference< css::beans::XPropertySet > & rXPropSet,
                 FontCollection& rFontCollection)

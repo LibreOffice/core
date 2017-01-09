@@ -65,7 +65,7 @@ const sal_uInt16 nMagic = (sal_uInt16)0x1977;
 #define KEY_QUALITY     "JPG-EXPORT-QUALITY"
 
 // The Help-IDs of the pages
-const char* aPageHelpIds[NOOFPAGES] =
+const char* const aPageHelpIds[NOOFPAGES] =
 {
     HID_SD_HTMLEXPORT_PAGE1,
     HID_SD_HTMLEXPORT_PAGE2,

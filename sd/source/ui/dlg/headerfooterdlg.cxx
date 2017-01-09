@@ -91,7 +91,7 @@ namespace sd
 {
 
 const int nDateTimeFormatsCount = 12;
-int nDateTimeFormats[nDateTimeFormatsCount] =
+int const nDateTimeFormats[nDateTimeFormatsCount] =
 {
     SVXDATEFORMAT_A,
     SVXDATEFORMAT_B,
