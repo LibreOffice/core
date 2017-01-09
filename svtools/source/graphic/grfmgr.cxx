@@ -447,13 +447,6 @@ void GraphicObject::FireSwapOutRequest()
     ImplAutoSwapOutHdl( nullptr );
 }
 
-void GraphicObject::GraphicManagerDestroyed()
-{
-    // we're alive, but our manager doesn't live anymore ==> connect to default manager
-    mpMgr = nullptr;
-    ImplSetGraphicManager();
-}
-
 bool GraphicObject::IsCached( OutputDevice* pOut, const Point& rPt, const Size& rSz,
                               const GraphicAttr* pAttr, GraphicManagerDrawFlags nFlags ) const
 {
