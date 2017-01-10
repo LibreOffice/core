@@ -1317,8 +1317,10 @@ bool SwRegHistory::InsertItems( const SfxItemSet& rSet,
                 (isCHRATR(nWhich) || RES_TXTATR_UNKNOWN_CONTAINER == nWhich)
                     ? RES_TXTATR_AUTOFMT
                     : static_cast<RES_TXTATR>(nWhich));
-            if (RES_TXTATR_AUTOFMT == nExpected && 0 == nStart && pTextNode->Len() == nEnd)
+            if (RES_TXTATR_AUTOFMT == nExpected)
                 continue; // special case, may get set on text node itself
+                          // tdf#105077 even worse, node's set could cause
+                          // nothing at all to be inserted
             assert(std::find_if(
                 m_pHistory->m_SwpHstry.begin(), m_pHistory->m_SwpHstry.end(),
                 [nExpected](SwHistoryHint *const pHint) -> bool {
