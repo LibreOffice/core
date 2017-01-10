@@ -669,8 +669,8 @@ void Test::testMiscEquivalent()
 
 void Test::testParser()
 {
-    char const* formula = "{ \xf0\x9d\x91\x8e }"; // non-BMP Unicode
-    char const* expected = "\xf0\x9d\x91\x8e";
+    char const* const formula = "{ \xf0\x9d\x91\x8e }"; // non-BMP Unicode
+    char const* const expected = "\xf0\x9d\x91\x8e";
 
     OUString sOutput;
     OUString sInput = OUString(formula, strlen(formula), RTL_TEXTENCODING_UTF8);
