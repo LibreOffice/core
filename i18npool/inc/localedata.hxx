@@ -132,7 +132,7 @@ private:
         getCalendarItemByName(const OUString& name,
         const css::lang::Locale& rLocale,
         const css::uno::Sequence< css::i18n::Calendar2 >& calendarsSeq,
-        sal_Int16 item) throw( css::uno::RuntimeException );
+        sal_Int16 item) throw( css::uno::RuntimeException, std::exception );
 
     /// Helper to obtain a sequence of days, months, gmonths or eras.
     css::uno::Sequence< css::i18n::CalendarItem2 > getCalendarItems(

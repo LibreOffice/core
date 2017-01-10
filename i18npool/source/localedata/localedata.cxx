@@ -601,7 +601,7 @@ oslGenericFunction SAL_CALL lcl_LookupTableHelper::getFunctionSymbolByName(
 
 Sequence< CalendarItem2 > &LocaleDataImpl::getCalendarItemByName(const OUString& name,
         const Locale& rLocale, const Sequence< Calendar2 >& calendarsSeq, sal_Int16 item)
-        throw(RuntimeException)
+        throw(RuntimeException, std::exception)
 {
     if (!ref_name.equals(name)) {
         OUString aLocStr, id;
