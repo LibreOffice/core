@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a6eadb0_e11ccd79",
+        "filename": "framework/source/services/desktop.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-01-10T06:45:47Z",
+      "side": 1,
+      "message": "could just use a range-based for loop here",
+      "revId": "cc09a570b37626022129f129ee060eca838667a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
