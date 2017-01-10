@@ -5205,6 +5205,15 @@ ONEBLADE_TRANS_SUBTYPE              = 26; // 107
 ACROSS_TRANS_SUBTYPE                = 27;
 RECTANGLE_TRANS_SUBTYPE             = 34; // 101
 DIAMOND_TRANS_SUBTYPE               = 35; // 102
+TOPLEFT_TRANS_SUBTYPE               = 36  // 3
+TOPRIGHT_TRANS_SUBTYPE              = 37  // 4
+BOTTOMRIGHT_TRANS_SUBTYPE           = 38  // 5
+BOTTOMLEFT_TRANS_SUBTYPE            = 39  // 6
+TOPCENTER_TRANS_SUBTYPE             = 40; // 7
+RIGHTCENTER_TRANS_SUBTYPE           = 41; // 8
+BOTTOMCENTER_TRANS_SUBTYPE          = 42; // 9
+LEFTCENTER_TRANS_SUBTYPE            = 43; // 10
+
 
 aTransitionSubtypeInMap = {
     'default'           : DEFAULT_TRANS_SUBTYPE,
@@ -5236,7 +5245,15 @@ aTransitionSubtypeInMap = {
     'oneBlade'          : ONEBLADE_TRANS_SUBTYPE,
     'across'            : ACROSS_TRANS_SUBTYPE,
     'rectangle'         : RECTANGLE_TRANS_SUBTYPE,
-    'diamond'           : DIAMOND_TRANS_SUBTYPE
+    'diamond'           : DIAMOND_TRANS_SUBTYPE,
+    'topLeft'           : TOPLEFT_TRANS_SUBTYPE,
+    'topRight'          : TOPRIGHT_TRANS_SUBTYPE,
+    'bottomRight'       : BOTTOMRIGHT_TRANS_SUBTYPE,
+    'bottomLeft'        : BOTTOMLEFT_TRANS_SUBTYPE,
+    'topCenter'         : TOPCENTER_TRANS_SUBTYPE,
+    'rightCenter'       : RIGHTCENTER_TRANS_SUBTYPE,
+    'bottomCenter'      : BOTTOMCENTER_TRANS_SUBTYPE,
+    'leftCenter'        : LEFTCENTER_TRANS_SUBTYPE
 };
 
 aTransitionSubtypeOutMap = [ 'default', 'leftToRight', 'topToBottom', 'cornersIn',
@@ -5246,7 +5263,7 @@ aTransitionSubtypeOutMap = [ 'default', 'leftToRight', 'topToBottom', 'cornersIn
                              'fourBlade', 'fromLeft', 'fromTop', 'fromRight',
                              'fromBottom', 'crossfade', 'fadeToColor', 'fadeFromColor',
                              'fadeOverColor', 'threeBlade', 'eightBlade', 'oneBlade',
-                             'across', 'rectangle', 'diamond' ];
+                             'across', 'rectangle', 'diamond'];
 
 
 // Transition Modes
@@ -5340,6 +5357,88 @@ aTransitionInfoTable[BARWIPE_TRANSITION][TOPTOBOTTOM_TRANS_SUBTYPE] =
     'scaleY' : 1.0,
     'reverseMethod' : REVERSEMETHOD_FLIP_Y,
     'outInvertsSweep' : false,
+    'scaleIsotropically' : false
+};
+
+aTransitionInfoTable[BOXWIPE_TRANSITION] = {};
+aTransitionInfoTable[BOXWIPE_TRANSITION][TOPLEFT_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : 0.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_IGNORE,
+    'outInvertsSweep' : true,
+    'scaleIsotropically' : false
+};
+aTransitionInfoTable[BOXWIPE_TRANSITION][TOPRIGHT_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : 90.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_IGNORE,
+    'outInvertsSweep' : true,
+    'scaleIsotropically' : false
+};
+aTransitionInfoTable[BOXWIPE_TRANSITION][BOTTOMRIGHT_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : 180.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_IGNORE,
+    'outInvertsSweep' : true,
+    'scaleIsotropically' : false
+};
+aTransitionInfoTable[BOXWIPE_TRANSITION][BOTTOMLEFT_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : -90.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_IGNORE,
+    'outInvertsSweep' : true,
+    'scaleIsotropically' : false
+};
+aTransitionInfoTable[BOXWIPE_TRANSITION][TOPCENTER_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : 0.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_FLIP_Y,
+    'outInvertsSweep' : true,
+    'scaleIsotropically' : false
+};
+aTransitionInfoTable[BOXWIPE_TRANSITION][RIGHTCENTER_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : 90.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_FLIP_X,
+    'outInvertsSweep' : true,
+    'scaleIsotropically' : false
+};
+aTransitionInfoTable[BOXWIPE_TRANSITION][BOTTOMCENTER_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : 180.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_FLIP_Y,
+    'outInvertsSweep' : true,
+    'scaleIsotropically' : false
+};
+aTransitionInfoTable[BOXWIPE_TRANSITION][LEFTCENTER_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : -90.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_FLIP_X,
+    'outInvertsSweep' : true,
     'scaleIsotropically' : false
 };
 
@@ -9112,6 +9211,11 @@ function createClipPolyPolygon( nType, nSubtype )
             return new BarWipePath( 1 );
         case FOURBOXWIPE_TRANSITION:
             return new FourBoxWipePath( nSubtype === CORNERSOUT_TRANS_SUBTYPE );
+        case BOXWIPE_TRANSITION:
+            return new BoxWipePath( nSubtype == LEFTCENTER_TRANS_SUBTYPE ||
+                                    nSubtype == TOPCENTER_TRANS_SUBTYPE ||
+                                    nSubtype == RIGHTCENTER_TRANS_SUBTYPE ||
+                                    nSubtype == BOTTOMCENTER_TRANS_SUBTYPE );
         case ELLIPSEWIPE_TRANSITION:
             return new EllipseWipePath( nSubtype );
         case PINWHEELWIPE_TRANSITION:
@@ -9239,6 +9343,31 @@ BarWipePath.prototype.perform = function( nT )
 };
 
 
+/** Class BoxWipePath
+ *  This class handles a path made up by one square and is utilized for
+ *  performing BoxWipe transitions.
+ *
+ *  @param bIsTopCentered
+ *      if true the transition subtype is top centered else not.
+ */
+function BoxWipePath(bIsTopCentered) {
+    this.bIsTopCentered = bIsTopCentered;
+    this.aBasePath = createUnitSquarePath();
+}
+
+BoxWipePath.prototype.perform = function( nT ) {
+    var d = pruneScaleValue(nT);
+    var aTransform = SVGIdentityMatrix;
+    if(this.bIsTopCentered) {
+        aTransform = aTransform.translate(-0.5, 0.0).scale(d, d).translate(0.5, 0.0);
+    }
+    else {
+        aTransform = aTransform.scale(d, d);
+    }
+    var aPath = this.aBasePath.cloneNode(true);
+    aPath.matrixTransform(aTransform);
+    return aPath;
+}
 
 
 /** Class FourBoxWipePath
