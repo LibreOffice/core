@@ -16,6 +16,8 @@
 #include <cstdlib>
 #include <cstring>
 #include <sstream>
+#include <string>
+#include <iostream>
 
 #include <stdio.h>
 #include <string.h>
@@ -100,28 +102,68 @@ char const * getEnvironmentVariable_(const char* env) {
     return p2;
 }
 
+bool getValueFromLoggingIniFile(const char* key, char* value) {
+    OUString programDirectory;
+    osl_getProcessWorkingDir(&(programDirectory.pData));
+    OUString aLogFile(programDirectory + "/" + "logging.ini");
+    osl::File aBaseFile(aLogFile);
+    if (aBaseFile.open(osl_File_OpenFlag_Read) != osl::File::E_None)
+        return nullptr;
+
+    rtl::ByteSequence bseq;
+    std::size_t n;
+    std::string aKey;
+    std::string aValue;
+    std::string sWantedKey(key);
+    char* ret = nullptr;
+    while (aBaseFile.readLine(bseq) == osl::File::E_None) {
+        const char * cLine = reinterpret_cast<char const *>(bseq.getConstArray());
+        std::string sLine(cLine);
+        if (sLine.find('#') == 0)
+            continue;
+        if ( ( n = sLine.find('=') ) != std::string::npos) {
+            aKey = sLine.substr(0, n);
+            if (aKey != sWantedKey)
+                continue;
+            aValue = sLine.substr(n+1, sLine.length());
+            std::cout << "key: " << aKey << " value: " << aValue << "\n";
+
+            sprintf(value, "%s", aValue.c_str());
+            return true;
+        }
+    }
+    return false;
+}
+
 char const * getLogLevel() {
-    // First check the environment variable, then the bootstrap setting
+    // First check the environment variable, then the setting in logging.ini
     static char const * env = getEnvironmentVariable_("SAL_LOG");
     if (env != nullptr)
         return env;
 
-    OUString sLogLevel;
-    if (rtl::Bootstrap::get("LogLevel", sLogLevel) && !sLogLevel.isEmpty())
-        return  OUStringToOString( sLogLevel, RTL_TEXTENCODING_ASCII_US).getStr();
+    static char logLevel[1024];
+    if (getValueFromLoggingIniFile("LogLevel", logLevel)) {
+        fprintf(stderr, "LogLevel: %s\n", logLevel);
+        return logLevel;
+    }
+
     return nullptr;
 
 }
 
 char const * getLogFile() {
-    // First check the environment variable, then the bootstrap setting
+    // First check the environment variable, then the setting in logging.ini
     static char const * logFile = getEnvironmentVariable_("SAL_LOG_FILE");
     if (logFile != nullptr)
         return logFile;
 
-    OUString sLogFilePath;
-    if (rtl::Bootstrap::get("LogFilePath", sLogFilePath) && !sLogFilePath.isEmpty())
-        return  OUStringToOString( sLogFilePath, RTL_TEXTENCODING_ASCII_US).getStr();
+
+    static char logFilePath[1024];
+    if (getValueFromLoggingIniFile("LogFilePath", logFilePath)) {
+        fprintf(stderr, "logFilePath: %s\n", logFilePath);
+        return logFilePath;
+    }
+
     return nullptr;
 }
 
