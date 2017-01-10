@@ -89,9 +89,6 @@ ViewTabBar::ViewTabBar (
     mpTabPage.reset(VclPtr<TabPage>::Create(mpTabControl.get()));
     mpTabPage->Hide();
 
-    // add some space before the tabitems
-    mpTabControl->SetItemsOffset(Point(5, 3));
-
     // Tunnel through the controller and use the ViewShellBase to obtain the
     // view frame.
     try

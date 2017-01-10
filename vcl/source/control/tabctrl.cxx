@@ -367,8 +367,8 @@ bool TabControl::ImplPlaceTabs( long nWidth )
     if ( nWidth <= 0 )
         return false;
 
-    const long nOffsetX = 2 + GetItemsOffset().X();
-    const long nOffsetY = 2 + GetItemsOffset().Y();
+    const long nOffsetX = 2; /// + GetItemsOffset().X();
+    const long nOffsetY = 2; /// + GetItemsOffset().Y();
 
     // fdo#66435 throw Knuth/Tex minimum raggedness algorithm at the problem
     // of single bare tab on lines of their own
@@ -388,7 +388,7 @@ bool TabControl::ImplPlaceTabs( long nWidth )
     if ( ( mnMaxPageWidth > 0 ) && ( mnMaxPageWidth < nWidth ) )
         nWidth = mnMaxPageWidth;
 
-    nWidth -= GetItemsOffset().X();
+    //nWidth -= GetItemsOffset().X();
 
     const size_t magicMaxLines = 100; // magic number of maximum lines
 
@@ -401,10 +401,9 @@ bool TabControl::ImplPlaceTabs( long nWidth )
     long nX = nOffsetX;
     long nY = nOffsetY;
 
-    sal_uInt16 nLines = 0; // number of lines
-    sal_uInt16 nChosenLine = 0; // line which is active now
+    size_t nLines = 0; // number of lines
 
-    sal_uInt16 nIndex = 0;
+    size_t nIndex = 0;
     for( std::vector< ImplTabItem >::iterator it = mpTabCtrlData->maItemList.begin() ;
          it != mpTabCtrlData->maItemList.end() ;
          ++it, ++nIndex )
@@ -439,30 +438,24 @@ bool TabControl::ImplPlaceTabs( long nWidth )
         it->mbFullVisible = true;
 
         nLineWidths[ nLines ] += aSize.Width();
-        if ( ( !maxLineWidth ) || ( nLineWidths[ nLines ] > maxLineWidth ) )
+        if ( ( maxLineWidth == 0 ) || ( nLineWidths[ nLines ] > maxLineWidth ) )
             maxLineWidth = nLineWidths[ nLines ];
 
         nX += aSize.Width();
-
-        if ( it->mnId == mnCurPageId )
-            nChosenLine = nLines;
     }
 
     nLineFirstTabNums[ nLines + 1 ] = static_cast< sal_uInt16 >( mpTabCtrlData->maItemList.size() );
 
     const long firstTabXWhenAlignedLeft = 1 + ( ( origWidth - nWidth ) >> 1 );
 
-    if ( nLines )
+    if ( nLines > 0 )
     {   // two or more lines
         const long tabHeight = mpTabCtrlData->maItemList[0].maRect.Bottom() - 2;
-        long nLineHeights[ nLines + 1 ];
+        long nLineTops[ nLines + 1 ];
 
-        for ( sal_uInt16 line = 0; line < nLines + 1; line++ )
+        for ( size_t line = 0; line < nLines + 1; line++ )
         {
-            if ( line <= nChosenLine )
-                nLineHeights[ line ] = tabHeight * ( nLines - ( nChosenLine - line ) ) + GetItemsOffset().Y();
-            else
-                nLineHeights[ line ] = tabHeight * ( line - nChosenLine - 1 ) + GetItemsOffset().Y();
+            nLineTops[ line ] = tabHeight * ( line + 1 ); // + GetItemsOffset().Y();
         }
 
         sal_uInt32 item = 0;
@@ -482,8 +475,8 @@ bool TabControl::ImplPlaceTabs( long nWidth )
                 bNewLine = true;
             }
 
-            it->maRect.Top() = nLineHeights[ lineN - 1 ];
-            it->maRect.Bottom() = nLineHeights[ lineN - 1 ] + tabHeight;
+            it->maRect.Top() = nLineTops[ lineN - 1 ];
+            it->maRect.Bottom() = nLineTops[ lineN - 1 ] + tabHeight;
 
             long lastTabOnPreviousLine = 0;
             if ( lineN > 0 )
@@ -517,7 +510,7 @@ bool TabControl::ImplPlaceTabs( long nWidth )
         }
     }
     else
-    {   // only one line
+    {   // there’s just single line
         long firstTabX = firstTabXWhenAlignedLeft;
 
         if( ImplGetSVData()->maNWFData.mbCenteredTabs )
@@ -2122,13 +2115,7 @@ Rectangle TabControl::GetTabBounds( sal_uInt16 nPageId ) const
     return aRet;
 }
 
-void TabControl::SetItemsOffset( const Point& rOffs )
-{
-    if( mpTabCtrlData )
-        mpTabCtrlData->maItemsOffset = rOffs;
-}
-
-Point TabControl::GetItemsOffset() const
+Point TabControl::GetOffsetOfItems() const
 {
     if( mpTabCtrlData )
         return mpTabCtrlData->maItemsOffset;
@@ -2328,8 +2315,8 @@ bool NotebookbarTabControl::ImplPlaceTabs( long nWidth )
 
     long nMaxWidth = nWidth;
 
-    const long nOffsetX = 2 + GetItemsOffset().X();
-    const long nOffsetY = 2 + GetItemsOffset().Y();
+    const long nOffsetX = 2; // + GetItemsOffset().X();
+    const long nOffsetY = 2; // + GetItemsOffset().Y();
 
     //fdo#66435 throw Knuth/Tex minimum raggedness algorithm at the problem
     //of ugly bare tabs on lines of their own
@@ -2347,7 +2334,7 @@ bool NotebookbarTabControl::ImplPlaceTabs( long nWidth )
 
     if ( (mnMaxPageWidth > 0) && (mnMaxPageWidth < nMaxWidth) )
         nMaxWidth = mnMaxPageWidth;
-    nMaxWidth -= GetItemsOffset().X();
+    ////nMaxWidth -= GetItemsOffset().X();
 
     long nX = nOffsetX;
     long nY = nOffsetY;
@@ -2420,9 +2407,9 @@ bool NotebookbarTabControl::ImplPlaceTabs( long nWidth )
         for ( sal_uInt16 i = 0; i < nLines+1; i++ )
         {
             if ( i <= nCurLine )
-                nLineHeightAry[i] = nIH*(nLines-(nCurLine-i)) + GetItemsOffset().Y();
+                nLineHeightAry[i] = nIH*(nLines-(nCurLine-i)); /// + GetItemsOffset().Y();
             else
-                nLineHeightAry[i] = nIH*(i-nCurLine-1) + GetItemsOffset().Y();
+                nLineHeightAry[i] = nIH*(i-nCurLine-1); /// + GetItemsOffset().Y();
         }
 
         nLinePosAry[nLines+1] = (sal_uInt16)mpTabCtrlData->maItemList.size();
