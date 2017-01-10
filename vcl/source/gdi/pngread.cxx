@@ -76,9 +76,11 @@ private:
     std::vector<sal_uInt8>::iterator maDataIter;
 
     std::unique_ptr<Bitmap>    mpBmp;
-    Bitmap::ScopedWriteAccess  mpAcc;
+    Bitmap::ScopedWriteAccess  mxAcc;
     std::unique_ptr<Bitmap>    mpMaskBmp;
+    Bitmap::ScopedWriteAccess  mxMaskAcc;
     std::unique_ptr<AlphaMask> mpAlphaMask;
+    AlphaMask::ScopedWriteAccess mxAlphaAcc;
     BitmapWriteAccess*         mpMaskAcc;
 
     ZCodec              mpZCodec;
@@ -420,17 +422,10 @@ BitmapEx PNGReaderImpl::GetBitmapEx( const Size& rPreviewSizeHint )
     }
 
     // release write access of the bitmaps
-    mpAcc.reset();
-
-    if ( mpMaskAcc )
-    {
-        if ( mpAlphaMask )
-            mpAlphaMask->ReleaseAccess( mpMaskAcc );
-        else if ( mpMaskBmp )
-            Bitmap::ReleaseAccess( mpMaskAcc );
-
-        mpMaskAcc = nullptr;
-    }
+    mxAcc.reset();
+    mxMaskAcc.reset();
+    mxAlphaAcc.reset();
+    mpMaskAcc = nullptr;
 
     // return the resulting BitmapEx
     BitmapEx aRet;
@@ -659,16 +654,17 @@ bool PNGReaderImpl::ImplReadHeader( const Size& rPreviewSizeHint )
         return false;
 
     mpBmp = o3tl::make_unique<Bitmap>( maTargetSize, mnTargetDepth );
-    mpAcc = Bitmap::ScopedWriteAccess(*mpBmp);
-    if( !mpAcc )
+    mxAcc = Bitmap::ScopedWriteAccess(*mpBmp);
+    if (!mxAcc)
         return false;
 
     if ( mbAlphaChannel )
     {
         mpAlphaMask = o3tl::make_unique<AlphaMask>( maTargetSize );
         mpAlphaMask->Erase( 128 );
-        mpMaskAcc = mpAlphaMask->AcquireWriteAccess();
-        if( !mpMaskAcc )
+        mxAlphaAcc = AlphaMask::ScopedWriteAccess(*mpAlphaMask);
+        mpMaskAcc = mxAlphaAcc.get();
+        if (!mpMaskAcc)
             return false;
     }
 
@@ -693,9 +689,9 @@ void PNGReaderImpl::ImplGetGrayPalette( sal_uInt16 nBitDepth )
     if( nBitDepth == 2 )
         nPaletteEntryCount = 16;
 
-    mpAcc->SetPaletteEntryCount( nPaletteEntryCount );
+    mxAcc->SetPaletteEntryCount( nPaletteEntryCount );
     for ( sal_uInt32 i = 0, nStart = 0; nStart < 256; i++, nStart += nAdd )
-        mpAcc->SetPaletteColor( (sal_uInt16)i, BitmapColor( mpColorTable[ nStart ],
+        mxAcc->SetPaletteColor( (sal_uInt16)i, BitmapColor( mpColorTable[ nStart ],
             mpColorTable[ nStart ], mpColorTable[ nStart ] ) );
 }
 
@@ -703,17 +699,17 @@ bool PNGReaderImpl::ImplReadPalette()
 {
     sal_uInt16 nCount = static_cast<sal_uInt16>( mnChunkLen / 3 );
 
-    if ( ( ( mnChunkLen % 3 ) == 0 ) && ( ( 0 < nCount ) && ( nCount <= 256 ) ) && mpAcc )
+    if ( ( ( mnChunkLen % 3 ) == 0 ) && ( ( 0 < nCount ) && ( nCount <= 256 ) ) && mxAcc )
     {
         mbPalette = true;
-        mpAcc->SetPaletteEntryCount( (sal_uInt16) nCount );
+        mxAcc->SetPaletteEntryCount( (sal_uInt16) nCount );
 
         for ( sal_uInt16 i = 0; i < nCount; i++ )
         {
             sal_uInt8 nRed =   mpColorTable[ *maDataIter++ ];
             sal_uInt8 nGreen = mpColorTable[ *maDataIter++ ];
             sal_uInt8 nBlue =  mpColorTable[ *maDataIter++ ];
-            mpAcc->SetPaletteColor( i, Color( nRed, nGreen, nBlue ) );
+            mxAcc->SetPaletteColor( i, Color( nRed, nGreen, nBlue ) );
         }
     }
     else
@@ -783,12 +779,14 @@ bool PNGReaderImpl::ImplReadTransparent()
         if( bNeedAlpha)
         {
             mpAlphaMask = o3tl::make_unique<AlphaMask>( maTargetSize );
-            mpMaskAcc = mpAlphaMask->AcquireWriteAccess();
+            mxAlphaAcc = AlphaMask::ScopedWriteAccess(*mpAlphaMask);
+            mpMaskAcc = mxAlphaAcc.get();
         }
         else
         {
             mpMaskBmp = o3tl::make_unique<Bitmap>( maTargetSize, 1 );
-            mpMaskAcc = mpMaskBmp->AcquireWriteAccess();
+            mxMaskAcc = Bitmap::ScopedWriteAccess(*mpMaskBmp);
+            mpMaskAcc = mxMaskAcc.get();
         }
         mbTransparent = (mpMaskAcc != nullptr);
         if( !mbTransparent )
@@ -834,9 +832,9 @@ void PNGReaderImpl::ImplGetBackground()
             if ( mnChunkLen == 1 )
             {
                 sal_uInt16 nCol = *maDataIter++;
-                if ( nCol < mpAcc->GetPaletteEntryCount() )
+                if ( nCol < mxAcc->GetPaletteEntryCount() )
                 {
-                    mpAcc->Erase( mpAcc->GetPaletteColor( (sal_uInt8)nCol ) );
+                    mxAcc->Erase( mxAcc->GetPaletteColor( (sal_uInt8)nCol ) );
                     break;
                 }
             }
@@ -851,7 +849,7 @@ void PNGReaderImpl::ImplGetBackground()
                 // the color type 0 and 4 is always greyscale,
                 // so the return value can be used as index
                 sal_uInt8 nIndex = ImplScaleColor();
-                mpAcc->Erase( mpAcc->GetPaletteColor( nIndex ) );
+                mxAcc->Erase( mxAcc->GetPaletteColor( nIndex ) );
             }
         }
         break;
@@ -864,7 +862,7 @@ void PNGReaderImpl::ImplGetBackground()
                 sal_uInt8 nRed = ImplScaleColor();
                 sal_uInt8 nGreen = ImplScaleColor();
                 sal_uInt8 nBlue = ImplScaleColor();
-                mpAcc->Erase( Color( nRed, nGreen, nBlue ) );
+                mxAcc->Erase( Color( nRed, nGreen, nBlue ) );
             }
         }
         break;
@@ -1164,9 +1162,9 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
     const sal_uInt32 nY = mnYpos >> mnPreviewShift;
 
     sal_uInt8* pTmp = mpInflateInBuf + 1;
-    if ( mpAcc->HasPalette() ) // alphachannel is not allowed by pictures including palette entries
+    if ( mxAcc->HasPalette() ) // alphachannel is not allowed by pictures including palette entries
     {
-        switch ( mpAcc->GetBitCount() )
+        switch ( mxAcc->GetBitCount() )
         {
             case 1 :
             {
@@ -1331,8 +1329,8 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
                         {
                             int nLineBytes = maOrigSize.Width();
                             if (mbPalette)
-                                SanitizePaletteIndexes(pTmp, nLineBytes, mpAcc);
-                            mpAcc->CopyScanline( nY, pTmp, ScanlineFormat::N8BitPal, nLineBytes );
+                                SanitizePaletteIndexes(pTmp, nLineBytes, mxAcc);
+                            mxAcc->CopyScanline( nY, pTmp, ScanlineFormat::N8BitPal, nLineBytes );
                         }
                         else
                         {
@@ -1423,7 +1421,7 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
 
                     // copy scanlines directly to bitmaps for content and alpha; use the formats which
                     // are able to copy directly to BitmapBuffer
-                    mpAcc->CopyScanline(nY, mpScanline, ScanlineFormat::N24BitTcBgr, maOrigSize.Width() * 3);
+                    mxAcc->CopyScanline(nY, mpScanline, ScanlineFormat::N24BitTcBgr, maOrigSize.Width() * 3);
                     mpMaskAcc->CopyScanline(nY, mpScanlineAlpha, ScanlineFormat::N8BitPal, maOrigSize.Width());
                 }
                 else
@@ -1555,7 +1553,7 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
 
                     // copy scanline directly to bitmap for content; use the format which is able to
                     // copy directly to BitmapBuffer
-                    mpAcc->CopyScanline(nY, mpScanline, ScanlineFormat::N24BitTcBgr, maOrigSize.Width() * 3);
+                    mxAcc->CopyScanline(nY, mpScanline, ScanlineFormat::N24BitTcBgr, maOrigSize.Width() * 3);
                 }
                 else
                 {
@@ -1610,7 +1608,7 @@ void PNGReaderImpl::ImplSetPixel( sal_uInt32 nY, sal_uInt32 nX, const BitmapColo
         return;
     nX >>= mnPreviewShift;
 
-    mpAcc->SetPixel( nY, nX, rBitmapColor );
+    mxAcc->SetPixel( nY, nX, rBitmapColor );
 }
 
 void PNGReaderImpl::ImplSetPixel( sal_uInt32 nY, sal_uInt32 nX, sal_uInt8 nPalIndex )
@@ -1620,7 +1618,7 @@ void PNGReaderImpl::ImplSetPixel( sal_uInt32 nY, sal_uInt32 nX, sal_uInt8 nPalIn
         return;
     nX >>= mnPreviewShift;
 
-    mpAcc->SetPixelIndex(nY, nX, SanitizePaletteIndex(nPalIndex, mpAcc->GetPaletteEntryCount()));
+    mxAcc->SetPixelIndex(nY, nX, SanitizePaletteIndex(nPalIndex, mxAcc->GetPaletteEntryCount()));
 }
 
 void PNGReaderImpl::ImplSetTranspPixel( sal_uInt32 nY, sal_uInt32 nX, const BitmapColor& rBitmapColor, bool bTrans )
@@ -1630,7 +1628,7 @@ void PNGReaderImpl::ImplSetTranspPixel( sal_uInt32 nY, sal_uInt32 nX, const Bitm
         return;
     nX >>= mnPreviewShift;
 
-    mpAcc->SetPixel( nY, nX, rBitmapColor );
+    mxAcc->SetPixel( nY, nX, rBitmapColor );
 
     if ( bTrans )
         mpMaskAcc->SetPixel( nY, nX, mcTranspColor );
@@ -1646,7 +1644,7 @@ void PNGReaderImpl::ImplSetAlphaPixel( sal_uInt32 nY, sal_uInt32 nX,
         return;
     nX >>= mnPreviewShift;
 
-    mpAcc->SetPixelIndex(nY, nX, SanitizePaletteIndex(nPalIndex, mpAcc->GetPaletteEntryCount()));
+    mxAcc->SetPixelIndex(nY, nX, SanitizePaletteIndex(nPalIndex, mxAcc->GetPaletteEntryCount()));
     mpMaskAcc->SetPixel(nY, nX, BitmapColor(~nAlpha));
 }
 
@@ -1658,7 +1656,7 @@ void PNGReaderImpl::ImplSetAlphaPixel( sal_uInt32 nY, sal_uInt32 nX,
         return;
     nX >>= mnPreviewShift;
 
-    mpAcc->SetPixel( nY, nX, rBitmapColor );
+    mxAcc->SetPixel( nY, nX, rBitmapColor );
     if (!mpMaskAcc)
         return;
     mpMaskAcc->SetPixel(nY, nX, BitmapColor(~nAlpha));
