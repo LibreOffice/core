@@ -112,7 +112,7 @@ bool IsUserWordbook( const OUString& rFile )
     SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( OUString(rFile), StreamMode::STD_READ );
     if ( pStream && !pStream->GetError() )
     {
-        static const sal_Char*      pVerOOo7    = "OOoUserDict1";
+        static const sal_Char* const pVerOOo7    = "OOoUserDict1";
         sal_uInt64 const nSniffPos = pStream->Tell();
         static std::size_t nVerOOo7Len = sal::static_int_cast< std::size_t >(strlen( pVerOOo7 ));
         sal_Char pMagicHeader[MAX_HEADER_LENGTH];
