@@ -68,6 +68,20 @@
               </packing>
             </child>
             <child>
+              <object class="GtkToolButton" id="TBI_CLOSE">
+                <property name="use_action_appearance">False</property>
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="valign">start</property>
+                <property name="action_name">TBI_CLOSE</property>
+                <property name="label" translatable="yes">Close</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkToolButton" id="TBI_SELECT">
                 <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
