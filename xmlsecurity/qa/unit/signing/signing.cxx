@@ -49,7 +49,7 @@ using namespace com::sun::star;
 
 namespace
 {
-const char* DATA_DIRECTORY = "/xmlsecurity/qa/unit/signing/data/";
+const char* const DATA_DIRECTORY = "/xmlsecurity/qa/unit/signing/data/";
 }
 
 /// Testsuite for the document signing feature.

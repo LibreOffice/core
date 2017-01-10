@@ -234,7 +234,7 @@ CertificateViewerDetailsTP::CertificateViewerDetailsTP( vcl::Window* _pParent, C
     // fill list box
     Reference< security::XCertificate > xCert = mpDlg->mxCert;
     sal_uInt16                  nLineBreak = 16;
-    const char*             pHexSep = " ";
+    const char* const pHexSep = " ";
     OUString                aLBEntry;
     OUString                aDetails;
     // Certificate Versions are reported wrong (#i35107#) - 0 == "V1", 1 == "V2", ..., n = "V(n+1)"
