@@ -132,7 +132,7 @@ bool SfxUShortRangesItem::operator==( const SfxPoolItem &rItem ) const
 
     sal_uInt16 n;
     for ( n = 0; _pRanges[n] && rOther._pRanges[n]; ++n )
-        if ( *_pRanges != rOther._pRanges[n] )
+        if ( _pRanges[n] != rOther._pRanges[n] )
             return false;
 
     return !_pRanges[n] && !rOther._pRanges[n];
