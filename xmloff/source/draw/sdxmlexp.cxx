@@ -1453,9 +1453,9 @@ static OUString findOrAppendImpl( std::vector< DateTimeDeclImpl >& rVector, cons
 
 }
 
-static const sal_Char* gpStrHeaderTextPrefix = "hdr";
-static const sal_Char* gpStrFooterTextPrefix = "ftr";
-static const sal_Char* gpStrDateTimeTextPrefix = "dtd";
+static const sal_Char gpStrHeaderTextPrefix[] = "hdr";
+static const sal_Char gpStrFooterTextPrefix[] = "ftr";
+static const sal_Char gpStrDateTimeTextPrefix[] = "dtd";
 
 HeaderFooterPageSettingsImpl SdXMLExport::ImpPrepDrawPageHeaderFooterDecls( const Reference<XDrawPage>& xDrawPage )
 {
@@ -1516,7 +1516,7 @@ void SdXMLExport::ImpWriteHeaderFooterDecls()
     if( !maHeaderDeclsVector.empty() )
     {
         // export header decls
-        const OUString aPrefix( OUString::createFromAscii( gpStrHeaderTextPrefix ) );
+        const OUString aPrefix( gpStrHeaderTextPrefix );
         std::vector< OUString >::iterator aIter;
         sal_Int32 nIndex;
         for( nIndex = 1, aIter = maHeaderDeclsVector.begin(); aIter != maHeaderDeclsVector.end(); ++aIter, ++nIndex )
@@ -1533,7 +1533,7 @@ void SdXMLExport::ImpWriteHeaderFooterDecls()
     if( !maFooterDeclsVector.empty() )
     {
         // export footer decls
-        const OUString aPrefix( OUString::createFromAscii( gpStrFooterTextPrefix ) );
+        const OUString aPrefix( gpStrFooterTextPrefix );
         std::vector< OUString >::iterator aIter;
         sal_Int32 nIndex;
         for( nIndex = 1, aIter = maFooterDeclsVector.begin(); aIter != maFooterDeclsVector.end(); ++aIter, ++nIndex )
@@ -1550,7 +1550,7 @@ void SdXMLExport::ImpWriteHeaderFooterDecls()
     if( !maDateTimeDeclsVector.empty() )
     {
         // export footer decls
-        const OUString aPrefix( OUString::createFromAscii( gpStrDateTimeTextPrefix ) );
+        const OUString aPrefix( gpStrDateTimeTextPrefix );
         std::vector< DateTimeDeclImpl >::iterator aIter;
         sal_Int32 nIndex;
         for( nIndex = 1, aIter = maDateTimeDeclsVector.begin(); aIter != maDateTimeDeclsVector.end(); ++aIter, ++nIndex )
