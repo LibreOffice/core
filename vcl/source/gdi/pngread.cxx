@@ -76,7 +76,7 @@ private:
     std::vector<sal_uInt8>::iterator maDataIter;
 
     std::unique_ptr<Bitmap>    mpBmp;
-    BitmapWriteAccess*         mpAcc;
+    Bitmap::ScopedWriteAccess  mpAcc;
     std::unique_ptr<Bitmap>    mpMaskBmp;
     std::unique_ptr<AlphaMask> mpAlphaMask;
     BitmapWriteAccess*         mpMaskAcc;
@@ -168,7 +168,6 @@ public:
 
 PNGReaderImpl::PNGReaderImpl( SvStream& rPNGStream )
 :   mrPNGStream( rPNGStream ),
-    mpAcc           ( nullptr ),
     mpMaskAcc       ( nullptr ),
     mpInflateInBuf  ( nullptr ),
     mpScanPrior     ( nullptr ),
@@ -421,11 +420,7 @@ BitmapEx PNGReaderImpl::GetBitmapEx( const Size& rPreviewSizeHint )
     }
 
     // release write access of the bitmaps
-    if ( mpAcc )
-    {
-        Bitmap::ReleaseAccess( mpAcc );
-        mpAcc = nullptr;
-    }
+    mpAcc.reset();
 
     if ( mpMaskAcc )
     {
@@ -664,7 +659,7 @@ bool PNGReaderImpl::ImplReadHeader( const Size& rPreviewSizeHint )
         return false;
 
     mpBmp = o3tl::make_unique<Bitmap>( maTargetSize, mnTargetDepth );
-    mpAcc = mpBmp->AcquireWriteAccess();
+    mpAcc = Bitmap::ScopedWriteAccess(*mpBmp);
     if( !mpAcc )
         return false;
 
@@ -1137,9 +1132,9 @@ namespace
         return nIndex;
     }
 
-    void SanitizePaletteIndexes(sal_uInt8* pEntries, int nLen, BitmapWriteAccess* pAcc)
+    void SanitizePaletteIndexes(sal_uInt8* pEntries, int nLen, const Bitmap::ScopedWriteAccess& rAcc)
     {
-        sal_uInt16 nPaletteEntryCount = pAcc->GetPaletteEntryCount();
+        sal_uInt16 nPaletteEntryCount = rAcc->GetPaletteEntryCount();
         for (int nX = 0; nX < nLen; ++nX)
         {
             if (pEntries[nX] >= nPaletteEntryCount)
