@@ -114,24 +114,6 @@ using namespace ::com::sun::star;
 
 #include <shells.hrc>
 
-namespace
-{
-    bool lcl_hasAllComponentsAvailable()
-    {
-        try
-        {
-            return css::sdb::TextConnectionSettings::create(comphelper::getProcessComponentContext()).is();
-        }
-        catch (css::uno::Exception & e)
-        {
-            SAL_INFO(
-                "sw.core",
-                "assuming Base to be missing; caught " << e.Message);
-            return false;
-        }
-    }
-}
-
 SFX_IMPL_INTERFACE(SwModule, SfxModule)
 
 void SwModule::InitInterface_Impl()
@@ -406,6 +388,21 @@ SwMailMergeWizardExecutor::SwMailMergeWizardExecutor()
 SwMailMergeWizardExecutor::~SwMailMergeWizardExecutor()
 {
     OSL_ENSURE( m_pWizard == nullptr, "SwMailMergeWizardExecutor: m_pWizard must be Null!" );
+}
+
+bool lcl_hasAllComponentsAvailable()
+{
+    try
+    {
+        return css::sdb::TextConnectionSettings::create(comphelper::getProcessComponentContext()).is();
+    }
+    catch (css::uno::Exception & e)
+    {
+        SAL_INFO(
+            "sw.core",
+            "assuming Base to be missing; caught " << e.Message);
+        return false;
+    }
 }
 
 void SwMailMergeWizardExecutor::ExecuteMailMergeWizard( const SfxItemSet * pArgs )
