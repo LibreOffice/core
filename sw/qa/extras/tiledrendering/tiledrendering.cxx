@@ -32,7 +32,7 @@
 #include <sfx2/viewsh.hxx>
 #include <sfx2/lokhelper.hxx>
 
-static const char* DATA_DIRECTORY = "/sw/qa/extras/tiledrendering/data/";
+static const char* const DATA_DIRECTORY = "/sw/qa/extras/tiledrendering/data/";
 
 /// Testsuite for the SwXTextDocument methods implementing the vcl::ITiledRenderable interface.
 class SwTiledRenderingTest : public SwModelTestBase

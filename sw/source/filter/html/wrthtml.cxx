@@ -604,7 +604,7 @@ static void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
         HTMLOutFuncs::Out_String( rHTMLWrt.Strm(), aEncURL,
                                   rHTMLWrt.m_eDestEnc,
                                   &rHTMLWrt.m_aNonConvertableCharacters );
-        const sal_Char* pDelim = "&#255;";
+        const sal_Char* const pDelim = "&#255;";
         if( !aFilter.isEmpty() || !aSection.isEmpty() || bURLContainsDelim )
             rHTMLWrt.Strm().WriteCharPtr( pDelim );
         if( !aFilter.isEmpty() )

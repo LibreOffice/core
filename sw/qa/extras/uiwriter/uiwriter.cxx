@@ -98,7 +98,7 @@
 #include <comphelper/configurationhelper.hxx>
 #include <config_features.h>
 
-static const char* DATA_DIRECTORY = "/sw/qa/extras/uiwriter/data/";
+static const char* const DATA_DIRECTORY = "/sw/qa/extras/uiwriter/data/";
 
 class SwUiWriterTest : public SwModelTestBase
 {

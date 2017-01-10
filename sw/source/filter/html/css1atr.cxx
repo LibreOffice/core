@@ -167,7 +167,7 @@ const sal_Char* sCSS1_rule_end      = " }";
 const sal_Char* sCSS1_span_tag_end  = "\">";
 const sal_Char cCSS1_style_opt_end  = '\"';
 
-const sal_Char* sHTML_FTN_fontheight = "57%";
+const sal_Char* const sHTML_FTN_fontheight = "57%";
 
 OString lclConvToHex(sal_uInt16 nHex)
 {
