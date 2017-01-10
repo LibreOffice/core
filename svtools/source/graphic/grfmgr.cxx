@@ -97,7 +97,6 @@ GraphicObject::GraphicObject( const GraphicObject& rGraphicObj ) :
     maLink      ( rGraphicObj.maLink ),
     maUserData  ( rGraphicObj.maUserData )
 {
-    ImplEnsureGraphicManager();
     ImplConstruct();
     ImplAssignGraphicData();
     mpGlobalMgr->ImplRegisterObj(*this, maGraphic, nullptr, &rGraphicObj);
