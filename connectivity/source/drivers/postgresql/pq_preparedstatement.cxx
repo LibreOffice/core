@@ -135,7 +135,7 @@ static ::cppu::IPropertyArrayHelper & getPreparedStatementPropertyArrayHelper()
 
 static bool isOperator( char c )
 {
-    static const char * operators = "<>=()!/&%.,;";
+    static const char * const operators = "<>=()!/&%.,;";
 
     const char * w = operators;
     while (*w && *w != c)

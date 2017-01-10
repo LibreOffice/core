@@ -55,8 +55,8 @@ sal_Int64 SAL_CALL java_sql_Blob::length(  ) throw(css::sdbc::SQLException, css:
 
     {
         // initialize temporary variable
-        static const char * cSignature = "()J";
-        static const char * cMethodName = "length";
+        static const char * const cSignature = "()J";
+        static const char * const cMethodName = "length";
         // submit Java-Call
         static jmethodID mID(nullptr);
         obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);
@@ -72,8 +72,8 @@ css::uno::Sequence< sal_Int8 > SAL_CALL java_sql_Blob::getBytes( sal_Int64 pos, 
     css::uno::Sequence< sal_Int8 > aSeq;
     {
         // initialize temporary variable
-        static const char * cSignature = "(JI)[B";
-        static const char * cMethodName = "getBytes";
+        static const char * const cSignature = "(JI)[B";
+        static const char * const cMethodName = "getBytes";
         // submit Java-Call
         static jmethodID mID(nullptr);
         obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);
@@ -107,8 +107,8 @@ sal_Int64 SAL_CALL java_sql_Blob::position( const css::uno::Sequence< sal_Int8 >
 
     {
         // initialize temporary variable
-        static const char * cSignature = "([BI)J";
-        static const char * cMethodName = "position";
+        static const char * const cSignature = "([BI)J";
+        static const char * const cMethodName = "position";
         // submit Java-Call
         static jmethodID mID(nullptr);
         obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);

@@ -54,8 +54,8 @@ sal_Int64 SAL_CALL java_sql_Clob::length(  ) throw(css::sdbc::SQLException, css:
 
     {
         // initialize temporary variable
-        static const char * cSignature = "()J";
-        static const char * cMethodName = "length";
+        static const char * const cSignature = "()J";
+        static const char * const cMethodName = "length";
         // execute Java-Call
         static jmethodID mID(nullptr);
         obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);
@@ -71,8 +71,8 @@ OUString SAL_CALL java_sql_Clob::getSubString( sal_Int64 pos, sal_Int32 subStrin
     OUString aStr;
     {
         // initialize temporary variable
-        static const char * cSignature = "(JI)Ljava/lang/String;";
-        static const char * cMethodName = "getSubString";
+        static const char * const cSignature = "(JI)Ljava/lang/String;";
+        static const char * const cMethodName = "getSubString";
         // execute Java-Call
         static jmethodID mID(nullptr);
         obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);
@@ -104,8 +104,8 @@ sal_Int64 SAL_CALL java_sql_Clob::position( const OUString& searchstr, sal_Int32
         // convert Parameter
         args[0].l = convertwchar_tToJavaString(t.pEnv,searchstr);
         // initialize temporary Variable
-        static const char * cSignature = "(Ljava/lang/String;I)J";
-        static const char * cMethodName = "position";
+        static const char * const cSignature = "(Ljava/lang/String;I)J";
+        static const char * const cMethodName = "position";
         // execute Java-Call
         static jmethodID mID(nullptr);
         obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);

@@ -226,8 +226,8 @@ sal_Bool SAL_CALL java_sql_Statement_Base::execute( const OUString& sql ) throw(
         createStatement(t.pEnv);
         m_sSqlStatement = sql;
         // initialize temporary Variable
-        static const char * cSignature = "(Ljava/lang/String;)Z";
-        static const char * cMethodName = "execute";
+        static const char * const cSignature = "(Ljava/lang/String;)Z";
+        static const char * const cMethodName = "execute";
         // Java-Call
         static jmethodID mID(nullptr);
         obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);
@@ -261,8 +261,8 @@ Reference< XResultSet > SAL_CALL java_sql_Statement_Base::executeQuery( const OU
         createStatement(t.pEnv);
         m_sSqlStatement = sql;
         // initialize temporary variable
-        static const char * cSignature = "(Ljava/lang/String;)Ljava/sql/ResultSet;";
-        static const char * cMethodName = "executeQuery";
+        static const char * const cSignature = "(Ljava/lang/String;)Ljava/sql/ResultSet;";
+        static const char * const cMethodName = "executeQuery";
         // Java-Call
         static jmethodID mID(nullptr);
         obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);
@@ -773,13 +773,13 @@ void java_sql_Statement::createStatement(JNIEnv* _pEnv)
 
     if( _pEnv && !object ){
         // initialize temporary variable
-        static const char * cMethodName = "createStatement";
+        static const char * const cMethodName = "createStatement";
         // Java-Call
         jobject out = nullptr;
         static jmethodID mID(nullptr);
         if ( !mID )
         {
-            static const char * cSignature = "(II)Ljava/sql/Statement;";
+            static const char * const cSignature = "(II)Ljava/sql/Statement;";
             mID  = _pEnv->GetMethodID( m_pConnection->getMyClass(), cMethodName, cSignature );
         }
         if( mID ){
@@ -787,7 +787,7 @@ void java_sql_Statement::createStatement(JNIEnv* _pEnv)
         } //mID
         else
         {
-            static const char * cSignature2 = "()Ljava/sql/Statement;";
+            static const char * const cSignature2 = "()Ljava/sql/Statement;";
             static jmethodID mID2 = _pEnv->GetMethodID( m_pConnection->getMyClass(), cMethodName, cSignature2 );OSL_ENSURE(mID2,"Unknown method id!");
             if( mID2 ){
                 out = _pEnv->CallObjectMethod( m_pConnection->getJavaObject(), mID2);

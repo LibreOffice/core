@@ -82,8 +82,8 @@ sal_Int32 SAL_CALL java_io_Reader::available(  ) throw(css::io::NotConnectedExce
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
 
     {
-        static const char * cSignature = "()Z";
-        static const char * cMethodName = "ready";
+        static const char * const cSignature = "()Z";
+        static const char * const cMethodName = "ready";
         // Java-Call
         static jmethodID mID(nullptr);
         obtainMethodId_throwRuntime(t.pEnv, cMethodName,cSignature, mID);
@@ -133,8 +133,8 @@ sal_Int32 SAL_CALL java_io_Reader::readBytes( css::uno::Sequence< sal_Int8 >& aD
 
     {
         jcharArray pCharArray = t.pEnv->NewCharArray(nCharsToRead);
-        static const char * cSignature = "([CII)I";
-        static const char * cMethodName = "read";
+        static const char * const cSignature = "([CII)I";
+        static const char * const cMethodName = "read";
         // Java-Call
         static jmethodID mID(nullptr);
         obtainMethodId_throwRuntime(t.pEnv, cMethodName,cSignature, mID);

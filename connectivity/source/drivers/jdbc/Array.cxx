@@ -57,8 +57,8 @@ css::uno::Sequence< css::uno::Any > SAL_CALL java_sql_Array::getArray( const css
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     {
         jobject obj = convertTypeMapToJavaMap(t.pEnv,typeMap);
-        static const char * cSignature = "(Ljava/util/Map;)[Ljava/lang/Object;";
-        static const char * cMethodName = "getArray";
+        static const char * const cSignature = "(Ljava/util/Map;)[Ljava/lang/Object;";
+        static const char * const cMethodName = "getArray";
         static jmethodID mID(nullptr);
         obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);
         // submit Java-Call
@@ -75,8 +75,8 @@ css::uno::Sequence< css::uno::Any > SAL_CALL java_sql_Array::getArrayAtIndex( sa
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     {
         jobject obj = convertTypeMapToJavaMap(t.pEnv,typeMap);
-        static const char * cSignature = "(IILjava/util/Map;)[Ljava/lang/Object;";
-        static const char * cMethodName = "getArray";
+        static const char * const cSignature = "(IILjava/util/Map;)[Ljava/lang/Object;";
+        static const char * const cMethodName = "getArray";
         // submit Java-Call
         static jmethodID mID(nullptr);
         obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);
@@ -95,8 +95,8 @@ css::uno::Reference< css::sdbc::XResultSet > SAL_CALL java_sql_Array::getResultS
         // convert Parameter
         jobject obj = convertTypeMapToJavaMap(t.pEnv,typeMap);
         // initialize temporary variable
-        static const char * cSignature = "(Ljava/util/Map;)Ljava/sql/ResultSet;";
-        static const char * cMethodName = "getResultSet";
+        static const char * const cSignature = "(Ljava/util/Map;)Ljava/sql/ResultSet;";
+        static const char * const cMethodName = "getResultSet";
         // submit Java-Call
         static jmethodID mID(nullptr);
         obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);
@@ -115,8 +115,8 @@ css::uno::Reference< css::sdbc::XResultSet > SAL_CALL java_sql_Array::getResultS
         // convert parameter
         jobject obj = convertTypeMapToJavaMap(t.pEnv,typeMap);
         // initialize temporary variable
-        static const char * cSignature = "(Ljava/util/Map;)Ljava/sql/ResultSet;";
-        static const char * cMethodName = "getResultSetAtIndex";
+        static const char * const cSignature = "(Ljava/util/Map;)Ljava/sql/ResultSet;";
+        static const char * const cMethodName = "getResultSetAtIndex";
         // submit Java-Call
         static jmethodID mID(nullptr);
         obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);

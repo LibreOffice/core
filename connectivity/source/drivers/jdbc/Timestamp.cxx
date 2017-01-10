@@ -46,7 +46,7 @@ java_sql_Date::java_sql_Date( const css::util::Date& _rOut ) : java_util_Date( n
     static jmethodID mID(nullptr);
     if ( !mID )
     {
-        static const char * cSignature = "(Ljava/lang/String;)Ljava/sql/Date;";
+        static const char * const cSignature = "(Ljava/lang/String;)Ljava/sql/Date;";
         mID  = t.pEnv->GetStaticMethodID( getMyClass(), "valueOf", cSignature );
     }
     OSL_ENSURE(mID,"Unknown method id!");
@@ -115,7 +115,7 @@ java_sql_Time::java_sql_Time( const css::util::Time& _rOut ): java_util_Date( nu
     static jmethodID mID(nullptr);
     if ( !mID )
     {
-        static const char * cSignature = "(Ljava/lang/String;)Ljava/sql/Time;";
+        static const char * const cSignature = "(Ljava/lang/String;)Ljava/sql/Time;";
         mID  = t.pEnv->GetStaticMethodID( getMyClass(), "valueOf", cSignature );
     }
     OSL_ENSURE(mID,"Unknown method id!");
@@ -171,7 +171,7 @@ java_sql_Timestamp::java_sql_Timestamp(const css::util::DateTime& _rOut)
     static jmethodID mID(nullptr);
     if ( !mID )
     {
-        static const char * cSignature = "(Ljava/lang/String;)Ljava/sql/Timestamp;";
+        static const char * const cSignature = "(Ljava/lang/String;)Ljava/sql/Timestamp;";
         mID  = t.pEnv->GetStaticMethodID( getMyClass(), "valueOf", cSignature );
     }
     OSL_ENSURE(mID,"Unknown method id!");

@@ -87,8 +87,8 @@ sal_Int32 SAL_CALL java_io_InputStream::readBytes( css::uno::Sequence< sal_Int8 
 
     {
         jbyteArray pByteArray = t.pEnv->NewByteArray(nBytesToRead);
-        static const char * cSignature = "([BII)I";
-        static const char * cMethodName = "read";
+        static const char * const cSignature = "([BII)I";
+        static const char * const cMethodName = "read";
         // execute Java-Call
         static jmethodID mID(nullptr);
         obtainMethodId_throwRuntime(t.pEnv, cMethodName,cSignature, mID);

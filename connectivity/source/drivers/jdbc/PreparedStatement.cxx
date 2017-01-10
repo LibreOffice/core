@@ -127,8 +127,8 @@ void SAL_CALL java_sql_PreparedStatement::setString( sal_Int32 parameterIndex, c
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     {       // initialize temporary Variable
         createStatement(t.pEnv);
-        static const char * cSignature = "(ILjava/lang/String;)V";
-        static const char * cMethodName = "setString";
+        static const char * const cSignature = "(ILjava/lang/String;)V";
+        static const char * const cMethodName = "setString";
         // Java-Call
         static jmethodID mID(nullptr);
         obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);
@@ -328,8 +328,8 @@ void SAL_CALL java_sql_PreparedStatement::setObjectWithInfo( sal_Int32 parameter
         createStatement(t.pEnv);
 
         // initialize temporary Variable
-        static const char * cSignature = "(ILjava/lang/Object;II)V";
-        static const char * cMethodName = "setObject";
+        static const char * const cSignature = "(ILjava/lang/Object;II)V";
+        static const char * const cMethodName = "setObject";
         // Java-Call
         static jmethodID mID(nullptr);
         obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);
@@ -427,8 +427,8 @@ void SAL_CALL java_sql_PreparedStatement::setBytes( sal_Int32 parameterIndex, co
         createStatement(t.pEnv);
 
         // initialize temporary Variable
-        static const char * cSignature = "(I[B)V";
-        static const char * cMethodName = "setBytes";
+        static const char * const cSignature = "(I[B)V";
+        static const char * const cMethodName = "setBytes";
         // Java-Call
         static jmethodID mID(nullptr);
         obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);
@@ -461,8 +461,8 @@ void SAL_CALL java_sql_PreparedStatement::setCharacterStream( sal_Int32 paramete
         createStatement(t.pEnv);
 
         // initialize temporary variable
-        static const char * cSignature = "(ILjava/io/InputStream;I)V";
-        static const char * cMethodName = "setCharacterStream";
+        static const char * const cSignature = "(ILjava/io/InputStream;I)V";
+        static const char * const cMethodName = "setCharacterStream";
         // Java-Call
         static jmethodID mID(nullptr);
         obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);
@@ -491,7 +491,7 @@ void SAL_CALL java_sql_PreparedStatement::setCharacterStream( sal_Int32 paramete
         if ( !mID2 )
         {
             // initialize temporary variable
-            const char * cSignatureStream = "([BII)V";
+            const char * const cSignatureStream = "([BII)V";
             mID2  = t.pEnv->GetMethodID( aClass, "<init>", cSignatureStream );
         }
         jobject tempObj = nullptr;
@@ -518,8 +518,8 @@ void SAL_CALL java_sql_PreparedStatement::setBinaryStream( sal_Int32 parameterIn
     {
         createStatement(t.pEnv);
         // initialize temporary variable
-        static const char * cSignature = "(ILjava/io/InputStream;I)V";
-        static const char * cMethodName = "setBinaryStream";
+        static const char * const cSignature = "(ILjava/io/InputStream;I)V";
+        static const char * const cMethodName = "setBinaryStream";
         // Java-Call
         static jmethodID mID(nullptr);
         obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);
@@ -550,7 +550,7 @@ void SAL_CALL java_sql_PreparedStatement::setBinaryStream( sal_Int32 parameterIn
             if ( !mID2 )
             {
                 // initialize temporary variable
-                const char * cSignatureStream = "([BII)V";
+                const char * const cSignatureStream = "([BII)V";
                 mID2  = t.pEnv->GetMethodID( aClass, "<init>", cSignatureStream );
             }
             jobject tempObj = nullptr;
@@ -656,7 +656,7 @@ void java_sql_PreparedStatement::createStatement(JNIEnv* _pEnv)
 
     if( !object && _pEnv ){
         // initialize temporary variable
-        static const char * cMethodName = "prepareStatement";
+        static const char * const cMethodName = "prepareStatement";
 
         jvalue args[1];
         // convert Parameter
@@ -666,7 +666,7 @@ void java_sql_PreparedStatement::createStatement(JNIEnv* _pEnv)
         static jmethodID mID(nullptr);
         if ( !mID )
         {
-            static const char * cSignature = "(Ljava/lang/String;II)Ljava/sql/PreparedStatement;";
+            static const char * const cSignature = "(Ljava/lang/String;II)Ljava/sql/PreparedStatement;";
             mID  = _pEnv->GetMethodID( m_pConnection->getMyClass(), cMethodName, cSignature );
         }
         if( mID )
@@ -678,7 +678,7 @@ void java_sql_PreparedStatement::createStatement(JNIEnv* _pEnv)
             static jmethodID mID2 = nullptr;
             if ( !mID2 )
             {
-                static const char * cSignature2 = "(Ljava/lang/String;)Ljava/sql/PreparedStatement;";
+                static const char * const cSignature2 = "(Ljava/lang/String;)Ljava/sql/PreparedStatement;";
                 mID2 = _pEnv->GetMethodID( m_pConnection->getMyClass(), cMethodName, cSignature2 );
             }
             if ( mID2 )

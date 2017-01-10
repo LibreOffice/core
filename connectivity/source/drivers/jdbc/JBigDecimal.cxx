@@ -45,7 +45,7 @@ java_math_BigDecimal::java_math_BigDecimal( const OUString& _par0 ): java_lang_O
         return;
     // Java-Call for the Constructor
     // initialize temporary Variable
-    static const char * cSignature = "(Ljava/lang/String;)V";
+    static const char * const cSignature = "(Ljava/lang/String;)V";
     jobject tempObj;
     static jmethodID mID(nullptr);
     obtainMethodId_throwSQL(t.pEnv, "<init>",cSignature, mID);
@@ -66,7 +66,7 @@ java_math_BigDecimal::java_math_BigDecimal( const double& _par0 ): java_lang_Obj
         return;
     // Java-Call for the Constructor
     // initialize temporary Variable
-    static const char * cSignature = "(D)V";
+    static const char * const cSignature = "(D)V";
     jobject tempObj;
     static jmethodID mID(nullptr);
     obtainMethodId_throwSQL(t.pEnv, "<init>",cSignature, mID);

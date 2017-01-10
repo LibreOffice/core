@@ -84,13 +84,13 @@ void OCalcConnection::construct(const OUString& url,const Sequence< PropertyValu
     m_aFileName = aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
 
     m_sPassword.clear();
-    const char* pPwd        = "password";
+    const char pPwd[] = "password";
 
     const PropertyValue *pIter  = info.getConstArray();
     const PropertyValue *pEnd   = pIter + info.getLength();
     for(;pIter != pEnd;++pIter)
     {
-        if(pIter->Name.equalsAscii(pPwd))
+        if(pIter->Name == pPwd)
         {
             pIter->Value >>= m_sPassword;
             break;

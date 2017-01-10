@@ -301,8 +301,8 @@ Any SAL_CALL java_sql_ResultSet::getObject( sal_Int32 columnIndex, const Referen
         static jmethodID mID(nullptr);
         if ( !mID  )
         {
-            static const char * cSignature = "(I)Ljava/lang/Object;";
-            static const char * cMethodName = "getObject";
+            static const char * const cSignature = "(I)Ljava/lang/Object;";
+            static const char * const cMethodName = "getObject";
 
             obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);
         }
@@ -627,8 +627,8 @@ void SAL_CALL java_sql_ResultSet::updateString( sal_Int32 columnIndex, const OUS
         static jmethodID mID(nullptr);
         if ( !mID  )
         {
-            static const char * cSignature = "(ILjava/lang/String;)V";
-            static const char * cMethodName = "updateString";
+            static const char * const cSignature = "(ILjava/lang/String;)V";
+            static const char * const cMethodName = "updateString";
 
             obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);
         }
@@ -653,8 +653,8 @@ void SAL_CALL java_sql_ResultSet::updateBytes( sal_Int32 columnIndex, const css:
         static jmethodID mID(nullptr);
         if ( !mID  )
         {
-            static const char * cSignature = "(I[B)V";
-            static const char * cMethodName = "updateBytes";
+            static const char * const cSignature = "(I[B)V";
+            static const char * const cMethodName = "updateBytes";
 
             obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);
         }
@@ -715,8 +715,8 @@ void SAL_CALL java_sql_ResultSet::updateBinaryStream( sal_Int32 columnIndex, con
             static jmethodID mID(nullptr);
             if ( !mID  )
             {
-                static const char * cSignature = "(ILjava/io/InputStream;I)V";
-                static const char * cMethodName = "updateBinaryStream";
+                static const char * const cSignature = "(ILjava/io/InputStream;I)V";
+                static const char * const cMethodName = "updateBinaryStream";
                 obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);
             }
 
@@ -746,8 +746,8 @@ void SAL_CALL java_sql_ResultSet::updateCharacterStream( sal_Int32 columnIndex, 
             static jmethodID mID(nullptr);
             if ( !mID  )
             {
-                static const char * cSignature = "(ILjava/io/Reader;I)V";
-                static const char * cMethodName = "updateCharacterStream";
+                static const char * const cSignature = "(ILjava/io/Reader;I)V";
+                static const char * const cMethodName = "updateCharacterStream";
                 obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);
             }
 
@@ -793,8 +793,8 @@ void SAL_CALL java_sql_ResultSet::updateNumericObject( sal_Int32 columnIndex, co
             static jmethodID mID(nullptr);
             if ( !mID  )
             {
-                static const char * cSignature = "(ILjava/lang/Object;I)V";
-                static const char * cMethodName = "updateObject";
+                static const char * const cSignature = "(ILjava/lang/Object;I)V";
+                static const char * const cMethodName = "updateObject";
 
                 obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);
             }

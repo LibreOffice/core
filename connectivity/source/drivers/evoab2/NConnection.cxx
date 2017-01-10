@@ -75,13 +75,13 @@ void OEvoabConnection::construct(const OUString& url, const Sequence< PropertyVa
     SAL_INFO("connectivity.evoab2", "OEvoabConnection::construct()::url = " << url );
 
      OUString sPassword;
-        const char* pPwd                = "password";
+        const char pPwd[] = "password";
 
         const PropertyValue *pIter      = info.getConstArray();
         const PropertyValue *pEnd       = pIter + info.getLength();
         for(;pIter != pEnd;++pIter)
         {
-                if(pIter->Name.equalsAscii(pPwd))
+                if(pIter->Name == pPwd)
                 {
                         pIter->Value >>= sPassword;
                         break;

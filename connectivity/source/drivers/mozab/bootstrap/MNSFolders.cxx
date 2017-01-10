@@ -110,7 +110,7 @@ namespace
             else
             {
                 OUString sProductDirCandidate;
-                const char* pProfileRegistry = "profiles.ini";
+                const char pProfileRegistry[] = "profiles.ini";
 
                 // check all possible candidates
                 for ( size_t i=0; i<NB_CANDIDATES; ++i )
@@ -123,7 +123,7 @@ namespace
 
                     // check existence
                     ::osl::DirectoryItem aRegistryItem;
-                    ::osl::FileBase::RC result = ::osl::DirectoryItem::get( sProductDirCandidate + OUString::createFromAscii( pProfileRegistry ), aRegistryItem );
+                    ::osl::FileBase::RC result = ::osl::DirectoryItem::get( sProductDirCandidate + pProfileRegistry, aRegistryItem );
                     if ( result == ::osl::FileBase::E_None  )
                     {
                         ::osl::FileStatus aStatus( osl_FileStatus_Mask_Validate );

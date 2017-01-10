@@ -536,8 +536,8 @@ OUString SAL_CALL java_sql_Connection::nativeSQL( const OUString& sql ) throw(SQ
     {
 
         // initialize temporary Variable
-        static const char * cSignature = "(Ljava/lang/String;)Ljava/lang/String;";
-        static const char * cMethodName = "nativeSQL";
+        static const char * const cSignature = "(Ljava/lang/String;)Ljava/lang/String;";
+        static const char * const cMethodName = "nativeSQL";
         // Java-Call
         static jmethodID mID(nullptr);
         obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);
@@ -810,8 +810,8 @@ bool java_sql_Connection::construct(const OUString& url,
     if ( t.pEnv && m_Driver_theClass && m_pDriverobject )
     {
         // Java-Call
-        static const char * cSignature = "(Ljava/lang/String;Ljava/util/Properties;)Ljava/sql/Connection;";
-        static const char * cMethodName = "connect";
+        static const char * const cSignature = "(Ljava/lang/String;Ljava/util/Properties;)Ljava/sql/Connection;";
+        static const char * const cMethodName = "connect";
         jmethodID mID  = t.pEnv->GetMethodID( m_Driver_theClass, cMethodName, cSignature );
 
         if ( mID )

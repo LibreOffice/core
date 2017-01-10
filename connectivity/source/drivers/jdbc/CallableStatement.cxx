@@ -212,8 +212,8 @@ void SAL_CALL java_sql_CallableStatement::registerOutParameter( sal_Int32 parame
         createStatement(t.pEnv);
 
         // initialize temporary variable
-        static const char * cSignature = "(IILjava/lang/String;)V";
-        static const char * cMethodName = "registerOutParameter";
+        static const char * const cSignature = "(IILjava/lang/String;)V";
+        static const char * const cMethodName = "registerOutParameter";
         // execute Java-Call
         static jmethodID mID(nullptr);
         obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);
@@ -232,8 +232,8 @@ void SAL_CALL java_sql_CallableStatement::registerNumericOutParameter( sal_Int32
     {
         createStatement(t.pEnv);
         // initialize temporary variable
-        static const char * cSignature = "(III)V";
-        static const char * cMethodName = "registerOutParameter";
+        static const char * const cSignature = "(III)V";
+        static const char * const cMethodName = "registerOutParameter";
         // execute Java-Call
         static jmethodID mID(nullptr);
         obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);
@@ -321,7 +321,7 @@ void java_sql_CallableStatement::createStatement(JNIEnv* /*_pEnv*/)
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv && !object ){
         // initialize temporary variable
-        static const char * cMethodName = "prepareCall";
+        static const char * const cMethodName = "prepareCall";
         // execute Java-Call
         jobject out = nullptr;
         // convert Parameter
@@ -330,7 +330,7 @@ void java_sql_CallableStatement::createStatement(JNIEnv* /*_pEnv*/)
         static jmethodID mID(nullptr);
         if ( !mID  )
         {
-            static const char * cSignature = "(Ljava/lang/String;II)Ljava/sql/CallableStatement;";
+            static const char * const cSignature = "(Ljava/lang/String;II)Ljava/sql/CallableStatement;";
             mID  = t.pEnv->GetMethodID( m_pConnection->getMyClass(), cMethodName, cSignature );
         }
         if( mID ){
@@ -338,7 +338,7 @@ void java_sql_CallableStatement::createStatement(JNIEnv* /*_pEnv*/)
         } //mID
         else
         {
-            static const char * cSignature2 = "(Ljava/lang/String;)Ljava/sql/CallableStatement;";
+            static const char * const cSignature2 = "(Ljava/lang/String;)Ljava/sql/CallableStatement;";
             static jmethodID mID2 = t.pEnv->GetMethodID( m_pConnection->getMyClass(), cMethodName, cSignature2 );OSL_ENSURE(mID2,"Unknown method id!");
             if( mID2 ){
                 out = t.pEnv->CallObjectMethod( m_pConnection->getJavaObject(), mID2, str.get() );

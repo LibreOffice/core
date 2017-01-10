@@ -46,8 +46,8 @@ void java_util_Properties::setProperty(const OUString& key, const OUString& valu
         args[0].l = convertwchar_tToJavaString(t.pEnv,key);
         args[1].l = convertwchar_tToJavaString(t.pEnv,value);
         // Initialize temporary Variables
-        static const char * cSignature = "(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/Object;";
-        static const char * cMethodName = "setProperty";
+        static const char * const cSignature = "(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/Object;";
+        static const char * const cMethodName = "setProperty";
         // Turn off Java-Call
         static jmethodID mID(nullptr);
         obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);
@@ -82,7 +82,7 @@ java_util_Properties::java_util_Properties( ): java_lang_Object( nullptr, nullpt
         return;
     // Turn off Java-Call for the constructor
     // Initialize temperary Variables
-    static const char * cSignature = "()V";
+    static const char * const cSignature = "()V";
     jobject tempObj;
     static jmethodID mID(nullptr);
     obtainMethodId_throwSQL(t.pEnv, "<init>",cSignature, mID);
@@ -212,7 +212,7 @@ jobject connectivity::createByteInputStream(const css::uno::Reference< css::io::
     static jmethodID mID(nullptr);
     if  ( !mID )
     {
-        static const char * cSignature = "([B)V";
+        static const char * const cSignature = "([B)V";
         mID  = t.pEnv->GetMethodID( clazz, "<init>", cSignature );
         OSL_ENSURE( mID, cSignature );
         if  ( !mID )
@@ -239,7 +239,7 @@ jobject connectivity::createCharArrayReader(const css::uno::Reference< css::io::
     static jmethodID mID(nullptr);
     if  ( !mID )
     {
-        static const char * cSignature = "([C)V";
+        static const char * const cSignature = "([C)V";
         mID  = t.pEnv->GetMethodID( clazz, "<init>", cSignature );
         OSL_ENSURE( mID, cSignature );
         if  ( !mID )
