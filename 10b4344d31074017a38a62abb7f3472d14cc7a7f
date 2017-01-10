@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a6eadb0_450e6c35",
+        "filename": "framework/source/services/desktop.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1123,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-01-10T07:07:42Z",
+      "side": 1,
+      "message": "what we have done in other places, is to do a:\n   std::vector\u003cT\u003e xTemp;\n   xTemp.swap(m_xComponentDllListeners)\nwhich is slightly more efficient, since we\u0027re going to be clearing this list shortly anyhow",
+      "revId": "10b4344d31074017a38a62abb7f3472d14cc7a7f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
