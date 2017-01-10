@@ -22,6 +22,7 @@
 #include <document.hxx>
 
 #include "docsh.hxx"
+#include "scdllapi.h"
 
 #include <queue>
 
@@ -49,11 +50,12 @@ class ExternalDataMapper
     OUString maURL;
 
 public:
-    ExternalDataMapper(ScDocShell* pDocShell, const OUString& rUrl, const OUString& rName,
-    SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCOL2, SCROW nRow2, bool& bSuccess);
-    ~ExternalDataMapper();
+    SC_DLLPUBLIC ExternalDataMapper(ScDocShell* pDocShell, const OUString& rUrl, const OUString& rName,
+        SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCOL2, SCROW nRow2, bool& bSuccess);
 
-    void StartImport();
+    SC_DLLPUBLIC ~ExternalDataMapper();
+
+    SC_DLLPUBLIC void StartImport();
 };
 
 struct Cell
