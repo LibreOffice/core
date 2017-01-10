@@ -42,7 +42,7 @@ static LanguageType nImplSystemUILanguage = LANGUAGE_DONTKNOW;
 // Get locale of category LC_CTYPE of environment variables
 static const sal_Char* getLangFromEnvironment()
 {
-    static const sal_Char* pFallback = "C";
+    static const sal_Char* const pFallback = "C";
     const sal_Char *pLang = nullptr;
 
     pLang = getenv ( "LC_ALL" );
@@ -60,7 +60,7 @@ static const sal_Char* getLangFromEnvironment()
 // Get locale of category LC_MESSAGES of environment variables
 static const sal_Char* getUILangFromEnvironment()
 {
-    static const sal_Char* pFallback = "C";
+    static const sal_Char* const pFallback = "C";
     const sal_Char *pLang = nullptr;
 
     pLang = getenv ( "LANGUAGE" );      // respect the GNU extension
