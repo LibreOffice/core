@@ -22,6 +22,7 @@
 #include <document.hxx>
 
 #include "docsh.hxx"
+#include "scdllapi.h"
 
 #include <queue>
 
@@ -39,7 +40,7 @@ SvStream* FetchStreamFromURL(OUString& rUrl);
 
 class DataProvider;
 
-class ExternalDataMapper
+class SC_DLLPUBLIC ExternalDataMapper
 {
     ScRange maRange;
     ScDocShell* mpDocShell;
@@ -50,7 +51,8 @@ class ExternalDataMapper
 
 public:
     ExternalDataMapper(ScDocShell* pDocShell, const OUString& rUrl, const OUString& rName,
-    SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCOL2, SCROW nRow2, bool& bSuccess);
+        SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCOL2, SCROW nRow2, bool& bSuccess);
+
     ~ExternalDataMapper();
 
     void StartImport();
