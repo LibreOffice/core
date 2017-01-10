@@ -20,6 +20,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_FIREBIRD_CONNECTION_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_FIREBIRD_CONNECTION_HXX
 
+#include "Clob.hxx"
 #include "Blob.hxx"
 #include "SubComponent.hxx"
 
@@ -208,6 +209,10 @@ namespace connectivity
              */
             css::uno::Reference< css::sdbc::XBlob>
                 createBlob(ISC_QUAD* pBlobID)
+                throw(css::sdbc::SQLException,
+                      css::uno::RuntimeException);
+            css::uno::Reference< css::sdbc::XClob>
+                createClob(ISC_QUAD* pBlobID)
                 throw(css::sdbc::SQLException,
                       css::uno::RuntimeException);
 
