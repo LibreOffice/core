@@ -321,8 +321,8 @@ namespace /* private */ {
     };
 
 
-    const char* XML_HEADER = "<?xml version=\"1.0\"?>\n<RecentFiles>\n";
-    const char* XML_FOOTER = "</RecentFiles>";
+    const char* const XML_HEADER = "<?xml version=\"1.0\"?>\n<RecentFiles>\n";
+    const char* const XML_FOOTER = "</RecentFiles>";
 
 
     // assumes that the list is ordered decreasing
@@ -385,9 +385,9 @@ namespace /* private */ {
     };
 
 
-    const char* GROUP_OOO         = "openoffice.org";
-    const char* GROUP_STAR_OFFICE = "staroffice";
-    const char* GROUP_STAR_SUITE  = "starsuite";
+    const char* const GROUP_OOO         = "openoffice.org";
+    const char* const GROUP_STAR_OFFICE = "staroffice";
+    const char* const GROUP_STAR_SUITE  = "starsuite";
 
 
     void recently_used_item_list_add(
