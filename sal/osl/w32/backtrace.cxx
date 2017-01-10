@@ -16,6 +16,7 @@
 #include <DbgHelp.h>
 
 #include <rtl/ustrbuf.hxx>
+#include <memory>
 
 rtl_uString *osl_backtraceAsString(int maxNoStackFramesToDisplay)
 {
@@ -24,8 +25,8 @@ rtl_uString *osl_backtraceAsString(int maxNoStackFramesToDisplay)
     HANDLE hProcess = GetCurrentProcess();
     SymInitialize( hProcess, nullptr, true );
 
-    void * aStack[ maxNoStackFramesToDisplay ];
-    sal_uInt32 nFrames = CaptureStackBackTrace( 0, maxNoStackFramesToDisplay, aStack, nullptr );
+    std::unique_ptr<void*[]> aStack(new void*[ maxNoStackFramesToDisplay ]);
+    sal_uInt32 nFrames = CaptureStackBackTrace( 0, maxNoStackFramesToDisplay, aStack.get(), nullptr );
 
     SYMBOL_INFO  * pSymbol;
     pSymbol = static_cast<SYMBOL_INFO *>(calloc( sizeof( SYMBOL_INFO ) + 1024 * sizeof( char ), 1 ));
