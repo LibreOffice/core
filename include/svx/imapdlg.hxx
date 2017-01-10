@@ -109,6 +109,7 @@ class SVX_DLLPUBLIC SvxIMapDlg : public SfxModelessDialog // SfxFloatingWindow
     sal_uInt16          mnActiveId;
     sal_uInt16          mnMacroId;
     sal_uInt16          mnPropertyId;
+    sal_uInt16          mnCloseId;
 
     Size                aLastSize;
     VclPtr<IMapWindow>         pIMapWnd;

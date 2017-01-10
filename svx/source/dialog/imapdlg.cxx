@@ -121,14 +121,15 @@ SvxIMapDlg::SvxIMapDlg(SfxBindings *_pBindings, SfxChildWindow *pCW, vcl::Window
     , aIMapItem(*this, *_pBindings)
 {
     get(m_pTbxIMapDlg1, "toolbar");
-    m_pTbxIMapDlg1->InsertSeparator(3, 5);
-    m_pTbxIMapDlg1->InsertSeparator(9, 5);
-    m_pTbxIMapDlg1->InsertSeparator(14, 5);
-    m_pTbxIMapDlg1->InsertSeparator(17, 5);
+    m_pTbxIMapDlg1->InsertSeparator(4, 5);
+    m_pTbxIMapDlg1->InsertSeparator(10, 5);
+    m_pTbxIMapDlg1->InsertSeparator(15, 5);
+    m_pTbxIMapDlg1->InsertSeparator(18, 5);
 
     mnApplyId = m_pTbxIMapDlg1->GetItemId("TBI_APPLY");
     mnOpenId = m_pTbxIMapDlg1->GetItemId("TBI_OPEN");
     mnSaveAsId = m_pTbxIMapDlg1->GetItemId("TBI_SAVEAS");
+    mnCloseId = m_pTbxIMapDlg1->GetItemId("TBI_CLOSE");
     mnSelectId = m_pTbxIMapDlg1->GetItemId("TBI_SELECT");
     mnRectId = m_pTbxIMapDlg1->GetItemId("TBI_RECT");
     mnCircleId = m_pTbxIMapDlg1->GetItemId("TBI_CIRCLE");
@@ -344,6 +345,11 @@ IMPL_LINK( SvxIMapDlg, TbxClickHdl, ToolBox*, pTbx, void )
         DoOpen();
     else if(nNewItemId == mnSaveAsId)
             DoSave();
+    else if(nNewItemId == mnCloseId)
+    {
+        SvxIMapDlg* pDlg = GetIMapDlg();
+        pDlg->Close();
+    }
     else if(nNewItemId == mnSelectId)
     {
         SetActiveTool( nNewItemId );
