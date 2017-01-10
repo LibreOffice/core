@@ -289,6 +289,13 @@ bool StringConstant::VisitCallExpr(CallExpr const * expr) {
     {
         // u.equalsIgnoreAsciiCaseAscii("foo") ->
         // u.equalsIngoreAsciiCase("foo"):
+        std::string file(
+            compiler.getSourceManager().getFilename(
+                compiler.getSourceManager().getSpellingLoc(
+                    expr->getLocStart())));
+        if (file == SRCDIR "/sal/qa/rtl/strings/test_oustring_compare.cxx") {
+            return true;
+        }
         handleChar(
             expr, 0, fdecl, "rtl::OUString::equalsIgnoreAsciiCase",
             TreatEmpty::CheckEmpty, false);
@@ -300,6 +307,13 @@ bool StringConstant::VisitCallExpr(CallExpr const * expr) {
     {
         // u.equalsIgnoreAsciiCaseAsciiL("foo", 3) ->
         // u.equalsIngoreAsciiCase("foo"):
+        std::string file(
+            compiler.getSourceManager().getFilename(
+                compiler.getSourceManager().getSpellingLoc(
+                    expr->getLocStart())));
+        if (file == SRCDIR "/sal/qa/rtl/strings/test_oustring_compare.cxx") {
+            return true;
+        }
         handleCharLen(
             expr, 0, 1, fdecl, "rtl::OUString::equalsIgnoreAsciiCase",
             TreatEmpty::CheckEmpty);
