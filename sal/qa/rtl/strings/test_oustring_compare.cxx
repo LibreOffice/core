@@ -45,9 +45,9 @@ CPPUNIT_TEST_SUITE_REGISTRATION(test::oustring::Compare);
 
 void test::oustring::Compare::equalsIgnoreAsciiCaseAscii()
 {
-    const char* abc = "abc";
-    const char* abcd = "abcd";
-    const char* empty = "";
+    const char* const abc = "abc";
+    const char* const abcd = "abcd";
+    const char* const empty = "";
     CPPUNIT_ASSERT(!rtl::OUString().equalsIgnoreAsciiCaseAscii(abc));
     CPPUNIT_ASSERT(!rtl::OUString().equalsIgnoreAsciiCaseAsciiL(abc,3));
     CPPUNIT_ASSERT(!rtl::OUString("abc").

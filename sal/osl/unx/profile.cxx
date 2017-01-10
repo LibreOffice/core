@@ -1687,7 +1687,7 @@ static bool storeProfile(osl_TProfileImpl* pProfile, bool bCleanup)
 static osl_TFile* osl_openTmpProfileImpl(osl_TProfileImpl* pProfile)
 {
     osl_TFile* pFile=nullptr;
-    sal_Char const * pszExtension = "tmp";
+    sal_Char const * const pszExtension = "tmp";
     sal_Char pszTmpName[PATH_MAX];
     oslProfileOption PFlags=0;
 
