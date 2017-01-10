@@ -280,7 +280,7 @@ const OUString GetWindowClassification(const vcl::Window* pWindow)
 
 void Deck::PrintWindowSubTree(vcl::Window* pRoot, int nIndentation)
 {
-    static const char* sIndentation = "                                                                  ";
+    static const char* const sIndentation = "                                                                  ";
     const Point aLocation (pRoot->GetPosPixel());
     const Size aSize (pRoot->GetSizePixel());
     SAL_INFO(

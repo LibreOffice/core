@@ -113,10 +113,9 @@ static OUString const & HelpLocaleString()
         {
             OUString aBaseInstallPath;
             utl::Bootstrap::locateBaseInstallation(aBaseInstallPath);
-            static const char *szHelpPath = "/help/";
+            static const char szHelpPath[] = "/help/";
 
-            OUString sHelpPath = aBaseInstallPath +
-                OUString::createFromAscii(szHelpPath) + aLocaleStr;
+            OUString sHelpPath = aBaseInstallPath + szHelpPath + aLocaleStr;
             osl::DirectoryItem aDirItem;
 
             if (osl::DirectoryItem::get(sHelpPath, aDirItem) != osl::FileBase::E_None)
@@ -128,8 +127,7 @@ static OUString const & HelpLocaleString()
                 {
                     bOk = true;
                     sLang = sLang.copy( 0, nSepPos );
-                    sHelpPath = aBaseInstallPath +
-                        OUString::createFromAscii(szHelpPath) + sLang;
+                    sHelpPath = aBaseInstallPath + szHelpPath + sLang;
                     if (osl::DirectoryItem::get(sHelpPath, aDirItem) != osl::FileBase::E_None)
                         bOk = false;
                 }

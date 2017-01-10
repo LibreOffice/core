@@ -458,10 +458,10 @@ const char* s_stdMetaList[] = {
     nullptr
 };
 
-const char* s_nsXLink   = "http://www.w3.org/1999/xlink";
-const char* s_nsDC      = "http://purl.org/dc/elements/1.1/";
-const char* s_nsODF     = "urn:oasis:names:tc:opendocument:xmlns:office:1.0";
-const char* s_nsODFMeta = "urn:oasis:names:tc:opendocument:xmlns:meta:1.0";
+const char s_nsXLink[] = "http://www.w3.org/1999/xlink";
+const char s_nsDC[] = "http://purl.org/dc/elements/1.1/";
+const char s_nsODF[] = "urn:oasis:names:tc:opendocument:xmlns:office:1.0";
+const char s_nsODFMeta[] = "urn:oasis:names:tc:opendocument:xmlns:meta:1.0";
 // const char* s_nsOOo     = "http://openoffice.org/2004/office"; // not used (yet?)
 
 static const char s_meta    [] = "meta.xml";
@@ -1123,10 +1123,10 @@ void SAL_CALL SfxDocumentMetaData::init(
     m_xDoc = i_xDoc;
 
     // select nodes for standard meta data stuff
-    xPath->registerNS("xlink",  OUString::createFromAscii(s_nsXLink));
-    xPath->registerNS("dc",     OUString::createFromAscii(s_nsDC));
-    xPath->registerNS("office", OUString::createFromAscii(s_nsODF));
-    xPath->registerNS("meta",   OUString::createFromAscii(s_nsODFMeta));
+    xPath->registerNS("xlink", s_nsXLink);
+    xPath->registerNS("dc", s_nsDC);
+    xPath->registerNS("office", s_nsODF);
+    xPath->registerNS("meta", s_nsODFMeta);
     // NB: we do not handle the single-XML-file ODF variant, which would
     //     have the root element office:document.
     //     The root of such documents must be converted in the importer!
@@ -1149,7 +1149,7 @@ void SAL_CALL SfxDocumentMetaData::init(
             while (xNode.is()) {
                 if (css::xml::dom::NodeType_ELEMENT_NODE ==xNode->getNodeType())
                 {
-                    if ( xNode->getNamespaceURI().equalsAscii(s_nsODF) && xNode->getLocalName() == "document-meta" )
+                    if ( xNode->getNamespaceURI() == s_nsODF && xNode->getLocalName() == "document-meta" )
                     {
                         xRElem.set(xNode, css::uno::UNO_QUERY_THROW);
                         break;
@@ -1168,20 +1168,15 @@ void SAL_CALL SfxDocumentMetaData::init(
             }
             if (!xRElem.is()) {
                 xRElem = i_xDoc->createElementNS(
-                    OUString::createFromAscii(s_nsODF),
-                    "office:document-meta");
+                    s_nsODF, "office:document-meta");
                 css::uno::Reference<css::xml::dom::XNode> xRNode(xRElem,
                     css::uno::UNO_QUERY_THROW);
                 i_xDoc->appendChild(xRNode);
             }
-            xRElem->setAttributeNS(OUString::createFromAscii(s_nsODF),
-                        "office:version",
-                        "1.0");
+            xRElem->setAttributeNS(s_nsODF, "office:version", "1.0");
             // does not exist, otherwise m_xParent would not be null
             css::uno::Reference<css::xml::dom::XNode> xParent (
-                i_xDoc->createElementNS(
-                    OUString::createFromAscii(s_nsODF),
-                    "office:meta"),
+                i_xDoc->createElementNS(s_nsODF, "office:meta"),
             css::uno::UNO_QUERY_THROW);
             xRElem->appendChild(xParent);
             m_xParent = xParent;
@@ -1248,12 +1243,8 @@ void SAL_CALL SfxDocumentMetaData::init(
         css::uno::Reference<css::xml::dom::XElement> xElem(*it,
             css::uno::UNO_QUERY_THROW);
         css::uno::Any any;
-        OUString name = xElem->getAttributeNS(
-                OUString::createFromAscii(s_nsODFMeta),
-                "name");
-        OUString type = xElem->getAttributeNS(
-                OUString::createFromAscii(s_nsODFMeta),
-                "value-type");
+        OUString name = xElem->getAttributeNS(s_nsODFMeta, "name");
+        OUString type = xElem->getAttributeNS(s_nsODFMeta, "value-type");
         OUString text = getNodeText(*it);
         if ( type == "float" ) {
             double d;
