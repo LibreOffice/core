@@ -531,7 +531,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, FileHdl, Button*, void)
                 // Store full path, show filename only. Use INetURLObject to display spaces in filename correctly
                 INetURLObject aUrl = INetURLObject(aFilesArr[i]);
                 sal_Int16 nPos = pImagesLst->InsertEntry( aUrl.GetLastName(INetURLObject::DecodeMechanism::WithCharset) );
-                pImagesLst->SetEntryData(nPos, new OUString(aUrl.GetMainURL(INetURLObject::DecodeMechanism::WithCharset)));
+                pImagesLst->SetEntryData(nPos, new OUString(aUrl.GetMainURL(INetURLObject::DecodeMechanism::NONE)));
             }
         }
     }
