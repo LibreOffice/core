@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a6eadb0_e5e85819",
+        "filename": "sc/inc/rangelst.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-01-10T09:07:05Z",
+      "side": 1,
+      "message": "could potentially simplify all this deleting by just making this a\n   std::vector\u003cScRangePair\u003e\nor, if the other code is storing pointers to the elements, then a\n   std::vector\u003cstd::unique_ptr\u003cScRangePair\u003e\u003e",
+      "revId": "38d7000b5d27d30b018936ff8487271097ef6c15",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a6eadb0_c58d1c7d",
+        "filename": "sc/source/core/tool/rangelst.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1251,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-01-10T09:07:05Z",
+      "side": 1,
+      "message": "I think the delete needs to happen before the erase(), otherwise the itr will be invalid",
+      "revId": "38d7000b5d27d30b018936ff8487271097ef6c15",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
