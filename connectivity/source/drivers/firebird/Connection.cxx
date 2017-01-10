@@ -373,6 +373,20 @@ Reference< XBlob> Connection::createBlob(ISC_QUAD* pBlobId)
     return xReturn;
 }
 
+Reference< XClob> Connection::createClob(ISC_QUAD* pBlobId)
+    throw(SQLException, RuntimeException)
+{
+    MutexGuard aGuard(m_aMutex);
+    checkDisposed(Connection_BASE::rBHelper.bDisposed);
+
+    Reference< XClob > xReturn = new Clob(&m_aDBHandle,
+                                          &m_aTransactionHandle,
+                                          *pBlobId);
+
+    m_aStatements.push_back(WeakReferenceHelper(xReturn));
+    return xReturn;
+}
+
 
 //----- XConnection ----------------------------------------------------------
 Reference< XStatement > SAL_CALL Connection::createStatement( )
