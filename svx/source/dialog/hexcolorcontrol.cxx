@@ -44,7 +44,7 @@ sal_Int32 HexColorControl::GetColor()
 
     if (nLen < 7)
     {
-        static const sal_Char* pNullStr = "000000";
+        static const sal_Char* const pNullStr = "000000";
         aStr += OUString::createFromAscii( &pNullStr[nLen-1] );
     }
 

@@ -138,7 +138,7 @@ namespace svxform
             OString(
                 "lcl_implMapIntValue: could not convert the integer value "
                 + OString::number(_nValue) + " !").getStr());
-        static const sal_Char* s_pDummy = "";
+        static const sal_Char* const s_pDummy = "";
             // just as a fallback ....
         return s_pDummy;
     }
