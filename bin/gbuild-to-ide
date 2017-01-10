@@ -831,7 +831,7 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
         dependency_libs = {}
         for linked_lib in linked_libs:
             for library_project in library_projects:
-                if library_project.target.name() == linked_lib:
+                if library_project.target.name == linked_lib:
                     dependency_libs[library_project.guid] = library_project
         return dependency_libs
 
