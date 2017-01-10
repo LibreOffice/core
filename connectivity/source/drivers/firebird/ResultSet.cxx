@@ -746,7 +746,15 @@ uno::Reference< XClob > SAL_CALL OResultSet::getClob( sal_Int32 columnIndex ) th
     MutexGuard aGuard(m_rMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
-    return nullptr;
+    int aSqlSubType = m_pSqlda->sqlvar[columnIndex-1].sqlsubtype;
+
+    SAL_WARN_IF(aSqlSubType != 1,
+        "connectivity.firebird", "wrong subtype, not a textual blob");
+
+    ISC_QUAD* pBlobID = safelyRetrieveValue< ISC_QUAD* >(columnIndex, SQL_BLOB);
+    if (!pBlobID)
+        return nullptr;
+    return m_pConnection->createClob(pBlobID);
 }
 
 uno::Reference< XBlob > SAL_CALL OResultSet::getBlob(sal_Int32 columnIndex)
