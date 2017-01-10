@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a6eadb0_853ec4b6",
+        "filename": "framework/source/services/desktop.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1131,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-01-10T07:41:03Z",
+      "side": 1,
+      "message": "surely all of this is unnecessary, since terminate() must have been called before dispose() ?",
+      "revId": "69cb99616f5a33eb55d0471a79f2f6d906c51698",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
