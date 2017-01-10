@@ -2018,7 +2018,7 @@ uno::Sequence< OUString > LngSvcMgr::getSupportedServiceNames_Static()
 
 uno::Reference< uno::XInterface > SAL_CALL LngSvcMgr_CreateInstance(
             const uno::Reference< lang::XMultiServiceFactory > & /*rSMgr*/ )
-        throw(uno::Exception)
+        throw(uno::Exception, std::exception)
 {
     uno::Reference< uno::XInterface > xService = static_cast<cppu::OWeakObject*>(new LngSvcMgr);
     return xService;
