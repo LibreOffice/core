@@ -33,8 +33,8 @@
 
 using namespace com::sun::star;
 
-static const char* cURLInsertColumns = ".uno:DataSourceBrowser/InsertColumns"; //data into text
-static const char* cURLDocDataSource = ".uno:DataSourceBrowser/DocumentDataSource";
+static const char cURLInsertColumns[] = ".uno:DataSourceBrowser/InsertColumns"; //data into text
+static const char cURLDocDataSource[] = ".uno:DataSourceBrowser/DocumentDataSource";
 
 static uno::Reference<view::XSelectionSupplier> lcl_GetSelectionSupplier( SfxViewShell* pViewShell )
 {
@@ -98,8 +98,8 @@ uno::Reference<frame::XDispatch> SAL_CALL ScDispatchProviderInterceptor::queryDi
     uno::Reference<frame::XDispatch> xResult;
     // create some dispatch ...
     if ( pViewShell && (
-        aURL.Complete.equalsAscii(cURLInsertColumns) ||
-        aURL.Complete.equalsAscii(cURLDocDataSource) ) )
+        aURL.Complete == cURLInsertColumns ||
+        aURL.Complete == cURLDocDataSource ) )
     {
         if (!m_xMyDispatch.is())
             m_xMyDispatch = new ScDispatch( pViewShell );
@@ -221,7 +221,7 @@ void SAL_CALL ScDispatch::dispatch( const util::URL& aURL,
     SolarMutexGuard aGuard;
 
     bool bDone = false;
-    if ( pViewShell && aURL.Complete.equalsAscii(cURLInsertColumns) )
+    if ( pViewShell && aURL.Complete == cURLInsertColumns )
     {
         ScViewData& rViewData = pViewShell->GetViewData();
         ScAddress aPos( rViewData.GetCurX(), rViewData.GetCurY(), rViewData.GetTabNo() );
@@ -277,7 +277,7 @@ void SAL_CALL ScDispatch::addStatusListener(
     aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
     aEvent.FeatureURL = aURL;
 
-    if ( aURL.Complete.equalsAscii(cURLDocDataSource) )
+    if ( aURL.Complete == cURLDocDataSource )
     {
         aDataSourceListeners.push_back( uno::Reference<frame::XStatusListener>( xListener ) );
 
@@ -306,7 +306,7 @@ void SAL_CALL ScDispatch::removeStatusListener(
 {
     SolarMutexGuard aGuard;
 
-    if ( aURL.Complete.equalsAscii(cURLDocDataSource) )
+    if ( aURL.Complete == cURLDocDataSource )
     {
         sal_uInt16 nCount = aDataSourceListeners.size();
         for ( sal_uInt16 n=nCount; n--; )
@@ -352,7 +352,7 @@ void SAL_CALL ScDispatch::selectionChanged( const css::lang::EventObject& /* aEv
         {
             frame::FeatureStateEvent aEvent;
             aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
-            aEvent.FeatureURL.Complete = OUString::createFromAscii( cURLDocDataSource );
+            aEvent.FeatureURL.Complete = cURLDocDataSource;
 
             lcl_FillDataSource( aEvent, aNewImport );       // modifies State, IsEnabled
 

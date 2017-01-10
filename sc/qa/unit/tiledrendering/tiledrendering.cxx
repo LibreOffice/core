@@ -42,7 +42,7 @@ using namespace css;
 namespace
 {
 
-const char* DATA_DIRECTORY = "/sc/qa/unit/tiledrendering/data/";
+const char* const DATA_DIRECTORY = "/sc/qa/unit/tiledrendering/data/";
 
 class ScTiledRenderingTest : public test::BootstrapFixture, public unotest::MacrosTest, public XmlTestTools
 {

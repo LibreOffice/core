@@ -1450,9 +1450,9 @@ void Test::testSharedFormulaUpdateOnNamedRangeChange()
 
     m_pDoc->InsertTab(0, "Test");
 
-    const char* pName = "MyRange";
-    const char* pExpr1 = "$Test.$A$1:$A$3";
-    const char* pExpr2 = "$Test.$A$1:$A$4";
+    const char* const pName = "MyRange";
+    const char* const pExpr1 = "$Test.$A$1:$A$3";
+    const char* const pExpr2 = "$Test.$A$1:$A$4";
 
     RangeNameDef aName;
     aName.mpName = pName;
