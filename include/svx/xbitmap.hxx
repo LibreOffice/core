@@ -39,12 +39,13 @@ private:
 
     const GraphicObject& GetGraphicObject() const;
 
+    XOBitmap(const XOBitmap& rXBmp) = delete;
+    XOBitmap& operator=(const XOBitmap& rXOBitmap) = delete;
+
+
 public:
     XOBitmap( const Bitmap& rBitmap );
-    XOBitmap( const XOBitmap& rXBmp );
     ~XOBitmap();
-
-    XOBitmap& operator=( const XOBitmap& rXOBitmap );
 
     void Bitmap2Array();
     void Array2Bitmap();

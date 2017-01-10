@@ -52,53 +52,9 @@ XOBitmap::XOBitmap( const Bitmap& rBmp ) :
 {
 }
 
-XOBitmap::XOBitmap( const XOBitmap& rXBmp ) :
-    pPixelArray ( nullptr )
-{
-    eType = rXBmp.eType;
-    aGraphicObject = rXBmp.aGraphicObject;
-    aArraySize = rXBmp.aArraySize;
-    aPixelColor = rXBmp.aPixelColor;
-    aBckgrColor = rXBmp.aBckgrColor;
-    bGraphicDirty = rXBmp.bGraphicDirty;
-
-    if( rXBmp.pPixelArray )
-    {
-        if( eType == XBitmapType::N8x8 )
-        {
-            pPixelArray = new sal_uInt16[ 64 ];
-
-            for( sal_uInt16 i = 0; i < 64; i++ )
-                *( pPixelArray + i ) = *( rXBmp.pPixelArray + i );
-        }
-    }
-}
-
 XOBitmap::~XOBitmap()
 {
     delete [] pPixelArray;
-}
-
-XOBitmap& XOBitmap::operator=( const XOBitmap& rXBmp )
-{
-    eType = rXBmp.eType;
-    aGraphicObject = rXBmp.aGraphicObject;
-    aArraySize = rXBmp.aArraySize;
-    aPixelColor = rXBmp.aPixelColor;
-    aBckgrColor = rXBmp.aBckgrColor;
-    bGraphicDirty = rXBmp.bGraphicDirty;
-
-    if( rXBmp.pPixelArray )
-    {
-        if( eType == XBitmapType::N8x8 )
-        {
-            pPixelArray = new sal_uInt16[ 64 ];
-
-            for( sal_uInt16 i = 0; i < 64; i++ )
-                *( pPixelArray + i ) = *( rXBmp.pPixelArray + i );
-        }
-    }
-    return *this;
 }
 
 Bitmap XOBitmap::GetBitmap() const
