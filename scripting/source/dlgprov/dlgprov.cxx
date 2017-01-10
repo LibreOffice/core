@@ -615,7 +615,7 @@ namespace dlgprov
     Reference < XControl > DialogProviderImpl::createDialogImpl(
         const OUString& URL, const Reference< XInterface >& xHandler,
         const Reference< XWindowPeer >& xParent, bool bDialogProviderMode )
-            throw (IllegalArgumentException, RuntimeException)
+            throw (IllegalArgumentException, RuntimeException, std::exception)
     {
         // if the dialog is located in a document, the document must already be open!
 

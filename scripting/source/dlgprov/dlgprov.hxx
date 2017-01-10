@@ -106,7 +106,7 @@ namespace dlgprov
             const css::uno::Reference< css::uno::XInterface >& xHandler,
             const css::uno::Reference< css::awt::XWindowPeer >& xParent,
             bool bDialogProviderMode )
-                throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
+                throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception);
 
     public:
         explicit DialogProviderImpl(
