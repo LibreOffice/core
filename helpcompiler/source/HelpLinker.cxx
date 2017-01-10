@@ -206,7 +206,7 @@ namespace URLEncoder
 {
     static std::string encode(const std::string &rIn)
     {
-        const char *good = "!$&'()*+,-.=@_";
+        const char * const good = "!$&'()*+,-.=@_";
         static const char hex[17] = "0123456789ABCDEF";
 
         std::string result;
