@@ -1071,7 +1071,7 @@ bool PrintFontManager::createFontSubset(
             return false;
         }
         // create font subset
-        const char* pGlyphSetName = nullptr; // TODO: better name?
+        const char* const pGlyphSetName = nullptr; // TODO: better name?
         const bool bOK = rInfo.CreateFontSubset(
             FontSubsetInfo::TYPE1_PFB,
             pOutFile, pGlyphSetName,

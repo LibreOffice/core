@@ -170,7 +170,7 @@ namespace
 
     OString getHexString(const sal_uInt8* pData, sal_uInt32 nLength)
     {
-        static const char* pHexData = "0123456789ABCDEF";
+        static const char* const pHexData = "0123456789ABCDEF";
 
         bool bIsZero = true;
         OStringBuffer aHexStr;

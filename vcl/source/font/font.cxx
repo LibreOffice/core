@@ -563,12 +563,12 @@ namespace
         bool bResult = false;
         // might be a type1, find eexec
         const char* pStream = i_pBuffer;
-        const char* pExec = "eexec";
+        const char* const pExec = "eexec";
         const char* pExecPos = std::search( pStream, pStream+i_nSize, pExec, pExec+5 );
         if( pExecPos != pStream+i_nSize)
         {
             // find /FamilyName entry
-            static const char* pFam = "/FamilyName";
+            static const char* const pFam = "/FamilyName";
             const char* pFamPos = std::search( pStream, pExecPos, pFam, pFam+11 );
             if( pFamPos != pExecPos )
             {
@@ -586,7 +586,7 @@ namespace
             }
 
             // parse /ItalicAngle
-            static const char* pItalic = "/ItalicAngle";
+            static const char* const pItalic = "/ItalicAngle";
             const char* pItalicPos = std::search( pStream, pExecPos, pItalic, pItalic+12 );
             if( pItalicPos != pExecPos )
             {
@@ -595,7 +595,7 @@ namespace
             }
 
             // parse /Weight
-            static const char* pWeight = "/Weight";
+            static const char* const pWeight = "/Weight";
             const char* pWeightPos = std::search( pStream, pExecPos, pWeight, pWeight+7 );
             if( pWeightPos != pExecPos )
             {
@@ -620,7 +620,7 @@ namespace
             }
 
             // parse isFixedPitch
-            static const char* pFixed = "/isFixedPitch";
+            static const char* const pFixed = "/isFixedPitch";
             const char* pFixedPos = std::search( pStream, pExecPos, pFixed, pFixed+13 );
             if( pFixedPos != pExecPos )
             {
