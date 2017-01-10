@@ -219,7 +219,7 @@ getBluez5Adapter(DBusConnection *pConnection)
     if (!pMsg)
         return nullptr;
 
-    const gchar* pInterfaceType = "org.bluez.Adapter1";
+    const gchar* const pInterfaceType = "org.bluez.Adapter1";
 
     pMsg = sendUnrefAndWaitForReply( pConnection, pMsg );
 

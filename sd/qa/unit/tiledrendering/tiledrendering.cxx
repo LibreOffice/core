@@ -45,7 +45,7 @@
 
 using namespace css;
 
-static const char* DATA_DIRECTORY = "/sd/qa/unit/tiledrendering/data/";
+static const char* const DATA_DIRECTORY = "/sd/qa/unit/tiledrendering/data/";
 
 class SdTiledRenderingTest : public SdModelTestBase, public XmlTestTools
 {
