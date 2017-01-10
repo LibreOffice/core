@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a6eadb0_2557b003",
+        "filename": "configure.ac",
+        "patchSetId": 8
+      },
+      "lineNbr": 3284,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2017-01-10T07:34:45Z",
+      "side": 1,
+      "message": "Bad rebase: this is not used anymore.",
+      "range": {
+        "startLine": 3262,
+        "startChar": 0,
+        "endLine": 3284,
+        "endChar": 1
+      },
+      "revId": "7c89ba594da65f2539977eba48b98a91b36c41a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
