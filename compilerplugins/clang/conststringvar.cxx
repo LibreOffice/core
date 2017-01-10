@@ -104,6 +104,10 @@ public:
         if (init == nullptr) {
             return true;
         }
+        if (init->isInstantiationDependent()) {
+            // avoid problems with isCXX11ConstantExpr in template code
+            return true;
+        }
         APValue v;
         if (!init->isCXX11ConstantExpr(compiler.getASTContext(), &v)) {
             return true;
