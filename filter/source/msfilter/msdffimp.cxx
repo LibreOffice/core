@@ -2743,7 +2743,7 @@ void DffPropertyReader::CheckAndCorrectExcelTextRotation( SvStream& rIn, SfxItem
 
                                         bRotateTextWithShape = true;    // using the correct xml default
                                         const char* pArry = reinterpret_cast< char* >( aSeq.getArray() );
-                                        const char* pUpright = "upright=";
+                                        const char* const pUpright = "upright=";
                                         const char* pEnd = pArry + nBytesRead;
                                         const char* pPtr = pArry;
                                         while( ( pPtr + 12 ) < pEnd )
