@@ -2465,7 +2465,7 @@ bool XclExpLinkManagerImpl8::InsertDde(
 }
 
 bool XclExpLinkManagerImpl8::InsertExtName( sal_uInt16& rnExtSheet, sal_uInt16& rnExtName,
-        const OUString& rName, const OUString& rUrl, const ScExternalRefCache::TokenArrayRef& rArray )
+        const OUString& rUrl, const OUString& rName, const ScExternalRefCache::TokenArrayRef& rArray )
 {
     sal_uInt16 nSupbook;
     if( maSBBuffer.InsertExtName( nSupbook, rnExtName, rUrl, rName, rArray ) )
@@ -2612,7 +2612,7 @@ bool XclExpLinkManager::InsertDde(
 }
 
 bool XclExpLinkManager::InsertExtName(
-    sal_uInt16& rnExtSheet, sal_uInt16& rnExtName, const OUString& rName, const OUString& rUrl,
+    sal_uInt16& rnExtSheet, sal_uInt16& rnExtName, const OUString& rUrl, const OUString& rName,
     const ScExternalRefCache::TokenArrayRef& rArray )
 {
     return mxImpl->InsertExtName(rnExtSheet, rnExtName, rUrl, rName, rArray);
