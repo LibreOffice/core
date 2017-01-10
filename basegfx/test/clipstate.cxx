@@ -114,11 +114,11 @@ public:
 
     void verifySimpleRange()
     {
-        const char* unionSvg="m100 10v90h-90v10h-20v-10h-90v-90h-10v-20h10v-90h90v-10h20v10h90v90h10v20z";
-        const char* intersectSvg="m-100 10v-20h10v20zm90 90v-10h20v10zm0-190v-10h20v10zm100 100v-20h10v20z";
-        const char* xorSvg="m-100 10h10v-20h-10zm90 90h20v-10h-20zm0-190h20v-10h-20zm100 100h10v-20h-10z"
+        const char* const unionSvg="m100 10v90h-90v10h-20v-10h-90v-90h-10v-20h10v-90h90v-10h20v10h90v90h10v20z";
+        const char* const intersectSvg="m-100 10v-20h10v20zm90 90v-10h20v10zm0-190v-10h20v10zm100 100v-20h10v20z";
+        const char* const xorSvg="m-100 10h10v-20h-10zm90 90h20v-10h-20zm0-190h20v-10h-20zm100 100h10v-20h-10z"
                            "m10 0v90h-90v10h-20v-10h-90v-90h-10v-20h10v-90h90v-10h20v10h90v90h10v20z";
-        const char* subtractSvg="m-90 10v-20h-10v-90h90v10h20v-10h90v90h-10v20h10v90h-90v-10h-20v10h-90v-90z";
+        const char* const subtractSvg="m-90 10v-20h-10v-90h90v10h20v-10h90v90h-10v20h10v90h-90v-10h-20v10h-90v-90z";
 
         CPPUNIT_ASSERT_MESSAGE("cleared clip stays empty under union operation",
                                aUnion1.isCleared());
@@ -132,18 +132,17 @@ public:
     {
         tools::B2DClipState aMixedClip;
 
-        const char* unionSvg="m100 10v90h-90v10h-20v-10h-90v-90h-10v-20h10v-90h90v-10h20v10h90v90h10v20z";
+        const char unionSvg[]="m100 10v90h-90v10h-20v-10h-90v-90h-10v-20h10v-90h90v-10h20v10h90v90h10v20z";
 
         B2DPolyPolygon aTmp1;
-        tools::importFromSvgD(
-            aTmp1, OUString::createFromAscii(unionSvg), false, nullptr);
+        tools::importFromSvgD(aTmp1, unionSvg, false, nullptr);
 
         aMixedClip.intersectPolyPolygon(aTmp1);
         aMixedClip.subtractRange(B2DRange(-20,-150,20,0));
         aMixedClip.subtractRange(B2DRange(-150,-20,0,20));
         aMixedClip.xorRange(B2DRange(-150,-150,150,150));
 
-        const char* mixedClipSvg="m0 0v20h-100v80h90v10h20v-10h90v-90h10v-20h-10v-90h-80v100zm-20-20v-80h-80v80zm-130 170v-300h300v300z";
+        const char* const mixedClipSvg="m0 0v20h-100v80h90v10h20v-10h90v-90h10v-20h-10v-90h-80v100zm-20-20v-80h-80v80zm-130 170v-300h300v300z";
         verifyPoly("mixed clip", mixedClipSvg, aMixedClip);
     }
 

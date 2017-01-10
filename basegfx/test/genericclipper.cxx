@@ -103,25 +103,25 @@ public:
 
     void validateOr()
     {
-        const char* pValid="m0 0h100v150h-75v-50h-5v50h-20v-50-10zm75 100v-50h-50v50z";
+        const char* const pValid="m0 0h100v150h-75v-50h-5v50h-20v-50-10zm75 100v-50h-50v50z";
         validate("validateOr", pValid, &tools::solvePolygonOperationOr);
     }
 
     void validateXor()
     {
-        const char* pValid="m0 0h100v150h-75v-50h-5v50h-20v-50-10zm0 100h20v-10h-20zm75 0v-50h-50v50z";
+        const char* const pValid="m0 0h100v150h-75v-50h-5v50h-20v-50-10zm0 100h20v-10h-20zm75 0v-50h-50v50z";
         validate("validateXor", pValid, &tools::solvePolygonOperationXor);
     }
 
     void validateAnd()
     {
-        const char* pValid="m0 100v-10h20v10z";
+        const char* const pValid="m0 100v-10h20v10z";
         validate("validateAnd", pValid, &tools::solvePolygonOperationAnd);
     }
 
     void validateDiff()
     {
-        const char* pValid="m0 90v-90h100v150h-75v-50h-5v-10zm75 10v-50h-50v50z";
+        const char* const pValid="m0 90v-90h100v150h-75v-50h-5v-10zm75 10v-50h-50v50z";
         validate("validateDiff", pValid, &tools::solvePolygonOperationDiff);
     }
 

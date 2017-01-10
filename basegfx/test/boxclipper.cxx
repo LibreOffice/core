@@ -159,11 +159,9 @@ public:
             aRandomIntersections.appendElement( aRandomRange, B2VectorOrientation::Negative );
         }
 #else
-        const char* randomSvg="m394 783h404v57h-404zm-197-505h571v576h-571zm356-634h75v200h-75zm-40-113h403v588h-403zm93-811h111v494h-111zm-364-619h562v121h-562zm-134-8h292v27h-292zm110 356h621v486h-621zm78-386h228v25h-228zm475-345h201v201h-201zm-2-93h122v126h-122zm-417-243h567v524h-567zm-266-738h863v456h-863zm262-333h315v698h-315zm-328-826h43v393h-43zm830-219h120v664h-120zm-311-636h221v109h-221zm-500 137h628v19h-628zm681-94h211v493h-211zm-366-646h384v355h-384zm-189-199h715v247h-715zm165-459h563v601h-563zm258-479h98v606h-98zm270-517h65v218h-65zm-44-259h96v286h-96zm-599-202h705v468h-705zm216-803h450v494h-450zm-150-22h26v167h-26zm-55-599h50v260h-50zm190-278h490v387h-490zm-290-453h634v392h-634zm257 189h552v300h-552zm-151-690h136v455h-136zm12-597h488v432h-488zm501-459h48v39h-48zm-224-112h429v22h-429zm-281 102h492v621h-492zm519-158h208v17h-208zm-681-563h56v427h-56zm126-451h615v392h-615zm-47-410h598v522h-598zm-32 316h79v110h-79zm-71-129h18v127h-18zm126-993h743v589h-743zm211-430h428v750h-428zm61-554h100v220h-100zm-353-49h658v157h-658zm778-383h115v272h-115zm-249-541h119v712h-119zm203 86h94v40h-94z";
+        const char randomSvg[]="m394 783h404v57h-404zm-197-505h571v576h-571zm356-634h75v200h-75zm-40-113h403v588h-403zm93-811h111v494h-111zm-364-619h562v121h-562zm-134-8h292v27h-292zm110 356h621v486h-621zm78-386h228v25h-228zm475-345h201v201h-201zm-2-93h122v126h-122zm-417-243h567v524h-567zm-266-738h863v456h-863zm262-333h315v698h-315zm-328-826h43v393h-43zm830-219h120v664h-120zm-311-636h221v109h-221zm-500 137h628v19h-628zm681-94h211v493h-211zm-366-646h384v355h-384zm-189-199h715v247h-715zm165-459h563v601h-563zm258-479h98v606h-98zm270-517h65v218h-65zm-44-259h96v286h-96zm-599-202h705v468h-705zm216-803h450v494h-450zm-150-22h26v167h-26zm-55-599h50v260h-50zm190-278h490v387h-490zm-290-453h634v392h-634zm257 189h552v300h-552zm-151-690h136v455h-136zm12-597h488v432h-488zm501-459h48v39h-48zm-224-112h429v22h-429zm-281 102h492v621h-492zm519-158h208v17h-208zm-681-563h56v427h-56zm126-451h615v392h-615zm-47-410h598v522h-598zm-32 316h79v110h-79zm-71-129h18v127h-18zm126-993h743v589h-743zm211-430h428v750h-428zm61-554h100v220h-100zm-353-49h658v157h-658zm778-383h115v272h-115zm-249-541h119v712h-119zm203 86h94v40h-94z";
         B2DPolyPolygon randomPoly;
-        tools::importFromSvgD(
-            randomPoly,
-            OUString::createFromAscii(randomSvg), false, nullptr);
+        tools::importFromSvgD(randomPoly, randomSvg, false, nullptr);
         for (auto const& aPolygon : randomPoly)
             aRandomIntersections.appendElement(aPolygon.getB2DRange(), B2VectorOrientation::Negative);
 #endif
@@ -237,28 +235,28 @@ public:
 
     void verifyPoly()
     {
-        const char* disjunct="m-100-100v200h200v-200zm900 900v200h200v-200z";
-        const char* equal="m-100-100v200h200v-200zm200 0h-200v200h200v-200z";
-        const char* intersectionN="m-100-100v100h200v-100zm200 0v-100h-200v100 200h200v-200z";
-        const char* intersectionE="m0-100v200h100v-200zm0 0h-100v200h100 200v-200z";
-        const char* intersectionS="m-100 0v100h200v-100zm0-100v200 100h200v-100-200z";
-        const char* intersectionW="m-100-100v200h100v-200zm0 0h-100v200h100 200v-200z";
-        const char* intersectionNE="m0-100v100h100v-100zm0-100v100h-100v200h200v-100h100v-200z";
-        const char* intersectionSE="m0 0v100h100v-100zm100 0v-100h-200v200h100v100h200v-200z";
-        const char* intersectionSW="m-100 0v100h100v-100zm0-100v100h-100v200h200v-100h100v-200z";
-        const char* intersectionNW="m-100-100v100h100v-100zm100 0v-100h-200v200h100v100h200v-200z";
-        const char* ringIntersection="m50-150v100h100v-100zm0 200v100h100v-100zm100-200v-200h-300v300h200v100h-200v300h300v-200h200v-300z";
-        const char* ringIntersection2="m-150 50v100h100v-100zm0-200v100h100v-100zm100 200v-100h100v100z"
+        const char* const disjunct="m-100-100v200h200v-200zm900 900v200h200v-200z";
+        const char* const equal="m-100-100v200h200v-200zm200 0h-200v200h200v-200z";
+        const char* const intersectionN="m-100-100v100h200v-100zm200 0v-100h-200v100 200h200v-200z";
+        const char* const intersectionE="m0-100v200h100v-200zm0 0h-100v200h100 200v-200z";
+        const char* const intersectionS="m-100 0v100h200v-100zm0-100v200 100h200v-100-200z";
+        const char* const intersectionW="m-100-100v200h100v-200zm0 0h-100v200h100 200v-200z";
+        const char* const intersectionNE="m0-100v100h100v-100zm0-100v100h-100v200h200v-100h100v-200z";
+        const char* const intersectionSE="m0 0v100h100v-100zm100 0v-100h-200v200h100v100h200v-200z";
+        const char* const intersectionSW="m-100 0v100h100v-100zm0-100v100h-100v200h200v-100h100v-200z";
+        const char* const intersectionNW="m-100-100v100h100v-100zm100 0v-100h-200v200h100v100h200v-200z";
+        const char* const ringIntersection="m50-150v100h100v-100zm0 200v100h100v-100zm100-200v-200h-300v300h200v100h-200v300h300v-200h200v-300z";
+        const char* const ringIntersection2="m-150 50v100h100v-100zm0-200v100h100v-100zm100 200v-100h100v100z"
                                       "m100-200v100h100v-100zm0 200v100h100v-100zm100-200v-200h-300v200h-200v300h200v200h300v-200h200v-300z";
-        const char* ringIntersectExtraStrip="m-150 50v100h100v-100zm0-200v100h100v-100zm100 200v-100h100v25h-50v50h50v25z"
+        const char* const ringIntersectExtraStrip="m-150 50v100h100v-100zm0-200v100h100v-100zm100 200v-100h100v25h-50v50h50v25z"
                                             "m100-200v100h100v-100zm0 200v100h100v-100zm0-75v50h150v-50z"
                                             "m100-125v-200h-300v200h-200v300h200v200h300v-200h200v-300z";
-        const char* complexIntersections="m0 0zm0 0zm0 0zm0 0v-100 100h-100 100v100-100h100zm0 0v-100 100h-100 100v100-100h100z"
+        const char* const complexIntersections="m0 0zm0 0zm0 0zm0 0v-100 100h-100 100v100-100h100zm0 0v-100 100h-100 100v100-100h100z"
                                          "m100 0v-100h-100-100v100 100h100 100v-100zm0 0v-100h-100-100v100 100h100 100v-100z"
                                          "m0 0v-100h-100v-100 100h-100v100h-100 100v100h100v100-100h100v-100h100z"
                                          "m0-100v-100h-100-100v100h-100v100 100h100v100h100 100v-100h100v-100-100z"
                                          "m100 0v-100h-200-100-100v100 200 100h100 100 200v-100-200zm600 900v200h200v-200z";
-        const char* randomIntersections="m20-4515v393h43v-393zm34-8690v127h18v-127zm24 674v427h56v-427zm126-451v16-16z"
+        const char* const randomIntersections="m20-4515v393h43v-393zm34-8690v127h18v-127zm24 674v427h56v-427zm126-451v16-16z"
                                          "m22 3470v260h50v-260zm55 599v167h26v-167zm-49-1831v455h136v-455z"
                                          "m10 8845v19h158v-19zm54-38v25h228v-25zm156-13245v108h100v-108z"
                                          "m101 14826v200h75v-200zm-205-3000v365h315v-365zm-309-1877v19h628v-19z"
