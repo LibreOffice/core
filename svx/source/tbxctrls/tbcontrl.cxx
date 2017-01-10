@@ -2683,10 +2683,16 @@ public:
     // XToolbarController
     virtual css::uno::Reference< css::awt::XWindow > SAL_CALL createItemWindow( const css::uno::Reference< css::awt::XWindow >& rParent ) throw ( css::uno::RuntimeException, std::exception ) override;
 
+    // XComponent
+    virtual void SAL_CALL dispose() throw ( css::uno::RuntimeException, std::exception ) override;
+
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw ( css::uno::RuntimeException, std::exception ) override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName ) throw ( css::uno::RuntimeException, std::exception ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw ( css::uno::RuntimeException, std::exception ) override;
+
+private:
+    VclPtr<SvxFontNameBox_Impl> m_pBox;
 };
 
 SvxFontNameToolBoxControl::SvxFontNameToolBoxControl()
@@ -2702,25 +2708,21 @@ void SvxFontNameToolBoxControl::statusChanged( const css::frame::FeatureStateEve
     if ( !getToolboxId( nId, &pToolBox ) )
         return;
 
-    SvxFontNameBox_Impl* pBox = static_cast<SvxFontNameBox_Impl*>(pToolBox->GetItemWindow( nId ));
-
-    DBG_ASSERT( pBox, "Control not found!" );
-
     if ( !rEvent.IsEnabled )
     {
-        pBox->Disable();
-        pBox->Update( nullptr );
+        m_pBox->Disable();
+        m_pBox->Update( nullptr );
     }
     else
     {
-        pBox->Enable();
+        m_pBox->Enable();
 
         css::awt::FontDescriptor aFontDesc;
         if ( rEvent.State >>= aFontDesc )
-            pBox->Update( &aFontDesc );
+            m_pBox->Update( &aFontDesc );
         else
-            pBox->SetText( "" );
-        pBox->SaveValue();
+            m_pBox->SetText( "" );
+        m_pBox->SaveValue();
     }
 
     pToolBox->EnableItem( nId, rEvent.IsEnabled );
@@ -2730,10 +2732,17 @@ css::uno::Reference< css::awt::XWindow > SvxFontNameToolBoxControl::createItemWi
     throw ( css::uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    VclPtrInstance<SvxFontNameBox_Impl> pBox( VCLUnoHelper::GetWindow( rParent ),
-                                              Reference< XDispatchProvider >( m_xFrame->getController(), UNO_QUERY ),
-                                              m_xFrame,0);
-    return VCLUnoHelper::GetInterface( pBox );
+    m_pBox = VclPtr<SvxFontNameBox_Impl>::Create( VCLUnoHelper::GetWindow( rParent ),
+                                                  Reference< XDispatchProvider >( m_xFrame->getController(), UNO_QUERY ),
+                                                  m_xFrame, 0);
+    return VCLUnoHelper::GetInterface( m_pBox );
+}
+
+void SvxFontNameToolBoxControl::dispose()
+    throw ( css::uno::RuntimeException, std::exception )
+{
+    m_pBox.disposeAndClear();
+    ToolboxController::dispose();
 }
 
 OUString SvxFontNameToolBoxControl::getImplementationName()
