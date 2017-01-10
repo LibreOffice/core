@@ -861,7 +861,7 @@ class FilterCache : public BaseLock
         /** TODO */
         void impl_readPatchUINames(const css::uno::Reference< css::container::XNameAccess >& xNode,
                                          CacheItem&                                          rItem)
-            throw(css::uno::Exception);
+            throw(css::uno::Exception, std::exception);
 
 
         /** TODO */

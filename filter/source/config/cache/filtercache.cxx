@@ -1512,10 +1512,9 @@ void FilterCache::impl_loadSet(const css::uno::Reference< css::container::XNameA
     }
 }
 
-
 void FilterCache::impl_readPatchUINames(const css::uno::Reference< css::container::XNameAccess >& xNode,
                                               CacheItem&                                          rItem)
-    throw(css::uno::Exception)
+    throw(css::uno::Exception, std::exception)
 {
 
     // SAFE -> ----------------------------------
@@ -1572,7 +1571,6 @@ void FilterCache::impl_readPatchUINames(const css::uno::Reference< css::containe
     if (pUIName != lUINames.end())
         rItem[PROPNAME_UINAME] = pUIName->second;
 }
-
 
 void FilterCache::impl_savePatchUINames(const css::uno::Reference< css::container::XNameReplace >& xNode,
                                         const CacheItem&                                           rItem)
