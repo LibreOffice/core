@@ -120,8 +120,8 @@ void printUsageAndExit(const char* programname, const char* version)
 
 SAL_IMPLEMENT_MAIN()
 {
-    const char* version = "0.4";
-    const char* programname = "uno-skeletonmaker";
+    const char* const version = "0.4";
+    const char* const programname = "uno-skeletonmaker";
 
     sal_uInt32 nCount = rtl_getAppCommandArgCount();
     if ( nCount == 0 ) {
