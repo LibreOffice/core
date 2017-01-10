@@ -1820,7 +1820,7 @@ int  CreateT3FromTTGlyphs(TrueTypeFont *ttf, FILE *outf, const char *fname,
         "    0 1 255 {Encoding exch /.notdef put} for\n";
 
     const char * const h16 = "    Encoding %d /glyph%d put\n";
-    const char * const h17 = "/XUID [103 0 0 16#%08X %d 16#%08X 16#%08X] def\n";
+    const char * const h17 = "/XUID [103 0 0 16#%08" SAL_PRIXUINT32 " %d 16#%08" SAL_PRIXUINT32 " 16#%08" SAL_PRIXUINT32 "] def\n";
 
     const char * const h30 = "/CharProcs %d dict def\n";
     const char * const h31 = "  CharProcs begin\n";
