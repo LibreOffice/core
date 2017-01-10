@@ -3925,25 +3925,18 @@ void ScInterpreter::ScSheets()
         SCCOL nCol2;
         SCROW nRow2;
         SCTAB nTab2;
-        while (nParamCount-- > 0)
+        while (nGlobalError == FormulaError::NONE && nParamCount-- > 0)
         {
             switch ( GetStackType() )
             {
                 case svSingleRef:
+                case svExternalSingleRef:
                     PopError();
                     nVal++;
                 break;
                 case svDoubleRef:
                     PopDoubleRef(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
                     nVal += static_cast<sal_uLong>(nTab2 - nTab1 + 1);
-                break;
-                case svMatrix:
-                    PopError();
-                    nVal++;
-                break;
-                case svExternalSingleRef:
-                    PopError();
-                    nVal++;
                 break;
                 case svExternalDoubleRef:
                 {
@@ -3956,12 +3949,12 @@ void ScInterpreter::ScSheets()
                 }
                 break;
                 default:
-                    PopError();
                     SetError( FormulaError::IllegalParameter );
             }
         }
     }
-    PushDouble( (double) nVal );
+    if (nGlobalError == FormulaError::NONE)
+        PushDouble( (double) nVal );
 }
 
 void ScInterpreter::ScColumn()
