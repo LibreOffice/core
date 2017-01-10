@@ -715,7 +715,7 @@ double ConvertToDec( const OUString& aStr, sal_uInt16 nBase, sal_uInt16 nCharLim
 
 static inline sal_Char GetMaxChar( sal_uInt16 nBase )
 {
-    const sal_Char* c = "--123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const sal_Char* const c = "--123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     return c[ nBase ];
 }
 
