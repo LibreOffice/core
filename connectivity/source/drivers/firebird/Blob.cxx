@@ -149,19 +149,20 @@ uno::Sequence< sal_Int8 > SAL_CALL  Blob::getBytes(sal_Int64 nPosition,
     checkDisposed(Blob_BASE::rBHelper.bDisposed);
     ensureBlobIsOpened();
 
-    if (nPosition > m_nBlobLength)
+    if (nPosition > m_nBlobLength || nPosition < 1)
         throw lang::IllegalArgumentException("nPosition out of range", *this, 0);
     // We only have to read as many bytes as are available, i.e. nPosition+nBytes
     // can legally be greater than the total length, hence we don't bother to check.
 
-    if (nPosition > m_nBlobPosition)
+    if (nPosition -1 < m_nBlobPosition)
     {
         // Resets to the beginning (we can't seek these blobs)
         closeBlob();
         ensureBlobIsOpened();
     }
 
-    skipBytes(nPosition - m_nBlobPosition);
+    // nPosition is indexed from 1.
+    skipBytes(nPosition - m_nBlobPosition -1 );
 
     // Don't bother preallocating: readBytes does the appropriate calculations
     // and reallocates for us.
