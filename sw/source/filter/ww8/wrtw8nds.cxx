@@ -2885,9 +2885,7 @@ void MSWordExportBase::OutputSectionNode( const SwSectionNode& rSectionNode )
         // here the section break
         sal_uLong nRstLnNum = 0;
         const SfxItemSet* pSet;
-        if ( rNd.IsTableNode() )
-            pSet = &rNd.GetTableNode()->GetTable().GetFrameFormat()->GetAttrSet();
-        else if ( rNd.IsContentNode() )
+        if ( rNd.IsContentNode() )
         {
             pSet = &rNd.GetContentNode()->GetSwAttrSet();
             nRstLnNum = static_cast<const SwFormatLineNumber&>(pSet->Get(
@@ -2899,7 +2897,7 @@ void MSWordExportBase::OutputSectionNode( const SwSectionNode& rSectionNode )
         if ( pSet && NoPageBreakSection( pSet ) )
             pSet = nullptr;
 
-        if ( !pSet || rNd.IsTableNode() )
+        if ( !pSet )
         {
             // new Section with no own PageDesc/-Break
             //  -> write follow section break;
