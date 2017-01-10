@@ -1408,8 +1408,8 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
 
     if( GETA( CharFontName ) )
     {
-        const char* pitch = nullptr;
-        const char* charset = nullptr;
+        const char* const pitch = nullptr;
+        const char* const charset = nullptr;
         OUString usTypeface;
 
         mAny >>= usTypeface;
@@ -1424,8 +1424,8 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
 
     if( ( bComplex && GETAD( CharFontNameComplex ) ) || ( !bComplex && GETAD( CharFontNameAsian ) ) )
     {
-        const char* pitch = nullptr;
-        const char* charset = nullptr;
+        const char* const pitch = nullptr;
+        const char* const charset = nullptr;
         OUString usTypeface;
 
         mAny >>= usTypeface;

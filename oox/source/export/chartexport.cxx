@@ -2880,7 +2880,7 @@ void ChartExport::_exportAxis(
         || ( nAxisType == XML_dateAx ) )
     {
         // FIXME: seems not support? use default value,
-        const char* isAuto = "1";
+        const char* const isAuto = "1";
         pFS->singleElement( FSNS( XML_c, XML_auto ),
             XML_val, isAuto,
             FSEND );
@@ -2888,7 +2888,7 @@ void ChartExport::_exportAxis(
         if( nAxisType == XML_catAx )
         {
             // FIXME: seems not support? lblAlgn
-            const char* sLblAlgn = "ctr";
+            const char* const sLblAlgn = "ctr";
             pFS->singleElement( FSNS( XML_c, XML_lblAlgn ),
                     XML_val, sLblAlgn,
                     FSEND );
