@@ -44,11 +44,11 @@ using namespace ::com::sun::star::i18n;
 
 namespace sax {
 
-static const sal_Char* gpsMM = "mm";
-static const sal_Char* gpsCM = "cm";
-static const sal_Char* gpsPT = "pt";
-static const sal_Char* gpsINCH = "in";
-static const sal_Char* gpsPC = "pc";
+static const sal_Char* const gpsMM = "mm";
+static const sal_Char* const gpsCM = "cm";
+static const sal_Char* const gpsPT = "pt";
+static const sal_Char* const gpsINCH = "in";
+static const sal_Char* const gpsPC = "pc";
 
 const sal_Int8 XML_MAXDIGITSCOUNT_TIME = 14;
 
