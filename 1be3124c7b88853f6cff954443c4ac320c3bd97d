@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a6eadb0_c52c3cae",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3956,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-01-10T21:44:02Z",
+      "side": 1,
+      "message": "This is wrong, in case of error nothing would be pushed. PushDouble() (and other Push...()) already check and act accordingly if an error is set.",
+      "revId": "1be3124c7b88853f6cff954443c4ac320c3bd97d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

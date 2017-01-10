@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a6eadb0_a52f40a0",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3959,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-01-10T21:44:02Z",
+      "side": 0,
+      "message": "Do not remove the PopError() here, in case an error is on the stack it shall be propagated instead of the new error (IllegalParameter).",
+      "revId": "63133848be96df0a22de5b51a9b8d1cb2565c28a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
