@@ -20,6 +20,7 @@
 #include <stdio.h>
 #include <o3tl/any.hxx>
 #include <oox/drawingml/chart/chartconverter.hxx>
+#include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 #include <oox/ole/vbaproject.hxx>
 #include <epptooxml.hxx>
@@ -67,12 +68,12 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
 // presentation namespaces
-#define PNMSS         FSNS(XML_xmlns, XML_a),   "http://schemas.openxmlformats.org/drawingml/2006/main", \
-                      FSNS(XML_xmlns, XML_p),   "http://schemas.openxmlformats.org/presentationml/2006/main", \
-                      FSNS(XML_xmlns, XML_r),   "http://schemas.openxmlformats.org/officeDocument/2006/relationships", \
-                      FSNS(XML_xmlns, XML_p14), "http://schemas.microsoft.com/office/powerpoint/2010/main", \
-                      FSNS(XML_xmlns, XML_p15), "http://schemas.microsoft.com/office/powerpoint/2012/main", \
-                      FSNS(XML_xmlns, XML_mc),  "http://schemas.openxmlformats.org/markup-compatibility/2006"
+#define PNMSS         FSNS(XML_xmlns, XML_a),   OUStringToOString(this->getNamespaceURL(OOX_NS(dml)), RTL_TEXTENCODING_UTF8).getStr(), \
+                      FSNS(XML_xmlns, XML_p),   OUStringToOString(this->getNamespaceURL(OOX_NS(ppt)), RTL_TEXTENCODING_UTF8).getStr(), \
+                      FSNS(XML_xmlns, XML_r),   OUStringToOString(this->getNamespaceURL(OOX_NS(officeRel)), RTL_TEXTENCODING_UTF8).getStr(), \
+                      FSNS(XML_xmlns, XML_p14), OUStringToOString(this->getNamespaceURL(OOX_NS(p14)), RTL_TEXTENCODING_UTF8).getStr(), \
+                      FSNS(XML_xmlns, XML_p15), OUStringToOString(this->getNamespaceURL(OOX_NS(p15)), RTL_TEXTENCODING_UTF8).getStr(), \
+                      FSNS(XML_xmlns, XML_mc),  OUStringToOString(this->getNamespaceURL(OOX_NS(mce)), RTL_TEXTENCODING_UTF8).getStr()
 
 
 using namespace ::com::sun::star;
@@ -1406,7 +1407,7 @@ void PowerPointExport::WriteAuthors()
                  "commentAuthors.xml" );
 
     pFS->startElementNS( XML_p, XML_cmAuthorLst,
-                         FSNS( XML_xmlns, XML_p ), "http://schemas.openxmlformats.org/presentationml/2006/main",
+                         FSNS( XML_xmlns, XML_p ), OUStringToOString(this->getNamespaceURL(OOX_NS(ppt)), RTL_TEXTENCODING_UTF8),
                          FSEND );
 
     for( const AuthorsMap::value_type& i : maAuthors ) {
@@ -1455,7 +1456,7 @@ bool PowerPointExport::WriteComments( sal_uInt32 nPageNum )
                                                                 "application/vnd.openxmlformats-officedocument.presentationml.comments+xml" );
 
             pFS->startElementNS( XML_p, XML_cmLst,
-                                 FSNS( XML_xmlns, XML_p ), "http://schemas.openxmlformats.org/presentationml/2006/main",
+                                 FSNS( XML_xmlns, XML_p ), OUStringToOString(this->getNamespaceURL(OOX_NS(ppt)), RTL_TEXTENCODING_UTF8),
                                  FSEND );
 
             do {
@@ -2179,7 +2180,7 @@ void PowerPointExport::WriteTheme( sal_Int32 nThemeNum )
                                                         "application/vnd.openxmlformats-officedocument.theme+xml" );
 
     pFS->startElementNS( XML_a, XML_theme,
-                         FSNS( XML_xmlns, XML_a), "http://schemas.openxmlformats.org/drawingml/2006/main",
+                         FSNS( XML_xmlns, XML_a), OUStringToOString(this->getNamespaceURL(OOX_NS(dml)), RTL_TEXTENCODING_UTF8),
                          XML_name, "Office Theme",
                          FSEND );
 
