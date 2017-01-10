@@ -2239,7 +2239,7 @@ OUString const & HtmlExport::getDocumentTitle()
     return mDocTitle;
 }
 
-static const char* JS_NavigateAbs =
+static const char JS_NavigateAbs[] =
     "function NavigateAbs( nPage )\r\n"
     "{\r\n"
     "  frames[\"show\"].location.href = \"img\" + nPage + \".$EXT\";\r\n"
@@ -2259,7 +2259,7 @@ static const char* JS_NavigateAbs =
     "  }\r\n"
     "}\r\n\r\n";
 
-static const char* JS_NavigateRel =
+static const char JS_NavigateRel[] =
     "function NavigateRel( nDelta )\r\n"
     "{\r\n"
     "  var nPage = parseInt(nCurrentPage) + parseInt(nDelta);\r\n"
@@ -2269,14 +2269,14 @@ static const char* JS_NavigateRel =
     "  }\r\n"
     "}\r\n\r\n";
 
-static const char* JS_ExpandOutline =
+static const char JS_ExpandOutline[] =
     "function ExpandOutline()\r\n"
     "{\r\n"
     "  frames[\"navbar2\"].location.href = \"navbar4.$EXT\";\r\n"
     "  frames[\"outline\"].location.href = \"outline1.$EXT\";\r\n"
     "}\r\n\r\n";
 
-static const char * JS_CollapseOutline =
+static const char JS_CollapseOutline[] =
     "function CollapseOutline()\r\n"
     "{\r\n"
     "  frames[\"navbar2\"].location.href = \"navbar3.$EXT\";\r\n"
@@ -2304,7 +2304,7 @@ bool HtmlExport::CreateFrames()
     aStr.append(OUString::number(mnSdPageCount));
     aStr.append(";\r\n\r\n");
 
-    OUString aFunction = OUString::createFromAscii(JS_NavigateAbs);
+    OUString aFunction = JS_NavigateAbs;
 
     if(mbNotes)
     {
@@ -2316,17 +2316,17 @@ bool HtmlExport::CreateFrames()
     aFunction = aFunction.replaceAll(aPlaceHolder, maHTMLExtension);
     aStr.append(aFunction);
 
-    aTmp = OUString::createFromAscii(JS_NavigateRel);
+    aTmp = JS_NavigateRel;
     aTmp = aTmp.replaceAll(aPlaceHolder, maHTMLExtension);
     aStr.append(aTmp);
 
     if(mbImpress)
     {
-        aTmp = OUString::createFromAscii(JS_ExpandOutline);
+        aTmp = JS_ExpandOutline;
         aTmp = aTmp.replaceAll(aPlaceHolder, maHTMLExtension);
         aStr.append(aTmp);
 
-        aTmp = OUString::createFromAscii(JS_CollapseOutline);
+        aTmp = JS_CollapseOutline;
         aTmp = aTmp.replaceAll(aPlaceHolder, maHTMLExtension);
         aStr.append(aTmp);
     }
