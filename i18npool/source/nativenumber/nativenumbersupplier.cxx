@@ -1030,11 +1030,11 @@ OUString SAL_CALL getCyrillicNativeNumberString(const OUString& aNumberString)
         return aNumberString;
 }
 
-static const sal_Char* implementationName = "com.sun.star.i18n.NativeNumberSupplier";
+static const sal_Char implementationName[] = "com.sun.star.i18n.NativeNumberSupplier";
 
 OUString SAL_CALL NativeNumberSupplierService::getImplementationName() throw( RuntimeException, std::exception )
 {
-    return OUString::createFromAscii( implementationName );
+    return OUString(implementationName);
 }
 
 sal_Bool SAL_CALL
@@ -1046,7 +1046,7 @@ NativeNumberSupplierService::supportsService(const OUString& rServiceName) throw
 Sequence< OUString > SAL_CALL
 NativeNumberSupplierService::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
-    Sequence< OUString > aRet { OUString::createFromAscii( implementationName ) };
+    Sequence< OUString > aRet {implementationName};
     return aRet;
 }
 
