@@ -113,7 +113,8 @@ struct DDInfo
 struct Impl_IMEInfos
 {
     OUString      aOldTextAfterStartPos;
-    ExtTextInputAttr* pAttribs;
+    std::unique_ptr<ExtTextInputAttr[]>
+                  pAttribs;
     sal_Int32     nPos;
     sal_Int32     nLen;
     bool          bCursor;
@@ -138,21 +139,18 @@ Impl_IMEInfos::Impl_IMEInfos(sal_Int32 nP, const OUString& rOldTextAfterStartPos
 
 Impl_IMEInfos::~Impl_IMEInfos()
 {
-    delete[] pAttribs;
 }
 
 void Impl_IMEInfos::CopyAttribs(const ExtTextInputAttr* pA, sal_Int32 nL)
 {
     nLen = nL;
-    delete[] pAttribs;
-    pAttribs = new ExtTextInputAttr[ nL ];
-    memcpy( pAttribs, pA, nL*sizeof(ExtTextInputAttr) );
+    pAttribs.reset(new ExtTextInputAttr[ nL ]);
+    memcpy( pAttribs.get(), pA, nL*sizeof(ExtTextInputAttr) );
 }
 
 void Impl_IMEInfos::DestroyAttribs()
 {
-    delete[] pAttribs;
-    pAttribs = nullptr;
+    pAttribs.reset();
     nLen = 0;
 }
 
@@ -1724,7 +1722,7 @@ void Edit::KeyInput( const KeyEvent& rKEvt )
 
 void Edit::FillLayoutData() const
 {
-    mpControlData->mpLayoutData = new vcl::ControlLayoutData();
+    mpControlData->mpLayoutData.reset( new vcl::ControlLayoutData );
     const_cast<Edit*>(this)->Invalidate();
 }
 

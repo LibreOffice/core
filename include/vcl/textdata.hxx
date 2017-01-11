@@ -25,6 +25,7 @@
 #include <rtl/ustring.hxx>
 #include <svl/hint.hxx>
 #include <vcl/dllapi.h>
+#include <memory>
 
 enum class ExtTextInputAttr;
 
@@ -126,7 +127,7 @@ public:
 struct TEIMEInfos
 {
     OUString    aOldTextAfterStartPos;
-    ExtTextInputAttr* pAttribs;
+    std::unique_ptr<ExtTextInputAttr[]> pAttribs;
     TextPaM     aPos;
     sal_Int32   nLen;
     bool        bCursor;

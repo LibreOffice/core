@@ -1092,13 +1092,9 @@ MetaTextArrayAction::MetaTextArrayAction( const MetaTextArrayAction& rAction ) :
 {
     if( rAction.mpDXAry )
     {
-        const sal_Int32 nAryLen = mnLen;
-
-        mpDXAry = new long[ nAryLen ];
-        memcpy( mpDXAry, rAction.mpDXAry, nAryLen * sizeof( long ) );
+        mpDXAry.reset( new long[ mnLen ] );
+        memcpy( mpDXAry.get(), rAction.mpDXAry.get(), mnLen * sizeof( long ) );
     }
-    else
-        mpDXAry = nullptr;
 }
 
 MetaTextArrayAction::MetaTextArrayAction( const Point& rStartPt,
@@ -1116,21 +1112,18 @@ MetaTextArrayAction::MetaTextArrayAction( const Point& rStartPt,
 
     if( nAryLen )
     {
-        mpDXAry = new long[ nAryLen ];
-        memcpy( mpDXAry, pDXAry, nAryLen * sizeof(long) );
+        mpDXAry.reset( new long[ nAryLen ] );
+        memcpy( mpDXAry.get(), pDXAry, nAryLen * sizeof(long) );
     }
-    else
-        mpDXAry = nullptr;
 }
 
 MetaTextArrayAction::~MetaTextArrayAction()
 {
-    delete[] mpDXAry;
 }
 
 void MetaTextArrayAction::Execute( OutputDevice* pOut )
 {
-    pOut->DrawTextArray( maStartPt, maStr, mpDXAry, mnIndex, mnLen );
+    pOut->DrawTextArray( maStartPt, maStr, mpDXAry.get(), mnIndex, mnLen );
 }
 
 MetaAction* MetaTextArrayAction::Clone()
@@ -1176,7 +1169,7 @@ void MetaTextArrayAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaTextArrayAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
 {
-    delete[] mpDXAry;
+    mpDXAry.reset();
 
     VersionCompat aCompat(rIStm, StreamMode::READ);
     ReadPair( rIStm, maStartPt );
@@ -1202,7 +1195,7 @@ void MetaTextArrayAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
         // #i9762#, #106172# Ensure that DX array is at least mnLen entries long
         if ( mnLen >= nAryLen )
         {
-            mpDXAry = new (std::nothrow)long[ mnLen ];
+            mpDXAry.reset( new (std::nothrow)long[ mnLen ] );
             if ( mpDXAry )
             {
                 sal_Int32 i;
@@ -1233,8 +1226,7 @@ void MetaTextArrayAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
         if ( mnIndex + mnLen > maStr.getLength() )
         {
             mnIndex = 0;
-            delete[] mpDXAry;
-            mpDXAry = nullptr;
+            mpDXAry.reset();
         }
     }
 }
