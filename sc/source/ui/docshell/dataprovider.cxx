@@ -25,7 +25,9 @@ using namespace com::sun::star;
 
 namespace sc {
 
-SvStream* FetchStreamFromURL (OUString& rURL)
+namespace {
+
+std::unique_ptr<SvStream> FetchStreamFromURL(const OUString& rURL)
 {
     uno::Reference< ucb::XSimpleFileAccess3 > xFileAccess( ucb::SimpleFileAccess::create( comphelper::getProcessComponentContext() ), uno::UNO_QUERY );
 
@@ -34,32 +36,32 @@ SvStream* FetchStreamFromURL (OUString& rURL)
 
     const sal_Int32 BUF_LEN = 8000;
     uno::Sequence< sal_Int8 > buffer( BUF_LEN );
-    OStringBuffer aBuffer( 64000 );
+    OStringBuffer* aBuffer = new OStringBuffer( 64000 );
 
     sal_Int32 nRead = 0;
     while ( ( nRead = xStream->readBytes( buffer, BUF_LEN ) ) == BUF_LEN )
     {
-        aBuffer.append( reinterpret_cast< const char* >( buffer.getConstArray() ), nRead );
+        aBuffer->append( reinterpret_cast< const char* >( buffer.getConstArray() ), nRead );
     }
 
     if ( nRead > 0 )
     {
-        aBuffer.append( reinterpret_cast< const char* >( buffer.getConstArray() ), nRead );
+        aBuffer->append( reinterpret_cast< const char* >( buffer.getConstArray() ), nRead );
     }
 
     xStream->closeInput();
 
-    SvStream* pStream = new SvStream;
-    pStream->WriteCharPtr(aBuffer.getStr());
+    SvStream* pStream = new SvMemoryStream(const_cast<char*>(aBuffer->getStr()), aBuffer->getLength(), StreamMode::READ);
+    return std::unique_ptr<SvStream>(pStream);
+}
 
-    return pStream;
 }
 
 ExternalDataMapper::ExternalDataMapper(ScDocShell* pDocShell, const OUString& rURL, const OUString& rName, SCTAB nTab,
     SCCOL nCol1,SCROW nRow1, SCCOL nCol2, SCROW nRow2, bool& bSuccess):
     maRange (ScRange(nCol1, nRow1, nTab, nCol2, nRow2, nTab)),
     mpDocShell(pDocShell),
-    mpDataProvider (new CSVDataProvider(mpDocShell, maURL, maRange)),
+    mpDataProvider (new CSVDataProvider(mpDocShell, rURL, maRange)),
     mpDBCollection (pDocShell->GetDocument().GetDBCollection()),
     maURL(rURL)
 {
@@ -133,14 +135,18 @@ public:
     }
 };
 
-CSVFetchThread::CSVFetchThread(SvStream *pData, size_t nColCount):
+CSVFetchThread::CSVFetchThread(ScDocument** pDoc, const OUString& mrURL, size_t nColCount):
         Thread("ReaderThread"),
-        mpStream(pData),
+        mpStream(nullptr),
+        mpDocument(new ScDocument),
+        maURL (mrURL),
         mnColCount(nColCount),
         mbTerminate(false)
 {
     maConfig.delimiters.push_back(',');
     maConfig.text_qualifier = '"';
+    mpDocument->InsertTab(0, "blah");
+    *pDoc = mpDocument;
 }
 
 CSVFetchThread::~CSVFetchThread()
@@ -166,40 +172,84 @@ void CSVFetchThread::EndThread()
 
 void CSVFetchThread::execute()
 {
-    LinesType aLines(10);
-
-    // Read & store new lines from stream.
-    for (Line & rLine : aLines)
+    mpStream = FetchStreamFromURL(maURL);
+    if (mpStream->good())
     {
-        rLine.maCells.clear();
-        mpStream->ReadLine(rLine.maLine);
-        CSVHandler aHdl(rLine, mnColCount);
-        orcus::csv_parser<CSVHandler> parser(rLine.maLine.getStr(), rLine.maLine.getLength(), aHdl, maConfig);
-        parser.parse();
-    }
+        LinesType* pLines = new LinesType(10);
+        SCROW nCurRow = 0;
+        for (Line & rLine : *pLines)
+        {
+            rLine.maCells.clear();
+            mpStream->ReadLine(rLine.maLine);
+            CSVHandler aHdl(rLine, mnColCount);
+            orcus::csv_parser<CSVHandler> parser(rLine.maLine.getStr(), rLine.maLine.getLength(), aHdl, maConfig);
+            parser.parse();
 
-    if (!mpStream->good())
-        RequestTerminate();
+            if (rLine.maCells.empty())
+            {
+                return;
+            }
+
+            SCCOL nCol = 0;
+            const char* pLineHead = rLine.maLine.getStr();
+            for (auto& rCell : rLine.maCells)
+            {
+                if (rCell.mbValue)
+                {
+                    mpDocument->SetValue(ScAddress(nCol, nCurRow, 0 /* Tab */), rCell.mfValue);
+                }
+                else
+                {
+                    mpDocument->SetString(nCol, nCurRow, 0 /* Tab */, OUString(pLineHead+rCell.maStr.Pos, rCell.maStr.Size, RTL_TEXTENCODING_UTF8));
+                }
+                ++nCol;
+            }
+            nCurRow++;
+        }
+    }
+}
+
+osl::Mutex& CSVFetchThread::GetLinesMutex()
+{
+    return maMtxLines;
+}
+
+bool CSVFetchThread::HasNewLines()
+{
+    return !maPendingLines.empty();
+}
+
+void CSVFetchThread::WaitForNewLines()
+{
+    maCondConsume.wait();
+    maCondConsume.reset();
+}
+
+LinesType* CSVFetchThread::GetNewLines()
+{
+    LinesType* pLines = maPendingLines.front();
+    maPendingLines.pop();
+    return pLines;
+}
+
+void CSVFetchThread::ResumeFetchStream()
+{
+    maCondReadStream.set();
 }
 
 CSVDataProvider::CSVDataProvider(ScDocShell* pDocShell, const OUString& rURL, const ScRange& rRange):
     maURL(rURL),
     mrRange(rRange),
     mpDocShell(pDocShell),
+    mpDocument(&pDocShell->GetDocument()),
+    mpLines(nullptr),
+    mnLineCount(0),
     mbImportUnderway(false)
 {
 }
 
 CSVDataProvider::~CSVDataProvider()
 {
-    if(mbImportUnderway)
-        StopImport();
-
-    if (mxCSVFetchThread.is())
-    {
-        mxCSVFetchThread->EndThread();
-        mxCSVFetchThread->join();
-    }
 }
 
 void CSVDataProvider::StartImport()
@@ -209,29 +259,71 @@ void CSVDataProvider::StartImport()
 
     if (!mxCSVFetchThread.is())
     {
-        SvStream* pStream = FetchStreamFromURL(maURL);
-        mxCSVFetchThread = new CSVFetchThread(pStream, mrRange.aEnd.Col() - mrRange.aStart.Col() + 1);
+        ScDocument* pDoc = nullptr;
+        mxCSVFetchThread = new CSVFetchThread(&pDoc, maURL, mrRange.aEnd.Col() - mrRange.aStart.Col() + 1);
         mxCSVFetchThread->launch();
+        if (mxCSVFetchThread.is())
+        {
+            mxCSVFetchThread->EndThread();
+            mxCSVFetchThread->join();
+        }
+
+        WriteToDoc(pDoc);
+        delete pDoc;
     }
-    mbImportUnderway = true;
 
-    maImportTimer.Start();
-}
-
-void CSVDataProvider::StopImport()
-{
-    if (!mbImportUnderway)
-        return;
-
-    mbImportUnderway = false;
     Refresh();
-    maImportTimer.Stop();
 }
 
 void CSVDataProvider::Refresh()
 {
     mpDocShell->DoHardRecalc();
     mpDocShell->SetDocumentModified();
+}
+
+Line CSVDataProvider::GetLine()
+{
+    if (!mpLines || mnLineCount >= mpLines->size())
+    {
+        if (mxCSVFetchThread->IsRequestedTerminate())
+            return Line();
+
+        osl::ResettableMutexGuard aGuard(mxCSVFetchThread->GetLinesMutex());
+        while (!mxCSVFetchThread->HasNewLines() && !mxCSVFetchThread->IsRequestedTerminate())
+        {
+            aGuard.clear();
+            mxCSVFetchThread->WaitForNewLines();
+            aGuard.reset();
+        }
+
+        mpLines = mxCSVFetchThread->GetNewLines();
+        mxCSVFetchThread->ResumeFetchStream();
+    }
+
+    return mpLines->at(mnLineCount++);
+}
+
+void CSVDataProvider::WriteToDoc(ScDocument* pDoc)
+{
+    double* pfValue;
+    for (int nRow = mrRange.aStart.Row(); nRow < mrRange.aEnd.Row(); ++nRow)
+    {
+        for (int nCol = mrRange.aStart.Col(); nCol < mrRange.aEnd.Col(); ++nCol)
+        {
+            ScAddress aAddr = ScAddress(nCol, nRow, mrRange.aStart.Tab());
+            pfValue = pDoc->GetValueCell(aAddr);
+
+            if (pfValue == nullptr)
+            {
+                OUString aString = pDoc->GetString(nCol, nRow, mrRange.aStart.Tab());
+                mpDocument->SetString(nCol, nRow, mrRange.aStart.Tab(), aString);
+            }
+            else
+            {
+                mpDocument->SetValue(nCol, nRow, mrRange.aStart.Tab(), *pfValue);
+            }
+        }
+    }
 }
 
 }

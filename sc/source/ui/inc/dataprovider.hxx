@@ -18,7 +18,6 @@
 #include <address.hxx>
 #include <osl/mutex.hxx>
 #include <osl/conditn.hxx>
-#include <vcl/timer.hxx>
 #include <dbdata.hxx>
 #include <document.hxx>
 
@@ -36,16 +35,15 @@
 
 namespace sc {
 
-/* Fetch Data Stream from local or remote locations */
-SvStream* FetchStreamFromURL(OUString& rUrl);
-
 class DataProvider;
+class CSVDataProvider;
 
 class SC_DLLPUBLIC ExternalDataMapper
 {
     ScRange maRange;
     ScDocShell* mpDocShell;
     std::unique_ptr<DataProvider> mpDataProvider;
+    ScDocument maDocument;
     ScDBCollection* mpDBCollection;
 
     OUString maURL;
@@ -90,17 +88,25 @@ typedef std::vector<Line> LinesType;
 class CSVFetchThread : public salhelper::Thread
 {
     std::unique_ptr<SvStream> mpStream;
+    ScDocument* mpDocument;
+    OUString maURL;
     size_t mnColCount;
 
     bool mbTerminate;
     osl::Mutex maMtxTerminate;
+
+    std::queue<LinesType*> maPendingLines;
+    osl::Mutex maMtxLines;
+
+    osl::Condition maCondReadStream;
+    osl::Condition maCondConsume;
 
     orcus::csv::parser_config maConfig;
 
     virtual void execute() override;
 
 public:
-    CSVFetchThread(SvStream*, size_t);
+    CSVFetchThread(ScDocument** pDoc, const OUString&, size_t);
     virtual ~CSVFetchThread() override;
 
     void RequestTerminate();
@@ -108,6 +114,11 @@ public:
     void Terminate();
     void EndThread();
     void EmptyLineQueue(std::queue<LinesType*>& );
+    osl::Mutex& GetLinesMutex();
+    bool HasNewLines();
+    void WaitForNewLines();
+    LinesType* GetNewLines();
+    void ResumeFetchStream();
 };
 
 class DataProvider
@@ -116,8 +127,8 @@ public:
     virtual ~DataProvider() = 0;
 
     virtual void StartImport() = 0;
-    virtual void StopImport() = 0;
     virtual void Refresh() = 0;
+    virtual void WriteToDoc(ScDocument*) = 0;
 
     virtual ScRange GetRange() const = 0;
     virtual const OUString& GetURL() const = 0;
@@ -127,19 +138,23 @@ class CSVDataProvider : public DataProvider
 {
     OUString maURL;
     ScRange mrRange;
-    Timer maImportTimer;
     rtl::Reference<CSVFetchThread> mxCSVFetchThread;
     ScDocShell* mpDocShell;
+    ScDocument* mpDocument;
+    LinesType* mpLines;
+    size_t mnLineCount;
 
     bool mbImportUnderway;
+
 
 public:
     CSVDataProvider (ScDocShell* pDocShell, const OUString& rUrl, const ScRange& rRange);
     virtual ~CSVDataProvider() override;
 
     virtual void StartImport() override;
-    virtual void StopImport() override;
     virtual void Refresh() override;
+    virtual void WriteToDoc(ScDocument*) override;
+    Line GetLine();
 
     ScRange GetRange() const override
     {
