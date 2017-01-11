@@ -53,7 +53,6 @@ OutlinerParaObjData::OutlinerParaObjData( const OutlinerParaObjData& r ):
 
 OutlinerParaObjData::~OutlinerParaObjData()
 {
-    delete mpEditTextObject;
 }
 
 bool OutlinerParaObjData::operator==(const OutlinerParaObjData& rCandidate) const

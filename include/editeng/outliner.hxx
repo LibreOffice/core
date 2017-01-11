@@ -192,10 +192,8 @@ class EDITENG_DLLPUBLIC OutlinerView final
 {
     friend class Outliner;
 
-private:
-
-    Outliner*   pOwner;
-    EditView*   pEditView;
+    Outliner*                   pOwner;
+    std::unique_ptr<EditView>   pEditView;
 
     enum class MouseTarget {
         Text = 0,

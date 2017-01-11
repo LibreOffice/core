@@ -89,11 +89,12 @@ public:
     typedef std::vector<VclPtr<vcl::Window>> OutWindowSet;
 
 public: // Needed for Undo
-    ImpEditView*    GetImpEditView() const      { return pImpEditView; }
+    ImpEditView*    GetImpEditView() const      { return pImpEditView.get(); }
     ImpEditEngine*  GetImpEditEngine() const;
 
 private:
-    ImpEditView*    pImpEditView;
+    std::unique_ptr<ImpEditView>
+                    pImpEditView;
     OUString        aDicNameSingle;
 
                     EditView( const EditView& ) = delete;

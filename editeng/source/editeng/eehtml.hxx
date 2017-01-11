@@ -39,7 +39,8 @@ private:
     EditSelection           aCurSel;
     OUString                aBaseURL;
     EditEngine*             mpEditEngine;
-    AnchorInfo*             pCurAnchor;
+    std::unique_ptr<AnchorInfo>
+                            pCurAnchor;
 
     bool                    bInPara:1;
     bool                    bWasInPara:1; // Remember bInPara before HeadingStart, because afterwards it will be gone.
