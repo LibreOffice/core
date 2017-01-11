@@ -28,6 +28,7 @@ $(eval $(call gb_Library_use_libraries,wpftqahelper,\
     cppu \
     sal \
     test \
+    tl \
     ucbhelper \
     unotest \
 ))

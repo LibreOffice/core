@@ -11,6 +11,8 @@
 
 #include <com/sun/star/document/XFilter.hpp>
 
+#include <tools/urlobj.hxx>
+
 #include "WpftLoader.hxx"
 
 namespace uno = com::sun::star::uno;
@@ -31,6 +33,16 @@ WpftFilterTestBase::WpftFilterTestBase(const rtl::OUString &rFactoryURL)
 bool WpftFilterTestBase::load(const OUString &, const OUString &rURL, const OUString &,
                               SfxFilterFlags, SotClipboardFormatId, unsigned int)
 {
+
+    if (m_pOptionalMap)
+    {
+        // first check if this test file is supported by the used version of the library
+        const INetURLObject aUrl(rURL);
+        const WpftOptionalMap_t::const_iterator it(m_pOptionalMap->find(aUrl.getName()));
+        if ((it != m_pOptionalMap->end()) && !it->second)
+            return true; // skip the file
+    }
+
     const WpftLoader aLoader(rURL, m_xFilter, m_aFactoryURL, m_xDesktop, m_xTypeMap, m_xContext);
     return aLoader.getDocument().is();
 }
