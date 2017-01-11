@@ -114,11 +114,10 @@ SafeModeDialog::SafeModeDialog(vcl::Window* pParent)
     // Disable restart btn until some checkbox is active
     mpBtnRestart->Disable();
 
-    // Check the first radio button and disable the other parts
+    // Check the first radio button and call its handler,
+    // it'll disable the relevant parts
     mpRadioRestore->Check();
-    mpBoxConfigure->Disable();
-    mpBoxDeinstall->Disable();
-    mpBoxReset->Disable();
+    RadioBtnHdl( mpRadioRestore );
 
     // Set URL for help button (module=safemode)
     OUString sURL("http://hub.libreoffice.org/send-feedback/?LOversion=" + utl::ConfigManager::getAboutBoxProductVersion() +
