@@ -754,11 +754,8 @@ sal_uInt32 MetaField::GetNumberFormat(OUString const & rContent) const
     SwTextNode * const pTextNode( GetTextNode() );
     if (pTextNode)
     {
-        SvNumberFormatter *const pNumberFormatter(
-                pTextNode->GetDoc()->GetNumberFormatter() );
         double number;
-        (void) pNumberFormatter->IsNumberFormat(
-                rContent, nNumberFormat, number );
+        (void) pTextNode->GetDoc()->IsNumberFormat( rContent, nNumberFormat, number );
     }
     return nNumberFormat;
 }

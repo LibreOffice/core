@@ -702,9 +702,7 @@ void SwFormulaField::SetExpandedFormula( const OUString& rStr )
     {
         double fTmpValue;
 
-        SvNumberFormatter* pFormatter = GetDoc()->GetNumberFormatter();
-
-        if (pFormatter->IsNumberFormat(rStr, nFormat, fTmpValue))
+        if (GetDoc()->IsNumberFormat(rStr, nFormat, fTmpValue))
         {
             SwValueField::SetValue(fTmpValue);
 

@@ -400,7 +400,7 @@ bool SwEditShell::IsTableBoxTextFormat() const
         return false;
 
     double fVal;
-    return !GetDoc()->GetNumberFormatter()->IsNumberFormat( rText, nFormat, fVal );
+    return !GetDoc()->IsNumberFormat( rText, nFormat, fVal );
 }
 
 OUString SwEditShell::GetTableBoxText() const

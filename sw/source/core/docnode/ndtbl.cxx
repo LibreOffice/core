@@ -4032,6 +4032,23 @@ bool SwDoc::SetColRowWidthHeight( SwTableBox& rAktBox, TableChgWidthHeightType e
     return bRet;
 }
 
+bool SwDoc::IsNumberFormat( const OUString& rString, sal_uInt32& F_Index, double& fOutNumber )
+{
+    if( rString.getLength() > 308 ) // optimization matches svl:IsNumberFormat arbitrary value
+        return false;
+
+    // remove any comment anchor marks
+    OUStringBuffer sStringBuffer(rString);
+    sal_Int32 nCommentPosition = sStringBuffer.indexOf( CH_TXTATR_INWORD );
+    while( nCommentPosition != -1 )
+    {
+        sStringBuffer.remove( nCommentPosition, 1 );
+        nCommentPosition = sStringBuffer.indexOf( CH_TXTATR_INWORD, nCommentPosition );
+    }
+
+    return GetNumberFormatter()->IsNumberFormat( sStringBuffer.makeStringAndClear(), F_Index, fOutNumber );
+}
+
 void SwDoc::ChkBoxNumFormat( SwTableBox& rBox, bool bCallUpdate )
 {
     // Optimization: If the Box says it's Text, it remains Text
