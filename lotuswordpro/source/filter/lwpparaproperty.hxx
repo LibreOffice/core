@@ -209,12 +209,12 @@ public:
     inline LwpBulletOverride* GetLocalParaBullet();
 
 private:
-    LwpBulletOverride* m_pBullet;
+    std::unique_ptr<LwpBulletOverride> m_pBullet;
 };
 
 inline LwpBulletOverride* LwpParaBulletProperty::GetLocalParaBullet()
 {
-    return m_pBullet;
+    return m_pBullet.get();
 }
 
 class LwpParaNumberingProperty : public LwpParaProperty

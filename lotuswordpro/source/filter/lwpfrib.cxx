@@ -99,7 +99,6 @@ LwpFrib::LwpFrib(LwpPara* pPara)
 
 LwpFrib::~LwpFrib()
 {
-    delete m_pModifiers;
 }
 
 LwpFrib* LwpFrib::CreateFrib(LwpPara* pPara, LwpObjectStream* pObjStrm, sal_uInt8 fribtag,sal_uInt8 editID)
@@ -219,7 +218,7 @@ void LwpFrib::SetModifiers(ModifierInfo* pModifiers)
 {
     if (pModifiers)
     {
-        m_pModifiers = pModifiers;
+        m_pModifiers.reset( pModifiers );
         m_ModFlag = true;
         if (pModifiers->RevisionFlag)
         {

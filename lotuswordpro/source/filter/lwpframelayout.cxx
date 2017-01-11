@@ -767,7 +767,6 @@ LwpFrameLayout::LwpFrameLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
 
 LwpFrameLayout::~LwpFrameLayout()
 {
-    delete m_pFrame;
 }
 
 /**
@@ -781,7 +780,7 @@ void LwpFrameLayout::Read()
     {
         if(m_pObjStrm->QuickReaduInt16())
         {
-            m_Link.Read(m_pObjStrm);
+            m_Link.Read(m_pObjStrm.get());
         }
     }
     m_pObjStrm->SkipExtra();
@@ -858,7 +857,7 @@ void  LwpFrameLayout::RegisterStyle()
 
     //register frame style
     XFFrameStyle* pFrameStyle = new XFFrameStyle();
-    m_pFrame = new LwpFrame(this);
+    m_pFrame.reset( new LwpFrame(this) );
     m_pFrame->RegisterStyle(pFrameStyle);
 
     //register content style
@@ -1027,7 +1026,6 @@ LwpGroupLayout::LwpGroupLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
 
 LwpGroupLayout::~LwpGroupLayout()
 {
-    delete m_pFrame;
 }
 /**
  * @descr read group layout object
@@ -1049,7 +1047,7 @@ void LwpGroupLayout::RegisterStyle()
 
     //register frame style
     XFFrameStyle* pFrameStyle = new XFFrameStyle();
-    m_pFrame = new LwpFrame(this);
+    m_pFrame.reset( new LwpFrame(this) );
     m_pFrame->RegisterStyle(pFrameStyle);
 
     //register child frame style
@@ -1214,7 +1212,7 @@ void LwpRubyLayout::Read()
     m_nStateFlag = m_pObjStrm->QuickReaduInt16();
     m_nXOffset = m_pObjStrm->QuickReadInt32();
     m_nYOffset = m_pObjStrm->QuickReadInt32();
-    m_objRubyMarker.ReadIndexed(m_pObjStrm);
+    m_objRubyMarker.ReadIndexed(m_pObjStrm.get());
     m_pObjStrm->SkipExtra();
 }
 

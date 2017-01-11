@@ -87,7 +87,7 @@ private:
     LwpLayout* m_pTabLayout;    //for register tab style
 
     bool m_bDropcap;
-    LwpHyperlinkMgr* m_pHyperlinkMgr;
+    std::unique_ptr<LwpHyperlinkMgr> m_pHyperlinkMgr;
     OUString m_CurrSectionName;
 
     XFContentContainer* m_pXFContainer;
@@ -112,7 +112,7 @@ public:
     LwpPageLayout* GetCurrentLayout() { return m_pCurrentLayout; }
     inline LwpMiddleLayout* GetTabLayout();//for register tab style
     const OUString& GetSectionName() { return m_CurrSectionName; }
-    LwpHyperlinkMgr* GetHyperlinkMgr() { return m_pHyperlinkMgr; }
+    LwpHyperlinkMgr* GetHyperlinkMgr() { return m_pHyperlinkMgr.get(); }
 
     inline bool IsPMModified() { return m_bPMModified; }
     inline void SetPMModified(bool bPMModified);
