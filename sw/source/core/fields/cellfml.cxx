@@ -224,12 +224,12 @@ double SwTableBox::GetValue( SwTableCalcPara& rCalcPara ) const
                     css::util::NumberFormat::PERCENT == pNumFormatr->GetType( nFormatIndex ))
             {
                 sal_uInt32 nTmpFormat = 0;
-                if( pNumFormatr->IsNumberFormat( sText, nTmpFormat, aNum ) &&
+                if( pDoc->IsNumberFormat( sText, nTmpFormat, aNum ) &&
                     css::util::NumberFormat::NUMBER == pNumFormatr->GetType( nTmpFormat ))
                     sText += "%";
             }
 
-            if( pNumFormatr->IsNumberFormat( sText, nFormatIndex, aNum ))
+            if( pDoc->IsNumberFormat( sText, nFormatIndex, aNum ))
                 nRet = aNum;
         }
         // ?? otherwise it is an error
