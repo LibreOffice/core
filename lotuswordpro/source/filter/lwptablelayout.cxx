@@ -818,7 +818,7 @@ void LwpTableLayout::Read()
     {
         assert(false);
     }
-    m_ColumnLayout.ReadIndexed(m_pObjStrm);
+    m_ColumnLayout.ReadIndexed(m_pObjStrm.get());
 
     m_pObjStrm->SkipExtra();
 }
@@ -1429,7 +1429,7 @@ LwpColumnLayout::~LwpColumnLayout()
 {}
 void LwpColumnLayout::Read()
 {
-    LwpObjectStream* pStrm = m_pObjStrm;
+    LwpObjectStream* pStrm = m_pObjStrm.get();
 
     LwpVirtualLayout::Read();
 

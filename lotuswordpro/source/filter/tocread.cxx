@@ -80,8 +80,8 @@ CBenTOCReader::ReadLabelAndTOC()
     if ((Err = cpContainer->SeekToPosition(TOCOffset)) != BenErr_OK)
         return Err;
 
-    cpTOC = new BenByte[cTOCSize];
-    if ((Err = cpContainer->ReadKnownSize(cpTOC, cTOCSize)) != BenErr_OK)
+    cpTOC.reset( new BenByte[cTOCSize] );
+    if ((Err = cpContainer->ReadKnownSize(cpTOC.get(), cTOCSize)) != BenErr_OK)
         return Err;
 
     if ((Err = ReadTOC()) != BenErr_OK)
@@ -464,7 +464,7 @@ CBenTOCReader::GetByte(BenByte * pByte)
     if (! CanGetData(1))
         return BenErr_ReadPastEndOfTOC;
 
-    *pByte = UtGetIntelByte(cpTOC + cCurr);
+    *pByte = UtGetIntelByte(cpTOC.get() + cCurr);
     ++cCurr;
     return BenErr_OK;
 }
@@ -475,7 +475,7 @@ CBenTOCReader::GetDWord(BenDWord * pDWord)
     if (! CanGetData(4))
         return BenErr_ReadPastEndOfTOC;
 
-    *pDWord = UtGetIntelDWord(cpTOC + cCurr);
+    *pDWord = UtGetIntelDWord(cpTOC.get() + cCurr);
     cCurr += 4;
     return BenErr_OK;
 }
@@ -504,7 +504,7 @@ CBenTOCReader::GetData(void * pBuffer, unsigned long Amt)
     if (! CanGetData(Amt))
         return BenErr_ReadPastEndOfTOC;
 
-    UtHugeMemcpy(pBuffer, cpTOC + cCurr, Amt);
+    UtHugeMemcpy(pBuffer, cpTOC.get() + cCurr, Amt);
     cCurr += Amt;
     return BenErr_OK;
 }

@@ -69,7 +69,7 @@ LwpDLVListHeadHolder::LwpDLVListHeadHolder(LwpObjectHeader& objHdr, LwpSvStream*
 */
 void LwpDLVListHeadHolder::Read()
 {
-    m_DLVHead.ReadIndexed(m_pObjStrm);
+    m_DLVHead.ReadIndexed(m_pObjStrm.get());
     m_pObjStrm->SkipExtra();
 }
 
@@ -81,7 +81,7 @@ LwpDLVListHeadTailHolder::LwpDLVListHeadTailHolder(LwpObjectHeader& objHdr, LwpS
 */
 void LwpDLVListHeadTailHolder::Read()
 {
-    m_HeadTail.Read(m_pObjStrm);
+    m_HeadTail.Read(m_pObjStrm.get());
     //m_pObjStrm->SkipExtra();
 }
 
@@ -95,7 +95,7 @@ void LwpObjectHolder::Read()
 {
     LwpDLVList::Read();
 
-    m_Object.ReadIndexed(m_pObjStrm);
+    m_Object.ReadIndexed(m_pObjStrm.get());
     if( LwpFileHeader::m_nFileRevision < 0x0006 )
         m_pObjStrm->SkipExtra();
 }
@@ -110,7 +110,7 @@ void LwpListList::Read()
 {
     LwpObjectHolder::Read();
 
-    m_HeadTail.Read(m_pObjStrm);
+    m_HeadTail.Read(m_pObjStrm.get());
     m_pObjStrm->SkipExtra();
 }
 

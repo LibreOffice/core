@@ -608,7 +608,7 @@ void LwpCellLayout::RegisterStyle()
  */
 void LwpCellLayout::Read()
 {
-    LwpObjectStream* pStrm = m_pObjStrm;
+    LwpObjectStream* pStrm = m_pObjStrm.get();
 
     LwpMiddleLayout::Read();
 
@@ -866,7 +866,7 @@ void LwpHiddenCellLayout::Read()
 {
     LwpCellLayout::Read();
 
-    cconnectedlayout.ReadIndexed(m_pObjStrm);
+    cconnectedlayout.ReadIndexed(m_pObjStrm.get());
     m_pObjStrm->SkipExtra();
 
 }

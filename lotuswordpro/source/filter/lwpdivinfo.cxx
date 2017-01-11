@@ -77,18 +77,18 @@ void LwpDivInfo::Read()
 {
 
     SkipFront();
-    m_ParentID.ReadIndexed(m_pObjStrm);
+    m_ParentID.ReadIndexed(m_pObjStrm.get());
     if (LwpFileHeader::m_nFileRevision < 0x0006)
     {
         m_pObjStrm->SkipExtra();
     }
-    m_Name.Read(m_pObjStrm);
+    m_Name.Read(m_pObjStrm.get());
     if (LwpFileHeader::m_nFileRevision < 0x0006)
     {
         m_pObjStrm->SkipExtra();
     }
 
-    m_LayoutID.ReadIndexed(m_pObjStrm);
+    m_LayoutID.ReadIndexed(m_pObjStrm.get());
     m_nFlags = m_pObjStrm->QuickReaduInt16();
     if (LwpFileHeader::m_nFileRevision < 0x0010)  // In 98, graphic links count too
     {
@@ -96,16 +96,16 @@ void LwpDivInfo::Read()
             m_nFlags &= ~DI_KNOWIFANYOLEDDELINKS;
     }
 
-    m_ExternalName.Read(m_pObjStrm);
-    m_ExternalType.Read(m_pObjStrm);
-    m_ClassName.Read(m_pObjStrm);
-    m_InitialLayoutID.ReadIndexed(m_pObjStrm);
+    m_ExternalName.Read(m_pObjStrm.get());
+    m_ExternalType.Read(m_pObjStrm.get());
+    m_ClassName.Read(m_pObjStrm.get());
+    m_InitialLayoutID.ReadIndexed(m_pObjStrm.get());
 
     m_nPageNoStyle = m_pObjStrm->QuickReaduInt16();
-    m_TabColor.Read(m_pObjStrm);
+    m_TabColor.Read(m_pObjStrm.get());
 
     // read filler page stuff
-    m_FillerPageTextID.ReadIndexed(m_pObjStrm);
+    m_FillerPageTextID.ReadIndexed(m_pObjStrm.get());
 
     // read external file object stuff
     sal_uInt16 type = m_pObjStrm->QuickReaduInt16();
@@ -119,20 +119,20 @@ void LwpDivInfo::SkipFront()
 {
     LwpObjectID toSkip;
 
-    toSkip.ReadIndexed(m_pObjStrm); // skip ListNext;
+    toSkip.ReadIndexed(m_pObjStrm.get()); // skip ListNext;
     if (LwpFileHeader::m_nFileRevision < 0x0006)
     {
         m_pObjStrm->SkipExtra();
     }
-    toSkip.ReadIndexed(m_pObjStrm); // skip ListPrevious;
+    toSkip.ReadIndexed(m_pObjStrm.get()); // skip ListPrevious;
     if (LwpFileHeader::m_nFileRevision < 0x0006)
     {
         m_pObjStrm->SkipExtra();
     }
-    toSkip.ReadIndexed(m_pObjStrm); // skip Head;
+    toSkip.ReadIndexed(m_pObjStrm.get()); // skip Head;
     if (LwpFileHeader::m_nFileRevision < 0x0006)
     {
-        toSkip.ReadIndexed(m_pObjStrm); //skip tail
+        toSkip.ReadIndexed(m_pObjStrm.get()); //skip tail
         m_pObjStrm->SkipExtra();
     }
 }

@@ -154,7 +154,7 @@ void LwpRowLayout::RegisterStyle()
 void LwpRowLayout::Read()
 {
     #define MAXUNIT (0x7fffffffL)               // Highest positive UNIT value
-    LwpObjectStream* pStrm = m_pObjStrm;
+    LwpObjectStream* pStrm = m_pObjStrm.get();
 
     LwpVirtualLayout::Read();
 
@@ -475,7 +475,7 @@ void LwpRowHeadingLayout::Read()
 {
     LwpRowLayout::Read();
 
-    cRowLayout.ReadIndexed(m_pObjStrm);
+    cRowLayout.ReadIndexed(m_pObjStrm.get());
     m_pObjStrm->SkipExtra();
 }
 

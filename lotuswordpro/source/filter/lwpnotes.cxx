@@ -146,13 +146,13 @@ void LwpNoteLayout::Read()
     LwpFrameLayout::Read();
 
     m_nTime = m_pObjStrm->QuickReaduInt32();
-    m_UserName.Read(m_pObjStrm);
+    m_UserName.Read(m_pObjStrm.get());
 
     LwpAtomHolder aUserInitials;
-    aUserInitials.Read(m_pObjStrm);
+    aUserInitials.Read(m_pObjStrm.get());
 
     LwpColor aColor;
-    aColor.Read(m_pObjStrm);
+    aColor.Read(m_pObjStrm.get());
 
     // vacant note sequence
     m_pObjStrm->QuickReadInt32();

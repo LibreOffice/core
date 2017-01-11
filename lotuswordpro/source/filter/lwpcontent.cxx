@@ -82,7 +82,7 @@ void LwpContent::Read()
 {
     LwpDLNFVList::Read();
 
-    LwpObjectStream* pStrm = m_pObjStrm;
+    LwpObjectStream* pStrm = m_pObjStrm.get();
 
     m_LayoutsWithMe.Read(pStrm);
     m_nFlags = pStrm->QuickReaduInt16();

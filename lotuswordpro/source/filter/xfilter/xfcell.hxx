@@ -141,11 +141,12 @@ public:
      */
     virtual void    ToXml(IXFStream *pStrm) override;
 
-    const XFTable*  GetSubTable() const { return m_pSubTable; }
+    const XFTable*  GetSubTable() const { return m_pSubTable.get(); }
 
 private:
     XFRow          *m_pOwnerRow;
-    XFTable        *m_pSubTable;
+    rtl::Reference<XFTable>
+                    m_pSubTable;
     sal_Int32       m_nCol;
     sal_Int32       m_nColSpaned;
     sal_Int32       m_nRepeated;

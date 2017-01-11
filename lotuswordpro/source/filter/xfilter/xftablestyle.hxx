@@ -65,6 +65,7 @@
 #include "xfshadow.hxx"
 #include "xfcolor.hxx"
 #include "xfbreaks.hxx"
+#include <memory>
 
 class XFBGImage;
 class XFTableStyle : public XFStyle
@@ -92,7 +93,7 @@ public:
 private:
     double  m_fWidth;
     XFColor m_aBackColor;
-    XFBGImage   *m_pBGImage;
+    std::unique_ptr<XFBGImage> m_pBGImage;
     XFShadow    m_aShadow;
     XFMargins   m_aMargins;
     XFBreaks    m_aBreaks;

@@ -132,9 +132,9 @@ LwpDivisionOptions::~LwpDivisionOptions()
 
 void LwpDivisionOptions::Read()
 {
-    m_HyphOpts.Read(m_pObjStrm);
+    m_HyphOpts.Read(m_pObjStrm.get());
     m_nOptionFlag = m_pObjStrm->QuickReaduInt16();
-    m_Lang.Read(m_pObjStrm);
+    m_Lang.Read(m_pObjStrm.get());
     m_pObjStrm->SkipExtra();
 }
 

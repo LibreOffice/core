@@ -81,14 +81,13 @@ LwpStory::LwpStory(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
 
 LwpStory::~LwpStory()
 {
-    delete m_pHyperlinkMgr;
 }
 
 void LwpStory::Read()
 {
     LwpContent::Read();
-    m_ParaList.Read(m_pObjStrm);
-    m_FirstParaStyle.ReadIndexed(m_pObjStrm);
+    m_ParaList.Read(m_pObjStrm.get());
+    m_FirstParaStyle.ReadIndexed(m_pObjStrm.get());
     m_pObjStrm->SkipExtra();
 }
 

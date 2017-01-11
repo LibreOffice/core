@@ -78,7 +78,6 @@ LwpSilverBullet::LwpSilverBullet(LwpObjectHeader& objHdr, LwpSvStream* pStrm)
 
 LwpSilverBullet::~LwpSilverBullet()
 {
-    delete m_pAtomHolder;
 }
 
 void LwpSilverBullet::Read()
@@ -86,7 +85,7 @@ void LwpSilverBullet::Read()
     LwpDLNFVList::Read();
 
     m_nFlags = m_pObjStrm->QuickReaduInt16();
-    m_aStory.ReadIndexed(m_pObjStrm);
+    m_aStory.ReadIndexed(m_pObjStrm.get());
 
     sal_uInt16 nNumPos = m_pObjStrm->QuickReaduInt16();
 
@@ -98,7 +97,7 @@ void LwpSilverBullet::Read()
 
     m_nUseCount = m_pObjStrm->QuickReaduInt32();
 
-    m_pAtomHolder->Read(m_pObjStrm);
+    m_pAtomHolder->Read(m_pObjStrm.get());
 }
 
 /**

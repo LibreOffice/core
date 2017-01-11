@@ -76,13 +76,13 @@ void LwpDocData::Read()
     //cOptionFlag
     m_DocOptions.nOptionFlag = m_pObjStrm->QuickReaduInt16();
     //cEncrypt1Password
-    m_DocOptions.encrypt1password.Read(m_pObjStrm);
+    m_DocOptions.encrypt1password.Read(m_pObjStrm.get());
     //cEncrypt2Password
-    m_DocOptions.encrypt2password.Read(m_pObjStrm);
+    m_DocOptions.encrypt2password.Read(m_pObjStrm.get());
     //cCharecterSet
-    m_DocOptions.characterSet.Read(m_pObjStrm);
+    m_DocOptions.characterSet.Read(m_pObjStrm.get());
     //cGrammerSet
-    m_DocOptions.grammerSet.Read(m_pObjStrm);
+    m_DocOptions.grammerSet.Read(m_pObjStrm.get());
     //cShowMarginMarks
     m_DocOptions.nMarginMarks = m_pObjStrm->QuickReaduInt16();
     //cMarginMarksLocation
@@ -93,11 +93,11 @@ void LwpDocData::Read()
 
     //doc info
     //cDescription
-    m_DocInfo.description.Read(m_pObjStrm);
+    m_DocInfo.description.Read(m_pObjStrm.get());
     //cKeyWord
-    m_DocInfo.keywords.Read(m_pObjStrm);
+    m_DocInfo.keywords.Read(m_pObjStrm.get());
     //cCreatedBy
-    m_DocInfo.createdBy.Read(m_pObjStrm);
+    m_DocInfo.createdBy.Read(m_pObjStrm.get());
     //cCreationTime
     m_DocInfo.nCreationTime = m_pObjStrm->QuickReadInt32();
     LtgLocalTime(m_DocInfo.nCreationTime,m_nCreationTime);
@@ -111,7 +111,7 @@ void LwpDocData::Read()
     m_nTotalEditTime.tm_min = m_DocInfo.nTotalEditTime % 60;
     m_nTotalEditTime.tm_sec = 0;
     //cpVerDocInfo
-    m_DocInfo.cpVerDocInfo.ReadIndexed(m_pObjStrm);
+    m_DocInfo.cpVerDocInfo.ReadIndexed(m_pObjStrm.get());
 
     //EditorList
     m_DocInfo.nNumEditedBy = m_pObjStrm->QuickReaduInt16();
@@ -121,10 +121,10 @@ void LwpDocData::Read()
     for ( i = 0; i < m_DocInfo.nNumEditedBy; i++)
     {
         //CDLNList
-        pCDLNList[i].Read(m_pObjStrm);  //cName
+        pCDLNList[i].Read(m_pObjStrm.get());  //cName
         m_pObjStrm->SkipExtra();
         //CEditedBy
-        pEditorList[i].Read(m_pObjStrm);    //cName
+        pEditorList[i].Read(m_pObjStrm.get());    //cName
         m_pObjStrm->SkipExtra();
     }
 
@@ -135,7 +135,7 @@ void LwpDocData::Read()
 
     //doc control
     //cGreeting
-    m_DocControl.cGreeting.Read(m_pObjStrm);
+    m_DocControl.cGreeting.Read(m_pObjStrm.get());
     //cFlags
     m_DocControl.nFlags = m_pObjStrm->QuickReaduInt16();
 
@@ -156,7 +156,7 @@ void LwpDocData::Read()
     //cAutoVersioning
     m_DocControl.nAutoVersioning = m_pObjStrm->QuickReaduInt16();
     //cDocControlOnlyEditor
-    m_DocControl.cDocControlOnlyEditor.Read(m_pObjStrm);
+    m_DocControl.cDocControlOnlyEditor.Read(m_pObjStrm.get());
     //cEditorVerification
     m_DocControl.nEditorVerification = m_pObjStrm->QuickReaduInt16();
 
@@ -171,11 +171,11 @@ void LwpDocData::Read()
     {
         LwpEditorAttr* pEditorAttr = new LwpEditorAttr;
         //cName
-        pEditorAttr->cName.Read(m_pObjStrm);
+        pEditorAttr->cName.Read(m_pObjStrm.get());
         //cInitials
-        pEditorAttr->cInitials.Read(m_pObjStrm);
+        pEditorAttr->cInitials.Read(m_pObjStrm.get());
         //cHiLite
-        pEditorAttr->cHiLiteColor.Read(m_pObjStrm);
+        pEditorAttr->cHiLiteColor.Read(m_pObjStrm.get());
 
         //cID
         pEditorAttr->nID = m_pObjStrm->QuickReaduInt16();
@@ -207,16 +207,16 @@ void LwpDocData::Read()
         //CFontDescriptionOverrideBase--cTightness
         pEditorAttr->cInsFontOver.cFontDescriptionOverrideBase.cTightness = m_pObjStrm->QuickReaduInt16();
         //CFontDescriptionOverrideBase--cColor
-        pEditorAttr->cInsFontOver.cFontDescriptionOverrideBase.cColor.Read(m_pObjStrm);
+        pEditorAttr->cInsFontOver.cFontDescriptionOverrideBase.cColor.Read(m_pObjStrm.get());
 
         //CFontDescriptionOverrideBase--cBackgroundColor
-        pEditorAttr->cInsFontOver.cFontDescriptionOverrideBase.cBackgroundColor.Read(m_pObjStrm);
+        pEditorAttr->cInsFontOver.cFontDescriptionOverrideBase.cBackgroundColor.Read(m_pObjStrm.get());
 
         m_pObjStrm->SkipExtra();
         //cFaceName
-        pEditorAttr->cInsFontOver.cFaceName.Read(m_pObjStrm);
+        pEditorAttr->cInsFontOver.cFaceName.Read(m_pObjStrm.get());
         //cAltFaceName
-        pEditorAttr->cInsFontOver.cAltFaceName.Read(m_pObjStrm);
+        pEditorAttr->cInsFontOver.cAltFaceName.Read(m_pObjStrm.get());
         m_pObjStrm->SkipExtra();
 
         //cDelFontOver
@@ -246,16 +246,16 @@ void LwpDocData::Read()
         //CFontDescriptionOverrideBase--cTightness
         pEditorAttr->cDelFontOver.cFontDescriptionOverrideBase.cTightness = m_pObjStrm->QuickReaduInt16();
         //CFontDescriptionOverrideBase--cColor
-        pEditorAttr->cDelFontOver.cFontDescriptionOverrideBase.cColor.Read(m_pObjStrm);
+        pEditorAttr->cDelFontOver.cFontDescriptionOverrideBase.cColor.Read(m_pObjStrm.get());
 
         //CFontDescriptionOverrideBase--cBackgroundColor
-        pEditorAttr->cDelFontOver.cFontDescriptionOverrideBase.cBackgroundColor.Read(m_pObjStrm);
+        pEditorAttr->cDelFontOver.cFontDescriptionOverrideBase.cBackgroundColor.Read(m_pObjStrm.get());
 
         m_pObjStrm->SkipExtra();
         //cFaceName
-        pEditorAttr->cDelFontOver.cFaceName.Read(m_pObjStrm);
+        pEditorAttr->cDelFontOver.cFaceName.Read(m_pObjStrm.get());
         //cAltFaceName
-        pEditorAttr->cDelFontOver.cAltFaceName.Read(m_pObjStrm);
+        pEditorAttr->cDelFontOver.cAltFaceName.Read(m_pObjStrm.get());
         m_pObjStrm->SkipExtra();
 
         //cAbilities
