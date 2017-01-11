@@ -52,8 +52,6 @@ typedef union {
 #define RIGHT_DELIM 284
 #define DIGIT   285
 
-#ifndef _WIN32
 extern YYSTYPE yylval;
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

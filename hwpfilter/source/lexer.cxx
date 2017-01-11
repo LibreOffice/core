@@ -946,9 +946,6 @@ extern "C" {
 int yywrap();
 }
 
-#ifdef _WIN32
-extern YYSTYPE yylval;
-#endif
 #ifdef TOKEN_DEBUG
 #define token_debug printf
 #else
