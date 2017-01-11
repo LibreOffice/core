@@ -95,7 +95,7 @@ namespace
                                     rtl::math::approxEqual(m_aHyperlinkBounds.Y2,406.2) );
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "Correct hyperlink URI", OUString("http://download.openoffice.org/"), m_aURI );
 
-            const char* sText = " \n \nThis is a testtext\nNew paragraph,\nnew line\n"
+            const char* const sText = " \n \nThis is a testtext\nNew paragraph,\nnew line\n"
                 "Hyperlink, this is\n?\nThis is more text\noutline mode\n?\nNew paragraph\n";
             OString aTmp;
             m_aTextOut.makeStringAndClear().convertToString( &aTmp,
