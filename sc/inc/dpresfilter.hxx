@@ -99,7 +99,7 @@ private:
     LeafValuesType maLeafValues;
 
     OUString maPrimaryDimName;
-    MemberNode* mpRoot;
+    std::unique_ptr<MemberNode> mpRoot;
 
 public:
 

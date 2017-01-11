@@ -440,32 +440,27 @@ ScTableListItem::ScTableListItem( const ScTableListItem& rCpy )
 {
     if ( nCount > 0 )
     {
-        pTabArr = new SCTAB [nCount];
+        pTabArr.reset( new SCTAB [nCount] );
 
         for ( sal_uInt16 i=0; i<nCount; i++ )
             pTabArr[i] = rCpy.pTabArr[i];
     }
-    else
-        pTabArr = nullptr;
 }
 
 ScTableListItem::~ScTableListItem()
 {
-    delete [] pTabArr;
 }
 
 ScTableListItem& ScTableListItem::operator=( const ScTableListItem& rCpy )
 {
-    delete [] pTabArr;
-
     if ( rCpy.nCount > 0 )
     {
-        pTabArr = new SCTAB [rCpy.nCount];
+        pTabArr.reset( new SCTAB [rCpy.nCount] );
         for ( sal_uInt16 i=0; i<rCpy.nCount; i++ )
             pTabArr[i] = rCpy.pTabArr[i];
     }
     else
-        pTabArr = nullptr;
+        pTabArr.reset();
 
     nCount = rCpy.nCount;
 

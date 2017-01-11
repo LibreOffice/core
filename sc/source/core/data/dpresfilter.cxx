@@ -85,7 +85,6 @@ void ScDPResultTree::MemberNode::dump(int nLevel) const
 ScDPResultTree::ScDPResultTree() : mpRoot(new MemberNode) {}
 ScDPResultTree::~ScDPResultTree()
 {
-    delete mpRoot;
 }
 
 void ScDPResultTree::add(
@@ -95,7 +94,7 @@ void ScDPResultTree::add(
 
     const OUString* pDimName = nullptr;
     const OUString* pMemName = nullptr;
-    MemberNode* pMemNode = mpRoot;
+    MemberNode* pMemNode = mpRoot.get();
 
     std::vector<ScDPResultFilter>::const_iterator itFilter = rFilters.begin(), itFilterEnd = rFilters.end();
     for (; itFilter != itFilterEnd; ++itFilter)
@@ -203,8 +202,7 @@ bool ScDPResultTree::empty() const
 void ScDPResultTree::clear()
 {
     maPrimaryDimName = EMPTY_OUSTRING;
-    delete mpRoot;
-    mpRoot = new MemberNode;
+    mpRoot.reset( new MemberNode );
 }
 
 const ScDPResultTree::ValuesType* ScDPResultTree::getResults(
@@ -212,7 +210,7 @@ const ScDPResultTree::ValuesType* ScDPResultTree::getResults(
 {
     const sheet::DataPilotFieldFilter* p = rFilters.getConstArray();
     const sheet::DataPilotFieldFilter* pEnd = p + static_cast<size_t>(rFilters.getLength());
-    const MemberNode* pMember = mpRoot;
+    const MemberNode* pMember = mpRoot.get();
     for (; p != pEnd; ++p)
     {
         DimensionsType::const_iterator itDim = pMember->maChildDimensions.find(

@@ -49,7 +49,6 @@ ScAppOptions::ScAppOptions( const ScAppOptions& rCpy ) : pLRUList( nullptr )
 
 ScAppOptions::~ScAppOptions()
 {
-    delete [] pLRUList;
 }
 
 void ScAppOptions::SetDefaults()
@@ -66,8 +65,7 @@ void ScAppOptions::SetDefaults()
     bAutoComplete   = true;
     bDetectiveAuto  = true;
 
-    delete [] pLRUList;
-    pLRUList = new sal_uInt16[5];               // sinnvoll vorbelegen
+    pLRUList.reset( new sal_uInt16[5] );               // sinnvoll vorbelegen
     pLRUList[0] = SC_OPCODE_SUM;
     pLRUList[1] = SC_OPCODE_AVERAGE;
     pLRUList[2] = SC_OPCODE_MIN;
@@ -95,7 +93,7 @@ ScAppOptions& ScAppOptions::operator=( const ScAppOptions& rCpy )
     eZoomType       = rCpy.eZoomType;
     bSynchronizeZoom = rCpy.bSynchronizeZoom;
     nZoom           = rCpy.nZoom;
-    SetLRUFuncList( rCpy.pLRUList, rCpy.nLRUFuncCount );
+    SetLRUFuncList( rCpy.pLRUList.get(), rCpy.nLRUFuncCount );
     nStatusFunc     = rCpy.nStatusFunc;
     bAutoComplete   = rCpy.bAutoComplete;
     bDetectiveAuto  = rCpy.bDetectiveAuto;
@@ -113,19 +111,17 @@ ScAppOptions& ScAppOptions::operator=( const ScAppOptions& rCpy )
 
 void ScAppOptions::SetLRUFuncList( const sal_uInt16* pList, const sal_uInt16 nCount )
 {
-    delete [] pLRUList;
-
     nLRUFuncCount = nCount;
 
     if ( nLRUFuncCount > 0 )
     {
-        pLRUList = new sal_uInt16[nLRUFuncCount];
+        pLRUList.reset( new sal_uInt16[nLRUFuncCount] );
 
         for ( sal_uInt16 i=0; i<nLRUFuncCount; i++ )
             pLRUList[i] = pList[i];
     }
     else
-        pLRUList = nullptr;
+        pLRUList.reset();
 }
 
 //  Config Item containing app options

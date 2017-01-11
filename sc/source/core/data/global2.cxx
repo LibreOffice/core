@@ -231,18 +231,15 @@ ScSolveParam::ScSolveParam( const ScAddress& rFormulaCell,
 
 ScSolveParam::~ScSolveParam()
 {
-    delete pStrTargetVal;
 }
 
 ScSolveParam& ScSolveParam::operator=( const ScSolveParam& r )
 {
-    delete pStrTargetVal;
-
     aRefFormulaCell  = r.aRefFormulaCell;
     aRefVariableCell = r.aRefVariableCell;
-    pStrTargetVal    = r.pStrTargetVal
+    pStrTargetVal.reset( r.pStrTargetVal
                             ? new OUString(*r.pStrTargetVal)
-                            : nullptr;
+                            : nullptr);
     return *this;
 }
 

@@ -88,7 +88,8 @@ private:
     css::uno::Reference< css::reflection::XIdlMethod> xFunction;
     css::uno::Any       aObject;
     long                nArgCount;
-    ScAddInArgDesc*     pArgDescs;
+    std::unique_ptr<ScAddInArgDesc[]>
+                        pArgDescs;
     long                nCallerPos;
     sal_uInt16          nCategory;
     OString             sHelpId;
@@ -113,7 +114,7 @@ public:
                                                         { return xFunction; }
     const css::uno::Any& GetObject() const   { return aObject; }
     long                    GetArgumentCount() const    { return nArgCount; }
-    const ScAddInArgDesc*   GetArguments() const        { return pArgDescs; }
+    const ScAddInArgDesc*   GetArguments() const        { return pArgDescs.get(); }
     long                    GetCallerPos() const        { return nCallerPos; }
     const OUString&         GetDescription() const      { return aDescription; }
     sal_uInt16              GetCategory() const         { return nCategory; }

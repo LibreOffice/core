@@ -88,7 +88,7 @@ public:
 class ScEditAttrTester
 {
     ScEditEngineDefaulter* pEngine;
-    SfxItemSet* pEditAttrs;
+    std::unique_ptr<SfxItemSet> pEditAttrs;
     bool        bNeedsObject;
     bool        bNeedsCellAttr;
 

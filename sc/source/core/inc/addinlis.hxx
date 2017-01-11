@@ -37,7 +37,7 @@ class ScAddInListener : public cppu::WeakImplHelper<
 private:
     css::uno::Reference<css::sheet::XVolatileResult> xVolRes;
     css::uno::Any aResult;
-    ScAddInDocs* pDocs; // documents where this is used
+    std::unique_ptr<ScAddInDocs> pDocs; // documents where this is used
 
     static ::std::list<ScAddInListener*> aAllListeners;
 

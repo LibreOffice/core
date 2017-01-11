@@ -1340,8 +1340,6 @@ ScDPDimension::ScDPDimension( ScDPSource* pSrc, long nD ) :
 ScDPDimension::~ScDPDimension()
 {
     //TODO: release pSource
-
-    delete pSelectedData;
 }
 
 ScDPHierarchies* ScDPDimension::GetHierarchiesObject()
@@ -1442,13 +1440,13 @@ const ScDPItemData& ScDPDimension::GetSelectedData()
                 ScDPMember* pMember = pMembers->getByIndex(i);
                 if (aSelectedPage.equals(pMember->GetNameStr( false)))
                 {
-                    pSelectedData = new ScDPItemData(pMember->FillItemData());
+                    pSelectedData.reset( new ScDPItemData(pMember->FillItemData()) );
                 }
             }
         }
 
         if ( !pSelectedData )
-            pSelectedData = new ScDPItemData(aSelectedPage);      // default - name only
+            pSelectedData.reset( new ScDPItemData(aSelectedPage) );      // default - name only
     }
 
     return *pSelectedData;
@@ -1543,7 +1541,7 @@ void SAL_CALL ScDPDimension::setPropertyValue( const OUString& aPropertyName, co
             OSL_FAIL("Filter property is not a single string");
             throw lang::IllegalArgumentException();
         }
-        DELETEZ( pSelectedData );       // invalid after changing aSelectedPage
+        pSelectedData.reset();       // invalid after changing aSelectedPage
     }
     else if (aPropertyName == SC_UNO_DP_LAYOUTNAME)
     {

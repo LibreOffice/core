@@ -241,7 +241,7 @@ public:
 private:
     DimsType m_DimList;
     DupNameCountType maDupNameCounts; /// keep track of number of duplicates in each name.
-    ScDPDimensionSaveData* pDimensionData; // settings that create new dimensions
+    std::unique_ptr<ScDPDimensionSaveData> pDimensionData; // settings that create new dimensions
     sal_uInt16 nColumnGrandMode;
     sal_uInt16 nRowGrandMode;
     sal_uInt16 nIgnoreEmptyMode;
@@ -347,7 +347,7 @@ public:
     bool IsEmpty() const;
 
     const ScDPDimensionSaveData* GetExistingDimensionData() const
-        { return pDimensionData; }
+        { return pDimensionData.get(); }
 
     void RemoveAllGroupDimensions( const OUString& rSrcDimName, std::vector<OUString>* pDeletedNames = nullptr );
 

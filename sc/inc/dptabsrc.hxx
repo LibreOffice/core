@@ -315,7 +315,8 @@ class ScDPDimension : public cppu::WeakImplHelper<
                         aReferenceValue;    // settings for "show data as" / "displayed value"
     bool                bHasSelectedPage;
     OUString            aSelectedPage;
-    ScDPItemData*       pSelectedData;      // internal, temporary, created from aSelectedPage
+    std::unique_ptr<ScDPItemData>
+                        pSelectedData;      // internal, temporary, created from aSelectedPage
     bool                mbHasHiddenMember;
 
 public:

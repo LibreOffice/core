@@ -481,12 +481,11 @@ ScDPGroupTableData::ScDPGroupTableData( const shared_ptr<ScDPTableData>& pSource
 
     CreateCacheTable();
     nSourceCount = pSource->GetColumnCount();               // real columns, excluding data layout
-    pNumGroups = new ScDPNumGroupDimension[nSourceCount];
+    pNumGroups.reset( new ScDPNumGroupDimension[nSourceCount] );
 }
 
 ScDPGroupTableData::~ScDPGroupTableData()
 {
-    delete[] pNumGroups;
 }
 
 void ScDPGroupTableData::AddGroupDimension( const ScDPGroupDimension& rGroup )

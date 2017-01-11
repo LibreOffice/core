@@ -124,7 +124,8 @@ class ScDPGroupTableData : public ScDPTableData
     std::shared_ptr<ScDPTableData> pSourceData;
     long                    nSourceCount;
     ScDPGroupDimensionVec   aGroups;
-    ScDPNumGroupDimension*  pNumGroups;     // array[nSourceCount]
+    std::unique_ptr<ScDPNumGroupDimension[]>
+                            pNumGroups;     // array[nSourceCount]
     ScDocument*             pDoc;
     StringHashSet           aGroupNames;
 

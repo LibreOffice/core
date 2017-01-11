@@ -655,8 +655,8 @@ void ScDPAggData::SetAuxiliary( double fNew )
 ScDPAggData* ScDPAggData::GetChild()
 {
     if (!pChild)
-        pChild = new ScDPAggData;
-    return pChild;
+        pChild.reset( new ScDPAggData );
+    return pChild.get();
 }
 
 void ScDPAggData::Reset()
@@ -664,8 +664,7 @@ void ScDPAggData::Reset()
     fVal = 0.0;
     fAux = 0.0;
     nCount = SC_DPAGG_EMPTY;
-    delete pChild;
-    pChild = nullptr;
+    pChild.reset();
 }
 
 #if DUMP_PIVOT_TABLE
@@ -1845,7 +1844,6 @@ ScDPDataMember::ScDPDataMember( const ScDPResultData* pData, const ScDPResultMem
 
 ScDPDataMember::~ScDPDataMember()
 {
-    delete pChildDimension;
 }
 
 OUString ScDPDataMember::GetName() const
@@ -1883,7 +1881,7 @@ bool ScDPDataMember::HasHiddenDetails() const
 void ScDPDataMember::InitFrom( const ScDPResultDimension* pDim )
 {
     if ( !pChildDimension )
-        pChildDimension = new ScDPDataDimension(pResultData);
+        pChildDimension.reset( new ScDPDataDimension(pResultData) );
     pChildDimension->InitFrom(pDim);
 }
 

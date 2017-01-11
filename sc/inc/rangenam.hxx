@@ -63,7 +63,8 @@ private:
     OUString        aName;
     OUString        aUpperName; // #i62977# for faster searching (aName is never modified after ctor)
     OUString        maNewName;  ///< used for formulas after changing names in the dialog
-    ScTokenArray*   pCode;
+    std::unique_ptr<ScTokenArray>
+                    pCode;
     ScAddress       aPos;
     Type            eType;
     ScDocument*     pDoc;
@@ -116,9 +117,9 @@ public:
     sal_uInt16      GetIndex() const                { return nIndex; }
     /// Does not change the name, but sets maNewName for formula update after dialog.
     void            SetNewName( const OUString& rNewName )  { maNewName = rNewName; }
-    ScTokenArray*   GetCode()                       { return pCode; }
+    ScTokenArray*   GetCode()                       { return pCode.get(); }
     SC_DLLPUBLIC void   SetCode( ScTokenArray& );
-    const ScTokenArray* GetCode() const             { return pCode; }
+    const ScTokenArray* GetCode() const             { return pCode.get(); }
     SC_DLLPUBLIC FormulaError GetErrCode() const;
     bool            HasReferences() const;
     void            AddType( Type nType );
