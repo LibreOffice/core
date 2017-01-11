@@ -38,7 +38,6 @@ XFillExchangeData::XFillExchangeData( const XFillAttrSetItem& rXFillAttrSetItem 
 
 XFillExchangeData::~XFillExchangeData()
 {
-    delete pXFillAttrSetItem;
 }
 
 /// binary export (currently w/o version control because it is not persistent)
@@ -110,8 +109,7 @@ SvStream& ReadXFillExchangeData( SvStream& rIStm, XFillExchangeData& rData )
         }
     }
 
-    delete rData.pXFillAttrSetItem;
-    rData.pXFillAttrSetItem = new XFillAttrSetItem( pSet );
+    rData.pXFillAttrSetItem.reset( new XFillAttrSetItem( pSet ) );
     rData.pPool = rData.pXFillAttrSetItem->GetItemSet().GetPool();
 
     return rIStm;
@@ -119,17 +117,15 @@ SvStream& ReadXFillExchangeData( SvStream& rIStm, XFillExchangeData& rData )
 
 XFillExchangeData& XFillExchangeData::operator=( const XFillExchangeData& rData )
 {
-    delete pXFillAttrSetItem;
-
     if( rData.pXFillAttrSetItem )
-        pXFillAttrSetItem = static_cast<XFillAttrSetItem*>( rData.pXFillAttrSetItem->Clone( pPool = rData.pXFillAttrSetItem->GetItemSet().GetPool() ) );
+        pXFillAttrSetItem.reset( static_cast<XFillAttrSetItem*>( rData.pXFillAttrSetItem->Clone( pPool = rData.pXFillAttrSetItem->GetItemSet().GetPool() ) ) );
     else
     {
         pPool = nullptr;
-        pXFillAttrSetItem = nullptr;
+        pXFillAttrSetItem.reset();
     }
 
-    return( *this );
+    return *this;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -277,7 +277,7 @@ basegfx::B2DPolygon SdrCircObj::ImpCalcXPolyCirc(const SdrObjKind eCicrleKind, c
 void SdrCircObj::RecalcXPoly()
 {
     const basegfx::B2DPolygon aPolyCirc(ImpCalcXPolyCirc(meCircleKind, maRect, nStartAngle, nEndAngle));
-    mpXPoly = new XPolygon(aPolyCirc);
+    mpXPoly.reset( new XPolygon(aPolyCirc) );
 }
 
 OUString SdrCircObj::TakeObjNameSingul() const

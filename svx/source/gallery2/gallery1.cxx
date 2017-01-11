@@ -148,16 +148,16 @@ class GalleryThemeCacheEntry
 private:
 
     const GalleryThemeEntry*        mpThemeEntry;
-    GalleryTheme*                           mpTheme;
+    std::unique_ptr<GalleryTheme>   mpTheme;
 
 public:
 
                                 GalleryThemeCacheEntry( const GalleryThemeEntry* pThemeEntry, GalleryTheme* pTheme ) :
                                     mpThemeEntry( pThemeEntry ), mpTheme( pTheme ) {}
-                                ~GalleryThemeCacheEntry() { delete mpTheme; }
+                                ~GalleryThemeCacheEntry() {}
 
-    const GalleryThemeEntry*        GetThemeEntry() const { return mpThemeEntry; }
-    GalleryTheme*                           GetTheme() const { return mpTheme; }
+    const GalleryThemeEntry*    GetThemeEntry() const { return mpThemeEntry; }
+    GalleryTheme*               GetTheme() const { return mpTheme.get(); }
 };
 
 

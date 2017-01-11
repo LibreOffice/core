@@ -105,7 +105,6 @@ ImpSdrObjTextLinkUserData::ImpSdrObjTextLinkUserData():
 
 ImpSdrObjTextLinkUserData::~ImpSdrObjTextLinkUserData()
 {
-    delete pLink;
 }
 
 SdrObjUserData* ImpSdrObjTextLinkUserData::Clone(SdrObject* ) const
@@ -258,7 +257,7 @@ void SdrTextObj::ImpLinkAnmeldung()
     ImpSdrObjTextLinkUserData* pData=GetLinkUserData();
     sfx2::LinkManager* pLinkManager=pModel!=nullptr ? pModel->GetLinkManager() : nullptr;
     if (pLinkManager!=nullptr && pData!=nullptr && pData->pLink==nullptr) { // don't register twice
-        pData->pLink = new ImpSdrObjTextLink(this);
+        pData->pLink.reset( new ImpSdrObjTextLink(this) );
         pLinkManager->InsertFileLink(*pData->pLink,OBJECT_CLIENT_FILE,pData->aFileName,
                                      !pData->aFilterName.isEmpty() ?
                                       &pData->aFilterName : nullptr);
@@ -271,7 +270,7 @@ void SdrTextObj::ImpLinkAbmeldung()
     sfx2::LinkManager* pLinkManager=pModel!=nullptr ? pModel->GetLinkManager() : nullptr;
     if (pLinkManager!=nullptr && pData!=nullptr && pData->pLink!=nullptr) { // don't register twice
         // when doing Remove, *pLink is deleted implicitly
-        pLinkManager->Remove( pData->pLink );
+        pLinkManager->Remove( pData->pLink.get() );
         pData->pLink=nullptr;
     }
 }
