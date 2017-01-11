@@ -1097,7 +1097,6 @@ TcgSttbfCore::TcgSttbfCore() : fExtend( 0 )
 
 TcgSttbfCore::~TcgSttbfCore()
 {
-        delete[] dataItems;
 }
 
 bool TcgSttbfCore::Read( SvStream& rS )
@@ -1109,7 +1108,7 @@ bool TcgSttbfCore::Read( SvStream& rS )
     {
         if (cData > rS.remainingSize() / 4) //definitely an invalid record
             return false;
-        dataItems = new SBBItem[ cData ];
+        dataItems.reset( new SBBItem[ cData ] );
         for ( sal_Int32 index = 0; index < cData; ++index )
         {
             rS.ReadUInt16( dataItems[ index ].cchData );
@@ -1145,7 +1144,6 @@ MacroNames::MacroNames() :
 
 MacroNames::~MacroNames()
 {
-    delete[] rgNames;
 }
 
 bool MacroNames::Read( SvStream &rS)
@@ -1160,7 +1158,7 @@ bool MacroNames::Read( SvStream &rS)
         size_t nMaxAvailableRecords = rS.remainingSize()/sizeof(sal_uInt16);
         if (iMac > nMaxAvailableRecords)
             return false;
-        rgNames = new MacroName[ iMac ];
+        rgNames.reset( new MacroName[ iMac ] );
         for ( sal_Int32 index = 0; index < iMac; ++index )
         {
             if ( !rgNames[ index ].Read( rS ) )

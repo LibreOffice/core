@@ -1123,14 +1123,12 @@ WW8PLCFx_PCD::WW8PLCFx_PCD(const WW8Fib& rFib, WW8PLCFpcd* pPLCFpcd,
     : WW8PLCFx(rFib, false), nClipStart(-1)
 {
     // construct own iterator
-    pPcdI = new WW8PLCFpcd_Iter(*pPLCFpcd, nStartCp);
+    pPcdI.reset( new WW8PLCFpcd_Iter(*pPLCFpcd, nStartCp) );
     bVer67= bVer67P;
 }
 
 WW8PLCFx_PCD::~WW8PLCFx_PCD()
 {
-    // pPcd-Dtor which in called from WW8ScannerBase
-    delete pPcdI;
 }
 
 sal_uInt32 WW8PLCFx_PCD::GetIMax() const
@@ -3098,8 +3096,8 @@ WW8PLCFx_Cp_FKP::WW8PLCFx_Cp_FKP( SvStream* pSt, SvStream* pTableSt,
 {
     ResetAttrStartEnd();
 
-    pPcd = rSBase.m_pPiecePLCF ? new WW8PLCFx_PCD(GetFIB(),
-        rBase.m_pPiecePLCF, 0, IsSevenMinus(GetFIBVersion())) : nullptr;
+    if (rSBase.m_pPiecePLCF)
+        pPcd.reset( new WW8PLCFx_PCD(GetFIB(), rBase.m_pPiecePLCF, 0, IsSevenMinus(GetFIBVersion())) );
 
     /*
     Make a copy of the piece attributes for so that the calls to HasSprm on a
@@ -3110,7 +3108,7 @@ WW8PLCFx_Cp_FKP::WW8PLCFx_Cp_FKP( SvStream* pSt, SvStream* pTableSt,
     if (pPcd)
     {
         pPCDAttrs = rSBase.m_pPLCFx_PCDAttrs ? new WW8PLCFx_PCDAttrs(
-            *rSBase.m_pWw8Fib, pPcd, &rSBase) : nullptr;
+            *rSBase.m_pWw8Fib, pPcd.get(), &rSBase) : nullptr;
     }
 
     pPieceIter = rSBase.m_pPieceIter;
@@ -3118,7 +3116,6 @@ WW8PLCFx_Cp_FKP::WW8PLCFx_Cp_FKP( SvStream* pSt, SvStream* pTableSt,
 
 WW8PLCFx_Cp_FKP::~WW8PLCFx_Cp_FKP()
 {
-    delete pPcd;
 }
 
 void WW8PLCFx_Cp_FKP::ResetAttrStartEnd()
@@ -3680,12 +3677,11 @@ WW8PLCFx_FLD::WW8PLCFx_FLD( SvStream* pSt, const WW8Fib& rMyFib, short nType)
     }
 
     if( nLen )
-        pPLCF = new WW8PLCFspecial( pSt, nFc, nLen, 2 );
+        pPLCF.reset( new WW8PLCFspecial( pSt, nFc, nLen, 2 ) );
 }
 
 WW8PLCFx_FLD::~WW8PLCFx_FLD()
 {
-    delete pPLCF;
 }
 
 sal_uInt32 WW8PLCFx_FLD::GetIdx() const
