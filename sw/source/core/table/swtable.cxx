@@ -2293,19 +2293,19 @@ void SwTableBoxFormat::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew 
                                         pNumFormatr->GetType( nNewFormat ))
                                     {
                                         sal_uInt32 nTmpFormat = 0;
-                                        if( pNumFormatr->IsNumberFormat(
+                                        if( GetDoc()->IsNumberFormat(
                                                     aText, nTmpFormat, fVal ))
                                         {
                                             if( css::util::NumberFormat::NUMBER ==
                                                 pNumFormatr->GetType( nTmpFormat ))
                                                 aText += "%";
 
-                                            bIsNumFormat = pNumFormatr->IsNumberFormat(
+                                            bIsNumFormat = GetDoc()->IsNumberFormat(
                                                         aText, nTmpFormatIdx, fVal );
                                         }
                                     }
                                     else
-                                        bIsNumFormat = pNumFormatr->IsNumberFormat(
+                                        bIsNumFormat = GetDoc()->IsNumberFormat(
                                                         aText, nTmpFormatIdx, fVal );
 
                                     if( bIsNumFormat )
@@ -2393,7 +2393,7 @@ bool SwTableBox::HasNumContent( double& rNum, sal_uInt32& rFormatIndex,
             if( !rIsEmptyTextNd && css::util::NumberFormat::PERCENT == pNumFormatr->GetType( rFormatIndex ))
             {
                 sal_uInt32 nTmpFormat = 0;
-                if( pNumFormatr->IsNumberFormat( aText, nTmpFormat, rNum ) &&
+                if( GetFrameFormat()->GetDoc()->IsNumberFormat( aText, nTmpFormat, rNum ) &&
                     css::util::NumberFormat::NUMBER == pNumFormatr->GetType( nTmpFormat ))
                     aText += "%";
             }
@@ -2401,7 +2401,7 @@ bool SwTableBox::HasNumContent( double& rNum, sal_uInt32& rFormatIndex,
         else
             rFormatIndex = 0;
 
-        bRet = pNumFormatr->IsNumberFormat( aText, rFormatIndex, rNum );
+        bRet = GetFrameFormat()->GetDoc()->IsNumberFormat( aText, rFormatIndex, rNum );
     }
     else
         rIsEmptyTextNd = false;

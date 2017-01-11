@@ -40,6 +40,7 @@
 #include <com/sun/star/linguistic2/XHyphenatedWord.hpp>
 #include <sfx2/objsh.hxx>
 #include <svl/style.hxx>
+#include <svl/zformat.hxx>
 #include <editeng/numitem.hxx>
 #include <com/sun/star/linguistic2/XProofreadingIterator.hpp>
 #include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
@@ -1261,6 +1262,8 @@ public:
     SwTableBoxFormat* MakeTableBoxFormat();
     SwTableLineFormat* MakeTableLineFormat();
 
+    // helper function: cleanup before checking number value
+    bool IsNumberFormat( const OUString& rString, sal_uInt32& F_Index, double& fOutNumber);
     // Check if box has numerical value. Change format of box if required.
     void ChkBoxNumFormat( SwTableBox& rAktBox, bool bCallUpdate );
     void SetTableBoxFormulaAttrs( SwTableBox& rBox, const SfxItemSet& rSet );

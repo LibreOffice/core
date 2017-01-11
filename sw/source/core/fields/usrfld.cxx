@@ -259,9 +259,7 @@ void SwUserFieldType::SetContent( const OUString& rStr, sal_uInt32 nFormat )
         {
             double fValue;
 
-            SvNumberFormatter* pFormatter = GetDoc()->GetNumberFormatter();
-
-            if (pFormatter->IsNumberFormat(rStr, nFormat, fValue))
+            if (GetDoc()->IsNumberFormat(rStr, nFormat, fValue))
             {
                 SetValue(fValue);
                 aContent = DoubleToString(fValue, nFormat);
