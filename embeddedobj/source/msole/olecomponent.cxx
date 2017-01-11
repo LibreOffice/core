@@ -165,7 +165,7 @@ public:
 
 typedef ::std::vector< FORMATETC* > FormatEtcList;
 
-FORMATETC pFormatTemplates[FORMATS_NUM] = {
+FORMATETC const pFormatTemplates[FORMATS_NUM] = {
                     { CF_ENHMETAFILE, nullptr, 0, -1, TYMED_ENHMF },
                     { CF_METAFILEPICT, nullptr, 0, -1, TYMED_MFPICT },
                     { CF_BITMAP, nullptr, 0, -1, TYMED_GDI } };
