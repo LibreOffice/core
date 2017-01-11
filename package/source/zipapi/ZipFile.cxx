@@ -32,6 +32,7 @@
 #include <comphelper/processfactory.hxx>
 #include <rtl/digest.h>
 #include <osl/diagnose.h>
+#include <o3tl/make_unique.hxx>
 
 #include <algorithm>
 #include <vector>
@@ -518,9 +519,9 @@ uno::Reference< XInputStream > ZipFile::createUnbufferedStream(
     return new XUnbufferedStream ( m_xContext, aMutexHolder, rEntry, xStream, rData, nStreamMode, bIsEncrypted, aMediaType, bRecoveryMode );
 }
 
-ZipEnumeration* ZipFile::entries()
+std::unique_ptr<ZipEnumeration> ZipFile::entries()
 {
-    return new ZipEnumeration ( aEntries );
+    return o3tl::make_unique<ZipEnumeration>(aEntries);
 }
 
 uno::Reference< XInputStream > SAL_CALL ZipFile::getInputStream( ZipEntry& rEntry,

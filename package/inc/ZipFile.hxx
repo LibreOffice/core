@@ -33,6 +33,8 @@
 
 #include <mutexholder.hxx>
 
+#include <memory>
+
 namespace com { namespace sun { namespace star {
     namespace uno { class XComponentContext; }
     namespace ucb  { class XProgressHandler; }
@@ -159,7 +161,7 @@ public:
             const OUString& aMediaType,
             const rtl::Reference<SotMutexHolder>& aMutexHolder );
 
-    ZipEnumeration* entries();
+    std::unique_ptr<ZipEnumeration> entries();
 };
 
 #endif
