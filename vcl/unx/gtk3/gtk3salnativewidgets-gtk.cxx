@@ -2927,6 +2927,7 @@ void GtkData::initNWF()
     ImplSVData* pSVData = ImplGetSVData();
     pSVData->maNWFData.mbFlatMenu = true;
     pSVData->maNWFData.mbCheckBoxNeedsErase = true;
+    pSVData->maNWFData.mbDockingAreaAvoidTBFrames = true;
     pSVData->maNWFData.mbCanDrawWidgetAnySize = true;
     pSVData->maNWFData.mbDDListBoxNoTextArea = true;
     pSVData->maNWFData.mbNoFocusRects = true;
