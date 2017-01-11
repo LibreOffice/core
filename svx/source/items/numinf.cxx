@@ -91,7 +91,7 @@ SvxNumberInfoItem::SvxNumberInfoItem( const SvxNumberInfoItem& rItem ) :
 {
     if ( rItem.nDelCount > 0 )
     {
-        pDelFormatArr = new sal_uInt32[ rItem.nDelCount ];
+        pDelFormatArr.reset( new sal_uInt32[ rItem.nDelCount ] );
 
         for ( sal_uInt32 i = 0; i < rItem.nDelCount; ++i )
             pDelFormatArr[i] = rItem.pDelFormatArr[i];
@@ -101,7 +101,6 @@ SvxNumberInfoItem::SvxNumberInfoItem( const SvxNumberInfoItem& rItem ) :
 
 SvxNumberInfoItem::~SvxNumberInfoItem()
 {
-    delete [] pDelFormatArr;
 }
 
 
@@ -174,17 +173,13 @@ SvStream& SvxNumberInfoItem::Store( SvStream &rStream, sal_uInt16 /*nItemVersion
 void SvxNumberInfoItem::SetDelFormatArray( const sal_uInt32* pData,
                                            const sal_uInt32 nCount )
 {
-    if ( pDelFormatArr )
-    {
-        delete []pDelFormatArr;
-        pDelFormatArr = nullptr;
-    }
+    pDelFormatArr.reset();
 
     nDelCount = nCount;
 
     if ( nCount > 0 )
     {
-        pDelFormatArr = new sal_uInt32[ nCount ];
+        pDelFormatArr.reset( new sal_uInt32[ nCount ] );
 
         if ( pData != nullptr )
         {

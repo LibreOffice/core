@@ -125,7 +125,7 @@ class SdrEdgeObjGeoData : public SdrTextObjGeoData
 public:
     SdrObjConnection            aCon1;  // Verbindungszustand des Linienanfangs
     SdrObjConnection            aCon2;  // Verbindungszustand des Linienendes
-    XPolygon*                   pEdgeTrack;
+    std::unique_ptr<XPolygon>   pEdgeTrack;
     bool                        bEdgeTrackDirty;// sal_True=Verbindungsverlauf muss neu berechnet werden.
     bool                        bEdgeTrackUserDefined;
     SdrEdgeInfoRec              aEdgeInfo;

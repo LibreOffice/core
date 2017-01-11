@@ -61,7 +61,7 @@ public:
     const OUString&         GetValueString() const { return aStringVal; }
     double                  GetValueDouble() const  { return nDoubleVal; }
 
-    const sal_uInt32*       GetDelArray() const { return pDelFormatArr; }
+    const sal_uInt32*       GetDelArray() const { return pDelFormatArr.get(); }
     void                    SetDelFormatArray( const sal_uInt32* pData,
                                                const sal_uInt32  nCount );
 
@@ -74,7 +74,8 @@ private:
     OUString            aStringVal;
     double              nDoubleVal;
 
-    sal_uInt32*         pDelFormatArr;
+    std::unique_ptr<sal_uInt32[]>
+                        pDelFormatArr;
     sal_uInt32          nDelCount;
 };
 

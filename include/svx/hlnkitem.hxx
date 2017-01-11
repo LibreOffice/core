@@ -25,6 +25,7 @@
 #include <svl/macitem.hxx>
 #include <svx/svxdllapi.h>
 #include <o3tl/typed_flags_set.hxx>
+#include <memory>
 
 enum class HyperDialogEvent {
     NONE                = 0x0000,
@@ -52,7 +53,7 @@ class SVX_DLLPUBLIC SvxHyperlinkItem : public SfxPoolItem
     SvxLinkInsertMode eType;
 
     OUString sIntName;
-    SvxMacroTableDtor*  pMacroTable;
+    std::unique_ptr<SvxMacroTableDtor>  pMacroTable;
 
     HyperDialogEvent nMacroEvents;
 
@@ -67,7 +68,7 @@ public:
                                     SvxLinkInsertMode eTyp,
                                     HyperDialogEvent nEvents = HyperDialogEvent::NONE,
                                     SvxMacroTableDtor *pMacroTbl =nullptr );
-    virtual ~SvxHyperlinkItem () override { delete pMacroTable; }
+    virtual ~SvxHyperlinkItem () override {}
 
     inline SvxHyperlinkItem& operator=( const SvxHyperlinkItem &rItem );
 
@@ -94,7 +95,7 @@ public:
     void SetMacro( HyperDialogEvent nEvent, const SvxMacro& rMacro );
 
     void SetMacroTable( const SvxMacroTableDtor& rTbl );
-    const SvxMacroTableDtor* GetMacroTable() const    { return pMacroTable; }
+    const SvxMacroTableDtor* GetMacroTable() const { return pMacroTable.get(); }
 
     void SetMacroEvents (const HyperDialogEvent nEvents) { nMacroEvents = nEvents; }
     HyperDialogEvent GetMacroEvents() const { return nMacroEvents; }

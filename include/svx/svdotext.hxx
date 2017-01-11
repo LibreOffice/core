@@ -105,7 +105,8 @@ class ImpSdrObjTextLinkUserData : public SdrObjUserData
     OUString                    aFileName;   // Name des referenzierten Dokuments
     OUString                    aFilterName; // ggf. ein Filter
     DateTime                    aFileDate0;  // Unnoetiges neuladen vermeiden
-    ImpSdrObjTextLink*          pLink;
+    std::unique_ptr<ImpSdrObjTextLink>
+                                pLink;
     rtl_TextEncoding            eCharSet;
 
 public:

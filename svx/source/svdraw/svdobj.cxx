@@ -180,7 +180,6 @@ SdrObjGeoData::SdrObjGeoData():
 
 SdrObjGeoData::~SdrObjGeoData()
 {
-    delete pGPL;
 }
 
 SdrObjTransformInfoRec::SdrObjTransformInfoRec() :
@@ -1877,13 +1876,10 @@ void SdrObject::SaveGeoData(SdrObjGeoData& rGeo) const
         if (rGeo.pGPL!=nullptr) {
             *rGeo.pGPL=*pPlusData->pGluePoints;
         } else {
-            rGeo.pGPL=new SdrGluePointList(*pPlusData->pGluePoints);
+            rGeo.pGPL.reset( new SdrGluePointList(*pPlusData->pGluePoints) );
         }
     } else {
-        if (rGeo.pGPL!=nullptr) {
-            delete rGeo.pGPL;
-            rGeo.pGPL=nullptr;
-        }
+        rGeo.pGPL.reset();
     }
 }
 
