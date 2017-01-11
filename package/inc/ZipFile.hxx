@@ -61,7 +61,6 @@ class ZipFile
     ByteGrabber     aGrabber;
     ZipUtils::Inflater aInflater;
     css::uno::Reference < css::io::XInputStream > xStream;
-    css::uno::Reference < css::io::XSeekable > xSeek;
     const css::uno::Reference < css::uno::XComponentContext > m_xContext;
 
     bool bRecoveryMode;

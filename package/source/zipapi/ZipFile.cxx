@@ -72,7 +72,6 @@ ZipFile::ZipFile( uno::Reference < XInputStream > &xInput, const uno::Reference 
 : aGrabber(xInput)
 , aInflater( true )
 , xStream(xInput)
-, xSeek(xInput, UNO_QUERY)
 , m_xContext ( rxContext )
 , bRecoveryMode( false )
 {
@@ -90,7 +89,6 @@ ZipFile::ZipFile( uno::Reference < XInputStream > &xInput, const uno::Reference 
 : aGrabber(xInput)
 , aInflater( true )
 , xStream(xInput)
-, xSeek(xInput, UNO_QUERY)
 , m_xContext ( rxContext )
 , bRecoveryMode( bForceRecovery )
 {
@@ -118,7 +116,6 @@ void ZipFile::setInputStream ( const uno::Reference < XInputStream >& xNewStream
     ::osl::MutexGuard aGuard( m_aMutex );
 
     xStream = xNewStream;
-    xSeek.set( xStream, UNO_QUERY );
     aGrabber.setInputStream ( xStream );
 }
 
@@ -489,6 +486,7 @@ bool ZipFile::hasValidPassword ( ZipEntry & rEntry, const ::rtl::Reference< Encr
     bool bRet = false;
     if ( rData.is() && rData->m_aKey.getLength() )
     {
+        css::uno::Reference < css::io::XSeekable > xSeek(xStream, UNO_QUERY_THROW);
         xSeek->seek( rEntry.nOffset );
         sal_Int64 nSize = rEntry.nMethod == DEFLATED ? rEntry.nCompressedSize : rEntry.nSize;
 
