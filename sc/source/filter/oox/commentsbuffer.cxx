@@ -133,16 +133,16 @@ void Comment::finalizeImport()
     // BIFF12 stores cell range instead of cell address, use first cell of this range
     OSL_ENSURE( maModel.maRange.aStart == maModel.maRange.aEnd,
         "Comment::finalizeImport - comment anchor should be a single cell" );
-    CellAddress aNotePos( maModel.maRange.aStart.Tab(), maModel.maRange.aStart.Col(), maModel.maRange.aStart.Row() );
-    if( getAddressConverter().checkCellAddress( aNotePos, true ) && maModel.mxText.get() ) try
+    if( getAddressConverter().checkCellAddress( maModel.maRange.aStart, true ) && maModel.mxText.get() ) try
     {
+        CellAddress aNotePos( maModel.maRange.aStart.Tab(), maModel.maRange.aStart.Col(), maModel.maRange.aStart.Row() );
         Reference< XSheetAnnotationsSupplier > xAnnosSupp( getSheet(), UNO_QUERY_THROW );
         Reference< XSheetAnnotations > xAnnos( xAnnosSupp->getAnnotations(), UNO_SET_THROW );
         // non-empty string required by note implementation (real text will be added below)
         xAnnos->insertNew( aNotePos, OUString( ' ' ) );
 
         // receive created note from cell (insertNew does not return the note)
-        Reference< XSheetAnnotationAnchor > xAnnoAnchor( getCell( aNotePos ), UNO_QUERY_THROW );
+        Reference< XSheetAnnotationAnchor > xAnnoAnchor( getCell( maModel.maRange.aStart ), UNO_QUERY_THROW );
         Reference< XSheetAnnotation > xAnno( xAnnoAnchor->getAnnotation(), UNO_SET_THROW );
         Reference< XSheetAnnotationShapeSupplier > xAnnoShapeSupp( xAnno, UNO_QUERY_THROW );
         Reference< XShape > xAnnoShape( xAnnoShapeSupp->getAnnotationShape(), UNO_SET_THROW );

@@ -262,14 +262,6 @@ bool AddressConverter::checkTab( sal_Int16 nSheet, bool bTrackOverflow )
     return bValid;
 }
 
-bool AddressConverter::checkCellAddress( const CellAddress& rAddress, bool bTrackOverflow )
-{
-    return
-        checkTab( rAddress.Sheet, bTrackOverflow ) &&
-        checkCol( rAddress.Column, bTrackOverflow ) &&
-        checkRow( rAddress.Row, bTrackOverflow );
-}
-
 bool AddressConverter::checkCellAddress( const ScAddress& rAddress, bool bTrackOverflow )
 {
     return
