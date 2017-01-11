@@ -187,24 +187,7 @@ void ScInterpreter::ScGCD()
                             SetError(FormulaError::IllegalArgument);
                         else
                         {
-                            for ( SCSIZE j = 0; j < nC; j++ )
-                            {
-                                for (SCSIZE k = 0; k < nR; ++k)
-                                {
-                                    if (!pMat->IsValue(j,k))
-                                    {
-                                        PushIllegalArgument();
-                                        return;
-                                    }
-                                    fx = ::rtl::math::approxFloor( pMat->GetDouble(j,k));
-                                    if (fx < 0.0)
-                                    {
-                                        PushIllegalArgument();
-                                        return;
-                                    }
-                                    fy = ScGetGCD(fx, fy);
-                                }
-                            }
+                          fy=pMat->GetGcd();
                         }
                     }
                 }
