@@ -73,7 +73,7 @@ ScRangeData::ScRangeData( ScDocument* pDok,
         // Copy ctor default-constructs pCode if it was NULL, so it's initialized here, too,
         // to ensure same behavior if unnecessary copying is left out.
 
-        pCode = new ScTokenArray();
+        pCode.reset( new ScTokenArray );
         pCode->SetFromRangeName(true);
     }
 }
@@ -144,7 +144,6 @@ ScRangeData::ScRangeData(const ScRangeData& rScRangeData, ScDocument* pDocument,
 
 ScRangeData::~ScRangeData()
 {
-    delete pCode;
 }
 
 void ScRangeData::CompileRangeData( const OUString& rSymbol, bool bSetError )
@@ -162,8 +161,7 @@ void ScRangeData::CompileRangeData( const OUString& rSymbol, bool bSetError )
     if (bSetError)
         aComp.SetExtendedErrorDetection( ScCompiler::EXTENDED_ERROR_DETECTION_NAME_NO_BREAK);
     ScTokenArray* pNewCode = aComp.CompileString( rSymbol );
-    std::unique_ptr<ScTokenArray> pOldCode( pCode);     // old pCode will be deleted
-    pCode = pNewCode;
+    pCode.reset(pNewCode);
     pCode->SetFromRangeName(true);
     if( pCode->GetCodeError() == FormulaError::NONE )
     {
@@ -626,8 +624,7 @@ void ScRangeData::ValidateTabRefs()
 
 void ScRangeData::SetCode( ScTokenArray& rArr )
 {
-    std::unique_ptr<ScTokenArray> pOldCode( pCode); // old pCode will be deleted
-    pCode = new ScTokenArray( rArr );
+    pCode.reset(new ScTokenArray( rArr ));
     pCode->SetFromRangeName(true);
     InitCode();
 }
