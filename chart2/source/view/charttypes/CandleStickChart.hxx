@@ -47,7 +47,7 @@ public:
     virtual LegendSymbolStyle getLegendSymbolStyle() override;
 
 private: //member
-    BarPositionHelper*                   m_pMainPosHelper;
+    std::unique_ptr<BarPositionHelper>           m_pMainPosHelper;
 };
 } //namespace chart
 #endif

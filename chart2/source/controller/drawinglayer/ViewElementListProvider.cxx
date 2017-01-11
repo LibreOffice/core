@@ -52,9 +52,14 @@ ViewElementListProvider::ViewElementListProvider( DrawModelWrapper* pDrawModelWr
 {
 }
 
+ViewElementListProvider::ViewElementListProvider( ViewElementListProvider&& rOther )
+{
+    m_pDrawModelWrapper = rOther.m_pDrawModelWrapper;
+    m_pFontList = std::move(rOther.m_pFontList);
+}
+
 ViewElementListProvider::~ViewElementListProvider()
 {
-    delete m_pFontList;
 }
 
 XColorListRef   ViewElementListProvider::GetColorTable() const
@@ -191,10 +196,10 @@ FontList* ViewElementListProvider::getFontList() const
     {
         OutputDevice* pRefDev    = m_pDrawModelWrapper ? m_pDrawModelWrapper->getReferenceDevice() : nullptr;
         OutputDevice* pDefaultOut = Application::GetDefaultDevice();
-        m_pFontList = new FontList( pRefDev ? pRefDev    : pDefaultOut
-                                , pRefDev ? pDefaultOut : nullptr);
+        m_pFontList.reset( new FontList( pRefDev ? pRefDev    : pDefaultOut
+                                       , pRefDev ? pDefaultOut : nullptr) );
     }
-    return m_pFontList;
+    return m_pFontList.get();
 }
 } //namespace chart
 

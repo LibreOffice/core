@@ -65,7 +65,8 @@ private: //methods
                 , css::drawing::PolyPolygonShape3D &aPoly );
 
 private: //member
-    PlottingPositionHelper*             m_pMainPosHelper;
+    std::unique_ptr<PlottingPositionHelper>
+                                        m_pMainPosHelper;
 
     bool                                m_bArea;//false -> line or symbol only
     bool                                m_bLine;

@@ -70,8 +70,8 @@ AreaChart::AreaChart( const uno::Reference<XChartType>& xChartTypeModel
     m_pMainPosHelper->AllowShiftXAxisPos(true);
     m_pMainPosHelper->AllowShiftZAxisPos(true);
 
-    PlotterBase::m_pPosHelper = m_pMainPosHelper;
-    VSeriesPlotter::m_pMainPosHelper = m_pMainPosHelper;
+    PlotterBase::m_pPosHelper = m_pMainPosHelper.get();
+    VSeriesPlotter::m_pMainPosHelper = m_pMainPosHelper.get();
 
     try
     {
@@ -92,7 +92,6 @@ AreaChart::AreaChart( const uno::Reference<XChartType>& xChartTypeModel
 
 AreaChart::~AreaChart()
 {
-    delete m_pMainPosHelper;
 }
 
 double AreaChart::getMaximumX()
@@ -555,7 +554,7 @@ void AreaChart::impl_createSeriesShapes()
                 sal_Int32 nAttachedAxisIndex = (*aSeriesIter)->getAttachedAxisIndex();
                 PlottingPositionHelper* pPosHelper = &(this->getPlottingPositionHelper( nAttachedAxisIndex ));
                 if(!pPosHelper)
-                    pPosHelper = m_pMainPosHelper;
+                    pPosHelper = m_pMainPosHelper.get();
                 PlotterBase::m_pPosHelper = pPosHelper;
 
                 createRegressionCurvesShapes( **aSeriesIter, m_xErrorBarTarget, m_xRegressionCurveEquationTarget,
@@ -702,7 +701,7 @@ void AreaChart::createShapes()
 
                     PlottingPositionHelper* pPosHelper = &(this->getPlottingPositionHelper( nAttachedAxisIndex ));
                     if(!pPosHelper)
-                        pPosHelper = m_pMainPosHelper;
+                        pPosHelper = m_pMainPosHelper.get();
                     PlotterBase::m_pPosHelper = pPosHelper;
 
                     double fAdd = pSeries->getYValue( nIndex );
@@ -740,7 +739,7 @@ void AreaChart::createShapes()
                 sal_Int32 nAttachedAxisIndex = (*aSeriesIter)->getAttachedAxisIndex();
                 PlottingPositionHelper* pPosHelper = &(this->getPlottingPositionHelper( nAttachedAxisIndex ));
                 if(!pPosHelper)
-                    pPosHelper = m_pMainPosHelper;
+                    pPosHelper = m_pMainPosHelper.get();
                 PlotterBase::m_pPosHelper = pPosHelper;
 
                 if(m_nDimension==3)
