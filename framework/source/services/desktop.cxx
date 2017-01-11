@@ -1121,11 +1121,11 @@ void SAL_CALL Desktop::disposing()
     m_xStarBasicQuitGuard.clear();
     m_xSWThreadManager.clear();
 
-    // we need a copy because the notifyTermination might call the removeEventListener method
+    // we need a copy because the disposing might call the removeEventListener method
     std::vector< css::uno::Reference<css::frame::XTerminateListener> > xComponentDllListeners = m_xComponentDllListeners;
     for (auto& xListener: xComponentDllListeners)
     {
-        xListener->notifyTermination(aEvent);
+        xListener->disposing(aEvent);
     }
     xComponentDllListeners.clear();
     m_xComponentDllListeners.clear();
