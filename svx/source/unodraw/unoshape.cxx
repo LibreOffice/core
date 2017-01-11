@@ -1437,11 +1437,8 @@ bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rName,
                 return false;
 
             const XBitmapEntry* pEntry = pBitmapList->GetBitmap(nPos);
-            XFillBitmapItem aBmpItem;
-            aBmpItem.SetWhich( XATTR_FILLBITMAP );
-            aBmpItem.SetName( rName );
-            aBmpItem.SetGraphicObject(pEntry->GetGraphicObject());
-            rSet.Put( aBmpItem );
+            XFillBitmapItem aBmpItem(rName, pEntry->GetGraphicObject());
+            rSet.Put(aBmpItem);
             break;
         }
         case XATTR_FILLGRADIENT:
@@ -1456,10 +1453,7 @@ bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rName,
                 return false;
 
             const XGradientEntry* pEntry = pGradientList->GetGradient(nPos);
-            XFillGradientItem aGrdItem;
-            aGrdItem.SetWhich( XATTR_FILLGRADIENT );
-            aGrdItem.SetName( rName );
-            aGrdItem.SetGradientValue( pEntry->GetGradient() );
+            XFillGradientItem aGrdItem(rName, pEntry->GetGradient());
             rSet.Put( aGrdItem );
             break;
         }
@@ -1475,10 +1469,7 @@ bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rName,
                 return false;
 
             const XHatchEntry* pEntry = pHatchList->GetHatch( nPos );
-            XFillHatchItem aHatchItem;
-            aHatchItem.SetWhich( XATTR_FILLHATCH );
-            aHatchItem.SetName( rName );
-            aHatchItem.SetHatchValue( pEntry->GetHatch() );
+            XFillHatchItem aHatchItem(rName, pEntry->GetHatch());
             rSet.Put( aHatchItem );
             break;
         }
@@ -1497,18 +1488,12 @@ bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rName,
             const XLineEndEntry* pEntry = pLineEndList->GetLineEnd(nPos);
             if( XATTR_LINEEND == nWID )
             {
-                XLineEndItem aLEItem;
-                aLEItem.SetWhich( XATTR_LINEEND );
-                aLEItem.SetName( rName );
-                aLEItem.SetLineEndValue( pEntry->GetLineEnd() );
+                XLineEndItem aLEItem(rName, pEntry->GetLineEnd());
                 rSet.Put( aLEItem );
             }
             else
             {
-                XLineStartItem aLSItem;
-                aLSItem.SetWhich( XATTR_LINESTART );
-                aLSItem.SetName( rName );
-                aLSItem.SetLineStartValue( pEntry->GetLineEnd() );
+                XLineStartItem aLSItem(rName, pEntry->GetLineEnd());
                 rSet.Put( aLSItem );
             }
 
@@ -1526,10 +1511,7 @@ bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rName,
                 return false;
 
             const XDashEntry* pEntry = pDashList->GetDash(nPos);
-            XLineDashItem aDashItem;
-            aDashItem.SetWhich( XATTR_LINEDASH );
-            aDashItem.SetName( rName );
-            aDashItem.SetDashValue( pEntry->GetDash() );
+            XLineDashItem aDashItem(rName, pEntry->GetDash());
             rSet.Put( aDashItem );
             break;
         }
