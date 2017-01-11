@@ -337,7 +337,7 @@ private:
     /** Generates the final URL for the passed hyperlink. */
     OUString            getHyperlinkUrl( const HyperlinkModel& rHyperlink ) const;
     /** Inserts a hyperlinks into the specified cell. */
-    void insertHyperlink( const CellAddress& rAddress, const OUString& rUrl );
+    void insertHyperlink( const ScAddress& rAddress, const OUString& rUrl );
 
     /** Inserts all imported data validations into their cell ranges. */
     void                finalizeValidationRanges() const;
@@ -961,8 +961,8 @@ void WorksheetGlobals::finalizeHyperlinkRanges()
         OUString aUrl = getHyperlinkUrl( *aIt );
         // try to insert URL into each cell of the range
         if( !aUrl.isEmpty() )
-            for( CellAddress aAddress( getSheetIndex(), aIt->maRange.aStart.Col(), aIt->maRange.aStart.Row() ); aAddress.Row <= aIt->maRange.aEnd.Row(); ++aAddress.Row )
-                for( aAddress.Column = aIt->maRange.aStart.Col(); aAddress.Column <= aIt->maRange.aEnd.Col(); ++aAddress.Column )
+            for( ScAddress aAddress( aIt->maRange.aStart.Col(), aIt->maRange.aStart.Row(), getSheetIndex() ); aAddress.Row() <= aIt->maRange.aEnd.Row(); aAddress.IncRow() )
+                for( aAddress.SetCol(aIt->maRange.aStart.Col()); aAddress.Col() <= aIt->maRange.aEnd.Col(); aAddress.IncCol() )
                     insertHyperlink( aAddress, aUrl );
     }
 }
@@ -1004,11 +1004,10 @@ OUString WorksheetGlobals::getHyperlinkUrl( const HyperlinkModel& rHyperlink ) c
     return aUrl;
 }
 
-void WorksheetGlobals::insertHyperlink( const CellAddress& rAddress, const OUString& rUrl )
+void WorksheetGlobals::insertHyperlink( const ScAddress& rAddress, const OUString& rUrl )
 {
     ScDocumentImport& rDoc = getDocImport();
-    ScAddress aPos(rAddress.Column, rAddress.Row, rAddress.Sheet);
-    ScRefCellValue aCell(rDoc.getDoc(), aPos);
+    ScRefCellValue aCell(rDoc.getDoc(), rAddress);
 
     if (aCell.meType == CELLTYPE_STRING || aCell.meType == CELLTYPE_EDIT)
     {
@@ -1020,7 +1019,7 @@ void WorksheetGlobals::insertHyperlink( const CellAddress& rAddress, const OUStr
         SvxFieldItem aURLItem(aURLField, EE_FEATURE_FIELD);
         rEE.QuickInsertField(aURLItem, ESelection());
 
-        rDoc.setEditCell(aPos, rEE.CreateTextObject());
+        rDoc.setEditCell(rAddress, rEE.CreateTextObject());
     }
     else
     {
@@ -1035,7 +1034,7 @@ void WorksheetGlobals::insertHyperlink( const CellAddress& rAddress, const OUStr
         // attribute ) for better interoperability.
 
         SfxStringItem aItem(ATTR_HYPERLINK, rUrl);
-        rDoc.getDoc().ApplyAttr(rAddress.Column, rAddress.Row, rAddress.Sheet, aItem);
+        rDoc.getDoc().ApplyAttr(rAddress.Col(), rAddress.Row(), rAddress.Tab(), aItem);
     }
 }
 
