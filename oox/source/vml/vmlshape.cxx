@@ -1081,8 +1081,16 @@ Reference< XShape > BezierShape::implConvertAndInsert( const Reference< XShapes 
     }
 
     // Hacky way of ensuring the shape is correctly sized/positioned
-    xShape->setSize( awt::Size( rShapeRect.Width, rShapeRect.Height ) );
-    xShape->setPosition( awt::Point( rShapeRect.X, rShapeRect.Y ) );
+    try
+    {
+        // E.g. SwXFrame::setPosition() unconditionally throws
+        xShape->setSize( awt::Size( rShapeRect.Width, rShapeRect.Height ) );
+        xShape->setPosition( awt::Point( rShapeRect.X, rShapeRect.Y ) );
+    }
+    catch (const ::css::uno::Exception&)
+    {
+        // TODO: try some other way to ensure size/position
+    }
     return xShape;
 }
 
