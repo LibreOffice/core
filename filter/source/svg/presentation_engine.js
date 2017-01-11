@@ -1886,6 +1886,20 @@ function Rectangle( aSVGRectElem )
     this.bottom = y + height;
 }
 
+/*
+ * Returns key corresponding to a value in object, null otherwise.
+ *
+ * @param Object
+ * @param value
+ */
+function getKeyByValue(aObj, value) {
+  for(var key in aObj) {
+    if(aObj[key] == value)
+      return key;
+  }
+  return null;
+}
+
 function log( message )
 {
     if( typeof console == 'object' )
@@ -5164,11 +5178,6 @@ aTransitionTypeInMap = {
     'irisWipe'          : IRISWIPE_TRANSITION
 };
 
-aTransitionTypeOutMap = [ '', 'barWipe', 'boxWipe', 'fourBoxWipe', 'ellipseWipe',
-                          'clockWipe', 'pinWheelWipe', 'pushWipe', 'slideWipe',
-                          'fade', 'randomBarWipe', 'checkerBoardWipe', 'dissolve' , 'irisWipe'];
-
-
 /*
  * All Transition subtypes should be in sync with aTransitionSubtypeInMap:
  * Comments '//' followed by integers represent the transition values in their 
@@ -5238,16 +5247,6 @@ aTransitionSubtypeInMap = {
     'rectangle'         : RECTANGLE_TRANS_SUBTYPE,
     'diamond'           : DIAMOND_TRANS_SUBTYPE
 };
-
-aTransitionSubtypeOutMap = [ 'default', 'leftToRight', 'topToBottom', 'cornersIn',
-                             'cornersOut', 'vertical', 'horizontal', 'down', 'circle',
-                             'clockwiseTwelve', 'clockwiseThree', 'clockwiseSix',
-                             'clockwiseNine', 'twoBladeVertical', 'twoBladeHorizontal',
-                             'fourBlade', 'fromLeft', 'fromTop', 'fromRight',
-                             'fromBottom', 'crossfade', 'fadeToColor', 'fadeFromColor',
-                             'fadeOverColor', 'threeBlade', 'eightBlade', 'oneBlade',
-                             'across', 'rectangle', 'diamond' ];
-
 
 // Transition Modes
 TRANSITION_MODE_IN  = 1;
@@ -8147,10 +8146,10 @@ AnimationTransitionFilterNode.prototype.info = function( bVerbose )
     if( bVerbose )
     {
         // transition type
-        sInfo += ';  type: ' + aTransitionTypeOutMap[ String( this.getTransitionType() ) ];
+        sInfo += ';  type: ' + getKeyByValue(aTransitionTypeInMap, this.getTransitionType());
 
         // transition subtype
-        sInfo += ';  subtype: ' + aTransitionSubtypeOutMap[ this.getTransitionSubType() ];
+        sInfo += ';  subtype: ' + getKeyByValue(aTransitionSubtypeInMap, this.getTransitionSubType());
 
         // transition direction
         if( this.getReverseDirection() )
@@ -10961,10 +10960,10 @@ SlideTransition.prototype.info = function()
 
     var sInfo ='slide transition <' + this.sSlideId + '>: ';
     // transition type
-    sInfo += ';  type: ' + aTransitionTypeOutMap[ String( this.getTransitionType() ) ];
+    sInfo += ';  type: ' + getKeyByValue(aTransitionTypeInMap, this.getTransitionType());
 
     // transition subtype
-    sInfo += ';  subtype: ' + aTransitionSubtypeOutMap[ this.getTransitionSubType() ];
+    sInfo += ';  subtype: ' + getKeyByValue(aTransitionSubtypeInMap, this.getTransitionSubType());
 
     // transition direction
     if( !this.isDirectionForward() )
@@ -14891,6 +14890,7 @@ ElapsedTime.prototype.getElapsedTimeImpl = function()
     var nCurTime = this.getCurrentTime();
     return ( nCurTime - this.nStartTime );
 };
+
 
 
 /*****
