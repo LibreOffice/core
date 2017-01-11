@@ -122,7 +122,7 @@ private: // members
     std::shared_ptr< ObjectHierarchy >                              m_spObjectHierarchy;
     AccessibleUniqueId                                              m_aCurrentSelectionOID;
     SdrView*                                                        m_pSdrView;
-    ::accessibility::IAccessibleViewForwarder*                      m_pViewForwarder;
+    std::unique_ptr<::accessibility::IAccessibleViewForwarder>      m_pViewForwarder;
 };
 
 } //namespace chart

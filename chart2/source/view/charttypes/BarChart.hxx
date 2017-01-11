@@ -62,7 +62,7 @@ private: //methods
     void adaptOverlapAndGapwidthForGroupBarsPerAxis();
 
 private: //member
-    BarPositionHelper*                   m_pMainPosHelper;
+    std::unique_ptr<BarPositionHelper>   m_pMainPosHelper;
     css::uno::Sequence< sal_Int32 >      m_aOverlapSequence;
     css::uno::Sequence< sal_Int32 >      m_aGapwidthSequence;
 };

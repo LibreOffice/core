@@ -44,8 +44,8 @@ BarChart::BarChart( const uno::Reference<XChartType>& xChartTypeModel
         : VSeriesPlotter( xChartTypeModel, nDimensionCount )
         , m_pMainPosHelper( new BarPositionHelper() )
 {
-    PlotterBase::m_pPosHelper = m_pMainPosHelper;
-    VSeriesPlotter::m_pMainPosHelper = m_pMainPosHelper;
+    PlotterBase::m_pPosHelper = m_pMainPosHelper.get();
+    VSeriesPlotter::m_pMainPosHelper = m_pMainPosHelper.get();
 
     try
     {
@@ -63,7 +63,6 @@ BarChart::BarChart( const uno::Reference<XChartType>& xChartTypeModel
 
 BarChart::~BarChart()
 {
-    delete m_pMainPosHelper;
 }
 
 PlottingPositionHelper& BarChart::getPlottingPositionHelper( sal_Int32 nAxisIndex ) const
@@ -494,14 +493,14 @@ void BarChart::createShapes()
             for( aXSlotIter = aZSlotIter->begin(); aXSlotIter != aXSlotEnd; ++aXSlotIter, fSlotX+=1.0 )
             {
                 sal_Int32 nAttachedAxisIndex = 0;
-                BarPositionHelper* pPosHelper = m_pMainPosHelper;
+                BarPositionHelper* pPosHelper = m_pMainPosHelper.get();
                 if( aXSlotIter != aXSlotEnd )
                 {
                     nAttachedAxisIndex = aXSlotIter->getAttachedAxisIndexForFirstSeries();
                     //2ND_AXIS_IN_BARS so far one can assume to have the same plotter for each z slot
                     pPosHelper = dynamic_cast<BarPositionHelper*>(&( this->getPlottingPositionHelper( nAttachedAxisIndex ) ) );
                     if(!pPosHelper)
-                        pPosHelper = m_pMainPosHelper;
+                        pPosHelper = m_pMainPosHelper.get();
                 }
                 PlotterBase::m_pPosHelper = pPosHelper;
 
@@ -870,14 +869,14 @@ void BarChart::createShapes()
             ::std::vector< VDataSeriesGroup >::iterator             aXSlotIter = aZSlotIter->begin();
             const ::std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = aZSlotIter->end();
 
-            BarPositionHelper* pPosHelper = m_pMainPosHelper;
+            BarPositionHelper* pPosHelper = m_pMainPosHelper.get();
             if( aXSlotIter != aXSlotEnd )
             {
                 sal_Int32 nAttachedAxisIndex = aXSlotIter->getAttachedAxisIndexForFirstSeries();
                 //2ND_AXIS_IN_BARS so far one can assume to have the same plotter for each z slot
                 pPosHelper = dynamic_cast<BarPositionHelper*>(&( this->getPlottingPositionHelper( nAttachedAxisIndex ) ) );
                 if(!pPosHelper)
-                    pPosHelper = m_pMainPosHelper;
+                    pPosHelper = m_pMainPosHelper.get();
             }
             PlotterBase::m_pPosHelper = pPosHelper;
 

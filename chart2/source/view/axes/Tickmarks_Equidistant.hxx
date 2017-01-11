@@ -123,7 +123,8 @@ private: //member
     double    m_fScaledVisibleMin;
     double    m_fScaledVisibleMax;
 
-    double*   m_pfCurrentValues;
+    std::unique_ptr<double[]>
+              m_pfCurrentValues;
     //major-tick positions that may lay outside the visible range but complete partly visible intervals at the borders
     double    m_fOuterMajorTickBorderMin;
     double    m_fOuterMajorTickBorderMax;

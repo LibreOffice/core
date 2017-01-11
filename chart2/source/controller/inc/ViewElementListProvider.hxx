@@ -33,6 +33,7 @@ class ViewElementListProvider final
 {
 public:
     ViewElementListProvider( DrawModelWrapper* pDrawModelWrapper );
+    ViewElementListProvider( ViewElementListProvider&& );
     ~ViewElementListProvider();
 
     XColorListRef     GetColorTable() const;
@@ -51,8 +52,8 @@ public:
     //SfxPrinter*   getPrinter();
 
 private:
-    DrawModelWrapper*   m_pDrawModelWrapper;
-    mutable FontList*   m_pFontList;
+    DrawModelWrapper*                  m_pDrawModelWrapper;
+    mutable std::unique_ptr<FontList>  m_pFontList;
 };
 
 } //namespace chart
