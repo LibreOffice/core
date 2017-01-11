@@ -11,6 +11,7 @@
 
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <filter/msfilter/mstoolbar.hxx>
+#include <memory>
 
 class Xst : public TBBase
 {
@@ -294,7 +295,7 @@ class TcgSttbfCore : public TBBase
     sal_uInt16 fExtend;
     sal_uInt16 cData;
     sal_uInt16 cbExtra;
-    SBBItem* dataItems;
+    std::unique_ptr<SBBItem[]> dataItems;
     TcgSttbfCore(const TcgSttbfCore&) = delete;
     TcgSttbfCore& operator = ( const TcgSttbfCore&) = delete;
 
@@ -358,7 +359,7 @@ public:
 class MacroNames : public Tcg255SubStruct
 {
     sal_uInt16 iMac; //An unsigned integer that specifies the number of MacroName structures in rgNames.
-    MacroName* rgNames;
+    std::unique_ptr<MacroName[]> rgNames;
 
     MacroNames(const MacroNames&) = delete;
     MacroNames& operator = ( const MacroNames&) = delete;

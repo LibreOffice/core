@@ -108,13 +108,12 @@ struct HwpReaderPrivate
 HwpReader::HwpReader()
 {
     mxList = new AttributeListImpl;
-    d = new HwpReaderPrivate;
+    d.reset( new HwpReaderPrivate );
 }
 
 
 HwpReader::~HwpReader()
 {
-    delete d;
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportHWP(const OUString &rURL)

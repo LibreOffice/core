@@ -1923,7 +1923,6 @@ WW8_WrPlcSubDoc::WW8_WrPlcSubDoc()
 
 WW8_WrPlcSubDoc::~WW8_WrPlcSubDoc()
 {
-    delete pTextPos;
 }
 
 void WW8_WrPlcFootnoteEdn::Append( WW8_CP nCp, const SwFormatFootnote& rFootnote )
@@ -2006,7 +2005,7 @@ bool WW8_WrPlcSubDoc::WriteGenericText( WW8Export& rWrt, sal_uInt8 nTTyp,
         return false;
 
     sal_uLong nCpStart = rWrt.Fc2Cp( rWrt.Strm().Tell() );
-    pTextPos = new WW8_WrPlc0( nCpStart );
+    pTextPos.reset( new WW8_WrPlc0( nCpStart ) );
     sal_uInt16 i;
 
     switch ( nTTyp )

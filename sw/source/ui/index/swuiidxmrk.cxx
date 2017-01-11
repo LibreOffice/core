@@ -949,14 +949,12 @@ IMPL_LINK( SwIndexMarkPane, KeyDCBModifyHdl, Edit&, rEdit, void )
 
 SwIndexMarkPane::~SwIndexMarkPane()
 {
-    delete pTOXMgr;
 }
 
 void    SwIndexMarkPane::ReInitDlg(SwWrtShell& rWrtShell, SwTOXMark* pCurTOXMark)
 {
     pSh = &rWrtShell;
-    delete pTOXMgr;
-    pTOXMgr = new SwTOXMgr(pSh);
+    pTOXMgr.reset( new SwTOXMgr(pSh) );
     if(pCurTOXMark)
     {
         for(sal_uInt16 i = 0; i < pTOXMgr->GetTOXMarkCount(); i++)

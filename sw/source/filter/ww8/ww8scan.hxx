@@ -27,6 +27,7 @@
 #include <cassert>
 #include <cstddef>
 #include <list>
+#include <memory>
 #include <stack>
 #include <unordered_map>
 #include <vector>
@@ -452,7 +453,7 @@ public:
 class WW8PLCFx_PCD : public WW8PLCFx            // iterator for Piece table
 {
 private:
-    WW8PLCFpcd_Iter* pPcdI;
+    std::unique_ptr<WW8PLCFpcd_Iter> pPcdI;
     bool bVer67;
     WW8_CP nClipStart;
 
@@ -474,7 +475,7 @@ public:
     WW8_FC AktPieceStartCp2Fc( WW8_CP nCp );
     static void AktPieceFc2Cp(WW8_CP& rStartPos, WW8_CP& rEndPos,
         const WW8ScannerBase *pSBase);
-    WW8PLCFpcd_Iter* GetPLCFIter() { return pPcdI; }
+    WW8PLCFpcd_Iter* GetPLCFIter() { return pPcdI.get(); }
     void SetClipStart(WW8_CP nIn) { nClipStart = nIn; }
     WW8_CP GetClipStart() { return nClipStart; }
 
@@ -618,7 +619,7 @@ class WW8PLCFx_Cp_FKP : public WW8PLCFx_Fc_FKP
 {
 private:
     const WW8ScannerBase& rSBase;
-    WW8PLCFx_PCD* pPcd;
+    std::unique_ptr<WW8PLCFx_PCD> pPcd;
     WW8PLCFpcd_Iter *pPieceIter;
     WW8_CP nAttrStart, nAttrEnd;
     bool bLineEnd : 1;
@@ -709,7 +710,7 @@ public:
 class WW8PLCFx_FLD : public WW8PLCFx
 {
 private:
-    WW8PLCFspecial* pPLCF;
+    std::unique_ptr<WW8PLCFspecial> pPLCF;
     const WW8Fib& rFib;
     WW8PLCFx_FLD(const WW8PLCFx_FLD&) = delete;
     WW8PLCFx_FLD& operator=(const WW8PLCFx_FLD &) = delete;

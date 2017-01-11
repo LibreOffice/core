@@ -814,12 +814,11 @@ WW8_WrPlc1::WW8_WrPlc1( sal_uInt16 nStructSz )
     : nStructSiz( nStructSz )
 {
     nDataLen = 16 * nStructSz;
-    pData = new sal_uInt8[ nDataLen ];
+    pData.reset( new sal_uInt8[ nDataLen ] );
 }
 
 WW8_WrPlc1::~WW8_WrPlc1()
 {
-    delete[] pData;
 }
 
 WW8_CP WW8_WrPlc1::Prev() const
@@ -836,12 +835,11 @@ void WW8_WrPlc1::Append( WW8_CP nCp, const void* pNewData )
     if( nDataLen < nInsPos + nStructSiz )
     {
         sal_uInt8* pNew = new sal_uInt8[ 2 * nDataLen ];
-        memcpy( pNew, pData, nDataLen );
-        delete[] pData;
-        pData = pNew;
+        memcpy( pNew, pData.get(), nDataLen );
+        pData.reset(pNew);
         nDataLen *= 2;
     }
-    memcpy( pData + nInsPos, pNewData, nStructSiz );
+    memcpy( pData.get() + nInsPos, pNewData, nStructSiz );
 }
 
 void WW8_WrPlc1::Finish( sal_uLong nLastCp, sal_uLong nSttCp )
@@ -861,7 +859,7 @@ void WW8_WrPlc1::Write( SvStream& rStrm )
     for( i = 0; i < aPos.size(); ++i )
         SwWW8Writer::WriteLong( rStrm, aPos[i] );
     if( i )
-        rStrm.WriteBytes(pData, (i-1) * nStructSiz);
+        rStrm.WriteBytes(pData.get(), (i-1) * nStructSiz);
 }
 
 // Class WW8_WrPlcField for fields
