@@ -99,7 +99,7 @@ OUString lclBuildWebQueryTables( const WebPrModel::TablesVector& rTables )
 }
 
 Reference< XAreaLink > lclFindAreaLink(
-        const Reference< XAreaLinks >& rxAreaLinks, const CellAddress& rDestPos,
+        const Reference< XAreaLinks >& rxAreaLinks, const ScAddress& rDestPos,
         const OUString& rFileUrl, const OUString& rTables, const OUString& rFilterName, const OUString& rFilterOptions )
 {
     try
@@ -112,7 +112,7 @@ Reference< XAreaLink > lclFindAreaLink(
             PropertySet aPropSet( xAreaLink );
             CellRangeAddress aDestArea = xAreaLink->getDestArea();
             OUString aString;
-            if( (rDestPos.Sheet == aDestArea.Sheet) && (rDestPos.Column == aDestArea.StartColumn) && (rDestPos.Row == aDestArea.StartRow) &&
+            if( (rDestPos.Tab() == aDestArea.Sheet) && (rDestPos.Col() == aDestArea.StartColumn) && (rDestPos.Row() == aDestArea.StartRow) &&
                     (rTables == xAreaLink->getSourceArea()) &&
                     aPropSet.getProperty( aString, PROP_Url ) && (rFileUrl == aString) &&
                     aPropSet.getProperty( aString, PROP_Filter ) && (rFilterName == aString) &&
@@ -233,13 +233,13 @@ void QueryTable::finalizeImport()
                     OSL_ENSURE( bIsRange, "QueryTable::finalizeImport - defined name does not contain valid cell range" );
                     if( bIsRange && getAddressConverter().checkCellRange( aDestRange, false, true ) )
                     {
-                        CellAddress aDestPos( aDestRange.aStart.Tab(), aDestRange.aStart.Col(), aDestRange.aStart.Row() );
                         // find tables mode: entire document, all tables, or specific tables
                         OUString aTables = pWebPr->mbHtmlTables ? lclBuildWebQueryTables( pWebPr->maTables ) : "HTML_all";
                         if( !aTables.isEmpty() ) try
                         {
                             PropertySet aDocProps( getDocument() );
                             Reference< XAreaLinks > xAreaLinks( aDocProps.getAnyProperty( PROP_AreaLinks ), UNO_QUERY_THROW );
+                            CellAddress aDestPos( aDestRange.aStart.Tab(), aDestRange.aStart.Col(), aDestRange.aStart.Row() );
                             OUString aFilterName = "calc_HTML_WebQuery";
                             OUString aFilterOptions;
                             xAreaLinks->insertAtPosition( aDestPos, aFileUrl, aTables, aFilterName, aFilterOptions );
@@ -247,7 +247,7 @@ void QueryTable::finalizeImport()
                             sal_Int32 nRefreshPeriod = xConnection->getModel().mnInterval * 60;
                             if( nRefreshPeriod > 0 )
                             {
-                                PropertySet aPropSet( lclFindAreaLink( xAreaLinks, aDestPos, aFileUrl, aTables, aFilterName, aFilterOptions ) );
+                                PropertySet aPropSet( lclFindAreaLink( xAreaLinks, aDestRange.aStart, aFileUrl, aTables, aFilterName, aFilterOptions ) );
                                 aPropSet.setProperty( PROP_RefreshPeriod, nRefreshPeriod );
                             }
                         }
