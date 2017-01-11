@@ -104,14 +104,14 @@ void LwpPageLayout::Read()
     }
 
     m_nPrinterBin = m_pObjStrm->QuickReaduInt16();
-    m_pPrinterBinName->Read(m_pObjStrm);
+    m_pPrinterBinName->Read(m_pObjStrm.get());
 
     if (LwpFileHeader::m_nFileRevision >= 0x000B)
         m_nBdroffset = m_pObjStrm->QuickReadInt32();
 
     if (m_pObjStrm->CheckExtra())
     {
-        m_pPaperName->Read(m_pObjStrm);
+        m_pPaperName->Read(m_pObjStrm.get());
         m_pObjStrm->SkipExtra();
     }
 

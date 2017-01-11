@@ -116,7 +116,7 @@ public:
 
 public:
     css::uno::Reference<css::xml::sax::XDocumentHandler> m_aHandler;
-    XFSaxAttrList               *m_pAttrList;
+    std::unique_ptr<XFSaxAttrList>                       m_pAttrList;
 };
 
 #endif //XFSAXSTREAM_INC

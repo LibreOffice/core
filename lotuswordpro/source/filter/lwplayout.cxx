@@ -93,7 +93,7 @@ void LwpVirtualLayout::Read()
 {
     LwpDLNFPVList::Read();
 
-    LwpObjectStream* pStrm = m_pObjStrm;
+    LwpObjectStream* pStrm = m_pObjStrm.get();
     m_nAttributes = pStrm->QuickReaduInt32();
     m_nAttributes2 = pStrm->QuickReaduInt32();
     m_nAttributes3 = pStrm->QuickReaduInt32();
@@ -526,7 +526,6 @@ LwpLayoutStyle::LwpLayoutStyle()
 
 LwpLayoutStyle::~LwpLayoutStyle()
 {
-    delete m_pDescription;
 }
 
 void LwpLayoutStyle::Read(LwpObjectStream* pStrm)
@@ -583,7 +582,7 @@ LwpMiddleLayout::~LwpMiddleLayout()
 }
 void LwpMiddleLayout::Read()
 {
-    LwpObjectStream* pStrm = m_pObjStrm;
+    LwpObjectStream* pStrm = m_pObjStrm.get();
 
     LwpVirtualLayout::Read();
 
@@ -1481,7 +1480,7 @@ LwpLayout::~LwpLayout()
 
 void LwpLayout::Read()
 {
-    LwpObjectStream* pStrm = m_pObjStrm;
+    LwpObjectStream* pStrm = m_pObjStrm.get();
 
     LwpMiddleLayout::Read();
     if (LwpFileHeader::m_nFileRevision < 0x000B)
@@ -1960,7 +1959,7 @@ LwpPlacableLayout::~LwpPlacableLayout()
 
 void LwpPlacableLayout::Read()
 {
-    LwpObjectStream* pStrm = m_pObjStrm;
+    LwpObjectStream* pStrm = m_pObjStrm.get();
     LwpLayout::Read();
     if(LwpFileHeader::m_nFileRevision < 0x000B)
     {

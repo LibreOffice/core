@@ -73,8 +73,8 @@ LwpPropListElement* LwpPropListElement::GetNext()
 void LwpPropListElement::Read()
 {
     LwpDLVList::Read();
-    m_Name.Read(m_pObjStrm);
-    m_Value.Read(m_pObjStrm);
+    m_Name.Read(m_pObjStrm.get());
+    m_Value.Read(m_pObjStrm.get());
     m_pObjStrm->SkipExtra();
 }
 

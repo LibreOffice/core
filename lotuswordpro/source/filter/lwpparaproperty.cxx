@@ -227,7 +227,6 @@ m_pBullet(new LwpBulletOverride)
 
 LwpParaBulletProperty::~LwpParaBulletProperty()
 {
-    delete m_pBullet;
 }
 
 LwpParaNumberingProperty::LwpParaNumberingProperty(LwpObjectStream * pStrm)

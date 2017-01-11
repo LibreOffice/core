@@ -78,8 +78,8 @@ void LwpOrderedObject::Read()
 {
     LwpDLNFVList::Read();
 
-    m_ListList.ReadIndexed(m_pObjStrm);
-    m_Para.ReadIndexed(m_pObjStrm);
+    m_ListList.ReadIndexed(m_pObjStrm.get());
+    m_Para.ReadIndexed(m_pObjStrm.get());
     m_pObjStrm->SkipExtra();
 }
 
@@ -101,9 +101,9 @@ void LwpSection::Read()
 {
     LwpOrderedObject::Read();
     m_Flags = m_pObjStrm->QuickReaduInt16();
-    m_PageLayout.ReadIndexed(m_pObjStrm);
-    m_Color.Read(m_pObjStrm);
-    m_AtomHolder.Read(m_pObjStrm);
+    m_PageLayout.ReadIndexed(m_pObjStrm.get());
+    m_Color.Read(m_pObjStrm.get());
+    m_AtomHolder.Read(m_pObjStrm.get());
     m_pObjStrm->SkipExtra();
 }
 
@@ -133,10 +133,10 @@ LwpIndexSection::~LwpIndexSection()
 void LwpIndexSection::Read()
 {
     LwpSection::Read();
-    m_TextMarker.Read(m_pObjStrm);
-    m_ParentName.Read(m_pObjStrm);
-    m_DivisionName.Read(m_pObjStrm);
-    m_SectionName.Read(m_pObjStrm);
+    m_TextMarker.Read(m_pObjStrm.get());
+    m_ParentName.Read(m_pObjStrm.get());
+    m_DivisionName.Read(m_pObjStrm.get());
+    m_SectionName.Read(m_pObjStrm.get());
     m_nForm = m_pObjStrm->QuickReaduInt16();
     m_nFlags = m_pObjStrm->QuickReaduInt16();
     m_pObjStrm->SkipExtra();
