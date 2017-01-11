@@ -397,7 +397,6 @@
   <block-list:block block-list:abbreviated-name=":dolár2:" block-list:name="💵"/>
   <block-list:block block-list:abbreviated-name=":dolár tučne:" block-list:name="💲"/>
   <block-list:block block-list:abbreviated-name=":doľava3:" block-list:name="☚"/>
-  <block-list:block block-list:abbreviated-name=":doľava:" block-list:name="☜"/>
   <block-list:block block-list:abbreviated-name=":dolník:" block-list:name="🂫"/>
   <block-list:block block-list:abbreviated-name=":dom2:" block-list:name="🏡"/>
   <block-list:block block-list:abbreviated-name=":dom:" block-list:name="🏠"/>
@@ -1214,6 +1213,7 @@
   <block-list:block block-list:abbreviated-name=":vlak4:" block-list:name="🚈"/>
   <block-list:block block-list:abbreviated-name=":vlak:" block-list:name="🚆"/>
   <block-list:block block-list:abbreviated-name=":vľavo2:" block-list:name="👈"/>
+  <block-list:block block-list:abbreviated-name=":vľavo:" block-list:name="☜"/>
   <block-list:block block-list:abbreviated-name=":vlk:" block-list:name="🐺"/>
   <block-list:block block-list:abbreviated-name=":Vodnár:" block-list:name="♒"/>
   <block-list:block block-list:abbreviated-name=":vodový melón:" block-list:name="🍉"/>
