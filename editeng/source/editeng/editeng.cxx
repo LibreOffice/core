@@ -94,12 +94,11 @@ static SfxItemPool* pGlobalPool=nullptr;
 
 EditEngine::EditEngine( SfxItemPool* pItemPool )
 {
-    pImpEditEngine = new ImpEditEngine( this, pItemPool );
+    pImpEditEngine.reset( new ImpEditEngine( this, pItemPool ) );
 }
 
 EditEngine::~EditEngine()
 {
-    delete pImpEditEngine;
 }
 
 void EditEngine::EnableUndo( bool bEnable )
@@ -2772,22 +2771,20 @@ bool EditEngine::IsPageOverflow() {
 
 EFieldInfo::EFieldInfo()
 {
-    pFieldItem = nullptr;
 }
 
 
-EFieldInfo::EFieldInfo( const SvxFieldItem& rFieldItem, sal_Int32 nPara, sal_Int32 nPos ) : aPosition( nPara, nPos )
+EFieldInfo::EFieldInfo( const SvxFieldItem& rFieldItem, sal_Int32 nPara, sal_Int32 nPos ) :
+    pFieldItem( new SvxFieldItem( rFieldItem ) ),
+    aPosition( nPara, nPos )
 {
-    pFieldItem = new SvxFieldItem( rFieldItem );
 }
 
 EFieldInfo::~EFieldInfo()
 {
-    delete pFieldItem;
 }
 
 EFieldInfo::EFieldInfo( const EFieldInfo& rFldInfo )
-    : pFieldItem(nullptr)
 {
     *this = rFldInfo;
 }
@@ -2797,7 +2794,7 @@ EFieldInfo& EFieldInfo::operator= ( const EFieldInfo& rFldInfo )
     if( this == &rFldInfo )
         return *this;
 
-    pFieldItem = rFldInfo.pFieldItem ? new SvxFieldItem( *rFldInfo.pFieldItem ) : nullptr;
+    pFieldItem.reset( rFldInfo.pFieldItem ? new SvxFieldItem( *rFldInfo.pFieldItem ) : nullptr );
     aCurrentText = rFldInfo.aCurrentText;
     aPosition = rFldInfo.aPosition;
 

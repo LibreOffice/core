@@ -52,13 +52,12 @@ OutlinerView::OutlinerView( Outliner* pOut, vcl::Window* pWin )
 {
     pOwner                      = pOut;
 
-    pEditView = new EditView( pOut->pEditEngine, pWin );
+    pEditView.reset( new EditView( pOut->pEditEngine, pWin ) );
     pEditView->SetSelectionMode( EE_SELMODE_TXTONLY );
 }
 
 OutlinerView::~OutlinerView()
 {
-    delete pEditView;
 }
 
 void OutlinerView::Paint( const Rectangle& rRect, OutputDevice* pTargetDevice )

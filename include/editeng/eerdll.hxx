@@ -24,6 +24,7 @@ class GlobalEditData;
 
 #include <tools/resid.hxx>
 #include <editeng/editengdllapi.h>
+#include <memory>
 
 class EDITENG_DLLPUBLIC EditResId: public ResId
 {
@@ -33,14 +34,14 @@ public:
 
 class EditDLL
 {
-    GlobalEditData* pGlobalData;
+    std::unique_ptr<GlobalEditData> pGlobalData;
 
 public:
     EditDLL();
     ~EditDLL();
 
     static ResMgr* GetResMgr();
-    GlobalEditData* GetGlobalData() const   { return pGlobalData; }
+    GlobalEditData* GetGlobalData() const   { return pGlobalData.get(); }
     static EditDLL& Get();
 };
 

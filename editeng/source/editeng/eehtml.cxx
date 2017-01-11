@@ -67,7 +67,6 @@ EditHTMLParser::EditHTMLParser( SvStream& rIn, const OUString& rBaseURL, SvKeyVa
 
 EditHTMLParser::~EditHTMLParser()
 {
-    delete pCurAnchor;
 }
 
 SvParserState EditHTMLParser::CallParser(EditEngine* pEE, const EditPaM& rPaM)
@@ -780,7 +779,7 @@ void EditHTMLParser::AnchorStart()
                 aRootURL.GetNewAbsURL( aRef, &aTargetURL );
                 aURL = aTargetURL.GetMainURL( INetURLObject::DecodeMechanism::ToIUri );
             }
-            pCurAnchor = new AnchorInfo;
+            pCurAnchor.reset( new AnchorInfo );
             pCurAnchor->aHRef = aURL;
         }
     }
@@ -794,8 +793,7 @@ void EditHTMLParser::AnchorEnd()
         SvxFieldItem aFld( SvxURLField( pCurAnchor->aHRef, pCurAnchor->aText, SVXURLFORMAT_REPR ), EE_FEATURE_FIELD  );
         aCurSel = mpEditEngine->InsertField(aCurSel, aFld);
         bFieldsInserted = true;
-        delete pCurAnchor;
-        pCurAnchor = nullptr;
+        pCurAnchor.reset();
 
         if (mpEditEngine->IsImportHandlerSet())
         {
