@@ -64,7 +64,7 @@ struct CertErrorToString{
     char const * name;
 };
 
-CertErrorToString arErrStrings[] =
+CertErrorToString const arErrStrings[] =
 {
     { 0x00000000, "CERT_TRUST_NO_ERROR"},
     { 0x00000001, "CERT_TRUST_IS_NOT_TIME_VALID"},
