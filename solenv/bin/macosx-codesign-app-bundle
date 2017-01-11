@@ -55,7 +55,7 @@ done
 find "$APP_BUNDLE/Contents/MacOS" -type f |
 while read file; do
     id=`echo ${file#${APP_BUNDLE}/Contents/} | sed -e 's,/,.,g'`
-    codesign --force --verbose --identifier=$MACOSX_BUNDLE_IDENTIFIER.$id --sign "$MACOSX_CODESIGNING_IDENTITY" $entitlements "$file"
+    codesign --force --verbose --identifier=$MACOSX_BUNDLE_IDENTIFIER.$id --sign "$MACOSX_CODESIGNING_IDENTITY" $entitlements "$file" || exit 1
 done
 
 # Sign included bundles. First .app ones (i.e. the Python.app inside
@@ -67,7 +67,7 @@ while read app; do
     fn=${fn%.*}
     # Assume the app has a XML (and not binary) Info.plist
     id=`grep -A 1 '<key>CFBundleIdentifier</key>' $app/Contents/Info.plist | tail -1 | sed -e 's,.*<string>,,' -e 's,</string>.*,,'`
-    codesign --verbose --identifier=$id --sign "$MACOSX_CODESIGNING_IDENTITY" $entitlements "$app"
+    codesign --verbose --identifier=$id --sign "$MACOSX_CODESIGNING_IDENTITY" $entitlements "$app" || exit 1
 done
 
 # Then .framework ones. Again, be generic just for kicks.
@@ -80,7 +80,7 @@ while read framework; do
         if test ! -L "$version" -a -d "$version"; then
 	    # Assume the framework has a XML (and not binary) Info.plist
 	    id=`grep -A 1 '<key>CFBundleIdentifier</key>' $version/Resources/Info.plist | tail -1 | sed -e 's,.*<string>,,' -e 's,</string>.*,,'`
-            codesign --verbose --identifier=$id --sign "$MACOSX_CODESIGNING_IDENTITY" "$version"
+            codesign --verbose --identifier=$id --sign "$MACOSX_CODESIGNING_IDENTITY" "$version" || exit 1
         fi
     done
 done
@@ -89,7 +89,7 @@ done
 
 find "$APP_BUNDLE" -name '*.mdimporter' -type d |
 while read bundle; do
-    codesign --verbose --prefix=$MACOSX_BUNDLE_IDENTIFIER. --sign "$MACOSX_CODESIGNING_IDENTITY" "$bundle"
+    codesign --verbose --prefix=$MACOSX_BUNDLE_IDENTIFIER. --sign "$MACOSX_CODESIGNING_IDENTITY" "$bundle" || exit 1
 done
 
 # Sign the app bundle as a whole which means (re-)signing the
@@ -106,6 +106,6 @@ done
 
 id=`echo ${PRODUCTNAME} | tr ' ' '-'`
 
-codesign --force --verbose --identifier="${MACOSX_BUNDLE_IDENTIFIER}" --sign "$MACOSX_CODESIGNING_IDENTITY" $entitlements "$APP_BUNDLE"
+codesign --force --verbose --identifier="${MACOSX_BUNDLE_IDENTIFIER}" --sign "$MACOSX_CODESIGNING_IDENTITY" $entitlements "$APP_BUNDLE" || exit 1
 
 exit 0
