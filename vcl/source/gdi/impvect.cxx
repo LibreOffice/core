@@ -268,7 +268,8 @@ private:
     Point           maStartPt;
     sal_uLong       mnArraySize;
     sal_uLong       mnCount;
-    sal_uInt8*      mpCodes;
+    std::unique_ptr<sal_uInt8[]>
+                    mpCodes;
 
     void            ImplGetSpace();
 
@@ -293,12 +294,11 @@ ImplChain::ImplChain() :
     mnArraySize ( 1024UL ),
     mnCount     ( 0UL )
 {
-    mpCodes = new sal_uInt8[ mnArraySize ];
+    mpCodes.reset( new sal_uInt8[ mnArraySize ] );
 }
 
 ImplChain::~ImplChain()
 {
-    delete[] mpCodes;
 }
 
 void ImplChain::ImplGetSpace()
@@ -308,9 +308,8 @@ void ImplChain::ImplGetSpace()
 
     mnArraySize = mnArraySize << 1UL;
     pNewCodes = new sal_uInt8[ mnArraySize ];
-    memcpy( pNewCodes, mpCodes, nOldArraySize );
-    delete[] mpCodes;
-    mpCodes = pNewCodes;
+    memcpy( pNewCodes, mpCodes.get(), nOldArraySize );
+    mpCodes.reset( pNewCodes );
 }
 
 void ImplChain::ImplBeginAdd( const Point& rStartPt )

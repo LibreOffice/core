@@ -2199,7 +2199,7 @@ VclPtr<SfxTabPage> SfxCustomPropertiesPage::Create( vcl::Window* pParent, const 
 
 CmisValue::CmisValue( vcl::Window* pParent, const OUString& aStr )
 {
-    m_pUIBuilder = new VclBuilder( pParent, getUIRootDir(), "sfx/ui/cmisline.ui");
+    m_pUIBuilder.reset(new VclBuilder( pParent, getUIRootDir(), "sfx/ui/cmisline.ui"));
     get( m_aValueEdit, "value");
     m_aValueEdit->Show();
     m_aValueEdit->SetText( aStr );
@@ -2207,7 +2207,7 @@ CmisValue::CmisValue( vcl::Window* pParent, const OUString& aStr )
 
 CmisDateTime::CmisDateTime( vcl::Window* pParent, const util::DateTime& aDateTime )
 {
-    m_pUIBuilder = new VclBuilder( pParent, getUIRootDir(), "sfx/ui/cmisline.ui");
+    m_pUIBuilder.reset(new VclBuilder( pParent, getUIRootDir(), "sfx/ui/cmisline.ui"));
     get( m_aDateField, "date");
     get( m_aTimeField, "time");
     m_aDateField->Show();
@@ -2218,7 +2218,7 @@ CmisDateTime::CmisDateTime( vcl::Window* pParent, const util::DateTime& aDateTim
 
 CmisYesNo::CmisYesNo( vcl::Window* pParent, bool bValue )
 {
-    m_pUIBuilder = new VclBuilder( pParent, getUIRootDir(), "sfx/ui/cmisline.ui");
+    m_pUIBuilder.reset(new VclBuilder( pParent, getUIRootDir(), "sfx/ui/cmisline.ui"));
     get( m_aYesButton, "yes");
     get( m_aNoButton, "no");
     m_aYesButton->Show();
@@ -2237,7 +2237,7 @@ CmisPropertyLine::CmisPropertyLine(vcl::Window* pParent)
     , m_bMultiValued(false)
     , m_bOpenChoice(false)
 {
-    m_pUIBuilder = new VclBuilder( pParent, getUIRootDir(), "sfx/ui/cmisline.ui");
+    m_pUIBuilder.reset(new VclBuilder( pParent, getUIRootDir(), "sfx/ui/cmisline.ui"));
     get( m_pFrame, "CmisFrame" );
     get( m_aName, "name" );
     get( m_aType, "type" );

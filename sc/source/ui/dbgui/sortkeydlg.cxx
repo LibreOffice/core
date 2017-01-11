@@ -13,7 +13,7 @@
 
 ScSortKeyItem::ScSortKeyItem(vcl::Window* pParent)
 {
-    m_pUIBuilder = new VclBuilder(pParent, getUIRootDir(), "modules/scalc/ui/sortkey.ui");
+    m_pUIBuilder.reset(new VclBuilder(pParent, getUIRootDir(), "modules/scalc/ui/sortkey.ui"));
 
     get(m_pFrame, "SortKeyFrame");
     get(m_pFlSort, "sortft");

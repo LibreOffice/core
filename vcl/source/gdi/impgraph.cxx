@@ -68,9 +68,12 @@ public:
     Size    maPreviewSize;
 };
 
+GraphicReader::GraphicReader()
+{
+}
+
 GraphicReader::~GraphicReader()
 {
-    delete mpReaderData;
 }
 
 void GraphicReader::DisablePreviewMode()
@@ -82,7 +85,7 @@ void GraphicReader::DisablePreviewMode()
 void GraphicReader::SetPreviewSize( const Size& rSize )
 {
     if( !mpReaderData )
-        mpReaderData = new ReaderData;
+        mpReaderData.reset( new ReaderData );
     mpReaderData->maPreviewSize = rSize;
 }
 

@@ -375,7 +375,7 @@ void DockingWindow::loadUI(vcl::Window* pParent, const OString& rID, const OUStr
 {
     mbIsDefferedInit = true;
     mpDialogParent = pParent; //should be unset in doDeferredInit
-    m_pUIBuilder = new VclBuilder(this, getUIRootDir(), rUIXMLDescription, rID, rFrame);
+    m_pUIBuilder.reset( new VclBuilder(this, getUIRootDir(), rUIXMLDescription, rID, rFrame) );
 }
 
 DockingWindow::DockingWindow(vcl::Window* pParent, const OString& rID,

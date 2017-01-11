@@ -39,7 +39,8 @@ class VCL_DLLPUBLIC FormatterBase
 {
 private:
     VclPtr<Edit>            mpField;
-    LocaleDataWrapper*      mpLocaleDataWrapper;
+    std::unique_ptr<LocaleDataWrapper>
+                            mpLocaleDataWrapper;
     bool                    mbReformat;
     bool                    mbStrictFormat;
     bool                    mbEmptyFieldValue;

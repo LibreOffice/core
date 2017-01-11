@@ -1415,7 +1415,7 @@ SfxHelpIndexWindow_Impl::SfxHelpIndexWindow_Impl(SfxHelpWindow_Impl* _pParent)
     , bWasCursorLeftOrRight(false)
     , bIsInitDone(false)
 {
-    m_pUIBuilder = new VclBuilder(this, getUIRootDir(), "sfx/ui/helpcontrol.ui", "HelpControl");
+    m_pUIBuilder.reset(new VclBuilder(this, getUIRootDir(), "sfx/ui/helpcontrol.ui", "HelpControl"));
     get(m_pActiveLB, "active");
     get(m_pTabCtrl, "tabcontrol");
 

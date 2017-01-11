@@ -234,7 +234,7 @@ bool SvpSalInstance::CheckTimeout( bool bExecuteTimers )
                 m_aTimeout = aTimeOfDay;
                 m_aTimeout += m_nTimeoutMS;
 
-                osl::Guard< comphelper::SolarMutex > aGuard( mpSalYieldMutex );
+                osl::Guard< comphelper::SolarMutex > aGuard( mpSalYieldMutex.get() );
 
                 // notify
                 ImplSVData* pSVData = ImplGetSVData();

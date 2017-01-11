@@ -45,7 +45,7 @@ ScCondFrmtEntry::ScCondFrmtEntry(vcl::Window* pParent, ScDocument* pDoc, const S
     , mpDoc(pDoc)
     , maPos(rPos)
 {
-    m_pUIBuilder = new VclBuilder(this, getUIRootDir(), "modules/scalc/ui/conditionalentry.ui");
+    m_pUIBuilder.reset(new VclBuilder(this, getUIRootDir(), "modules/scalc/ui/conditionalentry.ui"));
 
     get(maGrid, "grid");
     get(maFtCondNr, "number");
@@ -1360,7 +1360,7 @@ public:
 ScIconSetFrmtDataEntry::ScIconSetFrmtDataEntry(vcl::Window* pParent, ScIconSetType eType, ScDocument* pDoc, sal_Int32 i, const ScColorScaleEntry* pEntry)
     : VclContainer(pParent)
 {
-    m_pUIBuilder = new VclBuilder(this, getUIRootDir(), "modules/scalc/ui/conditionaliconset.ui");
+    m_pUIBuilder.reset(new VclBuilder(this, getUIRootDir(), "modules/scalc/ui/conditionaliconset.ui"));
     get(maGrid, "ConditionalIconSet");
     get(maImgIcon, "icon");
     get(maFtEntry, "label");

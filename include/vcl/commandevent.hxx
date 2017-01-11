@@ -91,7 +91,7 @@ class VCL_DLLPUBLIC CommandExtTextInputData
 {
 private:
     OUString            maText;
-    ExtTextInputAttr*   mpTextAttr;
+    std::unique_ptr<ExtTextInputAttr[]> mpTextAttr;
     sal_Int32           mnCursorPos;
     sal_uInt16          mnCursorFlags;
     bool                mbOnlyCursor;
@@ -106,7 +106,7 @@ public:
                         ~CommandExtTextInputData();
 
     const OUString&     GetText() const { return maText; }
-    const ExtTextInputAttr* GetTextAttr() const { return mpTextAttr; }
+    const ExtTextInputAttr* GetTextAttr() const { return mpTextAttr.get(); }
 
     sal_Int32           GetCursorPos() const { return mnCursorPos; }
     bool                IsCursorVisible() const { return (mnCursorFlags & EXTTEXTINPUT_CURSOR_INVISIBLE) == 0; }

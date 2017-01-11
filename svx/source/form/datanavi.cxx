@@ -1366,7 +1366,7 @@ namespace svxform
         , m_aItemImageList(SVX_RES(RID_SVXIL_DATANAVI))
         , m_xDataListener(new DataListener(this))
     {
-        m_pUIBuilder = new VclBuilder(this, getUIRootDir(), "svx/ui/datanavigator.ui", "DataNavigator");
+        m_pUIBuilder.reset(new VclBuilder(this, getUIRootDir(), "svx/ui/datanavigator.ui", "DataNavigator"));
         get(m_pModelsBox, "modelslist");
         get(m_pModelBtn, "modelsbutton");
         get(m_pTabCtrl, "tabcontrol");

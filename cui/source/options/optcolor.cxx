@@ -481,7 +481,7 @@ void ColorConfigWindow_Impl::Entry::SetColor (Color aColor)
 ColorConfigWindow_Impl::ColorConfigWindow_Impl(vcl::Window* pParent)
     : VclContainer(pParent)
 {
-    m_pUIBuilder = new VclBuilder(this, getUIRootDir(), "cui/ui/colorconfigwin.ui");
+    m_pUIBuilder.reset(new VclBuilder(this, getUIRootDir(), "cui/ui/colorconfigwin.ui"));
     get(m_pGrid, "ColorConfigWindow");
     CreateEntries();
     SetAppearance();

@@ -38,10 +38,10 @@ ParaULSpacingWindow::ParaULSpacingWindow(vcl::Window* pParent, css::uno::Referen
     : VclVBox(pParent)
     , m_eUnit(MapUnit::MapTwip)
 {
-    m_pUIBuilder = new VclBuilder(this, getUIRootDir(),
+    m_pUIBuilder.reset(new VclBuilder(this, getUIRootDir(),
                                   "svx/ui/paraulspacing.ui",
                                   "ParaULSpacingWindow",
-                                  xFrame);
+                                  xFrame));
 
     get(m_pAboveSpacing, "aboveparaspacing");
     get(m_pBelowSpacing, "belowparaspacing");
@@ -107,10 +107,10 @@ ParaLRSpacingWindow::ParaLRSpacingWindow(vcl::Window* pParent, css::uno::Referen
     : VclVBox(pParent)
     , m_eUnit(MapUnit::MapTwip)
 {
-    m_pUIBuilder = new VclBuilder(this, getUIRootDir(),
+    m_pUIBuilder.reset(new VclBuilder(this, getUIRootDir(),
                                   "svx/ui/paralrspacing.ui",
                                   "ParaLRSpacingWindow",
-                                  xFrame);
+                                  xFrame));
 
     get(m_pBeforeSpacing, "beforetextindent");
     get(m_pAfterSpacing, "aftertextindent");

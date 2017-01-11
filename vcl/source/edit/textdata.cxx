@@ -331,21 +331,18 @@ TEIMEInfos::TEIMEInfos( const TextPaM& rPos, const OUString& rOldTextAfterStartP
 
 TEIMEInfos::~TEIMEInfos()
 {
-    delete[] pAttribs;
 }
 
 void TEIMEInfos::CopyAttribs(const ExtTextInputAttr* pA, sal_Int32 nL)
 {
     nLen = nL;
-    delete[] pAttribs;
-    pAttribs = new ExtTextInputAttr[ nL ];
-    memcpy( pAttribs, pA, nL*sizeof(ExtTextInputAttr) );
+    pAttribs.reset( new ExtTextInputAttr[ nL ] );
+    memcpy( pAttribs.get(), pA, nL*sizeof(ExtTextInputAttr) );
 }
 
 void TEIMEInfos::DestroyAttribs()
 {
-    delete[] pAttribs;
-    pAttribs = nullptr;
+    pAttribs.reset();
     nLen = 0;
 }
 

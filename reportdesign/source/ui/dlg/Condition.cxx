@@ -113,7 +113,7 @@ Condition::Condition( vcl::Window* _pParent, IConditionalFormatAction& _rAction,
     , m_nCondIndex(0)
     , m_bInDestruction(false)
 {
-    m_pUIBuilder = new VclBuilder(this, getUIRootDir(), "modules/dbreport/ui/conditionwin.ui");
+    m_pUIBuilder.reset(new VclBuilder(this, getUIRootDir(), "modules/dbreport/ui/conditionwin.ui"));
 
     get(m_pHeader, "headerLabel");
     get(m_pConditionType, "typeCombobox");
