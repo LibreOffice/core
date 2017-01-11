@@ -8540,12 +8540,14 @@ if test "x$enable_postgresql_sdbc" != "xno"; then
             if test "$with_krb5" != "no"; then
                 WITH_KRB5=TRUE
                 save_LIBS=$LIBS
+                # Not sure whether it makes any sense here to search multiple potential libraries; it is not likely
+                # that the libraries where these functions are located on macOS will change, is it?
                 AC_SEARCH_LIBS(com_err, [com_err 'com_err -lssl -lcrypto' krb5 'krb5 -lcrypto -ldes -lasn1 -lroken'], [],
-                    [AC_MSG_ERROR([could not find function 'com_err' required for Kerberos 5, try installing libcom_err devel package])])
+                    [AC_MSG_ERROR([could not find function 'com_err' required for Kerberos 5])])
                 KRB5_LIBS=$LIBS
                 LIBS=$save_LIBS
                 AC_SEARCH_LIBS(krb5_sendauth, [krb5 'krb5 -lcrypto -ldes -lasn1 -lroken'], [],
-                    [AC_MSG_ERROR([could not find function 'krb5_sendauth' required for Kerberos 5, try installing krb5 devel package])])
+                    [AC_MSG_ERROR([could not find function 'krb5_sendauth' required for Kerberos 5])])
                 KRB5_LIBS="$KRB5_LIBS $LIBS"
                 LIBS=$save_LIBS
             fi
