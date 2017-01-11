@@ -25,7 +25,7 @@ using namespace com::sun::star;
 
 namespace sc {
 
-SvStream* FetchStreamFromURL (OUString& rURL)
+SvStream* FetchStreamFromURL(const OUString& rURL)
 {
     uno::Reference< ucb::XSimpleFileAccess3 > xFileAccess( ucb::SimpleFileAccess::create( comphelper::getProcessComponentContext() ), uno::UNO_QUERY );
 
@@ -49,8 +49,7 @@ SvStream* FetchStreamFromURL (OUString& rURL)
 
     xStream->closeInput();
 
-    SvStream* pStream = new SvStream;
-    pStream->WriteCharPtr(aBuffer.getStr());
+    SvStream* pStream = new SvMemoryStream(const_cast<char*>(aBuffer.getStr()), aBuffer.getLength(), StreamMode::WRITE);
 
     return pStream;
 }
@@ -59,7 +58,7 @@ ExternalDataMapper::ExternalDataMapper(ScDocShell* pDocShell, const OUString& rU
     SCCOL nCol1,SCROW nRow1, SCCOL nCol2, SCROW nRow2, bool& bSuccess):
     maRange (ScRange(nCol1, nRow1, nTab, nCol2, nRow2, nTab)),
     mpDocShell(pDocShell),
-    mpDataProvider (new CSVDataProvider(mpDocShell, maURL, maRange)),
+    mpDataProvider (new CSVDataProvider(mpDocShell, rURL, maRange)),
     mpDBCollection (pDocShell->GetDocument().GetDBCollection()),
     maURL(rURL)
 {
