@@ -77,7 +77,6 @@ XFCell::XFCell()
 
 XFCell::~XFCell()
 {
-    delete m_pSubTable;
 }
 
 void    XFCell::Add(XFContent *pContent)
@@ -87,7 +86,7 @@ void    XFCell::Add(XFContent *pContent)
         Reset();
         m_eValueType = enumXFValueTypeNone;
     }
-    if (m_pSubTable)
+    if (m_pSubTable.is())
     {
         throw std::runtime_error("subtable already set");
     }
@@ -184,7 +183,7 @@ void    XFCell::ToXml(IXFStream *pStrm)
 
     pStrm->StartElement( "table:table-cell" );
 
-    if( m_pSubTable )
+    if( m_pSubTable.is() )
         m_pSubTable->ToXml(pStrm);
     else
     {

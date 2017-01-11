@@ -157,7 +157,7 @@ void LwpFootnote::Read()
     LwpOrderedObject::Read();
     m_nType = m_pObjStrm->QuickReaduInt16();
     m_nRow = m_pObjStrm->QuickReaduInt16();
-    m_Content.ReadIndexed(m_pObjStrm);
+    m_Content.ReadIndexed(m_pObjStrm.get());
     m_pObjStrm->SkipExtra();
 }
 
@@ -447,14 +447,14 @@ LwpFootnoteOptions::~LwpFootnoteOptions()
 void LwpFootnoteOptions::Read()
 {
     m_nFlag = m_pObjStrm->QuickReaduInt16();
-    m_FootnoteNumbering.Read(m_pObjStrm);
-    m_EndnoteDivisionNumbering.Read(m_pObjStrm);
-    m_EndnoteDivisionGroupNumbering.Read(m_pObjStrm);
-    m_EndnoteDocNumbering.Read(m_pObjStrm);
-    m_FootnoteSeparator.Read(m_pObjStrm);
-    m_FootnoteContinuedSeparator.Read(m_pObjStrm);
-    m_ContinuedOnMessage.Read(m_pObjStrm);
-    m_ContinuedFromMessage.Read(m_pObjStrm);
+    m_FootnoteNumbering.Read(m_pObjStrm.get());
+    m_EndnoteDivisionNumbering.Read(m_pObjStrm.get());
+    m_EndnoteDivisionGroupNumbering.Read(m_pObjStrm.get());
+    m_EndnoteDocNumbering.Read(m_pObjStrm.get());
+    m_FootnoteSeparator.Read(m_pObjStrm.get());
+    m_FootnoteContinuedSeparator.Read(m_pObjStrm.get());
+    m_ContinuedOnMessage.Read(m_pObjStrm.get());
+    m_ContinuedFromMessage.Read(m_pObjStrm.get());
     m_pObjStrm->SkipExtra();
 }
 

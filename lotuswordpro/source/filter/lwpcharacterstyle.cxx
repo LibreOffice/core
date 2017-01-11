@@ -119,33 +119,33 @@ void LwpTextStyle::ReadCommon()
     m_nCSFlags = m_pObjStrm->QuickReaduInt16();
     m_nUseCount = m_pObjStrm->QuickReaduInt32();
 
-    m_pDescription->Read(m_pObjStrm);
+    m_pDescription->Read(m_pObjStrm.get());
 
-    m_pLangOverride->Read(m_pObjStrm);
-    m_pTxtAttrOverride->Read(m_pObjStrm);
+    m_pLangOverride->Read(m_pObjStrm.get());
+    m_pTxtAttrOverride->Read(m_pObjStrm.get());
     if (LwpFileHeader::m_nFileRevision < 0x000B)
     {
-        m_pCharacterBorderOverride->Read(m_pObjStrm);
-        m_pAmikakeOverride->Read(m_pObjStrm);
+        m_pCharacterBorderOverride->Read(m_pObjStrm.get());
+        m_pAmikakeOverride->Read(m_pObjStrm.get());
     }
     else
     {
-        m_CharacterBorder.ReadIndexed(m_pObjStrm);
-        m_Amikake.ReadIndexed(m_pObjStrm);
+        m_CharacterBorder.ReadIndexed(m_pObjStrm.get());
+        m_Amikake.ReadIndexed(m_pObjStrm.get());
     }
     sal_uInt16 nCount = 6;
     if (LwpFileHeader::m_nFileRevision > 0x0005)
         nCount = m_pObjStrm->QuickReaduInt16();
 
-    m_FaceStyle.ReadIndexed(m_pObjStrm);
+    m_FaceStyle.ReadIndexed(m_pObjStrm.get());
 
     if (nCount > 1)
     {
-        m_SizeStyle.ReadIndexed(m_pObjStrm);
-        m_AttributeStyle.ReadIndexed(m_pObjStrm);
-        m_FontStyle.ReadIndexed(m_pObjStrm);
-        m_CharacterBorderStyle.ReadIndexed(m_pObjStrm);
-        m_AmikakeStyle.ReadIndexed(m_pObjStrm);
+        m_SizeStyle.ReadIndexed(m_pObjStrm.get());
+        m_AttributeStyle.ReadIndexed(m_pObjStrm.get());
+        m_FontStyle.ReadIndexed(m_pObjStrm.get());
+        m_CharacterBorderStyle.ReadIndexed(m_pObjStrm.get());
+        m_AmikakeStyle.ReadIndexed(m_pObjStrm.get());
     }
 
     if (m_pObjStrm->CheckExtra())

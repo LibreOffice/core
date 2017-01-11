@@ -87,7 +87,7 @@ public:
     {
         LwpDLVList::Read();
         if( m_pOverride )
-            m_pOverride->Read(m_pObjStrm);
+            m_pOverride->Read(m_pObjStrm.get());
     }
 
     LwpOverride* GetOverride()

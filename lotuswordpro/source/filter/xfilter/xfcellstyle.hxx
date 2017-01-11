@@ -70,6 +70,8 @@
 #include "xfpadding.hxx"
 #include "xfshadow.hxx"
 
+#include <memory>
+
 class XFBorders;
 class XFFont;
 class XFBorders;
@@ -143,7 +145,7 @@ private:
     XFPadding   m_aPadding;
     rtl::Reference<XFFont> m_pFont;
     XFShadow    m_aShadow;
-    XFBorders   *m_pBorders;
+    std::unique_ptr<XFBorders>  m_pBorders;
     bool    m_bWrapText;
 };
 

@@ -63,12 +63,11 @@ class CBenTOCReader
 public: // Methods
     explicit CBenTOCReader(pLtcBenContainer pContainer)
         : cpContainer(pContainer)
-        , cpTOC(nullptr)
         , cBlockSize(0)
         , cCurr(0)
         , cTOCSize(0)
         { }
-    ~CBenTOCReader() { delete[] cpTOC; }
+    ~CBenTOCReader() {}
     BenError ReadLabelAndTOC();
 
 private: // Methods
@@ -85,7 +84,7 @@ private: // Methods
 
 private: // Data
     pLtcBenContainer cpContainer;
-    BenByte*         cpTOC;
+    std::unique_ptr<BenByte[]> cpTOC;
     unsigned long cBlockSize;
     unsigned long cCurr;
     unsigned long cTOCSize;

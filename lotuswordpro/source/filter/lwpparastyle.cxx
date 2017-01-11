@@ -108,43 +108,43 @@ void LwpParaStyle::Read()
     {
         // read many overrides
         LwpAlignmentOverride    aAlignOverride;
-        aAlignOverride.Read(m_pObjStrm);
+        aAlignOverride.Read(m_pObjStrm.get());
 
         LwpSpacingOverride  aSpacingOverride;
-        aSpacingOverride.Read(m_pObjStrm);
+        aSpacingOverride.Read(m_pObjStrm.get());
 
         LwpIndentOverride       aIndentOverride;
-        aIndentOverride.Read(m_pObjStrm);
+        aIndentOverride.Read(m_pObjStrm.get());
 
         LwpParaBorderOverride   aPBOverride;
-        aPBOverride.Read(m_pObjStrm);
+        aPBOverride.Read(m_pObjStrm.get());
 
         LwpBreaksOverride   aBreaksOverride;
-        aBreaksOverride.Read(m_pObjStrm);
+        aBreaksOverride.Read(m_pObjStrm.get());
 
         LwpNumberingOverride    aNumberingOverride;
-        aNumberingOverride.Read(m_pObjStrm);
+        aNumberingOverride.Read(m_pObjStrm.get());
 
         LwpTabOverride      aTabOverride;
-        aTabOverride.Read(m_pObjStrm);
+        aTabOverride.Read(m_pObjStrm.get());
 
     }
     else
     {
-        m_AlignmentStyle.ReadIndexed(m_pObjStrm);
-        m_SpacingStyle.ReadIndexed(m_pObjStrm);
-        m_IndentStyle.ReadIndexed(m_pObjStrm);
-        m_BorderStyle.ReadIndexed(m_pObjStrm);
-        m_BreaksStyle.ReadIndexed(m_pObjStrm);
-        m_NumberingStyle.ReadIndexed(m_pObjStrm);
-        m_TabStyle.ReadIndexed(m_pObjStrm);
+        m_AlignmentStyle.ReadIndexed(m_pObjStrm.get());
+        m_SpacingStyle.ReadIndexed(m_pObjStrm.get());
+        m_IndentStyle.ReadIndexed(m_pObjStrm.get());
+        m_BorderStyle.ReadIndexed(m_pObjStrm.get());
+        m_BreaksStyle.ReadIndexed(m_pObjStrm.get());
+        m_NumberingStyle.ReadIndexed(m_pObjStrm.get());
+        m_TabStyle.ReadIndexed(m_pObjStrm.get());
 
-        m_pKinsokuOptsOverride->Read(m_pObjStrm);
-        m_pBulletOverride->Read(m_pObjStrm);
+        m_pKinsokuOptsOverride->Read(m_pObjStrm.get());
+        m_pBulletOverride->Read(m_pObjStrm.get());
 
         if (m_pObjStrm->CheckExtra())
         {
-            m_BackgroundStyle.ReadIndexed(m_pObjStrm);
+            m_BackgroundStyle.ReadIndexed(m_pObjStrm.get());
             m_pObjStrm->SkipExtra();
         }
 

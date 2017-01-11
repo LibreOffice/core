@@ -69,7 +69,6 @@ XFSectionStyle::XFSectionStyle()
 
 XFSectionStyle::~XFSectionStyle()
 {
-    delete m_pColumns;
 }
 
 enumXFStyle XFSectionStyle::GetStyleFamily()
@@ -89,8 +88,7 @@ void XFSectionStyle::SetMarginRight(double right)
 
 void    XFSectionStyle::SetColumns(XFColumns *pColumns)
 {
-    delete m_pColumns;
-    m_pColumns = pColumns;
+    m_pColumns.reset( pColumns );
 }
 
 void XFSectionStyle::ToXml(IXFStream *pStrm)

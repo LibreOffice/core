@@ -125,8 +125,8 @@ bool LwpFormulaInfo::ReadCellID()
     LwpColumnSpecifier ColumnSpecifier;
     bool readSucceeded = true;
 
-    RowSpecifier.QuickRead(m_pObjStrm);
-    ColumnSpecifier.QuickRead(m_pObjStrm);
+    RowSpecifier.QuickRead(m_pObjStrm.get());
+    ColumnSpecifier.QuickRead(m_pObjStrm.get());
 
     m_aStack.push_back( new LwpFormulaCellAddr(ColumnSpecifier.ColumnID(cColumn),
                                                 RowSpecifier.RowID(m_nFormulaRow)) );
@@ -324,7 +324,7 @@ void LwpFormulaInfo::Read()
     m_pObjStrm->SeekRel(2);//flags, size in file: sal_uInt16
 
     LwpNotifyListPersistent cNotifyList;
-    cNotifyList.Read(m_pObjStrm);
+    cNotifyList.Read(m_pObjStrm.get());
 
     ReadExpression();
 

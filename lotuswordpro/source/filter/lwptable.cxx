@@ -114,11 +114,11 @@ void LwpTable::Read()
 
     m_nAttributes = m_pObjStrm->QuickReaduInt16();
 
-    m_Layout.ReadIndexed(m_pObjStrm);
+    m_Layout.ReadIndexed(m_pObjStrm.get());
 
-    m_DefaultCellStyle.ReadIndexed(m_pObjStrm);
+    m_DefaultCellStyle.ReadIndexed(m_pObjStrm.get());
     if (LwpFileHeader::m_nFileRevision >= 0x0007)
-        m_CPNotifyList.Read(m_pObjStrm);
+        m_CPNotifyList.Read(m_pObjStrm.get());
 
     m_pObjStrm->SkipExtra();
 }
@@ -171,8 +171,8 @@ LwpParallelColumns::~LwpParallelColumns()
 void LwpParallelColumns::Read()
 {
     LwpTable::Read();
-    cDefaultLeftColumnStyle.ReadIndexed(m_pObjStrm);
-    cDefaultRightColumnStyle.ReadIndexed(m_pObjStrm);
+    cDefaultLeftColumnStyle.ReadIndexed(m_pObjStrm.get());
+    cDefaultRightColumnStyle.ReadIndexed(m_pObjStrm.get());
 
     m_pObjStrm->SkipExtra();
 }

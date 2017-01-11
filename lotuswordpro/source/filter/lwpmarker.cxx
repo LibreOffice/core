@@ -78,9 +78,9 @@ LwpMarker::LwpMarker(LwpObjectHeader &objHdr, LwpSvStream *pStrm)
 void LwpMarker::Read()
 {
     LwpDLNFPVList::Read();
-    m_objContent.ReadIndexed(m_pObjStrm);
-    m_objLayout.ReadIndexed(m_pObjStrm);
-    m_objMarkerList.ReadIndexed(m_pObjStrm);
+    m_objContent.ReadIndexed(m_pObjStrm.get());
+    m_objLayout.ReadIndexed(m_pObjStrm.get());
+    m_objMarkerList.ReadIndexed(m_pObjStrm.get());
     m_nNeedUpdate = m_pObjStrm->QuickReaduInt16();
     m_nFlag = m_pObjStrm->QuickReaduInt16();
     m_nPageNumber = m_pObjStrm->QuickReaduInt16();
@@ -107,7 +107,7 @@ void LwpStoryMarker::Read()
 {
     LwpMarker::Read();
     m_nFlag = m_pObjStrm->QuickReaduInt16();
-    m_Range.Read(m_pObjStrm);
+    m_Range.Read(m_pObjStrm.get());
     m_pObjStrm->SkipExtra();
 }
 
@@ -128,14 +128,14 @@ LwpCHBlkMarker::LwpCHBlkMarker(LwpObjectHeader &objHdr, LwpSvStream *pStrm)
 void LwpCHBlkMarker::Read()
 {
     LwpStoryMarker::Read();
-    m_objPromptStory.ReadIndexed(m_pObjStrm);
-    m_Help.Read(m_pObjStrm);
+    m_objPromptStory.ReadIndexed(m_pObjStrm.get());
+    m_Help.Read(m_pObjStrm.get());
     m_nAction = m_pObjStrm->QuickReaduInt16();
     m_nTab = m_pObjStrm->QuickReaduInt32();
     m_nFlag = m_pObjStrm->QuickReaduInt16();
     if(m_pObjStrm->CheckExtra())
     {
-        m_Mirror.Read(m_pObjStrm);
+        m_Mirror.Read(m_pObjStrm.get());
         m_pObjStrm->SkipExtra();
     }
 }
@@ -328,7 +328,7 @@ LwpBookMark::LwpBookMark(LwpObjectHeader &objHdr, LwpSvStream *pStrm)
 void LwpBookMark::Read()
 {
     LwpDLNFVList::Read();
-    m_objMarker.ReadIndexed(m_pObjStrm);
+    m_objMarker.ReadIndexed(m_pObjStrm.get());
     if (LwpFileHeader::m_nFileRevision < 0x0008)
     {
         if (m_pObjStrm->QuickReadBool())
@@ -365,11 +365,11 @@ LwpFieldMark::LwpFieldMark(LwpObjectHeader &objHdr, LwpSvStream *pStrm)
 void LwpFieldMark::Read()
 {
     LwpStoryMarker::Read();
-    m_Formula.Read(m_pObjStrm);
-    m_objFormulaStory.ReadIndexed(m_pObjStrm);
+    m_Formula.Read(m_pObjStrm.get());
+    m_objFormulaStory.ReadIndexed(m_pObjStrm.get());
     if (LwpFileHeader::m_nFileRevision < 0x000B)
         return;
-    m_objResultContent.ReadIndexed(m_pObjStrm);
+    m_objResultContent.ReadIndexed(m_pObjStrm.get());
     m_nFlag = m_pObjStrm->QuickReaduInt16();
     m_nFieldType = m_pObjStrm->QuickReaduInt16();
     m_pObjStrm->SkipExtra();
@@ -547,7 +547,7 @@ LwpRubyMarker::LwpRubyMarker(LwpObjectHeader &objHdr, LwpSvStream *pStrm):LwpSto
 void LwpRubyMarker::Read()
 {
     LwpStoryMarker::Read();
-    m_objLayout.ReadIndexed(m_pObjStrm);
+    m_objLayout.ReadIndexed(m_pObjStrm.get());
     m_pObjStrm->SkipExtra();
 }
 

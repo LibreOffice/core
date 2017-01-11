@@ -64,6 +64,7 @@
 #include "xfstyle.hxx"
 #include "xfbgimage.hxx"
 #include "xfcolor.hxx"
+#include <memory>
 
 class XFColumns;
 /*
@@ -92,7 +93,7 @@ private:
     double      m_fMarginLeft;
     double      m_fMarginRight;
     XFColor     m_aBackColor;
-    XFColumns   *m_pColumns;
+    std::unique_ptr<XFColumns>  m_pColumns;
 };
 
 #endif

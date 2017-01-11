@@ -96,22 +96,22 @@ void LwpPageHint::Read()
 {
     LwpDLVList::Read();
 
-    m_PageLayout.ReadIndexed(m_pObjStrm);
+    m_PageLayout.ReadIndexed(m_pObjStrm.get());
     //m_ContentHints.ReadIndexed(m_pObjStrm);
-    m_ContentHints.Read(m_pObjStrm);
+    m_ContentHints.Read(m_pObjStrm.get());
     m_nLastFootnoteSeen = m_pObjStrm->QuickReaduInt16();
     m_nLastFootnoteProcessed = m_pObjStrm->QuickReaduInt16();
     m_nFlags = m_pObjStrm->QuickReaduInt16();
     m_nPageNumber = m_pObjStrm->QuickReaduInt16();
     m_nNumberStyle = m_pObjStrm->QuickReaduInt16();
-    m_BeforeText.Read(m_pObjStrm);
-    m_AfterText.Read(m_pObjStrm);
+    m_BeforeText.Read(m_pObjStrm.get());
+    m_AfterText.Read(m_pObjStrm.get());
     m_nNumberFlags = m_pObjStrm->QuickReaduInt8();
     m_nRenderedPageNumber = m_pObjStrm->QuickReaduInt16();
-    m_CurrentSection.ReadIndexed(m_pObjStrm);
+    m_CurrentSection.ReadIndexed(m_pObjStrm.get());
     m_nCurrentSectionPage = m_pObjStrm->QuickReaduInt16();
     //m_FootnoteSeen.ReadIndexed(m_pObjStrm);
-    m_FootnoteSeen.Read(m_pObjStrm);
+    m_FootnoteSeen.Read(m_pObjStrm.get());
     m_nLayoutPageNumber = m_pObjStrm->QuickReaduInt16();
 
     m_pObjStrm->SkipExtra();

@@ -87,8 +87,8 @@ void LwpGraphicOleObject::Read()
     if (LwpFileHeader::m_nFileRevision >= 0x000b)
     {
         // I'm not sure about the read method
-        m_pNextObj.ReadIndexed(m_pObjStrm);
-        m_pPrevObj.ReadIndexed(m_pObjStrm);
+        m_pNextObj.ReadIndexed(m_pObjStrm.get());
+        m_pPrevObj.ReadIndexed(m_pObjStrm.get());
     }
     m_pObjStrm->SkipExtra();
 
@@ -215,12 +215,12 @@ void LwpOleObject::Read()
             //if (VO_INVALID == m_pObjStrm->QuickReaduInt16())
             //  return;
 
-            ID.Read(m_pObjStrm);
+            ID.Read(m_pObjStrm.get());
             //return m_pObjStrm->Locate(ID);
         }
         else
         {
-            ID.ReadIndexed(m_pObjStrm);
+            ID.ReadIndexed(m_pObjStrm.get());
             //if (ID.IsNull())
             //  return;
 
