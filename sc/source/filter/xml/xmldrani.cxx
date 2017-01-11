@@ -204,9 +204,9 @@ ScXMLDatabaseRangeContext::ScXMLDatabaseRangeContext( ScXMLImport& rImport,
     mpQueryParam->nCol2 = maRange.aEnd.Col();
     mpQueryParam->nRow2 = maRange.aEnd.Row();
 
-    if (sDatabaseRangeName.matchAsciiL(STR_DB_LOCAL_NONAME, strlen(STR_DB_LOCAL_NONAME)))
+    if (sDatabaseRangeName.startsWith(STR_DB_LOCAL_NONAME))
         meRangeType = ScDBCollection::SheetAnonymous;
-    else if (sDatabaseRangeName.matchAsciiL(STR_DB_GLOBAL_NONAME, strlen(STR_DB_GLOBAL_NONAME)))
+    else if (sDatabaseRangeName.startsWith(STR_DB_GLOBAL_NONAME))
         meRangeType = ScDBCollection::GlobalAnonymous;
 }
 

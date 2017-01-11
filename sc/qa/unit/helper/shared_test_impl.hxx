@@ -276,8 +276,8 @@ void testCeilingFloor_Impl( ScDocument& rDoc )
 {
     // Original test case document is ceiling-floor.xlsx
     // Sheet1.K1 has =AND(K3:K81) to evaluate all results.
-    const char* pORef = "Sheet1.K1";
-    OUString aRef( OUString::createFromAscii( pORef));
+    const char pORef[] = "Sheet1.K1";
+    OUString aRef(pORef);
     ScAddress aPos;
     aPos.Parse(aRef);
     if (!checkFormula( rDoc, aPos, "AND(K3:K81)"))
