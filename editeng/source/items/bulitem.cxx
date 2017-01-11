@@ -133,7 +133,7 @@ SvxBulletItem::SvxBulletItem( SvStream& rStrm, sal_uInt16 _nWhich )
             nStyle = SvxBulletStyle::NONE;
         }
         else
-            pGraphicObject = new GraphicObject( aBmp );
+            pGraphicObject.reset( new GraphicObject( aBmp ) );
     }
 
     sal_Int32 nTmp(0);
@@ -159,7 +159,8 @@ SvxBulletItem::SvxBulletItem( SvStream& rStrm, sal_uInt16 _nWhich )
 SvxBulletItem::SvxBulletItem( const SvxBulletItem& rItem) : SfxPoolItem( rItem )
 {
     aFont           = rItem.aFont;
-    pGraphicObject  = ( rItem.pGraphicObject ? new GraphicObject( *rItem.pGraphicObject ) : nullptr );
+    if (rItem.pGraphicObject)
+        pGraphicObject.reset( new GraphicObject( *rItem.pGraphicObject ) );
     aPrevText       = rItem.aPrevText;
     aFollowText     = rItem.aFollowText;
     nStart          = rItem.nStart;
@@ -172,7 +173,6 @@ SvxBulletItem::SvxBulletItem( const SvxBulletItem& rItem) : SfxPoolItem( rItem )
 
 SvxBulletItem::~SvxBulletItem()
 {
-    delete pGraphicObject;
 }
 
 
@@ -273,12 +273,7 @@ SvStream& SvxBulletItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) c
     if( ( nStyle == SvxBulletStyle::BMP ) &&
         ( !pGraphicObject || ( GraphicType::NONE == pGraphicObject->GetType() ) || ( GraphicType::Default == pGraphicObject->GetType() ) ) )
     {
-        if( pGraphicObject )
-        {
-            delete( const_cast< SvxBulletItem* >( this )->pGraphicObject );
-            const_cast< SvxBulletItem* >( this )->pGraphicObject = nullptr;
-        }
-
+        const_cast< SvxBulletItem* >( this )->pGraphicObject.reset();
         const_cast< SvxBulletItem* >( this )->nStyle = SvxBulletStyle::NONE;
     }
 
@@ -366,16 +361,11 @@ void SvxBulletItem::SetGraphicObject( const GraphicObject& rGraphicObject )
 {
     if( ( GraphicType::NONE == rGraphicObject.GetType() ) || ( GraphicType::Default == rGraphicObject.GetType() ) )
     {
-        if( pGraphicObject )
-        {
-            delete pGraphicObject;
-            pGraphicObject = nullptr;
-        }
+         pGraphicObject.reset();
     }
     else
     {
-        delete pGraphicObject;
-        pGraphicObject = new GraphicObject( rGraphicObject );
+        pGraphicObject.reset( new GraphicObject( rGraphicObject ) );
     }
 }
 

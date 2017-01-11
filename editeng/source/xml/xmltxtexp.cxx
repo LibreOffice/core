@@ -62,8 +62,8 @@ class SvxEditEngineSourceImpl;
 class SvxEditEngineSourceImpl : public salhelper::SimpleReferenceObject
 {
 private:
-    EditEngine*             mpEditEngine;
-    SvxTextForwarder*       mpTextForwarder;
+    EditEngine*                        mpEditEngine;
+    std::unique_ptr<SvxTextForwarder>  mpTextForwarder;
 
     virtual ~SvxEditEngineSourceImpl() override;
 
@@ -81,15 +81,14 @@ SvxEditEngineSourceImpl::SvxEditEngineSourceImpl( EditEngine* pEditEngine )
 
 SvxEditEngineSourceImpl::~SvxEditEngineSourceImpl()
 {
-    delete mpTextForwarder;
 }
 
 SvxTextForwarder* SvxEditEngineSourceImpl::GetTextForwarder()
 {
     if (!mpTextForwarder)
-        mpTextForwarder = new SvxEditEngineForwarder( *mpEditEngine );
+        mpTextForwarder.reset( new SvxEditEngineForwarder( *mpEditEngine ) );
 
-    return mpTextForwarder;
+    return mpTextForwarder.get();
 }
 
 // SvxTextEditSource

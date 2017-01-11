@@ -45,7 +45,8 @@ enum class SvxBulletStyle
 class EDITENG_DLLPUBLIC SvxBulletItem : public SfxPoolItem
 {
     vcl::Font       aFont;
-    GraphicObject*  pGraphicObject;
+    std::unique_ptr<GraphicObject>
+                    pGraphicObject;
     OUString        aPrevText;
     OUString        aFollowText;
     sal_uInt16      nStart;

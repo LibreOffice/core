@@ -200,13 +200,12 @@ EditResId::EditResId(sal_uInt16 nId)
 }
 
 EditDLL::EditDLL()
+    : pGlobalData( new GlobalEditData )
 {
-    pGlobalData = new GlobalEditData;
 }
 
 EditDLL::~EditDLL()
 {
-    delete pGlobalData;
 }
 
 static ResMgr* pResMgr=nullptr;

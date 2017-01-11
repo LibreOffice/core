@@ -67,9 +67,9 @@ public:
 class EDITENG_DLLPUBLIC SvxFieldItem : public SfxPoolItem
 {
 private:
-    SvxFieldData*           pField;
+    std::unique_ptr<SvxFieldData>      pField;
 
-                    EDITENG_DLLPRIVATE SvxFieldItem( SvxFieldData* pField, const sal_uInt16 nId );
+    EDITENG_DLLPRIVATE SvxFieldItem( SvxFieldData* pField, const sal_uInt16 nId );
 
 public:
             static SfxPoolItem* CreateDefault();
@@ -83,7 +83,7 @@ public:
     virtual SfxPoolItem*    Create( SvStream&, sal_uInt16 nVer ) const override;
     virtual SvStream&       Store( SvStream& , sal_uInt16 nItemVersion ) const override;
 
-    const SvxFieldData*     GetField() const    { return pField; }
+    const SvxFieldData*     GetField() const    { return pField.get(); }
     static SvClassManager&  GetClassManager();
 };
 
