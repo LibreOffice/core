@@ -35,16 +35,14 @@ ScMarkArray::ScMarkArray() :
 ScMarkArray::ScMarkArray( ScMarkArray&& rArray ) :
     nCount( rArray.nCount ),
     nLimit( rArray.nLimit ),
-    pData( rArray.pData )
+    pData( rArray.pData.release() )
 {
     rArray.nCount = 0;
     rArray.nLimit = 0;
-    rArray.pData = nullptr;
 }
 
 ScMarkArray::~ScMarkArray()
 {
-    delete[] pData;
 }
 
 void ScMarkArray::Reset( bool bMarked, SCSIZE nNeeded )
@@ -52,12 +50,10 @@ void ScMarkArray::Reset( bool bMarked, SCSIZE nNeeded )
     // always create pData here
     // (or have separate method to ensure pData)
 
-    delete[] pData;
-
     assert(nNeeded);
     nLimit = nNeeded;
     nCount = 1;
-    pData = new ScMarkEntry[nNeeded];
+    pData.reset( new ScMarkEntry[nNeeded] );
     pData[0].nRow = MAXROW;
     pData[0].bMarked = bMarked;
 }
@@ -129,9 +125,8 @@ void ScMarkArray::SetMarkArea( SCROW nStartRow, SCROW nEndRow, bool bMarked )
                     if ( nLimit < nNeeded )
                         nLimit = nNeeded;
                     ScMarkEntry* pNewData = new ScMarkEntry[nLimit];
-                    memcpy( pNewData, pData, nCount*sizeof(ScMarkEntry) );
-                    delete[] pData;
-                    pData = pNewData;
+                    memcpy( pNewData, pData.get(), nCount*sizeof(ScMarkEntry) );
+                    pData.reset( pNewData );
                 }
             }
 
@@ -207,7 +202,7 @@ void ScMarkArray::SetMarkArea( SCROW nStartRow, SCROW nEndRow, bool bMarked )
                 }
                 if ( ni < nj )
                 {   // remove entries
-                    memmove( pData + ni, pData + nj, (nCount - nj) * sizeof(ScMarkEntry) );
+                    memmove( pData.get() + ni, pData.get() + nj, (nCount - nj) * sizeof(ScMarkEntry) );
                     nCount -= nj - ni;
                 }
             }
@@ -217,11 +212,11 @@ void ScMarkArray::SetMarkArea( SCROW nStartRow, SCROW nEndRow, bool bMarked )
                 if ( nInsert <= nCount )
                 {
                     if ( !bSplit )
-                        memmove( pData + nInsert + 1, pData + nInsert,
+                        memmove( pData.get() + nInsert + 1, pData.get() + nInsert,
                             (nCount - nInsert) * sizeof(ScMarkEntry) );
                     else
                     {
-                        memmove( pData + nInsert + 2, pData + nInsert,
+                        memmove( pData.get() + nInsert + 2, pData.get() + nInsert,
                             (nCount - nInsert) * sizeof(ScMarkEntry) );
                         pData[nInsert+1] = pData[nInsert-1];
                         nCount++;
@@ -306,15 +301,13 @@ bool ScMarkArray::HasEqualRowsMarked( const ScMarkArray& rOther ) const
 
 void ScMarkArray::CopyMarksTo( ScMarkArray& rDestMarkArray ) const
 {
-    delete[] rDestMarkArray.pData;
-
     if (pData)
     {
-        rDestMarkArray.pData = new ScMarkEntry[nCount];
-        memcpy( rDestMarkArray.pData, pData, nCount * sizeof(ScMarkEntry) );
+        rDestMarkArray.pData.reset( new ScMarkEntry[nCount] );
+        memcpy( rDestMarkArray.pData.get(), pData.get(), nCount * sizeof(ScMarkEntry) );
     }
     else
-        rDestMarkArray.pData = nullptr;
+        rDestMarkArray.pData.reset();
 
     rDestMarkArray.nCount = rDestMarkArray.nLimit = nCount;
 }

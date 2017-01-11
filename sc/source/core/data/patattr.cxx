@@ -95,14 +95,11 @@ ScPatternAttr::ScPatternAttr( const ScPatternAttr& rPatternAttr )
         mnKey(rPatternAttr.mnKey)
 {
     if (rPatternAttr.pName)
-        pName = new OUString(*rPatternAttr.pName);
-    else
-        pName = nullptr;
+        pName.reset( new OUString(*rPatternAttr.pName) );
 }
 
 ScPatternAttr::~ScPatternAttr()
 {
-    delete pName;
 }
 
 SfxPoolItem* ScPatternAttr::Clone( SfxItemPool *pPool ) const
@@ -110,7 +107,7 @@ SfxPoolItem* ScPatternAttr::Clone( SfxItemPool *pPool ) const
     ScPatternAttr* pPattern = new ScPatternAttr( GetItemSet().Clone(true, pPool) );
 
     pPattern->pStyle = pStyle;
-    pPattern->pName  = pName ? new OUString(*pName) : nullptr;
+    pPattern->pName.reset( pName ? new OUString(*pName) : nullptr );
 
     return pPattern;
 }
@@ -166,7 +163,7 @@ SfxPoolItem* ScPatternAttr::Create( SvStream& rStream, sal_uInt16 /* nVersion */
 
     ScPatternAttr* pPattern = new ScPatternAttr( pNewSet );
 
-    pPattern->pName = pStr;
+    pPattern->pName.reset( pStr );
 
     return pPattern;
 }
@@ -1213,7 +1210,7 @@ bool ScPatternAttr::IsVisibleEqual( const ScPatternAttr& rOther ) const
 
 const OUString* ScPatternAttr::GetStyleName() const
 {
-    return pName ? pName : ( pStyle ? &pStyle->GetName() : nullptr );
+    return pName ? pName.get() : ( pStyle ? &pStyle->GetName() : nullptr );
 }
 
 void ScPatternAttr::SetStyleSheet( ScStyleSheet* pNewStyle, bool bClearDirectFormat )
@@ -1233,7 +1230,7 @@ void ScPatternAttr::SetStyleSheet( ScStyleSheet* pNewStyle, bool bClearDirectFor
         }
         rPatternSet.SetParent(&pNewStyle->GetItemSet());
         pStyle = pNewStyle;
-        DELETEZ( pName );
+        pName.reset();
     }
     else
     {
@@ -1261,7 +1258,7 @@ void ScPatternAttr::UpdateStyleSheet(ScDocument* pDoc)
         if (pStyle)
         {
             GetItemSet().SetParent(&pStyle->GetItemSet());
-            DELETEZ( pName );
+            pName.reset();
         }
     }
     else
@@ -1277,7 +1274,7 @@ void ScPatternAttr::StyleToName()
         if ( pName )
             *pName = pStyle->GetName();
         else
-            pName = new OUString( pStyle->GetName() );
+            pName.reset( new OUString( pStyle->GetName() ) );
 
         pStyle = nullptr;
         GetItemSet().SetParent( nullptr );

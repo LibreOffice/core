@@ -86,7 +86,6 @@ ScChartPositioner::ScChartPositioner( const ScChartPositioner& rPositioner ) :
 
 ScChartPositioner::~ScChartPositioner()
 {
-    delete pPositionMap;
 }
 
 void ScChartPositioner::SetRangeList( const ScRange& rRange )
@@ -331,15 +330,14 @@ void ScChartPositioner::CheckColRowHeaders()
 const ScChartPositionMap* ScChartPositioner::GetPositionMap()
 {
     CreatePositionMap();
-    return pPositionMap;
+    return pPositionMap.get();
 }
 
 void ScChartPositioner::CreatePositionMap()
 {
     if ( eGlue == SC_CHARTGLUE_NA && pPositionMap )
     {
-        delete pPositionMap;
-        pPositionMap = nullptr;
+        pPositionMap.reset();
     }
 
     if ( pPositionMap )
@@ -458,8 +456,8 @@ void ScChartPositioner::CreatePositionMap()
         }
     }
 
-    pPositionMap = new ScChartPositionMap( static_cast<SCCOL>(nColCount), static_cast<SCROW>(nRowCount),
-        static_cast<SCCOL>(nColAdd), static_cast<SCROW>(nRowAdd), *pCols );
+    pPositionMap.reset( new ScChartPositionMap( static_cast<SCCOL>(nColCount), static_cast<SCROW>(nRowCount),
+        static_cast<SCCOL>(nColAdd), static_cast<SCROW>(nRowAdd), *pCols ) );
 
     //  cleanup
     for (ColumnMap::const_iterator it = pCols->begin(); it != pCols->end(); ++it )
@@ -467,6 +465,12 @@ void ScChartPositioner::CreatePositionMap()
         delete it->second;
     }
     delete pCols;
+}
+
+void ScChartPositioner::InvalidateGlue()
+{
+    eGlue = SC_CHARTGLUE_NA;
+    pPositionMap.reset();
 }
 
 ScChartPositionMap::ScChartPositionMap( SCCOL nChartCols, SCROW nChartRows,
