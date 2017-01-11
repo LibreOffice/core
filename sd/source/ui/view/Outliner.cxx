@@ -580,7 +580,10 @@ void Outliner::Initialize (bool bDirectionIsForward)
             // The iterator has pointed to the object one ahead/before the current
             // one.  Now move it to the one before/ahead the current one.
             ++maObjectIterator;
-            ++maObjectIterator;
+            if (maObjectIterator != sd::outliner::OutlinerContainer(this).end())
+            {
+                ++maObjectIterator;
+            }
         }
 
         mbMatchMayExist = true;
