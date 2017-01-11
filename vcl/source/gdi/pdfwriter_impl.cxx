@@ -2322,8 +2322,7 @@ void PDFWriterImpl::endPage()
             if( jpeg->m_pStream )
             {
                 writeJPG( *jpeg );
-                delete jpeg->m_pStream;
-                jpeg->m_pStream = nullptr;
+                jpeg->m_pStream.reset();
                 jpeg->m_aMask = Bitmap();
             }
         }
@@ -11227,7 +11226,7 @@ void PDFWriterImpl::drawJPGBitmap( SvStream& rDCTData, bool bIsTrueColor, const 
         JPGEmit& rEmit = m_aJPGs.front();
         rEmit.m_nObject     = createObject();
         rEmit.m_aID         = aID;
-        rEmit.m_pStream     = pStream;
+        rEmit.m_pStream.reset( pStream );
         rEmit.m_bTrueColor  = bIsTrueColor;
         if( !! rMask && rMask.GetSizePixel() == rSizePixel )
             rEmit.m_aMask   = rMask;
