@@ -35,6 +35,7 @@
 #include <sfx2/childwin.hxx>
 #include "toxe.hxx"
 #include <com/sun/star/i18n/XExtendedIndexEntrySupplier.hpp>
+#include <memory>
 
 class SwWrtShell;
 class SwTOXMgr;
@@ -99,7 +100,8 @@ class SwIndexMarkPane
     css::uno::Reference< css::i18n::XExtendedIndexEntrySupplier >
                     xExtendedIndexEntrySupplier;
 
-    SwTOXMgr*       pTOXMgr;
+    std::unique_ptr<SwTOXMgr>
+                    pTOXMgr;
     SwWrtShell*     pSh;
 
     void            Apply();
