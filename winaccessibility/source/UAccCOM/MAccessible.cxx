@@ -88,7 +88,7 @@ enum XInterfaceIndex {
 
 // IA2 states mapping, and name
 // maintenance the consistency, change one array, change the three all
-long IA2_STATES[] =
+long const IA2_STATES[] =
 {
     IA2_STATE_ACTIVE,                   // =                    0x1;
     IA2_STATE_ARMED,                    // =                    0x2;
@@ -114,7 +114,7 @@ long IA2_STATES[] =
 <=== map ===>
 
 */
-short UNO_STATES[] =
+short const UNO_STATES[] =
 {
     ACTIVE,         // = (sal_Int16)1;
     ARMED,          // = (sal_Int16)2;
