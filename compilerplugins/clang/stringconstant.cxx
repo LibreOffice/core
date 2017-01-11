@@ -106,7 +106,7 @@ private:
     std::string describeChangeKind(ChangeKind kind);
 
     bool isStringConstant(
-        Expr const * expr, unsigned * size, bool * nonAscii,
+        Expr const * expr, unsigned * size, bool * nonArray, bool * nonAscii,
         bool * embeddedNuls, bool * terminatingNul);
 
     bool isZero(Expr const * expr);
@@ -477,11 +477,13 @@ bool StringConstant::VisitCallExpr(CallExpr const * expr) {
         && fdecl->getNumParams() == 1)
     {
         unsigned n;
+        bool nonArray;
         bool non;
         bool emb;
         bool trm;
         if (!isStringConstant(
-                expr->getArg(0)->IgnoreParenImpCasts(), &n, &non, &emb, &trm))
+                expr->getArg(0)->IgnoreParenImpCasts(), &n, &nonArray, &non,
+                &emb, &trm))
         {
             return true;
         }
@@ -516,12 +518,13 @@ bool StringConstant::VisitCallExpr(CallExpr const * expr) {
     {
         for (unsigned i = 0; i != 2; ++i) {
             unsigned n;
+            bool nonArray;
             bool non;
             bool emb;
             bool trm;
             if (!isStringConstant(
-                    expr->getArg(i)->IgnoreParenImpCasts(), &n, &non, &emb,
-                    &trm))
+                    expr->getArg(i)->IgnoreParenImpCasts(), &n, &nonArray, &non,
+                    &emb, &trm))
             {
                 continue;
             }
@@ -560,12 +563,13 @@ bool StringConstant::VisitCallExpr(CallExpr const * expr) {
     {
         for (unsigned i = 0; i != 2; ++i) {
             unsigned n;
+            bool nonArray;
             bool non;
             bool emb;
             bool trm;
             if (!isStringConstant(
-                    expr->getArg(i)->IgnoreParenImpCasts(), &n, &non, &emb,
-                    &trm))
+                    expr->getArg(i)->IgnoreParenImpCasts(), &n, &nonArray, &non,
+                    &emb, &trm))
             {
                 continue;
             }
@@ -603,11 +607,13 @@ bool StringConstant::VisitCallExpr(CallExpr const * expr) {
         && fdecl->getNumParams() == 1)
     {
         unsigned n;
+        bool nonArray;
         bool non;
         bool emb;
         bool trm;
         if (!isStringConstant(
-                expr->getArg(1)->IgnoreParenImpCasts(), &n, &non, &emb, &trm))
+                expr->getArg(1)->IgnoreParenImpCasts(), &n, &nonArray, &non,
+                &emb, &trm))
         {
             return true;
         }
@@ -658,6 +664,78 @@ bool StringConstant::VisitCallExpr(CallExpr const * expr) {
             TreatEmpty::Error);
         return true;
     }
+    if (dc.Function("append").Class("OStringBuffer").Namespace("rtl")
+        .GlobalNamespace())
+    {
+        switch (fdecl->getNumParams()) {
+        case 1:
+            {
+                // char const * const s = "foo"; b.append(s) ->
+                // char const s[] = "foo"; b.append(s):
+                unsigned n;
+                bool nonArray;
+                bool non;
+                bool emb;
+                bool trm;
+                if (!isStringConstant(
+                        expr->getArg(0)->IgnoreParenImpCasts(), &n, &nonArray,
+                        &non, &emb, &trm))
+                {
+                    return true;
+                }
+                if (non || emb) {
+                    return true;
+                }
+                if (!trm) {
+                    report(
+                        DiagnosticsEngine::Warning,
+                        ("call of %0 with string constant argument lacking a"
+                         " terminating NUL"),
+                        getMemberLocation(expr))
+                        << fdecl->getQualifiedNameAsString()
+                        << expr->getSourceRange();
+                    return true;
+                }
+                std::string repl;
+                checkEmpty(expr, fdecl, TreatEmpty::Error, n, &repl);
+                if (nonArray) {
+                    report(
+                        DiagnosticsEngine::Warning,
+                        ("in call of %0 with non-array string constant"
+                         " argument, change that argument into an array"),
+                        getMemberLocation(expr))
+                        << fdecl->getQualifiedNameAsString()
+                        << expr->getSourceRange();
+                    return true;
+                }
+                return true;
+            }
+        case 2:
+            {
+                // b.append("foo", 3) -> b.append("foo"):
+                std::string file(
+                    compiler.getSourceManager().getFilename(
+                        compiler.getSourceManager().getSpellingLoc(
+                            expr->getLocStart())));
+                if (file
+                    == SRCDIR "/sal/qa/OStringBuffer/rtl_OStringBuffer.cxx")
+                {
+                    return true;
+                }
+                handleCharLen(
+                    expr, 0, 1, fdecl, "rtl::OStringBuffer::append",
+                    TreatEmpty::Error);
+                return true;
+            }
+        default:
+            return true;
+        }
+    }
+    if ((dc.Function("append").Class("OStringBuffer").Namespace("rtl")
+         .GlobalNamespace())
+        && fdecl->getNumParams() == 2)
+    {
+    }
     return true;
 }
 
@@ -696,11 +774,13 @@ bool StringConstant::VisitCXXConstructExpr(CXXConstructExpr const * expr) {
                     simplify = false;
                 } else {
                     unsigned n;
+                    bool nonArray;
                     bool non;
                     bool emb;
                     bool trm;
                     if (!isStringConstant(
-                            arg->IgnoreParenImpCasts(), &n, &non, &emb, &trm))
+                            arg->IgnoreParenImpCasts(), &n, &nonArray, &non,
+                            &emb, &trm))
                     {
                         return true;
                     }
@@ -742,12 +822,13 @@ bool StringConstant::VisitCXXConstructExpr(CXXConstructExpr const * expr) {
         case 4:
             {
                 unsigned n;
+                bool nonArray;
                 bool non;
                 bool emb;
                 bool trm;
                 if (!isStringConstant(
-                        expr->getArg(0)->IgnoreParenImpCasts(), &n, &non, &emb,
-                        &trm))
+                        expr->getArg(0)->IgnoreParenImpCasts(), &n, &nonArray,
+                        &non, &emb, &trm))
                 {
                     return true;
                 }
@@ -995,11 +1076,12 @@ std::string StringConstant::describeChangeKind(ChangeKind kind) {
 }
 
 bool StringConstant::isStringConstant(
-    Expr const * expr, unsigned * size, bool * nonAscii, bool * embeddedNuls,
-    bool * terminatingNul)
+    Expr const * expr, unsigned * size, bool * nonArray, bool * nonAscii,
+    bool * embeddedNuls, bool * terminatingNul)
 {
     assert(expr != nullptr);
     assert(size != nullptr);
+    assert(nonArray != nullptr);
     assert(nonAscii != nullptr);
     assert(embeddedNuls != nullptr);
     assert(terminatingNul != nullptr);
@@ -1030,12 +1112,16 @@ bool StringConstant::isStringConstant(
             }
         }
     }
-    if (!(loplugin::TypeCheck(t).Pointer().Const().Char()
-          || (t->isConstantArrayType()
-              && (loplugin::TypeCheck(
-                      t->getAsArrayTypeUnsafe()->getElementType())
-                  .Char()))))
+    bool isPtr;
+    if (loplugin::TypeCheck(t).Pointer().Const().Char()) {
+        isPtr = true;
+    } else if (t->isConstantArrayType()
+               && (loplugin::TypeCheck(
+                       t->getAsArrayTypeUnsafe()->getElementType())
+                   .Char()))
     {
+        isPtr = false;
+    } else {
         return false;
     }
     clang::StringLiteral const * lit = dyn_cast<clang::StringLiteral>(expr);
@@ -1055,6 +1141,7 @@ bool StringConstant::isStringConstant(
             }
         }
         *size = n;
+        *nonArray = isPtr;
         *nonAscii = non;
         *embeddedNuls = emb;
         *terminatingNul = true;
@@ -1077,7 +1164,7 @@ bool StringConstant::isStringConstant(
             Expr const * e2 = e->IgnoreParenImpCasts();
             if (e2 != e) {
                 return isStringConstant(
-                    e2, size, nonAscii, embeddedNuls, terminatingNul);
+                    e2, size, nonArray, nonAscii, embeddedNuls, terminatingNul);
             }
             //TODO: string literals are represented as recursive LValues???
             llvm::APInt n
@@ -1086,6 +1173,7 @@ bool StringConstant::isStringConstant(
             --n;
             assert(n.ule(std::numeric_limits<unsigned>::max()));
             *size = static_cast<unsigned>(n.getLimitedValue());
+            *nonArray = isPtr || *nonArray;
             *nonAscii = false; //TODO
             *embeddedNuls = false; //TODO
             *terminatingNul = true;
@@ -1118,6 +1206,7 @@ bool StringConstant::isStringConstant(
             }
             bool trm = e.getInt() == 0;
             *size = trm ? n - 1 : n;
+            *nonArray = isPtr;
             *nonAscii = non;
             *embeddedNuls = emb;
             *terminatingNul = trm;
@@ -1353,11 +1442,13 @@ void StringConstant::handleChar(
     char const * rewriteFrom, char const * rewriteTo)
 {
     unsigned n;
+    bool nonArray;
     bool non;
     bool emb;
     bool trm;
     if (!isStringConstant(
-            expr->getArg(arg)->IgnoreParenImpCasts(), &n, &non, &emb, &trm))
+            expr->getArg(arg)->IgnoreParenImpCasts(), &n, &nonArray, &non, &emb,
+            &trm))
     {
         return;
     }
@@ -1411,11 +1502,13 @@ void StringConstant::handleCharLen(
     // that at the level of non-expanded macros instead, but I have not found
     // out how to do that yet anyway):
     unsigned n;
+    bool nonArray;
     bool non;
     bool emb;
     bool trm;
     if (!(isStringConstant(
-              expr->getArg(arg1)->IgnoreParenImpCasts(), &n, &non, &emb, &trm)
+              expr->getArg(arg1)->IgnoreParenImpCasts(), &n, &nonArray, &non,
+              &emb, &trm)
           && trm))
     {
         return;
@@ -1437,12 +1530,13 @@ void StringConstant::handleCharLen(
             return;
         }
         unsigned n2;
+        bool nonArray2;
         bool non2;
         bool emb2;
         bool trm2;
         if (!(isStringConstant(
-                  subs->getBase()->IgnoreParenImpCasts(), &n2, &non2, &emb2,
-                  &trm2)
+                  subs->getBase()->IgnoreParenImpCasts(), &n2, &nonArray2,
+                  &non2, &emb2, &trm2)
               && n2 == n && non2 == non && emb2 == emb && trm2 == trm
                   //TODO: same strings
               && subs->getIdx()->EvaluateAsInt(res, compiler.getASTContext())
@@ -1527,11 +1621,13 @@ void StringConstant::handleOUStringCtor(
         return;
     }
     unsigned n;
+    bool nonArray;
     bool non;
     bool emb;
     bool trm;
     if (!isStringConstant(
-            e3->getArg(0)->IgnoreParenImpCasts(), &n, &non, &emb, &trm))
+            e3->getArg(0)->IgnoreParenImpCasts(), &n, &nonArray, &non, &emb,
+            &trm))
     {
         return;
     }

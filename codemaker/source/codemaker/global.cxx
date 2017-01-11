@@ -99,7 +99,7 @@ OString createFileNameFromType( const OString& destination,
         fileNameBuf.append(destination.getStr(), destination.getLength());
 
     if (bWithSeparator)
-        fileNameBuf.append("/", 1);
+        fileNameBuf.append("/");
 
     fileNameBuf.append(type.getStr(), type.getLength());
     fileNameBuf.append(postfix.getStr(), postfix.getLength());

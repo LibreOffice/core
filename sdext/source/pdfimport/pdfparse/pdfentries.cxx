@@ -433,7 +433,7 @@ bool PDFObjectRef::emit( EmitContext& rWriteContext ) const
     aBuf.append( sal_Int32( m_nNumber ) );
     aBuf.append( ' ' );
     aBuf.append( sal_Int32( m_nGeneration ) );
-    aBuf.append( " R", 2 );
+    aBuf.append( " R" );
     return rWriteContext.write( aBuf.getStr(), aBuf.getLength() );
 }
 

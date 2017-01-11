@@ -49,7 +49,7 @@ namespace {
 void appendString(rtl::OStringBuffer & buffer, rtl::OUString const & string) {
     buffer.append('"');
     for (int i = 0; i < string.getLength(); ++i) {
-        buffer.append(RTL_CONSTASCII_STRINGPARAM("\\u"));
+        buffer.append("\\u");
         sal_Unicode c = string[i];
         if (c < 0x1000) {
             buffer.append('0');
@@ -72,7 +72,7 @@ void createMessage(
 {
     message.setLength(0);
     appendString(message, string1);
-    message.append(RTL_CONSTASCII_STRINGPARAM(" vs. "));
+    message.append(" vs. ");
     appendString(message, string2);
 }
 

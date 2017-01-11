@@ -63,28 +63,28 @@ void testConvertToString(TestConvertToString const & rTest)
                                                  rTest.nFlags));
 
     rtl::OStringBuffer aPrefix;
-    aPrefix.append(RTL_CONSTASCII_STRINGPARAM("{"));
+    aPrefix.append("{");
     for (sal_Int32 i = 0; i < rTest.nLength; ++i)
     {
-        aPrefix.append(RTL_CONSTASCII_STRINGPARAM("U+"));
+        aPrefix.append("U+");
         aPrefix.append(static_cast< sal_Int32 >(rTest.aSource[i]), 16);
         if (i + 1 < rTest.nLength)
-            aPrefix.append(RTL_CONSTASCII_STRINGPARAM(","));
+            aPrefix.append(",");
     }
-    aPrefix.append(RTL_CONSTASCII_STRINGPARAM("}, "));
+    aPrefix.append("}, ");
     aPrefix.append(static_cast< sal_Int32 >(rTest.nEncoding));
-    aPrefix.append(RTL_CONSTASCII_STRINGPARAM(", 0x"));
+    aPrefix.append(", 0x");
     aPrefix.append(static_cast< sal_Int32 >(rTest.nFlags), 16);
-    aPrefix.append(RTL_CONSTASCII_STRINGPARAM(" -> "));
+    aPrefix.append(" -> ");
 
     if (bSuccess)
     {
         if (rTest.pStrict == nullptr || !aStrict.equals(rTest.pStrict))
         {
             rtl::OStringBuffer aMessage(aPrefix);
-            aMessage.append(RTL_CONSTASCII_STRINGPARAM("strict = \""));
+            aMessage.append("strict = \"");
             aMessage.append(aStrict);
-            aMessage.append(RTL_CONSTASCII_STRINGPARAM("\""));
+            aMessage.append("\"");
             CPPUNIT_ASSERT_MESSAGE(aMessage.getStr(), false);
         }
     }
@@ -93,22 +93,22 @@ void testConvertToString(TestConvertToString const & rTest)
         if (!aStrict.equals(rtl::OString(RTL_CONSTASCII_STRINGPARAM("12345"))))
         {
             rtl::OStringBuffer aMessage(aPrefix);
-            aMessage.append(RTL_CONSTASCII_STRINGPARAM("modified output"));
+            aMessage.append("modified output");
             CPPUNIT_ASSERT_MESSAGE(aMessage.getStr(), false);
         }
         if (rTest.pStrict != nullptr)
         {
             rtl::OStringBuffer aMessage(aPrefix);
-            aMessage.append(RTL_CONSTASCII_STRINGPARAM("failed"));
+            aMessage.append("failed");
             CPPUNIT_ASSERT_MESSAGE(aMessage.getStr(), false);
         }
     }
     if (!aRelaxed.equals(rTest.pRelaxed))
     {
         rtl::OStringBuffer aMessage(aPrefix);
-        aMessage.append(RTL_CONSTASCII_STRINGPARAM("relaxed = \""));
+        aMessage.append("relaxed = \"");
         aMessage.append(aRelaxed);
-        aMessage.append(RTL_CONSTASCII_STRINGPARAM("\""));
+        aMessage.append("\"");
         CPPUNIT_ASSERT_MESSAGE(aMessage.getStr(), false);
     }
 }
