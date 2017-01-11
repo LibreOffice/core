@@ -41,7 +41,7 @@
 #define _INIT_ATL_COMMON_VARS
 #endif
 #include <atlbase.h>
-CComModule _Module;
+static CComModule _Module;
 #include <atlcom.h>
 
 #if defined __clang__

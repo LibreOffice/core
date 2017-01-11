@@ -8,6 +8,7 @@
  */
 
 #include "check.hxx"
+#include "compat.hxx"
 #include "plugin.hxx"
 
 // Find variable declarations at namespace scope that need not have external
@@ -70,6 +71,14 @@ public:
             //
             // is already handled by Clang itself with an error "variable 'v' is
             // not needed and will not be emitted"
+            return true;
+        }
+        SourceLocation argLoc;
+        if (compat::isMacroArgExpansion(compiler, def->getLocation(), &argLoc)
+            && (Lexer::getImmediateMacroName(
+                    argLoc, compiler.getSourceManager(), compiler.getLangOpts())
+                == "DEFINE_GUID"))
+        {
             return true;
         }
         report(

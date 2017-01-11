@@ -125,13 +125,13 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 
 // for now database component and chart are always installed
 #define SUPPORTED_EXT_NUM 30
-const char* aFileExt[] = { ".vor",
+const char* const aFileExt[] = { ".vor",
                            ".sds", ".sda", ".sdd", ".sdp", ".sdc", ".sdw", ".smf",
                            ".stw", ".stc", ".sti", ".std",
                            ".sxw", ".sxc", ".sxi", ".sxd", ".sxg", ".sxm",
                            ".ott", ".otg", ".otp", ".ots", ".otf",
                            ".odt", ".oth", ".odm", ".odg", ".odp", ".ods", ".odf"};
-const char* aMimeType[] = {
+const char* const aMimeType[] = {
                           "application/vnd.stardivision.writer",
 
                           "application/vnd.stardivision.chart",
@@ -176,23 +176,23 @@ const int nForModes[] = { 16,
                           16,  2,  4,  8, 32,
                           16, 16, 16,  2,  4,  8, 32 };
 
-const char* aClassID = "{67F2A879-82D5-4A6D-8CC5-FFB3C114B69D}";
-const char* aTypeLib = "{61FA3F13-8061-4796-B055-3697ED28CB38}";
+const char* const aClassID = "{67F2A879-82D5-4A6D-8CC5-FFB3C114B69D}";
+const char* const aTypeLib = "{61FA3F13-8061-4796-B055-3697ED28CB38}";
 
 // ISOComWindowPeer interface information
-const char* aInterIDWinPeer = "{BF5D10F3-8A10-4A0B-B150-2B6AA2D7E118}";
-const char* aProxyStubWinPeer = "{00020424-0000-0000-C000-000000000046}";
+const char* const aInterIDWinPeer = "{BF5D10F3-8A10-4A0B-B150-2B6AA2D7E118}";
+const char* const aProxyStubWinPeer = "{00020424-0000-0000-C000-000000000046}";
 
 // ISODispatchInterceptor interface information
-const char* aInterIDDispInt = "{9337694C-B27D-4384-95A4-9D8E0EABC9E5}";
-const char* aProxyStubDispInt = "{00020424-0000-0000-C000-000000000046}";
+const char* const aInterIDDispInt = "{9337694C-B27D-4384-95A4-9D8E0EABC9E5}";
+const char* const aProxyStubDispInt = "{00020424-0000-0000-C000-000000000046}";
 
 // ISOActionsApproval interface information
-const char* aInterIDActApprove = "{029E9F1E-2B3F-4297-9160-8197DE7ED54F}";
-const char* aProxyStubActApprove = "{00020424-0000-0000-C000-000000000046}";
+const char* const aInterIDActApprove = "{029E9F1E-2B3F-4297-9160-8197DE7ED54F}";
+const char* const aProxyStubActApprove = "{00020424-0000-0000-C000-000000000046}";
 
 // The following prefix is required for HKEY_LOCAL_MACHINE and HKEY_CURRENT_USER ( not for HKEY_CLASSES_ROOT )
-const char* aLocalPrefix = "Software\\Classes\\";
+const char* const aLocalPrefix = "Software\\Classes\\";
 
 BOOL createKey( HKEY hkey,
                 const char* aKeyToCreate,
@@ -506,8 +506,8 @@ STDAPI DllUnregisterServerNative( int nMode, BOOL bForAllUsers, BOOL bFor64Bit )
 // DllRegisterServerDoc - Adds entries to the system registry
 
 #define SUPPORTED_MSEXT_NUM 7
-const char* aMSFileExt[] = { ".dot", ".doc", ".xlt", ".xls", ".pot", ".ppt", ".pps" };
-const char* aMSMimeType[] = { "application/msword",
+const char* const aMSFileExt[] = { ".dot", ".doc", ".xlt", ".xls", ".pot", ".ppt", ".pps" };
+const char* const aMSMimeType[] = { "application/msword",
                           "application/msword",
                           "application/msexcell",
                           "application/msexcell",
