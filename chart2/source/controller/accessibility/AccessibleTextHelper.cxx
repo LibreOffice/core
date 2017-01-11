@@ -53,7 +53,6 @@ AccessibleTextHelper::AccessibleTextHelper(
 
 AccessibleTextHelper::~AccessibleTextHelper()
 {
-    delete m_pTextHelper;
 }
 
 // ____ XInitialization ____
@@ -79,7 +78,7 @@ void SAL_CALL AccessibleTextHelper::initialize( const Sequence< uno::Any >& aArg
 
     SolarMutexGuard aSolarGuard;
 
-    delete m_pTextHelper;
+    m_pTextHelper.reset();
 
     VclPtr<vcl::Window> pWindow( VCLUnoHelper::GetWindow( xWindow ));
     if( pWindow )
@@ -90,7 +89,7 @@ void SAL_CALL AccessibleTextHelper::initialize( const Sequence< uno::Any >& aArg
             SdrObject * pTextObj = m_pDrawViewWrapper->getNamedSdrObject( aCID );
             if( pTextObj )
             {
-                m_pTextHelper = new ::accessibility::AccessibleTextHelper(o3tl::make_unique<SvxTextEditSource>(*pTextObj, nullptr, *pView, *pWindow));
+                m_pTextHelper.reset( new ::accessibility::AccessibleTextHelper(o3tl::make_unique<SvxTextEditSource>(*pTextObj, nullptr, *pView, *pWindow)) );
                 m_pTextHelper->SetEventSource( xEventSource );
             }
         }
