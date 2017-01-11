@@ -110,7 +110,8 @@ struct PieLabelInfo;
     void                performLabelBestFit(ShapeParam& rShapeParam, PieLabelInfo& rPieLabelInfo);
 
 private: //member
-    PiePositionHelper*    m_pPosHelper;
+    std::unique_ptr<PiePositionHelper>
+                          m_pPosHelper;
     bool                  m_bUseRings;
     bool                  m_bSizeExcludesLabelsAndExplodedSegments;
 

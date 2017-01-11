@@ -63,7 +63,6 @@ AccessibleChartView::AccessibleChartView(SdrView* pView ) :
 
 AccessibleChartView::~AccessibleChartView()
 {
-    delete m_pViewForwarder;
 }
 
 awt::Rectangle AccessibleChartView::GetWindowPosSize() const
@@ -324,12 +323,8 @@ void SAL_CALL AccessibleChartView::initialize( const Sequence< Any >& rArguments
             aAccInfo.m_spObjectHierarchy = m_spObjectHierarchy;
             aAccInfo.m_pSdrView = m_pSdrView;
             VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( m_xWindow );
-            if ( m_pViewForwarder )
-            {
-                delete m_pViewForwarder;
-            }
-            m_pViewForwarder = new AccessibleViewForwarder( this, pWindow );
-            aAccInfo.m_pViewForwarder = m_pViewForwarder;
+            m_pViewForwarder.reset( new AccessibleViewForwarder( this, pWindow ) );
+            aAccInfo.m_pViewForwarder = m_pViewForwarder.get();
             // broadcasts an INVALIDATE_ALL_CHILDREN event globally
             SetInfo( aAccInfo );
         }

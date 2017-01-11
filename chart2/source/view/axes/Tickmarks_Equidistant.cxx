@@ -77,7 +77,7 @@ EquidistantTickFactory::EquidistantTickFactory(
 {
     //@todo: make sure that the scale is valid for the scaling
 
-    m_pfCurrentValues = new double[getTickDepth()];
+    m_pfCurrentValues.reset( new double[getTickDepth()] );
 
     if( m_rScale.Scaling.is() )
     {
@@ -128,7 +128,6 @@ EquidistantTickFactory::EquidistantTickFactory(
 
 EquidistantTickFactory::~EquidistantTickFactory()
 {
-    delete[] m_pfCurrentValues;
 }
 
 sal_Int32 EquidistantTickFactory::getTickDepth() const
