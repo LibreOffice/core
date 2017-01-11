@@ -35,6 +35,7 @@
 #include <rtl/math.hxx>
 
 #include <math.h>
+#include <algorithm>
 
 #include <vector>
 #include <limits>
@@ -325,6 +326,8 @@ public:
 
     void MatConcat(SCSIZE nMaxCol, SCSIZE nMaxRow, const ScMatrixRef& xMat1, const ScMatrixRef& xMat2,
             SvNumberFormatter& rFormatter, svl::SharedStringPool& rPool);
+    double GetGcd() const;
+
 
 #if DEBUG_MATRIX
     void Dump() const;
@@ -1410,6 +1413,29 @@ struct MinOp
     }
 };
 
+struct Gcd
+{
+  static double init() { return 0; }
+  static double gcdResult(double fx,double fy)
+  {
+    if (fy == 0.0)
+        return fx;
+    else if (fx == 0.0)
+        return fy;
+    else
+    {
+        double fz = fmod(fx, fy);
+        while (fz > 0.0)
+        {
+            fx = fy;
+            fy = fz;
+            fz = fmod(fx, fy);
+        }
+        return fy;
+    }
+  }
+};
+
 template<typename Op>
 class CalcMaxMinValue : public std::unary_function<MatrixImplType::element_block_type, void>
 {
@@ -1467,6 +1493,50 @@ public:
                 ;
         }
     }
+};
+
+template<typename Op>
+class CalcGcd : public std::unary_function<MatrixImplType::element_block_type, void>
+{
+     double fy;
+     double er;
+public:
+  CalcGcd():
+  fy(0.0)
+  {}
+
+  double getRis() const {return (fy >0 ? fy : er);}
+  void operator() ( const MatrixImplType::element_block_node_type &node)
+  {
+    switch(node.type)
+    {
+      case mdds::mtm::element_numeric:
+      {
+        typedef MatrixImplType::numeric_block_type block_type;
+        block_type::const_iterator it = block_type::begin(*node.data);
+        block_type::const_iterator itEnd = block_type::end(*node.data);
+        for(;it != itEnd;++it)
+          {
+            if(*it > 0)
+              {
+                fy = Op::gcdResult(*it, fy);
+              }
+            else
+               er = CreateDoubleError(FormulaError::IllegalArgument);
+           }
+      }
+      break;
+      case mdds::mtm::element_boolean:
+      case mdds::mtm::element_empty:
+      case mdds::mtm::element_string:
+      {
+         break;
+      }
+      break;
+      default:
+          ;
+    }
+  }
 };
 
 inline double evaluate( double fVal, ScQueryOp eOp )
@@ -1888,6 +1958,13 @@ double ScMatrixImpl::GetMinValue( bool bTextAsZero ) const
     CalcMaxMinValue<MinOp> aFunc(bTextAsZero);
     maMat.walk(aFunc);
     return aFunc.getValue();
+}
+
+double ScMatrixImpl::GetGcd() const
+{
+    CalcGcd<Gcd> aFunc;
+    maMat.walk(aFunc);
+    return aFunc.getRis();
 }
 
 ScMatrixRef ScMatrixImpl::CompareMatrix(
@@ -3030,6 +3107,11 @@ double ScFullMatrix::GetMinValue( bool bTextAsZero ) const
     return pImpl->GetMinValue(bTextAsZero);
 }
 
+double ScFullMatrix::GetGcd()
+{
+    return pImpl->GetGcd();
+}
+
 ScMatrixRef ScFullMatrix::CompareMatrix(
     sc::Compare& rComp, size_t nMatPos, sc::CompareOptions* pOptions ) const
 {
@@ -3943,6 +4025,12 @@ double ScVectorRefMatrix::GetMinValue(bool bTextAsZero) const
 {
     const_cast<ScVectorRefMatrix*>(this)->ensureFullMatrix();
     return mpFullMatrix->GetMinValue(bTextAsZero);
+}
+
+double ScVectorRefMatrix::GetGcd()
+{
+    const_cast<ScVectorRefMatrix*>(this)->ensureFullMatrix();
+    return mpFullMatrix->GetGcd();
 }
 
 ScMatrixRef ScVectorRefMatrix::CompareMatrix(sc::Compare& rComp, size_t nMatPos, sc::CompareOptions* pOptions) const
