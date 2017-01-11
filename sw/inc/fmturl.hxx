@@ -34,7 +34,8 @@ class SW_DLLPUBLIC SwFormatURL: public SfxPoolItem
     OUString  sTargetFrameName; ///< Target frame for URL.
     OUString  sURL;             ///< Simple URL.
     OUString  sName;            ///< Name of the anchor.
-    ImageMap *pMap;             ///< ClientSide images.
+    std::unique_ptr<ImageMap>
+              pMap;             ///< ClientSide images.
 
     bool      bIsServerMap;     ///< A ServerSideImageMap with the URL.
 
@@ -66,8 +67,8 @@ public:
     const OUString& GetTargetFrameName()const { return sTargetFrameName; }
     const OUString& GetURL()            const { return sURL; }
           bool      IsServerMap()       const { return bIsServerMap; }
-    const ImageMap *GetMap()            const { return pMap; }
-          ImageMap *GetMap()                  { return pMap; }
+    const ImageMap *GetMap()            const { return pMap.get(); }
+          ImageMap *GetMap()                  { return pMap.get(); }
 
     const OUString& GetName() const                { return sName; }
     void SetName( const OUString& rNm )     { sName = rNm; }

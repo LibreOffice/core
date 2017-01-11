@@ -365,9 +365,9 @@ public:
     bool        BuildSortLst();
 
 private:
-    SwEditShell*              pSh;
-    SetGetExpFields*           pSrtLst;
-    std::set<const SwTextField*> aTmpLst;
+    SwEditShell*                      pSh;
+    std::unique_ptr<SetGetExpFields>  pSrtLst;
+    std::set<const SwTextField*>      aTmpLst;
 };
 
  /// Implementation in tblcalc.cxx.

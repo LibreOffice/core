@@ -96,7 +96,6 @@ SwAccessiblePortionData::SwAccessiblePortionData(
 
 SwAccessiblePortionData::~SwAccessiblePortionData()
 {
-    delete m_pSentences;
 }
 
 void SwAccessiblePortionData::Text(sal_Int32 nLength, sal_uInt16 nType, sal_Int32 /*nHeight*/, sal_Int32 /*nWidth*/)
@@ -480,7 +479,7 @@ void SwAccessiblePortionData::GetSentenceBoundary(
         OSL_ENSURE( g_pBreakIt->GetBreakIter().is(), "No break-iterator." );
         if( g_pBreakIt->GetBreakIter().is() )
         {
-            m_pSentences = new Positions_t();
+            m_pSentences.reset( new Positions_t );
             m_pSentences->reserve(10);
 
             // use xBreak->endOfSentence to iterate over all words; store

@@ -252,14 +252,13 @@ double SwTableBox::GetValue( SwTableCalcPara& rCalcPara ) const
 
 SwTableCalcPara::SwTableCalcPara( SwCalc& rCalculator, const SwTable& rTable )
     : pLastTableBox( nullptr ), nStackCnt( 0 ), nMaxSize( cMAXSTACKSIZE ),
+    pBoxStack( new SwTableSortBoxes ),
     rCalc( rCalculator ), pTable( &rTable )
 {
-    pBoxStack = new SwTableSortBoxes;
 }
 
 SwTableCalcPara::~SwTableCalcPara()
 {
-    delete pBoxStack;
 }
 
 bool SwTableCalcPara::CalcWithStackOverflow()

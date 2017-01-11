@@ -455,7 +455,6 @@ bool SwAutoCorrExceptWord::CheckDelChar( const SwPosition& rPos )
 
 SwDontExpandItem::~SwDontExpandItem()
 {
-    delete pDontExpItems;
 }
 
 void SwDontExpandItem::SaveDontExpandItems( const SwPosition& rPos )
@@ -463,14 +462,13 @@ void SwDontExpandItem::SaveDontExpandItems( const SwPosition& rPos )
     const SwTextNode* pTextNd = rPos.nNode.GetNode().GetTextNode();
     if( pTextNd )
     {
-        pDontExpItems = new SfxItemSet( const_cast<SwDoc*>(pTextNd->GetDoc())->GetAttrPool(),
-                                            aCharFormatSetRange );
+        pDontExpItems.reset( new SfxItemSet( const_cast<SwDoc*>(pTextNd->GetDoc())->GetAttrPool(),
+                                            aCharFormatSetRange ) );
         const sal_Int32 n = rPos.nContent.GetIndex();
         if( !pTextNd->GetAttr( *pDontExpItems, n, n,
                                 n != pTextNd->GetText().getLength() ))
         {
-            delete pDontExpItems;
-            pDontExpItems = nullptr;
+            pDontExpItems.reset();
         }
     }
 }

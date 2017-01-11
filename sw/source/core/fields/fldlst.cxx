@@ -36,7 +36,7 @@ SwInputFieldList::SwInputFieldList( SwEditShell* pShell, bool bBuildTmpLst )
     : pSh(pShell)
 {
     // create sorted list of all  input fields
-    pSrtLst = new SetGetExpFields();
+    pSrtLst.reset( new SetGetExpFields );
 
     const SwFieldTypes& rFieldTypes = *pSh->GetDoc()->getIDocumentFieldsAccess().GetFieldTypes();
     const size_t nSize = rFieldTypes.size();
@@ -80,7 +80,6 @@ SwInputFieldList::SwInputFieldList( SwEditShell* pShell, bool bBuildTmpLst )
 
 SwInputFieldList::~SwInputFieldList()
 {
-    delete pSrtLst;
 }
 
 size_t SwInputFieldList::Count() const

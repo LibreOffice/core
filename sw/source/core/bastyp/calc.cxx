@@ -197,7 +197,7 @@ SwHash* Find( const OUString& rStr, SwHash* const * ppTable,
     if( pPos )
         *pPos = static_cast<sal_uInt16>(ii);
 
-    for( SwHash* pEntry = *(ppTable+ii); pEntry; pEntry = pEntry->pNext )
+    for( SwHash* pEntry = *(ppTable+ii); pEntry; pEntry = pEntry->pNext.get() )
     {
         if( rStr == pEntry->aStr )
         {
@@ -357,7 +357,7 @@ SwCalc::SwCalc( SwDoc& rD )
 
     nVal.PutString( rUserOptions.GetToken( aAdrToken[ 11 ] ));
     sTmpStr = OUString::createFromAscii(sNTypeTab[25]);
-    m_aVarTable[ aHashValue[ 25 ] ]->pNext = new SwCalcExp( sTmpStr, nVal, nullptr );
+    m_aVarTable[ aHashValue[ 25 ] ]->pNext.reset( new SwCalcExp( sTmpStr, nVal, nullptr ) );
 
 } // SwCalc::SwCalc
 
@@ -448,14 +448,14 @@ SwCalcExp* SwCalc::VarLook( const OUString& rStr, bool bIns )
     {
         // then check doc
         SwHash* const * ppDocTable = m_rDoc.getIDocumentFieldsAccess().GetUpdateFields().GetFieldTypeTable();
-        for( SwHash* pEntry = *(ppDocTable+ii); pEntry; pEntry = pEntry->pNext )
+        for( SwHash* pEntry = *(ppDocTable+ii); pEntry; pEntry = pEntry->pNext.get() )
         {
             if( aStr == pEntry->aStr )
             {
                 // then insert here
                 pFnd = new SwCalcExp( aStr, SwSbxValue(),
                                     static_cast<SwCalcFieldType*>(pEntry)->pFieldType );
-                pFnd->pNext = *(m_aVarTable+ii);
+                pFnd->pNext.reset( *(m_aVarTable+ii) );
                 *(m_aVarTable+ii) = pFnd;
                 break;
             }
@@ -562,7 +562,7 @@ SwCalcExp* SwCalc::VarLook( const OUString& rStr, bool bIns )
     }
 
     SwCalcExp* pNewExp = new SwCalcExp( aStr, SwSbxValue(), nullptr );
-    pNewExp->pNext = m_aVarTable[ ii ];
+    pNewExp->pNext.reset( m_aVarTable[ ii ] );
     m_aVarTable[ ii ] = pNewExp;
 
     OUString sColumnName( GetColumnName( sTmpName ));
@@ -607,7 +607,7 @@ void SwCalc::VarChange( const OUString& rStr, const SwSbxValue& rValue )
     if( !pFnd )
     {
         pFnd = new SwCalcExp( aStr, SwSbxValue( rValue ), nullptr );
-        pFnd->pNext = m_aVarTable[ nPos ];
+        pFnd->pNext.reset( m_aVarTable[ nPos ] );
         m_aVarTable[ nPos ] = pFnd;
     }
     else
@@ -1392,7 +1392,6 @@ SwHash::SwHash(const OUString& rStr)
 
 SwHash::~SwHash()
 {
-    delete pNext;
 }
 
 void DeleteHashTable( SwHash **ppHashTable, sal_uInt16 nCount )

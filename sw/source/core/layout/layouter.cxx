@@ -45,13 +45,13 @@ public:
 
 class SwEndnoter
 {
-    SwLayouter* pMaster;
-    SwSectionFrame* pSect;
-    SwFootnoteFrames*    pEndArr;
+    SwLayouter*                        pMaster;
+    SwSectionFrame*                    pSect;
+    std::unique_ptr<SwFootnoteFrames>  pEndArr;
 public:
     explicit SwEndnoter( SwLayouter* pLay )
-        : pMaster( pLay ), pSect( nullptr ), pEndArr( nullptr ) {}
-    ~SwEndnoter() { delete pEndArr; }
+        : pMaster( pLay ), pSect( nullptr ) {}
+    ~SwEndnoter() {}
     void CollectEndnotes( SwSectionFrame* pSct );
     void CollectEndnote( SwFootnoteFrame* pFootnote );
     const SwSectionFrame* GetSect() const { return pSect; }
@@ -114,7 +114,7 @@ void SwEndnoter::CollectEndnote( SwFootnoteFrame* pFootnote )
         }
     }
     if( !pEndArr )
-        pEndArr = new SwFootnoteFrames;  // deleted from the SwLayouter
+        pEndArr.reset( new SwFootnoteFrames );  // deleted from the SwLayouter
     pEndArr->push_back( pFootnote );
 }
 
@@ -133,8 +133,7 @@ void SwEndnoter::InsertEndnotes()
     SwFootnoteBossFrame *pBoss = pRef ? pRef->FindFootnoteBossFrame()
                                : static_cast<SwFootnoteBossFrame*>(pSect->Lower());
     pBoss->MoveFootnotes_( *pEndArr );
-    delete pEndArr;
-    pEndArr = nullptr;
+    pEndArr.reset();
     pSect = nullptr;
 }
 

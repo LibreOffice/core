@@ -218,7 +218,6 @@ SwList::SwList( const OUString& sListId,
 
 SwList::~SwList()
 {
-    delete mpListImpl;
 }
 
 const OUString SwList::GetListId() const

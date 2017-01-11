@@ -29,7 +29,7 @@ class SwTextFormatInfo;
 class SwTextGuess
 {
     css::uno::Reference< css::linguistic2::XHyphenatedWord >  xHyphWord;
-    SwHangingPortion *pHanging; // for hanging punctuation
+    std::unique_ptr<SwHangingPortion> pHanging; // for hanging punctuation
     sal_Int32 nCutPos;         // this character doesn't fit
     sal_Int32 nBreakStart;     // start index of word containing line break
     sal_Int32 nBreakPos;       // start index of break position
@@ -40,14 +40,14 @@ public:
     inline SwTextGuess(): pHanging( nullptr ), nCutPos(0), nBreakStart(0),
                         nBreakPos(0), nFieldDiff(0), nBreakWidth(0)
         { }
-    ~SwTextGuess() { delete pHanging; }
+    ~SwTextGuess() {}
 
     // true, if current portion still fits to current line
     bool Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
                     const sal_uInt16 nHeight );
     bool AlternativeSpelling( const SwTextFormatInfo &rInf, const sal_Int32 nPos );
 
-    inline SwHangingPortion* GetHangingPortion() const { return pHanging; }
+    inline SwHangingPortion* GetHangingPortion() const { return pHanging.get(); }
     inline void ClearHangingPortion() { pHanging = nullptr; }
     inline sal_uInt16 BreakWidth() const { return nBreakWidth; }
     inline sal_Int32 CutPos() const { return nCutPos; }

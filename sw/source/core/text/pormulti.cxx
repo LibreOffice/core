@@ -305,8 +305,7 @@ SwDoubleLinePortion::SwDoubleLinePortion(const SwMultiCreator& rCreate, sal_Int3
 
     if( !pBracket->cPre && !pBracket->cPost )
     {
-        delete pBracket;
-        pBracket = nullptr;
+        pBracket.reset();
     }
 
     // double line portions have the same direction as the frame directions
@@ -359,7 +358,7 @@ void SwDoubleLinePortion::SetBrackets( const SwDoubleLinePortion& rDouble )
 {
     if( rDouble.pBracket )
     {
-        pBracket = new SwBracket;
+        pBracket.reset( new SwBracket );
         pBracket->cPre = rDouble.pBracket->cPre;
         pBracket->cPost = rDouble.pBracket->cPost;
         pBracket->nPreScript = rDouble.pBracket->nPreScript;
@@ -526,7 +525,6 @@ void SwDoubleLinePortion::ResetSpaceAdd( SwLineLayout* pCurr )
 
 SwDoubleLinePortion::~SwDoubleLinePortion()
 {
-    delete pBracket;
 }
 
 // constructs a ruby portion, i.e. an additional text is displayed

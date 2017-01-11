@@ -227,7 +227,8 @@ private:
     {
         CompareData &rData1, &rData2;
         const MovedData &rMoved1, &rMoved2;
-        long *pMemory, *pFDiag, *pBDiag;
+        std::unique_ptr<long[]> pMemory;
+        long *pFDiag, *pBDiag;
 
         void Compare( sal_uLong nStt1, sal_uLong nEnd1, sal_uLong nStt2, sal_uLong nEnd2 );
         sal_uLong CheckDiag( sal_uLong nStt1, sal_uLong nEnd1,
@@ -323,7 +324,7 @@ static CmpOptionsContainer CmpOptions;
 class CommonSubseq
 {
 private:
-    int *pData;
+    std::unique_ptr<int[]> pData;
     int nSize;
 
 protected:
@@ -332,12 +333,11 @@ protected:
     CommonSubseq( ArrayComparator &rComparator, int nMaxSize )
         : nSize( nMaxSize ), rCmp( rComparator )
     {
-        pData = new int[ nSize ];
+        pData.reset( new int[ nSize ] );
     }
 
     ~CommonSubseq()
     {
-        delete[] pData;
     }
 
     int FindLCS( int *pLcs1, int *pLcs2, int nStt1,
@@ -814,16 +814,15 @@ Compare::CompareSequence::CompareSequence(
     : rData1( rD1 ), rData2( rD2 ), rMoved1( rMD1 ), rMoved2( rMD2 )
 {
     sal_uLong nSize = rMD1.GetCount() + rMD2.GetCount() + 3;
-    pMemory = new long[ nSize * 2 ];
-    pFDiag = pMemory + ( rMD2.GetCount() + 1 );
-    pBDiag = pMemory + ( nSize + rMD2.GetCount() + 1 );
+    pMemory.reset( new long[ nSize * 2 ] );
+    pFDiag = pMemory.get() + ( rMD2.GetCount() + 1 );
+    pBDiag = pMemory.get() + ( nSize + rMD2.GetCount() + 1 );
 
     Compare( 0, rMD1.GetCount(), 0, rMD2.GetCount() );
 }
 
 Compare::CompareSequence::~CompareSequence()
 {
-    delete [] pMemory;
 }
 
 void Compare::CompareSequence::Compare( sal_uLong nStt1, sal_uLong nEnd1,
@@ -2325,7 +2324,7 @@ int CommonSubseq::FindLCS( int *pLcs1, int *pLcs2, int nStt1, int nEnd1,
     OSL_ASSERT( nLen2 >= 0 );
 
     int **pLcs = new int*[ nLen1 + 1 ];
-    pLcs[ 0 ] = pData;
+    pLcs[ 0 ] = pData.get();
 
     for( int i = 1; i < nLen1 + 1; i++ )
         pLcs[ i ] = pLcs[ i - 1 ] + nLen2 + 1;
