@@ -664,7 +664,7 @@ void AutoFilterBuffer::finalizeImport( sal_Int16 nSheet )
                 // the built-in defined name 'Criteria' must exist
                 if( const DefinedName* pCriteriaName = getDefinedNames().getByBuiltinId( BIFF_DEFNAME_CRITERIA, nSheet ).get() )
                 {
-                    CellRangeAddress aCriteriaRange;
+                    ScRange aCriteriaRange;
                     if( pCriteriaName->getAbsoluteRange( aCriteriaRange ) )
                     {
                         // set some common properties for the filter descriptor
@@ -693,7 +693,10 @@ void AutoFilterBuffer::finalizeImport( sal_Int16 nSheet )
                             deleted). */
                         PropertySet aRangeProps( xDatabaseRange );
                         aRangeProps.setProperty( PROP_AutoFilter, false );
-                        aRangeProps.setProperty( PROP_FilterCriteriaSource, aCriteriaRange );
+                        aRangeProps.setProperty( PROP_FilterCriteriaSource,
+                                                 CellRangeAddress( aCriteriaRange.aStart.Tab(),
+                                                                   aCriteriaRange.aStart.Col(), aCriteriaRange.aStart.Row(),
+                                                                   aCriteriaRange.aEnd.Col(), aCriteriaRange.aEnd.Row() ));
                     }
                 }
             }

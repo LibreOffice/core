@@ -398,14 +398,6 @@ void DefinedName::convertFormula( const css::uno::Sequence<css::sheet::ExternalL
     }
 }
 
-bool DefinedName::getAbsoluteRange( CellRangeAddress& orRange ) const
-{
-    ScTokenArray* pTokenArray = mpScRangeData->GetCode();
-    Sequence< FormulaToken > aFTokenSeq;
-    ScTokenConversion::ConvertToTokenSequence(getScDocument(), aFTokenSeq, *pTokenArray);
-    return getFormulaParser().extractCellRange( orRange, aFTokenSeq, false );
-}
-
 bool DefinedName::getAbsoluteRange( ScRange& orRange ) const
 {
     ScTokenArray* pTokenArray = mpScRangeData->GetCode();

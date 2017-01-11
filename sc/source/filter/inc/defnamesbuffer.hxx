@@ -117,7 +117,6 @@ public:
     /** Returns the token index used in API token arrays (com.sun.star.sheet.FormulaToken). */
     inline sal_Int32    getTokenIndex() const { return mnTokenIndex; }
     /** Tries to resolve the defined name to an absolute cell range. */
-    bool                getAbsoluteRange( css::table::CellRangeAddress& orRange ) const;
     bool                getAbsoluteRange( ScRange& orRange ) const;
 
 private:
