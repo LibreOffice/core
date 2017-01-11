@@ -25,7 +25,7 @@ using namespace com::sun::star;
 
 namespace sc {
 
-SvStream* FetchStreamFromURL (OUString& rURL)
+SvStream* FetchStreamFromURL(const OUString& rURL)
 {
     uno::Reference< ucb::XSimpleFileAccess3 > xFileAccess( ucb::SimpleFileAccess::create( comphelper::getProcessComponentContext() ), uno::UNO_QUERY );
 
@@ -59,7 +59,7 @@ ExternalDataMapper::ExternalDataMapper(ScDocShell* pDocShell, const OUString& rU
     SCCOL nCol1,SCROW nRow1, SCCOL nCol2, SCROW nRow2, bool& bSuccess):
     maRange (ScRange(nCol1, nRow1, nTab, nCol2, nRow2, nTab)),
     mpDocShell(pDocShell),
-    mpDataProvider (new CSVDataProvider(mpDocShell, maURL, maRange)),
+    mpDataProvider (new CSVDataProvider(mpDocShell, rURL, maRange)),
     mpDBCollection (pDocShell->GetDocument().GetDBCollection()),
     maURL(rURL)
 {
@@ -209,12 +209,12 @@ void CSVDataProvider::StartImport()
     if (mbImportUnderway)
         return;
 
-    if (!mxCSVFetchThread.is())
+    SvStream* pStream = FetchStreamFromURL(maURL);
+    /*if (!mxCSVFetchThread.is())
     {
-        SvStream* pStream = FetchStreamFromURL(maURL);
         mxCSVFetchThread = new CSVFetchThread(pStream, mrRange.aEnd.Col() - mrRange.aStart.Col() + 1);
         mxCSVFetchThread->launch();
-    }
+    }*/
     mbImportUnderway = true;
 
     maImportTimer.Start();
