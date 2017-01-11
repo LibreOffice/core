@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a6eadb0_e85f4d73",
+        "filename": "sc/source/ui/docshell/dataprovider.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1001210
+      },
+      "writtenOn": "2017-01-11T12:40:20Z",
+      "side": 1,
+      "message": "I\u0027ve commented out this part so that we could just focus on fetching data for now.",
+      "range": {
+        "startLine": 211,
+        "startChar": 4,
+        "endLine": 211,
+        "endChar": 6
+      },
+      "revId": "59308921f900ec5edc9061cfd08c40a31aa5f268",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
