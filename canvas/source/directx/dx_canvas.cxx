@@ -219,7 +219,7 @@ namespace dxcanvas
         return xRet;
     }
 
-    sdecl::class_<Canvas, sdecl::with_args<true> > serviceImpl1(&initCanvas);
+    sdecl::class_<Canvas, sdecl::with_args<true> > const serviceImpl1(&initCanvas);
     const sdecl::ServiceDecl dxCanvasDecl(
         serviceImpl1,
         CANVAS_IMPLEMENTATION_NAME,
@@ -233,7 +233,7 @@ namespace dxcanvas
     }
 
     namespace sdecl = comphelper::service_decl;
-    sdecl::class_<BitmapCanvas, sdecl::with_args<true> > serviceImpl2(&initBitmapCanvas);
+    sdecl::class_<BitmapCanvas, sdecl::with_args<true> > const serviceImpl2(&initBitmapCanvas);
     const sdecl::ServiceDecl dxBitmapCanvasDecl(
         serviceImpl2,
         BITMAPCANVAS_IMPLEMENTATION_NAME,

@@ -180,7 +180,7 @@ namespace dxcanvas
         return xRet;
     }
 
-    sdecl::class_<SpriteCanvas, sdecl::with_args<true> > serviceImpl(&initCanvas);
+    sdecl::class_<SpriteCanvas, sdecl::with_args<true> > const serviceImpl(&initCanvas);
     const sdecl::ServiceDecl dxSpriteCanvasDecl(
         serviceImpl,
         SPRITECANVAS_IMPLEMENTATION_NAME,
