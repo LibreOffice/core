@@ -80,12 +80,10 @@ ScUnoAddInFuncData::ScUnoAddInFuncData( const OUString& rNam, const OUString& rL
 {
     if ( nArgCount )
     {
-        pArgDescs = new ScAddInArgDesc[nArgCount];
+        pArgDescs.reset( new ScAddInArgDesc[nArgCount] );
         for (long i=0; i<nArgCount; i++)
             pArgDescs[i] = pAD[i];
     }
-    else
-        pArgDescs = nullptr;
 
     aUpperName = ScGlobal::pCharClass->uppercase(aUpperName);
     aUpperLocal = ScGlobal::pCharClass->uppercase(aUpperLocal);
@@ -93,7 +91,6 @@ ScUnoAddInFuncData::ScUnoAddInFuncData( const OUString& rNam, const OUString& rL
 
 ScUnoAddInFuncData::~ScUnoAddInFuncData()
 {
-    delete[] pArgDescs;
 }
 
 const ::std::vector<ScUnoAddInFuncData::LocalizedName>& ScUnoAddInFuncData::GetCompNames() const
@@ -204,17 +201,15 @@ void ScUnoAddInFuncData::SetFunction( const uno::Reference< reflection::XIdlMeth
 
 void ScUnoAddInFuncData::SetArguments( long nNewCount, const ScAddInArgDesc* pNewDescs )
 {
-    delete[] pArgDescs;
-
     nArgCount = nNewCount;
     if ( nArgCount )
     {
-        pArgDescs = new ScAddInArgDesc[nArgCount];
+        pArgDescs.reset( new ScAddInArgDesc[nArgCount] );
         for (long i=0; i<nArgCount; i++)
             pArgDescs[i] = pNewDescs[i];
     }
     else
-        pArgDescs = nullptr;
+        pArgDescs.reset();
 }
 
 void ScUnoAddInFuncData::SetCallerPos( long nNewPos )

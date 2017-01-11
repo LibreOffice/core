@@ -159,12 +159,12 @@ private:
     double          fVal;
     double          fAux;
     long            nCount;
-    ScDPAggData*    pChild;
+    std::unique_ptr<ScDPAggData> pChild;
     std::vector<double> mSortedValues;
 
 public:
             ScDPAggData() : fVal(0.0), fAux(0.0), nCount(SC_DPAGG_EMPTY), pChild(nullptr) {}
-            ~ScDPAggData() { delete pChild; }
+            ~ScDPAggData() {}
 
     void    Update( const ScDPValue& rNext, ScSubTotalFunc eFunc, const ScDPSubTotalState& rSubState );
     void    Calculate( ScSubTotalFunc eFunc, const ScDPSubTotalState& rSubState );
@@ -183,7 +183,7 @@ public:
 
     void    Reset();        // also deletes children
 
-    const ScDPAggData*  GetExistingChild() const    { return pChild; }
+    const ScDPAggData*  GetExistingChild() const    { return pChild.get(); }
     ScDPAggData*        GetChild();
 
 #if DUMP_PIVOT_TABLE
@@ -437,8 +437,9 @@ class ScDPDataMember
 private:
     const ScDPResultData*       pResultData;
     const ScDPResultMember*     pResultMember;          //! Ref?
-    ScDPDataDimension*      pChildDimension;
-    ScDPAggData             aAggregate;
+    std::unique_ptr<ScDPDataDimension>
+                                pChildDimension;
+    ScDPAggData                 aAggregate;
 
     void                UpdateValues( const ::std::vector<ScDPValue>& aValues, const ScDPSubTotalState& rSubState );
 
@@ -486,8 +487,8 @@ public:
 #endif
 
                         //! this will be removed!
-    const ScDPDataDimension*    GetChildDimension() const   { return pChildDimension; }
-    ScDPDataDimension*          GetChildDimension()         { return pChildDimension; }
+    const ScDPDataDimension*    GetChildDimension() const   { return pChildDimension.get(); }
+    ScDPDataDimension*          GetChildDimension()         { return pChildDimension.get(); }
 };
 
 typedef std::vector<ScDPDataMember*> ScDPDataMembers;

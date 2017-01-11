@@ -814,9 +814,7 @@ ScDPSaveData::ScDPSaveData(const ScDPSaveData& r) :
     mpDimOrder(nullptr)
 {
     if ( r.pDimensionData )
-        pDimensionData = new ScDPDimensionSaveData( *r.pDimensionData );
-    else
-        pDimensionData = nullptr;
+        pDimensionData.reset( new ScDPDimensionSaveData( *r.pDimensionData ) );
 
     for (auto const& it : r.m_DimList)
     {
@@ -870,7 +868,6 @@ bool ScDPSaveData::operator== ( const ScDPSaveData& r ) const
 
 ScDPSaveData::~ScDPSaveData()
 {
-    delete pDimensionData;
 }
 
 void ScDPSaveData::SetGrandTotalName(const OUString& rName)
@@ -1315,17 +1312,16 @@ void ScDPSaveData::RemoveAllGroupDimensions( const OUString& rSrcDimName, std::v
 ScDPDimensionSaveData* ScDPSaveData::GetDimensionData()
 {
     if (!pDimensionData)
-        pDimensionData = new ScDPDimensionSaveData;
-    return pDimensionData;
+        pDimensionData.reset( new ScDPDimensionSaveData );
+    return pDimensionData.get();
 }
 
 void ScDPSaveData::SetDimensionData( const ScDPDimensionSaveData* pNew )
 {
-    delete pDimensionData;
     if ( pNew )
-        pDimensionData = new ScDPDimensionSaveData( *pNew );
+        pDimensionData.reset( new ScDPDimensionSaveData( *pNew ) );
     else
-        pDimensionData = nullptr;
+        pDimensionData.reset();
 }
 
 void ScDPSaveData::BuildAllDimensionMembers(ScDPTableData* pData)

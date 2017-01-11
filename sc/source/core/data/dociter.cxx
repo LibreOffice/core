@@ -2190,13 +2190,12 @@ ScHorizontalValueIterator::ScHorizontalValueIterator( ScDocument* pDocument,
     pAttrArray = nullptr;
     nAttrEndRow = 0;
 
-    pCellIter = new ScHorizontalCellIterator( pDoc, nStartTab, nStartCol,
-            nStartRow, nEndCol, nEndRow );
+    pCellIter.reset( new ScHorizontalCellIterator( pDoc, nStartTab, nStartCol,
+            nStartRow, nEndCol, nEndRow ) );
 }
 
 ScHorizontalValueIterator::~ScHorizontalValueIterator()
 {
-    delete pCellIter;
 }
 
 bool ScHorizontalValueIterator::GetNext( double& rValue, FormulaError& rErr )
@@ -2518,14 +2517,11 @@ ScDocAttrIterator::ScDocAttrIterator(ScDocument* pDocument, SCTAB nTable,
     nCol( nCol1 )
 {
     if ( ValidTab(nTab) && nTab < pDoc->GetTableCount() && pDoc->maTabs[nTab] )
-        pColIter = pDoc->maTabs[nTab]->aCol[nCol].CreateAttrIterator( nStartRow, nEndRow );
-    else
-        pColIter = nullptr;
+        pColIter.reset( pDoc->maTabs[nTab]->aCol[nCol].CreateAttrIterator( nStartRow, nEndRow ) );
 }
 
 ScDocAttrIterator::~ScDocAttrIterator()
 {
-    delete pColIter;
 }
 
 const ScPatternAttr* ScDocAttrIterator::GetNext( SCCOL& rCol, SCROW& rRow1, SCROW& rRow2 )
@@ -2539,12 +2535,11 @@ const ScPatternAttr* ScDocAttrIterator::GetNext( SCCOL& rCol, SCROW& rRow1, SCRO
             return pPattern;
         }
 
-        delete pColIter;
         ++nCol;
         if ( nCol <= nEndCol )
-            pColIter = pDoc->maTabs[nTab]->aCol[nCol].CreateAttrIterator( nStartRow, nEndRow );
+            pColIter.reset( pDoc->maTabs[nTab]->aCol[nCol].CreateAttrIterator( nStartRow, nEndRow ) );
         else
-            pColIter = nullptr;
+            pColIter.reset();
     }
     return nullptr;  // Nothing anymore
 }
@@ -2649,7 +2644,7 @@ ScAttrRectIterator::ScAttrRectIterator(ScDocument* pDocument, SCTAB nTable,
 {
     if ( ValidTab(nTab) && nTab < pDoc->GetTableCount() && pDoc->maTabs[nTab] )
     {
-        pColIter = pDoc->maTabs[nTab]->aCol[nIterStartCol].CreateAttrIterator( nStartRow, nEndRow );
+        pColIter.reset( pDoc->maTabs[nTab]->aCol[nIterStartCol].CreateAttrIterator( nStartRow, nEndRow ) );
         while ( nIterEndCol < nEndCol &&
                 pDoc->maTabs[nTab]->aCol[nIterEndCol].IsAllAttrEqual(
                     pDoc->maTabs[nTab]->aCol[nIterEndCol+1], nStartRow, nEndRow ) )
@@ -2661,7 +2656,6 @@ ScAttrRectIterator::ScAttrRectIterator(ScDocument* pDocument, SCTAB nTable,
 
 ScAttrRectIterator::~ScAttrRectIterator()
 {
-    delete pColIter;
 }
 
 void ScAttrRectIterator::DataChanged()
@@ -2669,8 +2663,7 @@ void ScAttrRectIterator::DataChanged()
     if (pColIter)
     {
         SCROW nNextRow = pColIter->GetNextRow();
-        delete pColIter;
-        pColIter = pDoc->maTabs[nTab]->aCol[nIterStartCol].CreateAttrIterator( nNextRow, nEndRow );
+        pColIter.reset( pDoc->maTabs[nTab]->aCol[nIterStartCol].CreateAttrIterator( nNextRow, nEndRow ) );
     }
 }
 
@@ -2687,19 +2680,18 @@ const ScPatternAttr* ScAttrRectIterator::GetNext( SCCOL& rCol1, SCCOL& rCol2,
             return pPattern;
         }
 
-        delete pColIter;
         nIterStartCol = nIterEndCol+1;
         if ( nIterStartCol <= nEndCol )
         {
             nIterEndCol = nIterStartCol;
-            pColIter = pDoc->maTabs[nTab]->aCol[nIterStartCol].CreateAttrIterator( nStartRow, nEndRow );
+            pColIter.reset( pDoc->maTabs[nTab]->aCol[nIterStartCol].CreateAttrIterator( nStartRow, nEndRow ) );
             while ( nIterEndCol < nEndCol &&
                     pDoc->maTabs[nTab]->aCol[nIterEndCol].IsAllAttrEqual(
                         pDoc->maTabs[nTab]->aCol[nIterEndCol+1], nStartRow, nEndRow ) )
                 ++nIterEndCol;
         }
         else
-            pColIter = nullptr;
+            pColIter.reset();
     }
     return nullptr; // Nothing anymore
 }

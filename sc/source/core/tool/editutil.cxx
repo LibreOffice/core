@@ -381,8 +381,8 @@ ScEditAttrTester::ScEditAttrTester( ScEditEngineDefaulter* pEng ) :
     else
     {
         const SfxPoolItem* pItem = nullptr;
-        pEditAttrs = new SfxItemSet( pEngine->GetAttribs(
-                                        ESelection(0,0,0,pEngine->GetTextLen(0)), EditEngineAttribs_OnlyHard ) );
+        pEditAttrs.reset( new SfxItemSet( pEngine->GetAttribs(
+                                        ESelection(0,0,0,pEngine->GetTextLen(0)), EditEngineAttribs_OnlyHard ) ) );
         const SfxItemSet& rEditDefaults = pEngine->GetDefaults();
 
         for (sal_uInt16 nId = EE_CHAR_START; nId <= EE_CHAR_END && !bNeedsObject; nId++)
@@ -427,7 +427,6 @@ ScEditAttrTester::ScEditAttrTester( ScEditEngineDefaulter* pEng ) :
 
 ScEditAttrTester::~ScEditAttrTester()
 {
-    delete pEditAttrs;
 }
 
 ScEnginePoolHelper::ScEnginePoolHelper( SfxItemPool* pEnginePoolP,

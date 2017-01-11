@@ -46,12 +46,13 @@ class ScChartPositionMap
                                     SCROW nRowAdd,      // header rows
                                     ColumnMap& rCols        // table with col tables with address*
                                     );
-                                ~ScChartPositionMap();  //! deletes all ScAddress*
 
                                 ScChartPositionMap( const ScChartPositionMap& ) = delete;
             ScChartPositionMap& operator=( const ScChartPositionMap& ) = delete;
 
 public:
+                                ~ScChartPositionMap();  //! deletes all ScAddress*
+
             SCCOL               GetColCount() const { return nColCount; }
             SCROW               GetRowCount() const { return nRowCount; }
 
@@ -103,7 +104,7 @@ class ScChartPositioner final             // only parameter struct
 {
     ScRangeListRef  aRangeListRef;
     ScDocument* pDocument;
-    ScChartPositionMap* pPositionMap;
+    std::unique_ptr<ScChartPositionMap> pPositionMap;
     ScChartGlue eGlue;
     SCCOL       nStartCol;
     SCROW       nStartRow;
@@ -132,15 +133,7 @@ public:
     bool    HasColHeaders() const            { return bColHeaders; }
     bool    HasRowHeaders() const            { return bRowHeaders; }
 
-    void                    InvalidateGlue()
-                                {
-                                    eGlue = SC_CHARTGLUE_NA;
-                                    if ( pPositionMap )
-                                    {
-                                        delete pPositionMap;
-                                        pPositionMap = nullptr;
-                                    }
-                                }
+    void                        InvalidateGlue();
     const ScChartPositionMap*   GetPositionMap();
 };
 

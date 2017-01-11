@@ -80,16 +80,16 @@ class ModuleData
 {
 friend class ModuleCollection;
     OUString aName;
-    osl::Module* pInstance;
+    std::unique_ptr<osl::Module> pInstance;
 public:
     ModuleData(const ModuleData&) = delete;
     const ModuleData& operator=(const ModuleData&) = delete;
 
     ModuleData(const OUString& rStr, osl::Module* pInst) : aName(rStr), pInstance(pInst) {}
-    ~ModuleData() { delete pInstance; }
+    ~ModuleData() {}
 
     const OUString& GetName() const { return aName; }
-    osl::Module*    GetInstance() const { return pInstance; }
+    osl::Module*    GetInstance() const { return pInstance.get(); }
 };
 
 LegacyFuncData::LegacyFuncData(const ModuleData*pModule,

@@ -47,15 +47,14 @@ ScAddInListener* ScAddInListener::CreateListener(
 }
 
 ScAddInListener::ScAddInListener( uno::Reference<sheet::XVolatileResult> const & xVR, ScDocument* pDoc ) :
-    xVolRes( xVR )
+    xVolRes( xVR ),
+    pDocs( new ScAddInDocs )
 {
-    pDocs = new ScAddInDocs();
     pDocs->insert( pDoc );
 }
 
 ScAddInListener::~ScAddInListener()
 {
-    delete pDocs;
 }
 
 ScAddInListener* ScAddInListener::Get( const uno::Reference<sheet::XVolatileResult>& xVR )
@@ -80,7 +79,7 @@ void ScAddInListener::RemoveDocument( ScDocument* pDocumentP )
     ::std::list<ScAddInListener*>::iterator iter = aAllListeners.begin();
     while(iter != aAllListeners.end())
     {
-        ScAddInDocs* p = (*iter)->pDocs;
+        ScAddInDocs* p = (*iter)->pDocs.get();
         ScAddInDocs::iterator iter2 = p->find( pDocumentP );
         if( iter2 != p->end() )
         {

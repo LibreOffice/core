@@ -22,6 +22,7 @@
 
 #include "address.hxx"
 #include <vector>
+#include <memory>
 
 class ScRange;
 
@@ -51,8 +52,8 @@ public:
 
 class ScPrintRangeSaver
 {
-    SCTAB               nTabCount;
-    ScPrintSaverTab*    pData;      ///< Array
+    SCTAB                               nTabCount;
+    std::unique_ptr<ScPrintSaverTab[]>  pData;
 
 public:
             ScPrintRangeSaver( SCTAB nCount );

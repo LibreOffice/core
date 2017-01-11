@@ -45,8 +45,8 @@ public:
     SvxZoomType GetZoomType() const             { return eZoomType;     }
     void        SetSynchronizeZoom( bool bNew ) { bSynchronizeZoom = bNew; }
     bool        GetSynchronizeZoom() const      { return bSynchronizeZoom; }
-    sal_uInt16      GetLRUFuncListCount() const     { return nLRUFuncCount; }
-    sal_uInt16*     GetLRUFuncList() const          { return pLRUList;      }
+    sal_uInt16  GetLRUFuncListCount() const     { return nLRUFuncCount; }
+    sal_uInt16* GetLRUFuncList() const          { return pLRUList.get();      }
     void        SetLRUFuncList( const sal_uInt16* pList,
                                 const sal_uInt16  nCount );
     void        SetStatusFunc( sal_uInt32 nNew )    { nStatusFunc = nNew;   }
@@ -83,7 +83,8 @@ public:
 private:
     FieldUnit       eMetric;
     sal_uInt16      nLRUFuncCount;
-    sal_uInt16*     pLRUList;
+    std::unique_ptr<sal_uInt16[]>
+                    pLRUList;
     SvxZoomType     eZoomType;
     sal_uInt16      nZoom;
     bool            bSynchronizeZoom;
