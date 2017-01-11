@@ -28,10 +28,7 @@ if test -n "$ENABLE_MACOSX_SANDBOX"; then
     # through that. I think.
     other_files=''
 else
-    # In a non-sandboxed build (distributed outside the App Store)
-    # we traditionally have use --resource-rules. Let's not touch that?
-    resource_rules="--resource-rules $SRCDIR/setup_native/source/mac/CodesignRules.plist"
-    # And there we then want to sign data files, too, hmm.
+    # We then want to sign data files, too, hmm.
     other_files="\
  -or -name '*.fodt' -or -name 'schema.strings' -or -name 'schema.xml' \
  -or -name '*.jar' -or -name '*.jnilib' -or -name 'LICENSE' -or -name 'LICENSE.html' \
@@ -109,6 +106,6 @@ done
 
 id=`echo ${PRODUCTNAME} | tr ' ' '-'`
 
-codesign --force --verbose --identifier="${MACOSX_BUNDLE_IDENTIFIER}" $resource_rules --sign "$MACOSX_CODESIGNING_IDENTITY" $entitlements "$APP_BUNDLE"
+codesign --force --verbose --identifier="${MACOSX_BUNDLE_IDENTIFIER}" --sign "$MACOSX_CODESIGNING_IDENTITY" $entitlements "$APP_BUNDLE"
 
 exit 0
