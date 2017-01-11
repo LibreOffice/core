@@ -55,7 +55,6 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::script;
-using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::oox::core;
@@ -313,7 +312,7 @@ namespace {
 class VmlFindNoteFunc
 {
 public:
-    explicit            VmlFindNoteFunc( const CellAddress& rPos );
+    explicit            VmlFindNoteFunc( const ScAddress& rPos );
     bool                operator()( const ::oox::vml::ShapeBase& rShape ) const;
 
 private:
@@ -321,9 +320,9 @@ private:
     sal_Int32           mnRow;
 };
 
-VmlFindNoteFunc::VmlFindNoteFunc( const CellAddress& rPos ) :
-    mnCol( rPos.Column ),
-    mnRow( rPos.Row )
+VmlFindNoteFunc::VmlFindNoteFunc( const ScAddress& rPos ) :
+    mnCol( rPos.Col() ),
+    mnRow( rPos.Row() )
 {
 }
 
@@ -409,7 +408,7 @@ VmlDrawing::VmlDrawing( const WorksheetHelper& rHelper ) :
     maListBoxFont.monSize = 160;
 }
 
-const ::oox::vml::ShapeBase* VmlDrawing::getNoteShape( const CellAddress& rPos ) const
+const ::oox::vml::ShapeBase* VmlDrawing::getNoteShape( const ScAddress& rPos ) const
 {
     return getShapes().findShape( VmlFindNoteFunc( rPos ) );
 }
