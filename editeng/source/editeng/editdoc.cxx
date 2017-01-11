@@ -537,19 +537,17 @@ ExtraPortionInfo::ExtraPortionInfo()
 
 ExtraPortionInfo::~ExtraPortionInfo()
 {
-    delete[] pOrgDXArray;
 }
 
 void ExtraPortionInfo::SaveOrgDXArray( const long* pDXArray, sal_Int32 nLen )
 {
-    delete[] pOrgDXArray;
     if (pDXArray)
     {
-        pOrgDXArray = new long[nLen];
-        memcpy( pOrgDXArray, pDXArray, nLen * sizeof(long) );
+        pOrgDXArray.reset(new long[nLen]);
+        memcpy( pOrgDXArray.get(), pDXArray, nLen * sizeof(long) );
     }
     else
-        pOrgDXArray = nullptr;
+        pOrgDXArray.reset();
 }
 
 ParaPortion::ParaPortion( ContentNode* pN ) :

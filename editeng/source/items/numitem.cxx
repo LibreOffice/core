@@ -918,12 +918,11 @@ SfxPoolItem* SvxNumBulletItem::Create(SvStream &rStream, sal_uInt16 /*nItemVersi
 SvxNumBulletItem::SvxNumBulletItem(const SvxNumBulletItem& rCopy) :
     SfxPoolItem(rCopy.Which())
 {
-    pNumRule = new SvxNumRule(*rCopy.pNumRule);
+    pNumRule.reset( new SvxNumRule(*rCopy.pNumRule) );
 }
 
 SvxNumBulletItem::~SvxNumBulletItem()
 {
-    delete pNumRule;
 }
 
 bool SvxNumBulletItem::operator==( const SfxPoolItem& rCopy) const
@@ -949,7 +948,7 @@ SvStream&   SvxNumBulletItem::Store(SvStream &rStream, sal_uInt16 /*nItemVersion
 
 bool SvxNumBulletItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
-    rVal <<= SvxCreateNumRule( pNumRule );
+    rVal <<= SvxCreateNumRule( pNumRule.get() );
     return true;
 }
 
@@ -968,8 +967,7 @@ bool SvxNumBulletItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberI
                 delete pNewRule;
                 pNewRule = pConverted;
             }
-            delete pNumRule;
-            pNumRule = pNewRule;
+            pNumRule.reset( pNewRule );
             return true;
         }
         catch(const lang::IllegalArgumentException&)

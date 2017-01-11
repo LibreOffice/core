@@ -45,15 +45,12 @@ SvxUnoTextContentEnumeration::SvxUnoTextContentEnumeration( const SvxUnoTextBase
 {
     mxParentText = const_cast<SvxUnoTextBase*>(&_rText);
     if( mrText.GetEditSource() )
-        mpEditSource = mrText.GetEditSource()->Clone();
-    else
-        mpEditSource = nullptr;
+        mpEditSource.reset( mrText.GetEditSource()->Clone() );
     mnNextParagraph = 0;
 }
 
 SvxUnoTextContentEnumeration::~SvxUnoTextContentEnumeration() throw()
 {
-    delete mpEditSource;
 }
 
 // container::XEnumeration

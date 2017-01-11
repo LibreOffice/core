@@ -66,7 +66,7 @@ SvxAutoCorrCfg::SvxAutoCorrCfg() :
         aPath.insertName("acor");
         *pS = aPath.GetMainURL(INetURLObject::DecodeMechanism::ToIUri);
     }
-    pAutoCorrect = new SvxAutoCorrect( sSharePath, sUserPath );
+    pAutoCorrect.reset( new SvxAutoCorrect( sSharePath, sUserPath ) );
 
     aBaseConfig.Load(true);
     aSwConfig.Load(true);
@@ -74,20 +74,18 @@ SvxAutoCorrCfg::SvxAutoCorrCfg() :
 
 SvxAutoCorrCfg::~SvxAutoCorrCfg()
 {
-    delete pAutoCorrect;
 }
 
 void SvxAutoCorrCfg::SetAutoCorrect(SvxAutoCorrect *const pNew)
 {
-    if (pNew != pAutoCorrect)
+    if (pNew != pAutoCorrect.get())
     {
         if (pNew && (pAutoCorrect->GetFlags() != pNew->GetFlags()))
         {
             aBaseConfig.SetModified();
             aSwConfig.SetModified();
         }
-        delete pAutoCorrect;
-        pAutoCorrect = pNew;
+        pAutoCorrect.reset( pNew );
     }
 }
 

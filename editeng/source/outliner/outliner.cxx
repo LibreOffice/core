@@ -1290,7 +1290,7 @@ size_t Outliner::InsertView( OutlinerView* pView, size_t nIndex )
         advance( it, nIndex );
         ActualIndex = nIndex;
     }
-    pEditEngine->InsertView(  pView->pEditView, nIndex );
+    pEditEngine->InsertView(  pView->pEditView.get(), nIndex );
     return ActualIndex;
 }
 
@@ -1302,7 +1302,7 @@ void Outliner::RemoveView( OutlinerView* pView )
         if ( *it == pView )
         {
             pView->pEditView->HideCursor(); // HACK
-            pEditEngine->RemoveView(  pView->pEditView );
+            pEditEngine->RemoveView(  pView->pEditView.get() );
             aViewList.erase( it );
             break;
         }

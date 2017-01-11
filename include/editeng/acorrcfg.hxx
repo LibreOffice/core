@@ -65,7 +65,7 @@ class EDITENG_DLLPUBLIC SvxAutoCorrCfg final
     friend class SvxBaseAutoCorrCfg;
     friend class SvxSwAutoCorrCfg;
 
-    SvxAutoCorrect* pAutoCorrect;
+    std::unique_ptr<SvxAutoCorrect> pAutoCorrect;
 
     SvxBaseAutoCorrCfg      aBaseConfig;
     SvxSwAutoCorrCfg        aSwConfig;
@@ -91,8 +91,8 @@ public:
                     aSwConfig.Commit();
                 }
 
-          SvxAutoCorrect* GetAutoCorrect()          { return pAutoCorrect; }
-    const SvxAutoCorrect* GetAutoCorrect() const    { return pAutoCorrect; }
+          SvxAutoCorrect* GetAutoCorrect()          { return pAutoCorrect.get(); }
+    const SvxAutoCorrect* GetAutoCorrect() const    { return pAutoCorrect.get(); }
     // the pointer is transferred to the possession of the ConfigItems!
     void SetAutoCorrect( SvxAutoCorrect* );
 
