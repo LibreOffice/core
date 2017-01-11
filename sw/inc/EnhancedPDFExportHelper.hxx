@@ -196,7 +196,7 @@ class SwEnhancedPDFExportHelper
     SwEditShell& mrSh;
     OutputDevice& mrOut;
 
-    StringRangeEnumerator* mpRangeEnum;
+    std::unique_ptr<StringRangeEnumerator> mpRangeEnum;
     /** The problem is that numbers in StringRangeEnumerator aren't accordant
      * to real page numbers if mbSkipEmptyPages is true, because in this case
      * empty pages are excluded from a page range and numbers in

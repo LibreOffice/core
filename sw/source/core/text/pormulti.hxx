@@ -146,7 +146,7 @@ public:
 
 class SwDoubleLinePortion : public SwMultiPortion
 {
-    SwBracket* pBracket;    // Surrounding brackets
+    std::unique_ptr<SwBracket> pBracket;    // Surrounding brackets
     SwTwips nLineDiff;      // Difference of the width of the both lines
     sal_Int32 nBlank1;     // Number of blanks in the first line
     sal_Int32 nBlank2;     // Number of blanks in the second line
@@ -155,7 +155,7 @@ public:
     SwDoubleLinePortion( const SwMultiCreator& rCreate, sal_Int32 nEnd );
     virtual ~SwDoubleLinePortion() override;
 
-    inline SwBracket* GetBrackets() const { return pBracket; }
+    inline SwBracket* GetBrackets() const { return pBracket.get(); }
     void SetBrackets( const SwDoubleLinePortion& rDouble );
     void PaintBracket( SwTextPaintInfo& rInf, long nSpaceAdd, bool bOpen ) const;
     void FormatBrackets( SwTextFormatInfo &rInf, SwTwips& nMaxWidth );

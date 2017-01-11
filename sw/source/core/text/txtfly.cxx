@@ -340,11 +340,7 @@ SwTextFly::SwTextFly( const SwTextFly& rTextFly )
     pMaster = rTextFly.pMaster;
     if( rTextFly.mpAnchoredObjList )
     {
-        mpAnchoredObjList = new SwAnchoredObjList( *(rTextFly.mpAnchoredObjList) );
-    }
-    else
-    {
-        mpAnchoredObjList = nullptr;
+        mpAnchoredObjList.reset( new SwAnchoredObjList( *(rTextFly.mpAnchoredObjList) ) );
     }
 
     bOn = rTextFly.bOn;
@@ -359,7 +355,6 @@ SwTextFly::SwTextFly( const SwTextFly& rTextFly )
 
 SwTextFly::~SwTextFly()
 {
-    delete mpAnchoredObjList;
 }
 
 void SwTextFly::CtorInitTextFly( const SwTextFrame *pFrame )
@@ -373,8 +368,6 @@ void SwTextFly::CtorInitTextFly( const SwTextFrame *pFrame )
     mpCurrAnchoredObj = pTmp;
     pCurrFrame = pFrame;
     pMaster = pCurrFrame->IsFollow() ? nullptr : pCurrFrame;
-    // #i68520#
-    mpAnchoredObjList = nullptr;
     // If we're not overlapped by a frame or if a FlyCollection does not exist
     // at all, we switch off forever.
     // It could be, however, that a line is added while formatting, that
@@ -858,7 +851,7 @@ SwAnchoredObjList* SwTextFly::InitAnchoredObjList()
     if( nCount && bWrapAllowed )
     {
         // #i68520#
-        mpAnchoredObjList = new SwAnchoredObjList();
+        mpAnchoredObjList.reset(new SwAnchoredObjList );
 
         // #i28701# - consider complete frame area for new
         // text wrapping
@@ -960,11 +953,11 @@ SwAnchoredObjList* SwTextFly::InitAnchoredObjList()
     else
     {
         // #i68520#
-        mpAnchoredObjList = new SwAnchoredObjList();
+        mpAnchoredObjList.reset( new SwAnchoredObjList );
     }
 
     // #i68520#
-    return mpAnchoredObjList;
+    return mpAnchoredObjList.get();
 }
 
 SwTwips SwTextFly::CalcMinBottom() const

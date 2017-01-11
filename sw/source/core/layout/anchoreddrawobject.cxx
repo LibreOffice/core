@@ -210,8 +210,6 @@ SwAnchoredDrawObject::SwAnchoredDrawObject() :
 
 SwAnchoredDrawObject::~SwAnchoredDrawObject()
 {
-    // #i34748#
-    delete mpLastObjRect;
 }
 
 // --> #i62875#
@@ -728,7 +726,7 @@ void SwAnchoredDrawObject::SetLastObjRect( const Rectangle& _rNewLastRect )
 {
     if ( !mpLastObjRect )
     {
-        mpLastObjRect = new Rectangle;
+        mpLastObjRect.reset( new Rectangle );
     }
     *(mpLastObjRect) = _rNewLastRect;
 }

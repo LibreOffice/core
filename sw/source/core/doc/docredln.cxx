@@ -653,17 +653,16 @@ SwRedlineExtraData_FormatColl::SwRedlineExtraData_FormatColl( const OUString& rC
     : sFormatNm(rColl), pSet(nullptr), nPoolId(nPoolFormatId)
 {
     if( pItemSet && pItemSet->Count() )
-        pSet = new SfxItemSet( *pItemSet );
+        pSet.reset( new SfxItemSet( *pItemSet ) );
 }
 
 SwRedlineExtraData_FormatColl::~SwRedlineExtraData_FormatColl()
 {
-    delete pSet;
 }
 
 SwRedlineExtraData* SwRedlineExtraData_FormatColl::CreateNew() const
 {
-    return new SwRedlineExtraData_FormatColl( sFormatNm, nPoolId, pSet );
+    return new SwRedlineExtraData_FormatColl( sFormatNm, nPoolId, pSet.get() );
 }
 
 void SwRedlineExtraData_FormatColl::Reject( SwPaM& rPam ) const
@@ -713,11 +712,10 @@ bool SwRedlineExtraData_FormatColl::operator == ( const SwRedlineExtraData& r) c
 
 void SwRedlineExtraData_FormatColl::SetItemSet( const SfxItemSet& rSet )
 {
-    delete pSet;
     if( rSet.Count() )
-        pSet = new SfxItemSet( rSet );
+        pSet.reset( new SfxItemSet( rSet ) );
     else
-        pSet = nullptr;
+        pSet.reset();
 }
 
 SwRedlineExtraData_Format::SwRedlineExtraData_Format( const SfxItemSet& rSet )
@@ -784,10 +782,9 @@ bool SwRedlineExtraData_Format::operator == ( const SwRedlineExtraData& rCmp ) c
 }
 
 SwRedlineExtraData_FormattingChanges::SwRedlineExtraData_FormattingChanges( const SfxItemSet* pItemSet )
-    : pSet(nullptr)
 {
     if( pItemSet && pItemSet->Count() )
-        pSet = new SfxItemSet( *pItemSet );
+        pSet.reset( new SfxItemSet( *pItemSet ) );
 }
 
 SwRedlineExtraData_FormattingChanges::SwRedlineExtraData_FormattingChanges( const SwRedlineExtraData_FormattingChanges& rCpy )
@@ -796,17 +793,16 @@ SwRedlineExtraData_FormattingChanges::SwRedlineExtraData_FormattingChanges( cons
     // Checking pointer pSet before accessing it for Count
     if( rCpy.pSet && rCpy.pSet->Count() )
     {
-        pSet = new SfxItemSet( *(rCpy.pSet) );
+        pSet.reset( new SfxItemSet( *(rCpy.pSet) ) );
     }
     else
     {
-        pSet = nullptr;
+        pSet.reset();
     }
 }
 
 SwRedlineExtraData_FormattingChanges::~SwRedlineExtraData_FormattingChanges()
 {
-    delete pSet;
 }
 
 SwRedlineExtraData* SwRedlineExtraData_FormattingChanges::CreateNew() const

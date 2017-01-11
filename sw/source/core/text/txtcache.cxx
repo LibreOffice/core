@@ -29,7 +29,6 @@ SwTextLine::SwTextLine( SwTextFrame *pFrame, SwParaPortion *pNew ) :
 
 SwTextLine::~SwTextLine()
 {
-    delete pLine;
 }
 
 SwCacheObj *SwTextLineAccess::NewObj()
