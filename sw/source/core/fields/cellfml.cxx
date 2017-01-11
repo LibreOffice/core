@@ -150,13 +150,13 @@ double SwTableBox::GetValue( SwTableCalcPara& rCalcPara ) const
         // if there is a calculation field at position 1, get the value of it
         const bool bOK = nSttPos<sText.getLength();
         const sal_Unicode Char = bOK ? sText[nSttPos] : 0;
+        SwTextField * pTextField = nullptr;
         if ( bOK && (Char==CH_TXTATR_BREAKWORD || Char==CH_TXTATR_INWORD) )
         {
-            SwTextField * const pTextField =
-                static_txtattr_cast<SwTextField*>(pTextNd->GetTextAttrForCharAt(nSttPos, RES_TXTATR_FIELD));
-            if ( pTextField == nullptr )
-                break;
-
+            pTextField = static_txtattr_cast<SwTextField*>(pTextNd->GetTextAttrForCharAt(nSttPos, RES_TXTATR_FIELD));
+        }
+        if ( pTextField != nullptr )
+        {
             rCalcPara.rCalc.SetCalcError( CALC_NOERR ); // reset status
 
             const SwField* pField = pTextField->GetFormatField().GetField();
@@ -206,7 +206,7 @@ double SwTableBox::GetValue( SwTableCalcPara& rCalcPara ) const
                 break;
             nRet = rCalcPara.rCalc.Calculate( pTextInputField->GetFieldContent() ).GetDouble();
         }
-        else
+        else if ( Char != CH_TXTATR_BREAKWORD )
         {
             // result is 0 but no error!
             rCalcPara.rCalc.SetCalcError( CALC_NOERR ); // reset status
