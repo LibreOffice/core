@@ -27,10 +27,10 @@ extern "C"
 {
 #endif
 
-::rtl::OUString suParam0(RTL_CONSTASCII_USTRINGPARAM("-join"));
-::rtl::OUString suParam1(RTL_CONSTASCII_USTRINGPARAM("-with"));
-::rtl::OUString suParam2(RTL_CONSTASCII_USTRINGPARAM("-child"));
-::rtl::OUString suParam3(RTL_CONSTASCII_USTRINGPARAM("-process"));
+::rtl::OUString suParam0("-join");
+::rtl::OUString suParam1("-with");
+::rtl::OUString suParam2("-child");
+::rtl::OUString suParam3("-process");
 
 #ifdef __cplusplus
 }
