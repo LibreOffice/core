@@ -26,7 +26,6 @@
 
 ScChangeViewSettings::~ScChangeViewSettings()
 {
-    delete pCommentSearcher;
 }
 
 ScChangeViewSettings::ScChangeViewSettings( const ScChangeViewSettings& r ):
@@ -96,18 +95,14 @@ bool ScChangeViewSettings::IsValidComment(const OUString* pCommentStr) const
 void ScChangeViewSettings::SetTheComment(const OUString& rString)
 {
     aComment = rString;
-    if(pCommentSearcher)
-    {
-        delete pCommentSearcher;
-        pCommentSearcher=nullptr;
-    }
+    pCommentSearcher.reset();
 
     if(!rString.isEmpty())
     {
         utl::SearchParam aSearchParam( rString,
             utl::SearchParam::SRCH_REGEXP,false );
 
-        pCommentSearcher = new utl::TextSearch( aSearchParam, *ScGlobal::pCharClass );
+        pCommentSearcher.reset( new utl::TextSearch( aSearchParam, *ScGlobal::pCharClass ) );
     }
 }
 
