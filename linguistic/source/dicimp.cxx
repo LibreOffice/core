@@ -62,7 +62,7 @@ using namespace linguistic;
 static const sal_Char* const pVerStr2    = "WBSWG2";
 static const sal_Char* const pVerStr5    = "WBSWG5";
 static const sal_Char* const pVerStr6    = "WBSWG6";
-static const sal_Char*      pVerOOo7    = "OOoUserDict1";
+static const sal_Char* const pVerOOo7    = "OOoUserDict1";
 
 static const sal_Int16 DIC_VERSION_DONTKNOW = -1;
 static const sal_Int16 DIC_VERSION_2 = 2;
