@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a6eadb0_28b6a58a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2017-01-11T14:13:43Z",
+      "side": 1,
+      "message": "This gives the impression that blobs are indexed from 1 in firebird... While the subject is that they are indexed from 1 in LibreOffice. I suggest something like:\nfirebird-sdbc: XBlob::getBytes expects 1-indexed position",
+      "revId": "240f724c925bc8d1be007029750548607e218d91",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a6eadb0_48bbe172",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2017-01-11T14:13:43Z",
+      "side": 1,
+      "message": "*its* position, not \"it\u0027s\". \"it\u0027s\" \u003d it is",
+      "range": {
+        "startLine": 9,
+        "startChar": 49,
+        "endLine": 9,
+        "endChar": 53
+      },
+      "revId": "240f724c925bc8d1be007029750548607e218d91",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
