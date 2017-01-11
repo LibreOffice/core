@@ -41,7 +41,6 @@
 #include "smmod.hxx"
 #include "smdllapi.hxx"
 
-class SmNode;
 class SfxPrinter;
 class Printer;
 class SmCursor;

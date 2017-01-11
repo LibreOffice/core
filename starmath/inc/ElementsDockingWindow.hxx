@@ -29,7 +29,6 @@
 
 class SmDocShell;
 class SmNode;
-class ElementSelectorUIObject;
 
 class SmElement
 {
