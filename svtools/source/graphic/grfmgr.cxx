@@ -70,47 +70,48 @@ void GraphicObject::ImplAfterDataChange()
     mpGlobalMgr->ImplCheckSizeOfSwappedInGraphics(this);
 }
 
-GraphicObject::GraphicObject() :
-    maLink      (),
-    maUserData  ()
+GraphicObject::GraphicObject()
+    : mbAutoSwapped(false)
+    , mbIsInSwapIn(false)
+    , mbIsInSwapOut(false)
 {
     ImplEnsureGraphicManager();
-    ImplConstruct();
     ImplAssignGraphicData();
     mpGlobalMgr->ImplRegisterObj(*this, maGraphic, nullptr, nullptr);
 }
 
-GraphicObject::GraphicObject( const Graphic& rGraphic ) :
-    maGraphic   ( rGraphic ),
-    maLink      (),
-    maUserData  ()
+GraphicObject::GraphicObject(const Graphic& rGraphic)
+    : maGraphic(rGraphic)
+    , mbAutoSwapped(false)
+    , mbIsInSwapIn(false)
+    , mbIsInSwapOut(false)
 {
     ImplEnsureGraphicManager();
-    ImplConstruct();
     ImplAssignGraphicData();
     mpGlobalMgr->ImplRegisterObj(*this, maGraphic, nullptr, nullptr);
 }
 
-GraphicObject::GraphicObject( const GraphicObject& rGraphicObj ) :
-    maGraphic   ( rGraphicObj.GetGraphic() ),
-    maAttr      ( rGraphicObj.maAttr ),
-    maLink      ( rGraphicObj.maLink ),
-    maUserData  ( rGraphicObj.maUserData )
+GraphicObject::GraphicObject(const GraphicObject& rGraphicObj)
+    : maGraphic(rGraphicObj.GetGraphic())
+    , maAttr(rGraphicObj.maAttr)
+    , maLink(rGraphicObj.maLink)
+    , maUserData(rGraphicObj.maUserData)
+    , mbAutoSwapped(false)
+    , mbIsInSwapIn(false)
+    , mbIsInSwapOut(false)
 {
-    ImplConstruct();
     ImplAssignGraphicData();
     mpGlobalMgr->ImplRegisterObj(*this, maGraphic, nullptr, &rGraphicObj);
     if( rGraphicObj.HasUserData() && rGraphicObj.IsSwappedOut() )
         SetSwapState();
 }
 
-GraphicObject::GraphicObject( const OString& rUniqueID ) :
-    maLink      (),
-    maUserData  ()
+GraphicObject::GraphicObject(const OString& rUniqueID)
+    : mbAutoSwapped(false)
+    , mbIsInSwapIn(false)
+    , mbIsInSwapOut(false)
 {
     ImplEnsureGraphicManager();
-
-    ImplConstruct();
 
     // assign default properties
     ImplAssignGraphicData();
@@ -130,18 +131,6 @@ GraphicObject::~GraphicObject()
         delete mpGlobalMgr;
         mpGlobalMgr = nullptr;
     }
-}
-
-void GraphicObject::ImplConstruct()
-{
-    maSwapStreamHdl = Link<const GraphicObject*, SvStream*>();
-    mnAnimationLoopCount = 0;
-    mbAutoSwapped = false;
-    mbIsInSwapIn = false;
-    mbIsInSwapOut = false;
-
-    // Init with a unique, increasing ID
-    mnDataChangeTimeStamp = aIncrementingTimeOfLastDataChange++;
 }
 
 void GraphicObject::ImplAssignGraphicData()
