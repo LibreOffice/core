@@ -671,6 +671,7 @@ bool StringConstant::VisitCXXConstructExpr(CXXConstructExpr const * expr) {
     {
         ChangeKind kind;
         PassThrough pass;
+        bool simplify;
         switch (expr->getConstructor()->getNumParams()) {
         case 1:
             if (!loplugin::TypeCheck(
@@ -681,6 +682,7 @@ bool StringConstant::VisitCXXConstructExpr(CXXConstructExpr const * expr) {
             }
             kind = ChangeKind::SingleChar;
             pass = PassThrough::NonEmptyConstantString;
+            simplify = false;
             break;
         case 2:
             {
@@ -691,6 +693,7 @@ bool StringConstant::VisitCXXConstructExpr(CXXConstructExpr const * expr) {
                 {
                     kind = ChangeKind::OUStringLiteral1;
                     pass = PassThrough::NonEmptyConstantString;
+                    simplify = false;
                 } else {
                     unsigned n;
                     bool non;
@@ -732,7 +735,50 @@ bool StringConstant::VisitCXXConstructExpr(CXXConstructExpr const * expr) {
                     pass = n == 0
                         ? PassThrough::EmptyConstantString
                         : PassThrough::NonEmptyConstantString;
+                    simplify = false;
                 }
+                break;
+            }
+        case 4:
+            {
+                unsigned n;
+                bool non;
+                bool emb;
+                bool trm;
+                if (!isStringConstant(
+                        expr->getArg(0)->IgnoreParenImpCasts(), &n, &non, &emb,
+                        &trm))
+                {
+                    return true;
+                }
+                APSInt res;
+                if (!expr->getArg(1)->EvaluateAsInt(
+                        res, compiler.getASTContext())
+                    || res != n)
+                {
+                    return true;
+                }
+                if (!expr->getArg(2)->EvaluateAsInt(
+                        res, compiler.getASTContext())
+                    || res != 11) // RTL_TEXTENCODING_ASCII_US
+                {
+                    return true;
+                }
+                if (!expr->getArg(3)->EvaluateAsInt(
+                        res, compiler.getASTContext())
+                    || res != 0x333) // OSTRING_TO_OUSTRING_CVTFLAGS
+                {
+                    return true;
+                }
+                if (non || emb) {
+                    // cf. remaining uses of RTL_CONSTASCII_USTRINGPARAM
+                    return true;
+                }
+                kind = ChangeKind::Char;
+                pass = n == 0
+                    ? PassThrough::EmptyConstantString
+                    : PassThrough::NonEmptyConstantString;
+                simplify = true;
                 break;
             }
         default:
@@ -913,13 +959,20 @@ bool StringConstant::VisitCXXConstructExpr(CXXConstructExpr const * expr) {
                                 return true;
                             }
                         }
-                        return true;
                     } else if (isa<CXXConstructExpr>(call)) {
                     } else {
                         assert(false);
                     }
                 }
             }
+        }
+        if (simplify) {
+            report(
+                DiagnosticsEngine::Warning,
+                "simplify construction of %0 with %1",
+                expr->getExprLoc())
+                << classdecl << describeChangeKind(kind)
+                << expr->getSourceRange();
         }
         return true;
     }
@@ -1078,8 +1131,7 @@ bool StringConstant::isStringConstant(
 
 bool StringConstant::isZero(Expr const * expr) {
     APSInt res;
-    return expr->isIntegerConstantExpr(res, compiler.getASTContext())
-        && res == 0;
+    return expr->EvaluateAsInt(res, compiler.getASTContext()) && res == 0;
 }
 
 void StringConstant::reportChange(
@@ -1369,9 +1421,7 @@ void StringConstant::handleCharLen(
         return;
     }
     APSInt res;
-    if (expr->getArg(arg2)->isIntegerConstantExpr(
-            res, compiler.getASTContext()))
-    {
+    if (expr->getArg(arg2)->EvaluateAsInt(res, compiler.getASTContext())) {
         if (res != n) {
             return;
         }
@@ -1395,8 +1445,7 @@ void StringConstant::handleCharLen(
                   &trm2)
               && n2 == n && non2 == non && emb2 == emb && trm2 == trm
                   //TODO: same strings
-              && subs->getIdx()->isIntegerConstantExpr(
-                  res, compiler.getASTContext())
+              && subs->getIdx()->EvaluateAsInt(res, compiler.getASTContext())
               && res == 0))
         {
             return;

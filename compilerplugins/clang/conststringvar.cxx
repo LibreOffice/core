@@ -65,8 +65,23 @@ public:
     }
 
     bool TraverseImplicitCastExpr(ImplicitCastExpr * expr) {
+        bool match;
+        switch (expr->getCastKind()) {
+        case CK_NoOp:
+            // OString CharPtrDetector ctor:
+            match = bool(
+                loplugin::TypeCheck(expr->getType()).Const().Pointer().Const()
+                .Char());
+            break;
+        case CK_LValueToRValue:
+            match = true;
+            break;
+        default:
+            match = false;
+            break;
+        }
         bool pushed = false;
-        if (expr->getCastKind() == CK_LValueToRValue) {
+        if (match) {
             if (auto dr = dyn_cast<DeclRefExpr>(
                     expr->getSubExpr()->IgnoreParenImpCasts()))
             {
