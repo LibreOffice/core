@@ -23,13 +23,6 @@
 #include <tools/stream.hxx>
 #include <svl/rngitem.hxx>
 
-static inline sal_uInt16 Count_Impl(const sal_uInt16 * pRanges)
-{
-    sal_uInt16 nCount = 0;
-    for (; *pRanges; pRanges += 2) nCount += 2;
-    return nCount;
-}
-
 
 SfxRangeItem::SfxRangeItem( sal_uInt16 which, sal_uInt16 from, sal_uInt16 to ):
     SfxPoolItem( which ),
@@ -88,84 +81,6 @@ SvStream& SfxRangeItem::Store(SvStream &rStream, sal_uInt16) const
 {
     rStream.WriteUInt16( nFrom );
     rStream.WriteUInt16( nTo );
-    return rStream;
-}
-
-SfxUShortRangesItem::SfxUShortRangesItem( sal_uInt16 nWID, SvStream &rStream )
-:   SfxPoolItem( nWID )
-{
-    sal_uInt16 nCount(0);
-    rStream.ReadUInt16(nCount);
-    const size_t nMaxEntries = rStream.remainingSize() / sizeof(sal_uInt16);
-    if (nCount > nMaxEntries)
-    {
-        nCount = nMaxEntries;
-        SAL_WARN("svl.items", "SfxUShortRangesItem: truncated Stream");
-    }
-    _pRanges = new sal_uInt16[nCount + 1];
-    for ( sal_uInt16 n = 0; n < nCount; ++n )
-        rStream.ReadUInt16( _pRanges[n] );
-    _pRanges[nCount] = 0;
-}
-
-SfxUShortRangesItem::SfxUShortRangesItem( const SfxUShortRangesItem& rItem )
-:   SfxPoolItem( rItem )
-{
-    sal_uInt16 nCount = Count_Impl(rItem._pRanges) + 1;
-    _pRanges = new sal_uInt16[nCount];
-    memcpy( _pRanges, rItem._pRanges, sizeof(sal_uInt16) * nCount );
-}
-
-SfxUShortRangesItem::~SfxUShortRangesItem()
-{
-    delete _pRanges;
-}
-
-
-bool SfxUShortRangesItem::operator==( const SfxPoolItem &rItem ) const
-{
-    const SfxUShortRangesItem &rOther = static_cast<const SfxUShortRangesItem&>(rItem);
-    if ( !_pRanges && !rOther._pRanges )
-        return true;
-    if ( _pRanges || rOther._pRanges )
-        return false;
-
-    sal_uInt16 n;
-    for ( n = 0; _pRanges[n] && rOther._pRanges[n]; ++n )
-        if ( _pRanges[n] != rOther._pRanges[n] )
-            return false;
-
-    return !_pRanges[n] && !rOther._pRanges[n];
-}
-
-bool SfxUShortRangesItem::GetPresentation( SfxItemPresentation /*ePres*/,
-                                            MapUnit /*eCoreMetric*/,
-                                            MapUnit /*ePresMetric*/,
-                                            OUString & /*rText*/,
-                                            const IntlWrapper * ) const
-{
-    // not implemented
-    return false;
-}
-
-SfxPoolItem* SfxUShortRangesItem::Clone( SfxItemPool * ) const
-{
-    return new SfxUShortRangesItem( *this );
-}
-
-
-SfxPoolItem* SfxUShortRangesItem::Create( SvStream &rStream, sal_uInt16 ) const
-{
-    return new SfxUShortRangesItem( Which(), rStream );
-}
-
-
-SvStream& SfxUShortRangesItem::Store( SvStream &rStream, sal_uInt16 ) const
-{
-    sal_uInt16 nCount = Count_Impl( _pRanges );
-    rStream.ReadUInt16( nCount );
-    for ( sal_uInt16 n = 0; _pRanges[n]; ++n )
-        rStream.ReadUInt16( _pRanges[n] );
     return rStream;
 }
 
