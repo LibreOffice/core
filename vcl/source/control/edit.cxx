@@ -1217,7 +1217,7 @@ sal_Int32 Edit::ImplGetCharPos( const Point& rWindowPos ) const
 
     GetCaretPositions( aText, pDX, 0, aText.getLength() );
     long nX = rWindowPos.X() - mnXOffset - ImplGetExtraXOffset();
-    for( sal_Int32 i = 0; i < aText.getLength(); i++ )
+    for (sal_Int32 i = 0; i < aText.getLength(); aText.iterateCodePoints(&i))
     {
         if( (pDX[2*i] >= nX && pDX[2*i+1] <= nX) ||
             (pDX[2*i+1] >= nX && pDX[2*i] <= nX))
@@ -1226,12 +1226,12 @@ sal_Int32 Edit::ImplGetCharPos( const Point& rWindowPos ) const
             if( pDX[2*i] < pDX[2*i+1] )
             {
                 if( nX > (pDX[2*i]+pDX[2*i+1])/2 )
-                    nIndex++;
+                    aText.iterateCodePoints(&nIndex);
             }
             else
             {
                 if( nX < (pDX[2*i]+pDX[2*i+1])/2 )
-                    nIndex++;
+                    aText.iterateCodePoints(&nIndex);
             }
             break;
         }
@@ -1239,8 +1239,11 @@ sal_Int32 Edit::ImplGetCharPos( const Point& rWindowPos ) const
     if( nIndex == EDIT_NOLIMIT )
     {
         nIndex = 0;
+        sal_Int32 nFinalIndex = 0;
         long nDiff = std::abs( pDX[0]-nX );
-        for( sal_Int32 i = 1; i < aText.getLength(); i++ )
+        sal_Int32 i = 0;
+        aText.iterateCodePoints(&i);    //skip the first character
+        while (i < aText.getLength())
         {
             long nNewDiff = std::abs( pDX[2*i]-nX );
 
@@ -1249,8 +1252,12 @@ sal_Int32 Edit::ImplGetCharPos( const Point& rWindowPos ) const
                 nIndex = i;
                 nDiff = nNewDiff;
             }
+
+            nFinalIndex = i;
+
+            aText.iterateCodePoints(&i);
         }
-        if( nIndex == aText.getLength()-1 && std::abs( pDX[2*nIndex+1] - nX ) < nDiff )
+        if (nIndex == nFinalIndex && std::abs( pDX[2*nIndex+1] - nX ) < nDiff)
             nIndex = EDIT_NOLIMIT;
     }
 
