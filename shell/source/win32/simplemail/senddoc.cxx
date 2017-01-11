@@ -170,7 +170,7 @@ void initMapiMessage(
     pMapiMessage->nFileCount = aMapiAttachmentList.size();
 }
 
-const char* KnownParameter[] =
+const char* const KnownParameter[] =
 {
     "--to",
     "--cc",

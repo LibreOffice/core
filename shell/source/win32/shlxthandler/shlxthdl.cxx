@@ -37,18 +37,18 @@ HINSTANCE g_hModule = nullptr;
 
 namespace /* private */
 {
-    const char* GUID_PLACEHOLDER       = "{GUID}";
-    const char* EXTENSION_PLACEHOLDER  = "{EXT}";
-    const char* FORWARDKEY_PLACEHOLDER = "{FWDKEY}";
+    const char* const GUID_PLACEHOLDER       = "{GUID}";
+    const char* const EXTENSION_PLACEHOLDER  = "{EXT}";
+    const char* const FORWARDKEY_PLACEHOLDER = "{FWDKEY}";
 
-    const char* CLSID_ENTRY                         = "CLSID\\{GUID}\\InProcServer32";
-    const char* SHELLEX_IID_ENTRY                   = "{EXT}\\shellex\\{GUID}";
-    const char* SHELLEX_ENTRY                       = "{EXT}\\shellex";
-    const char* FORWARD_PROPSHEET_MYPROPSHEET_ENTRY = "{FWDKEY}\\shellex\\PropertySheetHandlers\\MyPropSheet1";
-    const char* FORWARD_PROPSHEET_ENTRY             = "{FWDKEY}\\shellex\\PropertySheetHandlers";
-    const char* FORWARD_SHELLEX_ENTRY               = "{FWDKEY}\\shellex";
+    const char* const CLSID_ENTRY                         = "CLSID\\{GUID}\\InProcServer32";
+    const char* const SHELLEX_IID_ENTRY                   = "{EXT}\\shellex\\{GUID}";
+    const char* const SHELLEX_ENTRY                       = "{EXT}\\shellex";
+    const char* const FORWARD_PROPSHEET_MYPROPSHEET_ENTRY = "{FWDKEY}\\shellex\\PropertySheetHandlers\\MyPropSheet1";
+    const char* const FORWARD_PROPSHEET_ENTRY             = "{FWDKEY}\\shellex\\PropertySheetHandlers";
+    const char* const FORWARD_SHELLEX_ENTRY               = "{FWDKEY}\\shellex";
 
-    const char* SHELL_EXTENSION_APPROVED_KEY_NAME   = "Software\\Microsoft\\Windows\\CurrentVersion\\Shell Extensions\\Approved";
+    const char* const SHELL_EXTENSION_APPROVED_KEY_NAME   = "Software\\Microsoft\\Windows\\CurrentVersion\\Shell Extensions\\Approved";
 
 
     // "String Placeholder" ->

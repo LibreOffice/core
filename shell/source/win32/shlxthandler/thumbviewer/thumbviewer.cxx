@@ -48,8 +48,6 @@
 #endif
 #include <memory>
 
-extern HINSTANCE g_hModule;
-
 namespace internal
 {
     /* The signet.png used for thumbnails of signed documents

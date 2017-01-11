@@ -37,7 +37,7 @@
 // Module global
 
 long g_DllRefCnt = 0;
-HINSTANCE g_hModule = nullptr;
+static HINSTANCE g_hModule = nullptr;
 
 // Map of property keys to the locations of their value(s) in the .??? XML schema
 struct PROPERTYMAP
@@ -56,7 +56,7 @@ const PROPERTYMAP g_rgPROPERTYMAP[] =
     { PKEY_Comment,        L"LibreOffice",          L"Comments" },
 };
 
-size_t gPropertyMapTableSize = SAL_N_ELEMENTS(g_rgPROPERTYMAP);
+size_t const gPropertyMapTableSize = SAL_N_ELEMENTS(g_rgPROPERTYMAP);
 
 
 CPropertyHdl::CPropertyHdl( long nRefCnt ) :
