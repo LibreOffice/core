@@ -23,14 +23,6 @@
 #include <comphelper/types.hxx>
 #include <rtl/ustrbuf.hxx>
 
-namespace connectivity
-{
-    namespace ado
-    {
-        sal_Int32 nAdoObjectCounter = 0;
-    }
-}
-
 using namespace connectivity::ado;
 
 void WpADOCatalog::Create()
