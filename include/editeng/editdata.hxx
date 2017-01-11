@@ -23,6 +23,7 @@
 
 #include <rtl/ustring.hxx>
 #include <editeng/editengdllapi.h>
+#include <memory>
 
 class SfxItemSet;
 class SfxPoolItem;
@@ -188,9 +189,9 @@ inline void ESelection::Adjust()
 
 struct EDITENG_DLLPUBLIC EFieldInfo
 {
-    SvxFieldItem*   pFieldItem;
-    OUString        aCurrentText;
-    EPosition       aPosition;
+    std::unique_ptr<SvxFieldItem>   pFieldItem;
+    OUString                        aCurrentText;
+    EPosition                       aPosition;
 
     EFieldInfo();
     EFieldInfo( const SvxFieldItem& rFieldItem, sal_Int32 nPara, sal_Int32 nPos );

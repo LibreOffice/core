@@ -371,13 +371,12 @@ EditUndoInsertFeature::EditUndoInsertFeature(
     EditEngine* pEE, const EPaM& rEPaM, const SfxPoolItem& rFeature) :
     EditUndo(EDITUNDO_INSERTFEATURE, pEE), aEPaM(rEPaM)
 {
-    pFeature = rFeature.Clone();
+    pFeature.reset( rFeature.Clone() );
     DBG_ASSERT( pFeature, "Feature could not be duplicated: EditUndoInsertFeature" );
 }
 
 EditUndoInsertFeature::~EditUndoInsertFeature()
 {
-    delete pFeature;
 }
 
 void EditUndoInsertFeature::Undo()
@@ -593,7 +592,6 @@ EditUndoTransliteration::EditUndoTransliteration(EditEngine* pEE, const ESelecti
 
 EditUndoTransliteration::~EditUndoTransliteration()
 {
-    delete pTxtObj;
 }
 
 void EditUndoTransliteration::Undo()

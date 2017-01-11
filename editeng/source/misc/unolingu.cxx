@@ -75,16 +75,15 @@ static uno::Reference< XLinguServiceManager2 > GetLngSvcMgr_Impl()
 class ThesDummy_Impl :
     public cppu::WeakImplHelper< XThesaurus >
 {
-    uno::Reference< XThesaurus >     xThes;      // the real one...
-    Sequence< lang::Locale >         *pLocaleSeq;
+    uno::Reference< XThesaurus >              xThes;      // the real one...
+    std::unique_ptr<Sequence< lang::Locale >> pLocaleSeq;
 
     void GetCfgLocales();
 
     void GetThes_Impl();
 
 public:
-    ThesDummy_Impl() : pLocaleSeq(nullptr)  {}
-    virtual ~ThesDummy_Impl() override;
+    ThesDummy_Impl() {}
 
     // XSupportedLocales
     virtual css::uno::Sequence< css::lang::Locale > SAL_CALL
@@ -105,12 +104,6 @@ public:
 };
 
 
-ThesDummy_Impl::~ThesDummy_Impl()
-{
-    delete pLocaleSeq;
-}
-
-
 void ThesDummy_Impl::GetCfgLocales()
 {
     if (!pLocaleSeq)
@@ -120,7 +113,7 @@ void ThesDummy_Impl::GetCfgLocales()
         Sequence < OUString > aNodeNames( aCfg.GetNodeNames( aNode ) );
         const OUString *pNodeNames = aNodeNames.getConstArray();
         sal_Int32 nLen = aNodeNames.getLength();
-        pLocaleSeq = new Sequence< lang::Locale >( nLen );
+        pLocaleSeq.reset( new Sequence< lang::Locale >( nLen ) );
         lang::Locale *pLocale = pLocaleSeq->getArray();
         for (sal_Int32 i = 0;  i < nLen;  ++i)
         {
@@ -140,7 +133,7 @@ void ThesDummy_Impl::GetThes_Impl()
         if (xThes.is())
         {
             // no longer needed...
-            delete pLocaleSeq;    pLocaleSeq = nullptr;
+            pLocaleSeq.reset();
         }
     }
 }

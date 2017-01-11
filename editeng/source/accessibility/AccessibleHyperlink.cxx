@@ -39,7 +39,7 @@ namespace accessibility
     AccessibleHyperlink::AccessibleHyperlink( SvxAccessibleTextAdapter& r, SvxFieldItem* p, sal_Int32 nP, sal_uInt16 nR, sal_Int32 nStt, sal_Int32 nEnd, const OUString& rD )
     : rTA( r )
     {
-        pFld = p;
+        pFld.reset( p );
         nPara = nP;
         nRealIdx = nR;
         nStartIdx = nStt;
@@ -49,7 +49,6 @@ namespace accessibility
 
     AccessibleHyperlink::~AccessibleHyperlink()
     {
-        delete pFld;
     }
 
     // XAccessibleAction
