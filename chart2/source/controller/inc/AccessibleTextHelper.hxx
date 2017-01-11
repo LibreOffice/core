@@ -95,8 +95,8 @@ public:
                css::uno::RuntimeException, std::exception) override;
 
 private:
-    ::accessibility::AccessibleTextHelper * m_pTextHelper;
-    DrawViewWrapper *                       m_pDrawViewWrapper;
+    std::unique_ptr<::accessibility::AccessibleTextHelper> m_pTextHelper;
+    DrawViewWrapper *                                      m_pDrawViewWrapper;
 };
 
 } //  namespace chart

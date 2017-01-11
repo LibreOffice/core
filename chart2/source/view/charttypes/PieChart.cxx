@@ -172,8 +172,8 @@ PieChart::PieChart( const uno::Reference<XChartType>& xChartTypeModel
 {
     ::rtl::math::setNan(&m_fMaxOffset);
 
-    PlotterBase::m_pPosHelper = m_pPosHelper;
-    VSeriesPlotter::m_pMainPosHelper = m_pPosHelper;
+    PlotterBase::m_pPosHelper = m_pPosHelper.get();
+    VSeriesPlotter::m_pMainPosHelper = m_pPosHelper.get();
     m_pPosHelper->m_fRadiusOffset = 0.0;
     m_pPosHelper->m_fRingDistance = 0.0;
 
@@ -196,7 +196,6 @@ PieChart::PieChart( const uno::Reference<XChartType>& xChartTypeModel
 
 PieChart::~PieChart()
 {
-    delete m_pPosHelper;
 }
 
 void PieChart::setScales( const std::vector< ExplicitScaleData >& rScales, bool /* bSwapXAndYAxis */ )
@@ -310,7 +309,7 @@ void PieChart::createTextLabelShape(
     ///the scene position of the label anchor point is calculated (see notes for
     ///`PolarLabelPositionHelper::getLabelScreenPositionAndAlignmentForUnitCircleValues`),
     ///and immediately transformed into the screen position.
-    PolarLabelPositionHelper aPolarPosHelper(m_pPosHelper,m_nDimension,m_xLogicTarget,m_pShapeFactory);
+    PolarLabelPositionHelper aPolarPosHelper(m_pPosHelper.get(),m_nDimension,m_xLogicTarget,m_pShapeFactory);
     awt::Point aScreenPosition2D(
         aPolarPosHelper.getLabelScreenPositionAndAlignmentForUnitCircleValues(eAlignment, nLabelPlacement
         , rParam.mfUnitCircleStartAngleDegree, rParam.mfUnitCircleWidthAngleDegree
