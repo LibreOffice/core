@@ -147,6 +147,4 @@ long WINAPI signalHandlerFunction(LPEXCEPTION_POINTERS lpEP)
 
 }
 
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
