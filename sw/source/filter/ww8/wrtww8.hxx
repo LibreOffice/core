@@ -1169,8 +1169,8 @@ private:
 protected:
     std::vector<WW8_CP> aCps;
     std::vector<const void*> aContent;                // PTRARR of SwFormatFootnote/PostIts/..
-    std::vector<const SwFrameFormat*> aSpareFormats;        //a backup for aContent: if there's no SdrObject, stores the fmt directly here
-    WW8_WrPlc0* pTextPos;            // positions of the individual texts
+    std::vector<const SwFrameFormat*> aSpareFormats;  // a backup for aContent: if there's no SdrObject, stores the fmt directly here
+    std::unique_ptr<WW8_WrPlc0> pTextPos;             // positions of the individual texts
 
     WW8_WrPlcSubDoc();
     virtual ~WW8_WrPlcSubDoc();
@@ -1281,7 +1281,7 @@ class WW8_WrPlc1
 {
 private:
     std::vector<WW8_CP> aPos;
-    sal_uInt8* pData;                // content ( structures )
+    std::unique_ptr<sal_uInt8[]> pData;                // content ( structures )
     sal_uLong nDataLen;
     sal_uInt16 nStructSiz;
 
