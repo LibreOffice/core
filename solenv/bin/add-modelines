@@ -43,10 +43,10 @@ ModelineReplace="false"
 
 function SetEnvironment()
 {
-     if [ -n "$(which tail)" -a -n "$(which head)" ]; then
+     if [ -n "$(which tail)" ] && [ -n "$(which head)" ]; then
         {
-            headCMD=`which head`
-            tailCMD=`which tail`
+            headCMD=$(which head)
+            tailCMD=$(which tail)
         }
         else
         {
@@ -55,18 +55,10 @@ function SetEnvironment()
         }
     fi
     if [ -n "$(which find)" ]; then
-        findCMD=`which find`
+        findCMD=$(which find)
         else
         {
             echo "Missing find, exiting..."
-            exit 1
-        }
-    fi
-    if [ -n "$(which awk)" ]; then
-        awkCMD=`which awk`
-        else
-        {
-            echo "Missing awk, exiting..."
             exit 1
         }
     fi
@@ -80,12 +72,12 @@ function EditFile()
 
     FileToEdit="$1"
 
-    currentFirstLine=`$headCMD -1 "$FileToEdit"`
-    currentLastLine=`$tailCMD -1 "$FileToEdit"`
+    currentFirstLine=$($headCMD -1 "$FileToEdit")
+    currentLastLine=$($tailCMD -1 "$FileToEdit")
 
     case "$ModelineReplace" in
         "true" )
-            if [ "${currentFirstLIne:0:6}" = "${FirstLine:0:6}" ]; then
+            if [ "${currentFirstLine:0:6}" = "${FirstLine:0:6}" ]; then
             {
                 echo "$FirstLine" > "$FileToEdit".new
                 $tailCMD -n +2 "$FileToEdit" >> "$FileToEdit".new
@@ -144,7 +136,7 @@ while getopts "zs:p:" opt; do
 done
 
 if [ $OPTIND -gt 1 ]; then
-    shift $(($OPTIND - 1))
+    shift $((OPTIND - 1))
 fi
 
 if [ $# -gt 1 ]; then
@@ -167,9 +159,9 @@ for FileType in ${SourceFiles}; do
 done
 
 # This gets rid of the final " -a " in the find argument list
-findArgs="${findArgs:0:(${#findArgs}-3)}"
+findArgs=(${findArgs:0:(${#findArgs}-3)})
 
-for file in $($findCMD $findArgs); do
+for file in $($findCMD "${findArgs[@]}"); do
     EditFile "$file"
     echo "Completed: " "$file"
 done
