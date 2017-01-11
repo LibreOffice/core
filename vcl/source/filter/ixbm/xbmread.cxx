@@ -39,7 +39,8 @@ class XBMReader : public GraphicReader
     SvStream&           rIStm;
     Bitmap              aBmp1;
     Bitmap::ScopedWriteAccess pAcc1;
-    short*              pHexTable;
+    std::unique_ptr<short[]>
+                        pHexTable;
     BitmapColor         aWhite;
     BitmapColor         aBlack;
     long                nLastPos;
@@ -55,7 +56,6 @@ class XBMReader : public GraphicReader
 public:
 
     explicit        XBMReader( SvStream& rStm );
-    virtual         ~XBMReader() override;
 
     ReadState       ReadXBM( Graphic& rGraphic );
 };
@@ -67,19 +67,14 @@ XBMReader::XBMReader( SvStream& rStm ) :
             nHeight         ( 0 ),
             bStatus         ( true )
 {
-    pHexTable = new short[ 256 ];
+    pHexTable.reset( new short[ 256 ] );
     maUpperName = "SVIXBM";
     InitTable();
 }
 
-XBMReader::~XBMReader()
-{
-    delete[] pHexTable;
-}
-
 void XBMReader::InitTable()
 {
-    memset( pHexTable, 0, sizeof( short ) * 256 );
+    memset( pHexTable.get(), 0, sizeof( short ) * 256 );
 
     pHexTable[(int)'0'] = 0;
     pHexTable[(int)'1'] = 1;

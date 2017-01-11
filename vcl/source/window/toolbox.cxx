@@ -93,7 +93,8 @@ typedef ::std::vector< VclPtr<ToolBox> > ImplTBList;
 class ImplTBDragMgr
 {
 private:
-    ImplTBList*     mpBoxList;
+    std::unique_ptr<ImplTBList>
+                    mpBoxList;
     VclPtr<ToolBox> mpDragBox;
     Point           maMouseOff;
     Rectangle       maRect;
@@ -1144,7 +1145,6 @@ ImplTBDragMgr::ImplTBDragMgr()
 
 ImplTBDragMgr::~ImplTBDragMgr()
 {
-    delete mpBoxList;
 }
 
 ToolBox* ImplTBDragMgr::FindToolBox( const Rectangle& rRect )
