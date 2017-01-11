@@ -2327,8 +2327,7 @@ void PDFWriterImpl::endPage()
             if( jpeg->m_pStream )
             {
                 writeJPG( *jpeg );
-                delete jpeg->m_pStream;
-                jpeg->m_pStream = nullptr;
+                jpeg->m_pStream.reset();
                 jpeg->m_aMask = Bitmap();
             }
         }
@@ -12093,11 +12092,11 @@ void PDFWriterImpl::drawJPGBitmap( SvStream& rDCTData, bool bIsTrueColor, const 
         ;
     if( it == m_aJPGs.end() )
     {
-        m_aJPGs.push_front( JPGEmit() );
+        m_aJPGs.emplace( m_aJPGs.begin() );
         JPGEmit& rEmit = m_aJPGs.front();
         rEmit.m_nObject     = createObject();
         rEmit.m_aID         = aID;
-        rEmit.m_pStream     = pStream;
+        rEmit.m_pStream.reset( pStream );
         rEmit.m_bTrueColor  = bIsTrueColor;
         if( !! rMask && rMask.GetSizePixel() == rSizePixel )
             rEmit.m_aMask   = rMask;
@@ -14062,4 +14061,12 @@ void PDFWriterImpl::MARK( const char* pString )
         emitComment( pString );
 }
 
+PDFWriterImpl::JPGEmit::JPGEmit(PDFWriterImpl::JPGEmit&& rOther)
+{
+    m_aID = rOther.m_aID;
+    m_pStream = std::move(rOther.m_pStream);
+    m_aMask = std::move(rOther.m_aMask);
+    m_nObject = rOther.m_nObject;
+    m_bTrueColor = rOther.m_bTrueColor;
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
