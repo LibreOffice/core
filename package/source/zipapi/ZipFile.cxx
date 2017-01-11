@@ -68,7 +68,6 @@ using ZipUtils::Inflater;
 /** This class is used to read entries from a zip file
  */
 ZipFile::ZipFile( uno::Reference < XInputStream > &xInput, const uno::Reference < XComponentContext > & rxContext, bool bInitialise )
-    throw(IOException, ZipException, RuntimeException)
 : aGrabber(xInput)
 , aInflater( true )
 , xStream(xInput)
@@ -87,7 +86,6 @@ ZipFile::ZipFile( uno::Reference < XInputStream > &xInput, const uno::Reference 
 }
 
 ZipFile::ZipFile( uno::Reference < XInputStream > &xInput, const uno::Reference < XComponentContext > & rxContext, bool bInitialise, bool bForceRecovery)
-    throw(IOException, ZipException, RuntimeException)
 : aGrabber(xInput)
 , aInflater( true )
 , xStream(xInput)
@@ -379,7 +377,6 @@ bool ZipFile::StaticFillData (  ::rtl::Reference< BaseEncryptionData > & rData,
 uno::Reference< XInputStream > ZipFile::StaticGetDataFromRawStream( const uno::Reference< uno::XComponentContext >& rxContext,
                                                                 const uno::Reference< XInputStream >& xStream,
                                                                 const ::rtl::Reference< EncryptionData > &rData )
-        throw ( packages::WrongPasswordException, ZipIOException, RuntimeException )
 {
     if ( !rData.is() )
         throw ZipIOException("Encrypted stream without encryption data!" );
@@ -521,7 +518,7 @@ uno::Reference< XInputStream > ZipFile::createUnbufferedStream(
     return new XUnbufferedStream ( m_xContext, aMutexHolder, rEntry, xStream, rData, nStreamMode, bIsEncrypted, aMediaType, bRecoveryMode );
 }
 
-ZipEnumeration * SAL_CALL ZipFile::entries(  )
+ZipEnumeration* ZipFile::entries()
 {
     return new ZipEnumeration ( aEntries );
 }
@@ -530,7 +527,6 @@ uno::Reference< XInputStream > SAL_CALL ZipFile::getInputStream( ZipEntry& rEntr
         const ::rtl::Reference< EncryptionData > &rData,
         bool bIsEncrypted,
         const rtl::Reference<SotMutexHolder>& aMutexHolder )
-    throw(IOException, ZipException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -558,10 +554,6 @@ uno::Reference< XInputStream > SAL_CALL ZipFile::getDataStream( ZipEntry& rEntry
         const ::rtl::Reference< EncryptionData > &rData,
         bool bIsEncrypted,
         const rtl::Reference<SotMutexHolder>& aMutexHolder )
-    throw ( packages::WrongPasswordException,
-            IOException,
-            ZipException,
-            RuntimeException )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -598,7 +590,6 @@ uno::Reference< XInputStream > SAL_CALL ZipFile::getRawData( ZipEntry& rEntry,
         const ::rtl::Reference< EncryptionData >& rData,
         bool bIsEncrypted,
         const rtl::Reference<SotMutexHolder>& aMutexHolder )
-    throw(IOException, ZipException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -613,10 +604,6 @@ uno::Reference< XInputStream > SAL_CALL ZipFile::getWrappedRawStream(
         const ::rtl::Reference< EncryptionData >& rData,
         const OUString& aMediaType,
         const rtl::Reference<SotMutexHolder>& aMutexHolder )
-    throw ( packages::NoEncryptionException,
-            IOException,
-            ZipException,
-            RuntimeException )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -630,7 +617,6 @@ uno::Reference< XInputStream > SAL_CALL ZipFile::getWrappedRawStream(
 }
 
 bool ZipFile::readLOC( ZipEntry &rEntry )
-    throw(IOException, ZipException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -700,8 +686,7 @@ bool ZipFile::readLOC( ZipEntry &rEntry )
     return true;
 }
 
-sal_Int32 ZipFile::findEND( )
-    throw(IOException, ZipException, RuntimeException)
+sal_Int32 ZipFile::findEND()
 {
     // this method is called in constructor only, no need for mutex
     sal_Int32 nLength, nPos, nEnd;
@@ -743,7 +728,6 @@ sal_Int32 ZipFile::findEND( )
 }
 
 sal_Int32 ZipFile::readCEN()
-    throw(IOException, ZipException, RuntimeException)
 {
     // this method is called in constructor only, no need for mutex
     sal_Int32 nCenPos = -1, nEndPos, nLocPos;
@@ -861,7 +845,6 @@ sal_Int32 ZipFile::readCEN()
 }
 
 void ZipFile::recover()
-    throw(IOException, ZipException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
