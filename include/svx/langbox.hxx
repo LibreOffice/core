@@ -90,7 +90,8 @@ protected:
     Image                   m_aNotCheckedImage;
     Image                   m_aCheckedImage;
     OUString                m_aAllString;
-    css::uno::Sequence< sal_Int16 >  *m_pSpellUsedLang;
+    std::unique_ptr<css::uno::Sequence< sal_Int16 >>
+                            m_pSpellUsedLang;
     SvxLanguageListFlags    m_nLangList;
     bool                    m_bHasLangNone;
     bool                    m_bLangNoneIsLangAll;

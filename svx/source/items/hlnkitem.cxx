@@ -200,9 +200,7 @@ SvxHyperlinkItem::SvxHyperlinkItem( const SvxHyperlinkItem& rHyperlinkItem ):
     nMacroEvents = rHyperlinkItem.nMacroEvents;
 
     if( rHyperlinkItem.GetMacroTable() )
-        pMacroTable = new SvxMacroTableDtor( *rHyperlinkItem.GetMacroTable() );
-    else
-        pMacroTable=nullptr;
+        pMacroTable.reset( new SvxMacroTableDtor( *rHyperlinkItem.GetMacroTable() ) );
 
 };
 
@@ -218,9 +216,7 @@ SvxHyperlinkItem::SvxHyperlinkItem( sal_uInt16 _nWhich, const OUString& rName, c
     nMacroEvents (nEvents)
 {
     if (pMacroTbl)
-        pMacroTable = new SvxMacroTableDtor ( *pMacroTbl );
-    else
-        pMacroTable=nullptr;
+        pMacroTable.reset( new SvxMacroTableDtor ( *pMacroTbl ) );
 }
 
 SfxPoolItem* SvxHyperlinkItem::Clone( SfxItemPool* ) const
@@ -243,7 +239,7 @@ bool SvxHyperlinkItem::operator==( const SfxPoolItem& rAttr ) const
     if (!bRet)
         return false;
 
-    const SvxMacroTableDtor* pOther = static_cast<const SvxHyperlinkItem&>(rAttr).pMacroTable;
+    const SvxMacroTableDtor* pOther = static_cast<const SvxHyperlinkItem&>(rAttr).pMacroTable.get();
     if( !pMacroTable )
         return ( !pOther || pOther->empty() );
     if( !pOther )
@@ -273,16 +269,14 @@ void SvxHyperlinkItem::SetMacro( HyperDialogEvent nEvent, const SvxMacro& rMacro
     }
 
     if( !pMacroTable )
-        pMacroTable = new SvxMacroTableDtor;
+        pMacroTable.reset( new SvxMacroTableDtor );
 
     pMacroTable->Insert( nSfxEvent, rMacro);
 }
 
 void SvxHyperlinkItem::SetMacroTable( const SvxMacroTableDtor& rTbl )
 {
-    delete pMacroTable;
-
-    pMacroTable = new SvxMacroTableDtor ( rTbl );
+    pMacroTable.reset( new SvxMacroTableDtor ( rTbl ) );
 }
 
 bool SvxHyperlinkItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const

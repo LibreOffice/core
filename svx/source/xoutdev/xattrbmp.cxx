@@ -47,14 +47,12 @@ using namespace ::com::sun::star;
 XOBitmap::XOBitmap( const Bitmap& rBmp ) :
     eType           ( XBitmapType::Import ),
     xGraphicObject  (new GraphicObject(rBmp)),
-    pPixelArray     ( nullptr ),
     bGraphicDirty   ( false )
 {
 }
 
 XOBitmap::~XOBitmap()
 {
-    delete [] pPixelArray;
 }
 
 Bitmap XOBitmap::GetBitmap() const
@@ -78,7 +76,7 @@ void XOBitmap::Bitmap2Array()
     const sal_uInt16    nLines = 8; // type dependent
 
     if( !pPixelArray )
-        pPixelArray = new sal_uInt16[ nLines * nLines ];
+        pPixelArray.reset( new sal_uInt16[ nLines * nLines ] );
 
     pVDev->SetOutputSizePixel( aBitmap.GetSizePixel() );
     pVDev->DrawBitmap( Point(), aBitmap );
@@ -90,10 +88,10 @@ void XOBitmap::Bitmap2Array()
         for( sal_uInt16 j = 0; j < nLines; j++ )
         {
             if ( pVDev->GetPixel( Point( j, i ) ) == aBckgrColor )
-                *( pPixelArray + j + i * nLines ) = 0;
+                pPixelArray[ j + i * nLines ] = 0;
             else
             {
-                *( pPixelArray + j + i * nLines ) = 1;
+                pPixelArray[ j + i * nLines ] = 1;
                 if( !bPixelColor )
                 {
                     aPixelColor = pVDev->GetPixel( Point( j, i ) );
@@ -120,7 +118,7 @@ void XOBitmap::Array2Bitmap()
     {
         for( sal_uInt16 j = 0; j < nLines; j++ )
         {
-            if( *( pPixelArray + j + i * nLines ) == 0 )
+            if( pPixelArray[ j + i * nLines ] == 0 )
                 pVDev->DrawPixel( Point( j, i ), aBckgrColor );
             else
                 pVDev->DrawPixel( Point( j, i ), aPixelColor );

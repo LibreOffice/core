@@ -42,7 +42,7 @@ protected:
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() override;
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties() override;
 
-    SdrObjList*                 pSub;    // Subliste (Kinder)
+    std::unique_ptr<SdrObjList> pSub;    // Subliste (Kinder)
     Point                       aRefPoint; // Referenzpunkt innerhalb der Objektgruppe
 
 public:
