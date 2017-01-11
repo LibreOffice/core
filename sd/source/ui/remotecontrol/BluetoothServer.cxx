@@ -295,7 +295,7 @@ bluez4GetDefaultService( DBusConnection *pConnection )
 {
     DBusMessage *pMsg;
     DBusMessageIter it;
-    const gchar* pInterfaceType = "org.bluez.Service";
+    const gchar* const pInterfaceType = "org.bluez.Service";
 
     // org.bluez.manager only exists for bluez 4.
     // getMethodCall should return NULL if there is any issue e.g. the
