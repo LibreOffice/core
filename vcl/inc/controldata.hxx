@@ -26,7 +26,7 @@ namespace vcl
 {
     struct ImplControlData
     {
-        mutable ControlLayoutData*  mpLayoutData;
+        mutable std::unique_ptr<ControlLayoutData>  mpLayoutData;
         VclPtr<OutputDevice>        mpReferenceDevice;
 
         ImplControlData()
@@ -37,7 +37,6 @@ namespace vcl
 
         ~ImplControlData()
         {
-            delete mpLayoutData;
         }
     };
 

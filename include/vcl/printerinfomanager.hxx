@@ -107,7 +107,8 @@ protected:
 
     std::list< SystemPrintQueue >     m_aSystemPrintQueues;
 
-    SystemQueueInfo*                  m_pQueueInfo;
+    std::unique_ptr<SystemQueueInfo>
+                                      m_pQueueInfo;
 
     Type                              m_eType;
     bool                              m_bUseIncludeFeature;

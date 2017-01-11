@@ -52,7 +52,6 @@ OldStylePrintAdaptor::OldStylePrintAdaptor( const VclPtr< Printer >& i_xPrinter 
 
 OldStylePrintAdaptor::~OldStylePrintAdaptor()
 {
-    delete mpData;
 }
 
 void OldStylePrintAdaptor::StartPage()

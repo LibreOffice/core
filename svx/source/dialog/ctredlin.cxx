@@ -1057,7 +1057,7 @@ IMPL_LINK( SvxTPFilter, RefHandle, Button*, pRef, void )
 SvxAcceptChgCtr::SvxAcceptChgCtr(vcl::Window* pParent, VclBuilderContainer* pTopLevel)
     : TabControl(pParent, WB_TABSTOP | WB_DIALOGCONTROL)
 {
-    m_pUIBuilder = new VclBuilder(this, getUIRootDir(), "svx/ui/redlinecontrol.ui", "RedlineControl");
+    m_pUIBuilder.reset(new VclBuilder(this, getUIRootDir(), "svx/ui/redlinecontrol.ui", "RedlineControl"));
 
     pTPFilter = VclPtr<SvxTPFilter>::Create(this);
     pTPView = VclPtr<SvxTPView>::Create(this, pTopLevel);

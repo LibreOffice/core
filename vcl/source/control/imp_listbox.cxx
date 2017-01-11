@@ -1851,7 +1851,7 @@ void ImplListBoxWindow::DrawEntry(vcl::RenderContext& rRenderContext, sal_Int32 
 
 void ImplListBoxWindow::FillLayoutData() const
 {
-    mpControlData->mpLayoutData = new vcl::ControlLayoutData();
+    mpControlData->mpLayoutData.reset( new vcl::ControlLayoutData );
     const_cast<ImplListBoxWindow*>(this)->Invalidate(Rectangle(Point(0, 0), GetOutputSize()));
 }
 
@@ -2585,7 +2585,7 @@ void ImplWin::MouseButtonDown( const MouseEvent& )
 
 void ImplWin::FillLayoutData() const
 {
-    mpControlData->mpLayoutData = new vcl::ControlLayoutData();
+    mpControlData->mpLayoutData.reset( new vcl::ControlLayoutData );
     ImplWin* pThis = const_cast<ImplWin*>(this);
     pThis->ImplDraw(*pThis, true);
 }

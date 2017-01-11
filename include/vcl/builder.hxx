@@ -473,7 +473,7 @@ public:
     }
 
 protected:
-    VclBuilder *m_pUIBuilder;
+    std::unique_ptr<VclBuilder> m_pUIBuilder;
 };
 
 /*

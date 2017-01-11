@@ -379,14 +379,13 @@ FormatterBase::FormatterBase()
 
 FormatterBase::~FormatterBase()
 {
-    delete mpLocaleDataWrapper;
 }
 
 LocaleDataWrapper& FormatterBase::ImplGetLocaleDataWrapper() const
 {
     if ( !mpLocaleDataWrapper )
     {
-        const_cast<FormatterBase*>(this)->mpLocaleDataWrapper = new LocaleDataWrapper( GetLanguageTag() );
+        const_cast<FormatterBase*>(this)->mpLocaleDataWrapper.reset( new LocaleDataWrapper( GetLanguageTag() ) );
     }
     return *mpLocaleDataWrapper;
 }

@@ -25,6 +25,7 @@
 #include <tools/debug.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/dllapi.h>
+#include <memory>
 
 namespace vcl { class Font; }
 
@@ -129,7 +130,8 @@ public:
 class TextCharAttrib
 {
 private:
-    TextAttrib*     mpAttr;
+    std::unique_ptr<TextAttrib>
+                    mpAttr;
     sal_Int32       mnStart;
     sal_Int32       mnEnd;
 
