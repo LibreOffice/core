@@ -475,7 +475,7 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
             SwPosSize aTmpSize = rInf.GetTextSize( &rSI, nCutPos, nHangingLen );
             aTmpSize.Width(aTmpSize.Width() + nLeftRightBorderSpace);
             OSL_ENSURE( !pHanging, "A hanging portion is hanging around" );
-            pHanging = new SwHangingPortion( aTmpSize );
+            pHanging.reset( new SwHangingPortion( aTmpSize ) );
             pHanging->SetLen( nHangingLen );
             nPorLen = nCutPos - rInf.GetIdx();
         }

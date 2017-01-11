@@ -20,6 +20,7 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_OBJECTFORMATTER_HXX
 
 #include <sal/types.h>
+#include <memory>
 
 class SwFrame;
 // #i26945#
@@ -50,7 +51,7 @@ class SwObjectFormatter
 
         // data structure to collect page number of object's 'anchor'
         // #i26945#
-        SwPageNumAndTypeOfAnchors* mpPgNumAndTypeOfAnchors;
+        std::unique_ptr<SwPageNumAndTypeOfAnchors> mpPgNumAndTypeOfAnchors;
 
         /** helper method for method <FormatObj_(..)> - performs the intrinsic
             format of the layout of the given layout frame and all its lower

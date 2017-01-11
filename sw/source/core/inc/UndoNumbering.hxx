@@ -64,8 +64,8 @@ class SwUndoDelNum : public SwUndo, private SwUndRng
         int level;
         inline NodeLevel(sal_uLong idx, int lvl) : index(idx), level(lvl) {};
     };
-    std::vector<NodeLevel> aNodes;
-    SwHistory* pHistory;
+    std::vector<NodeLevel>     aNodes;
+    std::unique_ptr<SwHistory> pHistory;
 
 public:
     SwUndoDelNum( const SwPaM& rPam );
@@ -77,7 +77,7 @@ public:
     virtual void RepeatImpl( ::sw::RepeatContext & ) override;
 
     void AddNode( const SwTextNode& rNd );
-    SwHistory* GetHistory() { return pHistory; }
+    SwHistory* GetHistory() { return pHistory.get(); }
 };
 
 class SwUndoMoveNum : public SwUndo, private SwUndRng

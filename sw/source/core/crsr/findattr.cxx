@@ -1058,15 +1058,15 @@ struct SwFindParaAttr : public SwFindParas
     const SfxItemSet *pSet, *pReplSet;
     const SearchOptions2 *pSearchOpt;
     SwCursor& m_rCursor;
-    utl::TextSearch* pSText;
+    std::unique_ptr<utl::TextSearch> pSText;
 
     SwFindParaAttr( const SfxItemSet& rSet, bool bNoCollection,
                     const SearchOptions2* pOpt, const SfxItemSet* pRSet,
                     SwCursor& rCursor )
         : bValue( bNoCollection ), pSet( &rSet ), pReplSet( pRSet ),
-          pSearchOpt( pOpt ), m_rCursor( rCursor ),pSText( nullptr ) {}
+          pSearchOpt( pOpt ), m_rCursor( rCursor ) {}
 
-    virtual ~SwFindParaAttr()   { delete pSText; }
+    virtual ~SwFindParaAttr()   {}
 
     virtual int Find( SwPaM* , SwMoveFnCollection const & , const SwPaM*, bool bInReadOnly ) override;
     virtual bool IsReplaceMode() const override;
@@ -1117,7 +1117,7 @@ int SwFindParaAttr::Find( SwPaM* pCursor, SwMoveFnCollection const & fnMove, con
 
                 aTmp.Locale = SvtSysLocale().GetLanguageTag().getLocale();
 
-                pSText = new utl::TextSearch( aTmp );
+                pSText.reset( new utl::TextSearch( aTmp ) );
             }
 
             // TODO: searching for attributes in Outliner text?!

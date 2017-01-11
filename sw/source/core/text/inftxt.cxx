@@ -98,13 +98,12 @@ SwLineInfo::SwLineInfo()
 
 SwLineInfo::~SwLineInfo()
 {
-    delete pRuler;
 }
+
 void SwLineInfo::CtorInitLineInfo( const SwAttrSet& rAttrSet,
                                    const SwTextNode& rTextNode )
 {
-    delete pRuler;
-    pRuler = new SvxTabStopItem( rAttrSet.GetTabStops() );
+    pRuler.reset( new SvxTabStopItem( rAttrSet.GetTabStops() ) );
     if ( rTextNode.GetListTabStopPosition( nListTabStopPosition ) )
     {
         bListTabStopIncluded = true;

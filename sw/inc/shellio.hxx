@@ -287,7 +287,7 @@ class SwImpBlocks;
 
 class SW_DLLPUBLIC SwTextBlocks
 {
-    SwImpBlocks* pImp;
+    std::unique_ptr<SwImpBlocks> pImp;
     sal_uLong        nErr;
 
 public:

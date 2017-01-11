@@ -21,6 +21,7 @@
 #define INCLUDED_SW_INC_LIST_HXX
 
 #include <rtl/ustring.hxx>
+#include <memory>
 
 class SwNumRule;
 class SwNodes;
@@ -57,7 +58,7 @@ class SwList
         SwList( const SwList& ) = delete;
         SwList& operator=( const SwList& ) = delete;
 
-        SwListImpl* mpListImpl;
+        std::unique_ptr<SwListImpl> mpListImpl;
 };
 #endif // INCLUDED_SW_INC_LIST_HXX
 

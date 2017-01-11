@@ -69,8 +69,7 @@ using namespace ::com::sun::star;
 // Hintergrundbrush setzen, z.B. bei Zeichenvorlagen
 void SwFont::SetBackColor( Color* pNewColor )
 {
-    delete m_pBackColor;
-    m_pBackColor = pNewColor;
+    m_pBackColor.reset( pNewColor );
     m_bFontChg = true;
     m_aSub[SwFontScript::Latin].m_pMagic = m_aSub[SwFontScript::CJK].m_pMagic = m_aSub[SwFontScript::CTL].m_pMagic = nullptr;
 }
@@ -481,8 +480,7 @@ sal_uInt16 SwSubFont::CalcEscAscent( const sal_uInt16 nOldAscent ) const
 void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
                          const IDocumentSettingAccess *pIDocumentSettingAccess )
 {
-    delete m_pBackColor;
-    m_pBackColor = nullptr;
+    m_pBackColor.reset();
 
     if( pAttrSet )
     {
@@ -661,7 +659,7 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
             SetVertical( static_cast<const SvxCharRotateItem*>(pItem)->GetValue() );
         if( SfxItemState::SET == pAttrSet->GetItemState( RES_CHRATR_BACKGROUND,
             true, &pItem ))
-            m_pBackColor = new Color( static_cast<const SvxBrushItem*>(pItem)->GetColor() );
+            m_pBackColor.reset( new Color( static_cast<const SvxBrushItem*>(pItem)->GetColor() ) );
         if( SfxItemState::SET == pAttrSet->GetItemState( RES_CHRATR_HIGHLIGHT,
             true, &pItem ))
             SetHighlightColor(static_cast<const SvxBrushItem*>(pItem)->GetColor());
@@ -706,7 +704,7 @@ SwFont::SwFont( const SwFont &rFont )
     : m_aSub(rFont.m_aSub)
 {
     m_nActual = rFont.m_nActual;
-    m_pBackColor = rFont.m_pBackColor ? new Color( *rFont.m_pBackColor ) : nullptr;
+    m_pBackColor.reset( rFont.m_pBackColor ? new Color( *rFont.m_pBackColor ) : nullptr );
     m_aHighlightColor = rFont.m_aHighlightColor;
     m_aTopBorder = rFont.m_aTopBorder;
     m_aBottomBorder = rFont.m_aBottomBorder;
@@ -837,9 +835,7 @@ SwFont::SwFont( const SwAttrSet* pAttrSet,
     const SfxPoolItem* pItem;
     if( SfxItemState::SET == pAttrSet->GetItemState( RES_CHRATR_BACKGROUND,
         true, &pItem ))
-        m_pBackColor = new Color( static_cast<const SvxBrushItem*>(pItem)->GetColor() );
-    else
-        m_pBackColor = nullptr;
+        m_pBackColor.reset( new Color( static_cast<const SvxBrushItem*>(pItem)->GetColor() ) );
     if( SfxItemState::SET == pAttrSet->GetItemState( RES_CHRATR_HIGHLIGHT,
         true, &pItem ))
         SetHighlightColor(static_cast<const SvxBrushItem*>(pItem)->GetColor());
@@ -900,7 +896,6 @@ SwFont::SwFont( const SwAttrSet* pAttrSet,
 
 SwFont::~SwFont()
 {
-    delete m_pBackColor;
 }
 
 SwSubFont& SwSubFont::operator=( const SwSubFont &rFont )
@@ -922,8 +917,7 @@ SwFont& SwFont::operator=( const SwFont &rFont )
     m_aSub[SwFontScript::CJK] = rFont.m_aSub[SwFontScript::CJK];
     m_aSub[SwFontScript::CTL] = rFont.m_aSub[SwFontScript::CTL];
     m_nActual = rFont.m_nActual;
-    delete m_pBackColor;
-    m_pBackColor = rFont.m_pBackColor ? new Color( *rFont.m_pBackColor ) : nullptr;
+    m_pBackColor.reset( rFont.m_pBackColor ? new Color( *rFont.m_pBackColor ) : nullptr );
     m_aHighlightColor = rFont.m_aHighlightColor;
     m_aTopBorder = rFont.m_aTopBorder;
     m_aBottomBorder = rFont.m_aBottomBorder;
@@ -1508,7 +1502,6 @@ SwUnderlineFont::SwUnderlineFont( SwFont& rFnt, sal_Int32 nEnd, const Point& rPo
 
 SwUnderlineFont::~SwUnderlineFont()
 {
-     delete m_pFont;
 }
 
 /// Helper for filters to find true lineheight of a font

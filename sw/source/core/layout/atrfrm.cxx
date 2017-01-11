@@ -530,25 +530,23 @@ SfxPoolItem*  SwFormatFooter::Clone( SfxItemPool* ) const
 SwFormatContent::SwFormatContent( const SwFormatContent &rCpy )
     : SfxPoolItem( RES_CNTNT )
 {
-    pStartNode = rCpy.GetContentIdx() ?
-                    new SwNodeIndex( *rCpy.GetContentIdx() ) : nullptr;
+    pStartNode.reset( rCpy.GetContentIdx() ?
+                      new SwNodeIndex( *rCpy.GetContentIdx() ) : nullptr);
 }
 
 SwFormatContent::SwFormatContent( const SwStartNode *pStartNd )
     : SfxPoolItem( RES_CNTNT )
 {
-    pStartNode = pStartNd ? new SwNodeIndex( *pStartNd ) : nullptr;
+    pStartNode.reset( pStartNd ? new SwNodeIndex( *pStartNd ) : nullptr);
 }
 
- SwFormatContent::~SwFormatContent()
+SwFormatContent::~SwFormatContent()
 {
-    delete pStartNode;
 }
 
 void SwFormatContent::SetNewContentIdx( const SwNodeIndex *pIdx )
 {
-    delete pStartNode;
-    pStartNode = pIdx ? new SwNodeIndex( *pIdx ) : nullptr;
+    pStartNode.reset( pIdx ? new SwNodeIndex( *pIdx ) : nullptr );
 }
 
 bool SwFormatContent::operator==( const SfxPoolItem& rAttr ) const
@@ -1751,12 +1749,12 @@ SwFormatURL::SwFormatURL( const SwFormatURL &rURL) :
     sName( rURL.GetName() ),
     bIsServerMap( rURL.IsServerMap() )
 {
-    pMap = rURL.GetMap() ? new ImageMap( *rURL.GetMap() ) : nullptr;
+    if (rURL.GetMap())
+        pMap.reset( new ImageMap( *rURL.GetMap() ) );
 }
 
 SwFormatURL::~SwFormatURL()
 {
-    delete pMap;
 }
 
 bool SwFormatURL::operator==( const SfxPoolItem &rAttr ) const
@@ -1772,7 +1770,7 @@ bool SwFormatURL::operator==( const SfxPoolItem &rAttr ) const
         if ( pMap && rCmp.GetMap() )
             bRet = *pMap == *rCmp.GetMap();
         else
-            bRet = pMap == rCmp.GetMap();
+            bRet = pMap.get() == rCmp.GetMap();
     }
     return bRet;
 }
@@ -1790,8 +1788,7 @@ void SwFormatURL::SetURL(const OUString &rURL, bool bServerMap)
 
 void SwFormatURL::SetMap( const ImageMap *pM )
 {
-    delete pMap;
-    pMap = pM ? new ImageMap( *pM ) : nullptr;
+    pMap.reset( pM ? new ImageMap( *pM ) : nullptr);
 }
 
 bool SwFormatURL::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
@@ -1868,11 +1865,11 @@ bool SwFormatURL::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         {
             uno::Reference<container::XIndexContainer> xCont;
             if(!rVal.hasValue())
-                DELETEZ(pMap);
+                pMap.reset();
             else if(rVal >>= xCont)
             {
                 if(!pMap)
-                    pMap = new ImageMap;
+                    pMap.reset(new ImageMap);
                 bRet = SvUnoImageMap_fillImageMap( xCont, *pMap );
             }
             else

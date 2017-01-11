@@ -22,13 +22,14 @@
 #include <sal/types.h>
 #include <tools/mempool.hxx>
 #include "swcache.hxx"
+#include <memory>
 
 class SwParaPortion;
 class SwTextFrame;
 
 class SwTextLine : public SwCacheObj
 {
-    SwParaPortion *pLine;
+    std::unique_ptr<SwParaPortion> pLine;
 
 public:
     DECL_FIXEDMEMPOOL_NEWDEL(SwTextLine)
@@ -36,10 +37,10 @@ public:
     SwTextLine( SwTextFrame *pFrame, SwParaPortion *pNew = nullptr );
     virtual ~SwTextLine() override;
 
-    inline       SwParaPortion *GetPara()       { return pLine; }
-    inline const SwParaPortion *GetPara() const { return pLine; }
+    inline       SwParaPortion *GetPara()       { return pLine.get(); }
+    inline const SwParaPortion *GetPara() const { return pLine.get(); }
 
-    inline void SetPara( SwParaPortion *pNew ) { pLine = pNew; }
+    inline void SetPara( SwParaPortion *pNew, bool bDelete ) { if (!bDelete) pLine.release(); pLine.reset( pNew ); }
 };
 
 class SwTextLineAccess : public SwCacheAccess

@@ -53,7 +53,6 @@ SwNoTextNode::SwNoTextNode( const SwNodeIndex & rWhere,
 
 SwNoTextNode::~SwNoTextNode()
 {
-    delete pContour;
 }
 
 /// Creates an AttrSet for all derivations with ranges for frame-
@@ -88,11 +87,10 @@ bool SwNoTextNode::SavePersistentData()
 
 void SwNoTextNode::SetContour( const tools::PolyPolygon *pPoly, bool bAutomatic )
 {
-    delete pContour;
     if ( pPoly )
-        pContour = new tools::PolyPolygon( *pPoly );
+        pContour.reset( new tools::PolyPolygon( *pPoly ) );
     else
-        pContour = nullptr;
+        pContour.reset();
     bAutomaticContour = bAutomatic;
     bContourMapModeValid = true;
     bPixelContour = false;
@@ -101,7 +99,7 @@ void SwNoTextNode::SetContour( const tools::PolyPolygon *pPoly, bool bAutomatic 
 void SwNoTextNode::CreateContour()
 {
     OSL_ENSURE( !pContour, "Contour available." );
-    pContour = new tools::PolyPolygon(SvxContourDlg::CreateAutoContour(GetGraphic()));
+    pContour.reset( new tools::PolyPolygon(SvxContourDlg::CreateAutoContour(GetGraphic())) );
     bAutomaticContour = true;
     bContourMapModeValid = true;
     bPixelContour = false;
@@ -175,7 +173,7 @@ const tools::PolyPolygon *SwNoTextNode::HasContour() const
         const_cast<SwNoTextNode *>(this)->bPixelContour = false;
     }
 
-    return pContour;
+    return pContour.get();
 }
 
 void SwNoTextNode::GetContour( tools::PolyPolygon &rPoly ) const
@@ -186,11 +184,10 @@ void SwNoTextNode::GetContour( tools::PolyPolygon &rPoly ) const
 
 void SwNoTextNode::SetContourAPI( const tools::PolyPolygon *pPoly )
 {
-    delete pContour;
     if ( pPoly )
-        pContour = new tools::PolyPolygon( *pPoly );
+        pContour.reset( new tools::PolyPolygon( *pPoly ) );
     else
-        pContour = nullptr;
+        pContour.reset();
     bContourMapModeValid = false;
 }
 

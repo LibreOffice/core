@@ -328,7 +328,7 @@ HashStr::HashStr( const OUString& rName, const OUString& rText,
                     HashStr* pNxt )
     : SwHash( rName ), aSetStr( rText )
 {
-    pNext = pNxt;
+    pNext.reset( pNxt );
 }
 
 /// Look up the Name, if it is present, return its String, otherwise return an empty String
@@ -1103,7 +1103,7 @@ void SwDocUpdateField::InsertFieldType( const SwFieldType& rType )
         if( !pFnd )
         {
             SwCalcFieldType* pNew = new SwCalcFieldType( sFieldName, &rType );
-            pNew->pNext = aFieldTypeTable[ n ];
+            pNew->pNext.reset( aFieldTypeTable[ n ] );
             aFieldTypeTable[ n ] = pNew;
         }
     }
@@ -1133,15 +1133,14 @@ void SwDocUpdateField::RemoveFieldType( const SwFieldType& rType )
         if( pFnd )
         {
             if( aFieldTypeTable[ n ] == pFnd )
-                aFieldTypeTable[ n ] = static_cast<SwCalcFieldType*>(pFnd->pNext);
+                aFieldTypeTable[ n ] = static_cast<SwCalcFieldType*>(pFnd->pNext.release());
             else
             {
                 SwHash* pPrev = aFieldTypeTable[ n ];
-                while( pPrev->pNext != pFnd )
-                    pPrev = pPrev->pNext;
-                pPrev->pNext = pFnd->pNext;
+                while( pPrev->pNext.get() != pFnd )
+                    pPrev = pPrev->pNext.get();
+                pPrev->pNext.reset( pFnd->pNext.release() );
             }
-            pFnd->pNext = nullptr;
             delete pFnd;
         }
     }

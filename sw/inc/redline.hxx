@@ -51,7 +51,7 @@ public:
 class SwRedlineExtraData_FormatColl : public SwRedlineExtraData
 {
     OUString sFormatNm;
-    SfxItemSet* pSet;
+    std::unique_ptr<SfxItemSet> pSet;
     sal_uInt16 nPoolId;
 public:
     SwRedlineExtraData_FormatColl( const OUString& rColl, sal_uInt16 nPoolFormatId,
@@ -88,7 +88,7 @@ public:
  */
 class SW_DLLPUBLIC SwRedlineExtraData_FormattingChanges : public SwRedlineExtraData
 {
-    SfxItemSet* pSet;
+    std::unique_ptr<SfxItemSet> pSet;
 
     SwRedlineExtraData_FormattingChanges( const SwRedlineExtraData_FormattingChanges& rCpy );
 
@@ -98,7 +98,7 @@ public:
     virtual SwRedlineExtraData* CreateNew() const override;
     virtual void Reject( SwPaM& rPam ) const override;
     virtual bool operator == ( const SwRedlineExtraData& ) const override;
-    SfxItemSet* GetItemSet( ) const { return pSet; }
+    SfxItemSet* GetItemSet( ) const { return pSet.get(); }
 };
 
 class SW_DLLPUBLIC SwRedlineData

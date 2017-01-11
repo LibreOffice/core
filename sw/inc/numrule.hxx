@@ -49,7 +49,7 @@ const sal_Unicode cBulletChar = 0x2022; ///< Character for lists.
 
 class SW_DLLPUBLIC SwNumFormat : public SvxNumberFormat, public SwClient
 {
-    SwFormatVertOrient* m_pVertOrient;
+    std::unique_ptr<SwFormatVertOrient> m_pVertOrient;
     //For i120928,record the cp info of graphic within bullet
     sal_Unicode     m_cGrfBulletCP;
     SAL_DLLPRIVATE void UpdateNumNodes( SwDoc* pDoc );

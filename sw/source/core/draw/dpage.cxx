@@ -58,12 +58,11 @@ SwDPage::SwDPage(SwDrawModel& rNewModel, bool bMasterPage) :
 
 SwDPage::SwDPage(const SwDPage& rSrcPage) :
     FmFormPage( rSrcPage ),
-    pGridLst( nullptr ),
     pDoc( nullptr )
 {
     if ( rSrcPage.pGridLst )
     {
-        pGridLst = new SdrPageGridFrameList;
+        pGridLst.reset( new SdrPageGridFrameList );
         for ( sal_uInt16 i = 0; i != rSrcPage.pGridLst->GetCount(); ++i )
             pGridLst->Insert( ( *rSrcPage.pGridLst )[ i ] );
     }
@@ -71,7 +70,6 @@ SwDPage::SwDPage(const SwDPage& rSrcPage) :
 
 SwDPage::~SwDPage()
 {
-    delete pGridLst;
 }
 
 void SwDPage::lateInit(const SwDPage& rPage, SwDrawModel* const pNewModel)
@@ -142,7 +140,7 @@ const SdrPageGridFrameList*  SwDPage::GetGridFrameList(
         if ( pGridLst )
             const_cast<SwDPage*>(this)->pGridLst->Clear();
         else
-            const_cast<SwDPage*>(this)->pGridLst = new SdrPageGridFrameList;
+            const_cast<SwDPage*>(this)->pGridLst.reset( new SdrPageGridFrameList );
 
         if ( pRect )
         {
@@ -151,7 +149,7 @@ const SdrPageGridFrameList*  SwDPage::GetGridFrameList(
             const SwFrame *pPg = pSh->GetLayout()->Lower();
             do
             {   if ( pPg->Frame().IsOver( aRect ) )
-                    ::InsertGridFrame( const_cast<SwDPage*>(this)->pGridLst, pPg );
+                    ::InsertGridFrame( const_cast<SwDPage*>(this)->pGridLst.get(), pPg );
                 pPg = pPg->GetNext();
             } while ( pPg );
         }
@@ -161,12 +159,12 @@ const SdrPageGridFrameList*  SwDPage::GetGridFrameList(
             const SwFrame *pPg = pSh->Imp()->GetFirstVisPage(pSh->GetOut());
             if ( pPg )
                 do
-                {   ::InsertGridFrame( const_cast<SwDPage*>(this)->pGridLst, pPg );
+                {   ::InsertGridFrame( const_cast<SwDPage*>(this)->pGridLst.get(), pPg );
                     pPg = pPg->GetNext();
                 } while ( pPg && pPg->Frame().IsOver( pSh->VisArea() ) );
         }
     }
-    return pGridLst;
+    return pGridLst.get();
 }
 
 bool SwDPage::RequestHelp( vcl::Window* pWindow, SdrView* pView,

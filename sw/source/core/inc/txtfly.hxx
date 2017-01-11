@@ -116,11 +116,11 @@ public:
  */
 class SwTextFly
 {
-    const SwPageFrame             * pPage;
-    const SwAnchoredObject      * mpCurrAnchoredObj;
-    const SwTextFrame              * pCurrFrame;
-    const SwContentFrame            * pMaster;
-    SwAnchoredObjList           * mpAnchoredObjList;
+    const SwPageFrame                * pPage;
+    const SwAnchoredObject           * mpCurrAnchoredObj;
+    const SwTextFrame                * pCurrFrame;
+    const SwContentFrame             * pMaster;
+    std::unique_ptr<SwAnchoredObjList> mpAnchoredObjList;
 
     long nMinBottom;
     long nNextTop;  /// Stores the upper edge of the "next" frame
@@ -299,7 +299,7 @@ public:
 inline SwAnchoredObjList* SwTextFly::GetAnchoredObjList() const
 {
     return mpAnchoredObjList
-           ? mpAnchoredObjList
+           ? mpAnchoredObjList.get()
            : const_cast<SwTextFly*>(this)->InitAnchoredObjList();
 }
 

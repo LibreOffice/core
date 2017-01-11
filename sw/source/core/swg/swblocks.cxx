@@ -239,8 +239,8 @@ SwTextBlocks::SwTextBlocks( const OUString& rFile )
     const OUString sFileName = aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
     switch( SwImpBlocks::GetFileType( rFile ) )
     {
-    case SwImpBlocks::FileType::XML:    pImp = new SwXMLTextBlocks( sFileName ); break;
-    case SwImpBlocks::FileType::NoFile: pImp = new SwXMLTextBlocks( sFileName ); break;
+    case SwImpBlocks::FileType::XML:    pImp.reset( new SwXMLTextBlocks( sFileName ) ); break;
+    case SwImpBlocks::FileType::NoFile: pImp.reset( new SwXMLTextBlocks( sFileName ) ); break;
     default: break;
     }
     if( !pImp )
@@ -249,7 +249,6 @@ SwTextBlocks::SwTextBlocks( const OUString& rFile )
 
 SwTextBlocks::~SwTextBlocks()
 {
-    delete pImp;
 }
 
 OUString SwTextBlocks::GetName()

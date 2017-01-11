@@ -121,7 +121,7 @@ struct SwHash
     SwHash( const OUString& rStr );
     virtual ~SwHash();
     OUString aStr;
-    SwHash *pNext;
+    std::unique_ptr<SwHash> pNext;
 };
 
 struct SwCalcExp : public SwHash

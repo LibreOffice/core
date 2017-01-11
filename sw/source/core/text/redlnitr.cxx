@@ -433,7 +433,7 @@ short SwExtend::Enter(SwFont& rFnt, sal_Int32 nNew)
     nPos = nNew;
     if( Inside() )
     {
-        pFnt = new SwFont( rFnt );
+        pFnt.reset( new SwFont( rFnt ) );
         ActualizeFont( rFnt, rArr[ nPos - nStart ] );
         return 1;
     }
@@ -457,8 +457,7 @@ bool SwExtend::Leave_(SwFont& rFnt, sal_Int32 nNew)
     else
     {
         rFnt = *pFnt;
-        delete pFnt;
-        pFnt = nullptr;
+        pFnt.reset();
         return true;
     }
     return false;
