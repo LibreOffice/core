@@ -47,12 +47,12 @@ typedef SC_HANDLE (__stdcall * OpenService_t)(SC_HANDLE, LPCSTR, DWORD);
 typedef BOOL (__stdcall * QueryServiceStatus_t)(SC_HANDLE, LPSERVICE_STATUS);
 typedef BOOL (__stdcall * StartService_t)(SC_HANDLE, DWORD, LPCSTR*);
 
-CloseServiceHandle_t CloseServiceHandle_ = nullptr;
-ControlService_t ControlService_ = nullptr;
-OpenSCManager_t OpenSCManager_ = nullptr;
-OpenService_t OpenService_ = nullptr;
-QueryServiceStatus_t QueryServiceStatus_ = nullptr;
-StartService_t StartService_ = nullptr;
+static CloseServiceHandle_t CloseServiceHandle_ = nullptr;
+static ControlService_t ControlService_ = nullptr;
+static OpenSCManager_t OpenSCManager_ = nullptr;
+static OpenService_t OpenService_ = nullptr;
+static QueryServiceStatus_t QueryServiceStatus_ = nullptr;
+static StartService_t StartService_ = nullptr;
 
 const char * const INDEXING_SERVICE_NAME = "cisvc";
 
