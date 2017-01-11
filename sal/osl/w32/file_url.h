@@ -23,6 +23,7 @@
 #include "sal/types.h"
 #include "rtl/ustring.h"
 #include "osl/file.h"
+#include "osl/mutex.h"
 
 #ifdef _MSC_VER
 #pragma warning(push,1)
@@ -80,6 +81,8 @@ oslFileError osl_getFileURLFromSystemPath_ (
     rtl_uString *  strPath,
     rtl_uString ** pstrURL
 );
+
+extern oslMutex g_CurrentDirectoryMutex;
 
 #ifdef __cplusplus
 }

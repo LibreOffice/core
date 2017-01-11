@@ -46,7 +46,7 @@
 #include <string.h>
 
 const sal_Unicode NAME_VALUE_SEPARATOR = TEXT('=');
-const sal_Char* SPACE = " ";
+const sal_Char SPACE[] = " ";
 const rtl::OUString ENV_COMSPEC ("COMSPEC");
 const rtl::OUString QUOTE("\"");
 
@@ -453,7 +453,7 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
        start at 1 instead of 0 */
     for (sal_uInt32 n = (nullptr != ustrImageName) ? 0 : 1; n < nArguments; n++)
     {
-        command_line.appendAscii(SPACE);
+        command_line.append(SPACE);
 
         /* Quote arguments containing blanks */
         if (rtl::OUString(ustrArguments[n]).indexOf(' ') != -1)

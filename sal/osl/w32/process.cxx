@@ -436,8 +436,6 @@ oslProcessError SAL_CALL osl_clearEnvironment(rtl_uString *ustrVar)
  * Current Working Directory.
  ***************************************************************************/
 
-extern "C" oslMutex g_CurrentDirectoryMutex;
-
 oslProcessError SAL_CALL osl_getProcessWorkingDir( rtl_uString **pustrWorkingDir )
 {
     ::osl::LongPathBuffer< sal_Unicode > aBuffer( MAX_LONG_PATH );

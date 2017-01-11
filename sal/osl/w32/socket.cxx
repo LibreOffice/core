@@ -273,7 +273,7 @@ struct LeakWarning
         SAL_WARN_IF( g_nSocketAddr, "sal.osl", "sal_socket: " << g_nSocketAddr << " socket address instances leak" );
     }
 };
-LeakWarning socketWarning;
+static LeakWarning socketWarning;
 #endif
 
 oslSocket osl_createSocketImpl_(SOCKET Socket)

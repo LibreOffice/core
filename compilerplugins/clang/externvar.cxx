@@ -73,6 +73,9 @@ public:
             // not needed and will not be emitted"
             return true;
         }
+        if (loplugin::DeclCheck(def).Var("_pRawDllMain").GlobalNamespace()) {
+            return true;
+        }
         SourceLocation argLoc;
         if (compat::isMacroArgExpansion(compiler, def->getLocation(), &argLoc)
             && (Lexer::getImmediateMacroName(

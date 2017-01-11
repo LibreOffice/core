@@ -34,16 +34,15 @@
 #include <osl/mutex.h>
 #include <osl/thread.h>
 
+#include "file_url.h"
 #include "rtllifecycle.h"
 
 #include <thread.h>
 
 // externals
 
-extern DWORD            g_dwTLSTextEncodingIndex;
 extern CRITICAL_SECTION g_ThreadKeyListCS;
 extern oslMutex         g_Mutex;
-extern oslMutex         g_CurrentDirectoryMutex;
 
 #ifdef __MINGW32__
 

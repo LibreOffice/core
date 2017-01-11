@@ -20,6 +20,8 @@ extern "C" {
 
 void SAL_CALL osl_callThreadKeyCallbackOnThreadDetach(void);
 
+extern DWORD g_dwTLSTextEncodingIndex;
+
 #if defined __cplusplus
 }
 #endif

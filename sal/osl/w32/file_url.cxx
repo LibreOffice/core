@@ -42,8 +42,7 @@
 
 // FileURL functions
 
-extern "C" oslMutex g_CurrentDirectoryMutex; /* Initialized in dllentry.c */
-oslMutex g_CurrentDirectoryMutex = nullptr;
+oslMutex g_CurrentDirectoryMutex = nullptr; /* Initialized in dllentry.c */
 
 static BOOL IsValidFilePathComponent(
     LPCWSTR lpComponent, LPCWSTR *lppComponentEnd, DWORD dwFlags)

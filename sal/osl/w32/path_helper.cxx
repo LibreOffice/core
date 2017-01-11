@@ -83,14 +83,14 @@ void SAL_CALL osl_systemPathRemoveSeparator(/*inout*/ rtl_uString** ppustrPath)
  ******************************************************************/
 
 // is [A-Za-z]:[/|\]\0
-const sal_Char* LDP                    = ":";
-const sal_Char* LDP_WITH_BACKSLASH     = ":\\";
-const sal_Char* LDP_WITH_SLASH         = ":/";
+const sal_Char* const LDP                = ":";
+const sal_Char* const LDP_WITH_BACKSLASH = ":\\";
+const sal_Char* const LDP_WITH_SLASH     = ":/";
 
 // degenerated case returned by the Windows FileOpen dialog
 // when someone enters for instance "x:filename", the Win32
 // API accepts this case
-const sal_Char* LDP_WITH_DOT_BACKSLASH = ":.\\";
+const sal_Char* const LDP_WITH_DOT_BACKSLASH = ":.\\";
 
 sal_Int32 osl_systemPathIsLogicalDrivePattern(/*in*/ const rtl_uString* pustrPath)
 {
