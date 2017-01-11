@@ -133,39 +133,39 @@ public:
     }
     /** return a new stream for a ole zone */
     librevenge::RVNGInputStream *getSubStreamByName(const char *name) override
-{
-    if (m_nameToPathMap.find(name)== m_nameToPathMap.end() || !m_xContent.is()) return nullptr;
-
-    try
     {
-        const uno::Reference<sdbc::XResultSet> xResultSet=getResultSet(m_xContent);
-        if (xResultSet.is() && xResultSet->first())
+        if (m_nameToPathMap.find(name)== m_nameToPathMap.end() || !m_xContent.is()) return nullptr;
+
+        try
         {
-            const uno::Reference<ucb::XContentAccess> xContentAccess(xResultSet, uno::UNO_QUERY_THROW);
-            const uno::Reference<sdbc::XRow> xRow(xResultSet, uno::UNO_QUERY_THROW);
-            OUString lPath=m_nameToPathMap.find(name)->second;
-            do
+            const uno::Reference<sdbc::XResultSet> xResultSet=getResultSet(m_xContent);
+            if (xResultSet.is() && xResultSet->first())
             {
-                const rtl::OUString aTitle(xRow->getString(1));
-                if (aTitle != lPath) continue;
+                const uno::Reference<ucb::XContentAccess> xContentAccess(xResultSet, uno::UNO_QUERY_THROW);
+                const uno::Reference<sdbc::XRow> xRow(xResultSet, uno::UNO_QUERY_THROW);
+                OUString lPath=m_nameToPathMap.find(name)->second;
+                do
+                {
+                    const rtl::OUString aTitle(xRow->getString(1));
+                    if (aTitle != lPath) continue;
 
-                const uno::Reference<ucb::XContent> xSubContent(xContentAccess->queryContent());
-                ucbhelper::Content aSubContent(xSubContent, uno::Reference<ucb::XCommandEnvironment>(), comphelper::getProcessComponentContext());
-                uno::Reference<io::XInputStream> xInputStream = aSubContent.openStream();
-                if (xInputStream.is())
-                    return new writerperfect::WPXSvInputStream(xInputStream);
-                break;
+                    const uno::Reference<ucb::XContent> xSubContent(xContentAccess->queryContent());
+                    ucbhelper::Content aSubContent(xSubContent, uno::Reference<ucb::XCommandEnvironment>(), comphelper::getProcessComponentContext());
+                    uno::Reference<io::XInputStream> xInputStream = aSubContent.openStream();
+                    if (xInputStream.is())
+                        return new writerperfect::WPXSvInputStream(xInputStream);
+                    break;
+                }
+                while (xResultSet->next());
             }
-            while (xResultSet->next());
         }
-    }
-    catch (...)
-    {
-        SAL_WARN("writerperfect", "ignoring Exception in MSWorksCalcImportFilterInternal::FolderStream::getSubStreamByName");
-    }
+        catch (...)
+        {
+            SAL_WARN("writerperfect", "ignoring Exception in MSWorksCalcImportFilterInternal::FolderStream::getSubStreamByName");
+        }
 
-    return nullptr;
-}
+        return nullptr;
+    }
     /** return a new stream for a ole zone */
     librevenge::RVNGInputStream *getSubStreamById(unsigned id) override
     {
