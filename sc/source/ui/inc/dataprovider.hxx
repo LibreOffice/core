@@ -36,7 +36,7 @@
 namespace sc {
 
 /* Fetch Data Stream from local or remote locations */
-SvStream* FetchStreamFromURL(OUString& rUrl);
+SvStream* FetchStreamFromURL(const OUString& rUrl);
 
 class DataProvider;
 
