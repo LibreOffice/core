@@ -207,12 +207,12 @@ void CSVDataProvider::StartImport()
     if (mbImportUnderway)
         return;
 
-    if (!mxCSVFetchThread.is())
-    {
         SvStream* pStream = FetchStreamFromURL(maURL);
+    /*if (!mxCSVFetchThread.is())
+    {
         mxCSVFetchThread = new CSVFetchThread(pStream, mrRange.aEnd.Col() - mrRange.aStart.Col() + 1);
         mxCSVFetchThread->launch();
-    }
+    }*/
     mbImportUnderway = true;
 
     maImportTimer.Start();
