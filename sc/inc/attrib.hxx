@@ -214,7 +214,7 @@ public:
 
 public:
     sal_uInt16  nCount;
-    SCTAB*  pTabArr;
+    std::unique_ptr<SCTAB[]>  pTabArr;
 };
 
 inline ScTableListItem::ScTableListItem( const sal_uInt16 nWhichP )
