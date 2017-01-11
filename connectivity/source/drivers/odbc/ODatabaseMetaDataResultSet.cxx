@@ -857,7 +857,7 @@ void ODatabaseMetaDataResultSet::openTables(const Any& catalog, const OUString& 
 
 
     const char  *pCOL = nullptr;
-    const char* pComma = ",";
+    const char* const pComma = ",";
     const OUString* pBegin = types.getConstArray();
     const OUString* pEnd = pBegin + types.getLength();
     for(;pBegin != pEnd;++pBegin)
@@ -1110,11 +1110,7 @@ void ODatabaseMetaDataResultSet::openSpecialColumns(bool _bRowVer,const Any& cat
     {
         const char errMsg[] = "ODBC: Trying to get special columns of empty table name";
         const char SQLState[] = "HY009";
-        throw SQLException( OUString(errMsg, sizeof(errMsg) - sizeof(errMsg[0]), RTL_TEXTENCODING_ASCII_US),
-                            *this,
-                            OUString(SQLState, sizeof(SQLState) - sizeof(SQLState[0]), RTL_TEXTENCODING_ASCII_US),
-                            -1,
-                            Any() );
+        throw SQLException( errMsg, *this, SQLState, -1, Any() );
     }
 
     const OUString *pSchemaPat = nullptr;
