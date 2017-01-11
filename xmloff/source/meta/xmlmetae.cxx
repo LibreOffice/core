@@ -295,10 +295,10 @@ void SvXMLMetaExport::MExport_()
     }
 }
 
-static const char * const s_xmlns  = "xmlns";
-static const char * const s_xmlns2 = "xmlns:";
-static const char * const s_meta   = "meta:";
-static const char * const s_href   = "xlink:href";
+static const char s_xmlns[] = "xmlns";
+static const char s_xmlns2[] = "xmlns:";
+static const char s_meta[] = "meta:";
+static const char s_href[] = "xlink:href";
 
 SvXMLMetaExport::SvXMLMetaExport(
         SvXMLExport& i_rExp,
@@ -326,11 +326,9 @@ void SvXMLMetaExport::Export()
              key != USHRT_MAX; key = rNsMap.GetNextKey(key)) {
             beans::StringPair ns;
             const OUString attrname = rNsMap.GetAttrNameByKey(key);
-            if (attrname.matchAsciiL(s_xmlns2, strlen(s_xmlns2))) {
-                ns.First  = attrname.copy(strlen(s_xmlns2));
-            } else if (attrname.equalsAsciiL(s_xmlns, strlen(s_xmlns))) {
-                // default initialized empty string
-            } else {
+            if (!attrname.startsWith(s_xmlns2, &ns.First)
+                || attrname == s_xmlns) // default initialized empty string
+            {
                 assert(!"namespace attribute not starting with xmlns unexpected");
             }
             ns.Second = rNsMap.GetNameByKey(key);
@@ -376,7 +374,7 @@ SvXMLMetaExport::startElement(const OUString & i_rName,
         const sal_Int16 nCount = i_xAttribs->getLength();
         for (sal_Int16 i = 0; i < nCount; ++i) {
             const OUString name(i_xAttribs->getNameByIndex(i));
-            if (name.matchAsciiL(s_xmlns, strlen(s_xmlns))) {
+            if (name.startsWith(s_xmlns)) {
                 bool found(false);
                 const SvXMLNamespaceMap & rNsMap(mrExport.GetNamespaceMap());
                 for (sal_uInt16 key = rNsMap.GetFirstKey();
@@ -419,14 +417,14 @@ SvXMLMetaExport::startElement(const OUString & i_rName,
     }
 
     // attach the attributes
-    if (i_rName.matchAsciiL(s_meta, strlen(s_meta))) {
+    if (i_rName.startsWith(s_meta)) {
         // special handling for all elements that may have
         // xlink:href attributes; these must be made relative
         const sal_Int16 nLength = i_xAttribs->getLength();
         for (sal_Int16 i = 0; i < nLength; ++i) {
             const OUString name (i_xAttribs->getNameByIndex (i));
             OUString value(i_xAttribs->getValueByIndex(i));
-            if (name.matchAsciiL(s_href, strlen(s_href))) {
+            if (name.startsWith(s_href)) {
                 value = mrExport.GetRelativeReference(value);
             }
             mrExport.AddAttribute(name, value);

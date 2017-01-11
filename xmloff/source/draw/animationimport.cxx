@@ -105,7 +105,7 @@ static ::rtl::OUString
 lcl_GetMediaReference(SvXMLImport const& rImport, ::rtl::OUString const& rURL)
 {
     if (rImport.IsPackageURL(rURL))
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.Package:")) + rURL;
+        return "vnd.sun.star.Package:" + rURL;
 
     return rImport.GetAbsoluteReference(rURL);
 }
