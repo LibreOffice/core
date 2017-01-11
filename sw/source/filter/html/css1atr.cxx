@@ -163,8 +163,8 @@ static Writer& OutCSS1_SwFormatLayoutSplit( Writer& rWrt, const SfxPoolItem& rHt
 namespace
 {
 
-const sal_Char* sCSS1_rule_end      = " }";
-const sal_Char* sCSS1_span_tag_end  = "\">";
+const sal_Char* const sCSS1_rule_end      = " }";
+const sal_Char* const sCSS1_span_tag_end  = "\">";
 const sal_Char cCSS1_style_opt_end  = '\"';
 
 const sal_Char* const sHTML_FTN_fontheight = "57%";
