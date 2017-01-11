@@ -65,6 +65,7 @@ $(eval $(call gb_Module_add_slowcheck_targets,sc, \
 	CppunitTest_sc_subsequent_export_test \
 	CppunitTest_sc_html_export_test \
 	CppunitTest_sc_copypaste \
+	CppunitTest_sc_dataproviders_test \
 ))
 
 # Various function tests fail in 32-bit linux_x86 build due to dreaded floating
