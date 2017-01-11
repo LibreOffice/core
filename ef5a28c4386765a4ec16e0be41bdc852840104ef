@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a6eadb0_a8e555a9",
+        "filename": "framework/source/services/desktop.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1104,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-01-11T13:09:34Z",
+      "side": 1,
+      "message": "why does that call notifyTermination() and not disposing() like one would expect?",
+      "revId": "ef5a28c4386765a4ec16e0be41bdc852840104ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
