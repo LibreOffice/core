@@ -447,7 +447,7 @@ void ImpEditEngine::FormatDoc()
         {
             for (EditView* pView : aEditViews)
             {
-                ImpEditView* pImpView = pView->pImpEditView;
+                ImpEditView* pImpView = pView->pImpEditView.get();
                 if ( pImpView->DoAutoHeight() )
                 {
                     Size aSz( pImpView->GetOutputArea().GetWidth(), nCurTextHeight );
@@ -4481,7 +4481,7 @@ void ImpEditEngine::ImplExpandCompressedPortions( EditLine* pLine, ParaPortion* 
                 DBG_ASSERT( nTxtPortionStart >= pLine->GetStart(), "Portion doesn't belong to the line!!!" );
                 long* pDXArray = pLine->GetCharPosArray().data() + (nTxtPortionStart - pLine->GetStart());
                 if ( pTP->GetExtraInfos()->pOrgDXArray )
-                    memcpy( pDXArray, pTP->GetExtraInfos()->pOrgDXArray, (pTP->GetLen()-1)*sizeof(sal_Int32) );
+                    memcpy( pDXArray, pTP->GetExtraInfos()->pOrgDXArray.get(), (pTP->GetLen()-1)*sizeof(sal_Int32) );
                 ImplCalcAsianCompression( pParaPortion->GetNode(), pTP, nTxtPortionStart, pDXArray, (sal_uInt16)nCompressPercent, true );
             }
         }
