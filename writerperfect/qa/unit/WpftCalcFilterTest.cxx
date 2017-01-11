@@ -35,9 +35,13 @@ void WpftCalcFilterTest::test()
     {
         {"Numbers_2.numbers", REQUIRE_ETONYEK_VERSION(0, 1, 2)},
     };
+    const writerperfect::test::WpftOptionalMap_t aWpsOptional
+    {
+        {"Lotus123_3.123", REQUIRE_WPS_VERSION(0, 4, 5)},
+    };
 
     doTest("com.sun.star.comp.Calc.MWAWCalcImportFilter", "/writerperfect/qa/unit/data/calc/libmwaw/");
-    doTest("com.sun.star.comp.Calc.MSWorksCalcImportFilter", "/writerperfect/qa/unit/data/calc/libwps/");
+    doTest("com.sun.star.comp.Calc.MSWorksCalcImportFilter", "/writerperfect/qa/unit/data/calc/libwps/", aWpsOptional);
     doTest("org.libreoffice.comp.Calc.NumbersImportFilter", "/writerperfect/qa/unit/data/calc/libetonyek/", aEtonyekOptional);
     doTest("org.libreoffice.comp.Calc.StarOfficeCalcImportFilter", "/writerperfect/qa/unit/data/calc/libstaroffice/");
 }
