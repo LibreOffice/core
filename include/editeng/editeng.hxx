@@ -158,7 +158,7 @@ public:
     typedef std::vector<EditView*> ViewsType;
 
 private:
-    ImpEditEngine*  pImpEditEngine;
+    std::unique_ptr<ImpEditEngine>  pImpEditEngine;
 
                                        EditEngine( const EditEngine& ) = delete;
                        EditEngine&     operator=( const EditEngine& ) = delete;

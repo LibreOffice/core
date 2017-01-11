@@ -40,7 +40,7 @@ namespace accessibility
     private:
 
         SvxAccessibleTextAdapter& rTA;
-        SvxFieldItem* pFld;
+        std::unique_ptr<SvxFieldItem> pFld;
         sal_Int32 nPara;  // EE values
         sal_uInt16 nRealIdx;  // EE values
         sal_Int32 nStartIdx, nEndIdx;   // translated values
