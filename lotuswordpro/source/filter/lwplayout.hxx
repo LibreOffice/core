@@ -312,7 +312,7 @@ public:
     void Read(LwpObjectStream* pStrm);
 private:
     sal_uInt32      m_nStyleDefinition;
-    LwpAtomHolder*  m_pDescription;
+    std::unique_ptr<LwpAtomHolder>  m_pDescription;
     sal_uInt16      m_nKey;
 };
 

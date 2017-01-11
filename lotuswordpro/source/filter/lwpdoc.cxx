@@ -103,43 +103,43 @@ void LwpDocument::Read()
 
     //Skip the SortOption and UIDocument
     {
-        LwpSortOption aDocSort( m_pObjStrm );
-        LwpUIDocument aUIDoc( m_pObjStrm );
+        LwpSortOption aDocSort( m_pObjStrm.get() );
+        LwpUIDocument aUIDoc( m_pObjStrm.get() );
     }
 
-    m_pLnOpts = new LwpLineNumberOptions(m_pObjStrm);
+    m_pLnOpts = new LwpLineNumberOptions(m_pObjStrm.get());
 
     //Skip LwpUserDictFiles
     {
-        LwpUserDictFiles aUsrDicts( m_pObjStrm );
+        LwpUserDictFiles aUsrDicts( m_pObjStrm.get() );
     }
 
     if( !IsChildDoc())
     {
         //Skip LwpPrinterInfo
-        LwpPrinterInfo aPrtInfo( m_pObjStrm );
+        LwpPrinterInfo aPrtInfo( m_pObjStrm.get() );
     }
 
-    m_pFoundry = m_pOwnedFoundry = new LwpFoundry(m_pObjStrm, this);
+    m_pFoundry = m_pOwnedFoundry = new LwpFoundry(m_pObjStrm.get(), this);
 
-    m_DivOpts.ReadIndexed(m_pObjStrm);
+    m_DivOpts.ReadIndexed(m_pObjStrm.get());
 
     if(!IsChildDoc())
     {
-        m_FootnoteOpts.ReadIndexed(m_pObjStrm);
-        m_DocData.ReadIndexed(m_pObjStrm);
+        m_FootnoteOpts.ReadIndexed(m_pObjStrm.get());
+        m_DocData.ReadIndexed(m_pObjStrm.get());
     }
     else
     {
         //Skip the docdata used in old version
         LwpObjectID dummyDocData;
-        dummyDocData.ReadIndexed(m_pObjStrm);
+        dummyDocData.ReadIndexed(m_pObjStrm.get());
     }
-    m_DivInfo.ReadIndexed(m_pObjStrm);
-    m_Epoch.Read(m_pObjStrm);
-    m_WYSIWYGPageHints.ReadIndexed(m_pObjStrm);
-    m_VerDoc.ReadIndexed(m_pObjStrm);
-    m_STXInfo.ReadIndexed(m_pObjStrm);
+    m_DivInfo.ReadIndexed(m_pObjStrm.get());
+    m_Epoch.Read(m_pObjStrm.get());
+    m_WYSIWYGPageHints.ReadIndexed(m_pObjStrm.get());
+    m_VerDoc.ReadIndexed(m_pObjStrm.get());
+    m_STXInfo.ReadIndexed(m_pObjStrm.get());
 }
 
 /**
@@ -147,7 +147,7 @@ void LwpDocument::Read()
  **/
 void LwpDocument::ReadPlug()
 {
-    m_DocSockID.ReadIndexed(m_pObjStrm);
+    m_DocSockID.ReadIndexed(m_pObjStrm.get());
     m_nFlags = m_pObjStrm->QuickReaduInt16();
     m_pObjStrm->SkipExtra();
 }
@@ -782,7 +782,7 @@ LwpDocSock::LwpDocSock(LwpObjectHeader& objHdr, LwpSvStream* pStrm)
 void LwpDocSock::Read()
 {
     LwpDLNFVList::Read();
-    m_Doc.ReadIndexed(m_pObjStrm);
+    m_Doc.ReadIndexed(m_pObjStrm.get());
     m_pObjStrm->SkipExtra();
 }
  /**

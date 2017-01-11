@@ -87,14 +87,14 @@ LwpTabRack::LwpTabRack(LwpObjectHeader objHdr, LwpSvStream* pStrm):LwpObject(obj
 
 void LwpTabRack::Read()
 {
-    m_NextID.ReadIndexed(m_pObjStrm);
+    m_NextID.ReadIndexed(m_pObjStrm.get());
 
     m_nNumTabs = m_pObjStrm->QuickReaduInt16();
     if (m_nNumTabs > MaxTabs)
         throw std::range_error("corrupt LwpTabRack");
     for (int i=0; i<m_nNumTabs; ++i)
     {
-        m_aTabs[i].Read(m_pObjStrm);
+        m_aTabs[i].Read(m_pObjStrm.get());
         m_pObjStrm->SkipExtra();
     }
     m_pObjStrm->SkipExtra();

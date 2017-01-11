@@ -77,17 +77,17 @@ void LwpCellList::Read()
     LwpDLVList::Read();
 
     LwpDLVListHeadTail cChild;
-    cChild.Read(m_pObjStrm);
+    cChild.Read(m_pObjStrm.get());
 
-    cParent.ReadIndexed(m_pObjStrm);
+    cParent.ReadIndexed(m_pObjStrm.get());
 
     if (LwpFileHeader::m_nFileRevision < 0x0006)
         m_pObjStrm->SkipExtra();
 
-    cValue.ReadIndexed(m_pObjStrm);
+    cValue.ReadIndexed(m_pObjStrm.get());
 
     LwpObjectID cDependent;
-    cDependent.ReadIndexed(m_pObjStrm);
+    cDependent.ReadIndexed(m_pObjStrm.get());
 
     cColumn = (sal_uInt8) m_pObjStrm->QuickReaduInt16();        // written as a sal_uInt16
 //  sal_uInt8 cCellFlags = (sal_uInt8) m_pObjStrm->QuickReaduInt16();   // written as a sal_uInt16
@@ -142,8 +142,8 @@ void LwpRowList::Read()
     // CDLFVList read construction
     LwpDLVList::Read();
 
-    cChild.Read(m_pObjStrm);
-    cParent.ReadIndexed(m_pObjStrm);
+    cChild.Read(m_pObjStrm.get());
+    cParent.ReadIndexed(m_pObjStrm.get());
 
     if (LwpFileHeader::m_nFileRevision < 0x0006)
         m_pObjStrm->SkipExtra();
@@ -167,8 +167,8 @@ void LwpTableRange::Read()
 {
     LwpDLVList::Read();
 
-    cqTable.ReadIndexed(m_pObjStrm);
-    cpCellRange.ReadIndexed(m_pObjStrm);
+    cqTable.ReadIndexed(m_pObjStrm.get());
+    cpCellRange.ReadIndexed(m_pObjStrm.get());
     m_pObjStrm->SkipExtra();
 }
 
@@ -184,7 +184,7 @@ LwpCellRange::~LwpCellRange()
 
 void LwpCellRange::Read()
 {
-    cpFolder.ReadIndexed(m_pObjStrm);
+    cpFolder.ReadIndexed(m_pObjStrm.get());
     m_pObjStrm->SkipExtra();
 }
 
@@ -203,13 +203,13 @@ void LwpFolder::Read()
     // CDLFVList read construction
     LwpDLVList::Read();
 
-    cChild.Read(m_pObjStrm);
-    cParent.ReadIndexed(m_pObjStrm);
+    cChild.Read(m_pObjStrm.get());
+    cParent.ReadIndexed(m_pObjStrm.get());
 
     if (LwpFileHeader::m_nFileRevision < 0x0006)
         m_pObjStrm->SkipExtra();
 
-    cqTable.ReadIndexed(m_pObjStrm);
+    cqTable.ReadIndexed(m_pObjStrm.get());
     m_pObjStrm->SkipExtra();
 }
 
@@ -230,7 +230,7 @@ void LwpDependent::Read()
 {
     LwpDLVList::Read();
 
-    cFormulaInfo.ReadIndexed(m_pObjStrm);
+    cFormulaInfo.ReadIndexed(m_pObjStrm.get());
     cReferenceOffset = m_pObjStrm->QuickReaduInt16();
     cFlags = (sal_uInt8)m_pObjStrm->QuickReaduInt16();  // Written as lushort.
 

@@ -140,7 +140,7 @@ private:
 
 private:
     LwpFrameLink m_Link;
-    LwpFrame* m_pFrame;
+    std::unique_ptr<LwpFrame> m_pFrame;
 };
 
 /**
@@ -159,7 +159,7 @@ public:
 protected:
     void Read() override;
 private:
-    LwpFrame* m_pFrame;
+    std::unique_ptr<LwpFrame> m_pFrame;
 
 };
 
