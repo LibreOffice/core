@@ -113,8 +113,8 @@ sal_uInt16 PPTExBulletProvider::GetId( const OString& rUniqueId, Size& rGraphicS
     if ( !rUniqueId.isEmpty() )
     {
         Rectangle       aRect;
-        GraphicObject   aGraphicObject( rUniqueId );
-        Graphic         aMappedGraphic, aGraphic( aGraphicObject.GetGraphic() );
+        std::unique_ptr<GraphicObject> xGraphicObject(new GraphicObject(rUniqueId));
+        Graphic         aMappedGraphic, aGraphic(xGraphicObject->GetGraphic());
         Size            aPrefSize( aGraphic.GetPrefSize() );
         BitmapEx        aBmpEx( aGraphic.GetBitmapEx() );
 
@@ -139,10 +139,10 @@ sal_uInt16 PPTExBulletProvider::GetId( const OString& rUniqueId, Size& rGraphicS
                 rGraphicSize = aNewSize;
 
                 aMappedGraphic = Graphic( aBmpEx );
-                aGraphicObject = GraphicObject( aMappedGraphic );
+                xGraphicObject.reset(new GraphicObject(aMappedGraphic));
             }
         }
-        sal_uInt32 nId = pGraphicProv->GetBlibID( aBuExPictureStream, aGraphicObject.GetUniqueID(), aRect );
+        sal_uInt32 nId = pGraphicProv->GetBlibID(aBuExPictureStream, xGraphicObject->GetUniqueID(), aRect);
 
         if ( nId && ( nId < 0x10000 ) )
             nRetValue = (sal_uInt16)nId - 1;

@@ -60,16 +60,16 @@ namespace internal {
 
 namespace {
 
-bool importShapeGraphic(
-    GraphicObject & o_rGraphic,
-    uno::Reference<beans::XPropertySet> const& xPropSet )
+std::unique_ptr<GraphicObject> importShapeGraphic(uno::Reference<beans::XPropertySet> const& xPropSet)
 {
+    std::unique_ptr<GraphicObject> xRet;
+
     OUString aURL;
     if( !getPropertyValue( aURL, xPropSet, "GraphicURL") ||
         aURL.isEmpty() )
     {
         // no or empty property - cannot import shape graphic
-        return false;
+        return xRet;
     }
 
     OUString const aVndUrl(
@@ -85,7 +85,7 @@ bool importShapeGraphic(
         {
             OSL_FAIL( "ShapeImporter::importShape(): "
                         "embedded graphic has no graphic ID" );
-            return false;
+            return nullptr;
         }
 
         // unique ID string found in URL, extract
@@ -100,14 +100,14 @@ bool importShapeGraphic(
         // fetch already loaded graphic from graphic manager.
         OString const aOldString(OUStringToOString(aUniqueId,
             RTL_TEXTENCODING_UTF8));
-        o_rGraphic = GraphicObject( aOldString );
+        xRet.reset(new GraphicObject(aOldString));
 
 
-        if( GraphicType::Default == o_rGraphic.GetType()
-            || GraphicType::NONE == o_rGraphic.GetType() )
+        if (GraphicType::Default == xRet->GetType()
+            || GraphicType::NONE == xRet->GetType())
         {
             // even the GrfMgr does not seem to know this graphic
-            return false;
+            return nullptr;
         }
     }
     else
@@ -123,7 +123,7 @@ bool importShapeGraphic(
         {
             OSL_FAIL( "ShapeImporter::importShape(): "
                         "cannot create input stream for graphic" );
-            return false;
+            return nullptr;
         }
 
         Graphic aTmpGraphic;
@@ -132,12 +132,12 @@ bool importShapeGraphic(
         {
             OSL_FAIL( "ShapeImporter::importShape(): "
                         "Failed to import shape graphic from given URL" );
-            return false;
+            return nullptr;
         }
 
-        o_rGraphic = GraphicObject( aTmpGraphic );
+        xRet.reset(new GraphicObject(aTmpGraphic));
     }
-    return true;
+    return xRet;
 }
 
 /** This shape implementation just acts as a dummy for the layermanager.
@@ -307,18 +307,17 @@ ShapeSharedPtr ShapeImporter::createShape(
     }
     else if( shapeType == "com.sun.star.drawing.GraphicObjectShape" || shapeType == "com.sun.star.presentation.GraphicObjectShape" )
     {
-        GraphicObject aGraphicObject;
-
         // to get hold of GIF animations, inspect Graphic
         // objects more thoroughly (the plain-jane shape
         // metafile of course would only contain the first
         // animation frame)
-        if( !importShapeGraphic( aGraphicObject, xPropSet ) )
+        std::unique_ptr<GraphicObject> xGraphicObject(importShapeGraphic(xPropSet));
+        if (!xGraphicObject)
             return ShapeSharedPtr(); // error loading graphic -
                                      // no placeholders in
                                      // slideshow
 
-        if( !aGraphicObject.IsAnimated() )
+        if (!xGraphicObject->IsAnimated())
         {
             // no animation - simply utilize plain draw shape import
 
@@ -381,9 +380,9 @@ ShapeSharedPtr ShapeImporter::createShape(
 
 
         Graphic aGraphic(
-            aGraphicObject.GetTransformedGraphic(
-                aGraphicObject.GetPrefSize(),
-                aGraphicObject.GetPrefMapMode(),
+            xGraphicObject->GetTransformedGraphic(
+                xGraphicObject->GetPrefSize(),
+                xGraphicObject->GetPrefMapMode(),
                 aGraphAttrs ) );
 
         return DrawShape::create( xCurrShape,

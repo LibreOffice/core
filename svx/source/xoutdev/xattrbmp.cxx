@@ -46,7 +46,7 @@ using namespace ::com::sun::star;
 
 XOBitmap::XOBitmap( const Bitmap& rBmp ) :
     eType           ( XBitmapType::Import ),
-    aGraphicObject  ( rBmp ),
+    xGraphicObject  (new GraphicObject(rBmp)),
     pPixelArray     ( nullptr ),
     bGraphicDirty   ( false )
 {
@@ -67,7 +67,7 @@ const GraphicObject& XOBitmap::GetGraphicObject() const
     if( bGraphicDirty )
         const_cast<XOBitmap*>(this)->Array2Bitmap();
 
-    return aGraphicObject;
+    return *xGraphicObject;
 }
 
 void XOBitmap::Bitmap2Array()
@@ -127,7 +127,7 @@ void XOBitmap::Array2Bitmap()
         }
     }
 
-    aGraphicObject = GraphicObject( pVDev->GetBitmap( Point(), Size( nLines, nLines ) ) );
+    xGraphicObject.reset(new GraphicObject(pVDev->GetBitmap(Point(), Size(nLines, nLines))));
     bGraphicDirty = false;
 }
 

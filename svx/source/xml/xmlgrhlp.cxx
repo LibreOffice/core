@@ -208,7 +208,7 @@ private:
     ::utl::TempFile*                mpTmp;
     SvStream*                       mpOStm;
     Reference< XOutputStream >      mxStmWrapper;
-    GraphicObject                   maGrfObj;
+    std::unique_ptr<GraphicObject>  mxGrfObj;
     bool                        mbClosed;
 
 public:
@@ -222,9 +222,10 @@ public:
     const GraphicObject&            GetGraphicObject();
 };
 
-SvXMLGraphicOutputStream::SvXMLGraphicOutputStream() :
-    mpTmp( new ::utl::TempFile ),
-    mbClosed( false )
+SvXMLGraphicOutputStream::SvXMLGraphicOutputStream()
+    : mpTmp(new ::utl::TempFile)
+    , mxGrfObj(new GraphicObject)
+    , mbClosed(false)
 {
     mpTmp->EnableKillingFile();
 
@@ -272,7 +273,7 @@ void SAL_CALL SvXMLGraphicOutputStream::closeOutput()
 
 const GraphicObject& SvXMLGraphicOutputStream::GetGraphicObject()
 {
-    if( mbClosed && ( maGrfObj.GetType() == GraphicType::NONE ) && mpOStm )
+    if (mbClosed && mxGrfObj->GetType() == GraphicType::NONE && mpOStm)
     {
         Graphic aGraphic;
 
@@ -329,8 +330,8 @@ const GraphicObject& SvXMLGraphicOutputStream::GetGraphicObject()
             }
         }
 
-        maGrfObj = aGraphic;
-        if( maGrfObj.GetType() != GraphicType::NONE )
+        mxGrfObj.reset(new GraphicObject(aGraphic));
+        if (mxGrfObj->GetType() != GraphicType::NONE)
         {
             delete mpOStm;
             mpOStm = nullptr;
@@ -339,7 +340,7 @@ const GraphicObject& SvXMLGraphicOutputStream::GetGraphicObject()
         }
     }
 
-    return maGrfObj;
+    return *mxGrfObj;
 }
 
 }

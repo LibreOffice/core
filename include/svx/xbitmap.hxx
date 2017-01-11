@@ -30,7 +30,7 @@ class SVX_DLLPUBLIC XOBitmap
 {
 private:
     XBitmapType     eType;
-    GraphicObject   aGraphicObject;
+    std::unique_ptr<GraphicObject> xGraphicObject;
     sal_uInt16*     pPixelArray;
     Size            aArraySize;
     Color           aPixelColor;
