@@ -118,7 +118,7 @@ struct SearchDlg_Impl
 {
     bool        bSaveToModule  : 1,
                 bFocusOnSearch : 1;
-    sal_uInt16* pRanges;
+    std::unique_ptr<sal_uInt16[]> pRanges;
     Timer       aSelectionTimer;
 
     uno::Reference< frame::XDispatch > xCommand1Dispatch;
@@ -129,7 +129,6 @@ struct SearchDlg_Impl
     SearchDlg_Impl()
         : bSaveToModule(true)
         , bFocusOnSearch(true)
-        , pRanges(nullptr)
     {
         aCommand1URL.Complete = aCommand1URL.Main = "vnd.sun.search:SearchViaComponent1";
         aCommand1URL.Protocol = "vnd.sun.search:";
@@ -138,7 +137,7 @@ struct SearchDlg_Impl
         aCommand2URL.Protocol = "vnd.sun.search:";
         aCommand2URL.Path = "SearchViaComponent2";
     }
-    ~SearchDlg_Impl() { delete[] pRanges; }
+    ~SearchDlg_Impl() {}
 };
 
 void ListToStrArr_Impl( sal_uInt16 nId, std::vector<OUString>& rStrLst, ComboBox& rCBox )
@@ -1080,8 +1079,8 @@ void SvxSearchDialog::InitAttrList_Impl( const SfxItemSet* pSSet,
             pPtr += 2;
         }
         nCnt = pPtr - pTmp + 1;
-        pImpl->pRanges = new sal_uInt16[nCnt];
-        memcpy( pImpl->pRanges, pTmp, sizeof(sal_uInt16) * nCnt );
+        pImpl->pRanges.reset( new sal_uInt16[nCnt] );
+        memcpy( pImpl->pRanges.get(), pTmp, sizeof(sal_uInt16) * nCnt );
     }
 
     // See to it that are the texts of the attributes are correct
@@ -1979,7 +1978,7 @@ IMPL_LINK_NOARG(SvxSearchDialog, FormatHdl_Impl, Button*, void)
         return;
 
     sal_sSize nCnt = 0;
-    const sal_uInt16* pPtr = pImpl->pRanges;
+    const sal_uInt16* pPtr = pImpl->pRanges.get();
     const sal_uInt16* pTmp = pPtr;
 
     while( *pTmp )
@@ -2110,7 +2109,7 @@ IMPL_LINK_NOARG(SvxSearchDialog, AttributeHdl_Impl, Button*, void)
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     if(pFact)
     {
-        ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateSvxSearchAttributeDialog( this, *pSearchList, pImpl->pRanges ));
+        ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateSvxSearchAttributeDialog( this, *pSearchList, pImpl->pRanges.get() ));
         DBG_ASSERT(pDlg, "Dialog creation failed!");
         pDlg->Execute();
     }

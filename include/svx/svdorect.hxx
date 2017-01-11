@@ -46,7 +46,7 @@ protected:
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() override;
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties() override;
 
-    XPolygon* mpXPoly;
+    std::unique_ptr<XPolygon> mpXPoly;
 
 protected:
     XPolygon ImpCalcXPoly(const Rectangle& rRect1, long nRad1) const;

@@ -658,7 +658,6 @@ FmXFormShell::FmXFormShell( FmFormShell& _rShell, SfxViewFrame* _pViewFrame )
 
 FmXFormShell::~FmXFormShell()
 {
-    delete m_pTextShell;
 }
 
 

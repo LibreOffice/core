@@ -1489,7 +1489,7 @@ SdrUndoDelPage::SdrUndoDelPage(SdrPage& rNewPg)
                 {
                     if(!pUndoGroup)
                     {
-                        pUndoGroup = new SdrUndoGroup(rMod);
+                        pUndoGroup.reset( new SdrUndoGroup(rMod) );
                     }
 
                     pUndoGroup->AddAction(rMod.GetSdrUndoFactory().CreateUndoPageRemoveMasterPage(*pDrawPage));
@@ -1501,7 +1501,6 @@ SdrUndoDelPage::SdrUndoDelPage(SdrPage& rNewPg)
 
 SdrUndoDelPage::~SdrUndoDelPage()
 {
-    delete pUndoGroup;
 }
 
 void SdrUndoDelPage::Undo()

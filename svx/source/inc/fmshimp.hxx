@@ -196,7 +196,7 @@ class SVX_DLLPUBLIC FmXFormShell   : public FmXFormShell_BASE
                     m_aLoadingPages;
 
     FmFormShell*                m_pShell;
-    svx::FmTextControlShell*  m_pTextShell;
+    std::unique_ptr<svx::FmTextControlShell>  m_pTextShell;
 
     svx::ControllerFeatures   m_aActiveControllerFeatures;
     svx::ControllerFeatures   m_aNavControllerFeatures;

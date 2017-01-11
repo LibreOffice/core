@@ -228,7 +228,8 @@ class SVX_DLLPUBLIC SdrObjGeoData
 public:
     Rectangle                   aBoundRect;
     Point                       aAnchor;
-    SdrGluePointList*           pGPL;
+    std::unique_ptr<SdrGluePointList>
+                                pGPL;
     bool                        bMovProt;
     bool                        bSizProt;
     bool                        bNoPrint;

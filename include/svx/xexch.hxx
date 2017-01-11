@@ -22,6 +22,7 @@
 
 
 #include <svx/svxdllapi.h>
+#include <memory>
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //                Clipboard format for XOutDev filling attributes
@@ -35,8 +36,8 @@ class SvStream;
 class SVX_DLLPUBLIC XFillExchangeData final
 {
 private:
-    XFillAttrSetItem*   pXFillAttrSetItem;
-    SfxItemPool*        pPool;
+    std::unique_ptr<XFillAttrSetItem> pXFillAttrSetItem;
+    SfxItemPool*                      pPool;
 
 public:
                         XFillExchangeData(const XFillAttrSetItem& rXFillAttrSetItem);
@@ -47,7 +48,7 @@ public:
     SVX_DLLPUBLIC friend SvStream&    WriteXFillExchangeData( SvStream& rOStm, const XFillExchangeData& rXFillExchangeData );
     SVX_DLLPUBLIC friend SvStream&    ReadXFillExchangeData( SvStream& rIStm, XFillExchangeData& rXFillExchangeData );
 
-    XFillAttrSetItem*   GetXFillAttrSetItem() { return pXFillAttrSetItem; }
+    XFillAttrSetItem*   GetXFillAttrSetItem() { return pXFillAttrSetItem.get(); }
 };
 
 #endif // INCLUDED_SVX_XEXCH_HXX

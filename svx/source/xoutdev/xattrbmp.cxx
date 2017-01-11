@@ -66,17 +66,16 @@ XOBitmap::XOBitmap( const XOBitmap& rXBmp ) :
     {
         if( eType == XBitmapType::N8x8 )
         {
-            pPixelArray = new sal_uInt16[ 64 ];
+            pPixelArray.reset( new sal_uInt16[ 64 ] );
 
             for( sal_uInt16 i = 0; i < 64; i++ )
-                *( pPixelArray + i ) = *( rXBmp.pPixelArray + i );
+                pPixelArray[i] = rXBmp.pPixelArray[i];
         }
     }
 }
 
 XOBitmap::~XOBitmap()
 {
-    delete [] pPixelArray;
 }
 
 XOBitmap& XOBitmap::operator=( const XOBitmap& rXBmp )
@@ -92,10 +91,10 @@ XOBitmap& XOBitmap::operator=( const XOBitmap& rXBmp )
     {
         if( eType == XBitmapType::N8x8 )
         {
-            pPixelArray = new sal_uInt16[ 64 ];
+            pPixelArray.reset( new sal_uInt16[ 64 ] );
 
             for( sal_uInt16 i = 0; i < 64; i++ )
-                *( pPixelArray + i ) = *( rXBmp.pPixelArray + i );
+                pPixelArray[i] = rXBmp.pPixelArray[i];
         }
     }
     return *this;
@@ -122,7 +121,7 @@ void XOBitmap::Bitmap2Array()
     const sal_uInt16    nLines = 8; // type dependent
 
     if( !pPixelArray )
-        pPixelArray = new sal_uInt16[ nLines * nLines ];
+        pPixelArray.reset( new sal_uInt16[ nLines * nLines ] );
 
     pVDev->SetOutputSizePixel( aBitmap.GetSizePixel() );
     pVDev->DrawBitmap( Point(), aBitmap );
@@ -134,10 +133,10 @@ void XOBitmap::Bitmap2Array()
         for( sal_uInt16 j = 0; j < nLines; j++ )
         {
             if ( pVDev->GetPixel( Point( j, i ) ) == aBckgrColor )
-                *( pPixelArray + j + i * nLines ) = 0;
+                pPixelArray[ j + i * nLines ] = 0;
             else
             {
-                *( pPixelArray + j + i * nLines ) = 1;
+                pPixelArray[ j + i * nLines ] = 1;
                 if( !bPixelColor )
                 {
                     aPixelColor = pVDev->GetPixel( Point( j, i ) );
@@ -164,7 +163,7 @@ void XOBitmap::Array2Bitmap()
     {
         for( sal_uInt16 j = 0; j < nLines; j++ )
         {
-            if( *( pPixelArray + j + i * nLines ) == 0 )
+            if( pPixelArray[ j + i * nLines ] == 0 )
                 pVDev->DrawPixel( Point( j, i ), aBckgrColor );
             else
                 pVDev->DrawPixel( Point( j, i ), aPixelColor );
