@@ -31,7 +31,7 @@ class SfxItemSet;
 
 class SwDontExpandItem
 {
-    SfxItemSet* pDontExpItems;
+    std::unique_ptr<SfxItemSet> pDontExpItems;
 
 public:
     SwDontExpandItem() :

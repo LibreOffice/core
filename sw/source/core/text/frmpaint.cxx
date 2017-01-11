@@ -62,7 +62,7 @@ class SwExtraPainter
     SwRect aRect;
     const SwTextFrame* pTextFrame;
     SwViewShell *pSh;
-    SwFont* pFnt;
+    std::unique_ptr<SwFont> pFnt;
     const SwLineNumberInfo &rLineInf;
     SwTwips nX;
     SwTwips nRedX;
@@ -79,8 +79,8 @@ public:
     SwExtraPainter( const SwTextFrame *pFrame, SwViewShell *pVwSh,
         const SwLineNumberInfo &rLnInf, const SwRect &rRct,
         sal_Int16 eHor, bool bLnNm );
-    ~SwExtraPainter() { delete pFnt; }
-    inline SwFont* GetFont() const { return pFnt; }
+    ~SwExtraPainter() {}
+    inline SwFont* GetFont() const { return pFnt.get(); }
     inline void IncLineNr() { ++nLineNr; }
     inline bool HasNumber() { return !( nLineNr % rLineInf.GetCountBy() ); }
     inline bool HasDivider() { if( !nDivider ) return false;
@@ -128,7 +128,7 @@ SwExtraPainter::SwExtraPainter( const SwTextFrame *pFrame, SwViewShell *pVwSh,
         nX = pFrame->Frame().Left();
         SwCharFormat* pFormat = rLineInf.GetCharFormat( const_cast<IDocumentStylePoolAccess&>(pFrame->GetNode()->getIDocumentStylePoolAccess()) );
         OSL_ENSURE( pFormat, "PaintExtraData without CharFormat" );
-        pFnt = new SwFont( &pFormat->GetAttrSet(), pFrame->GetTextNode()->getIDocumentSettingAccess() );
+        pFnt.reset( new SwFont( &pFormat->GetAttrSet(), pFrame->GetTextNode()->getIDocumentSettingAccess() ) );
         pFnt->Invalidate();
         pFnt->ChgPhysFnt( pSh, *pSh->GetOut() );
         pFnt->SetVertical( 0, pFrame->IsVertical() );
@@ -200,7 +200,7 @@ void SwExtraPainter::PaintExtra( SwTwips nY, long nAsc, long nMax, bool bRed )
     aDrawInf.SetLeft( 0 );
     aDrawInf.SetRight( LONG_MAX );
     aDrawInf.SetFrame( pTextFrame );
-    aDrawInf.SetFont( pFnt );
+    aDrawInf.SetFont( pFnt.get() );
     aDrawInf.SetSnapToGrid( false );
     aDrawInf.SetIgnoreFrameRTL( true );
 

@@ -166,12 +166,11 @@ SwUndoDelNum::SwUndoDelNum( const SwPaM& rPam )
     : SwUndo( UNDO_DELNUM, rPam.GetDoc() ), SwUndRng( rPam )
 {
     aNodes.reserve( nEndNode - nSttNode > 255 ? 255 : nEndNode - nSttNode );
-    pHistory = new SwHistory;
+    pHistory.reset( new SwHistory );
 }
 
 SwUndoDelNum::~SwUndoDelNum()
 {
-    delete pHistory;
 }
 
 void SwUndoDelNum::UndoImpl(::sw::UndoRedoContext & rContext)

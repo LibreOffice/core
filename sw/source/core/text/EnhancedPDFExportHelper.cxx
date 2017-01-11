@@ -1455,13 +1455,12 @@ SwEnhancedPDFExportHelper::SwEnhancedPDFExportHelper( SwEditShell& rSh,
                                                       const SwPrintData& rPrintData )
     : mrSh( rSh ),
       mrOut( rOut ),
-      mpRangeEnum( nullptr ),
       mbSkipEmptyPages( bSkipEmptyPages ),
       mbEditEngineOnly( bEditEngineOnly ),
       mrPrintData( rPrintData )
 {
     if ( !rPageRange.isEmpty() )
-        mpRangeEnum = new StringRangeEnumerator( rPageRange, 0, mrSh.GetPageCount()-1 );
+        mpRangeEnum.reset( new StringRangeEnumerator( rPageRange, 0, mrSh.GetPageCount()-1 ) );
 
     if ( mbSkipEmptyPages )
     {
@@ -1505,7 +1504,6 @@ SwEnhancedPDFExportHelper::SwEnhancedPDFExportHelper( SwEditShell& rSh,
 
 SwEnhancedPDFExportHelper::~SwEnhancedPDFExportHelper()
 {
-    delete mpRangeEnum;
 }
 
 Rectangle SwEnhancedPDFExportHelper::SwRectToPDFRect(const SwPageFrame* pCurrPage,

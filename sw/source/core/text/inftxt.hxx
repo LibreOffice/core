@@ -73,7 +73,7 @@ class SwLineInfo
 {
     friend class SwTextIter;
 
-    SvxTabStopItem* pRuler;
+    std::unique_ptr<SvxTabStopItem> pRuler;
     const SvxLineSpacingItem *pSpace;
     SvxParaVertAlignItem::Align nVertAlign;
     sal_uInt16 nDefTabStop;

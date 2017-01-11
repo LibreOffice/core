@@ -222,7 +222,6 @@ SwNumFormat::SwNumFormat(const SvxNumberFormat& rNumFormat, SwDoc* pDoc)
 
 SwNumFormat::~SwNumFormat()
 {
-    delete m_pVertOrient;
 }
 
 // #i22362#
@@ -351,7 +350,7 @@ const SwFormatVertOrient*      SwNumFormat::GetGraphicOrientation() const
     else
     {
         m_pVertOrient->SetVertOrient(eOrient);
-        return m_pVertOrient;
+        return m_pVertOrient.get();
     }
 }
 
@@ -1071,7 +1070,6 @@ namespace numfunc
             }
 
             SwDefBulletConfig();
-            virtual ~SwDefBulletConfig() override;
 
         private:
             /** sets internal default bullet configuration data to default values */
@@ -1099,7 +1097,7 @@ namespace numfunc
             sal_Unicode mnLevelChars[MAXLEVEL];
 
             // default bullet list font instance
-            vcl::Font* mpFont;
+            std::unique_ptr<vcl::Font> mpFont;
     };
 
     namespace
@@ -1128,11 +1126,6 @@ namespace numfunc
 
         // enable notification for changes on default bullet configuration change
         EnableNotification( GetPropNames() );
-    }
-
-    SwDefBulletConfig::~SwDefBulletConfig()
-    {
-        delete mpFont;
     }
 
     void SwDefBulletConfig::SetToDefault()
@@ -1235,9 +1228,7 @@ namespace numfunc
 
     void SwDefBulletConfig::InitFont()
     {
-        delete mpFont;
-
-        mpFont = new vcl::Font( msFontname, OUString(), Size( 0, 14 ) );
+        mpFont.reset( new vcl::Font( msFontname, OUString(), Size( 0, 14 ) ) );
         mpFont->SetWeight( meFontWeight );
         mpFont->SetItalic( meFontItalic );
         mpFont->SetCharSet( RTL_TEXTENCODING_SYMBOL );

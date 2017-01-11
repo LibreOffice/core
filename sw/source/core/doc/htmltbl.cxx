@@ -56,7 +56,7 @@ class SwHTMLTableLayoutConstraints
     sal_uInt16 nCol;                    // start column
     sal_uInt16 nColSpan;                // the column's COLSPAN
 
-    SwHTMLTableLayoutConstraints *pNext;        // the next constraint
+    std::unique_ptr<SwHTMLTableLayoutConstraints> pNext;        // the next constraint
 
     sal_uLong nMinNoAlign, nMaxNoAlign; // provisional result of AL-Pass 1
 
@@ -69,7 +69,7 @@ public:
     sal_uLong GetMaxNoAlign() const { return nMaxNoAlign; }
 
     SwHTMLTableLayoutConstraints *InsertNext( SwHTMLTableLayoutConstraints *pNxt );
-    SwHTMLTableLayoutConstraints* GetNext() const { return pNext; }
+    SwHTMLTableLayoutConstraints* GetNext() const { return pNext.get(); }
 
     sal_uInt16 GetColSpan() const { return nColSpan; }
     sal_uInt16 GetColumn() const { return nCol; }
@@ -131,7 +131,6 @@ SwHTMLTableLayoutConstraints::SwHTMLTableLayoutConstraints(
 
 SwHTMLTableLayoutConstraints::~SwHTMLTableLayoutConstraints()
 {
-    delete pNext;
 }
 
 SwHTMLTableLayoutConstraints *SwHTMLTableLayoutConstraints::InsertNext(
@@ -150,13 +149,13 @@ SwHTMLTableLayoutConstraints *SwHTMLTableLayoutConstraints::InsertNext(
 
     if( pPrev )
     {
-        pNxt->pNext = pPrev->GetNext();
-        pPrev->pNext = pNxt;
+        pNxt->pNext.reset( pPrev->pNext.release() );
+        pPrev->pNext.reset( pNxt );
         pConstr = this;
     }
     else
     {
-        pNxt->pNext = this;
+        pNxt->pNext.reset( this );
         pConstr = pNxt;
     }
 

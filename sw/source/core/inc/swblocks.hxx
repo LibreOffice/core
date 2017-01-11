@@ -67,7 +67,6 @@ protected:
     bool bInfoChanged : 1;              // Whether any info of TextBlock changed
 
     explicit SwImpBlocks( const OUString& );
-    virtual ~SwImpBlocks();
 
     enum class FileType {
         NoFile,  // Not present
@@ -86,6 +85,8 @@ protected:
     void   Touch();
 
 public:
+    virtual ~SwImpBlocks();
+
     static sal_uInt16 Hash( const OUString& );        /// Hashcode for Block names
     sal_uInt16 GetCount() const;                      /// Get count of Text Blocks
     sal_uInt16 GetIndex( const OUString& ) const;     /// Index for shortnames

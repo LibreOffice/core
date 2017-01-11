@@ -30,7 +30,7 @@ class SW_DLLPUBLIC SwNoTextNode : public SwContentNode
     friend class SwNodes;
     friend class SwNoTextFrame;
 
-    tools::PolyPolygon *pContour;
+    std::unique_ptr<tools::PolyPolygon> pContour;
     bool bAutomaticContour : 1; // automatic contour polygon, not manipulated
     bool bContourMapModeValid : 1; // contour map mode is not the graphics's
                                    // preferred map mode, but either

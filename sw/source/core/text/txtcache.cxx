@@ -29,7 +29,6 @@ SwTextLine::SwTextLine( SwTextFrame *pFrame, SwParaPortion *pNew ) :
 
 SwTextLine::~SwTextLine()
 {
-    delete pLine;
 }
 
 SwCacheObj *SwTextLineAccess::NewObj()
@@ -48,7 +47,7 @@ SwParaPortion *SwTextLineAccess::GetPara()
         const_cast<SwTextFrame *>(static_cast<SwTextFrame const *>(m_pOwner))->SetCacheIdx( pRet->GetCachePos() );
     }
     if ( !pRet->GetPara() )
-        pRet->SetPara( new SwParaPortion );
+        pRet->SetPara( new SwParaPortion, true/*bDelete*/ );
     return pRet->GetPara();
 }
 
@@ -100,8 +99,7 @@ void SwTextFrame::ClearPara()
                                         Get( this, GetCacheIdx(), false ));
         if ( pTextLine )
         {
-            delete pTextLine->GetPara();
-            pTextLine->SetPara( nullptr );
+            pTextLine->SetPara( nullptr, true/*bDelete*/ );
         }
         else
             mnCacheIndex = USHRT_MAX;
@@ -117,9 +115,7 @@ void SwTextFrame::SetPara( SwParaPortion *pNew, bool bDelete )
                                         Get( this, GetCacheIdx(), false ));
         if ( pTextLine )
         {
-            if( bDelete )
-                delete pTextLine->GetPara();
-            pTextLine->SetPara( pNew );
+            pTextLine->SetPara( pNew, bDelete );
         }
         else
         {

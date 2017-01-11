@@ -145,7 +145,6 @@ SwObjectFormatter::SwObjectFormatter( const SwPageFrame& _rPageFrame,
 
 SwObjectFormatter::~SwObjectFormatter()
 {
-    delete mpPgNumAndTypeOfAnchors;
 }
 
 SwObjectFormatter* SwObjectFormatter::CreateObjFormatter(

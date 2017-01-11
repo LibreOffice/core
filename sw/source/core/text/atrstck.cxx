@@ -353,7 +353,6 @@ SwAttrHandler::SwAttrHandler()
 
 SwAttrHandler::~SwAttrHandler()
 {
-    delete pFnt;
 }
 
 void SwAttrHandler::Init( const SwAttrSet& rAttrSet,
@@ -404,8 +403,7 @@ void SwAttrHandler::Init( const SfxPoolItem** pPoolItem, const SwAttrSet* pAS,
 
     // It is possible, that Init is called more than once, e.g., in a
     // SwTextFrame::FormatOnceMore situation.
-    delete pFnt;
-    pFnt = new SwFont( rFnt );
+    pFnt.reset( new SwFont( rFnt ) );
 }
 
 void SwAttrHandler::Reset( )
