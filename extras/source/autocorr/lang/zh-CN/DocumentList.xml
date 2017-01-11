@@ -815,7 +815,9 @@
   <block-list:block block-list:abbreviated-name=":^0:" block-list:name="⁰"/>
   <block-list:block block-list:abbreviated-name=":100:" block-list:name="💯"/>
   <block-list:block block-list:abbreviated-name=":10.30:" block-list:name="🕥"/>
+  <block-list:block block-list:abbreviated-name=":10 h:" block-list:name="🕙"/>
   <block-list:block block-list:abbreviated-name=":11.30:" block-list:name="🕦"/>
+  <block-list:block block-list:abbreviated-name=":11 h:" block-list:name="🕚"/>
   <block-list:block block-list:abbreviated-name=":12.30:" block-list:name="🕧"/>
   <block-list:block block-list:abbreviated-name=":1/2:" block-list:name="½"/>
   <block-list:block block-list:abbreviated-name=":12 h:" block-list:name="🕛"/>
@@ -860,9 +862,11 @@
   <block-list:block block-list:abbreviated-name=":8.30:" block-list:name="🕣"/>
   <block-list:block block-list:abbreviated-name=":_8:" block-list:name="₈"/>
   <block-list:block block-list:abbreviated-name=":^8:" block-list:name="⁸"/>
+  <block-list:block block-list:abbreviated-name=":8 h:" block-list:name="🕗"/>
   <block-list:block block-list:abbreviated-name=":9.30:" block-list:name="🕤"/>
   <block-list:block block-list:abbreviated-name=":_9:" block-list:name="₉"/>
   <block-list:block block-list:abbreviated-name=":^9:" block-list:name="⁹"/>
+  <block-list:block block-list:abbreviated-name=":9 h:" block-list:name="🕘"/>
   <block-list:block block-list:abbreviated-name=":abc:" block-list:name="🔤"/>
   <block-list:block block-list:abbreviated-name=":^a:" block-list:name="ᵃ"/>
   <block-list:block block-list:abbreviated-name=":_a:" block-list:name="ₐ"/>
