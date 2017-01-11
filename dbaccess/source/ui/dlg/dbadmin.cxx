@@ -302,7 +302,7 @@ SfxItemSet* ODbAdminDialog::createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rp
     _rpPool = nullptr;
     _rpDefaults = nullptr;
 
-    const OUString sFilterAll( "%", 1, RTL_TEXTENCODING_ASCII_US );
+    const OUString sFilterAll( "%" );
     // create and initialize the defaults
     _rpDefaults = new std::vector<SfxPoolItem*>(DSID_LAST_ITEM_ID - DSID_FIRST_ITEM_ID + 1);
     SfxPoolItem** pCounter = _rpDefaults->data();  // want to modify this without affecting the out param _rppDefaults
