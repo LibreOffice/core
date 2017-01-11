@@ -19,6 +19,7 @@
 
 #ifndef INCLUDED_HWPFILTER_SOURCE_HWPREADER_HXX
 #define INCLUDED_HWPFILTER_SOURCE_HWPREADER_HXX
+
 #include <errno.h>
 #include <stdio.h>
 #include <string.h>
@@ -40,6 +41,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
+#include <memory>
 
 using namespace ::cppu;
 using namespace ::com::sun::star::lang;
@@ -92,7 +94,7 @@ private:
     Reference< XDocumentHandler > m_rxDocumentHandler;
     rtl::Reference<AttributeListImpl> mxList;
     HWPFile hwpfile;
-    HwpReaderPrivate *d;
+    std::unique_ptr<HwpReaderPrivate> d;
 private:
     /* -------- Document Parsing --------- */
     void makeMeta();
