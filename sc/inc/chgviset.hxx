@@ -34,7 +34,8 @@ class SC_DLLPUBLIC ScChangeViewSettings
 {
 private:
 
-    utl::TextSearch*    pCommentSearcher;
+    std::unique_ptr<utl::TextSearch>
+                        pCommentSearcher;
     DateTime            aFirstDateTime;
     DateTime            aLastDateTime;
     OUString            aAuthorToShow;

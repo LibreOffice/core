@@ -370,7 +370,8 @@ private:
     SCROW           nStartRow;
     SCROW           nEndRow;
     SCCOL           nCol;
-    ScAttrIterator* pColIter;
+    std::unique_ptr<ScAttrIterator>
+                    pColIter;
 
 public:
                     ScDocAttrIterator(ScDocument* pDocument, SCTAB nTable,
@@ -391,7 +392,8 @@ private:
     SCROW           nEndRow;
     SCCOL           nIterStartCol;
     SCCOL           nIterEndCol;
-    ScAttrIterator* pColIter;
+    std::unique_ptr<ScAttrIterator>
+                    pColIter;
 
 public:
                     ScAttrRectIterator(ScDocument* pDocument, SCTAB nTable,
@@ -450,7 +452,8 @@ class ScHorizontalValueIterator
 private:
     ScDocument               *pDoc;
     const ScAttrArray        *pAttrArray;
-    ScHorizontalCellIterator *pCellIter;
+    std::unique_ptr<ScHorizontalCellIterator>
+                              pCellIter;
     sal_uLong                 nNumFormat;     // for CalcAsShown
     SCTAB                     nEndTab;
     SCCOL                     nCurCol;

@@ -51,9 +51,9 @@ enum ScAutoFontColorMode
 
 class SC_DLLPUBLIC ScPatternAttr: public SfxSetItem
 {
-    OUString*       pName;
-    ScStyleSheet*   pStyle;
-    sal_uInt64      mnKey;
+    std::unique_ptr<OUString>  pName;
+    ScStyleSheet*              pStyle;
+    sal_uInt64                 mnKey;
 public:
                             ScPatternAttr(SfxItemSet* pItemSet, const OUString& rStyleName);
                             ScPatternAttr(SfxItemSet* pItemSet);
