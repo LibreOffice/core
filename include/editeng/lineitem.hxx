@@ -59,11 +59,12 @@ public:
     virtual void             ScaleMetrics( long nMult, long nDiv ) override;
     virtual bool             HasMetrics() const override;
 
-    const   editeng::SvxBorderLine*  GetLine     () const { return pLine; }
-    void                    SetLine     ( const editeng::SvxBorderLine *pNew );
+    const editeng::SvxBorderLine*
+                            GetLine() const { return pLine.get(); }
+    void                    SetLine( const editeng::SvxBorderLine *pNew );
 
 private:
-    editeng::SvxBorderLine*  pLine;
+    std::unique_ptr<editeng::SvxBorderLine>  pLine;
 };
 
 

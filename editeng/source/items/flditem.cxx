@@ -271,28 +271,27 @@ MetaAction* SvxFieldData::createEndComment()
 
 SvxFieldItem::SvxFieldItem( SvxFieldData* pFld, const sal_uInt16 nId ) :
     SfxPoolItem( nId )
+    , pField( pFld )  // belongs directly to the item
 {
-    pField = pFld;  // belongs directly to the item
 }
 
 
 SvxFieldItem::SvxFieldItem( const SvxFieldData& rField, const sal_uInt16 nId ) :
     SfxPoolItem( nId )
+    , pField( rField.Clone() )
 {
-    pField = rField.Clone();
 }
 
 
 SvxFieldItem::SvxFieldItem( const SvxFieldItem& rItem ) :
     SfxPoolItem ( rItem )
+    , pField( rItem.GetField() ? rItem.GetField()->Clone() : nullptr )
 {
-    pField = rItem.GetField() ? rItem.GetField()->Clone() : nullptr;
 }
 
 
 SvxFieldItem::~SvxFieldItem()
 {
-    delete pField;
 }
 
 
@@ -332,7 +331,7 @@ SvStream& SvxFieldItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) co
         WriteSvPersistBase( aPStrm , &aDummyData );
     }
     else
-        WriteSvPersistBase( aPStrm, pField );
+        WriteSvPersistBase( aPStrm, pField.get() );
 
     return rStrm;
 }
@@ -343,7 +342,7 @@ bool SvxFieldItem::operator==( const SfxPoolItem& rItem ) const
     assert(SfxPoolItem::operator==(rItem));
 
     const SvxFieldData* pOtherFld = static_cast<const SvxFieldItem&>(rItem).GetField();
-    if( pField == pOtherFld )
+    if( pField.get() == pOtherFld )
         return true;
     if( pField == nullptr || pOtherFld == nullptr )
         return false;

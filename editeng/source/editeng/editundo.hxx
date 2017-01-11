@@ -134,8 +134,8 @@ public:
 class EditUndoInsertFeature : public EditUndo
 {
 private:
-    EPaM            aEPaM;
-    SfxPoolItem*    pFeature;
+    EPaM                           aEPaM;
+    std::unique_ptr<SfxPoolItem>   pFeature;
 
 public:
     EditUndoInsertFeature(EditEngine* pEE, const EPaM& rEPaM, const SfxPoolItem& rFeature);
@@ -251,7 +251,8 @@ private:
     ESelection          aNewESel;
 
     sal_Int32           nMode;
-    EditTextObject*     pTxtObj;
+    std::unique_ptr<EditTextObject>
+                        pTxtObj;
     OUString            aText;
 
 public:
@@ -259,7 +260,7 @@ public:
     virtual ~EditUndoTransliteration() override;
 
     void                SetText( const OUString& rText ) { aText = rText; }
-    void                SetText( EditTextObject* pObj ) { pTxtObj = pObj; }
+    void                SetText( EditTextObject* pObj ) { pTxtObj.reset( pObj ); }
     void                SetNewSelection( const ESelection& rSel ) { aNewESel = rSel; }
 
     virtual void        Undo() override;

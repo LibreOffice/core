@@ -155,17 +155,16 @@ LanguageType EditView::CheckLanguage(
 
 EditView::EditView( EditEngine* pEng, vcl::Window* pWindow )
 {
-    pImpEditView = new ImpEditView( this, pEng, pWindow );
+    pImpEditView.reset( new ImpEditView( this, pEng, pWindow ) );
 }
 
 EditView::~EditView()
 {
-    delete pImpEditView;
 }
 
 ImpEditEngine* EditView::GetImpEditEngine() const
 {
-    return pImpEditView->pEditEngine->pImpEditEngine;
+    return pImpEditView->pEditEngine->pImpEditEngine.get();
 }
 
 EditEngine* EditView::GetEditEngine() const
@@ -291,7 +290,7 @@ void EditView::GetSelectionRectangles(std::vector<Rectangle>& rLogicRects) const
 
 void EditView::Paint( const Rectangle& rRect, OutputDevice* pTargetDevice )
 {
-    pImpEditView->pEditEngine->pImpEditEngine->Paint( pImpEditView, rRect, pTargetDevice );
+    pImpEditView->pEditEngine->pImpEditEngine->Paint( pImpEditView.get(), rRect, pTargetDevice );
 }
 
 void EditView::SetEditEngine( EditEngine* pEditEng )
