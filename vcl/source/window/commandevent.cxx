@@ -28,12 +28,8 @@ CommandExtTextInputData::CommandExtTextInputData( const OUString& rText,
 {
     if ( pTextAttr && !maText.isEmpty() )
     {
-        mpTextAttr = new ExtTextInputAttr[maText.getLength()];
-        memcpy( mpTextAttr, pTextAttr, maText.getLength()*sizeof(ExtTextInputAttr) );
-    }
-    else
-    {
-        mpTextAttr = nullptr;
+        mpTextAttr.reset( new ExtTextInputAttr[maText.getLength()] );
+        memcpy( mpTextAttr.get(), pTextAttr, maText.getLength()*sizeof(ExtTextInputAttr) );
     }
 
     mnCursorPos     = nCursorPos;
@@ -46,12 +42,8 @@ CommandExtTextInputData::CommandExtTextInputData( const CommandExtTextInputData&
 {
     if ( rData.mpTextAttr && !maText.isEmpty() )
     {
-        mpTextAttr = new ExtTextInputAttr[maText.getLength()];
-        memcpy( mpTextAttr, rData.mpTextAttr, maText.getLength()*sizeof(ExtTextInputAttr) );
-    }
-    else
-    {
-        mpTextAttr = nullptr;
+        mpTextAttr.reset( new ExtTextInputAttr[maText.getLength()] );
+        memcpy( mpTextAttr.get(), rData.mpTextAttr.get(), maText.getLength()*sizeof(ExtTextInputAttr) );
     }
 
     mnCursorPos     = rData.mnCursorPos;
@@ -61,7 +53,6 @@ CommandExtTextInputData::CommandExtTextInputData( const CommandExtTextInputData&
 
 CommandExtTextInputData::~CommandExtTextInputData()
 {
-    delete [] mpTextAttr;
 }
 
 CommandInputContextData::CommandInputContextData( LanguageType eLang )

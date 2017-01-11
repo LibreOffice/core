@@ -1202,7 +1202,6 @@ VclBuilderContainer::VclBuilderContainer()
 
 VclBuilderContainer::~VclBuilderContainer()
 {
-    delete m_pUIBuilder;
 }
 
 ModelessDialog::ModelessDialog(vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription, InitFlag eFlag)

@@ -75,7 +75,7 @@ BackingWindow::BackingWindow( vcl::Window* i_pParent ) :
     mbInitControls( false ),
     mnHideExternalLinks( 0 )
 {
-    m_pUIBuilder = new VclBuilder(this, getUIRootDir(), "sfx/ui/startcenter.ui", "StartCenter" );
+    m_pUIBuilder.reset(new VclBuilder(this, getUIRootDir(), "sfx/ui/startcenter.ui", "StartCenter" ));
 
     get(mpOpenButton, "open_all");
     get(mpRemoteButton, "open_remote");
