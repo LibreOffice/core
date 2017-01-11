@@ -219,7 +219,6 @@ public:
     inline const Reference< XSpreadsheet >& getSheet() const { return mxSheet; }
 
     /** Returns the XCell interface for the passed cell address. */
-    Reference< XCell >  getCell( const CellAddress& rAddress ) const;
     Reference< XCell >  getCell( const ScAddress& rAddress ) const;
     /** Returns the XCellRange interface for the passed cell range address. */
     Reference< XCellRange > getCellRange( const ScRange& rRange ) const;
@@ -449,19 +448,6 @@ WorksheetGlobals::WorksheetGlobals( const WorkbookHelper& rHelper, const ISegmen
     }
 }
 
-Reference< XCell > WorksheetGlobals::getCell( const CellAddress& rAddress ) const
-{
-    Reference< XCell > xCell;
-    if( mxSheet.is() ) try
-    {
-        xCell = mxSheet->getCellByPosition( rAddress.Column, rAddress.Row );
-    }
-    catch( Exception& )
-    {
-    }
-    return xCell;
-}
-
 Reference< XCell > WorksheetGlobals::getCell( const ScAddress& rAddress ) const
 {
     Reference< XCell > xCell;
@@ -555,7 +541,7 @@ const awt::Size& WorksheetGlobals::getDrawPageSize() const
 awt::Point WorksheetGlobals::getCellPosition( sal_Int32 nCol, sal_Int32 nRow ) const
 {
     awt::Point aPoint;
-    PropertySet aCellProp( getCell( CellAddress( getSheetIndex(), nCol, nRow ) ) );
+    PropertySet aCellProp( getCell( ScAddress( nCol, nRow, getSheetIndex() ) ) );
     aCellProp.getProperty( aPoint, PROP_Position );
     return aPoint;
 }
@@ -563,7 +549,7 @@ awt::Point WorksheetGlobals::getCellPosition( sal_Int32 nCol, sal_Int32 nRow ) c
 awt::Size WorksheetGlobals::getCellSize( sal_Int32 nCol, sal_Int32 nRow ) const
 {
     awt::Size aSize;
-    PropertySet aCellProp( getCell( CellAddress( getSheetIndex(), nCol, nRow ) ) );
+    PropertySet aCellProp( getCell( ScAddress( nCol, nRow, getSheetIndex() ) ) );
     aCellProp.getProperty( aSize, PROP_Size );
     return aSize;
 }
@@ -1396,11 +1382,6 @@ SCTAB WorksheetHelper::getSheetIndex() const
 const Reference< XSpreadsheet >& WorksheetHelper::getSheet() const
 {
     return mrSheetGlob.getSheet();
-}
-
-Reference< XCell > WorksheetHelper::getCell( const CellAddress& rAddress ) const
-{
-    return mrSheetGlob.getCell( rAddress );
 }
 
 Reference< XCell > WorksheetHelper::getCell( const ScAddress& rAddress ) const

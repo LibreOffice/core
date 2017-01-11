@@ -21,7 +21,6 @@
 #define INCLUDED_SC_SOURCE_FILTER_INC_ADDRESSCONVERTER_HXX
 
 #include <vector>
-#include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include "workbookhelper.hxx"
 
@@ -238,17 +237,6 @@ public:
         @return  true = Passed sheet index is valid (no index overflow).
      */
     bool                checkTab( sal_Int16 nSheet, bool bTrackOverflow );
-
-    /** Checks the passed cell address if it fits into the spreadsheet limits.
-
-        @param rAddress  The cell address to be checked.
-        @param bTrackOverflow  true = Update the internal overflow flags, if
-            the address is outside of the supported sheet limits.
-        @return  true = Passed address is valid (no index overflow).
-     */
-    bool                checkCellAddress(
-                            const css::table::CellAddress& rAddress,
-                            bool bTrackOverflow );
 
     /** Checks the passed cell address if it fits into the spreadsheet limits.
 

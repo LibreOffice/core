@@ -194,9 +194,6 @@ public:
 
     /** Returns the XCell interface for the passed cell address. */
     css::uno::Reference< css::table::XCell >
-                        getCell( const css::table::CellAddress& rAddress ) const;
-
-    css::uno::Reference< css::table::XCell >
                         getCell( const ScAddress& rAddress ) const;
     /** Returns the XCellRange interface for the passed cell range address. */
     css::uno::Reference< css::table::XCellRange >
