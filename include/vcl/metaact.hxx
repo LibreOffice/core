@@ -445,7 +445,8 @@ private:
 
     Point       maStartPt;
     OUString    maStr;
-    long*       mpDXAry;
+    std::unique_ptr<long[]>
+                mpDXAry;
     sal_Int32   mnIndex;
     sal_Int32   mnLen;
 
@@ -473,7 +474,7 @@ public:
     const OUString& GetText() const { return maStr; }
     sal_Int32       GetIndex() const { return mnIndex; }
     sal_Int32       GetLen() const { return mnLen; }
-    long*           GetDXArray() const { return mpDXAry; }
+    long*           GetDXArray() const { return mpDXAry.get(); }
 };
 
 class VCL_DLLPUBLIC MetaStretchTextAction : public MetaAction
