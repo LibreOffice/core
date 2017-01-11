@@ -19,7 +19,14 @@
 #ifndef INCLUDED_DTRANS_SOURCE_WIN32_DND_GLOBALS_HXX
 #define INCLUDED_DTRANS_SOURCE_WIN32_DND_GLOBALS_HXX
 
+#include <sal/config.h>
+
+#include <com/sun/star/uno/Reference.hxx>
 #include <osl/mutex.hxx>
+
+namespace com { namespace sun { namespace star { namespace datatransfer {
+    class XTransferable;
+} } } }
 
 #if defined _MSC_VER
 #pragma warning(push,1)
@@ -74,6 +81,8 @@ struct MutexDummy
 {
     osl::Mutex m_mutex;
 };
+
+extern css::uno::Reference<css::datatransfer::XTransferable> g_XTransferable;
 
 #endif
 

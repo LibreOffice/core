@@ -53,8 +53,6 @@ using namespace com::sun::star::awt::MouseButton;
 using namespace com::sun::star::awt;
 using namespace com::sun::star::lang;
 
-extern Reference< XTransferable > g_XTransferable;
-
 unsigned __stdcall DndOleSTAFunc(LPVOID pParams);
 
 DragSource::DragSource( const Reference<XComponentContext>& rxContext):

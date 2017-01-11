@@ -41,7 +41,6 @@ using namespace com::sun::star::datatransfer::dnd::DNDConstants;
 
 #define WM_REGISTERDRAGDROP WM_USER + 1
 #define WM_REVOKEDRAGDROP WM_USER + 2
-extern Reference< XTransferable > g_XTransferable;
 
 DWORD WINAPI DndTargetOleSTAFunc(LPVOID pParams);
 
