@@ -731,11 +731,6 @@ bool StringConstant::VisitCallExpr(CallExpr const * expr) {
             return true;
         }
     }
-    if ((dc.Function("append").Class("OStringBuffer").Namespace("rtl")
-         .GlobalNamespace())
-        && fdecl->getNumParams() == 2)
-    {
-    }
     return true;
 }
 
