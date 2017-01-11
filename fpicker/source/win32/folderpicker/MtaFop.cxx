@@ -39,9 +39,9 @@ const bool INIT_NONSIGNALED = false;
 
 namespace
 {
-    const char* FOLDERPICKER_SRV_DLL_NAME = "fps.dll";
+    const char* const FOLDERPICKER_SRV_DLL_NAME = "fps.dll";
     const char g_szWndClsName[]           = "FopStaReqWnd###";
-    const char* CURRENT_INSTANCE          = "CurrInst";
+    const char* const CURRENT_INSTANCE          = "CurrInst";
 
     struct RequestContext
     {

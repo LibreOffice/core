@@ -43,7 +43,7 @@ struct Entry
     sal_Int16 resId;
 };
 
-Entry CtrlIdToResIdTable[] = {
+Entry const CtrlIdToResIdTable[] = {
     { CHECKBOX_AUTOEXTENSION,                   STR_SVT_FILEPICKER_AUTO_EXTENSION },
     { CHECKBOX_PASSWORD,                        STR_SVT_FILEPICKER_PASSWORD },
     { CHECKBOX_FILTEROPTIONS,                   STR_SVT_FILEPICKER_FILTER_OPTIONS },
