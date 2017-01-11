@@ -31,7 +31,7 @@
 
 using namespace com::sun::star;
 
-const GUID* guidList[ SUPPORTED_FACTORIES_NUM ] = {
+const GUID* const guidList[ SUPPORTED_FACTORIES_NUM ] = {
     &OID_WriterTextServer,
     &OID_WriterOASISTextServer,
     &OID_CalcServer,

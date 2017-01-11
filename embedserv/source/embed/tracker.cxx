@@ -30,8 +30,8 @@
 #include "syswinwrapper.hxx"
 
 
-HCURSOR afxCursors[10] = { nullptr, };
-HBRUSH afxHalftoneBrush = nullptr;
+static HCURSOR afxCursors[10] = { nullptr, };
+static HBRUSH afxHalftoneBrush = nullptr;
 
 
 // the struct below is used to determine the qualities of a particular handle
@@ -218,9 +218,9 @@ Tracker::Tracker(LPCRECT lpSrcRect, UINT nStyle)
     m_nStyle = nStyle;
 }
 
-HBRUSH afxHatchBrush = nullptr;
-HPEN afxBlackDottedPen = nullptr;
-int afxHandleSize = 0;
+static HBRUSH afxHatchBrush = nullptr;
+static HPEN afxBlackDottedPen = nullptr;
+static int afxHandleSize = 0;
 
 
 void Tracker::Construct()
