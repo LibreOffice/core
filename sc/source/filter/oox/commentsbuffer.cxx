@@ -162,7 +162,7 @@ void Comment::finalizeImport()
         }
 
         // convert shape formatting and visibility
-        if( const ::oox::vml::ShapeBase* pNoteShape = getVmlDrawing().getNoteShape( aNotePos ) )
+        if( const ::oox::vml::ShapeBase* pNoteShape = getVmlDrawing().getNoteShape( maModel.maRange.aStart ) )
         {
             // position and formatting
             pNoteShape->convertFormatting( xAnnoShape );
