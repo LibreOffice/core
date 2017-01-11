@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a6eadb0_cb8d2b7d",
+        "filename": "filter/source/svg/presentation_engine.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 14882,
+      "author": {
+        "id": 1000119
+      },
+      "writtenOn": "2017-01-11T17:00:21Z",
+      "side": 1,
+      "message": "I think that this syntax: key \u003d\u003e aObj[key] \u003d\u003d\u003d value\nis supported in ES6 only.",
+      "revId": "f5d56f214810ac3389294ddde353881c438beec3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
