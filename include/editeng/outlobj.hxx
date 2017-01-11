@@ -25,6 +25,7 @@
 #include <rtl/ustring.hxx>
 #include <rsc/rscsfx.hxx>
 #include <o3tl/cow_wrapper.hxx>
+#include <memory>
 
 class EditTextObject;
 enum class OutlinerMode;
@@ -36,9 +37,9 @@ enum class OutlinerMode;
 struct OutlinerParaObjData
 {
     // data members
-    EditTextObject*                 mpEditTextObject;
-    ParagraphDataVector             maParagraphDataVector;
-    bool                            mbIsEditDoc;
+    std::unique_ptr<EditTextObject>  mpEditTextObject;
+    ParagraphDataVector              maParagraphDataVector;
+    bool                             mbIsEditDoc;
 
     // constuctor
     OutlinerParaObjData( EditTextObject* pEditTextObject, const ParagraphDataVector& rParagraphDataVector, bool bIsEditDoc );

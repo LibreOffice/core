@@ -485,7 +485,7 @@ class SvxUnoTextContentEnumeration : public ::cppu::WeakAggImplHelper1< css::con
 {
 private:
     css::uno::Reference< css::text::XText > mxParentText;
-    SvxEditSource*          mpEditSource;
+    std::unique_ptr<SvxEditSource>          mpEditSource;
     sal_Int32               mnNextParagraph;
     const SvxUnoTextBase&   mrText;
 

@@ -33,6 +33,7 @@
 #include <unotools/fontcvt.hxx>
 #include <editeng/editengdllapi.h>
 #include <o3tl/typed_flags_set.hxx>
+#include <memory>
 
 class SvxBrushItem;
 namespace vcl { class Font; }
@@ -291,7 +292,7 @@ public:
 
 class EDITENG_DLLPUBLIC SvxNumBulletItem : public SfxPoolItem
 {
-    SvxNumRule*             pNumRule;
+    std::unique_ptr<SvxNumRule> pNumRule;
 public:
     explicit SvxNumBulletItem(SvxNumRule& rRule);
     SvxNumBulletItem(SvxNumRule& rRule, sal_uInt16 nWhich );
@@ -304,7 +305,7 @@ public:
     virtual SvStream&        Store(SvStream &rStream, sal_uInt16 nItemVersion ) const override;
     virtual bool             operator==( const SfxPoolItem& ) const override;
 
-    SvxNumRule*             GetNumRule() const {return pNumRule;}
+    SvxNumRule*             GetNumRule() const {return pNumRule.get();}
 
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;

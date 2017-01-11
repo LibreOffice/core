@@ -3082,16 +3082,15 @@ SvxLineItem::SvxLineItem( const sal_uInt16 nId ) :
 
 
 SvxLineItem::SvxLineItem( const SvxLineItem& rCpy ) :
-
     SfxPoolItem ( rCpy )
 {
-    pLine = rCpy.GetLine() ? new SvxBorderLine( *rCpy.GetLine() ) : nullptr;
+    if (rCpy.GetLine())
+        pLine.reset( new SvxBorderLine( *rCpy.GetLine() ) );
 }
 
 
 SvxLineItem::~SvxLineItem()
 {
-    delete pLine;
 }
 
 
@@ -3107,7 +3106,7 @@ bool SvxLineItem::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
 
-    return CmpBrdLn( pLine, static_cast<const SvxLineItem&>(rAttr).GetLine() );
+    return CmpBrdLn( pLine.get(), static_cast<const SvxLineItem&>(rAttr).GetLine() );
 }
 
 
@@ -3123,7 +3122,7 @@ bool SvxLineItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemId ) const
     nMemId &= ~CONVERT_TWIPS;
     if ( nMemId == 0 )
     {
-        rVal = uno::makeAny( SvxBoxItem::SvxLineToLine(pLine, bConvert) );
+        rVal = uno::makeAny( SvxBoxItem::SvxLineToLine(pLine.get(), bConvert) );
         return true;
     }
     else if ( pLine )
@@ -3155,9 +3154,9 @@ bool SvxLineItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemId )
         if ( lcl_extractBorderLine(rVal, aLine) )
         {
             if ( !pLine )
-                pLine = new SvxBorderLine;
+                pLine.reset( new SvxBorderLine );
             if( !SvxBoxItem::LineToSvxLine(aLine, *pLine, bConvert) )
-                DELETEZ( pLine );
+                pLine.reset();
             return true;
         }
         return false;
@@ -3165,7 +3164,7 @@ bool SvxLineItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemId )
     else if ( rVal >>= nVal )
     {
         if ( !pLine )
-            pLine = new SvxBorderLine;
+            pLine.reset( new SvxBorderLine );
 
         switch ( nMemId )
         {
@@ -3250,8 +3249,7 @@ SfxPoolItem* SvxLineItem::Create( SvStream& rStrm, sal_uInt16 ) const
 
 void SvxLineItem::SetLine( const SvxBorderLine* pNew )
 {
-    delete pLine;
-    pLine = pNew ? new SvxBorderLine( *pNew ) : nullptr;
+    pLine.reset( pNew ? new SvxBorderLine( *pNew ) : nullptr );
 }
 
 #define LOAD_GRAPHIC    ((sal_uInt16)0x0001)

@@ -144,7 +144,7 @@ struct DragAndDropInfo
 struct ImplIMEInfos
 {
     OUString    aOldTextAfterStartPos;
-    ExtTextInputAttr* pAttribs;
+    std::unique_ptr<ExtTextInputAttr[]> pAttribs;
     EditPaM     aPos;
     sal_Int32   nLen;
     bool        bCursor;
