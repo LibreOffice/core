@@ -23,9 +23,6 @@
 #include <sal/types.h>
 #include <sot/storage.hxx>
 
-class SotStorageStream;
-class SotStorage;
-
 #define EQNOLEFILEHDR_SIZE 28
 
 class EQNOLEFILEHDR

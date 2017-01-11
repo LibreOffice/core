@@ -36,7 +36,6 @@
 #include "edit.hxx"
 #include "node.hxx"
 
-class DataChangedEvent;
 class SmDocShell;
 class SmViewShell;
 class SmPrintUIOptions;

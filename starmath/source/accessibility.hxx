@@ -43,11 +43,6 @@ class SmGraphicWindow;
 class SmEditWindow;
 class SmDocShell;
 
-namespace com { namespace sun { namespace star { namespace accessibility {
-struct AccessibleEventObject;
-}}}}
-
-
 // classes and helper-classes used for accessibility in the graphic-window
 
 
