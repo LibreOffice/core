@@ -72,14 +72,11 @@ ScPrintRangeSaver::ScPrintRangeSaver( SCTAB nCount ) :
     nTabCount( nCount )
 {
     if (nCount > 0)
-        pData = new ScPrintSaverTab[nCount];
-    else
-        pData = nullptr;
+        pData.reset( new ScPrintSaverTab[nCount] );
 }
 
 ScPrintRangeSaver::~ScPrintRangeSaver()
 {
-    delete[] pData;
 }
 
 ScPrintSaverTab& ScPrintRangeSaver::GetTabData(SCTAB nTab)
