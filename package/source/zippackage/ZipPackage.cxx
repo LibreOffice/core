@@ -486,7 +486,7 @@ void ZipPackage::parseContentType()
 
 void ZipPackage::getZipFileContents()
 {
-    std::unique_ptr < ZipEnumeration > xEnum(m_pZipFile->entries());
+    std::unique_ptr<ZipEnumeration> xEnum = m_pZipFile->entries();
     ZipPackageStream *pPkgStream;
     ZipPackageFolder *pPkgFolder, *pCurrent;
     OUString sTemp, sDirName;
