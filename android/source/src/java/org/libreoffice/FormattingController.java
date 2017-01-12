@@ -1,40 +1,35 @@
 package org.libreoffice;
 
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 
 import org.libreoffice.kit.Document;
 
-public class FormattingController implements View.OnClickListener {
+ class FormattingController implements View.OnClickListener {
     private static final String LOGTAG = ToolbarController.class.getSimpleName();
 
-    private final Toolbar mToolbarBottom;
     private LibreOfficeMainActivity mContext;
 
-    public FormattingController(LibreOfficeMainActivity context, Toolbar toolbarBottom) {
-        mToolbarBottom = toolbarBottom;
+    FormattingController(LibreOfficeMainActivity context) {
         mContext = context;
 
-        ((ImageButton) context.findViewById(R.id.button_bold)).setOnClickListener(this);
-        ((ImageButton) context.findViewById(R.id.button_italic)).setOnClickListener(this);
-        ((ImageButton) context.findViewById(R.id.button_strikethrough)).setOnClickListener(this);
-        ((ImageButton) context.findViewById(R.id.button_underlined)).setOnClickListener(this);
+        mContext.findViewById(R.id.button_bold).setOnClickListener(this);
+        mContext.findViewById(R.id.button_italic).setOnClickListener(this);
+        mContext.findViewById(R.id.button_strikethrough).setOnClickListener(this);
+        mContext.findViewById(R.id.button_underlined).setOnClickListener(this);
 
-        ((ImageButton) context.findViewById(R.id.button_align_left)).setOnClickListener(this);
-        ((ImageButton) context.findViewById(R.id.button_align_center)).setOnClickListener(this);
-        ((ImageButton) context.findViewById(R.id.button_align_right)).setOnClickListener(this);
-        ((ImageButton) context.findViewById(R.id.button_align_justify)).setOnClickListener(this);
+        mContext.findViewById(R.id.button_align_left).setOnClickListener(this);
+        mContext.findViewById(R.id.button_align_center).setOnClickListener(this);
+        mContext.findViewById(R.id.button_align_right).setOnClickListener(this);
+        mContext.findViewById(R.id.button_align_justify).setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
         ImageButton button = (ImageButton) view;
-        boolean selected = button.isSelected();
-        button.setSelected(selected);
 
-        if (selected) {
+        if (button.isSelected()) {
             button.getBackground().setState(new int[]{-android.R.attr.state_selected});
         } else {
             button.getBackground().setState(new int[]{android.R.attr.state_selected});
@@ -65,15 +60,13 @@ public class FormattingController implements View.OnClickListener {
             case R.id.button_align_justify:
                 LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:JustifyPara"));
                 break;
-            default:
-                break;
         }
     }
 
-    public void onToggleStateChanged(final int type, final boolean selected) {
+    void onToggleStateChanged(final int type, final boolean selected) {
         LOKitShell.getMainHandler().post(new Runnable() {
             public void run() {
-                Integer buttonId = null;
+                Integer buttonId;
                 switch (type) {
                     case Document.BOLD:
                         buttonId = R.id.button_bold;
@@ -104,8 +97,7 @@ public class FormattingController implements View.OnClickListener {
                         return;
                 }
 
-                LibreOfficeMainActivity activity = LibreOfficeMainActivity.mAppContext;
-                ImageButton button = (ImageButton) activity.findViewById(buttonId);
+                ImageButton button = (ImageButton) mContext.findViewById(buttonId);
                 button.setSelected(selected);
                 if (selected) {
                     button.getBackground().setState(new int[]{android.R.attr.state_selected});
@@ -114,29 +106,5 @@ public class FormattingController implements View.OnClickListener {
                 }
             }
         });
-
-
-        /*if (menuItem == null) {
-            Log.e(LOGTAG, "MenuItem not found.");
-            return;
-        }
-
-        final Drawable drawable;
-        if (pressed) {
-            Resources resources = mContext.getResources();
-            Drawable[] layers = new Drawable[2];
-            layers[0] = resources.getDrawable(R.drawable.icon_background);
-            layers[1] = resources.getDrawable(drawableId);
-            drawable = new LayerDrawable(layers);
-        } else {
-            drawable = mContext.getResources().getDrawable(drawableId);
-        }
-
-        final MenuItem fMenuItem = menuItem;
-        LOKitShell.getMainHandler().post(new Runnable() {
-            public void run() {
-                fMenuItem.setIcon(drawable);
-            }
-        });*/
     }
 }
