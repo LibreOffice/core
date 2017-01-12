@@ -2544,7 +2544,6 @@ void SvxMenuConfigPage::UpdateButtonStates()
         m_pMoveUpButton->Enable( false );
         m_pMoveDownButton->Enable( false );
         m_pDeleteCommandButton->Enable(false);
-        m_pAddSeparatorButton->Enable();
 
         pPopup->EnableItem( "modrename", false );
 
@@ -2653,6 +2652,7 @@ IMPL_LINK_NOARG( SvxMenuConfigPage, SelectMenu, ListBox&, void )
     m_pModifyCommandButton->Enable( pMenuData != nullptr );
     m_pAddCommandsButton->Enable( pMenuData != nullptr );
     m_pAddSeparatorButton->Enable( pMenuData != nullptr );
+    m_pAddSubmenuButton->Enable( pMenuData != nullptr );
 
     PopupMenu* pPopup = m_pModifyTopLevelButton->GetPopupMenu();
     if ( pMenuData )
