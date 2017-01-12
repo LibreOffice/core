@@ -19,11 +19,15 @@ struct VirtualBase {
 };
 
 struct IncludedDerived1: VirtualBase {
-    ~IncludedDerived1() override {};
+    ~IncludedDerived1() override {}; // expected-error {{unnecessary user-declared destructor [loplugin:unnecessaryoverride]}}
 };
 
 struct IncludedDerived2: VirtualBase {
     ~IncludedDerived2() override;
+};
+
+struct IncludedNotDerived {
+    ~IncludedNotDerived();
 };
 
 struct Incomplete;
@@ -36,6 +40,10 @@ private:
     void operator =(IncludedDerived3) = delete;
 
     rtl::Reference<Incomplete> m;
+};
+
+struct MarkedInlineButNotDefined {
+    inline ~MarkedInlineButNotDefined();
 };
 
 #endif

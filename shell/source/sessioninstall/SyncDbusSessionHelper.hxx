@@ -21,7 +21,6 @@ namespace shell { namespace sessioninstall
     {
         public:
             SyncDbusSessionHelper(css::uno::Reference< css::uno::XComponentContext> const&);
-            virtual ~SyncDbusSessionHelper() override {}
 
             // XModify Methods
             virtual void SAL_CALL InstallPackageFiles( ::sal_uInt32 xid, const css::uno::Sequence< OUString >& files, const OUString& interaction ) override;

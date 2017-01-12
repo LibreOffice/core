@@ -16,7 +16,7 @@
 struct NonVirtualBase {};
 
 struct NonVirtualDerived1: NonVirtualBase {
-    ~NonVirtualDerived1() {}
+    ~NonVirtualDerived1() {} // expected-error {{unnecessary user-declared destructor [loplugin:unnecessaryoverride]}}
 };
 
 struct NonVirtualDerived2: NonVirtualBase {
@@ -40,6 +40,10 @@ struct Incomplete: salhelper::SimpleReferenceObject {};
 IncludedDerived3::IncludedDerived3() {}
 
 IncludedDerived3::~IncludedDerived3() {}
+
+// vmiklos likes these because he can quickly add a DEBUG or something similar without
+// massive recompile
+IncludedNotDerived::~IncludedNotDerived() {}
 
 struct NoExSpecDerived: VirtualBase {
     ~NoExSpecDerived() override {} // expected-error {{unnecessary user-declared destructor [loplugin:unnecessaryoverride]}}
@@ -113,9 +117,20 @@ struct PureDerived: PureBase {
     ~PureDerived() override {} // expected-error {{unnecessary user-declared destructor [loplugin:unnecessaryoverride]}}
 };
 
-// aovid loplugin:unreffun:
+struct CompleteBase {
+    ~CompleteBase() {} // expected-error {{unnecessary user-declared destructor [loplugin:unnecessaryoverride]}}
+};
+
+// <sberg> noelgrandin, there's one other corner case one can imagine:
+// a class defined in a .hxx with the dtor declared (but not defined) as inline in the .hxx,
+// and then defined in the cxx (making it effectively only callable from within the cxx);
+// removing the dtor declaration from the class definition would change the dtor to be callable from everywhere
+MarkedInlineButNotDefined::~MarkedInlineButNotDefined() {}
+
+// avoid loplugin:unreffun:
 int main() {
     (void) NonVirtualDerived1();
+    (void) CompleteBase();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
