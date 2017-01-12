@@ -1073,7 +1073,8 @@ bool crashReportInfoExists()
 #if HAVE_FEATURE_BREAKPAD
 void handleCrashReport()
 {
-    static const char SERVICENAME_CRASHREPORT[] = "com.sun.star.comp.svx.CrashReportUI";
+    // Don't show the dialog since we don't offer upload - only want the dumps
+    /*static const char SERVICENAME_CRASHREPORT[] = "com.sun.star.comp.svx.CrashReportUI";
 
     css::uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
 
@@ -1087,7 +1088,7 @@ void handleCrashReport()
     css::util::URL aURL;
     css::uno::Any aRet = xRecoveryUI->dispatchWithReturnValue(aURL, css::uno::Sequence< css::beans::PropertyValue >());
     bool bRet = false;
-    aRet >>= bRet;
+    aRet >>= bRet;*/
 }
 #endif
 
