@@ -33,7 +33,7 @@ CrashReportDialog::CrashReportDialog(vcl::Window* pParent):
     mpBtnSend->SetClickHdl(LINK(this, CrashReportDialog, BtnHdl));
     mpBtnCancel->SetClickHdl(LINK(this, CrashReportDialog, BtnHdl));
     mpBtnClose->SetClickHdl(LINK(this, CrashReportDialog, BtnHdl));
-    mpEditPostUpload->SetReadOnly(true);
+    mpEditPostUpload->SetReadOnly();
 }
 
 CrashReportDialog::~CrashReportDialog()
@@ -53,19 +53,7 @@ void CrashReportDialog::dispose()
     Dialog::dispose();
 }
 
-namespace {
-
-OUString getLibDir()
-{
-    OUString aOriginal = "$BRAND_BASE_DIR/" LIBO_LIBEXEC_FOLDER;
-    rtl::Bootstrap::expandMacros(aOriginal);
-
-    return aOriginal;
-}
-
-}
-
-IMPL_LINK_TYPED(CrashReportDialog, BtnHdl, Button*, pBtn, void)
+IMPL_LINK(CrashReportDialog, BtnHdl, Button*, pBtn)
 {
     if (pBtn == mpBtnSend.get())
     {
@@ -106,6 +94,7 @@ IMPL_LINK_TYPED(CrashReportDialog, BtnHdl, Button*, pBtn, void)
     {
         Close();
     }
+    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
