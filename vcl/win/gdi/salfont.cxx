@@ -335,10 +335,7 @@ struct ImplEnumInfo
     HDC                 mhDC;
     PhysicalFontCollection* mpList;
     OUString*           mpName;
-    LOGFONTA*           mpLogFontA;
-    LOGFONTW*           mpLogFontW;
-    UINT                mnPreferredCharSet;
-    bool                mbPrinter;
+    LOGFONTW*           mpLogFont;
     int                 mnFontCount;
 };
 
@@ -1049,12 +1046,12 @@ int CALLBACK SalEnumFontsProcExW( const LOGFONTW* lpelfe,
         {
             OUString aName = OUString(reinterpret_cast<const sal_Unicode*>(pLogFont->elfLogFont.lfFaceName));
             pInfo->mpName = &aName;
-            memcpy( pInfo->mpLogFontW->lfFaceName, pLogFont->elfLogFont.lfFaceName, (aName.getLength()+1)*sizeof( wchar_t ) );
-            pInfo->mpLogFontW->lfCharSet = pLogFont->elfLogFont.lfCharSet;
-            EnumFontFamiliesExW( pInfo->mhDC, pInfo->mpLogFontW, SalEnumFontsProcExW,
-                                 reinterpret_cast<LPARAM>(pInfo), 0 );
-            pInfo->mpLogFontW->lfFaceName[0] = '\0';
-            pInfo->mpLogFontW->lfCharSet = DEFAULT_CHARSET;
+            memcpy(pInfo->mpLogFont->lfFaceName, pLogFont->elfLogFont.lfFaceName, (aName.getLength()+1)*sizeof(wchar_t));
+            pInfo->mpLogFont->lfCharSet = pLogFont->elfLogFont.lfCharSet;
+            EnumFontFamiliesExW(pInfo->mhDC, pInfo->mpLogFont, SalEnumFontsProcExW,
+                                reinterpret_cast<LPARAM>(pInfo), 0);
+            pInfo->mpLogFont->lfFaceName[0] = '\0';
+            pInfo->mpLogFont->lfCharSet = DEFAULT_CHARSET;
             pInfo->mpName = nullptr;
         }
     }
@@ -1326,21 +1323,12 @@ void WinSalGraphics::GetDevFontList( PhysicalFontCollection* pFontCollection )
     aInfo.mhDC          = getHDC();
     aInfo.mpList        = pFontCollection;
     aInfo.mpName        = nullptr;
-    aInfo.mpLogFontA    = nullptr;
-    aInfo.mpLogFontW    = nullptr;
-    aInfo.mbPrinter     = mbPrinter;
     aInfo.mnFontCount   = 0;
-
-    aInfo.mnPreferredCharSet = DEFAULT_CHARSET;
-    DWORD nCP = GetACP();
-    CHARSETINFO aCharSetInfo;
-    if ( TranslateCharsetInfo( reinterpret_cast<DWORD*>((sal_IntPtr)nCP), &aCharSetInfo, TCI_SRCCODEPAGE ) )
-        aInfo.mnPreferredCharSet = aCharSetInfo.ciCharset;
 
     LOGFONTW aLogFont;
     memset( &aLogFont, 0, sizeof( aLogFont ) );
     aLogFont.lfCharSet = DEFAULT_CHARSET;
-    aInfo.mpLogFontW = &aLogFont;
+    aInfo.mpLogFont = &aLogFont;
     EnumFontFamiliesExW( getHDC(), &aLogFont,
         SalEnumFontsProcExW, reinterpret_cast<LPARAM>(&aInfo), 0 );
 
