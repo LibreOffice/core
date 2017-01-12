@@ -480,9 +480,6 @@ public:
                 xProps,
                 rControlName )
         {}
-    inline ~ControlImportContext()
-    {
-    }
 
     /// @throws css::xml::sax::SAXException
     /// @throws css::uno::RuntimeException

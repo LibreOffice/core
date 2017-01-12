@@ -41,10 +41,6 @@ namespace basegfx
             memset(mpZBuffer.get(), 0, sizeof(sal_uInt16) * mnCount);
         }
 
-        ~BZPixelRaster()
-        {
-        }
-
         // data access read only
         const sal_uInt16& getZ(sal_uInt32 nIndex) const
         {
