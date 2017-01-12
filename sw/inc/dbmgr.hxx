@@ -239,6 +239,7 @@ class SwDoc;
 class SW_DLLPUBLIC SwDBManager
 {
 friend class SwConnectionDisposedListener_Impl;
+    class MailDispatcherListener_Impl;
 
     enum class MergeStatus
     {

@@ -136,6 +136,7 @@
 #include <calc.hxx>
 #include <dbfld.hxx>
 #include <IDocumentState.hxx>
+#include <imaildsplistener.hxx>
 
 #include <memory>
 #include <comphelper/propertysequence.hxx>
@@ -300,10 +301,12 @@ void SwDataSourceRemovedListener::Dispose()
 
 struct SwDBManager_Impl
 {
-    SwDSParam*                    pMergeData;
+    SwDSParam                    *pMergeData;
     VclPtr<AbstractMailMergeDlg>  pMergeDialog;
     ::rtl::Reference<SwConnectionDisposedListener_Impl> m_xDisposeListener;
     rtl::Reference<SwDataSourceRemovedListener> m_xDataSourceRemovedListener;
+    osl::Mutex                    m_aAllEmailSendMutex;
+    uno::Reference< mail::XMailMessage> m_xLastMessage;
 
     explicit SwDBManager_Impl(SwDBManager& rDBManager)
        :pMergeData(nullptr)
@@ -1026,14 +1029,13 @@ static SfxObjectShell* lcl_CreateWorkingDocument(
     return xWorkObjectShell.get();
 }
 
-uno::Reference< mail::XMailMessage > lcl_CreateMailFromDoc(
+static SwMailMessage* lcl_CreateMailFromDoc(
     const SwMergeDescriptor &rMergeDescriptor,
     const OUString &sFileURL, const OUString &sMailRecipient,
     const OUString &sMailBodyMimeType, rtl_TextEncoding sMailEncoding,
     const OUString &sAttachmentMimeType )
 {
     SwMailMessage* pMessage = new SwMailMessage;
-    uno::Reference< mail::XMailMessage > xMessage = pMessage;
     if( rMergeDescriptor.pMailMergeConfigItem->IsMailReplyTo() )
         pMessage->setReplyToAddress(rMergeDescriptor.pMailMergeConfigItem->GetMailReplyTo());
     pMessage->addRecipient( sMailRecipient );
@@ -1056,7 +1058,7 @@ uno::Reference< mail::XMailMessage > lcl_CreateMailFromDoc(
         SvStream* pInStream = aMedium.GetInStream();
         assert( pInStream && "no output file created?" );
         if( !pInStream )
-            return xMessage;
+            return pMessage;
 
         pInStream->SetStreamCharSet( sMailEncoding );
         OString sLine;
@@ -1076,9 +1078,38 @@ uno::Reference< mail::XMailMessage > lcl_CreateMailFromDoc(
     for( const OUString& sBccRecipient : rMergeDescriptor.aBlindCopiesTo )
         pMessage->addBccRecipient( sBccRecipient );
 
-    xMessage = pMessage;
-    return xMessage;
+    return pMessage;
 }
+
+class SwDBManager::MailDispatcherListener_Impl : public IMailDispatcherListener
+{
+    SwDBManager &m_rDBManager;
+
+public:
+    explicit MailDispatcherListener_Impl( SwDBManager &rDBManager )
+        : m_rDBManager( rDBManager ) {}
+
+    virtual void started( ::rtl::Reference<MailDispatcher> ) override {};
+    virtual void stopped( ::rtl::Reference<MailDispatcher> ) override {};
+    virtual void idle( ::rtl::Reference<MailDispatcher> ) override {};
+
+    virtual void mailDelivered( ::rtl::Reference<MailDispatcher>,
+                 uno::Reference< mail::XMailMessage> xMessage ) override
+    {
+        osl::MutexGuard aGuard( m_rDBManager.pImpl->m_aAllEmailSendMutex );
+        if ( m_rDBManager.pImpl->m_xLastMessage == xMessage )
+            m_rDBManager.pImpl->m_xLastMessage.clear();
+    }
+
+    virtual void mailDeliveryError( ::rtl::Reference<MailDispatcher> xMailDispatcher,
+                uno::Reference< mail::XMailMessage>, const OUString& ) override
+    {
+        osl::MutexGuard aGuard( m_rDBManager.pImpl->m_aAllEmailSendMutex );
+        m_rDBManager.m_aMergeStatus = MergeStatus::ERROR;
+        m_rDBManager.pImpl->m_xLastMessage.clear();
+        xMailDispatcher->stop();
+    }
+};
 
 /**
  * Please have a look at the README in the same directory, before you make
@@ -1126,7 +1157,8 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
             nMaxDumpDocs = OUString(sMaxDumpDocs, strlen(sMaxDumpDocs), osl_getThreadTextEncoding()).toInt32();
     }
 
-    ::rtl::Reference< MailDispatcher >  xMailDispatcher;
+    ::rtl::Reference< MailDispatcher >          xMailDispatcher;
+    ::rtl::Reference< IMailDispatcherListener > xMailListener;
     OUString                            sMailBodyMimeType;
     rtl_TextEncoding                    sMailEncoding = ::osl_getThreadTextEncoding();
 
@@ -1154,7 +1186,12 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
 
         if( bMT_EMAIL )
         {
-            xMailDispatcher.set( new MailDispatcher(rMergeDescriptor.xSmtpServer));
+            // Reset internal mail accounting data
+            pImpl->m_xLastMessage.clear();
+
+            xMailDispatcher.set( new MailDispatcher(rMergeDescriptor.xSmtpServer) );
+            xMailListener = new MailDispatcherListener_Impl( *this );
+            xMailDispatcher->addListener( xMailListener );
             if(!rMergeDescriptor.bSendAsAttachment && rMergeDescriptor.bSendAsHTML)
             {
                 sMailBodyMimeType = "text/html; charset=";
@@ -1491,6 +1528,8 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                             sMailEncoding, pStoreToFilter->GetMimeType() );
                         if( xMessage.is() )
                         {
+                            osl::MutexGuard aGuard( pImpl->m_aAllEmailSendMutex );
+                            pImpl->m_xLastMessage.set( xMessage );
                             xMailDispatcher->enqueueMailMessage( xMessage );
                             if( !xMailDispatcher->isStarted() )
                                 xMailDispatcher->start();
@@ -1600,10 +1639,6 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
 
     pProgressDlg.disposeAndClear();
 
-    // remove the temporary files
-    for( const OUString &sFileURL : aFilesToRemove )
-        SWUnoHelper::UCB_DeleteFile( sFileURL );
-
     // unlock all dispatchers
     pViewFrame = SfxViewFrame::GetFirst(pSourceDocSh);
     while (pViewFrame)
@@ -1616,9 +1651,28 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
 
     if( xMailDispatcher.is() )
     {
+        if( IsMergeOk() )
+        {
+            // TODO: Instead of polling via an AutoTimer, post an Idle event,
+            // if the main loop has been made thread-safe.
+            AutoTimer aEmailDispatcherPollTimer;
+            aEmailDispatcherPollTimer.SetDebugName(
+                "sw::SwDBManager aEmailDispatcherPollTimer" );
+            aEmailDispatcherPollTimer.SetTimeout( 500 );
+            aEmailDispatcherPollTimer.Start();
+            while( IsMergeOk() && pImpl->m_xLastMessage.is() )
+                Application::Yield();
+            aEmailDispatcherPollTimer.Stop();
+        }
         xMailDispatcher->stop();
         xMailDispatcher->shutdown();
     }
+
+    // remove the temporary files
+    // has to be done after xMailDispatcher is finished, as mails may be
+    // delivered as message attachments!
+    for( const OUString &sFileURL : aFilesToRemove )
+        SWUnoHelper::UCB_DeleteFile( sFileURL );
 
     return !IsMergeError();
 }
