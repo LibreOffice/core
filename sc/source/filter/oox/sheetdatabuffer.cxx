@@ -349,14 +349,14 @@ void addIfNotInMyMap( StylesBuffer& rStyles, std::map< FormatKeyPair, ApiCellRan
     }
 }
 
-void SheetDataBuffer::addColXfStyle( sal_Int32 nXfId, sal_Int32 nFormatId, const css::table::CellRangeAddress& rAddress, bool bProcessRowRange )
+void SheetDataBuffer::addColXfStyle( sal_Int32 nXfId, sal_Int32 nFormatId, const ScRange& rAddress, bool bProcessRowRange )
 {
     RowRangeStyle aStyleRows;
     aStyleRows.mnNumFmt.first = nXfId;
     aStyleRows.mnNumFmt.second = nFormatId;
-    aStyleRows.mnStartRow = rAddress.StartRow;
-    aStyleRows.mnEndRow = rAddress.EndRow;
-    for ( sal_Int32 nCol = rAddress.StartColumn; nCol <= rAddress.EndColumn; ++nCol )
+    aStyleRows.mnStartRow = rAddress.aStart.Row();
+    aStyleRows.mnEndRow = rAddress.aEnd.Row();
+    for ( sal_Int32 nCol = rAddress.aStart.Col(); nCol <= rAddress.aEnd.Col(); ++nCol )
     {
         if ( !bProcessRowRange )
             maStylesPerColumn[ nCol ].insert( aStyleRows );
@@ -364,8 +364,8 @@ void SheetDataBuffer::addColXfStyle( sal_Int32 nXfId, sal_Int32 nFormatId, const
         {
             RowStyles& rRowStyles = maStylesPerColumn[ nCol ];
             // Reset row range for each column
-            aStyleRows.mnStartRow = rAddress.StartRow;
-            aStyleRows.mnEndRow = rAddress.EndRow;
+            aStyleRows.mnStartRow = rAddress.aStart.Row();
+            aStyleRows.mnEndRow = rAddress.aEnd.Row();
 
             // If aStyleRows includes rows already allocated to a style
             // in rRowStyles, then we need to split it into parts.
@@ -427,7 +427,9 @@ void SheetDataBuffer::finalizeImport()
     {
         const ApiCellRangeList& rRanges( it->second );
         for ( ::std::vector< CellRangeAddress >::const_iterator it_range = rRanges.begin(), it_rangeend = rRanges.end(); it_range!=it_rangeend; ++it_range )
-            addColXfStyle( it->first.first, it->first.second, *it_range );
+            addColXfStyle( it->first.first, it->first.second,
+                           ScRange( (*it_range).StartColumn, (*it_range).StartRow, (*it_range).Sheet,
+                                    (*it_range).EndColumn, (*it_range).EndRow, (*it_range).Sheet ));
     }
 
     for ( std::map< sal_Int32, std::vector< ValueRange > >::iterator it = maXfIdRowRangeList.begin(), it_end =  maXfIdRowRangeList.end(); it != it_end; ++it )
@@ -439,7 +441,8 @@ void SheetDataBuffer::finalizeImport()
         {
             if ( it->first == -1 ) // it's a dud skip it
                 continue;
-            CellRangeAddress aRange( getSheetIndex(), 0, rangeIter->mnFirst, rAddrConv.getMaxApiAddress().Col(), rangeIter->mnLast );
+            ScRange aRange( 0, rangeIter->mnFirst, getSheetIndex(),
+                            rAddrConv.getMaxApiAddress().Col(), rangeIter->mnLast, getSheetIndex() );
 
             addColXfStyle( it->first, -1, aRange, true );
         }
