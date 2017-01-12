@@ -25,6 +25,8 @@ using namespace com::sun::star;
 
 namespace sc {
 
+namespace {
+
 SvStream* FetchStreamFromURL(const OUString& rURL)
 {
     uno::Reference< ucb::XSimpleFileAccess3 > xFileAccess( ucb::SimpleFileAccess::create( comphelper::getProcessComponentContext() ), uno::UNO_QUERY );
@@ -52,6 +54,8 @@ SvStream* FetchStreamFromURL(const OUString& rURL)
     SvStream* pStream = new SvMemoryStream(const_cast<char*>(aBuffer->getStr()), aBuffer->getLength(), StreamMode::READ);
 
     return pStream;
+}
+
 }
 
 ExternalDataMapper::ExternalDataMapper(ScDocShell* pDocShell, const OUString& rURL, const OUString& rName, SCTAB nTab,
