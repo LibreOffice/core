@@ -54,9 +54,6 @@ struct CIEXYZ
         aXyzY(0),
         aXyzZ(0)
     {}
-
-    ~CIEXYZ()
-    {}
 };
 
 struct CIEXYZTriple
@@ -69,9 +66,6 @@ struct CIEXYZTriple
     :   aXyzRed(),
         aXyzGreen(),
         aXyzBlue()
-    {}
-
-    ~CIEXYZTriple()
     {}
 };
 
@@ -101,9 +95,6 @@ struct DIBInfoHeader
         nYPelsPerMeter(0UL),
         nColsUsed(0UL),
         nColsImportant(0UL)
-    {}
-
-    ~DIBInfoHeader()
     {}
 };
 

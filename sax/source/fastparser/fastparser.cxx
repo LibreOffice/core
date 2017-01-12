@@ -128,7 +128,6 @@ struct ParserData
     css::lang::Locale                                          maLocale;
 
     ParserData();
-    ~ParserData();
 };
 
 struct NamespaceDefine
@@ -376,9 +375,6 @@ OUString SAL_CALL FastLocatorImpl::getSystemId() throw (RuntimeException, std::e
 
 ParserData::ParserData()
     : mpTokenHandler( nullptr )
-{}
-
-ParserData::~ParserData()
 {}
 
 Entity::Entity(const ParserData& rData)

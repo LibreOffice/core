@@ -577,7 +577,6 @@ public:
 
                          /// Create without ui properties
                          PrinterOptionsHelper() {}
-                         ~PrinterOptionsHelper() {}
 
     /** Process a new set of properties
 

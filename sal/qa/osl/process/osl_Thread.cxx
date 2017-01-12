@@ -63,7 +63,6 @@ protected:
 
 public:
     StopWatch();
-    ~StopWatch() {}
 
     void start();                                 // Starts time
     void stop();                                  // Stops time

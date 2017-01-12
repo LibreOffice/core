@@ -71,10 +71,6 @@ namespace basegfx
                 mfAtan2 = atan2(maEnd.getY() - maStart.getY(), maEnd.getX() - maStart.getX());
             }
 
-            ~EdgeEntry()
-            {
-            }
-
             bool operator<(const EdgeEntry& rComp) const
             {
                 if(::basegfx::fTools::equal(maStart.getY(), rComp.maStart.getY()))

@@ -113,9 +113,15 @@ struct PureDerived: PureBase {
     ~PureDerived() override {} // expected-error {{unnecessary user-declared destructor [loplugin:unnecessaryoverride]}}
 };
 
+struct CompleteBase {
+    ~CompleteBase() {} // expected-error {{unnecessary user-declared destructor [loplugin:unnecessaryoverride]}}
+};
+
+
 // aovid loplugin:unreffun:
 int main() {
     (void) NonVirtualDerived1();
+    (void) CompleteBase();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

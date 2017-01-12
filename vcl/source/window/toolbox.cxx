@@ -113,7 +113,6 @@ private:
 
 public:
                     ImplTBDragMgr();
-                    ~ImplTBDragMgr();
 
     void            push_back( ToolBox* pBox )
                         { mpBoxList->push_back( pBox ); }
@@ -1141,10 +1140,6 @@ ImplTBDragMgr::ImplTBDragMgr()
     maAccel.InsertItem( KEY_RETURN, vcl::KeyCode( KEY_RETURN ) );
     maAccel.InsertItem( KEY_ESCAPE, vcl::KeyCode( KEY_ESCAPE ) );
     maAccel.SetSelectHdl( LINK( this, ImplTBDragMgr, SelectHdl ) );
-}
-
-ImplTBDragMgr::~ImplTBDragMgr()
-{
 }
 
 ToolBox* ImplTBDragMgr::FindToolBox( const Rectangle& rRect )

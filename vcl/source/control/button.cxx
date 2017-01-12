@@ -72,7 +72,6 @@ class ImplCommonButtonData
 {
 public:
     ImplCommonButtonData();
-    ~ImplCommonButtonData();
 
     Rectangle       maFocusRect;
     long            mnSeparatorX;
@@ -89,10 +88,6 @@ public:
 
 ImplCommonButtonData::ImplCommonButtonData() : maFocusRect(), mnSeparatorX(0), mnButtonState(DrawButtonFlags::NONE),
 mbSmallSymbol(false), maImage(), meImageAlign(ImageAlign::Top), meSymbolAlign(SymbolAlign::LEFT)
-{
-}
-
-ImplCommonButtonData::~ImplCommonButtonData()
 {
 }
 
