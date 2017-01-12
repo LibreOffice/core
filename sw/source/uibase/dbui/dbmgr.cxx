@@ -1050,7 +1050,7 @@ uno::Reference< mail::XMailMessage > lcl_CreateMailFromDoc(
         SfxMedium aMedium( sFileURL, StreamMode::READ );
         SvStream* pInStream = aMedium.GetInStream();
         assert( pInStream && "no output file created?" );
-        if( pInStream )
+        if( !pInStream )
             return xMessage;
 
         pInStream->SetStreamCharSet( sMailEncoding );
