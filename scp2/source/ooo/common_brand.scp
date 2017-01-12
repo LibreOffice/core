@@ -644,15 +644,6 @@ End
 
 // ProfileItems
 
-ProfileItem gid_Brand_Profileitem_Bootstrap_Errorreport_Server
-    ProfileID = gid_Brand_Profile_Bootstrap_Ini;
-    ModuleID = gid_Module_Root_Brand;
-    Section = "ErrorReport";
-    Order = 8;
-    Key = "ErrorReportServer";
-    Value = "report.libreoffice.org";
-End
-
 ProfileItem gid_Brand_Profileitem_Bootstrap_Productkey
     ProfileID = gid_Brand_Profile_Bootstrap_Ini;
     ModuleID = gid_Module_Root_Brand;
@@ -660,15 +651,6 @@ ProfileItem gid_Brand_Profileitem_Bootstrap_Productkey
     Order = 1;
     Key = "ProductKey";
     Value = "<productkey>";
-End
-
-ProfileItem gid_Brand_Profileitem_Bootstrap_Errorreport_Port
-    ProfileID = gid_Brand_Profile_Bootstrap_Ini;
-    ModuleID = gid_Module_Root_Brand;
-    Section = "ErrorReport";
-    Order = 7;
-    Key = "ErrorReportPort";
-    Value = "80";
 End
 
 ProfileItem gid_Brand_Profileitem_Bootstrap_Installmode

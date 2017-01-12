@@ -34,10 +34,7 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_
 $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_rcfile,bootstrap) :
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
 	( \
-		echo '[ErrorReport]' \
-		&& echo 'ErrorReportPort=80' \
-		&& echo 'ErrorReportServer=report.libreoffice.org' \
-		&& echo '[Bootstrap]' \
+		echo '[Bootstrap]' \
 		&& echo 'InstallMode=<installmode>' \
 		&& echo 'ProductKey=$(PRODUCTNAME) $(PRODUCTVERSION)' \
 		$(if $(ENABLE_RELEASE_BUILD),\
