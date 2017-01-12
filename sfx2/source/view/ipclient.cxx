@@ -932,7 +932,7 @@ ErrCode SfxInPlaceClient::DoVerb( long nVerb )
                 }
                 catch ( embed::UnreachableStateException& )
                 {
-                    if ( nVerb == 0 || nVerb == embed::EmbedVerbs::MS_OLEVERB_OPEN )
+                    if (nVerb == embed::EmbedVerbs::MS_OLEVERB_PRIMARY || nVerb == embed::EmbedVerbs::MS_OLEVERB_OPEN || embed::EmbedVerbs::MS_OLEVERB_SHOW)
                     {
                         // a workaround for the default verb, usually makes sense for alien objects
                         try
