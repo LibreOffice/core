@@ -1441,12 +1441,13 @@ ApiParserWrapper::ApiParserWrapper(
     maParserProps.setProperty( PROP_OpCodeMap, getOoxParserMap() );
 }
 
-ApiTokenSequence ApiParserWrapper::parseFormula( const OUString& rFormula, const CellAddress& rRefPos )
+ApiTokenSequence ApiParserWrapper::parseFormula( const OUString& rFormula, const ScAddress& rRefPos )
 {
     ApiTokenSequence aTokenSeq;
     if( mxParser.is() ) try
     {
-        aTokenSeq = mxParser->parseFormula( rFormula, rRefPos );
+        aTokenSeq = mxParser->parseFormula( rFormula,
+                                            CellAddress(rRefPos.Tab(), rRefPos.Col(), rRefPos.Row()) );
     }
     catch( Exception& )
     {

@@ -40,7 +40,7 @@ class OOXMLFormulaParserImpl : private FormulaFinalizer
 public:
     explicit            OOXMLFormulaParserImpl( const Reference< XMultiServiceFactory >& rxModelFactory );
 
-    Sequence< FormulaToken > parseFormula( const OUString& rFormula, const CellAddress& rReferencePos );
+    Sequence< FormulaToken > parseFormula( const OUString& rFormula, const ScAddress& rReferencePos );
 
 protected:
     virtual const FunctionInfo* resolveBadFuncName( const OUString& rTokenData ) const override;
@@ -55,7 +55,7 @@ OOXMLFormulaParserImpl::OOXMLFormulaParserImpl( const Reference< XMultiServiceFa
 {
 }
 
-Sequence< FormulaToken > OOXMLFormulaParserImpl::parseFormula( const OUString& rFormula, const CellAddress& rReferencePos )
+Sequence< FormulaToken > OOXMLFormulaParserImpl::parseFormula( const OUString& rFormula, const ScAddress& rReferencePos )
 {
     return finalizeTokenArray( maApiParser.parseFormula( rFormula, rReferencePos ) );
 }
@@ -151,7 +151,8 @@ Sequence< FormulaToken > SAL_CALL OOXMLFormulaParser::parseFormula(
         Reference< XMultiServiceFactory > xModelFactory( mxComponent, UNO_QUERY_THROW );
         mxParserImpl.reset( new OOXMLFormulaParserImpl( xModelFactory ) );
     }
-    return mxParserImpl->parseFormula( rFormula, rReferencePos );
+    return mxParserImpl->parseFormula( rFormula,
+                                       ScAddress(rReferencePos.Column, rReferencePos.Row, rReferencePos.Sheet) );
 }
 
 OUString SAL_CALL OOXMLFormulaParser::printFormula(

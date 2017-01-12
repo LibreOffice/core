@@ -609,7 +609,7 @@ public:
     /** Calls the XFormulaParser::parseFormula() function of the API parser. */
     ApiTokenSequence    parseFormula(
                             const OUString& rFormula,
-                            const css::table::CellAddress& rRefPos );
+                            const ScAddress& rRefPos );
 
 private:
     css::uno::Reference< css::sheet::XFormulaParser >
