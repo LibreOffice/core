@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a6eadb0_0ef3b174",
+        "filename": "filter/source/svg/presentation_engine.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 14886,
+      "author": {
+        "id": 1000119
+      },
+      "writtenOn": "2017-01-12T22:19:46Z",
+      "side": 1,
+      "message": "Better to move the function code to the \n\n/**********************************\n ** Helper functions and classes **\n **********************************/\n\nat the beginning (well \u003e ~1900 rows) of the script",
+      "revId": "f4b6f9ae13fd0680f6c039f303e0d88bc63b7005",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
