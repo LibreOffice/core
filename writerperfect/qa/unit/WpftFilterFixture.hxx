@@ -52,6 +52,10 @@ namespace container
 {
 class XNameAccess;
 }
+namespace document
+{
+class XTypeDetection;
+}
 namespace frame
 {
 class XDesktop2;
@@ -73,6 +77,7 @@ public:
 
 protected:
     css::uno::Reference<css::frame::XDesktop2> m_xDesktop;
+    css::uno::Reference<css::document::XTypeDetection> m_xTypeDetection;
     css::uno::Reference<css::container::XNameAccess> m_xTypeMap;
 };
 
