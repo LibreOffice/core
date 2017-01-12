@@ -848,10 +848,8 @@ static int getButtonPriority(const OString &rType)
     const OUString &rEnv = Application::GetDesktopEnvironment();
 
     if (rEnv.equalsIgnoreAsciiCase("windows") ||
-        rEnv.equalsIgnoreAsciiCase("kde5") ||
-        rEnv.equalsIgnoreAsciiCase("kde4") ||
         rEnv.equalsIgnoreAsciiCase("tde") ||
-        rEnv.equalsIgnoreAsciiCase("kde"))
+        rEnv.startsWithIgnoreAsciiCase("kde"))
     {
         pOrder = &aSaveDiscardCancel[0];
     }
