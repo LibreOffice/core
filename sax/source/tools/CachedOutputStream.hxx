@@ -49,7 +49,6 @@ public:
                          , mbWriteToOutStream(true)
                          , mpForMerge(nullptr)
     {}
-    ~CachedOutputStream() {}
 
     const css::uno::Reference< css::io::XOutputStream >& getOutputStream() const
     {

@@ -54,7 +54,6 @@ private:
 
 public:
     explicit XMLElementWrapper_XmlSecImpl(const xmlNodePtr pNode);
-    virtual ~XMLElementWrapper_XmlSecImpl() override {};
 
     /* XXMLElementWrapper */
 

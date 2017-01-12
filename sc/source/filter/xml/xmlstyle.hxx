@@ -340,7 +340,6 @@ public:
 class XmlScPropHdl_IsEqual : public XMLPropertyHandler
 {
 public:
-    virtual ~XmlScPropHdl_IsEqual() override {}
     virtual bool equals( const css::uno::Any& /* r1 */, const css::uno::Any& /* r2 */ ) const override { return true; }
     virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
     virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;

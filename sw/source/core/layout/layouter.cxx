@@ -51,7 +51,6 @@ class SwEndnoter
 public:
     explicit SwEndnoter( SwLayouter* pLay )
         : pMaster( pLay ), pSect( nullptr ) {}
-    ~SwEndnoter() {}
     void CollectEndnotes( SwSectionFrame* pSct );
     void CollectEndnote( SwFootnoteFrame* pFootnote );
     const SwSectionFrame* GetSect() const { return pSect; }

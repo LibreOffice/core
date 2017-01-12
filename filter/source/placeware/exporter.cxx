@@ -76,7 +76,6 @@ private:
 
 public:
     PageEntry();
-    ~PageEntry();
 
     OUString getTempURL() { return maTempFile.getFileURL(); }
 
@@ -97,11 +96,6 @@ PageEntry::PageEntry()
 : maTempFile( PlaceWareTempFile::createTempFileURL() )
 {
 }
-
-PageEntry::~PageEntry()
-{
-}
-
 
 static void encodeFile( osl::File& rSourceFile, Reference< XOutputStream > const & xOutputStream ) throw( css::uno::Exception )
 {

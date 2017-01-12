@@ -55,7 +55,6 @@ namespace pcr
                 const css::uno::Any& _rEnumValue
             ) const = 0;
 
-        virtual ~IPropertyEnumRepresentation() override { };
     };
 
 

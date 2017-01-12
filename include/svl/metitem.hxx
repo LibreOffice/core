@@ -28,7 +28,6 @@ public:
     explicit                 SfxMetricItem( sal_uInt16 nWhich, sal_uInt32 nValue );
                              SfxMetricItem( sal_uInt16 nWhich, SvStream & );
                              SfxMetricItem( const SfxMetricItem& );
-                             virtual ~SfxMetricItem() override {}
 
     virtual void             ScaleMetrics( long lMult, long lDiv ) override;
     virtual bool             HasMetrics() const override;

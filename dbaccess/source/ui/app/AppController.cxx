@@ -216,10 +216,6 @@ public:
         m_aSelectionListeners.disposeAndClear( aEvent );
     }
 
-    ~SelectionNotifier()
-    {
-    }
-
     struct SelectionGuardAccess { friend class SelectionGuard; private: SelectionGuardAccess() { }  };
 
     /** enters a block which modifies the selection of our owner.

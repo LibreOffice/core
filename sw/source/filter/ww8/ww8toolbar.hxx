@@ -85,7 +85,6 @@ class TBDelta : public TBBase
 
 public:
     TBDelta();
-    virtual ~TBDelta() override {}
     bool Read(SvStream &rS) override;
 #if OSL_DEBUG_LEVEL > 1
     virtual void Print( FILE* ) override;
@@ -108,7 +107,6 @@ protected:
 
 public:
     explicit Tcg255SubStruct();
-    virtual ~Tcg255SubStruct() override {}
     sal_uInt8 id() const { return ch; }
     bool Read(SvStream &rS) override;
 };
@@ -221,7 +219,6 @@ class Acd : public TBBase
 
 public:
     Acd();
-    virtual ~Acd() override {}
     bool Read(SvStream &rS) override;
 #if OSL_DEBUG_LEVEL > 1
     virtual void Print( FILE* ) override;
@@ -315,7 +312,6 @@ class TcgSttbf : public Tcg255SubStruct
 
 public:
     explicit TcgSttbf();
-    virtual ~TcgSttbf() override {}
     bool Read(SvStream &rS) override;
 #if OSL_DEBUG_LEVEL > 1
     virtual void Print( FILE* fp ) override;
@@ -332,7 +328,6 @@ class Xstz : public TBBase
 
 public:
     Xstz();
-    virtual ~Xstz() override {}
     bool Read(SvStream &rS) override;
 #if OSL_DEBUG_LEVEL > 1
     virtual void Print( FILE* fp ) override;
@@ -348,7 +343,6 @@ class MacroName : public TBBase
 
 public:
     MacroName();
-    virtual ~MacroName() override {}
     bool Read(SvStream &rS) override;
 #if OSL_DEBUG_LEVEL > 1
     virtual void Print( FILE* ) override;
@@ -398,7 +392,6 @@ class Tcg: public TBBase
 
 public:
     Tcg();
-    virtual ~Tcg() override {}
     bool Read(SvStream &rS) override;
     bool ImportCustomToolBar( SfxObjectShell& rDocSh );
 #if OSL_DEBUG_LEVEL > 1

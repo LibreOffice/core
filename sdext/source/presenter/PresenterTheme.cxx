@@ -93,7 +93,6 @@ public:
     ReadContext (
         const Reference<XComponentContext>& rxContext,
         const Reference<rendering::XCanvas>& rxCanvas);
-    ~ReadContext();
 
     /** Read data describing a font from the node that can be reached from
         the given root via the given path.
@@ -126,7 +125,6 @@ class PaneStyle
 {
 public:
     PaneStyle();
-    ~PaneStyle();
 
     const SharedBitmapDescriptor GetBitmap (const OUString& sBitmapName) const;
 
@@ -167,7 +165,6 @@ class ViewStyle
 {
 public:
     ViewStyle();
-    ~ViewStyle();
 
     const SharedBitmapDescriptor GetBitmap (const OUString& sBitmapName) const;
 
@@ -233,7 +230,6 @@ public:
         const OUString& rsName,
         const Reference<container::XHierarchicalNameAccess>& rThemeRoot,
         const OUString& rsNodeName);
-    ~Theme();
 
     void Read (
         PresenterConfigurationAccess& rConfiguration,
@@ -598,10 +594,6 @@ PresenterTheme::Theme::Theme (
 {
 }
 
-PresenterTheme::Theme::~Theme()
-{
-}
-
 void PresenterTheme::Theme::Read (
     PresenterConfigurationAccess& rConfiguration,
     ReadContext& rReadContext)
@@ -710,10 +702,6 @@ ReadContext::ReadContext (
                 rxContext),
             UNO_QUERY_THROW);
     }
-}
-
-ReadContext::~ReadContext()
-{
 }
 
 PresenterTheme::SharedFontDescriptor ReadContext::ReadFont (
@@ -951,10 +939,6 @@ PaneStyle::PaneStyle()
 {
 }
 
-PaneStyle::~PaneStyle()
-{
-}
-
 const SharedBitmapDescriptor PaneStyle::GetBitmap (const OUString& rsBitmapName) const
 {
     if (mpBitmaps.get() != nullptr)
@@ -1068,10 +1052,6 @@ ViewStyle::ViewStyle()
       mpParentStyle(),
       mpFont(),
       mpBackground()
-{
-}
-
-ViewStyle::~ViewStyle()
 {
 }
 

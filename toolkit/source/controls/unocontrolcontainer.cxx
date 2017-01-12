@@ -73,7 +73,6 @@ private:
 
 public:
     UnoControlHolderList();
-    ~UnoControlHolderList();
 
     /** adds a control with the given name to the list
         @param _rxControl
@@ -161,11 +160,6 @@ private:
 
 
 UnoControlHolderList::UnoControlHolderList()
-{
-}
-
-
-UnoControlHolderList::~UnoControlHolderList()
 {
 }
 

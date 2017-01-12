@@ -104,8 +104,6 @@ public:
 
     ArgInput();
 
-    ~ArgInput() {}
-
     void        InitArgInput (  FixedText*      pftArg,
                                 PushButton*    pbtnFx,
                                 ArgEdit*        pedArg,

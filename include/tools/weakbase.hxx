@@ -55,11 +55,6 @@ inline WeakReference< reference_type >::WeakReference( WeakReference< reference_
 }
 
 template< class reference_type >
-inline WeakReference< reference_type >::~WeakReference()
-{
-}
-
-template< class reference_type >
 inline bool WeakReference< reference_type >::is() const
 {
     return mpWeakConnection->mpReference != 0;

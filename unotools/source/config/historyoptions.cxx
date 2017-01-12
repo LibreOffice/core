@@ -67,7 +67,6 @@ class SvtHistoryOptions_Impl
 {
 public:
     SvtHistoryOptions_Impl();
-    ~SvtHistoryOptions_Impl();
 
     /// Returns the maximum size of the internal lists, ie. the capacity not the size.
     sal_uInt32 GetCapacity(EHistoryType eHistory);
@@ -120,10 +119,6 @@ SvtHistoryOptions_Impl::SvtHistoryOptions_Impl()
 
         SAL_WARN("unotools.config", "Caught unexpected: " << ex.Message);
     }
-}
-
-SvtHistoryOptions_Impl::~SvtHistoryOptions_Impl()
-{
 }
 
 sal_uInt32 SvtHistoryOptions_Impl::GetCapacity(EHistoryType eHistory)

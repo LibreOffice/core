@@ -72,7 +72,6 @@ struct EmitImplData
         m_nDecryptObject( 0 ),
         m_nDecryptGeneration( 0 )
     {}
-    ~EmitImplData() {}
     void decrypt( const sal_uInt8* pInBuffer, sal_uInt32 nLen, sal_uInt8* pOutBuffer,
                   unsigned int nObject, unsigned int nGeneration ) const
     {

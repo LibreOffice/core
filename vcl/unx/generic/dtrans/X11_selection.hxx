@@ -235,7 +235,6 @@ namespace x11 {
                     m_pTarget( rEntry.m_pTarget ),
                     m_aRootWindow( rEntry.m_aRootWindow )
                 {}
-            ~DropTargetEntry() {}
 
             DropTarget* operator->() const { return m_pTarget; }
             DropTargetEntry& operator=(const DropTargetEntry& rEntry)

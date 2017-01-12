@@ -35,7 +35,6 @@ public:
                              SfxRectangleItem();
                              SfxRectangleItem( sal_uInt16 nWhich, const Rectangle& rVal );
                              SfxRectangleItem( const SfxRectangleItem& );
-                             virtual ~SfxRectangleItem() override {}
 
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,

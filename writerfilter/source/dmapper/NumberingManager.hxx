@@ -73,8 +73,6 @@ public:
         ,m_outline(false)
         {}
 
-    virtual ~ListLevel( ) override { }
-
     // Setters for the import
     void SetValue( Id nId, sal_Int32 nValue );
     void SetBulletChar( const OUString& sValue ) { m_sBulletChar = sValue; };

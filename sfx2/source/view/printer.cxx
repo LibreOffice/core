@@ -47,7 +47,6 @@ struct SfxPrinter_Impl
         mbSelection ( true ),
         mbFromTo    ( true ),
         mbRange     ( true ) {}
-    ~SfxPrinter_Impl() {}
 };
 
 struct SfxPrintOptDlg_Impl

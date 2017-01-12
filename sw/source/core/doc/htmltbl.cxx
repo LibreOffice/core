@@ -63,7 +63,6 @@ class SwHTMLTableLayoutConstraints
 public:
     SwHTMLTableLayoutConstraints( sal_uLong nMin, sal_uLong nMax, sal_uInt16 nRow,
                                 sal_uInt16 nCol, sal_uInt16 nColSp );
-    ~SwHTMLTableLayoutConstraints();
 
     sal_uLong GetMinNoAlign() const { return nMinNoAlign; }
     sal_uLong GetMaxNoAlign() const { return nMaxNoAlign; }
@@ -128,10 +127,6 @@ SwHTMLTableLayoutConstraints::SwHTMLTableLayoutConstraints(
     pNext( nullptr ),
     nMinNoAlign( nMin ), nMaxNoAlign( nMax )
 {}
-
-SwHTMLTableLayoutConstraints::~SwHTMLTableLayoutConstraints()
-{
-}
 
 SwHTMLTableLayoutConstraints *SwHTMLTableLayoutConstraints::InsertNext(
     SwHTMLTableLayoutConstraints *pNxt )

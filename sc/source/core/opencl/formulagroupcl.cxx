@@ -1097,9 +1097,6 @@ public:
             }
         }
     }
-    ~DynamicKernelSlidingArgument()
-    {
-    }
 
     size_t GetArrayLength() const { return mpDVR->GetArrayLength(); }
 

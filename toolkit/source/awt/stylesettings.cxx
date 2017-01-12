@@ -87,10 +87,6 @@ namespace toolkit
                 throw DisposedException();
         }
 
-        ~StyleMethodGuard()
-        {
-        }
-
     private:
         SolarMutexGuard  m_aGuard;
     };

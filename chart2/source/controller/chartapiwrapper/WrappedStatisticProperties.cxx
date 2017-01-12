@@ -176,7 +176,6 @@ public:
                               , tSeriesOrDiagramPropertyType ePropertyType )
             : WrappedSeriesOrDiagramProperty< PROPERTYTYPE >(rName,rDefaulValue,spChart2ModelContact,ePropertyType)
     {}
-    virtual ~WrappedStatisticProperty() {};
 
 protected:
     static uno::Reference< beans::XPropertySet > getOrCreateErrorBarProperties( const Reference< beans::XPropertySet >& xSeriesPropertySet )

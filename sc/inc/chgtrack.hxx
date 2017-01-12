@@ -52,7 +52,6 @@ private:
 
 public:
     ScActionColorChanger( const ScChangeTrack& rTrack );
-    ~ScActionColorChanger() {}
     void        Update( const ScChangeAction& rAction );
     ColorData   GetColor() const    { return nColor; }
 };

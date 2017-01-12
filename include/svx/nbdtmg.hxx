@@ -69,7 +69,6 @@ class  SVX_DLLPUBLIC NumSettings_Impl
             , pBrushItem(nullptr)
             , aSize(0,0)
         {}
-        ~NumSettings_Impl(){}
 };
 
 typedef std::vector< std::shared_ptr<NumSettings_Impl> > NumSettingsArr_Impl;
@@ -100,7 +99,6 @@ class  SVX_DLLPUBLIC NumberSettings_Impl
             nIndexDefault((sal_uInt16)0xFFFF),
             pNumSetting(nullptr)
             {}
-        ~NumberSettings_Impl(){}
 };
 
 typedef std::vector< std::shared_ptr<NumberSettings_Impl> > NumberSettingsArr_Impl;
@@ -116,8 +114,6 @@ class  SVX_DLLPUBLIC OutlineSettings_Impl
             bIsCustomized(false),
             pNumSettingsArr(nullptr)
             {}
-        ~OutlineSettings_Impl(){
-        }
 };
 
 class SVX_DLLPUBLIC NBOTypeMgrBase
@@ -169,7 +165,6 @@ class SVX_DLLPUBLIC BulletsTypeMgr: public NBOTypeMgrBase
         static BulletsSettings* pActualBullets[DEFAULT_BULLET_TYPES];
     public:
         BulletsTypeMgr();
-        virtual ~BulletsTypeMgr() override {}
         virtual void Init() override;
         virtual sal_uInt16 GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 mLevel,sal_uInt16 nFromIndex=0) override;
         virtual void RelplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt16 mLevel) override;
@@ -208,7 +203,6 @@ class SVX_DLLPUBLIC OutlineTypeMgr: public NBOTypeMgrBase
         OutlineSettings_Impl*       pDefaultOutlineSettingsArrs[DEFAULT_NUM_VALUSET_COUNT];
     public:
         OutlineTypeMgr();
-        virtual ~OutlineTypeMgr() override {}
         virtual void Init() override;
         virtual sal_uInt16 GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 mLevel,sal_uInt16 nFromIndex=0) override;
         virtual void RelplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt16 mLevel) override;

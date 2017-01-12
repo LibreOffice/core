@@ -36,7 +36,6 @@ namespace reportdesign
         virtual css::uno::Reference< css::drawing::XShape >  CreateShape( SdrObject *pObj ) const throw (css::uno::RuntimeException, std::exception) override;
     public:
         OReportDrawPage(SdrPage* pPage,const css::uno::Reference< css::report::XSection >& _xSection);
-        virtual ~OReportDrawPage() throw() override {}
     };
 }
 #endif // INCLUDED_REPORTDESIGN_SOURCE_CORE_INC_REPORTDRAWPAGE_HXX

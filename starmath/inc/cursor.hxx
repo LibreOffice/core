@@ -93,10 +93,6 @@ public:
         BuildGraph();
     }
 
-    ~SmCursor()
-    {
-    }
-
     /** Get position */
     const SmCaretPos& GetPosition() const { return mpPosition->CaretPos; }
 

@@ -37,7 +37,6 @@ class FloatingWindow::ImplData
 {
 public:
     ImplData();
-    ~ImplData();
 
     VclPtr<ToolBox> mpBox;
     Rectangle       maItemEdgeClipRect; // used to clip the common edge between a toolbar item and the border of this window
@@ -46,10 +45,6 @@ public:
 FloatingWindow::ImplData::ImplData()
 {
     mpBox = nullptr;
-}
-
-FloatingWindow::ImplData::~ImplData()
-{
 }
 
 Rectangle& FloatingWindow::ImplGetItemEdgeClipRect()

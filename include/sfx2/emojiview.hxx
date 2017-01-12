@@ -42,8 +42,6 @@ public:
         : mCategory(rCategory)
     {}
 
-    ~ViewFilter_Category () {}
-
     bool operator () (const ThumbnailViewItem *pItem);
 
     static bool isFilteredCategory(FILTER_CATEGORY filter, const OUString &rCategory);

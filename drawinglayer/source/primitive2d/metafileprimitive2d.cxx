@@ -127,10 +127,6 @@ namespace
         {
         }
 
-        ~PropertyHolder()
-        {
-        }
-
         /// read/write accesses
         const basegfx::B2DHomMatrix& getTransformation() const { return maTransformation; }
         void setTransformation(const basegfx::B2DHomMatrix& rNew) { if(rNew != maTransformation) maTransformation = rNew; }

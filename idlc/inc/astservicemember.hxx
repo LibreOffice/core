@@ -30,7 +30,6 @@ public:
         , m_flags(flags)
         , m_pRealService(pRealService)
         {}
-    virtual ~AstServiceMember() override {}
 
     AstService* getRealService()
         { return m_pRealService; }

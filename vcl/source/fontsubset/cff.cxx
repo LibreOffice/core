@@ -322,7 +322,6 @@ public:
     static const int NMAXTRANS = 32;    // see CFF.appendixB
 public:
     explicit CffSubsetterContext( const U8* pBasePtr, int nBaseLen);
-    ~CffSubsetterContext();
 
     bool    initialCffRead();
     bool    emitAsType1( class Type1Emitter&,
@@ -431,11 +430,6 @@ CffSubsetterContext::CffSubsetterContext( const U8* pBasePtr, int nBaseLen)
 //  setCharStringType( 1);
     // TODO: new CffLocal[ mnFDAryCount];
     mpCffLocal = &maCffLocal[0];
-}
-
-CffSubsetterContext::~CffSubsetterContext()
-{
-    // TODO: delete[] maCffLocal;
 }
 
 inline int CffSubsetterContext::popInt()

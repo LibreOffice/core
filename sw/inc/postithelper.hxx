@@ -128,10 +128,6 @@ public:
     {
     }
 
-    virtual ~SwAnnotationItem() override
-    {
-    }
-
     virtual SwPosition GetAnchorPosition() const override;
     virtual bool UseElement() override;
     virtual const SwFormatField& GetFormatField() const override

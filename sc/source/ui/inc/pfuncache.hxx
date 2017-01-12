@@ -50,7 +50,6 @@ class ScPrintSelectionStatus
 
 public:
             ScPrintSelectionStatus() : eMode(SC_PRINTSEL_INVALID) {}
-            ~ScPrintSelectionStatus() {}
 
     void    SetMode(ScPrintSelectionMode eNew)  { eMode = eNew; }
     void    SetRanges(const ScRangeList& rNew)  { aRanges = rNew; }

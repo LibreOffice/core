@@ -71,8 +71,6 @@ namespace treeview {
 
     public:
 
-        virtual ~TVBase() override { }
-
         // XNameAccess
 
         virtual css::uno::Type SAL_CALL

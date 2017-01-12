@@ -58,7 +58,6 @@ public:
         mnBulletOffset(0),
         mnBulletLen(0),
         mbInBullet(false) {};
-    ~SvxAccessibleTextIndex() {};
 
     // Get/Set current paragraph
     void SetParagraph( sal_Int32 nPara )

@@ -59,8 +59,6 @@ public:
         : mApp(App)
     {}
 
-    ~ViewFilter_Application () {}
-
     bool operator () (const ThumbnailViewItem *pItem);
 
     static bool isFilteredExtension(FILTER_APPLICATION filter, const OUString &rExt);

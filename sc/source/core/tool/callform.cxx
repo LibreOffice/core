@@ -86,7 +86,6 @@ public:
     const ModuleData& operator=(const ModuleData&) = delete;
 
     ModuleData(const OUString& rStr, osl::Module* pInst) : aName(rStr), pInstance(pInst) {}
-    ~ModuleData() {}
 
     const OUString& GetName() const { return aName; }
     osl::Module*    GetInstance() const { return pInstance.get(); }

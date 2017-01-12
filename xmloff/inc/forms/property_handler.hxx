@@ -52,8 +52,6 @@ namespace xmloff
         */
         virtual bool
             getPropertyValues( const OUString& i_attributeValue, PropertyValues& o_propertyValues ) const = 0;
-
-        virtual ~PropertyHandlerBase() override {}
     };
 
     //= PPropertyHandler

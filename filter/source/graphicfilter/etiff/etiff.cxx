@@ -106,7 +106,6 @@ private:
 public:
 
     explicit            TIFFWriter(SvStream &rStream);
-                        ~TIFFWriter();
 
     bool WriteTIFF( const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem );
 };
@@ -141,11 +140,6 @@ TIFFWriter::TIFFWriter(SvStream &rStream)
     , nCodeSize(0)
     , nOffset(0)
     , dwShift(0)
-{
-}
-
-
-TIFFWriter::~TIFFWriter()
 {
 }
 

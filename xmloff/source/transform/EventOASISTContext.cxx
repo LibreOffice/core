@@ -44,7 +44,6 @@ class XMLTransformerOASISEventMap_Impl:
 {
 public:
     explicit XMLTransformerOASISEventMap_Impl( XMLTransformerEventMapEntry *pInit );
-    ~XMLTransformerOASISEventMap_Impl();
 };
 
 XMLTransformerOASISEventMap_Impl::XMLTransformerOASISEventMap_Impl( XMLTransformerEventMapEntry *pInit )
@@ -68,10 +67,6 @@ XMLTransformerOASISEventMap_Impl::XMLTransformerOASISEventMap_Impl( XMLTransform
             ++pInit;
         }
     }
-}
-
-XMLTransformerOASISEventMap_Impl::~XMLTransformerOASISEventMap_Impl()
-{
 }
 
 XMLEventOASISTransformerContext::XMLEventOASISTransformerContext(

@@ -31,7 +31,6 @@ class AccessibleRelationSetHelperImpl
 public:
     AccessibleRelationSetHelperImpl();
     AccessibleRelationSetHelperImpl(const AccessibleRelationSetHelperImpl& rImpl);
-    ~AccessibleRelationSetHelperImpl();
 
     sal_Int32 getRelationCount(  )
         throw (uno::RuntimeException);
@@ -55,10 +54,6 @@ AccessibleRelationSetHelperImpl::AccessibleRelationSetHelperImpl()
 
 AccessibleRelationSetHelperImpl::AccessibleRelationSetHelperImpl(const AccessibleRelationSetHelperImpl& rImpl)
     : maRelations(rImpl.maRelations)
-{
-}
-
-AccessibleRelationSetHelperImpl::~AccessibleRelationSetHelperImpl()
 {
 }
 

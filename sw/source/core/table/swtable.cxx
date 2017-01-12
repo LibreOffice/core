@@ -2565,8 +2565,6 @@ public:
     {
     }
 
-    ~Impl() {}
-
     void setTable(const SwTable * pTable)
     {
         m_pTable = pTable;

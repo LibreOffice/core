@@ -29,7 +29,6 @@ class SfxUnoDeck : public cppu::WeakImplHelper<css::ui::XDeck>
 public:
 
     SfxUnoDeck(const css::uno::Reference<css::frame::XFrame>& , const OUString&);
-    virtual ~SfxUnoDeck() override {};
 
     virtual OUString SAL_CALL getId()
                                 throw(css::uno::RuntimeException, std::exception) override;

@@ -33,9 +33,7 @@ public:
     explicit                 SfxFlagItem( sal_uInt16 nWhich = 0, sal_uInt16 nValue = 0 );
                              SfxFlagItem( const SfxFlagItem& );
 
-                             virtual ~SfxFlagItem() override {}
-
-    virtual sal_uInt8            GetFlagCount() const;
+    virtual sal_uInt8        GetFlagCount() const;
 
     virtual bool             operator==( const SfxPoolItem& ) const override;
     virtual SfxPoolItem*     Create(SvStream &, sal_uInt16 nVersion) const override;

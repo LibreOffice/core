@@ -112,8 +112,6 @@ public:
 
     explicit SwXMLTableLines_Impl( const SwTableLines& rLines );
 
-    ~SwXMLTableLines_Impl() {}
-
     sal_uInt32 GetWidth() const { return nWidth; }
     const SwTableLines *GetLines() const { return pLines; }
 

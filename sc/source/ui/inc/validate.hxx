@@ -31,7 +31,6 @@
 #include "anyrefdg.hxx"
 
 struct ScRefHandlerCaller : public virtual VclReferenceBase {
-    virtual ~ScRefHandlerCaller() override {}
 };
 class ScRefHandlerHelper
 {

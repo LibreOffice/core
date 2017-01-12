@@ -529,13 +529,7 @@ struct OReportDefinitionImpl
     ,m_bEscapeProcessing(true)
     ,m_bSetModifiedEnabled( true )
     {}
-
-    ~OReportDefinitionImpl();
 };
-
-OReportDefinitionImpl::~OReportDefinitionImpl()
-{
-}
 
 OReportDefinition::OReportDefinition(uno::Reference< uno::XComponentContext > const & _xContext)
 : ReportDefinitionBase(m_aMutex)

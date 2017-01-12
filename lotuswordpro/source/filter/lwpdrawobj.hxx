@@ -149,7 +149,6 @@ class LwpDrawGroup : public LwpDrawObj
 {
 public:
     explicit LwpDrawGroup(SvStream* pStream) : LwpDrawObj(pStream) {}
-    virtual ~LwpDrawGroup() override {}
 
 protected:
     virtual void Read() override {}
@@ -172,7 +171,6 @@ private:
 
 public:
     LwpDrawLine(SvStream * pStream, DrawingOffsetAndScale* pTransData);
-    virtual ~LwpDrawLine() override {}
 
 protected:
     virtual void Read() override;
@@ -234,7 +232,6 @@ private:
 
 public:
     LwpDrawRectangle(SvStream* pStream, DrawingOffsetAndScale* pTransData);
-    virtual ~LwpDrawRectangle() override {}
 
 protected:
     virtual void Read() override;
@@ -257,7 +254,6 @@ private:
 
 public:
     LwpDrawEllipse(SvStream * pStream, DrawingOffsetAndScale* pTransData);
-    virtual ~LwpDrawEllipse() override {}
 
 protected:
     virtual void Read() override;
@@ -278,7 +274,6 @@ private:
 
 public:
     LwpDrawArc(SvStream * pStream, DrawingOffsetAndScale* pTransData);
-    virtual ~LwpDrawArc() override {}
 
 protected:
     virtual void Read() override;
@@ -343,7 +338,6 @@ class LwpDrawMetafile : public LwpDrawObj
 {
 public:
     explicit LwpDrawMetafile(SvStream* pStream);
-    virtual ~LwpDrawMetafile() override {}
 
 protected:
     virtual void Read() override;

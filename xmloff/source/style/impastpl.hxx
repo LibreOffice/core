@@ -52,10 +52,6 @@ public:
 
     XMLAutoStylePoolProperties( XMLAutoStyleFamily& rFamilyData, const ::std::vector< XMLPropertyState >& rProperties, OUString& rParentname );
 
-    ~XMLAutoStylePoolProperties()
-    {
-    }
-
     const OUString& GetName() const { return msName; }
     const ::std::vector< XMLPropertyState >& GetProperties() const { return maProperties; }
     sal_uInt32 GetPos() const { return mnPos; }

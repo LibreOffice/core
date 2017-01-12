@@ -151,7 +151,6 @@ struct SfxSecurityPage_Impl
     DECL_LINK( ChangeProtectionPBHdl, Button*, void );
 
     SfxSecurityPage_Impl( SfxSecurityPage &rDlg, const SfxItemSet &rItemSet );
-    ~SfxSecurityPage_Impl();
 
     bool    FillItemSet_Impl( SfxItemSet & );
     void    Reset_Impl( const SfxItemSet & );
@@ -178,11 +177,6 @@ SfxSecurityPage_Impl::SfxSecurityPage_Impl( SfxSecurityPage &rTabPage, const Sfx
     m_pRecordChangesCB->SetToggleHdl( LINK( this, SfxSecurityPage_Impl, RecordChangesCBToggleHdl ) );
     m_pProtectPB->SetClickHdl( LINK( this, SfxSecurityPage_Impl, ChangeProtectionPBHdl ) );
     m_pUnProtectPB->SetClickHdl( LINK( this, SfxSecurityPage_Impl, ChangeProtectionPBHdl ) );
-}
-
-
-SfxSecurityPage_Impl::~SfxSecurityPage_Impl()
-{
 }
 
 

@@ -458,8 +458,6 @@ public:
                                     r.GetType() == formula::svExternalDoubleRef) ?
                                 r.GetDoubleRef()->Ref2 : Ref1 )
                     {}
-                ~SingleDoubleRefProvider()
-                    {}
 };
 
 #endif

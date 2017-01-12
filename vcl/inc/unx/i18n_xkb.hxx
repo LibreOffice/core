@@ -37,7 +37,6 @@ private:
 public:
 
                         SalI18N_KeyboardExtension( Display *pDisplay );
-    inline              ~SalI18N_KeyboardExtension();
 
     inline bool     UseExtension() const ;      // server and client support the
                                                     // extension
@@ -47,11 +46,6 @@ public:
 
     inline int          GetEventBase() const ;
 };
-
-inline
-SalI18N_KeyboardExtension::~SalI18N_KeyboardExtension()
-{
-}
 
 inline bool
 SalI18N_KeyboardExtension::UseExtension() const

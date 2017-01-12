@@ -236,7 +236,6 @@ private:
     public:
         CompareSequence( CompareData& rData1, CompareData& rData2,
                         const MovedData& rD1, const MovedData& rD2 );
-        ~CompareSequence();
     };
 
     static void CountDifference( const CompareData& rData, sal_uLong* pCounts );
@@ -819,10 +818,6 @@ Compare::CompareSequence::CompareSequence(
     pBDiag = pMemory.get() + ( nSize + rMD2.GetCount() + 1 );
 
     Compare( 0, rMD1.GetCount(), 0, rMD2.GetCount() );
-}
-
-Compare::CompareSequence::~CompareSequence()
-{
 }
 
 void Compare::CompareSequence::Compare( sal_uLong nStt1, sal_uLong nEnd1,

@@ -111,7 +111,6 @@ class NfKeywordTable final
 
 public:
     NfKeywordTable() : m_keywords(NF_KEYWORD_ENTRIES_COUNT) {};
-    ~NfKeywordTable() {}
 
     OUString & operator[] (Keywords_t::size_type n) { return m_keywords[n]; }
     const OUString & operator[] (Keywords_t::size_type n) const { return m_keywords[n]; }

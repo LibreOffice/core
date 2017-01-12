@@ -59,7 +59,6 @@ public:
         const sal_Int32 nRunIndex,
         const sal_Int32 nStartIndex,
         const sal_Int32 nEndIndex);
-    ~PageObjectRun();
 
     void operator () (const double nTime);
 
@@ -314,10 +313,6 @@ PageObjectRun::PageObjectRun (
 {
     maStartOffset.resize(nEndIndex - nStartIndex + 1);
     maEndOffset.resize(nEndIndex - nStartIndex + 1);
-}
-
-PageObjectRun::~PageObjectRun()
-{
 }
 
 void PageObjectRun::UpdateOffsets(

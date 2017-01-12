@@ -40,7 +40,6 @@ public:
         eq = _eq;
         trim();
     }
-    ~Formula(){ }
 
     void setDocumentHandler(Reference < XDocumentHandler > const & xHandler )
     {

@@ -954,7 +954,6 @@ class Matrix3
     void set( double *pn ) { for( int i = 0 ; i < 6; i++ ) f[i] = pn[i]; }
 public:
     Matrix3();
-    ~Matrix3() {}
 
     void skew( double alpha, double beta );
     void scale( double sx, double sy );

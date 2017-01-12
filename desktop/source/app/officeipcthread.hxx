@@ -135,7 +135,6 @@ class RequestHandlerController : public ::cppu::WeakImplHelper<
 {
     public:
         RequestHandlerController() {}
-        virtual ~RequestHandlerController() override {}
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName()

@@ -74,8 +74,6 @@ namespace chelp {
         {
         }
 
-        ~StaticModuleInformation() { }
-
         const OUString& get_title() const { return m_aTitle; }
         const OUString& get_id() const { return m_aStartId; }
         const OUString& get_program() const { return m_aProgramSwitch; }
@@ -109,8 +107,6 @@ namespace chelp {
         };
 
         explicit KeywordInfo( const std::vector< KeywordElement >& aVector );
-
-        ~KeywordInfo() { };
 
         css::uno::Sequence< OUString >&
         getKeywordList() { return listKey; }

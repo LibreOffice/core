@@ -71,7 +71,6 @@ class XFChangeList : public XFContentContainer
 {
 public:
     XFChangeList(){}
-    virtual ~XFChangeList() override {}
     virtual void ToXml(IXFStream *pStrm) override;
 };
 
@@ -79,7 +78,6 @@ class XFChangeRegion : public XFContentContainer
 {
 public:
     XFChangeRegion(){}
-    virtual ~XFChangeRegion() override {}
     virtual void ToXml(IXFStream *pStrm) override;
     void SetChangeID(const OUString& sID){m_sID=sID;}
     void SetEditor(const OUString& sEditor){m_sEditor=sEditor;}
@@ -92,7 +90,6 @@ class XFChangeInsert : public XFChangeRegion
 {
 public:
     XFChangeInsert(){}
-    virtual ~XFChangeInsert() override {}
     void ToXml(IXFStream *pStrm) override;
 };
 
@@ -100,7 +97,6 @@ class XFChangeDelete : public XFChangeRegion
 {
 public:
     XFChangeDelete(){}
-    virtual ~XFChangeDelete() override {}
     void ToXml(IXFStream *pStrm) override;
 };
 
@@ -108,7 +104,6 @@ class XFChangeStart : public XFContent
 {
 public:
     XFChangeStart(){}
-    virtual ~XFChangeStart() override {}
     void ToXml(IXFStream *pStrm) override;
     void SetChangeID(const OUString& sID){m_sID=sID;}
 private:
@@ -119,7 +114,6 @@ class XFChangeEnd : public XFContent
 {
 public:
     XFChangeEnd(){}
-    virtual ~XFChangeEnd() override {}
     void ToXml(IXFStream *pStrm) override;
     void SetChangeID(const OUString& sID){m_sID=sID;}
 private:

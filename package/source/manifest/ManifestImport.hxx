@@ -44,9 +44,6 @@ struct ManifestScopeEntry
     , m_aNamespaces( aNamespaces )
     , m_bValid( true )
     {}
-
-    ~ManifestScopeEntry()
-    {}
 };
 
 typedef ::std::vector< ManifestScopeEntry > ManifestStack;

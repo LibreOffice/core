@@ -53,7 +53,6 @@ public:
     Implementation (
         ConfigurationController& rController,
         const Reference<frame::XController>& rxController);
-    ~Implementation();
 
     Reference<XControllerManager> mxControllerManager;
 
@@ -558,10 +557,6 @@ ConfigurationController::Implementation::Implementation (
       mnLockCount(0)
 {
     mpQueueProcessor->SetConfiguration(mxRequestedConfiguration);
-}
-
-ConfigurationController::Implementation::~Implementation()
-{
 }
 
 } } // end of namespace sd::framework

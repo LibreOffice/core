@@ -97,7 +97,6 @@ class SvXMLNumUsedList_Impl
 
 public:
             SvXMLNumUsedList_Impl();
-            ~SvXMLNumUsedList_Impl();
 
     void    SetUsed( sal_uInt32 nKey );
     bool    IsUsed( sal_uInt32 nKey ) const;
@@ -116,10 +115,6 @@ public:
 SvXMLNumUsedList_Impl::SvXMLNumUsedList_Impl() :
     nUsedCount(0),
     nWasUsedCount(0)
-{
-}
-
-SvXMLNumUsedList_Impl::~SvXMLNumUsedList_Impl()
 {
 }
 

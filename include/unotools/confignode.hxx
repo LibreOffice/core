@@ -79,9 +79,6 @@ namespace utl
         OConfigurationNode& operator=(const OConfigurationNode& _rSource);
         OConfigurationNode& operator=(OConfigurationNode&& _rSource);
 
-        /// dtor
-        virtual ~OConfigurationNode() override {}
-
         /// returns the local name of the node
         OUString     getLocalName() const;
 

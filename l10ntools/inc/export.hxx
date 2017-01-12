@@ -246,10 +246,6 @@ class MergeDataHashMap
         {
         }
 
-        ~MergeDataHashMap()
-        {
-        }
-
         typedef HashMap_t::iterator iterator;
         typedef HashMap_t::const_iterator const_iterator;
 

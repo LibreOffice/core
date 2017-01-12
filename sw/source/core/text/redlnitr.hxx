@@ -44,7 +44,6 @@ class SwExtend
 public:
     SwExtend( const std::vector<ExtTextInputAttr> &rA, sal_Int32 nSt ) : rArr( rA ),
         nStart( nSt ), nPos( COMPLETE_STRING ), nEnd( nStart + rA.size() ) {}
-    ~SwExtend() {}
     bool IsOn() const { return pFnt != nullptr; }
     void Reset() { pFnt.reset(); nPos = COMPLETE_STRING; }
     bool Leave( SwFont& rFnt, sal_Int32 nNew )

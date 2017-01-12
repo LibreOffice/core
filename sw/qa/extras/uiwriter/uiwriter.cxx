@@ -3252,7 +3252,6 @@ class IdleTask
     bool GetFlag();
     IdleTask();
     DECL_LINK( FlipFlag, Idle *, void );
-    ~IdleTask() {}
     private:
     bool flag;
     Idle maIdle;

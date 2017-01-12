@@ -56,7 +56,6 @@ private:
 
 public:
                     ScDBDocFunc( ScDocShell& rDocSh ): rDocShell(rDocSh) {}
-                    ~ScDBDocFunc() {}
 
     void            UpdateImport( const OUString& rTarget, const svx::ODataAccessDescriptor& rDescriptor );
 

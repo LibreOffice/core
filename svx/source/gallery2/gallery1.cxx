@@ -154,7 +154,6 @@ public:
 
                                 GalleryThemeCacheEntry( const GalleryThemeEntry* pThemeEntry, GalleryTheme* pTheme ) :
                                     mpThemeEntry( pThemeEntry ), mpTheme( pTheme ) {}
-                                ~GalleryThemeCacheEntry() {}
 
     const GalleryThemeEntry*    GetThemeEntry() const { return mpThemeEntry; }
     GalleryTheme*               GetTheme() const { return mpTheme.get(); }

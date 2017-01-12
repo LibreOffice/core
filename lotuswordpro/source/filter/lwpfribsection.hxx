@@ -72,7 +72,6 @@ class LwpMasterPage
 {
 public:
     LwpMasterPage(LwpPara* pPara, LwpPageLayout* pLayout);
-    ~LwpMasterPage(){}
 
 public:
     //for page layout register and parse

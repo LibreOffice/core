@@ -42,8 +42,6 @@ namespace slideshow
         class ViewEventHandler : public virtual SharedPtrAble
         {
         public:
-            virtual ~ViewEventHandler() override {}
-
             /** Notify new view.
 
                 @param rView

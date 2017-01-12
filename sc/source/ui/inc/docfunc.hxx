@@ -232,7 +232,6 @@ class ScDocFuncDirect : public ScDocFunc
 {
 public:
             ScDocFuncDirect( ScDocShell& rDocSh ) : ScDocFunc( rDocSh ) {}
-    virtual ~ScDocFuncDirect() override {}
 };
 
 void VBA_DeleteModule( ScDocShell& rDocSh, const OUString& sModuleName );

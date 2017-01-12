@@ -68,7 +68,6 @@ public:
                                     SvxLinkInsertMode eTyp,
                                     HyperDialogEvent nEvents = HyperDialogEvent::NONE,
                                     SvxMacroTableDtor *pMacroTbl =nullptr );
-    virtual ~SvxHyperlinkItem () override {}
 
     inline SvxHyperlinkItem& operator=( const SvxHyperlinkItem &rItem );
 

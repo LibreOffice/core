@@ -256,9 +256,6 @@ class SwSectionFrameMoveAndDeleteHint : public SfxHint
             , mbSaveContent( bSaveContent )
         {}
 
-        virtual ~SwSectionFrameMoveAndDeleteHint() override
-        {}
-
         bool IsSaveContent() const
         {
             return mbSaveContent;

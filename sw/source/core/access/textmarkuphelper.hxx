@@ -39,7 +39,6 @@ class SwTextMarkupHelper
                             const SwTextNode& rTextNode );
         SwTextMarkupHelper( const SwAccessiblePortionData& rPortionData,
                             const SwWrongList& rTextMarkupList ); // #i108125#
-        ~SwTextMarkupHelper() {}
 
         sal_Int32 getTextMarkupCount( const sal_Int32 nTextMarkupType )
                 throw (css::lang::IllegalArgumentException,

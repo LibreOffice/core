@@ -91,7 +91,6 @@ class SdrHdlBitmapSet
 
 public:
     explicit SdrHdlBitmapSet();
-    ~SdrHdlBitmapSet();
 
     const BitmapEx& GetBitmapEx(BitmapMarkerKind eKindOfMarker, sal_uInt16 nInd);
 };
@@ -105,10 +104,6 @@ SdrHdlBitmapSet::SdrHdlBitmapSet()
     :   maMarkersBitmap(ResId(SIP_SA_MARKERS, *ImpGetResMgr())),
         // 15 kinds (BitmapMarkerKind) use index [0..5] + 5 extra
         maRealMarkers((KIND_COUNT * INDEX_COUNT) + INDIVIDUAL_COUNT)
-{
-}
-
-SdrHdlBitmapSet::~SdrHdlBitmapSet()
 {
 }
 

@@ -43,8 +43,6 @@ public:
     explicit FilterDetect( const css::uno::Reference< css::uno::XComponentContext > &rxCtx)
         : mxCtx( rxCtx ) {}
 
-    virtual ~FilterDetect() override {}
-
     //XExtendedFilterDetection
     virtual OUString SAL_CALL detect( css::uno::Sequence< css::beans::PropertyValue >& lDescriptor )
         throw( css::uno::RuntimeException, std::exception ) override;

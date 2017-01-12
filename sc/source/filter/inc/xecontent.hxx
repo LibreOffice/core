@@ -200,7 +200,6 @@ class XclExpCfvo : public XclExpRecord, protected XclExpRoot
 {
 public:
     explicit XclExpCfvo( const XclExpRoot& rRoot, const ScColorScaleEntry& rFormatEntry, const ScAddress& rPos, bool bFirst = true);
-    virtual ~XclExpCfvo() override {}
 
     virtual void SaveXml( XclExpXmlStream& rStrm ) override;
 private:

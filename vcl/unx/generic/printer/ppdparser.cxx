@@ -77,7 +77,6 @@ namespace psp
         key_translation_map     m_aTranslations;
         public:
         PPDTranslator() {}
-        ~PPDTranslator() {}
 
         void insertValue(
             const OUString& i_rKey,

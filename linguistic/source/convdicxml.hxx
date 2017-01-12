@@ -52,9 +52,6 @@ public:
         bSuccess    ( false )
     {
     }
-    virtual ~ConvDicXMLExport() override
-    {
-    }
 
     // SvXMLExport
     void ExportAutoStyles_() override    {}
@@ -87,10 +84,6 @@ public:
     {
         nLanguage       = LANGUAGE_NONE;
         nConversionType = -1;
-    }
-
-    virtual ~ConvDicXMLImport() throw () override
-    {
     }
 
     virtual void SAL_CALL startDocument() throw( css::xml::sax::SAXException, css::uno::RuntimeException, std::exception ) override;

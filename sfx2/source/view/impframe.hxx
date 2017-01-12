@@ -71,8 +71,6 @@ public:
         ,bMenuBarOn( true )
     {
     }
-
-    virtual ~SfxFrame_Impl() override { }
 };
 
 #endif

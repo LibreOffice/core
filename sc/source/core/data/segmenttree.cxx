@@ -42,7 +42,6 @@ public:
 
     ScFlatSegmentsImpl(SCCOLROW nMax, ValueType nDefault);
     ScFlatSegmentsImpl(const ScFlatSegmentsImpl& r);
-    ~ScFlatSegmentsImpl();
 
     bool setValue(SCCOLROW nPos1, SCCOLROW nPos2, ValueType nValue);
     void setValueIf(SCCOLROW nPos1, SCCOLROW nPos2, ValueType nValue, const std::function<bool(ValueType)>& rPredicate);
@@ -83,11 +82,6 @@ template<typename ValueType_, typename ExtValueType_>
 ScFlatSegmentsImpl<ValueType_, ExtValueType_>::ScFlatSegmentsImpl(const ScFlatSegmentsImpl<ValueType_, ExtValueType_>& r) :
     maSegments(r.maSegments),
     mbTreeSearchEnabled(r.mbTreeSearchEnabled)
-{
-}
-
-template<typename ValueType_, typename ExtValueType_>
-ScFlatSegmentsImpl<ValueType_, ExtValueType_>::~ScFlatSegmentsImpl()
 {
 }
 

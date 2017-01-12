@@ -37,7 +37,6 @@ class NamedCollection : public cppu::ImplInheritanceHelper<
 
 public:
     NamedCollection() {}
-    virtual ~NamedCollection() {}
 
     const T& getItem( const OUString& rName ) const
     {

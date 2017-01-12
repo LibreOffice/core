@@ -82,7 +82,6 @@ private:
 
 public:
     CodeCompleteDataCache(){}
-    ~CodeCompleteDataCache(){}
 
     friend BASIC_DLLPUBLIC std::ostream& operator<< (std::ostream& aStream, const CodeCompleteDataCache& aCache);
 

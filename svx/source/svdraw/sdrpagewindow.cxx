@@ -63,10 +63,6 @@ struct SdrPageWindow::Impl
         mpOriginalPaintWindow(nullptr)
     {
     }
-
-    ~Impl()
-    {
-    }
 };
 
 

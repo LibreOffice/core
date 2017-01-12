@@ -44,8 +44,6 @@ public:
     {
     }
 
-    ~ScAreaData() {}
-
     void Set( const OUString& rName, const OUString& rArea, bool bDb )
                 {
                     aStrName  = rName;

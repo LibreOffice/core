@@ -66,10 +66,6 @@ struct SfxViewFrame_Impl
         , bActive(false)
     {
     }
-
-    ~SfxViewFrame_Impl()
-    {
-    }
 };
 
 class SfxFrameViewWindow_Impl : public vcl::Window

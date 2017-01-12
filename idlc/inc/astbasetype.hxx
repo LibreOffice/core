@@ -31,8 +31,6 @@ public:
         , m_exprType(type)
         {}
 
-    virtual ~AstBaseType() override {}
-
     virtual bool isUnsigned() const override {
         switch (m_exprType) {
         case ET_ushort:
