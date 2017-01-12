@@ -117,6 +117,7 @@ $(eval $(call gb_Module_add_targets,vcl,\
     Executable_pcdfuzzer \
     Executable_dxffuzzer \
     Executable_metfuzzer \
+    Executable_ppmfuzzer \
 ))
 endif
 
