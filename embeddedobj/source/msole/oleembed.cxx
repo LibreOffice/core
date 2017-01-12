@@ -665,18 +665,25 @@ sal_Int32 SAL_CALL OleEmbeddedObject::getCurrentState()
 namespace
 {
 #ifndef _WIN32
-    bool lcl_CopyStream(const uno::Reference<io::XInputStream>& xIn, const uno::Reference<io::XOutputStream>& xOut)
+    bool lcl_CopyStream(const uno::Reference<io::XInputStream>& xIn, const uno::Reference<io::XOutputStream>& xOut, sal_Int32 nMaxCopy = SAL_MAX_INT32)
     {
+        if (nMaxCopy == 0)
+            return false;
+
         const sal_Int32 nChunkSize = 4096;
         uno::Sequence< sal_Int8 > aData(nChunkSize);
         sal_Int32 nTotalRead = 0;
         sal_Int32 nRead;
         do
         {
-            nRead = xIn->readBytes(aData, nChunkSize);
+            if (nTotalRead + aData.getLength() > nMaxCopy)
+            {
+                aData.realloc(nMaxCopy - nTotalRead);
+            }
+            nRead = xIn->readBytes(aData, aData.getLength());
             nTotalRead += nRead;
             xOut->writeBytes(aData);
-        } while (nRead == nChunkSize);
+        } while (nRead == nChunkSize && nTotalRead <= nMaxCopy);
         return nTotalRead != 0;
     }
 #endif
@@ -715,6 +722,52 @@ namespace
         }
 
         bool bCopied = xCONTENTS.is() && lcl_CopyStream(xCONTENTS->getInputStream(), xStream->getOutputStream());
+
+        if (!bCopied)
+        {
+            uno::Reference< io::XStream > xOle10Native;
+            try
+            {
+                xNameContainer->getByName("\1Ole10Native") >>= xOle10Native;
+            }
+            catch (container::NoSuchElementException const&)
+            {
+                // ignore
+            }
+            if (xOle10Native.is())
+            {
+                const uno::Reference<io::XInputStream> xIn = xOle10Native->getInputStream();
+                xIn->skipBytes(4); //size of the entire stream minus 4 bytes
+                xIn->skipBytes(2); //word that represent the directory type
+                uno::Sequence< sal_Int8 > aData(1);
+                sal_Int32 nRead;
+                do
+                {
+                    nRead = xIn->readBytes(aData, 1);
+                } while (nRead == 1 && aData[0] != 0);  // file name plus extension of the attachment null terminated
+                do
+                {
+                    nRead = xIn->readBytes(aData, 1);
+                } while (nRead == 1 && aData[0] != 0);  // Fully Qualified File name with extension
+                xIn->skipBytes(1); //single byte
+                xIn->skipBytes(1); //single byte
+                xIn->skipBytes(2); //Word that represent the directory type
+                xIn->skipBytes(4); //len of string
+                do
+                {
+                    nRead = xIn->readBytes(aData, 1);
+                } while (nRead == 1 && aData[0] != 0);  // Actual string representing the file path
+                uno::Sequence< sal_Int8 > aLenData(4);
+                xIn->readBytes(aLenData, 4); //len of attachment
+                sal_uInt32 nLen = static_cast<sal_uInt32>
+                                              ((sal_uInt32)aLenData[0]
+                                            + ((sal_uInt32)aLenData[1] <<  8)
+                                            + ((sal_uInt32)aLenData[2] << 16)
+                                            + ((sal_uInt32)aLenData[3] << 24));
+
+                bCopied = lcl_CopyStream(xIn, xStream->getOutputStream(), nLen);
+            }
+        }
 
         uno::Reference< io::XSeekable > xSeekableStor(xObjectStream, uno::UNO_QUERY);
         if (xSeekableStor.is())
@@ -862,7 +915,7 @@ void SAL_CALL OleEmbeddedObject::doVerb( sal_Int32 nVerbID )
                 }
             }
 
-            if ( m_aFilterName != "Text" && (!m_pOwnView || !m_pOwnView->Open()) )
+            if (!m_pOwnView || !m_pOwnView->Open())
             {
                 //Make a RO copy and see if the OS can find something to at
                 //least display the content for us
