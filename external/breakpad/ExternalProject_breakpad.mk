@@ -9,8 +9,6 @@
 
 $(eval $(call gb_ExternalProject_ExternalProject,breakpad))
 
-$(eval $(call gb_ExternalProject_use_autoconf,breakpad,build))
-
 $(eval $(call gb_ExternalProject_register_targets,breakpad,\
 	build \
 ))
