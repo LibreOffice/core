@@ -53,7 +53,6 @@
 #include "strings.hrc"
 #include "res_bmp.hrc"
 #include "cfgids.hxx"
-#include "tools/SdGlobalResourceContainer.hxx"
 
 
 #define SdModule
@@ -77,7 +76,6 @@ SdModule::SdModule(SfxObjectFactory* pFact1, SfxObjectFactory* pFact2 )
     pSearchItem(nullptr),
     pNumberFormatter( nullptr ),
     bWaterCan(false),
-    mpResourceContainer(new ::sd::SdGlobalResourceContainer()),
     mbEventListenerAdded(false),
     mpColorConfig(new svtools::ColorConfig)
 {
@@ -109,8 +107,6 @@ SdModule::~SdModule()
     {
         Application::RemoveEventListener( LINK( this, SdModule, EventListenerHdl ) );
     }
-
-    mpResourceContainer.reset();
 
     delete mpErrorHdl;
     mpVirtualRefDevice.disposeAndClear();
