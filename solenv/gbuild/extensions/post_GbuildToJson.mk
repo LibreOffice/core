@@ -97,6 +97,7 @@ $(call gb_LinkTarget_get_target,$(1)) : OBJCXXOBJECTS += $(2)
 
 endef
 gb_LinkTarget_use_package =
+gb_LinkTarget_use_generated_package =
 gb_LinkTarget_add_sdi_headers =
 gb_LinkTarget_use_external_project =
 gb_LinkTarget_add_scanners =
