@@ -50,85 +50,169 @@ class GbuildLinkTarget:
     def name(self):
         return self._name
 
+    @name.setter
+    def name(self, value):
+        self._name = value
+
     @property
     def location(self):
         return self._location
+
+    @location.setter
+    def location(self, value):
+        self._location = value
 
     @property
     def include(self):
         return self._include
 
+    @include.setter
+    def include(self, value):
+        self._include = value
+
     @property
     def include_sys(self):
         return self._include_sys
+
+    @include_sys.setter
+    def include_sys(self, value):
+        self._include_sys = value
 
     @property
     def defs(self):
         return self._defs
 
+    @defs.setter
+    def defs(self, value):
+        self._defs = value
+
     @property
     def cxxobjects(self):
         return self._cxxobjects
+
+    @cxxobjects.setter
+    def cxxobjects(self, value):
+        self._cxxobjects = value
 
     @property
     def cxxflags(self):
         return self._cxxflags
 
+    @cxxflags.setter
+    def cxxflags(self, value):
+        self._cxxflags = value
+
     @property
     def linked_libs(self):
         return self._linked_libs
+
+    @linked_libs.setter
+    def linked_libs(self, value):
+        self._linked_libs = value
 
     @property
     def asmobjects(self):
         return self._asmobjects
 
+    @asmobjects.setter
+    def asmobjects(self, value):
+        self._asmobjects = value
+
     @property
     def cflags(self):
         return self._cflags
+
+    @cflags.setter
+    def cflags(self, value):
+        self._cflags = value
 
     @property
     def gencobjects(self):
         return self._gencobjects
 
+    @gencobjects.setter
+    def gencobjects(self, value):
+        self._gencobjects = value
+
     @property
     def gencxxobjects(self):
         return self._gencxxobjects
+
+    @gencxxobjects.setter
+    def gencxxobjects(self, value):
+        self._gencxxobjects = value
 
     @property
     def ilibtarget(self):
         return self._ilibtarget
 
+    @ilibtarget.setter
+    def ilibtarget(self, value):
+        self._ilibtarget = value
+
     @property
     def linked_static_libs(self):
         return self._linked_static_libs
+
+    @linked_static_libs.setter
+    def linked_static_libs(self, value):
+        self._linked_static_libs = value
 
     @property
     def linktarget(self):
         return self._linktarget
 
+    @linktarget.setter
+    def linktarget(self, value):
+        self._linktarget = value
+
     @property
     def objcflags(self):
         return self._objcflags
+
+    @objcflags.setter
+    def objcflags(self, value):
+        self._objcflags = value
 
     @property
     def objcobjects(self):
         return self._objcobjects
 
+    @objcobjects.setter
+    def objcobjects(self, value):
+        self._objcobjects = value
+
     @property
     def objcxxflags(self):
         return self._objcxxflags
+
+    @objcxxflags.setter
+    def objcxxflags(self, value):
+        self._objcxxflags = value
 
     @property
     def objcxxobjects(self):
         return self._objcxxobjects
 
+    @objcxxobjects.setter
+    def objcxxobjects(self, value):
+        self._objcxxobjects = value
+
     @property
     def yaccobjects(self):
         return self._yaccobjects
 
+    @yaccobjects.setter
+    def yaccobjects(self, value):
+        self._yaccobjects = value
+
     @property
     def build_type(self):
         return self._build_type
+
+    @build_type.setter
+    def build_type(self, value):
+        self._build_type = value
 
     @property
     def target_name(self):
@@ -139,18 +223,24 @@ class GbuildLinkTarget:
         return '%s %s' % (self.build_type, self.name
 
     def module(self):
-        return self.location[self.location.rindex('/')+1:]
+        return self.location[self.location.rindex('/') + 1:]
 
     def is_empty(self):
-        return not self.include and not self.defs and not self.cxxobjects and not self.linked_libs
+        return not self.include and not self.defs and \
+           not self.cxxobjects and not self.linked_libs
 
     def __str__(self):
-        return '%s at %s with include path: %s, isystem includes: %s, defines: %s, objects: %s, cxxflags: %s and linked libs: %s' % (
-            self.short_name(), self.location, self.include, self.include_sys, self.defs, self.cxxobjects,
-            self.cxxflags, self.linked_libs)
+        return '%s at %s with include path: %s, ' + \
+               'isystem includes: %s, defines: %s,' + \
+               ' objects: %s, cxxflags: %s and linked ' + \
+               'libs: %s' % (self.short_name(), self.location,
+                             self.include, self.include_sys,
+                             self.defs, self.cxxobjects,
+                             self.cxxflags, self.linked_libs)
 
 
 class GbuildParser:
+
     def __init__(self, makecmd):
         self.makecmd = makecmd
         self.binpath = os.path.dirname(os.environ['GPERF']) # woha, this is quite a hack
