@@ -6,16 +6,43 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <dataprovider.hxx>
 #include <rtl/ustring.hxx>
 
-#include "dataproviders_test.hxx"
+#include "helper/qahelper.hxx"
+#include "document.hxx"
+#include <stringutil.hxx>
 #include "address.hxx"
+#include "dataprovider.hxx"
+
+#include <memory>
 
 
 struct TestImpl
 {
     ScDocShellRef m_xDocShell;
+};
+
+class ScDataProvidersTest : public test::BootstrapFixture
+{
+public:
+
+    ScDataProvidersTest();
+    virtual ~ScDataProvidersTest() override;
+
+    ScDocShell& getDocShell();
+
+    virtual void setUp() override;
+    virtual void tearDown() override;
+
+    void testCSVImport();
+
+    CPPUNIT_TEST_SUITE(ScDataProvidersTest);
+    CPPUNIT_TEST(testCSVImport);
+    CPPUNIT_TEST_SUITE_END();
+
+private:
+    std::unique_ptr<TestImpl> m_pImpl;
+    ScDocument *m_pDoc;
 };
 
 ScDataProvidersTest::ScDataProvidersTest() :
