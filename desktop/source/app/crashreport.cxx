@@ -10,6 +10,7 @@
 #include <desktop/crashreport.hxx>
 #include <rtl/bootstrap.hxx>
 #include <osl/file.hxx>
+#include <unotools/bootstrap.hxx>
 
 #include <config_version.h>
 #include <config_folders.h>
@@ -73,6 +74,7 @@ void CrashReporter::writeCommonInfo()
     std::ofstream minidump_file(ini_path, std::ios_base::trunc);
     minidump_file << "ProductName=LibreOffice\n";
     minidump_file << "Version=" LIBO_VERSION_DOTTED "\n";
+    minidump_file << "BuildID=" << utl::Bootstrap::getBuildIdData("") << "\n";
     minidump_file << "URL=http://crashreport.libreoffice.org/submit/\n";
     for (auto& keyValue : maKeyValues)
     {
