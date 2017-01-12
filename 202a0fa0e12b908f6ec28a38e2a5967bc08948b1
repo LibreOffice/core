@@ -1,0 +1,101 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a6eadb0_0e301156",
+        "filename": "sc/source/core/tool/scmatrix.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1505,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-01-12T18:50:13Z",
+      "side": 1,
+      "message": "\u0027er\u0027 is uninitialized.\n\nAnd please name variables according to the conventions, prefix member variables with \u0027m\u0027, so mfy and mfErr for example.",
+      "revId": "202a0fa0e12b908f6ec28a38e2a5967bc08948b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a6eadb0_0e1731a4",
+        "filename": "sc/source/core/tool/scmatrix.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1508,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-01-12T18:50:13Z",
+      "side": 1,
+      "message": "If error is set it needs to be returned instead of fy.",
+      "range": {
+        "startLine": 1508,
+        "startChar": 33,
+        "endLine": 1508,
+        "endChar": 48
+      },
+      "revId": "202a0fa0e12b908f6ec28a38e2a5967bc08948b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a6eadb0_ee1115b1",
+        "filename": "sc/source/core/tool/scmatrix.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1508,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-01-12T18:50:13Z",
+      "side": 1,
+      "message": "Why getRis() instead of getResult() which makes it clearer?",
+      "range": {
+        "startLine": 1508,
+        "startChar": 9,
+        "endLine": 1508,
+        "endChar": 15
+      },
+      "revId": "202a0fa0e12b908f6ec28a38e2a5967bc08948b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a6eadb0_2e35cd45",
+        "filename": "sc/source/core/tool/scmatrix.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1529,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-01-12T18:50:13Z",
+      "side": 1,
+      "message": "The original algorithm handles boolean as well.",
+      "revId": "202a0fa0e12b908f6ec28a38e2a5967bc08948b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a6eadb0_6e3fc525",
+        "filename": "sc/source/core/tool/scmatrix.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1531,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-01-12T18:50:13Z",
+      "side": 1,
+      "message": "The original algorithm generates an error for strings. However, in future this probably should take the general string conversion settings into account to decide whether numeric values are to be calculated or not.",
+      "revId": "202a0fa0e12b908f6ec28a38e2a5967bc08948b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
