@@ -43,9 +43,14 @@ VCLXAccessibleTabControl::VCLXAccessibleTabControl( VCLXWindow* pVCLXWindow )
     :VCLXAccessibleComponent( pVCLXWindow )
 {
     m_pTabControl = static_cast< TabControl* >( GetWindow().get() );
-
-    if ( m_pTabControl )
-        m_aAccessibleChildren.assign( m_pTabControl->GetPageCount(), Reference< XAccessible >() );
+    if (!m_pTabControl)
+        return;
+    if (m_pTabControl->isDisposed())
+    {
+        m_pTabControl.clear();
+        return;
+    }
+    m_aAccessibleChildren.assign( m_pTabControl->GetPageCount(), Reference< XAccessible >() );
 }
 
 
