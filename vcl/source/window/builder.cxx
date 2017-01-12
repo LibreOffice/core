@@ -1764,16 +1764,16 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
             }
         }
     }
-    SAL_WARN_IF(!xWindow, "vcl.layout", "probably need to implement " << name.getStr() << " or add a make" << name.getStr() << " function");
+    //SAL_WARN_IF(!xWindow, "vcl.layout", "probably need to implement " << name.getStr() << " or add a make" << name.getStr() << " function");
     if (xWindow)
     {
         xWindow->SetHelpId(m_sHelpRoot + id);
-        SAL_INFO("vcl.layout", "for " << name.getStr() <<
+        /*SAL_INFO("vcl.layout", "for " << name.getStr() <<
             ", created " << xWindow.get() << " child of " <<
             pParent << "(" << xWindow->mpWindowImpl->mpParent.get() << "/" <<
             xWindow->mpWindowImpl->mpRealParent.get() << "/" <<
             xWindow->mpWindowImpl->mpBorderWindow.get() << ") with helpid " <<
-            xWindow->GetHelpId().getStr());
+            xWindow->GetHelpId().getStr());*/
         m_aChildren.push_back(WinAndId(id, xWindow, bVertical));
     }
     return xWindow;
