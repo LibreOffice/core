@@ -336,6 +336,7 @@ struct ImplEnumInfo
     PhysicalFontCollection* mpList;
     OUString*           mpName;
     LOGFONTW*           mpLogFont;
+    bool                mbPrinter;
     int                 mnFontCount;
 };
 
@@ -1057,10 +1058,19 @@ int CALLBACK SalEnumFontsProcExW( const LOGFONTW* lpelfe,
     }
     else
     {
+        // Ignore non-device fonts on printers.
+        if (pInfo->mbPrinter)
+        {
+            if ((nFontType & RASTER_FONTTYPE) && !(nFontType & DEVICE_FONTTYPE))
+            {
+                SAL_INFO("vcl.gdi", "Unsupported printer font ignored: " << OUString(pLogFont->elfLogFont.lfFaceName));
+                return 1;
+            }
+        }
         // Only SFNT fonts are supported, ignore anything else.
-        if (!(nFontType & TRUETYPE_FONTTYPE) &&
-            !(pMetric->ntmTm.ntmFlags & NTM_PS_OPENTYPE) &&
-            !(pMetric->ntmTm.ntmFlags & NTM_TT_OPENTYPE))
+        else if (!(nFontType & TRUETYPE_FONTTYPE) &&
+                 !(pMetric->ntmTm.ntmFlags & NTM_PS_OPENTYPE) &&
+                 !(pMetric->ntmTm.ntmFlags & NTM_TT_OPENTYPE))
         {
             SAL_INFO("vcl.gdi", "Unsupported font ignored: " << OUString(pLogFont->elfLogFont.lfFaceName));
             return 1;
@@ -1323,6 +1333,7 @@ void WinSalGraphics::GetDevFontList( PhysicalFontCollection* pFontCollection )
     aInfo.mhDC          = getHDC();
     aInfo.mpList        = pFontCollection;
     aInfo.mpName        = nullptr;
+    aInfo.mbPrinter     = mbPrinter;
     aInfo.mnFontCount   = 0;
 
     LOGFONTW aLogFont;
