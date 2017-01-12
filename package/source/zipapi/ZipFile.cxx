@@ -598,7 +598,7 @@ uno::Reference< XInputStream > ZipFile::getRawData( ZipEntry& rEntry,
     return createUnbufferedStream ( aMutexHolder, rEntry, rData, UNBUFF_STREAM_RAW, bIsEncrypted );
 }
 
-uno::Reference< XInputStream > SAL_CALL ZipFile::getWrappedRawStream(
+uno::Reference< XInputStream > ZipFile::getWrappedRawStream(
         ZipEntry& rEntry,
         const ::rtl::Reference< EncryptionData >& rData,
         const OUString& aMediaType,
