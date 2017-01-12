@@ -142,19 +142,19 @@ public:
             const css::uno::Sequence< sal_Int8 > &aReadBuffer,
             const ::rtl::Reference < EncryptionData > &rData );
 
-    css::uno::Reference< css::io::XInputStream > SAL_CALL getInputStream(
+    css::uno::Reference< css::io::XInputStream > getInputStream(
             ZipEntry& rEntry,
             const ::rtl::Reference < EncryptionData > &rData,
             bool bDecrypt,
             const rtl::Reference<SotMutexHolder>& aMutexHolder );
 
-    css::uno::Reference< css::io::XInputStream > SAL_CALL getDataStream(
+    css::uno::Reference< css::io::XInputStream > getDataStream(
             ZipEntry& rEntry,
             const ::rtl::Reference < EncryptionData > &rData,
             bool bDecrypt,
             const rtl::Reference<SotMutexHolder>& aMutexHolder );
 
-    css::uno::Reference< css::io::XInputStream > SAL_CALL getWrappedRawStream(
+    css::uno::Reference< css::io::XInputStream > getWrappedRawStream(
             ZipEntry& rEntry,
             const ::rtl::Reference < EncryptionData > &rData,
             const OUString& aMediaType,

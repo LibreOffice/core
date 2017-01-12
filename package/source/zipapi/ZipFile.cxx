@@ -522,7 +522,7 @@ std::unique_ptr<ZipEnumeration> ZipFile::entries()
     return o3tl::make_unique<ZipEnumeration>(aEntries);
 }
 
-uno::Reference< XInputStream > SAL_CALL ZipFile::getInputStream( ZipEntry& rEntry,
+uno::Reference< XInputStream > ZipFile::getInputStream( ZipEntry& rEntry,
         const ::rtl::Reference< EncryptionData > &rData,
         bool bIsEncrypted,
         const rtl::Reference<SotMutexHolder>& aMutexHolder )
@@ -549,7 +549,7 @@ uno::Reference< XInputStream > SAL_CALL ZipFile::getInputStream( ZipEntry& rEntr
                                     bIsEncrypted );
 }
 
-uno::Reference< XInputStream > SAL_CALL ZipFile::getDataStream( ZipEntry& rEntry,
+uno::Reference< XInputStream > ZipFile::getDataStream( ZipEntry& rEntry,
         const ::rtl::Reference< EncryptionData > &rData,
         bool bIsEncrypted,
         const rtl::Reference<SotMutexHolder>& aMutexHolder )
@@ -585,7 +585,7 @@ uno::Reference< XInputStream > SAL_CALL ZipFile::getDataStream( ZipEntry& rEntry
                                     bIsEncrypted );
 }
 
-uno::Reference< XInputStream > SAL_CALL ZipFile::getRawData( ZipEntry& rEntry,
+uno::Reference< XInputStream > ZipFile::getRawData( ZipEntry& rEntry,
         const ::rtl::Reference< EncryptionData >& rData,
         bool bIsEncrypted,
         const rtl::Reference<SotMutexHolder>& aMutexHolder )
