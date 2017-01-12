@@ -40,6 +40,7 @@ $(eval $(foreach method, \
     add_objcobjects \
     add_objcxxobject \
     add_objcxxobjects \
+    use_udk_api \
 , \
     $(call gb_CompilerTest__forward_to_Linktarget,$(method)) \
 ))
