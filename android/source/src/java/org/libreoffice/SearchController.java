@@ -7,26 +7,26 @@ import android.widget.ImageButton;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class SearchController implements View.OnClickListener {
+class SearchController implements View.OnClickListener {
     private LibreOfficeMainActivity mActivity;
 
-    private enum SearchDriection {
+    private enum SearchDirection {
         UP, DOWN
-    };
-
-    public SearchController(LibreOfficeMainActivity activity) {
-        mActivity = activity;
-
-        ((ImageButton) activity.findViewById(R.id.button_search_up)).setOnClickListener(this);
-        ((ImageButton) activity.findViewById(R.id.button_search_down)).setOnClickListener(this);
     }
 
-    private void search(String searchString, SearchDriection direction, float x, float y) {
+    SearchController(LibreOfficeMainActivity activity) {
+        mActivity = activity;
+
+        activity.findViewById(R.id.button_search_up).setOnClickListener(this);
+        activity.findViewById(R.id.button_search_down).setOnClickListener(this);
+    }
+
+    private void search(String searchString, SearchDirection direction, float x, float y) {
         try {
             JSONObject rootJson = new JSONObject();
 
             addProperty(rootJson, "SearchItem.SearchString", "string", searchString);
-            addProperty(rootJson, "SearchItem.Backward", "boolean", direction == SearchDriection.DOWN ? "true" : "false");
+            addProperty(rootJson, "SearchItem.Backward", "boolean", direction == SearchDirection.DOWN ? "true" : "false");
             addProperty(rootJson, "SearchItem.SearchStartPointX", "long", String.valueOf((long) UnitConverter.pixelToTwip(x, LOKitShell.getDpi())));
             addProperty(rootJson, "SearchItem.SearchStartPointY", "long", String.valueOf((long) UnitConverter.pixelToTwip(y, LOKitShell.getDpi())));
             addProperty(rootJson, "SearchItem.Command", "long", String.valueOf(0)); // search all == 1
@@ -49,13 +49,13 @@ public class SearchController implements View.OnClickListener {
     public void onClick(View view) {
         ImageButton button = (ImageButton) view;
 
-        SearchDriection direction = SearchDriection.DOWN;
+        SearchDirection direction = SearchDirection.DOWN;
         switch(button.getId()) {
             case R.id.button_search_down:
-                direction = SearchDriection.DOWN;
+                direction = SearchDirection.DOWN;
                 break;
             case R.id.button_search_up:
-                direction = SearchDriection.UP;
+                direction = SearchDirection.UP;
                 break;
             default:
                 break;
