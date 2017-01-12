@@ -20,7 +20,6 @@
 #include "condformatbuffer.hxx"
 
 #include <com/sun/star/sheet/ConditionOperator2.hpp>
-#include <com/sun/star/table/CellRangeAddress.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
 #include <svl/intitem.hxx>
@@ -39,7 +38,6 @@
 #include "colorscale.hxx"
 #include "conditio.hxx"
 #include "document.hxx"
-#include "convuno.hxx"
 #include "docfunc.hxx"
 #include "tokenarray.hxx"
 #include "tokenuno.hxx"
@@ -49,7 +47,6 @@ namespace xls {
 
 using namespace ::com::sun::star::sheet;
 using namespace ::com::sun::star::style;
-using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::uno;
 
 namespace {
@@ -473,7 +470,7 @@ void CondFormatRule::importCfRule( const AttributeList& rAttribs )
 
 void CondFormatRule::appendFormula( const OUString& rFormula )
 {
-    ScAddress aBaseAddr = mrCondFormat.getRanges().getBaseAddress();
+    ScAddress aBaseAddr = mrCondFormat.getRanges().GetTopLeftCorner();
     ApiTokenSequence aTokens = getFormulaParser().importFormula( aBaseAddr, rFormula );
     maModel.maFormulas.push_back( aTokens );
 }
@@ -504,7 +501,7 @@ void CondFormatRule::importCfRule( SequenceInputStream& rStrm )
     SAL_WARN_IF( !( (nFmla1Size > 0) == (rStrm.getRemaining() >= 8) ), "sc.filter", "CondFormatRule::importCfRule - formula size mismatch" );
     if( rStrm.getRemaining() >= 8 )
     {
-        ScAddress aBaseAddr = mrCondFormat.getRanges().getBaseAddress();
+        ScAddress aBaseAddr = mrCondFormat.getRanges().GetTopLeftCorner();
         ApiTokenSequence aTokens = getFormulaParser().importFormula( aBaseAddr, FORMULATYPE_CONDFORMAT, rStrm );
         maModel.maFormulas.push_back( aTokens );
 
@@ -832,7 +829,7 @@ void CondFormatRule::finalizeImport()
             {
                 case 'B':       // current base address
                     if( aAddress.isEmpty() )
-                        aAddress = FormulaProcessorBase::generateAddress2dString( mrCondFormat.getRanges().getBaseAddress(), false );
+                        aAddress = FormulaProcessorBase::generateAddress2dString( mrCondFormat.getRanges().GetTopLeftCorner(), false );
                     aReplaceFormula = aReplaceFormula.replaceAt( nStrPos, 2, aAddress );
                 break;
                 default:
@@ -846,7 +843,7 @@ void CondFormatRule::finalizeImport()
         eOperator = SC_COND_DIRECT;
     }
 
-    ScAddress aPos = mrCondFormat.getRanges().getBaseAddress();
+    ScAddress aPos = mrCondFormat.getRanges().GetTopLeftCorner();
 
     if( eOperator == SC_COND_ERROR || eOperator == SC_COND_NOERROR )
     {
@@ -1060,18 +1057,11 @@ void CondFormat::finalizeImport()
         return;
     ScDocument& rDoc = getScDocument();
     maRules.forEachMem( &CondFormatRule::finalizeImport );
-    SCTAB nTab = maModel.maRanges.getBaseAddress().Tab();
+    SCTAB nTab = maModel.maRanges.GetTopLeftCorner().Tab();
     sal_Int32 nIndex = getScDocument().AddCondFormat(mpFormat, nTab);
 
-    ScRangeList aList;
-    for( ::std::vector< CellRangeAddress >::const_iterator itr = maModel.maRanges.begin(); itr != maModel.maRanges.end(); ++itr)
-    {
-        ScRange aRange;
-        ScUnoConversion::FillScRange(aRange, *itr);
-        aList.Append(aRange);
-    }
-    rDoc.AddCondFormatData( aList, nTab, nIndex );
-    mpFormat->SetRange(aList);
+    rDoc.AddCondFormatData( maModel.maRanges, nTab, nIndex );
+    mpFormat->SetRange(maModel.maRanges);
 }
 
 CondFormatRuleRef CondFormat::createRule()

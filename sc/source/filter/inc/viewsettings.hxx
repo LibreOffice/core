@@ -31,7 +31,7 @@ namespace xls {
 struct PaneSelectionModel
 {
     ScAddress maActiveCell;  /// Position of active cell (cursor).
-    ApiCellRangeList    maSelection;                    /// Selected cell ranges.
+    ScRangeList         maSelection;                    /// Selected cell ranges.
     sal_Int32           mnActiveCellId;                 /// Index of active cell in selection list.
 
     explicit            PaneSelectionModel();
