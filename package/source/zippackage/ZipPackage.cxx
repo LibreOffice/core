@@ -69,7 +69,6 @@
 #include "com/sun/star/io/XAsyncOutputMonitor.hpp"
 
 #include <cstring>
-#include <memory>
 #include <vector>
 
 #include <comphelper/processfactory.hxx>
@@ -80,6 +79,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/sequence.hxx>
+#include <o3tl/make_unique.hxx>
 
 using namespace std;
 using namespace osl;
@@ -156,14 +156,12 @@ ZipPackage::ZipPackage ( const uno::Reference < XComponentContext > &xContext )
 , m_bAllowRemoveOnInsert( true )
 , m_eMode ( e_IMode_None )
 , m_xContext( xContext )
-, m_pZipFile( nullptr )
 {
     m_xRootFolder = new ZipPackageFolder( m_xContext, m_nFormat, m_bAllowRemoveOnInsert );
 }
 
 ZipPackage::~ZipPackage()
 {
-    delete m_pZipFile;
 }
 
 bool ZipPackage::isLocalFile() const
@@ -734,7 +732,7 @@ void SAL_CALL ZipPackage::initialize( const uno::Sequence< Any >& aArguments )
             OUString message;
             try
             {
-                m_pZipFile = new ZipFile ( m_xContentStream, m_xContext, true, m_bForceRecovery );
+                m_pZipFile = o3tl::make_unique<ZipFile>(m_xContentStream, m_xContext, true, m_bForceRecovery);
                 getZipFileContents();
             }
             catch ( IOException & e )
@@ -749,14 +747,14 @@ void SAL_CALL ZipPackage::initialize( const uno::Sequence< Any >& aArguments )
             }
             catch ( Exception & )
             {
-                if( m_pZipFile ) { delete m_pZipFile; m_pZipFile = nullptr; }
+                m_pZipFile.reset();
                 throw;
             }
 
             if ( bBadZipFile )
             {
                 // clean up the memory, and tell the UCB about the error
-                if( m_pZipFile ) { delete m_pZipFile; m_pZipFile = nullptr; }
+                m_pZipFile.reset();
 
                 throw css::packages::zip::ZipIOException (
                     THROW_WHERE "Bad Zip File, " + message,
@@ -1104,7 +1102,7 @@ void ZipPackage::ConnectTo( const uno::Reference< io::XInputStream >& xInStream 
     if ( m_pZipFile )
         m_pZipFile->setInputStream( m_xContentStream );
     else
-        m_pZipFile = new ZipFile ( m_xContentStream, m_xContext, false );
+        m_pZipFile = o3tl::make_unique<ZipFile>(m_xContentStream, m_xContext, false);
 }
 
 namespace

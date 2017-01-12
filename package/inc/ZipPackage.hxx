@@ -36,6 +36,7 @@
 #include <osl/file.h>
 #include <mutexholder.hxx>
 #include <vector>
+#include <memory>
 
 class ZipOutputStream;
 class ZipPackageFolder;
@@ -97,7 +98,7 @@ protected:
     css::uno::Reference < css::io::XSeekable > m_xContentSeek;
     const css::uno::Reference < css::uno::XComponentContext > m_xContext;
 
-    ZipFile          *m_pZipFile;
+    std::unique_ptr<ZipFile> m_pZipFile;
 
     bool isLocalFile() const;
 
