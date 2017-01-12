@@ -66,6 +66,30 @@
     },
     {
       "key": {
+        "uuid": "1a6eadb0_cb90cbef",
+        "filename": "connectivity/source/drivers/firebird/Clob.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2017-01-12T08:46:06Z",
+      "side": 1,
+      "message": "Right. Should have read more carefully below, that you actually convert to OUString and then give the length of that.\n\nOTOH, is it guaranteed that the CLOB in Firebird is UTF8-encoded?",
+      "parentUuid": "1a6eadb0_8bda5377",
+      "range": {
+        "startLine": 48,
+        "startChar": 0,
+        "endLine": 48,
+        "endChar": 34
+      },
+      "revId": "065ec187c9fee570fb0df8fe0297301502306e7b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a6eadb0_eb9ae7c4",
         "filename": "connectivity/source/drivers/firebird/Clob.cxx",
         "patchSetId": 2
@@ -95,6 +119,42 @@
       "side": 1,
       "message": "Same. nLength bytes can be shorter than the requested unicode string.",
       "parentUuid": "1a6eadb0_eb9ae7c4",
+      "revId": "065ec187c9fee570fb0df8fe0297301502306e7b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a6eadb0_0bc1e3e4",
+        "filename": "connectivity/source/drivers/firebird/Clob.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2017-01-12T08:46:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a6eadb0_eb9ae7c4",
+      "revId": "065ec187c9fee570fb0df8fe0297301502306e7b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a6eadb0_ebbbc773",
+        "filename": "connectivity/source/drivers/firebird/Clob.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2017-01-12T08:46:06Z",
+      "side": 1,
+      "message": "Right. Bytes vs UTF16 code units.",
+      "parentUuid": "1a6eadb0_abe70f3f",
       "revId": "065ec187c9fee570fb0df8fe0297301502306e7b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
