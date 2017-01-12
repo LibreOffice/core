@@ -554,6 +554,11 @@ public:
                             const BinRangeList& rBinRanges,
                             sal_Int16 nSheet,
                             bool bTrackOverflow );
+    void                convertToCellRangeList(
+                            ScRangeList& orRanges,
+                            const BinRangeList& rBinRanges,
+                            sal_Int16 nSheet,
+                            bool bTrackOverflow );
 
 private:
     void                initializeMaxPos(

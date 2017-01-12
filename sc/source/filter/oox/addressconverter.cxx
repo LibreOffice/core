@@ -532,6 +532,15 @@ void AddressConverter::convertToCellRangeList( ApiCellRangeList& orRanges,
             orRanges.push_back( aRange );
 }
 
+void AddressConverter::convertToCellRangeList( ScRangeList& orRanges,
+        const BinRangeList& rBinRanges, sal_Int16 nSheet, bool bTrackOverflow )
+{
+    ScRange aRange;
+    for( ::std::vector< BinRange >::const_iterator aIt = rBinRanges.begin(), aEnd = rBinRanges.end(); aIt != aEnd; ++aIt )
+        if( convertToCellRange( aRange, *aIt, nSheet, true, bTrackOverflow ) )
+            orRanges.Append( aRange );
+}
+
 // private --------------------------------------------------------------------
 
 void AddressConverter::ControlCharacters::set(

@@ -224,7 +224,7 @@ void SheetViewSettings::importSelection( const AttributeList& rAttribs )
         rSelData.maActiveCell = getAddressConverter().createValidCellAddress( rAttribs.getString( XML_activeCell, OUString() ), getSheetIndex(), false );
         rSelData.mnActiveCellId = rAttribs.getInteger( XML_activeCellId, 0 );
         // selection
-        rSelData.maSelection.clear();
+        rSelData.maSelection.RemoveAll();
         getAddressConverter().convertToCellRangeList( rSelData.maSelection, rAttribs.getString( XML_sqref, OUString() ), getSheetIndex(), false );
     }
 }
@@ -305,7 +305,7 @@ void SheetViewSettings::importSelection( SequenceInputStream& rStrm )
         // selection
         BinRangeList aSelection;
         rStrm >> aSelection;
-        rPaneSel.maSelection.clear();
+        rPaneSel.maSelection.RemoveAll();
         getAddressConverter().convertToCellRangeList( rPaneSel.maSelection, aSelection, getSheetIndex(), false );
     }
 }
