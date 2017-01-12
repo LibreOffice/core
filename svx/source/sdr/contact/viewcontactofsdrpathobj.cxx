@@ -99,23 +99,28 @@ namespace sdr
                 sal_Int32 nPageWidth = pPage ? pPage->GetWdt() : 0;
                 sal_Int32 nPageHeight = pPage ? pPage->GetHgt() : 0;
 
-                //But, see tdf#97276 and tdf#98366. Don't clip too much if the
-                //underlying page dimension is unknown or a paste document
-                //where the page sizes use the odd default of 10x10
-                nPageWidth = std::max<sal_Int32>(21000, nPageWidth);
-                nPageHeight = std::max<sal_Int32>(29700, nPageHeight);
-                basegfx::B2DRange aClipRange(-nPageWidth, -nPageHeight,
-                                             nPageWidth*2, nPageHeight*2);
+                //But, see tdf#101187, only do this if our generous clip region
+                //would not over flow into a tiny clip region
+                if (nPageWidth < SAL_MAX_INT32/2 && nPageHeight < SAL_MAX_INT32/2)
+                {
+                    //But, see tdf#97276 and tdf#98366. Don't clip too much if the
+                    //underlying page dimension is unknown or a paste document
+                    //where the page sizes use the odd default of 10x10
+                    nPageWidth = std::max<sal_Int32>(21000, nPageWidth);
+                    nPageHeight = std::max<sal_Int32>(29700, nPageHeight);
+                    basegfx::B2DRange aClipRange(-nPageWidth, -nPageHeight,
+                                                 nPageWidth*2, nPageHeight*2);
 
-                aUnitPolyPolygon = basegfx::tools::clipPolyPolygonOnRange(aUnitPolyPolygon,
-                                                                   aClipRange, true, true);
-                nPolyCount = ensureGeometry(aUnitPolyPolygon);
+                    aUnitPolyPolygon = basegfx::tools::clipPolyPolygonOnRange(aUnitPolyPolygon,
+                                                                       aClipRange, true, true);
+                    nPolyCount = ensureGeometry(aUnitPolyPolygon);
 
-                // re-check that we have't been clipped out to oblivion
-                bIsLine =
-                    !aUnitPolyPolygon.areControlPointsUsed()
-                    && 1 == nPolyCount
-                    && 2 == aUnitPolyPolygon.getB2DPolygon(0).count();
+                    // re-check that we have't been clipped out to oblivion
+                    bIsLine =
+                        !aUnitPolyPolygon.areControlPointsUsed()
+                        && 1 == nPolyCount
+                        && 2 == aUnitPolyPolygon.getB2DPolygon(0).count();
+                }
             }
 
             if(bIsLine)
