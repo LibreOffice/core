@@ -173,9 +173,9 @@ try_again:
                 if (!pfnImport)
                 {
                     osl::Module aLibrary;
-                    aLibrary.loadRelative(&thisModule, "libicdlo.so");
+                    aLibrary.loadRelative(&thisModule, "libgielo.so");
                     pfnImport = reinterpret_cast<PFilterCall>(
-                        aLibrary.getFunctionSymbol("GraphicImport"));
+                        aLibrary.getFunctionSymbol("icdGraphicImport"));
                     aLibrary.release();
                 }
                 Graphic aGraphic;
@@ -190,9 +190,9 @@ try_again:
                 if (!pfnImport)
                 {
                     osl::Module aLibrary;
-                    aLibrary.loadRelative(&thisModule, "libidxlo.so");
+                    aLibrary.loadRelative(&thisModule, "libgielo.so");
                     pfnImport = reinterpret_cast<PFilterCall>(
-                        aLibrary.getFunctionSymbol("GraphicImport"));
+                        aLibrary.getFunctionSymbol("idxGraphicImport"));
                     aLibrary.release();
                 }
                 Graphic aGraphic;
@@ -207,9 +207,9 @@ try_again:
                 if (!pfnImport)
                 {
                     osl::Module aLibrary;
-                    aLibrary.loadRelative(&thisModule, "libimelo.so");
+                    aLibrary.loadRelative(&thisModule, "libgielo.so");
                     pfnImport = reinterpret_cast<PFilterCall>(
-                        aLibrary.getFunctionSymbol("GraphicImport"));
+                        aLibrary.getFunctionSymbol("imeGraphicImport"));
                     aLibrary.release();
                 }
                 Graphic aGraphic;
@@ -224,9 +224,9 @@ try_again:
                 if (!pfnImport)
                 {
                     osl::Module aLibrary;
-                    aLibrary.loadRelative(&thisModule, "libipblo.so");
+                    aLibrary.loadRelative(&thisModule, "libgielo.so");
                     pfnImport = reinterpret_cast<PFilterCall>(
-                        aLibrary.getFunctionSymbol("GraphicImport"));
+                        aLibrary.getFunctionSymbol("ipbGraphicImport"));
                     aLibrary.release();
                 }
                 Graphic aGraphic;
@@ -241,9 +241,9 @@ try_again:
                 if (!pfnImport)
                 {
                     osl::Module aLibrary;
-                    aLibrary.loadRelative(&thisModule, "libipdlo.so");
+                    aLibrary.loadRelative(&thisModule, "libgielo.so");
                     pfnImport = reinterpret_cast<PFilterCall>(
-                        aLibrary.getFunctionSymbol("GraphicImport"));
+                        aLibrary.getFunctionSymbol("ipdGraphicImport"));
                     aLibrary.release();
                 }
                 Graphic aGraphic;
@@ -258,9 +258,9 @@ try_again:
                 if (!pfnImport)
                 {
                     osl::Module aLibrary;
-                    aLibrary.loadRelative(&thisModule, "libipslo.so");
+                    aLibrary.loadRelative(&thisModule, "libgielo.so");
                     pfnImport = reinterpret_cast<PFilterCall>(
-                        aLibrary.getFunctionSymbol("GraphicImport"));
+                        aLibrary.getFunctionSymbol("ipsGraphicImport"));
                     aLibrary.release();
                 }
                 Graphic aGraphic;
@@ -275,9 +275,9 @@ try_again:
                 if (!pfnImport)
                 {
                     osl::Module aLibrary;
-                    aLibrary.loadRelative(&thisModule, "libiptlo.so");
+                    aLibrary.loadRelative(&thisModule, "libgielo.so");
                     pfnImport = reinterpret_cast<PFilterCall>(
-                        aLibrary.getFunctionSymbol("GraphicImport"));
+                        aLibrary.getFunctionSymbol("iptGraphicImport"));
                     aLibrary.release();
                 }
                 Graphic aGraphic;
@@ -292,9 +292,9 @@ try_again:
                 if (!pfnImport)
                 {
                     osl::Module aLibrary;
-                    aLibrary.loadRelative(&thisModule, "libipxlo.so");
+                    aLibrary.loadRelative(&thisModule, "libgielo.so");
                     pfnImport = reinterpret_cast<PFilterCall>(
-                        aLibrary.getFunctionSymbol("GraphicImport"));
+                        aLibrary.getFunctionSymbol("ipxGraphicImport"));
                     aLibrary.release();
                 }
                 Graphic aGraphic;
@@ -309,9 +309,9 @@ try_again:
                 if (!pfnImport)
                 {
                     osl::Module aLibrary;
-                    aLibrary.loadRelative(&thisModule, "libiralo.so");
+                    aLibrary.loadRelative(&thisModule, "libgielo.so");
                     pfnImport = reinterpret_cast<PFilterCall>(
-                        aLibrary.getFunctionSymbol("GraphicImport"));
+                        aLibrary.getFunctionSymbol("iraGraphicImport"));
                     aLibrary.release();
                 }
                 Graphic aGraphic;
@@ -326,9 +326,9 @@ try_again:
                 if (!pfnImport)
                 {
                     osl::Module aLibrary;
-                    aLibrary.loadRelative(&thisModule, "libitglo.so");
+                    aLibrary.loadRelative(&thisModule, "libgielo.so");
                     pfnImport = reinterpret_cast<PFilterCall>(
-                        aLibrary.getFunctionSymbol("GraphicImport"));
+                        aLibrary.getFunctionSymbol("itgGraphicImport"));
                     aLibrary.release();
                 }
                 Graphic aGraphic;
@@ -343,9 +343,9 @@ try_again:
                 if (!pfnImport)
                 {
                     osl::Module aLibrary;
-                    aLibrary.loadRelative(&thisModule, "libitilo.so");
+                    aLibrary.loadRelative(&thisModule, "libgielo.so");
                     pfnImport = reinterpret_cast<PFilterCall>(
-                        aLibrary.getFunctionSymbol("GraphicImport"));
+                        aLibrary.getFunctionSymbol("itiGraphicImport"));
                     aLibrary.release();
                 }
                 Graphic aGraphic;
