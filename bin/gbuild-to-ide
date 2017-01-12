@@ -23,17 +23,22 @@ import collections
 
 
 class GbuildLinkTarget:
-    def __init__(self, name, location, include, include_sys, defs, cxxobjects, cxxflags, linked_libs,
-                 asmobjects, cflags, gencobjects, gencxxobjects, ilibtarget, linked_static_libs, linktarget,
-                 objcflags, objcobjects, objcxxflags, objcxxobjects, yaccobjects, build_type):
-        (self.name, self.location, self.include,
-         self.include_sys, self.defs, self.cxxobjects,
-         self.cxxflags, self.linked_libs,
-         self.asmobjects, self.cflags, self.gencobjects,
-         self.gencxxobjects, self.ilibtarget, self.linked_static_libs,
-         self.linktarget, self.objcflags, self.objcobjects,
-         self.objcxxflags, self.objcxxobjects, self.yaccobjects,
-         self.build_type) = (name, location, include,
+
+    def __init__(self, name, location, include, include_sys, defs,
+                 cxxobjects, cxxflags, linked_libs, asmobjects,
+                 cflags, gencobjects, gencxxobjects, ilibtarget,
+                 linked_static_libs, linktarget, objcflags,
+                 objcobjects, objcxxflags, objcxxobjects,
+                 yaccobjects, build_type):
+        (self._name, self._location, self._include,
+         self._include_sys, self._defs, self._cxxobjects,
+         self._cxxflags, self._linked_libs,
+         self._asmobjects, self._cflags, self._gencobjects,
+         self._gencxxobjects, self._ilibtarget,
+         self._linked_static_libs, self._linktarget,
+         self._objcflags, self._objcobjects,
+         self._objcxxflags, self._objcxxobjects, self._yaccobjects,
+         self._build_type) = (name, location, include,
                              include_sys, defs, cxxobjects,
                              cxxflags, linked_libs, asmobjects,
                              cflags, gencobjects, gencxxobjects,
@@ -41,14 +46,97 @@ class GbuildLinkTarget:
                              objcflags, objcobjects, objcxxflags,
                              objcxxobjects, yaccobjects, build_type)
 
+    @property
     def name(self):
-        return self.name
+        return self._name
 
+    @property
+    def location(self):
+        return self._location
+
+    @property
+    def include(self):
+        return self._include
+
+    @property
+    def include_sys(self):
+        return self._include_sys
+
+    @property
+    def defs(self):
+        return self._defs
+
+    @property
+    def cxxobjects(self):
+        return self._cxxobjects
+
+    @property
+    def cxxflags(self):
+        return self._cxxflags
+
+    @property
+    def linked_libs(self):
+        return self._linked_libs
+
+    @property
+    def asmobjects(self):
+        return self._asmobjects
+
+    @property
+    def cflags(self):
+        return self._cflags
+
+    @property
+    def gencobjects(self):
+        return self._gencobjects
+
+    @property
+    def gencxxobjects(self):
+        return self._gencxxobjects
+
+    @property
+    def ilibtarget(self):
+        return self._ilibtarget
+
+    @property
+    def linked_static_libs(self):
+        return self._linked_static_libs
+
+    @property
+    def linktarget(self):
+        return self._linktarget
+
+    @property
+    def objcflags(self):
+        return self._objcflags
+
+    @property
+    def objcobjects(self):
+        return self._objcobjects
+
+    @property
+    def objcxxflags(self):
+        return self._objcxxflags
+
+    @property
+    def objcxxobjects(self):
+        return self._objcxxobjects
+
+    @property
+    def yaccobjects(self):
+        return self._yaccobjects
+
+    @property
+    def build_type(self):
+        return self._build_type
+
+    @property
     def target_name(self):
-        return self.build_type + '_' + self.name
+        return '%s_%s' % (self.build_type, self.name)
 
+    @property
     def short_name(self):
-        return self.build_type + ' ' + self.name
+        return '%s %s' % (self.build_type, self.name
 
     def module(self):
         return self.location[self.location.rindex('/')+1:]
@@ -60,6 +148,7 @@ class GbuildLinkTarget:
         return '%s at %s with include path: %s, isystem includes: %s, defines: %s, objects: %s, cxxflags: %s and linked libs: %s' % (
             self.short_name(), self.location, self.include, self.include_sys, self.defs, self.cxxobjects,
             self.cxxflags, self.linked_libs)
+
 
 class GbuildParser:
     def __init__(self, makecmd):
