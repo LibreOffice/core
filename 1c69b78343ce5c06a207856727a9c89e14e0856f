@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1a6eadb0_2e830dce",
+        "filename": "compilerplugins/clang/unnecessaryoverride.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-01-12T19:19:29Z",
+      "side": 1,
+      "message": "what I mean with \"complete\" is \"is the entirety of the class visible, with all of it\u0027s methods\"\n\nI\u0027m trying to catch classes where the whole class is declared in the header, in which case a trival/empty destructor is superfluous",
+      "parentUuid": "1a6eadb0_0e0ad1d2",
+      "revId": "1c69b78343ce5c06a207856727a9c89e14e0856f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a6eadb0_2e0f8de2",
         "filename": "compilerplugins/clang/unnecessaryoverride.cxx",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2017-01-12T14:56:07Z",
       "side": 1,
       "message": "what\u0027s the point of checking for base classes here?",
+      "revId": "1c69b78343ce5c06a207856727a9c89e14e0856f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a6eadb0_4e8849e8",
+        "filename": "compilerplugins/clang/unnecessaryoverride.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-01-12T19:19:29Z",
+      "side": 1,
+      "message": "because (a) one of your test cases has  no warning for a trivial destructor in a class with superclasses and I wasn\u0027t sure if there was some reason that is made sense  (b) I\u0027m just trying to catch the next simplest category of superfluous code",
+      "parentUuid": "1a6eadb0_2e0f8de2",
       "revId": "1c69b78343ce5c06a207856727a9c89e14e0856f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
