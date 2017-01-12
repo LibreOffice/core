@@ -509,6 +509,20 @@ void AddressConverter::convertToCellRangeList( ApiCellRangeList& orRanges,
     }
 }
 
+void AddressConverter::convertToCellRangeList( ScRangeList& orRanges,
+        const OUString& rString, sal_Int16 nSheet, bool bTrackOverflow )
+{
+    sal_Int32 nPos = 0;
+    sal_Int32 nLen = rString.getLength();
+    ScRange aRange;
+    while( (0 <= nPos) && (nPos < nLen) )
+    {
+        OUString aToken = rString.getToken( 0, ' ', nPos );
+        if( !aToken.isEmpty() && convertToCellRange( aRange, aToken, nSheet, true, bTrackOverflow ) )
+            orRanges.Append(aRange);
+    }
+}
+
 void AddressConverter::convertToCellRangeList( ApiCellRangeList& orRanges,
         const BinRangeList& rBinRanges, sal_Int16 nSheet, bool bTrackOverflow )
 {

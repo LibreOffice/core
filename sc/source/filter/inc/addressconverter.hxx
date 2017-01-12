@@ -22,6 +22,7 @@
 
 #include <vector>
 #include <com/sun/star/table/CellRangeAddress.hpp>
+#include <rangelst.hxx>
 #include "workbookhelper.hxx"
 
 namespace oox {
@@ -525,6 +526,11 @@ public:
      */
     void                convertToCellRangeList(
                             ApiCellRangeList& orRanges,
+                            const OUString& rString,
+                            sal_Int16 nSheet,
+                            bool bTrackOverflow );
+    void                convertToCellRangeList(
+                            ScRangeList& orRanges,
                             const OUString& rString,
                             sal_Int16 nSheet,
                             bool bTrackOverflow );
