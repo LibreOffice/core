@@ -47,7 +47,6 @@ namespace svtools { class ColorConfig; }
 
 namespace sd {
 class DrawDocShell;
-class SdGlobalResourceContainer;
 }
 
 namespace com { namespace sun { namespace star { namespace frame {
@@ -155,10 +154,6 @@ private:
 
     static SfxFrame* CreateEmptyDocument( const css::uno::Reference< css::frame::XFrame >& i_rFrame );
     static SfxFrame* CreateFromTemplate( const OUString& rTemplatePath, const css::uno::Reference< css::frame::XFrame >& i_rFrame );
-
-    /** The resource container controls the lifetime of some singletons.
-    */
-    ::std::unique_ptr< ::sd::SdGlobalResourceContainer> mpResourceContainer;
 
     bool mbEventListenerAdded;
 
