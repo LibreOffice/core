@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a6eadb0_0ee2d1d5",
+        "filename": "sc/source/ui/view/gridwin4.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 899,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-01-12T18:04:42Z",
+      "side": 1,
+      "message": "This factor is still not explained in the source code, neither why it is this number nor what it does, not why the 15 or the 1.76388889 (or the comment saying 26.45833335). Maybe it even only works in some constellation and the next one who comes along with \"this does not work on my screen\" will change it and maybe break things for others.\n\nMay it be that the factor can be expressed using one of the TWIPS related constants from sc/inc/global.hxx ? If it is \"to recalculate the origin in pixels\" (citing from a comment in an earlier patch set) then maybe using TWIPS_PER_PIXEL in the beginning is wrong? What units are aOriginalMode and aOutputData in?\n\nOr maybe you need to use LogicToPixel() and/or PixelToLogic()?",
+      "revId": "be38d1b55b8e5c0016d96e0c5de213e77a3d22fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a6eadb0_8ef50185",
+        "filename": "sc/source/ui/view/gridwin4.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 901,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-01-12T18:04:42Z",
+      "side": 1,
+      "message": "Apart from that, this is now at least the 4th place that introduces this magical twipFactor without any comment (luckily all in if(bIsTiledRendering) conditions). So if that is really needed and can not be expressed using existing conversion fuctions or factors then it should go into global.hxx (or rather some sc/source/ui/inc/*.hxx) and be commented properly and that constant then be used, instead of sprinkling the same black box calculation over. Maybe even factor out the common code that always recalculates the origin.\n\nSo when done with this patch I\u0027d like to see that cleaned up.\n\nFurthermore, if these special conversions are needed at more and more places then there might be something more fundamentally broken with tiled rendering and its device\u0027s MapMode. MapMode exactly is meant to take care of such conversions.",
+      "revId": "be38d1b55b8e5c0016d96e0c5de213e77a3d22fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
