@@ -231,14 +231,13 @@ struct SwMergeDescriptor
     }
 };
 
-struct SwDBManager_Impl;
-class SwConnectionDisposedListener_Impl;
 class AbstractMailMergeDlg;
 class SwDoc;
 
 class SW_DLLPUBLIC SwDBManager
 {
-friend class SwConnectionDisposedListener_Impl;
+    struct SwDBManager_Impl;
+    class ConnectionDisposedListener_Impl;
 
     enum class MergeStatus
     {

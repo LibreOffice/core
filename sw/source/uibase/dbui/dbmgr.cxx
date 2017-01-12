@@ -200,8 +200,8 @@ static bool lcl_getCountFromResultSet( sal_Int32& rCount, const SwDSParam* pPara
     return false;
 }
 
-class SwConnectionDisposedListener_Impl : public cppu::WeakImplHelper
-< lang::XEventListener >
+class SwDBManager::ConnectionDisposedListener_Impl
+    : public cppu::WeakImplHelper< lang::XEventListener >
 {
 private:
     SwDBManager * m_pDBManager;
@@ -209,7 +209,7 @@ private:
     virtual void SAL_CALL disposing( const lang::EventObject& Source ) throw (uno::RuntimeException, std::exception) override;
 
 public:
-    explicit SwConnectionDisposedListener_Impl(SwDBManager& rMgr);
+    explicit ConnectionDisposedListener_Impl(SwDBManager& rMgr);
 
     void Dispose() { m_pDBManager = nullptr; }
 
@@ -293,17 +293,16 @@ void SwDataSourceRemovedListener::Dispose()
     m_pDBManager = nullptr;
 }
 
-struct SwDBManager_Impl
+struct SwDBManager::SwDBManager_Impl
 {
     SwDSParam*                    pMergeData;
     VclPtr<AbstractMailMergeDlg>  pMergeDialog;
-    ::rtl::Reference<SwConnectionDisposedListener_Impl> m_xDisposeListener;
+    rtl::Reference<SwDBManager::ConnectionDisposedListener_Impl> m_xDisposeListener;
     rtl::Reference<SwDataSourceRemovedListener> m_xDataSourceRemovedListener;
 
     explicit SwDBManager_Impl(SwDBManager& rDBManager)
-       :pMergeData(nullptr)
-       ,pMergeDialog()
-       , m_xDisposeListener(new SwConnectionDisposedListener_Impl(rDBManager))
+        : pMergeData( nullptr )
+        , m_xDisposeListener(new ConnectionDisposedListener_Impl(rDBManager))
         {}
 
     ~SwDBManager_Impl()
@@ -3063,12 +3062,12 @@ void SwDBManager::releaseRevokeListener()
     pImpl->m_xDataSourceRemovedListener.clear();
 }
 
-SwConnectionDisposedListener_Impl::SwConnectionDisposedListener_Impl(SwDBManager& rManager)
+SwDBManager::ConnectionDisposedListener_Impl::ConnectionDisposedListener_Impl(SwDBManager& rManager)
     : m_pDBManager(&rManager)
 {
 }
 
-void SwConnectionDisposedListener_Impl::disposing( const lang::EventObject& rSource )
+void SwDBManager::ConnectionDisposedListener_Impl::disposing( const lang::EventObject& rSource )
         throw (uno::RuntimeException, std::exception)
 {
     ::SolarMutexGuard aGuard;
