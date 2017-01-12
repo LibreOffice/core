@@ -118,7 +118,6 @@ protected:
 
 public:
             SdOptionsLayout( sal_uInt16 nConfigId, bool bUseConfig );
-            virtual ~SdOptionsLayout() override {}
 
     bool    operator==( const SdOptionsLayout& rOpt ) const;
 
@@ -168,7 +167,6 @@ protected:
 public:
 
             SdOptionsContents( sal_uInt16 nConfigId, bool bUseConfig );
-            virtual ~SdOptionsContents() override {}
 
     bool    operator==( const SdOptionsContents& rOpt ) const;
 };
@@ -240,7 +238,6 @@ protected:
 public:
 
             SdOptionsMisc( sal_uInt16 nConfigId, bool bUseConfig );
-            virtual ~SdOptionsMisc() override {}
 
     bool    operator==( const SdOptionsMisc& rOpt ) const;
 
@@ -361,7 +358,6 @@ protected:
 public:
 
             SdOptionsSnap( sal_uInt16 nConfigId, bool bUseConfig );
-            virtual ~SdOptionsSnap() override {}
 
     bool    operator==( const SdOptionsSnap& rOpt ) const;
 
@@ -421,7 +417,6 @@ protected:
 public:
 
     explicit SdOptionsZoom(sal_uInt16 nConfigId);
-    virtual ~SdOptionsZoom() override {}
 
     void    GetScale( sal_Int32& rX, sal_Int32& rY ) const { Init(); rX = nX; rY = nY; }
     void    SetScale( sal_Int32 nInX, sal_Int32 nInY ) { if( nX != nInX || nY != nInY ) { OptionsChanged(); nX = nInX; nY = nInY; } }
@@ -509,7 +504,6 @@ protected:
 public:
 
             SdOptionsPrint( sal_uInt16 nConfigId, bool bUseConfig );
-            virtual ~SdOptionsPrint() override {}
 
     bool    operator==( const SdOptionsPrint& rOpt ) const;
 

@@ -60,10 +60,6 @@ public:
     {
     }
 
-    virtual ~ImportFilterImpl() override
-    {
-    }
-
     const css::uno::Reference< css::uno::XComponentContext > &getXContext() const
     {
         return mxContext;

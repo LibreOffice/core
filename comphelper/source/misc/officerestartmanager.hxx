@@ -48,9 +48,6 @@ public:
     , m_bRestartRequested( false )
     {}
 
-    virtual ~OOfficeRestartManager() override
-    {}
-
 // XRestartManager
     virtual void SAL_CALL requestRestart( const css::uno::Reference< css::task::XInteractionHandler >& xInteractionHandler ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL isRestartRequested( sal_Bool bInitialized ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;

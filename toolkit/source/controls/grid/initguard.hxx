@@ -41,10 +41,6 @@ namespace toolkit
             if ( !i_component.isInitialized() )
                 throw css::lang::NotInitializedException( OUString(), *&i_component );
         }
-
-        ~InitGuard()
-        {
-        }
     };
 
 

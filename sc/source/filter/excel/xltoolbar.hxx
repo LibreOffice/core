@@ -39,7 +39,6 @@ class ScTBC : public TBBase
     std::shared_ptr<TBCData> tbcd;
 public:
     ScTBC();
-    virtual ~ScTBC() override {}
 #ifdef DEBUG_SC_EXCEL
     virtual void Print( FILE* ) override;
 #endif
@@ -56,7 +55,6 @@ class ScCTB : public TBBase
     std::vector< ScTBC > rTBC;
 public:
     explicit ScCTB(sal_uInt16);
-    virtual ~ScCTB() override {}
 #ifdef DEBUG_SC_EXCEL
     virtual void Print( FILE* ) override;
 #endif
@@ -82,7 +80,6 @@ public:
     CTBS(const CTBS&);
     CTBS& operator = ( const CTBS&);
     CTBS();
-    virtual ~CTBS() override {}
 #ifdef DEBUG_SC_EXCEL
     virtual void Print( FILE* ) override;
 #endif

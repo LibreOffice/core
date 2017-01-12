@@ -52,8 +52,6 @@ public:
     explicit WeakListenerAdapter( const css::uno::WeakReference< Listener > & xListener ) :
             m_xListener( xListener )
     {}
-    virtual ~WeakListenerAdapter()
-    {}
 
 protected:
     // ____ XEventListener (base of all listeners) ____

@@ -67,7 +67,6 @@ public: // Methods
         , cCurr(0)
         , cTOCSize(0)
         { }
-    ~CBenTOCReader() {}
     BenError ReadLabelAndTOC();
 
 private: // Methods

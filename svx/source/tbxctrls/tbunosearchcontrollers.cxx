@@ -295,7 +295,6 @@ class SearchToolbarControllersManager
 public:
 
     SearchToolbarControllersManager();
-    ~SearchToolbarControllersManager();
 
     static SearchToolbarControllersManager& createControllersManager();
 
@@ -316,10 +315,6 @@ private:
 };
 
 SearchToolbarControllersManager::SearchToolbarControllersManager()
-{
-}
-
-SearchToolbarControllersManager::~SearchToolbarControllersManager()
 {
 }
 

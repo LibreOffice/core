@@ -32,7 +32,6 @@ private:
 
 public:
                 ScOutlineDocFunc( ScDocShell& rDocSh ): rDocShell(rDocSh) {}
-                ~ScOutlineDocFunc() {}
 
     void        MakeOutline( const ScRange& rRange, bool bColumns, bool bRecord, bool bApi );
     void        RemoveOutline( const ScRange& rRange, bool bColumns, bool bRecord, bool bApi );

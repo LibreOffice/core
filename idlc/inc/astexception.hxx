@@ -27,8 +27,6 @@ public:
     AstException(const OString& name, AstException* pBaseType, AstScope* pScope)
         : AstStruct(NT_exception, name, pBaseType, pScope)
         {}
-
-    virtual ~AstException() override {}
 };
 
 #endif // INCLUDED_IDLC_INC_ASTEXCEPTION_HXX

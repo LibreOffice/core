@@ -153,10 +153,6 @@ class WeakContainerListener : public ::cppu::WeakImplHelper<css::container::XCon
         {
         }
 
-        virtual ~WeakContainerListener() override
-        {
-        }
-
         // container.XContainerListener
         virtual void SAL_CALL elementInserted(const css::container::ContainerEvent& rEvent)
             throw(css::uno::RuntimeException, std::exception) override
@@ -208,10 +204,6 @@ class WeakChangesListener : public ::cppu::WeakImplHelper<css::util::XChangesLis
         {
         }
 
-        virtual ~WeakChangesListener() override
-        {
-        }
-
         // util.XChangesListener
         virtual void SAL_CALL changesOccurred(const css::util::ChangesEvent& rEvent)
             throw(css::uno::RuntimeException, std::exception) override
@@ -242,10 +234,6 @@ class WeakDocumentEventListener : public ::cppu::WeakImplHelper<css::document::X
     public:
         WeakDocumentEventListener(css::uno::Reference<css::document::XDocumentEventListener> const & xOwner)
             : mxOwner(xOwner)
-        {
-        }
-
-        virtual ~WeakDocumentEventListener() override
         {
         }
 

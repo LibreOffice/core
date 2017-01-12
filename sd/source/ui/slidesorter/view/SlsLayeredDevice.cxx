@@ -100,7 +100,6 @@ class Layer
 {
 public:
     Layer();
-    ~Layer();
     Layer(const Layer&) = delete;
     Layer& operator=(const Layer&) = delete;
 
@@ -375,10 +374,6 @@ Layer::Layer()
     : mpLayerDevice(),
       maPainters(),
       maInvalidationRegion()
-{
-}
-
-Layer::~Layer()
 {
 }
 

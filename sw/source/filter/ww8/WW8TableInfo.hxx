@@ -128,8 +128,6 @@ public:
     {
     }
 
-    ~CellInfo() {}
-
     bool operator < (const CellInfo & aCellInfo) const;
 
     long top() const { return m_aRect.Top(); }

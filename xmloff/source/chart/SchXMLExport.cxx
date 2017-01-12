@@ -129,8 +129,6 @@ public:
     SchXMLExportHelper_Impl( SvXMLExport& rExport,
                         SvXMLAutoStylePoolP& rASPool );
 
-    ~SchXMLExportHelper_Impl();
-
     SchXMLExportHelper_Impl(const SchXMLExportHelper_Impl&) = delete;
     SchXMLExportHelper_Impl& operator=(const SchXMLExportHelper_Impl&) = delete;
 
@@ -1064,10 +1062,6 @@ SchXMLExportHelper_Impl::SchXMLExportHelper_Impl(
         GetXMLToken( XML_TEXT ),
         mxExpPropMapper.get(),
         OUString( 'T' ));
-}
-
-SchXMLExportHelper_Impl::~SchXMLExportHelper_Impl()
-{
 }
 
 void SchXMLExportHelper_Impl::collectAutoStyles( Reference< chart::XChartDocument > const & rChartDoc )

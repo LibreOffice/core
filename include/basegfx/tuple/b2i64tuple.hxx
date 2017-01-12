@@ -76,9 +76,6 @@ namespace basegfx
             mnY( rTup.mnY )
         {}
 
-        ~B2I64Tuple()
-        {}
-
         /// Get X-Coordinate of 2D Tuple
         sal_Int64 getX() const
         {

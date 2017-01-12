@@ -111,13 +111,7 @@ struct BasicManagerImpl
 
     BasicManagerImpl()
     {}
-    ~BasicManagerImpl();
 };
-
-BasicManagerImpl::~BasicManagerImpl()
-{
-}
-
 
 // BasMgrContainerListenerImpl
 

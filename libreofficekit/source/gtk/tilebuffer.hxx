@@ -100,8 +100,6 @@ class TileBuffer
         cairo_surface_destroy(pSurface);
     }
 
-    ~TileBuffer() {}
-
     /**
        Gets the underlying Tile object for given position. The position (0, 0)
        points to the left top most tile of the buffer.

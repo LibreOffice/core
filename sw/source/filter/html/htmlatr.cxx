@@ -215,15 +215,9 @@ struct SwHTMLTextCollOutputInfo
         bOutDiv( false )
     {}
 
-    ~SwHTMLTextCollOutputInfo();
-
     bool HasParaToken() const { return aToken.getLength()==1 && aToken[0]=='P'; }
     bool ShouldOutputToken() const { return bOutPara || !HasParaToken(); }
 };
-
-SwHTMLTextCollOutputInfo::~SwHTMLTextCollOutputInfo()
-{
-}
 
 SwHTMLFormatInfo::SwHTMLFormatInfo( const SwFormat *pF, SwDoc *pDoc, SwDoc *pTemplate,
                               bool bOutStyles,

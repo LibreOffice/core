@@ -88,7 +88,6 @@ class LwpObjectManager
 {
 public:
     LwpObjectManager(){}
-    ~LwpObjectManager(){}
 private:
     LwpObjectID m_Division;
 public:
@@ -99,7 +98,6 @@ class LwpNumberManager
 {
 public:
     LwpNumberManager(){}
-    ~LwpNumberManager(){}
 private:
     LwpObjectID m_TableRange;
 public:
@@ -111,7 +109,6 @@ class LwpBulletManager
 {
 public:
     LwpBulletManager(){}
-    ~LwpBulletManager(){}
 private:
     LwpObjectID m_Head;
 public:
@@ -124,7 +121,6 @@ class LwpContentManager
 {
 public:
     LwpContentManager(){}
-    ~LwpContentManager(){}
 private:
     LwpObjectID m_ContentList;
     LwpObjectID m_EnumHead;
@@ -148,7 +144,6 @@ class LwpPieceManager
 {
 public:
     LwpPieceManager(){}
-    ~LwpPieceManager(){}
 private:
     LwpObjectID m_GeometryPieceList;
     LwpObjectID m_ScalePieceList;
@@ -185,7 +180,6 @@ class LwpOrderedObjectManager
 {
 public:
     LwpOrderedObjectManager(){}
-    ~LwpOrderedObjectManager(){}
 protected:
     LwpObjectID m_Head;
 public:

@@ -483,7 +483,6 @@ class SvxLinguData_Impl
 public:
     SvxLinguData_Impl();
     SvxLinguData_Impl( const SvxLinguData_Impl &rData );
-    ~SvxLinguData_Impl();
 
     SvxLinguData_Impl & operator = (const SvxLinguData_Impl &rData);
 
@@ -839,10 +838,6 @@ SvxLinguData_Impl & SvxLinguData_Impl::operator = (const SvxLinguData_Impl &rDat
     aDisplayServiceArr  = rData.aDisplayServiceArr;
     nDisplayServices    = rData.nDisplayServices;
     return *this;
-}
-
-SvxLinguData_Impl::~SvxLinguData_Impl()
-{
 }
 
 void SvxLinguData_Impl::SetChecked(const Sequence<OUString>& rConfiguredServices)

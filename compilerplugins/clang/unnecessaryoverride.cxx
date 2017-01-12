@@ -78,14 +78,25 @@ bool UnnecessaryOverride::VisitCXXMethodDecl(const CXXMethodDecl* methodDecl)
         return true;
     }
 
-    if (isa<CXXDestructorDecl>(methodDecl)) {
-        // Warn about unnecessarily user-declared overriding virtual
-        // destructors; such a destructor is deemed unnecessary if
+    StringRef aFileName = compiler.getSourceManager().getFilename(compiler.getSourceManager().getSpellingLoc(methodDecl->getLocStart()));
+
+    if (isa<CXXDestructorDecl>(methodDecl)
+       && !isInUnoIncludeFile(methodDecl))
+    {
+        // the code is this method is only __compiled__ if OSL_DEBUG_LEVEL > 1
+        if (aFileName == SRCDIR "/tools/source/stream/strmunx.cxx")
+            return true;
+
+        // Warn about unnecessarily user-declared destructors.
+        // A destructor is deemed unnecessary if:
         // * it is public;
         // * its class is only defined in the .cxx file (i.e., the virtual
-        //   destructor is neither used to controll the place of vtable
+        //   destructor is neither used to control the place of vtable
         //   emission, nor is its definition depending on types that may still
         //   be incomplete);
+        //     or
+        //   the destructor is inline, the class definition is complete,
+        //     and the class has no superclasses
         // * it either does not have an explicit exception specification, or has
         //   a non-dependent explicit exception specification that is compatible
         //   with a non-dependent exception specification the destructor would
@@ -102,14 +113,42 @@ bool UnnecessaryOverride::VisitCXXMethodDecl(const CXXMethodDecl* methodDecl)
         // implicit definition of a copy constructor and/or copy assignment
         // operator to change from being an obsolete feature to being a standard
         // feature.  That difference is not taken into account here.
-        if ((methodDecl->begin_overridden_methods()
-             == methodDecl->end_overridden_methods())
-            || methodDecl->getAccess() != AS_public)
+        auto cls = methodDecl->getParent();
+        if (methodDecl->isVirtual() && cls->getNumBases() == 0)
+        {
+            return true;
+        }
+        if (methodDecl->getAccess() != AS_public)
         {
             return true;
         }
         if (!compiler.getSourceManager().isInMainFile(
-                methodDecl->getCanonicalDecl()->getLocation()))
+                methodDecl->getCanonicalDecl()->getLocation())
+            && !( methodDecl->isInlined()))
+        {
+            return true;
+        }
+        // if it's virtual, but it has a base-class with a non-virtual destructor
+        if (methodDecl->isVirtual())
+        {
+            for (auto baseSpecifier = cls->bases_begin(); baseSpecifier != cls->bases_end(); ++baseSpecifier)
+            {
+                const RecordType* baseRecordType = baseSpecifier->getType()->getAs<RecordType>();
+                if (baseRecordType)
+                {
+                    const CXXRecordDecl* baseRecordDecl = dyn_cast<CXXRecordDecl>(baseRecordType->getDecl());
+                    if (baseRecordDecl && baseRecordDecl->getDestructor()
+                        && !baseRecordDecl->getDestructor()->isVirtual())
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+        // corner case
+        if (methodDecl->isInlined()
+            && compiler.getSourceManager().isInMainFile(methodDecl->getLocation())
+            && !compiler.getSourceManager().isInMainFile(methodDecl->getCanonicalDecl()->getLocation()))
         {
             return true;
         }
@@ -123,7 +162,6 @@ bool UnnecessaryOverride::VisitCXXMethodDecl(const CXXMethodDecl* methodDecl)
             }
         }
         //TODO: exception specification
-        auto cls = methodDecl->getParent();
         if (!(cls->hasUserDeclaredCopyConstructor()
               || cls->hasUserDeclaredCopyAssignment()
               || cls->hasUserDeclaredMoveConstructor()
@@ -166,7 +204,6 @@ bool UnnecessaryOverride::VisitCXXMethodDecl(const CXXMethodDecl* methodDecl)
         }
     }
     // sometimes the disambiguation happens in a base class
-    StringRef aFileName = compiler.getSourceManager().getFilename(compiler.getSourceManager().getSpellingLoc(methodDecl->getLocStart()));
     if (aFileName == SRCDIR "/comphelper/source/property/propertycontainer.cxx")
         return true;
     // not sure what is happening here

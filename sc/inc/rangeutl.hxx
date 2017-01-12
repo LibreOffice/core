@@ -42,7 +42,6 @@ class SC_DLLPUBLIC ScRangeUtil
 {
 public:
                 ScRangeUtil()  {}
-                ~ScRangeUtil() {}
 
     static bool MakeArea        ( const OUString&     rAreaStr,
                                   ScArea&           rArea,
@@ -265,7 +264,6 @@ private:
 
 public:
             ScAreaNameIterator( ScDocument* pDoc );
-            ~ScAreaNameIterator() {}
 
     bool Next( OUString& rName, ScRange& rRange );
     bool WasDBName() const { return !bFirstPass; }

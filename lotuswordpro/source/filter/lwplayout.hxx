@@ -97,7 +97,6 @@ class LwpVirtualLayout : public LwpDLNFPVList
 {
 public:
     LwpVirtualLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
-    virtual ~LwpVirtualLayout() override {}
     inline virtual sal_uInt16 GetNumCols(){return 1;}
     virtual double GetColWidth(sal_uInt16 nIndex);
     virtual double GetColGap(sal_uInt16 nIndex);
@@ -296,7 +295,6 @@ class LwpHeadLayout : public LwpVirtualLayout
 {
 public:
     LwpHeadLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
-    virtual ~LwpHeadLayout() override {}
     void RegisterStyle() override;
     rtl::Reference<LwpVirtualLayout> FindEnSuperTableLayout();
 protected:

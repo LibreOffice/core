@@ -75,9 +75,6 @@ public:
     {
     }
 
-    virtual ~XmlFilterAdaptor() override {}
-
-
     // XFilter
 
     virtual sal_Bool SAL_CALL filter( const css::uno::Sequence< css::beans::PropertyValue >& aDescriptor )

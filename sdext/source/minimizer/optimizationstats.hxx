@@ -33,7 +33,6 @@ class OptimizationStats
     public:
 
         OptimizationStats();
-        ~OptimizationStats(){};
 
         void SetStatusValue( const PPPOptimizerTokenEnum eStat, const css::uno::Any& rStatValue );
         const css::uno::Any* GetStatusValue( const PPPOptimizerTokenEnum eStat ) const;

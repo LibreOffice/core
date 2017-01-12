@@ -45,7 +45,6 @@ private:
 
 public:
     explicit PBMReader(SvStream & rPBM);
-    ~PBMReader();
     bool                ReadPBM(Graphic & rGraphic );
 };
 
@@ -62,10 +61,6 @@ PBMReader::PBMReader(SvStream & rPBM)
     , mnHeight(0)
     , mnCol(0)
     , mnMaxVal(0)
-{
-}
-
-PBMReader::~PBMReader()
 {
 }
 

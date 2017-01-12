@@ -48,10 +48,7 @@ private:
     BitmapChecksum  mnID4;
 
 public:
-
-
                 explicit GraphicID( const GraphicObject& rObj );
-                ~GraphicID() {}
 
     bool        operator==( const GraphicID& rID ) const
                 {

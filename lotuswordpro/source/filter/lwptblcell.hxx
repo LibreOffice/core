@@ -227,7 +227,6 @@ class LwpRowColumnQualifier
 {
 public:
     LwpRowColumnQualifier();
-    ~LwpRowColumnQualifier(){}
 
     bool IsAbsolute();
 
@@ -280,7 +279,6 @@ public:
     LwpRowSpecifier()
         : cRow(0)
         {}
-    ~LwpRowSpecifier(){}
 
     void QuickRead(LwpObjectStream *pStrm);
 
@@ -315,8 +313,6 @@ class LwpColumnSpecifier
 public:
     LwpColumnSpecifier()
         : cColumn(0)
-        {}
-    ~LwpColumnSpecifier()
         {}
 
     void QuickRead(LwpObjectStream *pStrm);

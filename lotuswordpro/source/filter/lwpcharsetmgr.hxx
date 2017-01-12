@@ -68,7 +68,6 @@ class LwpCharSetMgr
 {
 public:
     LwpCharSetMgr(){SetCodePageMap();}
-    ~LwpCharSetMgr(){}
     static LwpCharSetMgr* GetInstance();
     void SetCodePageMap();
     rtl_TextEncoding    GetTextCharEncoding(sal_uInt16 wordproCode);

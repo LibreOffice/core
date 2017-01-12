@@ -55,7 +55,6 @@ protected:
     virtual ScCellRangesBase* getCellRangesBase() throw ( css::uno::RuntimeException );
 public:
     ScVbaFormat( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::beans::XPropertySet >& _xPropertySet, const css::uno::Reference< css::frame::XModel >& xModel, bool bCheckAmbiguoity ) throw ( css::script::BasicErrorException );
-    virtual ~ScVbaFormat() {}
     virtual css::uno::Reference< ov::XHelperInterface > thisHelperIface() = 0;
      void SAL_CALL setAddIndent( const css::uno::Any& BAddIndent) throw( css::uno::RuntimeException ) { BAddIndent >>= mbAddIndent; }
      css::uno::Any SAL_CALL getAddIndent() throw( css::uno::RuntimeException ) { return css::uno::makeAny( mbAddIndent ); }

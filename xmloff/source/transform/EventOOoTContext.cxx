@@ -43,7 +43,6 @@ public:
 
     XMLTransformerOOoEventMap_Impl( XMLTransformerEventMapEntry *pInit,
                                        XMLTransformerEventMapEntry *pInit2  );
-    ~XMLTransformerOOoEventMap_Impl();
 };
 
 void XMLTransformerOOoEventMap_Impl::AddMap( XMLTransformerEventMapEntry *pInit )
@@ -78,10 +77,6 @@ XMLTransformerOOoEventMap_Impl::XMLTransformerOOoEventMap_Impl(
         AddMap( pInit );
     if( pInit2 )
         AddMap( pInit2 );
-}
-
-XMLTransformerOOoEventMap_Impl::~XMLTransformerOOoEventMap_Impl()
-{
 }
 
 XMLEventOOoTransformerContext::XMLEventOOoTransformerContext(

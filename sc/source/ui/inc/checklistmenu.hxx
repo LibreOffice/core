@@ -259,8 +259,6 @@ public:
     {
     }
 
-    virtual ~ScSearchEdit() override {}
-
     virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
     void SetTabStopsContainer( ScTabStops* pTabStops )  { mpTabStops = pTabStops; }
 };

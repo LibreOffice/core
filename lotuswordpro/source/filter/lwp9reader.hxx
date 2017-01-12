@@ -69,7 +69,6 @@ class Lwp9Reader
 {
 public:
     Lwp9Reader(LwpSvStream* InputStream, IXFStream* pStream);
-    ~Lwp9Reader(){}
 private:
     LwpSvStream*      m_pDocStream;
     IXFStream*        m_pStream;

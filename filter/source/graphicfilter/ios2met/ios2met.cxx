@@ -422,7 +422,6 @@ private:
 public:
 
     OS2METReader();
-    ~OS2METReader();
 
     void ReadOS2MET( SvStream & rStreamOS2MET, GDIMetaFile & rGDIMetaFile );
         // Reads from the stream a OS2MET file und and fills up the GDIMetaFile
@@ -451,10 +450,6 @@ OS2METReader::OS2METReader()
     , aAttr()
     , pAttrStack(nullptr)
     , pOrdFile(nullptr)
-{
-}
-
-OS2METReader::~OS2METReader()
 {
 }
 

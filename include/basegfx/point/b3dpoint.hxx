@@ -80,9 +80,6 @@ namespace basegfx
         :   B3DTuple(rTuple)
         {}
 
-        ~B3DPoint()
-        {}
-
         /** *=operator to allow usage from B3DPoint, too
         */
         B3DPoint& operator*=( const B3DPoint& rPnt )

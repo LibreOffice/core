@@ -25,7 +25,6 @@ class ScColumnTextWidthIterator
 public:
     ScColumnTextWidthIterator(const ScColumnTextWidthIterator&) = delete;
     const ScColumnTextWidthIterator& operator=(const ScColumnTextWidthIterator&) = delete;
-    ~ScColumnTextWidthIterator() = default;
     ScColumnTextWidthIterator(ScColumn& rCol, SCROW nStartRow, SCROW nEndRow);
 
     /**

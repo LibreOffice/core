@@ -30,7 +30,6 @@ class StringContainer
     std::unordered_set< OString, OStringHash >      m_aStrings;
 public:
     StringContainer() {}
-    ~StringContainer() {}
 
     const char* putString( const char* pString );
 };

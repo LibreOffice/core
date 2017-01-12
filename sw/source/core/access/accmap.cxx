@@ -666,7 +666,6 @@ class SwAccPreviewData
 
 public:
     SwAccPreviewData();
-    ~SwAccPreviewData();
 
     void Update( const SwAccessibleMap& rAccMap,
                  const std::vector<PreviewPage*>& _rPreviewPages,
@@ -692,10 +691,6 @@ public:
 
 SwAccPreviewData::SwAccPreviewData() :
     mpSelPage( nullptr )
-{
-}
-
-SwAccPreviewData::~SwAccPreviewData()
 {
 }
 

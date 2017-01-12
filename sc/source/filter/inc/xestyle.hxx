@@ -718,7 +718,6 @@ class XclExpDxfs : public XclExpRecordBase, protected XclExpRoot
 {
 public:
     XclExpDxfs( const XclExpRoot& rRoot );
-    virtual ~XclExpDxfs() override {}
 
     sal_Int32 GetDxfId(const OUString& rName);
 

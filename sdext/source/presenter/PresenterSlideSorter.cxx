@@ -139,7 +139,6 @@ public:
         const std::shared_ptr<PresenterTheme>& rpTheme,
         const Reference<awt::XWindow>& rxInvalidateTarget,
         const std::shared_ptr<PresenterPaintManager>& rpPaintManager);
-    ~MouseOverManager();
     MouseOverManager(const MouseOverManager&) = delete;
     MouseOverManager& operator=(const MouseOverManager&) = delete;
 
@@ -191,7 +190,6 @@ public:
     CurrentSlideFrameRenderer (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
         const css::uno::Reference<css::rendering::XCanvas>& rxCanvas);
-    ~CurrentSlideFrameRenderer();
 
     void PaintCurrentSlideFrame (
         const awt::Rectangle& rSlideBoundingBox,
@@ -1508,10 +1506,6 @@ PresenterSlideSorter::MouseOverManager::MouseOverManager (
     }
 }
 
-PresenterSlideSorter::MouseOverManager::~MouseOverManager()
-{
-}
-
 void PresenterSlideSorter::MouseOverManager::Paint (
     const sal_Int32 nSlideIndex,
     const Reference<rendering::XCanvas>& rxCanvas,
@@ -1842,10 +1836,6 @@ PresenterSlideSorter::CurrentSlideFrameRenderer::CurrentSlideFrameRenderer (
         mnRightFrameSize = ::std::max(mnRightFrameSize, mpBottomRight->mnWidth);
         mnBottomFrameSize = ::std::max(mnBottomFrameSize, mpBottomRight->mnHeight);
     }
-}
-
-PresenterSlideSorter::CurrentSlideFrameRenderer::~CurrentSlideFrameRenderer()
-{
 }
 
 void PresenterSlideSorter::CurrentSlideFrameRenderer::PaintCurrentSlideFrame (

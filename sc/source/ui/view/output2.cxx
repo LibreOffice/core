@@ -124,7 +124,6 @@ class ScDrawStringsVars
 
 public:
                 ScDrawStringsVars(ScOutputData* pData, bool bPTL);
-                ~ScDrawStringsVars();
 
                 //  SetPattern = ex-SetVars
                 //  SetPatternSimple: ohne Font
@@ -213,10 +212,6 @@ ScDrawStringsVars::ScDrawStringsVars(ScOutputData* pData, bool bPTL) :
     const svtools::ColorConfig& rColorConfig = pScMod->GetColorConfig();
     aBackConfigColor.SetColor( rColorConfig.GetColorValue(svtools::DOCCOLOR).nColor );
     aTextConfigColor.SetColor( rColorConfig.GetColorValue(svtools::FONTCOLOR).nColor );
-}
-
-ScDrawStringsVars::~ScDrawStringsVars()
-{
 }
 
 void ScDrawStringsVars::SetShrinkScale( long nScale, SvtScriptType nScript )

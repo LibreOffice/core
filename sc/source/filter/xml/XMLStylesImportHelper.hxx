@@ -69,7 +69,6 @@ struct ScMyCurrencyStyle
     ScMyCurrencyStyle() :
         mpRanges(new ScSimpleRangeList)
     {}
-    ~ScMyCurrencyStyle() {}
 };
 
 struct LessCurrencyStyle
@@ -111,7 +110,6 @@ struct ScMyStyle
     tools::SvRef<ScMyStyleRanges> xRanges;
 
     ScMyStyle() : xRanges(new ScMyStyleRanges()) {}
-    ~ScMyStyle() {}
 };
 
 struct LessStyle

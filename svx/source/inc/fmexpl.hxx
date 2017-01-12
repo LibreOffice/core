@@ -127,7 +127,6 @@ class FmNavViewMarksChanged : public SfxHint
     FmFormView* pView;
 public:
     FmNavViewMarksChanged(FmFormView* pWhichView) { pView = pWhichView; }
-    virtual ~FmNavViewMarksChanged() override {}
 
     const FmFormView* GetAffectedView() const { return pView; }
 };
@@ -222,7 +221,6 @@ public:
         : m_bMixedSelection(false)
     {
     }
-    virtual ~FmNavRequestSelectHint() override {}
 
     void SetMixedSelection(bool bMixedSelection) { m_bMixedSelection = bMixedSelection; }
     bool IsMixedSelection() const { return m_bMixedSelection; }

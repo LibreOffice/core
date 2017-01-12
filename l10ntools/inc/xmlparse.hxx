@@ -98,7 +98,6 @@ protected:
 public:
     /// returns the parent of this node
     XMLParentNode *GetParent() { return m_pParent; }
-    virtual ~XMLChildNode() override {};
 };
 
 typedef std::vector< XMLChildNode* > XMLChildNodeList;

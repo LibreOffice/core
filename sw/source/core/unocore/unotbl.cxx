@@ -1810,7 +1810,6 @@ class SwTableProperties_Impl
     SwUnoCursorHelper::SwAnyMapHelper aAnyMap;
 public:
     SwTableProperties_Impl();
-    ~SwTableProperties_Impl();
 
     void SetProperty(sal_uInt16 nWhichId, sal_uInt16 nMemberId, const uno::Any& aVal);
     bool GetProperty(sal_uInt16 nWhichId, sal_uInt16 nMemberId, const uno::Any*& rpAny);
@@ -1821,9 +1820,6 @@ public:
 };
 
 SwTableProperties_Impl::SwTableProperties_Impl()
-    { }
-
-SwTableProperties_Impl::~SwTableProperties_Impl()
     { }
 
 void SwTableProperties_Impl::SetProperty(sal_uInt16 nWhichId, sal_uInt16 nMemberId, const uno::Any& rVal)

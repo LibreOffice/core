@@ -34,9 +34,8 @@ public:
                              SfxPointItem();
                              SfxPointItem( sal_uInt16 nWhich, const Point& rVal );
                              SfxPointItem( const SfxPointItem& );
-                             virtual ~SfxPointItem() override {}
 
-    virtual bool GetPresentation( SfxItemPresentation ePres,
+    virtual bool             GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,
                                   MapUnit ePresMetric,
                                   OUString &rText,

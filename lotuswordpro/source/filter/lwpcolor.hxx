@@ -71,7 +71,6 @@ class LwpColor
 {
 public:
     LwpColor():m_nRed(0), m_nGreen(0), m_nBlue(0), m_nExtra(0){}
-    ~LwpColor(){}
 public:
     void Read(LwpObjectStream *pStrm);
     sal_uInt16 GetRed();

@@ -65,14 +65,9 @@ struct SvxSaveTabPage_Impl
     bool                    bInitialized;
 
     SvxSaveTabPage_Impl();
-    ~SvxSaveTabPage_Impl();
 };
 
 SvxSaveTabPage_Impl::SvxSaveTabPage_Impl() : bInitialized( false )
-{
-}
-
-SvxSaveTabPage_Impl::~SvxSaveTabPage_Impl()
 {
 }
 

@@ -49,7 +49,6 @@ class SystemWindow::ImplData
 {
 public:
     ImplData();
-    ~ImplData();
 
     std::unique_ptr<TaskPaneList>
                     mpTaskPaneList;
@@ -62,10 +61,6 @@ SystemWindow::ImplData::ImplData()
 {
     mpTaskPaneList = nullptr;
     maMaxOutSize = Size( SHRT_MAX, SHRT_MAX );
-}
-
-SystemWindow::ImplData::~ImplData()
-{
 }
 
 SystemWindow::SystemWindow(WindowType nType)

@@ -44,8 +44,6 @@ public:
     {
         SetWindow(pSplDlg);
     }
-    virtual ~VCLXSvxFindReplaceDialog() override
-    {};
 private:
     virtual css::uno::Reference< css::accessibility::XAccessibleContext >  CreateAccessibleContext() override
     {

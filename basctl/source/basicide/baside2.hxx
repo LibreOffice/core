@@ -540,7 +540,6 @@ private:
 
 public:
     UnoTypeCodeCompletetor( const std::vector< OUString >& aVect, const OUString& sVarType );
-    ~UnoTypeCodeCompletetor(){}
 
     std::vector< OUString > GetXIdlClassMethods() const;
     std::vector< OUString > GetXIdlClassFields() const;

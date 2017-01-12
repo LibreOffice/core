@@ -69,8 +69,6 @@ public:
                                 /** Copy constructor. */
                                 SvtScriptedTextHelper_Impl(
                                     const SvtScriptedTextHelper_Impl& _rCopy );
-                                /** Destructor. */
-                                ~SvtScriptedTextHelper_Impl();
 
                                 /** Sets new fonts and recalculates the text width. */
     void                        SetFonts( vcl::Font* _pLatinFont, vcl::Font* _pAsianFont, vcl::Font* _pCmplxFont );
@@ -108,10 +106,6 @@ SvtScriptedTextHelper_Impl::SvtScriptedTextHelper_Impl( const SvtScriptedTextHel
     maScriptVec( _rCopy.maScriptVec ),
     maWidthVec( _rCopy.maWidthVec ),
     maTextSize( _rCopy.maTextSize )
-{
-}
-
-SvtScriptedTextHelper_Impl::~SvtScriptedTextHelper_Impl()
 {
 }
 

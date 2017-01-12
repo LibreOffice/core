@@ -80,7 +80,6 @@ private:
     OUString aFieldName;
 public:
     explicit SwVbaReadFieldParams( const OUString& rData );
-    ~SwVbaReadFieldParams();
 
     long SkipToNextToken();
 
@@ -111,10 +110,6 @@ SwVbaReadFieldParams::SwVbaReadFieldParams( const OUString& _rData )
     nFnd      = nNext;
     nSavPtr   = nNext;
     aFieldName = aData.copy( 0, nFnd );
-}
-
-SwVbaReadFieldParams::~SwVbaReadFieldParams()
-{
 }
 
 OUString SwVbaReadFieldParams::GetResult() const

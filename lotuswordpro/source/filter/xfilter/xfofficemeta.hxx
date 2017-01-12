@@ -67,7 +67,6 @@ class XFOfficeMeta final
 {
 public:
     XFOfficeMeta(){}
-    ~XFOfficeMeta(){}
 
     void SetCreator(const OUString& creator);
     void SetDescription(const OUString& dsr);

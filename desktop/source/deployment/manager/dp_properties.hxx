@@ -40,7 +40,6 @@ class ExtensionProperties final
     static OUString getPropertyValue(css::beans::NamedValue const & v);
 public:
 
-    ~ExtensionProperties() {};
     ExtensionProperties(OUString const & urlExtension,
                         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv,
                         css::uno::Reference<css::uno::XComponentContext> const & xContext);

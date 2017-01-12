@@ -249,7 +249,6 @@ class LwpNumericFormat
 {
 public:
     explicit LwpNumericFormat(LwpObjectStream * pStrm);
-    ~LwpNumericFormat(){}
     void Read();
     static bool IsCurrencyFormat(sal_uInt16 Format);
     sal_uInt16 GetDecimalPlaces();

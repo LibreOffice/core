@@ -63,8 +63,6 @@ struct TSharedStorages final
             : m_lStoragesShare()
             , m_lStoragesUser ()
         {};
-
-        ~TSharedStorages() {};
 };
 
 /** @short  provides access to the:

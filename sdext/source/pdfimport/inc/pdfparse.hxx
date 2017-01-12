@@ -293,7 +293,6 @@ class PDFReader
 {
 public:
     PDFReader() {}
-    ~PDFReader() {}
 
     static PDFEntry* read( const char* pFileName );
 #ifdef _WIN32

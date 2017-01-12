@@ -496,9 +496,6 @@ public:
                 xProps,
                 rControlName )
         {}
-    inline ~ControlImportContext()
-    {
-    }
 
     inline void finish() throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception)
     {

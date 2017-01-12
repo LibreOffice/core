@@ -83,8 +83,6 @@ class LoadEnvException
             css::uno::Any const & original = css::uno::Any()):
             m_nID(id), m_sMessage(message), m_exOriginal(original)
         {}
-
-        ~LoadEnvException() {}
 };
 
 } // namespace framework

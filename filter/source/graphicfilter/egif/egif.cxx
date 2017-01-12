@@ -66,7 +66,6 @@ class GIFWriter
 public:
 
     explicit GIFWriter(SvStream &rStream);
-    ~GIFWriter() {}
 
     bool WriteGIF( const Graphic& rGraphic, FilterConfigItem* pConfigItem );
 };

@@ -1782,7 +1782,6 @@ private:
 
 public:
     explicit            ScHTMLTableMap( ScHTMLTable& rParentTable );
-                        ~ScHTMLTableMap();
 
     inline const_iterator begin() const { return maTables.begin(); }
     inline const_iterator end() const { return maTables.end(); }
@@ -1805,10 +1804,6 @@ private:
 ScHTMLTableMap::ScHTMLTableMap( ScHTMLTable& rParentTable ) :
     mrParentTable(rParentTable),
     mpCurrTable(nullptr)
-{
-}
-
-ScHTMLTableMap::~ScHTMLTableMap()
 {
 }
 

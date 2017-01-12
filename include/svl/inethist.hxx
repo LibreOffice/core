@@ -105,7 +105,6 @@ class SVL_DLLPUBLIC INetURLHistoryHint: public SfxHint
     const INetURLObject* pObj;
 public:
     explicit INetURLHistoryHint( const INetURLObject* Object ) : pObj(Object) {}
-    virtual ~INetURLHistoryHint() override {}
     const INetURLObject* GetObject() const { return pObj; }
 };
 

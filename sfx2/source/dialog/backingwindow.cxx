@@ -741,7 +741,6 @@ struct ImplDelayedDispatch
       aArgs( i_rArgs )
     {
     }
-    ~ImplDelayedDispatch() {}
 };
 
 static void implDispatchDelayed( void*, void* pArg )

@@ -30,7 +30,6 @@ public:
         , m_flags(flags)
         , m_pRealInterface(pRealInterface)
         {}
-    virtual ~AstInterfaceMember() override {}
 
     AstInterface* getRealInterface()
         { return m_pRealInterface; }

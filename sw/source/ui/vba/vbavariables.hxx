@@ -35,7 +35,6 @@ private:
 
 public:
     SwVbaVariables( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::beans::XPropertyAccess >& rUserDefined );
-    virtual ~SwVbaVariables() override {}
 
     // XEnumerationAccess
     virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException) override;

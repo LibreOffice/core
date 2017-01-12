@@ -43,14 +43,9 @@ namespace comphelper
         ComponentDescriptions                           m_aRegisteredComponents;
 
         OModuleImpl();
-        ~OModuleImpl();
     };
 
     OModuleImpl::OModuleImpl()
-    {
-    }
-
-    OModuleImpl::~OModuleImpl()
     {
     }
 

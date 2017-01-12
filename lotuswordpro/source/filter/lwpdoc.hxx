@@ -226,7 +226,6 @@ class LwpDocSock : public LwpDLNFVList
 {
 public:
     LwpDocSock(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
-    virtual ~LwpDocSock() override {}
 private:
     LwpObjectID m_Doc;
 protected:

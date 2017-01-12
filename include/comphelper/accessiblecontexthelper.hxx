@@ -274,11 +274,6 @@ namespace comphelper
         @precond <arg>_pContext</arg> != NULL
         */
         inline OContextEntryGuard( OAccessibleContextHelper* _pContext );
-
-        /** destructs the guard.
-            <p>The context (it's mutex, respectively) is unlocked.</p>
-        */
-        inline ~OContextEntryGuard();
     };
 
 
@@ -286,11 +281,6 @@ namespace comphelper
         :OContextEntryGuard_Base( _pContext->GetMutex( OAccessibleContextHelper::OAccessControl() ) )
     {
         _pContext->ensureAlive( OAccessibleContextHelper::OAccessControl() );
-    }
-
-
-    inline OContextEntryGuard::~OContextEntryGuard()
-    {
     }
 
 
@@ -302,7 +292,6 @@ namespace comphelper
     {
     public:
         inline OExternalLockGuard( OAccessibleContextHelper* _pContext );
-        inline ~OExternalLockGuard( );
     };
 
 
@@ -315,11 +304,6 @@ namespace comphelper
         // If you call into another UNO object with locked ::osl::Mutex,
         // this may lead to dead locks.
         clear();
-    }
-
-
-    inline OExternalLockGuard::~OExternalLockGuard( )
-    {
     }
 
 

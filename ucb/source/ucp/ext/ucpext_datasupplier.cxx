@@ -83,13 +83,7 @@ namespace ucb { namespace ucp { namespace ext
             ,m_xContext( rxContext )
         {
         }
-        ~DataSupplier_Impl();
     };
-
-
-    DataSupplier_Impl::~DataSupplier_Impl()
-    {
-    }
 
 
     //= helper

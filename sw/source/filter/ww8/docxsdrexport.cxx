@@ -170,8 +170,6 @@ struct DocxSdrExport::Impl
     {
     }
 
-    ~Impl() = default;
-
     /// Writes wp wrapper code around an SdrObject, which itself is written using drawingML syntax.
 
     void textFrameShadow(const SwFrameFormat& rFrameFormat);

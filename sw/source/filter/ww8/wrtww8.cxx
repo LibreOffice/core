@@ -332,16 +332,11 @@ class WW8_WrtFactoids
 
 public:
     WW8_WrtFactoids();
-    ~WW8_WrtFactoids();
     void Append(WW8_CP nStartCp, WW8_CP nEndCp, const std::map<OUString, OUString>& rStatements);
     void Write(WW8Export& rWrt);
-}
-;
-WW8_WrtFactoids::WW8_WrtFactoids()
-{
-}
+};
 
-WW8_WrtFactoids::~WW8_WrtFactoids()
+WW8_WrtFactoids::WW8_WrtFactoids()
 {
 }
 

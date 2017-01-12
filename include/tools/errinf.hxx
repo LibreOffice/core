@@ -91,8 +91,6 @@ public:
                        const OUString & rTheArg2, sal_uInt16 nMask):
         DynamicErrorInfo(nUserID, nMask), aArg1(rTheArg1), aArg2(rTheArg2) {}
 
-    virtual ~TwoStringErrorInfo() override {}
-
     const OUString& GetArg1() const { return aArg1; }
     const OUString& GetArg2() const { return aArg2; }
 };

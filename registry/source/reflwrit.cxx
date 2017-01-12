@@ -430,7 +430,6 @@ public:
     RTParamMode m_mode;
 
     ParamEntry();
-    ~ParamEntry();
 
     void setData(const OString& typeName,
                  const OString& name,
@@ -439,10 +438,6 @@ public:
 
 ParamEntry::ParamEntry()
     : m_mode(RT_PARAM_INVALID)
-{
-}
-
-ParamEntry::~ParamEntry()
 {
 }
 
@@ -471,7 +466,6 @@ public:
     RTFieldAccess   m_access;
 
     ReferenceEntry();
-    ~ReferenceEntry();
 
     void setData(const OString&     name,
                  RTReferenceType    refType,
@@ -482,10 +476,6 @@ public:
 ReferenceEntry::ReferenceEntry()
     : m_type(RTReferenceType::INVALID)
     , m_access(RTFieldAccess::INVALID)
-{
-}
-
-ReferenceEntry::~ReferenceEntry()
 {
 }
 
@@ -520,7 +510,6 @@ public:
     OString         m_doku;
 
     MethodEntry();
-    ~MethodEntry();
 
     void setData(const OString&    name,
                  const OString&    returnTypeName,
@@ -541,10 +530,6 @@ MethodEntry::MethodEntry()
     : m_mode(RTMethodMode::INVALID)
     , m_paramCount(0)
     , m_excCount(0)
-{
-}
-
-MethodEntry::~MethodEntry()
 {
 }
 
