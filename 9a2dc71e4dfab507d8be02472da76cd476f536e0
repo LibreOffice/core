@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a6eadb0_2b5a1f84",
+        "filename": "sw/qa/python/check_cross_references.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2017-01-12T07:03:38Z",
+      "side": 1,
+      "message": "Breaking function and parameters in 2 lines is not exactly \"more pythonic\", and makes is harder to read",
+      "revId": "9a2dc71e4dfab507d8be02472da76cd476f536e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a6eadb0_4b5f5b72",
+        "filename": "sw/qa/python/check_cross_references.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2017-01-12T07:03:38Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "9a2dc71e4dfab507d8be02472da76cd476f536e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a6eadb0_6b541754",
+        "filename": "sw/qa/python/check_cross_references.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2017-01-12T07:03:38Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "9a2dc71e4dfab507d8be02472da76cd476f536e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
