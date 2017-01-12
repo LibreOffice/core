@@ -22,4 +22,6 @@ $(eval $(call gb_CompilerTest_add_exception_objects,compilerplugins_clang, \
     compilerplugins/clang/test/vclwidgets \
 ))
 
+$(eval $(call gb_CompilerTest_use_udk_api,compilerplugins_clang))
+
 # vim: set noet sw=4 ts=4:
