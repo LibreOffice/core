@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# Script to sign executables, dylibs and frameworks in an app bundle
-# plus the bundle itself. Called from
-# the test-install target in Makefile.in
+# Script to sign executables, dylibs and frameworks in an app bundle plus the bundle itself. Called
+# from installer::simplepackage::create_package() in solenv/bin/modules/installer/simplepackage.pm
+# and the test-install target in Makefile.in.
 
 test `uname` = Darwin || { echo This is for OS X only; exit 1; }
 
