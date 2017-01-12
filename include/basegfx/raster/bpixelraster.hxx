@@ -57,10 +57,6 @@ namespace basegfx
             reset();
         }
 
-        ~BPixelRaster()
-        {
-        }
-
         // coordinate calcs between X/Y and span
         sal_uInt32 getIndexFromXY(sal_uInt32 nX, sal_uInt32 nY) const { return (nX + (nY * mnWidth)); }
 
