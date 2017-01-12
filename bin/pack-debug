@@ -256,6 +256,7 @@ do
 	/epm_gid_Module_Prg_Math_Bin.lst/{print"basis5.1-math"}
 	/epm_gid_Module_Prg_Wrt_Bin.lst/{print"basis5.1-writer"}
 	/epm_gid_Module_Pyuno.lst/{print"basis5.1-pyuno"}
+	/epm_gid_Module_Reportbuilder.lst/{print"basis5.1-extension-report-builder"}
 	/epm_gid_Module_Root_Brand.lst/{print"5.1"}
 	/epm_gid_Module_Root.lst/{print"basis5.1-core"}
 	/epm_gid_Module_Root_Ure_Hidden.lst/{print"5.1-ure"}
