@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a6eadb0_8e6501e3",
+        "filename": "bin/get-bugzilla-attachments-by-mimetype",
+        "patchSetId": 1
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-01-12T12:01:06Z",
+      "side": 1,
+      "message": "if you call this recursively you will get the same file-names as in the outer invocation because subAttachmentId starts from 0 in both cases.",
+      "revId": "ed6815fae675386d34f08c2067fee7068bbc6d51",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a6eadb0_8eac21ef",
+        "filename": "bin/get-bugzilla-attachments-by-mimetype",
+        "patchSetId": 1
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-01-12T12:01:06Z",
+      "side": 1,
+      "message": "what is tmp_mimetype? doesn\u0027t seem to be defined?",
+      "revId": "ed6815fae675386d34f08c2067fee7068bbc6d51",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a6eadb0_0ea011f4",
+        "filename": "bin/get-bugzilla-attachments-by-mimetype",
+        "patchSetId": 1
+      },
+      "lineNbr": 565,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-01-12T12:01:06Z",
+      "side": 1,
+      "message": "perhaps better to move this below common_noncore_mimetypes so it doesn\u0027t split the image mimetypes so far apart",
+      "revId": "ed6815fae675386d34f08c2067fee7068bbc6d51",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a6eadb0_ae62bdd6",
+        "filename": "bin/get-bugzilla-attachments-by-mimetype",
+        "patchSetId": 1
+      },
+      "lineNbr": 574,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-01-12T12:01:06Z",
+      "side": 1,
+      "message": "this doesn\u0027t actually exist on http://www.iana.org/assignments/media-types/media-types.xhtml",
+      "revId": "ed6815fae675386d34f08c2067fee7068bbc6d51",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a6eadb0_ee9af5c4",
+        "filename": "bin/get-bugzilla-attachments-by-mimetype",
+        "patchSetId": 1
+      },
+      "lineNbr": 579,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-01-12T12:01:06Z",
+      "side": 1,
+      "message": "this doesn\u0027t actually exist on http://www.iana.org/assignments/media-types/media-types.xhtml",
+      "revId": "ed6815fae675386d34f08c2067fee7068bbc6d51",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a6eadb0_6eafc5e3",
+        "filename": "bin/get-bugzilla-attachments-by-mimetype",
+        "patchSetId": 1
+      },
+      "lineNbr": 634,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-01-12T12:01:06Z",
+      "side": 1,
+      "message": "maybe do this not just for KeyboardInterrupt but for any exception? (i forget what \"finally\" is called in python)",
+      "revId": "ed6815fae675386d34f08c2067fee7068bbc6d51",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
