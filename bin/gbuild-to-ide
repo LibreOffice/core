@@ -243,11 +243,73 @@ class GbuildParser:
 
     def __init__(self, makecmd):
         self.makecmd = makecmd
-        self.binpath = os.path.dirname(os.environ['GPERF']) # woha, this is quite a hack
-        (self.srcdir, self.builddir, self.instdir, self.workdir) = (os.environ['SRCDIR'], os.environ['BUILDDIR'], os.environ['INSTDIR'], os.environ['WORKDIR'])
-        (self.modulenamelist, self.files) = ([], [])
-        (self.target_by_path, self.target_by_location) = (collections.OrderedDict(), collections.OrderedDict())
+        self._set_properties()
 
+    def _set_properties(self):
+        gperf_path = os.environ.get('GPERF', None)
+        if gperf_path:
+            gperf_path = os.path.dirname(gperf_path)
+
+        setattr(self, '_binpath', gperf_path)
+ 
+        for props in ['srcdir', 'builddir', 'instdir', 'workdir']:
+            setattr(self, '_%s' % props, os.environ.get(props.upper(),
+                    None)
+
+        for props in ['modulenamelist', 'files']:
+            setattr(self, '_%s' % props, [])
+
+        for props in ['target_by_path', 'target_by_location']:
+            setattr(self, '_%s' % props, collections.OrderedDict())
+
+    @property
+    def binpath(self):
+        return self._binpath
+
+    @binpath.setter
+    def binpath(self, value):
+        self._binpath = value
+
+    @property
+    def srcdir(self):
+        return self._srcdir
+
+    @srcdir.setter
+    def srcdir(self, value):
+        self._srcdir = value
+
+    @property
+    def builddir(self):
+        return self._builddir
+
+    @builddir.setter
+    def builddir(self, value):
+        self._builddir = value
+
+    @property
+    def instdir(self):
+        return self._instdir
+
+    @instdir.setter
+    def instdir(self, value):
+        self._instdir = value
+
+    @property
+    def workdir(self):
+        return self._workdir
+
+    @workdir.setter
+    def workdir(self, value):
+        self._workdir = value
+
+    @property
+    def target_by_path(self):
+        return self._target_by_path
+
+    @property
+    def target_by_location(self):
+        return self._target_by_location
+    
     includepattern = re.compile('-I(\S+)')
     isystempattern = re.compile('-isystem\s*(\S+)')
     warningpattern = re.compile('-W\S+')
