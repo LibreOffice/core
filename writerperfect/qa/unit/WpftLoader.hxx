@@ -68,8 +68,6 @@ public:
         const css::uno::Reference<css::container::XNameAccess> &rxTypeMap,
         const css::uno::Reference<css::uno::XComponentContext> &rxContext
     );
-    WpftLoader(const WpftLoader &) = delete;
-    WpftLoader &operator=(const WpftLoader &) = delete;
     ~WpftLoader();
 
     const css::uno::Reference<css::lang::XComponent> &getDocument() const;

@@ -28,10 +28,10 @@ void WpftFilterFixture::setUp()
 
     m_xDesktop = frame::theDesktop::get(m_xContext);
 
-    const uno::Reference<document::XTypeDetection> xTypeDetection(
+    m_xTypeDetection.set(
         m_xFactory->createInstanceWithContext("com.sun.star.document.TypeDetection", m_xContext),
         uno::UNO_QUERY_THROW);
-    m_xTypeMap.set(xTypeDetection, uno::UNO_QUERY_THROW);
+    m_xTypeMap.set(m_xTypeDetection, uno::UNO_QUERY_THROW);
 }
 
 void WpftFilterFixture::tearDown()
