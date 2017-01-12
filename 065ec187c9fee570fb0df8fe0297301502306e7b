@@ -90,6 +90,30 @@
     },
     {
       "key": {
+        "uuid": "1a6eadb0_2e9f8d04",
+        "filename": "connectivity/source/drivers/firebird/Clob.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1001240
+      },
+      "writtenOn": "2017-01-12T23:32:31Z",
+      "side": 1,
+      "message": "It\u0027s not guaranteed. Firebird uses \"NONE\" as default character set, which means that there is no character set assumption for columns; data\nis stored and retrieved just as you originally entered it. It\u0027s true for clobs as well.\n\nIt would make sense to change that to UTF8. bug 104905 and bug 105142 are about that.\n\nThe character set can be overwritten for a table or column too (e.g. a clob, but it\u0027s also not solved for char, varchar) . Maybe a new bug should be opened for allowing them?",
+      "parentUuid": "1a6eadb0_cb90cbef",
+      "range": {
+        "startLine": 48,
+        "startChar": 0,
+        "endLine": 48,
+        "endChar": 34
+      },
+      "revId": "065ec187c9fee570fb0df8fe0297301502306e7b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a6eadb0_eb9ae7c4",
         "filename": "connectivity/source/drivers/firebird/Clob.cxx",
         "patchSetId": 2
