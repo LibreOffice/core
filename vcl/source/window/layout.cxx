@@ -828,18 +828,22 @@ struct ButtonOrder
 
 static int getButtonPriority(const OString &rType)
 {
-    static const size_t N_TYPES = 3;
+    static const size_t N_TYPES = 5;
     static const ButtonOrder aDiscardCancelSave[N_TYPES] =
     {
         { "/discard", 0 },
+        { "/no", 0 },
         { "/cancel", 1 },
-        { "/save", 2 }
+        { "/save", 2 },
+        { "/yes", 2 }
     };
 
     static const ButtonOrder aSaveDiscardCancel[N_TYPES] =
     {
         { "/save", 0 },
+        { "/yes", 0 },
         { "/discard", 1 },
+        { "/no", 1 },
         { "/cancel", 2 }
     };
 
