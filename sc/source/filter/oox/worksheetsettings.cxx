@@ -30,7 +30,6 @@
 #include "workbooksettings.hxx"
 #include "tabprotection.hxx"
 #include "document.hxx"
-#include "convuno.hxx"
 
 namespace oox {
 namespace xls {
@@ -155,18 +154,11 @@ void WorksheetSettings::importProtectedRange( const AttributeList& rAttribs )
     OUString aRefs( rAttribs.getString( XML_sqref, OUString()));
     if (!aRefs.isEmpty())
     {
-        ApiCellRangeList aRangeList;
-        getAddressConverter().convertToCellRangeList( aRangeList, aRefs, getSheetIndex(), true );
-        if (!aRangeList.empty())
+        std::unique_ptr<ScRangeList> xRangeList(new ScRangeList());
+        getAddressConverter().convertToCellRangeList( *xRangeList, aRefs, getSheetIndex(), true );
+        if (!xRangeList->empty())
         {
-            aProt.maRangeList = new ScRangeList;
-            ScRangeList* pRangeList = aProt.maRangeList.get();
-            for (::std::vector< css::table::CellRangeAddress >::const_iterator itr( aRangeList.begin()), end( aRangeList.end()); itr != end; ++itr)
-            {
-                ScRange aRange;
-                ScUnoConversion::FillScRange( aRange, *itr);
-                pRangeList->Append( aRange);
-            }
+            aProt.maRangeList = xRangeList.release();
         }
     }
     maSheetProt.maEnhancedProtections.push_back( aProt);
