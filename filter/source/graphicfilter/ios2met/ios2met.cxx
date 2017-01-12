@@ -2603,8 +2603,6 @@ void OS2METReader::ReadField(sal_uInt16 nFieldType, sal_uInt16 nFieldSize)
 
 void OS2METReader::ReadOS2MET( SvStream & rStreamOS2MET, GDIMetaFile & rGDIMetaFile )
 {
-    sal_uLong nPercent, nLastPercent;
-
     ErrorCode=0;
 
     pOS2MET             = &rStreamOS2MET;
@@ -2667,19 +2665,9 @@ void OS2METReader::ReadOS2MET( SvStream & rStreamOS2MET, GDIMetaFile & rGDIMetaF
 
     pOS2MET->SetEndian(SvStreamEndian::LITTLE);
 
-    sal_uInt64 const nStartPos = pOS2MET->Tell();
-    sal_uInt64 const nRemaining = pOS2MET->remainingSize();
-
-    nLastPercent=0;
-
     sal_uInt64 nPos = pOS2MET->Tell();
 
     for (;;) {
-
-        nPercent = (nPos-nStartPos)*100 / nRemaining;
-        if (nLastPercent+4<=nPercent) {
-            nLastPercent=nPercent;
-        }
 
         sal_uInt16 nFieldSize = ReadBigEndianWord();
         sal_uInt8 nMagicByte(0);
