@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a6eadb0_0bbba3c5",
+        "filename": "sc/source/ui/inc/dataprovider.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-01-12T04:23:39Z",
+      "side": 1,
+      "message": "Instead of putting the DLLPUBLIC declaration at each method you can put it at the class declaration.",
+      "revId": "9b6fe34e0e6d0d38158f2261d513d435aa5bb879",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
