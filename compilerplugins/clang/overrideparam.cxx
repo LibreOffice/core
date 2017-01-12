@@ -179,11 +179,20 @@ bool OverrideParam::hasSameDefaultParams(const ParmVarDecl * parmVarDecl, const 
     {
         return true;
     }
-#if CLANG_VERSION >= 30900
-    return false;
-#else
-    return true; // clang3-8 doesn't have EvaluateAsFloat, so we can't be as precise
-#endif
+    return true;
+        // for one, Clang 3.8 doesn't have EvaluateAsFloat; for another, since
+        // <http://llvm.org/viewvc/llvm-project?view=revision&revision=291318>
+        // "PR23135: Don't instantiate constexpr functions referenced in
+        // unevaluated operands where possible", default args are not
+        // necessarily evaluated, so the above calls to EvaluateAsInt etc. may
+        // fail (as they do e.g. for SfxViewShell::SetPrinter and derived
+        // classes' 'SfxPrinterChangeFlags nDiffFlags = SFX_PRINTER_ALL' arg,
+        // include/sfx2/viewsh.hxx; what appears would help is to call
+        // 'compiler.getSema().MarkDeclarationsReferencedInExpr()' on
+        // defaultArgExpr and superDefaultArgExpr before any of the calls to
+        // EvaluateAsInt etc., cf. the implementation of
+        // Sema::CheckCXXDefaultArgExpr in Clang's lib/Sema/SemaExpr.cpp, but
+        // that would probably have unwanted side-effects)
 }
 
 bool OverrideParam::evaluate(const Expr* expr, APSInt& x)
