@@ -121,12 +121,11 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         Toolbar toolbarTop = (Toolbar) findViewById(R.id.toolbar);
-        Toolbar toolbarBottom = (Toolbar) findViewById(R.id.toolbar_bottom);
 
         hideBottomToolbar();
 
         mToolbarController = new ToolbarController(this, getSupportActionBar(), toolbarTop);
-        mFormattingController = new FormattingController(this, toolbarBottom);
+        mFormattingController = new FormattingController(this);
         toolbarTop.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -458,8 +457,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
         LOKitShell.getMainHandler().post(new Runnable() {
             @Override
             public void run() {
-                Toolbar toolbarBottom = (Toolbar) findViewById(R.id.toolbar_bottom);
-                if (toolbarBottom.getVisibility() != View.VISIBLE) {
+                if (findViewById(R.id.toolbar_bottom).getVisibility() != View.VISIBLE) {
                     showSoftKeyboardDirect();
                 }
             }
