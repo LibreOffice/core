@@ -238,6 +238,7 @@ class SW_DLLPUBLIC SwDBManager
 {
     struct SwDBManager_Impl;
     class ConnectionDisposedListener_Impl;
+    class MailDispatcherListener_Impl;
 
     enum class MergeStatus
     {
