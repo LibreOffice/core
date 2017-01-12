@@ -1406,21 +1406,26 @@ int CALLBACK SalEnumFontsProcExW( const LOGFONTW* lpelfe,
     }
     else
     {
+        // Ignore non-device font on printer.
+        if (pInfo->mbPrinter)
+        {
+            if ((nFontType & RASTER_FONTTYPE) && !(nFontType & DEVICE_FONTTYPE))
+            {
+                SAL_INFO("vcl.gdi", "Unsupported printer font ignored: " << OUString(pLogFont->elfLogFont.lfFaceName));
+                return 1;
+            }
+        }
         // Only SFNT fonts are supported, ignore anything else.
-        if (SalLayout::UseCommonLayout() || OpenGLWrapper::isVCLOpenGLEnabled())
+        else if (SalLayout::UseCommonLayout() || OpenGLWrapper::isVCLOpenGLEnabled())
         {
             if (!(nFontType & TRUETYPE_FONTTYPE) &&
                 !(pMetric->ntmTm.ntmFlags & NTM_PS_OPENTYPE) &&
                 !(pMetric->ntmTm.ntmFlags & NTM_TT_OPENTYPE))
             {
                 SAL_INFO("vcl.gdi", "Unsupported font ignored: " << OUString(pLogFont->elfLogFont.lfFaceName));
-                    return 1;
+                return 1;
             }
         }
-
-        // Ignore non-device font on printer.
-        if (pInfo->mbPrinter && !(nFontType & DEVICE_FONTTYPE))
-            return 1;
 
         WinFontFace* pData = ImplLogMetricToDevFontDataW( pLogFont, &(pMetric->ntmTm), nFontType );
         pData->SetFontId( sal_IntPtr( pInfo->mnFontCount++ ) );
