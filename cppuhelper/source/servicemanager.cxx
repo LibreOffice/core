@@ -686,9 +686,9 @@ cppuhelper::ServiceManager::Data::Implementation::createInstance(
     bool singletonRequest)
 {
     css::uno::Reference<css::uno::XInterface> inst;
-    if (constructor != nullptr) {
+    if (constructor) {
         inst.set(
-            (*constructor)(context.get(), css::uno::Sequence<css::uno::Any>()),
+            constructor(context.get(), css::uno::Sequence<css::uno::Any>()),
             SAL_NO_ACQUIRE);
     } else if (factory1.is()) {
             inst = factory1->createInstanceWithContext(context);
@@ -706,8 +706,8 @@ cppuhelper::ServiceManager::Data::Implementation::createInstanceWithArguments(
     bool singletonRequest, css::uno::Sequence<css::uno::Any> const & arguments)
 {
     css::uno::Reference<css::uno::XInterface> inst;
-    if (constructor != nullptr) {
-        inst.set((*constructor)(context.get(), arguments), SAL_NO_ACQUIRE);
+    if (constructor) {
+        inst.set(constructor(context.get(), arguments), SAL_NO_ACQUIRE);
         //HACK: The constructor will either observe arguments and return inst
         // that does not implement XInitialization (or null), or ignore
         // arguments and return inst that implements XInitialization; this
@@ -797,7 +797,7 @@ void cppuhelper::ServiceManager::loadImplementation(
             "Cannot expand URI" + implementation->info->uri + ": " + e.Message,
             static_cast< cppu::OWeakObject * >(this));
     }
-    cppuhelper::ImplementationConstructorFn * ctor = nullptr;
+    cppuhelper::WrapperConstructorFn ctor;
     css::uno::Reference< css::uno::XInterface > f0;
     // Special handling of SharedLibrary loader, with support for environment,
     // constructor, and prefix arguments:
@@ -808,27 +808,8 @@ void cppuhelper::ServiceManager::loadImplementation(
             uri, implementation->info->environment,
             implementation->info->prefix, implementation->info->name,
             implementation->info->constructor, this, &ctor, &f0);
-        if (ctor != nullptr) {
+        if (ctor) {
             assert(!implementation->info->environment.isEmpty());
-            css::uno::Environment curEnv(css::uno::Environment::getCurrent());
-            if (!curEnv.is()) {
-                throw css::uno::DeploymentException(
-                    "cannot get current environment",
-                    css::uno::Reference<css::uno::XInterface>());
-            }
-            css::uno::Environment env(
-                cppuhelper::detail::getEnvironment(
-                    implementation->info->environment,
-                    implementation->info->name));
-            if (!env.is()) {
-                throw css::uno::DeploymentException(
-                    ("cannot get environment "
-                     + implementation->info->environment),
-                    css::uno::Reference<css::uno::XInterface>());
-            }
-            if (curEnv.get() != env.get()) {
-                std::abort();//TODO
-            }
         }
     } else {
         SAL_WARN_IF(
@@ -864,7 +845,7 @@ void cppuhelper::ServiceManager::loadImplementation(
     }
     css::uno::Reference<css::lang::XSingleComponentFactory> f1;
     css::uno::Reference<css::lang::XSingleServiceFactory> f2;
-    if (ctor == nullptr) {
+    if (!ctor) {
         f1.set(f0, css::uno::UNO_QUERY);
         if (!f1.is()) {
             f2.set(f0, css::uno::UNO_QUERY);
@@ -1978,7 +1959,15 @@ void cppuhelper::ServiceManager::preloadImplementations() {
                 else
                 {
                     // get function symbol component factory
-                    fpFactory = aModule.getFunctionSymbol(iterator->second->info->constructor);
+                    aTargetEnv = cppuhelper::detail::getEnvironment(iterator->second->info->environment, iterator->second->info->name);
+                    if (aSourceEnv.get() == aTargetEnv.get())
+                    {
+                        fpFactory = aModule.getFunctionSymbol(iterator->second->info->constructor);
+                    }
+                    else
+                    {
+                        fpFactory = nullptr;
+                    }
                 }
 
                 css::uno::Reference<css::lang::XSingleComponentFactory> xSCFactory;
@@ -2002,7 +1991,7 @@ void cppuhelper::ServiceManager::preloadImplementations() {
                 }
 
                 if (!iterator->second->info->constructor.isEmpty() && fpFactory)
-                    iterator->second->constructor = reinterpret_cast<ImplementationConstructorFn *>(fpFactory);
+                    iterator->second->constructor = WrapperConstructorFn(reinterpret_cast<ImplementationConstructorFn *>(fpFactory));
 
                 iterator->second->factory1 = xSCFactory;
                 iterator->second->factory2 = xSSFactory;
