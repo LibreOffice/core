@@ -1166,7 +1166,7 @@ Const cstMaxBinlength = 2 * 65535
 				Case .DECIMAL, .NUMERIC			:		poResultSet.updateDouble(piColIndex, pvValue)
 				Case .TINYINT					:		poResultSet.updateShort(piColIndex, pvValue)
 				Case .CHAR, .VARCHAR, .LONGVARCHAR, .CLOB
-														If piRDBMS = DBMS_SQLITE And InStr(sValueTypeName, &quot;BINARY&quot;) &gt;0 Then		&apos;	Sqlite exception ... !
+														If piRDBMS = DBMS_SQLITE And InStr(sValueTypeName, &quot;BINARY&quot;) &gt; 0 Then		&apos;	Sqlite exception ... !
 															poResultSet.updateBytes(piColIndex, pvValue)
 														Else
 															poResultSet.updateString(piColIndex, pvValue)

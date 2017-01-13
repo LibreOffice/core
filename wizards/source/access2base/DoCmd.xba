@@ -340,7 +340,7 @@ Const cstProgressMeterLimit = 100
 											Utils._updateResultSetColumnValue(iRDBMS, oOutput.RowSet, i + 1, vField)
 										ElseIf oDatabase._BinaryStream Then
 											&apos;	Typically for SQLite where binary fields are limited
-											If lInputSize &gt; vOutputField.Column.Precision Then
+											If lInputSize &gt; vOutputField._Precision Then
 												TraceError(TRACEWARNING, ERRPRECISION, Utils._CalledSub(), 0, 1, Array(vOutputField._Name, lInputRecs + 1))
 												Utils._updateResultSetColumnValue(iRDBMS, oOutput.RowSet, i + 1, Null)
 											Else
@@ -352,6 +352,12 @@ Const cstProgressMeterLimit = 100
 										End If
 									Else
 										vField =  Utils._getResultSetColumnValue(.RowSet, i + 1)
+										If VarType(vField) = vbString Then
+											If Len(vField) &gt; vOutputField._Precision Then
+												TraceError(TRACEWARNING, ERRPRECISION, Utils._CalledSub(), 0, 1, Array(vOutputField._Name, lInputRecs + 1))
+											End If
+										End If
+										&apos;	Update is done anyway, if too long, with truncation
 										Utils._updateResultSetColumnValue(iRDBMS, oOutput.RowSet, i + 1, vField)
 									End If
 								Next i

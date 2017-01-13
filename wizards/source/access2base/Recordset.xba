@@ -545,6 +545,7 @@ Dim i As Integer, oFields As Object, iIndex As Integer
 		Set oObject = New Field
 		oObject._Name = sObjectName
 		Set oObject.Column = oFields.getByName(sObjectName)
+		If Utils._hasUNOProperty(oObject.Column, &quot;Precision&quot;) Then oObject._Precision = oObject.Column.Precision
 		oObject._ParentName = _Name
 		oObject._ParentType = _Type
 		Set oObject._ParentDatabase = _ParentDatabase
