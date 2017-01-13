@@ -511,10 +511,19 @@ class DXFEntities {
 
 public:
 
-    DXFEntities();
-    ~DXFEntities();
+    DXFEntities()
+        : pFirst(nullptr)
+        , mbBeingDrawn(false)
+    {
+    }
+
+    ~DXFEntities()
+    {
+        Clear();
+    }
 
     DXFBasicEntity * pFirst; // list of entities, READ ONLY!
+    mutable bool mbBeingDrawn; // guard for loop in entity parsing
 
     void Read(DXFGroupReader & rDGR);
         // read entities per rGDR of a DXF file until a
@@ -524,18 +533,6 @@ public:
     void Clear();
         // deletes all entities
 };
-
-inline DXFEntities::DXFEntities()
-{
-    pFirst=nullptr;
-}
-
-
-inline DXFEntities::~DXFEntities()
-{
-    Clear();
-}
-
 
 #endif
 
