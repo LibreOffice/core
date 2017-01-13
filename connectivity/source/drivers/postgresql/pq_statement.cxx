@@ -797,7 +797,7 @@ Reference< XResultSet > getGeneratedValuesFromLastInsert(
                     {
                         // it even was no autovalue, no sense to continue as we can't query the
                         // inserted row
-                        buf = OUStringBuffer();
+                        buf.setLength(0);
                         break;
                     }
                 }
