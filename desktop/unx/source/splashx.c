@@ -43,6 +43,10 @@ struct splash
     Display* display;
     int screen;
     int depth;
+    int display_width;
+    int display_height;
+    int display_x_pos;
+    int display_y_pos;
     Visual* visual;
 
     int width;
@@ -388,24 +392,14 @@ static void suppress_decorations(struct splash* splash)
 }
 
 /**
- * Create the window for the splash screen
+ * Connects to the display and initiales splash with the screen details
  *
  * @return Success: 1; Failure: 0
  */
-static int splash_create_window( struct splash* splash, int argc, char** argv )
+static int splash_init_display( struct splash* splash, int argc, char** argv )
 {
     char *display_name = NULL;
     int i;
-    Window root_win;
-    int display_width = 0;
-    int display_height = 0;
-    int display_x_pos = 0;
-    int display_y_pos = 0;
-    unsigned long value_mask = 0;
-    XGCValues values;
-    const char* name = "LibreOffice";
-    const char* icon = "icon"; // FIXME
-    XSizeHints size_hints;
 #ifdef USE_XINERAMA
     int n_xinerama_screens = 1;
     XineramaScreenInfo* p_screens = NULL;
@@ -437,9 +431,10 @@ static int splash_create_window( struct splash* splash, int argc, char** argv )
     splash->color_map = DefaultColormap( splash->display, splash->screen );
     splash->visual = DefaultVisual( splash->display, splash->screen );
 
-    root_win = RootWindow( splash->display, splash->screen );
-    display_width = DisplayWidth( splash->display, splash->screen );
-    display_height = DisplayHeight( splash->display, splash->screen );
+    splash->display_width = DisplayWidth( splash->display, splash->screen );
+    splash->display_height = DisplayHeight( splash->display, splash->screen );
+    splash->display_x_pos = 0;
+    splash->display_y_pos = 0;
 
 #ifdef USE_XINERAMA
     p_screens = XineramaQueryScreens( splash->display, &n_xinerama_screens );
@@ -449,20 +444,38 @@ static int splash_create_window( struct splash* splash, int argc, char** argv )
         {
             if ( p_screens[i].screen_number == splash->screen )
             {
-                display_width = p_screens[i].width;
-                display_height = p_screens[i].height;
-                display_x_pos = p_screens[i].x_org;
-                display_y_pos = p_screens[i].y_org;
+                splash->display_width = p_screens[i].width;
+                splash->display_height = p_screens[i].height;
+                splash->display_x_pos = p_screens[i].x_org;
+                splash->display_y_pos = p_screens[i].y_org;
                 break;
             }
         }
         XFree( p_screens );
     }
 #endif
+    return 1;
+}
+
+/**
+ * Create the window for the splash screen
+ *
+ * @return Success: 1; Failure: 0
+ */
+static int splash_create_window(struct splash* splash)
+{
+    Window root_win;
+    unsigned long value_mask = 0;
+    XGCValues values;
+    const char* name = "LibreOffice";
+    const char* icon = "icon"; // FIXME
+    XSizeHints size_hints;
+
+    root_win = RootWindow( splash->display, splash->screen );
 
     splash->win = XCreateSimpleWindow( splash->display, root_win,
-            (display_x_pos + (display_width - splash->width)/2),
-            (display_y_pos + (display_height - splash->height)/2),
+            (splash->display_x_pos + (splash->display_width - splash->width)/2),
+            (splash->display_y_pos + (splash->display_height - splash->height)/2),
             splash->width, splash->height, 0,
             BlackPixel( splash->display, splash->screen ), BlackPixel( splash->display, splash->screen ) );
 
@@ -481,8 +494,8 @@ static int splash_create_window( struct splash* splash, int argc, char** argv )
     splash->gc = XCreateGC( splash->display, splash->win, value_mask, &values );
 
     size_hints.flags = PPosition | PSize | PMinSize | PMaxSize;
-    size_hints.x = display_x_pos;
-    size_hints.y = display_y_pos;
+    size_hints.x = splash->display_x_pos;
+    size_hints.y = splash->display_y_pos;
     size_hints.width = splash->width;
     size_hints.height = splash->height;
     size_hints.min_width = splash->width;
@@ -531,29 +544,28 @@ static rtl_String* ustr_to_str( rtl_uString* pStr )
     return pOut;
 }
 
-static sal_Bool getScreenSize(int* display_width, int* display_height)
+static sal_Bool isHiDPI(struct splash* splash)
 {
-    Display* bDisplay = NULL;
-    Screen* bScreen = NULL;
+    const char* pValStr;
+    double nDPI;
 
-    bDisplay = XOpenDisplay( NULL );
-    if ( !bDisplay )
-    {
-        fprintf( stderr, "Failed to open default display.\n" );
+    /*
+     * GNOME currently enables hi-dpi support when the screen resolution is at least 192 dpi
+     * and the screen height (in device pixels) is at least 1200.
+     */
+
+    if (splash->display_height < 1200)
         return sal_False;
-    }
 
-    bScreen = DefaultScreenOfDisplay( bDisplay );
-    if ( !bScreen )
-    {
-        fprintf( stderr, "Failed to obtain the default screen of given display.\n" );
+    pValStr = XGetDefault(splash->display, "Xft", "dpi");
+    /* if its too old to have this, assume its not hidpi */
+    if (!pValStr)
         return sal_False;
-    }
 
-    *display_width = bScreen->width;
-    *display_height = bScreen->height;
+    nDPI = strtod(pValStr, NULL);
+    if (nDPI < 192)
+        return sal_False;
 
-    XCloseDisplay( bDisplay );
     return sal_True;
 }
 
@@ -566,7 +578,7 @@ static void splash_load_image( struct splash* splash, rtl_uString* pUAppPath )
      * now the splash screen will have to get along with language-territory. */
 
     char *pBuffer, *pSuffix, *pLocale;
-    int nLocSize, display_width, display_height;
+    int nLocSize;
     rtl_Locale *pLoc = NULL;
     rtl_String *pLang, *pCountry, *pAppPath;
 
@@ -594,26 +606,20 @@ static void splash_load_image( struct splash* splash, rtl_uString* pUAppPath )
     strcat (pSuffix, pLocale);
     strcat (pSuffix, IMG_SUFFIX);
     if ( splash_load_bmp( splash, pBuffer ) )
-        goto cleanup;
+        goto cleanup; /* success */
 
-    if ( getScreenSize( &display_width, &display_height ) == sal_True )
+    /* load high resolution splash image */
+    if (isHiDPI(splash))
     {
-        //load high resolution splash image
-        if ( display_width > 1920 && display_height > 1024 ) // suggest better display size limits?
-        {
-            //TODO- change progress bar parameters after getting size of intro-highres.png
-            strcpy (pSuffix, "intro-highres" IMG_SUFFIX);
-            if ( splash_load_bmp( splash, pBuffer ) )
-                goto cleanup;
-        }
-        //load low resolution splash image
-        else
-        {
-            strcpy (pSuffix, "intro" IMG_SUFFIX);
-            if ( splash_load_bmp( splash, pBuffer ) )
-                goto cleanup;
-        }
+        /* TODO- change progress bar parameters after getting size of intro-highres.png */
+        strcpy (pSuffix, "intro-highres" IMG_SUFFIX);
+        if ( splash_load_bmp( splash, pBuffer ) )
+            goto cleanup; /* success */
     }
+    /* load standard resolution splash image */
+    strcpy (pSuffix, "intro" IMG_SUFFIX);
+    if ( splash_load_bmp( splash, pBuffer ) )
+        goto cleanup;   /* success */
 
     fprintf (stderr, "Failed to find intro image\n");
 
@@ -729,37 +735,41 @@ struct splash* splash_create(rtl_uString* pAppPath, int argc, char** argv)
     sal_Bool bNoDefaults = sal_False;
 
     splash = calloc(1, sizeof(struct splash));
-    if(splash)
+    if (splash && !splash_init_display(splash, argc, argv))
     {
-        splash->width = WINDOW_WIDTH;
-        splash->height = WINDOW_HEIGHT;
-
-        splash->tlx = 212;
-        splash->tly = 216;
-        splash->barwidth = 263;
-        splash->barheight = 8;
-        splash->barspace = PROGRESS_BARSPACE;
-        splash->barcol.b = 18;
-        splash->barcol.g = 202;
-        splash->barcol.r = 157;
-        splash->framecol.b = 0xD3;
-        splash->framecol.g = 0xD3;
-        splash->framecol.r = 0xD3;
-
-        splash_load_image( splash, pAppPath );
-        splash_load_defaults( splash, pAppPath, &bNoDefaults );
-
-        if (!bNoDefaults && splash_create_window( splash, argc, argv ) )
-        {
-            splash_draw_progress( splash, 0 );
-        }
-        else
-        {
-            splash_destroy(splash);
-            splash = NULL;
-        }
+        splash_destroy(splash);
+        splash = NULL;
     }
-    return splash;
+
+    if (!splash)
+        return NULL;
+
+    splash->width = WINDOW_WIDTH;
+    splash->height = WINDOW_HEIGHT;
+
+    splash->tlx = 212;
+    splash->tly = 216;
+    splash->barwidth = 263;
+    splash->barheight = 8;
+    splash->barspace = PROGRESS_BARSPACE;
+    splash->barcol.b = 18;
+    splash->barcol.g = 202;
+    splash->barcol.r = 157;
+    splash->framecol.b = 0xD3;
+    splash->framecol.g = 0xD3;
+    splash->framecol.r = 0xD3;
+
+    splash_load_image( splash, pAppPath );
+    splash_load_defaults( splash, pAppPath, &bNoDefaults );
+
+    if (!bNoDefaults && splash_create_window(splash))
+    {
+        splash_draw_progress( splash, 0 );
+        return splash;
+    }
+
+    splash_destroy(splash);
+    return NULL;
 }
 
 #else /* not ENABLE_QUICKSTART_LIBPNG */
