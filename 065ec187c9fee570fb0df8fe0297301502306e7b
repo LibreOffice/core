@@ -220,6 +220,24 @@
     },
     {
       "key": {
+        "uuid": "1a6eadb0_d9e8a119",
+        "filename": "connectivity/source/drivers/firebird/Clob.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2017-01-13T09:38:10Z",
+      "side": 1,
+      "message": "Yup, with HSQLDB/JDBC it returns a UTF16 byte stream (which comes from the Java/JDBC implementation of getCharacterStream which actually returns a stream of UTF16 code units).",
+      "parentUuid": "1a6eadb0_19a5b903",
+      "revId": "065ec187c9fee570fb0df8fe0297301502306e7b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a6eadb0_4baafbd5",
         "filename": "connectivity/source/drivers/firebird/ResultSet.cxx",
         "patchSetId": 2
