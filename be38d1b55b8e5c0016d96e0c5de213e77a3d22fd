@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1a6eadb0_4e7209e7",
+        "filename": "sc/source/ui/view/gridwin4.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 899,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2017-01-13T03:32:25Z",
+      "side": 1,
+      "message": "15 is actually TWIPS_PER_PIXEL. Not sure why it\u0027s not spelled out.\n1.7638 is actually a magic number originated (as far as I can tell) from 127 / 72. I found this by trial and error, so not sure what it really is, but it\u0027s the number of pixel per unit (in the units of the MapMode). This 127 / 72 is also used in HMM conversions (though I don\u0027t know how they are related).\n\nThis whole things is confusing because \"pixel\" is *not* a unit at all. So whenever MapMode says \"pixel\" it doesn\u0027t mean anything comparable. It only means there is no conversion factor between the units of the object and anything else.\n\nSo, for example, if you have an image in Pixel units, it doesn\u0027t imply how large it should be rendered (on screen, or print, or anywhere). For that, we need pixels/scale unit (i.e. resolution).\n\nThe conversions happening are to render those objects that are in pixel correctly, without really having a scale unit. But since the other layers have units, what we do here is convert the number such that things align, and whatever those conversion factors are, we expect all objects to render correctly, provided images are in the same resolution, and other layers are in the same units.\n\nWe can use LogicToPixel or PixelToLogic only when we have units. But as said, we are converting coordinates from Pixel units to align with the other layers in Tiled mode (i.e. when the origin is not 0,0).",
+      "parentUuid": "1a6eadb0_0ee2d1d5",
+      "revId": "be38d1b55b8e5c0016d96e0c5de213e77a3d22fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a6eadb0_8ef50185",
         "filename": "sc/source/ui/view/gridwin4.cxx",
         "patchSetId": 6
@@ -30,6 +48,24 @@
       "writtenOn": "2017-01-12T18:04:42Z",
       "side": 1,
       "message": "Apart from that, this is now at least the 4th place that introduces this magical twipFactor without any comment (luckily all in if(bIsTiledRendering) conditions). So if that is really needed and can not be expressed using existing conversion fuctions or factors then it should go into global.hxx (or rather some sc/source/ui/inc/*.hxx) and be commented properly and that constant then be used, instead of sprinkling the same black box calculation over. Maybe even factor out the common code that always recalculates the origin.\n\nSo when done with this patch I\u0027d like to see that cleaned up.\n\nFurthermore, if these special conversions are needed at more and more places then there might be something more fundamentally broken with tiled rendering and its device\u0027s MapMode. MapMode exactly is meant to take care of such conversions.",
+      "revId": "be38d1b55b8e5c0016d96e0c5de213e77a3d22fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a6eadb0_6e77c5d4",
+        "filename": "sc/source/ui/view/gridwin4.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 901,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2017-01-13T03:32:25Z",
+      "side": 1,
+      "message": "Yes, we should have these in some sort of helper function instead of scattering around.\n\nYes, the cleanup is to use 100MM or some basic unit that everything maps to, then we don\u0027t have to do conversions at every arbitrary point.\n\nYes, Tiled rendering is fundamentally broken, because Calc rendering was never designed or implemented to render with arbitrary origin. What tiled rendering is doing, in theory, should have worked without any issue, had the Calc rendering been flexible and mathematically robust. Unfortunately, some layers assume origin is 0,0 and in a certain unit (MapMode is in a certain Unit value). And this breaks when we change origin to something other than 0,0, which we need to do to render the different tiles.\n\nWithout all these if(bIsTiledRendering) only the top-left tile renders correctly, all others would only render the cells correctly but not buttons/images/shapes/graphs.\n\nAgain, the correct solution is to have 100MM everywhere, so we don\u0027t have to change units before/after every rendering.\n\nThere has been several patches and efforts to convert to 100MM, but sadly that proved to be far more difficult than one imagined or hoped. Still, that\u0027s the worthwhile effort to spend energy in, in the long run. However here we\u0027re trying to fix specific cases, and not solve ever rendering ailment, so it\u0027s very localized fixes and special casing, as you note accurately.",
+      "parentUuid": "1a6eadb0_8ef50185",
       "revId": "be38d1b55b8e5c0016d96e0c5de213e77a3d22fd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
