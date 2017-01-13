@@ -133,7 +133,7 @@ struct HyperlinkModel : public ::oox::ole::StdHlinkInfo
 /** Stores data about ranges with data validation settings. */
 struct ValidationModel
 {
-    ApiCellRangeList    maRanges;
+    ScRangeList         maRanges;
     ApiTokenSequence    maTokens1;
     ApiTokenSequence    maTokens2;
     OUString     msRef;
