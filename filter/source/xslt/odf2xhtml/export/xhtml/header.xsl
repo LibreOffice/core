@@ -97,7 +97,7 @@
 	</xsl:text>
 <xsl:text>li { list-style: none; margin:0; padding:0;}
 	</xsl:text>
-<xsl:comment> "li span.odfLiEnd" - IE 7 issue</xsl:comment>
+<xsl:text>/* "li span.odfLiEnd" - IE 7 issue*/</xsl:text>
 <xsl:text>
 	</xsl:text>
 <xsl:text>li span. { clear: both; line-height:0; width:0; height:0; margin:0; padding:0; }
@@ -127,7 +127,7 @@
 
 			</xsl:for-each>
 			<!-- Otherwise all styles have been processed and the empty styles have to be given out -->
-				<xsl:comment> ODF styles with no properties representable as CSS </xsl:comment><xsl:text>
+				<xsl:text>/* ODF styles with no properties representable as CSS */</xsl:text><xsl:text>
 	</xsl:text><xsl:for-each select="$globalData/all-styles/style[final-properties = '']"><xsl:value-of select="concat('.', @style:name, ' ')"/></xsl:for-each> { }
 	</xsl:template>
 
