@@ -246,7 +246,7 @@ static typelib_TypeClass __cdecl cpp_mediate(
             std::hex << pCallStack[0] << "," << pCallStack[1] << "," << pCallStack[2] << ",...]" <<
             ", pThis=" << pThis << ", pCppI=" << pCppI <<
             std::dec << ", nFunctionIndex=" << nFunctionIndex << ", nVtableOffset=" << nVtableOffset );
-    SAL_INFO( "bridges.win32", "name=" << pTypeDescr->aBase.pTypeName );
+    SAL_INFO( "bridges.win32", "name=" << OUString::unacquired(&pTypeDescr->aBase.pTypeName) );
 
     if (nFunctionIndex >= pTypeDescr->nMapFunctionIndexToMemberIndex)
     {
@@ -268,7 +268,7 @@ static typelib_TypeClass __cdecl cpp_mediate(
 
     TypeDescription aMemberDescr( pTypeDescr->ppAllMembers[nMemberPos] );
 
-    SAL_INFO( "bridges.win32", "Calling " << aMemberDescr.get()->pTypeName );
+    SAL_INFO( "bridges.win32", "Calling " << OUString::unacquired(&aMemberDescr.get()->pTypeName) );
 
     typelib_TypeClass eRet = typelib_TypeClass_VOID;
     switch (aMemberDescr.get()->eTypeClass)
