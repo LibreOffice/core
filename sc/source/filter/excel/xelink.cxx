@@ -21,7 +21,6 @@
 
 #include <algorithm>
 #include <formula/errorcodes.hxx>
-#include <oox/token/namespaces.hxx>
 #include <unotools/collatorwrapper.hxx>
 #include <svl/zforlist.hxx>
 #include "document.hxx"
@@ -1678,11 +1677,11 @@ void XclExpSupbook::SaveXml( XclExpXmlStream& rStrm )
             true );
 
     pExternalLink->startElement( XML_externalLink,
-            XML_xmlns,              XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(xls))).getStr(),
+            XML_xmlns,              "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
             FSEND);
 
     pExternalLink->startElement( XML_externalBook,
-            FSNS(XML_xmlns, XML_r), XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(officeRel))).getStr(),
+            FSNS(XML_xmlns, XML_r), "http://schemas.openxmlformats.org/officeDocument/2006/relationships",
             FSNS(XML_r, XML_id),    XclXmlUtils::ToOString( sId ).getStr(),
             FSEND);
 

@@ -51,7 +51,6 @@
 #include "conditio.hxx"
 
 #include <oox/token/tokens.hxx>
-#include <oox/token/namespaces.hxx>
 #include <o3tl/make_unique.hxx>
 
 using namespace ::com::sun::star;
@@ -3138,7 +3137,7 @@ void XclExpXmlStyleSheet::SaveXml( XclExpXmlStream& rStrm )
     rStrm.PushStream( aStyleSheet );
 
     aStyleSheet->startElement( XML_styleSheet,
-            XML_xmlns, XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(xls))).getStr(),
+            XML_xmlns, "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
             FSEND );
 
     CreateRecord( EXC_ID_FORMATLIST )->SaveXml( rStrm );

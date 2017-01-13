@@ -76,7 +76,6 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <oox/token/tokens.hxx>
-#include <oox/token/namespaces.hxx>
 #include <memory>
 
 using namespace oox;
@@ -735,8 +734,8 @@ void ExcTable::WriteXml( XclExpXmlStream& rStrm )
     rStrm.PushStream( pWorksheet );
 
     pWorksheet->startElement( XML_worksheet,
-            XML_xmlns, XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(xls))).getStr(),
-            FSNS( XML_xmlns, XML_r ), XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(officeRel))).getStr(),
+            XML_xmlns, "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
+            FSNS( XML_xmlns, XML_r ), "http://schemas.openxmlformats.org/officeDocument/2006/relationships",
             FSEND );
 
     SetCurrScTab( mnScTab );
@@ -856,8 +855,8 @@ void ExcDocument::WriteXml( XclExpXmlStream& rStrm )
 
     sax_fastparser::FSHelperPtr& rWorkbook = rStrm.GetCurrentStream();
     rWorkbook->startElement( XML_workbook,
-            XML_xmlns, XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(xls))).getStr(),
-            FSNS(XML_xmlns, XML_r), XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(officeRel))).getStr(),
+            XML_xmlns, "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
+            FSNS(XML_xmlns, XML_r), "http://schemas.openxmlformats.org/officeDocument/2006/relationships",
             FSEND );
     rWorkbook->singleElement( XML_fileVersion,
             XML_appName, "Calc",

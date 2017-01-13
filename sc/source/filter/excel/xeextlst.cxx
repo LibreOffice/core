@@ -15,8 +15,6 @@
 #include "xecontent.hxx"
 #include "tokenarray.hxx"
 
-#include <oox/token/namespaces.hxx>
-
 using namespace ::oox;
 
 namespace {
@@ -352,7 +350,7 @@ void XclExpExtConditionalFormatting::SaveXml( XclExpXmlStream& rStrm )
 {
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
     rWorksheet->startElementNS( XML_x14, XML_conditionalFormatting,
-                                FSNS( XML_xmlns, XML_xm ), XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(xm))).getStr(),
+                                FSNS( XML_xmlns, XML_xm ), "http://schemas.microsoft.com/office/excel/2006/main",
                                 FSEND );
 
     maCfRules.SaveXml( rStrm );
@@ -398,7 +396,7 @@ void XclExpExtCalcPr::SaveXml( XclExpXmlStream& rStrm )
 {
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
     rWorksheet->startElement( XML_ext,
-                                FSNS( XML_xmlns, XML_loext ), XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(loext))).getStr(),
+                                FSNS( XML_xmlns, XML_loext ), "http://schemas.libreoffice.org/",
                                 XML_uri, maURI.getStr(),
                                 FSEND );
 
@@ -419,7 +417,7 @@ void XclExpExtCondFormat::SaveXml( XclExpXmlStream& rStrm )
 {
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
     rWorksheet->startElement( XML_ext,
-                                FSNS( XML_xmlns, XML_x14 ), XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(xls14Lst))).getStr(),
+                                FSNS( XML_xmlns, XML_x14 ), "http://schemas.microsoft.com/office/spreadsheetml/2009/9/main",
                                 XML_uri, maURI.getStr(),
                                 FSEND );
 
