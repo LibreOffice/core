@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a6eadb0_ce03790e",
+        "filename": "sw/qa/python/check_flies.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2017-01-13T07:59:56Z",
+      "side": 1,
+      "message": "white spaces...",
+      "revId": "08a2c93d6517050289561471c1f9ca6e998718cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
