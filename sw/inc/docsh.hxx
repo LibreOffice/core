@@ -267,6 +267,7 @@ public:
      the load of document being finished. */
 
     void LoadingFinished();
+    virtual void SetFormatSpecificCompatibilityOptions( const OUString& rFilterTypeName ) override;
 
     /// Cancel transfer (called from SFX).
     virtual void CancelTransfers() override;
