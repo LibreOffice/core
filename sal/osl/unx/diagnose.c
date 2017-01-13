@@ -199,6 +199,14 @@ static void osl_diagnose_backtrace_Impl (oslDebugMessageFunc f)
 #include <setjmp.h>
 #include "backtrace.h" /* for struct frame */
 
+#if defined(POWERPC) || defined(POWERPC64)
+
+#define FRAME_PTR_OFFSET 1
+#define FRAME_OFFSET     0
+#define STACK_BIAS       0x7ff
+
+#endif
+
 #if defined(X86) || defined(X86_64)
 
 #define FRAME_PTR_OFFSET 3
