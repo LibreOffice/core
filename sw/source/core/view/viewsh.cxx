@@ -899,6 +899,17 @@ void SwViewShell::SetProtectForm( bool _bProtectForm )
     rIDSA.set(DocumentSettingId::PROTECT_FORM, _bProtectForm );
 }
 
+void SwViewShell::SetMsWordCompTrailingBlanks( bool _bMsWordCompTrailingBlanks )
+{
+    IDocumentSettingAccess& rIDSA = getIDocumentSettingAccess();
+    if (rIDSA.get(DocumentSettingId::MS_WORD_COMP_TRAILING_BLANKS) != _bMsWordCompTrailingBlanks)
+    {
+        SwWait aWait(*GetDoc()->GetDocShell(), true);
+        rIDSA.set(DocumentSettingId::MS_WORD_COMP_TRAILING_BLANKS, _bMsWordCompTrailingBlanks);
+        const SwInvalidateFlags nInv = SwInvalidateFlags::PrtArea | SwInvalidateFlags::Size | SwInvalidateFlags::Table | SwInvalidateFlags::Section;
+        lcl_InvalidateAllContent(*this, nInv);
+    }
+}
 
 void SwViewShell::SetSubtractFlysAnchoredAtFlys(bool bSubtractFlysAnchoredAtFlys)
 {
