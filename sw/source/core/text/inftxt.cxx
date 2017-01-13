@@ -1184,71 +1184,78 @@ void SwTextPaintInfo::DrawBackBrush( const SwLinePortion &rPor ) const
             aFillColor = *m_pFnt->GetBackColor();
         }
 
-        // tdf#104349 do not hightlight portions of space chars before end of line
-        bool           draw = false;
-        bool           full = false;
-        SwLinePortion *pPos = const_cast<SwLinePortion *>(&rPor);
-        sal_Int32      nIdx = GetIdx();
-        sal_Int32      nLen;
-
-        do
+        // tdf#104349 do not hightlight portions of space chars before end of line if the compatibility option is enabled
+        // for LTR mode only
+        if ( !GetTextFrame()->IsRightToLeft() )
         {
-            nLen = pPos->GetLen();
-            for ( int i = nIdx; i < (nIdx + nLen); ++i )
+            if ( GetTextFrame()->GetNode()->getIDocumentSettingAccess()->get( DocumentSettingId::MS_WORD_COMP_TRAILING_BLANKS ) )
             {
-                if (i < GetText().getLength() && GetText()[i] == CH_TXTATR_NEWLINE)
+                bool           draw = false;
+                bool           full = false;
+                SwLinePortion *pPos = const_cast<SwLinePortion *>(&rPor);
+                sal_Int32      nIdx = GetIdx();
+                sal_Int32      nLen;
+
+                do
                 {
-                    if ( i >= (GetIdx() + rPor.GetLen()) )
+                    nLen = pPos->GetLen();
+                    for ( int i = nIdx; i < (nIdx + nLen); ++i )
                     {
-                        goto drawcontinue;
+                        if ( i < GetText().getLength() && GetText()[i] == CH_TXTATR_NEWLINE )
+                        {
+                            if ( i >= (GetIdx() + rPor.GetLen()) )
+                            {
+                                goto drawcontinue;
+                            }
+                        }
+                        if ( i >= GetText().getLength() || GetText()[i] != CH_BLANK )
+                        {
+                            draw = true;
+                            if ( i >= (GetIdx() + rPor.GetLen()) )
+                            {
+                                full = true;
+                                goto drawcontinue;
+                            }
+                        }
                     }
-                }
-                if (i >= GetText().getLength() || GetText()[i] != CH_BLANK)
+                    nIdx += nLen;
+                    pPos = pPos->GetPortion();
+                } while ( pPos );
+
+            drawcontinue:
+
+                if ( !draw )
+                    return;
+
+                if ( !full )
                 {
-                    draw = true;
-                    if ( i >= (GetIdx() + rPor.GetLen()) )
+                    pPos = const_cast<SwLinePortion *>(&rPor);
+                    nIdx = GetIdx();
+
+                    nLen = pPos->GetLen();
+                    for ( int i = (nIdx + nLen - 1); i >= nIdx; --i )
                     {
-                        full = true;
-                        goto drawcontinue;
+                        if ( i < GetText().getLength() && GetText()[i] == CH_TXTATR_NEWLINE )
+                        {
+                            continue;
+                        }
+                        if ( i >= GetText().getLength() || GetText()[i] != CH_BLANK )
+                        {
+                            sal_uInt16 nOldWidth = rPor.Width();
+                            sal_uInt16 nNewWidth = GetTextSize( m_pOut, nullptr, GetText(), nIdx, (i + 1 - nIdx) ).Width();
+
+                            const_cast<SwLinePortion&>(rPor).Width( nNewWidth );
+                            CalcRect( rPor, nullptr, &aIntersect, true );
+                            const_cast<SwLinePortion&>(rPor).Width( nOldWidth );
+
+                            if ( !aIntersect.HasArea() )
+                            {
+                                return;
+                            }
+
+                            break;
+                        }
                     }
-                }
-            }
-            nIdx += nLen;
-            pPos = pPos->GetPortion();
-        } while ( pPos );
-
-        drawcontinue:
-
-        if ( !draw )
-            return;
-
-        if ( !full )
-        {
-            pPos = const_cast<SwLinePortion *>(&rPor);
-            nIdx = GetIdx();
-
-            nLen = pPos->GetLen();
-            for ( int i = (nIdx + nLen - 1); i >= nIdx; --i )
-            {
-                if (i < GetText().getLength() && GetText()[i] == CH_TXTATR_NEWLINE)
-                {
-                    continue;
-                }
-                if (i >= GetText().getLength() || GetText()[i] != CH_BLANK)
-                {
-                    sal_uInt16 nOldWidth = rPor.Width();
-                    sal_uInt16 nNewWidth = GetTextSize( m_pOut, nullptr, GetText(), nIdx, (i + 1 - nIdx) ).Width();
-
-                    const_cast<SwLinePortion&>(rPor).Width( nNewWidth );
-                    CalcRect( rPor, nullptr, &aIntersect, true );
-                    const_cast<SwLinePortion&>(rPor).Width( nOldWidth );
-
-                    if ( ! aIntersect.HasArea() )
-                    {
-                        return;
-                    }
-
-                    break;
                 }
             }
         }

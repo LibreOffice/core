@@ -73,6 +73,7 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
     mbUnixForceZeroExtLeading(false),
     mbTabRelativeToIndent(true),
     mbProtectForm(false), // i#78591#
+    mbMsWordCompTrailingBlanks(false), // tdf#104349 tdf#104668
     mbInvertBorderSpacing (false),
     mbCollapseEmptyCellPara(true),
     mbTabAtLeftIndentForParagraphsInList(false), //#i89181#
@@ -168,6 +169,8 @@ bool sw::DocumentSettingManager::get(/*[in]*/ DocumentSettingId id) const
         case DocumentSettingId::UNIX_FORCE_ZERO_EXT_LEADING: return mbUnixForceZeroExtLeading;
         case DocumentSettingId::TABS_RELATIVE_TO_INDENT : return mbTabRelativeToIndent;
         case DocumentSettingId::PROTECT_FORM: return mbProtectForm;
+        // tdf#104349 tdf#104668
+        case DocumentSettingId::MS_WORD_COMP_TRAILING_BLANKS: return mbMsWordCompTrailingBlanks;
         // #i89181#
         case DocumentSettingId::TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST: return mbTabAtLeftIndentForParagraphsInList;
         case DocumentSettingId::INVERT_BORDER_SPACING: return mbInvertBorderSpacing;
@@ -304,6 +307,11 @@ void sw::DocumentSettingManager::set(/*[in]*/ DocumentSettingId id, /*[in]*/ boo
 
         case DocumentSettingId::PROTECT_FORM:
             mbProtectForm = value;
+            break;
+
+        // tdf#140349
+        case DocumentSettingId::MS_WORD_COMP_TRAILING_BLANKS:
+            mbMsWordCompTrailingBlanks = value;
             break;
 
         case DocumentSettingId::TABS_RELATIVE_TO_INDENT:
@@ -558,6 +566,7 @@ void sw::DocumentSettingManager::ReplaceCompatibilityOptions(const DocumentSetti
     mbUnixForceZeroExtLeading = rSource.mbUnixForceZeroExtLeading;
     mbTabRelativeToIndent = rSource.mbTabRelativeToIndent;
     mbTabAtLeftIndentForParagraphsInList = rSource.mbTabAtLeftIndentForParagraphsInList;
+    mbMsWordCompTrailingBlanks = rSource.mbMsWordCompTrailingBlanks;
 }
 
 sal_uInt32 sw::DocumentSettingManager::Getn32DummyCompatibilityOptions1() const

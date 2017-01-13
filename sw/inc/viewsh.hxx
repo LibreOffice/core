@@ -416,6 +416,8 @@ public:
 
     void SetProtectForm( bool _bProtectForm );
 
+    void SetMsWordCompTrailingBlanks( bool _bMsWordCompTrailingBlanks );
+
     void SetSubtractFlysAnchoredAtFlys(bool bSubtractFlysAnchoredAtFlys);
 
     // DOCUMENT COMPATIBILITY FLAGS END
