@@ -461,6 +461,9 @@ public:
     // Transfer IFace
     bool                        IsAbortingImport() const;
     void                        FinishedLoading( SfxLoadedFlags nWhich = SfxLoadedFlags::ALL );
+
+    virtual void                SetFormatSpecificCompatibilityOptions( SfxMedium* /*pMedium*/ ) { /* don't do anything here; derived classes must overload to do actual work */ };
+
     void                        TemplateDisconnectionAfterLoad();
     bool                        IsLoading() const;
     bool                        IsLoadingFinished() const;

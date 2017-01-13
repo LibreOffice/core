@@ -265,6 +265,7 @@ public:
      the load of document being finished. */
 
     void LoadingFinished();
+    virtual void SetFormatSpecificCompatibilityOptions( SfxMedium* pMed ) override;
 
     /// Cancel transfer (called from SFX).
     virtual void CancelTransfers() override;
