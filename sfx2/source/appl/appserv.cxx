@@ -1174,6 +1174,9 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
                 }
                 case SID_SAFE_MODE:
                 {
+                    // no restart in safe mode when already in safe mode
+                    if ( Application::IsSafeModeEnabled() )
+                       rSet.DisableItem( SID_SAFE_MODE );
                     break;
                 }
 
