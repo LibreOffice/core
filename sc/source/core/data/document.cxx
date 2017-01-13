@@ -6420,11 +6420,16 @@ bool ScDocument::HasColNotes(SCCOL nCol, SCTAB nTab) const
 
 bool ScDocument::HasTabNotes(SCTAB nTab) const
 {
-    bool hasNotes = false;
-    for (SCCOL nCol=0; nCol<MAXCOLCOUNT && !hasNotes; ++nCol)
-        hasNotes = HasColNotes(nCol, nTab);
+    const ScTable* pTab = FetchTable(nTab);
 
-    return hasNotes;
+    if ( !pTab )
+        return false;
+
+    for (SCCOL nCol=0, nColSize = pTab->aCol.size(); nCol < nColSize; ++nCol)
+        if ( HasColNotes(nCol, nTab) )
+            return true;
+
+    return false;
 }
 
 bool ScDocument::HasNotes() const
