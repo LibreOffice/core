@@ -560,6 +560,10 @@ public:
                             sal_Int16 nSheet,
                             bool bTrackOverflow );
 
+    /** Converts to a sequence. */
+    static css::uno::Sequence<css::table::CellRangeAddress>
+                        toApiSequence(const ScRangeList& orRanges);
+
 private:
     void                initializeMaxPos(
                             sal_Int16 nMaxXlsTab, sal_Int32 nMaxXlsCol, sal_Int32 nMaxXlsRow );
