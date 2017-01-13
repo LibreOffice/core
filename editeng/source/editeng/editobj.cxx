@@ -1121,9 +1121,6 @@ void EditTextObjectImpl::StoreData( SvStream& rOStream ) const
     {
         const ContentInfo& rC = *aContents[nPara].get();
 
-        // Text...
-        OStringBuffer aBuffer(OUStringToOString(rC.GetText(), eEncoding));
-
         // Symbols?
         bool bSymbolPara = false;
         if (rC.GetParaAttribs().GetItemState( EE_CHAR_FONTINFO ) == SfxItemState::SET)
@@ -1131,10 +1128,13 @@ void EditTextObjectImpl::StoreData( SvStream& rOStream ) const
             const SvxFontItem& rFontItem = static_cast<const SvxFontItem&>(rC.GetParaAttribs().Get(EE_CHAR_FONTINFO));
             if ( rFontItem.GetCharSet() == RTL_TEXTENCODING_SYMBOL )
             {
-                aBuffer = OStringBuffer(OUStringToOString(rC.GetText(), RTL_TEXTENCODING_SYMBOL));
                 bSymbolPara = true;
             }
         }
+
+        // eEncoding for Text, RTL_TEXTENCODING_SYMBOL for Symbols
+        OStringBuffer aBuffer(OUStringToOString(rC.GetText(), bSymbolPara ? RTL_TEXTENCODING_SYMBOL : eEncoding));
+
         for (size_t nA = 0; nA < rC.maCharAttribs.size(); ++nA)
         {
             const XEditAttribute& rAttr = *rC.maCharAttribs[nA].get();
