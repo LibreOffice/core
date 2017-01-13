@@ -90,22 +90,37 @@ void CrashReporter::writeCommonInfo()
 
 namespace {
 
-OUString getCrashUserProfileDirectory()
+OUString getCrashDirectory()
 {
-    OUString url("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/crash/");
-    rtl::Bootstrap::expandMacros(url);
-    osl::Directory::create(url);
+    OUString aCrashURL;
 
-    OUString aProfilePath;
-    osl::FileBase::getSystemPathFromFileURL(url, aProfilePath);
-    return aProfilePath;
+    // First check whether a user-defined path is available (crashreport.ini)
+    OUString aCrashPath("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("crashreport") ":CrashDirectory}");
+    rtl::Bootstrap::expandMacros(aCrashPath);
+    osl::FileBase::getFileURLFromSystemPath(aCrashPath, aCrashURL);
+
+    // Fall back to user profile
+    if (aCrashPath.isEmpty())
+    {
+        aCrashURL = "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/crash";
+        rtl::Bootstrap::expandMacros(aCrashURL);
+    }
+
+    if (!aCrashURL.endsWith("/"))
+        aCrashURL += "/";
+    osl::FileBase::RC rc = osl::Directory::create(aCrashURL);
+    (void)rc;
+    osl::FileBase::getSystemPathFromFileURL(aCrashURL, aCrashPath);
+    return aCrashPath;
 }
 
 }
 
 void CrashReporter::updateMinidumpLocation()
 {
-    OUString aURL = getCrashUserProfileDirectory();
+    OUString aURL = getCrashDirectory();
+    OString aOStringUrl = OUStringToOString(aURL, RTL_TEXTENCODING_UTF8);
+
 #if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
     OString aOStringUrl = OUStringToOString(aURL, RTL_TEXTENCODING_UTF8);
     google_breakpad::MinidumpDescriptor descriptor(aOStringUrl.getStr());
@@ -122,7 +137,7 @@ void CrashReporter::storeExceptionHandler(google_breakpad::ExceptionHandler* pEx
 
 std::string CrashReporter::getIniFileName()
 {
-    OUString url = getCrashUserProfileDirectory() + "dump.ini";
+    OUString url = getCrashDirectory() + "dump.ini";
     OString aUrl = OUStringToOString(url, RTL_TEXTENCODING_UTF8);
     std::string aRet(aUrl.getStr());
     return aRet;
