@@ -217,6 +217,7 @@ ReadState XPMReader::ReadXPM( Graphic& rGraphic )
                             if ( mnCpp == 2 )   // by using a 64kb indexing table
                             {
                                 mpFastColorTable = new sal_uInt8[ 256 * 256 ];
+                                memset(mpFastColorTable, 0, 255 * 255);
                                 for ( pPtr = mpColMap, i = 0; i < mnColors; i++, pPtr += mnCpp + 4 )
                                 {
                                     sal_uLong   j =  pPtr[ 0 ] << 8;
