@@ -133,10 +133,10 @@ void DXFPalette::SetColor(sal_uInt8 nIndex, sal_uInt8 nRed, sal_uInt8 nGreen, sa
 
 DXFRepresentation::DXFRepresentation()
     : mEnc(RTL_TEXTENCODING_DONTKNOW)
+    , mbInCalc(false)
 {
     setGlobalLineTypeScale(1.0);
 }
-
 
 DXFRepresentation::~DXFRepresentation()
 {
@@ -297,6 +297,10 @@ void DXFRepresentation::ReadHeader(DXFGroupReader & rDGR)
 void DXFRepresentation::CalcBoundingBox(const DXFEntities & rEntities,
                                         DXFBoundingBox & rBox)
 {
+    if (mbInCalc)
+        return;
+    mbInCalc = true;
+
     DXFBasicEntity * pBE=rEntities.pFirst;
     while (pBE!=nullptr) {
         switch (pBE->eType) {
@@ -441,6 +445,7 @@ void DXFRepresentation::CalcBoundingBox(const DXFEntities & rEntities,
         }
         pBE=pBE->pSucc;
     }
+    mbInCalc = false;
 }
 
 namespace {
