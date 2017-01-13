@@ -1083,6 +1083,12 @@ void SfxObjectShell::InitOwnModel_Impl()
 
 void SfxObjectShell::FinishedLoading( SfxLoadedFlags nFlags )
 {
+    std::shared_ptr<const SfxFilter> pFlt = pMedium->GetFilter();
+    if( pFlt )
+    {
+        SetFormatSpecificCompatibilityOptions( pFlt->GetTypeName() );
+    }
+
     bool bSetModifiedTRUE = false;
     const SfxStringItem* pSalvageItem = SfxItemSet::GetItem<SfxStringItem>(pMedium->GetItemSet(), SID_DOC_SALVAGE, false);
     if( ( nFlags & SfxLoadedFlags::MAINDOCUMENT ) && !(pImpl->nLoadedFlags & SfxLoadedFlags::MAINDOCUMENT )
@@ -1170,7 +1176,6 @@ void SfxObjectShell::FinishedLoading( SfxLoadedFlags nFlags )
             PostActivateEvent_Impl(SfxViewFrame::GetFirst(this));
     }
 }
-
 
 void SfxObjectShell::TemplateDisconnectionAfterLoad()
 {
