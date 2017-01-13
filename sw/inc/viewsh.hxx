@@ -416,6 +416,8 @@ public:
 
     void SetProtectForm( bool _bProtectForm );
 
+    void SetMsWordCompTrailingBlanks( bool _bMsWordCompTrailingBlanks );
+
     // DOCUMENT COMPATIBILITY FLAGS END
 
     // Calls Idle-formatter of Layout.
