@@ -260,7 +260,7 @@ extern "C" void cpp_vtable_call(
               ", pThis=" << pThis << ", pCppI=" << pCppI <<
               std::dec << ", nFunctionIndex=" << nFunctionIndex << ", nVtableOffset=" << nVtableOffset );
 
-    SAL_INFO( "bridges.ios", "name=" << pTypeDescr->aBase.pTypeName );
+    SAL_INFO( "bridges.ios", "name=" << OUString::unacquired(&pTypeDescr->aBase.pTypeName) );
 
     assert( nFunctionIndex < pTypeDescr->nMapFunctionIndexToMemberIndex );
 
@@ -276,7 +276,7 @@ extern "C" void cpp_vtable_call(
 
     TypeDescription aMemberDescr( pTypeDescr->ppAllMembers[nMemberPos] );
 
-    SAL_INFO( "bridges.ios", "Calling " << aMemberDescr.get()->pTypeName );
+    SAL_INFO( "bridges.ios", "Calling " << OUString::unacquired(&aMemberDescr.get()->pTypeName) );
 
     switch (aMemberDescr.get()->eTypeClass)
     {
