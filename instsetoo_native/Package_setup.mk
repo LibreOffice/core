@@ -18,6 +18,7 @@ $(eval $(call gb_Package_add_files,instsetoo_native_setup,$(LIBO_ETC_FOLDER),\
 	$(call gb_Helper_get_rcfile,soffice) \
 	$(call gb_Helper_get_rcfile,louno) \
 	$(call gb_Helper_get_rcfile,version) \
+	$(call gb_Helper_get_rcfile,crashreport) \
 ))
 
 # vim: set noet sw=4 ts=4:
