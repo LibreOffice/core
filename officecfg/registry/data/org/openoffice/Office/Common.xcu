@@ -27,7 +27,7 @@
     </node>
     <node oor:name="NewDocumentHandling">
       <prop oor:name="ForceFocusAndToFront">
-        <value install:module="wnt">false</value>
+        <value install:module="wnt">true</value>
       </prop>
     </node>
   </node>
