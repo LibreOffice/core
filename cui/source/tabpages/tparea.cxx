@@ -66,6 +66,19 @@ const sal_uInt16 SvxAreaTabPage::pAreaRanges[] =
     0
 };
 
+namespace
+{
+
+void lclExtendSize(Size& rSize, const Size& rInputSize)
+{
+    if (rSize.Width() < rInputSize.Width())
+        rSize.Width() = rInputSize.Width();
+    if (rSize.Height() < rInputSize.Height())
+        rSize.Height() = rInputSize.Height();
+}
+
+} // end anonymous namespace
+
 /*************************************************************************
 |*
 |*  Dialog to modify fill-attributes
@@ -125,6 +138,22 @@ SvxAreaTabPage::SvxAreaTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs
     m_pBtnPattern->SetClickHdl(aLink);
 
     SetExchangeSupport();
+
+    // Calculate optimal size of all pages..
+    m_pFillTabPage.disposeAndReset(SvxColorTabPage::Create(m_pFillTab, &m_rXFSet));
+    Size aSize = m_pFillTabPage->GetOptimalSize();
+    m_pFillTabPage.disposeAndReset(SvxGradientTabPage::Create(m_pFillTab, &m_rXFSet));
+    lclExtendSize(aSize, m_pFillTabPage->GetOptimalSize());
+    m_pFillTabPage.disposeAndReset(SvxBitmapTabPage::Create(m_pFillTab, &m_rXFSet));
+    lclExtendSize(aSize, m_pFillTabPage->GetOptimalSize());
+    m_pFillTabPage.disposeAndReset(SvxHatchTabPage::Create(m_pFillTab, &m_rXFSet));
+    lclExtendSize(aSize, m_pFillTabPage->GetOptimalSize());
+    m_pFillTabPage.disposeAndReset(SvxPatternTabPage::Create(m_pFillTab, &m_rXFSet));
+    lclExtendSize(aSize, m_pFillTabPage->GetOptimalSize());
+    m_pFillTabPage.disposeAndClear();
+
+    m_pFillTab->set_width_request(aSize.Width());
+    m_pFillTab->set_height_request(aSize.Height());
 }
 
 SvxAreaTabPage::~SvxAreaTabPage()
