@@ -50,6 +50,8 @@ typedef css::uno::XInterface * SAL_CALL ImplementationConstructorFn(
 
 }
 
+typedef std::function<css::uno::XInterface * (css::uno::XComponentContext *, css::uno::Sequence<css::uno::Any> const&)> WrapperConstructorFn;
+
 typedef cppu::WeakComponentImplHelper<
     css::lang::XServiceInfo, css::lang::XMultiServiceFactory,
     css::lang::XMultiComponentFactory, css::container::XSet,
@@ -149,7 +151,7 @@ public:
             enum Status { STATUS_NEW, STATUS_WRAPPER, STATUS_LOADED };
 
             std::shared_ptr< ImplementationInfo > info;
-            ImplementationConstructorFn * constructor;
+            WrapperConstructorFn constructor;
             css::uno::Reference< css::lang::XSingleComponentFactory > factory1;
             css::uno::Reference< css::lang::XSingleServiceFactory > factory2;
             css::uno::Reference< css::lang::XComponent > component;

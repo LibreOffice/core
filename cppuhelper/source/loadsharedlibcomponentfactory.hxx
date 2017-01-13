@@ -35,7 +35,7 @@ void loadSharedLibComponentFactory(
     rtl::OUString const & prefix, rtl::OUString const & implementation,
     rtl::OUString const & constructor,
     css::uno::Reference<css::lang::XMultiServiceFactory> const & serviceManager,
-    ImplementationConstructorFn ** constructorFunction,
+    WrapperConstructorFn * constructorFunction,
     css::uno::Reference<css::uno::XInterface> * factory);
 
 } }
