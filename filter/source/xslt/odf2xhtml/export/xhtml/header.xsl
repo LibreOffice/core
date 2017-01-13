@@ -48,7 +48,6 @@
 	exclude-result-prefixes="chart config dc dom dr3d draw fo form math meta number office ooo oooc ooow script style svg table text xforms xlink xsd xsi xforms xsd xsi"
 	xmlns="http://www.w3.org/1999/xhtml">
 
-
 	<!-- ************** -->
 	<!-- *** header *** -->
 	<!-- ************** -->
@@ -72,7 +71,6 @@
 		</xsl:element>
 
 	</xsl:template>
-
 
 	<!-- Creating a CSS style header from the collected styles of the 'globalData' parameter -->
 	<xsl:template name='create-css-styleheader'>
@@ -107,7 +105,7 @@
 <xsl:text>span.footnodeNumber { padding-right:1em; }
 	</xsl:text>
 <xsl:text>span.annotation_style_by_filter { font-size:95%; font-family:Arial; background-color:#fff000;  margin:0; border:0; padding:0;  }
-	</xsl:text>        
+	</xsl:text>
 <xsl:text>* { margin:0;}
 	</xsl:text>
 			<xsl:call-template name="write-mapped-CSS-styles">
@@ -126,7 +124,7 @@
 						<xsl:text>.</xsl:text><!--<xsl:value-of select="@style:family" /><xsl:text>:</xsl:text>--><xsl:value-of select="translate(@style:name, '.,;: %()[]/\+', '_____________')"/><xsl:text> { </xsl:text> <xsl:value-of select="final-properties" /><xsl:text>}
 	</xsl:text>
 					</xsl:if>
-					
+
 			</xsl:for-each>
 			<!-- Otherwise all styles have been processed and the empty styles have to be given out -->
 				<xsl:comment> ODF styles with no properties representable as CSS </xsl:comment><xsl:text>
@@ -141,7 +139,7 @@
 		<xsl:variable name="masterPageNames">
             <!-- set context to styles.xml -->
             <xsl:for-each select="$globalData/all-doc-styles/style">
-                <!-- Loop over every style:style containing a @style:master-page-name attribute -->            
+                <!-- Loop over every style:style containing a @style:master-page-name attribute -->
                 <xsl:for-each select="key('masterPage','count')">
                         <!-- set context to styles.xml -->
                         <xsl:for-each select="/*/office:body">
@@ -199,8 +197,6 @@
 		</xsl:choose>
 	</xsl:template>
 
-
-
 	<xsl:template name="page-margin">
 		<xsl:param name="globalData" />
 		<xsl:param name="pageProperties" />
@@ -229,7 +225,6 @@
 			<xsl:value-of select="$marginRight" />
 		</xsl:if>
 	</xsl:template>
-
 
 	<!-- *************************** -->
 	<!-- *** Common XHTML header *** -->
@@ -408,7 +403,7 @@
 		<link rel="transformation" href="http://xml.openoffice.org/odf2xhtml/rdf-extract.xsl" />
 		-->
 
-		<!-- base URL of document for resolving relative links  
+		<!-- base URL of document for resolving relative links
 		NOTE: CHROME has a problem, with relative references as from content table, referencing to root directory instead of document
 		<xsl:element name="base">
 			<xsl:attribute name="href">-->
