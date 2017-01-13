@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "1a6eadb0_d9498190",
+        "filename": "desktop/unx/source/splashx.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 534,
+      "author": {
+        "id": 1000381
+      },
+      "writtenOn": "2017-01-13T14:51:41Z",
+      "side": 1,
+      "message": "C99 has bool, but I guess we don’t build in C99 mode.",
+      "parentUuid": "1a6eadb0_593f3125",
+      "revId": "b2248172ebdb3fd70f6f72b0daa7df5c412b498d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a71b18c_b074d3cf",
         "filename": "desktop/unx/source/splashx.h",
         "patchSetId": 5
