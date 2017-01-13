@@ -189,7 +189,7 @@ private:
     };
 
     typedef ::std::pair< sal_Int32, sal_Int32 > XfIdNumFmtKey;
-    typedef ::std::map< XfIdNumFmtKey, ApiCellRangeList > XfIdRangeListMap;
+    typedef ::std::map< XfIdNumFmtKey, ScRangeList > XfIdRangeListMap;
 
     typedef ::std::pair< sal_Int32, sal_Int32 > RowRange;
     struct RowRangeStyle
