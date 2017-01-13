@@ -21,8 +21,17 @@
 
 #include "unx/gendata.hxx"
 
+// needed since we declare a std::unique_ptr<SystemQueueInfo>
+namespace psp
+{
+    class SystemQueueInfo
+    {
+    };
+}
+
 using namespace psp;
 using namespace osl;
+
 
 PrinterInfoManager& PrinterInfoManager::get()
 {
