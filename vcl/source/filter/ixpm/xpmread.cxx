@@ -147,7 +147,9 @@ ReadState XPMReader::ReadXPM( Graphic& rGraphic )
                             // using 2 charakters per pixel and less than 257 Colors we speed up
                             if ( mnCpp == 2 )   // by using a 64kb indexing table
                             {
-                                mpFastColorTable = new sal_uInt8[ 256 * 256 ];
+                                const size_t nSize = 256 * 256;
+                                mpFastColorTable = new sal_uInt8[nSize];
+                                memset(mpFastColorTable, 0, nSize);
                                 for ( pPtr = mpColMap, i = 0; i < mnColors; i++, pPtr += mnCpp + 4 )
                                 {
                                     sal_uLong   j =  pPtr[ 0 ] << 8;
