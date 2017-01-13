@@ -23,7 +23,6 @@
 #include <com/sun/star/sheet/XArrayFormulaTokens.hpp>
 #include <com/sun/star/sheet/XCellRangeData.hpp>
 #include <com/sun/star/sheet/XMultipleOperation.hpp>
-#include <com/sun/star/table/XCell.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>

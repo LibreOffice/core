@@ -24,7 +24,6 @@
 #include <com/sun/star/sheet/FormulaOpCodeMapEntry.hpp>
 #include <com/sun/star/sheet/FormulaToken.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
-#include <com/sun/star/table/CellRangeAddress.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <oox/helper/propertyset.hxx>
 #include <oox/helper/refvector.hxx>
@@ -720,7 +719,7 @@ public:
             ranges contained in the token sequence.
      */
     void                extractCellRangeList(
-                            ApiCellRangeList& orRanges,
+                            ScRangeList& orRanges,
                             const ApiTokenSequence& rTokens,
                             bool bAllowRelative,
                             sal_Int32 nFilterBySheet ) const;

@@ -28,58 +28,6 @@
 namespace oox {
 namespace xls {
 
-/** A vector of com.sun.star.table.CellRangeAddress elements and additional
-    functionality. */
-class ApiCellRangeList
-{
-public:
-    inline explicit     ApiCellRangeList() : mvAddresses() {}
-
-    size_t size() const { return mvAddresses.size(); }
-
-    bool empty() const { return mvAddresses.empty(); }
-
-    const css::table::CellRangeAddress& front() const
-    { return mvAddresses.front(); }
-
-    css::table::CellRangeAddress& operator[]( size_t i )
-    { return mvAddresses[ i ]; }
-
-    ::std::vector< css::table::CellRangeAddress >::const_iterator begin() const
-    { return mvAddresses.begin(); }
-    ::std::vector< css::table::CellRangeAddress >::iterator begin()
-    { return mvAddresses.begin(); }
-
-    ::std::vector< css::table::CellRangeAddress >::const_iterator end() const
-    { return mvAddresses.end(); }
-
-    ::std::vector< css::table::CellRangeAddress >::reverse_iterator rbegin()
-    { return mvAddresses.rbegin(); }
-
-    ::std::vector< css::table::CellRangeAddress >::reverse_iterator rend()
-    { return mvAddresses.rend(); }
-
-    void clear() { mvAddresses.clear(); }
-
-    void erase( ::std::vector< css::table::CellRangeAddress >::iterator it )
-    { mvAddresses.erase( it ); }
-
-    void pop_back() { mvAddresses.pop_back(); }
-
-    void push_back( const css::table::CellRangeAddress& rAddress )
-    { mvAddresses.push_back( rAddress ); }
-
-    /** Returns the base address of this range list (top-left cell of first range). */
-    ScAddress getBaseAddress() const;
-
-    /** Converts to a sequence. */
-    css::uno::Sequence< css::table::CellRangeAddress >
-    toSequence() const;
-
-private:
-    ::std::vector< css::table::CellRangeAddress > mvAddresses;
-};
-
 /** A 2D cell address struct for binary filters. */
 struct BinAddress
 {
@@ -352,10 +300,6 @@ public:
             overflow is not allowed via parameter bAllowOverflow.
      */
     bool                checkCellRange(
-                            const css::table::CellRangeAddress& rRange,
-                            bool bAllowOverflow, bool bTrackOverflow );
-
-    bool                checkCellRange(
                             const ScRange& rRange,
                             bool bAllowOverflow, bool bTrackOverflow );
 
@@ -386,10 +330,6 @@ public:
             allowed via parameter bAllowOverflow.
      */
     bool                validateCellRange(
-                            css::table::CellRangeAddress& orRange,
-                            bool bAllowOverflow, bool bTrackOverflow );
-
-    bool                validateCellRange(
                             ScRange& orRange,
                             bool bAllowOverflow, bool bTrackOverflow );
 
@@ -401,11 +341,6 @@ public:
         @param nSheet  Sheet index to be inserted into orRange.
         @return  true = Range address could be parsed from the passed string.
      */
-    static bool         convertToCellRangeUnchecked(
-                            css::table::CellRangeAddress& orRange,
-                            const OUString& rString,
-                            sal_Int16 nSheet );
-
     static bool         convertToCellRangeUnchecked(
                             ScRange& orRange,
                             const OUString& rString,
@@ -436,11 +371,6 @@ public:
             allowed via parameter bAllowOverflow.
      */
     bool                convertToCellRange(
-                            css::table::CellRangeAddress& orRange,
-                            const OUString& rString,
-                            sal_Int16 nSheet,
-                            bool bAllowOverflow, bool bTrackOverflow );
-    bool                convertToCellRange(
                             ScRange& orRange,
                             const OUString& rString,
                             sal_Int16 nSheet,
@@ -453,11 +383,6 @@ public:
         @param rBinRange  Binary cell range struct.
         @param nSheet  Sheet index to be inserted into orRange.
      */
-    static void         convertToCellRangeUnchecked(
-                            css::table::CellRangeAddress& orRange,
-                            const BinRange& rBinRange,
-                            sal_Int16 nSheet );
-
     static void         convertToCellRangeUnchecked(
                             ScRange& orRange,
                             const BinRange& rBinRange,
@@ -486,11 +411,6 @@ public:
             allowed via parameter bAllowOverflow.
      */
     bool                convertToCellRange(
-                            css::table::CellRangeAddress& orRange,
-                            const BinRange& rBinRange,
-                            sal_Int16 nSheet,
-                            bool bAllowOverflow, bool bTrackOverflow );
-    bool                convertToCellRange(
                             ScRange& orRange,
                             const BinRange& rBinRange,
                             sal_Int16 nSheet,
@@ -507,7 +427,7 @@ public:
             limits.
      */
     void                validateCellRangeList(
-                            ApiCellRangeList& orRanges,
+                            ScRangeList& orRanges,
                             bool bTrackOverflow );
 
     /** Tries to convert the passed string to a cell range list.
@@ -524,11 +444,6 @@ public:
             the original ranges contain cells outside of the supported sheet
             limits.
      */
-    void                convertToCellRangeList(
-                            ApiCellRangeList& orRanges,
-                            const OUString& rString,
-                            sal_Int16 nSheet,
-                            bool bTrackOverflow );
     void                convertToCellRangeList(
                             ScRangeList& orRanges,
                             const OUString& rString,
@@ -549,11 +464,6 @@ public:
             the original ranges contain cells outside of the supported sheet
             limits.
      */
-    void                convertToCellRangeList(
-                            ApiCellRangeList& orRanges,
-                            const BinRangeList& rBinRanges,
-                            sal_Int16 nSheet,
-                            bool bTrackOverflow );
     void                convertToCellRangeList(
                             ScRangeList& orRanges,
                             const BinRangeList& rBinRanges,
