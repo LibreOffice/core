@@ -22,6 +22,7 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/sheet/XCellRangeAddressable.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
+#include <convuno.hxx>
 #include <osl/diagnose.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -539,6 +540,18 @@ void AddressConverter::convertToCellRangeList( ScRangeList& orRanges,
     for( ::std::vector< BinRange >::const_iterator aIt = rBinRanges.begin(), aEnd = rBinRanges.end(); aIt != aEnd; ++aIt )
         if( convertToCellRange( aRange, *aIt, nSheet, true, bTrackOverflow ) )
             orRanges.Append( aRange );
+}
+
+Sequence<CellRangeAddress> AddressConverter::toApiSequence(const ScRangeList& orRanges)
+{
+    const size_t nSize = orRanges.size();
+    Sequence<CellRangeAddress> aRangeSequence(nSize);
+    CellRangeAddress* pApiRanges = aRangeSequence.getArray();
+    for (size_t i = 0; i < nSize; ++i)
+    {
+        ScUnoConversion::FillApiRange(pApiRanges[i], *orRanges[i]);
+    }
+    return aRangeSequence;
 }
 
 // private --------------------------------------------------------------------

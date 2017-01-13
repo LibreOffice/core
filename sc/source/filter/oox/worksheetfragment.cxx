@@ -82,12 +82,12 @@ void DataValidationsContextBase::SetValidation( WorksheetHelper& rTarget )
     rTarget.getAddressConverter().convertToCellRangeList(mxValModel->maRanges, maSqref, rTarget.getSheetIndex(), true);
     mxValModel->msRef = maSqref;
 
-    mxValModel->maTokens1 = rTarget.getFormulaParser().importFormula(mxValModel->maRanges.getBaseAddress(), maFormula1);
+    mxValModel->maTokens1 = rTarget.getFormulaParser().importFormula(mxValModel->maRanges.GetTopLeftCorner(), maFormula1);
     // process string list of a list validation (convert to list of string tokens)
     if (mxValModel->mnType == XML_list)
         rTarget.getFormulaParser().convertStringToStringList(mxValModel->maTokens1, ',', true);
 
-    mxValModel->maTokens2 = rTarget.getFormulaParser().importFormula(mxValModel->maRanges.getBaseAddress(), maFormula2);
+    mxValModel->maTokens2 = rTarget.getFormulaParser().importFormula(mxValModel->maRanges.GetTopLeftCorner(), maFormula2);
 
     rTarget.setValidation(*mxValModel);
     mxValModel.reset();
@@ -138,7 +138,7 @@ void DataValidationsContextBase::importDataValidation( SequenceInputStream& rStr
 
     // condition formula(s)
     FormulaParser& rParser = rTarget.getFormulaParser();
-    ScAddress aBaseAddr = aModel.maRanges.getBaseAddress();
+    ScAddress aBaseAddr = aModel.maRanges.GetTopLeftCorner();
     aModel.maTokens1 = rParser.importFormula(aBaseAddr, FORMULATYPE_VALIDATION, rStrm);
     aModel.maTokens2 = rParser.importFormula(aBaseAddr, FORMULATYPE_VALIDATION, rStrm);
     // process string list of a list validation (convert to list of string tokens)
