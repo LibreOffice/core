@@ -97,7 +97,7 @@
 	</xsl:text>
 <xsl:text>li { list-style: none; margin:0; padding:0;}
 	</xsl:text>
-<xsl:comment> "li span.odfLiEnd" - IE 7 issue</xsl:comment>
+/* "li span.odfLiEnd" - IE 7 issue*/
 <xsl:text>
 	</xsl:text>
 <xsl:text>li span. { clear: both; line-height:0; width:0; height:0; margin:0; padding:0; }
