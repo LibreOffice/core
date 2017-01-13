@@ -544,6 +544,8 @@ static void activate_uno(GSimpleAction *action, GVariant*, gpointer)
 
     if (strcmp(strval, "New") == 0)
     {
+        g_free(strval);
+
         uno::Reference<frame::XModuleManager2> xModuleManager(frame::ModuleManager::create(xContext));
         OUString aModuleId(xModuleManager->identify(xFrame));
         if (aModuleId.isEmpty())
