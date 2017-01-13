@@ -22,7 +22,6 @@
 #include <map>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/sheet/AddressConvention.hpp>
 #include <com/sun/star/sheet/ReferenceFlags.hpp>
 #include <com/sun/star/sheet/SingleReference.hpp>
@@ -1480,7 +1479,7 @@ bool lclConvertToCellRange( ScRange& orRange, const ComplexReference& rComplexRe
 
 enum TokenToRangeListState { STATE_REF, STATE_SEP, STATE_OPEN, STATE_CLOSE, STATE_ERROR };
 
-TokenToRangeListState lclProcessRef( ApiCellRangeList& orRanges, const Any& rData, bool bAllowRelative, sal_Int32 nFilterBySheet )
+TokenToRangeListState lclProcessRef( ScRangeList& orRanges, const Any& rData, bool bAllowRelative, sal_Int32 nFilterBySheet )
 {
     using namespace ::com::sun::star::sheet::ReferenceFlags;
     const sal_Int32 FORBIDDEN_FLAGS_DEL = COLUMN_DELETED | ROW_DELETED | SHEET_DELETED;
@@ -1490,10 +1489,10 @@ TokenToRangeListState lclProcessRef( ApiCellRangeList& orRanges, const Any& rDat
     SingleReference aSingleRef;
     if( rData >>= aSingleRef )
     {
-        ScAddress aAddress ( 0, 0, 0 );
+        ScAddress aAddress;
         // ignore invalid addresses (with #REF! errors), but do not stop parsing
         if( lclConvertToCellAddress( aAddress, aSingleRef, nForbiddenFlags, nFilterBySheet ) )
-            orRanges.push_back( CellRangeAddress( aAddress.Tab(), aAddress.Col(), aAddress.Row(), aAddress.Col(), aAddress.Row() ) );
+            orRanges.Append( ScRange(aAddress, aAddress) );
         return STATE_REF;
     }
     ComplexReference aComplexRef;
@@ -1502,8 +1501,7 @@ TokenToRangeListState lclProcessRef( ApiCellRangeList& orRanges, const Any& rDat
         ScRange aRange;
         // ignore invalid ranges (with #REF! errors), but do not stop parsing
         if( lclConvertToCellRange( aRange, aComplexRef, nForbiddenFlags, nFilterBySheet ) )
-            orRanges.push_back( CellRangeAddress(aRange.aStart.Tab(), aRange.aStart.Col(), aRange.aStart.Row(),
-                                                 aRange.aEnd.Col(), aRange.aEnd.Row()) );
+            orRanges.Append( aRange );
         return STATE_REF;
     }
     return STATE_ERROR;
@@ -1601,20 +1599,20 @@ Any FormulaProcessorBase::extractReference( const ApiTokenSequence& rTokens ) co
 bool FormulaProcessorBase::extractCellRange( ScRange& orRange,
         const ApiTokenSequence& rTokens, bool bAllowRelative ) const
 {
-    ApiCellRangeList aRanges;
+    ScRangeList aRanges;
     lclProcessRef( aRanges, extractReference( rTokens ), bAllowRelative, -1 );
     if( !aRanges.empty() )
     {
-        orRange = aRanges.getBaseAddress();
+        orRange = aRanges.GetTopLeftCorner();
         return true;
     }
     return false;
 }
 
-void FormulaProcessorBase::extractCellRangeList( ApiCellRangeList& orRanges,
+void FormulaProcessorBase::extractCellRangeList( ScRangeList& orRanges,
         const ApiTokenSequence& rTokens, bool bAllowRelative, sal_Int32 nFilterBySheet ) const
 {
-    orRanges.clear();
+    orRanges.RemoveAll();
     TokenToRangeListState eState = STATE_OPEN;
     sal_Int32 nParenLevel = 0;
     for( ApiTokenIterator aIt( rTokens, OPCODE_SPACES, true ); aIt.is() && (eState != STATE_ERROR); ++aIt )
@@ -1656,7 +1654,7 @@ void FormulaProcessorBase::extractCellRangeList( ApiCellRangeList& orRanges,
     }
 
     if( eState == STATE_ERROR )
-        orRanges.clear();
+        orRanges.RemoveAll();
     else
         getAddressConverter().validateCellRangeList( orRanges, false );
 }

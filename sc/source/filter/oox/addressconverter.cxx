@@ -50,18 +50,6 @@ const sal_Int16 OOX_MAXTAB          = static_cast< sal_Int16 >( (1 << 15) - 1 );
 } // namespace
 
 
-ScAddress ApiCellRangeList::getBaseAddress() const
-{
-    if( mvAddresses.empty() )
-        return ScAddress(0, 0, 0);
-    return ScAddress( SCCOL( mvAddresses.front().StartColumn ), SCROW( mvAddresses.front().StartRow ), SCTAB( mvAddresses.front().Sheet ) );
-}
-
-css::uno::Sequence< CellRangeAddress > ApiCellRangeList::toSequence() const
-{
-    return ContainerHelper::vectorToSequence( mvAddresses );
-}
-
 void BinAddress::read( SequenceInputStream& rStrm )
 {
     mnRow = rStrm.readInt32();
@@ -366,16 +354,6 @@ bool AddressConverter::checkCellRange( const ScRange& rRange, bool bAllowOverflo
         checkRow( rRange.aStart.Row(), bTrackOverflow );
 }
 
-bool AddressConverter::checkCellRange( const CellRangeAddress& rRange, bool bAllowOverflow, bool bTrackOverflow )
-{
-    return
-        (checkCol( rRange.EndColumn, bTrackOverflow ) || bAllowOverflow) &&     // bAllowOverflow after checkCol to track overflow!
-        (checkRow( rRange.EndRow, bTrackOverflow ) || bAllowOverflow) &&        // bAllowOverflow after checkRow to track overflow!
-        checkTab( rRange.Sheet, bTrackOverflow ) &&
-        checkCol( rRange.StartColumn, bTrackOverflow ) &&
-        checkRow( rRange.StartRow, bTrackOverflow );
-}
-
 bool AddressConverter::validateCellRange( ScRange& orRange, bool bAllowOverflow, bool bTrackOverflow )
 {
     if( orRange.aStart.Col() > orRange.aEnd.Col() )
@@ -399,21 +377,6 @@ bool AddressConverter::validateCellRange( ScRange& orRange, bool bAllowOverflow,
     return true;
 }
 
-bool AddressConverter::validateCellRange( CellRangeAddress& orRange, bool bAllowOverflow, bool bTrackOverflow )
-{
-    if( orRange.StartColumn > orRange.EndColumn )
-        ::std::swap( orRange.StartColumn, orRange.EndColumn );
-    if( orRange.StartRow > orRange.EndRow )
-        ::std::swap( orRange.StartRow, orRange.EndRow );
-    if( !checkCellRange( orRange, bAllowOverflow, bTrackOverflow ) )
-        return false;
-    if( orRange.EndColumn > maMaxPos.Col() )
-        orRange.EndColumn = maMaxPos.Col();
-    if( orRange.EndRow > maMaxPos.Row() )
-        orRange.EndRow = maMaxPos.Row();
-    return true;
-}
-
 bool AddressConverter::convertToCellRangeUnchecked( ScRange& orRange,
         const OUString& rString, sal_Int16 nSheet )
 {
@@ -431,37 +394,12 @@ bool AddressConverter::convertToCellRangeUnchecked( ScRange& orRange,
     return bReturnValue;
 }
 
-bool AddressConverter::convertToCellRangeUnchecked( CellRangeAddress& orRange,
-        const OUString& rString, sal_Int16 nSheet )
-{
-    orRange.Sheet = nSheet;
-    return parseOoxRange2d( orRange.StartColumn, orRange.StartRow, orRange.EndColumn, orRange.EndRow, rString );
-}
-
-bool AddressConverter::convertToCellRange( CellRangeAddress& orRange,
-        const OUString& rString, sal_Int16 nSheet, bool bAllowOverflow, bool bTrackOverflow )
-{
-    return
-        convertToCellRangeUnchecked( orRange, rString, nSheet ) &&
-        validateCellRange( orRange, bAllowOverflow, bTrackOverflow );
-}
-
 bool AddressConverter::convertToCellRange( ScRange& orRange,
         const OUString& rString, sal_Int16 nSheet, bool bAllowOverflow, bool bTrackOverflow )
 {
     return
         convertToCellRangeUnchecked( orRange, rString, nSheet ) &&
         validateCellRange( orRange, bAllowOverflow, bTrackOverflow );
-}
-
-void AddressConverter::convertToCellRangeUnchecked( CellRangeAddress& orRange,
-        const BinRange& rBinRange, sal_Int16 nSheet )
-{
-    orRange.Sheet       = nSheet;
-    orRange.StartColumn = rBinRange.maFirst.mnCol;
-    orRange.StartRow    = rBinRange.maFirst.mnRow;
-    orRange.EndColumn   = rBinRange.maLast.mnCol;
-    orRange.EndRow      = rBinRange.maLast.mnRow;
 }
 
 void AddressConverter::convertToCellRangeUnchecked( ScRange& orRange,
@@ -475,13 +413,6 @@ void AddressConverter::convertToCellRangeUnchecked( ScRange& orRange,
     orRange.aEnd.SetRow( rBinRange.maLast.mnRow );
 }
 
-bool AddressConverter::convertToCellRange( CellRangeAddress& orRange,
-        const BinRange& rBinRange, sal_Int16 nSheet, bool bAllowOverflow, bool bTrackOverflow )
-{
-    convertToCellRangeUnchecked( orRange, rBinRange, nSheet );
-    return validateCellRange( orRange, bAllowOverflow, bTrackOverflow );
-}
-
 bool AddressConverter::convertToCellRange( ScRange& orRange,
         const BinRange& rBinRange, sal_Int16 nSheet, bool bAllowOverflow, bool bTrackOverflow )
 {
@@ -489,25 +420,11 @@ bool AddressConverter::convertToCellRange( ScRange& orRange,
     return validateCellRange( orRange, bAllowOverflow, bTrackOverflow );
 }
 
-void AddressConverter::validateCellRangeList( ApiCellRangeList& orRanges, bool bTrackOverflow )
+void AddressConverter::validateCellRangeList( ScRangeList& orRanges, bool bTrackOverflow )
 {
     for( size_t nIndex = orRanges.size(); nIndex > 0; --nIndex )
-        if( !validateCellRange( orRanges[ nIndex - 1 ], true, bTrackOverflow ) )
-            orRanges.erase( orRanges.begin() + nIndex - 1 );
-}
-
-void AddressConverter::convertToCellRangeList( ApiCellRangeList& orRanges,
-        const OUString& rString, sal_Int16 nSheet, bool bTrackOverflow )
-{
-    sal_Int32 nPos = 0;
-    sal_Int32 nLen = rString.getLength();
-    CellRangeAddress aRange;
-    while( (0 <= nPos) && (nPos < nLen) )
-    {
-        OUString aToken = rString.getToken( 0, ' ', nPos );
-        if( !aToken.isEmpty() && convertToCellRange( aRange, aToken, nSheet, true, bTrackOverflow ) )
-            orRanges.push_back( aRange );
-    }
+        if( !validateCellRange( *orRanges[ nIndex - 1 ], true, bTrackOverflow ) )
+            orRanges.Remove( nIndex - 1 );
 }
 
 void AddressConverter::convertToCellRangeList( ScRangeList& orRanges,
@@ -522,15 +439,6 @@ void AddressConverter::convertToCellRangeList( ScRangeList& orRanges,
         if( !aToken.isEmpty() && convertToCellRange( aRange, aToken, nSheet, true, bTrackOverflow ) )
             orRanges.Append(aRange);
     }
-}
-
-void AddressConverter::convertToCellRangeList( ApiCellRangeList& orRanges,
-        const BinRangeList& rBinRanges, sal_Int16 nSheet, bool bTrackOverflow )
-{
-    CellRangeAddress aRange;
-    for( ::std::vector< BinRange >::const_iterator aIt = rBinRanges.begin(), aEnd = rBinRanges.end(); aIt != aEnd; ++aIt )
-        if( convertToCellRange( aRange, *aIt, nSheet, true, bTrackOverflow ) )
-            orRanges.push_back( aRange );
 }
 
 void AddressConverter::convertToCellRangeList( ScRangeList& orRanges,
