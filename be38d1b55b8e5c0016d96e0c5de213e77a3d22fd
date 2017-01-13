@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "1a6eadb0_99aaa918",
+        "filename": "sc/source/ui/view/gridwin4.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 899,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-01-13T14:39:31Z",
+      "side": 1,
+      "message": "Now that sheds some light.. 127/72 is actually the HMM/TWIPS ratio (\u003d2540/1440) which is also what you get when using sc::TwipsToHMM() from sc/inc/global.hxx, please use that instead, which also does the proper rounding.",
+      "parentUuid": "1a6eadb0_4e7209e7",
+      "revId": "be38d1b55b8e5c0016d96e0c5de213e77a3d22fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a6eadb0_8ef50185",
         "filename": "sc/source/ui/view/gridwin4.cxx",
         "patchSetId": 6
