@@ -316,44 +316,47 @@ bool XPMReader::ImplGetScanLine( sal_uLong nY )
             bStatus = false;
         else
         {
-            sal_uLong i, j;
-            if ( mpFastColorTable )
+            if (mpFastColorTable)
             {
-                for ( i = 0; i < mnWidth; i++ )
+                for (sal_uLong i = 0; i < mnWidth; ++i)
                 {
-                    j = (*pString++) << 8;
+                    sal_uLong j = (*pString++) << 8;
                     j += *pString++;
-                    sal_uInt8 k = (sal_uInt8)mpFastColorTable[ j ];
-                    mpAcc->SetPixel( nY, i, BitmapColor( (sal_uInt8)k ) );
+                    const sal_uInt8 k = mpFastColorTable[j];
+                    mpAcc->SetPixel(nY, i, BitmapColor(k));
 
                     if ( mpMaskAcc )
-                        mpMaskAcc->SetPixel( nY, i,
-                            ( mpColMap[ k * (mnCpp + 4) + mnCpp] ) ? aWhite : aBlack );
-                }
-            }
-            else for ( i = 0; i < mnWidth; i++ )
-            {
-                pColor = mpColMap;
-                for ( j = 0; j < mnColors; j++ )
-                {
-                    if ( ImplCompare( pString, pColor, mnCpp, XPMCASESENSITIVE ) )
                     {
-                        if ( mnColors > 256 )
-                            mpAcc->SetPixel( nY, i, Color ( pColor[3], pColor[4], pColor[5] ) );
-                        else
-                            mpAcc->SetPixel( nY, i, BitmapColor( (sal_uInt8) j ) );
-
-                        if ( mpMaskAcc )
-                            mpMaskAcc->SetPixel( nY, i, (
-                                pColor[ mnCpp ] ) ? aWhite : aBlack );
-
-                        break;
+                        const sal_uLong nMapIndex = k * (mnCpp + 4) + mnCpp;
+                        mpMaskAcc->SetPixel(nY, i, mpColMap[nMapIndex] ? aWhite : aBlack);
                     }
-                    pColor += ( mnCpp + 4 );
                 }
-                pString += mnCpp;
             }
+            else
+            {
+                for (sal_uLong i = 0; i < mnWidth; ++i)
+                {
+                    pColor = mpColMap;
+                    for (sal_uLong j = 0; j < mnColors; ++j)
+                    {
+                        if ( ImplCompare( pString, pColor, mnCpp, XPMCASESENSITIVE ) )
+                        {
+                            if ( mnColors > 256 )
+                                mpAcc->SetPixel( nY, i, Color ( pColor[3], pColor[4], pColor[5] ) );
+                            else
+                                mpAcc->SetPixel( nY, i, BitmapColor( (sal_uInt8) j ) );
 
+                            if ( mpMaskAcc )
+                                mpMaskAcc->SetPixel( nY, i, (
+                                    pColor[ mnCpp ] ) ? aWhite : aBlack );
+
+                            break;
+                        }
+                        pColor += ( mnCpp + 4 );
+                    }
+                    pString += mnCpp;
+                }
+            }
         }
     }
     return bStatus;
