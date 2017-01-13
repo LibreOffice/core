@@ -91,14 +91,6 @@
 .INCLUDE : unxlngppc.mk
 .ENDIF
 
-.IF "$(COM)$(OS)$(CPU)$(CPUNAME)" == "GCCLINUXPPOWERPC64"
-.INCLUDE : unxlngppc64.mk
-.ENDIF
-
-.IF "$(COM)$(OS)$(CPU)$(CPUNAME)" == "GCCFREEBSDPPOWERPC64"
-.INCLUDE : unxfbsdp.mk
-.ENDIF
-
 .IF "$(COM)$(OS)$(CPU)$(CPUNAME)" == "GCCLINUX3S390"
 .INCLUDE : unxlngs390.mk
 .ENDIF
@@ -113,6 +105,11 @@
 
 .IF "$(COM)$(OS)$(CPU)" == "GCCLINUXA"
 .INCLUDE : unxlnga.mk
+.ENDIF
+
+# FreeBSD includes the specific platforms in its makefile
+.IF "$(OS)" == "FREEBSD"
+.INCLUDE : unxfbsd.mk
 .ENDIF
 
 .IF "$(COM)$(OS)$(CPU)" == "ACCHPUXR"
@@ -141,10 +138,6 @@
 
 .IF "$(COM)$(OS)$(CPU)" == "GCCNETBSDS"
 .INCLUDE : unxbsds.mk
-.ENDIF
-
-.IF "$(OS)" == "FREEBSD"
-.INCLUDE : unxfbsd.mk
 .ENDIF
 
 .IF "$(COM)$(OS)$(CPU)" == "GCCMACOSXP"

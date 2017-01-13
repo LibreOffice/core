@@ -38,13 +38,10 @@ JAVAFLAGSDEBUG=-g
 .INCLUDE : unxfbsdx.mk
 .ENDIF
 .IF "$(CPUNAME)" == "POWERPC64"
-.INCLUDE : unxfbsdp.mk
+.INCLUDE : unxfbsdppc64.mk
 .ENDIF
 .IF "$(CPUNAME)" == "POWERPC"
 .INCLUDE : unxfbsdppc.mk
-.ENDIF
-.IF "$(CPUNAME)" == "POWERPC64"
-.INCLUDE : unxfbsdppc64.mk
 .ENDIF
 .IF "$(CPUNAME)" == "ARM"
 .INCLUDE : unxfbsdr.mk
