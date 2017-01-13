@@ -333,6 +333,7 @@
 			- 0.0133cm for solid style
 			- 0.0399cm for double style
 		 as there are three border lines painted -->
+	<xsl:decimal-format name = "unifiedFormat" decimal-separator = "." />
 	<xsl:template name="round-up-border-width">
 		<xsl:param name="borderWidth"/>
 		<xsl:param name="multiplier"/>
@@ -345,11 +346,11 @@
 		<xsl:variable name="minimalBorderWidth" select="0.0133 * $multiplier"/>
 		<xsl:choose>
 			<xsl:when test="number($borderWidthByCentimeter) &lt; $minimalBorderWidth">
-				<xsl:value-of select="$minimalBorderWidth"/>
+				<xsl:value-of select="format-number($minimalBorderWidth,'0.######','unifiedFormat')"/>
 				<xsl:text>cm</xsl:text>
 			</xsl:when>
 			<xsl:otherwise>
-				<xsl:value-of select="borderWidthByCentimeter"/>
+				<xsl:value-of select="format-number($borderWidthByCentimeter,'0.######','unifiedFormat')"/>
 				<xsl:text>cm</xsl:text>
 			</xsl:otherwise>
 		</xsl:choose>
