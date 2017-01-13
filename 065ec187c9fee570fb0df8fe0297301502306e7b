@@ -185,6 +185,23 @@
     },
     {
       "key": {
+        "uuid": "1a6eadb0_9962a9d7",
+        "filename": "connectivity/source/drivers/firebird/Clob.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2017-01-13T08:57:27Z",
+      "side": 1,
+      "message": "I\u0027m realising this is not consistent with what getSubString does. You pass whatever Firebird has as encoding for this column. For the moment, we assume it is UTF8.\n\nUnder this assumption, getCharacterStream gives UTF8... While in LibreOffice \"characters\" are UTF16. But, but, really the XInputStream can only give bytes (not characters) so what is \"the right thing\" is actually not obvious... Let\u0027s look at what other drivers do.",
+      "revId": "065ec187c9fee570fb0df8fe0297301502306e7b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a6eadb0_4baafbd5",
         "filename": "connectivity/source/drivers/firebird/ResultSet.cxx",
         "patchSetId": 2
