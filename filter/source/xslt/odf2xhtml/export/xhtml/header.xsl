@@ -93,7 +93,7 @@
 		<xsl:otherwise><xsl:text>td, th { vertical-align:top; font-size:12pt;}
 	</xsl:text></xsl:otherwise>
 	</xsl:choose>
-<xsl:text>h1, h2, h3, h4, h5, h6 { clear:both }
+<xsl:text>h1, h2, h3, h4, h5, h6 { clear:both;}
 	</xsl:text>
 <xsl:text>ol, ul { margin:0; padding:0;}
 	</xsl:text>
