@@ -680,6 +680,10 @@ void DXF2GDIMetaFile::DrawDimensionEntity(const DXFDimensionEntity & rE, const D
 void DXF2GDIMetaFile::DrawEntities(const DXFEntities & rEntities,
                                    const DXFTransform & rTransform)
 {
+    if (rEntities.mbBeingDrawn)
+        return;
+    rEntities.mbBeingDrawn = true;
+
     sal_uLong nCount=0;
     DXFTransform aET;
     const DXFTransform * pT;
@@ -745,6 +749,8 @@ void DXF2GDIMetaFile::DrawEntities(const DXFEntities & rEntities,
         pE=pE->pSucc;
         nCount++;
     }
+
+    rEntities.mbBeingDrawn = false;
 }
 
 
