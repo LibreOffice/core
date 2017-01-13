@@ -96,6 +96,8 @@ public:
 
     double mfGlobalLineTypeScale; // $LTSCALE
 
+    bool mbInCalc;  // guard for self-recursive bounding box calc
+
     DXFRepresentation();
     ~DXFRepresentation();
 
