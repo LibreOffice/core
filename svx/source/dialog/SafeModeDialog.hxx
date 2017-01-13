@@ -34,8 +34,8 @@ public:
 private:
 
     VclPtr<Button> mpBtnContinue;
-    VclPtr<Button> mpBtnQuit;
     VclPtr<Button> mpBtnRestart;
+    VclPtr<Button> mpBtnApply;
 
     VclPtr<VclBox> mpBoxRestore;
     VclPtr<VclBox> mpBoxConfigure;

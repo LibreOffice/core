@@ -37,8 +37,8 @@ SafeModeDialog::SafeModeDialog(vcl::Window* pParent)
 :   Dialog(pParent, "SafeModeDialog", "svx/ui/safemodedialog.ui"),
 
     mpBtnContinue(),
-    mpBtnQuit(),
     mpBtnRestart(),
+    mpBtnApply(),
 
     mpBoxRestore(),
     mpBoxConfigure(),
@@ -63,8 +63,8 @@ SafeModeDialog::SafeModeDialog(vcl::Window* pParent)
     maBackupFileHelper()
 {
     get(mpBtnContinue, "btn_continue");
-    get(mpBtnQuit, "btn_quit");
     get(mpBtnRestart, "btn_restart");
+    get(mpBtnApply, "btn_apply");
 
     get(mpBoxRestore, "group_restore");
     get(mpBoxConfigure, "group_configure");
@@ -96,8 +96,8 @@ SafeModeDialog::SafeModeDialog(vcl::Window* pParent)
     mpRadioReset->SetClickHdl(LINK(this, SafeModeDialog, RadioBtnHdl));
 
     mpBtnContinue->SetClickHdl(LINK(this, SafeModeDialog, DialogBtnHdl));
-    mpBtnQuit->SetClickHdl(LINK(this, SafeModeDialog, DialogBtnHdl));
     mpBtnRestart->SetClickHdl(LINK(this, SafeModeDialog, DialogBtnHdl));
+    mpBtnApply->SetClickHdl(LINK(this, SafeModeDialog, DialogBtnHdl));
 
     mpCBCheckProfilesafeConfig->SetToggleHdl(LINK(this, SafeModeDialog, CheckBoxHdl));
     mpCBCheckProfilesafeExtensions->SetToggleHdl(LINK(this, SafeModeDialog, CheckBoxHdl));
@@ -113,7 +113,7 @@ SafeModeDialog::SafeModeDialog(vcl::Window* pParent)
     mpBtnCreateZip->SetClickHdl(LINK(this, SafeModeDialog, CreateZipBtnHdl));
 
     // Disable restart btn until some checkbox is active
-    mpBtnRestart->Disable();
+    mpBtnApply->Disable();
 
     // Check the first radio button and call its handler,
     // it'll disable the relevant parts
@@ -146,8 +146,8 @@ void SafeModeDialog::dispose()
     mpBoxReset.clear();
 
     mpBtnContinue.clear();
-    mpBtnQuit.clear();
     mpBtnRestart.clear();
+    mpBtnApply.clear();
 
     mpCBCheckProfilesafeConfig.clear();
     mpCBCheckProfilesafeExtensions.clear();
@@ -345,12 +345,15 @@ IMPL_LINK(SafeModeDialog, DialogBtnHdl, Button*, pBtn)
     {
         Close();
     }
-    else if (pBtn == mpBtnQuit.get())
-    {
-        Close();
-        Application::Quit();
-    }
     else if (pBtn == mpBtnRestart.get())
+    {
+        sfx2::SafeMode::putRestartFlag();
+        Close();
+        uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
+        css::task::OfficeRestartManager::get(xContext)->requestRestart(
+            css::uno::Reference< css::task::XInteractionHandler >());
+    }
+    else if (pBtn == mpBtnApply.get())
     {
         sfx2::SafeMode::putRestartFlag();
         Close();
@@ -427,7 +430,7 @@ IMPL_LINK(SafeModeDialog, CheckBoxHdl, CheckBox*, /*pCheckBox*/ )
         mpCBResetCustomizations->IsChecked() ||
         mpCBResetWholeUserProfile->IsChecked());
 
-    mpBtnRestart->Enable(bEnable);
+    mpBtnApply->Enable(bEnable);
 
     return 0;
 }
