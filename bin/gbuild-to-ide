@@ -40,26 +40,8 @@ class GbuildLinkTarget:
                              ilibtarget, linked_static_libs, linktarget,
                              objcflags, objcobjects, objcxxflags,
                              objcxxobjects, yaccobjects, build_type)
+        self.target_name = self.build_type + '_' + self.name
 
-    def name(self):
-        return self.name
-
-    def target_name(self):
-        return self.build_type + '_' + self.name
-
-    def short_name(self):
-        return self.build_type + ' ' + self.name
-
-    def module(self):
-        return self.location[self.location.rindex('/')+1:]
-
-    def is_empty(self):
-        return not self.include and not self.defs and not self.cxxobjects and not self.linked_libs
-
-    def __str__(self):
-        return '%s at %s with include path: %s, isystem includes: %s, defines: %s, objects: %s, cxxflags: %s and linked libs: %s' % (
-            self.short_name(), self.location, self.include, self.include_sys, self.defs, self.cxxobjects,
-            self.cxxflags, self.linked_libs)
 
 class GbuildParser:
     def __init__(self, makecmd):
@@ -146,7 +128,7 @@ class GbuildParser:
             x = self.target_by_path[path]
             if path != '' and len(set(self.target_by_path[path])) > 1:
                 print('fdo#70422: multiple target use dir %s: %s' % (
-                    path, ', '.join([target.short_name() for target in set(self.target_by_path[path])])))
+                    path, ', '.join([target.target_name for target in set(self.target_by_path[path])])))
         for location in self.target_by_location:
             self.modulenamelist.append(os.path.split(location)[1])
         return self
@@ -815,7 +797,7 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
             module = location.split('/')[-1]
             module_directory = os.path.join(self.solution_directory, module)
             for target in self.gbuildparser.target_by_location[location]:
-                project_path = os.path.join(module_directory, '%s.vcxproj' % target.target_name())
+                project_path = os.path.join(module_directory, '%s.vcxproj' % target.target_name)
                 project_guid = self.write_project(project_path, target)
                 p = VisualStudioIntegrationGenerator.Project(project_guid, target, project_path)
                 projects.append(p)
@@ -841,11 +823,11 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
             f.write('Microsoft Visual Studio Solution File, Format Version 12.00\n')
             for project in projects:
                 target = project.target
-                print(' %s' % target.target_name(), end='')
+                print(' %s' % target.target_name, end='')
                 proj_path = os.path.relpath(project.path, os.path.abspath(os.path.dirname(solution_path)))
                 f.write('Project("{%s}") = "%s", "%s", "{%s}"\n' %
                         (VisualStudioIntegrationGenerator.nmake_project_guid,
-                         target.short_name(), proj_path, project.guid))
+                         target.target_name, proj_path, project.guid))
                 libs_in_solution = self.get_dependency_libs(target.linked_libs,
                                                             library_projects)
                 if libs_in_solution:
@@ -898,7 +880,7 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
         proj_keyword_node = ET.SubElement(globals_node, '{%s}Keyword' % ns)
         proj_keyword_node.text = 'MakeFileProj'
         proj_name_node = ET.SubElement(globals_node, '{%s}ProjectName' % ns)
-        proj_name_node.text = target.short_name()
+        proj_name_node.text = target.target_name
 
         ET.SubElement(proj_node, '{%s}Import' % ns, Project='$(VCTargetsPath)\Microsoft.Cpp.Default.props')
         for configuration in self.configurations:
@@ -930,7 +912,7 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
                 'builddir': self.gbuildparser.builddir,
                 'location': target.location,
                 'makecmd': self.gbuildparser.makecmd,
-                'target': target.target_name()}
+                'target': target.target_name}
             nmake_build_node = ET.SubElement(conf_node, '{%s}NMakeBuildCommandLine' % ns)
             nmake_build_node.text = cfg_targets['build'] % nmake_params
             nmake_clean_node = ET.SubElement(conf_node, '{%s}NMakeCleanCommandLine' % ns)
@@ -953,7 +935,7 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
             if os.path.isfile(cxxfile):
                 ET.SubElement(cxxobjects_node, '{%s}ClCompile' % ns, Include=cxxfile)
             else:
-                print('Source %s in project %s does not exist' % (cxxfile, target.target_name()))
+                print('Source %s in project %s does not exist' % (cxxfile, target.target_name))
 
         includes_node = ET.SubElement(proj_node, '{%s}ItemGroup' % ns)
         for cxxobject in target.cxxobjects:
@@ -1483,7 +1465,7 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
 
         all_libs = self.gbuildparser.files
         for lib in all_libs:
-            self._log("\nlibrary : %s, loc=%s" % (lib.short_name(), lib.location))
+            self._log("\nlibrary : %s, loc=%s" % (lib.target_name, lib.location))
             lib_name = os.path.basename(lib.location)
             lib_folder = os.path.relpath(lib.location, self.base_folder)
 
