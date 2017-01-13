@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a6eadb0_74c15480",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-01-13T20:54:51Z",
+      "side": 1,
+      "message": "no idea what the benefit is",
+      "revId": "85c8cf04f820913a8567a55315cc2acc2ed4f397",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a6eadb0_94bef0fd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-01-13T20:54:51Z",
+      "side": 1,
+      "message": "useful, that could be a bug / typo...",
+      "revId": "85c8cf04f820913a8567a55315cc2acc2ed4f397",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a6eadb0_b4bbec0d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-01-13T20:54:51Z",
+      "side": 1,
+      "message": "very useful",
+      "revId": "85c8cf04f820913a8567a55315cc2acc2ed4f397",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a6eadb0_f43ba49a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-01-13T20:54:51Z",
+      "side": 1,
+      "message": "notably the Solaris 10 /bin/sh is so primitive that it doesn\u0027t support $(..) - this is one reason why `..` is ubiquitous\n\nbut that is probably no longer relevant since OpenSolaris had a working /bin/sh in 2010 so Illumos derivatives should have it too, and Solaris 10 is pretty old and AFAIK there are no paying customers of LO on Solaris 10, so no objection to this.\n\n(of course, for a utility script like this that isn\u0027t even used during a build, much less shipped with the product, even less of a concern.)",
+      "revId": "85c8cf04f820913a8567a55315cc2acc2ed4f397",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a6eadb0_3446fc23",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-01-13T20:54:51Z",
+      "side": 1,
+      "message": "no idea what that is about",
+      "revId": "85c8cf04f820913a8567a55315cc2acc2ed4f397",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a6eadb0_544b782b",
+        "filename": "solenv/bin/add-modelines",
+        "patchSetId": 1
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-01-13T20:54:51Z",
+      "side": 1,
+      "message": "i\u0027m honestly not sure what the [@] does but i trust you researched this.",
+      "revId": "85c8cf04f820913a8567a55315cc2acc2ed4f397",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
