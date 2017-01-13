@@ -106,10 +106,10 @@ void Scenario::importInputCells( SequenceInputStream& rStrm )
 void Scenario::finalizeImport()
 {
     AddressConverter& rAddrConv = getAddressConverter();
-    ::std::vector< CellRangeAddress > aRanges;
+    ScRangeList aRanges;
     for( ScenarioCellVector::iterator aIt = maCells.begin(), aEnd = maCells.end(); aIt != aEnd; ++aIt )
         if( !aIt->mbDeleted && rAddrConv.checkCellAddress( aIt->maPos, true ) )
-            aRanges.push_back( CellRangeAddress( aIt->maPos.Tab(), aIt->maPos.Col(), aIt->maPos.Row(), aIt->maPos.Col(), aIt->maPos.Row() ) );
+            aRanges.Append( ScRange(aIt->maPos, aIt->maPos) );
 
     if( !aRanges.empty() && !maModel.maName.isEmpty() ) try
     {
@@ -121,7 +121,7 @@ void Scenario::finalizeImport()
         // create the new scenario sheet
         Reference< XScenariosSupplier > xScenariosSupp( getSheetFromDoc( mnSheet ), UNO_QUERY_THROW );
         Reference< XScenarios > xScenarios( xScenariosSupp->getScenarios(), UNO_SET_THROW );
-        xScenarios->addNewByName( aScenName, ContainerHelper::vectorToSequence( aRanges ), maModel.maComment );
+        xScenarios->addNewByName( aScenName, AddressConverter::toApiSequence(aRanges), maModel.maComment );
 
         // write scenario cell values
         Reference< XSpreadsheet > xSheet( getSheetFromDoc( aScenName ), UNO_SET_THROW );

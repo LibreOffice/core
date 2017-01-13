@@ -560,6 +560,15 @@ public:
                             sal_Int16 nSheet,
                             bool bTrackOverflow );
 
+    /** Converts the passed range list to a sequence of cell range addresses.
+
+        @param orRanges  List of range objects.
+        @return  A uno sequence of cell range addresses as used in API calls.
+            Does not check ranges for supported sheet limits.
+     */
+    static css::uno::Sequence<css::table::CellRangeAddress>
+                        toApiSequence(const ScRangeList& orRanges);
+
 private:
     void                initializeMaxPos(
                             sal_Int16 nMaxXlsTab, sal_Int32 nMaxXlsCol, sal_Int32 nMaxXlsRow );
