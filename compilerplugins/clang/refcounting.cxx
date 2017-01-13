@@ -211,8 +211,6 @@ bool containsXInterfaceSubclass(const Type* pType0) {
                 || dc.Class("mem_fun_t").StdNamespace()
                 || dc.Class("mem_fun1_t").StdNamespace()
                 || dc.Class("SwIterator").GlobalNamespace()
-                || (dc.Class("InitGuard").Namespace("toolkit")
-                    .GlobalNamespace())
                 || (dc.Class("SharedUNOComponent").Namespace("utl")
                     .GlobalNamespace())
                 || (dc.Class("OAutoRegistration").Namespace("utl")

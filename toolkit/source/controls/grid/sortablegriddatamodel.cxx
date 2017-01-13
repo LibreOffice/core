@@ -17,13 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "initguard.hxx"
-
 #include <com/sun/star/i18n/Collator.hpp>
 #include <com/sun/star/i18n/XCollator.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/NotInitializedException.hpp>
 #include <com/sun/star/ucb/AlreadyInitializedException.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/awt/grid/XGridDataListener.hpp>
@@ -33,6 +32,7 @@
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/anycompare.hxx>
+#include <comphelper/componentguard.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <tools/diagnose_ex.h>
@@ -45,12 +45,11 @@ using namespace css::i18n;
 using namespace css::lang;
 using namespace css::ucb;
 using namespace css::uno;
-using namespace toolkit;
 
 namespace {
 
 class SortableGridDataModel;
-typedef InitGuard< SortableGridDataModel >  MethodGuard;
+class MethodGuard;
 
 typedef ::cppu::WeakComponentImplHelper    <   css::awt::grid::XSortableMutableGridDataModel
                                             ,   css::lang::XServiceInfo
@@ -195,6 +194,17 @@ private:
     bool                                                    m_sortAscending;
     ::std::vector< ::sal_Int32 >                                  m_publicToPrivateRowIndex;
     ::std::vector< ::sal_Int32 >                                  m_privateToPublicRowIndex;
+};
+
+class MethodGuard : public ::comphelper::ComponentGuard
+{
+public:
+    MethodGuard( SortableGridDataModel& i_component, ::cppu::OBroadcastHelper & i_broadcastHelper )
+        :comphelper::ComponentGuard( i_component, i_broadcastHelper )
+    {
+        if ( !i_component.isInitialized() )
+            throw css::lang::NotInitializedException( OUString(), *&i_component );
+    }
 };
 
     namespace
