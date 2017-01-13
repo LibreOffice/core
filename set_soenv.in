@@ -408,45 +408,25 @@ elsif ( $platform =~ m/freebsd/ )
       $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."arm".$ds."native_threads";
       $EPM_FLAGS      = "-a arm";
    }
-   elsif ($platform =~ m/^powerpc/)
-   {
-      if (($platform =~ m/^powerpc64/) && ('@SIZEOF_LONG@' eq '8')) {
-         print "Setting FreeBSD PPC64 specific values... ";
-         $outfile = "FreeBSDPPC64Env.Set"; 
-         $OUTPATH = "unxfbsdppc64";
-         $CPUNAME = "POWERPC64";
-
-         if ( $JDK eq "gcj" ) {
-            $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc64";
-            $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc64".$ds."client";
-            $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc64".$ds."native_threads";
-         }
-      }
-      else {
-         print "Setting FreeBSD PPC specific values... ";
-         $outfile = "FreeBSDPPCEnv.Set"; 
-         $OUTPATH = "unxfbsdppc";
-         $CPUNAME = "POWERPC";
-
-         if ( $JDK eq "gcj" ) {
-            $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc";
-            $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc".$ds."client";
-            $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc".$ds."native_threads"; }
-         elsif ($JDK =~ m/^[Ii][Bb][Mm]/)
-         {  $JRELIBDIR     = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc";
-            $JRETOOLKITDIR = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc".$ds."classic";
-            $JRETHREADDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc";
-         }
-	 # OpenJDK
-	 elsif ($JDK =~ m/sun/) {
-	    $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc";
-	    $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc".$ds."server";
-	    $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc".$ds."native_threads";
-	 }
-      }
-
+   elsif (($platform =~ m/^powerpc64/) && ('@SIZEOF_LONG@' eq '8'))
+   {  print "Setting FreeBSD PPC64 specific values... ";
+      $outfile        = "FreeBSDPPC64Env.Set"; 
       $CPU            = "P";
-
+      $CPUNAME        = "POWERPC64";
+      $OUTPATH        = "unxfbsdppc64";
+      $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc64";
+      $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc64".$ds."server";
+      $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc64".$ds."native_threads";
+   }
+   elsif ($platform =~ m/powerpc/)
+   {  print "Setting FreeBSD PPC specific values... ";
+      $outfile        = "FreeBSDPPCEnv.Set"; 
+      $CPU            = "P";
+      $CPUNAME        = "POWERPC";
+      $OUTPATH        = "unxfbsdppc";
+      $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc";
+      $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc".$ds."client";
+      $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc".$ds."native_threads";
    }
    else
    {  print "Unsupported FreeBSD architecture: $platform \n";
