@@ -202,6 +202,24 @@
     },
     {
       "key": {
+        "uuid": "1a6eadb0_19a5b903",
+        "filename": "connectivity/source/drivers/firebird/Clob.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2017-01-13T09:17:31Z",
+      "side": 1,
+      "message": "Looks like only jdbc (including HSQLDB) implements CLOB. Reading the code, it looks like it serves UTF16 (but I\u0027m going to test that). We should probably align and do the same. You can do it in a separate future commit.",
+      "parentUuid": "1a6eadb0_9962a9d7",
+      "revId": "065ec187c9fee570fb0df8fe0297301502306e7b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a6eadb0_4baafbd5",
         "filename": "connectivity/source/drivers/firebird/ResultSet.cxx",
         "patchSetId": 2
