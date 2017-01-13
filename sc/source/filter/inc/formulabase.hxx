@@ -694,10 +694,6 @@ public:
             address which has been extracted to orRange, false otherwise.
      */
     bool                extractCellRange(
-                            css::table::CellRangeAddress& orRange,
-                            const ApiTokenSequence& rTokens,
-                            bool bAllowRelative ) const;
-    bool                extractCellRange(
                             ScRange& orRange,
                             const ApiTokenSequence& rTokens,
                             bool bAllowRelative ) const;

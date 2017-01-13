@@ -1467,11 +1467,10 @@ bool lclConvertToCellAddress( ScAddress& orAddress, const SingleReference& rSing
         ((nFilterBySheet < 0) || (nFilterBySheet == rSingleRef.Sheet));
 }
 
-bool lclConvertToCellRange( CellRangeAddress& orRange, const ComplexReference& rComplexRef, sal_Int32 nForbiddenFlags, sal_Int32 nFilterBySheet )
+bool lclConvertToCellRange( ScRange& orRange, const ComplexReference& rComplexRef, sal_Int32 nForbiddenFlags, sal_Int32 nFilterBySheet )
 {
-    orRange = CellRangeAddress( static_cast< sal_Int16 >( rComplexRef.Reference1.Sheet ),
-        rComplexRef.Reference1.Column, rComplexRef.Reference1.Row,
-        rComplexRef.Reference2.Column, rComplexRef.Reference2.Row );
+    orRange = ScRange( rComplexRef.Reference1.Column, rComplexRef.Reference1.Row, rComplexRef.Reference1.Sheet,
+                       rComplexRef.Reference2.Column, rComplexRef.Reference2.Row, rComplexRef.Reference2.Sheet );
     return
         !getFlag( rComplexRef.Reference1.Flags, nForbiddenFlags ) &&
         !getFlag( rComplexRef.Reference2.Flags, nForbiddenFlags ) &&
@@ -1500,10 +1499,11 @@ TokenToRangeListState lclProcessRef( ApiCellRangeList& orRanges, const Any& rDat
     ComplexReference aComplexRef;
     if( rData >>= aComplexRef )
     {
-        CellRangeAddress aRange;
+        ScRange aRange;
         // ignore invalid ranges (with #REF! errors), but do not stop parsing
         if( lclConvertToCellRange( aRange, aComplexRef, nForbiddenFlags, nFilterBySheet ) )
-            orRanges.push_back( aRange );
+            orRanges.push_back( CellRangeAddress(aRange.aStart.Tab(), aRange.aStart.Col(), aRange.aStart.Row(),
+                                                 aRange.aEnd.Col(), aRange.aEnd.Row()) );
         return STATE_REF;
     }
     return STATE_ERROR;
@@ -1596,19 +1596,6 @@ Any FormulaProcessorBase::extractReference( const ApiTokenSequence& rTokens ) co
             return aRefAny;
     }
     return Any();
-}
-
-bool FormulaProcessorBase::extractCellRange( CellRangeAddress& orRange,
-        const ApiTokenSequence& rTokens, bool bAllowRelative ) const
-{
-    ApiCellRangeList aRanges;
-    lclProcessRef( aRanges, extractReference( rTokens ), bAllowRelative, -1 );
-    if( !aRanges.empty() )
-    {
-        orRange = aRanges.front();
-        return true;
-    }
-    return false;
 }
 
 bool FormulaProcessorBase::extractCellRange( ScRange& orRange,
