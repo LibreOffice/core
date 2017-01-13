@@ -128,7 +128,7 @@
 			</xsl:for-each>
 			<!-- Otherwise all styles have been processed and the empty styles have to be given out -->
 				<xsl:text>/* ODF styles with no properties representable as CSS */</xsl:text><xsl:text>
-	</xsl:text><xsl:for-each select="$globalData/all-styles/style[final-properties = '']"><xsl:value-of select="concat('.', @style:name, ' ')"/></xsl:for-each> { }
+	</xsl:text><xsl:for-each select="$globalData/all-styles/style[final-properties = '']"><xsl:value-of select="concat('.', @style:name, ' ')"/></xsl:for-each>
 	</xsl:template>
 
 	<!-- Creating CSS page layout based on first office master style -->
