@@ -647,8 +647,11 @@ void GraphicObject::SetGraphic( const Graphic& rGraphic, const GraphicObject* pC
 
 void GraphicObject::SetGraphic( const Graphic& rGraphic, const OUString& rLink )
 {
+    // in case we are called from a situation where rLink and maLink are the same thing,
+    // we need a copy because SetGraphic clears maLink
+    OUString sLinkCopy = rLink;
     SetGraphic( rGraphic );
-    maLink = rLink;
+    maLink = sLinkCopy;
 }
 
 Graphic GraphicObject::GetTransformedGraphic( const Size& rDestSize, const MapMode& rDestMap, const GraphicAttr& rAttr ) const
