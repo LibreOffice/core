@@ -124,7 +124,7 @@ sal_Int32 SAL_CALL java_io_Reader::readBytes( css::uno::Sequence< sal_Int8 >& aD
     }
 
     if(nBytesToRead == 0)
-        return 0;
+        return nBytesWritten;
 
     sal_Int32 nCharsToRead = (nBytesToRead + 1)/2;
 
