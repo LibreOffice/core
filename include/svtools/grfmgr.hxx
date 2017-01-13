@@ -102,7 +102,6 @@ private:
 public:
 
                     GraphicAttr();
-                    ~GraphicAttr();
 
     bool            operator==( const GraphicAttr& rAttr ) const;
     bool            operator!=( const GraphicAttr& rAttr ) const { return !( *this == rAttr ); }
