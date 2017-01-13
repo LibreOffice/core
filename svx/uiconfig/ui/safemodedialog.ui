@@ -48,8 +48,8 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="btn_quit">
-                <property name="label" translatable="yes">_Quit</property>
+              <object class="GtkButton" id="btn_restart">
+                <property name="label" translatable="yes">_Restart in Normal Mode</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -62,7 +62,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="btn_restart">
+              <object class="GtkButton" id="btn_apply">
                 <property name="label" translatable="yes">_Apply Changes and Restart</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
