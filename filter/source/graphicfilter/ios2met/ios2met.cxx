@@ -371,7 +371,7 @@ private:
     OSAttr   aAttr;
     OSAttr   * pAttrStack;
 
-    SvStream * pOrdFile;
+    std::unique_ptr<SvStream> xOrdFile;
 
     void AddPointsToPath(const tools::Polygon & rPoly);
     void AddPointsToArea(const tools::Polygon & rPoly);
@@ -450,12 +450,54 @@ OS2METReader::OS2METReader()
     , aDefAttr()
     , aAttr()
     , pAttrStack(nullptr)
-    , pOrdFile(nullptr)
 {
 }
 
 OS2METReader::~OS2METReader()
 {
+    while (pAreaStack!=nullptr) {
+        OSArea * p=pAreaStack;
+        pAreaStack=p->pSucc;
+        delete p;
+    }
+
+    while (pPathStack!=nullptr) {
+        OSPath * p=pPathStack;
+        pPathStack=p->pSucc;
+        delete p;
+    }
+
+    while (pPathList!=nullptr) {
+        OSPath * p=pPathList;
+        pPathList=p->pSucc;
+        delete p;
+    }
+
+    while (pFontList!=nullptr) {
+        OSFont * p=pFontList;
+        pFontList=p->pSucc;
+        delete p;
+    }
+
+    while (pBitmapList!=nullptr) {
+        OSBitmap * p=pBitmapList;
+        pBitmapList=p->pSucc;
+        if (p->pBMP!=nullptr) delete p->pBMP;
+        delete p;
+    }
+
+    while (pAttrStack!=nullptr) {
+        OSAttr * p=pAttrStack;
+        pAttrStack=p->pSucc;
+        delete p;
+    }
+
+    while (pPaletteStack!=nullptr) {
+        OSPalette * p=pPaletteStack;
+        pPaletteStack=p->pSucc;
+        if (p->p0RGB!=nullptr) delete[] p->p0RGB;
+        delete p;
+    }
 }
 
 bool OS2METReader::IsLineInfo()
@@ -2509,15 +2551,16 @@ void OS2METReader::ReadField(sal_uInt16 nFieldType, sal_uInt16 nFieldSize)
             sal_uInt16 nOrderID, nOrderLen;
             sal_uInt8 nbyte;
 
-            if (pOrdFile==nullptr) break;
+            if (!xOrdFile)
+                break;
 
-            // In pOrdFile all "DatGrfObj" fields were collected so that the
+            // In xOrdFile all "DatGrfObj" fields were collected so that the
             // therein contained "Orders" are continuous and not segmented by fields.
             // To read them from the memory stream without having any trouble,
             // we use a  little trick:
 
             pSave=pOS2MET;
-            pOS2MET=pOrdFile; //(!)
+            pOS2MET=xOrdFile.get(); //(!)
             nMaxPos=pOS2MET->Tell();
             pOS2MET->Seek(0);
 
@@ -2560,11 +2603,11 @@ void OS2METReader::ReadField(sal_uInt16 nFieldType, sal_uInt16 nFieldSize)
             }
 
             pOS2MET=pSave;
-            if (pOrdFile->GetError()) {
+            if (xOrdFile->GetError()) {
                 pOS2MET->SetError(SVSTREAM_FILEFORMAT_ERROR);
                 ErrorCode=10;
             }
-            delete pOrdFile; pOrdFile=nullptr;
+            xOrdFile.reset();
             break;
         }
         case DscGrfObjMagic: {
@@ -2583,13 +2626,13 @@ void OS2METReader::ReadField(sal_uInt16 nFieldType, sal_uInt16 nFieldSize)
             break;
         }
         case DatGrfObjMagic: {
-            if (pOrdFile==nullptr) {
-                pOrdFile = new SvMemoryStream;
-                pOrdFile->SetEndian(SvStreamEndian::LITTLE);
+            if (!xOrdFile) {
+                xOrdFile.reset(new SvMemoryStream);
+                xOrdFile->SetEndian(SvStreamEndian::LITTLE);
             }
             std::unique_ptr<sal_uInt8[]> pBuf(new sal_uInt8[nFieldSize]);
             pOS2MET->ReadBytes(pBuf.get(), nFieldSize);
-            pOrdFile->WriteBytes(pBuf.get(), nFieldSize);
+            xOrdFile->WriteBytes(pBuf.get(), nFieldSize);
             break;
         }
         case MapCodFntMagic:
@@ -2657,7 +2700,7 @@ void OS2METReader::ReadOS2MET( SvStream & rStreamOS2MET, GDIMetaFile & rGDIMetaF
 
     aAttr=aDefAttr;
 
-    pOrdFile=nullptr;
+    xOrdFile.reset();
 
     pVirDev = VclPtr<VirtualDevice>::Create();
     pVirDev->EnableOutput(false);
@@ -2730,52 +2773,6 @@ void OS2METReader::ReadOS2MET( SvStream & rStreamOS2MET, GDIMetaFile & rGDIMetaF
             rGDIMetaFile.Move( -aCalcBndRect.Left(), -aCalcBndRect.Top() );
 
         rGDIMetaFile.SetPrefSize( aCalcBndRect.GetSize() );
-    }
-
-    if (pOrdFile!=nullptr) delete pOrdFile;
-
-    while (pAreaStack!=nullptr) {
-        OSArea * p=pAreaStack;
-        pAreaStack=p->pSucc;
-        delete p;
-    }
-
-    while (pPathStack!=nullptr) {
-        OSPath * p=pPathStack;
-        pPathStack=p->pSucc;
-        delete p;
-    }
-
-    while (pPathList!=nullptr) {
-        OSPath * p=pPathList;
-        pPathList=p->pSucc;
-        delete p;
-    }
-
-    while (pFontList!=nullptr) {
-        OSFont * p=pFontList;
-        pFontList=p->pSucc;
-        delete p;
-    }
-
-    while (pBitmapList!=nullptr) {
-        OSBitmap * p=pBitmapList;
-        pBitmapList=p->pSucc;
-        if (p->pBMP!=nullptr) delete p->pBMP;
-        delete p;
-    }
-
-    while (pAttrStack!=nullptr) {
-        OSAttr * p=pAttrStack;
-        pAttrStack=p->pSucc;
-        delete p;
-    }
-
-    while (pPaletteStack!=nullptr) {
-        OSPalette * p=pPaletteStack;
-        pPaletteStack=p->pSucc;
-        if (p->p0RGB!=nullptr) delete[] p->p0RGB;
-        delete p;
     }
 
     pOS2MET->SetEndian(nOrigNumberFormat);
