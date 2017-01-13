@@ -57,8 +57,9 @@ using namespace ::com::sun::star::beans;
 #define PROPERTYNAME_CONSIDERWRAPSTYLE  COMPATIBILITY_PROPERTYNAME_CONSIDERWRAPPINGSTYLE
 #define PROPERTYNAME_EXPANDWORDSPACE    COMPATIBILITY_PROPERTYNAME_EXPANDWORDSPACE
 #define PROPERTYNAME_PROTECTFORM        COMPATIBILITY_PROPERTYNAME_PROTECTFORM
+#define PROPERTYNAME_MSWORDTRAILINGBLANKS COMPATIBILITY_PROPERTYNAME_MSWORDTRAILINGBLANKS
 
-#define PROPERTYCOUNT                   14
+#define PROPERTYCOUNT                   15
 
 #define OFFSET_NAME                     0
 #define OFFSET_MODULE                   1
@@ -74,6 +75,7 @@ using namespace ::com::sun::star::beans;
 #define OFFSET_CONSIDERWRAPPINGSTYLE    11
 #define OFFSET_EXPANDWORDSPACE          12
 #define OFFSET_PROTECTFORM              13
+#define OFFSET_MSWORDTRAILINGBLANKS     14
 
 //  private declarations!
 
@@ -89,7 +91,9 @@ struct SvtCompatibilityEntry
             bNoExtLeading( false ), bUseLineSpacing( false ),
             bAddTableSpacing( false ), bUseObjPos( false ),
             bUseOurTextWrapping( false ), bConsiderWrappingStyle( false ),
-            bExpandWordSpace( true ), bProtectForm( false ) {}
+            bExpandWordSpace( true ), bProtectForm( false ),
+            bMsWordCompTrailingBlanks ( false ) {}
+
         SvtCompatibilityEntry(
             const OUString& _rName, const OUString& _rNewModule ) :
                 sName( _rName ), sModule( _rNewModule ),
@@ -98,7 +102,8 @@ struct SvtCompatibilityEntry
                 bNoExtLeading( false ), bUseLineSpacing( false ),
                 bAddTableSpacing( false ), bUseObjPos( false ),
                 bUseOurTextWrapping( false ), bConsiderWrappingStyle( false ),
-                bExpandWordSpace( true ), bProtectForm( false ) {}
+                bExpandWordSpace( true ), bProtectForm( false ),
+                bMsWordCompTrailingBlanks( false ) {}
 
         inline void     SetUsePrtMetrics( bool _bSet ) { bUsePrtMetrics = _bSet; }
         inline void     SetAddSpacing( bool _bSet ) { bAddSpacing = _bSet; }
@@ -112,6 +117,7 @@ struct SvtCompatibilityEntry
         inline void     SetConsiderWrappingStyle( bool _bSet ) { bConsiderWrappingStyle = _bSet; }
         inline void     SetExpandWordSpace( bool _bSet ) { bExpandWordSpace = _bSet; }
         inline void     SetProtectForm( bool _bSet ) { bProtectForm = _bSet; }
+        inline void     SetMsWordCompTrailingBlanks( bool _bSet ) { bMsWordCompTrailingBlanks = _bSet; }
 
     public:
         OUString    sName;
@@ -128,6 +134,7 @@ struct SvtCompatibilityEntry
         bool        bConsiderWrappingStyle;
         bool        bExpandWordSpace;
         bool        bProtectForm;
+        bool        bMsWordCompTrailingBlanks;
 };
 
 /*-****************************************************************************************************************
@@ -171,6 +178,7 @@ class SvtCompatibility
             lProperties[ OFFSET_USEOURTEXTWRAPPING ].Name = PROPERTYNAME_USEOURTEXTWRAP;
             lProperties[ OFFSET_CONSIDERWRAPPINGSTYLE ].Name = PROPERTYNAME_CONSIDERWRAPSTYLE;
             lProperties[ OFFSET_EXPANDWORDSPACE ].Name = PROPERTYNAME_EXPANDWORDSPACE;
+            lProperties[ OFFSET_MSWORDTRAILINGBLANKS ].Name = PROPERTYNAME_MSWORDTRAILINGBLANKS;
 
             for ( vector< SvtCompatibilityEntry >::const_iterator pItem = pList->begin();
                   pItem != pList->end(); ++pItem )
@@ -188,6 +196,7 @@ class SvtCompatibility
                 lProperties[ OFFSET_USEOURTEXTWRAPPING ].Value <<= pItem->bUseOurTextWrapping;
                 lProperties[ OFFSET_CONSIDERWRAPPINGSTYLE ].Value <<= pItem->bConsiderWrappingStyle;
                 lProperties[ OFFSET_EXPANDWORDSPACE ].Value <<= pItem->bExpandWordSpace;
+                lProperties[ OFFSET_MSWORDTRAILINGBLANKS ].Value <<= pItem->bMsWordCompTrailingBlanks;
                 lResult[ nStep ] = lProperties;
                 ++nStep;
             }
@@ -261,7 +270,8 @@ class SvtCompatibilityOptions_Impl : public ConfigItem
                                                             bool _bUseOurTextWrapping,
                                                             bool _bConsiderWrappingStyle,
                                                             bool _bExpandWordSpace,
-                                                            bool _bProtectForm );
+                                                            bool _bProtectForm,
+                                                            bool _bMsWordCompTrailingBlanks );
 
         inline bool IsUsePrtDevice() const { return m_aDefOptions.bUsePrtMetrics; }
         inline bool IsAddSpacing() const { return m_aDefOptions.bAddSpacing; }
@@ -274,6 +284,7 @@ class SvtCompatibilityOptions_Impl : public ConfigItem
         inline bool IsUseOurTextWrapping() const { return m_aDefOptions.bUseOurTextWrapping; }
         inline bool IsConsiderWrappingStyle() const { return m_aDefOptions.bConsiderWrappingStyle; }
         inline bool IsExpandWordSpace() const { return m_aDefOptions.bExpandWordSpace; }
+        inline bool IsMsWordCompTrailingBlanks() const { return m_aDefOptions.bMsWordCompTrailingBlanks; }
 
     //  private methods
 
@@ -351,6 +362,7 @@ SvtCompatibilityOptions_Impl::SvtCompatibilityOptions_Impl()
         lValues[ nPosition++ ] >>= aItem.bUseOurTextWrapping;
         lValues[ nPosition++ ] >>= aItem.bConsiderWrappingStyle;
         lValues[ nPosition++ ] >>= aItem.bExpandWordSpace;
+        lValues[ nPosition++ ] >>= aItem.bMsWordCompTrailingBlanks;
         m_aOptions.AppendEntry( aItem );
 
         if ( !bDefaultFound && aItem.sName == COMPATIBILITY_DEFAULT_NAME )
@@ -397,6 +409,8 @@ void SvtCompatibilityOptions_Impl::SetDefault( const OUString & sName, bool bVal
         m_aDefOptions.SetConsiderWrappingStyle( bValue );
     else if ( sName == COMPATIBILITY_PROPERTYNAME_EXPANDWORDSPACE )
         m_aDefOptions.SetExpandWordSpace( bValue );
+    else if ( sName == COMPATIBILITY_PROPERTYNAME_MSWORDTRAILINGBLANKS )
+        m_aDefOptions.SetExpandWordSpace( bValue );
 }
 
 //  public method
@@ -437,6 +451,7 @@ void SvtCompatibilityOptions_Impl::ImplCommit()
         lPropertyValues[ OFFSET_CONSIDERWRAPPINGSTYLE - 1   ].Name = sNode + PROPERTYNAME_CONSIDERWRAPSTYLE;
         lPropertyValues[ OFFSET_EXPANDWORDSPACE - 1         ].Name = sNode + PROPERTYNAME_EXPANDWORDSPACE;
         lPropertyValues[ OFFSET_PROTECTFORM - 1             ].Name = sNode + PROPERTYNAME_PROTECTFORM;
+        lPropertyValues[ OFFSET_MSWORDTRAILINGBLANKS - 1    ].Name = sNode + PROPERTYNAME_MSWORDTRAILINGBLANKS;
 
         lPropertyValues[ OFFSET_MODULE - 1                  ].Value <<= aItem.sModule;
         lPropertyValues[ OFFSET_USEPRTMETRICS - 1           ].Value <<= aItem.bUsePrtMetrics;
@@ -451,6 +466,7 @@ void SvtCompatibilityOptions_Impl::ImplCommit()
         lPropertyValues[ OFFSET_CONSIDERWRAPPINGSTYLE - 1   ].Value <<= aItem.bConsiderWrappingStyle;
         lPropertyValues[ OFFSET_EXPANDWORDSPACE - 1         ].Value <<= aItem.bExpandWordSpace;
         lPropertyValues[ OFFSET_PROTECTFORM - 1             ].Value <<= aItem.bProtectForm;
+        lPropertyValues[ OFFSET_MSWORDTRAILINGBLANKS - 1    ].Value <<= aItem.bMsWordCompTrailingBlanks;
 
         SetSetProperties( SETNODE_ALLFILEFORMATS, lPropertyValues );
     }
@@ -488,7 +504,8 @@ void SvtCompatibilityOptions_Impl::AppendItem(  const OUString& _sName,
                                                 bool _bUseOurTextWrapping,
                                                 bool _bConsiderWrappingStyle,
                                                 bool _bExpandWordSpace,
-                                                bool _bProtectForm )
+                                                bool _bProtectForm,
+                                                bool _bMsWordCompTrailingBlanks )
 {
     SvtCompatibilityEntry aItem( _sName, _sModule );
     aItem.SetUsePrtMetrics( _bUsePrtMetrics );
@@ -503,6 +520,7 @@ void SvtCompatibilityOptions_Impl::AppendItem(  const OUString& _sName,
     aItem.SetConsiderWrappingStyle( _bConsiderWrappingStyle );
     aItem.SetExpandWordSpace( _bExpandWordSpace );
     aItem.SetProtectForm( _bProtectForm );
+    aItem.SetMsWordCompTrailingBlanks( _bMsWordCompTrailingBlanks );
     m_aOptions.AppendEntry( aItem );
 
     // default item reset?
@@ -577,6 +595,9 @@ void SvtCompatibilityOptions_Impl::impl_ExpandPropertyNames(
         lDestination[nDestStep] = sFixPath;
         lDestination[nDestStep] += PROPERTYNAME_EXPANDWORDSPACE;
         ++nDestStep;
+        lDestination[nDestStep] = sFixPath;
+        lDestination[nDestStep] += PROPERTYNAME_MSWORDTRAILINGBLANKS;
+        ++nDestStep;
     }
 }
 
@@ -631,14 +652,16 @@ void SvtCompatibilityOptions::AppendItem( const OUString& sName,
                                           bool bUseOurTextWrapping,
                                           bool bConsiderWrappingStyle,
                                           bool bExpandWordSpace,
-                                          bool bProtectForm )
+                                          bool bProtectForm,
+                                          bool bMsWordCompTrailingBlanks )
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     m_pImpl->AppendItem(
         sName, sModule, bUsePrtMetrics, bAddSpacing,
         bAddSpacingAtPages, bUseOurTabStops, bNoExtLeading,
         bUseLineSpacing, bAddTableSpacing, bUseObjPos,
-        bUseOurTextWrapping, bConsiderWrappingStyle, bExpandWordSpace, bProtectForm );
+        bUseOurTextWrapping, bConsiderWrappingStyle, bExpandWordSpace,
+        bProtectForm, bMsWordCompTrailingBlanks );
 }
 
 bool SvtCompatibilityOptions::IsUsePrtDevice() const
@@ -705,6 +728,12 @@ bool SvtCompatibilityOptions::IsExpandWordSpace() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pImpl->IsExpandWordSpace();
+}
+
+bool SvtCompatibilityOptions::IsMsWordCompTrailingBlanks() const
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    return m_pImpl->IsMsWordCompTrailingBlanks();
 }
 
 Sequence< Sequence< PropertyValue > > SvtCompatibilityOptions::GetList() const

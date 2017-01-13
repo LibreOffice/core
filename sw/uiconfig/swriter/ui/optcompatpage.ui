@@ -65,6 +65,7 @@
                       <item translatable="yes">Consider wrapping style when positioning objects</item>
                       <item translatable="yes">Expand word space on lines with manual line breaks in justified paragraphs</item>
                       <item translatable="yes">Protect form</item>
+                      <item translatable="yes">MS Word-compatible trailing blanks</item>
                       <item translatable="yes">&lt;User settings&gt;</item>
                     </items>
                   </object>
