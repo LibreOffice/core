@@ -451,10 +451,14 @@ OS2METReader::OS2METReader()
     , aAttr()
     , pAttrStack(nullptr)
 {
+    pVirDev = VclPtr<VirtualDevice>::Create();
+    pVirDev->EnableOutput(false);
 }
 
 OS2METReader::~OS2METReader()
 {
+    pVirDev.disposeAndClear();
+
     while (pAreaStack!=nullptr) {
         OSArea * p=pAreaStack;
         pAreaStack=p->pSucc;
@@ -2702,8 +2706,6 @@ void OS2METReader::ReadOS2MET( SvStream & rStreamOS2MET, GDIMetaFile & rGDIMetaF
 
     xOrdFile.reset();
 
-    pVirDev = VclPtr<VirtualDevice>::Create();
-    pVirDev->EnableOutput(false);
     rGDIMetaFile.Record(pVirDev);
 
     pOS2MET->SetEndian(SvStreamEndian::LITTLE);
@@ -2761,7 +2763,6 @@ void OS2METReader::ReadOS2MET( SvStream & rStreamOS2MET, GDIMetaFile & rGDIMetaF
     }
 
     rGDIMetaFile.Stop();
-    pVirDev.disposeAndClear();
 
     rGDIMetaFile.SetPrefMapMode( aGlobMapMode );
 
