@@ -74,6 +74,7 @@ ZipFile::ZipFile( uno::Reference < XInputStream > &xInput, const uno::Reference 
 , xStream(xInput)
 , m_xContext ( rxContext )
 , bRecoveryMode( false )
+, mbUseBufferedStream(false)
 {
     if (bInitialise)
     {
@@ -91,6 +92,7 @@ ZipFile::ZipFile( uno::Reference < XInputStream > &xInput, const uno::Reference 
 , xStream(xInput)
 , m_xContext ( rxContext )
 , bRecoveryMode( bForceRecovery )
+, mbUseBufferedStream(false)
 {
     if (bInitialise)
     {
@@ -109,6 +111,11 @@ ZipFile::ZipFile( uno::Reference < XInputStream > &xInput, const uno::Reference 
 ZipFile::~ZipFile()
 {
     aEntries.clear();
+}
+
+void ZipFile::setUseBufferedStream( bool b )
+{
+    mbUseBufferedStream = b;
 }
 
 void ZipFile::setInputStream ( const uno::Reference < XInputStream >& xNewStream )
@@ -504,7 +511,99 @@ bool ZipFile::hasValidPassword ( ZipEntry & rEntry, const ::rtl::Reference< Encr
     return bRet;
 }
 
-uno::Reference< XInputStream > ZipFile::createUnbufferedStream(
+namespace {
+
+class XBufferedStream : public cppu::WeakImplHelper<css::io::XInputStream>
+{
+    std::vector<sal_Int8> maBytes;
+    size_t mnPos;
+
+    size_t remainingSize() const
+    {
+        return maBytes.size() - mnPos;
+    }
+
+    bool hasBytes() const
+    {
+        return mnPos < maBytes.size();
+    }
+
+public:
+    XBufferedStream( const uno::Reference<XInputStream>& xSrcStream ) : mnPos(0)
+    {
+        const sal_Int32 nBufSize = 8192;
+
+        sal_Int32 nRemaining = xSrcStream->available();
+        maBytes.reserve(nRemaining);
+        uno::Sequence<sal_Int8> aBuf(nBufSize);
+
+        auto readAndCopy = [&]( sal_Int32 nReadSize ) -> sal_Int32
+        {
+            sal_Int32 nBytes = xSrcStream->readBytes(aBuf, nReadSize);
+            const sal_Int8* p = aBuf.getArray();
+            const sal_Int8* pEnd = p + nBytes;
+            std::copy(p, pEnd, std::back_inserter(maBytes));
+            return nBytes;
+        };
+
+        while (nRemaining > nBufSize)
+            nRemaining -= readAndCopy(nBufSize);
+
+        if (nRemaining)
+            readAndCopy(nRemaining);
+    }
+
+    virtual sal_Int32 SAL_CALL readBytes( uno::Sequence<sal_Int8>& rData, sal_Int32 nBytesToRead )
+        throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception) override
+    {
+        if (!hasBytes())
+            return 0;
+
+        sal_Int32 nReadSize = std::min<sal_Int32>(nBytesToRead, remainingSize());
+        rData.realloc(nReadSize);
+        std::vector<sal_Int8>::const_iterator it = maBytes.cbegin();
+        std::advance(it, mnPos);
+        for (sal_Int32 i = 0; i < nReadSize; ++i, ++it)
+            rData[i] = *it;
+
+        mnPos += nReadSize;
+
+        return nReadSize;
+    }
+
+    virtual sal_Int32 SAL_CALL readSomeBytes( ::css::uno::Sequence<sal_Int8>& rData, sal_Int32 nMaxBytesToRead )
+        throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception) override
+    {
+        return readBytes(rData, nMaxBytesToRead);
+    }
+
+    virtual void SAL_CALL skipBytes( sal_Int32 nBytesToSkip )
+        throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception) override
+    {
+        if (!hasBytes())
+            return;
+
+        mnPos += nBytesToSkip;
+    }
+
+    virtual sal_Int32 SAL_CALL available()
+        throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception) override
+    {
+        if (!hasBytes())
+            return 0;
+
+        return remainingSize();
+    }
+
+    virtual void SAL_CALL closeInput()
+        throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception) override
+    {
+    }
+};
+
+}
+
+uno::Reference< XInputStream > ZipFile::createStreamForZipEntry(
             const rtl::Reference<SotMutexHolder>& aMutexHolder,
             ZipEntry & rEntry,
             const ::rtl::Reference< EncryptionData > &rData,
@@ -514,7 +613,14 @@ uno::Reference< XInputStream > ZipFile::createUnbufferedStream(
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    return new XUnbufferedStream ( m_xContext, aMutexHolder, rEntry, xStream, rData, nStreamMode, bIsEncrypted, aMediaType, bRecoveryMode );
+    uno::Reference<io::XInputStream> xSrcStream = new XUnbufferedStream(
+        m_xContext, aMutexHolder, rEntry, xStream, rData, nStreamMode, bIsEncrypted, aMediaType, bRecoveryMode);
+
+    if (!mbUseBufferedStream)
+        return xSrcStream;
+
+    uno::Reference<io::XInputStream> xBufStream(new XBufferedStream(xSrcStream));
+    return xBufStream;
 }
 
 std::unique_ptr<ZipEnumeration> ZipFile::entries()
@@ -542,7 +648,7 @@ uno::Reference< XInputStream > ZipFile::getInputStream( ZipEntry& rEntry,
     if ( bIsEncrypted && rData.is() && rData->m_aDigest.getLength() )
         bNeedRawStream = !hasValidPassword ( rEntry, rData );
 
-    return createUnbufferedStream ( aMutexHolder,
+    return createStreamForZipEntry ( aMutexHolder,
                                     rEntry,
                                     rData,
                                     bNeedRawStream ? UNBUFF_STREAM_RAW : UNBUFF_STREAM_DATA,
@@ -578,7 +684,7 @@ uno::Reference< XInputStream > ZipFile::getDataStream( ZipEntry& rEntry,
     else
         bNeedRawStream = ( rEntry.nMethod == STORED );
 
-    return createUnbufferedStream ( aMutexHolder,
+    return createStreamForZipEntry ( aMutexHolder,
                                     rEntry,
                                     rData,
                                     bNeedRawStream ? UNBUFF_STREAM_RAW : UNBUFF_STREAM_DATA,
@@ -595,7 +701,7 @@ uno::Reference< XInputStream > ZipFile::getRawData( ZipEntry& rEntry,
     if ( rEntry.nOffset <= 0 )
         readLOC( rEntry );
 
-    return createUnbufferedStream ( aMutexHolder, rEntry, rData, UNBUFF_STREAM_RAW, bIsEncrypted );
+    return createStreamForZipEntry ( aMutexHolder, rEntry, rData, UNBUFF_STREAM_RAW, bIsEncrypted );
 }
 
 uno::Reference< XInputStream > ZipFile::getWrappedRawStream(
@@ -612,7 +718,7 @@ uno::Reference< XInputStream > ZipFile::getWrappedRawStream(
     if ( rEntry.nOffset <= 0 )
         readLOC( rEntry );
 
-    return createUnbufferedStream ( aMutexHolder, rEntry, rData, UNBUFF_STREAM_WRAPPEDRAW, true, aMediaType );
+    return createStreamForZipEntry ( aMutexHolder, rEntry, rData, UNBUFF_STREAM_WRAPPEDRAW, true, aMediaType );
 }
 
 bool ZipFile::readLOC( ZipEntry &rEntry )
