@@ -154,7 +154,8 @@ public:
             const css::uno::Reference < css::io::XInputStream >& xStream,
             const css::uno::Reference< css::uno::XComponentContext >& rxContext
                             = css::uno::Reference< css::uno::XComponentContext >(),
-            bool bRepairStorage = false )
+            bool bRepairStorage = false,
+            bool bUseBufferedStream = false )
         throw ( css::uno::Exception );
 
     static css::uno::Reference< css::embed::XStorage >
@@ -164,7 +165,8 @@ public:
             sal_Int32 nStorageMode = css::embed::ElementModes::READWRITE,
             const css::uno::Reference< css::uno::XComponentContext >& rxContext
                             = css::uno::Reference< css::uno::XComponentContext >(),
-            bool bRepairStorage = false )
+            bool bRepairStorage = false,
+            bool bUseBufferedStream = false )
         throw ( css::uno::Exception );
 
     static css::uno::Sequence< css::beans::NamedValue >
