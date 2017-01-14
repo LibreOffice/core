@@ -30,13 +30,13 @@ import java.nio.ByteBuffer;
 public class LOKitTileProvider implements TileProvider {
     private static final String LOGTAG = LOKitTileProvider.class.getSimpleName();
     private static int TILE_SIZE = 256;
-    private final GeckoLayerClient mLayerClient;
     private final float mTileWidth;
     private final float mTileHeight;
     private final String mInputFile;
     private Office mOffice;
     private Document mDocument;
     private boolean mIsReady = false;
+    private LibreOfficeMainActivity mContext;
 
     private float mDPI;
     private float mWidthTwip;
@@ -48,14 +48,13 @@ public class LOKitTileProvider implements TileProvider {
 
     /**
      * Initialize LOKit and load the document.
-     * @param layerClient - layerclient implementation
      * @param messageCallback - callback for messages retrieved from LOKit
      * @param input - input path of the document
      */
-    public LOKitTileProvider(GeckoLayerClient layerClient, Document.MessageCallback messageCallback, String input) {
-        mLayerClient = layerClient;
+    public LOKitTileProvider(LibreOfficeMainActivity context, Document.MessageCallback messageCallback, String input) {
+        mContext = context;
         mMessageCallback = messageCallback;
-        mDPI = LOKitShell.getDpi();
+        mDPI = LOKitShell.getDpi(mContext);
         mTileWidth = pixelToTwip(TILE_SIZE, mDPI);
         mTileHeight = pixelToTwip(TILE_SIZE, mDPI);
 
@@ -139,8 +138,8 @@ public class LOKitTileProvider implements TileProvider {
         if (values == null || values.isEmpty())
             return;
 
-        LOKitShell.getFontController().parseJson(values);
-        LOKitShell.getFontController().setupFontViews();
+        mContext.getFontController().parseJson(values);
+        mContext.getFontController().setupFontViews();
     }
 
     private String getGenericPartName(int i) {
