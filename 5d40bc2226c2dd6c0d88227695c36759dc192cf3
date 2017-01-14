@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa48f94a_725fd80e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2017-01-14T13:46:14Z",
+      "side": 1,
+      "message": "Created the reprodudcer: [1] and wrote this error report: [2].\n\n* [1] http://paste.openstack.org/show/594931\n* [2] https://developercommunity.visualstudio.com/content/problem/11385/constexpr-related-compiler-bug-failure-was-caused.html",
+      "revId": "5d40bc2226c2dd6c0d88227695c36759dc192cf3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
