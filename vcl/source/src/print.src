@@ -95,14 +95,14 @@ String SV_PRINT_PRINTPREVIEW_TXT
     Text [en-US] = "Print preview";
 };
 
-Image SV_PRINT_COLLATE_IMG
+Bitmap SV_PRINT_COLLATE_BMP
 {
-    ImageBitmap = Bitmap { File = "collate.png" ; };
+    File = "collate.png" ;
 };
 
-Image SV_PRINT_NOCOLLATE_IMG
+Bitmap SV_PRINT_NOCOLLATE_BMP
 {
-    ImageBitmap = Bitmap { File = "ncollate.png" ; };
+    File = "ncollate.png" ;
 };
 
 String SV_PRINT_QUERYFAXNUMBER_TXT

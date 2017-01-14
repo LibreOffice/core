@@ -113,8 +113,7 @@ CertificateViewerGeneralTP::CertificateViewerGeneralTP( vcl::Window* _pParent, C
 
     if ( !bCertValid )
     {
-        m_pCertImg->SetImage(
-            Image( XMLSEC_RES( IMG_STATE_NOT_VALIDATED ) ) );
+        m_pCertImg->SetImage(Image(BitmapEx(XMLSEC_RES(BMP_STATE_NOT_VALIDATED))));
         m_pHintNotTrustedFI->SetText( XMLSEC_RES( STR_CERTIFICATE_NOT_VALIDATED ) );
     }
 
