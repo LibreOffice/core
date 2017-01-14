@@ -65,9 +65,10 @@ protected:
     css::uno::Reference < css::ucb::XProgressHandler > xProgressHandler;
 
     bool bRecoveryMode;
+    bool mbUseBufferedStream;
 
     // aMediaType parameter is used only for raw stream header creation
-    css::uno::Reference < css::io::XInputStream >  createUnbufferedStream(
+    css::uno::Reference < css::io::XInputStream >  createStreamForZipEntry(
             const rtl::Reference<SotMutexHolder>& aMutexHolder,
             ZipEntry & rEntry,
             const ::rtl::Reference < EncryptionData > &rData,
@@ -104,6 +105,9 @@ public:
     EntryHash& GetEntryHash() { return aEntries; }
 
     void setInputStream ( css::uno::Reference < css::io::XInputStream > xNewStream );
+
+    void setUseBufferedStream( bool b );
+
     css::uno::Reference< css::io::XInputStream > SAL_CALL getRawData(
             ZipEntry& rEntry,
             const ::rtl::Reference < EncryptionData > &rData,

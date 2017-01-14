@@ -572,6 +572,7 @@ void SAL_CALL ZipPackage::initialize( const uno::Sequence< Any >& aArguments )
     if ( aArguments.getLength() )
     {
         bool bHaveZipFile = true;
+        bool bUseBufferedStream = false;
 
         for( int ind = 0; ind < aArguments.getLength(); ind++ )
         {
@@ -699,6 +700,10 @@ void SAL_CALL ZipPackage::initialize( const uno::Sequence< Any >& aArguments )
                     aNamedValue.Value >>= m_bAllowRemoveOnInsert;
                     m_pRootFolder->setRemoveOnInsertMode_Impl( m_bAllowRemoveOnInsert );
                 }
+                else if (aNamedValue.Name == "UseBufferedStream")
+                {
+                    aNamedValue.Value >>= bUseBufferedStream;
+                }
 
                 // for now the progress handler is not used, probably it will never be
                 // if ( aNamedValue.Name == "ProgressHandler" )
@@ -742,6 +747,7 @@ void SAL_CALL ZipPackage::initialize( const uno::Sequence< Any >& aArguments )
             try
             {
                 m_pZipFile = new ZipFile ( m_xContentStream, m_xContext, true, m_bForceRecovery, xProgressHandler );
+                m_pZipFile->setUseBufferedStream(bUseBufferedStream);
                 getZipFileContents();
             }
             catch ( IOException & e )
