@@ -3117,6 +3117,22 @@ bool ExTextOutRenderer::operator ()(SalLayout const &rLayout, HDC hDC,
     sal_GlyphId glyphIntStr[MAX_GLYPHS];
     int nGlyphs = 0;
     WORD glyphWStr[MAX_GLYPHS];
+    HFONT hFont = static_cast<HFONT>(GetCurrentObject( hDC, OBJ_FONT ));
+    HFONT hAltFont = nullptr;
+    bool bUseAltFont = false;
+    const CommonSalLayout* pCSL = dynamic_cast<const CommonSalLayout*>(&rLayout);
+    if (pCSL && pCSL->getFontSelData().mbVertical)
+    {
+        LOGFONTW aLogFont;
+        GetObjectW(hFont, sizeof(LOGFONTW), &aLogFont);
+        if (aLogFont.lfFaceName[0] == '@')
+        {
+            memmove(&aLogFont.lfFaceName[0], &aLogFont.lfFaceName[1],
+                sizeof(aLogFont.lfFaceName)-sizeof(aLogFont.lfFaceName[0]));
+            hAltFont = CreateFontIndirectW(&aLogFont);
+        }
+    }
+
     do
     {
         nGlyphs = rLayout.GetNextGlyphs(1, glyphIntStr, *pPos, *pGetNextGlypInfo);
@@ -3125,10 +3141,12 @@ bool ExTextOutRenderer::operator ()(SalLayout const &rLayout, HDC hDC,
 
         if (SalLayout::UseCommonLayout())
         {
-            for (int i = 0; i < nGlyphs; i++)
+            bool bVertical = (glyphIntStr[0] & GF_ROTMASK) == GF_ROTL;
+
+            if (hAltFont && bVertical == bUseAltFont)
             {
-                if ((glyphIntStr[i] & GF_ROTMASK) == GF_ROTL)
-                    glyphIntStr[i] |= GF_VERT;
+                bUseAltFont = !bUseAltFont;
+                SelectFont(hDC, bUseAltFont ? hAltFont : hFont);
             }
         }
 
@@ -3136,6 +3154,12 @@ bool ExTextOutRenderer::operator ()(SalLayout const &rLayout, HDC hDC,
         ExtTextOutW(hDC, pPos->X(), pPos->Y(), ETO_GLYPH_INDEX, nullptr, LPCWSTR(&glyphWStr), nGlyphs, nullptr);
     } while (!pRectToErase);
 
+    if (hAltFont)
+    {
+        if (bUseAltFont)
+            SelectFont(hDC, hFont);
+        DeleteObject(hAltFont);
+    }
     return (pRectToErase && nGlyphs >= 1);
 }
 
