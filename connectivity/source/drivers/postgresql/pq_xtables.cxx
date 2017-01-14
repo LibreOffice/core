@@ -270,7 +270,7 @@ void Tables::appendByDescriptor(
     OUString description = extractStringProperty( descriptor, st.DESCRIPTION );
     if( !description.isEmpty() )
     {
-        buf = OUStringBuffer( 128 );
+        buf.truncate();
         buf.append( "COMMENT ON TABLE" );
         bufferQuoteQualifiedIdentifier( buf, schema, name, m_pSettings );
         buf.append( "IS " );
@@ -292,7 +292,7 @@ void Tables::appendByDescriptor(
                 description = extractStringProperty( column,st.DESCRIPTION );
                 if( !description.isEmpty() )
                 {
-                    buf = OUStringBuffer( 128 );
+                    buf.truncate();
                     buf.append( "COMMENT ON COLUMN " );
                     bufferQuoteQualifiedIdentifier(
                         buf, schema, name, extractStringProperty( column, st.NAME ), m_pSettings );

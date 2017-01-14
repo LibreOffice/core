@@ -978,7 +978,7 @@ void ScFormulaCell::GetFormula( OUStringBuffer& rBuffer,
 {
     if( pCode->GetCodeError() != FormulaError::NONE && !pCode->GetLen() )
     {
-        rBuffer = OUStringBuffer( ScGlobal::GetErrorString( pCode->GetCodeError()));
+        rBuffer = ScGlobal::GetErrorString(pCode->GetCodeError());
         return;
     }
     else if( cMatrixFlag == MM_REFERENCE )

@@ -4449,7 +4449,7 @@ void ScXMLExport::ExportConditionalFormat(SCTAB nTab)
                         ::sax::Converter::convertColor(aBuffer, pFormatData->maPositiveColor.GetColor());
                         AddAttribute(XML_NAMESPACE_CALC_EXT, XML_POSITIVE_COLOR, aBuffer.makeStringAndClear());
 
-                        aBuffer = OUStringBuffer();
+                        aBuffer.truncate();
                         ::sax::Converter::convertColor(aBuffer, pFormatData->maAxisColor.GetColor());
                         AddAttribute(XML_NAMESPACE_CALC_EXT, XML_AXIS_COLOR, aBuffer.makeStringAndClear());
                         SvXMLElementExport aElementDataBar(*this, XML_NAMESPACE_CALC_EXT, XML_DATA_BAR, true, true);

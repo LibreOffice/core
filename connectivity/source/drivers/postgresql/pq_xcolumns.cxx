@@ -404,7 +404,7 @@ void alterColumnByDescriptor(
     OUString pastDefaultValue = extractStringProperty( past, st.DEFAULT_VALUE );
     if( futureDefaultValue != pastDefaultValue )
     {
-        buf = OUStringBuffer( 128 );
+        buf.truncate();
         buf.append( "ALTER TABLE" );
         bufferQuoteQualifiedIdentifier( buf, schemaName, tableName, settings );
         buf.append( "ALTER COLUMN" );
@@ -422,7 +422,7 @@ void alterColumnByDescriptor(
     sal_Int32 pastNullable = extractIntProperty( past, st.IS_NULLABLE );
     if( futureNullable != pastNullable )
     {
-        buf = OUStringBuffer( 128 );
+        buf.truncate();
         buf.append( "ALTER TABLE" );
         bufferQuoteQualifiedIdentifier( buf, schemaName, tableName, settings );
         buf.append( "ALTER COLUMN" );
@@ -449,7 +449,7 @@ void alterColumnByDescriptor(
 
     if( futureComment != pastComment )
     {
-        buf = OUStringBuffer( 128 );
+        buf.truncate();
         buf.append( "COMMENT ON COLUMN" );
         bufferQuoteQualifiedIdentifier( buf, schemaName, tableName , futureColumnName, settings );
         buf.append( "IS " );

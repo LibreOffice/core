@@ -1192,21 +1192,21 @@ OUString ToggleUnicodeCodepoint::StringToReplace()
     mbAllowMoreChars = false;
 
     //validate unicode notation.
-    OUStringBuffer sIn;
+    OUString sIn;
     sal_uInt32 nUnicode = 0;
     sal_Int32 nUPlus = maInput.indexOf("U+");
     //if U+ notation used, strip off all extra chars added not in U+ notation
     if( nUPlus != -1 )
     {
         maInput = maInput.copy(nUPlus);
-        sIn = maInput.copy(2);
+        sIn = maInput.copy(2).toString();
         nUPlus = sIn.indexOf("U+");
     }
     else
-        sIn = maInput;
+        sIn = maInput.toString();
     while( nUPlus != -1 )
     {
-        nUnicode = sIn.copy(0, nUPlus).toString().toUInt32(16);
+        nUnicode = sIn.copy(0, nUPlus).toUInt32(16);
         //prevent creating control characters or invalid Unicode values
         if( !rtl::isUnicodeCodePoint(nUnicode) || nUnicode < 0x20  )
             maInput = sIn.copy(nUPlus);
@@ -1214,7 +1214,7 @@ OUString ToggleUnicodeCodepoint::StringToReplace()
         nUPlus =  sIn.indexOf("U+");
     }
 
-    nUnicode = sIn.toString().toUInt32(16);
+    nUnicode = sIn.toUInt32(16);
     if( !rtl::isUnicodeCodePoint(nUnicode) || nUnicode < 0x20 )
        maInput.truncate().append( sIn[sIn.getLength()-1] );
     return maInput.toString();
