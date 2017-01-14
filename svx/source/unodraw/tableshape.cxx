@@ -41,17 +41,15 @@ SvxTableShape::SvxTableShape( SdrObject* pObj ) throw()
     SetShapeType( "com.sun.star.drawing.TableShape" );
 }
 
-
 SvxTableShape::~SvxTableShape() throw()
 {
 }
-
 
 bool SvxTableShape::setPropertyValueImpl(
     const OUString& rName,
     const SfxItemPropertySimpleEntry* pProperty,
     const css::uno::Any& rValue )
-        throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException)
+        throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
 {
     switch( pProperty->nWID )
     {
