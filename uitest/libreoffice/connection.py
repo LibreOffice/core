@@ -22,6 +22,7 @@ except ImportError:
     print("URE_BOOTSTRAP=file:///installation/opt/program/fundamentalrc")
     raise
 
+
 class OfficeConnection:
     def __init__(self, args):
         self.args = args
@@ -50,10 +51,10 @@ class OfficeConnection:
         self.xContext = self.connect(socket)
 
     def bootstrap(self, soffice, userdir, socket):
-        argv = [ soffice, "--accept=" + socket + ";urp",
+        argv = [soffice, "--accept=" + socket + ";urp",
                 "-env:UserInstallation=" + userdir,
                 "--quickstart=no", "--nofirststartwizard",
-                "--norestore", "--nologo" ]
+                "--norestore", "--nologo"]
         if "--valgrind" in self.args:
             argv.append("--valgrind")
 
@@ -80,7 +81,6 @@ class OfficeConnection:
             try:
                 xContext = xUnoResolver.resolve(url)
                 return xContext
-#            except com.sun.star.connection.NoConnectException
             except pyuno.getClass("com.sun.star.connection.NoConnectException"):
                 print("NoConnectException: sleeping...")
                 time.sleep(1)
@@ -95,7 +95,6 @@ class OfficeConnection:
                             "com.sun.star.frame.Desktop", self.xContext)
                     xDesktop.terminate()
                     print("...done")
-#                except com.sun.star.lang.DisposedException:
                 except pyuno.getClass("com.sun.star.beans.UnknownPropertyException"):
                     print("caught UnknownPropertyException while TearDown")
                     pass # ignore, also means disposed
@@ -144,23 +143,29 @@ class PersistentConnection:
     def __init__(self, args):
         self.args = args
         self.connection = None
+
     def getContext(self):
         return self.connection.xContext
+
     def setUp(self):
         assert(not self.connection)
         conn = OfficeConnection(self.args)
         conn.setUp()
         self.connection = conn
+
     def preTest(self):
         assert(self.connection)
+
     def postTest(self):
         assert(self.connection)
+
     def tearDown(self):
         if self.connection:
             try:
                 self.connection.tearDown()
             finally:
                 self.connection = None
+
     def kill(self):
         if self.connection and self.connection.soffice:
             self.connection.soffice.kill()
