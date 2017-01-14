@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa48f94a_12c4cc90",
+        "filename": "sw/uiconfig/swriter/ui/pageorientationcontrol.ui",
+        "patchSetId": 5
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-01-14T16:50:19Z",
+      "side": 1,
+      "message": "I\u0027m sorry; could you tell me what does this mean? Russian translation team has problems translating this.",
+      "range": {
+        "startLine": 56,
+        "startChar": 61,
+        "endLine": 56,
+        "endChar": 67
+      },
+      "revId": "cbe43883e465336da55c96665f9bb7672ffa3bb0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
