@@ -189,7 +189,7 @@ void InsertSubMenuItems( Menu* pSubMenu, sal_uInt16& nItemId, const Reference< X
                                         Bitmap aMaskBitmap;
                                         SvMemoryStream aMem( const_cast<sal_Int8 *>(aDIBSeq.getConstArray()), aDIBSeq.getLength(), StreamMode::READ );
                                         ReadDIB(aMaskBitmap, aMem, true);
-                                        aImage = Image( aBitmap, aMaskBitmap );
+                                        aImage = Image(BitmapEx(aBitmap, aMaskBitmap));
                                     }
                                     else
                                         aImage = Image( aBitmap );

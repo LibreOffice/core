@@ -59,7 +59,6 @@ public:
                     explicit Image( const ResId& rResId );
                     explicit Image( const BitmapEx& rBitmapEx );
                     explicit Image( const Bitmap& rBitmap );
-                    Image( const Bitmap& rBitmap, const Bitmap& rMaskBitmap );
                     Image( const Bitmap& rBitmap, const Color& rColor );
                     explicit Image( const css::uno::Reference< css::graphic::XGraphic >& rxGraphic );
                     explicit Image( const OUString &rPNGFileUrl );
