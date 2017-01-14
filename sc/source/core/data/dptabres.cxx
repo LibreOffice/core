@@ -2609,11 +2609,11 @@ void ScDPDataMember::UpdateRunningTotals(
                                 {
                                     double nTotal;
                                     if ( eRefType == sheet::DataPilotFieldReferenceType::ROW_PERCENTAGE )
-                                        nTotal = pRowTotalData->GetAuxiliary();
+                                        nTotal = pRowTotalData ? pRowTotalData->GetAuxiliary() : 0.0;
                                     else if ( eRefType == sheet::DataPilotFieldReferenceType::COLUMN_PERCENTAGE )
-                                        nTotal = pColTotalData->GetAuxiliary();
+                                        nTotal = pColTotalData ? pColTotalData->GetAuxiliary() : 0.0;
                                     else
-                                        nTotal = pGrandTotalData->GetAuxiliary();
+                                        nTotal = pGrandTotalData ? pGrandTotalData->GetAuxiliary() : 0.0;
 
                                     if ( nTotal == 0.0 )
                                         pAggData->SetError();
@@ -2623,9 +2623,9 @@ void ScDPDataMember::UpdateRunningTotals(
                                 break;
                             case sheet::DataPilotFieldReferenceType::INDEX:
                                 {
-                                    double nColTotal = pColTotalData->GetAuxiliary();
-                                    double nRowTotal = pRowTotalData->GetAuxiliary();
-                                    double nGrandTotal = pGrandTotalData->GetAuxiliary();
+                                    double nColTotal = pColTotalData ? pColTotalData->GetAuxiliary() : 0.0;
+                                    double nRowTotal = pRowTotalData ? pRowTotalData->GetAuxiliary() : 0.0;
+                                    double nGrandTotal = pGrandTotalData ? pGrandTotalData->GetAuxiliary() : 0.0;
                                     if ( nRowTotal == 0.0 || nColTotal == 0.0 )
                                         pAggData->SetError();
                                     else
