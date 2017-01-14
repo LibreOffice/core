@@ -1603,7 +1603,7 @@ CacheItem FilterCache::impl_loadItem(const css::uno::Reference< css::container::
                                            EItemType                                           eType  ,
                                      const OUString&                                    sItem  ,
                                            EReadOption                                         eOption)
-    throw(css::uno::Exception)
+    throw(css::uno::Exception, std::exception)
 {
     // try to get an API object, which points directly to the
     // requested item. If it fail an exception should occur and
@@ -2167,7 +2167,7 @@ void FilterCache::impl_readOldFormat()
 CacheItem FilterCache::impl_readOldItem(const css::uno::Reference< css::container::XNameAccess >& xSet ,
                                               EItemType                                           eType,
                                         const OUString&                                    sItem)
-    throw(css::uno::Exception)
+    throw(css::uno::Exception, std::exception)
 {
     css::uno::Reference< css::container::XNameAccess > xItem;
     xSet->getByName(sItem) >>= xItem;

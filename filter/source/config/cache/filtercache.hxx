@@ -771,7 +771,7 @@ class FilterCache : public BaseLock
                                       EItemType                                           eType  ,
                                 const OUString&                                    sItem  ,
                                       EReadOption                                         eOption)
-            throw(css::uno::Exception);
+            throw(css::uno::Exception, std::exception);
 
 
         /** @short  try to load the requested item on demand from the underlying configuration
@@ -876,7 +876,7 @@ class FilterCache : public BaseLock
         CacheItem impl_readOldItem(const css::uno::Reference< css::container::XNameAccess >& xSet ,
                                          EItemType                                           eType,
                                    const OUString&                                    sItem)
-            throw(css::uno::Exception);
+            throw(css::uno::Exception, std::exception);
 
 
         /** TODO */
