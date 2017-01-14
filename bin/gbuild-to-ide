@@ -49,7 +49,7 @@ class GbuildParser:
         self.binpath = os.path.dirname(os.environ['GPERF']) # woha, this is quite a hack
         (self.srcdir, self.builddir, self.instdir, self.workdir) = (os.environ['SRCDIR'], os.environ['BUILDDIR'],
                                                                     os.environ['INSTDIR'], os.environ['WORKDIR'])
-        (self.modules, self.target_by_path) = (collections.OrderedDict(), collections.OrderedDict())
+        self.modules = collections.OrderedDict()
 
     _includepattern = re.compile('-I(\S+)')
     _isystempattern = re.compile('-isystem\s*(\S+)')
@@ -119,22 +119,10 @@ class GbuildParser:
                     module = location.split('/')[-1]
                     if not module in moduleDict:
                         moduleDict[module] = {'targets': set()}
-                        moduleDict[module]['targets'] |= set([newObj])
+                    moduleDict[module]['targets'] |= set([newObj])
 
         for module in sorted(moduleDict):
             self.modules[module] = moduleDict[module]
-        for m in self.modules:
-            for target in self.modules[m]['targets']:
-                for cxx in target.cxxobjects:
-                    path = '/'.join(cxx.split('/')[:-1])
-                    if path not in self.target_by_path:
-                        self.target_by_path[path] = set()
-                    self.target_by_path[path] |= set([target])
-        for path in self.target_by_path:
-            x = self.target_by_path[path]
-            if path != '' and len(set(self.target_by_path[path])) > 1:
-                print('fdo#70422: multiple target use dir %s: %s' % (
-                    path, ', '.join([target.target_name for target in set(self.target_by_path[path])])))
         return self
 
 
@@ -156,12 +144,12 @@ class EclipseCDTIntegrationGenerator(IdeIntegrationGenerator):
             modulepath = os.path.join(self.gbuildparser.builddir, module)
             includedirfile = open(os.path.join(modulepath, '.eclipsesettingfile'), 'w')
             modulelibs = []
-            for lib in self.gbuildparser.target_by_path.keys():
+            for lib in self.target_path.keys():
                 if lib.startswith(module+'/'):
                     modulelibs.append(lib)
             include = set()
             for lib in modulelibs:
-                for target in self.gbuildparser.target_by_path[lib]:
+                for target in self.target_path[lib]:
                     include |= set(target.include)
             includedirfile.write('\n'.join(include))
             includedirfile.close()
@@ -172,13 +160,13 @@ class EclipseCDTIntegrationGenerator(IdeIntegrationGenerator):
             modulepath = os.path.join(self.gbuildparser.builddir, module)
             macrofile = open(os.path.join(modulepath, '.macros'), 'w')
             modulelibs = []
-            for lib in self.gbuildparser.target_by_path.keys():
+            for lib in self.target_path.keys():
                 if lib.startswith(module+'/'):
                     modulelibs.append(lib)
             define = []
             defineset = set()
             for lib in modulelibs:
-                for target in self.gbuildparser.target_by_path[lib]:
+                for target in self.target_path[lib]:
                     for i in target.defs.keys():
                         tmp = str(i) +','+str(target.defs[i])
                         if tmp not in defineset:
@@ -260,6 +248,14 @@ class EclipseCDTIntegrationGenerator(IdeIntegrationGenerator):
             os.remove(os.path.join(modulepath, '.macros'))
 
     def emit(self):
+        self.target_path = {}
+        for m in self.gbuildparser.modules:
+            for target in self.gbuildparser.modules[m]['targets']:
+                for cxx in target.cxxobjects:
+                    path = '/'.join(cxx.split('/')[:-1])
+                    if path not in self.target_path:
+                        self.target_path[path] = set()
+                    self.target_path[path] |= set([target])
         self.create_include_paths()
         self.create_macros()
         self.create_settings_file()
@@ -474,7 +470,7 @@ VersionControl=kdevgit
     def write_includepaths(self, path):
         includedirfile = open(os.path.join(path, '.kdev_include_paths'), 'w')
         include = set()
-        for target in self.gbuildparser.target_by_path[path]:
+        for target in self.target_path[path]:
             include |= set(target.include)
         includedirfile.write('\n'.join(include))
         includedirfile.close()
@@ -483,7 +479,16 @@ VersionControl=kdevgit
         IdeIntegrationGenerator.__init__(self, gbuildparser, ide)
 
     def emit(self):
-        for path in self.gbuildparser.target_by_path:
+        self.target_path = {}
+        for m in self.gbuildparser.modules:
+            for target in self.gbuildparser.modules[m]['targets']:
+                for cxx in target.cxxobjects:
+                    path = '/'.join(cxx.split('/')[:-1])
+                    if path not in self.target_path:
+                        self.target_path[path] = set()
+                    self.target_path[path] |= set([target])
+
+        for path in self.target_path:
             self.write_includepaths(path)
         for modulename in self.gbuildparser.modules:
             location = self.gbuildparser.srcdir + '/' + modulename
