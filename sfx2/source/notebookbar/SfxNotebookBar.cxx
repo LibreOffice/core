@@ -113,24 +113,25 @@ static OUString lcl_getNotebookbarFileName( vcl::EnumContext::Application eApp )
     return OUString();
 }
 
-static const utl::OConfigurationNode lcl_getCurrentImplConfigNode( const Reference<css::frame::XFrame>& xFrame,
-                                                                   utl::OConfigurationTreeRoot& aNotebookbarNode )
+static utl::OConfigurationTreeRoot lcl_getCurrentImplConfigRoot()
 {
-    const Reference<frame::XModuleManager> xModuleManager  = frame::ModuleManager::create( ::comphelper::getProcessComponentContext() );
+    return utl::OConfigurationTreeRoot(::comphelper::getProcessComponentContext(),
+                                       "org.openoffice.Office.UI.Notebookbar/",
+                                       true);
+}
 
-    OUStringBuffer aPath("org.openoffice.Office.UI.Notebookbar/");
-
-    aNotebookbarNode = utl::OConfigurationTreeRoot(
-                                        ::comphelper::getProcessComponentContext(),
-                                        aPath.makeStringAndClear(),
-                                        true);
-    if ( !aNotebookbarNode.isValid() )
+static const utl::OConfigurationNode lcl_getCurrentImplConfigNode(const Reference<css::frame::XFrame>& xFrame,
+                                                                  utl::OConfigurationTreeRoot& rNotebookbarNode )
+{
+    if (!rNotebookbarNode.isValid())
         return utl::OConfigurationNode();
+
+    const Reference<frame::XModuleManager> xModuleManager  = frame::ModuleManager::create( ::comphelper::getProcessComponentContext() );
 
     vcl::EnumContext::Application eApp = vcl::EnumContext::GetApplicationEnum( xModuleManager->identify( xFrame ) );
     OUString aActive = lcl_getNotebookbarFileName( eApp );
 
-    const utl::OConfigurationNode aImplsNode = aNotebookbarNode.openNode("Applications/" + lcl_getAppName( eApp) + "/Implementations");
+    const utl::OConfigurationNode aImplsNode = rNotebookbarNode.openNode("Applications/" + lcl_getAppName( eApp) + "/Implementations");
     const Sequence<OUString> aModeNodeNames( aImplsNode.getNodeNames() );
     const sal_Int32 nCount( aModeNodeNames.getLength() );
 
@@ -287,8 +288,8 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
             pNotebookBar->GetParent()->Resize();
             pNotebookBar->SetIconClickHdl( LINK( nullptr, SfxNotebookBar, OpenNotebookbarPopupMenu ) );
 
-            utl::OConfigurationTreeRoot aRoot;
-            const utl::OConfigurationNode aModeNode( lcl_getCurrentImplConfigNode( xFrame, aRoot ) );
+            utl::OConfigurationTreeRoot aRoot(lcl_getCurrentImplConfigRoot());
+            const utl::OConfigurationNode aModeNode(lcl_getCurrentImplConfigNode(xFrame, aRoot));
             SfxNotebookBar::ShowMenubar( comphelper::getBOOL( aModeNode.getNodeValue( "HasMenubar" ) ) );
 
             SfxViewFrame* pView = SfxViewFrame::Current();
@@ -426,8 +427,8 @@ void SfxNotebookBar::ToggleMenubar()
             // Save menubar settings
             if (IsActive())
             {
-                utl::OConfigurationTreeRoot aRoot;
-                utl::OConfigurationNode aModeNode( lcl_getCurrentImplConfigNode( xFrame, aRoot ) );
+                utl::OConfigurationTreeRoot aRoot(lcl_getCurrentImplConfigRoot());
+                utl::OConfigurationNode aModeNode(lcl_getCurrentImplConfigNode(xFrame, aRoot));
                 aModeNode.setNodeValue( "HasMenubar", toAny<bool>( bShow ) );
                 aRoot.commit();
             }
