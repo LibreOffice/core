@@ -16,6 +16,7 @@
 
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/sdbc/XClob.hpp>
+#include <rtl/ref.hxx>
 
 namespace connectivity
 {
@@ -35,7 +36,7 @@ namespace connectivity
              * hence we store the data in a Blob, and the Clob class is
              * a wrapper around that.
              */
-            connectivity::firebird::Blob     m_aBlob;
+            rtl::Reference<connectivity::firebird::Blob> m_aBlob;
 
         public:
             Clob(isc_db_handle* pDatabaseHandle,
