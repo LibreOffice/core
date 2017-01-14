@@ -339,15 +339,15 @@ Style2FontSlant( uno::Any& rAny, const gchar * value )
 {
     awt::FontSlant aFontSlant;
 
-    if( strncmp( value, STRNCMP_PARAM( "normal" ) ) )
+    if( strncmp( value, STRNCMP_PARAM( "normal" ) ) == 0 )
         aFontSlant = awt::FontSlant_NONE;
-    else if( strncmp( value, STRNCMP_PARAM( "oblique" ) ) )
+    else if( strncmp( value, STRNCMP_PARAM( "oblique" ) ) == 0 )
         aFontSlant = awt::FontSlant_OBLIQUE;
-    else if( strncmp( value, STRNCMP_PARAM( "italic" ) ) )
+    else if( strncmp( value, STRNCMP_PARAM( "italic" ) ) == 0 )
         aFontSlant = awt::FontSlant_ITALIC;
-    else if( strncmp( value, STRNCMP_PARAM( "reverse oblique" ) ) )
+    else if( strncmp( value, STRNCMP_PARAM( "reverse oblique" ) ) == 0 )
         aFontSlant = awt::FontSlant_REVERSE_OBLIQUE;
-    else if( strncmp( value, STRNCMP_PARAM( "reverse italic" ) ) )
+    else if( strncmp( value, STRNCMP_PARAM( "reverse italic" ) ) == 0 )
         aFontSlant = awt::FontSlant_REVERSE_ITALIC;
     else
         return false;
@@ -417,13 +417,13 @@ Justification2Adjust( uno::Any& rAny, const gchar * value )
 {
     short nParagraphAdjust;
 
-    if( strncmp( value, STRNCMP_PARAM( "left" ) ) )
+    if( strncmp( value, STRNCMP_PARAM( "left" ) ) == 0 )
         nParagraphAdjust = style::ParagraphAdjust_LEFT;
-    else if( strncmp( value, STRNCMP_PARAM( "right" ) ) )
+    else if( strncmp( value, STRNCMP_PARAM( "right" ) ) == 0 )
         nParagraphAdjust = style::ParagraphAdjust_RIGHT;
-    else if( strncmp( value, STRNCMP_PARAM( "fill" ) ) )
+    else if( strncmp( value, STRNCMP_PARAM( "fill" ) ) == 0 )
         nParagraphAdjust = style::ParagraphAdjust_BLOCK;
-    else if( strncmp( value, STRNCMP_PARAM( "center" ) ) )
+    else if( strncmp( value, STRNCMP_PARAM( "center" ) ) == 0 )
         nParagraphAdjust = style::ParagraphAdjust_CENTER;
     else
         return false;
@@ -509,11 +509,11 @@ String2Underline( uno::Any& rAny, const gchar * value )
 {
     short nUnderline;
 
-    if( strncmp( value, STRNCMP_PARAM( "none" ) ) )
+    if( strncmp( value, STRNCMP_PARAM( "none" ) ) == 0 )
         nUnderline = awt::FontUnderline::NONE;
-    else if( strncmp( value, STRNCMP_PARAM( "single" ) ) )
+    else if( strncmp( value, STRNCMP_PARAM( "single" ) ) == 0 )
         nUnderline = awt::FontUnderline::SINGLE;
-    else if( strncmp( value, STRNCMP_PARAM( "double" ) ) )
+    else if( strncmp( value, STRNCMP_PARAM( "double" ) ) == 0 )
         nUnderline = awt::FontUnderline::DOUBLE;
     else
         return false;
@@ -597,9 +597,9 @@ String2Bool( uno::Any& rAny, const gchar * value )
 {
     bool bValue;
 
-    if( strncmp( value, STRNCMP_PARAM( "true" ) ) )
+    if( strncmp( value, STRNCMP_PARAM( "true" ) ) == 0 )
         bValue = true;
-    else if( strncmp( value, STRNCMP_PARAM( "false" ) ) )
+    else if( strncmp( value, STRNCMP_PARAM( "false" ) ) == 0 )
         bValue = false;
     else
         return false;
@@ -654,9 +654,9 @@ String2CaseMap( uno::Any& rAny, const gchar * value )
 {
     short nCaseMap;
 
-    if( strncmp( value, STRNCMP_PARAM( "normal" ) ) )
+    if( strncmp( value, STRNCMP_PARAM( "normal" ) ) == 0 )
         nCaseMap = style::CaseMap::NONE;
-    else if( strncmp( value, STRNCMP_PARAM( "small_caps" ) ) )
+    else if( strncmp( value, STRNCMP_PARAM( "small_caps" ) ) == 0 )
         nCaseMap = style::CaseMap::SMALLCAPS;
     else
         return false;
