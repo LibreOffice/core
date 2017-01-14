@@ -193,8 +193,8 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
                 if ( aDescr[nInd].Name == "InteractionHandler"
                   || aDescr[nInd].Name == "Password"
                   || aDescr[nInd].Name == "RepairPackage"
-                  || aDescr[nInd].Name == "StatusIndicator" )
-                  // || aDescr[nInd].Name == "Unpacked" ) // TODO:
+                  || aDescr[nInd].Name == "StatusIndicator"
+                  || aDescr[nInd].Name == "UseBufferedStream" )
                 {
                     aPropsToSet.realloc( ++nNumArgs );
                     aPropsToSet[nNumArgs-1].Name = aDescr[nInd].Name;
