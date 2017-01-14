@@ -34,7 +34,6 @@ public class JavaPanZoomController
 {
     private static final String LOGTAG = "GeckoPanZoomController";
 
-
     // Animation stops if the velocity is below this value when overscrolled or panning.
     private static final float STOPPED_THRESHOLD = 4.0f;
 
@@ -43,7 +42,7 @@ public class JavaPanZoomController
 
     // The distance the user has to pan before we recognize it as such (e.g. to avoid 1-pixel pans
     // between the touch-down and touch-up of a click). In units of density-independent pixels.
-    public static final float PAN_THRESHOLD = 1/16f * LOKitShell.getDpi();
+    private final float PAN_THRESHOLD;
 
     // Angle from axis within which we stay axis-locked
     private static final double AXIS_LOCK_ANGLE = Math.PI / 6.0; // 30 degrees
@@ -52,7 +51,7 @@ public class JavaPanZoomController
     private static final float MAX_ZOOM = 4.0f;
 
     // The maximum amount we would like to scroll with the mouse
-    private static final float MAX_SCROLL = 0.075f * LOKitShell.getDpi();
+    private final float MAX_SCROLL;
 
     private enum PanZoomState {
         NOTHING,        /* no touch-start events received */
@@ -93,6 +92,8 @@ public class JavaPanZoomController
     private boolean mWaitForDoubleTap;
 
     public JavaPanZoomController(PanZoomTarget target, View view) {
+        PAN_THRESHOLD = 1/16f * LOKitShell.getDpi(view.getContext());
+        MAX_SCROLL = 0.075f * LOKitShell.getDpi(view.getContext());
         mTarget = target;
         mSubscroller = new SubdocumentScrollHelper();
         mX = new AxisX(mSubscroller);

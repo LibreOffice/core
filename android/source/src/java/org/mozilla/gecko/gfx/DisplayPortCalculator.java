@@ -11,6 +11,7 @@ import android.util.Log;
 
 import org.json.JSONArray;
 import org.libreoffice.LOKitShell;
+import org.libreoffice.LibreOfficeMainActivity;
 import org.mozilla.gecko.util.FloatUtils;
 
 import java.util.Map;
@@ -338,7 +339,8 @@ final class DisplayPortCalculator {
 
         VelocityBiasStrategy(Map<String, Integer> prefs) {
             SIZE_MULTIPLIER = getFloatPref(prefs, PREF_DISPLAYPORT_VB_MULTIPLIER, 2000);
-            VELOCITY_THRESHOLD = LOKitShell.getDpi() * getFloatPref(prefs, PREF_DISPLAYPORT_VB_VELOCITY_THRESHOLD, 32);
+            //TODO remove static reference to context
+            VELOCITY_THRESHOLD = LOKitShell.getDpi(LibreOfficeMainActivity.mAppContext) * getFloatPref(prefs, PREF_DISPLAYPORT_VB_VELOCITY_THRESHOLD, 32);
             REVERSE_BUFFER = getFloatPref(prefs, PREF_DISPLAYPORT_VB_REVERSE_BUFFER, 200);
             DANGER_ZONE_BASE_X_MULTIPLIER = getFloatPref(prefs, PREF_DISPLAYPORT_VB_DANGER_X_BASE, 1000);
             DANGER_ZONE_BASE_Y_MULTIPLIER = getFloatPref(prefs, PREF_DISPLAYPORT_VB_DANGER_Y_BASE, 1000);
@@ -452,7 +454,8 @@ final class DisplayPortCalculator {
 
         // The velocity above which we start zooming out the display port to keep up
         // with the panning.
-        private static final float VELOCITY_EXPANSION_THRESHOLD = LOKitShell.getDpi() / 16f;
+        //TODO remove static reference to context
+        private static final float VELOCITY_EXPANSION_THRESHOLD = LOKitShell.getDpi(LibreOfficeMainActivity.mAppContext) / 16f;
 
         // How much we increase the display port based on velocity. Assuming no friction and
         // splitting (see below), this should be the number of frames (@60fps) between us
@@ -653,7 +656,8 @@ final class DisplayPortCalculator {
         private int mMaxFramesToDraw;   // maximum number of frames we take to draw
 
         PredictionBiasStrategy(Map<String, Integer> prefs) {
-            VELOCITY_THRESHOLD = LOKitShell.getDpi() * getFloatPref(prefs, PREF_DISPLAYPORT_PB_VELOCITY_THRESHOLD, 16);
+            //TODO remove static reference to context
+            VELOCITY_THRESHOLD = LOKitShell.getDpi(LibreOfficeMainActivity.mAppContext) * getFloatPref(prefs, PREF_DISPLAYPORT_PB_VELOCITY_THRESHOLD, 16);
             resetPageState();
         }
 

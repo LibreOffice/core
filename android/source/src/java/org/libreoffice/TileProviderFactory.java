@@ -24,8 +24,8 @@ public class TileProviderFactory {
         LibreOfficeKit.initializeLibrary();
     }
 
-    public static TileProvider create(GeckoLayerClient layerClient, InvalidationHandler invalidationHandler, String filename) {
-         return new LOKitTileProvider(layerClient, invalidationHandler, filename);
+    public static TileProvider create(LibreOfficeMainActivity context, InvalidationHandler invalidationHandler, String filename) {
+         return new LOKitTileProvider(context, invalidationHandler, filename);
     }
 }
 

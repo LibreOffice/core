@@ -56,15 +56,12 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
 
     public static LibreOfficeMainActivity mAppContext;
 
-    private static GeckoLayerClient mLayerClient;
-    private static LOKitThread sLOKitThread;
+    private GeckoLayerClient mLayerClient;
 
     private static boolean mIsExperimentalMode;
 
     private int providerId;
     private URI documentUri;
-
-    public Handler mMainHandler;
 
     private DrawerLayout mDrawerLayout;
     private LOAbout mAbout;
@@ -86,7 +83,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
         mAbout = new LOAbout(this, false);
     }
 
-    public static GeckoLayerClient getLayerClient() {
+    public GeckoLayerClient getLayerClient() {
         return mLayerClient;
     }
 
@@ -116,8 +113,6 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
                 sPrefs.edit().putInt(ASSETS_EXTRACTED_PREFS_KEY, BuildConfig.VERSION_CODE).apply();
             }
         }
-        mMainHandler = new Handler();
-
         setContentView(R.layout.activity_main);
 
         Toolbar toolbarTop = (Toolbar) findViewById(R.id.toolbar);
@@ -169,12 +164,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
             mDrawerList.setOnItemClickListener(new DocumentPartClickListener());
         }
 
-        if (sLOKitThread == null) {
-            sLOKitThread = new LOKitThread();
-            sLOKitThread.start();
-        } else {
-            sLOKitThread.clearQueue();
-        }
+        LibreOfficeApplication.getLoKitThread().clearQueue();
 
         mLayerClient = new GeckoLayerClient(this);
         mLayerClient.setZoomConstraints(new ZoomConstraints(true));
@@ -194,7 +184,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
         });
 
         // create TextCursorLayer
-        mDocumentOverlay = new DocumentOverlay(mAppContext, layerView);
+        mDocumentOverlay = new DocumentOverlay(this, layerView);
 
         mToolbarController.setupToolbars();
     }
@@ -391,17 +381,13 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
             }
         };
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(mAppContext);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(R.string.save_alert_dialog_title)
                 .setPositiveButton(R.string.save_document, dialogClickListener)
                 .setNegativeButton(R.string.cancel_save_document, dialogClickListener)
                 .setNeutralButton(R.string.no_save_document, dialogClickListener)
                 .show();
 
-    }
-
-    public LOKitThread getLOKitThread() {
-        return sLOKitThread;
     }
 
     public List<DocumentPartView> getDocumentPartView() {

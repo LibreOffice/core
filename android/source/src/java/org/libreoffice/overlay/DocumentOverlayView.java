@@ -18,6 +18,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
+import org.libreoffice.LibreOfficeMainActivity;
 import org.libreoffice.canvas.Cursor;
 import org.libreoffice.canvas.GraphicSelection;
 import org.libreoffice.canvas.SelectionHandle;
@@ -88,14 +89,14 @@ public class DocumentOverlayView extends View implements View.OnTouchListener {
             mSelectionPaint.setAlpha(50);
             mSelectionsVisible = false;
 
-            mGraphicSelection = new GraphicSelection();
+            mGraphicSelection = new GraphicSelection((LibreOfficeMainActivity) getContext());
             mGraphicSelection.setVisible(false);
 
             postDelayed(cursorAnimation, CURSOR_BLINK_TIME);
 
-            mHandleMiddle = new SelectionHandleMiddle(getContext());
-            mHandleStart = new SelectionHandleStart(getContext());
-            mHandleEnd = new SelectionHandleEnd(getContext());
+            mHandleMiddle = new SelectionHandleMiddle((LibreOfficeMainActivity) getContext());
+            mHandleStart = new SelectionHandleStart((LibreOfficeMainActivity) getContext());
+            mHandleEnd = new SelectionHandleEnd((LibreOfficeMainActivity) getContext());
 
             mInitialized = true;
         }
