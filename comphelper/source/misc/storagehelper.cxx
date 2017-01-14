@@ -317,17 +317,28 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageOfFormatFromInputStr
             const OUString& aFormat,
             const uno::Reference < io::XInputStream >& xStream,
             const uno::Reference< uno::XComponentContext >& rxContext,
-            bool bRepairStorage )
+            bool bRepairStorage, bool bUseBufferedStream )
         throw ( uno::Exception )
 {
     uno::Sequence< beans::PropertyValue > aProps( 1 );
-    aProps[0].Name = "StorageFormat";
-    aProps[0].Value <<= aFormat;
+    sal_Int32 nPos = 0;
+    aProps[nPos].Name = "StorageFormat";
+    aProps[nPos].Value <<= aFormat;
+    ++nPos;
     if ( bRepairStorage )
     {
-        aProps.realloc( 2 );
-        aProps[1].Name = "RepairPackage";
-        aProps[1].Value <<= bRepairStorage;
+        aProps.realloc(nPos+1);
+        aProps[nPos].Name = "RepairPackage";
+        aProps[nPos].Value <<= bRepairStorage;
+        ++nPos;
+    }
+
+    if (bUseBufferedStream)
+    {
+        aProps.realloc(nPos+1);
+        aProps[nPos].Name = "UseBufferedStream";
+        aProps[nPos].Value <<= bUseBufferedStream;
+        ++nPos;
     }
 
     uno::Sequence< uno::Any > aArgs( 3 );
@@ -349,17 +360,28 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageOfFormatFromStream(
             const uno::Reference < io::XStream >& xStream,
             sal_Int32 nStorageMode,
             const uno::Reference< uno::XComponentContext >& rxContext,
-            bool bRepairStorage )
+            bool bRepairStorage, bool bUseBufferedStream )
         throw ( uno::Exception )
 {
     uno::Sequence< beans::PropertyValue > aProps( 1 );
-    aProps[0].Name = "StorageFormat";
-    aProps[0].Value <<= aFormat;
+    sal_Int32 nPos = 0;
+    aProps[nPos].Name = "StorageFormat";
+    aProps[nPos].Value <<= aFormat;
+    ++nPos;
     if ( bRepairStorage )
     {
-        aProps.realloc( 2 );
-        aProps[1].Name = "RepairPackage";
-        aProps[1].Value <<= bRepairStorage;
+        aProps.realloc(nPos+1);
+        aProps[nPos].Name = "RepairPackage";
+        aProps[nPos].Value <<= bRepairStorage;
+        ++nPos;
+    }
+
+    if (bUseBufferedStream)
+    {
+        aProps.realloc(nPos+1);
+        aProps[nPos].Name = "UseBufferedStream";
+        aProps[nPos].Value <<= bUseBufferedStream;
+        ++nPos;
     }
 
     uno::Sequence< uno::Any > aArgs( 3 );
