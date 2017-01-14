@@ -1,6 +1,6 @@
 package org.libreoffice.canvas;
 
-import android.content.Context;
+import org.libreoffice.LibreOfficeMainActivity;
 
 import org.libreoffice.R;
 
@@ -8,8 +8,8 @@ import org.libreoffice.R;
  * Selection handle for showing and manipulating the start of a selection.
  */
 public class SelectionHandleStart extends SelectionHandle {
-    public SelectionHandleStart(Context context) {
-        super(getBitmapForDrawable(context, R.drawable.handle_alias_start));
+    public SelectionHandleStart(LibreOfficeMainActivity context) {
+        super(context, getBitmapForDrawable(context, R.drawable.handle_alias_start));
     }
 
     /**

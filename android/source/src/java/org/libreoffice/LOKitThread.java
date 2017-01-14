@@ -1,5 +1,6 @@
 package org.libreoffice;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.PointF;
 import android.graphics.RectF;
@@ -25,7 +26,6 @@ public class LOKitThread extends Thread {
 
     private LinkedBlockingQueue<LOEvent> mEventQueue = new LinkedBlockingQueue<LOEvent>();
 
-    private LibreOfficeMainActivity mApplication;
     private TileProvider mTileProvider;
     private InvalidationHandler mInvalidationHandler;
     private ImmutableViewportMetrics mViewportMetrics;
@@ -157,12 +157,12 @@ public class LOKitThread extends Thread {
      * Change part of the document.
      */
     private void changePart(int partIndex) {
-        LOKitShell.showProgressSpinner();
+        LOKitShell.showProgressSpinner(LibreOfficeMainActivity.mAppContext);
         mTileProvider.changePart(partIndex);
         mViewportMetrics = mLayerClient.getViewportMetrics();
         mLayerClient.setViewportMetrics(mViewportMetrics.scaleTo(0.9f, new PointF()));
         refresh();
-        LOKitShell.hideProgressSpinner();
+        LOKitShell.hideProgressSpinner(LibreOfficeMainActivity.mAppContext);
     }
 
     /**
@@ -170,19 +170,18 @@ public class LOKitThread extends Thread {
      * @param filename - filename where the document is located
      */
     private void loadDocument(String filename) {
-        if (mApplication == null) {
-            mApplication = LibreOfficeMainActivity.mAppContext;
-        }
+        //TODO remove static reference to context (causes memory leaks)
+        LibreOfficeMainActivity mMainActivity = LibreOfficeMainActivity.mAppContext;
 
-        mLayerClient = LibreOfficeMainActivity.getLayerClient();
+        mLayerClient = mMainActivity.getLayerClient();
 
-        mInvalidationHandler = new InvalidationHandler(LibreOfficeMainActivity.mAppContext);
-        mTileProvider = TileProviderFactory.create(mLayerClient, mInvalidationHandler, filename);
+        mInvalidationHandler = new InvalidationHandler(mMainActivity);
+        mTileProvider = TileProviderFactory.create(mMainActivity, mInvalidationHandler, filename);
 
         if (mTileProvider.isReady()) {
-            LOKitShell.showProgressSpinner();
+            LOKitShell.showProgressSpinner(mMainActivity);
             refresh();
-            LOKitShell.hideProgressSpinner();
+            LOKitShell.hideProgressSpinner(mMainActivity);
         } else {
             closeDocument();
         }
